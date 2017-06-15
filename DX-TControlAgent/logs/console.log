@@ -1,0 +1,132 @@
+[2017-06-02 10:04:53][INFO ]************************************************************
+[2017-06-02 10:04:53][INFO ]SqlSessionManager를 초기화합니다.
+[2017-06-02 10:04:53][INFO ]SqlSessionManager를 초기화하였습니다.
+[2017-06-02 10:04:53][INFO ]************************************************************
+[2017-06-02 10:04:53][INFO ]DX-TcontrolAgent Deamon Start..
+[2017-06-02 10:04:53][INFO ]DX-TcontrolAgent Deamon Start.. 2017-06-02 10:04:53
+[2017-06-02 10:04:53][INFO ]
+[2017-06-02 10:04:53][INFO ]**************************************************
+[2017-06-02 10:04:53][INFO ]SocketListener[127.0.0.1]를 기동합니다.
+[2017-06-02 10:04:53][INFO ]ListenerPort : [9001]
+[2017-06-02 10:04:53][INFO ]Timeout : [-1]
+[2017-06-02 10:04:53][INFO ]Backlog : [-1]
+[2017-06-02 10:04:53][INFO ]SocketListener[127.0.0.1]가 메시지 수신을 대기하고 있습니다.
+[2017-06-02 10:04:53][INFO ]**************************************************
+[2017-06-02 10:04:53][INFO ]
+[2017-06-02 10:05:10][ERROR]DxT006 java.lang.NullPointerException 
+[2017-06-02 10:05:14][ERROR]DXTcontrolSocketExecute java.lang.NegativeArraySizeException
+[2017-06-02 10:06:32][ERROR]DxT006 java.lang.NullPointerException 
+[2017-06-02 10:08:25][ERROR]DXTcontrolSocketExecute java.lang.NegativeArraySizeException
+[2017-06-02 10:10:25][INFO ]************************************************************
+[2017-06-02 10:10:25][INFO ]SqlSessionManager를 초기화합니다.
+[2017-06-02 10:10:25][INFO ]SqlSessionManager를 초기화하였습니다.
+[2017-06-02 10:10:25][INFO ]************************************************************
+[2017-06-02 10:10:25][INFO ]DX-TcontrolAgent Deamon Start..
+[2017-06-02 10:10:25][INFO ]DX-TcontrolAgent Deamon Start.. 2017-06-02 10:10:25
+[2017-06-02 10:10:25][INFO ]
+[2017-06-02 10:10:25][INFO ]**************************************************
+[2017-06-02 10:10:25][INFO ]SocketListener[127.0.0.1]를 기동합니다.
+[2017-06-02 10:10:25][INFO ]ListenerPort : [9001]
+[2017-06-02 10:10:25][INFO ]Timeout : [-1]
+[2017-06-02 10:10:25][INFO ]Backlog : [-1]
+[2017-06-02 10:10:25][INFO ]SocketListener[127.0.0.1]가 메시지 수신을 대기하고 있습니다.
+[2017-06-02 10:10:25][INFO ]**************************************************
+[2017-06-02 10:10:25][INFO ]
+[2017-06-02 10:10:38][INFO ]************************************************************
+[2017-06-02 10:10:38][INFO ]DBCPPool을 생성합니다. [192.168.10.70_postgres]
+[2017-06-02 10:10:38][INFO ]DBCPPool 생성 완료 하였습니다. [192.168.10.70_postgres]
+[2017-06-02 10:10:38][INFO ]************************************************************
+[2017-06-02 10:11:03][ERROR]DXTcontrolSocketExecute java.net.SocketException: Connection reset by peer: socket write error
+[2017-06-02 10:11:35][INFO ]************************************************************
+[2017-06-02 10:11:35][INFO ]SqlSessionManager를 초기화합니다.
+[2017-06-02 10:11:35][INFO ]SqlSessionManager를 초기화하였습니다.
+[2017-06-02 10:11:35][INFO ]************************************************************
+[2017-06-02 10:11:35][INFO ]DX-TcontrolAgent Deamon Start..
+[2017-06-02 10:11:35][INFO ]DX-TcontrolAgent Deamon Start.. 2017-06-02 10:11:35
+[2017-06-02 10:11:35][INFO ]
+[2017-06-02 10:11:35][INFO ]**************************************************
+[2017-06-02 10:11:35][INFO ]SocketListener[127.0.0.1]를 기동합니다.
+[2017-06-02 10:11:35][INFO ]ListenerPort : [9001]
+[2017-06-02 10:11:35][INFO ]Timeout : [-1]
+[2017-06-02 10:11:35][INFO ]Backlog : [-1]
+[2017-06-02 10:11:35][INFO ]SocketListener[127.0.0.1]가 메시지 수신을 대기하고 있습니다.
+[2017-06-02 10:11:35][INFO ]**************************************************
+[2017-06-02 10:11:35][INFO ]
+[2017-06-02 10:11:57][INFO ]************************************************************
+[2017-06-02 10:11:57][INFO ]DBCPPool을 생성합니다. [192.168.10.70_postgres]
+[2017-06-02 10:11:57][INFO ]DBCPPool 생성 완료 하였습니다. [192.168.10.70_postgres]
+[2017-06-02 10:11:57][INFO ]************************************************************
+[2017-06-02 10:13:25][ERROR]DXTcontrolSocketExecute java.lang.NegativeArraySizeException
+[2017-06-02 10:29:53][ERROR]DXTcontrolSocketExecute java.lang.NegativeArraySizeException
+[2017-06-02 10:32:57][ERROR]DXTcontrolSocketExecute java.lang.NullPointerException
+[2017-06-02 10:34:14][ERROR]DXTcontrolSocketExecute java.lang.NullPointerException
+[2017-06-02 10:34:40][ERROR]DxT001 org.postgresql.util.PSQLException: Connection attempt timed out. 
+[2017-06-02 10:34:40][ERROR]DxT006 java.lang.NullPointerException 
+[2017-06-02 10:34:40][ERROR]DXTcontrolSocketExecute java.lang.NegativeArraySizeException
+[2017-06-02 10:35:15][ERROR]DxT001 org.postgresql.util.PSQLException: Connection attempt timed out. 
+[2017-06-02 10:35:15][ERROR]DxT006 java.lang.NullPointerException 
+[2017-06-02 10:35:15][ERROR]DXTcontrolSocketExecute java.lang.NegativeArraySizeException
+[2017-06-02 10:35:49][ERROR]DxT001 org.postgresql.util.PSQLException: Connection attempt timed out. 
+[2017-06-02 10:35:49][ERROR]DxT006 java.lang.NullPointerException 
+[2017-06-02 10:35:52][ERROR]DXTcontrolSocketExecute java.lang.NegativeArraySizeException
+[2017-06-02 10:36:46][ERROR]DxT001 org.postgresql.util.PSQLException: Connection attempt timed out. 
+[2017-06-02 10:36:46][ERROR]DxT006 java.lang.NullPointerException 
+[2017-06-02 10:37:07][ERROR]DXTcontrolSocketExecute java.lang.NegativeArraySizeException
+[2017-06-02 10:37:42][ERROR]데몬 시작시 에러가 발생하였습니다. org.springframework.beans.factory.BeanCreationException: Error creating bean with name 'sql-map-client' defined in class path resource [Dx-TcontrolAgent-context.xml]: Invocation of init method failed; nested exception is org.springframework.core.NestedIOException: Failed to parse config resource: class path resource [sql-map-config.xml]; nested exception is com.ibatis.common.xml.NodeletException: Error parsing XML.  Cause: java.lang.RuntimeException: Error parsing XPath '/sqlMapConfig/sqlMap'.  Cause: com.ibatis.common.xml.NodeletException: Error parsing XML.  Cause: java.net.ConnectException: Connection timed out: connect
+[2017-06-02 10:37:42][ERROR]데몬 종료시 에러가 발생하였습니다. {0}
+[2017-06-02 10:37:55][INFO ]************************************************************
+[2017-06-02 10:37:55][INFO ]SqlSessionManager를 초기화합니다.
+[2017-06-02 10:37:56][INFO ]SqlSessionManager를 초기화하였습니다.
+[2017-06-02 10:37:56][INFO ]************************************************************
+[2017-06-02 10:37:56][INFO ]DX-TcontrolAgent Deamon Start..
+[2017-06-02 10:37:56][INFO ]DX-TcontrolAgent Deamon Start.. 2017-06-02 10:37:56
+[2017-06-02 10:37:56][INFO ]
+[2017-06-02 10:37:56][INFO ]**************************************************
+[2017-06-02 10:37:56][INFO ]SocketListener[127.0.0.1]를 기동합니다.
+[2017-06-02 10:37:56][INFO ]ListenerPort : [9001]
+[2017-06-02 10:37:56][INFO ]Timeout : [-1]
+[2017-06-02 10:37:56][INFO ]Backlog : [-1]
+[2017-06-02 10:37:56][INFO ]SocketListener[127.0.0.1]가 메시지 수신을 대기하고 있습니다.
+[2017-06-02 10:37:56][INFO ]**************************************************
+[2017-06-02 10:37:56][INFO ]
+[2017-06-02 10:38:11][INFO ]************************************************************
+[2017-06-02 10:38:11][INFO ]DBCPPool을 생성합니다. [192.168.10.70_postgres]
+[2017-06-02 10:38:11][INFO ]DBCPPool 생성 완료 하였습니다. [192.168.10.70_postgres]
+[2017-06-02 10:38:11][INFO ]************************************************************
+[2017-06-02 10:38:16][ERROR]DxT001 org.postgresql.util.PSQLException: Connection attempt timed out. 
+[2017-06-02 10:38:16][ERROR]DxT006 java.lang.NullPointerException 
+[2017-06-02 10:45:50][ERROR]데몬 시작시 에러가 발생하였습니다. org.springframework.beans.factory.BeanCreationException: Error creating bean with name 'sql-map-client' defined in class path resource [Dx-TcontrolAgent-context.xml]: Invocation of init method failed; nested exception is org.springframework.core.NestedIOException: Failed to parse config resource: class path resource [sql-map-config.xml]; nested exception is com.ibatis.common.xml.NodeletException: Error parsing XML.  Cause: java.lang.RuntimeException: Error parsing XPath '/sqlMapConfig/sqlMap'.  Cause: com.ibatis.common.xml.NodeletException: Error parsing XML.  Cause: java.net.ConnectException: Connection timed out: connect
+[2017-06-02 10:45:50][ERROR]데몬 종료시 에러가 발생하였습니다. {0}
+[2017-06-02 10:46:26][ERROR]데몬 시작시 에러가 발생하였습니다. org.springframework.beans.factory.BeanCreationException: Error creating bean with name 'sql-map-client' defined in class path resource [Dx-TcontrolAgent-context.xml]: Invocation of init method failed; nested exception is org.springframework.core.NestedIOException: Failed to parse config resource: class path resource [sql-map-config.xml]; nested exception is com.ibatis.common.xml.NodeletException: Error parsing XML.  Cause: java.lang.RuntimeException: Error parsing XPath '/sqlMapConfig/sqlMap'.  Cause: com.ibatis.common.xml.NodeletException: Error parsing XML.  Cause: java.net.ConnectException: Connection timed out: connect
+[2017-06-02 10:46:26][ERROR]데몬 종료시 에러가 발생하였습니다. {0}
+[2017-06-02 10:46:38][INFO ]************************************************************
+[2017-06-02 10:46:38][INFO ]SqlSessionManager를 초기화합니다.
+[2017-06-02 10:46:38][INFO ]SqlSessionManager를 초기화하였습니다.
+[2017-06-02 10:46:38][INFO ]************************************************************
+[2017-06-02 10:46:38][INFO ]DX-TcontrolAgent Deamon Start..
+[2017-06-02 10:46:38][INFO ]DX-TcontrolAgent Deamon Start.. 2017-06-02 10:46:38
+[2017-06-02 10:46:38][INFO ]
+[2017-06-02 10:46:38][INFO ]**************************************************
+[2017-06-02 10:46:38][INFO ]SocketListener[127.0.0.1]를 기동합니다.
+[2017-06-02 10:46:38][INFO ]ListenerPort : [9001]
+[2017-06-02 10:46:38][INFO ]Timeout : [-1]
+[2017-06-02 10:46:38][INFO ]Backlog : [-1]
+[2017-06-02 10:46:38][INFO ]SocketListener[127.0.0.1]가 메시지 수신을 대기하고 있습니다.
+[2017-06-02 10:46:38][INFO ]**************************************************
+[2017-06-02 10:46:38][INFO ]
+[2017-06-02 10:46:56][INFO ]************************************************************
+[2017-06-02 10:46:56][INFO ]DBCPPool을 생성합니다. [192.168.10.70_postgres]
+[2017-06-02 10:46:56][INFO ]DBCPPool 생성 완료 하였습니다. [192.168.10.70_postgres]
+[2017-06-02 10:46:56][INFO ]************************************************************
+[2017-06-02 10:47:01][ERROR]DxT001 org.postgresql.util.PSQLException: Connection attempt timed out. 
+[2017-06-02 10:47:01][ERROR]DxT006 java.lang.NullPointerException 
+[2017-06-02 10:47:08][ERROR]DXTcontrolSocketExecute java.lang.NegativeArraySizeException
+[2017-06-02 10:47:39][ERROR]DxT001 org.postgresql.util.PSQLException: Connection attempt timed out. 
+[2017-06-02 10:47:39][ERROR]DxT006 java.lang.NullPointerException 
+[2017-06-02 10:48:40][ERROR]DXTcontrolSocketExecute java.lang.NegativeArraySizeException
+[2017-06-02 10:50:21][ERROR]DxT001 org.postgresql.util.PSQLException: Connection attempt timed out. 
+[2017-06-02 10:50:21][ERROR]DxT006 java.lang.NullPointerException 
+[2017-06-02 10:50:21][ERROR]DXTcontrolSocketExecute java.net.SocketException: Connection reset by peer: socket write error
+[2017-06-02 10:51:35][ERROR]DXTcontrolSocketExecute java.net.SocketException: Connection reset by peer: socket write error
+[2017-06-02 10:52:12][ERROR]DXTcontrolSocketExecute java.lang.NullPointerException
+[2017-06-02 14:51:35][ERROR]DXTcontrolSocketExecute java.lang.NullPointerException

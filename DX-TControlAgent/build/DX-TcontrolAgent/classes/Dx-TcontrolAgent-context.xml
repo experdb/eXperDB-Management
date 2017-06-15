@@ -1,0 +1,146 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:aop="http://www.springframework.org/schema/aop"
+    xmlns:context="http://www.springframework.org/schema/context"
+    xmlns:tx="http://www.springframework.org/schema/tx"
+    xmlns:util="http://www.springframework.org/schema/util"
+    xsi:schemaLocation="http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-3.0.xsd
+        http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+        http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util-3.0.xsd
+        http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-3.0.xsd
+        http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-3.0.xsd">
+<!--
+    <context:property-placeholder location="classpath:/context.properties"/>
+--> 
+	<!--
+	============================================================ 
+	Apache Commons DBCP DataSource that refers to a combined database 
+	============================================================
+	-->
+	<bean id="environmentVariablesConfiguration" class="org.jasypt.encryption.pbe.config.EnvironmentStringPBEConfig">  
+	        <property name="algorithm" value="PBEWithMD5AndDES" />  
+	        <property name="passwordEnvName" value="APP_ENCRYPTION_PASSWORD" />
+	</bean>  
+	       
+	<bean id="configurationEncryptor" class="org.jasypt.encryption.pbe.StandardPBEStringEncryptor">  
+	        <property name="config" ref="environmentVariablesConfiguration" /> 
+	        <property name="password" value="jasyptPass" /> 
+	</bean>  
+	      
+	<bean id="propertyConfigurer" class="org.jasypt.spring3.properties.EncryptablePropertyPlaceholderConfigurer">  
+	        <constructor-arg ref="configurationEncryptor" />  
+	        <property name="locations">  
+	            <list>  
+	                <value>classpath:/context.properties</value>  
+	            </list>  
+	        </property>  
+	</bean> 
+<!--  -->
+	<bean id="data-source" class="org.apache.commons.dbcp.BasicDataSource"
+		destroy-method="close">
+		<property name="driverClassName" value="${database.driverClass}" />
+		<property name="url" value="${database.url}" />
+		<property name="username" value="${database.username}" />
+		<property name="password" value="${database.password}" />
+		<property name="maxActive" value="${database.maxActive}" />
+		<property name="maxIdle" value="${database.maxIdle}" />
+		<property name="maxWait" value="${database.maxWait}" />
+		<property name="minIdle" value="${database.minIdle}" />
+		<property name="testWhileIdle" value="${database.testWhileIdle}" />
+		<property name="timeBetweenEvictionRunsMillis"	value="${database.timeBetweenEvictionRunsMillis}" />
+		<property name="validationQuery" value="${database.validationQuery}" />
+	</bean>
+
+	<!--
+	============================================================
+	Transaction manager for a single JDBC DataSource
+	============================================================
+	-->
+
+	<bean id="transaction-manager"
+		class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+		<property name="dataSource" ref="data-source" />
+	</bean>
+	
+	
+	<!--
+    ============================================================
+    Transaction config
+    ============================================================
+    -->
+    
+    <aop:config >
+        <aop:advisor pointcut="execution(* com.k4m.dx.tcontrol.base.service.*Service.*(..))" advice-ref="tx-advice"/>   
+    </aop:config>
+  
+    <tx:advice id="tx-advice" transaction-manager="transaction-manager">
+        <tx:attributes>
+			<tx:method name="add*"/>
+			<tx:method name="insert*"/>
+			<tx:method name="request*"/>
+			<tx:method name="registe*"/>
+			<tx:method name="create*"/>      
+			<tx:method name="save*"/>      
+			<tx:method name="modify*"/>
+			<tx:method name="update*"/>
+			<tx:method name="change*"/>
+			<tx:method name="treat*"/>
+			<tx:method name="terminate*"/>
+			<tx:method name="withdraw*"/>
+			<tx:method name="remove*"/>
+			<tx:method name="delete*"/>
+			<tx:method name="find*" read-only="true"/>
+			<tx:method name="get*" read-only="true"/>
+			<tx:method name="load*" read-only="true"/>
+        </tx:attributes>
+    </tx:advice>
+
+	<!--
+	============================================================ 
+	SqlMap setup for iBATIS Database Layer
+	============================================================
+	-->
+
+	<bean id="sql-map-client" class="org.springframework.orm.ibatis.SqlMapClientFactoryBean">
+		<property name="configLocation" value="classpath:sql-map-config.xml" />
+		<property name="dataSource" ref="data-source" />
+	</bean>		
+
+		
+    <!--
+        ============================================================
+        Message Source
+        ============================================================
+    -->		
+    <bean id="messageSource" class="org.springframework.context.support.ReloadableResourceBundleMessageSource">
+        <property name="basenames">
+            <list>
+                <value>classpath:context</value>
+                <value>classpath:messages</value>
+            </list>
+        </property>
+        <property name="cacheSeconds" value="60" />
+        <property name="defaultEncoding" value="UTF-8" />
+    </bean>
+    
+    <bean id="messageSourceAccessor" class="org.springframework.context.support.MessageSourceAccessor">
+        <constructor-arg ref="messageSource"/>
+    </bean>
+    
+    <bean id="common-message-source"
+		class="com.k4m.dx.tcontrol.util.Messages"
+		factory-method="getInstance">
+		<constructor-arg	ref="messageSourceAccessor" />
+	</bean>
+    
+
+    <!--
+        ============================================================
+        Component and Service bean load
+        ============================================================
+    -->	
+    
+      <context:component-scan base-package="com.k4m.dx.tcontrol.base"/>
+    
+</beans>		
