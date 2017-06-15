@@ -1,0 +1,283 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE sqlMap
+    PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN"
+    "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+
+<sqlMap namespace="cmmnCodeSQL">
+
+	<typeAlias alias="pageVO" type="com.k4m.dx.tcontrol.common.service.PageVO"/>
+	<typeAlias alias="cmmnCodeVO" type="com.k4m.dx.tcontrol.common.service.CmmnCodeVO"/>
+
+	<select id="selectCmmnCodeList" parameterClass="pageVO" resultClass="cmmnCodeVO">
+		/**
+	 	* Query ID : selectCmmnCodeList
+	 	* Description : 공통코드 조회
+	 	* Author : 변승우
+	 	**/
+	 	
+      SELECT 
+            (ROW_NUMBER() OVER()) AS ROWNUM
+		  , (ROW_NUMBER() OVER()) AS IDX
+      	  , GRP_CD
+	      , GRP_CD_NM
+	      , GRP_CD_EXP
+	      , USE_YN
+	      , FRST_REGR_ID
+	      , FRST_REG_DTM
+	      , LST_MDFR_ID
+	      , LST_MDF_DTM 
+      FROM T_SYSGRP_C
+      WHERE 1=1	
+      LIMIT #recordCountPerPage# OFFSET #firstIndex#
+    </select>
+    
+    
+   	<select id="selectCmmnCodeListTotCnt" parameterClass="pageVO" resultClass="int">
+    	/**
+	 	* Query ID : selectCmmnCodeListTotCnt
+	 	* Description : 공통코드 갯수 조회
+	 	* Author : 변승우
+	 	**/
+		SELECT 
+				COUNT(*) totcnt
+		FROM T_SYSGRP_C
+		WHERE 1=1
+	</select>
+	
+	
+	  <insert id="insertCmmnCode" parameterClass="cmmnCodeVO">
+    	/**
+	 	* Query ID : insertCmmnCode
+	 	* Description : 공통코드 등록
+	 	* Author : 변승우
+	 	**/
+	 	
+		INSERT INTO T_SYSGRP_C
+		(
+      		GRP_CD
+	      , GRP_CD_NM
+	      , GRP_CD_EXP
+	      , USE_YN
+	      , FRST_REGR_ID
+	      , FRST_REG_DTM
+	      , LST_MDFR_ID
+	      , LST_MDF_DTM 
+		) 
+		VALUES
+		(
+			  #grp_cd#
+			, #grp_cd_nm#
+			, #grp_cd_exp#
+			, #use_yn#
+			, #usr_id#
+			, clock_timestamp()
+			, #usr_id#
+			, clock_timestamp()
+		)
+	</insert>
+	
+	<select id="selectCmmnCodeDetailList" parameterClass="cmmnCodeVO" resultClass="cmmnCodeVO">
+		/**
+	 	* Query ID : selectCmmnCodeDetailList
+	 	* Description : 공통코드 상세 조회
+	 	* Author : 변승우
+	 	**/
+	 	
+      SELECT 
+            (ROW_NUMBER() OVER()) AS ROWNUM
+		  , (ROW_NUMBER() OVER()) AS IDX
+      	  , GRP_CD
+	      , GRP_CD_NM
+	      , GRP_CD_EXP
+	      , USE_YN
+	      , FRST_REGR_ID
+	      , FRST_REG_DTM
+	      , LST_MDFR_ID
+	      , LST_MDF_DTM 
+      FROM T_SYSGRP_C
+      WHERE 1=1
+      AND GRP_CD = #grp_cd#
+    </select>
+    
+    
+    <update id="updateCmmnCode" parameterClass="cmmnCodeVO">
+   	    /**
+	 	* Query ID : updateCmmnCode
+	 	* Description : 공통코드 수정
+	 	* Author : 변승우
+	 	**/
+	 	
+		UPDATE T_SYSGRP_C
+		SET 
+	  	 	   GRP_CD_NM= #grp_cd_nm#
+		      , GRP_CD_EXP=#grp_cd_exp#
+		      , USE_YN=#use_yn#
+		      , LST_MDFR_ID=#usr_id#
+		      , LST_MDF_DTM= clock_timestamp()
+		WHERE GRP_CD=#grp_cd#
+	</update> 
+	
+	
+    <delete id="deleteCmmnCode" parameterClass="cmmnCodeVO">
+       	/**
+	 	* Query ID : deleteCmmnCode
+	 	* Description : 공통코드 삭제
+	 	* Author : 변승우
+	 	**/
+	 	
+	  DELETE 
+	  FROM T_SYSGRP_C 
+	  WHERE GRP_CD=#grp_cd#
+	</delete>
+	
+	
+		<select id="cmmnCodeSearch" parameterClass="pageVO" resultClass="cmmnCodeVO">
+			/**
+		 	* Query ID : cmmnCodeSearch
+		 	* Description : 공통코드 검색 조회
+		 	* Author : 변승우
+		 	**/
+		 	
+			SELECT 
+				    (ROW_NUMBER() OVER()) AS ROWNUM
+				  , (ROW_NUMBER() OVER()) AS IDX
+		          , GRP_CD
+			      , GRP_CD_NM
+			      , USE_YN
+			      , FRST_REGR_ID
+			      , FRST_REG_DTM
+			      , LST_MDFR_ID
+			      , LST_MDF_DTM 
+	      FROM T_SYSGRP_C
+	      WHERE 1=1
+	      <isEqual property="searchCondition" compareValue="0" > 
+	      </isEqual>
+	      <isEqual property="searchCondition" compareValue="1" > 
+	      AND GRP_CD like '%' || #searchKeyword# || '%'
+	      </isEqual>
+	      <isEqual property="searchCondition" compareValue="2" > 
+	      AND GRP_CD_NM like '%' || #searchKeyword# || '%'
+	      </isEqual>
+    	</select>	
+	
+	
+	
+	
+		<!-- 상세코드 쿼리 시작 -->
+		<select id="cmmnCodeDtlList" parameterClass="pageVO" resultClass="cmmnCodeVO">
+			/**
+		 	* Query ID : cmmnCodeDtlList
+		 	* Description : 상세코드 조회
+		 	* Author : 변승우
+		 	**/
+		 	
+			SELECT 
+				    (ROW_NUMBER() OVER()) AS ROWNUM
+				  , (ROW_NUMBER() OVER()) AS IDX
+		          , A.GRP_CD
+		          , B.SYS_CD
+			      , B.SYS_CD_NM
+			      , B.USE_YN
+			      , B.FRST_REGR_ID
+			      , B.FRST_REG_DTM
+			      , B.LST_MDFR_ID
+			      , B.LST_MDF_DTM 
+	      FROM T_SYSGRP_C A, T_SYSDTL_C B
+	      WHERE 1=1
+	      AND A.GRP_CD = B.GRP_CD
+	      AND A.GRP_CD = #grp_cd#
+	      LIMIT #recordCountPerPage# OFFSET #firstIndex#
+    	</select>
+
+
+	   	<select id="selectCmmnCodeDtlListTotCnt" parameterClass="pageVO" resultClass="int">
+	    	/**
+		 	* Query ID : selectCmmnCodeDtlListTotCnt
+		 	* Description : 상세코드 갯수 조회
+		 	* Author : 변승우
+		 	**/
+			SELECT 
+					COUNT(*) totcnt
+			FROM T_SYSDTL_C
+			WHERE 1=1
+			AND GRP_CD = #grp_cd#
+		</select>
+	
+	
+		<insert id="insertCmmnDtlCode" parameterClass="cmmnCodeVO">
+	    	/**
+		 	* Query ID : insertCmmnDtlCode
+		 	* Description : 공통코드 등록
+		 	* Author : 변승우
+		 	**/
+		 	
+			INSERT INTO T_SYSDTL_C
+			(
+	      		GRP_CD
+		      , SYS_CD
+		      , SYS_CD_NM
+		      , USE_YN
+		      , FRST_REGR_ID
+		      , FRST_REG_DTM
+		      , LST_MDFR_ID
+		      , LST_MDF_DTM 
+			) 
+			VALUES
+			(
+				  #grp_cd#
+				, #sys_cd#
+				, #sys_cd_nm#
+				, #use_yn#
+				, #usr_id#
+				, clock_timestamp()
+				, #usr_id#
+				, clock_timestamp()
+			)
+		</insert>	
+		
+	    <delete id="deleteCmmnDtlCode" parameterClass="cmmnCodeVO">
+	       	/**
+		 	* Query ID : deleteCmmnDtlCode
+		 	* Description : 상세코드 삭제
+		 	* Author : 변승우
+		 	**/
+		 	
+		  DELETE 
+		  FROM T_SYSDTL_C 
+		  WHERE SYS_CD=#sys_cd#
+		</delete>		
+		
+		
+		<select id="cmmnDtlCodeSearch" parameterClass="pageVO" resultClass="cmmnCodeVO">
+			/**
+		 	* Query ID : cmmnDtlCodeSearch
+		 	* Description : 상세코드 검색 조회
+		 	* Author : 변승우
+		 	**/
+		 	
+			SELECT 
+				    (ROW_NUMBER() OVER()) AS ROWNUM
+				  , (ROW_NUMBER() OVER()) AS IDX
+		          , A.GRP_CD
+		          , B.SYS_CD
+			      , B.SYS_CD_NM
+			      , B.USE_YN
+			      , B.FRST_REGR_ID
+			      , B.FRST_REG_DTM
+			      , B.LST_MDFR_ID
+			      , B.LST_MDF_DTM 
+	      FROM T_SYSGRP_C A, T_SYSDTL_C B
+	      WHERE 1=1
+	      AND A.GRP_CD = B.GRP_CD
+	      AND A.GRP_CD = #grp_cd#
+	       <isEqual property="searchCondition" compareValue="0" > 
+	      </isEqual>
+	      <isEqual property="searchCondition" compareValue="1" > 
+	      AND B.SYS_CD like '%' || #searchKeyword# || '%'
+	      </isEqual>
+	      <isEqual property="searchCondition" compareValue="2" > 
+	      AND B.SYS_CD_NM like '%' || #searchKeyword# || '%'
+	      </isEqual>
+    	</select>
+		
+</sqlMap>

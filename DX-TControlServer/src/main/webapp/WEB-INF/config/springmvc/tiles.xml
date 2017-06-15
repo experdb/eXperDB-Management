@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE tiles-definitions PUBLIC 
+	"-//Apache Software Foundation//DTD Tiles Configuration 2.0//EN" 
+	"http://tiles.apache.org/dtds/tiles-config_2_0.dtd">
+
+<tiles-definitions>
+	<definition name="default"
+		template="/WEB-INF/view/layout/layout.jsp">
+		<put-attribute name="topMenu"
+			value="/WEB-INF/view/layout/topMenu.jsp" />
+		<put-attribute name="treeMenu"
+			value="/WEB-INF/view/layout/treeMenu.jsp" />
+		<put-attribute name="contents"
+			value="" />
+	</definition>
+
+ 	<definition name="view/*" extends="default">
+		<put-attribute name="contents" value="/WEB-INF/view/index.jsp" />
+	</definition> 
+	<definition name="cmmn/*" extends="default">
+		<put-attribute name="contents" value="/WEB-INF/view/cmmn/code/{1}.jsp"  />
+	</definition> 
+	<definition name="cmmn/codeDtl/*" extends="default">
+		<put-attribute name="contents" value="/WEB-INF/view/cmmn/codeDtl/{1}.jsp"  />
+	</definition> 	
+	<definition name="sample/*" extends="default">
+		<put-attribute name="contents" value="/WEB-INF/view/sample/{1}.jsp" />
+	</definition>
+	<definition name="dbserver/*" extends="default">
+		<put-attribute name="contents" value="/WEB-INF/view/dbserver/{1}.jsp" />
+	</definition>
+	<definition name="backup/*" extends="default">
+		<put-attribute name="contents" value="/WEB-INF/view/backup/{1}.jsp" />
+	</definition>	
+	<definition name="admin/dbServerManager/*" extends="default">
+		<put-attribute name="contents" value="/WEB-INF/view/admin/dbServerManager/{1}.jsp" />
+	</definition>	
+	<definition name="admin/userManager/*" extends="default">
+		<put-attribute name="contents" value="/WEB-INF/view/admin/userManager/{1}.jsp" />
+	</definition>
+	<definition name="admin/menuAuthority/*" extends="default">
+		<put-attribute name="contents" value="/WEB-INF/view/admin/menuAuthority/{1}.jsp" />
+	</definition>
+	<definition name="admin/dbAuthority/*" extends="default">
+		<put-attribute name="contents" value="/WEB-INF/view/admin/dbAuthority/{1}.jsp" />
+	</definition>
+	<definition name="admin/accessHistory/*" extends="default">
+		<put-attribute name="contents" value="/WEB-INF/view/admin/accessHistory/{1}.jsp" />
+	</definition>
+	<definition name="admin/agentMonitoring/*" extends="default">
+		<put-attribute name="contents" value="/WEB-INF/view/admin/agentMonitoring/{1}.jsp" />
+	</definition>
+	<definition name="functions/transfer/*" extends="default">
+		<put-attribute name="contents" value="/WEB-INF/view/functions/transfer/{1}.jsp" />
+	</definition>
+</tiles-definitions>

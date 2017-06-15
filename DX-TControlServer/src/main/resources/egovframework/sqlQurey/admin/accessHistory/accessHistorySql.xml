@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE sqlMap
+    PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN"
+    "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+
+<sqlMap namespace="userAccessSql">
+	<typeAlias alias="HistoryVO" type="com.k4m.dx.tcontrol.common.service.HistoryVO" />
+	
+	<select id="selectAccessHistory" resultClass="HistoryVO">
+		/**
+		* Query ID : selectAccessHistory
+		* Description : 접근내역 조회
+		* Author : 김주영
+		**/
+		SELECT
+		  (ROW_NUMBER() OVER()) AS ROWNUM
+		, (ROW_NUMBER() OVER()) AS IDX
+		, A.EXEDTM_DATE
+		, A.EXEDTM_HOUR
+		, A.SYS_CD_NM
+		, A.USR_ID
+		, A.USR_NM
+		, A.DEPT_NM
+		, A.PST_NM
+		, A.LGI_IPADR
+		FROM(
+			SELECT 
+				  TO_CHAR(G.EXEDTM,'YYYY-MM-DD')EXEDTM_DATE
+				, TO_CHAR(G.EXEDTM,'HH24:MI')EXEDTM_HOUR
+				, C.SYS_CD_NM
+				, G.USR_ID
+				, I.USR_NM
+				, I.DEPT_NM
+				, I.PST_NM
+				, G.LGI_IPADR
+			FROM T_SYSWRK_G G, T_SYSDTL_C C, T_USR_I I
+			WHERE G.EXE_DTL_CD =C.SYS_CD
+			AND G.USR_ID=I.USR_ID
+			<isNotEmpty property="lgi_dtm_start">
+				AND to_char(G.EXEDTM,'MM/DD/YYYY') between #lgi_dtm_start# and #lgi_dtm_end#
+			</isNotEmpty>
+			<isNotEmpty property="usr_nm">
+				AND I.USR_NM LIKE #usr_nm#
+			</isNotEmpty>
+			ORDER BY EXEDTM DESC
+			)A
+	</select>
+
+
+</sqlMap>

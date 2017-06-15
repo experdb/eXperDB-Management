@@ -1,0 +1,582 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+
+<sqlMap namespace="cmmnHistorySQL">
+
+	<typeAlias alias="HistoryVO" type="com.k4m.dx.tcontrol.common.service.HistoryVO" />
+
+	<insert id="insertHistoryLogin" parameterClass="HistoryVO">
+		/**
+		* Query ID : insertHistoryLogin
+		* Description : 로그인 이력 등록
+		* Author : 김주영
+		**/
+
+		INSERT INTO T_SYSWRK_G
+		(
+		  WRK_SN
+		, USR_ID
+		, EXE_DTL_CD
+		, EXEDTM
+		, LGI_IPADR
+		)
+		VALUES
+		(
+		  nextval('q_syswrk_g_01')
+		, #usr_id#
+		, 'DX-T0003'
+		, clock_timestamp()
+		, #lgi_ipadr#
+		)
+	</insert>
+
+	<insert id="insertHistoryLogout" parameterClass="HistoryVO">
+		/**
+		* Query ID : insertHistoryLogout
+		* Description : 로그아웃 이력 등록
+		* Author : 김주영
+		**/
+
+		INSERT INTO T_SYSWRK_G
+		(
+		  WRK_SN
+		, USR_ID
+		, EXE_DTL_CD
+		, EXEDTM
+		, LGI_IPADR
+		)
+		VALUES
+		(
+		  nextval('q_syswrk_g_01')
+		, #usr_id#
+		, 'DX-T0003_01'
+		, clock_timestamp()
+		, #lgi_ipadr#
+		)
+	</insert>
+
+	<insert id="insertHistoryMain" parameterClass="HistoryVO">
+		/**
+		* Query ID : insertHistoryMain
+		* Description : 메인화면 이력 등록
+		* Author : 김주영
+		**/
+
+		INSERT INTO T_SYSWRK_G
+		(
+		  WRK_SN
+		, USR_ID
+		, EXE_DTL_CD
+		, EXEDTM
+		, LGI_IPADR
+		)
+		VALUES
+		(
+		  nextval('q_syswrk_g_01')
+		, #usr_id#
+		, 'DX-T0004'
+		, clock_timestamp()
+		, #lgi_ipadr#
+		)
+	</insert>
+
+	<insert id="insertHistoryDbTree" parameterClass="HistoryVO">
+		/**
+		* Query ID : insertHistoryDbTree
+		* Description : DB Server Tree 이력 등록
+		* Author : 김주영
+		**/
+
+		INSERT INTO T_SYSWRK_G
+		(
+		  WRK_SN
+		, USR_ID
+		, EXE_DTL_CD
+		, EXEDTM
+		, LGI_IPADR
+		)
+		VALUES
+		(
+		  nextval('q_syswrk_g_01')
+		, #usr_id#
+		, 'DX-T0005'
+		, clock_timestamp()
+		, #lgi_ipadr#
+		)
+	</insert>
+
+	<insert id="insertHistoryDbServer" parameterClass="HistoryVO">
+		/**
+		* Query ID : insertHistoryDbServer
+		* Description : DB Server 이력 등록
+		* Author : 김주영
+		**/
+
+		INSERT INTO T_SYSWRK_G
+		(
+		  WRK_SN
+		, USR_ID
+		, EXE_DTL_CD
+		, EXEDTM
+		, LGI_IPADR
+		)
+		VALUES
+		(
+		  nextval('q_syswrk_g_01')
+		, #usr_id#
+		, 'DX-T0006'
+		, clock_timestamp()
+		, #lgi_ipadr#
+		)
+	</insert>
+
+	<insert id="insertHistoryDbServerRegPopup" parameterClass="HistoryVO">
+		/**
+		* Query ID : insertHistoryDbServerRegPopup
+		* Description : DB Server 등록팝업 이력 등록
+		* Author : 김주영
+		**/
+
+		INSERT INTO T_SYSWRK_G
+		(
+		  WRK_SN
+		, USR_ID
+		, EXE_DTL_CD
+		, EXEDTM
+		, LGI_IPADR
+		)
+		VALUES
+		(
+		  nextval('q_syswrk_g_01')
+		, #usr_id#
+		, 'DX-T0007'
+		, clock_timestamp()
+		, #lgi_ipadr#
+		)
+	</insert>
+
+	<insert id="insertHistoryDbServerI" parameterClass="HistoryVO">
+		/**
+		* Query ID : insertHistoryDbServerI
+		* Description : DB Server 등록팝업 저장 등록
+		* Author : 김주영
+		**/
+
+		INSERT INTO T_SYSWRK_G
+		(
+		  WRK_SN
+		, USR_ID
+		, EXE_DTL_CD
+		, EXEDTM
+		, LGI_IPADR
+		)
+		VALUES
+		(
+		  nextval('q_syswrk_g_01')
+		, #usr_id#
+		, 'DX-T0007_01'
+		, clock_timestamp()
+		, #lgi_ipadr#
+		)
+	</insert>
+	
+	<insert id="insertHistoryDatabase" parameterClass="HistoryVO">
+		/**
+		* Query ID : insertHistoryDatabase
+		* Description : Database조회 이력 등록
+		* Author : 김주영
+		**/
+
+		INSERT INTO T_SYSWRK_G
+		(
+		  WRK_SN
+		, USR_ID
+		, EXE_DTL_CD
+		, EXEDTM
+		, LGI_IPADR
+		)
+		VALUES
+		(
+		  nextval('q_syswrk_g_01')
+		, #usr_id#
+		, 'DX-T0009'
+		, clock_timestamp()
+		, #lgi_ipadr#
+		)
+	</insert>
+		
+	<insert id="insertHistoryTransferSetting" parameterClass="HistoryVO">
+		/**
+		* Query ID : insertHistoryTransferSetting
+		* Description : 전송설정 이력 등록
+		* Author : 김주영
+		**/
+
+		INSERT INTO T_SYSWRK_G
+		(
+		  WRK_SN
+		, USR_ID
+		, EXE_DTL_CD
+		, EXEDTM
+		, LGI_IPADR
+		)
+		VALUES
+		(
+		  nextval('q_syswrk_g_01')
+		, #usr_id#
+		, 'DX-T0011'
+		, clock_timestamp()
+		, #lgi_ipadr#
+		)
+	</insert>
+
+	<insert id="insertHistoryConnectorRegister" parameterClass="HistoryVO">
+		/**
+		* Query ID : insertHistoryConnectorRegister
+		* Description : Connector조회 이력 등록
+		* Author : 김주영
+		**/
+
+		INSERT INTO T_SYSWRK_G
+		(
+		  WRK_SN
+		, USR_ID
+		, EXE_DTL_CD
+		, EXEDTM
+		, LGI_IPADR
+		)
+		VALUES
+		(
+		  nextval('q_syswrk_g_01')
+		, #usr_id#
+		, 'DX-T0012'
+		, clock_timestamp()
+		, #lgi_ipadr#
+		)
+	</insert>
+
+	<insert id="insertHistoryConnectorRegisterU" parameterClass="HistoryVO">
+		/**
+		* Query ID : insertHistoryConnectorRegisterU
+		* Description : Connector수정 이력 등록
+		* Author : 김주영
+		**/
+
+		INSERT INTO T_SYSWRK_G
+		(
+		  WRK_SN
+		, USR_ID
+		, EXE_DTL_CD
+		, EXEDTM
+		, LGI_IPADR
+		)
+		VALUES
+		(
+		  nextval('q_syswrk_g_01')
+		, #usr_id#
+		, 'DX-T0012_03'
+		, clock_timestamp()
+		, #lgi_ipadr#
+		)
+	</insert>
+	
+	<insert id="insertHistoryConnectorRegisterD" parameterClass="HistoryVO">
+		/**
+		* Query ID : insertHistoryConnectorRegisterD
+		* Description : Connector삭제 이력 등록
+		* Author : 김주영
+		**/
+
+		INSERT INTO T_SYSWRK_G
+		(
+		  WRK_SN
+		, USR_ID
+		, EXE_DTL_CD
+		, EXEDTM
+		, LGI_IPADR
+		)
+		VALUES
+		(
+		  nextval('q_syswrk_g_01')
+		, #usr_id#
+		, 'DX-T0012_04'
+		, clock_timestamp()
+		, #lgi_ipadr#
+		)
+	</insert>
+	
+	<insert id="insertHistoryConnectorRegPopup" parameterClass="HistoryVO">
+		/**
+		* Query ID : insertHistoryConnectorRegPopup
+		* Description : Connector 등록 팝업 이력 등록
+		* Author : 김주영
+		**/
+
+		INSERT INTO T_SYSWRK_G
+		(
+		  WRK_SN
+		, USR_ID
+		, EXE_DTL_CD
+		, EXEDTM
+		, LGI_IPADR
+		)
+		VALUES
+		(
+		  nextval('q_syswrk_g_01')
+		, #usr_id#
+		, 'DX-T0013'
+		, clock_timestamp()
+		, #lgi_ipadr#
+		)
+	</insert>
+	
+	<insert id="insertHistoryConnectorRegisterI" parameterClass="HistoryVO">
+		/**
+		* Query ID : insertHistoryConnectorRegisterI
+		* Description : Connector등록 이력 등록
+		* Author : 김주영
+		**/
+
+		INSERT INTO T_SYSWRK_G
+		(
+		  WRK_SN
+		, USR_ID
+		, EXE_DTL_CD
+		, EXEDTM
+		, LGI_IPADR
+		)
+		VALUES
+		(
+		  nextval('q_syswrk_g_01')
+		, #usr_id#
+		, 'DX-T0013_01'
+		, clock_timestamp()
+		, #lgi_ipadr#
+		)
+	</insert>
+	
+	<insert id="insertHistoryConnectorConnTest" parameterClass="HistoryVO">
+		/**
+		* Query ID : insertHistoryConnectorConnTest
+		* Description : 연결테스트 이력 등록
+		* Author : 김주영
+		**/
+
+		INSERT INTO T_SYSWRK_G
+		(
+		  WRK_SN
+		, USR_ID
+		, EXE_DTL_CD
+		, EXEDTM
+		, LGI_IPADR
+		)
+		VALUES
+		(
+		  nextval('q_syswrk_g_01')
+		, #usr_id#
+		, 'DX-T0013_02'
+		, clock_timestamp()
+		, #lgi_ipadr#
+		)
+	</insert>		
+	
+	<insert id="insertHistoryUserManager" parameterClass="HistoryVO">
+		/**
+		* Query ID : insertHistoryUserManager
+		* Description : 사용자관리 이력 등록
+		* Author : 김주영
+		**/
+
+		INSERT INTO T_SYSWRK_G
+		(
+		  WRK_SN
+		, USR_ID
+		, EXE_DTL_CD
+		, EXEDTM
+		, LGI_IPADR
+		)
+		VALUES
+		(
+		  nextval('q_syswrk_g_01')
+		, #usr_id#
+		, 'DX-T0031'
+		, clock_timestamp()
+		, #lgi_ipadr#
+		)
+	</insert>
+
+	<insert id="insertHistoryUserManagerD" parameterClass="HistoryVO">
+		/**
+		* Query ID : insertHistoryUserManagerD
+		* Description : 사용자삭제 이력 등록
+		* Author : 김주영
+		**/
+
+		INSERT INTO T_SYSWRK_G
+		(
+		  WRK_SN
+		, USR_ID
+		, EXE_DTL_CD
+		, EXEDTM
+		, LGI_IPADR
+		)
+		VALUES
+		(
+		  nextval('q_syswrk_g_01')
+		, #usr_id#
+		, 'DX-T0031_01'
+		, clock_timestamp()
+		, #lgi_ipadr#
+		)
+	</insert>
+
+	<insert id="insertHistoryUserManagerI" parameterClass="HistoryVO">
+		/**
+		* Query ID : insertHistoryUserManagerI
+		* Description : 사용자등록 이력 등록
+		* Author : 김주영
+		**/
+
+		INSERT INTO T_SYSWRK_G
+		(
+		  WRK_SN
+		, USR_ID
+		, EXE_DTL_CD
+		, EXEDTM
+		, LGI_IPADR
+		)
+		VALUES
+		(
+		  nextval('q_syswrk_g_01')
+		, #usr_id#
+		, 'DX-T0032'
+		, clock_timestamp()
+		, #lgi_ipadr#
+		)
+	</insert>
+
+	<insert id="insertHistoryUserManagerU" parameterClass="HistoryVO">
+		/**
+		* Query ID : insertHistoryUserManagerU
+		* Description : 사용자수정 이력 등록
+		* Author : 김주영
+		**/
+
+		INSERT INTO T_SYSWRK_G
+		(
+		  WRK_SN
+		, USR_ID
+		, EXE_DTL_CD
+		, EXEDTM
+		, LGI_IPADR
+		)
+		VALUES
+		(
+		  nextval('q_syswrk_g_01')
+		, #usr_id#
+		, 'DX-T0033'
+		, clock_timestamp()
+		, #lgi_ipadr#
+		)
+	</insert>
+
+	<insert id="insertHistoryMenuAuthority" parameterClass="HistoryVO">
+		/**
+		* Query ID : insertHistoryMenuAuthority
+		* Description : 메뉴권한관리 이력 등록
+		* Author : 김주영
+		**/
+
+		INSERT INTO T_SYSWRK_G
+		(
+		  WRK_SN
+		, USR_ID
+		, EXE_DTL_CD
+		, EXEDTM
+		, LGI_IPADR
+		)
+		VALUES
+		(
+		  nextval('q_syswrk_g_01')
+		, #usr_id#
+		, 'DX-T0034'
+		, clock_timestamp()
+		, #lgi_ipadr#
+		)
+	</insert>
+	
+	<insert id="insertHistoryDbAuthority" parameterClass="HistoryVO">
+		/**
+		* Query ID : insertHistoryDbAuthority
+		* Description : DB권한관리 이력 등록
+		* Author : 김주영
+		**/
+
+		INSERT INTO T_SYSWRK_G
+		(
+		  WRK_SN
+		, USR_ID
+		, EXE_DTL_CD
+		, EXEDTM
+		, LGI_IPADR
+		)
+		VALUES
+		(
+		  nextval('q_syswrk_g_01')
+		, #usr_id#
+		, 'DX-T0035'
+		, clock_timestamp()
+		, #lgi_ipadr#
+		)
+	</insert>
+	
+	<insert id="insertHistoryAccessHistory" parameterClass="HistoryVO">
+		/**
+		* Query ID : insertHistoryAccessHistory
+		* Description : 화면접근 이력 등록
+		* Author : 김주영
+		**/
+
+		INSERT INTO T_SYSWRK_G
+		(
+		  WRK_SN
+		, USR_ID
+		, EXE_DTL_CD
+		, EXEDTM
+		, LGI_IPADR
+		)
+		VALUES
+		(
+		  nextval('q_syswrk_g_01')
+		, #usr_id#
+		, 'DX-T0036'
+		, clock_timestamp()
+		, #lgi_ipadr#
+		)
+	</insert>
+	
+	<insert id="insertHistoryAgentMonitoring" parameterClass="HistoryVO">
+		/**
+		* Query ID : insertHistoryAgentMonitoring
+		* Description : Agent모니터링 이력 등록
+		* Author : 김주영
+		**/
+
+		INSERT INTO T_SYSWRK_G
+		(
+		  WRK_SN
+		, USR_ID
+		, EXE_DTL_CD
+		, EXEDTM
+		, LGI_IPADR
+		)
+		VALUES
+		(
+		  nextval('q_syswrk_g_01')
+		, #usr_id#
+		, 'DX-T0037'
+		, clock_timestamp()
+		, #lgi_ipadr#
+		)
+	</insert>
+</sqlMap>

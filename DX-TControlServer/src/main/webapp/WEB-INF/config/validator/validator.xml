@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE form-validation PUBLIC 
+    "-//Apache Software Foundation//DTD Commons Validator Rules Configuration 1.1//EN" 
+    "http://jakarta.apache.org/commons/dtds/validator_1_1.dtd">
+
+<form-validation>
+
+    <formset>
+        <form name="sampleVO">
+        	<field property="name" depends="required">
+        		<arg0 key="title.sample.name" />
+			</field>
+			<field property="description" depends="required">
+                <arg0 key="title.sample.description" />
+            </field>
+        	<field property="regUser" depends="required">
+        		<arg0 key="title.sample.regUser" />
+			</field>
+        </form>
+    </formset>
+    
+      <formset>
+        <form name="SampleListVO">
+        	<field property="no" depends="required">
+        		<arg0 key="일렬번호" />
+			</field>
+			<field property="category_id" depends="required">
+                <arg0 key="카테고리ID" />
+            </field>
+        	<field property="category_nm" depends="required">
+        		<arg0 key="카테고리명" />
+			</field>
+			<field property="use_yn" depends="required">
+        		<arg0 key="사용여부" />
+			</field>
+			<field property="contents" depends="required">
+        		<arg0 key="내용" />
+			</field>
+			<field property="reg_nm" depends="required">
+        		<arg0 key="등록자" />
+			</field>
+        </form>
+    </formset>
+
+      <formset>
+        <form name="SampleTreeVO">
+			<field property="server_nm" depends="required">
+                <arg0 key="서버명" />
+            </field>
+        	<field property="ip" depends="required">
+        		<arg0 key="IP" />
+			</field>
+			<field property="port" depends="required">
+        		<arg0 key="Port" />
+			</field>
+			<field property="user_nm" depends="required">
+        		<arg0 key="User" />
+			</field>
+			<field property="password" depends="required">
+        		<arg0 key="Password" />
+			</field>
+        </form>
+    </formset>
+</form-validation>

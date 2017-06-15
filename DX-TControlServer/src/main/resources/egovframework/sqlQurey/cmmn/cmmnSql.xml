@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE sqlMap
+    PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN"
+    "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+
+<sqlMap namespace="cmmnListSQL">
+	<typeAlias alias="userVO" type="com.k4m.dx.tcontrol.login.service.UserVO"/>
+
+
+	<select id="selectLoginUserList" parameterClass="userVO" resultClass="userVO">
+		/**
+	 	* Query ID : selectLoginUserList
+	 	* Description : 로그인 사용자 조회
+	 	* Author : 변승우
+	 	**/
+	 	
+      SELECT 
+				  USR_ID
+				, USR_NM
+				, PWD
+				, BLN_NM
+				, DEPT_NM
+				, RSP_BSN_NM
+				, PST_NM
+				, AUT_ID
+				, CPN
+				, USR_EXPR_DT
+				, USE_YN
+				, FRST_REGR_ID
+				, FRST_REG_DTM
+				, LST_MDFR_ID
+				, LST_MDF_DTM
+      FROM T_USR_I
+      WHERE 1=1	
+      AND  USR_ID = #usr_id#		
+    </select>
+    
+</sqlMap>

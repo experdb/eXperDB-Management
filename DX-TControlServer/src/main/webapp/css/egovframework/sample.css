@@ -1,0 +1,204 @@
+/********************************************************************************/
+/*								                                                */
+/*  Design RIAN     			                                                */
+/*  Date : 2017-05-17		                                                  	*/
+/*      				         			                                    */
+/*									                                            */
+/********************************************************************************/
+
+/* body {
+   margin: 0;
+   padding: 0;
+   font-family: "굴림";
+   font-size: 12px;
+   color: #666;
+   scroll: auto;
+} */
+
+table, tr, td, th {
+   font-size: 11px;
+   color: #333333;
+}
+
+
+
+#content_pop {
+   float: left;
+   text-align: left;
+   width: 680px;
+   background-color: #FFFFFF;
+   padding: 10px 10px 10px 10px;
+}
+
+#title {
+   float: left;
+   text-align: left;
+   padding: 10px 0 10px 0;
+   border-bottom: 1px solid #e5e5e5;
+   width: 680px;
+}
+
+#title ul {
+   float: left;
+   margin: 0;
+   padding: 0;
+}
+
+#title li {
+   list-style-type: none;
+   width: 200px;
+   padding: 3px 0px 2px 0px;
+   float: left;
+   font-family: "돋움";
+   font-size: 16px;
+   font-weight: bold;
+   color: #000000;
+}
+
+#table {
+   float: left;
+   margin: 0 0 10px 0;
+   padding: 0 0 0 0;
+   width: 680px;
+}
+
+table, tr, td, th {
+   font-size: 13px;
+   color: rgb(51, 51, 51);
+}
+
+th {
+   background-color: #F3F5E0;
+   background: url(../../images/egovframework/example/th_bg.gif) 0 0 repeat;
+   height: 26px;
+   text-align: center;
+   vertical-align: middle;
+   color: #003366;
+}
+
+.listtd {
+   padding: 10px 5px 8px 5px;
+   border-bottom: 1px solid #e5e5e5;
+}
+
+#sysbtn {
+   float: right;
+   text-align: right;
+   padding: 0;
+   margin: 0;
+   display: inline;
+}
+
+.btn_blue_l {
+   float: left;
+   background: url(../../images/egovframework/example/btn_bg_l.gif) 0 0
+      no-repeat;
+   height: 20px;
+   padding: 0px 0px 0px 10px;
+   margin: 0px 0px 0px 0px;
+}
+
+
+.tbtd_caption {
+   font-weight: bold;
+   color: #003366;
+   background-color: #E5EDF3;
+   text-align: right;
+   padding: 10px 4px 9px 5px;
+   margin: 0;
+}
+
+.tbtd_caption1 {
+   font-family: "맑은 고딕";
+   font-weight: bold;
+   color: #003366;
+   background-color: #E5EDF3;
+   text-align: left;
+   padding: 10px 4px 9px 5px;
+   margin: 0;
+}
+
+.tbtd_content {
+   background-color: #F5F8FA;
+   padding: 7px 10px 5px 10px;
+   margin: 0;
+}
+
+#sysbtn ul {
+   margin: 0;
+   padding: 0;
+   float: left;
+   display: inline;
+}
+
+#sysbtn li {
+   list-style-type: none;
+   margin: 0 auto;
+   padding: 0 0 0 3px;
+   float: left;
+   display: inline;
+}
+
+#paging {padding:0 0 0 0; text-align:center; width:100%;}
+#paging ul {display:inline;}
+#paging li {display:inline; list-style-type:none; padding:0 10px 0 10px; font-family: Tahoma; font-size:11px; color: #333333;}
+#paging li.pre10 {padding:0 2px 0 2px;}
+#paging li.pre1 {padding:0 2px 0 2px;}
+#paging li.next10 {padding:0 2px 0 2px;}
+#paging li.next1 {padding:0 2px 0 2px;}
+#paging li.line {background:url(../../images/egovframework/example/paging_line.gif) 0 2px no-repeat;}
+#paging li.first {padding:0 5px 0 0;}
+#paging li.last {background:url(../../images/egovframework/example/paging_line.gif) 0 2px no-repeat; padding:0 5px 0 0;}
+
+.bbsList { clear:both; padding:10px 0; overflow:hidden;}
+.bbsList table { width:100%; border-top:2px solid #4e95dc;}
+.bbsList th { padding:10px 0; overflow:hidden; text-align:center; border-bottom:1px solid #ccc; background:#f8f8f8;}
+.bbsList td { padding:10px 0; overflow:hidden; text-align:center; border-bottom:1px solid #ccc; color:#5d5858;}
+.bbsList td a { color:#3672c2;}
+.bbsList td.left { text-align:left; }
+
+.bbsListMa { clear:both; padding:10px 0; overflow:hidden}
+.bbsListMa table { width:100%; border-top:2px solid #b3d7f1; }
+.bbsListMa th { padding:8px 0; overflow:hidden; color:#576b79; text-align:center; border-bottom:1px solid #cbcbcb; border-right:1px solid #cbcbcb; background:#f8f8f8;}
+.bbsListMa td { padding:7px 0; overflow:hidden; font-size:11px; text-align:center; border-bottom:1px solid #cbcbcb; border-right:1px solid #cbcbcb; color:#5d5858}
+.bbsListMa td a { color:#3672c2}
+.bbsListMa td.left { text-align:left; }
+.bbsListMa th.last, .bbsListMa td.last { border-right:none}
+
+.bbsDetail { clear:both; padding:10px 0; overflow:hidden;}
+.bbsDetail table { width:100%;}
+.bbsDetail th { padding:10px 10px; overflow:hidden; text-align:left; border-bottom:1px solid #ccc; border-right:1px solid #ccc; background:#f8f8f8;}
+.bbsDetail th img { vertical-align:top; margin-right:5px}
+.bbsDetail th.first { border-top:2px solid #4e95dc}
+.bbsDetail td.first { border-top:2px solid #4e95dc}
+.bbsDetail td.none { border-bottom:none;}
+.bbsDetail td { padding:10px 10px; overflow:hidden; text-align:left; border-bottom:1px solid #ccc; color:#5d5858;}
+.bbsDetail input { border:1px solid #d3d3d3; padding:2px 5px; overflow:hidden; vertical-align:top;}
+
+.location { border-bottom:1px solid #dcdcdc; text-align:right; height:30px; font-size:11px; line-height:30px; color:#333;}
+.location strong { font-size:11px; letter-spacing:-1px; }
+
+.Btn { clear:both; padding:15px 0 0; text-align:right; overflow:hidden}
+.BtnTOp { clear:both; padding:0px 0 10px; text-align:right; overflow:hidden} 
+.bbsBtn {  display:inline-block; margin:0 2px; background: url(/images/egovframework/bopr/bg_bbs_btn.gif) repeat-x; height:20px; padding:0 12px; }
+overflow:hidden; text-align:center; border:1px solid #d1d6e3; font-size:11px; letter-spacing:-1px;  line-height:22px;}
+.bbsBtn a { color:#0e72c2; }
+.bbsBtn a:hover { text-decoration:none; color:#000;}
+
+
+/* 검색부분 */
+.search { clear:both; margin:0 auto; text-align:center; background:#f9f9f9; border-bottom:1px solid #dcdcdc; border-left:1px solid #dcdcdc; border-right:1px solid #dcdcdc;}
+.disp_none { display:none; }
+
+/* search */
+.searchboxA { overflow:hidden; width:100%; margin:0; padding:8px 0 6px;_padding:7px 0 5px;text-align:center;}
+.searchboxA .inptext { margin:0; width:200px; border:1px solid #d3d3d3; height:20px;}
+.searchboxA img { vertical-align:middle; }
+.serSel { width:120px; white-space:nowrap;  border:1px solid #d3d3d3; vertical-align:top; height:20px;}
+.searchbtn { width:37px; height:22px; vertical-align:top;}
+
+.disp_none { display:none; }
+img {
+   border: 0;
+   vertical-align: middle;
+}
