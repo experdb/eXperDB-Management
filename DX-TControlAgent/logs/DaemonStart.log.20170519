@@ -1,0 +1,25 @@
+2017-05-19 18:01:19|C:\Users\thpark\.NKJSD_com.k4m.dx.tcontrol.DaemonStart.lock 락 파일을 생성합니다.
+2017-05-19 18:01:19|데몬 종료 표시자 파일 감시 쓰레드를 시작했습니다.
+2017-05-19 18:01:19|Refreshing org.springframework.context.support.ClassPathXmlApplicationContext@38c8c892: startup date [Fri May 19 18:01:19 KST 2017]; root of context hierarchy
+2017-05-19 18:01:19|Loading XML bean definitions from class path resource [Dx-TcontrolAgent-context.xml]
+2017-05-19 18:01:20|Loading properties file from class path resource [context.properties]
+2017-05-19 18:01:20|JSR-330 'javax.inject.Inject' annotation found and supported for autowiring
+2017-05-19 18:01:20|DX-TcontrolAgent Deamon Start..
+2017-05-19 18:01:20|DX-TcontrolAgent Deamon Start..
+2017-05-19 18:01:20|DX-TcontrolAgent Deamon Start.. 2017-05-19 18:01:20
+2017-05-19 18:01:20|DX-TcontrolAgent Deamon Start.. 2017-05-19 18:01:20
+2017-05-19 18:01:20|
+2017-05-19 18:01:20|**************************************************
+2017-05-19 18:01:20|SocketListener[127.0.0.1]를 기동합니다.
+2017-05-19 18:01:20|ListenerPort : [9001]
+2017-05-19 18:01:20|Timeout : [-1]
+2017-05-19 18:01:20|Backlog : [-1]
+2017-05-19 18:01:20|SocketListener[127.0.0.1]가 메시지 수신을 대기하고 있습니다.
+2017-05-19 18:01:20|**************************************************
+2017-05-19 18:01:20|
+2017-05-19 18:08:04|DX-TcontrolAgent Deamon Start..
+2017-05-19 18:08:04|DX-TcontrolAgent Deamon Start.. 2017-05-19 18:08:04
+2017-05-19 18:09:21|DX-TcontrolAgent Deamon Start..
+2017-05-19 18:09:21|DX-TcontrolAgent Deamon Start.. 2017-05-19 18:09:21
+2017-05-19 18:11:30|DX-TcontrolAgent Deamon Start..
+2017-05-19 18:11:30|DX-TcontrolAgent Deamon Start.. 2017-05-19 18:11:30

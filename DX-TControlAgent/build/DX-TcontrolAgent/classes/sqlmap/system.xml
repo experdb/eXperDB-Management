@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="system">
+	<select id="TB_INSTANCE_INFO_R001" resultType="hashmap" flushCache="true">
+		select INSTANCE_ID, 
+		       SERVER_IP, 
+		       SERVICE_PORT, 
+		       CONN_USER_ID, 
+		       convert_from(decode(CONN_USER_PWD,'base64'),'UTF8') as CONN_USER_PWD, 
+		       COLLECT_PERIOD_SEC, 
+		       CONN_DB_NAME,
+		       PG_VERSION, 
+		       LAST_MOD_DT
+		  from TB_INSTANCE_INFO
+		 where COLLECT_YN = 'Y'
+		   and DELETE_YN = 'N'
+		order by LAST_MOD_DT DESC
+	</select>
+	
+	<select id="TB_INSTANCE_INFO_R002" resultType="hashmap">
+		select INSTANCE_ID, 
+		       LAST_MOD_DT
+		  from TB_INSTANCE_INFO
+		order by LAST_MOD_DT DESC
+		limit 1
+	</select>
+	
+	<select id="TB_INSTANCE_INFO_R003" resultType="hashmap">
+		SELECT instance_id 
+		FROM tb_instance_info
+		where COLLECT_YN = 'Y'
+		      and DELETE_YN = 'N'
+		ORDER BY RANDOM()
+		LIMIT 1
+	</select>	
+	
+	<select id="TB_CONFIG_R001" resultType="hashmap">
+		SELECT DAILY_BATCH_START_TIME, 
+		       HCHK_PERIOD_SEC,
+		       TO_CHAR(NOW(), 'HH24:MI:SS') NOW_TIME
+	      FROM TB_CONFIG
+	</select>
+	
+	<select id="TB_CONFIG_R002" resultType="hashmap">
+		SELECT SERIAL_KEY,
+		       AGENT_IP,
+		       AGENT_PORT
+	      FROM TB_CONFIG
+	</select>	
+	
+	<select id="TB_SYS_LOG_R001" resultType="hashmap">
+		SELECT REG_DATE,
+		       TASK_CD,
+		       STATUS
+	          FROM TB_SYS_LOG
+		 WHERE REG_DATE = TO_CHAR(NOW(), 'YYYYMMDD')
+		   AND TASK_CD = '2'	
+	</select>	
+</mapper>

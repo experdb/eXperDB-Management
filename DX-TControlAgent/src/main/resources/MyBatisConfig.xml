@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE configuration PUBLIC "-//mybatis.org//DTD Config 3.0//EN"  "http://mybatis.org/dtd/mybatis-3-config.dtd">
+
+<configuration>
+
+	<settings>
+		<setting name="defaultExecutorType" value="BATCH" /> <!-- 이 설정으로 batch 처리가 가능하다. -->
+		<setting name = "logImpl" value="LOG4J"/>
+	</settings>
+
+    <!-- db 정보 파일을 로드한다. -->
+    <!--
+    <properties resource="db.properties" />
+	-->
+  
+    <!-- db 연결 -->
+    <environments default="development">
+        <environment id="development">
+            <transactionManager type="JDBC" />
+            <dataSource type="POOLED">
+                <property name="driver" value="org.postgresql.Driver" />
+                <property name="url" value="jdbc:postgresql://127.0.0.1:5431/tcontrol" />
+                <property name="username" value="experdba" />
+                <property name="password" value="experdba" />
+				<property name="poolMaximumActiveConnections" value="100" />
+            </dataSource>
+        </environment>
+    </environments>
+
+    <!-- sql 맵퍼 -->
+    <mappers>
+        <mapper resource="sqlmap/system.xml" /> <!-- sql  -->	
+        <mapper resource="sqlmap/app.xml" /> <!-- 수집 sql  -->
+    </mappers>
+
+</configuration>

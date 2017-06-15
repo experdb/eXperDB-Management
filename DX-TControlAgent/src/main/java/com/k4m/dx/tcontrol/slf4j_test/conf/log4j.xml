@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE log4j:configuration SYSTEM "log4j.dtd">
+
+<log4j:configuration>
+	<appender name="stdout" class="org.apache.log4j.ConsoleAppender">
+		<layout class="org.apache.log4j.PatternLayout">
+			<param name="ConversionPattern"
+				value="[%d{yyyy-MM-dd HH:mm}] %5p [%C{1}(%M:%L)] :%m%n%n" />
+		</layout>
+	</appender>
+
+	<appender name="file" class="org.apache.log4j.DailyRollingFileAppender">
+		<param name="File" value="./logs/debug.log" />
+		<param name="Append" value="true" />
+		<param name="DatePattern" value="'.'yyyy-MM-dd" />
+		<layout class="org.apache.log4j.PatternLayout">
+		<!-- 
+			<param name="ConversionPattern"
+				value="[slf5s.start]%d{DATE}[slf5s.DATE]%n %p[slf5s.PRIORITY]%n%x[slf5s.NDC]%n%t[slf5s.THREAD]%n
+   						  %c[slf5s.CATEGORY]%n%l[slf5s.LOCATION]%n%m[slf5s.MESSAGE]%n%n" />
+   						  -->
+		  <param name="ConversionPattern" value="[%d{yyyy-MM-dd HH:mm}] %5p [%C{1}(%M:%L)] :%m%n%n" />
+		</layout>
+	</appender>
+
+	
+	<category name="client">
+		<priority value="DEBUG" />
+	</category>
+
+	<category name="server">
+		<priority value="DEBUG" />
+	</category>
+	<root>
+		<priority value="DEBUG" />
+		<appender-ref ref="stdout" />	
+		<appender-ref ref="file" />
+	</root>
+	
+	
+
+</log4j:configuration>
