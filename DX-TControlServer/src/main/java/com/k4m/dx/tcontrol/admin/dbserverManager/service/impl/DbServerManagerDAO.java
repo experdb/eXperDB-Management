@@ -27,7 +27,7 @@ public class DbServerManagerDAO extends EgovAbstractMapper{
 	@SuppressWarnings({ "unchecked", "deprecation" })
 	public List<DbServerVO> selectDbServerList(DbServerVO dbServerVO) throws SQLException {
 		List<DbServerVO> sl = null;
-		sl = (List<DbServerVO>) list("dbserverManagerSql.selectLoginUserList", dbServerVO);
+		sl = (List<DbServerVO>) list("dbserverManagerSql.selectDbServerList", dbServerVO);
 		return sl;
 	}
 

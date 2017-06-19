@@ -39,13 +39,14 @@
                 , LST_MDF_DTM
           FROM T_DBSVR_I	
           WHERE 1 = 1
-	      <if test="db_svr_nm != ''">
+          
+	      <if test="db_svr_nm != null and db_svr_nm != '' ">
 	      AND DB_SVR_NM LIKE '%' || #{db_svr_nm} || '%'
-	      </if>
-	      <if test="ipadr != ''">
+	      </if>	     
+	      <if test="ipadr != null and ipadr != '' ">
 	      AND IPADR LIKE '%' || #{ipadr} || '%'
-	      </if>
-	      <if test="dft_db_nm != ''">
+	      </if>	      
+	      <if test="dft_db_nm != null and dft_db_nm != '' ">
 	      AND DFT_DB_NM LIKE  '%' || #{dft_db_nm} || '%'
 	      </if>         
           ORDER BY DB_SVR_ID
