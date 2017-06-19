@@ -36,13 +36,13 @@ public class ClientTester {
 		int port = 9001;
 		try {
 			
-			clientTester.dxT001(Ip, port);
+			//clientTester.dxT001(Ip, port);
 			//clientTester.dxT002(Ip, port);
 			//clientTester.dxT003(Ip, port);
 			//clientTester.dxT004(Ip, port);
 			//clientTester.dxT005(Ip, port);
 			//clientTester.dxT006_C(Ip, port);
-			//clientTester.dxT006_R(Ip, port);
+			clientTester.dxT006_R(Ip, port);
 			//clientTester.dxT006_U(Ip, port);
 			//clientTester.dxT006_D(Ip, port);
 			
