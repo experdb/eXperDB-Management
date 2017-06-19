@@ -7,7 +7,7 @@ import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 
-import com.k4m.dx.tcontrol.socket.ProtocolID;
+import com.k4m.dx.tcontrol.socket.client.ClientProtocolID;
 import com.k4m.dx.tcontrol.socket.TranCodeType;
 
 public class ClientAdapter {
@@ -36,7 +36,7 @@ public class ClientAdapter {
 
 		JSONObject jObj = new JSONObject();
 
-		jObj.put(ProtocolID.DX_EX_CODE, TranCodeType.CLOSE);
+		jObj.put(ClientProtocolID.DX_EX_CODE, TranCodeType.CLOSE);
 		
 		byte[] bt = jObj.toString().getBytes();
 		
@@ -48,8 +48,8 @@ public class ClientAdapter {
 	private List<String> SubReqMsg(byte[] recvBuff) throws Exception{
 		JSONParser parser=new JSONParser();
 		JSONObject obj=(JSONObject)parser.parse(new String(recvBuff));
-		JSONArray jArray=(JSONArray) obj.get(ProtocolID.RESULT_DATA);
-		String _tran_err_msg = (String)obj.get(ProtocolID.ERR_MSG);
+		JSONArray jArray=(JSONArray) obj.get(ClientProtocolID.RESULT_DATA);
+		String _tran_err_msg = (String)obj.get(ClientProtocolID.ERR_MSG);
 		
 		if (_tran_err_msg == null){
 			List<String> _tran_req_data = new ArrayList<String>();
@@ -87,8 +87,8 @@ public class ClientAdapter {
 	 */
 	public JSONObject dxT001(String strDxExCode, JSONObject serverObj) throws Exception{
 		JSONObject jObj = new JSONObject();
-		jObj.put(ProtocolID.DX_EX_CODE, strDxExCode);
-		jObj.put(ProtocolID.SERVER_INFO, serverObj);
+		jObj.put(ClientProtocolID.DX_EX_CODE, strDxExCode);
+		jObj.put(ClientProtocolID.SERVER_INFO, serverObj);
 
 		byte[] bt = jObj.toString().getBytes();
 		
@@ -108,9 +108,9 @@ public class ClientAdapter {
 	 */
 	public JSONObject dxT002(String strDxExCode, JSONObject serverObj, String strSchema) throws Exception{
 		JSONObject jObj = new JSONObject();
-		jObj.put(ProtocolID.DX_EX_CODE, strDxExCode);
-		jObj.put(ProtocolID.SERVER_INFO, serverObj);
-		jObj.put(ProtocolID.SCHEMA, strSchema);
+		jObj.put(ClientProtocolID.DX_EX_CODE, strDxExCode);
+		jObj.put(ClientProtocolID.SERVER_INFO, serverObj);
+		jObj.put(ClientProtocolID.SCHEMA, strSchema);
 
 		byte[] bt = jObj.toString().getBytes();
 		
@@ -122,8 +122,8 @@ public class ClientAdapter {
 	
 	public JSONObject dxT003(String strDxExCode, JSONObject serverObj) throws Exception{
 		JSONObject jObj = new JSONObject();
-		jObj.put(ProtocolID.DX_EX_CODE, strDxExCode);
-		jObj.put(ProtocolID.SERVER_INFO, serverObj);
+		jObj.put(ClientProtocolID.DX_EX_CODE, strDxExCode);
+		jObj.put(ClientProtocolID.SERVER_INFO, serverObj);
 
 
 		byte[] bt = jObj.toString().getBytes();

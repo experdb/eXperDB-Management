@@ -4,9 +4,7 @@ import java.net.ConnectException;
 import java.net.Socket;
 import java.net.UnknownHostException;
 
-import com.k4m.dx.tcontrol.socket.SocketCtl;
-
-public class ClientConnector extends SocketCtl{	
+public class ClientConnector extends ClientSocketCtl{	
 	public void create(String ipaddr, int port) throws UnknownHostException, ConnectException, IOException {		
 		this.ipaddr		= ipaddr;
 		this.port		= port;
