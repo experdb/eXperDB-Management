@@ -13,7 +13,7 @@
  	<mappers>
 	 	<!-- cmmn -->
 		<mapper resource="egovframework/sqlmap/mapper/cmmn/cmmnSql.xml" />
-		<mapper resource="egovframework/sqlmap/mapper/cmmn/cmmnCodeSql.xml" />
+		<mapper resource="egovframework/sqlmap/mapper/cmmn/cmmnCodeSql.xml" /> 
 		<mapper resource="egovframework/sqlmap/mapper/cmmn/cmmnHistorySql.xml" />
 		
 		<!-- sample -->
