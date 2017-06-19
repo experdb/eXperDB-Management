@@ -7,9 +7,6 @@ import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 
-import com.k4m.dx.tcontrol.socket.client.ClientProtocolID;
-import com.k4m.dx.tcontrol.socket.client.ClientTranCodeType;
-
 public class ClientAdapter {
 	private final ClientConnector cc;
 	private final String IP;
