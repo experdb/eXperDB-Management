@@ -13,7 +13,7 @@ import com.k4m.dx.tcontrol.functions.transfer.service.TransferService;
 @Service("transferServiceImpl")
 public class TransferServiceImpl implements TransferService{
 	
-	@Resource(name = "TransferDAO")
+	@Resource(name = "transferDAO")
 	private TransferDAO transferDAO;
 	
 	public List<ConnectorVO> selectConnectorRegister(Map<String, Object> param) throws Exception {
