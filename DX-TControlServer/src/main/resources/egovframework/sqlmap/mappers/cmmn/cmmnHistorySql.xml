@@ -21,10 +21,10 @@
 		VALUES
 		(
 		  nextval('q_syswrk_g_01')
-		, #usr_id#
+		, #{usr_id}
 		, 'DX-T0003'
 		, clock_timestamp()
-		, #lgi_ipadr#
+		, #{lgi_ipadr}
 		)
 	</insert>
 
@@ -46,10 +46,10 @@
 		VALUES
 		(
 		  nextval('q_syswrk_g_01')
-		, #usr_id#
+		, #{usr_id}
 		, 'DX-T0003_01'
 		, clock_timestamp()
-		, #lgi_ipadr#
+		, #{lgi_ipadr}
 		)
 	</insert>
 
@@ -71,10 +71,10 @@
 		VALUES
 		(
 		  nextval('q_syswrk_g_01')
-		, #usr_id#
+		, #{usr_id}
 		, 'DX-T0004'
 		, clock_timestamp()
-		, #lgi_ipadr#
+		, #{lgi_ipadr}
 		)
 	</insert>
 
@@ -96,10 +96,10 @@
 		VALUES
 		(
 		  nextval('q_syswrk_g_01')
-		, #usr_id#
+		, #{usr_id}
 		, 'DX-T0005'
 		, clock_timestamp()
-		, #lgi_ipadr#
+		, #{lgi_ipadr}
 		)
 	</insert>
 
@@ -121,10 +121,10 @@
 		VALUES
 		(
 		  nextval('q_syswrk_g_01')
-		, #usr_id#
+		, #{usr_id}
 		, 'DX-T0006'
 		, clock_timestamp()
-		, #lgi_ipadr#
+		, #{lgi_ipadr}
 		)
 	</insert>
 
@@ -146,10 +146,10 @@
 		VALUES
 		(
 		  nextval('q_syswrk_g_01')
-		, #usr_id#
+		, #{usr_id}
 		, 'DX-T0007'
 		, clock_timestamp()
-		, #lgi_ipadr#
+		, #{lgi_ipadr}
 		)
 	</insert>
 
@@ -171,10 +171,10 @@
 		VALUES
 		(
 		  nextval('q_syswrk_g_01')
-		, #usr_id#
+		, #{usr_id}
 		, 'DX-T0007_01'
 		, clock_timestamp()
-		, #lgi_ipadr#
+		, #{lgi_ipadr}
 		)
 	</insert>
 	
@@ -196,10 +196,10 @@
 		VALUES
 		(
 		  nextval('q_syswrk_g_01')
-		, #usr_id#
+		, #{usr_id}
 		, 'DX-T0009'
 		, clock_timestamp()
-		, #lgi_ipadr#
+		, #{lgi_ipadr}
 		)
 	</insert>
 		
@@ -221,10 +221,10 @@
 		VALUES
 		(
 		  nextval('q_syswrk_g_01')
-		, #usr_id#
+		, #{usr_id}
 		, 'DX-T0011'
 		, clock_timestamp()
-		, #lgi_ipadr#
+		, #{lgi_ipadr}
 		)
 	</insert>
 
@@ -246,10 +246,10 @@
 		VALUES
 		(
 		  nextval('q_syswrk_g_01')
-		, #usr_id#
+		, #{usr_id}
 		, 'DX-T0012'
 		, clock_timestamp()
-		, #lgi_ipadr#
+		, #{lgi_ipadr}
 		)
 	</insert>
 
@@ -271,10 +271,10 @@
 		VALUES
 		(
 		  nextval('q_syswrk_g_01')
-		, #usr_id#
+		, #{usr_id}
 		, 'DX-T0012_03'
 		, clock_timestamp()
-		, #lgi_ipadr#
+		, #{lgi_ipadr}
 		)
 	</insert>
 	
@@ -296,10 +296,10 @@
 		VALUES
 		(
 		  nextval('q_syswrk_g_01')
-		, #usr_id#
+		, #{usr_id}
 		, 'DX-T0012_04'
 		, clock_timestamp()
-		, #lgi_ipadr#
+		, #{lgi_ipadr}
 		)
 	</insert>
 	
@@ -321,10 +321,10 @@
 		VALUES
 		(
 		  nextval('q_syswrk_g_01')
-		, #usr_id#
+		, #{usr_id}
 		, 'DX-T0013'
 		, clock_timestamp()
-		, #lgi_ipadr#
+		, #{lgi_ipadr}
 		)
 	</insert>
 	
@@ -346,10 +346,10 @@
 		VALUES
 		(
 		  nextval('q_syswrk_g_01')
-		, #usr_id#
+		, #{usr_id}
 		, 'DX-T0013_01'
 		, clock_timestamp()
-		, #lgi_ipadr#
+		, #{lgi_ipadr}
 		)
 	</insert>
 	
@@ -371,10 +371,10 @@
 		VALUES
 		(
 		  nextval('q_syswrk_g_01')
-		, #usr_id#
+		, #{usr_id}
 		, 'DX-T0013_02'
 		, clock_timestamp()
-		, #lgi_ipadr#
+		, #{lgi_ipadr}
 		)
 	</insert>		
 	
@@ -396,10 +396,10 @@
 		VALUES
 		(
 		  nextval('q_syswrk_g_01')
-		, #usr_id#
+		, #{usr_id}
 		, 'DX-T0031'
 		, clock_timestamp()
-		, #lgi_ipadr#
+		, #{lgi_ipadr}
 		)
 	</insert>
 
@@ -421,10 +421,10 @@
 		VALUES
 		(
 		  nextval('q_syswrk_g_01')
-		, #usr_id#
+		, #{usr_id}
 		, 'DX-T0031_01'
 		, clock_timestamp()
-		, #lgi_ipadr#
+		, #{lgi_ipadr}
 		)
 	</insert>
 
@@ -446,10 +446,10 @@
 		VALUES
 		(
 		  nextval('q_syswrk_g_01')
-		, #usr_id#
+		, #{usr_id}
 		, 'DX-T0032'
 		, clock_timestamp()
-		, #lgi_ipadr#
+		, #{lgi_ipadr}
 		)
 	</insert>
 
@@ -471,10 +471,10 @@
 		VALUES
 		(
 		  nextval('q_syswrk_g_01')
-		, #usr_id#
+		, #{usr_id}
 		, 'DX-T0033'
 		, clock_timestamp()
-		, #lgi_ipadr#
+		, #{lgi_ipadr}
 		)
 	</insert>
 
@@ -496,10 +496,10 @@
 		VALUES
 		(
 		  nextval('q_syswrk_g_01')
-		, #usr_id#
+		, #{usr_id}
 		, 'DX-T0034'
 		, clock_timestamp()
-		, #lgi_ipadr#
+		, #{lgi_ipadr}
 		)
 	</insert>
 	
@@ -521,10 +521,10 @@
 		VALUES
 		(
 		  nextval('q_syswrk_g_01')
-		, #usr_id#
+		, #{usr_id}
 		, 'DX-T0035'
 		, clock_timestamp()
-		, #lgi_ipadr#
+		, #{lgi_ipadr}
 		)
 	</insert>
 	
@@ -546,10 +546,10 @@
 		VALUES
 		(
 		  nextval('q_syswrk_g_01')
-		, #usr_id#
+		, #{usr_id}
 		, 'DX-T0036'
 		, clock_timestamp()
-		, #lgi_ipadr#
+		, #{lgi_ipadr}
 		)
 	</insert>
 	
@@ -571,10 +571,10 @@
 		VALUES
 		(
 		  nextval('q_syswrk_g_01')
-		, #usr_id#
+		, #{usr_id}
 		, 'DX-T0037'
 		, clock_timestamp()
-		, #lgi_ipadr#
+		, #{lgi_ipadr}
 		)
 	</insert>
 

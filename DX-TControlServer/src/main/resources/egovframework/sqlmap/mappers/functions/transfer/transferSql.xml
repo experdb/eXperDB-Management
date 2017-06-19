@@ -35,10 +35,10 @@
 			FROM T_CNR_I
 			WHERE 1=1	
 				<if test="cnr_nm != ''">
-				AND CNR_NM LIKE #cnr_nm#
+				AND CNR_NM LIKE #{cnr_nm}
 				</if>
 				<if test="cnr_ipadr != ''">
-				AND CNR_IPADR LIKE #cnr_ipadr#
+				AND CNR_IPADR LIKE #{cnr_ipadr}
 				</if>
 			ORDER BY LST_MDF_DTM DESC
 		)A		
@@ -61,7 +61,7 @@
 		, LST_MDFR_ID
 		, LST_MDF_DTM
 		FROM T_CNR_I
-		WHERE cnr_id = #cnr_id#
+		WHERE cnr_id = #{cnr_id}
 	 </select>
 	 
 	<delete id="deleteConnectorRegister" parameterType="int">
@@ -71,7 +71,7 @@
 		* Author : 김주영
 		**/
 		DELETE FROM T_CNR_I
-		WHERE cnr_id=#cnr_id#
+		WHERE cnr_id=#{cnr_id}
 	</delete>
 		
 	<insert id="insertConnectorRegister" parameterType="ConnectorVO">
@@ -93,13 +93,13 @@
 		) 
 		VALUES(         
 		  nextval('q_cnr_i_01')
-		, #cnr_nm#
-		, #cnr_ipadr#
-		, #cnr_portno#
-		, #cnr_cnn_tp_cd#
-		, #frst_regr_id#
+		, #{cnr_nm}
+		, #{cnr_ipadr}
+		, #{cnr_portno}
+		, #{cnr_cnn_tp_cd}
+		, #{frst_regr_id}
 		, clock_timestamp()
-		, #lst_mdfr_id#
+		, #{lst_mdfr_id}
 		, clock_timestamp()
 		)
 	</insert>
@@ -112,12 +112,12 @@
 		**/	
 		UPDATE T_CNR_I
 		SET
-		  CNR_NM = #cnr_nm#
-		, CNR_IPADR = #cnr_ipadr#
-		, CNR_PORTNO =#cnr_portno#
-		, CNR_CNN_TP_CD =#cnr_cnn_tp_cd#
-		, LST_MDFR_ID =#lst_mdfr_id#
+		  CNR_NM = #{cnr_nm}
+		, CNR_IPADR = #{cnr_ipadr}
+		, CNR_PORTNO =#{cnr_portno}
+		, CNR_CNN_TP_CD =#{cnr_cnn_tp_cd}
+		, LST_MDFR_ID =#{lst_mdfr_id}
 		, LST_MDF_DTM = clock_timestamp()
-		WHERE CNR_ID = #cnr_id#			
+		WHERE CNR_ID = #{cnr_id}			
 	</update>
 </mapper>

@@ -23,7 +23,7 @@
 	      , LST_MDF_DTM 
       FROM T_SYSGRP_C
       WHERE 1=1	
-      LIMIT #recordCountPerPage# OFFSET #firstIndex#
+      LIMIT #{recordCountPerPage} OFFSET #{firstIndex}
     </select>
     
     
@@ -60,13 +60,13 @@
 		) 
 		VALUES
 		(
-			  #grp_cd#
-			, #grp_cd_nm#
-			, #grp_cd_exp#
-			, #use_yn#
-			, #usr_id#
+			  #{grp_cd}
+			, #{grp_cd_nm}
+			, #{grp_cd_exp}
+			, #{use_yn}
+			, #{usr_id}
 			, clock_timestamp()
-			, #usr_id#
+			, #{usr_id}
 			, clock_timestamp()
 		)
 	</insert>
@@ -91,7 +91,7 @@
 	      , LST_MDF_DTM 
       FROM T_SYSGRP_C
       WHERE 1=1
-      AND GRP_CD = #grp_cd#
+      AND GRP_CD = #{grp_cd}
     </select>
     
     
@@ -104,12 +104,12 @@
 	 	
 		UPDATE T_SYSGRP_C
 		SET 
-	  	 	   GRP_CD_NM= #grp_cd_nm#
-		      , GRP_CD_EXP=#grp_cd_exp#
-		      , USE_YN=#use_yn#
-		      , LST_MDFR_ID=#usr_id#
+	  	 	   GRP_CD_NM= #{grp_cd_nm}
+		      , GRP_CD_EXP=#{grp_cd_exp}
+		      , USE_YN=#{use_yn}
+		      , LST_MDFR_ID=#{usr_id}
 		      , LST_MDF_DTM= clock_timestamp()
-		WHERE GRP_CD=#grp_cd#
+		WHERE GRP_CD=#{grp_cd}
 	</update> 
 	
 	
@@ -122,7 +122,7 @@
 	 	
 	  DELETE 
 	  FROM T_SYSGRP_C 
-	  WHERE GRP_CD=#grp_cd#
+	  WHERE GRP_CD=#{grp_cd}
 	</delete>
 	
 	
@@ -148,10 +148,10 @@
 	      <if test='searchCondition == "0"'>
 	      </if>
 	      <if test='searchCondition == "1"'>
-	      AND GRP_CD like '%' || #searchKeyword# || '%'
+	      AND GRP_CD like '%' || #{searchKeyword} || '%'
 	      </if>
 	      <if test='searchCondition == "2"'>
-	      AND GRP_CD_NM like '%' || #searchKeyword# || '%'
+	      AND GRP_CD_NM like '%' || #{searchKeyword} || '%'
 	      </if>
     	</select>	
 	
@@ -180,8 +180,8 @@
 	      FROM T_SYSGRP_C A, T_SYSDTL_C B
 	      WHERE 1=1
 	      AND A.GRP_CD = B.GRP_CD
-	      AND A.GRP_CD = #grp_cd#
-	      LIMIT #recordCountPerPage# OFFSET #firstIndex#
+	      AND A.GRP_CD = #{grp_cd}
+	      LIMIT #{recordCountPerPage} OFFSET #{firstIndex}
     	</select>
 
 
@@ -195,7 +195,7 @@
 					COUNT(*) totcnt
 			FROM T_SYSDTL_C
 			WHERE 1=1
-			AND GRP_CD = #grp_cd#
+			AND GRP_CD = #{grp_cd}
 		</select>
 	
 	
@@ -219,13 +219,13 @@
 			) 
 			VALUES
 			(
-				  #grp_cd#
-				, #sys_cd#
-				, #sys_cd_nm#
-				, #use_yn#
-				, #usr_id#
+				  #{grp_cd}
+				, #{sys_cd}
+				, #{sys_cd_nm}
+				, #{use_yn}
+				, #{usr_id}
 				, clock_timestamp()
-				, #usr_id#
+				, #{usr_id}
 				, clock_timestamp()
 			)
 		</insert>	
@@ -239,7 +239,7 @@
 		 	
 		  DELETE 
 		  FROM T_SYSDTL_C 
-		  WHERE SYS_CD=#sys_cd#
+		  WHERE SYS_CD=#{sys_cd}
 		</delete>		
 		
 		
@@ -264,14 +264,14 @@
 	      FROM T_SYSGRP_C A, T_SYSDTL_C B
 	      WHERE 1=1
 	      AND A.GRP_CD = B.GRP_CD
-	      AND A.GRP_CD = #grp_cd#
+	      AND A.GRP_CD = #{grp_cd}
 	      <if test='searchCondition == "0"'>
 		  </if>
 	      <if test='searchCondition == "1"'>
-	      AND B.SYS_CD like '%' || #searchKeyword# || '%'
+	      AND B.SYS_CD like '%' || #{searchKeyword} || '%'
 	      </if>
 	      <if test='searchCondition == "2"'>
-	      AND B.SYS_CD_NM like '%' || #searchKeyword# || '%'
+	      AND B.SYS_CD_NM like '%' || #{searchKeyword} || '%'
 	      </if>
     	</select>
     	

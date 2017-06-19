@@ -28,7 +28,7 @@
 				, LST_MDF_DTM
       FROM T_USR_I
       WHERE 1=1	
-      AND  USR_ID = #usr_id#		
+      AND  USR_ID = #{usr_id}		
     </select>
 
 </mapper>

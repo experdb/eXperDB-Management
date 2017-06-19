@@ -50,15 +50,15 @@
 		VALUES
 		(
 			  nextval('SEQ_TCONTROL_SAMPLE1')
-			, #db_svr_nm#
-			, #ipadr#
-			, #portno#
-			, #dft_db_nm#
-			, #svr_spr_usr_id#
-			, #svr_spr_scm_pwd#
-			, #frst_regr_id#
+			, #{db_svr_nm}
+			, #{ipadr}
+			, #{portno}
+			, #{dft_db_nm}
+			, #{svr_spr_usr_id}
+			, #{svr_spr_scm_pwd}
+			, #{frst_regr_id}
 			, clock_timestamp()
-			, #lst_mdfr_id#
+			, #{lst_mdfr_id}
 			, clock_timestamp()	
 		)
 	</insert>
