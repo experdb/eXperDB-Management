@@ -34,10 +34,10 @@
 			, to_char(T_CNR_I.LST_MDF_DTM,'YYYY-MM-DD HH:mm:ss')LST_MDF_DTM
 			FROM T_CNR_I
 			WHERE 1=1	
-				<if test="cnr_nm != ''">
+				<if test="cnr_nm != null and cnr_nm != '' ">
 				AND CNR_NM LIKE #{cnr_nm}
 				</if>
-				<if test="cnr_ipadr != ''">
+				<if test="cnr_ipadr != null and cnr_ipadr != '' ">
 				AND CNR_IPADR LIKE #{cnr_ipadr}
 				</if>
 			ORDER BY LST_MDF_DTM DESC
