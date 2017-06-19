@@ -7,8 +7,6 @@ import java.util.List;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 
-import com.k4m.dx.tcontrol.socket.ProtocolID;
-import com.k4m.dx.tcontrol.socket.TranCodeType;
 
 /**
  * agent 기능
@@ -61,20 +59,20 @@ public class ClientTester {
 			JSONObject serverObj = new JSONObject();
 			
 			/**
-			serverObj.put(ProtocolID.SERVER_NAME, "222.110.153.162");
-			serverObj.put(ProtocolID.SERVER_IP, "222.110.153.162");
-			serverObj.put(ProtocolID.SERVER_PORT, "6432");
-			serverObj.put(ProtocolID.DATABASE_NAME, "postgres");
-			serverObj.put(ProtocolID.USER_ID, "experdba");
-			serverObj.put(ProtocolID.USER_PWD, "experdba");
+			serverObj.put(ClientProtocolID.SERVER_NAME, "222.110.153.162");
+			serverObj.put(ClientProtocolID.SERVER_IP, "222.110.153.162");
+			serverObj.put(ClientProtocolID.SERVER_PORT, "6432");
+			serverObj.put(ClientProtocolID.DATABASE_NAME, "postgres");
+			serverObj.put(ClientProtocolID.USER_ID, "experdba");
+			serverObj.put(ClientProtocolID.USER_PWD, "experdba");
 			**/
 			
-			serverObj.put(ProtocolID.SERVER_NAME, "222.110.153.162");
-			serverObj.put(ProtocolID.SERVER_IP, "222.110.153.162");
-			serverObj.put(ProtocolID.SERVER_PORT, "5432");
-			serverObj.put(ProtocolID.DATABASE_NAME, "pgmon");
-			serverObj.put(ProtocolID.USER_ID, "pgmon");
-			serverObj.put(ProtocolID.USER_PWD, "pgmon");
+			serverObj.put(ClientProtocolID.SERVER_NAME, "222.110.153.162");
+			serverObj.put(ClientProtocolID.SERVER_IP, "222.110.153.162");
+			serverObj.put(ClientProtocolID.SERVER_PORT, "5432");
+			serverObj.put(ClientProtocolID.DATABASE_NAME, "pgmon");
+			serverObj.put(ClientProtocolID.USER_ID, "pgmon");
+			serverObj.put(ClientProtocolID.USER_PWD, "pgmon");
 			
 			
 			
@@ -83,12 +81,12 @@ public class ClientTester {
 			ClientAdapter CA = new ClientAdapter(Ip, port);
 			CA.open(); 
 				
-			objList = CA.dxT001(TranCodeType.DxT001, serverObj);
+			objList = CA.dxT001(ClientTranCodeType.DxT001, serverObj);
 			
-			String _tran_err_msg = (String)objList.get(ProtocolID.ERR_MSG);
-			String strDxExCode = (String)objList.get(ProtocolID.DX_EX_CODE);
+			String _tran_err_msg = (String)objList.get(ClientProtocolID.ERR_MSG);
+			String strDxExCode = (String)objList.get(ClientProtocolID.DX_EX_CODE);
 			
-			List<Object> selectDBList =(ArrayList<Object>) objList.get(ProtocolID.RESULT_DATA);
+			List<Object> selectDBList =(ArrayList<Object>) objList.get(ClientProtocolID.RESULT_DATA);
 			
 			System.out.println("strDxExCode : " + " " + strDxExCode);
 			
@@ -116,19 +114,19 @@ public class ClientTester {
 
 			JSONObject serverObj = new JSONObject();
 			
-/*			serverObj.put(ProtocolID.SERVER_NAME, "222.110.153.162");
-			serverObj.put(ProtocolID.SERVER_IP, "222.110.153.162");
-			serverObj.put(ProtocolID.SERVER_PORT, "5432");
-			serverObj.put(ProtocolID.DATABASE_NAME, "ibizspt");
-			serverObj.put(ProtocolID.USER_ID, "pgmon");
-			serverObj.put(ProtocolID.USER_PWD, "pgmon");*/
+/*			serverObj.put(ClientProtocolID.SERVER_NAME, "222.110.153.162");
+			serverObj.put(ClientProtocolID.SERVER_IP, "222.110.153.162");
+			serverObj.put(ClientProtocolID.SERVER_PORT, "5432");
+			serverObj.put(ClientProtocolID.DATABASE_NAME, "ibizspt");
+			serverObj.put(ClientProtocolID.USER_ID, "pgmon");
+			serverObj.put(ClientProtocolID.USER_PWD, "pgmon");*/
 			
-			serverObj.put(ProtocolID.SERVER_NAME, "222.110.153.162");
-			serverObj.put(ProtocolID.SERVER_IP, "222.110.153.162");
-			serverObj.put(ProtocolID.SERVER_PORT, "6432");
-			serverObj.put(ProtocolID.DATABASE_NAME, "postgres");
-			serverObj.put(ProtocolID.USER_ID, "experdba");
-			serverObj.put(ProtocolID.USER_PWD, "experdba");
+			serverObj.put(ClientProtocolID.SERVER_NAME, "222.110.153.162");
+			serverObj.put(ClientProtocolID.SERVER_IP, "222.110.153.162");
+			serverObj.put(ClientProtocolID.SERVER_PORT, "6432");
+			serverObj.put(ClientProtocolID.DATABASE_NAME, "postgres");
+			serverObj.put(ClientProtocolID.USER_ID, "experdba");
+			serverObj.put(ClientProtocolID.USER_PWD, "experdba");
 			
 			JSONObject objList;
 			
@@ -137,14 +135,14 @@ public class ClientTester {
 			
 			String strSchema = "tcontrol";
 				
-			objList = CA.dxT002(TranCodeType.DxT002, serverObj, strSchema);
+			objList = CA.dxT002(ClientTranCodeType.DxT002, serverObj, strSchema);
 			
-			String strResultCode = (String)objList.get(ProtocolID.RESULT_CODE);
-			String strErrCode = (String)objList.get(ProtocolID.ERR_CODE);
-			String strErrMsg = (String)objList.get(ProtocolID.ERR_MSG);
-			String strDxExCode = (String)objList.get(ProtocolID.DX_EX_CODE);
+			String strResultCode = (String)objList.get(ClientProtocolID.RESULT_CODE);
+			String strErrCode = (String)objList.get(ClientProtocolID.ERR_CODE);
+			String strErrMsg = (String)objList.get(ClientProtocolID.ERR_MSG);
+			String strDxExCode = (String)objList.get(ClientProtocolID.DX_EX_CODE);
 			
-			List<Object> selectDBList =(ArrayList<Object>) objList.get(ProtocolID.RESULT_DATA);
+			List<Object> selectDBList =(ArrayList<Object>) objList.get(ClientProtocolID.RESULT_DATA);
 			
 			System.out.println("strDxExCode : " + " " + strDxExCode);
 			System.out.println("strResultCode : " + " " + strResultCode);
@@ -174,31 +172,31 @@ public class ClientTester {
 		try {
 			JSONObject serverObj = new JSONObject();
 			
-			serverObj.put(ProtocolID.SERVER_NAME, "222.110.153.162");
-			serverObj.put(ProtocolID.SERVER_IP, "222.110.153.162");
-			serverObj.put(ProtocolID.SERVER_PORT, "6432");
-			serverObj.put(ProtocolID.DATABASE_NAME, "postgres");
-			serverObj.put(ProtocolID.USER_ID, "experdba");
-			serverObj.put(ProtocolID.USER_PWD, "experdba");
+			serverObj.put(ClientProtocolID.SERVER_NAME, "222.110.153.162");
+			serverObj.put(ClientProtocolID.SERVER_IP, "222.110.153.162");
+			serverObj.put(ClientProtocolID.SERVER_PORT, "6432");
+			serverObj.put(ClientProtocolID.DATABASE_NAME, "postgres");
+			serverObj.put(ClientProtocolID.USER_ID, "experdba");
+			serverObj.put(ClientProtocolID.USER_PWD, "experdba");
 			
 			JSONObject objList;
 			
 			ClientAdapter CA = new ClientAdapter(Ip, port);
 			CA.open(); 
 			
-			objList = CA.dxT003(TranCodeType.DxT003, serverObj);
+			objList = CA.dxT003(ClientTranCodeType.DxT003, serverObj);
 			
-			String strResultCode = (String)objList.get(ProtocolID.RESULT_CODE);
-			String strErrCode = (String)objList.get(ProtocolID.ERR_CODE);
-			String strErrMsg = (String)objList.get(ProtocolID.ERR_MSG);
-			String strDxExCode = (String)objList.get(ProtocolID.DX_EX_CODE);
+			String strResultCode = (String)objList.get(ClientProtocolID.RESULT_CODE);
+			String strErrCode = (String)objList.get(ClientProtocolID.ERR_CODE);
+			String strErrMsg = (String)objList.get(ClientProtocolID.ERR_MSG);
+			String strDxExCode = (String)objList.get(ClientProtocolID.DX_EX_CODE);
 			
 			System.out.println("strDxExCode : " + " " + strDxExCode);
 			System.out.println("strResultCode : " + " " + strResultCode);
 			System.out.println("strErrCode : " + " " + strErrCode);
 			System.out.println("strErrMsg : " + " " + strErrMsg);
 			
-			System.out.println("RESULT_DATA : " + " " + objList.get(ProtocolID.RESULT_DATA));
+			System.out.println("RESULT_DATA : " + " " + objList.get(ClientProtocolID.RESULT_DATA));
 			
 			CA.close();
 		} catch(Exception e) {
@@ -236,33 +234,33 @@ public class ClientTester {
 			JSONArray arrCmd = new JSONArray();
 			
 			JSONObject objJob_01 = new JSONObject();
-			objJob_01.put(ProtocolID.SCD_ID, ""); //스캐쥴ID
-			objJob_01.put(ProtocolID.WORK_ID, ""); //작업ID
-			objJob_01.put(ProtocolID.EXD_ORD, ""); //실행순서
-			objJob_01.put(ProtocolID.NXT_EXD_YN, ""); //다음실행여부
-			objJob_01.put(ProtocolID.REQ_CMD, CMD[0]);
+			objJob_01.put(ClientProtocolID.SCD_ID, ""); //스캐쥴ID
+			objJob_01.put(ClientProtocolID.WORK_ID, ""); //작업ID
+			objJob_01.put(ClientProtocolID.EXD_ORD, ""); //실행순서
+			objJob_01.put(ClientProtocolID.NXT_EXD_YN, ""); //다음실행여부
+			objJob_01.put(ClientProtocolID.REQ_CMD, CMD[0]);
 			
 			JSONObject objJob_02 = new JSONObject();
-			objJob_02.put(ProtocolID.SCD_ID, ""); //스캐쥴ID
-			objJob_02.put(ProtocolID.WORK_ID, ""); //작업ID
-			objJob_02.put(ProtocolID.EXD_ORD, ""); //실행순서
-			objJob_02.put(ProtocolID.NXT_EXD_YN, ""); //다음실행여부
-			objJob_02.put(ProtocolID.REQ_CMD, CMD[0]);
+			objJob_02.put(ClientProtocolID.SCD_ID, ""); //스캐쥴ID
+			objJob_02.put(ClientProtocolID.WORK_ID, ""); //작업ID
+			objJob_02.put(ClientProtocolID.EXD_ORD, ""); //실행순서
+			objJob_02.put(ClientProtocolID.NXT_EXD_YN, ""); //다음실행여부
+			objJob_02.put(ClientProtocolID.REQ_CMD, CMD[0]);
 			
 			JSONObject objJob_03 = new JSONObject();
-			objJob_03.put(ProtocolID.SCD_ID, ""); //스캐쥴ID
-			objJob_03.put(ProtocolID.WORK_ID, ""); //작업ID
-			objJob_03.put(ProtocolID.EXD_ORD, ""); //실행순서
-			objJob_03.put(ProtocolID.NXT_EXD_YN, ""); //다음실행여부
-			objJob_03.put(ProtocolID.REQ_CMD, CMD[0]); //명령어
+			objJob_03.put(ClientProtocolID.SCD_ID, ""); //스캐쥴ID
+			objJob_03.put(ClientProtocolID.WORK_ID, ""); //작업ID
+			objJob_03.put(ClientProtocolID.EXD_ORD, ""); //실행순서
+			objJob_03.put(ClientProtocolID.NXT_EXD_YN, ""); //다음실행여부
+			objJob_03.put(ClientProtocolID.REQ_CMD, CMD[0]); //명령어
 			
 			arrCmd.add(0, objJob_01);
 			arrCmd.add(1, objJob_02);
 			arrCmd.add(2, objJob_03);
 
 			
-			reqJObj.put(ProtocolID.DX_EX_CODE, TranCodeType.DxT005);
-			reqJObj.put(ProtocolID.ARR_CMD, arrCmd);
+			reqJObj.put(ClientProtocolID.DX_EX_CODE, ClientTranCodeType.DxT005);
+			reqJObj.put(ClientProtocolID.ARR_CMD, arrCmd);
 			
 			ClientAdapter CA = new ClientAdapter(Ip, port);
 			CA.open(); 
@@ -277,41 +275,41 @@ public class ClientTester {
 		try {
 			JSONObject serverObj = new JSONObject();
 			
-			serverObj.put(ProtocolID.SERVER_NAME, "222.110.153.162");
-			serverObj.put(ProtocolID.SERVER_IP, "222.110.153.162");
-			serverObj.put(ProtocolID.SERVER_PORT, "6432");
-			serverObj.put(ProtocolID.DATABASE_NAME, "postgres");
-			serverObj.put(ProtocolID.USER_ID, "experdba");
-			serverObj.put(ProtocolID.USER_PWD, "experdba");
+			serverObj.put(ClientProtocolID.SERVER_NAME, "222.110.153.162");
+			serverObj.put(ClientProtocolID.SERVER_IP, "222.110.153.162");
+			serverObj.put(ClientProtocolID.SERVER_PORT, "6432");
+			serverObj.put(ClientProtocolID.DATABASE_NAME, "postgres");
+			serverObj.put(ClientProtocolID.USER_ID, "experdba");
+			serverObj.put(ClientProtocolID.USER_PWD, "experdba");
 			
 			JSONObject objList;
 
 			
 			JSONObject acObj = new JSONObject();
-			acObj.put(ProtocolID.AC_SET, "1");
-			acObj.put(ProtocolID.AC_TYPE, "host");
-			acObj.put(ProtocolID.AC_DATABASE, "experdba");
-			acObj.put(ProtocolID.AC_USER, "experdba");
-			acObj.put(ProtocolID.AC_IP, "222.110.153.254");
-			acObj.put(ProtocolID.AC_METHOD, "trust");
-			acObj.put(ProtocolID.AC_OPTION, "");
+			acObj.put(ClientProtocolID.AC_SET, "1");
+			acObj.put(ClientProtocolID.AC_TYPE, "host");
+			acObj.put(ClientProtocolID.AC_DATABASE, "experdba");
+			acObj.put(ClientProtocolID.AC_USER, "experdba");
+			acObj.put(ClientProtocolID.AC_IP, "222.110.153.254");
+			acObj.put(ClientProtocolID.AC_METHOD, "trust");
+			acObj.put(ClientProtocolID.AC_OPTION, "");
 
 			
 			ClientAdapter CA = new ClientAdapter(Ip, port);
 			CA.open(); 
 
 			JSONObject jObj = new JSONObject();
-			jObj.put(ProtocolID.DX_EX_CODE, TranCodeType.DxT006);
-			jObj.put(ProtocolID.COMMAND_CODE, ProtocolID.COMMAND_CODE_C);
-			jObj.put(ProtocolID.SERVER_INFO, serverObj);
-			jObj.put(ProtocolID.ACCESS_CONTROL_INFO, acObj);
+			jObj.put(ClientProtocolID.DX_EX_CODE, ClientTranCodeType.DxT006);
+			jObj.put(ClientProtocolID.COMMAND_CODE, ClientProtocolID.COMMAND_CODE_C);
+			jObj.put(ClientProtocolID.SERVER_INFO, serverObj);
+			jObj.put(ClientProtocolID.ACCESS_CONTROL_INFO, acObj);
 			
-			objList = CA.dxT006(TranCodeType.DxT006, jObj);
+			objList = CA.dxT006(ClientTranCodeType.DxT006, jObj);
 			
-			String strErrMsg = (String)objList.get(ProtocolID.ERR_MSG);
-			String strErrCode = (String)objList.get(ProtocolID.ERR_CODE);
-			String strDxExCode = (String)objList.get(ProtocolID.DX_EX_CODE);
-			String strResultCode = (String)objList.get(ProtocolID.RESULT_CODE);
+			String strErrMsg = (String)objList.get(ClientProtocolID.ERR_MSG);
+			String strErrCode = (String)objList.get(ClientProtocolID.ERR_CODE);
+			String strDxExCode = (String)objList.get(ClientProtocolID.DX_EX_CODE);
+			String strResultCode = (String)objList.get(ClientProtocolID.RESULT_CODE);
 			System.out.println("RESULT_CODE : " +  strResultCode);
 			System.out.println("ERR_CODE : " +  strErrCode);
 			System.out.println("ERR_MSG : " +  strErrMsg);
@@ -332,46 +330,46 @@ public class ClientTester {
 		try {
 			JSONObject serverObj = new JSONObject();
 			
-			serverObj.put(ProtocolID.SERVER_NAME, "222.110.153.162");
-			serverObj.put(ProtocolID.SERVER_IP, "222.110.153.162");
-			serverObj.put(ProtocolID.SERVER_PORT, "6432");
-			serverObj.put(ProtocolID.DATABASE_NAME, "postgres");
-			serverObj.put(ProtocolID.USER_ID, "experdba");
-			serverObj.put(ProtocolID.USER_PWD, "experdba");
+			serverObj.put(ClientProtocolID.SERVER_NAME, "222.110.153.162");
+			serverObj.put(ClientProtocolID.SERVER_IP, "222.110.153.162");
+			serverObj.put(ClientProtocolID.SERVER_PORT, "6432");
+			serverObj.put(ClientProtocolID.DATABASE_NAME, "postgres");
+			serverObj.put(ClientProtocolID.USER_ID, "experdba");
+			serverObj.put(ClientProtocolID.USER_PWD, "experdba");
 			
 			JSONObject objList;
 
 			
 			JSONObject acObj = new JSONObject();
-			acObj.put(ProtocolID.AC_SET, "1");
-			acObj.put(ProtocolID.AC_TYPE, "host");
-			acObj.put(ProtocolID.AC_DATABASE, "experdba");
-			acObj.put(ProtocolID.AC_USER, "experdba");
-			acObj.put(ProtocolID.AC_IP, "222.110.153.254");
-			acObj.put(ProtocolID.AC_METHOD, "trust");
-			acObj.put(ProtocolID.AC_OPTION, "");
+			acObj.put(ClientProtocolID.AC_SET, "1");
+			acObj.put(ClientProtocolID.AC_TYPE, "host");
+			acObj.put(ClientProtocolID.AC_DATABASE, "experdba");
+			acObj.put(ClientProtocolID.AC_USER, "experdba");
+			acObj.put(ClientProtocolID.AC_IP, "222.110.153.254");
+			acObj.put(ClientProtocolID.AC_METHOD, "trust");
+			acObj.put(ClientProtocolID.AC_OPTION, "");
 
 			
 			ClientAdapter CA = new ClientAdapter(Ip, port);
 			CA.open(); 
 
 			JSONObject jObj = new JSONObject();
-			jObj.put(ProtocolID.DX_EX_CODE, TranCodeType.DxT006);
-			jObj.put(ProtocolID.COMMAND_CODE, ProtocolID.COMMAND_CODE_R);
-			jObj.put(ProtocolID.SERVER_INFO, serverObj);
-			jObj.put(ProtocolID.ACCESS_CONTROL_INFO, acObj);
+			jObj.put(ClientProtocolID.DX_EX_CODE, ClientTranCodeType.DxT006);
+			jObj.put(ClientProtocolID.COMMAND_CODE, ClientProtocolID.COMMAND_CODE_R);
+			jObj.put(ClientProtocolID.SERVER_INFO, serverObj);
+			jObj.put(ClientProtocolID.ACCESS_CONTROL_INFO, acObj);
 			
-			objList = CA.dxT006(TranCodeType.DxT006, jObj);
-			String strErrCode = (String)objList.get(ProtocolID.ERR_CODE);
-			String strErrMsg = (String)objList.get(ProtocolID.ERR_MSG);
-			String strDxExCode = (String)objList.get(ProtocolID.DX_EX_CODE);
-			String strResultCode = (String)objList.get(ProtocolID.RESULT_CODE);
+			objList = CA.dxT006(ClientTranCodeType.DxT006, jObj);
+			String strErrCode = (String)objList.get(ClientProtocolID.ERR_CODE);
+			String strErrMsg = (String)objList.get(ClientProtocolID.ERR_MSG);
+			String strDxExCode = (String)objList.get(ClientProtocolID.DX_EX_CODE);
+			String strResultCode = (String)objList.get(ClientProtocolID.RESULT_CODE);
 			
 			System.out.println("RESULT_CODE : " +  strResultCode);
 			System.out.println("ERR_CODE : " +  strErrCode);
 			System.out.println("ERR_MSG : " +  strErrMsg);
 			
-			List<Object> selectDBList =(ArrayList<Object>) objList.get(ProtocolID.RESULT_DATA);
+			List<Object> selectDBList =(ArrayList<Object>) objList.get(ClientProtocolID.RESULT_DATA);
 			
 			for(int i=0; i<selectDBList.size()-1; i++) {
 				JSONObject mp = (JSONObject) selectDBList.get(i);
@@ -399,42 +397,42 @@ public class ClientTester {
 		try {
 			JSONObject serverObj = new JSONObject();
 			
-			serverObj.put(ProtocolID.SERVER_NAME, "222.110.153.162");
-			serverObj.put(ProtocolID.SERVER_IP, "222.110.153.162");
-			serverObj.put(ProtocolID.SERVER_PORT, "6432");
-			serverObj.put(ProtocolID.DATABASE_NAME, "postgres");
-			serverObj.put(ProtocolID.USER_ID, "experdba");
-			serverObj.put(ProtocolID.USER_PWD, "experdba");
+			serverObj.put(ClientProtocolID.SERVER_NAME, "222.110.153.162");
+			serverObj.put(ClientProtocolID.SERVER_IP, "222.110.153.162");
+			serverObj.put(ClientProtocolID.SERVER_PORT, "6432");
+			serverObj.put(ClientProtocolID.DATABASE_NAME, "postgres");
+			serverObj.put(ClientProtocolID.USER_ID, "experdba");
+			serverObj.put(ClientProtocolID.USER_PWD, "experdba");
 			
 			JSONObject objList;
 
 			
 			JSONObject acObj = new JSONObject();
-			acObj.put(ProtocolID.AC_SEQ, "6");
-			acObj.put(ProtocolID.AC_SET, "0");
-			acObj.put(ProtocolID.AC_TYPE, "host");
-			acObj.put(ProtocolID.AC_DATABASE, "experdba");
-			acObj.put(ProtocolID.AC_USER, "experdba");
-			acObj.put(ProtocolID.AC_IP, "222.110.153.254");
-			acObj.put(ProtocolID.AC_METHOD, "trust");
-			acObj.put(ProtocolID.AC_OPTION, "");
+			acObj.put(ClientProtocolID.AC_SEQ, "6");
+			acObj.put(ClientProtocolID.AC_SET, "0");
+			acObj.put(ClientProtocolID.AC_TYPE, "host");
+			acObj.put(ClientProtocolID.AC_DATABASE, "experdba");
+			acObj.put(ClientProtocolID.AC_USER, "experdba");
+			acObj.put(ClientProtocolID.AC_IP, "222.110.153.254");
+			acObj.put(ClientProtocolID.AC_METHOD, "trust");
+			acObj.put(ClientProtocolID.AC_OPTION, "");
 
 			
 			ClientAdapter CA = new ClientAdapter(Ip, port);
 			CA.open(); 
 
 			JSONObject jObj = new JSONObject();
-			jObj.put(ProtocolID.DX_EX_CODE, TranCodeType.DxT006);
-			jObj.put(ProtocolID.COMMAND_CODE, ProtocolID.COMMAND_CODE_U);
-			jObj.put(ProtocolID.SERVER_INFO, serverObj);
-			jObj.put(ProtocolID.ACCESS_CONTROL_INFO, acObj);
+			jObj.put(ClientProtocolID.DX_EX_CODE, ClientTranCodeType.DxT006);
+			jObj.put(ClientProtocolID.COMMAND_CODE, ClientProtocolID.COMMAND_CODE_U);
+			jObj.put(ClientProtocolID.SERVER_INFO, serverObj);
+			jObj.put(ClientProtocolID.ACCESS_CONTROL_INFO, acObj);
 			
-			objList = CA.dxT006(TranCodeType.DxT006, jObj);
+			objList = CA.dxT006(ClientTranCodeType.DxT006, jObj);
 			
-			String strErrMsg = (String)objList.get(ProtocolID.ERR_MSG);
-			String strErrCode = (String)objList.get(ProtocolID.ERR_CODE);
-			String strDxExCode = (String)objList.get(ProtocolID.DX_EX_CODE);
-			String strResultCode = (String)objList.get(ProtocolID.RESULT_CODE);
+			String strErrMsg = (String)objList.get(ClientProtocolID.ERR_MSG);
+			String strErrCode = (String)objList.get(ClientProtocolID.ERR_CODE);
+			String strDxExCode = (String)objList.get(ClientProtocolID.DX_EX_CODE);
+			String strResultCode = (String)objList.get(ClientProtocolID.RESULT_CODE);
 			System.out.println("RESULT_CODE : " +  strResultCode);
 			System.out.println("ERR_CODE : " +  strErrCode);
 			System.out.println("ERR_MSG : " +  strErrMsg);
@@ -453,20 +451,20 @@ public class ClientTester {
 		try {
 			JSONObject serverObj = new JSONObject();
 			
-			serverObj.put(ProtocolID.SERVER_NAME, "222.110.153.162");
-			serverObj.put(ProtocolID.SERVER_IP, "222.110.153.162");
-			serverObj.put(ProtocolID.SERVER_PORT, "6432");
-			serverObj.put(ProtocolID.DATABASE_NAME, "postgres");
-			serverObj.put(ProtocolID.USER_ID, "experdba");
-			serverObj.put(ProtocolID.USER_PWD, "experdba");
+			serverObj.put(ClientProtocolID.SERVER_NAME, "222.110.153.162");
+			serverObj.put(ClientProtocolID.SERVER_IP, "222.110.153.162");
+			serverObj.put(ClientProtocolID.SERVER_PORT, "6432");
+			serverObj.put(ClientProtocolID.DATABASE_NAME, "postgres");
+			serverObj.put(ClientProtocolID.USER_ID, "experdba");
+			serverObj.put(ClientProtocolID.USER_PWD, "experdba");
 			
 			JSONObject objList;
 
 			HashMap<String, String> hpSeq = new HashMap<String, String>();
-			hpSeq.put(ProtocolID.AC_SEQ, "5");
+			hpSeq.put(ClientProtocolID.AC_SEQ, "5");
 			
 			HashMap<String, String> hpSeq2 = new HashMap<String, String>();
-			hpSeq2.put(ProtocolID.AC_SEQ, "6");
+			hpSeq2.put(ClientProtocolID.AC_SEQ, "6");
 			
 			ArrayList arrSeq = new ArrayList();
 			arrSeq.add(hpSeq);
@@ -477,17 +475,17 @@ public class ClientTester {
 			CA.open(); 
 
 			JSONObject jObj = new JSONObject();
-			jObj.put(ProtocolID.DX_EX_CODE, TranCodeType.DxT006);
-			jObj.put(ProtocolID.COMMAND_CODE, ProtocolID.COMMAND_CODE_D);
-			jObj.put(ProtocolID.SERVER_INFO, serverObj);
-			jObj.put(ProtocolID.ARR_AC_SEQ, arrSeq);
+			jObj.put(ClientProtocolID.DX_EX_CODE, ClientTranCodeType.DxT006);
+			jObj.put(ClientProtocolID.COMMAND_CODE, ClientProtocolID.COMMAND_CODE_D);
+			jObj.put(ClientProtocolID.SERVER_INFO, serverObj);
+			jObj.put(ClientProtocolID.ARR_AC_SEQ, arrSeq);
 			
-			objList = CA.dxT006(TranCodeType.DxT006, jObj);
+			objList = CA.dxT006(ClientTranCodeType.DxT006, jObj);
 			
-			String strErrMsg = (String)objList.get(ProtocolID.ERR_MSG);
-			String strErrCode = (String)objList.get(ProtocolID.ERR_CODE);
-			String strDxExCode = (String)objList.get(ProtocolID.DX_EX_CODE);
-			String strResultCode = (String)objList.get(ProtocolID.RESULT_CODE);
+			String strErrMsg = (String)objList.get(ClientProtocolID.ERR_MSG);
+			String strErrCode = (String)objList.get(ClientProtocolID.ERR_CODE);
+			String strDxExCode = (String)objList.get(ClientProtocolID.DX_EX_CODE);
+			String strResultCode = (String)objList.get(ClientProtocolID.RESULT_CODE);
 			System.out.println("RESULT_CODE : " +  strResultCode);
 			System.out.println("ERR_CODE : " +  strErrCode);
 			System.out.println("ERR_MSG : " +  strErrMsg);

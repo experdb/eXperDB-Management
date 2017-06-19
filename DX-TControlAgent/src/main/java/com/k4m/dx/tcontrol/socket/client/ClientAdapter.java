@@ -8,7 +8,7 @@ import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 
 import com.k4m.dx.tcontrol.socket.client.ClientProtocolID;
-import com.k4m.dx.tcontrol.socket.TranCodeType;
+import com.k4m.dx.tcontrol.socket.client.ClientTranCodeType;
 
 public class ClientAdapter {
 	private final ClientConnector cc;
@@ -36,7 +36,7 @@ public class ClientAdapter {
 
 		JSONObject jObj = new JSONObject();
 
-		jObj.put(ClientProtocolID.DX_EX_CODE, TranCodeType.CLOSE);
+		jObj.put(ClientProtocolID.DX_EX_CODE, ClientTranCodeType.CLOSE);
 		
 		byte[] bt = jObj.toString().getBytes();
 		
