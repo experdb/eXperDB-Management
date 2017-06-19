@@ -95,5 +95,15 @@
 	 	**/
 	    SELECT 1 from pg_extension WHERE extname = 'adminpack'
 	</select>
+	
+	<select id="selectRoleName" parameterType="HashMap" resultType="HashMap">
+		/**
+	 	* Query ID : selectRoleName
+	 	* Description : role 조회
+	 	* Author : 박태혁
+	 	**/
+	    SELECT rolname FROM pg_roles
+	</select>
+	
 
 </mapper>

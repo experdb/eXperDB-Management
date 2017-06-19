@@ -13,6 +13,7 @@ import com.k4m.dx.tcontrol.server.DxT002;
 import com.k4m.dx.tcontrol.server.DxT003;
 import com.k4m.dx.tcontrol.server.DxT005;
 import com.k4m.dx.tcontrol.server.DxT006;
+import com.k4m.dx.tcontrol.server.DxT011;
 import com.k4m.dx.tcontrol.socket.ProtocolID;
 import com.k4m.dx.tcontrol.socket.SocketCtl;
 import com.k4m.dx.tcontrol.socket.TranCodeType;
@@ -84,7 +85,15 @@ public class DXTcontrolSocketExecute extends SocketCtl implements Runnable {
 					dxT006.execute(strDX_EX_CODE, jObj);
 
 					break;
+				//role 조회
+				case TranCodeType.DxT011 :
+					
+					DxT011 dxT011 = new DxT011(client, is, os);
+					dxT011.execute(strDX_EX_CODE, objSERVER_INFO);
+
+					break;
 				}
+
 
 		       
 			}

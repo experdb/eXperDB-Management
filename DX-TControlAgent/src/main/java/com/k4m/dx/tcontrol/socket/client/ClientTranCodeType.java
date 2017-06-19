@@ -9,6 +9,9 @@ public class ClientTranCodeType {
 	public static final String DxT006 = "DxT006";
 	public static final String DxT007 = "DxT007";
 	public static final String DxT008 = "DxT008";
+	public static final String DxT009 = "DxT009";
+	public static final String DxT010 = "DxT010";
+	public static final String DxT011 = "DxT011";
 	
 	public static final String STATUS = "STATUS";
 	public static final String STOP = "STOP";
