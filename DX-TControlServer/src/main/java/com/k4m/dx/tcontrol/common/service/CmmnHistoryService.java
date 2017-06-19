@@ -3,7 +3,7 @@ package com.k4m.dx.tcontrol.common.service;
 public interface CmmnHistoryService {
 
 	/**
-	 * 로그인 이력을 등록한다.
+	 * 로그인 이력 등록
 	 * 
 	 * @param historyVO
 	 * @throws Exception
@@ -11,7 +11,7 @@ public interface CmmnHistoryService {
 	void insertHistoryLogin(HistoryVO historyVO) throws Exception;
 
 	/**
-	 * 로그아웃 이력을 등록한다.
+	 * 로그아웃 이력 등록
 	 * 
 	 * @param historyVO
 	 * @throws Exception
@@ -19,7 +19,7 @@ public interface CmmnHistoryService {
 	void insertHistoryLogout(HistoryVO historyVO) throws Exception;
 
 	/**
-	 * 메인화면 이력을 등록한다.
+	 * 메인화면 이력 등록
 	 * 
 	 * @param historyVO
 	 * @throws Exception
@@ -27,7 +27,7 @@ public interface CmmnHistoryService {
 	void insertHistoryMain(HistoryVO historyVO) throws Exception;
 
 	/**
-	 * DB Server Tree 이력을 등록한다.
+	 * DB Server Tree 이력 등록
 	 * 
 	 * @param historyVO
 	 * @throws Exception
@@ -35,7 +35,7 @@ public interface CmmnHistoryService {
 	void insertHistoryDbTree(HistoryVO historyVO) throws Exception;
 
 	/**
-	 * DB Server 화면 이력을 등록한다.
+	 * DB Server 화면 이력 등록
 	 * 
 	 * @param historyVO
 	 * @throws Exception
@@ -43,7 +43,7 @@ public interface CmmnHistoryService {
 	void insertHistoryDbServer(HistoryVO historyVO) throws Exception;
 
 	/**
-	 * DB Server 등록팝업 이력을 등록한다.
+	 * DB Server 등록팝업 이력 등록
 	 * 
 	 * @param historyVO
 	 * @throws Exception
@@ -51,7 +51,7 @@ public interface CmmnHistoryService {
 	void insertHistoryDbServerRegPopup(HistoryVO historyVO) throws Exception;
 
 	/**
-	 * DB Server 등록팝업 저장이력을 등록한다.
+	 * DB Server 등록팝업 저장이력 등록
 	 * 
 	 * @param historyVO
 	 * @throws Exception
@@ -59,7 +59,7 @@ public interface CmmnHistoryService {
 	void insertHistoryDbServerI(HistoryVO historyVO) throws Exception;
 
 	/**
-	 * Database 조회화면 이력을 등록한다.
+	 * Database 조회화면 이력 등록
 	 * 
 	 * @param historyVO
 	 * @throws Exception
@@ -67,7 +67,7 @@ public interface CmmnHistoryService {
 	void insertHistoryDatabase(HistoryVO historyVO) throws Exception;
 
 	/**
-	 * 전송설정 이력을 등록한다.
+	 * 전송설정 이력 등록
 	 * 
 	 * @param historyVO
 	 * @throws Exception
@@ -75,7 +75,7 @@ public interface CmmnHistoryService {
 	void insertHistoryTransferSetting(HistoryVO historyVO) throws Exception;
 
 	/**
-	 * Connector 조회화면 이력을 등록한다.
+	 * Connector 조회화면 이력 등록
 	 * 
 	 * @param historyVO
 	 * @throws Exception
@@ -83,7 +83,7 @@ public interface CmmnHistoryService {
 	void insertHistoryConnectorRegister(HistoryVO historyVO) throws Exception;
 
 	/**
-	 * Connector수정 이력을 등록한다.
+	 * Connector수정 이력 등록
 	 * 
 	 * @param historyVO
 	 * @throws Exception
@@ -91,7 +91,7 @@ public interface CmmnHistoryService {
 	void insertHistoryConnectorRegisterU(HistoryVO historyVO) throws Exception;
 
 	/**
-	 * Connector삭제 이력을 등록한다.
+	 * Connector삭제 이력 등록
 	 * 
 	 * @param historyVO
 	 * @throws Exception
@@ -99,7 +99,7 @@ public interface CmmnHistoryService {
 	void insertHistoryConnectorRegisterD(HistoryVO historyVO) throws Exception;
 
 	/**
-	 * Connector 등록 팝업 화면 이력을 등록한다.
+	 * Connector 등록 팝업 화면 이력 등록
 	 * 
 	 * @param historyVO
 	 * @throws Exception
@@ -107,7 +107,7 @@ public interface CmmnHistoryService {
 	void insertHistoryConnectorRegPopup(HistoryVO historyVO) throws Exception;
 
 	/**
-	 * Connector등록 이력을 등록한다.
+	 * Connector등록 이력 등록
 	 * 
 	 * @param historyVO
 	 * @throws Exception
@@ -115,7 +115,7 @@ public interface CmmnHistoryService {
 	void insertHistoryConnectorRegisterI(HistoryVO historyVO) throws Exception;
 
 	/**
-	 * Connector 연결테스트 이력을 등록한다.
+	 * Connector 연결테스트 이력 등록
 	 * 
 	 * @param historyVO
 	 * @throws Exception

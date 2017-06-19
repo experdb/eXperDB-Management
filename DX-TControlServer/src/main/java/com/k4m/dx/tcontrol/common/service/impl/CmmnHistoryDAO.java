@@ -2,202 +2,214 @@ package com.k4m.dx.tcontrol.common.service.impl;
 
 import java.sql.SQLException;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Repository;
 
-import com.ibatis.sqlmap.client.SqlMapClient;
 import com.k4m.dx.tcontrol.common.service.HistoryVO;
 
+import egovframework.rte.psl.dataaccess.EgovAbstractMapper;
+
 @Repository("CmmnHistoryDAO")
-public class CmmnHistoryDAO {
+public class CmmnHistoryDAO extends EgovAbstractMapper{
 
-	@Autowired
-	@Qualifier("sqlMapClient")
-	private SqlMapClient sqlMapClient;
-
-	public void insertHistoryLogin(HistoryVO historyVO) {
-		try {
-			sqlMapClient.insert("cmmnHistorySQL.insertHistoryLogin", historyVO);
-		} catch (SQLException e) {
-			e.printStackTrace();
-		}
+	/**
+	 * 로그인 이력 등록
+	 * 
+	 * @param historyVO
+	 * @throws SQLException
+	 */
+	public void insertHistoryLogin(HistoryVO historyVO) throws SQLException {
+		insert("cmmnHistorySQL.insertHistoryLogin", historyVO);
 	}
 
-	public void insertHistoryLogout(HistoryVO historyVO) {
-		try {
-			sqlMapClient.insert("cmmnHistorySQL.insertHistoryLogout", historyVO);
-		} catch (SQLException e) {
-			e.printStackTrace();
-		}
+	
+	/**
+	 * 로그아웃 이력 등록
+	 * 
+	 * @param historyVO
+	 * @throws SQLException
+	 */
+	public void insertHistoryLogout(HistoryVO historyVO) throws SQLException {
+		insert("cmmnHistorySQL.insertHistoryLogout", historyVO);
 	}
 
-	public void insertHistoryMain(HistoryVO historyVO) {
-		try {
-			sqlMapClient.insert("cmmnHistorySQL.insertHistoryMain", historyVO);
-		} catch (SQLException e) {
-			e.printStackTrace();
-		}
+	
+	/**
+	 * 메인화면 이력 등록
+	 * 
+	 * @param historyVO
+	 * @throws SQLException
+	 */
+	public void insertHistoryMain(HistoryVO historyVO) throws SQLException {
+		insert("cmmnHistorySQL.insertHistoryMain", historyVO);
 	}
 
-	public void insertHistoryDbTree(HistoryVO historyVO) {
-		try {
-			sqlMapClient.insert("cmmnHistorySQL.insertHistoryDbTree", historyVO);
-		} catch (SQLException e) {
-			e.printStackTrace();
-		}
+	
+	/**
+	 * DB Server Tree 이력 등록
+	 * 
+	 * @param historyVO
+	 * @throws SQLException
+	 */
+	public void insertHistoryDbTree(HistoryVO historyVO) throws SQLException {
+		insert("cmmnHistorySQL.insertHistoryDbTree", historyVO);
 	}
 
-	public void insertHistoryDbServer(HistoryVO historyVO) {
-		try {
-			sqlMapClient.insert("cmmnHistorySQL.insertHistoryDbServer", historyVO);
-		} catch (SQLException e) {
-			e.printStackTrace();
-		}
+	
+	/**
+	 * DB Server 화면 이력 등록
+	 * 
+	 * @param historyVO
+	 * @throws SQLException
+	 */
+	public void insertHistoryDbServer(HistoryVO historyVO) throws SQLException {
+		insert("cmmnHistorySQL.insertHistoryDbServer", historyVO);
 	}
 
-	public void insertHistoryDbServerRegPopup(HistoryVO historyVO) {
-		try {
-			sqlMapClient.insert("cmmnHistorySQL.insertHistoryDbServerRegPopup", historyVO);
-		} catch (SQLException e) {
-			e.printStackTrace();
-		}
+	
+	/**
+	 * DB Server 등록팝업 이력 등록
+	 * 
+	 * @param historyVO
+	 * @throws SQLException
+	 */
+	public void insertHistoryDbServerRegPopup(HistoryVO historyVO) throws SQLException {
+		insert("cmmnHistorySQL.insertHistoryDbServerRegPopup", historyVO);
 	}
 
-	public void insertHistoryDbServerI(HistoryVO historyVO) {
-		try {
-			sqlMapClient.insert("cmmnHistorySQL.insertHistoryDbServerI", historyVO);
-		} catch (SQLException e) {
-			e.printStackTrace();
-		}
+	
+	
+	/**
+	 * DB Server 등록팝업 저장이력 등록
+	 * 
+	 * @param historyVO
+	 * @throws SQLException
+	 */
+	public void insertHistoryDbServerI(HistoryVO historyVO) throws SQLException {
+		insert("cmmnHistorySQL.insertHistoryDbServerI", historyVO);
 	}
 
-	public void insertHistoryDatabase(HistoryVO historyVO) {
-		try {
-			sqlMapClient.insert("cmmnHistorySQL.insertHistoryDatabase", historyVO);
-		} catch (SQLException e) {
-			e.printStackTrace();
-		}
+	
+	/**
+	 * Database 조회화면 이력 등록
+	 * 
+	 * @param historyVO
+	 * @throws SQLException
+	 */
+	public void insertHistoryDatabase(HistoryVO historyVO) throws SQLException {
+		insert("cmmnHistorySQL.insertHistoryDatabase", historyVO);
+	}
+	
+	
+	/**
+	 * 전송설정 이력 등록
+	 * 
+	 * @param historyVO
+	 * @throws SQLException
+	 */
+
+	public void insertHistoryTransferSetting(HistoryVO historyVO) throws SQLException {
+		insert("cmmnHistorySQL.insertHistoryTransferSetting", historyVO);
+	}
+	
+	
+	/**
+	 * Connector 조회화면 이력 등록
+	 * 
+	 * @param historyVO
+	 * @throws SQLException
+	 */
+	public void insertHistoryConnectorRegister(HistoryVO historyVO) throws SQLException {
+		insert("cmmnHistorySQL.insertHistoryConnectorRegister", historyVO);
 	}
 
-	public void insertHistoryTransferSetting(HistoryVO historyVO) {
-		try {
-			sqlMapClient.insert("cmmnHistorySQL.insertHistoryTransferSetting", historyVO);
-		} catch (SQLException e) {
-			e.printStackTrace();
-		}
+	
+	
+	/**
+	 * Connector수정 이력 등록
+	 * 
+	 * @param historyVO
+	 * @throws SQLException
+	 */
+	public void insertHistoryConnectorRegisterU(HistoryVO historyVO) throws SQLException {
+		insert("cmmnHistorySQL.insertHistoryConnectorRegisterU", historyVO);
 	}
 
-	public void insertHistoryConnectorRegister(HistoryVO historyVO) {
-		try {
-			sqlMapClient.insert("cmmnHistorySQL.insertHistoryConnectorRegister", historyVO);
-		} catch (SQLException e) {
-			e.printStackTrace();
-		}
+	
+	/**
+	 * Connector삭제 이력 등록
+	 * 
+	 * @param historyVO
+	 * @throws SQLException
+	 */
+	public void insertHistoryConnectorRegisterD(HistoryVO historyVO) throws SQLException {
+		insert("cmmnHistorySQL.insertHistoryConnectorRegisterD", historyVO);
 	}
 
-	public void insertHistoryConnectorRegisterU(HistoryVO historyVO) {
-		try {
-			sqlMapClient.insert("cmmnHistorySQL.insertHistoryConnectorRegisterU", historyVO);
-		} catch (SQLException e) {
-			e.printStackTrace();
-		}
+	
+	/**
+	 * Connector 등록 팝업 화면 이력 등록
+	 * 
+	 * @param historyVO
+	 * @throws SQLException
+	 */
+	public void insertHistoryConnectorRegPopup(HistoryVO historyVO) throws SQLException {
+		insert("cmmnHistorySQL.insertHistoryConnectorRegPopup", historyVO);
 	}
 
-	public void insertHistoryConnectorRegisterD(HistoryVO historyVO) {
-		try {
-			sqlMapClient.insert("cmmnHistorySQL.insertHistoryConnectorRegisterD", historyVO);
-		} catch (SQLException e) {
-			e.printStackTrace();
-		}
+	
+	/**
+	 * Connector등록 이력 등록
+	 * 
+	 * @param historyVO
+	 * @throws SQLException
+	 */
+	public void insertHistoryConnectorRegisterI(HistoryVO historyVO) throws SQLException {
+		insert("cmmnHistorySQL.insertHistoryConnectorRegisterI", historyVO);
 	}
 
-	public void insertHistoryConnectorRegPopup(HistoryVO historyVO) {
-		try {
-			sqlMapClient.insert("cmmnHistorySQL.insertHistoryConnectorRegPopup", historyVO);
-		} catch (SQLException e) {
-			e.printStackTrace();
-		}
+	
+	/**
+	 * Connector 연결테스트 이력 등록
+	 * 
+	 * @param historyVO
+	 * @throws SQLException
+	 */
+	public void insertHistoryConnectorConnTest(HistoryVO historyVO) throws SQLException {
+		insert("cmmnHistorySQL.insertHistoryConnectorConnTest", historyVO);
 	}
 
-	public void insertHistoryConnectorRegisterI(HistoryVO historyVO) {
-		try {
-			sqlMapClient.insert("cmmnHistorySQL.insertHistoryConnectorRegisterI", historyVO);
-		} catch (SQLException e) {
-			e.printStackTrace();
-		}
+	
+
+	public void insertHistoryUserManager(HistoryVO historyVO) throws SQLException {
+		insert("cmmnHistorySQL.insertHistoryUserManager", historyVO);
 	}
 
-	public void insertHistoryConnectorConnTest(HistoryVO historyVO) {
-		try {
-			sqlMapClient.insert("cmmnHistorySQL.insertHistoryConnectorConnTest", historyVO);
-		} catch (SQLException e) {
-			e.printStackTrace();
-		}
+	public void insertHistoryUserManagerD(HistoryVO historyVO) throws SQLException {
+		insert("cmmnHistorySQL.insertHistoryUserManagerD", historyVO);
 	}
 
-	public void insertHistoryUserManager(HistoryVO historyVO) {
-		try {
-			sqlMapClient.insert("cmmnHistorySQL.insertHistoryUserManager", historyVO);
-		} catch (SQLException e) {
-			e.printStackTrace();
-		}
+	public void insertHistoryUserManagerI(HistoryVO historyVO) throws SQLException {
+		insert("cmmnHistorySQL.insertHistoryUserManagerI", historyVO);
 	}
 
-	public void insertHistoryUserManagerD(HistoryVO historyVO) {
-		try {
-			sqlMapClient.insert("cmmnHistorySQL.insertHistoryUserManagerD", historyVO);
-		} catch (SQLException e) {
-			e.printStackTrace();
-		}
+	public void insertHistoryUserManagerU(HistoryVO historyVO) throws SQLException {
+		insert("cmmnHistorySQL.insertHistoryUserManagerU", historyVO);
 	}
 
-	public void insertHistoryUserManagerI(HistoryVO historyVO) {
-		try {
-			sqlMapClient.insert("cmmnHistorySQL.insertHistoryUserManagerI", historyVO);
-		} catch (SQLException e) {
-			e.printStackTrace();
-		}
+	public void insertHistoryMenuAuthority(HistoryVO historyVO) throws SQLException {
+		insert("cmmnHistorySQL.insertHistoryMenuAuthority", historyVO);
 	}
 
-	public void insertHistoryUserManagerU(HistoryVO historyVO) {
-		try {
-			sqlMapClient.insert("cmmnHistorySQL.insertHistoryUserManagerU", historyVO);
-		} catch (SQLException e) {
-			e.printStackTrace();
-		}
+	public void insertHistoryDbAuthority(HistoryVO historyVO) throws SQLException {
+		insert("cmmnHistorySQL.insertHistoryDbAuthority", historyVO);
 	}
 
-	public void insertHistoryMenuAuthority(HistoryVO historyVO) {
-		try {
-			sqlMapClient.insert("cmmnHistorySQL.insertHistoryMenuAuthority", historyVO);
-		} catch (SQLException e) {
-			e.printStackTrace();
-		}
+	public void insertHistoryAccessHistory(HistoryVO historyVO) throws SQLException {
+		insert("cmmnHistorySQL.insertHistoryAccessHistory", historyVO);
 	}
 
-	public void insertHistoryDbAuthority(HistoryVO historyVO) {
-		try {
-			sqlMapClient.insert("cmmnHistorySQL.insertHistoryDbAuthority", historyVO);
-		} catch (SQLException e) {
-			e.printStackTrace();
-		}
-	}
-
-	public void insertHistoryAccessHistory(HistoryVO historyVO) {
-		try {
-			sqlMapClient.insert("cmmnHistorySQL.insertHistoryAccessHistory", historyVO);
-		} catch (SQLException e) {
-			e.printStackTrace();
-		}
-	}
-
-	public void insertHistoryAgentMonitoring(HistoryVO historyVO) {
-		try {
-			sqlMapClient.insert("cmmnHistorySQL.insertHistoryAgentMonitoring", historyVO);
-		} catch (SQLException e) {
-			e.printStackTrace();
-		}
+	public void insertHistoryAgentMonitoring(HistoryVO historyVO) throws SQLException {
+		insert("cmmnHistorySQL.insertHistoryAgentMonitoring", historyVO);
 	}
 
 }

@@ -4,73 +4,90 @@ import java.sql.SQLException;
 import java.util.List;
 import java.util.Map;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Repository;
 
-import com.ibatis.sqlmap.client.SqlMapClient;
 import com.k4m.dx.tcontrol.login.service.UserVO;
 
+import egovframework.rte.psl.dataaccess.EgovAbstractMapper;
+
 @Repository("UserManagerDAO")
-public class UserManagerDAO {
+public class UserManagerDAO extends EgovAbstractMapper{
+	
+	/**
+	 * 사용자 등록
+	 * 
+	 * @param userVo
+	 * @throws SQLException
+	 */
+	public void insertUserManager(UserVO userVo) throws SQLException{
+		insert("userManagerSql.insertUserManager", userVo);
 
-	@Autowired
-	@Qualifier("sqlMapClient")
-	private SqlMapClient sqlMapClient;
-
-	public void insertUserManager(UserVO userVo) {
-		try {
-			sqlMapClient.insert("userManagerSql.insertUserManager", userVo);
-		} catch (SQLException e) {
-			e.printStackTrace();
-		}
+	}
+	
+	
+	/**
+	 * 사용자 조회
+	 * 
+	 * @param param
+	 * @return List
+	 * @throws SQLException
+	 */
+	@SuppressWarnings({ "unchecked", "deprecation" })
+	public List<UserVO> selectUserManager(Map<String, Object> param)throws SQLException {
+		List<UserVO> result = null;
+		result = (List<UserVO>) list("userManagerSql.selectUserManager", param);
+		return result;
 	}
 
-	@SuppressWarnings("unchecked")
-	public List<UserVO> selectUserManager(Map<String, Object> param) {
-		List<UserVO> sl = null;
-		try {
-			sl = (List<UserVO>) sqlMapClient.queryForList("userManagerSql.selectUserManager", param);
-		} catch (SQLException e) {
-			e.printStackTrace();
-		}
-		return sl;
-	}
-
-	public int userManagerIdCheck(String usr_id) {
+	
+	/**
+	 * 사용자 아이디 중복 체크
+	 * 
+	 * @param usr_id
+	 * @return resultSet
+	 * @throws SQLException
+	 */
+	public int userManagerIdCheck(String usr_id) throws SQLException {
 		int resultSet = 0;
-		try {
-			resultSet = (int) sqlMapClient.queryForObject("userManagerSql.userManagerIdCheck", usr_id);
-		} catch (SQLException e) {
-			e.printStackTrace();
-		}
+		resultSet = (int) getSqlSession().selectOne("userManagerSql.userManagerIdCheck", usr_id);
 		return resultSet;
 	}
 
-	public void deleteUserManager(String string) {
-		try {
-			sqlMapClient.delete("userManagerSql.deleteUserManager", string);
-		} catch (SQLException e) {
-			e.printStackTrace();
-		}
+	
+	/**
+	 * 사용자 삭제
+	 * 
+	 * @param string
+	 * @throws SQLException
+	 */
+	public void deleteUserManager(String string) throws SQLException {
+		delete("userManagerSql.deleteUserManager", string);
 	}
 
-	@SuppressWarnings("unchecked")
-	public List<UserVO> selectDetailUserManager(String usr_id) {
-		List<UserVO> sl = null;
-		try {
-			sl = (List<UserVO>) sqlMapClient.queryForList("userManagerSql.selectDetailUserManager", usr_id);
-		} catch (SQLException e) {
-			e.printStackTrace();
-		}
-		return sl;
+	
+	/**
+	 * 사용자 상세정보 조회
+	 * 
+	 * @param usr_id
+	 * @return List
+	 * @throws SQLException
+	 */
+
+	@SuppressWarnings({ "unchecked", "deprecation" })
+	public List<UserVO> selectDetailUserManager(String usr_id) throws SQLException {
+		List<UserVO> result = null;
+		result = (List<UserVO>) list("userManagerSql.selectDetailUserManager", usr_id);
+		return result;
 	}
 
-	public void updateUserManager(UserVO userVo) {
-		try {
-			sqlMapClient.update("userManagerSql.updateUserManager", userVo);
-		} catch (SQLException e) {
-			e.printStackTrace();
-		}	
+	
+	/**
+	 * 사용자 수정
+	 * 
+	 * @param userVo
+	 * @throws SQLException
+	 */
+	public void updateUserManager(UserVO userVo) throws SQLException {
+		update("userManagerSql.updateUserManager", userVo);	
 	}
 }

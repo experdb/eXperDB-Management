@@ -13,7 +13,7 @@ import com.k4m.dx.tcontrol.login.service.UserVO;
 @Service("UserAccessServiceImpl")
 public class AccessHistoryServiceImpl implements AccessHistoryService{
 	
-	@Resource(name = "AccessHistoryDAO")
+	@Resource(name = "accessHistoryDAO")
 	private AccessHistoryDAO accessHistoryDAO;
 
 	public List<UserVO> selectAccessHistory(Map<String, Object> param) throws Exception {
