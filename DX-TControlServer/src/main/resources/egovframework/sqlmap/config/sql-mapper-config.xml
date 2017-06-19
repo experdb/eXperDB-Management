@@ -9,26 +9,25 @@
 		<typeAlias alias="searchVO" type="com.k4m.dx.tcontrol.sample.service.PagingVO"/>
     </typeAliases>
     
-
  	<mappers>
 	 	<!-- cmmn -->
-		<mapper resource="egovframework/sqlmap/mapper/cmmn/cmmnSql.xml" />
-		<mapper resource="egovframework/sqlmap/mapper/cmmn/cmmnCodeSql.xml" /> 
-		<mapper resource="egovframework/sqlmap/mapper/cmmn/cmmnHistorySql.xml" />
+		<mapper resource="egovframework/sqlmap/mappers/cmmn/cmmnSql.xml" />
+		<mapper resource="egovframework/sqlmap/mappers/cmmn/cmmnCodeSql.xml" /> 
+		<mapper resource="egovframework/sqlmap/mappers/cmmn/cmmnHistorySql.xml" />
 		
 		<!-- sample -->
-		<mapper resource="egovframework/sqlmap/mapper/sample/sampleListSql.xml" />
-		<mapper resource="egovframework/sqlmap/mapper/sample/sampleTreeSql.xml" />
+		<mapper resource="egovframework/sqlmap/mappers/sample/sampleListSql.xml" />
+		<mapper resource="egovframework/sqlmap/mappers/sample/sampleTreeSql.xml" />
 		
 		<!-- backup -->
-		<mapper resource="egovframework/sqlmap/mapper/backup/backupSql.xml" />
+		<mapper resource="egovframework/sqlmap/mappers/backup/backupSql.xml" />
 		
 		<!-- admin -->
-		<mapper resource="egovframework/sqlmap/mapper/admin/userManager/userManagerSql.xml" />
-		<mapper resource="egovframework/sqlmap/mapper/admin/dbserverManager/dbserverManagerSql.xml" />
-		<mapper resource="egovframework/sqlmap/mapper/admin/accessHistory/accessHistorySql.xml" />
+		<mapper resource="egovframework/sqlmap/mappers/admin/userManager/userManagerSql.xml" />
+		<mapper resource="egovframework/sqlmap/mappers/admin/dbserverManager/dbserverManagerSql.xml" />
+		<mapper resource="egovframework/sqlmap/mappers/admin/accessHistory/accessHistorySql.xml" />
 		
 		<!-- functions -->
-		<mapper resource="egovframework/sqlmap/mapper/functions/transfer/transferSql.xml" />
+		<mapper resource="egovframework/sqlmap/mappers/functions/transfer/transferSql.xml" />
 	</mappers>
 </configuration>
