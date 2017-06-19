@@ -13,7 +13,7 @@ import com.k4m.dx.tcontrol.login.service.UserVO;
 @Service("loginServiceImpl")
 public class LoginServiceImpl implements LoginService{
 
-	@Resource(name = "LoginDAO")
+	@Resource(name = "loginDAO")
 	private LoginDAO loginDAO;
 	
 	@Override

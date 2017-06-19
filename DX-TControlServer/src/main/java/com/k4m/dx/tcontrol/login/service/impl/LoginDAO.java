@@ -10,41 +10,23 @@ import org.springframework.stereotype.Repository;
 import com.ibatis.sqlmap.client.SqlMapClient;
 import com.k4m.dx.tcontrol.login.service.UserVO;
 
-@Repository("LoginDAO")
-public class LoginDAO {
-	
-	@Autowired
-	@Qualifier("sqlMapClient")
-	private SqlMapClient sqlMapClient;
+import egovframework.rte.psl.dataaccess.EgovAbstractMapper;
 
-	@SuppressWarnings("unchecked")
-	public List<UserVO> selectUserList(UserVO userVO) {
+@Repository("loginDAO")
+public class LoginDAO extends EgovAbstractMapper{
+	
+	/**
+	 * 로그인 정보 조회
+	 * 
+	 * @param userVO
+	 * @return List
+	 * @throws Exception
+	 */
+	@SuppressWarnings({ "unchecked", "deprecation" })
+	public List<UserVO> selectUserList(UserVO userVO) throws SQLException {
 		List<UserVO> result = null;
-		try {
-			//사용자 정보 조회
-			result = (List<UserVO>) sqlMapClient.queryForList("cmmnListSQL.selectLoginUserList", userVO);
-		} catch (SQLException e) {
-			e.printStackTrace();
-		}	
+		result = (List<UserVO>) list("cmmnListSQL.selectLoginUserList", userVO);	
 		return result;
 	}
 
-
-	public void insertLoginLog(UserVO userVO) {
-		try {
-			sqlMapClient.insert("cmmnListSQL.insertLoginLog", userVO);
-		} catch (SQLException e) {
-			e.printStackTrace();
-		}	
-	}
-
-
-	public void insertLogoutLog(UserVO userVo) {
-		try {
-			sqlMapClient.insert("cmmnListSQL.insertLogoutLog", userVo);
-		} catch (SQLException e) {
-			e.printStackTrace();
-		}	
-	}
-	
 }
