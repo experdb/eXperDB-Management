@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE configuration PUBLIC "-//mybatis.org//DTD Config 3.0//EN" "http://mybatis.org/dtd/mybatis-3-config.dtd">
+
+<configuration>
+    
+    <typeAliases>
+    	<typeAlias alias="dbServerVO" type="com.k4m.dx.tcontrol.admin.dbserverManager.service.DbServerVO" />
+    	<typeAlias alias="sampleListVO" type="com.k4m.dx.tcontrol.sample.service.SampleListVO"/>
+		<typeAlias alias="searchVO" type="com.k4m.dx.tcontrol.sample.service.PagingVO"/>
+    </typeAliases>
+    
+
+ 	<mappers>
+	 	<!-- cmmn -->
+		<mapper resource="egovframework/sqlmap/mapper/cmmn/cmmnSql.xml" />
+		<mapper resource="egovframework/sqlmap/mapper/cmmn/cmmnCodeSql.xml" /> 
+		<mapper resource="egovframework/sqlmap/mapper/cmmn/cmmnHistorySql.xml" />
+		
+		<!-- sample -->
+		<mapper resource="egovframework/sqlmap/mapper/sample/sampleListSql.xml" />
+		<mapper resource="egovframework/sqlmap/mapper/sample/sampleTreeSql.xml" />
+		
+		<!-- backup -->
+		<mapper resource="egovframework/sqlmap/mapper/backup/backupSql.xml" />
+		
+		<!-- admin -->
+		<mapper resource="egovframework/sqlmap/mapper/admin/userManager/userManagerSql.xml" />
+		<mapper resource="egovframework/sqlmap/mapper/admin/dbserverManager/dbserverManagerSql.xml" />
+		<mapper resource="egovframework/sqlmap/mapper/admin/accessHistory/accessHistorySql.xml" />
+		
+		<!-- functions -->
+		<mapper resource="egovframework/sqlmap/mapper/functions/transfer/transferSql.xml" />
+	</mappers>
+</configuration>
