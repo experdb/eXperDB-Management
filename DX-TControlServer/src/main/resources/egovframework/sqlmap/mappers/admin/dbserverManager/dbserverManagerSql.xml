@@ -40,13 +40,13 @@
           FROM T_DBSVR_I	
           WHERE 1 = 1
 	      <if test="db_svr_nm != ''">
-	      AND DB_SVR_NM LIKE '%' || #db_svr_nm# || '%'
+	      AND DB_SVR_NM LIKE '%' || #{db_svr_nm} || '%'
 	      </if>
 	      <if test="ipadr != ''">
-	      AND IPADR LIKE '%' || #ipadr# || '%'
+	      AND IPADR LIKE '%' || #{ipadr} || '%'
 	      </if>
 	      <if test="dft_db_nm != ''">
-	      AND DFT_DB_NM LIKE  '%' || #dft_db_nm# || '%'
+	      AND DFT_DB_NM LIKE  '%' || #{dft_db_nm} || '%'
 	      </if>         
           ORDER BY DB_SVR_ID
       ) A		
@@ -77,15 +77,15 @@
 		VALUES
 		(
 			  nextval('q_dbsvr_i_01')
-			, #db_svr_nm#
-			, #ipadr#
-			, #portno#
-			, #dft_db_nm#
-			, #svr_spr_usr_id#
-			, #svr_spr_scm_pwd#
-			, #frst_regr_id#
+			, #{db_svr_nm}
+			, #{ipadr}
+			, #{portno}
+			, #{dft_db_nm}
+			, #{svr_spr_usr_id}
+			, #{svr_spr_scm_pwd}
+			, #{frst_regr_id}
 			, clock_timestamp()
-			, #lst_mdfr_id#
+			, #{lst_mdfr_id}
 			, clock_timestamp()	
 		)
 	</insert>    

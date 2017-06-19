@@ -36,22 +36,22 @@
 			TO_CHAR(LST_MDF_DTM,'YYYY-MM-DD HH24:MI') AS LST_MDF_DTM
       FROM T_WRKCNG_I A
       WHERE 1=1	
-      	AND DB_SVR_ID=#db_svr_id#
-      	AND BCK_BSN_DSCD=#bck_bsn_dscd#
+      	AND DB_SVR_ID=#{db_svr_id}
+      	AND BCK_BSN_DSCD=#{bck_bsn_dscd}
       	<if test="wrk_nm != ''">
-      		AND WRK_NM LIKE CONCAT('%',#wrk_nm#,'%')
+      		AND WRK_NM LIKE CONCAT('%',#{wrk_nm},'%')
       	</if>
       	<if test="bck_opt_cd != ''">
-      		AND BCK_OPT_CD=#bck_opt_cd#
+      		AND BCK_OPT_CD=#{bck_opt_cd}
       	</if>
       	<if test="wrk_id != ''">
       		<if test='wrk_id != "0"'>
-	      		AND WRK_ID=#wrk_id#
+	      		AND WRK_ID=#{wrk_id}
 			</if>
       	</if>
       	<if test="db_id != ''">
       		<if test='db_id != "0"'>
-	      		AND DB_ID=#db_id#
+	      		AND DB_ID=#{db_id}
 			</if>
       	</if>
       ORDER BY WRK_ID DESC
@@ -71,7 +71,7 @@
     		EXPS_ORD
     	FROM T_WRKOPTDTL_C
     	WHERE 1=1
-    		AND GRP_CD=#grp_cd#
+    		AND GRP_CD=#{grp_cd}
     	ORDER BY EXPS_ORD
     </select>
 
@@ -103,17 +103,17 @@
 		VALUES
 			(
 			nextval('q_wrkcng_i_01'),
-			#db_svr_id#,
+			#{db_svr_id},
 			'rman',
-			#wrk_nm#,
-			#wrk_exp#,
-			#bck_opt_cd#,
-			#bck_mtn_ecnt#,
-			#cps_yn#,
-			#log_file_bck_yn#,
-			#log_file_stg_dcnt#,
-			#log_file_mtn_ecnt#,
-			#file_stg_dcnt#,
+			#{wrk_nm},
+			#{wrk_exp},
+			#{bck_opt_cd},
+			#{bck_mtn_ecnt},
+			#{cps_yn},
+			#{log_file_bck_yn},
+			#{log_file_stg_dcnt},
+			#{log_file_mtn_ecnt},
+			#{file_stg_dcnt},
 			'',
 			now(),
 			'',
@@ -150,18 +150,18 @@
 		VALUES
 			(
 			nextval('q_wrkcng_i_01'),
-			#db_svr_id#,
+			#{db_svr_id},
 			'dump',
-			#wrk_nm#,
-			#wrk_exp#,
-			#db_id#,
-			#save_pth#,
-			#file_fmt_cd#,
-			#cprt#,
-			#encd_mth_nm#,
-			#usr_role_nm#,
-			#file_stg_dcnt#,
-			#bck_mtn_ecnt#,
+			#{wrk_nm},
+			#{wrk_exp},
+			#{db_id},
+			#{save_pth},
+			#{file_fmt_cd},
+			#{cprt},
+			#{encd_mth_nm},
+			#{usr_role_nm},
+			#{file_stg_dcnt},
+			#{bck_mtn_ecnt},
 			'',
 			now(),
 			'',
@@ -176,19 +176,19 @@
 	 	* Author : Yoon jh
 	 	**/
 		UPDATE T_WRKCNG_I SET
-			wrk_nm = #wrk_nm#,
-			wrk_exp = #wrk_exp#,
-			bck_opt_cd = #bck_opt_cd#,
-			cps_yn = #cps_yn#,
-			log_file_bck_yn = #log_file_bck_yn#,
-			bck_mtn_ecnt = #bck_mtn_ecnt#,
-			log_file_stg_dcnt = #log_file_stg_dcnt#,
-			log_file_mtn_ecnt = #log_file_mtn_ecnt#,
-			file_stg_dcnt = #file_stg_dcnt#,
+			wrk_nm = #{wrk_nm},
+			wrk_exp = #{wrk_exp},
+			bck_opt_cd = #{bck_opt_cd},
+			cps_yn = #{cps_yn},
+			log_file_bck_yn = #{log_file_bck_yn},
+			bck_mtn_ecnt = #{bck_mtn_ecnt},
+			log_file_stg_dcnt = #{log_file_stg_dcnt},
+			log_file_mtn_ecnt = #{log_file_mtn_ecnt},
+			file_stg_dcnt = #{file_stg_dcnt},
 			lst_mdfr_id = '',
 			lst_mdf_dtm = now()
 		WHERE
-			WRK_ID = #wrk_id#
+			WRK_ID = #{wrk_id}
 	</update>
 	
 	<select id="lastWorkId"  resultType="workVO">
@@ -218,11 +218,11 @@
 			)
 		VALUES
 			(
-			#wrk_id#,
-			#opt_sn#,
-			#grp_cd#,
-			#opt_cd#,
-			#bck_opt_val#,
+			#{wrk_id},
+			#{opt_sn},
+			#{grp_cd},
+			#{opt_cd},
+			#{bck_opt_val},
 			'',
 			now(),
 			'',
@@ -238,10 +238,10 @@
 	 	**/	
 		DELETE FROM t_bckopt_i
 		WHERE
-			WRK_ID = #wrk_id#
+			WRK_ID = #{wrk_id}
 			<if test="opt_sn != ''">
 				<if test='opt_sn != "0"'>
-			AND OPT_SN = #opt_sn#
+			AND OPT_SN = #{opt_sn}
 				</if>
 			</if>
 	</delete>
@@ -254,7 +254,7 @@
 	 	**/	
 		DELETE FROM T_WRKCNG_I
 		WHERE
-			WRK_ID = #wrk_id#
+			WRK_ID = #{wrk_id}
 	</delete>
 	
 	<select id="selectWorkOptList" parameterType="workVO" resultType="workOptVO">
@@ -276,7 +276,7 @@
 			LST_MDF_DTM
       FROM T_BCKOPT_I
       WHERE 1=1	
-      	AND WRK_ID = #wrk_id#
+      	AND WRK_ID = #{wrk_id}
       ORDER BY OPT_SN DESC
     </select>
     
@@ -298,7 +298,7 @@
 		FROM
 			T_DB_I
 		WHERE
-			DB_SVR_ID = #db_svr_id#
+			DB_SVR_ID = #{db_svr_id}
 		ORDER BY DB_ID DESC
     </select>
     
@@ -331,39 +331,39 @@
 	 		AND TWG.WRK_ID = TWI.WRK_ID
       	<if test="wrk_id != ''">
       		<if test='wrk_id != "0"'>
-	      		AND TWG.WRK_ID=#wrk_id#
+	      		AND TWG.WRK_ID=#{wrk_id}
 	      	</if>
       	</if>
       	<if test="scd_id != ''">
       		<if test='scd_id != "0"'>
-	      		AND TWG.SCD_ID=#scd_id#
+	      		AND TWG.SCD_ID=#{scd_id}
 	      	</if>
       	</if>
       	<if test="exe_sn != ''">
       		<if test='exe_sn != "0"'>      	
-	      		AND TWG.EXE_SN=#exe_sn#
+	      		AND TWG.EXE_SN=#{exe_sn}
 	      	</if>
       	</if>
       	<if test="db_id != ''">
       		<if test='db_id != "0"'>     
-	      		AND TWG.DB_ID=#db_id#
+	      		AND TWG.DB_ID=#{db_id}
 	      	</if>
       	</if>
       	<if test="bck_bsn_dscd != ''">
-      		AND TWI.BCK_BSN_DSCD = #bck_bsn_dscd#
+      		AND TWI.BCK_BSN_DSCD = #{bck_bsn_dscd}
       	</if>
       	<if test="bck_opt_cd != ''">
-      		AND TWG.BCK_OPT_CD = #bck_opt_cd#
+      		AND TWG.BCK_OPT_CD = #{bck_opt_cd}
       	</if>
       	<if test="wrk_strt_dtm != ''">
       		<if test="wrk_end_dtm != ''">
-      			AND (TO_DATE(#wrk_strt_dtm#,'YYYY-MM-DD') BETWEEN TWG.WRK_STRT_DTM AND TWG.WRK_END_DTM
+      			AND (TO_DATE(#{wrk_strt_dtm},'YYYY-MM-DD') BETWEEN TWG.WRK_STRT_DTM AND TWG.WRK_END_DTM
       				OR
-      				TO_DATE(#wrk_end_dtm#,'YYYY-MM-DD') BETWEEN TWG.WRK_STRT_DTM AND TWG.WRK_END_DTM)
+      				TO_DATE(#{wrk_end_dtm},'YYYY-MM-DD') BETWEEN TWG.WRK_STRT_DTM AND TWG.WRK_END_DTM)
       		</if>
       	</if>
       	<if test="exe_rslt_cd != ''">
-      		AND TWG.EXE_RSLT_CD=#exe_rslt_cd#
+      		AND TWG.EXE_RSLT_CD=#{exe_rslt_cd}
       	</if>
       	
       	ORDER BY TWG.EXE_SN DESC
