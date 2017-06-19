@@ -21,6 +21,7 @@ public class SampleListDAO extends EgovAbstractMapper{
 		insert("sampleListSQL.insertSampleList", sampleListVo);	
 	}
 
+	
 	@SuppressWarnings({ "unchecked", "deprecation" })
 	public List<SampleListVO> selectDetailSampleList(SampleListVO sampleListVo) throws SQLException {
 		List<SampleListVO> sl = null;
