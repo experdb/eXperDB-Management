@@ -3,5 +3,276 @@
 
 <mapper namespace="cmmnCodeSQL">
    
+	<select id="selectCmmnCodeList" parameterType="pageVO" resultType="cmmnCodeVO">
+		/**
+	 	* Query ID : selectCmmnCodeList
+	 	* Description : 공통코드 조회
+	 	* Author : 변승우
+	 	**/
+	 	
+      SELECT 
+            (ROW_NUMBER() OVER()) AS ROWNUM
+		  , (ROW_NUMBER() OVER()) AS IDX
+      	  , GRP_CD
+	      , GRP_CD_NM
+	      , GRP_CD_EXP
+	      , USE_YN
+	      , FRST_REGR_ID
+	      , FRST_REG_DTM
+	      , LST_MDFR_ID
+	      , LST_MDF_DTM 
+      FROM T_SYSGRP_C
+      WHERE 1=1	
+      LIMIT #recordCountPerPage# OFFSET #firstIndex#
+    </select>
+    
+    
+   	<select id="selectCmmnCodeListTotCnt" parameterType="pageVO" resultType="int">
+    	/**
+	 	* Query ID : selectCmmnCodeListTotCnt
+	 	* Description : 공통코드 갯수 조회
+	 	* Author : 변승우
+	 	**/
+		SELECT 
+				COUNT(*) totcnt
+		FROM T_SYSGRP_C
+		WHERE 1=1
+	</select>
+	
+	
+	  <insert id="insertCmmnCode" parameterType="cmmnCodeVO">
+    	/**
+	 	* Query ID : insertCmmnCode
+	 	* Description : 공통코드 등록
+	 	* Author : 변승우
+	 	**/
+	 	
+		INSERT INTO T_SYSGRP_C
+		(
+      		GRP_CD
+	      , GRP_CD_NM
+	      , GRP_CD_EXP
+	      , USE_YN
+	      , FRST_REGR_ID
+	      , FRST_REG_DTM
+	      , LST_MDFR_ID
+	      , LST_MDF_DTM 
+		) 
+		VALUES
+		(
+			  #grp_cd#
+			, #grp_cd_nm#
+			, #grp_cd_exp#
+			, #use_yn#
+			, #usr_id#
+			, clock_timestamp()
+			, #usr_id#
+			, clock_timestamp()
+		)
+	</insert>
+	
+	<select id="selectCmmnCodeDetailList" parameterType="cmmnCodeVO" resultType="cmmnCodeVO">
+		/**
+	 	* Query ID : selectCmmnCodeDetailList
+	 	* Description : 공통코드 상세 조회
+	 	* Author : 변승우
+	 	**/
+	 	
+      SELECT 
+            (ROW_NUMBER() OVER()) AS ROWNUM
+		  , (ROW_NUMBER() OVER()) AS IDX
+      	  , GRP_CD
+	      , GRP_CD_NM
+	      , GRP_CD_EXP
+	      , USE_YN
+	      , FRST_REGR_ID
+	      , FRST_REG_DTM
+	      , LST_MDFR_ID
+	      , LST_MDF_DTM 
+      FROM T_SYSGRP_C
+      WHERE 1=1
+      AND GRP_CD = #grp_cd#
+    </select>
+    
+    
+    <update id="updateCmmnCode" parameterType="cmmnCodeVO">
+   	    /**
+	 	* Query ID : updateCmmnCode
+	 	* Description : 공통코드 수정
+	 	* Author : 변승우
+	 	**/
+	 	
+		UPDATE T_SYSGRP_C
+		SET 
+	  	 	   GRP_CD_NM= #grp_cd_nm#
+		      , GRP_CD_EXP=#grp_cd_exp#
+		      , USE_YN=#use_yn#
+		      , LST_MDFR_ID=#usr_id#
+		      , LST_MDF_DTM= clock_timestamp()
+		WHERE GRP_CD=#grp_cd#
+	</update> 
+	
+	
+    <delete id="deleteCmmnCode" parameterType="cmmnCodeVO">
+       	/**
+	 	* Query ID : deleteCmmnCode
+	 	* Description : 공통코드 삭제
+	 	* Author : 변승우
+	 	**/
+	 	
+	  DELETE 
+	  FROM T_SYSGRP_C 
+	  WHERE GRP_CD=#grp_cd#
+	</delete>
+	
+	
+		<select id="cmmnCodeSearch" parameterType="pageVO" resultType="cmmnCodeVO">
+			/**
+		 	* Query ID : cmmnCodeSearch
+		 	* Description : 공통코드 검색 조회
+		 	* Author : 변승우
+		 	**/
+		 	
+			SELECT 
+				    (ROW_NUMBER() OVER()) AS ROWNUM
+				  , (ROW_NUMBER() OVER()) AS IDX
+		          , GRP_CD
+			      , GRP_CD_NM
+			      , USE_YN
+			      , FRST_REGR_ID
+			      , FRST_REG_DTM
+			      , LST_MDFR_ID
+			      , LST_MDF_DTM 
+	      FROM T_SYSGRP_C
+	      WHERE 1=1
+	      <if test='searchCondition == "0"'>
+	      </if>
+	      <if test='searchCondition == "1"'>
+	      AND GRP_CD like '%' || #searchKeyword# || '%'
+	      </if>
+	      <if test='searchCondition == "2"'>
+	      AND GRP_CD_NM like '%' || #searchKeyword# || '%'
+	      </if>
+    	</select>	
+	
+	
+	
+	
+		<!-- 상세코드 쿼리 시작 -->
+		<select id="cmmnCodeDtlList" parameterType="pageVO" resultType="cmmnCodeVO">
+			/**
+		 	* Query ID : cmmnCodeDtlList
+		 	* Description : 상세코드 조회
+		 	* Author : 변승우
+		 	**/
+		 	
+			SELECT 
+				    (ROW_NUMBER() OVER()) AS ROWNUM
+				  , (ROW_NUMBER() OVER()) AS IDX
+		          , A.GRP_CD
+		          , B.SYS_CD
+			      , B.SYS_CD_NM
+			      , B.USE_YN
+			      , B.FRST_REGR_ID
+			      , B.FRST_REG_DTM
+			      , B.LST_MDFR_ID
+			      , B.LST_MDF_DTM 
+	      FROM T_SYSGRP_C A, T_SYSDTL_C B
+	      WHERE 1=1
+	      AND A.GRP_CD = B.GRP_CD
+	      AND A.GRP_CD = #grp_cd#
+	      LIMIT #recordCountPerPage# OFFSET #firstIndex#
+    	</select>
 
+
+	   	<select id="selectCmmnCodeDtlListTotCnt" parameterType="pageVO" resultType="int">
+	    	/**
+		 	* Query ID : selectCmmnCodeDtlListTotCnt
+		 	* Description : 상세코드 갯수 조회
+		 	* Author : 변승우
+		 	**/
+			SELECT 
+					COUNT(*) totcnt
+			FROM T_SYSDTL_C
+			WHERE 1=1
+			AND GRP_CD = #grp_cd#
+		</select>
+	
+	
+		<insert id="insertCmmnDtlCode" parameterType="cmmnCodeVO">
+	    	/**
+		 	* Query ID : insertCmmnDtlCode
+		 	* Description : 공통코드 등록
+		 	* Author : 변승우
+		 	**/
+		 	
+			INSERT INTO T_SYSDTL_C
+			(
+	      		GRP_CD
+		      , SYS_CD
+		      , SYS_CD_NM
+		      , USE_YN
+		      , FRST_REGR_ID
+		      , FRST_REG_DTM
+		      , LST_MDFR_ID
+		      , LST_MDF_DTM 
+			) 
+			VALUES
+			(
+				  #grp_cd#
+				, #sys_cd#
+				, #sys_cd_nm#
+				, #use_yn#
+				, #usr_id#
+				, clock_timestamp()
+				, #usr_id#
+				, clock_timestamp()
+			)
+		</insert>	
+		
+	    <delete id="deleteCmmnDtlCode" parameterType="cmmnCodeVO">
+	       	/**
+		 	* Query ID : deleteCmmnDtlCode
+		 	* Description : 상세코드 삭제
+		 	* Author : 변승우
+		 	**/
+		 	
+		  DELETE 
+		  FROM T_SYSDTL_C 
+		  WHERE SYS_CD=#sys_cd#
+		</delete>		
+		
+		
+		<select id="cmmnDtlCodeSearch" parameterType="pageVO" resultType="cmmnCodeVO">
+			/**
+		 	* Query ID : cmmnDtlCodeSearch
+		 	* Description : 상세코드 검색 조회
+		 	* Author : 변승우
+		 	**/
+		 	
+			SELECT 
+				    (ROW_NUMBER() OVER()) AS ROWNUM
+				  , (ROW_NUMBER() OVER()) AS IDX
+		          , A.GRP_CD
+		          , B.SYS_CD
+			      , B.SYS_CD_NM
+			      , B.USE_YN
+			      , B.FRST_REGR_ID
+			      , B.FRST_REG_DTM
+			      , B.LST_MDFR_ID
+			      , B.LST_MDF_DTM 
+	      FROM T_SYSGRP_C A, T_SYSDTL_C B
+	      WHERE 1=1
+	      AND A.GRP_CD = B.GRP_CD
+	      AND A.GRP_CD = #grp_cd#
+	      <if test='searchCondition == "0"'>
+		  </if>
+	      <if test='searchCondition == "1"'>
+	      AND B.SYS_CD like '%' || #searchKeyword# || '%'
+	      </if>
+	      <if test='searchCondition == "2"'>
+	      AND B.SYS_CD_NM like '%' || #searchKeyword# || '%'
+	      </if>
+    	</select>
+    	
 </mapper>
