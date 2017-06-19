@@ -14,7 +14,7 @@ import com.k4m.dx.tcontrol.common.service.PageVO;
 @Service("cmmnCodeServiceImpl")
 public class CmmnCodeServiceImpl implements CmmnCodeService {
 	
-    @Resource(name="CmmnCodeDAO")
+    @Resource(name="cmmnCodeDAO")
     private CmmnCodeDAO cmmnCodeDAO;
 
 	/**

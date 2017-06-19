@@ -3,30 +3,21 @@ package com.k4m.dx.tcontrol.sample.service.impl;
 import java.sql.SQLException;
 import java.util.List;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Repository;
 
-import com.ibatis.sqlmap.client.SqlMapClient;
 import com.k4m.dx.tcontrol.sample.service.SampleListVO;
 
-@Repository("SampleDatatableDAO")
-public class SampleDatatableDAO {
-	
-	@Autowired
-	@Qualifier("sqlMapClient")
-	private SqlMapClient sqlMapClient;
+import egovframework.rte.psl.dataaccess.EgovAbstractMapper;
 
-	@SuppressWarnings("unchecked")
-	public List<SampleListVO> selectSampleDatatableList() {
+@Repository("sampleDatatableDAO")
+public class SampleDatatableDAO extends EgovAbstractMapper{
+
+	@SuppressWarnings({ "unchecked", "deprecation" })
+	public List<SampleListVO> selectSampleDatatableList() throws SQLException {
 		List<SampleListVO> sl = null;
-		try {
-			sl = (List<SampleListVO>) sqlMapClient.queryForList("sampleListSQL.selectSampleDatatableList");	
-		} catch (SQLException e) {
-			e.printStackTrace();
-        }
+		sl = (List<SampleListVO>) list("sampleListSQL.selectSampleDatatableList", sl);
 		return sl;
 	}
 
-	
+
 }

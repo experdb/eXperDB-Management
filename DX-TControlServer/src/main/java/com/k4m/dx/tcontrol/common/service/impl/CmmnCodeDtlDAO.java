@@ -3,36 +3,28 @@ package com.k4m.dx.tcontrol.common.service.impl;
 import java.sql.SQLException;
 import java.util.List;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Repository;
 
-import com.ibatis.sqlmap.client.SqlMapClient;
 import com.k4m.dx.tcontrol.common.service.CmmnCodeVO;
 import com.k4m.dx.tcontrol.common.service.PageVO;
 
+import egovframework.rte.psl.dataaccess.EgovAbstractMapper;
 
-@Repository("CmmnCodeDtlDAO")
-public class CmmnCodeDtlDAO {
+
+@Repository("cmmnCodeDtlDAO")
+public class CmmnCodeDtlDAO extends EgovAbstractMapper{
 	
-	@Autowired
-	@Qualifier("sqlMapClient")
-	private SqlMapClient sqlMapClient;
-	
+
     /**
 	 * 코드 목록을 조회한다.
      * @param pageVO, cmmnCodeVO
      * @return List(코드 목록)
      * @throws Exception
      */
-    @SuppressWarnings("unchecked")
+    @SuppressWarnings({ "unchecked", "deprecation" })
 	public List<CmmnCodeVO> cmmnCodeDtlList(PageVO pageVO,  CmmnCodeVO cmmnCodeVO) throws Exception {
 		List<CmmnCodeVO> sl = null;
-		try {
-			return sl = (List<CmmnCodeVO>) sqlMapClient.queryForList("cmmnCodeSQL.cmmnCodeDtlList", pageVO);
-		} catch (SQLException e) {
-			e.printStackTrace();
-		}	
+		sl = (List<CmmnCodeVO>) list("cmmnCodeSQL.cmmnCodeDtlList", pageVO);	
 		return sl;
     }
     
@@ -42,13 +34,9 @@ public class CmmnCodeDtlDAO {
      * @param searchVO
      * @return int(공통코드 총 갯수)
      */
-	public int selectCmmnCodeDtlListTotCnt(PageVO pageVO) {
+	public int selectCmmnCodeDtlListTotCnt(PageVO pageVO) throws SQLException {
 		int TotCnt= 0;
-		try {
-			TotCnt = (int) sqlMapClient.queryForObject("cmmnCodeSQL.selectCmmnCodeDtlListTotCnt", pageVO);
-		} catch (SQLException e) {
-			e.printStackTrace();
-		}
+		TotCnt = (int) getSqlSession().selectOne("cmmnCodeSQL.selectCmmnCodeDtlListTotCnt", pageVO);
 		return TotCnt;
 	}
 
@@ -58,12 +46,8 @@ public class CmmnCodeDtlDAO {
 	 * @param cmmnCode
 	 * @throws Exception
 	 */
-	public void insertCmmnDtlCode(CmmnCodeVO cmmnCodeVO) {
-		try {
-			sqlMapClient.insert("cmmnCodeSQL.insertCmmnDtlCode", cmmnCodeVO);
-		} catch (SQLException e) {
-			e.printStackTrace();
-		}	
+	public void insertCmmnDtlCode(CmmnCodeVO cmmnCodeVO) throws SQLException {
+		insert("cmmnCodeSQL.insertCmmnDtlCode", cmmnCodeVO);	
 	}
 
 
@@ -72,12 +56,8 @@ public class CmmnCodeDtlDAO {
 	 * @param cmmnCode
 	 * @throws Exception
 	 */
-	public void deleteCmmnDtlCode(CmmnCodeVO cmmnCodeVO) {
-		try {
-			sqlMapClient.delete("cmmnCodeSQL.deleteCmmnDtlCode", cmmnCodeVO);
-		} catch (SQLException e) {
-			e.printStackTrace();
-		}		
+	public void deleteCmmnDtlCode(CmmnCodeVO cmmnCodeVO) throws SQLException {
+		delete("cmmnCodeSQL.deleteCmmnDtlCode", cmmnCodeVO);		
 	}
 
 
@@ -87,14 +67,10 @@ public class CmmnCodeDtlDAO {
      * @return List(코드 목록)
      * @throws Exception
      */
-    @SuppressWarnings("unchecked")
+    @SuppressWarnings({ "unchecked", "deprecation" })
 	public List<CmmnCodeVO> cmmnDtlCodeSearch( PageVO pageVO) throws Exception {
 		List<CmmnCodeVO> sl = null;
-		try {
-			return sl = (List<CmmnCodeVO>) sqlMapClient.queryForList("cmmnCodeSQL.cmmnDtlCodeSearch", pageVO);
-		} catch (SQLException e) {
-			e.printStackTrace();
-		}	
+		sl = (List<CmmnCodeVO>) list("cmmnCodeSQL.cmmnDtlCodeSearch", pageVO);	
 		return sl;
     }
 }
