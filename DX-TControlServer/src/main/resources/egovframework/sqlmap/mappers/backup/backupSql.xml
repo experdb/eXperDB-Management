@@ -38,18 +38,18 @@
       WHERE 1=1	
       	AND DB_SVR_ID=#{db_svr_id}
       	AND BCK_BSN_DSCD=#{bck_bsn_dscd}
-      	<if test="wrk_nm != ''">
+      	<if test="wrk_nm != null and wrk_nm != '' ">
       		AND WRK_NM LIKE CONCAT('%',#{wrk_nm},'%')
       	</if>
-      	<if test="bck_opt_cd != ''">
+      	<if test="bck_opt_cd != null and bck_opt_cd != '' ">
       		AND BCK_OPT_CD=#{bck_opt_cd}
       	</if>
-      	<if test="wrk_id != ''">
+      	<if test="wrk_id != null and wrk_id != '' ">
       		<if test='wrk_id != "0"'>
 	      		AND WRK_ID=#{wrk_id}
 			</if>
       	</if>
-      	<if test="db_id != ''">
+      	<if test="db_id != null and db_id != '' ">
       		<if test='db_id != "0"'>
 	      		AND DB_ID=#{db_id}
 			</if>
@@ -239,7 +239,7 @@
 		DELETE FROM t_bckopt_i
 		WHERE
 			WRK_ID = #{wrk_id}
-			<if test="opt_sn != ''">
+			<if test="opt_sn != null and opt_sn != '' ">
 				<if test='opt_sn != "0"'>
 			AND OPT_SN = #{opt_sn}
 				</if>
@@ -329,40 +329,40 @@
 	 	FROM T_WRKEXE_G TWG, T_WRKCNG_I TWI
 	 	WHERE 1=1
 	 		AND TWG.WRK_ID = TWI.WRK_ID
-      	<if test="wrk_id != ''">
+	 	<if test="wrk_id != null and wrk_id != '' ">
       		<if test='wrk_id != "0"'>
 	      		AND TWG.WRK_ID=#{wrk_id}
 	      	</if>
       	</if>
-      	<if test="scd_id != ''">
+      	<if test="scd_id != null and scd_id != '' ">
       		<if test='scd_id != "0"'>
 	      		AND TWG.SCD_ID=#{scd_id}
 	      	</if>
       	</if>
-      	<if test="exe_sn != ''">
+      	<if test="exe_sn != null and exe_sn != '' ">
       		<if test='exe_sn != "0"'>      	
 	      		AND TWG.EXE_SN=#{exe_sn}
 	      	</if>
       	</if>
-      	<if test="db_id != ''">
+      	<if test="db_id != null and db_id != '' ">
       		<if test='db_id != "0"'>     
 	      		AND TWG.DB_ID=#{db_id}
 	      	</if>
       	</if>
-      	<if test="bck_bsn_dscd != ''">
+      	<if test="bck_bsn_dscd != null and bck_bsn_dscd != '' ">
       		AND TWI.BCK_BSN_DSCD = #{bck_bsn_dscd}
       	</if>
-      	<if test="bck_opt_cd != ''">
+      	<if test="bck_opt_cd != null and bck_opt_cd != '' ">
       		AND TWG.BCK_OPT_CD = #{bck_opt_cd}
       	</if>
-      	<if test="wrk_strt_dtm != ''">
-      		<if test="wrk_end_dtm != ''">
+      	<if test="wrk_strt_dtm != null and wrk_strt_dtm != '' ">
+      		<if test="wrk_end_dtm != null and wrk_end_dtm != '' ">
       			AND (TO_DATE(#{wrk_strt_dtm},'YYYY-MM-DD') BETWEEN TWG.WRK_STRT_DTM AND TWG.WRK_END_DTM
       				OR
       				TO_DATE(#{wrk_end_dtm},'YYYY-MM-DD') BETWEEN TWG.WRK_STRT_DTM AND TWG.WRK_END_DTM)
       		</if>
       	</if>
-      	<if test="exe_rslt_cd != ''">
+      	<if test="exe_rslt_cd != null and exe_rslt_cd != '' ">
       		AND TWG.EXE_RSLT_CD=#{exe_rslt_cd}
       	</if>
       	
