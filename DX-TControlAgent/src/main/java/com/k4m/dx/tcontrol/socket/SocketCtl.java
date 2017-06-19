@@ -11,7 +11,6 @@ import java.net.SocketTimeoutException;
 import java.util.LinkedHashMap;
 import java.util.List;
 
-import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 
 import com.k4m.dx.tcontrol.util.CommonUtil;
