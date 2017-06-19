@@ -10,7 +10,7 @@ import com.k4m.dx.tcontrol.login.service.UserVO;
 
 import egovframework.rte.psl.dataaccess.EgovAbstractMapper;
 
-@Repository("UserManagerDAO")
+@Repository("userManagerDAO")
 public class UserManagerDAO extends EgovAbstractMapper{
 	
 	/**
