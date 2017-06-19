@@ -7,6 +7,17 @@
     	<typeAlias alias="dbServerVO" type="com.k4m.dx.tcontrol.admin.dbserverManager.service.DbServerVO" />
     	<typeAlias alias="sampleListVO" type="com.k4m.dx.tcontrol.sample.service.SampleListVO"/>
 		<typeAlias alias="searchVO" type="com.k4m.dx.tcontrol.sample.service.PagingVO"/>
+		<typeAlias alias="sampleTreeVO" type="com.k4m.dx.tcontrol.sample.service.SampleTreeVO"/>
+		<typeAlias alias="HistoryVO" type="com.k4m.dx.tcontrol.common.service.HistoryVO" />
+		<typeAlias alias="userVO" type="com.k4m.dx.tcontrol.login.service.UserVO" />
+		<typeAlias alias="workVO" type="com.k4m.dx.tcontrol.backup.service.WorkVO"/>
+		<typeAlias alias="workOptVO" type="com.k4m.dx.tcontrol.backup.service.WorkOptVO"/>
+		<typeAlias alias="pageVO" type="com.k4m.dx.tcontrol.common.service.PageVO"/>
+		<typeAlias alias="dbVO" type="com.k4m.dx.tcontrol.backup.service.DbVO"/>
+		<typeAlias alias="workLogVO" type="com.k4m.dx.tcontrol.backup.service.WorkLogVO"/>
+		<typeAlias alias="workOptDetailVO" type="com.k4m.dx.tcontrol.backup.service.WorkOptDetailVO"/>
+		<typeAlias alias="cmmnCodeVO" type="com.k4m.dx.tcontrol.common.service.CmmnCodeVO"/>
+		<typeAlias alias="ConnectorVO" type="com.k4m.dx.tcontrol.functions.transfer.service.ConnectorVO"/>
     </typeAliases>
     
  	<mappers>
