@@ -196,7 +196,7 @@ public class SocketCtl {
 	
 	protected JSONObject ResultJSON(List<Object> resultData, String strDxExCode
 										, String strResultCode
-										, String strErrCode, String strErrMsg){
+										, String strErrCode, String strErrMsg) throws Exception{
 		JSONObject outputObj = new JSONObject();
 		outputObj.put(ProtocolID.DX_EX_CODE, strDxExCode);
 		outputObj.put(ProtocolID.RESULT_CODE, strResultCode);
@@ -210,7 +210,7 @@ public class SocketCtl {
 	
 	protected JSONObject DxT006ResultJSON(List<LinkedHashMap<String, String>> resultData, String strDxExCode
 			, String strResultCode
-			, String strErrCode, String strErrMsg){
+			, String strErrCode, String strErrMsg) throws Exception{
 		JSONObject outputObj = new JSONObject();
 		outputObj.put(ProtocolID.DX_EX_CODE, strDxExCode);
 		outputObj.put(ProtocolID.RESULT_CODE, strResultCode);

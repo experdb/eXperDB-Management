@@ -557,7 +557,7 @@ public class ClientTester {
 			
 			serverObj.put(ClientProtocolID.SERVER_NAME, "222.110.153.162");
 			serverObj.put(ClientProtocolID.SERVER_IP, "222.110.153.162");
-			serverObj.put(ClientProtocolID.SERVER_PORT, "5432");
+			serverObj.put(ClientProtocolID.SERVER_PORT, "6432");
 			serverObj.put(ClientProtocolID.DATABASE_NAME, "pgmon");
 			serverObj.put(ClientProtocolID.USER_ID, "pgmon");
 			serverObj.put(ClientProtocolID.USER_PWD, "pgmon");
@@ -571,22 +571,28 @@ public class ClientTester {
 				
 			objList = CA.dxT011(ClientTranCodeType.DxT011, serverObj);
 			
-			String _tran_err_msg = (String)objList.get(ClientProtocolID.ERR_MSG);
+			String strErrMsg = (String)objList.get(ClientProtocolID.ERR_MSG);
+			String strErrCode = (String)objList.get(ClientProtocolID.ERR_CODE);
 			String strDxExCode = (String)objList.get(ClientProtocolID.DX_EX_CODE);
+			String strResultCode = (String)objList.get(ClientProtocolID.RESULT_CODE);
+			System.out.println("RESULT_CODE : " +  strResultCode);
+			System.out.println("ERR_CODE : " +  strErrCode);
+			System.out.println("ERR_MSG : " +  strErrMsg);
 			
 			List<Object> selectDBList =(ArrayList<Object>) objList.get(ClientProtocolID.RESULT_DATA);
 			
 			System.out.println("strDxExCode : " + " " + strDxExCode);
-			
-			for(int i=0; i<selectDBList.size(); i++) {
-				
-				Object obj = selectDBList.get(i);
-				
-				HashMap hp = (HashMap) obj;
-				String rolname = (String) hp.get("rolname");
-
-				System.out.println(i + " " + rolname);
-
+			if(selectDBList.size() > 0) {
+				for(int i=0; i<selectDBList.size(); i++) {
+					
+					Object obj = selectDBList.get(i);
+					
+					HashMap hp = (HashMap) obj;
+					String rolname = (String) hp.get("rolname");
+	
+					System.out.println(i + " " + rolname);
+	
+				}
 			}
 				
 				
