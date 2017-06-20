@@ -20,6 +20,7 @@ import com.k4m.dx.tcontrol.db.DBCPPoolManager;
 import com.k4m.dx.tcontrol.db.SqlSessionManager;
 import com.k4m.dx.tcontrol.socket.ProtocolID;
 import com.k4m.dx.tcontrol.socket.SocketCtl;
+import com.k4m.dx.tcontrol.socket.TranCodeType;
 
 /**
  * Database List 조회
@@ -57,6 +58,8 @@ public class DxT001 extends SocketCtl{
 		SqlSession sessDB = null;
 		List<Object> selectDBList = new ArrayList<Object>();
 		
+		JSONObject outputObj = new JSONObject();
+		
 		try {
 			
 			SocketExt.setupDriverPool(dbInfoObj, poolName);
@@ -68,7 +71,7 @@ public class DxT001 extends SocketCtl{
 			selectDBList = sessDB.selectList("app.selectDatabaseList");
 			
 			
-	        JSONObject outputObj = ResultJSON(selectDBList, strDxExCode, "0", "", "");
+	        outputObj = ResultJSON(selectDBList, strDxExCode, "0", "", "");
 	        
 	        sendBuff = outputObj.toString().getBytes();
 	        send(4, sendBuff);
@@ -76,6 +79,15 @@ public class DxT001 extends SocketCtl{
 			
 		} catch (Exception e) {
 			errLogger.error("DxT001 {} ", e.toString());
+			
+			outputObj.put(ProtocolID.DX_EX_CODE, TranCodeType.DxT001);
+			outputObj.put(ProtocolID.RESULT_CODE, "1");
+			outputObj.put(ProtocolID.ERR_CODE, TranCodeType.DxT001);
+			outputObj.put(ProtocolID.ERR_MSG, "DxT001 Error [" + e.toString() + "]");
+			
+			sendBuff = outputObj.toString().getBytes();
+			send(4, sendBuff);
+			
 		} finally {
 			sessDB.close();
 		}	        

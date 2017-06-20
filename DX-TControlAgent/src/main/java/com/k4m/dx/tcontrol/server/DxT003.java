@@ -15,6 +15,7 @@ import org.slf4j.LoggerFactory;
 import com.k4m.dx.tcontrol.db.DBCPPoolManager;
 import com.k4m.dx.tcontrol.socket.ProtocolID;
 import com.k4m.dx.tcontrol.socket.SocketCtl;
+import com.k4m.dx.tcontrol.socket.TranCodeType;
 
 /**
  * Connection Test
@@ -51,6 +52,8 @@ public class DxT003 extends SocketCtl{
 		String poolName = "ConnectionTest";
 		Connection conn = null;
 		
+		JSONObject outputObj = new JSONObject();
+		
 		try {
 			Class.forName("org.postgresql.Driver");
 			
@@ -62,21 +65,26 @@ public class DxT003 extends SocketCtl{
 
 			conn = DriverManager.getConnection(strConnUrl, props);
 			outputArray.add("접속 테스트가 성공했습니다.");
+			
+			outputObj = ResultJSON(outputArray, strDxExCode, strSuccessCode, strErrCode, strErrMsg);
+			send(TotalLengthBit, outputObj.toString().getBytes());
 
 		} catch (Exception e) {
 			errLogger.error("DxT003 {} ", e.toString());
-			outputArray.add("접속 테스트가 실패했습니다.");
-			strErrCode = "ErrDxT003";
-			strErrMsg = "접속 테스트가 실패했습니다.";
-			strSuccessCode = "1";
+			outputObj.put(ProtocolID.DX_EX_CODE, TranCodeType.DxT003);
+			outputObj.put(ProtocolID.RESULT_CODE, "1");
+			outputObj.put(ProtocolID.ERR_CODE, TranCodeType.DxT003);
+			outputObj.put(ProtocolID.ERR_MSG, "DxT003 Error [" + e.toString() + "]");
+			
+			sendBuff = outputObj.toString().getBytes();
+			send(4, sendBuff);
 		} finally {
 			if (poolName != null){
 				DBCPPoolManager.shutdownDriver(poolName);
 			}
 		}	    
 		
-		JSONObject outputObj = ResultJSON(outputArray, strDxExCode, strSuccessCode, strErrCode, strErrMsg);
-		send(TotalLengthBit, outputObj.toString().getBytes());
+
 
 
 	}
