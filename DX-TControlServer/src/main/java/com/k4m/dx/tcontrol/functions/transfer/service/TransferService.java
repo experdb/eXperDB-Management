@@ -48,5 +48,14 @@ public interface TransferService {
 	 * @throws Exception
 	 */
 	void updateConnectorRegister(ConnectorVO connectorVO)throws Exception;
+
+	
+	/**
+	 * 전송설정 등록
+	 * @param transferVO
+	 * @return
+	 * @throws Exception
+	 */
+	void insertTransferSetting(TransferVO transferVO)throws Exception;
 	
 }

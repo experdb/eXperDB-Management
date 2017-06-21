@@ -3,16 +3,26 @@ package com.k4m.dx.tcontrol.admin.accesshistory.service;
 import java.util.List;
 import java.util.Map;
 
+import com.k4m.dx.tcontrol.common.service.HistoryVO;
 import com.k4m.dx.tcontrol.login.service.UserVO;
 
 public interface AccessHistoryService {
+	
 	/**
-	 * 접근 내역
+	 * 화면접근 내역 조회
 	 * @param param 
 	 * @param userVo
 	 * @return
 	 * @throws Exception
 	 */
 	List<UserVO> selectAccessHistory(Map<String, Object> param) throws Exception;
+	
+	/**
+	 * 화면접근 이력 등록
+	 * 
+	 * @param historyVO
+	 * @throws Exception
+	 */
+	void insertHistory(HistoryVO historyVO) throws Exception;
 
 }

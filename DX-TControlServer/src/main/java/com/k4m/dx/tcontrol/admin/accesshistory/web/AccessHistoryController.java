@@ -5,7 +5,6 @@ import java.util.List;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -15,7 +14,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.k4m.dx.tcontrol.admin.accesshistory.service.AccessHistoryService;
-import com.k4m.dx.tcontrol.common.service.CmmnHistoryService;
+import com.k4m.dx.tcontrol.cmmn.CmmnUtils;
 import com.k4m.dx.tcontrol.common.service.HistoryVO;
 import com.k4m.dx.tcontrol.login.service.UserVO;
 
@@ -39,11 +38,8 @@ public class AccessHistoryController {
 	@Autowired
 	private AccessHistoryService accessHistoryService;
 	
-	@Autowired
-	private CmmnHistoryService cmmnHistoryService;
-	
 	/**
-	 * 접근내역 화면을 보여준다.
+	 * 접근이력 화면을 보여준다.
 	 * 
 	 * @param historyVO
 	 * @param request
@@ -55,12 +51,9 @@ public class AccessHistoryController {
 		ModelAndView mv = new ModelAndView();
 		try {
 			// 화면접근 이력 남기기
-			HttpSession session = request.getSession();
-			String usr_id = (String) session.getAttribute("usr_id");
-			String ip = (String) session.getAttribute("ip");
-			historyVO.setUsr_id(usr_id);
-			historyVO.setLgi_ipadr(ip);
-			cmmnHistoryService.insertHistoryAccessHistory(historyVO);
+			CmmnUtils.saveHistory(request, historyVO);
+			historyVO.setExe_dtl_cd("DX-T0036");
+			accessHistoryService.insertHistory(historyVO);
 			
 			mv.setViewName("admin/accessHistory/accessHistory");
 		} catch (Exception e) {
@@ -71,7 +64,7 @@ public class AccessHistoryController {
 	}
 
 	/**
-	 * 접근내역을 조회한다.
+	 * 접근이력을 조회한다.
 	 * 
 	 * @return resultSet
 	 * @throws Exception
@@ -98,6 +91,13 @@ public class AccessHistoryController {
 		return resultSet;
 	}
 
+	
+	/**
+	 * 접근이력 엑셀을 저장한다.
+	 * 
+	 * @param request
+	 * @throws Exception
+	 */
 	@RequestMapping("/accessHistory_data_JxlExportExcel.do")
 	public ModelAndView accessHistory_data_JxlExportExcel(HttpServletRequest request) throws Exception {
 		List<UserVO> resultSet = null;

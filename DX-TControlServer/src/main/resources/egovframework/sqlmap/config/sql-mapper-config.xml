@@ -8,7 +8,7 @@
     	<typeAlias alias="sampleListVO" type="com.k4m.dx.tcontrol.sample.service.SampleListVO"/>
 		<typeAlias alias="searchVO" type="com.k4m.dx.tcontrol.sample.service.PagingVO"/>
 		<typeAlias alias="sampleTreeVO" type="com.k4m.dx.tcontrol.sample.service.SampleTreeVO"/>
-		<typeAlias alias="HistoryVO" type="com.k4m.dx.tcontrol.common.service.HistoryVO" />
+		<typeAlias alias="historyVO" type="com.k4m.dx.tcontrol.common.service.HistoryVO" />
 		<typeAlias alias="userVO" type="com.k4m.dx.tcontrol.login.service.UserVO" />
 		<typeAlias alias="workVO" type="com.k4m.dx.tcontrol.backup.service.WorkVO"/>
 		<typeAlias alias="workOptVO" type="com.k4m.dx.tcontrol.backup.service.WorkOptVO"/>
@@ -17,7 +17,8 @@
 		<typeAlias alias="workLogVO" type="com.k4m.dx.tcontrol.backup.service.WorkLogVO"/>
 		<typeAlias alias="workOptDetailVO" type="com.k4m.dx.tcontrol.backup.service.WorkOptDetailVO"/>
 		<typeAlias alias="cmmnCodeVO" type="com.k4m.dx.tcontrol.common.service.CmmnCodeVO"/>
-		<typeAlias alias="ConnectorVO" type="com.k4m.dx.tcontrol.functions.transfer.service.ConnectorVO"/>
+		<typeAlias alias="connectorVO" type="com.k4m.dx.tcontrol.functions.transfer.service.ConnectorVO"/>
+		<typeAlias alias="transferVO" type="com.k4m.dx.tcontrol.functions.transfer.service.TransferVO"/>
     </typeAliases>
     
  	<mappers>
@@ -40,5 +41,8 @@
 		
 		<!-- functions -->
 		<mapper resource="egovframework/sqlmap/mappers/functions/transfer/transferSql.xml" />
+		
+		<!-- mypage -->
+		<mapper resource="egovframework/sqlmap/mappers/mypage/mypageSql.xml" />
 	</mappers>
 </configuration>

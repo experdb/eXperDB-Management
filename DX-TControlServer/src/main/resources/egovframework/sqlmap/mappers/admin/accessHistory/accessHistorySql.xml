@@ -3,7 +3,7 @@
 
 <mapper namespace="accessHistorySql">
 
-	<select id="selectAccessHistory" resultType="HistoryVO">
+	<select id="selectAccessHistory" resultType="historyVO">
 		/**
 		* Query ID : selectAccessHistory
 		* Description : 접근내역 조회
@@ -42,4 +42,29 @@
 			ORDER BY EXEDTM DESC
 			)A
 	</select>
+	
+	<insert id="insertHistory" parameterType="historyVO">
+		/**
+		* Query ID : insertHistory
+		* Description : 화면접근 이력 등록
+		* Author : 김주영
+		**/
+
+		INSERT INTO T_SYSWRK_G
+		(
+		  WRK_SN
+		, USR_ID
+		, EXE_DTL_CD
+		, EXEDTM
+		, LGI_IPADR
+		)
+		VALUES
+		(
+		  nextval('q_syswrk_g_01')
+		, #{usr_id}
+		, #{exe_dtl_cd}
+		, clock_timestamp()
+		, #{lgi_ipadr}
+		)
+	</insert>	
 </mapper>

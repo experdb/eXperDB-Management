@@ -4,14 +4,10 @@
 	"http://tiles.apache.org/dtds/tiles-config_2_0.dtd">
 
 <tiles-definitions>
-	<definition name="default"
-		template="/WEB-INF/view/layout/layout.jsp">
-		<put-attribute name="topMenu"
-			value="/WEB-INF/view/layout/topMenu.jsp" />
-		<put-attribute name="treeMenu"
-			value="/WEB-INF/view/layout/treeMenu.jsp" />
-		<put-attribute name="contents"
-			value="" />
+	<definition name="default" template="/WEB-INF/view/layout/layout.jsp">
+		<put-attribute name="topMenu" value="/WEB-INF/view/layout/topMenu.jsp" />
+		<put-attribute name="treeMenu" value="/WEB-INF/view/layout/treeMenu.jsp" />
+		<put-attribute name="contents" value="" />
 	</definition>
 
  	<definition name="view/*" extends="default">
@@ -53,4 +49,7 @@
 	<definition name="functions/transfer/*" extends="default">
 		<put-attribute name="contents" value="/WEB-INF/view/functions/transfer/{1}.jsp" />
 	</definition>
+	<definition name="mypage/*" extends="default">
+		<put-attribute name="contents" value="/WEB-INF/view/mypage/{1}.jsp"  />
+	</definition> 
 </tiles-definitions>
