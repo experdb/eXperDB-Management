@@ -14,7 +14,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
-import com.k4m.dx.tcontrol.common.service.CmmnHistoryService;
+import com.k4m.dx.tcontrol.admin.accesshistory.service.AccessHistoryService;
+import com.k4m.dx.tcontrol.cmmn.CmmnUtils;
 import com.k4m.dx.tcontrol.common.service.HistoryVO;
 import com.k4m.dx.tcontrol.functions.transfer.service.ConnectorVO;
 import com.k4m.dx.tcontrol.functions.transfer.service.TransferService;
@@ -41,7 +42,7 @@ public class TransferController {
 	private TransferService transferService;
 
 	@Autowired
-	private CmmnHistoryService cmmnHistoryService;
+	private AccessHistoryService accessHistoryService;
 
 	/**
 	 * 전송설정 화면을 보여준다.
@@ -55,13 +56,10 @@ public class TransferController {
 		ModelAndView mv = new ModelAndView();
 		try {
 			// 전송설정 이력 남기기
-			HttpSession session = request.getSession();
-			String usr_id = (String) session.getAttribute("usr_id");
-			String ip = (String) session.getAttribute("ip");
-			historyVO.setUsr_id(usr_id);
-			historyVO.setLgi_ipadr(ip);
-			cmmnHistoryService.insertHistoryTransferSetting(historyVO);
-
+			CmmnUtils.saveHistory(request, historyVO);
+			historyVO.setExe_dtl_cd("DX-T0011");
+			accessHistoryService.insertHistory(historyVO);
+			
 			mv.setViewName("functions/transfer/transferSetting");
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -73,13 +71,36 @@ public class TransferController {
 	 * 전송설정 등록한다.
 	 * 
 	 * @param transferVO
+	 * @param request
 	 * @return
 	 * @throws Exception
 	 */
 	@RequestMapping(value = "/insertTransferSetting.do")
-	public @ResponseBody void insertTransferSetting(@ModelAttribute("transferVO") TransferVO transferVO) {
+	public @ResponseBody void insertTransferSetting(@ModelAttribute("transferVO") TransferVO transferVO,@ModelAttribute("historyVO") HistoryVO historyVO,HttpServletRequest request) {
 		try {
 			System.out.println("전송설정정보 등록!");
+			HttpSession session = request.getSession();
+			String usr_id = (String) session.getAttribute("usr_id");
+			transferVO.setFrst_regr_id(usr_id);
+			transferVO.setLst_mdfr_id(usr_id);
+			
+			String [] servername = {"kafka Broker","schema registry","zookeeper","BottledWater"};
+			String[] ipadrs = request.getParameter("ipadrs").toString().split(",");
+			String [] portnos = request.getParameter("portnos").toString().split(",");
+			
+			for (int i = 0; i < servername.length; i++) {
+				System.out.println(servername[i]+" ip : "+ipadrs[i]+" port : "+Integer.parseInt(portnos[i]));
+				transferVO.setTrf_svr_nm(servername[i]);
+				transferVO.setIpadr(ipadrs[i]);
+				transferVO.setPortno(Integer.parseInt(portnos[i]));
+				transferService.insertTransferSetting(transferVO);
+			}
+			
+			// 전송설정 저장 이력 남기기
+			CmmnUtils.saveHistory(request, historyVO);
+			historyVO.setExe_dtl_cd("DX-T0011_01");
+			accessHistoryService.insertHistory(historyVO);
+				
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -99,12 +120,9 @@ public class TransferController {
 		ModelAndView mv = new ModelAndView();
 		try {
 			// Connector조회 이력 남기기
-			HttpSession session = request.getSession();
-			String usr_id = (String) session.getAttribute("usr_id");
-			String ip = (String) session.getAttribute("ip");
-			historyVO.setUsr_id(usr_id);
-			historyVO.setLgi_ipadr(ip);
-			cmmnHistoryService.insertHistoryConnectorRegister(historyVO);
+			CmmnUtils.saveHistory(request, historyVO);
+			historyVO.setExe_dtl_cd("DX-T0012");
+			accessHistoryService.insertHistory(historyVO);
 
 			mv.setViewName("functions/transfer/connectorRegister");
 		} catch (Exception e) {
@@ -153,22 +171,18 @@ public class TransferController {
 		try {
 			String act = request.getParameter("act");
 			
-			HttpSession session = request.getSession();
-			String usr_id = (String) session.getAttribute("usr_id");
-			String ip = (String) session.getAttribute("ip");
-			
 			if (act.equals("i")) {
 				// Connector 등록 팝업 이력 남기기
-				historyVO.setUsr_id(usr_id);
-				historyVO.setLgi_ipadr(ip);
-				cmmnHistoryService.insertHistoryConnectorRegPopup(historyVO);
+				CmmnUtils.saveHistory(request, historyVO);
+				historyVO.setExe_dtl_cd("DX-T0013");
+				accessHistoryService.insertHistory(historyVO);
 			}
 			
 			if (act.equals("u")) {
 				// Connector수정 이력 남기기
-				historyVO.setUsr_id(usr_id);
-				historyVO.setLgi_ipadr(ip);
-				cmmnHistoryService.insertHistoryConnectorRegisterU(historyVO);
+				CmmnUtils.saveHistory(request, historyVO);
+				historyVO.setExe_dtl_cd("DX-T0012_03");
+				accessHistoryService.insertHistory(historyVO);
 				
 				int cnr_id = Integer.parseInt(request.getParameter("cnr_id"));
 				result = transferService.selectDetailConnectorRegister(cnr_id);
@@ -201,13 +215,10 @@ public class TransferController {
 	public @ResponseBody String connectorConnTest(@ModelAttribute("historyVO") HistoryVO historyVO, HttpServletRequest request) {
 		try {
 			// 연결테스트 이력 남기기
-			HttpSession session = request.getSession();
-			String usr_id = (String) session.getAttribute("usr_id");
-			String ip = (String) session.getAttribute("ip");
-			historyVO.setUsr_id(usr_id);
-			historyVO.setLgi_ipadr(ip);
-			cmmnHistoryService.insertHistoryConnectorConnTest(historyVO);
-			
+			CmmnUtils.saveHistory(request, historyVO);
+			historyVO.setExe_dtl_cd("DX-T0013_02");
+			accessHistoryService.insertHistory(historyVO);
+		
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -233,10 +244,10 @@ public class TransferController {
 			transferService.insertConnectorRegister(connectorVO);
 
 			// Connector등록 이력 남기기
-			String ip = (String) session.getAttribute("ip");
-			historyVO.setUsr_id(usr_id);
-			historyVO.setLgi_ipadr(ip);
-			cmmnHistoryService.insertHistoryConnectorRegisterI(historyVO);
+			CmmnUtils.saveHistory(request, historyVO);
+			historyVO.setExe_dtl_cd("DX-T0013_01");
+			accessHistoryService.insertHistory(historyVO);
+			
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -280,12 +291,9 @@ public class TransferController {
 			}
 
 			// Connector삭제 이력 남기기
-			HttpSession session = request.getSession();
-			String usr_id = (String) session.getAttribute("usr_id");
-			String ip = (String) session.getAttribute("ip");
-			historyVO.setUsr_id(usr_id);
-			historyVO.setLgi_ipadr(ip);
-			cmmnHistoryService.insertHistoryConnectorRegisterD(historyVO);
+			CmmnUtils.saveHistory(request, historyVO);
+			historyVO.setExe_dtl_cd("DX-T0012_04");
+			accessHistoryService.insertHistory(historyVO);
 
 			return true;
 		} catch (Exception e) {

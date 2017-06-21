@@ -132,6 +132,12 @@ $(function(){
 		<li><a href="/sampleRowsShuffle.do" onClick="fn_cookie(null)">RowsShuffle</a></li>
       </ul>
     </li>
+    <li><a href="#">MyPage</a>
+      <ul>
+        <li><a href="/myPage.do" onClick="fn_cookie(null)">개인정보수정</a></li>
+        <li><a href="#">My스케쥴</a></li>
+      </ul>
+    </li> 
     	<%
     		if(usr_id != null){
     	%>

@@ -6,6 +6,7 @@ import java.util.Map;
 
 import org.springframework.stereotype.Repository;
 
+import com.k4m.dx.tcontrol.common.service.HistoryVO;
 import com.k4m.dx.tcontrol.login.service.UserVO;
 
 import egovframework.rte.psl.dataaccess.EgovAbstractMapper;
@@ -14,17 +15,27 @@ import egovframework.rte.psl.dataaccess.EgovAbstractMapper;
 public class AccessHistoryDAO extends EgovAbstractMapper{
 	
 	/**
-	 * 접근 내역 조회
+	 * 화면접근 내역 조회
 	 * 
 	 * @param userVO
 	 * @return List
-	 * @throws Exception
+	 * @throws SQLException
 	 */
 	@SuppressWarnings({ "unchecked", "deprecation" })
 	public List<UserVO> selectAccessHistory(Map<String, Object> param) throws SQLException {
 		List<UserVO> result = null;
 		result = (List<UserVO>) list("accessHistorySql.selectAccessHistory",param);
 		return result;
+	}
+	
+	/**
+	 * 화면접근 이력 등록
+	 * 
+	 * @param historyVO
+	 * @throws SQLException
+	 */
+	public void insertHistory(HistoryVO historyVO) throws SQLException{
+		insert("accessHistorySql.insertHistory", historyVO);	
 	}
 
 }

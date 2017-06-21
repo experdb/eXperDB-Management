@@ -15,9 +15,10 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
+import com.k4m.dx.tcontrol.admin.accesshistory.service.AccessHistoryService;
 import com.k4m.dx.tcontrol.admin.usermanager.service.UserManagerService;
+import com.k4m.dx.tcontrol.cmmn.CmmnUtils;
 import com.k4m.dx.tcontrol.cmmn.SHA256;
-import com.k4m.dx.tcontrol.common.service.CmmnHistoryService;
 import com.k4m.dx.tcontrol.common.service.HistoryVO;
 import com.k4m.dx.tcontrol.login.service.UserVO;
 
@@ -43,7 +44,7 @@ public class UserManagerController {
 	private UserManagerService userManagerService;
 
 	@Autowired
-	private CmmnHistoryService cmmnHistoryService;
+	private AccessHistoryService accessHistoryService;
 	
 	
 	/**
@@ -59,12 +60,9 @@ public class UserManagerController {
 		ModelAndView mv = new ModelAndView();
 		try {
 			// 사용자관리 이력 남기기
-			HttpSession session = request.getSession();
-			String usr_id = (String) session.getAttribute("usr_id");
-			String ip = (String) session.getAttribute("ip");
-			historyVO.setUsr_id(usr_id);
-			historyVO.setLgi_ipadr(ip);
-			cmmnHistoryService.insertHistoryUserManager(historyVO);
+			CmmnUtils.saveHistory(request, historyVO);
+			historyVO.setExe_dtl_cd("DX-T0031");
+			accessHistoryService.insertHistory(historyVO);
 			
 			mv.setViewName("admin/userManager/userManager");
 		} catch (Exception e) {
@@ -87,24 +85,19 @@ public class UserManagerController {
 		List<UserVO> result = null;
 		try {
 			String act = request.getParameter("act");
-			
-			HttpSession session = request.getSession();
-			String session_usr_id = (String) session.getAttribute("usr_id");
-			String ip = (String) session.getAttribute("ip");
+			CmmnUtils.saveHistory(request, historyVO);
 			
 			if(act.equals("i")){
 				// 사용자등록 이력 남기기
-				historyVO.setUsr_id(session_usr_id);
-				historyVO.setLgi_ipadr(ip);
-				cmmnHistoryService.insertHistoryUserManagerI(historyVO);
+				historyVO.setExe_dtl_cd("DX-T0032");
+				accessHistoryService.insertHistory(historyVO);			
 			}
 
 			if(act.equals("u")){
 				// 사용자수정 이력 남기기
-				historyVO.setUsr_id(session_usr_id);
-				historyVO.setLgi_ipadr(ip);
-				cmmnHistoryService.insertHistoryUserManagerU(historyVO);
-				
+				historyVO.setExe_dtl_cd("DX-T0033");
+				accessHistoryService.insertHistory(historyVO);
+							
 				String usr_id = request.getParameter("usr_id");
 				result = userManagerService.selectDetailUserManager(usr_id);
 				
@@ -255,12 +248,9 @@ public class UserManagerController {
 			}
 			
 			// 사용자관리 이력 남기기
-			HttpSession session = request.getSession();
-			String usr_id = (String) session.getAttribute("usr_id");
-			String ip = (String) session.getAttribute("ip");
-			historyVO.setUsr_id(usr_id);
-			historyVO.setLgi_ipadr(ip);
-			cmmnHistoryService.insertHistoryUserManagerD(historyVO);
+			CmmnUtils.saveHistory(request, historyVO);
+			historyVO.setExe_dtl_cd("DX-T0031_01");
+			accessHistoryService.insertHistory(historyVO);
 			
 			return true;
 		} catch (Exception e) {

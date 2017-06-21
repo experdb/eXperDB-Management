@@ -12,9 +12,10 @@ import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 
+import com.k4m.dx.tcontrol.admin.accesshistory.service.AccessHistoryService;
+import com.k4m.dx.tcontrol.cmmn.CmmnUtils;
 import com.k4m.dx.tcontrol.cmmn.SHA256;
 import com.k4m.dx.tcontrol.cmmn.cmmnExcepHndlr;
-import com.k4m.dx.tcontrol.common.service.CmmnHistoryService;
 import com.k4m.dx.tcontrol.common.service.HistoryVO;
 import com.k4m.dx.tcontrol.login.service.LoginService;
 import com.k4m.dx.tcontrol.login.service.UserVO;
@@ -41,7 +42,7 @@ public class LoginController {
 	private LoginService loginService;
 
 	@Autowired
-	private CmmnHistoryService cmmnHistoryService;
+	private AccessHistoryService accessHistoryService;
 	
 	/**
 	 * 로그인을 한다.
@@ -84,12 +85,13 @@ public class LoginController {
 					InetAddress local = InetAddress.getLocalHost();
 					String ip = local.getHostAddress();
 					request.getSession().setAttribute("ip", ip);
-					
-					historyVO.setUsr_id(id);
-					historyVO.setLgi_ipadr(ip);
+
 					
 					// 로그인 이력 남기기
-					cmmnHistoryService.insertHistoryLogin(historyVO);
+					CmmnUtils.saveHistory(request, historyVO);
+					historyVO.setExe_dtl_cd("DX-T0003");
+					accessHistoryService.insertHistory(historyVO);
+					
 
 					return "redirect:/index.do";
 				}
@@ -112,14 +114,12 @@ public class LoginController {
 	@RequestMapping(value = "/logout.do")
 	public String loginout(@ModelAttribute("userVo") UserVO userVo, @ModelAttribute("historyVO") HistoryVO historyVO, HttpServletRequest request) {
 		try {
+			// 로그아웃 이력 남기기
+			CmmnUtils.saveHistory(request, historyVO);
+			historyVO.setExe_dtl_cd("DX-T0003_01");
+			accessHistoryService.insertHistory(historyVO);
+			
 			HttpSession session = request.getSession();
-			String usr_id = (String) session.getAttribute("usr_id");
-			String ip = (String) session.getAttribute("ip");
-
-			historyVO.setUsr_id(usr_id);
-			historyVO.setLgi_ipadr(ip);
-			cmmnHistoryService.insertHistoryLogout(historyVO);
-
 			session.invalidate();
 			return "redirect:/";
 		} catch (Exception e) {
