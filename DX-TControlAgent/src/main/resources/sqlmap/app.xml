@@ -104,6 +104,16 @@
 	 	**/
 	    SELECT rolname FROM pg_roles
 	</select>
+
+	<select id="selectSettingValue" parameterType="HashMap" resultType="HashMap">
+		/**
+	 	* Query ID : selectSettingValue
+	 	* Description : postgresql.auto.conf file setting 조회
+	 	* Author : 박태혁
+	 	**/
+	    select current_setting(${cmd}) as settingValue
+	</select>
+	
 	
 
 </mapper>

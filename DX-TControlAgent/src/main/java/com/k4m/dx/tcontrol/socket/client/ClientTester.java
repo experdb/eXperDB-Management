@@ -36,7 +36,7 @@ public class ClientTester {
 		int port = 9001;
 		try {
 			
-			//clientTester.dxT001(Ip, port);
+			clientTester.dxT001(Ip, port);
 			//clientTester.dxT002(Ip, port);
 			//clientTester.dxT003(Ip, port);
 			//clientTester.dxT004(Ip, port);
@@ -45,7 +45,7 @@ public class ClientTester {
 			//clientTester.dxT006_R(Ip, port);
 			//clientTester.dxT006_U(Ip, port);
 			//clientTester.dxT006_D(Ip, port);
-			clientTester.dxT011(Ip, port);
+			//clientTester.dxT011(Ip, port);
 			
 			
 		} catch(Exception e) {
@@ -59,21 +59,23 @@ public class ClientTester {
 
 			JSONObject serverObj = new JSONObject();
 			
-			/**
+		
 			serverObj.put(ClientProtocolID.SERVER_NAME, "222.110.153.162");
 			serverObj.put(ClientProtocolID.SERVER_IP, "222.110.153.162");
 			serverObj.put(ClientProtocolID.SERVER_PORT, "6432");
 			serverObj.put(ClientProtocolID.DATABASE_NAME, "postgres");
 			serverObj.put(ClientProtocolID.USER_ID, "experdba");
 			serverObj.put(ClientProtocolID.USER_PWD, "experdba");
-			**/
+		
 			
+			/**
 			serverObj.put(ClientProtocolID.SERVER_NAME, "222.110.153.162");
 			serverObj.put(ClientProtocolID.SERVER_IP, "222.110.153.162");
 			serverObj.put(ClientProtocolID.SERVER_PORT, "5432");
 			serverObj.put(ClientProtocolID.DATABASE_NAME, "pgmon");
 			serverObj.put(ClientProtocolID.USER_ID, "pgmon");
 			serverObj.put(ClientProtocolID.USER_PWD, "pgmon");
+			**/
 			
 			
 			
@@ -501,9 +503,44 @@ public class ClientTester {
 		}
 	}
 	
+	/**
+	 * 		감사로그활성화
+	 * 
+			로그종류 
+				pgaudit.log - read, write, function, role, ddl, misc
+			로그 수준 
+				pgaudit.log level
+			로그 카탈로그 
+				pgaudit.log catalog
+			로그 Parameter
+				pgaudit.log parameter
+			로그 Relation
+				pgaudit.log relation
+			로그 statement
+				pgaudit.log_statement_once
+			Role
+				pgaudit.role
+	 * @param Ip
+	 * @param port
+	 */
 	private void dxT007(String Ip, int port) {
 		try {
-			JSONArray arrDBInfo = new JSONArray();
+			JSONObject serverObj = new JSONObject();
+			
+			serverObj.put(ClientProtocolID.SERVER_NAME, "222.110.153.162");
+			serverObj.put(ClientProtocolID.SERVER_IP, "222.110.153.162");
+			serverObj.put(ClientProtocolID.SERVER_PORT, "6432");
+			serverObj.put(ClientProtocolID.DATABASE_NAME, "postgres");
+			serverObj.put(ClientProtocolID.USER_ID, "experdba");
+			serverObj.put(ClientProtocolID.USER_PWD, "experdba");
+			
+			JSONObject objInputData = new JSONObject();
+
+
+
+
+			
+			
 			
 			ClientAdapter CA = new ClientAdapter(Ip, port);
 			CA.open(); 
@@ -546,22 +583,23 @@ public class ClientTester {
 
 			JSONObject serverObj = new JSONObject();
 			
-			/**
+			
 			serverObj.put(ClientProtocolID.SERVER_NAME, "222.110.153.162");
 			serverObj.put(ClientProtocolID.SERVER_IP, "222.110.153.162");
 			serverObj.put(ClientProtocolID.SERVER_PORT, "6432");
 			serverObj.put(ClientProtocolID.DATABASE_NAME, "postgres");
 			serverObj.put(ClientProtocolID.USER_ID, "experdba");
 			serverObj.put(ClientProtocolID.USER_PWD, "experdba");
-			**/
 			
+			
+			/**
 			serverObj.put(ClientProtocolID.SERVER_NAME, "222.110.153.162");
 			serverObj.put(ClientProtocolID.SERVER_IP, "222.110.153.162");
-			serverObj.put(ClientProtocolID.SERVER_PORT, "6432");
+			serverObj.put(ClientProtocolID.SERVER_PORT, "5432");
 			serverObj.put(ClientProtocolID.DATABASE_NAME, "pgmon");
 			serverObj.put(ClientProtocolID.USER_ID, "pgmon");
 			serverObj.put(ClientProtocolID.USER_PWD, "pgmon");
-			
+			**/
 			
 			
 			JSONObject objList;
