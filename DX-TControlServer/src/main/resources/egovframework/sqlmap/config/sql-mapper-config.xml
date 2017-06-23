@@ -7,28 +7,42 @@
     	<typeAlias alias="dbServerVO" type="com.k4m.dx.tcontrol.admin.dbserverManager.service.DbServerVO" />
     	<typeAlias alias="sampleListVO" type="com.k4m.dx.tcontrol.sample.service.SampleListVO"/>
 		<typeAlias alias="searchVO" type="com.k4m.dx.tcontrol.sample.service.PagingVO"/>
+		<typeAlias alias="sampleTreeVO" type="com.k4m.dx.tcontrol.sample.service.SampleTreeVO"/>
+		<typeAlias alias="historyVO" type="com.k4m.dx.tcontrol.common.service.HistoryVO" />
+		<typeAlias alias="userVO" type="com.k4m.dx.tcontrol.login.service.UserVO" />
+		<typeAlias alias="workVO" type="com.k4m.dx.tcontrol.backup.service.WorkVO"/>
+		<typeAlias alias="workOptVO" type="com.k4m.dx.tcontrol.backup.service.WorkOptVO"/>
+		<typeAlias alias="pageVO" type="com.k4m.dx.tcontrol.common.service.PageVO"/>
+		<typeAlias alias="dbVO" type="com.k4m.dx.tcontrol.backup.service.DbVO"/>
+		<typeAlias alias="workLogVO" type="com.k4m.dx.tcontrol.backup.service.WorkLogVO"/>
+		<typeAlias alias="workOptDetailVO" type="com.k4m.dx.tcontrol.backup.service.WorkOptDetailVO"/>
+		<typeAlias alias="cmmnCodeVO" type="com.k4m.dx.tcontrol.common.service.CmmnCodeVO"/>
+		<typeAlias alias="connectorVO" type="com.k4m.dx.tcontrol.functions.transfer.service.ConnectorVO"/>
+		<typeAlias alias="transferVO" type="com.k4m.dx.tcontrol.functions.transfer.service.TransferVO"/>
     </typeAliases>
     
-
  	<mappers>
 	 	<!-- cmmn -->
-		<mapper resource="egovframework/sqlmap/mapper/cmmn/cmmnSql.xml" />
-		<mapper resource="egovframework/sqlmap/mapper/cmmn/cmmnCodeSql.xml" /> 
-		<mapper resource="egovframework/sqlmap/mapper/cmmn/cmmnHistorySql.xml" />
+		<mapper resource="egovframework/sqlmap/mappers/cmmn/cmmnSql.xml" />
+		<mapper resource="egovframework/sqlmap/mappers/cmmn/cmmnCodeSql.xml" /> 
+		<mapper resource="egovframework/sqlmap/mappers/cmmn/cmmnHistorySql.xml" />
 		
 		<!-- sample -->
-		<mapper resource="egovframework/sqlmap/mapper/sample/sampleListSql.xml" />
-		<mapper resource="egovframework/sqlmap/mapper/sample/sampleTreeSql.xml" />
+		<mapper resource="egovframework/sqlmap/mappers/sample/sampleListSql.xml" />
+		<mapper resource="egovframework/sqlmap/mappers/sample/sampleTreeSql.xml" />
 		
 		<!-- backup -->
-		<mapper resource="egovframework/sqlmap/mapper/backup/backupSql.xml" />
+		<mapper resource="egovframework/sqlmap/mappers/backup/backupSql.xml" />
 		
 		<!-- admin -->
-		<mapper resource="egovframework/sqlmap/mapper/admin/userManager/userManagerSql.xml" />
-		<mapper resource="egovframework/sqlmap/mapper/admin/dbserverManager/dbserverManagerSql.xml" />
-		<mapper resource="egovframework/sqlmap/mapper/admin/accessHistory/accessHistorySql.xml" />
+		<mapper resource="egovframework/sqlmap/mappers/admin/userManager/userManagerSql.xml" />
+		<mapper resource="egovframework/sqlmap/mappers/admin/dbserverManager/dbserverManagerSql.xml" />
+		<mapper resource="egovframework/sqlmap/mappers/admin/accessHistory/accessHistorySql.xml" />
 		
 		<!-- functions -->
-		<mapper resource="egovframework/sqlmap/mapper/functions/transfer/transferSql.xml" />
+		<mapper resource="egovframework/sqlmap/mappers/functions/transfer/transferSql.xml" />
+		
+		<!-- mypage -->
+		<mapper resource="egovframework/sqlmap/mappers/mypage/mypageSql.xml" />
 	</mappers>
 </configuration>

@@ -13,7 +13,7 @@ import com.k4m.dx.tcontrol.login.service.UserVO;
 @Service("UserManagerServiceImpl")
 public class UserManagerServiceImpl implements UserManagerService {
 
-	@Resource(name = "UserManagerDAO")
+	@Resource(name = "userManagerDAO")
 	private UserManagerDAO userManagerDAO;
 
 	public void insertUserManager(UserVO userVo) throws Exception {

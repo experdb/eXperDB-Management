@@ -1,13 +1,9 @@
-<?xml version="1.0" encoding="UTF-8" ?>
-<!DOCTYPE sqlMap
-    PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN"
-    "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper   PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
-<sqlMap namespace="cmmnListSQL">
-	<typeAlias alias="userVO" type="com.k4m.dx.tcontrol.login.service.UserVO"/>
+<mapper namespace="cmmnListSQL">
 
-
-	<select id="selectLoginUserList" parameterClass="userVO" resultClass="userVO">
+	<select id="selectLoginUserList" parameterType="userVO" resultType="userVO">
 		/**
 	 	* Query ID : selectLoginUserList
 	 	* Description : 로그인 사용자 조회
@@ -32,7 +28,7 @@
 				, LST_MDF_DTM
       FROM T_USR_I
       WHERE 1=1	
-      AND  USR_ID = #usr_id#		
+      AND  USR_ID = #{usr_id}		
     </select>
-    
-</sqlMap>
+
+</mapper>

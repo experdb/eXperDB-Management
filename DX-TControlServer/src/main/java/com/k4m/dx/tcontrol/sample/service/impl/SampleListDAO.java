@@ -2,75 +2,44 @@ package com.k4m.dx.tcontrol.sample.service.impl;
 
 import java.sql.SQLException;
 import java.util.List;
-
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Repository;
-
-import com.ibatis.sqlmap.client.SqlMapClient;
 import com.k4m.dx.tcontrol.sample.service.PagingVO;
 import com.k4m.dx.tcontrol.sample.service.SampleListVO;
+import egovframework.rte.psl.dataaccess.EgovAbstractMapper;
+ 
+@Repository("sampleListDAO")
+public class SampleListDAO extends EgovAbstractMapper{
 
-@Repository("SampleListDAO")
-public class SampleListDAO {
-
-	@Autowired
-	@Qualifier("sqlMapClient")
-	private SqlMapClient sqlMapClient;
-
-	@SuppressWarnings("unchecked")
-	public List<SampleListVO> selectSampleList(PagingVO searchVO) {
+	@SuppressWarnings({ "unchecked", "deprecation" })
+	public List<SampleListVO> selectSampleList(PagingVO searchVO) throws SQLException {
 		List<SampleListVO> sl = null;
-		try {
-			return sl = (List<SampleListVO>) sqlMapClient.queryForList("sampleListSQL.selectSampleList", searchVO);
-		} catch (SQLException e) {
-			e.printStackTrace();
-		}	
+		sl = (List<SampleListVO>) list("sampleListSQL.selectSampleList", searchVO);	
 		return sl;
 	}
 
-	public void insertSampleList(SampleListVO sampleListVo) {
-		try {
-			sqlMapClient.insert("sampleListSQL.insertSampleList", sampleListVo);
-		} catch (SQLException e) {
-			e.printStackTrace();
-		}	
+	public void insertSampleList(SampleListVO sampleListVo) throws SQLException {
+		insert("sampleListSQL.insertSampleList", sampleListVo);	
 	}
 
-	@SuppressWarnings("unchecked")
-	public List<SampleListVO> selectDetailSampleList(SampleListVO sampleListVo) {
+	
+	@SuppressWarnings({ "unchecked", "deprecation" })
+	public List<SampleListVO> selectDetailSampleList(SampleListVO sampleListVo) throws SQLException {
 		List<SampleListVO> sl = null;
-		try {
-			sl = (List<SampleListVO>) sqlMapClient.queryForList("sampleListSQL.selectDetailSampleList", sampleListVo);	
-        } catch(SQLException e){
-        	e.printStackTrace();
-        }
+		sl = (List<SampleListVO>) list("sampleListSQL.selectDetailSampleList", sampleListVo);
 		return sl;
 	}
 
-	public void updateSampleList(SampleListVO sampleListVo) {
-		try {
-			sqlMapClient.update("sampleListSQL.updateSampleList", sampleListVo);
-		} catch (SQLException e) {
-			e.printStackTrace();
-		}	
+	public void updateSampleList(SampleListVO sampleListVo) throws SQLException {
+		update("sampleListSQL.updateSampleList", sampleListVo);	
 	}
 
-	public void deleteSampleList(SampleListVO sampleListVo) {
-		try {
-			sqlMapClient.update("sampleListSQL.deleteSampleList", sampleListVo);
-		} catch (SQLException e) {
-			e.printStackTrace();
-		}		
+	public void deleteSampleList(SampleListVO sampleListVo) throws SQLException {
+		update("sampleListSQL.deleteSampleList", sampleListVo);		
 	}
 
-	public int selectSampleListTotCnt(PagingVO searchVO) {
+	public int selectSampleListTotCnt(PagingVO searchVO) throws SQLException {
 		int TotCnt= 0;
-		try {
-			TotCnt = (int) sqlMapClient.queryForObject("sampleListSQL.selectSampleListTotCnt", searchVO);
-		} catch (SQLException e) {
-			e.printStackTrace();
-		}
+		TotCnt = (int) getSqlSession().selectOne("sampleListSQL.selectSampleListTotCnt", searchVO);
 		return TotCnt;
 	}
 

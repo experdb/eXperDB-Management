@@ -3,4 +3,64 @@
 
 <mapper namespace="sampleTreeSQL">
 
+	<select id="selectSampleTreeDBServer" resultType="sampleTreeVO">
+		/**
+	 	*  Query ID : selectSampleTreeDBServer
+	 	* Description : SampleTreeList 조회
+	 	* Author : 변승우
+	 	**/
+	 	
+      SELECT 
+			  DB_SVR_ID
+			, DB_SVR_NM
+			, IPADR
+			, PORTNO
+			, DFT_DB_NM
+			, SVR_SPR_USR_ID
+			, SVR_SPR_SCM_PWD
+			, FRST_REGR_ID
+			, FRST_REG_DTM
+			, LST_MDFR_ID
+			, LST_MDF_DTM
+      FROM T_DBSVR_I	
+      ORDER BY DB_SVR_ID		
+    </select>
+    
+    <insert id="insertSampleTreeDBServer" parameterType="sampleTreeVO">
+    	/**
+	 	*  Query ID : insertSampleTreeDBServer
+	 	* Description : insertSampleTreeDBServer 등록
+	 	* Author : 변승우
+	 	**/
+	 	
+		INSERT INTO T_DBSVR_I
+		(
+			  DB_SVR_ID
+			, DB_SVR_NM
+			, IPADR
+			, PORTNO
+			, DFT_DB_NM
+			, SVR_SPR_USR_ID
+			, SVR_SPR_SCM_PWD
+			, FRST_REGR_ID
+			, FRST_REG_DTM
+			, LST_MDFR_ID
+			, LST_MDF_DTM
+		) 
+		VALUES
+		(
+			  nextval('SEQ_TCONTROL_SAMPLE1')
+			, #{db_svr_nm}
+			, #{ipadr}
+			, #{portno}
+			, #{dft_db_nm}
+			, #{svr_spr_usr_id}
+			, #{svr_spr_scm_pwd}
+			, #{frst_regr_id}
+			, clock_timestamp()
+			, #{lst_mdfr_id}
+			, clock_timestamp()	
+		)
+	</insert>
+	
 </mapper>

@@ -1,7 +1,6 @@
 package com.k4m.dx.tcontrol.admin.dbauthority.web;
 
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -9,7 +8,8 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
 
-import com.k4m.dx.tcontrol.common.service.CmmnHistoryService;
+import com.k4m.dx.tcontrol.admin.accesshistory.service.AccessHistoryService;
+import com.k4m.dx.tcontrol.cmmn.CmmnUtils;
 import com.k4m.dx.tcontrol.common.service.HistoryVO;
 
 /**
@@ -31,7 +31,7 @@ import com.k4m.dx.tcontrol.common.service.HistoryVO;
 public class DbAuthorityController {
 
 	@Autowired
-	private CmmnHistoryService cmmnHistoryService;
+	private AccessHistoryService accessHistoryService;
 
 	/**
 	 * DB권한관리 화면을 보여준다.
@@ -46,13 +46,10 @@ public class DbAuthorityController {
 		ModelAndView mv = new ModelAndView();
 		try {
 			// DB권한관리 이력 남기기
-			HttpSession session = request.getSession();
-			String usr_id = (String) session.getAttribute("usr_id");
-			String ip = (String) session.getAttribute("ip");
-			historyVO.setUsr_id(usr_id);
-			historyVO.setLgi_ipadr(ip);
-			cmmnHistoryService.insertHistoryDbAuthority(historyVO);
-			
+			CmmnUtils.saveHistory(request, historyVO);
+			historyVO.setExe_dtl_cd("DX-T0035");
+			accessHistoryService.insertHistory(historyVO);
+				
 			mv.setViewName("admin/dbAuthority/dbAuthority");
 		} catch (Exception e) {
 			e.printStackTrace();

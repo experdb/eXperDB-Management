@@ -13,7 +13,7 @@ import com.k4m.dx.tcontrol.sample.service.SampleTreeVO;
 @Service("sampleTreeServiceImpl")
 public class SampleTreeServiceImpl implements SampleTreeService{
 	
-	@Resource(name = "SampleTreeDAO")
+	@Resource(name = "sampleTreeDAO")
 	private SampleTreeDAO sampleTreeDAO;
 
 	public List<SampleTreeVO> selectSampleTreeList() throws Exception {

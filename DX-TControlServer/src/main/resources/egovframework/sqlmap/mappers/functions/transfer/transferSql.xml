@@ -1,12 +1,9 @@
-<?xml version="1.0" encoding="UTF-8" ?>
-<!DOCTYPE sqlMap
-    PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN"
-    "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper   PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
-<sqlMap namespace="transferSql">
-	<typeAlias alias="ConnectorVO" type="com.k4m.dx.tcontrol.functions.transfer.service.ConnectorVO"/>
-	
-		<select id="selectConnectorRegister" resultClass="ConnectorVO">
+<mapper namespace="transferSql">
+
+	<select id="selectConnectorRegister" resultType="connectorVO">
 		/**
 	 	* Query ID : selectConnectorRegister
 	 	* Description : Connector 조회
@@ -37,17 +34,17 @@
 			, to_char(T_CNR_I.LST_MDF_DTM,'YYYY-MM-DD HH:mm:ss')LST_MDF_DTM
 			FROM T_CNR_I
 			WHERE 1=1	
-				<isNotEmpty property="cnr_nm">
-				AND CNR_NM LIKE #cnr_nm#
-				</isNotEmpty>
-				<isNotEmpty property="cnr_ipadr">
-				AND CNR_IPADR LIKE #cnr_ipadr#
-				</isNotEmpty>
+				<if test="cnr_nm != null and cnr_nm != '' ">
+				AND CNR_NM LIKE #{cnr_nm}
+				</if>
+				<if test="cnr_ipadr != null and cnr_ipadr != '' ">
+				AND CNR_IPADR LIKE #{cnr_ipadr}
+				</if>
 			ORDER BY LST_MDF_DTM DESC
 		)A		
-    	</select>
+    </select>
     
-		<select id="selectDetailConnectorRegister" resultClass="ConnectorVO">
+	<select id="selectDetailConnectorRegister" resultType="connectorVO">
 		/**
 	 	* Query ID : selectDetailConnectorRegister
 	 	* Description : Connector 상세 조회
@@ -64,20 +61,20 @@
 		, LST_MDFR_ID
 		, LST_MDF_DTM
 		FROM T_CNR_I
-		WHERE cnr_id = #cnr_id#
-	 	</select>
+		WHERE cnr_id = #{cnr_id}
+	 </select>
 	 
-		<delete id="deleteConnectorRegister" parameterClass="int">
+	<delete id="deleteConnectorRegister" parameterType="int">
 		/**
 		* Query ID : deleteConnectorRegister
 		* Description : Connector 삭제
 		* Author : 김주영
 		**/
 		DELETE FROM T_CNR_I
-		WHERE cnr_id=#cnr_id#
-		</delete>
+		WHERE cnr_id=#{cnr_id}
+	</delete>
 		
-		<insert id="insertConnectorRegister" parameterClass="ConnectorVO">
+	<insert id="insertConnectorRegister" parameterType="connectorVO">
 		/**
 		* Query ID : insertConnectorRegister
 		* Description : Connector 등록
@@ -96,18 +93,18 @@
 		) 
 		VALUES(         
 		  nextval('q_cnr_i_01')
-		, #cnr_nm#
-		, #cnr_ipadr#
-		, #cnr_portno#
-		, #cnr_cnn_tp_cd#
-		, #frst_regr_id#
+		, #{cnr_nm}
+		, #{cnr_ipadr}
+		, #{cnr_portno}
+		, #{cnr_cnn_tp_cd}
+		, #{frst_regr_id}
 		, clock_timestamp()
-		, #lst_mdfr_id#
+		, #{lst_mdfr_id}
 		, clock_timestamp()
 		)
-		</insert>
+	</insert>
 		
-		<update id="updateConnectorRegister" parameterClass="ConnectorVO">
+	<update id="updateConnectorRegister" parameterType="connectorVO">
 		/**
 		* Query ID : updateConnectorRegister
 		* Description : Connector 업데이트
@@ -115,12 +112,40 @@
 		**/	
 		UPDATE T_CNR_I
 		SET
-		  CNR_NM = #cnr_nm#
-		, CNR_IPADR = #cnr_ipadr#
-		, CNR_PORTNO =#cnr_portno#
-		, CNR_CNN_TP_CD =#cnr_cnn_tp_cd#
-		, LST_MDFR_ID =#lst_mdfr_id#
+		  CNR_NM = #{cnr_nm}
+		, CNR_IPADR = #{cnr_ipadr}
+		, CNR_PORTNO =#{cnr_portno}
+		, CNR_CNN_TP_CD =#{cnr_cnn_tp_cd}
+		, LST_MDFR_ID =#{lst_mdfr_id}
 		, LST_MDF_DTM = clock_timestamp()
-		WHERE CNR_ID = #cnr_id#			
-		</update>
-</sqlMap>
+		WHERE CNR_ID = #{cnr_id}			
+	</update>
+	
+	<insert id="insertTransferSetting" parameterType="transferVO">
+		/**
+		* Query ID : insertTransferSetting
+		* Description : 전송설정 등록
+		* Author : 김주영
+		**/
+		INSERT INTO T_TRFCNG_I(
+		  TRF_CNG_ID
+		, TRF_SVR_NM
+		, IPADR
+		, PORTNO
+		, FRST_REGR_ID
+		, FRST_REG_DTM
+		, LST_MDFR_ID
+		, LST_MDF_DTM
+		) 
+		VALUES(         
+		  nextval('q_trfcng_i_01')
+		, #{trf_svr_nm}
+		, #{ipadr}
+		, #{portno}
+		, #{frst_regr_id}
+		, clock_timestamp()
+		, #{lst_mdfr_id}
+		, clock_timestamp()
+		)	
+	</insert>
+</mapper>

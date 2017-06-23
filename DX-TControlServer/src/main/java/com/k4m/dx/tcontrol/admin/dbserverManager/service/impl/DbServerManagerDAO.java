@@ -9,33 +9,38 @@ import org.springframework.stereotype.Repository;
 
 import com.ibatis.sqlmap.client.SqlMapClient;
 import com.k4m.dx.tcontrol.admin.dbserverManager.service.DbServerVO;
+import com.k4m.dx.tcontrol.login.service.UserVO;
 
-@Repository("DbServerManagerDAO")
-public class DbServerManagerDAO {
+import egovframework.rte.psl.dataaccess.EgovAbstractMapper;
 
-	@Autowired
-	@Qualifier("sqlMapClient")
-	private SqlMapClient sqlMapClient;
+@Repository("dbServerManagerDAO")
+public class DbServerManagerDAO extends EgovAbstractMapper{
 
-
-	@SuppressWarnings("unchecked")
-	public List<DbServerVO> selectDbServerList(DbServerVO dbServerVO) {
+	
+	/**
+	 * DB서버 정보 조회
+	 * 
+	 * @param dbServerVO
+	 * @return List
+	 * @throws Exception
+	 */	
+	@SuppressWarnings({ "unchecked", "deprecation" })
+	public List<DbServerVO> selectDbServerList(DbServerVO dbServerVO) throws SQLException {
 		List<DbServerVO> sl = null;
-		try {
-			sl = (List<DbServerVO>) sqlMapClient.queryForList("dbserverManagerSql.selectDbServerList", dbServerVO);
-		} catch (SQLException e) {
-			e.printStackTrace();
-		}
+		sl = (List<DbServerVO>) list("dbserverManagerSql.selectDbServerList", dbServerVO);
 		return sl;
 	}
 
-
-	public void insertDbServer(DbServerVO dbServerVO) {
-		try {
-			sqlMapClient.insert("dbserverManagerSql.insertDbServer", dbServerVO);
-		} catch (SQLException e) {
-			e.printStackTrace();
-		}		
+	
+	/**
+	 * DB서버 정보 등록
+	 * 
+	 * @param dbServerVO
+	 * @return 
+	 * @throws Exception
+	 */	
+	public void insertDbServer(DbServerVO dbServerVO) throws SQLException {
+		insert("dbserverManagerSql.insertDbServer", dbServerVO);		
 	}
 	
 }

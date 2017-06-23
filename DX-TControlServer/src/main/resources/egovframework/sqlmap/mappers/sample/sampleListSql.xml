@@ -3,5 +3,135 @@
 
 <mapper namespace="sampleListSQL">
 
-
+	<select id="selectSampleList" parameterType="searchVO" resultType="sampleListVO">
+		/**
+	 	* Query ID : selectSampleList
+	 	* Description : SampleList 조회
+	 	* Author : 김주영
+	 	**/
+	 	
+      SELECT 
+      		NO
+	      , CATEGORY_ID
+	      , CATEGORY_NM
+	      , USE_YN
+	      , CONTENTS
+	      , REG_NM 
+      FROM TCONTROL_SAMPLE
+      WHERE 1=1	
+      ORDER BY NO
+      LIMIT #{recordCountPerPage} OFFSET #{firstIndex}		
+    </select>
+    
+    <insert id="insertSampleList" parameterType="sampleListVO">
+    	/**
+	 	* Query ID : insertSampleList
+	 	* Description : SampleList 등록
+	 	* Author : 김주영
+	 	**/
+	 	
+		INSERT INTO TCONTROL_SAMPLE
+		(
+			  NO
+			, CATEGORY_ID
+			, CATEGORY_NM
+			, USE_YN
+			, CONTENTS
+			, REG_NM
+		) 
+		VALUES
+		(
+			  nextval('SEQ_TCONTROL_SAMPLE')
+			, 'SAMPLE_LIST'||nextval('SEQ_TCONTROL_SAMPLE1')
+			, #{category_nm}
+			, #{use_yn}
+			, #{contents}
+			, #{reg_nm}
+		)
+	</insert>
+    
+    <select id="selectDetailSampleList" resultType="sampleListVO">
+        /**
+	 	* Query ID : selectDetailSampleList
+	 	* Description : SampleList 상세정보 조회
+	 	* Author : 김주영
+	 	**/
+	 	
+      SELECT 
+      	  NO
+		, CATEGORY_ID
+		, CATEGORY_NM
+		, USE_YN
+		, CONTENTS
+		, REG_NM 
+      FROM TCONTROL_SAMPLE 
+      WHERE CATEGORY_ID=#{category_id}
+   </select>
+   
+   	<update id="updateSampleList" parameterType="sampleListVO">
+   	    /**
+	 	* Query ID : updateSampleList
+	 	* Description : SampleList 수정
+	 	* Author : 김주영
+	 	**/
+	 	
+		UPDATE TCONTROL_SAMPLE
+		SET 
+			  CATEGORY_NM=#{category_nm}
+			, USE_YN=#{use_yn}
+			, CONTENTS=#{contents}
+			, REG_NM=#{reg_nm}
+		WHERE NO=#{no}
+	</update> 
+	
+    <delete id="deleteSampleList">
+       	/**
+	 	* Query ID : deleteSampleList
+	 	* Description : SampleList 삭제
+	 	* Author : 김주영
+	 	**/
+	 	
+	  DELETE 
+	  FROM TCONTROL_SAMPLE 
+	  WHERE NO=#{no}
+	</delete>
+	
+	<select id="selectSampleDatatableList" resultType="sampleListVO">
+		/**
+	 	* Query ID : selectSampleDatatableList
+	 	* Description : SampleDatatable 조회
+	 	* Author : 김주영
+	 	**/
+	  SELECT
+		  (ROW_NUMBER() OVER()) AS ROWNUM
+		, (ROW_NUMBER() OVER()) AS IDX
+		, NO
+		, CATEGORY_ID
+		, CATEGORY_NM
+		, USE_YN
+		, CONTENTS
+		, REG_NM
+	  FROM( 	  	
+      SELECT 
+      		NO
+	      , CATEGORY_ID
+	      , CATEGORY_NM
+	      , USE_YN
+	      , CONTENTS
+	      , REG_NM 
+      FROM TCONTROL_SAMPLE	
+      ORDER BY NO)A
+    </select>
+    
+    <select id="selectSampleListTotCnt" parameterType="searchVO" resultType="int">
+    	/**
+	 	* Query ID : selectSampleListTotCnt
+	 	* Description : SampleDatatable TotCnt 조회
+	 	* Author : 김주영
+	 	**/
+		SELECT COUNT(*) totcnt
+		FROM TCONTROL_SAMPLE
+		WHERE 1=1
+	</select>
+	
 </mapper>

@@ -1,0 +1,372 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper   PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="backupSQL">
+
+	<select id="selectWorkList" parameterType="workVO" resultType="workVO">
+		/**
+	 	* Query ID : selectWorkList
+	 	* Description : workList 조회
+	 	* Author : Yoon jh
+	 	**/
+	 	
+      SELECT 
+      		WRK_ID,
+			DB_SVR_ID,
+			DB_ID,
+			(CASE WHEN DB_ID>0 THEN (SELECT DB_NM FROM T_DB_I WHERE A.DB_ID=DB_ID ) ELSE '' END) AS DB_NM,
+			BCK_BSN_DSCD,
+			WRK_NM,
+			WRK_EXP,
+			BCK_OPT_CD,
+			BCK_MTN_ECNT,
+			CPS_YN,
+			LOG_FILE_BCK_YN,
+			LOG_FILE_STG_DCNT,
+			LOG_FILE_MTN_ECNT,
+			CPRT,
+			SAVE_PTH,
+			FILE_FMT_CD,
+			FILE_STG_DCNT,
+			ENCD_MTH_NM,
+			USR_ROLE_NM,
+			FRST_REGR_ID,
+			TO_CHAR(FRST_REG_DTM,'YYYY-MM-DD HH24:MI') AS FRST_REG_DTM,
+			LST_MDFR_ID,
+			TO_CHAR(LST_MDF_DTM,'YYYY-MM-DD HH24:MI') AS LST_MDF_DTM
+      FROM T_WRKCNG_I A
+      WHERE 1=1	
+      	AND DB_SVR_ID=#{db_svr_id}
+      	AND BCK_BSN_DSCD=#{bck_bsn_dscd}
+      	<if test="wrk_nm != null and wrk_nm != '' ">
+      		AND WRK_NM LIKE CONCAT('%',#{wrk_nm},'%')
+      	</if>
+      	<if test="bck_opt_cd != null and bck_opt_cd != '' ">
+      		AND BCK_OPT_CD=#{bck_opt_cd}
+      	</if>
+      	<if test="wrk_id != null and wrk_id != '' ">
+      		<if test='wrk_id != "0"'>
+	      		AND WRK_ID=#{wrk_id}
+			</if>
+      	</if>
+      	<if test="db_id != null and db_id != '' ">
+      		<if test='db_id != "0"'>
+	      		AND DB_ID=#{db_id}
+			</if>
+      	</if>
+      ORDER BY WRK_ID DESC
+    </select>
+    
+    <select id="selectOptDetailList" parameterType="workOptDetailVO" resultType="workOptDetailVO">
+		/**
+	 	* Query ID : selectOptDetailList
+	 	* Description : 옵션별 List 조회
+	 	* Author : Yoon jh
+	 	**/    
+    	SELECT
+    		GRP_CD,
+    		OPT_CD,
+    		OPT_CD_NM,
+    		DFT_CD_VAL,
+    		EXPS_ORD
+    	FROM T_WRKOPTDTL_C
+    	WHERE 1=1
+    		AND GRP_CD=#{grp_cd}
+    	ORDER BY EXPS_ORD
+    </select>
+
+	<insert id="insertRmanWork" parameterType="workVO">
+		/**
+	 	* Query ID : insertRmanWork
+	 	* Description : Rman백업 insert
+	 	* Author : Yoon jh
+	 	**/
+		INSERT INTO T_WRKCNG_I
+			(
+			wrk_id,
+			db_svr_id,
+			bck_bsn_dscd,
+			wrk_nm,
+			wrk_exp,
+			bck_opt_cd,
+			bck_mtn_ecnt,
+			cps_yn,
+			log_file_bck_yn,
+			log_file_stg_dcnt,
+			log_file_mtn_ecnt,
+			file_stg_dcnt,
+			frst_regr_id,
+			frst_reg_dtm,
+			lst_mdfr_id,
+			lst_mdf_dtm
+			)
+		VALUES
+			(
+			nextval('q_wrkcng_i_01'),
+			#{db_svr_id},
+			'rman',
+			#{wrk_nm},
+			#{wrk_exp},
+			#{bck_opt_cd},
+			#{bck_mtn_ecnt},
+			#{cps_yn},
+			#{log_file_bck_yn},
+			#{log_file_stg_dcnt},
+			#{log_file_mtn_ecnt},
+			#{file_stg_dcnt},
+			'',
+			now(),
+			'',
+			now()
+			)
+	</insert>
+	
+	<insert id="insertDumpWork" parameterType="workVO">
+		/**
+	 	* Query ID : insertDumpWork
+	 	* Description : Dump백업 insert
+	 	* Author : Yoon jh
+	 	**/
+		INSERT INTO T_WRKCNG_I
+			(
+			wrk_id,
+			db_svr_id,
+			bck_bsn_dscd,
+			wrk_nm,
+			wrk_exp,
+			db_id,
+			save_pth,
+			file_fmt_cd,
+			cprt,
+			encd_mth_nm,
+			usr_role_nm,
+			file_stg_dcnt,
+			bck_mtn_ecnt,
+			frst_regr_id,
+			frst_reg_dtm,
+			lst_mdfr_id,
+			lst_mdf_dtm
+			)
+		VALUES
+			(
+			nextval('q_wrkcng_i_01'),
+			#{db_svr_id},
+			'dump',
+			#{wrk_nm},
+			#{wrk_exp},
+			#{db_id},
+			#{save_pth},
+			#{file_fmt_cd},
+			#{cprt},
+			#{encd_mth_nm},
+			#{usr_role_nm},
+			#{file_stg_dcnt},
+			#{bck_mtn_ecnt},
+			'',
+			now(),
+			'',
+			now()
+			)
+	</insert>
+	
+	<update id="updateRmanWork" parameterType="workVO">
+		/**
+	 	* Query ID : updateRmanWork
+	 	* Description : Rman백업 update
+	 	* Author : Yoon jh
+	 	**/
+		UPDATE T_WRKCNG_I SET
+			wrk_nm = #{wrk_nm},
+			wrk_exp = #{wrk_exp},
+			bck_opt_cd = #{bck_opt_cd},
+			cps_yn = #{cps_yn},
+			log_file_bck_yn = #{log_file_bck_yn},
+			bck_mtn_ecnt = #{bck_mtn_ecnt},
+			log_file_stg_dcnt = #{log_file_stg_dcnt},
+			log_file_mtn_ecnt = #{log_file_mtn_ecnt},
+			file_stg_dcnt = #{file_stg_dcnt},
+			lst_mdfr_id = '',
+			lst_mdf_dtm = now()
+		WHERE
+			WRK_ID = #{wrk_id}
+	</update>
+	
+	<select id="lastWorkId"  resultType="workVO">
+		SELECT
+			COALESCE(MAX(WRK_ID),0) AS wrk_id
+		FROM
+		T_WRKCNG_I
+	</select>
+	
+	<insert id="insertWorkOpt" parameterType="workOptVO">
+		/**
+	 	* Query ID : insertWorkOpt
+	 	* Description : 백업옵션 insert
+	 	* Author : Yoon jh
+	 	**/
+		INSERT INTO t_bckopt_i
+			(
+			wrk_id,
+			opt_sn,
+			grp_cd,
+			opt_cd,
+			bck_opt_val,
+			frst_regr_id,
+			frst_reg_dtm,
+			lst_mdfr_id,
+			lst_mdf_dtm
+			)
+		VALUES
+			(
+			#{wrk_id},
+			#{opt_sn},
+			#{grp_cd},
+			#{opt_cd},
+			#{bck_opt_val},
+			'',
+			now(),
+			'',
+			now()
+			)
+	</insert>
+	
+	<delete id="deleteWorkOpt" parameterType="workOptVO">
+		/**
+	 	* Query ID : deleteWorkOpt
+	 	* Description : 백업옵션 delete
+	 	* Author : Yoon jh
+	 	**/	
+		DELETE FROM t_bckopt_i
+		WHERE
+			WRK_ID = #{wrk_id}
+			<if test="opt_sn != null and opt_sn != '' ">
+				<if test='opt_sn != "0"'>
+			AND OPT_SN = #{opt_sn}
+				</if>
+			</if>
+	</delete>
+	
+	<delete id="deleteWork" parameterType="workVO">
+		/**
+	 	* Query ID : deleteWork
+	 	* Description : 백업 delete
+	 	* Author : Yoon jh
+	 	**/	
+		DELETE FROM T_WRKCNG_I
+		WHERE
+			WRK_ID = #{wrk_id}
+	</delete>
+	
+	<select id="selectWorkOptList" parameterType="workVO" resultType="workOptVO">
+		/**
+	 	* Query ID : selectWorkOptList
+	 	* Description : work Option List 조회
+	 	* Author : Yoon jh
+	 	**/
+	 	
+      SELECT 
+      		WRK_ID,
+			OPT_SN,
+			GRP_CD,
+			OPT_CD,
+			BCK_OPT_VAL,
+			FRST_REGR_ID,
+			FRST_REG_DTM,
+			LST_MDFR_ID,
+			LST_MDF_DTM
+      FROM T_BCKOPT_I
+      WHERE 1=1	
+      	AND WRK_ID = #{wrk_id}
+      ORDER BY OPT_SN DESC
+    </select>
+    
+    <select id="selectDbList" parameterType="workVO" resultType="dbVO">
+		/**
+	 	* Query ID : selectDbList
+	 	* Description : DB List 조회
+	 	* Author : Yoon jh
+	 	**/
+	 	SELECT
+	 		DB_ID,
+	 		DB_SVR_ID,
+	 		DB_NM,
+	 		DB_USR_ID,
+			FRST_REGR_ID,
+			FRST_REG_DTM,
+			LST_MDFR_ID,
+			LST_MDF_DTM
+		FROM
+			T_DB_I
+		WHERE
+			DB_SVR_ID = #{db_svr_id}
+		ORDER BY DB_ID DESC
+    </select>
+    
+    <select id="selectWorkLogList" parameterType="workLogVO" resultType="workLogVO">
+    	/**
+	 	* Query ID : selectWorkLogList
+	 	* Description : 백업로그 List 조회
+	 	* Author : Yoon jh
+	 	**/
+	 	SELECT
+	 		(ROW_NUMBER() OVER()) AS ROWNUM,
+	 		TWG.EXE_SN AS EXE_SN,
+	 		TWG.SCD_ID AS SCD_ID,
+	 		TWG.WRK_ID AS WRK_ID,
+	 		to_char(TWG.WRK_STRT_DTM,'YYYY-MM-DD HH24:MI') AS WRK_STRT_DTM,
+	 		to_char(TWG.WRK_END_DTM,'YYYY-MM-DD HH24:MI') AS WRK_END_DTM,
+	 		TWG.EXE_RSLT_CD AS EXE_RSLT_CD,
+	 		TWG.BCK_OPT_CD AS BCK_OPT_CD,
+	 		TWG.TLI AS TLI,
+	 		TWG.FILE_SZ AS FILE_SZ,
+	 		TWG.DB_ID AS DB_ID,
+	 		(SELECT DB_NM FROM T_DB_I WHERE TWG.DB_ID=DB_ID) AS DB_NM,
+	 		TWG.BCK_FILE_PTH AS BCK_FILE_PTH,
+	 		TWG.FRST_REGR_ID AS FRST_REGR_ID,
+	 		to_char(TWG.FRST_REG_DTM,'YYYY-MM-DD HH24:MI') AS FRST_REG_DTM,
+	 		TWG.LST_MDFR_ID AS LST_MDFR_ID,
+	 		to_char(TWG.LST_MDF_DTM,'YYYY-MM-DD HH24:MI') AS LST_MDF_DTM
+	 	FROM T_WRKEXE_G TWG, T_WRKCNG_I TWI
+	 	WHERE 1=1
+	 		AND TWG.WRK_ID = TWI.WRK_ID
+	 	<if test="wrk_id != null and wrk_id != '' ">
+      		<if test='wrk_id != "0"'>
+	      		AND TWG.WRK_ID=#{wrk_id}
+	      	</if>
+      	</if>
+      	<if test="scd_id != null and scd_id != '' ">
+      		<if test='scd_id != "0"'>
+	      		AND TWG.SCD_ID=#{scd_id}
+	      	</if>
+      	</if>
+      	<if test="exe_sn != null and exe_sn != '' ">
+      		<if test='exe_sn != "0"'>      	
+	      		AND TWG.EXE_SN=#{exe_sn}
+	      	</if>
+      	</if>
+      	<if test="db_id != null and db_id != '' ">
+      		<if test='db_id != "0"'>     
+	      		AND TWG.DB_ID=#{db_id}
+	      	</if>
+      	</if>
+      	<if test="bck_bsn_dscd != null and bck_bsn_dscd != '' ">
+      		AND TWI.BCK_BSN_DSCD = #{bck_bsn_dscd}
+      	</if>
+      	<if test="bck_opt_cd != null and bck_opt_cd != '' ">
+      		AND TWG.BCK_OPT_CD = #{bck_opt_cd}
+      	</if>
+      	<if test="wrk_strt_dtm != null and wrk_strt_dtm != '' ">
+      		<if test="wrk_end_dtm != null and wrk_end_dtm != '' ">
+      			AND (TO_DATE(#{wrk_strt_dtm},'YYYY-MM-DD') BETWEEN TWG.WRK_STRT_DTM AND TWG.WRK_END_DTM
+      				OR
+      				TO_DATE(#{wrk_end_dtm},'YYYY-MM-DD') BETWEEN TWG.WRK_STRT_DTM AND TWG.WRK_END_DTM)
+      		</if>
+      	</if>
+      	<if test="exe_rslt_cd != null and exe_rslt_cd != '' ">
+      		AND TWG.EXE_RSLT_CD=#{exe_rslt_cd}
+      	</if>
+      	
+      	ORDER BY TWG.EXE_SN DESC
+    </select>
+
+</mapper>

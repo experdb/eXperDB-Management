@@ -9,11 +9,12 @@ import org.springframework.stereotype.Service;
 
 import com.k4m.dx.tcontrol.functions.transfer.service.ConnectorVO;
 import com.k4m.dx.tcontrol.functions.transfer.service.TransferService;
+import com.k4m.dx.tcontrol.functions.transfer.service.TransferVO;
 
 @Service("transferServiceImpl")
 public class TransferServiceImpl implements TransferService{
 	
-	@Resource(name = "TransferDAO")
+	@Resource(name = "transferDAO")
 	private TransferDAO transferDAO;
 	
 	public List<ConnectorVO> selectConnectorRegister(Map<String, Object> param) throws Exception {
@@ -34,6 +35,11 @@ public class TransferServiceImpl implements TransferService{
 
 	public void updateConnectorRegister(ConnectorVO connectorVO) throws Exception {
 		transferDAO.updateConnectorRegister(connectorVO);
+	}
+
+
+	public void insertTransferSetting(TransferVO transferVO) throws Exception {
+		transferDAO.insertTransferSetting(transferVO);	
 	}
 
 

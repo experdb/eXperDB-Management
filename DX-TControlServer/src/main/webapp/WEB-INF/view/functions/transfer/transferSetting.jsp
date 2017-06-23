@@ -12,10 +12,10 @@
 	*
 	*   수정일         수정자                   수정내용
 	*  ------------    -----------    ---------------------------
-	*  2017.06.13     최초 생성
+	*  2017.06.19     최초 생성
 	*
 	* author 김주영 사원
-	* since 2017.06.13
+	* since 2017.06.19
 	*
 	*/
 %>
@@ -27,14 +27,105 @@
 </head>
 <link type="text/css" rel="stylesheet" href="<c:url value='/css/egovframework/sample.css'/>" />
 <script>
-	/* 저장버튼 클릭시*/
+	
+	/* 숫자체크 */
+	function valid_numeric(objValue)
+	{
+		if (objValue.match(/^[0-9]+$/) == null)
+		{	return false;	}
+		else
+		{	return true;	}
+	}
+
+	/* Validation */
+	function fn_transferValidation(){
+ 		var kbipadr = document.getElementById("kbipadr");
+		if (kbipadr.value == "") {
+			alert("kafka Broker 아이피를 입력하여 주십시오.");
+			kbipadr.focus();
+			return false;
+		}
+
+ 		var kbportno = document.getElementById("kbportno");
+		if (kbportno.value == "") {
+			alert("kafka Broker 포트를 입력하여 주십시오.");
+			kbportno.focus();
+			return false;
+		}
+ 		if(!valid_numeric(kbportno.value))
+	 	{
+ 			alert("포트는 숫자만 입력가능합니다.");
+ 			kbportno.focus();
+		 	return false;
+		}		
+ 		var sripadr = document.getElementById("sripadr");
+		if (sripadr.value == "") {
+			alert("schema registry 아이피를 입력하여 주십시오.");
+			sripadr.focus();
+			return false;
+		}	
+ 		var srportno = document.getElementById("srportno");
+		if (srportno.value == "") {
+			alert("schema registry 포트를 입력하여 주십시오.");
+			srportno.focus();
+			return false;
+		}
+ 		if(!valid_numeric(srportno.value))
+	 	{
+ 			alert("포트는 숫자만 입력가능합니다.");
+ 			srportno.focus();
+		 	return false;
+		}
+ 		var zipadr = document.getElementById("zipadr");
+		if (zipadr.value == "") {
+			alert("zookeeper 아이피를 입력하여 주십시오.");
+			zipadr.focus();
+			return false;
+		}
+ 		var zportno = document.getElementById("zportno");
+		if (zportno.value == "") {
+			alert("zookeeper 포트를 입력하여 주십시오.");
+			zportno.focus();
+			return false;
+		}
+ 		if(!valid_numeric(zportno.value))
+	 	{
+ 			alert("포트는 숫자만 입력가능합니다.");
+ 			zportno.focus();
+		 	return false;
+		}	
+ 		var bipadr = document.getElementById("bipadr");
+		if (bipadr.value == "") {
+			alert("BottledWater 아이피를 입력하여 주십시오.");
+			bipadr.focus();
+			return false;
+		}
+ 		var bportno = document.getElementById("bportno");
+		if (bportno.value == "") {
+			alert("BottledWater 포트를 입력하여 주십시오.");
+			bportno.focus();
+			return false;
+		}
+ 		if(!valid_numeric(bportno.value))
+	 	{
+ 			alert("포트는 숫자만 입력가능합니다.");
+ 			bportno.focus();
+		 	return false;
+		}
+	
+ 		return true;		
+	}
+	
+	
+	/* 저장버튼 클릭시 */
 	function fn_insert() {
+		if (!fn_transferValidation()) return false;	
 		$.ajax({
 			url : '/insertTransferSetting.do',
 			type : 'post',
 			data : {
-				ipadr : $("#ipadr").val(),
-				portno : $("#portno").val()
+ 				ipadrs : $("#kbipadr").val()+","+$("#sripadr").val()+","+$("#zipadr").val()+","+$("#bipadr").val(),
+ 				portnos : $("#kbportno").val()+","+$("#srportno").val()+","+$("#zportno").val()+","+$("#bportno").val(),
 			},
 			success : function(result) {
 				alert("저장하였습니다.");
@@ -69,23 +160,23 @@
 				</tr>
 				<tr>
 					<td align="center" class="listtd">kafka Broker</td>
-					<td align="center" class="listtd"><input type="text" name="ipadr" id="ipadr"></td>
-					<td align="center" class="listtd"><input type="text" name="portno" id="portno"></td>
+					<td align="center" class="listtd"><input type="text" name="kbipadr" id="kbipadr"></td>
+					<td align="center" class="listtd"><input type="text" name="kbportno" id="kbportno"></td>
 				</tr>
 				<tr>
 					<td align="center" class="listtd">schema registry</td>
-					<td align="center" class="listtd"><input type="text" name="ipadr" id="ipadr"></td>
-					<td align="center" class="listtd"><input type="text" name="portno" id="portno"></td>
+					<td align="center" class="listtd"><input type="text" name="sripadr" id="sripadr"></td>
+					<td align="center" class="listtd"><input type="text" name="srportno" id="srportno"></td>
 				</tr>
 				<tr>
 					<td align="center" class="listtd">zookeeper</td>
-					<td align="center" class="listtd"><input type="text" name="ipadr" id="ipadr"></td>
-					<td align="center" class="listtd"><input type="text" name="portno" id="portno"></td>
+					<td align="center" class="listtd"><input type="text" name="zipadr" id="zipadr"></td>
+					<td align="center" class="listtd"><input type="text" name="zportno" id="zportno"></td>
 				</tr>
 				<tr>
 					<td align="center" class="listtd">BottledWater</td>
-					<td align="center" class="listtd"><input type="text" name="ipadr" id="ipadr"></td>
-					<td align="center" class="listtd"><input type="text" name="portno" id="portno"></td>
+					<td align="center" class="listtd"><input type="text" name="bipadr" id="bipadr"></td>
+					<td align="center" class="listtd"><input type="text" name="bportno" id="bportno"></td>
 				</tr>
 			</table>
 		</div>
@@ -97,10 +188,6 @@
 				<li><span class="btn_blue_l"> 
 				<a href="#" onclick="fn_insert()">저장</a> 
 				<img src="<c:url value='/images/egovframework/example/btn_bg_r.gif'/>"alt="" />
-				</span></li>
-				<li><span class="btn_blue_l"> 
-				<a href="#">취소</a> 
-				<img src="<c:url value='/images/egovframework/example/btn_bg_r.gif'/>" alt="" />
 				</span></li>
 			</ul>
 		</div>

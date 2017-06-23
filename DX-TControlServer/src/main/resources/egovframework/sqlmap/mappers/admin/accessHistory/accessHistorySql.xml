@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper   PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="accessHistorySql">
+
+	<select id="selectAccessHistory" resultType="historyVO">
+		/**
+		* Query ID : selectAccessHistory
+		* Description : 접근내역 조회
+		* Author : 김주영
+		**/
+		SELECT
+		  (ROW_NUMBER() OVER()) AS ROWNUM
+		, (ROW_NUMBER() OVER()) AS IDX
+		, A.EXEDTM_DATE
+		, A.EXEDTM_HOUR
+		, A.SYS_CD_NM
+		, A.USR_ID
+		, A.USR_NM
+		, A.DEPT_NM
+		, A.PST_NM
+		, A.LGI_IPADR
+		FROM(
+			SELECT 
+				  TO_CHAR(G.EXEDTM,'YYYY-MM-DD')EXEDTM_DATE
+				, TO_CHAR(G.EXEDTM,'HH24:MI')EXEDTM_HOUR
+				, C.SYS_CD_NM
+				, G.USR_ID
+				, I.USR_NM
+				, I.DEPT_NM
+				, I.PST_NM
+				, G.LGI_IPADR
+			FROM T_SYSWRK_G G, T_SYSDTL_C C, T_USR_I I
+			WHERE G.EXE_DTL_CD =C.SYS_CD
+			AND G.USR_ID=I.USR_ID
+			<if test="lgi_dtm_start != null and lgi_dtm_start != '' ">
+				AND to_char(G.EXEDTM,'MM/DD/YYYY') between #{lgi_dtm_start} and #{lgi_dtm_end}
+			</if>
+			<if test="usr_nm != null and usr_nm != '' ">
+				AND I.USR_NM LIKE #{usr_nm}
+			</if>
+			ORDER BY EXEDTM DESC
+			)A
+	</select>
+	
+	<insert id="insertHistory" parameterType="historyVO">
+		/**
+		* Query ID : insertHistory
+		* Description : 화면접근 이력 등록
+		* Author : 김주영
+		**/
+
+		INSERT INTO T_SYSWRK_G
+		(
+		  WRK_SN
+		, USR_ID
+		, EXE_DTL_CD
+		, EXEDTM
+		, LGI_IPADR
+		)
+		VALUES
+		(
+		  nextval('q_syswrk_g_01')
+		, #{usr_id}
+		, #{exe_dtl_cd}
+		, clock_timestamp()
+		, #{lgi_ipadr}
+		)
+	</insert>	
+</mapper>

@@ -14,7 +14,7 @@ import com.k4m.dx.tcontrol.sample.service.SampleListVO;
 @Service("sampleListServiceImpl")
 public class SampleListServiceImpl implements SampleListService{
 
-	@Resource(name = "SampleListDAO")
+	@Resource(name = "sampleListDAO")
 	private SampleListDAO sampleListDAO;
 	
 	public List<SampleListVO> selectSampleList(PagingVO searchVO) throws Exception {

@@ -13,7 +13,7 @@ import com.k4m.dx.tcontrol.sample.service.SampleListVO;
 @Service("sampleDatatableServiceImpl")
 public class SampleDatatableServiceImpl implements SampleDatatableService{
 
-	@Resource(name = "SampleDatatableDAO")
+	@Resource(name = "sampleDatatableDAO")
 	private SampleDatatableDAO sampleDatatableDAO;
 	
 	public List<SampleListVO> selectSampleDatatableList() throws Exception {

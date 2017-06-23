@@ -1,12 +1,9 @@
-<?xml version="1.0" encoding="UTF-8" ?>
-<!DOCTYPE sqlMap
-    PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN"
-    "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper   PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
-<sqlMap namespace="dbserverManagerSql">
-	<typeAlias alias="dbServerVO" type="com.k4m.dx.tcontrol.admin.dbserverManager.service.DbServerVO" />
+<mapper namespace="dbserverManagerSql">
 
-	<select id="selectDbServerList" resultClass="dbServerVO">
+	<select id="selectDbServerList" resultType="dbServerVO">
 		/**
 	 	*  Query ID : selectDbServerList
 	 	* Description : DB서버 리스트 조회
@@ -42,21 +39,22 @@
                 , LST_MDF_DTM
           FROM T_DBSVR_I	
           WHERE 1 = 1
-	      <isNotEmpty property="db_svr_nm">
-	      AND DB_SVR_NM LIKE '%' || #db_svr_nm# || '%'
-	      </isNotEmpty>
-	      <isNotEmpty property="ipadr">
-	      AND IPADR LIKE '%' || #ipadr# || '%'
-	      </isNotEmpty>
-	      <isNotEmpty property="dft_db_nm">
-	      AND DFT_DB_NM LIKE  '%' || #dft_db_nm# || '%'
-	      </isNotEmpty>          
+          
+	      <if test="db_svr_nm != null and db_svr_nm != '' ">
+	      AND DB_SVR_NM LIKE '%' || #{db_svr_nm} || '%'
+	      </if>	     
+	      <if test="ipadr != null and ipadr != '' ">
+	      AND IPADR LIKE '%' || #{ipadr} || '%'
+	      </if>	      
+	      <if test="dft_db_nm != null and dft_db_nm != '' ">
+	      AND DFT_DB_NM LIKE  '%' || #{dft_db_nm} || '%'
+	      </if>         
           ORDER BY DB_SVR_ID
       ) A		
     </select>
     
     
-    <insert id="insertDbServer" parameterClass="dbServerVO">
+    <insert id="insertDbServer" parameterType="dbServerVO">
     	/**
 	 	*  Query ID : insertDbServer
 	 	* Description : insertDbServer 등록
@@ -80,16 +78,16 @@
 		VALUES
 		(
 			  nextval('q_dbsvr_i_01')
-			, #db_svr_nm#
-			, #ipadr#
-			, #portno#
-			, #dft_db_nm#
-			, #svr_spr_usr_id#
-			, #svr_spr_scm_pwd#
-			, #frst_regr_id#
+			, #{db_svr_nm}
+			, #{ipadr}
+			, #{portno}
+			, #{dft_db_nm}
+			, #{svr_spr_usr_id}
+			, #{svr_spr_scm_pwd}
+			, #{frst_regr_id}
 			, clock_timestamp()
-			, #lst_mdfr_id#
+			, #{lst_mdfr_id}
 			, clock_timestamp()	
 		)
 	</insert>    
-</sqlMap>
+</mapper>

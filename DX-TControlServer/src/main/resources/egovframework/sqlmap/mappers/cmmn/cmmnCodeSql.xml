@@ -1,14 +1,9 @@
-<?xml version="1.0" encoding="UTF-8" ?>
-<!DOCTYPE sqlMap
-    PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN"
-    "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper   PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
-<sqlMap namespace="cmmnCodeSQL">
-
-	<typeAlias alias="pageVO" type="com.k4m.dx.tcontrol.common.service.PageVO"/>
-	<typeAlias alias="cmmnCodeVO" type="com.k4m.dx.tcontrol.common.service.CmmnCodeVO"/>
-
-	<select id="selectCmmnCodeList" parameterClass="pageVO" resultClass="cmmnCodeVO">
+<mapper namespace="cmmnCodeSQL">
+   
+	<select id="selectCmmnCodeList" parameterType="pageVO" resultType="cmmnCodeVO">
 		/**
 	 	* Query ID : selectCmmnCodeList
 	 	* Description : 공통코드 조회
@@ -28,11 +23,11 @@
 	      , LST_MDF_DTM 
       FROM T_SYSGRP_C
       WHERE 1=1	
-      LIMIT #recordCountPerPage# OFFSET #firstIndex#
+      LIMIT #{recordCountPerPage} OFFSET #{firstIndex}
     </select>
     
     
-   	<select id="selectCmmnCodeListTotCnt" parameterClass="pageVO" resultClass="int">
+   	<select id="selectCmmnCodeListTotCnt" parameterType="pageVO" resultType="int">
     	/**
 	 	* Query ID : selectCmmnCodeListTotCnt
 	 	* Description : 공통코드 갯수 조회
@@ -45,7 +40,7 @@
 	</select>
 	
 	
-	  <insert id="insertCmmnCode" parameterClass="cmmnCodeVO">
+	  <insert id="insertCmmnCode" parameterType="cmmnCodeVO">
     	/**
 	 	* Query ID : insertCmmnCode
 	 	* Description : 공통코드 등록
@@ -65,18 +60,18 @@
 		) 
 		VALUES
 		(
-			  #grp_cd#
-			, #grp_cd_nm#
-			, #grp_cd_exp#
-			, #use_yn#
-			, #usr_id#
+			  #{grp_cd}
+			, #{grp_cd_nm}
+			, #{grp_cd_exp}
+			, #{use_yn}
+			, #{usr_id}
 			, clock_timestamp()
-			, #usr_id#
+			, #{usr_id}
 			, clock_timestamp()
 		)
 	</insert>
 	
-	<select id="selectCmmnCodeDetailList" parameterClass="cmmnCodeVO" resultClass="cmmnCodeVO">
+	<select id="selectCmmnCodeDetailList" parameterType="cmmnCodeVO" resultType="cmmnCodeVO">
 		/**
 	 	* Query ID : selectCmmnCodeDetailList
 	 	* Description : 공통코드 상세 조회
@@ -96,11 +91,11 @@
 	      , LST_MDF_DTM 
       FROM T_SYSGRP_C
       WHERE 1=1
-      AND GRP_CD = #grp_cd#
+      AND GRP_CD = #{grp_cd}
     </select>
     
     
-    <update id="updateCmmnCode" parameterClass="cmmnCodeVO">
+    <update id="updateCmmnCode" parameterType="cmmnCodeVO">
    	    /**
 	 	* Query ID : updateCmmnCode
 	 	* Description : 공통코드 수정
@@ -109,16 +104,16 @@
 	 	
 		UPDATE T_SYSGRP_C
 		SET 
-	  	 	   GRP_CD_NM= #grp_cd_nm#
-		      , GRP_CD_EXP=#grp_cd_exp#
-		      , USE_YN=#use_yn#
-		      , LST_MDFR_ID=#usr_id#
+	  	 	   GRP_CD_NM= #{grp_cd_nm}
+		      , GRP_CD_EXP=#{grp_cd_exp}
+		      , USE_YN=#{use_yn}
+		      , LST_MDFR_ID=#{usr_id}
 		      , LST_MDF_DTM= clock_timestamp()
-		WHERE GRP_CD=#grp_cd#
+		WHERE GRP_CD=#{grp_cd}
 	</update> 
 	
 	
-    <delete id="deleteCmmnCode" parameterClass="cmmnCodeVO">
+    <delete id="deleteCmmnCode" parameterType="cmmnCodeVO">
        	/**
 	 	* Query ID : deleteCmmnCode
 	 	* Description : 공통코드 삭제
@@ -127,11 +122,11 @@
 	 	
 	  DELETE 
 	  FROM T_SYSGRP_C 
-	  WHERE GRP_CD=#grp_cd#
+	  WHERE GRP_CD=#{grp_cd}
 	</delete>
 	
 	
-		<select id="cmmnCodeSearch" parameterClass="pageVO" resultClass="cmmnCodeVO">
+		<select id="cmmnCodeSearch" parameterType="pageVO" resultType="cmmnCodeVO">
 			/**
 		 	* Query ID : cmmnCodeSearch
 		 	* Description : 공통코드 검색 조회
@@ -150,21 +145,21 @@
 			      , LST_MDF_DTM 
 	      FROM T_SYSGRP_C
 	      WHERE 1=1
-	      <isEqual property="searchCondition" compareValue="0" > 
-	      </isEqual>
-	      <isEqual property="searchCondition" compareValue="1" > 
-	      AND GRP_CD like '%' || #searchKeyword# || '%'
-	      </isEqual>
-	      <isEqual property="searchCondition" compareValue="2" > 
-	      AND GRP_CD_NM like '%' || #searchKeyword# || '%'
-	      </isEqual>
+	      <if test='searchCondition == "0"'>
+	      </if>
+	      <if test='searchCondition == "1"'>
+	      AND GRP_CD like '%' || #{searchKeyword} || '%'
+	      </if>
+	      <if test='searchCondition == "2"'>
+	      AND GRP_CD_NM like '%' || #{searchKeyword} || '%'
+	      </if>
     	</select>	
 	
 	
 	
 	
 		<!-- 상세코드 쿼리 시작 -->
-		<select id="cmmnCodeDtlList" parameterClass="pageVO" resultClass="cmmnCodeVO">
+		<select id="cmmnCodeDtlList" parameterType="pageVO" resultType="cmmnCodeVO">
 			/**
 		 	* Query ID : cmmnCodeDtlList
 		 	* Description : 상세코드 조회
@@ -185,12 +180,12 @@
 	      FROM T_SYSGRP_C A, T_SYSDTL_C B
 	      WHERE 1=1
 	      AND A.GRP_CD = B.GRP_CD
-	      AND A.GRP_CD = #grp_cd#
-	      LIMIT #recordCountPerPage# OFFSET #firstIndex#
+	      AND A.GRP_CD = #{grp_cd}
+	      LIMIT #{recordCountPerPage} OFFSET #{firstIndex}
     	</select>
 
 
-	   	<select id="selectCmmnCodeDtlListTotCnt" parameterClass="pageVO" resultClass="int">
+	   	<select id="selectCmmnCodeDtlListTotCnt" parameterType="pageVO" resultType="int">
 	    	/**
 		 	* Query ID : selectCmmnCodeDtlListTotCnt
 		 	* Description : 상세코드 갯수 조회
@@ -200,11 +195,11 @@
 					COUNT(*) totcnt
 			FROM T_SYSDTL_C
 			WHERE 1=1
-			AND GRP_CD = #grp_cd#
+			AND GRP_CD = #{grp_cd}
 		</select>
 	
 	
-		<insert id="insertCmmnDtlCode" parameterClass="cmmnCodeVO">
+		<insert id="insertCmmnDtlCode" parameterType="cmmnCodeVO">
 	    	/**
 		 	* Query ID : insertCmmnDtlCode
 		 	* Description : 공통코드 등록
@@ -224,18 +219,18 @@
 			) 
 			VALUES
 			(
-				  #grp_cd#
-				, #sys_cd#
-				, #sys_cd_nm#
-				, #use_yn#
-				, #usr_id#
+				  #{grp_cd}
+				, #{sys_cd}
+				, #{sys_cd_nm}
+				, #{use_yn}
+				, #{usr_id}
 				, clock_timestamp()
-				, #usr_id#
+				, #{usr_id}
 				, clock_timestamp()
 			)
 		</insert>	
 		
-	    <delete id="deleteCmmnDtlCode" parameterClass="cmmnCodeVO">
+	    <delete id="deleteCmmnDtlCode" parameterType="cmmnCodeVO">
 	       	/**
 		 	* Query ID : deleteCmmnDtlCode
 		 	* Description : 상세코드 삭제
@@ -244,11 +239,11 @@
 		 	
 		  DELETE 
 		  FROM T_SYSDTL_C 
-		  WHERE SYS_CD=#sys_cd#
+		  WHERE SYS_CD=#{sys_cd}
 		</delete>		
 		
 		
-		<select id="cmmnDtlCodeSearch" parameterClass="pageVO" resultClass="cmmnCodeVO">
+		<select id="cmmnDtlCodeSearch" parameterType="pageVO" resultType="cmmnCodeVO">
 			/**
 		 	* Query ID : cmmnDtlCodeSearch
 		 	* Description : 상세코드 검색 조회
@@ -269,15 +264,15 @@
 	      FROM T_SYSGRP_C A, T_SYSDTL_C B
 	      WHERE 1=1
 	      AND A.GRP_CD = B.GRP_CD
-	      AND A.GRP_CD = #grp_cd#
-	       <isEqual property="searchCondition" compareValue="0" > 
-	      </isEqual>
-	      <isEqual property="searchCondition" compareValue="1" > 
-	      AND B.SYS_CD like '%' || #searchKeyword# || '%'
-	      </isEqual>
-	      <isEqual property="searchCondition" compareValue="2" > 
-	      AND B.SYS_CD_NM like '%' || #searchKeyword# || '%'
-	      </isEqual>
+	      AND A.GRP_CD = #{grp_cd}
+	      <if test='searchCondition == "0"'>
+		  </if>
+	      <if test='searchCondition == "1"'>
+	      AND B.SYS_CD like '%' || #{searchKeyword} || '%'
+	      </if>
+	      <if test='searchCondition == "2"'>
+	      AND B.SYS_CD_NM like '%' || #{searchKeyword} || '%'
+	      </if>
     	</select>
-		
-</sqlMap>
+    	
+</mapper>

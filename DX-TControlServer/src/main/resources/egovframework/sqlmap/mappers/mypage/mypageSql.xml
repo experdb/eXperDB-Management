@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper   PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="mypageSql">
+
+	<select id="selectDetailMyPage" resultType="userVO">
+		/**
+		* Query ID : selectDetailMyPage
+		* Description : mypage 상세조회
+		* Author : 김주영
+		**/
+		SELECT
+		  USR_ID
+		, USR_NM
+		, PWD
+		, BLN_NM
+		, DEPT_NM
+		, RSP_BSN_NM
+		, PST_NM
+		, AUT_ID
+		, CPN
+		, USR_EXPR_DT
+		, USE_YN
+		, FRST_REG_DTM
+		, LST_MDF_DTM
+		FROM T_USR_I
+		WHERE usr_id = #{usr_id}
+	</select>
+	
+	<update id="updateMypage" parameterType="userVO">
+		/**
+		* Query ID : updateMypage
+		* Description : 개인정보 수정
+		* Author : 김주영
+		**/
+ 		UPDATE T_USR_I
+		SET 
+		  USR_NM=#{usr_nm}
+		, BLN_NM=#{bln_nm}
+		, DEPT_NM=#{dept_nm}
+		, RSP_BSN_NM=#{rsp_bsn_nm}
+		, PST_NM=#{pst_nm}
+		, CPN=#{cpn}
+		, LST_MDFR_ID=#{lst_mdfr_id}
+		, LST_MDF_DTM= clock_timestamp()
+		WHERE usr_id = #{usr_id}
+	</update>	
+
+</mapper>
