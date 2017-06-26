@@ -178,7 +178,7 @@
 		$("#lgi_dtm_end").val(lgi_dtm_end);
 		$("#user_nm").val(usr_nm);
 
-		form.action = "/accessHistory_data_JxlExportExcel.do";
+		form.action = "/accessHistory_Excel.do";
 		form.submit();
 		return;
 	}

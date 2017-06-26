@@ -27,7 +27,10 @@
 	</definition>
 	<definition name="backup/*" extends="default">
 		<put-attribute name="contents" value="/WEB-INF/view/backup/{1}.jsp" />
-	</definition>	
+	</definition>
+	<definition name="accessControl/*" extends="default">
+		<put-attribute name="contents" value="/WEB-INF/view/accessControl/{1}.jsp" />
+	</definition>		
 	<definition name="admin/dbServerManager/*" extends="default">
 		<put-attribute name="contents" value="/WEB-INF/view/admin/dbServerManager/{1}.jsp" />
 	</definition>	

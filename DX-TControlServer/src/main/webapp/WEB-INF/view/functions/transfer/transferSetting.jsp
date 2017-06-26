@@ -117,11 +117,31 @@
 	}
 	
 	
-	/* 저장버튼 클릭시 */
+	/* 저장버튼 클릭시(전송설정 값이 없는 경우) */
 	function fn_insert() {
 		if (!fn_transferValidation()) return false;	
 		$.ajax({
 			url : '/insertTransferSetting.do',
+			type : 'post',
+			data : {
+ 				ipadrs : $("#kbipadr").val()+","+$("#sripadr").val()+","+$("#zipadr").val()+","+$("#bipadr").val(),
+ 				portnos : $("#kbportno").val()+","+$("#srportno").val()+","+$("#zportno").val()+","+$("#bportno").val(),
+			},
+			success : function(result) {
+				alert("저장하였습니다.");
+				window.location.reload();
+			},
+			error : function(request, status, error) {
+				 alert("실패");
+			}
+		});
+	}
+	
+	/* 저장버튼 클릭시(전송설정 값이 있는 경우) */
+	function fn_update() {
+		if (!fn_transferValidation()) return false;	
+		$.ajax({
+			url : '/updateTransferSetting.do',
 			type : 'post',
 			data : {
  				ipadrs : $("#kbipadr").val()+","+$("#sripadr").val()+","+$("#zipadr").val()+","+$("#bipadr").val(),
@@ -135,6 +155,48 @@
 			}
 		});
 	}
+	
+	$(window.document).ready(function() {
+		$.ajax({
+			url : "/selectTransferSetting.do",
+			data : {},
+			dataType : "json",
+			type : "post",
+			error : function(xhr, status, error) {
+				alert("실패")
+			},
+			success : function(data) {
+ 				var cnt = data.length;
+ 				if(cnt==0){
+ 					$('<button onclick="fn_insert()"></button>').text('저장').appendTo('#sysbtn');
+ 				}else{
+ 				   $('<button onclick="fn_update()"></button>').text('저장').appendTo('#sysbtn');
+		            for (var i = 0; i < cnt; i++) {
+		            	var trf_svr_nm = data[i].trf_svr_nm;
+		            	var ipadr = data[i].ipadr;
+		            	var portno = data[i].portno;
+	 	            	if(trf_svr_nm=='kafka Broker'){
+	 	            		 $("#kbipadr").val(ipadr);
+	 	            		 $("#kbportno").val(portno);
+	 	            	}
+	 	            	if(trf_svr_nm=='schema registry'){
+		            		 $("#sripadr").val(ipadr);
+	 	            		 $("#srportno").val(portno);	            		
+	 	            	}
+	 	            	if(trf_svr_nm=='zookeeper'){
+		            		 $("#zipadr").val(ipadr);
+	 	            		 $("#zportno").val(portno);	            		
+	 	            	}
+	 	            	if(trf_svr_nm=='BottledWater'){
+		            		 $("#bipadr").val(ipadr);
+	 	            		 $("#bportno").val(portno);	            		
+	 	            	}
+		            }
+ 				}
+			}
+		});
+	});
+	
 </script>
 <body>
 	<div id="content_pop">
@@ -183,13 +245,7 @@
 		<!-- // 리스트 -->
 
 		<!-- //등록버튼 -->
-		<div id="sysbtn" style="text-align: center;">
-			<ul>
-				<li><span class="btn_blue_l"> 
-				<a href="#" onclick="fn_insert()">저장</a> 
-				<img src="<c:url value='/images/egovframework/example/btn_bg_r.gif'/>"alt="" />
-				</span></li>
-			</ul>
+		<div id="sysbtn">
 		</div>
 
 	</div>

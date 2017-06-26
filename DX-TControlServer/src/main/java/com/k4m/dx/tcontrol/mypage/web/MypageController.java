@@ -1,6 +1,8 @@
 package com.k4m.dx.tcontrol.mypage.web;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
@@ -14,6 +16,7 @@ import org.springframework.web.servlet.ModelAndView;
 
 import com.k4m.dx.tcontrol.admin.accesshistory.service.AccessHistoryService;
 import com.k4m.dx.tcontrol.cmmn.CmmnUtils;
+import com.k4m.dx.tcontrol.cmmn.SHA256;
 import com.k4m.dx.tcontrol.common.service.HistoryVO;
 import com.k4m.dx.tcontrol.login.service.UserVO;
 import com.k4m.dx.tcontrol.mypage.service.MyPageService;
@@ -84,6 +87,35 @@ public class MypageController {
 
 	}
 	
+
+	/**
+	 * 개인정보수정
+	 * 
+	 * @param userVo
+	 * @param historyVO
+	 * @param request
+	 * @return
+	 * @throws Exception
+	 */
+	@RequestMapping(value = "/updateMypage.do")
+	public @ResponseBody void updateMypage(@ModelAttribute("userVo") UserVO userVo,@ModelAttribute("historyVO") HistoryVO historyVO,HttpServletRequest request) {
+		try {
+			HttpSession session = request.getSession();
+			String usr_id = (String)session.getAttribute("usr_id");
+			userVo.setLst_mdfr_id(usr_id);
+			
+			myPageService.updateMypage(userVo);
+			
+			//개인정보수정 이력 남기기
+			CmmnUtils.saveHistory(request, historyVO);
+			historyVO.setExe_dtl_cd("DX-T0042_01");
+			accessHistoryService.insertHistory(historyVO);
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+	
 	
 	/**
 	 * 패스워드변경 팝업을 보여준다.
@@ -107,9 +139,38 @@ public class MypageController {
 		}
 		return mv;
 	}
-
+	
+	
 	/**
-	 * 개인정보수정
+	 * 패스워드를 체크한다.
+	 * 
+	 * @param request
+	 */
+	@RequestMapping(value = "/checkPwd.do")
+	public @ResponseBody boolean checkPwd(HttpServletRequest request) {
+		try {
+			Map<String, Object> param = new HashMap<String, Object>();
+			HttpSession session = request.getSession();
+			String usr_id = (String) session.getAttribute("usr_id");
+			String nowpwd = SHA256.SHA256(request.getParameter("nowpwd"));
+			param.put("usr_id", usr_id);
+			param.put("nowpwd", nowpwd);
+			
+			List<Map<String, Object>> list = myPageService.selectPwd(param);
+			if(list.size()==1){
+				return true;
+			}else{
+				return false;
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return false;
+	}
+	
+	
+	/**
+	 * 패스워드를 변경한다.
 	 * 
 	 * @param userVo
 	 * @param historyVO
@@ -117,18 +178,19 @@ public class MypageController {
 	 * @return
 	 * @throws Exception
 	 */
-	@RequestMapping(value = "/updateMypage.do")
-	public @ResponseBody void updateMypage(@ModelAttribute("userVo") UserVO userVo,@ModelAttribute("historyVO") HistoryVO historyVO,HttpServletRequest request) {
+	@RequestMapping(value = "/updatePwd.do")
+	public @ResponseBody void updatePwd(@ModelAttribute("userVo") UserVO userVo,@ModelAttribute("historyVO") HistoryVO historyVO,HttpServletRequest request) {
 		try {
 			HttpSession session = request.getSession();
 			String usr_id = (String)session.getAttribute("usr_id");
+			userVo.setUsr_id(usr_id);
 			userVo.setLst_mdfr_id(usr_id);
+			userVo.setPwd(SHA256.SHA256(userVo.getPwd()));
+			myPageService.updatePwd(userVo);
 			
-			myPageService.updateMypage(userVo);
-			
-			//개인정보수정 이력 남기기
+			//패스워드변경 이력 남기기
 			CmmnUtils.saveHistory(request, historyVO);
-			historyVO.setExe_dtl_cd("DX-T0042_01");
+			historyVO.setExe_dtl_cd("DX-T0043_01");
 			accessHistoryService.insertHistory(historyVO);
 			
 		} catch (Exception e) {

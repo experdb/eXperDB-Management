@@ -88,13 +88,13 @@ public class UserManagerController {
 			CmmnUtils.saveHistory(request, historyVO);
 			
 			if(act.equals("i")){
-				// 사용자등록 이력 남기기
+				// 사용자등록 화면 이력 남기기
 				historyVO.setExe_dtl_cd("DX-T0032");
 				accessHistoryService.insertHistory(historyVO);			
 			}
 
 			if(act.equals("u")){
-				// 사용자수정 이력 남기기
+				// 사용자수정 화면 이력 남기기
 				historyVO.setExe_dtl_cd("DX-T0033");
 				accessHistoryService.insertHistory(historyVO);
 							
@@ -133,8 +133,13 @@ public class UserManagerController {
 	 * @throws Exception
 	 */
 	@RequestMapping(value = "/insertUserManager.do")
-	public String insertUserManager(@ModelAttribute("userVo") UserVO userVo,HttpServletRequest request) {
+	public String insertUserManager(@ModelAttribute("userVo") UserVO userVo,HttpServletRequest request,@ModelAttribute("historyVO") HistoryVO historyVO) {
 		try {		
+			// 사용자 등록 이력 남기기
+			CmmnUtils.saveHistory(request, historyVO);
+			historyVO.setExe_dtl_cd("DX-T0032_01");
+			accessHistoryService.insertHistory(historyVO);
+			
 			//패스워드 암호화
 			userVo.setPwd(SHA256.SHA256(userVo.getPwd()));
 			
@@ -161,8 +166,13 @@ public class UserManagerController {
 	 * @throws Exception
 	 */
 	@RequestMapping(value = "/updateUserManager.do")
-	public String updateUserManager(@ModelAttribute("userVo") UserVO userVo,HttpServletRequest request) {
+	public String updateUserManager(@ModelAttribute("userVo") UserVO userVo,@ModelAttribute("historyVO") HistoryVO historyVO,HttpServletRequest request) {
 		try {
+			// 사용자 수정 이력 남기기
+			CmmnUtils.saveHistory(request, historyVO);
+			historyVO.setExe_dtl_cd("DX-T0033_01");
+			accessHistoryService.insertHistory(historyVO);
+			
 			//패스워드 암호화
 			userVo.setPwd(SHA256.SHA256(userVo.getPwd()));
 			

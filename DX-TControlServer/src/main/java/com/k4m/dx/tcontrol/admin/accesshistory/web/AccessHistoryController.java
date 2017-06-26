@@ -71,9 +71,14 @@ public class AccessHistoryController {
 	 */
 	@RequestMapping(value = "/selectAccessHistory.do")
 	@ResponseBody
-	public List<UserVO> selectAccessHistory(HttpServletRequest request) {
+	public List<UserVO> selectAccessHistory(@ModelAttribute("historyVO") HistoryVO historyVO, HttpServletRequest request) {
 		List<UserVO> resultSet = null;
-		try {
+		try {		
+			// 화면접근이력 조회 이력 남기기
+			CmmnUtils.saveHistory(request, historyVO);
+			historyVO.setExe_dtl_cd("DX-T0036_02");
+			accessHistoryService.insertHistory(historyVO);
+			
 			Map<String, Object> param = new HashMap<String, Object>();
 
 			String lgi_dtm_start = request.getParameter("lgi_dtm_start");
@@ -98,11 +103,16 @@ public class AccessHistoryController {
 	 * @param request
 	 * @throws Exception
 	 */
-	@RequestMapping("/accessHistory_data_JxlExportExcel.do")
-	public ModelAndView accessHistory_data_JxlExportExcel(HttpServletRequest request) throws Exception {
+	@RequestMapping("/accessHistory_Excel.do")
+	public ModelAndView accessHistory_Excel(@ModelAttribute("historyVO") HistoryVO historyVO, HttpServletRequest request) throws Exception {
 		List<UserVO> resultSet = null;
 		Map<String, Object> param = new HashMap<String, Object>();
 		try {
+			//화면접근이력 엑셀저장 이력 남기기
+			CmmnUtils.saveHistory(request, historyVO);
+			historyVO.setExe_dtl_cd("DX-T0036_01");
+			accessHistoryService.insertHistory(historyVO);
+			
 			String lgi_dtm_start = request.getParameter("lgi_dtm_start");
 			String lgi_dtm_end = request.getParameter("lgi_dtm_end");
 			String usr_nm = request.getParameter("usr_nm");

@@ -68,6 +68,26 @@ public class TransferController {
 	}
 
 	/**
+	 * 전송설정 조회한다.
+	 * 
+	 * @param request
+	 * @return resultSet
+	 * @throws Exception
+	 */
+	@RequestMapping(value = "/selectTransferSetting.do")
+	public @ResponseBody List<TransferVO> selectTransferSetting(HttpServletRequest request) {
+		List<TransferVO> resultSet = null;
+		try {
+			HttpSession session = request.getSession();
+			String usr_id = (String) session.getAttribute("usr_id");
+			resultSet = transferService.selectTransferSetting(usr_id);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return resultSet;
+	}
+	
+	/**
 	 * 전송설정 등록한다.
 	 * 
 	 * @param transferVO
@@ -78,7 +98,7 @@ public class TransferController {
 	@RequestMapping(value = "/insertTransferSetting.do")
 	public @ResponseBody void insertTransferSetting(@ModelAttribute("transferVO") TransferVO transferVO,@ModelAttribute("historyVO") HistoryVO historyVO,HttpServletRequest request) {
 		try {
-			System.out.println("전송설정정보 등록!");
+			System.out.println("*********전송설정정보 등록*********");
 			HttpSession session = request.getSession();
 			String usr_id = (String) session.getAttribute("usr_id");
 			transferVO.setFrst_regr_id(usr_id);
@@ -89,7 +109,7 @@ public class TransferController {
 			String [] portnos = request.getParameter("portnos").toString().split(",");
 			
 			for (int i = 0; i < servername.length; i++) {
-				System.out.println(servername[i]+" ip : "+ipadrs[i]+" port : "+Integer.parseInt(portnos[i]));
+				System.out.println("*"+servername[i]+" *ip : "+ipadrs[i]+" *port : "+Integer.parseInt(portnos[i]));
 				transferVO.setTrf_svr_nm(servername[i]);
 				transferVO.setIpadr(ipadrs[i]);
 				transferVO.setPortno(Integer.parseInt(portnos[i]));
@@ -106,6 +126,44 @@ public class TransferController {
 		}
 	}
 
+	/**
+	 * 전송설정 수정한다.
+	 * 
+	 * @param transferVO
+	 * @param request
+	 * @return
+	 * @throws Exception
+	 */
+	@RequestMapping(value = "/updateTransferSetting.do")
+	public @ResponseBody void updateTransferSetting(@ModelAttribute("transferVO") TransferVO transferVO,@ModelAttribute("historyVO") HistoryVO historyVO,HttpServletRequest request) {
+		try {
+			System.out.println("*********전송설정정보 수정*********");
+			HttpSession session = request.getSession();
+			String usr_id = (String) session.getAttribute("usr_id");
+			transferVO.setLst_mdfr_id(usr_id);
+			
+			String [] servername = {"kafka Broker","schema registry","zookeeper","BottledWater"};
+			String[] ipadrs = request.getParameter("ipadrs").toString().split(",");
+			String [] portnos = request.getParameter("portnos").toString().split(",");
+			
+			for (int i = 0; i < servername.length; i++) {
+				System.out.println("*"+servername[i]+" *ip : "+ipadrs[i]+" *port : "+Integer.parseInt(portnos[i]));
+				transferVO.setTrf_svr_nm(servername[i]);
+				transferVO.setIpadr(ipadrs[i]);
+				transferVO.setPortno(Integer.parseInt(portnos[i]));
+				transferService.updateTransferSetting(transferVO);
+			}
+			
+			// 전송설정 저장 이력 남기기
+			CmmnUtils.saveHistory(request, historyVO);
+			historyVO.setExe_dtl_cd("DX-T0011_01");
+			accessHistoryService.insertHistory(historyVO);
+				
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+	
 	/**
 	 * Connector 등록 화면을 보여준다.
 	 * 
@@ -139,9 +197,14 @@ public class TransferController {
 	 * @throws Exception
 	 */
 	@RequestMapping(value = "/selectConnectorRegister.do")
-	public @ResponseBody List<ConnectorVO> selectConnectorRegister(HttpServletRequest request) {
+	public @ResponseBody List<ConnectorVO> selectConnectorRegister(@ModelAttribute("historyVO") HistoryVO historyVO, HttpServletRequest request) {
 		List<ConnectorVO> resultSet = null;
 		try {
+			// Connector 조회 이력 남기기
+			CmmnUtils.saveHistory(request, historyVO);
+			historyVO.setExe_dtl_cd("DX-T0012_01");
+			accessHistoryService.insertHistory(historyVO);					
+			
 			Map<String, Object> param = new HashMap<String, Object>();
 
 			String cnr_nm = request.getParameter("cnr_nm");

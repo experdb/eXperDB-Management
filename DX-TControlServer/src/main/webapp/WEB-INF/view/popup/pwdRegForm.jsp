@@ -20,6 +20,7 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <title>패스워드변경 팝업</title>
+<script src="/js/jquery/jquery-1.12.4.js" type="text/javascript"></script>
 <script>
 	/*Validation*/
 	function fn_pwdValidation(){
@@ -51,9 +52,42 @@
 	/*확인버튼 클릭시*/
 	function fn_update(){
 		if (!fn_pwdValidation()) return false;
+		$.ajax({
+			url : '/checkPwd.do',
+			type : 'post',
+			data : {
+				nowpwd : $("#nowpwd").val()
+			},
+			success : function(result) {
+				if(result){
+					$.ajax({
+						url : '/updatePwd.do',
+						type : 'post',
+						data : {
+							pwd : $("#pwd").val()
+						},
+						success : function(result) {
+							alert("저장하였습니다.");
+							window.close();
+						},
+						error : function(request, status, error) {
+							alert("실패");
+						}
+					});
+				}
+				else{
+					alert("현재 비밀번호가 틀렸습니다.");
+				}
+
+			},
+			error : function(request, status, error) {
+				alert("실패");
+			}
+		});
 		
 	}
 </script>
+
 </head>
 <body>
 	<h4>비밀번호변경</h4>

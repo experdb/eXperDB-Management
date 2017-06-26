@@ -3,6 +3,64 @@
 
 <mapper namespace="transferSql">
 
+	<select id="selectTransferSetting" resultType="transferVO">
+		/**
+	 	* Query ID : selectTransferSetting
+	 	* Description : 전송설정 조회
+	 	* Author : 김주영
+	 	**/
+		SELECT 
+		  TRF_CNG_ID
+		, TRF_SVR_NM
+		, IPADR,PORTNO 
+		FROM T_TRFCNG_I
+		WHERE FRST_REGR_ID = #{usr_id} 
+    </select>
+    
+	<insert id="insertTransferSetting" parameterType="transferVO">
+		/**
+		* Query ID : insertTransferSetting
+		* Description : 전송설정 등록
+		* Author : 김주영
+		**/
+		INSERT INTO T_TRFCNG_I(
+		  TRF_CNG_ID
+		, TRF_SVR_NM
+		, IPADR
+		, PORTNO
+		, FRST_REGR_ID
+		, FRST_REG_DTM
+		, LST_MDFR_ID
+		, LST_MDF_DTM
+		) 
+		VALUES(         
+		  nextval('q_trfcng_i_01')
+		, #{trf_svr_nm}
+		, #{ipadr}
+		, #{portno}
+		, #{frst_regr_id}
+		, clock_timestamp()
+		, #{lst_mdfr_id}
+		, clock_timestamp()
+		)	
+	</insert>
+
+	<update id="updateTransferSetting" parameterType="transferVO">
+		/**
+		* Query ID : updateTransferSetting
+		* Description : 전송설정 업데이트
+		* Author : 김주영
+		**/	
+		UPDATE T_TRFCNG_I
+		SET
+		  IPADR = #{ipadr}
+		, PORTNO = #{portno}
+		, LST_MDFR_ID = #{lst_mdfr_id}
+		, LST_MDF_DTM = clock_timestamp()
+		WHERE FRST_REGR_ID = #{lst_mdfr_id}
+		AND TRF_SVR_NM= #{trf_svr_nm}
+	</update>
+	
 	<select id="selectConnectorRegister" resultType="connectorVO">
 		/**
 	 	* Query ID : selectConnectorRegister
@@ -121,31 +179,4 @@
 		WHERE CNR_ID = #{cnr_id}			
 	</update>
 	
-	<insert id="insertTransferSetting" parameterType="transferVO">
-		/**
-		* Query ID : insertTransferSetting
-		* Description : 전송설정 등록
-		* Author : 김주영
-		**/
-		INSERT INTO T_TRFCNG_I(
-		  TRF_CNG_ID
-		, TRF_SVR_NM
-		, IPADR
-		, PORTNO
-		, FRST_REGR_ID
-		, FRST_REG_DTM
-		, LST_MDFR_ID
-		, LST_MDF_DTM
-		) 
-		VALUES(         
-		  nextval('q_trfcng_i_01')
-		, #{trf_svr_nm}
-		, #{ipadr}
-		, #{portno}
-		, #{frst_regr_id}
-		, clock_timestamp()
-		, #{lst_mdfr_id}
-		, clock_timestamp()
-		)	
-	</insert>
 </mapper>

@@ -24,7 +24,7 @@
 		, FRST_REG_DTM
 		, LST_MDF_DTM
 		FROM T_USR_I
-		WHERE usr_id = #{usr_id}
+		WHERE USR_ID = #{usr_id}
 	</select>
 	
 	<update id="updateMypage" parameterType="userVO">
@@ -43,7 +43,33 @@
 		, CPN=#{cpn}
 		, LST_MDFR_ID=#{lst_mdfr_id}
 		, LST_MDF_DTM= clock_timestamp()
-		WHERE usr_id = #{usr_id}
+		WHERE USR_ID = #{usr_id}
 	</update>	
 
+	<select id="selectPwd" resultType="userVO">
+		/**
+		* Query ID : selectPwd
+		* Description : 현재 비밀번호 조회
+		* Author : 김주영
+		**/
+		SELECT
+		PWD
+		FROM T_USR_I
+		WHERE USR_ID = #{usr_id}
+		AND PWD = #{nowpwd}
+	</select>
+	
+	<update id="updatePwd" parameterType="userVO">
+		/**
+		* Query ID : updatePwd
+		* Description : 비밀번호 업데이트
+		* Author : 김주영
+		**/
+ 		UPDATE T_USR_I
+		SET 
+		  PWD=#{pwd}
+		, LST_MDFR_ID=#{lst_mdfr_id}
+		, LST_MDF_DTM= clock_timestamp()
+		WHERE USR_ID = #{usr_id}
+	</update>	
 </mapper>

@@ -14,6 +14,43 @@ import egovframework.rte.psl.dataaccess.EgovAbstractMapper;
 @Repository("transferDAO")
 public class TransferDAO extends EgovAbstractMapper{
 	
+	
+	/**
+	 * 전송설정 조회
+	 * 
+	 * @param usr_id
+	 * @throws SQLException
+	 */
+	@SuppressWarnings({ "unchecked", "deprecation" })
+	public List<TransferVO> selectTransferSetting(String usr_id) {
+		List<TransferVO> result = null;
+		result = (List<TransferVO>) list("transferSql.selectTransferSetting",usr_id);
+		return result;
+	}
+	
+	
+	/**
+	 * 전송설정 등록
+	 * 
+	 * @param transferVO
+	 * @throws SQLException
+	 */
+	public void insertTransferSetting(TransferVO transferVO) throws SQLException {
+		insert("transferSql.insertTransferSetting", transferVO);
+	}
+	
+	
+	/**
+	 * 전송설정 등록
+	 * 
+	 * @param transferVO
+	 * @throws SQLException
+	 */
+	public void updateTransferSetting(TransferVO transferVO)throws SQLException {
+		update("transferSql.updateTransferSetting", transferVO);		
+	}	
+	
+	
 	/**
 	 * Connector 리스트 조회
 	 * 
@@ -78,15 +115,9 @@ public class TransferDAO extends EgovAbstractMapper{
 		delete("transferSql.updateConnectorRegister", connectorVO);	
 	}
 
-	
-	/**
-	 * 전송설정 등록
-	 * 
-	 * @param transferVO
-	 * @throws SQLException
-	 */
-	public void insertTransferSetting(TransferVO transferVO) throws SQLException {
-		insert("transferSql.insertTransferSetting", transferVO);
-	}
+
+
+
+
 
 }

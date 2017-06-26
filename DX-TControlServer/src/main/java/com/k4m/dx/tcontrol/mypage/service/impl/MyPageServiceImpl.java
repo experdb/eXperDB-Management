@@ -1,6 +1,7 @@
 package com.k4m.dx.tcontrol.mypage.service.impl;
 
 import java.util.List;
+import java.util.Map;
 
 import javax.annotation.Resource;
 
@@ -23,6 +24,16 @@ public class MyPageServiceImpl implements MyPageService{
 	@Override
 	public void updateMypage(UserVO userVo) throws Exception {
 		myPageDAO.updateMypage(userVo);
+	}
+
+	@Override
+	public List<Map<String, Object>> selectPwd(Map<String, Object> param) throws Exception {
+		return myPageDAO.selectPwd(param);
+	}
+
+	@Override
+	public void updatePwd(UserVO userVo) throws Exception {
+		myPageDAO.updatePwd(userVo);
 	}
 
 

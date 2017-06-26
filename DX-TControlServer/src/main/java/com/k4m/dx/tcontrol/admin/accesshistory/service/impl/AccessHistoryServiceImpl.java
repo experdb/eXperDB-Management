@@ -11,7 +11,7 @@ import com.k4m.dx.tcontrol.admin.accesshistory.service.AccessHistoryService;
 import com.k4m.dx.tcontrol.common.service.HistoryVO;
 import com.k4m.dx.tcontrol.login.service.UserVO;
 
-@Service("UserAccessServiceImpl")
+@Service("AccessHistoryServiceImpl")
 public class AccessHistoryServiceImpl implements AccessHistoryService{
 	
 	@Resource(name = "accessHistoryDAO")

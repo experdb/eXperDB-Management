@@ -16,6 +16,19 @@ public class TransferServiceImpl implements TransferService{
 	
 	@Resource(name = "transferDAO")
 	private TransferDAO transferDAO;
+
+	
+	public List<TransferVO> selectTransferSetting(String usr_id) throws Exception {
+		return transferDAO.selectTransferSetting(usr_id);
+	}
+	
+	public void insertTransferSetting(TransferVO transferVO) throws Exception {
+		transferDAO.insertTransferSetting(transferVO);	
+	}
+	
+	public void updateTransferSetting(TransferVO transferVO) throws Exception {
+		transferDAO.updateTransferSetting(transferVO);		
+	}
 	
 	public List<ConnectorVO> selectConnectorRegister(Map<String, Object> param) throws Exception {
 		return transferDAO.selectConnectorRegister(param);
@@ -38,9 +51,9 @@ public class TransferServiceImpl implements TransferService{
 	}
 
 
-	public void insertTransferSetting(TransferVO transferVO) throws Exception {
-		transferDAO.insertTransferSetting(transferVO);	
-	}
+
+
+
 
 
 

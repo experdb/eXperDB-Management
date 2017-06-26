@@ -6,6 +6,30 @@ import java.util.Map;
 public interface TransferService {
 	
 	/**
+	 * 전송설정 조회
+	 * @param usr_id
+	 * @return
+	 * @throws Exception
+	 */
+	List<TransferVO> selectTransferSetting(String usr_id) throws Exception;
+	
+	/**
+	 * 전송설정 등록
+	 * @param transferVO
+	 * @return
+	 * @throws Exception
+	 */
+	void insertTransferSetting(TransferVO transferVO) throws Exception;
+	
+	/**
+	 * 전송설정 수정
+	 * @param transferVO
+	 * @return
+	 * @throws Exception
+	 */
+	void updateTransferSetting(TransferVO transferVO) throws Exception;
+	
+	/**
 	 * Connector 리스트 조회
 	 * @param param 
 	 * @return
@@ -49,13 +73,7 @@ public interface TransferService {
 	 */
 	void updateConnectorRegister(ConnectorVO connectorVO)throws Exception;
 
-	
-	/**
-	 * 전송설정 등록
-	 * @param transferVO
-	 * @return
-	 * @throws Exception
-	 */
-	void insertTransferSetting(TransferVO transferVO)throws Exception;
+
+
 	
 }

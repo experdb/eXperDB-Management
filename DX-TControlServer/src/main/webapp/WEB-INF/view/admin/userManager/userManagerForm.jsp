@@ -44,7 +44,7 @@
 	var act = "${act}";
 	
 	//등록버튼 클릭시
-	function fn_create() {
+	function fn_insert() {
 		var strid = document.getElementById('usr_id');
 		var strnm = document.getElementById('usr_nm');
 		var strpwd1 = document.getElementById('pwd1');
@@ -240,7 +240,7 @@
 			</table>
 		</form>
 		<br> 
-		<c:if test="${act == 'i'}"><button type="button" onclick="fn_create()">등록</button></c:if> 
+		<c:if test="${act == 'i'}"><button type="button" onclick="fn_insert()">등록</button></c:if> 
 		<c:if test="${act == 'u'}"><button type="button" onclick="fn_update()">수정</button></c:if> 
 		<button type="button" onclick="fn_cancel()">취소</button>
 </body>
