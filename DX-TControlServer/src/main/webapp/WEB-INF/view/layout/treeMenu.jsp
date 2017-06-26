@@ -7,21 +7,19 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-<title>Insert title here</title>
-<link rel="stylesheet" href="<c:url value='/css/treeview/jquery.treeview.css'/>" />
+<title>eXperDB</title>
+<link rel="stylesheet" type="text/css" href="../css/common.css">
+<script type="text/javascript" src="../js/jquery-1.9.1.min.js"></script>
+<script type="text/javascript" src="../js/common.js"></script>
+
+<%-- <link rel="stylesheet" href="<c:url value='/css/treeview/jquery.treeview.css'/>" />
 <link rel="stylesheet" href="<c:url value='/css/treeview/screen.css'/>" />
-<script src="/js/treeview/jquery.js" type="text/javascript"></script>
-<script src="/js/treeview/jquery.cookie.js" type="text/javascript"></script>
-<script src="/js/treeview/jquery.treeview.js" type="text/javascript"></script>
-<style>
-.treeborder{
-	overflow:auto;
-	height:600px;
-}
-</style>
+<script src="/js/treeview/jquery.js" type="text/javascript"></script> --%>
+<!-- <script src="/js/treeview/jquery.cookie.js" type="text/javascript"></script> -->
+<!-- <script src="/js/treeview/jquery.treeview.js" type="text/javascript"></script> -->
+
 <script type="text/javascript">
 	$(window.document).ready(   
-			
 		function() {	
    			$.ajax({
 				async : false,
@@ -51,56 +49,141 @@
 					GetJsonDataConnector(result)
 				}
 			});  
-            $("#tree").treeview({
+   			
+   			
+/*             $("#tree").treeview({
                 collapsed: false,
                 animated: "medium",
                 control:"#sidetreecontrol",
                 persist: "location"
-            });
+            }); */
+            
                      
-        })
+        });
         
 
 		function GetJsonData(data) {
-			var parseData = $.parseJSON(data);
+			//var parseData = $.parseJSON(data);
+			var parseData = JSON.stringify((data));
 			$(data).each(function (index, item) {	
 				var html = "";
-				html+="<li><strong>"+item.db_svr_nm+"</strong>";
-				html+="<ul><li>백업관리";
-				html+="<ul><li><a href='/backup/rmanList.do?db_svr_id="+item.db_svr_id+"' onClick=javascript:fn_GoLink('/backup/rmanList.do?db_svr_id="+item.db_svr_id+"');>백업설정</a></li>";
-				html+="<li><a href='/backup/rmanLogList.do?db_svr_id="+item.db_svr_id+"' onClick=javascript:fn_GoLink('/backup/rmanLogList.do?db_svr_id="+item.db_svr_id+"');>백업이력</a></li></ul>";
-				html+="</li></ul>";
-				html+="<ul><li>접근제어관리<ul>";
-				html+="<li><a href='/accessControl.do?db_svr_id="+item.db_svr_id+"' onClick=javascript:fn_GoLink('/serverAccessControl?db_svr_id="+item.db_svr_id+"');>서버접근제어</a></li>";
-				html+="<li><a href='?'>감사설정</a></li>";
-				html+="<li><a href='?'>감사이력</a></li>";
-				html+="</ul></li></ul></li>";
-								
-				$( "#tree1" ).append(html);
+				html+="<ul class=depth_1 lnbMenu>";
+					html+="<li>"+item.db_svr_nm+"";
+							html+="<ul class=depth_2>";
+								html+="<li class=ico2_1>백업관리";
+									html+="<ul class=depth_3>";
+										html+="<li class=ico3_1><a href='/backup/rmanList.do?db_svr_id="+item.db_svr_id+"' onClick=javascript:fn_GoLink('/backup/rmanList.do?db_svr_id="+item.db_svr_id+"');>백업설정</a></li>";
+										html+="<li class=ico3_2><a href='/backup/rmanLogList.do?db_svr_id="+item.db_svr_id+"' onClick=javascript:fn_GoLink('/backup/rmanLogList.do?db_svr_id="+item.db_svr_id+"');>백업이력</a></li>";
+									html+="</ul>";
+								html+="</li>";
+								html+="<li class=ico2_2>접근제어관리";
+									html+="<ul class=depth_3>"
+										html+="<li class=ico3_3><a href='/accessControl.do?db_svr_id="+item.db_svr_id+"' onClick=javascript:fn_GoLink('/serverAccessControl?db_svr_id="+item.db_svr_id+"');>서버접근제어</a></li>";
+										html+="<li class=ico3_4><a href='?'>감사설정</a></li>";
+										html+="<li class=ico3_5><a href='?'>감사이력</a></li>";
+									html+="</ul>";
+								html+="</li>";
+							html+="</ul>";
+						html+="</li>";
+					html+="</ul>";
+				$( "#tree1" ).append(html).trigger( "create" );
 			})
 		}
 		
-		function GetJsonDataConnector(data) {
-			var parseData = $.parseJSON(data);
+	
+	
+		function GetJsonDataConnector(data) {						
+			//var parseData = $.parseJSON(data);
+			var parseData = JSON.stringify((data))
 			$(data).each(function (index, item) {	
 				var html = "";
-				html+="<ul><li><strong>"+item.cnr_nm+"</strong>";
-				html+="<ul><li><a href='?'>전송대상설정</a></li>";
-				html+="<ul><li><a href='?'>전송상세설정</a></li>";
-				html+="</ul></li></ul>";
-								
-				$( "#tree2" ).append(html);
+				html+="<ul class=depth_1 lnbMenu>";
+					html+="<li class=t1>전송설정</li>";
+					html+="<li class=t2>"+item.cnr_nm;
+						html+="<ul class=depth_2>"	;					
+							html+="<li class=ico2_3><a href='?'>전송대상설정</a></li>";
+							html+="<li class=ico2_3><a href='?'>전송상세설정</a></li>";
+						html+="</ul>";
+					html+="</li>";
+				html+="</ul>";
+				$( "#tree2" ).append(html).trigger( "create" );
 			})
 		}	
 	
- 	function fn_GoLink(url) {	
+		
+	function fn_logout(){
+		var frm = document.treeView;
+		frm.action = "/logout.do";
+		frm.submit();	
+	}	
+		
+/*  	function fn_GoLink(url) {	
  		$.cookie('menu_url' , url, { path : '/' });
- 	}
+ 	} */
     </script>
 
 </head>
 <body>
-	<form name="treeView" id="treeView">
+<form name="treeView" id="treeView">
+		<!-- container -->
+		<div id="container">		
+				<!-- lnb -->
+				<div id="lnb_menu">
+					<div class="logout">
+						<button onClick="fn_logout();">LOGOUT</button>
+					</div>	
+					<h3 class="blind">LNB 메뉴</h3>
+					<div class="lnb">
+						<div class="inr">
+							<div class="lnb_tit">DB 서버
+								<div class="all_btn">
+									<a href="#n" class="all_close">전체 닫기</a>
+									<a href="#n" class="all_open">전체 열기</a>
+								</div>
+							</div>
+							<div id="tree1"></div>	
+						</div>
+			
+						<div class="inr type2">
+							<div class="lnb_tit">Transfer
+								<div class="all_btn">
+									<a href="#n" class="all_close">전체 닫기</a>
+									<a href="#n" class="all_open">전체 열기</a>
+								</div>
+							</div>
+							<div id="tree2"></div>
+						</div>
+					</div>
+				</div><!-- // lnb -->
+		</div>
+</form>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<%-- 	<form name="treeView" id="treeView">
 		<table border="1" width="250">
 			<tr>
 				<td>
@@ -134,6 +217,6 @@
 				</td>
 			</tr>
 		</table>
-	</form>
+	</form> --%>
 </body>
 </html>
