@@ -39,14 +39,16 @@
                 , LST_MDF_DTM
           FROM T_DBSVR_I	
           WHERE 1 = 1
-          
-	      <if test="db_svr_nm != null and db_svr_nm != '' ">
+  	      <if test="db_svr_id != null and db_svr_id != '' and db_svr_id != 0">
+	      AND DB_SVR_ID = #{db_svr_id}
+	      </if>	         
+	      <if test="db_svr_nm != null and db_svr_nm != ''">
 	      AND DB_SVR_NM LIKE '%' || #{db_svr_nm} || '%'
 	      </if>	     
-	      <if test="ipadr != null and ipadr != '' ">
+	      <if test="ipadr != null and ipadr != ''">
 	      AND IPADR LIKE '%' || #{ipadr} || '%'
 	      </if>	      
-	      <if test="dft_db_nm != null and dft_db_nm != '' ">
+	      <if test="dft_db_nm != null and dft_db_nm != ''">
 	      AND DFT_DB_NM LIKE  '%' || #{dft_db_nm} || '%'
 	      </if>         
           ORDER BY DB_SVR_ID
@@ -90,4 +92,166 @@
 			, clock_timestamp()	
 		)
 	</insert>    
+	
+	
+	   <update id="updateDbServer" parameterType="dbServerVO">
+   	    /**
+	 	* Query ID : updateDbServer
+	 	* Description : DB서버 수정
+	 	* Author : 변승우
+	 	**/
+	 	
+		UPDATE T_DBSVR_I
+		SET 
+	  	 	   DB_SVR_NM= #{db_svr_nm}
+		      , IPADR=#{ipadr}
+		      , PORTNO=#{portno}
+		      , DFT_DB_NM=#{dft_db_nm}
+			  , SVR_SPR_USR_ID=#{svr_spr_usr_id}
+			  , SVR_SPR_SCM_PWD=#{svr_spr_scm_pwd}
+			  , LST_MDFR_ID=#{lst_mdfr_id}
+			  , LST_MDF_DTM=clock_timestamp()	
+		WHERE DB_SVR_ID=#{db_svr_id}
+	</update> 
+	
+	
+<!-- <delete id="deleteCmmnCode" parameterType="cmmnCodeVO">
+       	/**
+	 	* Query ID : deleteCmmnCode
+	 	* Description : 공통코드 삭제
+	 	* Author : 변승우
+	 	**/
+	 	
+	  DELETE 
+	  FROM T_SYSGRP_C 
+	  WHERE GRP_CD=#{grp_cd}
+	</delete> -->
+	
+	
+	<delete id="deleteDB" parameterType="dbServerVO">
+       	/**
+	 	* Query ID : deleteDB
+	 	* Description : DB삭제
+	 	* Author : 변승우
+	 	**/
+	 	
+	  DELETE 
+	  FROM T_DB_I 
+	  WHERE DB_SVR_ID=#{db_svr_id}
+	</delete>
+	
+	
+	    <insert id="insertDB" parameterType="HashMap">
+    	/**
+	 	*  Query ID : insertDB
+	 	* Description : insertDB 등록
+	 	* Author : 변승우
+	 	**/
+	 	
+		INSERT INTO T_DB_I
+		(
+			  DB_ID
+			, DB_SVR_ID
+			, DB_NM
+			, FRST_REGR_ID
+			, FRST_REG_DTM
+			, LST_MDFR_ID
+			, LST_MDF_DTM
+		) 
+		VALUES
+		(
+			  nextval('q_db_i_01')
+			, #{db_svr_id}
+			, #{dft_db_nm}
+			, #{frst_regr_id}
+			, clock_timestamp()
+			, #{lst_mdfr_id}
+			, clock_timestamp()	
+		)
+	</insert>    
+	
+	
+	<select id="selectDbList" resultType="dbVO">
+		/**
+	 	*  Query ID : selectDbList
+	 	* Description : DB 리스트 조회
+	 	* Author : 변승우
+	 	**/
+	 	
+          SELECT 
+                  (ROW_NUMBER() OVER()) AS ROWNUM
+				, (ROW_NUMBER() OVER()) AS IDX
+                , DB_ID
+                , DB_SVR_ID
+                , DB_NM
+                , DB_USR_ID
+                , FRST_REGR_ID
+                , FRST_REG_DTM
+                , LST_MDFR_ID
+                , LST_MDF_DTM
+          FROM T_DB_I
+     </select>	
+     
+     
+     <select id="selectRepoDBList" resultType="HashMap" parameterType="HashMap">
+		/**
+	 	*  Query ID : selectRepoDBList
+	 	* Description : DB Repository 리스트 조회
+	 	* Author : 변승우
+	 	**/
+	 	
+		SELECT
+              (ROW_NUMBER() OVER()) AS ROWNUM
+			, (ROW_NUMBER() OVER()) AS IDX
+            , AA.DB_SVR_NM
+            , AA.IPADR
+            , AA.PORTNO
+            , AA.DB_ID
+            , AA.DB_NM
+            , AA.FRST_REGR_ID
+            , AA.FRST_REG_DTM
+            , AA.LST_MDFR_ID
+            , AA.LST_MDF_DTM
+        FROM(
+	            SELECT
+	                 A.DB_SVR_NM
+	                , A.IPADR
+	                , A.PORTNO
+	                , B.DB_ID
+	                , B.DB_NM
+	                , A.FRST_REGR_ID
+	                , A.FRST_REG_DTM
+	                , A.LST_MDFR_ID
+	                , A.LST_MDF_DTM
+	            FROM T_DBSVR_I A, T_DB_I B
+	            WHERE 1 = 1
+	            AND A.DB_SVR_ID = B.DB_SVR_ID
+			    <if test="db_svr_nm != null and db_svr_nm != ''">
+			    AND A.DB_SVR_NM LIKE '%' || #{db_svr_nm} || '%'
+			    </if>	     
+			    <if test="ipadr != null and ipadr != ''">
+			    AND A.IPADR LIKE '%' || #{ipadr} || '%'
+			    </if>	      
+			    <if test="dft_db_nm != null and dft_db_nm != ''">
+			    AND B.DB_NM LIKE  '%' || #{dft_db_nm} || '%'
+			    </if>         	            
+	            ORDER BY A.DB_SVR_NM
+            	)AA
+     </select>	
+     
+
+     <select id="selectSvrList" resultType="HashMap">
+		/**
+	 	*  Query ID : selectSvrList
+	 	* Description : Repository 등록된 DB의 서버 리스트 조회
+	 	* Author : 변승우
+	 	**/ 	
+	 	
+            SELECT
+                 	A.DB_SVR_NM
+            FROM T_DBSVR_I A, T_DB_I B
+            WHERE 1 = 1
+            AND A.DB_SVR_ID = B.DB_SVR_ID
+            GROUP BY A.DB_SVR_NM
+     </select>	
 </mapper>

@@ -62,7 +62,13 @@ function fn_init() {
 		]
 	});
 
-	
+
+	    //더블 클릭시
+		$('#serverList tbody').on('dblclick', 'tr', function () {
+			var data = table.row( this ).data();		
+			var db_svr_id = data.db_svr_id;
+			window.open("/popup/dbServerRegReForm.do?db_svr_id="+db_svr_id,"dbServerRegRePop","location=no,menubar=no,resizable=yes,scrollbars=no,status=no,width=800,height=270,top=0,left=0");
+		});
 }
 
 $(window.document).ready(function() {
@@ -81,36 +87,49 @@ $(window.document).ready(function() {
 			table.rows.add(result).draw();
 		}
 	}); 
-
+ 
 });
 
-$(function() {
-	//조회버튼 클릭시
-	$("#btnSelect").click(function() {
-		$.ajax({
-			url : "/selectDbServerList.do",
-			data : {
-				db_svr_nm : $("#db_svr_nm").val(),
-				ipadr : $("#ipadr").val(),
-				dft_db_nm : $("#dft_db_nm").val(),
-			},
-			dataType : "json",
-			type : "post",
-			error : function(xhr, status, error) {
-				alert("실패")
-			},
-			success : function(result) {
-				table.clear().draw();
-				table.rows.add(result).draw();
-			}
-		});
+//조회
+function fn_search(){
+	$.ajax({
+		url : "/selectDbServerList.do",
+		data : {
+			db_svr_nm : $("#db_svr_nm").val(),
+			ipadr : $("#ipadr").val(),
+			dft_db_nm : $("#dft_db_nm").val(),
+		},
+		dataType : "json",
+		type : "post",
+		error : function(xhr, status, error) {
+			alert("실패")
+		},
+		success : function(result) {
+			table.clear().draw();
+			table.rows.add(result).draw();
+		}
 	});
-});
+}
 
-
+//DB서버 등록 팝업 호출
 function fn_reg_popup(){
 	window.open("/popup/dbServerRegForm.do","dbServerRegPop","location=no,menubar=no,resizable=yes,scrollbars=no,status=no,width=800,height=270,top=0,left=0");
 }
+
+
+//DB서버 등록 팝업 수정
+function fn_regRe_popup(){
+	var datas = table.rows('.selected').data();
+	if (datas.length == 1) {
+		var db_svr_id = table.row('.selected').data().db_svr_id;
+		window.open("/popup/dbServerRegReForm.do?db_svr_id="+db_svr_id,"dbServerRegRePop","location=no,menubar=no,resizable=yes,scrollbars=no,status=no,width=800,height=270,top=0,left=0");
+	} else {
+		alert("하나의 항목을 선택해주세요.");
+	}	
+}
+
+
+
 
 </script>
 
@@ -124,9 +143,9 @@ function fn_reg_popup(){
 	 <tr>
 	 	<td colspan="3">	 	 		
 	 			<div id="button" style="float: right;">
-	 				<input type="button" value="조회" id="btnSelect">
+	 				<input type="button" value="조회" onClick="fn_search()">
 					<input type="button" value="등록" onClick="fn_reg_popup()">
-					<input type="button" value="수정" id="btnUpdate">
+					<input type="button" value="수정" onClick="fn_regRe_popup()">
 					<input type="button" value="삭제" id="btnDelete">
 				</div>
 	 	</td>

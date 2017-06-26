@@ -27,7 +27,7 @@
 <title>Insert title here</title>
 <script type="text/javascript">
 //연결테스트 확인여부
-var connCheck = 0;
+var connCheck = "fail";
 
 //숫자체크
 function valid_numeric(objValue)
@@ -88,11 +88,12 @@ function fn_dbServerValidation(){
 }
 
 
-
+// DBserver 등록
 function fn_insertDbServer(){
 
 	if (!fn_dbServerValidation()) return false;
 	
+	if(connCheck == "success"){
   	$.ajax({
 		url : "/insertDbServer.do",
 		data : {
@@ -112,16 +113,57 @@ function fn_insertDbServer(){
 			self.close();	 
 		}
 	}); 
+	}else{
+		alert("연결 테스트 성공후 등록이 가능합니다.")
+	}
 } 
 
+
+//DBserver 연결테스트
+function fn_dbServerConnTest(){
+	
+	if (!fn_dbServerValidation()) return false;
+
+	$.ajax({
+		url : "/dbServerConnTest.do",
+		data : {
+			db_svr_nm : $("#db_svr_nm").val(),
+			dft_db_nm : $("#dft_db_nm").val(),
+			ipadr : $("#ipadr").val(),
+			portno : $("#portno").val(),
+			svr_spr_usr_id : $("#svr_spr_usr_id").val(),
+			svr_spr_scm_pwd : $("#svr_spr_scm_pwd").val()
+		},
+		type : "post",
+		error : function(xhr, status, error) {
+			alert("실패");
+		},
+		success : function(result) {
+			if(result.result_code == 0){
+			connCheck = "success"
+			}else{
+			connCheck = "fail"
+			alert("[ 연결 테스트 실패! ]");
+			return false;
+			}		
+			alert(result.result_data);
+		}
+	}); 
+
+}
+
+
+//DBserver 취소
+function fn_dbServerCancle(){
+	document.dbserverInsert.reset();
+}
 
 	
 </script>
 </head>
 <body>
 <h3>DB 서버 등록</h3>
-
-
+ <form name="dbserverInsert" id="dbserverInsert" method="post">
 <!--메인 등록 폼  -->
 <table style="border: 1px solid black; padding: 10px;" width="100%">
 	<tr>
@@ -150,13 +192,13 @@ function fn_insertDbServer(){
  			<div id="button" align="center">
  				<a href="#" onClick="fn_insertDbServer();"><input type="button" value="저장"  id="btnSelect"></a>
 				<a href="#" onClick="fn_dbServerConnTest();"><input type="button" value="연결테스트"></a>
-				<input type="button" value="취소">
+				<a href="#" onClick="fn_dbServerCancle();"><input type="button" value="취소"></a>
 			</div>
 		 </td>
 	</tr>
 </table>
 <!--/메인 등록 폼  -->
 
-
+</form>
 </body>
 </html>

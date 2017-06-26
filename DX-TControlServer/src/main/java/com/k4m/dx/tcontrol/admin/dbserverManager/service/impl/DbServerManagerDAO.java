@@ -1,7 +1,9 @@
 package com.k4m.dx.tcontrol.admin.dbserverManager.service.impl;
 
 import java.sql.SQLException;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -9,6 +11,7 @@ import org.springframework.stereotype.Repository;
 
 import com.ibatis.sqlmap.client.SqlMapClient;
 import com.k4m.dx.tcontrol.admin.dbserverManager.service.DbServerVO;
+import com.k4m.dx.tcontrol.backup.service.DbVO;
 import com.k4m.dx.tcontrol.login.service.UserVO;
 
 import egovframework.rte.psl.dataaccess.EgovAbstractMapper;
@@ -42,5 +45,86 @@ public class DbServerManagerDAO extends EgovAbstractMapper{
 	public void insertDbServer(DbServerVO dbServerVO) throws SQLException {
 		insert("dbserverManagerSql.insertDbServer", dbServerVO);		
 	}
+
 	
+	/**
+	 * DB서버 정보 수정
+	 * 
+	 * @param dbServerVO
+	 * @return 
+	 * @throws Exception
+	 */	
+	public void updateDbServer(DbServerVO dbServerVO) throws SQLException {
+		update("dbserverManagerSql.updateDbServer", dbServerVO);	
+	}
+
+
+	/**
+	 * DB 삭제
+	 * 
+	 * @param dbServerVO
+	 * @return 
+	 * @throws Exception
+	 */	
+	public void deleteDB(DbServerVO dbServerVO) throws SQLException{
+		delete("dbserverManagerSql.deleteDB", dbServerVO);	
+	}
+
+
+	/**
+	 * DB 등록
+	 * 
+	 * @param paramvalue
+	 * @return 
+	 * @throws Exception
+	 */	
+	public void insertDB(HashMap<String, Object> paramvalue) {
+		insert("dbserverManagerSql.insertDB",paramvalue );		
+	}
+
+	
+	/**
+	 * DB 정보 조회
+	 * 
+	 * @param 
+	 * @return List
+	 * @throws Exception
+	 */	
+	@SuppressWarnings({ "deprecation", "unchecked" })
+	public List<DbVO> selectDbList() {
+		List<DbVO> sl = null;
+		sl = (List<DbVO>) list("dbserverManagerSql.selectDbList", null);
+		return sl;
+	}
+
+
+	/**
+	 * Repository DB 정보 조회
+	 * @param paramvalue 
+	 * 
+	 * @param 
+	 * @return List
+	 * @throws Exception
+	 */	
+	@SuppressWarnings({ "deprecation", "unchecked" })
+	public List<Map<String, Object>> selectRepoDBList(HashMap<String, Object> paramvalue) {
+		List<Map<String, Object>>  sl = null;
+		sl = (List<Map<String, Object>>) list("dbserverManagerSql.selectRepoDBList", paramvalue);
+		return sl;
+	}
+
+
+	/**
+	 * Repository DB에 등록되어 있는 DB의 서버명 SelectBox 
+	 * 
+	 * @param 
+	 * @return List
+	 * @throws Exception
+	 */	
+	public List<Map<String, Object>> selectSvrList() {
+		List<Map<String, Object>>  sl = null;
+		sl = (List<Map<String, Object>>) list("dbserverManagerSql.selectSvrList", null);
+		return sl;
+	}
+
 }

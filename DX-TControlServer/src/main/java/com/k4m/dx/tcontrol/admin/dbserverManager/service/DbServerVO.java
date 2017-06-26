@@ -3,7 +3,7 @@ package com.k4m.dx.tcontrol.admin.dbserverManager.service;
 public class DbServerVO {
 	private int rownum;
 	private int idx;
-	private String db_svr_id;
+	private int db_svr_id;
 	private String db_svr_nm;
 	private String ipadr;
 	private int portno;
@@ -31,11 +31,11 @@ public class DbServerVO {
 		this.idx = idx;
 	}
 
-	public String getDb_svr_id() {
+	public int getDb_svr_id() {
 		return db_svr_id;
 	}
 
-	public void setDb_svr_id(String db_svr_id) {
+	public void setDb_svr_id(int db_svr_id) {
 		this.db_svr_id = db_svr_id;
 	}
 
