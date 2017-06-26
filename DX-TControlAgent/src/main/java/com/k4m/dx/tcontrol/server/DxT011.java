@@ -8,22 +8,19 @@ import java.sql.DriverManager;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.apache.commons.dbcp.PoolingDriver;
 import org.apache.ibatis.session.SqlSession;
 import org.apache.ibatis.session.SqlSessionFactory;
-import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.k4m.dx.tcontrol.db.DBCPPoolManager;
 import com.k4m.dx.tcontrol.db.SqlSessionManager;
 import com.k4m.dx.tcontrol.socket.ProtocolID;
 import com.k4m.dx.tcontrol.socket.SocketCtl;
 import com.k4m.dx.tcontrol.socket.TranCodeType;
 
 /**
- * Database List 조회
+ * role 조회
  *
  * @author 박태혁
  * @see <pre>
@@ -35,11 +32,11 @@ import com.k4m.dx.tcontrol.socket.TranCodeType;
  * </pre>
  */
 
-public class DxT001 extends SocketCtl{
+public class DxT011 extends SocketCtl{
 	
 	private static Logger errLogger = LoggerFactory.getLogger("errorToFile");
 	
-	public DxT001(Socket socket, InputStream is, OutputStream	os) {
+	public DxT011(Socket socket, InputStream is, OutputStream	os) {
 		this.client = socket;
 		this.is = is;
 		this.os = os;
@@ -68,7 +65,7 @@ public class DxT001 extends SocketCtl{
 			connDB = DriverManager.getConnection("jdbc:apache:commons:dbcp:" + poolName);
 			sessDB = sqlSessionFactory.openSession(connDB);
 
-			selectDBList = sessDB.selectList("app.selectDatabaseList");
+			selectDBList = sessDB.selectList("app.selectRoleName");
 			
 			
 	        outputObj = ResultJSON(selectDBList, strDxExCode, "0", "", "");
@@ -78,16 +75,15 @@ public class DxT001 extends SocketCtl{
 
 			
 		} catch (Exception e) {
-			errLogger.error("DxT001 {} ", e.toString());
+			errLogger.error("DxT011 {} ", e.toString());
 			
-			outputObj.put(ProtocolID.DX_EX_CODE, TranCodeType.DxT001);
+			outputObj.put(ProtocolID.DX_EX_CODE, TranCodeType.DxT011);
 			outputObj.put(ProtocolID.RESULT_CODE, "1");
-			outputObj.put(ProtocolID.ERR_CODE, TranCodeType.DxT001);
-			outputObj.put(ProtocolID.ERR_MSG, "DxT001 Error [" + e.toString() + "]");
+			outputObj.put(ProtocolID.ERR_CODE, TranCodeType.DxT011);
+			outputObj.put(ProtocolID.ERR_MSG, "DxT011 Error [" + e.toString() + "]");
 			
 			sendBuff = outputObj.toString().getBytes();
 			send(4, sendBuff);
-			
 		} finally {
 			sessDB.close();
 		}	        

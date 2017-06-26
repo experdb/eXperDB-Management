@@ -74,12 +74,15 @@ public class DaemonStart implements DxDaemon{
 		try {
 		
 			ApplicationContext context = new ClassPathXmlApplicationContext(new String[] {
-					"Dx-TcontrolAgent-context.xml"
+					//"Dx-TcontrolAgent-context.xml"
+					"context-datasource.xml"
+					, "context-mapper.xml"
+					, "context-transaction.xml"
 				});
 
 			// SqlSessionManager 초기화
 			try {
-				SqlSessionManager.initInstance();
+				//SqlSessionManager.initInstance();
 			} catch (Exception e) {
 				errLogger.error("데몬 시작시 에러가 발생하였습니다. {}", e.toString());
 				return;
@@ -107,6 +110,7 @@ public class DaemonStart implements DxDaemon{
 		
 		} catch(Exception e) {
 			errLogger.error("데몬 시작시 에러가 발생하였습니다. {}", e.toString());
+			e.printStackTrace();
 		}
 			
 		
@@ -118,6 +122,8 @@ public class DaemonStart implements DxDaemon{
 			socketService.stop();
 		} catch(Exception e) {
 			errLogger.error("데몬 종료시 에러가 발생하였습니다. {0}", e.toString());
+			e.printStackTrace();
+			
 		}
 		
 	}

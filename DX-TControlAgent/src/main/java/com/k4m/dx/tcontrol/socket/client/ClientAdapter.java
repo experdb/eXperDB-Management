@@ -7,9 +7,6 @@ import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 
-import com.k4m.dx.tcontrol.socket.client.ClientProtocolID;
-import com.k4m.dx.tcontrol.socket.client.ClientTranCodeType;
-
 public class ClientAdapter {
 	private final ClientConnector cc;
 	private final String IP;
@@ -146,6 +143,26 @@ public class ClientAdapter {
 	}
 	
 	public JSONObject dxT006(String strDxExCode, JSONObject jObj) throws Exception{
+
+		byte[] bt = jObj.toString().getBytes();
+		
+		cc.send(4, bt);
+		
+		byte[]	recvBuff = cc.recv(4, false);
+		return parseToJsonObj(recvBuff);
+	}
+	
+	/**
+	 * role name 조회
+	 * @param strDxExCode
+	 * @param serverObj
+	 * @return
+	 * @throws Exception
+	 */
+	public JSONObject dxT011(String strDxExCode, JSONObject serverObj) throws Exception{
+		JSONObject jObj = new JSONObject();
+		jObj.put(ClientProtocolID.DX_EX_CODE, strDxExCode);
+		jObj.put(ClientProtocolID.SERVER_INFO, serverObj);
 
 		byte[] bt = jObj.toString().getBytes();
 		

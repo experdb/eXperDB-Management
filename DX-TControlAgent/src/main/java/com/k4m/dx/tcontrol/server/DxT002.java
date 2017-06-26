@@ -22,6 +22,7 @@ import com.k4m.dx.tcontrol.db.SqlSessionManager;
 import com.k4m.dx.tcontrol.socket.ErrCodeMng;
 import com.k4m.dx.tcontrol.socket.ProtocolID;
 import com.k4m.dx.tcontrol.socket.SocketCtl;
+import com.k4m.dx.tcontrol.socket.TranCodeType;
 
 /**
  * Table List 조회
@@ -64,6 +65,8 @@ public class DxT002 extends SocketCtl{
 		SqlSession sessDB = null;
 		List<Object> selectTableList = new ArrayList<Object>();
 		
+		JSONObject outputObj = new JSONObject();
+		
 		try {
 			
 			SocketExt.setupDriverPool(dbInfoObj, poolName);
@@ -85,14 +88,23 @@ public class DxT002 extends SocketCtl{
 			selectTableList = sessDB.selectList("app.selectTableList", hp);
 			
 			
-			JSONObject outputObj = ResultJSON(selectTableList, strDxExCode, strSuccessCode, strErrCode, strErrMsg);
+			outputObj = ResultJSON(selectTableList, strDxExCode, strSuccessCode, strErrCode, strErrMsg);
 	        
 	        sendBuff = outputObj.toString().getBytes();
 	        send(4, sendBuff);
 
 			
 		} catch (Exception e) {
-			errLogger.error("DxT001 {} ", e.toString());
+			errLogger.error("DxT002 {} ", e.toString());
+			
+			outputObj.put(ProtocolID.DX_EX_CODE, TranCodeType.DxT002);
+			outputObj.put(ProtocolID.RESULT_CODE, "1");
+			outputObj.put(ProtocolID.ERR_CODE, TranCodeType.DxT002);
+			outputObj.put(ProtocolID.ERR_MSG, "DxT002 Error [" + e.toString() + "]");
+			
+			sendBuff = outputObj.toString().getBytes();
+			send(4, sendBuff);
+			
 		} finally {
 			sessDB.close();
 		}	        

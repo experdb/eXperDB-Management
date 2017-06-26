@@ -23,7 +23,7 @@ public class SqlSessionManager {
 		log.info("************************************************************");
 		log.info("SqlSessionManager를 초기화합니다.");
 		
-		String resource = "MyBatisConfig.xml";
+		String resource = "sql-mapper-config.xml";
 		InputStream inputStream = Resources.getResourceAsStream(resource);
 		
 		sqlSession = new SqlSessionFactoryBuilder().build(inputStream);

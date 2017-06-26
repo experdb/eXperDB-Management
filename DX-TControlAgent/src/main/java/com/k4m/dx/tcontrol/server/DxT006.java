@@ -22,6 +22,7 @@ import com.k4m.dx.tcontrol.db.DBCPPoolManager;
 import com.k4m.dx.tcontrol.db.SqlSessionManager;
 import com.k4m.dx.tcontrol.socket.ProtocolID;
 import com.k4m.dx.tcontrol.socket.SocketCtl;
+import com.k4m.dx.tcontrol.socket.TranCodeType;
 import com.k4m.dx.tcontrol.util.PgHbaConfigLine;
 
 /**
@@ -110,11 +111,14 @@ public class DxT006 extends SocketCtl{
 			send(TotalLengthBit, outputObj.toString().getBytes());
 		} catch (Exception e) {
 			errLogger.error("DxT006 {} ", e.toString());
-			outputObj.put(ProtocolID.RESULT_CODE, "1");
-			outputObj.put(ProtocolID.ERR_CODE, "1");
-			outputObj.put(ProtocolID.ERR_MSG, e.toString());
 			
-			send(TotalLengthBit, outputObj.toString().getBytes());
+			outputObj.put(ProtocolID.DX_EX_CODE, TranCodeType.DxT006);
+			outputObj.put(ProtocolID.RESULT_CODE, "1");
+			outputObj.put(ProtocolID.ERR_CODE, TranCodeType.DxT006);
+			outputObj.put(ProtocolID.ERR_MSG, "DxT006 Error [" + e.toString() + "]");
+			
+			sendBuff = outputObj.toString().getBytes();
+			send(4, sendBuff);
 
 		} finally {
 
@@ -185,6 +189,7 @@ public class DxT006 extends SocketCtl{
 			
 		} catch (Exception e) {
 			errLogger.error("selectAuthentication {} ", e.toString());
+			throw e;
 		} finally {
 			sessDB.close();
 			connDB.close();
@@ -297,6 +302,7 @@ public class DxT006 extends SocketCtl{
 			
 		} catch(Exception e) {
 			errLogger.error("createAuthentication {} ", e.toString());
+			throw e;
 		} finally {
 			sessDB.close();
 			connDB.close();
@@ -403,6 +409,7 @@ public class DxT006 extends SocketCtl{
 			
 		} catch(Exception e) {
 			errLogger.error("updateAuthentication {} ", e.toString());
+			throw e;
 		} finally {
 			sessDB.close();
 			connDB.close();

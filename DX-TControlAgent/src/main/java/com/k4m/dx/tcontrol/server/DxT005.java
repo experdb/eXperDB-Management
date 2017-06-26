@@ -11,6 +11,7 @@ import org.slf4j.LoggerFactory;
 
 import com.k4m.dx.tcontrol.socket.ProtocolID;
 import com.k4m.dx.tcontrol.socket.SocketCtl;
+import com.k4m.dx.tcontrol.socket.TranCodeType;
 import com.k4m.dx.tcontrol.util.RunCommandExec;
 
 /**
@@ -43,6 +44,7 @@ public class DxT005 extends SocketCtl{
 		String strSuccessCode = "0";
 
 		JSONArray outputArray = new JSONArray();
+		JSONObject outputObj = new JSONObject();
 		
 		try {
 
@@ -70,16 +72,22 @@ public class DxT005 extends SocketCtl{
 				System.out.println("retVal "+(i+1)+" : "+ retVal);
 			}
 			
+			outputObj = ResultJSON(outputArray, strDxExCode, strSuccessCode, strErrCode, strErrMsg);
+			send(TotalLengthBit, outputObj.toString().getBytes());
 
 		} catch (Exception e) {
 			errLogger.error("DxT005 {} ", e.toString());
-
+			outputObj.put(ProtocolID.DX_EX_CODE, TranCodeType.DxT005);
+			outputObj.put(ProtocolID.RESULT_CODE, "1");
+			outputObj.put(ProtocolID.ERR_CODE, TranCodeType.DxT005);
+			outputObj.put(ProtocolID.ERR_MSG, "DxT005 Error [" + e.toString() + "]");
+			
+			sendBuff = outputObj.toString().getBytes();
+			send(4, sendBuff);
 		} finally {
 
 		}	    
 		
-		JSONObject outputObj = ResultJSON(outputArray, strDxExCode, strSuccessCode, strErrCode, strErrMsg);
-		send(TotalLengthBit, outputObj.toString().getBytes());
 
 
 	}

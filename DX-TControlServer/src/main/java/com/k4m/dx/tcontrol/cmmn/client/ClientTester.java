@@ -15,13 +15,13 @@ import org.json.simple.JSONObject;
  * 2. table List 조회(dxT002)
  * 3. 서버연결 Test(dxT003)
  * 4. Connector 연결 Test(dxT004)
- * 5. 백업실행(dxT001)
- * 6. DB접근제어 CRUD(dxT005)
- * 7. 감사로그설정(dxT006)
- * 8. 감사로그조회(dxT007)
- * 9. Agent Monitoring(dxT008)
- * 10. Extention 설치 유무 조회(dxT009)
- * 
+ * 5. 백업실행(dxT005)
+ * 6. DB접근제어 CRUD(dxT006)
+ * 7. 감사로그설정(dxT007)
+ * 8. 감사로그조회(dxT008)
+ * 9. Agent Monitoring(dxT009)
+ * 10. Extention 설치 유무 조회(dxT010)
+ * 11. role name 조회(dxT011)
  * @author thpark
  *
  */
@@ -31,12 +31,12 @@ public class ClientTester {
 		
 		ClientTester clientTester = new ClientTester();
 		
-		String Ip = "222.110.153.162";
-		//String Ip = "127.0.0.1";
+		//String Ip = "222.110.153.162";
+		String Ip = "127.0.0.1";
 		int port = 9001;
 		try {
 			
-			clientTester.dxT001(Ip, port);
+			//clientTester.dxT001(Ip, port);
 			//clientTester.dxT002(Ip, port);
 			//clientTester.dxT003(Ip, port);
 			//clientTester.dxT004(Ip, port);
@@ -45,6 +45,7 @@ public class ClientTester {
 			//clientTester.dxT006_R(Ip, port);
 			//clientTester.dxT006_U(Ip, port);
 			//clientTester.dxT006_D(Ip, port);
+			clientTester.dxT011(Ip, port);
 			
 			
 		} catch(Exception e) {
@@ -533,6 +534,62 @@ public class ClientTester {
 			ClientAdapter CA = new ClientAdapter(Ip, port);
 			CA.open(); 
 				//CA.dxT001("dxT001", arrDBInfo);
+			CA.close();
+		} catch(Exception e) {
+			e.printStackTrace();
+		}
+	}
+	
+	private void dxT011(String Ip, int port) {
+		try {
+
+
+			JSONObject serverObj = new JSONObject();
+			
+			/**
+			serverObj.put(ClientProtocolID.SERVER_NAME, "222.110.153.162");
+			serverObj.put(ClientProtocolID.SERVER_IP, "222.110.153.162");
+			serverObj.put(ClientProtocolID.SERVER_PORT, "6432");
+			serverObj.put(ClientProtocolID.DATABASE_NAME, "postgres");
+			serverObj.put(ClientProtocolID.USER_ID, "experdba");
+			serverObj.put(ClientProtocolID.USER_PWD, "experdba");
+			**/
+			
+			serverObj.put(ClientProtocolID.SERVER_NAME, "222.110.153.162");
+			serverObj.put(ClientProtocolID.SERVER_IP, "222.110.153.162");
+			serverObj.put(ClientProtocolID.SERVER_PORT, "5432");
+			serverObj.put(ClientProtocolID.DATABASE_NAME, "pgmon");
+			serverObj.put(ClientProtocolID.USER_ID, "pgmon");
+			serverObj.put(ClientProtocolID.USER_PWD, "pgmon");
+			
+			
+			
+			JSONObject objList;
+			
+			ClientAdapter CA = new ClientAdapter(Ip, port);
+			CA.open(); 
+				
+			objList = CA.dxT011(ClientTranCodeType.DxT011, serverObj);
+			
+			String _tran_err_msg = (String)objList.get(ClientProtocolID.ERR_MSG);
+			String strDxExCode = (String)objList.get(ClientProtocolID.DX_EX_CODE);
+			
+			List<Object> selectDBList =(ArrayList<Object>) objList.get(ClientProtocolID.RESULT_DATA);
+			
+			System.out.println("strDxExCode : " + " " + strDxExCode);
+			
+			for(int i=0; i<selectDBList.size(); i++) {
+				
+				Object obj = selectDBList.get(i);
+				
+				HashMap hp = (HashMap) obj;
+				String rolname = (String) hp.get("rolname");
+
+				System.out.println(i + " " + rolname);
+
+			}
+				
+				
 			CA.close();
 		} catch(Exception e) {
 			e.printStackTrace();
