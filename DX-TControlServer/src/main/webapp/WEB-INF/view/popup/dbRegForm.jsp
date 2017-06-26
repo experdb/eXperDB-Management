@@ -22,26 +22,26 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-<link type="text/css" rel="stylesheet" href="<c:url value='/css/egovframework/sample.css'/>" />
+
 <link rel="stylesheet" href="<c:url value='/css/dt/dataTables.jqueryui.min.css'/>" />
 <link rel="stylesheet" type="text/css" href="/css/dt/dataTables.checkboxes.css" />
 <script src="/js/jquery/jquery-1.12.4.js" type="text/javascript"></script>
-<script src="js/jquery/jquery-ui.js" type="text/javascript"></script>
-<script src="js/jquery/jquery.dataTables.min.js" type="text/javascript"></script>
+<script src="/js/jquery/jquery-ui.js" type="text/javascript"></script>
+<script src="/js/jquery/jquery.dataTables.min.js" type="text/javascript"></script>
 <title>Insert title here</title>
 <script type="text/javascript">
 var table_db = null;
 
 function fn_init(){
 	/* 선택된 서버에 대한 데이터베이스 정보 */
-   table_db = $('#dbList').DataTable({
+     table_db = $('#dbList').DataTable({
 		scrollY : "600px",
 		searching : false,
 		columns : [
 		{data : "dft_db_nm", className : "dt-center", defaultContent : ""}, 
 		{data : "rownum", defaultContent : "", targets : 0, orderable : false, checkboxes : {'selectRow' : true}}, 		
 		]
-	});    
+	});      
 }
 
 $(window.document).ready(function() {

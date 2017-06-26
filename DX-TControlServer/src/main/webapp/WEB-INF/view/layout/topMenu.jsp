@@ -11,51 +11,11 @@
 <link rel="stylesheet"
 	href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 <title>Insert title here</title>
-<style>
-.zeta-menu-bar {
-  background: white;
-  display: block;
-  width: 100%;
-  position:relative;
-  z-index:10;
-}
-.zeta-menu { margin: 0; padding: 0; }
-.zeta-menu li {
-  float: left;
-  list-style:none;
-  position: relative;
-}
-.zeta-menu li:hover { background: transparent; }
-.zeta-menu li:hover>a { color: gray; }
-.zeta-menu a {
-  color: black;
-  display: block;
-  padding: 10px 20px;
-  text-decoration: none;
-}
-.zeta-menu ul {
-  background: #eee;
-  border: 1px solid silver;
-  display: none;
-  padding: 0;
-  position: absolute;
-  left: 0;
-  top: 100%;
-  width: 180px;
-}
-.zeta-menu ul li { float: none; }
-.zeta-menu ul li:hover { background: #ddd; } 
-.zeta-menu ul li:hover a { color: black; }
-.zeta-menu ul a { color: black; }
-.zeta-menu ul ul { left: 100%; top: 0; }
-.zeta-menu ul ul li {float:left; margin-right:10px;}
 
-a:link {
-	text-decoration: none;
-}
+<link rel="stylesheet" type="text/css" href="../css/common.css">
+<script type="text/javascript" src="../js/jquery-1.9.1.min.js"></script>
+<script type="text/javascript" src="../js/common.js"></script>
 
-</style>
-<script src="//code.jquery.com/jquery.min.js"></script>
 <script src="/js/treeview/jquery.cookie.js" type="text/javascript"></script>
 <script>
 $(function(){
