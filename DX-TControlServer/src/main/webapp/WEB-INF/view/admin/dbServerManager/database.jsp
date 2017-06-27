@@ -24,17 +24,12 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <link type="text/css" rel="stylesheet" href="<c:url value='/css/dt/jquery.dataTables.min.css'/>" />
-<link rel="stylesheet" href="<c:url value='/css/treeview/jquery.treeview.css'/>" />
-<link rel="stylesheet" href="<c:url value='/css/treeview/screen.css'/>" />
 <link rel="stylesheet" type="text/css" href="/css/dt/dataTables.checkboxes.css" />
 <script src="js/jquery/jquery-1.7.2.min.js" type="text/javascript"></script>
 <script src="js/jquery/jquery-ui.js" type="text/javascript"></script>
 <script src="js/json2.js" type="text/javascript"></script>
 <script src="js/jquery/jquery.dataTables.min.js" type="text/javascript"></script>
 <script src="js/dt/dataTables.checkboxes.min.js" type="text/javascript"></script>
-<script src="js/dt/dataTables.colVis.js" type="text/javascript"></script>
-<script src="js/treeview/jquery.cookie.js" type="text/javascript"></script>
-<script src="js/treeview/jquery.treeview.js" type="text/javascript"></script>
 <title>Insert title here</title>
 
 <script>
@@ -42,6 +37,9 @@ var table = null;
 
 function fn_init() {
 	
+		/* ********************************************************
+		 * Repository 디비 리스트 (데이터테이블)
+		 ******************************************************** */
 		table = $('#repoDBList').DataTable({
 		scrollY : "300px",
 		processing : true,
@@ -65,9 +63,9 @@ function fn_init() {
 $(window.document).ready(function() {
 	fn_init();
 	
-	/* 
-	 * Repository DB에 등록되어 있는 DB의 서버명 SelectBox 
-	 */
+	 /* ********************************************************
+	  * 페이지 시작시, Repository DB에 등록되어 있는 디비의 서버명 SelectBox 
+	  ******************************************************** */
 	  	$.ajax({
 			url : "/selectSvrList.do",
 			data : {},
@@ -88,10 +86,9 @@ $(window.document).ready(function() {
 		}); 
 	 
 	 
-	 
-	/* 
-	 * Repository DB에 등록되어 있는 DB정보 조회
-	 */
+ /* ********************************************************
+  * Repository 디비 리스트 조회
+  ******************************************************** */
   	$.ajax({
 		url : "/selectRepoDBList.do",
 		data : {},
@@ -108,6 +105,9 @@ $(window.document).ready(function() {
 });
 
 
+/* ********************************************************
+ * Repository 디비 리스트 조회 (검색조건 입력)
+ ******************************************************** */
 function fn_search(){
   	$.ajax({
 		url : "/selectRepoDBList.do",
@@ -129,6 +129,9 @@ function fn_search(){
 }
 
 
+/* ********************************************************
+ * 디비 등록 팝업 호출
+ ******************************************************** */
 function fn_reg_popup(){
 	window.open("/popup/dbRegForm.do","dbRegPop","location=no,menubar=no,resizable=yes,scrollbars=no,status=no,width=800,height=270,top=0,left=0");
 }
@@ -137,59 +140,78 @@ function fn_reg_popup(){
 
 </head>
 <body>
- 데이타베이스
- 
-  	<!--버튼 설정  -->
-	 <table style="padding: 10px;" width="100%">
-	 <tr>
-	 	<td colspan="3">	 	 		
-	 			<div id="button" style="float: right;">
-	 				<input type="button" value="조회" onClick="fn_search()">
-					<input type="button" value="등록" onClick="fn_reg_popup()">
-					<input type="button" value="삭제" id="btnDelete">
+	<div id="container">
+		<!-- contents -->
+		<div id="contents">
+			<div class="location">
+				<ul>
+					<li>Admin</li>
+					<li>DB서버관리</li>
+					<li class="on">Database</li>
+				</ul>
+			</div>
+
+			<div class="contents_wrap">
+				<h4>DB 서버 화면</h4>
+				<div class="contents">
+					<div class="cmm_grp">
+						<div class="btn_type_01">
+							<span class="btn"><button onClick="fn_search()">조회</button></span>
+							<span class="btn" onclick="toggleLayer($('#pop_layer'), 'on');"><button>등록</button></span>
+							<a href="#n" class="btn"><span>삭제</span></a>
+						</div>
+						<div class="sch_form">
+							<table class="write">
+								<caption>DB Server 조회하기</caption>
+								<colgroup>
+									<col style="width: 90px;" />
+									<col />
+									<col style="width: 70px;" />
+									<col />
+									<col style="width: 90px;" />
+									<col />
+									<col style="width: 70px;" />
+									<col />
+								</colgroup>
+								<tbody>
+									<tr>
+										<th scope="row" class="t2">DB 서버명</th>
+										<td><select id="db_svr_nm" name="db_svr_nm">
+												<option value="%">전체</option>
+										</select></td>
+										<th scope="row" class="t3">아이피</th>
+										<td><input type="text" class="txt" name="ipadr" id="ipadr" /></td>
+										<th scope="row" class="t4">Database</th>
+										<td><input type="text" class="txt" name="dft_db_nm" id="dft_db_nm" /></td>
+									</tr>
+								</tbody>
+							</table>
+						</div>
+						<!-- 메인 테이블 -->
+						<table id="repoDBList" class="display" cellspacing="0">
+							<thead>
+								<tr>
+									<th></th>
+									<th>No</th>
+									<th>서버명</th>
+									<th>아이피</th>
+									<th>포트</th>
+									<th>DB명</th>
+									<th>등록자</th>
+									<th>등록일시</th>
+									<th>수정자</th>
+									<th>수정일시</th>
+									<th></th>
+								</tr>
+							</thead>
+						</table>
+						<!-- /메인 테이블 -->
+					</div>
 				</div>
-	 	</td>
-	 </tr>
-	 </table>
- 	<!--/버튼 설정  -->
- 	
- 	
-	<!-- 조회 조건 -->
-	  <table style="border: 1px solid black; padding: 10px;" width="100%">
-	  <tr>
-	  	<td>
-	 		◎서버명 <select id="db_svr_nm" name="db_svr_nm" style="width:200px;"><option value="%">전체</option></select>
-	 	</td>
-	 	<td>
-	 		◎아이피 <input type="text" name="ipadr" id="ipadr">
-	 	</td>
-	 	<td>
-	 		◎DB명 <input type="text" name="dft_db_nm" id="dft_db_nm">
-	 	</td>
-	 </tr>
-	 </table>
-	 <!-- /조회 조건 -->
-	 
-	 <br><br>
-	 
-	 <!-- 메인 테이블 -->
-	<table id="repoDBList" class="display" cellspacing="0" >
-		<thead>
-			<tr>
-				<th></th>
-				<th>No</th>			
-				<th>서버명</th>
-				<th>아이피</th>
-				<th>포트</th>
-				<th>DB명</th>
-				<th>등록자</th>
-				<th>등록일시</th>
-				<th>수정자</th>
-				<th>수정일시</th>
-				<th></th>
-			</tr>
-		</thead>
-	</table>
-	<!-- /메인 테이블 -->
+			</div>
+		</div>
+		<!-- // contents -->
+	</div>
+	<!-- // container -->
 </body>
 </html>

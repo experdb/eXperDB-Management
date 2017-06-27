@@ -76,58 +76,71 @@ function fnCheck(str){
 }
 
 </script>
+<body>
+	<div id="container">
+		<!-- contents -->
+		<div id="contents">
+				<div class="location">
+				<ul>
+					<li>그룹코드 등록</li>
+				</ul>
+			</div>
+			<div class="contents_wrap">
+			<h4>그룹코드 등록</h4>
+			<div class="contents">
+			<form name="insertCmmnCode" id="insertCmmnCode" method="post">
+				<div class="contsBody">
+					<div class="Btn">
+						<span class="bbsBtn"><a href="javascript:fn_cmmnCodeList()">목록</a></span>
+						<span class="bbsBtn"><a
+							href="javascript:fn_egov_regist_CmmnCode();">등록</a></span>
+					</div>
 
-<form name="insertCmmnCode" id="insertCmmnCode" method="post">
-<div class="contsBody">
-	<h2>공통코드 관리</h2>
-	<div class="location">공통코드 관리 > 공통코드 관리 > <strong>등록</strong></div>
+					<div class="bbsDetail">
+						<table>
+							<colgroup>
+								<col style="width: 20%">
+								<col style="width: auto">
+							</colgroup>
+							<tbody>
 
-	<div class="Btn">
-		<span class="bbsBtn"><a href="javascript:fn_cmmnCodeList()" >목록</a></span>
-		<span class="bbsBtn"><a href="javascript:fn_egov_regist_CmmnCode();" >등록</a></span>
+								<tr>
+									<th><img src="/images/egovframework/example/blt4.gif"
+										alt="필수입력" />코드ID</th>
+									<td colspan="3"><input type="text" size="10"
+										maxlength="10" name="grp_cd" id="grp_cd" /></td>
+								</tr>
+
+								<tr>
+									<th><img src="/images/egovframework/example/blt4.gif"
+										alt="필수입력" />코드명</th>
+									<td><input type="text" size="60" maxlength="60"
+										name="grp_cd_nm" id="grp_cd_nm" /></td>
+								</tr>
+
+								<tr>
+									<th><img src="/images/egovframework/example/blt4.gif"
+										alt="필수입력" />코드설명</th>
+									<td><textarea rows="3" cols="60" id="grp_cd_exp"
+											name="grp_cd_exp"></textarea></td>
+								</tr>
+
+								<tr>
+									<th><img src="/images/egovframework/example/blt4.gif"
+										alt="필수입력" />사용여부</th>
+									<td colspan="3"><select name="use_yn" id="use_yn">
+											<option value="Y">사용</option>
+											<option value="N">미사용</option>
+									</select></td>
+								</tr>
+							</tbody>
+						</table>
+					</div>
+				</div>
+			</form>
+			</div>
+			</div>
+		</div>
 	</div>
-
-	<div class="bbsDetail">
-		<table>
-		<colgroup>
-			<col style="width:20%" >
-			<col style="width:auto" >
-		</colgroup>
-		<tbody>
-	
-		<tr>
-			<th><img src="/images/egovframework/example/blt4.gif" alt="필수입력" />코드ID</th>          
-			<td colspan="3">
-			<input type="text"  size="10" maxlength="10"  name="grp_cd"  id="grp_cd" />
-			</td>
-		</tr> 
-		
- 		<tr>
-			<th><img src="/images/egovframework/example/blt4.gif" alt="필수입력" />코드명</th>          
-			<td>				
-				<input type="text"  size="60" maxlength="60"  name="grp_cd_nm"  id="grp_cd_nm"/>
-			</td>    
-		</tr> 
-		
-		<tr> 
-			<th><img src="/images/egovframework/example/blt4.gif" alt="필수입력" />코드설명</th>
-			<td>
-				<textarea rows="3" cols="60" id="grp_cd_exp" name="grp_cd_exp"></textarea>
-			</td>
-		</tr> 
-		
-		<tr> 
-			<th><img src="/images/egovframework/example/blt4.gif" alt="필수입력" />사용여부</th>
-			<td colspan="3">
-				<select name="use_yn" id="use_yn">
-					<option value="Y" >사용</option>
-					<option value="N">미사용</option>
-				</select>
-			</td>    
-		</tr>				
-		</tbody>
-		</table>
-	</div>
-</div>	
-</form>
+</body>
 </html>

@@ -1,5 +1,4 @@
-<%@ page language="java" contentType="text/html; charset=UTF-8"
-    pageEncoding="UTF-8"%>
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form"%>
 <%@ taglib prefix="ui" uri="http://egovframework.gov/ctl/ui"%>
@@ -25,8 +24,6 @@
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <link type="text/css" rel="stylesheet" href="<c:url value='/css/dt/jquery.dataTables.min.css'/>" />
 <link rel="stylesheet" href="<c:url value='/css/dt/dataTables.jqueryui.min.css'/>" />
-<link rel="stylesheet" href="<c:url value='/css/treeview/jquery.treeview.css'/>" />
-<link rel="stylesheet" href="<c:url value='/css/treeview/screen.css'/>" />
 <link rel="stylesheet" type="text/css" href="/css/dt/dataTables.checkboxes.css" />
 <script src="js/jquery/jquery-1.7.2.min.js" type="text/javascript"></script>
 <script src="js/jquery/jquery-ui.js" type="text/javascript"></script>
@@ -43,9 +40,11 @@ var table_db = null;
 
 function fn_init() {
 	
-	/* 디비서버 정보 */
+	/* ********************************************************
+	 * 서버 (데이터테이블)
+	 ******************************************************** */
 	table_dbServer = $('#dbServerList').DataTable({
-		scrollY : "600px",
+		scrollY : "245px",
 		processing : true,
 		searching : false,
 		columns : [
@@ -73,9 +72,11 @@ function fn_init() {
 		]
 	});
 
-	/* 선택된 서버에 대한 데이터베이스 정보 */
+	/* ********************************************************
+	 * 디비 (데이터테이블)
+	 ******************************************************** */
 	table_db = $('#dbList').DataTable({
-		scrollY : "600px",
+		scrollY : "285px",
 		searching : false,
 		columns : [
 		{data : "dft_db_nm", className : "dt-center", defaultContent : ""}, 
@@ -86,7 +87,9 @@ function fn_init() {
 }
 
 
-
+/* ********************************************************
+ * 페이지 시작시(서버 조회)
+ ******************************************************** */
 $(window.document).ready(function() {
 	fn_init();
 	
@@ -109,6 +112,10 @@ $(window.document).ready(function() {
 });
 
 $(function() {		
+	
+	/* ********************************************************
+	 * 서버 테이블 (선택영역 표시)
+	 ******************************************************** */
     $('#dbServerList tbody').on( 'click', 'tr', function () {
     	var check = table_dbServer.row( this ).index()+1
     	$(":radio[name=input:radio][value="+check+"]").attr("checked", true);
@@ -122,6 +129,9 @@ $(function() {
         } 
          var db_svr_nm = table_dbServer.row('.selected').data().db_svr_nm;
       
+        /* ********************************************************
+         * 선택된 서버에 대한 디비 조회
+        ******************************************************** */
        	$.ajax({
     		url : "/selectServerDBList.do",
     		data : {
@@ -143,16 +153,21 @@ $(function() {
     
 })
 
-//DB서버 등록 팝업 호출
+
+/* ********************************************************
+ * 페이지 시작시(서버 조회)
+ ******************************************************** */
 function fn_reg_popup(){
 	window.open("/popup/dbServerRegForm.do","dbServerRegPop","location=no,menubar=no,resizable=yes,scrollbars=no,status=no,width=800,height=270,top=0,left=0");
 }
 
 
-//DB서버 등록 팝업 수정
+/* ********************************************************
+ * 서버 등록
+ ******************************************************** */
 function fn_regRe_popup(){
 	var datas = table_dbServer.rows('.selected').data();
-	if (datas.length < 1) {
+	if (datas.length == 1) {
 		var db_svr_id = table_dbServer.row('.selected').data().db_svr_id;
 		window.open("/popup/dbServerRegReForm.do?db_svr_id="+db_svr_id,"dbServerRegRePop","location=no,menubar=no,resizable=yes,scrollbars=no,status=no,width=800,height=270,top=0,left=0");
 	} else {
@@ -161,11 +176,13 @@ function fn_regRe_popup(){
 }
 
 
-//DB 등록
+/* ********************************************************
+ * 디비 등록
+ ******************************************************** */
 function fn_insertDB(){
 	var db_svr_id = table_dbServer.row('.selected').data().db_svr_id;
-
 	var datas = table_db.rows('.selected').data();
+	
 	if (datas.length > 0) {
 		var rows = [];
     	for (var i = 0;i<datas.length;i++) {
@@ -196,7 +213,10 @@ function fn_insertDB(){
 	}
 }
 
-// repository DB 검색 비교
+
+/* ********************************************************
+ * 서버에 등록된 디비,  <=>  Repository에 등록된 디비 비교
+ ******************************************************** */
 function fn_dataCompareChcek(svrDbList){
 	$.ajax({
 		url : "/selectDBList.do",
@@ -228,61 +248,79 @@ function fn_dataCompareChcek(svrDbList){
 			} 
 		}
 	});	
-
 }
 
 
 </script>
 </head>
 <body>
- DB Tree
-<table style="padding: 10px;" width="100%">
- 	<tr>	
- 		<td width="500">
- 			<strong>DB Server 리스트</strong>		
- 			<div id="button" style="margin-left: 74%;">
-				<input type="button" value="등록" onClick="fn_reg_popup()">
-				<input type="button" value="수정" onClick="fn_regRe_popup()">
-				<input type="button" value="삭제" id="btnDelete">
-			</div>		
-			<table id="dbServerList" class="display" cellspacing="0"  align="right">
-				<thead>
-					<tr>
-						<th></th>
-						<th></th>
-						<th></th>
-						<th>DB 서버</th>
-						<th></th>
-						<th></th>
-						<th></th>
-						<th></th>
-						<th></th>
-						<th></th>
-						<th></th>
-						<th></th>
-					</tr>
-				</thead>
-			</table>
- 		</td>
- 		
- 		<td width="200">
- 		</td>
- 		
- 		<td width="500">
- 			<strong>Database 리스트</strong>
- 			<div id="button" style="margin-left: 90%;">
-				<input type="button" value="저장" onClick="fn_insertDB()">
-			</div>			
-			<table id="dbList" class="display" cellspacing="0"  align="left">
-				<thead>
-					<tr>
-						<th>메뉴</th>
-						<th>등록선택</th>
-					</tr>
-				</thead>
-			</table>
- 		</td>
- 	</tr>
- </table> 
+<div id="container">
+	<!-- contents -->
+			<div id="contents">
+				<div class="location">
+					<ul>
+						<li>Admin</li>
+						<li>DB서버관리</li>
+						<li class="on">DB Tree</li>
+					</ul>
+				</div>
+
+				<div class="contents_wrap">
+					<h4>DB 서버 Tree 화면</h4>
+					<div class="contents">
+						<div class="tree_grp">
+							<div class="tree_lt">
+								<div class="btn_type_01">
+									<span class="btn"><button onClick="fn_reg_popup()">등록</button></span>
+									<span class="btn"><button onClick="fn_regRe_popup()">수정</button></span>
+									<a href="#n" class="btn"><span>삭제</span></a>
+								</div>
+								<div class="inner">
+									<p class="tit">DB 서버 목록</p>
+									<div class="tree_server">
+										<table id="dbServerList" class="display" cellspacing="0"  align="right">
+											<thead>
+												<tr>
+													<th></th>
+													<th></th>
+													<th></th>
+													<th>DB 서버</th>
+													<th></th>
+													<th></th>
+													<th></th>
+													<th></th>
+													<th></th>
+													<th></th>
+													<th></th>
+													<th></th>
+												</tr>
+											</thead>
+										</table>
+									</div>
+								</div>
+							</div>
+							<div class="tree_rt">
+								<div class="btn_type_01">
+									<span class="btn"><button onClick="fn_insertDB()">저장</button></span>
+								</div>
+								<div class="inner">
+									<p class="tit">DB 목록</p>
+									<div class="tree_list">
+										<table id="dbList" class="display" cellspacing="0"  align="left">
+											<thead>
+												<tr>
+													<th>메뉴</th>
+													<th>등록선택</th>
+												</tr>
+											</thead>
+										</table>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div><!-- // contents -->
+	</div>
 </body>
 </html>
