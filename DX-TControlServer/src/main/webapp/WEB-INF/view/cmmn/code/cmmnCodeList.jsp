@@ -10,10 +10,8 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <title>공통코드</title>
-<link type="text/css" rel="stylesheet"
-	href="<c:url value='/css/egovframework/sample.css'/>" />
+<link type="text/css" rel="stylesheet" href="<c:url value='/css/egovframework/sample.css'/>" />
 <script type="text/javaScript" language="javascript" defer="defer">
-	
 </script>
 </head>
 <script type="text/javascript">
@@ -69,6 +67,9 @@ function fn_cmmnCodeDtl(grp_cd){
 }
 
 
+/* ********************************************************
+ * 코드 Validation
+ ******************************************************** */
 function fncChangeCondition(){
 	if(document.listForm.searchCondition.value == ''){
 		document.listForm.searchKeyword.value="검색조건을 선택하세요";
@@ -79,7 +80,9 @@ function fncChangeCondition(){
 	}
 }
 
-
+/* ********************************************************
+ * 코드 리스트 조회(검색조건입력)
+ ******************************************************** */
 function fncSearchList(){
 	if(!document.listForm.searchKeyword.disabled){
 			fn_search();	
@@ -89,82 +92,103 @@ function fncSearchList(){
 	}
 	
 }
-
 </script>
 
+
 <body onLoad="fncChangeCondition();">
-<form:form commandName="pageVO" name="listForm"  id="listForm" method="post" >
-<div class="contsBody">
-	<h2>그룹코드 관리</h2>
-	<div class="location"> 코드관리 > <strong>그룹코드</strong></div>
-	
-	<!-- 검색영역 -->
-	<div class="search">
-		<fieldset class="searchboxA">
-			<select id="searchCondition" name="searchCondition" class="serSel" style="" title="검색어 선택" onchange="fncChangeCondition();">
-				<option value="">검색조건선택</option>
-				<option value='0' <c:if test="${pageVO.searchCondition == '0'}">selected="selected"</c:if>>전체</option>
-				<option value='1' <c:if test="${pageVO.searchCondition == '1'}">selected="selected"</c:if>>그룹코드ID</option>
-				<option value='2' <c:if test="${pageVO.searchCondition == '2'}">selected="selected"</c:if>>그룹코드명</option>
-			</select>
-			
-			<label for="searchKeyword" class="disp_none">검색어</label>
-			<input id="searchKeyword" name="searchKeyword" class="inptext" title="검색어 입력란" type="text" onkeyPress="fncPress();"
-				<c:if test="${pageVO.searchKeyword ne ''}">value="<c:out value='${pageVO.searchKeyword}'/>"</c:if>
-				<c:if test="${pageVO.searchKeyword eq ''}">value="검색조건을 선택하세요" disabled="disabled"</c:if>
-			/>                       		
-			<input type="image" class="searchbtn" title="검색" src="/images/egovframework/example/btn_search.gif" alt="검색" onclick="fncSearchList(); return false;"/>
-		</fieldset>
-	</div>
-	<!-- //검색영역 -->
+	<div id="container">
+		<!-- contents -->
+		<div id="contents">
+			<div class="location">
+				<ul>
+					<li>그룹코드 리스트</li>
+				</ul>
+			</div>
+			<div class="contents_wrap">
+			<h4>그룹코드 관리</h4>
+			<div class="contents">
+			<form:form commandName="pageVO" name="listForm" id="listForm"
+				method="post">
+				<div class="contsBody">
+					<!-- 검색영역 -->
+					<div class="search">
+						<fieldset class="searchboxA">
+							<select id="searchCondition" name="searchCondition"
+								class="serSel" style="" title="검색어 선택"
+								onchange="fncChangeCondition();">
+								<option value="">검색조건선택</option>
+								<option value='0'
+									<c:if test="${pageVO.searchCondition == '0'}">selected="selected"</c:if>>전체</option>
+								<option value='1'
+									<c:if test="${pageVO.searchCondition == '1'}">selected="selected"</c:if>>그룹코드ID</option>
+								<option value='2'
+									<c:if test="${pageVO.searchCondition == '2'}">selected="selected"</c:if>>그룹코드명</option>
+							</select> <label for="searchKeyword" class="disp_none">검색어</label> <input
+								id="searchKeyword" name="searchKeyword" class="inptext"
+								title="검색어 입력란" type="text" onkeyPress="fncPress();"
+								<c:if test="${pageVO.searchKeyword ne ''}">value="<c:out value='${pageVO.searchKeyword}'/>"</c:if>
+								<c:if test="${pageVO.searchKeyword eq ''}">value="검색조건을 선택하세요" disabled="disabled"</c:if> />
+							<input type="image" class="searchbtn" title="검색"
+								src="/images/egovframework/example/btn_search.gif" alt="검색"
+								onclick="fncSearchList(); return false;" />
+						</fieldset>
+					</div>
+					<!-- //검색영역 -->
 
-	<div class="Btn">
-		<span class="bbsBtn"><a href="javascript:fnRegist()" title="그룹코드 등록화면으로 이동">등록</a></span>
-	</div>
+					<div class="Btn">
+						<span class="bbsBtn"><a href="javascript:fnRegist()"
+							title="그룹코드 등록화면으로 이동">등록</a></span>
+					</div>
 
-	<div class="bbsList">
-		<table>
-		<colgroup>
-			<col style="width:10%" >
-			<col style="width:30%" >
-			<col style="width:auto" >
-			<col style="width:10%" >
-			<col style="width:7%" >
-		</colgroup>
-		<thead>
-		<tr>
-			<th scope="col">순번</th>
-			<th scope="col">그룹코드ID</th>
-			<th scope="col">그룹코드명</th>
-			<th scope="col">사용여부</th>
-			<th scope="col">상세보기</th>
-		</tr>
-		</thead>
-		
-		<tbody>	
-		<c:forEach items="${resultList}" var="result" varStatus="status">
-		<tr>	
-			<td>${result.rownum}</td>	
-			<td><a href='#' onClick="fn_cmmnCodeDtl('${result.grp_cd}');">${result.grp_cd}</a></td>
-			<td>${result.grp_cd_nm}</td>
-			<td>${result.use_yn}</td>
-			<td><input type="button" value="상세보기" onClick="fn_cmmnCodeDetail('${result.grp_cd}');"></td>
-		</tr>
-		</c:forEach>
-		</tbody>
-		</table>
+					<div class="bbsList">
+						<table>
+							<colgroup>
+								<col style="width: 10%">
+								<col style="width: 30%">
+								<col style="width: auto">
+								<col style="width: 10%">
+								<col style="width: 7%">
+							</colgroup>
+							<thead>
+								<tr>
+									<th scope="col">순번</th>
+									<th scope="col">그룹코드ID</th>
+									<th scope="col">그룹코드명</th>
+									<th scope="col">사용여부</th>
+									<th scope="col">상세보기</th>
+								</tr>
+							</thead>
+
+							<tbody>
+								<c:forEach items="${resultList}" var="result" varStatus="status">
+									<tr>
+										<td>${result.rownum}</td>
+										<td><a href='#'
+											onClick="fn_cmmnCodeDtl('${result.grp_cd}');">${result.grp_cd}</a></td>
+										<td>${result.grp_cd_nm}</td>
+										<td>${result.use_yn}</td>
+										<td><input type="button" value="상세보기"
+											onClick="fn_cmmnCodeDetail('${result.grp_cd}');"></td>
+									</tr>
+								</c:forEach>
+							</tbody>
+						</table>
+					</div>
+					<!-- // 리스트 -->
+					<c:if test="${!empty pageVO.pageIndex }">
+						<!-- /List -->
+						<div id="paging">
+							<ui:pagination paginationInfo="${paginationInfo}" type="image"
+								jsFunction="fn_egov_link_page" />
+							<form:hidden path="pageIndex" />
+						</div>
+					</c:if>
+				</div>
+				<input type="hidden" name="grp_cd">
+			</form:form>
+			</div>
+			</div>
+		</div>
 	</div>
-		<!-- // 리스트 -->
-		<c:if test="${!empty pageVO.pageIndex }">
-        	<!-- /List -->
-        	<div id="paging">
-        		<ui:pagination paginationInfo = "${paginationInfo}" type="image" jsFunction="fn_egov_link_page" />
-        		<form:hidden path="pageIndex" />
-        	</div>
-        </c:if>	
-</div>
-	
-	<input type="hidden" name="grp_cd">
-</form:form>
 </body>
 </html>

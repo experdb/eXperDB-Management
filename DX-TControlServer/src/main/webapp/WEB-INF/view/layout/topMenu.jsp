@@ -13,27 +13,6 @@
 <link rel="stylesheet" type="text/css" href="../css/common.css">
 <script type="text/javascript" src="../js/jquery-1.9.1.min.js"></script>
 <script type="text/javascript" src="../js/common.js"></script>
-
-<script>
-/* $(function(){
-  $(".zeta-menu li").hover(function(){
-    $('ul:first',this).show();
-  }, function(){
-    $('ul:first',this).hide();
-  });
-  $(".zeta-menu>li:has(ul)>a").each( function() {
-    $(this).html( $(this).html()+' &or;' );
-  });
-  $(".zeta-menu ul li:has(ul)")
-    .find("a:first")
-    .append("<p style='float:right;margin:-3px'>&#9656;</p>");
-}); */
-
-/*  	function fn_cookie(url) {
-		$.cookie('menu_url' , url, { path : '/' });
-	}  */
-	
-</script>
 </head>
 <body>
 <div id="wrap">
@@ -86,9 +65,7 @@
 			    		if(usr_id != null){
 			    	%>
 			   	<li>
-			    	<div align="left">
 						<a href="/cmmnCodeList.do" >코드관리</a>
-					</div>
 				</li>	
 					<%
 			    	}
