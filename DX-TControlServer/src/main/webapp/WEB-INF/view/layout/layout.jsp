@@ -22,7 +22,7 @@
 			<tiles:insertAttribute name="treeMenu" />
 		</div>
 
-		<div id="contents">
+		<div id="main">
 			<tiles:insertAttribute name="contents" />
 		</div>
 	</div>
