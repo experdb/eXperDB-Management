@@ -140,9 +140,6 @@ function fn_reg_popup(){
 
 </head>
 <body>
-	<div id="container">
-		<!-- contents -->
-		<div id="contents">
 			<div class="location">
 				<ul>
 					<li>Admin</li>
@@ -209,9 +206,5 @@ function fn_reg_popup(){
 					</div>
 				</div>
 			</div>
-		</div>
-		<!-- // contents -->
-	</div>
-	<!-- // container -->
 </body>
 </html>

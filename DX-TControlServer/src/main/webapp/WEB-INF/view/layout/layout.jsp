@@ -17,13 +17,15 @@
 		<div id="header">
 			<tiles:insertAttribute name="topMenu" />
 		</div>
-
-		<div id="tree">
-			<tiles:insertAttribute name="treeMenu" />
-		</div>
-
-		<div id="main">
+		<!-- container -->
+		<div id="container">
+			<div id="lnb_menu">
+				<tiles:insertAttribute name="treeMenu" />
+			</div>
+			<!-- contents -->
+			<div id="contents">
 			<tiles:insertAttribute name="contents" />
+			</div>
 		</div>
 	</div>
 </body>
