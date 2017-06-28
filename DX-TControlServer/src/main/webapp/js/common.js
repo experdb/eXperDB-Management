@@ -1,13 +1,14 @@
 (function($){
 	// lnb custome scrollbar
+})(jQuery);
+
+$(window).ready(function(){
 	$(window).on("load",function(){
 		if($("#lnb_menu").length > 0){
 			$("#lnb_menu").mCustomScrollbar();
 		}
 	});
-})(jQuery);
-
-$(window).ready(function(){
+	
 	if( $('#lnb_menu').length ) { lnb_fix(); } 
 
 	function lnb_fix(){
@@ -57,7 +58,6 @@ $(window).ready(function(){
 			$('ul:first',this).hide();
 		});
 	}gnbMenu();
-
 
 	function lnbMenu(){
 		$(".lnbMenu li > a").click(function(){
