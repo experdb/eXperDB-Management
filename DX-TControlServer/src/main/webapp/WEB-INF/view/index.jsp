@@ -12,8 +12,6 @@
 <style>
 </style>
 <body>
-<!-- 	<div id="container">
-		<div id="contents"> -->
 			<table>
 				<tr>
 					<td><img src="<c:url value='/images/egovframework/example/4.png'/>" alt="" /></td>
@@ -24,7 +22,5 @@
 					<td><img src="<c:url value='/images/egovframework/example/1.png'/>" alt="" /></td>
 				</tr>
 			</table>
-<!-- 		</div>
-	</div>  -->
 </body>
 </html>

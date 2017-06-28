@@ -254,9 +254,6 @@ function fn_dataCompareChcek(svrDbList){
 </script>
 </head>
 <body>
-<div id="container">
-	<!-- contents -->
-			<div id="contents">
 				<div class="location">
 					<ul>
 						<li>Admin</li>
@@ -320,7 +317,5 @@ function fn_dataCompareChcek(svrDbList){
 						</div>
 					</div>
 				</div>
-			</div><!-- // contents -->
-	</div>
 </body>
 </html>

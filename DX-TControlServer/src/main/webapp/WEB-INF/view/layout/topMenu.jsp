@@ -15,9 +15,6 @@
 <script type="text/javascript" src="../js/common.js"></script>
 </head>
 <body>
-<div id="wrap">
-		<!-- header -->
-		<div id="header">
 			<h1 class="logo"><a href="/index.do"><img src="../images/logo.png" alt="eXperDB" /></a></h1>
 			<div id="gnb_menu">
 				<h2 class="blind">주메뉴</h2>
@@ -78,9 +75,7 @@
 					</li>
 				</ul>
 			</div>
-		</div>
-		<!-- // header -->
-</div>
+
 
 
 
