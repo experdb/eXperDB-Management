@@ -167,10 +167,6 @@
 	});
 </script>
 <body>
-	<!-- container -->
-	<div id="container">
-		<!-- contents -->
-		<div id="contents">
 			<div class="location">
 				<ul>
 					<li>Admin</li>
@@ -237,10 +233,7 @@
 					</div>
 				</div>
 			</div>
-		</div>
-		<!-- // contents -->
-	</div>
-	<!-- // container -->
+
 
 
 

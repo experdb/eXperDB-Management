@@ -20,7 +20,9 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <title>패스워드변경 팝업</title>
-<script src="/js/jquery/jquery-1.12.4.js" type="text/javascript"></script>
+<link rel="stylesheet" type="text/css" href="../css/common.css">
+<script type="text/javascript" src="../js/jquery-1.9.1.min.js"></script>
+<script type="text/javascript" src="../js/common.js"></script>
 <script>
 	/*Validation*/
 	function fn_pwdValidation(){
@@ -90,7 +92,49 @@
 
 </head>
 <body>
-	<h4>비밀번호변경</h4>
+<div class="pop_container">
+	<div class="pop_cts">
+		<p class="tit">패스워드 변경하기</p>
+		<table class="write">
+			<caption>패스워드 변경하기</caption>
+			<colgroup>
+				<col style="width:120px;" />
+				<col />
+			</colgroup>
+			<tbody>
+				<tr>
+					<th scope="row" class="ico_t1">현재 패스워드</th>
+					<td><input type="password" class="txt" name="" /></td>
+				</tr>
+			</tbody>
+		</table>
+		<div class="pop_cmm2">
+			<table class="write">
+				<caption>패스워드 변경하기</caption>
+				<colgroup>
+					<col style="width:120px;" />
+					<col />
+				</colgroup>
+				<tbody>
+					<tr>
+						<th scope="row" class="ico_t1">새 패스워드</th>
+						<td><input type="password" class="txt" name="" /></td>
+					</tr>
+					<tr>
+						<th scope="row" class="ico_t1">새 패스워드 확인</th>
+						<td><input type="password" class="txt" name="" /></td>
+					</tr>
+				</tbody>
+			</table>
+		</div>
+		<div class="btn_type_02">
+			<span class="btn btnC_01"><button>저장</button></span>
+			<a href="#n" class="btn" onclick="window.close();"><span>취소</span></a>
+		</div>
+	</div>
+	
+	
+	<!-- <h4>비밀번호변경</h4>
 	<table border="1px solid #ccc" style="border-collapse: collapse;">
 	<tr>
 		<td>현재 패스워드</td>
@@ -110,6 +154,6 @@
 	<div id="button" style="float: center;">
 		<button onclick="fn_update()">확인</button>
 		<button onclick="javascript:window.close();">취소</button>
-	</div>
+	</div> -->
 </body>
 </html>

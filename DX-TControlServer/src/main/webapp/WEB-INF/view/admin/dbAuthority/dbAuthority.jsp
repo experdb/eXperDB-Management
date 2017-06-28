@@ -95,10 +95,6 @@
 	});
 </script>
 <body>
-		<!-- container -->
-		<div id="container">
-			<!-- contents -->
-			<div id="contents">
 				<div class="location">
 					<ul>
 						<li>Admin</li>
@@ -363,8 +359,7 @@
 						</div>
 					</div>
 				</div>
-			</div><!-- // contents -->
-		</div><!-- // container -->
+				
 <!-- 	<h2>DB권한관리</h2>
 	<table width="100%">
 		<tr>

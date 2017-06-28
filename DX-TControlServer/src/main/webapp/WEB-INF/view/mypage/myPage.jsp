@@ -177,10 +177,7 @@
 		</div><!-- //pop-container -->
 	</div>
 	
-	<!-- container -->
-	<div id="container">
-		<!-- contents -->
-		<div id="contents">
+
 			<div class="location">
 				<ul>
 					<li>My PAGE</li>
@@ -247,10 +244,7 @@
 					</div>
 				</div>
 			</div>
-		</div>
-		<!-- // contents -->
-	</div>
-	<!-- // container -->
+
 
 
 

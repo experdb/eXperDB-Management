@@ -88,11 +88,6 @@ $(window.document).ready(function() {
 });
 </script>
 <body>
-
-		<!-- container -->
-		<div id="container">
-			<!-- contents -->
-			<div id="contents">
 				<div class="location">
 					<ul>
 						<li>Admin</li>
@@ -343,8 +338,6 @@ $(window.document).ready(function() {
 						</div>
 					</div>
 				</div>
-			</div><!-- // contents -->
-		</div><!-- // container -->
 
 <!-- 	<h2>메뉴권한 관리</h2>
 	<table width="100%">

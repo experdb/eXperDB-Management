@@ -192,10 +192,6 @@
 		<input type="hidden" name="user_nm" id="user_nm">
 	</form>
 
-	<!-- container -->
-	<div id="container">
-		<!-- contents -->
-		<div id="contents">
 			<div class="location">
 				<ul>
 					<li>Admin</li>
@@ -257,10 +253,6 @@
 					</div>
 				</div>
 			</div>
-		</div>
-		<!-- // contents -->
-	</div>
-	<!-- // container -->
 
 
 

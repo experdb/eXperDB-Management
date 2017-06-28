@@ -198,9 +198,6 @@
 	
 </script>
 <body>
-		<div id="container">
-			<!-- contents -->
-			<div id="contents">
 				<div class="location">
 					<ul>
 						<li>Function</li>
@@ -256,8 +253,6 @@
 						</div>
 					</div>
 				</div>
-			</div><!-- // contents -->
-		</div>
 
 <%-- 	<div id="content_pop">
 		<!-- 타이틀 -->
