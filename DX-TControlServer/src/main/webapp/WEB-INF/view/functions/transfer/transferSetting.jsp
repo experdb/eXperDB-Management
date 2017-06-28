@@ -25,7 +25,6 @@
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <title>전송설정</title>
 </head>
-<link type="text/css" rel="stylesheet" href="<c:url value='/css/egovframework/sample.css'/>" />
 <script>
 	
 	/* 숫자체크 */
@@ -168,9 +167,9 @@
 			success : function(data) {
  				var cnt = data.length;
  				if(cnt==0){
- 					$('<button onclick="fn_insert()"></button>').text('저장').appendTo('#sysbtn');
+ 					$('<button onclick="fn_insert()"></button>').text('저장').appendTo('.btnC_01');
  				}else{
- 				   $('<button onclick="fn_update()"></button>').text('저장').appendTo('#sysbtn');
+ 				   $('<button onclick="fn_update()"></button>').text('저장').appendTo('.btnC_01');
 		            for (var i = 0; i < cnt; i++) {
 		            	var trf_svr_nm = data[i].trf_svr_nm;
 		            	var ipadr = data[i].ipadr;
@@ -199,7 +198,68 @@
 	
 </script>
 <body>
-	<div id="content_pop">
+		<div id="container">
+			<!-- contents -->
+			<div id="contents">
+				<div class="location">
+					<ul>
+						<li>Function</li>
+						<li>Transfer</li>
+						<li class="on">전송설정</li>
+					</ul>
+				</div>
+
+				<div class="contents_wrap">
+					<h4>전송설정 화면</h4>
+					<div class="contents">
+						<div class="cmm_center">
+							<table class="list">
+								<caption>전송설정 화면 리스트</caption>
+								<colgroup>
+									<col style="width:165px;" />
+									<col style="width:187px;" />
+									<col style="width:164px;" />
+								</colgroup>
+								<thead>
+									<tr>
+										<th scope="col">서버명</th>
+										<th scope="col">아이디</th>
+										<th scope="col">포트</th>
+									</tr>
+								</thead>
+								<tbody>
+									<tr>
+										<td>Kafka Broker</td>
+										<td><input type="text" class="txt" name="kbipadr" id="kbipadr"/></td>
+										<td class="type2"><input type="text" class="txt" name="kbportno" id="kbportno"/></td>
+									</tr>
+									<tr>
+										<td>Schema registry</td>
+										<td><input type="text" class="txt" name="sripadr" id="sripadr"/></td>
+										<td class="type2"><input type="text" class="txt" name="srportno" id="srportno"/></td>
+									</tr>
+									<tr>
+										<td>Zookeeper</td>
+										<td><input type="text" class="txt" name="zipadr" id="zipadr"/></td>
+										<td class="type2"><input type="text" class="txt" name="zportno" id="zportno"/></td>
+									</tr>
+									<tr>
+										<td>Battoed Water</td>
+										<td><input type="text" class="txt" name="bipadr" id="bipadr"/></td>
+										<td class="type2"><input type="text" class="txt" name="bportno" id="bportno"/></td>
+									</tr>
+								</tbody>
+							</table>
+							<div class="btn_type_04">
+								<span class="btn btnC_01"></span>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div><!-- // contents -->
+		</div>
+
+<%-- 	<div id="content_pop">
 		<!-- 타이틀 -->
 		<div id="title">
 			<ul>
@@ -247,7 +307,6 @@
 		<!-- //등록버튼 -->
 		<div id="sysbtn">
 		</div>
-
-	</div>
+	</div> --%>
 </body>
 </html>
