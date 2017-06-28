@@ -23,13 +23,6 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-<link type="text/css" rel="stylesheet" href="<c:url value='/css/dt/jquery.dataTables.min.css'/>" />
-<link rel="stylesheet" type="text/css" href="/css/dt/dataTables.checkboxes.css" />
-<script src="js/jquery/jquery-1.7.2.min.js" type="text/javascript"></script>
-<script src="js/jquery/jquery-ui.js" type="text/javascript"></script>
-<script src="js/json2.js" type="text/javascript"></script>
-<script src="js/jquery/jquery.dataTables.min.js" type="text/javascript"></script>
-<script src="js/dt/dataTables.checkboxes.min.js" type="text/javascript"></script>
 <title>Insert title here</title>
 
 
@@ -143,6 +136,7 @@ function fn_regRe_popup(){
 
 </head>
 <body>
+<div id="contents">
 			<div class="location">
 				<ul>
 					<li>Admin</li>
@@ -205,6 +199,6 @@ function fn_regRe_popup(){
 					</div>
 				</div>
 			</div>
-
+		</div>
 </body>
 </html>

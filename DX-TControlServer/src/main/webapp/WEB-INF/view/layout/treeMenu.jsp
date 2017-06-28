@@ -1,20 +1,9 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
-<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
-<%@ taglib prefix="form" uri="http://www.springframework.org/tags/form"%>
-<%@ taglib prefix="ui" uri="http://egovframework.gov/ctl/ui"%>
-<%@ taglib prefix="spring" uri="http://www.springframework.org/tags"%>
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
-<head>
-<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-<title>eXperDB</title>
-<link rel="stylesheet" type="text/css" href="../css/common.css">
-<script type="text/javascript" src="../js/jquery-1.9.1.min.js"></script>
-<script src="js/jquery/jquery-1.7.2.min.js" type="text/javascript"></script>
+
 
 
 <script type="text/javascript">
-	$(window.document).ready(   
+	$(window.document).ready(   		
 		function() {	
    			$.ajax({
 				async : false,
@@ -43,11 +32,14 @@
 				success : function(result) {
 					GetJsonDataConnector(result)
 				}
-			});      
+			});  
+   			
         });
         
 
 		function GetJsonData(data) {
+			var i=1;
+			
 			var parseData = $.parseJSON(data);
 
 		 	var html1 = "";
@@ -79,7 +71,7 @@
 				html1+='	</li>';
 				html1+='</ul>';							
 			})		
-			$( ".type1" ).append(html1);
+			$( "#tree1" ).append(html1);
 		}
 		
 	
@@ -106,7 +98,7 @@
 				html += '		</li>';
 				html += '	</ul>';			
 			})	
-			$( ".type2" ).append(html);
+			$( "#tree2" ).append(html);
 		}	
 	
 		
@@ -116,21 +108,22 @@
 		frm.submit();	
 	}	
     </script>
-<script type="text/javascript" src="../js/common.js"></script> 
-</head>
 
-<body>
+<script type="text/javascript" src="../js/jquery.mCustomScrollbar.concat.min.js"></script><!-- mCustomScrollbar -->
+<script type="text/javascript" src="../js/common.js"></script>
+
+
+	<div id="lnb_menu">
 		<form name="treeView" id="treeView">
 				<div class="logout">
 					<button onClick="fn_logout();">LOGOUT</button>
 				</div>
 				<h3 class="blind">LNB 메뉴</h3>
 				<div class="lnb">
-					<div class="inr type1">
+					<div class="inr type1" id="tree1">
 					</div>
-					<div class="inr type2">
+					<div class="inr type2" id=tree2>
 					</div>
 				</div>
 		</form>
-</body>
-</html>
+		</div>
