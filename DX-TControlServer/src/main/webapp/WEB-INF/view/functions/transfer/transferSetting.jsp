@@ -1,9 +1,5 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
-<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
-<%@ taglib prefix="form" uri="http://www.springframework.org/tags/form"%>
-<%@ taglib prefix="ui" uri="http://egovframework.gov/ctl/ui"%>
-<%@ taglib prefix="spring" uri="http://www.springframework.org/tags"%>
 <%
 	/**
 	* @Class Name : transferSetting.jsp
@@ -19,14 +15,7 @@
 	*
 	*/
 %>
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
-<head>
-<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-<title>전송설정</title>
-</head>
 <script>
-	
 	/* 숫자체크 */
 	function valid_numeric(objValue)
 	{
@@ -197,7 +186,7 @@
 	});
 	
 </script>
-<body>
+			<div id="contents">
 				<div class="location">
 					<ul>
 						<li>Function</li>
@@ -207,7 +196,7 @@
 				</div>
 
 				<div class="contents_wrap">
-					<h4>전송설정 화면</h4>
+					<h4>전송설정 화면<a href="#n"><img src="../images/ico_tit.png" alt="" /></a></h4>
 					<div class="contents">
 						<div class="cmm_center">
 							<table class="list">
@@ -253,55 +242,5 @@
 						</div>
 					</div>
 				</div>
+			</div>
 
-<%-- 	<div id="content_pop">
-		<!-- 타이틀 -->
-		<div id="title">
-			<ul>
-				<li><img src="<c:url value='/images/egovframework/example/title_dot.gif'/>" alt="" /> 전송설정</li>
-			</ul>
-		</div>
-		<!-- // 타이틀 -->
-		<!-- 리스트 -->
-		<div id="table">
-			<table width="100%" border="0" cellpadding="0" cellspacing="0">
-				<colgroup>
-					<col width="40" />
-					<col width="100" />
-					<col width="150" />
-				</colgroup>
-				<tr>
-					<th align="center">서버명</th>
-					<th align="center">아이피</th>
-					<th align="center">포트</th>
-				</tr>
-				<tr>
-					<td align="center" class="listtd">kafka Broker</td>
-					<td align="center" class="listtd"><input type="text" name="kbipadr" id="kbipadr"></td>
-					<td align="center" class="listtd"><input type="text" name="kbportno" id="kbportno"></td>
-				</tr>
-				<tr>
-					<td align="center" class="listtd">schema registry</td>
-					<td align="center" class="listtd"><input type="text" name="sripadr" id="sripadr"></td>
-					<td align="center" class="listtd"><input type="text" name="srportno" id="srportno"></td>
-				</tr>
-				<tr>
-					<td align="center" class="listtd">zookeeper</td>
-					<td align="center" class="listtd"><input type="text" name="zipadr" id="zipadr"></td>
-					<td align="center" class="listtd"><input type="text" name="zportno" id="zportno"></td>
-				</tr>
-				<tr>
-					<td align="center" class="listtd">BottledWater</td>
-					<td align="center" class="listtd"><input type="text" name="bipadr" id="bipadr"></td>
-					<td align="center" class="listtd"><input type="text" name="bportno" id="bportno"></td>
-				</tr>
-			</table>
-		</div>
-		<!-- // 리스트 -->
-
-		<!-- //등록버튼 -->
-		<div id="sysbtn">
-		</div>
-	</div> --%>
-</body>
-</html>

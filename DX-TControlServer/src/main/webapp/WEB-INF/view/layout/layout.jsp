@@ -20,6 +20,10 @@
 <script src="js/jquery/jquery.dataTables.min.js" type="text/javascript"></script>
 <script src="js/dt/dataTables.checkboxes.min.js" type="text/javascript"></script>
 <script type="text/javascript" src="../js/common.js"></script>
+
+<!-- 달력을 사용 script -->
+<script type="text/javascript" src="/js/jquery-ui.min.js"></script>
+<script type="text/javascript" src="/js/calendar.js"></script>
 </head>
 
 <body>

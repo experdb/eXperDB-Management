@@ -200,7 +200,7 @@
 			</div>
 
 			<div class="contents_wrap">
-				<h4>사용자 접근내역화면</h4>
+				<h4>사용자 접근내역화면<a href="#n"><img src="../images/ico_tit.png" alt="" /></a></h4>
 				<div class="contents">
 					<div class="cmm_grp">
 						<div class="btn_type_float">
