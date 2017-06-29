@@ -108,7 +108,7 @@ function fn_search(){
  * 서버 등록 팝업페이지 호출
  ******************************************************** */
 function fn_reg_popup(){
-	window.open("/popup/dbServerRegForm.do","dbServerRegPop","location=no,menubar=no,resizable=yes,scrollbars=no,status=no,width=800,height=270,top=0,left=0");
+	window.open("/popup/dbServerRegForm.do","dbServerRegPop","location=no,menubar=no,resizable=yes,scrollbars=no,status=no,width=920,height=380,top=0,left=0");
 }
 
 
@@ -119,7 +119,7 @@ function fn_regRe_popup(){
 	var datas = table.rows('.selected').data();
 	if (datas.length == 1) {
 		var db_svr_id = table.row('.selected').data().db_svr_id;
-		window.open("/popup/dbServerRegReForm.do?db_svr_id="+db_svr_id,"dbServerRegRePop","location=no,menubar=no,resizable=yes,scrollbars=no,status=no,width=800,height=270,top=0,left=0");
+		window.open("/popup/dbServerRegReForm.do?db_svr_id="+db_svr_id,"dbServerRegRePop","location=no,menubar=no,resizable=yes,scrollbars=no,status=no,width=920,height=380,top=0,left=0");
 	} else {
 		alert("하나의 항목을 선택해주세요.");
 	}	
@@ -142,8 +142,8 @@ function fn_regRe_popup(){
 					<div class="cmm_grp">
 						<div class="btn_type_01">
 							<span class="btn"><button onClick="fn_search()">조회</button></span>
-							<span class="btn" onclick="toggleLayer($('#pop_layer'), 'on');"><button>등록</button></span>
-							<span class="btn" onclick="toggleLayer($('#pop_layer2'), 'on');"><button>수정</button></span>
+							<span class="btn" onclick="fn_reg_popup();"><button>등록</button></span>
+							<span class="btn" onclick="fn_regRe_popup();"><button>수정</button></span>
 							<a href="#n" class="btn"><span>삭제</span></a>
 						</div>
 						<div class="sch_form">
