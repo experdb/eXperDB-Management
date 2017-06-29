@@ -16,17 +16,10 @@
 	*/
 %>    
 
-
-<%-- <link type="text/css" rel="stylesheet" href="<c:url value='/css/dt/jquery.dataTables.min.css'/>" />
-<link rel="stylesheet" href="<c:url value='/css/dt/dataTables.jqueryui.min.css'/>" />
-<link rel="stylesheet" type="text/css" href="/css/dt/dataTables.checkboxes.css" />
-<script src="js/jquery/jquery-1.7.2.min.js" type="text/javascript"></script>
-<script src="js/jquery/jquery-ui.js" type="text/javascript"></script>
-<script src="js/jquery/jquery.dataTables.min.js" type="text/javascript"></script>
-<script src="js/dt/dataTables.checkboxes.min.js" type="text/javascript"></script> --%>
-
-
 <script>
+//연결테스트 확인여부
+var connCheck = "fail";
+
 var table_dbServer = null;
 var table_db = null;
 
@@ -37,8 +30,8 @@ function fn_init() {
 	 ******************************************************** */
 	table_dbServer = $('#dbServerList').DataTable({
 		scrollY : "245px",
-		processing : true,
 		searching : false,
+		paging : false,
 		columns : [
 		{data : "rownum", defaultContent : "", className : "dt-center", 
 			targets: 0,
@@ -70,6 +63,7 @@ function fn_init() {
 	table_db = $('#dbList').DataTable({
 		scrollY : "285px",
 		searching : false,
+		paging : false,
 		columns : [
 		{data : "dft_db_nm", className : "dt-center", defaultContent : ""}, 
 		{data : "rownum", defaultContent : "", targets : 0, orderable : false, checkboxes : {'selectRow' : true}}, 		
@@ -143,25 +137,26 @@ $(function() {
         
     } );
     
+
 })
 
 
 /* ********************************************************
- * 페이지 시작시(서버 조회)
+ * 서버 등록 팝업페이지 호출
  ******************************************************** */
 function fn_reg_popup(){
-	window.open("/popup/dbServerRegForm.do","dbServerRegPop","location=no,menubar=no,resizable=yes,scrollbars=no,status=no,width=800,height=270,top=0,left=0");
+	window.open("/popup/dbServerRegForm.do","dbServerRegPop","location=no,menubar=no,scrollbars=no,status=no,width=920,height=380");
 }
 
 
 /* ********************************************************
- * 서버 등록
+ * 서버 수정 팝업페이지 호출
  ******************************************************** */
 function fn_regRe_popup(){
 	var datas = table_dbServer.rows('.selected').data();
 	if (datas.length == 1) {
 		var db_svr_id = table_dbServer.row('.selected').data().db_svr_id;
-		window.open("/popup/dbServerRegReForm.do?db_svr_id="+db_svr_id,"dbServerRegRePop","location=no,menubar=no,resizable=yes,scrollbars=no,status=no,width=800,height=270,top=0,left=0");
+		window.open("/popup/dbServerRegReForm.do?db_svr_id="+db_svr_id,"dbServerRegRePop","location=no,menubar=no,resizable=yes,scrollbars=no,status=no,width=920,height=380");
 	} else {
 		alert("하나의 항목을 선택해주세요.");
 	}	
@@ -244,7 +239,6 @@ function fn_dataCompareChcek(svrDbList){
 
 
 </script>
-
 <div id="contents">
 				<div class="location">
 					<ul>
@@ -255,13 +249,13 @@ function fn_dataCompareChcek(svrDbList){
 				</div>
 
 				<div class="contents_wrap">
-					<h4>DB 서버 Tree 화면</h4>
+					<h4>DB 서버 Tree 화면<a href="#n"><img src="../images/ico_tit.png" alt="" /></a></h4>
 					<div class="contents">
 						<div class="tree_grp">
 							<div class="tree_lt">
 								<div class="btn_type_01">
-									<span class="btn"><button onClick="fn_reg_popup()">등록</button></span>
-									<span class="btn"><button onClick="fn_regRe_popup()">수정</button></span>
+									<span class="btn"><button onclick="fn_reg_popup();">등록</button></span>
+									<span class="btn"><button onClick="fn_regRe_popup();">수정</button></span>
 									<a href="#n" class="btn"><span>삭제</span></a>
 								</div>
 								<div class="inner">
@@ -270,7 +264,7 @@ function fn_dataCompareChcek(svrDbList){
 										<table id="dbServerList" class="display" cellspacing="0"  align="right">
 											<thead>
 												<tr>
-													<th></th>
+													<th>선택</th>
 													<th></th>
 													<th></th>
 													<th>DB 서버</th>
@@ -310,3 +304,4 @@ function fn_dataCompareChcek(svrDbList){
 					</div>
 				</div>
 			</div>	
+	
