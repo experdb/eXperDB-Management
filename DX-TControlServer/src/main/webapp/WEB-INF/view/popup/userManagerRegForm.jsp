@@ -171,7 +171,7 @@
 				$("#dept_nm").attr("onfocus", "idcheck_alert();");
 				$("#pst_nm").attr("onfocus", "idcheck_alert();");
 				$("#rsp_bsn_nm").attr("onfocus", "idcheck_alert();");
-				$("#cphno").attr("onfocus", "idcheck_alert();");
+				$("#cpn").attr("onfocus", "idcheck_alert();");
 				$("#datepicker").attr("onfocus", "idcheck_alert();");
 				$("#use_yn").attr("onfocus", "idcheck_alert();");
 			}
