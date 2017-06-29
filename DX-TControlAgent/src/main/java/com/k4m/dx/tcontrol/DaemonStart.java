@@ -9,11 +9,14 @@ import org.slf4j.LoggerFactory;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 
-import com.k4m.dx.tcontrol.db.SqlSessionManager;
+import com.k4m.dx.tcontrol.db.repository.service.SystemServiceImpl;
+import com.k4m.dx.tcontrol.db.repository.vo.AgentInfoVO;
+import com.k4m.dx.tcontrol.db.repository.vo.DbServerInfoVO;
 import com.k4m.dx.tcontrol.deamon.DxDaemon;
 import com.k4m.dx.tcontrol.deamon.DxDaemonManager;
 import com.k4m.dx.tcontrol.deamon.IllegalDxDaemonClassException;
 import com.k4m.dx.tcontrol.socket.DXTcontrolAgentSocket;
+import com.k4m.dx.tcontrol.util.FileUtil;
 
 public class DaemonStart implements DxDaemon{
 	
@@ -24,7 +27,6 @@ public class DaemonStart implements DxDaemon{
 	private static Logger server = LoggerFactory.getLogger("server");
 	
 	private DXTcontrolAgentSocket socketService;
-	
 
 	public static void main(String args[]) {
 		// -shutdown 옵션이 있을 경우 데몬을 종료시킨다.
@@ -64,27 +66,39 @@ public class DaemonStart implements DxDaemon{
 
 			
 		}  catch (Exception e) {
+			errLogger.error("데몬 시작시 에러가 발생하였습니다. {}", e.toString());
 			e.printStackTrace();
 		}
 	}
+	
+	ApplicationContext context;
 	
 	//@Override
 	public void startDaemon() {
 		
 		try {
 		
-			ApplicationContext context = new ClassPathXmlApplicationContext(new String[] {
-					//"Dx-TcontrolAgent-context.xml"
-					"context-datasource.xml"
-					, "context-mapper.xml"
-					, "context-transaction.xml"
+			context = new ClassPathXmlApplicationContext(new String[] {
+					"context-tcontrol.xml"
 				});
 
 			// SqlSessionManager 초기화
 			try {
-				//SqlSessionManager.initInstance();
+				String strIpadr = FileUtil.getPropertyValue("context.properties", "agent.install.ip");
+				
+				DbServerInfoVO searchVO = new DbServerInfoVO();
+				searchVO.setIPADR(strIpadr);
+
+				
+				SystemServiceImpl service = (SystemServiceImpl) context.getBean("SystemServiceImpl");
+
+				DbServerInfoVO dbServerInfo = service.selectDbServerInfo(searchVO);
+				
+				service.agentInfoStartMng(dbServerInfo);
+				
 			} catch (Exception e) {
 				errLogger.error("데몬 시작시 에러가 발생하였습니다. {}", e.toString());
+				e.printStackTrace();
 				return;
 			}		
 			
@@ -120,6 +134,19 @@ public class DaemonStart implements DxDaemon{
 		
 		try {
 			socketService.stop();
+			
+			String strIpadr = FileUtil.getPropertyValue("context.properties", "agent.install.ip");
+			
+			DbServerInfoVO searchVO = new DbServerInfoVO();
+			searchVO.setIPADR(strIpadr);
+
+			
+			SystemServiceImpl service = (SystemServiceImpl) context.getBean("SystemServiceImpl");
+
+			DbServerInfoVO dbServerInfo = service.selectDbServerInfo(searchVO);
+			
+			service.agentInfoStopMng(dbServerInfo);
+			
 		} catch(Exception e) {
 			errLogger.error("데몬 종료시 에러가 발생하였습니다. {0}", e.toString());
 			e.printStackTrace();

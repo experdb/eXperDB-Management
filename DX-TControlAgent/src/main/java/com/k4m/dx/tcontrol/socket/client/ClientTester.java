@@ -59,23 +59,23 @@ public class ClientTester {
 
 			JSONObject serverObj = new JSONObject();
 			
-		
+			/**
 			serverObj.put(ClientProtocolID.SERVER_NAME, "222.110.153.162");
 			serverObj.put(ClientProtocolID.SERVER_IP, "222.110.153.162");
 			serverObj.put(ClientProtocolID.SERVER_PORT, "6432");
 			serverObj.put(ClientProtocolID.DATABASE_NAME, "postgres");
 			serverObj.put(ClientProtocolID.USER_ID, "experdba");
 			serverObj.put(ClientProtocolID.USER_PWD, "experdba");
-		
+		**/
 			
-			/**
+		
 			serverObj.put(ClientProtocolID.SERVER_NAME, "222.110.153.162");
 			serverObj.put(ClientProtocolID.SERVER_IP, "222.110.153.162");
 			serverObj.put(ClientProtocolID.SERVER_PORT, "5432");
 			serverObj.put(ClientProtocolID.DATABASE_NAME, "pgmon");
 			serverObj.put(ClientProtocolID.USER_ID, "pgmon");
 			serverObj.put(ClientProtocolID.USER_PWD, "pgmon");
-			**/
+		
 			
 			
 			

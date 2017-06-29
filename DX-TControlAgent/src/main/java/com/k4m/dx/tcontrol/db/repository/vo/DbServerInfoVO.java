@@ -1,10 +1,10 @@
 package com.k4m.dx.tcontrol.db.repository.vo;
 
 public class DbServerInfoVO {
-	private String DB_SVR_ID;
+	private int DB_SVR_ID;
 	private String DB_SVR_NM;
 	private String IPADR;
-	private String PORTNO;
+	private int PORTNO;
 	private String DFT_DB_NM;
 	private String SVR_SPR_USR_ID;
 	private String SVR_SPR_SCM_PWD;
@@ -12,10 +12,12 @@ public class DbServerInfoVO {
 	private String FRST_REG_DTM;
 	private String LST_MDFR_ID;
 	private String LST_MDF_DTM;
-	public String getDB_SVR_ID() {
+	
+	
+	public int getDB_SVR_ID() {
 		return DB_SVR_ID;
 	}
-	public void setDB_SVR_ID(String dB_SVR_ID) {
+	public void setDB_SVR_ID(int dB_SVR_ID) {
 		DB_SVR_ID = dB_SVR_ID;
 	}
 	public String getDB_SVR_NM() {
@@ -27,15 +29,16 @@ public class DbServerInfoVO {
 	public String getIPADR() {
 		return IPADR;
 	}
+	public int getPORTNO() {
+		return PORTNO;
+	}
+	public void setPORTNO(int pORTNO) {
+		PORTNO = pORTNO;
+	}
 	public void setIPADR(String iPADR) {
 		IPADR = iPADR;
 	}
-	public String getPORTNO() {
-		return PORTNO;
-	}
-	public void setPORTNO(String pORTNO) {
-		PORTNO = pORTNO;
-	}
+
 	public String getDFT_DB_NM() {
 		return DFT_DB_NM;
 	}

@@ -111,9 +111,119 @@
 	 	* Description : postgresql.auto.conf file setting 조회
 	 	* Author : 박태혁
 	 	**/
-	    select current_setting(${cmd}) as settingValue
+	    select current_setting(#{settingId}) as settingValue
 	</select>
 	
+	<update  id="updatePgauditLogSetting" parameterType="HashMap">
+		/**
+	 	* Query ID : updatePgauditLog
+	 	* Description : log Setting
+	 	* Author : 박태혁
+	 	**/
+		ALTER SYSTEM SET pgaudit.log = #{pgauditLog}
+	</update>
 	
+	<update  id="updatePgauditLogLevelSetting" parameterType="HashMap">
+		/**
+	 	* Query ID : updatePgauditLogLevel
+	 	* Description : log_level Setting
+	 	* Author : 박태혁
+	 	**/
+		ALTER SYSTEM SET pgaudit.log_level = #{pgauditLogLevel}
+	</update>
+	
+	<update  id="updatePgauditLogCatalogSetting" parameterType="HashMap">
+		/**
+	 	* Query ID : updatePgauditLogCatalogSetting
+	 	* Description : log_catalog Setting
+	 	* Author : 박태혁
+	 	**/
+		ALTER SYSTEM SET pgaudit.log_catalog = #{pgauditLogCatalog}
+	</update>
+	
+	<update  id="updatePgauditLogParameterSetting" parameterType="HashMap">
+		/**
+	 	* Query ID : updatePgauditLogParameterSetting
+	 	* Description : log_parameter Setting
+	 	* Author : 박태혁
+	 	**/
+		ALTER SYSTEM SET pgaudit.log_parameter = #{pgauditLogParameter}
+	</update>
+	
+	<update  id="updatePgauditLogStatementOnceSetting" parameterType="HashMap">
+		/**
+	 	* Query ID : updatePgauditLogStatementOnceSetting
+	 	* Description : log_statement_once Setting
+	 	* Author : 박태혁
+	 	**/
+		ALTER SYSTEM SET pgaudit.log_statement_once = #{pgauditLogStatementOnce}
+	</update>
 
+	<update  id="updatePgauditLogRelationSetting" parameterType="HashMap">
+		/**
+	 	* Query ID : updatePgauditLogRelation
+	 	* Description : log_relation Setting
+	 	* Author : 박태혁
+	 	**/
+		ALTER SYSTEM SET pgaudit.log_relation = #{pgauditLogRelation}
+	</update>
+	
+	<update  id="updatePgauditRoleSetting" parameterType="HashMap">
+		/**
+	 	* Query ID : updatePgauditRole
+	 	* Description : role Setting
+	 	* Author : 박태혁
+	 	**/
+		ALTER SYSTEM SET pgaudit.role = #{pgauditRole}
+	</update>
+	
+	<select id="selectPgReloadConfSetting">
+		/**
+	 	* Query ID : selectPgReloadConf
+	 	* Description : postgresql.auto.conf에 저장된 정보 로드
+	 	* Author : 박태혁
+	 	**/
+		SELECT pg_reload_conf()
+	</select>
+
+	<select id="selectPgAuditLogList"  parameterType="HashMap" resultType="HashMap">
+		/**
+	 	* Query ID : selectPgAuditLogList
+	 	* Description : 감사 이력 조회
+	 	* Author : 박태혁
+	 	**/
+		SELECT 
+			session_id
+			, session_line_num
+			, log_time
+			, user_name
+			, statement_id
+			, state
+			, error_session_line_num
+			, substatement_id
+			, substatement
+			, audit_type
+			, class
+			, command
+			, object_type
+			, object_name
+		FROM
+			pgaudit.vw_audit_event
+		WHERE session_line_num IS NOT NULL
+		
+		<if test="objectName != null AND objectName != ''">
+			AND object_name = #{object_name}
+		</if>
+		
+		<if test="userName != null AND userName != ''">
+			AND user_name = #{userName}
+		</if>
+		
+		<if test="start_date != null AND start_date != ''">
+			AND log_time between to_timestamp(#{start_date}, 'YYYY-MM-DD')
+			AND to_timestamp(#{end_date}, 'YYYY-MM-DD')
+		</if>
+		
+	</select>
+	
 </mapper>
