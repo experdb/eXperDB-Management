@@ -1,9 +1,4 @@
-<%@ page language="java" contentType="text/html; charset=UTF-8"
-	pageEncoding="UTF-8"%>
-<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
-<%@ taglib prefix="form" uri="http://www.springframework.org/tags/form"%>
-<%@ taglib prefix="ui" uri="http://egovframework.gov/ctl/ui"%>
-<%@ taglib prefix="spring" uri="http://www.springframework.org/tags"%>
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%
 	/**
 	* @Class Name : accessHistory.jsp
@@ -19,26 +14,7 @@
 	*
 	*/
 %>
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
-<head>
-<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-<title>화면접근이력</title>
-<%-- <link type="text/css" rel="stylesheet" href="<c:url value='/css/egovframework/jquery-ui.css'/>" /> --%>
-<link type="text/css" rel="stylesheet" href="<c:url value='/css/dt/jquery.dataTables.min.css'/>" />
-<%-- <link rel="stylesheet" href="<c:url value='/css/treeview/jquery.treeview.css'/>" /> --%>
-<%-- <link rel="stylesheet" href="<c:url value='/css/treeview/screen.css'/>" /> --%>
 
-<!-- <script src="js/jquery/jquery-1.7.2.min.js" type="text/javascript"></script> -->
-<script src="js/jquery/jquery-ui.js" type="text/javascript"></script>
-
-<!-- <script src="js/json2.js" type="text/javascript"></script> -->
-<script src="js/jquery/jquery.dataTables.min.js" type="text/javascript"></script>
-
-<!-- <script src="js/treeview/jquery.js" type="text/javascript"></script> -->
-<!-- <script src="js/treeview/jquery.cookie.js" type="text/javascript"></script> -->
-<!-- <script src="js/treeview/jquery.treeview.js" type="text/javascript"></script> -->
-</head>
 <script>
 	var table = null;
 
@@ -78,39 +54,22 @@
 	});
 
 	$(function() {
-		var dateFormat = "mm/dd/yy", from = $("#from").datepicker(
-				{
-					changeMonth : true,
-					changeYear : true,
-					numberOfMonths : 1,
-					prevText : '이전 달',
-					nextText : '다음 달',
-					monthNames : [ '1월', '2월', '3월', '4월', '5월', '6월', '7월',
-							'8월', '9월', '10월', '11월', '12월' ],
-					monthNamesShort : [ '1월', '2월', '3월', '4월', '5월', '6월',
-							'7월', '8월', '9월', '10월', '11월', '12월' ],
-					dayNames : [ '일', '월', '화', '수', '목', '금', '토' ],
-					dayNamesShort : [ '일', '월', '화', '수', '목', '금', '토' ],
-					dayNamesMin : [ '일', '월', '화', '수', '목', '금', '토' ],
-				}).on("change", function() {
-			to.datepicker("option", "minDate", getDate(this));
-		}), to = $("#to").datepicker(
-				{
-					changeMonth : true,
-					changeYear : true,
-					numberOfMonths : 1,
-					prevText : '이전 달',
-					nextText : '다음 달',
-					monthNames : [ '1월', '2월', '3월', '4월', '5월', '6월', '7월',
-							'8월', '9월', '10월', '11월', '12월' ],
-					monthNamesShort : [ '1월', '2월', '3월', '4월', '5월', '6월',
-							'7월', '8월', '9월', '10월', '11월', '12월' ],
-					dayNames : [ '일', '월', '화', '수', '목', '금', '토' ],
-					dayNamesShort : [ '일', '월', '화', '수', '목', '금', '토' ],
-					dayNamesMin : [ '일', '월', '화', '수', '목', '금', '토' ],
-				}).on("change", function() {
-			from.datepicker("option", "maxDate", getDate(this));
-		});
+		var dateFormat = "yyyy-mm-dd", 
+		from = $("#from").datepicker({
+				changeMonth : true,
+				changeYear : true,
+				onClose: function( selectedDate ) {
+				$( "#to" ).datepicker( "option", "minDate", selectedDate );
+				}
+			})
+								
+		to = $("#to").datepicker({
+				changeMonth : true,
+				changeYear : true,	
+				onClose: function( selectedDate ) {
+				$( "#from" ).datepicker( "option", "maxDate", selectedDate );
+				}
+			})
 
 		function getDate(element) {
 			var date;
@@ -294,5 +253,3 @@
 			</tr>
 		</thead>
 	</table> --%>
-</body>
-</html>

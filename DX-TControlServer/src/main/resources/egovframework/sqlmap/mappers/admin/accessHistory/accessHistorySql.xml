@@ -34,7 +34,7 @@
 			WHERE G.EXE_DTL_CD =C.SYS_CD
 			AND G.USR_ID=I.USR_ID
 			<if test="lgi_dtm_start != null and lgi_dtm_start != '' ">
-				AND to_char(G.EXEDTM,'MM/DD/YYYY') between #{lgi_dtm_start} and #{lgi_dtm_end}
+				AND to_char(G.EXEDTM,'YYYY-MM-DD') between #{lgi_dtm_start} and #{lgi_dtm_end}
 			</if>
 			<if test="usr_nm != null and usr_nm != '' ">
 				AND I.USR_NM LIKE #{usr_nm}
