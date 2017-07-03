@@ -16,8 +16,8 @@
 						<ul class="depth_2">
 							<li><a href="#n">Scheduler</a>
 								<ul class="depth_3">
-									<li><a href="#n">스케쥴 설정</a></li>
-									<li><a href="#n">스케쥴 조회</a></li>
+									<li><a href="/insertSchedule.do">스케쥴 등록</a></li>
+									<li><a href="/selectSchedule.do">스케쥴 조회</a></li>
 								</ul>
 							</li>
 							<li><a href="#n">Transfer</a>
