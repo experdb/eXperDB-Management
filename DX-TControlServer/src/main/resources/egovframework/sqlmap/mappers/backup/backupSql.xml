@@ -114,9 +114,9 @@
 			#{log_file_stg_dcnt},
 			#{log_file_mtn_ecnt},
 			#{file_stg_dcnt},
-			'',
+			#{frst_regr_id},
 			now(),
-			'',
+			#{frst_regr_id},
 			now()
 			)
 	</insert>
@@ -162,9 +162,9 @@
 			#{usr_role_nm},
 			#{file_stg_dcnt},
 			#{bck_mtn_ecnt},
-			'',
+			#{frst_regr_id},
 			now(),
-			'',
+			#{frst_regr_id},
 			now()
 			)
 	</insert>
@@ -185,7 +185,7 @@
 			log_file_stg_dcnt = #{log_file_stg_dcnt},
 			log_file_mtn_ecnt = #{log_file_mtn_ecnt},
 			file_stg_dcnt = #{file_stg_dcnt},
-			lst_mdfr_id = '',
+			lst_mdfr_id = #{lst_mdfr_id},
 			lst_mdf_dtm = now()
 		WHERE
 			WRK_ID = #{wrk_id}
@@ -223,9 +223,9 @@
 			#{grp_cd},
 			#{opt_cd},
 			#{bck_opt_val},
-			'',
+			#{frst_regr_id},
 			now(),
-			'',
+			#{frst_regr_id},
 			now()
 			)
 	</insert>
@@ -300,6 +300,24 @@
 		WHERE
 			DB_SVR_ID = #{db_svr_id}
 		ORDER BY DB_ID DESC
+    </select>
+    
+    <select id="selectDbSvrNm" parameterType="workVO" resultType="dbServerVO">
+		/**
+	 	* Query ID : selectDbSvrNm
+	 	* Description : DB Server Name 조회
+	 	* Author : Yoon jh
+	 	**/
+	 	SELECT
+			DB_SVR_NM,
+			IPADR,
+			PORTNO,
+			DFT_DB_NM,
+			SVR_SPR_USR_ID,
+			SVR_SPR_SCM_PWD
+		FROM T_DBSVR_I	
+		WHERE
+			DB_SVR_ID = #{db_svr_id}
     </select>
     
     <select id="selectWorkLogList" parameterType="workLogVO" resultType="workLogVO">

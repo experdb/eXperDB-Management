@@ -120,9 +120,9 @@ function fn_find_list(){
 
 function changeFileFmtCd(){
 	if($("#file_fmt_cd").val() == "TC000401"){
-		$(".cprt_1").show();
+		$("#cprt").removeAttr("disabled");
 	}else{
-		$(".cprt_1").hide();
+		$("#cprt").attr("disabled",true);
 	}
 	
 	if($("#file_fmt_cd").val() == "TC000402"){
@@ -279,13 +279,16 @@ function checkOid(){
 						<td>
 							<select name="usr_role_nm" id="usr_role_nm" class="select t4">
 								<option value="">선택</option>
+								<c:forEach var="result" items="${roleList.data}" varStatus="status">
+								<option value="<c:out value="${result.rolname}"/>"><c:out value="${result.rolname}"/></option>
+								</c:forEach>
 							</select>
 						</td>
 					</tr>
 					<tr>
 						<th scope="row" class="ico_t2">압축률</th>
 						<td>
-							<select name="cprt" id="cprt" class="select t4">
+							<select name="cprt" id="cprt" class="select t4" style="width:80px;">
 								<option value="0">미압축</option>
 								<option value="1">1Level</option>
 								<option value="2">2Level</option>

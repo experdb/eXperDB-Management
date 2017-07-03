@@ -1,8 +1,14 @@
 package com.k4m.dx.tcontrol.backup.web;
 
+import java.util.HashMap;
 import java.util.List;
-import javax.servlet.http.HttpServletResponse;
+import java.util.Map;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
+
+import org.json.simple.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
@@ -11,12 +17,16 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
+
+import com.k4m.dx.tcontrol.admin.dbserverManager.service.DbServerVO;
 import com.k4m.dx.tcontrol.backup.service.BackupService;
 import com.k4m.dx.tcontrol.backup.service.DbVO;
 import com.k4m.dx.tcontrol.backup.service.WorkLogVO;
 import com.k4m.dx.tcontrol.backup.service.WorkOptDetailVO;
 import com.k4m.dx.tcontrol.backup.service.WorkOptVO;
 import com.k4m.dx.tcontrol.backup.service.WorkVO;
+import com.k4m.dx.tcontrol.cmmn.client.ClientInfoCmmn;
+import com.k4m.dx.tcontrol.cmmn.client.ClientProtocolID;
 import com.k4m.dx.tcontrol.common.service.CmmnCodeDtlService;
 import com.k4m.dx.tcontrol.common.service.CmmnCodeVO;
 import com.k4m.dx.tcontrol.common.service.PageVO;
@@ -39,8 +49,14 @@ public class BackupController {
 		ModelAndView mv = new ModelAndView();
 
 		mv.addObject("db_svr_id",workVO.getDb_svr_id());
+		try {
+			mv.addObject("db_svr_nm", backupService.selectDbSvrNm(workVO).getDb_svr_nm());
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		mv.setViewName("backup/rmanList");
-		return mv;	
+		return mv;
 	}
 	
 	/**
@@ -49,12 +65,22 @@ public class BackupController {
 	 * @throws Exception
 	 */
 	@RequestMapping(value = "/backup/dumpList.do")
-	public ModelAndView dumpList(@ModelAttribute("workVo") WorkVO workVO, ModelMap model) throws Exception {
+	public ModelAndView dumpList(@ModelAttribute("workVo") WorkVO workVO, ModelMap model){
 		ModelAndView mv = new ModelAndView();
 
-		List<DbVO> dbList = backupService.selectDbList(workVO);
+		try {
+			mv.addObject("dbList",backupService.selectDbList(workVO));
+		} catch (Exception e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
 		
-		mv.addObject("dbList",dbList);
+		try {
+			mv.addObject("db_svr_nm", backupService.selectDbSvrNm(workVO).getDb_svr_nm());
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		mv.addObject("db_svr_id",workVO.getDb_svr_id());
 		mv.setViewName("backup/dumpList");
 		return mv;
@@ -142,9 +168,11 @@ public class BackupController {
 	 * @return ModelAndView mv
 	 * @throws Exception
 	 */
+	@SuppressWarnings("unchecked")
 	@RequestMapping(value = "/popup/dumpRegForm.do")
 	public ModelAndView dumpRegForm(@ModelAttribute("workVo") WorkVO workVO, ModelMap model) throws Exception {
 		ModelAndView mv = new ModelAndView();
+		Map<String, Object> result =new HashMap<String, Object>();
 		
 		mv.addObject("dbList", backupService.selectDbList(workVO));
 		
@@ -159,6 +187,27 @@ public class BackupController {
 			e.printStackTrace();
 		}
 		
+		try {
+			DbServerVO dbServerVO = backupService.selectDbSvrNm(workVO);
+			
+			JSONObject serverObj = new JSONObject();
+			
+			serverObj.put(ClientProtocolID.SERVER_NAME, dbServerVO.getDb_svr_nm());
+			serverObj.put(ClientProtocolID.SERVER_IP, dbServerVO.getIpadr());
+			serverObj.put(ClientProtocolID.SERVER_PORT, dbServerVO.getPortno());
+			serverObj.put(ClientProtocolID.DATABASE_NAME, dbServerVO.getDft_db_nm());
+			serverObj.put(ClientProtocolID.USER_ID, dbServerVO.getSvr_spr_usr_id());
+			serverObj.put(ClientProtocolID.USER_PWD, dbServerVO.getSvr_spr_scm_pwd());
+			
+			ClientInfoCmmn cic = new ClientInfoCmmn();
+			result = cic.role_List(serverObj);
+
+			mv.addObject("roleList",result);
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
 		mv.addObject("db_svr_id",workVO.getDb_svr_id());
 		mv.setViewName("popup/dumpRegForm");
 		return mv;	
@@ -170,9 +219,12 @@ public class BackupController {
 	 * @throws Exception
 	 */
 	@RequestMapping(value = "/popup/workRmanWrite.do")
-	public void workRmanWrite(@ModelAttribute("workVO") WorkVO workVO, HttpServletResponse response) throws Exception{
+	public void workRmanWrite(@ModelAttribute("workVO") WorkVO workVO, HttpServletResponse response, HttpServletRequest request) throws Exception{
 		WorkVO resultSet = null;
-		
+		HttpSession session = request.getSession();
+		String usr_id = (String) session.getAttribute("usr_id");
+
+		workVO.setFrst_regr_id(usr_id);
 		backupService.insertRmanWork(workVO);
 		resultSet = backupService.lastWorkId();
 		
@@ -187,9 +239,12 @@ public class BackupController {
 	 * @throws Exception
 	 */
 	@RequestMapping(value = "/popup/workDumpWrite.do")
-	public void workDumpWrite(@ModelAttribute("workVO") WorkVO workVO, HttpServletResponse response) throws Exception{
+	public void workDumpWrite(@ModelAttribute("workVO") WorkVO workVO, HttpServletResponse response, HttpServletRequest request) throws Exception{
 		WorkVO resultSet = null;
-		
+		HttpSession session = request.getSession();
+		String usr_id = (String) session.getAttribute("usr_id");
+
+		workVO.setFrst_regr_id(usr_id);
 		backupService.insertDumpWork(workVO);
 		resultSet = backupService.lastWorkId();
 		
@@ -199,8 +254,12 @@ public class BackupController {
 	}
 	
 	@RequestMapping(value = "/popup/workOptWrite.do")
-	public void workOptWrite(@ModelAttribute("WorkOptVO") WorkOptVO workOptVO, HttpServletResponse response){
+	public void workOptWrite(@ModelAttribute("WorkOptVO") WorkOptVO workOptVO, HttpServletResponse response, HttpServletRequest request){
+		HttpSession session = request.getSession();
+		String usr_id = (String) session.getAttribute("usr_id");
+		
 		try{
+			workOptVO.setFrst_regr_id(usr_id);
 			backupService.insertWorkOpt(workOptVO);
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -265,7 +324,11 @@ public class BackupController {
 	 * @throws Exception
 	 */
 	@RequestMapping(value = "/popup/workRmanReWrite.do")
-	public void workRmanReWrite(@ModelAttribute("workVO") WorkVO workVO, HttpServletResponse response) throws Exception{
+	public void workRmanReWrite(@ModelAttribute("workVO") WorkVO workVO, HttpServletResponse response, HttpServletRequest request) throws Exception{
+		HttpSession session = request.getSession();
+		String usr_id = (String) session.getAttribute("usr_id");
+
+		workVO.setLst_mdfr_id(usr_id);
 		backupService.updateRmanWork(workVO);
 		
 		// 옵션내역 삭제
