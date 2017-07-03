@@ -3,72 +3,15 @@
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form"%>
 <%@ taglib prefix="ui" uri="http://egovframework.gov/ctl/ui"%>
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags"%>
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!doctype html>
+<html lang="ko">
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-<title>Insert title here</title>
-<script src="/js/jquery/jquery-1.12.4.js" type="text/javascript"></script>
-<link type="text/css" rel="stylesheet" href="<c:url value='/css/egovframework/sample.css'/>" />
-</head>
-<style>
-li.total{
-   list-style-type: none;
-   float: left;
-   padding: 3px 0px 2px 0px;
-   text-align:left;
-   width: 100%;
-   font-family: "돋움";
-   font-size: 12px;
-   font-weight: bold;
-   color: #000000;
-}
-
-li.title{
-   list-style-type: none;
-   float: left;
-   padding: 3px 0px 2px 0px;
-   text-align:left;
-   width: 110px;
-   font-family: "돋움";
-   font-size: 12px;
-   color: #000000;
-   text-
-}
-
-li.content{
-   list-style-type: none;
-   float: left;
-   padding: 3px 0px 2px 0px;
-   text-align:left;
-   width: 520px;
-   font-family: "돋움";
-   font-size: 12px;
-   color: #000000;
-}
-
-li.title1{
-   list-style-type: none;
-   float: left;
-   padding: 3px 0px 2px 0px;
-   text-align:left;
-   width: 170px;
-   font-family: "돋움";
-   font-size: 12px;
-   color: #000000;
-}
-
-li.content1{
-   list-style-type: none;
-   float: left;
-   padding: 3px 0px 2px 0px;
-   text-align:left;
-   width: 125px;
-   font-family: "돋움";
-   font-size: 12px;
-   color: #000000;
-}
-</style>
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<title>eXperDB</title>
+<link rel="stylesheet" type="text/css" href="/css/common.css">
+<script type="text/javascript" src="/js/jquery-1.9.1.min.js"></script>
+<script type="text/javascript" src="/js/common.js"></script>
 <script type="text/javascript">
 // 저장후 작업ID
 var wrk_id = null;
@@ -165,72 +108,114 @@ function fn_find_list(){
 }
 
 </script>
+</head>
 <body>
-	<div id="content_pop">
-		<!-- 타이틀 -->
-		<div id="title">
-			<ul>
-				<li><img
-					src="<c:url value='/images/egovframework/example/title_dot.gif'/>"
-					alt="" /> RMAN백업 수정</li>
-			</ul>
-		</div>
-		<!-- // 타이틀 -->
-		
-		<div id="regForm">
-			<form name="workRegForm">
-			<input type="hidden" name="db_svr_id" id="db_svr_id" value="${db_svr_id}"/>
-			<input type="hidden" name="wrk_id" id="wrk_id" value="${wrk_id}"/> 
-			<div>
-				<ul style="padding-top:10px;float:left;">
-					<li class="title"><span>Work명</span></li>
-					<li class="content"><input type="text" name="wrk_nm" id="wrk_nm" value="<c:out value="${workInfo[0].wrk_nm}"/>" maxlength=50/></li>
-					<li class="title"><span>Work설명</span></li>
-					<li class="content"><textarea name="wrk_exp" id="wrk_exp" maxlength=200 style="width:95%;height:50px;"><c:out value="${workInfo[0].wrk_exp}"/></textarea></li>
-					<li class="title"><span>백업옵션</span></li>
-					<li class="content">
-						<select name="bck_opt_cd" id="bck_opt_cd">
-							<option value="">선택</option>
-							<option value="full"<c:if test="${workInfo[0].bck_opt_cd == 'full'}"> selected</c:if>>전체백업</option>
-							<option value="incr"<c:if test="${workInfo[0].bck_opt_cd == 'incr'}"> selected</c:if>>증분백업</option>
-							<option value="achi"<c:if test="${workInfo[0].bck_opt_cd == 'achi'}"> selected</c:if>>아카이브백업</option>
-						</select>
-					</li>
-				</ul>
-				<ul id="cps_opt" style="padding-top:20px;float:left;">
-					<li class="title"><span>압축</span></li>
-					<li class="content"><input type="checkbox" name="cps_yn" id="cps_yn" value="Y" <c:if test="${workInfo[0].cps_yn eq 'Y'}"> checked</c:if>/></li>					
-				</ul>
-				<ul id="back_opt" style="padding-top:0px;float:left;border:1px solid black;">
-					<li class="total"><span>백업파일옵션</span></li>
-					<li class="title1"><span>백업파일 보관일</span></li>
-					<li class="content1"><input type="text" name="file_stg_dcnt" id="file_stg_dcnt" value="<c:out value="${workInfo[0].file_stg_dcnt}"/>" maxlength=3 style="width:50px;"/></li>
-					<li class="title1"><span>백업파일 유지갯수</span></li>
-					<li class="content1"><input type="text" name="bck_mtn_ecnt" id="bck_mtn_ecnt" value="<c:out value="${workInfo[0].bck_mtn_ecnt}"/>" maxlength=3 style="width:50px;"/></li>
-				</ul>
-				<ul id="log_opt" style="float:left;border:1px solid black;">
-					<li class="total"><span>로그파일옵션</span></li> 
-					<li class="title"><span>로그파일백업여부</span></li>
-					<li class="content"><input type="checkbox" name="log_file_bck_yn" id="log_file_bck_yn" value="Y" <c:if test="${workInfo[0].log_file_bck_yn eq 'Y'}"> checked</c:if>/></li>
-					<li class="title1"><span>서버로그 파일보관일수</span></li>
-					<li class="content1"><input type="text" name="log_file_stg_dcnt" id="log_file_stg_dcnt" value="<c:out value="${workInfo[0].log_file_stg_dcnt}"/>" maxlength=3 style="width:50px;"/></li>
-					<li class="title1"><span>서버로그 파일유지갯수</span></li>
-					<li class="content1"><input type="text" name="log_file_mtn_ecnt" id="log_file_mtn_ecnt" value="<c:out value="${workInfo[0].log_file_mtn_ecnt}"/>" maxlength=3 style="width:50px;"/></li>
-				</ul>
+<form name="workRegForm">
+<input type="hidden" name="db_svr_id" id="db_svr_id" value="${db_svr_id}"/>
+<input type="hidden" name="wrk_id" id="wrk_id" value="${wrk_id}"/>
+	<div id="pop_layer">
+		<div class="pop-container">
+			<div class="pop_cts">
+				<p class="tit">Rman 백업 수정하기</p>
+				<div class="pop_cmm">
+					<table class="write">
+						<caption>Rman 백업 수정하기</caption>
+						<colgroup>
+							<col style="width:85px;" />
+							<col />
+						</colgroup>
+						<tbody>
+							<tr>
+								<th scope="row" class="ico_t1">Work명</th>
+								<td><input type="text" class="txt" name="wrk_nm" id="wrk_nm" maxlength=50 value="<c:out value="${workInfo[0].wrk_nm}"/>"/></td>
+							</tr>
+							<tr>
+								<th scope="row" class="ico_t1">Work<br/>설명</th>
+								<td>
+									<div class="textarea_grp">
+										<textarea name="wrk_exp" id="wrk_exp" maxlength=200><c:out value="${workInfo[0].wrk_exp}"/></textarea>
+									</div>
+								</td>
+							</tr>
+						</tbody>
+					</table>
+				</div>
+				<div class="pop_cmm mt25">
+					<div class="bak_option">
+						<div class="option">
+							<span class="tit">백업옵션</span>
+							<span>
+								<select name="bck_opt_cd" id="bck_opt_cd" class="select">
+									<option value="">선택</option>
+									<option value="full"<c:if test="${workInfo[0].bck_opt_cd == 'full'}"> selected</c:if>>전체백업</option>
+									<option value="incr"<c:if test="${workInfo[0].bck_opt_cd == 'incr'}"> selected</c:if>>증분백업</option>
+									<option value="achi"<c:if test="${workInfo[0].bck_opt_cd == 'achi'}"> selected</c:if>>아카이브백업</option>
+								</select>
+							</span>
+							<span class="chk">
+								<div class="inp_chk chk3">
+									<input type="checkbox" name="cps_yn" id="cps_yn" value="Y" <c:if test="${workInfo[0].cps_yn eq 'Y'}"> checked</c:if>/>
+									<label for="cps_yn">압축하기</label>
+								</div>
+							</span>
+						</div>
+						<div class="bak_inner">
+							<div class="bak_lt">
+								<p class="tit">백업파일옵션</p>
+								<div class="option_list">
+									<ul>
+										<li>
+											<div class="inner">
+												<p>백업파일 보관일</p>
+												<span><input type="text" class="txt" name="file_stg_dcnt" id="file_stg_dcnt" value="<c:out value="${workInfo[0].file_stg_dcnt}"/>" maxlength=3/> 일</span>
+											</div>
+										</li>
+										<li>
+											<div class="inner">
+												<p>백업파일 유지갯수</p>
+												<span><input type="text" class="txt" name="bck_mtn_ecnt" id="bck_mtn_ecnt" value="<c:out value="${workInfo[0].bck_mtn_ecnt}"/>" maxlength=3/> 일</span>
+											</div>
+										</li>
+									</ul>
+								</div>
+							</div>
+							<div class="bak_rt">
+								<p class="tit">로그파일옵션</p>
+								<div class="bak_rt_inr">
+									<div class="option_yn">
+										<div class="inp_chk chk3">
+											<input type="checkbox" name="log_file_bck_yn" id="log_file_bck_yn" value="Y" <c:if test="${workInfo[0].log_file_bck_yn eq 'Y'}"> checked</c:if>/>
+											<label for="log_file_bck_yn">로그파일백업 여부</label>
+										</div>
+									</div>
+									<div class="option_list">
+										<ul>
+											<li>
+												<div class="inner">
+													<p>서버로그 파일 보관일수</p>
+													<span><input type="text" class="txt" name="log_file_stg_dcnt" id="log_file_stg_dcnt" value="<c:out value="${workInfo[0].log_file_stg_dcnt}"/>" maxlength=3/> 일</span>
+												</div>
+											</li>
+											<li>
+												<div class="inner">
+													<p>서버로그 파일 유지갯수</p>
+													<span><input type="text" class="txt" name="log_file_mtn_ecnt" id="log_file_mtn_ecnt" value="<c:out value="${workInfo[0].log_file_mtn_ecnt}"/>" maxlength=3/> 일</span>
+												</div>
+											</li>
+										</ul>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="btn_type_02">
+					<span class="btn btnC_01" onClick="fn_update_work();"><button>등록</button></span>
+					<span class="btn" onclick="self.close();"><button>취소</button></span>
+				</div>
 			</div>
-			</form>
-		</div>
-		<!-- // 리스트 -->
-				<!-- //등록버튼 -->
-		<div id="sysbtn">
-			<ul>
-				<li><span class="btn_blue_l"> <a
-						href="javascript:fn_update_work();">수정</a> <img
-						src="<c:url value='/images/egovframework/example/btn_bg_r.gif'/>"
-						style="margin-left: 6px;" alt="" />
-				</span></li>
-			</ul>
-		</div>
+		</div><!-- //pop-container -->
 	</div>
+</form>	
 </body>
 </html>
