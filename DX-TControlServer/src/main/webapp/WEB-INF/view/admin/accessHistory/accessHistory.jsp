@@ -193,7 +193,7 @@
 							</table>
 						</div>
 						<div class="overflow_area">
-							<table id="accessHistoryTable" class="list" cellspacing="0" width="100%">
+							<table id="accessHistoryTable" class="display" cellspacing="0" width="100%">
 								<thead>
 									<tr>
 										<th>No</th>
