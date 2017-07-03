@@ -150,7 +150,7 @@
 		<input type="hidden" name="lgi_dtm_end" id="lgi_dtm_end"> 
 		<input type="hidden" name="user_nm" id="user_nm">
 	</form>
-
+		<div id="contents">
 			<div class="location">
 				<ul>
 					<li>Admin</li>
@@ -193,7 +193,7 @@
 							</table>
 						</div>
 						<div class="overflow_area">
-							<table id="accessHistoryTable" class="display" cellspacing="0" width="100%">
+							<table id="accessHistoryTable" class="list" cellspacing="0" width="100%">
 								<thead>
 									<tr>
 										<th>No</th>
@@ -212,44 +212,6 @@
 					</div>
 				</div>
 			</div>
-
-
-
-	<%-- 
-<form name="excelForm" method="post">
-	<input type="hidden" name="lgi_dtm_start" id="lgi_dtm_start">
-	<input type="hidden" name="lgi_dtm_end" id="lgi_dtm_end">
-	<input type="hidden" name="user_nm" id="user_nm">
-</form>
-
-	<h2>화면접근이력</h2>
-	<div id="button">
-		<button onclick="fn_ExportExcel()">엑셀저장</button>
-		<input type="button" value="조회" id="btnSelect" style="float: right;">
-	</div>
-	<br>
-	<table style="border: 1px solid black; padding: 10px;" width="100%">
-		<tr>
-			<td>접근일자</td>
-			<td><input type="text" id="from" name="from"> ~ <input
-				type="text" id="to" name="to"></td>
-			<td>사용자명</td>
-			<td><input type="text" id="usr_nm"></td>
-		</tr>
-	</table>
-	<br>
-	<table id="accessHistoryTable" class="display" cellspacing="0" width="100%">
-		<thead>
-			<tr>
-				<th>No</th>
-				<th>일자</th>
-				<th>시간</th>
-				<th>구분</th>
-				<th>아이디</th>
-				<th>사용자명</th>
-				<th>부서</th>
-				<th>직급</th>
-				<th>아이피</th>
-			</tr>
-		</thead>
-	</table> --%>
+		</div>
+		
+		

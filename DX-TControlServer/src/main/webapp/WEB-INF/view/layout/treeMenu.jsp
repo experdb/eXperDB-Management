@@ -112,7 +112,7 @@
 	<div id="lnb_menu">
 		<form name="treeView" id="treeView">
 				<div class="logout">
-					<button onClick="fn_logout();">LOGOUT</button>
+					<a href="#"><button onClick="fn_logout();">LOGOUT</button></a>
 				</div>
 				<h3 class="blind">LNB 메뉴</h3>
 				<div class="lnb">

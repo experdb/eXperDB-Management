@@ -54,8 +54,8 @@ public class DbServerManagerServiceImpl implements DbServerManagerService {
 	}
 
 	@Override
-	public List<Map<String, Object>> selectSvrList() throws Exception {
-		return dbServerManagerDAO.selectSvrList();
+	public List<Map<String, Object>> selectSvrList(int db_svr_id) throws Exception {
+		return dbServerManagerDAO.selectSvrList(db_svr_id);
 	}
 
 }

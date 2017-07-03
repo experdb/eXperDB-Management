@@ -67,8 +67,9 @@ public interface DbServerManagerService {
 
 	/**
 	 * Repository DB에 등록되어 있는 DB의 서버명 SelectBox 
+	 * @param db_svr_id 
 	 * @throws Exception
 	 */
-	List<Map<String, Object>> selectSvrList() throws Exception;
+	List<Map<String, Object>> selectSvrList(int db_svr_id) throws Exception;
 	
 }

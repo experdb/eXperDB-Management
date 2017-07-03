@@ -240,7 +240,7 @@
      </select>	
      
 
-     <select id="selectSvrList" resultType="HashMap">
+     <select id="selectSvrList" resultType="HashMap" parameterType="integer">
 		/**
 	 	*  Query ID : selectSvrList
 	 	* Description : Repository 등록된 DB의 서버 리스트 조회
@@ -248,10 +248,16 @@
 	 	**/ 	
 	 	
             SELECT
-                 	A.DB_SVR_NM
+            		A.DB_SVR_ID
+                 	, A.DB_SVR_NM
+	                , A.IPADR
+	                , A.PORTNO
             FROM T_DBSVR_I A, T_DB_I B
             WHERE 1 = 1
             AND A.DB_SVR_ID = B.DB_SVR_ID
-            GROUP BY A.DB_SVR_NM
+			<if test="value != null and value != 0">
+			AND A.DB_SVR_ID = #{value}
+			</if>
+            GROUP BY A.DB_SVR_NM, A.DB_SVR_ID, A.IPADR, A.PORTNO
      </select>	
 </mapper>
