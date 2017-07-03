@@ -8,11 +8,11 @@
 
 
 <div id="header">
-			<h1 class="logo"><a href="/index.do"><img src="../images/ico_logo_2.png" alt="eXperDB" /></a></h1>
+			<h1 class="logo"><a href="/index.do"><img src="/images/ico_logo_2.png" alt="eXperDB" /></a></h1>
 			<div id="gnb_menu">
 				<h2 class="blind">주메뉴</h2>
 				<ul class="depth_1" id="gnb">
-					<li><a href="#n"><span><img src="../images/ico_h_5.png" alt="FUNCTION" /></span></a>
+					<li><a href="#n"><span><img src="/images/ico_h_5.png" alt="FUNCTION" /></span></a>
 						<ul class="depth_2">
 							<li><a href="#n">Scheduler</a>
 								<ul class="depth_3">
@@ -28,7 +28,7 @@
 							</li>
 						</ul>
 					</li>
-					<li><a href="#n"><span><img src="../images/ico_h_6.png" alt="ADMIN" /></span></a>
+					<li><a href="#n"><span><img src="/images/ico_h_6.png" alt="ADMIN" /></span></a>
 						<ul class="depth_2">
 							<li><a href="#n">DB 서버관리</a>
 								<ul class="depth_3">
@@ -45,7 +45,7 @@
 							<li><a href="#n">확장설치 조회</a></li>
 						</ul>
 					</li>
-					<li><a href="#n"><span><img src="../images/ico_h_7.png" alt="MY PAGE" /></span></a>
+					<li><a href="#n"><span><img src="/images/ico_h_7.png" alt="MY PAGE" /></span></a>
 						<ul class="depth_2">
 							<li><a href="/myPage.do" >개인정보수정</a></li>
         					<li><a href="#">My스케쥴</a></li>
@@ -60,7 +60,7 @@
 					<%
 			    	}
 					%>
-					<li><a href="#n"><span><img src="../images/ico_h_8.png" alt="HELP" /></span></a>
+					<li><a href="#n"><span><img src="/images/ico_h_8.png" alt="HELP" /></span></a>
 						<ul class="depth_2">
 							<li><a href="#n">Online Help</a></li>
 							<li><a href="#n">About Tconsole</a></li>

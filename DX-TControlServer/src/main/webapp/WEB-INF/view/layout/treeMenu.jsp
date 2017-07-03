@@ -105,8 +105,8 @@
 	}	
     </script>
 
-<script type="text/javascript" src="../js/jquery.mCustomScrollbar.concat.min.js"></script><!-- mCustomScrollbar -->
-<script type="text/javascript" src="../js/common.js"></script>
+<script type="text/javascript" src="/js/jquery.mCustomScrollbar.concat.min.js"></script><!-- mCustomScrollbar -->
+<script type="text/javascript" src="/js/common.js"></script>
 
 
 	<div id="lnb_menu">

@@ -6,6 +6,7 @@ import javax.annotation.Resource;
 
 import org.springframework.stereotype.Service;
 
+import com.k4m.dx.tcontrol.admin.dbserverManager.service.DbServerVO;
 import com.k4m.dx.tcontrol.backup.service.BackupService;
 import com.k4m.dx.tcontrol.backup.service.DbVO;
 import com.k4m.dx.tcontrol.backup.service.WorkLogVO;
@@ -67,4 +68,7 @@ public class BackupServiceImpl implements BackupService{
 		return backupDAO.selectWorkLogList(workLogVO);
 	}
 	
+	public DbServerVO selectDbSvrNm(WorkVO workVO) throws Exception{
+		return backupDAO.selectDbSvrNm(workVO);
+	}
 }

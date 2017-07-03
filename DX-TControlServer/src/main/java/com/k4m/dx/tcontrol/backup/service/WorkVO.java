@@ -3,7 +3,7 @@ package com.k4m.dx.tcontrol.backup.service;
 public class WorkVO {
 	private int wrk_id;
 	private int db_svr_id;
-	private int db_id;
+	private String db_id;
 	private String db_nm;
 	private String bck_bsn_dscd;
 	private String wrk_nm;
@@ -73,10 +73,10 @@ public class WorkVO {
 	public void setDb_svr_id(int db_svr_id) {
 		this.db_svr_id = db_svr_id;
 	}
-	public int getDb_id() {
+	public String getDb_id() {
 		return db_id;
 	}
-	public void setDb_id(int db_id) {
+	public void setDb_id(String db_id) {
 		this.db_id = db_id;
 	}
 	public String getBck_bsn_dscd() {

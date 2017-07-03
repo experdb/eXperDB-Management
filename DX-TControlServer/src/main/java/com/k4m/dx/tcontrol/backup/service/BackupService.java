@@ -2,6 +2,8 @@ package com.k4m.dx.tcontrol.backup.service;
 
 import java.util.List;
 
+import com.k4m.dx.tcontrol.admin.dbserverManager.service.DbServerVO;
+
 public interface BackupService {
 
 	/**
@@ -95,4 +97,12 @@ public interface BackupService {
 	 * @throws Exception
 	 */
 	public List<WorkLogVO> selectWorkLogList(WorkLogVO workLogVO) throws Exception;
+	
+	/**
+	 * Select DB Server Name
+	 * @param WorkVO
+	 * @return DbServerVO
+	 * @throws Exception
+	 */
+	public DbServerVO selectDbSvrNm(WorkVO workVO) throws Exception;
 }
