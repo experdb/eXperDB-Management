@@ -116,6 +116,7 @@ public class ClientInfoCmmn {
 			selectList =(ArrayList<Object>) objList.get(ClientProtocolID.RESULT_DATA);
 			
 			System.out.println("strDxExCode : " + " " + strDxExCode);
+			System.out.println("resultCode : " + " " + (String)objList.get(ClientProtocolID.RESULT_CODE));
 			
 			for(int i=0; i<selectList.size(); i++) {	
 				JSONObject jsonObj = new JSONObject();
