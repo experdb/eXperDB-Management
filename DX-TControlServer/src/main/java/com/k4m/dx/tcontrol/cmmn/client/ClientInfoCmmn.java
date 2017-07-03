@@ -92,8 +92,55 @@ public class ClientInfoCmmn {
 		}
 		return result;
 	}
+	
+	// 3. 테이블 리스트 (tableList)
+	@SuppressWarnings({ "unchecked", "rawtypes" })
+	public JSONObject table_List(JSONObject serverObj,String strSchema){
 		
+		JSONArray jsonArray = new JSONArray(); // 객체를 담기위해 JSONArray 선언.
+		JSONObject result = new JSONObject();
+		
+		List<Object> selectList = null;
+		
+		try {
+			JSONObject objList;
+			
+			ClientAdapter CA = new ClientAdapter(Ip, port);
+			CA.open(); 
+				
+			objList = CA.dxT002(ClientTranCodeType.DxT002, serverObj, strSchema);
+			
+			String strErrMsg = (String)objList.get(ClientProtocolID.ERR_MSG);
+			String strDxExCode = (String)objList.get(ClientProtocolID.DX_EX_CODE);
+			
+			selectList =(ArrayList<Object>) objList.get(ClientProtocolID.RESULT_DATA);
+			
+			System.out.println("strDxExCode : " + " " + strDxExCode);
+			
+			for(int i=0; i<selectList.size(); i++) {	
+				JSONObject jsonObj = new JSONObject();
+				Object obj = selectList.get(i);				
+				HashMap hp = (HashMap) obj;
+				String table_schema = (String) hp.get("table_schema");
+				String table_name = (String) hp.get("table_name");
+				
+				jsonObj.put("schema", table_schema);
+				jsonObj.put("name", table_name);
+				jsonArray.add(jsonObj);
+				
+				System.out.println(i + " " + table_schema + " " + table_name);
+			}
+			result.put("data", jsonArray);
+		
+			CA.close();
+		} catch(Exception e) {
+			e.printStackTrace();
+		}
+		return result;
+	}
+	
 	// 11. Role 리스트 (roleList)
+	@SuppressWarnings({ "unchecked", "rawtypes" })
 	public JSONObject role_List(JSONObject serverObj){
 		
 		JSONArray jsonArray = new JSONArray(); // 객체를 담기위해 JSONArray 선언.
@@ -107,16 +154,16 @@ public class ClientInfoCmmn {
 				
 			objList = CA.dxT011(ClientTranCodeType.DxT011, serverObj);
 			
-			String _tran_err_msg = (String)objList.get(ClientProtocolID.ERR_MSG);
+			String strErrMsg = (String)objList.get(ClientProtocolID.ERR_MSG);
 			String strDxExCode = (String)objList.get(ClientProtocolID.DX_EX_CODE);
 			
-			List<Object> selectDBList =(ArrayList<Object>) objList.get(ClientProtocolID.RESULT_DATA);
+			List<Object> selectList =(ArrayList<Object>) objList.get(ClientProtocolID.RESULT_DATA);
 			
 			System.out.println("strDxExCode : " + " " + strDxExCode);
 			
-			for(int i=0; i<selectDBList.size(); i++) {
+			for(int i=0; i<selectList.size(); i++) {
 				JSONObject jsonObj = new JSONObject();
-				Object obj = selectDBList.get(i);
+				Object obj = selectList.get(i);
 				
 				HashMap hp = (HashMap) obj;
 
