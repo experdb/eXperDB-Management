@@ -181,52 +181,61 @@ public class DxT007 extends SocketCtl{
 
 			//DB 컨넥션을 가져온다.
 			connDB = DriverManager.getConnection("jdbc:apache:commons:dbcp:" + poolName);
-			
-			//connDB.setAutoCommit(false);
-			
+
 			sessDB = sqlSessionFactory.openSession(connDB);
 			
-			//1. auditLog - read, write, function, role, ddl, misc
-			HashMap hpLog = new HashMap();
-			hpLog.put("pgauditLog", acInfoObj.get(ProtocolID.AUDIT_LOG));
+			String strAuditUseYn = (String) acInfoObj.get(ProtocolID.AUDIT_USE_YN);
+			String strAuditLog = (String) acInfoObj.get(ProtocolID.AUDIT_LOG);
+			String strAuditLevel = (String) acInfoObj.get(ProtocolID.AUDIT_LEVEL);
+			String strAuditCatalog = (String) acInfoObj.get(ProtocolID.AUDIT_CATALOG);
+			String strAuditParameter = (String) acInfoObj.get(ProtocolID.AUDIT_PARAMETER);
+			String strAuditRelation = (String) acInfoObj.get(ProtocolID.AUDIT_RELATION);
+			String strAuditStatementOnce = (String) acInfoObj.get(ProtocolID.AUDIT_STATEMENT_ONCE);
+			String strAuditRole = (String) acInfoObj.get(ProtocolID.AUDIT_ROLE);
 			
-			sessDB.update("app.updatePgAuditLogSetting", hpLog);
+			if(strAuditUseYn.equals("N")) strAuditLog = "";
+			
+			//1. auditLog - read, write, function, role, ddl, misc
+			HashMap<String, String> hpLog = new HashMap<String, String>();
+			hpLog.put("pgauditlog", strAuditLog);
+			
+			sessDB.insert("app.updatePgAuditLogSetting", hpLog);
 			
 			//2. auditLevel
 			HashMap hpAuditLevel = new HashMap();
-			hpAuditLevel.put("pgauditLevel", acInfoObj.get(ProtocolID.AUDIT_LEVEL));
+			hpAuditLevel.put("pgauditLogLevel", strAuditLevel);
 			
-			sessDB.update("app.updatePgAuditLogLevelSetting", hpAuditLevel);
+			sessDB.insert("app.updatePgAuditLogLevelSetting", hpAuditLevel);
 			
 			//3. auditCatalog
 			HashMap hpAuditCatalog = new HashMap();
-			hpAuditCatalog.put("pgauditCatalog", acInfoObj.get(ProtocolID.AUDIT_CATALOG));
+			hpAuditCatalog.put("pgauditLogCatalog", strAuditCatalog);
 			
-			sessDB.update("app.updatePgAuditLogCatalogSetting", hpAuditCatalog);
+			sessDB.insert("app.updatePgAuditLogCatalogSetting", hpAuditCatalog);
 			
 			//4. auditParameter
 			HashMap hpAuditParameter = new HashMap();
-			hpAuditParameter.put("pgauditParameter", acInfoObj.get(ProtocolID.AUDIT_PARAMETER));
+			hpAuditParameter.put("pgauditLogParameter", strAuditParameter);
 			
-			sessDB.update("app.updatePgAuditLogParameterSetting", hpAuditParameter);
+			sessDB.insert("app.updatePgAuditLogParameterSetting", hpAuditParameter);
 
 			//5. auditRelation
 			HashMap hpAuditRelation = new HashMap();
-			hpAuditRelation.put("pgauditRelation", acInfoObj.get(ProtocolID.AUDIT_RELATION));
+			hpAuditRelation.put("pgauditLogRelation", strAuditRelation);
 			
-			sessDB.update("app.updatePgAuditLogRelationSetting", hpAuditRelation);
+			sessDB.insert("app.updatePgAuditLogRelationSetting", hpAuditRelation);
 
 			//6. auditStatementOnce
 			HashMap hpAuditStatementOnce = new HashMap();
-			hpAuditStatementOnce.put("pgauditStatementOnce", acInfoObj.get(ProtocolID.AUDIT_STATEMENT_ONCE));
+			hpAuditStatementOnce.put("pgauditLogStatementOnce", strAuditStatementOnce);
 			
-			sessDB.update("app.updatePgAuditLogStatementOnceSetting", hpAuditStatementOnce);
+			sessDB.insert("app.updatePgAuditLogStatementOnceSetting", hpAuditStatementOnce);
 			
 			//7. auditRole
 			HashMap hpAuditRole = new HashMap();
-			hpAuditStatementOnce.put("pgauditStatementOnce", acInfoObj.get(ProtocolID.AUDIT_STATEMENT_ONCE));
+			hpAuditRole.put("pgauditRole", strAuditRole);
 			
-			sessDB.update("app.updatePgAuditLogStatementOnceSetting", hpAuditStatementOnce);
+			sessDB.insert("app.updatePgAuditRoleSetting", hpAuditRole);
 
 			//8. conf file reload
 			sessDB.selectOne("app.selectPgConfReload");

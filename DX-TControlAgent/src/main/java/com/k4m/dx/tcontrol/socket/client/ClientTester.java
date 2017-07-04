@@ -45,9 +45,11 @@ public class ClientTester {
 			//clientTester.dxT006_R(Ip, port);
 			//clientTester.dxT006_U(Ip, port);
 			//clientTester.dxT006_D(Ip, port);
-			//clientTester.dxT011(Ip, port);
+			clientTester.dxT007(Ip, port);
 			
-			clientTester.dxT010(Ip, port);
+			
+			//clientTester.dxT010(Ip, port);
+			//clientTester.dxT011(Ip, port);
 			
 			
 		} catch(Exception e) {
@@ -542,25 +544,33 @@ public class ClientTester {
 			serverObj.put(ClientProtocolID.USER_ID, "experdba");
 			serverObj.put(ClientProtocolID.USER_PWD, "experdba");
 			
-			JSONObject objInputData = new JSONObject();
+			JSONObject objSettingInfo = new JSONObject();
 			
 			//로그종류 
-			objInputData.put(ClientProtocolID.AUDIT_LOG, "ddl, write");
-			objInputData.put(ClientProtocolID.AUDIT_LEVEL, "notice");
-			objInputData.put(ClientProtocolID.AUDIT_CATALOG, "off");
-			objInputData.put(ClientProtocolID.AUDIT_PARAMETER, "off");
-			objInputData.put(ClientProtocolID.AUDIT_RELATION, "off");
-			objInputData.put(ClientProtocolID.AUDIT_STATEMENT_ONCE, "off");
-			objInputData.put(ClientProtocolID.AUDIT_ROLE, "");
+			objSettingInfo.put(ClientProtocolID.AUDIT_USE_YN, "Y");
+			objSettingInfo.put(ClientProtocolID.AUDIT_LOG, "ddl, write");
+			objSettingInfo.put(ClientProtocolID.AUDIT_LEVEL, "info");
+			objSettingInfo.put(ClientProtocolID.AUDIT_CATALOG, "off");
+			objSettingInfo.put(ClientProtocolID.AUDIT_PARAMETER, "off");
+			objSettingInfo.put(ClientProtocolID.AUDIT_RELATION, "off");
+			objSettingInfo.put(ClientProtocolID.AUDIT_STATEMENT_ONCE, "off");
+			objSettingInfo.put(ClientProtocolID.AUDIT_ROLE, "postgres");
 
-
-
-			
-			
+			JSONObject objList;
 			
 			ClientAdapter CA = new ClientAdapter(Ip, port);
 			CA.open(); 
-				//CA.dxT001("dxT001", arrDBInfo);
+			
+			objList = CA.dxT007(ClientTranCodeType.DxT007, ClientProtocolID.COMMAND_CODE_C, serverObj, objSettingInfo);
+
+			String strErrMsg = (String)objList.get(ClientProtocolID.ERR_MSG);
+			String strErrCode = (String)objList.get(ClientProtocolID.ERR_CODE);
+			String strDxExCode = (String)objList.get(ClientProtocolID.DX_EX_CODE);
+			String strResultCode = (String)objList.get(ClientProtocolID.RESULT_CODE);
+			System.out.println("RESULT_CODE : " +  strResultCode);
+			System.out.println("ERR_CODE : " +  strErrCode);
+			System.out.println("ERR_MSG : " +  strErrMsg);
+			
 			CA.close();
 		} catch(Exception e) {
 			e.printStackTrace();

@@ -52,6 +52,7 @@ public class ProtocolID {
 	
 	//감사로그 종류
 	public static final String SETTING_INFO = "setting_info";
+	public static final String AUDIT_USE_YN = "use_yn";
 	
 	public static final String AUDIT_LOG = "log";
 	public static final String AUDIT_LEVEL = "level";
