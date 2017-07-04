@@ -5,6 +5,7 @@ import java.util.List;
 
 import org.springframework.stereotype.Repository;
 
+import com.k4m.dx.tcontrol.admin.dbserverManager.service.DbServerVO;
 import com.k4m.dx.tcontrol.backup.service.DbVO;
 import com.k4m.dx.tcontrol.backup.service.WorkLogVO;
 import com.k4m.dx.tcontrol.backup.service.WorkOptDetailVO;
@@ -73,5 +74,7 @@ public class BackupDAO extends EgovAbstractMapper{
 		return (List<WorkLogVO>) list("backupSQL.selectWorkLogList",workLogVO);
 	}
 	
-
+	public DbServerVO selectDbSvrNm(WorkVO workVO) throws Exception{
+		return (DbServerVO)getSqlSession().selectOne("backupSQL.selectDbSvrNm",workVO);
+	}
 }

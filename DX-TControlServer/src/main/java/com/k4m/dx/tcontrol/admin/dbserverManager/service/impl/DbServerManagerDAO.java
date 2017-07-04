@@ -116,14 +116,16 @@ public class DbServerManagerDAO extends EgovAbstractMapper{
 
 	/**
 	 * Repository DB에 등록되어 있는 DB의 서버명 SelectBox 
+	 * @param db_svr_id 
 	 * 
 	 * @param 
 	 * @return List
 	 * @throws Exception
 	 */	
-	public List<Map<String, Object>> selectSvrList() {
+	@SuppressWarnings({ "deprecation", "unchecked" })
+	public List<Map<String, Object>> selectSvrList(int db_svr_id) {
 		List<Map<String, Object>>  sl = null;
-		sl = (List<Map<String, Object>>) list("dbserverManagerSql.selectSvrList", null);
+		sl = (List<Map<String, Object>>) list("dbserverManagerSql.selectSvrList", db_svr_id);
 		return sl;
 	}
 

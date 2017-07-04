@@ -118,8 +118,9 @@ function fn_search(){
  * 디비 등록 팝업 호출
  ******************************************************** */
 function fn_reg_popup(){
-	window.open("/popup/dbRegForm.do","dbRegPop","location=no,menubar=no,resizable=yes,scrollbars=no,status=no,width=800,height=270,top=0,left=0");
+	window.open("/popup/dbRegForm.do","dbRegPop","location=no,menubar=no,resizable=yes,scrollbars=no,status=no,width=915,height=555,top=0,left=0");
 }
+
 
 </script>
 
@@ -139,7 +140,7 @@ function fn_reg_popup(){
 					<div class="cmm_grp">
 						<div class="btn_type_01">
 							<span class="btn"><button onClick="fn_search()">조회</button></span>
-							<span class="btn" onclick="toggleLayer($('#pop_layer'), 'on');"><button>등록</button></span>
+							<span class="btn" onclick="fn_reg_popup();"><button>등록</button></span>
 							<a href="#n" class="btn"><span>삭제</span></a>
 						</div>
 						<div class="sch_form">

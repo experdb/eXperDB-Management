@@ -79,7 +79,7 @@ public class UserManagerController {
 	 * @return ModelAndView mv
 	 * @throws Exception
 	 */
-	@RequestMapping(value = "/userManagerForm.do")
+	@RequestMapping(value = "/popup/userManagerRegForm.do")
 	public ModelAndView userManagerForm(@ModelAttribute("historyVO") HistoryVO historyVO, HttpServletRequest request) {
 		ModelAndView mv = new ModelAndView();
 		List<UserVO> result = null;
@@ -115,7 +115,7 @@ public class UserManagerController {
 				
 			}
 			mv.addObject("act",act);
-			mv.setViewName("admin/userManager/userManagerForm");
+			mv.setViewName("popup/userManagerRegForm");
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -133,7 +133,7 @@ public class UserManagerController {
 	 * @throws Exception
 	 */
 	@RequestMapping(value = "/insertUserManager.do")
-	public String insertUserManager(@ModelAttribute("userVo") UserVO userVo,HttpServletRequest request,@ModelAttribute("historyVO") HistoryVO historyVO) {
+	public @ResponseBody void insertUserManager(@ModelAttribute("userVo") UserVO userVo,HttpServletRequest request,@ModelAttribute("historyVO") HistoryVO historyVO) {
 		try {		
 			// 사용자 등록 이력 남기기
 			CmmnUtils.saveHistory(request, historyVO);
@@ -152,7 +152,6 @@ public class UserManagerController {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		return "redirect:/userManager.do";
 	}
 	
 	
@@ -166,7 +165,7 @@ public class UserManagerController {
 	 * @throws Exception
 	 */
 	@RequestMapping(value = "/updateUserManager.do")
-	public String updateUserManager(@ModelAttribute("userVo") UserVO userVo,@ModelAttribute("historyVO") HistoryVO historyVO,HttpServletRequest request) {
+	public @ResponseBody void updateUserManager(@ModelAttribute("userVo") UserVO userVo,@ModelAttribute("historyVO") HistoryVO historyVO,HttpServletRequest request) {
 		try {
 			// 사용자 수정 이력 남기기
 			CmmnUtils.saveHistory(request, historyVO);
@@ -184,8 +183,6 @@ public class UserManagerController {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		return "redirect:/userManager.do";
-
 	}
 	
 	

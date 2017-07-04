@@ -446,10 +446,19 @@ public class DbServerManagerController {
 	@SuppressWarnings("unused")
 	@RequestMapping(value = "/selectSvrList.do")
 	@ResponseBody
-	public List<Map<String, Object>> selectSvrList() {
+	public List<Map<String, Object>> selectSvrList(HttpServletRequest request) {
+	
 		List<Map<String, Object>> resultSet = null;
-		try {			
-			resultSet = dbServerManagerService.selectSvrList();			
+		try {		
+			int db_svr_id = 0;
+			
+			if(request.getParameter("db_svr_id") != null){
+				db_svr_id = Integer.parseInt(request.getParameter("db_svr_id"));		
+				System.out.println(db_svr_id);
+			}
+
+			
+			resultSet = dbServerManagerService.selectSvrList(db_svr_id);	
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

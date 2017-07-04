@@ -1,9 +1,4 @@
-<%@ page language="java" contentType="text/html; charset=UTF-8"
-	pageEncoding="UTF-8"%>
-<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
-<%@ taglib prefix="form" uri="http://www.springframework.org/tags/form"%>
-<%@ taglib prefix="ui" uri="http://egovframework.gov/ctl/ui"%>
-<%@ taglib prefix="spring" uri="http://www.springframework.org/tags"%>
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%
 	/**
 	* @Class Name : accessHistory.jsp
@@ -19,26 +14,7 @@
 	*
 	*/
 %>
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
-<head>
-<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-<title>화면접근이력</title>
-<%-- <link type="text/css" rel="stylesheet" href="<c:url value='/css/egovframework/jquery-ui.css'/>" /> --%>
-<link type="text/css" rel="stylesheet" href="<c:url value='/css/dt/jquery.dataTables.min.css'/>" />
-<%-- <link rel="stylesheet" href="<c:url value='/css/treeview/jquery.treeview.css'/>" /> --%>
-<%-- <link rel="stylesheet" href="<c:url value='/css/treeview/screen.css'/>" /> --%>
 
-<!-- <script src="js/jquery/jquery-1.7.2.min.js" type="text/javascript"></script> -->
-<script src="js/jquery/jquery-ui.js" type="text/javascript"></script>
-
-<!-- <script src="js/json2.js" type="text/javascript"></script> -->
-<script src="js/jquery/jquery.dataTables.min.js" type="text/javascript"></script>
-
-<!-- <script src="js/treeview/jquery.js" type="text/javascript"></script> -->
-<!-- <script src="js/treeview/jquery.cookie.js" type="text/javascript"></script> -->
-<!-- <script src="js/treeview/jquery.treeview.js" type="text/javascript"></script> -->
-</head>
 <script>
 	var table = null;
 
@@ -78,39 +54,22 @@
 	});
 
 	$(function() {
-		var dateFormat = "mm/dd/yy", from = $("#from").datepicker(
-				{
-					changeMonth : true,
-					changeYear : true,
-					numberOfMonths : 1,
-					prevText : '이전 달',
-					nextText : '다음 달',
-					monthNames : [ '1월', '2월', '3월', '4월', '5월', '6월', '7월',
-							'8월', '9월', '10월', '11월', '12월' ],
-					monthNamesShort : [ '1월', '2월', '3월', '4월', '5월', '6월',
-							'7월', '8월', '9월', '10월', '11월', '12월' ],
-					dayNames : [ '일', '월', '화', '수', '목', '금', '토' ],
-					dayNamesShort : [ '일', '월', '화', '수', '목', '금', '토' ],
-					dayNamesMin : [ '일', '월', '화', '수', '목', '금', '토' ],
-				}).on("change", function() {
-			to.datepicker("option", "minDate", getDate(this));
-		}), to = $("#to").datepicker(
-				{
-					changeMonth : true,
-					changeYear : true,
-					numberOfMonths : 1,
-					prevText : '이전 달',
-					nextText : '다음 달',
-					monthNames : [ '1월', '2월', '3월', '4월', '5월', '6월', '7월',
-							'8월', '9월', '10월', '11월', '12월' ],
-					monthNamesShort : [ '1월', '2월', '3월', '4월', '5월', '6월',
-							'7월', '8월', '9월', '10월', '11월', '12월' ],
-					dayNames : [ '일', '월', '화', '수', '목', '금', '토' ],
-					dayNamesShort : [ '일', '월', '화', '수', '목', '금', '토' ],
-					dayNamesMin : [ '일', '월', '화', '수', '목', '금', '토' ],
-				}).on("change", function() {
-			from.datepicker("option", "maxDate", getDate(this));
-		});
+		var dateFormat = "yyyy-mm-dd", 
+		from = $("#from").datepicker({
+				changeMonth : true,
+				changeYear : true,
+				onClose: function( selectedDate ) {
+				$( "#to" ).datepicker( "option", "minDate", selectedDate );
+				}
+			})
+								
+		to = $("#to").datepicker({
+				changeMonth : true,
+				changeYear : true,	
+				onClose: function( selectedDate ) {
+				$( "#from" ).datepicker( "option", "maxDate", selectedDate );
+				}
+			})
 
 		function getDate(element) {
 			var date;
@@ -191,7 +150,7 @@
 		<input type="hidden" name="lgi_dtm_end" id="lgi_dtm_end"> 
 		<input type="hidden" name="user_nm" id="user_nm">
 	</form>
-
+		<div id="contents">
 			<div class="location">
 				<ul>
 					<li>Admin</li>
@@ -200,7 +159,7 @@
 			</div>
 
 			<div class="contents_wrap">
-				<h4>사용자 접근내역화면</h4>
+				<h4>사용자 접근내역화면<a href="#n"><img src="../images/ico_tit.png" alt="" /></a></h4>
 				<div class="contents">
 					<div class="cmm_grp">
 						<div class="btn_type_float">
@@ -253,46 +212,6 @@
 					</div>
 				</div>
 			</div>
-
-
-
-	<%-- 
-<form name="excelForm" method="post">
-	<input type="hidden" name="lgi_dtm_start" id="lgi_dtm_start">
-	<input type="hidden" name="lgi_dtm_end" id="lgi_dtm_end">
-	<input type="hidden" name="user_nm" id="user_nm">
-</form>
-
-	<h2>화면접근이력</h2>
-	<div id="button">
-		<button onclick="fn_ExportExcel()">엑셀저장</button>
-		<input type="button" value="조회" id="btnSelect" style="float: right;">
-	</div>
-	<br>
-	<table style="border: 1px solid black; padding: 10px;" width="100%">
-		<tr>
-			<td>접근일자</td>
-			<td><input type="text" id="from" name="from"> ~ <input
-				type="text" id="to" name="to"></td>
-			<td>사용자명</td>
-			<td><input type="text" id="usr_nm"></td>
-		</tr>
-	</table>
-	<br>
-	<table id="accessHistoryTable" class="display" cellspacing="0" width="100%">
-		<thead>
-			<tr>
-				<th>No</th>
-				<th>일자</th>
-				<th>시간</th>
-				<th>구분</th>
-				<th>아이디</th>
-				<th>사용자명</th>
-				<th>부서</th>
-				<th>직급</th>
-				<th>아이피</th>
-			</tr>
-		</thead>
-	</table> --%>
-</body>
-</html>
+		</div>
+		
+		

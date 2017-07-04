@@ -16,6 +16,8 @@ import org.springframework.web.servlet.ModelAndView;
 
 import com.k4m.dx.tcontrol.admin.accesshistory.service.AccessHistoryService;
 import com.k4m.dx.tcontrol.admin.dbserverManager.service.DbServerVO;
+import com.k4m.dx.tcontrol.backup.service.BackupService;
+import com.k4m.dx.tcontrol.backup.service.WorkVO;
 import com.k4m.dx.tcontrol.cmmn.CmmnUtils;
 import com.k4m.dx.tcontrol.cmmn.client.ClientInfoCmmn;
 import com.k4m.dx.tcontrol.cmmn.client.ClientProtocolID;
@@ -39,6 +41,8 @@ import com.k4m.dx.tcontrol.common.service.HistoryVO;
 
 @Controller
 public class CmmnController {
+	@Autowired
+	private BackupService backupService;
 	
 	@Autowired
 	private AccessHistoryService accessHistoryService;
@@ -93,6 +97,40 @@ public class CmmnController {
 			ClientInfoCmmn cic = new ClientInfoCmmn();
 			result = cic.db_List(serverObj);
 	
+			System.out.println(result);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return result;
+	}
+	
+	/**
+	 * Tbale 리스트를 조회한다.
+	 * 
+	 * @return resultSet
+	 * @throws Exception
+	 */
+	@SuppressWarnings("unchecked")
+	@RequestMapping(value = "/selectTableList.do")
+	@ResponseBody
+	public Map<String, Object> selectTableList (@ModelAttribute("workVO") WorkVO workVO, HttpServletRequest request) {
+		
+		Map<String, Object> result =new HashMap<String, Object>();
+		try {
+			DbServerVO dbServerVO = backupService.selectDbSvrNm(workVO);
+			
+			JSONObject serverObj = new JSONObject();
+			
+			serverObj.put(ClientProtocolID.SERVER_NAME, dbServerVO.getDb_svr_nm());
+			serverObj.put(ClientProtocolID.SERVER_IP, dbServerVO.getIpadr());
+			serverObj.put(ClientProtocolID.SERVER_PORT, dbServerVO.getPortno());
+			serverObj.put(ClientProtocolID.DATABASE_NAME, dbServerVO.getDft_db_nm());
+			serverObj.put(ClientProtocolID.USER_ID, dbServerVO.getSvr_spr_usr_id());
+			serverObj.put(ClientProtocolID.USER_PWD, dbServerVO.getSvr_spr_scm_pwd());
+			
+			ClientInfoCmmn cic = new ClientInfoCmmn();
+			result = cic.table_List(serverObj, workVO.getDb_id());
+			
 			System.out.println(result);
 		} catch (Exception e) {
 			e.printStackTrace();

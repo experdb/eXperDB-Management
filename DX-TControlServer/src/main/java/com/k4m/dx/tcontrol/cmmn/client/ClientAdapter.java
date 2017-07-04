@@ -104,6 +104,7 @@ public class ClientAdapter {
 	 * @return
 	 * @throws Exception
 	 */
+	@SuppressWarnings("unchecked")
 	public JSONObject dxT002(String strDxExCode, JSONObject serverObj, String strSchema) throws Exception{
 		JSONObject jObj = new JSONObject();
 		jObj.put(ClientProtocolID.DX_EX_CODE, strDxExCode);
@@ -118,6 +119,7 @@ public class ClientAdapter {
 		return parseToJsonObj(recvBuff);
 	}
 	
+	@SuppressWarnings("unchecked")
 	public JSONObject dxT003(String strDxExCode, JSONObject serverObj) throws Exception{
 		JSONObject jObj = new JSONObject();
 		jObj.put(ClientProtocolID.DX_EX_CODE, strDxExCode);
@@ -160,6 +162,7 @@ public class ClientAdapter {
 	 * @return
 	 * @throws Exception
 	 */
+	@SuppressWarnings("unchecked")
 	public JSONObject dxT011(String strDxExCode, JSONObject serverObj) throws Exception{
 		JSONObject jObj = new JSONObject();
 		jObj.put(ClientProtocolID.DX_EX_CODE, strDxExCode);

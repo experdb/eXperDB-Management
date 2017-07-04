@@ -22,9 +22,11 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-<link type="text/css" rel="stylesheet" href="<c:url value='/css/egovframework/sample.css'/>" />
-<script src="/js/jquery/jquery-1.12.4.js" type="text/javascript"></script>
-<title>Insert title here</title>
+<script type="text/javascript" src="../js/jquery-1.9.1.min.js"></script>
+<link rel="stylesheet" type="text/css" href="../../css/common.css">
+<script type="text/javascript" src="../../js/common.js"></script>
+
+<title>eXperDB</title>
 <script type="text/javascript">
 //연결테스트 확인여부
 var connCheck = "fail";
@@ -162,43 +164,48 @@ function fn_dbServerCancle(){
 </script>
 </head>
 <body>
-<h3>DB 서버 등록</h3>
- <form name="dbserverInsert" id="dbserverInsert" method="post">
-<!--메인 등록 폼  -->
-<table style="border: 1px solid black; padding: 10px;" width="100%">
-	<tr>
-	  	<td class="tbtd_caption1">◎서버명(*)</td>
-	  	<td class="tbtd_content"> <input type="text" name="db_svr_nm" id="db_svr_nm"></td>
-	 	<td class="tbtd_caption1">◎Database(*) </td>
-	 	<td class="tbtd_content"> <input type="text" name="dft_db_nm" id="dft_db_nm"></td>
-	</tr>
-	<tr>
-	  	<td class="tbtd_caption1">◎IP(*)</td>
-	  	<td class="tbtd_content"><input type="text" name="ipadr" id="ipadr"></td>
-	 	<td class="tbtd_caption1">◎Port(*)</td>
-	 	<td class="tbtd_content"><input type="text" name="portno" id="portno"></td>
-	</tr>
-	<tr>
-	  	<td class="tbtd_caption1">◎User(*)</td>
-	  	<td class="tbtd_content"><input type="text" name="svr_spr_usr_id" id="svr_spr_usr_id"></td>
-	 	<td class="tbtd_caption1">◎Password(*)</td>
-	 	<td class="tbtd_content"><input type="password" name="svr_spr_scm_pwd" id="svr_spr_scm_pwd"></td>
-	</tr>		
-</table>
 
-<table style="padding: 10px;" width="100%">
-	<tr>
-		<td>	 	 		
- 			<div id="button" align="center">
- 				<a href="#" onClick="fn_insertDbServer();"><input type="button" value="저장"  id="btnSelect"></a>
-				<a href="#" onClick="fn_dbServerConnTest();"><input type="button" value="연결테스트"></a>
-				<a href="#" onClick="fn_dbServerCancle();"><input type="button" value="취소"></a>
-			</div>
-		 </td>
-	</tr>
-</table>
-<!--/메인 등록 폼  -->
+<div class="pop_container">
+	<div class="pop_cts">
+		<p class="tit">DB Server 등록하기</p>
+		<form name="dbserverInsert" id="dbserverInsert" method="post">
+		<table class="write">
+			<caption>DB Server 등록하기</caption>
+			<colgroup>
+				<col style="width:100px;" />
+				<col />
+				<col style="width:100px;" />
+				<col />
+			</colgroup>
+			<tbody>
+				<tr>
+					<th scope="row" class="ico_t1">서버명(*)</th>
+					<td><input type="text" class="txt" name="db_svr_nm" id="db_svr_nm" /></td>
+					<th scope="row" class="ico_t1">Database(*)</th>
+					<td><input type="text" class="txt" name="dft_db_nm" id="dft_db_nm" /></td>
+				</tr>
+				<tr>
+					<th scope="row" class="ico_t1">IP(*)</th>
+					<td><input type="text" class="txt" name="ipadr" id="ipadr" /></td>
+					<th scope="row" class="ico_t1">Port(*)</th>
+					<td><input type="text" class="txt" name="portno" id="portno" /></td>
+				</tr>
+				<tr>
+					<th scope="row" class="ico_t1">User(*)</th>
+					<td><input type="text" class="txt" name="svr_spr_usr_id" id="svr_spr_usr_id" /></td>
+					<th scope="row" class="ico_t1">Password(*)</th>
+					<td><input type="password" class="txt" name="svr_spr_scm_pwd" id="svr_spr_scm_pwd" /></td>
+				</tr>
+			</tbody>
+		</table>
+		</form>
+		<div class="btn_type_02">
+			<span class="btn"><button onClick="fn_insertDbServer();">저장</button></span>
+			<span class="btn btnF_01 btnC_01"><button onClick="fn_dbServerConnTest();">연결테스트</button></span>
+			<a href="#n" class="btn" onclick="window.close();"><span>취소</span></a>
+		</div>
+	</div>
+</div>
 
-</form>
 </body>
 </html>
