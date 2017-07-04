@@ -95,6 +95,21 @@
 	 	**/
 	    SELECT 1 from pg_extension WHERE extname = 'adminpack'
 	</select>
+
+	<select id="selectPgExtensionList" parameterType="HashMap" resultType="HashMap">
+		/**
+	 	* Query ID : selectPgExtensionList
+	 	* Description : Extension List 조회
+	 	* Author : 박태혁
+	 	**/
+	    SELECT extname from pg_extension
+	    WHERE
+	    	extname is not null
+	    	<if test="extname != null and extname != '' ">
+	    	AND extname = #{extname}
+	    	</if>
+	    	
+	</select>
 	
 	<select id="selectRoleName" parameterType="HashMap" resultType="HashMap">
 		/**
@@ -114,79 +129,71 @@
 	    select current_setting(#{settingId}) as settingValue
 	</select>
 	
-	<update  id="updatePgauditLogSetting" parameterType="HashMap">
+	<update  id="updatePgAuditLogSetting" parameterType="HashMap">
 		/**
 	 	* Query ID : updatePgauditLog
-	 	* Description : log Setting
+	 	* Description : log Setting - read, write, function, role, ddl, misc
 	 	* Author : 박태혁
 	 	**/
 		ALTER SYSTEM SET pgaudit.log = #{pgauditLog}
 	</update>
 	
-	<update  id="updatePgauditLogLevelSetting" parameterType="HashMap">
+	<update  id="updatePgAuditLogLevelSetting" parameterType="HashMap">
 		/**
 	 	* Query ID : updatePgauditLogLevel
-	 	* Description : log_level Setting
+	 	* Description : log_level Setting - debug, info, notice, warning
 	 	* Author : 박태혁
 	 	**/
 		ALTER SYSTEM SET pgaudit.log_level = #{pgauditLogLevel}
 	</update>
 	
-	<update  id="updatePgauditLogCatalogSetting" parameterType="HashMap">
+	<update  id="updatePgAuditLogCatalogSetting" parameterType="HashMap">
 		/**
 	 	* Query ID : updatePgauditLogCatalogSetting
-	 	* Description : log_catalog Setting
+	 	* Description : log_catalog Setting - true, false
 	 	* Author : 박태혁
 	 	**/
 		ALTER SYSTEM SET pgaudit.log_catalog = #{pgauditLogCatalog}
 	</update>
 	
-	<update  id="updatePgauditLogParameterSetting" parameterType="HashMap">
+	<update  id="updatePgAuditLogParameterSetting" parameterType="HashMap">
 		/**
 	 	* Query ID : updatePgauditLogParameterSetting
-	 	* Description : log_parameter Setting
+	 	* Description : log_parameter Setting - true, false
 	 	* Author : 박태혁
 	 	**/
 		ALTER SYSTEM SET pgaudit.log_parameter = #{pgauditLogParameter}
 	</update>
 	
-	<update  id="updatePgauditLogStatementOnceSetting" parameterType="HashMap">
+	<update  id="updatePgAuditLogStatementOnceSetting" parameterType="HashMap">
 		/**
 	 	* Query ID : updatePgauditLogStatementOnceSetting
-	 	* Description : log_statement_once Setting
+	 	* Description : log_statement_once Setting - true, false
 	 	* Author : 박태혁
 	 	**/
 		ALTER SYSTEM SET pgaudit.log_statement_once = #{pgauditLogStatementOnce}
 	</update>
 
-	<update  id="updatePgauditLogRelationSetting" parameterType="HashMap">
+	<update  id="updatePgAuditLogRelationSetting" parameterType="HashMap">
 		/**
 	 	* Query ID : updatePgauditLogRelation
-	 	* Description : log_relation Setting
+	 	* Description : log_relation Setting - true, false
 	 	* Author : 박태혁
 	 	**/
 		ALTER SYSTEM SET pgaudit.log_relation = #{pgauditLogRelation}
 	</update>
 	
-	<update  id="updatePgauditRoleSetting" parameterType="HashMap">
+	<update  id="updatePgAuditRoleSetting" parameterType="HashMap">
 		/**
 	 	* Query ID : updatePgauditRole
-	 	* Description : role Setting
+	 	* Description : role Setting - postgres, 
 	 	* Author : 박태혁
 	 	**/
 		ALTER SYSTEM SET pgaudit.role = #{pgauditRole}
 	</update>
 	
-	<select id="selectPgReloadConfSetting">
-		/**
-	 	* Query ID : selectPgReloadConf
-	 	* Description : postgresql.auto.conf에 저장된 정보 로드
-	 	* Author : 박태혁
-	 	**/
-		SELECT pg_reload_conf()
-	</select>
 
-	<select id="selectPgAuditLogList"  parameterType="HashMap" resultType="HashMap">
+	<select id="selectPgAuditLogList"  parameterType="PgAuditVO" resultType="PgAuditVO">
 		/**
 	 	* Query ID : selectPgAuditLogList
 	 	* Description : 감사 이력 조회
@@ -198,28 +205,28 @@
 			, log_time
 			, user_name
 			, statement_id
-			, state
+			, audit_state
 			, error_session_line_num
 			, substatement_id
 			, substatement
 			, audit_type
-			, class
-			, command
+			, audit_class
+			, audit_command
 			, object_type
 			, object_name
 		FROM
 			pgaudit.vw_audit_event
 		WHERE session_line_num IS NOT NULL
 		
-		<if test="objectName != null AND objectName != ''">
+		<if test="object_name != null AND object_name != '' ">
 			AND object_name = #{object_name}
 		</if>
 		
-		<if test="userName != null AND userName != ''">
-			AND user_name = #{userName}
+		<if test="user_name != null AND user_name != '' "> 
+			AND user_name = #{user_name}
 		</if>
 		
-		<if test="start_date != null AND start_date != ''">
+		<if test="start_date != null AND start_date != '' ">
 			AND log_time between to_timestamp(#{start_date}, 'YYYY-MM-DD')
 			AND to_timestamp(#{end_date}, 'YYYY-MM-DD')
 		</if>

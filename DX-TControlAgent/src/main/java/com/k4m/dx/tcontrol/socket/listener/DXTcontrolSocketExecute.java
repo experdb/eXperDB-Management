@@ -13,6 +13,7 @@ import com.k4m.dx.tcontrol.server.DxT002;
 import com.k4m.dx.tcontrol.server.DxT003;
 import com.k4m.dx.tcontrol.server.DxT005;
 import com.k4m.dx.tcontrol.server.DxT006;
+import com.k4m.dx.tcontrol.server.DxT010;
 import com.k4m.dx.tcontrol.server.DxT011;
 import com.k4m.dx.tcontrol.socket.ProtocolID;
 import com.k4m.dx.tcontrol.socket.SocketCtl;
@@ -83,6 +84,13 @@ public class DXTcontrolSocketExecute extends SocketCtl implements Runnable {
 					
 					DxT006 dxT006 = new DxT006(client, is, os);
 					dxT006.execute(strDX_EX_CODE, jObj);
+
+					break;
+					
+				case TranCodeType.DxT010 :
+					
+					DxT010 dxT010 = new DxT010(client, is, os);
+					dxT010.execute(strDX_EX_CODE, jObj);
 
 					break;
 				//role 조회

@@ -6,6 +6,7 @@
     <typeAliases>
     	<typeAlias alias="DbServerInfoVO" type="com.k4m.dx.tcontrol.db.repository.vo.DbServerInfoVO" />
     	<typeAlias alias="AgentInfoVO" type="com.k4m.dx.tcontrol.db.repository.vo.AgentInfoVO" />
+    	<typeAlias alias="PgAuditVO" type="com.k4m.dx.tcontrol.db.repository.vo.PgAuditVO" />
     </typeAliases>
     
  	<mappers>

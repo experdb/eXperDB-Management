@@ -13,6 +13,7 @@ import java.util.List;
 
 import org.json.simple.JSONObject;
 
+import com.k4m.dx.tcontrol.db.repository.vo.PgAuditVO;
 import com.k4m.dx.tcontrol.util.CommonUtil;
 
 public class SocketCtl {
@@ -209,6 +210,19 @@ public class SocketCtl {
 	
 	
 	protected JSONObject DxT006ResultJSON(List<LinkedHashMap<String, String>> resultData, String strDxExCode
+			, String strResultCode
+			, String strErrCode, String strErrMsg) throws Exception{
+		JSONObject outputObj = new JSONObject();
+		outputObj.put(ProtocolID.DX_EX_CODE, strDxExCode);
+		outputObj.put(ProtocolID.RESULT_CODE, strResultCode);
+		outputObj.put(ProtocolID.ERR_CODE, strErrCode);
+		outputObj.put(ProtocolID.ERR_MSG, strErrMsg);
+		outputObj.put(ProtocolID.RESULT_DATA, resultData);
+		
+		return outputObj;
+	}
+	
+	protected JSONObject DxT007ResultJSON(List<PgAuditVO> resultData, String strDxExCode
 			, String strResultCode
 			, String strErrCode, String strErrMsg) throws Exception{
 		JSONObject outputObj = new JSONObject();

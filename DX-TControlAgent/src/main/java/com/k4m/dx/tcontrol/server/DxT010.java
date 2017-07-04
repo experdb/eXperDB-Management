@@ -6,24 +6,22 @@ import java.net.Socket;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
-import org.apache.commons.dbcp.PoolingDriver;
 import org.apache.ibatis.session.SqlSession;
 import org.apache.ibatis.session.SqlSessionFactory;
-import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.k4m.dx.tcontrol.db.DBCPPoolManager;
 import com.k4m.dx.tcontrol.db.SqlSessionManager;
 import com.k4m.dx.tcontrol.socket.ProtocolID;
 import com.k4m.dx.tcontrol.socket.SocketCtl;
 import com.k4m.dx.tcontrol.socket.TranCodeType;
 
 /**
- * Database List 조회
+ * Extension List 조회
  *
  * @author 박태혁
  * @see <pre>
@@ -51,27 +49,31 @@ public class DxT010 extends SocketCtl{
 		SqlSessionFactory sqlSessionFactory = null;
 		
 		sqlSessionFactory = SqlSessionManager.getInstance();
+		JSONObject objSERVER_INFO = (JSONObject) dbInfoObj.get(ProtocolID.SERVER_INFO);
 		
-		String poolName = "" + dbInfoObj.get(ProtocolID.SERVER_NAME) + "_" + dbInfoObj.get(ProtocolID.DATABASE_NAME);
+		String poolName = "" + objSERVER_INFO.get(ProtocolID.SERVER_NAME) + "_" + objSERVER_INFO.get(ProtocolID.DATABASE_NAME);
 		
 		Connection connDB = null;
 		SqlSession sessDB = null;
-		List<Object> selectDBList = new ArrayList<Object>();
+		List<Object> selectExtensionList = new ArrayList<Object>();
 		
 		JSONObject outputObj = new JSONObject();
 		
 		try {
 			
-			SocketExt.setupDriverPool(dbInfoObj, poolName);
+			SocketExt.setupDriverPool(objSERVER_INFO, poolName);
 			
 			//DB 컨넥션을 가져온다.
 			connDB = DriverManager.getConnection("jdbc:apache:commons:dbcp:" + poolName);
 			sessDB = sqlSessionFactory.openSession(connDB);
+			
+			HashMap hp = new HashMap();
+			hp.put("extname", dbInfoObj.get(ProtocolID.EXTNAME));
 
-			selectDBList = sessDB.selectList("app.selectDatabaseList");
+			selectExtensionList = sessDB.selectList("app.selectPgExtensionList", hp);
 			
 			
-	        outputObj = ResultJSON(selectDBList, strDxExCode, "0", "", "");
+	        outputObj = ResultJSON(selectExtensionList, strDxExCode, "0", "", "");
 	        
 	        sendBuff = outputObj.toString().getBytes();
 	        send(4, sendBuff);
