@@ -169,7 +169,21 @@ function fn_regRe_popup(){
 								</tbody>
 							</table>
 						</div>
-						<table id="serverList" class="display" cellspacing="0">
+						<table id="serverList" class="cell-border display" >
+									<colgroup>
+									<col style="width:5%;" />
+									<col style="width:5%;" />
+									<col style="width:10%;" />
+									<col style="width:10%;" />
+									<col style="width:10%;" />
+									<col style="width:10%;" />
+									<col style="width:10%;" />
+									<col style="width:10%;" />
+									<col style="width:10%;" />
+									<col style="width:10%;" />
+									<col style="width:10%;" />
+								</colgroup>
+						
 							<thead>
 								<tr>
 									<th></th>

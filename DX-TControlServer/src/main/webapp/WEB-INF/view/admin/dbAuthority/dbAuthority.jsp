@@ -238,6 +238,52 @@
 														</div>
 													</td>
 												</tr>
+												
+													<tr class="db_tit">
+													<th scope="row">DB server 2</th>
+													<td>
+														<div class="inp_chk">
+															<input type="checkbox" id="db_server_2_all" name="db_server_2_all" checked="checked" />
+															<label for="db_server_2_all"></label>
+														</div>
+													</td>
+												</tr>
+												<tr>
+													<th scope="row">rman백업설정</th>
+													<td>
+														<div class="inp_chk">
+															<input type="checkbox" id="db_server_2_1" name="db_server_2" checked="checked" />
+															<label for="db_server_2_1"></label>
+														</div>
+													</td>
+												</tr>
+												<tr>
+													<th scope="row">dump백업설정</th>
+													<td>
+														<div class="inp_chk">
+															<input type="checkbox" id="db_server_2_2" name="db_server_2" checked="checked" />
+															<label for="db_server_2_2"></label>
+														</div>
+													</td>
+												</tr>
+												<tr>
+													<th scope="row">접근제어설정</th>
+													<td>
+														<div class="inp_chk">
+															<input type="checkbox" id="db_server_2_3" name="db_server_2" checked="checked" />
+															<label for="db_server_2_3"></label>
+														</div>
+													</td>
+												</tr>
+												<tr>
+													<th scope="row">감사설정</th>
+													<td>
+														<div class="inp_chk">
+															<input type="checkbox" id="db_server_2_4" name="db_server_2" checked="checked" />
+															<label for="db_server_2_4"></label>
+														</div>
+													</td>
+												</tr>
 											</tbody>
 										</table>
 									</div>

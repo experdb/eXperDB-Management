@@ -11,15 +11,34 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <title>eXperDB</title>
+<link rel="stylesheet" type="text/css" href="/css/jquery-ui.css">
 <link rel="stylesheet" type="text/css" href="/css/common.css">
-<link type="text/css" rel="stylesheet" href="<c:url value='/css/dt/jquery.dataTables.min.css'/>" />
-<link rel="stylesheet" href="<c:url value='/css/dt/dataTables.jqueryui.min.css'/>" />
-<link rel="stylesheet" type="text/css" href="/css/dt/dataTables.checkboxes.css" />
-<script src="/js/jquery/jquery-1.7.2.min.js" type="text/javascript"></script>
-<script src="/js/jquery/jquery-ui.js" type="text/javascript"></script>
+
+
+<link rel = "stylesheet" type = "text/css" media = "screen" href = "<c:url value='/css/dt/jquery.dataTables.min.css'/>"/>
+<link rel = "stylesheet" type = "text/css" media = "screen" href = "<c:url value='/css/dt/dataTables.jqueryui.min.css'/>"/> 
+<link rel="stylesheet" type="text/css" href="<c:url value='/css/dt/dataTables.colVis.css'/>"/>
+<link rel="stylesheet" type="text/css" href="<c:url value='/css/dt/dataTables.checkboxes.css'/>"/>
+
+
+
+	<script src ="/js/jquery/jquery-1.7.2.min.js" type="text/javascript"></script>
+	<script src ="/js/jquery/jquery-ui.js" type="text/javascript"></script>
+
+
 <script src="/js/jquery/jquery.dataTables.min.js" type="text/javascript"></script>
-<script src="/js/dt/dataTables.checkboxes.min.js" type="text/javascript"></script>
+<script src="/js/dt/dataTables.jqueryui.min.js" type="text/javascript"></script>
+
+ <script src="/js/dt/dataTables.colResize.js" type="text/javascript"></script>
+<script src="/js/dt/dataTables.checkboxes.min.js" type="text/javascript"></script>	
+<script src="/js/dt/dataTables.colVis.js" type="text/javascript"></script>	
+
 <script type="text/javascript" src="/js/common.js"></script>
+
+
+
+
+
 
 <!-- 달력을 사용 script -->
 <script type="text/javascript" src="/js/jquery-ui.min.js"></script>
