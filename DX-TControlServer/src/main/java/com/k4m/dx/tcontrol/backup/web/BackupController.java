@@ -123,9 +123,18 @@ public class BackupController {
 	 * @throws Exception
 	 */
 	@RequestMapping(value = "/backup/rmanLogList.do")
-	public ModelAndView rmanLogList(@RequestParam("db_svr_id") String db_svr_id) {
+	public ModelAndView rmanLogList(@ModelAttribute("workVo") WorkVO workVO) {
 		ModelAndView mv = new ModelAndView();
-		mv.addObject("db_svr_id",db_svr_id);
+
+		mv.addObject("db_svr_id",workVO.getDb_svr_id());
+		try {
+
+			mv.addObject("db_svr_nm", backupService.selectDbSvrNm(workVO).getDb_svr_nm());
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
 		mv.setViewName("backup/rmanLogList");
 		return mv;	
 	}
@@ -139,10 +148,17 @@ public class BackupController {
 	@RequestMapping(value = "/backup/dumpLogList.do")
 	public ModelAndView dumpLogList(@ModelAttribute("workVo") WorkVO workVO) throws Exception{
 		ModelAndView mv = new ModelAndView();
-		
 		List<DbVO> dbList = backupService.selectDbList(workVO);
+		
 		mv.addObject("dbList",dbList);
 		mv.addObject("db_svr_id",workVO.getDb_svr_id());
+		
+		try {
+			mv.addObject("db_svr_nm", backupService.selectDbSvrNm(workVO).getDb_svr_nm());
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		mv.setViewName("backup/dumpLogList");
 		return mv;	
 	}
