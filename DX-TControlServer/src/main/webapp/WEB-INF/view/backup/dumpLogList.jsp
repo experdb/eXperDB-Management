@@ -3,30 +3,28 @@
 <%@ taglib prefix="form"   uri="http://www.springframework.org/tags/form" %>
 <%@ taglib prefix="ui"     uri="http://egovframework.gov/ctl/ui"%>
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags"%>
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
-<head>
-<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-<title>Insert title here</title>
-<link type="text/css" rel="stylesheet" href="<c:url value='/css/egovframework/jquery-ui.css'/>"/>
-<link type="text/css" rel="stylesheet" href="<c:url value='/css/dt/jquery.dataTables.min.css'/>"/>
-<link rel="stylesheet" href="<c:url value='/css/treeview/jquery.treeview.css'/>"/>
-<link rel="stylesheet" href="<c:url value='/css/treeview/screen.css'/>"/>
-<link type="text/css" rel="stylesheet" href="<c:url value='/css/egovframework/sample.css'/>" />
-<script src="/js/jquery/jquery-1.7.2.min.js" type="text/javascript"></script>
-<script src="/js/jquery/jquery-ui.js" type="text/javascript"></script>
-<script src="/js/json2.js" type="text/javascript"></script>
-<script src="/js/jquery/jquery.dataTables.min.js" type="text/javascript"></script>
-<script src="/js/treeview/jquery.cookie.js" type="text/javascript"></script>
-<script src="/js/treeview/jquery.treeview.js" type="text/javascript"></script>
-
+<%
+	/**
+	* @Class Name : dumpLogList.jsp
+	* @Description : dump Log List 화면
+	* @Modification Information
+	*
+	*   수정일         수정자                   수정내용
+	*  ------------    -----------    ---------------------------
+	*  2017.06.07     최초 생성
+	*
+	* author YoonJH
+	* since 2017.06.07
+	*
+	*/
+%>
 <script type="text/javascript">
 var table = null;
 
 function fn_init(){
    	table = $('#logList').DataTable({	
-		scrollY: "300px",	
-		"processing": true,
+		scrollY: "250px",	
+		searching : false,
 	    columns : [
 		         	{ data: "rownum", className: "dt-center", defaultContent: ""}, 
  		         	{ data: "db_nm", className: "dt-center", defaultContent: ""}, 
@@ -42,10 +40,21 @@ function fn_init(){
 $(window.document).ready(function() {
 	fn_init();
 	
+	var today = new Date();
+	var day_end = today.toJSON().slice(0,10);
+	
+	today.setDate(today.getDate() - 7);
+	var day_start = today.toJSON().slice(0,10); 
+
+	$("#wrk_strt_dtm").val(day_start);
+	$("#wrk_end_dtm").val(day_end);
+	
 	$.ajax({
 		url : "/backup/selectWorkLogList.do",
 	  	data : {
-	  		bck_bsn_dscd : "rman"
+	  		bck_bsn_dscd : "dump",
+	  		wrk_strt_dtm : day_start,
+	  		wrk_end_dtm : day_end
 	  	},
 		dataType : "json",
 		type : "post",
@@ -58,13 +67,16 @@ $(window.document).ready(function() {
 		}
 	});
 	
-	$( ".datepicker" ).datepicker({
-		dateFormat: 'yy-mm-dd'
+	$( ".calendar" ).datepicker({
+		dateFormat: 'yy-mm-dd',
+		changeMonth : true,
+		changeYear : true
  	});
 });
 
 function fn_find_list(){
-	var bck_opt_cd = $("#bck_opt_cd").val();
+	var db_id = $("#db_id").val();
+	if(db_id == "") db_id = 0;
 	var wrk_strt_dtm = $("#wrk_strt_dtm").val();
 	var wrk_end_dtm = $("#wrk_end_dtm").val();
 	var exe_rslt_cd = $("#exe_rslt_cd").val();
@@ -74,7 +86,7 @@ function fn_find_list(){
 	$.ajax({
 		url : "/backup/selectWorkLogList.do",
 	  	data : {
-	  		bck_bsn_dscd : "rman",
+	  		bck_bsn_dscd : "dump",
 	  		db_id : db_id,
 	  		wrk_strt_dtm : wrk_strt_dtm,
 	  		wrk_end_dtm : wrk_end_dtm,
@@ -92,71 +104,119 @@ function fn_find_list(){
 	});
 }
 
-$.datepicker.setDefaults({
-    dateFormat: 'yy-mm-dd',
-    prevText: '이전 달',
-    nextText: '다음 달',
-    monthNames: ['1월', '2월', '3월', '4월', '5월', '6월', '7월', '8월', '9월', '10월', '11월', '12월'],
-    monthNamesShort: ['1월', '2월', '3월', '4월', '5월', '6월', '7월', '8월', '9월', '10월', '11월', '12월'],
-    dayNames: ['일', '월', '화', '수', '목', '금', '토'],
-    dayNamesShort: ['일', '월', '화', '수', '목', '금', '토'],
-    dayNamesMin: ['일', '월', '화', '수', '목', '금', '토'],
-    showMonthAfterYear: true,
-    yearSuffix: '년'
+$(function() {
+	//조회버튼 클릭시
+	$("#btnSelect").click(function() {
+		var wrk_strt_dtm = $("#wrk_strt_dtm").val();
+		var wrk_end_dtm = $("#wrk_end_dtm").val();
+
+		if (wrk_strt_dtm != "" && wrk_end_dtm == "") {
+			alert("종료일자를 선택해 주세요");
+			return false;
+		}
+
+		if (wrk_end_dtm != "" && wrk_strt_dtm == "") {
+			alert("시작일자를 선택해 주세요");
+			return false;
+		}
+
+		fn_find_list();
+	});
 });
 </script>
-</head>
-<body>
-	<div id="content_pop">
-		<!-- 타이틀 -->
-		<div id="title">
-			<ul>
-				<li><a href="/backup/rmanLogList.do?db_svr_id=${db_svr_id}"> RMAN 백업이력</a></li>			
-				<li><img
-					src="<c:url value='/images/egovframework/example/title_dot.gif'/>"
-					alt="" /> DUMP 백업이력</li>
-			</ul>
+<!-- contents -->
+<div id="contents">
+	<div class="location">
+		<ul>
+			<li>DB서버</li>
+			<li>${db_svr_nm}</li>
+			<li class="on">백업 이력</li>
+		</ul>
+	</div>
+
+	<div class="contents_wrap">
+		<h4>Dump 백업관리화면  <a href="#n"><img src="../images/ico_tit.png" alt="" /></a></h4>
+		<div class="contents">
+			<div class="cmm_tab">
+				<ul>
+					<li><a href="/backup/rmanLogList.do?db_svr_id=${db_svr_id}">Rman 백업 이력</a></li>
+					<li class="atv"><a href="/backup/dumpLogList.do?db_svr_id=${db_svr_id}">Dump 백업 이력</a></li>
+				</ul>
+			</div>
+			<div class="cmm_grp">
+				<div class="btn_type_01">
+					<span class="btn"><button id="btnSelect">조회</button></span>
+				</div>
+				<div class="sch_form">
+				<form name="findList" id="findList" method="post">
+				<input type="hidden" name="db_svr_id" id="db_svr_id" value="${db_svr_id}"/> 
+					<table class="write">
+						<caption>검색 조회</caption>
+						<colgroup>
+							<col style="width:80px;" />
+							<col style="width:230px;" />
+							<col style="width:100px;" />
+							<col />
+						</colgroup>
+						<tbody>
+							<tr>
+								<th scope="row" class="t10">작업기간</th>
+								<td colspan="3">
+									<div class="calendar_area">
+										<a href="#n" class="calendar_btn">달력열기</a>
+										<input type="text" name="wrk_strt_dtm" id="wrk_strt_dtm" class="calendar" readonly/>
+										<span class="wave">~</span>
+										<a href="#n" class="calendar_btn">달력열기</a>
+										<input type="text" name="wrk_end_dtm" id="wrk_end_dtm" class="calendar" readonly/>
+									</div>
+								</td>
+							</tr>
+							<tr>
+								<th scope="row" class="t9">상태</th>
+								<td>
+									<select name="exe_rslt_cd" id="exe_rslt_cd" class="select t5">
+										<option value="">선택</option>
+										<option value="S">성공</option>
+										<option value="F">실패</option>
+									</select>
+								</td>
+								<th scope="row" class="t9">Database명</th>
+								<td>
+									<select name="db_id" id="db_id" class="select t5">
+										<option value="">선택</option>
+										<c:forEach var="result" items="${dbList}" varStatus="status">
+										<option value="<c:out value="${result.db_id}"/>"><c:out value="${result.db_nm}"/></option>
+										</c:forEach>
+									</select>	
+								</td>
+							</tr>
+						</tbody>
+					</table>
+					</form>
+				</div>
+				<div class="overflow_area">
+					<table class="list" id="logList" cellspacing="0" width="100%">
+						<caption>Dump 백업관리 이력화면 리스트</caption>
+						<thead>
+							<tr>
+								<th scope="col">NO</th>
+								<th scope="col">Database</th>
+								<th scope="col">작업시작 시간</th>
+								<th scope="col">작업종료 시간</th>
+								<th scope="col">상태</th>
+								<th scope="col">백업파일경로</th>
+								<th scope="col">Size</th>
+							</tr>
+						</thead>
+					</table>
+				</div>
+			</div>
 		</div>
-		<!-- // 검색창 -->
-		<form name="findList" id="findList" method="post">
-		<input type="hidden" name="db_svr_id" id="db_svr_id" value="${db_svr_id}"/> 
-		<div id="search">
-		작업기간 : <input type="text" name="wrk_strt_dtm" id="wrk_strt_dtm" class="datepicker" readonly style="width:80px;"/> ~ <input type="text" name="wrk_end_dtm" id="wrk_end_dtm" class="datepicker" readonly style="width:80px;"/>
-		상태 : <select name="exe_rslt_cd" id="exe_rslt_cd">
-					<option value="">선택</option>
-					<option value="S">성공</option>
-					<option value="F">실패</option>
-				</select>
-		Database명 : <select name="db_id" id="db_id">
-			<option value="">선택</option>
-			<c:forEach var="result" items="${dbList}" varStatus="status">
-			<option value="<c:out value="${result.db_id}"/>"><c:out value="${result.db_nm}"/></option>
-			</c:forEach>
-		</select>				
-		</div>
-		<div  style="margin-bottom:50px;text-align:center;float:right;">
-				<span class="btn_blue_l">
-					<a href="javascript:fn_find_list();">조회</a> <img src="<c:url value='/images/egovframework/example/btn_bg_r.gif'/>" style="margin-left: 6px;" alt="" />
-				</span>
-		</div>
-		</form>
-		<!-- // 검색창 -->		
-		<!-- // 타이틀 -->
-		<table id="logList" class="display" cellspacing="0" width="100%">
-	        <thead>
-	            <tr>
-	                <th>No</th>
-	                <th>DATABASE</th>
-	                <th>작업시작시간</th>
-	                <th>작업종료시간</th>
-	                <th>상태</th>
-	                <th>백업파일경로</th>
-	                <th>Size</th>
-	            </tr>
-	        </thead>
-	    </table>
+	</div>
+</div><!-- // contents -->
+
 		
-		
+		</div><!-- // container -->
 	</div>
 </body>
 </html>
