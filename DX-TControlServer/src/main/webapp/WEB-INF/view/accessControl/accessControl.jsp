@@ -1,8 +1,5 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
-<%@ taglib prefix="form" uri="http://www.springframework.org/tags/form"%>
-<%@ taglib prefix="ui" uri="http://egovframework.gov/ctl/ui"%>
-<%@ taglib prefix="spring" uri="http://www.springframework.org/tags"%>
 <%
 	/**
 	* @Class Name : serverAccessControl.jsp
@@ -18,26 +15,6 @@
 	*
 	*/
 %>	
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
-<head>
-<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-<title>서버접근제어</title>
-<link type="text/css" rel="stylesheet" href="<c:url value='/css/dt/jquery.dataTables.min.css'/>" />
-<link rel="stylesheet" href="<c:url value='/css/treeview/jquery.treeview.css'/>" />
-<link rel="stylesheet" href="<c:url value='/css/treeview/screen.css'/>" />
-<!-- 체크박스css -->
-<link rel="stylesheet" type="text/css" href="/css/dt/dataTables.checkboxes.css" />
-<script src="js/jquery/jquery-1.7.2.min.js" type="text/javascript"></script>
-<script src="js/jquery/jquery-ui.js" type="text/javascript"></script>
-<script src="js/json2.js" type="text/javascript"></script>
-<script src="js/jquery/jquery.dataTables.min.js" type="text/javascript"></script>
-<!-- 체크박스js -->
-<script src="js/dt/dataTables.checkboxes.min.js" type="text/javascript"></script>
-<script src="js/dt/dataTables.colVis.js" type="text/javascript"></script>
-<script src="js/treeview/jquery.cookie.js" type="text/javascript"></script>
-<script src="js/treeview/jquery.treeview.js" type="text/javascript"></script>
-</head>
 <script>
 	var table = null;
 
@@ -56,11 +33,10 @@
 			 ]
 		});
 	}
-
 	$(window.document).ready(function() {
 		fn_init();
 			
- 		$.ajax({
+/*  		$.ajax({
 			url : "/selectAccessControl.do",
 			data : {
 			},
@@ -74,7 +50,7 @@
 				table.rows.add(result).draw();
 			}
 		}); 
-	
+	 */
 	});
 	
 	/* 조회 버튼 클릭시*/
@@ -98,9 +74,100 @@
 	}
 	
 	
+	function windowPopup(){
+		var popUrl = "/popup/accessControlRegForm.do?act=i"; // 서버 url 팝업경로
+		var width = 920;
+		var height = 480;
+		var left = (window.screen.width / 2) - (width / 2);
+		var top = (window.screen.height /2) - (height / 2);
+		var popOption = "width="+width+", height="+height+", top="+top+", left="+left+", resizable=no, scrollbars=no, status=no, toolbar=no, titlebar=yes, location=no,";
+		
+		window.open(popUrl,"",popOption);
+	}
+	
+
 </script>
-<body>
-	<h2>서버접근제어</h2>
+		<!-- contents -->
+			<div id="contents">
+				<div class="location">
+					<ul>
+						<li>PG Server1</li>
+						<li>접근제어관리</li>
+						<li class="on">서버접근제어</li>
+					</ul>
+				</div>
+
+				<div class="contents_wrap">
+					<h4>접근제어 리스트 <a href="#n"><img src="../images/ico_tit.png" alt="" /></a></h4>
+					<div class="contents">
+						<div class="cmm_grp">
+							<div class="control_grp">
+								<div class="control_lt">
+									<div class="inner">
+										<p class="tit">Database 목록</p>
+										<div class="control_list">
+											<ul>
+												<li>
+													<div class="inp_chk">
+														<img src="/images/chk.png" style="width: 22px; height: 22px; line-height: 22px; margin: 0px 10px 0 0;">
+														<label for="server">${db_svr_nm}</label>
+													</div>
+													<ul>
+														<c:forEach var="resultSet" items="${resultSet}">
+															<li>
+																<div class="inp_chk">
+																	<input type="checkbox" id="${resultSet.db_nm}" name="${resultSet.db_nm}" />
+																	<label for="${resultSet.db_nm}">${resultSet.db_nm}</label>
+																</div>
+															</li>															
+														</c:forEach>
+													</ul>
+												</li>
+											</ul>
+										</div>
+									</div>
+								</div>
+								
+								<div class="control_rt">
+									<div class="btn_type_01">
+										<span>
+											<div class="search_area">
+												<input type="text" class="txt search" />
+												<button class="search_btn">검색</button>
+											</div>
+										</span>
+										<span class="btn" onclick="windowPopup();"><button>등록</button></span>
+										<span class="btn"><button>수정</button></span>
+										<a href="#n" class="btn"><span>삭제</span></a>
+									</div>
+									<div class="inner">
+										<p class="tit">접근제어 리스트</p>
+										<div class="overflow_area">
+											<table id="accessControlTable" class="display" cellspacing="0" width="100%">
+												<thead>
+													<tr>
+														<th></th>
+														<th>No</th>
+														<th>User</th>
+														<th>IP Address</th>
+														<th>Method</th>
+														<th>Option</th>
+														<th>Type</th>
+													</tr>
+												</thead>
+											</table>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div><!-- // contents -->
+			
+			
+			
+	<!-- <h2>서버접근제어</h2>
 	<div style="overflow: scroll; overflow-x: hidden; width: 30%; height: 500px; padding: 5px; float: left; margin-right: 50px;">
 		<h3>DB서버</h3>
 	</div>
@@ -129,6 +196,4 @@
 			</thead>
 		</table>
 	</div>
-		
-</body>
-</html>
+ -->

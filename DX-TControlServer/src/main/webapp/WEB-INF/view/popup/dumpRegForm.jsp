@@ -112,6 +112,27 @@ function valCheck(){
 	return true;
 }
 
+function fn_get_table_list(){
+	var db_id = $("#db_id").val();
+	
+	if(db_id){
+		$.ajax({
+			async : false,
+			url : "/selectTableList.do",
+		  	data : {
+		  		db_svr_id : $("#db_svr_id").val(),
+		  		db_id : "tcontrol" /**$("#db_id").val()**/
+		  	},
+			type : "post",
+			error : function(request, xhr, status, error) {
+				alert("실패");
+			},
+			success : function(data) {
+				alert(JSON.stringify(data));
+			}
+		});
+	}
+}
 
 
 function fn_find_list(){
@@ -223,7 +244,8 @@ function checkOid(){
 						<td><input type="text" class="txt" name="wrk_nm" id="wrk_nm" maxlength=50/></td>
 						<th scope="row" class="ico_t1">Database</th>
 						<td>
-							<select name="db_id" id="db_id" class="select">
+							<select name="db_id" id="db_id" class="select" onChange="fn_get_table_list()">
+								<option value="">선택</option>
 								<c:forEach var="result" items="${dbList}" varStatus="status">
 								<option value="<c:out value="${result.db_id}"/>"><c:out value="${result.db_nm}"/></option>
 								</c:forEach>

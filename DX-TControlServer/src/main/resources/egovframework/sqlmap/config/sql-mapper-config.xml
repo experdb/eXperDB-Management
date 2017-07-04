@@ -42,6 +42,9 @@
 		<!-- functions -->
 		<mapper resource="egovframework/sqlmap/mappers/functions/transfer/transferSql.xml" />
 		
+		<!-- accesscontrol -->
+		<mapper resource="egovframework/sqlmap/mappers/accessControl/accessControlSql.xml" />
+		
 		<!-- mypage -->
 		<mapper resource="egovframework/sqlmap/mappers/mypage/mypageSql.xml" />
 	</mappers>
