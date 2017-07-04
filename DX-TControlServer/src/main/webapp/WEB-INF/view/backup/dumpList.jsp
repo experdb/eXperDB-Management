@@ -4,14 +4,14 @@
 <script type="text/javascript">
 $(window.document).ready(
 	function() {
-		getDataList(); 
+		getDumpDataList(); 
 });
 
-function fn_find_list(){
-	getDataList($("#wrk_nm").val(), $("#bck_opt_cd").val());
+function fn_dump_find_list(){
+	getDumpDataList($("#wrk_nm").val(), $("#bck_opt_cd").val());
 }
 
-function fn_reg_popup(){
+function fn_dump_reg_popup(){
 	var popUrl = "/popup/dumpRegForm.do?db_svr_id=${db_svr_id}"; // 서버 url 팝업경로
 	var width = 954;
 	var height = 810;
@@ -23,7 +23,7 @@ function fn_reg_popup(){
 	winPop.focus();
 }
 
-function fn_reg_reform_popup(wrk_id){
+function fn_dump_reform_popup(wrk_id){
 	var popUrl = "/popup/dumpRegReForm.do?db_svr_id=${db_svr_id}&wrk_id="+wrk_id; // 서버 url 팝업경로
 	var width = 954;
 	var height = 810;
@@ -42,7 +42,7 @@ function getDataList(wrk_nm, bck_opt_cd){
 	  		db_svr_id : '<c:out value="${db_svr_id}"/>',
 	  		bck_opt_cd : bck_opt_cd,
 	  		wrk_nm : wrk_nm,
-	  		bck_bsn_dscd : "dump"
+	  		bck_bsn_dscd : "TC000202"
 	  	},
 		dataType : "json",
 		type : "post",
@@ -181,7 +181,7 @@ function fn_work_delete(){
 								<td><input type="text" class="txt t3" name="wrk_nm" id="wrk_nm"/></td>
 								<th scope="row" class="t4">DB명</th>
 								<td>
-									<select name="db_id" id="db_id" class="txt t3" style="width:100px;">
+									<select name="db_id" id="db_id" class="txt t3" style="width:150px;">
 										<option value="">선택</option>
 										<c:forEach var="result" items="${dbList}" varStatus="status">
 										<option value="<c:out value="${result.db_id}"/>"><c:out value="${result.db_nm}"/></option>

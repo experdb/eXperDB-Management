@@ -36,7 +36,7 @@ function fn_insert_work(){
 		  		cps_yn : cps_yn,
 		  		log_file_bck_yn : log_file_bck_yn,
 		  		db_id : 0,
-		  		bck_bsn_dscd : "rman",
+		  		bck_bsn_dscd : "TC000201",
 		  		file_stg_dcnt : $("#file_stg_dcnt").val(),
 		  		log_file_stg_dcnt : $("#log_file_stg_dcnt").val(),
 		  		log_file_mtn_ecnt : $("#log_file_mtn_ecnt").val()
@@ -46,16 +46,12 @@ function fn_insert_work(){
 				alert("실패");
 			},
 			success : function(data) {
-				fn_insert_opt(data);
+				opener.fn_rman_find_list();
+				alert("등록이 완료되었습니다.");
+				self.close();
 			}
 		});  
 	}
-}
-
-function fn_insert_opt(data){
-	opener.location.reload();
-	alert("등록이 완료되었습니다.");
-	self.close();
 }
 
 function valCheck(){
@@ -122,10 +118,9 @@ function fn_find_list(){
 							<span class="tit">백업옵션</span>
 							<span>
 								<select name="bck_opt_cd" id="bck_opt_cd" class="select">
-									<option value="">선택</option>
-									<option value="full">전체백업</option>
-									<option value="incr">증분백업</option>
-									<option value="achi">아카이브백업</option>
+									<option value="TC000301">전체백업</option>
+									<option value="TC000302">증분백업</option>
+									<option value="TC000303">아카이브백업</option>
 								</select>
 							</span>
 							<span class="chk">

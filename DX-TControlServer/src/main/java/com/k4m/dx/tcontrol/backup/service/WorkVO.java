@@ -3,7 +3,7 @@ package com.k4m.dx.tcontrol.backup.service;
 public class WorkVO {
 	private int wrk_id;
 	private int db_svr_id;
-	private String db_id;
+	private int db_id;
 	private String db_nm;
 	private String bck_bsn_dscd;
 	private String wrk_nm;
@@ -24,7 +24,21 @@ public class WorkVO {
 	private String log_file_bck_yn;
 	private int log_file_stg_dcnt;
 	private int log_file_mtn_ecnt;
+	private String bck_bsn_dscd_nm;
+	private String bck_opt_cd_nm;
 
+	public String getBck_bsn_dscd_nm() {
+		return bck_bsn_dscd_nm;
+	}
+	public void setBck_bsn_dscd_nm(String bck_bsn_dscd_nm) {
+		this.bck_bsn_dscd_nm = bck_bsn_dscd_nm;
+	}
+	public String getBck_opt_cd_nm() {
+		return bck_opt_cd_nm;
+	}
+	public void setBck_opt_cd_nm(String bck_opt_cd_nm) {
+		this.bck_opt_cd_nm = bck_opt_cd_nm;
+	}
 	public int getBck_mtn_ecnt() {
 		return bck_mtn_ecnt;
 	}
@@ -73,10 +87,10 @@ public class WorkVO {
 	public void setDb_svr_id(int db_svr_id) {
 		this.db_svr_id = db_svr_id;
 	}
-	public String getDb_id() {
+	public int getDb_id() {
 		return db_id;
 	}
-	public void setDb_id(String db_id) {
+	public void setDb_id(int db_id) {
 		this.db_id = db_id;
 	}
 	public String getBck_bsn_dscd() {
