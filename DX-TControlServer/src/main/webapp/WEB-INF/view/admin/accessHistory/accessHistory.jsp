@@ -38,19 +38,9 @@
 	
 	$(window.document).ready(function() {
 		fn_init();
-		$.ajax({
-			url : "/selectAccessHistory.do",
-			data : {},
-			dataType : "json",
-			type : "post",
-			error : function(xhr, status, error) {
-				alert("실패")
-			},
-			success : function(result) {
-				table.clear().draw();
-				table.rows.add(result).draw();
-			}
-		});
+		$('#from').val($.datepicker.formatDate('yy-mm-dd', new Date()));
+		$('#to').val($.datepicker.formatDate('yy-mm-dd', new Date()));
+		
 	});
 
 	$(function() {
@@ -86,17 +76,7 @@
 			var lgi_dtm_start = $("#from").val();
 			var lgi_dtm_end = $("#to").val();
 			var usr_nm = "%" + $("#usr_nm").val() + "%";
-
-			if (lgi_dtm_start != "" && lgi_dtm_end == "") {
-				alert("종료일자를 선택해 주세요");
-				return false;
-			}
-
-			if (lgi_dtm_end != "" && lgi_dtm_start == "") {
-				alert("시작일자를 선택해 주세요");
-				return false;
-			}
-
+			
 			$.ajax({
 				url : "/selectAccessHistory.do",
 				data : {
@@ -119,29 +99,26 @@
 
 	// 엑셀저장
 	function fn_ExportExcel() {
-		var lgi_dtm_start = $("#from").val();
-		var lgi_dtm_end = $("#to").val();
-		var usr_nm = "%" + $("#usr_nm").val() + "%";
-
-		if (lgi_dtm_start != "" && lgi_dtm_end == "") {
-			alert("종료일자를 선택해 주세요");
+		var dataCnt = table.rows().data().length;
+		
+		if(dataCnt == 0){
+			alert("데이터가 존재하지 않습니다.")
 			return false;
+		}else{
+			var lgi_dtm_start = $("#from").val();
+			var lgi_dtm_end = $("#to").val();
+			var usr_nm = "%" + $("#usr_nm").val() + "%";
+	
+			var form = document.excelForm;
+	
+			$("#lgi_dtm_start").val(lgi_dtm_start);
+			$("#lgi_dtm_end").val(lgi_dtm_end);
+			$("#user_nm").val(usr_nm);
+	
+			form.action = "/accessHistory_Excel.do";
+			form.submit();
+			return;
 		}
-
-		if (lgi_dtm_end != "" && lgi_dtm_start == "") {
-			alert("시작일자를 선택해 주세요");
-			return false;
-		}
-
-		var form = document.excelForm;
-
-		$("#lgi_dtm_start").val(lgi_dtm_start);
-		$("#lgi_dtm_end").val(lgi_dtm_end);
-		$("#user_nm").val(usr_nm);
-
-		form.action = "/accessHistory_Excel.do";
-		form.submit();
-		return;
 	}
 </script>
 <body>
@@ -181,9 +158,9 @@
 										<td>
 											<div class="calendar_area">
 												<a href="#n" class="calendar_btn">달력열기</a> 
-												<input type="text" class="calendar" id="from" name="from" title="기간검색 시작날짜" /> <span class="wave">~</span>
+												<input type="text" class="calendar" id="from" name="from" title="기간검색 시작날짜" readonly="readonly"/> <span class="wave">~</span>
 												<a href="#n" class="calendar_btn">달력열기</a> 
-												<input type="text" class="calendar" id="to" name="to" title="기간검색 종료날짜" />
+												<input type="text" class="calendar" id="to" name="to" title="기간검색 종료날짜" readonly="readonly"/>
 											</div>
 										</td>
 										<th scope="row" class="t9">사용자</th>
@@ -193,7 +170,7 @@
 							</table>
 						</div>
 						<div class="overflow_area">
-							<table id="accessHistoryTable" class="list" cellspacing="0" width="100%">
+							<table id="accessHistoryTable" class="display" cellspacing="0" width="100%">
 								<thead>
 									<tr>
 										<th>No</th>

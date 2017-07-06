@@ -16,6 +16,7 @@ import org.springframework.web.servlet.ModelAndView;
 import com.k4m.dx.tcontrol.accesscontrol.service.AccessControlService;
 import com.k4m.dx.tcontrol.accesscontrol.service.AccessControlVO;
 import com.k4m.dx.tcontrol.admin.accesshistory.service.AccessHistoryService;
+import com.k4m.dx.tcontrol.backup.service.DbVO;
 import com.k4m.dx.tcontrol.cmmn.CmmnUtils;
 import com.k4m.dx.tcontrol.common.service.HistoryVO;
 import com.k4m.dx.tcontrol.functions.transfer.service.ConnectorVO;
@@ -83,12 +84,20 @@ public class AccessControlController {
 			historyVO.setExe_dtl_cd("DX-T0027");
 			accessHistoryService.insertHistory(historyVO);
 			
+			//Databae 목록 조회
+			int db_svr_id = Integer.parseInt(request.getParameter("db_svr_id"));
+			List<DbVO> resultSet = accessControlService.selectDatabaseList(db_svr_id);
+
+			String db_svr_nm= request.getParameter("db_svr_nm");
+			mv.addObject("db_svr_nm",db_svr_nm);
+			mv.addObject("resultSet",resultSet);
 			mv.setViewName("accessControl/accessControl");
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 		return mv;
 	}
+	
 	
 	
 	/**

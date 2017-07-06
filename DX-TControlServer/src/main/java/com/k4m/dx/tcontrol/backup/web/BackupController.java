@@ -1,5 +1,6 @@
 package com.k4m.dx.tcontrol.backup.web;
 
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -48,6 +49,13 @@ public class BackupController {
 	public ModelAndView rmanList(@ModelAttribute("workVo") WorkVO workVO, ModelMap model) {
 		ModelAndView mv = new ModelAndView();
 
+		try {
+			mv.addObject("dbList",backupService.selectDbList(workVO));
+		} catch (Exception e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
+		
 		mv.addObject("db_svr_id",workVO.getDb_svr_id());
 		try {
 			mv.addObject("db_svr_nm", backupService.selectDbSvrNm(workVO).getDb_svr_nm());
@@ -292,7 +300,7 @@ public class BackupController {
 	public ModelAndView rmanRegReForm(@ModelAttribute("workVo") WorkVO workVO, ModelMap model) throws Exception  {
 		ModelAndView mv = new ModelAndView();
 
-		workVO.setBck_bsn_dscd("rman");
+		workVO.setBck_bsn_dscd("TC000201");
 		model.addAttribute("workInfo", backupService.selectWorkList(workVO));
 
 		// incoding code List
@@ -323,7 +331,7 @@ public class BackupController {
 	public ModelAndView dumpRegReForm(@ModelAttribute("workVo") WorkVO workVO, ModelMap model) throws Exception  {
 		ModelAndView mv = new ModelAndView();
 
-		workVO.setBck_bsn_dscd("dump");
+		workVO.setBck_bsn_dscd("TC000202");
 		model.addAttribute("workInfo", backupService.selectWorkList(workVO));
 		model.addAttribute("workOptInfo", backupService.selectWorkOptList(workVO));
 
@@ -337,22 +345,27 @@ public class BackupController {
 	/**
 	 * Rman Work을 수정등록한다.
 	 * @return 
+	 * @throws IOException 
 	 * @throws Exception
 	 */
 	@RequestMapping(value = "/popup/workRmanReWrite.do")
-	public void workRmanReWrite(@ModelAttribute("workVO") WorkVO workVO, HttpServletResponse response, HttpServletRequest request) throws Exception{
+	public void workRmanReWrite(@ModelAttribute("workVO") WorkVO workVO, HttpServletResponse response, HttpServletRequest request) throws IOException{
 		HttpSession session = request.getSession();
 		String usr_id = (String) session.getAttribute("usr_id");
+		
+		String result = "F";
 
 		workVO.setLst_mdfr_id(usr_id);
-		backupService.updateRmanWork(workVO);
-		
-		// 옵션내역 삭제
-		WorkOptVO workOptVO = new WorkOptVO();
-		workOptVO.setWrk_id(workVO.getWrk_id());
-		backupService.deleteWorkOpt(workOptVO);
-		
-		response.getWriter().println(workVO.getWrk_id());
+		try {
+			backupService.updateRmanWork(workVO);
+			result = "S";
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			result = "F";
+		}
+
+		response.getWriter().println(result);
 	}
 	
 	/**

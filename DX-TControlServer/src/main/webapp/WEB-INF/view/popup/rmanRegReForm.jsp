@@ -44,41 +44,21 @@ function fn_update_work(){
 				alert("실패");
 			},
 			success : function(data) {
-				fn_insert_opt();
+				result(data);
 			}
 		});  
 	}
 }
 
-function fn_insert_opt(){
-	var sn = 1;
-	$("input[name=opt]").each(function(){
-		fn_insert_optval($("#wrk_id").val(),sn,$(this).attr("grp_cd"),$(this).attr("opt_cd"),$(this).val());
-		sn++;
-	});
-	opener.location.reload();	
-	alert("수정이 완료되었습니다.");
-	self.close();
-}
-
-function fn_insert_optval(wrk_id, opt_sn, grp_cd, opt_cd, bck_opt_val){
-	$.ajax({
-		async : false,
-		url : "/popup/workOptWrite.do",
-	  	data : {
-	  		wrk_id : wrk_id,
-	  		opt_sn : opt_sn,
-	  		grp_cd : grp_cd,
-	  		opt_cd : opt_cd,
-	  		bck_opt_val : bck_opt_val
-	  	},
-		type : "post",
-		error : function(request, xhr, status, error) {
-			alert("백업옵션 저장실패");
-		},
-		success : function() {
-		}
-	});  
+function result(data){
+	if($.trim(data) == "S"){
+		opener.fn_rman_find_list();	
+		alert("수정이 완료되었습니다.");
+		self.close();
+	}else{
+		alert("동일Work명이 존재합니다. 다른 Work명을 입력해주세요.");
+		document.location.url = "rmanRegReForm.do?db_svr_id=${db_svr_id}&wrk_id=${wrk_id}";
+	}
 }
 
 function valCheck(){
@@ -147,9 +127,9 @@ function fn_find_list(){
 							<span>
 								<select name="bck_opt_cd" id="bck_opt_cd" class="select">
 									<option value="">선택</option>
-									<option value="full"<c:if test="${workInfo[0].bck_opt_cd == 'full'}"> selected</c:if>>전체백업</option>
-									<option value="incr"<c:if test="${workInfo[0].bck_opt_cd == 'incr'}"> selected</c:if>>증분백업</option>
-									<option value="achi"<c:if test="${workInfo[0].bck_opt_cd == 'achi'}"> selected</c:if>>아카이브백업</option>
+									<option value="TC000301"<c:if test="${workInfo[0].bck_opt_cd == 'TC000301'}"> selected</c:if>>전체백업</option>
+									<option value="TC000302"<c:if test="${workInfo[0].bck_opt_cd == 'TC000302'}"> selected</c:if>>증분백업</option>
+									<option value="TC000303"<c:if test="${workInfo[0].bck_opt_cd == 'TC000303'}"> selected</c:if>>아카이브백업</option>
 								</select>
 							</span>
 							<span class="chk">

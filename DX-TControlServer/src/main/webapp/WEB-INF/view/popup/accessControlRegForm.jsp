@@ -23,10 +23,9 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <title>접근제어 등록/수정 팝업</title>
-<link type="text/css" rel="stylesheet" href="<c:url value='/css/egovframework/sample.css'/>" />
-<link rel="stylesheet" href="<c:url value='/css/treeview/jquery.treeview.css'/>" />
-<link rel="stylesheet" href="<c:url value='/css/treeview/screen.css'/>" />
-<script src="/js/jquery/jquery-1.12.4.js" type="text/javascript"></script>
+<link rel="stylesheet" type="text/css" href="../css/common.css">
+<script type="text/javascript" src="../js/jquery-1.9.1.min.js"></script>
+<script type="text/javascript" src="../js/common.js"></script>
 </head>
 <script>
 	/* Validation */
@@ -95,7 +94,107 @@
 	}
 </script>
 <body>
-	<h3>
+<div class="pop_container">
+	<div class="pop_cts">
+		<p class="tit">
+			<c:if test="${act == 'i'}">접근제어 등록하기</c:if>
+			<c:if test="${act == 'u'}">접근제어 수정하기</c:if>
+		</p>
+		<div class="pop_cmm">
+			<table class="write">
+				<caption>
+					<c:if test="${act == 'i'}">접근제어 등록하기</c:if>
+					<c:if test="${act == 'u'}">접근제어 수정하기</c:if>
+				</caption>
+				<colgroup>
+					<col style="width:85px;" />
+					<col />
+					<col style="width:85px;" />
+					<col />
+				</colgroup>
+				<tbody>
+					<tr>
+						<th scope="row" class="ico_t1">서버명</th>
+						<td><input type="text" class="txt bg1" name="" /></td>
+						<th scope="row" class="ico_t1">Database</th>
+						<td><input type="text" class="txt bg1 t4" name="" /></td>
+					</tr>
+				</tbody>
+			</table>
+		</div>
+		<div class="pop_cmm mt25">
+			<table class="write">
+				<caption>
+					<c:if test="${act == 'i'}">접근제어 등록하기</c:if>
+					<c:if test="${act == 'u'}">접근제어 수정하기</c:if>
+				</caption>
+				<colgroup>
+					<col style="width:85px;" />
+					<col />
+					<col style="width:85px;" />
+					<col />
+				</colgroup>
+				<tbody>
+					<tr>
+						<th scope="row" class="ico_t1">IP</th>
+						<td><input type="text" class="txt" name="" /></td>
+						<th scope="row" class="ico_t1">User</th>
+						<td><input type="text" class="txt t4" name="" /></td>
+					</tr>
+					<tr>
+						<th scope="row" class="ico_t1">Method</th>
+						<td>
+							<select id="ctf_mth_nm" name="ctf_mth_nm" class="select">
+								<option value="trues">trues</option>
+								<option value="reject">reject</option>
+								<option value="md5">md5</option>
+								<option value="password">password</option>
+								<option value="Krb4">Krb4</option>
+								<option value="krb5">krb5</option>
+								<option value="ident">ident</option>
+								<option value="pam">pam</option>
+								<option value="ldap">ldap</option>
+								<option value="gss">gss</option>
+								<option value="Sspi">Sspi</option>
+								<option value="cert">cert</option>
+								<option value="crypt">crypt</option>
+								<option value="radius">radius</option>
+								<option value="peer">peer</option>
+							</select>
+						</td>
+						<th scope="row" class="ico_t1">Type</th>
+						<td>					
+							<select id="ctf_tp_nm" name="ctf_tp_nm" class="select t4">
+								<option value="local">local</option>
+								<option value="host">host</option>
+								<option value="hostssl">hostssl</option>
+								<option value="hostnossl">hostnossl</option>
+							</select>
+						</td>
+					</tr>
+					<tr>
+						<th scope="row" class="ico_t1">Option</th>
+						<td colspan="3"><input type="text" class="txt t4" name="" /></td>
+					</tr>
+				</tbody>
+			</table>
+		</div>
+		<div class="btn_type_02">
+			<span class="btn btnC_01">					
+				<c:if test="${act == 'i'}">
+					<button type="button" onclick="fn_insert()">저장</button>
+				</c:if>
+				<c:if test="${act == 'u'}">
+					<button type="button" onclick="fn_update()">저장</button>
+				</c:if>
+			</span>
+			<a href="#n" class="btn" onclick="window.close();"><span>취소</span></a>
+		</div>
+	</div>
+</div>
+
+
+	<%-- <h3>
 		<c:if test="${act == 'i'}">접근제어 등록</c:if>
 		<c:if test="${act == 'u'}">접근제어 수정</c:if>
 	</h3>
@@ -160,6 +259,6 @@
 			</c:if>
 			<input type="button" value="취소" onclick="self.close()">
 		</div>
-	</div>
+	</div> --%>
 </body>
 </html>

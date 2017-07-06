@@ -67,4 +67,51 @@
 		, #{lgi_ipadr}
 		)
 	</insert>	
+	
+	<select id="selectAccessHistoryTotCnt" parameterType="searchVO" resultType="int">
+    	/**
+	 	* Query ID : selectAccessHistoryTotCnt
+	 	* Description : selectAccessHistoryTotCnt TotCnt 조회
+	 	* Author : 김주영
+	 	**/
+		SELECT COUNT(*) totcnt
+		FROM T_SYSWRK_G G, T_SYSDTL_C C, T_USR_I I
+		WHERE G.EXE_DTL_CD =C.SYS_CD
+		AND G.USR_ID=I.USR_ID
+	</select>
+	
+	<select id="selectAccessHistoryList" parameterType="searchVO" resultType="historyVO">
+		/**
+	 	* Query ID : selectAccessHistorys
+	 	* Description : 접근내역 조회
+	 	* Author : 김주영
+	 	**/
+		SELECT
+		  (ROW_NUMBER() OVER()) AS ROWNUM
+		, (ROW_NUMBER() OVER()) AS IDX
+		, A.EXEDTM_DATE
+		, A.EXEDTM_HOUR
+		, A.SYS_CD_NM
+		, A.USR_ID
+		, A.USR_NM
+		, A.DEPT_NM
+		, A.PST_NM
+		, A.LGI_IPADR
+		FROM(
+			SELECT 
+				  TO_CHAR(G.EXEDTM,'YYYY-MM-DD')EXEDTM_DATE
+				, TO_CHAR(G.EXEDTM,'HH24:MI')EXEDTM_HOUR
+				, C.SYS_CD_NM
+				, G.USR_ID
+				, I.USR_NM
+				, I.DEPT_NM
+				, I.PST_NM
+				, G.LGI_IPADR
+			FROM T_SYSWRK_G G, T_SYSDTL_C C, T_USR_I I
+			WHERE G.EXE_DTL_CD =C.SYS_CD
+			AND G.USR_ID=I.USR_ID
+			ORDER BY EXEDTM DESC
+			 LIMIT #{recordCountPerPage} OFFSET #{firstIndex}	
+		)A
+	 </select>
 </mapper>
