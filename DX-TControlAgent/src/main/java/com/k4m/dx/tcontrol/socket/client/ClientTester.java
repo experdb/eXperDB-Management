@@ -45,7 +45,8 @@ public class ClientTester {
 			//clientTester.dxT006_R(Ip, port);
 			//clientTester.dxT006_U(Ip, port);
 			//clientTester.dxT006_D(Ip, port);
-			clientTester.dxT007(Ip, port);
+			clientTester.dxT007_C(Ip, port);
+			//clientTester.dxT007_R(Ip, port);
 			
 			
 			//clientTester.dxT010(Ip, port);
@@ -533,7 +534,51 @@ public class ClientTester {
 	 * @param Ip
 	 * @param port
 	 */
-	private void dxT007(String Ip, int port) {
+	private void dxT007_C(String Ip, int port) {
+		try {
+			JSONObject serverObj = new JSONObject();
+			
+			serverObj.put(ClientProtocolID.SERVER_NAME, "222.110.153.162");
+			serverObj.put(ClientProtocolID.SERVER_IP, "222.110.153.162");
+			serverObj.put(ClientProtocolID.SERVER_PORT, "6432");
+			serverObj.put(ClientProtocolID.DATABASE_NAME, "postgres");
+			serverObj.put(ClientProtocolID.USER_ID, "experdba");
+			serverObj.put(ClientProtocolID.USER_PWD, "experdba");
+			
+			JSONObject objSettingInfo = new JSONObject();
+			
+			//로그종류 
+			objSettingInfo.put(ClientProtocolID.AUDIT_USE_YN, "Y");
+			objSettingInfo.put(ClientProtocolID.AUDIT_LOG, "ddl, write");
+			objSettingInfo.put(ClientProtocolID.AUDIT_LEVEL, "LOG");
+			objSettingInfo.put(ClientProtocolID.AUDIT_CATALOG, "off");
+			objSettingInfo.put(ClientProtocolID.AUDIT_PARAMETER, "off");
+			objSettingInfo.put(ClientProtocolID.AUDIT_RELATION, "off");
+			objSettingInfo.put(ClientProtocolID.AUDIT_STATEMENT_ONCE, "off");
+			objSettingInfo.put(ClientProtocolID.AUDIT_ROLE, "postgres");
+
+			JSONObject objList;
+			
+			ClientAdapter CA = new ClientAdapter(Ip, port);
+			CA.open(); 
+			
+			objList = CA.dxT007(ClientTranCodeType.DxT007, ClientProtocolID.COMMAND_CODE_C, serverObj, objSettingInfo);
+
+			String strErrMsg = (String)objList.get(ClientProtocolID.ERR_MSG);
+			String strErrCode = (String)objList.get(ClientProtocolID.ERR_CODE);
+			String strDxExCode = (String)objList.get(ClientProtocolID.DX_EX_CODE);
+			String strResultCode = (String)objList.get(ClientProtocolID.RESULT_CODE);
+			System.out.println("RESULT_CODE : " +  strResultCode);
+			System.out.println("ERR_CODE : " +  strErrCode);
+			System.out.println("ERR_MSG : " +  strErrMsg);
+			
+			CA.close();
+		} catch(Exception e) {
+			e.printStackTrace();
+		}
+	}
+
+	private void dxT007_R(String Ip, int port) {
 		try {
 			JSONObject serverObj = new JSONObject();
 			
@@ -561,7 +606,7 @@ public class ClientTester {
 			ClientAdapter CA = new ClientAdapter(Ip, port);
 			CA.open(); 
 			
-			objList = CA.dxT007(ClientTranCodeType.DxT007, ClientProtocolID.COMMAND_CODE_C, serverObj, objSettingInfo);
+			objList = CA.dxT007(ClientTranCodeType.DxT007, ClientProtocolID.COMMAND_CODE_R, serverObj, objSettingInfo);
 
 			String strErrMsg = (String)objList.get(ClientProtocolID.ERR_MSG);
 			String strErrCode = (String)objList.get(ClientProtocolID.ERR_CODE);
@@ -571,6 +616,18 @@ public class ClientTester {
 			System.out.println("ERR_CODE : " +  strErrCode);
 			System.out.println("ERR_MSG : " +  strErrMsg);
 			
+			HashMap selectData =(HashMap) objList.get(ClientProtocolID.RESULT_DATA);
+			
+				
+				System.out.println("log : " +  selectData.get("log")
+				                + " log_level : " +  selectData.get("log_level")
+				                + " log_relation : " +  selectData.get("log_relation")
+								+ " role : " +  selectData.get("role")
+								+ " log_catalog : " +  selectData.get("log_catalog")
+								+ " log_parameter : " +  selectData.get("log_parameter")
+								+ " log_statement_once : " +  selectData.get("log_statement_once")
+								);
+
 			CA.close();
 		} catch(Exception e) {
 			e.printStackTrace();

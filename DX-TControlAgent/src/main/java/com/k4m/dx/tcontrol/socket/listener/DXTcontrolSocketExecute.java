@@ -14,6 +14,7 @@ import com.k4m.dx.tcontrol.server.DxT003;
 import com.k4m.dx.tcontrol.server.DxT005;
 import com.k4m.dx.tcontrol.server.DxT006;
 import com.k4m.dx.tcontrol.server.DxT007;
+import com.k4m.dx.tcontrol.server.DxT008;
 import com.k4m.dx.tcontrol.server.DxT010;
 import com.k4m.dx.tcontrol.server.DxT011;
 import com.k4m.dx.tcontrol.socket.ProtocolID;
@@ -58,22 +59,25 @@ public class DXTcontrolSocketExecute extends SocketCtl implements Runnable {
 				JSONObject resDataObj = new JSONObject();
 				
 				switch(strDX_EX_CODE) {
+				//Database List
 				case TranCodeType.DxT001 :
 					DxT001 dxT001 = new DxT001(client, is, os);
 					dxT001.execute(strDX_EX_CODE, objSERVER_INFO);
 					break;
+				//table List
 				case TranCodeType.DxT002 :
 					String strSchema = (String) jObj.get(ProtocolID.SCHEMA);
 					
 					DxT002 dxT002 = new DxT002(client, is, os);
 					dxT002.execute(strDX_EX_CODE, objSERVER_INFO, strSchema);
 					break;
+				//connection Test
 				case TranCodeType.DxT003 :
 					
 					DxT003 dxT003 = new DxT003(client, is, os);
 					dxT003.execute(strDX_EX_CODE, objSERVER_INFO);
 					break;
-					
+				//backup management
 				case TranCodeType.DxT005 :
 					
 					JSONArray arrCmd = (JSONArray) jObj.get(ProtocolID.ARR_CMD);
@@ -81,25 +85,35 @@ public class DXTcontrolSocketExecute extends SocketCtl implements Runnable {
 					DxT005 dxT005 = new DxT005(client, is, os);
 					dxT005.execute(strDX_EX_CODE, arrCmd);
 					break;
+				//Authentication Management
 				case TranCodeType.DxT006 :
 					
 					DxT006 dxT006 = new DxT006(client, is, os);
 					dxT006.execute(strDX_EX_CODE, jObj);
 
 					break;
+				//Audit Log Setting
 				case TranCodeType.DxT007 :
 					
 					DxT007 dxT007 = new DxT007(client, is, os);
 					dxT007.execute(strDX_EX_CODE, jObj);
 
 					break;	
+				//Search Audit Log 
+				case TranCodeType.DxT008 :
+					
+					DxT008 dxT008 = new DxT008(client, is, os);
+					dxT008.execute(strDX_EX_CODE, jObj);
+
+					break;	
+				//Whether to install extension
 				case TranCodeType.DxT010 :
 					
 					DxT010 dxT010 = new DxT010(client, is, os);
 					dxT010.execute(strDX_EX_CODE, jObj);
 
 					break;
-				//role 조회
+				//Search role 
 				case TranCodeType.DxT011 :
 					
 					DxT011 dxT011 = new DxT011(client, is, os);

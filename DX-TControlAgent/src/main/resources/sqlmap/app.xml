@@ -196,6 +196,21 @@
 		ALTER SYSTEM SET pgaudit.role = ${pgauditRole}
 	</insert>
 	
+	<select id="selectPgAuditLogSetting"  parameterType="PgAuditSettingVO" resultType="PgAuditSettingVO">
+		/**
+	 	* Query ID : selectPgAuditLogSetting
+	 	* Description : Audit Setting 조회
+	 	* Author : 박태혁
+	 	**/
+		SELECT 
+			current_setting('pgaudit.log') AS log
+			, current_setting('pgaudit.log_level')	AS log_level
+			, current_setting('pgaudit.log_relation')	AS log_relation
+			, current_setting('pgaudit.role')	AS role
+			, current_setting('pgaudit.log_catalog')	AS log_catalog
+			, current_setting('pgaudit.log_parameter')	AS log_parameter
+			, current_setting('pgaudit.log_statement_once')	AS log_statement_once
+	</select>
 
 	<select id="selectPgAuditLogList"  parameterType="PgAuditVO" resultType="PgAuditVO">
 		/**
@@ -209,13 +224,13 @@
 			, log_time
 			, user_name
 			, statement_id
-			, audit_state
+			, state as audit_state
 			, error_session_line_num
 			, substatement_id
 			, substatement
-			, audit_type
-			, audit_class
-			, audit_command
+			, audit_type as audit_type
+			, class as audit_class
+			, command as audit_command
 			, object_type
 			, object_name
 		FROM

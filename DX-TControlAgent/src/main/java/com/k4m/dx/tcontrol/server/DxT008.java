@@ -23,7 +23,7 @@ import com.k4m.dx.tcontrol.socket.SocketCtl;
 import com.k4m.dx.tcontrol.socket.TranCodeType;
 
 /**
- * Audit 감사 설정
+ * Audit 감사 Log 조회
  *
  * @author 박태혁
  * @see <pre>
@@ -37,11 +37,11 @@ import com.k4m.dx.tcontrol.socket.TranCodeType;
  * </pre>
  */
 
-public class DxT007 extends SocketCtl{
+public class DxT008 extends SocketCtl{
 	
 	private static Logger errLogger = LoggerFactory.getLogger("errorToFile");
 	
-	public DxT007(Socket socket, InputStream is, OutputStream	os) {
+	public DxT008(Socket socket, InputStream is, OutputStream	os) {
 		this.client = socket;
 		this.is = is;
 		this.os = os;
@@ -57,29 +57,15 @@ public class DxT007 extends SocketCtl{
 		String strCommandCode = (String) jObj.get(ProtocolID.COMMAND_CODE);
 		JSONObject objSettingInfo = (JSONObject) jObj.get(ProtocolID.SETTING_INFO);
 
-		PgAuditSettingVO outputArray = new PgAuditSettingVO();
+		List<PgAuditVO> outputArray = new ArrayList<PgAuditVO>();
 		
 		JSONObject outputObj = new JSONObject();
 		
 		try {
-			//등록
-			if(strCommandCode.equals(ProtocolID.COMMAND_CODE_C)) {
-				
-				createAuditLog(jObj);
-				
-				outputObj.put(ProtocolID.DX_EX_CODE, strDxExCode);
-				outputObj.put(ProtocolID.RESULT_CODE, "0");
-				outputObj.put(ProtocolID.ERR_CODE, "");
-				outputObj.put(ProtocolID.ERR_MSG, "");
-				outputObj.put(ProtocolID.RESULT_DATA, "success");
-			
-			//조회
-			} else if(strCommandCode.equals(ProtocolID.COMMAND_CODE_R)) {
-				outputArray = selectPgAuditLogSetting(objSERVER_INFO);
+
+				outputArray = selectPgAuditList(objSERVER_INFO);
 				
 				outputObj = DxT007ResultJSON(outputArray, strDxExCode, strSuccessCode, strErrCode, strErrMsg);
-			
-			}
 			
 			send(TotalLengthBit, outputObj.toString().getBytes());
 		} catch (Exception e) {
@@ -102,45 +88,6 @@ public class DxT007 extends SocketCtl{
 
 	}
 	
-	
-	private PgAuditSettingVO selectPgAuditLogSetting(JSONObject serverInfoObj) throws Exception{
-
-		
-		PgAuditSettingVO pgAuditSettingVO = new PgAuditSettingVO();
-		
-		SqlSessionFactory sqlSessionFactory = null;
-		
-		sqlSessionFactory = SqlSessionManager.getInstance();
-		
-		String poolName = "" + serverInfoObj.get(ProtocolID.SERVER_NAME) + "_" + serverInfoObj.get(ProtocolID.DATABASE_NAME);
-		
-		Connection connDB = null;
-		SqlSession sessDB = null;
-		
-		try {
-			
-			SocketExt.setupDriverPool(serverInfoObj, poolName);
-
-			//DB 컨넥션을 가져온다.
-			connDB = DriverManager.getConnection("jdbc:apache:commons:dbcp:" + poolName);
-			
-			//connDB.setAutoCommit(false);
-			
-			sessDB = sqlSessionFactory.openSession(connDB);
-			
-			pgAuditSettingVO = sessDB.selectOne("app.selectPgAuditLogSetting");
-			
-		} catch(Exception e) {
-			errLogger.error("createAuditLog {} ", e.toString());
-			throw e;
-		} finally {
-			sessDB.close();
-			connDB.close();
-		}	
-		
-		return pgAuditSettingVO;
-	}
-	
 	private List<PgAuditVO> selectPgAuditList(JSONObject jObj) throws Exception{
 		JSONObject serverInfoObj = (JSONObject) jObj.get(ProtocolID.SERVER_INFO);
 		JSONObject acInfoObj = (JSONObject) jObj.get(ProtocolID.SETTING_INFO);
@@ -160,7 +107,6 @@ public class DxT007 extends SocketCtl{
 		
 		Connection connDB = null;
 		SqlSession sessDB = null;
-		List<Object> selectList = new ArrayList<Object>();
 		
 		List<PgAuditVO> list = new ArrayList<PgAuditVO>();
 		
@@ -170,8 +116,6 @@ public class DxT007 extends SocketCtl{
 
 			//DB 컨넥션을 가져온다.
 			connDB = DriverManager.getConnection("jdbc:apache:commons:dbcp:" + poolName);
-			
-			//connDB.setAutoCommit(false);
 			
 			sessDB = sqlSessionFactory.openSession(connDB);
 			
