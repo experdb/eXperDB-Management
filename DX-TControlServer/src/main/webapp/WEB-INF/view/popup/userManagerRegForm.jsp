@@ -72,6 +72,7 @@
 	
 	//등록버튼 클릭시
 	function fn_insert() {
+		
 		if (!fn_userManagerValidation()) return false;	
 		$.ajax({
 			url : '/insertUserManager.do',
@@ -86,7 +87,7 @@
 				rsp_bsn_nm : $("#rsp_bsn_nm").val(),
 				cpn : $("#cpn").val(),
 // 				aut_id : $("#aut_id").val(),
-				datepicker : $("#datepicker1").val(),
+				usr_expr_dt : $("#datepicker1").val(),
 				use_yn : $("#use_yn").val(),
 			},
 			success : function(result) {
@@ -116,7 +117,7 @@
 					rsp_bsn_nm : $("#rsp_bsn_nm").val(),
 					cpn : $("#cpn").val(),
 	// 				aut_id : $("#aut_id").val(),
-					datepicker : $("#datepicker2").val(),
+					usr_expr_dt : $("#datepicker1").val(),
 					use_yn : $("#use_yn").val(),
 				},
 				success : function(result) {
@@ -137,6 +138,7 @@
 		if (usr_id.value == "") {
 			alert("사용자 아이디를 넣어주세요");
 			document.getElementById('usr_id').focus();
+			idCheck = 0;
 			return;
 		}
 		$.ajax({
@@ -172,7 +174,6 @@
 				$("#pst_nm").attr("onfocus", "idcheck_alert();");
 				$("#rsp_bsn_nm").attr("onfocus", "idcheck_alert();");
 				$("#cpn").attr("onfocus", "idcheck_alert();");
-				$("#datepicker").attr("onfocus", "idcheck_alert();");
 				$("#use_yn").attr("onfocus", "idcheck_alert();");
 			}
 		};
@@ -186,9 +187,14 @@
 	}
 	
 	$(window.document).ready(function() {
+		$.datepicker.setDefaults({
+			dateFormat: 'yymmdd'
+		});
+		
 		if (act == "u") {
 			$("input[name=usr_id]").attr("readonly", true);
 		}
+		
 	})
 </script>
 <body>
