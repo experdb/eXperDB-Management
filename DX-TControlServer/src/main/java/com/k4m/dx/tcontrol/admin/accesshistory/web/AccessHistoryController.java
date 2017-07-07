@@ -4,10 +4,12 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -17,6 +19,10 @@ import com.k4m.dx.tcontrol.admin.accesshistory.service.AccessHistoryService;
 import com.k4m.dx.tcontrol.cmmn.CmmnUtils;
 import com.k4m.dx.tcontrol.common.service.HistoryVO;
 import com.k4m.dx.tcontrol.login.service.UserVO;
+import com.k4m.dx.tcontrol.sample.service.PagingVO;
+
+import egovframework.rte.fdl.property.EgovPropertyService;
+import egovframework.rte.ptl.mvc.tags.ui.pagination.PaginationInfo;
 
 /**
  * 접근내역 컨트롤러 클래스를 정의한다.
@@ -38,6 +44,10 @@ public class AccessHistoryController {
 	@Autowired
 	private AccessHistoryService accessHistoryService;
 	
+	/** EgovPropertyService */
+	@Resource(name = "propertiesService")
+	protected EgovPropertyService propertiesService;
+	
 	/**
 	 * 접근이력 화면을 보여준다.
 	 * 
@@ -47,13 +57,35 @@ public class AccessHistoryController {
 	 * @throws Exception
 	 */
 	@RequestMapping(value = "/accessHistory.do")
-	public ModelAndView accessHistory(@ModelAttribute("historyVO") HistoryVO historyVO, HttpServletRequest request) {
+	public ModelAndView accessHistory(@ModelAttribute("searchVO") PagingVO searchVO, @ModelAttribute("historyVO") HistoryVO historyVO, HttpServletRequest request, ModelMap model) {
 		ModelAndView mv = new ModelAndView();
 		try {
 			// 화면접근 이력 남기기
 			CmmnUtils.saveHistory(request, historyVO);
 			historyVO.setExe_dtl_cd("DX-T0036");
 			accessHistoryService.insertHistory(historyVO);
+			
+			
+			/** EgovPropertyService.sample */
+			searchVO.setPageUnit(propertiesService.getInt("pageUnit"));
+			searchVO.setPageSize(propertiesService.getInt("pageSize"));
+
+			/** pageing setting */
+			PaginationInfo paginationInfo = new PaginationInfo();
+			paginationInfo.setCurrentPageNo(searchVO.getPageIndex());
+			paginationInfo.setRecordCountPerPage(searchVO.getPageUnit());
+			paginationInfo.setPageSize(searchVO.getPageSize());
+
+			searchVO.setFirstIndex(paginationInfo.getFirstRecordIndex());
+			searchVO.setLastIndex(paginationInfo.getLastRecordIndex());
+			searchVO.setRecordCountPerPage(paginationInfo.getRecordCountPerPage());
+			
+			List<UserVO> resultList = accessHistoryService.selectAccessHistoryList(searchVO);
+			model.addAttribute("resultList", resultList);
+
+			int totCnt = accessHistoryService.selectAccessHistoryTotCnt();
+			paginationInfo.setTotalRecordCount(totCnt);
+			model.addAttribute("paginationInfo", paginationInfo);
 			
 			mv.setViewName("admin/accessHistory/accessHistory");
 		} catch (Exception e) {

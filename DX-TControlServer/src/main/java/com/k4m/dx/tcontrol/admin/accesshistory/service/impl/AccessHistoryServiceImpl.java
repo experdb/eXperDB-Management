@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 import com.k4m.dx.tcontrol.admin.accesshistory.service.AccessHistoryService;
 import com.k4m.dx.tcontrol.common.service.HistoryVO;
 import com.k4m.dx.tcontrol.login.service.UserVO;
+import com.k4m.dx.tcontrol.sample.service.PagingVO;
 
 @Service("AccessHistoryServiceImpl")
 public class AccessHistoryServiceImpl implements AccessHistoryService{
@@ -23,5 +24,13 @@ public class AccessHistoryServiceImpl implements AccessHistoryService{
 
 	public void insertHistory(HistoryVO historyVO) throws Exception {
 		accessHistoryDAO.insertHistory(historyVO);	
+	}
+
+	public List<UserVO> selectAccessHistoryList(PagingVO searchVO) throws Exception {
+		return accessHistoryDAO.selectAccessHistoryList(searchVO);
+	}
+
+	public int selectAccessHistoryTotCnt() throws Exception {
+		return accessHistoryDAO.selectAccessHistoryTotCnt();
 	}
 }
