@@ -73,4 +73,49 @@
 	      ) A		
     </select>
 
+
+	<select id="selectServerInfo" resultType="dbServerVO" parameterType="dbServerVO">
+				/**
+		 	*  Query ID : selectDbServerList
+		 	* Description : DB서버 정보 조회
+		 	* Author : 박태혁
+		 	**/
+	          SELECT 
+	                 DB_SVR_ID
+	                , DB_SVR_NM
+	                , IPADR
+	                , PORTNO
+	                , DFT_DB_NM
+	                , SVR_SPR_USR_ID
+	                , SVR_SPR_SCM_PWD
+	                , FRST_REGR_ID
+	                , FRST_REG_DTM
+	                , LST_MDFR_ID
+	                , LST_MDF_DTM
+	          FROM T_DBSVR_I
+	          WHERE
+	          	IPADR = #{DB_SVR_ID}
+	</select>
+	
+	<select id="selectAgentInfo" resultType="agentInfoVO" parameterType="agentInfoVO">
+			/**
+		 	*  Query ID : selectAgentInfo
+		 	* Description : Agent 정보 조회
+		 	* Author : 박태혁
+		 	**/
+		 	SELECT
+				DB_SVR_ID
+				, SOCKET_PORT
+				, AGT_CNDT_CD
+				, STRT_DTM
+				, ISTCNF_YN
+				, FRST_REGR_ID
+				, FRST_REG_DTM
+				, LST_MDFR_ID
+				, LST_MDF_DTM
+			FROM  T_AGTCNDT_I
+			WHERE
+				DB_SVR_ID = #{DB_SVR_ID}
+			LIMIT 1
+	</select>
 </mapper>

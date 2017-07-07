@@ -6,6 +6,7 @@ import java.util.List;
 import org.springframework.stereotype.Repository;
 
 import com.k4m.dx.tcontrol.admin.dbserverManager.service.DbServerVO;
+import com.k4m.dx.tcontrol.common.service.AgentInfoVO;
 
 import egovframework.rte.psl.dataaccess.EgovAbstractMapper;
 
@@ -24,6 +25,27 @@ public class CmmnServerInfoDAO extends EgovAbstractMapper{
 		sl = (List<DbServerVO>) list("cmmnListSQL.selectDbServerList", db_svr_nm);	
 		return sl;
 	}
+	
+	/**
+	 * Agent 정보 조회
+	 * @param vo
+	 * @return
+	 * @throws Exception
+	 */
+	public AgentInfoVO selectAgentInfo(AgentInfoVO vo) throws Exception {
+		return (AgentInfoVO) selectOne("cmmnListSQL.selectAgentInfo", vo);
+	}
+
+	/**
+	 * 서버 정보 조회
+	 * @param vo
+	 * @return
+	 * @throws Exception
+	 */
+	public DbServerVO selectServerInfo(DbServerVO vo) throws Exception {
+		return (DbServerVO) selectOne("cmmnListSQL.selectServerInfo", vo);
+	}
+	
 
 
 

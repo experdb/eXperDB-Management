@@ -18,6 +18,15 @@ public class AuditVO {
 	private String object_name;
 	private String start_date;
 	private String end_date;
+	private int DB_SVR_ID;
+	
+
+	public int getDB_SVR_ID() {
+		return DB_SVR_ID;
+	}
+	public void setDB_SVR_ID(int dB_SVR_ID) {
+		DB_SVR_ID = dB_SVR_ID;
+	}
 	public String getSession_id() {
 		return session_id;
 	}

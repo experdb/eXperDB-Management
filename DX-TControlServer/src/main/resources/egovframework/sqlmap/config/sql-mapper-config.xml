@@ -21,6 +21,8 @@
 		<typeAlias alias="transferVO" type="com.k4m.dx.tcontrol.functions.transfer.service.TransferVO"/>
 		<typeAlias alias="dbidbserverVO" type="com.k4m.dx.tcontrol.accesscontrol.service.DbIDbServerVO"/>
 		<typeAlias alias="AccessControlVO" type="com.k4m.dx.tcontrol.accesscontrol.service.AccessControlVO"/>
+		<typeAlias alias="agentInfoVO" type="com.k4m.dx.tcontrol.common.service.AgentInfoVO" />
+		
     </typeAliases>
     
  	<mappers>
