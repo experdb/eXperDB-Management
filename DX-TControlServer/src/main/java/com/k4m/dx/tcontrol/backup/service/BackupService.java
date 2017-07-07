@@ -105,4 +105,18 @@ public interface BackupService {
 	 * @throws Exception
 	 */
 	public DbServerVO selectDbSvrNm(WorkVO workVO) throws Exception;
+
+	/**
+	 * Insert Backup Object
+	 * @param WorkObjVO
+	 * @throws Exception
+	 */
+	public void insertWorkObj(WorkObjVO workObjVO) throws Exception;
+
+	/**
+	 * Delete Backup Object
+	 * @param WorkObjVO
+	 * @throws Exception
+	 */
+	public void deleteWorkObj(WorkObjVO workObjVO) throws Exception;
 }

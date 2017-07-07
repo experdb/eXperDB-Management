@@ -32,7 +32,7 @@ function fn_rman_init(){
  		         	{ data: "bck_opt_cd_nm", className: "dt-center", defaultContent: ""}, 
  		         	{ data: "wrk_strt_dtm", className: "dt-center", defaultContent: ""}, 
  		         	{ data: "wrk_end_dtm", className: "dt-center", defaultContent: ""}, 
- 		         	{ data: "exe_rslt_cd", className: "dt-center", defaultContent: ""}, 
+ 		         	{ data: "exe_rslt_cd_nm", className: "dt-center", defaultContent: ""}, 
  		         	{ data: "tli", className: "dt-center", defaultContent: ""},
  		         	{ data: "file_sz", className: "dt-center", defaultContent: ""}
  		        ] 
@@ -48,7 +48,7 @@ function fn_dump_init(){
  		         	{ data: "db_nm", className: "dt-center", defaultContent: ""}, 
  		         	{ data: "wrk_strt_dtm", className: "dt-center", defaultContent: ""}, 
  		         	{ data: "wrk_end_dtm", className: "dt-center", defaultContent: ""}, 
- 		         	{ data: "exe_rslt_cd", className: "dt-center", defaultContent: ""}, 
+ 		         	{ data: "exe_rslt_cd_nm", className: "dt-center", defaultContent: ""}, 
  		         	{ data: "bck_file_pth", className: "dt-center", defaultContent: ""},
  		         	{ data: "file_sz", className: "dt-center", defaultContent: ""}
  		        ] 
@@ -240,8 +240,8 @@ function selectTab(intab){
 								<td>
 									<select name="exe_rslt_cd" id="exe_rslt_cd" class="select t5">
 										<option value="">선택</option>
-										<option value="S">성공</option>
-										<option value="F">실패</option>
+										<option value="TC001701">Success</option>
+										<option value="TC001702">Fail</option>
 									</select>
 								</td>
 								<th scope="row" class="t9 search_rman">Mode</th>

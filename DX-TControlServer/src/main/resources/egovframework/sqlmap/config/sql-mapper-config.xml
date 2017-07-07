@@ -22,6 +22,7 @@
 		<typeAlias alias="dbidbserverVO" type="com.k4m.dx.tcontrol.accesscontrol.service.DbIDbServerVO"/>
 		<typeAlias alias="AccessControlVO" type="com.k4m.dx.tcontrol.accesscontrol.service.AccessControlVO"/>
 		<typeAlias alias="agentInfoVO" type="com.k4m.dx.tcontrol.common.service.AgentInfoVO" />
+		<typeAlias alias="workObjVO" type="com.k4m.dx.tcontrol.backup.service.WorkObjVO"/>
 		
     </typeAliases>
     

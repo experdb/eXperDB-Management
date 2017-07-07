@@ -23,6 +23,7 @@ import com.k4m.dx.tcontrol.admin.dbserverManager.service.DbServerVO;
 import com.k4m.dx.tcontrol.backup.service.BackupService;
 import com.k4m.dx.tcontrol.backup.service.DbVO;
 import com.k4m.dx.tcontrol.backup.service.WorkLogVO;
+import com.k4m.dx.tcontrol.backup.service.WorkObjVO;
 import com.k4m.dx.tcontrol.backup.service.WorkOptDetailVO;
 import com.k4m.dx.tcontrol.backup.service.WorkOptVO;
 import com.k4m.dx.tcontrol.backup.service.WorkVO;
@@ -385,5 +386,40 @@ public class BackupController {
 		backupService.deleteWork(workVO);
 		
 		response.getWriter().println(workVO.getWrk_id());
+	}
+	
+	/**
+	 * Object를 등록한다.
+	 * @param WorkObjVO
+	 * @return 
+	 * @throws Exception
+	 */
+	@RequestMapping(value = "/popup/workObjWrite.do")
+	public void workObjWrite(@ModelAttribute("WorkObjVO") WorkObjVO workObjVO, HttpServletResponse response, HttpServletRequest request){
+		HttpSession session = request.getSession();
+		String usr_id = (String) session.getAttribute("usr_id");
+
+		try{
+			workObjVO.setFrst_regr_id(usr_id);
+			backupService.insertWorkObj(workObjVO);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+	
+	/**
+	 * Object를 삭제한다.
+	 * @param WorkObjVO
+	 * @return 
+	 * @throws Exception
+	 */
+	@RequestMapping(value = "/popup/workObjDelete.do")
+	public void workObjDelete(@ModelAttribute("WorkObjVO") WorkObjVO workObjVO, HttpServletResponse response){
+		try {
+			backupService.deleteWorkObj(workObjVO);
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 }

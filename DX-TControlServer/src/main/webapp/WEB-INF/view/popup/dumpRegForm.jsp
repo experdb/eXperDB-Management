@@ -123,10 +123,10 @@ function fn_insert_object_val(wrk_id,sn,otype,schema,val,check_val){
 }
 
 function valCheck(){
-	if($("#db_id").val() == ""){
-		alert("Database가 없어서 셋팅이 불가능합니다.");
+	if($( "#db_id option:selected" ).val() == ""){
+		alert("백업할 Database를 선택하세요.");
 		return false;
-	}	
+	}
 	if($("#wrk_nm").val() == ""){
 		alert("Work명을 입력해 주세요.");
 		$("#wrk_nm").focus();
@@ -146,16 +146,17 @@ function valCheck(){
 	return true;
 }
 
-function fn_get_table_list(){
-	var usr_role_nm = $("#usr_role_nm").val();
-	
-	if(usr_role_nm){
+function fn_get_object_list(db_nm){
+	var db_nm = $( "#db_id option:selected" ).text();
+	var db_id = $( "#db_id option:selected" ).val();
+
+	if(db_nm != "" && db_id != ""){
 		$.ajax({
 			async : false,
-			url : "/selectTableList.do",
+			url : "/getObjectList.do",
 		  	data : {
 		  		db_svr_id : $("#db_svr_id").val(),
-		  		usr_role_nm : usr_role_nm
+		  		db_nm : db_nm
 		  	},
 			type : "post",
 			error : function(request, xhr, status, error) {
@@ -163,13 +164,15 @@ function fn_get_table_list(){
 			},
 			success : function(data) {
 				//alert(JSON.stringify(data));
-				fn_make_table_list(data);
+				fn_make_object_list(data);
 			}
 		});
+	}else{
+		$(".tNav").html("");
 	}
 }
 
-function fn_make_table_list(data){
+function fn_make_object_list(data){
 	var html = "<ul>";
 	var schema = "";
 	var schemaCnt = 0;
@@ -180,7 +183,7 @@ function fn_make_table_list(data){
 			html += "</ul></li>\n";
 		}
 		if(schema != inSchema){
-			html += "<li clase='active open' style='background-position:9px -1766px;'><button type='button' class='tNavToggle minus'>-</button><a href='#'>"+item.schema+" (Schema)</a>";
+			html += "<li class='active'><a href='#'>"+item.schema+" (Schema)</a>";
 			html += "<div class='inp_chk'>";
 			html += "<input type='checkbox' id='schema"+schemaCnt+"' name='tree' value='"+item.schema+"' otype='schema' schema='"+item.schema+"'/><label for='schema"+schemaCnt+"'></label>";
 			html += "</div>";
@@ -197,8 +200,6 @@ function fn_make_table_list(data){
 			schema = inSchema;
 			schemaCnt++;
 		}
-		//alert(index+":"+item.schema+":"+item.name);
-		
 	});
 	if(schemaCnt > 0) html += "</ul></li>";
 	html += "</ul>";
@@ -206,7 +207,7 @@ function fn_make_table_list(data){
 	
 	$(".tNav").html("");
 	$(".tNav").html(html);
-	$(".tNav li").last().css("background-position","9px -1766px");
+	$.getScript( "/js/common.js", function() {});
 }
 
 function fn_find_list(){
@@ -318,7 +319,8 @@ function checkOid(){
 						<td><input type="text" class="txt" name="wrk_nm" id="wrk_nm" maxlength=50/></td>
 						<th scope="row" class="ico_t1">Database</th>
 						<td>
-							<select name="db_id" id="db_id" class="select">
+							<select name="db_id" id="db_id" class="select"  onChange="fn_get_object_list();">
+								<option value="">선택</option>
 								<c:forEach var="result" items="${dbList}" varStatus="status">
 								<option value="<c:out value="${result.db_id}"/>"><c:out value="${result.db_nm}"/></option>
 								</c:forEach>
@@ -373,7 +375,7 @@ function checkOid(){
 						</td>
 						<th scope="row" class="ico_t2">Rolename</th>
 						<td>
-							<select name="usr_role_nm" id="usr_role_nm" class="select t4" onChange="fn_get_table_list();">
+							<select name="usr_role_nm" id="usr_role_nm" class="select t4">
 								<option value="">선택</option>
 								<c:forEach var="result" items="${roleList.data}" varStatus="status">
 								<option value="<c:out value="${result.rolname}"/>"><c:out value="${result.rolname}"/></option>
@@ -523,41 +525,8 @@ function checkOid(){
 					</div>
 
 					<div class="view">
-						<div class="tNav">
-							<!-- <ul>
-								<li class="active"><a href="#">Test1 Database</a>
-									<div class="inp_chk">
-										<input type="checkbox" id="tree_1_1" name="tree" checked="checked"  />
-										<label for="tree_1_1"></label>
-									</div>
-									<ul>
-										<li><a href="#">Test1 Schema</a>
-											<div class="inp_chk">
-												<input type="checkbox" id="tree_2_1" name="tree" checked="checked"  />
-												<label for="tree_2_1"></label>
-											</div>
-										</li>
-										<li><a href="#">Test2 Schema</a>
-											<div class="inp_chk">
-												<input type="checkbox" id="tree_2_2" name="tree" checked="checked"  />
-												<label for="tree_2_2"></label>
-											</div>
-										</li>
-										<li><a href="#">Test2 Schema</a>
-											<div class="inp_chk">
-												<input type="checkbox" id="tree_2_2" name="tree" checked="checked"  />
-												<label for="tree_2_2"></label>
-											</div>
-										</li>
-										<li><a href="#">Test2 Schema</a>
-											<div class="inp_chk">
-												<input type="checkbox" id="tree_2_2" name="tree" checked="checked"  />
-												<label for="tree_2_2"></label>
-											</div>
-										</li>
-									</ul>
-								</li>
-							</ul> -->
+						<div class="tNav" >
+							
 						</div>
 					</div>
 				</div>

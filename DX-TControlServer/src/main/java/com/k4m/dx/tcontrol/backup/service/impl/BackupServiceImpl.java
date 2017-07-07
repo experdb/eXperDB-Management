@@ -10,6 +10,7 @@ import com.k4m.dx.tcontrol.admin.dbserverManager.service.DbServerVO;
 import com.k4m.dx.tcontrol.backup.service.BackupService;
 import com.k4m.dx.tcontrol.backup.service.DbVO;
 import com.k4m.dx.tcontrol.backup.service.WorkLogVO;
+import com.k4m.dx.tcontrol.backup.service.WorkObjVO;
 import com.k4m.dx.tcontrol.backup.service.WorkOptDetailVO;
 import com.k4m.dx.tcontrol.backup.service.WorkOptVO;
 import com.k4m.dx.tcontrol.backup.service.WorkVO;
@@ -40,6 +41,7 @@ public class BackupServiceImpl implements BackupService{
 	public void updateRmanWork(WorkVO workVO) throws Exception{
 		backupDAO.updateRmanWork(workVO);
 	}
+	
 	public WorkVO lastWorkId() throws Exception{
 		return backupDAO.lastWorkId();
 	}
@@ -70,5 +72,13 @@ public class BackupServiceImpl implements BackupService{
 	
 	public DbServerVO selectDbSvrNm(WorkVO workVO) throws Exception{
 		return backupDAO.selectDbSvrNm(workVO);
+	}
+	
+	public void insertWorkObj(WorkObjVO workObjVO) throws Exception{
+		backupDAO.insertWorkObj(workObjVO);
+	}
+	
+	public void deleteWorkObj(WorkObjVO workObjVO) throws Exception{
+		backupDAO.deleteWorkObj(workObjVO);
 	}
 }
