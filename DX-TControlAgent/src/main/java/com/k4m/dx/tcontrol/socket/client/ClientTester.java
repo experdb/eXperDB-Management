@@ -45,13 +45,13 @@ public class ClientTester {
 			//clientTester.dxT006_R(Ip, port);
 			//clientTester.dxT006_U(Ip, port);
 			//clientTester.dxT006_D(Ip, port);
-			clientTester.dxT007_C(Ip, port);
+			//clientTester.dxT007_C(Ip, port);
 			//clientTester.dxT007_R(Ip, port);
 			
 			
 			//clientTester.dxT010(Ip, port);
 			//clientTester.dxT011(Ip, port);
-			
+			clientTester.dxT012(Ip, port);
 			
 		} catch(Exception e) {
 			e.printStackTrace();
@@ -776,4 +776,66 @@ public class ClientTester {
 		}
 	}
 
+	private void dxT012(String Ip, int port) {
+		try {
+
+
+			JSONObject serverObj = new JSONObject();
+			
+			
+			serverObj.put(ClientProtocolID.SERVER_NAME, "222.110.153.162");
+			serverObj.put(ClientProtocolID.SERVER_IP, "222.110.153.162");
+			serverObj.put(ClientProtocolID.SERVER_PORT, "6432");
+			serverObj.put(ClientProtocolID.DATABASE_NAME, "postgres");
+			serverObj.put(ClientProtocolID.USER_ID, "experdba");
+			serverObj.put(ClientProtocolID.USER_PWD, "experdba");
+			
+			
+			/**
+			serverObj.put(ClientProtocolID.SERVER_NAME, "222.110.153.162");
+			serverObj.put(ClientProtocolID.SERVER_IP, "222.110.153.162");
+			serverObj.put(ClientProtocolID.SERVER_PORT, "5432");
+			serverObj.put(ClientProtocolID.DATABASE_NAME, "pgmon");
+			serverObj.put(ClientProtocolID.USER_ID, "pgmon");
+			serverObj.put(ClientProtocolID.USER_PWD, "pgmon");
+			**/
+			
+			
+			JSONObject objList;
+			
+			ClientAdapter CA = new ClientAdapter(Ip, port);
+			CA.open(); 
+				
+			objList = CA.dxT011(ClientTranCodeType.DxT012, serverObj);
+			
+			String strErrMsg = (String)objList.get(ClientProtocolID.ERR_MSG);
+			String strErrCode = (String)objList.get(ClientProtocolID.ERR_CODE);
+			String strDxExCode = (String)objList.get(ClientProtocolID.DX_EX_CODE);
+			String strResultCode = (String)objList.get(ClientProtocolID.RESULT_CODE);
+			System.out.println("RESULT_CODE : " +  strResultCode);
+			System.out.println("ERR_CODE : " +  strErrCode);
+			System.out.println("ERR_MSG : " +  strErrMsg);
+			
+			List<Object> selectDBList =(ArrayList<Object>) objList.get(ClientProtocolID.RESULT_DATA);
+			
+			System.out.println("strDxExCode : " + " " + strDxExCode);
+			if(selectDBList.size() > 0) {
+				for(int i=0; i<selectDBList.size(); i++) {
+					
+					Object obj = selectDBList.get(i);
+					
+					HashMap hp = (HashMap) obj;
+					String table_schema = (String) hp.get("table_schema");
+					String table_name = (String) hp.get("table_name");
+					System.out.println(i + " " + table_schema + " " + table_name);
+	
+				}
+			}
+				
+				
+			CA.close();
+		} catch(Exception e) {
+			e.printStackTrace();
+		}
+	}
 }

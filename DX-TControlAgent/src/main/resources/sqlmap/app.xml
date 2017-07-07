@@ -31,6 +31,15 @@
 		ORDER BY table_schema,table_name
 	</select>
 	
+	<select id="selectAllSchemaTableList" parameterType="hashmap" resultType="hashmap">
+		SELECT 
+			table_schema
+			, table_name
+		FROM information_schema.tables
+		where table_schema not in ('pg_catalog','information_schema','pgaudit') and table_type='BASE TABLE'
+		order by table_schema
+	</select>
+	
 	<select id="selectAuthentication" parameterType="hashmap" resultType="hashmap">
 		/**
 	 	* Query ID : selectAuthentication
