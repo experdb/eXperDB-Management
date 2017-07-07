@@ -2,6 +2,7 @@ package com.k4m.dx.tcontrol.db.repository.vo;
 
 public class AgentInfoVO {
 	private int DB_SVR_ID;
+	private int SOCKET_PORT;
 	private String AGT_CNDT_CD;
 	private String STRT_DTM;
 	private String ISTCNF_YN;
@@ -19,6 +20,13 @@ public class AgentInfoVO {
 	}
 	public void setDB_SVR_ID(int dB_SVR_ID) {
 		DB_SVR_ID = dB_SVR_ID;
+	}
+	
+	public int getSOCKET_PORT() {
+		return SOCKET_PORT;
+	}
+	public void setSOCKET_PORT(int sOCKET_PORT) {
+		SOCKET_PORT = sOCKET_PORT;
 	}
 	public String getAGT_CNDT_CD() {
 		return AGT_CNDT_CD;

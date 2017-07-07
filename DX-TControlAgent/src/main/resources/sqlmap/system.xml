@@ -37,6 +37,7 @@
 	 	INSERT INTO T_AGTCNDT_I
 	 	(
 			DB_SVR_ID
+			, SOCKET_PORT
 			, AGT_CNDT_CD
 			, STRT_DTM
 			, ISTCNF_YN
@@ -48,6 +49,7 @@
 	 	VALUES
 	 	(
 			#{DB_SVR_ID}
+			, #{SOCKET_PORT}
 			, #{AGT_CNDT_CD}
 			, now()
 			, #{ISTCNF_YN}
@@ -68,6 +70,7 @@
 	 	UPDATE T_AGTCNDT_I
 	 	SET 
 	 		AGT_CNDT_CD = #{AGT_CNDT_CD}
+	 		, SOCKET_PORT = #{SOCKET_PORT}
 	 		, ISTCNF_YN = #{ISTCNF_YN}
 	 		, LST_MDF_DTM = now()
 	 	WHERE
@@ -84,6 +87,7 @@
 	 	**/
 			SELECT
 				DB_SVR_ID
+				, SOCKET_PORT
 				, AGT_CNDT_CD
 				, STRT_DTM
 				, ISTCNF_YN

@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 import com.k4m.dx.tcontrol.db.repository.dao.SystemDAO;
 import com.k4m.dx.tcontrol.db.repository.vo.AgentInfoVO;
 import com.k4m.dx.tcontrol.db.repository.vo.DbServerInfoVO;
+import com.k4m.dx.tcontrol.util.FileUtil;
 
 
 
@@ -47,6 +48,7 @@ public class SystemServiceImpl implements SystemService{
 		if(dbServerInfo == null) {
 			throw new Exception("DX-Tcontrol Repository DB에 서버가 등록되어 있지 않습니다. Database 서버를 등록 후 Agent를 구동하세요.");
 		} else {
+			String strSocketPort = FileUtil.getPropertyValue("context.properties", "socket.server.port");
 			int DB_SVR_ID = dbServerInfo.getDB_SVR_ID();
 			AgentInfoVO searchAgentInfoVO = new AgentInfoVO();
 			searchAgentInfoVO.setDB_SVR_ID(DB_SVR_ID);
@@ -56,6 +58,7 @@ public class SystemServiceImpl implements SystemService{
 			AgentInfoVO vo = new AgentInfoVO();
 			
 			vo.setDB_SVR_ID(dbServerInfo.getDB_SVR_ID());
+			vo.setSOCKET_PORT(Integer.parseInt(strSocketPort));
 			vo.setAGT_CNDT_CD(AgentInfoVO.TC001101); //실행
 			vo.setISTCNF_YN("Y");
 			vo.setFRST_REGR_ID("system");
