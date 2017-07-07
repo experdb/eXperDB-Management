@@ -7,7 +7,6 @@ import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 
-
 public class ClientAdapter {
 	private final ClientConnector cc;
 	private final String IP;
@@ -104,7 +103,6 @@ public class ClientAdapter {
 	 * @return
 	 * @throws Exception
 	 */
-	@SuppressWarnings("unchecked")
 	public JSONObject dxT002(String strDxExCode, JSONObject serverObj, String strSchema) throws Exception{
 		JSONObject jObj = new JSONObject();
 		jObj.put(ClientProtocolID.DX_EX_CODE, strDxExCode);
@@ -119,7 +117,6 @@ public class ClientAdapter {
 		return parseToJsonObj(recvBuff);
 	}
 	
-	@SuppressWarnings("unchecked")
 	public JSONObject dxT003(String strDxExCode, JSONObject serverObj) throws Exception{
 		JSONObject jObj = new JSONObject();
 		jObj.put(ClientProtocolID.DX_EX_CODE, strDxExCode);
@@ -155,6 +152,35 @@ public class ClientAdapter {
 		return parseToJsonObj(recvBuff);
 	}
 	
+	public JSONObject dxT007(String strDxExCode, String strCommandCode, JSONObject serverObj, JSONObject objSettingInfo) throws Exception{
+		JSONObject jObj = new JSONObject();
+		jObj.put(ClientProtocolID.DX_EX_CODE, strDxExCode);
+		jObj.put(ClientProtocolID.COMMAND_CODE, strCommandCode);
+		jObj.put(ClientProtocolID.SERVER_INFO, serverObj);
+		jObj.put(ClientProtocolID.SETTING_INFO, objSettingInfo);
+		
+		byte[] bt = jObj.toString().getBytes();
+		
+		cc.send(4, bt);
+		
+		byte[]	recvBuff = cc.recv(4, false);
+		return parseToJsonObj(recvBuff);
+	}
+	
+	public JSONObject dxT010(String strDxExCode, JSONObject serverObj, String extname) throws Exception{
+		JSONObject jObj = new JSONObject();
+		jObj.put(ClientProtocolID.DX_EX_CODE, strDxExCode);
+		jObj.put(ClientProtocolID.SERVER_INFO, serverObj);
+		jObj.put(ClientProtocolID.EXTNAME, extname);
+
+		byte[] bt = jObj.toString().getBytes();
+		
+		cc.send(4, bt);
+		
+		byte[]	recvBuff = cc.recv(4, false);
+		return parseToJsonObj(recvBuff);
+	}
+	
 	/**
 	 * role name 조회
 	 * @param strDxExCode
@@ -162,8 +188,20 @@ public class ClientAdapter {
 	 * @return
 	 * @throws Exception
 	 */
-	@SuppressWarnings("unchecked")
 	public JSONObject dxT011(String strDxExCode, JSONObject serverObj) throws Exception{
+		JSONObject jObj = new JSONObject();
+		jObj.put(ClientProtocolID.DX_EX_CODE, strDxExCode);
+		jObj.put(ClientProtocolID.SERVER_INFO, serverObj);
+
+		byte[] bt = jObj.toString().getBytes();
+		
+		cc.send(4, bt);
+		
+		byte[]	recvBuff = cc.recv(4, false);
+		return parseToJsonObj(recvBuff);
+	}
+	
+	public JSONObject dxT012(String strDxExCode, JSONObject serverObj) throws Exception{
 		JSONObject jObj = new JSONObject();
 		jObj.put(ClientProtocolID.DX_EX_CODE, strDxExCode);
 		jObj.put(ClientProtocolID.SERVER_INFO, serverObj);
