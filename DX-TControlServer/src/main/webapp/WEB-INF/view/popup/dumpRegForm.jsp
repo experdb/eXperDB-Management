@@ -3,6 +3,21 @@
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form"%>
 <%@ taglib prefix="ui" uri="http://egovframework.gov/ctl/ui"%>
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags"%>
+<%
+	/**
+	* @Class Name : dumpRegForm.jsp
+	* @Description : rman 백업 등록 화면
+	* @Modification Information
+	*
+	*   수정일         수정자                   수정내용
+	*  ------------    -----------    ---------------------------
+	*  2017.06.07     최초 생성
+	*
+	* author YoonJH
+	* since 2017.06.07
+	*
+	*/
+%>
 <!doctype html>
 <html lang="ko">
 <head>
@@ -17,12 +32,6 @@
 var wrk_id = null;
 
 function fn_insert_work(){
-	var cps_yn = "N";
-	var log_file_bck_yn = "N";
-	
-	if( $("#cps_yn").is(":checked")) cps_yn = "Y";
-	if( $("#log_file_bck_yn").is(":checked")) log_file_bck_yn = "Y";
-	
 	if(valCheck()){
 		$.ajax({
 			async : false,
@@ -32,7 +41,7 @@ function fn_insert_work(){
 		  		wrk_nm : $("#wrk_nm").val(),
 		  		wrk_exp : $("#wrk_exp").val(),
 		  		db_id : $("#db_id").val(),
-		  		bck_bsn_dscd : "dump",
+		  		bck_bsn_dscd : "TC000202",
 		  		save_pth : $("#save_pth").val(),
 		  		file_fmt_cd : $("#file_fmt_cd").val(),
 		  		cprt : $("#cprt").val(),
@@ -50,6 +59,7 @@ function fn_insert_work(){
 			}
 		});  
 	}
+	return false;
 }
 
 function fn_insert_opt(data){
@@ -66,13 +76,11 @@ function fn_insert_opt(data){
 			sn++;
 		});
 	}
-	opener.location.reload();
-	alert("등록이 완료되었습니다.");
-	self.close();
+
+	fn_insert_object(data);
 }
 
 function fn_insert_optval(wrk_id, opt_sn, grp_cd, opt_cd, bck_opt_val){
-	
 	$.ajax({
 		async : false,
 		url : "/popup/workOptWrite.do",
@@ -89,10 +97,36 @@ function fn_insert_optval(wrk_id, opt_sn, grp_cd, opt_cd, bck_opt_val){
 		},
 		success : function() {
 		}
-	});  
+	});
+}
+
+function fn_insert_object(data){
+	var sn =1;
+	$("input[name=tree]").each(function(){
+		if( $(this).is(":checked")){
+			fn_insert_object_val(data,sn,$(this).attr("otype"),$(this).attr("schema"),$(this).val(),"Y");
+		}else{
+			fn_insert_object_val(data,sn,$(this).attr("otype"),$(this).attr("schema"),$(this).val(),"N");
+		}
+		//alert(sn);
+		sn++;
+	});
+
+	opener.fn_dump_find_list();
+	alert("등록이 완료되었습니다.");
+	//self.close();
+}
+
+function fn_insert_object_val(wrk_id,sn,otype,schema,val,check_val){
+	var db_id = $("#db_id").val();
+	alert(wrk_id+":"+sn+":"+otype+":"+schema+":"+val+":"+check_val);
 }
 
 function valCheck(){
+	if($("#db_id").val() == ""){
+		alert("Database가 없어서 셋팅이 불가능합니다.");
+		return false;
+	}	
 	if($("#wrk_nm").val() == ""){
 		alert("Work명을 입력해 주세요.");
 		$("#wrk_nm").focus();
@@ -103,9 +137,9 @@ function valCheck(){
 		$("#wrk_exp").focus();
 		return false;
 	}
-	if($("#bck_opt_cd").val() == ""){
-		alert("백업옵션을 선택해 주세요.");
-		$("#bck_opt_cd").focus();
+	if($("#save_pth").val() == ""){
+		alert("저장경로를 입력해 주세요.");
+		$("#save_pth").focus();
 		return false;
 	}
 	
@@ -113,27 +147,67 @@ function valCheck(){
 }
 
 function fn_get_table_list(){
-	var db_id = $("#db_id").val();
+	var usr_role_nm = $("#usr_role_nm").val();
 	
-	if(db_id){
+	if(usr_role_nm){
 		$.ajax({
 			async : false,
 			url : "/selectTableList.do",
 		  	data : {
 		  		db_svr_id : $("#db_svr_id").val(),
-		  		db_id : "tcontrol" /**$("#db_id").val()**/
+		  		usr_role_nm : usr_role_nm
 		  	},
 			type : "post",
 			error : function(request, xhr, status, error) {
 				alert("실패");
 			},
 			success : function(data) {
-				alert(JSON.stringify(data));
+				//alert(JSON.stringify(data));
+				fn_make_table_list(data);
 			}
 		});
 	}
 }
 
+function fn_make_table_list(data){
+	var html = "<ul>";
+	var schema = "";
+	var schemaCnt = 0;
+	$(data.data).each(function (index, item) {
+		var inSchema = item.schema;
+		
+		if(schemaCnt > 0 && schema != inSchema){
+			html += "</ul></li>\n";
+		}
+		if(schema != inSchema){
+			html += "<li clase='active open' style='background-position:9px -1766px;'><button type='button' class='tNavToggle minus'>-</button><a href='#'>"+item.schema+" (Schema)</a>";
+			html += "<div class='inp_chk'>";
+			html += "<input type='checkbox' id='schema"+schemaCnt+"' name='tree' value='"+item.schema+"' otype='schema' schema='"+item.schema+"'/><label for='schema"+schemaCnt+"'></label>";
+			html += "</div>";
+			html += "<ul>\n";
+		}
+		
+		html += "<li><a href='#'>"+item.name+"</a>";
+		html += "<div class='inp_chk'>";
+		html += "<input type='checkbox' id='table"+index+"' name='tree' value='"+item.name+"' otype='table' schema='"+item.schema+"'/><label for='table"+index+"'></label>";
+		html += "</div>";
+		html += "</li>\n";
+
+		if(schema != inSchema){
+			schema = inSchema;
+			schemaCnt++;
+		}
+		//alert(index+":"+item.schema+":"+item.name);
+		
+	});
+	if(schemaCnt > 0) html += "</ul></li>";
+	html += "</ul>";
+	//alert(html);
+	
+	$(".tNav").html("");
+	$(".tNav").html(html);
+	$(".tNav li").last().css("background-position","9px -1766px");
+}
 
 function fn_find_list(){
 	getDataList($("#wrk_nm").val(), $("#bck_opt_cd").val());
@@ -226,10 +300,10 @@ function checkOid(){
 <body>
 <div class="pop_container">
 	<div class="pop_cts">
-	<form name="workRegForm">
-	<input type="hidden" name="db_svr_id" id="db_svr_id" value="${db_svr_id}"/>
 		<p class="tit">Dump 백업 등록하기</p>
 		<div class="pop_cmm">
+			<form name="workRegForm">
+			<input type="hidden" name="db_svr_id" id="db_svr_id" value="${db_svr_id}"/>
 			<table class="write">
 				<caption>Dump 백업 등록하기</caption>
 				<colgroup>
@@ -244,8 +318,7 @@ function checkOid(){
 						<td><input type="text" class="txt" name="wrk_nm" id="wrk_nm" maxlength=50/></td>
 						<th scope="row" class="ico_t1">Database</th>
 						<td>
-							<select name="db_id" id="db_id" class="select" onChange="fn_get_table_list()">
-								<option value="">선택</option>
+							<select name="db_id" id="db_id" class="select">
 								<c:forEach var="result" items="${dbList}" varStatus="status">
 								<option value="<c:out value="${result.db_id}"/>"><c:out value="${result.db_nm}"/></option>
 								</c:forEach>
@@ -292,14 +365,15 @@ function checkOid(){
 						<th scope="row" class="ico_t2">인코딩방식</th>
 						<td>
 							<select name="encd_mth_nm" id="encd_mth_nm" class="select t5">
+								<option value="">선택</option>
 								<c:forEach var="result" items="${incodeList}" varStatus="status">
-									<option value="<c:out value="${result.sys_cd}"/>"<c:if test="${result.sys_cd == 'TC000507'}"> selected</c:if>><c:out value="${result.sys_cd_nm}"/></option>
+									<option value="<c:out value="${result.sys_cd}"/>"><c:out value="${result.sys_cd_nm}"/></option>
 								</c:forEach>
 							</select>
 						</td>
 						<th scope="row" class="ico_t2">Rolename</th>
 						<td>
-							<select name="usr_role_nm" id="usr_role_nm" class="select t4">
+							<select name="usr_role_nm" id="usr_role_nm" class="select t4" onChange="fn_get_table_list();">
 								<option value="">선택</option>
 								<c:forEach var="result" items="${roleList.data}" varStatus="status">
 								<option value="<c:out value="${result.rolname}"/>"><c:out value="${result.rolname}"/></option>
@@ -323,9 +397,9 @@ function checkOid(){
 								<option value="9">9Level</option>
 							</select> %</td>
 						<th scope="row" class="ico_t2">파일보관일수</th>
-						<td><input type="text" class="txt t6" name="file_stg_dcnt" id="file_stg_dcnt" maxlength=3/> 일</td>
+						<td><input type="text" class="txt t6" name="file_stg_dcnt" id="file_stg_dcnt" maxlength=3 value="0"/> 일</td>
 						<th scope="row" class="ico_t2">백업유지갯수</th>
-						<td><input type="text" class="txt t6" name="bck_mtn_ecnt" id="bck_mtn_ecnt" maxlength=3/></td>
+						<td><input type="text" class="txt t6" name="bck_mtn_ecnt" id="bck_mtn_ecnt" maxlength=3 value="0"/></td>
 					</tr>
 				</tbody>
 			</table>
@@ -450,60 +524,30 @@ function checkOid(){
 
 					<div class="view">
 						<div class="tNav">
-							<ul>
+							<!-- <ul>
 								<li class="active"><a href="#">Test1 Database</a>
 									<div class="inp_chk">
 										<input type="checkbox" id="tree_1_1" name="tree" checked="checked"  />
 										<label for="tree_1_1"></label>
 									</div>
 									<ul>
-										<li class="active"><a href="#">Test1 Schema</a>
+										<li><a href="#">Test1 Schema</a>
 											<div class="inp_chk">
 												<input type="checkbox" id="tree_2_1" name="tree" checked="checked"  />
 												<label for="tree_2_1"></label>
 											</div>
-											<ul>
-												<li><a href="#">Test_table1</a>
-													<div class="inp_chk">
-														<input type="checkbox" id="tree_3_1" name="tree" checked="checked"  />
-														<label for="tree_3_1"></label>
-													</div>
-													<ul>
-														<li><a href="#">Test_table1-1</a>
-															<div class="inp_chk">
-																<input type="checkbox" id="tree_4_1" name="tree" checked="checked"  />
-																<label for="tree_4_1"></label>
-															</div>
-														</li>
-														<li><a href="#">Test_table1-2</a>
-															<div class="inp_chk">
-																<input type="checkbox" id="tree_4_2" name="tree" checked="checked"  />
-																<label for="tree_4_2"></label>
-															</div>
-														</li>
-													</ul>
-												</li>
-												<li><a href="#">Test_table2</a>
-													<div class="inp_chk">
-														<input type="checkbox" id="tree_3_2" name="tree" checked="checked"  />
-														<label for="tree_3_2"></label>
-													</div>
-													<ul>
-														<li><a href="#">Test_table2-1</a>
-															<div class="inp_chk">
-																<input type="checkbox" id="tree_4_3" name="tree" checked="checked"  />
-																<label for="tree_4_3"></label>
-															</div>
-														</li>
-														<li><a href="#">Test_table2-2</a>
-															<div class="inp_chk">
-																<input type="checkbox" id="tree_4_4" name="tree" checked="checked"  />
-																<label for="tree_4_4"></label>
-															</div>
-														</li>
-													</ul>
-												</li>
-											</ul>
+										</li>
+										<li><a href="#">Test2 Schema</a>
+											<div class="inp_chk">
+												<input type="checkbox" id="tree_2_2" name="tree" checked="checked"  />
+												<label for="tree_2_2"></label>
+											</div>
+										</li>
+										<li><a href="#">Test2 Schema</a>
+											<div class="inp_chk">
+												<input type="checkbox" id="tree_2_2" name="tree" checked="checked"  />
+												<label for="tree_2_2"></label>
+											</div>
 										</li>
 										<li><a href="#">Test2 Schema</a>
 											<div class="inp_chk">
@@ -513,28 +557,18 @@ function checkOid(){
 										</li>
 									</ul>
 								</li>
-								<li><a href="#">TEST2 Database</a>
-									<div class="inp_chk">
-										<input type="checkbox" id="tree_1_2" name="tree" checked="checked"  />
-										<label for="tree_1_2"></label>
-									</div>
-									<ul>
-										<li><a href="#">Test3 Schema</a></li>
-										<li><a href="#">Test4 Schema</a></li>
-									</ul>
-								</li>
-							</ul>
+							</ul> -->
 						</div>
 					</div>
 				</div>
 			</div>
+			</form>
 		</div>
 		<div class="btn_type_02">
 			<span class="btn btnC_01" onClick="fn_insert_work();"><button>등록</button></span>
 			<a href="#n" class="btn" onclick="self.close();"><span>취소</span></a>
 		</div>
 	</div>
-	</form>
 </div>
 </body>
 </html>

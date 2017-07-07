@@ -14,6 +14,7 @@ public class WorkVO {
 	private Double cprt;
 	private String save_pth;
 	private String file_fmt_cd;
+	private String file_fmt_cd_nm;
 	private int file_stg_dcnt;
 	private String encd_mth_nm;
 	private String usr_role_nm;
@@ -27,6 +28,12 @@ public class WorkVO {
 	private String bck_bsn_dscd_nm;
 	private String bck_opt_cd_nm;
 
+	public String getFile_fmt_cd_nm() {
+		return file_fmt_cd_nm;
+	}
+	public void setFile_fmt_cd_nm(String file_fmt_cd_nm) {
+		this.file_fmt_cd_nm = file_fmt_cd_nm;
+	}
 	public String getBck_bsn_dscd_nm() {
 		return bck_bsn_dscd_nm;
 	}

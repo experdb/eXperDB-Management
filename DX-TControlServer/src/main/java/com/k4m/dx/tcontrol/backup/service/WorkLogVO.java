@@ -9,6 +9,7 @@ public class WorkLogVO {
 	private String wrk_end_dtm;
 	private String exe_rslt_cd;
 	private String bck_opt_cd;
+	private String bck_opt_cd_nm;
 	private int tli;
 	private int file_sz;
 	private int db_id;
@@ -20,6 +21,12 @@ public class WorkLogVO {
 	private String lst_mdf_dtm;
 	private String bck_bsn_dscd;
 	
+	public String getBck_opt_cd_nm() {
+		return bck_opt_cd_nm;
+	}
+	public void setBck_opt_cd_nm(String bck_opt_cd_nm) {
+		this.bck_opt_cd_nm = bck_opt_cd_nm;
+	}
 	public String getDb_nm() {
 		return db_nm;
 	}

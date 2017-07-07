@@ -129,7 +129,7 @@ public class CmmnController {
 			serverObj.put(ClientProtocolID.USER_PWD, dbServerVO.getSvr_spr_scm_pwd());
 			
 			ClientInfoCmmn cic = new ClientInfoCmmn();
-			result = cic.table_List(serverObj,  String.valueOf(workVO.getDb_id()));
+			result = cic.table_List(serverObj,  String.valueOf(workVO.getUsr_role_nm()));
 			
 			System.out.println(result);
 		} catch (Exception e) {

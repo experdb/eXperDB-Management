@@ -19,15 +19,17 @@
 	*/
 %>
 <script type="text/javascript">
-var table = null;
+var tableRman = null;
+var tableDump = null;
+var tab = "rman";
 
-function fn_init(){
-   	table = $('#logList').DataTable({	
+function fn_rman_init(){
+   	tableRman = $('#logRmanList').DataTable({	
 		scrollY: "250px",
 		searching : false,
 	    columns : [
 		         	{ data: "rownum", className: "dt-center", defaultContent: ""}, 
- 		         	{ data: "bck_opt_cd", className: "dt-center", defaultContent: ""}, 
+ 		         	{ data: "bck_opt_cd_nm", className: "dt-center", defaultContent: ""}, 
  		         	{ data: "wrk_strt_dtm", className: "dt-center", defaultContent: ""}, 
  		         	{ data: "wrk_end_dtm", className: "dt-center", defaultContent: ""}, 
  		         	{ data: "exe_rslt_cd", className: "dt-center", defaultContent: ""}, 
@@ -37,8 +39,25 @@ function fn_init(){
 	});
 }
 
+function fn_dump_init(){
+   	tableDump = $('#logDumpList').DataTable({	
+		scrollY: "250px",	
+		searching : false,
+	    columns : [
+		         	{ data: "rownum", className: "dt-center", defaultContent: ""}, 
+ 		         	{ data: "db_nm", className: "dt-center", defaultContent: ""}, 
+ 		         	{ data: "wrk_strt_dtm", className: "dt-center", defaultContent: ""}, 
+ 		         	{ data: "wrk_end_dtm", className: "dt-center", defaultContent: ""}, 
+ 		         	{ data: "exe_rslt_cd", className: "dt-center", defaultContent: ""}, 
+ 		         	{ data: "bck_file_pth", className: "dt-center", defaultContent: ""},
+ 		         	{ data: "file_sz", className: "dt-center", defaultContent: ""}
+ 		        ] 
+	});
+}
+
 $(window.document).ready(function() {
-	fn_init();
+	fn_rman_init();
+	fn_dump_init();
 	
 	var today = new Date();
 	var day_end = today.toJSON().slice(0,10);
@@ -49,23 +68,7 @@ $(window.document).ready(function() {
 	$("#wrk_strt_dtm").val(day_start);
 	$("#wrk_end_dtm").val(day_end);
 	
-	$.ajax({
-		url : "/backup/selectWorkLogList.do",
-	  	data : {
-	  		bck_bsn_dscd : "rman",
-	  		wrk_strt_dtm : day_start,
-	  		wrk_end_dtm : day_end
-	  	},
-		dataType : "json",
-		type : "post",
-		error : function(xhr, status, error) {
-			alert("실패")
-		},
-		success : function(result) {
-			table.clear().draw();
-			table.rows.add(result).draw();
-		}
-	});
+	fn_rman_find_list();
 	
 	$( ".calendar" ).datepicker({
 		dateFormat: 'yy-mm-dd',
@@ -74,7 +77,7 @@ $(window.document).ready(function() {
  	});
 });
 
-function fn_find_list(){
+function fn_rman_find_list(){
 	var bck_opt_cd = $("#bck_opt_cd").val();
 	var wrk_strt_dtm = $("#wrk_strt_dtm").val();
 	var wrk_end_dtm = $("#wrk_end_dtm").val();
@@ -85,7 +88,7 @@ function fn_find_list(){
 	$.ajax({
 		url : "/backup/selectWorkLogList.do",
 	  	data : {
-	  		bck_bsn_dscd : "rman",
+	  		bck_bsn_dscd : "TC000201",
 	  		bck_opt_cd : bck_opt_cd,
 	  		wrk_strt_dtm : wrk_strt_dtm,
 	  		wrk_end_dtm : wrk_end_dtm,
@@ -97,8 +100,38 @@ function fn_find_list(){
 			alert("실패")
 		},
 		success : function(result) {
-			table.clear().draw();
-			table.rows.add(result).draw();
+			tableRman.clear().draw();
+			tableRman.rows.add(result).draw();
+		}
+	});
+}
+
+function fn_dump_find_list(){
+	var db_id = $("#db_id").val();
+	if(db_id == "") db_id = 0;
+	var wrk_strt_dtm = $("#wrk_strt_dtm").val();
+	var wrk_end_dtm = $("#wrk_end_dtm").val();
+	var exe_rslt_cd = $("#exe_rslt_cd").val();
+	
+	//fn_init();
+
+	$.ajax({
+		url : "/backup/selectWorkLogList.do",
+	  	data : {
+	  		bck_bsn_dscd : "TC000202",
+	  		db_id : db_id,
+	  		wrk_strt_dtm : wrk_strt_dtm,
+	  		wrk_end_dtm : wrk_end_dtm,
+	  		exe_rslt_cd : exe_rslt_cd
+	  	},
+		dataType : "json",
+		type : "post",
+		error : function(xhr, status, error) {
+			alert("실패")
+		},
+		success : function(result) {
+			tableDump.clear().draw();
+			tableDump.rows.add(result).draw();
 		}
 	});
 }
@@ -119,27 +152,59 @@ $(function() {
 			return false;
 		}
 
-		fn_find_list();
+		if(tab == "rman"){
+			fn_rman_find_list();
+			alert("rman");
+		}else{
+			fn_dump_find_list();
+			alert("dump");
+		}
 	});
 });
+
+function selectTab(intab){
+	tab = intab;
+	if(intab == "dump"){
+		$("#tab_rman").hide();
+		$("#tab_dump").show();
+		$(".search_rman").hide();
+		$(".search_dump").show();
+		$("#logRmanListDiv").hide();
+		$("#logDumpListDiv").show();
+		fn_dump_find_list();
+	}else{
+		$("#tab_rman").show();
+		$("#tab_dump").hide();
+		$(".search_rman").show();
+		$(".search_dump").hide();
+		$("#logDumpListDiv").hide();
+		$("#logRmanListDiv").show();
+		fn_rman_find_list();
+	}
+}
+
 </script>
 <!-- contents -->
 <div id="contents">
 	<div class="location">
 		<ul>
-			<li>DB서버</li>
 			<li>${db_svr_nm}</li>
+			<li>백업관리</li>
 			<li class="on">백업 이력</li>
 		</ul>
 	</div>
 
 	<div class="contents_wrap">
-		<h4>Rman 백업관리화면 <a href="#n"><img src="/images/ico_tit.png" alt="" /></a></h4>
+		<h4>백업 관리 화면 <a href="#n"><img src="/images/ico_tit.png" alt="" /></a></h4>
 		<div class="contents">
 			<div class="cmm_tab">
-				<ul>
-					<li class="atv"><a href="/backup/rmanLogList.do?db_svr_id=${db_svr_id}">Rman 백업 이력</a></li>
-					<li><a href="/backup/dumpLogList.do?db_svr_id=${db_svr_id}">Dump 백업 이력</a></li>
+				<ul id="tab_rman">
+					<li class="atv"><a href="javascript:selectTab('rman');">Rman 백업 이력</a></li>
+					<li><a href="javascript:selectTab('dump');">Dump 백업 이력</a></li>
+				</ul>
+				<ul id="tab_dump" style="display:none">
+					<li><a href="javascript:selectTab('rman');">Rman 백업 이력</a></li>
+					<li class="atv"><a href="javascript:selectTab('dump');">Dump 백업 이력</a></li>
 				</ul>
 			</div>
 			<div class="cmm_grp">
@@ -154,7 +219,7 @@ $(function() {
 						<colgroup>
 							<col style="width:80px;" />
 							<col style="width:230px;" />
-							<col style="width:60px;" />
+							<col style="width:100px;" />
 							<col />
 						</colgroup>
 						<tbody>
@@ -170,16 +235,7 @@ $(function() {
 									</div>
 								</td>
 							</tr>
-							<tr>
-								<th scope="row" class="t9">Mode</th>
-								<td>
-									<select name="bck_opt_cd" id="bck_opt_cd" class="select t5">
-										<option value="">선택</option>
-										<option value="full">전체백업</option>
-										<option value="incr">증분백업</option>
-										<option value="achi">아카이브백업</option>
-									</select>
-								</td>
+							<tr style="height:35px;">
 								<th scope="row" class="t9">상태</th>
 								<td>
 									<select name="exe_rslt_cd" id="exe_rslt_cd" class="select t5">
@@ -188,13 +244,31 @@ $(function() {
 										<option value="F">실패</option>
 									</select>
 								</td>
+								<th scope="row" class="t9 search_rman">Mode</th>
+								<td class="search_rman">
+									<select name="bck_opt_cd" id="bck_opt_cd" class="select t5">
+										<option value="">선택</option>
+										<option value="TC000301">전체백업</option>
+										<option value="TC000302">증분백업</option>
+										<option value="TC000303">아카이브백업</option>
+									</select>
+								</td>
+								<th scope="row" class="t9 search_dump" style="display:none;">Database명</th>
+								<td class="search_dump" style="display:none;">
+									<select name="db_id" id="db_id" class="select t5">
+										<option value="">선택</option>
+										<c:forEach var="result" items="${dbList}" varStatus="status">
+										<option value="<c:out value="${result.db_id}"/>"><c:out value="${result.db_nm}"/></option>
+										</c:forEach>
+									</select>	
+								</td>							
 							</tr>
 						</tbody>
 					</table>
 					</form>
 				</div>
-				<div class="overflow_area">
-					<table class="list" id="logList" cellspacing="0" width="100%">
+				<div class="overflow_area" id="logRmanListDiv">
+					<table class="list" id="logRmanList" cellspacing="0" width="100%">
 						<thead>
 							<tr>
 								<th scope="col">NO</th>
@@ -203,6 +277,22 @@ $(function() {
 								<th scope="col">작업종료 시간</th>
 								<th scope="col">상태</th>
 								<th scope="col">TLI</th>
+								<th scope="col">Size</th>
+							</tr>
+						</thead>
+					</table>
+				</div>
+				<div class="overflow_area" style="display:none;" id="logDumpListDiv">
+					<table class="list" id="logDumpList" cellspacing="0" width="100%">
+						<caption>Dump 백업관리 이력화면 리스트</caption>
+						<thead>
+							<tr>
+								<th scope="col">NO</th>
+								<th scope="col">Database</th>
+								<th scope="col">작업시작 시간</th>
+								<th scope="col">작업종료 시간</th>
+								<th scope="col">상태</th>
+								<th scope="col">백업파일경로</th>
 								<th scope="col">Size</th>
 							</tr>
 						</thead>
