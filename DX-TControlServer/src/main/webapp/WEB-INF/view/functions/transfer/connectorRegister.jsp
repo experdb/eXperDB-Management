@@ -40,10 +40,17 @@
 		
 		/* 더블 클릭시*/
 		$('#connectorTable tbody').on('dblclick','tr',function() {
-				var data = table.row(this).data();
-				var cnr_id = data.cnr_id;
-				window.open("/popup/connectorRegForm.do?act=u&cnr_id="+ cnr_id,"connectorRegPop","location=no,menubar=no,resizable=yes,scrollbars=no,status=no,width=1000,height=400,top=0,left=0");
-			});
+			var data = table.row(this).data();
+			var cnr_id = data.cnr_id;
+			var popUrl = "/popup/connectorRegForm.do?act=u&cnr_id=" + cnr_id; // 서버 url 팝업경로
+			var width = 920;
+			var height = 385;
+			var left = (window.screen.width / 2) - (width / 2);
+			var top = (window.screen.height /2) - (height / 2);
+			var popOption = "width="+width+", height="+height+", top="+top+", left="+left+", resizable=no, scrollbars=no, status=no, toolbar=no, titlebar=yes, location=no,";
+					
+			window.open(popUrl,"",popOption);	
+		});
 	}
 
 	$(window.document).ready(function() {
@@ -85,7 +92,14 @@
 
 	/* 등록버튼 클릭시*/
 	function fn_insert() {
-		window.open("/popup/connectorRegForm.do?act=i","connectorRegPop","location=no,menubar=no,resizable=yes,scrollbars=no,status=no,width=1000,height=400,top=0,left=0");
+		var popUrl = "/popup/connectorRegForm.do?act=i"; // 서버 url 팝업경로
+		var width = 920;
+		var height = 385;
+		var left = (window.screen.width / 2) - (width / 2);
+		var top = (window.screen.height /2) - (height / 2);
+		var popOption = "width="+width+", height="+height+", top="+top+", left="+left+", resizable=no, scrollbars=no, status=no, toolbar=no, titlebar=yes, location=no,";
+			
+		window.open(popUrl,"",popOption);	
 	}
 
 	/* 수정버튼 클릭시*/
@@ -93,7 +107,16 @@
 		var rowCnt = table.rows('.selected').data().length;
 		if (rowCnt == 1) {
 			var cnr_id = table.row('.selected').data().cnr_id;
-			window.open("/popup/connectorRegForm.do?act=u&cnr_id=" + cnr_id,"connectorRegPop","location=no,menubar=no,resizable=yes,scrollbars=no,status=no,width=1000,height=400,top=0,left=0");
+			
+			var popUrl = "/popup/connectorRegForm.do?act=u&cnr_id=" + cnr_id; // 서버 url 팝업경로
+			var width = 920;
+			var height = 385;
+			var left = (window.screen.width / 2) - (width / 2);
+			var top = (window.screen.height /2) - (height / 2);
+			var popOption = "width="+width+", height="+height+", top="+top+", left="+left+", resizable=no, scrollbars=no, status=no, toolbar=no, titlebar=yes, location=no,";
+				
+			window.open(popUrl,"",popOption);	
+			
 		} else {
 			alert("하나의 항목을 선택해주세요.");
 			return false;
@@ -136,17 +159,7 @@
 
 		}
 	}
-	
-	function windowPopup(){
-		var popUrl = "/popup/connectorRegForm.do?act=i"; // 서버 url 팝업경로
-		var width = 920;
-		var height = 385;
-		var left = (window.screen.width / 2) - (width / 2);
-		var top = (window.screen.height /2) - (height / 2);
-		var popOption = "width="+width+", height="+height+", top="+top+", left="+left+", resizable=no, scrollbars=no, status=no, toolbar=no, titlebar=yes, location=no,";
-		
-		window.open(popUrl,"",popOption);
-	}
+
 </script>
 		<div id="contents">
 			<div class="location">
@@ -162,7 +175,7 @@
 				<div class="contents">
 					<div class="cmm_grp">
 						<div class="btn_type_01">
-							<span class="btn"><button id="select" onclick="fn_select()">조회</button></span> 
+							<span class="btn"><button onclick="fn_select()">조회</button></span> 
 							<span class="btn"><button onclick="fn_insert()">등록</button></span>
 							<span class="btn"><button onclick="fn_update()">수정</button></span> 
 							<span class="btn"><button onclick="fn_delete()">삭제</button></span> 
@@ -179,9 +192,9 @@
 								<tbody>
 									<tr>
 										<th scope="row" class="t2">Connector명</th>
-										<td><input type="text" class="txt" name="search_cnr_nm" id="cnr_nm"/></td>
+										<td><input type="text" class="txt" name="cnr_nm" id="cnr_nm"/></td>
 										<th scope="row" class="t3">아이피</th>
-										<td><input type="text" class="txt" name="search_cnr_ipadr" id="cnr_ipadr"/></td>
+										<td><input type="text" class="txt" name="cnr_ipadr" id="cnr_ipadr"/></td>
 									</tr>
 								</tbody>
 							</table>
