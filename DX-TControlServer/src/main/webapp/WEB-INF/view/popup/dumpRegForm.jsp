@@ -63,20 +63,15 @@ function fn_insert_work(){
 }
 
 function fn_insert_opt(data){
-
 	var sn = 1;
 	if(data != "0"){
 		$("input[name=opt]").each(function(){
 			if( $(this).not(":disabled") && $(this).is(":checked")){
 				fn_insert_optval(data,sn,$(this).attr("grp_cd"),$(this).attr("opt_cd"),"Y");
-			}else{
-				fn_insert_optval(data,sn,$(this).attr("grp_cd"),$(this).attr("opt_cd"),"N");
 			}
-			//alert(sn);
 			sn++;
 		});
 	}
-
 	fn_insert_object(data);
 }
 
@@ -101,25 +96,37 @@ function fn_insert_optval(wrk_id, opt_sn, grp_cd, opt_cd, bck_opt_val){
 }
 
 function fn_insert_object(data){
-	var sn =1;
 	$("input[name=tree]").each(function(){
 		if( $(this).is(":checked")){
-			fn_insert_object_val(data,sn,$(this).attr("otype"),$(this).attr("schema"),$(this).val(),"Y");
-		}else{
-			fn_insert_object_val(data,sn,$(this).attr("otype"),$(this).attr("schema"),$(this).val(),"N");
+			fn_insert_object_val(data,$(this).attr("otype"),$(this).attr("schema"),$(this).val());
 		}
-		//alert(sn);
-		sn++;
 	});
 
 	opener.fn_dump_find_list();
 	alert("등록이 완료되었습니다.");
-	//self.close();
+	self.close();
 }
 
-function fn_insert_object_val(wrk_id,sn,otype,schema,val,check_val){
+function fn_insert_object_val(wrk_id,otype,scm_nm,obj_nm){
 	var db_id = $("#db_id").val();
-	alert(wrk_id+":"+sn+":"+otype+":"+schema+":"+val+":"+check_val);
+
+	if(otype != "table") obj_nm = "";
+	$.ajax({
+		async : false,
+		url : "/popup/workObjWrite.do",
+	  	data : {
+	  		wrk_id : wrk_id,
+	  		db_id : db_id,
+	  		scm_nm : scm_nm,
+	  		obj_nm : obj_nm
+	  	},
+		type : "post",
+		error : function(request, xhr, status, error) {
+			alert("Obj 저장실패");
+		},
+		success : function() {
+		}
+	});
 }
 
 function valCheck(){
@@ -146,7 +153,7 @@ function valCheck(){
 	return true;
 }
 
-function fn_get_object_list(db_nm){
+function fn_get_object_list(){
 	var db_nm = $( "#db_id option:selected" ).text();
 	var db_id = $( "#db_id option:selected" ).val();
 
@@ -210,9 +217,6 @@ function fn_make_object_list(data){
 	$.getScript( "/js/common.js", function() {});
 }
 
-function fn_find_list(){
-	getDataList($("#wrk_nm").val(), $("#bck_opt_cd").val());
-}
 
 function changeFileFmtCd(){
 	if($("#file_fmt_cd").val() == "TC000401"){

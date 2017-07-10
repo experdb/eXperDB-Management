@@ -45,6 +45,14 @@ public interface BackupService {
 	public void updateRmanWork(WorkVO workVO) throws Exception;
 	
 	/**
+	 * Dump백업수정 내역 update
+	 * @param WorkVO
+	 * @return String
+	 * @throws Exception
+	 */
+	public void updateDumpWork(WorkVO workVO) throws Exception;
+	
+	/**
 	 * get wrk_id MAX value
 	 * @return WorkVO
 	 * @throws Exception
@@ -114,9 +122,17 @@ public interface BackupService {
 	public void insertWorkObj(WorkObjVO workObjVO) throws Exception;
 
 	/**
+	 * Select Backup Object
+	 * @param WorkObjVO
+	 * @return WorkObjVO
+	 * @throws Exception
+	 */
+	public List<WorkObjVO> selectWorkObj(WorkVO workVO) throws Exception;
+	
+	/**
 	 * Delete Backup Object
 	 * @param WorkObjVO
 	 * @throws Exception
 	 */
-	public void deleteWorkObj(WorkObjVO workObjVO) throws Exception;
+	public void deleteWorkObj(WorkVO workVO) throws Exception;
 }

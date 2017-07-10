@@ -52,6 +52,10 @@ public class BackupDAO extends EgovAbstractMapper{
 		update("backupSQL.updateRmanWork",workVO);
 	}
 	
+	public void updateDumpWork(WorkVO workVO) throws Exception{
+		update("backupSQL.updateDumpWork",workVO);
+	}
+	
 	@SuppressWarnings({ "unchecked", "deprecation" })
 	public List<WorkOptVO> selectWorkOptList(WorkVO workVO) throws Exception{
 		return (List<WorkOptVO>) list("backupSQL.selectWorkOptList",workVO);
@@ -83,7 +87,12 @@ public class BackupDAO extends EgovAbstractMapper{
 		insert("backupSQL.insertWorkObj",workObjVO);
 	}
 	
-	public void deleteWorkObj(WorkObjVO workObjVO) throws Exception{
-		delete("backupSQL.deleteWorkObj",workObjVO);
+	@SuppressWarnings({ "deprecation", "unchecked" })
+	public List<WorkObjVO> selectWorkObj(WorkVO workVO) throws Exception{
+		return (List<WorkObjVO>) list("backupSQL.selectWorkObj",workVO);
+	}
+	
+	public void deleteWorkObj(WorkVO workVO) throws Exception{
+		delete("backupSQL.deleteWorkObj",workVO);
 	}
 }

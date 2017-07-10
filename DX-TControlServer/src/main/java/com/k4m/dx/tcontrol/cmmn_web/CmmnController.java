@@ -97,7 +97,7 @@ public class CmmnController {
 			ClientInfoCmmn cic = new ClientInfoCmmn();
 			result = cic.db_List(serverObj);
 	
-			System.out.println(result);
+			//System.out.println(result);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -131,7 +131,7 @@ public class CmmnController {
 			ClientInfoCmmn cic = new ClientInfoCmmn();
 			result = cic.table_List(serverObj,  String.valueOf(workVO.getUsr_role_nm()));
 			
-			System.out.println(result);
+			//System.out.println(result);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -165,7 +165,7 @@ public class CmmnController {
 			ClientInfoCmmn cic = new ClientInfoCmmn();
 			result = cic.object_List(serverObj);
 			
-			System.out.println(result);
+			//System.out.println(result);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

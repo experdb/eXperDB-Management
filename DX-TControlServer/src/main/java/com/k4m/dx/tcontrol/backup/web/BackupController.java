@@ -327,14 +327,73 @@ public class BackupController {
 	 * @return ModelAndView mv
 	 * @throws Exception
 	 */
-	@SuppressWarnings("null")
+	@SuppressWarnings({ "null", "unchecked" })
 	@RequestMapping(value = "/popup/dumpRegReForm.do")
-	public ModelAndView dumpRegReForm(@ModelAttribute("workVo") WorkVO workVO, ModelMap model) throws Exception  {
+	public ModelAndView dumpRegReForm(@ModelAttribute("workVo") WorkVO workVO, ModelMap model) {
 		ModelAndView mv = new ModelAndView();
 
+		try {
+			mv.addObject("dbList", backupService.selectDbList(workVO));
+		} catch (Exception e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
+		
+		// Work info
 		workVO.setBck_bsn_dscd("TC000202");
-		model.addAttribute("workInfo", backupService.selectWorkList(workVO));
-		model.addAttribute("workOptInfo", backupService.selectWorkOptList(workVO));
+		try {
+			model.addAttribute("workInfo", backupService.selectWorkList(workVO));
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		// Work Option List
+		try {
+			model.addAttribute("workOptInfo", backupService.selectWorkOptList(workVO));
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		// Work Obj List
+		try {
+			model.addAttribute("workObjList", backupService.selectWorkObj(workVO));
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		// incoding code List
+		try {
+			PageVO pageVO = new PageVO();
+			pageVO.setGrp_cd("TC0005");
+			pageVO.setSearchCondition("0");
+			List<CmmnCodeVO> cmmnCodeVO = cmmnCodeDtlService.cmmnDtlCodeSearch(pageVO);
+			mv.addObject("incodeList",cmmnCodeVO);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		
+		// Server Role List
+		try {
+			DbServerVO dbServerVO = backupService.selectDbSvrNm(workVO);
+			
+			JSONObject serverObj = new JSONObject();
+			
+			serverObj.put(ClientProtocolID.SERVER_NAME, dbServerVO.getDb_svr_nm());
+			serverObj.put(ClientProtocolID.SERVER_IP, dbServerVO.getIpadr());
+			serverObj.put(ClientProtocolID.SERVER_PORT, dbServerVO.getPortno());
+			serverObj.put(ClientProtocolID.DATABASE_NAME, dbServerVO.getDft_db_nm());
+			serverObj.put(ClientProtocolID.USER_ID, dbServerVO.getSvr_spr_usr_id());
+			serverObj.put(ClientProtocolID.USER_PWD, dbServerVO.getSvr_spr_scm_pwd());
+			
+			ClientInfoCmmn cic = new ClientInfoCmmn();
+			mv.addObject("roleList",cic.role_List(serverObj));
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 
 		mv.addObject("db_svr_id",workVO.getDb_svr_id());
 		mv.addObject("wrk_id",workVO.getWrk_id());
@@ -370,6 +429,51 @@ public class BackupController {
 	}
 	
 	/**
+	 * Dump Work을 수정등록한다.
+	 * @return 
+	 * @throws IOException 
+	 * @throws Exception
+	 */
+	@RequestMapping(value = "/popup/workDumpReWrite.do")
+	public void workDumpReWrite(@ModelAttribute("workVO") WorkVO workVO, HttpServletResponse response, HttpServletRequest request) throws IOException{
+		HttpSession session = request.getSession();
+		String usr_id = (String) session.getAttribute("usr_id");
+		
+		String result = "F";
+
+		workVO.setLst_mdfr_id(usr_id);
+		try {
+			backupService.updateDumpWork(workVO);
+			result = "S";
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			result = "F";
+		}
+		
+		// 옵션내역 삭제
+		WorkOptVO workOptVO = new WorkOptVO();
+		workOptVO.setWrk_id(workVO.getWrk_id());
+		try {
+			backupService.deleteWorkOpt(workOptVO);
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		// Object내역 삭제
+		try {
+			backupService.deleteWorkObj(workVO);
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
+		System.out.println("workDumpReWrite result:"+result);
+		response.getWriter().println(result);
+	}
+	
+	/**
 	 * Work을 삭제한다.
 	 * @return 
 	 * @throws Exception
@@ -381,6 +485,9 @@ public class BackupController {
 		WorkOptVO workOptVO = new WorkOptVO();
 		workOptVO.setWrk_id(workVO.getWrk_id());
 		backupService.deleteWorkOpt(workOptVO);
+		
+		// obj내역 삭제
+		backupService.deleteWorkObj(workVO);
 		
 		// work삭제
 		backupService.deleteWork(workVO);
@@ -414,9 +521,9 @@ public class BackupController {
 	 * @throws Exception
 	 */
 	@RequestMapping(value = "/popup/workObjDelete.do")
-	public void workObjDelete(@ModelAttribute("WorkObjVO") WorkObjVO workObjVO, HttpServletResponse response){
+	public void workObjDelete(@ModelAttribute("WorkVO") WorkVO workVO, HttpServletResponse response){
 		try {
-			backupService.deleteWorkObj(workObjVO);
+			backupService.deleteWorkObj(workVO);
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

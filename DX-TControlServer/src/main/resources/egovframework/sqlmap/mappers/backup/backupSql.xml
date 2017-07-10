@@ -194,6 +194,30 @@
 			WRK_ID = #{wrk_id}
 	</update>
 	
+	<update id="updateDumpWork" parameterType="workVO">
+		/**
+	 	* Query ID : updateDumpWork
+	 	* Description : Dump백업 update
+	 	* Author : Yoon jh
+	 	**/
+		UPDATE T_WRKCNG_I SET
+			wrk_nm = #{wrk_nm},
+			wrk_exp = #{wrk_exp},
+			db_id = #{db_id},
+			save_pth = #{save_pth},
+			file_fmt_cd = #{file_fmt_cd},
+			cprt = #{cprt},
+			encd_mth_nm = #{encd_mth_nm},
+			usr_role_nm = #{usr_role_nm},
+			file_stg_dcnt = #{file_stg_dcnt},
+			bck_mtn_ecnt = #{bck_mtn_ecnt},
+			frst_regr_id = #{frst_regr_id},
+			lst_mdfr_id = #{lst_mdfr_id},
+			lst_mdf_dtm = now()
+		WHERE
+			WRK_ID = #{wrk_id}
+	</update>
+	
 	<select id="lastWorkId"  resultType="workVO">
 		SELECT
 			COALESCE(MAX(WRK_ID),0) AS wrk_id
@@ -424,7 +448,24 @@
 			)
 	</insert>
 	
-	<delete id="deleteWorkObj" parameterType="workObjVO">
+	<select id="selectWorkObj" parameterType="workVO" resultType="workObjVO">
+		/**
+	 	* Query ID : selectWorkObj
+	 	* Description : 백업 Object 조회
+	 	* Author : Yoon jh
+	 	**/
+	 	SELECT
+			obj_sn,
+			db_id,
+			scm_nm,
+			obj_nm
+		FROM t_bckobj_l	
+		WHERE
+			wrk_id = #{wrk_id}
+		ORDER BY obj_sn
+    </select>
+	
+	<delete id="deleteWorkObj" parameterType="workVO">
 		/**
 	 	* Query ID : deleteWorkObj
 	 	* Description : 백업 Object delete

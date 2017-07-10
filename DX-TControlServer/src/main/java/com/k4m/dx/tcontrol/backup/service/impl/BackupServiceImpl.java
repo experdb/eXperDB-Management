@@ -42,6 +42,10 @@ public class BackupServiceImpl implements BackupService{
 		backupDAO.updateRmanWork(workVO);
 	}
 	
+	public void updateDumpWork(WorkVO workVO) throws Exception{
+		backupDAO.updateDumpWork(workVO);
+	}
+	
 	public WorkVO lastWorkId() throws Exception{
 		return backupDAO.lastWorkId();
 	}
@@ -78,7 +82,11 @@ public class BackupServiceImpl implements BackupService{
 		backupDAO.insertWorkObj(workObjVO);
 	}
 	
-	public void deleteWorkObj(WorkObjVO workObjVO) throws Exception{
-		backupDAO.deleteWorkObj(workObjVO);
+	public List<WorkObjVO> selectWorkObj(WorkVO workVO) throws Exception{
+		return backupDAO.selectWorkObj(workVO);
+	}
+	
+	public void deleteWorkObj(WorkVO workVO) throws Exception{
+		backupDAO.deleteWorkObj(workVO);
 	}
 }
