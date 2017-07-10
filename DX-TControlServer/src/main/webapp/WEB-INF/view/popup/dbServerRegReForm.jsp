@@ -39,6 +39,7 @@ $(window.document).ready(function() {
 		url : "/selectDbServerList.do",
 		data : {
 			db_svr_id : parseInt(db_svr_id),
+			flag : "u"
 		},
 		dataType : "json",
 		type : "post",
@@ -70,7 +71,8 @@ function fn_dbServerConnTest(){
 			ipadr : $("#ipadr").val(),
 			portno : $("#portno").val(),
 			svr_spr_usr_id : $("#svr_spr_usr_id").val(),
-			svr_spr_scm_pwd : $("#svr_spr_scm_pwd").val()
+			svr_spr_scm_pwd : $("#svr_spr_scm_pwd").val(),
+			check : "u",
 		},
 		type : "post",
 		error : function(xhr, status, error) {

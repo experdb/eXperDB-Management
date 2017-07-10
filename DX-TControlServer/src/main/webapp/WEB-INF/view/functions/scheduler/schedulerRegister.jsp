@@ -13,6 +13,7 @@ function fn_init(){
 	processing : true,
 	searching : false,		
 	columns : [
+	{data : "rownum", defaultContent : "", targets : 0, orderable : false, checkboxes : {'selectRow' : true}}, 
 	{data:"index", columnDefs: [ { searchable: false, orderable: false, targets: 0} ], order: [[ 1, 'asc' ]], className : "dt-center", defaultContent : ""},
 	{data : "wrk_id", className : "dt-center", defaultContent : "", visible: false },
 	{data : "db_svr_nm", className : "dt-center", defaultContent : ""}, //서버명
@@ -28,12 +29,11 @@ function fn_init(){
 			render: function (data, type, full, meta,row) {
 				if (type === 'display') {
 					var $exe_order = $('<div class="order_exc">');
-					$('<a class="dtMoveUp"><img src="../images/ico_order_up.png" alt="" /></a>').appendTo($exe_order);					
+					$('<a class="dtMoveUp" onClick="fn_moveUp();"><img src="../images/ico_order_up.png" alt="" /></a>').appendTo($exe_order);					
 					$('<a class="dtMoveDown"><img src="../images/ico_order_down.png" alt="" /></a>').appendTo($exe_order);																												
 					$('</div>').appendTo($exe_order);
 					return $exe_order.html();
 				}
-				return data;
 			}
 	},
 	{data: null,  	 		     
@@ -48,55 +48,21 @@ function fn_init(){
           	orderable: false, 
           	defaultContent: ""},
 	],
-		'drawCallback': function (settings) {
+/* 		'drawCallback': function (settings) {
 				// Remove previous binding before adding it
 				$('.dtMoveUp').unbind('click');
 				$('.dtMoveDown').unbind('click');
 				// Bind clicks to functions
 				$('.dtMoveUp').click(moveUp);
 				$('.dtMoveDown').click(moveDown);
-			}
+			} */
 });
 
     table.on( 'order.dt search.dt', function () {
-    	table.column(0, {search:'applied', order:'applied'}).nodes().each( function (cell, i) {
+    	table.column(1, {search:'applied', order:'applied'}).nodes().each( function (cell, i) {
             cell.innerHTML = i+1;
         } );
     } ).draw();
-    
-	// Move the row up
-	function moveUp() {
-		var tr = $(this).parents('tr');
-		moveRow(tr, 'up');
-	}
-
-	// Move the row down
-	function moveDown() {
-		var tr = $(this).parents('tr');
-		moveRow(tr, 'down');
-	}
-
-  // Move up or down (depending...)
-  function moveRow(row, direction) {
-    var index = table.row(row).index();
-    var rownum = -1;
-    if (direction === 'down') {
-    	rownum = 1;
-    }
-
-	//여기서부터 다시진행
-    var data1 = table.row(index).data();
-	alert(JSON.stringify(data1));
-	
-    data1.rownum += rownum;
-
-    var data2 = table.row(index + rownum).data();
-    data2.rownum += -rownum;
-
-    table.row(index).data(data2);
-    table.row(index + rownum).data(data1);
-    table.draw(false);
-	}
 }
 
 /* ********************************************************
@@ -176,6 +142,22 @@ $(window.document).ready(function() {
 });
 
 
+$(function() {		
+	
+	/* ********************************************************
+	 * 서버 테이블 (선택영역 표시)
+	 ******************************************************** */
+/*      $('#workList tbody').on( 'click', 'tr', function () {
+         if ( $(this).hasClass('selected') ) {
+        }
+        else { 	
+        	table.$('tr.selected').removeClass('selected');
+            $(this).addClass('selected');
+        } 
+    }) */
+
+});
+
 /* ********************************************************
  * work등록 팝업창 호출
  ******************************************************** */
@@ -205,9 +187,15 @@ function fn_exe_pred(){
 }
 
 
+function fn_moveUp(){
+	var tr = $(this).parents('tr');
+	alert(JSON.stringify(tr));
+}
+
 function fn_workAddCallback(rowList){
+	alert(JSON.stringify(rowList));
 	table.clear().draw();
-	table.rows.add(result).draw();
+	table.rows.add(rowList).draw();
 }
 </script>
 
@@ -232,18 +220,22 @@ function fn_workAddCallback(rowList){
 									<caption>검색 조회</caption>
 									<colgroup>
 										<col style="width:90px;" />
-										<col style="width:240px;" />
-										<col style="width:60px;" />
+										<col />
+
 										<col />
 									</colgroup>
 									<tbody>
 										<tr>
 											<th scope="row" class="t9 line">스케줄명</th>
 											<td><input type="text" class="txt t2"/></td>
-											<th scope="row" class="t9">설명</th>
-											<td><input type="text" class="txt t2"/></td>
 										</tr>
-									</tbody>
+										<tr>
+											<th scope="row" class="t9 line">설명</th>
+											<td>
+												<textarea class="tbd1" name=""></textarea>
+											</td>
+										</tr>
+									</tbody>		
 								</table>
 							</div>
 							<div class="sch_form">
@@ -273,8 +265,7 @@ function fn_workAddCallback(rowList){
 															<a href="#n" class="calendar_btn">달력열기</a>
 															<input type="text" class="calendar" id="datepicker1" title="스케줄시간설정" readonly />												
 													</div>	
-													</span>	
-																							
+													</span>																							
 													<span>
 															<div id="hour"></div>
 													</span>
@@ -304,6 +295,7 @@ function fn_workAddCallback(rowList){
 		
 									<thead>
 										<tr>
+											<th></th>
 											<th>No</th>
 											<th></th>
 											<th>서버명</th>

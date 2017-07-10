@@ -22,7 +22,7 @@ public class CmmnServerInfoDAO extends EgovAbstractMapper{
 	@SuppressWarnings({ "deprecation", "unchecked" })
 	public List<DbServerVO> selectDbServerList(String db_svr_nm) {
 		List<DbServerVO> sl = null;
-		sl = (List<DbServerVO>) list("cmmnListSQL.selectDbServerList", db_svr_nm);	
+		sl = (List<DbServerVO>) list("cmmnSql.selectDbServerList", db_svr_nm);	
 		return sl;
 	}
 	
@@ -33,7 +33,7 @@ public class CmmnServerInfoDAO extends EgovAbstractMapper{
 	 * @throws Exception
 	 */
 	public AgentInfoVO selectAgentInfo(AgentInfoVO vo) throws Exception {
-		return (AgentInfoVO) selectOne("cmmnListSQL.selectAgentInfo", vo);
+		return (AgentInfoVO) selectOne("cmmnSql.selectAgentInfo", vo);
 	}
 
 	/**
@@ -43,7 +43,7 @@ public class CmmnServerInfoDAO extends EgovAbstractMapper{
 	 * @throws Exception
 	 */
 	public DbServerVO selectServerInfo(DbServerVO vo) throws Exception {
-		return (DbServerVO) selectOne("cmmnListSQL.selectServerInfo", vo);
+		return (DbServerVO) selectOne("cmmnSql.selectServerInfo", vo);
 	}
 	
 
