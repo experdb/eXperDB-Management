@@ -4,7 +4,10 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form"%>
 <%@ taglib prefix="ui" uri="http://egovframework.gov/ctl/ui"%>
+<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags"%>
+
 
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
@@ -19,20 +22,13 @@
 <link rel = "stylesheet" type = "text/css" media = "screen" href = "<c:url value='/css/dt/dataTables.jqueryui.min.css'/>"/> 
 <link rel="stylesheet" type="text/css" href="<c:url value='/css/dt/dataTables.colVis.css'/>"/>
 <link rel="stylesheet" type="text/css" href="<c:url value='/css/dt/dataTables.checkboxes.css'/>"/>
-
-
-
-	<script src ="/js/jquery/jquery-1.7.2.min.js" type="text/javascript"></script>
-	<script src ="/js/jquery/jquery-ui.js" type="text/javascript"></script>
-
-
+<script src ="/js/jquery/jquery-1.7.2.min.js" type="text/javascript"></script>
+<script src ="/js/jquery/jquery-ui.js" type="text/javascript"></script>
 <script src="/js/jquery/jquery.dataTables.min.js" type="text/javascript"></script>
 <script src="/js/dt/dataTables.jqueryui.min.js" type="text/javascript"></script>
-
- <script src="/js/dt/dataTables.colResize.js" type="text/javascript"></script>
+<script src="/js/dt/dataTables.colResize.js" type="text/javascript"></script>
 <script src="/js/dt/dataTables.checkboxes.min.js" type="text/javascript"></script>	
 <script src="/js/dt/dataTables.colVis.js" type="text/javascript"></script>	
-
 <script type="text/javascript" src="/js/common.js"></script>
 
 

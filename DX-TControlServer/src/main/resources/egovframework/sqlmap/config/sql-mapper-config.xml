@@ -19,6 +19,11 @@
 		<typeAlias alias="cmmnCodeVO" type="com.k4m.dx.tcontrol.common.service.CmmnCodeVO"/>
 		<typeAlias alias="connectorVO" type="com.k4m.dx.tcontrol.functions.transfer.service.ConnectorVO"/>
 		<typeAlias alias="transferVO" type="com.k4m.dx.tcontrol.functions.transfer.service.TransferVO"/>
+		<typeAlias alias="dbidbserverVO" type="com.k4m.dx.tcontrol.accesscontrol.service.DbIDbServerVO"/>
+		<typeAlias alias="AccessControlVO" type="com.k4m.dx.tcontrol.accesscontrol.service.AccessControlVO"/>
+		<typeAlias alias="agentInfoVO" type="com.k4m.dx.tcontrol.common.service.AgentInfoVO" />
+		<typeAlias alias="workObjVO" type="com.k4m.dx.tcontrol.backup.service.WorkObjVO"/>
+		
     </typeAliases>
     
  	<mappers>
@@ -41,6 +46,7 @@
 		
 		<!-- functions -->
 		<mapper resource="egovframework/sqlmap/mappers/functions/transfer/transferSql.xml" />
+		<mapper resource="egovframework/sqlmap/mappers/functions/schedule/scheduleSql.xml" />
 		
 		<!-- accesscontrol -->
 		<mapper resource="egovframework/sqlmap/mappers/accessControl/accessControlSql.xml" />
