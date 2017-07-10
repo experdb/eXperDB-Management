@@ -2,6 +2,8 @@ package com.k4m.dx.tcontrol.audit;
 
 import java.util.HashMap;
 
+import javax.servlet.http.HttpServletRequest;
+
 import org.json.simple.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -43,18 +45,20 @@ public class AuditController {
 	private CmmnServerInfoService cmmnServerInfoService;
 	
 	@RequestMapping(value = "/audit/auditManagement.do")
-	public ModelAndView auditManagement(@ModelAttribute("auditVO") AuditVO auditVO, ModelMap model) throws Exception{
+	public ModelAndView auditManagement(@ModelAttribute("auditVO") AuditVO auditVO, ModelMap model, HttpServletRequest request) throws Exception{
 		ModelAndView mv = new ModelAndView();
 
 		//mv.addObject("db_svr_id",workVO.getDb_svr_id());
 		try {
+			int db_svr_id = Integer.parseInt(request.getParameter("db_svr_id"));
+			
 			AgentInfoVO vo = new AgentInfoVO();
-			vo.setDB_SVR_ID(auditVO.getDB_SVR_ID());
+			vo.setDB_SVR_ID(db_svr_id);
 			
 			AgentInfoVO agentInfo =  (AgentInfoVO) cmmnServerInfoService.selectAgentInfo(vo);
 			
 			DbServerVO schDbServerVO = new DbServerVO();
-			schDbServerVO.setDb_svr_id(auditVO.getDB_SVR_ID());
+			schDbServerVO.setDb_svr_id(db_svr_id);
 			
 			DbServerVO dbServerVO = (DbServerVO)  cmmnServerInfoService.selectServerInfo(schDbServerVO);
 			
@@ -101,12 +105,9 @@ public class AuditController {
 
 			CA.close();
 			
-			AuditVO returnAuditVO = new AuditVO();
-//			returnAuditVO.setLog_time(log_time);
 			
-			//mv.addObject("db_svr_nm", backupService.selectDbSvrNm(workVO).getDb_svr_nm());
+			mv.addObject("audit", selectData);
 		} catch (Exception e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		mv.setViewName("dbserver/auditManagement");

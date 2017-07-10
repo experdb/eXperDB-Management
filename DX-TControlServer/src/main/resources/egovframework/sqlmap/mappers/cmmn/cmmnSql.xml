@@ -94,7 +94,7 @@
 	                , LST_MDF_DTM
 	          FROM T_DBSVR_I
 	          WHERE
-	          	IPADR = #{DB_SVR_ID}
+	          	DB_SVR_ID = #{db_svr_id}
 	</select>
 	
 	<select id="selectAgentInfo" resultType="agentInfoVO" parameterType="agentInfoVO">

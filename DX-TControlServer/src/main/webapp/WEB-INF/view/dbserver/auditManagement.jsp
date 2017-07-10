@@ -52,8 +52,12 @@
 											<tr>
 												<th scope="row">로그수준</th>
 												<td colspan="3">
-													<select class="select" name="" id="">
-														<option value="">INFO</option>
+													<select class="select" name="log_level" id="log_level">
+														<option value="DEBUG"<c:if test="${audit.log_level == 'DEBUG'}"> selected</c:if>>DEBUG</option>
+														<option value="INFO"<c:if test="${audit.log_level == 'INFO'}"> selected</c:if>>INFO</option>
+														<option value="NOTICE"<c:if test="${audit.log_level == 'NOTICE'}"> selected</c:if>>NOTICE</option>
+														<option value="WARNING"<c:if test="${audit.log_level == 'WARNING'}"> selected</c:if>>WARNING</option>
+														<option value="LOG"<c:if test="${audit.log_level == 'LOG'}"> selected</c:if>>LOG</option>
 													</select>
 												</td>
 											</tr>
@@ -63,7 +67,7 @@
 													<div class="log_list">
 														<span>
 															<div class="inp_chk">
-																<input type="checkbox" id="log_1" name="log_1" checked="checked">
+																<input type="checkbox" id="READ" name="READ" <c:if test="${fn:contains(audit.log, 'READ')}"> checked="checked"</c:if>>
 																<label for="log_1">Read</label>
 															</div>
 														</span>
