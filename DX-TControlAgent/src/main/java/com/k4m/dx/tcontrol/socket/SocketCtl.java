@@ -8,11 +8,15 @@ import java.io.OutputStream;
 import java.math.BigInteger;
 import java.net.Socket;
 import java.net.SocketTimeoutException;
+import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.json.simple.JSONObject;
 
+import com.k4m.dx.tcontrol.db.repository.vo.PgAuditSettingVO;
+import com.k4m.dx.tcontrol.db.repository.vo.PgAuditVO;
 import com.k4m.dx.tcontrol.util.CommonUtil;
 
 public class SocketCtl {
@@ -220,5 +224,41 @@ public class SocketCtl {
 		
 		return outputObj;
 	}
+	
+	protected JSONObject DxT007ResultJSON(List<PgAuditVO> resultData, String strDxExCode
+			, String strResultCode
+			, String strErrCode, String strErrMsg) throws Exception{
+		JSONObject outputObj = new JSONObject();
+		outputObj.put(ProtocolID.DX_EX_CODE, strDxExCode);
+		outputObj.put(ProtocolID.RESULT_CODE, strResultCode);
+		outputObj.put(ProtocolID.ERR_CODE, strErrCode);
+		outputObj.put(ProtocolID.ERR_MSG, strErrMsg);
+		outputObj.put(ProtocolID.RESULT_DATA, resultData);
+		
+		return outputObj;
+	}
+	
+	protected JSONObject DxT007ResultJSON(PgAuditSettingVO resultData, String strDxExCode
+			, String strResultCode
+			, String strErrCode, String strErrMsg) throws Exception{
+
+		HashMap hp = new HashMap();
+		hp.put("log", resultData.getLog());
+		hp.put("log_level", resultData.getLog());
+		hp.put("log_relation", resultData.getLog());
+		hp.put("log_catalog", resultData.getLog());
+		hp.put("log_parameter", resultData.getLog());
+		hp.put("log_statement_once", resultData.getLog());
+		
+		JSONObject outputObj = new JSONObject();
+		outputObj.put(ProtocolID.DX_EX_CODE, strDxExCode);
+		outputObj.put(ProtocolID.RESULT_CODE, strResultCode);
+		outputObj.put(ProtocolID.ERR_CODE, strErrCode);
+		outputObj.put(ProtocolID.ERR_MSG, strErrMsg);
+		outputObj.put(ProtocolID.RESULT_DATA, hp);
+		
+		return outputObj;
+	}
+
 
 }

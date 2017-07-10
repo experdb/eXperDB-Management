@@ -4,8 +4,8 @@ public class AccessControlVO {
 	private int rownum;
 	private int idx;
 	private int svr_acs_cntr_id;//서버_접근_제어_ID 
-	private String db_svr_id;//DB_서버_ID    
-	private String db_id;//DB_ID         
+	private int db_svr_id;//DB_서버_ID    
+	private int db_id;//DB_ID         
 	private String prms_ipadr;//허용_IP주소      
 	private String prms_usr_id;//허용_사용자_ID     
 	private String ctf_mth_nm;//인증_방법_명      
@@ -35,16 +35,16 @@ public class AccessControlVO {
 	public void setSvr_acs_cntr_id(int svr_acs_cntr_id) {
 		this.svr_acs_cntr_id = svr_acs_cntr_id;
 	}
-	public String getDb_svr_id() {
+	public int getDb_svr_id() {
 		return db_svr_id;
 	}
-	public void setDb_svr_id(String db_svr_id) {
+	public void setDb_svr_id(int db_svr_id) {
 		this.db_svr_id = db_svr_id;
 	}
-	public String getDb_id() {
+	public int getDb_id() {
 		return db_id;
 	}
-	public void setDb_id(String db_id) {
+	public void setDb_id(int db_id) {
 		this.db_id = db_id;
 	}
 	public String getPrms_ipadr() {
@@ -107,5 +107,6 @@ public class AccessControlVO {
 	public void setLst_mdf_dtm(String lst_mdf_dtm) {
 		this.lst_mdf_dtm = lst_mdf_dtm;
 	}
+
     
 }

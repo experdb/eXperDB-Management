@@ -1,42 +1,40 @@
 package com.k4m.dx.tcontrol.db.repository.dao;
 
-import java.sql.SQLException;
 import java.util.List;
 
+import org.apache.ibatis.session.SqlSession;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Repository;
 
-import com.ibatis.sqlmap.client.SqlMapClient;
+import com.k4m.dx.tcontrol.db.repository.vo.AgentInfoVO;
 import com.k4m.dx.tcontrol.db.repository.vo.DbServerInfoVO;
 
 
 @Repository("SystemDAO")
 public class SystemDAO {
 	
+	//private SqlSessionFactory sqlSessionFactory = SqlSessionManager.getInstance();
+
 	@Autowired
-	@Qualifier("sqlMapClient")
-	private SqlMapClient sqlMapClient;
+    private SqlSession session;
 
-	public List<DbServerInfoVO> selectDbServerInfoList() {
-		List<DbServerInfoVO> sl = null;
-		try {
-			sl = (List<DbServerInfoVO>) sqlMapClient.queryForList("system.selectDbServerInfo");	
-		} catch (SQLException e) {
-			e.printStackTrace();
-        }
-		return sl;
+	public List<DbServerInfoVO> selectDbServerInfoList() throws Exception {
+		return (List) session.selectList("system.selectDbServerInfo");
 	}
 	
-	public DbServerInfoVO selectDbServerInfo() {
-		DbServerInfoVO sl = null;
-		try {
-			sl = (DbServerInfoVO) sqlMapClient.queryForObject("system.selectDbServerInfo");	
-		} catch (SQLException e) {
-			e.printStackTrace();
-        }
-		return sl;
+	public DbServerInfoVO selectDbServerInfo(DbServerInfoVO vo) throws Exception  {
+		return (DbServerInfoVO) session.selectOne("system.selectDbServerInfo", vo);
 	}
 
+	public void insertAgentInfo(AgentInfoVO vo) throws Exception  {
+		 session.insert("system.insertAgentInfo", vo);
+	}
 	
+	public void updateAgentInfo(AgentInfoVO vo) throws Exception {
+		session.update("system.updateAgentInfo", vo);
+	}
+	
+	public AgentInfoVO selectAgentInfo(AgentInfoVO vo) throws Exception  {
+		return (AgentInfoVO) session.selectOne("system.selectAgentInfo", vo);
+	}
 }

@@ -29,6 +29,7 @@
 			CPRT,
 			SAVE_PTH,
 			FILE_FMT_CD,
+			(SELECT SYS_CD_NM FROM T_SYSDTL_C WHERE A.FILE_FMT_CD = SYS_CD ) AS FILE_FMT_CD_NM,
 			FILE_STG_DCNT,
 			ENCD_MTH_NM,
 			USR_ROLE_NM,
@@ -336,7 +337,9 @@
 	 		to_char(TWG.WRK_STRT_DTM,'YYYY-MM-DD HH24:MI') AS WRK_STRT_DTM,
 	 		to_char(TWG.WRK_END_DTM,'YYYY-MM-DD HH24:MI') AS WRK_END_DTM,
 	 		TWG.EXE_RSLT_CD AS EXE_RSLT_CD,
+	 		(SELECT SYS_CD_NM FROM T_SYSDTL_C WHERE TWG.EXE_RSLT_CD = SYS_CD ) AS EXE_RSLT_CD_NM,
 	 		TWG.BCK_OPT_CD AS BCK_OPT_CD,
+	 		(SELECT SYS_CD_NM FROM T_SYSDTL_C WHERE TWG.BCK_OPT_CD = SYS_CD ) AS BCK_OPT_CD_NM,
 	 		TWG.TLI AS TLI,
 	 		TWG.FILE_SZ AS FILE_SZ,
 	 		TWG.DB_ID AS DB_ID,
@@ -389,4 +392,46 @@
       	ORDER BY TWG.EXE_SN DESC
     </select>
 
+	<insert id="insertWorkObj" parameterType="workObjVO">
+		/**
+	 	* Query ID : insertWorkObj
+	 	* Description : 백업 Object insert
+	 	* Author : Yoon jh
+	 	**/
+		INSERT INTO t_bckobj_l
+			(
+			obj_sn,
+			wrk_id,
+			db_id,
+			scm_nm,
+			obj_nm,
+			frst_regr_id,
+			frst_reg_dtm,
+			lst_mdfr_id,
+			lst_mdf_dtm
+			)
+		VALUES
+			(
+			NEXTVAL('q_bckobj_l_01'),
+			#{wrk_id},
+			#{db_id},
+			#{scm_nm},
+			#{obj_nm},
+			#{frst_regr_id},
+			now(),
+			#{frst_regr_id},
+			now()
+			)
+	</insert>
+	
+	<delete id="deleteWorkObj" parameterType="workObjVO">
+		/**
+	 	* Query ID : deleteWorkObj
+	 	* Description : 백업 Object delete
+	 	* Author : Yoon jh
+	 	**/	
+		DELETE FROM t_bckobj_l
+		WHERE 1=1
+			AND wrk_id = #{wrk_id}
+	</delete>
 </mapper>

@@ -29,7 +29,7 @@ function fn_init() {
 		table = $('#serverList').DataTable({
 		scrollY : "300px",
 		processing : true,
-		searching : false,
+		searching : false,		
 		columns : [
 		{data : "rownum", defaultContent : "", targets : 0, orderable : false, checkboxes : {'selectRow' : true}}, 
 		{data : "idx", className : "dt-center", defaultContent : ""},

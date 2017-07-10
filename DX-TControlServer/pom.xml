@@ -112,8 +112,24 @@
          <artifactId>gson</artifactId>
          <version>2.3.1</version>
       </dependency>
-
-
+      
+		<!-- Spring Security -->
+		<dependency>
+			<groupId>org.springframework.security</groupId>
+			<artifactId>spring-security-web</artifactId>
+			<version>4.1.2.RELEASE</version>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework.security</groupId>
+			<artifactId>spring-security-config</artifactId>
+			<version>4.1.2.RELEASE</version>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework.security</groupId>
+			<artifactId>spring-security-taglibs</artifactId>
+			<version>4.1.2.RELEASE</version>
+		</dependency>
+		
       <!-- Jackson Mapper -->
       <dependency>
          <groupId>org.codehaus.jackson</groupId>
@@ -127,7 +143,6 @@
          <artifactId>json-simple</artifactId>
          <version>1.1.1</version>
       </dependency>
-      
       
       <!-- tiles 설정 -->
       <dependency>

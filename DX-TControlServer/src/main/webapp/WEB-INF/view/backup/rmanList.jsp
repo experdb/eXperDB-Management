@@ -1,6 +1,21 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags"%>
+<%
+	/**
+	* @Class Name : rmanList.jsp
+	* @Description : 백업 목록 화면
+	* @Modification Information
+	*
+	*   수정일         수정자                   수정내용
+	*  ------------    -----------    ---------------------------
+	*  2017.06.07     최초 생성
+	*
+	* author YoonJH
+	* since 2017.06.07
+	*
+	*/
+%>
 <script type="text/javascript">
 $(window.document).ready(
 	function() {
@@ -45,7 +60,7 @@ function fn_dump_reg_popup(){
 	var height = 810;
 	var left = (window.screen.width / 2) - (width / 2);
 	var top = (window.screen.height /2) - (height / 2);
-	var popOption = "width="+width+", height="+height+", top="+top+", left="+left+", resizable=no, scrollbars=auto, status=no, toolbar=no, titlebar=yes, location=no,";
+	var popOption = "width="+width+", height="+height+", top="+top+", left="+left+", resizable=no, scrollbars=yes, status=no, toolbar=no, titlebar=yes, location=no,";
 	
 	var winPop = window.open(popUrl,"dumpRegPop",popOption);
 	winPop.focus();
@@ -57,7 +72,7 @@ function fn_dump_reform_popup(wrk_id){
 	var height = 810;
 	var left = (window.screen.width / 2) - (width / 2);
 	var top = (window.screen.height /2) - (height / 2);
-	var popOption = "width="+width+", height="+height+", top="+top+", left="+left+", resizable=no, scrollbars=auto, status=no, toolbar=no, titlebar=yes, location=no,";
+	var popOption = "width="+width+", height="+height+", top="+top+", left="+left+", resizable=no, scrollbars=yes, status=no, toolbar=no, titlebar=yes, location=no,";
 	
 	var winPop = window.open(popUrl,"dumpRegPop",popOption);
 	winPop.focus();
@@ -112,7 +127,7 @@ function dataRmanList(data){
 		var html = "";
 
 		html += "<tr>";
-		html += "<td align='center'><div class='inp_chk'><input type='checkBox' name='workId' id='workId"+i+"' value='"+item.wrk_id+"' onClick=\"fn_check_close()\"><label for='workId"+i+"'></label></div></td>";
+		html += "<td align='center'><div class='inp_chk'><input type='checkBox' name='rmanWorkId' id='rmanWorkId"+i+"' value='"+item.wrk_id+"' onClick=\"fn_rman_check_close()\"><label for='rmanWorkId"+i+"'></label></div></td>";
 		html += "<td align='center'>"+i+"</td>";
 		html += "<td align='center'>"+item.bck_bsn_dscd_nm+"</td>";
 		html += "<td align='center''><a href='javascript:fn_rman_reform_popup(\""+item.wrk_id+"\")'><b>"+item.wrk_nm+"</b></a></td>";
@@ -144,12 +159,12 @@ function dataDumpList(data){
 	$(data).each(function (index, item) {	
 		var html = "";
 		html += "<tr>";
-		html += "<td align='center'><div class='inp_chk'><input type='checkBox' name='workId' id='workId"+i+"' value='"+item.wrk_id+"' onClick=\"fn_check_close()\"><label for='workId"+i+"'></label></div></td>";
-		html += "<td align='center'>"+item.wrk_id+"</td>";
-		html += "<td align='center'>"+item.bck_bsn_dscd+"</td>";
-		html += "<td align='center'><a href='javascript:fn_reg_reform_popup(\""+item.wrk_id+"\")'>"+item.wrk_nm+"&nbsp;</a></td>";
+		html += "<td align='center'><div class='inp_chk'><input type='checkBox' name='dumpWorkId' id='dumpWorkId"+i+"' value='"+item.wrk_id+"' onClick=\"fn_dump_check_close()\"><label for='dumpWorkId"+i+"'></label></div></td>";
+		html += "<td align='center'>"+i+"</td>";
+		html += "<td align='center'>"+item.bck_bsn_dscd_nm+"</td>";
+		html += "<td align='center'><a href='javascript:fn_dump_reform_popup(\""+item.wrk_id+"\")'><b>"+item.wrk_nm+"</a></a></td>";
 		html += "<td align='left'>"+item.db_nm+"</td>";
-		html += "<td align='center'>"+item.file_fmt_cd+"</td>";
+		html += "<td align='center'>"+item.file_fmt_cd_nm+"</td>";
 		html += "<td align='center'>"+item.file_stg_dcnt+"</td>";
 		html += "<td align='center'>"+item.bck_mtn_ecnt+"</td>";
 		html += "<td align='center'>"+item.frst_regr_id+"</td>";
@@ -172,17 +187,33 @@ function dataDumpList(data){
 	}
 }
 
-function fn_check_close(){
-	$("#CheckAll").checked = false;
+function fn_rman_check_close(){
+	$("#rmanCheckAll").checked = false;
 }
 
-function fn_check_all(){
-	if($("#CheckAll").is(":checked")){
-		$("input:checkbox[name='workId']").each(function(){
+function fn_dump_check_close(){
+	$("#dumpCheckAll").checked = false;
+}
+
+function fn_rman_check_all(){
+	if($("#rmanCheckAll").is(":checked")){
+		$("input:checkbox[name='rmanWorkId']").each(function(){
 			this.checked = true;
 		});
 	}else{
-		$("input:checkbox[name='workId']").each(function(){
+		$("input:checkbox[name='rmanWorkId']").each(function(){
+			this.checked = false;
+		});
+	}
+}
+
+function fn_dump_check_all(){
+	if($("#dumpCheckAll").is(":checked")){
+		$("input:checkbox[name='dumpWorkId']").each(function(){
+			this.checked = true;
+		});
+	}else{
+		$("input:checkbox[name='dumpWorkId']").each(function(){
 			this.checked = false;
 		});
 	}
@@ -190,14 +221,14 @@ function fn_check_all(){
 
 function fn_rman_work_delete(){
 	var checkCnt = 0;	
-	$("input:checkbox[name='workId']").each(function(){
+	$("input:checkbox[name='rmanWorkId']").each(function(){
 		if(this.checked) checkCnt++;
 	});
 	
 	if(checkCnt < 1){
 		alert("삭제할 작업을 선택해 주세요.")
 	}else if(confirm("선택하신 작업을 삭제하시겠습니까?")){
-		$("input:checkbox[name='workId']").each(function(){
+		$("input:checkbox[name='rmanWorkId']").each(function(){
 			if(this.checked){
 				//alert(this.value);
 				$.ajax({
@@ -219,6 +250,40 @@ function fn_rman_work_delete(){
 		});
 		alert("선택한 작업이 삭제되었습니다.");
 		fn_rman_find_list();
+	}
+}
+
+function fn_dump_work_delete(){
+	var checkCnt = 0;	
+	$("input:checkbox[name='dumpWorkId']").each(function(){
+		if(this.checked) checkCnt++;
+	});
+	
+	if(checkCnt < 1){
+		alert("삭제할 작업을 선택해 주세요.")
+	}else if(confirm("선택하신 작업을 삭제하시겠습니까?")){
+		$("input:checkbox[name='dumpWorkId']").each(function(){
+			if(this.checked){
+				//alert(this.value);
+				$.ajax({
+					url : "/popup/workDelete.do",
+				  	data : {
+				  		db_svr_id : '<c:out value="${db_svr_id}"/>',
+				  		wrk_id : this.value
+				  	},
+					dataType : "json",
+					type : "post",
+					error : function(xhr, status, error) {
+						alert("실패")
+					},
+					success : function(data) {
+						
+					}
+				});
+			}
+		});
+		alert("선택한 작업이 삭제되었습니다.");
+		fn_dump_find_list();
 	}
 }
 
@@ -279,7 +344,7 @@ function selectTab(tab){
 					<span class="btn" onclick="fn_dump_find_list()"><button>조회</button></span>
 					<span class="btn" onclick="fn_dump_reg_popup()"><button>등록</button></span>
 					<!-- <span class="btn"><button>수정</button></span> -->
-					<span class="btn" onclick="fn_rman_work_delete()"><button>삭제</button></span>
+					<span class="btn" onclick="fn_dump_work_delete()"><button>삭제</button></span>
 				</div>
 				<form name="findList" id="findList" method="post" action="/backup/rmanList.do">
 				<input type="hidden" name="db_svr_id" id="db_svr_id" value="${db_svr_id}"/>				
@@ -335,24 +400,12 @@ function selectTab(tab){
 				<div class="overflow_area">
 					<table class="list pd_type3" id="rmanDataTable">
 						<caption>Rman백업관리 화면 리스트</caption>
-						<colgroup>
-							<col style="width:5%;" />
-							<col style="width:5%;" />
-							<col style="width:10%;" />
-							<col style="width:10%;" />
-							<col style="width:10%;" />
-							<col style="width:10%;" />
-							<col style="width:10%;" />
-							<col style="width:10%;" />
-							<col style="width:10%;" />
-							<col />
-						</colgroup>
 						<thead>
 							<tr>
 								<th scope="col">
 									<div class="inp_chk">
-										<input type="checkBox" name="CheckAll" id="CheckAll" onClick="fn_check_all()">
-										<label for="CheckAll"></label>
+										<input type="checkBox" name="rmanCheckAll" id="rmanCheckAll" onClick="fn_rman_check_all()">
+										<label for="rmanCheckAll"></label>
 									</div>
 								</th>
 								<th scope="col">NO</th>
@@ -371,26 +424,12 @@ function selectTab(tab){
 					</table>
 					<table class="list pd_type3" id="dumpDataTable" style="display:none;">
 						<caption>Rman백업관리 화면 리스트</caption>
-						<colgroup>
-							<col style="width:5%;" />
-							<col style="width:5%;" />
-							<col style="width:10%;" />
-							<col style="width:10%;" />
-							<col style="width:10%;" />
-							<col style="width:10%;" />
-							<col style="width:10%;" />
-							<col style="width:10%;" />
-							<col style="width:10%;" />
-							<col style="width:10%;" />
-							<col style="width:10%;" />
-							<col />
-						</colgroup>
 						<thead>
 							<tr>
 								<th scope="col">
 									<div class="inp_chk">
-										<input type="checkbox"  name="CheckAll" id="CheckAll" onClick="fn_check_all()" />
-										<label for="CheckAll"></label>
+										<input type="checkbox"  name="dumpCheckAll" id="dumpCheckAll" onClick="fn_dump_check_all()" />
+										<label for="dumpCheckAll"></label>
 									</div>
 								</th>
 								<th scope="col">NO</th>

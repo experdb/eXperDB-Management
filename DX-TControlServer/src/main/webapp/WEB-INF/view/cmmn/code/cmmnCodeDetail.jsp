@@ -46,7 +46,6 @@ function fn_deleteCmmnCode(){
 </script>
 
 <body>
-	<div id="container">
 		<!-- contents -->
 		<div id="contents">
 			<div class="location">
@@ -117,6 +116,5 @@ function fn_deleteCmmnCode(){
 			</div>
 			</div>
 		</div>
-	</div>
 </body>
 </html>

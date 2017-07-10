@@ -2,21 +2,103 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <mapper namespace="system">
-	<select id="selectDbServerInfo" parameterType="HashMap" resultType="hashmap">
-		SELECT
+	<select id="selectDbServerInfo" parameterType="DbServerInfoVO" resultType="DbServerInfoVO">
+		<![CDATA[
+		/**
+	 	* Query ID : selectDbServerInfo
+	 	* Description : Database Server 조회
+	 	* Author : 박태혁
+	 	**/
+			SELECT
+				DB_SVR_ID
+				, DB_SVR_NM
+				, IPADR
+				, PORTNO
+				, DFT_DB_NM
+				, SVR_SPR_USR_ID
+				, SVR_SPR_SCM_PWD
+				, FRST_REGR_ID
+				, FRST_REG_DTM
+				, LST_MDFR_ID
+				, LST_MDF_DTM
+			FROM  T_DBSVR_I
+			WHERE
+				IPADR = #{IPADR}
+			LIMIT 1
+		]]>
+	</select>
+	
+	<insert id="insertAgentInfo"  parameterType="AgentInfoVO">
+		/**
+	 	* Query ID : insertAgentInfo
+	 	* Description : Agent 설치 등록
+	 	* Author : 박태혁
+	 	**/
+	 	INSERT INTO T_AGTCNDT_I
+	 	(
 			DB_SVR_ID
-			, DB_SVR_NM
-			, IPADR
-			, PORTNO
-			, DFT_DB_NM
-			, SVR_SPR_USR_ID
-			, SVR_SPR_SCM_PWD
+			, SOCKET_PORT
+			, AGT_CNDT_CD
+			, STRT_DTM
+			, ISTCNF_YN
 			, FRST_REGR_ID
 			, FRST_REG_DTM
 			, LST_MDFR_ID
 			, LST_MDF_DTM
-		FROM  T_DBSVR_I
-		
-	</select>
+	 	)
+	 	VALUES
+	 	(
+			#{DB_SVR_ID}
+			, #{SOCKET_PORT}
+			, #{AGT_CNDT_CD}
+			, now()
+			, #{ISTCNF_YN}
+			, #{FRST_REGR_ID}
+			, now()
+			, #{LST_MDFR_ID}
+			, now()
+	 	)
+	</insert>
+	
+	<update id="updateAgentInfo"  parameterType="AgentInfoVO">
+	
+		/**
+	 	* Query ID : updateAgentInfo
+	 	* Description : Agent 설치 정보 수정
+	 	* Author : 박태혁
+	 	**/
+	 	UPDATE T_AGTCNDT_I
+	 	SET 
+	 		AGT_CNDT_CD = #{AGT_CNDT_CD}
+	 		, SOCKET_PORT = #{SOCKET_PORT}
+	 		, ISTCNF_YN = #{ISTCNF_YN}
+	 		, LST_MDF_DTM = now()
+	 	WHERE
+	 		DB_SVR_ID = #{DB_SVR_ID}
+	 	
+	</update>
 
+	<select id="selectAgentInfo" parameterType="AgentInfoVO" resultType="AgentInfoVO">
+		<![CDATA[
+		/**
+	 	* Query ID : selectAgentInfo
+	 	* Description : Agent 설치정보 조회
+	 	* Author : 박태혁
+	 	**/
+			SELECT
+				DB_SVR_ID
+				, SOCKET_PORT
+				, AGT_CNDT_CD
+				, STRT_DTM
+				, ISTCNF_YN
+				, FRST_REGR_ID
+				, FRST_REG_DTM
+				, LST_MDFR_ID
+				, LST_MDF_DTM
+			FROM  T_AGTCNDT_I
+			WHERE
+				DB_SVR_ID = #{DB_SVR_ID}
+			LIMIT 1
+		]]>
+	</select>
 </mapper>

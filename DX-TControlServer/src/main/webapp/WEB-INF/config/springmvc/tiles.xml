@@ -52,6 +52,9 @@
 	<definition name="functions/transfer/*" extends="default">
 		<put-attribute name="contents" value="/WEB-INF/view/functions/transfer/{1}.jsp" />
 	</definition>
+	<definition name="functions/scheduler/*" extends="default">
+		<put-attribute name="contents" value="/WEB-INF/view/functions/scheduler/{1}.jsp" />
+	</definition>
 	<definition name="mypage/*" extends="default">
 		<put-attribute name="contents" value="/WEB-INF/view/mypage/{1}.jsp"  />
 	</definition> 

@@ -3,6 +3,21 @@
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form"%>
 <%@ taglib prefix="ui" uri="http://egovframework.gov/ctl/ui"%>
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags"%>
+<%
+	/**
+	* @Class Name : rmanRegForm.jsp
+	* @Description : rman 백업등록 화면
+	* @Modification Information
+	*
+	*   수정일         수정자                   수정내용
+	*  ------------    -----------    ---------------------------
+	*  2017.06.07     최초 생성
+	*
+	* author YoonJH
+	* since 2017.06.07
+	*
+	*/
+%>
 <!doctype html>
 <html lang="ko">
 <head>

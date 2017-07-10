@@ -144,12 +144,16 @@ public class PageVO implements Serializable {
 	}
 
 	
-	public String getGrp_cd() {
+	public String FirstIndex() {
 		return grp_cd;
 	}
 
 	public void setGrp_cd(String grp_cd) {
 		this.grp_cd = grp_cd;
+	}
+
+	public String getGrp_cd() {
+		return grp_cd;
 	}
 
 	@Override

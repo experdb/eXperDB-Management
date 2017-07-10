@@ -180,4 +180,48 @@ public class ClientInfoCmmn {
 		}
 		return result;
 	}
+	
+	// 12. 스키마 및 테이블 리스트 (objectList)
+	@SuppressWarnings({ "unchecked", "rawtypes" })
+	public JSONObject object_List(JSONObject serverObj){
+		
+		JSONArray jsonArray = new JSONArray(); // 객체를 담기위해 JSONArray 선언.
+		JSONObject result = new JSONObject();
+		
+		List<Object> selectList = null;
+		
+		try {
+			JSONObject objList;
+			
+			ClientAdapter CA = new ClientAdapter(Ip, port);
+			CA.open(); 
+				
+			objList = CA.dxT012(ClientTranCodeType.DxT012, serverObj);
+			
+			String strErrMsg = (String)objList.get(ClientProtocolID.ERR_MSG);
+			String strDxExCode = (String)objList.get(ClientProtocolID.DX_EX_CODE);
+			
+			selectList =(ArrayList<Object>) objList.get(ClientProtocolID.RESULT_DATA);
+			
+			System.out.println("strDxExCode : " + " " + strDxExCode);
+			System.out.println("resultCode : " + " " + (String)objList.get(ClientProtocolID.RESULT_CODE));
+			
+			for(int i=0; i<selectList.size(); i++) {	
+				JSONObject jsonObj = new JSONObject();
+				HashMap hp = (HashMap) selectList.get(i);
+				
+				jsonObj.put("schema", (String) hp.get("table_schema"));
+				jsonObj.put("name", (String) hp.get("table_name"));
+				jsonArray.add(jsonObj);
+
+				System.out.println(i + " " + hp.get("table_schema") + " " + hp.get("table_name"));
+			}
+			result.put("data", jsonArray);
+		
+			CA.close();
+		} catch(Exception e) {
+			e.printStackTrace();
+		}
+		return result;
+	}	
 }

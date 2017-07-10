@@ -5,14 +5,10 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Repository;
 
-import com.ibatis.sqlmap.client.SqlMapClient;
 import com.k4m.dx.tcontrol.admin.dbserverManager.service.DbServerVO;
 import com.k4m.dx.tcontrol.backup.service.DbVO;
-import com.k4m.dx.tcontrol.login.service.UserVO;
 
 import egovframework.rte.psl.dataaccess.EgovAbstractMapper;
 

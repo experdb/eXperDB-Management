@@ -130,3 +130,23 @@
 [2017-06-02 10:51:35][ERROR]DXTcontrolSocketExecute java.net.SocketException: Connection reset by peer: socket write error
 [2017-06-02 10:52:12][ERROR]DXTcontrolSocketExecute java.lang.NullPointerException
 [2017-06-02 14:51:35][ERROR]DXTcontrolSocketExecute java.lang.NullPointerException
+[2017-07-07 14:48:22][INFO ]DX-TcontrolAgent Deamon Start..
+[2017-07-07 14:48:22][INFO ]DX-TcontrolAgent Deamon Start.. 2017-07-07 14:48:22
+[2017-07-07 14:48:22][INFO ]
+[2017-07-07 14:48:22][INFO ]**************************************************
+[2017-07-07 14:48:22][INFO ]SocketListener[127.0.0.1]를 기동합니다.
+[2017-07-07 14:48:22][INFO ]ListenerPort : [9001]
+[2017-07-07 14:48:22][INFO ]Timeout : [-1]
+[2017-07-07 14:48:22][INFO ]Backlog : [-1]
+[2017-07-07 14:48:22][INFO ]SocketListener[127.0.0.1]가 메시지 수신을 대기하고 있습니다.
+[2017-07-07 14:48:22][INFO ]**************************************************
+[2017-07-07 14:48:22][INFO ]
+[2017-07-07 14:48:23][INFO ]************************************************************
+[2017-07-07 14:48:23][INFO ]SqlSessionManager를 초기화합니다.
+[2017-07-07 14:48:23][INFO ]SqlSessionManager를 초기화하였습니다.
+[2017-07-07 14:48:23][INFO ]************************************************************
+[2017-07-07 14:48:23][INFO ]************************************************************
+[2017-07-07 14:48:23][INFO ]DBCPPool을 생성합니다. [222.110.153.162_postgres]
+[2017-07-07 14:48:23][INFO ]DBCPPool 생성 완료 하였습니다. [222.110.153.162_postgres]
+[2017-07-07 14:48:23][INFO ]************************************************************
+[2017-07-07 14:48:23][ERROR]DXTcontrolSocketExecute java.lang.NullPointerException

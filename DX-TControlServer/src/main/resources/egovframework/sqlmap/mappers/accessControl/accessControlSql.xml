@@ -3,16 +3,80 @@
 
 <mapper namespace="accessControlSql">
 
-	<select id="selectDatabaseList" resultType="dbVO">
+	<select id="selectDatabaseList" resultType="dbidbserverVO">
 		/**
 	 	*  Query ID : selectDatabaseList
 	 	* Description : DB 조회
 	 	* Author : 김주영
 	 	**/ 	
-	  	SELECT d.db_svr_id, d.db_nm
-		FROM T_DBSVR_I s,T_DB_I d
-		WHERE s.db_svr_id = d.db_svr_id
-		AND s.db_svr_id=#{db_svr_id}	  	
+		SELECT 	
+			  D.db_id
+			, D.db_nm
+			, S.db_svr_id
+			, S.db_svr_nm
+		FROM T_DB_I D, T_DBSVR_I S
+		WHERE D.db_svr_id=S.db_svr_id
+		AND S.db_svr_id=#{db_svr_id}	  	
+    </select>
+    
+    <select id="selectServerDb" resultType="dbidbserverVO">
+		/**
+	 	*  Query ID : selectServerDb
+	 	* Description : DB,SERVER 조회
+	 	* Author : 김주영
+	 	**/ 	
+		SELECT 
+			  D.db_id
+			, D.db_nm
+			, S.db_svr_id
+			, S.db_svr_nm
+			, S.ipadr
+			, S.portno
+			, S.dft_db_nm
+			, S.svr_spr_usr_id
+			, S.svr_spr_scm_pwd
+		FROM T_DB_I D, T_DBSVR_I S
+		WHERE D.db_svr_id=S.db_svr_id
+		AND D.db_id=#{db_id}	  	
     </select>
 	
+	<insert id="insertAccessControl" parameterType="AccessControlVO">
+		/**
+	 	*  Query ID : insertAccessControl
+	 	* Description : 접근제어 등록
+	 	* Author : 김주영
+	 	**/
+	 	INSERT INTO T_SVRACSCNTR_I
+		(
+		  SVR_ACS_CNTR_ID
+		, DB_SVR_ID
+		, DB_ID
+		, PRMS_IPADR
+		, PRMS_USR_ID
+		, CTF_MTH_NM
+		, CTF_TP_NM
+		, OPT_NM
+		, CMD_CNTS
+		, FRST_REGR_ID
+		, FRST_REG_DTM
+		, LST_MDFR_ID
+		, LST_MDF_DTM
+		)
+		VALUES
+		(
+		  nextval('q_svracscntr_i_01')
+		, #{db_svr_id}
+		, #{db_id}
+		, #{prms_ipadr}
+		, #{prms_usr_id}
+		, #{ctf_mth_nm}
+		, #{ctf_tp_nm}
+		, #{opt_nm}
+		, #{cmd_cnts}
+		, #{frst_regr_id}
+		, clock_timestamp()
+		, #{lst_mdfr_id}
+		, clock_timestamp()
+		) 
+	</insert>
 </mapper>

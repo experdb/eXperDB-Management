@@ -1,4 +1,4 @@
-SET CURRENT_DIR=C:\k4m\DxTcontrolWorkspace\DX-TcontrolAgent\build\DX-TcontrolAgent
+SET CURRENT_DIR=C:\k4m\DxTcontrolWorkspace\DX-TControl\DX-TcontrolAgent\build\DX-TcontrolAgent
 SET MAIN_CLASS=com.k4m.dx.tcontrol.DaemonStart
 SET JAVA_CLASSPATH="%JAVA_HOME%/jre/lib/tools.jar;%CURRENT_DIR%/classes;%CURRENT_DIR%/lib/;%CURRENT_DIR%/lib/*"
 

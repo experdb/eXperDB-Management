@@ -74,10 +74,15 @@ public class CmmnCodeDtlController {
     		pageVO.setLastIndex(paginationInfo.getLastRecordIndex());
     		pageVO.setRecordCountPerPage(paginationInfo.getRecordCountPerPage());		
     			
+    		System.out.println(pageVO.getGrp_cd());
+    		System.out.println(pageVO.getRecordCountPerPage());
+    		System.out.println(pageVO.getFirstIndex());
+    		
     		@SuppressWarnings("unchecked")
 			List<CmmnCodeVO> cmmnCodeList = cmmnCodeDtlService.cmmnCodeDtlList(pageVO, cmmnCodeVO);
 			model.addAttribute("resultList", cmmnCodeList);
 			model.addAttribute("grp_cd", grp_cd);
+			
 			
 			int totCnt = cmmnCodeDtlService.selectCmmnCodeDtlListTotCnt(pageVO);
 			paginationInfo.setTotalRecordCount(totCnt);

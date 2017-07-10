@@ -93,7 +93,6 @@ function fncSearchList(){
 </script>
 
 <body onLoad="fncChangeCondition();">
-	<div id="container">
 		<!-- contents -->
 		<div id="contents">
 			<div class="location">
@@ -191,6 +190,5 @@ function fncSearchList(){
 				</div>
 			</div>
 		</div>
-	</div>
 </body>
 </html>

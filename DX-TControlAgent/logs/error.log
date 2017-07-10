@@ -228,3 +228,4 @@
 2017-06-02 10:51:35|DXTcontrolSocketExecute java.net.SocketException: Connection reset by peer: socket write error
 2017-06-02 10:52:12|DXTcontrolSocketExecute java.lang.NullPointerException
 2017-06-02 14:51:35|DXTcontrolSocketExecute java.lang.NullPointerException
+2017-07-07 14:48:23|DXTcontrolSocketExecute java.lang.NullPointerException

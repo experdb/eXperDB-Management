@@ -46,6 +46,26 @@ public class ClientProtocolID {
 	public static final String AC_OPTION = "Option";
 	public static final String AC_COMMENT = "Comment";
 	
+	public static final String EXTNAME = "extname"; //extension 명
+	
 	public static final String ARR_AC_SEQ = "arrSeq";
+	
+	//감사로그 종류
+	public static final String SETTING_INFO = "setting_info";
+	public static final String AUDIT_USE_YN = "use_yn";
+	
+	public static final String AUDIT_LOG = "log";
+	public static final String AUDIT_LEVEL = "level";
+	public static final String AUDIT_CATALOG = "catalog";
+	public static final String AUDIT_PARAMETER = "parameter";
+	public static final String AUDIT_RELATION = "relation";
+	public static final String AUDIT_STATEMENT_ONCE = "statement_once";
+	public static final String AUDIT_ROLE = "role";
+	
+	//감사로그 조회조건
+	public static final String OBJECT_NAME = "object_name";
+	public static final String USER_NAME = "user_name";
+	public static final String START_DATE = "start_date";
+	public static final String END_DATE = "end_date";
 
 }

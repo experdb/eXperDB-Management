@@ -3,72 +3,30 @@
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form"%>
 <%@ taglib prefix="ui" uri="http://egovframework.gov/ctl/ui"%>
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags"%>
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<%
+	/**
+	* @Class Name : dumpRegReForm.jsp
+	* @Description : rman 백업 수정 화면
+	* @Modification Information
+	*
+	*   수정일         수정자                   수정내용
+	*  ------------    -----------    ---------------------------
+	*  2017.06.07     최초 생성
+	*
+	* author YoonJH
+	* since 2017.06.07
+	*
+	*/
+%>
+<!doctype html>
+<html lang="ko">
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-<title>Insert title here</title>
-<script src="/js/jquery/jquery-1.12.4.js" type="text/javascript"></script>
-<link type="text/css" rel="stylesheet" href="<c:url value='/css/egovframework/sample.css'/>" />
-</head>
-<style>
-li.total{
-   list-style-type: none;
-   float: left;
-   padding: 3px 0px 2px 0px;
-   text-align:left;
-   width: 100%;
-   font-family: "돋움";
-   font-size: 12px;
-   font-weight: bold;
-   color: #000000;
-}
-
-li.title{
-   list-style-type: none;
-   float: left;
-   padding: 3px 0px 2px 0px;
-   text-align:left;
-   width: 110px;
-   font-family: "돋움";
-   font-size: 12px;
-   color: #000000;
-   text-
-}
-
-li.content{
-   list-style-type: none;
-   float: left;
-   padding: 3px 0px 2px 0px;
-   text-align:left;
-   width: 520px;
-   font-family: "돋움";
-   font-size: 12px;
-   color: #000000;
-}
-
-li.title1{
-   list-style-type: none;
-   float: left;
-   padding: 3px 0px 2px 0px;
-   text-align:left;
-   width: 170px;
-   font-family: "돋움";
-   font-size: 12px;
-   color: #000000;
-}
-
-li.content1{
-   list-style-type: none;
-   float: left;
-   padding: 3px 0px 2px 0px;
-   text-align:left;
-   width: 125px;
-   font-family: "돋움";
-   font-size: 12px;
-   color: #000000;
-}
-</style>
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<title>eXperDB</title>
+<link rel="stylesheet" type="text/css" href="/css/common.css">
+<script type="text/javascript" src="/js/jquery-1.9.1.min.js"></script>
+<script type="text/javascript" src="/js/common.js"></script>
 <script type="text/javascript">
 // 저장후 작업ID
 var wrk_id = null;

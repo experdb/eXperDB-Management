@@ -77,7 +77,6 @@ function fnCheck(str){
 
 </script>
 <body>
-	<div id="container">
 		<!-- contents -->
 		<div id="contents">
 				<div class="location">
@@ -141,6 +140,5 @@ function fnCheck(str){
 			</div>
 			</div>
 		</div>
-	</div>
 </body>
 </html>

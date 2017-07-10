@@ -21,6 +21,7 @@ import org.springframework.web.servlet.ModelAndView;
 import com.k4m.dx.tcontrol.admin.dbserverManager.service.DbServerManagerService;
 import com.k4m.dx.tcontrol.admin.dbserverManager.service.DbServerVO;
 import com.k4m.dx.tcontrol.backup.service.DbVO;
+import com.k4m.dx.tcontrol.cmmn.SHA256;
 import com.k4m.dx.tcontrol.cmmn.client.ClientInfoCmmn;
 import com.k4m.dx.tcontrol.cmmn.client.ClientProtocolID;
 import com.k4m.dx.tcontrol.common.service.CmmnHistoryService;
@@ -209,14 +210,14 @@ public class DbServerManagerController {
 			System.out.println("패스워드 : " + dbServerVO.getSvr_spr_scm_pwd());
 			System.out.println("=====================");
 			
-			JSONObject serverObj = new JSONObject();
+			JSONObject serverObj = new JSONObject();			
 			
 			serverObj.put(ClientProtocolID.SERVER_NAME, dbServerVO.getDb_svr_nm());
 			serverObj.put(ClientProtocolID.SERVER_IP, dbServerVO.getIpadr());
 			serverObj.put(ClientProtocolID.SERVER_PORT, dbServerVO.getPortno());
 			serverObj.put(ClientProtocolID.DATABASE_NAME, dbServerVO.getDft_db_nm());
 			serverObj.put(ClientProtocolID.USER_ID, dbServerVO.getSvr_spr_usr_id());
-			serverObj.put(ClientProtocolID.USER_PWD, dbServerVO.getSvr_spr_scm_pwd());
+			serverObj.put(ClientProtocolID.USER_PWD, SHA256.SHA256(dbServerVO.getSvr_spr_scm_pwd()));
 			
 			ClientInfoCmmn conn  = new ClientInfoCmmn();
 			
@@ -249,6 +250,10 @@ public class DbServerManagerController {
 			
 			dbServerVO.setFrst_regr_id(id);
 			dbServerVO.setLst_mdfr_id(id);
+			
+			//비밀번호 암호화
+			String pw = SHA256.SHA256(dbServerVO.getSvr_spr_scm_pwd());
+			dbServerVO.setSvr_spr_scm_pwd(pw);
 			
 			System.out.println("=======parameter=======");
 			System.out.println("서버명 : " + dbServerVO.getDb_svr_nm());
@@ -308,6 +313,10 @@ public class DbServerManagerController {
 			String usr_id = (String) request.getSession().getAttribute("usr_id");
 			dbServerVO.setLst_mdfr_id(usr_id);
 
+			//비밀번호 암호화
+			String pw = SHA256.SHA256(dbServerVO.getSvr_spr_scm_pwd());
+			dbServerVO.setSvr_spr_scm_pwd(pw);
+			
 			dbServerManagerService.updateDbServer(dbServerVO);
 		} catch (Exception e) {
 			e.printStackTrace();
