@@ -3,7 +3,7 @@
 
 <mapper namespace="accessHistorySql">
 
-	<select id="selectAccessHistory" resultType="historyVO">
+	<select id="selectAccessHistory" resultType="historyVO" parameterType="hashmap" >
 		/**
 		* Query ID : selectAccessHistory
 		* Description : 접근내역 조회
@@ -40,7 +40,26 @@
 				AND I.USR_NM LIKE #{usr_nm}
 			</if>
 			ORDER BY EXEDTM DESC
+			LIMIT #{recordCountPerPage} OFFSET #{firstIndex}	
 			)A
+	</select>
+	
+	<select id="selectAccessHistoryTotCnt" parameterType="hashmap" resultType="int">
+    	/**
+	 	* Query ID : selectAccessHistoryTotCnt
+	 	* Description : selectAccessHistoryTotCnt TotCnt 조회
+	 	* Author : 김주영
+	 	**/
+		SELECT COUNT(*) totcnt
+		FROM T_SYSWRK_G G, T_SYSDTL_C C, T_USR_I I
+		WHERE G.EXE_DTL_CD =C.SYS_CD
+		AND G.USR_ID=I.USR_ID
+		<if test="lgi_dtm_start != null and lgi_dtm_start != '' ">
+				AND to_char(G.EXEDTM,'YYYY-MM-DD') between #{lgi_dtm_start} and #{lgi_dtm_end}
+		</if>
+		<if test="usr_nm != null and usr_nm != '' ">
+				AND I.USR_NM LIKE #{usr_nm}
+		</if>
 	</select>
 	
 	<insert id="insertHistory" parameterType="historyVO">
@@ -68,24 +87,12 @@
 		)
 	</insert>	
 	
-	<select id="selectAccessHistoryTotCnt" parameterType="searchVO" resultType="int">
-    	/**
-	 	* Query ID : selectAccessHistoryTotCnt
-	 	* Description : selectAccessHistoryTotCnt TotCnt 조회
-	 	* Author : 김주영
-	 	**/
-		SELECT COUNT(*) totcnt
-		FROM T_SYSWRK_G G, T_SYSDTL_C C, T_USR_I I
-		WHERE G.EXE_DTL_CD =C.SYS_CD
-		AND G.USR_ID=I.USR_ID
-	</select>
-	
-	<select id="selectAccessHistoryList" parameterType="searchVO" resultType="historyVO">
+	<select id="selectAccessHistoryExcel" resultType="historyVO" parameterType="hashmap" >
 		/**
-	 	* Query ID : selectAccessHistorys
-	 	* Description : 접근내역 조회
-	 	* Author : 김주영
-	 	**/
+		* Query ID : selectAccessHistoryExcel
+		* Description : 엑셀 접근내역 조회
+		* Author : 김주영
+		**/
 		SELECT
 		  (ROW_NUMBER() OVER()) AS ROWNUM
 		, (ROW_NUMBER() OVER()) AS IDX
@@ -110,8 +117,15 @@
 			FROM T_SYSWRK_G G, T_SYSDTL_C C, T_USR_I I
 			WHERE G.EXE_DTL_CD =C.SYS_CD
 			AND G.USR_ID=I.USR_ID
+			<if test="lgi_dtm_start != null and lgi_dtm_start != '' ">
+				AND to_char(G.EXEDTM,'YYYY-MM-DD') between #{lgi_dtm_start} and #{lgi_dtm_end}
+			</if>
+			<if test="usr_nm != null and usr_nm != '' ">
+				AND I.USR_NM LIKE #{usr_nm}
+			</if>
 			ORDER BY EXEDTM DESC
-			 LIMIT #{recordCountPerPage} OFFSET #{firstIndex}	
-		)A
-	 </select>
+			)A	
+	</select>
+	
+
 </mapper>

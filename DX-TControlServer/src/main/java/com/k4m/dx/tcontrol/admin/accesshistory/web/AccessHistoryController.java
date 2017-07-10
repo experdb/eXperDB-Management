@@ -57,34 +57,28 @@ public class AccessHistoryController {
 	 * @throws Exception
 	 */
 	@RequestMapping(value = "/accessHistory.do")
-	public ModelAndView accessHistory(@ModelAttribute("searchVO") PagingVO searchVO, @ModelAttribute("historyVO") HistoryVO historyVO, HttpServletRequest request, ModelMap model) {
+	public ModelAndView accessHistory(@ModelAttribute("pagingVO") PagingVO pagingVO,ModelMap model,@ModelAttribute("historyVO") HistoryVO historyVO, HttpServletRequest request) {
 		ModelAndView mv = new ModelAndView();
 		try {
 			// 화면접근 이력 남기기
 			CmmnUtils.saveHistory(request, historyVO);
 			historyVO.setExe_dtl_cd("DX-T0036");
 			accessHistoryService.insertHistory(historyVO);
-			
-			
+				
 			/** EgovPropertyService.sample */
-			searchVO.setPageUnit(propertiesService.getInt("pageUnit"));
-			searchVO.setPageSize(propertiesService.getInt("pageSize"));
+			pagingVO.setPageUnit(propertiesService.getInt("pageUnit"));
+			pagingVO.setPageSize(propertiesService.getInt("pageSize"));
 
 			/** pageing setting */
 			PaginationInfo paginationInfo = new PaginationInfo();
-			paginationInfo.setCurrentPageNo(searchVO.getPageIndex());
-			paginationInfo.setRecordCountPerPage(searchVO.getPageUnit());
-			paginationInfo.setPageSize(searchVO.getPageSize());
+			paginationInfo.setCurrentPageNo(pagingVO.getPageIndex());
+			paginationInfo.setRecordCountPerPage(pagingVO.getPageUnit());
+			paginationInfo.setPageSize(pagingVO.getPageSize());
 
-			searchVO.setFirstIndex(paginationInfo.getFirstRecordIndex());
-			searchVO.setLastIndex(paginationInfo.getLastRecordIndex());
-			searchVO.setRecordCountPerPage(paginationInfo.getRecordCountPerPage());
+			pagingVO.setFirstIndex(paginationInfo.getFirstRecordIndex());
+			pagingVO.setLastIndex(paginationInfo.getLastRecordIndex());
+			pagingVO.setRecordCountPerPage(paginationInfo.getRecordCountPerPage());
 			
-			List<UserVO> resultList = accessHistoryService.selectAccessHistoryList(searchVO);
-			model.addAttribute("resultList", resultList);
-
-			int totCnt = accessHistoryService.selectAccessHistoryTotCnt();
-			paginationInfo.setTotalRecordCount(totCnt);
 			model.addAttribute("paginationInfo", paginationInfo);
 			
 			mv.setViewName("admin/accessHistory/accessHistory");
@@ -103,29 +97,66 @@ public class AccessHistoryController {
 	 */
 	@RequestMapping(value = "/selectAccessHistory.do")
 	@ResponseBody
-	public List<UserVO> selectAccessHistory(@ModelAttribute("historyVO") HistoryVO historyVO, HttpServletRequest request) {
-		List<UserVO> resultSet = null;
+	public ModelAndView selectAccessHistory(@ModelAttribute("pagingVO") PagingVO pagingVO,ModelMap model,@ModelAttribute("historyVO") HistoryVO historyVO, HttpServletRequest request) {
+		ModelAndView mv = new ModelAndView();
 		try {		
-			// 화면접근이력 조회 이력 남기기
-			CmmnUtils.saveHistory(request, historyVO);
-			historyVO.setExe_dtl_cd("DX-T0036_02");
-			accessHistoryService.insertHistory(historyVO);
-			
+			String historyCheck = request.getParameter("historyCheck");
+			if(historyCheck.equals("historyCheck")){
+				// 화면접근이력 조회 이력 남기기
+				CmmnUtils.saveHistory(request, historyVO);
+				historyVO.setExe_dtl_cd("DX-T0036_02");
+				accessHistoryService.insertHistory(historyVO);
+			}
+					
 			Map<String, Object> param = new HashMap<String, Object>();
 
 			String lgi_dtm_start = request.getParameter("lgi_dtm_start");
 			String lgi_dtm_end = request.getParameter("lgi_dtm_end");
 			String usr_nm = request.getParameter("usr_nm");
-
+			if(usr_nm!=null){
+				model.addAttribute("usr_nm", usr_nm);
+				usr_nm="%"+usr_nm+"%";
+			}
+			
 			param.put("lgi_dtm_start", lgi_dtm_start);
 			param.put("lgi_dtm_end", lgi_dtm_end);
 			param.put("usr_nm", usr_nm);
 
-			resultSet = accessHistoryService.selectAccessHistory(param);
+			System.out.println("********PARAMETER*******");
+			System.out.println("사용자 : "+ usr_nm);
+			System.out.println("시작날짜 : "+ lgi_dtm_start);
+			System.out.println("종료날짜 : " +lgi_dtm_end);
+			System.out.println("*************************");
+			
+			/** EgovPropertyService.sample */
+			pagingVO.setPageUnit(propertiesService.getInt("pageUnit"));
+			pagingVO.setPageSize(propertiesService.getInt("pageSize"));
+
+			/** pageing setting */
+			PaginationInfo paginationInfo = new PaginationInfo();
+			paginationInfo.setCurrentPageNo(pagingVO.getPageIndex());
+			paginationInfo.setRecordCountPerPage(pagingVO.getPageUnit());
+			paginationInfo.setPageSize(pagingVO.getPageSize());
+
+			pagingVO.setFirstIndex(paginationInfo.getFirstRecordIndex());
+			pagingVO.setLastIndex(paginationInfo.getLastRecordIndex());
+			pagingVO.setRecordCountPerPage(paginationInfo.getRecordCountPerPage());
+	
+			List<UserVO> result = accessHistoryService.selectAccessHistory(pagingVO,param);
+
+			int totCnt = accessHistoryService.selectAccessHistoryTotCnt(param);
+			paginationInfo.setTotalRecordCount(totCnt);
+			
+			model.addAttribute("lgi_dtm_start", lgi_dtm_start);
+			model.addAttribute("lgi_dtm_end", lgi_dtm_end);
+			model.addAttribute("paginationInfo", paginationInfo);
+			model.addAttribute("result", result);
+					
+			mv.setViewName("admin/accessHistory/accessHistory");
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		return resultSet;
+		return mv;
 	}
 
 	
@@ -147,13 +178,19 @@ public class AccessHistoryController {
 			
 			String lgi_dtm_start = request.getParameter("lgi_dtm_start");
 			String lgi_dtm_end = request.getParameter("lgi_dtm_end");
-			String usr_nm = request.getParameter("usr_nm");
-
+			String usr_nm = request.getParameter("user_nm");
+			
+			System.out.println("********PARAMETER*******");
+			System.out.println("사용자 : "+ usr_nm);
+			System.out.println("시작날짜 : "+ lgi_dtm_start);
+			System.out.println("종료날짜 : " +lgi_dtm_end);
+			System.out.println("*************************");
+			
 			param.put("lgi_dtm_start", lgi_dtm_start);
 			param.put("lgi_dtm_end", lgi_dtm_end);
 			param.put("usr_nm", usr_nm);
 
-			resultSet = accessHistoryService.selectAccessHistory(param);
+			resultSet = accessHistoryService.selectAccessHistoryExcel(param);
 			
 			Map<String, Object> map = new HashMap<String, Object>();
 			map.put("category", resultSet);

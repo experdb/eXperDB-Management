@@ -18,19 +18,25 @@ public class AccessHistoryServiceImpl implements AccessHistoryService{
 	@Resource(name = "accessHistoryDAO")
 	private AccessHistoryDAO accessHistoryDAO;
 
-	public List<UserVO> selectAccessHistory(Map<String, Object> param) throws Exception {
-		return accessHistoryDAO.selectAccessHistory(param);
+	public List<UserVO> selectAccessHistory(PagingVO searchVO, Map<String, Object> param) throws Exception {
+		return accessHistoryDAO.selectAccessHistory(searchVO,param);
 	}
-
+	
+	public int selectAccessHistoryTotCnt(Map<String, Object> param)  throws Exception {
+		return accessHistoryDAO.selectAccessHistoryTotCnt(param);
+	}
+	
 	public void insertHistory(HistoryVO historyVO) throws Exception {
 		accessHistoryDAO.insertHistory(historyVO);	
 	}
 
-	public List<UserVO> selectAccessHistoryList(PagingVO searchVO) throws Exception {
-		return accessHistoryDAO.selectAccessHistoryList(searchVO);
+	public List<UserVO> selectAccessHistoryExcel(Map<String, Object> param) throws Exception {
+		return accessHistoryDAO.selectAccessHistoryExcel(param);
 	}
 
-	public int selectAccessHistoryTotCnt() throws Exception {
-		return accessHistoryDAO.selectAccessHistoryTotCnt();
-	}
+
+
+
+
+
 }
