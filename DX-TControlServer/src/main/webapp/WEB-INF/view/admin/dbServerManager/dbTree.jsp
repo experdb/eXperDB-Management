@@ -169,8 +169,7 @@ function fn_regRe_popup(){
 function fn_insertDB(){
 	var db_svr_id = table_dbServer.row('.selected').data().db_svr_id;
 	var datas = table_db.rows('.selected').data();
-	
-	if (datas.length > 0) {
+
 		var rows = [];
     	for (var i = 0;i<datas.length;i++) {
     		rows.push(table_db.rows('.selected').data()[i]);
@@ -195,9 +194,7 @@ function fn_insertDB(){
     	}else{
     		return false;
     	}
-	}else{
-		alert("하나의 항목을 선택해주세요.");
-	}
+
 }
 
 
