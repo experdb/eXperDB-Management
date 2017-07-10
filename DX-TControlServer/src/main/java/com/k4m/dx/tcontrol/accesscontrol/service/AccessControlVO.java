@@ -7,7 +7,9 @@ public class AccessControlVO {
 	private int db_svr_id;//DB_서버_ID    
 	private int db_id;//DB_ID         
 	private String prms_ipadr;//허용_IP주소      
-	private String prms_usr_id;//허용_사용자_ID     
+	private String prms_usr_id;//허용_사용자_ID 
+	private int prms_seq;//허용순번
+	private String prms_set;//인증사용여부
 	private String ctf_mth_nm;//인증_방법_명      
 	private String ctf_tp_nm;//인증_유형_명       
 	private String opt_nm;//옵션_명          
@@ -59,6 +61,18 @@ public class AccessControlVO {
 	public void setPrms_usr_id(String prms_usr_id) {
 		this.prms_usr_id = prms_usr_id;
 	}
+	public int getPrms_seq() {
+		return prms_seq;
+	}
+	public void setPrms_seq(int prms_seq) {
+		this.prms_seq = prms_seq;
+	}
+	public String getPrms_set() {
+		return prms_set;
+	}
+	public void setPrms_set(String prms_set) {
+		this.prms_set = prms_set;
+	}
 	public String getCtf_mth_nm() {
 		return ctf_mth_nm;
 	}
@@ -107,6 +121,5 @@ public class AccessControlVO {
 	public void setLst_mdf_dtm(String lst_mdf_dtm) {
 		this.lst_mdf_dtm = lst_mdf_dtm;
 	}
-
     
 }
