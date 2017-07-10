@@ -1,6 +1,8 @@
 package com.k4m.dx.tcontrol.backup.service;
 
 public class WorkVO {
+	private int rownum;
+	private int idx;
 	private int wrk_id;
 	private int db_svr_id;
 	private int db_id;
@@ -14,6 +16,7 @@ public class WorkVO {
 	private Double cprt;
 	private String save_pth;
 	private String file_fmt_cd;
+	private String file_fmt_cd_nm;
 	private int file_stg_dcnt;
 	private String encd_mth_nm;
 	private String usr_role_nm;
@@ -27,6 +30,32 @@ public class WorkVO {
 	private String bck_bsn_dscd_nm;
 	private String bck_opt_cd_nm;
 
+	
+	
+	public int getRownum() {
+		return rownum;
+	}
+	public void setRownum(int rownum) {
+		this.rownum = rownum;
+	}
+	public int getIdx() {
+		return idx;
+	}
+	public void setIdx(int idx) {
+		this.idx = idx;
+	}
+	public String getFile_fmt_cd_nm() {
+		return file_fmt_cd_nm;
+	}
+	public void setFile_fmt_cd_nm(String file_fmt_cd_nm) {
+		this.file_fmt_cd_nm = file_fmt_cd_nm;
+	}
+	public String getFile_fmt_cd_nm() {
+		return file_fmt_cd_nm;
+	}
+	public void setFile_fmt_cd_nm(String file_fmt_cd_nm) {
+		this.file_fmt_cd_nm = file_fmt_cd_nm;
+	}
 	public String getBck_bsn_dscd_nm() {
 		return bck_bsn_dscd_nm;
 	}
