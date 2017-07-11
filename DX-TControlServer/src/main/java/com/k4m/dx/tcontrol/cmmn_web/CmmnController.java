@@ -114,7 +114,7 @@ public class CmmnController {
 	
 	/**
 	 * Tbale 리스트를 조회한다.
-	 * 
+	 * @param WorkVO
 	 * @return resultSet
 	 * @throws Exception
 	 */
@@ -122,11 +122,10 @@ public class CmmnController {
 	@RequestMapping(value = "/selectTableList.do")
 	@ResponseBody
 	public Map<String, Object> selectTableList (@ModelAttribute("workVO") WorkVO workVO, HttpServletRequest request) {
-		
 		Map<String, Object> result =new HashMap<String, Object>();
+
 		try {
 			DbServerVO dbServerVO = backupService.selectDbSvrNm(workVO);
-			
 			JSONObject serverObj = new JSONObject();
 			
 			serverObj.put(ClientProtocolID.SERVER_NAME, dbServerVO.getDb_svr_nm());
@@ -148,7 +147,7 @@ public class CmmnController {
 	
 	/**
 	 * Object 리스트를 조회한다.
-	 * 
+	 * @param WorkVO
 	 * @return resultSet
 	 * @throws Exception
 	 */
@@ -156,11 +155,10 @@ public class CmmnController {
 	@RequestMapping(value = "/getObjectList.do")
 	@ResponseBody
 	public Map<String, Object> getObjectList (@ModelAttribute("workVO") WorkVO workVO, HttpServletRequest request) {
-		
 		Map<String, Object> result =new HashMap<String, Object>();
+
 		try {
 			DbServerVO dbServerVO = backupService.selectDbSvrNm(workVO);
-			
 			JSONObject serverObj = new JSONObject();
 			
 			serverObj.put(ClientProtocolID.SERVER_NAME, dbServerVO.getDb_svr_nm());

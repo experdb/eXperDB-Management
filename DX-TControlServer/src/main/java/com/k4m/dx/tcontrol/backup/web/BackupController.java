@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
+import com.k4m.dx.tcontrol.admin.accesshistory.service.AccessHistoryService;
 import com.k4m.dx.tcontrol.admin.dbserverManager.service.DbServerVO;
 import com.k4m.dx.tcontrol.backup.service.BackupService;
 import com.k4m.dx.tcontrol.backup.service.DbVO;
@@ -27,10 +28,12 @@ import com.k4m.dx.tcontrol.backup.service.WorkObjVO;
 import com.k4m.dx.tcontrol.backup.service.WorkOptDetailVO;
 import com.k4m.dx.tcontrol.backup.service.WorkOptVO;
 import com.k4m.dx.tcontrol.backup.service.WorkVO;
+import com.k4m.dx.tcontrol.cmmn.CmmnUtils;
 import com.k4m.dx.tcontrol.cmmn.client.ClientInfoCmmn;
 import com.k4m.dx.tcontrol.cmmn.client.ClientProtocolID;
 import com.k4m.dx.tcontrol.common.service.CmmnCodeDtlService;
 import com.k4m.dx.tcontrol.common.service.CmmnCodeVO;
+import com.k4m.dx.tcontrol.common.service.HistoryVO;
 import com.k4m.dx.tcontrol.common.service.PageVO;
 
 @Controller
@@ -41,84 +44,127 @@ public class BackupController {
 	@Autowired
 	private CmmnCodeDtlService cmmnCodeDtlService;
 	
+	@Autowired
+	private AccessHistoryService accessHistoryService;
+	
 	/**
-	 * Rman백업 페이지를 반환한다.
-	 * @return ModelAndView mv
+	 * Work List View page
+	 * @param WorkVO
+	 * @return ModelAndView
 	 * @throws Exception
 	 */
-	@RequestMapping(value = "/backup/rmanList.do")
-	public ModelAndView rmanList(@ModelAttribute("workVo") WorkVO workVO, ModelMap model) {
+	@RequestMapping(value = "/backup/workList.do")
+	public ModelAndView workList(@ModelAttribute("workVo") WorkVO workVO) {
 		ModelAndView mv = new ModelAndView();
-
+		
 		try {
 			mv.addObject("dbList",backupService.selectDbList(workVO));
 		} catch (Exception e1) {
 			// TODO Auto-generated catch block
 			e1.printStackTrace();
 		}
-		
-		mv.addObject("db_svr_id",workVO.getDb_svr_id());
-		try {
-			mv.addObject("db_svr_nm", backupService.selectDbSvrNm(workVO).getDb_svr_nm());
-		} catch (Exception e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		mv.setViewName("backup/rmanList");
-		return mv;
-	}
-	
-	/**
-	 * Dump백업 페이지를 반환한다.
-	 * @return ModelAndView mv
-	 * @throws Exception
-	 */
-	@RequestMapping(value = "/backup/dumpList.do")
-	public ModelAndView dumpList(@ModelAttribute("workVo") WorkVO workVO, ModelMap model){
-		ModelAndView mv = new ModelAndView();
 
 		try {
-			mv.addObject("dbList",backupService.selectDbList(workVO));
-		} catch (Exception e1) {
-			// TODO Auto-generated catch block
-			e1.printStackTrace();
-		}
-		
-		try {
 			mv.addObject("db_svr_nm", backupService.selectDbSvrNm(workVO).getDb_svr_nm());
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+		
 		mv.addObject("db_svr_id",workVO.getDb_svr_id());
-		mv.setViewName("backup/dumpList");
+		mv.setViewName("backup/workList");
 		return mv;
 	}
+
 	
 	/**
-	 * Rman백업목록을 조회한다.
+	 * Work List
 	 * @param WorkVO
 	 * @return List<WorkVO>
-	 * @throws Exception
 	 */
-	@RequestMapping(value="/backup/workList.do")
+	@RequestMapping(value="/backup/getWorkList.do")
 	@ResponseBody
-	public List<WorkVO> rmanDataList(@ModelAttribute("workVo") WorkVO workVO) throws Exception{
+	public List<WorkVO> rmanDataList(@ModelAttribute("workVo") WorkVO workVO, HttpServletRequest request, @ModelAttribute("historyVO") HistoryVO historyVO){
 		List<WorkVO> resultSet = null;
-		resultSet = backupService.selectWorkList(workVO);
+		
+		// 사용자관리 이력 남기기
+		try {
+			CmmnUtils.saveHistory(request, historyVO);
+			if(workVO.getBck_bsn_dscd().equals("TC000201")){
+				historyVO.setExe_dtl_cd("DX-T0019");
+			}else{
+				historyVO.setExe_dtl_cd("DX-T0021");
+			}
+			accessHistoryService.insertHistory(historyVO);
+		} catch (Exception e2) {
+			// TODO Auto-generated catch block
+			e2.printStackTrace();
+		}
+		
+		try {
+			resultSet = backupService.selectWorkList(workVO);
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		
 		return resultSet;
 	}
 	
 	/**
-	 * 백업 Log목록을 조회한다.
+	 * Backup Log View page
 	 * @param WorkVO
-	 * @return List<WorkVO>
+	 * @return ModelAndView
+	 */
+	@RequestMapping(value = "/backup/workLogList.do")
+	public ModelAndView rmanLogList(@ModelAttribute("workVo") WorkVO workVO) {
+		ModelAndView mv = new ModelAndView();
+
+		// Get DB list
+		try {
+			mv.addObject("dbList",backupService.selectDbList(workVO));
+		} catch (Exception e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
+		
+		// Get DBServer Name
+		try {
+			mv.addObject("db_svr_nm", backupService.selectDbSvrNm(workVO).getDb_svr_nm());
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		mv.addObject("db_svr_id",workVO.getDb_svr_id());
+		mv.setViewName("backup/workLogList");
+		return mv;	
+	}
+	
+	/**
+	 * Backup Log List
+	 * @param WorkLogVO
+	 * @return List<WorkLogVO>
 	 * @throws Exception
 	 */
 	@RequestMapping(value="/backup/selectWorkLogList.do")
 	@ResponseBody
-	public List<WorkLogVO> selectWorkLogList(@ModelAttribute("workLogVo") WorkLogVO workLogVO) throws Exception{
+	public List<WorkLogVO> selectWorkLogList(@ModelAttribute("workLogVo") WorkLogVO workLogVO, HttpServletRequest request, @ModelAttribute("historyVO") HistoryVO historyVO) throws Exception{
+		
+		// 사용자관리 이력 남기기
+		try {
+			CmmnUtils.saveHistory(request, historyVO);
+			if(workLogVO.getBck_bsn_dscd().equals("TC000201")){
+				historyVO.setExe_dtl_cd("DX-T0025");
+			}else{
+				historyVO.setExe_dtl_cd("DX-T0026");
+			}
+			accessHistoryService.insertHistory(historyVO);
+		} catch (Exception e2) {
+			// TODO Auto-generated catch block
+			e2.printStackTrace();
+		}
+				
 		List<WorkLogVO> resultSet = null;
 		resultSet = backupService.selectWorkLogList(workLogVO);
 
@@ -126,82 +172,59 @@ public class BackupController {
 	}
 	
 	/**
-	 * Rman Log목록을 조회페이지를 반환한다.
-	 * @param String db_svr_id
-	 * @return mv
-	 * @throws Exception
-	 */
-	@RequestMapping(value = "/backup/rmanLogList.do")
-	public ModelAndView rmanLogList(@ModelAttribute("workVo") WorkVO workVO) {
-		ModelAndView mv = new ModelAndView();
-
-		mv.addObject("db_svr_id",workVO.getDb_svr_id());
-		try {
-
-			mv.addObject("db_svr_nm", backupService.selectDbSvrNm(workVO).getDb_svr_nm());
-		} catch (Exception e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		
-		mv.setViewName("backup/rmanLogList");
-		return mv;	
-	}
-	
-	/**
-	 * Dump Log목록을 조회페이지를 반환한다.
-	 * @param String db_svr_id
-	 * @return mv
-	 * @throws Exception
-	 */
-	@RequestMapping(value = "/backup/dumpLogList.do")
-	public ModelAndView dumpLogList(@ModelAttribute("workVo") WorkVO workVO) throws Exception{
-		ModelAndView mv = new ModelAndView();
-		List<DbVO> dbList = backupService.selectDbList(workVO);
-		
-		mv.addObject("dbList",dbList);
-		mv.addObject("db_svr_id",workVO.getDb_svr_id());
-		
-		try {
-			mv.addObject("db_svr_nm", backupService.selectDbSvrNm(workVO).getDb_svr_nm());
-		} catch (Exception e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		mv.setViewName("backup/dumpLogList");
-		return mv;	
-	}
-
-	
-	/**
-	 * Rman백업 등록팝업 페이지를 반환한다.
-	 * @return ModelAndView mv
-	 * @throws Exception
+	 * Rman Backup Registration View page
+	 * @param WorkVO
+	 * @return ModelAndView
 	 */
 	@SuppressWarnings("null")
 	@RequestMapping(value = "/popup/rmanRegForm.do")
-	public ModelAndView rmanRegForm(@ModelAttribute("workVo") WorkVO workVO, ModelMap model) {
+	public ModelAndView rmanRegForm(@ModelAttribute("workVo") WorkVO workVO, HttpServletRequest request, @ModelAttribute("historyVO") HistoryVO historyVO) {
 		ModelAndView mv = new ModelAndView();
 
+		// 사용자관리 이력 남기기
+		try {
+			CmmnUtils.saveHistory(request, historyVO);
+			historyVO.setExe_dtl_cd("DX-T0020");
+			accessHistoryService.insertHistory(historyVO);
+		} catch (Exception e2) {
+			// TODO Auto-generated catch block
+			e2.printStackTrace();
+		}
+				
 		mv.addObject("db_svr_id",workVO.getDb_svr_id());
 		mv.setViewName("popup/rmanRegForm");
-		return mv;	
+		return mv;
 	}
 	
 	/**
-	 * Dump백업 등록팝업 페이지를 반환한다.
-	 * @return ModelAndView mv
-	 * @throws Exception
+	 * Dump Backup Registration View page
+	 * @param WorkVO
+	 * @return ModelAndView
 	 */
 	@SuppressWarnings("unchecked")
 	@RequestMapping(value = "/popup/dumpRegForm.do")
-	public ModelAndView dumpRegForm(@ModelAttribute("workVo") WorkVO workVO, ModelMap model) throws Exception {
+	public ModelAndView dumpRegForm(@ModelAttribute("workVo") WorkVO workVO, HttpServletRequest request, @ModelAttribute("historyVO") HistoryVO historyVO) {
 		ModelAndView mv = new ModelAndView();
-		Map<String, Object> result =new HashMap<String, Object>();
 		
-		mv.addObject("dbList", backupService.selectDbList(workVO));
+		// 사용자관리 이력 남기기
+		try {
+			CmmnUtils.saveHistory(request, historyVO);
+			historyVO.setExe_dtl_cd("DX-T0022");
+			accessHistoryService.insertHistory(historyVO);
+		} catch (Exception e2) {
+			// TODO Auto-generated catch block
+			e2.printStackTrace();
+		}
 		
-		// incoding code List
+		// Get DB List
+		try {
+			mv.addObject("dbList", backupService.selectDbList(workVO));
+		} catch (Exception e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
+		
+		// Get Incoding Code List
 		try {
 			PageVO pageVO = new PageVO();
 			pageVO.setGrp_cd("TC0005");
@@ -212,9 +235,10 @@ public class BackupController {
 			e.printStackTrace();
 		}
 		
+		// Get DB ROLE List
+		Map<String, Object> result =new HashMap<String, Object>();
 		try {
 			DbServerVO dbServerVO = backupService.selectDbSvrNm(workVO);
-			
 			JSONObject serverObj = new JSONObject();
 			
 			serverObj.put(ClientProtocolID.SERVER_NAME, dbServerVO.getDb_svr_nm());
@@ -223,7 +247,6 @@ public class BackupController {
 			serverObj.put(ClientProtocolID.DATABASE_NAME, dbServerVO.getDft_db_nm());
 			serverObj.put(ClientProtocolID.USER_ID, dbServerVO.getSvr_spr_usr_id());
 			serverObj.put(ClientProtocolID.USER_PWD, dbServerVO.getSvr_spr_scm_pwd());
-			
 			ClientInfoCmmn cic = new ClientInfoCmmn();
 			result = cic.role_List(serverObj);
 
@@ -239,52 +262,79 @@ public class BackupController {
 	}
 	
 	/**
-	 * Rman Work을 등록한다.
+	 * Rman Backup Work Insert
+	 * @param WorkVO
 	 * @return String
-	 * @throws Exception
+	 * @throws IOException 
 	 */
 	@RequestMapping(value = "/popup/workRmanWrite.do")
-	public void workRmanWrite(@ModelAttribute("workVO") WorkVO workVO, HttpServletResponse response, HttpServletRequest request) throws Exception{
-		WorkVO resultSet = null;
-		HttpSession session = request.getSession();
-		String usr_id = (String) session.getAttribute("usr_id");
+	public void workRmanWrite(@ModelAttribute("workVO") WorkVO workVO, HttpServletResponse response, HttpServletRequest request) throws IOException {
+		String result = "S";
 
-		workVO.setFrst_regr_id(usr_id);
-		backupService.insertRmanWork(workVO);
-		resultSet = backupService.lastWorkId();
+		try {
+			HttpSession session = request.getSession();
+			String usr_id = (String) session.getAttribute("usr_id");
+			workVO.setFrst_regr_id(usr_id);
+			backupService.insertRmanWork(workVO);
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			result = "F";
+		}
 		
-		System.out.println("result:"+resultSet.getWrk_id());
-
-		response.getWriter().println(resultSet.getWrk_id());
+		response.getWriter().println(result);
 	}
 
 	/**
-	 * Dump Work을 등록한다.
+	 * Dump Backup Work Insert
+	 * @param WorkVO
 	 * @return String
-	 * @throws Exception
+	 * @throws IOException 
 	 */
 	@RequestMapping(value = "/popup/workDumpWrite.do")
-	public void workDumpWrite(@ModelAttribute("workVO") WorkVO workVO, HttpServletResponse response, HttpServletRequest request) throws Exception{
+	public void workDumpWrite(@ModelAttribute("workVO") WorkVO workVO, HttpServletResponse response, HttpServletRequest request) throws IOException{
 		WorkVO resultSet = null;
-		HttpSession session = request.getSession();
-		String usr_id = (String) session.getAttribute("usr_id");
+		String result = "S";
 
-		workVO.setFrst_regr_id(usr_id);
-		backupService.insertDumpWork(workVO);
-		resultSet = backupService.lastWorkId();
+		// Data Insert
+		try {
+			HttpSession session = request.getSession();
+			String usr_id = (String) session.getAttribute("usr_id");
+			workVO.setFrst_regr_id(usr_id);
+			backupService.insertDumpWork(workVO);
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			result = "F";
+		}
 		
-		System.out.println("result:"+resultSet.getWrk_id());
+		// Get Last wrk_id
+		if(result.equals("S")){
+			try {
+				resultSet = backupService.lastWorkId();
+			} catch (Exception e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+
+		// Return wrk_id=0 for Insert Fail
+		if(result.equals("F")) resultSet.setWrk_id(0);
 
 		response.getWriter().println(resultSet.getWrk_id());
 	}
 	
+	/**
+	 * Backup Work Option insert
+	 * @param WorkOptVO
+	 * @return
+	 */
 	@RequestMapping(value = "/popup/workOptWrite.do")
-	public void workOptWrite(@ModelAttribute("WorkOptVO") WorkOptVO workOptVO, HttpServletResponse response, HttpServletRequest request){
+	public void workOptWrite(@ModelAttribute("WorkOptVO") WorkOptVO workOptVO, HttpServletRequest request){
 		HttpSession session = request.getSession();
 		String usr_id = (String) session.getAttribute("usr_id");
-		
+		workOptVO.setFrst_regr_id(usr_id);		
 		try{
-			workOptVO.setFrst_regr_id(usr_id);
 			backupService.insertWorkOpt(workOptVO);
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -292,19 +342,35 @@ public class BackupController {
 	}
 
 	/**
-	 * Rman백업 수정팝업 페이지를 반환한다.
-	 * @return ModelAndView mv
-	 * @throws Exception
+	 * Rman Backup Reregistration View page
+	 * @param WorkVO
+	 * @return ModelAndView
 	 */
 	@SuppressWarnings("null")
 	@RequestMapping(value = "/popup/rmanRegReForm.do")
-	public ModelAndView rmanRegReForm(@ModelAttribute("workVo") WorkVO workVO, ModelMap model) throws Exception  {
+	public ModelAndView rmanRegReForm(@ModelAttribute("workVo") WorkVO workVO, HttpServletRequest request, @ModelAttribute("historyVO") HistoryVO historyVO)  {
 		ModelAndView mv = new ModelAndView();
 
-		workVO.setBck_bsn_dscd("TC000201");
-		model.addAttribute("workInfo", backupService.selectWorkList(workVO));
+		// 사용자관리 이력 남기기
+		try {
+			CmmnUtils.saveHistory(request, historyVO);
+			historyVO.setExe_dtl_cd("DX-T0020_01");
+			accessHistoryService.insertHistory(historyVO);
+		} catch (Exception e2) {
+			// TODO Auto-generated catch block
+			e2.printStackTrace();
+		}
+		
+		// Get Rman Backup Information
+		try {
+			workVO.setBck_bsn_dscd("TC000201");
+			mv.addObject("workInfo", backupService.selectWorkList(workVO));
+		} catch (Exception e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
 
-		// incoding code List
+		// Get Incoding Code List
 		try {
 			PageVO pageVO = new PageVO();
 			pageVO.setGrp_cd("TC0005");
@@ -324,14 +390,25 @@ public class BackupController {
 	
 	/**
 	 * Dump백업 수정팝업 페이지를 반환한다.
-	 * @return ModelAndView mv
-	 * @throws Exception
+	 * @param WorkVO
+	 * @return ModelAndView
 	 */
 	@SuppressWarnings({ "null", "unchecked" })
 	@RequestMapping(value = "/popup/dumpRegReForm.do")
-	public ModelAndView dumpRegReForm(@ModelAttribute("workVo") WorkVO workVO, ModelMap model) {
+	public ModelAndView dumpRegReForm(@ModelAttribute("workVo") WorkVO workVO, HttpServletRequest request, @ModelAttribute("historyVO") HistoryVO historyVO) {
 		ModelAndView mv = new ModelAndView();
 
+		// 사용자관리 이력 남기기
+		try {
+			CmmnUtils.saveHistory(request, historyVO);
+			historyVO.setExe_dtl_cd("DX-T0022_01");
+			accessHistoryService.insertHistory(historyVO);
+		} catch (Exception e2) {
+			// TODO Auto-generated catch block
+			e2.printStackTrace();
+		}
+		
+		// Get DB List
 		try {
 			mv.addObject("dbList", backupService.selectDbList(workVO));
 		} catch (Exception e1) {
@@ -342,7 +419,7 @@ public class BackupController {
 		// Work info
 		workVO.setBck_bsn_dscd("TC000202");
 		try {
-			model.addAttribute("workInfo", backupService.selectWorkList(workVO));
+			mv.addObject("workInfo", backupService.selectWorkList(workVO));
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -350,21 +427,21 @@ public class BackupController {
 		
 		// Work Option List
 		try {
-			model.addAttribute("workOptInfo", backupService.selectWorkOptList(workVO));
+			mv.addObject("workOptInfo", backupService.selectWorkOptList(workVO));
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		
-		// Work Obj List
+		// Work Object List
 		try {
-			model.addAttribute("workObjList", backupService.selectWorkObj(workVO));
+			mv.addObject("workObjList", backupService.selectWorkObj(workVO));
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		
-		// incoding code List
+		// Get Incoding code List
 		try {
 			PageVO pageVO = new PageVO();
 			pageVO.setGrp_cd("TC0005");
@@ -378,7 +455,6 @@ public class BackupController {
 		// Server Role List
 		try {
 			DbServerVO dbServerVO = backupService.selectDbSvrNm(workVO);
-			
 			JSONObject serverObj = new JSONObject();
 			
 			serverObj.put(ClientProtocolID.SERVER_NAME, dbServerVO.getDb_svr_nm());
@@ -397,28 +473,25 @@ public class BackupController {
 
 		mv.addObject("db_svr_id",workVO.getDb_svr_id());
 		mv.addObject("wrk_id",workVO.getWrk_id());
-		
 		mv.setViewName("popup/dumpRegReForm");
 		return mv;	
 	}
 	
 	/**
-	 * Rman Work을 수정등록한다.
-	 * @return 
+	 * Rman Backup Work Update
+	 * @param WorkVO
+	 * @return String
 	 * @throws IOException 
-	 * @throws Exception
 	 */
 	@RequestMapping(value = "/popup/workRmanReWrite.do")
 	public void workRmanReWrite(@ModelAttribute("workVO") WorkVO workVO, HttpServletResponse response, HttpServletRequest request) throws IOException{
-		HttpSession session = request.getSession();
-		String usr_id = (String) session.getAttribute("usr_id");
-		
-		String result = "F";
+		String result = "S";
 
-		workVO.setLst_mdfr_id(usr_id);
 		try {
+			HttpSession session = request.getSession();
+			String usr_id = (String) session.getAttribute("usr_id");
+			workVO.setLst_mdfr_id(usr_id);
 			backupService.updateRmanWork(workVO);
-			result = "S";
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -429,20 +502,19 @@ public class BackupController {
 	}
 	
 	/**
-	 * Dump Work을 수정등록한다.
-	 * @return 
+	 * Dump Backup Work Update
+	 * @param WorkVO
+	 * @return String
 	 * @throws IOException 
-	 * @throws Exception
 	 */
 	@RequestMapping(value = "/popup/workDumpReWrite.do")
 	public void workDumpReWrite(@ModelAttribute("workVO") WorkVO workVO, HttpServletResponse response, HttpServletRequest request) throws IOException{
-		HttpSession session = request.getSession();
-		String usr_id = (String) session.getAttribute("usr_id");
-		
 		String result = "F";
 
-		workVO.setLst_mdfr_id(usr_id);
 		try {
+			HttpSession session = request.getSession();
+			String usr_id = (String) session.getAttribute("usr_id");
+			workVO.setLst_mdfr_id(usr_id);
 			backupService.updateDumpWork(workVO);
 			result = "S";
 		} catch (Exception e) {
@@ -451,7 +523,47 @@ public class BackupController {
 			result = "F";
 		}
 		
-		// 옵션내역 삭제
+		// work option delete
+		try {
+			WorkOptVO workOptVO = new WorkOptVO();
+			workOptVO.setWrk_id(workVO.getWrk_id());
+			backupService.deleteWorkOpt(workOptVO);
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		// work object delete 
+		try {
+			backupService.deleteWorkObj(workVO);
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
+		response.getWriter().println(result);
+	}
+	
+	/**
+	 * Work Delete
+	 * @param WorkVO
+	 * @return String
+	 * @throws IOException 
+	 */
+	@RequestMapping(value = "/popup/workDelete.do")
+	public void workDelete(@ModelAttribute("workVO") WorkVO workVO, HttpServletResponse response, HttpServletRequest request, @ModelAttribute("historyVO") HistoryVO historyVO) throws IOException{
+		
+		// 사용자관리 이력 남기기
+		try {
+			CmmnUtils.saveHistory(request, historyVO);
+			historyVO.setExe_dtl_cd("DX-T0020_02");
+			accessHistoryService.insertHistory(historyVO);
+		} catch (Exception e2) {
+			// TODO Auto-generated catch block
+			e2.printStackTrace();
+		}
+
+		// work option delete
 		WorkOptVO workOptVO = new WorkOptVO();
 		workOptVO.setWrk_id(workVO.getWrk_id());
 		try {
@@ -461,48 +573,32 @@ public class BackupController {
 			e.printStackTrace();
 		}
 		
-		// Object내역 삭제
+		// work object delete
 		try {
 			backupService.deleteWorkObj(workVO);
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-
-		System.out.println("workDumpReWrite result:"+result);
-		response.getWriter().println(result);
-	}
-	
-	/**
-	 * Work을 삭제한다.
-	 * @return 
-	 * @throws Exception
-	 */
-	@RequestMapping(value = "/popup/workDelete.do")
-	public void workDelete(@ModelAttribute("workVO") WorkVO workVO, HttpServletResponse response) throws Exception{
 		
-		// 옵션내역 삭제
-		WorkOptVO workOptVO = new WorkOptVO();
-		workOptVO.setWrk_id(workVO.getWrk_id());
-		backupService.deleteWorkOpt(workOptVO);
-		
-		// obj내역 삭제
-		backupService.deleteWorkObj(workVO);
-		
-		// work삭제
-		backupService.deleteWork(workVO);
+		// work delete
+		try {
+			backupService.deleteWork(workVO);
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		
 		response.getWriter().println(workVO.getWrk_id());
 	}
 	
 	/**
-	 * Object를 등록한다.
+	 * Object insert
 	 * @param WorkObjVO
 	 * @return 
-	 * @throws Exception
 	 */
 	@RequestMapping(value = "/popup/workObjWrite.do")
-	public void workObjWrite(@ModelAttribute("WorkObjVO") WorkObjVO workObjVO, HttpServletResponse response, HttpServletRequest request){
+	public void workObjWrite(@ModelAttribute("WorkObjVO") WorkObjVO workObjVO, HttpServletRequest request){
 		HttpSession session = request.getSession();
 		String usr_id = (String) session.getAttribute("usr_id");
 
@@ -515,10 +611,9 @@ public class BackupController {
 	}
 	
 	/**
-	 * Object를 삭제한다.
-	 * @param WorkObjVO
+	 * Object delete
+	 * @param WorkVO
 	 * @return 
-	 * @throws Exception
 	 */
 	@RequestMapping(value = "/popup/workObjDelete.do")
 	public void workObjDelete(@ModelAttribute("WorkVO") WorkVO workVO, HttpServletResponse response){

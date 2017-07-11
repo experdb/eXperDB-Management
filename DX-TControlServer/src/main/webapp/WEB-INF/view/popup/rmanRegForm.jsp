@@ -31,7 +31,10 @@
 // 저장후 작업ID
 var wrk_id = null;
 
-function fn_insert_work(){
+/* ********************************************************
+ * Rman Backup Insert
+ ******************************************************** */
+ function fn_insert_work(){
 	var cps_yn = "N";
 	var log_file_bck_yn = "N";
 	
@@ -61,40 +64,48 @@ function fn_insert_work(){
 				alert("실패");
 			},
 			success : function(data) {
-				opener.fn_rman_find_list();
-				alert("등록이 완료되었습니다.");
-				self.close();
+				result(data);
 			}
-		});  
+		});
 	}
 }
 
+/* ********************************************************
+ * Result Process
+ ******************************************************** */
+function result(data){
+	if($.trim(data) == "S"){
+		opener.fn_rman_find_list();	
+		alert("등록이 완료되었습니다.");
+		self.close();
+	}else{
+		alert("동일Work명이 존재합니다. 다른 Work명을 입력해주세요.");
+		$("#wrk_nm").val("");
+		$("#wrk_nm").focus();
+	}
+}
+
+/* ********************************************************
+ * Validation Check
+ ******************************************************** */
 function valCheck(){
 	if($("#wrk_nm").val() == ""){
 		alert("Work명을 입력해 주세요.");
 		$("#wrk_nm").focus();
 		return false;
-	}
-	if($("#wrk_exp").val() == ""){
+	}else if($("#wrk_exp").val() == ""){
 		alert("Work설명을 입력해 주세요.");
 		$("#wrk_exp").focus();
 		return false;
-	}
-	if($("#bck_opt_cd").val() == ""){
+	}else if($("#bck_opt_cd").val() == ""){
 		alert("백업옵션을 선택해 주세요.");
 		$("#bck_opt_cd").focus();
 		return false;
+	}else{
+		return true;
 	}
-	
-	return true;
+
 }
-
-
-
-function fn_find_list(){
-	getDataList($("#wrk_nm").val(), $("#bck_opt_cd").val());
-}
-
 </script>
 </head>
 <body>
@@ -133,9 +144,9 @@ function fn_find_list(){
 							<span class="tit">백업옵션</span>
 							<span>
 								<select name="bck_opt_cd" id="bck_opt_cd" class="select">
-									<option value="TC000301">전체백업</option>
-									<option value="TC000302">증분백업</option>
-									<option value="TC000303">아카이브백업</option>
+									<option value="TC000301">FULL</option>
+									<option value="TC000302">incremental</option>
+									<option value="TC000303">archive</option>
 								</select>
 							</span>
 							<span class="chk">
@@ -196,8 +207,8 @@ function fn_find_list(){
 					</div>
 				</div>
 				<div class="btn_type_02">
-					<span class="btn btnC_01" onClick="fn_insert_work();"><button>등록</button></span>
-					<span class="btn" onclick="self.close();"><button>취소</button></span>
+					<span class="btn btnC_01" onClick="fn_insert_work();return false;"><button>등록</button></span>
+					<span class="btn" onclick="self.close();return false;"><button>취소</button></span>
 				</div>
 			</div>
 		</div><!-- //pop-container -->

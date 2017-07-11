@@ -8,22 +8,23 @@ public interface BackupService {
 
 	/**
 	 * 백업 목록 조회
-	 * @return
+	 * @param WorkVO
+	 * @return List<WorkVO>
 	 * @throws Exception
 	 */
 	public List<WorkVO> selectWorkList(WorkVO workVO) throws Exception;
 	
 	/**
 	 * 옵션별 상세내역 조회
-	 * @return
+	 * @param WorkOptDetailVO
+	 * @return List<WorkOptDetailVO>
 	 * @throws Exception
 	 */
 	public List<WorkOptDetailVO> selectOptDetailList(WorkOptDetailVO workOptDetailVO) throws Exception;
 	
 	/**
 	 * Rman백업내역 insert
-	 * @param WorkVO
-	 * @return String
+	 * @param WorkVOworkVO
 	 * @throws Exception
 	 */
 	public void insertRmanWork(WorkVO workVO) throws Exception;
@@ -31,7 +32,6 @@ public interface BackupService {
 	/**
 	 * Dump백업내역 insert
 	 * @param WorkVO
-	 * @return String
 	 * @throws Exception
 	 */
 	public void insertDumpWork(WorkVO workVO) throws Exception;
@@ -39,7 +39,6 @@ public interface BackupService {
 	/**
 	 * Rman백업수정 내역 update
 	 * @param WorkVO
-	 * @return String
 	 * @throws Exception
 	 */
 	public void updateRmanWork(WorkVO workVO) throws Exception;
@@ -47,7 +46,6 @@ public interface BackupService {
 	/**
 	 * Dump백업수정 내역 update
 	 * @param WorkVO
-	 * @return String
 	 * @throws Exception
 	 */
 	public void updateDumpWork(WorkVO workVO) throws Exception;
@@ -69,7 +67,8 @@ public interface BackupService {
 	
 	/**
 	 * Work별 등록 옵션 내역 조회
-	 * @return
+	 * @param WorkVO
+	 * @return List<WorkOptVO>
 	 * @throws Exception
 	 */
 	public List<WorkOptVO> selectWorkOptList(WorkVO workVO) throws Exception;
@@ -77,7 +76,6 @@ public interface BackupService {
 	/**
 	 * Work별 등록 옵션 delete
 	 * @param WorkOptVO
-	 * @return
 	 * @throws Exception
 	 */
 	public void deleteWorkOpt(WorkOptVO workOptVO) throws Exception;
@@ -85,7 +83,6 @@ public interface BackupService {
 	/**
 	 * Work delete
 	 * @param WorkVO
-	 * @return
 	 * @throws Exception
 	 */
 	public void deleteWork(WorkVO workVO) throws Exception;
@@ -123,7 +120,7 @@ public interface BackupService {
 
 	/**
 	 * Select Backup Object
-	 * @param WorkObjVO
+	 * @param WorkVO
 	 * @return WorkObjVO
 	 * @throws Exception
 	 */
@@ -131,7 +128,7 @@ public interface BackupService {
 	
 	/**
 	 * Delete Backup Object
-	 * @param WorkObjVO
+	 * @param WorkVO
 	 * @throws Exception
 	 */
 	public void deleteWorkObj(WorkVO workVO) throws Exception;

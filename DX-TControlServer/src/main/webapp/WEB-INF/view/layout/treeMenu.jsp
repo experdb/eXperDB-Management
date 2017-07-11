@@ -54,8 +54,8 @@
 				html1+='		<ul class="depth_2">';
 				html1+='			<li class="ico2_1"><a href="#n">백업관리</a>';
 				html1+='				<ul class="depth_3">';
-				html1+='					<li class="ico3_1"><a href=/backup/rmanList.do?db_svr_id='+item.db_svr_id+'>백업설정</a></li>';
-				html1+='					<li class="ico3_2"><a href=/backup/rmanLogList.do?db_svr_id='+item.db_svr_id+'>백업이력</a></li>';
+				html1+='					<li class="ico3_1"><a href=/backup/workList.do?db_svr_id='+item.db_svr_id+'>백업설정</a></li>';
+				html1+='					<li class="ico3_2"><a href=/backup/workLogList.do?db_svr_id='+item.db_svr_id+'>백업이력</a></li>';
 				html1+='				</ul>';
 				html1+='			</li>';
 				html1+='			<li class="ico2_2"><a href="#n">접근제어관리</a>';

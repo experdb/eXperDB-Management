@@ -31,6 +31,9 @@
 // 저장후 작업ID
 var wrk_id = null;
 
+/* ********************************************************
+ * DB Object initialization
+ ******************************************************** */
 var workObj = {"obj":[
 	<c:forEach var="result" items="${workObjList}" varStatus="status">
 	{"scm_nm":"${result.scm_nm}","obj_nm":"${result.obj_nm}"},
@@ -38,16 +41,20 @@ var workObj = {"obj":[
 	{"scm_nm":"","obj_nm":""}
 ]};
 
+/* ********************************************************
+ * Checkbox, Object List initialization
+ ******************************************************** */
 $(window.document).ready(
-		function() {
-			fn_get_object_list("${workInfo[0].db_id}","${workInfo[0].db_nm}");
-			checkSection();
-			checkObject('TC000701');
-			checkObject('TC000702');
-			changeFileFmtCd();
-			checkOid();
-	});
+	function() {
+		fn_get_object_list("${workInfo[0].db_id}","${workInfo[0].db_nm}");
+		checkSection();
+		changeFileFmtCd();
+		checkOid();
+});
 
+/* ********************************************************
+ * Dump Backup Update
+ ******************************************************** */
 function fn_update_work(){
 	if(valCheck()){
 		$.ajax({
@@ -82,11 +89,14 @@ function fn_update_work(){
 	}
 }
 
+/* ********************************************************
+ * Dump Backup Option Insert
+ ******************************************************** */
 function fn_insert_opt(){
 	var sn = 1;
 	$("input[name=opt]").each(function(){
 		if( $(this).not(":disabled") && $(this).is(":checked")){
-			fn_insert_optval($("#wrk_id").val(),sn,$(this).attr("grp_cd"),$(this).attr("opt_cd"),"Y");
+			fn_insert_opt_val($("#wrk_id").val(),sn,$(this).attr("grp_cd"),$(this).attr("opt_cd"),"Y");
 		}
 		sn++;
 	});
@@ -94,7 +104,10 @@ function fn_insert_opt(){
 	fn_insert_object();
 }
 
-function fn_insert_optval(wrk_id, opt_sn, grp_cd, opt_cd, bck_opt_val){
+/* ********************************************************
+ * Dump Backup Each Option Insert
+ ******************************************************** */
+function fn_insert_opt_val(wrk_id, opt_sn, grp_cd, opt_cd, bck_opt_val){
 	$.ajax({
 		async : false,
 		url : "/popup/workOptWrite.do",
@@ -106,14 +119,14 @@ function fn_insert_optval(wrk_id, opt_sn, grp_cd, opt_cd, bck_opt_val){
 	  		bck_opt_val : bck_opt_val
 	  	},
 		type : "post",
-		error : function(request, xhr, status, error) {
-			alert("백업옵션 저장실패");
-		},
-		success : function() {
-		}
+		error : function(request, xhr, status, error) {},
+		success : function() {}
 	});
 }
 
+/* ********************************************************
+ * Dump Backup Object Insert
+ ******************************************************** */
 function fn_insert_object(){
 	$("input[name=tree]").each(function(){
 		if( $(this).is(":checked")){
@@ -126,6 +139,9 @@ function fn_insert_object(){
 	self.close();
 }
 
+/* ********************************************************
+ * Dump Backup Each Object Insert
+ ******************************************************** */
 function fn_insert_object_val(wrk_id,otype,scm_nm,obj_nm){
 	var db_id = $("#db_id").val();
 
@@ -140,14 +156,14 @@ function fn_insert_object_val(wrk_id,otype,scm_nm,obj_nm){
 	  		obj_nm : obj_nm
 	  	},
 		type : "post",
-		error : function(request, xhr, status, error) {
-			alert("Obj 저장실패");
-		},
-		success : function() {
-		}
+		error : function(request, xhr, status, error) {},
+		success : function() {}
 	});
 }
 
+/* ********************************************************
+ * Validation Check
+ ******************************************************** */
 function valCheck(){
 	if($("#db_id option:selected" ).val() == ""){
 		alert("백업할 Database를 선택하세요.");
@@ -172,7 +188,9 @@ function valCheck(){
 	return true;
 }
 
-
+/* ********************************************************
+ * Get Selected Database`s Object List
+ ******************************************************** */
 function fn_get_object_list(in_db_id,in_db_nm){
 	var db_nm = in_db_nm;
 	var db_id = in_db_id;
@@ -195,7 +213,6 @@ function fn_get_object_list(in_db_id,in_db_nm){
 				alert("실패");
 			},
 			success : function(data) {
-				//alert(JSON.stringify(data));
 				fn_make_object_list(data);
 			}
 		});
@@ -204,6 +221,9 @@ function fn_get_object_list(in_db_id,in_db_nm){
 	}
 }
 
+/* ********************************************************
+ * Make Object Tree
+ ******************************************************** */
 function fn_make_object_list(data){
 	var html = "<ul>";
 	var schema = "";
@@ -243,13 +263,15 @@ function fn_make_object_list(data){
 	});
 	if(schemaCnt > 0) html += "</ul></li>";
 	html += "</ul>";
-	//alert(html);
-	
+
 	$(".tNav").html("");
 	$(".tNav").html(html);
 	$.getScript( "/js/common.js", function() {});
 }
 
+/* ********************************************************
+ * File Format에 따른 Checkbox disabled Check
+ ******************************************************** */
 function changeFileFmtCd(){
 	if($("#file_fmt_cd").val() == "TC000401"){
 		$("#cprt").removeAttr("disabled");
@@ -272,7 +294,9 @@ function changeFileFmtCd(){
 	}
 }
 
-/** sections 체크시 Object형태중 Only data, Only Schema를 비활성화 시킨다. **/
+/* ********************************************************
+ * Sections에 체크시 Object형태중 Only data, Only Schema를 비활성화 시킨다.
+ ******************************************************** */
 function checkSection(){
 	var check = false;
 	$("input[name=opt]").each(function(){
@@ -292,6 +316,9 @@ function checkSection(){
 	});
 }
 
+/* ********************************************************
+ * Object형태 중 Only data, Only Schema 중 1개만 체크가능
+ ******************************************************** */
 function checkObject(code){
 	var check1 = false;
 	var check2 = false;
@@ -313,6 +340,9 @@ function checkObject(code){
 	});
 }
 
+/* ********************************************************
+ * 쿼리에서 Use Column Inserts, Use Insert Commands선택시 "OIDS포함" disabled
+ ******************************************************** */
 function checkOid(){
 	var check = false;
 	$("input[name=opt]").each(function(){
@@ -646,8 +676,8 @@ function checkOid(){
 			</form>
 		</div>
 		<div class="btn_type_02">
-			<span class="btn btnC_01" onClick="fn_update_work();"><button>수정등록</button></span>
-			<a href="#n" class="btn" onclick="self.close();"><span>취소</span></a>
+			<span class="btn btnC_01" onClick="fn_update_work();return false;"><button>수정등록</button></span>
+			<a href="#n" class="btn" onclick="self.close();return false;"><span>취소</span></a>
 		</div>
 	</div>
 </div>

@@ -5,8 +5,8 @@
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags"%>
 <%
 	/**
-	* @Class Name : rmanLogList.jsp
-	* @Description : rman Log List 화면
+	* @Class Name : workLogList.jsp
+	* @Description : Log List 화면
 	* @Modification Information
 	*
 	*   수정일         수정자                   수정내용
@@ -23,6 +23,35 @@ var tableRman = null;
 var tableDump = null;
 var tab = "rman";
 
+/* ********************************************************
+ * Data initialization
+ ******************************************************** */
+$(window.document).ready(function() {
+	fn_rman_init();
+	fn_dump_init();
+	
+	var today = new Date();
+	var day_end = today.toJSON().slice(0,10);
+	
+	today.setDate(today.getDate() - 7);
+	var day_start = today.toJSON().slice(0,10); 
+
+	$("#wrk_strt_dtm").val(day_start);
+	$("#wrk_end_dtm").val(day_end);
+	
+	fn_get_rman_list();
+	//fn_get_dump_list();
+	
+	$( ".calendar" ).datepicker({
+		dateFormat: 'yy-mm-dd',
+		changeMonth : true,
+		changeYear : true
+ 	});
+});
+
+/* ********************************************************
+ * Rman Data Table initialization
+ ******************************************************** */
 function fn_rman_init(){
    	tableRman = $('#logRmanList').DataTable({	
 		scrollY: "250px",
@@ -39,6 +68,9 @@ function fn_rman_init(){
 	});
 }
 
+/* ********************************************************
+ * Dump Data Table initialization
+ ******************************************************** */
 function fn_dump_init(){
    	tableDump = $('#logDumpList').DataTable({	
 		scrollY: "250px",	
@@ -55,44 +87,20 @@ function fn_dump_init(){
 	});
 }
 
-$(window.document).ready(function() {
-	fn_rman_init();
-	fn_dump_init();
-	
-	var today = new Date();
-	var day_end = today.toJSON().slice(0,10);
-	
-	today.setDate(today.getDate() - 7);
-	var day_start = today.toJSON().slice(0,10); 
 
-	$("#wrk_strt_dtm").val(day_start);
-	$("#wrk_end_dtm").val(day_end);
-	
-	fn_rman_find_list();
-	
-	$( ".calendar" ).datepicker({
-		dateFormat: 'yy-mm-dd',
-		changeMonth : true,
-		changeYear : true
- 	});
-});
-
-function fn_rman_find_list(){
-	var bck_opt_cd = $("#bck_opt_cd").val();
-	var wrk_strt_dtm = $("#wrk_strt_dtm").val();
-	var wrk_end_dtm = $("#wrk_end_dtm").val();
-	var exe_rslt_cd = $("#exe_rslt_cd").val();
-	
-	//fn_init();
+/* ********************************************************
+ * Get Rman Log List
+ ******************************************************** */
+function fn_get_rman_list(){
 
 	$.ajax({
 		url : "/backup/selectWorkLogList.do",
 	  	data : {
 	  		bck_bsn_dscd : "TC000201",
-	  		bck_opt_cd : bck_opt_cd,
-	  		wrk_strt_dtm : wrk_strt_dtm,
-	  		wrk_end_dtm : wrk_end_dtm,
-	  		exe_rslt_cd : exe_rslt_cd
+	  		bck_opt_cd : $("#bck_opt_cd").val(),
+	  		wrk_strt_dtm : $("#wrk_strt_dtm").val(),
+	  		wrk_end_dtm : $("#wrk_end_dtm").val(),
+	  		exe_rslt_cd : $("#exe_rslt_cd").val()
 	  	},
 		dataType : "json",
 		type : "post",
@@ -106,23 +114,21 @@ function fn_rman_find_list(){
 	});
 }
 
-function fn_dump_find_list(){
+/* ********************************************************
+ * Get Dump Log List
+ ******************************************************** */
+function fn_get_dump_list(){
 	var db_id = $("#db_id").val();
 	if(db_id == "") db_id = 0;
-	var wrk_strt_dtm = $("#wrk_strt_dtm").val();
-	var wrk_end_dtm = $("#wrk_end_dtm").val();
-	var exe_rslt_cd = $("#exe_rslt_cd").val();
-	
-	//fn_init();
 
 	$.ajax({
 		url : "/backup/selectWorkLogList.do",
 	  	data : {
 	  		bck_bsn_dscd : "TC000202",
 	  		db_id : db_id,
-	  		wrk_strt_dtm : wrk_strt_dtm,
-	  		wrk_end_dtm : wrk_end_dtm,
-	  		exe_rslt_cd : exe_rslt_cd
+	  		wrk_strt_dtm : $("#wrk_strt_dtm").val(),
+	  		wrk_end_dtm : $("#wrk_end_dtm").val(),
+	  		exe_rslt_cd : $("#exe_rslt_cd").val()
 	  	},
 		dataType : "json",
 		type : "post",
@@ -136,8 +142,10 @@ function fn_dump_find_list(){
 	});
 }
 
+/* ********************************************************
+ * Click Search Button
+ ******************************************************** */
 $(function() {
-	//조회버튼 클릭시
 	$("#btnSelect").click(function() {
 		var wrk_strt_dtm = $("#wrk_strt_dtm").val();
 		var wrk_end_dtm = $("#wrk_end_dtm").val();
@@ -153,15 +161,17 @@ $(function() {
 		}
 
 		if(tab == "rman"){
-			fn_rman_find_list();
-			alert("rman");
+			fn_get_rman_list();
 		}else{
-			fn_dump_find_list();
-			alert("dump");
+			fn_get_dump_list();
 		}
 	});
 });
 
+/* ********************************************************
+ * Tab Click
+ ******************************************************** */
+var clickDump = false;
 function selectTab(intab){
 	tab = intab;
 	if(intab == "dump"){
@@ -171,7 +181,10 @@ function selectTab(intab){
 		$(".search_dump").show();
 		$("#logRmanListDiv").hide();
 		$("#logDumpListDiv").show();
-		fn_dump_find_list();
+		if(clickDump == false){
+			fn_get_dump_list();
+			clickDump = true;
+		}
 	}else{
 		$("#tab_rman").show();
 		$("#tab_dump").hide();
@@ -179,7 +192,6 @@ function selectTab(intab){
 		$(".search_dump").hide();
 		$("#logDumpListDiv").hide();
 		$("#logRmanListDiv").show();
-		fn_rman_find_list();
 	}
 }
 

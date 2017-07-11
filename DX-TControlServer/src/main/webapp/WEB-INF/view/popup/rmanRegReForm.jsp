@@ -3,6 +3,21 @@
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form"%>
 <%@ taglib prefix="ui" uri="http://egovframework.gov/ctl/ui"%>
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags"%>
+<%
+	/**
+	* @Class Name : rmanRegForm.jsp
+	* @Description : rman 백업등록 화면
+	* @Modification Information
+	*
+	*   수정일         수정자                   수정내용
+	*  ------------    -----------    ---------------------------
+	*  2017.06.07     최초 생성
+	*
+	* author YoonJH
+	* since 2017.06.07
+	*
+	*/
+%>
 <!doctype html>
 <html lang="ko">
 <head>
@@ -16,6 +31,9 @@
 // 저장후 작업ID
 var wrk_id = null;
 
+/* ********************************************************
+ * Rman Backup Update
+ ******************************************************** */
 function fn_update_work(){
 	var cps_yn = "N";
 	var log_file_bck_yn = "N";
@@ -46,10 +64,13 @@ function fn_update_work(){
 			success : function(data) {
 				result(data);
 			}
-		});  
+		});
 	}
 }
 
+/* ********************************************************
+ * Result Process
+ ******************************************************** */
 function result(data){
 	if($.trim(data) == "S"){
 		opener.fn_rman_find_list();	
@@ -57,36 +78,31 @@ function result(data){
 		self.close();
 	}else{
 		alert("동일Work명이 존재합니다. 다른 Work명을 입력해주세요.");
-		document.location.url = "rmanRegReForm.do?db_svr_id=${db_svr_id}&wrk_id=${wrk_id}";
+		$("#wrk_nm").val();
+		$("#wrk_nm").focus();
 	}
 }
 
+/* ********************************************************
+ * Validation Check
+ ******************************************************** */
 function valCheck(){
 	if($("#wrk_nm").val() == ""){
 		alert("Work명을 입력해 주세요.");
 		$("#wrk_nm").focus();
 		return false;
-	}
-	if($("#wrk_exp").val() == ""){
+	}else if($("#wrk_exp").val() == ""){
 		alert("Work설명을 입력해 주세요.");
 		$("#wrk_exp").focus();
 		return false;
-	}
-	if($("#bck_opt_cd").val() == ""){
+	}else if($("#bck_opt_cd").val() == ""){
 		alert("백업옵션을 선택해 주세요.");
 		$("#bck_opt_cd").focus();
 		return false;
+	}else{
+		return true;
 	}
-	
-	return true;
 }
-
-
-
-function fn_find_list(){
-	getDataList($("#wrk_nm").val(), $("#bck_opt_cd").val());
-}
-
 </script>
 </head>
 <body>
@@ -127,9 +143,9 @@ function fn_find_list(){
 							<span>
 								<select name="bck_opt_cd" id="bck_opt_cd" class="select">
 									<option value="">선택</option>
-									<option value="TC000301"<c:if test="${workInfo[0].bck_opt_cd == 'TC000301'}"> selected</c:if>>전체백업</option>
-									<option value="TC000302"<c:if test="${workInfo[0].bck_opt_cd == 'TC000302'}"> selected</c:if>>증분백업</option>
-									<option value="TC000303"<c:if test="${workInfo[0].bck_opt_cd == 'TC000303'}"> selected</c:if>>아카이브백업</option>
+									<option value="TC000301"<c:if test="${workInfo[0].bck_opt_cd == 'TC000301'}"> selected</c:if>>FULL</option>
+									<option value="TC000302"<c:if test="${workInfo[0].bck_opt_cd == 'TC000302'}"> selected</c:if>>incremental</option>
+									<option value="TC000303"<c:if test="${workInfo[0].bck_opt_cd == 'TC000303'}"> selected</c:if>>archive</option>
 								</select>
 							</span>
 							<span class="chk">
@@ -190,8 +206,8 @@ function fn_find_list(){
 					</div>
 				</div>
 				<div class="btn_type_02">
-					<span class="btn btnC_01" onClick="fn_update_work();"><button>등록</button></span>
-					<span class="btn" onclick="self.close();"><button>취소</button></span>
+					<span class="btn btnC_01" onClick="fn_update_work();return false;"><button>등록</button></span>
+					<span class="btn" onclick="self.close();return false;"><button>취소</button></span>
 				</div>
 			</div>
 		</div><!-- //pop-container -->

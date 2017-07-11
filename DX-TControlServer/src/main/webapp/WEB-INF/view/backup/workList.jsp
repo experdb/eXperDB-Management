@@ -3,8 +3,8 @@
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags"%>
 <%
 	/**
-	* @Class Name : rmanList.jsp
-	* @Description : 백업 목록 화면
+	* @Class Name : workList.jsp
+	* @Description : 백업 목록
 	* @Modification Information
 	*
 	*   수정일         수정자                   수정내용
@@ -17,21 +17,34 @@
 	*/
 %>
 <script type="text/javascript">
+/* ********************************************************
+ * Data initialization
+ ******************************************************** */
 $(window.document).ready(
 	function() {
-		getRmanDataList(); 
+		getRmanDataList();
+		getDumpDataList();
 });
 
+/* ********************************************************
+ * Rman Backup Find Button Click
+ ******************************************************** */
 function fn_rman_find_list(){
 	getRmanDataList($("#wrk_nm").val(), $("#bck_opt_cd").val());
 }
 
+/* ********************************************************
+ * Dump Backup Find Button Click
+ ******************************************************** */
 function fn_dump_find_list(){
 	getDumpDataList($("#wrk_nm").val(), $("#db_id").val());
 }
 
+/* ********************************************************
+ * Rman Backup Regist Window Open
+ ******************************************************** */
 function fn_rman_reg_popup(){
-	var popUrl = "/popup/rmanRegForm.do?db_svr_id=${db_svr_id}"; // 서버 url 팝업경로
+	var popUrl = "/popup/rmanRegForm.do?db_svr_id=${db_svr_id}";
 	var width = 954;
 	var height = 585;
 	var left = (window.screen.width / 2) - (width / 2);
@@ -42,8 +55,11 @@ function fn_rman_reg_popup(){
 	winPop.focus();
 }
 
+/* ********************************************************
+ * Rman Backup Reregist Window Open
+ ******************************************************** */
 function fn_rman_reform_popup(wrk_id){
-	var popUrl = "/popup/rmanRegReForm.do?db_svr_id=${db_svr_id}&wrk_id="+wrk_id; // 서버 url 팝업경로
+	var popUrl = "/popup/rmanRegReForm.do?db_svr_id=${db_svr_id}&wrk_id="+wrk_id;
 	var width = 954;
 	var height = 585;
 	var left = (window.screen.width / 2) - (width / 2);
@@ -54,8 +70,11 @@ function fn_rman_reform_popup(wrk_id){
 	winPop.focus();
 }
 
+/* ********************************************************
+ * Dump Backup Regist Window Open
+ ******************************************************** */
 function fn_dump_reg_popup(){
-	var popUrl = "/popup/dumpRegForm.do?db_svr_id=${db_svr_id}"; // 서버 url 팝업경로
+	var popUrl = "/popup/dumpRegForm.do?db_svr_id=${db_svr_id}";
 	var width = 954;
 	var height = 810;
 	var left = (window.screen.width / 2) - (width / 2);
@@ -66,8 +85,11 @@ function fn_dump_reg_popup(){
 	winPop.focus();
 }
 
+/* ********************************************************
+ * Dump Backup Reregist Window Open
+ ******************************************************** */
 function fn_dump_reform_popup(wrk_id){
-	var popUrl = "/popup/dumpRegReForm.do?db_svr_id=${db_svr_id}&wrk_id="+wrk_id; // 서버 url 팝업경로
+	var popUrl = "/popup/dumpRegReForm.do?db_svr_id=${db_svr_id}&wrk_id="+wrk_id;
 	var width = 954;
 	var height = 810;
 	var left = (window.screen.width / 2) - (width / 2);
@@ -78,9 +100,12 @@ function fn_dump_reform_popup(wrk_id){
 	winPop.focus();
 }
 
+/* ********************************************************
+ * Rman Backup Data Fetch List
+ ******************************************************** */
 function getRmanDataList(wrk_nm, bck_opt_cd){
 	$.ajax({
-		url : "/backup/workList.do",
+		url : "/backup/getWorkList.do",
 	  	data : {
 	  		db_svr_id : '<c:out value="${db_svr_id}"/>',
 	  		bck_opt_cd : bck_opt_cd,
@@ -98,10 +123,13 @@ function getRmanDataList(wrk_nm, bck_opt_cd){
 	});
 }
 
+/* ********************************************************
+ * Dump Backup Data Fetch List
+ ******************************************************** */
 function getDumpDataList(wrk_nm, db_id){
 	if(db_id == "") db_id = 0;
 	$.ajax({
-		url : "/backup/workList.do",
+		url : "/backup/getWorkList.do",
 	  	data : {
 	  		db_svr_id : '<c:out value="${db_svr_id}"/>',
 	  		db_id : db_id,
@@ -119,13 +147,14 @@ function getDumpDataList(wrk_nm, db_id){
 	});
 }
 
+/* ********************************************************
+ * Make Rman Data Table
+ ******************************************************** */
 function dataRmanList(data){
-	
 	var i = 1;
 	$("#rmanDataTable > tbody:last > tr").remove();
 	$(data).each(function (index, item) {	
 		var html = "";
-
 		html += "<tr>";
 		html += "<td align='center'><div class='inp_chk'><input type='checkBox' name='rmanWorkId' id='rmanWorkId"+i+"' value='"+item.wrk_id+"' onClick=\"fn_rman_check_close()\"><label for='rmanWorkId"+i+"'></label></div></td>";
 		html += "<td align='center'>"+i+"</td>";
@@ -144,16 +173,16 @@ function dataRmanList(data){
 	
 	if(data.length == 0){
 		var html = "";
-		
 		$("#rmanDataTable > tbody:last > tr:last").remove();
-		
 		html += "<tr><td colspan=10 align='center'>등록된 내역이 없습니다.</td></tr>";
 		$("#rmanDataTable > tbody:last").append(html);
 	}
 }
 
+/* ********************************************************
+ * Make Dump Data Table
+ ******************************************************** */
 function dataDumpList(data){
-	
 	var i = 1;
 	$("#dumpDataTable > tbody:last > tr").remove();
 	$(data).each(function (index, item) {	
@@ -173,28 +202,42 @@ function dataDumpList(data){
 		html += "<td align='center'>"+item.lst_mdf_dtm+"</td>";		
 		html += "</tr>";
 		$("#dumpDataTable > tbody:last").append(html);
-		
 		i++;
 	});
 	
 	if(data.length == 0){
 		var html = "";
-		
 		$("#dumpDataTable > tbody:last > tr:last").remove();
-		
 		html += "<tr><td colspan=12 align='center'>등록된 내역이 없습니다.</td></tr>";
 		$("#dumpDataTable > tbody:last").append(html);
 	}
 }
 
+/* ********************************************************
+ * Rman Data List Checkbox Check
+ ******************************************************** */
 function fn_rman_check_close(){
-	$("#rmanCheckAll").checked = false;
+	var checkAll = true;
+	$("input:checkbox[name='rmanWorkId']").each(function(){
+		if(!$(this).is(":checked")) checkAll = false;
+	});
+	$("#rmanCheckAll").attr("checked",checkAll);
 }
 
+/* ********************************************************
+ * Dump Data List Checkbox Check
+ ******************************************************** */
 function fn_dump_check_close(){
-	$("#dumpCheckAll").checked = false;
+	var checkAll = true;
+	$("input:checkbox[name='dumpWorkId']").each(function(){
+		if(!$(this).is(":checked")) checkAll = false;
+	});
+	$("#dumpCheckAll").attr("checked",checkAll);
 }
 
+/* ********************************************************
+ * Rman Data List Checkbox Check All
+ ******************************************************** */
 function fn_rman_check_all(){
 	if($("#rmanCheckAll").is(":checked")){
 		$("input:checkbox[name='rmanWorkId']").each(function(){
@@ -207,6 +250,9 @@ function fn_rman_check_all(){
 	}
 }
 
+/* ********************************************************
+ * Dump Data List Checkbox Check All
+ ******************************************************** */
 function fn_dump_check_all(){
 	if($("#dumpCheckAll").is(":checked")){
 		$("input:checkbox[name='dumpWorkId']").each(function(){
@@ -219,6 +265,9 @@ function fn_dump_check_all(){
 	}
 }
 
+/* ********************************************************
+ * Rman Data Delete
+ ******************************************************** */
 function fn_rman_work_delete(){
 	var checkCnt = 0;	
 	$("input:checkbox[name='rmanWorkId']").each(function(){
@@ -230,7 +279,6 @@ function fn_rman_work_delete(){
 	}else if(confirm("선택하신 작업을 삭제하시겠습니까?")){
 		$("input:checkbox[name='rmanWorkId']").each(function(){
 			if(this.checked){
-				//alert(this.value);
 				$.ajax({
 					url : "/popup/workDelete.do",
 				  	data : {
@@ -243,7 +291,6 @@ function fn_rman_work_delete(){
 						alert("실패")
 					},
 					success : function(data) {
-						
 					}
 				});
 			}
@@ -253,6 +300,9 @@ function fn_rman_work_delete(){
 	}
 }
 
+/* ********************************************************
+ * Dump Data Delete
+ ******************************************************** */
 function fn_dump_work_delete(){
 	var checkCnt = 0;	
 	$("input:checkbox[name='dumpWorkId']").each(function(){
@@ -264,7 +314,6 @@ function fn_dump_work_delete(){
 	}else if(confirm("선택하신 작업을 삭제하시겠습니까?")){
 		$("input:checkbox[name='dumpWorkId']").each(function(){
 			if(this.checked){
-				//alert(this.value);
 				$.ajax({
 					url : "/popup/workDelete.do",
 				  	data : {
@@ -277,7 +326,6 @@ function fn_dump_work_delete(){
 						alert("실패")
 					},
 					success : function(data) {
-						
 					}
 				});
 			}
@@ -287,6 +335,9 @@ function fn_dump_work_delete(){
 	}
 }
 
+/* ********************************************************
+ * Tab Click
+ ******************************************************** */
 function selectTab(tab){
 	if(tab == "dump"){
 		$("#tab1").hide();
@@ -297,7 +348,6 @@ function selectTab(tab){
 		$("#searchDump").show();
 		$("#btnRman").hide();
 		$("#btnDump").show();
-		fn_dump_find_list();
 	}else{
 		$("#tab1").show();
 		$("#tab2").hide();
@@ -307,7 +357,6 @@ function selectTab(tab){
 		$("#searchDump").hide();
 		$("#btnRman").show();
 		$("#btnDump").hide();
-		fn_rman_find_list();
 	}
 }
 </script>
@@ -346,7 +395,7 @@ function selectTab(tab){
 					<!-- <span class="btn"><button>수정</button></span> -->
 					<span class="btn" onclick="fn_dump_work_delete()"><button>삭제</button></span>
 				</div>
-				<form name="findList" id="findList" method="post" action="/backup/rmanList.do">
+				<form name="findList" id="findList" method="post">
 				<input type="hidden" name="db_svr_id" id="db_svr_id" value="${db_svr_id}"/>				
 				<div class="sch_form">
 					<table class="write" id="searchRman">
@@ -364,9 +413,9 @@ function selectTab(tab){
 								<th scope="row" class="t9">구분</th>
 								<td><select name="bck_opt_cd" id="bck_opt_cd" class="txt t3" style="width:150px;">
 										<option value="">선택</option>
-										<option value="TC000301">전체백업</option>
-										<option value="TC000302">증분백업</option>
-										<option value="TC000303">아카이브백업</option>
+										<option value="TC000301">FULL</option>
+										<option value="TC000302">incremental</option>
+										<option value="TC000303">archive</option>
 									</select>
 								</td>
 							</tr>
