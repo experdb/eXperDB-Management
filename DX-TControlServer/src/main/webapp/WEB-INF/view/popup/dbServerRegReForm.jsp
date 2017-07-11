@@ -38,7 +38,7 @@ $(window.document).ready(function() {
     $.ajax({
 		url : "/selectDbServerList.do",
 		data : {
-			db_svr_id : parseInt(db_svr_id),
+			db_svr_id : parseInt(db_svr_id)
 		},
 		dataType : "json",
 		type : "post",
@@ -70,7 +70,8 @@ function fn_dbServerConnTest(){
 			ipadr : $("#ipadr").val(),
 			portno : $("#portno").val(),
 			svr_spr_usr_id : $("#svr_spr_usr_id").val(),
-			svr_spr_scm_pwd : $("#svr_spr_scm_pwd").val()
+			svr_spr_scm_pwd : $("#svr_spr_scm_pwd").val(),
+			check : "u",
 		},
 		type : "post",
 		error : function(xhr, status, error) {
@@ -94,7 +95,7 @@ function fn_dbServerConnTest(){
 //DBserver 수정
 function fn_updateDbServer(){
 	
-	//if(connCheck == "success"){
+	if(connCheck == "success"){
 	
 	$.ajax({
 		url : "/updateDbServer.do",
@@ -113,14 +114,13 @@ function fn_updateDbServer(){
 		},
 		success : function(result) {
 			alert("수정 되었습니다.");
-			//opener.location.reload();
-			opener.fn_search();
+			opener.location.reload();	
 			self.close();			
 		}
 	}); 
-	//}else{
-	//	alert("연결 테스트 성공후 수정이 가능합니다.")
-	//}
+	}else{
+		alert("연결 테스트 성공후 수정이 가능합니다.")
+	}
 }
 
 

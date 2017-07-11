@@ -1,5 +1,6 @@
 package com.k4m.dx.tcontrol.admin.dbserverManager.web;
 
+import java.io.UnsupportedEncodingException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -21,6 +22,7 @@ import org.springframework.web.servlet.ModelAndView;
 import com.k4m.dx.tcontrol.admin.dbserverManager.service.DbServerManagerService;
 import com.k4m.dx.tcontrol.admin.dbserverManager.service.DbServerVO;
 import com.k4m.dx.tcontrol.backup.service.DbVO;
+import com.k4m.dx.tcontrol.cmmn.AES256;
 import com.k4m.dx.tcontrol.cmmn.SHA256;
 import com.k4m.dx.tcontrol.cmmn.client.ClientInfoCmmn;
 import com.k4m.dx.tcontrol.cmmn.client.ClientProtocolID;
@@ -50,6 +52,9 @@ public class DbServerManagerController {
 	
 	@Autowired
 	private CmmnHistoryService cmmnHistoryService;
+	
+	private String key = "aes256-dx-tcontrol-key";
+	
 	
 	/**
 	 * DB Tree 화면을 보여준다.
@@ -169,6 +174,7 @@ public class DbServerManagerController {
 	@RequestMapping(value = "/selectDbServerList.do")
 	@ResponseBody
 	public List<DbServerVO> selectDbServerList(@ModelAttribute("dbServerVO") DbServerVO dbServerVO) {
+		List<DbServerVO> result = null;
 		List<DbServerVO> resultSet = null;
 		try {
 			
@@ -180,7 +186,7 @@ public class DbServerManagerController {
 			System.out.println("=====================");
 			
 			resultSet = dbServerManagerService.selectDbServerList(dbServerVO);
-			
+
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -195,12 +201,12 @@ public class DbServerManagerController {
 	 * @throws Exception
 	 */
 	@RequestMapping(value="/dbServerConnTest.do")
-	public @ResponseBody Map<String, Object> dbServerConnTest(@ModelAttribute("dbServerVO") DbServerVO dbServerVO) {
+	public @ResponseBody Map<String, Object> dbServerConnTest(@ModelAttribute("dbServerVO") DbServerVO dbServerVO, HttpServletRequest request) {
 		
 		Map<String, Object> result =new HashMap<String, Object>();
 	
 		try {
-				
+			AES256 aes = new AES256(key);
 			System.out.println("=======parameter=======");
 			System.out.println("서버명 : " + dbServerVO.getDb_svr_nm());
 			System.out.println("Database : " + dbServerVO.getDft_db_nm());
@@ -216,8 +222,13 @@ public class DbServerManagerController {
 			serverObj.put(ClientProtocolID.SERVER_IP, dbServerVO.getIpadr());
 			serverObj.put(ClientProtocolID.SERVER_PORT, dbServerVO.getPortno());
 			serverObj.put(ClientProtocolID.DATABASE_NAME, dbServerVO.getDft_db_nm());
-			serverObj.put(ClientProtocolID.USER_ID, dbServerVO.getSvr_spr_usr_id());
-			serverObj.put(ClientProtocolID.USER_PWD, SHA256.SHA256(dbServerVO.getSvr_spr_scm_pwd()));
+			serverObj.put(ClientProtocolID.USER_ID, dbServerVO.getSvr_spr_usr_id());			
+			if(request.getParameter("check").equals("i")){
+				serverObj.put(ClientProtocolID.USER_PWD, dbServerVO.getSvr_spr_scm_pwd());
+			}else{
+				//암호 복호화
+				serverObj.put(ClientProtocolID.USER_PWD, aes.aesDecode(dbServerVO.getSvr_spr_scm_pwd()));
+			}
 			
 			ClientInfoCmmn conn  = new ClientInfoCmmn();
 			
@@ -243,6 +254,7 @@ public class DbServerManagerController {
 	 */
 	@RequestMapping(value = "/insertDbServer.do")
 	public @ResponseBody String insertDbServer(@ModelAttribute("dbServerVO") DbServerVO dbServerVO, @ModelAttribute("historyVO") HistoryVO historyVO,HttpServletRequest request) throws Exception {
+		AES256 aes = new AES256(key);
 		try {
 			
 			String id = (String) request.getSession().getAttribute("usr_id");
@@ -251,8 +263,10 @@ public class DbServerManagerController {
 			dbServerVO.setFrst_regr_id(id);
 			dbServerVO.setLst_mdfr_id(id);
 			
+			
 			//비밀번호 암호화
-			String pw = SHA256.SHA256(dbServerVO.getSvr_spr_scm_pwd());
+			//String pw = SHA256.SHA256(dbServerVO.getSvr_spr_scm_pwd());
+			String pw = aes.aesEncode(dbServerVO.getSvr_spr_scm_pwd());
 			dbServerVO.setSvr_spr_scm_pwd(pw);
 			
 			System.out.println("=======parameter=======");
@@ -309,12 +323,12 @@ public class DbServerManagerController {
 	@RequestMapping(value = "/updateDbServer.do")
 	public @ResponseBody boolean updateDbServer(@ModelAttribute("dbServerVO") DbServerVO dbServerVO, HttpServletRequest request){
 		try {
-			
+			AES256 aes = new AES256(key);
 			String usr_id = (String) request.getSession().getAttribute("usr_id");
 			dbServerVO.setLst_mdfr_id(usr_id);
 
 			//비밀번호 암호화
-			String pw = SHA256.SHA256(dbServerVO.getSvr_spr_scm_pwd());
+			String pw = aes.aesEncode(dbServerVO.getSvr_spr_scm_pwd());
 			dbServerVO.setSvr_spr_scm_pwd(pw);
 			
 			dbServerManagerService.updateDbServer(dbServerVO);

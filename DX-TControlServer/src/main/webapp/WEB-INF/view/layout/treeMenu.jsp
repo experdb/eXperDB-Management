@@ -60,7 +60,7 @@
 				html1+='			</li>';
 				html1+='			<li class="ico2_2"><a href="#n">접근제어관리</a>';
 				html1+='				<ul class="depth_3">';
-				html1+='					<li class="ico3_3"><a href=/accessControl.do?db_svr_id='+item.db_svr_id+'&&db_svr_nm='+item.db_svr_nm+'>서버접근제어</a></li>';
+				html1+='					<li class="ico3_3"><a href=/accessControl.do?db_svr_id='+item.db_svr_id+'>서버접근제어</a></li>';
 				html1+='					<li class="ico3_4"><a href=/audit/auditManagement.do?db_svr_id='+item.db_svr_id+'>감사설정</a></li>';
 				html1+='					<li class="ico3_5"><a href="#n">감사이력</a></li>';
 				html1+='				</ul>';
@@ -108,7 +108,7 @@
 
 <script type="text/javascript" src="/js/jquery.mCustomScrollbar.concat.min.js"></script><!-- mCustomScrollbar -->
 <script type="text/javascript" src="/js/common.js"></script>
-
+<script type="text/javascript" src="/js/common_lnb.js"></script>
 
 	<div id="lnb_menu">
 		<form name="treeView" id="treeView">

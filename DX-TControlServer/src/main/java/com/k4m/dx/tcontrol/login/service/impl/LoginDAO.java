@@ -22,7 +22,7 @@ public class LoginDAO extends EgovAbstractMapper{
 	@SuppressWarnings({ "unchecked", "deprecation" })
 	public List<UserVO> selectUserList(UserVO userVO) throws SQLException {
 		List<UserVO> result = null;
-		result = (List<UserVO>) list("cmmnListSQL.selectLoginUserList", userVO);	
+		result = (List<UserVO>) list("cmmnSql.selectLoginUserList", userVO);	
 		return result;
 	}
 

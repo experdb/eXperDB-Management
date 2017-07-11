@@ -134,7 +134,8 @@ function fn_dbServerConnTest(){
 			ipadr : $("#ipadr").val(),
 			portno : $("#portno").val(),
 			svr_spr_usr_id : $("#svr_spr_usr_id").val(),
-			svr_spr_scm_pwd : $("#svr_spr_scm_pwd").val()
+			svr_spr_scm_pwd : $("#svr_spr_scm_pwd").val(),
+			check : "i",
 		},
 		type : "post",
 		error : function(xhr, status, error) {

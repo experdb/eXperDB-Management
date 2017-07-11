@@ -140,8 +140,7 @@ function fn_workAdd(){
 					<col style="width:100px;" />
 					<col style="width:30px;" />
 					<col style="width:30px;" />
-					<col style="width:100px;" />
-					<col />
+					<col style="width:100px;" />			
 				</colgroup>
 				<tbody>
 					<tr>
