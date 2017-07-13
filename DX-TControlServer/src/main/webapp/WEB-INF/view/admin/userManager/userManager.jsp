@@ -84,61 +84,26 @@
 
 	});
 	
-		//조회버튼 클릭시
-		function fn_select(){
-			$.ajax({
-				url : "/selectUserManager.do",
-				data : {
-					type : $("#type").val(),
-					search : "%" + $("#search").val() + "%",
-					use_yn : $("#use_yn").val(),
-				},
-				dataType : "json",
-				type : "post",
-				error : function(xhr, status, error) {
-					alert("실패")
-				},
-				success : function(result) {
-					table.clear().draw();
-					table.rows.add(result).draw();
-				}
-			});
-		}
-
-		//삭제 버튼 클릭시
-		function fn_delete(){
-			var datas = table.rows('.selected').data();
-			if (datas.length <= 0) {
-				alert("하나의 항목을 선택해주세요.");
-				return false;
-			} else {
-				if (!confirm("삭제하시겠습니까?"))
-					return false;
-				var rowList = [];
-				for (var i = 0; i < datas.length; i++) {
-					rowList += datas[i].usr_id + ',';
-				}
-				$.ajax({
-					url : "/deleteUserManager.do",
-					data : {
-						usr_id : rowList,
-					},
-					dataType : "json",
-					type : "post",
-					error : function(xhr, status, error) {
-						alert("실패")
-					},
-					success : function(result) {
-						if (result) {
-							alert("삭제되었습니다.");
-							$("#btnSelect").click();
-						} else {
-							alert("처리 실패");
-						}
-					}
-				});
+	/*조회버튼 클릭시*/
+	function fn_select(){
+		$.ajax({
+			url : "/selectUserManager.do",
+			data : {
+				type : $("#type").val(),
+				search : "%" + $("#search").val() + "%",
+				use_yn : $("#use_yn").val(),
+			},
+			dataType : "json",
+			type : "post",
+			error : function(xhr, status, error) {
+				alert("실패")
+			},
+			success : function(result) {
+				table.clear().draw();
+				table.rows.add(result).draw();
 			}
-		}
+		});
+	}
 
 
 	/* 등록버튼 클릭시*/
@@ -171,7 +136,41 @@
 			return false;
 		}
 	}
-
+	
+	/*삭제 버튼 클릭시*/
+	function fn_delete(){
+		var datas = table.rows('.selected').data();
+		if (datas.length <= 0) {
+			alert("하나의 항목을 선택해주세요.");
+			return false;
+		} else {
+			if (!confirm("삭제하시겠습니까?"))
+				return false;
+			var rowList = [];
+			for (var i = 0; i < datas.length; i++) {
+				rowList += datas[i].usr_id + ',';
+			}
+			$.ajax({
+				url : "/deleteUserManager.do",
+				data : {
+					usr_id : rowList,
+				},
+				dataType : "json",
+				type : "post",
+				error : function(xhr, status, error) {
+					alert("실패")
+				},
+				success : function(result) {
+					if (result) {
+						alert("삭제되었습니다.");
+						fn_select();
+					} else {
+						alert("처리 실패");
+					}
+				}
+			});
+		}
+	}
 </script>
 <div id="contents">
 	<div class="location">
@@ -186,7 +185,7 @@
 		<div class="contents">
 			<div class="cmm_grp">
 				<div class="btn_type_01">
-					<span class="btn"><button id="select" onclick="fn_select()">조회</button></span> 
+					<span class="btn"><button onclick="fn_select()">조회</button></span> 
 					<span class="btn" onclick="fn_insert()"><button>등록</button></span>
 					<span class="btn" onclick="fn_update();"><button>수정</button></span>
 					<a href="#n" class="btn" id="btnDelete" onclick="fn_delete()"><span>삭제</span></a>
