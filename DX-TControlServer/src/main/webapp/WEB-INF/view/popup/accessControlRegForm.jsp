@@ -30,30 +30,38 @@
 <script>
 	/* Validation */
 	function fn_accessControl(){
-		var prms_ipadr = document.getElementById("prms_ipadr");
-		if (prms_ipadr.value == "") {
+		var prms_ipadr = document.getElementById("prms_ipadr");	
+		var prms_ipadr_val = prms_ipadr.value;
+		if (prms_ipadr_val == "") {
 			   alert("IP를 입력하여 주십시오.");
 			   prms_ipadr.focus();
 			   return false;
 		}
+		
+		//ABCDEF0123456789 
+		// '/'하나만 체크
+		var checkFlag = prms_ipadr_val.indexOf('/');
+		if(checkFlag<0){
+			alert("형식에 맞게 입력하여 주십시오.");
+			prms_ipadr.focus();
+			return false;
+		}	
 		return true;
 	}
 	
 	/* 등록 버튼 클릭시*/
 	function fn_insert() {
-		alert("등록");
 		if (!fn_accessControl()) return false;
 		$.ajax({
 			url : "/insertAccessControl.do",
 			data : {
-				db_svr_id : $("#db_svr_id").val(),
-				db_id : $("#db_id").val(),
+				db_svr_id : '${db_svr_id}',
+				db_id : '${db_id}',
 				prms_ipadr : $("#prms_ipadr").val(),
 				prms_usr_id : $("#prms_usr_id").val(),
 				ctf_mth_nm : $("#ctf_mth_nm").val(),
 				ctf_tp_nm : $("#ctf_tp_nm").val(),
 				opt_nm : $("#opt_nm").val(),
-				cmd_cnts : $("#cmd_cnts").val(),
 			},
 			type : "post",
 			error : function(request, status, error) {
@@ -62,19 +70,20 @@
 			success : function(result) {
 				alert("저장하였습니다.");
 				window.close();
+				opener.fn_select();
 			}
 		});
 	}
 
 	/* 수정 버튼 클릭시*/
 	function fn_update() {
-		alert("수정");
 		if (!fn_accessControl()) return false;
 		$.ajax({
 			url : "/updateAccessControl.do",
 			data : {
-				db_svr_id : $("#db_svr_id").val(),
-				db_id : $("#db_id").val(),
+				prms_seq : '${prms_seq}',
+				db_svr_id : '${db_svr_id}',
+				db_id : '${db_id}',
 				prms_ipadr : $("#prms_ipadr").val(),
 				prms_usr_id : $("#prms_usr_id").val(),
 				ctf_mth_nm : $("#ctf_mth_nm").val(),
@@ -89,6 +98,7 @@
 			success : function(result) {
 				alert("저장하였습니다.");
 				window.close();
+				opener.fn_select();
 			}
 		});
 	}
@@ -115,9 +125,9 @@
 				<tbody>
 					<tr>
 						<th scope="row" class="ico_t1">서버명</th>
-						<td><input type="text" class="txt bg1" name="" /></td>
+						<td><input type="text" class="txt bg1" value="${db_svr_nm}" readonly="readonly"/></td>
 						<th scope="row" class="ico_t1">Database</th>
-						<td><input type="text" class="txt bg1 t4" name="" /></td>
+						<td><input type="text" class="txt bg1 t4" value="${db_nm}" readonly="readonly"/></td>
 					</tr>
 				</tbody>
 			</table>
@@ -129,52 +139,60 @@
 					<c:if test="${act == 'u'}">접근제어 수정하기</c:if>
 				</caption>
 				<colgroup>
-					<col style="width:85px;" />
+					<col style="width:110px;" />
 					<col />
 					<col style="width:85px;" />
 					<col />
 				</colgroup>
 				<tbody>
 					<tr>
-						<th scope="row" class="ico_t1">IP</th>
-						<td><input type="text" class="txt" name="" /></td>
+						<th scope="row" class="ico_t1">IP<br>(127.0.0.1/32)</th>
+						<td><input type="text" class="txt" name="prms_ipadr" id="prms_ipadr" value="${prms_ipadr}"/></td>
 						<th scope="row" class="ico_t1">User</th>
-						<td><input type="text" class="txt t4" name="" /></td>
+						<td>
+									
+							<select id="prms_usr_id" name="prms_usr_id" class="select t4">
+								<option value="all" ${prms_usr_id == 'all' ? 'selected="selected"' : ''}>all</option>
+								<c:forEach var="result" items="${result.data}">
+									<option value="${result.rolname}" ${prms_usr_id eq result.rolname ? "selected='selected'" : ""}>${result.rolname}</option>
+								</c:forEach>
+							</select>
+						</td>
 					</tr>
 					<tr>
 						<th scope="row" class="ico_t1">Method</th>
 						<td>
-							<select id="ctf_mth_nm" name="ctf_mth_nm" class="select">
-								<option value="trues">trues</option>
-								<option value="reject">reject</option>
-								<option value="md5">md5</option>
-								<option value="password">password</option>
-								<option value="Krb4">Krb4</option>
-								<option value="krb5">krb5</option>
-								<option value="ident">ident</option>
-								<option value="pam">pam</option>
-								<option value="ldap">ldap</option>
-								<option value="gss">gss</option>
-								<option value="Sspi">Sspi</option>
-								<option value="cert">cert</option>
-								<option value="crypt">crypt</option>
-								<option value="radius">radius</option>
-								<option value="peer">peer</option>
+							<select id="ctf_mth_nm" name="ctf_mth_nm" id="ctf_mth_nm" class="select">
+								<option value="trust"  ${ctf_mth_nm == 'trust' ? 'selected="selected"' : ''}>trust</option>
+								<option value="reject" ${ctf_mth_nm == 'reject' ? 'selected="selected"' : ''}>reject</option>
+								<option value="md5" ${ctf_mth_nm == 'md5' ? 'selected="selected"' : ''}>md5</option>
+								<option value="password" ${ctf_mth_nm == 'password' ? 'selected="selected"' : ''}>password</option>
+								<option value="Krb4" ${ctf_mth_nm == 'Krb4' ? 'selected="selected"' : ''}>Krb4</option>
+								<option value="krb5" ${ctf_mth_nm == 'krb5' ? 'selected="selected"' : ''}>krb5</option>
+								<option value="ident" ${ctf_mth_nm == 'ident' ? 'selected="selected"' : ''}>ident</option>
+								<option value="pam" ${ctf_mth_nm == 'pam' ? 'selected="selected"' : ''}>pam</option>
+								<option value="ldap" ${ctf_mth_nm == 'ldap' ? 'selected="selected"' : ''}>ldap</option>
+								<option value="gss" ${ctf_mth_nm == 'gss' ? 'selected="selected"' : ''}>gss</option>
+								<option value="Sspi" ${ctf_mth_nm == 'Sspi' ? 'selected="selected"' : ''}>Sspi</option>
+								<option value="cert" ${ctf_mth_nm == 'cert' ? 'selected="selected"' : ''}>cert</option>
+								<option value="crypt" ${ctf_mth_nm == 'crypt' ? 'selected="selected"' : ''}>crypt</option>
+								<option value="radius" ${ctf_mth_nm == 'radius' ? 'selected="selected"' : ''}>radius</option>
+								<option value="peer" ${ctf_mth_nm == 'peer' ? 'selected="selected"' : ''}>peer</option>
 							</select>
 						</td>
 						<th scope="row" class="ico_t1">Type</th>
 						<td>					
-							<select id="ctf_tp_nm" name="ctf_tp_nm" class="select t4">
-								<option value="local">local</option>
-								<option value="host">host</option>
-								<option value="hostssl">hostssl</option>
-								<option value="hostnossl">hostnossl</option>
+							<select id="ctf_tp_nm" name="ctf_tp_nm" id="ctf_tp_nm" class="select t4">
+								<option value="local" ${ctf_tp_nm == 'local' ? 'selected="selected"' : ''}>local</option>
+								<option value="host" ${ctf_tp_nm == 'host' ? 'selected="selected"' : ''}>host</option>
+								<option value="hostssl" ${ctf_tp_nm == 'hostssl' ? 'selected="selected"' : ''}>hostssl</option>
+								<option value="hostnossl" ${ctf_tp_nm == 'hostnossl' ? 'selected="selected"' : ''}>hostnossl</option>
 							</select>
 						</td>
 					</tr>
 					<tr>
 						<th scope="row" class="ico_t1">Option</th>
-						<td colspan="3"><input type="text" class="txt t4" name="" /></td>
+						<td colspan="3"><input type="text" class="txt t4" name="opt_nm" id="opt_nm" value="${opt_nm}"/></td>
 					</tr>
 				</tbody>
 			</table>
@@ -193,72 +211,5 @@
 	</div>
 </div>
 
-
-	<%-- <h3>
-		<c:if test="${act == 'i'}">접근제어 등록</c:if>
-		<c:if test="${act == 'u'}">접근제어 수정</c:if>
-	</h3>
-	
-	<div style="border: 1px solid black; padding: 10px; margin-bottom: 15px;">
-		DB 서버명 : <input type="text" readonly="readonly" id="db_svr_id" name="db_svr_id"> <br> 
-		Database : <input type="text" readonly="readonly" id="db_id" name="db_id">
-	</div>
-	<div style="border: 1px solid black; padding: 10px;">
-		<table>
-			<tr>
-				<td>◎ IP</td>
-				<td><input type="text" id="prms_ipadr" name="prms_ipadr"></td>
-				<td>◎ User</td>
-				<td><input type="text" id="prms_usr_id" name="prms_usr_id"></td>
-			</tr>
-			<tr>
-				<td>◎ Method</td>
-				<td>
-					<select id="ctf_mth_nm" name="ctf_mth_nm">
-						<option value="trues">trues</option>
-						<option value="reject">reject</option>
-						<option value="md5">md5</option>
-						<option value="password">password</option>
-						<option value="Krb4">Krb4</option>
-						<option value="krb5">krb5</option>
-						<option value="ident">ident</option>
-						<option value="pam">pam</option>
-						<option value="ldap">ldap</option>
-						<option value="gss">gss</option>
-						<option value="Sspi">Sspi</option>
-						<option value="cert">cert</option>
-						<option value="crypt">crypt</option>
-						<option value="radius">radius</option>
-						<option value="peer">peer</option>
-					</select>
-				</td>
-				<td>◎ Type</td>
-				<td>
-					<select id="ctf_tp_nm" name="ctf_tp_nm">
-						<option value="local">local</option>
-						<option value="host">host</option>
-						<option value="hostssl">hostssl</option>
-						<option value="hostnossl">hostnossl</option>
-					</select>
-				</td>
-			</tr>
-			<tr>
-				<td>◎ Option</td>
-				<td><input type="text" id="opt_nm" name="opt_nm"></td>
-			</tr>
-			<tr>
-				<td colspan="4"><textarea rows="5" cols="85" name="cmd_cnts" id="cmd_cnts"></textarea></td>
-			</tr>
-		</table>
-		<div style="padding: 10px; text-align: center;">
-			<c:if test="${act == 'i'}">
-				<button type="button" onclick="fn_insert()">저장</button>
-			</c:if>
-			<c:if test="${act == 'u'}">
-				<button type="button" onclick="fn_update()">저장</button>
-			</c:if>
-			<input type="button" value="취소" onclick="self.close()">
-		</div>
-	</div> --%>
 </body>
 </html>
