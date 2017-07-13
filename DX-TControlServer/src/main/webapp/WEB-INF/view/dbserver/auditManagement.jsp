@@ -1,4 +1,11 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<%@ taglib uri="http://tiles.apache.org/tags-tiles" prefix="tiles"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<%@ taglib prefix="form" uri="http://www.springframework.org/tags/form"%>
+<%@ taglib prefix="ui" uri="http://egovframework.gov/ctl/ui"%>
+<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
+<%@ taglib prefix="spring" uri="http://www.springframework.org/tags"%>
 <%
 	/**
 	* @Class Name : auditManagement.jsp
@@ -50,14 +57,14 @@
 										</colgroup>
 										<tbody>
 											<tr>
-												<th scope="row">로그수준</th>
+												<th scope="row">로그수준${fn:toUpperCase(audit.log_level)}</th>
 												<td colspan="3">
 													<select class="select" name="log_level" id="log_level">
-														<option value="DEBUG"<c:if test="${audit.log_level == 'DEBUG'}"> selected</c:if>>DEBUG</option>
-														<option value="INFO"<c:if test="${audit.log_level == 'INFO'}"> selected</c:if>>INFO</option>
-														<option value="NOTICE"<c:if test="${audit.log_level == 'NOTICE'}"> selected</c:if>>NOTICE</option>
-														<option value="WARNING"<c:if test="${audit.log_level == 'WARNING'}"> selected</c:if>>WARNING</option>
-														<option value="LOG"<c:if test="${audit.log_level == 'LOG'}"> selected</c:if>>LOG</option>
+														<option value="DEBUG"<c:if test="${fn:toUpperCase(audit.log_level) == 'DEBUG'}"> selected</c:if>>DEBUG</option>
+														<option value="INFO"<c:if test="${fn:toUpperCase(audit.log_level) == 'INFO'}"> selected</c:if>>INFO</option>
+														<option value="NOTICE"<c:if test="${fn:toUpperCase(audit.log_level) == 'NOTICE'}"> selected</c:if>>NOTICE</option>
+														<option value="WARNING"<c:if test="${fn:toUpperCase(audit.log_level) == 'WARNING'}"> selected</c:if>>WARNING</option>
+														<option value="LOG"<c:if test="${fn:toUpperCase(audit.log_level) == 'LOG'}"> selected</c:if>>LOG</option>
 													</select>
 												</td>
 											</tr>
@@ -67,37 +74,37 @@
 													<div class="log_list">
 														<span>
 															<div class="inp_chk">
-																<input type="checkbox" id="READ" name="READ" <c:if test="${fn:contains(audit.log, 'READ')}"> checked="checked"</c:if>>
+																<input type="checkbox" id="log" name="log"<c:if test="${fn:contains(fn:toUpperCase(audit.log), 'READ')}"> checked="checked"</c:if>>
 																<label for="log_1">Read</label>
 															</div>
 														</span>
 														<span>
 															<div class="inp_chk">
-																<input type="checkbox" id="log_2" name="log_1" checked="checked">
+																<input type="checkbox" id="log" name="log"<c:if test="${fn:contains(fn:toUpperCase(audit.log), 'WRITE')}"> checked="checked"</c:if>>
 																<label for="log_2">Write</label>
 															</div>
 														</span>
 														<span>
 															<div class="inp_chk">
-																<input type="checkbox" id="log_3" name="log_1" checked="checked">
+																<input type="checkbox" id="log" name="log"<c:if test="${fn:contains(fn:toUpperCase(audit.log), 'FUNCTION')}"> checked="checked"</c:if>>
 																<label for="log_3">Function</label>
 															</div>
 														</span>
 														<span>
 															<div class="inp_chk">
-																<input type="checkbox" id="log_4" name="log_1" checked="checked">
+																<input type="checkbox" id="log" name="log"<c:if test="${fn:contains(fn:toUpperCase(audit.log), 'ROLE')}"> checked="checked"</c:if>>
 																<label for="log_4">ROLE</label>
 															</div>
 														</span>
 														<span>
 															<div class="inp_chk">
-																<input type="checkbox" id="log_5" name="log_1">
+																<input type="checkbox" id="log" name="log"<c:if test="${fn:contains(fn:toUpperCase(audit.log), 'DDL')}"> checked="checked"</c:if>>
 																<label for="log_5">DDL</label>
 															</div>
 														</span>
 														<span>
 															<div class="inp_chk">
-																<input type="checkbox" id="log_6" name="log_1">
+																<input type="checkbox" id="log" name="log"<c:if test="${fn:contains(fn:toUpperCase(audit.log), 'MISC')}"> checked="checked"</c:if>>
 																<label for="log_6">MISC</label>
 															</div>
 														</span>
@@ -108,14 +115,14 @@
 												<th scope="row">로그카탈로그</th>
 												<td>
 													<div class="inp_chk">
-														<input type="checkbox" id="log_2_1" name="log_2" checked="checked">
+														<input type="checkbox" id="log_catalog" name="log_catalog"<c:if test="${fn:contains(fn:toUpperCase(audit.log_catalog), 'on')}"> checked="checked"</c:if>>
 														<label for="log_2_1">활성화</label>
 													</div>
 												</td>
 												<th scope="row" class="double">로그 Parameter</th>
 												<td>
 													<div class="inp_chk">
-														<input type="checkbox" id="log_3_1" name="log_3" checked="checked">
+														<input type="checkbox" id="log_parameter" name="log_parameter"<c:if test="${fn:contains(fn:toUpperCase(audit.log_parameter), 'on')}"> checked="checked"</c:if>>
 														<label for="log_3_1">활성화</label>
 													</div>
 												</td>
@@ -124,14 +131,14 @@
 												<th scope="row">로그 Relation</th>
 												<td>
 													<div class="inp_chk">
-														<input type="checkbox" id="log_4_1" name="log_4" checked="checked">
+														<input type="checkbox" id="log_relation" name="log_relation"<c:if test="${fn:contains(fn:toUpperCase(audit.log_relation), 'on')}"> checked="checked"</c:if>>
 														<label for="log_4_1">활성화</label>
 													</div>
 												</td>
 												<th scope="row" class="double">로그 Statement</th>
 												<td>
 													<div class="inp_chk">
-														<input type="checkbox" id="log_5_1" name="log_5">
+														<input type="checkbox" id="log_statement" name="log_statement"<c:if test="${fn:contains(fn:toUpperCase(audit.log_statement), 'on')}"> checked="checked"</c:if>>
 														<label for="log_5_1">활성화</label>
 													</div>
 												</td>
@@ -140,10 +147,10 @@
 									</table>
 								</div>
 								<div class="layout_rt">
-									<p class="ly_tit">Database</p>
+									<p class="ly_tit">Role</p>
 									<div class="overflow_area">
 										<table class="list">
-											<caption>Database 리스트</caption>
+											<caption>Role 리스트</caption>
 											<colgroup>
 												<col style="width:12%;" />
 												<col style="width:12%;" />

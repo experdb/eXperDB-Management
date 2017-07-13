@@ -261,4 +261,14 @@ public class PgHbaConfigLine {
 		public void setChanged(boolean changed) {
 			this.changed = changed;
 		}
+		
+		public static void main(String[] args) {
+	    	String strTemp = "#local   replication     postgres                                trust";
+	    	if(strTemp.contains("#")){
+	    		strTemp = strTemp.replaceFirst("#","");
+	    		
+	    		System.out.println(strTemp);
+
+	    	}
+		}
 }
