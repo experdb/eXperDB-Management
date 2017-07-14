@@ -173,72 +173,75 @@
 	}
 </script>
 <div id="contents">
-	<div class="location">
-		<ul>
-			<li>Admin</li>
-			<li class="on">사용자 관리</li>
-		</ul>
-	</div>
-
 	<div class="contents_wrap">
-		<h4>사용자 관리화면<a href="#n"><img src="../images/ico_tit.png" alt="" /></a></h4>
-		<div class="contents">
-			<div class="cmm_grp">
-				<div class="btn_type_01">
-					<span class="btn"><button onclick="fn_select()">조회</button></span> 
-					<span class="btn" onclick="fn_insert()"><button>등록</button></span>
-					<span class="btn" onclick="fn_update();"><button>수정</button></span>
-					<a href="#n" class="btn" id="btnDelete" onclick="fn_delete()"><span>삭제</span></a>
-				</div>
-				<div class="sch_form">
-					<table class="write">
-						<caption>검색 조회</caption>
-						<colgroup>
-							<col style="width: 120px;" />
-							<col style="width: 180px;" />
-							<col style="width: 200px;" />
-							<col style="width: 80px;" />
-							<col />
-						</colgroup>
-						<tbody>
-							<tr>
-								<th scope="row" class="t9">검색조건</th>
-								<td>
-									<select class="select t5" id="type">
-											<option value="usr_nm">사용자명</option>
-											<option value="usr_id">아이디</option>
-									</select>
-								</td>
-								<td><input type="text" class="txt t2" id="search" /></td>
-								<th scope="row" class="t9">사용여부</th>
-								<td>
-									<select class="select t5" id="search_use_yn">
-											<option value="%">전체</option>
-											<option value="Y">사용</option>
-											<option value="N">미사용</option>
-									</select>
-								</td>
-							</tr>
-						</tbody>
-					</table>
-				</div>
-				<div class="overflow_area">
-					<table id="userListTable" class="display" cellspacing="0" width="100%">
-						<thead>
-							<tr>
-								<th></th>
-								<th>No</th>
-								<th>아이디</th>
-								<th>권한구분</th>
-								<th>소속</th>
-								<th>사용자명</th>
-								<th>연락처</th>
-								<th>사용여부</th>
-							</tr>
-						</thead>
-					</table>
+		<div class="contents_tit">
+			<h4>사용자 관리화면 <a href="#n"><img src="../images/ico_tit.png" alt="" /></a></h4>
+				<div class="location">
+					<ul>
+						<li>Admin</li>
+						<li class="on">사용자 관리</li>
+					</ul>
 				</div>
 			</div>
-		</div>
-	</div>
+	
+			<div class="contents">
+				<div class="cmm_grp">
+					<div class="btn_type_01">
+						<span class="btn"><button onclick="fn_select()">조회</button></span> 
+						<span class="btn" onclick="fn_insert()"><button>등록</button></span>
+						<span class="btn" onclick="fn_update();"><button>수정</button></span>
+						<a href="#n" class="btn" id="btnDelete" onclick="fn_delete()"><span>삭제</span></a>
+					</div>
+					<div class="sch_form">
+						<table class="write">
+							<caption>검색 조회</caption>
+							<colgroup>
+								<col style="width: 120px;" />
+								<col style="width: 180px;" />
+								<col style="width: 200px;" />
+								<col style="width: 80px;" />
+								<col />
+							</colgroup>
+							<tbody>
+								<tr>
+									<th scope="row" class="t9">검색조건</th>
+									<td>
+										<select class="select t5" id="type">
+												<option value="usr_nm">사용자명</option>
+												<option value="usr_id">아이디</option>
+										</select>
+									</td>
+									<td><input type="text" class="txt t2" id="search" /></td>
+									<th scope="row" class="t9">사용여부</th>
+									<td>
+										<select class="select t5" id="search_use_yn">
+												<option value="%">전체</option>
+												<option value="Y">사용</option>
+												<option value="N">미사용</option>
+										</select>
+									</td>
+								</tr>
+							</tbody>
+						</table>
+					</div>
+					<div class="overflow_area">
+						<table id="userListTable" class="display" cellspacing="0" width="100%">
+							<thead>
+								<tr>
+									<th></th>
+									<th>No</th>
+									<th>아이디</th>
+									<th>권한구분</th>
+									<th>소속</th>
+									<th>사용자명</th>
+									<th>연락처</th>
+									<th>사용여부</th>
+								</tr>
+							</thead>
+						</table>
+					</div>
+				</div>
+			</div>
+
+	</div>	
 </div>
