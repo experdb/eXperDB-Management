@@ -1,5 +1,5 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
-    pageEncoding="UTF-8"%>
+	pageEncoding="UTF-8"%>
 
 <%
 	/**
@@ -15,9 +15,7 @@
 	* since 2017.06.01
 	*
 	*/
-%>   
-
-
+%>
 
 <script>
 var table = null;
@@ -127,7 +125,12 @@ function fn_regRe_popup(){
 </script>
 
 
+
+
 <div id="contents">
+	<div class="contents_wrap">
+		<div class="contents_tit">
+			<h4>DB 서버 화면 <a href="#n"><img src="../images/ico_tit.png" alt="" /></a></h4>
 			<div class="location">
 				<ul>
 					<li>Admin</li>
@@ -135,72 +138,72 @@ function fn_regRe_popup(){
 					<li class="on">DB 서버</li>
 				</ul>
 			</div>
+		</div>
 
-			<div class="contents_wrap">
-				<h4>DB 서버 화면</h4>
-				<div class="contents">
-					<div class="cmm_grp">
-						<div class="btn_type_01">
-							<span class="btn"><button onClick="fn_search()">조회</button></span>
-							<span class="btn" onclick="fn_reg_popup();"><button>등록</button></span>
-							<span class="btn" onclick="fn_regRe_popup();"><button>수정</button></span>
-							<a href="#n" class="btn"><span>삭제</span></a>
-						</div>
-						<div class="sch_form">
-							<table class="write">
-								<caption>DB Server 조회하기</caption>
-								<colgroup>
-									<col style="width: 70px;" />
-									<col />
-									<col style="width: 70px;" />
-									<col />
-									<col style="width: 90px;" />
-									<col />
-								</colgroup>
-								<tbody>
-									<tr>
-										<th scope="row" class="t2">서버명</th>
-										<td><input type="text" class="txt" name="db_svr_nm" id="db_svr_nm" /></td>
-										<th scope="row" class="t3">아이피</th>
-										<td><input type="text" class="txt" name="ipadr" id="ipadr" /></td>
-										<th scope="row" class="t4">Database</th>
-										<td><input type="text" class="txt" name="dft_db_nm" id="dft_db_nm" /></td>
-									</tr>
-								</tbody>
-							</table>
-						</div>
-						<table id="serverList" class="cell-border display" >
-									<colgroup>
-									<col style="width:5%;" />
-									<col style="width:5%;" />
-									<col style="width:10%;" />
-									<col style="width:10%;" />
-									<col style="width:10%;" />
-									<col style="width:10%;" />
-									<col style="width:10%;" />
-									<col style="width:10%;" />
-									<col style="width:10%;" />
-									<col style="width:10%;" />
-									<col style="width:10%;" />
-								</colgroup>
-						
-							<thead>
-								<tr>
-									<th></th>
-									<th>No</th>
-									<th>서버명</th>
-									<th>아이피</th>
-									<th>database</th>
-									<th>포트</th>
-									<th>User</th>
-									<th>등록자</th>
-									<th>등록일시</th>
-									<th>수정자</th>
-									<th>수정일시</th>
-								</tr>
-							</thead>
-						</table>						
-					</div>
+
+		<div class="contents">
+			<div class="cmm_grp">
+				<div class="btn_type_01">
+					<span class="btn"><button onClick="fn_search()">조회</button></span>
+					<span class="btn" onclick="fn_reg_popup();"><button>등록</button></span>
+					<span class="btn" onclick="fn_regRe_popup();"><button>수정</button></span>
+					<a href="#n" class="btn"><span>삭제</span></a>
 				</div>
+				<div class="sch_form">
+					<table class="write">
+						<caption>DB Server 조회하기</caption>
+						<colgroup>
+							<col style="width: 70px;" />
+							<col />
+							<col style="width: 70px;" />
+							<col />
+							<col style="width: 90px;" />
+							<col />
+						</colgroup>
+						<tbody>
+							<tr>
+								<th scope="row" class="t2">서버명</th>
+								<td><input type="text" class="txt" name="db_svr_nm" id="db_svr_nm" /></td>
+								<th scope="row" class="t3">아이피</th>
+								<td><input type="text" class="txt" name="ipadr" id="ipadr" /></td>
+								<th scope="row" class="t4">Database</th>
+								<td><input type="text" class="txt" name="dft_db_nm" id="dft_db_nm" /></td>
+							</tr>
+						</tbody>
+					</table>
+				</div>
+				<table id="serverList" class="cell-border display">
+					<colgroup>
+						<col style="width: 5%;" />
+						<col style="width: 5%;" />
+						<col style="width: 10%;" />
+						<col style="width: 10%;" />
+						<col style="width: 10%;" />
+						<col style="width: 10%;" />
+						<col style="width: 10%;" />
+						<col style="width: 10%;" />
+						<col style="width: 10%;" />
+						<col style="width: 10%;" />
+						<col style="width: 10%;" />
+					</colgroup>
+
+					<thead>
+						<tr>
+							<th></th>
+							<th>No</th>
+							<th>서버명</th>
+							<th>아이피</th>
+							<th>database</th>
+							<th>포트</th>
+							<th>User</th>
+							<th>등록자</th>
+							<th>등록일시</th>
+							<th>수정자</th>
+							<th>수정일시</th>
+						</tr>
+					</thead>
+				</table>
 			</div>
 		</div>
+	</div>
+</div>

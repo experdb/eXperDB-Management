@@ -243,7 +243,7 @@
 			</h4>
 			<div class="location">
 				<ul>
-					<li>PG Server1</li>
+					<li>${db_svr_nm}</li>
 					<li>접근제어관리</li>
 					<li class="on">서버접근제어</li>
 				</ul>
@@ -259,9 +259,8 @@
 								<ul>
 									<li>
 										<div class="inp_chk">
-											<img src="/images/ico_left_1.png"
-												style="line-height: 22px; margin: 0px 10px 0 0;"> <label
-												for="server">${db_svr_nm}</label>
+											<img src="/images/ico_left_1.png" style="line-height: 22px; margin: 0px 10px 0 0;"> 
+											<label for="server">${db_svr_nm}</label>
 										</div>
 										<ul>
 											<c:forEach var="resultSet" items="${resultSet}">
