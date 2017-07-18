@@ -4,6 +4,21 @@
 
 $(window).ready(function(){
 	
+	$('#loading').hide();
+	
+	$( document ).ajaxStart(function() {	
+	      $('#loading').css('position', 'absolute');
+	      $('#loading').css('left', '50%');
+	      $('#loading').css('top', '50%');
+	      $('#loading').css('transform', 'translate(-50%,-50%)');	  
+	      $('#loading').show();	
+	});
+	
+	//AJAX 통신 종료
+	$( document ).ajaxStop(function() {
+		$('#loading').hide();
+	});
+	
 	// GNB_click function
 	/*
 	function gnbMenu(){
