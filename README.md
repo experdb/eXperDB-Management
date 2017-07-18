@@ -1,7 +1,7 @@
 
 # DX-TControl
 [![LICENSE](https://img.shields.io/badge/LICENSE-GPL--3.0-orange.svg)](https://github.com/experdb/DX-TControl/blob/master/LICENSE)
-[![VERSION](https://img.shields.io/badge/VERSION-0.1-ff69b4.svg)](https://github.com/experdb/DX-TControl/blob/master/VERSION)
+[![VERSION](https://img.shields.io/badge/VERSION-v1.0.0-ff69b4.svg)](https://github.com/experdb/DX-TControl/blob/master/VERSION)
 
 * **소개**
 ```
