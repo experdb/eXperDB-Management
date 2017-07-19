@@ -234,7 +234,12 @@
 	    <artifactId>log4jdbc-remix</artifactId>
 	    <version>0.2.7</version>
 	</dependency>
-
+	<!-- Jackson Mapper -->
+	<dependency>
+		<groupId>org.codehaus.jackson</groupId>
+		<artifactId>jackson-mapper-asl</artifactId>
+		<version>1.9.13</version>
+	</dependency>
   </dependencies>
   
   <build>
