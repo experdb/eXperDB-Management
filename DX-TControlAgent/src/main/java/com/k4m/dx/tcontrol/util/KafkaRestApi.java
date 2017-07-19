@@ -1,5 +1,6 @@
 package com.k4m.dx.tcontrol.util;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
@@ -53,11 +54,13 @@ public class KafkaRestApi {
 			return new HttpEntity<Object>(params, requestHeaders);
 	}
 
-	public ResponseEntity<String> searchKafkaConnect() throws Exception {
+	public ArrayList<Map<String, Object>> searchKafkaConnect(String strName) throws Exception {
 		String baseUrl = getApiServerUrl() + "/connectors";
 		String jsonString = "";
 		JSONObject configJsonObjectMap = null;
 		ResponseEntity<String> responseEntity = null;
+		
+		ArrayList<Map<String, Object>> configList = new ArrayList<Map<String, Object>>();
 
 		try {
 
@@ -86,7 +89,9 @@ public class KafkaRestApi {
 					// 서버 해당 커넥터의 설정 정보 조회
 					connectorConfig = getKafkaConnectorConfigorStatus(restUrl, restPort, objects.get(i).toString(),
 							"config");
-					System.out.println(connectorConfig);
+					//System.out.println(connectorConfig);
+					
+					//System.out.println( "name : " + connectorConfig.get("name"));
 
 					// 서버 해당 커넥터의 상태 정보 조회
 					connectorStatus = getKafkaConnectorConfigorStatus(restUrl, restPort, objects.get(i).toString(),
@@ -96,8 +101,13 @@ public class KafkaRestApi {
 					connectorConfig.put("status", ((JSONObject) connectorStatus.get("connector")).get("state"));
 
 					// System.out.println(connectorConfig.get("status"));
-
-					// configList.add(connectorConfig);
+					if(strName.equals("")) {
+						configList.add(connectorConfig);
+					} else {
+						if(strName.equals(connectorConfig.get("name"))) {
+							configList.add(connectorConfig);
+						}
+					}
 				}
 			} else {
 				// 응답 코드가 200이 아닌 경우 에러 처리
@@ -116,7 +126,7 @@ public class KafkaRestApi {
 		} catch (Exception e) {
 			throw e;
 		}
-		return responseEntity;
+		return configList;
 	}
 
 	private Map<String, Object> getKafkaConnectorConfigorStatus(String ip, int port, String connectorName, String job)
@@ -188,10 +198,12 @@ public class KafkaRestApi {
 	 * @param strRotate_interval_ms
 	 * @throws Exception
 	 */
-	public void createKafkaConnect(String strName, String strConnector_class, String strTasks_max, String strTopics,
+	public boolean createKafkaConnect(String strName, String strConnector_class, String strTasks_max, String strTopics,
 			String strHdfs_url, String strHadoop_conf_dir, String strHadoop_home, String strFlush_size,
 			String strRotate_interval_ms) throws Exception {
 		ApplicationContext context;
+		
+		boolean blnReturn = true;
 
 		try {
 
@@ -226,8 +238,11 @@ public class KafkaRestApi {
 			// System.out.println(responseEntity.getBody());
 
 		} catch (Exception e) {
-			e.printStackTrace();
+			//e.printStackTrace();
+			blnReturn = false;
 		}
+		
+		return blnReturn;
 	}
 
 	/**
@@ -235,7 +250,11 @@ public class KafkaRestApi {
 	 * 
 	 * @param strConnect
 	 */
-	public void deleteKafkaConnect(String strConnect) {
+	public boolean deleteKafkaConnect(String strConnect) {
+		boolean blnReturn = true;
+		
+		try {
+			
 		String baseUrl = getApiServerUrl() + "/connectors/" + strConnect;
 
 		RestTemplate restTemplate = new RestTemplate();
@@ -247,45 +266,12 @@ public class KafkaRestApi {
 		ResponseEntity<String> responseEntity = restTemplate.exchange(baseUrl, HttpMethod.DELETE, requestEntity,
 				String.class, strConnect);
 		logger.info(responseEntity.getBody());
-	}
-
-	public static void main(String[] args) throws Exception {
-		String ip = "222.110.153.216";
-		int port = 8083;
-
-		KafkaRestApi kafkaRestApi = new KafkaRestApi(ip, port);
-
-		/**
-		 * {"rotate.interval.ms":"60000"
-		 * ,"hdfs.url":"hdfs://KAFKA0:8020/dxm/warehouse/"
-		 * ,"topics":"default-topic" ,"name":"default-config" ,"tasks.max":"3"
-		 * ,"hadoop.conf.dir":"/etc/kafka-connect-hdfs" ,"flush.size":"100"
-		 * ,"connector.class":"io.confluent.connect.hdfs.HdfsSinkConnector"}
-		 **/
-		String strName = "kafka-connect_test06";
-		String strConnector_class = "io.confluent.connect.hdfs.HdfsSinkConnector";
-		String strTasks_max = "3";
-		String strTopics = "connect_test06.postgres.table1, connect_test06.postgres.table2";
-		String strHdfs_url = "hdfs://KAFKA0:8020/dxm/warehouse/";
-		String strHadoop_conf_dir = "/etc/kafka-connect-hdfs";
-		String strHadoop_home = "/home/";
-		String strFlush_size = "100";
-		String strRotate_interval_ms = "1000";
-
-		/**
-		kafkaRestApi.createKafkaConnect(strName, strConnector_class, strTasks_max, strTopics, strHdfs_url,
-				strHadoop_conf_dir, strHadoop_home, strFlush_size, strRotate_interval_ms);
-				**/
 		
-		kafkaRestApi.updateKafkaConnect(strName, strConnector_class, strTasks_max, strTopics, strHdfs_url,
-				strHadoop_conf_dir, strHadoop_home, strFlush_size, strRotate_interval_ms);
-
-		// kafkaRestApi.searchKafkaConnect();
-
-		// kafkaRestApi.deleteKafkaConnect(strName);
-
-		kafkaRestApi.searchKafkaConnect();
-
+		} catch(Exception e) {
+			blnReturn = false;
+		}
+		
+		return blnReturn;
 	}
 
 	/**
@@ -301,11 +287,13 @@ public class KafkaRestApi {
 	 * @param strRotate_interval_ms
 	 * @throws Exception
 	 */
-	public void updateKafkaConnect(String strName, String strConnector_class, String strTasks_max, String strTopics,
+	public boolean updateKafkaConnect(String strName, String strConnector_class, String strTasks_max, String strTopics,
 			String strHdfs_url, String strHadoop_conf_dir, String strHadoop_home, String strFlush_size,
 			String strRotate_interval_ms) throws Exception {
 		ApplicationContext context;
 
+		boolean blnReturn = true;
+		
 		try {
 
 			String baseUrl = getApiServerUrl() + "/connectors/" + strName + "/config" ;
@@ -336,8 +324,11 @@ public class KafkaRestApi {
 			// System.out.println(responseEntity.getBody());
 
 		} catch (Exception e) {
-			e.printStackTrace();
+			//e.printStackTrace();
+			blnReturn = false;
 		}
+		
+		return blnReturn;
 	}
 	
 	
@@ -350,6 +341,52 @@ public class KafkaRestApi {
 		String topicPrefix = "";
 		
 		String strRunCommand = "/home/postgres/experdb/bin/bottledwater --postgres=postgres://experdba@127.0.0.1/postgres --slot=postgres --broker=localhost:9092 --schema-registry=localhost:8081 --topic-prefix=postgres --allow-unkeyed --on-error=log";
+	}
+
+	public static void main(String[] args) throws Exception {
+		String ip = "222.110.153.201";
+		int port = 8083;
+
+		KafkaRestApi kafkaRestApi = new KafkaRestApi(ip, port);
+
+		/**
+		 * {"rotate.interval.ms":"60000"
+		 * ,"hdfs.url":"hdfs://KAFKA0:8020/dxm/warehouse/"
+		 * ,"topics":"default-topic" ,"name":"default-config" ,"tasks.max":"3"
+		 * ,"hadoop.conf.dir":"/etc/kafka-connect-hdfs" ,"flush.size":"100"
+		 * ,"connector.class":"io.confluent.connect.hdfs.HdfsSinkConnector"}
+		 **/
+		String strName = "kafka-connect_test06";
+		String strConnector_class = "io.confluent.connect.hdfs.HdfsSinkConnector";
+		String strTasks_max = "3";
+		String strTopics = "connect_test06.postgres.table1, connect_test06.postgres.table2";
+		String strHdfs_url = "hdfs://KAFKA0:8020/dxm/warehouse/";
+		String strHadoop_conf_dir = "/etc/kafka-connect-hdfs";
+		String strHadoop_home = "/home/";
+		String strFlush_size = "100";
+		String strRotate_interval_ms = "1000";
+
+		/**
+		kafkaRestApi.createKafkaConnect(strName, strConnector_class, strTasks_max, strTopics, strHdfs_url,
+				strHadoop_conf_dir, strHadoop_home, strFlush_size, strRotate_interval_ms);
+				**/
+		/**
+		kafkaRestApi.updateKafkaConnect(strName, strConnector_class, strTasks_max, strTopics, strHdfs_url,
+				strHadoop_conf_dir, strHadoop_home, strFlush_size, strRotate_interval_ms);
+		**/
+		
+		// kafkaRestApi.searchKafkaConnect();
+
+		// kafkaRestApi.deleteKafkaConnect(strName);
+		
+		strName = "default-config";
+		ArrayList<Map<String, Object>> kafkaConnectList = kafkaRestApi.searchKafkaConnect(strName);
+		
+		for(Map<String, Object> map: kafkaConnectList) {
+			String name = (String) map.get("name");
+			System.out.print(name);
+		}
+
 	}
 
 }

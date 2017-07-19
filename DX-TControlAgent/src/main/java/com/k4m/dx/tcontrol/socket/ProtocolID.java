@@ -71,6 +71,7 @@ public class ProtocolID {
 	//KAFKA CONNECT
 	public static final String CONNECTOR_INFO = "CONNECTOR_INFO";
 	public static final String CONNECTOR_NAME = "CONNECTOR_NAME";
+	public static final String HDFS_URL = "HDFS_URL";
 	public static final String CONNECTOR_CLASS = "CONNECTOR_CLASS";
 	public static final String TASK_MAX = "TASK_MAX";
 	public static final String HADOOP_CONF_DIR = "HADOOP_CONF_DIR";

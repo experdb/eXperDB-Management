@@ -31,8 +31,8 @@ public class ClientTester {
 		
 		ClientTester clientTester = new ClientTester();
 		
-		String Ip = "222.110.153.162";
-		//String Ip = "127.0.0.1";
+		//String Ip = "222.110.153.162";
+		String Ip = "127.0.0.1";
 		int port = 9001;
 		try {
 			
@@ -44,7 +44,7 @@ public class ClientTester {
 			//clientTester.dxT006_C(Ip, port);
 			//clientTester.dxT006_R(Ip, port);
 			//clientTester.dxT006_U(Ip, port);
-			clientTester.dxT006_D(Ip, port);
+			//clientTester.dxT006_D(Ip, port);
 			//clientTester.dxT007_C(Ip, port);
 			//clientTester.dxT007_R(Ip, port);
 			
@@ -54,7 +54,11 @@ public class ClientTester {
 			//clientTester.dxT012(Ip, port);
 			
 			//clientTester.dxT013(Ip, port);
-			clientTester.dxT014(Ip, port);
+
+			clientTester.dxT014_R(Ip, port);
+			//clientTester.dxT014_C(Ip, port);
+			//clientTester.dxT014_U(Ip, port);
+			//clientTester.dxT014_D(Ip, port);
 			
 		} catch(Exception e) {
 			e.printStackTrace();
@@ -842,17 +846,28 @@ public class ClientTester {
 		}
 	}
 	
-	
-	private void dxT014(String Ip, int port) {
+	/**
+	 * kafka connect 조회
+	 * @param Ip
+	 * @param port
+	 */
+	private void dxT014_R(String Ip, int port) {
 		try {
 
 			
 			JSONObject serverObj = new JSONObject();
 			
-			serverObj.put(ClientProtocolID.SERVER_IP, "222.110.153.216");
-			serverObj.put(ClientProtocolID.SERVER_PORT, "8083");
+			String strServerIp = "222.110.153.201";
+			String strServerPort = "8083";
 			
-			String strName = "kafka-connect_test06";
+			serverObj.put(ClientProtocolID.SERVER_IP, strServerIp);
+			serverObj.put(ClientProtocolID.SERVER_PORT, strServerPort);
+			
+			
+			//strName : 공백이면 전체 검색
+			String strName = "";
+			
+			/**
 			String strConnector_class = "io.confluent.connect.hdfs.HdfsSinkConnector";
 			String strTasks_max = "3";
 			String strTopics = "connect_test06.postgres.table1, connect_test06.postgres.table2";
@@ -861,6 +876,7 @@ public class ClientTester {
 			String strHadoop_home = "/home/";
 			String strFlush_size = "100";
 			String strRotate_interval_ms = "1000";
+			**/
 			
 			JSONObject connectorInfoObj = new JSONObject();
 			
@@ -898,13 +914,202 @@ public class ClientTester {
 					Object obj = selectDBList.get(i);
 					
 					HashMap hp = (HashMap) obj;
-					String table_schema = (String) hp.get("table_schema");
-					String table_name = (String) hp.get("table_name");
-					System.out.println(i + " " + table_schema + " " + table_name);
+					String name = (String) hp.get("name");
+					String hdfs_url = (String) hp.get("hdfs.url");
+					
+					System.out.println(i + " " + hp );
+					System.out.println(i + " name : " + name );
+					System.out.println(i + " hdfs_url : " + hdfs_url );
 	
 				}
 			}
 				
+				
+			CA.close();
+		} catch(Exception e) {
+			e.printStackTrace();
+		}
+	}
+	
+	
+	private void dxT014_C(String Ip, int port) {
+		try {
+
+			
+			JSONObject serverObj = new JSONObject();
+			
+			String strServerIp = "222.110.153.201";
+			String strServerPort = "8083";
+			
+			serverObj.put(ClientProtocolID.SERVER_IP, strServerIp);
+			serverObj.put(ClientProtocolID.SERVER_PORT, strServerPort);
+			
+
+			String strName = "connect01";
+
+			String strConnector_class = "io.confluent.connect.hdfs.HdfsSinkConnector";
+			String strTasks_max = "3";
+			String strTopics = "connect_test06.postgres.table1, connect_test06.postgres.table2";
+			String strHdfs_url = "hdfs://KAFKA0:8020/dxm/warehouse/";
+			String strHadoop_conf_dir = "/etc/kafka-connect-hdfs";
+			String strHadoop_home = "/home/";
+			String strFlush_size = "100";
+			String strRotate_interval_ms = "1000";
+
+			
+			JSONObject connectorInfoObj = new JSONObject();
+			
+			connectorInfoObj.put(ClientProtocolID.CONNECTOR_NAME, strName);
+			connectorInfoObj.put(ClientProtocolID.CONNECTOR_CLASS, strConnector_class);
+			connectorInfoObj.put(ClientProtocolID.TASK_MAX, strTasks_max);
+			connectorInfoObj.put(ClientProtocolID.TOPIC, strTopics);
+			connectorInfoObj.put(ClientProtocolID.HDFS_URL, strHdfs_url);
+			connectorInfoObj.put(ClientProtocolID.HADOOP_CONF_DIR, strHadoop_conf_dir);
+			connectorInfoObj.put(ClientProtocolID.HADOOP_HOOM, strHadoop_home);
+			connectorInfoObj.put(ClientProtocolID.FLUSH_SIZE, strFlush_size);
+			connectorInfoObj.put(ClientProtocolID.ROTATE_INTERVAL_MS, strRotate_interval_ms);
+			
+			
+			JSONObject jObj = new JSONObject();
+			jObj.put(ClientProtocolID.DX_EX_CODE, ClientTranCodeType.DxT014);
+			jObj.put(ClientProtocolID.COMMAND_CODE, ClientProtocolID.COMMAND_CODE_C);
+			jObj.put(ClientProtocolID.SERVER_INFO, serverObj);
+			jObj.put(ClientProtocolID.CONNECTOR_INFO, connectorInfoObj);
+			
+			
+			JSONObject objList;
+			
+			ClientAdapter CA = new ClientAdapter(Ip, port);
+			CA.open(); 
+				
+			objList = CA.dxT014(ClientTranCodeType.DxT014, jObj);
+			
+			String strErrMsg = (String)objList.get(ClientProtocolID.ERR_MSG);
+			String strErrCode = (String)objList.get(ClientProtocolID.ERR_CODE);
+			String strDxExCode = (String)objList.get(ClientProtocolID.DX_EX_CODE);
+			String strResultCode = (String)objList.get(ClientProtocolID.RESULT_CODE);
+			System.out.println("RESULT_CODE : " +  strResultCode);
+			System.out.println("ERR_CODE : " +  strErrCode);
+			System.out.println("ERR_MSG : " +  strErrMsg);
+		
+				
+			CA.close();
+		} catch(Exception e) {
+			e.printStackTrace();
+		}
+	}
+	
+	
+	private void dxT014_U(String Ip, int port) {
+		try {
+
+			
+			JSONObject serverObj = new JSONObject();
+			
+			String strServerIp = "222.110.153.201";
+			String strServerPort = "8083";
+			
+			serverObj.put(ClientProtocolID.SERVER_IP, strServerIp);
+			serverObj.put(ClientProtocolID.SERVER_PORT, strServerPort);
+			
+
+			String strName = "connect01";
+
+			String strConnector_class = "io.confluent.connect.hdfs.HdfsSinkConnector";
+			String strTasks_max = "3";
+			String strTopics = "connect_test06.postgres.table1, connect_test06.postgres.table2";
+			String strHdfs_url = "hdfs://KAFKA0:8020/dxm/warehouse/";
+			String strHadoop_conf_dir = "/etc/kafka-connect-hdfs";
+			String strHadoop_home = "/home/";
+			String strFlush_size = "200";
+			String strRotate_interval_ms = "1000";
+
+			
+			JSONObject connectorInfoObj = new JSONObject();
+			
+			connectorInfoObj.put(ClientProtocolID.CONNECTOR_NAME, strName);
+			connectorInfoObj.put(ClientProtocolID.CONNECTOR_CLASS, strConnector_class);
+			connectorInfoObj.put(ClientProtocolID.TASK_MAX, strTasks_max);
+			connectorInfoObj.put(ClientProtocolID.TOPIC, strTopics);
+			connectorInfoObj.put(ClientProtocolID.HDFS_URL, strHdfs_url);
+			connectorInfoObj.put(ClientProtocolID.HADOOP_CONF_DIR, strHadoop_conf_dir);
+			connectorInfoObj.put(ClientProtocolID.HADOOP_HOOM, strHadoop_home);
+			connectorInfoObj.put(ClientProtocolID.FLUSH_SIZE, strFlush_size);
+			connectorInfoObj.put(ClientProtocolID.ROTATE_INTERVAL_MS, strRotate_interval_ms);
+			
+			
+			JSONObject jObj = new JSONObject();
+			jObj.put(ClientProtocolID.DX_EX_CODE, ClientTranCodeType.DxT014);
+			jObj.put(ClientProtocolID.COMMAND_CODE, ClientProtocolID.COMMAND_CODE_U);
+			jObj.put(ClientProtocolID.SERVER_INFO, serverObj);
+			jObj.put(ClientProtocolID.CONNECTOR_INFO, connectorInfoObj);
+			
+			
+			JSONObject objList;
+			
+			ClientAdapter CA = new ClientAdapter(Ip, port);
+			CA.open(); 
+				
+			objList = CA.dxT014(ClientTranCodeType.DxT014, jObj);
+			
+			String strErrMsg = (String)objList.get(ClientProtocolID.ERR_MSG);
+			String strErrCode = (String)objList.get(ClientProtocolID.ERR_CODE);
+			String strDxExCode = (String)objList.get(ClientProtocolID.DX_EX_CODE);
+			String strResultCode = (String)objList.get(ClientProtocolID.RESULT_CODE);
+			System.out.println("RESULT_CODE : " +  strResultCode);
+			System.out.println("ERR_CODE : " +  strErrCode);
+			System.out.println("ERR_MSG : " +  strErrMsg);
+		
+				
+			CA.close();
+		} catch(Exception e) {
+			e.printStackTrace();
+		}
+	}
+	
+	private void dxT014_D(String Ip, int port) {
+		try {
+
+			
+			JSONObject serverObj = new JSONObject();
+			
+			String strServerIp = "222.110.153.201";
+			String strServerPort = "8083";
+			
+			serverObj.put(ClientProtocolID.SERVER_IP, strServerIp);
+			serverObj.put(ClientProtocolID.SERVER_PORT, strServerPort);
+			
+
+			String strName = "connect01";
+
+			
+			JSONObject connectorInfoObj = new JSONObject();
+			
+			connectorInfoObj.put(ClientProtocolID.CONNECTOR_NAME, strName);
+			
+			
+			JSONObject jObj = new JSONObject();
+			jObj.put(ClientProtocolID.DX_EX_CODE, ClientTranCodeType.DxT014);
+			jObj.put(ClientProtocolID.COMMAND_CODE, ClientProtocolID.COMMAND_CODE_D);
+			jObj.put(ClientProtocolID.SERVER_INFO, serverObj);
+			jObj.put(ClientProtocolID.CONNECTOR_INFO, connectorInfoObj);
+			
+			
+			JSONObject objList;
+			
+			ClientAdapter CA = new ClientAdapter(Ip, port);
+			CA.open(); 
+				
+			objList = CA.dxT014(ClientTranCodeType.DxT014, jObj);
+			
+			String strErrMsg = (String)objList.get(ClientProtocolID.ERR_MSG);
+			String strErrCode = (String)objList.get(ClientProtocolID.ERR_CODE);
+			String strDxExCode = (String)objList.get(ClientProtocolID.DX_EX_CODE);
+			String strResultCode = (String)objList.get(ClientProtocolID.RESULT_CODE);
+			System.out.println("RESULT_CODE : " +  strResultCode);
+			System.out.println("ERR_CODE : " +  strErrCode);
+			System.out.println("ERR_MSG : " +  strErrMsg);
+		
 				
 			CA.close();
 		} catch(Exception e) {
