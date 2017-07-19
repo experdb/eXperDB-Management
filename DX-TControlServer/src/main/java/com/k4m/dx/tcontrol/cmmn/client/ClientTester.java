@@ -55,9 +55,9 @@ public class ClientTester {
 			
 			//clientTester.dxT013(Ip, port);
 
-			clientTester.dxT014_R(Ip, port);
+			//clientTester.dxT014_R(Ip, port);
 			//clientTester.dxT014_C(Ip, port);
-			//clientTester.dxT014_U(Ip, port);
+			clientTester.dxT014_U(Ip, port);
 			//clientTester.dxT014_D(Ip, port);
 			
 		} catch(Exception e) {
@@ -949,7 +949,7 @@ public class ClientTester {
 
 			String strConnector_class = "io.confluent.connect.hdfs.HdfsSinkConnector";
 			String strTasks_max = "3";
-			String strTopics = "connect_test06.postgres.table1, connect_test06.postgres.table2";
+			String strTopics = "";
 			String strHdfs_url = "hdfs://KAFKA0:8020/dxm/warehouse/";
 			String strHadoop_conf_dir = "/etc/kafka-connect-hdfs";
 			String strHadoop_home = "/home/";
