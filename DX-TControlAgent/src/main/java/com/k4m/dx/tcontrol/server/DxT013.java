@@ -25,7 +25,7 @@ import com.k4m.dx.tcontrol.socket.SocketCtl;
 import com.k4m.dx.tcontrol.socket.TranCodeType;
 
 /**
- * 전체스키마태이블 조회
+ * BottledWater 실행/종료
  *
  * @author 박태혁
  * @see <pre>
@@ -37,11 +37,11 @@ import com.k4m.dx.tcontrol.socket.TranCodeType;
  * </pre>
  */
 
-public class DxT012 extends SocketCtl{
+public class DxT013 extends SocketCtl{
 	
 	private static Logger errLogger = LoggerFactory.getLogger("errorToFile");
 	
-	public DxT012(Socket socket, InputStream is, OutputStream	os) {
+	public DxT013(Socket socket, InputStream is, OutputStream	os) {
 		this.client = socket;
 		this.is = is;
 		this.os = os;

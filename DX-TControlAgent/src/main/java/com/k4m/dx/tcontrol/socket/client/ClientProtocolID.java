@@ -67,5 +67,16 @@ public class ClientProtocolID {
 	public static final String USER_NAME = "user_name";
 	public static final String START_DATE = "start_date";
 	public static final String END_DATE = "end_date";
+	
+	//KAFKA CONNECT
+	public static final String CONNECTOR_INFO = "CONNECTOR_INFO";
+	public static final String CONNECTOR_NAME = "CONNECTOR_NAME";
+	public static final String CONNECTOR_CLASS = "CONNECTOR_CLASS";
+	public static final String TASK_MAX = "TASK_MAX";
+	public static final String HADOOP_CONF_DIR = "HADOOP_CONF_DIR";
+	public static final String HADOOP_HOOM = "HADOOP_HOOM";
+	public static final String FLUSH_SIZE = "FLUSH_SIZE";
+	public static final String ROTATE_INTERVAL_MS = "ROTATE_INTERVAL_MS";
+	public static final String TOPIC = "TOPIC";
 
 }
