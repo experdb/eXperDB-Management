@@ -150,7 +150,7 @@
 				success : function(result) {
 					if (result) {
 						alert("삭제되었습니다.");
-						fn_select();
+						location.reload();
 					} else {
 						alert("처리 실패");
 					}
