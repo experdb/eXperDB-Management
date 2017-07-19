@@ -191,10 +191,6 @@
 			dateFormat: 'yymmdd'
 		});
 		
-		if (act == "u") {
-			$("input[name=usr_id]").attr("readonly", true);
-		}
-		
 	})
 </script>
 <body>
@@ -219,8 +215,14 @@
 			<tbody>
 				<tr>
 					<th scope="row" class="ico_t1">사용자아이디</th>
-					<td><input type="text" class="txt" name="usr_id" id="usr_id" value="${get_usr_id}"/>
-						<c:if test="${act == 'i'}"><button type="button" onclick="fn_idCheck()">중복체크</button></c:if>
+					<td>
+						<c:if test="${act == 'i'}">
+							<input type="text" class="txt" name="usr_id" id="usr_id" value="${get_usr_id}" style="width: 230px;"/>
+							<span class="btn btnC_01"><button type="button" class= "btn_type_02" onclick="fn_idCheck()" style="width: 60px; margin-right: -60px; margin-top: 0;">중복체크</button></span>
+						</c:if>
+						<c:if test="${act == 'u'}">
+							<input type="text" class="txt" name="usr_id" id="usr_id" value="${get_usr_id}" readonly="readonly"/>
+						</c:if>							
 					</td>
 					<th scope="row" class="ico_t1">사용자명</th>
 					<td><input type="text" class="txt" name="usr_nm" id="usr_nm" value="${usr_nm}"/></td>

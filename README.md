@@ -1,9 +1,11 @@
-# DX-TControl
 
+# DX-TControl
+[![LICENSE](https://img.shields.io/badge/LICENSE-GPL--3.0-orange.svg)](https://github.com/experdb/DX-TControl/blob/master/LICENSE)
+[![VERSION](https://img.shields.io/badge/VERSION-v1.0.0-ff69b4.svg)](https://github.com/experdb/DX-TControl/blob/master/VERSION)
 
 * **소개**
 ```
-소개
+DX-Tcontrol 입니다
 ```
 
 * **개발환경**
@@ -15,10 +17,11 @@
 * Was : Apache Tomcat 8
 * Build : Ant Build
 * Deploy : Maven
+
 ```
 
- * **설치방법**
- 
+* **설치방법**
+
 ```
 설치방법
 ```
@@ -32,9 +35,9 @@
 * 관리자시스템
 ```
 
- * **라이센스**  
+ * **라이선스**  
 ```
-라이센스
+라이선스
 ```
 
 

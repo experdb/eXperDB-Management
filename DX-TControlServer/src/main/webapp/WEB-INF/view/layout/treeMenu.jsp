@@ -77,23 +77,13 @@
 		function GetJsonDataConnector(data) {						
 			var parseData = $.parseJSON(data);
 			var html = "";		
-			html += '<div class="lnb_tit">Transfer';
-			html += '		<div class="all_btn">';
-			html += '			<a href="#" class="all_close">전체 닫기</a>';
-			html += '			<a href="#" class="all_open">전체 열기</a>';
-			html += '		</div>'; 
-			html += '</div>'; 
-			
+	
 			$(data).each(function (index, item) {
-			html += '<ul class="depth_1 lnbMenu">';
-			html += '		<li class="t1"><a href="#n">전송설정</a></li>';
 			html += '		<li class="t2"><a href="#n">'+item.cnr_nm+'</a>';
 			html += '			<ul class="depth_2">';
 			html += '		     	<li class="ico2_3"><a href="#n">전송대상 설정</a></li>';
 			html += '				<li class="ico2_4"><a href="#n">전송상세 설정</a></li>';
-			html += '			</ul>';
-			html += '		</li>';
-			html += '	</ul>';			
+			html += '			</ul>';	
 			})		
 			$( "#tree2" ).append(html);
 		}	
@@ -119,7 +109,16 @@
 				<div class="lnb">
 					<div class="inr" id="tree1">
 					</div>
-					<div class="inr type2" id=tree2>
+					<div class="inr type2">
+						<div class="lnb_tit">Transfer
+							<div class="all_btn">
+								<a href="#n" class="all_open">전체 열기</a>
+								<a href="#n" class="all_close">전체 닫기</a>
+							</div>
+						</div>
+						<ul class="depth_1 lnbMenu" id="tree2">
+							<li class="t1"><a href="/transferSetting.do">전송설정</a></li>
+						</ul>
 					</div>
 				</div>
 		</form>

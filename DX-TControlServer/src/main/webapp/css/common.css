@@ -249,24 +249,6 @@ input[type="text"]:disabled, input[type="text"].disabled {background:#e4e9ec;col
 .pop_cts .pop_cmm3{padding:10px;margin-top:30px;}
 .pop_cts .pop_cmm3 .pop_s_tit{padding:0 0 0 30px;height:20px;line-height:20px;margin-bottom:10px;background:url(../images/popup/ico_p_2.png) 8px 48% no-repeat;}
 
-
-.pop_cts_1{position:relative;width:1220px;min-height:385px;padding:48px 55px 25px;margin:auto;background:#fff;border:3px solid #b8c3c6;}
-.pop_cts_1.data{min-height:540px;padding:90px 115px;}
-.pop_cts_1 > .tit{height:15px;line-height:15px;padding-left:25px;margin-bottom:35px;color:#324452;font-family:'Nanum Square Bold';font-weight:700;background:url(../images/popup/ico_p_1.png) 4px 50% no-repeat;}
-.pop_cts_1 .pop_type1:after{display:block;content:"";clear:both;}
-.pop_cts_1 .pop_type1 .pop_lt{float:left;width:383px;}
-.pop_cts_1 .pop_type1 .pop_rt{float:left;width:365px;border:1px solid #b8c3c6;margin-left:50px;}
-.pop_cts_1 .pop_cmm{border:1px solid #b8c3c6;padding:10px;}
-.pop_cts_1 .pop_cmm.c2{padding:0;}
-.pop_cts_1 .pop_cmm2{padding-top:25px;margin-top:25px;border-top:1px solid #e4e9ec;}
-.pop_cts_1 .pop_logo{position:absolute;bottom:130px;left:50%;margin-left:-113px;}
-.pop_cts_1 .pop_cmm3{padding:10px;margin-top:30px;}
-.pop_cts_1 .pop_cmm3 .pop_s_tit{padding:0 0 0 30px;height:20px;line-height:20px;margin-bottom:10px;background:url(../images/popup/ico_p_2.png) 8px 48% no-repeat;}
-
-
-
-
-
 /* 맵핑 */
 .mapping_area{position:relative;top:0;left:0;margin-top:17px;padding:10px 20px;border:1px solid #b8c3c6;}
 .mapping_area:after{display:block;content:"";clear:both;}
@@ -423,7 +405,7 @@ table.write tr th.ico_t4{padding:0 8px 0 33px !important;background:url(../image
 table.write tr td input.txt,
 table.write tr td select.select{width:295px;}
 table.write tr td input.txt.t2,
-table.write tr td select.select.t2{width:500px;}
+table.write tr td select.select.t2,{width:500px;}
 table.write tr td input.txt.t3,
 table.write tr td select.select.t3{width:243px;}
 table.write tr td input.txt.t4,
@@ -715,81 +697,7 @@ body.bg{background:#fff url(../images/login_bg.png) center center no-repeat;}
 .mCS-dir-rtl > .mCSB_inside > .mCSB_scrollTools, 
 .mCS-dir-rtl > .mCSB_outside + .mCSB_scrollTools{right:auto;left:0;}
 .mCS-dir-rtl > .mCSB_outside + .mCSB_scrollTools{left:-26px;}
-.mCSB_scrollTools .mCSB_draggerContainer{position:absolute;top:0;left:0;bottom/*paging*/
-.paging{padding:10px 0;text-align:center;}
-.paging li{display:inline-block;vertical-align:middle;}
-.paging li > a,
-.paging li > span{display:block;margin:0 3px;width:30px;height:30px;line-height:30px;border:1px solid #99abb0;font-size:13px;color:#99abb0;}
-.paging li > span.curr{border:1px solid #f58220;color:#f58220;}
-.paging li.prev > a,
-.paging li.next > a{width:73px;border:1px solid #f58220;color:#f58220;}
-.paging li.prev a,
-.paging li.next a{text-align:left;}
-.paging li.prev a{padding-left:32px;background:url(../images/paging_prev.png) 9px 50% no-repeat;}
-.paging li.next a{padding-left:17px;background:url(../images/paging_next.png) 51px 50% no-repeat;}
-
-/* DashBoard
--------------------------------------------------------------- */
-/* main_grp */
-.main_grp{}
-.main_grp .main_info:after{display:block;content:"";clear:both;}
-.main_grp .main_info .m_tit{line-height:18px;padding:10px 0 12px 23px;color:#101922;font-family:'Nanum Square Bold';font-weight:700;}
-.main_grp .main_info > div{float:left;background:#e4e9ec;padding:0 20px 20px;}
-.main_grp .main_info .m_info_lt{margin-right:30px;}
-.main_grp .main_info .m_info_lt .m_tit{background:url(../images/ico_main_tit_1.png) 0 48% no-repeat;}
-.main_grp .main_info .m_info_rt .m_tit{background:url(../images/ico_main_tit_2.png) 0 48% no-repeat;}
-.main_grp .main_info ul:after{display:block;content:"";clear:both;}
-.main_grp .main_info ul > li{float:left;width:87px;height:149px;background:#fff;margin-left:6px;text-align:center;}
-.main_grp .main_info ul > li:first-child{margin-left:0;}
-.main_grp .main_info ul > li .state{padding:8px 0 0;font-size:11px;color:#101922;}
-.main_grp .main_info ul > li .state span{display:block;margin-top:10px;}
-.main_grp .main_info ul > li .state_num{height:54px;line-height:54px;margin:20px 0 12px;font-size:60px;font-family:Nanum Myeongjo;font-weight:700;}
-.main_grp .main_info ul > li .state_num.double{margin:8px 0 12px;}
-.main_grp .main_info ul > li .state_num.c1{color:#99abb0;}
-.main_grp .main_info ul > li .state_num.c2{color:#324452;}
-.main_grp .main_info ul > li .state_num.c3{color:#f36f21;}
-.main_grp .main_info ul > li .state_txt{color:#b8c3c6;}
-
-.main_grp .main_server_info{margin-top:30px;}
-.main_grp .main_server_info .tit{height:32px;line-height:32px;padding-left:42px;background:#e4e9ec url(../images/ico_main_tit_3.png) 17px 5px no-repeat;}
-.main_grp .main_server_info .inner{padding:15px 20px 25px;border:1px solid #b8c3c6;border-top:none;}
-.main_grp .main_server_info .inner .sch_form .calendar_area{display:inline-block;margin-right:10px;}
-.main_grp .main_server_info .inner table.list{margin-top:25px;border:1px solid #b8c3c6;}
-.main_grp .main_server_info .inner table.list tr th{border-top:1px solid #b8c3c6;}
-
-/* 52ppt Connect 등록 */
-#pop_connector{position:relative;height:calc(100% - 77px);padding-left:200px;}
-#pop_connector:before{content:"";display:block;position:absolute;top:0;left:0;width:193px;height:100%;background:#373737;z-index:-1;}
-#pop_connector:after{content:"";display:block;clear:both;}
-#connector_lnb_menu{position:fixed;left:0;top:0;width:200px;height:100%;overflow-y:auto;z-index:10;}
-#connector_lnb_menu .connector_search{padding:14px 14px 30px;}
-#connector_lnb_menu .connector_search > p{color:#b8c3c6;font-size:9px;margin-bottom:24px;}
-#connector_lnb_menu .connector_search .connector_search_area{position:relative;top:0;left:0;}
-#connector_lnb_menu .connector_search .connector_search_area .txt{width:170px;height:26px;line-height:26px;border:1px solid #b8c3c6;padding:0 30px 0 5px;background:#373737;color:#b8c3c6;}
-#connector_lnb_menu .connector_search .connector_search_area .search_btn{width:30px;height:26px;position:absolute;top:0;right:0;background:url(../images/connector/ico_search.png) 50% 50% no-repeat;text-indent:-9999em;cursor:pointer;}
- 
-#connector_lnb_menu .connector_lnb{margin:0 14px 0 7px;color:#b8c3c6;}
-#connector_lnb_menu .connector_lnb .connector_inner{padding:23px 0 28px;border-top:1px solid #898989;}
-#connector_lnb_menu .connector_lnb .connector_inner a{color:#b8c3c6;}
-#connector_lnb_menu .connector_lnb .connector_inner .tit{padding:5px 0 5px 33px;background:url(../images/connector/ico_lnb_1.png) 6px 50% no-repeat;}
-#connector_lnb_menu .connector_lnb .connector_inner .depth_1 > li{margin-top:10px;}
-#connector_lnb_menu .connector_lnb .connector_inner .depth_1 > li > a{display:block;padding-left:54px;background:url(../images/connector/ico_lnb_2.png) 39px 50% no-repeat;}
-#connector_lnb_menu .connector_lnb .connector_inner .depth_1 > li > a:hover,
-#connector_lnb_menu .connector_lnb .connector_inner .depth_1 > li > a:focus,
-#connector_lnb_menu .connector_lnb .connector_inner .depth_1 > li.on > a{color:#ff9900;}
-#connector_lnb_menu .connector_lnb .connector_inner .depth_1 .depth_2{display:none;}
-#connector_lnb_menu .connector_lnb .connector_inner .depth_1 .depth_2 > li{margin-top:10px;}
-#connector_lnb_menu .connector_lnb .connector_inner .depth_1 .depth_2 > li > a{display:block;padding-left:82px;background:url(../images/connector/ico_lnb_3.png) 70px 50% no-repeat;}
-#connector_lnb_menu .connector_lnb .connector_inner .depth_1 .depth_2 > li > a:hover,
-#connector_lnb_menu .connector_lnb .connector_inner .depth_1 .depth_2 > li > a:focus,
-#connector_lnb_menu .connector_lnb .connector_inner .depth_1 .depth_2 > li.on > a{color:#ff9900;}
-
-#pop_connector #connector_cts{float:left;min-width:970px;width:100%;padding:30px 50px;}
-#pop_connector #connector_cts h4{height:45px;line-height:45px;color:#373737;font-size:24px;background:#fff;padding-left:16px;}
-#pop_connector #connector_cts .connector_grp{min-height:720px;margin-top:30px;background:#fff;padding:20px;}
-
-
-:0;right:0;height:auto;}
+.mCSB_scrollTools .mCSB_draggerContainer{position:absolute;top:0;left:0;bottom:0;right:0;height:auto;}
 .mCSB_scrollTools a + .mCSB_draggerContainer{margin:20px 0;}
 .mCSB_scrollTools .mCSB_draggerRail{width:100%;height:100%;margin:0 auto;}
 .mCSB_scrollTools .mCSB_dragger{cursor:pointer;width:5px;height:30px;z-index:1;}

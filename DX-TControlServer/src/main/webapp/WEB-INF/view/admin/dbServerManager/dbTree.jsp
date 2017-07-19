@@ -14,7 +14,7 @@
 	* since 2017.05.31
 	*
 	*/
-%>    
+%>
 
 <script>
 //연결테스트 확인여부
@@ -237,68 +237,70 @@ function fn_dataCompareChcek(svrDbList){
 
 </script>
 <div id="contents">
-				<div class="location">
-					<ul>
-						<li>Admin</li>
-						<li>DB서버관리</li>
-						<li class="on">DB Tree</li>
-					</ul>
-				</div>
-
-				<div class="contents_wrap">
-					<h4>DB 서버 Tree 화면<a href="#n"><img src="../images/ico_tit.png" alt="" /></a></h4>
-					<div class="contents">
-						<div class="tree_grp">
-							<div class="tree_lt">
-								<div class="btn_type_01">
-									<span class="btn"><button onclick="fn_reg_popup();">등록</button></span>
-									<span class="btn"><button onClick="fn_regRe_popup();">수정</button></span>
-									<a href="#n" class="btn"><span>삭제</span></a>
-								</div>
-								<div class="inner">
-									<p class="tit">DB 서버 목록</p>
-									<div class="tree_server">
-										<table id="dbServerList" class="display" cellspacing="0"  align="right">
-											<thead>
-												<tr>
-													<th>선택</th>
-													<th></th>
-													<th></th>
-													<th>DB 서버</th>
-													<th></th>
-													<th></th>
-													<th></th>
-													<th></th>
-													<th></th>
-													<th></th>
-													<th></th>
-													<th></th>
-												</tr>
-											</thead>
-										</table>
-									</div>
-								</div>
-							</div>
-							<div class="tree_rt">
-								<div class="btn_type_01">
-									<span class="btn"><button onClick="fn_insertDB()">저장</button></span>
-								</div>
-								<div class="inner">
-									<p class="tit">DB 목록</p>
-									<div class="tree_list">
-										<table id="dbList" class="display" cellspacing="0"  align="left">
-											<thead>
-												<tr>
-													<th>메뉴</th>
-													<th>등록선택</th>
-												</tr>
-											</thead>
-										</table>
-									</div>
-								</div>
-							</div>
+	<div class="contents_wrap">
+		<div class="contents_tit">
+			<h4>DB 서버 Tree 화면 <a href="#n"><img src="../images/ico_tit.png"alt="" /></a>
+			</h4>
+			<div class="location">
+				<ul>
+					<li>Admin</li>
+					<li>DB서버관리</li>
+					<li class="on">DB Tree</li>
+				</ul>
+			</div>
+		</div>
+		<div class="contents">
+			<div class="tree_grp">
+				<div class="tree_lt">
+					<div class="btn_type_01">
+						<span class="btn"><button onclick="fn_reg_popup();">등록</button></span>
+						<span class="btn"><button onClick="fn_regRe_popup();">수정</button></span>
+						<a href="#n" class="btn"><span>삭제</span></a>
+					</div>
+					<div class="inner">
+						<p class="tit">DB 서버 목록</p>
+						<div class="tree_server">
+							<table id="dbServerList" class="display" cellspacing="0" align="right">
+								<thead>
+									<tr>
+										<th>선택</th>
+										<th></th>
+										<th></th>
+										<th>DB 서버</th>
+										<th></th>
+										<th></th>
+										<th></th>
+										<th></th>
+										<th></th>
+										<th></th>
+										<th></th>
+										<th></th>
+									</tr>
+								</thead>
+							</table>
 						</div>
 					</div>
 				</div>
-			</div>	
-	
+				<div class="tree_rt">
+					<div class="btn_type_01">
+						<span class="btn"><button onClick="fn_insertDB()">저장</button></span>
+					</div>
+					<div class="inner">
+						<p class="tit">DB 목록</p>
+						<div class="tree_list">
+							<table id="dbList" class="display" cellspacing="0" align="left">
+								<thead>
+									<tr>
+										<th>메뉴</th>
+										<th>등록선택</th>
+									</tr>
+								</thead>
+							</table>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+

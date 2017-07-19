@@ -96,24 +96,22 @@
 		document.selectList.submit();
 	}
 </script>
-<body>
 	<form name="excelForm" method="post">
 		<input type="hidden" name="lgi_dtm_start" id="lgi_dtm_start">
 		<input type="hidden" name="lgi_dtm_end" id="lgi_dtm_end"> 
 		<input type="hidden" name="user_nm" id="user_nm">
 	</form>
 	<div id="contents">
-		<div class="location">
-			<ul>
-				<li>Admin</li>
-				<li class="on">사용자 접근내역</li>
-			</ul>
-		</div>
-
 		<div class="contents_wrap">
-			<h4>
-				사용자 접근내역화면<a href="#n"><img src="../images/ico_tit.png" alt="" /></a>
-			</h4>
+			<div class="contents_tit">
+				<h4>사용자 접근내역화면 <a href="#n"><img src="../images/ico_tit.png" alt="" /></a></h4>
+					<div class="location">
+						<ul>
+							<li>Admin</li>
+							<li class="on">사용자 접근내역</li>
+						</ul>
+					</div>
+				</div>
 			<div class="contents">
 				<div class="cmm_grp">
 					<div class="btn_type_float">

@@ -1,6 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
-    pageEncoding="UTF-8"%>
-    
+	pageEncoding="UTF-8"%>
+
 <%
 	/**
 	* @Class Name : database.jsp
@@ -15,7 +15,7 @@
 	* since 2017.06.23
 	*
 	*/
-%>   
+%>
 
 <script>
 var table = null;
@@ -126,6 +126,9 @@ function fn_reg_popup(){
 
 
 <div id="contents">
+	<div class="contents_wrap">
+		<div class="contents_tit">
+			<h4>DB 서버 화면 <a href="#n"><img src="../images/ico_tit.png" alt="" /></a></h4>
 			<div class="location">
 				<ul>
 					<li>Admin</li>
@@ -133,63 +136,61 @@ function fn_reg_popup(){
 					<li class="on">Database</li>
 				</ul>
 			</div>
-
-			<div class="contents_wrap">
-				<h4>DB 서버 화면</h4>
-				<div class="contents">
-					<div class="cmm_grp">
-						<div class="btn_type_01">
-							<span class="btn"><button onClick="fn_search()">조회</button></span>
-							<span class="btn" onclick="fn_reg_popup();"><button>등록</button></span>
-							<a href="#n" class="btn"><span>삭제</span></a>
-						</div>
-						<div class="sch_form">
-							<table class="write">
-								<caption>DB Server 조회하기</caption>
-								<colgroup>
-									<col style="width: 90px;" />
-									<col />
-									<col style="width: 70px;" />
-									<col />
-									<col style="width: 90px;" />
-									<col />
-									<col style="width: 70px;" />
-									<col />
-								</colgroup>
-								<tbody>
-									<tr>
-										<th scope="row" class="t2">DB 서버명</th>
-										<td><select id="db_svr_nm" name="db_svr_nm">
-												<option value="%">전체</option>
-										</select></td>
-										<th scope="row" class="t3">아이피</th>
-										<td><input type="text" class="txt" name="ipadr" id="ipadr" /></td>
-										<th scope="row" class="t4">Database</th>
-										<td><input type="text" class="txt" name="dft_db_nm" id="dft_db_nm" /></td>
-									</tr>
-								</tbody>
-							</table>
-						</div>
-						<!-- 메인 테이블 -->
-						<table id="repoDBList" class="display" cellspacing="0">
-							<thead>
-								<tr>
-									<th></th>
-									<th>No</th>
-									<th>서버명</th>
-									<th>아이피</th>
-									<th>포트</th>
-									<th>DB명</th>
-									<th>등록자</th>
-									<th>등록일시</th>
-									<th>수정자</th>
-									<th>수정일시</th>
-									<th></th>
-								</tr>
-							</thead>
-						</table>
-						<!-- /메인 테이블 -->
-					</div>
+		</div>
+		<div class="contents">
+			<div class="cmm_grp">
+				<div class="btn_type_01">
+					<span class="btn"><button onClick="fn_search()">조회</button></span>
+					<span class="btn" onclick="fn_reg_popup();"><button>등록</button></span>
+					<a href="#n" class="btn"><span>삭제</span></a>
 				</div>
+				<div class="sch_form">
+					<table class="write">
+						<caption>DB Server 조회하기</caption>
+						<colgroup>
+							<col style="width: 90px;" />
+							<col />
+							<col style="width: 70px;" />
+							<col />
+							<col style="width: 90px;" />
+							<col />
+							<col style="width: 70px;" />
+							<col />
+						</colgroup>
+						<tbody>
+							<tr>
+								<th scope="row" class="t2">DB 서버명</th>
+								<td><select id="db_svr_nm" name="db_svr_nm">
+										<option value="%">전체</option>
+								</select></td>
+								<th scope="row" class="t3">아이피</th>
+								<td><input type="text" class="txt" name="ipadr" id="ipadr" /></td>
+								<th scope="row" class="t4">Database</th>
+								<td><input type="text" class="txt" name="dft_db_nm" id="dft_db_nm" /></td>
+							</tr>
+						</tbody>
+					</table>
+				</div>
+				<!-- 메인 테이블 -->
+				<table id="repoDBList" class="display" cellspacing="0">
+					<thead>
+						<tr>
+							<th></th>
+							<th>No</th>
+							<th>서버명</th>
+							<th>아이피</th>
+							<th>포트</th>
+							<th>DB명</th>
+							<th>등록자</th>
+							<th>등록일시</th>
+							<th>수정자</th>
+							<th>수정일시</th>
+							<th></th>
+						</tr>
+					</thead>
+				</table>
+				<!-- /메인 테이블 -->
 			</div>
 		</div>
+	</div>
+</div>
