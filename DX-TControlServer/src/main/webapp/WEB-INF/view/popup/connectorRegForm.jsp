@@ -103,8 +103,8 @@
 				},
 				success : function(result) {
 					alert("등록하였습니다.");
+					opener.location.reload();
 					window.close();
-					opener.fn_select();
 				},
 				error : function(request, status, error) {
 					alert("실패");
@@ -131,8 +131,8 @@
 				},
 				success : function(result) {
 					alert("수정하였습니다.");
+					opener.location.reload();
 					window.close();
-					opener.fn_select();
 				},
 				error : function(request, status, error) {
 					alert("실패");
