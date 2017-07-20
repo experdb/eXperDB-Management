@@ -463,7 +463,7 @@ public class TreeTransferController {
 	 * @return ModelAndView mv
 	 * @throws Exception
 	 */
-	@RequestMapping(value = "/transferTargetDetail.do")
+	@RequestMapping(value = "/popup/transferTargetDetailRegForm.do")
 	public ModelAndView transferTargetDetail(@ModelAttribute("historyVO") HistoryVO historyVO, HttpServletRequest request) {
 		ModelAndView mv = new ModelAndView();
 		List<ConnectorVO> resultList = null;
@@ -513,8 +513,7 @@ public class TreeTransferController {
 				}							
 			}
 			mv.addObject("connector_type",resultList.get(0).getCnr_cnn_tp_cd());
-			mv.addObject("cnr_nm",request.getParameter("cnr_nm"));
-			mv.setViewName("transfer/transferTargetDetail");
+			mv.setViewName("popup/transferTargetDetailRegForm");
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

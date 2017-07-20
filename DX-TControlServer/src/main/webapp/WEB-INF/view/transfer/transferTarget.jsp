@@ -68,7 +68,16 @@
 		    		var row = datas[0];
 			    	$row.removeClass('detail');
 		 			var name  = row.name;
-		 			location.href="/transferTargetDetail.do?cnr_nm=${cnr_nm}&&cnr_id=${cnr_id}&&name="+name;
+				
+		 			var popUrl = "/popup/transferTargetDetailRegForm.do?&&cnr_id=${cnr_id}&&name="+name; // 서버 url 팝업경로
+		 			var width = 930;
+		 			var height = 630;
+		 			var left = (window.screen.width / 2) - (width / 2);
+		 			var top = (window.screen.height /2) - (height / 2);
+		 			var popOption = "width="+width+", height="+height+", top="+top+", left="+left+", resizable=no, scrollbars=no, status=no, toolbar=no, titlebar=yes, location=no,";
+		 			
+		 			window.open(popUrl,"",popOption);
+		 			
 		    	}
 			});	
 		}
@@ -202,7 +211,6 @@
 		<div class="contents">
 			<div class="cmm_grp">
 				<div class="btn_type_01">
-					<span class="btn" onclick="fn_select();"><button>조회</button></span> 
 					<span class="btn" onclick="fn_insert();"><button>등록</button></span> 
 					<span class="btn" onclick="fn_update();"><button>수정</button></span> 
 					<span class="btn" onclick="fn_delete();"><button>삭제</button></span>
