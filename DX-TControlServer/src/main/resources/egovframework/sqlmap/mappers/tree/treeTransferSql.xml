@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper   PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="treeTransferSql">
+	
+	<insert id="insertTransferTarget" parameterType="TransferTargetVO">
+		/**
+		* Query ID : insertTransferTarget
+		* Description : 전송대상 등록
+		* Author : 김주영
+		**/
+		INSERT INTO T_TRFTRGCNG_I
+		(
+		  TRF_TRG_ID
+		, TRF_TRG_CNN_NM
+		, TRF_TRG_URL
+		, CONNECTOR_CLASS
+		, TASK_MAX
+		, HADOOP_CONF_DIR
+		, HADOOP_HOME
+		, FLUSH_SIZE
+		, ROTATE_INTERVAL_MS
+		, CNR_ID
+		, FRST_REGR_ID
+		, FRST_REG_DTM
+		, LST_MDFR_ID
+		, LST_MDF_DTM
+		)
+		VALUES
+		(
+		  nextval('q_trftrgcng_i_01')
+		, #{trf_trg_cnn_nm}
+		, #{trf_trg_url}
+		, #{connector_class}
+		, #{task_max}
+		, #{hadoop_conf_dir}
+		, #{hadoop_home}
+		, #{flush_size}
+		, #{rotate_interval_ms}
+		, #{cnr_id}
+		, #{frst_regr_id}
+		, clock_timestamp()
+		, #{lst_mdfr_id}
+		, clock_timestamp()
+		)		
+	</insert>
+	
+	<delete id="deleteTransferTarget" parameterType="int">
+		/**
+		* Query ID : deleteTransferTarget
+		* Description : 전송대상 전체 삭제
+		* Author : 김주영
+		**/
+		DELETE FROM T_TRFTRGCNG_I
+		WHERE CNR_ID=#{cnr_id}
+	</delete>
+
+</mapper>
