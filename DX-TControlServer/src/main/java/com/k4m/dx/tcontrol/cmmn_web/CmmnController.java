@@ -19,6 +19,7 @@ import com.k4m.dx.tcontrol.admin.dbserverManager.service.DbServerVO;
 import com.k4m.dx.tcontrol.backup.service.BackupService;
 import com.k4m.dx.tcontrol.backup.service.WorkVO;
 import com.k4m.dx.tcontrol.cmmn.AES256;
+import com.k4m.dx.tcontrol.cmmn.AES256_KEY;
 import com.k4m.dx.tcontrol.cmmn.CmmnUtils;
 import com.k4m.dx.tcontrol.cmmn.SHA256;
 import com.k4m.dx.tcontrol.cmmn.client.ClientInfoCmmn;
@@ -52,8 +53,6 @@ public class CmmnController {
 	@Autowired
 	private CmmnServerInfoService cmmnServerInfoService;
 	
-	private String key = "aes256-dx-tcontrol-key";
-	
 	/**
 	 * 메인(홈)을 보여준다.
 	 * @return ModelAndView mv
@@ -85,7 +84,7 @@ public class CmmnController {
 		Map<String, Object> result =new HashMap<String, Object>();
 	
 		try {
-			AES256 aes = new AES256(key);
+			AES256 aes = new AES256(AES256_KEY.ENC_KEY);
 			String db_svr_nm = request.getParameter("db_svr_nm");
 			System.out.println(db_svr_nm);
 			
@@ -125,6 +124,7 @@ public class CmmnController {
 		Map<String, Object> result =new HashMap<String, Object>();
 
 		try {
+			AES256 aes = new AES256(AES256_KEY.ENC_KEY);
 			DbServerVO dbServerVO = backupService.selectDbSvrNm(workVO);
 			JSONObject serverObj = new JSONObject();
 			
@@ -133,7 +133,7 @@ public class CmmnController {
 			serverObj.put(ClientProtocolID.SERVER_PORT, dbServerVO.getPortno());
 			serverObj.put(ClientProtocolID.DATABASE_NAME, dbServerVO.getDft_db_nm());
 			serverObj.put(ClientProtocolID.USER_ID, dbServerVO.getSvr_spr_usr_id());
-			serverObj.put(ClientProtocolID.USER_PWD, dbServerVO.getSvr_spr_scm_pwd());
+			serverObj.put(ClientProtocolID.USER_PWD, aes.aesDecode(dbServerVO.getSvr_spr_scm_pwd()));
 			
 			ClientInfoCmmn cic = new ClientInfoCmmn();
 			result = cic.table_List(serverObj,  String.valueOf(workVO.getUsr_role_nm()));
