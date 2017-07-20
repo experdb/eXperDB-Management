@@ -25,6 +25,7 @@ import com.k4m.dx.tcontrol.admin.dbserverManager.service.DbServerManagerService;
 import com.k4m.dx.tcontrol.admin.dbserverManager.service.DbServerVO;
 import com.k4m.dx.tcontrol.backup.service.DbVO;
 import com.k4m.dx.tcontrol.cmmn.AES256;
+import com.k4m.dx.tcontrol.cmmn.AES256_KEY;
 import com.k4m.dx.tcontrol.cmmn.client.ClientInfoCmmn;
 import com.k4m.dx.tcontrol.cmmn.client.ClientProtocolID;
 import com.k4m.dx.tcontrol.common.service.CmmnHistoryService;
@@ -56,10 +57,8 @@ public class DbServerManagerController {
 	
 	@Autowired
 	private AccessControlService accessControlService;
-	
-	private String key = "aes256-dx-tcontrol-key";
-	
-	
+
+
 	/**
 	 * DB Tree 화면을 보여준다.
 	 * 
@@ -210,7 +209,7 @@ public class DbServerManagerController {
 		Map<String, Object> result =new HashMap<String, Object>();
 	
 		try {
-			AES256 aes = new AES256(key);
+			AES256 aes = new AES256(AES256_KEY.ENC_KEY);
 			System.out.println("=======parameter=======");
 			System.out.println("서버명 : " + dbServerVO.getDb_svr_nm());
 			System.out.println("Database : " + dbServerVO.getDft_db_nm());
@@ -258,7 +257,7 @@ public class DbServerManagerController {
 	 */
 	@RequestMapping(value = "/insertDbServer.do")
 	public @ResponseBody String insertDbServer(@ModelAttribute("dbServerVO") DbServerVO dbServerVO, @ModelAttribute("historyVO") HistoryVO historyVO,HttpServletRequest request) throws Exception {
-		AES256 aes = new AES256(key);
+		AES256 aes = new AES256(AES256_KEY.ENC_KEY);
 		try {
 			
 			String id = (String) request.getSession().getAttribute("usr_id");
@@ -327,7 +326,7 @@ public class DbServerManagerController {
 	@RequestMapping(value = "/updateDbServer.do")
 	public @ResponseBody boolean updateDbServer(@ModelAttribute("dbServerVO") DbServerVO dbServerVO, HttpServletRequest request){
 		try {
-			AES256 aes = new AES256(key);
+			AES256 aes = new AES256(AES256_KEY.ENC_KEY);
 			String usr_id = (String) request.getSession().getAttribute("usr_id");
 			dbServerVO.setLst_mdfr_id(usr_id);
 
