@@ -22,7 +22,10 @@
 		<typeAlias alias="dbidbserverVO" type="com.k4m.dx.tcontrol.accesscontrol.service.DbIDbServerVO"/>
 		<typeAlias alias="AccessControlVO" type="com.k4m.dx.tcontrol.accesscontrol.service.AccessControlVO"/>
 		<typeAlias alias="agentInfoVO" type="com.k4m.dx.tcontrol.common.service.AgentInfoVO" />
-		<typeAlias alias="workObjVO" type="com.k4m.dx.tcontrol.backup.service.WorkObjVO"/>
+		<typeAlias alias="workObjVO" type="com.k4m.dx.tcontrol.backup.service.WorkObjVO"/>		
+		<typeAlias alias="scheduleVO" type="com.k4m.dx.tcontrol.functions.schedule.service.ScheduleVO"/>
+		<typeAlias alias="scheduleDtlVO" type="com.k4m.dx.tcontrol.functions.schedule.service.ScheduleDtlVO"/>
+		<typeAlias alias="TransferTargetVO" type="com.k4m.dx.tcontrol.tree.transfer.service.TransferTargetVO"/>
 		
     </typeAliases>
     
@@ -53,5 +56,8 @@
 		
 		<!-- mypage -->
 		<mapper resource="egovframework/sqlmap/mappers/mypage/mypageSql.xml" />
+		
+		<!-- treetransfer -->
+		<mapper resource="egovframework/sqlmap/mappers/tree/treeTransferSql.xml" />
 	</mappers>
 </configuration>
