@@ -164,15 +164,12 @@
 <div id="contents">
 	<div class="contents_wrap">
 		<div class="contents_tit">
-			<h4>
-				Connector 등록 화면 <a href="#n"><img src="../images/ico_tit.png"
-					alt="" /></a>
-			</h4>
+			<h4>Kafka-Connector 등록 화면 <a href="#n"><img src="../images/ico_tit.png"alt="" /></a></h4>
 			<div class="location">
 				<ul>
 					<li>Function</li>
 					<li>Transfer</li>
-					<li class="on">Connector 등록</li>
+					<li class="on">Kafka-Connector 등록</li>
 				</ul>
 			</div>
 		</div>
@@ -189,14 +186,14 @@
 					<table class="write">
 						<caption>DB Server 조회하기</caption>
 						<colgroup>
-							<col style="width: 100px;" />
+							<col style="width: 130px;" />
 							<col />
 							<col style="width: 70px;" />
 							<col />
 						</colgroup>
 						<tbody>
 							<tr>
-								<th scope="row" class="t2">Connector명</th>
+								<th scope="row" class="t2">Kafka-Connector명</th>
 								<td><input type="text" class="txt" name="cnr_nm" id="cnr_nm" /></td>
 								<th scope="row" class="t3">아이피</th>
 								<td><input type="text" class="txt" name="cnr_ipadr" id="cnr_ipadr" /></td>
@@ -209,7 +206,7 @@
 						<tr>
 							<th></th>
 							<th>NO</th>
-							<th>서버명</th>
+							<th>Kafka-Connector명</th>
 							<th>아이피</th>
 							<th>포트</th>
 							<th>유형</th>

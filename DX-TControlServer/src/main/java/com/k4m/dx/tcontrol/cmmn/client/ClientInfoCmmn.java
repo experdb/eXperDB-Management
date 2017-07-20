@@ -470,4 +470,218 @@ public class ClientInfoCmmn {
 		}
 		return result;
 	}
+	
+	//14.kafka connect 조회(kafakConnect_select)
+	public JSONObject kafakConnect_select(JSONObject serverObj,String strName) {
+		
+		JSONArray jsonArray = new JSONArray(); // 객체를 담기위해 JSONArray 선언.
+		JSONObject result = new JSONObject();
+		
+		try {
+					
+			JSONObject connectorInfoObj = new JSONObject();
+			
+			connectorInfoObj.put(ClientProtocolID.CONNECTOR_NAME, strName);
+			
+			JSONObject jObj = new JSONObject();
+			jObj.put(ClientProtocolID.DX_EX_CODE, ClientTranCodeType.DxT014);
+			jObj.put(ClientProtocolID.COMMAND_CODE, ClientProtocolID.COMMAND_CODE_R);
+			jObj.put(ClientProtocolID.SERVER_INFO, serverObj);
+			jObj.put(ClientProtocolID.CONNECTOR_INFO, connectorInfoObj);
+			
+			
+			JSONObject objList;
+			
+			ClientAdapter CA = new ClientAdapter(Ip, port);
+			CA.open(); 
+				
+			objList = CA.dxT014(ClientTranCodeType.DxT014, jObj);
+			
+			String strErrMsg = (String)objList.get(ClientProtocolID.ERR_MSG);
+			String strErrCode = (String)objList.get(ClientProtocolID.ERR_CODE);
+			String strDxExCode = (String)objList.get(ClientProtocolID.DX_EX_CODE);
+			String strResultCode = (String)objList.get(ClientProtocolID.RESULT_CODE);
+			System.out.println("RESULT_CODE : " +  strResultCode);
+			System.out.println("ERR_CODE : " +  strErrCode);
+			System.out.println("ERR_MSG : " +  strErrMsg);
+			
+			List<Object> selectDBList =(ArrayList<Object>) objList.get(ClientProtocolID.RESULT_DATA);
+			
+			System.out.println("strDxExCode : " + " " + strDxExCode);
+			if(selectDBList.size() > 0) {
+				for(int i=0; i<selectDBList.size(); i++) {
+					JSONObject jsonObj = new JSONObject();
+					
+					Object obj = selectDBList.get(i);
+					
+					HashMap hp = (HashMap) obj;
+					String name = (String) hp.get("name");
+					String hdfs_url = (String) hp.get("hdfs.url");
+					
+					System.out.println(i + " " + hp );
+					System.out.println(i + " name : " + name );
+					System.out.println(i + " hdfs_url : " + hdfs_url );
+					
+					jsonObj.put("hp", hp);
+					jsonObj.put("name", name);
+					jsonObj.put("hdfs_url", hdfs_url);
+					
+					jsonArray.add(jsonObj);
+	
+				}
+				result.put("data", jsonArray);
+			}
+						
+			CA.close();
+		} catch(Exception e) {
+			e.printStackTrace();
+		}
+		return result;
+	}
+	
+	//14.kafka connect 등록(kafakConnect_create)
+	public void kafakConnect_create(JSONObject serverObj,JSONObject param) {
+		try {
+
+			String strName = (String) param.get("strName");
+			String strConnector_class = (String) param.get("strConnector_class");
+			String strTasks_max = (String) param.get("strTasks_max");
+			String strTopics = "";
+			String strHdfs_url = (String) param.get("strHdfs_url");
+			String strHadoop_conf_dir = (String) param.get("strHadoop_conf_dir");
+			String strHadoop_home = (String) param.get("strHadoop_home");
+			String strFlush_size = (String) param.get("strFlush_size");
+			String strRotate_interval_ms = (String) param.get("strRotate_interval_ms");
+
+			JSONObject connectorInfoObj = new JSONObject();
+			
+			connectorInfoObj.put(ClientProtocolID.CONNECTOR_NAME, strName);
+			connectorInfoObj.put(ClientProtocolID.CONNECTOR_CLASS, strConnector_class);
+			connectorInfoObj.put(ClientProtocolID.TASK_MAX, strTasks_max);
+			connectorInfoObj.put(ClientProtocolID.TOPIC, strTopics);
+			connectorInfoObj.put(ClientProtocolID.HDFS_URL, strHdfs_url);
+			connectorInfoObj.put(ClientProtocolID.HADOOP_CONF_DIR, strHadoop_conf_dir);
+			connectorInfoObj.put(ClientProtocolID.HADOOP_HOOM, strHadoop_home);
+			connectorInfoObj.put(ClientProtocolID.FLUSH_SIZE, strFlush_size);
+			connectorInfoObj.put(ClientProtocolID.ROTATE_INTERVAL_MS, strRotate_interval_ms);
+			
+			
+			JSONObject jObj = new JSONObject();
+			jObj.put(ClientProtocolID.DX_EX_CODE, ClientTranCodeType.DxT014);
+			jObj.put(ClientProtocolID.COMMAND_CODE, ClientProtocolID.COMMAND_CODE_C);
+			jObj.put(ClientProtocolID.SERVER_INFO, serverObj);
+			jObj.put(ClientProtocolID.CONNECTOR_INFO, connectorInfoObj);
+					
+			JSONObject objList;
+			
+			ClientAdapter CA = new ClientAdapter(Ip, port);
+			CA.open(); 
+				
+			objList = CA.dxT014(ClientTranCodeType.DxT014, jObj);
+			
+			String strErrMsg = (String)objList.get(ClientProtocolID.ERR_MSG);
+			String strErrCode = (String)objList.get(ClientProtocolID.ERR_CODE);
+			String strDxExCode = (String)objList.get(ClientProtocolID.DX_EX_CODE);
+			String strResultCode = (String)objList.get(ClientProtocolID.RESULT_CODE);
+			System.out.println("RESULT_CODE : " +  strResultCode);
+			System.out.println("ERR_CODE : " +  strErrCode);
+			System.out.println("ERR_MSG : " +  strErrMsg);
+				
+			CA.close();
+		} catch(Exception e) {
+			e.printStackTrace();
+		}
+	}
+	//14.kafka connect 수정(kafakConnect_update)
+	public void kafakConnect_update(JSONObject serverObj,JSONObject param) {
+		try {
+	
+			String strName = (String) param.get("strName");
+	
+			String strConnector_class = (String) param.get("strConnector_class");
+			String strTasks_max = (String) param.get("strTasks_max");
+			String strTopics = (String) param.get("strTopics");
+			String strHdfs_url = (String) param.get("strHdfs_url");
+			String strHadoop_conf_dir = (String) param.get("strHadoop_conf_dir");
+			String strHadoop_home = (String) param.get("strHadoop_home");
+			String strFlush_size = (String) param.get("strFlush_size");
+			String strRotate_interval_ms = (String) param.get("strRotate_interval_ms");
+
+			
+			JSONObject connectorInfoObj = new JSONObject();
+			
+			connectorInfoObj.put(ClientProtocolID.CONNECTOR_NAME, strName);
+			connectorInfoObj.put(ClientProtocolID.CONNECTOR_CLASS, strConnector_class);
+			connectorInfoObj.put(ClientProtocolID.TASK_MAX, strTasks_max);
+			connectorInfoObj.put(ClientProtocolID.TOPIC, strTopics);
+			connectorInfoObj.put(ClientProtocolID.HDFS_URL, strHdfs_url);
+			connectorInfoObj.put(ClientProtocolID.HADOOP_CONF_DIR, strHadoop_conf_dir);
+			connectorInfoObj.put(ClientProtocolID.HADOOP_HOOM, strHadoop_home);
+			connectorInfoObj.put(ClientProtocolID.FLUSH_SIZE, strFlush_size);
+			connectorInfoObj.put(ClientProtocolID.ROTATE_INTERVAL_MS, strRotate_interval_ms);
+			
+			
+			JSONObject jObj = new JSONObject();
+			jObj.put(ClientProtocolID.DX_EX_CODE, ClientTranCodeType.DxT014);
+			jObj.put(ClientProtocolID.COMMAND_CODE, ClientProtocolID.COMMAND_CODE_U);
+			jObj.put(ClientProtocolID.SERVER_INFO, serverObj);
+			jObj.put(ClientProtocolID.CONNECTOR_INFO, connectorInfoObj);
+			
+			
+			JSONObject objList;
+			
+			ClientAdapter CA = new ClientAdapter(Ip, port);
+			CA.open(); 
+				
+			objList = CA.dxT014(ClientTranCodeType.DxT014, jObj);
+			
+			String strErrMsg = (String)objList.get(ClientProtocolID.ERR_MSG);
+			String strErrCode = (String)objList.get(ClientProtocolID.ERR_CODE);
+			String strDxExCode = (String)objList.get(ClientProtocolID.DX_EX_CODE);
+			String strResultCode = (String)objList.get(ClientProtocolID.RESULT_CODE);
+			System.out.println("RESULT_CODE : " +  strResultCode);
+			System.out.println("ERR_CODE : " +  strErrCode);
+			System.out.println("ERR_MSG : " +  strErrMsg);
+		
+				
+			CA.close();
+		} catch(Exception e) {
+			e.printStackTrace();
+		}
+	}
+	
+	
+	//14.kafka connect 삭제(kafakConnect_delete)
+	public void kafakConnect_delete(JSONObject serverObj,String strName) {
+		try {
+			JSONObject connectorInfoObj = new JSONObject();
+			
+			connectorInfoObj.put(ClientProtocolID.CONNECTOR_NAME, strName);		
+			
+			JSONObject jObj = new JSONObject();
+			jObj.put(ClientProtocolID.DX_EX_CODE, ClientTranCodeType.DxT014);
+			jObj.put(ClientProtocolID.COMMAND_CODE, ClientProtocolID.COMMAND_CODE_D);
+			jObj.put(ClientProtocolID.SERVER_INFO, serverObj);
+			jObj.put(ClientProtocolID.CONNECTOR_INFO, connectorInfoObj);
+					
+			JSONObject objList;
+			
+			ClientAdapter CA = new ClientAdapter(Ip, port);
+			CA.open(); 
+				
+			objList = CA.dxT014(ClientTranCodeType.DxT014, jObj);
+			
+			String strErrMsg = (String)objList.get(ClientProtocolID.ERR_MSG);
+			String strErrCode = (String)objList.get(ClientProtocolID.ERR_CODE);
+			String strDxExCode = (String)objList.get(ClientProtocolID.DX_EX_CODE);
+			String strResultCode = (String)objList.get(ClientProtocolID.RESULT_CODE);
+			System.out.println("RESULT_CODE : " +  strResultCode);
+			System.out.println("ERR_CODE : " +  strErrCode);
+			System.out.println("ERR_MSG : " +  strErrMsg);
+				
+			CA.close();
+		} catch(Exception e) {
+			e.printStackTrace();
+		}
+	}
 }
