@@ -44,6 +44,7 @@ import com.k4m.dx.tcontrol.util.KafkaRestApi;
 public class DxT014 extends SocketCtl{
 	
 	private static Logger errLogger = LoggerFactory.getLogger("errorToFile");
+	private static Logger socketLogger = LoggerFactory.getLogger("socketLogger");
 	
 	public DxT014(Socket socket, InputStream is, OutputStream	os) {
 		this.client = socket;
@@ -52,6 +53,8 @@ public class DxT014 extends SocketCtl{
 	}
 
 	public void execute(String strDxExCode, JSONObject jObj) throws Exception {
+		
+		socketLogger.info("DxT014.execute : " + strDxExCode);
 		byte[] sendBuff = null;
 		String strErrCode = "";
 		String strErrMsg = "";
@@ -65,6 +68,7 @@ public class DxT014 extends SocketCtl{
 		
 		String strIP = (String) objSERVER_INFO.get(ProtocolID.SERVER_IP);
 		String strPort =  (String) objSERVER_INFO.get(ProtocolID.SERVER_PORT);
+		
 		
 		KafkaRestApi kafkaRestApi = new KafkaRestApi(strIP, Integer.parseInt(strPort));
 		
@@ -102,6 +106,8 @@ public class DxT014 extends SocketCtl{
 			
 			//조회
 			} else if(strCommandCode.equals(ProtocolID.COMMAND_CODE_R)) {
+				
+				
 				outputArray =  kafkaRestApi.searchKafkaConnect(strName);
 				
 				outputObj = DxT014ResultJSON(outputArray, strDxExCode, strSuccessCode, strErrCode, strErrMsg);

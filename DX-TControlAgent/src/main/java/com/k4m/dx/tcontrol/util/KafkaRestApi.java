@@ -31,6 +31,8 @@ public class KafkaRestApi {
 	}
 
 	private Logger logger = LoggerFactory.getLogger(KafkaRestApi.class);
+	private static Logger socketLogger = LoggerFactory.getLogger("socketLogger");
+	private static Logger errLogger = LoggerFactory.getLogger("errorToFile");
 
 	private String getApiServerUrl() {
 		return "http://" + restUrl + ":" + restPort;
@@ -60,6 +62,7 @@ public class KafkaRestApi {
 		JSONObject configJsonObjectMap = null;
 		ResponseEntity<String> responseEntity = null;
 		
+		
 		ArrayList<Map<String, Object>> configList = new ArrayList<Map<String, Object>>();
 
 		try {
@@ -72,6 +75,7 @@ public class KafkaRestApi {
 
 			responseEntity = restTemplate.exchange(baseUrl, HttpMethod.GET, requestEntity, String.class);
 			jsonString = responseEntity.getBody();
+			
 
 			if (responseEntity != null && responseEntity.getStatusCode().value() == 200) {
 
@@ -87,9 +91,8 @@ public class KafkaRestApi {
 					connectorStatus = new HashMap<String, Object>();
 
 					// 서버 해당 커넥터의 설정 정보 조회
-					connectorConfig = getKafkaConnectorConfigorStatus(restUrl, restPort, objects.get(i).toString(),
-							"config");
-					//System.out.println(connectorConfig);
+					connectorConfig = getKafkaConnectorConfigorStatus(restUrl, restPort, objects.get(i).toString(),"config");
+		
 					
 					//System.out.println( "name : " + connectorConfig.get("name"));
 
@@ -112,18 +115,22 @@ public class KafkaRestApi {
 			} else {
 				// 응답 코드가 200이 아닌 경우 에러 처리
 				// Globals.logger.error(url+" REST API 접속에서 예외가 발생했습니다.");
+				errLogger.info(baseUrl + " REST API 접속에서 예외가 발생했습니다. 응답 코드가 적절하지 않습니다.");
 				throw new Exception(baseUrl + " REST API 접속에서 예외가 발생했습니다. 응답 코드가 적절하지 않습니다.");
 			}
 
 		} catch (HttpClientErrorException e) {
 			// Globals.logger.info(url+" REST API 접속에서 예외가 발생했습니다.");
 			// Globals.logger.info(e);
+			errLogger.info(" REST API 접속에서 예외가 발생했습니다." + e.toString());
 			throw e;
 		} catch (ResourceAccessException e) {
 			// Globals.logger.info(url+" REST API 접속에서 예외가 발생했습니다.");
 			// Globals.logger.info(e);
+			errLogger.info(" REST API 접속에서 예외가 발생했습니다." + e.toString());
 			throw e;
 		} catch (Exception e) {
+			errLogger.info(" REST API 접속에서 예외가 발생했습니다." + e.toString());
 			throw e;
 		}
 		return configList;

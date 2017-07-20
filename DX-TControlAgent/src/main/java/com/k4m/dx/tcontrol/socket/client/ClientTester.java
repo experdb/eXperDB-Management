@@ -53,11 +53,11 @@ public class ClientTester {
 			//clientTester.dxT011(Ip, port);
 			//clientTester.dxT012(Ip, port);
 			
-			//clientTester.dxT013(Ip, port);
+			clientTester.dxT013(Ip, port);
 
 			//clientTester.dxT014_R(Ip, port);
 			//clientTester.dxT014_C(Ip, port);
-			clientTester.dxT014_U(Ip, port);
+			//clientTester.dxT014_U(Ip, port);
 			//clientTester.dxT014_D(Ip, port);
 			
 		} catch(Exception e) {
@@ -839,6 +839,40 @@ public class ClientTester {
 				}
 			}
 				
+				
+			CA.close();
+		} catch(Exception e) {
+			e.printStackTrace();
+		}
+	}
+	
+	
+	private void dxT013(String Ip, int port) {
+		try {
+
+			String strExecTxt = "";
+
+			JSONObject jObj = new JSONObject();
+			jObj.put(ClientProtocolID.DX_EX_CODE, ClientTranCodeType.DxT014);
+			jObj.put(ClientProtocolID.COMMAND_CODE, ClientProtocolID.RUN);
+			jObj.put(ClientProtocolID.EXEC_TXT, strExecTxt);
+			
+			
+			JSONObject objList;
+			
+			ClientAdapter CA = new ClientAdapter(Ip, port);
+			CA.open(); 
+				
+			objList = CA.dxT013(ClientTranCodeType.DxT013, jObj);
+			
+			String strErrMsg = (String)objList.get(ClientProtocolID.ERR_MSG);
+			String strErrCode = (String)objList.get(ClientProtocolID.ERR_CODE);
+			String strDxExCode = (String)objList.get(ClientProtocolID.DX_EX_CODE);
+			String strResultCode = (String)objList.get(ClientProtocolID.RESULT_CODE);
+			System.out.println("RESULT_CODE : " +  strResultCode);
+			System.out.println("ERR_CODE : " +  strErrCode);
+			System.out.println("ERR_MSG : " +  strErrMsg);
+		
 				
 			CA.close();
 		} catch(Exception e) {

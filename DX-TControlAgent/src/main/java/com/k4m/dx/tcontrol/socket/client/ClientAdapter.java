@@ -214,6 +214,15 @@ public class ClientAdapter {
 		return parseToJsonObj(recvBuff);
 	}
 	
+	public JSONObject dxT013(String strDxExCode, JSONObject jObj) throws Exception{
+
+		byte[] bt = jObj.toString().getBytes();
+		
+		cc.send(4, bt);
+		
+		byte[]	recvBuff = cc.recv(4, false);
+		return parseToJsonObj(recvBuff);
+	}
 	
 	public JSONObject dxT014(String strDxExCode, JSONObject jObj) throws Exception{
 

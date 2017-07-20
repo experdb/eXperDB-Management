@@ -1,23 +1,22 @@
 package com.k4m.dx.tcontrol.server;
 
+import java.io.BufferedReader;
 import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.io.OutputStream;
+import java.lang.reflect.Field;
 import java.net.Socket;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 
-import org.apache.commons.dbcp.PoolingDriver;
 import org.apache.ibatis.session.SqlSession;
 import org.apache.ibatis.session.SqlSessionFactory;
-import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.k4m.dx.tcontrol.db.DBCPPoolManager;
 import com.k4m.dx.tcontrol.db.SqlSessionManager;
 import com.k4m.dx.tcontrol.socket.ErrCodeMng;
 import com.k4m.dx.tcontrol.socket.ProtocolID;
@@ -47,66 +46,74 @@ public class DxT013 extends SocketCtl{
 		this.os = os;
 	}
 
-	public void execute(String strDxExCode, JSONObject dbInfoObj) throws Exception {
+	public void execute(String strDxExCode, JSONObject jObj) throws Exception {
 		byte[] sendBuff = null;
 		String strErrCode = "";
 		String strErrMsg = "";
 		String strSuccessCode = "0";
 		
-		SqlSessionFactory sqlSessionFactory = null;
 		
-		JSONObject resDataObj = new JSONObject();
-		
-		sqlSessionFactory = SqlSessionManager.getInstance();
-		
-		String poolName = "" + dbInfoObj.get(ProtocolID.SERVER_NAME) + "_" + dbInfoObj.get(ProtocolID.DATABASE_NAME);
-		
-		Connection connDB = null;
-		SqlSession sessDB = null;
-		List<Object> selectTableList = new ArrayList<Object>();
+		String execTxt = (String) jObj.get(ProtocolID.EXEC_TXT);
+	
 		
 		JSONObject outputObj = new JSONObject();
 		
 		try {
 			
-			SocketExt.setupDriverPool(dbInfoObj, poolName);
-
-			try {
-			//DB 컨넥션을 가져온다.
-			connDB = DriverManager.getConnection("jdbc:apache:commons:dbcp:" + poolName);
-			sessDB = sqlSessionFactory.openSession(connDB);
+			shellCmd(execTxt);
 			
-			} catch(Exception e) {
-				strErrCode += ErrCodeMng.Err001;
-				strErrMsg += ErrCodeMng.Err001_Msg + " " + e.toString();
-				strSuccessCode = "1";
-			}
-		
-			
-			selectTableList = sessDB.selectList("app.selectAllSchemaTableList");
-			
-			
-			outputObj = ResultJSON(selectTableList, strDxExCode, strSuccessCode, strErrCode, strErrMsg);
+			outputObj = DxT013ResultJSON(strDxExCode, strSuccessCode, strErrCode, strErrMsg);
 	        
 	        sendBuff = outputObj.toString().getBytes();
 	        send(4, sendBuff);
 
 			
 		} catch (Exception e) {
-			errLogger.error("DxT012 {} ", e.toString());
+			errLogger.error("DxT013 {} ", e.toString());
 			
-			outputObj.put(ProtocolID.DX_EX_CODE, TranCodeType.DxT002);
+			outputObj.put(ProtocolID.DX_EX_CODE, TranCodeType.DxT013);
 			outputObj.put(ProtocolID.RESULT_CODE, "1");
-			outputObj.put(ProtocolID.ERR_CODE, TranCodeType.DxT002);
-			outputObj.put(ProtocolID.ERR_MSG, "DxT002 Error [" + e.toString() + "]");
+			outputObj.put(ProtocolID.ERR_CODE, TranCodeType.DxT013);
+			outputObj.put(ProtocolID.ERR_MSG, "DxT013 Error [" + e.toString() + "]");
 			
 			sendBuff = outputObj.toString().getBytes();
 			send(4, sendBuff);
 			
 		} finally {
-			sessDB.close();
-		}	        
-
+		}	
 
 	}
+	
+	   public static void shellCmd(String command) throws Exception {
+           Runtime runtime = Runtime.getRuntime();
+           Process process = runtime.exec(command);
+           
+           long pid = getPidOfProcess(process);
+           
+           InputStream is = process.getInputStream();
+           InputStreamReader isr = new InputStreamReader(is);
+           BufferedReader br = new BufferedReader(isr);
+           String line;
+           while((line = br.readLine()) != null) {
+                          System.out.println(line);
+           }
+	   }
+	   
+	   public static synchronized long getPidOfProcess(Process p) {
+		    long pid = -1;
+
+		    try {
+		      if (p.getClass().getName().equals("java.lang.UNIXProcess")) {
+		        Field f = p.getClass().getDeclaredField("pid");
+		        f.setAccessible(true);
+		        pid = f.getLong(p);
+		        f.setAccessible(false);
+		      }
+		    } catch (Exception e) {
+		      pid = -1;
+		    }
+		    return pid;
+		  }
+
+
 }
