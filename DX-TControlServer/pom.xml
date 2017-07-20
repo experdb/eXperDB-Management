@@ -75,7 +75,11 @@
          <artifactId>egovframework.rte.fdl.property</artifactId>
          <version>${egovframework.rte.version}</version>
       </dependency>
-
+		<dependency>
+			<groupId>egovframework.rte</groupId>
+			<artifactId>egovframework.rte.bat.core</artifactId>
+			<version>3.1.0</version>
+		</dependency>
         <dependency>
           <groupId>javax.servlet</groupId>
           <artifactId>servlet-api</artifactId>
@@ -183,7 +187,31 @@
 	    <version>1.10</version>
 	</dependency>
 
-
+	<!-- Scheduling -->
+	<dependency>
+	    <groupId>org.quartz-scheduler</groupId>
+	    <artifactId>quartz</artifactId>
+	    <version>2.2.1</version>
+	    <exclusions>
+	        <exclusion>
+	            <artifactId>slf4j-api</artifactId>
+	            <groupId>org.slf4j</groupId>
+	        </exclusion>
+	    </exclusions>
+	</dependency>
+	<dependency>
+	    <groupId>org.quartz-scheduler</groupId>
+	    <artifactId>quartz-jobs</artifactId>
+	    <version>2.2.1</version>
+	</dependency>
+	<!-- Scheduling end-->
+		
+	<dependency>
+	    <groupId>org.springframework.batch</groupId>
+	    <artifactId>spring-batch-core</artifactId>
+	    <version>3.0.7.RELEASE</version>
+	</dependency>
+		
       <!-- /excel 설정 -->
       
         <!-- mysql이나 oracle 필요시 사용 -->
