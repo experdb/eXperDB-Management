@@ -25,6 +25,7 @@
 		<typeAlias alias="workObjVO" type="com.k4m.dx.tcontrol.backup.service.WorkObjVO"/>		
 		<typeAlias alias="scheduleVO" type="com.k4m.dx.tcontrol.functions.schedule.service.ScheduleVO"/>
 		<typeAlias alias="scheduleDtlVO" type="com.k4m.dx.tcontrol.functions.schedule.service.ScheduleDtlVO"/>
+		<typeAlias alias="workObjVO" type="com.k4m.dx.tcontrol.backup.service.WorkObjVO"/>
 		<typeAlias alias="TransferTargetVO" type="com.k4m.dx.tcontrol.tree.transfer.service.TransferTargetVO"/>
 		
     </typeAliases>

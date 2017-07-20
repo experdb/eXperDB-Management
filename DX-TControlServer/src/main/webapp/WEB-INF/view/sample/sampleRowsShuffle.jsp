@@ -1,15 +1,15 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
-<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<%-- <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form"%>
 <%@ taglib prefix="ui" uri="http://egovframework.gov/ctl/ui"%>
-<%@ taglib prefix="spring" uri="http://www.springframework.org/tags"%>
+<%@ taglib prefix="spring" uri="http://www.springframework.org/tags"%> --%>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <title>sampleRowsShuffle</title>
-<link type="text/css" rel="stylesheet" href="<c:url value='/css/egovframework/jquery-ui.css'/>"/>
+ <link type="text/css" rel="stylesheet" href="<c:url value='/css/egovframework/jquery-ui.css'/>"/>
 <link type="text/css" rel="stylesheet" href="<c:url value='/css/dt/jquery.dataTables.min.css'/>"/>
 <link rel="stylesheet" href="<c:url value='/css/treeview/jquery.treeview.css'/>"/>
 <link rel="stylesheet" href="<c:url value='/css/treeview/screen.css'/>"/>
@@ -21,7 +21,7 @@
 <script src="js/jquery/jquery.dataTables.min.js" type="text/javascript"></script>
 <!-- <script src="js/treeview/jquery.js" type="text/javascript"></script> -->
 <script src="js/treeview/jquery.cookie.js" type="text/javascript"></script>
-<script src="js/treeview/jquery.treeview.js" type="text/javascript"></script>
+<script src="js/treeview/jquery.treeview.js" type="text/javascript"></script> 
 
 </head>
 <style>
@@ -210,6 +210,9 @@ $(window.document).ready(
 		});
 </script>
 <body>
+
+			<div id="contents">
+				<div class="contents_wrap">
 	<h1>스케줄시간 , 테이블 셔플</h1>
 
 	<h3>*스케줄시간설정</h3>
@@ -300,5 +303,7 @@ $(window.document).ready(
             </tr>
         </thead>
     </table>
+    </div>
+    </div>
 </body>
 </html>

@@ -15,6 +15,8 @@ import org.springframework.web.servlet.ModelAndView;
 import com.k4m.dx.tcontrol.admin.accesshistory.service.AccessHistoryService;
 import com.k4m.dx.tcontrol.admin.dbserverManager.service.DbServerVO;
 import com.k4m.dx.tcontrol.audit.service.AuditVO;
+import com.k4m.dx.tcontrol.cmmn.AES256;
+import com.k4m.dx.tcontrol.cmmn.AES256_KEY;
 import com.k4m.dx.tcontrol.cmmn.client.ClientAdapter;
 import com.k4m.dx.tcontrol.cmmn.client.ClientProtocolID;
 import com.k4m.dx.tcontrol.cmmn.client.ClientTranCodeType;
@@ -64,12 +66,16 @@ public class AuditController {
 			
 			JSONObject serverObj = new JSONObject();
 			
+			AES256 dec = new AES256(AES256_KEY.ENC_KEY);
+			System.out.println("KEY : " + dbServerVO.getSvr_spr_scm_pwd());
+			String strPwd = dec.aesDecode(dbServerVO.getSvr_spr_scm_pwd());
+			
 			serverObj.put(ClientProtocolID.SERVER_NAME, dbServerVO.getDb_svr_nm());
 			serverObj.put(ClientProtocolID.SERVER_IP, dbServerVO.getIpadr());
 			serverObj.put(ClientProtocolID.SERVER_PORT, dbServerVO.getPortno());
 			serverObj.put(ClientProtocolID.DATABASE_NAME, dbServerVO.getDft_db_nm());
 			serverObj.put(ClientProtocolID.USER_ID, dbServerVO.getSvr_spr_usr_id());
-			serverObj.put(ClientProtocolID.USER_PWD, dbServerVO.getSvr_spr_scm_pwd());
+			serverObj.put(ClientProtocolID.USER_PWD, strPwd);
 			
 			
 			String IP = dbServerVO.getIpadr();
@@ -112,6 +118,18 @@ public class AuditController {
 		}
 		mv.setViewName("dbserver/auditManagement");
 		return mv;
+	}
+	
+	public static void main(String[] args) throws Exception {
+		AES256 dec = new AES256(AES256_KEY.ENC_KEY);
+		
+		String strData = dec.aesEncode("test");
+		
+		System.out.println(strData);
+		
+		System.out.println(dec.aesDecode("ELZ2H6WyVytsGBOhEcDMLw=="));
+		
+		
 	}
 	
 }

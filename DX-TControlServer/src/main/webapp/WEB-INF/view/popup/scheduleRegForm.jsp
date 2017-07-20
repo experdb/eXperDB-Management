@@ -17,6 +17,7 @@
 <link rel = "stylesheet" type = "text/css" media = "screen" href = "<c:url value='/css/dt/dataTables.jqueryui.min.css'/>"/> 
 <link rel="stylesheet" type="text/css" href="<c:url value='/css/dt/dataTables.colVis.css'/>"/>
 <link rel="stylesheet" type="text/css" href="<c:url value='/css/dt/dataTables.checkboxes.css'/>"/>
+
 <script src ="/js/jquery/jquery-1.7.2.min.js" type="text/javascript"></script>
 <script src ="/js/jquery/jquery-ui.js" type="text/javascript"></script>
 <script src="/js/jquery/jquery.dataTables.min.js" type="text/javascript"></script>
@@ -36,6 +37,7 @@ function fn_init() {
 		 ******************************************************** */
 		table = $('#workList').DataTable({
 		scrollY : "271px",
+		
 		processing : true,
 		searching : false,
 		paging : false,	
@@ -76,12 +78,42 @@ function fn_init() {
  ******************************************************** */
 $(window.document).ready(function() {
 	fn_init();
+	
+	 /* ********************************************************
+	  * 페이지 시작시, Repository DB에 등록되어 있는 디비의 서버명 SelectBox 
+	  ******************************************************** */
+	  	$.ajax({
+			url : "/selectSvrList.do",
+			data : {},
+			dataType : "json",
+			type : "post",
+			error : function(xhr, status, error) {
+				alert("실패")
+			},
+			success : function(result) {				
+				$("#db_svr_nm").children().remove();
+				$("#db_svr_nm").append("<option value='%'>선택</option>");
+				if(result.length > 0){
+					for(var i=0; i<result.length; i++){
+						$("#db_svr_nm").append("<option value='"+result[i].db_svr_nm+"'>"+result[i].db_svr_nm+"</option>");	
+					}									
+				}
+			}
+		}); 
+	 
 });
 
 /* ********************************************************
  * 조회
  ******************************************************** */
 function fn_search(){
+	var db_svr_nm = $("#db_svr_nm").val();
+	
+	if(db_svr_nm == '%'){
+		alert("서버명을 선택하셔야 합니다.");
+		return false;
+	}
+
 	$.ajax({
 		url : "/selectWorkList.do",
 		data : {
@@ -114,10 +146,10 @@ function fn_workAdd(){
 	
 	var rowList = [];
     for (var i = 0; i < datas.length; i++) {
-       rowList.push( table.rows('.selected').data()[i]);     
+        rowList.push( table.rows('.selected').data()[i].wrk_id);   
+	   //rowList.push( table.rows('.selected').data()[i]);     
   }	
-
-	opener.fn_workAddCallback(rowList);
+	opener.fn_workAddCallback(JSON.stringify(rowList));
 	self.close();
 }
 </script>
@@ -125,7 +157,7 @@ function fn_workAdd(){
 </head>
 <body>
 <div class="pop_container">
-	<div class="pop_cts_1">
+	<div class="pop_cts">
 		<p class="tit">스케줄 Work등록</p>
 			<div class="btn_type_01">
 				<span class="btn"><button onClick="fn_search();">조회</button></span>
@@ -137,23 +169,24 @@ function fn_workAdd(){
 					<col style="width:30px;" />
 					<col style="width:50px;" />
 					<col style="width:30px;" />
-					<col style="width:100px;" />
-					<col style="width:30px;" />
+					<col style="width:50px;" />
 					<col style="width:30px;" />
 					<col style="width:100px;" />			
 				</colgroup>
 				<tbody>
 					<tr>
+						<th scope="row" class="ico_t1">DB 서버명</th>
+						<td>
+						<select class="select t8" name="db_svr_nm" id="db_svr_nm">
+								<option value="%">선택</option>
+						</select>	
 						<th scope="row" class="ico_t1">구분</th>
 						<td>
 						<select class="select t8" name="bck_bsn_dscd" id="bck_bsn_dscd">
 							<option value="TC000201">Rman백업</option>
 							<option value="TC000202">Dump백업</option>
 						</select>						
-						</td>					
-						<th scope="row" class="ico_t1">서버명</th>
-						<td><input type="text" class="txt t1" name="db_svr_nm" id="db_svr_nm" /></td>			
-						<td></td>					
+						</td>									
 						<th scope="row" class="ico_t1" style="magin-left:50px;" >Work명</th>
 						<td><input type="text" class="txt t4" name="wrk_nm" id="wrk_nm" /></td>				
 					</tr>
@@ -207,8 +240,8 @@ function fn_workAdd(){
 	</div>
 </div>
 
-<div id="loading">
-		<img src="/images/spin.gif" alt="" />
-</div>
+	<div id="loading">
+			<img src="/images/spin.gif" alt="" />
+	</div>
 </body>
 </html>

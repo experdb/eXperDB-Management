@@ -23,7 +23,7 @@
 							<li><a href="#n">Transfer</a>
 								<ul class="depth_3">
 									<li><a href="/transferSetting.do" >전송 설정</a></li>
-									<li><a href="/connectorRegister.do" >Connector 등록</a></li>
+									<li><a href="/connectorRegister.do" >Kafka-Connector 등록</a></li>
 								</ul>
 							</li>
 						</ul>

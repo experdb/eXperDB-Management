@@ -379,7 +379,6 @@ public class DbServerManagerController {
 			
 			String strRows = request.getParameter("rows").toString().replaceAll("&quot;", "\"");
 
-			System.out.println(strRows);
 			JSONArray rows = (JSONArray) new JSONParser().parse(strRows);
 		
 			dbServerManagerService.deleteDB(dbServerVO);

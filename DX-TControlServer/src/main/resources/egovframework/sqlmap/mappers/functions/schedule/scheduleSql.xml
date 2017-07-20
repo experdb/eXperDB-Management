@@ -52,4 +52,112 @@
       </if>
     </select>
   
+  
+  	<select id="selectScheduleWorkList" resultType="Map" parameterType="HashMap">
+		/**
+	 	* Query ID : selectScheduleWorkList
+	 	* Description :  선택된 work List 조회
+	 	* Author : 변승우
+	 	**/
+       SELECT 
+      		(ROW_NUMBER() OVER()) AS ROWNUM
+      		,(ROW_NUMBER() OVER()) AS IDX
+      		, WRK_ID
+			, DB_SVR_ID
+            , (SELECT DB_SVR_NM FROM T_DBSVR_I WHERE A.DB_SVR_ID = DB_SVR_ID ) AS DB_SVR_NM
+			, DB_ID
+			, (CASE WHEN DB_ID>0 THEN (SELECT DB_NM FROM T_DB_I WHERE A.DB_ID=DB_ID ) ELSE '' END) AS DB_NM
+			, BCK_BSN_DSCD
+			, (SELECT SYS_CD_NM FROM T_SYSDTL_C WHERE A.BCK_BSN_DSCD = SYS_CD ) AS BCK_BSN_DSCD_NM
+			, WRK_NM
+			, WRK_EXP
+			, 'N' AS NXT_EXE_YN
+      FROM T_WRKCNG_I A
+      WHERE 1=1	
+      AND WRK_ID IN
+      <foreach item="item" index="index" collection="work_id" open="(" separator="," close=")"> 
+				 #{item}::numeric
+		</foreach>
+    </select>
+    
+   
+    <select id="selectScd_id" resultType="int">
+   		/**
+	 	* Query ID : selectScm_id
+	 	* Description : 스케줄 ID 조회
+	 	* Author : 변승우
+	 	**/
+    	SELECT NEXTVAL('q_scd_m_01')
+    </select>
+    
+    
+    <insert id="insertSchedule" parameterType="scheduleVO">
+		/**
+	 	* Query ID : insertSchedule
+	 	* Description : 스케줄 insert
+	 	* Author : 변승우
+	 	**/
+		INSERT INTO T_SCD_M
+			(
+			SCD_ID
+			, SCD_NM
+			, SCD_EXP
+			, EXE_PERD_CD
+			, EXE_DT
+			, EXE_HMS
+			, PREV_EXE_DTM
+			, NXT_EXE_DTM
+			, FRST_REGR_ID
+			, FRST_REG_DTM
+			, LST_MDFR_ID
+			, LST_MDF_DTM
+			)
+		VALUES
+			(			
+			#{scd_id}
+			, #{scd_nm}
+			, #{scd_exp}
+			, #{exe_perd_cd}
+			, #{exe_dt}
+			, #{exe_hms}
+			, #{prev_exe_dtm}
+			, #{nxt_exe_dtm}
+			, #{frst_regr_id}
+			, clock_timestamp()
+			, #{frst_regr_id}
+			, clock_timestamp()
+			)
+	</insert>
+	
+	<insert id="insertScheduleDtl" parameterType="scheduleDtlVO">
+		/**
+	 	* Query ID : insertScheduleDtl
+	 	* Description : 스케줄 상세정보 insert
+	 	* Author : 변승우
+	 	**/
+		INSERT INTO T_SCD_D
+			(
+			SCD_DTL_ID
+			, SCD_ID
+			, WRK_ID
+			, EXE_ORD
+			, NXT_EXE_YN
+			, FRST_REGR_ID
+			, FRST_REG_DTM
+			, LST_MDFR_ID
+			, LST_MDF_DTM
+			)
+		VALUES
+			(			
+			nextval('q_scd_d_01')
+			, #{scd_id}
+			, #{wrk_id}
+			, #{exe_ord}
+			, #{nxt_exe_yn}
+			, #{frst_regr_id}
+			, clock_timestamp()
+			, #{frst_regr_id}
+			, clock_timestamp()
+			)
+	</insert>
 </mapper>
