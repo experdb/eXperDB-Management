@@ -18,6 +18,8 @@ import com.k4m.dx.tcontrol.server.DxT008;
 import com.k4m.dx.tcontrol.server.DxT010;
 import com.k4m.dx.tcontrol.server.DxT011;
 import com.k4m.dx.tcontrol.server.DxT012;
+import com.k4m.dx.tcontrol.server.DxT013;
+import com.k4m.dx.tcontrol.server.DxT014;
 import com.k4m.dx.tcontrol.socket.ProtocolID;
 import com.k4m.dx.tcontrol.socket.SocketCtl;
 import com.k4m.dx.tcontrol.socket.TranCodeType;
@@ -52,12 +54,14 @@ public class DXTcontrolSocketExecute extends SocketCtl implements Runnable {
 				
 				JSONObject objSERVER_INFO = (JSONObject) jObj.get(ProtocolID.SERVER_INFO);
 				
-				System.out.println("DX_EX_CODE : " + strDX_EX_CODE);	
-				System.out.println("server_ip : " + objSERVER_INFO.get(ProtocolID.SERVER_IP));
-				System.out.println("server_port : " + objSERVER_INFO.get(ProtocolID.SERVER_PORT));
+				socketLogger.info("DX_EX_CODE : " + strDX_EX_CODE);	
+				socketLogger.info("server_ip : " + objSERVER_INFO.get(ProtocolID.SERVER_IP));
+				socketLogger.info("server_port : " + objSERVER_INFO.get(ProtocolID.SERVER_PORT));
 				
 				
 				JSONObject resDataObj = new JSONObject();
+				
+				socketLogger.info("strDX_EX_CODE : " + strDX_EX_CODE);
 				
 				switch(strDX_EX_CODE) {
 				//Database List
@@ -127,7 +131,22 @@ public class DXTcontrolSocketExecute extends SocketCtl implements Runnable {
 					dxT012.execute(strDX_EX_CODE, objSERVER_INFO);
 
 					break;
+				case TranCodeType.DxT013 :
+					
+					DxT013 dxT013 = new DxT013(client, is, os);
+					dxT013.execute(strDX_EX_CODE, jObj);
+
+					break;
+				case TranCodeType.DxT014 :
+					
+					socketLogger.info("DxT014 : " + TranCodeType.DxT014);
+					
+					DxT014 dxT014 = new DxT014(client, is, os);
+					dxT014.execute(strDX_EX_CODE, jObj);
+
+					break;
 				}
+
 
 
 		       

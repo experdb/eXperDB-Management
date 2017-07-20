@@ -261,4 +261,40 @@
 		
 	</select>
 	
+	<select id="selectPgResumeIngest">
+		/**
+	 	* Query ID : selectPgResumeIngest
+	 	* Description : bottledWater 프로세스 실행
+	 	* Author : 박태혁
+	 	**/
+		SELECT pg_resume_ingest(0)
+	</select>
+
+	<select id="selectPgSuspendIngest">
+		/**
+	 	* Query ID : selectPgSuspendIngest
+	 	* Description : bottledWater 프로세스 종료
+	 	* Author : 박태혁
+	 	**/
+		SELECT pg_suspend_ingest()
+
+	</select>
+
+	<select id="selectCreateKafkaConnect" parameterType="hashmap">
+		/**
+	 	* Query ID : selectCreateKafkaConnect
+	 	* Description : kafka Connect 생성
+	 	* Author : 박태혁
+	 	**/
+		select pg_create_kafka_connect(#{connectName})
+	</select>
+
+	<select id="selectDeleteKafkaConnect" parameterType="hashmap">
+		/**
+	 	* Query ID : selectDeleteKafkaConnect
+	 	* Description : kafka Connect 삭제
+	 	* Author : 박태혁
+	 	**/
+		select pg_delete_kafka_connect(#{connectName})
+	</select>
 </mapper>
