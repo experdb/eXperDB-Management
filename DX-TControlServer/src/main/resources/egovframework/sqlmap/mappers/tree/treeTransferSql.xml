@@ -54,5 +54,21 @@
 		DELETE FROM T_TRFTRGCNG_I
 		WHERE CNR_ID=#{cnr_id}
 	</delete>
-
+	
+	<select id="selectTransferDetail" resultType="TransferDetailVO">
+		/**
+		* Query ID : selectTransferDetail
+		* Description : 전송상세설정 조회
+		* Author : 김주영
+		**/
+		SELECT 
+		  T.TRF_TRG_CNN_NM
+		, I.DB_NM 
+		FROM T_TRFTRGCNG_I T
+			LEFT OUTER JOIN T_TRFTRGMPP_R R
+			ON T.TRF_TRG_ID= R.TRF_TRG_ID
+				LEFT OUTER JOIN T_DB_I I
+				ON  R.DB_ID = I.DB_ID
+		WHERE T.CNR_ID=#{cnr_id}
+	</select>
 </mapper>
