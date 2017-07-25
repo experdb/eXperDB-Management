@@ -1,8 +1,13 @@
 package com.k4m.dx.tcontrol.util;
 
+import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
+import java.io.FileReader;
+import java.io.IOException;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.Properties;
 
@@ -15,6 +20,29 @@ import org.springframework.core.io.Resource;
  *
  */
 public class FileUtil {
+	
+	public static String getFileView(File file) throws Exception {
+		String strView = "";
+        BufferedReader br = null;
+        try {
+            br = new BufferedReader(new FileReader(file));
+            char[] c = new char[(int) file.length()];
+            br.read(c);
+            strView = new String(c);
+/*            String line;
+            while ((line = br.readLine()) != null) {
+            	strView += line + "\r\n";
+            }*/
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }finally {
+            if(br != null) try {br.close(); } catch (IOException e) {}
+        }
+        
+        return strView;
+	}
 
 	/**
 	 * 프로퍼티 get value
@@ -171,18 +199,32 @@ public class FileUtil {
 	public static void main(String args[]) {
 		
 		try {
-		//pdf.end 파일Test
-		String strPdfFileName = "1000088_1.pdf.end";
-		String strExtFileName = fileNameSubString(strPdfFileName);
-		
-		if(strExtFileName.indexOf(".") > 0) {
-			System.out.println(fileExtenderSubString(strExtFileName));
-		}
-
+			//pdf.end 파일Test
+			/**
+			String strPdfFileName = "1000088_1.pdf.end";
+			String strExtFileName = fileNameSubString(strPdfFileName);
+			
+			if(strExtFileName.indexOf(".") > 0) {
+				System.out.println(fileExtenderSubString(strExtFileName));
+			}
+			
+			**/
+			
+			//파일읽기
+			String strFilePath = "C:\\k4m\\01-1. DX 제폼개발\\04. 시험\\pg_log\\";
+			String strFileName = "postgresql-2017-07-25_095614.log";
+			
+			File inFile = new File(strFilePath, strFileName);
+			
+			String strFileTxt = FileUtil.getFileView(inFile);
+			
+			System.out.println(strFileTxt);
+			
 		
 		} catch(Exception e) {
 			e.printStackTrace();
 		}
 	}
+
 
 }

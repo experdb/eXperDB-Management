@@ -29,11 +29,12 @@ public class ClientProtocolID {
 	public static final String REQ_CMD = "REQ_CMD"; //명령어
 	public static final String ARR_CMD = "ARR_CMD"; //명령어 Array
 	
-	public static final String COMMAND_CODE = "COMMAND_CODE"; //Authentication CRUD
-	public static final String COMMAND_CODE_C = "COMMAND_CODE_C"; //Authentication C
-	public static final String COMMAND_CODE_R = "COMMAND_CODE_R"; //Authentication R
-	public static final String COMMAND_CODE_U = "COMMAND_CODE_U"; //Authentication U
-	public static final String COMMAND_CODE_D = "COMMAND_CODE_D"; //Authentication D
+	public static final String COMMAND_CODE = "COMMAND_CODE"; // CRUD
+	public static final String COMMAND_CODE_C = "COMMAND_CODE_C"; // C
+	public static final String COMMAND_CODE_R = "COMMAND_CODE_R"; // R
+	public static final String COMMAND_CODE_U = "COMMAND_CODE_U"; // U
+	public static final String COMMAND_CODE_D = "COMMAND_CODE_D"; // D
+	public static final String COMMAND_CODE_V = "COMMAND_CODE_V"; // view
 	
 	public static final String ACCESS_CONTROL_INFO = "ACCESS_CONTROL_INFO";
 	public static final String AC_SEQ = "Seq";
@@ -67,6 +68,10 @@ public class ClientProtocolID {
 	public static final String USER_NAME = "user_name";
 	public static final String START_DATE = "start_date";
 	public static final String END_DATE = "end_date";
+	public static final String FILE_NAME = "file_name";
+	public static final String FILE_SIZE = "file_size";
+	public static final String FILE_LASTMODIFIED = "file_lastmodified";
+	public static final String FILE_DIRECTORY = "file_directory";
 	
 	//KAFKA CONNECT
 	public static final String CONNECTOR_INFO = "CONNECTOR_INFO";
@@ -80,8 +85,10 @@ public class ClientProtocolID {
 	public static final String ROTATE_INTERVAL_MS = "ROTATE_INTERVAL_MS";
 	public static final String TOPIC = "TOPIC";
 	
+	
 	public static final String EXEC_TXT = "EXEC_TXT";
 	public static final String RUN = "RUN";
 	public static final String STOP = "STOP";
+
 
 }
