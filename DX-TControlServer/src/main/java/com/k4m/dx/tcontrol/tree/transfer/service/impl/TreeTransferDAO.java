@@ -5,7 +5,9 @@ import java.util.List;
 
 import org.springframework.stereotype.Repository;
 
+import com.k4m.dx.tcontrol.accesscontrol.service.DbIDbServerVO;
 import com.k4m.dx.tcontrol.tree.transfer.service.TransferDetailVO;
+import com.k4m.dx.tcontrol.tree.transfer.service.TransferRelationVO;
 import com.k4m.dx.tcontrol.tree.transfer.service.TransferTargetVO;
 
 import egovframework.rte.psl.dataaccess.EgovAbstractMapper;
@@ -47,4 +49,40 @@ public class TreeTransferDAO extends EgovAbstractMapper {
 		return result;
 	}
 
+	/**
+	 * 데이터베이스 조회
+	 * 
+	 * @param db_svr_nm
+	 * @throws SQLException
+	 */
+	@SuppressWarnings({ "deprecation", "unchecked" })
+	public List<DbIDbServerVO> selectServerDbList(String db_svr_nm) throws SQLException {
+		List<DbIDbServerVO> result = null;
+		result = (List<DbIDbServerVO>) list("treeTransferSql.selectServerDbList", db_svr_nm);
+		return result;
+	}
+
+	/**
+	 * DB,SERVER 조회
+	 * 
+	 * @param db_id
+	 * @throws SQLException
+	 */
+	@SuppressWarnings({ "unchecked", "deprecation" })
+	public List<DbIDbServerVO> selectServerDb(int db_id) throws SQLException {
+		List<DbIDbServerVO> result = null;
+		result = (List<DbIDbServerVO>) list("treeTransferSql.selectServerDb", db_id);
+		return result;
+	}
+
+	/**
+	 * 전송대상매핑관계 등록
+	 * 
+	 * @param transferRelationVO
+	 * @throws SQLException
+	 */
+	public void insertTransferRelation(TransferRelationVO transferRelationVO) {
+		insert("treeTransferSql.insertTransferRelation", transferRelationVO);
+
+	}
 }
