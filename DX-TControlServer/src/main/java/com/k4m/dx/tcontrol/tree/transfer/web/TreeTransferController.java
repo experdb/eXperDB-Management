@@ -1,6 +1,8 @@
 package com.k4m.dx.tcontrol.tree.transfer.web;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
@@ -21,6 +23,8 @@ import com.k4m.dx.tcontrol.cmmn.client.ClientProtocolID;
 import com.k4m.dx.tcontrol.common.service.HistoryVO;
 import com.k4m.dx.tcontrol.functions.transfer.service.ConnectorVO;
 import com.k4m.dx.tcontrol.functions.transfer.service.TransferService;
+import com.k4m.dx.tcontrol.login.service.UserVO;
+import com.k4m.dx.tcontrol.tree.transfer.service.TransferDetailVO;
 import com.k4m.dx.tcontrol.tree.transfer.service.TransferTargetVO;
 import com.k4m.dx.tcontrol.tree.transfer.service.TreeTransferService;
 
@@ -536,12 +540,35 @@ public class TreeTransferController {
 			historyVO.setExe_dtl_cd("DX-T0017");
 			accessHistoryService.insertHistory(historyVO);
 			
+			mv.addObject("cnr_id",request.getParameter("cnr_id"));
+			mv.addObject("cnr_nm",request.getParameter("cnr_nm"));
 			mv.setViewName("transfer/transferDetail");
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 		return mv;
 	}
+	
+	
+	/**
+	 * 전송관리 리스트를 조회한다.
+	 * 
+	 * @return resultSet
+	 * @throws Exception
+	 */
+	@RequestMapping(value = "/selectTransferDetail.do")
+	public @ResponseBody List<TransferDetailVO> selectTransferDetail(@ModelAttribute("transferDetailVO") TransferDetailVO transferDetailVO,HttpServletRequest request) {
+		List<TransferDetailVO> resultSet = null;
+		try {
+			transferDetailVO.setCnr_id(Integer.parseInt(request.getParameter("cnr_id")));
+			resultSet = treeTransferService.selectTransferDetail(transferDetailVO);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return resultSet;
+
+	}
+	
 	
 	/**
 	 * Database 매핑작업 팝업 화면을 보여준다.

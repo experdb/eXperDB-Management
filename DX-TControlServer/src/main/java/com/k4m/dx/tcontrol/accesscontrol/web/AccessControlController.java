@@ -94,7 +94,10 @@ public class AccessControlController {
 			//Database 목록 조회
 			int db_svr_id = Integer.parseInt(request.getParameter("db_svr_id"));
 			List<DbIDbServerVO> resultSet = accessControlService.selectDatabaseList(db_svr_id);
-			if(resultSet.size()!=0){
+			if(resultSet.size()==0){
+				List<DbIDbServerVO> result = accessControlService.selectDbServerName(db_svr_id);
+				mv.addObject("db_svr_nm",result.get(0).getDb_svr_nm());
+			}else{
 				mv.addObject("db_svr_nm",resultSet.get(0).getDb_svr_nm());
 				mv.addObject("resultSet",resultSet);
 			}

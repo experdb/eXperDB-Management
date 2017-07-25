@@ -8,14 +8,68 @@
 	*
 	*   수정일         수정자                   수정내용
 	*  ------------    -----------    ---------------------------
-	*  2017.07.24     최초 생성
+	*  2017.07.21     최초 생성
 	*
 	* author 김주영 사원
-	* since 2017.07.24
+	* since 2017.07.21
 	*
 	*/
 %>
 <script type="text/javascript">
+
+	var table = null;
+	var cnr_id="${cnr_id}";
+
+	function fn_init() {
+		table = $('#transferDetailTable').DataTable({
+			scrollY : "250px",
+			searching : false,
+			columns : [
+			{ data : "trf_trg_cnn_nm", className : "dt-center", defaultContent : ""}, 
+			{ data : "", className : "dt-center", defaultContent : ""}, 
+			{ data : "db_nm", className : "dt-center", defaultContent : ""}, 
+			{ data : "", className : "dt-center", defaultContent : ""}, 
+			{
+				data : "",
+				render : function(data, type, full, meta) {
+					var html = "<a href='#n'><img src='../images/mappin_btn.png' alt='맵핑설정버튼' onclick='windowPopup();' /></a>";
+					return html;
+				},
+				className : "dt-center",
+				defaultContent : ""
+			},
+			]
+		});
+	}
+
+	$(window.document).ready(function() {
+		fn_init();
+		$.ajax({
+			url : "/selectTransferDetail.do",
+			data : {
+				trf_trg_cnn_nm : "%"+$("#trf_trg_cnn_nm").val()+"%",
+				db_nm : "%"+$("#db_nm").val()+"%",
+				cnr_id : cnr_id
+			},
+			dataType : "json",
+			type : "post",
+			error : function(xhr, status, error) {
+				alert("실패")
+			},
+			success : function(result) {
+				table.clear().draw();
+				table.rows.add(result).draw();
+			}
+		});
+
+	});
+	
+	/*조회버튼 클릭시*/
+	function fn_select(){
+		alert("조회버튼!");
+	}
+	
+	/*맵핑설정버튼 클릭시*/
 	function windowPopup(){
 		var popUrl = "/popup/transferMappingRegForm.do"; // 서버 url 팝업경로
 		var width = 920;
@@ -35,7 +89,7 @@
 			<div class="location">
 				<ul>
 					<li>Transfer</li>
-					<li>Connector1</li>
+					<li>${cnr_nm }</li>
 					<li class="on">전송상세 설정</li>
 				</ul>
 			</div>
@@ -43,7 +97,7 @@
 		<div class="contents">
 			<div class="cmm_grp">
 				<div class="btn_type_01">
-					<span class="btn"><button>조회</button></span> 
+					<span class="btn"><button onclick="fn_select()">조회</button></span> 
 				</div>
 				<div class="sch_form">
 					<table class="write">
@@ -57,15 +111,34 @@
 						<tbody>
 							<tr>
 								<th scope="row" class="t7">Connector명</th>
-								<td><input type="text" class="txt t3" name="" /></td>
+								<td><input type="text" class="txt t3" name="" id="trf_trg_cnn_nm"/></td>
 								<th scope="row" class="t4">Database명</th>
-								<td><input type="text" class="txt t3" name="" /></td>
+								<td><input type="text" class="txt t3" name="" id="db_nm"/></td>
 							</tr>
 						</tbody>
 					</table>
 				</div>
 				<div class="overflow_area">
-					<table class="list pd_type1">
+					<table id="transferDetailTable" class="display" cellspacing="0" width="100%">
+						<thead>
+							<tr>
+								<th>Connector명</th>
+								<th>서버명</th>
+								<th>Database명</th>
+								<th>상태</th>
+								<th>맵핑설정</th>
+							</tr>
+						</thead>
+					</table>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+<!-- // contents -->
+
+
+<!-- 					<table class="list pd_type1">
 						<caption>전송 관리 조회 리스트</caption>
 						<colgroup>
 							<col style="width: 30%;" />
@@ -99,10 +172,4 @@
 								<td><a href="#n"><img src="../images/mappin_btn.png" alt="맵핑설정버튼" /></a></td>
 							</tr>
 						</tbody>
-					</table>
-				</div>
-			</div>
-		</div>
-	</div>
-</div>
-<!-- // contents -->
+					</table> -->
