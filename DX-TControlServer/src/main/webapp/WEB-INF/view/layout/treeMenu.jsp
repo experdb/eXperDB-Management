@@ -62,7 +62,7 @@
 				html1+='				<ul class="depth_3">';
 				html1+='					<li class="ico3_3"><a href=/accessControl.do?db_svr_id='+item.db_svr_id+'>서버접근제어</a></li>';
 				html1+='					<li class="ico3_4"><a href=/audit/auditManagement.do?db_svr_id='+item.db_svr_id+'>감사설정</a></li>';
-				html1+='					<li class="ico3_5"><a href="#n">감사이력</a></li>';
+				html1+='					<li class="ico3_5"><a href=/audit/auditLogList.do?db_svr_id='+item.db_svr_id+'>감사이력</a></li>';
 				html1+='				</ul>';
 				html1+='			</li>';
 				html1+='		</ul>';

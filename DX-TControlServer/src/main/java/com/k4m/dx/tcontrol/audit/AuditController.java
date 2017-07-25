@@ -270,6 +270,145 @@ public class AuditController {
 		return blnReturn;
 	}
 	
+	
+	@RequestMapping(value = "/audit/auditLogList.do")
+	public ModelAndView auditLogList(@ModelAttribute("auditVO") AuditVO auditVO, ModelMap model, HttpServletRequest request) throws Exception{
+		ModelAndView mv = new ModelAndView();
+
+		//mv.addObject("db_svr_id",workVO.getDb_svr_id());
+		try {
+			String strDbSvrId = request.getParameter("db_svr_id");
+			int db_svr_id = Integer.parseInt(strDbSvrId);
+			
+			AgentInfoVO vo = new AgentInfoVO();
+			vo.setDB_SVR_ID(db_svr_id);
+			
+			AgentInfoVO agentInfo =  (AgentInfoVO) cmmnServerInfoService.selectAgentInfo(vo);
+			
+			DbServerVO schDbServerVO = new DbServerVO();
+			schDbServerVO.setDb_svr_id(db_svr_id);
+			
+			DbServerVO dbServerVO = (DbServerVO)  cmmnServerInfoService.selectServerInfo(schDbServerVO);
+			
+			
+			mv.addObject("serverName", dbServerVO.getDb_svr_nm());
+			mv.addObject("db_svr_id", strDbSvrId);
+			
+			List<HashMap<String, String>> fileList = new ArrayList<HashMap<String, String>>();
+			
+			mv.addObject("logFileList", fileList);
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		mv.setViewName("dbserver/auditLogList");
+		return mv;
+	}
+	
+	
+	@RequestMapping(value = "/audit/auditLogSearchList.do")
+	public ModelAndView auditLogSearchList(@ModelAttribute("auditVO") AuditVO auditVO, ModelMap model, HttpServletRequest request) throws Exception{
+		ModelAndView mv = new ModelAndView();
+
+		//mv.addObject("db_svr_id",workVO.getDb_svr_id());
+		try {
+			String strDbSvrId = request.getParameter("db_svr_id");
+			int db_svr_id = Integer.parseInt(strDbSvrId);
+			
+			AgentInfoVO vo = new AgentInfoVO();
+			vo.setDB_SVR_ID(db_svr_id);
+			
+			AgentInfoVO agentInfo =  (AgentInfoVO) cmmnServerInfoService.selectAgentInfo(vo);
+			
+			DbServerVO schDbServerVO = new DbServerVO();
+			schDbServerVO.setDb_svr_id(db_svr_id);
+			
+			DbServerVO dbServerVO = (DbServerVO)  cmmnServerInfoService.selectServerInfo(schDbServerVO);
+			
+			JSONObject serverObj = new JSONObject();
+			
+			AES256 dec = new AES256(AES256_KEY.ENC_KEY);
+			System.out.println("KEY : " + dbServerVO.getSvr_spr_scm_pwd());
+			String strPwd = dec.aesDecode(dbServerVO.getSvr_spr_scm_pwd());
+			
+			serverObj.put(ClientProtocolID.SERVER_NAME, dbServerVO.getDb_svr_nm());
+			serverObj.put(ClientProtocolID.SERVER_IP, dbServerVO.getIpadr());
+			serverObj.put(ClientProtocolID.SERVER_PORT, dbServerVO.getPortno());
+			serverObj.put(ClientProtocolID.DATABASE_NAME, dbServerVO.getDft_db_nm());
+			serverObj.put(ClientProtocolID.USER_ID, dbServerVO.getSvr_spr_usr_id());
+			serverObj.put(ClientProtocolID.USER_PWD, strPwd);
+			
+			
+			String IP = dbServerVO.getIpadr();
+			int PORT = agentInfo.getSOCKET_PORT();
+			
+			//IP = "127.0.0.1";
+			ClientAdapter CA = new ClientAdapter(IP, PORT);
+			CA.open(); 
+			
+			JSONObject objList;
+			
+			String strExtName = "pgaudit";
+			
+			JSONObject objExtList = CA.dxT010(ClientTranCodeType.DxT010, serverObj, strExtName);
+			
+			List<Object> selectExtList  = (ArrayList<Object>) objExtList.get(ClientProtocolID.RESULT_DATA);
+			
+			
+			if(selectExtList.size() == 0) {
+				strExtName = "";
+				mv.addObject("extName", strExtName);
+				mv.setViewName("dbserver/auditManagement");
+				return mv;
+			}
+			
+			
+			JSONObject objSettingInfo = new JSONObject();
+			
+			objList = CA.dxT007(ClientTranCodeType.DxT007, ClientProtocolID.COMMAND_CODE_R, serverObj, objSettingInfo);
+
+			String strErrMsg = (String)objList.get(ClientProtocolID.ERR_MSG);
+			String strErrCode = (String)objList.get(ClientProtocolID.ERR_CODE);
+			String strDxExCode = (String)objList.get(ClientProtocolID.DX_EX_CODE);
+			String strResultCode = (String)objList.get(ClientProtocolID.RESULT_CODE);
+			System.out.println("RESULT_CODE : " +  strResultCode);
+			System.out.println("ERR_CODE : " +  strErrCode);
+			System.out.println("ERR_MSG : " +  strErrMsg);
+			
+			HashMap selectData =(HashMap) objList.get(ClientProtocolID.RESULT_DATA);
+			
+			JSONObject objRoleList;
+			objRoleList = CA.dxT011(ClientTranCodeType.DxT011, serverObj);
+			
+			List<Object> selectRoleList =(ArrayList<Object>) objRoleList.get(ClientProtocolID.RESULT_DATA);
+
+			CA.close();
+			
+			String strIsActive = "on";
+			
+			String auditActive = (String) selectData.get("log");
+			
+			if(auditActive == null || auditActive.equals("")) {
+				strIsActive = "off";
+			}
+			
+			selectData.put("isActive", strIsActive);
+			
+			mv.addObject("audit", selectData);
+			mv.addObject("roleList", selectRoleList);
+			mv.addObject("extName", strExtName);
+			mv.addObject("serverName", dbServerVO.getDb_svr_nm());
+			mv.addObject("db_svr_id", strDbSvrId);
+			
+
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		mv.setViewName("dbserver/auditLogList");
+		return mv;
+	}
+	
 	public static void main(String[] args) throws Exception {
 		AES256 dec = new AES256(AES256_KEY.ENC_KEY);
 		

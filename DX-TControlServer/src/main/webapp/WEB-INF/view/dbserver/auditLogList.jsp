@@ -22,15 +22,21 @@
 	*/
 %>
 
-			<div id="contents">
-				
+<script language="javascript">
+	function fn_search() {
+		
+	}
+</script>
 
+<form name="auditForm" id="auditForm" method="post" onSubmit="return false;">
+<input type="hidden" name="db_svr_id" value="${db_svr_id}">
+			<div id="contents">
 				<div class="contents_wrap">
 					<div class="contents_tit">
 						<h4>감사 이력화면 <a href="#n"><img src="../images/ico_tit.png" alt="" /></a></h4>
 						<div class="location">
 							<ul>
-								<li>PG Server1</li>
+								<li>${db_svr_id}</li>
 								<li>접근제어관리</li>
 								<li class="on">감사 이력</li>
 							</ul>
@@ -90,60 +96,41 @@
 								<table class="list">
 									<caption>Rman 백업관리 이력화면 리스트</caption>
 									<colgroup>
+										<col style="width:10%;" />
+										<col style="width:60%;" />
 										<col style="width:20%;" />
-										<col style="width:8%;" />
 										<col style="width:10%;" />
-										<col style="width:5%;" />
-										<col style="width:10%;" />
-										<col style="width:11%;" />
-										<col style="width:15%;" />
-										<col style="width:6%;" />
-										<col style="width:6%;" />
-										<col style="width:5%;" />
-										<col style="width:8%;" />
+
 									</colgroup>
 									<thead>
 										<tr>
-											<th scope="col">Time</th>
-											<th scope="col">User name</th>
-											<th scope="col">Statement <br/>ID</th>
-											<th scope="col">State</th>
-											<th scope="col">Error <br/>session line</th>
-											<th scope="col">Substatement <br/> ID</th>
-											<th scope="col">Substatement</th>
-											<th scope="col">Class</th>
-											<th scope="col">Command</th>
-											<th scope="col">Object <br/>Type</th>
-											<th scope="col">Object <br/>name</th>
+											<th scope="col">No</th>
+											<th scope="col">로그파일명</th>
+											<th scope="col">Size</th>
+											<th scope="col">수정일시</th>
 										</tr>
 									</thead>
 									<tbody>
+									
+									<c:if test="${fn:length(logFileList) == 0}">
 										<tr>
 											<td>"2017-05-11 14:26:52.207+09"</td>
 											<td>name</td>
 											<td>121</td>
 											<td>OK</td>
-											<td></td>
-											<td></td>
-											<td>select * from table</td>
-											<td>Read</td>
-											<td>Select</td>
-											<td>Table</td>
-											<td>Public table</td>
+											
 										</tr>
+									</c:if>
+									<c:forEach var="log" items="${logFileList}" varStatus="status">
 										<tr>
-											<td>"2017-05-11 14:26:52.207+09"</td>
+											<td>${log.rolname}</td>
 											<td>name</td>
 											<td>121</td>
 											<td>OK</td>
-											<td></td>
-											<td></td>
-											<td>select * from table</td>
-											<td>Read</td>
-											<td>Select</td>
-											<td>Table</td>
-											<td>Public table</td>
+											
 										</tr>
+									</c:forEach>
+									
 									</tbody>
 								</table>
 							</div>
@@ -151,3 +138,4 @@
 					</div>
 				</div>
 			</div>
+</form>
