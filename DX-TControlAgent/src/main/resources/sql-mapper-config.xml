@@ -2,12 +2,18 @@
 <!DOCTYPE configuration PUBLIC "-//mybatis.org//DTD Config 3.0//EN" "http://mybatis.org/dtd/mybatis-3-config.dtd">
 
 <configuration>
+	<settings>
+		<setting name="callSettersOnNulls" value="true" />
+
+	</settings>
     
     <typeAliases>
     	<typeAlias alias="DbServerInfoVO" type="com.k4m.dx.tcontrol.db.repository.vo.DbServerInfoVO" />
     	<typeAlias alias="AgentInfoVO" type="com.k4m.dx.tcontrol.db.repository.vo.AgentInfoVO" />
     	<typeAlias alias="PgAuditVO" type="com.k4m.dx.tcontrol.db.repository.vo.PgAuditVO" />
     	<typeAlias alias="PgAuditSettingVO" type="com.k4m.dx.tcontrol.db.repository.vo.PgAuditSettingVO" />
+    	<typeAlias alias="AuditVO" type="com.k4m.dx.tcontrol.server.AuditVO" />
+    	
     </typeAliases>
     
  	<mappers>

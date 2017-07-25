@@ -138,74 +138,74 @@
 	    select current_setting(#{settingId}) as settingValue
 	</select>
 	
-	<insert  id="updatePgAuditLogSetting" parameterType="hashmap">
+	<insert  id="updatePgAuditLogSetting" parameterType="AuditVO">
 		/**
 	 	* Query ID : updatePgauditLog
 	 	* Description : log Setting - read, write, function, role, ddl, misc
 	 	* Author : 박태혁
 	 	**/
 	 	<![CDATA[
-		ALTER SYSTEM SET pgaudit.log = ${pgauditlog}
+		ALTER SYSTEM SET pgaudit.log = ${auditLog}
 		]]>
 	</insert>
 	
-	<insert  id="updatePgAuditLogLevelSetting" parameterType="hashmap">
+	<insert  id="updatePgAuditLogLevelSetting" parameterType="AuditVO">
 		/**
 	 	* Query ID : updatePgauditLogLevel
 	 	* Description : log_level Setting - debug, info, notice, warning
 	 	* Author : 박태혁
 	 	**/
 	 	<![CDATA[
-		ALTER SYSTEM SET pgaudit.log_level = ${pgauditLogLevel}
+		ALTER SYSTEM SET pgaudit.log_level = ${auditLevel}
 		]]>
 	</insert>
 	
-	<insert  id="updatePgAuditLogCatalogSetting" parameterType="hashmap">
+	<insert  id="updatePgAuditLogCatalogSetting" parameterType="AuditVO">
 		/**
 	 	* Query ID : updatePgauditLogCatalogSetting
 	 	* Description : log_catalog Setting - true, false
 	 	* Author : 박태혁
 	 	**/
-		ALTER SYSTEM SET pgaudit.log_catalog = ${pgauditLogCatalog}
+		ALTER SYSTEM SET pgaudit.log_catalog = ${auditCatalog}
 	</insert>
 	
-	<insert  id="updatePgAuditLogParameterSetting" parameterType="hashmap">
+	<insert  id="updatePgAuditLogParameterSetting" parameterType="AuditVO">
 		/**
 	 	* Query ID : updatePgauditLogParameterSetting
 	 	* Description : log_parameter Setting - true, false
 	 	* Author : 박태혁
 	 	**/
-		ALTER SYSTEM SET pgaudit.log_parameter = ${pgauditLogParameter}
+		ALTER SYSTEM SET pgaudit.log_parameter = ${auditParameter}
 	</insert>
 	
-	<insert  id="updatePgAuditLogStatementOnceSetting" parameterType="hashmap">
+	<insert  id="updatePgAuditLogStatementOnceSetting" parameterType="AuditVO">
 		/**
 	 	* Query ID : updatePgauditLogStatementOnceSetting
 	 	* Description : log_statement_once Setting - true, false
 	 	* Author : 박태혁
 	 	**/
-		ALTER SYSTEM SET pgaudit.log_statement_once = ${pgauditLogStatementOnce}
+		ALTER SYSTEM SET pgaudit.log_statement_once = ${auditStatementOnce}
 	</insert>
 
-	<insert  id="updatePgAuditLogRelationSetting" parameterType="hashmap">
+	<insert  id="updatePgAuditLogRelationSetting" parameterType="AuditVO">
 		/**
 	 	* Query ID : updatePgauditLogRelation
 	 	* Description : log_relation Setting - true, false
 	 	* Author : 박태혁
 	 	**/
-		ALTER SYSTEM SET pgaudit.log_relation = ${pgauditLogRelation}
+		ALTER SYSTEM SET pgaudit.log_relation = ${auditRelation}
 	</insert>
 	
-	<insert  id="updatePgAuditRoleSetting" parameterType="hashmap">
+	<insert  id="updatePgAuditRoleSetting" parameterType="AuditVO">
 		/**
 	 	* Query ID : updatePgauditRole
 	 	* Description : role Setting - postgres, 
 	 	* Author : 박태혁
 	 	**/
-		ALTER SYSTEM SET pgaudit.role = ${pgauditRole}
+		ALTER SYSTEM SET pgaudit.role = '${auditRole}'
 	</insert>
 	
-	<select id="selectPgAuditLogSetting"  parameterType="PgAuditSettingVO" resultType="PgAuditSettingVO">
+	<select id="selectPgAuditLogSetting" resultType="PgAuditSettingVO">
 		/**
 	 	* Query ID : selectPgAuditLogSetting
 	 	* Description : Audit Setting 조회

@@ -244,11 +244,12 @@ public class SocketCtl {
 
 		HashMap hp = new HashMap();
 		hp.put("log", resultData.getLog());
-		hp.put("log_level", resultData.getLog());
-		hp.put("log_relation", resultData.getLog());
-		hp.put("log_catalog", resultData.getLog());
-		hp.put("log_parameter", resultData.getLog());
-		hp.put("log_statement_once", resultData.getLog());
+		hp.put("log_level", resultData.getLog_level());
+		hp.put("log_relation", resultData.getLog_relation());
+		hp.put("log_catalog", resultData.getLog_catalog());
+		hp.put("log_parameter", resultData.getLog_parameter());
+		hp.put("log_statement_once", resultData.getLog_statement_once());
+		hp.put("log_roles", resultData.getRole());
 		
 		JSONObject outputObj = new JSONObject();
 		outputObj.put(ProtocolID.DX_EX_CODE, strDxExCode);

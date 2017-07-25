@@ -22,6 +22,9 @@ import org.json.simple.JSONObject;
  * 9. Agent Monitoring(dxT009)
  * 10. Extention 설치 유무 조회(dxT010)
  * 11. role name 조회(dxT011)
+ * 12. All 스키마 태이블 조회
+ * 13. bottledWater 실행/종료
+ * 14. Kafka-connector connect 등록/수정/삭제/조회
  * @author thpark
  *
  */
@@ -31,8 +34,8 @@ public class ClientTester {
 		
 		ClientTester clientTester = new ClientTester();
 		
-		String Ip = "222.110.153.162";
-		//String Ip = "127.0.0.1";
+		//String Ip = "222.110.153.162";
+		String Ip = "127.0.0.1";
 		int port = 9001;
 		try {
 			
@@ -45,8 +48,8 @@ public class ClientTester {
 			//clientTester.dxT006_R(Ip, port);
 			//clientTester.dxT006_U(Ip, port);
 			//clientTester.dxT006_D(Ip, port);
-			//clientTester.dxT007_C(Ip, port);
-			clientTester.dxT007_R(Ip, port);
+			clientTester.dxT007_C(Ip, port);
+			//clientTester.dxT007_R(Ip, port);
 			
 			
 			//clientTester.dxT010(Ip, port);
@@ -556,13 +559,13 @@ public class ClientTester {
 			
 			//로그종류 
 			objSettingInfo.put(ClientProtocolID.AUDIT_USE_YN, "Y");
-			objSettingInfo.put(ClientProtocolID.AUDIT_LOG, "ddl, write");
+			objSettingInfo.put(ClientProtocolID.AUDIT_LOG, "ddl,write");
 			objSettingInfo.put(ClientProtocolID.AUDIT_LEVEL, "LOG");
 			objSettingInfo.put(ClientProtocolID.AUDIT_CATALOG, "off");
 			objSettingInfo.put(ClientProtocolID.AUDIT_PARAMETER, "off");
 			objSettingInfo.put(ClientProtocolID.AUDIT_RELATION, "off");
 			objSettingInfo.put(ClientProtocolID.AUDIT_STATEMENT_ONCE, "off");
-			objSettingInfo.put(ClientProtocolID.AUDIT_ROLE, "postgres");
+			objSettingInfo.put(ClientProtocolID.AUDIT_ROLE, "experdba,tcontrol");
 
 			JSONObject objList;
 			
@@ -684,7 +687,7 @@ public class ClientTester {
 			serverObj.put(ClientProtocolID.USER_ID, "experdba");
 			serverObj.put(ClientProtocolID.USER_PWD, "experdba");
 			
-			String strExtname = "";
+			String strExtname = "pgaudit";
 			
 			
 			ClientAdapter CA = new ClientAdapter(Ip, port);
