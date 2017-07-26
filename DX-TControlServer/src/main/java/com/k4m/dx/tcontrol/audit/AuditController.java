@@ -325,6 +325,8 @@ public class AuditController {
 			
 			DbServerVO dbServerVO = (DbServerVO)  cmmnServerInfoService.selectServerInfo(schDbServerVO);
 			
+			String strDirectory = dbServerVO.getIstpath();
+			
 			JSONObject serverObj = new JSONObject();
 			
 			AES256 dec = new AES256(AES256_KEY.ENC_KEY);
@@ -338,6 +340,12 @@ public class AuditController {
 			serverObj.put(ClientProtocolID.USER_ID, dbServerVO.getSvr_spr_usr_id());
 			serverObj.put(ClientProtocolID.USER_PWD, strPwd);
 			
+			JSONObject jObj = new JSONObject();
+			jObj.put(ClientProtocolID.DX_EX_CODE, ClientTranCodeType.DxT015);
+			jObj.put(ClientProtocolID.SERVER_INFO, serverObj);
+			jObj.put(ClientProtocolID.COMMAND_CODE, ClientProtocolID.COMMAND_CODE_R);
+			jObj.put(ClientProtocolID.FILE_DIRECTORY, strDirectory);
+			
 			
 			String IP = dbServerVO.getIpadr();
 			int PORT = agentInfo.getSOCKET_PORT();
@@ -346,27 +354,8 @@ public class AuditController {
 			ClientAdapter CA = new ClientAdapter(IP, PORT);
 			CA.open(); 
 			
-			JSONObject objList;
+			JSONObject objList = CA.dxT015(jObj);
 			
-			String strExtName = "pgaudit";
-			
-			JSONObject objExtList = CA.dxT010(ClientTranCodeType.DxT010, serverObj, strExtName);
-			
-			List<Object> selectExtList  = (ArrayList<Object>) objExtList.get(ClientProtocolID.RESULT_DATA);
-			
-			
-			if(selectExtList.size() == 0) {
-				strExtName = "";
-				mv.addObject("extName", strExtName);
-				mv.setViewName("dbserver/auditManagement");
-				return mv;
-			}
-			
-			
-			JSONObject objSettingInfo = new JSONObject();
-			
-			objList = CA.dxT007(ClientTranCodeType.DxT007, ClientProtocolID.COMMAND_CODE_R, serverObj, objSettingInfo);
-
 			String strErrMsg = (String)objList.get(ClientProtocolID.ERR_MSG);
 			String strErrCode = (String)objList.get(ClientProtocolID.ERR_CODE);
 			String strDxExCode = (String)objList.get(ClientProtocolID.DX_EX_CODE);
@@ -375,30 +364,13 @@ public class AuditController {
 			System.out.println("ERR_CODE : " +  strErrCode);
 			System.out.println("ERR_MSG : " +  strErrMsg);
 			
-			HashMap selectData =(HashMap) objList.get(ClientProtocolID.RESULT_DATA);
+			List<HashMap<String, String>> fileList = (List<HashMap<String, String>>) objList.get(ClientProtocolID.RESULT_DATA);
 			
-			JSONObject objRoleList;
-			objRoleList = CA.dxT011(ClientTranCodeType.DxT011, serverObj);
-			
-			List<Object> selectRoleList =(ArrayList<Object>) objRoleList.get(ClientProtocolID.RESULT_DATA);
 
-			CA.close();
 			
-			String strIsActive = "on";
-			
-			String auditActive = (String) selectData.get("log");
-			
-			if(auditActive == null || auditActive.equals("")) {
-				strIsActive = "off";
-			}
-			
-			selectData.put("isActive", strIsActive);
-			
-			mv.addObject("audit", selectData);
-			mv.addObject("roleList", selectRoleList);
-			mv.addObject("extName", strExtName);
 			mv.addObject("serverName", dbServerVO.getDb_svr_nm());
 			mv.addObject("db_svr_id", strDbSvrId);
+			mv.addObject("logFileList", fileList);
 			
 
 			

@@ -24,7 +24,11 @@
 
 <script language="javascript">
 	function fn_search() {
+		var form = document.auditForm;
 		
+		form.action = "/audit/auditLogSearchList.do";
+		form.submit();
+		return;
 	}
 </script>
 
@@ -36,7 +40,7 @@
 						<h4>감사 이력화면 <a href="#n"><img src="../images/ico_tit.png" alt="" /></a></h4>
 						<div class="location">
 							<ul>
-								<li>${db_svr_id}</li>
+								<li>${serverName}</li>
 								<li>접근제어관리</li>
 								<li class="on">감사 이력</li>
 							</ul>
@@ -45,7 +49,7 @@
 					<div class="contents">
 						<div class="cmm_grp">
 							<div class="btn_type_01">
-								<span class="btn"><button>조회</button></span>
+								<span class="btn"><button onClick="javascript:fn_search();">조회</button></span>
 							</div>
 							<div class="sch_form">
 								<table class="write">
@@ -59,24 +63,7 @@
 										<col />
 									</colgroup>
 									<tbody>
-										<tr>
-											<th scope="row" class="t4">Database</th>
-											<td>
-												<select class="select t5" name="" id="">
-													<option value="">-선택하세요-</option>
-													<option value="">Database1</option>
-												</select>
-											</td>
-											<th scope="row" class="t9">사용자</th>
-											<td><input type="text" class="txt t2"/></td>
-											<th scope="row" class="t9">성공&#47;실패</th>
-											<td>
-												<select class="select t5" name="" id="">
-													<option value="">-선택하세요-</option>
-													<option value="">상태1</option>
-												</select>
-											</td>
-										</tr>
+
 										<tr>
 											<th scope="row" class="t10">작업기간</th>
 											<td colspan="5">
@@ -114,19 +101,19 @@
 									
 									<c:if test="${fn:length(logFileList) == 0}">
 										<tr>
-											<td>"2017-05-11 14:26:52.207+09"</td>
-											<td>name</td>
-											<td>121</td>
-											<td>OK</td>
+											<td></td>
+											<td></td>
+											<td></td>
+											<td></td>
 											
 										</tr>
 									</c:if>
 									<c:forEach var="log" items="${logFileList}" varStatus="status">
 										<tr>
-											<td>${log.rolname}</td>
-											<td>name</td>
-											<td>121</td>
-											<td>OK</td>
+											<td>${status.count}</td>
+											<td>${log.file_name}</td>
+											<td>${log.file_size}</td>
+											<td>${log.file_lastmodified}</td>
 											
 										</tr>
 									</c:forEach>

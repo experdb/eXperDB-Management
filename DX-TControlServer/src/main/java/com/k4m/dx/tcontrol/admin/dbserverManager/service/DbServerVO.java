@@ -8,12 +8,22 @@ public class DbServerVO {
 	private String ipadr;
 	private int portno;
 	private String dft_db_nm;
+	private String istpath;
 	private String svr_spr_usr_id;
 	private String svr_spr_scm_pwd;
 	private String frst_regr_id;
 	private String frst_reg_dtm;
 	private String lst_mdfr_id;
 	private String lst_mdf_dtm;
+
+
+	public String getIstpath() {
+		return istpath;
+	}
+
+	public void setIstpath(String istpath) {
+		this.istpath = istpath;
+	}
 
 	public int getRownum() {
 		return rownum;
