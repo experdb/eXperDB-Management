@@ -20,14 +20,16 @@
 		<typeAlias alias="connectorVO" type="com.k4m.dx.tcontrol.functions.transfer.service.ConnectorVO"/>
 		<typeAlias alias="transferVO" type="com.k4m.dx.tcontrol.functions.transfer.service.TransferVO"/>
 		<typeAlias alias="dbidbserverVO" type="com.k4m.dx.tcontrol.accesscontrol.service.DbIDbServerVO"/>
-		<typeAlias alias="AccessControlVO" type="com.k4m.dx.tcontrol.accesscontrol.service.AccessControlVO"/>
+		<typeAlias alias="accessControlVO" type="com.k4m.dx.tcontrol.accesscontrol.service.AccessControlVO"/>
 		<typeAlias alias="agentInfoVO" type="com.k4m.dx.tcontrol.common.service.AgentInfoVO" />
 		<typeAlias alias="workObjVO" type="com.k4m.dx.tcontrol.backup.service.WorkObjVO"/>		
 		<typeAlias alias="scheduleVO" type="com.k4m.dx.tcontrol.functions.schedule.service.ScheduleVO"/>
 		<typeAlias alias="scheduleDtlVO" type="com.k4m.dx.tcontrol.functions.schedule.service.ScheduleDtlVO"/>
 		<typeAlias alias="workObjVO" type="com.k4m.dx.tcontrol.backup.service.WorkObjVO"/>
-		<typeAlias alias="TransferTargetVO" type="com.k4m.dx.tcontrol.tree.transfer.service.TransferTargetVO"/>
-		<typeAlias alias="TransferDetailVO" type="com.k4m.dx.tcontrol.tree.transfer.service.TransferDetailVO"/>
+		<typeAlias alias="transferTargetVO" type="com.k4m.dx.tcontrol.tree.transfer.service.TransferTargetVO"/>
+		<typeAlias alias="transferDetailVO" type="com.k4m.dx.tcontrol.tree.transfer.service.TransferDetailVO"/>
+		<typeAlias alias="transferMappingVO" type="com.k4m.dx.tcontrol.tree.transfer.service.TransferMappingVO"/>
+		<typeAlias alias="transferRelationVO" type="com.k4m.dx.tcontrol.tree.transfer.service.TransferRelationVO"/>
 		
     </typeAliases>
     

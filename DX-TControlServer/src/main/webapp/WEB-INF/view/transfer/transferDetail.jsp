@@ -30,9 +30,9 @@
 			{ data : "db_nm", className : "dt-center", defaultContent : ""}, 
 			{ data : "", className : "dt-center", defaultContent : ""}, 
 			{
-				data : "",
+				data : "trf_trg_id",
 				render : function(data, type, full, meta) {
-					var html = "<a href='#n'><img src='../images/mappin_btn.png' alt='맵핑설정버튼' onclick='windowPopup();' /></a>";
+					var html = "<a href='#n'><img src='../images/mappin_btn.png' alt='맵핑설정버튼' onclick='windowPopup("+data+");' /></a>";
 					return html;
 				},
 				className : "dt-center",
@@ -70,8 +70,8 @@
 	}
 	
 	/*맵핑설정버튼 클릭시*/
-	function windowPopup(){
-		var popUrl = "/popup/transferMappingRegForm.do"; // 서버 url 팝업경로
+	function windowPopup(trf_trg_id){
+		var popUrl = "/popup/transferMappingRegForm.do?trf_trg_id="+trf_trg_id+"&&cnr_id="+cnr_id; // 서버 url 팝업경로
 		var width = 920;
 		var height = 675;
 		var left = (window.screen.width / 2) - (width / 2);

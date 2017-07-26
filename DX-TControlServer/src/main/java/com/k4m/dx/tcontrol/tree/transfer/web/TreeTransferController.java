@@ -9,6 +9,7 @@ import javax.servlet.http.HttpSession;
 
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
+import org.json.simple.parser.JSONParser;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -16,15 +17,21 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
+import com.k4m.dx.tcontrol.accesscontrol.service.DbIDbServerVO;
 import com.k4m.dx.tcontrol.admin.accesshistory.service.AccessHistoryService;
+import com.k4m.dx.tcontrol.admin.dbserverManager.service.DbServerManagerService;
+import com.k4m.dx.tcontrol.admin.dbserverManager.service.DbServerVO;
+import com.k4m.dx.tcontrol.cmmn.AES256;
+import com.k4m.dx.tcontrol.cmmn.AES256_KEY;
 import com.k4m.dx.tcontrol.cmmn.CmmnUtils;
 import com.k4m.dx.tcontrol.cmmn.client.ClientInfoCmmn;
 import com.k4m.dx.tcontrol.cmmn.client.ClientProtocolID;
 import com.k4m.dx.tcontrol.common.service.HistoryVO;
 import com.k4m.dx.tcontrol.functions.transfer.service.ConnectorVO;
 import com.k4m.dx.tcontrol.functions.transfer.service.TransferService;
-import com.k4m.dx.tcontrol.login.service.UserVO;
 import com.k4m.dx.tcontrol.tree.transfer.service.TransferDetailVO;
+import com.k4m.dx.tcontrol.tree.transfer.service.TransferMappingVO;
+import com.k4m.dx.tcontrol.tree.transfer.service.TransferRelationVO;
 import com.k4m.dx.tcontrol.tree.transfer.service.TransferTargetVO;
 import com.k4m.dx.tcontrol.tree.transfer.service.TreeTransferService;
 
@@ -53,6 +60,10 @@ public class TreeTransferController {
 	
 	@Autowired
 	private TransferService transferService;
+	
+	@Autowired
+	private DbServerManagerService dbServerManagerService;
+	
 	/**
 	 * 전송대상설정 화면을 보여준다.
 	 * 
@@ -578,18 +589,125 @@ public class TreeTransferController {
 	 * @throws Exception
 	 */
 	@RequestMapping(value = "/popup/transferMappingRegForm.do")
-	public ModelAndView transferMappingRegForm(@ModelAttribute("historyVO") HistoryVO historyVO, HttpServletRequest request) {
+	public ModelAndView transferMappingRegForm(@ModelAttribute("dbServerVO") DbServerVO dbServerVO,@ModelAttribute("historyVO") HistoryVO historyVO, HttpServletRequest request) {
 		ModelAndView mv = new ModelAndView();
+		List<DbServerVO> resultSet = null;
 		try {
 			// 전송설정 이력 남기기 수정
 			CmmnUtils.saveHistory(request, historyVO);
 			historyVO.setExe_dtl_cd("DX-T0018");
 			accessHistoryService.insertHistory(historyVO);
 			
+			resultSet = dbServerManagerService.selectDbServerList(dbServerVO);
+			mv.addObject("resultSet",resultSet);
+			mv.addObject("trf_trg_id",request.getParameter("trf_trg_id"));
+			mv.addObject("cnr_id",request.getParameter("cnr_id"));
 			mv.setViewName("popup/transferMappingRegForm");
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 		return mv;
 	}	
+	
+	/**
+	 * DB를 조회한다.
+	 * 
+	 * @param dbIDbServerVO
+	 * @param request
+	 * @return 
+	 * @throws Exception
+	 */
+	@RequestMapping(value = "/selectServerDbList.do")
+	public @ResponseBody List<DbIDbServerVO> selectServerDbList(@ModelAttribute("dbIDbServerVO") DbIDbServerVO dbIDbServerVO,HttpServletRequest request){
+		List<DbIDbServerVO> resultSet = null;
+		try{
+			String db_svr_nm= request.getParameter("db_svr_nm");
+			resultSet = treeTransferService.selectServerDbList(db_svr_nm);
+		}catch(Exception e){
+			e.printStackTrace();
+		}
+		return resultSet;
+		
+	}
+	
+	/**
+	 * 테이블 리스트를 조회한다.
+	 * 
+	 * @param dbIDbServerVO
+	 * @param request
+	 * @return 
+	 * @return 
+	 * @return 
+	 * @throws Exception
+	 */
+	@RequestMapping(value = "/selectMappingTableList.do")
+	public @ResponseBody Map<String, Object> selectTableList2(HttpServletRequest request){
+		List<DbIDbServerVO> resultSet = null;
+		JSONObject serverObj = new JSONObject();
+		ClientInfoCmmn cic = new ClientInfoCmmn();
+		Map<String, Object> result =new HashMap<String, Object>();
+		try{
+			AES256 aes = new AES256(AES256_KEY.ENC_KEY);
+			int db_id = Integer.parseInt(request.getParameter("db_id"));
+			resultSet = treeTransferService.selectServerDb(db_id);
+			
+			serverObj.put(ClientProtocolID.SERVER_NAME, resultSet.get(0).getDb_svr_nm());
+			serverObj.put(ClientProtocolID.SERVER_IP, resultSet.get(0).getIpadr());
+			serverObj.put(ClientProtocolID.SERVER_PORT, resultSet.get(0).getPortno());
+			serverObj.put(ClientProtocolID.DATABASE_NAME, resultSet.get(0).getDb_nm());
+			serverObj.put(ClientProtocolID.USER_ID, resultSet.get(0).getSvr_spr_usr_id());
+			serverObj.put(ClientProtocolID.USER_PWD, aes.aesDecode(resultSet.get(0).getSvr_spr_scm_pwd()));
+					
+			result = cic.tableList_select(serverObj);
+			
+		}catch(Exception e){
+			e.printStackTrace();
+		}
+		return result;
+	}
+	
+	/**
+	 * 전송매핑작업을 등록한다.
+	 * 
+	 * @param userVo
+	 * @param request
+	 * @return
+	 * @throws Exception
+	 */
+	@RequestMapping(value = "/insertTransferMapping.do")
+	public @ResponseBody void insertTransferMapping(@ModelAttribute("transferRelationVO") TransferRelationVO transferRelationVO, @ModelAttribute("transferMappingVO") TransferMappingVO transferMappingVO,HttpServletRequest request,@ModelAttribute("historyVO") HistoryVO historyVO) {
+		try {		
+//			// 사용자 등록 이력 남기기
+//			CmmnUtils.saveHistory(request, historyVO);
+//			historyVO.setExe_dtl_cd("DX-T0032_01");
+//			accessHistoryService.insertHistory(historyVO);
+			
+			HttpSession session = request.getSession();
+			String usr_id = (String)session.getAttribute("usr_id");
+			transferRelationVO.setFrst_regr_id(usr_id);
+			transferRelationVO.setLst_mdfr_id(usr_id);
+			
+			transferRelationVO.setTrf_trg_id(Integer.parseInt(request.getParameter("trf_trg_id")));
+			transferRelationVO.setCnr_id(Integer.parseInt(request.getParameter("cnr_id")));
+			transferRelationVO.setDb_id(Integer.parseInt(request.getParameter("db_id")));
+			
+			/*전송대상매핑관계 INSERT*/
+			treeTransferService.insertTransferRelation(transferRelationVO);
+			
+			JSONParser jParser = new JSONParser();
+			JSONArray jArr = (JSONArray)jParser.parse(request.getParameter("rowList").toString().replace("&quot;", "\""));
+			System.out.println(jArr);
+			for(int i=0; i<jArr.size(); i++){
+				JSONObject jObj = (JSONObject)jArr.get(i);
+				String table_name=(String) jObj.get("table_name");
+				String table_schema=(String) jObj.get("table_schema");
+				System.out.println("table_name : "+table_name+" table_schema : "+table_schema);
+			}
+			
+			 
+
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
 }

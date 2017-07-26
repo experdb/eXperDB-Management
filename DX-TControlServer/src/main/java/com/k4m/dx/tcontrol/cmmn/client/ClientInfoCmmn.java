@@ -137,7 +137,7 @@ public class ClientInfoCmmn {
 		return result;
 	}
 
-	// 7. DB접근제어 C(dbAccess_create)
+	// 6. DB접근제어 C(dbAccess_create)
 	public void dbAccess_create(JSONObject serverObj, JSONObject acObj) {
 		try {
 			JSONObject objList;
@@ -466,6 +466,50 @@ public class ClientInfoCmmn {
 
 			CA.close();
 		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return result;
+	}
+	
+	//12. 테이블리스트 조회(tableList_select)
+	public JSONObject tableList_select(JSONObject serverObj) {
+		JSONArray jsonArray = new JSONArray(); // 객체를 담기위해 JSONArray 선언.
+		JSONObject result = new JSONObject();
+		try {
+			JSONObject objList;
+			
+			ClientAdapter CA = new ClientAdapter(Ip, port);
+			CA.open(); 
+				
+			objList = CA.dxT011(ClientTranCodeType.DxT012, serverObj);
+			
+			String strErrMsg = (String)objList.get(ClientProtocolID.ERR_MSG);
+			String strErrCode = (String)objList.get(ClientProtocolID.ERR_CODE);
+			String strDxExCode = (String)objList.get(ClientProtocolID.DX_EX_CODE);
+			String strResultCode = (String)objList.get(ClientProtocolID.RESULT_CODE);
+			System.out.println("RESULT_CODE : " +  strResultCode);
+			System.out.println("ERR_CODE : " +  strErrCode);
+			System.out.println("ERR_MSG : " +  strErrMsg);
+			
+			List<Object> selectDBList =(ArrayList<Object>) objList.get(ClientProtocolID.RESULT_DATA);
+			
+			System.out.println("strDxExCode : " + " " + strDxExCode);
+			if(selectDBList.size() > 0) {
+				for(int i=0; i<selectDBList.size(); i++) {
+					JSONObject jsonObj = new JSONObject();
+					Object obj = selectDBList.get(i);
+					HashMap hp = (HashMap) obj;
+					String table_schema = (String) hp.get("table_schema");
+					String table_name = (String) hp.get("table_name");
+					System.out.println(i + " " + table_schema + " " + table_name);
+					jsonObj.put("table_schema", table_schema);
+					jsonObj.put("table_name", table_name);
+					jsonArray.add(jsonObj);
+				}
+			}		
+			result.put("data", jsonArray);	
+			CA.close();
+		} catch(Exception e) {
 			e.printStackTrace();
 		}
 		return result;

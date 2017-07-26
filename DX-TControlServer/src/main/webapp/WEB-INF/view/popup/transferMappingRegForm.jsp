@@ -1,5 +1,8 @@
-<%@ page language="java" contentType="text/html; charset=UTF-8"
-	pageEncoding="UTF-8"%>
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<%@ taglib prefix="form" uri="http://www.springframework.org/tags/form"%>
+<%@ taglib prefix="ui" uri="http://egovframework.gov/ctl/ui"%>
+<%@ taglib prefix="spring" uri="http://www.springframework.org/tags"%>
 <%
 	/**
 	* @Class Name : transferMappingRegForm.jsp
@@ -21,10 +24,222 @@
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <title>Database 매핑작업</title>
 <link rel="stylesheet" type="text/css" href="../css/common.css">
+<link rel="stylesheet" type="text/css" href="/css/dt/dataTables.checkboxes.css" />
+<link rel = "stylesheet" type = "text/css" media = "screen" href = "<c:url value='/css/dt/jquery.dataTables.min.css'/>"/>
+<link rel = "stylesheet" type = "text/css" media = "screen" href = "<c:url value='/css/dt/dataTables.jqueryui.min.css'/>"/>
 <script type="text/javascript" src="../js/jquery-1.9.1.min.js"></script>
 <script type="text/javascript" src="../js/common.js"></script>
+<script src="/js/jquery/jquery.dataTables.min.js" type="text/javascript"></script>
+<script src="/js/dt/dataTables.checkboxes.min.js" type="text/javascript"></script>
 <script>
-
+	var tableList = null;
+	var connectorTableList = null;
+	
+	function fn_init() {
+		tableList = $('#tableList').DataTable({
+			scrollY : "250px",
+			searching : false,
+			paging: false,
+			columns : [
+			{ data : "", defaultContent : "", targets : 0, orderable : false, checkboxes : {'selectRow' : true}}, 
+			{ data : "table_schema", className : "dt-center", defaultContent : ""}, 
+			{ data : "table_name", className : "dt-center", defaultContent : ""}, 
+			 ]
+		});
+		
+		connectorTableList = $('#connectorTableList').DataTable({
+			scrollY : "250px",
+			searching : false,
+			paging: false,
+			columns : [
+			{ data : "", defaultContent : "", targets : 0, orderable : false, checkboxes : {'selectRow' : true}}, 
+			{ data : "table_schema", className : "dt-center", defaultContent : ""}, 
+			{ data : "table_name", className : "dt-center", defaultContent : ""}, 
+			 ]
+		});
+	}
+	
+	$(window.document).ready(function() {
+		fn_init();
+		var db_svr_nm = $("#db_svr_nm").val();
+		
+		/*DB 조회*/
+       	$.ajax({
+    		url : "/selectServerDbList.do",
+    		data : {
+    			db_svr_nm: db_svr_nm,			
+    		},
+    		dataType : "json",
+    		type : "post",
+    		error : function(xhr, status, error) {
+    			alert("실패")
+    		},
+    		success : function(result) {  
+				var option = "<option value=''>선택</option>";
+				for(var i=0; i<result.length; i++){	
+					 option += "<option value='"+result[i].db_id+"'>"+result[i].db_nm+"</option>";	
+				}	  
+				$('#db_nm').append(option);
+    		}
+    	});
+	  
+	});
+	
+	/*서버선택시*/
+	function fn_serverChange(){
+		tableList.clear().draw();
+		$("select[name='db_nm'] option").remove();		
+		var db_svr_nm = $("#db_svr_nm").val();
+       	$.ajax({
+    		url : "/selectServerDbList.do",
+    		data : {
+    			db_svr_nm: db_svr_nm,			
+    		},
+    		dataType : "json",
+    		type : "post",
+    		error : function(xhr, status, error) {
+    			alert("실패")
+    		},
+    		success : function(result) {  
+    				var option = "<option value=''>선택</option>";
+					for(var i=0; i<result.length; i++){	
+						 option += "<option value='"+result[i].db_id+"'>"+result[i].db_nm+"</option>";		 
+					}	  
+				$('#db_nm').append(option);
+    		}
+    	});
+	}
+	
+	/*DB선택시 -> 테이블리스트 조회*/
+	function fn_dbChange(){
+    	$.ajax({
+    		url : "/selectMappingTableList.do",
+    		data : {
+    			db_id : $("#db_nm").val(),
+    		},
+    		dataType : "json",
+    		type : "post",
+    		error : function(xhr, status, error) {
+    			alert("실패")
+    		},
+    		success : function(result) {
+    			tableList.clear().draw();		
+    			tableList.rows.add(result.data).draw();
+    		}
+    	});
+	}
+	
+	/*Connector 테이블리스트 조회*/
+	function fn_selectConnectorTableList(){
+    	$.ajax({
+    		url : "/selectConnectorTableList.do",
+    		data : {
+    		},
+    		dataType : "json",
+    		type : "post",
+    		error : function(xhr, status, error) {
+    			alert("실패")
+    		},
+    		success : function(result) {
+    			connectorTableList.clear().draw();
+    			connectorTableList.rows.add(result).draw();
+    		}
+    	});
+	}
+	
+ 	/*-> 클릭시*/
+ 	function fn_rightMove(){
+ 		var datas = tableList.rows('.selected').data();
+ 		if(datas.length <1){
+ 			alert("선택된 데이터가 없습니다.");	
+ 		}else{
+ 			var rows = [];
+        	for (var i = 0;i<datas.length;i++) {
+				rows.push(tableList.rows('.selected').data()[i]); 
+			}
+        	connectorTableList.rows.add(rows).draw();
+        	tableList.rows('.selected').remove().draw();
+        	$('.selected').removeClass('selected');
+        	$("input[type=checkbox]").prop("checked", false);	
+ 		}	 		 
+	}
+ 	
+ 	/*->> 클릭시*/
+ 	function fn_allRightMove(){
+ 		var datas = tableList.rows().data();
+ 		var rows = [];
+        for (var i = 0;i<datas.length;i++) {
+			rows.push(tableList.rows().data()[i]); 
+		}
+        connectorTableList.rows.add(rows).draw(); 		
+        tableList.rows().remove().draw();
+        $('.selected').removeClass('selected');
+        $("input[type=checkbox]").prop("checked", false);	
+	}
+ 	
+ 	
+ 	/*<- 클릭시*/
+ 	function fn_leftMove(){
+ 		var datas = connectorTableList.rows('.selected').data();
+ 		if(datas.length <1){
+ 			alert("선택된 데이터가 없습니다.");	
+ 		}else{
+ 			var rows = [];
+        	for (var i = 0;i<datas.length;i++) {
+				rows.push(connectorTableList.rows('.selected').data()[i]); 
+			}
+        	tableList.rows.add(rows).draw();
+        	connectorTableList.rows('.selected').remove().draw();
+        	$('.selected').removeClass('selected');
+        	$("input[type=checkbox]").prop("checked", false);	
+ 		}	 
+ 	}
+	
+ 	/*<<- 클릭시*/
+ 	function fn_allLeftMove(){
+ 		var datas = connectorTableList.rows().data();
+ 		var rows = [];
+        for (var i = 0;i<datas.length;i++) {
+			rows.push(connectorTableList.rows().data()[i]); 
+		}
+        tableList.rows.add(rows).draw(); 		
+        connectorTableList.rows().remove().draw();
+        $('.selected').removeClass('selected');
+        $("input[type=checkbox]").prop("checked", false);	
+ 	}
+ 		
+ 	
+	/*맵핑저장 클릭시*/
+	function fn_insert(){
+		var data = connectorTableList.rows().data();
+		if(data.length <1){
+			alert("저장할 데이터가 없습니다.");	
+		}else{
+			var rowList = [];
+            for (var i = 0; i < data.length; i++) {
+               rowList.push(connectorTableList.rows().data()[i]);
+            }
+    		$.ajax({
+    			url : '/insertTransferMapping.do',
+    			type : 'post',
+    			dataType : 'text',
+    			data : {
+    				rowList : JSON.stringify(rowList),
+    				trf_trg_id : '${trf_trg_id}',
+    				cnr_id : '${cnr_id}',
+    				db_id : $("#db_nm").val()
+    			},
+    			success : function(result) {
+    				alert("저장하였습니다.");
+    				window.close();
+    				opener.fn_select();
+    			},
+    			error : function(request, status, error) {
+    				alert("실패");
+    			}
+    		});
+		}	
+	}
 </script>
 </head>
 <body>
@@ -48,20 +263,16 @@
 				</tr>
 				<tr>
 					<th scope="row" class="ico_t1">서버명</th>
-					<td>
-						<select class="select t3" name="" id="">
-							<option value=""></option>
-							<option value="">서버명1</option>
-							<option value="">서버명2</option>
-						</select>
+					<td>	
+						<select class="select t3" name="db_svr_nm" id="db_svr_nm" onchange="fn_serverChange()">
+							<c:forEach var="resultSet" items="${resultSet}" varStatus="status">
+							<option value="${resultSet.db_svr_nm}">${resultSet.db_svr_nm}</option>
+							</c:forEach>
+						</select>		
 					</td>
 					<th scope="row" class="ico_t1">DB명</th>
 					<td>
-						<select class="select" name="" id="">
-							<option value=""></option>
-							<option value="">DB명1</option>
-							<option value="">DB명2</option>
-						</select>
+						<select class="select" name="db_nm" id="db_nm" onchange="fn_dbChange()"></select>
 					</td>
 				</tr>
 			</tbody>
@@ -70,106 +281,40 @@
 			<div class="mapping_lt">
 				<p class="tit">테이블 리스트</p>
 				<div class="overflow_area">
-					<table class="list pd_type2">
-						<caption>테이블 목록</caption>
-						<colgroup>
-							<col style="width:43px;" />
-							<col style="width:184px;" />
-							<col style="width:102px;" />
-						</colgroup>
+					<table id="tableList" class="display" cellspacing="0" width="100%">
 						<thead>
 							<tr>
-								<th scope="col">
-									<div class="inp_chk">
-										<input type="checkbox" id="chk_all" name="chk1" checked="checked" />
-										<label for="chk_all"></label>
-									</div>
-								</th>
-								<th scope="col">Schema</th>
-								<th scope="col">Table명</th>
+								<th></th>
+								<th>Schema</th>
+								<th>Table명</th>
 							</tr>
 						</thead>
-						<tbody>
-							<tr>
-								<td>
-									<div class="inp_chk">
-										<input type="checkbox" id="chk_1" name="chk1" checked="checked" />
-										<label for="chk_1"></label>
-									</div>
-								</td>
-								<td>TestSchema 1</td>
-								<td>Table 1</td>
-							</tr>
-							<tr>
-								<td>
-									<div class="inp_chk">
-										<input type="checkbox" id="chk_2" name="chk1" checked="checked" />
-										<label for="chk_2"></label>
-									</div>
-								</td>
-								<td>TestSchema 2</td>
-								<td>Table 2</td>
-							</tr>
-						</tbody>
 					</table>
 				</div>
 			</div>
 			<div class="mapping_rt">
 				<p class="tit">Connector 테이블 리스트</p>
 				<div class="overflow_area">
-					<table class="list pd_type2">
-						<caption>Connector 테이블 목록</caption>
-						<colgroup>
-							<col style="width:43px;" />
-							<col style="width:184px;" />
-							<col style="width:102px;" />
-						</colgroup>
+					<table id="connectorTableList" class="display" cellspacing="0" width="100%">
 						<thead>
 							<tr>
-								<th scope="col">
-									<div class="inp_chk">
-										<input type="checkbox" id="chk_all2" name="chk2" checked="checked" />
-										<label for="chk_all2"></label>
-									</div>
-								</th>
-								<th scope="col">Schema</th>
-								<th scope="col">Table명</th>
+								<th></th>
+								<th>Schema</th>
+								<th>Table명</th>
 							</tr>
 						</thead>
-						<tbody>
-							<tr>
-								<td>
-									<div class="inp_chk">
-										<input type="checkbox" id="chk_21" name="chk2" checked="checked" />
-										<label for="chk_21"></label>
-									</div>
-								</td>
-								<td>TestSchema 1</td>
-								<td>Table 1</td>
-							</tr>
-							<tr>
-								<td>
-									<div class="inp_chk">
-										<input type="checkbox" id="chk_22" name="chk2" checked="checked" />
-										<label for="chk_22"></label>
-									</div>
-								</td>
-								<td>TestSchema 2</td>
-								<td>Table 2</td>
-							</tr>
-						</tbody>
 					</table>
 				</div>
 			</div>
 			<div class="mapping_btn">
-				<a href="#n"><img src="../../images/popup/ico_p_4.png" alt="전체우로" /></a>
-				<a href="#n"><img src="../../images/popup/ico_p_5.png" alt="한개우로" /></a>
-				<a href="#n"><img src="../../images/popup/ico_p_6.png" alt="전체좌로" /></a>
-				<a href="#n"><img src="../../images/popup/ico_p_7.png" alt="한개좌로" /></a>
+				<a href="#n" onclick="fn_allRightMove();"><img src="../../images/popup/ico_p_4.png" alt="전체우로" /></a>
+				<a href="#n" onclick="fn_rightMove();"><img src="../../images/popup/ico_p_5.png" alt="한개우로" /></a>
+				<a href="#n" onclick="fn_leftMove();"><img src="../../images/popup/ico_p_6.png" alt="한개좌로" /></a>
+				<a href="#n" onclick="fn_allLeftMove();"><img src="../../images/popup/ico_p_7.png" alt="전체좌로" /></a>
 			</div>
 		</div>
 		<div class="btn_type_02">
-			<span class="btn btnC_01"><button>맵핑저장</button></span>
+			<span class="btn btnC_01"><button onclick="fn_insert()">맵핑저장</button></span>
 			<a href="#n" class="btn" onclick="window.close();"><span>취소</span></a>
 		</div>
 	</div>

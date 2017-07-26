@@ -68,7 +68,7 @@
 	</delete>
 	
 	
-	<insert id="insertAccessControl" parameterType="AccessControlVO">
+	<insert id="insertAccessControl" parameterType="accessControlVO">
 		/**
 	 	*  Query ID : insertAccessControl
 	 	* Description : 접근제어 등록

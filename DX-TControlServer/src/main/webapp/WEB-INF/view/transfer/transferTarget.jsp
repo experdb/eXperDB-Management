@@ -26,10 +26,11 @@
 			{ data : "", defaultContent : "", targets : 0, orderable : false, checkboxes : {'selectRow' : true}}, 
 			{ data : "", className : "dt-center", defaultContent : ""}, 
 			{ data : "name", className : "dt-center", defaultContent : ""}, 
+			{ data : "hdfs_url", className : "dt-center", defaultContent : ""}, 
 			{
-				data : "hdfs_url",
+				data : "",
 				render : function(data, type, full, meta) {
-					var html = data+"<span class='btn btnC_01 btnF_02' style='float: right;'><button id='detail'>상세조회</button></span>";
+					var html = "<span class='btn btnC_01 btnF_02'><button id='detail'>상세조회</button></span>";
 					return html;
 				},
 				className : "dt-center",
@@ -238,6 +239,7 @@
 								<th>No</th>
 								<th>연결이름</th>
 								<th>Target URL</th>
+								<th>상세조회</th>
 							</tr>
 						</thead>
 					</table>

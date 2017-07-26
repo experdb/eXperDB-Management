@@ -33,7 +33,7 @@
 		var trf_trg_cnn_nm = document.getElementById('trf_trg_cnn_nm');
 		var trf_trg_url = document.getElementById('trf_trg_url');
 		if (trf_trg_cnn_nm.value == "" || trf_trg_cnn_nm.value == "undefind" || trf_trg_cnn_nm.value == null) {
-			alert("연결이름을 넣어주세요");
+			alert("Connect명을 넣어주세요");
 			trf_trg_cnn_nm.focus();
 			return false;
 		}
