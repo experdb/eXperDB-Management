@@ -72,6 +72,7 @@ public class ProtocolID {
 	public static final String FILE_SIZE = "file_size";
 	public static final String FILE_LASTMODIFIED = "file_lastmodified";
 	public static final String FILE_DIRECTORY = "file_directory";
+	public static final String SEARCH_INFO = "search_info";
 	
 	//KAFKA CONNECT
 	public static final String CONNECTOR_INFO = "CONNECTOR_INFO";

@@ -7,6 +7,7 @@ import java.net.Socket;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -18,6 +19,7 @@ import org.slf4j.LoggerFactory;
 import com.k4m.dx.tcontrol.socket.ProtocolID;
 import com.k4m.dx.tcontrol.socket.SocketCtl;
 import com.k4m.dx.tcontrol.socket.TranCodeType;
+import com.k4m.dx.tcontrol.util.DateUtil;
 import com.k4m.dx.tcontrol.util.FileEntry;
 import com.k4m.dx.tcontrol.util.FileListSearcher;
 import com.k4m.dx.tcontrol.util.FileUtil;
@@ -71,6 +73,13 @@ public class DxT015 extends SocketCtl{
 			FileListSearcher fs = new FileListSearcher(strLogFileDir);
 			
 			if(strCommandCode.equals(ProtocolID.COMMAND_CODE_R)) {
+				
+				JSONObject searchInfoObj = (JSONObject) jObj.get(ProtocolID.SEARCH_INFO);
+				String strFrom = (String) searchInfoObj.get(ProtocolID.START_DATE);
+				String strTo = (String) searchInfoObj.get(ProtocolID.END_DATE);
+				
+				Date dtFrom = DateUtil.getDateToString(strFrom);
+				Date dtTo = DateUtil.getDateToString(strTo);
 
 				List<HashMap<String, String>> resultFileList = new ArrayList<HashMap<String, String>>();
 				
@@ -82,17 +91,22 @@ public class DxT015 extends SocketCtl{
 					HashMap<String, String> hp = new HashMap<String, String>();
 					
 					String strFileName = fn.getFileName();
-					String strFileSize = Long.toString(fn.getFileSize());
-					String strLastModified = Long.toString(fn.getLastModified());
+					String strFileSize = FileUtil.getFileSize(fn.getFileSize(), 2);
+					String strLastModified = FileUtil.getFileLastModifiedDate(fn.getLastModified());
+					
+					Date dtLastModified = DateUtil.getDateToString(strLastModified);
 					
 					String strExtender = FileUtil.fileExtenderSubString(strFileName);
 					
 					if(strExtender.equals("log")) {
-						hp.put(ProtocolID.FILE_NAME, strFileName);
-						hp.put(ProtocolID.FILE_SIZE, strFileSize);
-						hp.put(ProtocolID.FILE_LASTMODIFIED, strLastModified);
-						
-						resultFileList.add(hp);
+						if(((dtLastModified.compareTo(dtFrom) > 0) || (dtLastModified.compareTo(dtFrom) == 0))
+								&&((dtLastModified.compareTo(dtTo) < 0) || (dtLastModified.compareTo(dtTo) == 0))) {
+							hp.put(ProtocolID.FILE_NAME, strFileName);
+							hp.put(ProtocolID.FILE_SIZE, strFileSize);
+							hp.put(ProtocolID.FILE_LASTMODIFIED, strLastModified);
+							
+							resultFileList.add(hp);
+						}
 					}
 				}
 				

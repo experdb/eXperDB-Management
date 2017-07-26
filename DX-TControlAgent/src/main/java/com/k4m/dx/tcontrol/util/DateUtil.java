@@ -95,10 +95,24 @@ public class DateUtil {
 	   return week[oCalendar.get(Calendar.DAY_OF_WEEK) - 1];
 	}
 	
+	/**
+	 * String YYYYMMDD 를 날짜로 변환
+	 * @param strDateYMD
+	 * @return
+	 * @throws Exception
+	 */
+	public static Date getDateToString(String strDateYMD) throws Exception {
+		SimpleDateFormat transFormat = new SimpleDateFormat("yyyy-MM-dd");
+		Date transDate = transFormat.parse(strDateYMD);
+		
+		return transDate;
+	}
+	
 	public static void main(String args[]) throws Exception{
 		DateUtil dt = new DateUtil();
 		
 		//System.out.println(dt.getYMD());
+		/**
 		System.out.println("YYYY : " + dt.getDate("YYYY"));
 		System.out.println("MM : " + dt.getDate("MM"));
 		System.out.println("DD : " + dt.getDate("DD"));
@@ -106,6 +120,16 @@ public class DateUtil {
 		System.out.println("time : " + dt.getTime());
 		
 		System.out.println("week : " + dt.getDayOfWeek());
+		**/
+		
+		Date a = getDateToString("2017-07-25 09:51:14");
+		Date b = getDateToString("2017-07-26");
+		Date c = getDateToString("2017-07-22");
+		
+		
+		System.out.println(a.compareTo(b));
+		System.out.println(a.compareTo(c));
+		System.out.println(a.compareTo(a));
 		
 	}
 

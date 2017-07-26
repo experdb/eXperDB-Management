@@ -16,7 +16,7 @@ import org.json.simple.JSONObject;
 
 public class ClientSocketCtl {
 	public static final int TotalLengthBit = 4;
-	private static int		DEFAULT_TIMEOUT = 30;
+	private static int		DEFAULT_TIMEOUT = 300;
 	private static int		DEFAULT_BUFFER_SIZE = 1024;
 	
 	protected String		_caller = "unknown";	
@@ -134,6 +134,7 @@ public class ClientSocketCtl {
 			
 			int		r = is.read(buff, i, recvSize - i);
 			
+			
 			if (r == -1)
 				break;
 			
@@ -228,5 +229,18 @@ public class ClientSocketCtl {
 		byteArray[3] = (byte)(value);
 		return byteArray;
 	}
+	
+	public String receiveMessage() throws IOException {
+		byte[] buf = new byte[4096];
+		StringBuffer strbuf = new StringBuffer(4096);
+
+		int read = 0;
+		while((read = is.read(buf)) > 0) {
+			strbuf.append(new String(buf, 0, read));
+		}
+
+		return new String(strbuf);
+	}
+
 
 }

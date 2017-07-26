@@ -23,6 +23,46 @@
 %>
 
 <script language="javascript">
+$(window.document).ready(function() {
+	var lgi_dtm_start = "${lgi_dtm_start}";
+	var lgi_dtm_end = "${lgi_dtm_end}";
+	if (lgi_dtm_start != "" && lgi_dtm_end != "") {
+		$('#from').val(lgi_dtm_start);
+		$('#to').val(lgi_dtm_end);
+	} else {
+		$('#from').val($.datepicker.formatDate('yy-mm-dd', new Date()));
+		$('#to').val($.datepicker.formatDate('yy-mm-dd', new Date()));
+	}
+});
+
+$(function() {
+	var dateFormat = "yyyy-mm-dd", from = $("#from").datepicker({
+		changeMonth : false,
+		changeYear : false,
+		onClose : function(selectedDate) {
+			$("#to").datepicker("option", "minDate", selectedDate);
+		}
+	})
+
+	to = $("#to").datepicker({
+		changeMonth : false,
+		changeYear : false,
+		onClose : function(selectedDate) {
+			$("#from").datepicker("option", "maxDate", selectedDate);
+		}
+	})
+
+	function getDate(element) {
+		var date;
+		try {
+			date = $.datepicker.parseDate(dateFormat, element.value);
+		} catch (error) {
+			date = null;
+		}
+		return date;
+	}
+});
+
 	function fn_search() {
 		var form = document.auditForm;
 		
@@ -30,14 +70,22 @@
 		form.submit();
 		return;
 	}
+	
+	function fn_openLogView(file_name) {
+		var db_svr_id = $("#db_svr_id").val();
+
+		var param = "db_svr_id=" + db_svr_id + "&file_name=" + file_name;
+		
+		window.open("/audit/auditLogView.do?" + param  ,"popLogView","location=no,menubar=no,resizable=yes,scrollbars=no,status=no,width=915,height=710,top=0,left=0");
+	}
 </script>
 
 <form name="auditForm" id="auditForm" method="post" onSubmit="return false;">
-<input type="hidden" name="db_svr_id" value="${db_svr_id}">
+<input type="hidden" id="db_svr_id" name="db_svr_id" value="${db_svr_id}">
 			<div id="contents">
 				<div class="contents_wrap">
 					<div class="contents_tit">
-						<h4>감사 이력화면 <a href="#n"><img src="../images/ico_tit.png" alt="" /></a></h4>
+						<h4>감사이력 화면 <a href="#n"><img src="../images/ico_tit.png" alt="" /></a></h4>
 						<div class="location">
 							<ul>
 								<li>${serverName}</li>
@@ -69,10 +117,10 @@
 											<td colspan="5">
 												<div class="calendar_area">
 													<a href="#n" class="calendar_btn">달력열기</a>
-													<input type="text" class="calendar" id="datepicker1" title="기간검색 시작날짜" readonly />
+													<input type="text" class="calendar" id="from" name="lgi_dtm_start" title="기간검색 시작날짜" readonly="readonly" />
 													<span class="wave">~</span>
 													<a href="#n" class="calendar_btn">달력열기</a>
-													<input type="text" class="calendar" id="datepicker2" title="기간검색 종료날짜" readonly />
+													<input type="text" class="calendar" id="to" name="lgi_dtm_end" title="기간검색 종료날짜" readonly="readonly" />
 												</div>
 											</td>
 										</tr>
@@ -83,10 +131,10 @@
 								<table class="list">
 									<caption>Rman 백업관리 이력화면 리스트</caption>
 									<colgroup>
-										<col style="width:10%;" />
+										<col style="width:5%;" />
 										<col style="width:60%;" />
+										<col style="width:15%;" />
 										<col style="width:20%;" />
-										<col style="width:10%;" />
 
 									</colgroup>
 									<thead>
@@ -111,7 +159,7 @@
 									<c:forEach var="log" items="${logFileList}" varStatus="status">
 										<tr>
 											<td>${status.count}</td>
-											<td>${log.file_name}</td>
+											<td><a href="javascript:fn_openLogView('${log.file_name}')">${log.file_name}</a></td>
 											<td>${log.file_size}</td>
 											<td>${log.file_lastmodified}</td>
 											

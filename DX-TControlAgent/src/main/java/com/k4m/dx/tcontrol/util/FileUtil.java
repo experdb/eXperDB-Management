@@ -7,8 +7,10 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.FileReader;
 import java.io.IOException;
-import java.util.Comparator;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.HashMap;
+import java.util.Locale;
 import java.util.Properties;
 
 import org.springframework.core.io.ClassPathResource;
@@ -16,32 +18,37 @@ import org.springframework.core.io.Resource;
 
 /**
  * File Handle Utils
+ * 
  * @author thpark
  *
  */
 public class FileUtil {
-	
+
 	public static String getFileView(File file) throws Exception {
 		String strView = "";
-        BufferedReader br = null;
-        try {
-            br = new BufferedReader(new FileReader(file));
-            char[] c = new char[(int) file.length()];
-            br.read(c);
-            strView = new String(c);
-/*            String line;
-            while ((line = br.readLine()) != null) {
-            	strView += line + "\r\n";
-            }*/
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }finally {
-            if(br != null) try {br.close(); } catch (IOException e) {}
-        }
-        
-        return strView;
+		BufferedReader br = null;
+		try {
+			br = new BufferedReader(new FileReader(file));
+			char[] c = new char[(int) file.length()];
+			br.read(c);
+			strView = new String(c);
+			/*
+			 * String line; while ((line = br.readLine()) != null) { strView +=
+			 * line + "\r\n"; }
+			 */
+		} catch (FileNotFoundException e) {
+			e.printStackTrace();
+		} catch (IOException e) {
+			e.printStackTrace();
+		} finally {
+			if (br != null)
+				try {
+					br.close();
+				} catch (IOException e) {
+				}
+		}
+
+		return strView;
 	}
 
 	/**
@@ -121,9 +128,10 @@ public class FileUtil {
 
 		return strOrgFileName;
 	}
-	
+
 	/**
 	 * 파일 확장자 추출
+	 * 
 	 * @param fileName
 	 * @return
 	 * @throws Exception
@@ -156,7 +164,7 @@ public class FileUtil {
 		while ((data = fis.read()) != -1) {
 			fos.write(data);
 		}
-		
+
 		fis.close();
 		fos.close();
 
@@ -164,9 +172,10 @@ public class FileUtil {
 		fileDelete(inFileName);
 
 	}
-	
+
 	/**
 	 * File Copy
+	 * 
 	 * @param inFileName
 	 * @param outFileName
 	 * @throws Exception
@@ -180,7 +189,7 @@ public class FileUtil {
 		while ((data = fis.read()) != -1) {
 			fos.write(data);
 		}
-		
+
 		fis.close();
 		fos.close();
 
@@ -191,40 +200,86 @@ public class FileUtil {
 	 * 
 	 * @param deleteFileName
 	 */
-	public static void fileDelete(String deleteFileName)  throws Exception {
+	public static void fileDelete(String deleteFileName) throws Exception {
 		File file = new File(deleteFileName);
 		file.delete();
 	}
+
+
+	/**
+	 * 파일크기 추출
+	 * @param filesize
+	 * @param type
+	 * @return
+	 */
+	public static String getFileSize(long filesize, int Cutlength) {
+		String size = "";
+
+		if (filesize < 1024)
+			size = filesize + " Byte";
+		else if (filesize > 1024 && filesize < (1024 * 1024)) {
+			double longtemp = filesize / (double) 1024;
+			int len = Double.toString(longtemp).indexOf(".");
+			size = Double.toString(longtemp).substring(0, len + Cutlength) + " Kb";
+		} else if (filesize > (1024 * 1024)) {
+			double longtemp = filesize / ((double) 1024 * 1024);
+			int len = Double.toString(longtemp).indexOf(".");
+			size = Double.toString(longtemp).substring(0, len + Cutlength) + " Mb";
+		}
+		return size;
+	}
+	
+	public static String getFileLastModifiedDate(long fileLastModified) throws Exception {
+		String strLastModified = "";
+		
+		SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.KOREA);
+
+		Date date = new Date(fileLastModified);
+
+		strLastModified = formatter.format(date);
+
+		
+		return strLastModified;
+	}
 	
 	public static void main(String args[]) {
-		
+
 		try {
-			//pdf.end 파일Test
+			// pdf.end 파일Test
 			/**
-			String strPdfFileName = "1000088_1.pdf.end";
-			String strExtFileName = fileNameSubString(strPdfFileName);
-			
-			if(strExtFileName.indexOf(".") > 0) {
-				System.out.println(fileExtenderSubString(strExtFileName));
-			}
-			
-			**/
-			
-			//파일읽기
+			 * String strPdfFileName = "1000088_1.pdf.end"; String
+			 * strExtFileName = fileNameSubString(strPdfFileName);
+			 * 
+			 * if(strExtFileName.indexOf(".") > 0) {
+			 * System.out.println(fileExtenderSubString(strExtFileName)); }
+			 * 
+			 **/
+
+			// 파일읽기
+			/**
 			String strFilePath = "C:\\k4m\\01-1. DX 제폼개발\\04. 시험\\pg_log\\";
 			String strFileName = "postgresql-2017-07-25_095614.log";
-			
+
 			File inFile = new File(strFilePath, strFileName);
+
+			//String strFileTxt = FileUtil.getFileView(inFile);
+
+			//System.out.println(strFileTxt);
 			
-			String strFileTxt = FileUtil.getFileView(inFile);
 			
-			System.out.println(strFileTxt);
+			//file LastModified
+			String strLastModified = FileUtil.getFileLastModifiedDate(inFile.lastModified());
+			System.out.println(strLastModified);
+			**
+			*/
 			
-		
-		} catch(Exception e) {
+			Date date = new Date("2017-07-26");
+
+		} catch (Exception e) {
 			e.printStackTrace();
 		}
 	}
-
+	
+	
 
 }

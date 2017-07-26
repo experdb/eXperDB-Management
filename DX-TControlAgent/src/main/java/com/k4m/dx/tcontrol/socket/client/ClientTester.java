@@ -64,8 +64,8 @@ public class ClientTester {
 			//clientTester.dxT014_U(Ip, port);
 			//clientTester.dxT014_D(Ip, port);
 			
-			//clientTester.dxT015_R(Ip, port);
-			clientTester.dxT015_V(Ip, port);
+			clientTester.dxT015_R(Ip, port);
+			//clientTester.dxT015_V(Ip, port);
 			
 			
 		} catch(Exception e) {
@@ -1172,11 +1172,19 @@ public class ClientTester {
 			serverObj.put(ClientProtocolID.SERVER_NAME, Ip);
 			serverObj.put(ClientProtocolID.SERVER_IP, Integer.toString(port));
 			
+			String strStartDate = "2017-07-25";
+			String strEndDate = "2017-07-26";
+				
+			JSONObject searchInfoObj = new JSONObject();
+			searchInfoObj.put(ClientProtocolID.START_DATE, strStartDate);
+			searchInfoObj.put(ClientProtocolID.END_DATE, strEndDate);
+			
 			JSONObject jObj = new JSONObject();
 			jObj.put(ClientProtocolID.DX_EX_CODE, ClientTranCodeType.DxT015);
 			jObj.put(ClientProtocolID.SERVER_INFO, serverObj);
 			jObj.put(ClientProtocolID.COMMAND_CODE, ClientProtocolID.COMMAND_CODE_R);
 			jObj.put(ClientProtocolID.FILE_DIRECTORY, strDirectory);
+			jObj.put(ClientProtocolID.SEARCH_INFO, searchInfoObj);
 			
 			
 			JSONObject objList;
@@ -1218,7 +1226,7 @@ public class ClientTester {
 		try {
 
 			String strDirectory = "/home/devel/experdb/data/pg_log/";
-			String strFileName = "postgresql-2017-07-25_095614.log";
+			String strFileName = "postgresql-2017-07-26_095844.log";
 			
 			//strDirectory = "C:\\k4m\\01-1. DX 제폼개발\\04. 시험\\pg_log\\";
 			

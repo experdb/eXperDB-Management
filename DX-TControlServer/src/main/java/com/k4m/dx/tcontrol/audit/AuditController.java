@@ -336,9 +336,7 @@ public class AuditController {
 			serverObj.put(ClientProtocolID.SERVER_NAME, dbServerVO.getDb_svr_nm());
 			serverObj.put(ClientProtocolID.SERVER_IP, dbServerVO.getIpadr());
 			serverObj.put(ClientProtocolID.SERVER_PORT, dbServerVO.getPortno());
-			serverObj.put(ClientProtocolID.DATABASE_NAME, dbServerVO.getDft_db_nm());
-			serverObj.put(ClientProtocolID.USER_ID, dbServerVO.getSvr_spr_usr_id());
-			serverObj.put(ClientProtocolID.USER_PWD, strPwd);
+
 			
 			JSONObject jObj = new JSONObject();
 			jObj.put(ClientProtocolID.DX_EX_CODE, ClientTranCodeType.DxT015);
@@ -378,6 +376,83 @@ public class AuditController {
 			e.printStackTrace();
 		}
 		mv.setViewName("dbserver/auditLogList");
+		return mv;
+	}
+	
+	@RequestMapping(value = "/audit/auditLogView.do")
+	public ModelAndView auditLogView(@ModelAttribute("auditVO") AuditVO auditVO, ModelMap model, HttpServletRequest request) throws Exception{
+		ModelAndView mv = new ModelAndView();
+
+		//mv.addObject("db_svr_id",workVO.getDb_svr_id());
+		try {
+			String strDbSvrId = request.getParameter("db_svr_id");
+			int db_svr_id = Integer.parseInt(strDbSvrId);
+			
+			AgentInfoVO vo = new AgentInfoVO();
+			vo.setDB_SVR_ID(db_svr_id);
+			
+			AgentInfoVO agentInfo =  (AgentInfoVO) cmmnServerInfoService.selectAgentInfo(vo);
+			
+			DbServerVO schDbServerVO = new DbServerVO();
+			schDbServerVO.setDb_svr_id(db_svr_id);
+			
+			DbServerVO dbServerVO = (DbServerVO)  cmmnServerInfoService.selectServerInfo(schDbServerVO);
+			
+			String strDirectory = dbServerVO.getIstpath();
+			String strFileName = request.getParameter("file_name");
+			
+			JSONObject serverObj = new JSONObject();
+			
+
+			
+			serverObj.put(ClientProtocolID.SERVER_NAME, dbServerVO.getDb_svr_nm());
+			serverObj.put(ClientProtocolID.SERVER_IP, dbServerVO.getIpadr());
+			serverObj.put(ClientProtocolID.SERVER_PORT, dbServerVO.getPortno());
+
+			
+			JSONObject jObj = new JSONObject();
+			jObj.put(ClientProtocolID.DX_EX_CODE, ClientTranCodeType.DxT015);
+			jObj.put(ClientProtocolID.SERVER_INFO, serverObj);
+			jObj.put(ClientProtocolID.COMMAND_CODE, ClientProtocolID.COMMAND_CODE_V);
+			jObj.put(ClientProtocolID.FILE_DIRECTORY, strDirectory);
+			jObj.put(ClientProtocolID.FILE_NAME, strFileName);
+			
+			
+			String IP = dbServerVO.getIpadr();
+			int PORT = agentInfo.getSOCKET_PORT();
+			
+			//IP = "127.0.0.1";
+			ClientAdapter CA = new ClientAdapter(IP, PORT);
+			CA.open(); 
+			
+			JSONObject objList = CA.dxT015(jObj);
+			
+			String strErrMsg = (String)objList.get(ClientProtocolID.ERR_MSG);
+			String strErrCode = (String)objList.get(ClientProtocolID.ERR_CODE);
+			String strDxExCode = (String)objList.get(ClientProtocolID.DX_EX_CODE);
+			String strResultCode = (String)objList.get(ClientProtocolID.RESULT_CODE);
+			System.out.println("RESULT_CODE : " +  strResultCode);
+			System.out.println("ERR_CODE : " +  strErrCode);
+			System.out.println("ERR_MSG : " +  strErrMsg);
+			
+			String strLogView = (String)objList.get(ClientProtocolID.RESULT_DATA);
+			
+			System.out.println("#################################");
+			System.out.println(strLogView.trim());
+			System.out.println("#################################");
+			
+
+			
+			mv.addObject("serverName", dbServerVO.getDb_svr_nm());
+			mv.addObject("db_svr_id", strDbSvrId);
+			mv.addObject("logView", strLogView.trim());
+			
+
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		mv.setViewName("popup/auditLogView");
 		return mv;
 	}
 	
