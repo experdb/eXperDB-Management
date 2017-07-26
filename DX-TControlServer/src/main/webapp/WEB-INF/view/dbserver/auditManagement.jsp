@@ -228,7 +228,7 @@
 												</td>
 												<th scope="row" class="double">로그 Statement</th>
 												<td>
-													<div class="inp_chk">${fn:toLowerCase(audit.log_statement_once)}
+													<div class="inp_chk">
 														<input type="checkbox" id="chkStatement" name="chkStatement"<c:if test="${fn:toLowerCase(audit.log_statement_once) == 'on'}"> checked="checked"</c:if>>
 														<label for="chkStatement">활성화</label>
 													</div>

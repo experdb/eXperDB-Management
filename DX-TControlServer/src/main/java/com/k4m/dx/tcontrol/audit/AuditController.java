@@ -1,13 +1,15 @@
 package com.k4m.dx.tcontrol.audit;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.HashMap;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 
+import org.apache.poi.ss.usermodel.DateUtil;
 import org.json.simple.JSONObject;
-import org.json.simple.parser.ParseException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
@@ -16,7 +18,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
-import com.k4m.dx.tcontrol.accesscontrol.service.AccessControlVO;
 import com.k4m.dx.tcontrol.admin.accesshistory.service.AccessHistoryService;
 import com.k4m.dx.tcontrol.admin.dbserverManager.service.DbServerVO;
 import com.k4m.dx.tcontrol.audit.service.AuditVO;
@@ -27,7 +28,6 @@ import com.k4m.dx.tcontrol.cmmn.client.ClientProtocolID;
 import com.k4m.dx.tcontrol.cmmn.client.ClientTranCodeType;
 import com.k4m.dx.tcontrol.common.service.AgentInfoVO;
 import com.k4m.dx.tcontrol.common.service.CmmnServerInfoService;
-import com.k4m.dx.tcontrol.common.service.HistoryVO;
 
 /**
  * 감사로그 컨트롤러 클래스를 정의한다.
@@ -101,7 +101,7 @@ public class AuditController {
 			List<Object> selectExtList  = (ArrayList<Object>) objExtList.get(ClientProtocolID.RESULT_DATA);
 			
 			
-			if(selectExtList.size() == 0) {
+			if(selectExtList == null || selectExtList.size() == 0) {
 				strExtName = "";
 				mv.addObject("extName", strExtName);
 				mv.setViewName("dbserver/auditManagement");
@@ -251,7 +251,7 @@ public class AuditController {
 
 		JSONObject objList;
 
-		IP = "127.0.0.1";
+		//IP = "127.0.0.1";
 		
 		ClientAdapter CA = new ClientAdapter(IP, PORT);
 		CA.open(); 
@@ -280,6 +280,19 @@ public class AuditController {
 			String strDbSvrId = request.getParameter("db_svr_id");
 			int db_svr_id = Integer.parseInt(strDbSvrId);
 			
+			SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+
+	        Calendar c1 = Calendar.getInstance();
+
+	        String strToday = sdf.format(c1.getTime());
+
+			String strStartDate =  strToday;
+			String strEndDate =  strToday;
+			
+			JSONObject searchInfoObj = new JSONObject();
+			searchInfoObj.put(ClientProtocolID.START_DATE, strStartDate);
+			searchInfoObj.put(ClientProtocolID.END_DATE, strEndDate);
+			
 			AgentInfoVO vo = new AgentInfoVO();
 			vo.setDB_SVR_ID(db_svr_id);
 			
@@ -290,13 +303,56 @@ public class AuditController {
 			
 			DbServerVO dbServerVO = (DbServerVO)  cmmnServerInfoService.selectServerInfo(schDbServerVO);
 			
+			String strDirectory = dbServerVO.getIstpath();
+			
+			JSONObject serverObj = new JSONObject();
+			
+			AES256 dec = new AES256(AES256_KEY.ENC_KEY);
+			System.out.println("KEY : " + dbServerVO.getSvr_spr_scm_pwd());
+			String strPwd = dec.aesDecode(dbServerVO.getSvr_spr_scm_pwd());
+			
+			serverObj.put(ClientProtocolID.SERVER_NAME, dbServerVO.getDb_svr_nm());
+			serverObj.put(ClientProtocolID.SERVER_IP, dbServerVO.getIpadr());
+			serverObj.put(ClientProtocolID.SERVER_PORT, dbServerVO.getPortno());
+
+			
+			JSONObject jObj = new JSONObject();
+			jObj.put(ClientProtocolID.DX_EX_CODE, ClientTranCodeType.DxT015);
+			jObj.put(ClientProtocolID.SERVER_INFO, serverObj);
+			jObj.put(ClientProtocolID.COMMAND_CODE, ClientProtocolID.COMMAND_CODE_R);
+			jObj.put(ClientProtocolID.FILE_DIRECTORY, strDirectory);
+			jObj.put(ClientProtocolID.SEARCH_INFO, searchInfoObj);
+			
+			
+			String IP = dbServerVO.getIpadr();
+			int PORT = agentInfo.getSOCKET_PORT();
+			
+			//IP = "127.0.0.1";
+			ClientAdapter CA = new ClientAdapter(IP, PORT);
+			CA.open(); 
+			
+			JSONObject objList = CA.dxT015(jObj);
+			
+			String strErrMsg = (String)objList.get(ClientProtocolID.ERR_MSG);
+			String strErrCode = (String)objList.get(ClientProtocolID.ERR_CODE);
+			String strDxExCode = (String)objList.get(ClientProtocolID.DX_EX_CODE);
+			String strResultCode = (String)objList.get(ClientProtocolID.RESULT_CODE);
+			System.out.println("RESULT_CODE : " +  strResultCode);
+			System.out.println("ERR_CODE : " +  strErrCode);
+			System.out.println("ERR_MSG : " +  strErrMsg);
+			
+			List<HashMap<String, String>> fileList = (List<HashMap<String, String>>) objList.get(ClientProtocolID.RESULT_DATA);
+			
+
 			
 			mv.addObject("serverName", dbServerVO.getDb_svr_nm());
 			mv.addObject("db_svr_id", strDbSvrId);
-			
-			List<HashMap<String, String>> fileList = new ArrayList<HashMap<String, String>>();
-			
 			mv.addObject("logFileList", fileList);
+			
+			mv.addObject("start_date", strStartDate);
+			mv.addObject("end_date", strEndDate);
+			
+
 			
 		} catch (Exception e) {
 			e.printStackTrace();

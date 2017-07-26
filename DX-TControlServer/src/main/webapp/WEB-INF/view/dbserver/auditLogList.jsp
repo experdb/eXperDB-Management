@@ -33,6 +33,8 @@ $(window.document).ready(function() {
 		$('#from').val($.datepicker.formatDate('yy-mm-dd', new Date()));
 		$('#to').val($.datepicker.formatDate('yy-mm-dd', new Date()));
 	}
+	
+
 });
 
 $(function() {
