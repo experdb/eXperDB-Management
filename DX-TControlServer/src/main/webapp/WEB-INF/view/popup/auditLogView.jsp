@@ -55,6 +55,11 @@
 		var v_log = $("#auditlog").val();
 		copy_to_clipboard(v_log);
 	}
+	
+	$(window.document).ready(function() {
+
+	});
+	
 
 </script>
 <div class="pop_container">

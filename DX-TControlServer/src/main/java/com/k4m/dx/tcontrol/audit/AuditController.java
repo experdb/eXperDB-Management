@@ -447,11 +447,6 @@ public class AuditController {
 			System.out.println("ERR_MSG : " +  strErrMsg);
 			
 			String strLogView = (String)objList.get(ClientProtocolID.RESULT_DATA);
-			
-			System.out.println("#################################");
-			System.out.println(strLogView.trim());
-			System.out.println("#################################");
-			
 
 			
 			mv.addObject("serverName", dbServerVO.getDb_svr_nm());
