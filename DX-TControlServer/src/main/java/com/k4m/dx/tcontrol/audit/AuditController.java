@@ -315,6 +315,13 @@ public class AuditController {
 			String strDbSvrId = request.getParameter("db_svr_id");
 			int db_svr_id = Integer.parseInt(strDbSvrId);
 			
+			String strStartDate =  request.getParameter("start_date");
+			String strEndDate =  request.getParameter("end_date");
+			
+			JSONObject searchInfoObj = new JSONObject();
+			searchInfoObj.put(ClientProtocolID.START_DATE, strStartDate);
+			searchInfoObj.put(ClientProtocolID.END_DATE, strEndDate);
+			
 			AgentInfoVO vo = new AgentInfoVO();
 			vo.setDB_SVR_ID(db_svr_id);
 			
@@ -343,6 +350,7 @@ public class AuditController {
 			jObj.put(ClientProtocolID.SERVER_INFO, serverObj);
 			jObj.put(ClientProtocolID.COMMAND_CODE, ClientProtocolID.COMMAND_CODE_R);
 			jObj.put(ClientProtocolID.FILE_DIRECTORY, strDirectory);
+			jObj.put(ClientProtocolID.SEARCH_INFO, searchInfoObj);
 			
 			
 			String IP = dbServerVO.getIpadr();
@@ -369,6 +377,9 @@ public class AuditController {
 			mv.addObject("serverName", dbServerVO.getDb_svr_nm());
 			mv.addObject("db_svr_id", strDbSvrId);
 			mv.addObject("logFileList", fileList);
+			
+			mv.addObject("start_date", strStartDate);
+			mv.addObject("end_date", strEndDate);
 			
 
 			

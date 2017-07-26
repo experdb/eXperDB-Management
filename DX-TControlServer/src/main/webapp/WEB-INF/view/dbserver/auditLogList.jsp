@@ -24,8 +24,8 @@
 
 <script language="javascript">
 $(window.document).ready(function() {
-	var lgi_dtm_start = "${lgi_dtm_start}";
-	var lgi_dtm_end = "${lgi_dtm_end}";
+	var lgi_dtm_start = "${start_date}";
+	var lgi_dtm_end = "${end_date}";
 	if (lgi_dtm_start != "" && lgi_dtm_end != "") {
 		$('#from').val(lgi_dtm_start);
 		$('#to').val(lgi_dtm_end);
@@ -117,10 +117,10 @@ $(function() {
 											<td colspan="5">
 												<div class="calendar_area">
 													<a href="#n" class="calendar_btn">달력열기</a>
-													<input type="text" class="calendar" id="from" name="lgi_dtm_start" title="기간검색 시작날짜" readonly="readonly" />
+													<input type="text" class="calendar" id="from" name="start_date" title="기간검색 시작날짜" readonly="readonly" />
 													<span class="wave">~</span>
 													<a href="#n" class="calendar_btn">달력열기</a>
-													<input type="text" class="calendar" id="to" name="lgi_dtm_end" title="기간검색 종료날짜" readonly="readonly" />
+													<input type="text" class="calendar" id="to" name="end_date" title="기간검색 종료날짜" readonly="readonly" />
 												</div>
 											</td>
 										</tr>

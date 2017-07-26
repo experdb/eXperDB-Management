@@ -33,11 +33,35 @@
 <script type="text/javascript" src="../../js/common.js"></script>
 </head>
 <body>
+<script language="javascript">
+
+	function is_ie() {
+	  if(navigator.userAgent.toLowerCase().indexOf("chrome") != -1) return false;
+	  if(navigator.userAgent.toLowerCase().indexOf("msie") != -1) return true;
+	  if(navigator.userAgent.toLowerCase().indexOf("windows nt") != -1) return true;
+	  return false;
+	}
+	 
+	function copy_to_clipboard(str) {
+	  if( is_ie() ) {
+	    window.clipboardData.setData("Text", str);
+	    alert("복사되었습니다.");
+	    return;
+	  }
+	  prompt("Ctrl+C를 눌러 복사하세요.", str);
+	}
+	
+	function fn_copy() {
+		var v_log = $("#auditlog").val();
+		copy_to_clipboard(v_log);
+	}
+
+</script>
 <div class="pop_container">
 	<div class="pop_cts">
 		<p class="tit">감사이력 보기</p>
 		<div class="btn_type_01">
-			<span class="btn btnC_01"><button onClick="">다운로드</button></span>
+			<span class="btn btnC_01"><button onClick="fn_copy();">복사</button></span>
 			<a href="#n" class="btn" onclick="window.close();"><span>취소</span></a>
 		</div>
 		<div class="pop_cmm">
