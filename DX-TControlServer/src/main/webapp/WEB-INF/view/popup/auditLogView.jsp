@@ -67,8 +67,14 @@
 	}
 	
 	$(window.document).ready(function() {
+		
 
 	});
+	
+	function fn_Show() {
+		$("#auditloading").hide();
+		
+	}
 	
 
 </script>
@@ -80,6 +86,11 @@
 			<span class="btn btnC_01"><button onClick="fn_copy();">복사</button></span>
 			<a href="#n" class="btn" onclick="window.close();"><span>취소</span></a>
 		</div>
+		
+	<div id="auditloading">
+			<img src="/images/spin.gif" alt="" />
+	</div>
+	
 		<div class="pop_cmm">
 			<table class="write">
 				<caption>감사이력 보기</caption>
@@ -92,8 +103,11 @@
 					<tr>
 						<td>
 							<div class="textarea_grp">
-								<textarea name="auditlog" id="auditlog" style="height:500px">${logView}</textarea>
+								
+								<textarea name="auditlog"  id="auditlog" style="height:550px">${logView}</textarea>
+								
 							</div>
+							
 						</td>
 					</tr>
 				</tbody>
@@ -104,5 +118,6 @@
 
 	</div>
 </div>
+<script>fn_Show();</script>
 </body>
 </html>
