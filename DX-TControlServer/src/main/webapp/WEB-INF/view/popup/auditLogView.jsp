@@ -43,12 +43,22 @@
 	}
 	 
 	function copy_to_clipboard(str) {
-	  if( is_ie() ) {
+	  if ( window.clipboardData ){ 
 	    window.clipboardData.setData("Text", str);
-	    alert("복사되었습니다.");
+	    alert("클립보드에 복사되었습니다. \n [Ctrl+v]를 사용하여 원하는 곳에 붙여넣기 하세요.");
 	    return;
 	  }
-	  prompt("Ctrl+C를 눌러 복사하세요.", str);
+	  else {
+		  var textArea = document.getElementById("auditlog");
+		  textArea.select();
+
+		  var successful = document.execCommand( "copy", false, null ); 
+		  if(successful) {
+			  alert("클립보드에 복사되었습니다. \n [Ctrl+v]를 사용하여 원하는 곳에 붙여넣기 하세요.");
+		  }
+
+	  }
+
 	}
 	
 	function fn_copy() {
@@ -62,6 +72,7 @@
 	
 
 </script>
+
 <div class="pop_container">
 	<div class="pop_cts">
 		<p class="tit">감사이력 보기</p>
