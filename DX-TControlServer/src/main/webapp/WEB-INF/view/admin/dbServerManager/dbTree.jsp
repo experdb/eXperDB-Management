@@ -130,8 +130,12 @@ $(function() {
     		},
     		success : function(result) {
     			table_db.clear().draw();
-    			table_db.rows.add(result.data).draw();
-    			fn_dataCompareChcek(result);
+    			if(result.data == null){
+    				alert("서버상태를 확인해주세요.");
+    			}else{
+	    			table_db.rows.add(result.data).draw();
+	    			fn_dataCompareChcek(result);
+    			}
     		}
     	});
         

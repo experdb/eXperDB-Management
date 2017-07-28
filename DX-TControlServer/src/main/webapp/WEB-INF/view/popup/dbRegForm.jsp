@@ -96,8 +96,12 @@ function fn_svr_db(db_svr_nm, db_svr_id){
 		},
 		success : function(result) {
 			table_db.clear().draw();
-			table_db.rows.add(result.data).draw();
-			fn_dataCompareChcek(result,db_svr_id);
+			if(result.data == null){
+				alert("서버상태를 확인해주세요.");
+			}else{
+				table_db.rows.add(result.data).draw();
+				fn_dataCompareChcek(result,db_svr_id);
+			}
 		}
 	});	
 }

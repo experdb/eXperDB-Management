@@ -6,7 +6,9 @@ import java.util.List;
 import org.springframework.stereotype.Repository;
 
 import com.k4m.dx.tcontrol.accesscontrol.service.DbIDbServerVO;
+import com.k4m.dx.tcontrol.tree.transfer.service.TransferDetailMappingVO;
 import com.k4m.dx.tcontrol.tree.transfer.service.TransferDetailVO;
+import com.k4m.dx.tcontrol.tree.transfer.service.TransferMappingVO;
 import com.k4m.dx.tcontrol.tree.transfer.service.TransferRelationVO;
 import com.k4m.dx.tcontrol.tree.transfer.service.TransferTargetVO;
 
@@ -81,8 +83,53 @@ public class TreeTransferDAO extends EgovAbstractMapper {
 	 * @param transferRelationVO
 	 * @throws SQLException
 	 */
-	public void insertTransferRelation(TransferRelationVO transferRelationVO) {
+	public void insertTransferRelation(TransferRelationVO transferRelationVO) throws SQLException {
 		insert("treeTransferSql.insertTransferRelation", transferRelationVO);
 
+	}
+
+	/**
+	 * 전송매핑테이블내역 등록
+	 * 
+	 * @param transferMappingVO
+	 * @throws SQLException
+	 */
+	public void insertTransferMapping(TransferMappingVO transferMappingVO) throws SQLException {
+		insert("treeTransferSql.insertTransferMapping", transferMappingVO);
+	}
+
+	/**
+	 * 전송매핑테이블내역 조회
+	 * 
+	 * @param trf_trg_id
+	 * @throws SQLException
+	 */
+	@SuppressWarnings({ "deprecation", "unchecked" })
+	public List<TransferDetailMappingVO> selectTransferMapping(int trf_trg_id) throws SQLException {
+		List<TransferDetailMappingVO> result = null;
+		result = (List<TransferDetailMappingVO>) list("treeTransferSql.selectTransferMapping", trf_trg_id);
+		return result;
+	}
+
+	/**
+	 * 전송대상매핑관계 삭제
+	 * 
+	 * @param trf_trg_id
+	 * @return
+	 * @throws Exception
+	 */
+	public void deleteTransferRelation(int trf_trg_id) throws SQLException {
+		delete("treeTransferSql.deleteTransferRelation", trf_trg_id);
+	}
+
+	/**
+	 * 전송매핑테이블내역 삭제
+	 * 
+	 * @param trf_trg_mpp_id
+	 * @return
+	 * @throws Exception
+	 */
+	public void deleteTransferMapping(int trf_trg_mpp_id) throws SQLException {
+		delete("treeTransferSql.deleteTransferMapping", trf_trg_mpp_id);
 	}
 }

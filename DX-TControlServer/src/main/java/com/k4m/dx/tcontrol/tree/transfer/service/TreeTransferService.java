@@ -56,4 +56,42 @@ public interface TreeTransferService {
 	 */
 	void insertTransferRelation(TransferRelationVO transferRelationVO) throws Exception;
 
+	/**
+	 * 전송매핑테이블내역 등록
+	 * 
+	 * @param transferMappingVO
+	 * @return
+	 * @throws Exception
+	 */
+	void insertTransferMapping(TransferMappingVO transferMappingVO) throws Exception;
+
+	/**
+	 * 전송매핑테이블내역 조회
+	 * 
+	 * @param trf_trg_id
+	 * @return
+	 * @throws Exception
+	 */
+	List<TransferDetailMappingVO> selectTransferMapping(int trf_trg_id) throws Exception;
+
+	/**
+	 * 전송대상매핑관계 삭제
+	 * 
+	 * @param trf_trg_id
+	 * @return
+	 * @throws Exception
+	 */
+	void deleteTransferRelation(int trf_trg_id) throws Exception;
+
+	/**
+	 * 전송매핑테이블내역 삭제
+	 * 
+	 * @param trf_trg_mpp_id
+	 * @return
+	 * @throws Exception
+	 */
+	void deleteTransferMapping(int trf_trg_mpp_id) throws Exception;
+
+
+
 }
