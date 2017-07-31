@@ -1,8 +1,8 @@
 package com.k4m.dx.tcontrol.server;
 
+import java.io.BufferedInputStream;
+import java.io.BufferedOutputStream;
 import java.io.File;
-import java.io.InputStream;
-import java.io.OutputStream;
 import java.net.Socket;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -42,7 +42,7 @@ public class DxT015 extends SocketCtl{
 	private static Logger errLogger = LoggerFactory.getLogger("errorToFile");
 	private static Logger socketLogger = LoggerFactory.getLogger("socketLogger");
 	
-	public DxT015(Socket socket, InputStream is, OutputStream	os) {
+	public DxT015(Socket socket, BufferedInputStream is, BufferedOutputStream	os) {
 		this.client = socket;
 		this.is = is;
 		this.os = os;
@@ -132,8 +132,8 @@ public class DxT015 extends SocketCtl{
 				outputObj.put(ProtocolID.ERR_MSG, strErrMsg);
 				outputObj.put(ProtocolID.RESULT_DATA, strFileTxt);
 			}
-			
-			send(TotalLengthBit, outputObj.toString().getBytes());
+			send(outputObj);
+			//send(TotalLengthBit, outputObj.toString().getBytes());
 			
 		} catch (Exception e) {
 			errLogger.error("DxT015 {} ", e.toString());

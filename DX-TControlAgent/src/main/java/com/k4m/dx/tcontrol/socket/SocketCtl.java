@@ -1,10 +1,10 @@
 package com.k4m.dx.tcontrol.socket;
 
+import java.io.BufferedInputStream;
+import java.io.BufferedOutputStream;
 import java.io.IOException;
-import java.io.InputStream;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
-import java.io.OutputStream;
 import java.math.BigInteger;
 import java.net.Socket;
 import java.net.SocketTimeoutException;
@@ -32,8 +32,8 @@ public class SocketCtl {
 	protected int		bufferSize = DEFAULT_BUFFER_SIZE;
 	
 	protected Socket		client = null;
-	protected InputStream	is = null;
-	protected OutputStream	os = null;
+	protected BufferedInputStream	is = null;
+	protected BufferedOutputStream	os = null;
 	
 	private String		sendmsg = "";
 	private String		recvmsg = "";

@@ -13,7 +13,7 @@ import com.k4m.dx.tcontrol.util.FileUtil;
 
 
 
-@Service("SystemServiceImpl")
+@Service("SystemService")
 public class SystemServiceImpl implements SystemService{
 
 	@Resource(name = "SystemDAO")

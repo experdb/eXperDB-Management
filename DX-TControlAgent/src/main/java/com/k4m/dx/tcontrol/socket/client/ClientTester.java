@@ -64,8 +64,8 @@ public class ClientTester {
 			//clientTester.dxT014_U(Ip, port);
 			//clientTester.dxT014_D(Ip, port);
 			
-			clientTester.dxT015_R(Ip, port);
-			//clientTester.dxT015_V(Ip, port);
+			//clientTester.dxT015_R(Ip, port);
+			clientTester.dxT015_V(Ip, port);
 			
 			
 		} catch(Exception e) {
@@ -1165,7 +1165,7 @@ public class ClientTester {
 
 			String strDirectory = "/home/devel/experdb/data/pg_log/";
 			
-			//strDirectory = "C:\\k4m\\01-1. DX 제폼개발\\04. 시험\\pg_log\\";
+			strDirectory = "C:\\k4m\\01-1. DX 제폼개발\\04. 시험\\pg_log\\";
 			
 			JSONObject serverObj = new JSONObject();
 			
@@ -1226,7 +1226,10 @@ public class ClientTester {
 		try {
 
 			String strDirectory = "/home/devel/experdb/data/pg_log/";
-			String strFileName = "postgresql-2017-07-26_095844.log";
+			//strDirectory = "C:\\k4m\\01-1. DX 제폼개발\\04. 시험\\pg_log\\";
+			
+			String strFileName = "postgresql-2017-07-28_101101.log";
+			//strFileName = "postgresql-2017-07-31_000000.log";
 			
 			//strDirectory = "C:\\k4m\\01-1. DX 제폼개발\\04. 시험\\pg_log\\";
 			
@@ -1265,7 +1268,7 @@ public class ClientTester {
 			
 			System.out.println("###############");
 			
-			System.out.println(strLogView);
+			//System.out.println(strLogView);
 			
 			System.out.println("###############");
 				

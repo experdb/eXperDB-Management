@@ -78,9 +78,7 @@ public class DaemonStart implements DxDaemon{
 		
 		try {
 		
-			context = new ClassPathXmlApplicationContext(new String[] {
-					"context-tcontrol.xml"
-				});
+			context = new ClassPathXmlApplicationContext(new String[] {"context-tcontrol.xml"});
 
 			// SqlSessionManager 초기화
 			try {
@@ -90,7 +88,7 @@ public class DaemonStart implements DxDaemon{
 				searchVO.setIPADR(strIpadr);
 
 				
-				SystemServiceImpl service = (SystemServiceImpl) context.getBean("SystemServiceImpl");
+				SystemServiceImpl service = (SystemServiceImpl) context.getBean("SystemService");
 
 				DbServerInfoVO dbServerInfo = service.selectDbServerInfo(searchVO);
 				

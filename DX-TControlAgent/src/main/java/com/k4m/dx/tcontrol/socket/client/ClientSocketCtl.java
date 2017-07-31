@@ -1,10 +1,12 @@
 package com.k4m.dx.tcontrol.socket.client;
 
+import java.io.BufferedInputStream;
+import java.io.BufferedOutputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.DataInputStream;
 import java.io.IOException;
-import java.io.InputStream;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
-import java.io.OutputStream;
 import java.math.BigInteger;
 import java.net.Socket;
 import java.net.SocketTimeoutException;
@@ -16,7 +18,7 @@ import org.json.simple.JSONObject;
 
 public class ClientSocketCtl {
 	public static final int TotalLengthBit = 4;
-	private static int		DEFAULT_TIMEOUT = 300;
+	private static int		DEFAULT_TIMEOUT = 600;
 	private static int		DEFAULT_BUFFER_SIZE = 1024;
 	
 	protected String		_caller = "unknown";	
@@ -27,8 +29,8 @@ public class ClientSocketCtl {
 	protected int		bufferSize = DEFAULT_BUFFER_SIZE;
 	
 	protected Socket		client = null;
-	protected InputStream	is = null;
-	protected OutputStream	os = null;
+	protected BufferedInputStream 	is = null;
+	protected BufferedOutputStream	os = null;
 	
 	private String		sendmsg = "";
 	private String		recvmsg = "";
@@ -231,15 +233,44 @@ public class ClientSocketCtl {
 	}
 	
 	public String receiveMessage() throws IOException {
-		byte[] buf = new byte[4096];
-		StringBuffer strbuf = new StringBuffer(4096);
+		byte[] b = new byte[4];
+		StringBuffer buffer = new StringBuffer();
+		
+		//ByteBuffer bBuffer = ByteBuffer.wrap(b);
+		//bBuffer.flip();
 
-		int read = 0;
-		while((read = is.read(buf)) > 0) {
-			strbuf.append(new String(buf, 0, read));
+		int i;
+		while((i = is.read(b, 0, b.length)) != -1) {
+			buffer.append(new String(b, 0, i));
+			//bBuffer.put(b, 0, i);
 		}
+		
+		//String buffer = new String(bBuffer.array() , "UTF-8" );
 
-		return new String(strbuf);
+		return buffer.toString();
+	}
+	
+	public String receiveMessageData() throws IOException {
+		DataInputStream dis = new DataInputStream(is);
+		
+		String msg = dis.readUTF();
+		
+		return msg;
+	}
+	
+	public String byteArrayOutputStreamReceiveMessage() throws IOException {
+		
+		ByteArrayOutputStream buffer = new ByteArrayOutputStream();
+		int nRead;
+		byte[] data = new byte[2];
+		while( (nRead = is.read(data)) != -1 ) {
+		 buffer.write(data, 0, nRead);
+		}
+		buffer.flush();
+
+		String str = new String(buffer.toByteArray());
+		
+		return str;
 	}
 
 

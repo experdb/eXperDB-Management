@@ -75,6 +75,12 @@ public class ClientAdapter {
 		return obj;
 	}
 	
+	private JSONObject parseToJsonObj(String recvBuff) throws Exception{
+		JSONParser parser=new JSONParser();
+		JSONObject obj=(JSONObject)parser.parse(recvBuff);
+		return obj;
+	}
+	
 	/**
 	 * DB List 조회
 	 * @param tran_cd
@@ -240,8 +246,16 @@ public class ClientAdapter {
 		
 		cc.send(4, bt);
 		
-		byte[]	recvBuff = cc.recv(4, false);
-		return parseToJsonObj(recvBuff);
+		
+
+
+		//String strData = cc.receiveMessage();
+		//String strData = cc.receiveMessageData();
+		//byte[]	recvBuff = cc.recv(4, false);
+		JSONObject obj = (JSONObject) cc.recvObject();
+		//String strData = cc.byteArrayOutputStreamReceiveMessage();
+		//return parseToJsonObj(strData);
+		return obj;
 	}
 	
 

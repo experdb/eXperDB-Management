@@ -1,5 +1,7 @@
 package com.k4m.dx.tcontrol.server;
 
+import java.io.BufferedInputStream;
+import java.io.BufferedOutputStream;
 import java.io.BufferedReader;
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -40,7 +42,7 @@ public class DxT013 extends SocketCtl{
 	
 	private static Logger errLogger = LoggerFactory.getLogger("errorToFile");
 	
-	public DxT013(Socket socket, InputStream is, OutputStream	os) {
+	public DxT013(Socket socket, BufferedInputStream is, BufferedOutputStream	os) {
 		this.client = socket;
 		this.is = is;
 		this.os = os;
