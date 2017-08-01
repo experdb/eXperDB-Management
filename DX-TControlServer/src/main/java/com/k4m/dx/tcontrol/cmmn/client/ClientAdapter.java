@@ -3,6 +3,9 @@ package com.k4m.dx.tcontrol.cmmn.client;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
@@ -258,4 +261,16 @@ public class ClientAdapter {
 		return obj;
 	}
 	
+	public void dxT015_DL(JSONObject jObj, HttpServletRequest request, HttpServletResponse response ) throws Exception{
+
+		byte[] bt = jObj.toString().getBytes();
+		
+		cc.send(4, bt);
+		
+		
+		String strFileName = (String) jObj.get(ClientProtocolID.FILE_NAME);
+
+		cc.recvFileDownLoad(strFileName, request, response);
+
+	}
 }

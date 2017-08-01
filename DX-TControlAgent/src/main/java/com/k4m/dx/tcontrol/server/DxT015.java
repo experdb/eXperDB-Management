@@ -118,6 +118,8 @@ public class DxT015 extends SocketCtl{
 				outputObj.put(ProtocolID.ERR_MSG, strErrMsg);
 				outputObj.put(ProtocolID.RESULT_DATA, resultFileList);
 				
+				send(outputObj);
+				
 			} else if(strCommandCode.equals(ProtocolID.COMMAND_CODE_V)) {
 				
 
@@ -131,16 +133,32 @@ public class DxT015 extends SocketCtl{
 				outputObj.put(ProtocolID.ERR_CODE, strErrCode);
 				outputObj.put(ProtocolID.ERR_MSG, strErrMsg);
 				outputObj.put(ProtocolID.RESULT_DATA, strFileTxt);
+				
+				send(outputObj);
+			} else if(strCommandCode.equals(ProtocolID.COMMAND_CODE_DL)) {
+				String strFileName = (String) jObj.get(ProtocolID.FILE_NAME);
+				File inFile = new File(strLogFileDir, strFileName);
+				if(inFile.exists()) {
+					send(inFile);
+				} else {
+					outputObj.put(ProtocolID.DX_EX_CODE, TranCodeType.DxT015_DL);
+					outputObj.put(ProtocolID.RESULT_CODE, "1");
+					outputObj.put(ProtocolID.ERR_CODE, TranCodeType.DxT015_DL);
+					outputObj.put(ProtocolID.ERR_MSG, "DxT015_DL Error [FIle Not Found Error]");
+					
+					sendBuff = outputObj.toString().getBytes();
+					send(4, sendBuff);
+				}
 			}
-			send(outputObj);
+			
 			//send(TotalLengthBit, outputObj.toString().getBytes());
 			
 		} catch (Exception e) {
 			errLogger.error("DxT015 {} ", e.toString());
 			
-			outputObj.put(ProtocolID.DX_EX_CODE, TranCodeType.DxT014);
+			outputObj.put(ProtocolID.DX_EX_CODE, TranCodeType.DxT015);
 			outputObj.put(ProtocolID.RESULT_CODE, "1");
-			outputObj.put(ProtocolID.ERR_CODE, TranCodeType.DxT014);
+			outputObj.put(ProtocolID.ERR_CODE, TranCodeType.DxT015);
 			outputObj.put(ProtocolID.ERR_MSG, "DxT014 Error [" + e.toString() + "]");
 			
 			sendBuff = outputObj.toString().getBytes();

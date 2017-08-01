@@ -2,9 +2,14 @@ package com.k4m.dx.tcontrol.socket;
 
 import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
+import java.io.DataInputStream;
+import java.io.DataOutputStream;
+import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
+import java.io.OutputStream;
 import java.math.BigInteger;
 import java.net.Socket;
 import java.net.SocketTimeoutException;
@@ -14,12 +19,18 @@ import java.util.List;
 import java.util.Map;
 
 import org.json.simple.JSONObject;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.k4m.dx.tcontrol.db.repository.vo.PgAuditSettingVO;
 import com.k4m.dx.tcontrol.db.repository.vo.PgAuditVO;
 import com.k4m.dx.tcontrol.util.CommonUtil;
 
 public class SocketCtl {
+	
+	private static Logger errLogger = LoggerFactory.getLogger("errorToFile");
+	private static Logger socketLogger = LoggerFactory.getLogger("socketLogger");
+	
 	public static final int TotalLengthBit = 4;
 	private static int		DEFAULT_TIMEOUT = 30;
 	private static int		DEFAULT_BUFFER_SIZE = 1024;
@@ -117,6 +128,45 @@ public class SocketCtl {
 		ObjectOutputStream oos = new ObjectOutputStream(os);
 		oos.writeObject(obj);
 		oos.flush();
+	}
+	
+	public void send(File file) throws Exception{
+		
+		BufferedInputStream bufferedinputstream = null;
+		try {
+			socketLogger.info("send : " + TranCodeType.DxT015_DL);
+			
+			//BufferedOutputStream out = new BufferedOutputStream( client.getOutputStream() );
+			
+			//OutputStream outputstream = client.getOutputStream();
+			client.setReceiveBufferSize(50000);
+			client.setSendBufferSize(50000);
+
+			 bufferedinputstream = new BufferedInputStream(new FileInputStream(file));
+			 
+			 byte readByte[] = new byte[4096];
+             int readCount = 0;
+             while ((readCount = bufferedinputstream.read(readByte, 0, 4096)) != -1) {
+            // while ((bytesRead = fileIn.read(buffer)) != -1) {
+            	 socketLogger.info(readByte + " " + readCount);
+                 os.write(readByte, 0, readCount);
+             }
+             socketLogger.info("out.flush() : " + TranCodeType.DxT015_DL);
+             os.flush();
+             os.close();
+
+
+		} catch(Exception e) {
+			e.printStackTrace();
+			errLogger.info(e.toString());
+		} finally {
+			if (bufferedinputstream != null) {
+				try {
+					bufferedinputstream.close();
+				} catch (Exception e) {
+				}
+			}
+		}
 	}
 	
 	public byte[] recv() throws IOException, SocketTimeoutException, Exception {

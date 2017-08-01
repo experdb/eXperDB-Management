@@ -156,6 +156,14 @@ public class DXTcontrolSocketExecute extends SocketCtl implements Runnable {
 					dxT015.execute(strDX_EX_CODE, jObj);
 
 					break;
+				case TranCodeType.DxT015_DL :
+					
+					socketLogger.info("DxT015_DL : " + TranCodeType.DxT015_DL);
+					
+					DxT015 dxT015_DL = new DxT015(client, is, os);
+					dxT015_DL.execute(strDX_EX_CODE, jObj);
+
+					break;
 				}
 
 

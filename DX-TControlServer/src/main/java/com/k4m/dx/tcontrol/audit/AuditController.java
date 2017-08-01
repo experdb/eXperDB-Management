@@ -7,8 +7,8 @@ import java.util.HashMap;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
-import org.apache.poi.ss.usermodel.DateUtil;
 import org.json.simple.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -352,7 +352,7 @@ public class AuditController {
 			mv.addObject("start_date", strStartDate);
 			mv.addObject("end_date", strEndDate);
 			
-
+			CA.close();
 			
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -437,6 +437,8 @@ public class AuditController {
 			mv.addObject("start_date", strStartDate);
 			mv.addObject("end_date", strEndDate);
 			
+			CA.close();
+			
 
 			
 		} catch (Exception e) {
@@ -502,14 +504,75 @@ public class AuditController {
 			System.out.println("ERR_CODE : " +  strErrCode);
 			System.out.println("ERR_MSG : " +  strErrMsg);
 			
-			String strLogView = (String)objList.get(ClientProtocolID.RESULT_DATA);
+			//String strLogView = (String)objList.get(ClientProtocolID.RESULT_DATA);
 
 			
 			mv.addObject("serverName", dbServerVO.getDb_svr_nm());
 			mv.addObject("db_svr_id", strDbSvrId);
-			mv.addObject("logView", strLogView.trim());
+			mv.addObject("logView", ((String)objList.get(ClientProtocolID.RESULT_DATA)).trim());
+			
+			CA.close();
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+		}
+		mv.setViewName("popup/auditLogView");
+		return mv;
+	}
+	
+	
+	@RequestMapping(value = "/audit/auditLogDownload.do")
+	public ModelAndView auditLogDownload( HttpServletRequest request, HttpServletResponse response) throws Exception{
+		ModelAndView mv = new ModelAndView();
+
+		//mv.addObject("db_svr_id",workVO.getDb_svr_id());
+		try {
+			String strDbSvrId = request.getParameter("db_svr_id");
+			int db_svr_id = Integer.parseInt(strDbSvrId);
+			
+			AgentInfoVO vo = new AgentInfoVO();
+			vo.setDB_SVR_ID(db_svr_id);
+			
+			AgentInfoVO agentInfo =  (AgentInfoVO) cmmnServerInfoService.selectAgentInfo(vo);
+			
+			DbServerVO schDbServerVO = new DbServerVO();
+			schDbServerVO.setDb_svr_id(db_svr_id);
+			
+			DbServerVO dbServerVO = (DbServerVO)  cmmnServerInfoService.selectServerInfo(schDbServerVO);
+			
+			String strDirectory = dbServerVO.getIstpath();
+			strDirectory = "C:\\k4m\\01-1. DX 제폼개발\\04. 시험\\pg_log\\";
+			
+			String strFileName = request.getParameter("file_name");
+			
+			JSONObject serverObj = new JSONObject();
 			
 
+			
+			serverObj.put(ClientProtocolID.SERVER_NAME, dbServerVO.getDb_svr_nm());
+			serverObj.put(ClientProtocolID.SERVER_IP, dbServerVO.getIpadr());
+			serverObj.put(ClientProtocolID.SERVER_PORT, dbServerVO.getPortno());
+
+			
+			JSONObject jObj = new JSONObject();
+			jObj.put(ClientProtocolID.DX_EX_CODE, ClientTranCodeType.DxT015_DL);
+			jObj.put(ClientProtocolID.SERVER_INFO, serverObj);
+			jObj.put(ClientProtocolID.COMMAND_CODE, ClientProtocolID.COMMAND_CODE_DL);
+			jObj.put(ClientProtocolID.FILE_DIRECTORY, strDirectory);
+			jObj.put(ClientProtocolID.FILE_NAME, strFileName);
+			
+			
+			String IP = dbServerVO.getIpadr();
+			int PORT = agentInfo.getSOCKET_PORT();
+			
+			IP = "127.0.0.1";
+			ClientAdapter CA = new ClientAdapter(IP, PORT);
+			CA.open(); 
+			
+			CA.dxT015_DL(jObj, request, response);
+			
+			CA.close();
 			
 		} catch (Exception e) {
 			e.printStackTrace();

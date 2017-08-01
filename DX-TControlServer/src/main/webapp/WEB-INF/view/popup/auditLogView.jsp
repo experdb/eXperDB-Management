@@ -94,6 +94,7 @@
 		 	sec = Math.floor(sec/3600) + '시간 ' + Math.floor(sec%3600/60) + '분 ' + sec%60 + '초';
 		}
 		
+		
 		return sec;
 	}
 	
@@ -120,7 +121,12 @@
 					<col />
 				</colgroup>
 				<tbody>
-
+					<tr>
+						<td>
+							50MB load 시 약 1분 소요됩니다.
+							
+						</td>
+					</tr>
 					<tr>
 						<td>
 							<div class="textarea_grp">
