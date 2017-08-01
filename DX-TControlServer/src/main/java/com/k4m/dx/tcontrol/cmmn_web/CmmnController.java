@@ -158,6 +158,7 @@ public class CmmnController {
 		Map<String, Object> result =new HashMap<String, Object>();
 
 		try {
+			AES256 aes = new AES256(AES256_KEY.ENC_KEY);
 			DbServerVO dbServerVO = backupService.selectDbSvrNm(workVO);
 			JSONObject serverObj = new JSONObject();
 			
@@ -166,7 +167,8 @@ public class CmmnController {
 			serverObj.put(ClientProtocolID.SERVER_PORT, dbServerVO.getPortno());
 			serverObj.put(ClientProtocolID.DATABASE_NAME, workVO.getDb_nm());
 			serverObj.put(ClientProtocolID.USER_ID, dbServerVO.getSvr_spr_usr_id());
-			serverObj.put(ClientProtocolID.USER_PWD, dbServerVO.getSvr_spr_scm_pwd());
+			//serverObj.put(ClientProtocolID.USER_PWD, dbServerVO.getSvr_spr_scm_pwd());
+			serverObj.put(ClientProtocolID.USER_PWD, aes.aesDecode(dbServerVO.getSvr_spr_scm_pwd()));
 			
 			ClientInfoCmmn cic = new ClientInfoCmmn();
 			result = cic.object_List(serverObj);

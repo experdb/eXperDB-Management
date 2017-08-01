@@ -28,6 +28,8 @@ import com.k4m.dx.tcontrol.backup.service.WorkObjVO;
 import com.k4m.dx.tcontrol.backup.service.WorkOptDetailVO;
 import com.k4m.dx.tcontrol.backup.service.WorkOptVO;
 import com.k4m.dx.tcontrol.backup.service.WorkVO;
+import com.k4m.dx.tcontrol.cmmn.AES256;
+import com.k4m.dx.tcontrol.cmmn.AES256_KEY;
 import com.k4m.dx.tcontrol.cmmn.CmmnUtils;
 import com.k4m.dx.tcontrol.cmmn.client.ClientInfoCmmn;
 import com.k4m.dx.tcontrol.cmmn.client.ClientProtocolID;
@@ -236,8 +238,8 @@ public class BackupController {
 		}
 		
 		// Get DB ROLE List
-		Map<String, Object> result =new HashMap<String, Object>();
 		try {
+			AES256 aes = new AES256(AES256_KEY.ENC_KEY);
 			DbServerVO dbServerVO = backupService.selectDbSvrNm(workVO);
 			JSONObject serverObj = new JSONObject();
 			
@@ -246,11 +248,11 @@ public class BackupController {
 			serverObj.put(ClientProtocolID.SERVER_PORT, dbServerVO.getPortno());
 			serverObj.put(ClientProtocolID.DATABASE_NAME, dbServerVO.getDft_db_nm());
 			serverObj.put(ClientProtocolID.USER_ID, dbServerVO.getSvr_spr_usr_id());
-			serverObj.put(ClientProtocolID.USER_PWD, dbServerVO.getSvr_spr_scm_pwd());
+			//serverObj.put(ClientProtocolID.USER_PWD, dbServerVO.getSvr_spr_scm_pwd());
+			serverObj.put(ClientProtocolID.USER_PWD, aes.aesDecode(dbServerVO.getSvr_spr_scm_pwd()));
 			ClientInfoCmmn cic = new ClientInfoCmmn();
-			result = cic.role_List(serverObj);
 
-			mv.addObject("roleList",result);
+			mv.addObject("roleList",cic.role_List(serverObj));
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -454,6 +456,7 @@ public class BackupController {
 		
 		// Server Role List
 		try {
+			AES256 aes = new AES256(AES256_KEY.ENC_KEY);
 			DbServerVO dbServerVO = backupService.selectDbSvrNm(workVO);
 			JSONObject serverObj = new JSONObject();
 			
@@ -462,7 +465,7 @@ public class BackupController {
 			serverObj.put(ClientProtocolID.SERVER_PORT, dbServerVO.getPortno());
 			serverObj.put(ClientProtocolID.DATABASE_NAME, dbServerVO.getDft_db_nm());
 			serverObj.put(ClientProtocolID.USER_ID, dbServerVO.getSvr_spr_usr_id());
-			serverObj.put(ClientProtocolID.USER_PWD, dbServerVO.getSvr_spr_scm_pwd());
+			serverObj.put(ClientProtocolID.USER_PWD, aes.aesDecode(dbServerVO.getSvr_spr_scm_pwd()));
 			
 			ClientInfoCmmn cic = new ClientInfoCmmn();
 			mv.addObject("roleList",cic.role_List(serverObj));

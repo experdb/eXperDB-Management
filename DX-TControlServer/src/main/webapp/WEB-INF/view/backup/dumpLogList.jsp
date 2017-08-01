@@ -135,7 +135,16 @@ $(function() {
 	</div>
 
 	<div class="contents_wrap">
-		<h4>Dump 백업관리화면  <a href="#n"><img src="../images/ico_tit.png" alt="" /></a></h4>
+		<div class="contents_tit">
+			<h4>Dump 백업관리화면<a href="#n"><img src="/images/ico_tit.png" alt="" /></a></h4>
+			<div class="location">
+				<ul>
+					<li>DB서버</li>
+					<li>${db_svr_nm}</li>
+					<li class="on">백업 이력</li>
+				</ul>
+			</div>
+		</div>	
 		<div class="contents">
 			<div class="cmm_tab">
 				<ul>
