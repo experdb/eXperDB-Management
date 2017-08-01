@@ -208,7 +208,8 @@ public class ScheduleServiceImpl implements ScheduleService{
 	}
 
 
-
-
-
+	@Override
+	public void updateScheduleStatus(ScheduleVO scheduleVO) throws Exception {
+		scheduleDAO.updateScheduleStatus(scheduleVO);		
+	}
 }

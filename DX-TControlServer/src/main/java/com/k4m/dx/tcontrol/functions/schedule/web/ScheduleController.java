@@ -330,10 +330,16 @@ public class ScheduleController {
 	 */
 	@RequestMapping(value = "/scheduleStop.do")
 	@ResponseBody
-	public boolean scheduleStop(HttpServletRequest request) {
+	public boolean scheduleStop(HttpServletRequest request, @ModelAttribute("scheduleVO") ScheduleVO scheduleVO) {
 
 		try {
-			String scd_id = request.getParameter("scd_id").toString();
+			String scd_id = request.getParameter("scd_id").toString();	
+	
+			scheduleVO.setScd_id(Integer.parseInt(scd_id));
+			scheduleVO.setScd_cndt("TC001802");
+			
+			scheduleService.updateScheduleStatus(scheduleVO);
+			
 			scheduleUtl.deleteSchdul(scd_id);			
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -358,6 +364,10 @@ public class ScheduleController {
 			JSONObject rows = (JSONObject) new JSONParser().parse(strRows);
 			
 			scheduleVO.setScd_id(Integer.parseInt(rows.get("scd_id").toString()));
+			scheduleVO.setScd_cndt("TC001801");
+
+			scheduleService.updateScheduleStatus(scheduleVO);
+			
 			scheduleVO.setExe_perd_cd(rows.get("exe_perd_cd").toString());
 			if(rows.get("exe_dt") != null){
 				scheduleVO.setExe_dt(rows.get("exe_dt").toString());

@@ -91,7 +91,6 @@ $(window.document).ready(function() {
 				alert("실패")
 			},
 			success : function(result) {		
-				alert(JSON.stringify(result));
 				$("#db_svr_nm").children().remove();
 				$("#db_svr_nm").append("<option value='%'>선택</option>");
 				if(result.length > 0){

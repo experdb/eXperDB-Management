@@ -118,7 +118,6 @@ function fn_insertDbServer(){
 			alert("실패");
 		},
 		success : function(result) {
-			opener.location.reload();
 			self.close();	 
 		}
 	}); 

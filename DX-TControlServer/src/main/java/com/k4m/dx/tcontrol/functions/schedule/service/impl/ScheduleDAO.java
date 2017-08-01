@@ -130,4 +130,9 @@ public class ScheduleDAO extends EgovAbstractMapper{
 		delete("scheduleSql.deleteScheduleDtl",scheduleDtlVO);	
 	}
 
+
+	public void updateScheduleStatus(ScheduleVO scheduleVO) {
+		update("scheduleSql.updateScheduleStatus",scheduleVO);			
+	}
+
 }

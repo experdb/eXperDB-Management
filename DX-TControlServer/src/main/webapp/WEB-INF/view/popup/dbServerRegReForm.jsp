@@ -117,7 +117,6 @@ function fn_updateDbServer(){
 		},
 		success : function(result) {
 			alert("수정 되었습니다.");
-			opener.location.reload();	
 			self.close();			
 		}
 	}); 

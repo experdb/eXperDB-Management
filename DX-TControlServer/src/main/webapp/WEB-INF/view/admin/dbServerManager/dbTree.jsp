@@ -149,7 +149,7 @@ $(function() {
  * 서버 등록 팝업페이지 호출
  ******************************************************** */
 function fn_reg_popup(){
-	window.open("/popup/dbServerRegForm.do","dbServerRegPop","location=no,menubar=no,scrollbars=no,status=no,width=920,height=380");
+	window.open("/popup/dbServerRegForm.do","dbServerRegPop","location=no,menubar=no,scrollbars=no,status=no,width=920,height=405");
 }
 
 
@@ -160,7 +160,7 @@ function fn_regRe_popup(){
 	var datas = table_dbServer.rows('.selected').data();
 	if (datas.length == 1) {
 		var db_svr_id = table_dbServer.row('.selected').data().db_svr_id;
-		window.open("/popup/dbServerRegReForm.do?db_svr_id="+db_svr_id,"dbServerRegRePop","location=no,menubar=no,resizable=yes,scrollbars=no,status=no,width=920,height=380");
+		window.open("/popup/dbServerRegReForm.do?db_svr_id="+db_svr_id,"dbServerRegRePop","location=no,menubar=no,resizable=yes,scrollbars=no,status=no,width=920,height=405");
 	} else {
 		alert("하나의 항목을 선택해주세요.");
 	}	
@@ -193,6 +193,7 @@ function fn_insertDB(){
 				},
 				success : function(result) {
 					alert("저장되었습니다.");
+					location.reload();
 				}
 			});	
     	}else{

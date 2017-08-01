@@ -147,4 +147,12 @@ public interface ScheduleService {
 	 */
 	void deleteScheduleDtl(ScheduleDtlVO scheduleDtlVO) throws Exception;
 
+
+	/**
+	 * 스케줄 상태 업데이트
+	 * @param 
+	 * @throws Exception
+	 */
+	void updateScheduleStatus(ScheduleVO scheduleVO) throws Exception;
+
 }

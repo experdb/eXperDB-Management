@@ -102,6 +102,7 @@
 			SCD_ID
 			, SCD_NM
 			, SCD_EXP
+			, SCD_SCD_CNDT
 			, EXE_PERD_CD
 			, EXE_DT
 			, EXE_HMS
@@ -117,6 +118,7 @@
 			#{scd_id}
 			, #{scd_nm}
 			, #{scd_exp}
+			, 'TC001801'
 			, #{exe_perd_cd}
 			, #{exe_dt}
 			, #{exe_hms}
@@ -196,7 +198,7 @@
     
     <select id="selectInitScheduleList" resultType="scheduleVO">
 		/**
-	 	* Query ID : selectScheduleList
+	 	* Query ID : selectInitScheduleList
 	 	* Description :  스케줄  List 조회
 	 	* Author : 변승우
 	 	**/
@@ -217,6 +219,7 @@
 			, TO_CHAR(LST_MDF_DTM,'YYYY-MM-DD HH24:MI:SS') AS LST_MDF_DTM			
       FROM T_SCD_M
       WHERE 1=1	
+      AND SCD_CNDT = 'TC001801'
     </select>	
     
     
@@ -432,4 +435,17 @@
 	 	DELETE FROM T_SCD_D
 	 	WHERE SCD_ID=#{scd_id}::numeric	
 	</update>	
+	
+	
+	<update id="updateScheduleStatus" parameterType="scheduleVO">
+	   	/**
+	 	* Query ID : updateScheduleStatus
+	 	* Description : 다음 실행할 스케줄 시간 업데이트
+	 	* Author : 변승우
+	 	**/
+	 	UPDATE T_SCD_M
+	 	SET
+		       SCD_CNDT=#{scd_cndt} 	
+	 	WHERE SCD_ID=#{scd_id}
+	</update>
 </mapper>
