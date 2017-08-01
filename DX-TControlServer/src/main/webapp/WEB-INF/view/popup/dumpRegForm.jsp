@@ -51,7 +51,8 @@ function fn_insert_work(){
 		  		encd_mth_nm : $("#encd_mth_nm").val(),
 		  		usr_role_nm : $("#usr_role_nm").val(),
 		  		file_stg_dcnt : $("#file_stg_dcnt").val(),
-		  		bck_mtn_ecnt : $("#bck_mtn_ecnt").val()
+		  		bck_mtn_ecnt : $("#bck_mtn_ecnt").val(),
+		  		bck_filenm : $("#bck_filenm").val()
 		  	},
 			type : "post",
 			error : function(request, xhr, status, error) {
@@ -167,6 +168,11 @@ function valCheck(){
 	if($("#save_pth").val() == ""){
 		alert("저장경로를 입력해 주세요.");
 		$("#save_pth").focus();
+		return false;
+	}
+	if($("#bck_filenm").val() == ""){
+		alert("저장경로를 입력해 주세요.");
+		$("#bck_filenm").focus();
 		return false;
 	}
 	
@@ -347,13 +353,33 @@ function checkOid(){
 				<colgroup>
 					<col style="width:95px;" />
 					<col />
-					<col style="width:95px;" />
-					<col />
 				</colgroup>
 				<tbody>
 					<tr>
 						<th scope="row" class="ico_t1">Work명</th>
 						<td><input type="text" class="txt" name="wrk_nm" id="wrk_nm" maxlength=50/></td>
+					</tr>
+					<tr>
+						<th scope="row" class="ico_t1">Work<br/>설명</th>
+						<td>
+							<div class="textarea_grp">
+								<textarea name="wrk_exp" id="wrk_exp" maxlength=200></textarea>
+							</div>
+						</td>
+					</tr>
+				</tbody>
+			</table>
+		</div>
+		<div class="pop_cmm mt25">
+			<table class="write">
+				<colgroup>
+					<col style="width:95px;" />
+					<col />
+					<col style="width:95px;" />
+					<col />
+				</colgroup>
+				<tbody>
+					<tr>
 						<th scope="row" class="ico_t1">Database</th>
 						<td>
 							<select name="db_id" id="db_id" class="select"  onChange="fn_get_object_list();">
@@ -363,14 +389,8 @@ function checkOid(){
 								</c:forEach>
 							</select>
 						</td>
-					</tr>
-					<tr>
-						<th scope="row" class="ico_t1">Work<br/>설명</th>
-						<td colspan="3">
-							<div class="textarea_grp">
-								<textarea name="wrk_exp" id="wrk_exp" maxlength=200></textarea>
-							</div>
-						</td>
+						<th scope="row" class="ico_t1">백업파일명</th>
+						<td><input type="text" class="txt" name="bck_filenm" id="bck_filenm" maxlength=50/></td>
 					</tr>
 				</tbody>
 			</table>

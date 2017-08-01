@@ -30,7 +30,42 @@ public class WorkVO {
 	private int log_file_mtn_ecnt;
 	private String bck_bsn_dscd_nm;
 	private String bck_opt_cd_nm;
+	private String bck_filenm;
+	private String data_pth;
+	private String bck_pth;
+	private int acv_file_stgdt;
+	private int acv_file_mtncnt;
 
+	public String getBck_filenm() {
+		return bck_filenm;
+	}
+	public void setBck_filenm(String bck_filenm) {
+		this.bck_filenm = bck_filenm;
+	}
+	public String getData_pth() {
+		return data_pth;
+	}
+	public void setData_pth(String data_pth) {
+		this.data_pth = data_pth;
+	}
+	public String getBck_pth() {
+		return bck_pth;
+	}
+	public void setBck_pth(String bck_pth) {
+		this.bck_pth = bck_pth;
+	}
+	public int getAcv_file_stgdt() {
+		return acv_file_stgdt;
+	}
+	public void setAcv_file_stgdt(int acv_file_stgdt) {
+		this.acv_file_stgdt = acv_file_stgdt;
+	}
+	public int getAcv_file_mtncnt() {
+		return acv_file_mtncnt;
+	}
+	public void setAcv_file_mtncnt(int acv_file_mtncnt) {
+		this.acv_file_mtncnt = acv_file_mtncnt;
+	}
 	public int getRownum() {
 		return rownum;
 	}
