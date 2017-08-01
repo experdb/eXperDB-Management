@@ -120,16 +120,6 @@ function fn_init(){
     table.row(index + rownum).data(data1);
     table.draw(true);
 	}
-  
-  
-	/* ********************************************************
-	 * 서버리스트 더블클릭
-	 ******************************************************** */
-	$('#workList tbody').on('dblclick', 'tr', function () {
-
-	    var d = table.row(this).data();
-	    alert(JSON.stringify(d));
-	});
 }
 
 
@@ -331,7 +321,8 @@ function fn_insertSchedule(){
 				alert("실패")
 			},
 			success : function(result) {
-		
+				alert("스케줄이 등록되었습니다.");
+				location.href='/selectScheduleListView.do' ;
 			}
 		}); 	
 	}else{
@@ -345,11 +336,12 @@ function fn_insertSchedule(){
 			<div id="contents">
 				<div class="contents_wrap">
 					<div class="contents_tit">
-						<h4>스케쥴 리스트화면 <a href="#n"><img src="../images/ico_tit.png" alt="" /></a></h4>
+						<h4>스케줄 등록화면 <a href="#n"><img src="../images/ico_tit.png" alt="" /></a></h4>
 						<div class="location">
 							<ul>
-								<li>My Page</li>
-								<li class="on">스케쥴 등록</li>
+								<li>Function</li>
+								<li>Scheduler</li>
+								<li class="on">스케줄등록</li>
 							</ul>
 						</div>
 					</div>
@@ -368,7 +360,7 @@ function fn_insertSchedule(){
 									<tbody>
 										<tr>
 											<th scope="row" class="t9 line">스케줄명</th>
-											<td><input type="text" class="txt t2" id="scd_nm" name=""/></td>
+											<td><input type="text" class="txt t2" id="scd_nm" name="scd_nm"/></td>
 										</tr>
 										<tr>
 											<th scope="row" class="t9 line">설명</th>

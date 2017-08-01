@@ -1,5 +1,6 @@
 package com.k4m.dx.tcontrol.functions.schedule.service.impl;
 
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -45,6 +46,88 @@ public class ScheduleDAO extends EgovAbstractMapper{
 
 	public void insertScheduleDtl(ScheduleDtlVO scheduleDtlVO) {
 		insert("scheduleSql.insertScheduleDtl",scheduleDtlVO);	
+	}
+
+	
+	@SuppressWarnings({ "deprecation", "unchecked" })
+	public List<Map<String, Object>> selectScheduleList(ScheduleVO scheduleVO) {
+		List<Map<String, Object>> sl = null;
+		sl = (List<Map<String, Object>>) list("scheduleSql.selectScheduleList", scheduleVO);		
+		return sl;
+	}
+
+	
+	@SuppressWarnings({ "deprecation", "unchecked" })
+	public List<ScheduleVO> selectInitScheduleList() {
+		List<ScheduleVO> sl = null;
+		sl = (List<ScheduleVO>) list("scheduleSql.selectInitScheduleList", null);		
+		return sl;
+	}
+
+
+	@SuppressWarnings({ "deprecation", "unchecked" })
+	public List<Map<String, Object>> selectExeScheduleList(String scd_id) {
+		List<Map<String, Object>> sl = null;
+		sl = (List<Map<String, Object>>) list("scheduleSql.selectExeScheduleList", scd_id);		
+		return sl;
+	}
+
+
+	public void updatePrevJobTime(HashMap<String , Object> hp) {
+		update("scheduleSql.updatePrevJobTime",hp);
+	}
+
+
+	public void updateNxtJobTime(HashMap<String, Object> hp) {
+		update("scheduleSql.updateNxtJobTime",hp);		
+	}
+
+
+	@SuppressWarnings({ "deprecation", "unchecked" })
+	public List<Map<String, Object>> selectDbconn(int db_id) {
+		List<Map<String, Object>> sl = null;
+		sl = (List<Map<String, Object>>) list("scheduleSql.selectDbconn", db_id);		
+		return sl;
+	}
+
+
+	@SuppressWarnings({ "unchecked", "deprecation" })
+	public List<Map<String, Object>> selectAddOption(int wrk_id) {
+		List<Map<String, Object>> sl = null;
+		sl = (List<Map<String, Object>>) list("scheduleSql.selectAddOption", wrk_id);		
+		return sl;
+	}
+
+
+	@SuppressWarnings({ "deprecation", "unchecked" })
+	public List<Map<String, Object>> selectAddObject(int wrk_id) {
+		List<Map<String, Object>> sl = null;
+		sl = (List<Map<String, Object>>) list("scheduleSql.selectAddObject", wrk_id);		
+		return sl;
+	}
+
+
+	public void deleteScheduleList(int scd_id) {
+		delete("scheduleSql.deleteDscheduleList",scd_id);
+		delete("scheduleSql.deleteMscheduleList",scd_id);
+	}
+
+
+	@SuppressWarnings({ "deprecation", "unchecked" })
+	public List<Map<String, Object>> selectModifyScheduleList(int scd_id) {
+		List<Map<String, Object>> sl = null;
+		sl = (List<Map<String, Object>>) list("scheduleSql.selectModifyScheduleList", scd_id);		
+		return sl;
+	}
+
+
+	public void updateSchedule(ScheduleVO scheduleVO) {
+		update("scheduleSql.updateSchedule",scheduleVO);	
+	}
+
+
+	public void deleteScheduleDtl(ScheduleDtlVO scheduleDtlVO) {
+		delete("scheduleSql.deleteScheduleDtl",scheduleDtlVO);	
 	}
 
 }

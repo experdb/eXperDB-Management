@@ -279,6 +279,7 @@ public class DbServerManagerController {
 			System.out.println("포트 : " + dbServerVO.getPortno());
 			System.out.println("유저 : " + dbServerVO.getSvr_spr_usr_id());
 			System.out.println("패스워드 : " + dbServerVO.getSvr_spr_scm_pwd());
+			System.out.println("서버저장경로 : " + dbServerVO.getIstpath());
 			System.out.println("=====================");
 			
 			dbServerManagerService.insertDbServer(dbServerVO);
