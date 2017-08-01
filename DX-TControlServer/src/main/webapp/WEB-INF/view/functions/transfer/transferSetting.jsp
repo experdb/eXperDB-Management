@@ -26,80 +26,68 @@
 
 	/* Validation */
 	function fn_transferValidation(){
- 		var kbipadr = document.getElementById("kbipadr");
-		if (kbipadr.value == "") {
+ 		var kafka_broker_ip = document.getElementById("kafka_broker_ip");
+		if (kafka_broker_ip.value == "") {
 			alert("kafka Broker 아이피를 입력하여 주십시오.");
-			kbipadr.focus();
+			kafka_broker_ip.focus();
 			return false;
 		}
 
- 		var kbportno = document.getElementById("kbportno");
-		if (kbportno.value == "") {
+ 		var kafka_broker_port = document.getElementById("kafka_broker_port");
+		if (kafka_broker_port.value == "") {
 			alert("kafka Broker 포트를 입력하여 주십시오.");
-			kbportno.focus();
+			kafka_broker_port.focus();
 			return false;
 		}
- 		if(!valid_numeric(kbportno.value))
+ 		if(!valid_numeric(kafka_broker_port.value))
 	 	{
  			alert("포트는 숫자만 입력가능합니다.");
- 			kbportno.focus();
+ 			kafka_broker_port.focus();
 		 	return false;
 		}		
- 		var sripadr = document.getElementById("sripadr");
-		if (sripadr.value == "") {
+ 		var schema_registry_ip = document.getElementById("schema_registry_ip");
+		if (schema_registry_ip.value == "") {
 			alert("schema registry 아이피를 입력하여 주십시오.");
-			sripadr.focus();
+			schema_registry_ip.focus();
 			return false;
 		}	
- 		var srportno = document.getElementById("srportno");
-		if (srportno.value == "") {
+ 		var schema_registry_port = document.getElementById("schema_registry_port");
+		if (schema_registry_port.value == "") {
 			alert("schema registry 포트를 입력하여 주십시오.");
-			srportno.focus();
+			schema_registry_port.focus();
 			return false;
 		}
- 		if(!valid_numeric(srportno.value))
+ 		if(!valid_numeric(schema_registry_port.value))
 	 	{
  			alert("포트는 숫자만 입력가능합니다.");
  			srportno.focus();
 		 	return false;
 		}
- 		var zipadr = document.getElementById("zipadr");
-		if (zipadr.value == "") {
+ 		var zookeeper_ip = document.getElementById("zookeeper_ip");
+		if (zookeeper_ip.value == "") {
 			alert("zookeeper 아이피를 입력하여 주십시오.");
-			zipadr.focus();
+			zookeeper_ip.focus();
 			return false;
 		}
- 		var zportno = document.getElementById("zportno");
-		if (zportno.value == "") {
+ 		var zookeeper_port = document.getElementById("zookeeper_port");
+		if (zookeeper_port.value == "") {
 			alert("zookeeper 포트를 입력하여 주십시오.");
-			zportno.focus();
+			zookeeper_port.focus();
 			return false;
 		}
- 		if(!valid_numeric(zportno.value))
+ 		if(!valid_numeric(zookeeper_port.value))
 	 	{
  			alert("포트는 숫자만 입력가능합니다.");
- 			zportno.focus();
+ 			zookeeper_port.focus();
 		 	return false;
 		}	
- 		var bipadr = document.getElementById("bipadr");
-		if (bipadr.value == "") {
-			alert("BottledWater 아이피를 입력하여 주십시오.");
-			bipadr.focus();
+ 		var bw_home = document.getElementById("bw_home");
+		if (bw_home.value == "") {
+			alert("BottledWater home을 입력하여 주십시오.");
+			bw_home.focus();
 			return false;
 		}
- 		var bportno = document.getElementById("bportno");
-		if (bportno.value == "") {
-			alert("BottledWater 포트를 입력하여 주십시오.");
-			bportno.focus();
-			return false;
-		}
- 		if(!valid_numeric(bportno.value))
-	 	{
- 			alert("포트는 숫자만 입력가능합니다.");
- 			bportno.focus();
-		 	return false;
-		}
-	
+		
  		return true;		
 	}
 	
@@ -111,8 +99,14 @@
 			url : '/insertTransferSetting.do',
 			type : 'post',
 			data : {
- 				ipadrs : $("#kbipadr").val()+","+$("#sripadr").val()+","+$("#zipadr").val()+","+$("#bipadr").val(),
- 				portnos : $("#kbportno").val()+","+$("#srportno").val()+","+$("#zportno").val()+","+$("#bportno").val(),
+				kafka_broker_ip : $("#kafka_broker_ip").val(),
+				kafka_broker_port : $("#kafka_broker_port").val(),
+				schema_registry_ip : $("#schema_registry_ip").val(),
+				schema_registry_port : $("#schema_registry_port").val(),
+				zookeeper_ip : $("#zookeeper_ip").val(),
+				zookeeper_port : $("#zookeeper_port").val(),
+				bw_home : $("#bw_home").val(),
+				
 			},
 			success : function(result) {
 				alert("저장하였습니다.");
@@ -131,8 +125,14 @@
 			url : '/updateTransferSetting.do',
 			type : 'post',
 			data : {
- 				ipadrs : $("#kbipadr").val()+","+$("#sripadr").val()+","+$("#zipadr").val()+","+$("#bipadr").val(),
- 				portnos : $("#kbportno").val()+","+$("#srportno").val()+","+$("#zportno").val()+","+$("#bportno").val(),
+				kafka_broker_ip : $("#kafka_broker_ip").val(),
+				kafka_broker_port : $("#kafka_broker_port").val(),
+				schema_registry_ip : $("#schema_registry_ip").val(),
+				schema_registry_port : $("#schema_registry_port").val(),
+				zookeeper_ip : $("#zookeeper_ip").val(),
+				zookeeper_port : $("#zookeeper_port").val(),
+				bw_home : $("#bw_home").val(),
+				trf_cng_id : $("#trf_cng_id").val()
 			},
 			success : function(result) {
 				alert("저장하였습니다.");
@@ -157,34 +157,23 @@
  				if(cnt==0){
  					$('<button onclick="fn_insert()"></button>').text('저장').appendTo('.btnC_01');
  				}else{
- 				   $('<button onclick="fn_update()"></button>').text('저장').appendTo('.btnC_01');
-		            for (var i = 0; i < cnt; i++) {
-		            	var trf_svr_nm = data[i].trf_svr_nm;
-		            	var ipadr = data[i].ipadr;
-		            	var portno = data[i].portno;
-	 	            	if(trf_svr_nm=='kafka Broker'){
-	 	            		 $("#kbipadr").val(ipadr);
-	 	            		 $("#kbportno").val(portno);
-	 	            	}
-	 	            	if(trf_svr_nm=='schema registry'){
-		            		 $("#sripadr").val(ipadr);
-	 	            		 $("#srportno").val(portno);	            		
-	 	            	}
-	 	            	if(trf_svr_nm=='zookeeper'){
-		            		 $("#zipadr").val(ipadr);
-	 	            		 $("#zportno").val(portno);	            		
-	 	            	}
-	 	            	if(trf_svr_nm=='BottledWater'){
-		            		 $("#bipadr").val(ipadr);
-	 	            		 $("#bportno").val(portno);	            		
-	 	            	}
-		            }
+ 				  $('<button onclick="fn_update()"></button>').text('저장').appendTo('.btnC_01');
+ 				  $("#kafka_broker_ip").val(data[0].kafka_broker_ip);
+ 				  $("#kafka_broker_port").val(data[0].kafka_broker_port);
+ 				  $("#schema_registry_ip").val(data[0].schema_registry_ip);
+ 				  $("#schema_registry_port").val(data[0].schema_registry_port);
+ 				  $("#zookeeper_ip").val(data[0].zookeeper_ip);
+ 				  $("#zookeeper_port").val(data[0].zookeeper_port);
+ 				  $("#bw_home").val(data[0].bw_home); 	
+ 				  $("#trf_cng_id").val(data[0].trf_cng_id);
+ 	 
  				}
 			}
 		});
 	});
 	
 </script>
+<input type="hidden" id="trf_cng_id">
 <div id="contents">
 	<div class="contents_wrap">
 		<div class="contents_tit">
@@ -212,32 +201,30 @@
 					<thead>
 						<tr>
 							<th scope="col">서버명</th>
-							<th scope="col">아이디</th>
+							<th scope="col">아이피</th>
 							<th scope="col">포트</th>
 						</tr>
 					</thead>
 					<tbody>
 						<tr>
 							<td>Kafka Broker</td>
-							<td><input type="text" class="txt" name="kbipadr"
-								id="kbipadr" /></td>
-							<td class="type2"><input type="text" class="txt"
-								name="kbportno" id="kbportno" /></td>
+							<td><input type="text" class="txt" name="kafka_broker_ip" id="kafka_broker_ip" /></td>
+							<td class="type2"><input type="text" class="txt" name="kafka_broker_port" id="kafka_broker_port" /></td>
 						</tr>
 						<tr>
 							<td>Schema registry</td>
-							<td><input type="text" class="txt" name="sripadr" id="sripadr" /></td>
-							<td class="type2"><input type="text" class="txt" name="srportno" id="srportno" /></td>
+							<td><input type="text" class="txt" name="schema_registry_ip" id="schema_registry_ip" /></td>
+							<td class="type2"><input type="text" class="txt" name="schema_registry_port" id="schema_registry_port" /></td>
 						</tr>
 						<tr>
 							<td>Zookeeper</td>
-							<td><input type="text" class="txt" name="zipadr" id="zipadr" /></td>
-							<td class="type2"><input type="text" class="txt" name="zportno" id="zportno" /></td>
+							<td><input type="text" class="txt" name="zookeeper_ip" id="zookeeper_ip" /></td>
+							<td class="type2"><input type="text" class="txt" name="zookeeper_port" id="zookeeper_port" /></td>
 						</tr>
 						<tr>
-							<td>Battoed Water</td>
-							<td><input type="text" class="txt" name="bipadr" id="bipadr" /></td>
-							<td class="type2"><input type="text" class="txt" name="bportno" id="bportno" /></td>
+							<td>Bottledwater home</td>
+							<td colspan="2"><input type="text" class="txt" name="bw_home" id="bw_home" /></td>
+							
 						</tr>
 					</tbody>
 				</table>

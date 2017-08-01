@@ -1,5 +1,4 @@
-<%@ page language="java" contentType="text/html; charset=UTF-8"
-	pageEncoding="UTF-8"%>
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%
 	/**
 	* @Class Name : transferDetail.jsp
@@ -88,7 +87,23 @@
 	
 	/*조회버튼 클릭시*/
 	function fn_select(){
-		alert("조회버튼!");
+		$.ajax({
+			url : "/selectTransferDetail.do",
+			data : {
+				trf_trg_cnn_nm : "%"+$("#trf_trg_cnn_nm").val()+"%",
+				db_nm : "%"+$("#db_nm").val()+"%",
+				cnr_id : cnr_id
+			},
+			dataType : "json",
+			type : "post",
+			error : function(xhr, status, error) {
+				alert("실패")
+			},
+			success : function(result) {
+				table.clear().draw();
+				table.rows.add(result).draw();
+			}
+		});
 	}
 	
 	/*맵핑설정버튼 클릭시*/
@@ -160,38 +175,7 @@
 <!-- // contents -->
 
 
-<!-- 					<table class="list pd_type1">
-						<caption>전송 관리 조회 리스트</caption>
-						<colgroup>
-							<col style="width: 30%;" />
-							<col />
-							<col style="width: 10%;" />
-							<col style="width: 13%;" />
-							<col style="width: 10%;" />
-						</colgroup>
-						<thead>
-							<tr>
-								<th scope="col">Connector명</th>
-								<th scope="col">Database명</th>
-								<th scope="col">상태</th>
-								<th scope="col">실행</th>
-								<th scope="col">맵핑설정</th>
-							</tr>
-						</thead>
-						<tbody>
-							<tr>
-								<td class="tal">TestConnection 1</td>
-								<td class="tal">DB 1</td>
-								<td>실행중</td>
-								<td><a href="#n"><img src="../images/ico_start.png" alt="실행중" /></a></td>
-								<td><a href="#n"><img src="../images/mappin_btn.png" alt="맵핑설정버튼" onclick="windowPopup();" /></a></td>
-							</tr>
-							<tr>
-								<td class="tal">TestConnection 2</td>
-								<td class="tal">DB 2</td>
-								<td>중지중</td>
-								<td><a href="#n"><img src="../images/ico_end.png" alt="중지중" /></a></td>
-								<td><a href="#n"><img src="../images/mappin_btn.png" alt="맵핑설정버튼" /></a></td>
-							</tr>
-						</tbody>
-					</table> -->
+<!-- 	
+<td><a href="#n"><img src="../images/ico_start.png" alt="실행중" /></a></td>
+<a href="#n"><img src="../images/ico_end.png" alt="중지중" /></a>
+ -->

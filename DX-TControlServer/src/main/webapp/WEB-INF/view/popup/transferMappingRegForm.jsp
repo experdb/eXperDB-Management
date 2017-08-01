@@ -203,6 +203,8 @@
 	    			}
 	    		}
 	    	});	
+		}else if($("#db_nm").val()==""){
+			connectorTableList.clear().draw();
 		}
 	}
 	
@@ -274,6 +276,7 @@
 		if(data.length <1){
 			alert("저장할 데이터가 없습니다.");	
 		}else{
+			 if (!confirm("저장하시겠습니까?")) return false;
 			//connector 테이블 리스트가 있을 경우
 			var trf_trg_mpp_id = 0;
 			if("${result[0].trf_trg_mpp_id}" != ""){

@@ -2,6 +2,17 @@
 <!DOCTYPE mapper   PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <mapper namespace="treeTransferSql">
+
+	<select id="transferTargetNameCheck" resultType="int">
+		/**
+		* Query ID : transferTargetNameCheck
+		* Description : 커넥트명 중복 체크
+		* Author : 김주영
+		**/
+		SELECT COUNT(*)
+		FROM T_TRFTRGCNG_I
+		WHERE TRF_TRG_CNN_NM=#{trf_trg_cnn_nm}
+	</select>
 	
 	<insert id="insertTransferTarget" parameterType="transferTargetVO">
 		/**
@@ -45,17 +56,37 @@
 		)		
 	</insert>
 	
-	<delete id="deleteTransferTarget" parameterType="int">
+	<update id="updateTransferTarget" parameterType="transferTargetVO">
+		/**
+		* Query ID : updateTransferTarget
+		* Description : 전송대상 업데이트
+		* Author : 김주영
+		**/	
+		UPDATE T_TRFTRGCNG_I
+		SET
+		  TRF_TRG_URL=#{trf_trg_url}
+		, CONNECTOR_CLASS=#{connector_class}
+		, TASK_MAX=#{task_max}
+		, HADOOP_CONF_DIR=#{hadoop_conf_dir}
+		, HADOOP_HOME=#{hadoop_home}
+		, FLUSH_SIZE=#{flush_size}
+		, ROTATE_INTERVAL_MS=#{rotate_interval_ms}
+		, LST_MDFR_ID=#{lst_mdfr_id}
+		, LST_MDF_DTM= clock_timestamp()
+		WHERE TRF_TRG_CNN_NM=#{trf_trg_cnn_nm}
+	</update>
+	
+	<delete id="deleteTransferTarget" parameterType="String">
 		/**
 		* Query ID : deleteTransferTarget
-		* Description : 전송대상 전체 삭제
+		* Description : 전송대상 삭제
 		* Author : 김주영
 		**/
 		DELETE FROM T_TRFTRGCNG_I
-		WHERE CNR_ID=#{cnr_id}
+		WHERE TRF_TRG_CNN_NM=#{trf_trg_cnn_nm}
 	</delete>
 	
-	<select id="selectTransferDetail" resultType="transferDetailVO">
+	<select id="selectTransferDetail" parameterType="transferDetailVO" resultType="transferDetailVO">
 		/**
 		* Query ID : selectTransferDetail
 		* Description : 전송상세설정 조회

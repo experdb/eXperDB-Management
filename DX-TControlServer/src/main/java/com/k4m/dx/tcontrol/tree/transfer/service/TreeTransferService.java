@@ -5,6 +5,14 @@ import java.util.List;
 import com.k4m.dx.tcontrol.accesscontrol.service.DbIDbServerVO;
 
 public interface TreeTransferService {
+	
+	/**
+	 * 커넥트명 중복 체크
+	 * 
+	 * @param transferTargetVO
+	 * @throws Exception
+	 */
+	int transferTargetNameCheck(String trf_trg_cnn_nm) throws Exception;
 
 	/**
 	 * 전송대상 등록
@@ -15,12 +23,20 @@ public interface TreeTransferService {
 	void insertTransferTarget(TransferTargetVO transferTargetVO) throws Exception;
 
 	/**
-	 * 전송대상 전체 삭제
+	 * 전송대상 수정
 	 * 
-	 * @param cnr_id
+	 * @param transferTargetVO
 	 * @throws Exception
 	 */
-	void deleteTransferTarget(int cnr_id) throws Exception;
+	void updateTransferTarget(TransferTargetVO transferTargetVO) throws Exception;
+
+	/**
+	 * 전송대상 삭제
+	 * 
+	 * @param name
+	 * @throws Exception
+	 */
+	void deleteTransferTarget(String name) throws Exception;
 
 	/**
 	 * 전송상세설정 조회
@@ -91,7 +107,5 @@ public interface TreeTransferService {
 	 * @throws Exception
 	 */
 	void deleteTransferMapping(int trf_trg_mpp_id) throws Exception;
-
-
 
 }

@@ -11,8 +11,13 @@
 	 	**/
 		SELECT 
 		  TRF_CNG_ID
-		, TRF_SVR_NM
-		, IPADR,PORTNO 
+		, KAFKA_BROKER_IP
+		, KAFKA_BROKER_PORT
+		, SCHEMA_REGISTRY_IP
+		, SCHEMA_REGISTRY_PORT
+		, ZOOKEEPER_IP
+		, ZOOKEEPER_PORT
+		, BW_HOME
 		FROM T_TRFCNG_I
 		WHERE FRST_REGR_ID = #{usr_id} 
     </select>
@@ -25,9 +30,13 @@
 		**/
 		INSERT INTO T_TRFCNG_I(
 		  TRF_CNG_ID
-		, TRF_SVR_NM
-		, IPADR
-		, PORTNO
+		, KAFKA_BROKER_IP
+		, KAFKA_BROKER_PORT
+		, SCHEMA_REGISTRY_IP
+		, SCHEMA_REGISTRY_PORT
+		, ZOOKEEPER_IP
+		, ZOOKEEPER_PORT
+		, BW_HOME
 		, FRST_REGR_ID
 		, FRST_REG_DTM
 		, LST_MDFR_ID
@@ -35,9 +44,13 @@
 		) 
 		VALUES(         
 		  nextval('q_trfcng_i_01')
-		, #{trf_svr_nm}
-		, #{ipadr}
-		, #{portno}
+		, #{kafka_broker_ip}
+		, #{kafka_broker_port}
+		, #{schema_registry_ip}
+		, #{schema_registry_port}
+		, #{zookeeper_ip}
+		, #{zookeeper_port}
+		, #{bw_home}	
 		, #{frst_regr_id}
 		, clock_timestamp()
 		, #{lst_mdfr_id}
@@ -53,12 +66,16 @@
 		**/	
 		UPDATE T_TRFCNG_I
 		SET
-		  IPADR = #{ipadr}
-		, PORTNO = #{portno}
+		  KAFKA_BROKER_IP = #{kafka_broker_ip}
+		, KAFKA_BROKER_PORT = #{kafka_broker_port}
+		, SCHEMA_REGISTRY_IP = #{schema_registry_ip}
+		, SCHEMA_REGISTRY_PORT = #{schema_registry_port}
+		, ZOOKEEPER_IP = #{zookeeper_ip}
+		, ZOOKEEPER_PORT = #{zookeeper_port}
+		, BW_HOME = #{bw_home}
 		, LST_MDFR_ID = #{lst_mdfr_id}
 		, LST_MDF_DTM = clock_timestamp()
-		WHERE FRST_REGR_ID = #{lst_mdfr_id}
-		AND TRF_SVR_NM= #{trf_svr_nm}
+		WHERE TRF_CNG_ID = #{trf_cng_id}
 	</update>
 	
 	<select id="selectConnectorRegister" resultType="connectorVO">

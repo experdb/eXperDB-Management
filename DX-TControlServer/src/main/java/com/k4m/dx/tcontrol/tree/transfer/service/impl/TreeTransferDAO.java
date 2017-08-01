@@ -18,6 +18,18 @@ import egovframework.rte.psl.dataaccess.EgovAbstractMapper;
 public class TreeTransferDAO extends EgovAbstractMapper {
 
 	/**
+	 * 커넥트명 중복 체크
+	 * 
+	 * @param transferTargetVO
+	 * @throws SQLException
+	 */
+	public int transferTargetNameCheck(String trf_trg_cnn_nm) throws SQLException {
+		int resultSet = 0;
+		resultSet = (int) getSqlSession().selectOne("treeTransferSql.transferTargetNameCheck", trf_trg_cnn_nm);
+		return resultSet;
+	}
+
+	/**
 	 * 전송대상 등록
 	 * 
 	 * @param transferTargetVO
@@ -29,13 +41,24 @@ public class TreeTransferDAO extends EgovAbstractMapper {
 	}
 
 	/**
-	 * 전송대상 전체 삭제
+	 * 전송대상 수정
 	 * 
-	 * @param cnr_id
+	 * @param transferTargetVO
 	 * @throws SQLException
 	 */
-	public void deleteTransferTarget(int cnr_id) throws SQLException {
-		delete("treeTransferSql.deleteTransferTarget", cnr_id);
+	public void updateTransferTarget(TransferTargetVO transferTargetVO) {
+		insert("treeTransferSql.updateTransferTarget", transferTargetVO);
+
+	}
+
+	/**
+	 * 전송대상 삭제
+	 * 
+	 * @param name
+	 * @throws SQLException
+	 */
+	public void deleteTransferTarget(String name) throws SQLException {
+		delete("treeTransferSql.deleteTransferTarget", name);
 	}
 
 	/**
@@ -132,4 +155,5 @@ public class TreeTransferDAO extends EgovAbstractMapper {
 	public void deleteTransferMapping(int trf_trg_mpp_id) throws SQLException {
 		delete("treeTransferSql.deleteTransferMapping", trf_trg_mpp_id);
 	}
+
 }
