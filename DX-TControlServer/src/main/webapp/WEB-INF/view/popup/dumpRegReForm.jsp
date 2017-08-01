@@ -239,7 +239,7 @@ function fn_make_object_list(data){
 			$(workObj.obj).each(function(i,v){
 				if(v.scm_nm == item.schema && v.obj_nm == "") checkStr = " checked";
 			});
-			html += "<li class='active'><a href='#'>"+item.schema+" (Schema)</a>";
+			html += "<li class='active'><a href='#'>"+item.schema+"</a>";
 			html += "<div class='inp_chk'>";
 			html += "<input type='checkbox' id='schema"+schemaCnt+"' name='tree' value='"+item.schema+"' otype='schema' schema='"+item.schema+"'"+checkStr+"/><label for='schema"+schemaCnt+"'></label>";
 			html += "</div>";

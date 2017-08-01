@@ -407,6 +407,7 @@ public class ClientInfoCmmn {
 			List<Object> selectList = (ArrayList<Object>) objList.get(ClientProtocolID.RESULT_DATA);
 
 			System.out.println("strDxExCode : " + " " + strDxExCode);
+			System.out.println("strErrMsg : " + " " + strErrMsg);
 
 			for (int i = 0; i < selectList.size(); i++) {
 				JSONObject jsonObj = new JSONObject();
@@ -443,12 +444,18 @@ public class ClientInfoCmmn {
 			CA.open();
 
 			objList = CA.dxT012(ClientTranCodeType.DxT012, serverObj);
-
-			String strErrMsg = (String) objList.get(ClientProtocolID.ERR_MSG);
-			String strDxExCode = (String) objList.get(ClientProtocolID.DX_EX_CODE);
-
+			
+			
 			selectList = (ArrayList<Object>) objList.get(ClientProtocolID.RESULT_DATA);
 
+			String strErrMsg = (String)objList.get(ClientProtocolID.ERR_MSG);
+			String strErrCode = (String)objList.get(ClientProtocolID.ERR_CODE);
+			String strDxExCode = (String)objList.get(ClientProtocolID.DX_EX_CODE);
+			String strResultCode = (String)objList.get(ClientProtocolID.RESULT_CODE);
+			
+			System.out.println("RESULT_CODE : " +  strResultCode);
+			System.out.println("ERR_CODE : " +  strErrCode);
+			System.out.println("ERR_MSG : " +  strErrMsg);
 			System.out.println("strDxExCode : " + " " + strDxExCode);
 			System.out.println("resultCode : " + " " + (String) objList.get(ClientProtocolID.RESULT_CODE));
 

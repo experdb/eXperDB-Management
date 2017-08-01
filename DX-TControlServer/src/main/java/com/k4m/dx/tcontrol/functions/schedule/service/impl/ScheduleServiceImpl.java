@@ -1,6 +1,7 @@
 package com.k4m.dx.tcontrol.functions.schedule.service.impl;
 
 
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -16,7 +17,7 @@ import com.k4m.dx.tcontrol.functions.schedule.service.ScheduleVO;
 
 
 
-@Service("ScheduleServiceImpl")
+@Service("scheduleService")
 public class ScheduleServiceImpl implements ScheduleService{
 
 	@Resource(name = "ScheduleDAO")
@@ -75,6 +76,139 @@ public class ScheduleServiceImpl implements ScheduleService{
 	public void insertScheduleDtl(ScheduleDtlVO scheduleDtlVO) throws Exception {
 		scheduleDAO.insertScheduleDtl(scheduleDtlVO);	
 	}
+
+
+	/**
+	 * 스케줄 리스트 조회
+	 * @param 
+	 * @throws Exception
+	 */
+	@Override
+	public List<Map<String, Object>> selectScheduleList(ScheduleVO scheduleVO) throws Exception {
+		return scheduleDAO.selectScheduleList(scheduleVO);
+	}
+
+
+	/**
+	 * 서버 시작시 시행할 스케줄 리스트
+	 * @param 
+	 * @throws Exception
+	 */
+	public List<ScheduleVO> selectInitScheduleList() {
+		return scheduleDAO.selectInitScheduleList();
+	}
+
+
+	/**
+	 * 실행할 스케줄 리스트 정보 조회
+	 * @param 
+	 * @throws Exception
+	 */
+	@Override
+	public List<Map<String, Object>> selectExeScheduleList(String scd_id) throws Exception {
+		return scheduleDAO.selectExeScheduleList(scd_id);
+	}
+
+	
+	/**
+	 * JOB 수행전 다음 JOB 실행시간 업데이트
+	 * @param 
+	 * @throws Exception
+	 */
+	public void updateNxtJobTime(HashMap<String, Object> hp) {
+		scheduleDAO.updateNxtJobTime(hp);	
+	}
+	
+	
+	/**
+	 *  JOB 수행후 이전 JOB 실행시간 업데이트
+	 * @param 
+	 * @throws Exception
+	 */
+	@Override
+	public void updatePrevJobTime(HashMap<String , Object> hp) throws Exception {
+		scheduleDAO.updatePrevJobTime(hp);		
+	}
+
+	
+	/**
+	 * DB서버 접속정보 조회
+	 * @param 
+	 * @throws Exception
+	 */
+	@Override
+	public List<Map<String, Object>> selectDbconn(int db_id) throws Exception {
+		return scheduleDAO.selectDbconn(db_id);
+	}
+
+
+	/**
+	 * 부가옵션 조회
+	 * @param 
+	 * @throws Exception
+	 */
+	@Override
+	public List<Map<String, Object>> selectAddOption(int wrk_id) throws Exception {
+		return scheduleDAO.selectAddOption(wrk_id);
+	}
+
+	
+	/**
+	 * 오브젝트옵션 조회
+	 * @param 
+	 * @throws Exception
+	 */
+	@Override
+	public List<Map<String, Object>> selectAddObject(int wrk_id) throws Exception {
+		return scheduleDAO.selectAddObject(wrk_id);
+	}
+
+
+	/**
+	 * 스케줄 리스트 삭제
+	 * @param 
+	 * @throws Exception
+	 */
+	@Override
+	public void deleteScheduleList(int scd_id) throws Exception {
+		scheduleDAO.deleteScheduleList(scd_id);	
+	}
+
+
+	/**
+	 * 스케줄리스트 수정 정보 조회
+	 * @param 
+	 * @throws Exception
+	 */
+	@Override
+	public List<Map<String, Object>> selectModifyScheduleList(int scd_id) {
+		return scheduleDAO.selectModifyScheduleList(scd_id);
+	}
+
+	
+	/**
+	 * 스케줄마스터 수정
+	 * @param 
+	 * @throws Exception
+	 */
+	@Override
+	public void updateSchedule(ScheduleVO scheduleVO) throws Exception {
+		scheduleDAO.updateSchedule(scheduleVO);	
+	}
+
+	
+	/**
+	 * 스케줄 디테일 삭제
+	 * @param 
+	 * @throws Exception
+	 */
+	@Override
+	public void deleteScheduleDtl(ScheduleDtlVO scheduleDtlVO) throws Exception {
+		scheduleDAO.deleteScheduleDtl(scheduleDtlVO);		
+	}
+
+
+
 
 
 }

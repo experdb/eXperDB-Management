@@ -215,7 +215,7 @@ function fn_make_object_list(data){
 			html += "</ul></li>\n";
 		}
 		if(schema != inSchema){
-			html += "<li class='active'><a href='#'>"+item.schema+" (Schema)</a>";
+			html += "<li class='active'><a href='#'>"+item.schema+"</a>";
 			html += "<div class='inp_chk'>";
 			html += "<input type='checkbox' id='schema"+schemaCnt+"' name='tree' value='"+item.schema+"' otype='schema' schema='"+item.schema+"'/><label for='schema"+schemaCnt+"'></label>";
 			html += "</div>";

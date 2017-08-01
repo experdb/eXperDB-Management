@@ -362,15 +362,17 @@ function selectTab(tab){
 </script>
 <!-- contents -->
 <div id="contents">
-	<div class="location">
-		<ul>
-			<li>${db_svr_nm}</li>
-			<li>백업관리</li>
-			<li class="on">백업 설정</li>
-		</ul>
-	</div>
 	<div class="contents_wrap">
-		<h4>백업 설정 화면 <a href="#n"><img src="/images/ico_tit.png" alt="" /></a></h4>
+		<div class="contents_tit">
+			<h4>백업 설정 화면<a href="#n"><img src="/images/ico_tit.png" alt="" /></a></h4>
+			<div class="location">
+				<ul>
+					<li>${db_svr_nm}</li>
+					<li>백업관리</li>
+					<li class="on">백업 설정</li>
+				</ul>
+			</div>
+		</div>	
 		<div class="contents">
 			<div class="cmm_tab">
 				<ul id="tab1">

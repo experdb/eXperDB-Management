@@ -86,6 +86,12 @@ function fn_dbServerValidation(){
   			 svr_spr_scm_pwd.focus();
   			   return false;
   		}		
+ 		var istpath = document.getElementById("istpath");
+ 		if (istpath.value == "") {
+  			   alert("저장경로를 입력하여 주십시오.");
+  			 istpath.focus();
+  			   return false;
+  		}	
  		return true;
 }
 
@@ -104,7 +110,8 @@ function fn_insertDbServer(){
 			ipadr : $("#ipadr").val(),
 			portno : $("#portno").val(),
 			svr_spr_usr_id : $("#svr_spr_usr_id").val(),
-			svr_spr_scm_pwd : $("#svr_spr_scm_pwd").val()
+			svr_spr_scm_pwd : $("#svr_spr_scm_pwd").val(),
+			istpath : $("#istpath").val()
 		},
 		type : "post",
 		error : function(xhr, status, error) {
@@ -135,6 +142,7 @@ function fn_dbServerConnTest(){
 			portno : $("#portno").val(),
 			svr_spr_usr_id : $("#svr_spr_usr_id").val(),
 			svr_spr_scm_pwd : $("#svr_spr_scm_pwd").val(),
+			istpath : $("#istpath").val(),
 			check : "i",
 		},
 		type : "post",
@@ -187,7 +195,7 @@ function fn_dbServerCancle(){
 				</tr>
 				<tr>
 					<th scope="row" class="ico_t1">IP(*)</th>
-					<td><input type="text" class="txt" name="ipadr" id="ipadr" /></td>
+					<td><input type="text" class="txt" name="ipadr" id="ipadr" style="width:200px"/></td>
 					<th scope="row" class="ico_t1">Port(*)</th>
 					<td><input type="text" class="txt" name="portno" id="portno" /></td>
 				</tr>
@@ -196,6 +204,10 @@ function fn_dbServerCancle(){
 					<td><input type="text" class="txt" name="svr_spr_usr_id" id="svr_spr_usr_id" /></td>
 					<th scope="row" class="ico_t1">Password(*)</th>
 					<td><input type="password" class="txt" name="svr_spr_scm_pwd" id="svr_spr_scm_pwd" /></td>
+				</tr>
+				<tr>
+					<th scope="row" class="ico_t1">서버 설치경로</th>
+					<td><input type="text" class="txt" name="istpath" id="istpath" style="width:700px" /></td>					
 				</tr>
 			</tbody>
 		</table>
