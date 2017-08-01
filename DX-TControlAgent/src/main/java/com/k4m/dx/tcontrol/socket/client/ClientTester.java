@@ -67,9 +67,9 @@ public class ClientTester {
 			//clientTester.dxT014_U(Ip, port);
 			//clientTester.dxT014_D(Ip, port);
 			
-			//clientTester.dxT015_R(Ip, port);
+			clientTester.dxT015_R(Ip, port);
 			//clientTester.dxT015_V(Ip, port);
-			clientTester.dxT015_DL(Ip, port);
+			//clientTester.dxT015_DL(Ip, port);
 			
 			
 		} catch(Exception e) {
@@ -1169,7 +1169,7 @@ public class ClientTester {
 
 			String strDirectory = "/home/devel/experdb/data/pg_log/";
 			
-			strDirectory = "C:\\k4m\\01-1. DX 제폼개발\\04. 시험\\pg_log\\";
+			//strDirectory = "C:\\k4m\\01-1. DX 제폼개발\\04. 시험\\pg_log\\";
 			
 			JSONObject serverObj = new JSONObject();
 			
@@ -1258,7 +1258,7 @@ public class ClientTester {
 			ClientAdapter CA = new ClientAdapter(Ip, port);
 			CA.open(); 
 				
-			objList = CA.dxT015(jObj);
+			objList = CA.dxT015_V(jObj);
 			
 			String strErrMsg = (String)objList.get(ClientProtocolID.ERR_MSG);
 			String strErrCode = (String)objList.get(ClientProtocolID.ERR_CODE);

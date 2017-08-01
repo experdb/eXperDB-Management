@@ -162,6 +162,7 @@ public class ClientSocketCtl {
 
 	public byte[] recv(int lengthFieldSize, boolean containLengthField)
 			throws IOException, SocketTimeoutException, Exception {
+		System.out.println("recv(int lengthFieldSize, boolean containLengthField)");
 		if (client == null) {
 			throw new Exception("TRConnector : Socket이 생성되지 않았습니다.");
 		}
@@ -199,11 +200,10 @@ public class ClientSocketCtl {
 
 	public void recvFileDownLoad_test(String fileName)
 			throws IOException, SocketTimeoutException, Exception {
-		Socket socket;
 	    DataInputStream dis;
 	    FileOutputStream fos;
 	    BufferedOutputStream bos;
-	    String filename;
+
 	    int control = 0;
 
 		//String resCLient = request.getHeader("User-Agent");

@@ -245,6 +245,24 @@ public class ClientAdapter {
 	
 	public JSONObject dxT015(JSONObject jObj) throws Exception{
 
+		System.out.println("dxT015");
+		byte[] bt = jObj.toString().getBytes();
+		
+		cc.send(4, bt);
+		
+		
+
+
+		System.out.println("cc.recv(4, false)");
+		byte[]	recvBuff = cc.recv(4, false);
+		//JSONObject obj = (JSONObject) cc.recvObject();
+		//String strData = cc.byteArrayOutputStreamReceiveMessage();
+		return parseToJsonObj(recvBuff);
+
+	}
+	
+	public JSONObject dxT015_V(JSONObject jObj) throws Exception{
+
 		byte[] bt = jObj.toString().getBytes();
 		
 		cc.send(4, bt);

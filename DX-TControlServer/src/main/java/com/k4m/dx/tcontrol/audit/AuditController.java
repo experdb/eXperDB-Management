@@ -303,7 +303,7 @@ public class AuditController {
 			
 			DbServerVO dbServerVO = (DbServerVO)  cmmnServerInfoService.selectServerInfo(schDbServerVO);
 			
-			String strDirectory = dbServerVO.getIstpath();
+			String strDirectory = dbServerVO.getIstpath() + "pg_log/";
 			
 			JSONObject serverObj = new JSONObject();
 			
@@ -494,7 +494,7 @@ public class AuditController {
 			ClientAdapter CA = new ClientAdapter(IP, PORT);
 			CA.open(); 
 			
-			JSONObject objList = CA.dxT015(jObj);
+			JSONObject objList = CA.dxT015_V(jObj);
 			
 			String strErrMsg = (String)objList.get(ClientProtocolID.ERR_MSG);
 			String strErrCode = (String)objList.get(ClientProtocolID.ERR_CODE);
@@ -566,7 +566,7 @@ public class AuditController {
 			String IP = dbServerVO.getIpadr();
 			int PORT = agentInfo.getSOCKET_PORT();
 			
-			IP = "127.0.0.1";
+			//IP = "127.0.0.1";
 			ClientAdapter CA = new ClientAdapter(IP, PORT);
 			CA.open(); 
 			

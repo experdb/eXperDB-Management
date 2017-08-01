@@ -118,7 +118,7 @@ public class DxT015 extends SocketCtl{
 				outputObj.put(ProtocolID.ERR_MSG, strErrMsg);
 				outputObj.put(ProtocolID.RESULT_DATA, resultFileList);
 				
-				send(outputObj);
+				send(4, sendBuff);
 				
 			} else if(strCommandCode.equals(ProtocolID.COMMAND_CODE_V)) {
 				
@@ -159,7 +159,7 @@ public class DxT015 extends SocketCtl{
 			outputObj.put(ProtocolID.DX_EX_CODE, TranCodeType.DxT015);
 			outputObj.put(ProtocolID.RESULT_CODE, "1");
 			outputObj.put(ProtocolID.ERR_CODE, TranCodeType.DxT015);
-			outputObj.put(ProtocolID.ERR_MSG, "DxT014 Error [" + e.toString() + "]");
+			outputObj.put(ProtocolID.ERR_MSG, "DxT015 Error [" + e.toString() + "]");
 			
 			sendBuff = outputObj.toString().getBytes();
 			send(4, sendBuff);
