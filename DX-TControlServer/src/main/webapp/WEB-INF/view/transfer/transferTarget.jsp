@@ -103,7 +103,9 @@
 			},
 			success : function(result) {
 				table.clear().draw();
-				table.rows.add(result.data).draw();
+				if(result.data != null){
+					table.rows.add(result.data).draw();
+				}
 			}
 		});
 	
@@ -124,7 +126,9 @@
 			},
 			success : function(result) {
 				table.clear().draw();
-				table.rows.add(result.data).draw();
+				if(result.data != null){
+					table.rows.add(result.data).draw();
+				}
 			}
 		});
 	}

@@ -7,7 +7,9 @@ import javax.annotation.Resource;
 import org.springframework.stereotype.Service;
 
 import com.k4m.dx.tcontrol.accesscontrol.service.DbIDbServerVO;
+import com.k4m.dx.tcontrol.tree.transfer.service.TransferDetailMappingVO;
 import com.k4m.dx.tcontrol.tree.transfer.service.TransferDetailVO;
+import com.k4m.dx.tcontrol.tree.transfer.service.TransferMappingVO;
 import com.k4m.dx.tcontrol.tree.transfer.service.TransferRelationVO;
 import com.k4m.dx.tcontrol.tree.transfer.service.TransferTargetVO;
 import com.k4m.dx.tcontrol.tree.transfer.service.TreeTransferService;
@@ -46,6 +48,26 @@ public class TreeTransferServiceImpl implements TreeTransferService {
 	@Override
 	public void insertTransferRelation(TransferRelationVO transferRelationVO) throws Exception {
 		treeTransferDAO.insertTransferRelation(transferRelationVO);
+	}
+
+	@Override
+	public void insertTransferMapping(TransferMappingVO transferMappingVO) throws Exception {
+		treeTransferDAO.insertTransferMapping(transferMappingVO);
+	}
+
+	@Override
+	public List<TransferDetailMappingVO> selectTransferMapping(int trf_trg_id) throws Exception {
+		return treeTransferDAO.selectTransferMapping(trf_trg_id);
+	}
+
+	@Override
+	public void deleteTransferRelation(int trf_trg_id) throws Exception {
+		treeTransferDAO.deleteTransferRelation(trf_trg_id);
+	}
+
+	@Override
+	public void deleteTransferMapping(int trf_trg_mpp_id) throws Exception {
+		treeTransferDAO.deleteTransferMapping(trf_trg_mpp_id);
 	}
 
 }

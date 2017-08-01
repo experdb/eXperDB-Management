@@ -30,7 +30,7 @@
 		<typeAlias alias="transferDetailVO" type="com.k4m.dx.tcontrol.tree.transfer.service.TransferDetailVO"/>
 		<typeAlias alias="transferMappingVO" type="com.k4m.dx.tcontrol.tree.transfer.service.TransferMappingVO"/>
 		<typeAlias alias="transferRelationVO" type="com.k4m.dx.tcontrol.tree.transfer.service.TransferRelationVO"/>
-		
+		<typeAlias alias="transferDetailMappingVO" type="com.k4m.dx.tcontrol.tree.transfer.service.TransferDetailMappingVO"/>
     </typeAliases>
     
  	<mappers>

@@ -71,18 +71,18 @@ public class ClientInfoCmmn {
 			selectDBList = (ArrayList<Object>) objList.get(ClientProtocolID.RESULT_DATA);
 
 			System.out.println("strDxExCode : " + " " + strDxExCode);
-
-			for (int i = 0; i < selectDBList.size(); i++) {
-				JSONObject jsonObj = new JSONObject();
-				Object obj = selectDBList.get(i);
-				HashMap hp = (HashMap) obj;
-				String datname = (String) hp.get("datname");
-
-				jsonObj.put("dft_db_nm", datname);
-				jsonArray.add(jsonObj);
+			if(selectDBList != null){
+				for (int i = 0; i < selectDBList.size(); i++) {
+					JSONObject jsonObj = new JSONObject();
+					Object obj = selectDBList.get(i);
+					HashMap hp = (HashMap) obj;
+					String datname = (String) hp.get("datname");
+	
+					jsonObj.put("dft_db_nm", datname);
+					jsonArray.add(jsonObj);
+				}
+				result.put("data", jsonArray);
 			}
-			result.put("data", jsonArray);
-
 			CA.close();
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -494,20 +494,23 @@ public class ClientInfoCmmn {
 			List<Object> selectDBList =(ArrayList<Object>) objList.get(ClientProtocolID.RESULT_DATA);
 			
 			System.out.println("strDxExCode : " + " " + strDxExCode);
-			if(selectDBList.size() > 0) {
-				for(int i=0; i<selectDBList.size(); i++) {
-					JSONObject jsonObj = new JSONObject();
-					Object obj = selectDBList.get(i);
-					HashMap hp = (HashMap) obj;
-					String table_schema = (String) hp.get("table_schema");
-					String table_name = (String) hp.get("table_name");
-					System.out.println(i + " " + table_schema + " " + table_name);
-					jsonObj.put("table_schema", table_schema);
-					jsonObj.put("table_name", table_name);
-					jsonArray.add(jsonObj);
-				}
-			}		
-			result.put("data", jsonArray);	
+			
+			if(selectDBList != null){
+				if(selectDBList.size() > 0) {
+					for(int i=0; i<selectDBList.size(); i++) {
+						JSONObject jsonObj = new JSONObject();
+						Object obj = selectDBList.get(i);
+						HashMap hp = (HashMap) obj;
+						String table_schema = (String) hp.get("table_schema");
+						String table_name = (String) hp.get("table_name");
+						System.out.println(i + " " + table_schema + " " + table_name);
+						jsonObj.put("table_schema", table_schema);
+						jsonObj.put("table_name", table_name);
+						jsonArray.add(jsonObj);
+					}
+				}		
+				result.put("data", jsonArray);	
+			}
 			CA.close();
 		} catch(Exception e) {
 			e.printStackTrace();

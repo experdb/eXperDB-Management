@@ -58,38 +58,49 @@
 			 ]
 		});
 	}
+
 	
 	$(window.document).ready(function() {
 		fn_init();
-		var db_svr_nm = $("#db_svr_nm").val();
-		
-		/*DB 조회*/
-       	$.ajax({
-    		url : "/selectServerDbList.do",
-    		data : {
-    			db_svr_nm: db_svr_nm,			
-    		},
-    		dataType : "json",
-    		type : "post",
-    		error : function(xhr, status, error) {
-    			alert("실패")
-    		},
-    		success : function(result) {  
-				var option = "<option value=''>선택</option>";
-				for(var i=0; i<result.length; i++){	
-					 option += "<option value='"+result[i].db_id+"'>"+result[i].db_nm+"</option>";	
-				}	  
-				$('#db_nm').append(option);
-    		}
-    	});
-	  
+		if("${result}" == ""){
+			fn_dbSelect($("#db_svr_nm").val());
+		}else{		
+			$("#db_svr_nm").val("${result[0].db_svr_nm}").attr("selected", "selected");	
+			$("select[name='db_nm'] option").remove();		
+	       	$.ajax({
+	    		url : "/selectServerDbList.do",
+	    		data : {
+	    			db_svr_nm: '${result[0].db_svr_nm}',			
+	    		},
+	    		dataType : "json",
+	    		type : "post",
+	    		error : function(xhr, status, error) {
+	    			alert("실패")
+	    		},
+	    		success : function(result) {  
+	    				var option = "<option value=''>선택</option>";
+						for(var i=0; i<result.length; i++){	
+							 option += "<option value='"+result[i].db_id+"'>"+result[i].db_nm+"</option>";		 
+						}
+					$('#db_nm').append(option);
+					$("#db_nm").val("${result[0].db_id}").attr("selected", "selected");
+					fn_dbChange();				
+	    		}
+	    	});
+		}
+	
 	});
 	
 	/*서버선택시*/
 	function fn_serverChange(){
 		tableList.clear().draw();
+		connectorTableList.clear().draw();
+		fn_dbSelect($("#db_svr_nm").val());
+	}
+	
+	/*서버선택시 데이터베이스 조회*/
+	function fn_dbSelect(db_svr_nm){
 		$("select[name='db_nm'] option").remove();		
-		var db_svr_nm = $("#db_svr_nm").val();
        	$.ajax({
     		url : "/selectServerDbList.do",
     		data : {
@@ -104,47 +115,95 @@
     				var option = "<option value=''>선택</option>";
 					for(var i=0; i<result.length; i++){	
 						 option += "<option value='"+result[i].db_id+"'>"+result[i].db_nm+"</option>";		 
-					}	  
+					}
 				$('#db_nm').append(option);
     		}
     	});
 	}
 	
-	/*DB선택시 -> 테이블리스트 조회*/
-	function fn_dbChange(){
-    	$.ajax({
-    		url : "/selectMappingTableList.do",
-    		data : {
-    			db_id : $("#db_nm").val(),
-    		},
-    		dataType : "json",
-    		type : "post",
-    		error : function(xhr, status, error) {
-    			alert("실패")
-    		},
-    		success : function(result) {
-    			tableList.clear().draw();		
-    			tableList.rows.add(result.data).draw();
-    		}
-    	});
+	var $this = $(this);
+	var $row = $this.parent().parent();
+	$row.addClass('select-detail');
+	var datas = table.rows('.select-detail').data();
+	if(datas.length==1) {
+		var row = datas[0];
+    	$row.removeClass('select-detail');
+			var popup = new OpenPostPopup("base_0004_05");
+			popup.add("sys_nm",row.sys_nm);
+			popup.add("schema_nm",row.schema_nm);
+			popup.add("user_id",row.user_id);
+			popup.show(640,480);
 	}
 	
-	/*Connector 테이블리스트 조회*/
-	function fn_selectConnectorTableList(){
-    	$.ajax({
-    		url : "/selectConnectorTableList.do",
-    		data : {
-    		},
-    		dataType : "json",
-    		type : "post",
-    		error : function(xhr, status, error) {
-    			alert("실패")
-    		},
-    		success : function(result) {
-    			connectorTableList.clear().draw();
-    			connectorTableList.rows.add(result).draw();
-    		}
-    	});
+	/*DB선택시 -> 테이블리스트 조회*/
+	function fn_dbChange(){
+		tableList.clear().draw();
+		//Connector 테이블 값이 있을 경우
+		if("${result[0].db_id}"==$("#db_nm").val()){
+			$.ajax({
+	    		url : "/selectMappingTableList.do",
+	    		data : {
+	    			db_id : $("#db_nm").val(),
+	    		},
+	    		dataType : "json",
+	    		type : "post",
+	    		error : function(xhr, status, error) {
+	    			alert("실패")
+	    		},
+	    		success : function(result) {
+	    			if(result.data == null){
+	    				alert("서버상태를 확인해주세요.");
+	    			}else{
+	    				tableList.clear().draw();	
+		    			for(var i=0; i<result.data.length;i++){
+		    				<c:forEach items="${result}" var="result">
+		    				if("${result.scm_nm}" == result.data[i].table_schema && "${result.tb_engl_nm}"== result.data[i].table_name){
+		    					result.data.splice(i,1);
+			    			}
+		    				</c:forEach>		
+			    		}
+		    			
+		    			<c:forEach items="${result}" var="result">
+		    			connectorTableList.row.add( {
+		    		        "table_schema":"${result.scm_nm}",
+		    		        "table_name": "${result.tb_engl_nm}"
+		    		    } ).draw();
+		    			</c:forEach>
+		    			tableList.rows.add(result.data).draw();
+		    			
+		    	    	$('.selected').removeClass('selected');
+		    	    	$("input[type=checkbox]").prop("checked", false);
+	    			}
+	    			
+	    			
+	    		}
+	    	});	
+		}
+		// DB명을 선택 눌렀을 경우 조회 안되는 조건
+		else if($("#db_nm").val()!=""){
+			connectorTableList.clear().draw();
+			$.ajax({
+	    		url : "/selectMappingTableList.do",
+	    		data : {
+	    			db_id : $("#db_nm").val(),
+	    		},
+	    		dataType : "json",
+	    		type : "post",
+	    		error : function(xhr, status, error) {
+	    			alert("실패")
+	    		},
+	    		success : function(result) {
+	    			if(result.data == null){
+	    				alert("서버상태를 확인해주세요.");
+	    			}else{
+		    			tableList.clear().draw();		
+		    			tableList.rows.add(result.data).draw();
+		    	    	$('.selected').removeClass('selected');
+		    	    	$("input[type=checkbox]").prop("checked", false);
+	    			}
+	    		}
+	    	});	
+		}
 	}
 	
  	/*-> 클릭시*/
@@ -215,6 +274,11 @@
 		if(data.length <1){
 			alert("저장할 데이터가 없습니다.");	
 		}else{
+			//connector 테이블 리스트가 있을 경우
+			var trf_trg_mpp_id = 0;
+			if("${result[0].trf_trg_mpp_id}" != ""){
+				trf_trg_mpp_id = "${result[0].trf_trg_mpp_id}";
+			}
 			var rowList = [];
             for (var i = 0; i < data.length; i++) {
                rowList.push(connectorTableList.rows().data()[i]);
@@ -227,7 +291,9 @@
     				rowList : JSON.stringify(rowList),
     				trf_trg_id : '${trf_trg_id}',
     				cnr_id : '${cnr_id}',
-    				db_id : $("#db_nm").val()
+    				db_id : $("#db_nm").val(),
+    				trf_trg_mpp_id : trf_trg_mpp_id,
+    				trf_trg_cnn_nm : '${trf_trg_cnn_nm}'
     			},
     			success : function(result) {
     				alert("저장하였습니다.");
@@ -257,7 +323,7 @@
 			<tbody>
 				<tr>
 					<th scope="row" class="ico_t1">Connector명</th>
-					<td><input type="text" class="txt t3 bg1" name="" value="TextConnection" /></td>
+					<td><input type="text" class="txt t3 bg1" name="trf_trg_cnn_nm" value="${trf_trg_cnn_nm}" /></td>
 					<th>&nbsp;</th>
 					<td>&nbsp;</td>
 				</tr>
@@ -266,7 +332,7 @@
 					<td>	
 						<select class="select t3" name="db_svr_nm" id="db_svr_nm" onchange="fn_serverChange()">
 							<c:forEach var="resultSet" items="${resultSet}" varStatus="status">
-							<option value="${resultSet.db_svr_nm}">${resultSet.db_svr_nm}</option>
+								<option value="${resultSet.db_svr_nm}">${resultSet.db_svr_nm}</option>
 							</c:forEach>
 						</select>		
 					</td>
@@ -301,8 +367,8 @@
 								<th></th>
 								<th>Schema</th>
 								<th>Table명</th>
-							</tr>
-						</thead>
+							</tr>	
+							</thead>			
 					</table>
 				</div>
 			</div>
@@ -318,6 +384,10 @@
 			<a href="#n" class="btn" onclick="window.close();"><span>취소</span></a>
 		</div>
 	</div>
+</div>
+
+<div id="loading">
+	<img src="/images/spin.gif" alt="" />
 </div>
 </body>
 </html>

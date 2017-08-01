@@ -26,20 +26,42 @@
 			searching : false,
 			columns : [
 			{ data : "trf_trg_cnn_nm", className : "dt-center", defaultContent : ""}, 
-			{ data : "", className : "dt-center", defaultContent : ""}, 
+			{ data : "db_svr_nm", className : "dt-center", defaultContent : ""}, 
 			{ data : "db_nm", className : "dt-center", defaultContent : ""}, 
-			{ data : "", className : "dt-center", defaultContent : ""}, 
 			{
-				data : "trf_trg_id",
+				data : "",
 				render : function(data, type, full, meta) {
-					var html = "<a href='#n'><img src='../images/mappin_btn.png' alt='맵핑설정버튼' onclick='windowPopup("+data+");' /></a>";
+					var html = "<a href='#n'><img src='../images/ico_start.png' alt='실행중' /></a>";	
 					return html;
 				},
 				className : "dt-center",
 				defaultContent : ""
-			},
+			}, 
+			{ data : "", className : "dt-center", defaultContent : "<a href='#n'><img src='../images/mappin_btn.png' alt='맵핑설정버튼' id='mappingBtn'/></a>"}
 			]
 		});
+		
+	    //맵핑설정버튼 클릭시
+		 $('#transferDetailTable tbody').on('click','#mappingBtn', function () {
+		 		var $this = $(this);
+		    	var $row = $this.parent().parent().parent();
+		    	$row.addClass('select-detail');
+		    	var datas = table.rows('.select-detail').data();
+		    	if(datas.length==1) {
+		    		var row = datas[0];
+			    	$row.removeClass('select-detail');
+					var popUrl = "/popup/transferMappingRegForm.do?trf_trg_id="+row.trf_trg_id+"&&cnr_id="+cnr_id+"&&trf_trg_cnn_nm="+row.trf_trg_cnn_nm; // 서버 url 팝업경로
+					var width = 920;
+					var height = 675;
+					var left = (window.screen.width / 2) - (width / 2);
+					var top = (window.screen.height /2) - (height / 2);
+					var popOption = "width="+width+", height="+height+", top="+top+", left="+left+", resizable=no, scrollbars=no, status=no, toolbar=no, titlebar=yes, location=no,";
+					
+					window.open(popUrl,"",popOption);
+					
+		    	}
+			});
+	    
 	}
 
 	$(window.document).ready(function() {

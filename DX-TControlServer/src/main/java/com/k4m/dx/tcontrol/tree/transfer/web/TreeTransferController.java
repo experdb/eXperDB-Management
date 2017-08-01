@@ -29,6 +29,7 @@ import com.k4m.dx.tcontrol.cmmn.client.ClientProtocolID;
 import com.k4m.dx.tcontrol.common.service.HistoryVO;
 import com.k4m.dx.tcontrol.functions.transfer.service.ConnectorVO;
 import com.k4m.dx.tcontrol.functions.transfer.service.TransferService;
+import com.k4m.dx.tcontrol.tree.transfer.service.TransferDetailMappingVO;
 import com.k4m.dx.tcontrol.tree.transfer.service.TransferDetailVO;
 import com.k4m.dx.tcontrol.tree.transfer.service.TransferMappingVO;
 import com.k4m.dx.tcontrol.tree.transfer.service.TransferRelationVO;
@@ -135,7 +136,6 @@ public class TreeTransferController {
 	@RequestMapping(value = "/popup/transferTargetRegForm.do")
 	public ModelAndView transferTargetRegForm(@ModelAttribute("historyVO") HistoryVO historyVO, HttpServletRequest request) {
 		ModelAndView mv = new ModelAndView();
-//		List<TransferTargetVO> result = null;
 		JSONObject result = new JSONObject();
 		List<ConnectorVO> resultList = null;
 		
@@ -592,16 +592,23 @@ public class TreeTransferController {
 	public ModelAndView transferMappingRegForm(@ModelAttribute("dbServerVO") DbServerVO dbServerVO,@ModelAttribute("historyVO") HistoryVO historyVO, HttpServletRequest request) {
 		ModelAndView mv = new ModelAndView();
 		List<DbServerVO> resultSet = null;
+		List<TransferDetailMappingVO> result = null;
 		try {
 			// 전송설정 이력 남기기 수정
 			CmmnUtils.saveHistory(request, historyVO);
 			historyVO.setExe_dtl_cd("DX-T0018");
 			accessHistoryService.insertHistory(historyVO);
 			
+			result= treeTransferService.selectTransferMapping(Integer.parseInt(request.getParameter("trf_trg_id")));
+			if(result.size()>0){
+				mv.addObject("result",result);
+			}
+			
 			resultSet = dbServerManagerService.selectDbServerList(dbServerVO);
 			mv.addObject("resultSet",resultSet);
 			mv.addObject("trf_trg_id",request.getParameter("trf_trg_id"));
 			mv.addObject("cnr_id",request.getParameter("cnr_id"));
+			mv.addObject("trf_trg_cnn_nm",request.getParameter("trf_trg_cnn_nm"));
 			mv.setViewName("popup/transferMappingRegForm");
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -641,7 +648,7 @@ public class TreeTransferController {
 	 * @throws Exception
 	 */
 	@RequestMapping(value = "/selectMappingTableList.do")
-	public @ResponseBody Map<String, Object> selectTableList2(HttpServletRequest request){
+	public @ResponseBody Map<String, Object> selectMappingTableList(HttpServletRequest request){
 		List<DbIDbServerVO> resultSet = null;
 		JSONObject serverObj = new JSONObject();
 		ClientInfoCmmn cic = new ClientInfoCmmn();
@@ -659,7 +666,7 @@ public class TreeTransferController {
 			serverObj.put(ClientProtocolID.USER_PWD, aes.aesDecode(resultSet.get(0).getSvr_spr_scm_pwd()));
 					
 			result = cic.tableList_select(serverObj);
-			
+
 		}catch(Exception e){
 			e.printStackTrace();
 		}
@@ -669,14 +676,19 @@ public class TreeTransferController {
 	/**
 	 * 전송매핑작업을 등록한다.
 	 * 
-	 * @param userVo
+	 * @param transferRelationVO
+	 * @param transferMappingVO
 	 * @param request
+	 * @param historyVO
 	 * @return
 	 * @throws Exception
 	 */
 	@RequestMapping(value = "/insertTransferMapping.do")
 	public @ResponseBody void insertTransferMapping(@ModelAttribute("transferRelationVO") TransferRelationVO transferRelationVO, @ModelAttribute("transferMappingVO") TransferMappingVO transferMappingVO,HttpServletRequest request,@ModelAttribute("historyVO") HistoryVO historyVO) {
-		try {		
+		List<ConnectorVO> resultList = null;
+		JSONObject result = new JSONObject();
+		JSONObject param = new JSONObject();
+		try {
 //			// 사용자 등록 이력 남기기
 //			CmmnUtils.saveHistory(request, historyVO);
 //			historyVO.setExe_dtl_cd("DX-T0032_01");
@@ -686,26 +698,76 @@ public class TreeTransferController {
 			String usr_id = (String)session.getAttribute("usr_id");
 			transferRelationVO.setFrst_regr_id(usr_id);
 			transferRelationVO.setLst_mdfr_id(usr_id);
+			transferMappingVO.setFrst_regr_id(usr_id);
+			transferMappingVO.setLst_mdfr_id(usr_id);
 			
 			transferRelationVO.setTrf_trg_id(Integer.parseInt(request.getParameter("trf_trg_id")));
 			transferRelationVO.setCnr_id(Integer.parseInt(request.getParameter("cnr_id")));
 			transferRelationVO.setDb_id(Integer.parseInt(request.getParameter("db_id")));
+			
+			/*전송대상매핑관계 DELETE*/
+			treeTransferService.deleteTransferRelation(Integer.parseInt(request.getParameter("trf_trg_id")));
+			/*전송매핑테이블내역 DELETE*/
+			treeTransferService.deleteTransferMapping(Integer.parseInt(request.getParameter("trf_trg_mpp_id")));
 			
 			/*전송대상매핑관계 INSERT*/
 			treeTransferService.insertTransferRelation(transferRelationVO);
 			
 			JSONParser jParser = new JSONParser();
 			JSONArray jArr = (JSONArray)jParser.parse(request.getParameter("rowList").toString().replace("&quot;", "\""));
-			System.out.println(jArr);
+			
+			String trf_trg_cnn_nm = request.getParameter("trf_trg_cnn_nm");
+			String topic = "";
+			
 			for(int i=0; i<jArr.size(); i++){
 				JSONObject jObj = (JSONObject)jArr.get(i);
 				String table_name=(String) jObj.get("table_name");
 				String table_schema=(String) jObj.get("table_schema");
-				System.out.println("table_name : "+table_name+" table_schema : "+table_schema);
-			}
+				
+				transferMappingVO.setTb_engl_nm(table_name);
+				transferMappingVO.setScm_nm(table_schema);
+				
+				/*전송매핑테이블내역 INSERT*/
+				treeTransferService.insertTransferMapping(transferMappingVO); 	
+				
+				if(i>0){ 
+					topic += ","; 
+				}
+				topic += trf_trg_cnn_nm+"."+table_schema+"."+table_name;			
+			}		 
 			
-			 
-
+			resultList = transferService.selectDetailConnectorRegister(Integer.parseInt(request.getParameter("cnr_id")));
+			
+			JSONObject serverObj = new JSONObject();
+			String strServerIp = resultList.get(0).getCnr_ipadr();
+			String strServerPort = Integer.toString(resultList.get(0).getCnr_portno());
+			serverObj.put(ClientProtocolID.SERVER_IP, strServerIp);
+			serverObj.put(ClientProtocolID.SERVER_PORT, strServerPort);
+			ClientInfoCmmn cic = new ClientInfoCmmn();
+			result = cic.kafakConnect_select(serverObj,trf_trg_cnn_nm);
+			
+			for(int i=0; i<result.size(); i++){
+				JSONArray data = (JSONArray)result.get("data");
+				for(int m=0; m<data.size(); m++){
+					JSONObject jsonObj = (JSONObject)data.get(m);
+					JSONObject hp = (JSONObject) jsonObj.get("hp");
+					
+					param.put("strName", (String) hp.get("name"));
+					param.put("strConnector_class", (String) hp.get("connector.class"));
+					param.put("strTasks_max", (String) hp.get("tasks.max"));
+					param.put("strTopics", topic);
+					param.put("strHdfs_url", (String) hp.get("hdfs.url"));
+					param.put("strHadoop_conf_dir", (String) hp.get("hadoop.conf.dir"));
+					param.put("strHadoop_home", (String) hp.get("hadoop.home"));
+					param.put("strFlush_size", (String) hp.get("flush.size"));
+					param.put("strRotate_interval_ms", (String) hp.get("rotate.interval.ms"));
+					
+				}							
+			}	
+			/*kafakConnect_update topic 업데이트*/
+			cic.kafakConnect_update(serverObj,param);
+			
+			
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

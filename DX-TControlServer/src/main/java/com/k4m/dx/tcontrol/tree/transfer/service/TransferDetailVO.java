@@ -6,6 +6,7 @@ public class TransferDetailVO {
 	private int cnr_id;
 	private String db_id;
 	private String db_nm;
+	private String db_svr_nm;
 	private String frst_regr_id;
 	private String frst_reg_dtm;
 	private String lst_mdfr_id;
@@ -41,6 +42,12 @@ public class TransferDetailVO {
 	public void setDb_nm(String db_nm) {
 		this.db_nm = db_nm;
 	}
+	public String getDb_svr_nm() {
+		return db_svr_nm;
+	}
+	public void setDb_svr_nm(String db_svr_nm) {
+		this.db_svr_nm = db_svr_nm;
+	}
 	public String getFrst_regr_id() {
 		return frst_regr_id;
 	}
@@ -65,6 +72,7 @@ public class TransferDetailVO {
 	public void setLst_mdf_dtm(String lst_mdf_dtm) {
 		this.lst_mdf_dtm = lst_mdf_dtm;
 	}
+
 	
 
 }
