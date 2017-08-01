@@ -67,13 +67,35 @@
 	}
 	
 	$(window.document).ready(function() {
-		
+		//document.getElementById("auditlog").scrollTop = document.getElementById("auditlog").scrollHeight;
+		setTimeout(function(){
+		    var t = performance.timing;
+		    console.log(t.loadEventEnd - t.responseEnd);
+		    var loadTime = (t.loadEventEnd - t.responseEnd) / 60;
+		    
+		    $("#recTime").text("응답시간 :" + fn_sec(loadTime.toFixed(1)));
+		    //alert(fn_sec(loadTime.toFixed(1)));
+		  }, 0);
 
 	});
 	
 	function fn_Show() {
 		$("#auditloading").hide();
+		$("#auditlog").scrollTop($("#auditlog")[0].scrollHeight);
 		
+	}
+	
+	function fn_sec(sec) {
+		if (sec < 60) {
+		 	sec = sec + '초';
+		} else if (sec < 3600){
+		 	sec = Math.floor(sec%3600/60) + '분 ' + sec%60 + '초';
+		} else {
+		 	sec = Math.floor(sec/3600) + '시간 ' + Math.floor(sec%3600/60) + '분 ' + sec%60 + '초';
+		}
+		
+		
+		return sec;
 	}
 	
 
@@ -99,7 +121,12 @@
 					<col />
 				</colgroup>
 				<tbody>
-
+					<tr>
+						<td>
+							50MB load 시 약 1분 소요됩니다.
+							
+						</td>
+					</tr>
 					<tr>
 						<td>
 							<div class="textarea_grp">
@@ -108,6 +135,10 @@
 								
 							</div>
 							
+						</td>
+					</tr>
+					<tr>
+						<td> <div id="recTime"></div>
 						</td>
 					</tr>
 				</tbody>

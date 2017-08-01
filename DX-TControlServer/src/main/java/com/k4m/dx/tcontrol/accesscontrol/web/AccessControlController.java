@@ -21,6 +21,8 @@ import com.k4m.dx.tcontrol.accesscontrol.service.AccessControlService;
 import com.k4m.dx.tcontrol.accesscontrol.service.AccessControlVO;
 import com.k4m.dx.tcontrol.accesscontrol.service.DbIDbServerVO;
 import com.k4m.dx.tcontrol.admin.accesshistory.service.AccessHistoryService;
+import com.k4m.dx.tcontrol.cmmn.AES256;
+import com.k4m.dx.tcontrol.cmmn.AES256_KEY;
 import com.k4m.dx.tcontrol.cmmn.CmmnUtils;
 import com.k4m.dx.tcontrol.cmmn.client.ClientInfoCmmn;
 import com.k4m.dx.tcontrol.cmmn.client.ClientProtocolID;
@@ -121,6 +123,7 @@ public class AccessControlController {
 		List<DbIDbServerVO> resultSet = null;
 		JSONObject result = new JSONObject();
 		try {
+			AES256 aes = new AES256(AES256_KEY.ENC_KEY);
 			int db_id = Integer.parseInt(request.getParameter("db_id"));
 			resultSet = accessControlService.selectServerDb(db_id);
 					
@@ -131,8 +134,8 @@ public class AccessControlController {
 			serverObj.put(ClientProtocolID.SERVER_PORT, resultSet.get(0).getPortno());
 			serverObj.put(ClientProtocolID.DATABASE_NAME, resultSet.get(0).getDft_db_nm());
 			serverObj.put(ClientProtocolID.USER_ID, resultSet.get(0).getSvr_spr_usr_id());
-			serverObj.put(ClientProtocolID.USER_PWD, resultSet.get(0).getSvr_spr_scm_pwd());
-			
+			serverObj.put(ClientProtocolID.USER_PWD, aes.aesDecode(resultSet.get(0).getSvr_spr_scm_pwd()));
+
 			ClientInfoCmmn cic = new ClientInfoCmmn();
 			result = cic.dbAccess_select(serverObj);	
 		} catch (Exception e) {
@@ -155,6 +158,7 @@ public class AccessControlController {
 		List<DbIDbServerVO> resultSet = null;
 		Map<String, Object> result =new HashMap<String, Object>();
 		try {
+			AES256 aes = new AES256(AES256_KEY.ENC_KEY);
 			String act = request.getParameter("act");
 			CmmnUtils.saveHistory(request, historyVO);
 
@@ -169,7 +173,7 @@ public class AccessControlController {
 			serverObj.put(ClientProtocolID.SERVER_PORT, resultSet.get(0).getPortno());
 			serverObj.put(ClientProtocolID.DATABASE_NAME, resultSet.get(0).getDft_db_nm());
 			serverObj.put(ClientProtocolID.USER_ID, resultSet.get(0).getSvr_spr_usr_id());
-			serverObj.put(ClientProtocolID.USER_PWD, resultSet.get(0).getSvr_spr_scm_pwd());
+			serverObj.put(ClientProtocolID.USER_PWD, aes.aesDecode(resultSet.get(0).getSvr_spr_scm_pwd()));
 
 			ClientInfoCmmn cic = new ClientInfoCmmn();
 			result = cic.role_List(serverObj);	
@@ -218,6 +222,8 @@ public class AccessControlController {
 	public @ResponseBody void insertAccessControl(@ModelAttribute("accessControlVO") AccessControlVO accessControlVO,HttpServletRequest request,@ModelAttribute("historyVO") HistoryVO historyVO) {
 		List<DbIDbServerVO> resultSet = null;
 			try {		
+				AES256 aes = new AES256(AES256_KEY.ENC_KEY);
+				
 				// 접근제어 등록 이력 남기기
 				CmmnUtils.saveHistory(request, historyVO);
 				historyVO.setExe_dtl_cd("DX-T0028_02");
@@ -232,7 +238,7 @@ public class AccessControlController {
 				serverObj.put(ClientProtocolID.SERVER_PORT, resultSet.get(0).getPortno());
 				serverObj.put(ClientProtocolID.DATABASE_NAME, resultSet.get(0).getDft_db_nm());
 				serverObj.put(ClientProtocolID.USER_ID, resultSet.get(0).getSvr_spr_usr_id());
-				serverObj.put(ClientProtocolID.USER_PWD, resultSet.get(0).getSvr_spr_scm_pwd());
+				serverObj.put(ClientProtocolID.USER_PWD, aes.aesDecode(resultSet.get(0).getSvr_spr_scm_pwd()));
 
 				JSONObject acObj = new JSONObject();
 				acObj.put(ClientProtocolID.AC_SET, "1");
@@ -284,6 +290,8 @@ public class AccessControlController {
 	public @ResponseBody void updateAccessControl(@ModelAttribute("accessControlVO") AccessControlVO accessControlVO,HttpServletRequest request,@ModelAttribute("historyVO") HistoryVO historyVO) {
 		List<DbIDbServerVO> resultSet = null;
 		try {		
+			AES256 aes = new AES256(AES256_KEY.ENC_KEY);
+			
 			// 접근제어 수정 이력 남기기
 			CmmnUtils.saveHistory(request, historyVO);
 			historyVO.setExe_dtl_cd("DX-T0028_03");
@@ -298,7 +306,7 @@ public class AccessControlController {
 			serverObj.put(ClientProtocolID.SERVER_PORT, resultSet.get(0).getPortno());
 			serverObj.put(ClientProtocolID.DATABASE_NAME, resultSet.get(0).getDft_db_nm());
 			serverObj.put(ClientProtocolID.USER_ID, resultSet.get(0).getSvr_spr_usr_id());
-			serverObj.put(ClientProtocolID.USER_PWD, resultSet.get(0).getSvr_spr_scm_pwd());
+			serverObj.put(ClientProtocolID.USER_PWD, aes.aesDecode(resultSet.get(0).getSvr_spr_scm_pwd()));
 			
 			JSONObject acObj = new JSONObject();
 			acObj.put(ClientProtocolID.AC_SEQ, request.getParameter("prms_seq"));
@@ -358,6 +366,8 @@ public class AccessControlController {
 		ClientInfoCmmn cic = new ClientInfoCmmn();
 			
 		try {		
+			AES256 aes = new AES256(AES256_KEY.ENC_KEY);
+			
 			// 접근제어 삭제 이력 남기기
 			CmmnUtils.saveHistory(request, historyVO);
 			historyVO.setExe_dtl_cd("DX-T0027_02");
@@ -373,7 +383,7 @@ public class AccessControlController {
 			serverObj.put(ClientProtocolID.SERVER_PORT, resultSet.get(0).getPortno());
 			serverObj.put(ClientProtocolID.DATABASE_NAME, resultSet.get(0).getDft_db_nm());
 			serverObj.put(ClientProtocolID.USER_ID, resultSet.get(0).getSvr_spr_usr_id());
-			serverObj.put(ClientProtocolID.USER_PWD, resultSet.get(0).getSvr_spr_scm_pwd());
+			serverObj.put(ClientProtocolID.USER_PWD, aes.aesDecode(resultSet.get(0).getSvr_spr_scm_pwd()));
 			
 			String[] param = request.getParameter("rowList").toString().split(",");
 			for (int i = 0; i < param.length; i++) {

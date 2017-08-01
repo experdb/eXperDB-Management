@@ -4,6 +4,9 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 
@@ -35,8 +38,8 @@ public class ClientTester {
 		
 		ClientTester clientTester = new ClientTester();
 		
-		String Ip = "222.110.153.162";
-		//String Ip = "127.0.0.1";
+		//String Ip = "222.110.153.162";
+		String Ip = "127.0.0.1";
 		int port = 9001;
 		try {
 			
@@ -66,6 +69,7 @@ public class ClientTester {
 			
 			clientTester.dxT015_R(Ip, port);
 			//clientTester.dxT015_V(Ip, port);
+			//clientTester.dxT015_DL(Ip, port);
 			
 			
 		} catch(Exception e) {
@@ -1226,7 +1230,10 @@ public class ClientTester {
 		try {
 
 			String strDirectory = "/home/devel/experdb/data/pg_log/";
-			String strFileName = "postgresql-2017-07-26_095844.log";
+			//strDirectory = "C:\\k4m\\01-1. DX 제폼개발\\04. 시험\\pg_log\\";
+			
+			String strFileName = "postgresql-2017-07-28_101101.log";
+			//strFileName = "postgresql-2017-07-31_000000.log";
 			
 			//strDirectory = "C:\\k4m\\01-1. DX 제폼개발\\04. 시험\\pg_log\\";
 			
@@ -1251,7 +1258,7 @@ public class ClientTester {
 			ClientAdapter CA = new ClientAdapter(Ip, port);
 			CA.open(); 
 				
-			objList = CA.dxT015(jObj);
+			objList = CA.dxT015_V(jObj);
 			
 			String strErrMsg = (String)objList.get(ClientProtocolID.ERR_MSG);
 			String strErrCode = (String)objList.get(ClientProtocolID.ERR_CODE);
@@ -1265,11 +1272,56 @@ public class ClientTester {
 			
 			System.out.println("###############");
 			
-			System.out.println(strLogView);
+			//System.out.println(strLogView);
 			
 			System.out.println("###############");
 				
 			CA.close();
+		} catch(Exception e) {
+			e.printStackTrace();
+		}
+	}
+	
+	private void dxT015_DL(String Ip, int port) {
+		try {
+			
+			Ip = "222.110.153.162";
+
+			String strDirectory = "/home/devel/experdb/data/pg_log/";
+			//strDirectory = "C:\\k4m\\01-1. DX 제폼개발\\04. 시험\\pg_log\\";
+			
+			String strFileName = "postgresql-2017-08-01_000000.log";
+			//strFileName = "postgresql-2017-07-31_000000.log";
+			
+			//strDirectory = "C:\\k4m\\01-1. DX 제폼개발\\04. 시험\\pg_log\\";
+			
+			JSONObject serverObj = new JSONObject();
+			
+			serverObj.put(ClientProtocolID.SERVER_NAME, Ip);
+			serverObj.put(ClientProtocolID.SERVER_IP, Ip);
+			serverObj.put(ClientProtocolID.SERVER_PORT, Integer.toString(port));
+			
+			JSONObject jObj = new JSONObject();
+			
+			
+			jObj.put(ClientProtocolID.DX_EX_CODE, ClientTranCodeType.DxT015_DL);
+			jObj.put(ClientProtocolID.SERVER_INFO, serverObj);
+			jObj.put(ClientProtocolID.COMMAND_CODE, ClientProtocolID.COMMAND_CODE_DL);
+			jObj.put(ClientProtocolID.FILE_DIRECTORY, strDirectory);
+			jObj.put(ClientProtocolID.FILE_NAME, strFileName);
+			
+			
+			JSONObject objList;
+			
+			ClientAdapter CA = new ClientAdapter(Ip, port);
+			CA.open(); 
+			
+			HttpServletRequest request = null;
+			HttpServletResponse response = null;
+			CA.dxT015_DL(jObj, request, response);
+			
+				
+			//CA.close();
 		} catch(Exception e) {
 			e.printStackTrace();
 		}

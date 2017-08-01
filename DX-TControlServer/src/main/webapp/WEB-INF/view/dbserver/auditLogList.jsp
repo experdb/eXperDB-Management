@@ -78,7 +78,8 @@ $(function() {
 
 		var param = "db_svr_id=" + db_svr_id + "&file_name=" + file_name;
 		
-		window.open("/audit/auditLogView.do?" + param  ,"popLogView","location=no,menubar=no,resizable=yes,scrollbars=no,status=no,width=915,height=800,top=0,left=0");
+		//window.open("/audit/auditLogView.do?" + param  ,"popLogView","location=no,menubar=no,resizable=yes,scrollbars=no,status=no,width=915,height=800,top=0,left=0");
+		window.open("/audit/auditLogDownload.do?" + param  ,"popLogView","location=no,menubar=no,resizable=yes,scrollbars=no,status=no,width=915,height=800,top=0,left=0");
 	}
 </script>
 

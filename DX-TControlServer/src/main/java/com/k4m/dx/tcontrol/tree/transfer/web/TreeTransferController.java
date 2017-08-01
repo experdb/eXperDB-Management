@@ -14,6 +14,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
@@ -76,7 +77,7 @@ public class TreeTransferController {
 	public ModelAndView transferTarget(@ModelAttribute("historyVO") HistoryVO historyVO, HttpServletRequest request) {
 		ModelAndView mv = new ModelAndView();
 		try {
-			// 전송설정 이력 남기기
+			// 전송대상리스트 이력 남기기
 			CmmnUtils.saveHistory(request, historyVO);
 			historyVO.setExe_dtl_cd("DX-T0014");
 			accessHistoryService.insertHistory(historyVO);
@@ -140,18 +141,19 @@ public class TreeTransferController {
 		List<ConnectorVO> resultList = null;
 		
 		try {
-			// 전송설정 이력 남기기
+			
 			CmmnUtils.saveHistory(request, historyVO);
 		
 			String act = request.getParameter("act");
 			int cnr_id = Integer.parseInt(request.getParameter("cnr_id"));
 			if(act.equals("i")){
-				historyVO.setExe_dtl_cd("DX-T0014_02");
-				accessHistoryService.insertHistory(historyVO);
-							
+				// 전송대상등록팝업 이력 남기기
+				historyVO.setExe_dtl_cd("DX-T0015");
+				accessHistoryService.insertHistory(historyVO);					
 			}
 			if(act.equals("u")){
-				historyVO.setExe_dtl_cd("DX-T0014_03");
+				// 전송대상수정팝업 이력 남기기
+				historyVO.setExe_dtl_cd("DX-T0015_01");
 				accessHistoryService.insertHistory(historyVO);
 				
 				resultList = transferService.selectDetailConnectorRegister(cnr_id);
@@ -204,6 +206,30 @@ public class TreeTransferController {
 		return mv;
 	}	
 	
+	
+	/**
+	 * 커넥트명 중복 체크한다.
+	 * 
+	 * @param trf_trg_cnn_nm
+	 * @return
+	 * @throws Exception
+	 */
+	@RequestMapping(value = "/transferTargetNameCheck.do")
+	public @ResponseBody String transferTargetNameCheck(@RequestParam("trf_trg_cnn_nm") String trf_trg_cnn_nm) {
+		try {
+			int resultSet = treeTransferService.transferTargetNameCheck(trf_trg_cnn_nm);
+			if (resultSet > 0) {
+				// 중복값이 존재함.
+				return "false";
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return "true";
+	}
+	
+	
+	
 	/**
 	 * 전송대상을 등록한다.
 	 * 
@@ -218,24 +244,20 @@ public class TreeTransferController {
 		List<ConnectorVO> resultList = null;
 		JSONObject serverObj = new JSONObject();
 		JSONObject param = new JSONObject();
-		JSONObject result = new JSONObject();
 		ClientInfoCmmn cic = new ClientInfoCmmn();
 		try {		
 			// 전송대상 등록 이력 남기기
 			CmmnUtils.saveHistory(request, historyVO);
-//			historyVO.setExe_dtl_cd("DX-T0032_01");
-//			accessHistoryService.insertHistory(historyVO);
-			
-			int cnr_id = Integer.parseInt(request.getParameter("cnr_id"));
-			
+			historyVO.setExe_dtl_cd("DX-T0014_02");
+			accessHistoryService.insertHistory(historyVO);
+					
 			HttpSession session = request.getSession();
 			String usr_id = (String)session.getAttribute("usr_id");
 			transferTargetVO.setFrst_regr_id(usr_id);
 			transferTargetVO.setLst_mdfr_id(usr_id);
+			treeTransferService.insertTransferTarget(transferTargetVO);
 			
-			//전송대상 전체 삭제
-			treeTransferService.deleteTransferTarget(cnr_id);
-			
+			int cnr_id = Integer.parseInt(request.getParameter("cnr_id"));			
 			resultList = transferService.selectDetailConnectorRegister(cnr_id);
 			
 			String strServerIp = resultList.get(0).getCnr_ipadr();
@@ -253,38 +275,6 @@ public class TreeTransferController {
 			param.put("strRotate_interval_ms", Integer.toString(transferTargetVO.getRotate_interval_ms()));
 		
 			cic.kafakConnect_create(serverObj,param);
-
-			String strName="";
-			result = cic.kafakConnect_select(serverObj,strName);
-			for(int i=0; i<result.size(); i++){
-				JSONArray data = (JSONArray)result.get("data");
-				for(int m=0; m<data.size(); m++){
-					JSONObject jsonObj = (JSONObject)data.get(m);
-					
-					JSONObject hp = (JSONObject) jsonObj.get("hp");
-					int rotate_interval_ms = Integer.parseInt((String) hp.get("rotate.interval.ms"));
-					String hadoop_home = (String) hp.get("hadoop.home");
-					String trf_trg_url = (String) hp.get("hdfs.url");
-					String topics = (String) hp.get("topics");
-					int task_max = Integer.parseInt((String) hp.get("tasks.max"));
-					String trf_trg_cnn_nm = (String) hp.get("name");
-					String hadoop_conf_dir = (String) hp.get("hadoop.conf.dir");
-					int flush_size = Integer.parseInt((String) hp.get("flush.size"));
-					String connector_class = (String) hp.get("connector.class");
-					
-					transferTargetVO.setTrf_trg_cnn_nm(trf_trg_cnn_nm);
-					transferTargetVO.setTrf_trg_url(trf_trg_url);
-					transferTargetVO.setConnector_class(connector_class);
-					transferTargetVO.setTask_max(task_max);
-					transferTargetVO.setHadoop_conf_dir(hadoop_conf_dir);
-					transferTargetVO.setHadoop_home(hadoop_home);
-					transferTargetVO.setFlush_size(flush_size);
-					transferTargetVO.setRotate_interval_ms(rotate_interval_ms);
-					
-					treeTransferService.insertTransferTarget(transferTargetVO);
-
-				}							
-			}	
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -304,13 +294,12 @@ public class TreeTransferController {
 		ClientInfoCmmn cic = new ClientInfoCmmn();
 		JSONObject serverObj = new JSONObject();
 		JSONObject param = new JSONObject();
-		JSONObject result = new JSONObject();
 		List<ConnectorVO> resultList = null;
 		try {		
 			// 전송대상 수정 이력 남기기
 			CmmnUtils.saveHistory(request, historyVO);
-//			historyVO.setExe_dtl_cd("DX-T0032_01");
-//			accessHistoryService.insertHistory(historyVO);
+			historyVO.setExe_dtl_cd("DX-T0014_03");
+			accessHistoryService.insertHistory(historyVO);
 			int cnr_id = transferTargetVO.getCnr_id();
 			
 			HttpSession session = request.getSession();
@@ -318,6 +307,8 @@ public class TreeTransferController {
 			transferTargetVO.setFrst_regr_id(usr_id);
 			transferTargetVO.setLst_mdfr_id(usr_id);
 			transferTargetVO.setCnr_id(cnr_id);
+			
+			treeTransferService.updateTransferTarget(transferTargetVO);
 			
 			resultList = transferService.selectDetailConnectorRegister(cnr_id);
 			
@@ -349,39 +340,6 @@ public class TreeTransferController {
 			
 			cic.kafakConnect_update(serverObj,param);
 			
-			//전송대상 전체 삭제
-			treeTransferService.deleteTransferTarget(cnr_id);
-			
-			strName="";
-			result = cic.kafakConnect_select(serverObj,strName);
-			for(int i=0; i<result.size(); i++){
-				JSONArray data = (JSONArray)result.get("data");
-				for(int m=0; m<data.size(); m++){
-					JSONObject jsonObj = (JSONObject)data.get(m);
-					
-					JSONObject hp = (JSONObject) jsonObj.get("hp");
-					int rotate_interval_ms = Integer.parseInt((String) hp.get("rotate.interval.ms"));
-					String hadoop_home = (String) hp.get("hadoop.home");
-					String trf_trg_url = (String) hp.get("hdfs.url");
-					String topics = (String) hp.get("topics");
-					int task_max = Integer.parseInt((String) hp.get("tasks.max"));
-					String trf_trg_cnn_nm = (String) hp.get("name");
-					String hadoop_conf_dir = (String) hp.get("hadoop.conf.dir");
-					int flush_size = Integer.parseInt((String) hp.get("flush.size"));
-					String connector_class = (String) hp.get("connector.class");
-					
-					transferTargetVO.setTrf_trg_cnn_nm(trf_trg_cnn_nm);
-					transferTargetVO.setTrf_trg_url(trf_trg_url);
-					transferTargetVO.setConnector_class(connector_class);
-					transferTargetVO.setTask_max(task_max);
-					transferTargetVO.setHadoop_conf_dir(hadoop_conf_dir);
-					transferTargetVO.setHadoop_home(hadoop_home);
-					transferTargetVO.setFlush_size(flush_size);
-					transferTargetVO.setRotate_interval_ms(rotate_interval_ms);
-					
-					treeTransferService.insertTransferTarget(transferTargetVO);
-				}							
-			}			
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -399,14 +357,13 @@ public class TreeTransferController {
 	public @ResponseBody boolean deleteTransferTarget(@ModelAttribute("transferTargetVO") TransferTargetVO transferTargetVO,HttpServletRequest request, @ModelAttribute("historyVO") HistoryVO historyVO) {
 		ClientInfoCmmn cic = new ClientInfoCmmn();
 		JSONObject serverObj = new JSONObject();
-		JSONObject result = new JSONObject();
 		List<ConnectorVO> resultList = null;
 		
 		try {		
 			// 전송대상 삭제 이력 남기기
 			CmmnUtils.saveHistory(request, historyVO);
-//			historyVO.setExe_dtl_cd("DX-T0032_01");
-//			accessHistoryService.insertHistory(historyVO);
+			historyVO.setExe_dtl_cd("DX-T0014_04");
+			accessHistoryService.insertHistory(historyVO);
 			
 			int cnr_id = Integer.parseInt(request.getParameter("cnr_id"));
 			
@@ -427,44 +384,9 @@ public class TreeTransferController {
 			String[] param = request.getParameter("name").toString().split(",");
 			for (int i = 0; i < param.length; i++) {
 				cic.kafakConnect_delete(serverObj,param[i]);
-			}			
-			
-			//전송대상 전체 삭제
-			treeTransferService.deleteTransferTarget(cnr_id);
-			
-			String strName="";
-			result = cic.kafakConnect_select(serverObj,strName);
-			for(int i=0; i<result.size(); i++){
-				JSONArray data = (JSONArray)result.get("data");
-				for(int m=0; m<data.size(); m++){
-					JSONObject jsonObj = (JSONObject)data.get(m);
-					
-					JSONObject hp = (JSONObject) jsonObj.get("hp");
-					int rotate_interval_ms = Integer.parseInt((String) hp.get("rotate.interval.ms"));
-					String hadoop_home = (String) hp.get("hadoop.home");
-					String trf_trg_url = (String) hp.get("hdfs.url");
-					String topics = (String) hp.get("topics");
-					int task_max = Integer.parseInt((String) hp.get("tasks.max"));
-					String trf_trg_cnn_nm = (String) hp.get("name");
-					String hadoop_conf_dir = (String) hp.get("hadoop.conf.dir");
-					int flush_size = Integer.parseInt((String) hp.get("flush.size"));
-					String connector_class = (String) hp.get("connector.class");
-					
-					transferTargetVO.setTrf_trg_cnn_nm(trf_trg_cnn_nm);
-					transferTargetVO.setTrf_trg_url(trf_trg_url);
-					transferTargetVO.setConnector_class(connector_class);
-					transferTargetVO.setTask_max(task_max);
-					transferTargetVO.setHadoop_conf_dir(hadoop_conf_dir);
-					transferTargetVO.setHadoop_home(hadoop_home);
-					transferTargetVO.setFlush_size(flush_size);
-					transferTargetVO.setRotate_interval_ms(rotate_interval_ms);
-					
-					treeTransferService.insertTransferTarget(transferTargetVO);
-				}							
-			}		
-			
+				treeTransferService.deleteTransferTarget(param[i]);
+			}				
 		return true;
-		
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -546,7 +468,7 @@ public class TreeTransferController {
 	public ModelAndView transferDetail(@ModelAttribute("historyVO") HistoryVO historyVO, HttpServletRequest request) {
 		ModelAndView mv = new ModelAndView();
 		try {
-			// 전송설정 이력 남기기
+			// 전송 관리 이력 남기기
 			CmmnUtils.saveHistory(request, historyVO);
 			historyVO.setExe_dtl_cd("DX-T0017");
 			accessHistoryService.insertHistory(historyVO);
@@ -594,7 +516,7 @@ public class TreeTransferController {
 		List<DbServerVO> resultSet = null;
 		List<TransferDetailMappingVO> result = null;
 		try {
-			// 전송설정 이력 남기기 수정
+			// Database 매핑팝업 이력 남기기 수정
 			CmmnUtils.saveHistory(request, historyVO);
 			historyVO.setExe_dtl_cd("DX-T0018");
 			accessHistoryService.insertHistory(historyVO);
@@ -689,10 +611,10 @@ public class TreeTransferController {
 		JSONObject result = new JSONObject();
 		JSONObject param = new JSONObject();
 		try {
-//			// 사용자 등록 이력 남기기
-//			CmmnUtils.saveHistory(request, historyVO);
-//			historyVO.setExe_dtl_cd("DX-T0032_01");
-//			accessHistoryService.insertHistory(historyVO);
+			// Database 매핑저장 이력 남기기
+			CmmnUtils.saveHistory(request, historyVO);
+			historyVO.setExe_dtl_cd("DX-T0018_01");
+			accessHistoryService.insertHistory(historyVO);
 			
 			HttpSession session = request.getSession();
 			String usr_id = (String)session.getAttribute("usr_id");

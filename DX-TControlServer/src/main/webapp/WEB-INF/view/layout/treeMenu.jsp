@@ -7,7 +7,7 @@
 		function() {	
    			$.ajax({
 				async : false,
-				url : "/selectSampleTreeList.do",
+				url : "/selectSvrList.do",
 			  	data : {},
 				dataType : "json",
 				type : "post",

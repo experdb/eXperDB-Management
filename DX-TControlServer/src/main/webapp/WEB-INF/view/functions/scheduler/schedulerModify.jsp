@@ -2,23 +2,7 @@
     pageEncoding="UTF-8"%>
 
 <script>
-var table = null;
-
-function fn_validation(){
-	var scd_nm = document.getElementById("scd_nm");
-		if (scd_nm.value == "") {
-			   alert("스케줄명을 입력하여 주십시오.");
-			   scd_nm.focus();
-			   return false;
-		}
-		var scd_exp = document.getElementById("scd_exp");
- 		if (scd_exp.value == "") {
-  			   alert("스케줄설명을 입력하여 주십시오.");
-  			 scd_exp.focus();
-  			   return false;
-  		}
- 		return true;
-}
+var scd_id = ${scd_id};
 
 function fn_init(){
 	/* ********************************************************
@@ -54,8 +38,7 @@ function fn_init(){
 		className: "dt-center",
       	defaultContent: "",
         	render: function (data, type, full){
-
- 
+        		
         		var onError ='<select  id="nxt_exe_yn" name="nxt_exe_yn">';
         		if(data.NXT_EXE_YN  == 'Y') {
         			onError +='<option value="y" selected>Y</option>';
@@ -200,6 +183,35 @@ $(window.document).ready(function() {
 	fn_makeHour();
 	fn_makeMin();
 	fn_makeSec();
+
+	
+ 	$.ajax({
+		url : "/selectModifyScheduleList.do",
+		data : {
+			scd_id : scd_id
+		},
+		dataType : "json",
+		type : "post",
+		error : function(xhr, status, error) {
+			alert("실패")
+		},
+		success : function(result) {	
+			document.getElementById('scd_nm').value= result[0].scd_nm;
+			document.getElementById('scd_exp').value= result[0].scd_exp;				
+			document.getElementById('exe_perd_cd').value= result[0].exe_perd_cd;
+			document.getElementById('datepicker1').value= result[0].exe_dt;
+ 			document.getElementById('exe_h').value= result[0].exe_hms.substring(4, 6);
+			document.getElementById('exe_m').value= result[0].exe_hms.substring(2, 4);
+			document.getElementById('exe_s').value= result[0].exe_hms.substring(0, 2);
+			var rowList = [];
+		    for (var i = 0; i <result.length; i++) {
+		        rowList.push(result[i].wrk_id);   
+		  	}		
+		    fn_exe_pred(result[0].exe_dt); 
+		    fn_workAddCallback(JSON.stringify(rowList));
+		}
+	}); 
+	
 });
 
 
@@ -230,11 +242,18 @@ function fn_workDel(){
 /* ********************************************************
  * 실행주기 변경시 이벤트 호출
  ******************************************************** */
-function fn_exe_pred(){
+function fn_exe_pred(week){
 	var exe_perd_cd = $("#exe_perd_cd").val();
 	
 	if(exe_perd_cd == "TC001602"){
 		$("#weekDay").show();
+
+	     var list = $("input:input:checkbox[name='chk']");
+	    for(var i = 0; i < list.length; i++){	    
+	    	if(week.charAt(i)==1){
+	    		list[i].checked = true;
+	    	}   	
+	    } 
 	}else{
 		$("#weekDay").hide();
 	}	
@@ -246,6 +265,10 @@ function fn_exe_pred(){
 	}
 }
 
+
+/* ********************************************************
+ * 실행주기 변경시 이벤트 호출
+ ******************************************************** */
 function fn_workAddCallback(rowList){
 	$.ajax({
 		url : "/selectScheduleWorkList.do",
@@ -264,7 +287,29 @@ function fn_workAddCallback(rowList){
 	});
 }
 
-function fn_insertSchedule(){
+
+
+function fn_scheduleStop(){
+	if (confirm("스케줄을 수정 하시겠습니까?")){
+     	$.ajax({
+    		url : "/scheduleStop.do",
+    		data : {
+    			scd_id : scd_id
+    		},
+    		dataType : "json",
+    		type : "post",
+    		error : function(xhr, status, error) {
+    			alert("실패")
+    		},
+    		success : function(result) {
+    			fn_updateSchedule();
+    		}
+    	});    
+	}
+}
+
+
+function fn_updateSchedule(){
 	var exe_perd_cd = $("#exe_perd_cd").val(); 
 		
 	if(exe_perd_cd == "TC001602"){
@@ -281,8 +326,6 @@ function fn_insertSchedule(){
 	}else if(exe_perd_cd == "TC001605"){
 		var exe_dt = $("#datepicker1").val().replace(/-/gi,'').trim();
 	}	
-
-	if (!fn_validation()) return false;
 	
 	var datas = table.rows().data();
 
@@ -301,10 +344,10 @@ function fn_insertSchedule(){
 		arrmaps.push(tmpmap);	
 		}
 
-	if (confirm("스케줄을 등록 하시겠습니까?")){
 		$.ajax({
-			url : "/insertSchedule.do",
+			url : "/updateSchedule.do",
 			data : {
+				scd_id : scd_id,
 				 scd_nm : $("#scd_nm").val(),
 				 scd_exp : $("#scd_exp").val(),
 				 exe_perd_cd : $("#exe_perd_cd").val(),
@@ -321,34 +364,74 @@ function fn_insertSchedule(){
 				alert("실패")
 			},
 			success : function(result) {
-				alert("스케줄이 등록되었습니다.");
-				location.href='/selectScheduleListView.do' ;
+				if(confirm("수정되었습니다. 스케줄 실행 하시겠습니까?")){
+					fn_scheduleReStart();
+				}else{
+				}
 			}
 		}); 	
-	}else{
-		return false;
-	}
 }
 
+
+function fn_scheduleReStart(){
+	var exe_perd_cd = $("#exe_perd_cd").val(); 
+	
+	if(exe_perd_cd == "TC001602"){
+	    var dayWeek = new Array();
+	    var list = $("input[name='chk']");
+	    for(var i = 0; i < list.length; i++){
+	        if(list[i].checked){ //선택되어 있으면 배열에 값을 저장함
+	        	dayWeek.push(1);
+	        }else{
+	        	dayWeek.push(list[i].value);
+	        }
+	    }	    
+		var exe_dt = dayWeek.toString().replace(/,/gi,'').trim();
+	}else if(exe_perd_cd == "TC001605"){
+		var exe_dt = $("#datepicker1").val().replace(/-/gi,'').trim();
+	}	
+	
+	var row = new Object();
+	
+    row.scd_id= scd_id;
+    row.exe_perd_cd =  $("#exe_perd_cd").val();
+    row.exe_dt = exe_dt;
+    row.exe_hms = $("#exe_s").val()+$("#exe_m").val()+$("#exe_h").val();
+  
+ 	$.ajax({
+		url : "/scheduleReStart.do",
+		data : {
+			sWork : JSON.stringify(row)
+		},
+		dataType : "json",
+		type : "post",
+		error : function(xhr, status, error) {
+			alert("실패")
+		},
+		success : function(result) {
+			location.href='/selectScheduleListView.do' ;
+		}
+	});    
+}
 
 </script>
 
 			<div id="contents">
 				<div class="contents_wrap">
 					<div class="contents_tit">
-						<h4>스케줄 등록화면 <a href="#n"><img src="../images/ico_tit.png" alt="" /></a></h4>
+						<h4>스케줄 등록수정 <a href="#n"><img src="../images/ico_tit.png" alt="" /></a></h4>
 						<div class="location">
 							<ul>
 								<li>Function</li>
 								<li>Scheduler</li>
-								<li class="on">스케줄등록</li>
+								<li class="on">스케줄수정</li>
 							</ul>
 						</div>
 					</div>
 					<div class="contents">
 						<div class="cmm_grp">
 							<div class="btn_type_01">
-								<span class="btn"><button onClick="fn_insertSchedule();">등록</button></span>
+								<span class="btn"><button onClick="fn_scheduleStop();">수정</button></span>
 							</div>
 							<div class="sch_form">
 								<table class="write">
@@ -393,13 +476,13 @@ function fn_insertSchedule(){
 														</select>
 													</span>
 													<span id="weekDay" >
-							                            <input type="checkbox" id="chk" name="chk" value="0">일요일
-							                            <input type="checkbox" id="chk" name="chk" value="0">월요일
-							                            <input type="checkbox" id="chk" name="chk" value="0">화요일
-							                            <input type="checkbox" id="chk" name="chk" value="0">수요일
-							                            <input type="checkbox" id="chk" name="chk" value="0">목요일
-							                            <input type="checkbox" id="chk" name="chk" value="0">금요일
-							                            <input type="checkbox" id="chk" name="chk" value="0">토요일
+							                            <input type="checkbox" id="chk0" name="chk" value="0">일요일
+							                            <input type="checkbox" id="chk1" name="chk" value="0">월요일
+							                            <input type="checkbox" id="chk2" name="chk" value="0">화요일
+							                            <input type="checkbox" id="chk3" name="chk" value="0">수요일
+							                            <input type="checkbox" id="chk4" name="chk" value="0">목요일
+							                            <input type="checkbox" id="chk5" name="chk" value="0">금요일
+							                            <input type="checkbox" id="chk6" name="chk" value="0">토요일
                         							</span>
 													<span id="calendar">
 														<div class="calendar_area">

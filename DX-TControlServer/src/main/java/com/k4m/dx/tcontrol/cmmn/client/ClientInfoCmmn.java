@@ -206,39 +206,40 @@ public class ClientInfoCmmn {
 			System.out.println("ERR_MSG : " + strErrMsg);
 
 			List<Object> selectDBList = (ArrayList<Object>) objList.get(ClientProtocolID.RESULT_DATA);
-
-			for (int i = 1; i < selectDBList.size() - 1; i++) {
-				JSONObject jsonObj = new JSONObject();
-				Object obj = selectDBList.get(i);
-				HashMap hp = (HashMap) obj;
-
-				if (Integer.parseInt((String) hp.get("Set")) != 0) {
-					String Seq = (String) hp.get("Seq");
-					String Set = (String) hp.get("Set");
-					String Type = (String) hp.get("Type");
-					String Database = (String) hp.get("Database");
-					String User = (String) hp.get("User");
-					String Ipadr = (String) hp.get("Ip");
-					String Method = (String) hp.get("Method");
-					String Option = (String) hp.get("Option");
-
-					jsonObj.put("Seq", Seq);
-					jsonObj.put("Set", Set);
-					jsonObj.put("Type", Type);
-					jsonObj.put("Database", Database);
-					jsonObj.put("User", User);
-					jsonObj.put("Ipadr", Ipadr);
-					jsonObj.put("Method", Method);
-					jsonObj.put("Option", Option);
-
-					jsonArray.add(jsonObj);
-					System.out.println("seq : " + Seq + " Set : " + Set + " Type : " + Type + " Database : " + Database
-							+ " User : " + User + " Ip : " + Ipadr + " Method : " + Method + " Option : " + Option);
+			
+			if(selectDBList != null){
+				for (int i = 1; i < selectDBList.size() - 1; i++) {
+					JSONObject jsonObj = new JSONObject();
+					Object obj = selectDBList.get(i);
+					HashMap hp = (HashMap) obj;
+	
+					if (Integer.parseInt((String) hp.get("Set")) != 0) {
+						String Seq = (String) hp.get("Seq");
+						String Set = (String) hp.get("Set");
+						String Type = (String) hp.get("Type");
+						String Database = (String) hp.get("Database");
+						String User = (String) hp.get("User");
+						String Ipadr = (String) hp.get("Ip");
+						String Method = (String) hp.get("Method");
+						String Option = (String) hp.get("Option");
+	
+						jsonObj.put("Seq", Seq);
+						jsonObj.put("Set", Set);
+						jsonObj.put("Type", Type);
+						jsonObj.put("Database", Database);
+						jsonObj.put("User", User);
+						jsonObj.put("Ipadr", Ipadr);
+						jsonObj.put("Method", Method);
+						jsonObj.put("Option", Option);
+	
+						jsonArray.add(jsonObj);
+						System.out.println("seq : " + Seq + " Set : " + Set + " Type : " + Type + " Database : " + Database
+								+ " User : " + User + " Ip : " + Ipadr + " Method : " + Method + " Option : " + Option);
+					}
+	
 				}
-
+				result.put("data", jsonArray);
 			}
-			result.put("data", jsonArray);
-
 			CA.close();
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -562,30 +563,32 @@ public class ClientInfoCmmn {
 			List<Object> selectDBList =(ArrayList<Object>) objList.get(ClientProtocolID.RESULT_DATA);
 			
 			System.out.println("strDxExCode : " + " " + strDxExCode);
-			if(selectDBList.size() > 0) {
-				for(int i=0; i<selectDBList.size(); i++) {
-					JSONObject jsonObj = new JSONObject();
-					
-					Object obj = selectDBList.get(i);
-					
-					HashMap hp = (HashMap) obj;
-					String name = (String) hp.get("name");
-					String hdfs_url = (String) hp.get("hdfs.url");
-					
-					System.out.println(i + " " + hp );
-					System.out.println(i + " name : " + name );
-					System.out.println(i + " hdfs_url : " + hdfs_url );
-					
-					jsonObj.put("hp", hp);
-					jsonObj.put("name", name);
-					jsonObj.put("hdfs_url", hdfs_url);
-					
-					jsonArray.add(jsonObj);
-	
-				}
-				result.put("data", jsonArray);
-			}
+			
+			if(selectDBList != null){
+				if(selectDBList.size() > 0) {
+					for(int i=0; i<selectDBList.size(); i++) {
+						JSONObject jsonObj = new JSONObject();
 						
+						Object obj = selectDBList.get(i);
+						
+						HashMap hp = (HashMap) obj;
+						String name = (String) hp.get("name");
+						String hdfs_url = (String) hp.get("hdfs.url");
+						
+						System.out.println(i + " " + hp );
+						System.out.println(i + " name : " + name );
+						System.out.println(i + " hdfs_url : " + hdfs_url );
+						
+						jsonObj.put("hp", hp);
+						jsonObj.put("name", name);
+						jsonObj.put("hdfs_url", hdfs_url);
+						
+						jsonArray.add(jsonObj);
+		
+					}
+					result.put("data", jsonArray);
+				}
+			}			
 			CA.close();
 		} catch(Exception e) {
 			e.printStackTrace();

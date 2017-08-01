@@ -228,7 +228,11 @@
 			},
 			success : function(result) {
 				table.clear().draw();
-				table.rows.add(result.data).draw();
+				if(result.data == null){
+    				alert("서버상태를 확인해주세요.");
+    			}else{
+					table.rows.add(result.data).draw();
+    			}
 			}
 		}); 	 	
 	}

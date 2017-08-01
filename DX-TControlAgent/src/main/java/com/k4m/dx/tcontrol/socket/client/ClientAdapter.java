@@ -3,6 +3,9 @@ package com.k4m.dx.tcontrol.socket.client;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
@@ -72,6 +75,12 @@ public class ClientAdapter {
 	private JSONObject parseToJsonObj(byte[] recvBuff) throws Exception{
 		JSONParser parser=new JSONParser();
 		JSONObject obj=(JSONObject)parser.parse(new String(recvBuff));
+		return obj;
+	}
+	
+	private JSONObject parseToJsonObj(String recvBuff) throws Exception{
+		JSONParser parser=new JSONParser();
+		JSONObject obj=(JSONObject)parser.parse(recvBuff);
 		return obj;
 	}
 	
@@ -240,9 +249,46 @@ public class ClientAdapter {
 		
 		cc.send(4, bt);
 		
+		
+
+
+		//String strData = cc.receiveMessage();
+		//String strData = cc.receiveMessageData();
 		byte[]	recvBuff = cc.recv(4, false);
+		//JSONObject obj = (JSONObject) cc.recvObject();
+		//String strData = cc.byteArrayOutputStreamReceiveMessage();
 		return parseToJsonObj(recvBuff);
+
 	}
 	
+	public JSONObject dxT015_V(JSONObject jObj) throws Exception{
 
+		byte[] bt = jObj.toString().getBytes();
+		
+		cc.send(4, bt);
+		
+		
+
+
+		//String strData = cc.receiveMessage();
+		//String strData = cc.receiveMessageData();
+		//byte[]	recvBuff = cc.recv(4, false);
+		JSONObject obj = (JSONObject) cc.recvObject();
+		//String strData = cc.byteArrayOutputStreamReceiveMessage();
+		//return parseToJsonObj(strData);
+		return obj;
+	}
+	
+	public void dxT015_DL(JSONObject jObj, HttpServletRequest request, HttpServletResponse response ) throws Exception{
+
+		byte[] bt = jObj.toString().getBytes();
+		
+		cc.send(4, bt);
+		
+		
+		String strFileName = (String) jObj.get(ClientProtocolID.FILE_NAME);
+
+		cc.recvFileDownLoad(strFileName, request, response);
+
+	}
 }

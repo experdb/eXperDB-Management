@@ -21,13 +21,24 @@ public class TreeTransferServiceImpl implements TreeTransferService {
 	private TreeTransferDAO treeTransferDAO;
 
 	@Override
+	public int transferTargetNameCheck(String trf_trg_cnn_nm) throws Exception {
+		return treeTransferDAO.transferTargetNameCheck(trf_trg_cnn_nm);
+	}
+
+	@Override
 	public void insertTransferTarget(TransferTargetVO transferTargetVO) throws Exception {
 		treeTransferDAO.insertTransferTarget(transferTargetVO);
 	}
 
 	@Override
-	public void deleteTransferTarget(int cnr_id) throws Exception {
-		treeTransferDAO.deleteTransferTarget(cnr_id);
+	public void updateTransferTarget(TransferTargetVO transferTargetVO) throws Exception {
+		treeTransferDAO.updateTransferTarget(transferTargetVO);
+
+	}
+
+	@Override
+	public void deleteTransferTarget(String name) throws Exception {
+		treeTransferDAO.deleteTransferTarget(name);
 	}
 
 	@Override

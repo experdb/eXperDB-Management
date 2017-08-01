@@ -27,7 +27,8 @@
 <script type="text/javascript" src="../js/jquery-1.9.1.min.js"></script>
 <script type="text/javascript" src="../js/common.js"></script>
 <script>
-
+	var nmCheck = null;
+	
 	/* Validation */
 	function fn_transferTargetValidation(){
 		var trf_trg_cnn_nm = document.getElementById('trf_trg_cnn_nm');
@@ -56,6 +57,7 @@
 	/*저장버튼 클릭시insert*/
 	function fn_insert() {
 		if (!fn_transferTargetValidation()) return false;
+		if (!confirm("저장하시겠습니까?")) return false;
 			$.ajax({
 				url : '/insertTransferTarget.do',
 				type : 'post',
@@ -85,6 +87,7 @@
 	/*저장버튼 클릭시update*/
 	function fn_update(){
 		if (!fn_transferTargetValidation()) return false;
+		if (!confirm("저장하시겠습니까?")) return false;
 			$.ajax({
 				url : '/updateTransferTarget.do',
 				type : 'post',
@@ -116,12 +119,62 @@
 		if(act=="i"){
 			$("#task_max").val("3");
 			$("#flush_size").val("100");
-			$("#rotate_interval_ms").val("3000");		
+			$("#rotate_interval_ms").val("3000");	
+			
+			document.getElementById("trf_trg_cnn_nm").focus();
+			
+			$("#trf_trg_url").attr("onfocus", "fn_nmCheck_alert();");
+			$("#connector_class").attr("onfocus", "fn_nmCheck_alert();");	
+			$("#task_max").attr("onfocus", "fn_nmCheck_alert();");	
+			$("#hadoop_conf_dir").attr("onfocus", "fn_nmCheck_alert();");	
+			$("#hadoop_home").attr("onfocus", "fn_nmCheck_alert();");	
+			$("#flush_size").attr("onfocus", "fn_nmCheck_alert();");	
+			$("#rotate_interval_ms").attr("onfocus", "fn_nmCheck_alert();");
+			
 		}
 		if(act=="u"){
 			$("#trf_trg_cnn_nm").attr("readonly",true);
 		}
 	})
+	
+	/* Connect명 중복체크*/
+	function fn_nmCheck(){
+		nmCheck = 1;
+		var trf_trg_cnn_nm = document.getElementById("trf_trg_cnn_nm");
+		if (trf_trg_cnn_nm.value == "") {
+			alert("Connect명을 넣어주세요");
+			document.getElementById('trf_trg_cnn_nm').focus();
+			nmCheck = 0;
+			return;
+		}
+		$.ajax({
+			url : '/transferTargetNameCheck.do',
+			type : 'post',
+			data : {
+				trf_trg_cnn_nm : $("#trf_trg_cnn_nm").val()
+			},
+			success : function(result) {
+				if (result == "true") {
+					alert("Connect명을 사용하실 수 있습니다.");
+					document.getElementById("trf_trg_url").focus();
+				} else {
+					alert("중복된 Connect명이 존재합니다.");
+					document.getElementById("trf_trg_cnn_nm").focus();
+					nmCheck = 0;
+				}
+			},
+			error : function(request, status, error) {
+				alert("실패");
+			}
+		});
+	}
+	
+	function fn_nmCheck_alert(){
+		if (nmCheck != 1) {
+			alert("Connect명을 입력한 후 중복 체크를 해주세요");
+			document.getElementById("trf_trg_cnn_nm").focus();
+		}
+	}
 </script>
 </head>
 <body>
@@ -143,7 +196,17 @@
 			<tbody>
 				<tr>
 					<th scope="row" class="ico_t1">Connect명</th>
-					<td><input type="text" class="txt" name="trf_trg_cnn_nm" id="trf_trg_cnn_nm" value="${trf_trg_cnn_nm}" style="width: 500px;"/></td>
+					<td>
+						<c:if test="${act == 'i'}">
+							<input type="text" class="txt" name="trf_trg_cnn_nm" id="trf_trg_cnn_nm" value="${trf_trg_cnn_nm}" style="width: 300px;"/>
+							<span class="btn btnC_01">
+								<button type="button" class= "btn_type_02" onclick="fn_nmCheck()" style="width: 60px; margin-right: -60px; margin-top: 0;">중복체크</button>
+							</span>
+						</c:if>
+						<c:if test="${act == 'u'}">
+							<input type="text" class="txt" name="trf_trg_cnn_nm" id="trf_trg_cnn_nm" value="${trf_trg_cnn_nm}" style="width: 500px;"/>
+						</c:if>
+					</td>
 				</tr>
 				<tr>
 					<th scope="row" class="ico_t1">hdfs.url</th>

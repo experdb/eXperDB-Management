@@ -35,6 +35,7 @@ public class ProtocolID {
 	public static final String COMMAND_CODE_U = "COMMAND_CODE_U"; // U
 	public static final String COMMAND_CODE_D = "COMMAND_CODE_D"; // D
 	public static final String COMMAND_CODE_V = "COMMAND_CODE_V"; // view
+	public static final String COMMAND_CODE_DL = "COMMAND_CODE_DL"; // download
 	
 	public static final String ACCESS_CONTROL_INFO = "ACCESS_CONTROL_INFO";
 	public static final String AC_SEQ = "Seq";

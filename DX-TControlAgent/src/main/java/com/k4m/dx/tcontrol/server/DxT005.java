@@ -1,5 +1,7 @@
 package com.k4m.dx.tcontrol.server;
 
+import java.io.BufferedInputStream;
+import java.io.BufferedOutputStream;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.Socket;
@@ -8,7 +10,10 @@ import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.support.ClassPathXmlApplicationContext;
 
+import com.k4m.dx.tcontrol.db.repository.service.SystemServiceImpl;
 import com.k4m.dx.tcontrol.socket.ProtocolID;
 import com.k4m.dx.tcontrol.socket.SocketCtl;
 import com.k4m.dx.tcontrol.socket.TranCodeType;
@@ -31,7 +36,9 @@ public class DxT005 extends SocketCtl{
 	
 	private static Logger errLogger = LoggerFactory.getLogger("errorToFile");
 	
-	public DxT005(Socket socket, InputStream is, OutputStream	os) {
+	ApplicationContext context;
+	
+	public DxT005(Socket socket, BufferedInputStream is, BufferedOutputStream	os) {
 		this.client = socket;
 		this.is = is;
 		this.os = os;
@@ -45,6 +52,8 @@ public class DxT005 extends SocketCtl{
 
 		JSONArray outputArray = new JSONArray();
 		JSONObject outputObj = new JSONObject();
+		
+		
 		
 		try {
 
@@ -68,6 +77,12 @@ public class DxT005 extends SocketCtl{
 					ie.printStackTrace();
 				}
 				String retVal = r.call();
+				
+				
+				//완료 건 update
+				context = new ClassPathXmlApplicationContext(new String[] {"context-tcontrol.xml"});
+				
+				SystemServiceImpl service = (SystemServiceImpl) context.getBean("SystemService");
 
 				System.out.println("retVal "+(i+1)+" : "+ retVal);
 			}

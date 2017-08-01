@@ -40,7 +40,7 @@ public class RunCommandExec extends Thread {
 			proc.getInputStream().close();
 			proc.getOutputStream().close();
 			proc.waitFor();
-			this.retVal = "OK";
+			this.retVal = "success";
 		}catch(IOException e){
 			System.out.println(e);
 			this.retVal = "IOException";

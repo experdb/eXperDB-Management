@@ -1,4 +1,6 @@
 package com.k4m.dx.tcontrol.socket.client;
+import java.io.BufferedInputStream;
+import java.io.BufferedOutputStream;
 import java.io.IOException;
 import java.net.ConnectException;
 import java.net.Socket;
@@ -14,8 +16,8 @@ public class ClientConnector extends ClientSocketCtl{
 			
 			client.setSoTimeout(timeout * 1000);
 			
-			os		= client.getOutputStream();
-			is		= client.getInputStream();
+			os		= new BufferedOutputStream(client.getOutputStream());
+			is		= new BufferedInputStream(client.getInputStream());
 		}
 	}
 	
@@ -32,8 +34,8 @@ public class ClientConnector extends ClientSocketCtl{
 		
 		client.setSoTimeout(timeout * 1000);
 		
-		os		= client.getOutputStream();
-		is		= client.getInputStream();
+		os		= new BufferedOutputStream(client.getOutputStream());
+		is		= new BufferedInputStream(client.getInputStream());
 	}
 		
 	public void close() {

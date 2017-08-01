@@ -152,8 +152,9 @@
 					alert("사용자아이디를 사용하실 수 있습니다.");
 					document.getElementById("usr_nm").focus();
 				} else {
-					alert("중복된값이 존재합니다.");
+					alert("중복된 사용자아이디가 존재합니다.");
 					document.getElementById("usr_id").focus();
+					idCheck = 0;
 				}
 			},
 			error : function(request, status, error) {

@@ -90,7 +90,7 @@ $(window.document).ready(function() {
 			error : function(xhr, status, error) {
 				alert("실패")
 			},
-			success : function(result) {				
+			success : function(result) {		
 				$("#db_svr_nm").children().remove();
 				$("#db_svr_nm").append("<option value='%'>선택</option>");
 				if(result.length > 0){

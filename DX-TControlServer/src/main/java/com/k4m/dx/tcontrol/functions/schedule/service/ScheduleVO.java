@@ -7,6 +7,7 @@ public class ScheduleVO {
 	private int scd_id;
 	private String scd_nm;
 	private String scd_exp;
+	private String scd_cndt;
 	private String exe_perd_cd;
 	private String exe_dt;
 	private String exe_h;
@@ -19,6 +20,7 @@ public class ScheduleVO {
 	private String frst_reg_dtm;
 	private String lst_mdfr_id;
 	private String lst_mdf_dtm;
+	private String status;
 
 	public int getRownum() {
 		return rownum;
@@ -154,6 +156,22 @@ public class ScheduleVO {
 
 	public void setLst_mdf_dtm(String lst_mdf_dtm) {
 		this.lst_mdf_dtm = lst_mdf_dtm;
+	}
+
+	public String getStatus() {
+		return status;
+	}
+
+	public void setStatus(String status) {
+		this.status = status;
+	}
+
+	public String getScd_cndt() {
+		return scd_cndt;
+	}
+
+	public void setScd_cndt(String scd_cndt) {
+		this.scd_cndt = scd_cndt;
 	}
 
 }

@@ -1,5 +1,7 @@
 package com.k4m.dx.tcontrol.socket.listener;
 
+import java.io.BufferedInputStream;
+import java.io.BufferedOutputStream;
 import java.net.Socket;
 
 import org.json.simple.JSONArray;
@@ -39,8 +41,8 @@ public class DXTcontrolSocketExecute extends SocketCtl implements Runnable {
 	
 	public void run() {
 		try {
-			is = client.getInputStream();
-			os = client.getOutputStream();
+			is = new BufferedInputStream(client.getInputStream());
+			os = new BufferedOutputStream(client.getOutputStream());
 			
 			while(true) {
 				byte[] recvBuff = recv(TotalLengthBit, false);
@@ -152,6 +154,14 @@ public class DXTcontrolSocketExecute extends SocketCtl implements Runnable {
 					
 					DxT015 dxT015 = new DxT015(client, is, os);
 					dxT015.execute(strDX_EX_CODE, jObj);
+
+					break;
+				case TranCodeType.DxT015_DL :
+					
+					socketLogger.info("DxT015_DL : " + TranCodeType.DxT015_DL);
+					
+					DxT015 dxT015_DL = new DxT015(client, is, os);
+					dxT015_DL.execute(strDX_EX_CODE, jObj);
 
 					break;
 				}

@@ -1,16 +1,20 @@
 package com.k4m.dx.tcontrol.functions.transfer.service;
 
 public class TransferVO {
-	private int rownum; //rownum
-	private int idx; //idx
-	private int trf_cng_id; //전송_설정_ID
-	private String trf_svr_nm;//전송_서버_명
-	private String ipadr;//IP주소
-	private int portno;//포트번호
+	private int rownum; // rownum
+	private int idx; // idx
+	private int trf_cng_id;//전송_설정_ID
+	private String kafka_broker_ip;//ZOOKEEPER_IP
+	private int kafka_broker_port;//ZOOKEEPER_PORT
+	private String schema_registry_ip;//SCHEMA_REGISTRY_IP
+	private int schema_registry_port;//SCHEMA_REGISTRY_PORT
+	private String zookeeper_ip;//ZOOKEEPER_IP
+	private int zookeeper_port;//ZOOKEEPER_PORT
+	private String bw_home;//BW_HOME
 	private String frst_regr_id;//최초_등록자_ID
 	private String frst_reg_dtm;//최초_등록_일시
 	private String lst_mdfr_id;//최종_수정자_ID
-	private String lst_mdf_dtm;//최종_수정_일시
+	private String lst_mdf_dtm;;//최초_수정_일시
 	
 	public int getRownum() {
 		return rownum;
@@ -30,23 +34,47 @@ public class TransferVO {
 	public void setTrf_cng_id(int trf_cng_id) {
 		this.trf_cng_id = trf_cng_id;
 	}
-	public String getTrf_svr_nm() {
-		return trf_svr_nm;
+	public String getKafka_broker_ip() {
+		return kafka_broker_ip;
 	}
-	public void setTrf_svr_nm(String trf_svr_nm) {
-		this.trf_svr_nm = trf_svr_nm;
+	public void setKafka_broker_ip(String kafka_broker_ip) {
+		this.kafka_broker_ip = kafka_broker_ip;
 	}
-	public String getIpadr() {
-		return ipadr;
+	public int getKafka_broker_port() {
+		return kafka_broker_port;
 	}
-	public void setIpadr(String ipadr) {
-		this.ipadr = ipadr;
+	public void setKafka_broker_port(int kafka_broker_port) {
+		this.kafka_broker_port = kafka_broker_port;
 	}
-	public int getPortno() {
-		return portno;
+	public String getSchema_registry_ip() {
+		return schema_registry_ip;
 	}
-	public void setPortno(int portno) {
-		this.portno = portno;
+	public void setSchema_registry_ip(String schema_registry_ip) {
+		this.schema_registry_ip = schema_registry_ip;
+	}
+	public int getSchema_registry_port() {
+		return schema_registry_port;
+	}
+	public void setSchema_registry_port(int schema_registry_port) {
+		this.schema_registry_port = schema_registry_port;
+	}
+	public String getZookeeper_ip() {
+		return zookeeper_ip;
+	}
+	public void setZookeeper_ip(String zookeeper_ip) {
+		this.zookeeper_ip = zookeeper_ip;
+	}
+	public int getZookeeper_port() {
+		return zookeeper_port;
+	}
+	public void setZookeeper_port(int zookeeper_port) {
+		this.zookeeper_port = zookeeper_port;
+	}
+	public String getBw_home() {
+		return bw_home;
+	}
+	public void setBw_home(String bw_home) {
+		this.bw_home = bw_home;
 	}
 	public String getFrst_regr_id() {
 		return frst_regr_id;
@@ -73,6 +101,4 @@ public class TransferVO {
 		this.lst_mdf_dtm = lst_mdf_dtm;
 	}
 
-	
-	
 }
