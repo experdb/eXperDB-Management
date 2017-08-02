@@ -35,6 +35,7 @@ import com.k4m.dx.tcontrol.util.RunCommandExec;
 public class DxT005 extends SocketCtl{
 	
 	private static Logger errLogger = LoggerFactory.getLogger("errorToFile");
+	private static Logger socketLogger = LoggerFactory.getLogger("socketLogger");
 	
 	ApplicationContext context;
 	
@@ -49,6 +50,8 @@ public class DxT005 extends SocketCtl{
 		String strErrCode = "";
 		String strErrMsg = "";
 		String strSuccessCode = "0";
+		
+		socketLogger.info("execute(String strDxExCode, JSONArray arrCmd)");
 
 		JSONArray outputArray = new JSONArray();
 		JSONObject outputObj = new JSONObject();
@@ -68,6 +71,12 @@ public class DxT005 extends SocketCtl{
 				String strEXD_ORD = objJob.get(ProtocolID.EXD_ORD).toString();
 				String strNXT_EXD_YN = objJob.get(ProtocolID.NXT_EXD_YN).toString();
 				String strCommand = objJob.get(ProtocolID.REQ_CMD).toString();
+				
+				socketLogger.info(strSCD_ID);
+				socketLogger.info(strWORK_ID);
+				socketLogger.info(strEXD_ORD);
+				socketLogger.info(strNXT_EXD_YN);
+				socketLogger.info(strCommand);
 
 				RunCommandExec r = new RunCommandExec(strCommand);
 				r.start();
@@ -86,9 +95,11 @@ public class DxT005 extends SocketCtl{
 
 				System.out.println("retVal "+(i+1)+" : "+ retVal);
 			}
-			
+			socketLogger.info("send start");
 			outputObj = ResultJSON(outputArray, strDxExCode, strSuccessCode, strErrCode, strErrMsg);
 			send(TotalLengthBit, outputObj.toString().getBytes());
+			
+			socketLogger.info("send end");
 
 		} catch (Exception e) {
 			errLogger.error("DxT005 {} ", e.toString());
