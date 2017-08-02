@@ -66,7 +66,7 @@ public class ScheduleUtl {
 		 	    - STEP 3.4. Scheduler 객체에 JobListener 설정
 		 */
 		EgovBatchListnerUtl egovBatchListenerUtl = new EgovBatchListnerUtl();					// STEP 3.1. JobListener Class 생성
-		egovBatchListenerUtl.setScheduleService(scheduleService);				// STEP 3.3. SchdulResultService 설정
+		egovBatchListenerUtl.setScheduleService(scheduleService);									// STEP 3.3. SchdulResultService 설정
 		scheduler.getListenerManager().addJobListener(egovBatchListenerUtl);						// STEP 3.7. Scheduler 객체에 JobListener 설정
 		
 		
@@ -136,7 +136,7 @@ public class ScheduleUtl {
 		CronTrigger trigger = newTrigger()
 		    .withIdentity("scd_id", String.valueOf(scd_id))
 		    // .withSchedule(cronSchedule(sce.getCronExpression(exe_perd_cd, exe_dt, exe_h, exe_m, exe_s)))
-		    .withSchedule(cronSchedule("0/10 * * * * ?"))
+		    .withSchedule(cronSchedule("* /10 * * * ?"))
 		    .build();	
 		try
 		{
