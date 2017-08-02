@@ -263,7 +263,7 @@ public class TreeTransferController {
 	 * @throws Exception
 	 */
 	@RequestMapping(value = "/insertTransferTarget.do")
-	public @ResponseBody void insertTransferTarget(@ModelAttribute("transferTargetVO") TransferTargetVO transferTargetVO, HttpServletRequest request, @ModelAttribute("historyVO") HistoryVO historyVO) {
+	public @ResponseBody boolean insertTransferTarget(@ModelAttribute("transferTargetVO") TransferTargetVO transferTargetVO, HttpServletRequest request, @ModelAttribute("historyVO") HistoryVO historyVO) {
 		List<ConnectorVO> resultList = null;
 		JSONObject serverObj = new JSONObject();
 		JSONObject param = new JSONObject();
@@ -278,7 +278,6 @@ public class TreeTransferController {
 			String usr_id = (String)session.getAttribute("usr_id");
 			transferTargetVO.setFrst_regr_id(usr_id);
 			transferTargetVO.setLst_mdfr_id(usr_id);
-			treeTransferService.insertTransferTarget(transferTargetVO);
 			
 			int cnr_id = Integer.parseInt(request.getParameter("cnr_id"));			
 			resultList = transferService.selectDetailConnectorRegister(cnr_id);
@@ -297,10 +296,18 @@ public class TreeTransferController {
 			param.put("strFlush_size", Integer.toString(transferTargetVO.getFlush_size()));
 			param.put("strRotate_interval_ms", Integer.toString(transferTargetVO.getRotate_interval_ms()));
 		
-			cic.kafakConnect_create(serverObj,param);
+			Map<String, Object> result =cic.kafakConnect_create(serverObj,param);
+			String strResultCode= (String) result.get("strResultCode");
+			if(strResultCode.equals("0")){
+				treeTransferService.insertTransferTarget(transferTargetVO);
+				return true;
+			}else{
+				return false;
+			}	
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
+		return false;
 	}
 	
 	/**
@@ -313,7 +320,7 @@ public class TreeTransferController {
 	 * @throws Exception
 	 */
 	@RequestMapping(value = "/updateTransferTarget.do")
-	public @ResponseBody void updateTransferTarget(@ModelAttribute("transferTargetVO") TransferTargetVO transferTargetVO, HttpServletRequest request, @ModelAttribute("historyVO") HistoryVO historyVO) {
+	public @ResponseBody boolean updateTransferTarget(@ModelAttribute("transferTargetVO") TransferTargetVO transferTargetVO, HttpServletRequest request, @ModelAttribute("historyVO") HistoryVO historyVO) {
 		ClientInfoCmmn cic = new ClientInfoCmmn();
 		JSONObject serverObj = new JSONObject();
 		JSONObject param = new JSONObject();
@@ -331,8 +338,7 @@ public class TreeTransferController {
 			transferTargetVO.setLst_mdfr_id(usr_id);
 			transferTargetVO.setCnr_id(cnr_id);
 			
-			treeTransferService.updateTransferTarget(transferTargetVO);
-			
+		
 			resultList = transferService.selectDetailConnectorRegister(cnr_id);
 			
 			String strServerIp = resultList.get(0).getCnr_ipadr();
@@ -361,11 +367,18 @@ public class TreeTransferController {
 			param.put("strFlush_size", strFlush_size);
 			param.put("strRotate_interval_ms", strRotate_interval_ms);
 			
-			cic.kafakConnect_update(serverObj,param);
-			
+			Map<String, Object> result =cic.kafakConnect_update(serverObj,param);
+			String strResultCode= (String) result.get("strResultCode");
+			if(strResultCode.equals("0")){
+				treeTransferService.updateTransferTarget(transferTargetVO);
+				return true;
+			}else{
+				return false;
+			}				
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
+		return false;
 	}
 	
 	/**
@@ -406,17 +419,22 @@ public class TreeTransferController {
 
 			String[] param = request.getParameter("name").toString().split(",");
 			for (int i = 0; i < param.length; i++) {
-				cic.kafakConnect_delete(serverObj,param[i]);
-				String trf_trg_mpp_id = treeTransferService.selectTransfermappid(param[i]);
-				if(trf_trg_mpp_id!=null){
-					/*전송대상매핑관계,전송매핑테이블내역 삭제*/
-					treeTransferService.deleteTransferRelation(Integer.parseInt(trf_trg_mpp_id));
-					treeTransferService.deleteTransferMapping(Integer.parseInt(trf_trg_mpp_id));
-				}
-				/*전송대상설정정보 삭제*/
-				treeTransferService.deleteTransferTarget(param[i]);
+				Map<String, Object> result = cic.kafakConnect_delete(serverObj,param[i]);
+				String strResultCode= (String) result.get("strResultCode");
+				if(strResultCode.equals("0")){
+					String trf_trg_mpp_id = treeTransferService.selectTransfermappid(param[i]);
+					if(trf_trg_mpp_id!=null){
+						/*전송대상매핑관계,전송매핑테이블내역 삭제*/
+						treeTransferService.deleteTransferRelation(Integer.parseInt(trf_trg_mpp_id));
+						treeTransferService.deleteTransferMapping(Integer.parseInt(trf_trg_mpp_id));
+					}
+					/*전송대상설정정보 삭제*/
+					treeTransferService.deleteTransferTarget(param[i]);
+					return true;
+				}else{
+					return false;
+				}					
 			}				
-		return true;
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

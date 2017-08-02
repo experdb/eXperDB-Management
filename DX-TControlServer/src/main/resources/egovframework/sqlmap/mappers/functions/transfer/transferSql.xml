@@ -138,17 +138,7 @@
 		FROM T_CNR_I
 		WHERE cnr_id = #{cnr_id}
 	 </select>
-	 
-	<delete id="deleteConnectorRegister" parameterType="int">
-		/**
-		* Query ID : deleteConnectorRegister
-		* Description : Connector 삭제
-		* Author : 김주영
-		**/
-		DELETE FROM T_CNR_I
-		WHERE cnr_id=#{cnr_id}
-	</delete>
-		
+	 	
 	<insert id="insertConnectorRegister" parameterType="connectorVO">
 		/**
 		* Query ID : insertConnectorRegister
@@ -195,5 +185,57 @@
 		, LST_MDF_DTM = clock_timestamp()
 		WHERE CNR_ID = #{cnr_id}			
 	</update>
+	
+	<delete id="deleteConnectorRegister" parameterType="int">
+		/**
+		* Query ID : deleteConnectorRegister
+		* Description : Connector 삭제
+		* Author : 김주영
+		**/
+		DELETE FROM T_CNR_I
+		WHERE CNR_ID=#{cnr_id}
+	</delete>
+	
+	<delete id="deleteTransferInfo" parameterType="int">
+		/**
+		* Query ID : deleteTransferInfo
+		* Description : 전송대상설정정보 삭제
+		* Author : 김주영
+		**/
+		DELETE FROM T_TRFTRGCNG_I
+		WHERE CNR_ID=#{cnr_id}
+	</delete>
+	
+	<select id="selectTrftrgmppid" parameterType="int" resultType="transferMappingVO">
+		/**
+		* Query ID : selectTrftrgmppid
+		* Description : trf_trg_mpp_id 조회
+		* Author : 김주영
+		**/
+		SELECT TRF_TRG_MPP_ID
+		FROM T_TRFTRGMPP_R
+		WHERE CNR_ID =#{cnr_id}
+		
+	</select>
+	
+	<delete id="deleteTransferRelation" parameterType="int">
+		/**
+		* Query ID : deleteTransferRelation
+		* Description : 전송대상매핑관계 삭제
+		* Author : 김주영
+		**/
+		DELETE FROM T_TRFTRGMPP_R
+		WHERE CNR_ID=#{cnr_id}
+	</delete>
+	
+	<delete id="deleteTransferMapping" parameterType="int">
+		/**
+		* Query ID : deleteTransferMapping
+		* Description : 전송매핑테이블 삭제
+		* Author : 김주영
+		**/
+		DELETE FROM T_TRFMPPTB_L
+		WHERE TRF_TRG_MPP_ID=#{trf_trg_mpp_id}
+	</delete>
 	
 </mapper>

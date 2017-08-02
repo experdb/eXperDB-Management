@@ -92,6 +92,7 @@
 	function fn_insert() {
 		if (!fn_connectorValidation()) return false;
 		if(checkConnection=='success'){
+			if (!confirm("저장하시겠습니까?")) return false;
 			$.ajax({
 				url : '/insertConnectorRegister.do',
 				type : 'post',
@@ -102,7 +103,7 @@
 					cnr_cnn_tp_cd : $("#cnr_cnn_tp_cd").val()
 				},
 				success : function(result) {
-					alert("등록하였습니다.");
+					alert("저장하였습니다.");
 					opener.location.reload();
 					window.close();
 				},
@@ -111,7 +112,7 @@
 				}
 			});
 		}else{
-			alert("연결테스트해주세용");
+			alert("연결테스트를 해주세요.");
 		}
 	}
 
@@ -119,6 +120,7 @@
 	function fn_update() {
 		if (!fn_connectorValidation()) return false;
 		if(checkConnection=='success'){
+			if (!confirm("수정하시겠습니까?")) return false;
 			$.ajax({
 				url : '/updateConnectorRegister.do',
 				type : 'post',
@@ -139,17 +141,15 @@
 				}
 			});
 		}else{
-			alert("연결테스트해주세용");
+			alert("연결테스트를 해주세요.");
 		}
 	}
 
 </script>
 <body>
 	<div class="pop-container">
-		<form name="insertConnectorRegister" id="insertConnectorRegister"
-			method="post">
-			<input type="hidden" name="cnr_id" id="cnr_id" value="${cnr_id}">
 			<div class="pop_cts">
+				<input type="hidden" name="cnr_id" id="cnr_id" value="${cnr_id}">
 				<p class="tit">
 					<c:if test="${act == 'i'}">Kafka-Connector 등록하기</c:if>
 					<c:if test="${act == 'u'}">Kafka-Connector 수정하기</c:if>
@@ -176,7 +176,7 @@
 							<th scope="row" class="ico_t1">연결유형(*)</th>
 							<td>
 								<select class="select" name="cnr_cnn_tp_cd" id="cnr_cnn_tp_cd">
-									<option value="HDFS">HDFS</option>
+									<option value="HDFS" ${cnr_cnn_tp_cd == 'HDFS' ? 'selected="selected"' : ''}>HDFS</option>
 								</select>
 							</td>
 							<th scope="row" class="ico_t1">Port(*)</th>
@@ -196,8 +196,7 @@
 					</span> 
 					<a href="#n" class="btn" onclick="window.close();"><span>취소</span></a>
 				</div>
-			</div>
-		</form>
+		</div>
 	</div>
 	<!-- //pop-container -->
 
