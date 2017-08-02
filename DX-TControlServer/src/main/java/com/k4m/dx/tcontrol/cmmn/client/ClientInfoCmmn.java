@@ -644,8 +644,10 @@ public class ClientInfoCmmn {
 		return result;
 	}
 	
+	
 	//14.kafka connect 등록(kafakConnect_create)
-	public void kafakConnect_create(JSONObject serverObj,JSONObject param) {
+	public Map<String, Object> kafakConnect_create(JSONObject serverObj,JSONObject param) {
+		Map<String, Object> result = new HashMap<String, Object>();
 		try {
 
 			String strName = (String) param.get("strName");
@@ -693,12 +695,18 @@ public class ClientInfoCmmn {
 			System.out.println("ERR_MSG : " +  strErrMsg);
 				
 			CA.close();
+			
+			result.put("strResultCode", strResultCode);
+			return result;
 		} catch(Exception e) {
 			e.printStackTrace();
 		}
+		return result;
 	}
+	
 	//14.kafka connect 수정(kafakConnect_update)
-	public void kafakConnect_update(JSONObject serverObj,JSONObject param) {
+	public Map<String, Object> kafakConnect_update(JSONObject serverObj,JSONObject param) {
+		Map<String, Object> result = new HashMap<String, Object>();
 		try {
 	
 			String strName = (String) param.get("strName");
@@ -747,17 +755,21 @@ public class ClientInfoCmmn {
 			System.out.println("RESULT_CODE : " +  strResultCode);
 			System.out.println("ERR_CODE : " +  strErrCode);
 			System.out.println("ERR_MSG : " +  strErrMsg);
-		
-				
+			
 			CA.close();
+			
+			result.put("strResultCode", strResultCode);
+			return result;
 		} catch(Exception e) {
 			e.printStackTrace();
 		}
+		return result;
 	}
 	
 	
 	//14.kafka connect 삭제(kafakConnect_delete)
-	public void kafakConnect_delete(JSONObject serverObj,String strName) {
+	public Map<String, Object> kafakConnect_delete(JSONObject serverObj,String strName) {
+		Map<String, Object> result = new HashMap<String, Object>();
 		try {
 			JSONObject connectorInfoObj = new JSONObject();
 			
@@ -785,8 +797,12 @@ public class ClientInfoCmmn {
 			System.out.println("ERR_MSG : " +  strErrMsg);
 				
 			CA.close();
+			
+			result.put("strResultCode", strResultCode);
+			return result;
 		} catch(Exception e) {
 			e.printStackTrace();
 		}
+		return result;
 	}
 }

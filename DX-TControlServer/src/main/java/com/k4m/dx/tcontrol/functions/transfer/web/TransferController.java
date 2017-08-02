@@ -20,6 +20,7 @@ import com.k4m.dx.tcontrol.common.service.HistoryVO;
 import com.k4m.dx.tcontrol.functions.transfer.service.ConnectorVO;
 import com.k4m.dx.tcontrol.functions.transfer.service.TransferService;
 import com.k4m.dx.tcontrol.functions.transfer.service.TransferVO;
+import com.k4m.dx.tcontrol.tree.transfer.service.TransferMappingVO;
 
 /**
  * Transfer 컨트롤러 클래스를 정의한다.
@@ -328,7 +329,20 @@ public class TransferController {
 		try {
 			String[] param = request.getParameter("cnr_id").toString().split(",");
 			for (int i = 0; i < param.length; i++) {
+				/*1. 커넥터정보 삭제*/
 				transferService.deleteConnectorRegister(Integer.parseInt(param[i]));
+				/*2. 전송대상설정정보 삭제*/
+				transferService.deleteTransferInfo(Integer.parseInt(param[i]));
+				/*TODO 3. trf_trg_mpp_id조회 후, 전송대상매핑관계 삭제 */
+				List<TransferMappingVO> result = transferService.selectTrftrgmppid(Integer.parseInt(param[i]));
+				transferService.deleteTransferRelation(Integer.parseInt(param[i]));
+				/*TODO 4. 전송매핑테이블 삭제*/
+				if(result!=null){
+					for(int j=0; j<result.size(); j++){
+						System.out.println("매핑된 테이블정보가 있어요! trf_trg_mpp_id = "+result.get(j).getTrf_trg_mpp_id());
+						transferService.deleteTransferMapping(result.get(j).getTrf_trg_mpp_id());
+					}
+				}		
 			}
 
 			// Connector삭제 이력 남기기
