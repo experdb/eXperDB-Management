@@ -1,6 +1,9 @@
 package com.k4m.dx.tcontrol.functions.schedule;
 
 import java.io.UnsupportedEncodingException;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
 import java.util.Map;
 
@@ -11,16 +14,16 @@ import org.quartz.JobExecutionException;
 import org.springframework.beans.factory.config.AutowireCapableBeanFactory;
 import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
-
-import com.k4m.dx.tcontrol.admin.dbserverManager.service.DbServerManagerService;
-import com.k4m.dx.tcontrol.admin.dbserverManager.service.DbServerVO;
 import com.k4m.dx.tcontrol.cmmn.AES256;
 import com.k4m.dx.tcontrol.cmmn.AES256_KEY;
+import com.k4m.dx.tcontrol.cmmn.client.ClientInfoCmmn;
 import com.k4m.dx.tcontrol.functions.schedule.service.ScheduleService;
 
 public class ScheduleQuartzJob implements Job{
 
 	private ConfigurableApplicationContext context;
+	
+	ArrayList<String> CMD = new ArrayList<String>();
 	
 	/**
 	 * 1. 스케줄ID를 가져옴
@@ -31,7 +34,7 @@ public class ScheduleQuartzJob implements Job{
 	 */
 	@Override
 	public void execute(JobExecutionContext jobContext) throws JobExecutionException {
-		
+
 		 System.out.println(">>>>>>>>>>>>>>>> Schedule Start >>>>>>>>>>>>>");
 
 			if(context != null && context.isActive())
@@ -40,6 +43,7 @@ public class ScheduleQuartzJob implements Job{
 			}
 			
 		try{
+			
 			List<Map<String, Object>> resultWork = null;
 			List<Map<String, Object>> resultDbconn = null;
 			List<Map<String, Object>> addOption = null;
@@ -87,16 +91,14 @@ public class ScheduleQuartzJob implements Job{
 				// 백업 내용이 DUMP 백업일경우 
 				if(resultWork.get(i).get("bck_bsn_dscd").equals("TC000202")){
 					String strCmd = dumpBackupMakeCmd(resultDbconn, resultWork, addOption, addObject, i);	
-					
-					//AGENT 호출
-					System.out.println("명령어 생성 결과 = " +strCmd);
+					CMD.add(strCmd);
 				// 백업 내용이 RMAN 백업일경우	
 				}else{
-					rmanBackupMakeCmd(resultWork);
+					String rmanCmd = rmanBackupMakeCmd(resultWork, i);		
+					CMD.add(rmanCmd);
 				}
-				
 			}			
-			System.out.println(resultWork);
+			agentCall(resultWork, CMD);
 		}catch(Exception e){
 			e.printStackTrace();
 		}
@@ -126,7 +128,11 @@ public class ScheduleQuartzJob implements Job{
 	@SuppressWarnings("unused")
 	private String dumpBackupMakeCmd(List<Map<String, Object>> resultDbconn, List<Map<String, Object>> resultWork, List<Map<String, Object>> addOption, List<Map<String, Object>> addObject, int i) {
 		
+		Calendar calendar = Calendar.getInstance();
 		
+        java.util.Date date = calendar.getTime();
+        String today = (new SimpleDateFormat("yyyyMMddHHmmss").format(date));
+        
 		String strCmd = "pg_dump";
 		String strLast = "";
 		
@@ -146,20 +152,26 @@ public class ScheduleQuartzJob implements Job{
 			}
 			
 			//2. 기본옵션 명령어 생성
-				strLast += resultWork.get(i).get("db_nm")+"  > "+resultWork.get(i).get("save_pth") ;
+				strLast +=" "+resultWork.get(i).get("db_nm")+"  > "+resultWork.get(i).get("save_pth")+"/"+resultWork.get(i).get("bck_filenm")+"_"+today;
 				
-				//2.2 파일포멧에 따른 명령어 생성
-				strCmd += " --format="+resultWork.get(i).get("file_fmt_cd_nm");
-				//2.3 파일포멧이 tar일경우 압축률 명령어 생성
-				if(resultWork.get(i).get("file_fmt_cd_nm") == "tar"){
-					strCmd += " --compress="+resultWork.get(i).get("cprt");
+				if(resultWork.get(i).get("file_fmt_cd_nm") != null || resultWork.get(i).get("file_fmt_cd_nm") != ""){
+					//2.2 파일포멧에 따른 명령어 생성
+					strCmd += " --format="+resultWork.get(i).get("file_fmt_cd_nm");
+					//2.3 파일포멧이 tar일경우 압축률 명령어 생성
+					if(resultWork.get(i).get("file_fmt_cd_nm") == "tar"){
+						strCmd += " --compress="+resultWork.get(i).get("cprt");
+					}
 				}
 				
 				//2.4 인코딩 방식 명령어 생성
-				strCmd +=" --encoding="+resultWork.get(i).get("incd");
-				//2.5 rolename 명령어 생성
-				strCmd +=" --role="+resultWork.get(i).get("usr_role_nm");
-
+				if(resultWork.get(i).get("incd") != null || resultWork.get(i).get("incd") != ""){
+					strCmd +=" --encoding="+resultWork.get(i).get("incd");
+				}
+				
+				//2.5 rolename 명령어 생성		
+				if(!resultWork.get(i).get("usr_role_nm").equals("")){
+					strCmd +=" --role="+resultWork.get(i).get("usr_role_nm");
+				}
 				
 			//3. 부가옵션 명령어 생성
 			for(int j =0; j<addOption.size(); j++){
@@ -218,13 +230,17 @@ public class ScheduleQuartzJob implements Job{
 				}
 			}
 			
-			strCmd += " --table=";
-			//4. 오브젝트옵션 명령어 생성
-			for(int n=0; n<addObject.size(); n++){				
-				strCmd+=addObject.get(n).get("obj_nm")+" ";
-			}
+			if(addObject.size() != 0){
+				//4. 오브젝트옵션 명령어 생성
+				for(int n=0; n<addObject.size(); n++){		
+					if(addObject.get(n).get("obj_nm").equals(null) || addObject.get(n).get("obj_nm").equals("")){
+						strCmd+=" -n "+addObject.get(n).get("scm_nm");
+					}else{
+						strCmd+=" -t "+addObject.get(n).get("obj_nm");
+					}
+				}
+			}			
 			strCmd += strLast;
-			
 		} catch (UnsupportedEncodingException e) {			
 			e.printStackTrace();
 		}		
@@ -233,10 +249,46 @@ public class ScheduleQuartzJob implements Job{
 
 	
 	
-	private String rmanBackupMakeCmd(List<Map<String, Object>> resultWork) {
-		String rmanCmd = "pg_rman ";
+	private String rmanBackupMakeCmd(List<Map<String, Object>> resultWork, int i) {
+		String rmanCmd = "pg_rman backup";
+
+		//데이터베이스 클러스터의 절대경로
+		rmanCmd += " --pgdata="+resultWork.get(i).get("data_pth").toString();
 		
+		//백업 카탈로그의 절대경로
+		rmanCmd += " --backup-path="+resultWork.get(i).get("bck_pth").toString();
 		
-		return null;	
+		//백업모드
+		if(resultWork.get(i).get("bck_opt_cd").toString().equals("TC000301")){
+			rmanCmd += " --backup-mode=full";
+		}else if(resultWork.get(i).get("bck_opt_cd").toString().equals("TC000302")){
+			rmanCmd += " --backup-mode=incremental";
+		}else{
+			rmanCmd += " --backup-mode=archive";
+		}
+		
+		if(resultWork.get(i).get("cps_yn").toString().equals("Y")){
+			rmanCmd += " --with-serverlog";
+		}
+		
+		if(resultWork.get(i).get("log_file_bck_yn").toString().equals("Y")){
+			rmanCmd += " --compress-data";
+		}
+				
+		rmanCmd += " --keep-data-generations="+resultWork.get(i).get("bck_mtn_ecnt");
+		rmanCmd += " --keep-data-days="+resultWork.get(i).get("file_stg_dcnt");
+		rmanCmd += " --keep-arclog-files="+resultWork.get(i).get("acv_file_mtncnt");
+		rmanCmd += " --keep-arclog-days="+resultWork.get(i).get("acv_file_stgdt");
+		rmanCmd += " --keep-srvlog-files="+resultWork.get(i).get("log_file_mtn_ecnt");
+		rmanCmd += " --keep-srvlog-days="+resultWork.get(i).get("log_file_stg_dcnt");
+
+		return rmanCmd;	
+	}
+	
+	
+	public void agentCall(List<Map<String, Object>> resultWork, ArrayList<String> CMD) {
+		ClientInfoCmmn clc = new ClientInfoCmmn();
+		
+		clc.db_backup(resultWork, CMD);
 	}
 }
