@@ -35,6 +35,24 @@ $(window.document).ready(function() {
 	}
 	
 
+	// Ajax 파일 다운로드
+	jQuery.download = function(url, data, method){
+	    // url과 data를 입력받음
+	    if( url && data ){ 
+	        // data 는  string 또는 array/object 를 파라미터로 받는다.
+	        data = typeof data == 'string' ? data : jQuery.param(data);
+	        // 파라미터를 form의  input으로 만든다.
+	        var inputs = '';
+	        jQuery.each(data.split('&'), function(){ 
+	            var pair = this.split('=');
+	            inputs+='<input type="hidden" name="'+ pair[0] +'" value="'+ pair[1] +'" />'; 
+	        });
+	        // request를 보낸다.
+	        jQuery('<form action="'+ url +'" method="'+ (method||'post') +'">'+inputs+'</form>')
+	        .appendTo('body').submit().remove();
+	    };
+	};
+	
 });
 
 $(function() {
@@ -73,16 +91,61 @@ $(function() {
 		return;
 	}
 	
-	function fn_openLogView(file_name) {
+	function fn_openLogView(file_name, file_size) {
 		var db_svr_id = $("#db_svr_id").val();
-
 		var param = "db_svr_id=" + db_svr_id + "&file_name=" + file_name;
 		
-		//window.open("/audit/auditLogView.do?" + param  ,"popLogView","location=no,menubar=no,resizable=yes,scrollbars=no,status=no,width=915,height=800,top=0,left=0");
-		window.open("/audit/auditLogDownload.do?" + param  ,"popLogView","location=no,menubar=no,resizable=yes,scrollbars=no,status=no,width=915,height=800,top=0,left=0");
+		var v_size = file_size.replace("Mb", "");
+		
+		if(v_size >60) {
+			if(confirm("다운로드 후 확인가능합니다. 다운로드하시겠습니까?")) {
+				fn_download(file_name, file_size);
+			}
+		} else {
+			window.open("/audit/auditLogView.do?" + param  ,"popLogView","location=no,menubar=no,resizable=yes,scrollbars=no,status=no,width=915,height=800,top=0,left=0");
+		}
+		
+	}
+	
+	function fn_download(file_name, file_size) {
+		$("#auditloading").show();
+		var db_svr_id = $("#db_svr_id").val();
+		var param = "db_svr_id=" + db_svr_id + "&file_name=" + file_name;
+
+		var v_size = file_size.replace("Mb", "");
+		var v_time = 1800 * v_size;
+		
+		fn_buttonState(true);
+		//$("#btnDownload").prop("disabled", true);
+
+		//$.download('/audit/auditLogDownload.do', param,'post' );
+		setTimeout("fn_progressClose()", v_time);
+		
+
+		var form = document.auditForm;
+		form.target = "frmDownload";
+		form.action = "/audit/auditLogDownload.do?" + param ;
+		form.submit();
+		return;
+
+	}
+	
+	function fn_buttonState(blnState) {
+		var btnLength = document.all("btnDownload").length;
+		for(i=0; i<btnLength; i++) {
+			document.all("btnDownload")[i].disabled = blnState;
+		}
+		
+	}
+	
+	function fn_progressClose() {
+		$("#auditloading").hide();
+		fn_buttonState(false);
+		//$("#btnDownload").prop("disabled", false);
 	}
 </script>
 
+<iframe id="frmDownload" name="frmDownload" width="0px" height="0px"></iframe>
 <form name="auditForm" id="auditForm" method="post" onSubmit="return false;">
 <input type="hidden" id="db_svr_id" name="db_svr_id" value="${db_svr_id}">
 			<div id="contents">
@@ -117,7 +180,7 @@ $(function() {
 
 										<tr>
 											<th scope="row" class="t10">작업기간</th>
-											<td colspan="5">
+											<td colspan="4">
 												<div class="calendar_area">
 													<a href="#n" class="calendar_btn">달력열기</a>
 													<input type="text" class="calendar" id="from" name="start_date" title="기간검색 시작날짜" readonly="readonly" />
@@ -125,6 +188,11 @@ $(function() {
 													<a href="#n" class="calendar_btn">달력열기</a>
 													<input type="text" class="calendar" id="to" name="end_date" title="기간검색 종료날짜" readonly="readonly" />
 												</div>
+											</td>
+											<td>
+	<div id="auditloading" style="display:none">
+			<img src="/images/spin.gif" alt="" /> 다운로드 중입니다... ......... .. <a href="javascript:fn_progressClose();">확인</a>
+	</div>
 											</td>
 										</tr>
 									</tbody>
@@ -135,9 +203,10 @@ $(function() {
 									<caption>Rman 백업관리 이력화면 리스트</caption>
 									<colgroup>
 										<col style="width:5%;" />
-										<col style="width:60%;" />
+										<col style="width:50%;" />
 										<col style="width:15%;" />
 										<col style="width:20%;" />
+										<col style="width:10%;" />
 
 									</colgroup>
 									<thead>
@@ -146,6 +215,7 @@ $(function() {
 											<th scope="col">로그파일명</th>
 											<th scope="col">Size</th>
 											<th scope="col">수정일시</th>
+											<th scope="col">다운로드</th>
 										</tr>
 									</thead>
 									<tbody>
@@ -156,15 +226,17 @@ $(function() {
 											<td></td>
 											<td></td>
 											<td></td>
+											<td></td>
 											
 										</tr>
 									</c:if>
 									<c:forEach var="log" items="${logFileList}" varStatus="status">
 										<tr>
 											<td>${status.count}</td>
-											<td><a href="javascript:fn_openLogView('${log.file_name}')">${log.file_name}</a></td>
+											<td><a href="javascript:fn_openLogView('${log.file_name}', '${log.file_size}')">${log.file_name}</a></td>
 											<td>${log.file_size}</td>
 											<td>${log.file_lastmodified}</td>
+											<td><span class="btn"><button id="btnDownload" name="btnDownload" onClick="javascript:fn_download('${log.file_name}', '${log.file_size}');">다운로드</button></span></td>
 											
 										</tr>
 									</c:forEach>

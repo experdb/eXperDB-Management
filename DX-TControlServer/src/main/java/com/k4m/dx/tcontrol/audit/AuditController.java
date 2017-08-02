@@ -303,7 +303,7 @@ public class AuditController {
 			
 			DbServerVO dbServerVO = (DbServerVO)  cmmnServerInfoService.selectServerInfo(schDbServerVO);
 			
-			String strDirectory = dbServerVO.getIstpath() + "pg_log/";
+			String strDirectory = dbServerVO.getIstpath() + "/data/pg_log/";
 			
 			JSONObject serverObj = new JSONObject();
 			
@@ -388,7 +388,7 @@ public class AuditController {
 			
 			DbServerVO dbServerVO = (DbServerVO)  cmmnServerInfoService.selectServerInfo(schDbServerVO);
 			
-			String strDirectory = dbServerVO.getIstpath();
+			String strDirectory = dbServerVO.getIstpath()+ "/data/pg_log/";
 			
 			JSONObject serverObj = new JSONObject();
 			
@@ -467,7 +467,7 @@ public class AuditController {
 			
 			DbServerVO dbServerVO = (DbServerVO)  cmmnServerInfoService.selectServerInfo(schDbServerVO);
 			
-			String strDirectory = dbServerVO.getIstpath();
+			String strDirectory = dbServerVO.getIstpath()+ "/data/pg_log/";
 			String strFileName = request.getParameter("file_name");
 			
 			JSONObject serverObj = new JSONObject();
@@ -521,9 +521,8 @@ public class AuditController {
 		return mv;
 	}
 	
-	
 	@RequestMapping(value = "/audit/auditLogDownload.do")
-	public ModelAndView auditLogDownload( HttpServletRequest request, HttpServletResponse response) throws Exception{
+	public void auditLogDownload( HttpServletRequest request, HttpServletResponse response) throws Exception{
 		ModelAndView mv = new ModelAndView();
 
 		//mv.addObject("db_svr_id",workVO.getDb_svr_id());
@@ -541,8 +540,8 @@ public class AuditController {
 			
 			DbServerVO dbServerVO = (DbServerVO)  cmmnServerInfoService.selectServerInfo(schDbServerVO);
 			
-			String strDirectory = dbServerVO.getIstpath();
-			strDirectory = "C:\\k4m\\01-1. DX 제폼개발\\04. 시험\\pg_log\\";
+			String strDirectory = dbServerVO.getIstpath()+ "/data/pg_log/";
+			//strDirectory = "C:\\k4m\\01-1. DX 제폼개발\\04. 시험\\pg_log\\";
 			
 			String strFileName = request.getParameter("file_name");
 			
@@ -572,13 +571,16 @@ public class AuditController {
 			
 			CA.dxT015_DL(jObj, request, response);
 			
-			CA.close();
+			//System.out.println("완료===");
+			
+			//CA.close();
 			
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		mv.setViewName("popup/auditLogView");
-		return mv;
+		//return "redirect:/popup/auditLogDownload";
+		//mv.setViewName("popup/auditLogDownload");
+		//return mv;
 	}
 	
 	public static void main(String[] args) throws Exception {

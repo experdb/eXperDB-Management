@@ -38,8 +38,8 @@ public class ClientTester {
 		
 		ClientTester clientTester = new ClientTester();
 		
-		//String Ip = "222.110.153.162";
-		String Ip = "127.0.0.1";
+		String Ip = "222.110.153.162";
+		 Ip = "127.0.0.1";
 		int port = 9001;
 		try {
 			
@@ -47,7 +47,7 @@ public class ClientTester {
 			//clientTester.dxT002(Ip, port);
 			//clientTester.dxT003(Ip, port);
 			//clientTester.dxT004(Ip, port);
-			//clientTester.dxT005(Ip, port);
+			clientTester.dxT005(Ip, port);
 			//clientTester.dxT006_C(Ip, port);
 			//clientTester.dxT006_R(Ip, port);
 			//clientTester.dxT006_U(Ip, port);
@@ -69,7 +69,7 @@ public class ClientTester {
 			
 			//clientTester.dxT015_R(Ip, port);
 			//clientTester.dxT015_V(Ip, port);
-			clientTester.dxT015_DL(Ip, port);
+			//clientTester.dxT015_DL(Ip, port);
 			
 			
 		} catch(Exception e) {
@@ -285,8 +285,14 @@ public class ClientTester {
 			arrCmd.add(1, objJob_02);
 			arrCmd.add(2, objJob_03);
 
+			JSONObject serverObj = new JSONObject();
+			
+			serverObj.put(ClientProtocolID.SERVER_NAME, "222.110.153.162");
+			serverObj.put(ClientProtocolID.SERVER_IP, "222.110.153.162");
+			serverObj.put(ClientProtocolID.SERVER_PORT, "6432");
 			
 			reqJObj.put(ClientProtocolID.DX_EX_CODE, ClientTranCodeType.DxT005);
+			reqJObj.put(ClientProtocolID.SERVER_INFO, serverObj);
 			reqJObj.put(ClientProtocolID.ARR_CMD, arrCmd);
 			
 			ClientAdapter CA = new ClientAdapter(Ip, port);
@@ -1258,7 +1264,7 @@ public class ClientTester {
 			ClientAdapter CA = new ClientAdapter(Ip, port);
 			CA.open(); 
 				
-			objList = CA.dxT015(jObj);
+			objList = CA.dxT015_V(jObj);
 			
 			String strErrMsg = (String)objList.get(ClientProtocolID.ERR_MSG);
 			String strErrCode = (String)objList.get(ClientProtocolID.ERR_CODE);

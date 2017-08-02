@@ -162,6 +162,7 @@ public class ClientSocketCtl {
 
 	public byte[] recv(int lengthFieldSize, boolean containLengthField)
 			throws IOException, SocketTimeoutException, Exception {
+		System.out.println("recv(int lengthFieldSize, boolean containLengthField)");
 		if (client == null) {
 			throw new Exception("TRConnector : Socket이 생성되지 않았습니다.");
 		}
@@ -199,11 +200,10 @@ public class ClientSocketCtl {
 
 	public void recvFileDownLoad_test(String fileName)
 			throws IOException, SocketTimeoutException, Exception {
-		Socket socket;
 	    DataInputStream dis;
 	    FileOutputStream fos;
 	    BufferedOutputStream bos;
-	    String filename;
+
 	    int control = 0;
 
 		//String resCLient = request.getHeader("User-Agent");
@@ -276,6 +276,8 @@ public class ClientSocketCtl {
 	    BufferedOutputStream bos;
 	    String filename;
 	    int control = 0;
+	    
+	    response.reset();
 
 		String resCLient = request.getHeader("User-Agent");
 
@@ -291,13 +293,10 @@ public class ClientSocketCtl {
             int size = 4096;
             byte[] data = new byte[size];
             while ((len = dis.read(data)) != -1) {
-                control++;
-                if(control % 10000 == 0)
-                {
-                    System.out.println("수신중..." + control/10000);      
-                }
                 bos.write(data, 0, len);
             }
+            
+            //System.out.println("수신완료");
             
             bos.flush();
             bos.close();
@@ -310,22 +309,26 @@ public class ClientSocketCtl {
 
 			byte[] bytestream = new byte[(int) file.length()];
 
-			FileInputStream filestream = new FileInputStream(fileName);
+			FileInputStream filestream = new FileInputStream(file);
 			int i = 0, j = 0; // 파일 스트림을 바이트 배열에 넣는다.
 			while ((i = filestream.read()) != -1) {
 				bytestream[j] = (byte) i;
 				j++;
 			}
-			filestream.close(); // FileInputStream을 닫아줘야 file이 삭제된다
+			filestream.close(); 
 
 			try {
-				boolean success = file.delete(); // 화일을 생성과 동시에 byte[]배열에 입력후
-													// 화일은 삭제
+				boolean success = file.delete(); 
+				
+				 //System.out.println("파일삭제");
+				 
 				if (!success)
 					System.out.println("<script>alert('not success')</script>");
 			} catch (IllegalArgumentException e) {
 				System.err.println(e.getMessage());
 			}
+			
+			
 
 			if (resCLient.indexOf("MSIE") != -1) {
 				response.setHeader("Content-Disposition", "attachment; filename=" + fileName);
@@ -338,11 +341,14 @@ public class ClientSocketCtl {
 
 			}
 			
+			 //System.out.println("다운로드");
 			OutputStream outStream = response.getOutputStream(); // 응답 스트림 객체를 생성한다. 
 			outStream.write(bytestream); // 응답 스트림에 파일 바이트 배열을 쓴다. 
+			
+			outStream.flush();
 			outStream.close();
 
-
+			 //System.out.println("완료");
 		} catch (Exception e) {
 			e.printStackTrace();
 			throw new IOException();

@@ -118,6 +118,7 @@ public class DxT015 extends SocketCtl{
 				outputObj.put(ProtocolID.ERR_MSG, strErrMsg);
 				outputObj.put(ProtocolID.RESULT_DATA, resultFileList);
 				
+				sendBuff = outputObj.toString().getBytes();
 				send(4, sendBuff);
 				
 			} else if(strCommandCode.equals(ProtocolID.COMMAND_CODE_V)) {

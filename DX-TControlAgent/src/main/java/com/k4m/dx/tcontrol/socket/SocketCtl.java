@@ -178,6 +178,8 @@ public class SocketCtl {
 			throw new Exception("TRConnector : Socket이 생성되지 않았습니다.");
 		}
 		
+		
+		
 		byte[]	buff = new byte[recvSize];
 		int		i = 0;
 		
