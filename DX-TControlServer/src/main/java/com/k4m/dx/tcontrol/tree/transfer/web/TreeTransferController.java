@@ -67,6 +67,29 @@ public class TreeTransferController {
 	private DbServerManagerService dbServerManagerService;
 	
 	/**
+	 * 전송설정 화면을 보여준다.
+	 * 
+	 * @param
+	 * @return ModelAndView mv
+	 * @throws Exception
+	 */
+	@RequestMapping(value = "/treeTransferSetting.do")
+	public ModelAndView transferSetting(@ModelAttribute("historyVO") HistoryVO historyVO, HttpServletRequest request) {
+		ModelAndView mv = new ModelAndView();
+		try {
+			// 전송설정 이력 남기기
+			CmmnUtils.saveHistory(request, historyVO);
+			historyVO.setExe_dtl_cd("DX-T0011");
+			accessHistoryService.insertHistory(historyVO);
+			
+			mv.setViewName("transfer/transferSetting");
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return mv;
+	}
+	
+	/**
 	 * 전송대상설정 화면을 보여준다.
 	 * 
 	 * @param
@@ -384,6 +407,13 @@ public class TreeTransferController {
 			String[] param = request.getParameter("name").toString().split(",");
 			for (int i = 0; i < param.length; i++) {
 				cic.kafakConnect_delete(serverObj,param[i]);
+				String trf_trg_mpp_id = treeTransferService.selectTransfermappid(param[i]);
+				if(trf_trg_mpp_id!=null){
+					/*전송대상매핑관계,전송매핑테이블내역 삭제*/
+					treeTransferService.deleteTransferRelation(Integer.parseInt(trf_trg_mpp_id));
+					treeTransferService.deleteTransferMapping(Integer.parseInt(trf_trg_mpp_id));
+				}
+				/*전송대상설정정보 삭제*/
 				treeTransferService.deleteTransferTarget(param[i]);
 			}				
 		return true;
@@ -628,7 +658,7 @@ public class TreeTransferController {
 			transferRelationVO.setDb_id(Integer.parseInt(request.getParameter("db_id")));
 			
 			/*전송대상매핑관계 DELETE*/
-			treeTransferService.deleteTransferRelation(Integer.parseInt(request.getParameter("trf_trg_id")));
+			treeTransferService.deleteTransferRelation(Integer.parseInt(request.getParameter("trf_trg_mpp_id")));
 			/*전송매핑테이블내역 DELETE*/
 			treeTransferService.deleteTransferMapping(Integer.parseInt(request.getParameter("trf_trg_mpp_id")));
 			
