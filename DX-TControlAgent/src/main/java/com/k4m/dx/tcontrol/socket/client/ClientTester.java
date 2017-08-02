@@ -38,8 +38,8 @@ public class ClientTester {
 		
 		ClientTester clientTester = new ClientTester();
 		
-		//String Ip = "222.110.153.162";
-		String Ip = "127.0.0.1";
+		String Ip = "222.110.153.162";
+		 Ip = "127.0.0.1";
 		int port = 9001;
 		try {
 			
@@ -1169,7 +1169,7 @@ public class ClientTester {
 
 			String strDirectory = "/home/devel/experdb/data/pg_log/";
 			
-			//strDirectory = "C:\\k4m\\01-1. DX 제폼개발\\04. 시험\\pg_log\\";
+			strDirectory = "C:\\k4m\\01-1. DX 제폼개발\\04. 시험\\pg_log\\";
 			
 			JSONObject serverObj = new JSONObject();
 			
