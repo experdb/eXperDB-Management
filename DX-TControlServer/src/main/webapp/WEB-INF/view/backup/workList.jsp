@@ -46,7 +46,7 @@ function fn_dump_find_list(){
 function fn_rman_reg_popup(){
 	var popUrl = "/popup/rmanRegForm.do?db_svr_id=${db_svr_id}";
 	var width = 954;
-	var height = 585;
+	var height = 650;
 	var left = (window.screen.width / 2) - (width / 2);
 	var top = (window.screen.height /2) - (height / 2);
 	var popOption = "width="+width+", height="+height+", top="+top+", left="+left+", resizable=no, scrollbars=no, status=no, toolbar=no, titlebar=yes, location=no,";
@@ -61,7 +61,7 @@ function fn_rman_reg_popup(){
 function fn_rman_reform_popup(wrk_id){
 	var popUrl = "/popup/rmanRegReForm.do?db_svr_id=${db_svr_id}&wrk_id="+wrk_id;
 	var width = 954;
-	var height = 585;
+	var height = 650;
 	var left = (window.screen.width / 2) - (width / 2);
 	var top = (window.screen.height /2) - (height / 2);
 	var popOption = "width="+width+", height="+height+", top="+top+", left="+left+", resizable=no, scrollbars=no, status=no, toolbar=no, titlebar=yes, location=no,";
@@ -76,7 +76,7 @@ function fn_rman_reform_popup(wrk_id){
 function fn_dump_reg_popup(){
 	var popUrl = "/popup/dumpRegForm.do?db_svr_id=${db_svr_id}";
 	var width = 954;
-	var height = 810;
+	var height = 900;
 	var left = (window.screen.width / 2) - (width / 2);
 	var top = (window.screen.height /2) - (height / 2);
 	var popOption = "width="+width+", height="+height+", top="+top+", left="+left+", resizable=no, scrollbars=yes, status=no, toolbar=no, titlebar=yes, location=no,";
@@ -91,7 +91,7 @@ function fn_dump_reg_popup(){
 function fn_dump_reform_popup(wrk_id){
 	var popUrl = "/popup/dumpRegReForm.do?db_svr_id=${db_svr_id}&wrk_id="+wrk_id;
 	var width = 954;
-	var height = 810;
+	var height = 900;
 	var left = (window.screen.width / 2) - (width / 2);
 	var top = (window.screen.height /2) - (height / 2);
 	var popOption = "width="+width+", height="+height+", top="+top+", left="+left+", resizable=no, scrollbars=yes, status=no, toolbar=no, titlebar=yes, location=no,";

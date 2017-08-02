@@ -129,8 +129,7 @@
 			$("#hadoop_conf_dir").attr("onfocus", "fn_nmCheck_alert();");	
 			$("#hadoop_home").attr("onfocus", "fn_nmCheck_alert();");	
 			$("#flush_size").attr("onfocus", "fn_nmCheck_alert();");	
-			$("#rotate_interval_ms").attr("onfocus", "fn_nmCheck_alert();");
-			
+			$("#rotate_interval_ms").attr("onfocus", "fn_nmCheck_alert();");	
 		}
 		if(act=="u"){
 			$("#trf_trg_cnn_nm").attr("readonly",true);

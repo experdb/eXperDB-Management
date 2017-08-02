@@ -117,7 +117,7 @@
 							</div>
 						</div>
 						<ul class="depth_1 lnbMenu" id="tree2">
-							<li class="t1"><a href="/transferSetting.do">전송설정</a></li>
+							<li class="t1"><a href="/treeTransferSetting.do">전송설정</a></li>
 						</ul>
 					</div>
 				</div>

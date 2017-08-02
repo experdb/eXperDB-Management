@@ -46,11 +46,22 @@ public class TreeTransferDAO extends EgovAbstractMapper {
 	 * @param transferTargetVO
 	 * @throws SQLException
 	 */
-	public void updateTransferTarget(TransferTargetVO transferTargetVO) {
+	public void updateTransferTarget(TransferTargetVO transferTargetVO) throws SQLException {
 		insert("treeTransferSql.updateTransferTarget", transferTargetVO);
 
 	}
-
+	
+	/**
+	 * TRF_TRG_MPP_ID 조회
+	 * 
+	 * @param transferTargetVO
+	 * @throws SQLException
+	 */
+	public String selectTransfermappid(String name) throws SQLException {
+		String result = null;
+		result = (String) getSqlSession().selectOne("treeTransferSql.selectTransfermappid", name);
+		return result;
+	}
 	/**
 	 * 전송대상 삭제
 	 * 
@@ -141,8 +152,8 @@ public class TreeTransferDAO extends EgovAbstractMapper {
 	 * @return
 	 * @throws Exception
 	 */
-	public void deleteTransferRelation(int trf_trg_id) throws SQLException {
-		delete("treeTransferSql.deleteTransferRelation", trf_trg_id);
+	public void deleteTransferRelation(int trf_trg_mpp_id) throws SQLException {
+		delete("treeTransferSql.deleteTransferRelation", trf_trg_mpp_id);
 	}
 
 	/**
@@ -155,5 +166,7 @@ public class TreeTransferDAO extends EgovAbstractMapper {
 	public void deleteTransferMapping(int trf_trg_mpp_id) throws SQLException {
 		delete("treeTransferSql.deleteTransferMapping", trf_trg_mpp_id);
 	}
+
+
 
 }

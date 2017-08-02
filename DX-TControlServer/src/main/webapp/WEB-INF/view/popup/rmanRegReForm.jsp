@@ -55,7 +55,11 @@ function fn_update_work(){
 		  		log_file_bck_yn : log_file_bck_yn,
 		  		file_stg_dcnt : $("#file_stg_dcnt").val(),
 		  		log_file_stg_dcnt : $("#log_file_stg_dcnt").val(),
-		  		log_file_mtn_ecnt : $("#log_file_mtn_ecnt").val()
+		  		log_file_mtn_ecnt : $("#log_file_mtn_ecnt").val(),
+		  		data_pth : $("#data_pth").val(),
+		  		bck_pth : $("#bck_pth").val(),
+		  		acv_file_stgdt : $("#acv_file_stgdt").val(),
+		  		acv_file_mtncnt : $("#acv_file_mtncnt").val()
 		  	},
 			type : "post",
 			error : function(request, xhr, status, error) {
@@ -99,6 +103,14 @@ function valCheck(){
 		alert("백업옵션을 선택해 주세요.");
 		$("#bck_opt_cd").focus();
 		return false;
+	}else if($("#data_pth").val() == ""){
+		alert("데이터경로를 입력해 주세요.");
+		$("#data_pth").focus();
+		return false;
+	}else if($("#bck_pth").val() == ""){
+		alert("백업경로를 입력해 주세요.");
+		$("#bck_pth").focus();
+		return false;		
 	}else{
 		return true;
 	}
@@ -154,6 +166,23 @@ function valCheck(){
 									<label for="cps_yn">압축하기</label>
 								</div>
 							</span>
+							
+							<table class="write">
+								<colgroup>
+									<col style="width:90px;" />
+									<col />
+									<col style="width:90px;" />
+									<col />
+								</colgroup>
+								<tbody>
+									<tr>
+										<th scope="row" class="ico_t1">데이터경로</th>
+										<td><input type="text" class="txt" name="data_pth" id="data_pth" maxlength=50 value="<c:out value="${workInfo[0].data_pth}"/>"/></td>
+										<th scope="row" class="ico_t1">백업경로</th>
+										<td><input type="text" class="txt" name="bck_pth" id="bck_pth" maxlength=50 value="<c:out value="${workInfo[0].bck_pth}"/>"/></td>
+									</tr>
+								</tbody>
+							</table>
 						</div>
 						<div class="bak_inner">
 							<div class="bak_lt">
@@ -162,14 +191,26 @@ function valCheck(){
 									<ul>
 										<li>
 											<div class="inner">
-												<p>백업파일 보관일</p>
+												<p>Full 백업파일 보관일</p>
 												<span><input type="text" class="txt" name="file_stg_dcnt" id="file_stg_dcnt" value="<c:out value="${workInfo[0].file_stg_dcnt}"/>" maxlength=3/> 일</span>
 											</div>
 										</li>
 										<li>
 											<div class="inner">
-												<p>백업파일 유지갯수</p>
+												<p>Full 백업파일 유지갯수</p>
 												<span><input type="text" class="txt" name="bck_mtn_ecnt" id="bck_mtn_ecnt" value="<c:out value="${workInfo[0].bck_mtn_ecnt}"/>" maxlength=3/> 일</span>
+											</div>
+										</li>
+										<li>
+											<div class="inner">
+												<p>아카이브 파일보관일</p>
+												<span><input type="text" class="txt" name="acv_file_stgdt" id="acv_file_stgdt" value="<c:out value="${workInfo[0].acv_file_stgdt}"/>" maxlength=3/> 일</span>
+											</div>
+										</li>
+										<li>
+											<div class="inner">
+												<p>아카이브 파일유지갯수</p>
+												<span><input type="text" class="txt" name="acv_file_mtncnt" id="acv_file_mtncnt" value="<c:out value="${workInfo[0].acv_file_mtncnt}"/>" maxlength=3/> 일</span>
 											</div>
 										</li>
 									</ul>

@@ -37,6 +37,11 @@ public class TreeTransferServiceImpl implements TreeTransferService {
 	}
 
 	@Override
+	public String selectTransfermappid(String name) throws Exception {
+		return treeTransferDAO.selectTransfermappid(name);
+	}
+
+	@Override
 	public void deleteTransferTarget(String name) throws Exception {
 		treeTransferDAO.deleteTransferTarget(name);
 	}
@@ -72,8 +77,8 @@ public class TreeTransferServiceImpl implements TreeTransferService {
 	}
 
 	@Override
-	public void deleteTransferRelation(int trf_trg_id) throws Exception {
-		treeTransferDAO.deleteTransferRelation(trf_trg_id);
+	public void deleteTransferRelation(int trf_trg_mpp_id) throws Exception {
+		treeTransferDAO.deleteTransferRelation(trf_trg_mpp_id);
 	}
 
 	@Override

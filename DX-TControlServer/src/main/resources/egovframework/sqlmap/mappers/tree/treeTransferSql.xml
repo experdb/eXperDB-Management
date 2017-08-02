@@ -76,6 +76,18 @@
 		WHERE TRF_TRG_CNN_NM=#{trf_trg_cnn_nm}
 	</update>
 	
+	<select id="selectTransfermappid" parameterType="String" resultType="String">
+		/**
+		* Query ID : selectTransfermappid
+		* Description : TRF_TRG_MPP_ID 조회
+		* Author : 김주영
+		**/
+		SELECT B.TRF_TRG_MPP_ID
+		FROM T_TRFTRGCNG_I A,T_TRFTRGMPP_R B			
+		WHERE A.TRF_TRG_ID = B.TRF_TRG_ID
+		AND A.TRF_TRG_CNN_NM=#{trf_trg_cnn_nm}
+	</select>
+	
 	<delete id="deleteTransferTarget" parameterType="String">
 		/**
 		* Query ID : deleteTransferTarget
@@ -113,8 +125,13 @@
 		* Description : 데이터베이스 조회
 		* Author : 김주영
 		**/
-		SELECT S.DB_SVR_ID,S.DB_SVR_NM ,I.DB_ID,I.DB_NM
-		FROM T_DBSVR_I S,T_DB_I I
+		SELECT 
+		  S.DB_SVR_ID
+		, S.DB_SVR_NM 
+		, I.DB_ID,I.DB_NM
+		FROM 
+		  T_DBSVR_I S
+		, T_DB_I I
 		WHERE S.DB_SVR_ID=I.DB_SVR_ID
 		AND S.DB_SVR_NM = #{db_svr_nm}
 	</select>
@@ -135,7 +152,9 @@
 			, S.dft_db_nm
 			, S.svr_spr_usr_id
 			, S.svr_spr_scm_pwd
-		FROM T_DB_I D, T_DBSVR_I S
+		FROM 
+		  T_DB_I D
+		, T_DBSVR_I S
 		WHERE D.db_svr_id=S.db_svr_id
 		AND D.db_id=#{db_id}	  	
     </select>	
@@ -219,7 +238,12 @@
 		, D.DB_ID
 		, D.DB_NM
 		, S.DB_SVR_NM
-		FROM T_TRFTRGCNG_I I,T_TRFTRGMPP_R R,T_TRFMPPTB_L L,T_DB_I D,T_DBSVR_I S
+		FROM 
+		   T_TRFTRGCNG_I I
+		,  T_TRFTRGMPP_R R
+		,  T_TRFMPPTB_L L
+		,  T_DB_I D
+		,  T_DBSVR_I S
 		WHERE I.TRF_TRG_ID=R.TRF_TRG_ID
 		AND R.TRF_TRG_MPP_ID=L.TRF_TRG_MPP_ID
 		AND R.DB_ID =D.DB_ID
@@ -234,7 +258,7 @@
 	 	* Author : 김주영
 	 	**/   
 	    DELETE FROM T_TRFTRGMPP_R
-	    WHERE TRF_TRG_ID =#{trf_trg_id}
+	    WHERE TRF_TRG_MPP_ID =#{trf_trg_mpp_id}
     </delete>
     
     <delete id="deleteTransferMapping" parameterType="int">

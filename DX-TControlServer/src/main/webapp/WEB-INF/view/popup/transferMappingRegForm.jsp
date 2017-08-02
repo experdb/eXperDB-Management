@@ -326,7 +326,7 @@
 			<tbody>
 				<tr>
 					<th scope="row" class="ico_t1">Connector명</th>
-					<td><input type="text" class="txt t3 bg1" name="trf_trg_cnn_nm" value="${trf_trg_cnn_nm}" /></td>
+					<td><input type="text" class="txt t3 bg1" name="trf_trg_cnn_nm" value="${trf_trg_cnn_nm}" readonly="readonly"/></td>
 					<th>&nbsp;</th>
 					<td>&nbsp;</td>
 				</tr>
