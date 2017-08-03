@@ -101,4 +101,70 @@
 			LIMIT 1
 		]]>
 	</select>
+	
+	<select id="selectQ_WRKEXE_G_01_SEQ" resultType="int">
+   		/**
+	 	* Query ID : selectQ_WRKEXE_G_01_SEQ
+	 	* Description : 작업실행로그 seq 조회
+	 	* Author : 박태혁
+	 	**/
+    	SELECT NEXTVAL('q_wrkexe_g_01')
+    </select>
+    
+    <insert id="insertT_WRKEXE_G"  parameterType="WrkExeVO">
+   		/**
+	 	* Query ID : insertT_WRKEXE_G
+	 	* Description : 작업실행로그 insert
+	 	* Author : 박태혁
+	 	**/
+	 	INSERT INTO T_WRKEXE_G
+	 	(
+			EXE_SN
+			, SCD_ID
+			, WRK_ID
+			, WRK_STRT_DTM
+			, WRK_END_DTM
+			, EXE_RSLT_CD
+			, BCK_OPT_CD
+			, TLI
+			, FILE_SZ
+			, DB_ID
+			, BCK_FILE_PTH
+			, FRST_REGR_ID
+			, LST_MDFR_ID
+	 	)
+	 	VALUES
+	 	(
+			#{EXE_SN}
+			, #{SCD_ID}
+			, #{WRK_ID}
+			, now()
+			, now()
+			, #{EXE_RSLT_CD}
+			, ''
+			, 0
+			, 0
+			, 0
+			, ''
+			, 'system'
+			, 'system'
+	 	)
+	 	
+    </insert>
+    
+    <update id="updateT_WRKEXE_G"  parameterType="WrkExeVO">
+   		/**
+	 	* Query ID : updateT_WRKEXE_G
+	 	* Description : 작업실행로그 update
+	 	* Author : 박태혁
+	 	**/
+		UPDATE T_WRKEXE_G
+		SET
+			WRK_END_DTM = now()
+			, EXE_RSLT_CD = #{EXE_RSLT_CD}
+		WHERE
+			EXE_SN = #{EXE_SN}
+				
+    </update>
+    
 </mapper>

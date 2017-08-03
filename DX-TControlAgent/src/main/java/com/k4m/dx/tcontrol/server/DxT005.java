@@ -2,8 +2,6 @@ package com.k4m.dx.tcontrol.server;
 
 import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
-import java.io.InputStream;
-import java.io.OutputStream;
 import java.net.Socket;
 
 import org.json.simple.JSONArray;
@@ -14,6 +12,7 @@ import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 
 import com.k4m.dx.tcontrol.db.repository.service.SystemServiceImpl;
+import com.k4m.dx.tcontrol.db.repository.vo.WrkExeVO;
 import com.k4m.dx.tcontrol.socket.ProtocolID;
 import com.k4m.dx.tcontrol.socket.SocketCtl;
 import com.k4m.dx.tcontrol.socket.TranCodeType;
@@ -56,8 +55,11 @@ public class DxT005 extends SocketCtl{
 		JSONArray outputArray = new JSONArray();
 		JSONObject outputObj = new JSONObject();
 		
+		context = new ClassPathXmlApplicationContext(new String[] {"context-tcontrol.xml"});
+		SystemServiceImpl service = (SystemServiceImpl) context.getBean("SystemService");
 		
-		
+		String strResultCode = "TC001701";
+
 		try {
 
 			for(int i=0;i<arrCmd.size();i++){
@@ -67,15 +69,20 @@ public class DxT005 extends SocketCtl{
 				
 				
 				String strSCD_ID = objJob.get(ProtocolID.SCD_ID).toString();
-				socketLogger.info(strSCD_ID);
-				/**
 				String strWORK_ID = objJob.get(ProtocolID.WORK_ID).toString();
-				socketLogger.info(strWORK_ID);
 				String strEXD_ORD = objJob.get(ProtocolID.EXD_ORD).toString();
-				socketLogger.info(strEXD_ORD);
 				String strNXT_EXD_YN = objJob.get(ProtocolID.NXT_EXD_YN).toString();
-				socketLogger.info(strNXT_EXD_YN);
-				**/
+
+				int intSeq = service.selectQ_WRKEXE_G_01_SEQ();
+				
+				WrkExeVO vo = new WrkExeVO();
+				vo.setEXE_SN(intSeq);
+				vo.setSCD_ID(Integer.parseInt(strSCD_ID));
+				vo.setWRK_ID(Integer.parseInt(strWORK_ID));
+				vo.setEXE_RSLT_CD("");
+				
+				service.insertT_WRKEXE_G(vo);
+				
 				String strCommand = objJob.get(ProtocolID.REQ_CMD).toString();
 
 				socketLogger.info(strCommand);
@@ -90,12 +97,31 @@ public class DxT005 extends SocketCtl{
 				String retVal = r.call();
 				
 				socketLogger.info("##### 결과 : " + retVal);
-				
+				//다음실행여부가 Y 이면 에러나도 다음 시행함.
+				if(retVal.equals("success")) {
+					WrkExeVO endVO = new WrkExeVO();
+					endVO.setEXE_RSLT_CD(strResultCode);
+					endVO.setEXE_SN(intSeq);
+					
+					service.updateT_WRKEXE_G(endVO);
+					continue;
+				} else {
+					strResultCode = "TC001702";
+					
+					WrkExeVO endVO = new WrkExeVO();
+					endVO.setEXE_RSLT_CD(strResultCode);
+					endVO.setEXE_SN(intSeq);
+					
+					service.updateT_WRKEXE_G(endVO);
+					
+					if(strNXT_EXD_YN.equals("y")) {
+						continue;
+					} else {
+						break;
+					}
+				}
 				
 				//완료 건 update
-				context = new ClassPathXmlApplicationContext(new String[] {"context-tcontrol.xml"});
-				
-				SystemServiceImpl service = (SystemServiceImpl) context.getBean("SystemService");
 
 				//System.out.println("retVal "+(i+1)+" : "+ retVal);
 			}

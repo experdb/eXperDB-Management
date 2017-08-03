@@ -13,6 +13,8 @@
     	<typeAlias alias="PgAuditVO" type="com.k4m.dx.tcontrol.db.repository.vo.PgAuditVO" />
     	<typeAlias alias="PgAuditSettingVO" type="com.k4m.dx.tcontrol.db.repository.vo.PgAuditSettingVO" />
     	<typeAlias alias="AuditVO" type="com.k4m.dx.tcontrol.server.AuditVO" />
+    	<typeAlias alias="WrkExeVO" type="com.k4m.dx.tcontrol.db.repository.vo.WrkExeVO" />
+    	
     	
     </typeAliases>
     

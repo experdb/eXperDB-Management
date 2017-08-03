@@ -4,6 +4,7 @@ import java.util.List;
 
 import com.k4m.dx.tcontrol.db.repository.vo.AgentInfoVO;
 import com.k4m.dx.tcontrol.db.repository.vo.DbServerInfoVO;
+import com.k4m.dx.tcontrol.db.repository.vo.WrkExeVO;
 
 public interface SystemService {
 	/**
@@ -57,4 +58,25 @@ public interface SystemService {
 	 * @throws Exception
 	 */
 	public void agentInfoStopMng(DbServerInfoVO dbServerInfo) throws Exception ;
+	
+	/**
+	 * 스케쥴실행 로그 seq 조회
+	 * @return
+	 * @throws Exception
+	 */
+	public int selectQ_WRKEXE_G_01_SEQ() throws Exception;
+	
+	/**
+	 * 스캐쥴실행 로그 등록
+	 * @param vo
+	 * @throws Exception
+	 */
+	public void insertT_WRKEXE_G(WrkExeVO vo) throws Exception;
+	
+	/**
+	 * 스캐쥴실행 로그 완료
+	 * @param vo
+	 * @throws Exception
+	 */
+	public void updateT_WRKEXE_G(WrkExeVO vo) throws Exception;
 }
