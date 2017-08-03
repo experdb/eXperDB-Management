@@ -1,62 +1,76 @@
-@import url(http://fonts.googleapis.com/earlyaccess/nanummyeongjo.css); /* 나눔명조 */
+@import url(http://fonts.googleapis.com/earlyaccess/nanummyeongjo.css);
+	/* 나눔명조 */
 
 /* FONT STYLE
 -------------------------------------------------------------- */
-@font-face{font-family:'Nanum Square';
-  font-style:normal;
-  font-weight:400;
-  src:url(./../font/NanumSquareR.eot);
-  src:local('Nanum Square Regular'),
-       local('NanumSquareR'),
-       url(./../font/NanumSquareR.eot?#iefix) format('embedded-opentype'),
-       url(./../font/NanumSquareR.woff2) format('woff2'),
-       url(./../font/NanumSquareR.woff) format('woff'),
-       url(./../font/NanumSquareR.ttf) format('truetype');}
-
-@font-face{font-family:'Nanum Square Bold';
-  font-style:bold;
-  font-weight:700;
-  src:url(./../font/NanumSquareB.eot);
-  src:local('Nanum Square Bold'),
-       local('NanumSquareB'),
-       url(./../font/NanumSquareB.eot?#iefix) format('embedded-opentype'),
-       url(./../font/NanumSquareB.woff2) format('woff2'),
-       url(./../font/NanumSquareB.woff) format('woff'),
-       url(./../font/NanumSquareB.ttf) format('truetype');}
-
-@font-face {font-family: 'Nanum Myeongjo';
-  font-style: normal;
-  font-weight: 700;
-  src: url(./../font/NanumMyeongjo-ExtraBold.eot);
-  src: url(./../font/NanumMyeongjo-ExtraBold.eot?#iefix) format('embedded-opentype'),
-       url(./../font/NanumMyeongjo-ExtraBold.woff2) format('woff2'),
-       url(./../font/NanumMyeongjo-ExtraBold.woff) format('woff'),
-       url(./../font/NanumMyeongjo-ExtraBold.ttf) format('truetype');
+@font-face {
+	font-family: 'Nanum Square';
+	font-style: normal;
+	font-weight: 400;
+	src: url(./../font/NanumSquareR.eot);
+	src: local('Nanum Square Regular'), local('NanumSquareR'),
+		url(./../font/NanumSquareR.eot?#iefix) format('embedded-opentype'),
+		url(./../font/NanumSquareR.woff2) format('woff2'),
+		url(./../font/NanumSquareR.woff) format('woff'),
+		url(./../font/NanumSquareR.ttf) format('truetype');
 }
 
-.treeview .border{
-	background:#1e1905;
+@font-face {
+	font-family: 'Nanum Square Bold';
+	font-style: bold;
+	font-weight: 700;
+	src: url(./../font/NanumSquareB.eot);
+	src: local('Nanum Square Bold'), local('NanumSquareB'),
+		url(./../font/NanumSquareB.eot?#iefix) format('embedded-opentype'),
+		url(./../font/NanumSquareB.woff2) format('woff2'),
+		url(./../font/NanumSquareB.woff) format('woff'),
+		url(./../font/NanumSquareB.ttf) format('truetype');
 }
 
-#sidetree{
-padding: 0px 0pt 7px 10px;
+@font-face {
+	font-family: 'Nanum Myeongjo';
+	font-style: normal;
+	font-weight: 700;
+	src: url(./../font/NanumMyeongjo-ExtraBold.eot);
+	src: url(./../font/NanumMyeongjo-ExtraBold.eot?#iefix)
+		format('embedded-opentype'),
+		url(./../font/NanumMyeongjo-ExtraBold.woff2) format('woff2'),
+		url(./../font/NanumMyeongjo-ExtraBold.woff) format('woff'),
+		url(./../font/NanumMyeongjo-ExtraBold.ttf) format('truetype');
+}
+
+.treeview .border {
+	background: #1e1905;
+}
+
+#sidetree {
+	padding: 0px 0pt 7px 10px;
 }
 
 #treeTitle {
-position:relative;top:0;left:0;padding:15px 0 15px 5px;margin:0 13px 0 7px; border-top:1px solid #898989;color:#ff9900;font-size:14px;font-family:'Nanum Square Bold';font-weight:700;
+	position: relative;
+	top: 0;
+	left: 0;
+	padding-top: 7px;
+	margin: 0 13px 0 7px;
+	border-top: 1px solid #898989;
+	color: #ff9900;
+	font-size: 14px;
+	font-family: 'Nanum Square Bold';
+	font-weight: 700;
 }
 
-.treeview a{
-	color:#d7d7d7;
-	font-size:13px;
-	text-decoration:none;
+.treeview a {
+	color: #d7d7d7;
+	font-size: 13px;
+	text-decoration: none;
 }
 
-#treeImg{
+#treeImg {
 	margin-right: 7px;
 }
 
-.treeview, .treeview ul { 
+.treeview, .treeview ul {
 	padding: 0;
 	margin: 0;
 	list-style: none;
@@ -77,10 +91,10 @@ position:relative;top:0;left:0;padding:15px 0 15px 5px;margin:0 13px 0 7px; bord
 /* fix for IE6 */
 * html .hitarea {
 	display: inline;
-	float:none;
+	float: none;
 }
 
-.treeview li { 
+.treeview li {
 	margin: 0;
 	padding: 7px 0pt 7px 20px;
 }
@@ -91,33 +105,84 @@ position:relative;top:0;left:0;padding:15px 0 15px 5px;margin:0 13px 0 7px; bord
 	padding: 3px;
 }
 
-#treecontrol { margin: 1em 0; display: none; }
+#treecontrol {
+	margin: 1em 0;
+	display: none;
+}
 
-.treeview .hover { color: #f58220; cursor: pointer; }
+.treeview .hover {
+	color: #f58220;
+	cursor: pointer;
+}
 
-.treeview li { background: url(images/treeview-default-line.gif) 0 0 no-repeat; }
-.treeview li.collapsable, .treeview li.expandable { background-position: 0 -176px; }
+.treeview li {
+	background: url(images/treeview-default-line.gif) 0 0 no-repeat;
+}
 
-.treeview .expandable-hitarea { background-position: -80px -3px; }
+.treeview li.collapsable, .treeview li.expandable {
+	background-position: 0 -176px;
+}
 
-.treeview li.last { background-position: 0 -1766px }
-.treeview li.lastCollapsable, .treeview li.lastExpandable { background-image: url(images/treeview-default.gif); }  
-.treeview li.lastCollapsable { background-position: 0 -111px }
-.treeview li.lastExpandable { background-position: -32px -67px }
+.treeview .expandable-hitarea {
+	background-position: -80px -3px;
+}
 
-.treeview div.lastCollapsable-hitarea, .treeview div.lastExpandable-hitarea { background-position: 0; }
+.treeview li.last {
+	background-position: 0 -1766px
+}
 
-.treeview-red li { background-image: url(images/treeview-red-line.gif); }
-.treeview-red .hitarea, .treeview-red li.lastCollapsable, .treeview-red li.lastExpandable { background-image: url(images/treeview-red.gif); } 
+.treeview li.lastCollapsable, .treeview li.lastExpandable {
+	background-image: url(images/treeview-default.gif);
+}
 
-.treeview-black li { background-image: url(images/treeview-black-line.gif); }
-.treeview-black .hitarea, .treeview-black li.lastCollapsable, .treeview-black li.lastExpandable { background-image: url(images/treeview-black.gif); }  
+.treeview li.lastCollapsable {
+	background-position: 0 -111px
+}
 
-.treeview-gray li { background-image: url(images/treeview-gray-line.gif); }
-.treeview-gray .hitarea, .treeview-gray li.lastCollapsable, .treeview-gray li.lastExpandable { background-image: url(images/treeview-gray.gif); } 
+.treeview li.lastExpandable {
+	background-position: -32px -67px
+}
 
-.treeview-famfamfam li { background-image: url(images/treeview-famfamfam-line.gif); }
-.treeview-famfamfam .hitarea, .treeview-famfamfam li.lastCollapsable, .treeview-famfamfam li.lastExpandable { background-image: url(images/treeview-famfamfam.gif); } 
+.treeview div.lastCollapsable-hitarea, .treeview div.lastExpandable-hitarea
+	{
+	background-position: 0;
+}
+
+.treeview-red li {
+	background-image: url(images/treeview-red-line.gif);
+}
+
+.treeview-red .hitarea, .treeview-red li.lastCollapsable, .treeview-red li.lastExpandable
+	{
+	background-image: url(images/treeview-red.gif);
+}
+
+.treeview-black li {
+	background-image: url(images/treeview-black-line.gif);
+}
+
+.treeview-black .hitarea, .treeview-black li.lastCollapsable,
+	.treeview-black li.lastExpandable {
+	background-image: url(images/treeview-black.gif);
+}
+
+.treeview-gray li {
+	background-image: url(images/treeview-gray-line.gif);
+}
+
+.treeview-gray .hitarea, .treeview-gray li.lastCollapsable,
+	.treeview-gray li.lastExpandable {
+	background-image: url(images/treeview-gray.gif);
+}
+
+.treeview-famfamfam li {
+	background-image: url(images/treeview-famfamfam-line.gif);
+}
+
+.treeview-famfamfam .hitarea, .treeview-famfamfam li.lastCollapsable,
+	.treeview-famfamfam li.lastExpandable {
+	background-image: url(images/treeview-famfamfam.gif);
+}
 
 .treeview .placeholder {
 	background: url(images/ajax-loader.gif) 0 0 no-repeat;
@@ -126,20 +191,26 @@ position:relative;top:0;left:0;padding:15px 0 15px 5px;margin:0 13px 0 7px; bord
 	display: block;
 }
 
+.filetree li {
+	padding: 3px 0 2px 16px;
+}
 
+.filetree span.folder, .filetree span.file {
+	padding: 1px 0 1px 16px;
+	display: block;
+}
 
+.filetree span.folder {
+	background: url(images/folder.gif) 0 0 no-repeat;
+}
 
+.filetree li.expandable span.folder {
+	background: url(images/folder-closed.gif) 0 0 no-repeat;
+}
 
-
-.filetree li { padding: 3px 0 2px 16px; }
-.filetree span.folder, .filetree span.file { padding: 1px 0 1px 16px; display: block; }
-.filetree span.folder { background: url(images/folder.gif) 0 0 no-repeat; }
-.filetree li.expandable span.folder { background: url(images/folder-closed.gif) 0 0 no-repeat; }
-.filetree span.file { background: url(images/file.gif) 0 0 no-repeat; }
-
-
-
-
+.filetree span.file {
+	background: url(images/file.gif) 0 0 no-repeat;
+}
 
 /* #lnb_menu .depth_1 > li{margin-top:1px;}
 #lnb_menu .depth_1 > li:first-child{margin-top:0;}
@@ -164,4 +235,3 @@ position:relative;top:0;left:0;padding:15px 0 15px 5px;margin:0 13px 0 7px; bord
 #lnb_menu .depth_1 .depth_2 .depth_3 > li.ico3_3 > a{background:url(../images/ico_lnb_12.png) 87px 1px no-repeat;}
 #lnb_menu .depth_1 .depth_2 .depth_3 > li.ico3_4 > a{background:url(../images/ico_lnb_13.png) 87px 1px no-repeat;}
 #lnb_menu .depth_1 .depth_2 .depth_3 > li.ico3_5 > a{background:url(../images/ico_lnb_14.png) 87px 1px no-repeat;} */
-

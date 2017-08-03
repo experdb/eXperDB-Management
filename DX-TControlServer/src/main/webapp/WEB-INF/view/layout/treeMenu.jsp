@@ -138,16 +138,20 @@
 <script type="text/javascript" src="/js/common.js"></script>
 <script type="text/javascript" src="/js/common_lnb.js"></script>
 
+
 	<div id="lnb_menu">
 		<form name="treeView" id="treeView">
 				<div class="logout">
 					<a href="#"><button onClick="fn_logout();">LOGOUT</button></a>
 				</div>
-				<div id="treeTitle"><img src="../images/ico_lnb_1.png" id="treeImg">DB 서버</div>
+				<div id="treeTitle"><img src="../images/ico_lnb_1.png" id="treeImg">DB 서버
+					<div id="sidetreecontrol" style="float: right;">
+						<a href="?#"><img src="../images/ico_lnb_close.png"></a>
+						<a href="?#"><img src="../images/ico_lnb_open.png"></a>
+					</div>
+				</div>
 				<div id="sidetree">				
-						<div id="sidetreecontrol">
-							<a href="?#"><img src="../images/ico_lnb_close.png"></a> | <a href="?#"><img src="../images/ico_lnb_open.png"></a>
-						</div>
+						
 						<div class="treeborder">
 						<ul id="tree">
 							<div id="tree1"></div>
@@ -156,11 +160,14 @@
 				</div>
 				
 				
-				<div id="treeTitle"><img src="../images/ico_lnb_2.png" id="treeImg">Transfer</div>
-				<div id="sidetree">				
-						<div id="sidetreecontrol2">							
-							<a href="?#"><img src="../images/ico_lnb_close.png"></a> | <a href="?#"><img src="../images/ico_lnb_open.png"></a>
+				<div id="treeTitle"><img src="../images/ico_lnb_2.png" id="treeImg">Transfer
+						<div id="sidetreecontrol2" style="float: right;">							
+							<a href="?#"><img src="../images/ico_lnb_close.png"></a>
+							<a href="?#"><img src="../images/ico_lnb_open.png"></a>
 						</div>
+				</div>
+				<div id="sidetree">				
+			
 						<div class="treeborder">
 						<ul id="tree2">
 							<div id="tree2"></div>
