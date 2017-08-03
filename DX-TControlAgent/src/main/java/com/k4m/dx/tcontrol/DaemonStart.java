@@ -49,7 +49,7 @@ public class DaemonStart implements DxDaemon{
 			System.out.println("## "+new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date()));
 			System.out.println("## DX-TcontrolAgent Dammon Process is Shutdown...");
 			
-			server.info("{} DX-TcontrolAgent Dammon Process is Shutdown...", new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date()));
+			daemonStartLogger.info("{} DX-TcontrolAgent Dammon Process is Shutdown...", new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date()));
 			
 			return; // 프로그램 종료.
 		}
