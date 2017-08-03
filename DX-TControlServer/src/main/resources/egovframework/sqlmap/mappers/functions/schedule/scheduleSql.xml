@@ -234,6 +234,7 @@
 				A.SCD_ID
 		        , A.WRK_ID
 		        , A.NXT_EXE_YN
+		        , A.EXE_ORD
 				, B.DB_SVR_ID
 				, B.DB_ID
 				, (CASE WHEN DB_ID>0 THEN (SELECT DB_NM FROM T_DB_I WHERE B.DB_ID=DB_ID ) ELSE '' END) AS DB_NM

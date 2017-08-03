@@ -98,6 +98,7 @@ public class ScheduleQuartzJob implements Job{
 					CMD.add(rmanCmd);
 				}
 			}			
+			//System.out.println("명령어="+CMD);
 			agentCall(resultWork, CMD);
 		}catch(Exception e){
 			e.printStackTrace();
