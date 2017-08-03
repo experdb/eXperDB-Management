@@ -98,7 +98,7 @@ public class ScheduleQuartzJob implements Job{
 					CMD.add(rmanCmd);
 				}
 			}			
-			//System.out.println("명령어="+CMD);
+			System.out.println("명령어="+CMD);
 			agentCall(resultWork, CMD);
 		}catch(Exception e){
 			e.printStackTrace();
@@ -150,12 +150,13 @@ public class ScheduleQuartzJob implements Job{
 				strCmd += " --port="+resultDbconn.get(k).get("portno");
 				//1.4 연결할 사용자이름
 				strCmd += " --username="+resultDbconn.get(k).get("svr_spr_usr_id");	
+				strCmd += " --no-password";	
 			}
 			
 			//2. 기본옵션 명령어 생성
 				strLast +=" "+resultWork.get(i).get("db_nm")+"  > "+resultWork.get(i).get("save_pth")+"/"+resultWork.get(i).get("bck_filenm")+"_"+today;
 				
-				if(resultWork.get(i).get("file_fmt_cd_nm") != null || resultWork.get(i).get("file_fmt_cd_nm") != ""){
+				if(resultWork.get(i).get("file_fmt_cd_nm") != null && resultWork.get(i).get("file_fmt_cd_nm") != ""){
 					//2.2 파일포멧에 따른 명령어 생성
 					strCmd += " --format="+resultWork.get(i).get("file_fmt_cd_nm");
 					//2.3 파일포멧이 tar일경우 압축률 명령어 생성
@@ -165,7 +166,7 @@ public class ScheduleQuartzJob implements Job{
 				}
 				
 				//2.4 인코딩 방식 명령어 생성
-				if(resultWork.get(i).get("incd") != null || resultWork.get(i).get("incd") != ""){
+				if(resultWork.get(i).get("incd") != null && resultWork.get(i).get("incd") != ""){
 					strCmd +=" --encoding="+resultWork.get(i).get("incd");
 				}
 				

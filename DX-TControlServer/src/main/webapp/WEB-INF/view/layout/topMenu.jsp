@@ -18,6 +18,7 @@
 								<ul class="depth_3">
 									<li><a href="/insertScheduleView.do">스케쥴 등록</a></li>
 									<li><a href="/selectScheduleListView.do">스케쥴 조회</a></li>
+									<li><a href="/selectScheduleHistoryView.do">스케쥴 이력</a></li>
 								</ul>
 							</li>
 							<li><a href="#n">Transfer</a>
