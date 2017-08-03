@@ -162,7 +162,7 @@ public class ClientSocketCtl {
 
 	public byte[] recv(int lengthFieldSize, boolean containLengthField)
 			throws IOException, SocketTimeoutException, Exception {
-		System.out.println("recv(int lengthFieldSize, boolean containLengthField)");
+		//System.out.println("recv(int lengthFieldSize, boolean containLengthField)");
 		if (client == null) {
 			throw new Exception("TRConnector : Socket이 생성되지 않았습니다.");
 		}
@@ -332,16 +332,12 @@ public class ClientSocketCtl {
 
 			if (resCLient.indexOf("MSIE") != -1) {
 				response.setHeader("Content-Disposition", "attachment; filename=" + fileName);
-				
-				response.setHeader("Cache-Control", "no-transform, max-age=0"); 
 			} else {
 				// 한글 파일명 처리
 				fileName = new String(fileName.getBytes("utf-8"), "iso-8859-1");
 
 				response.setHeader("Content-Disposition", "attachment; filename=\"" + fileName + "\"");
 				response.setHeader("Content-Type", "application/octet-stream; charset=utf-8");
-				
-				response.setHeader("Cache-Control", "no-transform, max-age=0"); 
 
 			}
 			

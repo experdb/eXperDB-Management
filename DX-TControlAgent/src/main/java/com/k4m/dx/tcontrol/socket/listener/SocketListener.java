@@ -40,7 +40,7 @@ public class SocketListener implements Runnable {
 	private void createServerSocket() throws Exception {
 		try {
 			this.serverSocket	= new ServerSocket(listenPort);
-			this.serverSocket.setSoTimeout(1000);
+			//this.serverSocket.setSoTimeout(1000);
 		} catch(Exception e) {
 			socketLogger.info("서버소켓을 생성하지 못했습니다. [" + e + "]");
 			

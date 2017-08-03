@@ -247,13 +247,18 @@ public class ClientTester {
 	private void dxT005(String Ip, int port) {
 		try {
 			
-			String[] CMD =
+/*			String[] CMD =
 				{
 					"pg_dump --file=cats_tmp_acquire.sql --table=ibizspt.cats_tmp_acquire ibizspt",
 					"pg_dump --file=cats_tmp_acquire_kb_owner.sql --table=ibizspt.cats_tmp_acquire_kb_owner ibizspt",
 					"pg_dump --file=cats_tmp_cardinfo.sql --table=ibizspt.cats_tmp_cardinfo ibizspt",
 					"pg_dump --file=cats_tmp_cardinfo.sql --table=ibizspt.cats_tmp_cardinfo ibizsptss",
 					"pg_dump --file=pdt_corppdt.sql --table=ibizspt.pdt_corppdt ibizspt"
+				};*/
+			
+			String[] CMD = {
+					"java -version",
+					"java -version"
 				};
 			
 			JSONObject reqJObj = new JSONObject();

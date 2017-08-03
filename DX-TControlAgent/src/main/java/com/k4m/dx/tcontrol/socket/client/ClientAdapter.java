@@ -34,13 +34,13 @@ public class ClientAdapter {
 	 */
 	public void close() throws Exception{
 
-		JSONObject jObj = new JSONObject();
+/*		JSONObject jObj = new JSONObject();
 
 		jObj.put(ClientProtocolID.DX_EX_CODE, ClientTranCodeType.CLOSE);
 		
 		byte[] bt = jObj.toString().getBytes();
 		
-		cc.send(4, bt);
+		cc.send(4, bt);*/
 		
 		cc.close();
 	}

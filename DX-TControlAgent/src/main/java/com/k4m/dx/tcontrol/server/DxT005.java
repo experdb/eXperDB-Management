@@ -67,15 +67,17 @@ public class DxT005 extends SocketCtl{
 				
 				
 				String strSCD_ID = objJob.get(ProtocolID.SCD_ID).toString();
-				String strWORK_ID = objJob.get(ProtocolID.WORK_ID).toString();
-				String strEXD_ORD = objJob.get(ProtocolID.EXD_ORD).toString();
-				String strNXT_EXD_YN = objJob.get(ProtocolID.NXT_EXD_YN).toString();
-				String strCommand = objJob.get(ProtocolID.REQ_CMD).toString();
-				
 				socketLogger.info(strSCD_ID);
+				/**
+				String strWORK_ID = objJob.get(ProtocolID.WORK_ID).toString();
 				socketLogger.info(strWORK_ID);
+				String strEXD_ORD = objJob.get(ProtocolID.EXD_ORD).toString();
 				socketLogger.info(strEXD_ORD);
+				String strNXT_EXD_YN = objJob.get(ProtocolID.NXT_EXD_YN).toString();
 				socketLogger.info(strNXT_EXD_YN);
+				**/
+				String strCommand = objJob.get(ProtocolID.REQ_CMD).toString();
+
 				socketLogger.info(strCommand);
 
 				RunCommandExec r = new RunCommandExec(strCommand);
@@ -87,17 +89,21 @@ public class DxT005 extends SocketCtl{
 				}
 				String retVal = r.call();
 				
+				socketLogger.info("##### 결과 : " + retVal);
+				
 				
 				//완료 건 update
-				context = new ClassPathXmlApplicationContext(new String[] {"context-tcontrol.xml"});
+				//context = new ClassPathXmlApplicationContext(new String[] {"context-tcontrol.xml"});
 				
-				SystemServiceImpl service = (SystemServiceImpl) context.getBean("SystemService");
+				//SystemServiceImpl service = (SystemServiceImpl) context.getBean("SystemService");
 
-				System.out.println("retVal "+(i+1)+" : "+ retVal);
+				//System.out.println("retVal "+(i+1)+" : "+ retVal);
 			}
 			socketLogger.info("send start");
-			outputObj = ResultJSON(outputArray, strDxExCode, strSuccessCode, strErrCode, strErrMsg);
-			send(TotalLengthBit, outputObj.toString().getBytes());
+			outputObj = DxT005ResultJSON(strDxExCode, strSuccessCode, strErrCode, strErrMsg);
+			sendBuff = outputObj.toString().getBytes();
+			
+			send(TotalLengthBit, sendBuff);
 			
 			socketLogger.info("send end");
 

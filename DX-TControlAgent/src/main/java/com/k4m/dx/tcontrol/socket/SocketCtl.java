@@ -263,6 +263,18 @@ public class SocketCtl {
 		return outputObj;
 	}
 	
+	protected JSONObject DxT005ResultJSON(String strDxExCode
+			, String strResultCode
+			, String strErrCode, String strErrMsg) throws Exception{
+		JSONObject outputObj = new JSONObject();
+		outputObj.put(ProtocolID.DX_EX_CODE, strDxExCode);
+		outputObj.put(ProtocolID.RESULT_CODE, strResultCode);
+		outputObj.put(ProtocolID.ERR_CODE, strErrCode);
+		outputObj.put(ProtocolID.ERR_MSG, strErrMsg);
+		
+		return outputObj;
+	}
+	
 	
 	protected JSONObject DxT006ResultJSON(List<LinkedHashMap<String, String>> resultData, String strDxExCode
 			, String strResultCode

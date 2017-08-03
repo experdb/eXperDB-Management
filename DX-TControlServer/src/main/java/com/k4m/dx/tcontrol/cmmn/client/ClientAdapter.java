@@ -34,13 +34,13 @@ public class ClientAdapter {
 	 */
 	public void close() throws Exception{
 
-		JSONObject jObj = new JSONObject();
+/*		JSONObject jObj = new JSONObject();
 
 		jObj.put(ClientProtocolID.DX_EX_CODE, ClientTranCodeType.CLOSE);
 		
 		byte[] bt = jObj.toString().getBytes();
 		
-		cc.send(4, bt);
+		cc.send(4, bt);*/
 		
 		cc.close();
 	}
@@ -245,7 +245,6 @@ public class ClientAdapter {
 	
 	public JSONObject dxT015(JSONObject jObj) throws Exception{
 
-		System.out.println("dxT015");
 		byte[] bt = jObj.toString().getBytes();
 		
 		cc.send(4, bt);
@@ -253,7 +252,8 @@ public class ClientAdapter {
 		
 
 
-		System.out.println("cc.recv(4, false)");
+		//String strData = cc.receiveMessage();
+		//String strData = cc.receiveMessageData();
 		byte[]	recvBuff = cc.recv(4, false);
 		//JSONObject obj = (JSONObject) cc.recvObject();
 		//String strData = cc.byteArrayOutputStreamReceiveMessage();

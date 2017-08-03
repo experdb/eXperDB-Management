@@ -162,7 +162,7 @@ public class ClientSocketCtl {
 
 	public byte[] recv(int lengthFieldSize, boolean containLengthField)
 			throws IOException, SocketTimeoutException, Exception {
-		System.out.println("recv(int lengthFieldSize, boolean containLengthField)");
+		//System.out.println("recv(int lengthFieldSize, boolean containLengthField)");
 		if (client == null) {
 			throw new Exception("TRConnector : Socket이 생성되지 않았습니다.");
 		}

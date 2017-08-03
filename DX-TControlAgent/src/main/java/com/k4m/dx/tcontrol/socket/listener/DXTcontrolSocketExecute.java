@@ -44,7 +44,7 @@ public class DXTcontrolSocketExecute extends SocketCtl implements Runnable {
 			is = new BufferedInputStream(client.getInputStream());
 			os = new BufferedOutputStream(client.getOutputStream());
 			
-			while(true) {
+			//while(true) {
 				byte[] recvBuff = recv(TotalLengthBit, false);
 				
 				JSONParser parser=new JSONParser();
@@ -179,10 +179,7 @@ public class DXTcontrolSocketExecute extends SocketCtl implements Runnable {
 					break;
 				}
 
-
-
-		       
-			}
+			//}
 			
 		} catch(Exception e) {
 			errLogger.error("{} {}", "DXTcontrolSocketExecute", e.toString());
