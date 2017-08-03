@@ -12,7 +12,7 @@ function fn_cookie(url) {
 </script>
 
 <div id="header">
-			<h1 class="logo"><a href="/index.do"><img src="/images/ico_logo_2.png" alt="eXperDB" /></a></h1>
+			<h1 class="logo"><a href="/index.do" onClick="fn_cookie(null)"><img src="/images/ico_logo_2.png" alt="eXperDB" /></a></h1>
 			<div id="gnb_menu">
 				<h2 class="blind">주메뉴</h2>
 				<ul class="depth_1" id="gnb">

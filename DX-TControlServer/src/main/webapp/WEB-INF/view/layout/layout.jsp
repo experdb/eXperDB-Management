@@ -32,7 +32,6 @@
 <script type="text/javascript" src="/js/common.js"></script>
 
 <link rel="stylesheet" href="<c:url value='/css/treeview/jquery.treeview.css'/>" />
-<link rel="stylesheet" href="<c:url value='/css/treeview/screen.css'/>" />
 <!-- <script src="/js/treeview/jquery.js" type="text/javascript"></script> -->
 <script src="/js/treeview/jquery.cookie.js" type="text/javascript"></script>
 <script src="/js/treeview/jquery.treeview.js" type="text/javascript"></script>
