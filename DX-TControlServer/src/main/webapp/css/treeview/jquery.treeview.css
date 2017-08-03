@@ -41,6 +41,7 @@
 
 .treeview .border {
 	background: #1e1905;
+	padding: 3px;
 }
 
 #sidetree {
@@ -96,7 +97,7 @@
 
 .treeview li {
 	margin: 0;
-	padding: 7px 0pt 7px 20px;
+	padding: 6px 0pt 4px 15px;
 }
 
 .treeview a.selected {
