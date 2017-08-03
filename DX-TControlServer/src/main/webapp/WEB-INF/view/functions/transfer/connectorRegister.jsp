@@ -43,8 +43,8 @@
 			var data = table.row(this).data();
 			var cnr_id = data.cnr_id;
 			var popUrl = "/popup/connectorRegForm.do?act=u&cnr_id=" + cnr_id; // 서버 url 팝업경로
-			var width = 920;
-			var height = 385;
+			var width = 955;
+			var height = 400;
 			var left = (window.screen.width / 2) - (width / 2);
 			var top = (window.screen.height /2) - (height / 2);
 			var popOption = "width="+width+", height="+height+", top="+top+", left="+left+", resizable=no, scrollbars=no, status=no, toolbar=no, titlebar=yes, location=no,";
@@ -93,8 +93,8 @@
 	/* 등록버튼 클릭시*/
 	function fn_insert() {
 		var popUrl = "/popup/connectorRegForm.do?act=i"; // 서버 url 팝업경로
-		var width = 920;
-		var height = 385;
+		var width = 955;
+		var height = 400;
 		var left = (window.screen.width / 2) - (width / 2);
 		var top = (window.screen.height /2) - (height / 2);
 		var popOption = "width="+width+", height="+height+", top="+top+", left="+left+", resizable=no, scrollbars=no, status=no, toolbar=no, titlebar=yes, location=no,";
@@ -109,8 +109,8 @@
 			var cnr_id = table.row('.selected').data().cnr_id;
 			
 			var popUrl = "/popup/connectorRegForm.do?act=u&cnr_id=" + cnr_id; // 서버 url 팝업경로
-			var width = 920;
-			var height = 385;
+			var width = 955;
+			var height = 400;
 			var left = (window.screen.width / 2) - (width / 2);
 			var top = (window.screen.height /2) - (height / 2);
 			var popOption = "width="+width+", height="+height+", top="+top+", left="+left+", resizable=no, scrollbars=no, status=no, toolbar=no, titlebar=yes, location=no,";
@@ -220,5 +220,4 @@
 			</div>
 		</div>
 	</div>
-</div>
 </div>

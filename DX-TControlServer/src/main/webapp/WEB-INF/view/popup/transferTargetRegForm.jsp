@@ -74,9 +74,14 @@
 					
 				},
 				success : function(result) {
-					alert("저장하였습니다.");
-					window.close();
-					opener.fn_select();
+					if(result){
+						alert("저장하였습니다.");
+						window.close();
+						opener.fn_select();
+					}else{
+						alert("Kafka-Connector 상태를 확인해주세요.");
+					}
+					
 				},
 				error : function(request, status, error) {
 					alert("실패");
@@ -104,9 +109,13 @@
 					rotate_interval_ms : $("#rotate_interval_ms").val(),
 				},
 				success : function(result) {
-					alert("저장하였습니다.");
-					window.close();
-					opener.fn_select();
+					if(result){
+						alert("저장하였습니다.");
+						window.close();
+						opener.fn_select();
+					}else{
+						alert("Kafka-Connector 상태를 확인해주세요.");
+					}
 				},
 				error : function(request, status, error) {
 					alert("실패");
