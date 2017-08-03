@@ -88,7 +88,8 @@ public class DxT013 extends SocketCtl{
 	
 	   public static void shellCmd(String command) throws Exception {
            Runtime runtime = Runtime.getRuntime();
-           Process process = runtime.exec(command);
+           
+           Process process = runtime.exec(new String[]{"/bin/sh", "-c", command});
            
            long pid = getPidOfProcess(process);
            

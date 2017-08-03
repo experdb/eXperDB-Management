@@ -47,7 +47,7 @@ public class ClientTester {
 			//clientTester.dxT002(Ip, port);
 			//clientTester.dxT003(Ip, port);
 			//clientTester.dxT004(Ip, port);
-			clientTester.dxT005(Ip, port);
+			//clientTester.dxT005(Ip, port);
 			//clientTester.dxT006_C(Ip, port);
 			//clientTester.dxT006_R(Ip, port);
 			//clientTester.dxT006_U(Ip, port);
@@ -60,7 +60,7 @@ public class ClientTester {
 			//clientTester.dxT011(Ip, port);
 			//clientTester.dxT012(Ip, port);
 			
-			//clientTester.dxT013(Ip, port);
+			clientTester.dxT013(Ip, port);
 
 			//clientTester.dxT014_R(Ip, port);
 			//clientTester.dxT014_C(Ip, port);
@@ -873,7 +873,7 @@ public class ClientTester {
 	private void dxT013(String Ip, int port) {
 		try {
 
-			String strExecTxt = "";
+			String strExecTxt = "ls -al";
 
 			JSONObject jObj = new JSONObject();
 			jObj.put(ClientProtocolID.DX_EX_CODE, ClientTranCodeType.DxT014);

@@ -93,9 +93,9 @@ public class DxT005 extends SocketCtl{
 				
 				
 				//완료 건 update
-				//context = new ClassPathXmlApplicationContext(new String[] {"context-tcontrol.xml"});
+				context = new ClassPathXmlApplicationContext(new String[] {"context-tcontrol.xml"});
 				
-				//SystemServiceImpl service = (SystemServiceImpl) context.getBean("SystemService");
+				SystemServiceImpl service = (SystemServiceImpl) context.getBean("SystemService");
 
 				//System.out.println("retVal "+(i+1)+" : "+ retVal);
 			}

@@ -31,7 +31,8 @@ public class RunCommandExec extends Thread {
 		Process proc = null;
 
 		try{
-			proc = Runtime.getRuntime().exec(cmd);
+			//proc = Runtime.getRuntime().exec(cmd);
+			proc = Runtime.getRuntime().exec(new String[]{"/bin/sh", "-c", cmd}); 
 			try (InputStream psout = proc.getInputStream()) {
 	            this.copy_old(psout, System.out);
 				//this.copy(psout);
