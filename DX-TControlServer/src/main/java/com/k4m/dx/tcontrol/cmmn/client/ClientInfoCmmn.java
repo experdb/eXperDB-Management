@@ -150,9 +150,9 @@ public class ClientInfoCmmn {
 			for(int i=0; i<resultWork.size(); i++){
 				JSONObject objJob = new JSONObject();
 				objJob.put(ClientProtocolID.SCD_ID, resultWork.get(i).get("scd_id")); //스캐쥴ID
-				objJob.put(ClientProtocolID.WORK_ID, resultWork.get(i).get("work_id")); //작업ID
-				objJob.put(ClientProtocolID.EXD_ORD, resultWork.get(i).get("exd_ord")); //실행순서
-				objJob.put(ClientProtocolID.NXT_EXD_YN, resultWork.get(i).get("nxt_exd_yn")); //다음실행여부
+				objJob.put(ClientProtocolID.WORK_ID, resultWork.get(i).get("wrk_id")); //작업ID
+				objJob.put(ClientProtocolID.EXD_ORD, resultWork.get(i).get("exe_ord")); //실행순서
+				objJob.put(ClientProtocolID.NXT_EXD_YN, resultWork.get(i).get("nxt_exe_yn")); //다음실행여부
 				objJob.put(ClientProtocolID.REQ_CMD, CMD.get(i));//명령어
 				arrCmd.add(j, objJob);
 				
@@ -160,17 +160,27 @@ public class ClientInfoCmmn {
 					j++;
 					JSONObject objJob2 = new JSONObject();
 					objJob2.put(ClientProtocolID.SCD_ID, resultWork.get(i).get("scd_id")); //스캐쥴ID
-					objJob2.put(ClientProtocolID.WORK_ID, resultWork.get(i).get("work_id")); //작업ID
-					objJob2.put(ClientProtocolID.EXD_ORD, resultWork.get(i).get("exd_ord")); //실행순서
-					objJob2.put(ClientProtocolID.NXT_EXD_YN, resultWork.get(i).get("nxt_exd_yn")); //다음실행여부
-					objJob2.put(ClientProtocolID.REQ_CMD, "pg_ramn validate -B "+resultWork.get(i).get("bck_pth"));//명령어
+					objJob2.put(ClientProtocolID.WORK_ID, resultWork.get(i).get("wrk_id")); //작업ID
+					objJob2.put(ClientProtocolID.EXD_ORD, resultWork.get(i).get("exe_ord")); //실행순서
+					objJob2.put(ClientProtocolID.NXT_EXD_YN, resultWork.get(i).get("nxt_exe_yn")); //다음실행여부
+					objJob2.put(ClientProtocolID.REQ_CMD, "pg_rman validate -B "+resultWork.get(i).get("bck_pth"));//명령어
 					arrCmd.add(j, objJob2);
 				}
 				
 				j++;
 			}
 
+			System.out.println("서버전송="+arrCmd.get(0));
+			System.out.println("서버전송="+arrCmd.get(1));
+			
+			JSONObject serverObj = new JSONObject();
+			
+			serverObj.put(ClientProtocolID.SERVER_NAME, "");
+			serverObj.put(ClientProtocolID.SERVER_IP, "");
+			serverObj.put(ClientProtocolID.SERVER_PORT, "");
+			
 			reqJObj.put(ClientProtocolID.DX_EX_CODE, ClientTranCodeType.DxT005);
+			reqJObj.put(ClientProtocolID.SERVER_INFO, serverObj);
 			reqJObj.put(ClientProtocolID.ARR_CMD, arrCmd);
 			
 			ClientAdapter CA = new ClientAdapter(Ip, port);
@@ -644,8 +654,10 @@ public class ClientInfoCmmn {
 		return result;
 	}
 	
+	
 	//14.kafka connect 등록(kafakConnect_create)
-	public void kafakConnect_create(JSONObject serverObj,JSONObject param) {
+	public Map<String, Object> kafakConnect_create(JSONObject serverObj,JSONObject param) {
+		Map<String, Object> result = new HashMap<String, Object>();
 		try {
 
 			String strName = (String) param.get("strName");
@@ -693,12 +705,18 @@ public class ClientInfoCmmn {
 			System.out.println("ERR_MSG : " +  strErrMsg);
 				
 			CA.close();
+			
+			result.put("strResultCode", strResultCode);
+			return result;
 		} catch(Exception e) {
 			e.printStackTrace();
 		}
+		return result;
 	}
+	
 	//14.kafka connect 수정(kafakConnect_update)
-	public void kafakConnect_update(JSONObject serverObj,JSONObject param) {
+	public Map<String, Object> kafakConnect_update(JSONObject serverObj,JSONObject param) {
+		Map<String, Object> result = new HashMap<String, Object>();
 		try {
 	
 			String strName = (String) param.get("strName");
@@ -747,17 +765,21 @@ public class ClientInfoCmmn {
 			System.out.println("RESULT_CODE : " +  strResultCode);
 			System.out.println("ERR_CODE : " +  strErrCode);
 			System.out.println("ERR_MSG : " +  strErrMsg);
-		
-				
+			
 			CA.close();
+			
+			result.put("strResultCode", strResultCode);
+			return result;
 		} catch(Exception e) {
 			e.printStackTrace();
 		}
+		return result;
 	}
 	
 	
 	//14.kafka connect 삭제(kafakConnect_delete)
-	public void kafakConnect_delete(JSONObject serverObj,String strName) {
+	public Map<String, Object> kafakConnect_delete(JSONObject serverObj,String strName) {
+		Map<String, Object> result = new HashMap<String, Object>();
 		try {
 			JSONObject connectorInfoObj = new JSONObject();
 			
@@ -785,8 +807,12 @@ public class ClientInfoCmmn {
 			System.out.println("ERR_MSG : " +  strErrMsg);
 				
 			CA.close();
+			
+			result.put("strResultCode", strResultCode);
+			return result;
 		} catch(Exception e) {
 			e.printStackTrace();
 		}
+		return result;
 	}
 }
