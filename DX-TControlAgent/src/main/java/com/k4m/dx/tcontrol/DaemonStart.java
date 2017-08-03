@@ -139,7 +139,7 @@ public class DaemonStart implements DxDaemon{
 			searchVO.setIPADR(strIpadr);
 
 			
-			SystemServiceImpl service = (SystemServiceImpl) context.getBean("SystemServiceImpl");
+			SystemServiceImpl service = (SystemServiceImpl) context.getBean("SystemService");
 
 			DbServerInfoVO dbServerInfo = service.selectDbServerInfo(searchVO);
 			
