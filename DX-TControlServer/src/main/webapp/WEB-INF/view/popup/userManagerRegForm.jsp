@@ -261,8 +261,13 @@
 					<tr>
 						<th scope="row" class="ico_t1">휴대폰번호</th>
 						<td><input type="text" class="txt" name="cpn" id="cpn" value="${cpn}" /></td>
-						<th scope="row" class="ico_t1">권한구분</th>
-<%-- 						<td><input type="text" class="txt" name="aut_id" id="aut_id" value="${aut_id}" /></td> --%>
+						<th scope="row" class="ico_t1">사용여부</th>
+						<td>
+							<select class="select" id="use_yn" name="use_yn">
+								<option value="Y" ${use_yn == 'Y' ? 'selected="selected"' : ''}>사용</option>
+								<option value="N" ${use_yn == 'N' ? 'selected="selected"' : ''}>미사용</option>
+							</select>
+						</td>
 					</tr>
 					<tr>
 						<th scope="row" class="ico_t1">사용자만료일</th>
@@ -271,13 +276,6 @@
 								<a href="#n" class="calendar_btn">달력열기</a>
 								<input type="text" class="calendar" id="datepicker1" title="사용자 만료일 날짜 검색"  value="${usr_expr_dt}" readonly />
 							</div>
-						</td>
-						<th scope="row" class="ico_t1">사용여부</th>
-						<td>
-							<select class="select" id="use_yn" name="use_yn">
-								<option value="Y" ${use_yn == 'Y' ? 'selected="selected"' : ''}>사용</option>
-								<option value="N" ${use_yn == 'N' ? 'selected="selected"' : ''}>미사용</option>
-							</select>
 						</td>
 					</tr>
 				</tbody>

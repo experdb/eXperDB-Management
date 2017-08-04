@@ -30,10 +30,62 @@
 				{ data : "Ipadr", className : "dt-center", defaultContent : ""}, 
 				{ data : "Method", className : "dt-center", defaultContent : ""}, 
 				{ data : "Option", className : "dt-center", defaultContent : ""}, 
-				{ data : "Type", className : "dt-center", defaultContent : ""}
-			 ]
+				{ data : "Type", className : "dt-center", defaultContent : ""},
+				{ data : "",	
+					className: "dt-center",							
+					defaultContent : "",
+					render: function (data, type, full, meta,row) {
+						if (type === 'display') {
+							var $exe_order = $('<div class="order_exc">');
+							$('<a class="dtMoveUp"><img src="../images/ico_order_up.png" alt="" /></a>').appendTo($exe_order);					
+							$('<a class="dtMoveDown"><img src="../images/ico_order_down.png" alt="" /></a>').appendTo($exe_order);																												
+							$('</div>').appendTo($exe_order);
+							return $exe_order.html();
+						}
+					}
+			},
+			 ],'drawCallback': function (settings) {
+					// Remove previous binding before adding it
+					$('.dtMoveUp').unbind('click');
+					$('.dtMoveDown').unbind('click');
+					// Bind clicks to functions
+					$('.dtMoveUp').click(moveUp);
+					$('.dtMoveDown').click(moveDown);
+				}
 		});
 		
+		// Move the row up
+		function moveUp() {
+			var tr = $(this).parents('tr');
+			moveRow(tr, 'up');
+		}
+
+		// Move the row down
+		function moveDown() {
+			var tr = $(this).parents('tr');
+			moveRow(tr, 'down');
+		}
+
+	  	// Move up or down (depending...)
+	  	function moveRow(row, direction) {
+		    var index = table.row(row).index();
+		    var rownum = -1;
+		    if (direction === 'down') {
+		    	rownum = 1;
+		    }
+		    var data1 = table.row(index).data();
+		    data1.rownum += rownum;
+		    var data2 = table.row(index + rownum).data();
+		    data2.rownum += -rownum;
+		    console.log(index);
+		    console.log(data2);
+		    table.row(index).data(data2);
+		    console.log(index + rownum);
+		    console.log(data1);
+		    table.row(index + rownum).data(data1);
+		    table.draw(true);
+		}
+	  
 		table.on( 'order.dt search.dt', function () {
 			table.column(1, {search:'applied', order:'applied'}).nodes().each( function (cell, i) {
 	            cell.innerHTML = i+1;
@@ -307,6 +359,7 @@
 											<th>Method</th>
 											<th>Option</th>
 											<th>Type</th>
+											<th>순서</th>
 										</tr>
 									</thead>
 								</table>
