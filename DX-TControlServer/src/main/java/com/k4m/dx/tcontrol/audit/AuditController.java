@@ -74,8 +74,10 @@ public class AuditController {
 			JSONObject serverObj = new JSONObject();
 			
 			AES256 dec = new AES256(AES256_KEY.ENC_KEY);
-			System.out.println("KEY : " + dbServerVO.getSvr_spr_scm_pwd());
+			//System.out.println("KEY : " + dbServerVO.getSvr_spr_scm_pwd());
 			String strPwd = dec.aesDecode(dbServerVO.getSvr_spr_scm_pwd());
+			
+			System.out.println(strPwd);
 			
 			serverObj.put(ClientProtocolID.SERVER_NAME, dbServerVO.getDb_svr_nm());
 			serverObj.put(ClientProtocolID.SERVER_IP, dbServerVO.getIpadr());
@@ -90,16 +92,19 @@ public class AuditController {
 			
 			//IP = "127.0.0.1";
 			ClientAdapter CA = new ClientAdapter(IP, PORT);
-			CA.open(); 
+			 
 			
 			JSONObject objList;
 			
 			String strExtName = "pgaudit";
 			
+			CA.open();
 			JSONObject objExtList = CA.dxT010(ClientTranCodeType.DxT010, serverObj, strExtName);
+			CA.close();
 			
 			List<Object> selectExtList  = (ArrayList<Object>) objExtList.get(ClientProtocolID.RESULT_DATA);
 			
+
 			
 			if(selectExtList == null || selectExtList.size() == 0) {
 				strExtName = "";
@@ -108,10 +113,9 @@ public class AuditController {
 				return mv;
 			}
 			
-			
-			JSONObject objSettingInfo = new JSONObject();
-			
-			objList = CA.dxT007(ClientTranCodeType.DxT007, ClientProtocolID.COMMAND_CODE_R, serverObj, objSettingInfo);
+			CA.open();
+			objList = CA.dxT007(ClientTranCodeType.DxT007, ClientProtocolID.COMMAND_CODE_R, serverObj );
+			CA.close();
 
 			String strErrMsg = (String)objList.get(ClientProtocolID.ERR_MSG);
 			String strErrCode = (String)objList.get(ClientProtocolID.ERR_CODE);
@@ -124,11 +128,14 @@ public class AuditController {
 			HashMap selectData =(HashMap) objList.get(ClientProtocolID.RESULT_DATA);
 			
 			JSONObject objRoleList;
+			
+			CA.open();
 			objRoleList = CA.dxT011(ClientTranCodeType.DxT011, serverObj);
+			CA.close();
 			
 			List<Object> selectRoleList =(ArrayList<Object>) objRoleList.get(ClientProtocolID.RESULT_DATA);
 
-			CA.close();
+			
 			
 			String strIsActive = "on";
 			
