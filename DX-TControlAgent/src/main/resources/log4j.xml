@@ -27,7 +27,7 @@
 	
 	<appender name="consoleToFile" class="org.apache.log4j.DailyRollingFileAppender">
 		<param name="Threshold" value="INFO" />
-		<param name="File" value="./logs/console.log" />
+		<param name="File" value="${log.base}/console.log" />
 		<param name="DatePattern" value="'.'yyyyMMdd" />
 		<param name="Encoding" value="utf-8"/>
 		<layout class="org.apache.log4j.PatternLayout">
@@ -37,7 +37,7 @@
 
 	<appender name="errorToFile" class="org.apache.log4j.DailyRollingFileAppender">
 		<param name="Threshold" value="ERROR" />
-		<param name="File" value="./logs/error.log" />
+		<param name="File" value="${log.base}/error.log" />
 		<param name="DatePattern" value="'.'yyyyMMdd" />
 		<param name="Encoding" value="utf-8"/>
 		<layout class="org.apache.log4j.PatternLayout">
@@ -47,7 +47,7 @@
 	
 	<appender name="daemonStartToFile" class="org.apache.log4j.DailyRollingFileAppender">
 		<param name="Threshold" value="DEBUG" />
-		<param name="File" value="./logs/DaemonStart.log" />
+		<param name="File" value="${log.base}/DaemonStart.log" />
 		<param name="DatePattern" value="'.'yyyyMMdd" />
 		<param name="Encoding" value="utf-8"/>
 		<layout class="org.apache.log4j.PatternLayout">
@@ -57,7 +57,7 @@
 	
 	<appender name="socketToFile" class="org.apache.log4j.DailyRollingFileAppender">
 		<param name="Threshold" value="DEBUG" />
-		<param name="File" value="./logs/socket.log" />
+		<param name="File" value="${log.base}/socket.log" />
 		<param name="DatePattern" value="'.'yyyyMMdd" />
 		<param name="Encoding" value="utf-8"/>
 		<layout class="org.apache.log4j.PatternLayout">
