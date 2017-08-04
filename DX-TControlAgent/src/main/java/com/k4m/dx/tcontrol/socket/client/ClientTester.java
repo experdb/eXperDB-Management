@@ -39,7 +39,7 @@ public class ClientTester {
 		ClientTester clientTester = new ClientTester();
 		
 		String Ip = "222.110.153.162";
-		 //Ip = "127.0.0.1";
+		 Ip = "127.0.0.1";
 		int port = 9001;
 		try {
 			
@@ -51,7 +51,7 @@ public class ClientTester {
 			//clientTester.dxT006_C(Ip, port);
 			//clientTester.dxT006_R(Ip, port);
 			//clientTester.dxT006_U(Ip, port);
-			//clientTester.dxT006_D(Ip, port);
+			clientTester.dxT006_D(Ip, port);
 			//clientTester.dxT007_C(Ip, port);
 			//clientTester.dxT007_R(Ip, port);
 			
@@ -60,7 +60,7 @@ public class ClientTester {
 			//clientTester.dxT011(Ip, port);
 			//clientTester.dxT012(Ip, port);
 			
-			clientTester.dxT013(Ip, port);
+			//clientTester.dxT013(Ip, port);
 
 			//clientTester.dxT014_R(Ip, port);
 			//clientTester.dxT014_C(Ip, port);
@@ -501,12 +501,12 @@ public class ClientTester {
 			HashMap<String, String> hpSeq = new HashMap<String, String>();
 			hpSeq.put(ClientProtocolID.AC_SEQ, "5");
 			
-			HashMap<String, String> hpSeq2 = new HashMap<String, String>();
-			hpSeq2.put(ClientProtocolID.AC_SEQ, "6");
+			//HashMap<String, String> hpSeq2 = new HashMap<String, String>();
+			//hpSeq2.put(ClientProtocolID.AC_SEQ, "6");
 			
 			ArrayList arrSeq = new ArrayList();
 			arrSeq.add(hpSeq);
-			arrSeq.add(hpSeq2);
+			//arrSeq.add(hpSeq2);
 			
 	
 			ClientAdapter CA = new ClientAdapter(Ip, port);
