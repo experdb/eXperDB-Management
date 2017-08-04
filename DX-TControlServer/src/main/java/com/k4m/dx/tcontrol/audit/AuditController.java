@@ -77,7 +77,6 @@ public class AuditController {
 			//System.out.println("KEY : " + dbServerVO.getSvr_spr_scm_pwd());
 			String strPwd = dec.aesDecode(dbServerVO.getSvr_spr_scm_pwd());
 			
-			System.out.println(strPwd);
 			
 			serverObj.put(ClientProtocolID.SERVER_NAME, dbServerVO.getDb_svr_nm());
 			serverObj.put(ClientProtocolID.SERVER_IP, dbServerVO.getIpadr());
