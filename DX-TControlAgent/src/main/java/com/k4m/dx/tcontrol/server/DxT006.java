@@ -487,7 +487,11 @@ public class DxT006 extends SocketCtl{
 						for(HashMap<String, String> intSeq2 : arrAcSeq) {
 							String strAcSeq =  intSeq2.get(ProtocolID.AC_SEQ);
 							int intAcSeq = Integer.parseInt(strAcSeq);
-							if(intAcSeq == intSeq) blnAcSeqCheck = true;
+							if(intAcSeq == intSeq) {
+								blnAcSeqCheck = true;
+								break;
+							}
+							
 						}
 						
 						if(!blnAcSeqCheck) {

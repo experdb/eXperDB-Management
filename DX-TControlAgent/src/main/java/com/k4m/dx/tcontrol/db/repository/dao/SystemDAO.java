@@ -8,6 +8,7 @@ import org.springframework.stereotype.Repository;
 
 import com.k4m.dx.tcontrol.db.repository.vo.AgentInfoVO;
 import com.k4m.dx.tcontrol.db.repository.vo.DbServerInfoVO;
+import com.k4m.dx.tcontrol.db.repository.vo.TrfTrgCngVO;
 import com.k4m.dx.tcontrol.db.repository.vo.WrkExeVO;
 
 
@@ -50,6 +51,11 @@ public class SystemDAO {
 	public void updateT_WRKEXE_G(WrkExeVO vo) throws Exception  {
 		 session.update("system.updateT_WRKEXE_G", vo);
 	}
+	
+	public void updateT_TRFTRGCNG_I(TrfTrgCngVO vo) throws Exception  {
+		 session.update("system.updateT_TRFTRGCNG_I", vo);
+	}
+	
 	
 	
 }

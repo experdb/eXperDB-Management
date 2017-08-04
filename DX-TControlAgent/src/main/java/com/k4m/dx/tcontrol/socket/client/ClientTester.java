@@ -501,12 +501,12 @@ public class ClientTester {
 			HashMap<String, String> hpSeq = new HashMap<String, String>();
 			hpSeq.put(ClientProtocolID.AC_SEQ, "5");
 			
-			//HashMap<String, String> hpSeq2 = new HashMap<String, String>();
-			//hpSeq2.put(ClientProtocolID.AC_SEQ, "6");
+			HashMap<String, String> hpSeq2 = new HashMap<String, String>();
+			hpSeq2.put(ClientProtocolID.AC_SEQ, "6");
 			
 			ArrayList arrSeq = new ArrayList();
 			arrSeq.add(hpSeq);
-			//arrSeq.add(hpSeq2);
+			arrSeq.add(hpSeq2);
 			
 	
 			ClientAdapter CA = new ClientAdapter(Ip, port);
@@ -873,11 +873,11 @@ public class ClientTester {
 	private void dxT013(String Ip, int port) {
 		try {
 
-			String strExecTxt = "";
+			String strExecTxt = "java -version";
 
 			JSONObject jObj = new JSONObject();
-			jObj.put(ClientProtocolID.DX_EX_CODE, ClientTranCodeType.DxT014);
-			jObj.put(ClientProtocolID.TRF_TRG_ID, "");
+			jObj.put(ClientProtocolID.DX_EX_CODE, ClientTranCodeType.DxT013);
+			jObj.put(ClientProtocolID.TRF_TRG_ID, "12");
 			jObj.put(ClientProtocolID.COMMAND_CODE, ClientProtocolID.RUN);
 			jObj.put(ClientProtocolID.EXEC_TXT, strExecTxt);
 			
