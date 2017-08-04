@@ -136,7 +136,7 @@ public class ScheduleUtl {
 		CronTrigger trigger = newTrigger()
 		    .withIdentity("scd_id", String.valueOf(scd_id))
 		    // .withSchedule(cronSchedule(sce.getCronExpression(exe_perd_cd, exe_dt, exe_h, exe_m, exe_s)))
-		    .withSchedule(cronSchedule("0 0/2 0-5,7-23 * * ?"))
+		    .withSchedule(cronSchedule("0 0/1 0-5,7-23 * * ?"))
 		    .build();	
 		try
 		{

@@ -98,7 +98,7 @@ public class ScheduleQuartzJob implements Job{
 					CMD.add(rmanCmd);
 				}
 			}			
-			//System.out.println("명령어="+CMD);
+			System.out.println("명령어="+CMD);
 			agentCall(resultWork, CMD);
 		}catch(Exception e){
 			e.printStackTrace();
@@ -145,40 +145,41 @@ public class ScheduleQuartzJob implements Job{
 				//1.1 연결할 데이터베이스의 이름 지정
 				//strCmd += "--dbname="+resultDbconn.get(k).get("dft_db_nm");
 				//1.2 호스트 이름 지정
-				strCmd += " --host="+resultDbconn.get(k).get("ipadr");
+				//strCmd += " --host="+resultDbconn.get(k).get("ipadr");
 				//1.3 서버가 연결을 청취하는 TCP포트 설정
 				strCmd += " --port="+resultDbconn.get(k).get("portno");
 				//1.4 연결할 사용자이름
 				strCmd += " --username="+resultDbconn.get(k).get("svr_spr_usr_id");	
+				strCmd += " --no-password";	
 			}
 			
 			//2. 기본옵션 명령어 생성
 				strLast +=" "+resultWork.get(i).get("db_nm")+"  > "+resultWork.get(i).get("save_pth")+"/"+resultWork.get(i).get("bck_filenm")+"_"+today;
 				
-				if(resultWork.get(i).get("file_fmt_cd_nm") != null || resultWork.get(i).get("file_fmt_cd_nm") != ""){
+				if(resultWork.get(i).get("file_fmt_cd_nm") != null && resultWork.get(i).get("file_fmt_cd_nm") != ""){
 					//2.2 파일포멧에 따른 명령어 생성
-					strCmd += " --format="+resultWork.get(i).get("file_fmt_cd_nm");
+					strCmd += " --format="+resultWork.get(i).get("file_fmt_cd_nm").toString().toLowerCase();
 					//2.3 파일포멧이 tar일경우 압축률 명령어 생성
 					if(resultWork.get(i).get("file_fmt_cd_nm") == "tar"){
-						strCmd += " --compress="+resultWork.get(i).get("cprt");
+						strCmd += " --compress="+resultWork.get(i).get("cprt").toString().toLowerCase();
 					}
 				}
 				
 				//2.4 인코딩 방식 명령어 생성
-				if(resultWork.get(i).get("incd") != null || resultWork.get(i).get("incd") != ""){
-					strCmd +=" --encoding="+resultWork.get(i).get("incd");
+				if(resultWork.get(i).get("incd") != null && resultWork.get(i).get("incd") != ""){
+					strCmd +=" --encoding="+resultWork.get(i).get("incd").toString().toLowerCase();
 				}
 				
 				//2.5 rolename 명령어 생성		
 				if(!resultWork.get(i).get("usr_role_nm").equals("")){
-					strCmd +=" --role="+resultWork.get(i).get("usr_role_nm");
+					strCmd +=" --role="+resultWork.get(i).get("usr_role_nm").toString().toLowerCase();
 				}
 				
 			//3. 부가옵션 명령어 생성
 			for(int j =0; j<addOption.size(); j++){
 				// Sections
 				if(addOption.get(j).get("grp_cd").toString().equals("TC0006")){
-					strCmd +=" --section="+addOption.get(j).get("opt_cd_nm");
+					strCmd +=" --section="+addOption.get(j).get("opt_cd_nm").toString().toLowerCase();
 				}
 				// Object형태
 				if(addOption.get(j).get("opt_cd").toString().equals("TC0007")){
@@ -195,7 +196,7 @@ public class ScheduleQuartzJob implements Job{
 				}
 				// 저장제외항목
 				if(addOption.get(j).get("grp_cd").toString().equals("TC0008")){
-					strCmd +=" --no="+addOption.get(j).get("opt_cd_nm");
+					strCmd +=" --no-"+addOption.get(j).get("opt_cd_nm").toString().toLowerCase();
 				}
 				// 쿼리
 				if(addOption.get(j).get("grp_cd").toString().equals("TC0009")){
@@ -235,9 +236,9 @@ public class ScheduleQuartzJob implements Job{
 				//4. 오브젝트옵션 명령어 생성
 				for(int n=0; n<addObject.size(); n++){		
 					if(addObject.get(n).get("obj_nm").equals(null) || addObject.get(n).get("obj_nm").equals("")){
-						strCmd+=" -n "+addObject.get(n).get("scm_nm");
+						strCmd+=" -n "+addObject.get(n).get("scm_nm").toString().toLowerCase();
 					}else{
-						strCmd+=" -t "+addObject.get(n).get("obj_nm");
+						strCmd+=" -t "+addObject.get(n).get("obj_nm").toString().toLowerCase();
 					}
 				}
 			}			

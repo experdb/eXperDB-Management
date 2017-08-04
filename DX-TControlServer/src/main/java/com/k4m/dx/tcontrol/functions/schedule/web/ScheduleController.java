@@ -512,5 +512,23 @@ public class ScheduleController {
 		}
 		txManager.commit(status);
 	}
+
 	
+	/**
+	 * 스케줄이력 화면을 보여준다.
+	 * 
+	 * @param
+	 * @return ModelAndView mv
+	 * @throws Exception
+	 */
+	@RequestMapping(value = "/selectScheduleHistoryView.do")
+	public ModelAndView selectScheduleHistoryView(HttpServletRequest request) {
+		ModelAndView mv = new ModelAndView();
+		try {
+			mv.setViewName("functions/scheduler/scheduleHistory");
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return mv;
+	}
 }
