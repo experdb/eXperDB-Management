@@ -146,7 +146,7 @@ $(function() {
 </script>
 
 <iframe id="frmDownload" name="frmDownload" width="0px" height="0px"></iframe>
-<form name="auditForm" id="auditForm" method="post" onSubmit="return false;">
+<form name="auditForm" id="auditForm" method="post">
 <input type="hidden" id="db_svr_id" name="db_svr_id" value="${db_svr_id}">
 			<div id="contents">
 				<div class="contents_wrap">
