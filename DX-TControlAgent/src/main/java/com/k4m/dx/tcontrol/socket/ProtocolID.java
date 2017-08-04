@@ -86,6 +86,7 @@ public class ProtocolID {
 	public static final String FLUSH_SIZE = "FLUSH_SIZE";
 	public static final String ROTATE_INTERVAL_MS = "ROTATE_INTERVAL_MS";
 	public static final String TOPIC = "TOPIC";
+	public static final String TRF_TRG_ID = "TRF_TRG_ID";
 	
 	
 	public static final String EXEC_TXT = "EXEC_TXT";

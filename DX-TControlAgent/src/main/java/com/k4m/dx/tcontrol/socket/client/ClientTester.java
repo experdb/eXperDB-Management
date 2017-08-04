@@ -53,14 +53,14 @@ public class ClientTester {
 			//clientTester.dxT006_U(Ip, port);
 			//clientTester.dxT006_D(Ip, port);
 			//clientTester.dxT007_C(Ip, port);
-			clientTester.dxT007_R(Ip, port);
+			//clientTester.dxT007_R(Ip, port);
 			
 			
 			//clientTester.dxT010(Ip, port);
-			clientTester.dxT011(Ip, port);
+			//clientTester.dxT011(Ip, port);
 			//clientTester.dxT012(Ip, port);
 			
-			//clientTester.dxT013(Ip, port);
+			clientTester.dxT013(Ip, port);
 
 			//clientTester.dxT014_R(Ip, port);
 			//clientTester.dxT014_C(Ip, port);
@@ -877,6 +877,7 @@ public class ClientTester {
 
 			JSONObject jObj = new JSONObject();
 			jObj.put(ClientProtocolID.DX_EX_CODE, ClientTranCodeType.DxT014);
+			jObj.put(ClientProtocolID.TRF_TRG_ID, "");
 			jObj.put(ClientProtocolID.COMMAND_CODE, ClientProtocolID.RUN);
 			jObj.put(ClientProtocolID.EXEC_TXT, strExecTxt);
 			
