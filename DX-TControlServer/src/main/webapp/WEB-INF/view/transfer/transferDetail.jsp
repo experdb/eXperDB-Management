@@ -162,7 +162,7 @@
 								<th>Connector명</th>
 								<th>서버명</th>
 								<th>Database명</th>
-								<th>상태</th>
+								<th>BottleWater실행</th>
 								<th>맵핑설정</th>
 							</tr>
 						</thead>

@@ -26,7 +26,6 @@ function fn_init() {
 		{ data : "rownum", defaultContent : "", targets : 0, orderable : false, checkboxes : {'selectRow' : true}}, 
 		{ data : "idx", className : "dt-center", defaultContent : ""}, 
 		{ data : "usr_id", className : "dt-center", defaultContent : ""}, 
-		{ data : "aut_id", className : "dt-center", defaultContent : ""}, 
 		{ data : "bln_nm", className : "dt-center", defaultContent : ""}, 
 		{ data : "usr_nm", className : "dt-center", defaultContent : ""}, 
 		{ data : "cpn", className : "dt-center", defaultContent : ""}, 
@@ -229,7 +228,6 @@ function fn_delete(){
 								<th></th>
 								<th>No</th>
 								<th>아이디</th>
-								<th>권한구분</th>
 								<th>소속</th>
 								<th>사용자명</th>
 								<th>연락처</th>
