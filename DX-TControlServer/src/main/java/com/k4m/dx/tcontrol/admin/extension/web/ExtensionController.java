@@ -54,4 +54,21 @@ public class ExtensionController {
 		}
 		return mv;
 	}
+	
+	
+	@RequestMapping(value = "/extensionDetail.do")
+	public ModelAndView extensionDetail(@ModelAttribute("historyVO") HistoryVO historyVO, HttpServletRequest request) {
+		ModelAndView mv = new ModelAndView();
+		try {
+			// Agent모니터링 이력 남기기
+			CmmnUtils.saveHistory(request, historyVO);
+			historyVO.setExe_dtl_cd("DX-T0038");
+			accessHistoryService.insertHistory(historyVO);
+			
+			mv.setViewName("admin/extension/extensionList");
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return mv;
+	}
 }
