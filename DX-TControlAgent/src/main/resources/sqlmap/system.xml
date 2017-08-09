@@ -73,6 +73,7 @@
 	 		, SOCKET_PORT = #{SOCKET_PORT}
 	 		, ISTCNF_YN = #{ISTCNF_YN}
 	 		, LST_MDF_DTM = now()
+	 		, STRT_DTM = now()
 	 	WHERE
 	 		DB_SVR_ID = #{DB_SVR_ID}
 	 	

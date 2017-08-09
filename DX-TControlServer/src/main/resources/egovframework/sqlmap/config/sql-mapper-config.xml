@@ -31,6 +31,7 @@
 		<typeAlias alias="transferMappingVO" type="com.k4m.dx.tcontrol.tree.transfer.service.TransferMappingVO"/>
 		<typeAlias alias="transferRelationVO" type="com.k4m.dx.tcontrol.tree.transfer.service.TransferRelationVO"/>
 		<typeAlias alias="transferDetailMappingVO" type="com.k4m.dx.tcontrol.tree.transfer.service.TransferDetailMappingVO"/>
+		<typeAlias alias="agentMonitoringVO" type="com.k4m.dx.tcontrol.admin.agentmonitoring.service.AgentMonitoringVO" />
     </typeAliases>
     
  	<mappers>
@@ -50,6 +51,7 @@
 		<mapper resource="egovframework/sqlmap/mappers/admin/userManager/userManagerSql.xml" />
 		<mapper resource="egovframework/sqlmap/mappers/admin/dbserverManager/dbserverManagerSql.xml" />
 		<mapper resource="egovframework/sqlmap/mappers/admin/accessHistory/accessHistorySql.xml" />
+		<mapper resource="egovframework/sqlmap/mappers/admin/agentMonitoringSql.xml" />
 		
 		<!-- functions -->
 		<mapper resource="egovframework/sqlmap/mappers/functions/transfer/transferSql.xml" />

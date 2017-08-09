@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper   PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="agentMonitoringSql">
+
+	<select id="selectAgentMonitoringList" parameterType="agentMonitoringVO" resultType="agentMonitoringVO">
+		/**
+	 	* Query ID : selectWorkList
+	 	* Description : workList 조회
+	 	* Author : 박태혁
+	 	**/
+	 	
+	 	SELECT 
+	 		B.DB_SVR_NM
+	 		, A.AGT_CNDT_CD
+	 		, TO_CHAR(A.STRT_DTM,'YYYY-MM-DD HH24:MI:SS') AS STRT_DTM
+	 		, A.ISTCNF_YN
+	 	FROM T_AGTCNDT_I A
+	 		, T_DBSVR_I B
+	 	WHERE
+	 		A.DB_SVR_ID = B.DB_SVR_ID
+	 		
+		<if test="DB_SVR_NM != null and DB_SVR_NM != '' ">
+			AND B.DB_SVR_NM LIKE #{DB_SVR_NM}
+		</if>
+		
+      ORDER BY A.LST_MDF_DTM DESC
+    </select>
+    
+   
+</mapper>
