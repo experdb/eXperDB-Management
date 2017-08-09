@@ -58,7 +58,12 @@ public class AgentMonitoringController {
 			historyVO.setExe_dtl_cd("DX-T0037");
 			accessHistoryService.insertHistory(historyVO);
 			
+			String strDB_SVR_NM = request.getParameter("DB_SVR_NM");
+			
+			if(strDB_SVR_NM == null) strDB_SVR_NM = "";
+			
 			AgentMonitoringVO vo = new AgentMonitoringVO();
+			vo.setDB_SVR_NM(strDB_SVR_NM);
 			
 			List<AgentMonitoringVO> list = (List<AgentMonitoringVO>) aentMonitoringService.selectAgentMonitoringList(vo);
 			

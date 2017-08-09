@@ -22,7 +22,15 @@
 	*/
 %>
 <script>
+	function fn_search() {
+		var form = document.agentForm;
+		
+		form.action = "/agentMonitoring.do";
+		form.submit();
+		return;
+	}
 </script>
+<form name="agentForm" id="agentForm" method="post">
 	<!-- contents -->
 			<div id="contents">
 				<div class="contents_wrap">
@@ -50,7 +58,7 @@
 									<tbody>
 										<tr>
 											<th scope="row" class="t2">DB 서버명</th>
-											<td><input type="text" class="txt t2"/></td>
+											<td><input type="text" id="DB_SVR_NM" name="DB_SVR_NM" class="txt t2"/></td>
 										</tr>
 									</tbody>
 								</table>
@@ -78,11 +86,8 @@
 
 									<c:if test="${fn:length(list) == 0}">
 										<tr>
-											<td></td>
-											<td></td>
-											<td></td>
-											<td></td>
-											<td></td>
+											<td colspan="5">Not Found Data !!</td>
+
 										</tr>
 									</c:if>
 									<c:forEach var="data" items="${list}" varStatus="status">
@@ -115,3 +120,4 @@
 					</div>
 				</div>
 			</div><!-- // contents -->
+</form>
