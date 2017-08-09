@@ -46,6 +46,9 @@
 	<definition name="admin/agentMonitoring/*" extends="default">
 		<put-attribute name="contents" value="/WEB-INF/view/admin/agentMonitoring/{1}.jsp" />
 	</definition>
+	<definition name="admin/extension/*" extends="default">
+		<put-attribute name="contents" value="/WEB-INF/view/admin/extension/{1}.jsp" />
+	</definition>
 	<definition name="functions/transfer/*" extends="default">
 		<put-attribute name="contents" value="/WEB-INF/view/functions/transfer/{1}.jsp" />
 	</definition>
