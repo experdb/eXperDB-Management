@@ -39,7 +39,7 @@ public class AgentMonitoringController {
 	private AccessHistoryService accessHistoryService;
 	
 	@Autowired
-	private AgentMonitoringService aentMonitoringService;
+	private AgentMonitoringService agentMonitoringService;
 
 	/**
 	 * Agent 모니터링 화면을 보여준다.
@@ -65,7 +65,8 @@ public class AgentMonitoringController {
 			AgentMonitoringVO vo = new AgentMonitoringVO();
 			vo.setDB_SVR_NM(strDB_SVR_NM);
 			
-			List<AgentMonitoringVO> list = (List<AgentMonitoringVO>) aentMonitoringService.selectAgentMonitoringList(vo);
+			List<AgentMonitoringVO> list = (List<AgentMonitoringVO>) agentMonitoringService.selectAgentMonitoringList(vo);
+
 			
 			model.addAttribute("list", list);
 			

@@ -57,11 +57,11 @@ public class ClientTester {
 			//clientTester.dxT007_R(Ip, port);
 			
 			
-			clientTester.dxT010(Ip, port);
+			//clientTester.dxT010(Ip, port);
 			//clientTester.dxT011(Ip, port);
 			//clientTester.dxT012(Ip, port);
 			
-			//clientTester.dxT013(Ip, port);
+			clientTester.dxT013(Ip, port);
 
 			//clientTester.dxT014_R(Ip, port);
 			//clientTester.dxT014_C(Ip, port);
@@ -71,7 +71,7 @@ public class ClientTester {
 			//clientTester.dxT015_R(Ip, port);
 			//clientTester.dxT015_V(Ip, port);
 			//clientTester.dxT015_DL(Ip, port);
-			clientTester.dxT016(Ip, port);
+			//clientTester.dxT016(Ip, port);
 			
 			
 		} catch(Exception e) {

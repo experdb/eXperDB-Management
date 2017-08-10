@@ -65,8 +65,8 @@ function fn_init() {
 		searching : false,
 		paging : false,
 		columns : [
-		{data : "dft_db_nm", className : "dt-center", defaultContent : ""}, 
-		{data : "rownum", defaultContent : "", targets : 0, orderable : false, checkboxes : {'selectRow' : true}}, 		
+		{data : "extname", className : "dt-center", defaultContent : ""}, 
+		{data : "installYn", className : "dt-center", defaultContent : "설치"}, 		
 		]
 	});
 	
@@ -113,7 +113,7 @@ $(function() {
             $(this).addClass('selected');
             
         } 
-         var db_svr_nm = table_dbServer.row('.selected').data().db_svr_nm;
+         var db_svr_id = table_dbServer.row('.selected').data().db_svr_id;
 
         /* ********************************************************
          * 선택된 서버에 대한 확장 조회
@@ -121,7 +121,7 @@ $(function() {
        	$.ajax({
     		url : "/extensionDetail.do",
     		data : {
-    			db_svr_nm: db_svr_nm,			
+    			db_svr_id: db_svr_id,			
     		},
     		dataType : "json",
     		type : "post",
@@ -130,11 +130,11 @@ $(function() {
     		},
     		success : function(result) {
     			table_db.clear().draw();
-    			if(result.data == null){
+    			if(result == null){
     				alert("서버상태를 확인해주세요.");
     			}else{
-	    			table_db.rows.add(result.data).draw();
-	    			fn_dataCompareChcek(result);
+	    			table_db.rows.add(result).draw();
+	    			//fn_dataCompareChcek(result);
     			}
     		}
     	});
@@ -145,52 +145,11 @@ $(function() {
 })
 
 
-
-
-
-
-/* ********************************************************
- * 서버에 등록된 디비,  <=>  Repository에 등록된 디비 비교
- ******************************************************** */
-function fn_dataCompareChcek(svrDbList){
-	$.ajax({
-		url : "/selectDBList.do",
-		data : {},
-		async:true,
-		dataType : "json",
-		type : "post",
-		error : function(xhr, status, error) {
-			alert("실패");
-		},
-		success : function(result) {
-			var db_svr_id =  table_dbServer.row('.selected').data().db_svr_id
-			
-			if(svrDbList.data.length>0){
- 				for(var i = 0; i<svrDbList.data.length; i++){
-					for(var j = 0; j<result.length; j++){						
-							 $('input', table_db.rows(i).nodes()).prop('checked', false); 	
-							 table_db.rows(i).nodes().to$().removeClass('selected');	
-					}
-				}	 	
-				for(var i = 0; i<svrDbList.data.length; i++){
-					for(var j = 0; j<result.length; j++){						
-						 if(db_svr_id == result[j].db_svr_id && svrDbList.data[i].dft_db_nm == result[j].db_nm){										 
-							 $('input', table_db.rows(i).nodes()).prop('checked', true); 
-							 table_db.rows(i).nodes().to$().addClass('selected');	
-						}
-					}
-				}		
-			} 
-		}
-	});	
-}
-
-
 </script>
 <div id="contents">
 	<div class="contents_wrap">
 		<div class="contents_tit">
-			<h4>DB 서버 Tree 화면 <a href="#n"><img src="../images/ico_tit.png"alt="" /></a>
+			<h4>확장설치조회 화면 <a href="#n"><img src="../images/ico_tit.png"alt="" /></a>
 			</h4>
 			<div class="location">
 				<ul>
@@ -207,7 +166,7 @@ function fn_dataCompareChcek(svrDbList){
 
 					</div>
 					<div class="inner">
-						<p class="tit">DB 서버 목록</p>
+						<p class="tit">확장설치조회</p>
 						<div class="tree_server">
 							<table id="dbServerList" class="display" cellspacing="0" align="right">
 								<thead>
