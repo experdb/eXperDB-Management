@@ -32,6 +32,8 @@
 		<typeAlias alias="transferRelationVO" type="com.k4m.dx.tcontrol.tree.transfer.service.TransferRelationVO"/>
 		<typeAlias alias="transferDetailMappingVO" type="com.k4m.dx.tcontrol.tree.transfer.service.TransferDetailMappingVO"/>
 		<typeAlias alias="agentMonitoringVO" type="com.k4m.dx.tcontrol.admin.agentmonitoring.service.AgentMonitoringVO" />
+		<typeAlias alias="dashboardVO" type="com.k4m.dx.tcontrol.dashboard.service.DashboardVO" />
+		
     </typeAliases>
     
  	<mappers>
@@ -65,5 +67,9 @@
 		
 		<!-- treetransfer -->
 		<mapper resource="egovframework/sqlmap/mappers/tree/treeTransferSql.xml" />
+		
+		<!-- dashboard -->
+		<mapper resource="egovframework/sqlmap/mappers/dashboard/dashboardSql.xml" />
+		
 	</mappers>
 </configuration>

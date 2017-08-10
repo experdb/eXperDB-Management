@@ -105,10 +105,10 @@
 											<td>${data.STRT_DTM}</td>
 											<td>
 											<c:if test="${data.ISTCNF_YN == 'Y'}">
-											설치됨
+											설치
 											</c:if>
-											<c:if test="${data.ISTCNF_YN == 'N'}">
-											미설치
+											<c:if test="${data.ISTCNF_YN == 'N' || data.ISTCNF_YN == null}">
+											<font color="red">미설치</font>
 											</c:if>
 											</td>
 										</tr>

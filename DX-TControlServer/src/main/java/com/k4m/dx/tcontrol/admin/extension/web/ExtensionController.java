@@ -124,17 +124,6 @@ public class ExtensionController {
 			
 			selectDBList =(ArrayList<Object>) objList.get(ClientProtocolID.RESULT_DATA);
 			
-			if(selectDBList.size() > 0) {
-				for(int i=0; i<selectDBList.size(); i++) {
-					Object obj = selectDBList.get(i);
-					
-					HashMap hp = (HashMap) obj;
-					String extname = (String) hp.get("extname");
-	
-					System.out.println(i + " " + extname);
-				}
-				
-			}
 
 		} catch (Exception e) {
 			e.printStackTrace();
