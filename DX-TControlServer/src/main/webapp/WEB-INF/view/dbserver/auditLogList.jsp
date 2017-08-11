@@ -56,6 +56,10 @@ $(window.document).ready(function() {
 });
 
 $(function() {
+	var extName = "${extName}";
+	
+	fn_chkExtName(extName)
+	
 	var dateFormat = "yyyy-mm-dd", from = $("#from").datepicker({
 		changeMonth : false,
 		changeYear : false,
@@ -82,6 +86,17 @@ $(function() {
 		return date;
 	}
 });
+
+function fn_chkExtName(extName) {
+	if(extName == "") {
+		alert("서버에 pgaudit Extension 이 설치되지 않았습니다.");
+		history.go(-1);
+	} else if(extName == "agent") {
+		alert("서버에 T엔진이 설치되지 않았습니다.");
+		history.go(-1);
+	}
+	
+}
 
 	function fn_search() {
 		var form = document.auditForm;

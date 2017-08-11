@@ -186,8 +186,8 @@
 									</c:if>
 											
 									</td>
-									<td>5</td>
-									<td>5</td>
+									<td>0</td>
+									<td>0</td>
 								</tr>
 								</c:forEach>
 							</tbody>
