@@ -69,13 +69,16 @@
 		  	AAA.DB_SVR_ID AS db_svr_id
 		  	, (SELECT DB_SVR_NM FROM T_DBSVR_I WHERE DB_SVR_ID = AAA.DB_SVR_ID) AS db_svr_nm
 		    , COUNT(AAA.WRK_ID) AS wrk_cnt
-		    , SUM(CASE WHEN AAA.SCD_ID IS NULL THEN 0 ELSE 1 END) AS db_cnt
+		    , (SELECT COUNT(*) FROM T_DB_I WHERE DB_SVR_ID = AAA.DB_SVR_ID) AS db_cnt
 		    , (SELECT COUNT(DISTINCT SCD_ID) FROM T_SCD_D A, T_WRKCNG_I B 
 		          WHERE B.db_svr_id = AAA.DB_SVR_ID 
 		          AND A.WRK_ID = B.WRK_ID) AS schedule_cnt
 		    , SUM(AAA.success_cnt) AS success_cnt
 		    , SUM(AAA.fail_cnt) AS fail_cnt
-		    , (SELECT COUNT(*) / (SELECT COUNT(DISTINCT DB_ID) FROM T_SVRACSCNTR_I WHERE DB_SVR_ID = AAA.DB_SVR_ID) 
+		    , (SELECT 
+               case when (SELECT COUNT(DISTINCT DB_ID) FROM T_SVRACSCNTR_I WHERE DB_SVR_ID = AAA.DB_SVR_ID) = 0 then 0
+               else COUNT(*) / (SELECT COUNT(DISTINCT DB_ID) FROM T_SVRACSCNTR_I WHERE DB_SVR_ID = AAA.DB_SVR_ID) 
+               end
 				FROM T_SVRACSCNTR_I WHERE DB_SVR_ID = AAA.DB_SVR_ID
 				) AS access_cnt
 		    , (SELECT AGT_CNDT_CD FROM T_AGTCNDT_I WHERE DB_SVR_ID = AAA.DB_SVR_ID) AS agt_cndt_cd
@@ -91,12 +94,12 @@
 		       (
 		       SELECT 
 		             A.DB_SVR_ID
-		            , A.WRK_ID
+		            , C.WRK_ID
 		            , B.SCD_ID
 		        FROM
-		            T_WRKCNG_I A
-		           INNER JOIN T_DBSVR_I C ON A.DB_SVR_ID = C.DB_SVR_ID
-		           LEFT OUTER JOIN T_SCD_D B ON A.WRK_ID = B.WRK_ID
+		             T_DBSVR_I  A
+		           LEFT OUTER JOIN T_WRKCNG_I C ON A.DB_SVR_ID = C.DB_SVR_ID
+		           LEFT OUTER JOIN T_SCD_D B ON B.WRK_ID = C.WRK_ID
 		        ) AA 
 		    ) AAA
 		 GROUP BY AAA.DB_SVR_ID

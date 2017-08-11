@@ -78,7 +78,7 @@
 							</li>
 							<li>
 								<p class="state">
-									<img src="../images/ico_state_12.png" alt="Unregistered" /><span>Running Schedule</span>
+									<img src="../images/ico_state_03.png" alt="Running Schedule" /><span>Running Schedule</span>
 								</p>
 								<p class="state_num c3">${backupInfo.schedule_run_cnt}</p>
 								<p class="state_txt">스케줄실행중</p>
