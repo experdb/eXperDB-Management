@@ -56,7 +56,9 @@
 		  	, (SELECT DB_SVR_NM FROM T_DBSVR_I WHERE DB_SVR_ID = AAA.DB_SVR_ID) AS db_svr_nm
 		    , COUNT(AAA.WRK_ID) AS wrk_cnt
 		    , SUM(CASE WHEN AAA.SCD_ID IS NULL THEN 0 ELSE 1 END) AS db_cnt
-		    , SUM(AAA.schedule_cnt) AS schedule_cnt
+		    , (SELECT COUNT(DISTINCT SCD_ID) FROM T_SCD_D A, T_WRKCNG_I B 
+		          WHERE B.db_svr_id = AAA.DB_SVR_ID 
+		          AND A.WRK_ID = B.WRK_ID) AS schedule_cnt
 		    , SUM(AAA.success_cnt) AS success_cnt
 		    , SUM(AAA.fail_cnt) AS fail_cnt
 		    , (SELECT COUNT(*) FROM T_SVRACSCNTR_I WHERE DB_SVR_ID = AAA.DB_SVR_ID) AS access_cnt
@@ -67,7 +69,6 @@
 		            AA.DB_SVR_ID
 		            , AA.WRK_ID
 		            , AA.SCD_ID
-		            , (SELECT COUNT(*) FROM T_SCD_M WHERE SCD_ID = AA.SCD_ID ) schedule_cnt
 		       		, (SELECT COUNT(*) FROM T_WRKEXE_G WHERE SCD_ID = AA.SCD_ID AND EXE_RSLT_CD = 'TC001701') success_cnt
 		       		, (SELECT COUNT(*) FROM T_WRKEXE_G WHERE SCD_ID = AA.SCD_ID AND EXE_RSLT_CD = 'TC001702') fail_cnt
 		       FROM
