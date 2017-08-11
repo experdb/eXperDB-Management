@@ -31,7 +31,7 @@
 			COUNT(*) AS server_cnt
 			, SUM(CASE WHEN AA.bakup_cnt > 0 THEN 1 ELSE 0 END) AS backup_cnt
             , sum(schedule_cnt) AS schedule_cnt
-			, SUM(CASE WHEN AA.bakup_cnt = 0 THEN 1 ELSE 0 END) AS unregistered_cnt
+			, SUM(schedule_run_cnt) AS schedule_run_cnt
 		FROM 
 		(
 		    SELECT 
@@ -39,6 +39,16 @@
 		        , (SELECT COUNT(DISTINCT SCD_ID) FROM T_SCD_D C, T_WRKCNG_I D
 		          WHERE D.db_svr_id = A.DB_SVR_ID 
 		          AND C.WRK_ID = D.WRK_ID) AS schedule_cnt
+		        , (
+		        	SELECT 
+		        		COUNT(DISTINCT C.SCD_ID) 
+		        	FROM T_SCD_D C, T_WRKCNG_I D, T_SCD_M E
+		          	WHERE 
+		          		D.db_svr_id = A.DB_SVR_ID 
+		          		AND C.SCD_ID = E.SCD_ID
+		            	AND C.WRK_ID = D.WRK_ID
+		            	AND E.SCD_CNDT = 'TC001801'
+		            ) AS schedule_run_cnt
 		        , COUNT(*) bakup_cnt
 		    FROM
 		        T_DBSVR_I A

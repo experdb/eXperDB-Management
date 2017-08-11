@@ -10,6 +10,7 @@ public class DashboardVO {
 	private int server_cnt;
 	private int backup_cnt;
 	private int unregistered_cnt;
+	private int schedule_run_cnt;
 	
 	private int db_svr_id;
 	private String db_svr_nm;
@@ -21,6 +22,12 @@ public class DashboardVO {
 	private String agt_cndt_cd;
 	
 	
+	public int getSchedule_run_cnt() {
+		return schedule_run_cnt;
+	}
+	public void setSchedule_run_cnt(int schedule_run_cnt) {
+		this.schedule_run_cnt = schedule_run_cnt;
+	}
 	public int getDb_cnt() {
 		return db_cnt;
 	}
