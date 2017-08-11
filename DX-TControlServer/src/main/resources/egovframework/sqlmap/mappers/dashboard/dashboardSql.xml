@@ -30,11 +30,15 @@
 		SELECT 
 			COUNT(*) AS server_cnt
 			, SUM(CASE WHEN AA.bakup_cnt > 0 THEN 1 ELSE 0 END) AS backup_cnt
+            , sum(schedule_cnt) AS schedule_cnt
 			, SUM(CASE WHEN AA.bakup_cnt = 0 THEN 1 ELSE 0 END) AS unregistered_cnt
 		FROM 
 		(
 		    SELECT 
 		        A.DB_SVR_ID
+		        , (SELECT COUNT(DISTINCT SCD_ID) FROM T_SCD_D C, T_WRKCNG_I D
+		          WHERE D.db_svr_id = A.DB_SVR_ID 
+		          AND C.WRK_ID = D.WRK_ID) AS schedule_cnt
 		        , COUNT(*) bakup_cnt
 		    FROM
 		        T_DBSVR_I A
@@ -61,7 +65,9 @@
 		          AND A.WRK_ID = B.WRK_ID) AS schedule_cnt
 		    , SUM(AAA.success_cnt) AS success_cnt
 		    , SUM(AAA.fail_cnt) AS fail_cnt
-		    , (SELECT COUNT(*) FROM T_SVRACSCNTR_I WHERE DB_SVR_ID = AAA.DB_SVR_ID) AS access_cnt
+		    , (SELECT COUNT(*) / (SELECT COUNT(DISTINCT DB_ID) FROM T_SVRACSCNTR_I WHERE DB_SVR_ID = AAA.DB_SVR_ID) 
+				FROM T_SVRACSCNTR_I WHERE DB_SVR_ID = AAA.DB_SVR_ID
+				) AS access_cnt
 		    , (SELECT AGT_CNDT_CD FROM T_AGTCNDT_I WHERE DB_SVR_ID = AAA.DB_SVR_ID) AS agt_cndt_cd
 		  FROM
 		  (

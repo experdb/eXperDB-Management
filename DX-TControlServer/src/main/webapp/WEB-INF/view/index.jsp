@@ -70,6 +70,14 @@
 							</li>
 							<li>
 								<p class="state">
+									<img src="../images/ico_state_09.png" alt="Backup" /><span>Schedule
+									</span>
+								</p>
+								<p class="state_num c1">${backupInfo.schedule_cnt}</p>
+								<p class="state_txt">스캐줄등록</p>
+							</li>
+							<li>
+								<p class="state">
 									<img src="../images/ico_state_12.png" alt="Unregistered" /><span>Unregistered</span>
 								</p>
 								<p class="state_num c3">${backupInfo.unregistered_cnt}</p>
@@ -158,8 +166,8 @@
 								<c:forEach var="data" items="${serverInfo}" varStatus="status">
 								<tr>
 									<td>${data.db_svr_nm}</td>
-									<td>${data.wrk_cnt}</td>
 									<td>${data.db_cnt}</td>
+									<td>${data.wrk_cnt}</td>
 									<td>${data.schedule_cnt}</td>
 									<td>${data.success_cnt}</td>
 									<td>${data.fail_cnt}</td>
