@@ -60,6 +60,7 @@
 		<!-- functions -->
 		<mapper resource="egovframework/sqlmap/mappers/functions/transfer/transferSql.xml" />
 		<mapper resource="egovframework/sqlmap/mappers/functions/schedule/scheduleSql.xml" />
+		<mapper resource="egovframework/sqlmap/mappers/functions/schedule/scheduleHistorySql.xml" />
 		
 		<!-- accesscontrol -->
 		<mapper resource="egovframework/sqlmap/mappers/accessControl/accessControlSql.xml" />

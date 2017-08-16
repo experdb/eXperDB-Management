@@ -38,6 +38,8 @@ import com.k4m.dx.tcontrol.functions.schedule.service.ScheduleDtlVO;
 import com.k4m.dx.tcontrol.functions.schedule.service.ScheduleService;
 import com.k4m.dx.tcontrol.functions.schedule.service.ScheduleVO;
 
+import egovframework.rte.ptl.mvc.tags.ui.pagination.PaginationInfo;
+
 /**
  * Schedule 컨트롤러 클래스를 정의한다.
  *
@@ -511,24 +513,5 @@ public class ScheduleController {
 			}
 		}
 		txManager.commit(status);
-	}
-
-	
-	/**
-	 * 스케줄이력 화면을 보여준다.
-	 * 
-	 * @param
-	 * @return ModelAndView mv
-	 * @throws Exception
-	 */
-	@RequestMapping(value = "/selectScheduleHistoryView.do")
-	public ModelAndView selectScheduleHistoryView(HttpServletRequest request) {
-		ModelAndView mv = new ModelAndView();
-		try {
-			mv.setViewName("functions/scheduler/scheduleHistory");
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-		return mv;
 	}
 }
