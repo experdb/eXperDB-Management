@@ -77,10 +77,13 @@ function fn_init() {
  * 페이지 시작시(서버 조회)
  ******************************************************** */
 $(window.document).ready(function() {
+	
+	fn_buttonAut();
+	
 	fn_init();
 	
   	$.ajax({
-		url : "/selectDbServerList.do",
+		url : "/selectTreeDbServerList.do",
 		data : {},
 		dataType : "json",
 		type : "post",
@@ -92,10 +95,20 @@ $(window.document).ready(function() {
 			table_dbServer.rows.add(result).draw();
 		}
 	});
-  	
-  	
-
 });
+
+function fn_buttonAut(){
+	var wrt_button = document.getElementById("wrt_button"); 
+	var save_button = document.getElementById("save_button"); 
+	
+	if("${wrt_aut_yn}" == "Y"){
+		wrt_button.style.display = '';
+		save_button.style.display = '';
+	}else{
+		wrt_button.style.display = 'none';
+		save_button.style.display = 'none';
+	}
+}
 
 $(function() {		
 	
@@ -258,9 +271,11 @@ function fn_dataCompareChcek(svrDbList){
 			<div class="tree_grp">
 				<div class="tree_lt">
 					<div class="btn_type_01">
+					<div id="wrt_button">
 						<span class="btn"><button onclick="fn_reg_popup();">등록</button></span>
-						<span class="btn"><button onClick="fn_regRe_popup();">수정</button></span>
+						<span class="btn"><button onClick="fn_regRe_popup();">수정</button></span>		
 						<a href="#n" class="btn"><span>삭제</span></a>
+					</div>
 					</div>
 					<div class="inner">
 						<p class="tit">DB 서버 목록</p>
@@ -288,7 +303,9 @@ function fn_dataCompareChcek(svrDbList){
 				</div>
 				<div class="tree_rt">
 					<div class="btn_type_01">
+						<div id="save_button">
 						<span class="btn"><button onClick="fn_insertDB()">저장</button></span>
+						</div>
 					</div>
 					<div class="inner">
 						<p class="tit">DB 목록</p>

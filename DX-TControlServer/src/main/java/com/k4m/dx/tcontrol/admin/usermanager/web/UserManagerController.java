@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.k4m.dx.tcontrol.admin.accesshistory.service.AccessHistoryService;
+import com.k4m.dx.tcontrol.admin.menuauthority.service.MenuAuthorityService;
 import com.k4m.dx.tcontrol.admin.usermanager.service.UserManagerService;
 import com.k4m.dx.tcontrol.cmmn.CmmnUtils;
 import com.k4m.dx.tcontrol.cmmn.SHA256;
@@ -39,6 +40,9 @@ import com.k4m.dx.tcontrol.login.service.UserVO;
 
 @Controller
 public class UserManagerController {
+	
+	@Autowired
+	private MenuAuthorityService menuAuthorityService;
 	
 	@Autowired
 	private UserManagerService userManagerService;
@@ -135,6 +139,8 @@ public class UserManagerController {
 	@RequestMapping(value = "/insertUserManager.do")
 	public @ResponseBody void insertUserManager(@ModelAttribute("userVo") UserVO userVo,HttpServletRequest request,@ModelAttribute("historyVO") HistoryVO historyVO) {
 		try {		
+			List<UserVO> result = null;
+			
 			// 사용자 등록 이력 남기기
 			CmmnUtils.saveHistory(request, historyVO);
 			historyVO.setExe_dtl_cd("DX-T0032_01");
@@ -149,6 +155,16 @@ public class UserManagerController {
 			userVo.setLst_mdfr_id(usr_id);
 			
 			userManagerService.insertUserManager(userVo);
+			
+			
+			result = menuAuthorityService.selectMnuIdList();
+			
+			for(int i=0; i<result.size(); i++){
+				userVo.setMnu_id(result.get(i).getMnu_id());
+				menuAuthorityService.insertUsrmnuaut(userVo);
+			}
+
+			
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

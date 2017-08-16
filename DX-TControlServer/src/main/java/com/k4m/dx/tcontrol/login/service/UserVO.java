@@ -18,6 +18,8 @@ public class UserVO {
 	private String frst_reg_dtm;//최초_등록_일시
 	private String lst_mdfr_id;//최종_수정자_ID
 	private String lst_mdf_dtm;//최종_수정_일시
+	
+	private int mnu_id;
 
 	//로그인 이력
 	private String lgi_crrno;//로그인_이력번호
@@ -173,7 +175,16 @@ public class UserVO {
 	public void setLog_out_dtm_hour(String log_out_dtm_hour) {
 		this.log_out_dtm_hour = log_out_dtm_hour;
 	}
+	
+	
+	public int getMnu_id() {
+		return mnu_id;
+	}
+	public void setMnu_id(int mnu_id) {
+		this.mnu_id = mnu_id;
+	}
 
+	
 	
 	
 }

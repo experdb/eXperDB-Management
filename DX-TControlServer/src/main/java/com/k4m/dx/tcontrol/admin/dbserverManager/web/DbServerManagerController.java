@@ -26,6 +26,7 @@ import com.k4m.dx.tcontrol.admin.dbserverManager.service.DbServerVO;
 import com.k4m.dx.tcontrol.backup.service.DbVO;
 import com.k4m.dx.tcontrol.cmmn.AES256;
 import com.k4m.dx.tcontrol.cmmn.AES256_KEY;
+import com.k4m.dx.tcontrol.cmmn.CmmnUtils;
 import com.k4m.dx.tcontrol.cmmn.client.ClientInfoCmmn;
 import com.k4m.dx.tcontrol.cmmn.client.ClientProtocolID;
 import com.k4m.dx.tcontrol.common.service.CmmnHistoryService;
@@ -48,7 +49,7 @@ import com.k4m.dx.tcontrol.common.service.HistoryVO;
 
 @Controller
 public class DbServerManagerController {
-
+	
 	@Autowired
 	private DbServerManagerService dbServerManagerService;
 	
@@ -59,32 +60,7 @@ public class DbServerManagerController {
 	private AccessControlService accessControlService;
 
 
-	/**
-	 * DB Tree 화면을 보여준다.
-	 * 
-	 * @param historyVO
-	 * @param request
-	 * @return ModelAndView mv
-	 * @throws Exception
-	 */
-	@RequestMapping(value = "/dbTree.do")
-	public ModelAndView dbTree(@ModelAttribute("historyVO") HistoryVO historyVO, HttpServletRequest request) {
-		ModelAndView mv = new ModelAndView();
-		try {
-			// DB Server Tree 이력 남기기
-			HttpSession session = request.getSession();
-			String usr_id = (String) session.getAttribute("usr_id");
-			String ip = (String) session.getAttribute("ip");
-			historyVO.setUsr_id(usr_id);
-			historyVO.setLgi_ipadr(ip);
-			cmmnHistoryService.insertHistoryDbTree(historyVO);
-			
-			mv.setViewName("admin/dbServerManager/dbTree");
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-		return mv;
-	}
+
 
 	/**
 	 * DB 서버 화면을 보여준다.
@@ -177,6 +153,7 @@ public class DbServerManagerController {
 	@RequestMapping(value = "/selectDbServerList.do")
 	@ResponseBody
 	public List<DbServerVO> selectDbServerList(@ModelAttribute("dbServerVO") DbServerVO dbServerVO) {
+	
 		List<DbServerVO> result = null;
 		List<DbServerVO> resultSet = null;
 		try {
