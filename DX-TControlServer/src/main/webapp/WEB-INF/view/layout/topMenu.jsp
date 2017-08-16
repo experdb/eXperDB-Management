@@ -53,7 +53,7 @@ function fn_cookie(url) {
 					<li><a href="#n"><span><img src="/images/ico_h_7.png" alt="MY PAGE" /></span></a>
 						<ul class="depth_2">
 							<li><a href="/myPage.do" onClick="fn_cookie(null)">개인정보수정</a></li>
-        					<li><a href="#" onClick="fn_cookie(null)">My스케쥴</a></li>
+        					<li><a href="/myScheduleListView.do" onClick="fn_cookie(null)">My스케쥴</a></li>
 						</ul>
 					</li>
 					<li><a href="#n"><span><img src="/images/ico_h_8.png" alt="HELP" /></span></a>

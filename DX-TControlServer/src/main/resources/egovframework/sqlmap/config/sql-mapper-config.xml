@@ -66,6 +66,7 @@
 		
 		<!-- mypage -->
 		<mapper resource="egovframework/sqlmap/mappers/mypage/mypageSql.xml" />
+		<mapper resource="egovframework/sqlmap/mappers/mypage/myScheduleSql.xml" />
 		
 		<!-- treetransfer -->
 		<mapper resource="egovframework/sqlmap/mappers/tree/treeTransferSql.xml" />
