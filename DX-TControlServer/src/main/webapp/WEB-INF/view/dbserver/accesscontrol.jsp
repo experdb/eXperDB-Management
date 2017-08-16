@@ -31,7 +31,7 @@
 				{ data : "Method", className : "dt-center", defaultContent : ""}, 
 				{ data : "Option", className : "dt-center", defaultContent : ""}, 
 				{ data : "Type", className : "dt-center", defaultContent : ""},
-				{ data : "",	
+				{ data : "exe_ord",	
 					className: "dt-center",							
 					defaultContent : "",
 					render: function (data, type, full, meta,row) {
@@ -44,53 +44,60 @@
 						}
 					}
 			},
-			 ],'drawCallback': function (settings) {
-					// Remove previous binding before adding it
-					$('.dtMoveUp').unbind('click');
-					$('.dtMoveDown').unbind('click');
-					// Bind clicks to functions
-					$('.dtMoveUp').click(moveUp);
-					$('.dtMoveDown').click(moveDown);
-				}
+			 ],
+	 		'drawCallback': function (settings) {
+				// Remove previous binding before adding it
+				$('.dtMoveUp').unbind('click');
+				$('.dtMoveDown').unbind('click');
+				// Bind clicks to functions
+				$('.dtMoveUp').click(moveUp);
+				$('.dtMoveDown').click(moveDown);
+			} 
 		});
 		
+ 	 	table.on( 'order.dt search.dt', function () {
+			table.column(1, {search:'applied', order:'applied'}).nodes().each( function (cell, i) {
+	            cell.innerHTML = i+1;
+	        } );
+	    } ).draw();  
+		  
 		// Move the row up
 		function moveUp() {
 			var tr = $(this).parents('tr');
 			moveRow(tr, 'up');
 		}
 
+		
 		// Move the row down
 		function moveDown() {
 			var tr = $(this).parents('tr');
 			moveRow(tr, 'down');
 		}
 
-	  	// Move up or down (depending...)
-	  	function moveRow(row, direction) {
-		    var index = table.row(row).index();
-		    var rownum = -1;
-		    if (direction === 'down') {
-		    	rownum = 1;
-		    }
-		    var data1 = table.row(index).data();
-		    data1.rownum += rownum;
-		    var data2 = table.row(index + rownum).data();
-		    data2.rownum += -rownum;
-		    console.log(index);
-		    console.log(data2);
-		    table.row(index).data(data2);
-		    console.log(index + rownum);
-		    console.log(data1);
-		    table.row(index + rownum).data(data1);
-		    table.draw(true);
+		
+	  // Move up or down (depending...)
+	  function moveRow(row, direction) {
+		 
+	    var index = table.row(row).index();
+	    var rownum = -1;
+	    if (direction === 'down') {
+	    	rownum = 1;
+	    }
+
+	    var data1 = table.row(index).data();
+	    data1.Seq = Number(data1.Seq)+rownum;
+
+
+	    
+	    var data2 = table.row(index + rownum).data();
+	    data2.Seq= Number(data2.Seq)-rownum;
+
+	    table.row(index).data(data2);
+	    table.row(index + rownum).data(data1);
+	    table.draw(true);
 		}
 	  
-		table.on( 'order.dt search.dt', function () {
-			table.column(1, {search:'applied', order:'applied'}).nodes().each( function (cell, i) {
-	            cell.innerHTML = i+1;
-	        } );
-	    } ).draw();
+	  
 		
 		//더블 클릭시
 		$('#accessControlTable tbody').on('dblclick','tr',function() {
@@ -125,11 +132,11 @@
 	
 	$(window.document).ready(function() {
 		fn_init();
-		var table = $('#accessControlTable').DataTable();
+ 		var table = $('#accessControlTable').DataTable();
 		$('#select').on( 'keyup', function () {
 			 table.search( this.value ).draw();
 		});	
-		$('.dataTables_filter').hide();
+		$('.dataTables_filter').hide(); 
 	})
 
 	

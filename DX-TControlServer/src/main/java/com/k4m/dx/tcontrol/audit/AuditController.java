@@ -87,6 +87,14 @@ public class AuditController {
 			
 			
 			String IP = dbServerVO.getIpadr();
+			
+			if(agentInfo == null) {
+				
+				mv.addObject("extName", "agent");
+				mv.setViewName("dbserver/auditManagement");
+				return mv;
+			}
+			
 			int PORT = agentInfo.getSOCKET_PORT();
 			
 			//IP = "127.0.0.1";
@@ -314,12 +322,16 @@ public class AuditController {
 			JSONObject serverObj = new JSONObject();
 			
 			AES256 dec = new AES256(AES256_KEY.ENC_KEY);
-			System.out.println("KEY : " + dbServerVO.getSvr_spr_scm_pwd());
+			//System.out.println("KEY : " + dbServerVO.getSvr_spr_scm_pwd());
 			String strPwd = dec.aesDecode(dbServerVO.getSvr_spr_scm_pwd());
+			
 			
 			serverObj.put(ClientProtocolID.SERVER_NAME, dbServerVO.getDb_svr_nm());
 			serverObj.put(ClientProtocolID.SERVER_IP, dbServerVO.getIpadr());
 			serverObj.put(ClientProtocolID.SERVER_PORT, dbServerVO.getPortno());
+			serverObj.put(ClientProtocolID.DATABASE_NAME, dbServerVO.getDft_db_nm());
+			serverObj.put(ClientProtocolID.USER_ID, dbServerVO.getSvr_spr_usr_id());
+			serverObj.put(ClientProtocolID.USER_PWD, strPwd);
 
 			
 			JSONObject jObj = new JSONObject();
@@ -330,14 +342,44 @@ public class AuditController {
 			jObj.put(ClientProtocolID.SEARCH_INFO, searchInfoObj);
 			
 			
+			
+			
 			String IP = dbServerVO.getIpadr();
+			
+			if(agentInfo == null) {
+				
+				mv.addObject("extName", "agent");
+				mv.setViewName("dbserver/auditLogList");
+				return mv;
+			}
+			
 			int PORT = agentInfo.getSOCKET_PORT();
+			
+			
 			
 			//IP = "127.0.0.1";
 			ClientAdapter CA = new ClientAdapter(IP, PORT);
-			CA.open(); 
 			
+			String strExtName = "pgaudit";
+			
+			CA.open();
+			JSONObject objExtList = CA.dxT010(ClientTranCodeType.DxT010, serverObj, strExtName);
+			CA.close();
+			
+			List<Object> selectExtList  = (ArrayList<Object>) objExtList.get(ClientProtocolID.RESULT_DATA);
+			
+
+			
+			if(selectExtList == null || selectExtList.size() == 0) {
+				strExtName = "";
+				mv.addObject("extName", strExtName);
+				mv.setViewName("dbserver/auditManagement");
+				return mv;
+			}
+			
+			CA.open(); 
 			JSONObject objList = CA.dxT015(jObj);
+			CA.close();
 			
 			String strErrMsg = (String)objList.get(ClientProtocolID.ERR_MSG);
 			String strErrCode = (String)objList.get(ClientProtocolID.ERR_CODE);
@@ -354,11 +396,11 @@ public class AuditController {
 			mv.addObject("serverName", dbServerVO.getDb_svr_nm());
 			mv.addObject("db_svr_id", strDbSvrId);
 			mv.addObject("logFileList", fileList);
-			
+			mv.addObject("extName", strExtName);
 			mv.addObject("start_date", strStartDate);
 			mv.addObject("end_date", strEndDate);
 			
-			CA.close();
+			
 			
 		} catch (Exception e) {
 			e.printStackTrace();

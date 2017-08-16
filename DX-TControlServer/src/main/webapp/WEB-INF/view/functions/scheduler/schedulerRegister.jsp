@@ -86,7 +86,6 @@ function fn_init(){
         } );
     } ).draw();
     
-    
 	// Move the row up
 	function moveUp() {
 		var tr = $(this).parents('tr');

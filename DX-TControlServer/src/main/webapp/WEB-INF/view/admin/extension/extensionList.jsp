@@ -65,8 +65,8 @@ function fn_init() {
 		searching : false,
 		paging : false,
 		columns : [
-		{data : "dft_db_nm", className : "dt-center", defaultContent : ""}, 
-		{data : "rownum", defaultContent : "", targets : 0, orderable : false, checkboxes : {'selectRow' : true}}, 		
+		{data : "extname", className : "dt-center", defaultContent : ""}, 
+		{data : "installYn", className : "dt-center", defaultContent : "설치"}, 		
 		]
 	});
 	
@@ -77,13 +77,10 @@ function fn_init() {
  * 페이지 시작시(서버 조회)
  ******************************************************** */
 $(window.document).ready(function() {
-	
-	fn_buttonAut();
-	
 	fn_init();
 	
   	$.ajax({
-		url : "/selectTreeDbServerList.do",
+		url : "/selectDbServerList.do",
 		data : {},
 		dataType : "json",
 		type : "post",
@@ -95,20 +92,10 @@ $(window.document).ready(function() {
 			table_dbServer.rows.add(result).draw();
 		}
 	});
-});
+  	
+  	
 
-function fn_buttonAut(){
-	var wrt_button = document.getElementById("wrt_button"); 
-	var save_button = document.getElementById("save_button"); 
-	
-	if("${wrt_aut_yn}" == "Y"){
-		wrt_button.style.display = '';
-		save_button.style.display = '';
-	}else{
-		wrt_button.style.display = 'none';
-		save_button.style.display = 'none';
-	}
-}
+});
 
 $(function() {		
 	
@@ -126,15 +113,15 @@ $(function() {
             $(this).addClass('selected');
             
         } 
-         var db_svr_nm = table_dbServer.row('.selected').data().db_svr_nm;
+         var db_svr_id = table_dbServer.row('.selected').data().db_svr_id;
 
         /* ********************************************************
-         * 선택된 서버에 대한 디비 조회
+         * 선택된 서버에 대한 확장 조회
         ******************************************************** */
        	$.ajax({
-    		url : "/selectServerDBList.do",
+    		url : "/extensionDetail.do",
     		data : {
-    			db_svr_nm: db_svr_nm,			
+    			db_svr_id: db_svr_id,			
     		},
     		dataType : "json",
     		type : "post",
@@ -143,11 +130,11 @@ $(function() {
     		},
     		success : function(result) {
     			table_db.clear().draw();
-    			if(result.data == null){
+    			if(result == null){
     				alert("서버상태를 확인해주세요.");
     			}else{
-	    			table_db.rows.add(result.data).draw();
-	    			fn_dataCompareChcek(result);
+	    			table_db.rows.add(result).draw();
+	    			//fn_dataCompareChcek(result);
     			}
     		}
     	});
@@ -158,112 +145,17 @@ $(function() {
 })
 
 
-/* ********************************************************
- * 서버 등록 팝업페이지 호출
- ******************************************************** */
-function fn_reg_popup(){
-	window.open("/popup/dbServerRegForm.do","dbServerRegPop","location=no,menubar=no,scrollbars=no,status=no,width=920,height=405");
-}
-
-
-/* ********************************************************
- * 서버 수정 팝업페이지 호출
- ******************************************************** */
-function fn_regRe_popup(){
-	var datas = table_dbServer.rows('.selected').data();
-	if (datas.length == 1) {
-		var db_svr_id = table_dbServer.row('.selected').data().db_svr_id;
-		window.open("/popup/dbServerRegReForm.do?db_svr_id="+db_svr_id,"dbServerRegRePop","location=no,menubar=no,resizable=yes,scrollbars=no,status=no,width=920,height=405");
-	} else {
-		alert("하나의 항목을 선택해주세요.");
-	}	
-}
-
-
-/* ********************************************************
- * 디비 등록
- ******************************************************** */
-function fn_insertDB(){
-	var db_svr_id = table_dbServer.row('.selected').data().db_svr_id;
-	var datas = table_db.rows('.selected').data();
-
-		var rows = [];
-    	for (var i = 0;i<datas.length;i++) {
-    		rows.push(table_db.rows('.selected').data()[i]);
-		}
-    	if (confirm("선택된 DB를 저장하시겠습니까?")){
-			$.ajax({
-				url : "/insertDB.do",
-				data : {
-					db_svr_id : db_svr_id,
-					rows : JSON.stringify(rows)
-				},
-				async:true,
-				dataType : "json",
-				type : "post",
-				error : function(xhr, status, error) {
-					alert("실패");
-				},
-				success : function(result) {
-					alert("저장되었습니다.");
-					location.reload();
-				}
-			});	
-    	}else{
-    		return false;
-    	}
-
-}
-
-
-/* ********************************************************
- * 서버에 등록된 디비,  <=>  Repository에 등록된 디비 비교
- ******************************************************** */
-function fn_dataCompareChcek(svrDbList){
-	$.ajax({
-		url : "/selectDBList.do",
-		data : {},
-		async:true,
-		dataType : "json",
-		type : "post",
-		error : function(xhr, status, error) {
-			alert("실패");
-		},
-		success : function(result) {
-			var db_svr_id =  table_dbServer.row('.selected').data().db_svr_id
-			
-			if(svrDbList.data.length>0){
- 				for(var i = 0; i<svrDbList.data.length; i++){
-					for(var j = 0; j<result.length; j++){						
-							 $('input', table_db.rows(i).nodes()).prop('checked', false); 	
-							 table_db.rows(i).nodes().to$().removeClass('selected');	
-					}
-				}	 	
-				for(var i = 0; i<svrDbList.data.length; i++){
-					for(var j = 0; j<result.length; j++){						
-						 if(db_svr_id == result[j].db_svr_id && svrDbList.data[i].dft_db_nm == result[j].db_nm){										 
-							 $('input', table_db.rows(i).nodes()).prop('checked', true); 
-							 table_db.rows(i).nodes().to$().addClass('selected');	
-						}
-					}
-				}		
-			} 
-		}
-	});	
-}
-
-
 </script>
 <div id="contents">
 	<div class="contents_wrap">
 		<div class="contents_tit">
-			<h4>DB 서버 Tree 화면 <a href="#n"><img src="../images/ico_tit.png"alt="" /></a>
+			<h4>확장설치조회 화면 <a href="#n"><img src="../images/ico_tit.png"alt="" /></a>
 			</h4>
 			<div class="location">
 				<ul>
 					<li>Admin</li>
-					<li>DB서버관리</li>
-					<li class="on">DB Tree</li>
+					<li>확장설치조회</li>
+
 				</ul>
 			</div>
 		</div>
@@ -271,14 +163,10 @@ function fn_dataCompareChcek(svrDbList){
 			<div class="tree_grp">
 				<div class="tree_lt">
 					<div class="btn_type_01">
-					<div id="wrt_button">
-						<span class="btn"><button onclick="fn_reg_popup();">등록</button></span>
-						<span class="btn"><button onClick="fn_regRe_popup();">수정</button></span>		
-						<a href="#n" class="btn"><span>삭제</span></a>
-					</div>
+
 					</div>
 					<div class="inner">
-						<p class="tit">DB 서버 목록</p>
+						<p class="tit">확장설치조회</p>
 						<div class="tree_server">
 							<table id="dbServerList" class="display" cellspacing="0" align="right">
 								<thead>
@@ -303,18 +191,16 @@ function fn_dataCompareChcek(svrDbList){
 				</div>
 				<div class="tree_rt">
 					<div class="btn_type_01">
-						<div id="save_button">
-						<span class="btn"><button onClick="fn_insertDB()">저장</button></span>
-						</div>
+						
 					</div>
 					<div class="inner">
-						<p class="tit">DB 목록</p>
+						<p class="tit">확장 목록</p>
 						<div class="tree_list">
 							<table id="dbList" class="display" cellspacing="0" align="left">
 								<thead>
 									<tr>
-										<th>메뉴</th>
-										<th>등록선택</th>
+										<th>확장명</th>
+										<th>설치여부</th>
 									</tr>
 								</thead>
 							</table>

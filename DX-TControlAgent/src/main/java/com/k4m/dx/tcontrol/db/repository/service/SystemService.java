@@ -4,6 +4,7 @@ import java.util.List;
 
 import com.k4m.dx.tcontrol.db.repository.vo.AgentInfoVO;
 import com.k4m.dx.tcontrol.db.repository.vo.DbServerInfoVO;
+import com.k4m.dx.tcontrol.db.repository.vo.TrfTrgCngVO;
 import com.k4m.dx.tcontrol.db.repository.vo.WrkExeVO;
 
 public interface SystemService {
@@ -79,4 +80,11 @@ public interface SystemService {
 	 * @throws Exception
 	 */
 	public void updateT_WRKEXE_G(WrkExeVO vo) throws Exception;
+	
+	/**
+	 * BottoedWater Run PID 등록
+	 * @param vo
+	 * @throws Exception
+	 */
+	public void updateT_TRFTRGCNG_I(TrfTrgCngVO vo) throws Exception;
 }

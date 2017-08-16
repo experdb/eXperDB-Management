@@ -242,6 +242,18 @@ public class FileUtil {
 		return strLastModified;
 	}
 	
+	public static boolean isDirectory(String strDirectory) throws Exception {
+		boolean blnReturn = false;
+		
+		File file = new File(strDirectory);
+		
+		if(file.isDirectory()) {
+			blnReturn = true;
+		}
+		
+		return blnReturn;
+	}
+	
 	public static void main(String args[]) {
 
 		try {
@@ -254,6 +266,12 @@ public class FileUtil {
 			 * System.out.println(fileExtenderSubString(strExtFileName)); }
 			 * 
 			 **/
+			
+			String strFilePath = "C:\\k4m\\01-1. DX 제폼개발\\04. 시험\\pg_log1\\";
+			
+			boolean blnReturn = isDirectory(strFilePath);
+			
+			System.out.println(blnReturn);
 
 			// 파일읽기
 			/**
@@ -273,7 +291,7 @@ public class FileUtil {
 			**
 			*/
 			
-			Date date = new Date("2017-07-26");
+			//Date date = new Date("2017-07-26");
 
 		} catch (Exception e) {
 			e.printStackTrace();

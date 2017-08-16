@@ -9,6 +9,7 @@ import javax.servlet.http.HttpServletRequest;
 import org.json.simple.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -21,11 +22,12 @@ import com.k4m.dx.tcontrol.backup.service.WorkVO;
 import com.k4m.dx.tcontrol.cmmn.AES256;
 import com.k4m.dx.tcontrol.cmmn.AES256_KEY;
 import com.k4m.dx.tcontrol.cmmn.CmmnUtils;
-import com.k4m.dx.tcontrol.cmmn.SHA256;
 import com.k4m.dx.tcontrol.cmmn.client.ClientInfoCmmn;
 import com.k4m.dx.tcontrol.cmmn.client.ClientProtocolID;
 import com.k4m.dx.tcontrol.common.service.CmmnServerInfoService;
 import com.k4m.dx.tcontrol.common.service.HistoryVO;
+import com.k4m.dx.tcontrol.dashboard.service.DashboardService;
+import com.k4m.dx.tcontrol.dashboard.service.DashboardVO;
 
 /**
  * 공통 컨트롤러 클래스를 정의한다.
@@ -53,19 +55,39 @@ public class CmmnController {
 	@Autowired
 	private CmmnServerInfoService cmmnServerInfoService;
 	
+	@Autowired
+	private DashboardService dashboardService;
+	
 	/**
 	 * 메인(홈)을 보여준다.
 	 * @return ModelAndView mv
 	 */	
 	@RequestMapping(value = "/index.do")
-	public ModelAndView index(@ModelAttribute("historyVO") HistoryVO historyVO, HttpServletRequest request) throws Exception {
+	public ModelAndView index(@ModelAttribute("historyVO") HistoryVO historyVO, HttpServletRequest request, ModelMap model) throws Exception {
 		
 		// 메인 이력 남기기
 		CmmnUtils.saveHistory(request, historyVO);
 		historyVO.setExe_dtl_cd("DX-T0004");
 		accessHistoryService.insertHistory(historyVO);
 		
+		//스케줄 정보
+		DashboardVO scheduleInfoVO = (DashboardVO) dashboardService.selectDashboardScheduleInfo();
+		
+		//백업정보
+		DashboardVO backupInfoVO = (DashboardVO) dashboardService.selectDashboardBackupInfo();
+		
+		DashboardVO vo = new DashboardVO();
+		
+		List<DashboardVO> serverInfoVO = (List<DashboardVO>) dashboardService.selectDashboardServerInfo(vo);
+		
+		
+		
+		
 		ModelAndView mv = new ModelAndView();
+		mv.addObject("scheduleInfo", scheduleInfoVO);
+		mv.addObject("backupInfo", backupInfoVO);
+		mv.addObject("serverInfo", serverInfoVO);
+		
 		mv.setViewName("view/index");
 		return mv;	
 	}

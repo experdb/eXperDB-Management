@@ -17,6 +17,7 @@ public class ClientTranCodeType {
 	public static final String DxT014 = "DxT014";
 	public static final String DxT015 = "DxT015";
 	public static final String DxT015_DL = "DxT015_DL";
+	public static final String DxT016 = "DxT016";
 	
 	public static final String STATUS = "STATUS";
 	public static final String STOP = "STOP";
@@ -33,6 +34,7 @@ public class ClientTranCodeType {
 	 * DB커넥션 테스트
 	 */
 	public static final String WEB_DB_CONN_TEST = "WEB_DB_CONN_TEST";			  //DB커넥션 테스트
+	
 
 	
 }

@@ -1,4 +1,11 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<%@ taglib uri="http://tiles.apache.org/tags-tiles" prefix="tiles"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<%@ taglib prefix="form" uri="http://www.springframework.org/tags/form"%>
+<%@ taglib prefix="ui" uri="http://egovframework.gov/ctl/ui"%>
+<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
+<%@ taglib prefix="spring" uri="http://www.springframework.org/tags"%>
 <%
 	/**
 	* @Class Name : agentMonitoring.jsp
@@ -15,7 +22,15 @@
 	*/
 %>
 <script>
+	function fn_search() {
+		var form = document.agentForm;
+		
+		form.action = "/agentMonitoring.do";
+		form.submit();
+		return;
+	}
 </script>
+<form name="agentForm" id="agentForm" method="post">
 	<!-- contents -->
 			<div id="contents">
 				<div class="contents_wrap">
@@ -43,14 +58,14 @@
 									<tbody>
 										<tr>
 											<th scope="row" class="t2">DB 서버명</th>
-											<td><input type="text" class="txt t2"/></td>
+											<td><input type="text" id="DB_SVR_NM" name="DB_SVR_NM" class="txt t2"/></td>
 										</tr>
 									</tbody>
 								</table>
 							</div>
 							<div class="overflow_area">
 								<table class="list">
-									<caption>Rman 백업관리 이력화면 리스트</caption>
+									<caption>Agent 모니터링 리스트</caption>
 									<colgroup>
 										<col style="width:10%;" />
 										<col style="width:25%;" />
@@ -64,38 +79,40 @@
 											<th scope="col">DB서버</th>
 											<th scope="col">Agent 상태</th>
 											<th scope="col">구동일시</th>
-											<th scope="col">설치확인</th>
+											<th scope="col">설치여부</th>
 										</tr>
 									</thead>
 									<tbody>
+
+									<c:if test="${fn:length(list) == 0}">
 										<tr>
-											<td>1</td>
-											<td>PGServer1</td>
-											<td><img src="../images/ico_agent_1.png" alt="" /></td>
-											<td>2017-01-01 12:13</td>
-											<td><span class="btn btnC_01 btnF_03" onclick="windowPopup();"><button>확인</button></span></td>
+											<td colspan="5">Not Found Data !!</td>
+
 										</tr>
+									</c:if>
+									<c:forEach var="data" items="${list}" varStatus="status">
 										<tr>
-											<td>1</td>
-											<td>PGServer1</td>
-											<td><img src="../images/ico_agent_2.png" alt="" /></td>
-											<td>2017-01-01 12:13</td>
-											<td><span class="btn btnC_01 btnF_03"><button>확인</button></span></td>
+											<td>${status.count}</td>
+											<td>${data.DB_SVR_NM}</td>
+											<td>
+											<c:if test="${data.AGT_CNDT_CD == 'TC001101'}">
+												<img src="../images/ico_agent_1.png" alt="" />
+											</c:if>
+											<c:if test="${data.AGT_CNDT_CD == 'TC001102'}">
+												<img src="../images/ico_agent_2.png" alt="" />
+											</c:if>
+											</td>
+											<td>${data.STRT_DTM}</td>
+											<td>
+											<c:if test="${data.ISTCNF_YN == 'Y'}">
+											설치
+											</c:if>
+											<c:if test="${data.ISTCNF_YN == 'N' || data.ISTCNF_YN == null}">
+											<font color="red">미설치</font>
+											</c:if>
+											</td>
 										</tr>
-										<tr>
-											<td>1</td>
-											<td>PGServer1</td>
-											<td><img src="../images/ico_agent_1.png" alt="" /></td>
-											<td>2017-01-01 12:13</td>
-											<td><span class="btn btnC_01 btnF_03"><button>확인</button></span></td>
-										</tr>
-										<tr>
-											<td>1</td>
-											<td>PGServer1</td>
-											<td><img src="../images/ico_agent_2.png" alt="" /></td>
-											<td>2017-01-01 12:13</td>
-											<td><span class="btn btnC_01 btnF_03"><button>확인</button></span></td>
-										</tr>
+									</c:forEach>
 									</tbody>
 								</table>
 							</div>
@@ -103,3 +120,4 @@
 					</div>
 				</div>
 			</div><!-- // contents -->
+</form>

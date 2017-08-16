@@ -29,6 +29,7 @@ import org.json.simple.JSONObject;
  * 13. bottledWater 실행/종료
  * 14. Kafka-connector connect 등록/수정/삭제/조회
  * 15. 감사로그 파일 리스트 조회 / 내용보기
+ * 16. 디렉터리 존재유무 체크
  * @author thpark
  *
  */
@@ -39,7 +40,7 @@ public class ClientTester {
 		ClientTester clientTester = new ClientTester();
 		
 		String Ip = "222.110.153.162";
-		 //Ip = "127.0.0.1";
+		 Ip = "127.0.0.1";
 		int port = 9001;
 		try {
 			
@@ -70,6 +71,7 @@ public class ClientTester {
 			//clientTester.dxT015_R(Ip, port);
 			//clientTester.dxT015_V(Ip, port);
 			//clientTester.dxT015_DL(Ip, port);
+			//clientTester.dxT016(Ip, port);
 			
 			
 		} catch(Exception e) {
@@ -873,11 +875,11 @@ public class ClientTester {
 	private void dxT013(String Ip, int port) {
 		try {
 
-			String strExecTxt = "";
+			String strExecTxt = "java -version";
 
 			JSONObject jObj = new JSONObject();
-			jObj.put(ClientProtocolID.DX_EX_CODE, ClientTranCodeType.DxT014);
-			jObj.put(ClientProtocolID.TRF_TRG_ID, "");
+			jObj.put(ClientProtocolID.DX_EX_CODE, ClientTranCodeType.DxT013);
+			jObj.put(ClientProtocolID.TRF_TRG_ID, "12");
 			jObj.put(ClientProtocolID.COMMAND_CODE, ClientProtocolID.RUN);
 			jObj.put(ClientProtocolID.EXEC_TXT, strExecTxt);
 			
@@ -1331,6 +1333,46 @@ public class ClientTester {
 			HttpServletRequest request = null;
 			HttpServletResponse response = null;
 			CA.dxT015_DL(jObj, request, response);
+			
+				
+			//CA.close();
+		} catch(Exception e) {
+			e.printStackTrace();
+		}
+	}
+	
+	private void dxT016(String Ip, int port) {
+		try {
+			
+
+			String strDirectory = "/home/devel/experdb/data/pg_log/";
+			strDirectory = "C:\\k4m\\01-1. DX 제폼개발\\04. 시험\\pg_log\\";
+			
+			JSONObject serverObj = new JSONObject();
+			
+			serverObj.put(ClientProtocolID.SERVER_NAME, Ip);
+			serverObj.put(ClientProtocolID.SERVER_IP, Ip);
+			serverObj.put(ClientProtocolID.SERVER_PORT, Integer.toString(port));
+			
+			JSONObject jObj = new JSONObject();
+			
+			
+			jObj.put(ClientProtocolID.DX_EX_CODE, ClientTranCodeType.DxT016);
+			jObj.put(ClientProtocolID.SERVER_INFO, serverObj);
+			jObj.put(ClientProtocolID.FILE_DIRECTORY, strDirectory);
+
+			JSONObject objList;
+			
+			ClientAdapter CA = new ClientAdapter(Ip, port);
+			CA.open(); 
+
+			objList = CA.dxT016(jObj);
+			
+			String checkDir = (String)objList.get(ClientProtocolID.RESULT_DATA);
+			
+			System.out.println("디렉터리 존재 유무(0:1) : " + checkDir);
+			
+			CA.close();
 			
 				
 			//CA.close();

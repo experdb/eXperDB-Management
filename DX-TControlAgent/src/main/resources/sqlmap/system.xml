@@ -73,6 +73,7 @@
 	 		, SOCKET_PORT = #{SOCKET_PORT}
 	 		, ISTCNF_YN = #{ISTCNF_YN}
 	 		, LST_MDF_DTM = now()
+	 		, STRT_DTM = now()
 	 	WHERE
 	 		DB_SVR_ID = #{DB_SVR_ID}
 	 	
@@ -166,5 +167,20 @@
 			EXE_SN = #{EXE_SN}
 				
     </update>
+    
+    <update id="updateT_TRFTRGCNG_I"  parameterType="TrfTrgCngVO">
+   		/**
+	 	* Query ID : updateT_TRFTRGCNG_I
+	 	* Description : BottledWater 실행 PID update
+	 	* Author : 박태혁
+	 	**/
+	 	UPDATE T_TRFTRGCNG_I
+	 	SET
+	 		BW_PID = #{BW_PID}
+	 	WHERE
+	 		TRF_TRG_ID = #{TRF_TRG_ID}
+    </update>
+    
+    
     
 </mapper>

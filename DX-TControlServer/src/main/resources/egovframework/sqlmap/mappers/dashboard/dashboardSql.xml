@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper   PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="dashboardSql">
+
+	<select id="selectDashboardScheduleInfo" parameterType="dashboardVO" resultType="dashboardVO">
+		/**
+	 	* Query ID : selectDashboardScheduleInfo
+	 	* Description : 스캐쥴 정보 조회
+	 	* Author : 박태혁
+	 	**/
+	 	
+		 SELECT 
+			SUM(CASE WHEN scd_cndt = 'TC001801' THEN 1 ELSE 0 END) AS run_cnt
+		    , SUM(CASE WHEN scd_cndt = 'TC001802' THEN 1 ELSE 0 END) AS stop_cnt
+		    , SUM(CASE WHEN (nxt_exe_dtm::date - now()::date) = 0 THEN 1 ELSE 0 END) as today_cnt
+		    , (SELECT COUNT(*) FROM T_WRKEXE_G WHERE exe_rslt_cd = 'TC001702') AS fail_cnt
+		FROM
+			T_SCD_M A
+    </select>
+
+
+	<select id="selectDashboardBackupInfo" parameterType="dashboardVO" resultType="dashboardVO">
+		/**
+	 	* Query ID : selectDashboardBackupInfo
+	 	* Description : 백업 정보 조회
+	 	* Author : 박태혁
+	 	**/
+	 	
+		SELECT 
+			COUNT(*) AS server_cnt
+			, SUM(backup_cnt) AS backup_cnt
+            , sum(schedule_cnt) AS schedule_cnt
+			, SUM(schedule_run_cnt) AS schedule_run_cnt
+		FROM 
+		(
+		    SELECT 
+		        A.DB_SVR_ID
+		        , (SELECT COUNT(DISTINCT SCD_ID) FROM T_SCD_D C, T_WRKCNG_I D
+		          WHERE D.db_svr_id = A.DB_SVR_ID 
+		          AND C.WRK_ID = D.WRK_ID) AS schedule_cnt
+		        , (
+		        	SELECT 
+		        		COUNT(DISTINCT C.SCD_ID) 
+		        	FROM T_SCD_D C, T_WRKCNG_I D, T_SCD_M E
+		          	WHERE 
+		          		D.db_svr_id = A.DB_SVR_ID 
+		          		AND C.SCD_ID = E.SCD_ID
+		            	AND C.WRK_ID = D.WRK_ID
+		            	AND E.SCD_CNDT = 'TC001801'
+		            ) AS schedule_run_cnt
+		        , SUM(CASE WHEN B.WRK_ID IS NULL THEN 0 ELSE 1 END) AS backup_cnt
+		    FROM
+		        T_DBSVR_I A
+		        LEFT OUTER JOIN T_WRKCNG_I B
+		    ON 
+		        A.DB_SVR_ID = B.DB_SVR_ID
+             GROUP BY A.DB_SVR_ID
+		) AA
+    </select>
+    
+	<select id="selectDashboardServerInfo" parameterType="dashboardVO" resultType="dashboardVO">
+		/**
+	 	* Query ID : "selectDashboardServerInfo"
+	 	* Description : 서버 정보 조회
+	 	* Author : 박태혁
+	 	**/
+		  SELECT
+		  	AAA.DB_SVR_ID AS db_svr_id
+		  	, (SELECT DB_SVR_NM FROM T_DBSVR_I WHERE DB_SVR_ID = AAA.DB_SVR_ID) AS db_svr_nm
+		    , COUNT(AAA.WRK_ID) AS wrk_cnt
+		    , (SELECT COUNT(*) FROM T_DB_I WHERE DB_SVR_ID = AAA.DB_SVR_ID) AS db_cnt
+		    , (SELECT COUNT(DISTINCT SCD_ID) FROM T_SCD_D A, T_WRKCNG_I B 
+		          WHERE B.db_svr_id = AAA.DB_SVR_ID 
+		          AND A.WRK_ID = B.WRK_ID) AS schedule_cnt
+		    , SUM(AAA.success_cnt) AS success_cnt
+		    , SUM(AAA.fail_cnt) AS fail_cnt
+		    , (SELECT 
+               case when (SELECT COUNT(DISTINCT DB_ID) FROM T_SVRACSCNTR_I WHERE DB_SVR_ID = AAA.DB_SVR_ID AND PRMS_SET = '1') = 0 then 0
+               else COUNT(*) / (SELECT COUNT(DISTINCT DB_ID) FROM T_SVRACSCNTR_I WHERE DB_SVR_ID = AAA.DB_SVR_ID AND PRMS_SET = '1') 
+               end
+				FROM T_SVRACSCNTR_I WHERE DB_SVR_ID = AAA.DB_SVR_ID  AND PRMS_SET = '1'
+				) AS access_cnt
+		    , (SELECT AGT_CNDT_CD FROM T_AGTCNDT_I WHERE DB_SVR_ID = AAA.DB_SVR_ID) AS agt_cndt_cd
+		  FROM
+		  (
+		      SELECT
+		            AA.DB_SVR_ID
+		            , AA.WRK_ID
+		            , AA.SCD_ID
+		       		, (SELECT COUNT(*) FROM T_WRKEXE_G WHERE SCD_ID = AA.SCD_ID AND EXE_RSLT_CD = 'TC001701') success_cnt
+		       		, (SELECT COUNT(*) FROM T_WRKEXE_G WHERE SCD_ID = AA.SCD_ID AND EXE_RSLT_CD = 'TC001702') fail_cnt
+		       FROM
+		       (
+		       SELECT 
+		             A.DB_SVR_ID
+		            , C.WRK_ID
+		            , B.SCD_ID
+		        FROM
+		             T_DBSVR_I  A
+		           LEFT OUTER JOIN T_WRKCNG_I C ON A.DB_SVR_ID = C.DB_SVR_ID
+		           LEFT OUTER JOIN T_SCD_D B ON B.WRK_ID = C.WRK_ID
+		        ) AA 
+		    ) AAA
+		 GROUP BY AAA.DB_SVR_ID
+	</select>
+    
+    
+   
+</mapper>

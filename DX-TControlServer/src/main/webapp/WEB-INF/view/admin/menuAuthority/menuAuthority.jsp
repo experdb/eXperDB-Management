@@ -7,10 +7,10 @@
 	*
 	*   수정일         수정자                   수정내용
 	*  ------------    -----------    ---------------------------
-	*  2017.05.29     최초 생성
+	*  2017.08.07     최초 생성
 	*
-	* author 김주영 사원
-	* since 2017.05.29
+	* author 변승우 대리
+	* since 2017.08.07
 	*
 	*/
 %>
@@ -20,7 +20,7 @@ var menuTable = null;
 
 function fn_init() {
 	userTable = $('#user').DataTable({
-		scrollY : "300px",
+		scrollY : "405px",
 		processing : true,
 		searching : false,
 		paging: false,
@@ -30,21 +30,27 @@ function fn_init() {
 		{data : "usr_nm", className : "dt-center", defaultContent : ""}
 		 ]
 	});
+	
+	
 	menuTable = $('#menu').DataTable({
 		scrollY : "300px",
 		processing : true,
 		searching : false,
 		paging: false,
 		columns : [
-		{data : "", className : "dt-center", defaultContent : ""}, 
-		{data : "", className : "dt-center", defaultContent : ""}, 
-		{data : "", className : "dt-center", defaultContent : ""}
+		{data : "mnu_id", className : "dt-center", defaultContent : ""}, 
+		{data : "mnu_cd", className : "dt-center", defaultContent : ""}, 
+		{data : "mnu_nm", className : "dt-center", defaultContent : ""}
 		 ]
 	});
 }
 
+
+
 $(window.document).ready(function() {
 	fn_init();
+	
+	//유저조회
 	$.ajax({
 		url : "/selectUserManager.do",
 		dataType : "json",
@@ -57,8 +63,108 @@ $(window.document).ready(function() {
 			userTable.rows.add(result).draw();
 		}
 	});
-
+	
 });
+
+
+$(function() {
+	
+	   $('#user tbody').on( 'click', 'tr', function () {
+	         if ( $(this).hasClass('selected') ) {
+	        	}
+	        else {	        	
+	        	userTable.$('tr.selected').removeClass('selected');
+	            $(this).addClass('selected');	            
+	        } 
+
+	         var usr_id = userTable.row('.selected').data().usr_id;
+	         
+	        /* ********************************************************
+	         * 선택된 유저 대한 메뉴권한 조회
+	        ******************************************************** */
+	     	$.ajax({
+	    		url : "/selectUsrmnuautList.do",
+	    		data : {
+	    			usr_id: usr_id,			
+	    		},
+	    		dataType : "json",
+	    		type : "post",
+	    		error : function(xhr, status, error) {
+	    			alert("실패")
+	    		},
+	    		success : function(result) {
+      				for(var i = 0; i<result.length; i++){  
+      					if(result[i].mnu_cd != "MN0001" && result[i].mnu_cd != "MN0002" && result[i].mnu_cd != "MN0003"){
+      						
+	     					//읽기권한
+	  						if(result[i].read_aut_yn == "Y"){	  									
+	  							document.getElementById("r_"+result[i].mnu_cd).checked = true;
+	  						}else{
+	  							document.getElementById("r_"+result[i].mnu_cd).checked = false;
+	  						}
+	
+	  						//쓰기권한
+	  						if(result[i].wrt_aut_yn == "Y"){
+	  							document.getElementById("w_"+result[i].mnu_cd).checked = true;
+	  						}else{
+	  							document.getElementById("w_"+result[i].mnu_cd).checked = false;
+	  						}
+      					}
+    				}	  			    				
+	    		}
+	    	});	
+	        
+	    } );   
+} );
+
+
+function fn_save(){
+	 var datasArr = new Array();
+	 	
+	 var usr_id = userTable.row('.selected').data().usr_id;
+
+	    var mnu_id = $("input[name='mnu_id']");
+	 	var read_aut = $("input[name='r_mnu_nm']");
+	    var wrt_aut = $("input[name='w_mnu_nm']");
+	   
+	    for(var i = 0; i < read_aut.length; i++){
+	     	var datas = new Object();
+	        datas.usr_id = usr_id;
+	        datas.mnu_id = mnu_id[i].value;
+	    	if(read_aut[i].checked){ //선택되어 있으면 배열에 값을 저장함
+	        	datas.read_aut_yn = "Y";   
+	        }else{
+	        	datas.read_aut_yn = "N";
+	        }
+	        
+	        if(wrt_aut[i].checked){ //선택되어 있으면 배열에 값을 저장함
+	        	datas.wrt_aut_yn = "Y";   	
+	        }else{
+	        	datas.wrt_aut_yn = "N";
+	        }
+	        datasArr.push(datas);
+	    }	    
+	    
+		if (confirm("저장 하시겠습니까?")){
+			$.ajax({
+				url : "/updateUsrMnuAut.do",
+				data : {
+					datasArr : JSON.stringify(datasArr)
+				},
+				dataType : "json",
+				type : "post",
+				error : function(xhr, status, error) {
+					alert("실패")
+				},
+				success : function(result) {
+					
+				}
+			}); 	
+		}else{
+			return false;
+		}
+	    
+}
 </script>
 			<!-- contents -->
 			<div id="contents">
@@ -85,7 +191,7 @@ $(window.document).ready(function() {
 									<div class="inner">
 										<p class="tit">사용자 선택</p>
 										<div class="overflow_area">
-											<table id="user" class="list" cellspacing="0" width="100%">
+											<table id="user" class="display" cellspacing="0" width="100%">
 												<thead>
 													<tr>
 														<th>No</th>
@@ -99,7 +205,7 @@ $(window.document).ready(function() {
 								</div>
 								<div class="menu_roll_rt">
 									<div class="btn_type_01">
-										<span class="btn"><button>저장</button></span>
+										<span class="btn"><button onClick="fn_save()";>저장</button></span>
 									</div>
 									<div class="inner">
 										<p class="tit">메뉴권한</p>
@@ -122,190 +228,234 @@ $(window.document).ready(function() {
 												</thead>
 												<tbody>
 													<tr>
-														<th scope="row" rowspan="4">Functions</th>
-														<th scope="row" rowspan="2">Scheduler</th>
-														<td>스케쥴 설정</td>
+														<th scope="row" rowspan="5">Functions</th>
+														<th scope="row" rowspan="3">Scheduler</th>
+														<td>스케줄 등록</td>
 														<td>
 															<div class="inp_chk">
-																<input type="checkbox" id="chk_menu_1_1" name="chk_menu1" checked="checked" />
-																<label for="chk_menu_1_1"></label>
+																<input type="checkbox" id="r_MN000101" name="r_mnu_nm" />
+																<label for="r_MN000101"></label>
 															</div>
 														</td>
 														<td>
 															<div class="inp_chk">
-																<input type="checkbox" id="chk_menu_1_2" name="chk_menu1" checked="checked" />
-																<label for="chk_menu_1_2"></label>
+																<input type="checkbox" id="w_MN000101" name="w_mnu_nm"  />
+																<label for="w_MN000101"></label>
 															</div>
 														</td>
 													</tr>
 													<tr>
-														<td>스케쥴 조회</td>
+														<td>스케줄 조회</td>
 														<td>
 															<div class="inp_chk">
-																<input type="checkbox" id="chk_menu_2_1" name="chk_menu2" checked="checked" />
-																<label for="chk_menu_2_2"></label>
+																<input type="checkbox" id="r_MN000102" name="r_mnu_nm" />
+																<label for="r_MN000102"></label>
 															</div>
 														</td>
 														<td>
 															<div class="inp_chk">
-																<input type="checkbox" id="chk_menu_2_2" name="chk_menu2" checked="checked" />
-																<label for="chk_menu_2_2"></label>
+																<input type="checkbox" id="w_MN000102" name="w_mnu_nm" />
+																<label for="w_MN000102"></label>
+															</div>
+														</td>													
+													</tr>
+													<tr>
+														<td>스케줄 이력</td>
+														<td>
+															<div class="inp_chk">
+																<input type="checkbox" id="r_MN000103" name="r_mnu_nm"  />
+																<label for="r_MN000103"></label>
 															</div>
 														</td>
+														<td>
+															<div class="inp_chk">
+																<input type="checkbox" id="w_MN000103" name="w_mnu_nm"  />
+																<label for="w_MN000103"></label>
+															</div>
+														</td>										
 													</tr>
 													<tr>
 														<th scope="row" rowspan="2">Transfer</th>
 														<td>전송설정</td>
 														<td>
 															<div class="inp_chk">
-																<input type="checkbox" id="chk_menu_3_1" name="chk_menu3" checked="checked" />
-																<label for="chk_menu_3_1"></label>
+																<input type="checkbox" id="r_MN000201" name="r_mnu_nm" />
+																<label for="r_MN000201"></label>
 															</div>
 														</td>
 														<td>
 															<div class="inp_chk">
-																<input type="checkbox" id="chk_menu_3_2" name="chk_menu3" checked="checked" />
-																<label for="chk_menu_3_2"></label>
+																<input type="checkbox" id="w_MN000201" name="w_mnu_nm"  />
+																<label for="w_MN000201"></label>
 															</div>
-														</td>
+														</td>										
 													</tr>
 													<tr>
-														<td>Connector 등록</td>
+														<td>Kafka-Conetcor 등록</td>
 														<td>
 															<div class="inp_chk">
-																<input type="checkbox" id="chk_menu_4_1" name="chk_menu4" checked="checked" />
-																<label for="chk_menu_4_1"></label>
+																<input type="checkbox" id="r_MN000202" name="r_mnu_nm" />
+																<label for="r_MN000202"></label>
 															</div>
 														</td>
 														<td>
 															<div class="inp_chk">
-																<input type="checkbox" id="chk_menu_4_2" name="chk_menu4" checked="checked" />
-																<label for="chk_menu_4_2"></label>
+																<input type="checkbox" id="w_MN000202" name="w_mnu_nm"  />
+																<label for="w_MN000202"></label>
 															</div>
-														</td>
+														</td>											
 													</tr>
 													<tr>
-														<th scope="row" rowspan="8">Admin</th>
+														<th scope="row" rowspan="9">Admin</th>
 														<th scope="row" rowspan="3">DB 서버관리</th>
 														<td>DB Tree</td>
 														<td>
 															<div class="inp_chk">
-																<input type="checkbox" id="chk_menu_5_1" name="chk_menu5" checked="checked" />
-																<label for="chk_menu_5_1"></label>
+																<input type="checkbox" id="r_MN000301" name="r_mnu_nm" />
+																<label for="r_MN000301"></label>
 															</div>
 														</td>
 														<td>
 															<div class="inp_chk">
-																<input type="checkbox" id="chk_menu_5_2" name="chk_menu5" checked="checked" />
-																<label for="chk_menu_5_2"></label>
+																<input type="checkbox" id="w_MN000301" name="w_mnu_nm" />
+																<label for="w_MN000301"></label>
 															</div>
-														</td>
+														</td>										
 													</tr>
 													<tr>
 														<td>DB Server</td>
 														<td>
 															<div class="inp_chk">
-																<input type="checkbox" id="chk_menu_6_1" name="chk_menu6" checked="checked" />
-																<label for="chk_menu_6_1"></label>
+																<input type="checkbox" id="r_MN000302" name="r_mnu_nm" />
+																<label for="r_MN000302"></label>
 															</div>
 														</td>
 														<td>
 															<div class="inp_chk">
-																<input type="checkbox" id="chk_menu_6_2" name="chk_menu6" checked="checked" />
-																<label for="chk_menu_6_2"></label>
+																<input type="checkbox" id="w_MN000302" name="w_mnu_nm"  />
+																<label for="w_MN000302"></label>
 															</div>
-														</td>
+														</td>										
 													</tr>
 													<tr>
 														<td>Database</td>
 														<td>
 															<div class="inp_chk">
-																<input type="checkbox" id="chk_menu_7_1" name="chk_menu7" checked="checked" />
-																<label for="chk_menu_7_1"></label>
+																<input type="checkbox" id="r_MN000303" name="r_mnu_nm" />
+																<label for="r_MN000303"></label>
 															</div>
 														</td>
 														<td>
 															<div class="inp_chk">
-																<input type="checkbox" id="chk_menu_7_2" name="chk_menu7" checked="checked" />
-																<label for="chk_menu_7_2"></label>
+																<input type="checkbox" id="w_MN000303" name="w_mnu_nm" />
+																<label for="w_MN000303"></label>
 															</div>
-														</td>
+														</td>											
 													</tr>
 													<tr>
 														<td colspan="2">사용자관리</td>
 														<td>
 															<div class="inp_chk">
-																<input type="checkbox" id="chk_menu_8_1" name="chk_menu8" checked="checked" />
-																<label for="chk_menu_8_1"></label>
+																<input type="checkbox" id="r_MN0004" name="r_mnu_nm"  />
+																<label for="r_MN0004"></label>
 															</div>
 														</td>
 														<td>
 															<div class="inp_chk">
-																<input type="checkbox" id="chk_menu_8_2" name="chk_menu8" checked="checked" />
-																<label for="chk_menu_8_2"></label>
+																<input type="checkbox" id="w_MN0004" name="w_mnu_nm"  />
+																<label for="w_MN0004"></label>
 															</div>
-														</td>
+														</td>								
 													</tr>
 													<tr>
 														<td colspan="2">메뉴권한관리</td>
 														<td>
 															<div class="inp_chk">
-																<input type="checkbox" id="chk_menu_9_1" name="chk_menu9" checked="checked" />
-																<label for="chk_menu_9_1"></label>
+																<input type="checkbox" id="r_MN0005" name="r_mnu_nm"  />
+																<label for="r_MN0005"></label>
 															</div>
 														</td>
 														<td>
 															<div class="inp_chk">
-																<input type="checkbox" id="chk_menu_9_2" name="chk_menu9" checked="checked" />
-																<label for="chk_menu_9_2"></label>
+																<input type="checkbox" id="w_MN0005" name="w_mnu_nm"  />
+																<label for="w_MN0005"></label>
 															</div>
-														</td>
+														</td>												
 													</tr>
 													<tr>
 														<td colspan="2">DB 권한관리</td>
 														<td>
 															<div class="inp_chk">
-																<input type="checkbox" id="chk_menu_10_1" name="chk_menu10" checked="checked" />
-																<label for="chk_menu_10_1"></label>
+																<input type="checkbox" id="r_MN0006" name="r_mnu_nm"  />
+																<label for="r_MN0006"></label>
 															</div>
 														</td>
 														<td>
 															<div class="inp_chk">
-																<input type="checkbox" id="chk_menu_10_2" name="chk_menu10" checked="checked" />
-																<label for="chk_menu_10_2"></label>
+																<input type="checkbox" id="w_MN0006" name="w_mnu_nm"  />
+																<label for="w_MN0006"></label>
 															</div>
-														</td>
+														</td>											
 													</tr>
 													<tr>
 														<td colspan="2">회원접근이력</td>
 														<td>
 															<div class="inp_chk">
-																<input type="checkbox" id="chk_menu_11_1" name="chk_menu11" checked="checked" />
-																<label for="chk_menu_11_1"></label>
+																<input type="checkbox" id="r_MN0007" name="r_mnu_nm"  />
+																<label for="r_MN0007"></label>
 															</div>
 														</td>
 														<td>
 															<div class="inp_chk">
-																<input type="checkbox" id="chk_menu_11_2" name="chk_menu11" checked="checked" />
-																<label for="chk_menu_11_2"></label>
+																<input type="checkbox" id="w_MN0007" name="w_mnu_nm"  />
+																<label for="w_MN0007"></label>
 															</div>
-														</td>
+														</td>												
 													</tr>
 													<tr>
 														<td colspan="2">Agent모니터링</td>
 														<td>
 															<div class="inp_chk">
-																<input type="checkbox" id="chk_menu_12_1" name="chk_menu12" checked="checked" />
-																<label for="chk_menu_12_1"></label>
+																<input type="checkbox" id="r_MN0008" name="r_mnu_nm"  />
+																<label for="r_MN0008"></label>
 															</div>
 														</td>
 														<td>
 															<div class="inp_chk">
-																<input type="checkbox" id="chk_menu_12_2" name="chk_menu12" checked="checked" />
-																<label for="chk_menu_12_2"></label>
+																<input type="checkbox" id="w_MN0008" name="w_mnu_nm"  />
+																<label for="w_MN0008"></label>
+															</div>
+														</td>											
+													</tr>
+													<tr>
+														<td colspan="2">확장설치 조회</td>
+														<td>
+															<div class="inp_chk">
+																<input type="checkbox" id="r_MN0009" name="r_mnu_nm"  />
+																<label for="r_MN0009"></label>
 															</div>
 														</td>
-													</tr>
+														<td>
+															<div class="inp_chk">
+																<input type="checkbox" id="w_MN0009" name="w_mnu_nm"  />
+																<label for="w_MN0009"></label>
+															</div>
+													<input type="hidden"  name="mnu_id" value="10">		
+													<input type="hidden"  name="mnu_id" value="11">		
+													<input type="hidden"  name="mnu_id" value="12">		
+													<input type="hidden"  name="mnu_id" value="13">		
+													<input type="hidden"  name="mnu_id" value="14">		
+													<input type="hidden"  name="mnu_id" value="15">		
+													<input type="hidden"  name="mnu_id" value="16">		
+													<input type="hidden"  name="mnu_id" value="17">			
+													<input type="hidden"  name="mnu_id" value="4">		
+													<input type="hidden"  name="mnu_id" value="5" >		
+													<input type="hidden"  name="mnu_id" value="6" >		
+													<input type="hidden"  name="mnu_id" value="7">		
+													<input type="hidden"  name="mnu_id" value="8" >		
+													<input type="hidden"  name="mnu_id" value="9">		
+														</td>											
+													</tr>																									
 												</tbody>
 											</table>
 										</div>

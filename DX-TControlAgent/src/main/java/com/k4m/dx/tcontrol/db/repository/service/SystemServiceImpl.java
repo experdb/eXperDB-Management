@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 import com.k4m.dx.tcontrol.db.repository.dao.SystemDAO;
 import com.k4m.dx.tcontrol.db.repository.vo.AgentInfoVO;
 import com.k4m.dx.tcontrol.db.repository.vo.DbServerInfoVO;
+import com.k4m.dx.tcontrol.db.repository.vo.TrfTrgCngVO;
 import com.k4m.dx.tcontrol.db.repository.vo.WrkExeVO;
 import com.k4m.dx.tcontrol.util.FileUtil;
 
@@ -99,5 +100,9 @@ public class SystemServiceImpl implements SystemService{
 
 	public void updateT_WRKEXE_G(WrkExeVO vo) throws Exception {
 		systemDAO.updateT_WRKEXE_G(vo);
+	}
+	
+	public void updateT_TRFTRGCNG_I(TrfTrgCngVO vo) throws Exception {
+		systemDAO.updateT_TRFTRGCNG_I(vo);
 	}
 }

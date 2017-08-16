@@ -469,25 +469,41 @@ public class DxT006 extends SocketCtl{
 				arrData = strPgHbaData.split("\n");
 				
 				int intSeq = 0;
-				boolean blnAcSeqCheck = false;
+				
 				
 				for(int i=0; i<arrData.length; i++) {
+					
+					boolean blnAcSeqCheck = false;
 
 					PgHbaConfigLine conf = new PgHbaConfigLine(arrData[i].toString());
 					
-					for(HashMap<String, String> intSeq2 : arrAcSeq) {
-						String strAcSeq =  intSeq2.get(ProtocolID.AC_SEQ);
-						int intAcSeq = Integer.parseInt(strAcSeq);
-						if(intAcSeq == intSeq) blnAcSeqCheck = true;
-					}
-					
-					if(!blnAcSeqCheck) {
+/*					if(!blnAcSeqCheck) {
 						buffer += arrData[i].toString() + "\n";
-					}
+						
+						System.out.println("buffer ==> " + buffer);
+					}*/
 					
 					if(conf.isValid() || (!conf.isValid() && !conf.isComment()) && !(conf.getText()).isEmpty()){
+						for(HashMap<String, String> intSeq2 : arrAcSeq) {
+							String strAcSeq =  intSeq2.get(ProtocolID.AC_SEQ);
+							int intAcSeq = Integer.parseInt(strAcSeq);
+							if(intAcSeq == intSeq) {
+								blnAcSeqCheck = true;
+								break;
+							}
+							
+						}
+						
+						if(!blnAcSeqCheck) {
+							buffer += arrData[i].toString() + "\n";
+							
+							System.out.println(intSeq + " buffer ==> " + arrData[i].toString());
+						}
+						
 						System.out.println(intSeq + " ==> " + arrData[i].toString());
 						intSeq ++;
+					} else {
+						buffer += arrData[i].toString() + "\n";
 					}
 				}
 			}

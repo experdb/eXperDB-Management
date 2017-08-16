@@ -5,22 +5,17 @@ import java.io.BufferedOutputStream;
 import java.io.BufferedReader;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.io.OutputStream;
 import java.lang.reflect.Field;
 import java.net.Socket;
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.util.ArrayList;
-import java.util.List;
 
-import org.apache.ibatis.session.SqlSession;
-import org.apache.ibatis.session.SqlSessionFactory;
 import org.json.simple.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.support.ClassPathXmlApplicationContext;
 
-import com.k4m.dx.tcontrol.db.SqlSessionManager;
-import com.k4m.dx.tcontrol.socket.ErrCodeMng;
+import com.k4m.dx.tcontrol.db.repository.service.SystemServiceImpl;
+import com.k4m.dx.tcontrol.db.repository.vo.TrfTrgCngVO;
 import com.k4m.dx.tcontrol.socket.ProtocolID;
 import com.k4m.dx.tcontrol.socket.SocketCtl;
 import com.k4m.dx.tcontrol.socket.TranCodeType;
@@ -56,13 +51,42 @@ public class DxT013 extends SocketCtl{
 		
 		
 		String execTxt = (String) jObj.get(ProtocolID.EXEC_TXT);
+		String commandCode = (String) jObj.get(ProtocolID.COMMAND_CODE);
+		String trfTrgId = (String) jObj.get(ProtocolID.TRF_TRG_ID);
+		
+		ApplicationContext context;
+
+		context = new ClassPathXmlApplicationContext(new String[] {"context-tcontrol.xml"});
+		SystemServiceImpl service = (SystemServiceImpl) context.getBean("SystemService");
+		
 	
 		
 		JSONObject outputObj = new JSONObject();
 		
 		try {
 			
-			shellCmd(execTxt);
+			if(commandCode.equals(ProtocolID.RUN)) {
+				
+				
+				long pid = shellCmd(execTxt);
+				
+				if(pid > 0) {
+					TrfTrgCngVO vo = new TrfTrgCngVO();
+					vo.setBW_PID((int)pid);
+					vo.setTRF_TRG_ID(Integer.parseInt(trfTrgId));
+					
+					service.updateT_TRFTRGCNG_I(vo);
+				}
+			} else if(commandCode.equals(ProtocolID.STOP)) {
+				shellCmd(execTxt);
+				
+				TrfTrgCngVO vo = new TrfTrgCngVO();
+				vo.setBW_PID(0);
+				vo.setTRF_TRG_ID(Integer.parseInt(trfTrgId));
+				
+				service.updateT_TRFTRGCNG_I(vo);
+			}
+			
 			
 			outputObj = DxT013ResultJSON(strDxExCode, strSuccessCode, strErrCode, strErrMsg);
 	        
@@ -86,7 +110,7 @@ public class DxT013 extends SocketCtl{
 
 	}
 	
-	   public static void shellCmd(String command) throws Exception {
+	   public static long shellCmd(String command) throws Exception {
            Runtime runtime = Runtime.getRuntime();
            
            Process process = runtime.exec(new String[]{"/bin/sh", "-c", command});
@@ -100,6 +124,8 @@ public class DxT013 extends SocketCtl{
            while((line = br.readLine()) != null) {
                           System.out.println(line);
            }
+           
+           return pid;
 	   }
 	   
 	   public static synchronized long getPidOfProcess(Process p) {
