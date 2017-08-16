@@ -47,7 +47,7 @@ function fn_cookie(url) {
 					        <li><a href="/dbAuthority.do" onClick="fn_cookie(null)">DB권한관리</a></li>
 					        <li><a href="/accessHistory.do" onClick="fn_cookie(null)">화면접근이력</a></li>
 					        <li><a href="/agentMonitoring.do" onClick="fn_cookie(null)">Agent 모니터링</a></li>
-							<li><a href="#n" onClick="fn_cookie(null)">확장설치 조회</a></li>
+							<li><a href="/extensionList.do" onClick="fn_cookie(null)">확장설치 조회</a></li>
 						</ul>
 					</li>
 					<li><a href="#n"><span><img src="/images/ico_h_7.png" alt="MY PAGE" /></span></a>
@@ -56,15 +56,6 @@ function fn_cookie(url) {
         					<li><a href="#" onClick="fn_cookie(null)">My스케쥴</a></li>
 						</ul>
 					</li>
-					<%
-			    		if(usr_id != null){
-			    	%>
-			   	<li>
-						<a href="/cmmnCodeList.do" onClick="fn_cookie(null)">코드관리</a>
-				</li>	
-					<%
-			    	}
-					%>
 					<li><a href="#n"><span><img src="/images/ico_h_8.png" alt="HELP" /></span></a>
 						<ul class="depth_2">
 							<li><a href="#n" onClick="fn_cookie(null)">Online Help</a></li>
