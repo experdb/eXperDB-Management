@@ -119,10 +119,14 @@ $(function() {
 
 
 function fn_save(){
-	 var datasArr = new Array();
-	 	
+	 var datasArr = new Array();	
+	 var datas = userTable.row('.selected').length;
+	 if(datas != 1){
+		 alert("선택된 유저가 없습니다.");
+		 return false;
+	 }else{
 	 var usr_id = userTable.row('.selected').data().usr_id;
-
+	
 	    var mnu_id = $("input[name='mnu_id']");
 	 	var read_aut = $("input[name='r_mnu_nm']");
 	    var wrt_aut = $("input[name='w_mnu_nm']");
@@ -144,7 +148,7 @@ function fn_save(){
 	        }
 	        datasArr.push(datas);
 	    }	    
-	    
+
 		if (confirm("저장 하시겠습니까?")){
 			$.ajax({
 				url : "/updateUsrMnuAut.do",
@@ -157,13 +161,13 @@ function fn_save(){
 					alert("실패")
 				},
 				success : function(result) {
-					
+					location.reload();
 				}
 			}); 	
 		}else{
 			return false;
 		}
-	    
+	 }
 }
 </script>
 			<!-- contents -->
