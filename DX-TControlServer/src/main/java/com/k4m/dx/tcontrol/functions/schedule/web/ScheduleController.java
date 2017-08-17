@@ -73,7 +73,7 @@ public class ScheduleController {
 	private ScheduleUtl scheduleUtl;
 	
 	/**
-	 * 스케쥴등록 화면을 보여준다.
+	 * 스케줄등록 화면을 보여준다.
 	 * 
 	 * @param
 	 * @return ModelAndView mv

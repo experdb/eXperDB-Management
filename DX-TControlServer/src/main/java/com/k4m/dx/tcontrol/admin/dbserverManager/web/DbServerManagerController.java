@@ -60,64 +60,8 @@ public class DbServerManagerController {
 	private AccessControlService accessControlService;
 
 
-
-
 	/**
-	 * DB 서버 화면을 보여준다.
-	 * 
-	 * @param historyVO
-	 * @param request
-	 * @return ModelAndView mv
-	 * @throws Exception
-	 */
-	@RequestMapping(value = "/dbServer.do")
-	public ModelAndView dbServer(@ModelAttribute("historyVO") HistoryVO historyVO, HttpServletRequest request) {
-		ModelAndView mv = new ModelAndView();
-		try {
-			// DB Server  이력 남기기
-			HttpSession session = request.getSession();
-			String usr_id = (String) session.getAttribute("usr_id");
-			String ip = (String) session.getAttribute("ip");
-			historyVO.setUsr_id(usr_id);
-			historyVO.setLgi_ipadr(ip);
-			cmmnHistoryService.insertHistoryDbServer(historyVO);
-			
-			mv.setViewName("admin/dbServerManager/dbServer");
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-		return mv;
-	}
-	
-	/**
-	 * database 화면을 보여준다.
-	 * 
-	 * @param historyVO
-	 * @param request
-	 * @return ModelAndView mv
-	 * @throws Exception
-	 */
-	@RequestMapping(value = "/database.do")
-	public ModelAndView database(@ModelAttribute("historyVO") HistoryVO historyVO, HttpServletRequest request) {
-		ModelAndView mv = new ModelAndView();
-		try {
-			// Database조회 이력 남기기
-			HttpSession session = request.getSession();
-			String usr_id = (String) session.getAttribute("usr_id");
-			String ip = (String) session.getAttribute("ip");
-			historyVO.setUsr_id(usr_id);
-			historyVO.setLgi_ipadr(ip);
-			cmmnHistoryService.insertHistoryDatabase(historyVO);
-			
-			mv.setViewName("admin/dbServerManager/database");
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-		return mv;
-	}
-	
-	/**
-	 * DB서버 등록 화면을 보여준다.
+	 * DB서버 등록 팝업 화면을 보여준다.
 	 * 
 	 * @param historyVO
 	 * @param request
@@ -125,23 +69,16 @@ public class DbServerManagerController {
 	 * @throws Exception
 	 */
 	@RequestMapping(value = "/popup/dbServerRegForm.do")
-	public ModelAndView dbServerRegForm(@ModelAttribute("historyVO") HistoryVO historyVO, HttpServletRequest request) {
+	public ModelAndView dbServerRegForm(HttpServletRequest request) {
 		ModelAndView mv = new ModelAndView();
 		try {
-			//DB Server 등록팝업 이력 남기기
-			HttpSession session = request.getSession();
-			String usr_id = (String) session.getAttribute("usr_id");
-			String ip = (String) session.getAttribute("ip");
-			historyVO.setUsr_id(usr_id);
-			historyVO.setLgi_ipadr(ip);
-			cmmnHistoryService.insertHistoryDbServerRegPopup(historyVO);
-			
 			mv.setViewName("popup/dbServerRegForm");
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 		return mv;
 	}
+	
 	
 	/**
 	 * DB서버 리스트를 조회한다.
@@ -272,11 +209,10 @@ public class DbServerManagerController {
 			e.printStackTrace();
 		}
 		return null;
-
 	}
 	
 	/**
-	 * DB서버 수정 화면을 보여준다.
+	 * DB서버 수정 팝업 화면을 보여준다.
 	 * 
 	 * @param historyVO
 	 * @param request
@@ -296,7 +232,7 @@ public class DbServerManagerController {
 	
 	
 	/**
-	 * DB서버를 수정한다.
+	 * DB서버 수정 팝업창에서 DB서버를 수정한다.
 	 * @param cmmnCodeVO
 	 * @throws Exception
 	 * @return "forward:/cmmnCodeList.do"
@@ -339,7 +275,7 @@ public class DbServerManagerController {
 	
 	
 	/**
-	 * DB를 등록 한다.
+	 * DB등록 팝업창에서 DB를 등록 한다.
 	 * 
 	 * @param dbServerVO
 	 * @param request
@@ -425,7 +361,7 @@ public class DbServerManagerController {
 	
 	
 	/**
-	 * DB서버 리스트를 조회한다.
+	 * DB등록 팝업창에서 DB서버 리스트를 조회한다.
 	 * 
 	 * @return resultSet
 	 * @throws Exception
@@ -444,37 +380,7 @@ public class DbServerManagerController {
 	}
 	
 	
-	/**
-	 * Repository DB 리스트를 조회한다.
-	 * 
-	 * @return resultSet
-	 * @throws Exception
-	 */
-	@SuppressWarnings("unused")
-	@RequestMapping(value = "/selectRepoDBList.do")
-	@ResponseBody
-	public List<Map<String, Object>> selectRepoDBList(HttpServletRequest request) {
 
-		HashMap<String, Object> paramvalue = new HashMap<String, Object>();
-		
-		String db_svr_nm = request.getParameter("db_svr_nm");
-		String ipadr = request.getParameter("ipadr");
-		String dft_db_nm = request.getParameter("dft_db_nm");
-		
-		paramvalue.put("db_svr_nm", db_svr_nm);
-		paramvalue.put("ipadr", ipadr);
-		paramvalue.put("dft_db_nm", dft_db_nm);
-
-		List<Map<String, Object>> resultSet = null;
-		try {			
-			resultSet = dbServerManagerService.selectRepoDBList(paramvalue);			
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-		return resultSet;
-	}
-	
-	
 	/**
 	 * Repository DB에 등록되어 있는 DB의 서버명 SelectBox 
 	 * 

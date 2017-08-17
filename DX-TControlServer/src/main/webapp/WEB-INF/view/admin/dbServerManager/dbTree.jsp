@@ -132,7 +132,7 @@ $(function() {
          * 선택된 서버에 대한 디비 조회
         ******************************************************** */
        	$.ajax({
-    		url : "/selectServerDBList.do",
+    		url : "/selectTreeServerDBList.do",
     		data : {
     			db_svr_nm: db_svr_nm,			
     		},
@@ -193,7 +193,7 @@ function fn_insertDB(){
 		}
     	if (confirm("선택된 DB를 저장하시겠습니까?")){
 			$.ajax({
-				url : "/insertDB.do",
+				url : "/insertTreeDB.do",
 				data : {
 					db_svr_id : db_svr_id,
 					rows : JSON.stringify(rows)
@@ -221,7 +221,7 @@ function fn_insertDB(){
  ******************************************************** */
 function fn_dataCompareChcek(svrDbList){
 	$.ajax({
-		url : "/selectDBList.do",
+		url : "/selectTreeDBList.do",
 		data : {},
 		async:true,
 		dataType : "json",
