@@ -46,13 +46,14 @@ function fn_init() {
 }
 
 $(window.document).ready(function() {
+	fn_buttonAut();
 	fn_init();
 	
 	 /* ********************************************************
 	  * 페이지 시작시, Repository DB에 등록되어 있는 디비의 서버명 SelectBox 
 	  ******************************************************** */
 	  	$.ajax({
-			url : "/selectSvrList.do",
+			url : "/selectDatabaseSvrList.do",
 			data : {},
 			dataType : "json",
 			type : "post",
@@ -70,12 +71,31 @@ $(window.document).ready(function() {
 			}
 		}); 
 	 
+function fn_buttonAut(){
+	var read_button = document.getElementById("read_button"); 
+	var int_button = document.getElementById("int_button"); 
+	var del_button = document.getElementById("del_button"); 
+	
+	if("${wrt_aut_yn}" == "Y"){
+		int_button.style.display = '';
+		del_button.style.display = '';
+	}else{
+		int_button.style.display = 'none';
+		del_button.style.display = 'none';
+	}
+		
+	if("${read_aut_yn}" == "Y"){
+		read_button.style.display = '';
+	}else{
+		read_button.style.display = 'none';
+	}
+}	 
 	 
  /* ********************************************************
   * Repository 디비 리스트 조회
   ******************************************************** */
   	$.ajax({
-		url : "/selectRepoDBList.do",
+		url : "/selectDatabaseRepoDBList.do",
 		data : {},
 		dataType : "json",
 		type : "post",
@@ -95,7 +115,7 @@ $(window.document).ready(function() {
  ******************************************************** */
 function fn_search(){
   	$.ajax({
-		url : "/selectRepoDBList.do",
+		url : "/selectDatabaseRepoDBList.do",
 		data : {
 			db_svr_nm : $("#db_svr_nm").val().trim(),
 			ipadr : $("#ipadr").val().trim(),
@@ -140,9 +160,9 @@ function fn_reg_popup(){
 		<div class="contents">
 			<div class="cmm_grp">
 				<div class="btn_type_01">
-					<span class="btn"><button onClick="fn_search()">조회</button></span>
-					<span class="btn" onclick="fn_reg_popup();"><button>등록</button></span>
-					<a href="#n" class="btn"><span>삭제</span></a>
+					<span class="btn" onClick="fn_search();" id="read_button"><button>조회</button></span>
+					<span class="btn" onclick="fn_reg_popup();" id="int_button"><button>등록</button></span>
+					<a href="#n" class="btn" id="del_button"><span>삭제</span></a>
 				</div>
 				<div class="sch_form">
 					<table class="write">

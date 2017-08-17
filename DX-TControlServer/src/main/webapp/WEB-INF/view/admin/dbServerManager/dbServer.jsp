@@ -59,10 +59,11 @@ function fn_init() {
  * 페이지 시작시, 서버 리스트 조회
  ******************************************************** */
 $(window.document).ready(function() {
+	fn_buttonAut();
 	fn_init();
 	
   	$.ajax({
-		url : "/selectDbServerList.do",
+		url : "/selectDbServerServerList.do",
 		data : {},
 		dataType : "json",
 		type : "post",
@@ -78,12 +79,35 @@ $(window.document).ready(function() {
 });
 
 
+function fn_buttonAut(){
+	var read_button = document.getElementById("read_button"); 
+	var int_button = document.getElementById("int_button"); 
+	var mdf_button = document.getElementById("mdf_button"); 
+	var del_button = document.getElementById("del_button"); 
+	
+	if("${wrt_aut_yn}" == "Y"){
+		int_button.style.display = '';
+		mdf_button.style.display = '';
+		del_button.style.display = '';
+	}else{
+		int_button.style.display = 'none';
+		mdf_button.style.display = 'none';
+		del_button.style.display = 'none';
+	}
+		
+	if("${read_aut_yn}" == "Y"){
+		read_button.style.display = '';
+	}else{
+		read_button.style.display = 'none';
+	}
+}
+
 /* ********************************************************
  * 서버리스트 조회 (검색조건 입력)
  ******************************************************** */
 function fn_search(){
 	$.ajax({
-		url : "/selectDbServerList.do",
+		url : "/selectDbServerServerList.do",
 		data : {
 			db_svr_nm : $("#db_svr_nm").val(),
 			ipadr : $("#ipadr").val(),
@@ -144,10 +168,10 @@ function fn_regRe_popup(){
 		<div class="contents">
 			<div class="cmm_grp">
 				<div class="btn_type_01">
-					<span class="btn"><button onClick="fn_search()">조회</button></span>
-					<span class="btn" onclick="fn_reg_popup();"><button>등록</button></span>
-					<span class="btn" onclick="fn_regRe_popup();"><button>수정</button></span>
-					<a href="#n" class="btn"><span>삭제</span></a>
+						<span class="btn" onClick="fn_search()" id="read_button"><button>조회</button></span>
+						<span class="btn" onclick="fn_reg_popup();" id="int_button"><button>등록</button></span>
+						<span class="btn" onclick="fn_regRe_popup();" id="mdf_button"><button>수정</button></span>
+						<a href="#n" class="btn" id="del_button"><span>삭제</span></a>
 				</div>
 				<div class="sch_form">
 					<table class="write">
