@@ -89,10 +89,13 @@ public class TreeController {
 
 		ModelAndView mv = new ModelAndView();
 		try {
-			mv.addObject("read_aut_yn", menuAut.get(0).get("read_aut_yn"));
-			mv.addObject("wrt_aut_yn", menuAut.get(0).get("wrt_aut_yn"));
-			mv.setViewName("admin/dbServerManager/dbTree");
-			
+			if(menuAut.get(0).get("read_aut_yn").equals("N")){
+				mv.setViewName("error/autError");
+			}else{
+				mv.addObject("read_aut_yn", menuAut.get(0).get("read_aut_yn"));
+				mv.addObject("wrt_aut_yn", menuAut.get(0).get("wrt_aut_yn"));
+				mv.setViewName("admin/dbServerManager/dbTree");
+			}
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
