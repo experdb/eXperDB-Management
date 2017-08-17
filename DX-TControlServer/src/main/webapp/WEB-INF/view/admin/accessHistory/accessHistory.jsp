@@ -82,6 +82,8 @@
 			return;
 		}
 	}
+	
+	
 	/*조회버튼 클릭시*/
 	function fn_select() {
 		$("#historyCheck").val("historyCheck");

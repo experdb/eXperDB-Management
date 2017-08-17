@@ -3,6 +3,7 @@ package com.k4m.dx.tcontrol.admin.menuauthority.web;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 
 import org.json.simple.JSONArray;
 import org.json.simple.parser.JSONParser;
@@ -68,6 +69,31 @@ public class MenuAuthorityController {
 		return mv;
 
 	}
+	
+	
+	/**
+	 * 탑 메뉴권한정보 조회
+	 * 
+	 * @return resultSet
+	 * @throws Exception
+	 */
+	@SuppressWarnings("unused")
+	@RequestMapping(value = "/menuAuthorityList.do")
+	@ResponseBody
+	public List<MenuAuthorityVO> menuAuthorityList(@ModelAttribute("menuAuthorityVO") MenuAuthorityVO menuAuthorityVO, HttpServletRequest request) {
+		List<MenuAuthorityVO> resultSet = null;
+		try {		
+			HttpSession session = request.getSession();
+			String usr_id = (String)session.getAttribute("usr_id");
+			
+			menuAuthorityVO.setUsr_id(usr_id);
+			
+			resultSet = menuAuthorityService.selectUsrmnuautList(menuAuthorityVO);		
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return resultSet;
+	}	
 	
 	
 	/**
