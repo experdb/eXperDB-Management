@@ -34,6 +34,7 @@
 		<typeAlias alias="menuAuthorityVO" type="com.k4m.dx.tcontrol.admin.menuauthority.service.MenuAuthorityVO"/>
 		<typeAlias alias="agentMonitoringVO" type="com.k4m.dx.tcontrol.admin.agentmonitoring.service.AgentMonitoringVO" />
 		<typeAlias alias="dashboardVO" type="com.k4m.dx.tcontrol.dashboard.service.DashboardVO" />
+		<typeAlias alias="bottlewaterVO" type="com.k4m.dx.tcontrol.tree.transfer.service.BottlewaterVO" /> 
 		
     </typeAliases>
     

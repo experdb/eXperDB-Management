@@ -61,4 +61,7 @@
 	<definition name="transfer/*" extends="default">
 		<put-attribute name="contents" value="/WEB-INF/view/transfer/{1}.jsp" />
 	</definition>
+		<definition name="help/*" extends="default">
+		<put-attribute name="contents" value="/WEB-INF/view/help/{1}.jsp" />
+	</definition>
 </tiles-definitions>

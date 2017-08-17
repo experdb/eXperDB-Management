@@ -31,7 +31,7 @@
 				{ data : "Method", className : "dt-center", defaultContent : ""}, 
 				{ data : "Option", className : "dt-center", defaultContent : ""}, 
 				{ data : "Type", className : "dt-center", defaultContent : ""},
-				{ data : "exe_ord",	
+				{ data : "",	
 					className: "dt-center",							
 					defaultContent : "",
 					render: function (data, type, full, meta,row) {
@@ -44,60 +44,76 @@
 						}
 					}
 			},
-			 ],
-	 		'drawCallback': function (settings) {
-				// Remove previous binding before adding it
-				$('.dtMoveUp').unbind('click');
-				$('.dtMoveDown').unbind('click');
-				// Bind clicks to functions
-				$('.dtMoveUp').click(moveUp);
-				$('.dtMoveDown').click(moveDown);
-			} 
+			 ],'drawCallback': function (settings) {
+					// Remove previous binding before adding it
+					$('.dtMoveUp').unbind('click');
+					$('.dtMoveDown').unbind('click');
+					// Bind clicks to functions
+					$('.dtMoveUp').click(moveUp);
+					$('.dtMoveDown').click(moveDown);
+				}
 		});
 		
- 	 	table.on( 'order.dt search.dt', function () {
-			table.column(1, {search:'applied', order:'applied'}).nodes().each( function (cell, i) {
-	            cell.innerHTML = i+1;
-	        } );
-	    } ).draw();  
-		  
 		// Move the row up
 		function moveUp() {
 			var tr = $(this).parents('tr');
 			moveRow(tr, 'up');
 		}
 
-		
 		// Move the row down
 		function moveDown() {
 			var tr = $(this).parents('tr');
 			moveRow(tr, 'down');
 		}
 
-		
-	  // Move up or down (depending...)
-	  function moveRow(row, direction) {
-		 
-	    var index = table.row(row).index();
-	    var rownum = -1;
-	    if (direction === 'down') {
-	    	rownum = 1;
-	    }
-
-	    var data1 = table.row(index).data();
-	    data1.Seq = Number(data1.Seq)+rownum;
-
-
-	    
-	    var data2 = table.row(index + rownum).data();
-	    data2.Seq= Number(data2.Seq)-rownum;
-
-	    table.row(index).data(data2);
-	    table.row(index + rownum).data(data1);
-	    table.draw(true);
+	  	// Move up or down (depending...)
+	  	function moveRow(row, direction) {
+	  		var check= document.getElementsByName("check");
+			for (var i=0; i<check.length; i++){
+				if(check[i].checked ==true){
+					var db_id = check[i].value;
+				}
+			}
+			var index = table.row(row).index();
+ 			var rownum = -1;
+ 			if (direction === 'down') {
+ 			    	rownum = 1;
+ 			}
+	  		var data1 = table.row(index).data();
+	  		var data2 = table.row(index + rownum).data();
+			data1.Seq =  Number(data1.Seq)+rownum; 
+ 			data2.Seq =  Number(data2.Seq)-rownum;
+ 			table.row(index).data(data2);
+ 			table.row(index + rownum).data(data1);
+ 			table.draw(true);
+			var rowList = [];
+			var data = table.rows().data();
+            for (var i = 0; i < data.length; i++) {
+               rowList.push(table.rows().data()[i]);
+            }    
+	  		//change
+	 		 $.ajax({
+	 			url : "/changeAccessControl.do",
+	 			data : {
+	 				rowList : JSON.stringify(rowList),
+	 				db_id : db_id
+	 			},
+	 			dataType : "json",
+	 			type : "post",
+	 			error : function(xhr, status, error) {
+	 				alert("실패")
+	 			},
+	 			success : function(result) {
+	 			}
+	 		});
+	 		 
 		}
 	  
-	  
+		table.on( 'order.dt search.dt', function () {
+			table.column(1, {search:'applied', order:'applied'}).nodes().each( function (cell, i) {
+	            cell.innerHTML = i+1;
+	        } );
+	    } ).draw();
 		
 		//더블 클릭시
 		$('#accessControlTable tbody').on('dblclick','tr',function() {
@@ -132,11 +148,11 @@
 	
 	$(window.document).ready(function() {
 		fn_init();
- 		var table = $('#accessControlTable').DataTable();
+		var table = $('#accessControlTable').DataTable();
 		$('#select').on( 'keyup', function () {
 			 table.search( this.value ).draw();
 		});	
-		$('.dataTables_filter').hide(); 
+		$('.dataTables_filter').hide();
 	})
 
 	
@@ -151,7 +167,8 @@
 		 $.ajax({
 				url : "/selectAccessControl.do",
 				data : {
-					db_id : db_id
+					db_id : db_id,
+					db_svr_id : "${db_svr_id}",
 				},
 				dataType : "json",
 				type : "post",
@@ -245,6 +262,7 @@
 			alert("Database를 선택해주세요.")
 			return false;
 		}else{
+			if (!confirm("삭제하시겠습니까?")) return false;
 			var datas = table.rows('.selected').data();
 			var rowList = [];
 			for (var i = 0; i < datas.length; i++) {
@@ -254,6 +272,7 @@
 					url : "/deleteAccessControl.do",
 					data : {
 						db_id : db_id,
+						db_svr_id : "${db_svr_id}",
 						rowList : rowList,
 					},
 					dataType : "json",
@@ -278,7 +297,8 @@
  		 $.ajax({
 			url : "/selectAccessControl.do",
 			data : {
-				db_id : db_id
+				db_id : db_id,
+				db_svr_id : "${db_svr_id}",
 			},
 			dataType : "json",
 			type : "post",

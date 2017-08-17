@@ -189,7 +189,7 @@ function fn_cookie(url) {
 					<li><a href="#n"><span><img src="/images/ico_h_8.png" alt="HELP" /></span></a>
 						<ul class="depth_2">
 							<li><a href="#n" onClick="fn_cookie(null)">Online Help</a></li>
-							<li><a href="#n" onClick="fn_cookie(null)">About Tconsole</a></li>
+							<li><a href="/aboutTcontrol.do" onClick="fn_cookie(null)">About Tcontrol</a></li>
 						</ul>
 					</li>
 				</ul>

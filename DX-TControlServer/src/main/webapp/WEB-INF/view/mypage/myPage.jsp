@@ -67,10 +67,6 @@
 							<td><a href="#n" onclick="fn_pwdPopup()"><img src="../images/ico_pwd_ud.png" alt="패스워드변경" /></a></td>
 						</tr>
 						<tr>
-							<th scope="row">권한 구분</th>
-							<td>${aut_id}</td>
-						</tr>
-						<tr>
 							<th scope="row">소속 (*)</th>
 							<td><input type="text" class="txt" name="bln_nm" id="bln_nm" value="${bln_nm}" /></td>
 						</tr>
