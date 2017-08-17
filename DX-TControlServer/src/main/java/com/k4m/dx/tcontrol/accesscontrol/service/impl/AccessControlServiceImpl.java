@@ -32,8 +32,8 @@ public class AccessControlServiceImpl implements AccessControlService {
 	}
 
 	@Override
-	public void deleteDbAccessControl(int db_svr_id) throws Exception {
-		accessControlDAO.deleteDbAccessControl(db_svr_id);
+	public void deleteDbAccessControl(int db_id) throws Exception {
+		accessControlDAO.deleteDbAccessControl(db_id);
 	}
 
 	@Override

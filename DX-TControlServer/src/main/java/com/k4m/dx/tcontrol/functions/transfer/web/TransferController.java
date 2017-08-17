@@ -246,26 +246,6 @@ public class TransferController {
 		return mv;
 	}
 
-	/**
-	 * connector서버 연결 테스트를 한다.
-	 * 
-	 * @param historyVO
-	 * @param request
-	 * @return
-	 */
-	@RequestMapping(value = "/connectorConnTest.do")
-	public @ResponseBody String connectorConnTest(@ModelAttribute("historyVO") HistoryVO historyVO, HttpServletRequest request) {
-		try {
-			// 연결테스트 이력 남기기
-			CmmnUtils.saveHistory(request, historyVO);
-			historyVO.setExe_dtl_cd("DX-T0013_02");
-			accessHistoryService.insertHistory(historyVO);
-		
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-		return null;
-	}
 
 	/**
 	 * Connector를 등록한다.
@@ -333,13 +313,12 @@ public class TransferController {
 				transferService.deleteConnectorRegister(Integer.parseInt(param[i]));
 				/*2. 전송대상설정정보 삭제*/
 				transferService.deleteTransferInfo(Integer.parseInt(param[i]));
-				/*TODO 3. trf_trg_mpp_id조회 후, 전송대상매핑관계 삭제 */
+				/*3. trf_trg_mpp_id조회 후, 전송대상매핑관계 삭제 */
 				List<TransferMappingVO> result = transferService.selectTrftrgmppid(Integer.parseInt(param[i]));
 				transferService.deleteTransferRelation(Integer.parseInt(param[i]));
-				/*TODO 4. 전송매핑테이블 삭제*/
+				/*4. 전송매핑테이블 삭제*/
 				if(result!=null){
 					for(int j=0; j<result.size(); j++){
-						System.out.println("매핑된 테이블정보가 있어요! trf_trg_mpp_id = "+result.get(j).getTrf_trg_mpp_id());
 						transferService.deleteTransferMapping(result.get(j).getTrf_trg_mpp_id());
 					}
 				}		

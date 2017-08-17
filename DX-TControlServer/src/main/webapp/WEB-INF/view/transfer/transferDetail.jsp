@@ -28,15 +28,23 @@
 			{ data : "db_svr_nm", className : "dt-center", defaultContent : ""}, 
 			{ data : "db_nm", className : "dt-center", defaultContent : ""}, 
 			{
-				data : "",
+				data : "bw_pid",
 				render : function(data, type, full, meta) {
-					var html = "<a href='#n'><img src='../images/ico_start.png' alt='실행중' /></a>";	
+					var html="";
+					if(data==0){
+						//중지
+						html += "<a href='#n')'><img src='../images/ico_end.png' alt='중지중' id='bottleWaterBtn'/></a>";
+					}else{
+						//실행중
+						html += "<a href='#n'><img src='../images/ico_start.png' alt='실행중' id='bottleWaterBtn'/></a>";	
+					}
 					return html;
 				},
 				className : "dt-center",
 				defaultContent : ""
 			}, 
-			{ data : "", className : "dt-center", defaultContent : "<a href='#n'><img src='../images/mappin_btn.png' alt='맵핑설정버튼' id='mappingBtn'/></a>"}
+			{ data : "", className : "dt-center", defaultContent : "<a href='#n'><img src='../images/mappin_btn.png' alt='맵핑설정버튼' id='mappingBtn'/></a>"},
+			{ data : "trf_trg_id", visible: false}, 
 			]
 		});
 		
@@ -60,6 +68,42 @@
 					
 		    	}
 			});
+	    
+		 //bottlewater 버튼 클릭시 -> bottleWater 실행,종료
+		 $('#transferDetailTable tbody').on('click','#bottleWaterBtn', function () {
+		 		var $this = $(this);
+		    	var $row = $this.parent().parent().parent();
+		    	$row.addClass('select-detail');
+		    	var datas = table.rows('.select-detail').data();
+		    	if(datas.length==1) {
+		    		var row = datas[0];
+			    	$row.removeClass('select-detail');
+					$.ajax({
+						url : "/bottlewaterControl.do",
+						data : {
+							bw_pid : row.bw_pid,
+							trf_trg_id : row.trf_trg_id
+						},
+						dataType : "json",
+						type : "post",
+						error : function(xhr, status, error) {
+							alert("실패")
+						},
+						success : function(result) {
+							if(result =='start'){
+								alert("실행하였습니다");
+								fn_select();
+							}else if(result =='stop'){
+								alert("중지하였습니다");
+								fn_select();
+							}else{
+								alert("서버를 확인해주세요");
+							}	
+						}
+					});		
+		    	}
+			});
+		    
 	    
 	}
 
@@ -117,6 +161,7 @@
 		
 		window.open(popUrl,"",popOption);
 	}
+	
 </script>
 <!-- contents -->
 <div id="contents">
@@ -173,9 +218,3 @@
 	</div>
 </div>
 <!-- // contents -->
-
-
-<!-- 	
-<td><a href="#n"><img src="../images/ico_start.png" alt="실행중" /></a></td>
-<a href="#n"><img src="../images/ico_end.png" alt="중지중" /></a>
- -->

@@ -25,11 +25,15 @@ import com.k4m.dx.tcontrol.admin.dbserverManager.service.DbServerVO;
 import com.k4m.dx.tcontrol.cmmn.AES256;
 import com.k4m.dx.tcontrol.cmmn.AES256_KEY;
 import com.k4m.dx.tcontrol.cmmn.CmmnUtils;
+import com.k4m.dx.tcontrol.cmmn.client.ClientAdapter;
 import com.k4m.dx.tcontrol.cmmn.client.ClientInfoCmmn;
 import com.k4m.dx.tcontrol.cmmn.client.ClientProtocolID;
+import com.k4m.dx.tcontrol.cmmn.client.ClientTranCodeType;
 import com.k4m.dx.tcontrol.common.service.HistoryVO;
 import com.k4m.dx.tcontrol.functions.transfer.service.ConnectorVO;
 import com.k4m.dx.tcontrol.functions.transfer.service.TransferService;
+import com.k4m.dx.tcontrol.functions.transfer.service.TransferVO;
+import com.k4m.dx.tcontrol.tree.transfer.service.BottlewaterVO;
 import com.k4m.dx.tcontrol.tree.transfer.service.TransferDetailMappingVO;
 import com.k4m.dx.tcontrol.tree.transfer.service.TransferDetailVO;
 import com.k4m.dx.tcontrol.tree.transfer.service.TransferMappingVO;
@@ -197,14 +201,15 @@ public class TreeTransferController {
 						JSONObject jsonObj = (JSONObject)data.get(m);
 						
 						JSONObject hp = (JSONObject) jsonObj.get("hp");
-						int rotate_interval_ms = Integer.parseInt((String) hp.get("rotate.interval.ms"));
+						
+						String rotate_interval_ms=String.valueOf(hp.get("rotate.interval.ms"));
 						String hadoop_home = (String) hp.get("hadoop.home");
 						String trf_trg_url = (String) hp.get("hdfs.url");
 						String topics = (String) hp.get("topics");
-						int task_max = Integer.parseInt((String) hp.get("tasks.max"));
+						String task_max=String.valueOf(hp.get("tasks.max"));
 						String trf_trg_cnn_nm = (String) hp.get("name");
 						String hadoop_conf_dir = (String) hp.get("hadoop.conf.dir");
-						int flush_size = Integer.parseInt((String) hp.get("flush.size"));
+						String flush_size=String.valueOf(hp.get("flush.size"));
 						String connector_class = (String) hp.get("connector.class");
 						
 						mv.addObject("trf_trg_cnn_nm",trf_trg_cnn_nm);
@@ -476,14 +481,15 @@ public class TreeTransferController {
 					JSONObject jsonObj = (JSONObject)data.get(m);
 					
 					JSONObject hp = (JSONObject) jsonObj.get("hp");
-					int rotate_interval_ms = Integer.parseInt((String) hp.get("rotate.interval.ms"));
+					
+					String rotate_interval_ms=String.valueOf(hp.get("rotate.interval.ms"));
 					String hadoop_home = (String) hp.get("hadoop.home");
 					String trf_trg_url = (String) hp.get("hdfs.url");
 					String topics = (String) hp.get("topics");
-					int task_max = Integer.parseInt((String) hp.get("tasks.max"));
+					String task_max=String.valueOf(hp.get("tasks.max"));
 					String trf_trg_cnn_nm = (String) hp.get("name");
 					String hadoop_conf_dir = (String) hp.get("hadoop.conf.dir");
-					int flush_size = Integer.parseInt((String) hp.get("flush.size"));
+					String flush_size=String.valueOf(hp.get("flush.size"));
 					String connector_class = (String) hp.get("connector.class");
 					
 					mv.addObject("rotate_interval_ms",rotate_interval_ms);
@@ -742,4 +748,96 @@ public class TreeTransferController {
 			e.printStackTrace();
 		}
 	}
+	
+	/**
+	 * bottlewater를 제어한다.
+	 * 
+	 * @param historyVO
+	 * @return
+	 * @throws Exception
+	 */
+	@RequestMapping(value = "/bottlewaterControl.do")
+	public @ResponseBody String bottlewaterControl(@ModelAttribute("transferDetailVO") TransferDetailVO transferDetailVO, HttpServletRequest request) {
+		try{
+			/* TODO 실행순서
+			 * 1. bottlewater 실행 및 중지
+			 * bw_pid가 0이면 -> 실행
+			 * bw_pid가 0이 아니면 -> 중지
+			 * 2. T_TRFTRGCNG_I 테이블에 
+			 * (실행-> bottlewater pid 인설트, 중지-> bw_pid 0 인설트)
+			 * */
+			AES256 aes = new AES256(AES256_KEY.ENC_KEY);
+			
+			HttpSession session = request.getSession();
+			String usr_id = (String)session.getAttribute("usr_id");
+			transferDetailVO.setLst_mdfr_id(usr_id);
+			
+			int trf_trg_id=Integer.parseInt(request.getParameter("trf_trg_id"));
+			int bw_pid=Integer.parseInt(request.getParameter("bw_pid"));
+			
+			if(bw_pid==0){
+				List<TransferVO> transferInfo = null;
+				transferInfo = transferService.selectTransferSetting(usr_id);
+				
+				List<BottlewaterVO> dbInfo = null;
+				dbInfo = treeTransferService.selectBottlewaterinfo(trf_trg_id);
+				
+				String topicTxt = "";
+				for(int i=0; i<dbInfo.size(); i++){
+					topicTxt +=dbInfo.get(i).getTrf_trg_cnn_nm() +"." +dbInfo.get(i).getScm_nm() +"."+dbInfo.get(i).getTb_engl_nm();
+					if(i!=dbInfo.size()-1){
+						topicTxt += ", ";
+					}
+				}
+				System.out.println("TOPIC : "+topicTxt);
+				String dbinfoTxt = "--postgres=postgres://"+dbInfo.get(0).getSvr_spr_usr_id()+":"
+									+ aes.aesDecode(dbInfo.get(0).getSvr_spr_scm_pwd())
+									+ "@"+dbInfo.get(0).getIpadr()+":"+dbInfo.get(0).getPortno()+"/"+dbInfo.get(0).getDft_db_nm();
+				/*bottlewater실행 명령어*/
+				String strExecTxt = transferInfo.get(0).getBw_home() + dbinfoTxt + " --slot=connect --broker="
+									+ transferInfo.get(0).getKafka_broker_ip()+":"+transferInfo.get(0).getKafka_broker_port()
+									+ " --topic-prefix="+topicTxt+" --allow-unkeyed --on-error=log";
+				System.out.println("명령어 : "+strExecTxt);
+				
+				String Ip = "222.110.153.162";
+				int port = 9001;
+				
+				JSONObject jObj = new JSONObject();
+				jObj.put(ClientProtocolID.DX_EX_CODE, ClientTranCodeType.DxT013);
+				jObj.put(ClientProtocolID.TRF_TRG_ID, "12");
+				jObj.put(ClientProtocolID.COMMAND_CODE, ClientProtocolID.RUN);
+				jObj.put(ClientProtocolID.EXEC_TXT, strExecTxt);
+				JSONObject objList;
+				ClientAdapter CA = new ClientAdapter(Ip, port);
+				CA.open();
+				objList = CA.dxT013(ClientTranCodeType.DxT013, jObj);
+				String strErrMsg = (String)objList.get(ClientProtocolID.ERR_MSG);
+				String strErrCode = (String)objList.get(ClientProtocolID.ERR_CODE);
+				String strDxExCode = (String)objList.get(ClientProtocolID.DX_EX_CODE);
+				String strResultCode = (String)objList.get(ClientProtocolID.RESULT_CODE);
+				System.out.println("RESULT_CODE : " +  strResultCode);
+				System.out.println("ERR_CODE : " +  strErrCode);
+				System.out.println("ERR_MSG : " +  strErrMsg);
+				CA.close();
+				
+				/*실행시킨 bwpid가져오기*/
+				int current_bwpid = 0;
+				transferDetailVO.setBw_pid(current_bwpid);
+				treeTransferService.updateBottleWaterBwpid(transferDetailVO);
+				return "start";
+			}else{
+				/*kill -9 pid 명령어*/
+				String strExecTxt = "kill -9"+bw_pid;
+				System.out.println(strExecTxt);
+				transferDetailVO.setBw_pid(0);
+				treeTransferService.updateBottleWaterBwpid(transferDetailVO);
+				return "stop";
+			}	
+		
+		}catch(Exception e){
+			return "false";
+		}
+	}
+
+		
 }

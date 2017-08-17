@@ -1,7 +1,7 @@
 package com.k4m.dx.tcontrol.tree.transfer.service;
 
 public class TransferDetailVO {
-	private String trf_trg_id;
+	private int trf_trg_id;
 	private String trf_trg_cnn_nm;
 	private int cnr_id;
 	private String db_id;
@@ -11,11 +11,12 @@ public class TransferDetailVO {
 	private String frst_reg_dtm;
 	private String lst_mdfr_id;
 	private String lst_mdf_dtm;
+	private int bw_pid;
 	
-	public String getTrf_trg_id() {
+	public int getTrf_trg_id() {
 		return trf_trg_id;
 	}
-	public void setTrf_trg_id(String trf_trg_id) {
+	public void setTrf_trg_id(int trf_trg_id) {
 		this.trf_trg_id = trf_trg_id;
 	}
 	public String getTrf_trg_cnn_nm() {
@@ -72,7 +73,13 @@ public class TransferDetailVO {
 	public void setLst_mdf_dtm(String lst_mdf_dtm) {
 		this.lst_mdf_dtm = lst_mdf_dtm;
 	}
+	public int getBw_pid() {
+		return bw_pid;
+	}
+	public void setBw_pid(int bw_pid) {
+		this.bw_pid = bw_pid;
+	}
 
 	
-
+	
 }

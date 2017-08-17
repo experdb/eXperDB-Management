@@ -109,8 +109,9 @@
 		,  TMP.TRF_TRG_ID
 		,  TMP.DB_NM
 		,  TMP.DB_SVR_NM
+		,  TMP.BW_PID
 		FROM (
-		SELECT TD.TRF_TRG_CNN_NM,TD.TRF_TRG_ID,(CASE WHEN TD.DB_NM IS NOT NULL THEN TD.DB_NM ELSE '' END) AS DB_NM,S.DB_SVR_NM
+		SELECT TD.TRF_TRG_CNN_NM,TD.TRF_TRG_ID,(CASE WHEN TD.DB_NM IS NOT NULL THEN TD.DB_NM ELSE '' END) AS DB_NM,S.DB_SVR_NM,TD.BW_PID
 			FROM (SELECT T.*,D.DB_SVR_ID,D.DB_NM
 				FROM (SELECT SI.*, MR.DB_ID
 					FROM T_TRFTRGCNG_I SI LEFT OUTER JOIN T_TRFTRGMPP_R MR 
@@ -274,4 +275,46 @@
 	    DELETE FROM T_TRFMPPTB_L
 	    WHERE TRF_TRG_MPP_ID =#{trf_trg_mpp_id}
     </delete>
+    
+    <update id="updateBottleWaterBwpid" parameterType="transferDetailVO">
+        /**
+	 	*  Query ID : updateBottleWaterBwpid
+	 	* Description : Bottlewater bwpid 업데이트
+	 	* Author : 김주영
+	 	**/
+		UPDATE T_TRFTRGCNG_I 
+		SET
+		  BW_PID=#{bw_pid}
+		, LST_MDFR_ID=#{lst_mdfr_id}
+		, LST_MDF_DTM= clock_timestamp()
+		WHERE TRF_TRG_ID=#{trf_trg_id}
+    </update>
+    
+    <select id="selectBottlewaterinfo" parameterType="int" resultType="bottlewaterVO">
+        /**
+	 	*  Query ID : updateBottleWaterBwpid
+	 	* Description : Bottlewater bwpid 업데이트
+	 	* Author : 김주영
+	 	**/
+	 	SELECT 
+	 	  S.DFT_DB_NM
+		, S.IPADR
+		, S.PORTNO
+		, S.SVR_SPR_USR_ID
+		, S.SVR_SPR_SCM_PWD
+		, A.DB_ID
+		, A.SCM_NM
+		, A.TB_ENGL_NM
+		, (SELECT TRF_TRG_CNN_NM FROM T_TRFTRGCNG_I WHERE TRF_TRG_ID= #{trf_trg_id}) AS TRF_TRG_CNN_NM
+		FROM 
+		(
+			SELECT R.DB_ID,R.CNR_ID,L.SCM_NM,L.TB_ENGL_NM
+			FROM T_TRFTRGMPP_R R,T_TRFMPPTB_L L
+			WHERE R.TRF_TRG_MPP_ID = L.TRF_TRG_MPP_ID
+			AND R.TRF_TRG_ID = #{trf_trg_id}
+		)A, T_DB_I I, T_DBSVR_I S
+		WHERE I.DB_SVR_ID=S.DB_SVR_ID
+		AND A.DB_ID=I.DB_ID
+    </select>
+    
 </mapper>

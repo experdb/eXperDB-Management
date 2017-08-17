@@ -7,9 +7,14 @@ import java.util.Map;
 
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
+import org.springframework.beans.factory.annotation.Autowired;
+
+import com.k4m.dx.tcontrol.admin.dbserverManager.service.DbServerVO;
+import com.k4m.dx.tcontrol.common.service.AgentInfoVO;
+import com.k4m.dx.tcontrol.common.service.CmmnServerInfoService;
 
 public class ClientInfoCmmn {
-
+	
 	String Ip = "222.110.153.162";
 	int port = 9001;
 
@@ -233,6 +238,7 @@ public class ClientInfoCmmn {
 		JSONObject result = new JSONObject();
 
 		try {
+			
 			JSONObject objList;
 
 			JSONObject acObj = new JSONObject();
@@ -266,7 +272,7 @@ public class ClientInfoCmmn {
 			List<Object> selectDBList = (ArrayList<Object>) objList.get(ClientProtocolID.RESULT_DATA);
 			
 			if(selectDBList != null){
-				for (int i = 1; i < selectDBList.size() - 1; i++) {
+				for(int i=0; i<selectDBList.size()-1; i++) {
 					JSONObject jsonObj = new JSONObject();
 					Object obj = selectDBList.get(i);
 					HashMap hp = (HashMap) obj;
@@ -345,7 +351,7 @@ public class ClientInfoCmmn {
 
 			List<Object> selectDBList = (ArrayList<Object>) objList.get(ClientProtocolID.RESULT_DATA);
 
-			for (int i = 1; i < selectDBList.size() - 1; i++) {
+			for(int i=0; i<selectDBList.size()-1; i++) {
 				JSONObject jsonObj = new JSONObject();
 
 				Object obj = selectDBList.get(i);
@@ -414,36 +420,38 @@ public class ClientInfoCmmn {
 	}
 
 	// 6. DB접근제어 D(dbAccess_delete)
-	public void dbAccess_delete(JSONObject serverObj, ArrayList arrSeq) {
+	public void dbAccess_delete(JSONObject serverObj,ArrayList arrSeq) {
 		try {
-
+			
 			JSONObject objList;
 
 			ClientAdapter CA = new ClientAdapter(Ip, port);
-			CA.open();
+			CA.open(); 
 
 			JSONObject jObj = new JSONObject();
 			jObj.put(ClientProtocolID.DX_EX_CODE, ClientTranCodeType.DxT006);
 			jObj.put(ClientProtocolID.COMMAND_CODE, ClientProtocolID.COMMAND_CODE_D);
 			jObj.put(ClientProtocolID.SERVER_INFO, serverObj);
 			jObj.put(ClientProtocolID.ARR_AC_SEQ, arrSeq);
-
+			
 			objList = CA.dxT006(ClientTranCodeType.DxT006, jObj);
-
-			String strErrMsg = (String) objList.get(ClientProtocolID.ERR_MSG);
-			String strErrCode = (String) objList.get(ClientProtocolID.ERR_CODE);
-			String strDxExCode = (String) objList.get(ClientProtocolID.DX_EX_CODE);
-			String strResultCode = (String) objList.get(ClientProtocolID.RESULT_CODE);
-			System.out.println("RESULT_CODE : " + strResultCode);
-			System.out.println("ERR_CODE : " + strErrCode);
-			System.out.println("ERR_MSG : " + strErrMsg);
-
+			
+			String strErrMsg = (String)objList.get(ClientProtocolID.ERR_MSG);
+			String strErrCode = (String)objList.get(ClientProtocolID.ERR_CODE);
+			String strDxExCode = (String)objList.get(ClientProtocolID.DX_EX_CODE);
+			String strResultCode = (String)objList.get(ClientProtocolID.RESULT_CODE);
+			System.out.println("RESULT_CODE : " +  strResultCode);
+			System.out.println("ERR_CODE : " +  strErrCode);
+			System.out.println("ERR_MSG : " +  strErrMsg);
+			
 			CA.close();
-
-		} catch (Exception e) {
+			
+			
+		} catch(Exception e) {
 			e.printStackTrace();
 		}
 	}
+	
 
 	// 11. Role 리스트 (roleList)
 	@SuppressWarnings({ "unchecked", "rawtypes" })

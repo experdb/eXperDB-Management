@@ -7,6 +7,8 @@ import javax.annotation.Resource;
 import org.springframework.stereotype.Service;
 
 import com.k4m.dx.tcontrol.accesscontrol.service.DbIDbServerVO;
+import com.k4m.dx.tcontrol.admin.dbserverManager.service.DbServerVO;
+import com.k4m.dx.tcontrol.tree.transfer.service.BottlewaterVO;
 import com.k4m.dx.tcontrol.tree.transfer.service.TransferDetailMappingVO;
 import com.k4m.dx.tcontrol.tree.transfer.service.TransferDetailVO;
 import com.k4m.dx.tcontrol.tree.transfer.service.TransferMappingVO;
@@ -84,6 +86,17 @@ public class TreeTransferServiceImpl implements TreeTransferService {
 	@Override
 	public void deleteTransferMapping(int trf_trg_mpp_id) throws Exception {
 		treeTransferDAO.deleteTransferMapping(trf_trg_mpp_id);
+	}
+
+	@Override
+	public void updateBottleWaterBwpid(TransferDetailVO transferDetailVO) throws Exception {
+		treeTransferDAO.updateBottleWaterBwpid(transferDetailVO);
+
+	}
+
+	@Override
+	public List<BottlewaterVO> selectBottlewaterinfo(int trf_trg_id) throws Exception {
+		return treeTransferDAO.selectBottlewaterinfo(trf_trg_id);
 	}
 
 }

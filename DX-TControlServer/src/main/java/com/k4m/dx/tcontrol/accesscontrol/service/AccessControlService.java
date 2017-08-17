@@ -32,13 +32,13 @@ public interface AccessControlService {
 	List<DbIDbServerVO> selectDbServerName(int db_svr_id) throws Exception;
 
 	/**
-	 * DB접근제어 삭제
+	 * DB접근제어 전체 삭제
 	 * 
-	 * @param db_svr_id
+	 * @param db_id
 	 * @return
 	 * @throws Exception
 	 */
-	void deleteDbAccessControl(int db_svr_id) throws Exception;
+	void deleteDbAccessControl(int db_id) throws Exception;
 
 	/**
 	 * 접근제어 등록
@@ -47,5 +47,4 @@ public interface AccessControlService {
 	 * @throws Exception
 	 */
 	void insertAccessControl(AccessControlVO accessControlVO) throws Exception;
-
 }

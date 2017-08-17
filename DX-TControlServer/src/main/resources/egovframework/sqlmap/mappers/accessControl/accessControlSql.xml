@@ -55,18 +55,18 @@
 			DB_SVR_NM
 		FROM T_DBSVR_I
 		WHERE DB_SVR_ID=#{db_svr_id}	
- 	</select>   
+ 	</select>
+ 	   
 	<delete id="deleteDbAccessControl" parameterType="int">
        	/**
 	 	* Query ID : deleteDbAccessControl
-	 	* Description : DB 접근제어 삭제
+	 	* Description : DB 접근제어 전체 삭제
 	 	* Author : 김주영
 	 	**/ 	
 		DELETE 
 		FROM T_SVRACSCNTR_I 
-	 	WHERE DB_SVR_ID=#{db_svr_id}
+	 	WHERE DB_ID=#{db_id}
 	</delete>
-	
 	
 	<insert id="insertAccessControl" parameterType="accessControlVO">
 		/**
@@ -111,5 +111,5 @@
 		, clock_timestamp()
 		) 
 	</insert>
-	
+
 </mapper>
