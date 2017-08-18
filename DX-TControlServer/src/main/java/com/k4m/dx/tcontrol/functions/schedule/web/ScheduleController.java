@@ -31,6 +31,7 @@ import org.springframework.web.servlet.ModelAndView;
 
 import com.k4m.dx.tcontrol.admin.menuauthority.service.MenuAuthorityService;
 import com.k4m.dx.tcontrol.backup.service.WorkVO;
+import com.k4m.dx.tcontrol.cmmn.CmmnUtils;
 import com.k4m.dx.tcontrol.functions.schedule.ScheduleUtl;
 import com.k4m.dx.tcontrol.functions.schedule.service.ScheduleDtlVO;
 import com.k4m.dx.tcontrol.functions.schedule.service.ScheduleService;
@@ -54,16 +55,16 @@ import com.k4m.dx.tcontrol.functions.schedule.service.ScheduleVO;
 public class ScheduleController {
 	
 	@Autowired
-<<<<<<< HEAD
+
 	private MenuAuthorityService menuAuthorityService;
 	
 	@Autowired
 	private ScheduleService scheduleService;
 	
+	
 	private List<Map<String, Object>> menuAut;
-=======
-	private ScheduleService scheduleService;
->>>>>>> branch 'master' of https://github.com/experdb/DX-TControl.git
+
+
 	
 	/**
 	 * Mybatis Transaction 
