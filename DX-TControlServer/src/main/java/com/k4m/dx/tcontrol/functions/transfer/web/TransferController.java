@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.k4m.dx.tcontrol.admin.accesshistory.service.AccessHistoryService;
+import com.k4m.dx.tcontrol.admin.menuauthority.service.MenuAuthorityService;
 import com.k4m.dx.tcontrol.cmmn.CmmnUtils;
 import com.k4m.dx.tcontrol.common.service.HistoryVO;
 import com.k4m.dx.tcontrol.functions.transfer.service.ConnectorVO;
@@ -45,6 +46,10 @@ public class TransferController {
 	@Autowired
 	private AccessHistoryService accessHistoryService;
 
+	@Autowired
+	private MenuAuthorityService menuAuthorityService;
+	
+	private List<Map<String, Object>> menuAut;
 	/**
 	 * 전송설정 화면을 보여준다.
 	 * 
@@ -56,12 +61,22 @@ public class TransferController {
 	public ModelAndView transferSetting(@ModelAttribute("historyVO") HistoryVO historyVO, HttpServletRequest request) {
 		ModelAndView mv = new ModelAndView();
 		try {
-			// 전송설정 이력 남기기
-			CmmnUtils.saveHistory(request, historyVO);
-			historyVO.setExe_dtl_cd("DX-T0011");
-			accessHistoryService.insertHistory(historyVO);
-			
-			mv.setViewName("functions/transfer/transferSetting");
+			CmmnUtils cu = new CmmnUtils();
+			menuAut = cu.selectMenuAut(menuAuthorityService, "13");
+			if(menuAut.get(0).get("read_aut_yn").equals("N")){
+				mv.setViewName("error/autError");
+			}else{
+				mv.addObject("read_aut_yn", menuAut.get(0).get("read_aut_yn"));
+				mv.addObject("wrt_aut_yn", menuAut.get(0).get("wrt_aut_yn"));
+				
+				// 전송설정 이력 남기기
+				CmmnUtils.saveHistory(request, historyVO);
+				historyVO.setExe_dtl_cd("DX-T0011");
+				accessHistoryService.insertHistory(historyVO);
+				
+				mv.setViewName("functions/transfer/transferSetting");
+			}
+
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -77,11 +92,20 @@ public class TransferController {
 	 */
 	@RequestMapping(value = "/selectTransferSetting.do")
 	public @ResponseBody List<TransferVO> selectTransferSetting(HttpServletRequest request) {
+		HttpSession session = request.getSession();
 		List<TransferVO> resultSet = null;
 		try {
-			HttpSession session = request.getSession();
-			String usr_id = (String) session.getAttribute("usr_id");
-			resultSet = transferService.selectTransferSetting(usr_id);
+			CmmnUtils cu = new CmmnUtils();
+			menuAut = cu.selectMenuAut(menuAuthorityService, "13");
+			
+			//읽기권한이 있을경우
+			if(menuAut.get(0).get("read_aut_yn").equals("Y")){
+				String usr_id = (String) session.getAttribute("usr_id");
+				resultSet = transferService.selectTransferSetting(usr_id);	
+			}else{
+				return resultSet;
+			}
+			
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -99,18 +123,26 @@ public class TransferController {
 	@RequestMapping(value = "/insertTransferSetting.do")
 	public @ResponseBody void insertTransferSetting(@ModelAttribute("transferVO") TransferVO transferVO,@ModelAttribute("historyVO") HistoryVO historyVO,HttpServletRequest request) {
 		try {
-			HttpSession session = request.getSession();
-			String usr_id = (String) session.getAttribute("usr_id");
-			transferVO.setFrst_regr_id(usr_id);
-			transferVO.setLst_mdfr_id(usr_id);
+			CmmnUtils cu = new CmmnUtils();
+			menuAut = cu.selectMenuAut(menuAuthorityService, "13");
 			
-			transferService.insertTransferSetting(transferVO);
-			
-			// 전송설정 저장 이력 남기기
-			CmmnUtils.saveHistory(request, historyVO);
-			historyVO.setExe_dtl_cd("DX-T0011_01");
-			accessHistoryService.insertHistory(historyVO);
+			//쓰기권한이 있을경우
+			if(menuAut.get(0).get("wrt_aut_yn").equals("Y")){
+				HttpSession session = request.getSession();
+				String usr_id = (String) session.getAttribute("usr_id");
+				transferVO.setFrst_regr_id(usr_id);
+				transferVO.setLst_mdfr_id(usr_id);
 				
+				transferService.insertTransferSetting(transferVO);
+				
+				// 전송설정 저장 이력 남기기
+				CmmnUtils.saveHistory(request, historyVO);
+				historyVO.setExe_dtl_cd("DX-T0011_01");
+				accessHistoryService.insertHistory(historyVO);
+			}else{
+
+			}
+					
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -127,17 +159,24 @@ public class TransferController {
 	@RequestMapping(value = "/updateTransferSetting.do")
 	public @ResponseBody void updateTransferSetting(@ModelAttribute("transferVO") TransferVO transferVO,@ModelAttribute("historyVO") HistoryVO historyVO,HttpServletRequest request) {
 		try {
-			HttpSession session = request.getSession();
-			String usr_id = (String) session.getAttribute("usr_id");
-			transferVO.setLst_mdfr_id(usr_id);
+			CmmnUtils cu = new CmmnUtils();
+			menuAut = cu.selectMenuAut(menuAuthorityService, "13");
 			
-			transferService.updateTransferSetting(transferVO);
-						
-			// 전송설정 저장 이력 남기기
-			CmmnUtils.saveHistory(request, historyVO);
-			historyVO.setExe_dtl_cd("DX-T0011_01");
-			accessHistoryService.insertHistory(historyVO);
+			//쓰기권한이 있을경우
+			if(menuAut.get(0).get("wrt_aut_yn").equals("Y")){
+				HttpSession session = request.getSession();
+				String usr_id = (String) session.getAttribute("usr_id");
+				transferVO.setLst_mdfr_id(usr_id);
 				
+				transferService.updateTransferSetting(transferVO);
+							
+				// 전송설정 저장 이력 남기기
+				CmmnUtils.saveHistory(request, historyVO);
+				historyVO.setExe_dtl_cd("DX-T0011_01");
+				accessHistoryService.insertHistory(historyVO);
+			}else{
+
+			}	
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -156,12 +195,22 @@ public class TransferController {
 			HttpServletRequest request) {
 		ModelAndView mv = new ModelAndView();
 		try {
-			// Connector조회 이력 남기기
-			CmmnUtils.saveHistory(request, historyVO);
-			historyVO.setExe_dtl_cd("DX-T0012");
-			accessHistoryService.insertHistory(historyVO);
+			CmmnUtils cu = new CmmnUtils();
+			menuAut = cu.selectMenuAut(menuAuthorityService, "14");
+			if(menuAut.get(0).get("read_aut_yn").equals("N")){
+				mv.setViewName("error/autError");
+			}else{
+				mv.addObject("read_aut_yn", menuAut.get(0).get("read_aut_yn"));
+				mv.addObject("wrt_aut_yn", menuAut.get(0).get("wrt_aut_yn"));
+				
+				// Connector조회 이력 남기기
+				CmmnUtils.saveHistory(request, historyVO);
+				historyVO.setExe_dtl_cd("DX-T0012");
+				accessHistoryService.insertHistory(historyVO);
 
-			mv.setViewName("functions/transfer/connectorRegister");
+				mv.setViewName("functions/transfer/connectorRegister");
+			}
+
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -179,20 +228,29 @@ public class TransferController {
 	public @ResponseBody List<ConnectorVO> selectConnectorRegister(@ModelAttribute("historyVO") HistoryVO historyVO, HttpServletRequest request) {
 		List<ConnectorVO> resultSet = null;
 		try {
-			// Connector 조회 이력 남기기
-			CmmnUtils.saveHistory(request, historyVO);
-			historyVO.setExe_dtl_cd("DX-T0012_01");
-			accessHistoryService.insertHistory(historyVO);					
+			CmmnUtils cu = new CmmnUtils();
+			menuAut = cu.selectMenuAut(menuAuthorityService, "14");
 			
-			Map<String, Object> param = new HashMap<String, Object>();
+			//읽기권한이 있을경우
+			if(menuAut.get(0).get("read_aut_yn").equals("Y")){
+				
+				// Connector 조회 이력 남기기
+				CmmnUtils.saveHistory(request, historyVO);
+				historyVO.setExe_dtl_cd("DX-T0012_01");
+				accessHistoryService.insertHistory(historyVO);					
+				
+				Map<String, Object> param = new HashMap<String, Object>();
 
-			String cnr_nm = request.getParameter("cnr_nm");
-			String cnr_ipadr = request.getParameter("cnr_ipadr");
+				String cnr_nm = request.getParameter("cnr_nm");
+				String cnr_ipadr = request.getParameter("cnr_ipadr");
 
-			param.put("cnr_nm", cnr_nm);
-			param.put("cnr_ipadr", cnr_ipadr);
+				param.put("cnr_nm", cnr_nm);
+				param.put("cnr_ipadr", cnr_ipadr);
 
-			resultSet = transferService.selectConnectorRegister(param);
+				resultSet = transferService.selectConnectorRegister(param);
+			}else{
+				return resultSet;
+			}
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

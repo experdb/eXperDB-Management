@@ -15,8 +15,6 @@ import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
-import org.quartz.JobExecutionContext;
-import org.quartz.JobKey;
 import org.quartz.Scheduler;
 import org.quartz.impl.StdSchedulerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,13 +30,10 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.k4m.dx.tcontrol.backup.service.WorkVO;
-import com.k4m.dx.tcontrol.common.service.CmmnHistoryService;
 import com.k4m.dx.tcontrol.functions.schedule.ScheduleUtl;
 import com.k4m.dx.tcontrol.functions.schedule.service.ScheduleDtlVO;
 import com.k4m.dx.tcontrol.functions.schedule.service.ScheduleService;
 import com.k4m.dx.tcontrol.functions.schedule.service.ScheduleVO;
-
-import egovframework.rte.ptl.mvc.tags.ui.pagination.PaginationInfo;
 
 /**
  * Schedule 컨트롤러 클래스를 정의한다.
@@ -59,9 +54,6 @@ public class ScheduleController {
 	
 	@Autowired
 	private ScheduleService scheduleService;
-	
-	@Autowired
-	private CmmnHistoryService cmmnHistoryService;
 	
 	/**
 	 * Mybatis Transaction 

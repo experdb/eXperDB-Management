@@ -38,22 +38,25 @@
 			         ]
 		});
 		
-		/* 더블 클릭시*/
-		$('#connectorTable tbody').on('dblclick','tr',function() {
-			var data = table.row(this).data();
-			var cnr_id = data.cnr_id;
-			var popUrl = "/popup/connectorRegForm.do?act=u&cnr_id=" + cnr_id; // 서버 url 팝업경로
-			var width = 955;
-			var height = 400;
-			var left = (window.screen.width / 2) - (width / 2);
-			var top = (window.screen.height /2) - (height / 2);
-			var popOption = "width="+width+", height="+height+", top="+top+", left="+left+", resizable=no, scrollbars=no, status=no, toolbar=no, titlebar=yes, location=no,";
-					
-			window.open(popUrl,"",popOption);	
-		});
+		//더블 클릭시 -> 쓰기 권한이 Y일 경우
+		if("${wrt_aut_yn}" == "Y"){
+			$('#connectorTable tbody').on('dblclick','tr',function() {
+				var data = table.row(this).data();
+				var cnr_id = data.cnr_id;
+				var popUrl = "/popup/connectorRegForm.do?act=u&cnr_id=" + cnr_id; // 서버 url 팝업경로
+				var width = 955;
+				var height = 400;
+				var left = (window.screen.width / 2) - (width / 2);
+				var top = (window.screen.height /2) - (height / 2);
+				var popOption = "width="+width+", height="+height+", top="+top+", left="+left+", resizable=no, scrollbars=no, status=no, toolbar=no, titlebar=yes, location=no,";
+						
+				window.open(popUrl,"",popOption);	
+			});
+		}
 	}
 
 	$(window.document).ready(function() {
+		fn_buttonAut();
 		fn_init();
 		$.ajax({
 			url : "/selectConnectorRegister.do",
@@ -70,6 +73,29 @@
 		});
 	});
 
+	function fn_buttonAut(){
+		var btnSelect = document.getElementById("btnSelect"); 
+		var btnInsert = document.getElementById("btnInsert"); 
+		var btnUpdate = document.getElementById("btnUpdate"); 
+		var btnDelete = document.getElementById("btnDelete"); 
+		
+		if("${wrt_aut_yn}" == "Y"){
+			btnInsert.style.display = '';
+			btnUpdate.style.display = '';
+			btnDelete.style.display = '';
+		}else{
+			btnInsert.style.display = 'none';
+			btnUpdate.style.display = 'none';
+			btnDelete.style.display = 'none';
+		}
+			
+		if("${read_aut_yn}" == "Y"){
+			btnSelect.style.display = '';
+		}else{
+			btnSelect.style.display = 'none';
+		}
+	}	
+	
 	/* 조회버튼 클릭시*/
 	function fn_select() {
 		$.ajax({
@@ -81,7 +107,7 @@
 			dataType : "json",
 			type : "post",
 			error : function(xhr, status, error) {
-				alert("실패")
+				alert("실패");
 			},
 			success : function(result) {
 				table.clear().draw();
@@ -129,7 +155,7 @@
 		if (datas.length <= 0) {
 			alert("하나의 항목을 선택해주세요.");
 			return false;
-		} else {
+		}else{
 			if (!confirm("삭제하시겠습니까?"))
 				return false;
 			var rowList = [];
@@ -156,7 +182,6 @@
 					}
 				}
 			});
-
 		}
 	}
 
@@ -177,10 +202,10 @@
 		<div class="contents">
 			<div class="cmm_grp">
 				<div class="btn_type_01">
-					<span class="btn"><button onclick="fn_select()">조회</button></span>
-					<span class="btn"><button onclick="fn_insert()">등록</button></span>
-					<span class="btn"><button onclick="fn_update()">수정</button></span>
-					<span class="btn"><button onclick="fn_delete()">삭제</button></span>
+					<span class="btn"><button onclick="fn_select()" id="btnSelect">조회</button></span>
+					<span class="btn"><button onclick="fn_insert()" id="btnInsert">등록</button></span>
+					<span class="btn"><button onclick="fn_update()" id="btnUpdate">수정</button></span>
+					<span class="btn"><button onclick="fn_delete()" id="btnDelete">삭제</button></span>
 				</div>
 				<div class="sch_form">
 					<table class="write">

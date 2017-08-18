@@ -17,7 +17,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
-import com.k4m.dx.tcontrol.common.service.CmmnHistoryService;
 import com.k4m.dx.tcontrol.functions.schedule.service.ScheduleVO;
 import com.k4m.dx.tcontrol.mypage.service.MyScheduleService;
 
@@ -41,10 +40,6 @@ public class MyscheduleController {
 	
 	@Autowired
 	private MyScheduleService mySscheduleService;
-	
-	@Autowired
-	private CmmnHistoryService cmmnHistoryService;
-	
 	
 	/**
 	 * My스케줄 화면을 보여준다.

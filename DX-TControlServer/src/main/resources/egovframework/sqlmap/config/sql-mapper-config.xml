@@ -42,7 +42,6 @@
 	 	<!-- cmmn -->
 		<mapper resource="egovframework/sqlmap/mappers/cmmn/cmmnSql.xml" />
 		<mapper resource="egovframework/sqlmap/mappers/cmmn/cmmnCodeSql.xml" /> 
-		<mapper resource="egovframework/sqlmap/mappers/cmmn/cmmnHistorySql.xml" />
 		
 		<!-- sample -->
 		<mapper resource="egovframework/sqlmap/mappers/sample/sampleListSql.xml" />

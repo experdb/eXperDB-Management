@@ -4,9 +4,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpSession;
 
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
@@ -31,11 +29,10 @@ import com.k4m.dx.tcontrol.cmmn.AES256_KEY;
 import com.k4m.dx.tcontrol.cmmn.CmmnUtils;
 import com.k4m.dx.tcontrol.cmmn.client.ClientInfoCmmn;
 import com.k4m.dx.tcontrol.cmmn.client.ClientProtocolID;
-import com.k4m.dx.tcontrol.common.service.CmmnHistoryService;
+import com.k4m.dx.tcontrol.common.service.AgentInfoVO;
 import com.k4m.dx.tcontrol.common.service.CmmnServerInfoService;
 import com.k4m.dx.tcontrol.common.service.CmmnVO;
 import com.k4m.dx.tcontrol.common.service.HistoryVO;
-import com.k4m.dx.tcontrol.functions.schedule.ScheduleUtl;
 
 /**
  * [DB TREE] 컨트롤러 클래스를 정의한다.
@@ -60,9 +57,6 @@ public class TreeController {
 
 	@Autowired
 	private DbServerManagerService dbServerManagerService;
-	
-	@Autowired
-	private CmmnHistoryService cmmnHistoryService;
 	
 	@Autowired
 	private AccessControlService accessControlService;
@@ -279,9 +273,19 @@ public class TreeController {
 			}
 			
 			}
+			
 			/*접근제어 정보 INSERT*/
 			int db_svr_id = dbServerVO.getDb_svr_id();
+			
+			AgentInfoVO vo = new AgentInfoVO();
+			vo.setDB_SVR_ID(db_svr_id);
+			AgentInfoVO agentInfo =  (AgentInfoVO) cmmnServerInfoService.selectAgentInfo(vo);
+		
 			List<DbIDbServerVO> resultSet = accessControlService.selectDatabaseList(db_svr_id);
+			
+			String IP = resultSet.get(0).getIpadr();
+			int PORT = agentInfo.getSOCKET_PORT();
+			
 			for(int n=0; n<resultSet.size(); n++){
 				JSONObject result = new JSONObject();
 				
@@ -294,7 +298,7 @@ public class TreeController {
 				serverObj.put(ClientProtocolID.USER_PWD, resultSet.get(0).getSvr_spr_scm_pwd());
 				
 				ClientInfoCmmn cic = new ClientInfoCmmn();
-				result = cic.dbAccess_selectAll(serverObj);
+				result = cic.dbAccess_selectAll(serverObj,IP,PORT);
 				for(int j=0; j<result.size(); j++){
 					 JSONArray data = (JSONArray)result.get("data");
 					for(int m=0; m<data.size(); m++){
@@ -313,7 +317,7 @@ public class TreeController {
 						accessControlService.insertAccessControl(accessControlVO);
 					}
 				}
-			}
+			}			
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

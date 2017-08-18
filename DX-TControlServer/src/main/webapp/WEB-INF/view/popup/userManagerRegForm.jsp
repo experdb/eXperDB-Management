@@ -92,8 +92,13 @@
 			},
 			success : function(result) {
 				alert("저장하였습니다.");
-				window.close();
-				opener.fn_select();
+				 if(confirm("유저에 권한을 부여하시겠습니까?")){
+					 window.close();
+					 opener.location.href="/menuAuthority.do";
+				 }else{
+					window.close();
+					opener.fn_select();
+				 }
 			},
 			error : function(request, status, error) {
 				alert("실패");
