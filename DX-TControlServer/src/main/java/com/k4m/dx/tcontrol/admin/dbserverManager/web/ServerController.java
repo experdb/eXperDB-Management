@@ -96,11 +96,11 @@ public class ServerController {
 			System.out.println("=====================");
 			
 			//읽기권한이 있을경우
-			if(menuAut.get(0).get("read_aut_yn").equals("Y")){
+			//if(menuAut.get(0).get("read_aut_yn").equals("Y")){
 				resultSet = dbServerManagerService.selectDbServerList(dbServerVO);
-			}else{
-				return resultSet;
-			}
+			//}else{
+			//	return resultSet;
+			//}
 
 		} catch (Exception e) {
 			e.printStackTrace();

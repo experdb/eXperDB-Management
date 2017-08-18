@@ -54,12 +54,16 @@ import com.k4m.dx.tcontrol.functions.schedule.service.ScheduleVO;
 public class ScheduleController {
 	
 	@Autowired
+<<<<<<< HEAD
 	private MenuAuthorityService menuAuthorityService;
 	
 	@Autowired
 	private ScheduleService scheduleService;
 	
 	private List<Map<String, Object>> menuAut;
+=======
+	private ScheduleService scheduleService;
+>>>>>>> branch 'master' of https://github.com/experdb/DX-TControl.git
 	
 	/**
 	 * Mybatis Transaction 

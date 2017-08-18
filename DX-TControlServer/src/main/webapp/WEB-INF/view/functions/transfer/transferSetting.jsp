@@ -155,9 +155,9 @@
 			success : function(data) {
  				var cnt = data.length;
  				if(cnt==0){
- 					$('<button onclick="fn_insert()"></button>').text('저장').appendTo('.btnC_01');
+ 					$('<button onclick="fn_insert()" id="btnInsert"></button>').text('저장').appendTo('.btnC_01');
  				}else{
- 				  $('<button onclick="fn_update()"></button>').text('저장').appendTo('.btnC_01');
+ 				  $('<button onclick="fn_update()" id="btnInsert"></button>').text('저장').appendTo('.btnC_01');
  				  $("#kafka_broker_ip").val(data[0].kafka_broker_ip);
  				  $("#kafka_broker_port").val(data[0].kafka_broker_port);
  				  $("#schema_registry_ip").val(data[0].schema_registry_ip);
@@ -168,10 +168,21 @@
  				  $("#trf_cng_id").val(data[0].trf_cng_id);
  	 
  				}
+ 				fn_buttonAut();
 			}
 		});
 	});
-	
+
+	function fn_buttonAut(){
+		var btnInsert = document.getElementById("btnInsert"); 
+		if("${wrt_aut_yn}" == "Y"){
+			btnInsert.style.display = '';
+
+		}else{
+			btnInsert.style.display = 'none';
+		}
+			
+	}	
 </script>
 <input type="hidden" id="trf_cng_id">
 <div id="contents">

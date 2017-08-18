@@ -44,6 +44,16 @@
         </property>
     </bean>
     
+    <mvc:interceptors>
+        <mvc:interceptor>
+            <mvc:mapping path="/**" />
+            	<mvc:exclude-mapping path="/" />
+            	<mvc:exclude-mapping path="/login.do" />
+            <bean class="com.k4m.dx.tcontrol.cmmn.SessionCheckInterceptor" />
+          </mvc:interceptor>
+    </mvc:interceptors>
+
+
     <bean id="localeResolver" class="org.springframework.web.servlet.i18n.SessionLocaleResolver" />
     <!-- 쿠키를 이용한 Locale 이용시 <bean id="localeResolver" class="org.springframework.web.servlet.i18n.CookieLocaleResolver"/> -->
     <bean id="localeChangeInterceptor" class="org.springframework.web.servlet.i18n.LocaleChangeInterceptor">

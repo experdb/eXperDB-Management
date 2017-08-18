@@ -23,15 +23,6 @@ public interface AccessControlService {
 	List<DbIDbServerVO> selectServerDb(int db_id) throws Exception;
 
 	/**
-	 * DB SERVER Name 조회
-	 * 
-	 * @param db_svr_id
-	 * @return
-	 * @throws Exception
-	 */
-	List<DbIDbServerVO> selectDbServerName(int db_svr_id) throws Exception;
-
-	/**
 	 * DB접근제어 전체 삭제
 	 * 
 	 * @param db_id

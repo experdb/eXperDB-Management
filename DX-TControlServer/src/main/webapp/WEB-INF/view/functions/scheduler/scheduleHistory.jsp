@@ -6,6 +6,8 @@
 
     <script>
 	$(window.document).ready(function() {
+		fn_buttonAut();
+		
 		var lgi_dtm_start = "${lgi_dtm_start}";
 		var lgi_dtm_end = "${lgi_dtm_end}";
 		if (lgi_dtm_start != "" && lgi_dtm_end != "") {
@@ -74,6 +76,16 @@
 		}
 	});
 	
+	function fn_buttonAut(){
+		var read_button = document.getElementById("read_button"); 
+		
+		if("${read_aut_yn}" == "Y"){
+			read_button.style.display = '';
+		}else{
+			read_button.style.display = 'none';
+		}
+	}
+	
 	/*조회버튼 클릭시*/
 	function fn_selectScheduleHistory() {
 		document.selectScheduleHistory.action = "/selectScheduleHistory.do";
@@ -105,7 +117,7 @@
 		<div class="contents">
 			<div class="cmm_grp">
 				<div class="btn_type_01">
-					<span class="btn"><button onClick="fn_selectScheduleHistory();">조회</button></span>
+					<span class="btn" id="read_button"><button onClick="fn_selectScheduleHistory();">조회</button></span>
 				</div>
 				<form:form commandName="pagingVO" name="selectScheduleHistory" id="selectScheduleHistory" method="post">
 				<div class="sch_form">

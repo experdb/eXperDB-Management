@@ -1,5 +1,7 @@
 package com.k4m.dx.tcontrol.cmmn;
 
+import java.util.List;
+
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
@@ -7,13 +9,13 @@ import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.handler.HandlerInterceptorAdapter;
 
 public class SessionCheckInterceptor extends HandlerInterceptorAdapter{
-	
+
 
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
         try {
         	System.out.println("Interceptor{preHandle}............................................ start");
-
+        		
             if(request.getSession().getAttribute("usr_id") == null ){
                     response.sendRedirect("/");
                     return false;
