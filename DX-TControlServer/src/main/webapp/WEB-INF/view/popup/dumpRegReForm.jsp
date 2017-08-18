@@ -186,8 +186,13 @@ function valCheck(){
 		return false;
 	}
 	if($("#bck_filenm").val() == ""){
-		alert("저장경로를 입력해 주세요.");
+		alert("백업파일명을 입력해 주세요.");
 		$("#bck_filenm").focus();
+		return false;
+	}
+	if($("#check_path").val() != "Y"){
+		alert("서버에 존재하는 경로를 입력후 경로체크를 해 주세요.");
+		$("#save_pth").focus();
 		return false;
 	}
 	return true;
@@ -366,6 +371,42 @@ function checkOid(){
 		}
 	});
 }
+
+/* ********************************************************
+ * 저장경로의 존재유무 체크
+ ******************************************************** */
+function checkFolder(){
+	var save_pth = $("#save_pth").val();
+	if(save_pth == ""){
+		alert("저장경로를 입력해 주세요.");
+		$("#save_pth").focus();
+	}else{
+		$.ajax({
+			async : false,
+			url : "/existDirCheck.do",
+		  	data : {
+		  		db_svr_id : $("#db_svr_id").val(),
+		  		path : save_pth
+		  	},
+			type : "post",
+			error : function(request, xhr, status, error) {
+				alert("실패");
+			},
+			success : function(data) {
+				if(data.result.ERR_CODE == ""){
+					if(data.result.RESULT_DATA == 0){
+						$("#check_path").val("Y");
+						alert("입력하신 경로는 존재합니다.");
+					}else{
+						alert("입력하신 경로는 존재하지 않습니다.");
+					}
+				}else{
+					alert("경로체크 중 서버에러로 인하여 실패하였습니다.")
+				}
+			}
+		});
+	}
+}
 </script>
 </head>
 <body>
@@ -375,7 +416,8 @@ function checkOid(){
 		<div class="pop_cmm">
 			<form name="workRegForm">
 			<input type="hidden" name="db_svr_id" id="db_svr_id" value="${db_svr_id}"/>
-			<input type="hidden" name="wrk_id" id="wrk_id" value="${wrk_id}"/> 
+			<input type="hidden" name="wrk_id" id="wrk_id" value="${wrk_id}"/>
+			<input type="hidden" name="check_path" id="check_path" value="Y"/>
 			<table class="write">
 				<caption>Dump 백업 수정하기</caption>
 				<colgroup>
@@ -437,7 +479,9 @@ function checkOid(){
 				<tbody>
 					<tr>
 						<th scope="row" class="ico_t2">저장경로</th>
-						<td colspan="5"><input type="text" class="txt t4" name="save_pth" id="save_pth" value="<c:out value="${workInfo[0].save_pth}"/>"/></td>
+						<td colspan="5"><input type="text" class="txt t4" name="save_pth" id="save_pth" style="width:650px" value="<c:out value="${workInfo[0].save_pth}"/>" onKeydown="$('#check_path').val('N')"/>
+							<a href="javascript:checkFolder();"><font color="red"><b>[경로체크]</b></font></a>
+						</td>
 					</tr>
 					<tr>
 						<th scope="row" class="ico_t2">파일포맷</th>

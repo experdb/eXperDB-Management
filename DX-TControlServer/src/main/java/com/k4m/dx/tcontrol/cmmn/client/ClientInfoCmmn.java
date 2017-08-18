@@ -823,4 +823,41 @@ public class ClientInfoCmmn {
 		}
 		return result;
 	}
+	
+	//16.exist directory check
+		public Map<String, Object> directory_exist(JSONObject serverObj,String folderPath) {
+			Map<String, Object> result = new HashMap<String, Object>();
+			try {
+				JSONObject connectorInfoObj = new JSONObject();
+				
+				JSONObject jObj = new JSONObject();
+				jObj.put(ClientProtocolID.DX_EX_CODE, ClientTranCodeType.DxT016);
+				jObj.put(ClientProtocolID.SERVER_INFO, serverObj);
+				jObj.put(ClientProtocolID.FILE_DIRECTORY, folderPath);
+						
+				JSONObject objList;
+				
+				ClientAdapter CA = new ClientAdapter(Ip, port);
+				CA.open(); 
+				objList = CA.dxT016(jObj);
+				
+				String strErrMsg = (String)objList.get(ClientProtocolID.ERR_MSG);
+				String strErrCode = (String)objList.get(ClientProtocolID.ERR_CODE);
+				String strDxExCode = (String)objList.get(ClientProtocolID.DX_EX_CODE);
+				String strResultCode = (String)objList.get(ClientProtocolID.RESULT_CODE);
+				String strResultData = (String)objList.get(ClientProtocolID.RESULT_DATA);
+				System.out.println("RESULT_CODE : " +  strResultCode);
+				System.out.println("ERR_CODE : " +  strErrCode);
+				System.out.println("ERR_MSG : " +  strErrMsg);
+				System.out.println("RESULT_DATA : " +  strResultData);
+
+				CA.close();
+				
+				result.put("result", objList);
+				return result;
+			} catch(Exception e) {
+				e.printStackTrace();
+			}
+			return result;
+		}
 }

@@ -112,17 +112,82 @@ function valCheck(){
 	}else if($("#bck_pth").val() == ""){
 		alert("백업경로를 입력해 주세요.");
 		$("#bck_pth").focus();
-		return false;		
+		return false;
+	}else if($("#check_path1").val() != "Y"){
+		alert("데이터경로에 서버에 존재하는 경로를 입력후 경로체크를 해 주세요.");
+		$("#data_pth").focus();
+		return false;
+	}else if($("#check_path2").val() != "Y"){
+		alert("백업경로에 서버에 존재하는 경로를 입력후 경로체크를 해 주세요.");
+		$("#bck_pth").focus();
+		return false;
 	}else{
 		return true;
 	}
 
 }
+
+/* ********************************************************
+ * 저장경로의 존재유무 체크
+ ******************************************************** */
+function checkFolder(keyType){
+	var save_path = "";
+	
+	if(keyType == 1){
+		save_path = $("#data_pth").val();
+	}else{
+		save_path = $("#bck_pth").val();
+	}
+
+	if(save_path == "" && keyType == 1){
+		alert("데이터경로를 입력해 주세요.");
+		$("#data_pth").focus();
+	}else if(save_path == ""){
+		alert("백업경로를 입력해 주세요.");
+		$("#bck_pth").focus();
+	}else{
+		$.ajax({
+			async : false,
+			url : "/existDirCheck.do",
+		  	data : {
+		  		db_svr_id : $("#db_svr_id").val(),
+		  		path : save_path
+		  	},
+			type : "post",
+			error : function(request, xhr, status, error) {
+				alert("실패");
+			},
+			success : function(data) {
+				if(data.result.ERR_CODE == ""){
+					if(data.result.RESULT_DATA == 0){
+						if(keyType == 1){
+							$("#check_path1").val("Y");
+						}else{
+							$("#check_path2").val("Y");
+						}
+						alert("입력하신 경로는 존재합니다.");
+					}else{
+						if(keyType == 1){
+							$("#data_pth").val("");
+						}else{
+							$("#bck_pth").val("");
+						}
+						alert("입력하신 경로는 존재하지 않습니다.");
+					}
+				}else{
+					alert("경로체크 중 서버에러로 인하여 실패하였습니다.")
+				}
+			}
+		});
+	}
+}
 </script>
 </head>
 <body>
 <form name="workRegForm">
-<input type="hidden" name="db_svr_id" id="db_svr_id" value="${db_svr_id}"/> 
+<input type="hidden" name="db_svr_id" id="db_svr_id" value="${db_svr_id}"/>
+<input type="hidden" name="check_path1" id="check_path1" value="N"/>
+<input type="hidden" name="check_path2" id="check_path2" value="N"/>
 	<div id="pop_layer">
 		<div class="pop-container">
 			<div class="pop_cts">
@@ -179,9 +244,13 @@ function valCheck(){
 
 									<tr>
 										<th scope="row" class="ico_t1">데이터경로</th>
-										<td><input type="text" class="txt" name="data_pth" id="data_pth" maxlength=50/></td>
+										<td><input type="text" class="txt" name="data_pth" id="data_pth" maxlength=50 style="width:230px" onKeydown="$('#check_path1').val('N')"/>
+											<a href="javascript:checkFolder(1);"><font color="red"><b>[경로체크]</b></font></a>
+										</td>
 										<th scope="row" class="ico_t1">백업경로</th>
-										<td><input type="text" class="txt" name="bck_pth" id="bck_pth" maxlength=50/></td>
+										<td><input type="text" class="txt" name="bck_pth" id="bck_pth" maxlength=50 style="width:230px" onKeydown="$('#check_path2').val('N')"/>
+											<a href="javascript:checkFolder(2);"><font color="red"><b>[경로체크]</b></font></a>
+										</td>
 									</tr>
 								</tbody>
 							</table>
