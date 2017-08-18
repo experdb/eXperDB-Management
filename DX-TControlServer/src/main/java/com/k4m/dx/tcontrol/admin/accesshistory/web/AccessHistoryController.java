@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.k4m.dx.tcontrol.admin.accesshistory.service.AccessHistoryService;
+import com.k4m.dx.tcontrol.admin.menuauthority.service.MenuAuthorityService;
 import com.k4m.dx.tcontrol.cmmn.CmmnUtils;
 import com.k4m.dx.tcontrol.common.service.HistoryVO;
 import com.k4m.dx.tcontrol.login.service.UserVO;
@@ -44,6 +45,11 @@ public class AccessHistoryController {
 	@Autowired
 	private AccessHistoryService accessHistoryService;
 	
+	@Autowired
+	private MenuAuthorityService menuAuthorityService;
+	
+	private List<Map<String, Object>> menuAut;
+	
 	/** EgovPropertyService */
 	@Resource(name = "propertiesService")
 	protected EgovPropertyService propertiesService;
@@ -60,28 +66,39 @@ public class AccessHistoryController {
 	public ModelAndView accessHistory(@ModelAttribute("pagingVO") PagingVO pagingVO,ModelMap model,@ModelAttribute("historyVO") HistoryVO historyVO, HttpServletRequest request) {
 		ModelAndView mv = new ModelAndView();
 		try {
-			// 화면접근 이력 남기기
-			CmmnUtils.saveHistory(request, historyVO);
-			historyVO.setExe_dtl_cd("DX-T0036");
-			accessHistoryService.insertHistory(historyVO);
+			CmmnUtils cu = new CmmnUtils();
+			menuAut = cu.selectMenuAut(menuAuthorityService, "7");
+			
+			if(menuAut.get(0).get("read_aut_yn").equals("N")){
+				mv.setViewName("error/autError");
+			}else{
+				mv.addObject("read_aut_yn", menuAut.get(0).get("read_aut_yn"));
+				mv.addObject("wrt_aut_yn", menuAut.get(0).get("wrt_aut_yn"));
 				
-			/** EgovPropertyService.sample */
-			pagingVO.setPageUnit(propertiesService.getInt("pageUnit"));
-			pagingVO.setPageSize(propertiesService.getInt("pageSize"));
+				// 화면접근 이력 남기기
+				CmmnUtils.saveHistory(request, historyVO);
+				historyVO.setExe_dtl_cd("DX-T0036");
+				accessHistoryService.insertHistory(historyVO);
+					
+				/** EgovPropertyService.sample */
+				pagingVO.setPageUnit(propertiesService.getInt("pageUnit"));
+				pagingVO.setPageSize(propertiesService.getInt("pageSize"));
 
-			/** pageing setting */
-			PaginationInfo paginationInfo = new PaginationInfo();
-			paginationInfo.setCurrentPageNo(pagingVO.getPageIndex());
-			paginationInfo.setRecordCountPerPage(pagingVO.getPageUnit());
-			paginationInfo.setPageSize(pagingVO.getPageSize());
+				/** pageing setting */
+				PaginationInfo paginationInfo = new PaginationInfo();
+				paginationInfo.setCurrentPageNo(pagingVO.getPageIndex());
+				paginationInfo.setRecordCountPerPage(pagingVO.getPageUnit());
+				paginationInfo.setPageSize(pagingVO.getPageSize());
 
-			pagingVO.setFirstIndex(paginationInfo.getFirstRecordIndex());
-			pagingVO.setLastIndex(paginationInfo.getLastRecordIndex());
-			pagingVO.setRecordCountPerPage(paginationInfo.getRecordCountPerPage());
+				pagingVO.setFirstIndex(paginationInfo.getFirstRecordIndex());
+				pagingVO.setLastIndex(paginationInfo.getLastRecordIndex());
+				pagingVO.setRecordCountPerPage(paginationInfo.getRecordCountPerPage());
+				
+				model.addAttribute("paginationInfo", paginationInfo);
+				
+				mv.setViewName("admin/accessHistory/accessHistory");
+			}
 			
-			model.addAttribute("paginationInfo", paginationInfo);
-			
-			mv.setViewName("admin/accessHistory/accessHistory");
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

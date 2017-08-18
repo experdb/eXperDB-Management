@@ -201,12 +201,12 @@ public class ClientInfoCmmn {
 	
 	
 	// 6. DB접근제어 C(dbAccess_create)
-	public void dbAccess_create(JSONObject serverObj, JSONObject acObj) {
+	public void dbAccess_create(JSONObject serverObj, JSONObject acObj, String IP, int PORT) {
 		try {
 			JSONObject objList;
-			ClientAdapter CA = new ClientAdapter(Ip, port);
+			ClientAdapter CA = new ClientAdapter(IP, PORT);
 			CA.open();
-
+			
 			JSONObject jObj = new JSONObject();
 			jObj.put(ClientProtocolID.DX_EX_CODE, ClientTranCodeType.DxT006);
 			jObj.put(ClientProtocolID.COMMAND_CODE, ClientProtocolID.COMMAND_CODE_C);
@@ -232,13 +232,10 @@ public class ClientInfoCmmn {
 
 	// 6. DB접근제어 R(dbAccessList-#주석처리 안되어있는것 set==0)
 	@SuppressWarnings({ "unchecked", "rawtypes" })
-	public JSONObject dbAccess_select(JSONObject serverObj) {
-
+	public JSONObject dbAccess_select(JSONObject serverObj, String IP, int PORT) {
 		JSONArray jsonArray = new JSONArray(); // 객체를 담기위해 JSONArray 선언.
 		JSONObject result = new JSONObject();
-
 		try {
-			
 			JSONObject objList;
 
 			JSONObject acObj = new JSONObject();
@@ -250,7 +247,7 @@ public class ClientInfoCmmn {
 			acObj.put(ClientProtocolID.AC_METHOD, "trust");
 			acObj.put(ClientProtocolID.AC_OPTION, "");
 
-			ClientAdapter CA = new ClientAdapter(Ip, port);
+			ClientAdapter CA = new ClientAdapter(IP, PORT);
 			CA.open();
 
 			JSONObject jObj = new JSONObject();
@@ -297,8 +294,7 @@ public class ClientInfoCmmn {
 						jsonObj.put("Option", Option);
 	
 						jsonArray.add(jsonObj);
-						System.out.println("seq : " + Seq + " Set : " + Set + " Type : " + Type + " Database : " + Database
-								+ " User : " + User + " Ip : " + Ipadr + " Method : " + Method + " Option : " + Option);
+						System.out.println("seq : " + Seq + " Set : " + Set + " Type : " + Type + " Database : " + Database + " User : " + User + " Ip : " + Ipadr + " Method : " + Method + " Option : " + Option);
 					}
 	
 				}
@@ -313,7 +309,7 @@ public class ClientInfoCmmn {
 
 	// 6. DB접근제어 R(dbAccessList-전체)
 	@SuppressWarnings({ "unchecked", "rawtypes" })
-	public JSONObject dbAccess_selectAll(JSONObject serverObj) {
+	public JSONObject dbAccess_selectAll(JSONObject serverObj, String IP, int PORT) {
 
 		JSONArray jsonArray = new JSONArray(); // 객체를 담기위해 JSONArray 선언.
 		JSONObject result = new JSONObject();
@@ -330,7 +326,7 @@ public class ClientInfoCmmn {
 			acObj.put(ClientProtocolID.AC_METHOD, "trust");
 			acObj.put(ClientProtocolID.AC_OPTION, "");
 
-			ClientAdapter CA = new ClientAdapter(Ip, port);
+			ClientAdapter CA = new ClientAdapter(IP, PORT);
 			CA.open();
 
 			JSONObject jObj = new JSONObject();
@@ -389,11 +385,11 @@ public class ClientInfoCmmn {
 	}
 
 	// 6.DB접근제어 U(dbAccess_update)
-	public void dbAccess_update(JSONObject serverObj,JSONObject acObj) {
+	public void dbAccess_update(JSONObject serverObj,JSONObject acObj, String IP, int PORT) {
 		try {
 			JSONObject objList;
 
-			ClientAdapter CA = new ClientAdapter(Ip, port);
+			ClientAdapter CA = new ClientAdapter(IP, PORT);
 			CA.open();
 
 			JSONObject jObj = new JSONObject();
@@ -420,12 +416,12 @@ public class ClientInfoCmmn {
 	}
 
 	// 6. DB접근제어 D(dbAccess_delete)
-	public void dbAccess_delete(JSONObject serverObj,ArrayList arrSeq) {
+	public void dbAccess_delete(JSONObject serverObj,ArrayList arrSeq,String IP, int PORT) {
 		try {
 			
 			JSONObject objList;
 
-			ClientAdapter CA = new ClientAdapter(Ip, port);
+			ClientAdapter CA = new ClientAdapter(IP, PORT);
 			CA.open(); 
 
 			JSONObject jObj = new JSONObject();

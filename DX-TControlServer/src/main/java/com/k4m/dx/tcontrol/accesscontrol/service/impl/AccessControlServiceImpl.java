@@ -27,11 +27,6 @@ public class AccessControlServiceImpl implements AccessControlService {
 	}
 
 	@Override
-	public List<DbIDbServerVO> selectDbServerName(int db_svr_id) throws Exception {
-		return accessControlDAO.selectDbServerName(db_svr_id);
-	}
-
-	@Override
 	public void deleteDbAccessControl(int db_id) throws Exception {
 		accessControlDAO.deleteDbAccessControl(db_id);
 	}

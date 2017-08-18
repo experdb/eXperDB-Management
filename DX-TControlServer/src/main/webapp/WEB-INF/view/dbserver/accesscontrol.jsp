@@ -96,7 +96,8 @@
 	 			url : "/changeAccessControl.do",
 	 			data : {
 	 				rowList : JSON.stringify(rowList),
-	 				db_id : db_id
+	 				db_id : db_id,
+	 				db_svr_id : "${db_svr_id}",
 	 			},
 	 			dataType : "json",
 	 			type : "post",
@@ -147,6 +148,9 @@
 
 	
 	$(window.document).ready(function() {
+		var extName = "${extName}";
+		fn_chkExtName(extName);
+		
 		fn_init();
 		var table = $('#accessControlTable').DataTable();
 		$('#select').on( 'keyup', function () {
@@ -155,6 +159,13 @@
 		$('.dataTables_filter').hide();
 	})
 
+	/*agent 설치 유무*/
+	function fn_chkExtName(extName) {
+		if(extName == "agent") {
+			alert("서버에 T엔진이 설치되지 않았습니다.");
+			history.go(-1);
+		}	
+	}
 	
 	/* 조회 버튼 클릭시*/
 	function fn_select() {
@@ -167,7 +178,7 @@
 		 $.ajax({
 				url : "/selectAccessControl.do",
 				data : {
-					db_id : db_id,
+ 					db_id : db_id,
 					db_svr_id : "${db_svr_id}",
 				},
 				dataType : "json",

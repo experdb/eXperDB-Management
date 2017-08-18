@@ -42,20 +42,6 @@ public class AccessControlDAO extends EgovAbstractMapper {
 	}
 
 	/**
-	 * DB SERVER Name 조회
-	 * 
-	 * @param db_svr_id
-	 * @return List
-	 * @throws Exception
-	 */
-	@SuppressWarnings({ "deprecation", "unchecked" })
-	public List<DbIDbServerVO> selectDbServerName(int db_svr_id) throws SQLException {
-		List<DbIDbServerVO> result = null;
-		result = (List<DbIDbServerVO>) list("accessControlSql.selectDbServerName", db_svr_id);
-		return result;
-	}
-
-	/**
 	 * DB접근제어 전체 삭제
 	 * 
 	 * @param db_id
