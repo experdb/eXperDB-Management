@@ -36,12 +36,14 @@
 	function fn_buttonAut(){
 		var excel_button = document.getElementById("btnExcel"); 
 		var select_button = document.getElementById("btnSelect"); 
-		
 		if("${wrt_aut_yn}" == "Y"){
 			excel_button.style.display = '';
-			select_button.style.display = '';
 		}else{
 			excel_button.style.display = 'none';
+		}	
+		if("${read_aut_yn}" == "Y"){
+			select_button.style.display = '';
+		}else{
 			select_button.style.display = 'none';
 		}
 	}

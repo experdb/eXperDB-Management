@@ -402,7 +402,7 @@ function fn_save(){
 														</td>											
 													</tr>
 													<tr>
-														<td colspan="2">회원접근이력</td>
+														<td colspan="2">화면접근이력</td>
 														<td>
 															<div class="inp_chk">
 																<input type="checkbox" id="r_MN0007" name="r_mnu_nm"  />

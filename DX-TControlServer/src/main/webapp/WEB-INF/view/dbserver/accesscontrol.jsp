@@ -149,24 +149,19 @@
 	
 	$(window.document).ready(function() {
 		var extName = "${extName}";
-		fn_chkExtName(extName);
-		
-		fn_init();
-		var table = $('#accessControlTable').DataTable();
-		$('#select').on( 'keyup', function () {
-			 table.search( this.value ).draw();
-		});	
-		$('.dataTables_filter').hide();
-	})
-
-	/*agent 설치 유무*/
-	function fn_chkExtName(extName) {
 		if(extName == "agent") {
 			alert("서버에 T엔진이 설치되지 않았습니다.");
 			history.go(-1);
+		}else{
+			fn_init();
+			var table = $('#accessControlTable').DataTable();
+			$('#select').on( 'keyup', function () {
+				 table.search( this.value ).draw();
+			});	
+			$('.dataTables_filter').hide();
 		}	
-	}
-	
+	});
+
 	/* 조회 버튼 클릭시*/
 	function fn_select() {
 		var check= document.getElementsByName("check");
