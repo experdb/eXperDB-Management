@@ -46,20 +46,17 @@ public class SystemServiceImpl implements SystemService{
 	 * @param dbServerInfo
 	 * @throws Exception
 	 */
-	public void agentInfoStartMng(DbServerInfoVO dbServerInfo) throws Exception  {
-		if(dbServerInfo == null) {
-			throw new Exception("DX-Tcontrol Repository DB에 서버가 등록되어 있지 않습니다. Database 서버를 등록 후 Agent를 구동하세요.");
-		} else {
-			String strSocketPort = FileUtil.getPropertyValue("context.properties", "socket.server.port");
-			int DB_SVR_ID = dbServerInfo.getDB_SVR_ID();
+	public void agentInfoStartMng(String strSocketIp, String strSocketPort) throws Exception  {
+
+
 			AgentInfoVO searchAgentInfoVO = new AgentInfoVO();
-			searchAgentInfoVO.setDB_SVR_ID(DB_SVR_ID);
+			searchAgentInfoVO.setIPADR(strSocketIp);
 			
 			AgentInfoVO agentInfo = this.selectAgentInfo(searchAgentInfoVO);
 			
 			AgentInfoVO vo = new AgentInfoVO();
 			
-			vo.setDB_SVR_ID(dbServerInfo.getDB_SVR_ID());
+			vo.setIPADR(strSocketIp);
 			vo.setSOCKET_PORT(Integer.parseInt(strSocketPort));
 			vo.setAGT_CNDT_CD(AgentInfoVO.TC001101); //실행
 			vo.setISTCNF_YN("Y");
@@ -71,18 +68,15 @@ public class SystemServiceImpl implements SystemService{
 			} else {
 				this.updateAgentInfo(vo);
 			}
-			
-		}
+
 	}
 	
-	public void agentInfoStopMng(DbServerInfoVO dbServerInfo) throws Exception  {
-		int DB_SVR_ID = dbServerInfo.getDB_SVR_ID();
-		AgentInfoVO searchAgentInfoVO = new AgentInfoVO();
-		searchAgentInfoVO.setDB_SVR_ID(DB_SVR_ID);
+	public void agentInfoStopMng(String strSocketIp, String strSocketPort) throws Exception  {
+
 		
 		AgentInfoVO vo = new AgentInfoVO();
 		
-		vo.setDB_SVR_ID(dbServerInfo.getDB_SVR_ID());
+		vo.setIPADR(strSocketIp);
 		vo.setAGT_CNDT_CD(AgentInfoVO.TC001102); //종료
 		vo.setISTCNF_YN("Y");
 		vo.setLST_MDFR_ID("system");

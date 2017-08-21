@@ -16,7 +16,7 @@
 	 		, TO_CHAR(B.STRT_DTM,'YYYY-MM-DD HH24:MI:SS') AS STRT_DTM
 	 		, B.ISTCNF_YN
 	 	FROM T_DBSVR_I A LEFT OUTER JOIN T_AGTCNDT_I B
-	 		ON A.DB_SVR_ID = B.DB_SVR_ID
+	 		ON A.IPADR = B.IPADR
 	 		
 		<if test="DB_SVR_NM != null and DB_SVR_NM != '' ">
 			AND A.DB_SVR_NM LIKE '%' || #{DB_SVR_NM} || '%'

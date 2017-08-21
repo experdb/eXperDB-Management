@@ -312,9 +312,12 @@ public class DbServerManagerController {
 			
 			/*접근제어 정보 INSERT*/
 			int db_svr_id = dbServerVO.getDb_svr_id();
+			String strIpAdr = dbServerVO.getIpadr();
 			
 			AgentInfoVO vo = new AgentInfoVO();
-			vo.setDB_SVR_ID(db_svr_id);
+			//vo.setDB_SVR_ID(db_svr_id);
+			vo.setIPADR(strIpAdr);
+			
 			AgentInfoVO agentInfo =  (AgentInfoVO) cmmnServerInfoService.selectAgentInfo(vo);
 		
 			List<DbIDbServerVO> resultSet = accessControlService.selectDatabaseList(db_svr_id);

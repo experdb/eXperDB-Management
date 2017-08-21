@@ -1,7 +1,8 @@
 package com.k4m.dx.tcontrol.common.service;
 
 public class AgentInfoVO {
-	private int DB_SVR_ID;
+	private int AGT_SN;
+	private String IPADR;
 	private int SOCKET_PORT;
 	private String AGT_CNDT_CD;
 	private String STRT_DTM;
@@ -15,13 +16,19 @@ public class AgentInfoVO {
 	public static String TC001102 = "TC001102"; //중지
 	
 
-	public int getDB_SVR_ID() {
-		return DB_SVR_ID;
+
+	public int getAGT_SN() {
+		return AGT_SN;
 	}
-	public void setDB_SVR_ID(int dB_SVR_ID) {
-		DB_SVR_ID = dB_SVR_ID;
+	public void setAGT_SN(int aGT_SN) {
+		AGT_SN = aGT_SN;
 	}
-	
+	public String getIPADR() {
+		return IPADR;
+	}
+	public void setIPADR(String iPADR) {
+		IPADR = iPADR;
+	}
 	public int getSOCKET_PORT() {
 		return SOCKET_PORT;
 	}
