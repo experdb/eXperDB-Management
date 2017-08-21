@@ -123,9 +123,34 @@ function fn_init(){
  * 페이지 시작시 함수
  ******************************************************** */
 $(window.document).ready(function() {
+	fn_buttonAut();
 	fn_init();
 	fn_selectScheduleList();
 });
+
+
+function fn_buttonAut(){
+	var read_button = document.getElementById("read_button"); 
+	var int_button = document.getElementById("int_button"); 
+	var mdf_button = document.getElementById("mdf_button"); 
+	var del_button = document.getElementById("del_button"); 
+	
+	if("${wrt_aut_yn}" == "Y"){
+		int_button.style.display = '';
+		mdf_button.style.display = '';
+		del_button.style.display = '';
+	}else{
+		int_button.style.display = 'none';
+		mdf_button.style.display = 'none';
+		del_button.style.display = 'none';
+	}
+		
+	if("${read_aut_yn}" == "Y"){
+		read_button.style.display = '';
+	}else{
+		read_button.style.display = 'none';
+	}
+}
 
 
 /* ********************************************************
@@ -235,10 +260,10 @@ function fn_modifyScheduleListView(){
 		<div class="contents">
 			<div class="cmm_grp">
 				<div class="btn_type_01">
-					<span class="btn"><button onClick="fn_selectScheduleList();">조회</button></span>
-					<span class="btn"><a href="/insertScheduleView.do"><button>등록</button></a></span>
-					<span class="btn"><button onClick="fn_modifyScheduleListView();">수정</button></span>
-					<span class="btn"><button onClick="fn_deleteScheduleList();">삭제</button></span>
+					<span class="btn" id="read_button"><button onClick="fn_selectScheduleList();">조회</button></span>
+					<span class="btn" id="int_button"><a href="/insertScheduleView.do"><button>등록</button></a></span>
+					<span class="btn" id="mdf_button"><button onClick="fn_modifyScheduleListView();">수정</button></span>
+					<span class="btn" id="del_button"><button onClick="fn_deleteScheduleList();">삭제</button></span>
 				</div>
 				<div class="sch_form">
 					<table class="write">

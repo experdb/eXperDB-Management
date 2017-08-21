@@ -201,4 +201,37 @@ public class CmmnController {
 		}
 		return result;
 	}
+	
+	/**
+	 * 디렉토리 존재유무 체크
+	 * @param WorkVO
+	 * @return resultSet
+	 * @throws Exception
+	 */
+	@SuppressWarnings("unchecked")
+	@RequestMapping(value = "/existDirCheck.do")
+	@ResponseBody
+	public Map<String, Object> existDirCheck (@ModelAttribute("workVO") WorkVO workVO, HttpServletRequest request) {
+		Map<String, Object> result =new HashMap<String, Object>();
+		String directory_path = request.getParameter("path");
+		try {
+			AES256 aes = new AES256(AES256_KEY.ENC_KEY);
+			DbServerVO dbServerVO = backupService.selectDbSvrNm(workVO);
+			JSONObject serverObj = new JSONObject();
+			
+			serverObj.put(ClientProtocolID.SERVER_NAME, dbServerVO.getDb_svr_nm());
+			serverObj.put(ClientProtocolID.SERVER_IP, dbServerVO.getIpadr());
+			serverObj.put(ClientProtocolID.SERVER_PORT, dbServerVO.getPortno());
+			//serverObj.put(ClientProtocolID.USER_PWD, dbServerVO.getSvr_spr_scm_pwd());
+			serverObj.put(ClientProtocolID.USER_PWD, aes.aesDecode(dbServerVO.getSvr_spr_scm_pwd()));
+
+			ClientInfoCmmn cic = new ClientInfoCmmn();
+			result = cic.directory_exist(serverObj,directory_path);
+			
+			//System.out.println(result);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return result;
+	}
 }

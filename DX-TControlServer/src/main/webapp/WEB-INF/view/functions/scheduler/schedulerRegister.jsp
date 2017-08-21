@@ -86,7 +86,6 @@ function fn_init(){
         } );
     } ).draw();
     
-    
 	// Move the row up
 	function moveUp() {
 		var tr = $(this).parents('tr');
@@ -192,6 +191,7 @@ function fn_makeMin(){
  * 페이지 시작시 함수
  ******************************************************** */
 $(window.document).ready(function() {
+	fn_buttonAut();
 	fn_init();
 	
 	$("#weekDay").hide();
@@ -201,6 +201,24 @@ $(window.document).ready(function() {
 	fn_makeMin();
 	fn_makeSec();
 });
+
+
+
+function fn_buttonAut(){
+	var int_button = document.getElementById("int_button"); 
+	var add_button = document.getElementById("add_button"); 
+	var del_button = document.getElementById("del_button"); 
+
+	if("${wrt_aut_yn}" == "Y"){
+		int_button.style.display = '';
+		add_button.style.display = '';
+		del_button.style.display = '';
+	}else{
+		int_button.style.display = 'none';
+		add_button.style.display = 'none';
+		del_button.style.display = 'none';
+	}
+}
 
 
 /* ********************************************************
@@ -348,7 +366,7 @@ function fn_insertSchedule(){
 					<div class="contents">
 						<div class="cmm_grp">
 							<div class="btn_type_01">
-								<span class="btn"><button onClick="fn_insertSchedule();">등록</button></span>
+								<span class="btn"  onClick="fn_insertSchedule();" id="int_button"><button>등록</button></span>
 							</div>
 							<div class="sch_form">
 								<table class="write">
@@ -427,8 +445,8 @@ function fn_insertSchedule(){
 								<div class="sub_tit">
 									<p>Work 등록</p>
 									<div class="sub_btn">
-										<a href="#n" class="btn btnF_04 btnC_01" onclick="fn_workAdd();"><span>추가</span></a>
-										<a href="#n" class="btn btnF_04" onclick="fn_workDel();"><span>삭제</span></a>
+										<a href="#n" class="btn btnF_04 btnC_01" onclick="fn_workAdd();"><span id="add_button">추가</span></a>
+										<a href="#n" class="btn btnF_04" onclick="fn_workDel();"><span id="del_button">삭제</span></a>
 									</div>
 								</div>
 								<div class="overflow_area">							

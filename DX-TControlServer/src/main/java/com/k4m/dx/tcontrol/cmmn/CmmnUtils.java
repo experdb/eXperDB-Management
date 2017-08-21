@@ -14,11 +14,22 @@ import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.config.AutowireCapableBeanFactory;
+import org.springframework.context.ConfigurableApplicationContext;
+import org.springframework.context.support.ClassPathXmlApplicationContext;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.context.request.RequestContextHolder;
+import org.springframework.web.context.request.ServletRequestAttributes;
 
+import com.k4m.dx.tcontrol.admin.menuauthority.service.MenuAuthorityService;
 import com.k4m.dx.tcontrol.common.service.HistoryVO;
+import com.k4m.dx.tcontrol.functions.schedule.service.ScheduleService;
 
 public class CmmnUtils {
+		
+	
+	//private ConfigurableApplicationContext context;
 	
 	public static void saveHistory(HttpServletRequest request,@ModelAttribute("historyVO") HistoryVO historyVO) {
 		HttpSession session = request.getSession();
@@ -27,6 +38,45 @@ public class CmmnUtils {
 		historyVO.setUsr_id(usr_id);
 		historyVO.setLgi_ipadr(ip);
 	}
+	
+	//메뉴권한 조회
+	public List<Map<String, Object>> selectMenuAut(MenuAuthorityService menuAuthorityService, String mnu_id) {
+		
+		List<Map<String, Object>> result = null;
+		
+		/*String xml[] = {
+				"egovframework/spring/context-aspect.xml",
+				"egovframework/spring/context-common.xml",
+				"egovframework/spring/context-datasource.xml",
+				"egovframework/spring/context-mapper.xml",
+				"egovframework/spring/context-properties.xml",
+				"egovframework/spring/context-transaction.xml"};
+		
+		context = new ClassPathXmlApplicationContext(xml);
+		context.getAutowireCapableBeanFactory().autowireBeanProperties(this,
+				AutowireCapableBeanFactory.AUTOWIRE_BY_TYPE, false);
+		
+		MenuAuthorityService menuAuthorityService = (MenuAuthorityService) context.getBean("menuAuthorityService");	*/	
+		
+		try{
+			ServletRequestAttributes sra = (ServletRequestAttributes) RequestContextHolder.currentRequestAttributes();
+			HttpServletRequest request = sra.getRequest();
+			
+			HttpSession session = request.getSession();
+			String usr_id = (String) session.getAttribute("usr_id");
+			
+			Map<String,Object> param = new HashMap<String, Object>();
+			param.put("usr_id", usr_id);
+			param.put("mnu_id", mnu_id);
+			
+			result = menuAuthorityService.selectMenuAut(param);
+					
+		}catch(Exception e){
+			e.printStackTrace();
+		}		
+		return result;
+	}
+	
 	
 	// 단건 
 	public static Map<String, Object> getParam(Map<String, String> reqJson) {

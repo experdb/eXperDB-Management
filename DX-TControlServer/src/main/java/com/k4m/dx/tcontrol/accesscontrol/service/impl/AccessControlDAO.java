@@ -13,6 +13,13 @@ import egovframework.rte.psl.dataaccess.EgovAbstractMapper;
 @Repository("accessControlDAO")
 public class AccessControlDAO extends EgovAbstractMapper {
 
+	/**
+	 * DB 조회
+	 * 
+	 * @param db_svr_id
+	 * @return List
+	 * @throws Exception
+	 */
 	@SuppressWarnings({ "deprecation", "unchecked" })
 	public List<DbIDbServerVO> selectDatabaseList(int db_svr_id) throws SQLException {
 		List<DbIDbServerVO> result = null;
@@ -20,6 +27,13 @@ public class AccessControlDAO extends EgovAbstractMapper {
 		return result;
 	}
 
+	/**
+	 * DB,SERVER 조회
+	 * 
+	 * @param db_id
+	 * @return List
+	 * @throws Exception
+	 */
 	@SuppressWarnings({ "unchecked", "deprecation" })
 	public List<DbIDbServerVO> selectServerDb(int db_id) throws SQLException {
 		List<DbIDbServerVO> result = null;
@@ -27,20 +41,26 @@ public class AccessControlDAO extends EgovAbstractMapper {
 		return result;
 	}
 
-	@SuppressWarnings({ "deprecation", "unchecked" })
-	public List<DbIDbServerVO> selectDbServerName(int db_svr_id) {
-		List<DbIDbServerVO> result = null;
-		result = (List<DbIDbServerVO>) list("accessControlSql.selectDbServerName", db_svr_id);
-		return result;
+	/**
+	 * DB접근제어 전체 삭제
+	 * 
+	 * @param db_id
+	 * @throws Exception
+	 */
+	public void deleteDbAccessControl(int db_id) throws SQLException {
+		delete("accessControlSql.deleteDbAccessControl", db_id);
+
 	}
 
-	public void deleteDbAccessControl(int db_svr_id) throws SQLException {
-		delete("accessControlSql.deleteDbAccessControl", db_svr_id);
-
-	}
-
+	/**
+	 * 접근제어 등록
+	 * 
+	 * @param accessControlVO
+	 * @throws Exception
+	 */
 	public void insertAccessControl(AccessControlVO accessControlVO) throws SQLException {
 		insert("accessControlSql.insertAccessControl", accessControlVO);
 	}
+
 
 }

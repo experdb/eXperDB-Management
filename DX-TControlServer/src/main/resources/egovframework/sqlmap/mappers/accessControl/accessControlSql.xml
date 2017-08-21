@@ -44,29 +44,17 @@
 		WHERE D.db_svr_id=S.db_svr_id
 		AND D.db_id=#{db_id}	  	
     </select>
- 
- 	<select id="selectDbServerName" resultType="dbidbserverVO">
- 		/**
-	 	*  Query ID : selectDbServerName
-	 	* Description : DB SERVER Name 조회
-	 	* Author : 김주영
-	 	**/ 	
-		SELECT 
-			DB_SVR_NM
-		FROM T_DBSVR_I
-		WHERE DB_SVR_ID=#{db_svr_id}	
- 	</select>   
+ 	   
 	<delete id="deleteDbAccessControl" parameterType="int">
        	/**
 	 	* Query ID : deleteDbAccessControl
-	 	* Description : DB 접근제어 삭제
+	 	* Description : DB 접근제어 전체 삭제
 	 	* Author : 김주영
 	 	**/ 	
 		DELETE 
 		FROM T_SVRACSCNTR_I 
-	 	WHERE DB_SVR_ID=#{db_svr_id}
+	 	WHERE DB_ID=#{db_id}
 	</delete>
-	
 	
 	<insert id="insertAccessControl" parameterType="accessControlVO">
 		/**
@@ -111,5 +99,5 @@
 		, clock_timestamp()
 		) 
 	</insert>
-	
+
 </mapper>

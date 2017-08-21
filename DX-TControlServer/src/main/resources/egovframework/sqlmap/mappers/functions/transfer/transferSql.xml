@@ -20,6 +20,7 @@
 		, BW_HOME
 		FROM T_TRFCNG_I
 		WHERE FRST_REGR_ID = #{usr_id} 
+		LIMIT 1
     </select>
     
 	<insert id="insertTransferSetting" parameterType="transferVO">

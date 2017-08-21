@@ -30,14 +30,19 @@
 <script>
 	/* Validation */
 	function fn_accessControl(){
-		var prms_ipadr = document.getElementById("prms_ipadr");	
-		var prms_ipadr_val = prms_ipadr.value;
-		if (prms_ipadr_val == "") {
-			   alert("IP를 입력하여 주십시오.");
-			   prms_ipadr.focus();
-			   return false;
-		}
-		
+		/*Type=local -> ip입력 안함*/
+		if($("#ctf_tp_nm option:selected").val()=="local"){
+			$("#prms_ipadr").val();
+			return true;	
+		}else{
+			var prms_ipadr = document.getElementById("prms_ipadr");	
+			var prms_ipadr_val = prms_ipadr.value;
+			if (prms_ipadr_val == "") {
+				   alert("IP를 입력하여 주십시오.");
+				   prms_ipadr.focus();
+				   return false;
+			}
+		}	
 		//ABCDEF0123456789 
 		// '/'하나만 체크
 		var checkFlag = prms_ipadr_val.indexOf('/');
@@ -167,13 +172,13 @@
 								<option value="reject" ${ctf_mth_nm == 'reject' ? 'selected="selected"' : ''}>reject</option>
 								<option value="md5" ${ctf_mth_nm == 'md5' ? 'selected="selected"' : ''}>md5</option>
 								<option value="password" ${ctf_mth_nm == 'password' ? 'selected="selected"' : ''}>password</option>
-								<option value="Krb4" ${ctf_mth_nm == 'Krb4' ? 'selected="selected"' : ''}>Krb4</option>
+								<option value="krb4" ${ctf_mth_nm == 'Krb4' ? 'selected="selected"' : ''}>Krb4</option>
 								<option value="krb5" ${ctf_mth_nm == 'krb5' ? 'selected="selected"' : ''}>krb5</option>
 								<option value="ident" ${ctf_mth_nm == 'ident' ? 'selected="selected"' : ''}>ident</option>
 								<option value="pam" ${ctf_mth_nm == 'pam' ? 'selected="selected"' : ''}>pam</option>
 								<option value="ldap" ${ctf_mth_nm == 'ldap' ? 'selected="selected"' : ''}>ldap</option>
 								<option value="gss" ${ctf_mth_nm == 'gss' ? 'selected="selected"' : ''}>gss</option>
-								<option value="Sspi" ${ctf_mth_nm == 'Sspi' ? 'selected="selected"' : ''}>Sspi</option>
+								<option value="sspi" ${ctf_mth_nm == 'Sspi' ? 'selected="selected"' : ''}>sspi</option>
 								<option value="cert" ${ctf_mth_nm == 'cert' ? 'selected="selected"' : ''}>cert</option>
 								<option value="crypt" ${ctf_mth_nm == 'crypt' ? 'selected="selected"' : ''}>crypt</option>
 								<option value="radius" ${ctf_mth_nm == 'radius' ? 'selected="selected"' : ''}>radius</option>

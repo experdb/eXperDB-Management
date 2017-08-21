@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper   PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="scheduleHistorySql">
+
+	<select id="selectScheduleHistory" resultType="hashmap" parameterType="hashmap" >
+		/**
+		* Query ID : selectScheduleHistory
+		* Description : 스케줄이력 조회
+		* Author : 변승우
+		**/
+		
+	  	SELECT 
+	        (ROW_NUMBER() OVER()) AS ROWNUM
+	        , (ROW_NUMBER() OVER()) AS IDX
+	        , A.DB_SVR_NM
+	        , A.SCD_ID
+	        , A.SCD_NM
+	        , A.SCD_ID
+	        , A.SCD_NM
+	        , A.WRK_ID
+	        , A.WRK_NM
+	        , A.WRK_STRT_DTM
+	        , A.WRK_END_DTM
+	        , A.EXE_RESULT
+		FROM
+		(SELECT
+		         D.DB_SVR_NM
+		        , A.SCD_ID
+		        , C.SCD_NM
+		        , A.WRK_ID
+		        , B.WRK_NM
+				, TO_CHAR(A.WRK_STRT_DTM,'YYYY-MM-DD HH24:MI:SS') AS WRK_STRT_DTM
+				, TO_CHAR(A.WRK_END_DTM,'YYYY-MM-DD HH24:MI:SS') AS WRK_END_DTM
+		        , (SELECT SYS_CD_NM FROM T_SYSDTL_C WHERE A.EXE_RSLT_CD = SYS_CD ) AS EXE_RESULT
+		FROM T_WRKEXE_G A, T_WRKCNG_I B, T_SCD_M C, T_DBSVR_I D
+		WHERE 1= 1
+		AND A.WRK_ID = B.WRK_ID
+		AND C.SCD_ID = A.SCD_ID
+		AND B.DB_SVR_ID = D.DB_SVR_ID
+		AND D.DB_SVR_NM LIKE #{db_svr_nm}
+		<if test="lgi_dtm_start != null and lgi_dtm_start != '' ">
+		 AND to_char(A.WRK_END_DTM,'YYYY-MM-DD') between #{lgi_dtm_start} and #{lgi_dtm_end}
+		</if>
+		<if test="scd_nm != null and scd_nm != '' ">
+			AND C.SCD_NM LIKE #{scd_nm}
+		</if>		
+		LIMIT #{recordCountPerPage} OFFSET #{firstIndex} )A
+	</select>
+
+
+
+	<select id="selectScheduleHistoryTotCnt" parameterType="hashmap" resultType="int">
+    	/**
+	 	* Query ID : selectScheduleHistoryTotCnt
+	 	* Description : 스케줄이력 총 갯수 조회
+	 	* Author : 변승우
+	 	**/
+	 	
+		SELECT 
+				COUNT(*) totcnt
+		FROM T_WRKEXE_G A, T_WRKCNG_I B, T_SCD_M C, T_DBSVR_I D
+		WHERE 1= 1
+		AND A.WRK_ID = B.WRK_ID
+		AND C.SCD_ID = A.SCD_ID
+		AND B.DB_SVR_ID = D.DB_SVR_ID
+		AND D.DB_SVR_NM LIKE #{db_svr_nm}
+		<if test="lgi_dtm_start != null and lgi_dtm_start != '' ">
+		 AND to_char(A.WRK_END_DTM,'YYYY-MM-DD') between #{lgi_dtm_start} and #{lgi_dtm_end}
+		</if>
+		<if test="scd_nm != null and scd_nm != '' ">
+			AND C.SCD_NM LIKE #{scd_nm}
+		</if>
+	</select>
+	
+</mapper>

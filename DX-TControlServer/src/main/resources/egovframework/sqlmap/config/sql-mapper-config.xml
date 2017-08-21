@@ -31,8 +31,10 @@
 		<typeAlias alias="transferMappingVO" type="com.k4m.dx.tcontrol.tree.transfer.service.TransferMappingVO"/>
 		<typeAlias alias="transferRelationVO" type="com.k4m.dx.tcontrol.tree.transfer.service.TransferRelationVO"/>
 		<typeAlias alias="transferDetailMappingVO" type="com.k4m.dx.tcontrol.tree.transfer.service.TransferDetailMappingVO"/>
+		<typeAlias alias="menuAuthorityVO" type="com.k4m.dx.tcontrol.admin.menuauthority.service.MenuAuthorityVO"/>
 		<typeAlias alias="agentMonitoringVO" type="com.k4m.dx.tcontrol.admin.agentmonitoring.service.AgentMonitoringVO" />
 		<typeAlias alias="dashboardVO" type="com.k4m.dx.tcontrol.dashboard.service.DashboardVO" />
+		<typeAlias alias="bottlewaterVO" type="com.k4m.dx.tcontrol.tree.transfer.service.BottlewaterVO" /> 
 		
     </typeAliases>
     
@@ -40,7 +42,6 @@
 	 	<!-- cmmn -->
 		<mapper resource="egovframework/sqlmap/mappers/cmmn/cmmnSql.xml" />
 		<mapper resource="egovframework/sqlmap/mappers/cmmn/cmmnCodeSql.xml" /> 
-		<mapper resource="egovframework/sqlmap/mappers/cmmn/cmmnHistorySql.xml" />
 		
 		<!-- sample -->
 		<mapper resource="egovframework/sqlmap/mappers/sample/sampleListSql.xml" />
@@ -53,17 +54,20 @@
 		<mapper resource="egovframework/sqlmap/mappers/admin/userManager/userManagerSql.xml" />
 		<mapper resource="egovframework/sqlmap/mappers/admin/dbserverManager/dbserverManagerSql.xml" />
 		<mapper resource="egovframework/sqlmap/mappers/admin/accessHistory/accessHistorySql.xml" />
+		<mapper resource="egovframework/sqlmap/mappers/admin/menuauthority/menuauthoritySql.xml" />
 		<mapper resource="egovframework/sqlmap/mappers/admin/agentMonitoringSql.xml" />
 		
 		<!-- functions -->
 		<mapper resource="egovframework/sqlmap/mappers/functions/transfer/transferSql.xml" />
 		<mapper resource="egovframework/sqlmap/mappers/functions/schedule/scheduleSql.xml" />
+		<mapper resource="egovframework/sqlmap/mappers/functions/schedule/scheduleHistorySql.xml" />
 		
 		<!-- accesscontrol -->
 		<mapper resource="egovframework/sqlmap/mappers/accessControl/accessControlSql.xml" />
 		
 		<!-- mypage -->
 		<mapper resource="egovframework/sqlmap/mappers/mypage/mypageSql.xml" />
+		<mapper resource="egovframework/sqlmap/mappers/mypage/myScheduleSql.xml" />
 		
 		<!-- treetransfer -->
 		<mapper resource="egovframework/sqlmap/mappers/tree/treeTransferSql.xml" />

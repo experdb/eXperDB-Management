@@ -45,23 +45,25 @@ function fn_init() {
 		} ]
 	});
 	
-	//더블 클릭시
-	$('#userListTable tbody').on('dblclick','tr',function() {
-			var data = table.row(this).data();
-			var usr_id = data.usr_id;
-			
-			var popUrl = "/popup/userManagerRegForm.do?act=u&usr_id=" + usr_id; // 서버 url 팝업경로
-			var width = 920;
-			var height = 570;
-			var left = (window.screen.width / 2) - (width / 2);
-			var top = (window.screen.height /2) - (height / 2);
-			var popOption = "width="+width+", height="+height+", top="+top+", left="+left+", resizable=no, scrollbars=no, status=no, toolbar=no, titlebar=yes, location=no,";
-			
-			window.open(popUrl,"",popOption);
-		});		
+	//더블 클릭시 -> 쓰기 권한이 Y일 경우
+	if("${wrt_aut_yn}" == "Y"){
+		$('#userListTable tbody').on('dblclick','tr',function() {
+				var data = table.row(this).data();
+				var usr_id = data.usr_id;
+				
+				var popUrl = "/popup/userManagerRegForm.do?act=u&usr_id=" + usr_id; // 서버 url 팝업경로
+				var width = 920;
+				var height = 570;
+				var left = (window.screen.width / 2) - (width / 2);
+				var top = (window.screen.height /2) - (height / 2);
+				var popOption = "width="+width+", height="+height+", top="+top+", left="+left+", resizable=no, scrollbars=no, status=no, toolbar=no, titlebar=yes, location=no,";
+				
+				window.open(popUrl,"",popOption);
+			});		
 	}
-
+}
 $(window.document).ready(function() {
+	fn_buttonAut();
 	fn_init();
 	$.ajax({
 		url : "/selectUserManager.do",
@@ -82,6 +84,29 @@ $(window.document).ready(function() {
 	});
 
 });
+
+function fn_buttonAut(){
+	var btnSelect = document.getElementById("btnSelect"); 
+	var btnInsert = document.getElementById("btnInsert"); 
+	var btnUpdate = document.getElementById("btnUpdate"); 
+	var btnDelete = document.getElementById("btnDelete"); 
+	
+	if("${wrt_aut_yn}" == "Y"){
+		btnInsert.style.display = '';
+		btnUpdate.style.display = '';
+		btnDelete.style.display = '';
+	}else{
+		btnInsert.style.display = 'none';
+		btnUpdate.style.display = 'none';
+		btnDelete.style.display = 'none';
+	}
+		
+	if("${read_aut_yn}" == "Y"){
+		btnSelect.style.display = '';
+	}else{
+		btnSelect.style.display = 'none';
+	}
+}	
 
 /*조회버튼 클릭시*/
 function fn_select(){
@@ -188,9 +213,9 @@ function fn_delete(){
 		<div class="contents">
 			<div class="cmm_grp">
 				<div class="btn_type_01">
-					<span class="btn"><button onclick="fn_select()">조회</button></span>
-					<span class="btn" onclick="fn_insert()"><button>등록</button></span>
-					<span class="btn" onclick="fn_update();"><button>수정</button></span>
+					<span class="btn"><button onclick="fn_select()" id="btnSelect">조회</button></span>
+					<span class="btn"><button onclick="fn_insert()" id="btnInsert">등록</button></span>
+					<span class="btn"><button onclick="fn_update()" id="btnUpdate">수정</button></span>
 					<a href="#n" class="btn" id="btnDelete" onclick="fn_delete()"><span>삭제</span></a>
 				</div>
 				<div class="sch_form">

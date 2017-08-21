@@ -19,6 +19,9 @@
 %>
 <script>
 	$(window.document).ready(function() {
+		
+		fn_buttonAut();
+		
 		var lgi_dtm_start = "${lgi_dtm_start}";
 		var lgi_dtm_end = "${lgi_dtm_end}";
 		if (lgi_dtm_start != "" && lgi_dtm_end != "") {
@@ -30,6 +33,22 @@
 		}
 	});
 
+	function fn_buttonAut(){
+		var excel_button = document.getElementById("btnExcel"); 
+		var select_button = document.getElementById("btnSelect"); 
+		if("${wrt_aut_yn}" == "Y"){
+			excel_button.style.display = '';
+		}else{
+			excel_button.style.display = 'none';
+		}	
+		if("${read_aut_yn}" == "Y"){
+			select_button.style.display = '';
+		}else{
+			select_button.style.display = 'none';
+		}
+	}
+
+	
 	$(function() {
 		var dateFormat = "yyyy-mm-dd", from = $("#from").datepicker({
 			changeMonth : false,
@@ -82,6 +101,8 @@
 			return;
 		}
 	}
+	
+	
 	/*조회버튼 클릭시*/
 	function fn_select() {
 		$("#historyCheck").val("historyCheck");
@@ -115,7 +136,7 @@
 			<div class="contents">
 				<div class="cmm_grp">
 					<div class="btn_type_float">
-						<span class="btn btnC_01 btn_fl"><button onclick="fn_ExportExcel()">엑셀저장</button></span> 
+						<span class="btn btnC_01 btn_fl"><button id="btnExcel" onclick="fn_ExportExcel()">엑셀저장</button></span> 
 								<span class="btn btn_fr"><button id="btnSelect"onclick="fn_select()">조회</button></span>															
 					</div>
 

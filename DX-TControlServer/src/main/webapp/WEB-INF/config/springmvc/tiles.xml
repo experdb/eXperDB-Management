@@ -13,6 +13,9 @@
  	<definition name="view/*" extends="default">
 		<put-attribute name="contents" value="/WEB-INF/view/index.jsp" />
 	</definition> 
+	<definition name="error/*" extends="default">
+		<put-attribute name="contents" value="/WEB-INF/view/error/{1}.jsp" />
+	</definition> 
 	<definition name="cmmn/*" extends="default">
 		<put-attribute name="contents" value="/WEB-INF/view/cmmn/code/{1}.jsp"  />
 	</definition> 
@@ -60,5 +63,8 @@
 	</definition> 
 	<definition name="transfer/*" extends="default">
 		<put-attribute name="contents" value="/WEB-INF/view/transfer/{1}.jsp" />
+	</definition>
+		<definition name="help/*" extends="default">
+		<put-attribute name="contents" value="/WEB-INF/view/help/{1}.jsp" />
 	</definition>
 </tiles-definitions>

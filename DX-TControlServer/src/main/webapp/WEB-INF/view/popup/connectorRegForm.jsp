@@ -29,8 +29,6 @@
 <script type="text/javascript" src="../js/common.js"></script>
 </head>
 <script>
-
-	var checkConnection= null;
 	
 	/* 숫자체크 */
 	function valid_numeric(objValue) {
@@ -70,28 +68,10 @@
 		return true;
 	}
 
-	/* 연결TEST */
-	function fn_connectorConnTest() {
-		if (!fn_connectorValidation())return false;
-		$.ajax({
-			url : '/connectorConnTest.do',
-			type : 'post',
-			data : {},
-			success : function(result) {
-				alert("연결테스트!");
-				checkConnection = "success";
-			},
-			error : function(request, status, error) {
-				alert("실패");
-				checkConnection="fail";
-			}
-		});
-	}
 	
 	/* 등록버튼 클릭시 */
 	function fn_insert() {
 		if (!fn_connectorValidation()) return false;
-		if(checkConnection=='success'){
 			if (!confirm("저장하시겠습니까?")) return false;
 			$.ajax({
 				url : '/insertConnectorRegister.do',
@@ -111,15 +91,11 @@
 					alert("실패");
 				}
 			});
-		}else{
-			alert("연결테스트를 해주세요.");
-		}
 	}
 
 	/* 수정버튼 클릭시 */
 	function fn_update() {
 		if (!fn_connectorValidation()) return false;
-		if(checkConnection=='success'){
 			if (!confirm("수정하시겠습니까?")) return false;
 			$.ajax({
 				url : '/updateConnectorRegister.do',
@@ -140,9 +116,6 @@
 					alert("실패");
 				}
 			});
-		}else{
-			alert("연결테스트를 해주세요.");
-		}
 	}
 
 </script>
@@ -191,9 +164,6 @@
 					<c:if test="${act == 'u'}">
 						<span class="btn"><button type="button" onclick="fn_update()">수정</button></span>
 					</c:if>
-					<span class="btn btnF_01 btnC_01">
-						<button type="button" onclick="fn_connectorConnTest()">연결테스트</button>
-					</span> 
 					<a href="#n" class="btn" onclick="window.close();"><span>취소</span></a>
 				</div>
 		</div>
