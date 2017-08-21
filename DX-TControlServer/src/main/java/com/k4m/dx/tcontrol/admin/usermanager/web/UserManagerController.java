@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.k4m.dx.tcontrol.admin.accesshistory.service.AccessHistoryService;
+import com.k4m.dx.tcontrol.admin.dbauthority.service.DbAuthorityService;
 import com.k4m.dx.tcontrol.admin.menuauthority.service.MenuAuthorityService;
 import com.k4m.dx.tcontrol.admin.usermanager.service.UserManagerService;
 import com.k4m.dx.tcontrol.cmmn.CmmnUtils;
@@ -43,6 +44,9 @@ public class UserManagerController {
 	
 	@Autowired
 	private MenuAuthorityService menuAuthorityService;
+	
+	@Autowired
+	private DbAuthorityService dbAuthorityService;
 	
 	@Autowired
 	private UserManagerService userManagerService;
@@ -167,13 +171,37 @@ public class UserManagerController {
 			userManagerService.insertUserManager(userVo);
 			
 			
+			// 메뉴 권한 초기등록
 			result = menuAuthorityService.selectMnuIdList();
 			
 			for(int i=0; i<result.size(); i++){
 				userVo.setMnu_id(result.get(i).getMnu_id());
 				menuAuthorityService.insertUsrmnuaut(userVo);
 			}
-
+			
+			
+			// 유저디비서버 권한 초기등록
+			List<Map<String, Object>>  severList = null;
+			severList = dbAuthorityService.selectSvrList();
+			for(int j=0; j<severList.size(); j++){
+				Map<String, Object> param = new HashMap<String, Object>();
+				param.put("user", userVo.getUsr_id());
+				param.put("usr_id", usr_id);
+				param.put("db_svr_id", severList.get(j).get("db_svr_id"));
+				dbAuthorityService.insertUsrDbSvrAut(param);
+			}
+					
+			// 유저디비 권한 초기등록
+			List<Map<String, Object>>  dbList = null;
+			dbList = dbAuthorityService.selectDBList();
+			for(int k=0; k<dbList.size(); k++){
+				Map<String, Object> param = new HashMap<String, Object>();
+				param.put("user", userVo.getUsr_id());
+				param.put("usr_id", usr_id);
+				param.put("db_svr_id", dbList.get(k).get("db_svr_id"));
+				param.put("db_id", dbList.get(k).get("db_id"));
+				dbAuthorityService.insertUsrDbAut(param);
+			}
 			
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -288,7 +316,12 @@ public class UserManagerController {
 			String[] param = request.getParameter("usr_id").toString().split(",");
 			for (int i = 0; i < param.length; i++) {
 				userManagerService.deleteUserManager(param[i]);
+				menuAuthorityService.deleteMenuAuthority(param[i]);
+				dbAuthorityService.deleteDbSvrAuthority(param[i]);
+				dbAuthorityService.deleteDbAuthority(param[i]);
 			}
+			
+
 			
 			// 사용자관리 이력 남기기
 			CmmnUtils.saveHistory(request, historyVO);
