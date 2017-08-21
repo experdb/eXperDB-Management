@@ -74,6 +74,17 @@ public class MenuAuthorityServiceImpl implements MenuAuthorityService{
 		return menuAuthorityDAO.selectMenuAut(param);
 	}
 
+	
+	/**
+	 * 사용자 삭제시 권한삭제
+	 * @param 
+	 * @throws Exception
+	 */
+	@Override
+	public void deleteMenuAuthority(String string) throws Exception {
+		menuAuthorityDAO.deleteMenuAuthority(string);	
+	}
+
 
 
 }

@@ -54,6 +54,7 @@
 		<mapper resource="egovframework/sqlmap/mappers/admin/userManager/userManagerSql.xml" />
 		<mapper resource="egovframework/sqlmap/mappers/admin/dbserverManager/dbserverManagerSql.xml" />
 		<mapper resource="egovframework/sqlmap/mappers/admin/accessHistory/accessHistorySql.xml" />
+		<mapper resource="egovframework/sqlmap/mappers/admin/dbAuthority/dbAuthoritySql.xml" />
 		<mapper resource="egovframework/sqlmap/mappers/admin/menuauthority/menuauthoritySql.xml" />
 		<mapper resource="egovframework/sqlmap/mappers/admin/agentMonitoringSql.xml" />
 		
