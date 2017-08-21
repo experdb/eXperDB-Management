@@ -77,6 +77,7 @@ public class SystemServiceImpl implements SystemService{
 		AgentInfoVO vo = new AgentInfoVO();
 		
 		vo.setIPADR(strSocketIp);
+		vo.setSOCKET_PORT(Integer.parseInt(strSocketPort));
 		vo.setAGT_CNDT_CD(AgentInfoVO.TC001102); //종료
 		vo.setISTCNF_YN("Y");
 		vo.setLST_MDFR_ID("system");

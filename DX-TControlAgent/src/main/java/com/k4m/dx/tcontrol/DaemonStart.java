@@ -83,7 +83,7 @@ public class DaemonStart implements DxDaemon{
 			// SqlSessionManager 초기화
 			try {
 				String strIpadr = FileUtil.getPropertyValue("context.properties", "agent.install.ip");
-				String strPort = FileUtil.getPropertyValue("context.properties", "agent.install.port");
+				String strPort = FileUtil.getPropertyValue("context.properties", "socket.server.port");
 				
 
 				
@@ -132,7 +132,7 @@ public class DaemonStart implements DxDaemon{
 			socketService.stop();
 			
 			String strIpadr = FileUtil.getPropertyValue("context.properties", "agent.install.ip");
-			String strPort = FileUtil.getPropertyValue("context.properties", "agent.install.port");
+			String strPort = FileUtil.getPropertyValue("context.properties", "socket.server.port");
 
 			SystemServiceImpl service = (SystemServiceImpl) context.getBean("SystemService");
 

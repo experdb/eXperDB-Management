@@ -81,11 +81,12 @@
                end
 				FROM T_SVRACSCNTR_I WHERE DB_SVR_ID = AAA.DB_SVR_ID  AND PRMS_SET = '1'
 				) AS access_cnt
-		    , (SELECT AGT_CNDT_CD FROM T_AGTCNDT_I WHERE DB_SVR_ID = AAA.DB_SVR_ID) AS agt_cndt_cd
+		    , (SELECT DISTINCT AGT_CNDT_CD FROM T_AGTCNDT_I WHERE IPADR = AAA.IPADR) AS agt_cndt_cd
 		  FROM
 		  (
 		      SELECT
 		            AA.DB_SVR_ID
+              	    , AA.IPADR
 		            , AA.WRK_ID
 		            , AA.SCD_ID
 		       		, (SELECT COUNT(*) FROM T_WRKEXE_G WHERE SCD_ID = AA.SCD_ID AND EXE_RSLT_CD = 'TC001701') success_cnt
@@ -94,6 +95,7 @@
 		       (
 		       SELECT 
 		             A.DB_SVR_ID
+                   , A.IPADR
 		            , C.WRK_ID
 		            , B.SCD_ID
 		        FROM
@@ -102,7 +104,7 @@
 		           LEFT OUTER JOIN T_SCD_D B ON B.WRK_ID = C.WRK_ID
 		        ) AA 
 		    ) AAA
-		 GROUP BY AAA.DB_SVR_ID
+		 GROUP BY AAA.DB_SVR_ID, AAA.IPADR
 	</select>
     
     
