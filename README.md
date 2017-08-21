@@ -87,7 +87,7 @@
 
 **제작자**
 
-	Alvin,Daniel,Juily
+	박태혁, 변승우, 김주영
 
 ----------
 Copyright (c) 2016-2017, eXperDB All rights reserved
