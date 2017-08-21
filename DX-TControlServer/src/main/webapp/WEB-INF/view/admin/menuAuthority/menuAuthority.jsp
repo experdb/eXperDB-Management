@@ -52,7 +52,7 @@ $(window.document).ready(function() {
 	
 	//유저조회
 	$.ajax({
-		url : "/selectUserManager.do",
+		url : "/selectMenuAutUserManager.do",
 		dataType : "json",
 		type : "post",
 		error : function(xhr, status, error) {

@@ -47,6 +47,15 @@ public interface MenuAuthorityService {
 	List<Map<String, Object>> selectMenuAut(Map<String, Object> param) throws Exception;
 
 
+	/**
+	 * 사용자 삭제시 권한삭제
+	 * @param 
+	 * @throws Exception
+	 */
+	void deleteMenuAuthority(String string) throws Exception;
+
+
+
 
 
 }

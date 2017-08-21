@@ -14,7 +14,7 @@ public class SessionCheckInterceptor extends HandlerInterceptorAdapter{
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
         try {
-        	System.out.println("Interceptor{preHandle}............................................ start");
+        	// System.out.println("Interceptor{preHandle}............................................ start");
         		
             if(request.getSession().getAttribute("usr_id") == null ){
                     response.sendRedirect("/");
@@ -29,7 +29,7 @@ public class SessionCheckInterceptor extends HandlerInterceptorAdapter{
  
     @Override
     public void postHandle(HttpServletRequest request, HttpServletResponse response, Object handler, ModelAndView modelAndView) throws Exception {
-    	System.out.println("Interceptor{postHandle}............................................ start");
+    	// System.out.println("Interceptor{postHandle}............................................ start");
     	super.postHandle(request, response, handler, modelAndView);
     }
  

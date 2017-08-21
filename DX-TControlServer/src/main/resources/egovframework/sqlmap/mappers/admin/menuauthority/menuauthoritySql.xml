@@ -109,4 +109,14 @@
 		AND mnu_id = #{mnu_id}::numeric
     </select>
 
+
+	<delete id="deleteMenuAuthority" parameterType="string">
+		/**
+		* Query ID : deleteMenuAuthority
+		* Description : 사용자삭제시, 메뉴권한 삭제
+		* Author : 변승우
+		**/
+		DELETE FROM T_USRMNUAUT_I
+		WHERE usr_id=#{usr_id}
+	</delete>
 </mapper>

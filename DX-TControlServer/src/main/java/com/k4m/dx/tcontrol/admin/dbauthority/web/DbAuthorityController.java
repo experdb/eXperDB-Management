@@ -1,21 +1,28 @@
 package com.k4m.dx.tcontrol.admin.dbauthority.web;
 
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
 import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.k4m.dx.tcontrol.admin.accesshistory.service.AccessHistoryService;
+import com.k4m.dx.tcontrol.admin.usermanager.service.UserManagerService;
 import com.k4m.dx.tcontrol.cmmn.CmmnUtils;
 import com.k4m.dx.tcontrol.common.service.HistoryVO;
+import com.k4m.dx.tcontrol.login.service.UserVO;
 
 /**
  * DB권한 관리 컨트롤러 클래스를 정의한다.
  *
- * @author 김주영
+ * @author 변승우
  * @see
  * 
  *      <pre>
@@ -23,7 +30,7 @@ import com.k4m.dx.tcontrol.common.service.HistoryVO;
  *
  *   수정일       수정자           수정내용
  *  -------     --------    ---------------------------
- *  2017.05.29   김주영 최초 생성
+ *  2017.05.29   변승우  최초 생성
  *      </pre>
  */
 
@@ -33,6 +40,10 @@ public class DbAuthorityController {
 	@Autowired
 	private AccessHistoryService accessHistoryService;
 
+	@Autowired
+	private UserManagerService userManagerService;
+	
+	
 	/**
 	 * DB권한관리 화면을 보여준다.
 	 * 
@@ -55,6 +66,36 @@ public class DbAuthorityController {
 			e.printStackTrace();
 		}
 		return mv;
+
+	}
+	
+	
+	/**
+	 * 사용자 리스트를 조회한다.
+	 * 
+	 * @param request
+	 * @return resultSet
+	 * @throws Exception
+	 */
+	@RequestMapping(value = "/selectDBAutUserManager.do")
+	public @ResponseBody List<UserVO> selectUserManager(HttpServletRequest request) {
+		List<UserVO> resultSet = null;
+		Map<String, Object> param = new HashMap<String, Object>();
+		try {	
+				String type=request.getParameter("type");
+				String search = request.getParameter("search");
+				String use_yn = request.getParameter("use_yn");
+							
+				param.put("type", type);
+				param.put("search", search);
+				param.put("use_yn", use_yn);
+			
+				resultSet = userManagerService.selectUserManager(param);	
+
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return resultSet;
 
 	}
 }
