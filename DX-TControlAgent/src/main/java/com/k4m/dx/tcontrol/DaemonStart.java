@@ -83,16 +83,14 @@ public class DaemonStart implements DxDaemon{
 			// SqlSessionManager 초기화
 			try {
 				String strIpadr = FileUtil.getPropertyValue("context.properties", "agent.install.ip");
+				String strPort = FileUtil.getPropertyValue("context.properties", "socket.server.port");
 				
-				DbServerInfoVO searchVO = new DbServerInfoVO();
-				searchVO.setIPADR(strIpadr);
 
 				
 				SystemServiceImpl service = (SystemServiceImpl) context.getBean("SystemService");
 
-				DbServerInfoVO dbServerInfo = service.selectDbServerInfo(searchVO);
 				
-				service.agentInfoStartMng(dbServerInfo);
+				service.agentInfoStartMng(strIpadr, strPort);
 				
 			} catch (Exception e) {
 				errLogger.error("데몬 시작시 에러가 발생하였습니다. {}", e.toString());
@@ -134,16 +132,12 @@ public class DaemonStart implements DxDaemon{
 			socketService.stop();
 			
 			String strIpadr = FileUtil.getPropertyValue("context.properties", "agent.install.ip");
-			
-			DbServerInfoVO searchVO = new DbServerInfoVO();
-			searchVO.setIPADR(strIpadr);
+			String strPort = FileUtil.getPropertyValue("context.properties", "socket.server.port");
 
-			
 			SystemServiceImpl service = (SystemServiceImpl) context.getBean("SystemService");
 
-			DbServerInfoVO dbServerInfo = service.selectDbServerInfo(searchVO);
 			
-			service.agentInfoStopMng(dbServerInfo);
+			service.agentInfoStopMng(strIpadr, strPort);
 			
 		} catch(Exception e) {
 			errLogger.error("데몬 종료시 에러가 발생하였습니다. {0}", e.toString());

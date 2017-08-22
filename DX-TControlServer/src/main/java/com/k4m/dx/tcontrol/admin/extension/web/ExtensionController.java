@@ -80,15 +80,17 @@ public class ExtensionController {
 			String strDbSvrId = request.getParameter("db_svr_id");
 			int db_svr_id = Integer.parseInt(strDbSvrId);
 			
-			AgentInfoVO vo = new AgentInfoVO();
-			vo.setDB_SVR_ID(db_svr_id);
-			
-			AgentInfoVO agentInfo =  (AgentInfoVO) cmmnServerInfoService.selectAgentInfo(vo);
-			
 			DbServerVO schDbServerVO = new DbServerVO();
 			schDbServerVO.setDb_svr_id(db_svr_id);
 			
 			DbServerVO dbServerVO = (DbServerVO)  cmmnServerInfoService.selectServerInfo(schDbServerVO);
+			String strIpAdr = dbServerVO.getIpadr();
+
+			AgentInfoVO vo = new AgentInfoVO();
+			vo.setIPADR(strIpAdr);
+			
+			AgentInfoVO agentInfo =  (AgentInfoVO) cmmnServerInfoService.selectAgentInfo(vo);
+			
 
 			AES256 dec = new AES256(AES256_KEY.ENC_KEY);
 			//System.out.println("KEY : " + dbServerVO.getSvr_spr_scm_pwd());

@@ -61,15 +61,18 @@ public class AuditController {
 			String strDbSvrId = request.getParameter("db_svr_id");
 			int db_svr_id = Integer.parseInt(strDbSvrId);
 			
-			AgentInfoVO vo = new AgentInfoVO();
-			vo.setDB_SVR_ID(db_svr_id);
-			
-			AgentInfoVO agentInfo =  (AgentInfoVO) cmmnServerInfoService.selectAgentInfo(vo);
-			
+
 			DbServerVO schDbServerVO = new DbServerVO();
 			schDbServerVO.setDb_svr_id(db_svr_id);
 			
 			DbServerVO dbServerVO = (DbServerVO)  cmmnServerInfoService.selectServerInfo(schDbServerVO);
+			String strIpAdr = dbServerVO.getIpadr();
+			
+			AgentInfoVO vo = new AgentInfoVO();
+			vo.setIPADR(strIpAdr);
+			
+			AgentInfoVO agentInfo =  (AgentInfoVO) cmmnServerInfoService.selectAgentInfo(vo);
+			
 			
 			JSONObject serverObj = new JSONObject();
 			
@@ -174,15 +177,19 @@ public class AuditController {
 		
 		int db_svr_id = Integer.parseInt(request.getParameter("db_svr_id"));
 		
-		AgentInfoVO vo = new AgentInfoVO();
-		vo.setDB_SVR_ID(db_svr_id);
-		
-		AgentInfoVO agentInfo =  (AgentInfoVO) cmmnServerInfoService.selectAgentInfo(vo);
+
 		
 		DbServerVO schDbServerVO = new DbServerVO();
 		schDbServerVO.setDb_svr_id(db_svr_id);
 		
 		DbServerVO dbServerVO = (DbServerVO)  cmmnServerInfoService.selectServerInfo(schDbServerVO);
+		String strIpAdr = dbServerVO.getIpadr();
+		
+		AgentInfoVO vo = new AgentInfoVO();
+		vo.setIPADR(strIpAdr);
+		
+		AgentInfoVO agentInfo =  (AgentInfoVO) cmmnServerInfoService.selectAgentInfo(vo);
+		
 		
 		String strLogActive = request.getParameter("chkLogActive") == null?"":request.getParameter("chkLogActive");
 		
@@ -307,15 +314,19 @@ public class AuditController {
 			searchInfoObj.put(ClientProtocolID.START_DATE, strStartDate);
 			searchInfoObj.put(ClientProtocolID.END_DATE, strEndDate);
 			
-			AgentInfoVO vo = new AgentInfoVO();
-			vo.setDB_SVR_ID(db_svr_id);
-			
-			AgentInfoVO agentInfo =  (AgentInfoVO) cmmnServerInfoService.selectAgentInfo(vo);
 			
 			DbServerVO schDbServerVO = new DbServerVO();
 			schDbServerVO.setDb_svr_id(db_svr_id);
 			
 			DbServerVO dbServerVO = (DbServerVO)  cmmnServerInfoService.selectServerInfo(schDbServerVO);
+			
+			String strIpAdr = dbServerVO.getIpadr();
+			
+			AgentInfoVO vo = new AgentInfoVO();
+			vo.setIPADR(strIpAdr);
+			
+			AgentInfoVO agentInfo =  (AgentInfoVO) cmmnServerInfoService.selectAgentInfo(vo);
+			
 			
 			String strDirectory = dbServerVO.getIstpath() + "/data/pg_log/";
 			
@@ -426,27 +437,33 @@ public class AuditController {
 			searchInfoObj.put(ClientProtocolID.START_DATE, strStartDate);
 			searchInfoObj.put(ClientProtocolID.END_DATE, strEndDate);
 			
-			AgentInfoVO vo = new AgentInfoVO();
-			vo.setDB_SVR_ID(db_svr_id);
-			
-			AgentInfoVO agentInfo =  (AgentInfoVO) cmmnServerInfoService.selectAgentInfo(vo);
-			
 			DbServerVO schDbServerVO = new DbServerVO();
 			schDbServerVO.setDb_svr_id(db_svr_id);
 			
 			DbServerVO dbServerVO = (DbServerVO)  cmmnServerInfoService.selectServerInfo(schDbServerVO);
+			
+			String strIpAdr = dbServerVO.getIpadr();
+			
+			AgentInfoVO vo = new AgentInfoVO();
+			vo.setIPADR(strIpAdr);
+			
+			AgentInfoVO agentInfo =  (AgentInfoVO) cmmnServerInfoService.selectAgentInfo(vo);
 			
 			String strDirectory = dbServerVO.getIstpath()+ "/data/pg_log/";
 			
 			JSONObject serverObj = new JSONObject();
 			
 			AES256 dec = new AES256(AES256_KEY.ENC_KEY);
-			System.out.println("KEY : " + dbServerVO.getSvr_spr_scm_pwd());
+			//System.out.println("KEY : " + dbServerVO.getSvr_spr_scm_pwd());
 			String strPwd = dec.aesDecode(dbServerVO.getSvr_spr_scm_pwd());
+			
 			
 			serverObj.put(ClientProtocolID.SERVER_NAME, dbServerVO.getDb_svr_nm());
 			serverObj.put(ClientProtocolID.SERVER_IP, dbServerVO.getIpadr());
 			serverObj.put(ClientProtocolID.SERVER_PORT, dbServerVO.getPortno());
+			serverObj.put(ClientProtocolID.DATABASE_NAME, dbServerVO.getDft_db_nm());
+			serverObj.put(ClientProtocolID.USER_ID, dbServerVO.getSvr_spr_usr_id());
+			serverObj.put(ClientProtocolID.USER_PWD, strPwd);
 
 			
 			JSONObject jObj = new JSONObject();
@@ -458,13 +475,39 @@ public class AuditController {
 			
 			
 			String IP = dbServerVO.getIpadr();
+			
+			if(agentInfo == null) {
+				
+				mv.addObject("extName", "agent");
+				mv.setViewName("dbserver/auditLogList");
+				return mv;
+			}
+			
 			int PORT = agentInfo.getSOCKET_PORT();
 			
 			//IP = "127.0.0.1";
 			ClientAdapter CA = new ClientAdapter(IP, PORT);
-			CA.open(); 
 			
+			String strExtName = "pgaudit";
+			
+			CA.open();
+			JSONObject objExtList = CA.dxT010(ClientTranCodeType.DxT010, serverObj, strExtName);
+			CA.close();
+			
+			List<Object> selectExtList  = (ArrayList<Object>) objExtList.get(ClientProtocolID.RESULT_DATA);
+			
+
+			
+			if(selectExtList == null || selectExtList.size() == 0) {
+				strExtName = "";
+				mv.addObject("extName", strExtName);
+				mv.setViewName("dbserver/auditManagement");
+				return mv;
+			}
+			
+			CA.open(); 
 			JSONObject objList = CA.dxT015(jObj);
+			CA.close();
 			
 			String strErrMsg = (String)objList.get(ClientProtocolID.ERR_MSG);
 			String strErrCode = (String)objList.get(ClientProtocolID.ERR_CODE);
@@ -481,14 +524,10 @@ public class AuditController {
 			mv.addObject("serverName", dbServerVO.getDb_svr_nm());
 			mv.addObject("db_svr_id", strDbSvrId);
 			mv.addObject("logFileList", fileList);
-			
+			mv.addObject("extName", strExtName);
 			mv.addObject("start_date", strStartDate);
 			mv.addObject("end_date", strEndDate);
-			
-			CA.close();
-			
 
-			
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -505,15 +544,18 @@ public class AuditController {
 			String strDbSvrId = request.getParameter("db_svr_id");
 			int db_svr_id = Integer.parseInt(strDbSvrId);
 			
-			AgentInfoVO vo = new AgentInfoVO();
-			vo.setDB_SVR_ID(db_svr_id);
-			
-			AgentInfoVO agentInfo =  (AgentInfoVO) cmmnServerInfoService.selectAgentInfo(vo);
 			
 			DbServerVO schDbServerVO = new DbServerVO();
 			schDbServerVO.setDb_svr_id(db_svr_id);
 			
 			DbServerVO dbServerVO = (DbServerVO)  cmmnServerInfoService.selectServerInfo(schDbServerVO);
+			
+			String strIpAdr = dbServerVO.getIpadr();
+			
+			AgentInfoVO vo = new AgentInfoVO();
+			vo.setIPADR(strIpAdr);
+			
+			AgentInfoVO agentInfo =  (AgentInfoVO) cmmnServerInfoService.selectAgentInfo(vo);
 			
 			String strDirectory = dbServerVO.getIstpath()+ "/data/pg_log/";
 			String strFileName = request.getParameter("file_name");
@@ -578,15 +620,18 @@ public class AuditController {
 			String strDbSvrId = request.getParameter("db_svr_id");
 			int db_svr_id = Integer.parseInt(strDbSvrId);
 			
-			AgentInfoVO vo = new AgentInfoVO();
-			vo.setDB_SVR_ID(db_svr_id);
-			
-			AgentInfoVO agentInfo =  (AgentInfoVO) cmmnServerInfoService.selectAgentInfo(vo);
 			
 			DbServerVO schDbServerVO = new DbServerVO();
 			schDbServerVO.setDb_svr_id(db_svr_id);
 			
 			DbServerVO dbServerVO = (DbServerVO)  cmmnServerInfoService.selectServerInfo(schDbServerVO);
+			
+			String strIpAdr = dbServerVO.getIpadr();
+			
+			AgentInfoVO vo = new AgentInfoVO();
+			vo.setIPADR(strIpAdr);
+			
+			AgentInfoVO agentInfo =  (AgentInfoVO) cmmnServerInfoService.selectAgentInfo(vo);
 			
 			String strDirectory = dbServerVO.getIstpath()+ "/data/pg_log/";
 			//strDirectory = "C:\\k4m\\01-1. DX 제폼개발\\04. 시험\\pg_log\\";

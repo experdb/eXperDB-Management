@@ -105,7 +105,8 @@
 		 	* Author : 박태혁
 		 	**/
 		 	SELECT
-				DB_SVR_ID
+				AGT_SN
+				, IPADR
 				, SOCKET_PORT
 				, AGT_CNDT_CD
 				, STRT_DTM
@@ -116,7 +117,7 @@
 				, LST_MDF_DTM
 			FROM  T_AGTCNDT_I
 			WHERE
-				DB_SVR_ID = #{DB_SVR_ID}
+				IPADR = #{IPADR}
 			LIMIT 1
 	</select>
 </mapper>

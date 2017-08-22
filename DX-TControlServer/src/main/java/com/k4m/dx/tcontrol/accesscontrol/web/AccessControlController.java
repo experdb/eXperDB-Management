@@ -93,7 +93,7 @@ public class AccessControlController {
 	public ModelAndView serverAccessControl(@ModelAttribute("historyVO") HistoryVO historyVO,
 			HttpServletRequest request) {
 		ModelAndView mv = new ModelAndView();
-		AgentInfoVO vo = new AgentInfoVO();
+
 		try {
 			// 접근제어관리 이력 남기기
 			CmmnUtils.saveHistory(request, historyVO);
@@ -102,7 +102,16 @@ public class AccessControlController {
 
 			int db_svr_id = Integer.parseInt(request.getParameter("db_svr_id"));
 			
-			vo.setDB_SVR_ID(db_svr_id);
+			DbServerVO schDbServerVO = new DbServerVO();
+			schDbServerVO.setDb_svr_id(db_svr_id);
+			
+			DbServerVO dbServerVO = (DbServerVO)  cmmnServerInfoService.selectServerInfo(schDbServerVO);
+			
+			String strIpAdr = dbServerVO.getIpadr();
+			
+			AgentInfoVO vo = new AgentInfoVO();
+			vo.setIPADR(strIpAdr);
+			
 			AgentInfoVO agentInfo =  (AgentInfoVO) cmmnServerInfoService.selectAgentInfo(vo);
 	
 			if(agentInfo == null) {
@@ -139,12 +148,17 @@ public class AccessControlController {
 			AES256 dec = new AES256(AES256_KEY.ENC_KEY);
 			int db_svr_id = Integer.parseInt(request.getParameter("db_svr_id"));
 			
-			AgentInfoVO vo = new AgentInfoVO();
-			vo.setDB_SVR_ID(db_svr_id);
-			AgentInfoVO agentInfo =  (AgentInfoVO) cmmnServerInfoService.selectAgentInfo(vo);
+
 			DbServerVO schDbServerVO = new DbServerVO();
 			schDbServerVO.setDb_svr_id(db_svr_id);
 			DbServerVO dbServerVO = (DbServerVO)  cmmnServerInfoService.selectServerInfo(schDbServerVO);
+
+			String strIpAdr = dbServerVO.getIpadr();
+			
+			AgentInfoVO vo = new AgentInfoVO();
+			vo.setIPADR(strIpAdr);
+			
+			AgentInfoVO agentInfo =  (AgentInfoVO) cmmnServerInfoService.selectAgentInfo(vo);
 			
 			JSONObject serverObj = new JSONObject();
 			
@@ -244,7 +258,7 @@ public class AccessControlController {
 		ClientInfoCmmn cic = new ClientInfoCmmn();
 		JSONObject serverObj = new JSONObject();
 		JSONObject acObj = new JSONObject();
-		AgentInfoVO vo = new AgentInfoVO();
+
 		try {
 			// 접근제어 등록 이력 남기기
 			CmmnUtils.saveHistory(request, historyVO);
@@ -256,12 +270,17 @@ public class AccessControlController {
 			
 			AES256 dec = new AES256(AES256_KEY.ENC_KEY);
 			int db_svr_id = Integer.parseInt(request.getParameter("db_svr_id"));
-			
-			vo.setDB_SVR_ID(db_svr_id);
-			AgentInfoVO agentInfo =  (AgentInfoVO) cmmnServerInfoService.selectAgentInfo(vo);
+
 			DbServerVO schDbServerVO = new DbServerVO();
 			schDbServerVO.setDb_svr_id(db_svr_id);
 			DbServerVO dbServerVO = (DbServerVO)  cmmnServerInfoService.selectServerInfo(schDbServerVO);
+			
+			String strIpAdr = dbServerVO.getIpadr();
+			
+			AgentInfoVO vo = new AgentInfoVO();
+			vo.setIPADR(strIpAdr);
+			
+			AgentInfoVO agentInfo =  (AgentInfoVO) cmmnServerInfoService.selectAgentInfo(vo);
 			
 			String IP = dbServerVO.getIpadr();
 			int PORT = agentInfo.getSOCKET_PORT();
@@ -321,7 +340,7 @@ public class AccessControlController {
 			HttpServletRequest request, @ModelAttribute("historyVO") HistoryVO historyVO) {
 		JSONObject serverObj = new JSONObject();
 		JSONObject acObj = new JSONObject();
-		AgentInfoVO vo = new AgentInfoVO();
+
 		ClientInfoCmmn cic = new ClientInfoCmmn();
 		try {
 			// 접근제어 수정 이력 남기기
@@ -331,12 +350,17 @@ public class AccessControlController {
 			
 			AES256 dec = new AES256(AES256_KEY.ENC_KEY);
 			int db_svr_id = Integer.parseInt(request.getParameter("db_svr_id"));
-			
-			vo.setDB_SVR_ID(db_svr_id);
-			AgentInfoVO agentInfo =  (AgentInfoVO) cmmnServerInfoService.selectAgentInfo(vo);
+
 			DbServerVO schDbServerVO = new DbServerVO();
 			schDbServerVO.setDb_svr_id(db_svr_id);
 			DbServerVO dbServerVO = (DbServerVO)  cmmnServerInfoService.selectServerInfo(schDbServerVO);
+			
+			String strIpAdr = dbServerVO.getIpadr();
+			
+			AgentInfoVO vo = new AgentInfoVO();
+			vo.setIPADR(strIpAdr);
+			
+			AgentInfoVO agentInfo =  (AgentInfoVO) cmmnServerInfoService.selectAgentInfo(vo);
 			
 			String IP = dbServerVO.getIpadr();
 			int PORT = agentInfo.getSOCKET_PORT();
@@ -399,7 +423,7 @@ public class AccessControlController {
 	@RequestMapping(value = "/deleteAccessControl.do")
 	public @ResponseBody boolean deleteAccessControl(@ModelAttribute("accessControlVO") AccessControlVO accessControlVO,
 			HttpServletRequest request, @ModelAttribute("historyVO") HistoryVO historyVO) {
-		AgentInfoVO vo = new AgentInfoVO();
+	
 		DbServerVO schDbServerVO = new DbServerVO();
 		JSONObject serverObj = new JSONObject();
 		ClientInfoCmmn cic = new ClientInfoCmmn();
@@ -408,10 +432,17 @@ public class AccessControlController {
 			AES256 dec = new AES256(AES256_KEY.ENC_KEY);
 			int db_svr_id = Integer.parseInt(request.getParameter("db_svr_id"));
 			
-			vo.setDB_SVR_ID(db_svr_id);
-			AgentInfoVO agentInfo =  (AgentInfoVO) cmmnServerInfoService.selectAgentInfo(vo);	
+
 			schDbServerVO.setDb_svr_id(db_svr_id);
 			DbServerVO dbServerVO = (DbServerVO)  cmmnServerInfoService.selectServerInfo(schDbServerVO);
+			
+			
+			String strIpAdr = dbServerVO.getIpadr();
+			
+			AgentInfoVO vo = new AgentInfoVO();
+			vo.setIPADR(strIpAdr);
+			
+			AgentInfoVO agentInfo =  (AgentInfoVO) cmmnServerInfoService.selectAgentInfo(vo);
 			
 			String IP = dbServerVO.getIpadr();
 			int PORT = agentInfo.getSOCKET_PORT();
@@ -473,19 +504,25 @@ public class AccessControlController {
 	 */
 	@RequestMapping(value = "/changeAccessControl.do")
 	public @ResponseBody boolean changeAccessControl(HttpServletRequest request,@ModelAttribute("accessControlVO") AccessControlVO accessControlVO) {
-		AgentInfoVO vo = new AgentInfoVO();
+
 		DbServerVO schDbServerVO = new DbServerVO();
 		JSONObject serverObj = new JSONObject();
 		ClientInfoCmmn cic = new ClientInfoCmmn();
 		try {
 			AES256 dec = new AES256(AES256_KEY.ENC_KEY);
 			int db_svr_id = Integer.parseInt(request.getParameter("db_svr_id"));
-					
-			vo.setDB_SVR_ID(db_svr_id);
-			AgentInfoVO agentInfo =  (AgentInfoVO) cmmnServerInfoService.selectAgentInfo(vo);
+
 			schDbServerVO.setDb_svr_id(db_svr_id);
 			DbServerVO dbServerVO = (DbServerVO)  cmmnServerInfoService.selectServerInfo(schDbServerVO);
 			String IP = dbServerVO.getIpadr();
+			
+			String strIpAdr = dbServerVO.getIpadr();
+			
+			AgentInfoVO vo = new AgentInfoVO();
+			vo.setIPADR(strIpAdr);
+			
+			AgentInfoVO agentInfo =  (AgentInfoVO) cmmnServerInfoService.selectAgentInfo(vo);
+			
 			int PORT = agentInfo.getSOCKET_PORT();
 					
 			serverObj.put(ClientProtocolID.SERVER_NAME, dbServerVO.getDb_svr_nm());

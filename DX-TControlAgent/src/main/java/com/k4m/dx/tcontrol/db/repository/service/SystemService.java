@@ -51,14 +51,14 @@ public interface SystemService {
 	 * @param dbServerInfo
 	 * @throws Exception
 	 */
-	public void agentInfoStartMng(DbServerInfoVO dbServerInfo) throws Exception ;
+	public void agentInfoStartMng(String strSocketIp, String strSocketPort) throws Exception ;
 	
 	/**
 	 * Agent 종료
 	 * @param dbServerInfo
 	 * @throws Exception
 	 */
-	public void agentInfoStopMng(DbServerInfoVO dbServerInfo) throws Exception ;
+	public void agentInfoStopMng(String strSocketIp, String strSocketPort) throws Exception ;
 	
 	/**
 	 * 스케쥴실행 로그 seq 조회
