@@ -213,14 +213,14 @@
 				<c:if test="${act == 'u'}">사용자 수정하기</c:if>
 			</caption>
 			<colgroup>
-				<col style="width:100px;" />
+				<col style="width:110px;" />
 				<col />
-				<col style="width:100px;" />
+				<col style="width:110px;" />
 				<col />
 			</colgroup>
 			<tbody>
 				<tr>
-					<th scope="row" class="ico_t1">사용자아이디</th>
+					<th scope="row" class="ico_t1">사용자아이디(*)</th>
 					<td>
 						<c:if test="${act == 'i'}">
 							<input type="text" class="txt" name="usr_id" id="usr_id" value="${get_usr_id}" style="width: 230px;"/>
@@ -230,13 +230,13 @@
 							<input type="text" class="txt" name="usr_id" id="usr_id" value="${get_usr_id}" readonly="readonly"/>
 						</c:if>							
 					</td>
-					<th scope="row" class="ico_t1">사용자명</th>
+					<th scope="row" class="ico_t1">사용자명(*)</th>
 					<td><input type="text" class="txt" name="usr_nm" id="usr_nm" value="${usr_nm}"/></td>
 				</tr>
 				<tr>
-					<th scope="row" class="ico_t1">패스워드</th>
+					<th scope="row" class="ico_t1">패스워드(*)</th>
 					<td><input type="password" class="txt" name="pwd" id="pwd" value="${pwd}"/></td>
-					<th scope="row" class="ico_t1">패스워드확인</th>
+					<th scope="row" class="ico_t1">패스워드확인(*)</th>
 					<td><input type="password" class="txt" name="pwdCheck" id="pwdCheck" value="${pwd}"/></td>
 				</tr>
 			</tbody>

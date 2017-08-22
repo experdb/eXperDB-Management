@@ -711,7 +711,7 @@ box-shadow: 1px 1px 2px 0px rgba(0,0,0,0.5);}
 .paging{padding:10px 0;text-align:center;}
 .paging li{display:inline-block;vertical-align:middle;}
 .paging li > a,
-.paging li > span{display:block;margin:0 3px;width:30px;height:30px;line-height:30px;border:1px solid #99abb0;font-size:13px;color:#99abb0;}
+.paging li > span{display:block;margin:0 3px;width:30px;height:30px;line-height:30px;border:1px solid #99abb0;font-size:10px;color:#99abb0;}
 .paging li > span.curr{border:1px solid #f58220;color:#f58220;}
 .paging li.prev > a,
 .paging li.next > a{width:73px;border:1px solid #f58220;color:#f58220;}

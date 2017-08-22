@@ -110,8 +110,9 @@
 		,  TMP.DB_NM
 		,  TMP.DB_SVR_NM
 		,  TMP.BW_PID
+		,  TMP.DB_ID
 		FROM (
-		SELECT TD.TRF_TRG_CNN_NM,TD.TRF_TRG_ID,(CASE WHEN TD.DB_NM IS NOT NULL THEN TD.DB_NM ELSE '' END) AS DB_NM,S.DB_SVR_NM,TD.BW_PID
+		SELECT TD.TRF_TRG_CNN_NM,TD.TRF_TRG_ID,(CASE WHEN TD.DB_NM IS NOT NULL THEN TD.DB_NM ELSE '' END) AS DB_NM,S.DB_SVR_NM,TD.BW_PID,TD.DB_ID
 			FROM (SELECT T.*,D.DB_SVR_ID,D.DB_NM
 				FROM (SELECT SI.*, MR.DB_ID
 					FROM T_TRFTRGCNG_I SI LEFT OUTER JOIN T_TRFTRGMPP_R MR 
@@ -141,7 +142,7 @@
 		AND S.DB_SVR_NM = #{db_svr_nm}
 	</select>
 	
-    <select id="selectServerDb" resultType="dbidbserverVO">
+    <select id="selectServerDb" resultType="dbidbserverVO" parameterType="dbidbserverVO">
 		/**
 	 	*  Query ID : selectServerDb
 	 	* Description : DB,SERVER 조회
@@ -161,7 +162,8 @@
 		  T_DB_I D
 		, T_DBSVR_I S
 		WHERE D.db_svr_id=S.db_svr_id
-		AND D.db_id=#{db_id}	  	
+		AND D.db_id=#{db_id}	
+		LIMIT 1	
     </select>	
     
     <insert id="insertTransferRelation" parameterType="transferRelationVO">
@@ -293,7 +295,7 @@
     <select id="selectBottlewaterinfo" parameterType="int" resultType="bottlewaterVO">
         /**
 	 	*  Query ID : updateBottleWaterBwpid
-	 	* Description : Bottlewater bwpid 업데이트
+	 	* Description : Bottlewater DB정보
 	 	* Author : 김주영
 	 	**/
 	 	SELECT 

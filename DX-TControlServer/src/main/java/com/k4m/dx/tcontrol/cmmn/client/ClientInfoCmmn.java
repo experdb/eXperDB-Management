@@ -542,13 +542,13 @@ public class ClientInfoCmmn {
 	}
 	
 	//12. 테이블리스트 조회(tableList_select)
-	public JSONObject tableList_select(JSONObject serverObj) {
+	public JSONObject tableList_select(JSONObject serverObj,String IP,int PORT) {
 		JSONArray jsonArray = new JSONArray(); // 객체를 담기위해 JSONArray 선언.
 		JSONObject result = new JSONObject();
 		try {
 			JSONObject objList;
 			
-			ClientAdapter CA = new ClientAdapter(Ip, port);
+			ClientAdapter CA = new ClientAdapter(IP, PORT);
 			CA.open(); 
 				
 			objList = CA.dxT011(ClientTranCodeType.DxT012, serverObj);

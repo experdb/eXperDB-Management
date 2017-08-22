@@ -6,7 +6,6 @@ import java.util.List;
 import org.springframework.stereotype.Repository;
 
 import com.k4m.dx.tcontrol.accesscontrol.service.DbIDbServerVO;
-import com.k4m.dx.tcontrol.admin.dbserverManager.service.DbServerVO;
 import com.k4m.dx.tcontrol.tree.transfer.service.BottlewaterVO;
 import com.k4m.dx.tcontrol.tree.transfer.service.TransferDetailMappingVO;
 import com.k4m.dx.tcontrol.tree.transfer.service.TransferDetailVO;
@@ -107,11 +106,8 @@ public class TreeTransferDAO extends EgovAbstractMapper {
 	 * @param db_id
 	 * @throws SQLException
 	 */
-	@SuppressWarnings({ "unchecked", "deprecation" })
-	public List<DbIDbServerVO> selectServerDb(int db_id) throws SQLException {
-		List<DbIDbServerVO> result = null;
-		result = (List<DbIDbServerVO>) list("treeTransferSql.selectServerDb", db_id);
-		return result;
+	public DbIDbServerVO selectServerDb(int db_id) throws SQLException {
+		return (DbIDbServerVO) selectOne("treeTransferSql.selectServerDb", db_id);
 	}
 
 	/**

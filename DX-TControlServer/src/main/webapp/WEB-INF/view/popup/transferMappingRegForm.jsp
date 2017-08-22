@@ -68,7 +68,7 @@
 			$("#db_svr_nm").val("${result[0].db_svr_nm}").attr("selected", "selected");	
 			$("select[name='db_nm'] option").remove();		
 	       	$.ajax({
-	    		url : "/selectServerDbList.do",
+	    		url : "/selectServerDbLists.do",
 	    		data : {
 	    			db_svr_nm: '${result[0].db_svr_nm}',			
 	    		},
@@ -102,7 +102,7 @@
 	function fn_dbSelect(db_svr_nm){
 		$("select[name='db_nm'] option").remove();		
        	$.ajax({
-    		url : "/selectServerDbList.do",
+    		url : "/selectServerDbLists.do",
     		data : {
     			db_svr_nm: db_svr_nm,			
     		},
@@ -119,20 +119,6 @@
 				$('#db_nm').append(option);
     		}
     	});
-	}
-	
-	var $this = $(this);
-	var $row = $this.parent().parent();
-	$row.addClass('select-detail');
-	var datas = table.rows('.select-detail').data();
-	if(datas.length==1) {
-		var row = datas[0];
-    	$row.removeClass('select-detail');
-			var popup = new OpenPostPopup("base_0004_05");
-			popup.add("sys_nm",row.sys_nm);
-			popup.add("schema_nm",row.schema_nm);
-			popup.add("user_id",row.user_id);
-			popup.show(640,480);
 	}
 	
 	/*DB선택시 -> 테이블리스트 조회*/

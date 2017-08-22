@@ -23,11 +23,13 @@ import com.k4m.dx.tcontrol.admin.dbserverManager.service.DbServerVO;
 import com.k4m.dx.tcontrol.audit.service.AuditVO;
 import com.k4m.dx.tcontrol.cmmn.AES256;
 import com.k4m.dx.tcontrol.cmmn.AES256_KEY;
+import com.k4m.dx.tcontrol.cmmn.CmmnUtils;
 import com.k4m.dx.tcontrol.cmmn.client.ClientAdapter;
 import com.k4m.dx.tcontrol.cmmn.client.ClientProtocolID;
 import com.k4m.dx.tcontrol.cmmn.client.ClientTranCodeType;
 import com.k4m.dx.tcontrol.common.service.AgentInfoVO;
 import com.k4m.dx.tcontrol.common.service.CmmnServerInfoService;
+import com.k4m.dx.tcontrol.common.service.HistoryVO;
 
 /**
  * 감사로그 컨트롤러 클래스를 정의한다.
@@ -53,11 +55,16 @@ public class AuditController {
 	private CmmnServerInfoService cmmnServerInfoService;
 	
 	@RequestMapping(value = "/audit/auditManagement.do")
-	public ModelAndView auditManagement(@ModelAttribute("auditVO") AuditVO auditVO, ModelMap model, HttpServletRequest request) throws Exception{
+	public ModelAndView auditManagement(@ModelAttribute("historyVO") HistoryVO historyVO,@ModelAttribute("auditVO") AuditVO auditVO, ModelMap model, HttpServletRequest request) throws Exception{
 		ModelAndView mv = new ModelAndView();
 
 		//mv.addObject("db_svr_id",workVO.getDb_svr_id());
 		try {
+			// 감사설정 이력 남기기
+			CmmnUtils.saveHistory(request, historyVO);
+			historyVO.setExe_dtl_cd("DX-T0029");
+			accessHistoryService.insertHistory(historyVO);
+			
 			String strDbSvrId = request.getParameter("db_svr_id");
 			int db_svr_id = Integer.parseInt(strDbSvrId);
 			
@@ -293,11 +300,16 @@ public class AuditController {
 	
 	
 	@RequestMapping(value = "/audit/auditLogList.do")
-	public ModelAndView auditLogList(@ModelAttribute("auditVO") AuditVO auditVO, ModelMap model, HttpServletRequest request) throws Exception{
+	public ModelAndView auditLogList(@ModelAttribute("historyVO") HistoryVO historyVO,@ModelAttribute("auditVO") AuditVO auditVO, ModelMap model, HttpServletRequest request) throws Exception{
 		ModelAndView mv = new ModelAndView();
 
 		//mv.addObject("db_svr_id",workVO.getDb_svr_id());
 		try {
+			// 감사설정 이력 남기기
+			CmmnUtils.saveHistory(request, historyVO);
+			historyVO.setExe_dtl_cd("DX-T0030");
+			accessHistoryService.insertHistory(historyVO); 
+			
 			String strDbSvrId = request.getParameter("db_svr_id");
 			int db_svr_id = Integer.parseInt(strDbSvrId);
 			

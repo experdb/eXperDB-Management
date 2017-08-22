@@ -20,7 +20,7 @@ public interface AccessControlService {
 	 * @return
 	 * @throws Exception
 	 */
-	List<DbIDbServerVO> selectServerDb(int db_id) throws Exception;
+	DbIDbServerVO selectServerDb(int db_id) throws Exception;
 
 	/**
 	 * DB접근제어 전체 삭제

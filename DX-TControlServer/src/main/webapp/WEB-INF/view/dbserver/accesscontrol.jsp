@@ -115,35 +115,7 @@
 	            cell.innerHTML = i+1;
 	        } );
 	    } ).draw();
-		
-		//더블 클릭시
-		$('#accessControlTable tbody').on('dblclick','tr',function() {
-			var check= document.getElementsByName("check");
-			var checkCount = 0;
-			for (var i=0; i<check.length; i++){
-				if(check[i].checked ==true){
-					var db_id = check[i].value;
-					checkCount ++;
-				}
-			}
-			var User = table.row(this).data().User;
-			var Seq = table.row(this).data().Seq;
-			var Method = table.row(this).data().Method;
-			var Database = table.row(this).data().Database;
-			var Type = table.row(this).data().Type;
-			var Ipadr = table.row(this).data().Ipadr;
-			var Option = table.row(this).data().Option;
-			
-			var popUrl = "/popup/accessControlRegForm.do?act=u&&db_id="+db_id+"&&User="+User+"&&Seq="+Seq+"&&Method="+Method+"&&Database="+Database+"&&Type="+Type+"&&Ipadr="+Ipadr+"&&Option="+Option; // 서버 url 팝업경로
-			var width = 920;
-			var height = 480;
-			var left = (window.screen.width / 2) - (width / 2);
-			var top = (window.screen.height /2) - (height / 2);
-			var popOption = "width="+width+", height="+height+", top="+top+", left="+left+", resizable=no, scrollbars=no, status=no, toolbar=no, titlebar=yes, location=no,";
-					
-			window.open(popUrl,"",popOption);
-		});	
-		
+				
 	}
 
 	
