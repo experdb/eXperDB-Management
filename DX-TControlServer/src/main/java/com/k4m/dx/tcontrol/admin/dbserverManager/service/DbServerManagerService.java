@@ -71,5 +71,13 @@ public interface DbServerManagerService {
 	 * @throws Exception
 	 */
 	List<Map<String, Object>> selectSvrList(int db_svr_id) throws Exception;
+
+	
+	/**
+	 * Repository DB서버 IP 중복체크
+	 * @param ipadr 
+	 * @throws Exception
+	 */
+	int dbServerIpCheck(String ipadr) throws Exception;
 	
 }

@@ -125,4 +125,11 @@ public class DbServerManagerDAO extends EgovAbstractMapper{
 		return sl;
 	}
 
+
+	public int dbServerIpCheck(String ipadr) {
+		int resultSet = 0;
+		resultSet = (int) getSqlSession().selectOne("dbserverManagerSql.dbServerIpCheck", ipadr);
+		return resultSet;
+	}
+
 }

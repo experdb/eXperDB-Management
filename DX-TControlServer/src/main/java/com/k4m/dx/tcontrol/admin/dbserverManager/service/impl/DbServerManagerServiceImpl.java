@@ -58,4 +58,9 @@ public class DbServerManagerServiceImpl implements DbServerManagerService {
 		return dbServerManagerDAO.selectSvrList(db_svr_id);
 	}
 
+	@Override
+	public int dbServerIpCheck(String ipadr) throws Exception {
+		return dbServerManagerDAO.dbServerIpCheck(ipadr);
+	}
+
 }

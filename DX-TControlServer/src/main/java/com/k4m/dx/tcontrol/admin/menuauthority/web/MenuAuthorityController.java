@@ -1,6 +1,8 @@
 package com.k4m.dx.tcontrol.admin.menuauthority.web;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
@@ -17,9 +19,11 @@ import org.springframework.web.servlet.ModelAndView;
 import com.k4m.dx.tcontrol.admin.accesshistory.service.AccessHistoryService;
 import com.k4m.dx.tcontrol.admin.menuauthority.service.MenuAuthorityService;
 import com.k4m.dx.tcontrol.admin.menuauthority.service.MenuAuthorityVO;
+import com.k4m.dx.tcontrol.admin.usermanager.service.UserManagerService;
 import com.k4m.dx.tcontrol.cmmn.CmmnUtils;
 import com.k4m.dx.tcontrol.common.service.HistoryVO;
 import com.k4m.dx.tcontrol.functions.schedule.service.ScheduleVO;
+import com.k4m.dx.tcontrol.login.service.UserVO;
 
 /**
  *메뉴권한관리 컨트롤러 클래스를 정의한다.
@@ -43,7 +47,12 @@ public class MenuAuthorityController {
 	private MenuAuthorityService menuAuthorityService;
 	
 	@Autowired
+	private UserManagerService userManagerService;
+	
+	@Autowired
 	private AccessHistoryService accessHistoryService;
+	
+	private List<Map<String, Object>> menuAut;
 	
 	/**
 	 * 메뉴권한관리 화면을 보여준다.
@@ -67,6 +76,36 @@ public class MenuAuthorityController {
 			e.printStackTrace();
 		}
 		return mv;
+
+	}
+	
+	
+	/**
+	 * 사용자 리스트를 조회한다.
+	 * 
+	 * @param request
+	 * @return resultSet
+	 * @throws Exception
+	 */
+	@RequestMapping(value = "/selectMenuAutUserManager.do")
+	public @ResponseBody List<UserVO> selectUserManager(HttpServletRequest request) {
+		List<UserVO> resultSet = null;
+		Map<String, Object> param = new HashMap<String, Object>();
+		try {	
+				String type=request.getParameter("type");
+				String search = request.getParameter("search");
+				String use_yn = request.getParameter("use_yn");
+							
+				param.put("type", type);
+				param.put("search", search);
+				param.put("use_yn", use_yn);
+			
+				resultSet = userManagerService.selectUserManager(param);	
+
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return resultSet;
 
 	}
 	
