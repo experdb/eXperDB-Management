@@ -611,10 +611,13 @@ public class AuditController {
 			
 			//String strLogView = (String)objList.get(ClientProtocolID.RESULT_DATA);
 
+			byte[] buffer = (byte[]) objList.get(ClientProtocolID.RESULT_DATA);
+			
+			String strBuffer = new String(buffer);
 			
 			mv.addObject("serverName", dbServerVO.getDb_svr_nm());
 			mv.addObject("db_svr_id", strDbSvrId);
-			mv.addObject("logView", ((String)objList.get(ClientProtocolID.RESULT_DATA)).trim());
+			mv.addObject("logView", strBuffer);
 			
 			
 			
@@ -627,7 +630,7 @@ public class AuditController {
 	}
 	
 	@RequestMapping(value = "/audit/auditLogDownload.do")
-	public boolean auditLogDownload( HttpServletRequest request, HttpServletResponse response) throws Exception{
+	public void auditLogDownload( HttpServletRequest request, HttpServletResponse response) throws Exception{
 		ModelAndView mv = new ModelAndView();
 
 		//mv.addObject("db_svr_id",workVO.getDb_svr_id());
@@ -687,7 +690,7 @@ public class AuditController {
 		//return "redirect:/popup/auditLogDownload";
 		//mv.setViewName("popup/auditLogDownload");
 		//return mv;
-		return true;
+		//return true;
 	}
 	
 	public static void main(String[] args) throws Exception {

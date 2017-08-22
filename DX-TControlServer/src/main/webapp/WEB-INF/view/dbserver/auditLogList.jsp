@@ -128,7 +128,7 @@ function fn_chkExtName(extName) {
 		var param = "db_svr_id=" + db_svr_id + "&file_name=" + file_name;
 
 		var v_size = file_size.replace("Mb", "");
-		var v_time = 1800 * v_size;
+		var v_time = 100 * v_size;
 		
 		fn_buttonState(true);
 		//$("#btnDownload").prop("disabled", true);
@@ -138,7 +138,7 @@ function fn_chkExtName(extName) {
 		
 
 		var form = document.auditForm;
-		form.target = "frmDownload";
+		//form.target = "frmDownload";
 		form.action = "/audit/auditLogDownload.do?" + param ;
 		form.submit();
 		return;
