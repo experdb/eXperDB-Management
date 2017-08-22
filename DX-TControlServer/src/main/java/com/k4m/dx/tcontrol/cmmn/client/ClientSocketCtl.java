@@ -2,18 +2,22 @@ package com.k4m.dx.tcontrol.cmmn.client;
 
 import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
+import java.io.BufferedReader;
 import java.io.ByteArrayOutputStream;
 import java.io.DataInputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.OutputStream;
 import java.math.BigInteger;
 import java.net.Socket;
 import java.net.SocketTimeoutException;
+import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
 
@@ -270,10 +274,66 @@ public class ClientSocketCtl {
 	
 	public void recvFileDownLoad(String fileName, HttpServletRequest request, HttpServletResponse response)
 			throws IOException, SocketTimeoutException, Exception {
+
+	    InputStream is = null; 
+
+	    response.reset();
+
+	    OutputStream outStream = null;
+	    ByteArrayOutputStream bos = null;
+	    
+		String resCLient = request.getHeader("User-Agent");
+		
+
+		if (resCLient.indexOf("MSIE") != -1) {
+			response.setHeader("Content-Disposition", "attachment; filename=" + fileName);
+		} else {
+			// 한글 파일명 처리
+			fileName = new String(fileName.getBytes("utf-8"), "iso-8859-1");
+
+			response.setHeader("Content-Disposition", "attachment; filename=\"" + fileName + "\"");
+			response.setHeader("Content-Type", "application/octet-stream; charset=utf-8");
+
+		}
+		
+		try {
+			outStream = response.getOutputStream();
+			is = client.getInputStream();
+			bos = new ByteArrayOutputStream();
+			
+			
+			byte[] resBytes = null;
+		    byte[] buffer = new byte[1024];
+
+		    int read = -1;
+			while ((read = is.read(buffer)) != -1) {
+				bos.write(buffer, 0, read);
+				
+			}
+			resBytes = bos.toByteArray();
+			outStream.write(resBytes);
+
+			outStream.flush();
+
+		} catch (Exception e) {
+			e.printStackTrace();
+			throw new IOException();
+		} finally {
+			//is.close();
+			if(bos != null) { bos.close(); }
+			if(outStream != null) { outStream.close(); }
+		}
+
+	}
+	
+	public void recvFileDownLoad_old(String fileName, HttpServletRequest request, HttpServletResponse response)
+			throws IOException, SocketTimeoutException, Exception {
 		Socket socket;
 	    DataInputStream dis;
 	    FileOutputStream fos;
 	    BufferedOutputStream bos;
+	    BufferedReader resultReader;
+	    
 	    String filename;
 	    int control = 0;
 	    
@@ -282,48 +342,61 @@ public class ClientSocketCtl {
 		String resCLient = request.getHeader("User-Agent");
 
 		try {
-			dis = new DataInputStream(client.getInputStream());
+			resultReader = new BufferedReader(new   InputStreamReader(client.getInputStream()));
+			//dis = new DataInputStream(client.getInputStream());
 
-			File file = new File(fileName);
+			//File file = new File(fileName);
+			/**
             fos = new FileOutputStream(file);
             bos = new BufferedOutputStream(fos);
-
+            **/
+			
+/*			 FileWriter fw = new FileWriter(file);
+			 BufferedWriter bw = new BufferedWriter(fw);
+*/
          // 바이트 데이터를 전송받으면서 기록
-            int len;
+/*            int len;
             int size = 4096;
             byte[] data = new byte[size];
             while ((len = dis.read(data)) != -1) {
-                bos.write(data, 0, len);
+                //bos.write(data, 0, len);
+            	bw.write(new String(data, 0, len));
+                bw.newLine();
             }
-            
+            fw.flush();
+            fw.close();
+            */
             //System.out.println("수신완료");
             
-            bos.flush();
-            bos.close();
-            fos.close();
-            dis.close();
+           // bos.flush();
+           // bos.close();
+           // fos.close();
+           // dis.close();
 
 
 
-			response.setHeader("Content-Length", Long.toString(file.length()));
+			//response.setHeader("Content-Length", Long.toString(file.length()));
 
-			byte[] bytestream = new byte[(int) file.length()];
+			//byte[] bytestream = new byte[(int) file.length()];
+/*			byte[] bytestream = null;
 
-			FileInputStream filestream = new FileInputStream(file);
+			//FileInputStream filestream = new FileInputStream(file);
 			int i = 0, j = 0; // 파일 스트림을 바이트 배열에 넣는다.
-			while ((i = filestream.read()) != -1) {
+			while ((i = dis.read()) != -1) {
+				bytestream = new byte[j+1];
 				bytestream[j] = (byte) i;
 				j++;
-			}
-			filestream.close(); 
+			}*/
+			
+			//filestream.close(); 
 
 			try {
-				boolean success = file.delete(); 
+				//boolean success = file.delete(); 
 				
 				 //System.out.println("파일삭제");
 				 
-				if (!success)
-					System.out.println("<script>alert('not success')</script>");
+				//if (!success)
+					//System.out.println("<script>alert('not success')</script>");
 			} catch (IllegalArgumentException e) {
 				System.err.println(e.getMessage());
 			}
@@ -343,10 +416,27 @@ public class ClientSocketCtl {
 			
 			 //System.out.println("다운로드");
 			OutputStream outStream = response.getOutputStream(); // 응답 스트림 객체를 생성한다. 
-			outStream.write(bytestream); // 응답 스트림에 파일 바이트 배열을 쓴다. 
+			//outStream.write(bytestream); // 응답 스트림에 파일 바이트 배열을 쓴다. 
+
+/*			int i = 0, j = 0; // 파일 스트림을 바이트 배열에 넣는다.
+			byte[] buffer = new byte[8192]; 
+			while ((i = dis.read()) != -1) {
+				outStream.write(buffer, 0, i);
+			}*/
+			byte[] buffer = new byte[1024]; 
+			int i = 0, j = 0;
+			while ((i = resultReader.read()) != -1) {
+				outStream.write(buffer, 0, i);
+			}
+			
+			outStream.write(buffer);
+			
+			
+			response.setHeader("Content-Length", Long.toString(i));
 			
 			outStream.flush();
 			outStream.close();
+			resultReader.close();
 
 			 //System.out.println("완료");
 		} catch (Exception e) {

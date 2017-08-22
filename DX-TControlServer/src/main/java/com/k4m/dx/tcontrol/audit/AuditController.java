@@ -278,6 +278,7 @@ public class AuditController {
 		CA.open(); 
 		
 		objList = CA.dxT007(ClientTranCodeType.DxT007, ClientProtocolID.COMMAND_CODE_C, serverObj, objSettingInfo);
+		CA.close();
 		
 		boolean blnReturn = true;
 		
@@ -286,7 +287,7 @@ public class AuditController {
 			blnReturn = false;
 		}
 		
-		CA.close();
+		
 		
 		return blnReturn;
 	}
@@ -586,6 +587,8 @@ public class AuditController {
 			
 			JSONObject objList = CA.dxT015_V(jObj);
 			
+			CA.close();
+			
 			String strErrMsg = (String)objList.get(ClientProtocolID.ERR_MSG);
 			String strErrCode = (String)objList.get(ClientProtocolID.ERR_CODE);
 			String strDxExCode = (String)objList.get(ClientProtocolID.DX_EX_CODE);
@@ -601,7 +604,7 @@ public class AuditController {
 			mv.addObject("db_svr_id", strDbSvrId);
 			mv.addObject("logView", ((String)objList.get(ClientProtocolID.RESULT_DATA)).trim());
 			
-			CA.close();
+			
 			
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -612,7 +615,7 @@ public class AuditController {
 	}
 	
 	@RequestMapping(value = "/audit/auditLogDownload.do")
-	public void auditLogDownload( HttpServletRequest request, HttpServletResponse response) throws Exception{
+	public boolean auditLogDownload( HttpServletRequest request, HttpServletResponse response) throws Exception{
 		ModelAndView mv = new ModelAndView();
 
 		//mv.addObject("db_svr_id",workVO.getDb_svr_id());
@@ -663,10 +666,8 @@ public class AuditController {
 			CA.open(); 
 			
 			CA.dxT015_DL(jObj, request, response);
-			
-			//System.out.println("완료===");
-			
-			//CA.close();
+
+			CA.close();
 			
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -674,6 +675,7 @@ public class AuditController {
 		//return "redirect:/popup/auditLogDownload";
 		//mv.setViewName("popup/auditLogDownload");
 		//return mv;
+		return true;
 	}
 	
 	public static void main(String[] args) throws Exception {
