@@ -177,4 +177,72 @@
 		AND A.DB_SVR_ID = B.DB_SVR_ID
 		AND A.USR_ID = #{usr_id}
 	</select>
+	
+	
+	<update id="updateUsrDBSrvAutInfo" parameterType="object">
+	   	/**
+	 	* Query ID : updateUsrDBSrvAutInfo
+	 	* Description : 사용자 DB서버권한 저장
+	 	* Author : 변승우
+	 	**/
+	 	UPDATE T_USRDBSVRAUT_I
+	 	SET
+	            BCK_CNG_AUT_YN = #{bck_cng_aut_yn} 
+				, BCK_HIST_AUT_YN = #{bck_hist_aut_yn} 
+				, ACS_CNTR_AUT_YN = #{acs_cntr_aut_yn} 
+				, ADT_CNG_AUT_YN = #{adt_cng_aut_yn} 
+				, ADT_HIST_AUT_YN = #{adt_hist_aut_yt} 	 	
+	 	WHERE USR_ID=#{usr_id}
+	 	AND DB_SVR_ID = #{db_svr_id}::numeric
+	</update>	
+	
+	
+	<select id="selectDBAutInfo" resultType="HashMap">
+		/**
+	 	*  Query ID : selectDBAutInfo
+	 	* Description : 서버 DB정보 조회
+	 	* Author : 변승우
+	 	**/
+		SELECT 
+				A.DB_SVR_ID
+		        , A.DB_SVR_NM
+		        , B.DB_ID
+		        , B.DB_NM
+		FROM T_DBSVR_I A , T_DB_I B
+		WHERE A.DB_SVR_ID = B.DB_SVR_ID	  
+	 </select>
+	 
+	 	<select id="selectUsrDBAutInfo" resultType="HashMap">
+		/**
+	 	*  Query ID : selectUsrDBAutInfo
+	 	* Description : 유저 서버 DB정보 조회
+	 	* Author : 변승우
+	 	**/
+		SELECT 
+				USR_DB_AUT_ID
+		        , DB_SVR_ID
+		        , DB_ID
+		        , AUT_YN
+		        , FRST_REGR_ID
+				, FRST_REG_DTM
+				, LST_MDFR_ID
+				, LST_MDF_DTM
+		FROM T_USRDBAUT_I
+		WHERE USR_ID = #{usr_id}	  
+	 </select>
+	 
+	 
+	 <update id="updateUsrDBAutInfo" parameterType="object">
+	   	/**
+	 	* Query ID : updateUsrDBAutInfo
+	 	* Description : 사용자 DB권한 저장
+	 	* Author : 변승우
+	 	**/
+	 	UPDATE T_USRDBAUT_I
+	 	SET
+	            AUT_YN = #{aut_yn} 	
+	 	WHERE USR_ID=#{usr_id}
+	 	AND DB_SVR_ID = #{db_svr_id}::numeric
+	 	AND DB_ID = #{db_id}::numeric
+	</update>	
 </mapper>

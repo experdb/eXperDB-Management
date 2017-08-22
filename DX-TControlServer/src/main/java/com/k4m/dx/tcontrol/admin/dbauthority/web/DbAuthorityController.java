@@ -6,6 +6,8 @@ import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 
+import org.json.simple.JSONArray;
+import org.json.simple.parser.JSONParser;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -122,6 +124,7 @@ public class DbAuthorityController {
 
 	}
 	
+	
 	/**
 	 * 서버 권한정보를 조회한다.
 	 * 
@@ -132,13 +135,114 @@ public class DbAuthorityController {
 	@RequestMapping(value = "/selectUsrDBSrvAutInfo.do")
 	public @ResponseBody List<Map<String, Object>> selectUsrDBSrvAutInfo(HttpServletRequest request) {
 		List<Map<String, Object>> resultSet = null;
-		String usr_id = request.getParameter("usr_id");
+		
+		String usr_id ="";
+		
+		if(request.getParameter("usr_id") == null){
+			usr_id = (String) request.getSession().getAttribute("usr_id");
+		}else{
+			usr_id = request.getParameter("usr_id");
+		}
 		try {	
 				resultSet = dbAuthorityService.selectUsrDBSrvAutInfo(usr_id);	
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 		return resultSet;
+	}
+	
+	
+	/**
+	 * DB서버권한 업데이트
+	 * 
+	 * @param
+	 * @return ModelAndView mv
+	 * @throws Exception
+	 */
+	@RequestMapping(value = "/updateUsrDBSrvAutInfo.do")
+	@ResponseBody
+	public void updateUsrDBSrvAutInfo(HttpServletRequest request) {
 
+		try {
+			String strRows = request.getParameter("datasArr").toString().replaceAll("&quot;", "\"");
+			JSONArray rows = (JSONArray) new JSONParser().parse(strRows);
+			
+			for(int i=0; i<rows.size(); i++){
+				dbAuthorityService.updateUsrDBSrvAutInfo(rows.get(i));
+			}
+
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+	
+	
+	/**
+	 * 디비 권한정보를 조회한다.
+	 * 
+	 * @param request
+	 * @return resultSet
+	 * @throws Exception
+	 */
+	@RequestMapping(value = "/selectDBAutInfo.do")
+	public @ResponseBody List<Map<String, Object>> selectDBAutInfo(HttpServletRequest request) {
+		List<Map<String, Object>> resultSet = null;		
+		try {	
+			resultSet = dbAuthorityService.selectDBAutInfo();	
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return resultSet;
+	}
+	
+	
+	/**
+	 * 디비 유저 권한정보를 조회한다.
+	 * 
+	 * @param request
+	 * @return resultSet
+	 * @throws Exception
+	 */
+	@RequestMapping(value = "/selectUsrDBAutInfo.do")
+	public @ResponseBody List<Map<String, Object>> selectUsrDBAutInfo(HttpServletRequest request) {
+		List<Map<String, Object>> resultSet = null;		
+		try {	
+			String usr_id ="";
+			
+			if(request.getParameter("usr_id") == null){
+				usr_id = (String) request.getSession().getAttribute("usr_id");
+			}else{
+				usr_id = request.getParameter("usr_id");
+			}
+				resultSet = dbAuthorityService.selectUsrDBAutInfo(usr_id);	
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return resultSet;
+	}
+	
+	
+	/**
+	 * DB권한 업데이트
+	 * 
+	 * @param
+	 * @return ModelAndView mv
+	 * @throws Exception
+	 */
+	@RequestMapping(value = "/updateUsrDBAutInfo.do")
+	@ResponseBody
+	public void updateUsrDBAutInfo(HttpServletRequest request) {
+
+		try {
+			String strRows = request.getParameter("datasArr").toString().replaceAll("&quot;", "\"");
+			JSONArray rows = (JSONArray) new JSONParser().parse(strRows);
+			
+			for(int i=0; i<rows.size(); i++){
+				dbAuthorityService.updateUsrDBAutInfo(rows.get(i));
+			}
+
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 	}
 }

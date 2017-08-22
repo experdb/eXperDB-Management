@@ -61,4 +61,41 @@ public interface DbAuthorityService {
 	 */
 	List<Map<String, Object>> selectUsrDBSrvAutInfo(String usr_id) throws Exception;
 
+
+	/**
+	 *  유저 디비서버권한 저장
+	 * @param usr_id 
+	 * @param 
+	 * @throws Exception
+	 */
+	void updateUsrDBSrvAutInfo(Object object) throws Exception;
+
+
+	/**
+	 * 디비권한 정보 조회
+	 * @param usr_id 
+	 * @param 
+	 * @throws Exception
+	 */
+	List<Map<String, Object>> selectDBAutInfo() throws Exception;
+
+
+	/**
+	 * 유저 디비권한 정보 조회
+	 * @param usr_id 
+	 * @param usr_id 
+	 * @param 
+	 * @throws Exception
+	 */
+	List<Map<String, Object>> selectUsrDBAutInfo(String usr_id) throws Exception;
+
+
+	/**
+	 *  유저 디비권한 저장
+	 * @param usr_id 
+	 * @param 
+	 * @throws Exception
+	 */
+	void updateUsrDBAutInfo(Object object) throws Exception;
+
 }

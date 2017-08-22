@@ -15,7 +15,7 @@
 					alert("실패");
 				},
 				success : function(result) {
-					GetJsonData(result)
+					fn_UsrDBSrvAut(result);					
 				}
 			});   
    			
@@ -50,6 +50,8 @@
             });
             
         });
+	
+
         
 /*   	function GetJsonData(data) {
 		var parseData = $.parseJSON(data);
@@ -68,9 +70,26 @@
 	}  */
 	
 	
+	function fn_UsrDBSrvAut(data){
+	  	$.ajax({
+			url : "/selectUsrDBSrvAutInfo.do",
+			data : {},
+			dataType : "json",
+			type : "post",
+			error : function(xhr, status, error) {
+				alert("실패")
+			},
+			success : function(result) {
+				GetJsonData(data, result);
+			}
+		})
+	}	
 	
-  		function GetJsonData(data) {
+
+	
+  		function GetJsonData(data, aut) {
 			var parseData = $.parseJSON(data);
+
 		 	var html1 = "";
  /*   			html1 += '<div class="lnb_tit">DB 서버';
 			html1 += '<div class="all_btn">';
@@ -86,15 +105,25 @@
 				html1+='		<ul class="depth_2">';
 				html1+='			<li class="ico2_1"><a href="#n"><img src="../images/ico_lnb_6.png" id="treeImg">백업관리</a>';
 				html1+='				<ul class="depth_3">';
-				html1+='					<li class="ico3_1"><a href=/backup/workList.do?db_svr_id='+item.db_svr_id+' onClick=javascript:fn_GoLink("/backup/workList.do?db_svr_id='+item.db_svr_id+'");><img src="../images/ico_lnb_10.png" id="treeImg">백업설정</a></li>';
-				html1+='					<li class="ico3_2"><a href=/backup/workLogList.do?db_svr_id='+item.db_svr_id+' onClick=javascript:fn_GoLink("/backup/workLogList.do?db_svr_id='+item.db_svr_id+'");><img src="../images/ico_lnb_11.png" id="treeImg">백업이력</a></li>';
+				if(aut[index].bck_cng_aut_yn == "Y"){
+					html1+='					<li class="ico3_1"><a href=/backup/workList.do?db_svr_id='+item.db_svr_id+' onClick=javascript:fn_GoLink("/backup/workList.do?db_svr_id='+item.db_svr_id+'");><img src="../images/ico_lnb_10.png" id="treeImg">백업설정</a></li>';
+				}
+				if(aut[index].bck_hist_aut_yn == "Y"){
+					html1+='					<li class="ico3_2"><a href=/backup/workLogList.do?db_svr_id='+item.db_svr_id+' onClick=javascript:fn_GoLink("/backup/workLogList.do?db_svr_id='+item.db_svr_id+'");><img src="../images/ico_lnb_11.png" id="treeImg">백업이력</a></li>';
+				}
 				html1+='				</ul>';
 				html1+='			</li>';
 				html1+='			<li class="ico2_2"><a href="#n"><img src="../images/ico_lnb_7.png" id="treeImg">접근제어관리</a>';
 				html1+='				<ul class="depth_3">';
-				html1+='					<li class="ico3_3"><a href=/accessControl.do?db_svr_id='+item.db_svr_id+' onClick=javascript:fn_GoLink("/accessControl.do?db_svr_id='+item.db_svr_id+'");><img src="../images/ico_lnb_12.png" id="treeImg">서버접근제어</a></li>';
-				html1+='					<li class="ico3_4"><a href=/audit/auditManagement.do?db_svr_id='+item.db_svr_id+' onClick=javascript:fn_GoLink("/audit/auditManagement.do?db_svr_id='+item.db_svr_id+'");><img src="../images/ico_lnb_13.png" id="treeImg">감사설정</a></li>';
-				html1+='					<li class="ico3_5"><a href=/audit/auditLogList.do?db_svr_id='+item.db_svr_id+' onClick=javascript:fn_GoLink("/audit/auditLogList.do?db_svr_id='+item.db_svr_id+'");><img src="../images/ico_lnb_14.png" id="treeImg">감사이력</a></li>';
+				if(aut[index].acs_cntr_aut_yn == "Y"){
+					html1+='					<li class="ico3_3"><a href=/accessControl.do?db_svr_id='+item.db_svr_id+' onClick=javascript:fn_GoLink("/accessControl.do?db_svr_id='+item.db_svr_id+'");><img src="../images/ico_lnb_12.png" id="treeImg">서버접근제어</a></li>';
+				}
+				if(aut[index].adt_cng_aut_yn == "Y"){
+					html1+='					<li class="ico3_4"><a href=/audit/auditManagement.do?db_svr_id='+item.db_svr_id+' onClick=javascript:fn_GoLink("/audit/auditManagement.do?db_svr_id='+item.db_svr_id+'");><img src="../images/ico_lnb_13.png" id="treeImg">감사설정</a></li>';
+				}
+				if(aut[index].adt_hist_aut_yn == "Y"){
+					html1+='					<li class="ico3_5"><a href=/audit/auditLogList.do?db_svr_id='+item.db_svr_id+' onClick=javascript:fn_GoLink("/audit/auditLogList.do?db_svr_id='+item.db_svr_id+'");><img src="../images/ico_lnb_14.png" id="treeImg">감사이력</a></li>';
+				}
 				html1+='				</ul>';
 				html1+='			</li>';
 				html1+='		</ul>';
