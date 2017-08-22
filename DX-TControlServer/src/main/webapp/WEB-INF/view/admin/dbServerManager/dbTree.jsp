@@ -217,6 +217,7 @@ function fn_regRe_popup(){
  ******************************************************** */
 function fn_insertDB(){
 	var db_svr_id = table_dbServer.row('.selected').data().db_svr_id;
+	var ipadr = table_dbServer.row('.selected').data().ipadr;
 	var datas = table_db.rows('.selected').data();
 
 		var rows = [];
@@ -228,6 +229,7 @@ function fn_insertDB(){
 				url : "/insertTreeDB.do",
 				data : {
 					db_svr_id : db_svr_id,
+					ipadr : ipadr,
 					rows : JSON.stringify(rows)
 				},
 				async:true,
