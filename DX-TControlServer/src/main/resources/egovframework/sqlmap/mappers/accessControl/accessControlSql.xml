@@ -24,7 +24,7 @@
 		AND S.db_svr_id=#{db_svr_id}	  	
     </select>
     
-    <select id="selectServerDb" resultType="dbidbserverVO">
+    <select id="selectServerDb" resultType="dbidbserverVO" parameterType="dbidbserverVO">
 		/**
 	 	*  Query ID : selectServerDb
 	 	* Description : DB,SERVER 조회
@@ -42,7 +42,8 @@
 			, S.svr_spr_scm_pwd
 		FROM T_DB_I D, T_DBSVR_I S
 		WHERE D.db_svr_id=S.db_svr_id
-		AND D.db_id=#{db_id}	  	
+		AND D.db_id=#{db_id}
+		LIMIT 1		  	
     </select>
  	   
 	<delete id="deleteDbAccessControl" parameterType="int">

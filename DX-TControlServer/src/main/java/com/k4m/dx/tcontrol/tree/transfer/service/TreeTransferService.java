@@ -3,7 +3,6 @@ package com.k4m.dx.tcontrol.tree.transfer.service;
 import java.util.List;
 
 import com.k4m.dx.tcontrol.accesscontrol.service.DbIDbServerVO;
-import com.k4m.dx.tcontrol.admin.dbserverManager.service.DbServerVO;
 
 public interface TreeTransferService {
 
@@ -70,7 +69,7 @@ public interface TreeTransferService {
 	 * @return
 	 * @throws Exception
 	 */
-	List<DbIDbServerVO> selectServerDb(int db_id) throws Exception;
+	DbIDbServerVO selectServerDb(int db_id) throws Exception;
 
 	/**
 	 * 전송대상매핑관계 등록

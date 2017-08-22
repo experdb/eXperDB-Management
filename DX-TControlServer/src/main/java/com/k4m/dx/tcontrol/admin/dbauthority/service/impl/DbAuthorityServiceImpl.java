@@ -60,4 +60,15 @@ public class DbAuthorityServiceImpl implements DbAuthorityService{
 		dbAuthorityDAO.deleteDbAuthority(string);
 	}
 
+	
+	/**
+	 *  유저 디비서버권한 정보 조회
+	 * @param 
+	 * @throws Exception
+	 */
+	@Override
+	public List<Map<String, Object>> selectUsrDBSrvAutInfo(String usr_id) throws Exception {
+		return dbAuthorityDAO.selectUsrDBSrvAutInfo(usr_id);
+	}
+
 }

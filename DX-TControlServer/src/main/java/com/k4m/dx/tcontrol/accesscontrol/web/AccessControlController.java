@@ -104,14 +104,10 @@ public class AccessControlController {
 			
 			DbServerVO schDbServerVO = new DbServerVO();
 			schDbServerVO.setDb_svr_id(db_svr_id);
-			
-			DbServerVO dbServerVO = (DbServerVO)  cmmnServerInfoService.selectServerInfo(schDbServerVO);
-			
-			String strIpAdr = dbServerVO.getIpadr();
-			
+			DbServerVO dbServerVO = (DbServerVO)  cmmnServerInfoService.selectServerInfo(schDbServerVO);		
+			String strIpAdr = dbServerVO.getIpadr();		
 			AgentInfoVO vo = new AgentInfoVO();
-			vo.setIPADR(strIpAdr);
-			
+			vo.setIPADR(strIpAdr);		
 			AgentInfoVO agentInfo =  (AgentInfoVO) cmmnServerInfoService.selectAgentInfo(vo);
 	
 			if(agentInfo == null) {
@@ -190,26 +186,35 @@ public class AccessControlController {
 	public ModelAndView connectorReg(@ModelAttribute("accessControlVO") AccessControlVO accessControlVO,
 			HttpServletRequest request, @ModelAttribute("historyVO") HistoryVO historyVO) {
 		ModelAndView mv = new ModelAndView();
-		List<DbIDbServerVO> resultSet = null;
 		Map<String, Object> result = new HashMap<String, Object>();
+		JSONObject serverObj = new JSONObject();
 		try {
-			AES256 aes = new AES256(AES256_KEY.ENC_KEY);
+			AES256 dec = new AES256(AES256_KEY.ENC_KEY);
 			String act = request.getParameter("act");
 			CmmnUtils.saveHistory(request, historyVO);
 
 			int db_id = Integer.parseInt(request.getParameter("db_id"));
-			resultSet = accessControlService.selectServerDb(db_id);
-
+			DbIDbServerVO dbIDbServerVO = (DbIDbServerVO) accessControlService.selectServerDb(db_id);
+			
+			DbServerVO schDbServerVO = new DbServerVO();
+			schDbServerVO.setDb_svr_id(dbIDbServerVO.getDb_svr_id());
+			DbServerVO dbServerVO =(DbServerVO) cmmnServerInfoService.selectServerInfo(schDbServerVO);
+			String strIpAdr = dbServerVO.getIpadr();	
+			AgentInfoVO vo = new AgentInfoVO();
+			vo.setIPADR(strIpAdr);
+			AgentInfoVO agentInfo =(AgentInfoVO) cmmnServerInfoService.selectAgentInfo(vo);
+			
+			String IP = dbServerVO.getIpadr();
+			int PORT = agentInfo.getSOCKET_PORT();
+			
 			/* TODO ip,port ROLE LIST조회 */
-			JSONObject serverObj = new JSONObject();
-
-			serverObj.put(ClientProtocolID.SERVER_NAME, resultSet.get(0).getDb_svr_nm());
-			serverObj.put(ClientProtocolID.SERVER_IP, resultSet.get(0).getIpadr());
-			serverObj.put(ClientProtocolID.SERVER_PORT, resultSet.get(0).getPortno());
-			serverObj.put(ClientProtocolID.DATABASE_NAME, resultSet.get(0).getDft_db_nm());
-			serverObj.put(ClientProtocolID.USER_ID, resultSet.get(0).getSvr_spr_usr_id());
-			serverObj.put(ClientProtocolID.USER_PWD, aes.aesDecode(resultSet.get(0).getSvr_spr_scm_pwd()));
-
+			serverObj.put(ClientProtocolID.SERVER_NAME, dbServerVO.getDb_svr_nm());
+			serverObj.put(ClientProtocolID.SERVER_IP, dbServerVO.getIpadr());
+			serverObj.put(ClientProtocolID.SERVER_PORT, dbServerVO.getPortno());
+			serverObj.put(ClientProtocolID.DATABASE_NAME, dbServerVO.getDft_db_nm());
+			serverObj.put(ClientProtocolID.USER_ID, dbServerVO.getSvr_spr_usr_id());
+			serverObj.put(ClientProtocolID.USER_PWD, dec.aesDecode(dbServerVO.getSvr_spr_scm_pwd()));
+			
 			ClientInfoCmmn cic = new ClientInfoCmmn();
 			result = cic.role_List(serverObj);
 			
@@ -231,10 +236,11 @@ public class AccessControlController {
 				mv.addObject("ctf_tp_nm",request.getParameter("Type").equals("undefined") ? "" : request.getParameter("Type"));
 				mv.addObject("opt_nm",request.getParameter("Option").equals("undefined") ? "" : request.getParameter("Option"));
 			}
+			
 			mv.addObject("result", result);
-			mv.addObject("db_svr_nm", resultSet.get(0).getDb_svr_nm());
-			mv.addObject("db_nm", resultSet.get(0).getDb_nm());
-			mv.addObject("db_svr_id", resultSet.get(0).getDb_svr_id());
+			mv.addObject("db_svr_nm", dbIDbServerVO.getDb_svr_nm());
+			mv.addObject("db_nm", dbIDbServerVO.getDb_nm());
+			mv.addObject("db_svr_id", dbIDbServerVO.getDb_svr_id());
 			mv.addObject("db_id", db_id);
 			mv.addObject("act", act);
 			mv.setViewName("popup/accessControlRegForm");
@@ -273,13 +279,10 @@ public class AccessControlController {
 
 			DbServerVO schDbServerVO = new DbServerVO();
 			schDbServerVO.setDb_svr_id(db_svr_id);
-			DbServerVO dbServerVO = (DbServerVO)  cmmnServerInfoService.selectServerInfo(schDbServerVO);
-			
-			String strIpAdr = dbServerVO.getIpadr();
-			
+			DbServerVO dbServerVO = (DbServerVO)  cmmnServerInfoService.selectServerInfo(schDbServerVO);	
+			String strIpAdr = dbServerVO.getIpadr();	
 			AgentInfoVO vo = new AgentInfoVO();
-			vo.setIPADR(strIpAdr);
-			
+			vo.setIPADR(strIpAdr);	
 			AgentInfoVO agentInfo =  (AgentInfoVO) cmmnServerInfoService.selectAgentInfo(vo);
 			
 			String IP = dbServerVO.getIpadr();
@@ -354,12 +357,9 @@ public class AccessControlController {
 			DbServerVO schDbServerVO = new DbServerVO();
 			schDbServerVO.setDb_svr_id(db_svr_id);
 			DbServerVO dbServerVO = (DbServerVO)  cmmnServerInfoService.selectServerInfo(schDbServerVO);
-			
 			String strIpAdr = dbServerVO.getIpadr();
-			
 			AgentInfoVO vo = new AgentInfoVO();
 			vo.setIPADR(strIpAdr);
-			
 			AgentInfoVO agentInfo =  (AgentInfoVO) cmmnServerInfoService.selectAgentInfo(vo);
 			
 			String IP = dbServerVO.getIpadr();
@@ -432,16 +432,11 @@ public class AccessControlController {
 			AES256 dec = new AES256(AES256_KEY.ENC_KEY);
 			int db_svr_id = Integer.parseInt(request.getParameter("db_svr_id"));
 			
-
 			schDbServerVO.setDb_svr_id(db_svr_id);
 			DbServerVO dbServerVO = (DbServerVO)  cmmnServerInfoService.selectServerInfo(schDbServerVO);
-			
-			
 			String strIpAdr = dbServerVO.getIpadr();
-			
 			AgentInfoVO vo = new AgentInfoVO();
 			vo.setIPADR(strIpAdr);
-			
 			AgentInfoVO agentInfo =  (AgentInfoVO) cmmnServerInfoService.selectAgentInfo(vo);
 			
 			String IP = dbServerVO.getIpadr();
@@ -515,12 +510,9 @@ public class AccessControlController {
 			schDbServerVO.setDb_svr_id(db_svr_id);
 			DbServerVO dbServerVO = (DbServerVO)  cmmnServerInfoService.selectServerInfo(schDbServerVO);
 			String IP = dbServerVO.getIpadr();
-			
 			String strIpAdr = dbServerVO.getIpadr();
-			
 			AgentInfoVO vo = new AgentInfoVO();
 			vo.setIPADR(strIpAdr);
-			
 			AgentInfoVO agentInfo =  (AgentInfoVO) cmmnServerInfoService.selectAgentInfo(vo);
 			
 			int PORT = agentInfo.getSOCKET_PORT();

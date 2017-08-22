@@ -22,7 +22,7 @@ public class AccessControlServiceImpl implements AccessControlService {
 	}
 
 	@Override
-	public List<DbIDbServerVO> selectServerDb(int db_id) throws Exception {
+	public DbIDbServerVO selectServerDb(int db_id) throws Exception {
 		return accessControlDAO.selectServerDb(db_id);
 	}
 

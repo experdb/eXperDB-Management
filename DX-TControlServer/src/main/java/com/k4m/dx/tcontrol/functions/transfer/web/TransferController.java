@@ -269,33 +269,38 @@ public class TransferController {
 		ModelAndView mv = new ModelAndView();
 		List<ConnectorVO> result = null;
 		try {
-			String act = request.getParameter("act");
-			
-			if (act.equals("i")) {
-				// Connector 등록 팝업 이력 남기기
-				CmmnUtils.saveHistory(request, historyVO);
-				historyVO.setExe_dtl_cd("DX-T0013");
-				accessHistoryService.insertHistory(historyVO);
-			}
-			
-			if (act.equals("u")) {
-				// Connector수정 이력 남기기
-				CmmnUtils.saveHistory(request, historyVO);
-				historyVO.setExe_dtl_cd("DX-T0012_03");
-				accessHistoryService.insertHistory(historyVO);
+			CmmnUtils cu = new CmmnUtils();
+			menuAut = cu.selectMenuAut(menuAuthorityService, "14");
+			if(menuAut.get(0).get("read_aut_yn").equals("N")){
+				mv.setViewName("error/autError");
+			}else{		
+				String act = request.getParameter("act");
 				
-				int cnr_id = Integer.parseInt(request.getParameter("cnr_id"));
-				result = transferService.selectDetailConnectorRegister(cnr_id);
-				mv.addObject("cnr_id", result.get(0).getCnr_id());
-				mv.addObject("cnr_nm", result.get(0).getCnr_nm());
-				mv.addObject("cnr_ipadr", result.get(0).getCnr_ipadr());
-				mv.addObject("cnr_portno", result.get(0).getCnr_portno());
-				mv.addObject("cnr_cnn_tp_cd", result.get(0).getCnr_cnn_tp_cd());
+				if (act.equals("i")) {
+					// Connector 등록 팝업 이력 남기기
+					CmmnUtils.saveHistory(request, historyVO);
+					historyVO.setExe_dtl_cd("DX-T0013");
+					accessHistoryService.insertHistory(historyVO);
+				}
+				
+				if (act.equals("u")) {
+					// Connector수정 이력 남기기
+					CmmnUtils.saveHistory(request, historyVO);
+					historyVO.setExe_dtl_cd("DX-T0012_03");
+					accessHistoryService.insertHistory(historyVO);
+					
+					int cnr_id = Integer.parseInt(request.getParameter("cnr_id"));
+					result = transferService.selectDetailConnectorRegister(cnr_id);
+					mv.addObject("cnr_id", result.get(0).getCnr_id());
+					mv.addObject("cnr_nm", result.get(0).getCnr_nm());
+					mv.addObject("cnr_ipadr", result.get(0).getCnr_ipadr());
+					mv.addObject("cnr_portno", result.get(0).getCnr_portno());
+					mv.addObject("cnr_cnn_tp_cd", result.get(0).getCnr_cnn_tp_cd());
+				}
+	
+				mv.addObject("act", act);
+				mv.setViewName("popup/connectorRegForm");
 			}
-
-			mv.addObject("act", act);
-			mv.setViewName("popup/connectorRegForm");
-			
 
 			
 		} catch (Exception e) {

@@ -34,11 +34,8 @@ public class AccessControlDAO extends EgovAbstractMapper {
 	 * @return List
 	 * @throws Exception
 	 */
-	@SuppressWarnings({ "unchecked", "deprecation" })
-	public List<DbIDbServerVO> selectServerDb(int db_id) throws SQLException {
-		List<DbIDbServerVO> result = null;
-		result = (List<DbIDbServerVO>) list("accessControlSql.selectServerDb", db_id);
-		return result;
+	public DbIDbServerVO selectServerDb(int db_id) throws SQLException {
+		return (DbIDbServerVO) selectOne("treeTransferSql.selectServerDb", db_id);
 	}
 
 	/**

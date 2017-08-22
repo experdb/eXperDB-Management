@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.k4m.dx.tcontrol.admin.accesshistory.service.AccessHistoryService;
+import com.k4m.dx.tcontrol.admin.dbauthority.service.DbAuthorityService;
 import com.k4m.dx.tcontrol.admin.usermanager.service.UserManagerService;
 import com.k4m.dx.tcontrol.cmmn.CmmnUtils;
 import com.k4m.dx.tcontrol.common.service.HistoryVO;
@@ -43,7 +44,8 @@ public class DbAuthorityController {
 	@Autowired
 	private UserManagerService userManagerService;
 	
-	
+	@Autowired
+	private DbAuthorityService dbAuthorityService;
 	/**
 	 * DB권한관리 화면을 보여준다.
 	 * 
@@ -92,6 +94,47 @@ public class DbAuthorityController {
 			
 				resultSet = userManagerService.selectUserManager(param);	
 
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return resultSet;
+
+	}
+	
+	
+	/**
+	 * 서버 권한정보를 조회한다.
+	 * 
+	 * @param request
+	 * @return resultSet
+	 * @throws Exception
+	 */
+	@RequestMapping(value = "/selectDBSrvAutInfo.do")
+	public @ResponseBody List<Map<String, Object>> selectDBSrvAutInfo(HttpServletRequest request) {
+		List<Map<String, Object>> resultSet = null;
+		
+		try {	
+				resultSet = dbAuthorityService.selectSvrList();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return resultSet;
+
+	}
+	
+	/**
+	 * 서버 권한정보를 조회한다.
+	 * 
+	 * @param request
+	 * @return resultSet
+	 * @throws Exception
+	 */
+	@RequestMapping(value = "/selectUsrDBSrvAutInfo.do")
+	public @ResponseBody List<Map<String, Object>> selectUsrDBSrvAutInfo(HttpServletRequest request) {
+		List<Map<String, Object>> resultSet = null;
+		String usr_id = request.getParameter("usr_id");
+		try {	
+				resultSet = dbAuthorityService.selectUsrDBSrvAutInfo(usr_id);	
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

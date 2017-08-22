@@ -49,14 +49,14 @@
 		$('#transferTargetTable tbody').on('dblclick','tr',function() {
 				var data = table.row(this).data();
 				var name = data.name;
-				var popUrl = "/popup/transferTargetRegForm.do?act=u&&cnr_id=${cnr_id}&&name="+name; // 서버 url 팝업경로
-				var width = 930;
-				var height = 630;
-				var left = (window.screen.width / 2) - (width / 2);
-				var top = (window.screen.height /2) - (height / 2);
-				var popOption = "width="+width+", height="+height+", top="+top+", left="+left+", resizable=no, scrollbars=no, status=no, toolbar=no, titlebar=yes, location=no,";
-				
-				window.open(popUrl,"",popOption);
+	 			var popUrl = "/popup/transferTargetDetailRegForm.do?&&cnr_id=${cnr_id}&&name="+name; // 서버 url 팝업경로
+	 			var width = 930;
+	 			var height = 635;
+	 			var left = (window.screen.width / 2) - (width / 2);
+	 			var top = (window.screen.height /2) - (height / 2);
+	 			var popOption = "width="+width+", height="+height+", top="+top+", left="+left+", resizable=no, scrollbars=no, status=no, toolbar=no, titlebar=yes, location=no,";
+	 			
+	 			window.open(popUrl,"",popOption);
 			});	
 		
 		//상세조회 클릭시

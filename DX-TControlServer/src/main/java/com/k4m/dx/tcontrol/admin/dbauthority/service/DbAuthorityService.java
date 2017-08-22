@@ -52,4 +52,13 @@ public interface DbAuthorityService {
 	 */
 	void deleteDbAuthority(String string) throws Exception;
 
+	
+	/**
+	 *  유저 디비서버권한 정보 조회
+	 * @param usr_id 
+	 * @param 
+	 * @throws Exception
+	 */
+	List<Map<String, Object>> selectUsrDBSrvAutInfo(String usr_id) throws Exception;
+
 }

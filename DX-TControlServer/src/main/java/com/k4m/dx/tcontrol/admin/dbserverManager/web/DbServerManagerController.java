@@ -14,6 +14,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
@@ -430,5 +431,27 @@ public class DbServerManagerController {
 			e.printStackTrace();
 		}
 		return mv;
+	}
+	
+	
+	/**
+	 * 중복 아이디를 체크한다.
+	 * 
+	 * @param usr_id
+	 * @return
+	 * @throws Exception
+	 */
+	@RequestMapping(value = "/dbServerIpCheck.do")
+	public @ResponseBody String dbServerIpCheck(@RequestParam("ipadr") String ipadr) {
+		try {
+			int resultSet = dbServerManagerService.dbServerIpCheck(ipadr);
+			if (resultSet > 0) {
+				// 중복값이 존재함.
+				return "false";
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return "true";
 	}
 }

@@ -45,6 +45,7 @@
 			}, 
 			{ data : "", className : "dt-center", defaultContent : "<a href='#n'><img src='../images/mappin_btn.png' alt='맵핑설정버튼' id='mappingBtn'/></a>"},
 			{ data : "trf_trg_id", visible: false}, 
+			{ data : "db_id", visible: false, render : function (data, type, set){if (data!=null){return data;}else{return null;} } }
 			]
 		});
 		
@@ -78,11 +79,16 @@
 		    	if(datas.length==1) {
 		    		var row = datas[0];
 			    	$row.removeClass('select-detail');
+			    	if(row.db_id==null){
+			    		alert("맵핑설정을 해주세요.");
+			    		return false;
+			    	}
 					$.ajax({
 						url : "/bottlewaterControl.do",
 						data : {
 							bw_pid : row.bw_pid,
-							trf_trg_id : row.trf_trg_id
+							trf_trg_id : row.trf_trg_id,
+							db_id : row.db_id
 						},
 						dataType : "json",
 						type : "post",

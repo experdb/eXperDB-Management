@@ -49,4 +49,11 @@ public class DbAuthorityDAO extends EgovAbstractMapper{
 		delete("dbAuthoritySql.deleteDbAuthority", string);			
 	}
 
+	
+	public List<Map<String, Object>> selectUsrDBSrvAutInfo(String usr_id) {
+		List<Map<String, Object>>  sl = null;
+		sl = (List<Map<String, Object>>) list("dbAuthoritySql.selectUsrDBSrvAutInfo", usr_id);
+		return sl;
+	}
+
 }

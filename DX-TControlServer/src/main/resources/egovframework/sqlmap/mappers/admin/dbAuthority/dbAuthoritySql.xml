@@ -152,5 +152,29 @@
 		**/
 		DELETE FROM T_USRDBAUT_I
 		WHERE usr_id=#{usr_id}
-	</delete>		
+	</delete>	
+	
+	
+
+	<select id="selectUsrDBSrvAutInfo" resultType="HashMap" parameterType="String">
+			/**
+		 	*  Query ID : selectUsrDBSrvAutInfo
+		 	* Description : 유저 DB서버 권한 조회
+		 	* Author : 변승우
+		 	**/	
+		 SELECT 
+			A.USR_DB_SVR_AUT_ID
+				, A.USR_ID
+				, A.DB_SVR_ID
+				, B.DB_SVR_NM
+	            , A.BCK_CNG_AUT_YN
+				, A.BCK_HIST_AUT_YN
+				, A.ACS_CNTR_AUT_YN
+				, A.ADT_CNG_AUT_YN
+				, A.ADT_HIST_AUT_YN
+		FROM T_USRDBSVRAUT_I A, T_DBSVR_I B
+		WHERE 1 = 1
+		AND A.DB_SVR_ID = B.DB_SVR_ID
+		AND A.USR_ID = #{usr_id}
+	</select>
 </mapper>

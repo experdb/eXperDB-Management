@@ -30,6 +30,7 @@
 <script type="text/javascript">
 //연결테스트 확인여부
 var connCheck = "fail";
+var idCheck = "fail";
 
 //숫자체크
 function valid_numeric(objValue)
@@ -101,7 +102,7 @@ function fn_insertDbServer(){
 
 	if (!fn_dbServerValidation()) return false;
 	
-	if(connCheck == "success"){
+	if(connCheck == "success" && idCheck == "success"){
   	$.ajax({
 		url : "/insertDbServer.do",
 		data : {
@@ -122,7 +123,7 @@ function fn_insertDbServer(){
 		}
 	}); 
 	}else{
-		alert("연결 테스트 성공후 등록이 가능합니다.")
+		alert("IP중복확인 / 연결 테스트 후 등록이 가능합니다.")
 	}
 } 
 
@@ -168,6 +169,36 @@ function fn_dbServerCancle(){
 	document.dbserverInsert.reset();
 }
 
+
+//아이디 중복체크
+function fn_ipCheck() {
+	var ipadr = document.getElementById("ipadr");
+	if (ipadr.value == "") {
+		alert("IP를 입력하세요.");
+		document.getElementById('ipadr').focus();
+		return;
+	}
+	$.ajax({
+		url : '/dbServerIpCheck.do',
+		type : 'post',
+		data : {
+			ipadr : $("#ipadr").val()
+		},
+		success : function(result) {
+			if (result == "true") {
+				alert("등록가능한 IP 입니다.");
+				document.getElementById("ipadr").focus();
+				idCheck = "success";
+			} else {
+				alert("중복된 IP가 존재합니다.");
+				document.getElementById("ipadr").focus();
+			}
+		},
+		error : function(request, status, error) {
+			alert("실패");
+		}
+	});
+}
 	
 </script>
 </head>
@@ -194,7 +225,9 @@ function fn_dbServerCancle(){
 				</tr>
 				<tr>
 					<th scope="row" class="ico_t1">IP(*)</th>
-					<td><input type="text" class="txt" name="ipadr" id="ipadr" style="width:200px"/></td>
+					<td><input type="text" class="txt" name="ipadr" id="ipadr" style="width:230px"/>
+					<span class="btn btnC_01"><button type="button" class= "btn_type_02" onclick="fn_ipCheck()" style="width: 60px; margin-right: -60px; margin-top: 0;">중복체크</button></span>
+					</td>
 					<th scope="row" class="ico_t1">Port(*)</th>
 					<td><input type="text" class="txt" name="portno" id="portno" /></td>
 				</tr>
