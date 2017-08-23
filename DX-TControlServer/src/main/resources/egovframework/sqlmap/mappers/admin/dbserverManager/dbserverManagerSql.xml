@@ -146,7 +146,7 @@
 	</delete>
 	
 	
-	    <insert id="insertDB" parameterType="HashMap">
+	<insert id="insertDB" parameterType="HashMap">
     	/**
 	 	*  Query ID : insertDB
 	 	* Description : insertDB 등록
@@ -158,6 +158,7 @@
 			  DB_ID
 			, DB_SVR_ID
 			, DB_NM
+			, USEYN
 			, FRST_REGR_ID
 			, FRST_REG_DTM
 			, LST_MDFR_ID
@@ -168,6 +169,7 @@
 			  nextval('q_db_i_01')
 			, #{db_svr_id}
 			, #{dft_db_nm}
+			, #{useyn}
 			, #{frst_regr_id}
 			, clock_timestamp()
 			, #{lst_mdfr_id}
@@ -278,4 +280,34 @@
 		FROM T_DBSVR_I
 		WHERE IPADR = #{ipadr}
 	</select>
+	
+	
+	<select id="selectDBcnt" resultType="int" parameterType="dbServerVO">
+		/**
+		* Query ID : selectDBcnt
+		* Description : DB서버 갯수 체크
+		* Author : 변승우
+		**/
+		SELECT 
+				 COUNT(*)
+		FROM T_DB_I
+		WHERE DB_SVR_ID = #{db_svr_id}
+	</select>
+
+
+	 <update id="updateDB" parameterType="hashmap">
+   	    /**
+	 	* Query ID : updateDB
+	 	* Description : DB 수정
+	 	* Author : 변승우
+	 	**/
+	 	
+		UPDATE T_DB_I
+		SET 
+	  	 	   USEYN= #{useyn}
+			  , LST_MDFR_ID=#{lst_mdfr_id}
+			  , LST_MDF_DTM=clock_timestamp()	
+		WHERE DB_SVR_ID=#{db_svr_id}::numeric
+		AND DB_NM=#{dft_db_nm}
+	</update> 
 </mapper>

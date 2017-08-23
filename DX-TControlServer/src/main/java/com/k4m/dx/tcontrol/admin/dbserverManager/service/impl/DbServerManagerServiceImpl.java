@@ -63,4 +63,14 @@ public class DbServerManagerServiceImpl implements DbServerManagerService {
 		return dbServerManagerDAO.dbServerIpCheck(ipadr);
 	}
 
+	@Override
+	public int selectDBcnt(DbServerVO dbServerVO) throws Exception {
+		return dbServerManagerDAO.selectDBcnt(dbServerVO);
+	}
+
+	@Override
+	public void updateDB(HashMap<String, Object> paramvalue) throws Exception {
+		dbServerManagerDAO.updateDB(paramvalue);
+	}
+
 }

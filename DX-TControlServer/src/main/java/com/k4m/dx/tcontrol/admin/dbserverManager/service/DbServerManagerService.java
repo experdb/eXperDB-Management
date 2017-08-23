@@ -79,5 +79,11 @@ public interface DbServerManagerService {
 	 * @throws Exception
 	 */
 	int dbServerIpCheck(String ipadr) throws Exception;
+
+
+	int selectDBcnt(DbServerVO dbServerVO) throws Exception;
+
+
+	void updateDB(HashMap<String, Object> paramvalue) throws Exception;
 	
 }

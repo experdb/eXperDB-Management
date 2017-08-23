@@ -216,21 +216,46 @@ function fn_regRe_popup(){
  * 디비 등록
  ******************************************************** */
 function fn_insertDB(){
+	var datasArr = new Array();	
 	var db_svr_id = table_dbServer.row('.selected').data().db_svr_id;
 	var ipadr = table_dbServer.row('.selected').data().ipadr;
-	var datas = table_db.rows('.selected').data();
+	var datas = table_db.rows().data();
 
-		var rows = [];
-    	for (var i = 0;i<datas.length;i++) {
-    		rows.push(table_db.rows('.selected').data()[i]);
+	var checkCnt = table_db.rows('.selected').data().length;
+	var rows = [];
+    	for (var i = 0; i<datas.length; i++) {
+     		var rows = new Object();
+     		
+     		var org_dbName = table_db.rows().data()[i].dft_db_nm;
+     		
+     		var returnValue = false;
+     		
+     		for(var j=0; j<checkCnt; j++) {
+     			var chkDBName = table_db.rows('.selected').data()[j].dft_db_nm;
+     			if(org_dbName  == chkDBName) {
+     				returnValue = true;
+     				break;
+     			}
+     		}
+     		
+     	 	if(returnValue == true){
+     			rows.useyn = "Y";
+     			rows.dft_db_nm = table_db.rows().data()[i].dft_db_nm;
+     		}else{
+     			rows.useyn = "N";
+     			rows.dft_db_nm = table_db.rows().data()[i].dft_db_nm;
+     		}   		 
+    		datasArr.push(rows);
 		}
+
     	if (confirm("선택된 DB를 저장하시겠습니까?")){
+    		alert(JSON.stringify(datasArr));
 			$.ajax({
 				url : "/insertTreeDB.do",
 				data : {
 					db_svr_id : db_svr_id,
 					ipadr : ipadr,
-					rows : JSON.stringify(rows)
+					rows : JSON.stringify(datasArr)
 				},
 				async:true,
 				dataType : "json",
@@ -380,7 +405,7 @@ function fn_dataCompareChcek(svrDbList){
 								<thead>
 									<tr>
 										<th>메뉴</th>
-										<th>등록선택</th>
+										<th><input name="select" value="1" type="checkbox"></th>
 									</tr>
 								</thead>
 							</table>

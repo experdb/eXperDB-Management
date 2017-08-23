@@ -225,6 +225,7 @@ public class TreeController {
 	 */
 	@RequestMapping(value = "/insertTreeDB.do")
 	public @ResponseBody boolean insertTreeDB(@ModelAttribute("accessControlVO") AccessControlVO accessControlVO,@ModelAttribute("dbServerVO") DbServerVO dbServerVO, @ModelAttribute("historyVO") HistoryVO historyVO, HttpServletRequest request) throws ParseException {
+			int cnt = 0; 
 		try {
 			CmmnUtils cu = new CmmnUtils();
 			menuAut = cu.selectMenuAut(menuAuthorityService, "15");
@@ -240,7 +241,7 @@ public class TreeController {
 			
 			//쓰기권한이 있을경우
 			if(menuAut.get(0).get("wrt_aut_yn").equals("Y")){
-				dbServerManagerService.deleteDB(dbServerVO);
+				cnt = dbServerManagerService.selectDBcnt(dbServerVO);
 				accessControlService.deleteDbAccessControl(dbServerVO.getDb_svr_id());
 			}else{
 				return true;
@@ -252,26 +253,35 @@ public class TreeController {
 			for (int i = 0; i < rows.size(); i++) {
 				JSONObject jsrow = (JSONObject) rows.get(i);
 				String dft_db_nm = jsrow.get("dft_db_nm").toString();
+				String useyn = jsrow.get("useyn").toString();
 				
 				paramvalue.put("db_svr_id", dbServerVO.getDb_svr_id());
 				paramvalue.put("dft_db_nm", dft_db_nm);
 				paramvalue.put("frst_regr_id", dbServerVO.getFrst_regr_id());
 				paramvalue.put("lst_mdfr_id", dbServerVO.getLst_mdfr_id());
+				paramvalue.put("useyn", useyn);
 				
 				System.out.println("============== parameter ==============");
 				System.out.println("DB 서버 ID : "+ paramvalue.get("db_svr_id"));
 				System.out.println("DB 명 : "+ paramvalue.get("dft_db_nm"));
+				System.out.println("사용여부 : "+ paramvalue.get("useyn"));
 				System.out.println("등록자 : "+ paramvalue.get("frst_regr_id"));
 				System.out.println("수정자 : "+ paramvalue.get("lst_mdfr_id"));
 				System.out.println("====================================");
 			
-			//쓰기권한이 있을경우
-			if(menuAut.get(0).get("wrt_aut_yn").equals("Y")){	
-				dbServerManagerService.insertDB(paramvalue);		
-			}else{
-				return true;
-			}
-			
+				//쓰기권한이 있을경우
+				if(menuAut.get(0).get("wrt_aut_yn").equals("Y")){	
+					if(cnt == 0){
+						dbServerManagerService.insertDB(paramvalue);		
+					}else{
+						System.out.println("업데이트");
+						dbServerManagerService.updateDB(paramvalue);		
+					}
+					
+				}else{
+					return true;
+				}
+				
 			}
 			
 			/*접근제어 정보 INSERT*/

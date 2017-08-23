@@ -72,6 +72,7 @@
 	
 	function fn_UsrDBSrvAut(data){
 	  	$.ajax({
+			async : false,
 			url : "/selectUsrDBSrvAutInfo.do",
 			data : {},
 			dataType : "json",
