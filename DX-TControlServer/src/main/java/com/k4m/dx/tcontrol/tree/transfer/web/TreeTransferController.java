@@ -642,25 +642,24 @@ public class TreeTransferController {
 			
 			int db_id = Integer.parseInt(request.getParameter("db_id"));
 			DbIDbServerVO dbIDbServerVO = (DbIDbServerVO) treeTransferService.selectServerDb(db_id);
-
-			DbServerVO schDbServerVO = new DbServerVO();
-			schDbServerVO.setDb_svr_id(dbIDbServerVO.getDb_svr_id());
-			DbServerVO dbServerVO = (DbServerVO)  cmmnServerInfoService.selectServerInfo(schDbServerVO);
-			String strIpAdr = dbServerVO.getIpadr();	
+	
 			AgentInfoVO vo = new AgentInfoVO();
-			vo.setIPADR(strIpAdr);
+			vo.setIPADR(dbIDbServerVO.getIpadr());
 			AgentInfoVO agentInfo =  (AgentInfoVO) cmmnServerInfoService.selectAgentInfo(vo);
 			
-			String IP = dbServerVO.getIpadr();
+			if (agentInfo==null){
+				return result;
+			}
+			String IP = dbIDbServerVO.getIpadr();
 			int PORT = agentInfo.getSOCKET_PORT();
-			
-			serverObj.put(ClientProtocolID.SERVER_NAME, dbServerVO.getDb_svr_nm());
-			serverObj.put(ClientProtocolID.SERVER_IP, dbServerVO.getIpadr());
-			serverObj.put(ClientProtocolID.SERVER_PORT, dbServerVO.getPortno());
-			serverObj.put(ClientProtocolID.DATABASE_NAME, dbServerVO.getDft_db_nm());
-			serverObj.put(ClientProtocolID.USER_ID, dbServerVO.getSvr_spr_usr_id());
-			serverObj.put(ClientProtocolID.USER_PWD, dec.aesDecode(dbServerVO.getSvr_spr_scm_pwd()));
-			
+
+			serverObj.put(ClientProtocolID.SERVER_NAME, dbIDbServerVO.getDb_svr_nm());
+			serverObj.put(ClientProtocolID.SERVER_IP, dbIDbServerVO.getIpadr());
+			serverObj.put(ClientProtocolID.SERVER_PORT, dbIDbServerVO.getPortno());
+			serverObj.put(ClientProtocolID.DATABASE_NAME, dbIDbServerVO.getDb_nm());
+			serverObj.put(ClientProtocolID.USER_ID, dbIDbServerVO.getSvr_spr_usr_id());
+			serverObj.put(ClientProtocolID.USER_PWD, dec.aesDecode(dbIDbServerVO.getSvr_spr_scm_pwd()));
+				
 			result = cic.tableList_select(serverObj,IP,PORT);
 
 		} catch (Exception e) {
@@ -800,12 +799,9 @@ public class TreeTransferController {
 			int bw_pid = Integer.parseInt(request.getParameter("bw_pid"));
 
 			if (bw_pid == 0) {
-				List<TransferVO> transferInfo = null;
-				transferInfo = transferService.selectTransferSetting(usr_id);
+				TransferVO transferInfo = (TransferVO) transferService.selectTransferSetting(usr_id);
+				 List<BottlewaterVO> dbInfo = treeTransferService.selectBottlewaterinfo(trf_trg_id);
 
-				List<BottlewaterVO> dbInfo = null;
-				dbInfo = treeTransferService.selectBottlewaterinfo(trf_trg_id);
-				
 				/* TOPIC */
 				String topicTxt = "";
 				for (int i = 0; i < dbInfo.size(); i++) {
@@ -817,11 +813,11 @@ public class TreeTransferController {
 				System.out.println("TOPIC : " + topicTxt);
 				String dbinfoTxt = "--postgres=postgres://" + dbInfo.get(0).getSvr_spr_usr_id() + ":"
 						+ aes.aesDecode(dbInfo.get(0).getSvr_spr_scm_pwd()) + "@" + dbInfo.get(0).getIpadr() + ":"
-						+ dbInfo.get(0).getPortno() + "/" + dbInfo.get(0).getDft_db_nm();
+						+ dbInfo.get(0).getPortno() + "/" + dbInfo.get(0).getDb_nm();
 				
 				/* bottlewater실행 명령어 */
-				String strExecTxt = transferInfo.get(0).getBw_home() + dbinfoTxt + " --slot=connect --broker="
-						+ transferInfo.get(0).getKafka_broker_ip() + ":" + transferInfo.get(0).getKafka_broker_port()
+				String strExecTxt = transferInfo.getBw_home() + dbinfoTxt + " --slot=connect --broker="
+						+ transferInfo.getKafka_broker_ip() + ":" + transferInfo.getKafka_broker_port()
 						+ " --topic-prefix=" + topicTxt + " --allow-unkeyed --on-error=log";
 				System.out.println("명령어 : " + strExecTxt);
 
@@ -834,7 +830,11 @@ public class TreeTransferController {
 				AgentInfoVO vo = new AgentInfoVO();
 				vo.setIPADR(strIpAdr);
 				AgentInfoVO agentInfo = (AgentInfoVO) cmmnServerInfoService.selectAgentInfo(vo);
-		
+				
+				if (agentInfo==null){
+					return "false";
+				}
+				
 				String IP = dbServerVO.getIpadr();
 				int PORT = agentInfo.getSOCKET_PORT();
 				
@@ -857,13 +857,13 @@ public class TreeTransferController {
 				CA.close();
 
 				/* 실행시킨 bwpid가져오기 */
-				int current_bwpid = 0;
+				int current_bwpid = 1;
 				transferDetailVO.setBw_pid(current_bwpid);
 				treeTransferService.updateBottleWaterBwpid(transferDetailVO);
 				return "start";
 			} else {
 				/* kill -9 pid 명령어 */
-				String strExecTxt = "kill -9" + bw_pid;
+				String strExecTxt = "kill -9 " + bw_pid;
 				System.out.println(strExecTxt);
 				transferDetailVO.setBw_pid(0);
 				treeTransferService.updateBottleWaterBwpid(transferDetailVO);

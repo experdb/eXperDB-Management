@@ -1,8 +1,6 @@
 package com.k4m.dx.tcontrol.admin.extension.web;
 
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -70,13 +68,7 @@ public class ExtensionController {
 	@ResponseBody
 	public ArrayList<Object> extensionDetail(@ModelAttribute("historyVO") HistoryVO historyVO, HttpServletRequest request) {
 		ArrayList<Object> selectDBList = null;
-		try {
-			// Agent모니터링 이력 남기기
-			CmmnUtils.saveHistory(request, historyVO);
-			historyVO.setExe_dtl_cd("DX-T0038");
-			accessHistoryService.insertHistory(historyVO);
-			
-			
+		try {	
 			String strDbSvrId = request.getParameter("db_svr_id");
 			int db_svr_id = Integer.parseInt(strDbSvrId);
 			

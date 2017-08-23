@@ -12,6 +12,7 @@ public class BottlewaterVO {
 	private String scm_nm;
 	private String tb_engl_nm;
 	private String trf_trg_cnn_nm;
+	private String db_nm;
 	
 	public int getDb_svr_id() {
 		return db_svr_id;
@@ -78,6 +79,12 @@ public class BottlewaterVO {
 	}
 	public void setTrf_trg_cnn_nm(String trf_trg_cnn_nm) {
 		this.trf_trg_cnn_nm = trf_trg_cnn_nm;
+	}
+	public String getDb_nm() {
+		return db_nm;
+	}
+	public void setDb_nm(String db_nm) {
+		this.db_nm = db_nm;
 	}
 
 }

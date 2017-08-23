@@ -138,7 +138,7 @@
 	    		},
 	    		success : function(result) {
 	    			if(result.data == null){
-	    				alert("서버상태를 확인해주세요.");
+	    				alert("서버에 T엔진이 설치되지 않았습니다.");
 	    			}else{
 	    				tableList.clear().draw();	
 		    			for(var i=0; i<result.data.length;i++){
@@ -180,7 +180,7 @@
 	    		},
 	    		success : function(result) {
 	    			if(result.data == null){
-	    				alert("서버상태를 확인해주세요.");
+	    				alert("서버에 T엔진이 설치되지 않았습니다.");
 	    			}else{
 		    			tableList.clear().draw();		
 		    			tableList.rows.add(result.data).draw();

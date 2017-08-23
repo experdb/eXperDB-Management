@@ -21,11 +21,8 @@ public class TransferDAO extends EgovAbstractMapper {
 	 * @param usr_id
 	 * @throws SQLException
 	 */
-	@SuppressWarnings({ "unchecked", "deprecation" })
-	public List<TransferVO> selectTransferSetting(String usr_id) {
-		List<TransferVO> result = null;
-		result = (List<TransferVO>) list("transferSql.selectTransferSetting", usr_id);
-		return result;
+	public TransferVO selectTransferSetting(String usr_id) {	
+		return (TransferVO) selectOne("transferSql.selectTransferSetting", usr_id);
 	}
 
 	/**

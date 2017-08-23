@@ -91,9 +91,9 @@ public class TransferController {
 	 * @throws Exception
 	 */
 	@RequestMapping(value = "/selectTransferSetting.do")
-	public @ResponseBody List<TransferVO> selectTransferSetting(HttpServletRequest request) {
+	public @ResponseBody TransferVO selectTransferSetting(HttpServletRequest request) {
 		HttpSession session = request.getSession();
-		List<TransferVO> resultSet = null;
+		 TransferVO resultSet = null;
 		try {
 			CmmnUtils cu = new CmmnUtils();
 			menuAut = cu.selectMenuAut(menuAuthorityService, "13");
@@ -101,7 +101,7 @@ public class TransferController {
 			//읽기권한이 있을경우
 			if(menuAut.get(0).get("read_aut_yn").equals("Y")){
 				String usr_id = (String) session.getAttribute("usr_id");
-				resultSet = transferService.selectTransferSetting(usr_id);	
+				resultSet = (TransferVO)transferService.selectTransferSetting(usr_id);	
 			}else{
 				return resultSet;
 			}
