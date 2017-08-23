@@ -249,7 +249,6 @@ function fn_insertDB(){
 		}
 
     	if (confirm("선택된 DB를 저장하시겠습니까?")){
-    		alert(JSON.stringify(datasArr));
 			$.ajax({
 				url : "/insertTreeDB.do",
 				data : {
