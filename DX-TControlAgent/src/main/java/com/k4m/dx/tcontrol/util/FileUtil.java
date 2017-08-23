@@ -254,6 +254,22 @@ public class FileUtil {
 		return blnReturn;
 	}
 	
+	/**
+	 * file to byte
+	 * @param file
+	 * @return
+	 * @throws Exception
+	 */
+	public static byte[] getFileToByte(File file) throws Exception {
+		byte[] bytesArray = new byte[(int) file.length()];
+
+		FileInputStream fis = new FileInputStream(file);
+		fis.read(bytesArray); //read file into bytes[]
+		fis.close();
+
+		return bytesArray;
+	}
+	
 	public static void main(String args[]) {
 
 		try {

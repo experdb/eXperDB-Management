@@ -3,6 +3,7 @@ package com.k4m.dx.tcontrol.server;
 import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
 import java.io.File;
+import java.io.FileInputStream;
 import java.net.Socket;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -127,13 +128,14 @@ public class DxT015 extends SocketCtl{
 				String strFileName = (String) jObj.get(ProtocolID.FILE_NAME);
 				File inFile = new File(strLogFileDir, strFileName);
 				
-				String strFileTxt = FileUtil.getFileView(inFile);
+				byte[] buffer = FileUtil.getFileToByte(inFile);
+				//String strFileTxt = FileUtil.getFileView(inFile);
 				
 				outputObj.put(ProtocolID.DX_EX_CODE, strDxExCode);
 				outputObj.put(ProtocolID.RESULT_CODE, strSuccessCode);
 				outputObj.put(ProtocolID.ERR_CODE, strErrCode);
 				outputObj.put(ProtocolID.ERR_MSG, strErrMsg);
-				outputObj.put(ProtocolID.RESULT_DATA, strFileTxt);
+				outputObj.put(ProtocolID.RESULT_DATA, buffer);
 				
 				send(outputObj);
 			} else if(strCommandCode.equals(ProtocolID.COMMAND_CODE_DL)) {

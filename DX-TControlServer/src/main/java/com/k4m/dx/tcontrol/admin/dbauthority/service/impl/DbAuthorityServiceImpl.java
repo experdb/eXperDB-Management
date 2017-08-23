@@ -71,4 +71,50 @@ public class DbAuthorityServiceImpl implements DbAuthorityService{
 		return dbAuthorityDAO.selectUsrDBSrvAutInfo(usr_id);
 	}
 
+	
+	/**
+	 *  유저 디비서버권한 저장
+	 * @param 
+	 * @throws Exception
+	 */
+	@Override
+	public void updateUsrDBSrvAutInfo(Object object) throws Exception {
+		dbAuthorityDAO.updateUsrDBSrvAutInfo(object);
+	}
+	
+	
+	/**
+	 *  유저 디비서버권한 저장
+	 * @param 
+	 * @throws Exception
+	 */
+	@Override
+	public List<Map<String, Object>> selectDBAutInfo() throws Exception {
+		return dbAuthorityDAO.selectDBAutInfo();
+	}
+
+	
+	/**
+	 * 유저 디비권한 정보 조회
+	 * @param usr_id 
+	 * @param 
+	 * @throws Exception
+	 */
+	@Override
+	public List<Map<String, Object>> selectUsrDBAutInfo(String usr_id) throws Exception {
+		return dbAuthorityDAO.selectUsrDBAutInfo(usr_id);
+	}
+
+
+	/**
+	 *  유저 디비권한 저장
+	 * @param usr_id 
+	 * @param 
+	 * @throws Exception
+	 */
+	@Override
+	public void updateUsrDBAutInfo(Object object) throws Exception {
+		dbAuthorityDAO.updateUsrDBAutInfo(object);	
+	}
+
 }

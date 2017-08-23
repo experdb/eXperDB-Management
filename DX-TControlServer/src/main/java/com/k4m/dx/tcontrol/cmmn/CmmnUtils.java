@@ -22,6 +22,7 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 
+import com.k4m.dx.tcontrol.admin.dbauthority.service.DbAuthorityService;
 import com.k4m.dx.tcontrol.admin.menuauthority.service.MenuAuthorityService;
 import com.k4m.dx.tcontrol.common.service.HistoryVO;
 import com.k4m.dx.tcontrol.functions.schedule.service.ScheduleService;
@@ -77,6 +78,26 @@ public class CmmnUtils {
 		return result;
 	}
 	
+	
+	
+	//디비권한 조회
+	public List<Map<String, Object>> selectUserDBAutList(DbAuthorityService dbAuthorityService) {		
+		
+		List<Map<String, Object>> result = null;		
+		
+		try{
+			ServletRequestAttributes sra = (ServletRequestAttributes) RequestContextHolder.currentRequestAttributes();
+			HttpServletRequest request = sra.getRequest();
+			
+			HttpSession session = request.getSession();
+			String usr_id = (String) session.getAttribute("usr_id");
+			
+			result = dbAuthorityService.selectUsrDBAutInfo(usr_id);		
+		}catch(Exception e){
+			e.printStackTrace();
+		}		
+		return result;
+	}
 	
 	// 단건 
 	public static Map<String, Object> getParam(Map<String, String> reqJson) {

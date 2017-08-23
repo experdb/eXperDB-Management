@@ -56,4 +56,24 @@ public class DbAuthorityDAO extends EgovAbstractMapper{
 		return sl;
 	}
 
+	public void updateUsrDBSrvAutInfo(Object object) {
+		update("dbAuthoritySql.updateUsrDBSrvAutInfo", object);		
+	}
+
+	public List<Map<String, Object>> selectDBAutInfo() {
+		List<Map<String, Object>>  sl = null;
+		sl = (List<Map<String, Object>>) list("dbAuthoritySql.selectDBAutInfo", null);
+		return sl;
+	}
+
+	public List<Map<String, Object>> selectUsrDBAutInfo(String usr_id) {
+		List<Map<String, Object>>  sl = null;
+		sl = (List<Map<String, Object>>) list("dbAuthoritySql.selectUsrDBAutInfo", usr_id);
+		return sl;
+	}
+
+	public void updateUsrDBAutInfo(Object object) {
+		update("dbAuthoritySql.updateUsrDBAutInfo", object);		
+	}
+
 }

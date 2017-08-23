@@ -277,7 +277,7 @@ public class ClientSocketCtl {
 
 	    InputStream is = null; 
 
-	    response.reset();
+	    //response.reset();
 
 	    OutputStream outStream = null;
 	    ByteArrayOutputStream bos = null;
@@ -297,7 +297,8 @@ public class ClientSocketCtl {
 		}
 		
 		try {
-			outStream = response.getOutputStream();
+			if(outStream == null) outStream = response.getOutputStream();
+			
 			is = client.getInputStream();
 			bos = new ByteArrayOutputStream();
 			
@@ -310,6 +311,8 @@ public class ClientSocketCtl {
 				bos.write(buffer, 0, read);
 				
 			}
+			response.setHeader("Content-Length", Long.toString(bos.size()));
+			
 			resBytes = bos.toByteArray();
 			outStream.write(resBytes);
 
