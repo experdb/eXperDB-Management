@@ -69,7 +69,7 @@
 		  	AAA.DB_SVR_ID AS db_svr_id
 		  	, (SELECT DB_SVR_NM FROM T_DBSVR_I WHERE DB_SVR_ID = AAA.DB_SVR_ID) AS db_svr_nm
 		    , COUNT(AAA.WRK_ID) AS wrk_cnt
-		    , (SELECT COUNT(*) FROM T_DB_I WHERE DB_SVR_ID = AAA.DB_SVR_ID AND USEYN = "Y") AS db_cnt
+		    , (SELECT COUNT(*) FROM T_DB_I WHERE DB_SVR_ID = AAA.DB_SVR_ID AND USEYN = 'Y') AS db_cnt
 		    , (SELECT COUNT(DISTINCT SCD_ID) FROM T_SCD_D A, T_WRKCNG_I B 
 		          WHERE B.db_svr_id = AAA.DB_SVR_ID 
 		          AND A.WRK_ID = B.WRK_ID) AS schedule_cnt
