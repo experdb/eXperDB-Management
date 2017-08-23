@@ -143,6 +143,7 @@
 	  DELETE 
 	  FROM T_DB_I 
 	  WHERE DB_SVR_ID=#{db_svr_id}
+	  AND USEYN = "Y"
 	</delete>
 	
 	
@@ -242,6 +243,7 @@
 			    <if test="dft_db_nm != null and dft_db_nm != ''">
 			    AND B.DB_NM LIKE  '%' || #{dft_db_nm} || '%'
 			    </if>         	            
+			    AND B.USEYN = "Y"
 	            ORDER BY A.DB_SVR_NM
             	)AA
      </select>	
@@ -265,6 +267,7 @@
 			<if test="value != null and value != 0">
 			AND A.DB_SVR_ID = #{value}
 			</if>
+			AND B.USEYN = "Y"
             GROUP BY A.DB_SVR_NM, A.DB_SVR_ID, A.IPADR, A.PORTNO
      </select>	
      
