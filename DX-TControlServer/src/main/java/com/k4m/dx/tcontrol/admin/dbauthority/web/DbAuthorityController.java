@@ -162,13 +162,20 @@ public class DbAuthorityController {
 	@RequestMapping(value = "/updateUsrDBSrvAutInfo.do")
 	@ResponseBody
 	public void updateUsrDBSrvAutInfo(HttpServletRequest request) {
-
+		int cnt = 0; 
+		
 		try {
 			String strRows = request.getParameter("datasArr").toString().replaceAll("&quot;", "\"");
 			JSONArray rows = (JSONArray) new JSONParser().parse(strRows);
-			
+					
 			for(int i=0; i<rows.size(); i++){
-				dbAuthorityService.updateUsrDBSrvAutInfo(rows.get(i));
+				cnt = dbAuthorityService.selectUsrDBSrvAutInfoCnt(rows.get(i));
+				
+				if(cnt==0){
+					dbAuthorityService.insertUsrDBSrvAutInfo(rows.get(i));
+				}else{
+					dbAuthorityService.updateUsrDBSrvAutInfo(rows.get(i));
+				}			
 			}
 
 		} catch (Exception e) {
@@ -232,13 +239,20 @@ public class DbAuthorityController {
 	@RequestMapping(value = "/updateUsrDBAutInfo.do")
 	@ResponseBody
 	public void updateUsrDBAutInfo(HttpServletRequest request) {
-
+		int cnt = 0;
 		try {
 			String strRows = request.getParameter("datasArr").toString().replaceAll("&quot;", "\"");
 			JSONArray rows = (JSONArray) new JSONParser().parse(strRows);
 			
 			for(int i=0; i<rows.size(); i++){
-				dbAuthorityService.updateUsrDBAutInfo(rows.get(i));
+				cnt = dbAuthorityService.selectUsrDBAutInfoCnt(rows.get(i));
+				
+				if(cnt==0){
+					dbAuthorityService.insertUsrDBAutInfo(rows.get(i));
+				}else{
+					dbAuthorityService.updateUsrDBAutInfo(rows.get(i));
+				}		
+				
 			}
 
 		} catch (Exception e) {

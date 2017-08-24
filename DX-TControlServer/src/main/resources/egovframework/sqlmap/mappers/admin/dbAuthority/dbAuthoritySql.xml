@@ -234,6 +234,21 @@
 	 </select>
 	 
 	 
+	 <select id="selectUsrDBSrvAutInfoCnt" parameterType="object" resultType="int">
+		/**
+	 	*  Query ID : selectUsrDBSrvAutInfoCnt
+	 	* Description : 등록된 유저 서버 권한 조회
+	 	* Author : 변승우
+	 	**/	
+		SELECT 
+			COUNT(*)
+		FROM T_USRDBSVRAUT_I 
+		WHERE 1 = 1
+		AND USR_ID = #{usr_id}
+		AND DB_SVR_ID = #{db_svr_id}::numeric	
+	 </select>		
+	 
+	 
 	 <update id="updateUsrDBAutInfo" parameterType="object">
 	   	/**
 	 	* Query ID : updateUsrDBAutInfo
@@ -246,5 +261,94 @@
 	 	WHERE USR_ID=#{usr_id}
 	 	AND DB_SVR_ID = #{db_svr_id}::numeric
 	 	AND DB_ID = #{db_id}::numeric
-	</update>	
+	</update>
+	
+	
+	<insert id="insertUsrDBSrvAutInfo" parameterType="HashMap">
+		/**
+		* Query ID : insertUsrDBSrvAutInfo
+		* Description : 유저디비서버 등록
+		* Author : 변승우
+		**/
+  			INSERT INTO T_USRDBSVRAUT_I
+			(
+			USR_DB_SVR_AUT_ID
+			, USR_ID
+			, DB_SVR_ID
+			, BCK_CNG_AUT_YN
+			, BCK_HIST_AUT_YN
+			, ACS_CNTR_AUT_YN
+			, ADT_CNG_AUT_YN
+			, ADT_HIST_AUT_YN
+			, FRST_REGR_ID
+			, FRST_REG_DTM
+			, LST_MDFR_ID
+			, LST_MDF_DTM
+			)
+		VALUES
+			(			
+			nextval('q_usrdbsvraut_i_01')
+			, #{usr_id}
+			, #{db_svr_id}::numeric
+			, #{bck_cng_aut_yn} 
+			, #{bck_hist_aut_yn} 
+			, #{acs_cntr_aut_yn} 
+			, #{adt_cng_aut_yn} 
+			, #{adt_hist_aut_yt}
+			, #{usr_id}
+			, clock_timestamp()
+			, #{usr_id}
+			, clock_timestamp()
+			)
+	</insert>	
+
+
+	 <select id="selectUsrDBAutInfoCnt" parameterType="object" resultType="int">
+		/**
+	 	*  Query ID : selectUsrDBAutInfoCnt
+	 	* Description : 등록된 유저 디비 권한 조회
+	 	* Author : 변승우
+	 	**/		
+		SELECT 
+			COUNT(*)
+		FROM T_USRDBAUT_I 
+		WHERE 1 = 1
+		AND USR_ID = #{usr_id}
+		AND DB_SVR_ID = #{db_svr_id}::numeric
+        AND DB_ID = #{db_id}::numeric
+      </select>
+      
+      
+      
+      <insert id="insertUsrDBAutInfo" parameterType="HashMap">
+		/**
+		* Query ID : insertUsrDBAutInfo
+		* Description : 유저디비권한 초기등록
+		* Author : 변승우
+		**/
+  			INSERT INTO T_USRDBAUT_I
+			(
+			USR_DB_AUT_ID
+			, DB_SVR_ID			
+			, DB_ID
+			, USR_ID		
+			, AUT_YN
+			, FRST_REGR_ID
+			, FRST_REG_DTM
+			, LST_MDFR_ID
+			, LST_MDF_DTM
+			)
+		VALUES
+			(			
+			nextval('q_usrdbaut_i_01')
+			, #{db_svr_id}::numeric
+			, #{db_id}::numeric
+			, #{usr_id}		
+			, #{aut_yn}
+			, #{usr_id}
+			, clock_timestamp()
+			, #{usr_id}
+			, clock_timestamp()
+			)
+	</insert>	
 </mapper>

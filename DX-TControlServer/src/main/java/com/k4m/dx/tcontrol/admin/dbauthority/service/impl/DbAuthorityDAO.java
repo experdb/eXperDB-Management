@@ -76,4 +76,24 @@ public class DbAuthorityDAO extends EgovAbstractMapper{
 		update("dbAuthoritySql.updateUsrDBAutInfo", object);		
 	}
 
+	public int selectUsrDBSrvAutInfoCnt(Object object) {
+		int resultSet = 0;
+		resultSet = (int) getSqlSession().selectOne("dbAuthoritySql.selectUsrDBSrvAutInfoCnt", object);
+		return resultSet;
+	}
+
+	public void insertUsrDBSrvAutInfo(Object object) {
+		insert("dbAuthoritySql.insertUsrDBSrvAutInfo", object);			
+	}
+
+	public int selectUsrDBAutInfoCnt(Object object) {
+		int resultSet = 0;
+		resultSet = (int) getSqlSession().selectOne("dbAuthoritySql.selectUsrDBAutInfoCnt", object);
+		return resultSet;
+	}
+
+	public void insertUsrDBAutInfo(Object object) {
+		insert("dbAuthoritySql.insertUsrDBAutInfo", object);	
+	}
+
 }

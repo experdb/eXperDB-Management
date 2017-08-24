@@ -2,8 +2,11 @@ package com.k4m.dx.tcontrol.admin.dbauthority.service.impl;
 
 import java.util.List;
 import java.util.Map;
+
 import javax.annotation.Resource;
+
 import org.springframework.stereotype.Service;
+
 import com.k4m.dx.tcontrol.admin.dbauthority.service.DbAuthorityService;
 
 
@@ -115,6 +118,30 @@ public class DbAuthorityServiceImpl implements DbAuthorityService{
 	@Override
 	public void updateUsrDBAutInfo(Object object) throws Exception {
 		dbAuthorityDAO.updateUsrDBAutInfo(object);	
+	}
+
+
+	@Override
+	public int selectUsrDBSrvAutInfoCnt(Object object) throws Exception {
+		return dbAuthorityDAO.selectUsrDBSrvAutInfoCnt(object);
+	}
+
+
+	@Override
+	public void insertUsrDBSrvAutInfo(Object object) throws Exception {
+		dbAuthorityDAO.insertUsrDBSrvAutInfo(object);		
+	}
+
+
+	@Override
+	public int selectUsrDBAutInfoCnt(Object object) throws Exception {
+		return dbAuthorityDAO.selectUsrDBAutInfoCnt(object);
+	}
+
+
+	@Override
+	public void insertUsrDBAutInfo(Object object) throws Exception {
+		dbAuthorityDAO.insertUsrDBAutInfo(object);	
 	}
 
 }

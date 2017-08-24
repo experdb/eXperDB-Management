@@ -19,6 +19,7 @@
 	var dbTable = null;
 	var dbServerTable = null;
 	var svr_server = null;
+	var db = null;
 
 	function fn_init() {
 		userTable = $('#user').DataTable({
@@ -146,22 +147,26 @@
 				})		
 				html1+='</table>';
 				$( "#svrAutList" ).append(html1);
-			}
+				fn_dbAutInfo();
+			}			
 		});
 		
-		
-		$.ajax({
-			url : "/selectDBAutInfo.do",
-			dataType : "json",
-			type : "post",
-			error : function(xhr, status, error) {
-				alert("실패")
-			},
-			success : function(result) {
-				fn_dbAut(svr_server, result);
-			}
-		});
-	
+
+		function fn_dbAutInfo(){
+			$.ajax({
+				url : "/selectDBAutInfo.do",
+				dataType : "json",
+				type : "post",
+				error : function(xhr, status, error) {
+					alert("실패")
+				},
+				success : function(result) {
+					db=result;
+					fn_dbAut(svr_server, result);
+				}
+			});
+		}
+
 		
  		function fn_dbAut(svr_server, result){
 		 	var html2 = "";
@@ -233,44 +238,51 @@
 		    			alert("실패")
 		    		},
 		    		success : function(result) {
-	       	 		 	for(var i = 0; i<result.length; i++){  
-	      	 			      	 				
+		    			if(result.length != 0){
+	       	 		 		for(var i = 0; i<result.length; i++){  
+	       	 		 		
 		     					//백업설정 권한
-		  						if(result[i].bck_cng_aut_yn == "Y"){	  									
+		  						if(result.length != 0 && result[i].bck_cng_aut_yn == "Y"){	  									
 		  							document.getElementById(result[i].db_svr_nm+"_bck_cng").checked = true;
 		  						}else{
 		  							document.getElementById(result[i].db_svr_nm+"_bck_cng").checked = false;
 		  						}
 		
 		  						//백업이력 권한
-		  						if(result[i].bck_hist_aut_yn == "Y"){
+		  						if(result.length != 0 && result[i].bck_hist_aut_yn == "Y"){
 		  							document.getElementById(result[i].db_svr_nm+"_bck_hist").checked = true;
 		  						}else{
 		  							document.getElementById(result[i].db_svr_nm+"_bck_hist").checked = false;
 		  						}
 		  						
 		  						//서버접근제어 권한
-		  						if(result[i].acs_cntr_aut_yn == "Y"){
+		  						if(result.length != 0 && result[i].acs_cntr_aut_yn == "Y"){
 		  							document.getElementById(result[i].db_svr_nm+"_acs_cntr").checked = true;
 		  						}else{
 		  							document.getElementById(result[i].db_svr_nm+"_acs_cntr").checked = false;
 		  						}
 		  						
 		  						//감사설정 권한
-		  						if(result[i].adt_cng_aut_yn == "Y"){
+		  						if(result.length != 0 && result[i].adt_cng_aut_yn == "Y"){
 		  							document.getElementById(result[i].db_svr_nm+"_adt_cng").checked = true;
 		  						}else{
 		  							document.getElementById(result[i].db_svr_nm+"_adt_cng").checked = false;
 		  						}
 		  						
 		  						//감사이력 권한
-		  						if(result[i].adt_hist_aut_yn == "Y"){
+		  						if(result.length != 0 && result[i].adt_hist_aut_yn == "Y"){
 		  							document.getElementById(result[i].db_svr_nm+"_adt_hist").checked = true;
 		  						}else{
 		  							document.getElementById(result[i].db_svr_nm+"_adt_hist").checked = false;
-		  						}
-		  						
-	    				}	   	   			
+		  						}		  						
+	    					} 
+		    			}else{
+		    				document.getElementById(svr_server[0].db_svr_nm+"_bck_cng").checked = false;
+		    				document.getElementById(svr_server[0].db_svr_nm+"_bck_hist").checked = false;
+		    				document.getElementById(svr_server[0].db_svr_nm+"_acs_cntr").checked = false;
+		    				document.getElementById(svr_server[0].db_svr_nm+"_adt_cng").checked = false;
+		    				document.getElementById(svr_server[0].db_svr_nm+"_adt_hist").checked = false;
+    					}	
 		    		} 
 		    	});	 	 
 		        
@@ -288,14 +300,20 @@
 		    		error : function(xhr, status, error) {
 		    			alert("실패")
 		    		},
-		    		success : function(result) {		   
-	       	 		 	for(var i = 0; i<result.length; i++){     	
-		  						if(result[i].aut_yn == "Y"){	  									
-		  							document.getElementById(result[i].db_svr_id+'_'+result[i].db_id).checked = true;
-		  						}else{
-		  							document.getElementById(result[i].db_svr_id+'_'+result[i].db_id).checked = false;
-		  						}		
-	    				}	   	   			
+		    		success : function(result) {	
+		    			if(result.length != 0){
+		       	 		 	for(var i = 0; i<result.length; i++){     	
+			  						if(result[i].aut_yn == "Y"){	  									
+			  							document.getElementById(result[i].db_svr_id+'_'+result[i].db_id).checked = true;
+			  						}else{
+			  							document.getElementById(result[i].db_svr_id+'_'+result[i].db_id).checked = false;
+			  						}		
+		    				}	
+		    			}else{
+		    				for(var j = 0; j<db.length; j++){ 
+		    					document.getElementById(db[j].db_svr_id+'_'+db[j].db_id).checked = false;
+		    				}
+		    			}	
 		    		} 
 		    	});	 	 
 		    } );   
@@ -319,41 +337,41 @@
 			 var adt_cng_aut = $("input[name='adt_cng_aut']");
 			 var adt_hist_aut = $("input[name='adt_hist_aut']");
 			 
-	 		 for(var i = 0; i < db_svr_id.length; i++){
-				 var datas = new Object();
-				 datas.usr_id = usr_id;
-			     datas.db_svr_id = db_svr_id[i].value;
+	 		 for(var i = 0; i < svr_server.length; i++){
+				 var rows = new Object();
+				 rows.usr_id = usr_id;
+				 rows.db_svr_id = db_svr_id[i].value;
 			    		     
 			     if(bck_cng_aut[i].checked){ //선택되어 있으면 배열에 값을 저장함
-			        	datas.bck_cng_aut_yn = "Y";   
+			    	 	rows.bck_cng_aut_yn = "Y";   
 			        }else{
-			        	datas.bck_cng_aut_yn = "N";
+			        	rows.bck_cng_aut_yn = "N";
 			        }
 			     
 			     if(bck_hist_aut[i].checked){ //선택되어 있으면 배열에 값을 저장함
-			        	datas.bck_hist_aut_yn = "Y";   
+			    		rows.bck_hist_aut_yn = "Y";   
 			        }else{
-			        	datas.bck_hist_aut_yn = "N";
+			        	rows.bck_hist_aut_yn = "N";
 			        }
 			     
 			     if(acs_cntr_aut[i].checked){ //선택되어 있으면 배열에 값을 저장함
-			        	datas.acs_cntr_aut_yn = "Y";   
+			    	 	rows.acs_cntr_aut_yn = "Y";   
 			        }else{
-			        	datas.acs_cntr_aut_yn = "N";
+			        	rows.acs_cntr_aut_yn = "N";
 			        }
 			     
 			     if(adt_cng_aut[i].checked){ //선택되어 있으면 배열에 값을 저장함
-			        	datas.adt_cng_aut_yn = "Y";   
+			    	 	rows.adt_cng_aut_yn = "Y";   
 			        }else{
-			        	datas.adt_cng_aut_yn = "N";
+			        	rows.adt_cng_aut_yn = "N";
 			        }
 			     
 			     if(adt_hist_aut[i].checked){ //선택되어 있으면 배열에 값을 저장함
-			        	datas.adt_hist_aut_yt = "Y";   
+			    	 	rows.adt_hist_aut_yt = "Y";   
 			        }else{
-			        	datas.adt_hist_aut_yt = "N";
+			        	rows.adt_hist_aut_yt = "N";
 			        }
-			     datasArr.push(datas);
+			     datasArr.push(rows);
 			 } 
 		 }
 		 

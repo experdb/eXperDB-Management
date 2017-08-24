@@ -119,7 +119,8 @@ function fn_insertDbServer(){
 			alert("실패");
 		},
 		success : function(result) {
-			self.close();	 
+			opener.location.reload();
+			self.close();	 			
 		}
 	}); 
 	}else{
