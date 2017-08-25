@@ -21,6 +21,7 @@ import org.springframework.web.servlet.ModelAndView;
 import com.k4m.dx.tcontrol.accesscontrol.service.AccessControlService;
 import com.k4m.dx.tcontrol.accesscontrol.service.AccessControlVO;
 import com.k4m.dx.tcontrol.accesscontrol.service.DbIDbServerVO;
+import com.k4m.dx.tcontrol.admin.accesshistory.service.AccessHistoryService;
 import com.k4m.dx.tcontrol.admin.dbserverManager.service.DbServerManagerService;
 import com.k4m.dx.tcontrol.admin.dbserverManager.service.DbServerVO;
 import com.k4m.dx.tcontrol.admin.menuauthority.service.MenuAuthorityService;
@@ -53,6 +54,9 @@ import com.k4m.dx.tcontrol.common.service.HistoryVO;
 public class DbServerManagerController {
 	
 	@Autowired
+	private AccessHistoryService accessHistoryService;
+	
+	@Autowired
 	private MenuAuthorityService menuAuthorityService;
 	
 	@Autowired
@@ -75,7 +79,7 @@ public class DbServerManagerController {
 	 * @throws Exception
 	 */
 	@RequestMapping(value = "/popup/dbServerRegForm.do")
-	public ModelAndView dbServerRegForm(HttpServletRequest request) {
+	public ModelAndView dbServerRegForm(@ModelAttribute("historyVO") HistoryVO historyVO, HttpServletRequest request) {
 		
 		ModelAndView mv = new ModelAndView();
 		
@@ -91,6 +95,11 @@ public class DbServerManagerController {
 			if(menuAut.get(0).get("wrt_aut_yn").equals("N")){
 				mv.setViewName("error/autError");
 			}else{
+				//이력 남기기
+				CmmnUtils.saveHistory(request, historyVO);
+				historyVO.setExe_dtl_cd("DX-T0007");
+				accessHistoryService.insertHistory(historyVO);
+				
 				mv.addObject("read_aut_yn", menuAut.get(0).get("read_aut_yn"));
 				mv.addObject("wrt_aut_yn", menuAut.get(0).get("wrt_aut_yn"));
 				mv.setViewName("popup/dbServerRegForm");
@@ -140,11 +149,16 @@ public class DbServerManagerController {
 	 * @throws Exception
 	 */
 	@RequestMapping(value="/dbServerConnTest.do")
-	public @ResponseBody Map<String, Object> dbServerConnTest(@ModelAttribute("dbServerVO") DbServerVO dbServerVO, HttpServletRequest request) {
+	public @ResponseBody Map<String, Object> dbServerConnTest(@ModelAttribute("historyVO") HistoryVO historyVO, @ModelAttribute("dbServerVO") DbServerVO dbServerVO, HttpServletRequest request) {
 		
 		Map<String, Object> result =new HashMap<String, Object>();
 	
 		try {
+			//이력 남기기
+			CmmnUtils.saveHistory(request, historyVO);
+			historyVO.setExe_dtl_cd("DX-T0007_02");
+			accessHistoryService.insertHistory(historyVO);
+			
 			AES256 aes = new AES256(AES256_KEY.ENC_KEY);
 			System.out.println("=======parameter=======");
 			System.out.println("서버명 : " + dbServerVO.getDb_svr_nm());
@@ -195,6 +209,10 @@ public class DbServerManagerController {
 	public @ResponseBody String insertDbServer(@ModelAttribute("dbServerVO") DbServerVO dbServerVO, @ModelAttribute("historyVO") HistoryVO historyVO,HttpServletRequest request) throws Exception {
 		AES256 aes = new AES256(AES256_KEY.ENC_KEY);
 		try {
+			//이력 남기기
+			CmmnUtils.saveHistory(request, historyVO);
+			historyVO.setExe_dtl_cd("DX-T0007_01");
+			accessHistoryService.insertHistory(historyVO);
 			
 			String id = (String) request.getSession().getAttribute("usr_id");
 			System.out.println(id);
@@ -235,7 +253,7 @@ public class DbServerManagerController {
 	 * @throws Exception
 	 */
 	@RequestMapping(value = "/popup/dbServerRegReForm.do")
-	public ModelAndView dbServerRegReForm(HttpServletRequest request) {
+	public ModelAndView dbServerRegReForm(@ModelAttribute("historyVO") HistoryVO historyVO, HttpServletRequest request) {
 		
 		ModelAndView mv = new ModelAndView();
 		
@@ -251,6 +269,11 @@ public class DbServerManagerController {
 			if(menuAut.get(0).get("wrt_aut_yn").equals("N")){
 				mv.setViewName("error/autError");
 			}else{
+				//이력 남기기
+				CmmnUtils.saveHistory(request, historyVO);
+				historyVO.setExe_dtl_cd("DX-T0008");
+				accessHistoryService.insertHistory(historyVO);
+				
 				mv.addObject("read_aut_yn", menuAut.get(0).get("read_aut_yn"));
 				mv.addObject("wrt_aut_yn", menuAut.get(0).get("wrt_aut_yn"));
 				mv.setViewName("popup/dbServerRegReForm");
@@ -269,8 +292,13 @@ public class DbServerManagerController {
 	 * @return "forward:/cmmnCodeList.do"
 	 */
 	@RequestMapping(value = "/updateDbServer.do")
-	public @ResponseBody boolean updateDbServer(@ModelAttribute("dbServerVO") DbServerVO dbServerVO, HttpServletRequest request){
+	public @ResponseBody boolean updateDbServer(@ModelAttribute("historyVO") HistoryVO historyVO, @ModelAttribute("dbServerVO") DbServerVO dbServerVO, HttpServletRequest request){
 		try {
+			//이력 남기기
+			CmmnUtils.saveHistory(request, historyVO);
+			historyVO.setExe_dtl_cd("DX-T0008_01");
+			accessHistoryService.insertHistory(historyVO);
+			
 			AES256 aes = new AES256(AES256_KEY.ENC_KEY);
 			String usr_id = (String) request.getSession().getAttribute("usr_id");
 			dbServerVO.setLst_mdfr_id(usr_id);

@@ -29,9 +29,11 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
+import com.k4m.dx.tcontrol.admin.accesshistory.service.AccessHistoryService;
 import com.k4m.dx.tcontrol.admin.menuauthority.service.MenuAuthorityService;
 import com.k4m.dx.tcontrol.backup.service.WorkVO;
 import com.k4m.dx.tcontrol.cmmn.CmmnUtils;
+import com.k4m.dx.tcontrol.common.service.HistoryVO;
 import com.k4m.dx.tcontrol.functions.schedule.ScheduleUtl;
 import com.k4m.dx.tcontrol.functions.schedule.service.ScheduleDtlVO;
 import com.k4m.dx.tcontrol.functions.schedule.service.ScheduleService;
@@ -53,6 +55,9 @@ import com.k4m.dx.tcontrol.functions.schedule.service.ScheduleVO;
  */
 @Controller
 public class ScheduleController {
+	
+	@Autowired
+	private AccessHistoryService accessHistoryService;
 	
 	@Autowired
 
@@ -82,18 +87,23 @@ public class ScheduleController {
 	 * @throws Exception
 	 */
 	@RequestMapping(value = "/insertScheduleView.do")
-	public ModelAndView insertScheduleView(HttpServletRequest request) {
+	public ModelAndView insertScheduleView(@ModelAttribute("historyVO") HistoryVO historyVO, HttpServletRequest request) {
 		
 		//해당메뉴 권한 조회 (공통메소드호출)
 		CmmnUtils cu = new CmmnUtils();
 		menuAut = cu.selectMenuAut(menuAuthorityService, "MN000101");
 		
 		ModelAndView mv = new ModelAndView();
-		try {
+		try {			
 			//읽기 권한이 없는경우 error페이지 호출 , [추후 Exception 처리예정]
 			if(menuAut.get(0).get("read_aut_yn").equals("N")){
 				mv.setViewName("error/autError");
 			}else{				
+				//스케줄 등록 화면 이력 남기기
+				CmmnUtils.saveHistory(request, historyVO);
+				historyVO.setExe_dtl_cd("DX-T0040");
+				accessHistoryService.insertHistory(historyVO);
+				
 				mv.addObject("read_aut_yn", menuAut.get(0).get("read_aut_yn"));
 				mv.addObject("wrt_aut_yn", menuAut.get(0).get("wrt_aut_yn"));
 				mv.setViewName("functions/scheduler/schedulerRegister");
@@ -113,18 +123,23 @@ public class ScheduleController {
 	 * @throws Exception
 	 */
 	@RequestMapping(value = "/popup/scheduleRegForm.do")
-	public ModelAndView scheduleRegForm(HttpServletRequest request) {
+	public ModelAndView scheduleRegForm(@ModelAttribute("historyVO") HistoryVO historyVO, HttpServletRequest request) {
 		
 		//해당메뉴 권한 조회 (공통메소드호출)
 		CmmnUtils cu = new CmmnUtils();
 		menuAut = cu.selectMenuAut(menuAuthorityService, "MN000101");
 		
 		ModelAndView mv = new ModelAndView();
-		try {
+		try {			
 			//쓰기 권한이 없는경우 error페이지 호출 , [추후 Exception 처리예정]
 			if(menuAut.get(0).get("wrt_aut_yn").equals("N")){
 				mv.setViewName("error/autError");
 			}else{	
+				//스케줄 등록 화면 이력 남기기
+				CmmnUtils.saveHistory(request, historyVO);
+				historyVO.setExe_dtl_cd("DX-T0041");
+				accessHistoryService.insertHistory(historyVO);
+				
 				mv.setViewName("popup/scheduleRegForm");	
 			}			
 		} catch (Exception e) {
@@ -135,7 +150,7 @@ public class ScheduleController {
 		
 		
 	/**
-	 * 스케쥴 work List를 조회한다.
+	 *  work List팝업 work List를 조회한다.
 	 * 
 	 * @return resultSet
 	 * @throws Exception
@@ -143,19 +158,24 @@ public class ScheduleController {
 	@SuppressWarnings("unused")
 	@RequestMapping(value = "/selectWorkList.do")
 	@ResponseBody
-	public List<WorkVO> selectWorkList(@ModelAttribute("workVO") WorkVO workVO, HttpServletResponse response) {
+	public List<WorkVO> selectWorkList(@ModelAttribute("historyVO") HistoryVO historyVO, @ModelAttribute("workVO") WorkVO workVO, HttpServletResponse response, HttpServletRequest request) {
 		
 		//해당메뉴 권한 조회 (공통메소드호출)
 		CmmnUtils cu = new CmmnUtils();
 		menuAut = cu.selectMenuAut(menuAuthorityService, "MN000101");
 		
 		List<WorkVO> resultSet = null;
-		try {
+		try {			
 			//읽기 권한이 없는경우 error페이지 호출 , [추후 Exception 처리예정]
 			if(menuAut.get(0).get("read_aut_yn").equals("N")){
 				response.sendRedirect("/autError.do");
 				return resultSet;
 			}else{		
+				//스케줄 work 조회 이력 남기기
+				CmmnUtils.saveHistory(request, historyVO);
+				historyVO.setExe_dtl_cd("DX-T0040_01");
+				accessHistoryService.insertHistory(historyVO);
+				
 				System.out.println("=======parameter=======");
 				System.out.println("구분 : " + workVO.getBck_bsn_dscd());
 				System.out.println("워크명 : " + workVO.getWrk_nm());
@@ -178,7 +198,7 @@ public class ScheduleController {
 	 */
 	@RequestMapping(value = "/selectScheduleWorkList.do")
 	@ResponseBody
-	public List<Map<String, Object>> selectScheduleWorkList(HttpServletRequest request, HttpServletResponse response) {
+	public List<Map<String, Object>> selectScheduleWorkList(@ModelAttribute("historyVO") HistoryVO historyVO, HttpServletRequest request, HttpServletResponse response) {
 	
 		//해당메뉴 권한 조회 (공통메소드호출)
 		CmmnUtils cu = new CmmnUtils();
@@ -217,7 +237,6 @@ public class ScheduleController {
 	 * 스케쥴을 등록한다.
 	 * 
 	 * @return 
-	 * @throws ParseException 
 	 * @throws Exception
 	 */
 	
@@ -227,7 +246,7 @@ public class ScheduleController {
 	 * 3. 스케줄 상세정보 등록
 	 */
 	@RequestMapping(value = "/insertSchedule.do")
-	public void insertSchedule(@ModelAttribute("scheduleVO") ScheduleVO scheduleVO,@ModelAttribute("scheduleDtlVO") ScheduleDtlVO scheduleDtlVO, HttpServletResponse response, HttpServletRequest request, @RequestParam Map<String,String> reqJson) throws IOException, ParseException{
+	public void insertSchedule(@ModelAttribute("historyVO") HistoryVO historyVO, @ModelAttribute("scheduleVO") ScheduleVO scheduleVO,@ModelAttribute("scheduleDtlVO") ScheduleDtlVO scheduleDtlVO, HttpServletResponse response, HttpServletRequest request, @RequestParam Map<String,String> reqJson) throws Exception{
 		
 		//해당메뉴 권한 조회 (공통메소드호출)
 		CmmnUtils cu = new CmmnUtils();
@@ -243,14 +262,19 @@ public class ScheduleController {
 		
 		String mInsertResult = "S";
 		String dInsertResult = "S";
-			
-					
+								
 		//쓰기 권한이 없는경우 error페이지 호출 , [추후 Exception 처리예정]
 		if(menuAut.get(0).get("wrt_aut_yn").equals("N")){
 			response.sendRedirect("/autError.do");
 		}else{		
+			
+			//스케줄 등록 남기기
+			CmmnUtils.saveHistory(request, historyVO);
+			historyVO.setExe_dtl_cd("DX-T0040_01");
+			accessHistoryService.insertHistory(historyVO);
+			
 			// 1. 스케줄ID 시퀀스 조회
-			try {			
+			try {							
 				int scd_id = scheduleService.selectScd_id();
 				System.out.println("스케줄ID 시퀀스 값 : " + scd_id );
 				scheduleVO.setScd_id(scd_id);
@@ -310,18 +334,23 @@ public class ScheduleController {
 	 * @throws Exception
 	 */
 	@RequestMapping(value = "/selectScheduleListView.do")
-	public ModelAndView selectScheduleListView(HttpServletRequest request, HttpServletResponse response) {
+	public ModelAndView selectScheduleListView(@ModelAttribute("historyVO") HistoryVO historyVO, HttpServletRequest request, HttpServletResponse response) {
 		
 		//해당메뉴 권한 조회 (공통메소드호출)
 		CmmnUtils cu = new CmmnUtils();
 		menuAut = cu.selectMenuAut(menuAuthorityService, "MN000102");
 		
 		ModelAndView mv = new ModelAndView();
-		try {
+		try {			
 			//읽기 권한이 없는경우 error페이지 호출 , [추후 Exception 처리예정]
 			if(menuAut.get(0).get("read_aut_yn").equals("N")){
 				mv.setViewName("error/autError");
 			}else{				
+				//이력 남기기
+				CmmnUtils.saveHistory(request, historyVO);
+				historyVO.setExe_dtl_cd("DX-T0039");
+				accessHistoryService.insertHistory(historyVO);
+				
 				mv.addObject("read_aut_yn", menuAut.get(0).get("read_aut_yn"));
 				mv.addObject("wrt_aut_yn", menuAut.get(0).get("wrt_aut_yn"));
 				mv.setViewName("functions/scheduler/schedulerList");
@@ -343,7 +372,7 @@ public class ScheduleController {
 	@SuppressWarnings("null")
 	@RequestMapping(value = "/selectScheduleList.do")
 	@ResponseBody
-	public List<Map<String, Object>> selectScheduleList(@ModelAttribute("scheduleVO") ScheduleVO scheduleVO, HttpServletRequest request, HttpServletResponse response) {
+	public List<Map<String, Object>> selectScheduleList(@ModelAttribute("historyVO") HistoryVO historyVO, @ModelAttribute("scheduleVO") ScheduleVO scheduleVO, HttpServletRequest request, HttpServletResponse response) {
 	
 		//해당메뉴 권한 조회 (공통메소드호출)
 		CmmnUtils cu = new CmmnUtils();
@@ -357,6 +386,11 @@ public class ScheduleController {
 				response.sendRedirect("/autError.do");
 				return resultSet;
 			}else{
+				//이력 남기기
+				CmmnUtils.saveHistory(request, historyVO);
+				historyVO.setExe_dtl_cd("DX-T0039_01");
+				accessHistoryService.insertHistory(historyVO);
+				
 				//현재 서비스 올라간 스케줄 그룹 정보
 				Scheduler scheduler = new StdSchedulerFactory().getScheduler();   
 
@@ -401,7 +435,7 @@ public class ScheduleController {
 	 */
 	@RequestMapping(value = "/scheduleStop.do")
 	@ResponseBody
-	public boolean scheduleStop(HttpServletRequest request, @ModelAttribute("scheduleVO") ScheduleVO scheduleVO, HttpServletResponse response) {
+	public boolean scheduleStop(@ModelAttribute("historyVO") HistoryVO historyVO, HttpServletRequest request, @ModelAttribute("scheduleVO") ScheduleVO scheduleVO, HttpServletResponse response) {
 		
 		//해당메뉴 권한 조회 (공통메소드호출)
 		CmmnUtils cu = new CmmnUtils();
@@ -413,6 +447,11 @@ public class ScheduleController {
 				response.sendRedirect("/autError.do");
 				return false;
 			}else{
+				//이력 남기기
+				CmmnUtils.saveHistory(request, historyVO);
+				historyVO.setExe_dtl_cd("DX-T0039_05");
+				accessHistoryService.insertHistory(historyVO);
+				
 				String scd_id = request.getParameter("scd_id").toString();	
 		
 				scheduleVO.setScd_id(Integer.parseInt(scd_id));
@@ -438,7 +477,7 @@ public class ScheduleController {
 	 */
 	@RequestMapping(value = "/scheduleReStart.do")
 	@ResponseBody
-	public boolean scheduleReStart(@ModelAttribute("scheduleVO") ScheduleVO scheduleVO, HttpServletRequest request, HttpServletResponse response) {
+	public boolean scheduleReStart(@ModelAttribute("historyVO") HistoryVO historyVO, @ModelAttribute("scheduleVO") ScheduleVO scheduleVO, HttpServletRequest request, HttpServletResponse response) {
 		
 		//해당메뉴 권한 조회 (공통메소드호출)
 		CmmnUtils cu = new CmmnUtils();
@@ -449,6 +488,11 @@ public class ScheduleController {
 			if(menuAut.get(0).get("wrt_aut_yn").equals("N")){	
 				response.sendRedirect("/autError.do");
 			}else{
+				//이력 남기기
+				CmmnUtils.saveHistory(request, historyVO);
+				historyVO.setExe_dtl_cd("DX-T0039_06");
+				accessHistoryService.insertHistory(historyVO);
+				
 				String strRows = request.getParameter("sWork").toString().replaceAll("&quot;", "\"");
 				JSONObject rows = (JSONObject) new JSONParser().parse(strRows);
 				
@@ -481,19 +525,24 @@ public class ScheduleController {
 	 */
 	@RequestMapping(value = "/deleteScheduleList.do")
 	@ResponseBody	
-	public void deleteScheduleList(HttpServletRequest request, HttpServletResponse response) {
+	public void deleteScheduleList(@ModelAttribute("historyVO") HistoryVO historyVO, HttpServletRequest request, HttpServletResponse response) {
 		
 		//해당메뉴 권한 조회 (공통메소드호출)
 		CmmnUtils cu = new CmmnUtils();
 		menuAut = cu.selectMenuAut(menuAuthorityService, "MN000102");		
 		
-		try {		
+		try {					
 			//쓰기 권한이 없는경우 error페이지 호출 , [추후 Exception 처리예정]
 			if(menuAut.get(0).get("wrt_aut_yn").equals("N")){	
 				response.sendRedirect("/autError.do");
 			}else{
-			String strRows = request.getParameter("rowList").toString().replaceAll("&quot;", "\"");
-			JSONArray rows = (JSONArray) new JSONParser().parse(strRows);		
+				//이력 남기기
+				CmmnUtils.saveHistory(request, historyVO);
+				historyVO.setExe_dtl_cd("DX-T0039_04");
+				accessHistoryService.insertHistory(historyVO);
+				
+				String strRows = request.getParameter("rowList").toString().replaceAll("&quot;", "\"");
+				JSONArray rows = (JSONArray) new JSONParser().parse(strRows);		
 				for(int i=0; i<rows.size(); i++){
 					int scd_id = Integer.parseInt(rows.get(i).toString());
 					scheduleService.deleteScheduleList(scd_id);
@@ -513,7 +562,7 @@ public class ScheduleController {
 	 * @throws Exception
 	 */
 	@RequestMapping(value = "/modifyScheduleListVeiw.do")
-	public ModelAndView modifyScheduleListVeiw(HttpServletRequest request, HttpServletResponse response) {
+	public ModelAndView modifyScheduleListVeiw(@ModelAttribute("historyVO") HistoryVO historyVO, HttpServletRequest request, HttpServletResponse response) {
 		
 		//해당메뉴 권한 조회 (공통메소드호출)
 		CmmnUtils cu = new CmmnUtils();
@@ -526,6 +575,11 @@ public class ScheduleController {
 			if(menuAut.get(0).get("wrt_aut_yn").equals("N")){
 				mv.setViewName("error/autError");
 			}else{	
+				//이력 남기기
+				CmmnUtils.saveHistory(request, historyVO);
+				historyVO.setExe_dtl_cd("DX-T0039_03");
+				accessHistoryService.insertHistory(historyVO);
+				
 				String scd_id = request.getParameter("scd_id");
 				mv.addObject("read_aut_yn", menuAut.get(0).get("read_aut_yn"));
 				mv.addObject("wrt_aut_yn", menuAut.get(0).get("wrt_aut_yn"));
@@ -548,7 +602,7 @@ public class ScheduleController {
 	 */
 	@RequestMapping(value = "/selectModifyScheduleList.do")
 	@ResponseBody
-	public List<Map<String, Object>> selectModifyScheduleList(HttpServletRequest request, HttpServletResponse response) {
+	public List<Map<String, Object>> selectModifyScheduleList(@ModelAttribute("historyVO") HistoryVO historyVO, HttpServletRequest request, HttpServletResponse response) {
 		
 		//해당메뉴 권한 조회 (공통메소드호출)
 		CmmnUtils cu = new CmmnUtils();
@@ -575,7 +629,6 @@ public class ScheduleController {
 	 * 스케쥴을 등록한다.
 	 * 
 	 * @return 
-	 * @throws ParseException 
 	 * @throws Exception
 	 */
 	
@@ -585,7 +638,7 @@ public class ScheduleController {
 	 * 3. 스케줄 상세정보 등록
 	 */
 	@RequestMapping(value = "/updateSchedule.do")
-	public void updateSchedule(@ModelAttribute("scheduleVO") ScheduleVO scheduleVO,@ModelAttribute("scheduleDtlVO") ScheduleDtlVO scheduleDtlVO, HttpServletResponse response, HttpServletRequest request, @RequestParam Map<String,String> reqJson) throws IOException, ParseException{
+	public void updateSchedule(@ModelAttribute("historyVO") HistoryVO historyVO, @ModelAttribute("scheduleVO") ScheduleVO scheduleVO,@ModelAttribute("scheduleDtlVO") ScheduleDtlVO scheduleDtlVO, HttpServletResponse response, HttpServletRequest request, @RequestParam Map<String,String> reqJson) throws Exception{
 		
 		//해당메뉴 권한 조회 (공통메소드호출)
 		CmmnUtils cu = new CmmnUtils();
@@ -601,11 +654,17 @@ public class ScheduleController {
 		
 		String mUpdateResult = "S";
 		String dUpdateResult = "S";
-		
+	
 		//쓰기 권한이 없는경우 error페이지 호출 , [추후 Exception 처리예정]
 		if(menuAut.get(0).get("wrt_aut_yn").equals("N")){	
 			response.sendRedirect("/autError.do");
 		}else{
+
+			//이력 남기기
+			CmmnUtils.saveHistory(request, historyVO);
+			historyVO.setExe_dtl_cd("DX-T0039_02");
+			accessHistoryService.insertHistory(historyVO);
+			
 			// 1. 스케줄 마스터 업데이트
 			try {			
 				scheduleVO.setFrst_regr_id(usr_id);

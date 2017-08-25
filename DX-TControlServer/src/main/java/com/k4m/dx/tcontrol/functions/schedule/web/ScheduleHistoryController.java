@@ -16,8 +16,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
+import com.k4m.dx.tcontrol.admin.accesshistory.service.AccessHistoryService;
 import com.k4m.dx.tcontrol.admin.menuauthority.service.MenuAuthorityService;
 import com.k4m.dx.tcontrol.cmmn.CmmnUtils;
+import com.k4m.dx.tcontrol.common.service.HistoryVO;
 import com.k4m.dx.tcontrol.functions.schedule.service.ScheduleHistoryService;
 import com.k4m.dx.tcontrol.sample.service.PagingVO;
 
@@ -43,6 +45,9 @@ import egovframework.rte.ptl.mvc.tags.ui.pagination.PaginationInfo;
 public class ScheduleHistoryController {
 	
 	@Autowired
+	private AccessHistoryService accessHistoryService;
+	
+	@Autowired
 	private MenuAuthorityService menuAuthorityService;
 	
 	@Autowired
@@ -62,18 +67,24 @@ public class ScheduleHistoryController {
 	 * @throws Exception
 	 */
 	@RequestMapping(value = "/selectScheduleHistoryView.do")
-	public ModelAndView selectScheduleHistoryView(@ModelAttribute("pagingVO") PagingVO pagingVO, ModelMap model, HttpServletRequest request) {
+	public ModelAndView selectScheduleHistoryView(@ModelAttribute("historyVO") HistoryVO historyVO, @ModelAttribute("pagingVO") PagingVO pagingVO, ModelMap model, HttpServletRequest request) {
 		
 		//해당메뉴 권한 조회 (공통메소드호출)
 		CmmnUtils cu = new CmmnUtils();
 		menuAut = cu.selectMenuAut(menuAuthorityService, "MN000103");
 		
 		ModelAndView mv = new ModelAndView();
-		try {
+		try {			
 			//읽기 권한이 없는경우 error페이지 호출 , [추후 Exception 처리예정]
 			if(menuAut.get(0).get("read_aut_yn").equals("N")){
 				mv.setViewName("error/autError");
 			}else{				
+				
+				//이력 남기기
+				CmmnUtils.saveHistory(request, historyVO);
+				historyVO.setExe_dtl_cd("DX-T0048");
+				accessHistoryService.insertHistory(historyVO);
+				
 				mv.addObject("read_aut_yn", menuAut.get(0).get("read_aut_yn"));
 				mv.addObject("wrt_aut_yn", menuAut.get(0).get("wrt_aut_yn"));
 	
@@ -110,7 +121,7 @@ public class ScheduleHistoryController {
 	 */
 	@RequestMapping(value = "/selectScheduleHistory.do")
 	@ResponseBody
-	public ModelAndView selectScheduleHistory(@ModelAttribute("pagingVO") PagingVO pagingVO, ModelMap model, HttpServletRequest request, HttpServletResponse response) {
+	public ModelAndView selectScheduleHistory(@ModelAttribute("historyVO") HistoryVO historyVO, @ModelAttribute("pagingVO") PagingVO pagingVO, ModelMap model, HttpServletRequest request, HttpServletResponse response) {
 		
 		//해당메뉴 권한 조회 (공통메소드호출)
 		CmmnUtils cu = new CmmnUtils();
@@ -121,7 +132,13 @@ public class ScheduleHistoryController {
 			//읽기 권한이 없는경우 error페이지 호출 , [추후 Exception 처리예정]
 			if(menuAut.get(0).get("read_aut_yn").equals("N")){
 				mv.setViewName("error/autError");
-			}else{				
+			}else{		
+				
+				//이력 남기기
+				CmmnUtils.saveHistory(request, historyVO);
+				historyVO.setExe_dtl_cd("DX-T0048_01");
+				accessHistoryService.insertHistory(historyVO);
+				
 				Map<String, Object> param = new HashMap<String, Object>();
 	
 				String lgi_dtm_start = request.getParameter("lgi_dtm_start");

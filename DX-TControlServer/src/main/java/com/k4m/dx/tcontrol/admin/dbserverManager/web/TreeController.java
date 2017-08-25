@@ -21,6 +21,7 @@ import org.springframework.web.servlet.ModelAndView;
 import com.k4m.dx.tcontrol.accesscontrol.service.AccessControlService;
 import com.k4m.dx.tcontrol.accesscontrol.service.AccessControlVO;
 import com.k4m.dx.tcontrol.accesscontrol.service.DbIDbServerVO;
+import com.k4m.dx.tcontrol.admin.accesshistory.service.AccessHistoryService;
 import com.k4m.dx.tcontrol.admin.dbserverManager.service.DbServerManagerService;
 import com.k4m.dx.tcontrol.admin.dbserverManager.service.DbServerVO;
 import com.k4m.dx.tcontrol.admin.menuauthority.service.MenuAuthorityService;
@@ -52,6 +53,9 @@ import com.k4m.dx.tcontrol.common.service.HistoryVO;
 
 @Controller
 public class TreeController {
+	
+	@Autowired
+	private AccessHistoryService accessHistoryService;
 	
 	@Autowired
 	private MenuAuthorityService menuAuthorityService;
@@ -89,6 +93,11 @@ public class TreeController {
 			if(menuAut.get(0).get("read_aut_yn").equals("N")){
 				mv.setViewName("error/autError");
 			}else{
+				//이력 남기기
+				CmmnUtils.saveHistory(request, historyVO);
+				historyVO.setExe_dtl_cd("DX-T0005");
+				accessHistoryService.insertHistory(historyVO);
+				
 				mv.addObject("read_aut_yn", menuAut.get(0).get("read_aut_yn"));
 				mv.addObject("wrt_aut_yn", menuAut.get(0).get("wrt_aut_yn"));
 				mv.setViewName("admin/dbServerManager/dbTree");
@@ -243,6 +252,11 @@ public class TreeController {
 				response.sendRedirect("/autError.do");
 				return false;
 			}else{
+				//이력 남기기
+				CmmnUtils.saveHistory(request, historyVO);
+				historyVO.setExe_dtl_cd("DX-T0005_04");
+				accessHistoryService.insertHistory(historyVO);
+				
 				String id = (String) request.getSession().getAttribute("usr_id");
 				
 				dbServerVO.setFrst_regr_id(id);

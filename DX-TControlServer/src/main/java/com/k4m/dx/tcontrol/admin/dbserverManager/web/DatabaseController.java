@@ -22,6 +22,7 @@ import org.springframework.web.servlet.ModelAndView;
 import com.k4m.dx.tcontrol.accesscontrol.service.AccessControlService;
 import com.k4m.dx.tcontrol.accesscontrol.service.AccessControlVO;
 import com.k4m.dx.tcontrol.accesscontrol.service.DbIDbServerVO;
+import com.k4m.dx.tcontrol.admin.accesshistory.service.AccessHistoryService;
 import com.k4m.dx.tcontrol.admin.dbserverManager.service.DbServerManagerService;
 import com.k4m.dx.tcontrol.admin.dbserverManager.service.DbServerVO;
 import com.k4m.dx.tcontrol.admin.menuauthority.service.MenuAuthorityService;
@@ -52,6 +53,9 @@ import com.k4m.dx.tcontrol.common.service.HistoryVO;
 public class DatabaseController {
 
 	@Autowired
+	private AccessHistoryService accessHistoryService;
+	
+	@Autowired
 	private MenuAuthorityService menuAuthorityService;
 
 	@Autowired
@@ -75,7 +79,7 @@ public class DatabaseController {
 	 * @throws Exception
 	 */
 	@RequestMapping(value = "/database.do")
-	public ModelAndView database(HttpServletRequest request) {
+	public ModelAndView database(@ModelAttribute("historyVO") HistoryVO historyVO, HttpServletRequest request) {
 		
 		//해당메뉴 권한 조회 (공통메소드호출),
 		CmmnUtils cu = new CmmnUtils();
@@ -87,6 +91,11 @@ public class DatabaseController {
 			if(menuAut.get(0).get("read_aut_yn").equals("N")){
 				mv.setViewName("error/autError");
 			}else{
+				//이력 남기기
+				CmmnUtils.saveHistory(request, historyVO);
+				historyVO.setExe_dtl_cd("DX-T0009");
+				accessHistoryService.insertHistory(historyVO);
+				
 				mv.addObject("read_aut_yn", menuAut.get(0).get("read_aut_yn"));
 				mv.addObject("wrt_aut_yn", menuAut.get(0).get("wrt_aut_yn"));
 				mv.setViewName("admin/dbServerManager/database");
@@ -107,7 +116,7 @@ public class DatabaseController {
 	@SuppressWarnings("unused")
 	@RequestMapping(value = "/selectDatabaseSvrList.do")
 	@ResponseBody
-	public List<Map<String, Object>> selectDatabaseSvrList(HttpServletRequest request, HttpServletResponse response) {
+	public List<Map<String, Object>> selectDatabaseSvrList(@ModelAttribute("historyVO") HistoryVO historyVO, HttpServletRequest request, HttpServletResponse response) {
 		
 		//해당메뉴 권한 조회 (공통메소드호출),
 		CmmnUtils cu = new CmmnUtils();
@@ -142,7 +151,7 @@ public class DatabaseController {
 	@SuppressWarnings("unused")
 	@RequestMapping(value = "/selectDatabaseRepoDBList.do")
 	@ResponseBody
-	public List<Map<String, Object>> selectDatabaseRepoDBList(HttpServletRequest request, HttpServletResponse response) {
+	public List<Map<String, Object>> selectDatabaseRepoDBList(@ModelAttribute("historyVO") HistoryVO historyVO, HttpServletRequest request, HttpServletResponse response) {
 		
 		//해당메뉴 권한 조회 (공통메소드호출)
 		CmmnUtils cu = new CmmnUtils();
@@ -157,6 +166,11 @@ public class DatabaseController {
 				response.sendRedirect("/autError.do");
 				return resultSet;
 			}else{
+				//이력 남기기
+				CmmnUtils.saveHistory(request, historyVO);
+				historyVO.setExe_dtl_cd("DX-T0009_01");
+				accessHistoryService.insertHistory(historyVO);
+				
 				String db_svr_nm = request.getParameter("db_svr_nm");
 				String ipadr = request.getParameter("ipadr");
 				String dft_db_nm = request.getParameter("dft_db_nm");
@@ -183,7 +197,7 @@ public class DatabaseController {
 	 * @throws Exception
 	 */
 	@RequestMapping(value = "/popup/dbRegForm.do")
-	public ModelAndView dbRegForm(HttpServletRequest request) {
+	public ModelAndView dbRegForm(@ModelAttribute("historyVO") HistoryVO historyVO, HttpServletRequest request) {
 		
 		//해당메뉴 권한 조회 (공통메소드호출)
 		CmmnUtils cu = new CmmnUtils();
@@ -195,6 +209,11 @@ public class DatabaseController {
 			if(menuAut.get(0).get("wrt_aut_yn").equals("N")){
 				mv.setViewName("error/autError");
 			}else{
+				//이력 남기기
+				CmmnUtils.saveHistory(request, historyVO);
+				historyVO.setExe_dtl_cd("DX-T0010");
+				accessHistoryService.insertHistory(historyVO);
+				
 				mv.addObject("read_aut_yn", menuAut.get(0).get("read_aut_yn"));
 				mv.addObject("wrt_aut_yn", menuAut.get(0).get("wrt_aut_yn"));
 				mv.setViewName("popup/dbRegForm");
@@ -215,7 +234,7 @@ public class DatabaseController {
 	@SuppressWarnings("unused")
 	@RequestMapping(value = "/selectDBList.do")
 	@ResponseBody
-	public List<DbVO> selectDBList(@ModelAttribute("dbVO") DbVO dbVO, HttpServletResponse response) {
+	public List<DbVO> selectDBList(@ModelAttribute("historyVO") HistoryVO historyVO, @ModelAttribute("dbVO") DbVO dbVO, HttpServletResponse response) {
 		
 		//해당메뉴 권한 조회 (공통메소드호출)
 		CmmnUtils cu = new CmmnUtils();
@@ -258,6 +277,11 @@ public class DatabaseController {
 				response.sendRedirect("/autError.do");
 				return false;
 			}else{
+				//이력 남기기
+				CmmnUtils.saveHistory(request, historyVO);
+				historyVO.setExe_dtl_cd("DX-T0010_01");
+				accessHistoryService.insertHistory(historyVO);
+				
 				String id = (String) request.getSession().getAttribute("usr_id");
 				
 				dbServerVO.setFrst_regr_id(id);
