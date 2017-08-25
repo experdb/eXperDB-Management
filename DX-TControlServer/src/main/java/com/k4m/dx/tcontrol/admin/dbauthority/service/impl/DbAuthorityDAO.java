@@ -50,6 +50,7 @@ public class DbAuthorityDAO extends EgovAbstractMapper{
 	}
 
 	
+	@SuppressWarnings({ "deprecation", "unchecked" })
 	public List<Map<String, Object>> selectUsrDBSrvAutInfo(String usr_id) {
 		List<Map<String, Object>>  sl = null;
 		sl = (List<Map<String, Object>>) list("dbAuthoritySql.selectUsrDBSrvAutInfo", usr_id);
@@ -60,12 +61,14 @@ public class DbAuthorityDAO extends EgovAbstractMapper{
 		update("dbAuthoritySql.updateUsrDBSrvAutInfo", object);		
 	}
 
+	@SuppressWarnings({ "deprecation", "unchecked" })
 	public List<Map<String, Object>> selectDBAutInfo() {
 		List<Map<String, Object>>  sl = null;
 		sl = (List<Map<String, Object>>) list("dbAuthoritySql.selectDBAutInfo", null);
 		return sl;
 	}
 
+	@SuppressWarnings({ "deprecation", "unchecked" })
 	public List<Map<String, Object>> selectUsrDBAutInfo(String usr_id) {
 		List<Map<String, Object>>  sl = null;
 		sl = (List<Map<String, Object>>) list("dbAuthoritySql.selectUsrDBAutInfo", usr_id);

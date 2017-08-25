@@ -101,12 +101,13 @@
 	 	* Author : 변승우
 	 	**/
 		SELECT 
-			      read_aut_yn
-			     , wrt_aut_yn
-		FROM T_USRMNUAUT_I 
+			      A.read_aut_yn
+			     , A.wrt_aut_yn
+		FROM T_USRMNUAUT_I A, T_MNU_I B
 		WHERE 1 = 1
-		AND  usr_id = #{usr_id}
-		AND mnu_id = #{mnu_id}::numeric
+		AND A.mnu_id = B.mnu_id
+		AND  A.usr_id = #{usr_id}
+		AND B.mnu_cd = #{mnu_cd}
     </select>
 
 

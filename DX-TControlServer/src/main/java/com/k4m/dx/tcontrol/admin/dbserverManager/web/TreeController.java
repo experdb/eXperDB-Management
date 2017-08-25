@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
@@ -79,7 +80,7 @@ public class TreeController {
 	public ModelAndView dbTree(@ModelAttribute("historyVO") HistoryVO historyVO, @ModelAttribute("cmmnVO") CmmnVO cmmnVO, HttpServletRequest request) {
 				
 		CmmnUtils cu = new CmmnUtils();
-		menuAut = cu.selectMenuAut(menuAuthorityService, "15");
+		menuAut = cu.selectMenuAut(menuAuthorityService, "MN000301");
 
 		ModelAndView mv = new ModelAndView();
 		try {
@@ -107,14 +108,19 @@ public class TreeController {
 	@SuppressWarnings("unused")
 	@RequestMapping(value = "/selectTreeDbServerList.do")
 	@ResponseBody
-	public List<DbServerVO> selectDbServerList(@ModelAttribute("dbServerVO") DbServerVO dbServerVO) {
+	public List<DbServerVO> selectDbServerList(@ModelAttribute("dbServerVO") DbServerVO dbServerVO, HttpServletResponse response) {
 	
 		CmmnUtils cu = new CmmnUtils();
-		menuAut = cu.selectMenuAut(menuAuthorityService, "15");
+		menuAut = cu.selectMenuAut(menuAuthorityService, "MN000301");
 		
 		List<DbServerVO> result = null;
 		List<DbServerVO> resultSet = null;
 		try {
+			//읽기권한이 없는경우
+			if(menuAut.get(0).get("read_aut_yn").equals("N")){
+				response.sendRedirect("/autError.do");
+				return resultSet;
+			}		
 			
 			System.out.println("=======parameter=======");
 			System.out.println("서버명 : " + dbServerVO.getDb_svr_id());
@@ -123,13 +129,8 @@ public class TreeController {
 			System.out.println("Database : " + dbServerVO.getDft_db_nm());
 			System.out.println("=====================");
 			
-			//읽기권한이 있을경우
-			if(menuAut.get(0).get("read_aut_yn").equals("Y")){
-				resultSet = dbServerManagerService.selectDbServerList(dbServerVO);
-			}else{
-				return resultSet;
-			}
-			
+			resultSet = dbServerManagerService.selectDbServerList(dbServerVO);
+
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -146,14 +147,20 @@ public class TreeController {
 	 */
 	@RequestMapping(value = "/selectTreeServerDBList.do")
 	@ResponseBody
-	public Map<String, Object> selectServerDBList (@ModelAttribute("dbServerVO") DbServerVO dbServerVO, HttpServletRequest request) {
+	public Map<String, Object> selectServerDBList (@ModelAttribute("dbServerVO") DbServerVO dbServerVO, HttpServletRequest request, HttpServletResponse response) {
 		
 		CmmnUtils cu = new CmmnUtils();
-		menuAut = cu.selectMenuAut(menuAuthorityService, "15");
+		menuAut = cu.selectMenuAut(menuAuthorityService, "MN000301");
 		
 		Map<String, Object> result =new HashMap<String, Object>();
 	
 		try {
+			//읽기권한이 없는경우
+			if(menuAut.get(0).get("read_aut_yn").equals("N")){
+				response.sendRedirect("/autError.do");
+				return result;
+			}		
+			
 			AES256 aes = new AES256(AES256_KEY.ENC_KEY);
 			String db_svr_nm = request.getParameter("db_svr_nm");
 			System.out.println(db_svr_nm);
@@ -169,14 +176,9 @@ public class TreeController {
 			serverObj.put(ClientProtocolID.USER_ID, resultSet.get(0).getSvr_spr_usr_id());
 			serverObj.put(ClientProtocolID.USER_PWD, aes.aesDecode(resultSet.get(0).getSvr_spr_scm_pwd()));
 			
+			ClientInfoCmmn cic = new ClientInfoCmmn();
+			result = cic.db_List(serverObj);
 			
-			//읽기권한이 있을경우
-			if(menuAut.get(0).get("read_aut_yn").equals("Y")){
-				ClientInfoCmmn cic = new ClientInfoCmmn();
-				result = cic.db_List(serverObj);
-			}else{
-				return result;
-			}
 			//System.out.println(result);
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -195,18 +197,20 @@ public class TreeController {
 	@SuppressWarnings("unused")
 	@RequestMapping(value = "/selectTreeDBList.do")
 	@ResponseBody
-	public List<DbVO> selectTreeDBList(@ModelAttribute("dbVO") DbVO dbVO) {
+	public List<DbVO> selectTreeDBList(@ModelAttribute("dbVO") DbVO dbVO, HttpServletResponse response) {
 		CmmnUtils cu = new CmmnUtils();
-		menuAut = cu.selectMenuAut(menuAuthorityService, "15");
+		menuAut = cu.selectMenuAut(menuAuthorityService, "MN000301");
 		
 		List<DbVO> resultSet = null;
 		try {
-			//읽기권한이 있을경우
-			if(menuAut.get(0).get("read_aut_yn").equals("Y")){
-				resultSet = dbServerManagerService.selectDbList();		
-			}else{
+			//읽기권한이 없는경우
+			if(menuAut.get(0).get("read_aut_yn").equals("N")){
+				response.sendRedirect("/autError.do");
 				return resultSet;
-			}
+			}		
+			
+			resultSet = dbServerManagerService.selectDbList();		
+
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -224,11 +228,17 @@ public class TreeController {
 	 * @throws Exception
 	 */
 	@RequestMapping(value = "/insertTreeDB.do")
-	public @ResponseBody boolean insertTreeDB(@ModelAttribute("accessControlVO") AccessControlVO accessControlVO,@ModelAttribute("dbServerVO") DbServerVO dbServerVO, @ModelAttribute("historyVO") HistoryVO historyVO, HttpServletRequest request) throws ParseException {
+	public @ResponseBody boolean insertTreeDB(@ModelAttribute("accessControlVO") AccessControlVO accessControlVO,@ModelAttribute("dbServerVO") DbServerVO dbServerVO, @ModelAttribute("historyVO") HistoryVO historyVO, HttpServletRequest request, HttpServletResponse response) throws ParseException {
 			int cnt = 0; 
 		try {
 			CmmnUtils cu = new CmmnUtils();
-			menuAut = cu.selectMenuAut(menuAuthorityService, "15");
+			menuAut = cu.selectMenuAut(menuAuthorityService, "MN000301");
+			
+			//쓰기권한이 없는경우
+			if(menuAut.get(0).get("wrt_aut_yn").equals("N")){
+				response.sendRedirect("/autError.do");
+				return false;
+			}
 			
 			String id = (String) request.getSession().getAttribute("usr_id");
 			
@@ -239,15 +249,9 @@ public class TreeController {
 
 			JSONArray rows = (JSONArray) new JSONParser().parse(strRows);
 			
-			//쓰기권한이 있을경우
-			if(menuAut.get(0).get("wrt_aut_yn").equals("Y")){
-				cnt = dbServerManagerService.selectDBcnt(dbServerVO);
-				accessControlService.deleteDbAccessControl(dbServerVO.getDb_svr_id());
-			}else{
-				return true;
-			}
-			
-			
+			cnt = dbServerManagerService.selectDBcnt(dbServerVO);
+			accessControlService.deleteDbAccessControl(dbServerVO.getDb_svr_id());
+		
 			HashMap<String, Object> paramvalue = new HashMap<String, Object>();
 			
 			for (int i = 0; i < rows.size(); i++) {
@@ -269,19 +273,11 @@ public class TreeController {
 				System.out.println("수정자 : "+ paramvalue.get("lst_mdfr_id"));
 				System.out.println("====================================");
 			
-				//쓰기권한이 있을경우
-				if(menuAut.get(0).get("wrt_aut_yn").equals("Y")){	
-					if(cnt == 0){
-						dbServerManagerService.insertDB(paramvalue);		
-					}else{
-						System.out.println("업데이트");
-						dbServerManagerService.updateDB(paramvalue);		
-					}
-					
+				if(cnt == 0){
+					dbServerManagerService.insertDB(paramvalue);		
 				}else{
-					return true;
-				}
-				
+					dbServerManagerService.updateDB(paramvalue);		
+				}							
 			}
 			
 			/*접근제어 정보 INSERT*/

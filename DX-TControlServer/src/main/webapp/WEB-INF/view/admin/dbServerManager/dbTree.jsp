@@ -279,6 +279,7 @@ function fn_insertDB(){
 					}
 				},
 				success : function(result) {
+					alert(result);
 					alert("저장되었습니다.");
 					location.reload();
 				}

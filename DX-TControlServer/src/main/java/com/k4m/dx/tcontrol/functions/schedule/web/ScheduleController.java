@@ -65,7 +65,6 @@ public class ScheduleController {
 	private List<Map<String, Object>> menuAut;
 
 
-	
 	/**
 	 * Mybatis Transaction 
 	 */
@@ -86,7 +85,7 @@ public class ScheduleController {
 	public ModelAndView insertScheduleView(HttpServletRequest request) {
 		
 		CmmnUtils cu = new CmmnUtils();
-		menuAut = cu.selectMenuAut(menuAuthorityService, "10");
+		menuAut = cu.selectMenuAut(menuAuthorityService, "MN000101");
 		
 		ModelAndView mv = new ModelAndView();
 		try {
@@ -113,9 +112,17 @@ public class ScheduleController {
 	 */
 	@RequestMapping(value = "/popup/scheduleRegForm.do")
 	public ModelAndView scheduleRegForm(HttpServletRequest request) {
+		
+		CmmnUtils cu = new CmmnUtils();
+		menuAut = cu.selectMenuAut(menuAuthorityService, "MN000101");
+		
 		ModelAndView mv = new ModelAndView();
 		try {
-			mv.setViewName("popup/scheduleRegForm");
+			if(menuAut.get(0).get("wrt_aut_yn").equals("N")){
+				mv.setViewName("error/autError");
+			}else{	
+				mv.setViewName("popup/scheduleRegForm");	
+			}			
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

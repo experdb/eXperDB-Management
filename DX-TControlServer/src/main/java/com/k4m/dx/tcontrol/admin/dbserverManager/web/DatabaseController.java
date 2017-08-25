@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -56,8 +57,9 @@ public class DatabaseController {
 	 */
 	@RequestMapping(value = "/database.do")
 	public ModelAndView database(HttpServletRequest request) {
+		
 		CmmnUtils cu = new CmmnUtils();
-		menuAut = cu.selectMenuAut(menuAuthorityService, "17");
+		menuAut = cu.selectMenuAut(menuAuthorityService, "MN000303");
 		
 		ModelAndView mv = new ModelAndView();
 		try {
@@ -80,25 +82,23 @@ public class DatabaseController {
 	@SuppressWarnings("unused")
 	@RequestMapping(value = "/selectDatabaseSvrList.do")
 	@ResponseBody
-	public List<Map<String, Object>> selectDatabaseSvrList(HttpServletRequest request) {
+	public List<Map<String, Object>> selectDatabaseSvrList(HttpServletRequest request, HttpServletResponse response) {
 		
 		CmmnUtils cu = new CmmnUtils();
-		menuAut = cu.selectMenuAut(menuAuthorityService, "17");
-		
+		menuAut = cu.selectMenuAut(menuAuthorityService, "MN000303");
+				
 		List<Map<String, Object>> resultSet = null;
-		try {		
-			int db_svr_id = 0;
-			
+		try {
+			//읽기권한이 없는경우
+			if(menuAut.get(0).get("read_aut_yn").equals("N")){
+				response.sendRedirect("/autError.do");
+				return resultSet;
+			}	
+			int db_svr_id = 0;		
 			if(request.getParameter("db_svr_id") != null){
 				db_svr_id = Integer.parseInt(request.getParameter("db_svr_id"));		
-				System.out.println(db_svr_id);
 			}	
-			//읽기권한이 있을경우
-			if(menuAut.get(0).get("read_aut_yn").equals("Y")){
-				resultSet = dbServerManagerService.selectSvrList(db_svr_id);	
-			}else{
-				return resultSet;
-			}
+			resultSet = dbServerManagerService.selectSvrList(db_svr_id);	
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -115,10 +115,10 @@ public class DatabaseController {
 	@SuppressWarnings("unused")
 	@RequestMapping(value = "/selectDatabaseRepoDBList.do")
 	@ResponseBody
-	public List<Map<String, Object>> selectDatabaseRepoDBList(HttpServletRequest request) {
+	public List<Map<String, Object>> selectDatabaseRepoDBList(HttpServletRequest request, HttpServletResponse response) {
 		
 		CmmnUtils cu = new CmmnUtils();
-		menuAut = cu.selectMenuAut(menuAuthorityService, "17");
+		menuAut = cu.selectMenuAut(menuAuthorityService, "MN000303");
 
 		HashMap<String, Object> paramvalue = new HashMap<String, Object>();
 		
@@ -131,13 +131,15 @@ public class DatabaseController {
 		paramvalue.put("dft_db_nm", dft_db_nm);
 
 		List<Map<String, Object>> resultSet = null;
-		try {			
-			//읽기권한이 있을경우
-			if(menuAut.get(0).get("read_aut_yn").equals("Y")){
-				resultSet = dbServerManagerService.selectRepoDBList(paramvalue);		
-			}else{
+		try {		
+			
+			//읽기권한이 없는경우
+			if(menuAut.get(0).get("read_aut_yn").equals("N")){
+				response.sendRedirect("/autError.do");
 				return resultSet;
-			}
+			}	
+			
+			resultSet = dbServerManagerService.selectRepoDBList(paramvalue);		
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

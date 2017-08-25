@@ -25,6 +25,7 @@ import com.k4m.dx.tcontrol.cmmn.CmmnUtils;
 import com.k4m.dx.tcontrol.cmmn.client.ClientInfoCmmn;
 import com.k4m.dx.tcontrol.cmmn.client.ClientProtocolID;
 import com.k4m.dx.tcontrol.common.service.CmmnServerInfoService;
+import com.k4m.dx.tcontrol.common.service.CmmnVO;
 import com.k4m.dx.tcontrol.common.service.HistoryVO;
 import com.k4m.dx.tcontrol.dashboard.service.DashboardService;
 import com.k4m.dx.tcontrol.dashboard.service.DashboardVO;
@@ -93,6 +94,28 @@ public class CmmnController {
 	}
 	
 
+	
+	/**
+	 *  권한 에러 화면을 보여준다.
+	 * 
+	 * @param 
+	 * @param request
+	 * @return ModelAndView mv
+	 * @throws Exception
+	 */
+	@RequestMapping(value = "/autError.do")
+	public ModelAndView autError(HttpServletRequest request) {
+				
+		ModelAndView mv = new ModelAndView();
+		try {	
+				mv.setViewName("error/autError");
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return mv;
+	}
+	
+	
 	/**
 	 * DB서버에 대한 DB 리스트를 조회한다.
 	 * 

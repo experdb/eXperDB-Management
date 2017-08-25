@@ -41,23 +41,9 @@ public class CmmnUtils {
 	}
 	
 	//메뉴권한 조회
-	public List<Map<String, Object>> selectMenuAut(MenuAuthorityService menuAuthorityService, String mnu_id) {
+	public List<Map<String, Object>> selectMenuAut(MenuAuthorityService menuAuthorityService, String mnu_cd) {
 		
 		List<Map<String, Object>> result = null;
-		
-		/*String xml[] = {
-				"egovframework/spring/context-aspect.xml",
-				"egovframework/spring/context-common.xml",
-				"egovframework/spring/context-datasource.xml",
-				"egovframework/spring/context-mapper.xml",
-				"egovframework/spring/context-properties.xml",
-				"egovframework/spring/context-transaction.xml"};
-		
-		context = new ClassPathXmlApplicationContext(xml);
-		context.getAutowireCapableBeanFactory().autowireBeanProperties(this,
-				AutowireCapableBeanFactory.AUTOWIRE_BY_TYPE, false);
-		
-		MenuAuthorityService menuAuthorityService = (MenuAuthorityService) context.getBean("menuAuthorityService");	*/	
 		
 		try{
 			ServletRequestAttributes sra = (ServletRequestAttributes) RequestContextHolder.currentRequestAttributes();
@@ -68,7 +54,7 @@ public class CmmnUtils {
 			
 			Map<String,Object> param = new HashMap<String, Object>();
 			param.put("usr_id", usr_id);
-			param.put("mnu_id", mnu_id);
+			param.put("mnu_cd", mnu_cd);
 			
 			result = menuAuthorityService.selectMenuAut(param);
 					

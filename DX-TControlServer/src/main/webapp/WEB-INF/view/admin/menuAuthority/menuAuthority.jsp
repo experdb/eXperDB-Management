@@ -444,20 +444,20 @@ function fn_save(){
 																<input type="checkbox" id="w_MN0009" name="w_mnu_nm"  />
 																<label for="w_MN0009"></label>
 															</div>
-													<input type="hidden"  name="mnu_id" value="10">		
-													<input type="hidden"  name="mnu_id" value="11">		
-													<input type="hidden"  name="mnu_id" value="12">		
-													<input type="hidden"  name="mnu_id" value="13">		
-													<input type="hidden"  name="mnu_id" value="14">		
-													<input type="hidden"  name="mnu_id" value="15">		
-													<input type="hidden"  name="mnu_id" value="16">		
-													<input type="hidden"  name="mnu_id" value="17">			
+													<input type="hidden"  name="mnu_id" value="2">		
+													<input type="hidden"  name="mnu_id" value="3">		
 													<input type="hidden"  name="mnu_id" value="4">		
-													<input type="hidden"  name="mnu_id" value="5" >		
-													<input type="hidden"  name="mnu_id" value="6" >		
+													<input type="hidden"  name="mnu_id" value="6">		
 													<input type="hidden"  name="mnu_id" value="7">		
-													<input type="hidden"  name="mnu_id" value="8" >		
 													<input type="hidden"  name="mnu_id" value="9">		
+													<input type="hidden"  name="mnu_id" value="10">		
+													<input type="hidden"  name="mnu_id" value="11">			
+													<input type="hidden"  name="mnu_id" value="12">		
+													<input type="hidden"  name="mnu_id" value="13" >		
+													<input type="hidden"  name="mnu_id" value="14" >		
+													<input type="hidden"  name="mnu_id" value="15">		
+													<input type="hidden"  name="mnu_id" value="16" >		
+													<input type="hidden"  name="mnu_id" value="17">		
 														</td>											
 													</tr>																									
 												</tbody>
