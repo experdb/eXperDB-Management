@@ -243,11 +243,11 @@ function checkFolder(keyType){
 									<tr>
 										<th scope="row" class="ico_t1">데이터경로</th>
 										<td><input type="text" class="txt" name="data_pth" id="data_pth" maxlength=50 value="<c:out value="${workInfo[0].data_pth}"/>" style="width:230px" onKeydown="$('#check_path1').val('N')"/>
-											<a href="javascript:checkFolder(1);"><font color="red"><b>[경로체크]</b></font></a>
+											<span class="btn btnC_01"><button type="button" class= "btn_type_02" onclick="checkFolder(1)" style="width: 60px; margin-right: -60px; margin-top: 0;">경로체크</button></span>
 										</td>
 										<th scope="row" class="ico_t1">백업경로</th>
 										<td><input type="text" class="txt" name="bck_pth" id="bck_pth" maxlength=50 value="<c:out value="${workInfo[0].bck_pth}"/>" style="width:230px" onKeydown="$('#check_path2').val('N')"/>
-											<a href="javascript:checkFolder(2);"><font color="red"><b>[경로체크]</b></font></a>
+											<span class="btn btnC_01"><button type="button" class= "btn_type_02" onclick="checkFolder(2)" style="width: 60px; margin-right: -60px; margin-top: 0;">경로체크</button></span>
 										</td>
 									</tr>
 								</tbody>

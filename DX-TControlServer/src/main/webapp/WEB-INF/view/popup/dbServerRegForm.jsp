@@ -201,6 +201,41 @@ function fn_ipCheck() {
 	});
 }
 	
+	
+/* ********************************************************
+ * 저장경로의 존재유무 체크
+ ******************************************************** */
+function checkFolder(){
+	var save_pth = $("#save_pth").val();
+	if(save_pth == ""){
+		alert("저장경로를 입력해 주세요.");
+		$("#save_pth").focus();
+	}else{
+		$.ajax({
+			async : false,
+			url : "/existDirCheck.do",
+		  	data : {
+		  		path : save_pth
+		  	},
+			type : "post",
+			error : function(request, xhr, status, error) {
+				alert("실패");
+			},
+			success : function(data) {
+				if(data.result.ERR_CODE == ""){
+					if(data.result.RESULT_DATA == 0){
+						$("#check_path").val("Y");
+						alert("입력하신 경로는 존재합니다.");
+					}else{
+						alert("입력하신 경로는 존재하지 않습니다.");
+					}
+				}else{
+					alert("경로체크 중 서버에러로 인하여 실패하였습니다.")
+				}
+			}
+		});
+	}
+}	
 </script>
 </head>
 <body>
@@ -240,7 +275,12 @@ function fn_ipCheck() {
 				</tr>
 				<tr>
 					<th scope="row" class="ico_t1">서버 설치경로</th>
-					<td><input type="text" class="txt" name="istpath" id="istpath" style="width:700px" /></td>					
+					<td>
+					<input type="text" class="txt" name="save_pth" id="save_pth" style="width:640px" /></td>
+					<th scope="row" class="ico_t1"></th>
+					<td>
+					<span class="btn btnC_01"><button type="button" class= "btn_type_02" onclick="checkFolder()" style="width: 60px; margin-left: 237px; margin-top: 0;">경로체크</button></span>
+					</td>					
 				</tr>
 			</tbody>
 		</table>
