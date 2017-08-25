@@ -48,6 +48,7 @@ function fn_init() {
 
 
 $(window.document).ready(function() {
+	fn_buttonAut();
 	fn_init();
 	
 	//유저조회
@@ -117,6 +118,15 @@ $(function() {
 	    } );   
 } );
 
+function fn_buttonAut(){
+	var save_button = document.getElementById("save_button"); 
+
+	if("${wrt_aut_yn}" == "Y"){
+		save_button.style.display = '';
+	}else{
+		save_button.style.display = 'none';
+	}
+}
 
 function fn_save(){
 	 var datasArr = new Array();	
@@ -209,7 +219,7 @@ function fn_save(){
 								</div>
 								<div class="menu_roll_rt">
 									<div class="btn_type_01">
-										<span class="btn"><button onClick="fn_save()";>저장</button></span>
+										<span class="btn"><button onClick="fn_save()"; id="save_button">저장</button></span>
 									</div>
 									<div class="inner">
 										<p class="tit">메뉴권한</p>

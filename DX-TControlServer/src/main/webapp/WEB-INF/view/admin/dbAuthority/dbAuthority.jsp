@@ -52,9 +52,24 @@
 		});
 		
 	}
+	
+	function fn_buttonAut(){
+		var db_button = document.getElementById("db_button"); 
+		var server_button = document.getElementById("server_button"); 
+		
+		if("${wrt_aut_yn}" == "Y"){
+			server_button.style.display = '';
+			db_button.style.display = '';
+		}else{
+			server_button.style.display = 'none';
+			db_button.style.display = 'none';
+		}
+	}
 
 	$(window.document).ready(function() {
+		fn_buttonAut();		
 		fn_init();
+		
 		$.ajax({
 			url : "/selectDBAutUserManager.do",
 			dataType : "json",
@@ -489,7 +504,7 @@
 								
 								<div class="db_roll_rt">
 									<div class="btn_type_01">
-										<span class="btn"><button onClick="fn_svr_save();">저장</button></span>
+										<span class="btn"><button onClick="fn_svr_save();" id="server_button">저장</button></span>
 									</div>
 									<div class="inner">
 										<p class="tit">DB서버 권한</p>
@@ -503,7 +518,7 @@
 								
 								<div class="db_roll_last">
 									<div class="btn_type_01">
-										<span class="btn"><button onClick="fn_db_save();">저장</button></span>
+										<span class="btn"><button onClick="fn_db_save();" id="db_button">저장</button></span>
 									</div>
 									<div class="inner">
 										<p class="tit">DB 권한</p>
