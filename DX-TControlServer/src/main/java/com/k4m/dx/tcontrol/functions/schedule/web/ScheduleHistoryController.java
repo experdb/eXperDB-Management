@@ -6,6 +6,7 @@ import java.util.Map;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -63,11 +64,13 @@ public class ScheduleHistoryController {
 	@RequestMapping(value = "/selectScheduleHistoryView.do")
 	public ModelAndView selectScheduleHistoryView(@ModelAttribute("pagingVO") PagingVO pagingVO, ModelMap model, HttpServletRequest request) {
 		
+		//해당메뉴 권한 조회 (공통메소드호출)
 		CmmnUtils cu = new CmmnUtils();
-		menuAut = cu.selectMenuAut(menuAuthorityService, "12");
+		menuAut = cu.selectMenuAut(menuAuthorityService, "MN000103");
 		
 		ModelAndView mv = new ModelAndView();
 		try {
+			//읽기 권한이 없는경우 error페이지 호출 , [추후 Exception 처리예정]
 			if(menuAut.get(0).get("read_aut_yn").equals("N")){
 				mv.setViewName("error/autError");
 			}else{				
@@ -107,67 +110,67 @@ public class ScheduleHistoryController {
 	 */
 	@RequestMapping(value = "/selectScheduleHistory.do")
 	@ResponseBody
-	public ModelAndView selectScheduleHistory(@ModelAttribute("pagingVO") PagingVO pagingVO, ModelMap model, HttpServletRequest request) {
+	public ModelAndView selectScheduleHistory(@ModelAttribute("pagingVO") PagingVO pagingVO, ModelMap model, HttpServletRequest request, HttpServletResponse response) {
 		
+		//해당메뉴 권한 조회 (공통메소드호출)
 		CmmnUtils cu = new CmmnUtils();
-		menuAut = cu.selectMenuAut(menuAuthorityService, "12");
+		menuAut = cu.selectMenuAut(menuAuthorityService, "MN000103");
 		
 		ModelAndView mv = new ModelAndView();
 		try {		
-					
-			Map<String, Object> param = new HashMap<String, Object>();
-
-			String lgi_dtm_start = request.getParameter("lgi_dtm_start");
-			String lgi_dtm_end = request.getParameter("lgi_dtm_end");
-			String scd_nm = request.getParameter("scd_nm");
-			String db_svr_nm = request.getParameter("db_svr_nm");
-			if(scd_nm == null){
-				scd_nm="%"+scd_nm+"%";
-			}
-			
-			param.put("lgi_dtm_start", lgi_dtm_start);
-			param.put("lgi_dtm_end", lgi_dtm_end);
-			param.put("scd_nm", scd_nm);
-			param.put("db_svr_nm", db_svr_nm);
-
-			System.out.println("********PARAMETER*******");
-			System.out.println("DB서버 : "+ db_svr_nm);
-			System.out.println("스케줄명 : "+ scd_nm);
-			System.out.println("시작날짜 : "+ lgi_dtm_start);
-			System.out.println("종료날짜 : " +lgi_dtm_end);
-			System.out.println("*************************");
-			
-			/** EgovPropertyService.sample */
-			pagingVO.setPageUnit(propertiesService.getInt("pageUnit"));
-			pagingVO.setPageSize(propertiesService.getInt("pageSize"));
-
-			/** pageing setting */
-			PaginationInfo paginationInfo = new PaginationInfo();
-			paginationInfo.setCurrentPageNo(pagingVO.getPageIndex());
-			paginationInfo.setRecordCountPerPage(pagingVO.getPageUnit());
-			paginationInfo.setPageSize(pagingVO.getPageSize());
-
-			pagingVO.setFirstIndex(paginationInfo.getFirstRecordIndex());
-			pagingVO.setLastIndex(paginationInfo.getLastRecordIndex());
-			pagingVO.setRecordCountPerPage(paginationInfo.getRecordCountPerPage());
-		
-			//읽기권한이 있을경우
-			if(menuAut.get(0).get("read_aut_yn").equals("Y")){
-			List<Map<String, Object>> result = scheduleHistoryService.selectScheduleHistory(pagingVO,param);
-			
-			int totCnt = scheduleHistoryService.selectScheduleHistoryTotCnt(param);
-			paginationInfo.setTotalRecordCount(totCnt);
-			model.addAttribute("result", result);	
-				mv.setViewName("functions/scheduler/scheduleHistory");
-			}else{
+			//읽기 권한이 없는경우 error페이지 호출 , [추후 Exception 처리예정]
+			if(menuAut.get(0).get("read_aut_yn").equals("N")){
 				mv.setViewName("error/autError");
-			}
+			}else{				
+				Map<String, Object> param = new HashMap<String, Object>();
+	
+				String lgi_dtm_start = request.getParameter("lgi_dtm_start");
+				String lgi_dtm_end = request.getParameter("lgi_dtm_end");
+				String scd_nm = request.getParameter("scd_nm");
+				String db_svr_nm = request.getParameter("db_svr_nm");
+				if(scd_nm == null){
+					scd_nm="%"+scd_nm+"%";
+				}
 				
-			model.addAttribute("lgi_dtm_start", lgi_dtm_start);
-			model.addAttribute("lgi_dtm_end", lgi_dtm_end);
-			model.addAttribute("paginationInfo", paginationInfo);
-			model.addAttribute("svr_nm", db_svr_nm);
-
+				param.put("lgi_dtm_start", lgi_dtm_start);
+				param.put("lgi_dtm_end", lgi_dtm_end);
+				param.put("scd_nm", scd_nm);
+				param.put("db_svr_nm", db_svr_nm);
+	
+				System.out.println("********PARAMETER*******");
+				System.out.println("DB서버 : "+ db_svr_nm);
+				System.out.println("스케줄명 : "+ scd_nm);
+				System.out.println("시작날짜 : "+ lgi_dtm_start);
+				System.out.println("종료날짜 : " +lgi_dtm_end);
+				System.out.println("*************************");
+				
+				/** EgovPropertyService.sample */
+				pagingVO.setPageUnit(propertiesService.getInt("pageUnit"));
+				pagingVO.setPageSize(propertiesService.getInt("pageSize"));
+	
+				/** pageing setting */
+				PaginationInfo paginationInfo = new PaginationInfo();
+				paginationInfo.setCurrentPageNo(pagingVO.getPageIndex());
+				paginationInfo.setRecordCountPerPage(pagingVO.getPageUnit());
+				paginationInfo.setPageSize(pagingVO.getPageSize());
+	
+				pagingVO.setFirstIndex(paginationInfo.getFirstRecordIndex());
+				pagingVO.setLastIndex(paginationInfo.getLastRecordIndex());
+				pagingVO.setRecordCountPerPage(paginationInfo.getRecordCountPerPage());
+			
+				List<Map<String, Object>> result = scheduleHistoryService.selectScheduleHistory(pagingVO,param);
+				
+				int totCnt = scheduleHistoryService.selectScheduleHistoryTotCnt(param);
+				paginationInfo.setTotalRecordCount(totCnt);
+				model.addAttribute("result", result);	
+				
+				mv.setViewName("functions/scheduler/scheduleHistory");
+						
+				model.addAttribute("lgi_dtm_start", lgi_dtm_start);
+				model.addAttribute("lgi_dtm_end", lgi_dtm_end);
+				model.addAttribute("paginationInfo", paginationInfo);
+				model.addAttribute("svr_nm", db_svr_nm);
+			}
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

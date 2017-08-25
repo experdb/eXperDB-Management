@@ -87,6 +87,9 @@ $(window.document).ready(function() {
 		data : {},
 		dataType : "json",
 		type : "post",
+		beforeSend: function(xhr) {
+	        xhr.setRequestHeader("AJAX", true);
+	     },
 		error : function(xhr, status, error) {
 			if(xhr.status == 401) {
 				alert("인증에 실패 했습니다. 로그인 페이지로 이동합니다.");
@@ -194,7 +197,7 @@ $(function() {
  * 서버 등록 팝업페이지 호출
  ******************************************************** */
 function fn_reg_popup(){
-	window.open("/popup/dbServerRegForm.do","dbServerRegPop","location=no,menubar=no,scrollbars=no,status=no,width=920,height=405");
+	window.open("/popup/dbServerRegForm.do?flag=tree","dbServerRegPop","location=no,menubar=no,scrollbars=no,status=no,width=920,height=405");
 }
 
 
@@ -205,7 +208,7 @@ function fn_regRe_popup(){
 	var datas = table_dbServer.rows('.selected').data();
 	if (datas.length == 1) {
 		var db_svr_id = table_dbServer.row('.selected').data().db_svr_id;
-		window.open("/popup/dbServerRegReForm.do?db_svr_id="+db_svr_id,"dbServerRegRePop","location=no,menubar=no,resizable=yes,scrollbars=no,status=no,width=920,height=405");
+		window.open("/popup/dbServerRegReForm.do?db_svr_id="+db_svr_id+"&flag=tree","dbServerRegRePop","location=no,menubar=no,resizable=yes,scrollbars=no,status=no,width=920,height=405");
 	} else {
 		alert("하나의 항목을 선택해주세요.");
 	}	

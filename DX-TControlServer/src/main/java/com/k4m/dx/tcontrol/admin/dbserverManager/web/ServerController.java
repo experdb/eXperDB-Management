@@ -97,12 +97,12 @@ public class ServerController {
 		List<DbServerVO> resultSet = null;
 	
 		try {
-			//읽기 권한이 없는경우  [추후 Exception 처리예정]
+			//읽기 권한이 없는경우 error페이지 호출 , [추후 Exception 처리예정]
 			if(menuAut.get(0).get("read_aut_yn").equals("N")){
 				response.sendRedirect("/autError.do.do");
 				return resultSet;
-			}
-			
+			}else{
+
 			System.out.println("=======parameter=======");
 			System.out.println("서버명 : " + dbServerVO.getDb_svr_id());
 			System.out.println("서버명 : " + dbServerVO.getDb_svr_nm());
@@ -111,9 +111,8 @@ public class ServerController {
 			System.out.println("=====================");
 			
 			resultSet = dbServerManagerService.selectDbServerList(dbServerVO);
-			response.sendRedirect("/dbServer.do");
-			return resultSet;
-
+			}
+			
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

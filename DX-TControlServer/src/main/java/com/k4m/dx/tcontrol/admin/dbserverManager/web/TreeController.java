@@ -78,12 +78,14 @@ public class TreeController {
 	 */
 	@RequestMapping(value = "/dbTree.do")
 	public ModelAndView dbTree(@ModelAttribute("historyVO") HistoryVO historyVO, @ModelAttribute("cmmnVO") CmmnVO cmmnVO, HttpServletRequest request) {
-				
+		
+		//해당메뉴 권한 조회 (공통메소드호출),
 		CmmnUtils cu = new CmmnUtils();
 		menuAut = cu.selectMenuAut(menuAuthorityService, "MN000301");
 
 		ModelAndView mv = new ModelAndView();
 		try {
+			//읽기 권한이 없는경우 error페이지 호출 , [추후 Exception 처리예정]
 			if(menuAut.get(0).get("read_aut_yn").equals("N")){
 				mv.setViewName("error/autError");
 			}else{
@@ -109,28 +111,28 @@ public class TreeController {
 	@RequestMapping(value = "/selectTreeDbServerList.do")
 	@ResponseBody
 	public List<DbServerVO> selectDbServerList(@ModelAttribute("dbServerVO") DbServerVO dbServerVO, HttpServletResponse response) {
-	
+		
+		//해당메뉴 권한 조회 (공통메소드호출)
 		CmmnUtils cu = new CmmnUtils();
 		menuAut = cu.selectMenuAut(menuAuthorityService, "MN000301");
 		
 		List<DbServerVO> result = null;
 		List<DbServerVO> resultSet = null;
 		try {
-			//읽기권한이 없는경우
+			//읽기 권한이 없는경우 error페이지 호출 , [추후 Exception 처리예정]
 			if(menuAut.get(0).get("read_aut_yn").equals("N")){
 				response.sendRedirect("/autError.do");
 				return resultSet;
-			}		
-			
-			System.out.println("=======parameter=======");
-			System.out.println("서버명 : " + dbServerVO.getDb_svr_id());
-			System.out.println("서버명 : " + dbServerVO.getDb_svr_nm());
-			System.out.println("아이피 : " + dbServerVO.getIpadr());
-			System.out.println("Database : " + dbServerVO.getDft_db_nm());
-			System.out.println("=====================");
-			
-			resultSet = dbServerManagerService.selectDbServerList(dbServerVO);
-
+			}else{					
+				System.out.println("=======parameter=======");
+				System.out.println("서버명 : " + dbServerVO.getDb_svr_id());
+				System.out.println("서버명 : " + dbServerVO.getDb_svr_nm());
+				System.out.println("아이피 : " + dbServerVO.getIpadr());
+				System.out.println("Database : " + dbServerVO.getDft_db_nm());
+				System.out.println("=====================");
+				
+				resultSet = dbServerManagerService.selectDbServerList(dbServerVO);
+			}
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -149,37 +151,35 @@ public class TreeController {
 	@ResponseBody
 	public Map<String, Object> selectServerDBList (@ModelAttribute("dbServerVO") DbServerVO dbServerVO, HttpServletRequest request, HttpServletResponse response) {
 		
+		//해당메뉴 권한 조회 (공통메소드호출)
 		CmmnUtils cu = new CmmnUtils();
 		menuAut = cu.selectMenuAut(menuAuthorityService, "MN000301");
 		
 		Map<String, Object> result =new HashMap<String, Object>();
 	
 		try {
-			//읽기권한이 없는경우
+			//읽기 권한이 없는경우 error페이지 호출 , [추후 Exception 처리예정]
 			if(menuAut.get(0).get("read_aut_yn").equals("N")){
 				response.sendRedirect("/autError.do");
 				return result;
-			}		
-			
-			AES256 aes = new AES256(AES256_KEY.ENC_KEY);
-			String db_svr_nm = request.getParameter("db_svr_nm");
-			System.out.println(db_svr_nm);
-			
-			List<DbServerVO> resultSet = cmmnServerInfoService.selectDbServerList(db_svr_nm);
-			
-			JSONObject serverObj = new JSONObject();
-			
-			serverObj.put(ClientProtocolID.SERVER_NAME, resultSet.get(0).getDb_svr_nm());
-			serverObj.put(ClientProtocolID.SERVER_IP, resultSet.get(0).getIpadr());
-			serverObj.put(ClientProtocolID.SERVER_PORT, resultSet.get(0).getPortno());
-			serverObj.put(ClientProtocolID.DATABASE_NAME, resultSet.get(0).getDft_db_nm());
-			serverObj.put(ClientProtocolID.USER_ID, resultSet.get(0).getSvr_spr_usr_id());
-			serverObj.put(ClientProtocolID.USER_PWD, aes.aesDecode(resultSet.get(0).getSvr_spr_scm_pwd()));
-			
-			ClientInfoCmmn cic = new ClientInfoCmmn();
-			result = cic.db_List(serverObj);
-			
-			//System.out.println(result);
+			}else{				
+				AES256 aes = new AES256(AES256_KEY.ENC_KEY);
+				String db_svr_nm = request.getParameter("db_svr_nm");
+	
+				List<DbServerVO> resultSet = cmmnServerInfoService.selectDbServerList(db_svr_nm);
+				
+				JSONObject serverObj = new JSONObject();
+				
+				serverObj.put(ClientProtocolID.SERVER_NAME, resultSet.get(0).getDb_svr_nm());
+				serverObj.put(ClientProtocolID.SERVER_IP, resultSet.get(0).getIpadr());
+				serverObj.put(ClientProtocolID.SERVER_PORT, resultSet.get(0).getPortno());
+				serverObj.put(ClientProtocolID.DATABASE_NAME, resultSet.get(0).getDft_db_nm());
+				serverObj.put(ClientProtocolID.USER_ID, resultSet.get(0).getSvr_spr_usr_id());
+				serverObj.put(ClientProtocolID.USER_PWD, aes.aesDecode(resultSet.get(0).getSvr_spr_scm_pwd()));
+				
+				ClientInfoCmmn cic = new ClientInfoCmmn();
+				result = cic.db_List(serverObj);
+			}
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -198,19 +198,20 @@ public class TreeController {
 	@RequestMapping(value = "/selectTreeDBList.do")
 	@ResponseBody
 	public List<DbVO> selectTreeDBList(@ModelAttribute("dbVO") DbVO dbVO, HttpServletResponse response) {
+		
+		//해당메뉴 권한 조회 (공통메소드호출)
 		CmmnUtils cu = new CmmnUtils();
 		menuAut = cu.selectMenuAut(menuAuthorityService, "MN000301");
 		
 		List<DbVO> resultSet = null;
 		try {
-			//읽기권한이 없는경우
+			//읽기 권한이 없는경우 error페이지 호출 , [추후 Exception 처리예정]
 			if(menuAut.get(0).get("read_aut_yn").equals("N")){
 				response.sendRedirect("/autError.do");
 				return resultSet;
-			}		
-			
-			resultSet = dbServerManagerService.selectDbList();		
-
+			}else{
+				resultSet = dbServerManagerService.selectDbList();		
+			}
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -229,103 +230,105 @@ public class TreeController {
 	 */
 	@RequestMapping(value = "/insertTreeDB.do")
 	public @ResponseBody boolean insertTreeDB(@ModelAttribute("accessControlVO") AccessControlVO accessControlVO,@ModelAttribute("dbServerVO") DbServerVO dbServerVO, @ModelAttribute("historyVO") HistoryVO historyVO, HttpServletRequest request, HttpServletResponse response) throws ParseException {
-			int cnt = 0; 
-		try {
-			CmmnUtils cu = new CmmnUtils();
-			menuAut = cu.selectMenuAut(menuAuthorityService, "MN000301");
-			
-			//쓰기권한이 없는경우
+	
+		//해당메뉴 권한 조회 (공통메소드호출)
+		CmmnUtils cu = new CmmnUtils();
+		menuAut = cu.selectMenuAut(menuAuthorityService, "MN000301");	
+	
+		int cnt = 0; 
+		
+		try {			
+			//쓰기 권한이 없는경우 error페이지 호출 , [추후 Exception 처리예정]
 			if(menuAut.get(0).get("wrt_aut_yn").equals("N")){
 				response.sendRedirect("/autError.do");
 				return false;
-			}
-			
-			String id = (String) request.getSession().getAttribute("usr_id");
-			
-			dbServerVO.setFrst_regr_id(id);
-			dbServerVO.setLst_mdfr_id(id);
-			
-			String strRows = request.getParameter("rows").toString().replaceAll("&quot;", "\"");
-
-			JSONArray rows = (JSONArray) new JSONParser().parse(strRows);
-			
-			cnt = dbServerManagerService.selectDBcnt(dbServerVO);
-			accessControlService.deleteDbAccessControl(dbServerVO.getDb_svr_id());
-		
-			HashMap<String, Object> paramvalue = new HashMap<String, Object>();
-			
-			for (int i = 0; i < rows.size(); i++) {
-				JSONObject jsrow = (JSONObject) rows.get(i);
-				String dft_db_nm = jsrow.get("dft_db_nm").toString();
-				String useyn = jsrow.get("useyn").toString();
+			}else{
+				String id = (String) request.getSession().getAttribute("usr_id");
 				
-				paramvalue.put("db_svr_id", dbServerVO.getDb_svr_id());
-				paramvalue.put("dft_db_nm", dft_db_nm);
-				paramvalue.put("frst_regr_id", dbServerVO.getFrst_regr_id());
-				paramvalue.put("lst_mdfr_id", dbServerVO.getLst_mdfr_id());
-				paramvalue.put("useyn", useyn);
+				dbServerVO.setFrst_regr_id(id);
+				dbServerVO.setLst_mdfr_id(id);
 				
-				System.out.println("============== parameter ==============");
-				System.out.println("DB 서버 ID : "+ paramvalue.get("db_svr_id"));
-				System.out.println("DB 명 : "+ paramvalue.get("dft_db_nm"));
-				System.out.println("사용여부 : "+ paramvalue.get("useyn"));
-				System.out.println("등록자 : "+ paramvalue.get("frst_regr_id"));
-				System.out.println("수정자 : "+ paramvalue.get("lst_mdfr_id"));
-				System.out.println("====================================");
-			
-				if(cnt == 0){
-					dbServerManagerService.insertDB(paramvalue);		
-				}else{
-					dbServerManagerService.updateDB(paramvalue);		
-				}							
-			}
-			
-			/*접근제어 정보 INSERT*/
-			int db_svr_id = dbServerVO.getDb_svr_id();
-			String strIpAdr = dbServerVO.getIpadr();
-			
-			AgentInfoVO vo = new AgentInfoVO();
-			vo.setIPADR(strIpAdr);
-			
-			AgentInfoVO agentInfo =  (AgentInfoVO) cmmnServerInfoService.selectAgentInfo(vo);
-		
-			List<DbIDbServerVO> resultSet = accessControlService.selectDatabaseList(db_svr_id);
-			
-			String IP = resultSet.get(0).getIpadr();
-			int PORT = agentInfo.getSOCKET_PORT();
-			
-			for(int n=0; n<resultSet.size(); n++){
-				JSONObject result = new JSONObject();
+				String strRows = request.getParameter("rows").toString().replaceAll("&quot;", "\"");
+				JSONArray rows = (JSONArray) new JSONParser().parse(strRows);
 				
-				JSONObject serverObj = new JSONObject();				
-				serverObj.put(ClientProtocolID.SERVER_NAME, resultSet.get(0).getDb_svr_nm());
-				serverObj.put(ClientProtocolID.SERVER_IP, resultSet.get(0).getIpadr());
-				serverObj.put(ClientProtocolID.SERVER_PORT, resultSet.get(0).getPortno());
-				serverObj.put(ClientProtocolID.DATABASE_NAME, resultSet.get(0).getDft_db_nm());
-				serverObj.put(ClientProtocolID.USER_ID, resultSet.get(0).getSvr_spr_usr_id());
-				serverObj.put(ClientProtocolID.USER_PWD, resultSet.get(0).getSvr_spr_scm_pwd());
+				cnt = dbServerManagerService.selectDBcnt(dbServerVO);
+				accessControlService.deleteDbAccessControl(dbServerVO.getDb_svr_id());
+			
+				HashMap<String, Object> paramvalue = new HashMap<String, Object>();
+			
+				for (int i = 0; i < rows.size(); i++) {
+					JSONObject jsrow = (JSONObject) rows.get(i);
+					String dft_db_nm = jsrow.get("dft_db_nm").toString();
+					String useyn = jsrow.get("useyn").toString();
+					
+					paramvalue.put("db_svr_id", dbServerVO.getDb_svr_id());
+					paramvalue.put("dft_db_nm", dft_db_nm);
+					paramvalue.put("frst_regr_id", dbServerVO.getFrst_regr_id());
+					paramvalue.put("lst_mdfr_id", dbServerVO.getLst_mdfr_id());
+					paramvalue.put("useyn", useyn);
+					
+					System.out.println("============== parameter ==============");
+					System.out.println("DB 서버 ID : "+ paramvalue.get("db_svr_id"));
+					System.out.println("DB 명 : "+ paramvalue.get("dft_db_nm"));
+					System.out.println("사용여부 : "+ paramvalue.get("useyn"));
+					System.out.println("등록자 : "+ paramvalue.get("frst_regr_id"));
+					System.out.println("수정자 : "+ paramvalue.get("lst_mdfr_id"));
+					System.out.println("====================================");
 				
-				ClientInfoCmmn cic = new ClientInfoCmmn();
-				result = cic.dbAccess_selectAll(serverObj,IP,PORT);
-				for(int j=0; j<result.size(); j++){
-					 JSONArray data = (JSONArray)result.get("data");
-					for(int m=0; m<data.size(); m++){
-						JSONObject jsonObj = (JSONObject)data.get(m);
-						accessControlVO.setFrst_regr_id(id);
-						accessControlVO.setLst_mdfr_id(id);
-						accessControlVO.setDb_svr_id(db_svr_id);
-						accessControlVO.setDb_id(resultSet.get(n).getDb_id());
-						accessControlVO.setPrms_ipadr((String)jsonObj.get("Ipadr"));
-						accessControlVO.setPrms_usr_id((String)jsonObj.get("User"));
-						accessControlVO.setCtf_mth_nm((String)jsonObj.get("Method"));
-						accessControlVO.setCtf_tp_nm((String)jsonObj.get("Type"));
-						accessControlVO.setOpt_nm((String)jsonObj.get("Option"));
-						accessControlVO.setPrms_seq(Integer.parseInt((String) jsonObj.get("Seq")));
-						accessControlVO.setPrms_set((String)jsonObj.get("Set"));
-						accessControlService.insertAccessControl(accessControlVO);
-					}
+					if(cnt == 0){
+						dbServerManagerService.insertDB(paramvalue);		
+					}else{
+						dbServerManagerService.updateDB(paramvalue);		
+					}							
 				}
-			}			
+			
+				/*접근제어 정보 INSERT*/
+				int db_svr_id = dbServerVO.getDb_svr_id();
+				String strIpAdr = dbServerVO.getIpadr();
+				
+				AgentInfoVO vo = new AgentInfoVO();
+				vo.setIPADR(strIpAdr);
+				
+				AgentInfoVO agentInfo =  (AgentInfoVO) cmmnServerInfoService.selectAgentInfo(vo);
+			
+				List<DbIDbServerVO> resultSet = accessControlService.selectDatabaseList(db_svr_id);
+				
+				String IP = resultSet.get(0).getIpadr();
+				int PORT = agentInfo.getSOCKET_PORT();
+				
+				for(int n=0; n<resultSet.size(); n++){
+					JSONObject result = new JSONObject();
+					
+					JSONObject serverObj = new JSONObject();				
+					serverObj.put(ClientProtocolID.SERVER_NAME, resultSet.get(0).getDb_svr_nm());
+					serverObj.put(ClientProtocolID.SERVER_IP, resultSet.get(0).getIpadr());
+					serverObj.put(ClientProtocolID.SERVER_PORT, resultSet.get(0).getPortno());
+					serverObj.put(ClientProtocolID.DATABASE_NAME, resultSet.get(0).getDft_db_nm());
+					serverObj.put(ClientProtocolID.USER_ID, resultSet.get(0).getSvr_spr_usr_id());
+					serverObj.put(ClientProtocolID.USER_PWD, resultSet.get(0).getSvr_spr_scm_pwd());
+					
+					ClientInfoCmmn cic = new ClientInfoCmmn();
+					result = cic.dbAccess_selectAll(serverObj,IP,PORT);
+					for(int j=0; j<result.size(); j++){
+						 JSONArray data = (JSONArray)result.get("data");
+						for(int m=0; m<data.size(); m++){
+							JSONObject jsonObj = (JSONObject)data.get(m);
+							accessControlVO.setFrst_regr_id(id);
+							accessControlVO.setLst_mdfr_id(id);
+							accessControlVO.setDb_svr_id(db_svr_id);
+							accessControlVO.setDb_id(resultSet.get(n).getDb_id());
+							accessControlVO.setPrms_ipadr((String)jsonObj.get("Ipadr"));
+							accessControlVO.setPrms_usr_id((String)jsonObj.get("User"));
+							accessControlVO.setCtf_mth_nm((String)jsonObj.get("Method"));
+							accessControlVO.setCtf_tp_nm((String)jsonObj.get("Type"));
+							accessControlVO.setOpt_nm((String)jsonObj.get("Option"));
+							accessControlVO.setPrms_seq(Integer.parseInt((String) jsonObj.get("Seq")));
+							accessControlVO.setPrms_set((String)jsonObj.get("Set"));
+							accessControlService.insertAccessControl(accessControlVO);
+						}
+					}
+				}			
+			}
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

@@ -84,11 +84,13 @@ public class ScheduleController {
 	@RequestMapping(value = "/insertScheduleView.do")
 	public ModelAndView insertScheduleView(HttpServletRequest request) {
 		
+		//해당메뉴 권한 조회 (공통메소드호출)
 		CmmnUtils cu = new CmmnUtils();
 		menuAut = cu.selectMenuAut(menuAuthorityService, "MN000101");
 		
 		ModelAndView mv = new ModelAndView();
 		try {
+			//읽기 권한이 없는경우 error페이지 호출 , [추후 Exception 처리예정]
 			if(menuAut.get(0).get("read_aut_yn").equals("N")){
 				mv.setViewName("error/autError");
 			}else{				
@@ -113,11 +115,13 @@ public class ScheduleController {
 	@RequestMapping(value = "/popup/scheduleRegForm.do")
 	public ModelAndView scheduleRegForm(HttpServletRequest request) {
 		
+		//해당메뉴 권한 조회 (공통메소드호출)
 		CmmnUtils cu = new CmmnUtils();
 		menuAut = cu.selectMenuAut(menuAuthorityService, "MN000101");
 		
 		ModelAndView mv = new ModelAndView();
 		try {
+			//쓰기 권한이 없는경우 error페이지 호출 , [추후 Exception 처리예정]
 			if(menuAut.get(0).get("wrt_aut_yn").equals("N")){
 				mv.setViewName("error/autError");
 			}else{	
@@ -139,17 +143,26 @@ public class ScheduleController {
 	@SuppressWarnings("unused")
 	@RequestMapping(value = "/selectWorkList.do")
 	@ResponseBody
-	public List<WorkVO> selectWorkList(@ModelAttribute("workVO") WorkVO workVO) {
+	public List<WorkVO> selectWorkList(@ModelAttribute("workVO") WorkVO workVO, HttpServletResponse response) {
+		
+		//해당메뉴 권한 조회 (공통메소드호출)
+		CmmnUtils cu = new CmmnUtils();
+		menuAut = cu.selectMenuAut(menuAuthorityService, "MN000101");
+		
 		List<WorkVO> resultSet = null;
 		try {
-			
-			System.out.println("=======parameter=======");
-			System.out.println("구분 : " + workVO.getBck_bsn_dscd());
-			System.out.println("워크명 : " + workVO.getWrk_nm());
-			System.out.println("=====================");
-			
-			resultSet = scheduleService.selectWorkList(workVO);
-			
+			//읽기 권한이 없는경우 error페이지 호출 , [추후 Exception 처리예정]
+			if(menuAut.get(0).get("read_aut_yn").equals("N")){
+				response.sendRedirect("/autError.do");
+				return resultSet;
+			}else{		
+				System.out.println("=======parameter=======");
+				System.out.println("구분 : " + workVO.getBck_bsn_dscd());
+				System.out.println("워크명 : " + workVO.getWrk_nm());
+				System.out.println("=====================");
+				
+				resultSet = scheduleService.selectWorkList(workVO);	
+			}
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -165,29 +178,32 @@ public class ScheduleController {
 	 */
 	@RequestMapping(value = "/selectScheduleWorkList.do")
 	@ResponseBody
-	public List<Map<String, Object>> selectScheduleWorkList(HttpServletRequest request) {
+	public List<Map<String, Object>> selectScheduleWorkList(HttpServletRequest request, HttpServletResponse response) {
 	
+		//해당메뉴 권한 조회 (공통메소드호출)
 		CmmnUtils cu = new CmmnUtils();
-		menuAut = cu.selectMenuAut(menuAuthorityService, "10");
+		menuAut = cu.selectMenuAut(menuAuthorityService, "MN000101");
 		
 		List<Map<String, Object>> result = null;
 		
-		String work_id = request.getParameter("work_id");
-		
-		String[] Param = work_id.toString().substring(1, work_id.length()-1 ).split(",");
-		HashMap<String , Object> paramvalue = new HashMap<String, Object>();
-		List<String> ids = new ArrayList<String>(); 
-		
-		for(int i=0; i<Param.length; i++){
-			ids.add(Param[i].toString()); 
-		}
-		paramvalue.put("work_id", ids);
-	
 		try {					
-			//읽기권한이 있을경우
-			if(menuAut.get(0).get("read_aut_yn").equals("Y")){
+			//읽기 권한이 없는경우 error페이지 호출 , [추후 Exception 처리예정]
+			if(menuAut.get(0).get("read_aut_yn").equals("N")){
+				response.sendRedirect("/autError.do");
+				return result;
+			}else{		
+				String work_id = request.getParameter("work_id");
+				
+				String[] Param = work_id.toString().substring(1, work_id.length()-1 ).split(",");
+				HashMap<String , Object> paramvalue = new HashMap<String, Object>();
+				List<String> ids = new ArrayList<String>(); 
+				
+				for(int i=0; i<Param.length; i++){
+					ids.add(Param[i].toString()); 
+				}
+				paramvalue.put("work_id", ids);
+				
 				result = scheduleService.selectScheduleWorkList(paramvalue);
-			}else{
 				return result;
 			}
 		} catch (Exception e) {
@@ -213,8 +229,9 @@ public class ScheduleController {
 	@RequestMapping(value = "/insertSchedule.do")
 	public void insertSchedule(@ModelAttribute("scheduleVO") ScheduleVO scheduleVO,@ModelAttribute("scheduleDtlVO") ScheduleDtlVO scheduleDtlVO, HttpServletResponse response, HttpServletRequest request, @RequestParam Map<String,String> reqJson) throws IOException, ParseException{
 		
+		//해당메뉴 권한 조회 (공통메소드호출)
 		CmmnUtils cu = new CmmnUtils();
-		menuAut = cu.selectMenuAut(menuAuthorityService, "10");
+		menuAut = cu.selectMenuAut(menuAuthorityService, "MN000101");
 		
 		// Transaction 
 		DefaultTransactionDefinition def  = new DefaultTransactionDefinition();
@@ -227,68 +244,59 @@ public class ScheduleController {
 		String mInsertResult = "S";
 		String dInsertResult = "S";
 			
-		
-		// 1. 스케줄ID 시퀀스 조회
-		try {			
-			int scd_id = scheduleService.selectScd_id();
-			System.out.println("스케줄ID 시퀀스 값 : " + scd_id );
-			scheduleVO.setScd_id(scd_id);
-			scheduleDtlVO.setScd_id(scd_id);
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-				
-		
-		// 1. 스케쥴 마스터 등록
-		try {			
-			scheduleVO.setFrst_regr_id(usr_id);
-			//쓰기권한이 있을경우
-			if(menuAut.get(0).get("wrt_aut_yn").equals("Y")){
-				scheduleService.insertSchedule(scheduleVO);
-			}else{
+					
+		//쓰기 권한이 없는경우 error페이지 호출 , [추후 Exception 처리예정]
+		if(menuAut.get(0).get("wrt_aut_yn").equals("N")){
+			response.sendRedirect("/autError.do");
+		}else{		
+			// 1. 스케줄ID 시퀀스 조회
+			try {			
+				int scd_id = scheduleService.selectScd_id();
+				System.out.println("스케줄ID 시퀀스 값 : " + scd_id );
+				scheduleVO.setScd_id(scd_id);
+				scheduleDtlVO.setScd_id(scd_id);
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+					
+			
+			// 1. 스케쥴 마스터 등록
+			try {			
+				scheduleVO.setFrst_regr_id(usr_id);
+					scheduleService.insertSchedule(scheduleVO);
+			} catch (Exception e) {
+				e.printStackTrace();
 				mInsertResult = "F";
 			}
-		} catch (Exception e) {
-			e.printStackTrace();
-			mInsertResult = "F";
-		}
-						
-		// 3. 스케쥴 상세정보 등록
-		if(mInsertResult.equals("S")){
-			try {
-				String strRows = request.getParameter("sWork").toString().replaceAll("&quot;", "\"");
-				JSONArray rows = (JSONArray) new JSONParser().parse(strRows);
-
-				for (int i = 0; i < rows.size(); i++) {
-
-					JSONObject jsrow = (JSONObject) rows.get(i);
-					scheduleDtlVO.setWrk_id(Integer.parseInt(jsrow.get("wrk_id").toString()));  
-					scheduleDtlVO.setExe_ord(Integer.parseInt(jsrow.get("index").toString()));
-					scheduleDtlVO.setNxt_exe_yn(jsrow.get("nxt_exe_yn").toString());
-					scheduleDtlVO.setFrst_regr_id(usr_id);
-					//쓰기권한이 있을경우
-					if(menuAut.get(0).get("wrt_aut_yn").equals("Y")){	
+							
+			// 3. 스케쥴 상세정보 등록
+			if(mInsertResult.equals("S")){
+				try {
+					String strRows = request.getParameter("sWork").toString().replaceAll("&quot;", "\"");
+					JSONArray rows = (JSONArray) new JSONParser().parse(strRows);
+	
+					for (int i = 0; i < rows.size(); i++) {
+						JSONObject jsrow = (JSONObject) rows.get(i);
+						scheduleDtlVO.setWrk_id(Integer.parseInt(jsrow.get("wrk_id").toString()));  
+						scheduleDtlVO.setExe_ord(Integer.parseInt(jsrow.get("index").toString()));
+						scheduleDtlVO.setNxt_exe_yn(jsrow.get("nxt_exe_yn").toString());
+						scheduleDtlVO.setFrst_regr_id(usr_id);
 						scheduleService.insertScheduleDtl(scheduleDtlVO);			
-					}else{
-						dInsertResult = "F";
 					}
+				} catch (Exception e) {
+					e.printStackTrace();
+					dInsertResult = "F";
 				}
-			} catch (Exception e) {
-				e.printStackTrace();
-				dInsertResult = "F";
 			}
-		}
-		txManager.commit(status);
-		
-		if(dInsertResult.equals("S")){
-			try{
-				System.out.println(">>> Sehcdule Controller  - 스케줄 등록");
-				//쓰기권한이 있을경우
-				if(menuAut.get(0).get("wrt_aut_yn").equals("Y")){	
-				scheduleUtl.insertSchdul(scheduleVO);			
+			txManager.commit(status);
+			
+			if(dInsertResult.equals("S")){
+				try{
+					System.out.println(">>> Sehcdule Controller  - 스케줄 등록");
+					scheduleUtl.insertSchdul(scheduleVO);			
+				} catch (Exception e) {
+					e.printStackTrace();
 				}
-			} catch (Exception e) {
-				e.printStackTrace();
 			}
 		}
 	}
@@ -302,12 +310,15 @@ public class ScheduleController {
 	 * @throws Exception
 	 */
 	@RequestMapping(value = "/selectScheduleListView.do")
-	public ModelAndView selectScheduleListView(HttpServletRequest request) {
+	public ModelAndView selectScheduleListView(HttpServletRequest request, HttpServletResponse response) {
+		
+		//해당메뉴 권한 조회 (공통메소드호출)
 		CmmnUtils cu = new CmmnUtils();
-		menuAut = cu.selectMenuAut(menuAuthorityService, "11");
+		menuAut = cu.selectMenuAut(menuAuthorityService, "MN000102");
 		
 		ModelAndView mv = new ModelAndView();
 		try {
+			//읽기 권한이 없는경우 error페이지 호출 , [추후 Exception 처리예정]
 			if(menuAut.get(0).get("read_aut_yn").equals("N")){
 				mv.setViewName("error/autError");
 			}else{				
@@ -322,6 +333,7 @@ public class ScheduleController {
 	}
 	
 	
+	
 	/**
 	 * 스케쥴 List를 조회한다.
 	 * 
@@ -331,51 +343,48 @@ public class ScheduleController {
 	@SuppressWarnings("null")
 	@RequestMapping(value = "/selectScheduleList.do")
 	@ResponseBody
-	public List<Map<String, Object>> selectScheduleList(@ModelAttribute("scheduleVO") ScheduleVO scheduleVO, HttpServletRequest request) {
+	public List<Map<String, Object>> selectScheduleList(@ModelAttribute("scheduleVO") ScheduleVO scheduleVO, HttpServletRequest request, HttpServletResponse response) {
 	
+		//해당메뉴 권한 조회 (공통메소드호출)
 		CmmnUtils cu = new CmmnUtils();
-		menuAut = cu.selectMenuAut(menuAuthorityService, "11");
+		menuAut = cu.selectMenuAut(menuAuthorityService, "MN000102");
 		
 		List<Map<String, Object>> resultSet = new ArrayList<Map<String, Object>>();
 		
 		try {
-			
-			//현재 서비스 올라간 스케줄 그룹 정보
-			Scheduler scheduler = new StdSchedulerFactory().getScheduler();   
-			System.out.println(scheduler.getJobGroupNames());
-			
-			//읽기권한이 있을경우
-			if(menuAut.get(0).get("read_aut_yn").equals("Y")){	
-			
-			List<Map<String, Object>> result = scheduleService.selectScheduleList(scheduleVO);
-				
-			for(int i=0; i<result.size(); i++){				
-				Map<String, Object> mp = new HashMap<String, Object>();
-				mp.put("rownum", result.get(i).get("rownum"));
-				mp.put("idx", result.get(i).get("idx"));
-				mp.put("scd_id", result.get(i).get("scd_id"));
-				mp.put("scd_nm", result.get(i).get("scd_nm"));
-				mp.put("scd_exp", result.get(i).get("scd_exp"));
-				mp.put("exe_perd_cd", result.get(i).get("exe_perd_cd"));			
-				mp.put("exe_hms", result.get(i).get("exe_hms"));
-				mp.put("prev_exe_dtm", result.get(i).get("prev_exe_dtm"));
-				mp.put("nxt_exe_dtm", result.get(i).get("prev_exe_dtm"));
-				mp.put("frst_regr_id", result.get(i).get("frst_regr_id"));
-				mp.put("frst_reg_dtm", result.get(i).get("frst_reg_dtm"));
-				mp.put("lst_mdfr_id", result.get(i).get("lst_mdfr_id"));
-				mp.put("lst_mdf_dtm", result.get(i).get("lst_mdfr_id"));
-				for(int j=0; j<scheduler.getJobGroupNames().size(); j++){	
-					if(result.get(i).get("scd_id").toString().equals(scheduler.getJobGroupNames().get(j).toString())){	
-						mp.put("status", "s");
-					}			
-				}		
-				resultSet.add(mp);
-			}
-			}else{
+			//읽기 권한이 없는경우 error페이지 호출 , [추후 Exception 처리예정]
+			if(menuAut.get(0).get("read_aut_yn").equals("N")){	
+				response.sendRedirect("/autError.do");
 				return resultSet;
+			}else{
+				//현재 서비스 올라간 스케줄 그룹 정보
+				Scheduler scheduler = new StdSchedulerFactory().getScheduler();   
+
+				List<Map<String, Object>> result = scheduleService.selectScheduleList(scheduleVO);
+					
+				for(int i=0; i<result.size(); i++){				
+					Map<String, Object> mp = new HashMap<String, Object>();
+					mp.put("rownum", result.get(i).get("rownum"));
+					mp.put("idx", result.get(i).get("idx"));
+					mp.put("scd_id", result.get(i).get("scd_id"));
+					mp.put("scd_nm", result.get(i).get("scd_nm"));
+					mp.put("scd_exp", result.get(i).get("scd_exp"));
+					mp.put("exe_perd_cd", result.get(i).get("exe_perd_cd"));			
+					mp.put("exe_hms", result.get(i).get("exe_hms"));
+					mp.put("prev_exe_dtm", result.get(i).get("prev_exe_dtm"));
+					mp.put("nxt_exe_dtm", result.get(i).get("prev_exe_dtm"));
+					mp.put("frst_regr_id", result.get(i).get("frst_regr_id"));
+					mp.put("frst_reg_dtm", result.get(i).get("frst_reg_dtm"));
+					mp.put("lst_mdfr_id", result.get(i).get("lst_mdfr_id"));
+					mp.put("lst_mdf_dtm", result.get(i).get("lst_mdfr_id"));
+					for(int j=0; j<scheduler.getJobGroupNames().size(); j++){	
+						if(result.get(i).get("scd_id").toString().equals(scheduler.getJobGroupNames().get(j).toString())){	
+							mp.put("status", "s");
+						}			
+					}		
+					resultSet.add(mp);
+				}
 			}
-			
-		System.out.println(resultSet);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -392,17 +401,27 @@ public class ScheduleController {
 	 */
 	@RequestMapping(value = "/scheduleStop.do")
 	@ResponseBody
-	public boolean scheduleStop(HttpServletRequest request, @ModelAttribute("scheduleVO") ScheduleVO scheduleVO) {
-
+	public boolean scheduleStop(HttpServletRequest request, @ModelAttribute("scheduleVO") ScheduleVO scheduleVO, HttpServletResponse response) {
+		
+		//해당메뉴 권한 조회 (공통메소드호출)
+		CmmnUtils cu = new CmmnUtils();
+		menuAut = cu.selectMenuAut(menuAuthorityService, "MN000102");		
+		
 		try {
-			String scd_id = request.getParameter("scd_id").toString();	
-	
-			scheduleVO.setScd_id(Integer.parseInt(scd_id));
-			scheduleVO.setScd_cndt("TC001802");
-			
-			scheduleService.updateScheduleStatus(scheduleVO);
-			
-			scheduleUtl.deleteSchdul(scd_id);			
+			//쓰기 권한이 없는경우 error페이지 호출 , [추후 Exception 처리예정]
+			if(menuAut.get(0).get("wrt_aut_yn").equals("N")){	
+				response.sendRedirect("/autError.do");
+				return false;
+			}else{
+				String scd_id = request.getParameter("scd_id").toString();	
+		
+				scheduleVO.setScd_id(Integer.parseInt(scd_id));
+				scheduleVO.setScd_cndt("TC001802");
+				
+				scheduleService.updateScheduleStatus(scheduleVO);
+				
+				scheduleUtl.deleteSchdul(scd_id);		
+			}
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -419,24 +438,33 @@ public class ScheduleController {
 	 */
 	@RequestMapping(value = "/scheduleReStart.do")
 	@ResponseBody
-	public boolean scheduleReStart(@ModelAttribute("scheduleVO") ScheduleVO scheduleVO, HttpServletRequest request) {
-
-		try {
-			String strRows = request.getParameter("sWork").toString().replaceAll("&quot;", "\"");
-			JSONObject rows = (JSONObject) new JSONParser().parse(strRows);
-			
-			scheduleVO.setScd_id(Integer.parseInt(rows.get("scd_id").toString()));
-			scheduleVO.setScd_cndt("TC001801");
-
-			scheduleService.updateScheduleStatus(scheduleVO);
-			
-			scheduleVO.setExe_perd_cd(rows.get("exe_perd_cd").toString());
-			if(rows.get("exe_dt") != null){
-				scheduleVO.setExe_dt(rows.get("exe_dt").toString());
-			}
-			scheduleVO.setExe_hms(rows.get("exe_hms").toString());
+	public boolean scheduleReStart(@ModelAttribute("scheduleVO") ScheduleVO scheduleVO, HttpServletRequest request, HttpServletResponse response) {
 		
-			scheduleUtl.insertSchdul(scheduleVO);					
+		//해당메뉴 권한 조회 (공통메소드호출)
+		CmmnUtils cu = new CmmnUtils();
+		menuAut = cu.selectMenuAut(menuAuthorityService, "MN000102");	
+		
+		try {
+			//쓰기 권한이 없는경우 error페이지 호출 , [추후 Exception 처리예정]
+			if(menuAut.get(0).get("wrt_aut_yn").equals("N")){	
+				response.sendRedirect("/autError.do");
+			}else{
+				String strRows = request.getParameter("sWork").toString().replaceAll("&quot;", "\"");
+				JSONObject rows = (JSONObject) new JSONParser().parse(strRows);
+				
+				scheduleVO.setScd_id(Integer.parseInt(rows.get("scd_id").toString()));
+				scheduleVO.setScd_cndt("TC001801");
+	
+				scheduleService.updateScheduleStatus(scheduleVO);
+				
+				scheduleVO.setExe_perd_cd(rows.get("exe_perd_cd").toString());
+				if(rows.get("exe_dt") != null){
+					scheduleVO.setExe_dt(rows.get("exe_dt").toString());
+				}
+				scheduleVO.setExe_hms(rows.get("exe_hms").toString());
+			
+				scheduleUtl.insertSchdul(scheduleVO);		
+			}
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -453,23 +481,24 @@ public class ScheduleController {
 	 */
 	@RequestMapping(value = "/deleteScheduleList.do")
 	@ResponseBody	
-	public void deleteScheduleList(HttpServletRequest request) {
-		CmmnUtils cu = new CmmnUtils();
-		menuAut = cu.selectMenuAut(menuAuthorityService, "11");
+	public void deleteScheduleList(HttpServletRequest request, HttpServletResponse response) {
 		
-		try {
-			
+		//해당메뉴 권한 조회 (공통메소드호출)
+		CmmnUtils cu = new CmmnUtils();
+		menuAut = cu.selectMenuAut(menuAuthorityService, "MN000102");		
+		
+		try {		
+			//쓰기 권한이 없는경우 error페이지 호출 , [추후 Exception 처리예정]
+			if(menuAut.get(0).get("wrt_aut_yn").equals("N")){	
+				response.sendRedirect("/autError.do");
+			}else{
 			String strRows = request.getParameter("rowList").toString().replaceAll("&quot;", "\"");
-			JSONArray rows = (JSONArray) new JSONParser().parse(strRows);
-			
-			//읽기권한이 있을경우
-			if(menuAut.get(0).get("wrt_aut_yn").equals("Y")){	
+			JSONArray rows = (JSONArray) new JSONParser().parse(strRows);		
 				for(int i=0; i<rows.size(); i++){
 					int scd_id = Integer.parseInt(rows.get(i).toString());
 					scheduleService.deleteScheduleList(scd_id);
 				}
-			}
-			
+			}				
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -484,14 +513,17 @@ public class ScheduleController {
 	 * @throws Exception
 	 */
 	@RequestMapping(value = "/modifyScheduleListVeiw.do")
-	public ModelAndView modifyScheduleListVeiw(HttpServletRequest request) {
+	public ModelAndView modifyScheduleListVeiw(HttpServletRequest request, HttpServletResponse response) {
 		
+		//해당메뉴 권한 조회 (공통메소드호출)
 		CmmnUtils cu = new CmmnUtils();
-		menuAut = cu.selectMenuAut(menuAuthorityService, "11");
+		menuAut = cu.selectMenuAut(menuAuthorityService, "MN000102");
 		
 		ModelAndView mv = new ModelAndView();
+		
 		try {
-			if(menuAut.get(0).get("read_aut_yn").equals("N")){
+			//쓰기 권한이 없는경우 error페이지 호출 , [추후 Exception 처리예정]
+			if(menuAut.get(0).get("wrt_aut_yn").equals("N")){
 				mv.setViewName("error/autError");
 			}else{	
 				String scd_id = request.getParameter("scd_id");
@@ -516,13 +548,22 @@ public class ScheduleController {
 	 */
 	@RequestMapping(value = "/selectModifyScheduleList.do")
 	@ResponseBody
-	public List<Map<String, Object>> selectModifyScheduleList(HttpServletRequest request) {
-		List<Map<String, Object>> result = null;
-		try {			
-			int scd_id  = Integer.parseInt(request.getParameter("scd_id").toString());
-			result = scheduleService.selectModifyScheduleList(scd_id);
+	public List<Map<String, Object>> selectModifyScheduleList(HttpServletRequest request, HttpServletResponse response) {
 		
-			System.out.println(result);
+		//해당메뉴 권한 조회 (공통메소드호출)
+		CmmnUtils cu = new CmmnUtils();
+		menuAut = cu.selectMenuAut(menuAuthorityService, "MN000102");
+		
+		List<Map<String, Object>> result = null;
+		try {		
+			//읽기 권한이 없는경우 error페이지 호출 , [추후 Exception 처리예정]
+			if(menuAut.get(0).get("read_aut_yn").equals("N")){	
+				response.sendRedirect("/autError.do");
+			}else{
+				int scd_id  = Integer.parseInt(request.getParameter("scd_id").toString());
+				result = scheduleService.selectModifyScheduleList(scd_id);
+			}
+
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -546,6 +587,10 @@ public class ScheduleController {
 	@RequestMapping(value = "/updateSchedule.do")
 	public void updateSchedule(@ModelAttribute("scheduleVO") ScheduleVO scheduleVO,@ModelAttribute("scheduleDtlVO") ScheduleDtlVO scheduleDtlVO, HttpServletResponse response, HttpServletRequest request, @RequestParam Map<String,String> reqJson) throws IOException, ParseException{
 		
+		//해당메뉴 권한 조회 (공통메소드호출)
+		CmmnUtils cu = new CmmnUtils();
+		menuAut = cu.selectMenuAut(menuAuthorityService, "MN000102");
+		
 		// Transaction 
 		DefaultTransactionDefinition def  = new DefaultTransactionDefinition();
 		def.setPropagationBehavior(TransactionDefinition.PROPAGATION_REQUIRED);
@@ -557,36 +602,41 @@ public class ScheduleController {
 		String mUpdateResult = "S";
 		String dUpdateResult = "S";
 		
-		// 1. 스케줄 마스터 업데이트
-		try {			
-			scheduleVO.setFrst_regr_id(usr_id);
-			scheduleService.updateSchedule(scheduleVO);
-		} catch (Exception e) {
-			e.printStackTrace();
-			mUpdateResult = "F";
-		}
-						
-		// 3. 스케쥴 상세정보 등록
-		if(mUpdateResult.equals("S")){
-			try {
-				String strRows = request.getParameter("sWork").toString().replaceAll("&quot;", "\"");
-				JSONArray rows = (JSONArray) new JSONParser().parse(strRows);
-
-				scheduleService.deleteScheduleDtl(scheduleDtlVO);	
-				
-				for (int i = 0; i < rows.size(); i++) {
-					JSONObject jsrow = (JSONObject) rows.get(i);
-					scheduleDtlVO.setWrk_id(Integer.parseInt(jsrow.get("wrk_id").toString()));  
-					scheduleDtlVO.setExe_ord(Integer.parseInt(jsrow.get("index").toString()));
-					scheduleDtlVO.setNxt_exe_yn(jsrow.get("nxt_exe_yn").toString());
-					scheduleDtlVO.setFrst_regr_id(usr_id);					
-					scheduleService.insertScheduleDtl(scheduleDtlVO);							
-				}
+		//쓰기 권한이 없는경우 error페이지 호출 , [추후 Exception 처리예정]
+		if(menuAut.get(0).get("wrt_aut_yn").equals("N")){	
+			response.sendRedirect("/autError.do");
+		}else{
+			// 1. 스케줄 마스터 업데이트
+			try {			
+				scheduleVO.setFrst_regr_id(usr_id);
+				scheduleService.updateSchedule(scheduleVO);
 			} catch (Exception e) {
 				e.printStackTrace();
-				dUpdateResult = "F";
+				mUpdateResult = "F";
 			}
+						
+			// 3. 스케쥴 상세정보 등록
+			if(mUpdateResult.equals("S")){
+				try {
+					String strRows = request.getParameter("sWork").toString().replaceAll("&quot;", "\"");
+					JSONArray rows = (JSONArray) new JSONParser().parse(strRows);
+	
+					scheduleService.deleteScheduleDtl(scheduleDtlVO);	
+					
+					for (int i = 0; i < rows.size(); i++) {
+						JSONObject jsrow = (JSONObject) rows.get(i);
+						scheduleDtlVO.setWrk_id(Integer.parseInt(jsrow.get("wrk_id").toString()));  
+						scheduleDtlVO.setExe_ord(Integer.parseInt(jsrow.get("index").toString()));
+						scheduleDtlVO.setNxt_exe_yn(jsrow.get("nxt_exe_yn").toString());
+						scheduleDtlVO.setFrst_regr_id(usr_id);					
+						scheduleService.insertScheduleDtl(scheduleDtlVO);							
+					}
+				} catch (Exception e) {
+					e.printStackTrace();
+					dUpdateResult = "F";
+				}
+			}
+			txManager.commit(status);
 		}
-		txManager.commit(status);
 	}
 }
