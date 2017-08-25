@@ -153,19 +153,18 @@
 				alert("실패")
 			},
 			success : function(data) {
- 				var cnt = data.length;
- 				if(cnt==0){
+ 				if(data==null){
  					$('<button onclick="fn_insert()" id="btnInsert"></button>').text('저장').appendTo('.btnC_01');
  				}else{
  				  $('<button onclick="fn_update()" id="btnInsert"></button>').text('저장').appendTo('.btnC_01');
- 				  $("#kafka_broker_ip").val(data[0].kafka_broker_ip);
- 				  $("#kafka_broker_port").val(data[0].kafka_broker_port);
- 				  $("#schema_registry_ip").val(data[0].schema_registry_ip);
- 				  $("#schema_registry_port").val(data[0].schema_registry_port);
- 				  $("#zookeeper_ip").val(data[0].zookeeper_ip);
- 				  $("#zookeeper_port").val(data[0].zookeeper_port);
- 				  $("#bw_home").val(data[0].bw_home); 	
- 				  $("#trf_cng_id").val(data[0].trf_cng_id);
+ 				  $("#kafka_broker_ip").val(data.kafka_broker_ip);
+ 				  $("#kafka_broker_port").val(data.kafka_broker_port);
+ 				  $("#schema_registry_ip").val(data.schema_registry_ip);
+ 				  $("#schema_registry_port").val(data.schema_registry_port);
+ 				  $("#zookeeper_ip").val(data.zookeeper_ip);
+ 				  $("#zookeeper_port").val(data.zookeeper_port);
+ 				  $("#bw_home").val(data.bw_home); 	
+ 				  $("#trf_cng_id").val(data.trf_cng_id);
  	 
  				}
  				fn_buttonAut();

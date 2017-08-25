@@ -256,7 +256,7 @@
  	}
  		
  	
-	/*맵핑저장 클릭시*/
+	/*매핑저장 클릭시*/
 	function fn_insert(){
 		var data = connectorTableList.rows().data();
 		if(data.length <1){
@@ -300,7 +300,7 @@
 <body>
 <div class="pop_container">
 	<div class="pop_cts">
-		<p class="tit">Database 맵핑 설정하기</p>
+		<p class="tit">Database 매핑 설정하기</p>
 		<table class="write">
 			<caption>전송대상 설정 등록하기</caption>
 			<colgroup>
@@ -369,7 +369,7 @@
 			</div>
 		</div>
 		<div class="btn_type_02">
-			<span class="btn btnC_01"><button onclick="fn_insert()">맵핑저장</button></span>
+			<span class="btn btnC_01"><button onclick="fn_insert()">저장</button></span>
 			<a href="#n" class="btn" onclick="window.close();"><span>취소</span></a>
 		</div>
 	</div>

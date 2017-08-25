@@ -102,7 +102,10 @@
 							}else if(result =='stop'){
 								alert("중지하였습니다");
 								fn_select();
-							}else{
+							}else if(result =='transfersetting'){
+								alert("전송설정을 등록 해주세요.");
+							}
+							else{
 								alert("서버에 T엔진이 설치되지 않았습니다.");
 							}	
 						}

@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -69,7 +70,7 @@ public class UserManagerController {
 		ModelAndView mv = new ModelAndView();
 		try {
 			CmmnUtils cu = new CmmnUtils();
-			menuAut = cu.selectMenuAut(menuAuthorityService, "4");
+			menuAut = cu.selectMenuAut(menuAuthorityService, "MN0004");
 			if(menuAut.get(0).get("read_aut_yn").equals("N")){
 				mv.setViewName("error/autError");
 			}else{
@@ -89,6 +90,42 @@ public class UserManagerController {
 		return mv;
 	}
 
+	/**
+	 * 사용자 리스트를 조회한다.
+	 * 
+	 * @param request
+	 * @return resultSet
+	 * @throws Exception
+	 */
+	@RequestMapping(value = "/selectUserManager.do")
+	public @ResponseBody List<UserVO> selectUserManager(HttpServletRequest request,HttpServletResponse response) {
+		List<UserVO> resultSet = null;
+		Map<String, Object> param = new HashMap<String, Object>();
+		try {
+			CmmnUtils cu = new CmmnUtils();
+			menuAut = cu.selectMenuAut(menuAuthorityService, "MN0004");
+			
+			if(menuAut.get(0).get("read_aut_yn").equals("N")){
+				response.sendRedirect("/autError.do.do");
+				return resultSet;
+			}
+			
+			String type=request.getParameter("type");
+			String search = request.getParameter("search");
+			String use_yn = request.getParameter("use_yn");
+						
+			param.put("type", type);
+			param.put("search", search);
+			param.put("use_yn", use_yn);
+		
+			resultSet = userManagerService.selectUserManager(param);	
+
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return resultSet;
+
+	}
 	
 	/**
 	 * 사용자 등록/수정 화면을 보여준다.
@@ -103,43 +140,43 @@ public class UserManagerController {
 		List<UserVO> result = null;
 		try {
 			CmmnUtils cu = new CmmnUtils();
-			menuAut = cu.selectMenuAut(menuAuthorityService, "4");
+			menuAut = cu.selectMenuAut(menuAuthorityService, "MN0004");
 			if(menuAut.get(0).get("read_aut_yn").equals("N")){
 				mv.setViewName("error/autError");
-			}else{	
-				String act = request.getParameter("act");
-				CmmnUtils.saveHistory(request, historyVO);
-				
-				if(act.equals("i")){
-					// 사용자등록 화면 이력 남기기
-					historyVO.setExe_dtl_cd("DX-T0032");
-					accessHistoryService.insertHistory(historyVO);			
-				}
-
-				if(act.equals("u")){
-					// 사용자수정 화면 이력 남기기
-					historyVO.setExe_dtl_cd("DX-T0033");
-					accessHistoryService.insertHistory(historyVO);
-								
-					String usr_id = request.getParameter("usr_id");
-					result = userManagerService.selectDetailUserManager(usr_id);
-					
-					mv.addObject("get_usr_id",result.get(0).getUsr_id());
-					mv.addObject("usr_nm",result.get(0).getUsr_nm());
-					mv.addObject("pwd",result.get(0).getPwd());
-					mv.addObject("bln_nm",result.get(0).getBln_nm());
-					mv.addObject("dept_nm",result.get(0).getDept_nm());
-					mv.addObject("pst_nm",result.get(0).getPst_nm());
-					mv.addObject("rsp_bsn_nm",result.get(0).getRsp_bsn_nm());
-					mv.addObject("cpn",result.get(0).getCpn());
-					mv.addObject("use_yn",result.get(0).getUse_yn());	
-					mv.addObject("aut_id",result.get(0).getAut_id());
-					mv.addObject("usr_expr_dt",result.get(0).getUsr_expr_dt());
-					
-				}
-				mv.addObject("act",act);
-				mv.setViewName("popup/userManagerRegForm");
+				return mv;
 			}
+			String act = request.getParameter("act");
+			CmmnUtils.saveHistory(request, historyVO);
+			
+			if(act.equals("i")){
+				// 사용자등록 화면 이력 남기기
+				historyVO.setExe_dtl_cd("DX-T0032");
+				accessHistoryService.insertHistory(historyVO);			
+			}
+
+			if(act.equals("u")){
+				// 사용자수정 화면 이력 남기기
+				historyVO.setExe_dtl_cd("DX-T0033");
+				accessHistoryService.insertHistory(historyVO);
+							
+				String usr_id = request.getParameter("usr_id");
+				result = userManagerService.selectDetailUserManager(usr_id);
+				
+				mv.addObject("get_usr_id",result.get(0).getUsr_id());
+				mv.addObject("usr_nm",result.get(0).getUsr_nm());
+				mv.addObject("pwd",result.get(0).getPwd());
+				mv.addObject("bln_nm",result.get(0).getBln_nm());
+				mv.addObject("dept_nm",result.get(0).getDept_nm());
+				mv.addObject("pst_nm",result.get(0).getPst_nm());
+				mv.addObject("rsp_bsn_nm",result.get(0).getRsp_bsn_nm());
+				mv.addObject("cpn",result.get(0).getCpn());
+				mv.addObject("use_yn",result.get(0).getUse_yn());	
+				mv.addObject("aut_id",result.get(0).getAut_id());
+				mv.addObject("usr_expr_dt",result.get(0).getUsr_expr_dt());
+				
+			}
+			mv.addObject("act",act);
+			mv.setViewName("popup/userManagerRegForm");
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -157,9 +194,16 @@ public class UserManagerController {
 	 * @throws Exception
 	 */
 	@RequestMapping(value = "/insertUserManager.do")
-	public @ResponseBody void insertUserManager(@ModelAttribute("userVo") UserVO userVo,HttpServletRequest request,@ModelAttribute("historyVO") HistoryVO historyVO) {
-		try {		
+	public @ResponseBody void insertUserManager(@ModelAttribute("userVo") UserVO userVo,HttpServletRequest request,HttpServletResponse response,@ModelAttribute("historyVO") HistoryVO historyVO) {
 			List<UserVO> result = null;
+		try {		
+			CmmnUtils cu = new CmmnUtils();
+			menuAut = cu.selectMenuAut(menuAuthorityService, "MN0004");
+			
+			//쓰기권한이 없는경우
+			if(menuAut.get(0).get("wrt_aut_yn").equals("N")){
+				response.sendRedirect("/autError.do");
+			}
 			
 			// 사용자 등록 이력 남기기
 			CmmnUtils.saveHistory(request, historyVO);
@@ -225,8 +269,16 @@ public class UserManagerController {
 	 * @throws Exception
 	 */
 	@RequestMapping(value = "/updateUserManager.do")
-	public @ResponseBody void updateUserManager(@ModelAttribute("userVo") UserVO userVo,@ModelAttribute("historyVO") HistoryVO historyVO,HttpServletRequest request) {
+	public @ResponseBody void updateUserManager(@ModelAttribute("userVo") UserVO userVo,HttpServletResponse response,@ModelAttribute("historyVO") HistoryVO historyVO,HttpServletRequest request) {
 		try {
+			CmmnUtils cu = new CmmnUtils();
+			menuAut = cu.selectMenuAut(menuAuthorityService, "MN0004");
+			
+			//쓰기권한이 없는경우
+			if(menuAut.get(0).get("wrt_aut_yn").equals("N")){
+				response.sendRedirect("/autError.do");
+			}
+			
 			// 사용자 수정 이력 남기기
 			CmmnUtils.saveHistory(request, historyVO);
 			historyVO.setExe_dtl_cd("DX-T0033_01");
@@ -268,45 +320,6 @@ public class UserManagerController {
 	}
 
 	
-	/**
-	 * 사용자 리스트를 조회한다.
-	 * 
-	 * @param request
-	 * @return resultSet
-	 * @throws Exception
-	 */
-	@RequestMapping(value = "/selectUserManager.do")
-	public @ResponseBody List<UserVO> selectUserManager(HttpServletRequest request) {
-		List<UserVO> resultSet = null;
-		Map<String, Object> param = new HashMap<String, Object>();
-		try {
-			CmmnUtils cu = new CmmnUtils();
-			menuAut = cu.selectMenuAut(menuAuthorityService, "4");
-		
-			//읽기권한이 있을경우
-			if(menuAut.get(0).get("read_aut_yn").equals("Y")){
-				
-				String type=request.getParameter("type");
-				String search = request.getParameter("search");
-				String use_yn = request.getParameter("use_yn");
-							
-				param.put("type", type);
-				param.put("search", search);
-				param.put("use_yn", use_yn);
-			
-				resultSet = userManagerService.selectUserManager(param);	
-			}else{
-				return resultSet;
-			}
-			
-
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-		return resultSet;
-
-	}
-
 	
 	/**
 	 * 사용자를 삭제한다.
@@ -317,8 +330,17 @@ public class UserManagerController {
 	 * @throws Exception
 	 */
 	@RequestMapping(value = "/deleteUserManager.do")
-	public @ResponseBody boolean deleteUserManager(@ModelAttribute("historyVO") HistoryVO historyVO, HttpServletRequest request) {
-		try {
+	public @ResponseBody boolean deleteUserManager(@ModelAttribute("historyVO") HistoryVO historyVO, HttpServletResponse response, HttpServletRequest request) {
+		try {	
+			CmmnUtils cu = new CmmnUtils();
+			menuAut = cu.selectMenuAut(menuAuthorityService, "MN0004");
+			
+			//쓰기권한이 없는경우
+			if(menuAut.get(0).get("wrt_aut_yn").equals("N")){
+				response.sendRedirect("/autError.do");
+				return false;
+			}
+			
 			String[] param = request.getParameter("usr_id").toString().split(",");
 			for (int i = 0; i < param.length; i++) {
 				userManagerService.deleteUserManager(param[i]);
@@ -326,9 +348,7 @@ public class UserManagerController {
 				dbAuthorityService.deleteDbSvrAuthority(param[i]);
 				dbAuthorityService.deleteDbAuthority(param[i]);
 			}
-			
 
-			
 			// 사용자관리 이력 남기기
 			CmmnUtils.saveHistory(request, historyVO);
 			historyVO.setExe_dtl_cd("DX-T0031_01");
