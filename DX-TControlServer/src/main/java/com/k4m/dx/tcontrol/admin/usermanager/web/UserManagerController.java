@@ -141,42 +141,43 @@ public class UserManagerController {
 		try {
 			CmmnUtils cu = new CmmnUtils();
 			menuAut = cu.selectMenuAut(menuAuthorityService, "MN0004");
-			if(menuAut.get(0).get("read_aut_yn").equals("N")){
+			if(menuAut.get(0).get("wrt_aut_yn").equals("N")){
 				mv.setViewName("error/autError");
-				return mv;
-			}
-			String act = request.getParameter("act");
-			CmmnUtils.saveHistory(request, historyVO);
-			
-			if(act.equals("i")){
-				// 사용자등록 화면 이력 남기기
-				historyVO.setExe_dtl_cd("DX-T0032");
-				accessHistoryService.insertHistory(historyVO);			
+			}else{
+				String act = request.getParameter("act");
+				CmmnUtils.saveHistory(request, historyVO);
+				
+				if(act.equals("i")){
+					// 사용자등록 화면 이력 남기기
+					historyVO.setExe_dtl_cd("DX-T0032");
+					accessHistoryService.insertHistory(historyVO);			
+				}
+
+				if(act.equals("u")){
+					// 사용자수정 화면 이력 남기기
+					historyVO.setExe_dtl_cd("DX-T0033");
+					accessHistoryService.insertHistory(historyVO);
+								
+					String usr_id = request.getParameter("usr_id");
+					result = userManagerService.selectDetailUserManager(usr_id);
+					
+					mv.addObject("get_usr_id",result.get(0).getUsr_id());
+					mv.addObject("usr_nm",result.get(0).getUsr_nm());
+					mv.addObject("pwd",result.get(0).getPwd());
+					mv.addObject("bln_nm",result.get(0).getBln_nm());
+					mv.addObject("dept_nm",result.get(0).getDept_nm());
+					mv.addObject("pst_nm",result.get(0).getPst_nm());
+					mv.addObject("rsp_bsn_nm",result.get(0).getRsp_bsn_nm());
+					mv.addObject("cpn",result.get(0).getCpn());
+					mv.addObject("use_yn",result.get(0).getUse_yn());	
+					mv.addObject("aut_id",result.get(0).getAut_id());
+					mv.addObject("usr_expr_dt",result.get(0).getUsr_expr_dt());
+					
+				}
+				mv.addObject("act",act);
+				mv.setViewName("popup/userManagerRegForm");
 			}
 
-			if(act.equals("u")){
-				// 사용자수정 화면 이력 남기기
-				historyVO.setExe_dtl_cd("DX-T0033");
-				accessHistoryService.insertHistory(historyVO);
-							
-				String usr_id = request.getParameter("usr_id");
-				result = userManagerService.selectDetailUserManager(usr_id);
-				
-				mv.addObject("get_usr_id",result.get(0).getUsr_id());
-				mv.addObject("usr_nm",result.get(0).getUsr_nm());
-				mv.addObject("pwd",result.get(0).getPwd());
-				mv.addObject("bln_nm",result.get(0).getBln_nm());
-				mv.addObject("dept_nm",result.get(0).getDept_nm());
-				mv.addObject("pst_nm",result.get(0).getPst_nm());
-				mv.addObject("rsp_bsn_nm",result.get(0).getRsp_bsn_nm());
-				mv.addObject("cpn",result.get(0).getCpn());
-				mv.addObject("use_yn",result.get(0).getUse_yn());	
-				mv.addObject("aut_id",result.get(0).getAut_id());
-				mv.addObject("usr_expr_dt",result.get(0).getUsr_expr_dt());
-				
-			}
-			mv.addObject("act",act);
-			mv.setViewName("popup/userManagerRegForm");
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
