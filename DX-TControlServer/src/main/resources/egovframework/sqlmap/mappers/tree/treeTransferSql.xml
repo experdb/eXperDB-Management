@@ -138,9 +138,12 @@
 		FROM 
 		  T_DBSVR_I S
 		, T_DB_I I
+		, T_USRDBAUT_I A
 		WHERE S.DB_SVR_ID=I.DB_SVR_ID
-		AND I.USEYN='Y'
+		AND I.DB_ID = A.DB_ID
 		AND S.DB_SVR_NM = #{db_svr_nm}
+		AND I.USEYN = 'Y'
+		AND A.AUT_YN = 'Y'
 	</select>
 	
     <select id="selectServerDb" resultType="dbidbserverVO" parameterType="dbidbserverVO">
@@ -229,7 +232,7 @@
 		, #{lst_mdfr_id}
 		, clock_timestamp()
 		)		
-    </insert>    
+    </insert>       
     
     <select id="selectTransferMapping" parameterType="int" resultType="transferDetailMappingVO">
     	/**
