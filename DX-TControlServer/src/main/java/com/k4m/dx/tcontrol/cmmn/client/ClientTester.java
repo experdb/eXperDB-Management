@@ -40,11 +40,11 @@ public class ClientTester {
 		ClientTester clientTester = new ClientTester();
 		
 		String Ip = "222.110.153.162";
-		 Ip = "127.0.0.1";
+		// Ip = "127.0.0.1";
 		int port = 9001;
 		try {
 			
-			//clientTester.dxT001(Ip, port);
+			clientTester.dxT001(Ip, port);
 			//clientTester.dxT002(Ip, port);
 			//clientTester.dxT003(Ip, port);
 			//clientTester.dxT004(Ip, port);
@@ -71,7 +71,7 @@ public class ClientTester {
 			//clientTester.dxT015_R(Ip, port);
 			//clientTester.dxT015_V(Ip, port);
 			//clientTester.dxT015_DL(Ip, port);
-			clientTester.dxT016(Ip, port);
+			//clientTester.dxT016(Ip, port);
 			
 			
 		} catch(Exception e) {
@@ -95,12 +95,12 @@ public class ClientTester {
 		**/
 			
 		
-			serverObj.put(ClientProtocolID.SERVER_NAME, "222.110.153.162");
+			serverObj.put(ClientProtocolID.SERVER_NAME, "222.110.153.162_6432");
 			serverObj.put(ClientProtocolID.SERVER_IP, "222.110.153.162");
-			serverObj.put(ClientProtocolID.SERVER_PORT, "5432");
-			serverObj.put(ClientProtocolID.DATABASE_NAME, "pgmon");
-			serverObj.put(ClientProtocolID.USER_ID, "pgmon");
-			serverObj.put(ClientProtocolID.USER_PWD, "pgmon");
+			serverObj.put(ClientProtocolID.SERVER_PORT, "6432");
+			serverObj.put(ClientProtocolID.DATABASE_NAME, "postgres");
+			serverObj.put(ClientProtocolID.USER_ID, "experdba");
+			serverObj.put(ClientProtocolID.USER_PWD, "experdba");
 		
 			
 			

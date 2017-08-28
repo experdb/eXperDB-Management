@@ -45,6 +45,7 @@
 		<if test="scd_nm != null and scd_nm != '' ">
 			AND C.SCD_NM LIKE #{scd_nm}
 		</if>		
+		ORDER BY WRK_END_DTM DESC
 		LIMIT #{recordCountPerPage} OFFSET #{firstIndex} )A
 	</select>
 

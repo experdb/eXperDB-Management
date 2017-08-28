@@ -75,11 +75,19 @@ $(window.document).ready(function() {
 });
 
 function fn_find_list(){
+	alert("a");
 	var db_id = $("#db_id").val();
-	if(db_id == "") db_id = 0;
+	//if(db_id == "") db_id = 0;
 	var wrk_strt_dtm = $("#wrk_strt_dtm").val();
 	var wrk_end_dtm = $("#wrk_end_dtm").val();
 	var exe_rslt_cd = $("#exe_rslt_cd").val();
+	
+	alert(db_id);
+	alert(wrk_strt_dtm);
+	alert(wrk_end_dtm);
+	alert(exe_rslt_cd);
+
+	
 	
 	//fn_init();
 
@@ -107,6 +115,8 @@ function fn_find_list(){
 $(function() {
 	//조회버튼 클릭시
 	$("#btnSelect").click(function() {
+		alert("Aaaaaaa");
+		
 		var wrk_strt_dtm = $("#wrk_strt_dtm").val();
 		var wrk_end_dtm = $("#wrk_end_dtm").val();
 
@@ -119,7 +129,6 @@ $(function() {
 			alert("시작일자를 선택해 주세요");
 			return false;
 		}
-
 		fn_find_list();
 	});
 });
