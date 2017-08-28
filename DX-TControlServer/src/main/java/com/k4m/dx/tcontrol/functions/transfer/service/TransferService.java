@@ -14,7 +14,7 @@ public interface TransferService {
 	 * @return
 	 * @throws Exception
 	 */
-	List<TransferVO> selectTransferSetting(String usr_id) throws Exception;
+	TransferVO selectTransferSetting(String usr_id) throws Exception;
 
 	/**
 	 * 전송설정 등록

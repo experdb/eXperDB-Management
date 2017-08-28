@@ -50,6 +50,7 @@ public class DbAuthorityDAO extends EgovAbstractMapper{
 	}
 
 	
+	@SuppressWarnings({ "deprecation", "unchecked" })
 	public List<Map<String, Object>> selectUsrDBSrvAutInfo(String usr_id) {
 		List<Map<String, Object>>  sl = null;
 		sl = (List<Map<String, Object>>) list("dbAuthoritySql.selectUsrDBSrvAutInfo", usr_id);
@@ -60,12 +61,14 @@ public class DbAuthorityDAO extends EgovAbstractMapper{
 		update("dbAuthoritySql.updateUsrDBSrvAutInfo", object);		
 	}
 
+	@SuppressWarnings({ "deprecation", "unchecked" })
 	public List<Map<String, Object>> selectDBAutInfo() {
 		List<Map<String, Object>>  sl = null;
 		sl = (List<Map<String, Object>>) list("dbAuthoritySql.selectDBAutInfo", null);
 		return sl;
 	}
 
+	@SuppressWarnings({ "deprecation", "unchecked" })
 	public List<Map<String, Object>> selectUsrDBAutInfo(String usr_id) {
 		List<Map<String, Object>>  sl = null;
 		sl = (List<Map<String, Object>>) list("dbAuthoritySql.selectUsrDBAutInfo", usr_id);
@@ -74,6 +77,33 @@ public class DbAuthorityDAO extends EgovAbstractMapper{
 
 	public void updateUsrDBAutInfo(Object object) {
 		update("dbAuthoritySql.updateUsrDBAutInfo", object);		
+	}
+
+	public int selectUsrDBSrvAutInfoCnt(Object object) {
+		int resultSet = 0;
+		resultSet = (int) getSqlSession().selectOne("dbAuthoritySql.selectUsrDBSrvAutInfoCnt", object);
+		return resultSet;
+	}
+
+	public void insertUsrDBSrvAutInfo(Object object) {
+		insert("dbAuthoritySql.insertUsrDBSrvAutInfo", object);			
+	}
+
+	public int selectUsrDBAutInfoCnt(Object object) {
+		int resultSet = 0;
+		resultSet = (int) getSqlSession().selectOne("dbAuthoritySql.selectUsrDBAutInfoCnt", object);
+		return resultSet;
+	}
+
+	public void insertUsrDBAutInfo(Object object) {
+		insert("dbAuthoritySql.insertUsrDBAutInfo", object);	
+	}
+
+	@SuppressWarnings({ "deprecation", "unchecked" })
+	public List<Map<String, Object>> selectUserDBSvrAutList(String usr_id) {
+		List<Map<String, Object>>  sl = null;
+		sl = (List<Map<String, Object>>) list("dbAuthoritySql.selectUserDBSvrAutList", usr_id);
+		return sl;
 	}
 
 }

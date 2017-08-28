@@ -17,6 +17,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
+import com.k4m.dx.tcontrol.admin.accesshistory.service.AccessHistoryService;
+import com.k4m.dx.tcontrol.cmmn.CmmnUtils;
+import com.k4m.dx.tcontrol.common.service.HistoryVO;
 import com.k4m.dx.tcontrol.functions.schedule.service.ScheduleVO;
 import com.k4m.dx.tcontrol.mypage.service.MyScheduleService;
 
@@ -39,6 +42,9 @@ import com.k4m.dx.tcontrol.mypage.service.MyScheduleService;
 public class MyscheduleController {
 	
 	@Autowired
+	private AccessHistoryService accessHistoryService;
+	
+	@Autowired
 	private MyScheduleService mySscheduleService;
 	
 	/**
@@ -49,9 +55,15 @@ public class MyscheduleController {
 	 * @throws Exception
 	 */
 	@RequestMapping(value = "/myScheduleListView.do")
-	public ModelAndView myScheduleListView(HttpServletRequest request) {
+	public ModelAndView myScheduleListView(@ModelAttribute("historyVO") HistoryVO historyVO, HttpServletRequest request) {
 		ModelAndView mv = new ModelAndView();
 		try {
+			
+			//이력 남기기
+			CmmnUtils.saveHistory(request, historyVO);
+			historyVO.setExe_dtl_cd("DX-T0044");
+			accessHistoryService.insertHistory(historyVO);
+			
 			mv.setViewName("mypage/mySchedulerList");
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -70,11 +82,15 @@ public class MyscheduleController {
 	@SuppressWarnings("null")
 	@RequestMapping(value = "/selectMyScheduleList.do")
 	@ResponseBody
-	public List<Map<String, Object>> selectMyScheduleList(@ModelAttribute("scheduleVO") ScheduleVO scheduleVO, HttpServletRequest request) {
+	public List<Map<String, Object>> selectMyScheduleList(@ModelAttribute("historyVO") HistoryVO historyVO, @ModelAttribute("scheduleVO") ScheduleVO scheduleVO, HttpServletRequest request) {
 	
 		List<Map<String, Object>> resultSet = new ArrayList<Map<String, Object>>();
 		
 		try {
+			//이력 남기기
+			CmmnUtils.saveHistory(request, historyVO);
+			historyVO.setExe_dtl_cd("DX-T0044_01");
+			accessHistoryService.insertHistory(historyVO);
 		
 			HttpSession session = request.getSession();
 			String usr_id = (String) session.getAttribute("usr_id");
@@ -109,8 +125,6 @@ public class MyscheduleController {
 				}		
 				resultSet.add(mp);
 			}
-			
-		System.out.println(resultSet);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -50,6 +51,7 @@ public class TransferController {
 	private MenuAuthorityService menuAuthorityService;
 	
 	private List<Map<String, Object>> menuAut;
+	
 	/**
 	 * 전송설정 화면을 보여준다.
 	 * 
@@ -62,7 +64,7 @@ public class TransferController {
 		ModelAndView mv = new ModelAndView();
 		try {
 			CmmnUtils cu = new CmmnUtils();
-			menuAut = cu.selectMenuAut(menuAuthorityService, "13");
+			menuAut = cu.selectMenuAut(menuAuthorityService, "MN000201");
 			if(menuAut.get(0).get("read_aut_yn").equals("N")){
 				mv.setViewName("error/autError");
 			}else{
@@ -91,21 +93,20 @@ public class TransferController {
 	 * @throws Exception
 	 */
 	@RequestMapping(value = "/selectTransferSetting.do")
-	public @ResponseBody List<TransferVO> selectTransferSetting(HttpServletRequest request) {
+	public @ResponseBody TransferVO selectTransferSetting(HttpServletRequest request,HttpServletResponse response) {
 		HttpSession session = request.getSession();
-		List<TransferVO> resultSet = null;
+		 TransferVO resultSet = null;
 		try {
 			CmmnUtils cu = new CmmnUtils();
-			menuAut = cu.selectMenuAut(menuAuthorityService, "13");
+			menuAut = cu.selectMenuAut(menuAuthorityService, "MN000201");
 			
 			//읽기권한이 있을경우
-			if(menuAut.get(0).get("read_aut_yn").equals("Y")){
-				String usr_id = (String) session.getAttribute("usr_id");
-				resultSet = transferService.selectTransferSetting(usr_id);	
-			}else{
+			if(menuAut.get(0).get("read_aut_yn").equals("N")){
+				response.sendRedirect("/autError.do");
 				return resultSet;
 			}
-			
+			String usr_id = (String) session.getAttribute("usr_id");
+			resultSet = (TransferVO)transferService.selectTransferSetting(usr_id);	
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -121,27 +122,26 @@ public class TransferController {
 	 * @throws Exception
 	 */
 	@RequestMapping(value = "/insertTransferSetting.do")
-	public @ResponseBody void insertTransferSetting(@ModelAttribute("transferVO") TransferVO transferVO,@ModelAttribute("historyVO") HistoryVO historyVO,HttpServletRequest request) {
+	public @ResponseBody void insertTransferSetting(@ModelAttribute("transferVO") TransferVO transferVO,@ModelAttribute("historyVO") HistoryVO historyVO,HttpServletRequest request,HttpServletResponse response) {
 		try {
 			CmmnUtils cu = new CmmnUtils();
-			menuAut = cu.selectMenuAut(menuAuthorityService, "13");
+			menuAut = cu.selectMenuAut(menuAuthorityService, "MN000201");
 			
 			//쓰기권한이 있을경우
-			if(menuAut.get(0).get("wrt_aut_yn").equals("Y")){
-				HttpSession session = request.getSession();
-				String usr_id = (String) session.getAttribute("usr_id");
-				transferVO.setFrst_regr_id(usr_id);
-				transferVO.setLst_mdfr_id(usr_id);
-				
-				transferService.insertTransferSetting(transferVO);
-				
-				// 전송설정 저장 이력 남기기
-				CmmnUtils.saveHistory(request, historyVO);
-				historyVO.setExe_dtl_cd("DX-T0011_01");
-				accessHistoryService.insertHistory(historyVO);
-			}else{
-
+			if(menuAut.get(0).get("wrt_aut_yn").equals("N")){
+				response.sendRedirect("/autError.do");
 			}
+			HttpSession session = request.getSession();
+			String usr_id = (String) session.getAttribute("usr_id");
+			transferVO.setFrst_regr_id(usr_id);
+			transferVO.setLst_mdfr_id(usr_id);
+				
+			transferService.insertTransferSetting(transferVO);
+				
+			// 전송설정 저장 이력 남기기
+			CmmnUtils.saveHistory(request, historyVO);
+			historyVO.setExe_dtl_cd("DX-T0011_01");
+			accessHistoryService.insertHistory(historyVO);
 					
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -157,29 +157,31 @@ public class TransferController {
 	 * @throws Exception
 	 */
 	@RequestMapping(value = "/updateTransferSetting.do")
-	public @ResponseBody void updateTransferSetting(@ModelAttribute("transferVO") TransferVO transferVO,@ModelAttribute("historyVO") HistoryVO historyVO,HttpServletRequest request) {
+	public @ResponseBody boolean updateTransferSetting(@ModelAttribute("transferVO") TransferVO transferVO,@ModelAttribute("historyVO") HistoryVO historyVO,HttpServletRequest request,HttpServletResponse response) {
 		try {
 			CmmnUtils cu = new CmmnUtils();
-			menuAut = cu.selectMenuAut(menuAuthorityService, "13");
-			
+			menuAut = cu.selectMenuAut(menuAuthorityService, "MN000201");
 			//쓰기권한이 있을경우
-			if(menuAut.get(0).get("wrt_aut_yn").equals("Y")){
-				HttpSession session = request.getSession();
-				String usr_id = (String) session.getAttribute("usr_id");
-				transferVO.setLst_mdfr_id(usr_id);
+			if(menuAut.get(0).get("wrt_aut_yn").equals("N")){
+				response.sendRedirect("/autError.do");
+				return false;
+			}
+			HttpSession session = request.getSession();
+			String usr_id = (String) session.getAttribute("usr_id");
+			transferVO.setLst_mdfr_id(usr_id);
 				
-				transferService.updateTransferSetting(transferVO);
+			transferService.updateTransferSetting(transferVO);
 							
-				// 전송설정 저장 이력 남기기
-				CmmnUtils.saveHistory(request, historyVO);
-				historyVO.setExe_dtl_cd("DX-T0011_01");
-				accessHistoryService.insertHistory(historyVO);
-			}else{
-
-			}	
+			// 전송설정 저장 이력 남기기
+			CmmnUtils.saveHistory(request, historyVO);
+			historyVO.setExe_dtl_cd("DX-T0011_01");
+			accessHistoryService.insertHistory(historyVO);
+			
+			return true;
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
+		return true;
 	}
 	
 	/**
@@ -196,7 +198,7 @@ public class TransferController {
 		ModelAndView mv = new ModelAndView();
 		try {
 			CmmnUtils cu = new CmmnUtils();
-			menuAut = cu.selectMenuAut(menuAuthorityService, "14");
+			menuAut = cu.selectMenuAut(menuAuthorityService, "MN000202");
 			if(menuAut.get(0).get("read_aut_yn").equals("N")){
 				mv.setViewName("error/autError");
 			}else{
@@ -225,32 +227,32 @@ public class TransferController {
 	 * @throws Exception
 	 */
 	@RequestMapping(value = "/selectConnectorRegister.do")
-	public @ResponseBody List<ConnectorVO> selectConnectorRegister(@ModelAttribute("historyVO") HistoryVO historyVO, HttpServletRequest request) {
+	public @ResponseBody List<ConnectorVO> selectConnectorRegister(@ModelAttribute("historyVO") HistoryVO historyVO, HttpServletRequest request,HttpServletResponse response) {
 		List<ConnectorVO> resultSet = null;
 		try {
 			CmmnUtils cu = new CmmnUtils();
-			menuAut = cu.selectMenuAut(menuAuthorityService, "14");
+			menuAut = cu.selectMenuAut(menuAuthorityService, "MN000202");
 			
 			//읽기권한이 있을경우
-			if(menuAut.get(0).get("read_aut_yn").equals("Y")){
-				
-				// Connector 조회 이력 남기기
-				CmmnUtils.saveHistory(request, historyVO);
-				historyVO.setExe_dtl_cd("DX-T0012_01");
-				accessHistoryService.insertHistory(historyVO);					
-				
-				Map<String, Object> param = new HashMap<String, Object>();
-
-				String cnr_nm = request.getParameter("cnr_nm");
-				String cnr_ipadr = request.getParameter("cnr_ipadr");
-
-				param.put("cnr_nm", cnr_nm);
-				param.put("cnr_ipadr", cnr_ipadr);
-
-				resultSet = transferService.selectConnectorRegister(param);
-			}else{
+			if(menuAut.get(0).get("read_aut_yn").equals("N")){
+				response.sendRedirect("/autError.do");
 				return resultSet;
 			}
+			
+			// Connector 조회 이력 남기기
+			CmmnUtils.saveHistory(request, historyVO);
+			historyVO.setExe_dtl_cd("DX-T0012_01");
+			accessHistoryService.insertHistory(historyVO);					
+			
+			Map<String, Object> param = new HashMap<String, Object>();
+
+			String cnr_nm = request.getParameter("cnr_nm");
+			String cnr_ipadr = request.getParameter("cnr_ipadr");
+
+			param.put("cnr_nm", cnr_nm);
+			param.put("cnr_ipadr", cnr_ipadr);
+
+			resultSet = transferService.selectConnectorRegister(param);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -270,38 +272,37 @@ public class TransferController {
 		List<ConnectorVO> result = null;
 		try {
 			CmmnUtils cu = new CmmnUtils();
-			menuAut = cu.selectMenuAut(menuAuthorityService, "14");
-			if(menuAut.get(0).get("read_aut_yn").equals("N")){
+			menuAut = cu.selectMenuAut(menuAuthorityService, "MN000202");
+			if(menuAut.get(0).get("read_aut_yn").equals("Y")){
 				mv.setViewName("error/autError");
-			}else{		
-				String act = request.getParameter("act");
+			}
+			
+			String act = request.getParameter("act");
+			
+			if (act.equals("i")) {
+				// Connector 등록 팝업 이력 남기기
+				CmmnUtils.saveHistory(request, historyVO);
+				historyVO.setExe_dtl_cd("DX-T0013");
+				accessHistoryService.insertHistory(historyVO);
+			}
+			
+			if (act.equals("u")) {
+				// Connector수정 이력 남기기
+				CmmnUtils.saveHistory(request, historyVO);
+				historyVO.setExe_dtl_cd("DX-T0012_03");
+				accessHistoryService.insertHistory(historyVO);
 				
-				if (act.equals("i")) {
-					// Connector 등록 팝업 이력 남기기
-					CmmnUtils.saveHistory(request, historyVO);
-					historyVO.setExe_dtl_cd("DX-T0013");
-					accessHistoryService.insertHistory(historyVO);
-				}
-				
-				if (act.equals("u")) {
-					// Connector수정 이력 남기기
-					CmmnUtils.saveHistory(request, historyVO);
-					historyVO.setExe_dtl_cd("DX-T0012_03");
-					accessHistoryService.insertHistory(historyVO);
-					
-					int cnr_id = Integer.parseInt(request.getParameter("cnr_id"));
-					result = transferService.selectDetailConnectorRegister(cnr_id);
-					mv.addObject("cnr_id", result.get(0).getCnr_id());
-					mv.addObject("cnr_nm", result.get(0).getCnr_nm());
-					mv.addObject("cnr_ipadr", result.get(0).getCnr_ipadr());
-					mv.addObject("cnr_portno", result.get(0).getCnr_portno());
-					mv.addObject("cnr_cnn_tp_cd", result.get(0).getCnr_cnn_tp_cd());
-				}
-	
-				mv.addObject("act", act);
-				mv.setViewName("popup/connectorRegForm");
+				int cnr_id = Integer.parseInt(request.getParameter("cnr_id"));
+				result = transferService.selectDetailConnectorRegister(cnr_id);
+				mv.addObject("cnr_id", result.get(0).getCnr_id());
+				mv.addObject("cnr_nm", result.get(0).getCnr_nm());
+				mv.addObject("cnr_ipadr", result.get(0).getCnr_ipadr());
+				mv.addObject("cnr_portno", result.get(0).getCnr_portno());
+				mv.addObject("cnr_cnn_tp_cd", result.get(0).getCnr_cnn_tp_cd());
 			}
 
+			mv.addObject("act", act);
+			mv.setViewName("popup/connectorRegForm");
 			
 		} catch (Exception e) {
 			e.printStackTrace();

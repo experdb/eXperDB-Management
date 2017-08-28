@@ -110,15 +110,15 @@
 		,  TMP.DB_NM
 		,  TMP.DB_SVR_NM
 		,  TMP.BW_PID
-		,  TMP.DB_ID
+		,  (SELECT DB_ID FROM T_DB_I WHERE DB_ID=TMP.DB_ID AND USEYN ='Y')
 		FROM (
 		SELECT TD.TRF_TRG_CNN_NM,TD.TRF_TRG_ID,(CASE WHEN TD.DB_NM IS NOT NULL THEN TD.DB_NM ELSE '' END) AS DB_NM,S.DB_SVR_NM,TD.BW_PID,TD.DB_ID
 			FROM (SELECT T.*,D.DB_SVR_ID,D.DB_NM
 				FROM (SELECT SI.*, MR.DB_ID
 					FROM T_TRFTRGCNG_I SI LEFT OUTER JOIN T_TRFTRGMPP_R MR 
 						ON SI.TRF_TRG_ID = MR.TRF_TRG_ID 
-					) AS T LEFT OUTER JOIN T_DB_I D ON T.DB_ID=D.DB_ID 
-				) AS TD LEFT OUTER JOIN T_DBSVR_I S ON TD.DB_SVR_ID = S.DB_SVR_ID
+					) AS T LEFT OUTER JOIN T_DB_I D ON T.DB_ID=D.DB_ID AND D.USEYN='Y'
+				) AS TD LEFT OUTER JOIN T_DBSVR_I S ON TD.DB_SVR_ID = S.DB_SVR_ID 
 			WHERE TD.CNR_ID=#{cnr_id}
 			AND TD.TRF_TRG_CNN_NM LIKE #{trf_trg_cnn_nm}
 			) TMP
@@ -139,6 +139,7 @@
 		  T_DBSVR_I S
 		, T_DB_I I
 		WHERE S.DB_SVR_ID=I.DB_SVR_ID
+		AND I.USEYN='Y'
 		AND S.DB_SVR_NM = #{db_svr_nm}
 	</select>
 	
@@ -163,6 +164,7 @@
 		, T_DBSVR_I S
 		WHERE D.db_svr_id=S.db_svr_id
 		AND D.db_id=#{db_id}	
+		AND D.USEYN='Y'
 		LIMIT 1	
     </select>	
     
@@ -255,6 +257,7 @@
 		AND R.TRF_TRG_MPP_ID=L.TRF_TRG_MPP_ID
 		AND R.DB_ID =D.DB_ID
 		AND D.DB_SVR_ID =S.DB_SVR_ID
+		AND D.USEYN='Y'
 		AND I.TRF_TRG_ID =#{trf_trg_id}
     </select>
     
@@ -294,7 +297,7 @@
     
     <select id="selectBottlewaterinfo" parameterType="int" resultType="bottlewaterVO">
         /**
-	 	*  Query ID : updateBottleWaterBwpid
+	 	*  Query ID : selectBottlewaterinfo
 	 	* Description : Bottlewater DB정보
 	 	* Author : 김주영
 	 	**/
@@ -308,6 +311,8 @@
 		, A.SCM_NM
 		, A.TB_ENGL_NM
 		, (SELECT TRF_TRG_CNN_NM FROM T_TRFTRGCNG_I WHERE TRF_TRG_ID= #{trf_trg_id}) AS TRF_TRG_CNN_NM
+		, I.DB_NM
+		, (SELECT CNR_NM FROM T_CNR_I WHERE CNR_ID=A.CNR_ID) AS CNR_NM
 		FROM 
 		(
 			SELECT R.DB_ID,R.CNR_ID,L.SCM_NM,L.TB_ENGL_NM
@@ -317,6 +322,7 @@
 		)A, T_DB_I I, T_DBSVR_I S
 		WHERE I.DB_SVR_ID=S.DB_SVR_ID
 		AND A.DB_ID=I.DB_ID
+		AND I.USEYN='Y'
     </select>
     
 </mapper>

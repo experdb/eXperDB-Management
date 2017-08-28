@@ -452,7 +452,7 @@ function checkFolder(){
 					<tr>
 						<th scope="row" class="ico_t2">저장경로</th>
 						<td colspan="5"><input type="text" class="txt t4" name="save_pth" id="save_pth" style="width:650px" onKeydown="$('#check_path').val('N')"/>
-							<a href="javascript:checkFolder();"><font color="red"><b>[경로체크]</b></font></a>
+							<span class="btn btnC_01"><button type="button" class= "btn_type_02" onclick="checkFolder()" style="width: 60px; margin-right: -60px; margin-top: 0;">경로체크</button></span>							
 						</td>
 					</tr>
 					<tr>

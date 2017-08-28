@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -12,10 +13,12 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
+import com.k4m.dx.tcontrol.admin.accesshistory.service.AccessHistoryService;
 import com.k4m.dx.tcontrol.admin.dbserverManager.service.DbServerManagerService;
 import com.k4m.dx.tcontrol.admin.dbserverManager.service.DbServerVO;
 import com.k4m.dx.tcontrol.admin.menuauthority.service.MenuAuthorityService;
 import com.k4m.dx.tcontrol.cmmn.CmmnUtils;
+import com.k4m.dx.tcontrol.common.service.HistoryVO;
 
 /**
  * [DB SERVER] 컨트롤러 클래스를 정의한다.
@@ -36,6 +39,9 @@ import com.k4m.dx.tcontrol.cmmn.CmmnUtils;
 public class ServerController {
 	
 	@Autowired
+	private AccessHistoryService accessHistoryService;
+	
+	@Autowired
 	private MenuAuthorityService menuAuthorityService;
 
 	@Autowired
@@ -52,16 +58,28 @@ public class ServerController {
 	 * @throws Exception
 	 */
 	@RequestMapping(value = "/dbServer.do")
-	public ModelAndView dbServer(HttpServletRequest request) {
+	public ModelAndView dbServer(@ModelAttribute("historyVO") HistoryVO historyVO, HttpServletRequest request) {
 		
+		//해당메뉴 권한 조회 (공통메소드호출),
 		CmmnUtils cu = new CmmnUtils();
-		menuAut = cu.selectMenuAut(menuAuthorityService, "16");
-		
+		menuAut = cu.selectMenuAut(menuAuthorityService, "MN000302");
 		ModelAndView mv = new ModelAndView();
-		try {		
-			mv.addObject("read_aut_yn", menuAut.get(0).get("read_aut_yn"));
-			mv.addObject("wrt_aut_yn", menuAut.get(0).get("wrt_aut_yn"));
-			mv.setViewName("admin/dbServerManager/dbServer");
+		
+		try {				
+			//읽기 권한이 없는경우 error페이지 호출 , [추후 Exception 처리예정]
+			if(menuAut.get(0).get("read_aut_yn").equals("N")){
+				///에러 페이지
+				mv.setViewName("error/autError");
+			}else{
+				//이력 남기기
+				CmmnUtils.saveHistory(request, historyVO);
+				historyVO.setExe_dtl_cd("DX-T0006");
+				accessHistoryService.insertHistory(historyVO);
+				
+				mv.addObject("read_aut_yn", menuAut.get(0).get("read_aut_yn"));
+				mv.addObject("wrt_aut_yn", menuAut.get(0).get("wrt_aut_yn"));
+				mv.setViewName("admin/dbServerManager/dbServer");
+			}		
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -79,15 +97,26 @@ public class ServerController {
 	@SuppressWarnings("unused")
 	@RequestMapping(value = "/selectDbServerServerList.do")
 	@ResponseBody
-	public List<DbServerVO> selectDbServerServerList(@ModelAttribute("dbServerVO") DbServerVO dbServerVO) {
-	
+	public List<DbServerVO> selectDbServerServerList(@ModelAttribute("historyVO") HistoryVO historyVO, @ModelAttribute("dbServerVO") DbServerVO dbServerVO, HttpServletResponse response, HttpServletRequest request) {
+		
+		//해당메뉴 권한 조회 (공통메소드호출)
 		CmmnUtils cu = new CmmnUtils();
-		menuAut = cu.selectMenuAut(menuAuthorityService, "16");
+		menuAut = cu.selectMenuAut(menuAuthorityService, "MN000302");
 		
 		List<DbServerVO> result = null;
 		List<DbServerVO> resultSet = null;
+	
 		try {
-			
+			//읽기 권한이 없는경우 error페이지 호출 , [추후 Exception 처리예정]
+			if(menuAut.get(0).get("read_aut_yn").equals("N")){
+				response.sendRedirect("/autError.do.do");
+				return resultSet;
+			}else{				
+			//이력 남기기
+			CmmnUtils.saveHistory(request, historyVO);
+			historyVO.setExe_dtl_cd("DX-T0006_01");
+			accessHistoryService.insertHistory(historyVO);
+				
 			System.out.println("=======parameter=======");
 			System.out.println("서버명 : " + dbServerVO.getDb_svr_id());
 			System.out.println("서버명 : " + dbServerVO.getDb_svr_nm());
@@ -95,13 +124,9 @@ public class ServerController {
 			System.out.println("Database : " + dbServerVO.getDft_db_nm());
 			System.out.println("=====================");
 			
-			//읽기권한이 있을경우
-			//if(menuAut.get(0).get("read_aut_yn").equals("Y")){
-				resultSet = dbServerManagerService.selectDbServerList(dbServerVO);
-			//}else{
-			//	return resultSet;
-			//}
-
+			resultSet = dbServerManagerService.selectDbServerList(dbServerVO);
+			}
+			
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

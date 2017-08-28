@@ -87,6 +87,9 @@ $(window.document).ready(function() {
 		data : {},
 		dataType : "json",
 		type : "post",
+		beforeSend: function(xhr) {
+	        xhr.setRequestHeader("AJAX", true);
+	     },
 		error : function(xhr, status, error) {
 			if(xhr.status == 401) {
 				alert("인증에 실패 했습니다. 로그인 페이지로 이동합니다.");
@@ -194,7 +197,7 @@ $(function() {
  * 서버 등록 팝업페이지 호출
  ******************************************************** */
 function fn_reg_popup(){
-	window.open("/popup/dbServerRegForm.do","dbServerRegPop","location=no,menubar=no,scrollbars=no,status=no,width=920,height=405");
+	window.open("/popup/dbServerRegForm.do?flag=tree","dbServerRegPop","location=no,menubar=no,scrollbars=no,status=no,width=920,height=405");
 }
 
 
@@ -205,7 +208,7 @@ function fn_regRe_popup(){
 	var datas = table_dbServer.rows('.selected').data();
 	if (datas.length == 1) {
 		var db_svr_id = table_dbServer.row('.selected').data().db_svr_id;
-		window.open("/popup/dbServerRegReForm.do?db_svr_id="+db_svr_id,"dbServerRegRePop","location=no,menubar=no,resizable=yes,scrollbars=no,status=no,width=920,height=405");
+		window.open("/popup/dbServerRegReForm.do?db_svr_id="+db_svr_id+"&flag=tree","dbServerRegRePop","location=no,menubar=no,resizable=yes,scrollbars=no,status=no,width=920,height=405");
 	} else {
 		alert("하나의 항목을 선택해주세요.");
 	}	
@@ -216,21 +219,45 @@ function fn_regRe_popup(){
  * 디비 등록
  ******************************************************** */
 function fn_insertDB(){
+	var datasArr = new Array();	
 	var db_svr_id = table_dbServer.row('.selected').data().db_svr_id;
 	var ipadr = table_dbServer.row('.selected').data().ipadr;
-	var datas = table_db.rows('.selected').data();
+	var datas = table_db.rows().data();
 
-		var rows = [];
-    	for (var i = 0;i<datas.length;i++) {
-    		rows.push(table_db.rows('.selected').data()[i]);
+	var checkCnt = table_db.rows('.selected').data().length;
+	var rows = [];
+    	for (var i = 0; i<datas.length; i++) {
+     		var rows = new Object();
+     		
+     		var org_dbName = table_db.rows().data()[i].dft_db_nm;
+     		
+     		var returnValue = false;
+     		
+     		for(var j=0; j<checkCnt; j++) {
+     			var chkDBName = table_db.rows('.selected').data()[j].dft_db_nm;
+     			if(org_dbName  == chkDBName) {
+     				returnValue = true;
+     				break;
+     			}
+     		}
+     		
+     	 	if(returnValue == true){
+     			rows.useyn = "Y";
+     			rows.dft_db_nm = table_db.rows().data()[i].dft_db_nm;
+     		}else{
+     			rows.useyn = "N";
+     			rows.dft_db_nm = table_db.rows().data()[i].dft_db_nm;
+     		}   		 
+    		datasArr.push(rows);
 		}
+
     	if (confirm("선택된 DB를 저장하시겠습니까?")){
 			$.ajax({
 				url : "/insertTreeDB.do",
 				data : {
 					db_svr_id : db_svr_id,
 					ipadr : ipadr,
-					rows : JSON.stringify(rows)
+					rows : JSON.stringify(datasArr)
 				},
 				async:true,
 				dataType : "json",
@@ -255,6 +282,7 @@ function fn_insertDB(){
 					}
 				},
 				success : function(result) {
+					alert(result);
 					alert("저장되었습니다.");
 					location.reload();
 				}
@@ -380,7 +408,7 @@ function fn_dataCompareChcek(svrDbList){
 								<thead>
 									<tr>
 										<th>메뉴</th>
-										<th>등록선택</th>
+										<th><input name="select" value="1" type="checkbox"></th>
 									</tr>
 								</thead>
 							</table>

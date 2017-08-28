@@ -25,10 +25,8 @@ import com.k4m.dx.tcontrol.admin.dbserverManager.service.DbServerVO;
 import com.k4m.dx.tcontrol.cmmn.AES256;
 import com.k4m.dx.tcontrol.cmmn.AES256_KEY;
 import com.k4m.dx.tcontrol.cmmn.CmmnUtils;
-import com.k4m.dx.tcontrol.cmmn.client.ClientAdapter;
 import com.k4m.dx.tcontrol.cmmn.client.ClientInfoCmmn;
 import com.k4m.dx.tcontrol.cmmn.client.ClientProtocolID;
-import com.k4m.dx.tcontrol.cmmn.client.ClientTranCodeType;
 import com.k4m.dx.tcontrol.common.service.AgentInfoVO;
 import com.k4m.dx.tcontrol.common.service.CmmnServerInfoService;
 import com.k4m.dx.tcontrol.common.service.HistoryVO;
@@ -437,8 +435,8 @@ public class TreeTransferController {
 					String trf_trg_mpp_id = treeTransferService.selectTransfermappid(param[i]);
 					if (trf_trg_mpp_id != null) {
 						/* 전송대상매핑관계,전송매핑테이블내역 삭제 */
-						treeTransferService.deleteTransferRelation(Integer.parseInt(trf_trg_mpp_id));
 						treeTransferService.deleteTransferMapping(Integer.parseInt(trf_trg_mpp_id));
+						treeTransferService.deleteTransferRelation(Integer.parseInt(trf_trg_mpp_id));										
 					}
 					/* 전송대상설정정보 삭제 */
 					treeTransferService.deleteTransferTarget(param[i]);
@@ -642,25 +640,24 @@ public class TreeTransferController {
 			
 			int db_id = Integer.parseInt(request.getParameter("db_id"));
 			DbIDbServerVO dbIDbServerVO = (DbIDbServerVO) treeTransferService.selectServerDb(db_id);
-
-			DbServerVO schDbServerVO = new DbServerVO();
-			schDbServerVO.setDb_svr_id(dbIDbServerVO.getDb_svr_id());
-			DbServerVO dbServerVO = (DbServerVO)  cmmnServerInfoService.selectServerInfo(schDbServerVO);
-			String strIpAdr = dbServerVO.getIpadr();	
+	
 			AgentInfoVO vo = new AgentInfoVO();
-			vo.setIPADR(strIpAdr);
+			vo.setIPADR(dbIDbServerVO.getIpadr());
 			AgentInfoVO agentInfo =  (AgentInfoVO) cmmnServerInfoService.selectAgentInfo(vo);
 			
-			String IP = dbServerVO.getIpadr();
+			if (agentInfo==null){
+				return result;
+			}
+			String IP = dbIDbServerVO.getIpadr();
 			int PORT = agentInfo.getSOCKET_PORT();
-			
-			serverObj.put(ClientProtocolID.SERVER_NAME, dbServerVO.getDb_svr_nm());
-			serverObj.put(ClientProtocolID.SERVER_IP, dbServerVO.getIpadr());
-			serverObj.put(ClientProtocolID.SERVER_PORT, dbServerVO.getPortno());
-			serverObj.put(ClientProtocolID.DATABASE_NAME, dbServerVO.getDft_db_nm());
-			serverObj.put(ClientProtocolID.USER_ID, dbServerVO.getSvr_spr_usr_id());
-			serverObj.put(ClientProtocolID.USER_PWD, dec.aesDecode(dbServerVO.getSvr_spr_scm_pwd()));
-			
+
+			serverObj.put(ClientProtocolID.SERVER_NAME, dbIDbServerVO.getDb_svr_nm());
+			serverObj.put(ClientProtocolID.SERVER_IP, dbIDbServerVO.getIpadr());
+			serverObj.put(ClientProtocolID.SERVER_PORT, dbIDbServerVO.getPortno());
+			serverObj.put(ClientProtocolID.DATABASE_NAME, dbIDbServerVO.getDb_nm());
+			serverObj.put(ClientProtocolID.USER_ID, dbIDbServerVO.getSvr_spr_usr_id());
+			serverObj.put(ClientProtocolID.USER_PWD, dec.aesDecode(dbIDbServerVO.getSvr_spr_scm_pwd()));
+				
 			result = cic.tableList_select(serverObj,IP,PORT);
 
 		} catch (Exception e) {
@@ -703,12 +700,11 @@ public class TreeTransferController {
 			transferRelationVO.setTrf_trg_id(Integer.parseInt(request.getParameter("trf_trg_id")));
 			transferRelationVO.setCnr_id(Integer.parseInt(request.getParameter("cnr_id")));
 			transferRelationVO.setDb_id(Integer.parseInt(request.getParameter("db_id")));
-
-			/* 전송대상매핑관계 DELETE */
-			treeTransferService.deleteTransferRelation(Integer.parseInt(request.getParameter("trf_trg_mpp_id")));
+			
 			/* 전송매핑테이블내역 DELETE */
 			treeTransferService.deleteTransferMapping(Integer.parseInt(request.getParameter("trf_trg_mpp_id")));
-
+			/* 전송대상매핑관계 DELETE */
+			treeTransferService.deleteTransferRelation(Integer.parseInt(request.getParameter("trf_trg_mpp_id")));
 			/* 전송대상매핑관계 INSERT */
 			treeTransferService.insertTransferRelation(transferRelationVO);
 
@@ -782,6 +778,7 @@ public class TreeTransferController {
 	@RequestMapping(value = "/bottlewaterControl.do")
 	public @ResponseBody String bottlewaterControl(
 			@ModelAttribute("transferDetailVO") TransferDetailVO transferDetailVO, HttpServletRequest request) {
+		ClientInfoCmmn cic = new ClientInfoCmmn();
 		try {
 			/*
 			 * TODO 실행순서 
@@ -799,13 +796,33 @@ public class TreeTransferController {
 			int trf_trg_id = Integer.parseInt(request.getParameter("trf_trg_id"));
 			int bw_pid = Integer.parseInt(request.getParameter("bw_pid"));
 
+			int db_id = Integer.parseInt(request.getParameter("db_id"));
+			DbIDbServerVO dbIDbServerVO = (DbIDbServerVO) treeTransferService.selectServerDb(db_id);
+			DbServerVO schDbServerVO = new DbServerVO();
+			schDbServerVO.setDb_svr_id(dbIDbServerVO.getDb_svr_id());
+			DbServerVO dbServerVO = (DbServerVO) cmmnServerInfoService.selectServerInfo(schDbServerVO);
+			String strIpAdr = dbServerVO.getIpadr();
+			AgentInfoVO vo = new AgentInfoVO();
+			vo.setIPADR(strIpAdr);
+			AgentInfoVO agentInfo = (AgentInfoVO) cmmnServerInfoService.selectAgentInfo(vo);
+			
+			/*agent 미설치일 경우*/
+			if (agentInfo==null){
+				return "false";
+			}
+			
+			String IP = dbServerVO.getIpadr();
+			int PORT = agentInfo.getSOCKET_PORT();	
+			
 			if (bw_pid == 0) {
-				List<TransferVO> transferInfo = null;
-				transferInfo = transferService.selectTransferSetting(usr_id);
+				TransferVO transferInfo = (TransferVO) transferService.selectTransferSetting(usr_id);
+				 List<BottlewaterVO> dbInfo = treeTransferService.selectBottlewaterinfo(trf_trg_id);
 
-				List<BottlewaterVO> dbInfo = null;
-				dbInfo = treeTransferService.selectBottlewaterinfo(trf_trg_id);
-				
+				/*전송설정등록을 안했을 경우*/
+				if(transferInfo==null){
+					return "transfersetting";
+				}
+					
 				/* TOPIC */
 				String topicTxt = "";
 				for (int i = 0; i < dbInfo.size(); i++) {
@@ -815,56 +832,33 @@ public class TreeTransferController {
 					}
 				}
 				System.out.println("TOPIC : " + topicTxt);
-				String dbinfoTxt = "--postgres=postgres://" + dbInfo.get(0).getSvr_spr_usr_id() + ":"
-						+ aes.aesDecode(dbInfo.get(0).getSvr_spr_scm_pwd()) + "@" + dbInfo.get(0).getIpadr() + ":"
-						+ dbInfo.get(0).getPortno() + "/" + dbInfo.get(0).getDft_db_nm();
+				String dbinfoTxt = " --postgres=postgres://" + dbInfo.get(0).getSvr_spr_usr_id() + ":"
+						+ aes.aesDecode(dbInfo.get(0).getSvr_spr_scm_pwd()) + "@127.0.0.1:"
+						+ dbInfo.get(0).getPortno() + "/" + dbInfo.get(0).getDb_nm();
+				
+				System.out.println(aes.aesDecode(dbInfo.get(0).getSvr_spr_scm_pwd()));
+				System.out.println(dbInfo.get(0).getSvr_spr_scm_pwd()+"***");
 				
 				/* bottlewater실행 명령어 */
-				String strExecTxt = transferInfo.get(0).getBw_home() + dbinfoTxt + " --slot=connect --broker="
-						+ transferInfo.get(0).getKafka_broker_ip() + ":" + transferInfo.get(0).getKafka_broker_port()
-						+ " --topic-prefix=" + topicTxt + " --allow-unkeyed --on-error=log";
+				String strExecTxt = transferInfo.getBw_home() + dbinfoTxt + " --slot="+ dbInfo.get(0).getCnr_nm()+" --broker="
+						+ transferInfo.getKafka_broker_ip() + ":" + transferInfo.getKafka_broker_port()
+						+ " --topic-prefix=" + topicTxt + " --allow-unkeyed --on-error=log &";
 				System.out.println("명령어 : " + strExecTxt);
 
-				int db_id = Integer.parseInt(request.getParameter("db_id"));
-				DbIDbServerVO dbIDbServerVO = (DbIDbServerVO) treeTransferService.selectServerDb(db_id);
-				DbServerVO schDbServerVO = new DbServerVO();
-				schDbServerVO.setDb_svr_id(dbIDbServerVO.getDb_svr_id());
-				DbServerVO dbServerVO = (DbServerVO) cmmnServerInfoService.selectServerInfo(schDbServerVO);
-				String strIpAdr = dbServerVO.getIpadr();
-				AgentInfoVO vo = new AgentInfoVO();
-				vo.setIPADR(strIpAdr);
-				AgentInfoVO agentInfo = (AgentInfoVO) cmmnServerInfoService.selectAgentInfo(vo);
-		
-				String IP = dbServerVO.getIpadr();
-				int PORT = agentInfo.getSOCKET_PORT();
+				cic.bottledwater(IP,PORT,strExecTxt);
 				
-				JSONObject jObj = new JSONObject();
-				jObj.put(ClientProtocolID.DX_EX_CODE, ClientTranCodeType.DxT013);
-				jObj.put(ClientProtocolID.TRF_TRG_ID, "12");
-				jObj.put(ClientProtocolID.COMMAND_CODE, ClientProtocolID.RUN);
-				jObj.put(ClientProtocolID.EXEC_TXT, strExecTxt);
-				JSONObject objList;
-				ClientAdapter CA = new ClientAdapter(IP, PORT);
-				CA.open();
-				objList = CA.dxT013(ClientTranCodeType.DxT013, jObj);
-				String strErrMsg = (String) objList.get(ClientProtocolID.ERR_MSG);
-				String strErrCode = (String) objList.get(ClientProtocolID.ERR_CODE);
-				String strDxExCode = (String) objList.get(ClientProtocolID.DX_EX_CODE);
-				String strResultCode = (String) objList.get(ClientProtocolID.RESULT_CODE);
-				System.out.println("RESULT_CODE : " + strResultCode);
-				System.out.println("ERR_CODE : " + strErrCode);
-				System.out.println("ERR_MSG : " + strErrMsg);
-				CA.close();
-
 				/* 실행시킨 bwpid가져오기 */
-				int current_bwpid = 0;
-				transferDetailVO.setBw_pid(current_bwpid);
-				treeTransferService.updateBottleWaterBwpid(transferDetailVO);
+//				int current_bwpid = 1;
+//				transferDetailVO.setBw_pid(current_bwpid);
+//				treeTransferService.updateBottleWaterBwpid(transferDetailVO);
 				return "start";
 			} else {
 				/* kill -9 pid 명령어 */
-				String strExecTxt = "kill -9" + bw_pid;
+				String strExecTxt = "kill -9 " + bw_pid;
 				System.out.println(strExecTxt);
+				
+				cic.bottledwater(IP,PORT,strExecTxt);		
+				
 				transferDetailVO.setBw_pid(0);
 				treeTransferService.updateBottleWaterBwpid(transferDetailVO);
 				return "stop";

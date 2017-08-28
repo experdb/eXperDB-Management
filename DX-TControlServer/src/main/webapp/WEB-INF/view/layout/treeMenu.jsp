@@ -30,7 +30,7 @@
 					alert("실패");
 				},
 				success : function(result) {
-					GetJsonDataConnector(result)
+					fn_usrMenuAut(result);
 				}
 			});  
    			
@@ -72,6 +72,7 @@
 	
 	function fn_UsrDBSrvAut(data){
 	  	$.ajax({
+			async : false,
 			url : "/selectUsrDBSrvAutInfo.do",
 			data : {},
 			dataType : "json",
@@ -81,6 +82,23 @@
 			},
 			success : function(result) {
 				GetJsonData(data, result);
+			}
+		})
+	}	
+	
+	
+	function fn_usrMenuAut(data){
+	  	$.ajax({
+			async : false,
+			url : "/transferAuthorityList.do",
+			data : {},
+			dataType : "json",
+			type : "post",
+			error : function(xhr, status, error) {
+				alert("실패")
+			},
+			success : function(result) {
+				GetJsonDataConnector(data, result);
 			}
 		})
 	}	
@@ -105,23 +123,23 @@
 				html1+='		<ul class="depth_2">';
 				html1+='			<li class="ico2_1"><a href="#n"><img src="../images/ico_lnb_6.png" id="treeImg">백업관리</a>';
 				html1+='				<ul class="depth_3">';
-				if(aut[index].bck_cng_aut_yn == "Y"){
+				if(aut.length != 0 && aut[index].bck_cng_aut_yn == "Y"){
 					html1+='					<li class="ico3_1"><a href=/backup/workList.do?db_svr_id='+item.db_svr_id+' onClick=javascript:fn_GoLink("/backup/workList.do?db_svr_id='+item.db_svr_id+'");><img src="../images/ico_lnb_10.png" id="treeImg">백업설정</a></li>';
 				}
-				if(aut[index].bck_hist_aut_yn == "Y"){
+				if(aut.length != 0 && aut[index].bck_hist_aut_yn == "Y"){
 					html1+='					<li class="ico3_2"><a href=/backup/workLogList.do?db_svr_id='+item.db_svr_id+' onClick=javascript:fn_GoLink("/backup/workLogList.do?db_svr_id='+item.db_svr_id+'");><img src="../images/ico_lnb_11.png" id="treeImg">백업이력</a></li>';
 				}
 				html1+='				</ul>';
 				html1+='			</li>';
 				html1+='			<li class="ico2_2"><a href="#n"><img src="../images/ico_lnb_7.png" id="treeImg">접근제어관리</a>';
 				html1+='				<ul class="depth_3">';
-				if(aut[index].acs_cntr_aut_yn == "Y"){
+				if(aut.length != 0 && aut[index].acs_cntr_aut_yn == "Y"){
 					html1+='					<li class="ico3_3"><a href=/accessControl.do?db_svr_id='+item.db_svr_id+' onClick=javascript:fn_GoLink("/accessControl.do?db_svr_id='+item.db_svr_id+'");><img src="../images/ico_lnb_12.png" id="treeImg">서버접근제어</a></li>';
 				}
-				if(aut[index].adt_cng_aut_yn == "Y"){
+				if(aut.length != 0 && aut[index].adt_cng_aut_yn == "Y"){
 					html1+='					<li class="ico3_4"><a href=/audit/auditManagement.do?db_svr_id='+item.db_svr_id+' onClick=javascript:fn_GoLink("/audit/auditManagement.do?db_svr_id='+item.db_svr_id+'");><img src="../images/ico_lnb_13.png" id="treeImg">감사설정</a></li>';
 				}
-				if(aut[index].adt_hist_aut_yn == "Y"){
+				if(aut.length != 0 && aut[index].adt_hist_aut_yn == "Y"){
 					html1+='					<li class="ico3_5"><a href=/audit/auditLogList.do?db_svr_id='+item.db_svr_id+' onClick=javascript:fn_GoLink("/audit/auditLogList.do?db_svr_id='+item.db_svr_id+'");><img src="../images/ico_lnb_14.png" id="treeImg">감사이력</a></li>';
 				}
 				html1+='				</ul>';
@@ -135,10 +153,13 @@
 		
 
 		
-	      function GetJsonDataConnector(data) {                  
+	      function GetJsonDataConnector(data, aut) {                  
 	          var parseData = $.parseJSON(data);
 	          var html = "";      
-	          html += '<ul class="depth_1 lnbMenu"><li class="t1"><a href="/treeTransferSetting.do"><img src="../images/ico_lnb_4.png" id="treeImg">전송설정</a></li>';
+	  
+	          if(aut.length != 0 && aut[0].read_aut_yn == "Y"){	        	 
+	        	  html += '<ul class="depth_1 lnbMenu"><li class="t1"><a href="/treeTransferSetting.do"><img src="../images/ico_lnb_4.png" id="treeImg">전송설정</a></li>';
+	          }
 	          $(data).each(function (index, item) {
 	          html += '      <ul class="depth_1 lnbMenu"><li class="t2"><div class="border"><a href="#n"><img src="../images/ico_lnb_5.png" id="treeImg">'+item.cnr_nm+'</a></div>';
 	          html += '         <ul class="depth_2">';

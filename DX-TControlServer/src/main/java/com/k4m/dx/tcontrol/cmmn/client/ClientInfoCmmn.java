@@ -588,6 +588,36 @@ public class ClientInfoCmmn {
 		return result;
 	}
 	
+	//bottledWater 실행/종료
+	public void bottledwater(String IP, int PORT, String strExecTxt) {
+		try {
+			JSONObject jObj = new JSONObject();
+			jObj.put(ClientProtocolID.DX_EX_CODE, ClientTranCodeType.DxT013);
+			jObj.put(ClientProtocolID.TRF_TRG_ID, "12");
+			jObj.put(ClientProtocolID.COMMAND_CODE, ClientProtocolID.RUN);
+			jObj.put(ClientProtocolID.EXEC_TXT, strExecTxt);
+			
+			JSONObject objList;
+			
+			ClientAdapter CA = new ClientAdapter(IP, PORT);
+			CA.open(); 
+				
+			objList = CA.dxT013(ClientTranCodeType.DxT013, jObj);
+			
+			String strErrMsg = (String)objList.get(ClientProtocolID.ERR_MSG);
+			String strErrCode = (String)objList.get(ClientProtocolID.ERR_CODE);
+			String strDxExCode = (String)objList.get(ClientProtocolID.DX_EX_CODE);
+			String strResultCode = (String)objList.get(ClientProtocolID.RESULT_CODE);
+			System.out.println("RESULT_CODE : " +  strResultCode);
+			System.out.println("ERR_CODE : " +  strErrCode);
+			System.out.println("ERR_MSG : " +  strErrMsg);
+				
+			CA.close();
+		} catch(Exception e) {
+			e.printStackTrace();
+		}
+	}
+	
 	//14.kafka connect 조회(kafakConnect_select)
 	public JSONObject kafakConnect_select(JSONObject serverObj,String strName) {
 		
@@ -856,4 +886,6 @@ public class ClientInfoCmmn {
 			}
 			return result;
 		}
+		
+		
 }

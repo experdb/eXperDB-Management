@@ -18,7 +18,7 @@ public class TransferServiceImpl implements TransferService {
 	@Resource(name = "transferDAO")
 	private TransferDAO transferDAO;
 
-	public List<TransferVO> selectTransferSetting(String usr_id) throws Exception {
+	public TransferVO selectTransferSetting(String usr_id) throws Exception {
 		return transferDAO.selectTransferSetting(usr_id);
 	}
 

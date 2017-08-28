@@ -132,4 +132,16 @@ public class DbServerManagerDAO extends EgovAbstractMapper{
 		return resultSet;
 	}
 
+
+	public int selectDBcnt(DbServerVO dbServerVO) {
+		int resultSet = 0;
+		resultSet = (int) getSqlSession().selectOne("dbserverManagerSql.selectDBcnt", dbServerVO);
+		return resultSet;
+	}
+
+
+	public void updateDB(HashMap<String, Object> paramvalue) {
+		update("dbserverManagerSql.updateDB",paramvalue );		
+	}
+
 }

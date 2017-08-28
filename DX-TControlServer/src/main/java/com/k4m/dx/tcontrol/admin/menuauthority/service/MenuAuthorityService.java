@@ -55,6 +55,14 @@ public interface MenuAuthorityService {
 	void deleteMenuAuthority(String string) throws Exception;
 
 
+	/**
+	 * 전송설정 메뉴권한
+	 * @param 
+	 * @throws Exception
+	 */
+	List<MenuAuthorityVO> transferAuthorityList(MenuAuthorityVO menuAuthorityVO);
+
+
 
 
 

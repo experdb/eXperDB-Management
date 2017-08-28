@@ -22,6 +22,7 @@
 		FROM T_DB_I D, T_DBSVR_I S
 		WHERE D.db_svr_id=S.db_svr_id
 		AND S.db_svr_id=#{db_svr_id}	  	
+		AND D.USEYN = 'Y'
     </select>
     
     <select id="selectServerDb" resultType="dbidbserverVO" parameterType="dbidbserverVO">
@@ -43,6 +44,7 @@
 		FROM T_DB_I D, T_DBSVR_I S
 		WHERE D.db_svr_id=S.db_svr_id
 		AND D.db_id=#{db_id}
+		AND D.USEYN = 'Y'
 		LIMIT 1		  	
     </select>
  	   
