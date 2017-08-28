@@ -86,5 +86,11 @@ public class MenuAuthorityServiceImpl implements MenuAuthorityService{
 	}
 
 
+	@Override
+	public List<MenuAuthorityVO> transferAuthorityList(MenuAuthorityVO menuAuthorityVO) {
+		return menuAuthorityDAO.transferAuthorityList(menuAuthorityVO);
+	}
+
+
 
 }

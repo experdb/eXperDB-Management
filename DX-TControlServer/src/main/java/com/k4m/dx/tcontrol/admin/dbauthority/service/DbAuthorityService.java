@@ -134,4 +134,13 @@ public interface DbAuthorityService {
 	 */
 	void insertUsrDBAutInfo(Object object) throws Exception;
 
+
+	/**
+	 *  유저 서버 권한 조회
+	 * @param usr_id 
+	 * @param 
+	 * @throws Exception
+	 */
+	List<Map<String, Object>> selectUserDBSvrAutList(String usr_id);
+
 }

@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -19,6 +20,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.k4m.dx.tcontrol.admin.accesshistory.service.AccessHistoryService;
+import com.k4m.dx.tcontrol.admin.dbauthority.service.DbAuthorityService;
 import com.k4m.dx.tcontrol.admin.dbserverManager.service.DbServerVO;
 import com.k4m.dx.tcontrol.audit.service.AuditVO;
 import com.k4m.dx.tcontrol.cmmn.AES256;
@@ -51,131 +53,144 @@ public class AuditController {
 	
 	@Autowired
 	private AccessHistoryService accessHistoryService;
+	
+	@Autowired
+	private DbAuthorityService dbAuthorityService;
+	
 	@Autowired
 	private CmmnServerInfoService cmmnServerInfoService;
 	
+	private List<Map<String, Object>> dbSvrAut;
+	
 	@RequestMapping(value = "/audit/auditManagement.do")
 	public ModelAndView auditManagement(@ModelAttribute("historyVO") HistoryVO historyVO,@ModelAttribute("auditVO") AuditVO auditVO, ModelMap model, HttpServletRequest request) throws Exception{
+		
+		//유저 디비서버 권한 조회 (공통메소드호출),
+		CmmnUtils cu = new CmmnUtils();
+		dbSvrAut = cu.selectUserDBSvrAutList(dbAuthorityService);
 		ModelAndView mv = new ModelAndView();
 
 		//mv.addObject("db_svr_id",workVO.getDb_svr_id());
 		try {
-			// 감사설정 이력 남기기
-			CmmnUtils.saveHistory(request, historyVO);
-			historyVO.setExe_dtl_cd("DX-T0029");
-			accessHistoryService.insertHistory(historyVO);
-			
-			String strDbSvrId = request.getParameter("db_svr_id");
-			int db_svr_id = Integer.parseInt(strDbSvrId);
-			
-
-			DbServerVO schDbServerVO = new DbServerVO();
-			schDbServerVO.setDb_svr_id(db_svr_id);
-			
-			DbServerVO dbServerVO = (DbServerVO)  cmmnServerInfoService.selectServerInfo(schDbServerVO);
-			String strIpAdr = dbServerVO.getIpadr();
-			
-			AgentInfoVO vo = new AgentInfoVO();
-			vo.setIPADR(strIpAdr);
-			
-			AgentInfoVO agentInfo =  (AgentInfoVO) cmmnServerInfoService.selectAgentInfo(vo);
-			
-			
-			JSONObject serverObj = new JSONObject();
-			
-			AES256 dec = new AES256(AES256_KEY.ENC_KEY);
-			//System.out.println("KEY : " + dbServerVO.getSvr_spr_scm_pwd());
-			String strPwd = dec.aesDecode(dbServerVO.getSvr_spr_scm_pwd());
-			
-			
-			serverObj.put(ClientProtocolID.SERVER_NAME, dbServerVO.getDb_svr_nm());
-			serverObj.put(ClientProtocolID.SERVER_IP, dbServerVO.getIpadr());
-			serverObj.put(ClientProtocolID.SERVER_PORT, dbServerVO.getPortno());
-			serverObj.put(ClientProtocolID.DATABASE_NAME, dbServerVO.getDft_db_nm());
-			serverObj.put(ClientProtocolID.USER_ID, dbServerVO.getSvr_spr_usr_id());
-			serverObj.put(ClientProtocolID.USER_PWD, strPwd);
-			
-			
-			String IP = dbServerVO.getIpadr();
-			
-			if(agentInfo == null) {
+			//읽기 권한이 없는경우 error페이지 호출 , [추후 Exception 처리예정]
+			if(dbSvrAut.get(0).get("adt_cng_aut_yn").equals("N")){
+				mv.setViewName("error/autError");				
+			}else{		
+				// 감사설정 이력 남기기
+				CmmnUtils.saveHistory(request, historyVO);
+				historyVO.setExe_dtl_cd("DX-T0029");
+				accessHistoryService.insertHistory(historyVO);
 				
-				mv.addObject("extName", "agent");
-				mv.setViewName("dbserver/auditManagement");
-				return mv;
-			}
-			
-			int PORT = agentInfo.getSOCKET_PORT();
-			
-			//IP = "127.0.0.1";
-			ClientAdapter CA = new ClientAdapter(IP, PORT);
-			 
-			
-			JSONObject objList;
-			
-			String strExtName = "pgaudit";
-			
-			CA.open();
-			JSONObject objExtList = CA.dxT010(ClientTranCodeType.DxT010, serverObj, strExtName);
-			CA.close();
-			
-			List<Object> selectExtList  = (ArrayList<Object>) objExtList.get(ClientProtocolID.RESULT_DATA);
-			
-
-			
-			if(selectExtList == null || selectExtList.size() == 0) {
-				strExtName = "";
+				String strDbSvrId = request.getParameter("db_svr_id");
+				int db_svr_id = Integer.parseInt(strDbSvrId);
+				
+	
+				DbServerVO schDbServerVO = new DbServerVO();
+				schDbServerVO.setDb_svr_id(db_svr_id);
+				
+				DbServerVO dbServerVO = (DbServerVO)  cmmnServerInfoService.selectServerInfo(schDbServerVO);
+				String strIpAdr = dbServerVO.getIpadr();
+				
+				AgentInfoVO vo = new AgentInfoVO();
+				vo.setIPADR(strIpAdr);
+				
+				AgentInfoVO agentInfo =  (AgentInfoVO) cmmnServerInfoService.selectAgentInfo(vo);
+				
+				
+				JSONObject serverObj = new JSONObject();
+				
+				AES256 dec = new AES256(AES256_KEY.ENC_KEY);
+				//System.out.println("KEY : " + dbServerVO.getSvr_spr_scm_pwd());
+				String strPwd = dec.aesDecode(dbServerVO.getSvr_spr_scm_pwd());
+				
+				
+				serverObj.put(ClientProtocolID.SERVER_NAME, dbServerVO.getDb_svr_nm());
+				serverObj.put(ClientProtocolID.SERVER_IP, dbServerVO.getIpadr());
+				serverObj.put(ClientProtocolID.SERVER_PORT, dbServerVO.getPortno());
+				serverObj.put(ClientProtocolID.DATABASE_NAME, dbServerVO.getDft_db_nm());
+				serverObj.put(ClientProtocolID.USER_ID, dbServerVO.getSvr_spr_usr_id());
+				serverObj.put(ClientProtocolID.USER_PWD, strPwd);
+				
+				
+				String IP = dbServerVO.getIpadr();
+				
+				if(agentInfo == null) {
+					
+					mv.addObject("extName", "agent");
+					mv.setViewName("dbserver/auditManagement");
+					return mv;
+				}
+				
+				int PORT = agentInfo.getSOCKET_PORT();
+				
+				//IP = "127.0.0.1";
+				ClientAdapter CA = new ClientAdapter(IP, PORT);
+				 
+				
+				JSONObject objList;
+				
+				String strExtName = "pgaudit";
+				
+				CA.open();
+				JSONObject objExtList = CA.dxT010(ClientTranCodeType.DxT010, serverObj, strExtName);
+				CA.close();
+				
+				List<Object> selectExtList  = (ArrayList<Object>) objExtList.get(ClientProtocolID.RESULT_DATA);
+				
+	
+				
+				if(selectExtList == null || selectExtList.size() == 0) {
+					strExtName = "";
+					mv.addObject("extName", strExtName);
+					mv.setViewName("dbserver/auditManagement");
+					return mv;
+				}
+				
+				CA.open();
+				objList = CA.dxT007(ClientTranCodeType.DxT007, ClientProtocolID.COMMAND_CODE_R, serverObj );
+				CA.close();
+	
+				String strErrMsg = (String)objList.get(ClientProtocolID.ERR_MSG);
+				String strErrCode = (String)objList.get(ClientProtocolID.ERR_CODE);
+				String strDxExCode = (String)objList.get(ClientProtocolID.DX_EX_CODE);
+				String strResultCode = (String)objList.get(ClientProtocolID.RESULT_CODE);
+				System.out.println("RESULT_CODE : " +  strResultCode);
+				System.out.println("ERR_CODE : " +  strErrCode);
+				System.out.println("ERR_MSG : " +  strErrMsg);
+				
+				HashMap selectData =(HashMap) objList.get(ClientProtocolID.RESULT_DATA);
+				
+				JSONObject objRoleList;
+				
+				CA.open();
+				objRoleList = CA.dxT011(ClientTranCodeType.DxT011, serverObj);
+				CA.close();
+				
+				List<Object> selectRoleList =(ArrayList<Object>) objRoleList.get(ClientProtocolID.RESULT_DATA);
+	
+				
+				
+				String strIsActive = "on";
+				
+				String auditActive = (String) selectData.get("log");
+				
+				if(auditActive == null || auditActive.equals("")) {
+					strIsActive = "off";
+				}
+				
+				selectData.put("isActive", strIsActive);
+				
+				mv.addObject("audit", selectData);
+				mv.addObject("roleList", selectRoleList);
 				mv.addObject("extName", strExtName);
+				mv.addObject("serverName", dbServerVO.getDb_svr_nm());
+				mv.addObject("db_svr_id", strDbSvrId);
+			
 				mv.setViewName("dbserver/auditManagement");
-				return mv;
 			}
-			
-			CA.open();
-			objList = CA.dxT007(ClientTranCodeType.DxT007, ClientProtocolID.COMMAND_CODE_R, serverObj );
-			CA.close();
-
-			String strErrMsg = (String)objList.get(ClientProtocolID.ERR_MSG);
-			String strErrCode = (String)objList.get(ClientProtocolID.ERR_CODE);
-			String strDxExCode = (String)objList.get(ClientProtocolID.DX_EX_CODE);
-			String strResultCode = (String)objList.get(ClientProtocolID.RESULT_CODE);
-			System.out.println("RESULT_CODE : " +  strResultCode);
-			System.out.println("ERR_CODE : " +  strErrCode);
-			System.out.println("ERR_MSG : " +  strErrMsg);
-			
-			HashMap selectData =(HashMap) objList.get(ClientProtocolID.RESULT_DATA);
-			
-			JSONObject objRoleList;
-			
-			CA.open();
-			objRoleList = CA.dxT011(ClientTranCodeType.DxT011, serverObj);
-			CA.close();
-			
-			List<Object> selectRoleList =(ArrayList<Object>) objRoleList.get(ClientProtocolID.RESULT_DATA);
-
-			
-			
-			String strIsActive = "on";
-			
-			String auditActive = (String) selectData.get("log");
-			
-			if(auditActive == null || auditActive.equals("")) {
-				strIsActive = "off";
-			}
-			
-			selectData.put("isActive", strIsActive);
-			
-			mv.addObject("audit", selectData);
-			mv.addObject("roleList", selectRoleList);
-			mv.addObject("extName", strExtName);
-			mv.addObject("serverName", dbServerVO.getDb_svr_nm());
-			mv.addObject("db_svr_id", strDbSvrId);
-			
-
-			
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		mv.setViewName("dbserver/auditManagement");
 		return mv;
 	}
 	
@@ -302,134 +317,142 @@ public class AuditController {
 	
 	@RequestMapping(value = "/audit/auditLogList.do")
 	public ModelAndView auditLogList(@ModelAttribute("historyVO") HistoryVO historyVO,@ModelAttribute("auditVO") AuditVO auditVO, ModelMap model, HttpServletRequest request) throws Exception{
+		
+		//유저 디비서버 권한 조회 (공통메소드호출),
+		CmmnUtils cu = new CmmnUtils();
+		dbSvrAut = cu.selectUserDBSvrAutList(dbAuthorityService);
+		
 		ModelAndView mv = new ModelAndView();
 
 		//mv.addObject("db_svr_id",workVO.getDb_svr_id());
 		try {
-			// 감사설정 이력 남기기
-			CmmnUtils.saveHistory(request, historyVO);
-			historyVO.setExe_dtl_cd("DX-T0030");
-			accessHistoryService.insertHistory(historyVO); 
-			
-			String strDbSvrId = request.getParameter("db_svr_id");
-			int db_svr_id = Integer.parseInt(strDbSvrId);
-			
-			SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-
-	        Calendar c1 = Calendar.getInstance();
-
-	        String strToday = sdf.format(c1.getTime());
-
-			String strStartDate =  strToday;
-			String strEndDate =  strToday;
-			
-			JSONObject searchInfoObj = new JSONObject();
-			searchInfoObj.put(ClientProtocolID.START_DATE, strStartDate);
-			searchInfoObj.put(ClientProtocolID.END_DATE, strEndDate);
-			
-			
-			DbServerVO schDbServerVO = new DbServerVO();
-			schDbServerVO.setDb_svr_id(db_svr_id);
-			
-			DbServerVO dbServerVO = (DbServerVO)  cmmnServerInfoService.selectServerInfo(schDbServerVO);
-			
-			String strIpAdr = dbServerVO.getIpadr();
-			
-			AgentInfoVO vo = new AgentInfoVO();
-			vo.setIPADR(strIpAdr);
-			
-			AgentInfoVO agentInfo =  (AgentInfoVO) cmmnServerInfoService.selectAgentInfo(vo);
-			
-			
-			String strDirectory = dbServerVO.getIstpath() + "/data/pg_log/";
-			
-			JSONObject serverObj = new JSONObject();
-			
-			AES256 dec = new AES256(AES256_KEY.ENC_KEY);
-			//System.out.println("KEY : " + dbServerVO.getSvr_spr_scm_pwd());
-			String strPwd = dec.aesDecode(dbServerVO.getSvr_spr_scm_pwd());
-			
-			
-			serverObj.put(ClientProtocolID.SERVER_NAME, dbServerVO.getDb_svr_nm());
-			serverObj.put(ClientProtocolID.SERVER_IP, dbServerVO.getIpadr());
-			serverObj.put(ClientProtocolID.SERVER_PORT, dbServerVO.getPortno());
-			serverObj.put(ClientProtocolID.DATABASE_NAME, dbServerVO.getDft_db_nm());
-			serverObj.put(ClientProtocolID.USER_ID, dbServerVO.getSvr_spr_usr_id());
-			serverObj.put(ClientProtocolID.USER_PWD, strPwd);
-
-			
-			JSONObject jObj = new JSONObject();
-			jObj.put(ClientProtocolID.DX_EX_CODE, ClientTranCodeType.DxT015);
-			jObj.put(ClientProtocolID.SERVER_INFO, serverObj);
-			jObj.put(ClientProtocolID.COMMAND_CODE, ClientProtocolID.COMMAND_CODE_R);
-			jObj.put(ClientProtocolID.FILE_DIRECTORY, strDirectory);
-			jObj.put(ClientProtocolID.SEARCH_INFO, searchInfoObj);
-			
-			
-			
-			
-			String IP = dbServerVO.getIpadr();
-			
-			if(agentInfo == null) {
+			//읽기 권한이 없는경우 error페이지 호출 , [추후 Exception 처리예정]
+			if(dbSvrAut.get(0).get("adt_hist_aut_yn").equals("N")){
+				mv.setViewName("error/autError");				
+			}else{	
+				// 감사설정 이력 남기기
+				CmmnUtils.saveHistory(request, historyVO);
+				historyVO.setExe_dtl_cd("DX-T0030");
+				accessHistoryService.insertHistory(historyVO); 
 				
-				mv.addObject("extName", "agent");
-				mv.setViewName("dbserver/auditLogList");
-				return mv;
-			}
-			
-			int PORT = agentInfo.getSOCKET_PORT();
-			
-			
-			
-			//IP = "127.0.0.1";
-			ClientAdapter CA = new ClientAdapter(IP, PORT);
-			
-			String strExtName = "pgaudit";
-			
-			CA.open();
-			JSONObject objExtList = CA.dxT010(ClientTranCodeType.DxT010, serverObj, strExtName);
-			CA.close();
-			
-			List<Object> selectExtList  = (ArrayList<Object>) objExtList.get(ClientProtocolID.RESULT_DATA);
-			
-
-			
-			if(selectExtList == null || selectExtList.size() == 0) {
-				strExtName = "";
+				String strDbSvrId = request.getParameter("db_svr_id");
+				int db_svr_id = Integer.parseInt(strDbSvrId);
+				
+				SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+	
+		        Calendar c1 = Calendar.getInstance();
+	
+		        String strToday = sdf.format(c1.getTime());
+	
+				String strStartDate =  strToday;
+				String strEndDate =  strToday;
+				
+				JSONObject searchInfoObj = new JSONObject();
+				searchInfoObj.put(ClientProtocolID.START_DATE, strStartDate);
+				searchInfoObj.put(ClientProtocolID.END_DATE, strEndDate);
+				
+				
+				DbServerVO schDbServerVO = new DbServerVO();
+				schDbServerVO.setDb_svr_id(db_svr_id);
+				
+				DbServerVO dbServerVO = (DbServerVO)  cmmnServerInfoService.selectServerInfo(schDbServerVO);
+				
+				String strIpAdr = dbServerVO.getIpadr();
+				
+				AgentInfoVO vo = new AgentInfoVO();
+				vo.setIPADR(strIpAdr);
+				
+				AgentInfoVO agentInfo =  (AgentInfoVO) cmmnServerInfoService.selectAgentInfo(vo);
+				
+				
+				String strDirectory = dbServerVO.getIstpath() + "/data/pg_log/";
+				
+				JSONObject serverObj = new JSONObject();
+				
+				AES256 dec = new AES256(AES256_KEY.ENC_KEY);
+				//System.out.println("KEY : " + dbServerVO.getSvr_spr_scm_pwd());
+				String strPwd = dec.aesDecode(dbServerVO.getSvr_spr_scm_pwd());
+				
+				
+				serverObj.put(ClientProtocolID.SERVER_NAME, dbServerVO.getDb_svr_nm());
+				serverObj.put(ClientProtocolID.SERVER_IP, dbServerVO.getIpadr());
+				serverObj.put(ClientProtocolID.SERVER_PORT, dbServerVO.getPortno());
+				serverObj.put(ClientProtocolID.DATABASE_NAME, dbServerVO.getDft_db_nm());
+				serverObj.put(ClientProtocolID.USER_ID, dbServerVO.getSvr_spr_usr_id());
+				serverObj.put(ClientProtocolID.USER_PWD, strPwd);
+	
+				
+				JSONObject jObj = new JSONObject();
+				jObj.put(ClientProtocolID.DX_EX_CODE, ClientTranCodeType.DxT015);
+				jObj.put(ClientProtocolID.SERVER_INFO, serverObj);
+				jObj.put(ClientProtocolID.COMMAND_CODE, ClientProtocolID.COMMAND_CODE_R);
+				jObj.put(ClientProtocolID.FILE_DIRECTORY, strDirectory);
+				jObj.put(ClientProtocolID.SEARCH_INFO, searchInfoObj);
+				
+				
+				
+				
+				String IP = dbServerVO.getIpadr();
+				
+				if(agentInfo == null) {
+					
+					mv.addObject("extName", "agent");
+					mv.setViewName("dbserver/auditLogList");
+					return mv;
+				}
+				
+				int PORT = agentInfo.getSOCKET_PORT();
+				
+				
+				
+				//IP = "127.0.0.1";
+				ClientAdapter CA = new ClientAdapter(IP, PORT);
+				
+				String strExtName = "pgaudit";
+				
+				CA.open();
+				JSONObject objExtList = CA.dxT010(ClientTranCodeType.DxT010, serverObj, strExtName);
+				CA.close();
+				
+				List<Object> selectExtList  = (ArrayList<Object>) objExtList.get(ClientProtocolID.RESULT_DATA);
+				
+	
+				
+				if(selectExtList == null || selectExtList.size() == 0) {
+					strExtName = "";
+					mv.addObject("extName", strExtName);
+					mv.setViewName("dbserver/auditManagement");
+					return mv;
+				}
+				
+				CA.open(); 
+				JSONObject objList = CA.dxT015(jObj);
+				CA.close();
+				
+				String strErrMsg = (String)objList.get(ClientProtocolID.ERR_MSG);
+				String strErrCode = (String)objList.get(ClientProtocolID.ERR_CODE);
+				String strDxExCode = (String)objList.get(ClientProtocolID.DX_EX_CODE);
+				String strResultCode = (String)objList.get(ClientProtocolID.RESULT_CODE);
+				System.out.println("RESULT_CODE : " +  strResultCode);
+				System.out.println("ERR_CODE : " +  strErrCode);
+				System.out.println("ERR_MSG : " +  strErrMsg);
+				
+				List<HashMap<String, String>> fileList = (List<HashMap<String, String>>) objList.get(ClientProtocolID.RESULT_DATA);
+				
+	
+				
+				mv.addObject("serverName", dbServerVO.getDb_svr_nm());
+				mv.addObject("db_svr_id", strDbSvrId);
+				mv.addObject("logFileList", fileList);
 				mv.addObject("extName", strExtName);
-				mv.setViewName("dbserver/auditManagement");
-				return mv;
-			}
-			
-			CA.open(); 
-			JSONObject objList = CA.dxT015(jObj);
-			CA.close();
-			
-			String strErrMsg = (String)objList.get(ClientProtocolID.ERR_MSG);
-			String strErrCode = (String)objList.get(ClientProtocolID.ERR_CODE);
-			String strDxExCode = (String)objList.get(ClientProtocolID.DX_EX_CODE);
-			String strResultCode = (String)objList.get(ClientProtocolID.RESULT_CODE);
-			System.out.println("RESULT_CODE : " +  strResultCode);
-			System.out.println("ERR_CODE : " +  strErrCode);
-			System.out.println("ERR_MSG : " +  strErrMsg);
-			
-			List<HashMap<String, String>> fileList = (List<HashMap<String, String>>) objList.get(ClientProtocolID.RESULT_DATA);
-			
-
-			
-			mv.addObject("serverName", dbServerVO.getDb_svr_nm());
-			mv.addObject("db_svr_id", strDbSvrId);
-			mv.addObject("logFileList", fileList);
-			mv.addObject("extName", strExtName);
-			mv.addObject("start_date", strStartDate);
-			mv.addObject("end_date", strEndDate);
-			
-			
+				mv.addObject("start_date", strStartDate);
+				mv.addObject("end_date", strEndDate);
+				mv.setViewName("dbserver/auditLogList");
+			}	
 			
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		mv.setViewName("dbserver/auditLogList");
 		return mv;
 	}
 	

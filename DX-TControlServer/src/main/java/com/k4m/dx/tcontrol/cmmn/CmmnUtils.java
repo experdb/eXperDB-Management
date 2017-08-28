@@ -85,6 +85,27 @@ public class CmmnUtils {
 		return result;
 	}
 	
+	
+	//유저디비서버권한 조회
+	public List<Map<String, Object>> selectUserDBSvrAutList(DbAuthorityService dbAuthorityService) {		
+		
+		List<Map<String, Object>> result = null;		
+		
+		try{
+			ServletRequestAttributes sra = (ServletRequestAttributes) RequestContextHolder.currentRequestAttributes();
+			HttpServletRequest request = sra.getRequest();
+			
+			HttpSession session = request.getSession();
+			String usr_id = (String) session.getAttribute("usr_id");
+			
+			result = dbAuthorityService.selectUserDBSvrAutList(usr_id);		
+		}catch(Exception e){
+			e.printStackTrace();
+		}		
+		return result;
+	}
+	
+	
 	// 단건 
 	public static Map<String, Object> getParam(Map<String, String> reqJson) {
 		

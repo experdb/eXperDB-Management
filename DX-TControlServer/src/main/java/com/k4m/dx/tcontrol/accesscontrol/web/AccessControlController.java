@@ -22,7 +22,9 @@ import com.k4m.dx.tcontrol.accesscontrol.service.AccessControlService;
 import com.k4m.dx.tcontrol.accesscontrol.service.AccessControlVO;
 import com.k4m.dx.tcontrol.accesscontrol.service.DbIDbServerVO;
 import com.k4m.dx.tcontrol.admin.accesshistory.service.AccessHistoryService;
+import com.k4m.dx.tcontrol.admin.dbauthority.service.DbAuthorityService;
 import com.k4m.dx.tcontrol.admin.dbserverManager.service.DbServerVO;
+import com.k4m.dx.tcontrol.admin.menuauthority.service.MenuAuthorityService;
 import com.k4m.dx.tcontrol.cmmn.AES256;
 import com.k4m.dx.tcontrol.cmmn.AES256_KEY;
 import com.k4m.dx.tcontrol.cmmn.CmmnUtils;
@@ -62,7 +64,12 @@ public class AccessControlController {
 	private AccessControlService accessControlService;
 
 	@Autowired
+	private DbAuthorityService dbAuthorityService;
+	
+	@Autowired
 	private CmmnServerInfoService cmmnServerInfoService;
+	
+	private List<Map<String, Object>> dbSvrAut;
 	
 	/**
 	 * 트리 Connector 리스트를 조회한다.
@@ -92,37 +99,47 @@ public class AccessControlController {
 	@RequestMapping(value = "/accessControl.do")
 	public ModelAndView serverAccessControl(@ModelAttribute("historyVO") HistoryVO historyVO,
 			HttpServletRequest request) {
+		
+		//유저 디비서버 권한 조회 (공통메소드호출),
+		CmmnUtils cu = new CmmnUtils();
+		dbSvrAut = cu.selectUserDBSvrAutList(dbAuthorityService);
+		
 		ModelAndView mv = new ModelAndView();
 
 		try {
-			// 접근제어관리 이력 남기기
-			CmmnUtils.saveHistory(request, historyVO);
-			historyVO.setExe_dtl_cd("DX-T0027");
-			accessHistoryService.insertHistory(historyVO);
-
-			int db_svr_id = Integer.parseInt(request.getParameter("db_svr_id"));
-			
-			DbServerVO schDbServerVO = new DbServerVO();
-			schDbServerVO.setDb_svr_id(db_svr_id);
-			DbServerVO dbServerVO = (DbServerVO)  cmmnServerInfoService.selectServerInfo(schDbServerVO);		
-			String strIpAdr = dbServerVO.getIpadr();		
-			AgentInfoVO vo = new AgentInfoVO();
-			vo.setIPADR(strIpAdr);		
-			AgentInfoVO agentInfo =  (AgentInfoVO) cmmnServerInfoService.selectAgentInfo(vo);
-	
-			if(agentInfo == null) {
-				mv.addObject("extName", "agent");
-				mv.setViewName("dbserver/accesscontrol");
+			//읽기 권한이 없는경우 error페이지 호출 , [추후 Exception 처리예정]
+			if(dbSvrAut.get(0).get("acs_cntr_aut_yn").equals("N")){
+				mv.setViewName("error/autError");				
 			}else{
-				List<DbIDbServerVO> resultSet = accessControlService.selectDatabaseList(db_svr_id);
-				if (resultSet.size() == 0) {
-					mv.addObject("db_svr_nm", resultSet.get(0).getDb_svr_nm());
-				} else {
-					mv.addObject("db_svr_nm", resultSet.get(0).getDb_svr_nm());
-					mv.addObject("resultSet", resultSet);
+				// 접근제어관리 이력 남기기
+				CmmnUtils.saveHistory(request, historyVO);
+				historyVO.setExe_dtl_cd("DX-T0027");
+				accessHistoryService.insertHistory(historyVO);
+	
+				int db_svr_id = Integer.parseInt(request.getParameter("db_svr_id"));
+				
+				DbServerVO schDbServerVO = new DbServerVO();
+				schDbServerVO.setDb_svr_id(db_svr_id);
+				DbServerVO dbServerVO = (DbServerVO)  cmmnServerInfoService.selectServerInfo(schDbServerVO);		
+				String strIpAdr = dbServerVO.getIpadr();		
+				AgentInfoVO vo = new AgentInfoVO();
+				vo.setIPADR(strIpAdr);		
+				AgentInfoVO agentInfo =  (AgentInfoVO) cmmnServerInfoService.selectAgentInfo(vo);
+		
+				if(agentInfo == null) {
+					mv.addObject("extName", "agent");
+					mv.setViewName("dbserver/accesscontrol");
+				}else{
+					List<DbIDbServerVO> resultSet = accessControlService.selectDatabaseList(db_svr_id);
+					if (resultSet.size() == 0) {
+						mv.addObject("db_svr_nm", resultSet.get(0).getDb_svr_nm());
+					} else {
+						mv.addObject("db_svr_nm", resultSet.get(0).getDb_svr_nm());
+						mv.addObject("resultSet", resultSet);
+					}
+					mv.addObject("db_svr_id", db_svr_id);
+					mv.setViewName("dbserver/accesscontrol");	
 				}
-				mv.addObject("db_svr_id", db_svr_id);
-				mv.setViewName("dbserver/accesscontrol");	
 			}
 		} catch (Exception e) {
 			e.printStackTrace();

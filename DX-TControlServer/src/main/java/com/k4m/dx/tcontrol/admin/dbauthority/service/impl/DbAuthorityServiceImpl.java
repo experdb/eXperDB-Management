@@ -144,4 +144,10 @@ public class DbAuthorityServiceImpl implements DbAuthorityService{
 		dbAuthorityDAO.insertUsrDBAutInfo(object);	
 	}
 
+
+	@Override
+	public List<Map<String, Object>> selectUserDBSvrAutList(String usr_id) {
+		return dbAuthorityDAO.selectUserDBSvrAutList(usr_id);
+	}
+
 }

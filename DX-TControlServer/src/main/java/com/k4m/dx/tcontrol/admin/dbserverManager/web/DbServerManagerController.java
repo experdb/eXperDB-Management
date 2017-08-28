@@ -6,10 +6,7 @@ import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 
-import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
-import org.json.simple.parser.JSONParser;
-import org.json.simple.parser.ParseException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -19,19 +16,16 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.k4m.dx.tcontrol.accesscontrol.service.AccessControlService;
-import com.k4m.dx.tcontrol.accesscontrol.service.AccessControlVO;
-import com.k4m.dx.tcontrol.accesscontrol.service.DbIDbServerVO;
 import com.k4m.dx.tcontrol.admin.accesshistory.service.AccessHistoryService;
 import com.k4m.dx.tcontrol.admin.dbserverManager.service.DbServerManagerService;
 import com.k4m.dx.tcontrol.admin.dbserverManager.service.DbServerVO;
 import com.k4m.dx.tcontrol.admin.menuauthority.service.MenuAuthorityService;
-import com.k4m.dx.tcontrol.backup.service.DbVO;
+import com.k4m.dx.tcontrol.backup.service.WorkVO;
 import com.k4m.dx.tcontrol.cmmn.AES256;
 import com.k4m.dx.tcontrol.cmmn.AES256_KEY;
 import com.k4m.dx.tcontrol.cmmn.CmmnUtils;
 import com.k4m.dx.tcontrol.cmmn.client.ClientInfoCmmn;
 import com.k4m.dx.tcontrol.cmmn.client.ClientProtocolID;
-import com.k4m.dx.tcontrol.common.service.AgentInfoVO;
 import com.k4m.dx.tcontrol.common.service.CmmnServerInfoService;
 import com.k4m.dx.tcontrol.common.service.HistoryVO;
 
@@ -383,5 +377,43 @@ public class DbServerManagerController {
 			e.printStackTrace();
 		}
 		return "true";
+	}
+	
+	
+	/**
+	 * 디렉토리 존재유무 체크
+	 * @param WorkVO
+	 * @return resultSet
+	 * @throws Exception
+	 */
+	@SuppressWarnings("unchecked")
+	@RequestMapping(value = "/isDirCheck.do")
+	@ResponseBody
+	public Map<String, Object> isDirCheck (HttpServletRequest request) {
+		Map<String, Object> result =new HashMap<String, Object>();
+		String db_svr_nm = request.getParameter("db_svr_nm");
+		String ipadr = request.getParameter("ipadr");
+		String portno = request.getParameter("portno");
+		String svr_spr_scm_pwd = request.getParameter("svr_spr_scm_pwd");
+		String directory_path = request.getParameter("path");
+		
+		try {
+			AES256 aes = new AES256(AES256_KEY.ENC_KEY);
+			JSONObject serverObj = new JSONObject();
+			
+			serverObj.put(ClientProtocolID.SERVER_NAME, db_svr_nm);
+			serverObj.put(ClientProtocolID.SERVER_IP, ipadr);
+			serverObj.put(ClientProtocolID.SERVER_PORT, portno);
+			//serverObj.put(ClientProtocolID.USER_PWD, dbServerVO.getSvr_spr_scm_pwd());
+			serverObj.put(ClientProtocolID.USER_PWD, aes.aesDecode(svr_spr_scm_pwd));
+
+			ClientInfoCmmn cic = new ClientInfoCmmn();
+			result = cic.directory_exist(serverObj,directory_path);
+			
+			//System.out.println(result);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return result;
 	}
 }

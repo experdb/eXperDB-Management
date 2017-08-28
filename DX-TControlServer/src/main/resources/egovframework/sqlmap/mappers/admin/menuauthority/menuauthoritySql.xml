@@ -120,4 +120,35 @@
 		DELETE FROM T_USRMNUAUT_I
 		WHERE usr_id=#{usr_id}
 	</delete>
+	
+	
+	<select id="transferAuthorityList" resultType="menuAuthorityVO" parameterType="menuAuthorityVO">
+		/**
+	 	*  Query ID : transferAuthorityList
+	 	* Description : 전송설정 메뉴권한조회
+	 	* Author : 변승우
+	 	**/
+	 	
+		SELECT 
+				 A.usr_mnu_aut_id
+				 ,A.mnu_id
+			     ,A.usr_id
+			     ,A.read_aut_yn
+			     ,A.wrt_aut_yn
+			     ,B.mnu_nm
+			     ,B.mnu_cd
+			     ,A.frst_regr_id
+			     ,A.frst_reg_dtm
+			     ,A.lst_mdfr_id
+			     ,A.lst_mdf_dtm
+		FROM
+		  		T_USRMNUAUT_I A
+		RIGHT OUTER JOIN
+		  		T_MNU_I B
+		ON 
+		A.MNU_ID = B.MNU_ID 
+		WHERE 1 = 1
+		AND A.USR_ID = #{usr_id}
+		AND B.MNU_CD = 'MN000201'
+    </select>
 </mapper>

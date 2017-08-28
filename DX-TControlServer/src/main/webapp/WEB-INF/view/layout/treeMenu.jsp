@@ -30,7 +30,7 @@
 					alert("실패");
 				},
 				success : function(result) {
-					GetJsonDataConnector(result)
+					fn_usrMenuAut(result);
 				}
 			});  
    			
@@ -86,6 +86,23 @@
 		})
 	}	
 	
+	
+	function fn_usrMenuAut(data){
+	  	$.ajax({
+			async : false,
+			url : "/transferAuthorityList.do",
+			data : {},
+			dataType : "json",
+			type : "post",
+			error : function(xhr, status, error) {
+				alert("실패")
+			},
+			success : function(result) {
+				GetJsonDataConnector(data, result);
+			}
+		})
+	}	
+	
 
 	
   		function GetJsonData(data, aut) {
@@ -136,10 +153,13 @@
 		
 
 		
-	      function GetJsonDataConnector(data) {                  
+	      function GetJsonDataConnector(data, aut) {                  
 	          var parseData = $.parseJSON(data);
 	          var html = "";      
-	          html += '<ul class="depth_1 lnbMenu"><li class="t1"><a href="/treeTransferSetting.do"><img src="../images/ico_lnb_4.png" id="treeImg">전송설정</a></li>';
+	  
+	          if(aut.length != 0 && aut[0].read_aut_yn == "Y"){	        	 
+	        	  html += '<ul class="depth_1 lnbMenu"><li class="t1"><a href="/treeTransferSetting.do"><img src="../images/ico_lnb_4.png" id="treeImg">전송설정</a></li>';
+	          }
 	          $(data).each(function (index, item) {
 	          html += '      <ul class="depth_1 lnbMenu"><li class="t2"><div class="border"><a href="#n"><img src="../images/ico_lnb_5.png" id="treeImg">'+item.cnr_nm+'</a></div>';
 	          html += '         <ul class="depth_2">';

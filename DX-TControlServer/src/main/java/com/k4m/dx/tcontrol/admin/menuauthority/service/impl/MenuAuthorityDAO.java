@@ -82,5 +82,17 @@ public class MenuAuthorityDAO extends EgovAbstractMapper{
 	public void deleteMenuAuthority(String string) {
 		delete("menuauthoritySql.deleteMenuAuthority",string);	
 	}
+
+
+	/**
+	 * 전송설정 메뉴권한
+	 * @param 
+	 * @throws Exception
+	 */
+	public List<MenuAuthorityVO> transferAuthorityList(MenuAuthorityVO menuAuthorityVO) {
+		List<MenuAuthorityVO> sl = null;
+		sl = (List<MenuAuthorityVO>) list("menuauthoritySql.transferAuthorityList", menuAuthorityVO);
+		return sl;
+	}
 	
 }

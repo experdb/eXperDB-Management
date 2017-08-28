@@ -214,7 +214,7 @@
 		AND B.USEYN = 'Y'
 	 </select>
 	 
-	 	<select id="selectUsrDBAutInfo" resultType="HashMap">
+	 <select id="selectUsrDBAutInfo" resultType="HashMap">
 		/**
 	 	*  Query ID : selectUsrDBAutInfo
 	 	* Description : 유저 서버 DB정보 조회
@@ -351,4 +351,27 @@
 			, clock_timestamp()
 			)
 	</insert>	
+	
+	
+	<select id="selectUserDBSvrAutList" resultType="HashMap">
+		/**
+	 	*  Query ID : selectUserDBSvrAutList
+	 	* Description : 유저 서버 DB정보 조회
+	 	* Author : 변승우
+	 	**/
+		SELECT 
+				USR_DB_SVR_AUT_ID
+		        , DB_SVR_ID
+		        , BCK_CNG_AUT_YN
+		        , BCK_HIST_AUT_YN
+		        , ACS_CNTR_AUT_YN
+		        , ADT_CNG_AUT_YN
+		        , ADT_HIST_AUT_YN
+		        , FRST_REGR_ID
+				, FRST_REG_DTM
+				, LST_MDFR_ID
+				, LST_MDF_DTM
+		FROM T_USRDBSVRAUT_I
+		WHERE USR_ID = #{usr_id}	  
+	 </select>
 </mapper>

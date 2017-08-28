@@ -20,6 +20,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.k4m.dx.tcontrol.admin.accesshistory.service.AccessHistoryService;
+import com.k4m.dx.tcontrol.admin.dbauthority.service.DbAuthorityService;
 import com.k4m.dx.tcontrol.admin.dbserverManager.service.DbServerVO;
 import com.k4m.dx.tcontrol.backup.service.BackupService;
 import com.k4m.dx.tcontrol.backup.service.DbVO;
@@ -49,6 +50,11 @@ public class BackupController {
 	@Autowired
 	private AccessHistoryService accessHistoryService;
 	
+	@Autowired
+	private DbAuthorityService dbAuthorityService;
+	
+	private List<Map<String, Object>> dbSvrAut;
+	
 	/**
 	 * Work List View page
 	 * @param WorkVO
@@ -57,24 +63,33 @@ public class BackupController {
 	 */
 	@RequestMapping(value = "/backup/workList.do")
 	public ModelAndView workList(@ModelAttribute("workVo") WorkVO workVO) {
+		
+		//유저 디비서버 권한 조회 (공통메소드호출),
+		CmmnUtils cu = new CmmnUtils();
+		dbSvrAut = cu.selectUserDBSvrAutList(dbAuthorityService);
+		
 		ModelAndView mv = new ModelAndView();
 		
-		try {
-			mv.addObject("dbList",backupService.selectDbList(workVO));
-		} catch (Exception e1) {
-			// TODO Auto-generated catch block
-			e1.printStackTrace();
+		//읽기 권한이 없는경우 error페이지 호출 , [추후 Exception 처리예정]
+		if(dbSvrAut.get(0).get("bck_cng_aut_yn").equals("N")){
+			mv.setViewName("error/autError");				
+		}else{	
+			try {
+				mv.addObject("dbList",backupService.selectDbList(workVO));
+			} catch (Exception e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
+	
+			try {
+				mv.addObject("db_svr_nm", backupService.selectDbSvrNm(workVO).getDb_svr_nm());
+			} catch (Exception e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}	
+			mv.addObject("db_svr_id",workVO.getDb_svr_id());
+			mv.setViewName("backup/workList");
 		}
-
-		try {
-			mv.addObject("db_svr_nm", backupService.selectDbSvrNm(workVO).getDb_svr_nm());
-		} catch (Exception e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		
-		mv.addObject("db_svr_id",workVO.getDb_svr_id());
-		mv.setViewName("backup/workList");
 		return mv;
 	}
 
@@ -120,26 +135,36 @@ public class BackupController {
 	 */
 	@RequestMapping(value = "/backup/workLogList.do")
 	public ModelAndView rmanLogList(@ModelAttribute("workVo") WorkVO workVO) {
+		
+		//유저 디비서버 권한 조회 (공통메소드호출),
+		CmmnUtils cu = new CmmnUtils();
+		dbSvrAut = cu.selectUserDBSvrAutList(dbAuthorityService);
+				
 		ModelAndView mv = new ModelAndView();
 
-		// Get DB list
-		try {
-			mv.addObject("dbList",backupService.selectDbList(workVO));
-		} catch (Exception e1) {
-			// TODO Auto-generated catch block
-			e1.printStackTrace();
+		//읽기 권한이 없는경우 error페이지 호출 , [추후 Exception 처리예정]
+		if(dbSvrAut.get(0).get("bck_hist_aut_yn").equals("N")){
+			mv.setViewName("error/autError");				
+		}else{	
+			// Get DB list
+			try {
+				mv.addObject("dbList",backupService.selectDbList(workVO));
+			} catch (Exception e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
+			
+			// Get DBServer Name
+			try {
+				mv.addObject("db_svr_nm", backupService.selectDbSvrNm(workVO).getDb_svr_nm());
+			} catch (Exception e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			
+			mv.addObject("db_svr_id",workVO.getDb_svr_id());
+			mv.setViewName("backup/workLogList");
 		}
-		
-		// Get DBServer Name
-		try {
-			mv.addObject("db_svr_nm", backupService.selectDbSvrNm(workVO).getDb_svr_nm());
-		} catch (Exception e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		
-		mv.addObject("db_svr_id",workVO.getDb_svr_id());
-		mv.setViewName("backup/workLogList");
 		return mv;	
 	}
 	

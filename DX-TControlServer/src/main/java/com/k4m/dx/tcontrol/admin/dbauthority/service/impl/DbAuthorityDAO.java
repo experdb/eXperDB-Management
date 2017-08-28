@@ -99,4 +99,11 @@ public class DbAuthorityDAO extends EgovAbstractMapper{
 		insert("dbAuthoritySql.insertUsrDBAutInfo", object);	
 	}
 
+	@SuppressWarnings({ "deprecation", "unchecked" })
+	public List<Map<String, Object>> selectUserDBSvrAutList(String usr_id) {
+		List<Map<String, Object>>  sl = null;
+		sl = (List<Map<String, Object>>) list("dbAuthoritySql.selectUserDBSvrAutList", usr_id);
+		return sl;
+	}
+
 }

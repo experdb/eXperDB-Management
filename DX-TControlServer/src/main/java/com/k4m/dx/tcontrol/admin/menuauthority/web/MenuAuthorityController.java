@@ -235,4 +235,30 @@ public class MenuAuthorityController {
 			e.printStackTrace();
 		}
 	}
+	
+	
+	/**
+	 * 전송설정 메뉴권한정보 조회
+	 * 
+	 * @return resultSet
+	 * @throws Exception
+	 */
+	@SuppressWarnings("unused")
+	@RequestMapping(value = "/transferAuthorityList.do")
+	@ResponseBody
+	public List<MenuAuthorityVO> transferAuthorityList(@ModelAttribute("menuAuthorityVO") MenuAuthorityVO menuAuthorityVO, HttpServletRequest request, HttpServletResponse response) {
+			
+		List<MenuAuthorityVO> resultSet = null;
+		try {		
+				HttpSession session = request.getSession();
+				String usr_id = (String)session.getAttribute("usr_id");
+				
+				menuAuthorityVO.setUsr_id(usr_id);
+				
+				resultSet = menuAuthorityService.transferAuthorityList(menuAuthorityVO);				
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return resultSet;
+	}	
 }

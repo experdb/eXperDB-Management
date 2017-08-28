@@ -206,15 +206,21 @@ function fn_ipCheck() {
  * 저장경로의 존재유무 체크
  ******************************************************** */
 function checkFolder(){
-	var save_pth = $("#save_pth").val();
+	var save_pth = $("#istpath").val();
 	if(save_pth == ""){
 		alert("저장경로를 입력해 주세요.");
-		$("#save_pth").focus();
+		$("#istpath").focus();
 	}else{
 		$.ajax({
 			async : false,
-			url : "/existDirCheck.do",
+			url : "/isDirCheck.do",
 		  	data : {
+				db_svr_nm : $("#db_svr_nm").val(),
+				dft_db_nm : $("#dft_db_nm").val(),
+				ipadr : $("#ipadr").val(),
+				portno : $("#portno").val(),
+				svr_spr_usr_id : $("#svr_spr_usr_id").val(),
+				svr_spr_scm_pwd : $("#svr_spr_scm_pwd").val(),
 		  		path : save_pth
 		  	},
 			type : "post",
@@ -276,7 +282,7 @@ function checkFolder(){
 				<tr>
 					<th scope="row" class="ico_t1">서버 설치경로</th>
 					<td>
-					<input type="text" class="txt" name="save_pth" id="save_pth" style="width:640px" /></td>
+					<input type="text" class="txt" name="istpath" id="istpath" style="width:640px" /></td>
 					<th scope="row" class="ico_t1"></th>
 					<td>
 					<span class="btn btnC_01"><button type="button" class= "btn_type_02" onclick="checkFolder()" style="width: 60px; margin-left: 237px; margin-top: 0;">경로체크</button></span>
