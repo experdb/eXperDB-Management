@@ -80,6 +80,7 @@ public class ClientTester {
 			//clientTester.dxT018_insert(Ip, port);
 			clientTester.dxT018_delete(Ip, port);
 			
+			
 			//clientTester.test();
 		} catch(Exception e) {
 			e.printStackTrace();
