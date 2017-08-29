@@ -93,5 +93,12 @@ public class ClientProtocolID {
 	public static final String RUN = "RUN";
 	public static final String STOP = "STOP";
 
+	public static final String TABLE_INFO = "TABLE_INFO";
+	public static final String TABLE_NAME = "TABLE_NAME";
+	public static final String TABLE_SCHEMA= "TABLE_SCHEMA";
+	public static final String TOPIC_NAME = "TOPIC_NAME";
+	public static final String CONNECT_NAME = "CONNECT_NAME";
+	public static final String CONTENTS = "CONTENTS";
+	public static final String REMARK = "REMARK";
 
 }

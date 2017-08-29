@@ -74,6 +74,7 @@ public class ClientAdapter {
 	 */
 	private JSONObject parseToJsonObj(byte[] recvBuff) throws Exception{
 		JSONParser parser=new JSONParser();
+		System.out.println(new String(recvBuff));
 		JSONObject obj=(JSONObject)parser.parse(new String(recvBuff));
 		return obj;
 	}
@@ -307,6 +308,26 @@ public class ClientAdapter {
 	}
 	
 	public JSONObject dxT016(JSONObject jObj) throws Exception{
+
+		byte[] bt = jObj.toString().getBytes();
+		
+		cc.send(4, bt);
+		
+		byte[]	recvBuff = cc.recv(4, false);
+		return parseToJsonObj(recvBuff);
+	}
+	
+	public JSONObject dxT017(JSONObject jObj) throws Exception{
+
+		byte[] bt = jObj.toString().getBytes();
+		
+		cc.send(4, bt);
+		
+		byte[]	recvBuff = cc.recv(4, false);
+		return parseToJsonObj(recvBuff);
+	}
+	
+	public JSONObject dxT018(JSONObject jObj) throws Exception{
 
 		byte[] bt = jObj.toString().getBytes();
 		

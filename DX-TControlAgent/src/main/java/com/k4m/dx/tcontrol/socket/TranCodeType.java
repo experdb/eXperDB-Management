@@ -18,6 +18,8 @@ public class TranCodeType {
 	public static final String DxT015 = "DxT015";
 	public static final String DxT015_DL = "DxT015_DL";
 	public static final String DxT016 = "DxT016";
+	public static final String DxT017 = "DxT017";
+	public static final String DxT018 = "DxT018";
 	
 	public static final String STATUS = "STATUS";
 	public static final String STOP = "STOP";

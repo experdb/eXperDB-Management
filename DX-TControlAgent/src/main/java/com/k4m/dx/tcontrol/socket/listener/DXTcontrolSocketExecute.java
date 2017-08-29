@@ -24,6 +24,8 @@ import com.k4m.dx.tcontrol.server.DxT013;
 import com.k4m.dx.tcontrol.server.DxT014;
 import com.k4m.dx.tcontrol.server.DxT015;
 import com.k4m.dx.tcontrol.server.DxT016;
+import com.k4m.dx.tcontrol.server.DxT017;
+import com.k4m.dx.tcontrol.server.DxT018;
 import com.k4m.dx.tcontrol.socket.ProtocolID;
 import com.k4m.dx.tcontrol.socket.SocketCtl;
 import com.k4m.dx.tcontrol.socket.TranCodeType;
@@ -91,7 +93,6 @@ public class DXTcontrolSocketExecute extends SocketCtl implements Runnable {
 				//backup management
 				case TranCodeType.DxT005 :
 					socketLogger.info("DX_EX_CODE : " + strDX_EX_CODE);	
-					objSERVER_INFO = (JSONObject) jObj.get(ProtocolID.SERVER_INFO);
 					
 					JSONArray arrCmd = (JSONArray) jObj.get(ProtocolID.ARR_CMD);
 					
@@ -102,8 +103,6 @@ public class DXTcontrolSocketExecute extends SocketCtl implements Runnable {
 				case TranCodeType.DxT006 :
 					socketLogger.info("DX_EX_CODE : " + strDX_EX_CODE);	
 					
-					objSERVER_INFO = (JSONObject) jObj.get(ProtocolID.SERVER_INFO);
-					
 					DxT006 dxT006 = new DxT006(client, is, os);
 					dxT006.execute(strDX_EX_CODE, jObj);
 
@@ -112,7 +111,6 @@ public class DXTcontrolSocketExecute extends SocketCtl implements Runnable {
 				case TranCodeType.DxT007 :
 					socketLogger.info("DX_EX_CODE : " + strDX_EX_CODE);	
 					
-					objSERVER_INFO = (JSONObject) jObj.get(ProtocolID.SERVER_INFO);
 					
 					DxT007 dxT007 = new DxT007(client, is, os);
 					dxT007.execute(strDX_EX_CODE, jObj);
@@ -122,8 +120,6 @@ public class DXTcontrolSocketExecute extends SocketCtl implements Runnable {
 				case TranCodeType.DxT008 :
 					socketLogger.info("DX_EX_CODE : " + strDX_EX_CODE);	
 					
-					objSERVER_INFO = (JSONObject) jObj.get(ProtocolID.SERVER_INFO);
-					
 					DxT008 dxT008 = new DxT008(client, is, os);
 					dxT008.execute(strDX_EX_CODE, jObj);
 
@@ -131,8 +127,6 @@ public class DXTcontrolSocketExecute extends SocketCtl implements Runnable {
 				//Whether to install extension
 				case TranCodeType.DxT010 :
 					socketLogger.info("DX_EX_CODE : " + strDX_EX_CODE);	
-					
-					objSERVER_INFO = (JSONObject) jObj.get(ProtocolID.SERVER_INFO);
 					
 					DxT010 dxT010 = new DxT010(client, is, os);
 					dxT010.execute(strDX_EX_CODE, jObj);
@@ -160,7 +154,6 @@ public class DXTcontrolSocketExecute extends SocketCtl implements Runnable {
 				case TranCodeType.DxT013 :
 					socketLogger.info("DX_EX_CODE : " + strDX_EX_CODE);	
 					
-					objSERVER_INFO = (JSONObject) jObj.get(ProtocolID.SERVER_INFO);
 					
 					DxT013 dxT013 = new DxT013(client, is, os);
 					dxT013.execute(strDX_EX_CODE, jObj);
@@ -168,18 +161,13 @@ public class DXTcontrolSocketExecute extends SocketCtl implements Runnable {
 					break;
 				case TranCodeType.DxT014 :
 					socketLogger.info("DX_EX_CODE : " + strDX_EX_CODE);	
-					
-					objSERVER_INFO = (JSONObject) jObj.get(ProtocolID.SERVER_INFO);
-					
-					
+
 					DxT014 dxT014 = new DxT014(client, is, os);
 					dxT014.execute(strDX_EX_CODE, jObj);
 
 					break;
 				case TranCodeType.DxT015 :
 					socketLogger.info("DX_EX_CODE : " + strDX_EX_CODE);	
-					
-					objSERVER_INFO = (JSONObject) jObj.get(ProtocolID.SERVER_INFO);
 
 					DxT015 dxT015 = new DxT015(client, is, os);
 					dxT015.execute(strDX_EX_CODE, jObj);
@@ -187,8 +175,6 @@ public class DXTcontrolSocketExecute extends SocketCtl implements Runnable {
 					break;
 				case TranCodeType.DxT015_DL :
 					socketLogger.info("DX_EX_CODE : " + strDX_EX_CODE);	
-					
-					objSERVER_INFO = (JSONObject) jObj.get(ProtocolID.SERVER_INFO);
 
 					DxT015 dxT015_DL = new DxT015(client, is, os);
 					dxT015_DL.execute(strDX_EX_CODE, jObj);
@@ -197,10 +183,22 @@ public class DXTcontrolSocketExecute extends SocketCtl implements Runnable {
 				case TranCodeType.DxT016 :
 					socketLogger.info("DX_EX_CODE : " + strDX_EX_CODE);	
 					
-					objSERVER_INFO = (JSONObject) jObj.get(ProtocolID.SERVER_INFO);
-					
 					DxT016 dxT016 = new DxT016(client, is, os);
 					dxT016.execute(strDX_EX_CODE, jObj);
+
+					break;
+				case TranCodeType.DxT017 :
+					socketLogger.info("DX_EX_CODE : " + strDX_EX_CODE);	
+					
+					DxT017 dxT017 = new DxT017(client, is, os);
+					dxT017.execute(strDX_EX_CODE, jObj);
+
+					break;
+				case TranCodeType.DxT018 :
+					socketLogger.info("DX_EX_CODE : " + strDX_EX_CODE);	
+					
+					DxT018 dxT018 = new DxT018(client, is, os);
+					dxT018.execute(strDX_EX_CODE, jObj);
 
 					break;
 				}

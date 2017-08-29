@@ -297,4 +297,106 @@
 	 	**/
 		select pg_delete_kafka_connect(#{connectName})
 	</select>
+	
+	<select id="selectTblMapps" parameterType="hashmap" resultType="hashmap">
+		/**
+	 	* Query ID : selectTblMapps
+	 	* Description : tbl_mapps Table 조회
+	 	* Author : 박태혁
+	 	**/
+	 	SELECT 
+	 		database_name
+	 		, table_schema
+	 		, table_name
+	 		, relnamespace
+	 		, reloid
+	 		, topic_name
+	 		, create_user
+	 		, remark
+	 	FROM
+	 		tbl_mapps
+	 	WHERE
+	 		database_name = #{DATABASE_NAME}
+	 		AND table_schema = #{TABLE_SCHEMA}
+	 		AND table_name = #{TABLE_NAME}
+	</select>
+	
+	<insert  id="insertTblMapps" parameterType="hashMap">
+		/**
+	 	* Query ID : insertTblMapps
+	 	* Description : tbl_mapps Table 등록
+	 	* Author : 박태혁
+	 	**/
+		INSERT INTO tbl_mapps (database_name, table_schema, table_name, relnamespace, reloid, topic_name, create_date, create_user, remark)
+		  SELECT
+		   A.table_catalog
+		   , A.table_schema
+		   , A.table_name
+		   , B.relnamespace
+		   , B.oid
+		   ,  #{TOPIC_NAME}
+		   , now()
+		   , current_user
+		   , #{REMARK}	
+		  FROM information_schema.tables A INNER JOIN pg_class B
+		  ON A.table_name = B.relname
+		  WHERE table_name = #{TABLE_NAME} 
+		  AND A.table_schema = #{TABLE_SCHEMA}
+		  AND B.oid = (SELECT #{REGCLASS}::regclass::oid)
+		  AND not exists (SELECT 1 FROM tbl_mapps C WHERE C.table_name = #{TABLE_NAME}  AND C.table_schema = #{TABLE_SCHEMA})
+  	</insert>
+  	
+  	<delete id="deleteTblMapps" parameterType="hashMap">
+		/**
+	 	* Query ID : deleteTblMapps
+	 	* Description : tbl_mapps Table 삭제
+	 	* Author : 박태혁
+	 	**/
+	 	DELETE FROM tbl_mapps
+	 	WHERE
+	 		database_name = #{DATABASE_NAME}
+	 		AND table_name = #{TABLE_NAME} 
+	 		AND table_schema = #{TABLE_SCHEMA}
+	 		
+	 </delete>
+	 
+	 
+  	<insert  id="insertKafkaConConfig" parameterType="hashMap">
+  		/**
+	 	* Query ID : insertKafkaConConfig
+	 	* Description : kafka_con_config Table 등록
+	 	* Author : 박태혁
+	 	**/
+	 	INSERT INTO kafka_con_config
+	 	(
+	 		DATABASE_NAME
+	 		, CONNECT_NAME
+	 		, CONTENTS
+	 		, CREATE_DATE
+	 		, CREATE_USER
+	 		, REMARK
+	 	)
+	 	VALUES(
+	 		#{DATABASE_NAME}
+	 		, #{CONNECT_NAME}
+	 		, to_json(#{CONTENTS}::json)
+	 		, now()
+	 		, #{USER_ID}
+	 		, #{REMARK}
+	 	)
+  	</insert>
+  	
+  	<delete id="deleteKafkaConConfig" parameterType="hashMap">
+  		/**
+	 	* Query ID : deleteKafkaConConfig
+	 	* Description : kafka_con_config Table 삭제
+	 	* Author : 박태혁
+	 	**/
+	 	DELETE FROM kafka_con_config
+	 	WHERE
+	 		DATABASE_NAME = #{DATABASE_NAME}
+	 		AND CONNECT_NAME = #{CONNECT_NAME}
+  	</delete>
+  	
+  	
 </mapper>
