@@ -156,6 +156,7 @@ public class TreeController {
 	 * @return resultSet
 	 * @throws Exception
 	 */
+	@SuppressWarnings("unchecked")
 	@RequestMapping(value = "/selectTreeServerDBList.do")
 	@ResponseBody
 	public Map<String, Object> selectServerDBList (@ModelAttribute("dbServerVO") DbServerVO dbServerVO, HttpServletRequest request, HttpServletResponse response) {

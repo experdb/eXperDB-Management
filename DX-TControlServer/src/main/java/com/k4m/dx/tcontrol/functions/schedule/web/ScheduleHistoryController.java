@@ -145,8 +145,8 @@ public class ScheduleHistoryController {
 				String lgi_dtm_end = request.getParameter("lgi_dtm_end");
 				String scd_nm = request.getParameter("scd_nm");
 				String db_svr_nm = request.getParameter("db_svr_nm");
-				if(scd_nm == null){
-					scd_nm="%"+scd_nm+"%";
+				if(scd_nm.equals("") ){
+					scd_nm="%";
 				}
 				
 				param.put("lgi_dtm_start", lgi_dtm_start);
@@ -180,13 +180,16 @@ public class ScheduleHistoryController {
 				int totCnt = scheduleHistoryService.selectScheduleHistoryTotCnt(param);
 				paginationInfo.setTotalRecordCount(totCnt);
 				model.addAttribute("result", result);	
-				
-				mv.setViewName("functions/scheduler/scheduleHistory");
-						
+								
 				model.addAttribute("lgi_dtm_start", lgi_dtm_start);
 				model.addAttribute("lgi_dtm_end", lgi_dtm_end);
 				model.addAttribute("paginationInfo", paginationInfo);
 				model.addAttribute("svr_nm", db_svr_nm);
+				
+				mv.addObject("read_aut_yn", menuAut.get(0).get("read_aut_yn"));
+				mv.addObject("wrt_aut_yn", menuAut.get(0).get("wrt_aut_yn"));
+				
+				mv.setViewName("functions/scheduler/scheduleHistory");
 			}
 		} catch (Exception e) {
 			e.printStackTrace();

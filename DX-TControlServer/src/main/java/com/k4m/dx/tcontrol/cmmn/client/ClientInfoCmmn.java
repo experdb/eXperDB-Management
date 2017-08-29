@@ -174,9 +174,6 @@ public class ClientInfoCmmn {
 				
 				j++;
 			}
-
-			System.out.println("서버전송="+arrCmd.get(0));
-			System.out.println("서버전송="+arrCmd.get(1));
 			
 			JSONObject serverObj = new JSONObject();
 			

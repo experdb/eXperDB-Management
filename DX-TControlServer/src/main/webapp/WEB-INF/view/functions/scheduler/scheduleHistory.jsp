@@ -78,8 +78,8 @@
 	
 	function fn_buttonAut(){
 		var read_button = document.getElementById("read_button"); 
-		
 		if("${read_aut_yn}" == "Y"){
+
 			read_button.style.display = '';
 		}else{
 			read_button.style.display = 'none';
@@ -185,8 +185,8 @@
 							<c:forEach var="result" items="${result}" varStatus="status">
 								<tr>
 									<td><c:out value="${paginationInfo.totalRecordCount+1 - ((pagingVO.pageIndex-1) * pagingVO.pageSize + status.count)}" /></td>
-									<td><c:out value="${result.wrk_nm}" /></td>
 									<td><c:out value="${result.scd_nm}" /></td>
+									<td><c:out value="${result.wrk_nm}" /></td>									
 									<td><c:out value="${result.wrk_strt_dtm}" /></td>
 									<td><c:out value="${result.wrk_end_dtm}" /></td>
 									<td><c:out value="${result.exe_result}" /></td>

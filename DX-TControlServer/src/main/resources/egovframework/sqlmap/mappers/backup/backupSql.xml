@@ -425,9 +425,11 @@
       	</if>
       	<if test="wrk_strt_dtm != null and wrk_strt_dtm != '' ">
       		<if test="wrk_end_dtm != null and wrk_end_dtm != '' ">
-      			AND (TO_DATE(#{wrk_strt_dtm},'YYYY-MM-DD') BETWEEN TWG.WRK_STRT_DTM AND TWG.WRK_END_DTM
+      			AND (
+      				TO_DATE(to_char(TWG.WRK_STRT_DTM,'YYYY-MM-DD'),'YYYY-MM-DD') BETWEEN TO_DATE(#{wrk_strt_dtm},'YYYY-MM-DD') AND TO_DATE(#{wrk_end_dtm},'YYYY-MM-DD')
       				OR
-      				TO_DATE(#{wrk_end_dtm},'YYYY-MM-DD') BETWEEN TWG.WRK_STRT_DTM AND TWG.WRK_END_DTM)
+      				TO_DATE(to_char(TWG.WRK_END_DTM,'YYYY-MM-DD'),'YYYY-MM-DD') BETWEEN TO_DATE(#{wrk_strt_dtm},'YYYY-MM-DD') AND TO_DATE(#{wrk_end_dtm},'YYYY-MM-DD')
+      				)
       		</if>
       	</if>
       	<if test="exe_rslt_cd != null and exe_rslt_cd != '' ">

@@ -293,12 +293,10 @@ public class DbServerManagerController {
 			historyVO.setExe_dtl_cd("DX-T0008_01");
 			accessHistoryService.insertHistory(historyVO);
 			
-			AES256 aes = new AES256(AES256_KEY.ENC_KEY);
 			String usr_id = (String) request.getSession().getAttribute("usr_id");
 			dbServerVO.setLst_mdfr_id(usr_id);
 
-			//비밀번호 암호화
-			String pw = aes.aesEncode(dbServerVO.getSvr_spr_scm_pwd());
+			String pw = dbServerVO.getSvr_spr_scm_pwd();
 			dbServerVO.setSvr_spr_scm_pwd(pw);
 			
 			dbServerManagerService.updateDbServer(dbServerVO);

@@ -235,10 +235,7 @@ function fn_modifyScheduleListView(){
 		<div class="contents">
 			<div class="cmm_grp">
 				<div class="btn_type_01">
-					<span class="btn"><button onClick="fn_selectScheduleList();">조회</button></span>
-					<span class="btn"><a href="/insertScheduleView.do"><button>등록</button></a></span>
-					<span class="btn"><button onClick="fn_modifyScheduleListView();">수정</button></span>
-					<span class="btn"><button onClick="fn_deleteScheduleList();">삭제</button></span>
+					<span class="btn"><button onClick="fn_selectScheduleList();">조회</button></span>		
 				</div>
 				<div class="sch_form">
 					<table class="write">
