@@ -121,7 +121,46 @@ function fn_init(){
 	}
 }
 
+/* ********************************************************
+ * 월
+ ******************************************************** */
+function fn_makeMonth(){
+	var month = "";
+	var monthHtml ="";
+	
+	monthHtml += '<select class="select t7" name="exe_month" id="exe_month">';	
+	for(var i=1; i<=12; i++){
+		if(i >= 0 && i<10){
+			month = "0" + i;
+		}else{
+			month = i;
+		}
+		monthHtml += '<option value="'+month+'">'+month+'</option>';
+	}
+	monthHtml += '</select> 월';	
+	$( "#month" ).append(monthHtml);
+}
 
+
+/* ********************************************************
+ * 일
+ ******************************************************** */
+function fn_makeDay(){
+	var day = "";
+	var dayHtml ="";
+	
+	dayHtml += '<select class="select t7" name="exe_day" id="exe_day">';	
+	for(var i=1; i<=31; i++){
+		if(i >= 0 && i<10){
+			day = "0" + i;
+		}else{
+			day = i;
+		}
+		dayHtml += '<option value="'+day+'">'+day+'</option>';
+	}
+		dayHtml += '</select> 일';	
+	$( "#day" ).append(dayHtml);
+}
 
 
 
@@ -194,9 +233,13 @@ $(window.document).ready(function() {
 	fn_buttonAut();
 	fn_init();
 	
+	$("#day").hide();
+	$("#month").hide();
 	$("#weekDay").hide();
 	$("#calendar").hide();
-	
+
+	fn_makeMonth();
+	fn_makeDay();
 	fn_makeHour();
 	fn_makeMin();
 	fn_makeSec();
@@ -256,6 +299,19 @@ function fn_exe_pred(){
 	}else{
 		$("#weekDay").hide();
 	}	
+
+	if(exe_perd_cd == "TC001603"){
+		$("#day").show();
+	}else{
+		$("#day").hide();
+	}
+	
+	if(exe_perd_cd == "TC001604"){
+		$("#day").show();
+		$("#month").show();
+	}else{
+		$("#month").hide();
+	}
 	
 	if(exe_perd_cd == "TC001605"){
 		$("#calendar").show();
@@ -327,6 +383,8 @@ function fn_insertSchedule(){
 				 scd_exp : $("#scd_exp").val(),
 				 exe_perd_cd : $("#exe_perd_cd").val(),
 				 exe_dt : exe_dt,
+				 exe_month : $("#exe_month").val(),
+				 exe_day : $("#exe_day").val(),
 				 exe_h : $("#exe_h").val(),
 				 exe_m : $("#exe_m").val(),
 				 exe_s	 : $("#exe_s").val(),			 
@@ -424,6 +482,12 @@ function fn_insertSchedule(){
 															<a href="#n" class="calendar_btn">달력열기</a>
 															<input type="text" class="calendar" id="datepicker1" name="exe_dt" title="스케줄시간설정" readonly />
 														</div>
+													</span>
+													<span>
+															<div id="month"></div>
+													</span>
+													<span>
+															<div id="day"></div>
 													</span>
 													<span>
 															<div id="hour"></div>

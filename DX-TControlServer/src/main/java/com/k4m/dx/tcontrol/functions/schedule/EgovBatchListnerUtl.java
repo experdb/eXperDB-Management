@@ -1,8 +1,12 @@
 package com.k4m.dx.tcontrol.functions.schedule;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
@@ -55,8 +59,8 @@ public class EgovBatchListnerUtl implements JobListener {
 			hp.put("scd_id", scd_id);
 			hp.put("nFireTime", nFireTime);
 			
-			System.out.println("▶▶▶ 다음 작업 수행시간 업데이트");
-			scheduleService.updateNxtJobTime(hp);
+			System.out.println("▶▶▶ 이전 작업 수행시간 업데이트");
+			scheduleService.updatePrevJobTime(hp);
 		
 		}
 		catch(Exception e)
@@ -102,12 +106,47 @@ public class EgovBatchListnerUtl implements JobListener {
 			HashMap<String , Object> hp = new HashMap<String , Object>();
 			
 			String scd_id = context.getJobDetail().getJobDataMap().getString("scd_id");
+			
+
+			List<Map<String, Object>> result = scheduleService.selectModifyScheduleList(Integer.parseInt(scd_id));
+			String exe_perd_cd = (String) result.get(0).get("exe_perd_cd");
+			
+			hp.put("scd_id", scd_id);
+
 			Date nFireTime  = context.getNextFireTime();
 
-			hp.put("scd_id", scd_id);
-			hp.put("nFireTime", nFireTime);		
-			scheduleService.updatePrevJobTime(hp);
-				
+		    Calendar cal = Calendar.getInstance();
+		    
+		    System.out.println(nFireTime);
+		    
+		    if(!exe_perd_cd.equals("TC001605")){
+		    	cal.setTime(nFireTime);
+		    }
+			
+			
+			
+			if(exe_perd_cd.equals("TC001601")){
+				 cal.add(Calendar.DATE, 1); 
+				 hp.put("nFireTime", cal.getTime());
+				 System.out.println("▶▶▶ 다음 작업 수행시간 업데이트");
+				scheduleService.updateNxtJobTime(hp);
+			}else if(exe_perd_cd.equals("TC001602")){
+				 cal.add(Calendar.DATE, 7); 
+				 hp.put("nFireTime", cal.getTime());
+				 System.out.println("▶▶▶ 다음 작업 수행시간 업데이트");
+				scheduleService.updateNxtJobTime(hp);
+			}else if(exe_perd_cd.equals("TC001603")){
+				 cal.add(Calendar.MONTH, 1); 
+				 hp.put("nFireTime", cal.getTime());
+				 System.out.println("▶▶▶ 다음 작업 수행시간 업데이트");
+				scheduleService.updateNxtJobTime(hp);
+			}else if(exe_perd_cd.equals("TC001604")){
+				 cal.add(Calendar.YEAR, 1); 
+				 hp.put("nFireTime", cal.getTime());
+				 System.out.println("▶▶▶ 다음 작업 수행시간 업데이트");
+				 scheduleService.updateNxtJobTime(hp);
+			}
+
 	/*		JobKey job_key = context.getJobDetail().getKey();
 			String job_name = context.getJobDetail().getKey().getName();
 			String job_group= context.getJobDetail().getKey().getGroup();
