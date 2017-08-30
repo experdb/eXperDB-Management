@@ -33,6 +33,22 @@
 					var html="";
 					if(data==0){
 						//중지
+						html += "<img src='../images/ico_agent_2.png' alt='' />";
+					}else{
+						//실행중
+						html += "<img src='../images/ico_agent_1.png' alt='' />";	
+					}
+					return html;
+				},
+				className : "dt-center",
+				defaultContent : ""
+			}, 
+			{
+				data : "bw_pid",
+				render : function(data, type, full, meta) {
+					var html="";
+					if(data==0){
+						//중지
 						html += "<a href='#n')'><img src='../images/ico_end.png' alt='중지중' id='bottleWaterBtn'/></a>";
 					}else{
 						//실행중
@@ -216,6 +232,7 @@
 								<th>Connector명</th>
 								<th>서버명</th>
 								<th>Database명</th>
+								<th>구동상태</th>
 								<th>BottleWater실행</th>
 								<th>맵핑설정</th>
 							</tr>

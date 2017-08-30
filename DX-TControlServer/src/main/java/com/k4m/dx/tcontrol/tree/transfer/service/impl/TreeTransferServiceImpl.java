@@ -6,8 +6,10 @@ import javax.annotation.Resource;
 
 import org.springframework.stereotype.Service;
 
+import com.k4m.dx.tcontrol.accesscontrol.service.DbAutVO;
 import com.k4m.dx.tcontrol.accesscontrol.service.DbIDbServerVO;
 import com.k4m.dx.tcontrol.tree.transfer.service.BottlewaterVO;
+import com.k4m.dx.tcontrol.tree.transfer.service.TblKafkaConfigVO;
 import com.k4m.dx.tcontrol.tree.transfer.service.TransferDetailMappingVO;
 import com.k4m.dx.tcontrol.tree.transfer.service.TransferDetailVO;
 import com.k4m.dx.tcontrol.tree.transfer.service.TransferMappingVO;
@@ -53,8 +55,8 @@ public class TreeTransferServiceImpl implements TreeTransferService {
 	}
 
 	@Override
-	public List<DbIDbServerVO> selectServerDbList(String db_svr_nm) throws Exception {
-		return treeTransferDAO.selectServerDbList(db_svr_nm);
+	public List<DbIDbServerVO> selectServerDbList(DbAutVO dbAutVO) throws Exception {
+		return treeTransferDAO.selectServerDbList(dbAutVO);
 	}
 
 	@Override
@@ -88,14 +90,13 @@ public class TreeTransferServiceImpl implements TreeTransferService {
 	}
 
 	@Override
-	public void updateBottleWaterBwpid(TransferDetailVO transferDetailVO) throws Exception {
-		treeTransferDAO.updateBottleWaterBwpid(transferDetailVO);
-
+	public List<BottlewaterVO> selectBottlewaterinfo(int trf_trg_id) throws Exception {
+		return treeTransferDAO.selectBottlewaterinfo(trf_trg_id);
 	}
 
 	@Override
-	public List<BottlewaterVO> selectBottlewaterinfo(int trf_trg_id) throws Exception {
-		return treeTransferDAO.selectBottlewaterinfo(trf_trg_id);
+	public List<TblKafkaConfigVO> selectTblKafkaConfigInfo(int trf_trg_id) throws Exception {
+		return treeTransferDAO.selectTblKafkaConfigInfo(trf_trg_id);
 	}
 
 }

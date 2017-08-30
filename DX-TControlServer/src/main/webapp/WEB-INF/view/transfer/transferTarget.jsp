@@ -177,6 +177,7 @@
 			for (var i = 0; i < datas.length; i++) {
 				rowList += datas[i].name + ',';
 			}
+			
 			$.ajax({
 				url : "/deleteTransferTarget.do",
 				data : {

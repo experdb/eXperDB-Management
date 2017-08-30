@@ -2,6 +2,7 @@ package com.k4m.dx.tcontrol.tree.transfer.service;
 
 import java.util.List;
 
+import com.k4m.dx.tcontrol.accesscontrol.service.DbAutVO;
 import com.k4m.dx.tcontrol.accesscontrol.service.DbIDbServerVO;
 
 public interface TreeTransferService {
@@ -57,10 +58,10 @@ public interface TreeTransferService {
 	/**
 	 * 데이터베이스 조회
 	 * 
-	 * @param db_svr_nm
+	 * @param dbAutVO
 	 * @throws Exception
 	 */
-	List<DbIDbServerVO> selectServerDbList(String db_svr_nm) throws Exception;
+	List<DbIDbServerVO> selectServerDbList(DbAutVO dbAutVO) throws Exception;
 
 	/**
 	 * DB,SERVER 조회
@@ -117,15 +118,6 @@ public interface TreeTransferService {
 	void deleteTransferMapping(int trf_trg_mpp_id) throws Exception;
 
 	/**
-	 * Bottlewater bwpid 업데이트
-	 * 
-	 * @param transferDetailVO
-	 * @return
-	 * @throws Exception
-	 */
-	void updateBottleWaterBwpid(TransferDetailVO transferDetailVO) throws Exception;
-
-	/**
 	 * Bottlewater DB정보
 	 * 
 	 * @param trf_trg_id
@@ -133,5 +125,16 @@ public interface TreeTransferService {
 	 * @throws Exception
 	 */
 	List<BottlewaterVO> selectBottlewaterinfo(int trf_trg_id) throws Exception;
+
+	/**
+	 * tbl kafaconfig 정보
+	 * 
+	 * @param trf_trg_id
+	 * @return
+	 * @throws Exception
+	 */
+	List<TblKafkaConfigVO> selectTblKafkaConfigInfo(int trf_trg_id) throws Exception;
+
+
 
 }

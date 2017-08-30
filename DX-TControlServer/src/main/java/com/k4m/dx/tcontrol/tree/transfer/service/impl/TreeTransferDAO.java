@@ -5,8 +5,10 @@ import java.util.List;
 
 import org.springframework.stereotype.Repository;
 
+import com.k4m.dx.tcontrol.accesscontrol.service.DbAutVO;
 import com.k4m.dx.tcontrol.accesscontrol.service.DbIDbServerVO;
 import com.k4m.dx.tcontrol.tree.transfer.service.BottlewaterVO;
+import com.k4m.dx.tcontrol.tree.transfer.service.TblKafkaConfigVO;
 import com.k4m.dx.tcontrol.tree.transfer.service.TransferDetailMappingVO;
 import com.k4m.dx.tcontrol.tree.transfer.service.TransferDetailVO;
 import com.k4m.dx.tcontrol.tree.transfer.service.TransferMappingVO;
@@ -94,9 +96,9 @@ public class TreeTransferDAO extends EgovAbstractMapper {
 	 * @throws SQLException
 	 */
 	@SuppressWarnings({ "deprecation", "unchecked" })
-	public List<DbIDbServerVO> selectServerDbList(String db_svr_nm) throws SQLException {
+	public List<DbIDbServerVO> selectServerDbList(DbAutVO dbAutVO) throws SQLException {
 		List<DbIDbServerVO> result = null;
-		result = (List<DbIDbServerVO>) list("treeTransferSql.selectServerDbList", db_svr_nm);
+		result = (List<DbIDbServerVO>) list("treeTransferSql.selectServerDbList", dbAutVO);
 		return result;
 	}
 
@@ -167,18 +169,6 @@ public class TreeTransferDAO extends EgovAbstractMapper {
 	}
 
 	/**
-	 * Bottlewater bwpid 업데이트
-	 * 
-	 * @param transferDetailVO
-	 * @return
-	 * @throws Exception
-	 */
-	public void updateBottleWaterBwpid(TransferDetailVO transferDetailVO) throws SQLException {
-		update("treeTransferSql.updateBottleWaterBwpid", transferDetailVO);
-
-	}
-
-	/**
 	 * Bottlewater DB정보
 	 * 
 	 * @param trf_trg_id
@@ -189,6 +179,20 @@ public class TreeTransferDAO extends EgovAbstractMapper {
 	public List<BottlewaterVO> selectBottlewaterinfo(int trf_trg_id) {
 		List<BottlewaterVO> result = null;
 		result = (List<BottlewaterVO>) list("treeTransferSql.selectBottlewaterinfo", trf_trg_id);
+		return result;
+	}
+
+	/**
+	 * tbl kafaconfig 정보
+	 * 
+	 * @param trf_trg_id
+	 * @return
+	 * @throws Exception
+	 */
+	@SuppressWarnings({ "deprecation", "unchecked" })
+	public List<TblKafkaConfigVO> selectTblKafkaConfigInfo(int trf_trg_id) {
+		List<TblKafkaConfigVO> result = null;
+		result = (List<TblKafkaConfigVO>) list("treeTransferSql.selectTblKafkaConfigInfo", trf_trg_id);
 		return result;
 	}
 

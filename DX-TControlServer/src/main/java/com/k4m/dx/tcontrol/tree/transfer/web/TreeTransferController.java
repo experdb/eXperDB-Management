@@ -1,5 +1,6 @@
 package com.k4m.dx.tcontrol.tree.transfer.web;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -18,10 +19,12 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
+import com.k4m.dx.tcontrol.accesscontrol.service.DbAutVO;
 import com.k4m.dx.tcontrol.accesscontrol.service.DbIDbServerVO;
 import com.k4m.dx.tcontrol.admin.accesshistory.service.AccessHistoryService;
 import com.k4m.dx.tcontrol.admin.dbserverManager.service.DbServerManagerService;
 import com.k4m.dx.tcontrol.admin.dbserverManager.service.DbServerVO;
+import com.k4m.dx.tcontrol.admin.menuauthority.service.MenuAuthorityService;
 import com.k4m.dx.tcontrol.cmmn.AES256;
 import com.k4m.dx.tcontrol.cmmn.AES256_KEY;
 import com.k4m.dx.tcontrol.cmmn.CmmnUtils;
@@ -34,6 +37,7 @@ import com.k4m.dx.tcontrol.functions.transfer.service.ConnectorVO;
 import com.k4m.dx.tcontrol.functions.transfer.service.TransferService;
 import com.k4m.dx.tcontrol.functions.transfer.service.TransferVO;
 import com.k4m.dx.tcontrol.tree.transfer.service.BottlewaterVO;
+import com.k4m.dx.tcontrol.tree.transfer.service.TblKafkaConfigVO;
 import com.k4m.dx.tcontrol.tree.transfer.service.TransferDetailMappingVO;
 import com.k4m.dx.tcontrol.tree.transfer.service.TransferDetailVO;
 import com.k4m.dx.tcontrol.tree.transfer.service.TransferMappingVO;
@@ -73,6 +77,11 @@ public class TreeTransferController {
 	@Autowired
 	private CmmnServerInfoService cmmnServerInfoService;
 
+	@Autowired
+	private MenuAuthorityService menuAuthorityService;
+	
+	private List<Map<String, Object>> menuAut;
+	
 	/**
 	 * 전송설정 화면을 보여준다.
 	 * 
@@ -84,14 +93,23 @@ public class TreeTransferController {
 	public ModelAndView transferSetting(@ModelAttribute("historyVO") HistoryVO historyVO, HttpServletRequest request) {
 		ModelAndView mv = new ModelAndView();
 		try {
-			// 전송설정 이력 남기기
-			CmmnUtils.saveHistory(request, historyVO);
-			historyVO.setExe_dtl_cd("DX-T0011");
-			accessHistoryService.insertHistory(historyVO);
-
-			mv.setViewName("transfer/transferSetting");
-		} catch (Exception e) {
-			e.printStackTrace();
+			CmmnUtils cu = new CmmnUtils();
+			menuAut = cu.selectMenuAut(menuAuthorityService, "MN000201");
+			if(menuAut.get(0).get("read_aut_yn").equals("N")){
+				mv.setViewName("error/autError");
+			}else{
+				mv.addObject("read_aut_yn", menuAut.get(0).get("read_aut_yn"));
+				mv.addObject("wrt_aut_yn", menuAut.get(0).get("wrt_aut_yn"));
+				
+				// 전송설정 이력 남기기
+				CmmnUtils.saveHistory(request, historyVO);
+				historyVO.setExe_dtl_cd("DX-T0011");
+				accessHistoryService.insertHistory(historyVO);
+				
+				mv.setViewName("transfer/transferSetting");
+			}
+		}catch (Exception e) {
+				e.printStackTrace();
 		}
 		return mv;
 	}
@@ -608,11 +626,14 @@ public class TreeTransferController {
 	 */
 	@RequestMapping(value = "/selectServerDbLists.do")
 	public @ResponseBody List<DbIDbServerVO> selectServerDbLists(
-			@ModelAttribute("dbIDbServerVO") DbIDbServerVO dbIDbServerVO, HttpServletRequest request) {
+			@ModelAttribute("dbIDbServerVO") DbIDbServerVO dbIDbServerVO, HttpServletRequest request,@ModelAttribute("dbAutVO") DbAutVO dbAutVO) {
 		List<DbIDbServerVO> resultSet = null;
 		try {
-			String db_svr_nm = request.getParameter("db_svr_nm");
-			resultSet = treeTransferService.selectServerDbList(db_svr_nm);
+			dbAutVO.setDb_svr_nm(request.getParameter("db_svr_nm"));
+			HttpSession session = request.getSession();
+			dbAutVO.setUsr_id((String) session.getAttribute("usr_id"));
+
+			resultSet = treeTransferService.selectServerDbList(dbAutVO);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -684,6 +705,7 @@ public class TreeTransferController {
 		List<ConnectorVO> resultList = null;
 		JSONObject result = new JSONObject();
 		JSONObject param = new JSONObject();
+		ClientInfoCmmn cic = new ClientInfoCmmn();
 		try {
 			// Database 매핑저장 이력 남기기
 			CmmnUtils.saveHistory(request, historyVO);
@@ -700,21 +722,19 @@ public class TreeTransferController {
 			transferRelationVO.setTrf_trg_id(Integer.parseInt(request.getParameter("trf_trg_id")));
 			transferRelationVO.setCnr_id(Integer.parseInt(request.getParameter("cnr_id")));
 			transferRelationVO.setDb_id(Integer.parseInt(request.getParameter("db_id")));
-			
+
 			/* 전송매핑테이블내역 DELETE */
 			treeTransferService.deleteTransferMapping(Integer.parseInt(request.getParameter("trf_trg_mpp_id")));
 			/* 전송대상매핑관계 DELETE */
 			treeTransferService.deleteTransferRelation(Integer.parseInt(request.getParameter("trf_trg_mpp_id")));
+	
 			/* 전송대상매핑관계 INSERT */
 			treeTransferService.insertTransferRelation(transferRelationVO);
 
 			JSONParser jParser = new JSONParser();
-			JSONArray jArr = (JSONArray) jParser
-					.parse(request.getParameter("rowList").toString().replace("&quot;", "\""));
-
+			JSONArray jArr = (JSONArray) jParser.parse(request.getParameter("rowList").toString().replace("&quot;", "\""));
 			String trf_trg_cnn_nm = request.getParameter("trf_trg_cnn_nm");
 			String topic = "";
-
 			for (int i = 0; i < jArr.size(); i++) {
 				JSONObject jObj = (JSONObject) jArr.get(i);
 				String table_name = (String) jObj.get("table_name");
@@ -731,17 +751,15 @@ public class TreeTransferController {
 				}
 				topic += trf_trg_cnn_nm + "." + table_schema + "." + table_name;
 			}
-
+			
 			resultList = transferService.selectDetailConnectorRegister(Integer.parseInt(request.getParameter("cnr_id")));
-
+			
 			JSONObject serverObj = new JSONObject();
 			String strServerIp = resultList.get(0).getCnr_ipadr();
 			String strServerPort = Integer.toString(resultList.get(0).getCnr_portno());
 			serverObj.put(ClientProtocolID.SERVER_IP, strServerIp);
 			serverObj.put(ClientProtocolID.SERVER_PORT, strServerPort);
-			ClientInfoCmmn cic = new ClientInfoCmmn();
-			result = cic.kafakConnect_select(serverObj, trf_trg_cnn_nm);
-
+			result = cic.kafakConnect_select(serverObj, trf_trg_cnn_nm);	
 			for (int i = 0; i < result.size(); i++) {
 				JSONArray data = (JSONArray) result.get("data");
 				for (int m = 0; m < data.size(); m++) {
@@ -757,12 +775,11 @@ public class TreeTransferController {
 					param.put("strHadoop_home", (String) hp.get("hadoop.home"));
 					param.put("strFlush_size", (String) hp.get("flush.size"));
 					param.put("strRotate_interval_ms", (String) hp.get("rotate.interval.ms"));
-
 				}
 			}
 			/* kafakConnect_update topic 업데이트 */
 			cic.kafakConnect_update(serverObj, param);
-
+			
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -779,6 +796,8 @@ public class TreeTransferController {
 	public @ResponseBody String bottlewaterControl(
 			@ModelAttribute("transferDetailVO") TransferDetailVO transferDetailVO, HttpServletRequest request) {
 		ClientInfoCmmn cic = new ClientInfoCmmn();
+		JSONObject result = new JSONObject();
+		JSONObject param = new JSONObject();
 		try {
 			/*
 			 * TODO 실행순서 
@@ -787,80 +806,137 @@ public class TreeTransferController {
 			 * bw_pid가 0이 아니면-> 중지 
 			 * 2. T_TRFTRGCNG_I 테이블에 (실행-> bottlewater pid 인설트, 중지-> bw_pid 0 인설트)
 			 */
-			AES256 aes = new AES256(AES256_KEY.ENC_KEY);
+			AES256 dec = new AES256(AES256_KEY.ENC_KEY);
 
 			HttpSession session = request.getSession();
 			String usr_id = (String) session.getAttribute("usr_id");
 			transferDetailVO.setLst_mdfr_id(usr_id);
-
+			
 			int trf_trg_id = Integer.parseInt(request.getParameter("trf_trg_id"));
 			int bw_pid = Integer.parseInt(request.getParameter("bw_pid"));
 
 			int db_id = Integer.parseInt(request.getParameter("db_id"));
 			DbIDbServerVO dbIDbServerVO = (DbIDbServerVO) treeTransferService.selectServerDb(db_id);
-			DbServerVO schDbServerVO = new DbServerVO();
-			schDbServerVO.setDb_svr_id(dbIDbServerVO.getDb_svr_id());
-			DbServerVO dbServerVO = (DbServerVO) cmmnServerInfoService.selectServerInfo(schDbServerVO);
-			String strIpAdr = dbServerVO.getIpadr();
+			String strIpAdr = dbIDbServerVO.getIpadr();
 			AgentInfoVO vo = new AgentInfoVO();
 			vo.setIPADR(strIpAdr);
-			AgentInfoVO agentInfo = (AgentInfoVO) cmmnServerInfoService.selectAgentInfo(vo);
-			
+			AgentInfoVO agentInfo =  (AgentInfoVO) cmmnServerInfoService.selectAgentInfo(vo);
+		
 			/*agent 미설치일 경우*/
 			if (agentInfo==null){
 				return "false";
 			}
 			
-			String IP = dbServerVO.getIpadr();
+			String IP = dbIDbServerVO.getIpadr();
 			int PORT = agentInfo.getSOCKET_PORT();	
 			
 			if (bw_pid == 0) {
-				TransferVO transferInfo = (TransferVO) transferService.selectTransferSetting(usr_id);
+				 TransferVO transferInfo = (TransferVO) transferService.selectTransferSetting(usr_id);
 				 List<BottlewaterVO> dbInfo = treeTransferService.selectBottlewaterinfo(trf_trg_id);
-
+				 
+				 
 				/*전송설정등록을 안했을 경우*/
 				if(transferInfo==null){
 					return "transfersetting";
 				}
+				
+				List<TblKafkaConfigVO> tblKafkaConfigInfo = treeTransferService.selectTblKafkaConfigInfo(trf_trg_id);
+				String trf_trg_cnn_nm = tblKafkaConfigInfo.get(0).getTrf_trg_cnn_nm();
+			
+				JSONObject serverObj = new JSONObject();
+				
+				serverObj.put(ClientProtocolID.SERVER_NAME, dbIDbServerVO.getDb_svr_nm());
+				serverObj.put(ClientProtocolID.SERVER_IP, dbIDbServerVO.getIpadr());
+				serverObj.put(ClientProtocolID.SERVER_PORT, dbIDbServerVO.getPortno());
+				serverObj.put(ClientProtocolID.DATABASE_NAME, dbIDbServerVO.getDb_nm());
+				serverObj.put(ClientProtocolID.USER_ID, dbIDbServerVO.getSvr_spr_usr_id());
+				serverObj.put(ClientProtocolID.USER_PWD, dec.aesDecode(dbIDbServerVO.getSvr_spr_scm_pwd()));
+				
+//				/*TODO tbl_mapps DELETE*/
+//							
+//				/*kafka_con_config DELETE*/
+//				JSONObject tableInfoObj = new JSONObject();
+//				tableInfoObj.put(ClientProtocolID.DATABASE_NAME, dbIDbServerVO.getDb_nm());
+//				tableInfoObj.put(ClientProtocolID.CONNECT_NAME, trf_trg_cnn_nm);
+//				cic.kafkaConConfig_delete(IP,PORT,serverObj,tableInfoObj);
+				
+				for(int i=0; i<tblKafkaConfigInfo.size(); i++){
+					String topic = tblKafkaConfigInfo.get(i).getTrf_trg_cnn_nm()+"."+tblKafkaConfigInfo.get(i).getScm_nm()+"."+tblKafkaConfigInfo.get(i).getTb_engl_nm();
+					/*tbl_mapps INSERT*/
+					ArrayList<HashMap<String, String>> arrTableInfo = new ArrayList<HashMap<String, String>>();
+					HashMap hp = new HashMap();
+					hp.put(ClientProtocolID.DATABASE_NAME, dbIDbServerVO.getDb_nm());
+					hp.put(ClientProtocolID.TABLE_NAME, tblKafkaConfigInfo.get(i).getTb_engl_nm());
+					hp.put(ClientProtocolID.TABLE_SCHEMA, tblKafkaConfigInfo.get(i).getScm_nm());
+					hp.put(ClientProtocolID.TOPIC_NAME, topic);
+					hp.put(ClientProtocolID.REMARK, "1");
+					arrTableInfo.add(hp);
+					cic.tblmapps_insert(IP,PORT,serverObj,arrTableInfo);
+				}
+
+				JSONObject kafkaServerObj = new JSONObject();
+				String strServerIp = tblKafkaConfigInfo.get(0).getCnr_ipadr();
+				String strServerPort = Integer.toString(tblKafkaConfigInfo.get(0).getCnr_portno());
 					
-				/* TOPIC */
-				String topicTxt = "";
-				for (int i = 0; i < dbInfo.size(); i++) {
-					topicTxt += dbInfo.get(i).getTrf_trg_cnn_nm() + "." + dbInfo.get(i).getScm_nm() + "." + dbInfo.get(i).getTb_engl_nm();
-					if (i != dbInfo.size() - 1) {
-						topicTxt += ",";
+				kafkaServerObj.put(ClientProtocolID.SERVER_IP, strServerIp);
+				kafkaServerObj.put(ClientProtocolID.SERVER_PORT, strServerPort);
+				result = cic.kafakConnect_select(kafkaServerObj, trf_trg_cnn_nm);	
+				for (int i = 0; i < result.size(); i++) {
+					JSONArray data = (JSONArray) result.get("data");
+					for (int m = 0; m < data.size(); m++) {
+						JSONObject jsonObj = (JSONObject) data.get(m);
+						JSONObject hp = (JSONObject) jsonObj.get("hp");
+
+						param.put("strName", (String) hp.get("name"));
+						param.put("strConnector_class", (String) hp.get("connector.class"));
+						param.put("strTasks_max", (String) hp.get("tasks.max"));
+						param.put("strTopics", (String) hp.get("topics"));
+						param.put("strHdfs_url", (String) hp.get("hdfs.url"));
+						param.put("strHadoop_conf_dir", (String) hp.get("hadoop.conf.dir"));
+						param.put("strHadoop_home", (String) hp.get("hadoop.home"));
+						param.put("strFlush_size", (String) hp.get("flush.size"));
+						param.put("strRotate_interval_ms", (String) hp.get("rotate.interval.ms"));
 					}
 				}
-				System.out.println("TOPIC : " + topicTxt);
+
+				/*kafka_con_config INSERT*/
+				JSONObject tableInfoObj = new JSONObject();
+				tableInfoObj.put(ClientProtocolID.DATABASE_NAME, dbIDbServerVO.getDb_nm());
+				tableInfoObj.put(ClientProtocolID.CONNECT_NAME, trf_trg_cnn_nm);
+				tableInfoObj.put(ClientProtocolID.CONTENTS, param.toJSONString());
+				tableInfoObj.put(ClientProtocolID.REMARK, "1");			
+				
+				cic.kafkaConConfig_insert(IP,PORT,serverObj,tableInfoObj);
+	
 				String dbinfoTxt = " --postgres=postgres://" + dbInfo.get(0).getSvr_spr_usr_id() + ":"
-						+ aes.aesDecode(dbInfo.get(0).getSvr_spr_scm_pwd()) + "@127.0.0.1:"
-						+ dbInfo.get(0).getPortno() + "/" + dbInfo.get(0).getDb_nm();
+						+ dec.aesDecode(dbInfo.get(0).getSvr_spr_scm_pwd()) + "@127.0.0.1:"
+						+ dbInfo.get(0).getPortno() + "/" + dbInfo.get(0).getDb_nm();			
 				
-				System.out.println(aes.aesDecode(dbInfo.get(0).getSvr_spr_scm_pwd()));
-				System.out.println(dbInfo.get(0).getSvr_spr_scm_pwd()+"***");
-				
-				/* bottlewater실행 명령어 */
-				String strExecTxt = transferInfo.getBw_home() + dbinfoTxt + " --slot="+ dbInfo.get(0).getCnr_nm()+" --broker="
-						+ transferInfo.getKafka_broker_ip() + ":" + transferInfo.getKafka_broker_port()
-						+ " --topic-prefix=" + topicTxt + " --allow-unkeyed --on-error=log &";
+				/* bottlewater실행 명령어 */    
+				String strExecTxt = "nohup "+transferInfo.getBw_home() + dbinfoTxt + " --slot="+ dbInfo.get(0).getTrf_trg_cnn_nm()
+						+" --broker="+ transferInfo.getKafka_broker_ip() + ":" + transferInfo.getKafka_broker_port()
+						+ " --schema-registry="+transferInfo.getSchema_registry_ip()+":"+transferInfo.getSchema_registry_port()
+						+ " --topic-prefix=" + dbInfo.get(0).getTrf_trg_cnn_nm() + " --skip-snapshot --allow-unkeyed --on-error=log &";
 				System.out.println("명령어 : " + strExecTxt);
 
-				cic.bottledwater(IP,PORT,strExecTxt);
+				String string_trf_trg_id = request.getParameter("trf_trg_id");
+				cic.bottledwater(IP,PORT,strExecTxt, string_trf_trg_id);
 				
-				/* 실행시킨 bwpid가져오기 */
-//				int current_bwpid = 1;
-//				transferDetailVO.setBw_pid(current_bwpid);
-//				treeTransferService.updateBottleWaterBwpid(transferDetailVO);
 				return "start";
 			} else {
 				/* kill -9 pid 명령어 */
+				System.out.println("bw_pid : "+bw_pid);
 				String strExecTxt = "kill -9 " + bw_pid;
 				System.out.println(strExecTxt);
 				
-				cic.bottledwater(IP,PORT,strExecTxt);		
+				String string_trf_trg_id = request.getParameter("trf_trg_id");
+				cic.bottledwater(IP,PORT,strExecTxt,string_trf_trg_id);	
 				
-				transferDetailVO.setBw_pid(0);
-				treeTransferService.updateBottleWaterBwpid(transferDetailVO);
+				List<TblKafkaConfigVO> tblKafkaConfigInfo = treeTransferService.selectTblKafkaConfigInfo(trf_trg_id);
+				
+				String slotName = tblKafkaConfigInfo.get(0).getTrf_trg_cnn_nm();
+				System.out.println(slotName);
+				cic.slot_delete(IP, PORT,slotName);
 				return "stop";
 			}
 

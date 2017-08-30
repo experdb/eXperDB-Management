@@ -20,11 +20,11 @@ import org.springframework.web.servlet.ModelAndView;
 
 import com.k4m.dx.tcontrol.accesscontrol.service.AccessControlService;
 import com.k4m.dx.tcontrol.accesscontrol.service.AccessControlVO;
+import com.k4m.dx.tcontrol.accesscontrol.service.DbAutVO;
 import com.k4m.dx.tcontrol.accesscontrol.service.DbIDbServerVO;
 import com.k4m.dx.tcontrol.admin.accesshistory.service.AccessHistoryService;
 import com.k4m.dx.tcontrol.admin.dbauthority.service.DbAuthorityService;
 import com.k4m.dx.tcontrol.admin.dbserverManager.service.DbServerVO;
-import com.k4m.dx.tcontrol.admin.menuauthority.service.MenuAuthorityService;
 import com.k4m.dx.tcontrol.cmmn.AES256;
 import com.k4m.dx.tcontrol.cmmn.AES256_KEY;
 import com.k4m.dx.tcontrol.cmmn.CmmnUtils;
@@ -100,14 +100,12 @@ public class AccessControlController {
 	public ModelAndView serverAccessControl(@ModelAttribute("historyVO") HistoryVO historyVO,
 			HttpServletRequest request) {
 		
-		//유저 디비서버 권한 조회 (공통메소드호출),
 		CmmnUtils cu = new CmmnUtils();
 		dbSvrAut = cu.selectUserDBSvrAutList(dbAuthorityService);
 		
 		ModelAndView mv = new ModelAndView();
 
 		try {
-			//읽기 권한이 없는경우 error페이지 호출 , [추후 Exception 처리예정]
 			if(dbSvrAut.get(0).get("acs_cntr_aut_yn").equals("N")){
 				mv.setViewName("error/autError");				
 			}else{
@@ -117,6 +115,11 @@ public class AccessControlController {
 				accessHistoryService.insertHistory(historyVO);
 	
 				int db_svr_id = Integer.parseInt(request.getParameter("db_svr_id"));
+				DbAutVO dbAutVO = new DbAutVO();
+				dbAutVO.setDb_svr_id(db_svr_id);
+				HttpSession session = request.getSession();
+				dbAutVO.setUsr_id((String) session.getAttribute("usr_id"));
+				
 				
 				DbServerVO schDbServerVO = new DbServerVO();
 				schDbServerVO.setDb_svr_id(db_svr_id);
@@ -130,7 +133,7 @@ public class AccessControlController {
 					mv.addObject("extName", "agent");
 					mv.setViewName("dbserver/accesscontrol");
 				}else{
-					List<DbIDbServerVO> resultSet = accessControlService.selectDatabaseList(db_svr_id);
+					List<DbIDbServerVO> resultSet = accessControlService.selectDatabaseListAut(dbAutVO);
 					if (resultSet.size() == 0) {
 						mv.addObject("db_svr_nm", resultSet.get(0).getDb_svr_nm());
 					} else {

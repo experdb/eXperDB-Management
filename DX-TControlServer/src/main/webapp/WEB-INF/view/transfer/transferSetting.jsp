@@ -167,10 +167,21 @@
  				  $("#trf_cng_id").val(data.trf_cng_id);
  	 
  				}
+ 				fn_buttonAut();
 			}
 		});
 	});
-	
+
+	function fn_buttonAut(){
+		var btnInsert = document.getElementById("btnInsert"); 
+		if("${wrt_aut_yn}" == "Y"){
+			btnInsert.style.display = '';
+
+		}else{
+			btnInsert.style.display = 'none';
+		}
+			
+	}	
 </script>
 <input type="hidden" id="trf_cng_id">
 <div id="contents">

@@ -12,7 +12,16 @@ public interface AccessControlService {
 	 * @throws Exception
 	 */
 	List<DbIDbServerVO> selectDatabaseList(int db_svr_id) throws Exception;
-
+	
+	/**
+	 * 권한 있는 DB 조회
+	 * 
+	 * @param dbAutVO
+	 * @return
+	 * @throws Exception
+	 */
+	List<DbIDbServerVO> selectDatabaseListAut(DbAutVO dbAutVO) throws Exception;
+	
 	/**
 	 * DB,SERVER 조회
 	 * 
@@ -38,4 +47,6 @@ public interface AccessControlService {
 	 * @throws Exception
 	 */
 	void insertAccessControl(AccessControlVO accessControlVO) throws Exception;
+
+	
 }

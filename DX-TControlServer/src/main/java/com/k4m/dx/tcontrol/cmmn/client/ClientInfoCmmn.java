@@ -7,14 +7,9 @@ import java.util.Map;
 
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
-import org.springframework.beans.factory.annotation.Autowired;
-
-import com.k4m.dx.tcontrol.admin.dbserverManager.service.DbServerVO;
-import com.k4m.dx.tcontrol.common.service.AgentInfoVO;
-import com.k4m.dx.tcontrol.common.service.CmmnServerInfoService;
 
 public class ClientInfoCmmn {
-	
+
 	String Ip = "222.110.153.162";
 	int port = 9001;
 
@@ -76,13 +71,13 @@ public class ClientInfoCmmn {
 			selectDBList = (ArrayList<Object>) objList.get(ClientProtocolID.RESULT_DATA);
 
 			System.out.println("strDxExCode : " + " " + strDxExCode);
-			if(selectDBList != null){
+			if (selectDBList != null) {
 				for (int i = 0; i < selectDBList.size(); i++) {
 					JSONObject jsonObj = new JSONObject();
 					Object obj = selectDBList.get(i);
 					HashMap hp = (HashMap) obj;
 					String datname = (String) hp.get("datname");
-	
+
 					jsonObj.put("dft_db_nm", datname);
 					jsonArray.add(jsonObj);
 				}
@@ -142,84 +137,79 @@ public class ClientInfoCmmn {
 		return result;
 	}
 
-	
 	// 5. 백업실행
-	public void db_backup(List<Map<String, Object>> resultWork, ArrayList<String> CMD){
+	public void db_backup(List<Map<String, Object>> resultWork, ArrayList<String> CMD) {
 		try {
-			
-			JSONObject reqJObj = new JSONObject();		
+
+			JSONObject reqJObj = new JSONObject();
 			JSONArray arrCmd = new JSONArray();
-			
-			int j  =0;
-			for(int i=0; i<resultWork.size(); i++){
+
+			int j = 0;
+			for (int i = 0; i < resultWork.size(); i++) {
 				JSONObject objJob = new JSONObject();
-				objJob.put(ClientProtocolID.SCD_ID, resultWork.get(i).get("scd_id")); //스캐쥴ID
-				objJob.put(ClientProtocolID.WORK_ID, resultWork.get(i).get("wrk_id")); //작업ID
-				objJob.put(ClientProtocolID.EXD_ORD, resultWork.get(i).get("exe_ord")); //실행순서
-				objJob.put(ClientProtocolID.NXT_EXD_YN, resultWork.get(i).get("nxt_exe_yn")); //다음실행여부				
-				objJob.put(ClientProtocolID.DB_ID, resultWork.get(i).get("db_id")); //db아이디
-				if(resultWork.get(i).get("bck_bsn_dscd").equals("TC000201")){
-					objJob.put(ClientProtocolID.BCK_OPT_CD, resultWork.get(i).get("bck_opt_cd")); //백업종류
-					objJob.put(ClientProtocolID.BCK_FILE_PTH, resultWork.get(i).get("bck_pth")); //저장경로
-				}else{
-					objJob.put(ClientProtocolID.BCK_OPT_CD, ""); //백업종류
-					objJob.put(ClientProtocolID.BCK_FILE_PTH, resultWork.get(i).get("save_pth")); //저장경로
+				objJob.put(ClientProtocolID.SCD_ID, resultWork.get(i).get("scd_id")); // 스캐쥴ID
+				objJob.put(ClientProtocolID.WORK_ID, resultWork.get(i).get("wrk_id")); // 작업ID
+				objJob.put(ClientProtocolID.EXD_ORD, resultWork.get(i).get("exe_ord")); // 실행순서
+				objJob.put(ClientProtocolID.NXT_EXD_YN, resultWork.get(i).get("nxt_exe_yn")); // 다음실행여부
+				objJob.put(ClientProtocolID.DB_ID, resultWork.get(i).get("db_id")); // db아이디
+				if (resultWork.get(i).get("bck_bsn_dscd").equals("TC000201")) {
+					objJob.put(ClientProtocolID.BCK_OPT_CD, resultWork.get(i).get("bck_opt_cd")); // 백업종류
+					objJob.put(ClientProtocolID.BCK_FILE_PTH, resultWork.get(i).get("bck_pth")); // 저장경로
+				} else {
+					objJob.put(ClientProtocolID.BCK_OPT_CD, ""); // 백업종류
+					objJob.put(ClientProtocolID.BCK_FILE_PTH, resultWork.get(i).get("save_pth")); // 저장경로
 				}
-				objJob.put(ClientProtocolID.LOG_YN, "Y"); //로그저장 유무
-				objJob.put(ClientProtocolID.REQ_CMD, CMD.get(i));//명령어
+				objJob.put(ClientProtocolID.LOG_YN, "Y"); // 로그저장 유무
+				objJob.put(ClientProtocolID.REQ_CMD, CMD.get(i));// 명령어
 				arrCmd.add(j, objJob);
-				
-				
-				//백업명령 실행후, 
+
+				// 백업명령 실행후,
 				// [pg_rman validate -B 백업경로] 명령어 실행해줘여함
 				// [pg_rman validate -B 백업경로] 정합성 체크하는 명령어, 안할실 복구불가능
-				if(resultWork.get(i).get("bck_bsn_dscd").equals("TC000201")){
+				if (resultWork.get(i).get("bck_bsn_dscd").equals("TC000201")) {
 					j++;
 					JSONObject objJob2 = new JSONObject();
-					objJob2.put(ClientProtocolID.SCD_ID, resultWork.get(i).get("scd_id")); //스캐쥴ID
-					objJob2.put(ClientProtocolID.WORK_ID, resultWork.get(i).get("wrk_id")); //작업ID
-					objJob2.put(ClientProtocolID.EXD_ORD, resultWork.get(i).get("exe_ord")); //실행순서
-					objJob2.put(ClientProtocolID.NXT_EXD_YN, resultWork.get(i).get("nxt_exe_yn")); //다음실행여부
-					objJob2.put(ClientProtocolID.BCK_OPT_CD, resultWork.get(i).get("bck_opt_cd")); //백업종류
-					objJob2.put(ClientProtocolID.DB_ID, resultWork.get(i).get("db_id")); //db아이디
-					objJob2.put(ClientProtocolID.BCK_FILE_PTH, resultWork.get(i).get("bck_pth")); //저장경로
-					objJob2.put(ClientProtocolID.LOG_YN, "N"); //로그저장 유무
-					objJob2.put(ClientProtocolID.REQ_CMD, "pg_rman validate -B "+resultWork.get(i).get("bck_pth"));//명령어
+					objJob2.put(ClientProtocolID.SCD_ID, resultWork.get(i).get("scd_id")); // 스캐쥴ID
+					objJob2.put(ClientProtocolID.WORK_ID, resultWork.get(i).get("wrk_id")); // 작업ID
+					objJob2.put(ClientProtocolID.EXD_ORD, resultWork.get(i).get("exe_ord")); // 실행순서
+					objJob2.put(ClientProtocolID.NXT_EXD_YN, resultWork.get(i).get("nxt_exe_yn")); // 다음실행여부
+					objJob2.put(ClientProtocolID.BCK_OPT_CD, resultWork.get(i).get("bck_opt_cd")); // 백업종류
+					objJob2.put(ClientProtocolID.DB_ID, resultWork.get(i).get("db_id")); // db아이디
+					objJob2.put(ClientProtocolID.BCK_FILE_PTH, resultWork.get(i).get("bck_pth")); // 저장경로
+					objJob2.put(ClientProtocolID.LOG_YN, "N"); // 로그저장 유무
+					objJob2.put(ClientProtocolID.REQ_CMD, "pg_rman validate -B " + resultWork.get(i).get("bck_pth"));// 명령어
 					arrCmd.add(j, objJob2);
 				}
-				
+
 				j++;
 			}
 
 			JSONObject serverObj = new JSONObject();
-			
+
 			serverObj.put(ClientProtocolID.SERVER_NAME, "");
 			serverObj.put(ClientProtocolID.SERVER_IP, "");
 			serverObj.put(ClientProtocolID.SERVER_PORT, "");
-			
+
 			reqJObj.put(ClientProtocolID.DX_EX_CODE, ClientTranCodeType.DxT005);
 			reqJObj.put(ClientProtocolID.SERVER_INFO, serverObj);
 			reqJObj.put(ClientProtocolID.ARR_CMD, arrCmd);
-			
+
 			ClientAdapter CA = new ClientAdapter(Ip, port);
-			CA.open(); 
-				CA.dxT005(reqJObj);
+			CA.open();
+			CA.dxT005(reqJObj);
 			CA.close();
-		} catch(Exception e) {
+		} catch (Exception e) {
 			e.printStackTrace();
 		}
 	}
-	
-	
-	
-	
+
 	// 6. DB접근제어 C(dbAccess_create)
 	public void dbAccess_create(JSONObject serverObj, JSONObject acObj, String IP, int PORT) {
 		try {
 			JSONObject objList;
 			ClientAdapter CA = new ClientAdapter(IP, PORT);
 			CA.open();
-			
+
 			JSONObject jObj = new JSONObject();
 			jObj.put(ClientProtocolID.DX_EX_CODE, ClientTranCodeType.DxT006);
 			jObj.put(ClientProtocolID.COMMAND_CODE, ClientProtocolID.COMMAND_CODE_C);
@@ -280,13 +270,13 @@ public class ClientInfoCmmn {
 			System.out.println("ERR_MSG : " + strErrMsg);
 
 			List<Object> selectDBList = (ArrayList<Object>) objList.get(ClientProtocolID.RESULT_DATA);
-			
-			if(selectDBList != null){
-				for(int i=0; i<selectDBList.size()-1; i++) {
+
+			if (selectDBList != null) {
+				for (int i = 0; i < selectDBList.size() - 1; i++) {
 					JSONObject jsonObj = new JSONObject();
 					Object obj = selectDBList.get(i);
 					HashMap hp = (HashMap) obj;
-	
+
 					if (Integer.parseInt((String) hp.get("Set")) != 0) {
 						String Seq = (String) hp.get("Seq");
 						String Set = (String) hp.get("Set");
@@ -296,7 +286,7 @@ public class ClientInfoCmmn {
 						String Ipadr = (String) hp.get("Ip");
 						String Method = (String) hp.get("Method");
 						String Option = (String) hp.get("Option");
-	
+
 						jsonObj.put("Seq", Seq);
 						jsonObj.put("Set", Set);
 						jsonObj.put("Type", Type);
@@ -305,11 +295,13 @@ public class ClientInfoCmmn {
 						jsonObj.put("Ipadr", Ipadr);
 						jsonObj.put("Method", Method);
 						jsonObj.put("Option", Option);
-	
+
 						jsonArray.add(jsonObj);
-						System.out.println("seq : " + Seq + " Set : " + Set + " Type : " + Type + " Database : " + Database + " User : " + User + " Ip : " + Ipadr + " Method : " + Method + " Option : " + Option);
+						System.out.println("seq : " + Seq + " Set : " + Set + " Type : " + Type + " Database : "
+								+ Database + " User : " + User + " Ip : " + Ipadr + " Method : " + Method + " Option : "
+								+ Option);
 					}
-	
+
 				}
 				result.put("data", jsonArray);
 			}
@@ -360,7 +352,7 @@ public class ClientInfoCmmn {
 
 			List<Object> selectDBList = (ArrayList<Object>) objList.get(ClientProtocolID.RESULT_DATA);
 
-			for(int i=0; i<selectDBList.size()-1; i++) {
+			for (int i = 0; i < selectDBList.size() - 1; i++) {
 				JSONObject jsonObj = new JSONObject();
 
 				Object obj = selectDBList.get(i);
@@ -398,7 +390,7 @@ public class ClientInfoCmmn {
 	}
 
 	// 6.DB접근제어 U(dbAccess_update)
-	public void dbAccess_update(JSONObject serverObj,JSONObject acObj, String IP, int PORT) {
+	public void dbAccess_update(JSONObject serverObj, JSONObject acObj, String IP, int PORT) {
 		try {
 			JSONObject objList;
 
@@ -429,38 +421,36 @@ public class ClientInfoCmmn {
 	}
 
 	// 6. DB접근제어 D(dbAccess_delete)
-	public void dbAccess_delete(JSONObject serverObj,ArrayList arrSeq,String IP, int PORT) {
+	public void dbAccess_delete(JSONObject serverObj, ArrayList arrSeq, String IP, int PORT) {
 		try {
-			
+
 			JSONObject objList;
 
 			ClientAdapter CA = new ClientAdapter(IP, PORT);
-			CA.open(); 
+			CA.open();
 
 			JSONObject jObj = new JSONObject();
 			jObj.put(ClientProtocolID.DX_EX_CODE, ClientTranCodeType.DxT006);
 			jObj.put(ClientProtocolID.COMMAND_CODE, ClientProtocolID.COMMAND_CODE_D);
 			jObj.put(ClientProtocolID.SERVER_INFO, serverObj);
 			jObj.put(ClientProtocolID.ARR_AC_SEQ, arrSeq);
-			
+
 			objList = CA.dxT006(ClientTranCodeType.DxT006, jObj);
-			
-			String strErrMsg = (String)objList.get(ClientProtocolID.ERR_MSG);
-			String strErrCode = (String)objList.get(ClientProtocolID.ERR_CODE);
-			String strDxExCode = (String)objList.get(ClientProtocolID.DX_EX_CODE);
-			String strResultCode = (String)objList.get(ClientProtocolID.RESULT_CODE);
-			System.out.println("RESULT_CODE : " +  strResultCode);
-			System.out.println("ERR_CODE : " +  strErrCode);
-			System.out.println("ERR_MSG : " +  strErrMsg);
-			
+
+			String strErrMsg = (String) objList.get(ClientProtocolID.ERR_MSG);
+			String strErrCode = (String) objList.get(ClientProtocolID.ERR_CODE);
+			String strDxExCode = (String) objList.get(ClientProtocolID.DX_EX_CODE);
+			String strResultCode = (String) objList.get(ClientProtocolID.RESULT_CODE);
+			System.out.println("RESULT_CODE : " + strResultCode);
+			System.out.println("ERR_CODE : " + strErrCode);
+			System.out.println("ERR_MSG : " + strErrMsg);
+
 			CA.close();
-			
-			
-		} catch(Exception e) {
+
+		} catch (Exception e) {
 			e.printStackTrace();
 		}
 	}
-	
 
 	// 11. Role 리스트 (roleList)
 	@SuppressWarnings({ "unchecked", "rawtypes" })
@@ -520,18 +510,17 @@ public class ClientInfoCmmn {
 			CA.open();
 
 			objList = CA.dxT012(ClientTranCodeType.DxT012, serverObj);
-			
-			
+
 			selectList = (ArrayList<Object>) objList.get(ClientProtocolID.RESULT_DATA);
 
-			String strErrMsg = (String)objList.get(ClientProtocolID.ERR_MSG);
-			String strErrCode = (String)objList.get(ClientProtocolID.ERR_CODE);
-			String strDxExCode = (String)objList.get(ClientProtocolID.DX_EX_CODE);
-			String strResultCode = (String)objList.get(ClientProtocolID.RESULT_CODE);
-			
-			System.out.println("RESULT_CODE : " +  strResultCode);
-			System.out.println("ERR_CODE : " +  strErrCode);
-			System.out.println("ERR_MSG : " +  strErrMsg);
+			String strErrMsg = (String) objList.get(ClientProtocolID.ERR_MSG);
+			String strErrCode = (String) objList.get(ClientProtocolID.ERR_CODE);
+			String strDxExCode = (String) objList.get(ClientProtocolID.DX_EX_CODE);
+			String strResultCode = (String) objList.get(ClientProtocolID.RESULT_CODE);
+
+			System.out.println("RESULT_CODE : " + strResultCode);
+			System.out.println("ERR_CODE : " + strErrCode);
+			System.out.println("ERR_MSG : " + strErrMsg);
 			System.out.println("strDxExCode : " + " " + strDxExCode);
 			System.out.println("resultCode : " + " " + (String) objList.get(ClientProtocolID.RESULT_CODE));
 
@@ -553,34 +542,34 @@ public class ClientInfoCmmn {
 		}
 		return result;
 	}
-	
-	//12. 테이블리스트 조회(tableList_select)
-	public JSONObject tableList_select(JSONObject serverObj,String IP,int PORT) {
+
+	// 12. 테이블리스트 조회(tableList_select)
+	public JSONObject tableList_select(JSONObject serverObj, String IP, int PORT) {
 		JSONArray jsonArray = new JSONArray(); // 객체를 담기위해 JSONArray 선언.
 		JSONObject result = new JSONObject();
 		try {
 			JSONObject objList;
-			
+
 			ClientAdapter CA = new ClientAdapter(IP, PORT);
-			CA.open(); 
-				
+			CA.open();
+
 			objList = CA.dxT011(ClientTranCodeType.DxT012, serverObj);
-			
-			String strErrMsg = (String)objList.get(ClientProtocolID.ERR_MSG);
-			String strErrCode = (String)objList.get(ClientProtocolID.ERR_CODE);
-			String strDxExCode = (String)objList.get(ClientProtocolID.DX_EX_CODE);
-			String strResultCode = (String)objList.get(ClientProtocolID.RESULT_CODE);
-			System.out.println("RESULT_CODE : " +  strResultCode);
-			System.out.println("ERR_CODE : " +  strErrCode);
-			System.out.println("ERR_MSG : " +  strErrMsg);
-			
-			List<Object> selectDBList =(ArrayList<Object>) objList.get(ClientProtocolID.RESULT_DATA);
-			
+
+			String strErrMsg = (String) objList.get(ClientProtocolID.ERR_MSG);
+			String strErrCode = (String) objList.get(ClientProtocolID.ERR_CODE);
+			String strDxExCode = (String) objList.get(ClientProtocolID.DX_EX_CODE);
+			String strResultCode = (String) objList.get(ClientProtocolID.RESULT_CODE);
+			System.out.println("RESULT_CODE : " + strResultCode);
+			System.out.println("ERR_CODE : " + strErrCode);
+			System.out.println("ERR_MSG : " + strErrMsg);
+
+			List<Object> selectDBList = (ArrayList<Object>) objList.get(ClientProtocolID.RESULT_DATA);
+
 			System.out.println("strDxExCode : " + " " + strDxExCode);
-			
-			if(selectDBList != null){
-				if(selectDBList.size() > 0) {
-					for(int i=0; i<selectDBList.size(); i++) {
+
+			if (selectDBList != null) {
+				if (selectDBList.size() > 0) {
+					for (int i = 0; i < selectDBList.size(); i++) {
 						JSONObject jsonObj = new JSONObject();
 						Object obj = selectDBList.get(i);
 						HashMap hp = (HashMap) obj;
@@ -591,119 +580,148 @@ public class ClientInfoCmmn {
 						jsonObj.put("table_name", table_name);
 						jsonArray.add(jsonObj);
 					}
-				}		
-				result.put("data", jsonArray);	
+				}
+				result.put("data", jsonArray);
 			}
 			CA.close();
-		} catch(Exception e) {
+		} catch (Exception e) {
 			e.printStackTrace();
 		}
 		return result;
 	}
-	
-	//bottledWater 실행/종료
-	public void bottledwater(String IP, int PORT, String strExecTxt) {
+
+	// bottledWater 실행/종료
+	public void bottledwater(String IP, int PORT, String strExecTxt, String trf_trg_id) {
 		try {
 			JSONObject jObj = new JSONObject();
 			jObj.put(ClientProtocolID.DX_EX_CODE, ClientTranCodeType.DxT013);
-			jObj.put(ClientProtocolID.TRF_TRG_ID, "12");
+			jObj.put(ClientProtocolID.TRF_TRG_ID, trf_trg_id);
 			jObj.put(ClientProtocolID.COMMAND_CODE, ClientProtocolID.RUN);
 			jObj.put(ClientProtocolID.EXEC_TXT, strExecTxt);
-			
+
 			JSONObject objList;
-			
+
 			ClientAdapter CA = new ClientAdapter(IP, PORT);
-			CA.open(); 
-				
+			CA.open();
+
 			objList = CA.dxT013(ClientTranCodeType.DxT013, jObj);
-			
-			String strErrMsg = (String)objList.get(ClientProtocolID.ERR_MSG);
-			String strErrCode = (String)objList.get(ClientProtocolID.ERR_CODE);
-			String strDxExCode = (String)objList.get(ClientProtocolID.DX_EX_CODE);
-			String strResultCode = (String)objList.get(ClientProtocolID.RESULT_CODE);
-			System.out.println("RESULT_CODE : " +  strResultCode);
-			System.out.println("ERR_CODE : " +  strErrCode);
-			System.out.println("ERR_MSG : " +  strErrMsg);
-				
+
+			String strErrMsg = (String) objList.get(ClientProtocolID.ERR_MSG);
+			String strErrCode = (String) objList.get(ClientProtocolID.ERR_CODE);
+			String strDxExCode = (String) objList.get(ClientProtocolID.DX_EX_CODE);
+			String strResultCode = (String) objList.get(ClientProtocolID.RESULT_CODE);
+			System.out.println("RESULT_CODE : " + strResultCode);
+			System.out.println("ERR_CODE : " + strErrCode);
+			System.out.println("ERR_MSG : " + strErrMsg);
+
 			CA.close();
-		} catch(Exception e) {
+		} catch (Exception e) {
 			e.printStackTrace();
 		}
 	}
-	
-	//14.kafka connect 조회(kafakConnect_select)
-	public JSONObject kafakConnect_select(JSONObject serverObj,String strName) {
-		
+
+	// slot 삭제
+	public void slot_delete(String IP, int PORT, String strExecTxt) {
+		try {
+
+			JSONObject jObj = new JSONObject();
+			jObj.put(ClientProtocolID.DX_EX_CODE, ClientTranCodeType.DxT013);
+			jObj.put(ClientProtocolID.TRF_TRG_ID, "12");
+			jObj.put(ClientProtocolID.COMMAND_CODE, ClientProtocolID.SLOT);
+			jObj.put(ClientProtocolID.EXEC_TXT, strExecTxt);
+
+			JSONObject objList;
+
+			ClientAdapter CA = new ClientAdapter(IP, PORT);
+			CA.open();
+
+			objList = CA.dxT013(ClientTranCodeType.DxT013, jObj);
+
+			String strErrMsg = (String) objList.get(ClientProtocolID.ERR_MSG);
+			String strErrCode = (String) objList.get(ClientProtocolID.ERR_CODE);
+			String strDxExCode = (String) objList.get(ClientProtocolID.DX_EX_CODE);
+			String strResultCode = (String) objList.get(ClientProtocolID.RESULT_CODE);
+			System.out.println("RESULT_CODE : " + strResultCode);
+			System.out.println("ERR_CODE : " + strErrCode);
+			System.out.println("ERR_MSG : " + strErrMsg);
+
+			CA.close();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+
+	// 14.kafka connect 조회(kafakConnect_select)
+	public JSONObject kafakConnect_select(JSONObject serverObj, String strName) {
+
 		JSONArray jsonArray = new JSONArray(); // 객체를 담기위해 JSONArray 선언.
 		JSONObject result = new JSONObject();
-		
+
 		try {
-					
+
 			JSONObject connectorInfoObj = new JSONObject();
-			
+
 			connectorInfoObj.put(ClientProtocolID.CONNECTOR_NAME, strName);
-			
+
 			JSONObject jObj = new JSONObject();
 			jObj.put(ClientProtocolID.DX_EX_CODE, ClientTranCodeType.DxT014);
 			jObj.put(ClientProtocolID.COMMAND_CODE, ClientProtocolID.COMMAND_CODE_R);
 			jObj.put(ClientProtocolID.SERVER_INFO, serverObj);
 			jObj.put(ClientProtocolID.CONNECTOR_INFO, connectorInfoObj);
-			
-			
+
 			JSONObject objList;
-			
+
 			ClientAdapter CA = new ClientAdapter(Ip, port);
-			CA.open(); 
-				
+			CA.open();
+
 			objList = CA.dxT014(ClientTranCodeType.DxT014, jObj);
-			
-			String strErrMsg = (String)objList.get(ClientProtocolID.ERR_MSG);
-			String strErrCode = (String)objList.get(ClientProtocolID.ERR_CODE);
-			String strDxExCode = (String)objList.get(ClientProtocolID.DX_EX_CODE);
-			String strResultCode = (String)objList.get(ClientProtocolID.RESULT_CODE);
-			System.out.println("RESULT_CODE : " +  strResultCode);
-			System.out.println("ERR_CODE : " +  strErrCode);
-			System.out.println("ERR_MSG : " +  strErrMsg);
-			
-			List<Object> selectDBList =(ArrayList<Object>) objList.get(ClientProtocolID.RESULT_DATA);
-			
+
+			String strErrMsg = (String) objList.get(ClientProtocolID.ERR_MSG);
+			String strErrCode = (String) objList.get(ClientProtocolID.ERR_CODE);
+			String strDxExCode = (String) objList.get(ClientProtocolID.DX_EX_CODE);
+			String strResultCode = (String) objList.get(ClientProtocolID.RESULT_CODE);
+			System.out.println("RESULT_CODE : " + strResultCode);
+			System.out.println("ERR_CODE : " + strErrCode);
+			System.out.println("ERR_MSG : " + strErrMsg);
+
+			List<Object> selectDBList = (ArrayList<Object>) objList.get(ClientProtocolID.RESULT_DATA);
+
 			System.out.println("strDxExCode : " + " " + strDxExCode);
-			
-			if(selectDBList != null){
-				if(selectDBList.size() > 0) {
-					for(int i=0; i<selectDBList.size(); i++) {
+
+			if (selectDBList != null) {
+				if (selectDBList.size() > 0) {
+					for (int i = 0; i < selectDBList.size(); i++) {
 						JSONObject jsonObj = new JSONObject();
-						
+
 						Object obj = selectDBList.get(i);
-						
+
 						HashMap hp = (HashMap) obj;
 						String name = (String) hp.get("name");
 						String hdfs_url = (String) hp.get("hdfs.url");
-						
-						System.out.println(i + " " + hp );
-						System.out.println(i + " name : " + name );
-						System.out.println(i + " hdfs_url : " + hdfs_url );
-						
+
+						System.out.println(i + " " + hp);
+						System.out.println(i + " name : " + name);
+						System.out.println(i + " hdfs_url : " + hdfs_url);
+
 						jsonObj.put("hp", hp);
 						jsonObj.put("name", name);
 						jsonObj.put("hdfs_url", hdfs_url);
-						
+
 						jsonArray.add(jsonObj);
-		
+
 					}
 					result.put("data", jsonArray);
 				}
-			}			
+			}
 			CA.close();
-		} catch(Exception e) {
+		} catch (Exception e) {
 			e.printStackTrace();
 		}
 		return result;
 	}
-	
-	
-	//14.kafka connect 등록(kafakConnect_create)
-	public Map<String, Object> kafakConnect_create(JSONObject serverObj,JSONObject param) {
+
+	// 14.kafka connect 등록(kafakConnect_create)
+	public Map<String, Object> kafakConnect_create(JSONObject serverObj, JSONObject param) {
 		Map<String, Object> result = new HashMap<String, Object>();
 		try {
 
@@ -718,7 +736,7 @@ public class ClientInfoCmmn {
 			String strRotate_interval_ms = (String) param.get("strRotate_interval_ms");
 
 			JSONObject connectorInfoObj = new JSONObject();
-			
+
 			connectorInfoObj.put(ClientProtocolID.CONNECTOR_NAME, strName);
 			connectorInfoObj.put(ClientProtocolID.CONNECTOR_CLASS, strConnector_class);
 			connectorInfoObj.put(ClientProtocolID.TASK_MAX, strTasks_max);
@@ -728,46 +746,45 @@ public class ClientInfoCmmn {
 			connectorInfoObj.put(ClientProtocolID.HADOOP_HOOM, strHadoop_home);
 			connectorInfoObj.put(ClientProtocolID.FLUSH_SIZE, strFlush_size);
 			connectorInfoObj.put(ClientProtocolID.ROTATE_INTERVAL_MS, strRotate_interval_ms);
-			
-			
+
 			JSONObject jObj = new JSONObject();
 			jObj.put(ClientProtocolID.DX_EX_CODE, ClientTranCodeType.DxT014);
 			jObj.put(ClientProtocolID.COMMAND_CODE, ClientProtocolID.COMMAND_CODE_C);
 			jObj.put(ClientProtocolID.SERVER_INFO, serverObj);
 			jObj.put(ClientProtocolID.CONNECTOR_INFO, connectorInfoObj);
-					
+
 			JSONObject objList;
-			
+
 			ClientAdapter CA = new ClientAdapter(Ip, port);
-			CA.open(); 
-				
+			CA.open();
+
 			objList = CA.dxT014(ClientTranCodeType.DxT014, jObj);
-			
-			String strErrMsg = (String)objList.get(ClientProtocolID.ERR_MSG);
-			String strErrCode = (String)objList.get(ClientProtocolID.ERR_CODE);
-			String strDxExCode = (String)objList.get(ClientProtocolID.DX_EX_CODE);
-			String strResultCode = (String)objList.get(ClientProtocolID.RESULT_CODE);
-			System.out.println("RESULT_CODE : " +  strResultCode);
-			System.out.println("ERR_CODE : " +  strErrCode);
-			System.out.println("ERR_MSG : " +  strErrMsg);
-				
+
+			String strErrMsg = (String) objList.get(ClientProtocolID.ERR_MSG);
+			String strErrCode = (String) objList.get(ClientProtocolID.ERR_CODE);
+			String strDxExCode = (String) objList.get(ClientProtocolID.DX_EX_CODE);
+			String strResultCode = (String) objList.get(ClientProtocolID.RESULT_CODE);
+			System.out.println("RESULT_CODE : " + strResultCode);
+			System.out.println("ERR_CODE : " + strErrCode);
+			System.out.println("ERR_MSG : " + strErrMsg);
+
 			CA.close();
-			
+
 			result.put("strResultCode", strResultCode);
 			return result;
-		} catch(Exception e) {
+		} catch (Exception e) {
 			e.printStackTrace();
 		}
 		return result;
 	}
-	
-	//14.kafka connect 수정(kafakConnect_update)
-	public Map<String, Object> kafakConnect_update(JSONObject serverObj,JSONObject param) {
+
+	// 14.kafka connect 수정(kafakConnect_update)
+	public Map<String, Object> kafakConnect_update(JSONObject serverObj, JSONObject param) {
 		Map<String, Object> result = new HashMap<String, Object>();
 		try {
-	
+
 			String strName = (String) param.get("strName");
-	
+
 			String strConnector_class = (String) param.get("strConnector_class");
 			String strTasks_max = (String) param.get("strTasks_max");
 			String strTopics = (String) param.get("strTopics");
@@ -777,9 +794,8 @@ public class ClientInfoCmmn {
 			String strFlush_size = (String) param.get("strFlush_size");
 			String strRotate_interval_ms = (String) param.get("strRotate_interval_ms");
 
-			
 			JSONObject connectorInfoObj = new JSONObject();
-			
+
 			connectorInfoObj.put(ClientProtocolID.CONNECTOR_NAME, strName);
 			connectorInfoObj.put(ClientProtocolID.CONNECTOR_CLASS, strConnector_class);
 			connectorInfoObj.put(ClientProtocolID.TASK_MAX, strTasks_max);
@@ -789,116 +805,212 @@ public class ClientInfoCmmn {
 			connectorInfoObj.put(ClientProtocolID.HADOOP_HOOM, strHadoop_home);
 			connectorInfoObj.put(ClientProtocolID.FLUSH_SIZE, strFlush_size);
 			connectorInfoObj.put(ClientProtocolID.ROTATE_INTERVAL_MS, strRotate_interval_ms);
-			
-			
+
 			JSONObject jObj = new JSONObject();
 			jObj.put(ClientProtocolID.DX_EX_CODE, ClientTranCodeType.DxT014);
 			jObj.put(ClientProtocolID.COMMAND_CODE, ClientProtocolID.COMMAND_CODE_U);
 			jObj.put(ClientProtocolID.SERVER_INFO, serverObj);
 			jObj.put(ClientProtocolID.CONNECTOR_INFO, connectorInfoObj);
-			
-			
+
 			JSONObject objList;
-			
+
 			ClientAdapter CA = new ClientAdapter(Ip, port);
-			CA.open(); 
-				
+			CA.open();
+
 			objList = CA.dxT014(ClientTranCodeType.DxT014, jObj);
-			
-			String strErrMsg = (String)objList.get(ClientProtocolID.ERR_MSG);
-			String strErrCode = (String)objList.get(ClientProtocolID.ERR_CODE);
-			String strDxExCode = (String)objList.get(ClientProtocolID.DX_EX_CODE);
-			String strResultCode = (String)objList.get(ClientProtocolID.RESULT_CODE);
-			System.out.println("RESULT_CODE : " +  strResultCode);
-			System.out.println("ERR_CODE : " +  strErrCode);
-			System.out.println("ERR_MSG : " +  strErrMsg);
-			
+
+			String strErrMsg = (String) objList.get(ClientProtocolID.ERR_MSG);
+			String strErrCode = (String) objList.get(ClientProtocolID.ERR_CODE);
+			String strDxExCode = (String) objList.get(ClientProtocolID.DX_EX_CODE);
+			String strResultCode = (String) objList.get(ClientProtocolID.RESULT_CODE);
+			System.out.println("RESULT_CODE : " + strResultCode);
+			System.out.println("ERR_CODE : " + strErrCode);
+			System.out.println("ERR_MSG : " + strErrMsg);
+
 			CA.close();
-			
+
 			result.put("strResultCode", strResultCode);
 			return result;
-		} catch(Exception e) {
+		} catch (Exception e) {
 			e.printStackTrace();
 		}
 		return result;
 	}
-	
-	
-	//14.kafka connect 삭제(kafakConnect_delete)
-	public Map<String, Object> kafakConnect_delete(JSONObject serverObj,String strName) {
+
+	// 14.kafka connect 삭제(kafakConnect_delete)
+	public Map<String, Object> kafakConnect_delete(JSONObject serverObj, String strName) {
 		Map<String, Object> result = new HashMap<String, Object>();
 		try {
 			JSONObject connectorInfoObj = new JSONObject();
-			
-			connectorInfoObj.put(ClientProtocolID.CONNECTOR_NAME, strName);		
-			
+
+			connectorInfoObj.put(ClientProtocolID.CONNECTOR_NAME, strName);
+
 			JSONObject jObj = new JSONObject();
 			jObj.put(ClientProtocolID.DX_EX_CODE, ClientTranCodeType.DxT014);
 			jObj.put(ClientProtocolID.COMMAND_CODE, ClientProtocolID.COMMAND_CODE_D);
 			jObj.put(ClientProtocolID.SERVER_INFO, serverObj);
 			jObj.put(ClientProtocolID.CONNECTOR_INFO, connectorInfoObj);
-					
+
 			JSONObject objList;
-			
+
 			ClientAdapter CA = new ClientAdapter(Ip, port);
-			CA.open(); 
-				
+			CA.open();
+
 			objList = CA.dxT014(ClientTranCodeType.DxT014, jObj);
-			
-			String strErrMsg = (String)objList.get(ClientProtocolID.ERR_MSG);
-			String strErrCode = (String)objList.get(ClientProtocolID.ERR_CODE);
-			String strDxExCode = (String)objList.get(ClientProtocolID.DX_EX_CODE);
-			String strResultCode = (String)objList.get(ClientProtocolID.RESULT_CODE);
-			System.out.println("RESULT_CODE : " +  strResultCode);
-			System.out.println("ERR_CODE : " +  strErrCode);
-			System.out.println("ERR_MSG : " +  strErrMsg);
-				
+
+			String strErrMsg = (String) objList.get(ClientProtocolID.ERR_MSG);
+			String strErrCode = (String) objList.get(ClientProtocolID.ERR_CODE);
+			String strDxExCode = (String) objList.get(ClientProtocolID.DX_EX_CODE);
+			String strResultCode = (String) objList.get(ClientProtocolID.RESULT_CODE);
+			System.out.println("RESULT_CODE : " + strResultCode);
+			System.out.println("ERR_CODE : " + strErrCode);
+			System.out.println("ERR_MSG : " + strErrMsg);
+
 			CA.close();
-			
+
 			result.put("strResultCode", strResultCode);
 			return result;
-		} catch(Exception e) {
+		} catch (Exception e) {
 			e.printStackTrace();
 		}
 		return result;
 	}
-	
-	//16.exist directory check
-		public Map<String, Object> directory_exist(JSONObject serverObj,String folderPath) {
-			Map<String, Object> result = new HashMap<String, Object>();
-			try {
-				JSONObject connectorInfoObj = new JSONObject();
-				
-				JSONObject jObj = new JSONObject();
-				jObj.put(ClientProtocolID.DX_EX_CODE, ClientTranCodeType.DxT016);
-				jObj.put(ClientProtocolID.SERVER_INFO, serverObj);
-				jObj.put(ClientProtocolID.FILE_DIRECTORY, folderPath);
-						
-				JSONObject objList;
-				
-				ClientAdapter CA = new ClientAdapter(Ip, port);
-				CA.open(); 
-				objList = CA.dxT016(jObj);
-				
-				String strErrMsg = (String)objList.get(ClientProtocolID.ERR_MSG);
-				String strErrCode = (String)objList.get(ClientProtocolID.ERR_CODE);
-				String strDxExCode = (String)objList.get(ClientProtocolID.DX_EX_CODE);
-				String strResultCode = (String)objList.get(ClientProtocolID.RESULT_CODE);
-				String strResultData = (String)objList.get(ClientProtocolID.RESULT_DATA);
-				System.out.println("RESULT_CODE : " +  strResultCode);
-				System.out.println("ERR_CODE : " +  strErrCode);
-				System.out.println("ERR_MSG : " +  strErrMsg);
-				System.out.println("RESULT_DATA : " +  strResultData);
 
-				CA.close();
-				
-				result.put("result", objList);
-				return result;
-			} catch(Exception e) {
-				e.printStackTrace();
-			}
+	// 16.exist directory check
+	public Map<String, Object> directory_exist(JSONObject serverObj, String folderPath) {
+		Map<String, Object> result = new HashMap<String, Object>();
+		try {
+			JSONObject connectorInfoObj = new JSONObject();
+
+			JSONObject jObj = new JSONObject();
+			jObj.put(ClientProtocolID.DX_EX_CODE, ClientTranCodeType.DxT016);
+			jObj.put(ClientProtocolID.SERVER_INFO, serverObj);
+			jObj.put(ClientProtocolID.FILE_DIRECTORY, folderPath);
+
+			JSONObject objList;
+
+			ClientAdapter CA = new ClientAdapter(Ip, port);
+			CA.open();
+			objList = CA.dxT016(jObj);
+
+			String strErrMsg = (String) objList.get(ClientProtocolID.ERR_MSG);
+			String strErrCode = (String) objList.get(ClientProtocolID.ERR_CODE);
+			String strDxExCode = (String) objList.get(ClientProtocolID.DX_EX_CODE);
+			String strResultCode = (String) objList.get(ClientProtocolID.RESULT_CODE);
+			String strResultData = (String) objList.get(ClientProtocolID.RESULT_DATA);
+			System.out.println("RESULT_CODE : " + strResultCode);
+			System.out.println("ERR_CODE : " + strErrCode);
+			System.out.println("ERR_MSG : " + strErrMsg);
+			System.out.println("RESULT_DATA : " + strResultData);
+
+			CA.close();
+
+			result.put("result", objList);
 			return result;
+		} catch (Exception e) {
+			e.printStackTrace();
 		}
-		
-		
+		return result;
+	}
+
+	// 17.tbl_mapps insert
+	public void tblmapps_insert(String IP, int PORT, JSONObject serverObj,
+			ArrayList<HashMap<String, String>> arrTableInfo) {
+		try {
+			JSONObject jObj = new JSONObject();
+
+			jObj.put(ClientProtocolID.DX_EX_CODE, ClientTranCodeType.DxT017);
+			jObj.put(ClientProtocolID.COMMAND_CODE, ClientProtocolID.COMMAND_CODE_C);
+			jObj.put(ClientProtocolID.SERVER_INFO, serverObj);
+			jObj.put(ClientProtocolID.TABLE_INFO, arrTableInfo);
+
+			JSONObject objList;
+
+			ClientAdapter CA = new ClientAdapter(IP, PORT);
+			CA.open();
+
+			objList = CA.dxT017(jObj);
+
+			String strErrMsg = (String) objList.get(ClientProtocolID.ERR_MSG);
+			String strErrCode = (String) objList.get(ClientProtocolID.ERR_CODE);
+			String strDxExCode = (String) objList.get(ClientProtocolID.DX_EX_CODE);
+			String strResultCode = (String) objList.get(ClientProtocolID.RESULT_CODE);
+			System.out.println("RESULT_CODE : " + strResultCode);
+			System.out.println("ERR_CODE : " + strErrCode);
+			System.out.println("ERR_MSG : " + strErrMsg);
+
+			CA.close();
+
+			// CA.close();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+
+	// kafka_con_config insert
+	public void kafkaConConfig_insert(String IP, int PORT, JSONObject serverObj, JSONObject tableInfoObj) {
+		try {
+
+			JSONObject jObj = new JSONObject();
+
+			jObj.put(ClientProtocolID.DX_EX_CODE, ClientTranCodeType.DxT018);
+			jObj.put(ClientProtocolID.COMMAND_CODE, ClientProtocolID.COMMAND_CODE_C);
+			jObj.put(ClientProtocolID.SERVER_INFO, serverObj);
+			jObj.put(ClientProtocolID.TABLE_INFO, tableInfoObj);
+
+			JSONObject objList;
+
+			ClientAdapter CA = new ClientAdapter(IP, PORT);
+			CA.open();
+
+			objList = CA.dxT018(jObj);
+			CA.close();
+
+			String strErrMsg = (String) objList.get(ClientProtocolID.ERR_MSG);
+			String strErrCode = (String) objList.get(ClientProtocolID.ERR_CODE);
+			String strDxExCode = (String) objList.get(ClientProtocolID.DX_EX_CODE);
+			String strResultCode = (String) objList.get(ClientProtocolID.RESULT_CODE);
+			System.out.println("RESULT_CODE : " + strResultCode);
+			System.out.println("ERR_CODE : " + strErrCode);
+			System.out.println("ERR_MSG : " + strErrMsg);
+
+			// CA.close();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+
+	// kafka_con_config delete
+	public void kafkaConConfig_delete(String IP, int PORT, JSONObject serverObj, JSONObject tableInfoObj) {
+		try {
+			JSONObject jObj = new JSONObject();
+
+			jObj.put(ClientProtocolID.DX_EX_CODE, ClientTranCodeType.DxT018);
+			jObj.put(ClientProtocolID.COMMAND_CODE, ClientProtocolID.COMMAND_CODE_D);
+			jObj.put(ClientProtocolID.SERVER_INFO, serverObj);
+			jObj.put(ClientProtocolID.TABLE_INFO, tableInfoObj);
+
+			JSONObject objList;
+
+			ClientAdapter CA = new ClientAdapter(IP, PORT);
+			CA.open();
+
+			objList = CA.dxT018(jObj);
+
+			String strErrMsg = (String) objList.get(ClientProtocolID.ERR_MSG);
+			String strErrCode = (String) objList.get(ClientProtocolID.ERR_CODE);
+			String strDxExCode = (String) objList.get(ClientProtocolID.DX_EX_CODE);
+			String strResultCode = (String) objList.get(ClientProtocolID.RESULT_CODE);
+			System.out.println("RESULT_CODE : " + strResultCode);
+			System.out.println("ERR_CODE : " + strErrCode);
+			System.out.println("ERR_MSG : " + strErrMsg);
+
+			CA.close();
+
+			// CA.close();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+
 }

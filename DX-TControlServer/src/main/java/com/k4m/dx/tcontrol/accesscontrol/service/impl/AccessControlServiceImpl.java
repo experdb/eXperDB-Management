@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 
 import com.k4m.dx.tcontrol.accesscontrol.service.AccessControlService;
 import com.k4m.dx.tcontrol.accesscontrol.service.AccessControlVO;
+import com.k4m.dx.tcontrol.accesscontrol.service.DbAutVO;
 import com.k4m.dx.tcontrol.accesscontrol.service.DbIDbServerVO;
 
 @Service("AccessControlServiceImpl")
@@ -19,6 +20,11 @@ public class AccessControlServiceImpl implements AccessControlService {
 	@Override
 	public List<DbIDbServerVO> selectDatabaseList(int db_svr_id) throws Exception {
 		return accessControlDAO.selectDatabaseList(db_svr_id);
+	}
+
+	@Override
+	public List<DbIDbServerVO> selectDatabaseListAut(DbAutVO dbAutVO) throws Exception {
+		return accessControlDAO.selectDatabaseListAut(dbAutVO);
 	}
 
 	@Override

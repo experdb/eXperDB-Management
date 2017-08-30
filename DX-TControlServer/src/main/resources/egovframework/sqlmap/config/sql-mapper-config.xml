@@ -20,6 +20,7 @@
 		<typeAlias alias="connectorVO" type="com.k4m.dx.tcontrol.functions.transfer.service.ConnectorVO"/>
 		<typeAlias alias="transferVO" type="com.k4m.dx.tcontrol.functions.transfer.service.TransferVO"/>
 		<typeAlias alias="dbidbserverVO" type="com.k4m.dx.tcontrol.accesscontrol.service.DbIDbServerVO"/>
+		<typeAlias alias="dbAutVO" type="com.k4m.dx.tcontrol.accesscontrol.service.DbAutVO"/>
 		<typeAlias alias="accessControlVO" type="com.k4m.dx.tcontrol.accesscontrol.service.AccessControlVO"/>
 		<typeAlias alias="agentInfoVO" type="com.k4m.dx.tcontrol.common.service.AgentInfoVO" />
 		<typeAlias alias="workObjVO" type="com.k4m.dx.tcontrol.backup.service.WorkObjVO"/>		
@@ -35,7 +36,7 @@
 		<typeAlias alias="agentMonitoringVO" type="com.k4m.dx.tcontrol.admin.agentmonitoring.service.AgentMonitoringVO" />
 		<typeAlias alias="dashboardVO" type="com.k4m.dx.tcontrol.dashboard.service.DashboardVO" />
 		<typeAlias alias="bottlewaterVO" type="com.k4m.dx.tcontrol.tree.transfer.service.BottlewaterVO" /> 
-		
+		<typeAlias alias="tblKafkaConfigVO" type="com.k4m.dx.tcontrol.tree.transfer.service.TblKafkaConfigVO" /> 
     </typeAliases>
     
  	<mappers>

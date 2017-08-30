@@ -125,7 +125,7 @@
 		WHERE TMP.DB_NM LIKE #{db_nm}
 	</select>
 	
-	<select id="selectServerDbList" parameterType="string" resultType="dbidbserverVO">
+	<select id="selectServerDbList" parameterType="dbAutVO" resultType="dbidbserverVO">
 		/**
 		* Query ID : selectServerDbList
 		* Description : 데이터베이스 조회
@@ -134,7 +134,8 @@
 		SELECT 
 		  S.DB_SVR_ID
 		, S.DB_SVR_NM 
-		, I.DB_ID,I.DB_NM
+		, I.DB_ID
+		, I.DB_NM
 		FROM 
 		  T_DBSVR_I S
 		, T_DB_I I
@@ -142,6 +143,7 @@
 		WHERE S.DB_SVR_ID=I.DB_SVR_ID
 		AND I.DB_ID = A.DB_ID
 		AND S.DB_SVR_NM = #{db_svr_nm}
+		AND A.USR_ID = #{usr_id}
 		AND I.USEYN = 'Y'
 		AND A.AUT_YN = 'Y'
 	</select>
@@ -284,20 +286,6 @@
 	    WHERE TRF_TRG_MPP_ID =#{trf_trg_mpp_id}
     </delete>
     
-    <update id="updateBottleWaterBwpid" parameterType="transferDetailVO">
-        /**
-	 	*  Query ID : updateBottleWaterBwpid
-	 	* Description : Bottlewater bwpid 업데이트
-	 	* Author : 김주영
-	 	**/
-		UPDATE T_TRFTRGCNG_I 
-		SET
-		  BW_PID=#{bw_pid}
-		, LST_MDFR_ID=#{lst_mdfr_id}
-		, LST_MDF_DTM= clock_timestamp()
-		WHERE TRF_TRG_ID=#{trf_trg_id}
-    </update>
-    
     <select id="selectBottlewaterinfo" parameterType="int" resultType="bottlewaterVO">
         /**
 	 	*  Query ID : selectBottlewaterinfo
@@ -327,5 +315,23 @@
 		AND A.DB_ID=I.DB_ID
 		AND I.USEYN='Y'
     </select>
-    
+ 
+     <select id="selectTblKafkaConfigInfo" parameterType="int" resultType="tblKafkaConfigVO">
+        /**
+	 	*  Query ID : selectTblKafkaConfigInfo
+	 	* Description : tbl kafaconfig 정보
+	 	* Author : 김주영
+	 	**/
+		SELECT 
+		  L.SCM_NM
+		, TB_ENGL_NM
+		, I.TRF_TRG_CNN_NM
+		, C.CNR_IPADR
+		, C.CNR_PORTNO
+		FROM T_TRFMPPTB_L L, T_CNR_I C,T_TRFTRGMPP_R R,T_TRFTRGCNG_I I
+		WHERE L.TRF_TRG_MPP_ID=(SELECT TRF_TRG_MPP_ID FROM T_TRFTRGMPP_R R,T_TRFTRGCNG_I I WHERE R.TRF_TRG_ID = I.TRF_TRG_ID AND I.TRF_TRG_ID = #{trf_trg_id})
+		AND C.CNR_ID = I.CNR_ID
+		AND I.TRF_TRG_ID = R.TRF_TRG_ID
+		AND R.TRF_TRG_MPP_ID = L.TRF_TRG_MPP_ID
+    </select>   
 </mapper>

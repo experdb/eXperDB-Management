@@ -10,6 +10,28 @@
 	 	* Author : 김주영
 	 	**/ 	
 		SELECT 	
+			  D.db_id
+			, D.db_nm
+			, S.db_svr_id
+			, S.db_svr_nm
+			, S.ipadr
+			, S.portno
+			, S.dft_db_nm
+			, S.svr_spr_usr_id
+			, S.svr_spr_scm_pwd
+		FROM T_DB_I D, T_DBSVR_I S
+		WHERE D.db_svr_id=S.db_svr_id
+		AND S.db_svr_id=#{db_svr_id}	  	
+		AND D.USEYN = 'Y'
+    </select>
+    
+    <select id="selectDatabaseListAut" parameterType="dbAutVO" resultType="dbidbserverVO">
+		/**
+	 	*  Query ID : selectDatabaseListAut
+	 	* Description : 권한 있는 DB 조회
+	 	* Author : 김주영
+	 	**/ 	
+		SELECT 	
 			  D.DB_ID
 			, D.DB_NM
 			, S.DB_SVR_ID
@@ -22,11 +44,11 @@
 		FROM T_DB_I D, T_DBSVR_I S, T_USRDBAUT_I A
 		WHERE D.DB_SVR_ID=S.DB_SVR_ID
 		AND D.DB_ID = A.DB_ID
-		AND S.DB_SVR_ID=#{db_svr_id}	  	
+		AND S.DB_SVR_ID=#{db_svr_id}
+		AND A.usr_id=#{usr_id}	  	
 		AND D.USEYN = 'Y'
 		AND A.AUT_YN = 'Y'
     </select>
-    
     <select id="selectServerDb" resultType="dbidbserverVO" parameterType="dbidbserverVO">
 		/**
 	 	*  Query ID : selectServerDb
