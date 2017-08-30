@@ -109,9 +109,11 @@ public class ScheduleUtl {
 		int scd_id = scheduleVO.getScd_id(); //스케줄ID
 		String exe_perd_cd =scheduleVO.getExe_perd_cd(); //실행주기코드
 		String exe_dt =  scheduleVO.getExe_dt(); //실행일시
-		String exe_h =  scheduleVO.getExe_hms().substring(0, 2);
+		String exe_month = scheduleVO.getExe_month();
+		String exe_day = scheduleVO.getExe_day();
+		String exe_s =  scheduleVO.getExe_hms().substring(0, 2);
 		String exe_m = scheduleVO.getExe_hms().substring(2, 4);
-		String exe_s = scheduleVO.getExe_hms().substring(4, 6);
+		String exe_h = scheduleVO.getExe_hms().substring(4, 6);
 		String exe_hms = scheduleVO.getExe_hms();
 		
 		
@@ -131,11 +133,11 @@ public class ScheduleUtl {
 		System.out.println("실행일시 : " + exe_dt);
 		System.out.println("실행시분초 : " + exe_hms);
 		System.out.println("=============================");
-		System.out.println(sce.getCronExpression(exe_perd_cd, exe_dt, exe_h, exe_m, exe_s));
+		System.out.println(sce.getCronExpression(exe_perd_cd, exe_dt, exe_h, exe_m, exe_s, exe_month, exe_day));
 		
 		CronTrigger trigger = newTrigger()
 		    .withIdentity("scd_id", String.valueOf(scd_id))
-		    .withSchedule(cronSchedule(sce.getCronExpression(exe_perd_cd, exe_dt, exe_h, exe_m, exe_s)))
+		    .withSchedule(cronSchedule(sce.getCronExpression(exe_perd_cd, exe_dt, exe_h, exe_m, exe_s, exe_month, exe_day)))
 		    .build();	
 		try
 		{

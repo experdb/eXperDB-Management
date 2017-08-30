@@ -406,7 +406,7 @@ public class ScheduleController {
 					mp.put("exe_perd_cd", result.get(i).get("exe_perd_cd"));			
 					mp.put("exe_hms", result.get(i).get("exe_hms"));
 					mp.put("prev_exe_dtm", result.get(i).get("prev_exe_dtm"));
-					mp.put("nxt_exe_dtm", result.get(i).get("prev_exe_dtm"));
+					mp.put("nxt_exe_dtm", result.get(i).get("nxt_exe_dtm"));
 					mp.put("frst_regr_id", result.get(i).get("frst_regr_id"));
 					mp.put("frst_reg_dtm", result.get(i).get("frst_reg_dtm"));
 					mp.put("lst_mdfr_id", result.get(i).get("lst_mdfr_id"));
@@ -504,6 +504,12 @@ public class ScheduleController {
 				scheduleVO.setExe_perd_cd(rows.get("exe_perd_cd").toString());
 				if(rows.get("exe_dt") != null){
 					scheduleVO.setExe_dt(rows.get("exe_dt").toString());
+				}
+				if(rows.get("exe_month") != null){
+					scheduleVO.setExe_month(rows.get("exe_month").toString());
+				}
+				if(rows.get("exe_day") != null){
+					scheduleVO.setExe_day(rows.get("exe_day").toString());
 				}
 				scheduleVO.setExe_hms(rows.get("exe_hms").toString());
 			

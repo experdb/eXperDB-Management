@@ -8,7 +8,7 @@ public class ScheduleCronExpression {
 	 * 실행일정을 CRON EXPRESSION 형태로 출력한다
 	 * @return String
 	 */
-	public String getCronExpression(String exe_perd_cd, String exe_dt, String exe_h, String exe_m, String exe_s)
+	public String getCronExpression(String exe_perd_cd, String exe_dt, String exe_h, String exe_m, String exe_s, String exe_month, String exe_day)
 	{
 		/*
 		 * 실행주기(exe_perd_cd)
@@ -67,28 +67,28 @@ public class ScheduleCronExpression {
 		}
 		else if ("TC001603".equals(exe_perd_cd))
 		{
-			exe_hms += " " + exe_dt.substring(6) + " * ?";
+			exe_hms += " " + exe_day + " * ?";
 		}
 		else if ("TC001604".equals(exe_perd_cd))
 		{
-			exe_hms += " " + exe_dt.substring(6) + " " + exe_dt.substring(4, 6) + " ?";
+			exe_hms += " " + exe_day+ " " + exe_month + " ?";
 		}
 		else if ("TC001605".equals(exe_perd_cd))
 		{
 			exe_hms += " " + exe_dt.substring(6) + " " + exe_dt.substring(4, 6) + " ? " + exe_dt.substring(0, 4);
 		}
 		
-		initStrExecutCycle(exe_perd_cd, exe_dt, exe_h, exe_m, exe_s);
+		initStrExecutCycle(exe_perd_cd, exe_dt, exe_h, exe_m, exe_s, exe_month, exe_day);
 		
 		return exe_hms;
 	}
 	
-	private void initStrExecutCycle(String exe_perd_cd, String exe_dt, String exe_h, String exe_m, String exe_s)
+	private void initStrExecutCycle(String exe_perd_cd, String exe_dt, String exe_h, String exe_m, String exe_s, String exe_month, String exe_day)
 	{
 	
 		String exe_hms = "";
-		
-		exe_hms = exe_h + "시 " + exe_m + "분 " + exe_s + "초";
+				
+		exe_hms = exe_s + "초" + exe_m + "분 " + exe_h + "시";
 		
 		/*
 		 * 실행주기(exe_perd_cd)
@@ -146,11 +146,11 @@ public class ScheduleCronExpression {
 		}
 		else if ("TC001603".equals(exe_perd_cd))
 		{
-			exe_hms = "매월 " + exe_dt.substring(6) + "일 " + exe_hms;
+			exe_hms = "매월 " + exe_day + "일 " + exe_hms;
 		}
 		else if ("TC001604".equals(exe_perd_cd))
 		{
-			exe_hms = "매년 " + exe_dt.substring(4, 6) + "월 " + exe_dt.substring(6) + "일 " + exe_hms;
+			exe_hms = "매년 " + exe_month + "월 " + exe_day + "일 " + exe_hms;
 		}
 		else if ("TC001605".equals(exe_perd_cd))
 		{

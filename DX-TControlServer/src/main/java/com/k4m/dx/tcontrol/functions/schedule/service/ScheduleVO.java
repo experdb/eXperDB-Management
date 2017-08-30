@@ -10,6 +10,8 @@ public class ScheduleVO {
 	private String scd_cndt;
 	private String exe_perd_cd;
 	private String exe_dt;
+	private String exe_month;
+	private String exe_day;
 	private String exe_h;
 	private String exe_m;
 	private String exe_s;
@@ -76,6 +78,22 @@ public class ScheduleVO {
 
 	public void setExe_dt(String exe_dt) {
 		this.exe_dt = exe_dt;
+	}
+
+	public String getExe_month() {
+		return exe_month;
+	}
+
+	public void setExe_month(String exe_month) {
+		this.exe_month = exe_month;
+	}
+
+	public String getExe_day() {
+		return exe_day;
+	}
+
+	public void setExe_day(String exe_day) {
+		this.exe_day = exe_day;
 	}
 
 	public String getExe_h() {

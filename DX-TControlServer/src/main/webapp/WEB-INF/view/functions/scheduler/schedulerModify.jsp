@@ -106,7 +106,46 @@ function fn_init(){
 }
 
 
+/* ********************************************************
+ * 월
+ ******************************************************** */
+function fn_makeMonth(){
+	var month = "";
+	var monthHtml ="";
+	
+	monthHtml += '<select class="select t7" name="exe_month" id="exe_month">';	
+	for(var i=1; i<=12; i++){
+		if(i >= 0 && i<10){
+			month = "0" + i;
+		}else{
+			month = i;
+		}
+		monthHtml += '<option value="'+month+'">'+month+'</option>';
+	}
+	monthHtml += '</select> 월';	
+	$( "#month" ).append(monthHtml);
+}
 
+
+/* ********************************************************
+ * 일
+ ******************************************************** */
+function fn_makeDay(){
+	var day = "";
+	var dayHtml ="";
+	
+	dayHtml += '<select class="select t7" name="exe_day" id="exe_day">';	
+	for(var i=1; i<=31; i++){
+		if(i >= 0 && i<10){
+			day = "0" + i;
+		}else{
+			day = i;
+		}
+		dayHtml += '<option value="'+day+'">'+day+'</option>';
+	}
+		dayHtml += '</select> 일';	
+	$( "#day" ).append(dayHtml);
+}
 
 
 /* ********************************************************
@@ -177,9 +216,13 @@ function fn_makeMin(){
 $(window.document).ready(function() {
 	fn_init();
 	
+	$("#day").hide();
+	$("#month").hide();
 	$("#weekDay").hide();
 	$("#calendar").hide();
-	
+
+	fn_makeMonth();
+	fn_makeDay();
 	fn_makeHour();
 	fn_makeMin();
 	fn_makeSec();
@@ -200,6 +243,8 @@ $(window.document).ready(function() {
 			document.getElementById('scd_exp').value= result[0].scd_exp;				
 			document.getElementById('exe_perd_cd').value= result[0].exe_perd_cd;
 			document.getElementById('datepicker1').value= result[0].exe_dt;
+			document.getElementById('exe_month').value= result[0].exe_month;
+			document.getElementById('exe_day').value= result[0].exe_day;
  			document.getElementById('exe_h').value= result[0].exe_hms.substring(4, 6);
 			document.getElementById('exe_m').value= result[0].exe_hms.substring(2, 4);
 			document.getElementById('exe_s').value= result[0].exe_hms.substring(0, 2);
@@ -207,7 +252,7 @@ $(window.document).ready(function() {
 		    for (var i = 0; i <result.length; i++) {
 		        rowList.push(result[i].wrk_id);   
 		  	}		
-		    fn_exe_pred(result[0].exe_dt); 
+		    fn_exe_pred(result[0].exe_dt, result[0].exe_month, result[0].exe_day); 
 		    fn_workAddCallback(JSON.stringify(rowList));
 		}
 	}); 
@@ -242,7 +287,7 @@ function fn_workDel(){
 /* ********************************************************
  * 실행주기 변경시 이벤트 호출
  ******************************************************** */
-function fn_exe_pred(week){
+function fn_exe_pred(week, month, day){
 	var exe_perd_cd = $("#exe_perd_cd").val();
 	
 	if(exe_perd_cd == "TC001602"){
@@ -258,7 +303,25 @@ function fn_exe_pred(week){
 		$("#weekDay").hide();
 	}	
 	
+	if(exe_perd_cd == "TC001603"){
+		document.getElementById('exe_day').value= day;
+		$("#day").show();
+	}else{
+		$("#day").hide();
+	}
+	
+	if(exe_perd_cd == "TC001604"){
+		document.getElementById('exe_month').value= month;
+		document.getElementById('exe_day').value= day;
+		$("#day").show();
+		$("#month").show();
+	}else{
+		$("#month").hide();
+	}
+	
+	
 	if(exe_perd_cd == "TC001605"){
+		
 		$("#calendar").show();
 	}else{
 		$("#calendar").hide();
@@ -352,6 +415,8 @@ function fn_updateSchedule(){
 				 scd_exp : $("#scd_exp").val(),
 				 exe_perd_cd : $("#exe_perd_cd").val(),
 				 exe_dt : exe_dt,
+				 exe_month : $("#exe_month").val(),
+				 exe_day : $("#exe_day").val(),
 				 exe_h : $("#exe_h").val(),
 				 exe_m : $("#exe_m").val(),
 				 exe_s	 : $("#exe_s").val(),			 
@@ -396,6 +461,8 @@ function fn_scheduleReStart(){
     row.scd_id= scd_id;
     row.exe_perd_cd =  $("#exe_perd_cd").val();
     row.exe_dt = exe_dt;
+    row.exe_month =  $("#exe_month").val();
+    row.exe_day =  $("#exe_day").val();
     row.exe_hms = $("#exe_s").val()+$("#exe_m").val()+$("#exe_h").val();
   
  	$.ajax({
@@ -489,6 +556,12 @@ function fn_scheduleReStart(){
 															<a href="#n" class="calendar_btn">달력열기</a>
 															<input type="text" class="calendar" id="datepicker1" name="exe_dt" title="스케줄시간설정" readonly />
 														</div>
+													</span>
+													<span>
+															<div id="month"></div>
+													</span>
+													<span>
+															<div id="day"></div>
 													</span>
 													<span>
 															<div id="hour"></div>

@@ -105,6 +105,8 @@
 			, SCD_CNDT
 			, EXE_PERD_CD
 			, EXE_DT
+			, EXE_MONTH
+			, EXE_DAY
 			, EXE_HMS
 			, PREV_EXE_DTM
 			, NXT_EXE_DTM
@@ -121,6 +123,8 @@
 			, 'TC001801'
 			, #{exe_perd_cd}
 			, #{exe_dt}
+			, #{exe_month}
+			, #{exe_day}
 			, #{exe_hms}
 			, #{prev_exe_dtm}
 			, #{nxt_exe_dtm}
@@ -179,6 +183,8 @@
             , SCD_EXP
 			, EXE_PERD_CD
 			, EXE_DT
+			, EXE_MONTH
+			, EXE_DAY
 			, EXE_HMS
 			, TO_CHAR(PREV_EXE_DTM,'YYYY-MM-DD HH24:MI:SS') AS PREV_EXE_DTM
 			, TO_CHAR(NXT_EXE_DTM,'YYYY-MM-DD HH24:MI:SS') AS NXT_EXE_DTM
@@ -210,6 +216,8 @@
             , SCD_EXP
 			, EXE_PERD_CD
 			, EXE_DT
+			, EXE_MONTH
+			, EXE_DAY
 			, EXE_HMS
 			, TO_CHAR(PREV_EXE_DTM,'YYYY-MM-DD HH24:MI:SS') AS PREV_EXE_DTM
 			, TO_CHAR(NXT_EXE_DTM,'YYYY-MM-DD HH24:MI:SS') AS NXT_EXE_DTM
@@ -395,6 +403,8 @@
 			, A.SCD_NM
             , A.SCD_EXP
 			, A.EXE_PERD_CD
+			, A.EXE_MONTH
+			, A.EXE_DAY
 			, A.EXE_DT
 			, A.EXE_HMS      
 			, TO_CHAR(A.PREV_EXE_DTM,'YYYY-MM-DD HH24:MI:SS') AS PREV_EXE_DTM
@@ -420,7 +430,9 @@
 			SCD_NM = #{scd_nm} 	
 			, SCD_EXP = #{scd_exp} 	
 			, EXE_PERD_CD = #{exe_perd_cd} 	
-			, EXE_DT = #{exe_dt} 	
+			, EXE_DT = #{exe_dt}
+			, EXE_MONTH = #{exe_month}
+			, EXE_DAY = #{exe_day}
 			, EXE_HMS = #{exe_hms} 	
 			, PREV_EXE_DTM = #{prev_exe_dtm} 	 
 			, NXT_EXE_DTM = #{nxt_exe_dtm} 	

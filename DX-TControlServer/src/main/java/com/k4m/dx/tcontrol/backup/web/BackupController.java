@@ -62,7 +62,7 @@ public class BackupController {
 	 * @throws Exception
 	 */
 	@RequestMapping(value = "/backup/workList.do")
-	public ModelAndView workList(@ModelAttribute("workVo") WorkVO workVO) {
+	public ModelAndView workList(@ModelAttribute("workVo") WorkVO workVO, HttpServletRequest request) {
 		
 		//유저 디비서버 권한 조회 (공통메소드호출),
 		CmmnUtils cu = new CmmnUtils();
@@ -75,6 +75,10 @@ public class BackupController {
 			mv.setViewName("error/autError");				
 		}else{	
 			try {
+				HttpSession session = request.getSession();
+				String usr_id = (String) session.getAttribute("usr_id");
+				workVO.setUsr_id(usr_id);
+				
 				mv.addObject("dbList",backupService.selectDbList(workVO));
 			} catch (Exception e1) {
 				// TODO Auto-generated catch block
@@ -134,7 +138,7 @@ public class BackupController {
 	 * @return ModelAndView
 	 */
 	@RequestMapping(value = "/backup/workLogList.do")
-	public ModelAndView rmanLogList(@ModelAttribute("workVo") WorkVO workVO) {
+	public ModelAndView rmanLogList(@ModelAttribute("workVo") WorkVO workVO, HttpServletRequest request) {
 		
 		//유저 디비서버 권한 조회 (공통메소드호출),
 		CmmnUtils cu = new CmmnUtils();
@@ -148,6 +152,10 @@ public class BackupController {
 		}else{	
 			// Get DB list
 			try {
+				HttpSession session = request.getSession();
+				String usr_id = (String) session.getAttribute("usr_id");
+				workVO.setUsr_id(usr_id);
+
 				mv.addObject("dbList",backupService.selectDbList(workVO));
 			} catch (Exception e1) {
 				// TODO Auto-generated catch block
@@ -245,6 +253,10 @@ public class BackupController {
 		
 		// Get DB List
 		try {
+			HttpSession session = request.getSession();
+			String usr_id = (String) session.getAttribute("usr_id");
+			workVO.setUsr_id(usr_id);
+			
 			mv.addObject("dbList", backupService.selectDbList(workVO));
 		} catch (Exception e1) {
 			// TODO Auto-generated catch block
@@ -437,6 +449,10 @@ public class BackupController {
 		
 		// Get DB List
 		try {
+			HttpSession session = request.getSession();
+			String usr_id = (String) session.getAttribute("usr_id");
+			workVO.setUsr_id(usr_id);
+			
 			mv.addObject("dbList", backupService.selectDbList(workVO));
 		} catch (Exception e1) {
 			// TODO Auto-generated catch block
