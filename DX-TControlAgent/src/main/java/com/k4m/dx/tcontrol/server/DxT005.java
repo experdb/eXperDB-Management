@@ -75,6 +75,7 @@ public class DxT005 extends SocketCtl{
 				String strBCK_OPT_CD = objJob.get(ProtocolID.BCK_OPT_CD).toString();
 				String strDB_ID = objJob.get(ProtocolID.DB_ID).toString();
 				String strBCK_FILE_PTH = objJob.get(ProtocolID.BCK_FILE_PTH).toString();
+				String strLOG_YN = objJob.get(ProtocolID.LOG_YN).toString();
 
 				int intSeq = service.selectQ_WRKEXE_G_01_SEQ();
 				
@@ -87,7 +88,9 @@ public class DxT005 extends SocketCtl{
 				vo.setDB_ID(Integer.parseInt(strDB_ID));
 				vo.setBCK_FILE_PTH(strBCK_FILE_PTH);
 				
-				service.insertT_WRKEXE_G(vo);
+				if(strLOG_YN.equals("Y")) {
+					service.insertT_WRKEXE_G(vo);
+				}
 				
 				String strCommand = objJob.get(ProtocolID.REQ_CMD).toString();
 
@@ -109,7 +112,10 @@ public class DxT005 extends SocketCtl{
 					endVO.setEXE_RSLT_CD(strResultCode);
 					endVO.setEXE_SN(intSeq);
 					
-					service.updateT_WRKEXE_G(endVO);
+					if(strLOG_YN.equals("Y")) {
+						service.updateT_WRKEXE_G(endVO);
+					}
+					
 					continue;
 				} else {
 					strResultCode = "TC001702";

@@ -145,7 +145,7 @@
 			, now()
 			, now()
 			, #{EXE_RSLT_CD}
-			, ''
+			, #{BCK_OPT_CD}
 			, 0
 			, 0
 			, #{DB_ID}

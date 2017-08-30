@@ -104,5 +104,6 @@ public class ProtocolID {
 	public static final String BCK_OPT_CD = "BCK_OPT_CD";
 	public static final String DB_ID = "DB_ID";
 	public static final String BCK_FILE_PTH = "BCK_FILE_PTH";
+	public static final String LOG_YN = "LOG_YN";
 	
 }

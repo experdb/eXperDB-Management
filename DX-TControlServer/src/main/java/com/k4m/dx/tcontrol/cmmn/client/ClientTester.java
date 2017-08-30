@@ -283,6 +283,7 @@ public class ClientTester {
 			objJob_01.put(ClientProtocolID.BCK_OPT_CD, "");
 			objJob_01.put(ClientProtocolID.DB_ID, "");
 			objJob_01.put(ClientProtocolID.BCK_FILE_PTH, "");
+			objJob_01.put(ClientProtocolID.LOG_YN, "Y");
 			
 			JSONObject objJob_02 = new JSONObject();
 			objJob_02.put(ClientProtocolID.SCD_ID, ""); //스캐쥴ID
@@ -293,6 +294,7 @@ public class ClientTester {
 			objJob_02.put(ClientProtocolID.BCK_OPT_CD, "");
 			objJob_02.put(ClientProtocolID.DB_ID, "");
 			objJob_02.put(ClientProtocolID.BCK_FILE_PTH, "");
+			objJob_02.put(ClientProtocolID.LOG_YN, "Y");
 			
 			JSONObject objJob_03 = new JSONObject();
 			objJob_03.put(ClientProtocolID.SCD_ID, ""); //스캐쥴ID
@@ -303,6 +305,7 @@ public class ClientTester {
 			objJob_03.put(ClientProtocolID.BCK_OPT_CD, "");
 			objJob_03.put(ClientProtocolID.DB_ID, "");
 			objJob_03.put(ClientProtocolID.BCK_FILE_PTH, "");
+			objJob_03.put(ClientProtocolID.LOG_YN, "Y");
 			
 			arrCmd.add(0, objJob_01);
 			arrCmd.add(1, objJob_02);
