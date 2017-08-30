@@ -35,7 +35,14 @@ public class WorkVO {
 	private String bck_pth;
 	private int acv_file_stgdt;
 	private int acv_file_mtncnt;
+	private String usr_id;
 
+	public String getUsr_id() {
+		return usr_id;
+	}
+	public void setUsr_id(String usr_id) {
+		this.usr_id = usr_id;
+	}
 	public String getBck_filenm() {
 		return bck_filenm;
 	}
