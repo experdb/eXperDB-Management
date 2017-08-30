@@ -105,5 +105,7 @@ public class ClientProtocolID {
 	public static final String DB_ID = "DB_ID";
 	public static final String BCK_FILE_PTH = "BCK_FILE_PTH";
 	public static final String LOG_YN = "LOG_YN";
+	
+	public static final String SLOT = "SLOT";
 
 }

@@ -925,6 +925,40 @@ public class ClientTester {
 		}
 	}
 	
+	private void dxT013_delete_slot(String Ip, int port) {
+		try {
+
+			String strExecTxt = "slotid";
+
+			JSONObject jObj = new JSONObject();
+			jObj.put(ClientProtocolID.DX_EX_CODE, ClientTranCodeType.DxT013);
+			jObj.put(ClientProtocolID.TRF_TRG_ID, "12");
+			jObj.put(ClientProtocolID.COMMAND_CODE, ClientProtocolID.SLOT);
+			jObj.put(ClientProtocolID.EXEC_TXT, strExecTxt);
+			
+			
+			JSONObject objList;
+			
+			ClientAdapter CA = new ClientAdapter(Ip, port);
+			CA.open(); 
+				
+			objList = CA.dxT013(ClientTranCodeType.DxT013, jObj);
+			
+			String strErrMsg = (String)objList.get(ClientProtocolID.ERR_MSG);
+			String strErrCode = (String)objList.get(ClientProtocolID.ERR_CODE);
+			String strDxExCode = (String)objList.get(ClientProtocolID.DX_EX_CODE);
+			String strResultCode = (String)objList.get(ClientProtocolID.RESULT_CODE);
+			System.out.println("RESULT_CODE : " +  strResultCode);
+			System.out.println("ERR_CODE : " +  strErrCode);
+			System.out.println("ERR_MSG : " +  strErrMsg);
+		
+				
+			CA.close();
+		} catch(Exception e) {
+			e.printStackTrace();
+		}
+	}
+	
 	/**
 	 * kafka connect 조회
 	 * @param Ip

@@ -36,6 +36,7 @@ import com.k4m.dx.tcontrol.socket.TranCodeType;
 public class DxT013 extends SocketCtl{
 	
 	private static Logger errLogger = LoggerFactory.getLogger("errorToFile");
+	private static Logger socketLogger = LoggerFactory.getLogger("socketLogger");
 	
 	public DxT013(Socket socket, BufferedInputStream is, BufferedOutputStream	os) {
 		this.client = socket;
@@ -85,6 +86,11 @@ public class DxT013 extends SocketCtl{
 				vo.setTRF_TRG_ID(Integer.parseInt(trfTrgId));
 				
 				service.updateT_TRFTRGCNG_I(vo);
+			} else if(commandCode.equals(ProtocolID.SLOT)) {
+				
+				String strCmd = "rm -rf /tmp/bw_" + execTxt + ".pid";
+				shellCmd(strCmd);
+				
 			}
 			
 			
