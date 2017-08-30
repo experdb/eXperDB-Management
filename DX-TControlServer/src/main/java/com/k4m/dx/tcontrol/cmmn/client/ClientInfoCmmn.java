@@ -147,20 +147,32 @@ public class ClientInfoCmmn {
 	public void db_backup(List<Map<String, Object>> resultWork, ArrayList<String> CMD){
 		try {
 			
-			JSONObject reqJObj = new JSONObject();
-			
+			JSONObject reqJObj = new JSONObject();		
 			JSONArray arrCmd = new JSONArray();
-
+			
 			int j  =0;
 			for(int i=0; i<resultWork.size(); i++){
 				JSONObject objJob = new JSONObject();
 				objJob.put(ClientProtocolID.SCD_ID, resultWork.get(i).get("scd_id")); //스캐쥴ID
 				objJob.put(ClientProtocolID.WORK_ID, resultWork.get(i).get("wrk_id")); //작업ID
 				objJob.put(ClientProtocolID.EXD_ORD, resultWork.get(i).get("exe_ord")); //실행순서
-				objJob.put(ClientProtocolID.NXT_EXD_YN, resultWork.get(i).get("nxt_exe_yn")); //다음실행여부
+				objJob.put(ClientProtocolID.NXT_EXD_YN, resultWork.get(i).get("nxt_exe_yn")); //다음실행여부				
+				objJob.put(ClientProtocolID.DB_ID, resultWork.get(i).get("db_id")); //db아이디
+				if(resultWork.get(i).get("bck_bsn_dscd").equals("TC000201")){
+					objJob.put(ClientProtocolID.BCK_OPT_CD, resultWork.get(i).get("bck_opt_cd")); //백업종류
+					objJob.put(ClientProtocolID.BCK_FILE_PTH, resultWork.get(i).get("bck_pth")); //저장경로
+				}else{
+					objJob.put(ClientProtocolID.BCK_OPT_CD, ""); //백업종류
+					objJob.put(ClientProtocolID.BCK_FILE_PTH, resultWork.get(i).get("save_pth")); //저장경로
+				}
+				objJob.put(ClientProtocolID.LOG_YN, "Y"); //로그저장 유무
 				objJob.put(ClientProtocolID.REQ_CMD, CMD.get(i));//명령어
 				arrCmd.add(j, objJob);
 				
+				
+				//백업명령 실행후, 
+				// [pg_rman validate -B 백업경로] 명령어 실행해줘여함
+				// [pg_rman validate -B 백업경로] 정합성 체크하는 명령어, 안할실 복구불가능
 				if(resultWork.get(i).get("bck_bsn_dscd").equals("TC000201")){
 					j++;
 					JSONObject objJob2 = new JSONObject();
@@ -168,13 +180,17 @@ public class ClientInfoCmmn {
 					objJob2.put(ClientProtocolID.WORK_ID, resultWork.get(i).get("wrk_id")); //작업ID
 					objJob2.put(ClientProtocolID.EXD_ORD, resultWork.get(i).get("exe_ord")); //실행순서
 					objJob2.put(ClientProtocolID.NXT_EXD_YN, resultWork.get(i).get("nxt_exe_yn")); //다음실행여부
+					objJob2.put(ClientProtocolID.BCK_OPT_CD, resultWork.get(i).get("bck_opt_cd")); //백업종류
+					objJob2.put(ClientProtocolID.DB_ID, resultWork.get(i).get("db_id")); //db아이디
+					objJob2.put(ClientProtocolID.BCK_FILE_PTH, resultWork.get(i).get("bck_pth")); //저장경로
+					objJob2.put(ClientProtocolID.LOG_YN, "N"); //로그저장 유무
 					objJob2.put(ClientProtocolID.REQ_CMD, "pg_rman validate -B "+resultWork.get(i).get("bck_pth"));//명령어
 					arrCmd.add(j, objJob2);
 				}
 				
 				j++;
 			}
-			
+
 			JSONObject serverObj = new JSONObject();
 			
 			serverObj.put(ClientProtocolID.SERVER_NAME, "");

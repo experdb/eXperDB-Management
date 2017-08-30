@@ -8,6 +8,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
@@ -21,6 +22,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.k4m.dx.tcontrol.functions.schedule.service.ScheduleService;
+import com.k4m.dx.tcontrol.functions.schedule.service.ScheduleVO;
 
 public class EgovBatchListnerUtl implements JobListener {
 	
@@ -33,6 +35,9 @@ public class EgovBatchListnerUtl implements JobListener {
 	public void setScheduleService(ScheduleService scheduleService) {
 		this.scheduleService = scheduleService;
 	}
+	
+	@Resource(name="egovSchdulUtl")
+	private ScheduleUtl scheduleUtl;
 
 	/**
 	 * Class Name 값을 리턴한다
@@ -55,11 +60,10 @@ public class EgovBatchListnerUtl implements JobListener {
 			
 			String scd_id = context.getJobDetail().getJobDataMap().getString("scd_id");
 			Date nFireTime  = context.getNextFireTime();
-			
+
 			hp.put("scd_id", scd_id);
 			hp.put("nFireTime", nFireTime);
-			
-			System.out.println("▶▶▶ 이전 작업 수행시간 업데이트");
+
 			scheduleService.updatePrevJobTime(hp);
 		
 		}
@@ -107,24 +111,18 @@ public class EgovBatchListnerUtl implements JobListener {
 			
 			String scd_id = context.getJobDetail().getJobDataMap().getString("scd_id");
 			
-
 			List<Map<String, Object>> result = scheduleService.selectModifyScheduleList(Integer.parseInt(scd_id));
-			String exe_perd_cd = (String) result.get(0).get("exe_perd_cd");
-			
 			hp.put("scd_id", scd_id);
 
+			String exe_perd_cd = (String) result.get(0).get("exe_perd_cd");
+			
 			Date nFireTime  = context.getNextFireTime();
-
 		    Calendar cal = Calendar.getInstance();
-		    
-		    System.out.println(nFireTime);
-		    
-		    if(!exe_perd_cd.equals("TC001605")){
+		   		    
+		    if(nFireTime != null){
 		    	cal.setTime(nFireTime);
 		    }
-			
-			
-			
+							
 			if(exe_perd_cd.equals("TC001601")){
 				 cal.add(Calendar.DATE, 1); 
 				 hp.put("nFireTime", cal.getTime());
@@ -145,6 +143,14 @@ public class EgovBatchListnerUtl implements JobListener {
 				 hp.put("nFireTime", cal.getTime());
 				 System.out.println("▶▶▶ 다음 작업 수행시간 업데이트");
 				 scheduleService.updateNxtJobTime(hp);
+			}else{
+				ScheduleVO scheduleVO = new ScheduleVO();
+				scheduleVO.setScd_id(Integer.parseInt(scd_id));
+				scheduleVO.setScd_cndt("TC001802");
+				hp.put("nFireTime", context.getScheduledFireTime());	
+				scheduleService.updatePrevJobTime(hp);
+				scheduleService.updateNxtJobTime(hp);
+				scheduleService.updateScheduleStatus(scheduleVO);		
 			}
 
 	/*		JobKey job_key = context.getJobDetail().getKey();
