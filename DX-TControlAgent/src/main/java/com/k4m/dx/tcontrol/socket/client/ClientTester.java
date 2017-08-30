@@ -50,7 +50,7 @@ public class ClientTester {
 			//clientTester.dxT002(Ip, port);
 			//clientTester.dxT003(Ip, port);
 			//clientTester.dxT004(Ip, port);
-			//clientTester.dxT005(Ip, port);
+			clientTester.dxT005(Ip, port);
 			//clientTester.dxT006_C(Ip, port);
 			//clientTester.dxT006_R(Ip, port);
 			//clientTester.dxT006_U(Ip, port);
@@ -78,7 +78,7 @@ public class ClientTester {
 			//clientTester.dxT017_delete(Ip, port);
 			//clientTester.dxT017_select(Ip, port);
 			//clientTester.dxT018_insert(Ip, port);
-			clientTester.dxT018_delete(Ip, port);
+			//clientTester.dxT018_delete(Ip, port);
 			
 			//clientTester.test();
 		} catch(Exception e) {
@@ -280,6 +280,9 @@ public class ClientTester {
 			objJob_01.put(ClientProtocolID.EXD_ORD, ""); //실행순서
 			objJob_01.put(ClientProtocolID.NXT_EXD_YN, ""); //다음실행여부
 			objJob_01.put(ClientProtocolID.REQ_CMD, CMD[0]);
+			objJob_01.put(ClientProtocolID.BCK_OPT_CD, "");
+			objJob_01.put(ClientProtocolID.DB_ID, "");
+			objJob_01.put(ClientProtocolID.BCK_FILE_PTH, "");
 			
 			JSONObject objJob_02 = new JSONObject();
 			objJob_02.put(ClientProtocolID.SCD_ID, ""); //스캐쥴ID
@@ -287,6 +290,9 @@ public class ClientTester {
 			objJob_02.put(ClientProtocolID.EXD_ORD, ""); //실행순서
 			objJob_02.put(ClientProtocolID.NXT_EXD_YN, ""); //다음실행여부
 			objJob_02.put(ClientProtocolID.REQ_CMD, CMD[0]);
+			objJob_02.put(ClientProtocolID.BCK_OPT_CD, "");
+			objJob_02.put(ClientProtocolID.DB_ID, "");
+			objJob_02.put(ClientProtocolID.BCK_FILE_PTH, "");
 			
 			JSONObject objJob_03 = new JSONObject();
 			objJob_03.put(ClientProtocolID.SCD_ID, ""); //스캐쥴ID
@@ -294,6 +300,9 @@ public class ClientTester {
 			objJob_03.put(ClientProtocolID.EXD_ORD, ""); //실행순서
 			objJob_03.put(ClientProtocolID.NXT_EXD_YN, ""); //다음실행여부
 			objJob_03.put(ClientProtocolID.REQ_CMD, CMD[0]); //명령어
+			objJob_03.put(ClientProtocolID.BCK_OPT_CD, "");
+			objJob_03.put(ClientProtocolID.DB_ID, "");
+			objJob_03.put(ClientProtocolID.BCK_FILE_PTH, "");
 			
 			arrCmd.add(0, objJob_01);
 			arrCmd.add(1, objJob_02);

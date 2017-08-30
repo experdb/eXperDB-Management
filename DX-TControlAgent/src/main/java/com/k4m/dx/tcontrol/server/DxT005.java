@@ -72,6 +72,9 @@ public class DxT005 extends SocketCtl{
 				String strWORK_ID = objJob.get(ProtocolID.WORK_ID).toString();
 				String strEXD_ORD = objJob.get(ProtocolID.EXD_ORD).toString();
 				String strNXT_EXD_YN = objJob.get(ProtocolID.NXT_EXD_YN).toString();
+				String strBCK_OPT_CD = objJob.get(ProtocolID.BCK_OPT_CD).toString();
+				String strDB_ID = objJob.get(ProtocolID.DB_ID).toString();
+				String strBCK_FILE_PTH = objJob.get(ProtocolID.BCK_FILE_PTH).toString();
 
 				int intSeq = service.selectQ_WRKEXE_G_01_SEQ();
 				
@@ -80,6 +83,9 @@ public class DxT005 extends SocketCtl{
 				vo.setSCD_ID(Integer.parseInt(strSCD_ID));
 				vo.setWRK_ID(Integer.parseInt(strWORK_ID));
 				vo.setEXE_RSLT_CD("");
+				vo.setBCK_OPT_CD(strBCK_OPT_CD);
+				vo.setDB_ID(Integer.parseInt(strDB_ID));
+				vo.setBCK_FILE_PTH(strBCK_FILE_PTH);
 				
 				service.insertT_WRKEXE_G(vo);
 				
