@@ -3,19 +3,27 @@ package com.k4m.dx.tcontrol.server;
 import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
 import java.io.BufferedReader;
-import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.lang.reflect.Field;
 import java.net.Socket;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Scanner;
 
+import org.apache.ibatis.session.SqlSession;
+import org.apache.ibatis.session.SqlSessionFactory;
 import org.json.simple.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 
+import com.k4m.dx.tcontrol.db.SqlSessionManager;
 import com.k4m.dx.tcontrol.db.repository.service.SystemServiceImpl;
-import com.k4m.dx.tcontrol.db.repository.vo.TrfTrgCngVO;
+import com.k4m.dx.tcontrol.socket.ErrCodeMng;
 import com.k4m.dx.tcontrol.socket.ProtocolID;
 import com.k4m.dx.tcontrol.socket.SocketCtl;
 import com.k4m.dx.tcontrol.socket.TranCodeType;
@@ -49,7 +57,7 @@ public class DxT013 extends SocketCtl{
 		String strErrCode = "";
 		String strErrMsg = "";
 		String strSuccessCode = "0";
-		
+
 		
 		String execTxt = (String) jObj.get(ProtocolID.EXEC_TXT);
 		String commandCode = (String) jObj.get(ProtocolID.COMMAND_CODE);
@@ -67,31 +75,23 @@ public class DxT013 extends SocketCtl{
 		try {
 			
 			if(commandCode.equals(ProtocolID.RUN)) {
-				
-				
-				long pid = shellCmd(execTxt);
-				
-				if(pid > 0) {
-					TrfTrgCngVO vo = new TrfTrgCngVO();
-					vo.setBW_PID((int)pid);
-					vo.setTRF_TRG_ID(Integer.parseInt(trfTrgId));
-					
-					service.updateT_TRFTRGCNG_I(vo);
-				}
-			} else if(commandCode.equals(ProtocolID.STOP)) {
+
 				shellCmd(execTxt);
 				
-				TrfTrgCngVO vo = new TrfTrgCngVO();
-				vo.setBW_PID(0);
-				vo.setTRF_TRG_ID(Integer.parseInt(trfTrgId));
+			} else if(commandCode.equals(ProtocolID.STOP)) {
+				String strCmd = "ps -ef| grep bottledwater |grep " + execTxt + " | awk '{print $2}'";
+				String strPid = getPidExec(strCmd);
 				
-				service.updateT_TRFTRGCNG_I(vo);
-			} else if(commandCode.equals(ProtocolID.SLOT)) {
+				String strStopCmd = "kill -9 " + strPid ;
+				shellCmd(strStopCmd);
 				
-				String strCmd = "rm -rf /tmp/bw_" + execTxt + ".pid";
-				shellCmd(strCmd);
+				deleteSlot(strDxExCode, jObj, execTxt);
 				
-			}
+				String strDeleteSlotCmd = "rm -rf /tmp/bw_" + execTxt + ".pid";
+				shellCmd(strDeleteSlotCmd);
+				
+				//service.updateT_TRFTRGCNG_I(vo);
+			} 
 			
 			
 			outputObj = DxT013ResultJSON(strDxExCode, strSuccessCode, strErrCode, strErrMsg);
@@ -116,39 +116,117 @@ public class DxT013 extends SocketCtl{
 
 	}
 	
-	   public static long shellCmd(String command) throws Exception {
+	   public static String shellCmd(String command) throws Exception {
+		   
+		   //ps -ef| grep bottledwater |grep test25 | awk '{print $2}'
+
+		   String strResult = "";
+
            Runtime runtime = Runtime.getRuntime();
            
            Process process = runtime.exec(new String[]{"/bin/sh", "-c", command});
+
            
-           long pid = getPidOfProcess(process);
-           
-           InputStream is = process.getInputStream();
-           InputStreamReader isr = new InputStreamReader(is);
-           BufferedReader br = new BufferedReader(isr);
-           String line;
-           while((line = br.readLine()) != null) {
-                          System.out.println(line);
-           }
-           
-           return pid;
+          return strResult;
 	   }
 	   
-	   public static synchronized long getPidOfProcess(Process p) {
-		    long pid = -1;
+	   
+	   public static String getPidExec(String command) throws Exception {
+		   
+		   //ps -ef| grep bottledwater |grep test25 | awk '{print $2}'
 
-		    try {
-		      if (p.getClass().getName().equals("java.lang.UNIXProcess")) {
-		        Field f = p.getClass().getDeclaredField("pid");
-		        f.setAccessible(true);
-		        pid = f.getLong(p);
-		        f.setAccessible(false);
-		      }
-		    } catch (Exception e) {
-		      pid = -1;
-		    }
-		    return pid;
-		  }
+		   String strResult = "";
+
+           Runtime runtime = Runtime.getRuntime();
+
+           Process process = runtime.exec(new String[]{"/bin/sh", "-c", command});
+           
+           strResult = getPid(process);
+
+           
+          return strResult;
+	   }
+	   
+	   public static String  getPid(Process p) throws Exception{
+
+		   StringBuffer sb = new StringBuffer();
+
+		   BufferedReader in = new BufferedReader(new InputStreamReader(p.getInputStream()));
+           String cl = null;
+           while((cl=in.readLine())!=null){
+               sb.append(cl);
+               break;
+           }
+
+           in.close();
+
+		   return sb.toString();
+		}
+	   
+	   /**
+	    * delete slot
+	    * @param strDxExCode
+	    * @param jObj
+	    * @param strSlotName
+	    * @throws Exception
+	    */
+		public void deleteSlot(String strDxExCode, JSONObject jObj, String strSlotName) throws Exception {
+			byte[] sendBuff = null;
+			String strErrCode = "";
+			String strErrMsg = "";
+			String strSuccessCode = "0";
+			
+			JSONObject objSERVER_INFO = (JSONObject) jObj.get(ProtocolID.SERVER_INFO);
+			
+			SqlSessionFactory sqlSessionFactory = null;
+
+			sqlSessionFactory = SqlSessionManager.getInstance();
+			
+			String poolName = "" + objSERVER_INFO.get(ProtocolID.SERVER_NAME) + "_" + objSERVER_INFO.get(ProtocolID.DATABASE_NAME);
+			
+			Connection connDB = null;
+			SqlSession sessDB = null;
+
+			
+			JSONObject outputObj = new JSONObject();
+			
+			try {
+				
+				SocketExt.setupDriverPool(objSERVER_INFO, poolName);
+
+				try {
+				//DB 컨넥션을 가져온다.
+				connDB = DriverManager.getConnection("jdbc:apache:commons:dbcp:" + poolName);
+				sessDB = sqlSessionFactory.openSession(connDB);
+				
+				} catch(Exception e) {
+					strErrCode += ErrCodeMng.Err001;
+					strErrMsg += ErrCodeMng.Err001_Msg + " " + e.toString();
+					strSuccessCode = "1";
+				}
+			
+				HashMap hp = new HashMap();
+				hp.put("SLOT_NAME", strSlotName);
+				
+				sessDB.selectOne("app.deleteSlot", hp);
 
 
+				
+			} catch (Exception e) {
+				errLogger.error("DxT013 {} ", e.toString());
+				
+				outputObj.put(ProtocolID.DX_EX_CODE, TranCodeType.DxT013);
+				outputObj.put(ProtocolID.RESULT_CODE, "1");
+				outputObj.put(ProtocolID.ERR_CODE, TranCodeType.DxT013);
+				outputObj.put(ProtocolID.ERR_MSG, "DxT002 Error [" + e.toString() + "]");
+				
+				sendBuff = outputObj.toString().getBytes();
+				send(4, sendBuff);
+				
+			} finally {
+				sessDB.close();
+			}	        
+
+
+		}
 }
