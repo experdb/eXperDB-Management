@@ -10,6 +10,8 @@ public class TransferVO {
 	private int schema_registry_port;//SCHEMA_REGISTRY_PORT
 	private String zookeeper_ip;//ZOOKEEPER_IP
 	private int zookeeper_port;//ZOOKEEPER_PORT
+	private String teng_ip;//T엔진 IP
+	private int teng_port;//T엔진 PORT
 	private String bw_home;//BW_HOME
 	private String frst_regr_id;//최초_등록자_ID
 	private String frst_reg_dtm;//최초_등록_일시
@@ -70,6 +72,18 @@ public class TransferVO {
 	public void setZookeeper_port(int zookeeper_port) {
 		this.zookeeper_port = zookeeper_port;
 	}
+	public String getTeng_ip() {
+		return teng_ip;
+	}
+	public void setTeng_ip(String teng_ip) {
+		this.teng_ip = teng_ip;
+	}
+	public int getTeng_port() {
+		return teng_port;
+	}
+	public void setTeng_port(int teng_port) {
+		this.teng_port = teng_port;
+	}
 	public String getBw_home() {
 		return bw_home;
 	}
@@ -100,5 +114,8 @@ public class TransferVO {
 	public void setLst_mdf_dtm(String lst_mdf_dtm) {
 		this.lst_mdf_dtm = lst_mdf_dtm;
 	}
+
+
+	
 
 }

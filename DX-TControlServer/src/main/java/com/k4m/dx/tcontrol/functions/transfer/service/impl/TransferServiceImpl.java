@@ -34,8 +34,8 @@ public class TransferServiceImpl implements TransferService {
 		return transferDAO.selectConnectorRegister(param);
 	}
 
-	public List<ConnectorVO> selectDetailConnectorRegister(int cnr_id) throws Exception {
-		return transferDAO.selectDetailConnectorRegister(cnr_id);
+	public ConnectorVO selectDetailConnectorRegister(int cnr_id) throws Exception {
+		return (ConnectorVO) transferDAO.selectDetailConnectorRegister(cnr_id);
 	}
 
 	public void insertConnectorRegister(ConnectorVO connectorVO) throws Exception {
@@ -68,6 +68,11 @@ public class TransferServiceImpl implements TransferService {
 	@Override
 	public void deleteTransferMapping(int trf_trg_mpp_id) throws Exception {
 		transferDAO.deleteTransferMapping(trf_trg_mpp_id);
+	}
+
+	@Override
+	public TransferVO selectTengInfo(String usr_id) throws Exception {
+		return (TransferVO) transferDAO.selectTengInfo(usr_id);
 	}
 
 }

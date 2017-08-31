@@ -148,24 +148,26 @@ public class TreeTransferController {
 	public @ResponseBody JSONObject selectTransferTarget(
 			@ModelAttribute("transferTargetVO") TransferTargetVO transferTargetVO, HttpServletRequest request) {
 		JSONObject result = new JSONObject();
-		List<ConnectorVO> resultList = null;
-
+		ClientInfoCmmn cic = new ClientInfoCmmn();
 		try {
+			HttpSession session = request.getSession();
+			String usr_id = (String) session.getAttribute("usr_id");
+			
 			int cnr_id = Integer.parseInt(request.getParameter("cnr_id"));
-			resultList = transferService.selectDetailConnectorRegister(cnr_id);
-
+			ConnectorVO connectInfo = (ConnectorVO) transferService.selectDetailConnectorRegister(cnr_id);
+			
+			TransferVO tengInfo =(TransferVO) transferService.selectTengInfo(usr_id);
+			String IP = tengInfo.getTeng_ip();
+			int PORT = tengInfo.getTeng_port();
+				
 			// strName : 공백이면 전체 검색
 			String strName = "";
-
 			JSONObject serverObj = new JSONObject();
-
-			String strServerIp = resultList.get(0).getCnr_ipadr();
-			String strServerPort = Integer.toString(resultList.get(0).getCnr_portno());
-
+			String strServerIp = connectInfo.getCnr_ipadr();
+			String strServerPort = Integer.toString(connectInfo.getCnr_portno());
 			serverObj.put(ClientProtocolID.SERVER_IP, strServerIp);
 			serverObj.put(ClientProtocolID.SERVER_PORT, strServerPort);
-			ClientInfoCmmn cic = new ClientInfoCmmn();
-			result = cic.kafakConnect_select(serverObj, strName);
+			result = cic.kafakConnect_select(serverObj, strName, IP, PORT);
 
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -186,12 +188,15 @@ public class TreeTransferController {
 			HttpServletRequest request) {
 		ModelAndView mv = new ModelAndView();
 		JSONObject result = new JSONObject();
-		List<ConnectorVO> resultList = null;
-
+		JSONObject serverObj = new JSONObject();
+		ClientInfoCmmn cic = new ClientInfoCmmn();
 		try {
 
 			CmmnUtils.saveHistory(request, historyVO);
 
+			HttpSession session = request.getSession();
+			String usr_id = (String) session.getAttribute("usr_id");
+			
 			String act = request.getParameter("act");
 			int cnr_id = Integer.parseInt(request.getParameter("cnr_id"));
 			if (act.equals("i")) {
@@ -204,25 +209,24 @@ public class TreeTransferController {
 				historyVO.setExe_dtl_cd("DX-T0015_01");
 				accessHistoryService.insertHistory(historyVO);
 
-				resultList = transferService.selectDetailConnectorRegister(cnr_id);
-
+				ConnectorVO connectInfo = (ConnectorVO) transferService.selectDetailConnectorRegister(cnr_id);
+				TransferVO tengInfo =(TransferVO) transferService.selectTengInfo(usr_id);
+				String IP = tengInfo.getTeng_ip();
+				int PORT = tengInfo.getTeng_port();
+				
 				String strName = request.getParameter("name");
-				JSONObject serverObj = new JSONObject();
-				String strServerIp = resultList.get(0).getCnr_ipadr();
-				String strServerPort = Integer.toString(resultList.get(0).getCnr_portno());
-
+				
+				String strServerIp = connectInfo.getCnr_ipadr();
+				String strServerPort = Integer.toString(connectInfo.getCnr_portno());
 				serverObj.put(ClientProtocolID.SERVER_IP, strServerIp);
 				serverObj.put(ClientProtocolID.SERVER_PORT, strServerPort);
-				ClientInfoCmmn cic = new ClientInfoCmmn();
-				result = cic.kafakConnect_select(serverObj, strName);
-
+				
+				result = cic.kafakConnect_select(serverObj, strName, IP, PORT);
 				for (int i = 0; i < result.size(); i++) {
 					JSONArray data = (JSONArray) result.get("data");
 					for (int m = 0; m < data.size(); m++) {
 						JSONObject jsonObj = (JSONObject) data.get(m);
-
 						JSONObject hp = (JSONObject) jsonObj.get("hp");
-
 						String rotate_interval_ms = String.valueOf(hp.get("rotate.interval.ms"));
 						String hadoop_home = (String) hp.get("hadoop.home");
 						String trf_trg_url = (String) hp.get("hdfs.url");
@@ -244,7 +248,6 @@ public class TreeTransferController {
 						mv.addObject("rotate_interval_ms", rotate_interval_ms);
 					}
 				}
-
 			}
 			mv.addObject("act", act);
 			mv.addObject("cnr_id", cnr_id);
@@ -289,7 +292,6 @@ public class TreeTransferController {
 	public @ResponseBody boolean insertTransferTarget(
 			@ModelAttribute("transferTargetVO") TransferTargetVO transferTargetVO, HttpServletRequest request,
 			@ModelAttribute("historyVO") HistoryVO historyVO) {
-		List<ConnectorVO> resultList = null;
 		JSONObject serverObj = new JSONObject();
 		JSONObject param = new JSONObject();
 		ClientInfoCmmn cic = new ClientInfoCmmn();
@@ -305,10 +307,13 @@ public class TreeTransferController {
 			transferTargetVO.setLst_mdfr_id(usr_id);
 
 			int cnr_id = Integer.parseInt(request.getParameter("cnr_id"));
-			resultList = transferService.selectDetailConnectorRegister(cnr_id);
-
-			String strServerIp = resultList.get(0).getCnr_ipadr();
-			String strServerPort = Integer.toString(resultList.get(0).getCnr_portno());
+			ConnectorVO connectInfo = (ConnectorVO) transferService.selectDetailConnectorRegister(cnr_id);
+			TransferVO tengInfo =(TransferVO) transferService.selectTengInfo(usr_id);
+			String IP = tengInfo.getTeng_ip();
+			int PORT = tengInfo.getTeng_port();
+			
+			String strServerIp = connectInfo.getCnr_ipadr();
+			String strServerPort = Integer.toString(connectInfo.getCnr_portno());
 			serverObj.put(ClientProtocolID.SERVER_IP, strServerIp);
 			serverObj.put(ClientProtocolID.SERVER_PORT, strServerPort);
 
@@ -321,7 +326,7 @@ public class TreeTransferController {
 			param.put("strFlush_size", Integer.toString(transferTargetVO.getFlush_size()));
 			param.put("strRotate_interval_ms", Integer.toString(transferTargetVO.getRotate_interval_ms()));
 
-			Map<String, Object> result = cic.kafakConnect_create(serverObj, param);
+			Map<String, Object> result = cic.kafakConnect_create(serverObj, param, IP, PORT);
 			String strResultCode = (String) result.get("strResultCode");
 			if (strResultCode.equals("0")) {
 				treeTransferService.insertTransferTarget(transferTargetVO);
@@ -351,7 +356,6 @@ public class TreeTransferController {
 		ClientInfoCmmn cic = new ClientInfoCmmn();
 		JSONObject serverObj = new JSONObject();
 		JSONObject param = new JSONObject();
-		List<ConnectorVO> resultList = null;
 		try {
 			// 전송대상 수정 이력 남기기
 			CmmnUtils.saveHistory(request, historyVO);
@@ -365,10 +369,13 @@ public class TreeTransferController {
 			transferTargetVO.setLst_mdfr_id(usr_id);
 			transferTargetVO.setCnr_id(cnr_id);
 
-			resultList = transferService.selectDetailConnectorRegister(cnr_id);
-
-			String strServerIp = resultList.get(0).getCnr_ipadr();
-			String strServerPort = Integer.toString(resultList.get(0).getCnr_portno());
+			ConnectorVO connectInfo = (ConnectorVO) transferService.selectDetailConnectorRegister(cnr_id);
+			TransferVO tengInfo =(TransferVO) transferService.selectTengInfo(usr_id);
+			String IP = tengInfo.getTeng_ip();
+			int PORT = tengInfo.getTeng_port();
+			
+			String strServerIp = connectInfo.getCnr_ipadr();
+			String strServerPort = Integer.toString(connectInfo.getCnr_portno());
 			serverObj.put(ClientProtocolID.SERVER_IP, strServerIp);
 			serverObj.put(ClientProtocolID.SERVER_PORT, strServerPort);
 
@@ -393,7 +400,7 @@ public class TreeTransferController {
 			param.put("strFlush_size", strFlush_size);
 			param.put("strRotate_interval_ms", strRotate_interval_ms);
 
-			Map<String, Object> result = cic.kafakConnect_update(serverObj, param);
+			Map<String, Object> result = cic.kafakConnect_update(serverObj, param,IP, PORT);
 			String strResultCode = (String) result.get("strResultCode");
 			if (strResultCode.equals("0")) {
 				treeTransferService.updateTransferTarget(transferTargetVO);
@@ -421,7 +428,6 @@ public class TreeTransferController {
 			@ModelAttribute("historyVO") HistoryVO historyVO) {
 		ClientInfoCmmn cic = new ClientInfoCmmn();
 		JSONObject serverObj = new JSONObject();
-		List<ConnectorVO> resultList = null;
 
 		try {
 			// 전송대상 삭제 이력 남기기
@@ -437,10 +443,13 @@ public class TreeTransferController {
 			transferTargetVO.setLst_mdfr_id(usr_id);
 			transferTargetVO.setCnr_id(cnr_id);
 
-			resultList = transferService.selectDetailConnectorRegister(cnr_id);
-
-			String strServerIp = resultList.get(0).getCnr_ipadr();
-			String strServerPort = Integer.toString(resultList.get(0).getCnr_portno());
+			ConnectorVO connectInfo = (ConnectorVO) transferService.selectDetailConnectorRegister(cnr_id);
+			TransferVO tengInfo =(TransferVO) transferService.selectTengInfo(usr_id);
+			String IP = tengInfo.getTeng_ip();
+			int PORT = tengInfo.getTeng_port();
+			
+			String strServerIp = connectInfo.getCnr_ipadr();
+			String strServerPort = Integer.toString(connectInfo.getCnr_portno());
 
 			serverObj.put(ClientProtocolID.SERVER_IP, strServerIp);
 			serverObj.put(ClientProtocolID.SERVER_PORT, strServerPort);
@@ -448,7 +457,7 @@ public class TreeTransferController {
 			String[] param = request.getParameter("name").toString().split(",");
 
 			for (int i=0; i<param.length; i++) {
-				Map<String, Object> result = cic.kafakConnect_delete(serverObj, param[i]);
+				Map<String, Object> result = cic.kafakConnect_delete(serverObj, param[i], IP, PORT);
 				String strResultCode = (String) result.get("strResultCode");
 				if (strResultCode.equals("0")) {
 					String trf_trg_mpp_id = treeTransferService.selectTransfermappid(param[i]);
@@ -480,7 +489,6 @@ public class TreeTransferController {
 	public ModelAndView transferTargetDetail(@ModelAttribute("historyVO") HistoryVO historyVO,
 			HttpServletRequest request) {
 		ModelAndView mv = new ModelAndView();
-		List<ConnectorVO> resultList = null;
 		JSONObject serverObj = new JSONObject();
 		JSONObject result = new JSONObject();
 		ClientInfoCmmn cic = new ClientInfoCmmn();
@@ -489,16 +497,22 @@ public class TreeTransferController {
 			CmmnUtils.saveHistory(request, historyVO);
 			historyVO.setExe_dtl_cd("DX-T0016");
 			accessHistoryService.insertHistory(historyVO);
-
+			
+			HttpSession session = request.getSession();
+			String usr_id = (String) session.getAttribute("usr_id");
+			
 			int cnr_id = Integer.parseInt(request.getParameter("cnr_id"));
-			resultList = transferService.selectDetailConnectorRegister(cnr_id);
-
-			String strServerIp = resultList.get(0).getCnr_ipadr();
-			String strServerPort = Integer.toString(resultList.get(0).getCnr_portno());
+			ConnectorVO connectInfo = (ConnectorVO) transferService.selectDetailConnectorRegister(cnr_id);
+			TransferVO tengInfo =(TransferVO) transferService.selectTengInfo(usr_id);
+			String IP = tengInfo.getTeng_ip();
+			int PORT = tengInfo.getTeng_port();
+			
+			String strServerIp = connectInfo.getCnr_ipadr();
+			String strServerPort = Integer.toString(connectInfo.getCnr_portno());
 			serverObj.put(ClientProtocolID.SERVER_IP, strServerIp);
 			serverObj.put(ClientProtocolID.SERVER_PORT, strServerPort);
 			String strName = request.getParameter("name");
-			result = cic.kafakConnect_select(serverObj, strName);
+			result = cic.kafakConnect_select(serverObj, strName, IP, PORT);
 			for (int i = 0; i < result.size(); i++) {
 				JSONArray data = (JSONArray) result.get("data");
 				for (int m = 0; m < data.size(); m++) {
@@ -527,7 +541,7 @@ public class TreeTransferController {
 					mv.addObject("connector_class", connector_class);
 				}
 			}
-			mv.addObject("connector_type", resultList.get(0).getCnr_cnn_tp_cd());
+			mv.addObject("connector_type", connectInfo.getCnr_cnn_tp_cd());
 			mv.setViewName("popup/transferTargetDetailRegForm");
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -702,7 +716,6 @@ public class TreeTransferController {
 			@ModelAttribute("transferRelationVO") TransferRelationVO transferRelationVO,
 			@ModelAttribute("transferMappingVO") TransferMappingVO transferMappingVO, HttpServletRequest request,
 			@ModelAttribute("historyVO") HistoryVO historyVO) {
-		List<ConnectorVO> resultList = null;
 		JSONObject result = new JSONObject();
 		JSONObject param = new JSONObject();
 		ClientInfoCmmn cic = new ClientInfoCmmn();
@@ -752,14 +765,18 @@ public class TreeTransferController {
 				topic += trf_trg_cnn_nm + "." + table_schema + "." + table_name;
 			}
 			
-			resultList = transferService.selectDetailConnectorRegister(Integer.parseInt(request.getParameter("cnr_id")));
-			
+			ConnectorVO connectInfo = (ConnectorVO) transferService.selectDetailConnectorRegister(Integer.parseInt(request.getParameter("cnr_id")));
+
+			TransferVO tengInfo =(TransferVO) transferService.selectTengInfo(usr_id);
+			String IP = tengInfo.getTeng_ip();
+			int PORT = tengInfo.getTeng_port();
+
 			JSONObject serverObj = new JSONObject();
-			String strServerIp = resultList.get(0).getCnr_ipadr();
-			String strServerPort = Integer.toString(resultList.get(0).getCnr_portno());
+			String strServerIp = connectInfo.getCnr_ipadr();
+			String strServerPort = Integer.toString(connectInfo.getCnr_portno());
 			serverObj.put(ClientProtocolID.SERVER_IP, strServerIp);
 			serverObj.put(ClientProtocolID.SERVER_PORT, strServerPort);
-			result = cic.kafakConnect_select(serverObj, trf_trg_cnn_nm);	
+			result = cic.kafakConnect_select(serverObj, trf_trg_cnn_nm, IP, PORT);	
 			for (int i = 0; i < result.size(); i++) {
 				JSONArray data = (JSONArray) result.get("data");
 				for (int m = 0; m < data.size(); m++) {
@@ -778,7 +795,7 @@ public class TreeTransferController {
 				}
 			}
 			/* kafakConnect_update topic 업데이트 */
-			cic.kafakConnect_update(serverObj, param);
+			cic.kafakConnect_update(serverObj, param, IP, PORT);
 			
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -807,18 +824,19 @@ public class TreeTransferController {
 			 *   1-2.kafka_con_config DELETE 
 			 *   1-3.tbl_mapps INSERT
 			 *   1-4.kafka_con_config INSERT
+			 *   1-5.bottledwater_start
+			 *   1-6.bw_pid update(1)
 			 *  bw_pid가 0이 아니면-> 중지 
-			 *   1-1. kill 명령어 날리기
-			 *   1-2. slot 삭제
+			 *   1-1.bottledwater_end
+			 *   1-2.bw_pid update(0)
 			 */
 			AES256 dec = new AES256(AES256_KEY.ENC_KEY);
 
 			HttpSession session = request.getSession();
 			String usr_id = (String) session.getAttribute("usr_id");
-			transferDetailVO.setLst_mdfr_id(usr_id);
 			
 			int trf_trg_id = Integer.parseInt(request.getParameter("trf_trg_id"));
-			int bw_pid = Integer.parseInt(request.getParameter("bw_pid"));
+			int current_bw_pid = Integer.parseInt(request.getParameter("bw_pid"));
 
 			int db_id = Integer.parseInt(request.getParameter("db_id"));
 			DbIDbServerVO dbIDbServerVO = (DbIDbServerVO) treeTransferService.selectServerDb(db_id);
@@ -832,13 +850,20 @@ public class TreeTransferController {
 				return "false";
 			}
 			
+			JSONObject serverObj = new JSONObject();
+			serverObj.put(ClientProtocolID.SERVER_NAME, dbIDbServerVO.getDb_svr_nm());
+			serverObj.put(ClientProtocolID.SERVER_IP, dbIDbServerVO.getIpadr());
+			serverObj.put(ClientProtocolID.SERVER_PORT, dbIDbServerVO.getPortno());
+			serverObj.put(ClientProtocolID.DATABASE_NAME, dbIDbServerVO.getDb_nm());
+			serverObj.put(ClientProtocolID.USER_ID, dbIDbServerVO.getSvr_spr_usr_id());
+			serverObj.put(ClientProtocolID.USER_PWD, dec.aesDecode(dbIDbServerVO.getSvr_spr_scm_pwd()));
+			
 			String IP = dbIDbServerVO.getIpadr();
 			int PORT = agentInfo.getSOCKET_PORT();	
 			
-			if (bw_pid == 0) {
+			if (current_bw_pid == 0) {
 				 TransferVO transferInfo = (TransferVO) transferService.selectTransferSetting(usr_id);
 				 List<BottlewaterVO> dbInfo = treeTransferService.selectBottlewaterinfo(trf_trg_id);
-				 
 				 
 				/*전송설정등록을 안했을 경우*/
 				if(transferInfo==null){
@@ -847,16 +872,7 @@ public class TreeTransferController {
 				
 				List<TblKafkaConfigVO> tblKafkaConfigInfo = treeTransferService.selectTblKafkaConfigInfo(trf_trg_id);
 				String trf_trg_cnn_nm = tblKafkaConfigInfo.get(0).getTrf_trg_cnn_nm();
-			
-				JSONObject serverObj = new JSONObject();
-				
-				serverObj.put(ClientProtocolID.SERVER_NAME, dbIDbServerVO.getDb_svr_nm());
-				serverObj.put(ClientProtocolID.SERVER_IP, dbIDbServerVO.getIpadr());
-				serverObj.put(ClientProtocolID.SERVER_PORT, dbIDbServerVO.getPortno());
-				serverObj.put(ClientProtocolID.DATABASE_NAME, dbIDbServerVO.getDb_nm());
-				serverObj.put(ClientProtocolID.USER_ID, dbIDbServerVO.getSvr_spr_usr_id());
-				serverObj.put(ClientProtocolID.USER_PWD, dec.aesDecode(dbIDbServerVO.getSvr_spr_scm_pwd()));
-				
+						
 //				/*TODO tbl_mapps DELETE*/
 //							
 //				/*kafka_con_config DELETE*/
@@ -878,6 +894,7 @@ public class TreeTransferController {
 					arrTableInfo.add(hp);
 					cic.tblmapps_insert(IP,PORT,serverObj,arrTableInfo);
 				}
+				
 
 				JSONObject kafkaServerObj = new JSONObject();
 				String strServerIp = tblKafkaConfigInfo.get(0).getCnr_ipadr();
@@ -885,7 +902,7 @@ public class TreeTransferController {
 					
 				kafkaServerObj.put(ClientProtocolID.SERVER_IP, strServerIp);
 				kafkaServerObj.put(ClientProtocolID.SERVER_PORT, strServerPort);
-				result = cic.kafakConnect_select(kafkaServerObj, trf_trg_cnn_nm);	
+				result = cic.kafakConnect_select(kafkaServerObj, trf_trg_cnn_nm, IP, PORT);	
 				for (int i = 0; i < result.size(); i++) {
 					JSONArray data = (JSONArray) result.get("data");
 					for (int m = 0; m < data.size(); m++) {
@@ -925,23 +942,30 @@ public class TreeTransferController {
 				System.out.println("명령어 : " + strExecTxt);
 
 				String string_trf_trg_id = request.getParameter("trf_trg_id");
-				cic.bottledwater(IP,PORT,strExecTxt, string_trf_trg_id);
+				cic.bottledwater_start(IP,PORT,strExecTxt, string_trf_trg_id);
+				
+				/* bwpid 업데이트 실행 -> 1 중지 -> 0*/
+				int bw_pid=1;
+				transferDetailVO.setBw_pid(bw_pid);
+				transferDetailVO.setLst_mdfr_id(usr_id);
+				transferDetailVO.setTrf_trg_id(trf_trg_id);
+				treeTransferService.updateBottleWaterBwpid(transferDetailVO);
 				
 				return "start";
 			} else {
-				/* kill -9 pid 명령어 */
-				System.out.println("bw_pid : "+bw_pid);
-				String strExecTxt = "kill -9 " + bw_pid;
-				System.out.println(strExecTxt);
-				
-				String string_trf_trg_id = request.getParameter("trf_trg_id");
-				cic.bottledwater(IP,PORT,strExecTxt,string_trf_trg_id);	
-				
 				List<TblKafkaConfigVO> tblKafkaConfigInfo = treeTransferService.selectTblKafkaConfigInfo(trf_trg_id);
+				String strExecTxt = tblKafkaConfigInfo.get(0).getTrf_trg_cnn_nm();
+				/*string_trf_trg_id 할필요 없음!*/
+				String string_trf_trg_id = "0";
+				cic.bottledwater_end(IP,PORT,strExecTxt,string_trf_trg_id,serverObj);	
+
+				/* bwpid 업데이트 실행 -> 1 중지 -> 0*/
+				int bw_pid=0;
+				transferDetailVO.setBw_pid(bw_pid);
+				transferDetailVO.setLst_mdfr_id(usr_id);
+				transferDetailVO.setTrf_trg_id(trf_trg_id);
+				treeTransferService.updateBottleWaterBwpid(transferDetailVO);
 				
-				String slotName = tblKafkaConfigInfo.get(0).getTrf_trg_cnn_nm();
-				System.out.println(slotName);
-				cic.slot_delete(IP, PORT,slotName);
 				return "stop";
 			}
 

@@ -136,5 +136,12 @@ public interface TreeTransferService {
 	List<TblKafkaConfigVO> selectTblKafkaConfigInfo(int trf_trg_id) throws Exception;
 
 
-
+	/**
+	 * Bottlewater bwpid 업데이트
+	 * 
+	 * @param transferDetailVO
+	 * @return
+	 * @throws Exception
+	 */
+	void updateBottleWaterBwpid(TransferDetailVO transferDetailVO) throws Exception;
 }

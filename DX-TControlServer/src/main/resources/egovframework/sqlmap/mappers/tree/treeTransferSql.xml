@@ -334,4 +334,19 @@
 		AND I.TRF_TRG_ID = R.TRF_TRG_ID
 		AND R.TRF_TRG_MPP_ID = L.TRF_TRG_MPP_ID
     </select>   
+    
+    <update id="updateBottleWaterBwpid" parameterType="transferDetailVO">
+        /**
+	 	*  Query ID : updateBottleWaterBwpid
+	 	* Description : Bottlewater bwpid 업데이트
+	 	* Author : 김주영
+	 	**/
+		UPDATE T_TRFTRGCNG_I 
+		SET
+		  BW_PID=#{bw_pid}
+		, LST_MDFR_ID=#{lst_mdfr_id}
+		, LST_MDF_DTM= clock_timestamp()
+		WHERE TRF_TRG_ID=#{trf_trg_id}
+    </update>    
+
 </mapper>

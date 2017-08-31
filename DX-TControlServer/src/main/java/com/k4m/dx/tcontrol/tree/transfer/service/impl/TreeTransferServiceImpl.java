@@ -98,5 +98,9 @@ public class TreeTransferServiceImpl implements TreeTransferService {
 	public List<TblKafkaConfigVO> selectTblKafkaConfigInfo(int trf_trg_id) throws Exception {
 		return treeTransferDAO.selectTblKafkaConfigInfo(trf_trg_id);
 	}
-
+	
+	@Override
+	public void updateBottleWaterBwpid(TransferDetailVO transferDetailVO) throws Exception {
+		treeTransferDAO.updateBottleWaterBwpid(transferDetailVO);
+	}
 }
