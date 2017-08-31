@@ -172,14 +172,22 @@ public class TreeController {
 			if(menuAut.get(0).get("read_aut_yn").equals("N")){
 				response.sendRedirect("/autError.do");
 				return result;
-			}else{				
+			}else{			
 				AES256 aes = new AES256(AES256_KEY.ENC_KEY);
 				String db_svr_nm = request.getParameter("db_svr_nm");
 	
 				List<DbServerVO> resultSet = cmmnServerInfoService.selectDbServerList(db_svr_nm);
 				
-				JSONObject serverObj = new JSONObject();
+				AgentInfoVO vo = new AgentInfoVO();
+				vo.setIPADR(resultSet.get(0).getIpadr());
 				
+				AgentInfoVO agentInfo =  (AgentInfoVO) cmmnServerInfoService.selectAgentInfo(vo);
+				
+				String IP = resultSet.get(0).getIpadr();
+				int PORT = agentInfo.getSOCKET_PORT();
+				
+				JSONObject serverObj = new JSONObject();
+
 				serverObj.put(ClientProtocolID.SERVER_NAME, resultSet.get(0).getDb_svr_nm());
 				serverObj.put(ClientProtocolID.SERVER_IP, resultSet.get(0).getIpadr());
 				serverObj.put(ClientProtocolID.SERVER_PORT, resultSet.get(0).getPortno());
@@ -188,7 +196,7 @@ public class TreeController {
 				serverObj.put(ClientProtocolID.USER_PWD, aes.aesDecode(resultSet.get(0).getSvr_spr_scm_pwd()));
 				
 				ClientInfoCmmn cic = new ClientInfoCmmn();
-				result = cic.db_List(serverObj);
+				result = cic.db_List(serverObj, IP, PORT);
 			}
 		} catch (Exception e) {
 			e.printStackTrace();

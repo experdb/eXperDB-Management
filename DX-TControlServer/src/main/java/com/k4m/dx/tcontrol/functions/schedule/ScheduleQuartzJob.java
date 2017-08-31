@@ -11,16 +11,24 @@ import org.quartz.Job;
 import org.quartz.JobDataMap;
 import org.quartz.JobExecutionContext;
 import org.quartz.JobExecutionException;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.config.AutowireCapableBeanFactory;
 import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
+
+import com.k4m.dx.tcontrol.admin.dbserverManager.service.DbServerVO;
 import com.k4m.dx.tcontrol.cmmn.AES256;
 import com.k4m.dx.tcontrol.cmmn.AES256_KEY;
 import com.k4m.dx.tcontrol.cmmn.client.ClientInfoCmmn;
+import com.k4m.dx.tcontrol.common.service.AgentInfoVO;
+import com.k4m.dx.tcontrol.common.service.CmmnServerInfoService;
 import com.k4m.dx.tcontrol.functions.schedule.service.ScheduleService;
 
 public class ScheduleQuartzJob implements Job{
 
+	@Autowired
+	private CmmnServerInfoService cmmnServerInfoService;
+	
 	private ConfigurableApplicationContext context;
 	
 	ArrayList<String> CMD = new ArrayList<String>();
@@ -291,6 +299,25 @@ public class ScheduleQuartzJob implements Job{
 	public void agentCall(List<Map<String, Object>> resultWork, ArrayList<String> CMD) {
 		ClientInfoCmmn clc = new ClientInfoCmmn();
 		
-		clc.db_backup(resultWork, CMD);
+		DbServerVO schDbServerVO = new DbServerVO();
+		schDbServerVO.setDb_svr_id(Integer.parseInt(resultWork.get(0).get("db_svr_id").toString()));
+	
+		try {
+			DbServerVO dbServerVO = (DbServerVO)  cmmnServerInfoService.selectServerInfo(schDbServerVO);
+			String strIpAdr = dbServerVO.getIpadr();
+			
+			AgentInfoVO vo = new AgentInfoVO();
+			vo.setIPADR(strIpAdr);
+			
+			AgentInfoVO agentInfo =  (AgentInfoVO) cmmnServerInfoService.selectAgentInfo(vo);
+			
+			String IP = dbServerVO.getIpadr();
+			int PORT = agentInfo.getSOCKET_PORT();
+
+			clc.db_backup(resultWork, CMD, IP ,PORT);
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 }

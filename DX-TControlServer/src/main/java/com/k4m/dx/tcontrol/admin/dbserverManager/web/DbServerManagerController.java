@@ -20,12 +20,12 @@ import com.k4m.dx.tcontrol.admin.accesshistory.service.AccessHistoryService;
 import com.k4m.dx.tcontrol.admin.dbserverManager.service.DbServerManagerService;
 import com.k4m.dx.tcontrol.admin.dbserverManager.service.DbServerVO;
 import com.k4m.dx.tcontrol.admin.menuauthority.service.MenuAuthorityService;
-import com.k4m.dx.tcontrol.backup.service.WorkVO;
 import com.k4m.dx.tcontrol.cmmn.AES256;
 import com.k4m.dx.tcontrol.cmmn.AES256_KEY;
 import com.k4m.dx.tcontrol.cmmn.CmmnUtils;
 import com.k4m.dx.tcontrol.cmmn.client.ClientInfoCmmn;
 import com.k4m.dx.tcontrol.cmmn.client.ClientProtocolID;
+import com.k4m.dx.tcontrol.common.service.AgentInfoVO;
 import com.k4m.dx.tcontrol.common.service.CmmnServerInfoService;
 import com.k4m.dx.tcontrol.common.service.HistoryVO;
 
@@ -146,12 +146,19 @@ public class DbServerManagerController {
 	public @ResponseBody Map<String, Object> dbServerConnTest(@ModelAttribute("historyVO") HistoryVO historyVO, @ModelAttribute("dbServerVO") DbServerVO dbServerVO, HttpServletRequest request) {
 		
 		Map<String, Object> result =new HashMap<String, Object>();
-	
+		
+		AgentInfoVO vo = new AgentInfoVO();
+		vo.setIPADR(dbServerVO.getIpadr());
+		
 		try {
 			//이력 남기기
 			CmmnUtils.saveHistory(request, historyVO);
 			historyVO.setExe_dtl_cd("DX-T0007_02");
 			accessHistoryService.insertHistory(historyVO);
+			
+			AgentInfoVO agentInfo =  (AgentInfoVO) cmmnServerInfoService.selectAgentInfo(vo);
+			String IP = dbServerVO.getIpadr();
+			int PORT = agentInfo.getSOCKET_PORT();
 			
 			AES256 aes = new AES256(AES256_KEY.ENC_KEY);
 			System.out.println("=======parameter=======");
@@ -179,7 +186,7 @@ public class DbServerManagerController {
 			
 			ClientInfoCmmn conn  = new ClientInfoCmmn();
 			
-			result = conn.DbserverConn(serverObj);
+			result = conn.DbserverConn(serverObj, IP, PORT);
 			
 			System.out.println(result.get("result_data"));
 			
@@ -398,6 +405,14 @@ public class DbServerManagerController {
 		try {
 			AES256 aes = new AES256(AES256_KEY.ENC_KEY);
 			JSONObject serverObj = new JSONObject();
+
+			AgentInfoVO vo = new AgentInfoVO();
+			vo.setIPADR(ipadr);
+			
+			AgentInfoVO agentInfo =  (AgentInfoVO) cmmnServerInfoService.selectAgentInfo(vo);
+			
+			String IP = ipadr;
+			int PORT = agentInfo.getSOCKET_PORT();
 			
 			serverObj.put(ClientProtocolID.SERVER_NAME, db_svr_nm);
 			serverObj.put(ClientProtocolID.SERVER_IP, ipadr);
@@ -406,7 +421,7 @@ public class DbServerManagerController {
 			serverObj.put(ClientProtocolID.USER_PWD, aes.aesDecode(svr_spr_scm_pwd));
 
 			ClientInfoCmmn cic = new ClientInfoCmmn();
-			result = cic.directory_exist(serverObj,directory_path);
+			result = cic.directory_exist(serverObj,directory_path, IP, PORT);
 			
 			//System.out.println(result);
 		} catch (Exception e) {
