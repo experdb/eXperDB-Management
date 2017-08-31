@@ -61,13 +61,13 @@
     </bean>
 
     <bean class="org.springframework.web.servlet.handler.SimpleMappingExceptionResolver">
-        <property name="defaultErrorView" value="cmmn/egovError"/>
+        <property name="defaultErrorView" value="WEB-INF/view/error/500Error"/>
         <property name="exceptionMappings">
             <props>
-                <prop key="org.springframework.dao.DataAccessException">view/dataAccessFailure</prop>
-                <prop key="org.springframework.transaction.TransactionException">view/transactionFailure</prop>
-                <prop key="egovframework.rte.fdl.cmmn.exception.EgovBizException">view/egovError</prop>
-                <prop key="org.springframework.security.AccessDeniedException">view/egovError</prop>
+                <prop key="org.springframework.dao.DataAccessException">view/error/500Error</prop>
+                <prop key="org.springframework.transaction.TransactionException">view/error/500Error</prop>
+                <prop key="egovframework.rte.fdl.cmmn.exception.EgovBizException">view/error/500Error</prop>
+                <prop key="org.springframework.security.AccessDeniedException">view/error/500Error</prop>
             </props>
         </property>
     </bean>

@@ -154,7 +154,7 @@ public class ScheduleQuartzJob implements Job{
 			}
 			
 			//2. 기본옵션 명령어 생성
-				strLast +=" "+resultWork.get(i).get("db_nm")+"  > "+resultWork.get(i).get("save_pth")+"/"+resultWork.get(i).get("bck_filenm")+"_"+today;
+				strLast +=" "+resultWork.get(i).get("db_nm")+"  > "+resultWork.get(i).get("save_pth")+"/"+resultWork.get(i).get("bck_filenm")+"_"+today+".dump";
 				
 				if(resultWork.get(i).get("file_fmt_cd_nm") != null && resultWork.get(i).get("file_fmt_cd_nm") != ""){
 					//2.2 파일포멧에 따른 명령어 생성

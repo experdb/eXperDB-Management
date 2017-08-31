@@ -109,7 +109,7 @@ public class ServerController {
 		try {
 			//읽기 권한이 없는경우 error페이지 호출 , [추후 Exception 처리예정]
 			if(menuAut.get(0).get("read_aut_yn").equals("N")){
-				response.sendRedirect("/autError.do.do");
+				response.sendRedirect("/autError.do");
 				return resultSet;
 			}else{				
 			//이력 남기기
