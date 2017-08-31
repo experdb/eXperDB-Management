@@ -24,6 +24,7 @@ import com.k4m.dx.tcontrol.cmmn.AES256_KEY;
 import com.k4m.dx.tcontrol.cmmn.CmmnUtils;
 import com.k4m.dx.tcontrol.cmmn.client.ClientInfoCmmn;
 import com.k4m.dx.tcontrol.cmmn.client.ClientProtocolID;
+import com.k4m.dx.tcontrol.common.service.AgentInfoVO;
 import com.k4m.dx.tcontrol.common.service.CmmnServerInfoService;
 import com.k4m.dx.tcontrol.common.service.CmmnVO;
 import com.k4m.dx.tcontrol.common.service.HistoryVO;
@@ -137,6 +138,14 @@ public class CmmnController {
 			
 			JSONObject serverObj = new JSONObject();
 			
+			AgentInfoVO vo = new AgentInfoVO();
+			vo.setIPADR(resultSet.get(0).getIpadr());
+			
+			AgentInfoVO agentInfo =  (AgentInfoVO) cmmnServerInfoService.selectAgentInfo(vo);
+			
+			String IP = resultSet.get(0).getIpadr();
+			int PORT = agentInfo.getSOCKET_PORT();
+			
 			serverObj.put(ClientProtocolID.SERVER_NAME, resultSet.get(0).getDb_svr_nm());
 			serverObj.put(ClientProtocolID.SERVER_IP, resultSet.get(0).getIpadr());
 			serverObj.put(ClientProtocolID.SERVER_PORT, resultSet.get(0).getPortno());
@@ -144,10 +153,9 @@ public class CmmnController {
 			serverObj.put(ClientProtocolID.USER_ID, resultSet.get(0).getSvr_spr_usr_id());
 			serverObj.put(ClientProtocolID.USER_PWD, aes.aesDecode(resultSet.get(0).getSvr_spr_scm_pwd()));
 			
-			
-			
+				
 			ClientInfoCmmn cic = new ClientInfoCmmn();
-			result = cic.db_List(serverObj);
+			result = cic.db_List(serverObj, IP, PORT);
 	
 			//System.out.println(result);
 		} catch (Exception e) {
@@ -207,6 +215,14 @@ public class CmmnController {
 			DbServerVO dbServerVO = backupService.selectDbSvrNm(workVO);
 			JSONObject serverObj = new JSONObject();
 			
+			AgentInfoVO vo = new AgentInfoVO();
+			vo.setIPADR(dbServerVO.getIpadr());
+			
+			AgentInfoVO agentInfo =  (AgentInfoVO) cmmnServerInfoService.selectAgentInfo(vo);
+			
+			String IP = dbServerVO.getIpadr();
+			int PORT = agentInfo.getSOCKET_PORT();
+			
 			serverObj.put(ClientProtocolID.SERVER_NAME, dbServerVO.getDb_svr_nm());
 			serverObj.put(ClientProtocolID.SERVER_IP, dbServerVO.getIpadr());
 			serverObj.put(ClientProtocolID.SERVER_PORT, dbServerVO.getPortno());
@@ -216,7 +232,7 @@ public class CmmnController {
 			serverObj.put(ClientProtocolID.USER_PWD, aes.aesDecode(dbServerVO.getSvr_spr_scm_pwd()));
 			
 			ClientInfoCmmn cic = new ClientInfoCmmn();
-			result = cic.object_List(serverObj);
+			result = cic.object_List(serverObj, IP, PORT);
 			
 			//System.out.println(result);
 		} catch (Exception e) {
@@ -242,6 +258,14 @@ public class CmmnController {
 			DbServerVO dbServerVO = backupService.selectDbSvrNm(workVO);
 			JSONObject serverObj = new JSONObject();
 			
+			AgentInfoVO vo = new AgentInfoVO();
+			vo.setIPADR(dbServerVO.getIpadr());
+			
+			AgentInfoVO agentInfo =  (AgentInfoVO) cmmnServerInfoService.selectAgentInfo(vo);
+			
+			String IP = dbServerVO.getIpadr();
+			int PORT = agentInfo.getSOCKET_PORT();
+			
 			serverObj.put(ClientProtocolID.SERVER_NAME, dbServerVO.getDb_svr_nm());
 			serverObj.put(ClientProtocolID.SERVER_IP, dbServerVO.getIpadr());
 			serverObj.put(ClientProtocolID.SERVER_PORT, dbServerVO.getPortno());
@@ -249,7 +273,7 @@ public class CmmnController {
 			serverObj.put(ClientProtocolID.USER_PWD, aes.aesDecode(dbServerVO.getSvr_spr_scm_pwd()));
 
 			ClientInfoCmmn cic = new ClientInfoCmmn();
-			result = cic.directory_exist(serverObj,directory_path);
+			result = cic.directory_exist(serverObj,directory_path, IP, PORT);
 			
 			//System.out.println(result);
 		} catch (Exception e) {

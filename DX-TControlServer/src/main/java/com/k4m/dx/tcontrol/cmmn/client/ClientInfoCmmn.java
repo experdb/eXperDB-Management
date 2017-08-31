@@ -7,22 +7,28 @@ import java.util.Map;
 
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
+import org.springframework.beans.factory.annotation.Autowired;
+
+import com.k4m.dx.tcontrol.common.service.AgentInfoVO;
+import com.k4m.dx.tcontrol.common.service.CmmnServerInfoService;
 
 public class ClientInfoCmmn {
-
+	
+	@Autowired
+	private CmmnServerInfoService cmmnServerInfoService;
+	
 	String Ip = "222.110.153.162";
 	int port = 9001;
 
 	// 1. 서버 연결 테스트 (serverConn)
-	public Map<String, Object> DbserverConn(JSONObject serverObj) {
+	public Map<String, Object> DbserverConn(JSONObject serverObj, String IP, int PORT) {
 
 		Map<String, Object> result = new HashMap<String, Object>();
 
-		try {
-
+		try {					
 			JSONObject objList;
 
-			ClientAdapter CA = new ClientAdapter(Ip, port);
+			ClientAdapter CA = new ClientAdapter(IP, PORT);
 			CA.open();
 
 			objList = CA.dxT003(ClientTranCodeType.DxT003, serverObj);
@@ -50,7 +56,7 @@ public class ClientInfoCmmn {
 	}
 
 	// 2. 데이터베이스 리스트 (dbList)
-	public JSONObject db_List(JSONObject serverObj) {
+	public JSONObject db_List(JSONObject serverObj, String IP, int PORT) {
 
 		JSONArray jsonArray = new JSONArray(); // 객체를 담기위해 JSONArray 선언.
 		JSONObject result = new JSONObject();
@@ -60,7 +66,7 @@ public class ClientInfoCmmn {
 		try {
 			JSONObject objList;
 
-			ClientAdapter CA = new ClientAdapter(Ip, port);
+			ClientAdapter CA = new ClientAdapter(IP, PORT);
 			CA.open();
 
 			objList = CA.dxT001(ClientTranCodeType.DxT001, serverObj);
@@ -138,7 +144,7 @@ public class ClientInfoCmmn {
 	}
 
 	// 5. 백업실행
-	public void db_backup(List<Map<String, Object>> resultWork, ArrayList<String> CMD) {
+	public void db_backup(List<Map<String, Object>> resultWork, ArrayList<String> CMD, String IP, int PORT) {
 		try {
 
 			JSONObject reqJObj = new JSONObject();
@@ -194,7 +200,7 @@ public class ClientInfoCmmn {
 			reqJObj.put(ClientProtocolID.SERVER_INFO, serverObj);
 			reqJObj.put(ClientProtocolID.ARR_CMD, arrCmd);
 
-			ClientAdapter CA = new ClientAdapter(Ip, port);
+			ClientAdapter CA = new ClientAdapter(IP, PORT);
 			CA.open();
 			CA.dxT005(reqJObj);
 			CA.close();
@@ -496,7 +502,7 @@ public class ClientInfoCmmn {
 
 	// 12. 스키마 및 테이블 리스트 (objectList)
 	@SuppressWarnings({ "unchecked", "rawtypes" })
-	public JSONObject object_List(JSONObject serverObj) {
+	public JSONObject object_List(JSONObject serverObj, String IP, int PORT) {
 
 		JSONArray jsonArray = new JSONArray(); // 객체를 담기위해 JSONArray 선언.
 		JSONObject result = new JSONObject();
@@ -877,7 +883,7 @@ public class ClientInfoCmmn {
 	}
 
 	// 16.exist directory check
-	public Map<String, Object> directory_exist(JSONObject serverObj, String folderPath) {
+	public Map<String, Object> directory_exist(JSONObject serverObj, String folderPath, String IP, int PORT) {
 		Map<String, Object> result = new HashMap<String, Object>();
 		try {
 			JSONObject connectorInfoObj = new JSONObject();
@@ -889,7 +895,7 @@ public class ClientInfoCmmn {
 
 			JSONObject objList;
 
-			ClientAdapter CA = new ClientAdapter(Ip, port);
+			ClientAdapter CA = new ClientAdapter(IP, PORT);
 			CA.open();
 			objList = CA.dxT016(jObj);
 
