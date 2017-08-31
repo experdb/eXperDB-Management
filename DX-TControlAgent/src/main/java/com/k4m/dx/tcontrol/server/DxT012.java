@@ -97,10 +97,10 @@ public class DxT012 extends SocketCtl{
 		} catch (Exception e) {
 			errLogger.error("DxT012 {} ", e.toString());
 			
-			outputObj.put(ProtocolID.DX_EX_CODE, TranCodeType.DxT002);
+			outputObj.put(ProtocolID.DX_EX_CODE, TranCodeType.DxT012);
 			outputObj.put(ProtocolID.RESULT_CODE, "1");
-			outputObj.put(ProtocolID.ERR_CODE, TranCodeType.DxT002);
-			outputObj.put(ProtocolID.ERR_MSG, "DxT002 Error [" + e.toString() + "]");
+			outputObj.put(ProtocolID.ERR_CODE, TranCodeType.DxT012);
+			outputObj.put(ProtocolID.ERR_MSG, "DxT012 Error [" + e.toString() + "]");
 			
 			sendBuff = outputObj.toString().getBytes();
 			send(4, sendBuff);
