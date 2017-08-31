@@ -446,7 +446,8 @@ public class TreeTransferController {
 			serverObj.put(ClientProtocolID.SERVER_PORT, strServerPort);
 
 			String[] param = request.getParameter("name").toString().split(",");
-			for (int i = 0; i < param.length; i++) {
+
+			for (int i=0; i<param.length; i++) {
 				Map<String, Object> result = cic.kafakConnect_delete(serverObj, param[i]);
 				String strResultCode = (String) result.get("strResultCode");
 				if (strResultCode.equals("0")) {
@@ -458,15 +459,14 @@ public class TreeTransferController {
 					}
 					/* 전송대상설정정보 삭제 */
 					treeTransferService.deleteTransferTarget(param[i]);
-					return true;
 				} else {
 					return false;
-				}
+				}				
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		return false;
+		return true;
 	}
 
 	/**
@@ -800,11 +800,16 @@ public class TreeTransferController {
 		JSONObject param = new JSONObject();
 		try {
 			/*
-			 * TODO 실행순서 
+			 * 실행순서 
 			 * 1. bottlewater 실행 및 중지 
-			 * bw_pid가 0이면 -> 실행 
-			 * bw_pid가 0이 아니면-> 중지 
-			 * 2. T_TRFTRGCNG_I 테이블에 (실행-> bottlewater pid 인설트, 중지-> bw_pid 0 인설트)
+			 *  bw_pid가 0이면 -> 실행 
+			 *   1-1.tbl_mapps DELETE
+			 *   1-2.kafka_con_config DELETE 
+			 *   1-3.tbl_mapps INSERT
+			 *   1-4.kafka_con_config INSERT
+			 *  bw_pid가 0이 아니면-> 중지 
+			 *   1-1. kill 명령어 날리기
+			 *   1-2. slot 삭제
 			 */
 			AES256 dec = new AES256(AES256_KEY.ENC_KEY);
 
