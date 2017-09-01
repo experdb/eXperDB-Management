@@ -398,14 +398,14 @@
 	 		AND CONNECT_NAME = #{CONNECT_NAME}
   	</delete>
   	
-  	 <delete id="deleteSlot" parameterType="hashMap">
+  	 <select id="selectDelSlot" parameterType="hashmap" resultType="hashmap">
   		/**
-	 	* Query ID : deleteSlot
+	 	* Query ID : selectDelSlot
 	 	* Description : Slot 삭제
 	 	* Author : 박태혁
 	 	**/
 	 	select pg_drop_replication_slot(#{SLOT_NAME});
-  	</delete>
+  	</select>
   	
   	
 </mapper>

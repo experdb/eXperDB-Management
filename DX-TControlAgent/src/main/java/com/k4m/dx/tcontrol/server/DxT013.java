@@ -85,10 +85,24 @@ public class DxT013 extends SocketCtl{
 				String strStopCmd = "kill -9 " + strPid ;
 				shellCmd(strStopCmd);
 				
-				deleteSlot(strDxExCode, jObj, execTxt);
 				
 				String strDeleteSlotCmd = "rm -rf /tmp/bw_" + execTxt + ".pid";
 				shellCmd(strDeleteSlotCmd);
+				
+				socketLogger.info(" deleteSlot Start ");
+				
+				int i=0;
+				while(true) {
+					String strPid2 = getPidExec(strCmd);
+					socketLogger.info(i + " pid1 : " + strPid + " pid2 : " + strPid2);
+					if(!strPid2.equals(strPid)) break;
+					i++;
+				}
+				socketLogger.info(" deleteSlot Start2 ");
+				
+				deleteSlot(strDxExCode, jObj, execTxt);
+				
+				socketLogger.info(" deleteSlot End ");
 				
 				//service.updateT_TRFTRGCNG_I(vo);
 			} 
@@ -208,7 +222,7 @@ public class DxT013 extends SocketCtl{
 				HashMap hp = new HashMap();
 				hp.put("SLOT_NAME", strSlotName);
 				
-				sessDB.selectOne("app.deleteSlot", hp);
+				sessDB.selectList("app.selectDelSlot", hp);
 
 
 				
