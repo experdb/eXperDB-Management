@@ -44,13 +44,13 @@ public interface TransferService {
 	List<ConnectorVO> selectConnectorRegister(Map<String, Object> param) throws Exception;
 
 	/**
-	 * Connector 상세조회
+	 * kafka-Connector ip,port 조회
 	 * 
 	 * @param cnr_id
 	 * @return
 	 * @throws Exception
 	 */
-	List<ConnectorVO> selectDetailConnectorRegister(int cnr_id) throws Exception;
+	ConnectorVO selectDetailConnectorRegister(int cnr_id) throws Exception;
 
 	/**
 	 * Connector 등록
@@ -114,5 +114,14 @@ public interface TransferService {
 	 * @throws Exception
 	 */
 	void deleteTransferMapping(int trf_trg_mpp_id) throws Exception;
+
+	/**
+	 * t엔진 ip, t엔진 port 정보 조회
+	 * 
+	 * @param usr_id
+	 * @return
+	 * @throws Exception
+	 */
+	TransferVO selectTengInfo(String usr_id) throws Exception;
 
 }

@@ -60,17 +60,14 @@ public class TransferDAO extends EgovAbstractMapper {
 	}
 
 	/**
-	 * Connector 상세조회
+	 * kafka-Connector ip,port 조회
 	 * 
 	 * @param cnr_id
 	 * @return
 	 * @throws SQLException
 	 */
-	@SuppressWarnings({ "unchecked", "deprecation" })
-	public List<ConnectorVO> selectDetailConnectorRegister(int cnr_id) throws SQLException {
-		List<ConnectorVO> sl = null;
-		sl = (List<ConnectorVO>) list("transferSql.selectDetailConnectorRegister", cnr_id);
-		return sl;
+	public ConnectorVO selectDetailConnectorRegister(int cnr_id) throws SQLException {
+		return (ConnectorVO) selectOne("transferSql.selectDetailConnectorRegister", cnr_id);
 	}
 
 	/**
@@ -147,6 +144,17 @@ public class TransferDAO extends EgovAbstractMapper {
 	 */
 	public void deleteTransferMapping(int trf_trg_mpp_id) throws SQLException {
 		delete("transferSql.deleteTransferMapping", trf_trg_mpp_id);
+	}
+	
+	/**
+	 * t엔진 ip, t엔진 port 정보 조회
+	 * 
+	 * @param usr_id
+	 * @return
+	 * @throws Exception
+	 */
+	public TransferVO selectTengInfo(String usr_id) {
+		return (TransferVO) selectOne("transferSql.selectTengInfo", usr_id);
 	}
 
 }

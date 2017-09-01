@@ -186,7 +186,7 @@ function fn_search(){
  * 디비 등록 팝업 호출
  ******************************************************** */
 function fn_reg_popup(){
-	window.open("/popup/dbRegForm.do","dbRegPop","location=no,menubar=no,resizable=yes,scrollbars=no,status=no,width=915,height=555,top=0,left=0");
+	window.open("/popup/dbRegForm.do","dbRegPop","location=no,menubar=no,resizable=yes,scrollbars=yes,status=no,width=915,height=555,top=0,left=0");
 }
 
 

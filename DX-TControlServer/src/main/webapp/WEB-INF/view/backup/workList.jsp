@@ -49,7 +49,7 @@ function fn_rman_reg_popup(){
 	var height = 650;
 	var left = (window.screen.width / 2) - (width / 2);
 	var top = (window.screen.height /2) - (height / 2);
-	var popOption = "width="+width+", height="+height+", top="+top+", left="+left+", resizable=no, scrollbars=no, status=no, toolbar=no, titlebar=yes, location=no,";
+	var popOption = "width="+width+", height="+height+", top="+top+", left="+left+", resizable=no, scrollbars=yes, status=no, toolbar=no, titlebar=yes, location=no,";
 	
 	var winPop = window.open(popUrl,"rmanRegPop",popOption);
 	winPop.focus();
@@ -64,7 +64,7 @@ function fn_rman_reform_popup(wrk_id){
 	var height = 650;
 	var left = (window.screen.width / 2) - (width / 2);
 	var top = (window.screen.height /2) - (height / 2);
-	var popOption = "width="+width+", height="+height+", top="+top+", left="+left+", resizable=no, scrollbars=no, status=no, toolbar=no, titlebar=yes, location=no,";
+	var popOption = "width="+width+", height="+height+", top="+top+", left="+left+", resizable=no, scrollbars=yes, status=no, toolbar=no, titlebar=yes, location=no,";
 	
 	var winPop = window.open(popUrl,"rmanRegPop",popOption);
 	winPop.focus();

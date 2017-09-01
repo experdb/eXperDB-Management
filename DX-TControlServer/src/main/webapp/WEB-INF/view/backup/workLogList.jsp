@@ -62,8 +62,6 @@ function fn_rman_init(){
  		         	{ data: "wrk_strt_dtm", className: "dt-center", defaultContent: ""}, 
  		         	{ data: "wrk_end_dtm", className: "dt-center", defaultContent: ""}, 
  		         	{ data: "exe_rslt_cd_nm", className: "dt-center", defaultContent: ""}, 
- 		         	{ data: "tli", className: "dt-center", defaultContent: ""},
- 		         	{ data: "file_sz", className: "dt-center", defaultContent: ""}
  		        ] 
 	});
 }
@@ -82,7 +80,6 @@ function fn_dump_init(){
  		         	{ data: "wrk_end_dtm", className: "dt-center", defaultContent: ""}, 
  		         	{ data: "exe_rslt_cd_nm", className: "dt-center", defaultContent: ""}, 
  		         	{ data: "bck_file_pth", className: "dt-center", defaultContent: ""},
- 		         	{ data: "file_sz", className: "dt-center", defaultContent: ""}
  		        ] 
 	});
 }
@@ -292,8 +289,6 @@ function selectTab(intab){
 								<th scope="col">작업시작 시간</th>
 								<th scope="col">작업종료 시간</th>
 								<th scope="col">상태</th>
-								<th scope="col">TLI</th>
-								<th scope="col">Size</th>
 							</tr>
 						</thead>
 					</table>
@@ -309,7 +304,6 @@ function selectTab(intab){
 								<th scope="col">작업종료 시간</th>
 								<th scope="col">상태</th>
 								<th scope="col">백업파일경로</th>
-								<th scope="col">Size</th>
 							</tr>
 						</thead>
 					</table>

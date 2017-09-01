@@ -17,6 +17,8 @@
 		, SCHEMA_REGISTRY_PORT
 		, ZOOKEEPER_IP
 		, ZOOKEEPER_PORT
+		, TENG_IP
+		, TENG_PORT
 		, BW_HOME
 		FROM T_TRFCNG_I
 		WHERE FRST_REGR_ID = #{usr_id} 
@@ -37,6 +39,8 @@
 		, SCHEMA_REGISTRY_PORT
 		, ZOOKEEPER_IP
 		, ZOOKEEPER_PORT
+		, TENG_IP
+		, TENG_PORT
 		, BW_HOME
 		, FRST_REGR_ID
 		, FRST_REG_DTM
@@ -51,6 +55,8 @@
 		, #{schema_registry_port}
 		, #{zookeeper_ip}
 		, #{zookeeper_port}
+		, #{teng_ip}
+		, #{teng_port}		
 		, #{bw_home}	
 		, #{frst_regr_id}
 		, clock_timestamp()
@@ -73,6 +79,8 @@
 		, SCHEMA_REGISTRY_PORT = #{schema_registry_port}
 		, ZOOKEEPER_IP = #{zookeeper_ip}
 		, ZOOKEEPER_PORT = #{zookeeper_port}
+		, TENG_IP = #{teng_ip}
+		, TENG_PORT = #{teng_port}
 		, BW_HOME = #{bw_home}
 		, LST_MDFR_ID = #{lst_mdfr_id}
 		, LST_MDF_DTM = clock_timestamp()
@@ -116,6 +124,7 @@
 				<if test="cnr_ipadr != null and cnr_ipadr != '' ">
 				AND CNR_IPADR LIKE #{cnr_ipadr}
 				</if>
+			AND FRST_REGR_ID = #{usr_id}
 			ORDER BY LST_MDF_DTM DESC
 		)A		
     </select>
@@ -123,7 +132,7 @@
 	<select id="selectDetailConnectorRegister" resultType="connectorVO">
 		/**
 	 	* Query ID : selectDetailConnectorRegister
-	 	* Description : Connector 상세 조회
+	 	* Description : kafka-Connector ip,port 조회
 	 	* Author : 김주영
 	 	**/
 	 	SELECT 
@@ -239,4 +248,13 @@
 		WHERE TRF_TRG_MPP_ID=#{trf_trg_mpp_id}
 	</delete>
 	
+	<select id="selectTengInfo" resultType="transferVO" parameterType="string">
+		/**
+		* Query ID : selectTengInfo
+		* Description : t엔진 ip, t엔진 port 정보 조회
+		* Author : 김주영
+		**/	
+		SELECT TENG_IP, TENG_PORT FROM T_TRFCNG_I
+		WHERE FRST_REGR_ID =#{usr_id}
+	</select>
 </mapper>

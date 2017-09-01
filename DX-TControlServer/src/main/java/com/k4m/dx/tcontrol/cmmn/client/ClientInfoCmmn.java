@@ -7,16 +7,9 @@ import java.util.Map;
 
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
-import org.springframework.beans.factory.annotation.Autowired;
-
-import com.k4m.dx.tcontrol.common.service.AgentInfoVO;
-import com.k4m.dx.tcontrol.common.service.CmmnServerInfoService;
 
 public class ClientInfoCmmn {
-	
-	@Autowired
-	private CmmnServerInfoService cmmnServerInfoService;
-	
+
 	String Ip = "222.110.153.162";
 	int port = 9001;
 
@@ -596,8 +589,8 @@ public class ClientInfoCmmn {
 		return result;
 	}
 
-	// bottledWater 실행/종료
-	public void bottledwater(String IP, int PORT, String strExecTxt, String trf_trg_id) {
+	// bottledWater 실행
+	public void bottledwater_start(String IP, int PORT, String strExecTxt, String trf_trg_id) {
 		try {
 			JSONObject jObj = new JSONObject();
 			jObj.put(ClientProtocolID.DX_EX_CODE, ClientTranCodeType.DxT013);
@@ -626,16 +619,16 @@ public class ClientInfoCmmn {
 		}
 	}
 
-	// slot 삭제
-	public void slot_delete(String IP, int PORT, String strExecTxt) {
+	// bottledWater 종료
+	public void bottledwater_end(String IP, int PORT, String strExecTxt, String trf_trg_id,JSONObject serverObj) {
 		try {
-
 			JSONObject jObj = new JSONObject();
 			jObj.put(ClientProtocolID.DX_EX_CODE, ClientTranCodeType.DxT013);
-			jObj.put(ClientProtocolID.TRF_TRG_ID, "12");
-			jObj.put(ClientProtocolID.COMMAND_CODE, ClientProtocolID.SLOT);
+			jObj.put(ClientProtocolID.TRF_TRG_ID, trf_trg_id);
+			jObj.put(ClientProtocolID.COMMAND_CODE, ClientProtocolID.STOP);
 			jObj.put(ClientProtocolID.EXEC_TXT, strExecTxt);
-
+			jObj.put(ClientProtocolID.SERVER_INFO, serverObj);
+			
 			JSONObject objList;
 
 			ClientAdapter CA = new ClientAdapter(IP, PORT);
@@ -658,7 +651,7 @@ public class ClientInfoCmmn {
 	}
 
 	// 14.kafka connect 조회(kafakConnect_select)
-	public JSONObject kafakConnect_select(JSONObject serverObj, String strName) {
+	public JSONObject kafakConnect_select(JSONObject serverObj, String strName, String IP, int PORT) {
 
 		JSONArray jsonArray = new JSONArray(); // 객체를 담기위해 JSONArray 선언.
 		JSONObject result = new JSONObject();
@@ -677,7 +670,7 @@ public class ClientInfoCmmn {
 
 			JSONObject objList;
 
-			ClientAdapter CA = new ClientAdapter(Ip, port);
+			ClientAdapter CA = new ClientAdapter(IP, PORT);
 			CA.open();
 
 			objList = CA.dxT014(ClientTranCodeType.DxT014, jObj);
@@ -727,7 +720,7 @@ public class ClientInfoCmmn {
 	}
 
 	// 14.kafka connect 등록(kafakConnect_create)
-	public Map<String, Object> kafakConnect_create(JSONObject serverObj, JSONObject param) {
+	public Map<String, Object> kafakConnect_create(JSONObject serverObj, JSONObject param, String IP, int PORT) {
 		Map<String, Object> result = new HashMap<String, Object>();
 		try {
 
@@ -761,7 +754,7 @@ public class ClientInfoCmmn {
 
 			JSONObject objList;
 
-			ClientAdapter CA = new ClientAdapter(Ip, port);
+			ClientAdapter CA = new ClientAdapter(IP, PORT);
 			CA.open();
 
 			objList = CA.dxT014(ClientTranCodeType.DxT014, jObj);
@@ -785,7 +778,7 @@ public class ClientInfoCmmn {
 	}
 
 	// 14.kafka connect 수정(kafakConnect_update)
-	public Map<String, Object> kafakConnect_update(JSONObject serverObj, JSONObject param) {
+	public Map<String, Object> kafakConnect_update(JSONObject serverObj, JSONObject param, String IP, int PORT) {
 		Map<String, Object> result = new HashMap<String, Object>();
 		try {
 
@@ -820,7 +813,7 @@ public class ClientInfoCmmn {
 
 			JSONObject objList;
 
-			ClientAdapter CA = new ClientAdapter(Ip, port);
+			ClientAdapter CA = new ClientAdapter(IP, PORT);
 			CA.open();
 
 			objList = CA.dxT014(ClientTranCodeType.DxT014, jObj);
@@ -844,7 +837,7 @@ public class ClientInfoCmmn {
 	}
 
 	// 14.kafka connect 삭제(kafakConnect_delete)
-	public Map<String, Object> kafakConnect_delete(JSONObject serverObj, String strName) {
+	public Map<String, Object> kafakConnect_delete(JSONObject serverObj, String strName, String IP, int PORT) {
 		Map<String, Object> result = new HashMap<String, Object>();
 		try {
 			JSONObject connectorInfoObj = new JSONObject();
@@ -859,7 +852,7 @@ public class ClientInfoCmmn {
 
 			JSONObject objList;
 
-			ClientAdapter CA = new ClientAdapter(Ip, port);
+			ClientAdapter CA = new ClientAdapter(IP,PORT);
 			CA.open();
 
 			objList = CA.dxT014(ClientTranCodeType.DxT014, jObj);

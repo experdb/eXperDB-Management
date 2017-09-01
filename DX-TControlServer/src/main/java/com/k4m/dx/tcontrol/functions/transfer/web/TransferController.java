@@ -242,7 +242,10 @@ public class TransferController {
 			// Connector 조회 이력 남기기
 			CmmnUtils.saveHistory(request, historyVO);
 			historyVO.setExe_dtl_cd("DX-T0012_01");
-			accessHistoryService.insertHistory(historyVO);					
+			accessHistoryService.insertHistory(historyVO);	
+			
+			HttpSession session = request.getSession();
+			String usr_id = (String) session.getAttribute("usr_id");
 			
 			Map<String, Object> param = new HashMap<String, Object>();
 
@@ -251,6 +254,7 @@ public class TransferController {
 
 			param.put("cnr_nm", cnr_nm);
 			param.put("cnr_ipadr", cnr_ipadr);
+			param.put("usr_id", usr_id);
 
 			resultSet = transferService.selectConnectorRegister(param);
 		} catch (Exception e) {
@@ -269,7 +273,6 @@ public class TransferController {
 	@RequestMapping(value = "/popup/connectorRegForm.do")
 	public ModelAndView connectorReg(HttpServletRequest request,@ModelAttribute("historyVO") HistoryVO historyVO) {
 		ModelAndView mv = new ModelAndView();
-		List<ConnectorVO> result = null;
 		try {
 			CmmnUtils cu = new CmmnUtils();
 			menuAut = cu.selectMenuAut(menuAuthorityService, "MN000202");
@@ -293,12 +296,12 @@ public class TransferController {
 				accessHistoryService.insertHistory(historyVO);
 				
 				int cnr_id = Integer.parseInt(request.getParameter("cnr_id"));
-				result = transferService.selectDetailConnectorRegister(cnr_id);
-				mv.addObject("cnr_id", result.get(0).getCnr_id());
-				mv.addObject("cnr_nm", result.get(0).getCnr_nm());
-				mv.addObject("cnr_ipadr", result.get(0).getCnr_ipadr());
-				mv.addObject("cnr_portno", result.get(0).getCnr_portno());
-				mv.addObject("cnr_cnn_tp_cd", result.get(0).getCnr_cnn_tp_cd());
+				ConnectorVO connectInfo = (ConnectorVO) transferService.selectDetailConnectorRegister(cnr_id);
+				mv.addObject("cnr_id",connectInfo.getCnr_id());
+				mv.addObject("cnr_nm", connectInfo.getCnr_nm());
+				mv.addObject("cnr_ipadr",connectInfo.getCnr_ipadr());
+				mv.addObject("cnr_portno",connectInfo.getCnr_portno());
+				mv.addObject("cnr_cnn_tp_cd",connectInfo.getCnr_cnn_tp_cd());
 			}
 
 			mv.addObject("act", act);

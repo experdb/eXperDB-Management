@@ -195,5 +195,16 @@ public class TreeTransferDAO extends EgovAbstractMapper {
 		result = (List<TblKafkaConfigVO>) list("treeTransferSql.selectTblKafkaConfigInfo", trf_trg_id);
 		return result;
 	}
+	
+	/**
+	 * Bottlewater bwpid 업데이트
+	 * 
+	 * @param transferDetailVO
+	 * @return
+	 * @throws Exception
+	 */
+	public void updateBottleWaterBwpid(TransferDetailVO transferDetailVO) throws SQLException {
+		update("treeTransferSql.updateBottleWaterBwpid", transferDetailVO);
+	}
 
 }

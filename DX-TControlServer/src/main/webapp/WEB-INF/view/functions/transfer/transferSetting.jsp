@@ -80,7 +80,25 @@
  			alert("포트는 숫자만 입력가능합니다.");
  			zookeeper_port.focus();
 		 	return false;
-		}	
+		}
+ 		var teng_ip = document.getElementById("teng_ip");
+		if (teng_ip.value == "") {
+			alert("T엔진 아이피를 입력하여 주십시오.");
+			teng_ip.focus();
+			return false;
+		}
+ 		var teng_port = document.getElementById("teng_port");
+		if (teng_port.value == "") {
+			alert("T엔진 포트를 입력하여 주십시오.");
+			teng_port.focus();
+			return false;
+		}
+ 		if(!valid_numeric(teng_port.value))
+	 	{
+ 			alert("포트는 숫자만 입력가능합니다.");
+ 			teng_port.focus();
+		 	return false;
+		}
  		var bw_home = document.getElementById("bw_home");
 		if (bw_home.value == "") {
 			alert("BottledWater home을 입력하여 주십시오.");
@@ -105,6 +123,8 @@
 				schema_registry_port : $("#schema_registry_port").val(),
 				zookeeper_ip : $("#zookeeper_ip").val(),
 				zookeeper_port : $("#zookeeper_port").val(),
+				teng_ip : $("#teng_ip").val(),
+				teng_port : $("#teng_port").val(),
 				bw_home : $("#bw_home").val(),
 				
 			},
@@ -131,6 +151,8 @@
 				schema_registry_port : $("#schema_registry_port").val(),
 				zookeeper_ip : $("#zookeeper_ip").val(),
 				zookeeper_port : $("#zookeeper_port").val(),
+				teng_ip : $("#teng_ip").val(),
+				teng_port : $("#teng_port").val(),
 				bw_home : $("#bw_home").val(),
 				trf_cng_id : $("#trf_cng_id").val()
 			},
@@ -163,6 +185,8 @@
  				  $("#schema_registry_port").val(data.schema_registry_port);
  				  $("#zookeeper_ip").val(data.zookeeper_ip);
  				  $("#zookeeper_port").val(data.zookeeper_port);
+ 				  $("#teng_ip").val(data.teng_ip);
+ 				  $("#teng_port").val(data.teng_port);
  				  $("#bw_home").val(data.bw_home); 	
  				  $("#trf_cng_id").val(data.trf_cng_id);
  	 
@@ -232,9 +256,13 @@
 							<td class="type2"><input type="text" class="txt" name="zookeeper_port" id="zookeeper_port" /></td>
 						</tr>
 						<tr>
+							<td>T엔진</td>
+							<td><input type="text" class="txt" name="teng_ip" id="teng_ip" /></td>
+							<td class="type2"><input type="text" class="txt" name="teng_port" id="teng_port" /></td>
+						</tr>
+						<tr>
 							<td>Bottledwater home</td>
-							<td colspan="2"><input type="text" class="txt" name="bw_home" id="bw_home" /></td>
-							
+							<td colspan="2"><input type="text" class="txt" name="bw_home" id="bw_home" /></td>	
 						</tr>
 					</tbody>
 				</table>

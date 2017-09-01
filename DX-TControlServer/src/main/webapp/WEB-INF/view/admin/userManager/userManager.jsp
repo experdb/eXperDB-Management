@@ -45,6 +45,22 @@ function fn_init() {
 		} ]
 	});
 	
+	//더블 클릭시
+	if("${wrt_aut_yn}" == "Y"){
+		$('#userListTable tbody').on('dblclick','tr',function() {
+				var data = table.row(this).data();
+				var usr_id = data.usr_id;
+				
+				var popUrl = "/popup/userManagerRegForm.do?act=u&usr_id=" + usr_id; // 서버 url 팝업경로
+				var width = 920;
+				var height = 570;
+				var left = (window.screen.width / 2) - (width / 2);
+				var top = (window.screen.height /2) - (height / 2);
+				var popOption = "width="+width+", height="+height+", top="+top+", left="+left+", resizable=no, scrollbars=yes, status=no, toolbar=no, titlebar=yes, location=no,";
+				
+				window.open(popUrl,"",popOption);
+			});	
+	}
 }
 $(window.document).ready(function() {
 	fn_buttonAut();
@@ -121,7 +137,7 @@ function fn_insert() {
 	var height = 570;
 	var left = (window.screen.width / 2) - (width / 2);
 	var top = (window.screen.height /2) - (height / 2);
-	var popOption = "width="+width+", height="+height+", top="+top+", left="+left+", resizable=no, scrollbars=no, status=no, toolbar=no, titlebar=yes, location=no,";
+	var popOption = "width="+width+", height="+height+", top="+top+", left="+left+", resizable=no, scrollbars=yes, status=no, toolbar=no, titlebar=yes, location=no,";
 	
 	window.open(popUrl,"",popOption);
 }
@@ -136,7 +152,7 @@ function fn_update() {
 			var height = 570;
 			var left = (window.screen.width / 2) - (width / 2);
 			var top = (window.screen.height /2) - (height / 2);
-			var popOption = "width="+width+", height="+height+", top="+top+", left="+left+", resizable=no, scrollbars=no, status=no, toolbar=no, titlebar=yes, location=no,";
+			var popOption = "width="+width+", height="+height+", top="+top+", left="+left+", resizable=no, scrollbars=yes, status=no, toolbar=no, titlebar=yes, location=no,";
 			
 			window.open(popUrl,"",popOption);
 		} else {

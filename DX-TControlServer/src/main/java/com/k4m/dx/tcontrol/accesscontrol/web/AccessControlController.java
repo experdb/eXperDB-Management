@@ -78,10 +78,15 @@ public class AccessControlController {
 	 * @throws Exception
 	 */
 	@RequestMapping(value = "/selectTreeConnectorRegister.do")
-	public @ResponseBody List<ConnectorVO> selectTreeConnectorRegister() {
+	public @ResponseBody List<ConnectorVO> selectTreeConnectorRegister(HttpServletRequest request) {
 		List<ConnectorVO> resultSet = null;
 		Map<String, Object> param = new HashMap<String, Object>();
 		try {
+			
+			HttpSession session = request.getSession();
+			String usr_id = (String) session.getAttribute("usr_id");
+			param.put("usr_id", usr_id);
+			
 			resultSet = transferService.selectConnectorRegister(param);
 		} catch (Exception e) {
 			e.printStackTrace();
