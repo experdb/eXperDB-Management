@@ -234,7 +234,6 @@ public class DbServerManagerController {
 			System.out.println("포트 : " + dbServerVO.getPortno());
 			System.out.println("유저 : " + dbServerVO.getSvr_spr_usr_id());
 			System.out.println("패스워드 : " + dbServerVO.getSvr_spr_scm_pwd());
-			System.out.println("서버저장경로 : " + dbServerVO.getIstpath());
 			System.out.println("=====================");
 			
 			dbServerManagerService.insertDbServer(dbServerVO);
@@ -428,5 +427,27 @@ public class DbServerManagerController {
 			e.printStackTrace();
 		}
 		return result;
+	}
+	
+	
+	/**
+	 * 중복 서버명을 체크한다.
+	 * 
+	 * @param db_svr_nm
+	 * @return
+	 * @throws Exception
+	 */
+	@RequestMapping(value = "/db_svr_nmCheck.do")
+	public @ResponseBody String db_svr_nmCheck(@RequestParam("db_svr_nm") String db_svr_nm) {
+		try {
+			int resultSet = dbServerManagerService.db_svr_nmCheck(db_svr_nm);
+			if (resultSet > 0) {
+				// 중복값이 존재함.
+				return "false";
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return "true";
 	}
 }

@@ -73,4 +73,9 @@ public class DbServerManagerServiceImpl implements DbServerManagerService {
 		dbServerManagerDAO.updateDB(paramvalue);
 	}
 
+	@Override
+	public int db_svr_nmCheck(String db_svr_nm) throws Exception {
+		return dbServerManagerDAO.db_svr_nmCheck(db_svr_nm);
+	}
+
 }

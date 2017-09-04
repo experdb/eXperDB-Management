@@ -20,7 +20,8 @@
 			, A.DFT_DB_NM
 			, A.SVR_SPR_USR_ID
 			, A.SVR_SPR_SCM_PWD
-			, A.ISTPATH
+			, A.PGHOME_PTH
+			, A.PGDATA_PTH
 			, A.FRST_REGR_ID
 			, FRST_REG_DTM
 			, A.LST_MDFR_ID
@@ -34,7 +35,8 @@
                 , DFT_DB_NM
                 , SVR_SPR_USR_ID
                 , SVR_SPR_SCM_PWD
-                , ISTPATH
+                , PGHOME_PTH
+				, PGDATA_PTH
 			, FRST_REGR_ID
 			, TO_CHAR(FRST_REG_DTM,'YYYY-MM-DD HH24:MI:SS') AS FRST_REG_DTM
 			, LST_MDFR_ID
@@ -74,7 +76,8 @@
 			, DFT_DB_NM
 			, SVR_SPR_USR_ID
 			, SVR_SPR_SCM_PWD
-			, ISTPATH
+			, PGHOME_PTH
+			, PGDATA_PTH
 			, FRST_REGR_ID
 			, FRST_REG_DTM
 			, LST_MDFR_ID
@@ -89,7 +92,8 @@
 			, #{dft_db_nm}
 			, #{svr_spr_usr_id}
 			, #{svr_spr_scm_pwd}
-			, #{istpath}
+			, #{pghome_pth}
+			, #{pgdata_pth}
 			, #{frst_regr_id}
 			, clock_timestamp()
 			, #{lst_mdfr_id}
@@ -113,7 +117,8 @@
 		      , DFT_DB_NM=#{dft_db_nm}
 			  , SVR_SPR_USR_ID=#{svr_spr_usr_id}
 			  , SVR_SPR_SCM_PWD=#{svr_spr_scm_pwd}
-			  , ISTPATH=#{istpath}
+			  , PGHOME_PTH=#{pghome_pth}
+			  , PGDATA_PTH=#{pgdata_pth}
 			  , LST_MDFR_ID=#{lst_mdfr_id}
 			  , LST_MDF_DTM=clock_timestamp()	
 		WHERE DB_SVR_ID=#{db_svr_id}
@@ -314,4 +319,17 @@
 		WHERE DB_SVR_ID=#{db_svr_id}::numeric
 		AND DB_NM=#{dft_db_nm}
 	</update> 
+	
+	
+     <select id="db_svr_nmCheck" resultType="int">
+		/**
+		* Query ID : db_svr_nmCheck
+		* Description : 서버명 중복 체크
+		* Author : 변승우
+		**/
+		SELECT 
+				 COUNT(*)
+		FROM T_DBSVR_I
+		WHERE DB_SVR_NM = #{db_svr_nm}
+	</select>	
 </mapper>

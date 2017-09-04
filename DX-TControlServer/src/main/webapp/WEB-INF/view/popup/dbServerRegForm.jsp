@@ -31,6 +31,10 @@
 //연결테스트 확인여부
 var connCheck = "fail";
 var idCheck = "fail";
+var db_svr_nmChk ="fail";
+
+var pghome_pth="fail";
+var pgdata_pth ="fail";
 
 //숫자체크
 function valid_numeric(objValue)
@@ -48,6 +52,9 @@ function fn_dbServerValidation(){
 			   alert("서버명을 입력하여 주십시오.");
 			   db_svr_nm.focus();
 			   return false;
+		}else if(db_svr_nmChk != "success"){
+			alert("서버명 중복검사를 하셔야합니다.");
+			return false;
 		}
 		var dft_db_nm = document.getElementById("dft_db_nm");
  		if (dft_db_nm.value == "") {
@@ -60,7 +67,10 @@ function fn_dbServerValidation(){
   			   alert("IP를 입력하여 주십시오.");
   			 ipadr.focus();
   			   return false;
-  		}
+  		}else if(idCheck != "success"){
+			alert("IP 중복검사를 하셔야합니다.");
+			return false;
+		}
 
  		var portno = document.getElementById("portno");
 		if (portno.value == "") {
@@ -87,12 +97,28 @@ function fn_dbServerValidation(){
   			 svr_spr_scm_pwd.focus();
   			   return false;
   		}		
- 		var istpath = document.getElementById("istpath");
- 		if (istpath.value == "") {
-  			   alert("저장경로를 입력하여 주십시오.");
-  			 istpath.focus();
+ 		var pghome_pth = document.getElementById("pghome_pth");
+ 		if (pghome_pth.value == "") {
+  			   alert("PG_HOME 경로를 입력하여 주십시오.");
+  			 pghome_pth.focus();
   			   return false;
-  		}	
+  		}else if(pghome_pth != "success"){
+			alert("PG_HOME경로 중복검사를 하셔야합니다.");
+			return false;
+		}
+ 		var pgdata_pth = document.getElementById("pgdata_pth");
+ 		if (pgdata_pth.value == "") {
+  			  alert("PG_DATA경로를 입력하여 주십시오.");
+  			 pgdata_pth.focus();
+  			   return false;
+  		}else if(pgdata_pth != "success"){
+			alert("PG_DATA경로 중복검사를 하셔야합니다.");
+			return false;
+		}
+ 		if(connCheck != "success"){
+			alert("연결테스트를 하셔야합니다.");
+			return false;
+		}
  		return true;
 }
 
@@ -102,7 +128,6 @@ function fn_insertDbServer(){
 
 	if (!fn_dbServerValidation()) return false;
 	
-	if(connCheck == "success" && idCheck == "success"){
   	$.ajax({
 		url : "/insertDbServer.do",
 		data : {
@@ -112,7 +137,8 @@ function fn_insertDbServer(){
 			portno : $("#portno").val(),
 			svr_spr_usr_id : $("#svr_spr_usr_id").val(),
 			svr_spr_scm_pwd : $("#svr_spr_scm_pwd").val(),
-			istpath : $("#istpath").val()
+			pghome_pth : $("#pghome_pth").val(),
+			pgdata_pth : $("#pgdata_pth").val()
 		},
 		type : "post",
 		error : function(xhr, status, error) {
@@ -123,9 +149,6 @@ function fn_insertDbServer(){
 			self.close();	 			
 		}
 	}); 
-	}else{
-		alert("IP중복확인 / 연결 테스트 후 등록이 가능합니다.")
-	}
 } 
 
 
@@ -143,7 +166,8 @@ function fn_dbServerConnTest(){
 			portno : $("#portno").val(),
 			svr_spr_usr_id : $("#svr_spr_usr_id").val(),
 			svr_spr_scm_pwd : $("#svr_spr_scm_pwd").val(),
-			istpath : $("#istpath").val(),
+			pghome_pth : $("#pghome_pth").val(),
+			pgdata_pth : $("#pgdata_pth").val(),
 			check : "i",
 		},
 		type : "post",
@@ -202,14 +226,45 @@ function fn_ipCheck() {
 }
 	
 	
+//서버명 중복체크
+function fn_svrnmCheck() {
+	var db_svr_nm = document.getElementById("db_svr_nm");
+	if (db_svr_nm.value == "") {
+		alert("서버명을 입력하세요.");
+		document.getElementById('db_svr_nm').focus();
+		return;
+	}
+	$.ajax({
+		url : '/db_svr_nmCheck.do',
+		type : 'post',
+		data : {
+			db_svr_nm : $("#db_svr_nm").val()
+		},
+		success : function(result) {
+			if (result == "true") {
+				alert("등록가능한 서버명 입니다.");
+				document.getElementById("db_svr_nm").focus();
+				db_svr_nmChk = "success";
+			} else {
+				alert("중복된 서버명이 존재합니다.");
+				document.getElementById("db_svr_nm").focus();
+			}
+		},
+		error : function(request, status, error) {
+			alert("실패");
+		}
+	});
+}
+
+	
 /* ********************************************************
- * 저장경로의 존재유무 체크
+ * PG_HOME 경로의 존재유무 체크
  ******************************************************** */
-function checkFolder(){
-	var save_pth = $("#istpath").val();
+function checkPghome(){
+	var save_pth = document.getElementById("pghome_pth");
 	if(save_pth == ""){
-		alert("저장경로를 입력해 주세요.");
-		$("#istpath").focus();
+		alert("PG_HOME 경로를 입력해 주세요.");
+		$("#pghome_pth").focus();
 	}else{
 		$.ajax({
 			async : false,
@@ -230,10 +285,52 @@ function checkFolder(){
 			success : function(data) {
 				if(data.result.ERR_CODE == ""){
 					if(data.result.RESULT_DATA == 0){
-						$("#check_path").val("Y");
-						alert("입력하신 경로는 존재합니다.");
+						pghome_pth="success";
+						alert("입력하신 PG_HOME 경로는 존재합니다.");
 					}else{
-						alert("입력하신 경로는 존재하지 않습니다.");
+						alert("입력하신 PG_HOME 경로는 존재하지 않습니다.");
+					}
+				}else{
+					alert("경로체크 중 서버에러로 인하여 실패하였습니다.")
+				}
+			}
+		});
+	}
+}	
+
+
+/* ********************************************************
+ * PG_DATA 경로의 존재유무 체크
+ ******************************************************** */
+function checkPgdata(){
+	var save_pth = document.getElementById("pgdata_pth");
+	if(save_pth == ""){
+		alert("PG_DATA 경로를 입력해 주세요.");
+		$("#pgdata_pth").focus();
+	}else{
+		$.ajax({
+			async : false,
+			url : "/isDirCheck.do",
+		  	data : {
+				db_svr_nm : $("#db_svr_nm").val(),
+				dft_db_nm : $("#dft_db_nm").val(),
+				ipadr : $("#ipadr").val(),
+				portno : $("#portno").val(),
+				svr_spr_usr_id : $("#svr_spr_usr_id").val(),
+				svr_spr_scm_pwd : $("#svr_spr_scm_pwd").val(),
+		  		path : save_pth
+		  	},
+			type : "post",
+			error : function(request, xhr, status, error) {
+				alert("실패");
+			},
+			success : function(data) {
+				if(data.result.ERR_CODE == ""){
+					if(data.result.RESULT_DATA == 0){
+						pgdata_pth="success";
+						alert("입력하신 PG_DATA 경로는 존재합니다.");
+					}else{
+						alert("입력하신 PG_DATA 경로는 존재하지 않습니다.");
 					}
 				}else{
 					alert("경로체크 중 서버에러로 인하여 실패하였습니다.")
@@ -261,7 +358,9 @@ function checkFolder(){
 			<tbody>
 				<tr>
 					<th scope="row" class="ico_t1">서버명(*)</th>
-					<td><input type="text" class="txt" name="db_svr_nm" id="db_svr_nm" /></td>
+					<td><input type="text" class="txt" name="db_svr_nm" id="db_svr_nm"  style="width:230px"/>
+					<span class="btn btnC_01"><button type="button" class= "btn_type_02" onclick="fn_svrnmCheck()" style="width: 60px; margin-right: -60px; margin-top: 0;">중복체크</button></span>
+					</td>
 					<th scope="row" class="ico_t1">Database(*)</th>
 					<td><input type="text" class="txt" name="dft_db_nm" id="dft_db_nm" /></td>
 				</tr>
@@ -280,14 +379,23 @@ function checkFolder(){
 					<td><input type="password" class="txt" name="svr_spr_scm_pwd" id="svr_spr_scm_pwd" /></td>
 				</tr>
 				<tr>
-					<th scope="row" class="ico_t1">서버 설치경로</th>
+					<th scope="row" class="ico_t1">PG_HOME경로(*)</th>
 					<td>
-					<input type="text" class="txt" name="istpath" id="istpath" style="width:640px" /></td>
+					<input type="text" class="txt" name="pghome_pth" id="pghome_pth" style="width:640px" /></td>
 					<th scope="row" class="ico_t1"></th>
 					<td>
-					<span class="btn btnC_01"><button type="button" class= "btn_type_02" onclick="checkFolder()" style="width: 60px; margin-left: 237px; margin-top: 0;">경로체크</button></span>
+					<span class="btn btnC_01"><button type="button" class= "btn_type_02" onclick="checkPghome()" style="width: 60px; margin-left: 237px; margin-top: 0;">경로체크</button></span>
 					</td>					
 				</tr>
+				<tr>
+					<th scope="row" class="ico_t1">PG_DATA경로(*)</th>
+					<td>
+					<input type="text" class="txt" name="pgdata_pth" id="pgdata_pth" style="width:640px" /></td>
+					<th scope="row" class="ico_t1"></th>
+					<td>
+					<span class="btn btnC_01"><button type="button" class= "btn_type_02" onclick="checkPgdata()" style="width: 60px; margin-left: 237px; margin-top: 0;">경로체크</button></span>
+					</td>					
+				</tr>				
 			</tbody>
 		</table>
 		</form>
