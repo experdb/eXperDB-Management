@@ -7,6 +7,7 @@ public class AgentInfoVO {
 	private String AGT_CNDT_CD;
 	private String STRT_DTM;
 	private String ISTCNF_YN;
+	private String AGT_VERSION;
 	private String FRST_REGR_ID;
 	private String FRST_REG_DTM;
 	private String LST_MDFR_ID;
@@ -18,6 +19,12 @@ public class AgentInfoVO {
 
 
 	
+	public String getAGT_VERSION() {
+		return AGT_VERSION;
+	}
+	public void setAGT_VERSION(String aGT_VERSION) {
+		AGT_VERSION = aGT_VERSION;
+	}
 	public int getAGT_SN() {
 		return AGT_SN;
 	}
