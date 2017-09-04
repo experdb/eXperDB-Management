@@ -213,7 +213,7 @@ public class DxT018 extends SocketCtl{
 			}
 
 		} catch(Exception e) {
-			errLogger.error("insertTblMapps {} ", e.toString());
+			errLogger.error("insertKafkaConConfig {} ", e.toString());
 			throw e;
 		} finally {
 			sessDB.close();

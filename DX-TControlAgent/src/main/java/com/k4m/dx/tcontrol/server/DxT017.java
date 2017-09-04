@@ -222,6 +222,7 @@ public class DxT017 extends SocketCtl{
 					hp.put("REGCLASS", strTableSchema + "." + strTableName);
 					
 					sessDB.insert("app.insertTblMapps", hp);
+					sessDB.insert("app.insertColMapps", hp);
 				}
 
 			}
@@ -235,6 +236,8 @@ public class DxT017 extends SocketCtl{
 		}	
 		
 	}
+	
+	
 	
 	private void deleteTblMapps(JSONObject jObj) throws Exception {
 		
@@ -281,6 +284,7 @@ public class DxT017 extends SocketCtl{
 					
 					
 					sessDB.delete("app.deleteTblMapps", hp);
+					sessDB.delete("app.deleteColMapps", hp);
 				}
 
 			}
@@ -294,6 +298,8 @@ public class DxT017 extends SocketCtl{
 		}	
 		
 	}
+	
+
 	
 	
 }

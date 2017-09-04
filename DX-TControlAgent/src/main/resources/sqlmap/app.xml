@@ -359,7 +359,41 @@
 	 		AND table_schema = #{TABLE_SCHEMA}
 	 		
 	 </delete>
-	 
+
+
+	<insert  id="insertColMapps" parameterType="hashMap">
+		/**
+	 	* Query ID : insertColMapps
+	 	* Description : col_mapps Table 등록
+	 	* Author : 박태혁
+	 	**/
+		INSERT INTO col_mapps (reloid, column_name, colseq, create_date, create_user, remark)
+		  SELECT
+		   B.oid
+		   , column_name
+		   , (select count(*)+1 from col_mapps where reloid = C.reloid) ord
+		   , now()
+		   , current_user
+		   , #{REMARK} remark
+		  FROM information_schema.columns A inner join pg_class B
+		  on A.table_name = B.relname
+		  JOIN tbl_mapps C on B.oid = C.reloid
+		  WHERE A.table_schema = #{TABLE_SCHEMA}
+		  AND A.table_name = #{TABLE_NAME}
+  	</insert>
+ 
+  	<delete id="deleteColMapps" parameterType="hashMap">
+		/**
+	 	* Query ID : deleteColMapps
+	 	* Description : col_mapps Table 삭제
+	 	* Author : 박태혁
+	 	**/
+	 	DELETE FROM col_mapps
+	 	WHERE
+	 		table_name = #{TABLE_NAME} 
+	 		AND table_schema = #{TABLE_SCHEMA}
+	 		
+	 </delete>
 	 
   	<insert  id="insertKafkaConConfig" parameterType="hashMap">
   		/**
