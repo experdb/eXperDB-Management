@@ -40,6 +40,7 @@
 			, IPADR
 			, SOCKET_PORT
 			, AGT_CNDT_CD
+			, AGT_VERSION
 			, STRT_DTM
 			, ISTCNF_YN
 			, FRST_REGR_ID
@@ -53,6 +54,7 @@
 			, #{IPADR}
 			, #{SOCKET_PORT}
 			, #{AGT_CNDT_CD}
+			, #{AGT_VERSION}
 			, now()
 			, #{ISTCNF_YN}
 			, #{FRST_REGR_ID}
@@ -72,6 +74,7 @@
 	 	UPDATE T_AGTCNDT_I
 	 	SET 
 	 		AGT_CNDT_CD = #{AGT_CNDT_CD}
+	 		, AGT_VERSION = #{AGT_VERSION}
 	 		, SOCKET_PORT = #{SOCKET_PORT}
 	 		, ISTCNF_YN = #{ISTCNF_YN}
 	 		, LST_MDF_DTM = now()
@@ -95,6 +98,7 @@
 				, AGT_CNDT_CD
 				, STRT_DTM
 				, ISTCNF_YN
+				, AGT_VERSION
 				, FRST_REGR_ID
 				, FRST_REG_DTM
 				, LST_MDFR_ID

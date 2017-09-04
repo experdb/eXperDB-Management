@@ -46,7 +46,7 @@ public class SystemServiceImpl implements SystemService{
 	 * @param dbServerInfo
 	 * @throws Exception
 	 */
-	public void agentInfoStartMng(String strSocketIp, String strSocketPort) throws Exception  {
+	public void agentInfoStartMng(String strSocketIp, String strSocketPort, String strVersion) throws Exception  {
 
 
 			AgentInfoVO searchAgentInfoVO = new AgentInfoVO();
@@ -58,6 +58,7 @@ public class SystemServiceImpl implements SystemService{
 			
 			vo.setIPADR(strSocketIp);
 			vo.setSOCKET_PORT(Integer.parseInt(strSocketPort));
+			vo.setAGT_VERSION(strVersion);
 			vo.setAGT_CNDT_CD(AgentInfoVO.TC001101); //실행
 			vo.setISTCNF_YN("Y");
 			vo.setFRST_REGR_ID("system");

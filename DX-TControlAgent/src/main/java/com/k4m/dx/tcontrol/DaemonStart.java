@@ -84,13 +84,14 @@ public class DaemonStart implements DxDaemon{
 			try {
 				String strIpadr = FileUtil.getPropertyValue("context.properties", "agent.install.ip");
 				String strPort = FileUtil.getPropertyValue("context.properties", "socket.server.port");
+				String strVersion = FileUtil.getPropertyValue("context.properties", "agent.install.version");
 				
 
 				
 				SystemServiceImpl service = (SystemServiceImpl) context.getBean("SystemService");
 
 				
-				service.agentInfoStartMng(strIpadr, strPort);
+				service.agentInfoStartMng(strIpadr, strPort, strVersion);
 				
 			} catch (Exception e) {
 				errLogger.error("데몬 시작시 에러가 발생하였습니다. {}", e.toString());

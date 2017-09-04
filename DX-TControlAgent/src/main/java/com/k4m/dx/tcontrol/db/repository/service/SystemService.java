@@ -51,7 +51,7 @@ public interface SystemService {
 	 * @param dbServerInfo
 	 * @throws Exception
 	 */
-	public void agentInfoStartMng(String strSocketIp, String strSocketPort) throws Exception ;
+	public void agentInfoStartMng(String strSocketIp, String strSocketPort, String strVersion) throws Exception ;
 	
 	/**
 	 * Agent 종료
