@@ -68,9 +68,10 @@
 									<caption>Agent 모니터링 리스트</caption>
 									<colgroup>
 										<col style="width:10%;" />
-										<col style="width:25%;" />
-										<col style="width:15%;" />
 										<col style="width:35%;" />
+										<col style="width:15%;" />
+										<col style="width:15%;" />
+										<col style="width:10%;" />
 										<col style="width:15%;" />
 									</colgroup>
 									<thead>
@@ -79,6 +80,7 @@
 											<th scope="col">DB서버</th>
 											<th scope="col">구동일시</th>
 											<th scope="col">설치여부</th>
+											<th scope="col">Agent Version</th>
 											<th scope="col">Agent 상태</th>
 										</tr>
 									</thead>
@@ -102,6 +104,9 @@
 											<c:if test="${data.ISTCNF_YN == 'N' || data.ISTCNF_YN == null}">
 											<font color="red">미설치</font>
 											</c:if>
+											</td>
+											<td>
+												${data.AGT_VERSION}
 											</td>
 											<td>
 											<c:if test="${data.AGT_CNDT_CD == 'TC001101'}">

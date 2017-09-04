@@ -12,6 +12,15 @@ public class AgentMonitoringVO {
 	private String FRST_REG_DTM;
 	private String LST_MDFR_ID;
 	private String LST_MDF_DTM;
+	private String AGT_VERSION;
+	
+	
+	public String getAGT_VERSION() {
+		return AGT_VERSION;
+	}
+	public void setAGT_VERSION(String aGT_VERSION) {
+		AGT_VERSION = aGT_VERSION;
+	}
 	public String getDB_SVR_ID() {
 		return DB_SVR_ID;
 	}
