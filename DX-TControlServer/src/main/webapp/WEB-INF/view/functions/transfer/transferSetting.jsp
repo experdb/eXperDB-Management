@@ -83,13 +83,13 @@
 		}
  		var teng_ip = document.getElementById("teng_ip");
 		if (teng_ip.value == "") {
-			alert("T엔진 아이피를 입력하여 주십시오.");
+			alert("experdb엔진 아이피를 입력하여 주십시오.");
 			teng_ip.focus();
 			return false;
 		}
  		var teng_port = document.getElementById("teng_port");
 		if (teng_port.value == "") {
-			alert("T엔진 포트를 입력하여 주십시오.");
+			alert("experdb엔진 포트를 입력하여 주십시오.");
 			teng_port.focus();
 			return false;
 		}
@@ -256,7 +256,7 @@
 							<td class="type2"><input type="text" class="txt" name="zookeeper_port" id="zookeeper_port" /></td>
 						</tr>
 						<tr>
-							<td>T엔진</td>
+							<td>experdb엔진</td>
 							<td><input type="text" class="txt" name="teng_ip" id="teng_ip" /></td>
 							<td class="type2"><input type="text" class="txt" name="teng_port" id="teng_port" /></td>
 						</tr>
