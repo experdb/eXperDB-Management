@@ -143,8 +143,8 @@
 									<th scope="col" colspan="4">백업관리</th>
 									<th scope="col">접근제어</th>
 
-									<th scope="col" rowspan="2">T엔진</th>
 									<th scope="col" colspan="2">Transfer</th>
+									<th scope="col" rowspan="2">T엔진</th>								
 								</tr>
 								<tr>
 									<th scope="col">등록</th>
@@ -173,21 +173,19 @@
 									<td>${data.fail_cnt}</td>
 									<td>${data.access_cnt}</td>
 
+									<td>0</td>
+									<td>0</td>
 									<td>
 									<c:if test="${data.agt_cndt_cd == null}">
 										<span class="work_state"><img src="../images/ico_state_08.png" alt="Not Install" /></span>Not Install
 									</c:if>
 									<c:if test="${data.agt_cndt_cd == 'TC001101'}">
 										<span class="work_state"><img src="../images/ico_state_03.png" alt="Running" /></span>Running
-									</c:if>
-									
+									</c:if>									
 									<c:if test="${data.agt_cndt_cd == 'TC001102'}">
 										<span class="work_state"><img src="../images/ico_state_07.png" alt="Stop" /></span>Stop
-									</c:if>
-											
-									</td>
-									<td>0</td>
-									<td>0</td>
+									</c:if>											
+									</td>							
 								</tr>
 								</c:forEach>
 							</tbody>

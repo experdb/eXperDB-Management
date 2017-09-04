@@ -49,6 +49,13 @@
                 persist: "location"
             });
             
+            $("#tree3").treeview({
+                collapsed: false,
+                animated: "medium",
+                control:"#sidetreecontrol",
+                persist: "location"
+            });
+            
         });
 	
 
@@ -98,13 +105,13 @@
 				alert("실패")
 			},
 			success : function(result) {
+				Schedule();
 				GetJsonDataConnector(data, result);
 			}
 		})
 	}	
 	
 
-	
   		function GetJsonData(data, aut) {
 			var parseData = $.parseJSON(data);
 
@@ -170,6 +177,14 @@
 	          html += '</ul>';
 	          $( "#tree2" ).append(html);
 	       }   
+	      
+	      
+	      function Schedule(){
+	    	  var html3 = '      <ul class="depth_1 lnbMenu"><li class="ico2_2"><a href="/insertScheduleView.do" onClick=javascript:fn_GoLink("/insertScheduleView.do");><img src="../images/ico_lnb_13.png" id="treeImg">스케줄등록</a></li></ul>';
+	          html3 += '         <ul class="depth_1 lnbMenu"><li class="ico2_2"><a href="/selectScheduleListView.do" onClick=javascript:fn_GoLink("/selectScheduleListView.do");><img src="../images/ico_lnb_11.png" id="treeImg">스케줄조회</a></li></ul>';
+	          html3 += '         <ul class="depth_1 lnbMenu"><li class="ico2_2"><a href="/selectScheduleHistoryView.do" onClick=javascript:fn_GoLink("/selectScheduleHistoryView.do");><img src="../images/ico_lnb_14.png" id="treeImg">스케줄이력</a></li></ul>';
+	          $( "#tree3" ).append(html3);
+	      }
 		
 	function fn_logout(){
 		var frm = document.treeView;
@@ -209,8 +224,17 @@
 						</div>
 				</div>
 				
+				<div id="treeTitle"><img src="../images/ico_main_tit_1.png" id="treeImg">Schedule
+				</div>	
+				<div id="sidetree">						
+						<div class="treeborder">
+						<ul id="tree">
+							<div id="tree3"></div>
+						</ul>
+						</div>
+				</div>
 				
-				<div id="treeTitle"><img src="../images/ico_lnb_2.png" id="treeImg">Transfer
+				<div id="treeSub"><img src="../images/ico_lnb_2.png" id="treeImg">Transfer
 						<div id="sidetreecontrol2" style="float: right;">							
 							<a href="?#"><img src="../images/ico_lnb_close.png"></a>
 							<a href="?#"><img src="../images/ico_lnb_open.png"></a>

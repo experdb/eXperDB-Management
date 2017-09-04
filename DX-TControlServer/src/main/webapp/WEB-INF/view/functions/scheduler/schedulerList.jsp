@@ -1,7 +1,9 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
     
-    
+<%
+	String usr_id = (String)session.getAttribute("usr_id");
+%>
 <script>
 var table = null;
 
@@ -36,14 +38,16 @@ function fn_init(){
 		},
 		{data : "status", 
 			render: function (data, type, full){
-				if(full.status == "s"){
-					var html = '<img src="../images/ico_start.png" alt="실행중" id="scheduleStop"/>';
+				if(full.frst_regr_id == "<%=usr_id%>"){			
+					if(full.status == "s"){
+						var html = '<img src="../images/ico_w_25.png" alt="실행중" id="scheduleStop"/>';
+							return html;
+					}else{
+						var html = '<img src="../images/ico_w_24.png" alt="중지중" id="scheduleStart" />';
 						return html;
-				}else{
-					var html = '<img src="../images/ico_end.png" alt="중지중" id="scheduleStart" />';
-					return html;
-				}
+					}					
 				return data;
+				}
 			},
 			className : "dt-center", defaultContent : "" 	
 		},		
@@ -131,11 +135,13 @@ $(window.document).ready(function() {
 
 function fn_buttonAut(){
 	var read_button = document.getElementById("read_button"); 
-	var int_button = document.getElementById("int_button"); 
-	var mdf_button = document.getElementById("mdf_button"); 
-	var del_button = document.getElementById("del_button"); 
 	
-	if("${wrt_aut_yn}" == "Y"){
+	//조회버튼만 남기고, 등록,수정,삭제는 My스케줄에서 가능
+/* 	var int_button = document.getElementById("int_button"); 
+	var mdf_button = document.getElementById("mdf_button"); 
+	var del_button = document.getElementById("del_button");  */
+	
+	/* if("${wrt_aut_yn}" == "Y"){
 		int_button.style.display = '';
 		mdf_button.style.display = '';
 		del_button.style.display = '';
@@ -143,7 +149,7 @@ function fn_buttonAut(){
 		int_button.style.display = 'none';
 		mdf_button.style.display = 'none';
 		del_button.style.display = 'none';
-	}
+	} */
 		
 	if("${read_aut_yn}" == "Y"){
 		read_button.style.display = '';
@@ -261,9 +267,9 @@ function fn_modifyScheduleListView(){
 			<div class="cmm_grp">
 				<div class="btn_type_01">
 					<span class="btn" id="read_button"><button onClick="fn_selectScheduleList();">조회</button></span>
-					<span class="btn" id="int_button"><a href="/insertScheduleView.do"><button>등록</button></a></span>
+					<!-- <span class="btn" id="int_button"><a href="/insertScheduleView.do"><button>등록</button></a></span>
 					<span class="btn" id="mdf_button"><button onClick="fn_modifyScheduleListView();">수정</button></span>
-					<span class="btn" id="del_button"><button onClick="fn_deleteScheduleList();">삭제</button></span>
+					<span class="btn" id="del_button"><button onClick="fn_deleteScheduleList();">삭제</button></span> -->
 				</div>
 				<div class="sch_form">
 					<table class="write">
