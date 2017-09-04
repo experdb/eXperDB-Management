@@ -365,7 +365,7 @@ public class AuditController {
 				AgentInfoVO agentInfo =  (AgentInfoVO) cmmnServerInfoService.selectAgentInfo(vo);
 				
 				
-				String strDirectory = dbServerVO.getIstpath() + "/data/pg_log/";
+				String strDirectory = dbServerVO.getPgdata_pth() + "/pg_log/";
 				
 				JSONObject serverObj = new JSONObject();
 				
@@ -485,7 +485,7 @@ public class AuditController {
 			
 			AgentInfoVO agentInfo =  (AgentInfoVO) cmmnServerInfoService.selectAgentInfo(vo);
 			
-			String strDirectory = dbServerVO.getIstpath()+ "/data/pg_log/";
+			String strDirectory = dbServerVO.getPgdata_pth()+ "/pg_log/";
 			
 			JSONObject serverObj = new JSONObject();
 			
@@ -593,7 +593,7 @@ public class AuditController {
 			
 			AgentInfoVO agentInfo =  (AgentInfoVO) cmmnServerInfoService.selectAgentInfo(vo);
 			
-			String strDirectory = dbServerVO.getIstpath()+ "/data/pg_log/";
+			String strDirectory = dbServerVO.getPgdata_pth()+ "/pg_log/";
 			String strFileName = request.getParameter("file_name");
 			
 			JSONObject serverObj = new JSONObject();
@@ -674,7 +674,7 @@ public class AuditController {
 			
 			AgentInfoVO agentInfo =  (AgentInfoVO) cmmnServerInfoService.selectAgentInfo(vo);
 			
-			String strDirectory = dbServerVO.getIstpath()+ "/data/pg_log/";
+			String strDirectory = dbServerVO.getPgdata_pth()+ "/pg_log/";
 			//strDirectory = "C:\\k4m\\01-1. DX 제폼개발\\04. 시험\\pg_log\\";
 			
 			String strFileName = request.getParameter("file_name");

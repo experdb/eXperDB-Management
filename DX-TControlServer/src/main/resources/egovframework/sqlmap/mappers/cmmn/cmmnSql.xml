@@ -86,7 +86,8 @@
 	                , IPADR
 	                , PORTNO
 	                , DFT_DB_NM
-	                , ISTPATH
+	                , PGHOME_PTH
+	                , PGDATA_PTH
 	                , SVR_SPR_USR_ID
 	                , SVR_SPR_SCM_PWD
 	                , FRST_REGR_ID
