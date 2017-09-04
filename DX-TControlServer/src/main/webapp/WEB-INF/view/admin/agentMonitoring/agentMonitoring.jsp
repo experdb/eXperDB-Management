@@ -77,9 +77,9 @@
 										<tr>
 											<th scope="col">NO</th>
 											<th scope="col">DB서버</th>
-											<th scope="col">Agent 상태</th>
 											<th scope="col">구동일시</th>
 											<th scope="col">설치여부</th>
+											<th scope="col">Agent 상태</th>
 										</tr>
 									</thead>
 									<tbody>
@@ -93,15 +93,7 @@
 									<c:forEach var="data" items="${list}" varStatus="status">
 										<tr>
 											<td>${status.count}</td>
-											<td>${data.DB_SVR_NM}</td>
-											<td>
-											<c:if test="${data.AGT_CNDT_CD == 'TC001101'}">
-												<img src="../images/ico_agent_1.png" alt="" />
-											</c:if>
-											<c:if test="${data.AGT_CNDT_CD == 'TC001102'}">
-												<img src="../images/ico_agent_2.png" alt="" />
-											</c:if>
-											</td>
+											<td>${data.DB_SVR_NM}</td>											
 											<td>${data.STRT_DTM}</td>
 											<td>
 											<c:if test="${data.ISTCNF_YN == 'Y'}">
@@ -109,6 +101,14 @@
 											</c:if>
 											<c:if test="${data.ISTCNF_YN == 'N' || data.ISTCNF_YN == null}">
 											<font color="red">미설치</font>
+											</c:if>
+											</td>
+											<td>
+											<c:if test="${data.AGT_CNDT_CD == 'TC001101'}">
+												<img src="../images/ico_agent_1.png" alt="" />
+											</c:if>
+											<c:if test="${data.AGT_CNDT_CD == 'TC001102'}">
+												<img src="../images/ico_agent_2.png" alt="" />
 											</c:if>
 											</td>
 										</tr>

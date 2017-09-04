@@ -144,4 +144,11 @@ public class DbServerManagerDAO extends EgovAbstractMapper{
 		update("dbserverManagerSql.updateDB",paramvalue );		
 	}
 
+
+	public int db_svr_nmCheck(String db_svr_nm) {
+		int resultSet = 0;
+		resultSet = (int) getSqlSession().selectOne("dbserverManagerSql.db_svr_nmCheck", db_svr_nm);
+		return resultSet;
+	}
+
 }

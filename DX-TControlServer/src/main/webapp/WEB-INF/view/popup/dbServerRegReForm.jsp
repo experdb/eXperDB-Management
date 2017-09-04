@@ -29,6 +29,8 @@
 <script type="text/javascript">
 
 var connCheck = "fail";
+var pghome_pth="fail";
+var pgdata_pth ="fail";
 
 $(window.document).ready(function() {
 	
@@ -53,7 +55,8 @@ $(window.document).ready(function() {
 			document.getElementById('portno').value= result[0].portno;
 			document.getElementById('svr_spr_usr_id').value= result[0].svr_spr_usr_id;
 			document.getElementById('svr_spr_scm_pwd').value= result[0].svr_spr_scm_pwd;
-			document.getElementById('istpath').value= result[0].istpath;
+			document.getElementById('pghome_pth').value= result[0].pghome_pth;
+			document.getElementById('pgdata_pth').value= result[0].pgdata_pth;
 		}
 	});   
 
@@ -72,7 +75,8 @@ function fn_dbServerConnTest(){
 			portno : $("#portno").val(),
 			svr_spr_usr_id : $("#svr_spr_usr_id").val(),
 			svr_spr_scm_pwd : $("#svr_spr_scm_pwd").val(),
-			istpath : $("#istpath").val(),
+			pghome_pth : $("#pghome_pth").val(),
+			pgdata_pth : $("#pgdata_pth").val(),
 			check : "u",
 		},
 		type : "post",
@@ -109,7 +113,8 @@ function fn_updateDbServer(){
 			portno : $("#portno").val(),
 			svr_spr_usr_id : $("#svr_spr_usr_id").val(),
 			svr_spr_scm_pwd : $("#svr_spr_scm_pwd").val(),
-			istpath : $("#istpath").val()
+			pghome_pth : $("#pghome_pth").val(),
+			pgdata_pth : $("#pgdata_pth").val()
 		},
 		type : "post",
 		error : function(xhr, status, error) {
@@ -127,13 +132,13 @@ function fn_updateDbServer(){
 
 
 /* ********************************************************
- * 저장경로의 존재유무 체크
+ * PG_HOME 경로의 존재유무 체크
  ******************************************************** */
-function checkFolder(){
-	var save_pth = $("#istpath").val();
+function checkPghome(){
+	var save_pth = document.getElementById("pghome_pth");
 	if(save_pth == ""){
-		alert("저장경로를 입력해 주세요.");
-		$("#istpath").focus();
+		alert("PG_HOME 경로를 입력해 주세요.");
+		$("#pghome_pth").focus();
 	}else{
 		$.ajax({
 			async : false,
@@ -154,10 +159,52 @@ function checkFolder(){
 			success : function(data) {
 				if(data.result.ERR_CODE == ""){
 					if(data.result.RESULT_DATA == 0){
-						$("#check_path").val("Y");
-						alert("입력하신 경로는 존재합니다.");
+						pghome_pth="success";
+						alert("입력하신 PG_HOME 경로는 존재합니다.");
 					}else{
-						alert("입력하신 경로는 존재하지 않습니다.");
+						alert("입력하신 PG_HOME 경로는 존재하지 않습니다.");
+					}
+				}else{
+					alert("경로체크 중 서버에러로 인하여 실패하였습니다.")
+				}
+			}
+		});
+	}
+}	
+
+
+/* ********************************************************
+ * PG_DATA 경로의 존재유무 체크
+ ******************************************************** */
+function checkPgdata(){
+	var save_pth = document.getElementById("pgdata_pth");
+	if(save_pth == ""){
+		alert("PG_DATA 경로를 입력해 주세요.");
+		$("#pgdata_pth").focus();
+	}else{
+		$.ajax({
+			async : false,
+			url : "/isDirCheck.do",
+		  	data : {
+				db_svr_nm : $("#db_svr_nm").val(),
+				dft_db_nm : $("#dft_db_nm").val(),
+				ipadr : $("#ipadr").val(),
+				portno : $("#portno").val(),
+				svr_spr_usr_id : $("#svr_spr_usr_id").val(),
+				svr_spr_scm_pwd : $("#svr_spr_scm_pwd").val(),
+		  		path : save_pth
+		  	},
+			type : "post",
+			error : function(request, xhr, status, error) {
+				alert("실패");
+			},
+			success : function(data) {
+				if(data.result.ERR_CODE == ""){
+					if(data.result.RESULT_DATA == 0){
+						pgdata_pth="success";
+						alert("입력하신 PG_DATA 경로는 존재합니다.");
+					}else{
+						alert("입력하신 PG_DATA 경로는 존재하지 않습니다.");
 					}
 				}else{
 					alert("경로체크 중 서버에러로 인하여 실패하였습니다.")
@@ -202,12 +249,23 @@ function checkFolder(){
 					<td><input type="password" class="txt" name="svr_spr_scm_pwd" id="svr_spr_scm_pwd" /></td>
 				</tr>
 				<tr>
-					<th scope="row" class="ico_t1">서버 설치경로</th>
-					<td><input type="text" class="txt" name="istpath" id="istpath" style="width:640px" /></td>		
+					<th scope="row" class="ico_t1">PG_HOME경로(*)</th>
 					<td>
-					<span class="btn btnC_01"><button type="button" class= "btn_type_02" onclick="checkFolder()" style="width: 60px; margin-left: 337px; margin-top: 0;">경로체크</button></span>
+					<input type="text" class="txt" name="pghome_pth" id="pghome_pth" style="width:640px" /></td>
+					<th scope="row" class="ico_t1"></th>
+					<td>
+					<span class="btn btnC_01"><button type="button" class= "btn_type_02" onclick="checkPghome()" style="width: 60px; margin-left: 237px; margin-top: 0;">경로체크</button></span>
 					</td>					
 				</tr>
+				<tr>
+					<th scope="row" class="ico_t1">PG_DATA경로(*)</th>
+					<td>
+					<input type="text" class="txt" name="pgdata_pth" id="pgdata_pth" style="width:640px" /></td>
+					<th scope="row" class="ico_t1"></th>
+					<td>
+					<span class="btn btnC_01"><button type="button" class= "btn_type_02" onclick="checkPgdata()" style="width: 60px; margin-left: 237px; margin-top: 0;">경로체크</button></span>
+					</td>					
+				</tr>	
 			</tbody>
 		</table>
 		<input type="hidden" id="db_svr_id" name="db_svr_id">

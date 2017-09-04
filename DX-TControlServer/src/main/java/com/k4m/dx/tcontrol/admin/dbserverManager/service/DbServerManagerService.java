@@ -85,5 +85,13 @@ public interface DbServerManagerService {
 
 
 	void updateDB(HashMap<String, Object> paramvalue) throws Exception;
+
+
+	/**
+	 * Repository DB서버명 중복체크
+	 * @param db_svr_nm 
+	 * @throws Exception
+	 */
+	int db_svr_nmCheck(String db_svr_nm)throws Exception;
 	
 }
