@@ -104,12 +104,11 @@ public class AccessControlController {
 	@RequestMapping(value = "/accessControl.do")
 	public ModelAndView serverAccessControl(@ModelAttribute("historyVO") HistoryVO historyVO,
 			HttpServletRequest request) {
-		
+	
 		CmmnUtils cu = new CmmnUtils();
 		dbSvrAut = cu.selectUserDBSvrAutList(dbAuthorityService);
-		
-		ModelAndView mv = new ModelAndView();
 
+		ModelAndView mv = new ModelAndView();
 		try {
 			if(dbSvrAut.get(0).get("acs_cntr_aut_yn").equals("N")){
 				mv.setViewName("error/autError");				
@@ -120,11 +119,6 @@ public class AccessControlController {
 				accessHistoryService.insertHistory(historyVO);
 	
 				int db_svr_id = Integer.parseInt(request.getParameter("db_svr_id"));
-				DbAutVO dbAutVO = new DbAutVO();
-				dbAutVO.setDb_svr_id(db_svr_id);
-				HttpSession session = request.getSession();
-				dbAutVO.setUsr_id((String) session.getAttribute("usr_id"));
-				
 				
 				DbServerVO schDbServerVO = new DbServerVO();
 				schDbServerVO.setDb_svr_id(db_svr_id);
@@ -138,13 +132,7 @@ public class AccessControlController {
 					mv.addObject("extName", "agent");
 					mv.setViewName("dbserver/accesscontrol");
 				}else{
-					List<DbIDbServerVO> resultSet = accessControlService.selectDatabaseListAut(dbAutVO);
-					if (resultSet.size() == 0) {
-						mv.addObject("db_svr_nm", resultSet.get(0).getDb_svr_nm());
-					} else {
-						mv.addObject("db_svr_nm", resultSet.get(0).getDb_svr_nm());
-						mv.addObject("resultSet", resultSet);
-					}
+					mv.addObject("db_svr_nm", dbServerVO.getDb_svr_nm());
 					mv.addObject("db_svr_id", db_svr_id);
 					mv.setViewName("dbserver/accesscontrol");	
 				}
@@ -169,16 +157,12 @@ public class AccessControlController {
 			AES256 dec = new AES256(AES256_KEY.ENC_KEY);
 			int db_svr_id = Integer.parseInt(request.getParameter("db_svr_id"));
 			
-
 			DbServerVO schDbServerVO = new DbServerVO();
 			schDbServerVO.setDb_svr_id(db_svr_id);
 			DbServerVO dbServerVO = (DbServerVO)  cmmnServerInfoService.selectServerInfo(schDbServerVO);
-
 			String strIpAdr = dbServerVO.getIpadr();
-			
 			AgentInfoVO vo = new AgentInfoVO();
 			vo.setIPADR(strIpAdr);
-			
 			AgentInfoVO agentInfo =  (AgentInfoVO) cmmnServerInfoService.selectAgentInfo(vo);
 			
 			JSONObject serverObj = new JSONObject();
@@ -218,17 +202,15 @@ public class AccessControlController {
 			String act = request.getParameter("act");
 			CmmnUtils.saveHistory(request, historyVO);
 
-			int db_id = Integer.parseInt(request.getParameter("db_id"));
-			DbIDbServerVO dbIDbServerVO = (DbIDbServerVO) accessControlService.selectServerDb(db_id);
-			
+			int db_svr_id = Integer.parseInt(request.getParameter("db_svr_id"));
 			DbServerVO schDbServerVO = new DbServerVO();
-			schDbServerVO.setDb_svr_id(dbIDbServerVO.getDb_svr_id());
-			DbServerVO dbServerVO =(DbServerVO) cmmnServerInfoService.selectServerInfo(schDbServerVO);
-			String strIpAdr = dbServerVO.getIpadr();	
+			schDbServerVO.setDb_svr_id(db_svr_id);
+			DbServerVO dbServerVO = (DbServerVO)  cmmnServerInfoService.selectServerInfo(schDbServerVO);
+			String strIpAdr = dbServerVO.getIpadr();
 			AgentInfoVO vo = new AgentInfoVO();
 			vo.setIPADR(strIpAdr);
-			AgentInfoVO agentInfo =(AgentInfoVO) cmmnServerInfoService.selectAgentInfo(vo);
-			
+			AgentInfoVO agentInfo =  (AgentInfoVO) cmmnServerInfoService.selectAgentInfo(vo);
+	
 			String IP = dbServerVO.getIpadr();
 			int PORT = agentInfo.getSOCKET_PORT();
 			
@@ -242,6 +224,14 @@ public class AccessControlController {
 			
 			ClientInfoCmmn cic = new ClientInfoCmmn();
 			result = cic.role_List(serverObj);
+			mv.addObject("result", result);
+			
+			DbAutVO dbAutVO = new DbAutVO();
+			dbAutVO.setDb_svr_id(db_svr_id);
+			HttpSession session = request.getSession();
+			dbAutVO.setUsr_id((String) session.getAttribute("usr_id"));
+			List<DbIDbServerVO> resultSet = accessControlService.selectDatabaseList(dbAutVO);
+			mv.addObject("resultSet", resultSet);
 			
 			if (act.equals("i")) {
 				// 접근제어 등록 팝업 이력 남기기
@@ -259,13 +249,11 @@ public class AccessControlController {
 				mv.addObject("prms_usr_id",request.getParameter("User").equals("undefined") ? "" : request.getParameter("User"));
 				mv.addObject("ctf_mth_nm",request.getParameter("Method").equals("undefined") ? "" : request.getParameter("Method"));
 				mv.addObject("ctf_tp_nm",request.getParameter("Type").equals("undefined") ? "" : request.getParameter("Type"));
+				mv.addObject("dtb",request.getParameter("Database").equals("undefined") ? "" : request.getParameter("Database"));
 			}
 			
-			mv.addObject("result", result);
-			mv.addObject("db_svr_nm", dbIDbServerVO.getDb_svr_nm());
-			mv.addObject("db_nm", dbIDbServerVO.getDb_nm());
-			mv.addObject("db_svr_id", dbIDbServerVO.getDb_svr_id());
-			mv.addObject("db_id", db_id);
+			mv.addObject("db_svr_nm", dbServerVO.getDb_svr_nm());
+			mv.addObject("db_svr_id", dbServerVO.getDb_svr_id());
 			mv.addObject("act", act);
 			mv.setViewName("popup/accessControlRegForm");
 		} catch (Exception e) {
@@ -295,12 +283,12 @@ public class AccessControlController {
 			historyVO.setExe_dtl_cd("DX-T0028_02");
 			accessHistoryService.insertHistory(historyVO);
 			
-			/*DBid 서버접근제어 전체 삭제*/
-			accessControlService.deleteDbAccessControl(accessControlVO.getDb_id());
-			
 			AES256 dec = new AES256(AES256_KEY.ENC_KEY);
 			int db_svr_id = Integer.parseInt(request.getParameter("db_svr_id"));
 
+			/*서버접근제어 전체 삭제*/
+			accessControlService.deleteDbAccessControl(db_svr_id);
+			
 			DbServerVO schDbServerVO = new DbServerVO();
 			schDbServerVO.setDb_svr_id(db_svr_id);
 			DbServerVO dbServerVO = (DbServerVO)  cmmnServerInfoService.selectServerInfo(schDbServerVO);	
@@ -321,7 +309,7 @@ public class AccessControlController {
 			
 			acObj.put(ClientProtocolID.AC_SET, "1");
 			acObj.put(ClientProtocolID.AC_TYPE, accessControlVO.getCtf_tp_nm());
-			acObj.put(ClientProtocolID.AC_DATABASE, dbServerVO.getDft_db_nm());
+			acObj.put(ClientProtocolID.AC_DATABASE, accessControlVO.getDtb());
 			acObj.put(ClientProtocolID.AC_USER, accessControlVO.getPrms_usr_id());
 			acObj.put(ClientProtocolID.AC_IP, accessControlVO.getPrms_ipadr());
 			acObj.put(ClientProtocolID.AC_METHOD, accessControlVO.getCtf_mth_nm());
@@ -346,6 +334,7 @@ public class AccessControlController {
 					accessControlVO.setCtf_mth_nm((String) jsonObj.get("Method"));
 					accessControlVO.setCtf_tp_nm((String) jsonObj.get("Type"));
 					accessControlVO.setOpt_nm((String) jsonObj.get("Option"));
+					accessControlVO.setDtb((String) jsonObj.get("Database"));
 					accessControlService.insertAccessControl(accessControlVO);
 				}
 			}
@@ -399,7 +388,7 @@ public class AccessControlController {
 			acObj.put(ClientProtocolID.AC_SEQ, request.getParameter("prms_seq"));	
 			acObj.put(ClientProtocolID.AC_SET, "1");
 			acObj.put(ClientProtocolID.AC_TYPE, accessControlVO.getCtf_tp_nm());
-			acObj.put(ClientProtocolID.AC_DATABASE, dbServerVO.getDft_db_nm());
+			acObj.put(ClientProtocolID.AC_DATABASE, accessControlVO.getDtb());
 			acObj.put(ClientProtocolID.AC_USER, accessControlVO.getPrms_usr_id());
 			acObj.put(ClientProtocolID.AC_IP, accessControlVO.getPrms_ipadr());
 			acObj.put(ClientProtocolID.AC_METHOD, accessControlVO.getCtf_mth_nm());
@@ -407,8 +396,8 @@ public class AccessControlController {
 			
 			cic.dbAccess_update(serverObj, acObj, IP, PORT);
 			
-			/*DBid 서버접근제어 전체 삭제*/
-			accessControlService.deleteDbAccessControl(accessControlVO.getDb_id());
+			/*서버접근제어 전체 삭제*/
+			accessControlService.deleteDbAccessControl(db_svr_id);
 			
 			HttpSession session = request.getSession();
 			String usr_id = (String) session.getAttribute("usr_id");
@@ -427,6 +416,7 @@ public class AccessControlController {
 					accessControlVO.setCtf_mth_nm((String) jsonObj.get("Method"));
 					accessControlVO.setCtf_tp_nm((String) jsonObj.get("Type"));
 					accessControlVO.setOpt_nm((String) jsonObj.get("Option"));
+					accessControlVO.setDtb((String) jsonObj.get("Database"));
 					accessControlService.insertAccessControl(accessControlVO);
 				}
 			}
@@ -484,7 +474,7 @@ public class AccessControlController {
 			cic.dbAccess_delete(serverObj, arrSeq, IP, PORT);
 
 			/*DBid 서버접근제어 전체 삭제*/
-			accessControlService.deleteDbAccessControl(accessControlVO.getDb_id());
+			accessControlService.deleteDbAccessControl(db_svr_id);
 			
 			HttpSession session = request.getSession();
 			String usr_id = (String) session.getAttribute("usr_id");
@@ -503,6 +493,7 @@ public class AccessControlController {
 					accessControlVO.setCtf_mth_nm((String) jsonObj.get("Method"));
 					accessControlVO.setCtf_tp_nm((String) jsonObj.get("Type"));
 					accessControlVO.setOpt_nm((String) jsonObj.get("Option"));
+					accessControlVO.setDtb((String) jsonObj.get("Database"));
 					accessControlService.insertAccessControl(accessControlVO);
 				}
 			}		
@@ -587,7 +578,7 @@ public class AccessControlController {
 			}
 			
 			/*DBid 서버접근제어 전체 삭제*/
-			accessControlService.deleteDbAccessControl(accessControlVO.getDb_id());
+			accessControlService.deleteDbAccessControl(db_svr_id);
 			
 			HttpSession session = request.getSession();
 			String usr_id = (String) session.getAttribute("usr_id");
@@ -606,6 +597,7 @@ public class AccessControlController {
 					accessControlVO.setCtf_mth_nm((String) jsonObj.get("Method"));
 					accessControlVO.setCtf_tp_nm((String) jsonObj.get("Type"));
 					accessControlVO.setOpt_nm((String) jsonObj.get("Option"));
+					accessControlVO.setDtb((String) jsonObj.get("Database"));
 					accessControlService.insertAccessControl(accessControlVO);
 				}
 			}

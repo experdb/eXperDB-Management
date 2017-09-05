@@ -80,7 +80,11 @@
 	    		success : function(result) {  
 	    				var option = "<option value=''>선택</option>";
 						for(var i=0; i<result.length; i++){	
-							 option += "<option value='"+result[i].db_id+"'>"+result[i].db_nm+"</option>";		 
+							 option += "<option value='"+result[i].db_id+"'>"+result[i].db_nm;
+							 if(result[i].db_exp!=""){
+								option += "("+result[i].db_exp+")";
+							 }
+							 option +="</option>";
 						}
 					$('#db_nm').append(option);
 					$("#db_nm").val("${result[0].db_id}").attr("selected", "selected");

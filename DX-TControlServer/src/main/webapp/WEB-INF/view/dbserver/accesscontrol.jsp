@@ -27,10 +27,11 @@
 			columns : [
 				{ data : "Seq", defaultContent : "", targets : 0, orderable : false, checkboxes : {'selectRow' : true}}, 
 				{ data : "", className : "dt-center", defaultContent : ""}, 
+				{ data : "Type", className : "dt-center", defaultContent : ""},
+				{ data : "Database", className : "dt-center", defaultContent : ""}, 
 				{ data : "User", className : "dt-center", defaultContent : ""}, 
 				{ data : "Ipadr", className : "dt-center", defaultContent : ""}, 
 				{ data : "Method", className : "dt-center", defaultContent : ""}, 
-				{ data : "Type", className : "dt-center", defaultContent : ""},
 				{ data : "",	
 					className: "dt-center",							
 					defaultContent : "",
@@ -97,14 +98,6 @@
 		
 		//더블 클릭시
 		$('#accessControlTable tbody').on('dblclick','tr',function() {
-			var check= document.getElementsByName("check");
-			var checkCount = 0;
-			for (var i=0; i<check.length; i++){
-				if(check[i].checked ==true){
-					var db_id = check[i].value;
-					checkCount ++;
-				}
-			}
 			var User = table.row(this).data().User;
 			var Seq = table.row(this).data().Seq;
 			var Method = table.row(this).data().Method;
@@ -112,9 +105,9 @@
 			var Type = table.row(this).data().Type;
 			var Ipadr = table.row(this).data().Ipadr;
 			
-			var popUrl = "/popup/accessControlRegForm.do?act=u&&db_id="+db_id+"&&User="+User+"&&Seq="+Seq+"&&Method="+Method+"&&Database="+Database+"&&Type="+Type+"&&Ipadr="+Ipadr; // 서버 url 팝업경로
+			var popUrl = "/popup/accessControlRegForm.do?act=u&&db_svr_id=${db_svr_id}&&User="+User+"&&Seq="+Seq+"&&Method="+Method+"&&Database="+Database+"&&Type="+Type+"&&Ipadr="+Ipadr; // 서버 url 팝업경로
 			var width = 920;
-			var height = 430;
+			var height = 380;
 			var left = (window.screen.width / 2) - (width / 2);
 			var top = (window.screen.height /2) - (height / 2);
 			var popOption = "width="+width+", height="+height+", top="+top+", left="+left+", resizable=no, scrollbars=no, status=no, toolbar=no, titlebar=yes, location=no,";
@@ -136,6 +129,25 @@
 				 table.search( this.value ).draw();
 			});	
 			$('.dataTables_filter').hide();
+	 		 $.ajax({
+	 			url : "/selectAccessControl.do",
+	 			data : {
+	 				db_svr_id : "${db_svr_id}",
+	 			},
+	 			dataType : "json",
+	 			type : "post",
+	 			error : function(xhr, status, error) {
+	 				alert("실패")
+	 			},
+	 			success : function(result) {
+	 				table.clear().draw();
+	 				if(result.data == null){
+	     				alert("서버상태를 확인해주세요.");
+	     			}else{
+	 					table.rows.add(result.data).draw();
+	     			}
+	 			}
+	 		}); 
 		}	
 	});
 
@@ -167,117 +179,76 @@
 
 	/* 등록 버튼 클릭시*/
 	function fn_insert(){
-		var check= document.getElementsByName("check");
-		var checkCount = 0;
-		for (var i=0; i<check.length; i++){
-			if(check[i].checked ==true){
-				var db_id = check[i].value;
-				checkCount ++;
-			}
-		}	
-		if(checkCount ==0){
-			alert("Database를 선택해주세요.")
-			return false;
-		}else{
-			var popUrl = "/popup/accessControlRegForm.do?act=i&&db_id="+db_id; // 서버 url 팝업경로
-			var width = 920;
-			var height = 430;
-			var left = (window.screen.width / 2) - (width / 2);
-			var top = (window.screen.height /2) - (height / 2);
-			var popOption = "width="+width+", height="+height+", top="+top+", left="+left+", resizable=no, scrollbars=yes, status=no, toolbar=no, titlebar=yes, location=no,";
+		var popUrl = "/popup/accessControlRegForm.do?act=i&&db_svr_id=${db_svr_id}"; // 서버 url 팝업경로
+		var width = 920;
+		var height = 380;
+		var left = (window.screen.width / 2) - (width / 2);
+		var top = (window.screen.height /2) - (height / 2);
+		var popOption = "width="+width+", height="+height+", top="+top+", left="+left+", resizable=no, scrollbars=yes, status=no, toolbar=no, titlebar=yes, location=no,";
 			
-			window.open(popUrl,"",popOption);		
-		}
+		window.open(popUrl,"",popOption);		
 	
 	}
 	
 	/* 수정 버튼 클릭시*/
 	function fn_update(){
-		var check= document.getElementsByName("check");
-		var checkCount = 0;
-		for (var i=0; i<check.length; i++){
-			if(check[i].checked ==true){
-				var db_id = check[i].value;
-				checkCount ++;
-			}
-		}
-		if(checkCount ==0){
-			alert("Database를 선택해주세요.")
-			return false;
+		var rowCnt = table.rows('.selected').data().length;
+		if (rowCnt == 1) {
+			var User = table.row('.selected').data().User;
+			var Seq = table.row('.selected').data().Seq;
+			var Method = table.row('.selected').data().Method;
+			var Database = table.row('.selected').data().Database;
+			var Type = table.row('.selected').data().Type;
+			var Ipadr = table.row('.selected').data().Ipadr;
+				
+			var popUrl = "/popup/accessControlRegForm.do?act=u&&db_svr_id=${db_svr_id}&&User="+User+"&&Seq="+Seq+"&&Method="+Method+"&&Database="+Database+"&&Type="+Type+"&&Ipadr="+Ipadr; // 서버 url 팝업경로
+			var width = 920;
+			var height = 380;
+			var left = (window.screen.width / 2) - (width / 2);
+			var top = (window.screen.height /2) - (height / 2);
+			var popOption = "width="+width+", height="+height+", top="+top+", left="+left+", resizable=no, scrollbars=yes, status=no, toolbar=no, titlebar=yes, location=no,";
+				
+			window.open(popUrl,"",popOption);
 		}else{
-			var rowCnt = table.rows('.selected').data().length;
-			if (rowCnt == 1) {
-				var User = table.row('.selected').data().User;
-				var Seq = table.row('.selected').data().Seq;
-				var Method = table.row('.selected').data().Method;
-				var Database = table.row('.selected').data().Database;
-				var Type = table.row('.selected').data().Type;
-				var Ipadr = table.row('.selected').data().Ipadr;
-				
-				var popUrl = "/popup/accessControlRegForm.do?act=u&&db_id="+db_id+"&&User="+User+"&&Seq="+Seq+"&&Method="+Method+"&&Database="+Database+"&&Type="+Type+"&&Ipadr="+Ipadr; // 서버 url 팝업경로
-				var width = 920;
-				var height = 430;
-				var left = (window.screen.width / 2) - (width / 2);
-				var top = (window.screen.height /2) - (height / 2);
-				var popOption = "width="+width+", height="+height+", top="+top+", left="+left+", resizable=no, scrollbars=yes, status=no, toolbar=no, titlebar=yes, location=no,";
-				
-				window.open(popUrl,"",popOption);
-			}else{
-				alert("하나의 항목을 선택해주세요.");
-				return false;
-			}			
-		}
+			alert("하나의 항목을 선택해주세요.");
+			return false;
+		}			
 	}
 
 	
 	/* 삭제 버튼 클릭시*/
 	function fn_delete() {
-		var check= document.getElementsByName("check");
-		var checkCount = 0;
-		for (var i=0; i<check.length; i++){
-			if(check[i].checked ==true){
-				var db_id = check[i].value;
-				checkCount ++;
-			}
-		}	
-		if(checkCount ==0){
-			alert("Database를 선택해주세요.")
+		var datas = table.rows('.selected').data();
+		if (datas.length <= 0) {
+			alert("하나의 항목을 선택해주세요.");
 			return false;
-		}else{
-			var datas = table.rows('.selected').data();
-			if (datas.length <= 0) {
-				alert("하나의 항목을 선택해주세요.");
-				return false;
-			} else {
-				if (!confirm("삭제하시겠습니까?")) return false;
-				var rowList = [];
-				for (var i = 0; i < datas.length; i++) {
-					rowList += datas[i].Seq + ',';
-				}
-	 				$.ajax({
-						url : "/deleteAccessControl.do",
-						data : {
-							db_id : db_id,
-							db_svr_id : "${db_svr_id}",
-							rowList : rowList,
-						},
-						dataType : "json",
-						type : "post",
-						error : function(xhr, status, error) {
-							alert("실패")
-						},
-						success : function(result) {
-							if (result) {
-								alert("삭제되었습니다.");
-								fn_select();
-							} else {
-								alert("처리 실패");
-							}
-						}
-					}); 	
+		} else {
+			if (!confirm("삭제하시겠습니까?")) return false;
+			var rowList = [];
+			for (var i = 0; i < datas.length; i++) {
+				rowList += datas[i].Seq + ',';
 			}
-		
-		}
+	 			$.ajax({
+					url : "/deleteAccessControl.do",
+					data : {
+						db_svr_id : "${db_svr_id}",
+						rowList : rowList,
+					},
+					dataType : "json",
+					type : "post",
+					error : function(xhr, status, error) {
+						alert("실패")
+					},
+					success : function(result) {
+						if (result) {
+							alert("삭제되었습니다.");
+							fn_select();
+						} else {
+							alert("처리 실패");
+						}
+					}
+				}); 	
+			}
 	}
 	
 	/* 저장 버튼 클릭시 */
@@ -313,29 +284,6 @@
 
 	}
 	
-	/* 데이터베이스 선택시 */
-	function fn_check(db_id){
- 		 $.ajax({
-			url : "/selectAccessControl.do",
-			data : {
-				db_id : db_id,
-				db_svr_id : "${db_svr_id}",
-			},
-			dataType : "json",
-			type : "post",
-			error : function(xhr, status, error) {
-				alert("실패")
-			},
-			success : function(result) {
-				table.clear().draw();
-				if(result.data == null){
-    				alert("서버상태를 확인해주세요.");
-    			}else{
-					table.rows.add(result.data).draw();
-    			}
-			}
-		}); 	 	
-	}
 
 </script>
 <!-- contents -->
@@ -358,31 +306,20 @@
 				<div class="control_grp">
 					<div class="control_lt">
 						<div class="inner">
-							<p class="tit">Database 목록</p>
+							<p class="tit">DB 서버</p>
 							<div class="control_list">
 								<ul>
 									<li>
-										<div class="inp_chk">
-											<img src="/images/ico_left_1.png" style="line-height: 22px; margin: 0px 10px 0 0;"> 
-											<label for="server">${db_svr_nm}</label>
+<!-- 									<img src="/images/ico_left_1.png" style="line-height: 22px; margin: 0px 10px 0 0;"> -->
+										<div class="inp_rdo">
+											<input type="radio" id="${db_svr_nm}" name="check"value="${db_svr_nm}" checked="checked"/> 
+											<label for="${db_svr_nm}">${db_svr_nm}</label>
 										</div>
-										<ul>
-											<c:forEach var="resultSet" items="${resultSet}">
-												<li>
-													<div class="inp_rdo">
-														<input type="radio" id="${resultSet.db_nm}" name="check" value="${resultSet.db_id}" onClick="fn_check('${resultSet.db_id}');" /> 
-														<label for="${resultSet.db_nm}">${resultSet.db_nm}</label>
-													</div>
-												</li>
-											</c:forEach>
-										</ul>
 									</li>
 								</ul>
 							</div>
 						</div>
 					</div>
-
-
 					<div class="control_rt">
 						<div class="btn_type_01">
 							<span>
@@ -390,7 +327,8 @@
 									<input type="text" class="txt search" id="select" />
 									<button class="search_btn">검색</button>
 								</div>
-							</span> <span class="btn" onclick="fn_insert();"><button>등록</button></span>
+							</span>
+							<span class="btn" onclick="fn_insert();"><button>등록</button></span>
 							<span class="btn" onclick="fn_update();"><button>수정</button></span>
 							<span class="btn" onclick="fn_delete();"><button>삭제</button></span>
 							<span class="btn" onclick="fn_save();"><button>저장</button></span>
@@ -398,15 +336,17 @@
 						<div class="inner">
 							<p class="tit">접근제어 리스트</p>
 							<div class="overflow_area">
-								<table id="accessControlTable" class="display" cellspacing="0" width="100%">
+								<table id="accessControlTable" class="display" cellspacing="0"
+									width="100%">
 									<thead>
 										<tr>
 											<th></th>
 											<th>No</th>
+											<th>Type</th>
+											<th>Database</th>
 											<th>User</th>
 											<th>IP Address</th>
 											<th>Method</th>
-											<th>Type</th>
 											<th>순서</th>
 										</tr>
 									</thead>

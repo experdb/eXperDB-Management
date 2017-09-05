@@ -22,45 +22,20 @@ public class AccessControlDAO extends EgovAbstractMapper {
 	 * @throws Exception
 	 */
 	@SuppressWarnings({ "deprecation", "unchecked" })
-	public List<DbIDbServerVO> selectDatabaseList(int db_svr_id) throws SQLException {
+	public List<DbIDbServerVO> selectDatabaseList(DbAutVO dbAutVO) throws SQLException {
 		List<DbIDbServerVO> result = null;
-		result = (List<DbIDbServerVO>) list("accessControlSql.selectDatabaseList", db_svr_id);
+		result = (List<DbIDbServerVO>) list("accessControlSql.selectDatabaseList", dbAutVO);
 		return result;
-	}
-
-	/**
-	 * 권한 있는 DB 조회
-	 * 
-	 * @param db_svr_id
-	 * @return List
-	 * @throws Exception
-	 */
-	@SuppressWarnings({ "unchecked", "deprecation" })
-	public List<DbIDbServerVO> selectDatabaseListAut(DbAutVO dbAutVO) {
-		List<DbIDbServerVO> result = null;
-		result = (List<DbIDbServerVO>) list("accessControlSql.selectDatabaseListAut", dbAutVO);
-		return result;
-	}
-
-	/**
-	 * DB,SERVER 조회
-	 * 
-	 * @param db_id
-	 * @return List
-	 * @throws Exception
-	 */
-	public DbIDbServerVO selectServerDb(int db_id) throws SQLException {
-		return (DbIDbServerVO) selectOne("treeTransferSql.selectServerDb", db_id);
 	}
 
 	/**
 	 * DB접근제어 전체 삭제
 	 * 
-	 * @param db_id
+	 * @param db_svr_id
 	 * @throws Exception
 	 */
-	public void deleteDbAccessControl(int db_id) throws SQLException {
-		delete("accessControlSql.deleteDbAccessControl", db_id);
+	public void deleteDbAccessControl(int db_svr_id) throws SQLException {
+		delete("accessControlSql.deleteDbAccessControl", db_svr_id);
 
 	}
 
@@ -73,5 +48,7 @@ public class AccessControlDAO extends EgovAbstractMapper {
 	public void insertAccessControl(AccessControlVO accessControlVO) throws SQLException {
 		insert("accessControlSql.insertAccessControl", accessControlVO);
 	}
+
+
 
 }

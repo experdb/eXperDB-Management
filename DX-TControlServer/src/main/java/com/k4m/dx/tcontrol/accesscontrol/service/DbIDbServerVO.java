@@ -13,6 +13,7 @@ public class DbIDbServerVO {
 	private String dft_db_nm; //디폴트_DB_명
 	private String svr_spr_usr_id; //서버_슈퍼_사용자_ID
 	private String svr_spr_scm_pwd; //서버_슈퍼_스키마_비밀번호
+	private String db_exp; //DB_설명
 	
 	public int getRownum() {
 		return rownum;
@@ -86,9 +87,12 @@ public class DbIDbServerVO {
 	public void setSvr_spr_scm_pwd(String svr_spr_scm_pwd) {
 		this.svr_spr_scm_pwd = svr_spr_scm_pwd;
 	}
-
-	
-
+	public String getDb_exp() {
+		return db_exp;
+	}
+	public void setDb_exp(String db_exp) {
+		this.db_exp = db_exp;
+	}
 	
     
 }

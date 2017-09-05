@@ -29,56 +29,56 @@
 </head>
 <script>
 	//숫자체크
-	function valid_numeric(objValue)
-	{
-		if (objValue.match(/^[0-9]+$/) == null)
-		{	return false;	}
-		else
-		{	return true;	}
+	function valid_numeric(objValue) {
+		if (objValue.match(/^[0-9]+$/) == null) {
+			return false;
+		} else {
+			return true;
+		}
 	}
 
 	/* Validation */
-	function fn_accessControl(){
+	function fn_accessControl() {
 		/*Type=local -> ip입력 안함*/
-		if($("#ctf_tp_nm option:selected").val()=="local"){
+		if ($("#ctf_tp_nm option:selected").val() == "local") {
 			$("#prms_ipadr").val();
-			return true;	
-		}else{
-			var ip = document.getElementById("ip");	
+			return true;
+		} else {
+			var ip = document.getElementById("ip");
 			if (ip.value == "") {
 				alert("IP를 입력하여 주십시오.");
 				ip.focus();
 				return false;
 			}
-			
-	 		var prefix = document.getElementById("prefix");
+
+			var prefix = document.getElementById("prefix");
 			if (prefix.value == "") {
-				   alert("Prefix를 입력하여 주십시오.");
-				   prefix.focus();
-				   return false;
+				alert("Prefix를 입력하여 주십시오.");
+				prefix.focus();
+				return false;
 			}
-	 		if(!valid_numeric(prefix.value))
-		 	{
-	 			alert("Prefix는 숫자만 입력가능합니다.");
-	 			prefix.focus();
-			 	return false;
+			if (!valid_numeric(prefix.value)) {
+				alert("Prefix는 숫자만 입력가능합니다.");
+				prefix.focus();
+				return false;
 			}
-		}	
+		}
 		return true;
 	}
-	
+
 	/* 등록 버튼 클릭시*/
 	function fn_insert() {
-		if (!fn_accessControl()) return false;
-		var ip = document.getElementById("ip").value;	
+		if (!fn_accessControl())
+			return false;
+		var ip = document.getElementById("ip").value;
 		var prefix = document.getElementById("prefix").value;
-		var prms_ipadr = ip+"/"+prefix;
+		var prms_ipadr = ip + "/" + prefix;
 		$.ajax({
 			url : "/insertAccessControl.do",
 			data : {
 				db_svr_id : '${db_svr_id}',
-				db_id : '${db_id}',
 				prms_ipadr : prms_ipadr,
+				dtb : $("#dtb").val(),
 				prms_usr_id : $("#prms_usr_id").val(),
 				ctf_mth_nm : $("#ctf_mth_nm").val(),
 				ctf_tp_nm : $("#ctf_tp_nm").val(),
@@ -97,21 +97,21 @@
 
 	/* 수정 버튼 클릭시*/
 	function fn_update() {
-		if (!fn_accessControl()) return false;
-		var ip = document.getElementById("ip").value;	
+		if (!fn_accessControl())
+			return false;
+		var ip = document.getElementById("ip").value;
 		var prefix = document.getElementById("prefix").value;
-		var prms_ipadr = ip+"/"+prefix;
+		var prms_ipadr = ip + "/" + prefix;
 		$.ajax({
 			url : "/updateAccessControl.do",
 			data : {
 				prms_seq : '${prms_seq}',
 				db_svr_id : '${db_svr_id}',
-				db_id : '${db_id}',
 				prms_ipadr : prms_ipadr,
+				dtb : $("#dtb").val(),
 				prms_usr_id : $("#prms_usr_id").val(),
 				ctf_mth_nm : $("#ctf_mth_nm").val(),
 				ctf_tp_nm : $("#ctf_tp_nm").val(),
-				cmd_cnts : $("#cmd_cnts").val(),
 			},
 			type : "post",
 			error : function(request, status, error) {
@@ -124,28 +124,28 @@
 			}
 		});
 	}
-	
+
 	$(window.document).ready(function() {
-		var ctf_tp_nm=$("#ctf_tp_nm option:selected").val();
-		if(ctf_tp_nm=="local"){
+		var ctf_tp_nm = $("#ctf_tp_nm option:selected").val();
+		if (ctf_tp_nm == "local") {
 			$('#ip').attr('disabled', 'true');
 			$('#prefix').attr('disabled', 'true');
 		}
 		if ("${act}" == "u") {
-			var prms_ipadr= "${prms_ipadr}";
-			var str= prms_ipadr.split("/");
-			 $('#ip').val(str[0]);
-			 $('#prefix').val(str[1]);
+			var prms_ipadr = "${prms_ipadr}";
+			var str = prms_ipadr.split("/");
+			$('#ip').val(str[0]);
+			$('#prefix').val(str[1]);
 		}
 	});
-	
+
 	function change(selectObj) {
-		if(selectObj.value =="local"){
+		if (selectObj.value == "local") {
 			$('#ip').attr('disabled', 'true');
 			$('#prefix').attr('disabled', 'true');
-		}else{
-			$('#ip').removeAttr('disabled'); 
-			$('#prefix').removeAttr('disabled'); 
+		} else {
+			$('#ip').removeAttr('disabled');
+			$('#prefix').removeAttr('disabled');
 		}
 	}
 </script>
@@ -173,7 +173,16 @@
 						<th scope="row" class="ico_t1">서버명</th>
 						<td><input type="text" class="txt bg1" value="${db_svr_nm}" readonly="readonly"/></td>
 						<th scope="row" class="ico_t1">Database</th>
-						<td><input type="text" class="txt bg1 t4" value="${db_nm}" readonly="readonly"/></td>
+						<td>
+							<select id="dtb" name="dtb" class="select t4">
+							<option value="all" ${dtb == 'all' ? 'selected="selected"' : ''}>all</option>
+							<option value="replication" ${dtb == 'replication' ? 'selected="selected"' : ''}>replication</option>
+								<c:forEach var="resultSet" items="${resultSet}">
+									<option value="${resultSet.db_nm}" ${dtb eq resultSet.db_nm ? "selected='selected'" : ""}>${resultSet.db_nm}
+									<c:if test="${!empty resultSet.db_exp}">(${resultSet.db_exp})</c:if>
+									</option>
+								</c:forEach>
+							</select>
 					</tr>
 				</tbody>
 			</table>
@@ -239,7 +248,6 @@
 								<option value="peer" ${ctf_mth_nm == 'peer' ? 'selected="selected"' : ''}>peer</option>
 							</select>
 						</td>
-
 					</tr>
 				</tbody>
 			</table>

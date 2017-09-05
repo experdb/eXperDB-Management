@@ -136,6 +136,7 @@
 		, S.DB_SVR_NM 
 		, I.DB_ID
 		, I.DB_NM
+		, I.DB_EXP
 		FROM 
 		  T_DBSVR_I S
 		, T_DB_I I

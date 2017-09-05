@@ -5,7 +5,7 @@ public class AccessControlVO {
 	private int idx;
 	private int svr_acs_cntr_id;//서버_접근_제어_ID 
 	private int db_svr_id;//DB_서버_ID    
-	private int db_id;//DB_ID         
+	private String dtb; //DATABASE      
 	private String prms_ipadr;//허용_IP주소      
 	private String prms_usr_id;//허용_사용자_ID 
 	private int prms_seq;//허용순번
@@ -17,7 +17,7 @@ public class AccessControlVO {
 	private String frst_regr_id;//최초_등록자_ID    
 	private String frst_reg_dtm;//최초_등록_일시    
 	private String lst_mdfr_id;//최종_수정자_ID     
-	private String lst_mdf_dtm;//최종_수정_일시 
+	private String lst_mdf_dtm;//최종_수정_일시
 	
 	public int getRownum() {
 		return rownum;
@@ -43,11 +43,11 @@ public class AccessControlVO {
 	public void setDb_svr_id(int db_svr_id) {
 		this.db_svr_id = db_svr_id;
 	}
-	public int getDb_id() {
-		return db_id;
+	public String getDtb() {
+		return dtb;
 	}
-	public void setDb_id(int db_id) {
-		this.db_id = db_id;
+	public void setDtb(String dtb) {
+		this.dtb = dtb;
 	}
 	public String getPrms_ipadr() {
 		return prms_ipadr;
@@ -120,6 +120,7 @@ public class AccessControlVO {
 	}
 	public void setLst_mdf_dtm(String lst_mdf_dtm) {
 		this.lst_mdf_dtm = lst_mdf_dtm;
-	}
-    
+	} 
+
+	
 }

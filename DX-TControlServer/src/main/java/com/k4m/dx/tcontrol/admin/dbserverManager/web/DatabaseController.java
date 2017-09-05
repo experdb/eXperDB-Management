@@ -6,7 +6,6 @@ import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
 
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
@@ -21,12 +20,13 @@ import org.springframework.web.servlet.ModelAndView;
 
 import com.k4m.dx.tcontrol.accesscontrol.service.AccessControlService;
 import com.k4m.dx.tcontrol.accesscontrol.service.AccessControlVO;
-import com.k4m.dx.tcontrol.accesscontrol.service.DbIDbServerVO;
 import com.k4m.dx.tcontrol.admin.accesshistory.service.AccessHistoryService;
 import com.k4m.dx.tcontrol.admin.dbserverManager.service.DbServerManagerService;
 import com.k4m.dx.tcontrol.admin.dbserverManager.service.DbServerVO;
 import com.k4m.dx.tcontrol.admin.menuauthority.service.MenuAuthorityService;
 import com.k4m.dx.tcontrol.backup.service.DbVO;
+import com.k4m.dx.tcontrol.cmmn.AES256;
+import com.k4m.dx.tcontrol.cmmn.AES256_KEY;
 import com.k4m.dx.tcontrol.cmmn.CmmnUtils;
 import com.k4m.dx.tcontrol.cmmn.client.ClientInfoCmmn;
 import com.k4m.dx.tcontrol.cmmn.client.ClientProtocolID;
@@ -315,43 +315,44 @@ public class DatabaseController {
 				dbServerManagerService.insertDB(paramvalue);		
 				
 				}
-				
+	
 				/*접근제어 정보 INSERT*/
+				AES256 dec = new AES256(AES256_KEY.ENC_KEY);
 				int db_svr_id = dbServerVO.getDb_svr_id();
+				
+				/*서버접근제어 전체 삭제*/
+				accessControlService.deleteDbAccessControl(db_svr_id);
+				
+				DbServerVO schDbServerVO = new DbServerVO();
+				schDbServerVO.setDb_svr_id(db_svr_id);
+				dbServerVO = (DbServerVO)  cmmnServerInfoService.selectServerInfo(schDbServerVO);
 				String strIpAdr = dbServerVO.getIpadr();
-				
 				AgentInfoVO vo = new AgentInfoVO();
-				//vo.setDB_SVR_ID(db_svr_id);
 				vo.setIPADR(strIpAdr);
-				
 				AgentInfoVO agentInfo =  (AgentInfoVO) cmmnServerInfoService.selectAgentInfo(vo);
-			
-				List<DbIDbServerVO> resultSet = accessControlService.selectDatabaseList(db_svr_id);
-				
-				String IP = resultSet.get(0).getIpadr();
+		
+				String IP = dbServerVO.getIpadr();
 				int PORT = agentInfo.getSOCKET_PORT();
 				
-				for(int n=0; n<resultSet.size(); n++){
-					JSONObject result = new JSONObject();
+				JSONObject result = new JSONObject();
+				JSONObject serverObj = new JSONObject();				
+				serverObj.put(ClientProtocolID.SERVER_NAME, dbServerVO.getDb_svr_nm());
+				serverObj.put(ClientProtocolID.SERVER_IP, dbServerVO.getIpadr());
+				serverObj.put(ClientProtocolID.SERVER_PORT, dbServerVO.getPortno());
+				serverObj.put(ClientProtocolID.DATABASE_NAME, dbServerVO.getDft_db_nm());
+				serverObj.put(ClientProtocolID.USER_ID, dbServerVO.getSvr_spr_usr_id());
+				serverObj.put(ClientProtocolID.USER_PWD, dec.aesDecode(dbServerVO.getSvr_spr_scm_pwd()));
 					
-					JSONObject serverObj = new JSONObject();				
-					serverObj.put(ClientProtocolID.SERVER_NAME, resultSet.get(0).getDb_svr_nm());
-					serverObj.put(ClientProtocolID.SERVER_IP, resultSet.get(0).getIpadr());
-					serverObj.put(ClientProtocolID.SERVER_PORT, resultSet.get(0).getPortno());
-					serverObj.put(ClientProtocolID.DATABASE_NAME, resultSet.get(0).getDft_db_nm());
-					serverObj.put(ClientProtocolID.USER_ID, resultSet.get(0).getSvr_spr_usr_id());
-					serverObj.put(ClientProtocolID.USER_PWD, resultSet.get(0).getSvr_spr_scm_pwd());
-					
-					ClientInfoCmmn cic = new ClientInfoCmmn();
-					result = cic.dbAccess_selectAll(serverObj,IP,PORT);
-					for(int j=0; j<result.size(); j++){
-						 JSONArray data = (JSONArray)result.get("data");
-						for(int m=0; m<data.size(); m++){
+				ClientInfoCmmn cic = new ClientInfoCmmn();
+				result = cic.dbAccess_selectAll(serverObj,IP,PORT);
+				for(int j=0; j<result.size(); j++){
+					 JSONArray data = (JSONArray)result.get("data");
+					for(int m=0; m<data.size(); m++){
 							JSONObject jsonObj = (JSONObject)data.get(m);
 							accessControlVO.setFrst_regr_id(id);
 							accessControlVO.setLst_mdfr_id(id);
 							accessControlVO.setDb_svr_id(db_svr_id);
-							accessControlVO.setDb_id(resultSet.get(n).getDb_id());
+							accessControlVO.setDtb((String) jsonObj.get("Database"));
 							accessControlVO.setPrms_ipadr((String)jsonObj.get("Ipadr"));
 							accessControlVO.setPrms_usr_id((String)jsonObj.get("User"));
 							accessControlVO.setCtf_mth_nm((String)jsonObj.get("Method"));
@@ -363,7 +364,7 @@ public class DatabaseController {
 						}
 					}
 				}
-			}
+			
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

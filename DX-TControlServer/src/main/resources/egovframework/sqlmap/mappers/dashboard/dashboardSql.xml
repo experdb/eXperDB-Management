@@ -75,12 +75,7 @@
 		          AND A.WRK_ID = B.WRK_ID) AS schedule_cnt
 		    , SUM(AAA.success_cnt) AS success_cnt
 		    , SUM(AAA.fail_cnt) AS fail_cnt
-		    , (SELECT 
-               case when (SELECT COUNT(DISTINCT DB_ID) FROM T_SVRACSCNTR_I WHERE DB_SVR_ID = AAA.DB_SVR_ID AND PRMS_SET = '1') = 0 then 0
-               else COUNT(*) / (SELECT COUNT(DISTINCT DB_ID) FROM T_SVRACSCNTR_I WHERE DB_SVR_ID = AAA.DB_SVR_ID AND PRMS_SET = '1') 
-               end
-				FROM T_SVRACSCNTR_I WHERE DB_SVR_ID = AAA.DB_SVR_ID  AND PRMS_SET = '1'
-				) AS access_cnt
+			, (SELECT COUNT(*) FROM T_SVRACSCNTR_I WHERE DB_SVR_ID = AAA.DB_SVR_ID AND PRMS_SET = '1') AS access_cnt
 		    , (SELECT DISTINCT AGT_CNDT_CD FROM T_AGTCNDT_I WHERE IPADR = AAA.IPADR) AS agt_cndt_cd
 		  FROM
 		  (

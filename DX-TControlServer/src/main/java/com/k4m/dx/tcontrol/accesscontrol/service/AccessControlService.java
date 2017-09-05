@@ -5,40 +5,22 @@ import java.util.List;
 public interface AccessControlService {
 
 	/**
-	 * DB 조회
-	 * 
-	 * @param db_svr_id
-	 * @return
-	 * @throws Exception
-	 */
-	List<DbIDbServerVO> selectDatabaseList(int db_svr_id) throws Exception;
-	
-	/**
-	 * 권한 있는 DB 조회
+	 * DB조회
 	 * 
 	 * @param dbAutVO
 	 * @return
 	 * @throws Exception
 	 */
-	List<DbIDbServerVO> selectDatabaseListAut(DbAutVO dbAutVO) throws Exception;
-	
-	/**
-	 * DB,SERVER 조회
-	 * 
-	 * @param db_id
-	 * @return
-	 * @throws Exception
-	 */
-	DbIDbServerVO selectServerDb(int db_id) throws Exception;
+	List<DbIDbServerVO> selectDatabaseList(DbAutVO dbAutVO) throws Exception;
 
 	/**
 	 * DB접근제어 전체 삭제
 	 * 
-	 * @param db_id
+	 * @param db_svr_id
 	 * @return
 	 * @throws Exception
 	 */
-	void deleteDbAccessControl(int db_id) throws Exception;
+	void deleteDbAccessControl(int db_svr_id) throws Exception;
 
 	/**
 	 * 접근제어 등록

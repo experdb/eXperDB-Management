@@ -72,7 +72,7 @@ function fn_init() {
 	        orderable: false,
 	        render: function(data, type, full, meta){
 	           if(type === 'display'){
-	              data = '<input type="text" name="db_exp" value="' +full.db_exp + '">';      
+	              data = '<input type="text" class="txt" name="db_exp" value="' +full.db_exp + '" style="height: 25px;">';      
 	           }
 	           return data;
 	        }}, 

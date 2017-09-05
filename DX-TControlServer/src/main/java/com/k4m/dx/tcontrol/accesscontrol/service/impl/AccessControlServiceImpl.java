@@ -18,28 +18,20 @@ public class AccessControlServiceImpl implements AccessControlService {
 	private AccessControlDAO accessControlDAO;
 
 	@Override
-	public List<DbIDbServerVO> selectDatabaseList(int db_svr_id) throws Exception {
-		return accessControlDAO.selectDatabaseList(db_svr_id);
+	public List<DbIDbServerVO> selectDatabaseList(DbAutVO dbAutVO) throws Exception {
+		return accessControlDAO.selectDatabaseList(dbAutVO);
 	}
-
+	
 	@Override
-	public List<DbIDbServerVO> selectDatabaseListAut(DbAutVO dbAutVO) throws Exception {
-		return accessControlDAO.selectDatabaseListAut(dbAutVO);
-	}
-
-	@Override
-	public DbIDbServerVO selectServerDb(int db_id) throws Exception {
-		return accessControlDAO.selectServerDb(db_id);
-	}
-
-	@Override
-	public void deleteDbAccessControl(int db_id) throws Exception {
-		accessControlDAO.deleteDbAccessControl(db_id);
+	public void deleteDbAccessControl(int db_svr_id) throws Exception {
+		accessControlDAO.deleteDbAccessControl(db_svr_id);
 	}
 
 	@Override
 	public void insertAccessControl(AccessControlVO accessControlVO) throws Exception {
 		accessControlDAO.insertAccessControl(accessControlVO);
 	}
+
+
 
 }
