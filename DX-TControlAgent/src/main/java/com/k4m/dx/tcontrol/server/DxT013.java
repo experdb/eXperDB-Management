@@ -2,16 +2,10 @@ package com.k4m.dx.tcontrol.server;
 
 import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
-import java.io.BufferedReader;
-import java.io.InputStreamReader;
-import java.lang.reflect.Field;
 import java.net.Socket;
 import java.sql.Connection;
 import java.sql.DriverManager;
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
-import java.util.Scanner;
 
 import org.apache.ibatis.session.SqlSession;
 import org.apache.ibatis.session.SqlSessionFactory;
@@ -27,6 +21,7 @@ import com.k4m.dx.tcontrol.socket.ErrCodeMng;
 import com.k4m.dx.tcontrol.socket.ProtocolID;
 import com.k4m.dx.tcontrol.socket.SocketCtl;
 import com.k4m.dx.tcontrol.socket.TranCodeType;
+import com.k4m.dx.tcontrol.util.CommonUtil;
 
 /**
  * BottledWater 실행/종료
@@ -80,7 +75,7 @@ public class DxT013 extends SocketCtl{
 				
 			} else if(commandCode.equals(ProtocolID.STOP)) {
 				String strCmd = "ps -ef| grep bottledwater |grep " + execTxt + " | awk '{print $2}'";
-				String strPid = getPidExec(strCmd);
+				String strPid = CommonUtil.getPidExec(strCmd);
 				
 				String strStopCmd = "kill -9 " + strPid ;
 				shellCmd(strStopCmd);
@@ -93,7 +88,7 @@ public class DxT013 extends SocketCtl{
 				
 				int i=0;
 				while(true) {
-					String strPid2 = getPidExec(strCmd);
+					String strPid2 = CommonUtil.getPidExec(strCmd);
 					socketLogger.info(i + " pid1 : " + strPid + " pid2 : " + strPid2);
 					if(!strPid2.equals(strPid)) break;
 					i++;
@@ -143,39 +138,7 @@ public class DxT013 extends SocketCtl{
            
           return strResult;
 	   }
-	   
-	   
-	   public static String getPidExec(String command) throws Exception {
-		   
-		   //ps -ef| grep bottledwater |grep test25 | awk '{print $2}'
 
-		   String strResult = "";
-
-           Runtime runtime = Runtime.getRuntime();
-
-           Process process = runtime.exec(new String[]{"/bin/sh", "-c", command});
-           
-           strResult = getPid(process);
-
-           
-          return strResult;
-	   }
-	   
-	   public static String  getPid(Process p) throws Exception{
-
-		   StringBuffer sb = new StringBuffer();
-
-		   BufferedReader in = new BufferedReader(new InputStreamReader(p.getInputStream()));
-           String cl = null;
-           while((cl=in.readLine())!=null){
-               sb.append(cl);
-               break;
-           }
-
-           in.close();
-
-		   return sb.toString();
-		}
 	   
 	   /**
 	    * delete slot

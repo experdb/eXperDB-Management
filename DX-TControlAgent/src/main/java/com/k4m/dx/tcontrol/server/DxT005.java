@@ -16,6 +16,7 @@ import com.k4m.dx.tcontrol.db.repository.vo.WrkExeVO;
 import com.k4m.dx.tcontrol.socket.ProtocolID;
 import com.k4m.dx.tcontrol.socket.SocketCtl;
 import com.k4m.dx.tcontrol.socket.TranCodeType;
+import com.k4m.dx.tcontrol.util.CommonUtil;
 import com.k4m.dx.tcontrol.util.RunCommandExec;
 
 /**
@@ -76,6 +77,8 @@ public class DxT005 extends SocketCtl{
 				String strDB_ID = objJob.get(ProtocolID.DB_ID).toString();
 				String strBCK_FILE_PTH = objJob.get(ProtocolID.BCK_FILE_PTH).toString();
 				String strLOG_YN = objJob.get(ProtocolID.LOG_YN).toString();
+				String strBCK_FILENM = objJob.get(ProtocolID.BCK_FILENM).toString();
+				
 
 				int intSeq = service.selectQ_WRKEXE_G_01_SEQ();
 				
@@ -108,9 +111,14 @@ public class DxT005 extends SocketCtl{
 				socketLogger.info("##### 결과 : " + retVal);
 				//다음실행여부가 Y 이면 에러나도 다음 시행함.
 				if(retVal.equals("success")) {
+					String strFileName = strBCK_FILENM;
+					String strCmd = "ls -al " + strBCK_FILE_PTH + "/" + strFileName + " | awk '{print $5}'";
+					String strFileSize = CommonUtil.getPidExec(strCmd);
+					
 					WrkExeVO endVO = new WrkExeVO();
 					endVO.setEXE_RSLT_CD(strResultCode);
 					endVO.setEXE_SN(intSeq);
+					endVO.setFILE_SZ(Integer.parseInt(strFileSize));
 					
 					if(strLOG_YN.equals("Y")) {
 						service.updateT_WRKEXE_G(endVO);
@@ -157,8 +165,7 @@ public class DxT005 extends SocketCtl{
 		} finally {
 
 		}	    
-		
-
-
 	}
+	
+
 }

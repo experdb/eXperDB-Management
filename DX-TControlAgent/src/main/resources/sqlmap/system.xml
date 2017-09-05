@@ -170,6 +170,7 @@
 		SET
 			WRK_END_DTM = now()
 			, EXE_RSLT_CD = #{EXE_RSLT_CD}
+			, FILE_SZ = #{FILE_SZ}
 		WHERE
 			EXE_SN = #{EXE_SN}
 				

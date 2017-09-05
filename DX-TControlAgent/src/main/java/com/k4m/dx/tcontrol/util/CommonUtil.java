@@ -1,7 +1,9 @@
 package com.k4m.dx.tcontrol.util;
 
+import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.io.StringWriter;
 import java.lang.management.ManagementFactory;
@@ -160,4 +162,35 @@ public class CommonUtil {
 		}
 		return Obj;
 	}
+	
+	   public static String getPidExec(String command) throws Exception {
+		   
+
+		   String strResult = "";
+
+           Runtime runtime = Runtime.getRuntime();
+
+           Process process = runtime.exec(new String[]{"/bin/sh", "-c", command});
+           
+           strResult = getPid(process);
+
+           
+          return strResult;
+	   }
+	   
+	   public static String  getPid(Process p) throws Exception{
+
+		   StringBuffer sb = new StringBuffer();
+
+		   BufferedReader in = new BufferedReader(new InputStreamReader(p.getInputStream()));
+           String cl = null;
+           while((cl=in.readLine())!=null){
+               sb.append(cl);
+               break;
+           }
+
+           in.close();
+
+		   return sb.toString();
+		}
 }
