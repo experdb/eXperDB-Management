@@ -312,7 +312,7 @@ function fn_insertDB(){
  ******************************************************** */
 function fn_dataCompareChcek(svrDbList){
 	$.ajax({
-		url : "/selectTreeDBListTree.do",
+		url : "/selectTreeDBList.do",
 		data : {},
 		async:true,
 		dataType : "json",
@@ -338,11 +338,7 @@ function fn_dataCompareChcek(svrDbList){
 		},
 		success : function(result) {
 			var db_svr_id =  table_dbServer.row('.selected').data().db_svr_id
-			alert(result.length);
-			/*  for(var i = 0; i<svrDbList.data.length; i++){
-					alert(result[i].db_exp);
-			} */ 
-			
+		
 			if(svrDbList.data.length>0){
  				for(var i = 0; i<svrDbList.data.length; i++){
 					for(var j = 0; j<result.length; j++){						
@@ -351,10 +347,14 @@ function fn_dataCompareChcek(svrDbList){
 					}
 				}	 	
 				for(var i = 0; i<svrDbList.data.length; i++){
-					for(var j = 0; j<result.length; j++){											
-						 if(db_svr_id == result[j].db_svr_id && svrDbList.data[i].dft_db_nm == result[j].db_nm){										 
-							 $('input', table_db.rows(i).nodes()).prop('checked', true); 
-							 table_db.rows(i).nodes().to$().addClass('selected');	
+					var list = $("input[name='db_exp']");
+					list[i].value = result[i].db_exp;
+					for(var j = 0; j<result.length; j++){
+						if(result[j].useyn == "Y"){
+							 if(db_svr_id == result[j].db_svr_id && svrDbList.data[i].dft_db_nm == result[j].db_nm){										 
+								 $('input', table_db.rows(i).nodes()).prop('checked', true); 
+								 table_db.rows(i).nodes().to$().addClass('selected');	
+							}
 						}
 					}
 				}		
