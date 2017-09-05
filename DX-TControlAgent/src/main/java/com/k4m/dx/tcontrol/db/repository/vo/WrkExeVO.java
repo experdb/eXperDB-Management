@@ -16,8 +16,17 @@ public class WrkExeVO {
 	private String FRST_REG_DTM;
 	private String LST_MDFR_ID;
 	private String LST_MDF_DTM;
+	private String BCK_FILENM;
+	
+	
 
 	
+	public String getBCK_FILENM() {
+		return BCK_FILENM;
+	}
+	public void setBCK_FILENM(String bCK_FILENM) {
+		BCK_FILENM = bCK_FILENM;
+	}
 	public int getEXE_SN() {
 		return EXE_SN;
 	}

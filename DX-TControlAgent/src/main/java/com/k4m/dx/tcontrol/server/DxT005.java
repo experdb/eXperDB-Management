@@ -119,6 +119,7 @@ public class DxT005 extends SocketCtl{
 					endVO.setEXE_RSLT_CD(strResultCode);
 					endVO.setEXE_SN(intSeq);
 					endVO.setFILE_SZ(Integer.parseInt(strFileSize));
+					endVO.setBCK_FILENM(strFileName);
 					
 					if(strLOG_YN.equals("Y")) {
 						service.updateT_WRKEXE_G(endVO);
