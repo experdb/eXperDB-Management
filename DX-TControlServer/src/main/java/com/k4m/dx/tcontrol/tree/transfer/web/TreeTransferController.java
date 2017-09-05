@@ -873,13 +873,13 @@ public class TreeTransferController {
 				List<TblKafkaConfigVO> tblKafkaConfigInfo = treeTransferService.selectTblKafkaConfigInfo(trf_trg_id);
 				String trf_trg_cnn_nm = tblKafkaConfigInfo.get(0).getTrf_trg_cnn_nm();
 						
-//				/*TODO tbl_mapps DELETE*/
-//							
-//				/*kafka_con_config DELETE*/
-//				JSONObject tableInfoObj = new JSONObject();
-//				tableInfoObj.put(ClientProtocolID.DATABASE_NAME, dbIDbServerVO.getDb_nm());
-//				tableInfoObj.put(ClientProtocolID.CONNECT_NAME, trf_trg_cnn_nm);
-//				cic.kafkaConConfig_delete(IP,PORT,serverObj,tableInfoObj);
+				/*TODO tbl_mapps DELETE 일단 보류!*/	
+				
+				/*kafka_con_config DELETE*/
+				JSONObject tableInfoObj = new JSONObject();
+				tableInfoObj.put(ClientProtocolID.DATABASE_NAME, dbIDbServerVO.getDb_nm());
+				tableInfoObj.put(ClientProtocolID.CONNECT_NAME, trf_trg_cnn_nm);
+				cic.kafkaConConfig_delete(IP,PORT,serverObj,tableInfoObj);
 				
 				for(int i=0; i<tblKafkaConfigInfo.size(); i++){
 					String topic = tblKafkaConfigInfo.get(i).getTrf_trg_cnn_nm()+"."+tblKafkaConfigInfo.get(i).getScm_nm()+"."+tblKafkaConfigInfo.get(i).getTb_engl_nm();
@@ -895,7 +895,6 @@ public class TreeTransferController {
 					cic.tblmapps_insert(IP,PORT,serverObj,arrTableInfo);
 				}
 				
-
 				JSONObject kafkaServerObj = new JSONObject();
 				String strServerIp = tblKafkaConfigInfo.get(0).getCnr_ipadr();
 				String strServerPort = Integer.toString(tblKafkaConfigInfo.get(0).getCnr_portno());
@@ -922,7 +921,7 @@ public class TreeTransferController {
 				}
 
 				/*kafka_con_config INSERT*/
-				JSONObject tableInfoObj = new JSONObject();
+				tableInfoObj = new JSONObject();
 				tableInfoObj.put(ClientProtocolID.DATABASE_NAME, dbIDbServerVO.getDb_nm());
 				tableInfoObj.put(ClientProtocolID.CONNECT_NAME, trf_trg_cnn_nm);
 				tableInfoObj.put(ClientProtocolID.CONTENTS, param.toJSONString());
@@ -934,7 +933,7 @@ public class TreeTransferController {
 						+ dec.aesDecode(dbInfo.get(0).getSvr_spr_scm_pwd()) + "@127.0.0.1:"
 						+ dbInfo.get(0).getPortno() + "/" + dbInfo.get(0).getDb_nm();			
 				
-				/* bottlewater실행 명령어 */    
+				/* bottlewater실행 명령어 */
 				String strExecTxt = "nohup "+transferInfo.getBw_home() + dbinfoTxt + " --slot="+ dbInfo.get(0).getTrf_trg_cnn_nm()
 						+" --broker="+ transferInfo.getKafka_broker_ip() + ":" + transferInfo.getKafka_broker_port()
 						+ " --schema-registry="+transferInfo.getSchema_registry_ip()+":"+transferInfo.getSchema_registry_port()

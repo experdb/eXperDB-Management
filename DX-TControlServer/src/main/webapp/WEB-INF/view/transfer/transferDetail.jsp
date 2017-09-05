@@ -49,10 +49,10 @@
 					var html="";
 					if(data==0){
 						//중지
-						html += "<a href='#n')'><img src='../images/ico_end.png' alt='중지중' id='bottleWaterBtn'/></a>";
+						html += "<a href='#n')'><img src='../images/ico_w_24.png' alt='중지중' id='bottleWaterBtn'/></a>";
 					}else{
 						//실행중
-						html += "<a href='#n'><img src='../images/ico_start.png' alt='실행중' id='bottleWaterBtn'/></a>";	
+						html += "<a href='#n'><img src='../images/ico_w_25.png' alt='실행중' id='bottleWaterBtn'/></a>";	
 					}
 					return html;
 				},

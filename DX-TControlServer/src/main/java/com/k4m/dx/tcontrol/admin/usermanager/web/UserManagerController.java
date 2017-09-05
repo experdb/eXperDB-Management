@@ -344,10 +344,10 @@ public class UserManagerController {
 			
 			String[] param = request.getParameter("usr_id").toString().split(",");
 			for (int i = 0; i < param.length; i++) {
-				userManagerService.deleteUserManager(param[i]);
 				menuAuthorityService.deleteMenuAuthority(param[i]);
 				dbAuthorityService.deleteDbSvrAuthority(param[i]);
 				dbAuthorityService.deleteDbAuthority(param[i]);
+				userManagerService.deleteUserManager(param[i]);
 			}
 
 			// 사용자관리 이력 남기기
