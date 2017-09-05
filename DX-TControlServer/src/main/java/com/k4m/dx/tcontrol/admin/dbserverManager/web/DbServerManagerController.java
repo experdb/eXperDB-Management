@@ -394,12 +394,14 @@ public class DbServerManagerController {
 	@RequestMapping(value = "/isDirCheck.do")
 	@ResponseBody
 	public Map<String, Object> isDirCheck (HttpServletRequest request) {
+	
 		Map<String, Object> result =new HashMap<String, Object>();
 		String db_svr_nm = request.getParameter("db_svr_nm");
 		String ipadr = request.getParameter("ipadr");
 		String portno = request.getParameter("portno");
 		String svr_spr_scm_pwd = request.getParameter("svr_spr_scm_pwd");
 		String directory_path = request.getParameter("path");
+		String flag = request.getParameter("flag");
 		
 		try {
 			AES256 aes = new AES256(AES256_KEY.ENC_KEY);
@@ -417,7 +419,12 @@ public class DbServerManagerController {
 			serverObj.put(ClientProtocolID.SERVER_IP, ipadr);
 			serverObj.put(ClientProtocolID.SERVER_PORT, portno);
 			//serverObj.put(ClientProtocolID.USER_PWD, dbServerVO.getSvr_spr_scm_pwd());
-			serverObj.put(ClientProtocolID.USER_PWD, aes.aesDecode(svr_spr_scm_pwd));
+			if(flag=="m"){
+				serverObj.put(ClientProtocolID.USER_PWD, aes.aesDecode(svr_spr_scm_pwd));
+			}else{
+				serverObj.put(ClientProtocolID.USER_PWD, (svr_spr_scm_pwd));
+			}
+
 
 			ClientInfoCmmn cic = new ClientInfoCmmn();
 			result = cic.directory_exist(serverObj,directory_path, IP, PORT);

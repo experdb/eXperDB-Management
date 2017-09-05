@@ -151,4 +151,11 @@ public class DbServerManagerDAO extends EgovAbstractMapper{
 		return resultSet;
 	}
 
+
+	public List<DbVO> selectDbListTree() {
+		List<DbVO> sl = null;
+		sl = (List<DbVO>) list("dbserverManagerSql.selectDbListTree", null);
+		return sl;
+	}
+
 }

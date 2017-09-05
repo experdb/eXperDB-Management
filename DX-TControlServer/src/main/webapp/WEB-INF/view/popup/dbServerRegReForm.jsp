@@ -29,8 +29,26 @@
 <script type="text/javascript">
 
 var connCheck = "fail";
-var pghome_pth="fail";
-var pgdata_pth ="fail";
+var pghomeCheck="fail";
+var pgdataCheck ="fail";
+
+
+function fn_dbServerValidation(){
+	 if(pghomeCheck != "success"){
+			alert("PG_HOME경로 중복검사를 하셔야합니다.");
+			return false;
+		}
+ 		if(pgdataCheck != "success"){
+			alert("PG_DATA경로 중복검사를 하셔야합니다.");
+			return false;
+		}
+ 		if(connCheck != "success"){
+			alert("연결테스트를 하셔야합니다.");
+			return false;
+		}
+ 		return true;
+}
+
 
 $(window.document).ready(function() {
 	
@@ -101,7 +119,7 @@ function fn_dbServerConnTest(){
 //DBserver 수정
 function fn_updateDbServer(){
 	
-	if(connCheck == "success"){
+	if (!fn_dbServerValidation()) return false;
 	
 	$.ajax({
 		url : "/updateDbServer.do",
@@ -125,9 +143,7 @@ function fn_updateDbServer(){
 			self.close();			
 		}
 	}); 
-	}else{
-		alert("연결 테스트 성공후 수정이 가능합니다.")
-	}
+	
 }
 
 
@@ -135,9 +151,9 @@ function fn_updateDbServer(){
  * PG_HOME 경로의 존재유무 체크
  ******************************************************** */
 function checkPghome(){
-	var save_pth = document.getElementById("pghome_pth");
+	var save_pth = $("#pghome_pth").val();
 	if(save_pth == ""){
-		alert("PG_HOME 경로를 입력해 주세요.");
+		alert("저장경로를 입력해 주세요.");
 		$("#pghome_pth").focus();
 	}else{
 		$.ajax({
@@ -150,7 +166,8 @@ function checkPghome(){
 				portno : $("#portno").val(),
 				svr_spr_usr_id : $("#svr_spr_usr_id").val(),
 				svr_spr_scm_pwd : $("#svr_spr_scm_pwd").val(),
-		  		path : save_pth
+		  		path : save_pth,
+		  		flag : "m"
 		  	},
 			type : "post",
 			error : function(request, xhr, status, error) {
@@ -159,10 +176,11 @@ function checkPghome(){
 			success : function(data) {
 				if(data.result.ERR_CODE == ""){
 					if(data.result.RESULT_DATA == 0){
-						pghome_pth="success";
-						alert("입력하신 PG_HOME 경로는 존재합니다.");
+						$("#check_path").val("Y");
+						pghomeCheck = "success";
+						alert("입력하신 경로는 존재합니다.");
 					}else{
-						alert("입력하신 PG_HOME 경로는 존재하지 않습니다.");
+						alert("입력하신 경로는 존재하지 않습니다.");
 					}
 				}else{
 					alert("경로체크 중 서버에러로 인하여 실패하였습니다.")
@@ -176,43 +194,46 @@ function checkPghome(){
 /* ********************************************************
  * PG_DATA 경로의 존재유무 체크
  ******************************************************** */
-function checkPgdata(){
-	var save_pth = document.getElementById("pgdata_pth");
-	if(save_pth == ""){
-		alert("PG_DATA 경로를 입력해 주세요.");
-		$("#pgdata_pth").focus();
-	}else{
-		$.ajax({
-			async : false,
-			url : "/isDirCheck.do",
-		  	data : {
-				db_svr_nm : $("#db_svr_nm").val(),
-				dft_db_nm : $("#dft_db_nm").val(),
-				ipadr : $("#ipadr").val(),
-				portno : $("#portno").val(),
-				svr_spr_usr_id : $("#svr_spr_usr_id").val(),
-				svr_spr_scm_pwd : $("#svr_spr_scm_pwd").val(),
-		  		path : save_pth
-		  	},
-			type : "post",
-			error : function(request, xhr, status, error) {
-				alert("실패");
-			},
-			success : function(data) {
-				if(data.result.ERR_CODE == ""){
-					if(data.result.RESULT_DATA == 0){
-						pgdata_pth="success";
-						alert("입력하신 PG_DATA 경로는 존재합니다.");
+ function checkPgdata(){
+		var save_pth = $("#pgdata_pth").val();
+		if(save_pth == ""){
+			alert("저장경로를 입력해 주세요.");
+			$("#pgdata_pth").focus();
+		}else{
+			$.ajax({
+				async : false,
+				url : "/isDirCheck.do",
+			  	data : {
+					db_svr_nm : $("#db_svr_nm").val(),
+					dft_db_nm : $("#dft_db_nm").val(),
+					ipadr : $("#ipadr").val(),
+					portno : $("#portno").val(),
+					svr_spr_usr_id : $("#svr_spr_usr_id").val(),
+					svr_spr_scm_pwd : $("#svr_spr_scm_pwd").val(),
+			  		path : save_pth,
+			  		flag : "m"
+			  	},
+				type : "post",
+				error : function(request, xhr, status, error) {
+					alert("실패");
+				},
+				success : function(data) {
+					if(data.result.ERR_CODE == ""){
+						if(data.result.RESULT_DATA == 0){
+							$("#check_path").val("Y");
+							pgdataCheck = "success";
+							alert("입력하신 경로는 존재합니다.");
+						}else{
+							alert("입력하신 경로는 존재하지 않습니다.");
+						}
 					}else{
-						alert("입력하신 PG_DATA 경로는 존재하지 않습니다.");
+						alert("경로체크 중 서버에러로 인하여 실패하였습니다.")
 					}
-				}else{
-					alert("경로체크 중 서버에러로 인하여 실패하였습니다.")
 				}
-			}
-		});
-	}
-}	
+			});
+		}
+	}	
+
 </script>
 </head>
 <body>
@@ -224,7 +245,7 @@ function checkPgdata(){
 		<table class="write">
 			<caption>DB Server 수정하기</caption>
 			<colgroup>
-				<col style="width:100px;" />
+				<col style="width:120px;" />
 				<col />
 				<col style="width:100px;" />
 				<col />

@@ -66,6 +66,16 @@ function fn_init() {
 		paging : false,
 		columns : [
 		{data : "dft_db_nm", className : "dt-center", defaultContent : ""}, 
+		{data : "db_exp", defaultContent : "", className : "dt-center", 
+			targets: 0,
+	        searchable: false,
+	        orderable: false,
+	        render: function(data, type, full, meta){
+	           if(type === 'display'){
+	              data = '<input type="text" name="db_exp" value="' +full.db_exp + '">';      
+	           }
+	           return data;
+	        }}, 
 		{data : "rownum", defaultContent : "", targets : 0, orderable : false, checkboxes : {'selectRow' : true}}, 		
 		]
 	});
@@ -197,7 +207,7 @@ $(function() {
  * 서버 등록 팝업페이지 호출
  ******************************************************** */
 function fn_reg_popup(){
-	window.open("/popup/dbServerRegForm.do?flag=tree","dbServerRegPop","location=no,menubar=no,scrollbars=yes,status=no,width=920,height=470");
+	window.open("/popup/dbServerRegForm.do?flag=tree","dbServerRegPop","location=no,menubar=no,scrollbars=yes,status=no,width=950,height=470");
 }
 
 
@@ -208,7 +218,7 @@ function fn_regRe_popup(){
 	var datas = table_dbServer.rows('.selected').data();
 	if (datas.length == 1) {
 		var db_svr_id = table_dbServer.row('.selected').data().db_svr_id;
-		window.open("/popup/dbServerRegReForm.do?db_svr_id="+db_svr_id+"&flag=tree","dbServerRegRePop","location=no,menubar=no,resizable=yes,scrollbars=yes,status=no,width=920,height=470");
+		window.open("/popup/dbServerRegReForm.do?db_svr_id="+db_svr_id+"&flag=tree","dbServerRegRePop","location=no,menubar=no,resizable=yes,scrollbars=yes,status=no,width=950,height=470");
 	} else {
 		alert("하나의 항목을 선택해주세요.");
 	}	
@@ -219,6 +229,7 @@ function fn_regRe_popup(){
  * 디비 등록
  ******************************************************** */
 function fn_insertDB(){
+	var list = $("input[name='db_exp']");
 	var datasArr = new Array();	
 	var db_svr_id = table_dbServer.row('.selected').data().db_svr_id;
 	var ipadr = table_dbServer.row('.selected').data().ipadr;
@@ -233,7 +244,8 @@ function fn_insertDB(){
      		
      		var returnValue = false;
      		
-     		for(var j=0; j<checkCnt; j++) {
+     		//기존에 있으면 업데이트 없으면 인서트
+     		for(var j=0; j<checkCnt; j++) {    			           	 	
      			var chkDBName = table_db.rows('.selected').data()[j].dft_db_nm;
      			if(org_dbName  == chkDBName) {
      				returnValue = true;
@@ -242,9 +254,11 @@ function fn_insertDB(){
      		}
      		
      	 	if(returnValue == true){
+     	 		rows.db_exp = list[i].value;
      			rows.useyn = "Y";
      			rows.dft_db_nm = table_db.rows().data()[i].dft_db_nm;
      		}else{
+     			rows.db_exp = list[i].value;
      			rows.useyn = "N";
      			rows.dft_db_nm = table_db.rows().data()[i].dft_db_nm;
      		}   		 
@@ -282,7 +296,6 @@ function fn_insertDB(){
 					}
 				},
 				success : function(result) {
-					alert(result);
 					alert("저장되었습니다.");
 					location.reload();
 				}
@@ -299,7 +312,7 @@ function fn_insertDB(){
  ******************************************************** */
 function fn_dataCompareChcek(svrDbList){
 	$.ajax({
-		url : "/selectTreeDBList.do",
+		url : "/selectTreeDBListTree.do",
 		data : {},
 		async:true,
 		dataType : "json",
@@ -325,6 +338,10 @@ function fn_dataCompareChcek(svrDbList){
 		},
 		success : function(result) {
 			var db_svr_id =  table_dbServer.row('.selected').data().db_svr_id
+			alert(result.length);
+			/*  for(var i = 0; i<svrDbList.data.length; i++){
+					alert(result[i].db_exp);
+			} */ 
 			
 			if(svrDbList.data.length>0){
  				for(var i = 0; i<svrDbList.data.length; i++){
@@ -334,7 +351,7 @@ function fn_dataCompareChcek(svrDbList){
 					}
 				}	 	
 				for(var i = 0; i<svrDbList.data.length; i++){
-					for(var j = 0; j<result.length; j++){						
+					for(var j = 0; j<result.length; j++){											
 						 if(db_svr_id == result[j].db_svr_id && svrDbList.data[i].dft_db_nm == result[j].db_nm){										 
 							 $('input', table_db.rows(i).nodes()).prop('checked', true); 
 							 table_db.rows(i).nodes().to$().addClass('selected');	
@@ -407,7 +424,8 @@ function fn_dataCompareChcek(svrDbList){
 							<table id="dbList" class="display" cellspacing="0" align="left">
 								<thead>
 									<tr>
-										<th>메뉴</th>
+										<th>데이터베이스</th>
+										<th>설명</th>
 										<th><input name="select" value="1" type="checkbox"></th>
 									</tr>
 								</thead>

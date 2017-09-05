@@ -33,7 +33,8 @@
                 , DFT_DB_NM
                 , SVR_SPR_USR_ID
                 , SVR_SPR_SCM_PWD
-                , ISTPATH
+                , PGHOME_PTH
+                , PGDATA_PTH
 			, FRST_REGR_ID
 			, TO_CHAR(FRST_REG_DTM,'YYYY-MM-DD HH24:MI:SS') AS FRST_REG_DTM
 			, LST_MDFR_ID

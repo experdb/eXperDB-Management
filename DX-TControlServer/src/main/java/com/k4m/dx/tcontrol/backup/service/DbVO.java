@@ -5,11 +5,19 @@ public class DbVO {
 	private int db_svr_id;
 	private String db_nm;
 	private String db_usr_id;
+	private String db_exp;
 	private String frst_regr_id;
 	private String frst_reg_dtm;
 	private String lst_mdfr_id;
 	private String lst_mdf_dtm;
 	
+	
+	public String getDb_exp() {
+		return db_exp;
+	}
+	public void setDb_exp(String db_exp) {
+		this.db_exp = db_exp;
+	}
 	public int getDb_id() {
 		return db_id;
 	}

@@ -78,6 +78,7 @@ public class ClientInfoCmmn {
 					String datname = (String) hp.get("datname");
 
 					jsonObj.put("dft_db_nm", datname);
+					jsonObj.put("db_exp", "");
 					jsonArray.add(jsonObj);
 				}
 				result.put("data", jsonArray);

@@ -78,4 +78,9 @@ public class DbServerManagerServiceImpl implements DbServerManagerService {
 		return dbServerManagerDAO.db_svr_nmCheck(db_svr_nm);
 	}
 
+	@Override
+	public List<DbVO> selectDbListTree() throws Exception {
+		return dbServerManagerDAO.selectDbListTree();
+	}
+
 }

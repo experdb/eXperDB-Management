@@ -228,7 +228,7 @@ public class TreeController {
 				response.sendRedirect("/autError.do");
 				return resultSet;
 			}else{
-				resultSet = dbServerManagerService.selectDbList();		
+				resultSet = dbServerManagerService.selectDbListTree();		
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -283,12 +283,14 @@ public class TreeController {
 					JSONObject jsrow = (JSONObject) rows.get(i);
 					String dft_db_nm = jsrow.get("dft_db_nm").toString();
 					String useyn = jsrow.get("useyn").toString();
+					String db_exp = jsrow.get("db_exp").toString();
 					
 					paramvalue.put("db_svr_id", dbServerVO.getDb_svr_id());
 					paramvalue.put("dft_db_nm", dft_db_nm);
 					paramvalue.put("frst_regr_id", dbServerVO.getFrst_regr_id());
 					paramvalue.put("lst_mdfr_id", dbServerVO.getLst_mdfr_id());
 					paramvalue.put("useyn", useyn);
+					paramvalue.put("db_exp", db_exp);
 					
 					System.out.println("============== parameter ==============");
 					System.out.println("DB 서버 ID : "+ paramvalue.get("db_svr_id"));

@@ -165,6 +165,7 @@
 			, DB_SVR_ID
 			, DB_NM
 			, USEYN
+			, DB_EXP
 			, FRST_REGR_ID
 			, FRST_REG_DTM
 			, LST_MDFR_ID
@@ -176,6 +177,7 @@
 			, #{db_svr_id}
 			, #{dft_db_nm}
 			, #{useyn}
+			, #{db_exp}
 			, #{frst_regr_id}
 			, clock_timestamp()
 			, #{lst_mdfr_id}
@@ -198,6 +200,7 @@
                 , DB_SVR_ID
                 , DB_NM
                 , DB_USR_ID
+                , DB_EXP
 				, FRST_REGR_ID
 				, TO_CHAR(FRST_REG_DTM,'YYYY-MM-DD HH24:MI:SS') AS FRST_REG_DTM
 				, LST_MDFR_ID
@@ -222,6 +225,7 @@
             , AA.PORTNO
             , AA.DB_ID
             , AA.DB_NM
+            , AA.DB_EXP
 			, AA.FRST_REGR_ID
 			, AA.FRST_REG_DTM
 			, AA.LST_MDFR_ID
@@ -233,6 +237,7 @@
 	                , A.PORTNO
 	                , B.DB_ID
 	                , B.DB_NM
+	                , B.DB_EXP
 					, A.FRST_REGR_ID
 					, TO_CHAR(A.FRST_REG_DTM,'YYYY-MM-DD HH24:MI:SS') AS FRST_REG_DTM
 					, A.LST_MDFR_ID
@@ -314,6 +319,7 @@
 		UPDATE T_DB_I
 		SET 
 	  	 	   USEYN= #{useyn}
+	  	 	  , DB_EXP=#{db_exp}
 			  , LST_MDFR_ID=#{lst_mdfr_id}
 			  , LST_MDF_DTM=clock_timestamp()	
 		WHERE DB_SVR_ID=#{db_svr_id}::numeric
