@@ -217,7 +217,7 @@
 					</td>
 				</tr>
 				<tr>
-					<th scope="row" class="ico_t1">hdfs.url</th>
+					<th scope="row" class="ico_t1">hdfs.url<br>ex)hdfs://ip:port/</th>
 					<td><input type="text" class="txt t2" name="trf_trg_url" id="trf_trg_url" value="${trf_trg_url}" style="width: 500px;"/></td>
 				</tr>
 				<tr>

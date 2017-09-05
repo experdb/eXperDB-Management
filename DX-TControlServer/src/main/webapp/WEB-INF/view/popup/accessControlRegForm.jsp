@@ -28,6 +28,15 @@
 <script type="text/javascript" src="../js/common.js"></script>
 </head>
 <script>
+	//숫자체크
+	function valid_numeric(objValue)
+	{
+		if (objValue.match(/^[0-9]+$/) == null)
+		{	return false;	}
+		else
+		{	return true;	}
+	}
+
 	/* Validation */
 	function fn_accessControl(){
 		/*Type=local -> ip입력 안함*/
@@ -35,21 +44,25 @@
 			$("#prms_ipadr").val();
 			return true;	
 		}else{
-			var prms_ipadr = document.getElementById("prms_ipadr");	
-			var prms_ipadr_val = prms_ipadr.value;
-			if (prms_ipadr_val == "") {
-				   alert("IP를 입력하여 주십시오.");
-				   prms_ipadr.focus();
+			var ip = document.getElementById("ip");	
+			if (ip.value == "") {
+				alert("IP를 입력하여 주십시오.");
+				ip.focus();
+				return false;
+			}
+			
+	 		var prefix = document.getElementById("prefix");
+			if (prefix.value == "") {
+				   alert("Prefix를 입력하여 주십시오.");
+				   prefix.focus();
 				   return false;
 			}
-		}	
-		//ABCDEF0123456789 
-		// '/'하나만 체크
-		var checkFlag = prms_ipadr_val.indexOf('/');
-		if(checkFlag<0){
-			alert("형식에 맞게 입력하여 주십시오.");
-			prms_ipadr.focus();
-			return false;
+	 		if(!valid_numeric(prefix.value))
+		 	{
+	 			alert("Prefix는 숫자만 입력가능합니다.");
+	 			prefix.focus();
+			 	return false;
+			}
 		}	
 		return true;
 	}
@@ -57,16 +70,18 @@
 	/* 등록 버튼 클릭시*/
 	function fn_insert() {
 		if (!fn_accessControl()) return false;
+		var ip = document.getElementById("ip").value;	
+		var prefix = document.getElementById("prefix").value;
+		var prms_ipadr = ip+"/"+prefix;
 		$.ajax({
 			url : "/insertAccessControl.do",
 			data : {
 				db_svr_id : '${db_svr_id}',
 				db_id : '${db_id}',
-				prms_ipadr : $("#prms_ipadr").val(),
+				prms_ipadr : prms_ipadr,
 				prms_usr_id : $("#prms_usr_id").val(),
 				ctf_mth_nm : $("#ctf_mth_nm").val(),
 				ctf_tp_nm : $("#ctf_tp_nm").val(),
-				opt_nm : $("#opt_nm").val(),
 			},
 			type : "post",
 			error : function(request, status, error) {
@@ -83,17 +98,19 @@
 	/* 수정 버튼 클릭시*/
 	function fn_update() {
 		if (!fn_accessControl()) return false;
+		var ip = document.getElementById("ip").value;	
+		var prefix = document.getElementById("prefix").value;
+		var prms_ipadr = ip+"/"+prefix;
 		$.ajax({
 			url : "/updateAccessControl.do",
 			data : {
 				prms_seq : '${prms_seq}',
 				db_svr_id : '${db_svr_id}',
 				db_id : '${db_id}',
-				prms_ipadr : $("#prms_ipadr").val(),
+				prms_ipadr : prms_ipadr,
 				prms_usr_id : $("#prms_usr_id").val(),
 				ctf_mth_nm : $("#ctf_mth_nm").val(),
 				ctf_tp_nm : $("#ctf_tp_nm").val(),
-				opt_nm : $("#opt_nm").val(),
 				cmd_cnts : $("#cmd_cnts").val(),
 			},
 			type : "post",
@@ -106,6 +123,30 @@
 				opener.fn_select();
 			}
 		});
+	}
+	
+	$(window.document).ready(function() {
+		var ctf_tp_nm=$("#ctf_tp_nm option:selected").val();
+		if(ctf_tp_nm=="local"){
+			$('#ip').attr('disabled', 'true');
+			$('#prefix').attr('disabled', 'true');
+		}
+		if ("${act}" == "u") {
+			var prms_ipadr= "${prms_ipadr}";
+			var str= prms_ipadr.split("/");
+			 $('#ip').val(str[0]);
+			 $('#prefix').val(str[1]);
+		}
+	});
+	
+	function change(selectObj) {
+		if(selectObj.value =="local"){
+			$('#ip').attr('disabled', 'true');
+			$('#prefix').attr('disabled', 'true');
+		}else{
+			$('#ip').removeAttr('disabled'); 
+			$('#prefix').removeAttr('disabled'); 
+		}
 	}
 </script>
 <body>
@@ -144,18 +185,32 @@
 					<c:if test="${act == 'u'}">접근제어 수정하기</c:if>
 				</caption>
 				<colgroup>
-					<col style="width:110px;" />
-					<col />
 					<col style="width:85px;" />
+					<col />
+					<col style="width:110px;" />
 					<col />
 				</colgroup>
 				<tbody>
 					<tr>
+						<th scope="row" class="ico_t1">Type</th>
+						<td>					
+							<select id="ctf_tp_nm" name="ctf_tp_nm" id="ctf_tp_nm" class="select t4" onChange="javascript:change(this)">
+								<option value="local" ${ctf_tp_nm == 'local' ? 'selected="selected"' : ''}>local</option>
+								<option value="host" ${ctf_tp_nm == 'host' ? 'selected="selected"' : ''}>host</option>
+								<option value="hostssl" ${ctf_tp_nm == 'hostssl' ? 'selected="selected"' : ''}>hostssl</option>
+								<option value="hostnossl" ${ctf_tp_nm == 'hostnossl' ? 'selected="selected"' : ''}>hostnossl</option>
+							</select>
+						</td>
+						
 						<th scope="row" class="ico_t1">IP<br>(127.0.0.1/32)</th>
-						<td><input type="text" class="txt" name="prms_ipadr" id="prms_ipadr" value="${prms_ipadr}"/></td>
-						<th scope="row" class="ico_t1">User</th>
 						<td>
-									
+							<input type="text" class="txt" name="prms_ipadr" id="ip" style="width: 130px;"/> /
+							<input type="text" class="txt" name="prms_ipadr" id="prefix" style="width: 100px;"/>
+						</td>
+					</tr>
+					<tr>
+						<th scope="row" class="ico_t1">User</th>
+						<td>									
 							<select id="prms_usr_id" name="prms_usr_id" class="select t4">
 								<option value="all" ${prms_usr_id == 'all' ? 'selected="selected"' : ''}>all</option>
 								<c:forEach var="result" items="${result.data}">
@@ -163,8 +218,7 @@
 								</c:forEach>
 							</select>
 						</td>
-					</tr>
-					<tr>
+						
 						<th scope="row" class="ico_t1">Method</th>
 						<td>
 							<select id="ctf_mth_nm" name="ctf_mth_nm" id="ctf_mth_nm" class="select">
@@ -185,19 +239,7 @@
 								<option value="peer" ${ctf_mth_nm == 'peer' ? 'selected="selected"' : ''}>peer</option>
 							</select>
 						</td>
-						<th scope="row" class="ico_t1">Type</th>
-						<td>					
-							<select id="ctf_tp_nm" name="ctf_tp_nm" id="ctf_tp_nm" class="select t4">
-								<option value="local" ${ctf_tp_nm == 'local' ? 'selected="selected"' : ''}>local</option>
-								<option value="host" ${ctf_tp_nm == 'host' ? 'selected="selected"' : ''}>host</option>
-								<option value="hostssl" ${ctf_tp_nm == 'hostssl' ? 'selected="selected"' : ''}>hostssl</option>
-								<option value="hostnossl" ${ctf_tp_nm == 'hostnossl' ? 'selected="selected"' : ''}>hostnossl</option>
-							</select>
-						</td>
-					</tr>
-					<tr>
-						<th scope="row" class="ico_t1">Option</th>
-						<td colspan="3"><input type="text" class="txt t4" name="opt_nm" id="opt_nm" value="${opt_nm}"/></td>
+
 					</tr>
 				</tbody>
 			</table>

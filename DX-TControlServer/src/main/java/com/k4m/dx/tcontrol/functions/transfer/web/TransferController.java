@@ -374,21 +374,22 @@ public class TransferController {
 	public @ResponseBody boolean deleteConnectorRegister(@ModelAttribute("historyVO") HistoryVO historyVO,
 			HttpServletRequest request) {
 		try {
-			String[] param = request.getParameter("cnr_id").toString().split(",");
+			String[] param = request.getParameter("cnr_id").toString().split(",");	
 			for (int i = 0; i < param.length; i++) {
-				/*1. 커넥터정보 삭제*/
-				transferService.deleteConnectorRegister(Integer.parseInt(param[i]));
-				/*2. 전송대상설정정보 삭제*/
-				transferService.deleteTransferInfo(Integer.parseInt(param[i]));
-				/*3. trf_trg_mpp_id조회 후, 전송대상매핑관계 삭제 */
+				/*1. trf_trg_mpp_id조회 후 전송매핑테이블 확인*/
 				List<TransferMappingVO> result = transferService.selectTrftrgmppid(Integer.parseInt(param[i]));
-				transferService.deleteTransferRelation(Integer.parseInt(param[i]));
-				/*4. 전송매핑테이블 삭제*/
+				/*2. 전송매핑테이블 삭제*/
 				if(result!=null){
 					for(int j=0; j<result.size(); j++){
 						transferService.deleteTransferMapping(result.get(j).getTrf_trg_mpp_id());
 					}
-				}		
+				}	
+				/*3. 전송대상매핑관계 삭제*/
+				transferService.deleteTransferRelation(Integer.parseInt(param[i]));
+				/*4. 전송대상설정정보 삭제*/
+				transferService.deleteTransferInfo(Integer.parseInt(param[i]));
+				/*5. 커넥터정보 삭제*/
+				transferService.deleteConnectorRegister(Integer.parseInt(param[i]));
 			}
 
 			// Connector삭제 이력 남기기

@@ -100,7 +100,6 @@
 		, PRMS_SET
 		, CTF_MTH_NM
 		, CTF_TP_NM
-		, OPT_NM
 		, CMD_CNTS
 		, FRST_REGR_ID
 		, FRST_REG_DTM
@@ -118,7 +117,6 @@
 		, #{prms_set}
 		, #{ctf_mth_nm}
 		, #{ctf_tp_nm}
-		, #{opt_nm}
 		, #{cmd_cnts}
 		, #{frst_regr_id}
 		, clock_timestamp()

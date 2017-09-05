@@ -259,7 +259,6 @@ public class AccessControlController {
 				mv.addObject("prms_usr_id",request.getParameter("User").equals("undefined") ? "" : request.getParameter("User"));
 				mv.addObject("ctf_mth_nm",request.getParameter("Method").equals("undefined") ? "" : request.getParameter("Method"));
 				mv.addObject("ctf_tp_nm",request.getParameter("Type").equals("undefined") ? "" : request.getParameter("Type"));
-				mv.addObject("opt_nm",request.getParameter("Option").equals("undefined") ? "" : request.getParameter("Option"));
 			}
 			
 			mv.addObject("result", result);
