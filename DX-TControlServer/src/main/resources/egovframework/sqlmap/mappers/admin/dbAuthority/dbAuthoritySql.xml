@@ -19,7 +19,8 @@
 			, A.DFT_DB_NM
 			, A.SVR_SPR_USR_ID
 			, A.SVR_SPR_SCM_PWD
-			, A.ISTPATH
+			, A.PGHOME_PTH
+            , A.PGDATA_PTH
 			, A.FRST_REGR_ID
 			, FRST_REG_DTM
 			, A.LST_MDFR_ID
