@@ -212,4 +212,10 @@ public class ScheduleServiceImpl implements ScheduleService{
 	public void updateScheduleStatus(ScheduleVO scheduleVO) throws Exception {
 		scheduleDAO.updateScheduleStatus(scheduleVO);		
 	}
+
+
+	@Override
+	public int scd_nmCheck(String scd_nm) throws Exception {
+		return scheduleDAO.scd_nmCheck( scd_nm);
+	}
 }

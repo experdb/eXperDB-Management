@@ -3,6 +3,7 @@
 
 <script>
 var table = null;
+var scd_nmChk = "fail";
 
 function fn_validation(){
 	var scd_nm = document.getElementById("scd_nm");
@@ -16,6 +17,8 @@ function fn_validation(){
   			   alert("스케줄설명을 입력하여 주십시오.");
   			 scd_exp.focus();
   			   return false;
+  		}if(scd_nmChk == "fail"){
+  			"스케줄명 중복체크 하셔야합니다.";
   		}
  		return true;
 }
@@ -54,8 +57,6 @@ function fn_init(){
 		className: "dt-center",
       	defaultContent: "",
         	render: function (data, type, full){
-
- 
         		var onError ='<select  id="nxt_exe_yn" name="nxt_exe_yn">';
         		if(data.NXT_EXE_YN  == 'Y') {
         			onError +='<option value="y" selected>Y</option>';
@@ -64,7 +65,6 @@ function fn_init(){
         			onError +='<option value="y">Y</option>';
         			onError +='<option value="n" selected>N</option>';
         		}
-
         		onError +='</select>';
         		return onError;	
         	}
@@ -407,6 +407,36 @@ function fn_insertSchedule(){
 }
 
 
+//스케줄명 중복체크
+function fn_check() {
+	var scd_nm = document.getElementById("scd_nm");
+	if (scd_nm.value == "") {
+		alert("스케줄명을 입력하세요.");
+		document.getElementById('scd_nm').focus();
+		return;
+	}
+	$.ajax({
+		url : '/scd_nmCheck.do',
+		type : 'post',
+		data : {
+			scd_nm : $("#scd_nm").val()
+		},
+		success : function(result) {
+			if (result == "true") {
+				alert("등록가능한 스케줄명 입니다.");
+				document.getElementById("scd_nm").focus();
+				scd_nmChk = "success";
+			} else {
+				scd_nmChk = "fail";
+				alert("중복된 스케줄명이 존재합니다.");
+				document.getElementById("scd_nm").focus();
+			}
+		},
+		error : function(request, status, error) {
+			alert("실패");
+		}
+	});
+}
 </script>
 
 			<div id="contents">
@@ -436,7 +466,9 @@ function fn_insertSchedule(){
 									<tbody>
 										<tr>
 											<th scope="row" class="t9 line">스케줄명</th>
-											<td><input type="text" class="txt t2" id="scd_nm" name="scd_nm"/></td>
+											<td><input type="text" class="txt t2" id="scd_nm" name="scd_nm"/>
+											<span class="btn btnF_04 btnC_01"><button type="button" class= "btn_type_02" onclick="fn_check()" style="width: 60px; margin-right: -60px; margin-top: 0;">중복체크</button></span>
+											</td>
 										</tr>
 										<tr>
 											<th scope="row" class="t9 line">설명</th>
