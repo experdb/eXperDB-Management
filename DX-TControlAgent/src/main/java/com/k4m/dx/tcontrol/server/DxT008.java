@@ -71,12 +71,12 @@ public class DxT008 extends SocketCtl{
 			
 			send(TotalLengthBit, outputObj.toString().getBytes());
 		} catch (Exception e) {
-			errLogger.error("DxT006 {} ", e.toString());
+			errLogger.error("DxT008 {} ", e.toString());
 			
-			outputObj.put(ProtocolID.DX_EX_CODE, TranCodeType.DxT006);
+			outputObj.put(ProtocolID.DX_EX_CODE, TranCodeType.DxT008);
 			outputObj.put(ProtocolID.RESULT_CODE, "1");
-			outputObj.put(ProtocolID.ERR_CODE, TranCodeType.DxT006);
-			outputObj.put(ProtocolID.ERR_MSG, "DxT006 Error [" + e.toString() + "]");
+			outputObj.put(ProtocolID.ERR_CODE, TranCodeType.DxT008);
+			outputObj.put(ProtocolID.ERR_MSG, "DxT008 Error [" + e.toString() + "]");
 			
 			sendBuff = outputObj.toString().getBytes();
 			send(4, sendBuff);

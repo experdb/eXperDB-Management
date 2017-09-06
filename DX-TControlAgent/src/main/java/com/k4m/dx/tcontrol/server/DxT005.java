@@ -112,8 +112,21 @@ public class DxT005 extends SocketCtl{
 				//다음실행여부가 Y 이면 에러나도 다음 시행함.
 				if(retVal.equals("success")) {
 					String strFileName = strBCK_FILENM;
-					String strCmd = "ls -al " + strBCK_FILE_PTH + "/" + strFileName + " | awk '{print $5}'";
+					String strSlush = "/";
+					
+					if(!strBCK_FILE_PTH.contentEquals("")) {
+						String strSl = strBCK_FILE_PTH.substring(strBCK_FILE_PTH.length()-1, strBCK_FILE_PTH.length());
+						if(strSl.equals("/")) {
+							strSlush = "";
+						}
+					}
+					
+					String strCmd = "ls -al " + strBCK_FILE_PTH + strSlush + strFileName + " | awk '{print $5}'";
 					String strFileSize = CommonUtil.getPidExec(strCmd);
+					
+					
+					socketLogger.info("##### strFileSize cmd : " + strCmd );
+					socketLogger.info("##### strFileSize : " + strFileSize );
 					
 					WrkExeVO endVO = new WrkExeVO();
 					endVO.setEXE_RSLT_CD(strResultCode);
@@ -168,5 +181,10 @@ public class DxT005 extends SocketCtl{
 		}	    
 	}
 	
-
+	public static void main(String[] args) {
+		String test = "/k4m/DxTcontrolWorkspace/";
+		String test2 = test.substring(test.length()-1, test.length());
+		
+		System.out.println("@@@@@@@@@@@@@@@@" + test2);
+	}
 }
