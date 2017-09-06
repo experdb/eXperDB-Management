@@ -44,7 +44,7 @@ function fn_init() {
 			defaultContent : ""
 		} ]
 	});
-	
+
 	//더블 클릭시
 	if("${wrt_aut_yn}" == "Y"){
 		$('#userListTable tbody').on('dblclick','tr',function() {

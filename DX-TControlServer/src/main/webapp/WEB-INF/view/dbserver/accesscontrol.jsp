@@ -107,7 +107,7 @@
 			
 			var popUrl = "/popup/accessControlRegForm.do?act=u&&db_svr_id=${db_svr_id}&&User="+User+"&&Seq="+Seq+"&&Method="+Method+"&&Database="+Database+"&&Type="+Type+"&&Ipadr="+Ipadr; // 서버 url 팝업경로
 			var width = 920;
-			var height = 380;
+			var height = 420;
 			var left = (window.screen.width / 2) - (width / 2);
 			var top = (window.screen.height /2) - (height / 2);
 			var popOption = "width="+width+", height="+height+", top="+top+", left="+left+", resizable=no, scrollbars=no, status=no, toolbar=no, titlebar=yes, location=no,";
@@ -181,7 +181,7 @@
 	function fn_insert(){
 		var popUrl = "/popup/accessControlRegForm.do?act=i&&db_svr_id=${db_svr_id}"; // 서버 url 팝업경로
 		var width = 920;
-		var height = 380;
+		var height = 420;
 		var left = (window.screen.width / 2) - (width / 2);
 		var top = (window.screen.height /2) - (height / 2);
 		var popOption = "width="+width+", height="+height+", top="+top+", left="+left+", resizable=no, scrollbars=yes, status=no, toolbar=no, titlebar=yes, location=no,";
@@ -203,7 +203,7 @@
 				
 			var popUrl = "/popup/accessControlRegForm.do?act=u&&db_svr_id=${db_svr_id}&&User="+User+"&&Seq="+Seq+"&&Method="+Method+"&&Database="+Database+"&&Type="+Type+"&&Ipadr="+Ipadr; // 서버 url 팝업경로
 			var width = 920;
-			var height = 380;
+			var height = 420;
 			var left = (window.screen.width / 2) - (width / 2);
 			var top = (window.screen.height /2) - (height / 2);
 			var popOption = "width="+width+", height="+height+", top="+top+", left="+left+", resizable=no, scrollbars=yes, status=no, toolbar=no, titlebar=yes, location=no,";

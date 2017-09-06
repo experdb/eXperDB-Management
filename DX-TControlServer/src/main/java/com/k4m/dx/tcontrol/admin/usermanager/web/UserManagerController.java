@@ -137,7 +137,6 @@ public class UserManagerController {
 	@RequestMapping(value = "/popup/userManagerRegForm.do")
 	public ModelAndView userManagerForm(@ModelAttribute("historyVO") HistoryVO historyVO, HttpServletRequest request) {
 		ModelAndView mv = new ModelAndView();
-		List<UserVO> result = null;
 		try {
 			CmmnUtils cu = new CmmnUtils();
 			menuAut = cu.selectMenuAut(menuAuthorityService, "MN0004");
@@ -159,19 +158,19 @@ public class UserManagerController {
 					accessHistoryService.insertHistory(historyVO);
 								
 					String usr_id = request.getParameter("usr_id");
-					result = userManagerService.selectDetailUserManager(usr_id);
+					UserVO result= (UserVO)userManagerService.selectDetailUserManager(usr_id);
 					
-					mv.addObject("get_usr_id",result.get(0).getUsr_id());
-					mv.addObject("usr_nm",result.get(0).getUsr_nm());
-					mv.addObject("pwd",result.get(0).getPwd());
-					mv.addObject("bln_nm",result.get(0).getBln_nm());
-					mv.addObject("dept_nm",result.get(0).getDept_nm());
-					mv.addObject("pst_nm",result.get(0).getPst_nm());
-					mv.addObject("rsp_bsn_nm",result.get(0).getRsp_bsn_nm());
-					mv.addObject("cpn",result.get(0).getCpn());
-					mv.addObject("use_yn",result.get(0).getUse_yn());	
-					mv.addObject("aut_id",result.get(0).getAut_id());
-					mv.addObject("usr_expr_dt",result.get(0).getUsr_expr_dt());
+					mv.addObject("get_usr_id",result.getUsr_id());
+					mv.addObject("usr_nm",result.getUsr_nm());
+					mv.addObject("pwd",result.getPwd());
+					mv.addObject("bln_nm",result.getBln_nm());
+					mv.addObject("dept_nm",result.getDept_nm());
+					mv.addObject("pst_nm",result.getPst_nm());
+					mv.addObject("rsp_bsn_nm",result.getRsp_bsn_nm());
+					mv.addObject("cpn",result.getCpn());
+					mv.addObject("use_yn",result.getUse_yn());	
+					mv.addObject("aut_id",result.getAut_id());
+					mv.addObject("usr_expr_dt",result.getUsr_expr_dt());
 					
 				}
 				mv.addObject("act",act);
@@ -274,24 +273,25 @@ public class UserManagerController {
 		try {
 			CmmnUtils cu = new CmmnUtils();
 			menuAut = cu.selectMenuAut(menuAuthorityService, "MN0004");
-			
 			//쓰기권한이 없는경우
 			if(menuAut.get(0).get("wrt_aut_yn").equals("N")){
 				response.sendRedirect("/autError.do");
 			}
-			
 			// 사용자 수정 이력 남기기
 			CmmnUtils.saveHistory(request, historyVO);
 			historyVO.setExe_dtl_cd("DX-T0033_01");
 			accessHistoryService.insertHistory(historyVO);
 			
-			//패스워드 암호화
-			userVo.setPwd(SHA256.SHA256(userVo.getPwd()));
-			
 			HttpSession session = request.getSession();
 			String usr_id = (String)session.getAttribute("usr_id");
 			userVo.setLst_mdfr_id(usr_id);
-			
+			UserVO userInfo= (UserVO)userManagerService.selectDetailUserManager(usr_id);
+			if(userInfo.getPwd().equals(userVo.getPwd())){
+				userVo.setPwd(userVo.getPwd());
+			}else{
+				//패스워드 암호화
+				userVo.setPwd(SHA256.SHA256(userVo.getPwd()));
+			}
 			userManagerService.updateUserManager(userVo);
 		} catch (Exception e) {
 			e.printStackTrace();

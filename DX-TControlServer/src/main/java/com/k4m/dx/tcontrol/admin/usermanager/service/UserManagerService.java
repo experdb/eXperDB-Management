@@ -44,7 +44,7 @@ public interface UserManagerService {
 	 * @param string
 	 * @throws Exception
 	 */
-	public List<UserVO> selectDetailUserManager(String usr_id)throws Exception;
+	public UserVO selectDetailUserManager(String usr_id)throws Exception;
 
 
 	/**

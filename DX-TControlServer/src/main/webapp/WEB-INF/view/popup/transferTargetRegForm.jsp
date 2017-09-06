@@ -31,21 +31,6 @@
 	
 	/* Validation */
 	function fn_transferTargetValidation(){
-		var trf_trg_cnn_nm = document.getElementById('trf_trg_cnn_nm');
-		var trf_trg_url = document.getElementById('trf_trg_url');
-		if (trf_trg_cnn_nm.value == "" || trf_trg_cnn_nm.value == "undefind" || trf_trg_cnn_nm.value == null) {
-			alert("Connect명을 넣어주세요");
-			trf_trg_cnn_nm.focus();
-			return false;
-		}
-		var blank_pattern = /[\s]/g;
-		var special_pattern = /[`~!@#$%^&*|\\\'\";:\/?]/gi;
-		if( blank_pattern.test(trf_trg_cnn_nm.value) == true || special_pattern.test(trf_trg_cnn_nm.value) == true ){
-		    alert('공백이나 특수문자는 입력할 수 없습니다.');
-		    trf_trg_cnn_nm.focus();
-		    return false;
-		}
-	
 		if (trf_trg_url.value == "" || trf_trg_url.value == "undefind" || trf_trg_url.value == null) {
 			alert("Target URL을 넣어주세요");
 			trf_trg_url.focus();
@@ -148,13 +133,20 @@
 	/* Connect명 중복체크*/
 	function fn_nmCheck(){
 		nmCheck = 1;
-		var trf_trg_cnn_nm = document.getElementById("trf_trg_cnn_nm");
-		if (trf_trg_cnn_nm.value == "") {
-			alert("Connect명을 넣어주세요");
-			document.getElementById('trf_trg_cnn_nm').focus();
+		var str = document.getElementById("trf_trg_cnn_nm").value;
+		var err = 0; 
+		for (var i=0; i<str.length; i++)  { 
+		    var chk = str.substring(i,i+1); 
+		    if ( str.match(/[^a-z0-9]/) != null ) {
+		        err = err + 1; 
+		    } 
+		} 
+		if (err > 0) { 
+		    alert("숫자 및 소문자 영문만 입력가능합니다."); 
+		    document.getElementById('trf_trg_cnn_nm').focus();
 			nmCheck = 0;
-			return;
-		}
+		    return;
+		} 
 		$.ajax({
 			url : '/transferTargetNameCheck.do',
 			type : 'post',
@@ -165,7 +157,7 @@
 				if (result == "true") {
 					alert("Connect명을 사용하실 수 있습니다.");
 					document.getElementById("trf_trg_url").focus();
-				} else {
+				}else {
 					alert("중복된 Connect명이 존재합니다.");
 					document.getElementById("trf_trg_cnn_nm").focus();
 					nmCheck = 0;

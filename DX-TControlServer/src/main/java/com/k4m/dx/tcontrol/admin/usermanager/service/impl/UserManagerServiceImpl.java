@@ -32,7 +32,7 @@ public class UserManagerServiceImpl implements UserManagerService {
 		userManagerDAO.deleteUserManager(string);
 	}
 
-	public List<UserVO> selectDetailUserManager(String usr_id) throws Exception {
+	public UserVO selectDetailUserManager(String usr_id) throws Exception {
 		return userManagerDAO.selectDetailUserManager(usr_id);
 	}
 

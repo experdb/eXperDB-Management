@@ -72,12 +72,8 @@ public class UserManagerDAO extends EgovAbstractMapper{
 	 * @return List
 	 * @throws SQLException
 	 */
-
-	@SuppressWarnings({ "unchecked", "deprecation" })
-	public List<UserVO> selectDetailUserManager(String usr_id) throws SQLException {
-		List<UserVO> result = null;
-		result = (List<UserVO>) list("userManagerSql.selectDetailUserManager", usr_id);
-		return result;
+	public UserVO selectDetailUserManager(String usr_id) throws SQLException {
+		return (UserVO) selectOne("userManagerSql.selectDetailUserManager", usr_id);
 	}
 
 	
