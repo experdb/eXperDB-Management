@@ -19,6 +19,7 @@ import org.slf4j.LoggerFactory;
 import com.k4m.dx.tcontrol.socket.ProtocolID;
 import com.k4m.dx.tcontrol.socket.SocketCtl;
 import com.k4m.dx.tcontrol.socket.TranCodeType;
+import com.k4m.dx.tcontrol.util.CommonUtil;
 import com.k4m.dx.tcontrol.util.DateUtil;
 import com.k4m.dx.tcontrol.util.FileEntry;
 import com.k4m.dx.tcontrol.util.FileListSearcher;
@@ -63,14 +64,25 @@ public class DxT016 extends SocketCtl{
 		try {
 			
 			String strDirectory = "1";
+			String strDirectorySize = "0";
+			
 			boolean blnIsDirectory = FileUtil.isDirectory(strLogFileDir);
-			if(blnIsDirectory) strDirectory = "0";
+			if(blnIsDirectory) {
+				String strCmd = "du -sh " + strLogFileDir + " | awk '{print $1}'";
+				strDirectory = "0";
+				strDirectorySize = CommonUtil.getPidExec(strCmd);
+			}
 			
 			outputObj.put(ProtocolID.DX_EX_CODE, strDxExCode);
 			outputObj.put(ProtocolID.RESULT_CODE, strSuccessCode);
 			outputObj.put(ProtocolID.ERR_CODE, strErrCode);
 			outputObj.put(ProtocolID.ERR_MSG, strErrMsg);
-			outputObj.put(ProtocolID.RESULT_DATA, strDirectory);
+			
+			HashMap hp = new HashMap();
+			hp.put(ProtocolID.IS_DIRECTORY, strDirectory);
+			hp.put(ProtocolID.CAPACITY, strDirectorySize);
+			
+			outputObj.put(ProtocolID.RESULT_DATA, hp);
 			
 			sendBuff = outputObj.toString().getBytes();
 			send(4, sendBuff);

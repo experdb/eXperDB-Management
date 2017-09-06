@@ -254,6 +254,18 @@ public class FileUtil {
 		return blnReturn;
 	}
 	
+	public static long getFileSize(String strFile) throws Exception {
+		long lFileSize = 0 ;
+		
+		File file = new File(strFile);
+		
+		if(file.isDirectory()) {
+			lFileSize = file.length();
+		}
+		
+		return lFileSize;
+	}
+	
 	/**
 	 * file to byte
 	 * @param file

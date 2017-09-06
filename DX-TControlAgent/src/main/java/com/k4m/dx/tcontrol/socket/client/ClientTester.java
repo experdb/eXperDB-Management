@@ -50,7 +50,7 @@ public class ClientTester {
 			//clientTester.dxT002(Ip, port);
 			//clientTester.dxT003(Ip, port);
 			//clientTester.dxT004(Ip, port);
-			clientTester.dxT005(Ip, port);
+			//clientTester.dxT005(Ip, port);
 			//clientTester.dxT006_C(Ip, port);
 			//clientTester.dxT006_R(Ip, port);
 			//clientTester.dxT006_U(Ip, port);
@@ -73,7 +73,7 @@ public class ClientTester {
 			//clientTester.dxT015_R(Ip, port);
 			//clientTester.dxT015_V(Ip, port);
 			//clientTester.dxT015_DL(Ip, port);
-			//clientTester.dxT016(Ip, port);
+			clientTester.dxT016(Ip, port);
 			//clientTester.dxT017_insert(Ip, port);
 			//clientTester.dxT017_delete(Ip, port);
 			//clientTester.dxT017_select(Ip, port);
@@ -1424,9 +1424,12 @@ public class ClientTester {
 
 			objList = CA.dxT016(jObj);
 			
-			String checkDir = (String)objList.get(ClientProtocolID.RESULT_DATA);
+			HashMap obj = (HashMap)objList.get(ClientProtocolID.RESULT_DATA);
 			
-			System.out.println("디렉터리 존재 유무(0:1) : " + checkDir);
+			String checkDir = (String)obj.get(ClientProtocolID.IS_DIRECTORY);
+			String capacity = (String)obj.get(ClientProtocolID.CAPACITY);
+			
+			System.out.println("디렉터리 존재 유무(0:1) : " + checkDir + " 용량 : " + capacity);
 			
 			CA.close();
 			

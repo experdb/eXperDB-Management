@@ -107,6 +107,9 @@ public class ClientProtocolID {
 	public static final String LOG_YN = "LOG_YN";
 	public static final String BCK_FILENM = "BCK_FILENM";
 	
+	public static final String IS_DIRECTORY = "IS_DIRECTORY";
+	public static final String CAPACITY = "CAPACITY";
+	
 	public static final String SLOT = "SLOT";
 
 }
