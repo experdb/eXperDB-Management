@@ -68,7 +68,7 @@ public class DxT016 extends SocketCtl{
 			
 			boolean blnIsDirectory = FileUtil.isDirectory(strLogFileDir);
 			if(blnIsDirectory) {
-				String strCmd = "du -sh " + strLogFileDir + " | awk '{print $1}'";
+				String strCmd = "du -sh --apparent-size " + strLogFileDir + " | awk '{print $1}'";
 				strDirectory = "0";
 				strDirectorySize = CommonUtil.getPidExec(strCmd);
 			}
