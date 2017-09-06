@@ -155,4 +155,12 @@ public interface ScheduleService {
 	 */
 	void updateScheduleStatus(ScheduleVO scheduleVO) throws Exception;
 
+	
+	/**
+	 * 스케줄명 중복검사
+	 * @param scd_nm
+	 * @throws Exception
+	 */
+	int scd_nmCheck(String scd_nm) throws Exception;
+
 }

@@ -135,4 +135,11 @@ public class ScheduleDAO extends EgovAbstractMapper{
 		update("scheduleSql.updateScheduleStatus",scheduleVO);			
 	}
 
+
+	public int scd_nmCheck(String scd_nm) {
+		int resultSet = 0;
+		resultSet = (int) getSqlSession().selectOne("scheduleSql.scd_nmCheck", scd_nm);
+		return resultSet;
+	}
+
 }

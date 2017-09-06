@@ -704,4 +704,26 @@ public class ScheduleController {
 			txManager.commit(status);
 		}
 	}
+	
+	
+	/**
+	 * 중복 스케줄명을 체크한다.
+	 * 
+	 * @param scd_nm
+	 * @return
+	 * @throws Exception
+	 */
+	@RequestMapping(value = "/scd_nmCheck.do")
+	public @ResponseBody String scd_nmCheck(@RequestParam("scd_nm") String scd_nm) {
+		try {
+			int resultSet = scheduleService.scd_nmCheck(scd_nm);
+			if (resultSet > 0) {
+				// 중복값이 존재함.
+				return "false";
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return "true";
+	}
 }
