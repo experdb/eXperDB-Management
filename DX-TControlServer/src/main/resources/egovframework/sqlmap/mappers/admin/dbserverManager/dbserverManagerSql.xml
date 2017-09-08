@@ -319,7 +319,7 @@
 	</select>
 	
 	
-	<select id="selectDBcnt" resultType="int" parameterType="dbServerVO">
+	<select id="selectDBcnt" resultType="int" parameterType="hashmap">
 		/**
 		* Query ID : selectDBcnt
 		* Description : DB서버 갯수 체크
@@ -328,7 +328,7 @@
 		SELECT 
 				 COUNT(*)
 		FROM T_DB_I
-		WHERE DB_SVR_ID = #{db_svr_id}
+		WHERE DB_NM = #{dft_db_nm}
 	</select>
 
 

@@ -64,8 +64,8 @@ public class DbServerManagerServiceImpl implements DbServerManagerService {
 	}
 
 	@Override
-	public int selectDBcnt(DbServerVO dbServerVO) throws Exception {
-		return dbServerManagerDAO.selectDBcnt(dbServerVO);
+	public int selectDBcnt(HashMap<String, Object> paramvalue) throws Exception {
+		return dbServerManagerDAO.selectDBcnt(paramvalue);
 	}
 
 	@Override

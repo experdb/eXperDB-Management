@@ -348,8 +348,9 @@ function fn_dataCompareChcek(svrDbList){
 				}	 	
 				for(var i = 0; i<svrDbList.data.length; i++){
 					var list = $("input[name='db_exp']");
-					list[i].value = result[i].db_exp;
+					
 					for(var j = 0; j<result.length; j++){
+						list[j].value = result[j].db_exp;
 						if(result[j].useyn == "Y"){
 							 if(db_svr_id == result[j].db_svr_id && svrDbList.data[i].dft_db_nm == result[j].db_nm){										 
 								 $('input', table_db.rows(i).nodes()).prop('checked', true); 

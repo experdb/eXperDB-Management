@@ -252,8 +252,6 @@ public class TreeController {
 		CmmnUtils cu = new CmmnUtils();
 		menuAut = cu.selectMenuAut(menuAuthorityService, "MN000301");	
 	
-		int cnt = 0; 
-		
 		try {			
 			//쓰기 권한이 없는경우 error페이지 호출 , [추후 Exception 처리예정]
 			if(menuAut.get(0).get("wrt_aut_yn").equals("N")){
@@ -273,12 +271,14 @@ public class TreeController {
 				String strRows = request.getParameter("rows").toString().replaceAll("&quot;", "\"");
 				JSONArray rows = (JSONArray) new JSONParser().parse(strRows);
 				
-				cnt = dbServerManagerService.selectDBcnt(dbServerVO);
+				
 				accessControlService.deleteDbAccessControl(dbServerVO.getDb_svr_id());
 			
 				HashMap<String, Object> paramvalue = new HashMap<String, Object>();
 			
 				for (int i = 0; i < rows.size(); i++) {
+					int cnt = 0; 
+					
 					JSONObject jsrow = (JSONObject) rows.get(i);
 					String dft_db_nm = jsrow.get("dft_db_nm").toString();
 					String useyn = jsrow.get("useyn").toString();
@@ -298,7 +298,8 @@ public class TreeController {
 					System.out.println("등록자 : "+ paramvalue.get("frst_regr_id"));
 					System.out.println("수정자 : "+ paramvalue.get("lst_mdfr_id"));
 					System.out.println("====================================");
-				
+					
+					cnt = dbServerManagerService.selectDBcnt(paramvalue);
 					if(cnt == 0){
 						dbServerManagerService.insertDB(paramvalue);		
 					}else{
