@@ -30,6 +30,7 @@
 		A.MNU_ID = B.MNU_ID 
 		WHERE 1 = 1
 		AND A.USR_ID = #{usr_id}
+		ORDER BY A.usr_mnu_aut_id
     </select>
     
     
@@ -149,6 +150,6 @@
 		A.MNU_ID = B.MNU_ID 
 		WHERE 1 = 1
 		AND A.USR_ID = #{usr_id}
-		AND B.MNU_CD = 'MN000201'
+		AND B.MNU_CD in ('MN000201', 'MN000101', 'MN000102', 'MN000103')
     </select>
 </mapper>

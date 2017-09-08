@@ -151,17 +151,18 @@ public class MenuAuthorityController {
 		List<MenuAuthorityVO> resultSet = null;
 		try {		
 			//읽기 권한이 없는경우 에러페이지 호출 [추후 Exception 처리예정]
-			if(menuAut.get(0).get("read_aut_yn").equals("N")){
+			/*if(menuAut.get(0).get("read_aut_yn").equals("N")){
+				System.out.println("@@@@@@@@@@@@@@@@@@@@");
 				response.sendRedirect("/autError.do");
 				return resultSet;
-			}else{
+			}else{*/
 				HttpSession session = request.getSession();
 				String usr_id = (String)session.getAttribute("usr_id");
 				
 				menuAuthorityVO.setUsr_id(usr_id);
 				
 				resultSet = menuAuthorityService.selectUsrmnuautList(menuAuthorityVO);		
-			}	
+			//}	
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

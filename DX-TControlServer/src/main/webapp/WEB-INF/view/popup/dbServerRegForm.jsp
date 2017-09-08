@@ -283,9 +283,9 @@ function checkPghome(){
 			error : function(request, xhr, status, error) {
 				alert("실패");
 			},
-			success : function(data) {
+			success : function(data) {				
 				if(data.result.ERR_CODE == ""){
-					if(data.result.RESULT_DATA == 0){
+					if(data.result.RESULT_DATA.IS_DIRECTORY== 0){
 						$("#check_path").val("Y");
 						pghomeCheck = "success";
 						alert("입력하신 경로는 존재합니다.");
@@ -329,7 +329,7 @@ function checkPghome(){
 				},
 				success : function(data) {
 					if(data.result.ERR_CODE == ""){
-						if(data.result.RESULT_DATA == 0){
+						if(data.result.RESULT_DATA.IS_DIRECTORY == 0){
 							$("#check_path").val("Y");
 							pgdataCheck = "success";
 							alert("입력하신 경로는 존재합니다.");

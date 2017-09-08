@@ -20,6 +20,7 @@ public class ScheduleHistoryDAO extends EgovAbstractMapper{
 		params.put("lgi_dtm_end", param.get("lgi_dtm_end"));
 		params.put("scd_nm", param.get("scd_nm"));
 		params.put("db_svr_nm", param.get("db_svr_nm"));
+		params.put("exe_result", param.get("exe_result"));
 		params.put("recordCountPerPage", pagingVO.getRecordCountPerPage());
 		params.put("firstIndex", pagingVO.getFirstIndex());
 
@@ -33,6 +34,13 @@ public class ScheduleHistoryDAO extends EgovAbstractMapper{
 		int TotCnt= 0;
 		TotCnt = (int) getSqlSession().selectOne("scheduleHistorySql.selectScheduleHistoryTotCnt",param);
 		return TotCnt;
+	}
+
+
+	public List<Map<String, Object>> selectScheduleHistoryFail() {
+		List<Map<String, Object>> sl = null;
+		sl = (List<Map<String, Object>>) list("scheduleHistorySql.selectScheduleHistoryFail", null);		
+		return sl;
 	}
 
 }

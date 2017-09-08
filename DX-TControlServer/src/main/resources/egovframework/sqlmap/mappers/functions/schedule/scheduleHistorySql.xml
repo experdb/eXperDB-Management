@@ -45,6 +45,7 @@
 		<if test="scd_nm != null and scd_nm != '' ">
 			AND C.SCD_NM LIKE #{scd_nm}
 		</if>		
+		AND A.EXE_RSLT_CD LIKE #{exe_result}
 		ORDER BY WRK_END_DTM DESC
 		LIMIT #{recordCountPerPage} OFFSET #{firstIndex} )A
 	</select>
@@ -72,6 +73,46 @@
 		<if test="scd_nm != null and scd_nm != '' ">
 			AND C.SCD_NM LIKE #{scd_nm}
 		</if>
+	</select>
+	
+	
+	
+	<select id="selectScheduleHistoryFail" resultType="hashmap" >
+		/**
+		* Query ID : selectScheduleHistoryFail
+		* Description : 스케줄 실패 이력 조회
+		* Author : 변승우
+		**/
+		SELECT 
+	        (ROW_NUMBER() OVER()) AS ROWNUM
+	        , (ROW_NUMBER() OVER()) AS IDX
+	        , A.DB_SVR_NM
+	        , A.SCD_ID
+	        , A.SCD_NM
+	        , A.SCD_ID
+	        , A.SCD_NM
+	        , A.WRK_ID
+	        , A.WRK_NM
+	        , A.WRK_STRT_DTM
+	        , A.WRK_END_DTM
+	        , A.EXE_RESULT
+		FROM
+		(SELECT
+		         D.DB_SVR_NM
+		        , A.SCD_ID
+		        , C.SCD_NM
+		        , A.WRK_ID
+		        , B.WRK_NM
+				, TO_CHAR(A.WRK_STRT_DTM,'YYYY-MM-DD HH24:MI:SS') AS WRK_STRT_DTM
+				, TO_CHAR(A.WRK_END_DTM,'YYYY-MM-DD HH24:MI:SS') AS WRK_END_DTM
+		        , (SELECT SYS_CD_NM FROM T_SYSDTL_C WHERE A.EXE_RSLT_CD = SYS_CD ) AS EXE_RESULT
+		FROM T_WRKEXE_G A, T_WRKCNG_I B, T_SCD_M C, T_DBSVR_I D
+		WHERE 1= 1
+		AND A.WRK_ID = B.WRK_ID
+		AND C.SCD_ID = A.SCD_ID
+		AND B.DB_SVR_ID = D.DB_SVR_ID
+        )A
+        WHERE A.EXE_RESULT = 'Fail'
 	</select>
 	
 </mapper>

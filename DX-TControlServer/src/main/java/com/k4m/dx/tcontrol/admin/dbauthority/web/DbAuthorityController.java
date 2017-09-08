@@ -183,10 +183,10 @@ public class DbAuthorityController {
 		
 		try {	
 			//읽기 권한이 없는경우 에러페이지 호출 [추후 Exception 처리예정]
-			if(menuAut.get(0).get("read_aut_yn").equals("N")){
-				response.sendRedirect("/autError.do");
-				return resultSet;
-			}else{
+//			if(menuAut.get(0).get("read_aut_yn").equals("N")){
+//				response.sendRedirect("/autError.do");
+//				return resultSet;
+//			}else{
 				String usr_id ="";
 				
 				if(request.getParameter("usr_id") == null){
@@ -196,7 +196,7 @@ public class DbAuthorityController {
 				}
 				
 				resultSet = dbAuthorityService.selectUsrDBSrvAutInfo(usr_id);	
-			}
+			//}
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

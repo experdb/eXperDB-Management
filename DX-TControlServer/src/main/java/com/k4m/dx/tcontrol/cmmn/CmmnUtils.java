@@ -173,4 +173,28 @@ public class CmmnUtils {
 	    
 		return map;
 	}
+	
+	
+	/**
+	 * 파일크기 추출
+	 * @param filesize
+	 * @param type
+	 * @return
+	 */
+	public static String getFileSize(long filesize, int Cutlength) {
+		String size = "";
+
+		if (filesize < 1024)
+			size = filesize + " Byte";
+		else if (filesize > 1024 && filesize < (1024 * 1024)) {
+			double longtemp = filesize / (double) 1024;
+			int len = Double.toString(longtemp).indexOf(".");
+			size = Double.toString(longtemp).substring(0, len + Cutlength) + " Kb";
+		} else if (filesize > (1024 * 1024)) {
+			double longtemp = filesize / ((double) 1024 * 1024);
+			int len = Double.toString(longtemp).indexOf(".");
+			size = Double.toString(longtemp).substring(0, len + Cutlength) + " Mb";
+		}
+		return size;
+	}
 }

@@ -26,4 +26,9 @@ public class ScheduleHistoryServiceImpl implements ScheduleHistoryService{
 	public int selectScheduleHistoryTotCnt(Map<String, Object> param) throws Exception {
 		return scheduleHistoryDAO.selectScheduleHistoryTotCnt(param);
 	}
+
+	@Override
+	public List<Map<String, Object>> selectScheduleHistoryFail() throws Exception {
+		return scheduleHistoryDAO.selectScheduleHistoryFail();
+	}
 }
