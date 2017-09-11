@@ -44,6 +44,16 @@ function fn_init(){
 		paging :false,
 		columns : [
 		{data : "dft_db_nm", className : "dt-center", defaultContent : ""}, 
+		{data : "db_exp", defaultContent : "", className : "dt-center", 
+			targets: 0,
+	        searchable: false,
+	        orderable: false,
+	        render: function(data, type, full, meta){
+	           if(type === 'display'){
+	              data = '<input type="text" class="txt" name="db_exp" value="' +full.db_exp + '" style="height: 25px;">';      
+	           }
+	           return data;
+	        }}, 
 		{data : "rownum", defaultContent : "", targets : 0, orderable : false, checkboxes : {'selectRow' : true}}, 		
 		]
 	});      
@@ -129,10 +139,14 @@ function fn_dataCompareChcek(svrDbList,db_svr_id){
 					}
 				}	 	
 				for(var i = 0; i<svrDbList.data.length; i++){
-					for(var j = 0; j<result.length; j++){						
+					var list = $("input[name='db_exp']");
+					for(var j = 0; j<result.length; j++){	
+						list[j].value = result[j].db_exp;
+						if(result[j].useyn == "Y"){
 						 if(db_svr_id == result[j].db_svr_id && svrDbList.data[i].dft_db_nm == result[j].db_nm){										 
 							 $('input', table_db.rows(i).nodes()).prop('checked', true); 
 							 table_db.rows(i).nodes().to$().addClass('selected');	
+							}
 						}
 					}
 				}		
@@ -172,20 +186,46 @@ function fn_dataCompareChcek(svrDbList,db_svr_id){
   * 디비 등록
   ******************************************************** */
  function fn_insertDB(){
+	var list = $("input[name='db_exp']");
+	var datasArr = new Array();
  	var db_svr_id =  $("#db_svr_nm").val();	
- 	var datas = table_db.rows('.selected').data();
+ 	var ipadr = $("#ipadr").val();	
+ 	var datas = table_db.rows().data();
  	
+ 	var checkCnt = table_db.rows('.selected').data().length;
  	if (datas.length > 0) {
  		var rows = [];
      	for (var i = 0;i<datas.length;i++) {
-     		rows.push(table_db.rows('.selected').data()[i]);
+     		var rows = new Object();     		
+     		var org_dbName = table_db.rows().data()[i].dft_db_nm;
+			var returnValue = false;
+     		
+     		//기존에 있으면 업데이트 없으면 인서트
+     		for(var j=0; j<checkCnt; j++) {    			           	 	
+     			var chkDBName = table_db.rows('.selected').data()[j].dft_db_nm;
+     			if(org_dbName  == chkDBName) {
+     				returnValue = true;
+     				break;
+     			}
+     		}
+     		if(returnValue == true){
+     	 		rows.db_exp = list[i].value;
+     			rows.useyn = "Y";
+     			rows.dft_db_nm = table_db.rows().data()[i].dft_db_nm;
+     		}else{
+     			rows.db_exp = list[i].value;
+     			rows.useyn = "N";
+     			rows.dft_db_nm = table_db.rows().data()[i].dft_db_nm;
+     		}   		 
+    		datasArr.push(rows);
  		}
      	if (confirm("선택된 DB를 저장하시겠습니까?")){
  			$.ajax({
  				url : "/insertDB.do",
  				data : {
  					db_svr_id : db_svr_id,
- 					rows : JSON.stringify(rows)
+ 					ipadr : ipadr,
+ 					rows : JSON.stringify(datasArr)
  				},
  				async:true,
  				dataType : "json",
@@ -243,10 +283,11 @@ function fn_dataCompareChcek(svrDbList,db_svr_id){
 				</form>
 			</div>
 			<div class="pop_rt">
-					<table id="dbList" class="display" cellspacing="0"  align="left">
+					<table id="dbList" class="cell-border display" cellspacing="0"  align="left">
 						<thead>
 							<tr>
-								<th>메뉴</th>
+								<th>데이터베이스</th>
+								<th>설명</th>
 								<th>등록선택</th>
 							</tr>
 						</thead>

@@ -315,7 +315,7 @@
 		    		error : function(xhr, status, error) {
 		    			alert("실패")
 		    		},
-		    		success : function(result) {	
+		    		success : function(result) {
 		    			if(result.length != 0){
 		       	 		 	for(var i = 0; i<result.length; i++){     	
 			  						if(result[i].aut_yn == "Y"){	  									

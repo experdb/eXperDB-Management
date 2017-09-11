@@ -140,7 +140,7 @@ public class ClientInfoCmmn {
 	}
 
 	// 5. 백업실행
-	public void db_backup(List<Map<String, Object>> resultWork, ArrayList<String> CMD, String IP, int PORT, String bck_fileNm) {
+	public void db_backup(List<Map<String, Object>> resultWork, ArrayList<String> CMD, String IP, int PORT, ArrayList<String> BCKNM) {
 		try {
 			JSONObject reqJObj = new JSONObject();
 			JSONArray arrCmd = new JSONArray();
@@ -160,7 +160,8 @@ public class ClientInfoCmmn {
 				} else {
 					objJob.put(ClientProtocolID.BCK_OPT_CD, ""); // 백업종류
 					objJob.put(ClientProtocolID.BCK_FILE_PTH, resultWork.get(i).get("save_pth")); // 저장경로					
-					objJob.put(ClientProtocolID.BCK_FILENM, bck_fileNm); // 저장파일명
+					objJob.put(ClientProtocolID.BCK_FILENM, BCKNM.get(i)); // 저장파일명
+					System.out.println(BCKNM.get(i));
 				}
 				objJob.put(ClientProtocolID.LOG_YN, "Y"); // 로그저장 유무
 				objJob.put(ClientProtocolID.REQ_CMD, CMD.get(i));// 명령어

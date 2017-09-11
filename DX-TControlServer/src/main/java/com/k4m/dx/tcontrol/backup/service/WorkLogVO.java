@@ -18,6 +18,7 @@ public class WorkLogVO {
 	private int db_id;
 	private String db_nm;
 	private String bck_file_pth;
+	private String bck_filenm;
 	private String frst_regr_id;
 	private String frst_reg_dtm;
 	private String lst_mdfr_id;
@@ -26,6 +27,12 @@ public class WorkLogVO {
 	
 	
 	
+	public String getBck_filenm() {
+		return bck_filenm;
+	}
+	public void setBck_filenm(String bck_filenm) {
+		this.bck_filenm = bck_filenm;
+	}
 	public String getScd_nm() {
 		return scd_nm;
 	}

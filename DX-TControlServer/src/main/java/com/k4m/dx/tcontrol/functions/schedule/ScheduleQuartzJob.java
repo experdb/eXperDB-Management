@@ -32,6 +32,7 @@ public class ScheduleQuartzJob implements Job{
 	private ConfigurableApplicationContext context;
 	
 	ArrayList<String> CMD = new ArrayList<String>();
+	ArrayList<String> BCK_NM = new ArrayList<String>();
 	
 	/**
 	 * 1. 스케줄ID를 가져옴
@@ -90,7 +91,7 @@ public class ScheduleQuartzJob implements Job{
 			
 			for(int i =0; i<resultWork.size(); i++){
 		        
-		        bck_fileNm = resultWork.get(i).get("bck_filenm")+"_"+today+".dump";
+		        bck_fileNm = "eXperDB_"+resultWork.get(i).get("wrk_id")+"_"+today+".dump";
 				
 				int db_svr_id = Integer.parseInt(resultWork.get(i).get("db_svr_id").toString());
 				int wrk_id = Integer.parseInt(resultWork.get(i).get("wrk_id").toString());
@@ -109,6 +110,7 @@ public class ScheduleQuartzJob implements Job{
 				// 백업 내용이 DUMP 백업일경우 
 				if(resultWork.get(i).get("bck_bsn_dscd").equals("TC000202")){
 					String strCmd = dumpBackupMakeCmd(resultDbconn, resultWork, addOption, addObject, i, bck_fileNm);	
+					BCK_NM.add(bck_fileNm);
 					CMD.add(strCmd);
 				// 백업 내용이 RMAN 백업일경우	
 				}else{
@@ -117,7 +119,7 @@ public class ScheduleQuartzJob implements Job{
 				}
 			}			
 			System.out.println("명령어="+CMD);
-			agentCall(resultWork, CMD, bck_fileNm);
+			agentCall(resultWork, CMD, BCK_NM);
 		}catch(Exception e){
 			e.printStackTrace();
 		}
@@ -301,7 +303,7 @@ public class ScheduleQuartzJob implements Job{
 	}
 	
 	
-	public void agentCall(List<Map<String, Object>> resultWork, ArrayList<String> CMD, String bck_fileNm) {
+	public void agentCall(List<Map<String, Object>> resultWork, ArrayList<String> CMD, ArrayList<String> BCKNM) {
 		ClientInfoCmmn clc = new ClientInfoCmmn();
 		
 		DbServerVO schDbServerVO = new DbServerVO();
@@ -319,7 +321,7 @@ public class ScheduleQuartzJob implements Job{
 			String IP = dbServerVO.getIpadr();
 			int PORT = agentInfo.getSOCKET_PORT();
 
-			clc.db_backup(resultWork, CMD, IP ,PORT, bck_fileNm);
+			clc.db_backup(resultWork, CMD, IP ,PORT, BCKNM);
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

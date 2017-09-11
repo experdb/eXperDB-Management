@@ -156,19 +156,22 @@ function checkFolder(keyType){
 			},
 			success : function(data) {
 				if(data.result.ERR_CODE == ""){
-					if(data.result.RESULT_DATA == 0){
+					if(data.result.RESULT_DATA.IS_DIRECTORY == 0){
 						if(keyType == 1){
 							$("#check_path1").val("Y");
 						}else{
 							$("#check_path2").val("Y");
 						}
 						alert("입력하신 경로는 존재합니다.");
-					}else{
+							var volume = data.result.RESULT_DATA.CAPACITY;
 						if(keyType == 1){
-							$("#data_pth").val("");
+							$("#dataVolume").empty();
+							$( "#dataVolume" ).append(volume);
 						}else{
-							$("#bck_pth").val("");
+							$("#backupVolume").empty();
+							$( "#backupVolume" ).append(volume);
 						}
+					}else{
 						alert("입력하신 경로는 존재하지 않습니다.");
 					}
 				}else{
@@ -240,16 +243,26 @@ function checkFolder(keyType){
 									<col />
 								</colgroup>
 								<tbody>
-									<tr>
+								
+								<tr>
 										<th scope="row" class="ico_t1">데이터경로</th>
-										<td><input type="text" class="txt" name="data_pth" id="data_pth" maxlength=50 value="<c:out value="${workInfo[0].data_pth}"/>" style="width:230px" onKeydown="$('#check_path1').val('N')"/>
+										<td><input type="text" class="txt" name="data_pth" id="data_pth" maxlength=50  value="<c:out value="${workInfo[0].data_pth}"/>" style="width:230px" onKeydown="$('#check_path1').val('N')"/>
 											<span class="btn btnC_01"><button type="button" class= "btn_type_02" onclick="checkFolder(1)" style="width: 60px; margin-right: -60px; margin-top: 0;">경로체크</button></span>
 										</td>
 										<th scope="row" class="ico_t1">백업경로</th>
-										<td><input type="text" class="txt" name="bck_pth" id="bck_pth" maxlength=50 value="<c:out value="${workInfo[0].bck_pth}"/>" style="width:230px" onKeydown="$('#check_path2').val('N')"/>
+										<td><input type="text" class="txt" name="bck_pth" id="bck_pth" maxlength=50  value="<c:out value="${workInfo[0].bck_pth}"/>" style="width:230px" onKeydown="$('#check_path2').val('N')"/>
 											<span class="btn btnC_01"><button type="button" class= "btn_type_02" onclick="checkFolder(2)" style="width: 60px; margin-right: -60px; margin-top: 0;">경로체크</button></span>
 										</td>
 									</tr>
+									
+									<tr>										
+										<th> 용량 : </th>
+										<td><div id="dataVolume"></div></td>
+										</div>
+										<th> 용량 :</th>
+										<td><div id="backupVolume"></div></td>
+									</tr>
+									
 								</tbody>
 							</table>
 						</div>

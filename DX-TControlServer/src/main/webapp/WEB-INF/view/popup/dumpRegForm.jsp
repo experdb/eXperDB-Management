@@ -171,11 +171,6 @@ function valCheck(){
 		$("#save_pth").focus();
 		return false;
 	}
-	if($("#bck_filenm").val() == ""){
-		alert("백업파일명을 입력해 주세요.");
-		$("#bck_filenm").focus();
-		return false;
-	}
 	if($("#check_path").val() != "Y"){
 		alert("서버에 존재하는 경로를 입력후 경로체크를 해 주세요.");
 		$("#save_pth").focus();
@@ -465,8 +460,6 @@ function fn_check() {
 								</c:forEach>
 							</select>
 						</td>
-						<th scope="row" class="ico_t1">백업파일명</th>
-						<td><input type="text" class="txt" name="bck_filenm" id="bck_filenm" maxlength=50/></td>
 					</tr>
 				</tbody>
 			</table>
@@ -658,7 +651,6 @@ function fn_check() {
 							</li>
 						</ul>
 					</div>
-
 					<div class="view">
 						<div class="tNav" >
 							
