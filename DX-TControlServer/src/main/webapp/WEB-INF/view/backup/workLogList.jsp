@@ -58,6 +58,7 @@ function fn_rman_init(){
 		searching : false,
 	    columns : [
 		         	{ data: "rownum", className: "dt-center", defaultContent: ""}, 
+		         	{ data: "wrk_nm", className: "dt-center", defaultContent: ""}, 
  		         	{ data: "bck_opt_cd_nm", className: "dt-center", defaultContent: ""}, 
  		         	{ data: "wrk_strt_dtm", className: "dt-center", defaultContent: ""}, 
  		         	{ data: "wrk_end_dtm", className: "dt-center", defaultContent: ""}, 
@@ -77,9 +78,11 @@ function fn_dump_init(){
 		         	{ data: "rownum", className: "dt-center", defaultContent: ""}, 
  		         	{ data: "db_nm", className: "dt-center", defaultContent: ""}, 
  		         	{ data: "wrk_strt_dtm", className: "dt-center", defaultContent: ""}, 
- 		         	{ data: "wrk_end_dtm", className: "dt-center", defaultContent: ""}, 
- 		         	{ data: "exe_rslt_cd_nm", className: "dt-center", defaultContent: ""}, 
+ 		         	{ data: "wrk_end_dtm", className: "dt-center", defaultContent: ""},  		         	
+ 		         	{ data: "file_sz", className: "dt-center", defaultContent: ""},
  		         	{ data: "bck_file_pth", className: "dt-center", defaultContent: ""},
+ 		         	{ data: "bck_filenm", className: "dt-center", defaultContent: ""},
+ 		         	{ data: "exe_rslt_cd_nm", className: "dt-center", defaultContent: ""}
  		        ] 
 	});
 }
@@ -261,9 +264,9 @@ function selectTab(intab){
 								<td class="search_rman">
 									<select name="bck_opt_cd" id="bck_opt_cd" class="select t5">
 										<option value="">선택</option>
-										<option value="TC000301">전체백업</option>
-										<option value="TC000302">증분백업</option>
-										<option value="TC000303">아카이브백업</option>
+										<option value="TC000301">FULL</option>
+										<option value="TC000302">incremental</option>
+										<option value="TC000303">archive</option>
 									</select>
 								</td>
 								<th scope="row" class="t9 search_dump" style="display:none;">Database명</th>
@@ -285,6 +288,7 @@ function selectTab(intab){
 						<thead>
 							<tr>
 								<th scope="col">NO</th>
+								<th scope="col">WORK명</th>
 								<th scope="col">Mode</th>
 								<th scope="col">작업시작 시간</th>
 								<th scope="col">작업종료 시간</th>
@@ -302,8 +306,10 @@ function selectTab(intab){
 								<th scope="col">Database</th>
 								<th scope="col">작업시작 시간</th>
 								<th scope="col">작업종료 시간</th>
-								<th scope="col">상태</th>
+								<th scope="col">Size</th>
 								<th scope="col">백업파일경로</th>
+								<th scope="col">백업파일명</th>
+								<th scope="col">상태</th>
 							</tr>
 						</thead>
 					</table>

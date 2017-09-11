@@ -1,6 +1,8 @@
 package com.k4m.dx.tcontrol.cmmn.client;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -138,9 +140,8 @@ public class ClientInfoCmmn {
 	}
 
 	// 5. 백업실행
-	public void db_backup(List<Map<String, Object>> resultWork, ArrayList<String> CMD, String IP, int PORT) {
+	public void db_backup(List<Map<String, Object>> resultWork, ArrayList<String> CMD, String IP, int PORT, ArrayList<String> BCKNM) {
 		try {
-
 			JSONObject reqJObj = new JSONObject();
 			JSONArray arrCmd = new JSONArray();
 
@@ -155,9 +156,12 @@ public class ClientInfoCmmn {
 				if (resultWork.get(i).get("bck_bsn_dscd").equals("TC000201")) {
 					objJob.put(ClientProtocolID.BCK_OPT_CD, resultWork.get(i).get("bck_opt_cd")); // 백업종류
 					objJob.put(ClientProtocolID.BCK_FILE_PTH, resultWork.get(i).get("bck_pth")); // 저장경로
+					objJob.put(ClientProtocolID.BCK_FILENM, ""); // 저장파일명
 				} else {
 					objJob.put(ClientProtocolID.BCK_OPT_CD, ""); // 백업종류
-					objJob.put(ClientProtocolID.BCK_FILE_PTH, resultWork.get(i).get("save_pth")); // 저장경로
+					objJob.put(ClientProtocolID.BCK_FILE_PTH, resultWork.get(i).get("save_pth")); // 저장경로					
+					objJob.put(ClientProtocolID.BCK_FILENM, BCKNM.get(i)); // 저장파일명
+					System.out.println(BCKNM.get(i));
 				}
 				objJob.put(ClientProtocolID.LOG_YN, "Y"); // 로그저장 유무
 				objJob.put(ClientProtocolID.REQ_CMD, CMD.get(i));// 명령어
@@ -176,6 +180,7 @@ public class ClientInfoCmmn {
 					objJob2.put(ClientProtocolID.BCK_OPT_CD, resultWork.get(i).get("bck_opt_cd")); // 백업종류
 					objJob2.put(ClientProtocolID.DB_ID, resultWork.get(i).get("db_id")); // db아이디
 					objJob2.put(ClientProtocolID.BCK_FILE_PTH, resultWork.get(i).get("bck_pth")); // 저장경로
+					objJob2.put(ClientProtocolID.BCK_FILENM, ""); // 저장파일명
 					objJob2.put(ClientProtocolID.LOG_YN, "N"); // 로그저장 유무
 					objJob2.put(ClientProtocolID.REQ_CMD, "pg_rman validate -B " + resultWork.get(i).get("bck_pth"));// 명령어
 					arrCmd.add(j, objJob2);
@@ -897,7 +902,7 @@ public class ClientInfoCmmn {
 			String strErrCode = (String) objList.get(ClientProtocolID.ERR_CODE);
 			String strDxExCode = (String) objList.get(ClientProtocolID.DX_EX_CODE);
 			String strResultCode = (String) objList.get(ClientProtocolID.RESULT_CODE);
-			String strResultData = (String) objList.get(ClientProtocolID.RESULT_DATA);
+			Object strResultData =  objList.get(ClientProtocolID.RESULT_DATA);
 			System.out.println("RESULT_CODE : " + strResultCode);
 			System.out.println("ERR_CODE : " + strErrCode);
 			System.out.println("ERR_MSG : " + strErrMsg);

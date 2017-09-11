@@ -668,4 +668,26 @@ public class BackupController {
 			e.printStackTrace();
 		}
 	}
+	
+	
+	/**
+	 * work명을 중복 체크한다.
+	 * 
+	 * @param scd_nm
+	 * @return
+	 * @throws Exception
+	 */
+	@RequestMapping(value = "/wrk_nmCheck.do")
+	public @ResponseBody String wrk_nmCheck(@RequestParam("wrk_nm") String wrk_nm) {
+		try {
+			int resultSet = backupService.wrk_nmCheck(wrk_nm);
+			if (resultSet > 0) {
+				// 중복값이 존재함.
+				return "false";
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return "true";
+	}
 }

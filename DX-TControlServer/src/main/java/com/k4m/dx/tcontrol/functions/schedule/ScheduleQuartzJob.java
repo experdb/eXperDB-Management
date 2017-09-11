@@ -32,6 +32,7 @@ public class ScheduleQuartzJob implements Job{
 	private ConfigurableApplicationContext context;
 	
 	ArrayList<String> CMD = new ArrayList<String>();
+	ArrayList<String> BCK_NM = new ArrayList<String>();
 	
 	/**
 	 * 1. 스케줄ID를 가져옴
@@ -82,7 +83,15 @@ public class ScheduleQuartzJob implements Job{
 			// 2. 해당 스케줄ID에 해당하는 스케줄 상세정보 조회(work 정보)
 			resultWork= scheduleService.selectExeScheduleList(scd_id);
 		
+			Calendar calendar = Calendar.getInstance();				
+	        java.util.Date date = calendar.getTime();
+	        String today = (new SimpleDateFormat("yyyyMMddHHmmss").format(date));
+	        
+	        String bck_fileNm ="";
+			
 			for(int i =0; i<resultWork.size(); i++){
+		        
+		        bck_fileNm = "eXperDB_"+resultWork.get(i).get("wrk_id")+"_"+today+".dump";
 				
 				int db_svr_id = Integer.parseInt(resultWork.get(i).get("db_svr_id").toString());
 				int wrk_id = Integer.parseInt(resultWork.get(i).get("wrk_id").toString());
@@ -96,9 +105,12 @@ public class ScheduleQuartzJob implements Job{
 				// 5. 오브젝트옵션 조회
 				addObject= scheduleService.selectAddObject(wrk_id);
 				
+				
+				
 				// 백업 내용이 DUMP 백업일경우 
 				if(resultWork.get(i).get("bck_bsn_dscd").equals("TC000202")){
-					String strCmd = dumpBackupMakeCmd(resultDbconn, resultWork, addOption, addObject, i);	
+					String strCmd = dumpBackupMakeCmd(resultDbconn, resultWork, addOption, addObject, i, bck_fileNm);	
+					BCK_NM.add(bck_fileNm);
 					CMD.add(strCmd);
 				// 백업 내용이 RMAN 백업일경우	
 				}else{
@@ -107,7 +119,7 @@ public class ScheduleQuartzJob implements Job{
 				}
 			}			
 			System.out.println("명령어="+CMD);
-			agentCall(resultWork, CMD);
+			agentCall(resultWork, CMD, BCK_NM);
 		}catch(Exception e){
 			e.printStackTrace();
 		}
@@ -135,13 +147,8 @@ public class ScheduleQuartzJob implements Job{
 	 * @return
 	 */
 	@SuppressWarnings("unused")
-	private String dumpBackupMakeCmd(List<Map<String, Object>> resultDbconn, List<Map<String, Object>> resultWork, List<Map<String, Object>> addOption, List<Map<String, Object>> addObject, int i) {
-		
-		Calendar calendar = Calendar.getInstance();
-		
-        java.util.Date date = calendar.getTime();
-        String today = (new SimpleDateFormat("yyyyMMddHHmmss").format(date));
-        
+	private String dumpBackupMakeCmd(List<Map<String, Object>> resultDbconn, List<Map<String, Object>> resultWork, List<Map<String, Object>> addOption, List<Map<String, Object>> addObject, int i, String bck_fileNm) {
+
 		String strCmd = "pg_dump";
 		String strLast = "";
 		
@@ -162,7 +169,7 @@ public class ScheduleQuartzJob implements Job{
 			}
 			
 			//2. 기본옵션 명령어 생성
-				strLast +=" "+resultWork.get(i).get("db_nm")+"  > "+resultWork.get(i).get("save_pth")+"/"+resultWork.get(i).get("bck_filenm")+"_"+today+".dump";
+				strLast +=" "+resultWork.get(i).get("db_nm")+"  > "+resultWork.get(i).get("save_pth")+"/"+bck_fileNm;
 				
 				if(resultWork.get(i).get("file_fmt_cd_nm") != null && resultWork.get(i).get("file_fmt_cd_nm") != ""){
 					//2.2 파일포멧에 따른 명령어 생성
@@ -296,7 +303,7 @@ public class ScheduleQuartzJob implements Job{
 	}
 	
 	
-	public void agentCall(List<Map<String, Object>> resultWork, ArrayList<String> CMD) {
+	public void agentCall(List<Map<String, Object>> resultWork, ArrayList<String> CMD, ArrayList<String> BCKNM) {
 		ClientInfoCmmn clc = new ClientInfoCmmn();
 		
 		DbServerVO schDbServerVO = new DbServerVO();
@@ -314,7 +321,7 @@ public class ScheduleQuartzJob implements Job{
 			String IP = dbServerVO.getIpadr();
 			int PORT = agentInfo.getSOCKET_PORT();
 
-			clc.db_backup(resultWork, CMD, IP ,PORT);
+			clc.db_backup(resultWork, CMD, IP ,PORT, BCKNM);
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

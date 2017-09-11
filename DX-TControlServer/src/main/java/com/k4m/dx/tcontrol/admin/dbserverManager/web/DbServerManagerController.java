@@ -396,6 +396,7 @@ public class DbServerManagerController {
 	public Map<String, Object> isDirCheck (HttpServletRequest request) {
 	
 		Map<String, Object> result =new HashMap<String, Object>();
+		
 		String db_svr_nm = request.getParameter("db_svr_nm");
 		String ipadr = request.getParameter("ipadr");
 		String portno = request.getParameter("portno");

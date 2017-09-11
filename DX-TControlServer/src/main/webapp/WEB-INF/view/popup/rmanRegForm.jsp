@@ -30,6 +30,7 @@
 <script type="text/javascript">
 // 저장후 작업ID
 var wrk_id = null;
+var wrk_nmChk ="fail";
 
 /* ********************************************************
  * Rman Backup Insert
@@ -121,6 +122,9 @@ function valCheck(){
 		alert("백업경로에 서버에 존재하는 경로를 입력후 경로체크를 해 주세요.");
 		$("#bck_pth").focus();
 		return false;
+	}else if(wrk_nmChk =="fail"){
+		alert("WORK명 중복체크 바랍니다.");;
+		return false;
 	}else{
 		return true;
 	}
@@ -159,19 +163,22 @@ function checkFolder(keyType){
 			},
 			success : function(data) {
 				if(data.result.ERR_CODE == ""){
-					if(data.result.RESULT_DATA == 0){
+					if(data.result.RESULT_DATA.IS_DIRECTORY == 0){
 						if(keyType == 1){
 							$("#check_path1").val("Y");
 						}else{
 							$("#check_path2").val("Y");
 						}
 						alert("입력하신 경로는 존재합니다.");
-					}else{
+							var volume = data.result.RESULT_DATA.CAPACITY;
 						if(keyType == 1){
-							$("#data_pth").val("");
+							$("#dataVolume").empty();
+							$( "#dataVolume" ).append(volume);
 						}else{
-							$("#bck_pth").val("");
+							$("#backupVolume").empty();
+							$( "#backupVolume" ).append(volume);
 						}
+					}else{
 						alert("입력하신 경로는 존재하지 않습니다.");
 					}
 				}else{
@@ -180,6 +187,38 @@ function checkFolder(keyType){
 			}
 		});
 	}
+}
+
+
+//work명 중복체크
+function fn_check() {
+	var wrk_nm = document.getElementById("wrk_nm");
+	if (wrk_nm.value == "") {
+		alert("WORK명을 입력하세요.");
+		document.getElementById('wrk_nm').focus();
+		return;
+	}
+	$.ajax({
+		url : '/wrk_nmCheck.do',
+		type : 'post',
+		data : {
+			wrk_nm : $("#wrk_nm").val()
+		},
+		success : function(result) {
+			if (result == "true") {
+				alert("등록가능한 WORK명 입니다.");
+				document.getElementById("wrk_nm").focus();
+				wrk_nmChk = "success";
+			} else {
+				scd_nmChk = "fail";
+				alert("중복된 WORK명이 존재합니다.");
+				document.getElementById("wrk_nm").focus();
+			}
+		},
+		error : function(request, status, error) {
+			alert("실패");
+		}
+	});
 }
 </script>
 </head>
@@ -202,7 +241,9 @@ function checkFolder(keyType){
 						<tbody>
 							<tr>
 								<th scope="row" class="ico_t1">Work명</th>
-								<td><input type="text" class="txt" name="wrk_nm" id="wrk_nm" maxlength=50/></td>
+								<td><input type="text" class="txt" name="wrk_nm" id="wrk_nm" maxlength=50/>
+								<span class="btn btnC_01"><button type="button" class= "btn_type_02" onclick="fn_check()" style="width: 60px; margin-right: -60px; margin-top: 0;">중복체크</button></span>
+								</td>
 							</tr>
 							<tr>
 								<th scope="row" class="ico_t1">Work<br/>설명</th>
@@ -252,6 +293,16 @@ function checkFolder(keyType){
 											<span class="btn btnC_01"><button type="button" class= "btn_type_02" onclick="checkFolder(2)" style="width: 60px; margin-right: -60px; margin-top: 0;">경로체크</button></span>
 										</td>
 									</tr>
+									
+									
+									<tr>										
+										<th> 용량 : </th>
+										<td><div id="dataVolume"></div></td>
+										</div>
+										<th> 용량 :</th>
+										<td><div id="backupVolume"></div></td>
+									</tr>
+									</div>
 								</tbody>
 							</table>
 						</div>

@@ -95,4 +95,10 @@ public class BackupDAO extends EgovAbstractMapper{
 	public void deleteWorkObj(WorkVO workVO) throws Exception{
 		delete("backupSQL.deleteWorkObj",workVO);
 	}
+
+	public int wrk_nmCheck(String wrk_nm) {
+		int resultSet = 0;
+		resultSet = (int) getSqlSession().selectOne("backupSQL.wrk_nmCheck", wrk_nm);
+		return resultSet;
+	}
 }

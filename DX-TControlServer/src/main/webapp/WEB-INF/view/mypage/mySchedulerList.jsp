@@ -37,10 +37,10 @@ function fn_init(){
 		{data : "status", 
 			render: function (data, type, full){
 				if(full.status == "s"){
-					var html = '<img src="../images/ico_start.png" alt="실행중" id="scheduleStop"/>';
+					var html = '<img src="../images/ico_w_25.png" alt="실행중" id="scheduleStop"/>';
 						return html;
 				}else{
-					var html = '<img src="../images/ico_end.png" alt="중지중" id="scheduleStart" />';
+					var html = '<img src="../images/ico_w_24.png" alt="중지중" id="scheduleStart" />';
 					return html;
 				}
 				return data;

@@ -89,4 +89,9 @@ public class BackupServiceImpl implements BackupService{
 	public void deleteWorkObj(WorkVO workVO) throws Exception{
 		backupDAO.deleteWorkObj(workVO);
 	}
+
+	@Override
+	public int wrk_nmCheck(String wrk_nm) throws Exception {
+		return backupDAO.wrk_nmCheck(wrk_nm);
+	}
 }

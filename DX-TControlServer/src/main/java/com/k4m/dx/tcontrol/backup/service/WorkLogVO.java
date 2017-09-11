@@ -4,7 +4,9 @@ public class WorkLogVO {
 	private int rownum;
 	private int exe_sn;
 	private int scd_id;
+	private String scd_nm;	
 	private int wrk_id;
+	private String wrk_nm;
 	private String wrk_strt_dtm;
 	private String wrk_end_dtm;
 	private String exe_rslt_cd;
@@ -16,12 +18,33 @@ public class WorkLogVO {
 	private int db_id;
 	private String db_nm;
 	private String bck_file_pth;
+	private String bck_filenm;
 	private String frst_regr_id;
 	private String frst_reg_dtm;
 	private String lst_mdfr_id;
 	private String lst_mdf_dtm;
 	private String bck_bsn_dscd;
 	
+	
+	
+	public String getBck_filenm() {
+		return bck_filenm;
+	}
+	public void setBck_filenm(String bck_filenm) {
+		this.bck_filenm = bck_filenm;
+	}
+	public String getScd_nm() {
+		return scd_nm;
+	}
+	public void setScd_nm(String scd_nm) {
+		this.scd_nm = scd_nm;
+	}
+	public String getWrk_nm() {
+		return wrk_nm;
+	}
+	public void setWrk_nm(String wrk_nm) {
+		this.wrk_nm = wrk_nm;
+	}
 	public String getExe_rslt_cd_nm() {
 		return exe_rslt_cd_nm;
 	}

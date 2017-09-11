@@ -1,5 +1,6 @@
 package com.k4m.dx.tcontrol.functions.schedule.web;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -80,6 +81,8 @@ public class ScheduleHistoryController {
 				mv.setViewName("error/autError");
 			}else{				
 				
+				String exe_result = request.getParameter("exe_result");
+				
 				//이력 남기기
 				CmmnUtils.saveHistory(request, historyVO);
 				historyVO.setExe_dtl_cd("DX-T0048");
@@ -103,7 +106,7 @@ public class ScheduleHistoryController {
 				pagingVO.setRecordCountPerPage(paginationInfo.getRecordCountPerPage());
 				
 				model.addAttribute("paginationInfo", paginationInfo);
-				
+				model.addAttribute("exe_result", exe_result);
 				mv.setViewName("functions/scheduler/scheduleHistory");
 			}	
 		} catch (Exception e) {
@@ -145,6 +148,7 @@ public class ScheduleHistoryController {
 				String lgi_dtm_end = request.getParameter("lgi_dtm_end");
 				String scd_nm = request.getParameter("scd_nm");
 				String db_svr_nm = request.getParameter("db_svr_nm");
+				String exe_result = request.getParameter("exe_result");
 				if(scd_nm.equals("") ){
 					scd_nm="%";
 				}
@@ -153,12 +157,14 @@ public class ScheduleHistoryController {
 				param.put("lgi_dtm_end", lgi_dtm_end);
 				param.put("scd_nm", scd_nm);
 				param.put("db_svr_nm", db_svr_nm);
+				param.put("exe_result", exe_result);
 	
 				System.out.println("********PARAMETER*******");
 				System.out.println("DB서버 : "+ db_svr_nm);
 				System.out.println("스케줄명 : "+ scd_nm);
 				System.out.println("시작날짜 : "+ lgi_dtm_start);
 				System.out.println("종료날짜 : " +lgi_dtm_end);
+				System.out.println("실행결과 : " +exe_result);
 				System.out.println("*************************");
 				
 				/** EgovPropertyService.sample */
@@ -185,6 +191,7 @@ public class ScheduleHistoryController {
 				model.addAttribute("lgi_dtm_end", lgi_dtm_end);
 				model.addAttribute("paginationInfo", paginationInfo);
 				model.addAttribute("svr_nm", db_svr_nm);
+				model.addAttribute("exe_result", exe_result);
 				
 				mv.addObject("read_aut_yn", menuAut.get(0).get("read_aut_yn"));
 				mv.addObject("wrt_aut_yn", menuAut.get(0).get("wrt_aut_yn"));
@@ -195,5 +202,122 @@ public class ScheduleHistoryController {
 			e.printStackTrace();
 		}
 		return mv;
+	}
+	
+	
+	
+	
+	
+	
+	/**
+	 * 스케줄실패 화면을 보여준다.
+	 * 
+	 * @param
+	 * @return ModelAndView mv
+	 * @throws Exception
+	 */
+	@RequestMapping(value = "/selectScheduleHistoryFail.do")
+	public ModelAndView selectScheduleHistoryFail(@ModelAttribute("historyVO") HistoryVO historyVO, HttpServletRequest request) {
+		
+		//해당메뉴 권한 조회 (공통메소드호출)
+		CmmnUtils cu = new CmmnUtils();
+		menuAut = cu.selectMenuAut(menuAuthorityService, "MN000103");
+		
+		ModelAndView mv = new ModelAndView();
+		try {			
+			//읽기 권한이 없는경우 error페이지 호출 , [추후 Exception 처리예정]
+			if(menuAut.get(0).get("read_aut_yn").equals("N")){
+				mv.setViewName("error/autError");
+			}else{				
+				//스케줄 등록 화면 이력 남기기
+				CmmnUtils.saveHistory(request, historyVO);
+				//수정
+				historyVO.setExe_dtl_cd("DX-T0048_01");
+				accessHistoryService.insertHistory(historyVO);
+				
+				mv.addObject("read_aut_yn", menuAut.get(0).get("read_aut_yn"));
+				mv.addObject("wrt_aut_yn", menuAut.get(0).get("wrt_aut_yn"));
+				mv.setViewName("functions/scheduler/scheduleHistoryFail");
+			}			
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return mv;
+	}
+	
+	
+	/**
+	 * 스케줄이력을 조회한다.
+	 * 
+	 * @return resultSet
+	 * @throws Exception
+	 */
+/*	@RequestMapping(value = "/selectScheduleHistoryFail.do")
+	@ResponseBody
+	public ModelAndView selectScheduleHistoryFail(@ModelAttribute("historyVO") HistoryVO historyVO, @ModelAttribute("pagingVO") PagingVO pagingVO, ModelMap model, HttpServletRequest request, HttpServletResponse response) {
+		
+		//해당메뉴 권한 조회 (공통메소드호출)
+		CmmnUtils cu = new CmmnUtils();
+		menuAut = cu.selectMenuAut(menuAuthorityService, "MN000103");
+		
+		ModelAndView mv = new ModelAndView();
+		try {		
+			//읽기 권한이 없는경우 error페이지 호출 , [추후 Exception 처리예정]
+			if(menuAut.get(0).get("read_aut_yn").equals("N")){
+				mv.setViewName("error/autError");
+			}else{		
+				
+				//이력 남기기
+				CmmnUtils.saveHistory(request, historyVO);
+				historyVO.setExe_dtl_cd("DX-T0048_01");
+				accessHistoryService.insertHistory(historyVO);
+
+				List<Map<String, Object>> result = scheduleHistoryService.selectScheduleHistory();
+						
+				mv.addObject("read_aut_yn", menuAut.get(0).get("read_aut_yn"));
+				mv.addObject("wrt_aut_yn", menuAut.get(0).get("wrt_aut_yn"));
+				
+				mv.setViewName("functions/scheduler/scheduleHistoryFail");
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return mv;
+	}*/
+	
+	
+	/**
+	 * 스케쥴 실패 work List를 조회한다.
+	 * 
+	 * @return resultSet
+	 * @throws Exception
+	 */
+	@RequestMapping(value = "/selectScheduleFailList.do")
+	@ResponseBody
+	public List<Map<String, Object>> selectScheduleFailList(@ModelAttribute("historyVO") HistoryVO historyVO, HttpServletRequest request, HttpServletResponse response) {
+	
+		//해당메뉴 권한 조회 (공통메소드호출)
+		CmmnUtils cu = new CmmnUtils();
+		menuAut = cu.selectMenuAut(menuAuthorityService, "MN000103");
+		
+		List<Map<String, Object>> result = null;
+		
+		try {					
+			//이력 남기기
+			CmmnUtils.saveHistory(request, historyVO);
+			historyVO.setExe_dtl_cd("DX-T0048_02");
+			accessHistoryService.insertHistory(historyVO);
+			
+			//읽기 권한이 없는경우 error페이지 호출 , [추후 Exception 처리예정]
+			if(menuAut.get(0).get("read_aut_yn").equals("N")){
+				response.sendRedirect("/autError.do");
+				return result;
+			}else{		
+				result = scheduleHistoryService.selectScheduleHistoryFail();
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return result;
 	}
 }

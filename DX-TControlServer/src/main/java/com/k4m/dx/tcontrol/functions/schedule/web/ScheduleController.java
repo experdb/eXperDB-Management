@@ -1,7 +1,10 @@
 package com.k4m.dx.tcontrol.functions.schedule.web;
 
 import java.io.IOException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -341,7 +344,10 @@ public class ScheduleController {
 		menuAut = cu.selectMenuAut(menuAuthorityService, "MN000102");
 		
 		ModelAndView mv = new ModelAndView();
-		try {			
+		try {
+			
+			String scd_cndt = request.getParameter("scd_cndt");
+
 			//읽기 권한이 없는경우 error페이지 호출 , [추후 Exception 처리예정]
 			if(menuAut.get(0).get("read_aut_yn").equals("N")){
 				mv.setViewName("error/autError");
@@ -353,6 +359,9 @@ public class ScheduleController {
 				
 				mv.addObject("read_aut_yn", menuAut.get(0).get("read_aut_yn"));
 				mv.addObject("wrt_aut_yn", menuAut.get(0).get("wrt_aut_yn"));
+				if(scd_cndt != null){
+					mv.addObject("scd_cndt", scd_cndt);
+				}
 				mv.setViewName("functions/scheduler/schedulerList");
 			}	
 		} catch (Exception e) {
@@ -394,6 +403,7 @@ public class ScheduleController {
 				//현재 서비스 올라간 스케줄 그룹 정보
 				Scheduler scheduler = new StdSchedulerFactory().getScheduler();   
 
+				
 				List<Map<String, Object>> result = scheduleService.selectScheduleList(scheduleVO);
 					
 				for(int i=0; i<result.size(); i++){				

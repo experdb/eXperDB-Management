@@ -335,7 +335,7 @@
 		SELECT
 			UDB.DB_ID,
 			UDB.DB_SVR_ID,
-			TDB.DB_NM,
+			TDB.DB_NM || '(' || TDB.DB_EXP || ')' AS DB_NM,
 			TDB.FRST_REGR_ID,
 			TDB.FRST_REG_DTM,
 			TDB.LST_MDFR_ID,
@@ -380,7 +380,9 @@
 	 		(ROW_NUMBER() OVER()) AS ROWNUM,
 	 		TWG.EXE_SN AS EXE_SN,
 	 		TWG.SCD_ID AS SCD_ID,
+	 		(SELECT SCD_NM FROM T_SCD_M WHERE TWG.SCD_ID = SCD_ID ) AS SCD_NM,
 	 		TWG.WRK_ID AS WRK_ID,
+	 		TWI.WRK_NM,
 	 		to_char(TWG.WRK_STRT_DTM,'YYYY-MM-DD HH24:MI') AS WRK_STRT_DTM,
 	 		to_char(TWG.WRK_END_DTM,'YYYY-MM-DD HH24:MI') AS WRK_END_DTM,
 	 		TWG.EXE_RSLT_CD AS EXE_RSLT_CD,
@@ -392,6 +394,7 @@
 	 		TWG.DB_ID AS DB_ID,
 	 		(SELECT DB_NM FROM T_DB_I WHERE TWG.DB_ID=DB_ID AND USEYN = 'Y') AS DB_NM,
 	 		TWG.BCK_FILE_PTH AS BCK_FILE_PTH,
+	 		TWG.BCK_FILENM AS BCK_FILENM,
 	 		TWG.FRST_REGR_ID AS FRST_REGR_ID,
 	 		to_char(TWG.FRST_REG_DTM,'YYYY-MM-DD HH24:MI') AS FRST_REG_DTM,
 	 		TWG.LST_MDFR_ID AS LST_MDFR_ID,
@@ -436,8 +439,7 @@
       	</if>
       	<if test="exe_rslt_cd != null and exe_rslt_cd != '' ">
       		AND TWG.EXE_RSLT_CD=#{exe_rslt_cd}
-      	</if>
-      	
+      	</if>     	
       	ORDER BY TWG.EXE_SN DESC
     </select>
 
@@ -500,4 +502,17 @@
 		WHERE 1=1
 			AND wrk_id = #{wrk_id}
 	</delete>
+	
+	
+	<select id="wrk_nmCheck" resultType="int">
+		/**
+		* Query ID : wrk_nmCheck
+		* Description : work명 중복 체크
+		* Author : 변승우
+		**/
+		SELECT 
+				 COUNT(*)
+		FROM T_WRKCNG_I
+		WHERE WRK_NM = #{wrk_nm}
+	</select>	
 </mapper>

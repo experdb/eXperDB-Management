@@ -30,9 +30,9 @@ function fn_init(){
  		         	{ data: "db_nm", className: "dt-center", defaultContent: ""}, 
  		         	{ data: "wrk_strt_dtm", className: "dt-center", defaultContent: ""}, 
  		         	{ data: "wrk_end_dtm", className: "dt-center", defaultContent: ""}, 
- 		         	{ data: "exe_rslt_cd", className: "dt-center", defaultContent: ""}, 
+ 		         	{ data: "file_sz", className: "dt-center", defaultContent: ""},
  		         	{ data: "bck_file_pth", className: "dt-center", defaultContent: ""},
- 		         	{ data: "file_sz", className: "dt-center", defaultContent: ""}
+ 		         	{ data: "exe_rslt_cd", className: "dt-center", defaultContent: ""}
  		        ] 
 	});
 }
@@ -221,9 +221,9 @@ $(function() {
 								<th scope="col">Database</th>
 								<th scope="col">작업시작 시간</th>
 								<th scope="col">작업종료 시간</th>
-								<th scope="col">상태</th>
-								<th scope="col">백업파일경로</th>
 								<th scope="col">Size</th>
+								<th scope="col">백업파일경로</th>
+								<th scope="col">상태</th>
 							</tr>
 						</thead>
 					</table>

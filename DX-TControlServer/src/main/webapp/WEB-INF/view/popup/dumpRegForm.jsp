@@ -30,6 +30,7 @@
 <script type="text/javascript">
 // 저장후 작업ID
 var wrk_id = null;
+var wrk_nmChk ="fail";
 
 /* ********************************************************
  * Dump Backup Insert
@@ -168,11 +169,6 @@ function valCheck(){
 	if($("#save_pth").val() == ""){
 		alert("저장경로를 입력해 주세요.");
 		$("#save_pth").focus();
-		return false;
-	}
-	if($("#bck_filenm").val() == ""){
-		alert("백업파일명을 입력해 주세요.");
-		$("#bck_filenm").focus();
 		return false;
 	}
 	if($("#check_path").val() != "Y"){
@@ -380,6 +376,37 @@ function checkFolder(){
 		});
 	}
 }
+
+//work명 중복체크
+function fn_check() {
+	var wrk_nm = document.getElementById("wrk_nm");
+	if (wrk_nm.value == "") {
+		alert("WORK명을 입력하세요.");
+		document.getElementById('wrk_nm').focus();
+		return;
+	}
+	$.ajax({
+		url : '/wrk_nmCheck.do',
+		type : 'post',
+		data : {
+			wrk_nm : $("#wrk_nm").val()
+		},
+		success : function(result) {
+			if (result == "true") {
+				alert("등록가능한 WORK명 입니다.");
+				document.getElementById("wrk_nm").focus();
+				wrk_nmChk = "success";
+			} else {
+				scd_nmChk = "fail";
+				alert("중복된 WORK명이 존재합니다.");
+				document.getElementById("wrk_nm").focus();
+			}
+		},
+		error : function(request, status, error) {
+			alert("실패");
+		}
+	});
+}
 </script>
 </head>
 <body>
@@ -399,7 +426,9 @@ function checkFolder(){
 				<tbody>
 					<tr>
 						<th scope="row" class="ico_t1">Work명</th>
-						<td><input type="text" class="txt" name="wrk_nm" id="wrk_nm" maxlength=50/></td>
+						<td><input type="text" class="txt" name="wrk_nm" id="wrk_nm" maxlength=50/>
+						<span class="btn btnC_01"><button type="button" class= "btn_type_02" onclick="fn_check()" style="width: 60px; margin-right: -60px; margin-top: 0;">중복체크</button></span>
+						</td>
 					</tr>
 					<tr>
 						<th scope="row" class="ico_t1">Work<br/>설명</th>
@@ -431,8 +460,6 @@ function checkFolder(){
 								</c:forEach>
 							</select>
 						</td>
-						<th scope="row" class="ico_t1">백업파일명</th>
-						<td><input type="text" class="txt" name="bck_filenm" id="bck_filenm" maxlength=50/></td>
 					</tr>
 				</tbody>
 			</table>
@@ -624,7 +651,6 @@ function checkFolder(){
 							</li>
 						</ul>
 					</div>
-
 					<div class="view">
 						<div class="tNav" >
 							

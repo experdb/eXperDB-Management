@@ -18,8 +18,15 @@
 			$('#to').val($.datepicker.formatDate('yy-mm-dd', new Date()));
 		}
 		
-		
+		var exe_result = "${exe_result}";
 		var svr_nm = "${svr_nm}";
+		
+		if(exe_result == "" || exe_result==null){
+			document.getElementById("exe_result").value="%";
+		}else{
+			document.getElementById("exe_result").value=exe_result;
+		}
+	
 		
 		 /* ********************************************************
 		  * 페이지 시작시, Repository DB에 등록되어 있는 디비의 서버명 SelectBox 
@@ -42,10 +49,7 @@
 					}
 					$("#db_svr_nm").val(svr_nm).attr("selected", "selected");
 				}
-			});
-		
-		 	
-		 
+			});	 
 	});
 	
 	$(function() {
@@ -125,11 +129,9 @@
 						<caption>검색 조회</caption>
 						<colgroup>
 							<col style="width: 150px;" />
-							<col />
-							<col style="width: 100px;" />
-							<col />
-							<col style="width: 100px;" />
-							<col />
+							<col style="width: 350px;" />
+							<col style="width: 150px;" />
+					
 						</colgroup>
 						<tbody>
 								<tr>
@@ -143,18 +145,26 @@
 										</div>
 									</td>
 								</tr>
+								 <tr>
+									<th scope="row" class="t9 line" >스케줄명</th>
+									<td><input type="text" class="txt t2" id="scd_nm" name="scd_nm"/ style="width: 700px;"></td>
+								</tr>
 								<tr>
 									<th scope="row" class="t9 line">DB 서버명</th>
 									<td>
-									<select class="select t8" name="db_svr_nm" id="db_svr_nm"  style="width:300px";>
-											<option value="%">전체</option>
-									</select>	
+										<select class="select t8" name="db_svr_nm" id="db_svr_nm"  style="width:200px";>
+												<option value="%">전체</option>
+										</select>	
+									</td>
+									<th scope="row" class="t9 line">실행결과</th>
+									<td>
+										<select class="select t8" name="exe_result" id="exe_result"  style="width:200px";>
+												<option value="%">전체</option>
+												<option value="TC001701">성공</option>
+												<option value="TC001702">실패</option>
+										</select>	
 									</td>
 								</tr>		
-							    <tr>
-									<th scope="row" class="t9 line" >스케줄명</th>
-									<td><input type="text" class="txt t2" id="scd_nm" name="scd_nm"/ style="width: 300px;"></td>
-								</tr>
 						</tbody>
 					</table>
 				</div>
@@ -165,6 +175,7 @@
 						<colgroup>
 							<col style="width: 5%;" />
 							<col style="width: 35%;" />
+							<col style="width: 25%;" />
 							<col style="width: 20%;" />
 							<col style="width: 15%;" />
 							<col style="width: 15%;" />
@@ -175,6 +186,7 @@
 							<tr style="border-bottom: 1px solid #b8c3c6;">
 								<th scope="col">NO</th>
 								<th scope="col">스케줄명</th>
+								<th scope="col">서버명</th>
 								<th scope="col">Work명</th>
 								<th scope="col">작업시작일시</th>
 								<th scope="col">작업종료일시</th>
@@ -186,6 +198,7 @@
 								<tr>
 									<td><c:out value="${paginationInfo.totalRecordCount+1 - ((pagingVO.pageIndex-1) * pagingVO.pageSize + status.count)}" /></td>
 									<td><c:out value="${result.scd_nm}" /></td>
+									<td><c:out value="${result.db_svr_nm}" /></td>
 									<td><c:out value="${result.wrk_nm}" /></td>									
 									<td><c:out value="${result.wrk_strt_dtm}" /></td>
 									<td><c:out value="${result.wrk_end_dtm}" /></td>

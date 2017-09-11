@@ -200,6 +200,9 @@
       <if test="scd_exp != null and scd_exp != '' ">
       	AND SCD_EXP LIKE CONCAT('%',#{scd_exp},'%')
       </if>
+      <if test="scd_cndt != null and scd_cndt != '' ">
+      	AND SCD_CNDT LIKE  '%' || #{scd_cndt} || '%'
+      </if>
     </select>	
     
     <select id="selectInitScheduleList" resultType="scheduleVO">

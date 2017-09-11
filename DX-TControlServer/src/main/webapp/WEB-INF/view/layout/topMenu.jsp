@@ -22,7 +22,7 @@ $(window.document).ready(function() {
 		success : function(result) {
 			for(var i = 0; i<result.length; i++){ 
 				
-			 	if((result[9].mnu_cd == "MN000101" &&  result[9].read_aut_yn == "N") &&  (result[10].mnu_cd == "MN000102" && result[10].read_aut_yn == "N") && (result[11].mnu_cd == "MN000103" && result[11].read_aut_yn == "N")){
+			 	if((result[1].mnu_cd == "MN000101" &&  result[1].read_aut_yn == "N") &&  (result[2].mnu_cd == "MN000102" && result[2].read_aut_yn == "N") && (result[3].mnu_cd == "MN000103" && result[3].read_aut_yn == "N")){
 					document.getElementById("MN0001").style.display = 'none';
 				}else{
 					document.getElementById("MN0001").style.display = '';
@@ -47,7 +47,7 @@ $(window.document).ready(function() {
 						}
 				} 
 				
-			 	if((result[12].mnu_cd == "MN000201" &&  result[12].read_aut_yn == "N") &&  (result[13].mnu_cd == "MN000202" && result[13].read_aut_yn == "N")){
+			 	if((result[5].mnu_cd == "MN000201" &&  result[5].read_aut_yn == "N") &&  (result[6].mnu_cd == "MN000202" && result[6].read_aut_yn == "N")){
 					document.getElementById("MN0002").style.display = 'none';
 				}else{
 					document.getElementById("MN0002").style.display = '';
@@ -66,7 +66,7 @@ $(window.document).ready(function() {
 					}
 				} 
 				
- 				if((result[14].mnu_cd == "MN000301" &&  result[14].read_aut_yn == "N") &&  (result[15].mnu_cd == "MN000302" && result[15].read_aut_yn == "N") && (result[16].mnu_cd == "MN000303" && result[16].read_aut_yn == "N")){
+ 				if((result[8].mnu_cd == "MN000301" &&  result[8].read_aut_yn == "N") &&  (result[9].mnu_cd == "MN000302" && result[9].read_aut_yn == "N") && (result[10].mnu_cd == "MN000303" && result[10].read_aut_yn == "N")){
  					document.getElementById("MN0003").style.display = 'none';
 				}else{
 					document.getElementById("MN0003").style.display = '';

@@ -6,7 +6,7 @@
 %>
 <script>
 var table = null;
-
+var scd_cndt = null;
 function fn_init(){
 	/* ********************************************************
 	 * work리스트
@@ -127,6 +127,7 @@ function fn_init(){
  * 페이지 시작시 함수
  ******************************************************** */
 $(window.document).ready(function() {
+	scd_cndt = "${scd_cndt}";
 	fn_buttonAut();
 	fn_init();
 	fn_selectScheduleList();
@@ -166,6 +167,7 @@ function fn_selectScheduleList(){
   	$.ajax({
 		url : "/selectScheduleList.do",
 		data : {
+			scd_cndt : scd_cndt,
 			scd_nm : $("#scd_nm").val(),
 			scd_exp : $("#scd_exp").val()
 		},

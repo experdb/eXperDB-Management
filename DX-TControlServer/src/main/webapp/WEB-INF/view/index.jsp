@@ -20,16 +20,31 @@
 						<ul>
 							<li>
 								<p class="state">
+									<img src="../images/ico_state_09.png" alt="Backup" /><span>Schedule
+									</span>
+								</p>
+								<a href="/selectScheduleListView.do"><p class="state_num c1">${backupInfo.schedule_cnt}</p></a>
+								<p class="state_txt">스캐줄등록</p>
+							</li>
+							<li>
+								<p class="state">
+									<img src="../images/ico_state_03.png" alt="Running Schedule" /><span>Running Schedule</span>
+								</p>
+								<a href="/selectScheduleListView.do?scd_cndt=TC001801"><p class="state_num c3">${backupInfo.schedule_run_cnt}</p></a>
+								<p class="state_txt">실행중</p>
+							</li>
+							<%-- <li>
+								<p class="state">
 									<img src="../images/ico_state_03.png" alt="Running" /><span>Running</span>
 								</p>
 								<p class="state_num c1">${scheduleInfo.run_cnt}</p>
 								<p class="state_txt">실행</p>
-							</li>
+							</li> --%>
 							<li>
 								<p class="state">
 									<img src="../images/ico_state_07.png" alt="Stop" /><span>Stop</span>
 								</p>
-								<p class="state_num c1">${scheduleInfo.stop_cnt}</p>
+								<a href="/selectScheduleListView.do?scd_cndt=TC001802"><p class="state_num c1">${scheduleInfo.stop_cnt}</p></a>
 								<p class="state_txt">중지</p>
 							</li>
 							<li>
@@ -45,7 +60,7 @@
 								<p class="state">
 									<img src="../images/ico_state_01.png" alt="Fail" /><span>Fail</span>
 								</p>
-								<p class="state_num c3">${scheduleInfo.fail_cnt}</p>
+								<a href="/selectScheduleHistoryFail.do"><p class="state_num c3">${scheduleInfo.fail_cnt}</p></a>
 								<p class="state_txt">오류</p>
 							</li>
 						</ul>
@@ -57,7 +72,7 @@
 								<p class="state">
 									<img src="../images/ico_state_10.png" alt="Server" /><span>Server</span>
 								</p>
-								<p class="state_num c1">${backupInfo.server_cnt}</p>
+								<a href="/dbServer.do"><p class="state_num c1">${backupInfo.server_cnt}</p></a>
 								<p class="state_txt">서버</p>
 							</li>
 							<li>
@@ -68,12 +83,12 @@
 								<p class="state_num c1">${backupInfo.backup_cnt}</p>
 								<p class="state_txt">백업등록</p>
 							</li>
-							<li>
+							<%-- <li>
 								<p class="state">
 									<img src="../images/ico_state_09.png" alt="Backup" /><span>Schedule
 									</span>
 								</p>
-								<p class="state_num c1">${backupInfo.schedule_cnt}</p>
+								<a href="/selectScheduleListView.do"><p class="state_num c1">${backupInfo.schedule_cnt}</p></a>
 								<p class="state_txt">스캐줄등록</p>
 							</li>
 							<li>
@@ -82,7 +97,7 @@
 								</p>
 								<p class="state_num c3">${backupInfo.schedule_run_cnt}</p>
 								<p class="state_txt">스케줄실행중</p>
-							</li>
+							</li> --%>
 						</ul>
 					</div>
 				</div>

@@ -132,4 +132,12 @@ public interface BackupService {
 	 * @throws Exception
 	 */
 	public void deleteWorkObj(WorkVO workVO) throws Exception;
+
+	
+	/**
+	 * work명 중복검사
+	 * @param wrk_nm
+	 * @throws Exception
+	 */
+	public int wrk_nmCheck(String wrk_nm) throws Exception;
 }
