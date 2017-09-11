@@ -68,8 +68,7 @@
 
 	/* 등록 버튼 클릭시*/
 	function fn_insert() {
-		if (!fn_accessControl())
-			return false;
+		if (!fn_accessControl())return false;
 		var ip = document.getElementById("ip").value;
 		var prefix = document.getElementById("prefix").value;
 		var prms_ipadr = ip + "/" + prefix;
@@ -97,11 +96,17 @@
 
 	/* 수정 버튼 클릭시*/
 	function fn_update() {
-		if (!fn_accessControl())
-			return false;
-		var ip = document.getElementById("ip").value;
-		var prefix = document.getElementById("prefix").value;
-		var prms_ipadr = ip + "/" + prefix;
+		if (!fn_accessControl())return false;
+		
+		var type = $("#ctf_tp_nm").val();
+		if(type=="local"){
+			var prms_ipadr = "";
+		}else{
+			var ip = document.getElementById("ip").value;
+			var prefix = document.getElementById("prefix").value;
+			var prms_ipadr = ip + "/" + prefix;
+		}
+
 		$.ajax({
 			url : "/updateAccessControl.do",
 			data : {
@@ -213,8 +218,8 @@
 						
 						<th scope="row" class="ico_t1">IP<br>(127.0.0.1/32)</th>
 						<td>
-							<input type="text" class="txt" name="prms_ipadr" id="ip" style="width: 130px;"/> /
-							<input type="text" class="txt" name="prms_ipadr" id="prefix" style="width: 100px;"/>
+							<input type="text" class="txt" name="ip" id="ip" style="width: 130px;"/> /
+							<input type="text" class="txt" name="prefix" id="prefix" style="width: 100px;"/>
 						</td>
 					</tr>
 					<tr>
