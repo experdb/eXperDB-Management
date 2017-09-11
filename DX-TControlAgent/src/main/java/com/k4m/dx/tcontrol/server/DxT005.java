@@ -112,21 +112,50 @@ public class DxT005 extends SocketCtl{
 				//다음실행여부가 Y 이면 에러나도 다음 시행함.
 				if(retVal.equals("success")) {
 					String strFileName = strBCK_FILENM;
-					String strSlush = "/";
+					String strFileSize = "";
 					
-					if(!strBCK_FILE_PTH.contentEquals("")) {
-						String strSl = strBCK_FILE_PTH.substring(strBCK_FILE_PTH.length()-1, strBCK_FILE_PTH.length());
-						if(strSl.equals("/")) {
-							strSlush = "";
+					//dump 일경우만 실행
+					if(strBCK_OPT_CD.equals("TC000202")) {
+						
+						String strSlush = "/";
+
+						if(!strBCK_FILE_PTH.contentEquals("")) {
+							String strSl = strBCK_FILE_PTH.substring(strBCK_FILE_PTH.length()-1, strBCK_FILE_PTH.length());
+							if(strSl.equals("/")) {
+								strSlush = "";
+							}
 						}
+						
+						String strCmd = "ls -al " + strBCK_FILE_PTH + strSlush + strFileName + " | awk '{print $5}'";
+						strFileSize = CommonUtil.getPidExec(strCmd);
+						
+						
+						socketLogger.info("##### strFileSize cmd : " + strCmd );
+						socketLogger.info("##### strFileSize : " + strFileSize );
+						
+						if(strFileSize == null) strFileSize = "0";
+						
+						if(strFileSize == null || strFileSize.equals("0")) {
+							
+							
+							WrkExeVO endVO = new WrkExeVO();
+							endVO.setEXE_RSLT_CD("TC001702");
+							endVO.setEXE_SN(intSeq);
+							
+							service.updateT_WRKEXE_G(endVO);
+							
+							if(strNXT_EXD_YN.equals("y")) {
+								continue;
+							} else {
+								break;
+							}
+							
+						}
+					
+					} else {
+						strFileSize = "0";
+						strFileName = "";
 					}
-					
-					String strCmd = "ls -al " + strBCK_FILE_PTH + strSlush + strFileName + " | awk '{print $5}'";
-					String strFileSize = CommonUtil.getPidExec(strCmd);
-					
-					
-					socketLogger.info("##### strFileSize cmd : " + strCmd );
-					socketLogger.info("##### strFileSize : " + strFileSize );
 					
 					WrkExeVO endVO = new WrkExeVO();
 					endVO.setEXE_RSLT_CD(strResultCode);
