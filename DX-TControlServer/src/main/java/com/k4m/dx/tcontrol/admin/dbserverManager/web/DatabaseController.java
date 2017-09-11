@@ -234,7 +234,7 @@ public class DatabaseController {
 	@SuppressWarnings("unused")
 	@RequestMapping(value = "/selectDBList.do")
 	@ResponseBody
-	public List<DbVO> selectDBList(@ModelAttribute("historyVO") HistoryVO historyVO, @ModelAttribute("dbVO") DbVO dbVO, HttpServletResponse response) {
+	public List<DbVO> selectDBList(@ModelAttribute("historyVO") HistoryVO historyVO, @ModelAttribute("dbVO") DbVO dbVO, HttpServletResponse response, HttpServletRequest request) {
 		
 		//해당메뉴 권한 조회 (공통메소드호출)
 		CmmnUtils cu = new CmmnUtils();
@@ -247,7 +247,8 @@ public class DatabaseController {
 				response.sendRedirect("/autError.do");
 				return resultSet;
 			}else{
-				resultSet = dbServerManagerService.selectDbListTree();		
+				int db_svr_id = Integer.parseInt(request.getParameter("db_svr_id"));
+				resultSet = dbServerManagerService.selectDbListTree(db_svr_id);		
 			}
 		} catch (Exception e) {
 			e.printStackTrace();

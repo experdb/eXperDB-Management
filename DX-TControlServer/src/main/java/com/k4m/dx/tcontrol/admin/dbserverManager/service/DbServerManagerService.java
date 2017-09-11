@@ -95,6 +95,6 @@ public interface DbServerManagerService {
 	int db_svr_nmCheck(String db_svr_nm) throws Exception;
 
 
-	List<DbVO> selectDbListTree() throws Exception;
+	List<DbVO> selectDbListTree(int db_svr_id) throws Exception;
 	
 }

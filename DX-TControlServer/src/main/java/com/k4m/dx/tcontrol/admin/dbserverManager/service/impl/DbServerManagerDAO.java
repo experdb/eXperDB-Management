@@ -152,9 +152,9 @@ public class DbServerManagerDAO extends EgovAbstractMapper{
 	}
 
 
-	public List<DbVO> selectDbListTree() {
+	public List<DbVO> selectDbListTree(int db_svr_id) {
 		List<DbVO> sl = null;
-		sl = (List<DbVO>) list("dbserverManagerSql.selectDbListTree", null);
+		sl = (List<DbVO>) list("dbserverManagerSql.selectDbListTree", db_svr_id);
 		return sl;
 	}
 

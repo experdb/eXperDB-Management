@@ -155,7 +155,7 @@ function fn_insertDbServer(){
 //DBserver 연결테스트
 function fn_dbServerConnTest(){
 	
-	if (!fn_dbServerValidation()) return false;
+	//if (!fn_dbServerValidation()) return false;
 
 	$.ajax({
 		url : "/dbServerConnTest.do",
