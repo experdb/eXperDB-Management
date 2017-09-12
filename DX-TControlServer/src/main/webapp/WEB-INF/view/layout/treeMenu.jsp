@@ -12,7 +12,7 @@
 				dataType : "json",
 				type : "post",
 				error : function(xhr, status, error) {
-					alert("실패a");
+					alert("실패");
 				},
 				success : function(result) {
 					fn_UsrDBSrvAut(result);					
@@ -27,7 +27,7 @@
 				dataType : "json",
 				type : "post",
 				error : function(xhr, status, error) {
-					alert("실패b");
+					alert("실패");
 				},
 				success : function(result) {
 					fn_usrMenuAut(result);
@@ -85,7 +85,7 @@
 			dataType : "json",
 			type : "post",
 			error : function(xhr, status, error) {
-				alert("실패c")
+				alert("실패")
 			},
 			success : function(result) {
 				GetJsonData(data, result);
@@ -114,7 +114,6 @@
 
   		function GetJsonData(data, aut) {
 			var parseData = $.parseJSON(data);
-
 		 	var html1 = "";
  /*   			html1 += '<div class="lnb_tit">DB 서버';
 			html1 += '<div class="all_btn">';
