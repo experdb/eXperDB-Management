@@ -173,11 +173,24 @@ function fn_cookie(url) {
 								</ul>
 							</li>				
 						    <li><a href="/userManager.do" onClick="fn_cookie(null)" id="MN0004">사용자관리</a></li>
-					        <li><a href="/menuAuthority.do" onClick="fn_cookie(null)" id="MN0005">메뉴권한관리</a></li>
-					        <li><a href="/dbAuthority.do" onClick="fn_cookie(null)" id="MN0006">DB권한관리</a></li>
-					        <li><a href="/accessHistory.do" onClick="fn_cookie(null)" id="MN0007">이력관리</a></li>
-					        <li><a href="/agentMonitoring.do" onClick="fn_cookie(null)" id="MN0008">모니터링</a></li>
-							<li><a href="/extensionList.do" onClick="fn_cookie(null)" id="MN0009">확장팩설치 정보</a></li>
+							<li><a href="#n" id="MN0005">권한관리</a>
+					        	<ul class="depth_3">
+									<li><a href="/menuAuthority.do" onClick="fn_cookie(null)" id="MN000501">메뉴권한관리</a></li>
+									<li><a href="/dbAuthority.do" onClick="fn_cookie(null)" id="MN000502">서버권한관리</a></li>
+									<li><a href="/dbAuthority.do" onClick="fn_cookie(null)" id="MN000503">DB권한관리</a></li>									
+								</ul>
+					        </li>	        					        
+					        <li><a href="#n" id="MN0006">이력관리</a>
+					        	<ul class="depth_3">
+									<li><a href="/accessHistory.do" onClick="fn_cookie(null)" id="MN000601">화면접근이력</a></li>
+								</ul>
+					        </li>
+					        <li><a href="#n" id="MN0007">모니터링</a>
+					        	<ul class="depth_3">
+									<li><a href="/agentMonitoring.do" onClick="fn_cookie(null)" id="MN000701">에이전트 모니터링</a></li>
+								</ul>
+					        </li>
+							<li><a href="/extensionList.do" onClick="fn_cookie(null)" id="MN0008">확장팩설치 정보</a></li>
 						</ul>
 					</li>
 					<li><a href="#n"><span><img src="/images/ico_h_7.png" alt="MY PAGE" /></span></a>
