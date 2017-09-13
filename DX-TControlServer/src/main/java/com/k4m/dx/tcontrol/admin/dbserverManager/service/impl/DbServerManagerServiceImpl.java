@@ -79,8 +79,8 @@ public class DbServerManagerServiceImpl implements DbServerManagerService {
 	}
 
 	@Override
-	public List<DbVO> selectDbListTree() throws Exception {
-		return dbServerManagerDAO.selectDbListTree();
+	public List<DbVO> selectDbListTree(int db_svr_id) throws Exception {
+		return dbServerManagerDAO.selectDbListTree(db_svr_id);
 	}
 
 }

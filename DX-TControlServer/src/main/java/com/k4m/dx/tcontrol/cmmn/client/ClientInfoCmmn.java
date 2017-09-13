@@ -457,6 +457,36 @@ public class ClientInfoCmmn {
 		}
 	}
 
+	// 10. 확장 설치 리스트 조회(Extension_select)
+	public List<Object> extension_select(JSONObject serverObj,String IP, int PORT,String strExtname) {
+		List<Object> selectDBList = null;
+		try {
+	
+			ClientAdapter CA = new ClientAdapter(IP, PORT);
+			CA.open(); 
+			
+			JSONObject objList;
+			
+			//strExtname = "pgaudit";
+			objList = CA.dxT010(ClientTranCodeType.DxT010, serverObj, strExtname);
+			
+			String strErrMsg = (String)objList.get(ClientProtocolID.ERR_MSG);
+			String strErrCode = (String)objList.get(ClientProtocolID.ERR_CODE);
+			String strDxExCode = (String)objList.get(ClientProtocolID.DX_EX_CODE);
+			String strResultCode = (String)objList.get(ClientProtocolID.RESULT_CODE);
+			
+			selectDBList =(ArrayList<Object>) objList.get(ClientProtocolID.RESULT_DATA);
+			
+			CA.close();
+			
+			return selectDBList;
+		} catch(Exception e) {
+			e.printStackTrace();
+		}
+		return selectDBList;
+	}
+	
+	
 	// 11. Role 리스트 (roleList)
 	@SuppressWarnings({ "unchecked", "rawtypes" })
 	public JSONObject role_List(JSONObject serverObj) {

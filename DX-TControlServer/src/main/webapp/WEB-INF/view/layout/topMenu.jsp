@@ -148,42 +148,55 @@ function fn_cookie(url) {
 				<ul class="depth_1" id="gnb">
 					<li><a href="#n"><span><img src="/images/ico_h_5.png" alt="FUNCTION" /></span></a>
 						<ul class="depth_2">
-							<li><a href="#n" id="MN0001">Scheduler</a>
+							<li><a href="#n" id="MN0001">스케줄정보</a>
 								<ul class="depth_3">
-									<li><a href="/insertScheduleView.do" onClick="fn_cookie(null)" id="MN000101">스케쥴 등록</a></li>
-									<li><a href="/selectScheduleListView.do" onClick="fn_cookie(null)" id="MN000102">스케쥴 조회</a></li>
-									<li><a href="/selectScheduleHistoryView.do" onClick="fn_cookie(null)" id="MN000103">스케쥴 이력</a></li>
+									<li><a href="/insertScheduleView.do" onClick="fn_cookie(null)" id="MN000101">스케줄 등록</a></li>
+									<li><a href="/selectScheduleListView.do" onClick="fn_cookie(null)" id="MN000102">스케줄 관리</a></li>
+									<li><a href="/selectScheduleHistoryView.do" onClick="fn_cookie(null)" id="MN000103">스케줄 수행이력</a></li>
 								</ul>
 							</li>
-							<li><a href="#n" id="MN0002">Transfer</a>
+							<li><a href="#n" id="MN0002">데이터전송정보</a>
 								<ul class="depth_3">
-									<li><a href="/transferSetting.do" onClick="fn_cookie(null)" id="MN000201">전송 설정</a></li>
-									<li><a href="/connectorRegister.do" onClick="fn_cookie(null)" id="MN000202">Kafka-Connector 등록</a></li>
+									<li><a href="/transferSetting.do" onClick="fn_cookie(null)" id="MN000201">데이터 전송설정</a></li>
+									<li><a href="/connectorRegister.do" onClick="fn_cookie(null)" id="MN000202">커넥터 등록</a></li>
 								</ul>
 							</li>
 						</ul>
 					</li>
 					<li><a href="#n"><span><img src="/images/ico_h_6.png" alt="ADMIN" /></span></a>
 						<ul class="depth_2">
-							<li><a href="#n" id="MN0003">DB 서버관리</a>
+							<li><a href="#n" id="MN0003">DBMS 정보</a>
 								<ul class="depth_3">
-									<li><a href="/dbTree.do" onClick="fn_cookie(null)" id="MN000301">DB Tree</a></li>
-									<li><a href="/dbServer.do" onClick="fn_cookie(null)" id="MN000302">DB 서버</a></li>
-									<li><a href="/database.do" onClick="fn_cookie(null)" id="MN000303">Database</a></li>
+									<li><a href="/dbTree.do" onClick="fn_cookie(null)" id="MN000301">DBMS 등록</a></li>
+									<li><a href="/dbServer.do" onClick="fn_cookie(null)" id="MN000302">DBMS 관리</a></li>
+									<li><a href="/database.do" onClick="fn_cookie(null)" id="MN000303">DataBase 관리</a></li>
 								</ul>
 							</li>				
 						    <li><a href="/userManager.do" onClick="fn_cookie(null)" id="MN0004">사용자관리</a></li>
-					        <li><a href="/menuAuthority.do" onClick="fn_cookie(null)" id="MN0005">메뉴권한관리</a></li>
-					        <li><a href="/dbAuthority.do" onClick="fn_cookie(null)" id="MN0006">DB권한관리</a></li>
-					        <li><a href="/accessHistory.do" onClick="fn_cookie(null)" id="MN0007">화면접근이력</a></li>
-					        <li><a href="/agentMonitoring.do" onClick="fn_cookie(null)" id="MN0008">Agent 모니터링</a></li>
-							<li><a href="/extensionList.do" onClick="fn_cookie(null)" id="MN0009">확장설치 조회</a></li>
+							<li><a href="#n" id="MN0005">권한관리</a>
+					        	<ul class="depth_3">
+									<li><a href="/menuAuthority.do" onClick="fn_cookie(null)" id="MN000501">메뉴권한관리</a></li>
+									<li><a href="/dbAuthority.do" onClick="fn_cookie(null)" id="MN000502">서버권한관리</a></li>
+									<li><a href="/dbAuthority.do" onClick="fn_cookie(null)" id="MN000503">DB권한관리</a></li>									
+								</ul>
+					        </li>	        					        
+					        <li><a href="#n" id="MN0006">이력관리</a>
+					        	<ul class="depth_3">
+									<li><a href="/accessHistory.do" onClick="fn_cookie(null)" id="MN000601">화면접근이력</a></li>
+								</ul>
+					        </li>
+					        <li><a href="#n" id="MN0007">모니터링</a>
+					        	<ul class="depth_3">
+									<li><a href="/agentMonitoring.do" onClick="fn_cookie(null)" id="MN000701">에이전트 모니터링</a></li>
+								</ul>
+					        </li>
+							<li><a href="/extensionList.do" onClick="fn_cookie(null)" id="MN0008">확장팩설치 정보</a></li>
 						</ul>
 					</li>
 					<li><a href="#n"><span><img src="/images/ico_h_7.png" alt="MY PAGE" /></span></a>
 						<ul class="depth_2">
-							<li><a href="/myPage.do" onClick="fn_cookie(null)">개인정보수정</a></li>
-        					<li><a href="/myScheduleListView.do" onClick="fn_cookie(null)">My스케쥴</a></li>
+							<li><a href="/myPage.do" onClick="fn_cookie(null)">사용자정보관리</a></li>
+        					<li><a href="/myScheduleListView.do" onClick="fn_cookie(null)">My스케줄</a></li>
 						</ul>
 					</li>
 					<li><a href="#n"><span><img src="/images/ico_h_8.png" alt="HELP" /></span></a>

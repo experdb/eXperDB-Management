@@ -214,7 +214,7 @@ public class TreeController {
 	@SuppressWarnings("unused")
 	@RequestMapping(value = "/selectTreeDBList.do")
 	@ResponseBody
-	public List<DbVO> selectTreeDBList(@ModelAttribute("dbVO") DbVO dbVO, HttpServletResponse response) {
+	public List<DbVO> selectTreeDBList(@ModelAttribute("dbVO") DbVO dbVO, HttpServletResponse response, HttpServletRequest request) {
 		
 		//해당메뉴 권한 조회 (공통메소드호출)
 		CmmnUtils cu = new CmmnUtils();
@@ -227,7 +227,8 @@ public class TreeController {
 				response.sendRedirect("/autError.do");
 				return resultSet;
 			}else{
-				resultSet = dbServerManagerService.selectDbListTree();		
+				int db_svr_id = Integer.parseInt(request.getParameter("db_svr_id"));
+				resultSet = dbServerManagerService.selectDbListTree(db_svr_id);		
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -335,25 +336,30 @@ public class TreeController {
 				serverObj.put(ClientProtocolID.USER_PWD, dec.aesDecode(dbServerVO.getSvr_spr_scm_pwd()));
 					
 				ClientInfoCmmn cic = new ClientInfoCmmn();
-				result = cic.dbAccess_selectAll(serverObj,IP,PORT);
-				for(int j=0; j<result.size(); j++){
-					 JSONArray data = (JSONArray)result.get("data");
-					for(int m=0; m<data.size(); m++){
-							JSONObject jsonObj = (JSONObject)data.get(m);
-							accessControlVO.setFrst_regr_id(id);
-							accessControlVO.setLst_mdfr_id(id);
-							accessControlVO.setDb_svr_id(db_svr_id);
-							accessControlVO.setDtb((String) jsonObj.get("Database"));
-							accessControlVO.setPrms_ipadr((String)jsonObj.get("Ipadr"));
-							accessControlVO.setPrms_usr_id((String)jsonObj.get("User"));
-							accessControlVO.setCtf_mth_nm((String)jsonObj.get("Method"));
-							accessControlVO.setCtf_tp_nm((String)jsonObj.get("Type"));
-							accessControlVO.setOpt_nm((String)jsonObj.get("Option"));
-							accessControlVO.setPrms_seq(Integer.parseInt((String) jsonObj.get("Seq")));
-							accessControlVO.setPrms_set((String)jsonObj.get("Set"));
-							accessControlService.insertAccessControl(accessControlVO);
-						}
-					}		
+				
+				String strExtName = "pgaudit";
+				List<Object> results = cic.extension_select(serverObj,IP,PORT,strExtName);
+				if(results != null && result.size() != 0) {
+					result = cic.dbAccess_selectAll(serverObj,IP,PORT);
+					for(int j=0; j<result.size(); j++){
+						 JSONArray data = (JSONArray)result.get("data");
+						for(int m=0; m<data.size(); m++){
+								JSONObject jsonObj = (JSONObject)data.get(m);
+								accessControlVO.setFrst_regr_id(id);
+								accessControlVO.setLst_mdfr_id(id);
+								accessControlVO.setDb_svr_id(db_svr_id);
+								accessControlVO.setDtb((String) jsonObj.get("Database"));
+								accessControlVO.setPrms_ipadr((String)jsonObj.get("Ipadr"));
+								accessControlVO.setPrms_usr_id((String)jsonObj.get("User"));
+								accessControlVO.setCtf_mth_nm((String)jsonObj.get("Method"));
+								accessControlVO.setCtf_tp_nm((String)jsonObj.get("Type"));
+								accessControlVO.setOpt_nm((String)jsonObj.get("Option"));
+								accessControlVO.setPrms_seq(Integer.parseInt((String) jsonObj.get("Seq")));
+								accessControlVO.setPrms_set((String)jsonObj.get("Set"));
+								accessControlService.insertAccessControl(accessControlVO);
+							}
+						}	
+					}
 			}
 		} catch (Exception e) {
 			e.printStackTrace();

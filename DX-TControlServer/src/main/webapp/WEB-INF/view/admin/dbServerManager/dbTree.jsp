@@ -311,9 +311,10 @@ function fn_insertDB(){
  * 서버에 등록된 디비,  <=>  Repository에 등록된 디비 비교
  ******************************************************** */
 function fn_dataCompareChcek(svrDbList){
+	var db_svr_id =  table_dbServer.row('.selected').data().db_svr_id
 	$.ajax({
 		url : "/selectTreeDBList.do",
-		data : {},
+		data : {db_svr_id : db_svr_id},
 		async:true,
 		dataType : "json",
 		type : "post",
@@ -337,7 +338,7 @@ function fn_dataCompareChcek(svrDbList){
 			}
 		},
 		success : function(result) {
-			var db_svr_id =  table_dbServer.row('.selected').data().db_svr_id
+		//	var db_svr_id =  table_dbServer.row('.selected').data().db_svr_id
 		
 			if(svrDbList.data.length>0){
  				for(var i = 0; i<svrDbList.data.length; i++){

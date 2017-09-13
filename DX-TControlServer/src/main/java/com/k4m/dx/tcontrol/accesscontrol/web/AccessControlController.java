@@ -28,8 +28,10 @@ import com.k4m.dx.tcontrol.admin.dbserverManager.service.DbServerVO;
 import com.k4m.dx.tcontrol.cmmn.AES256;
 import com.k4m.dx.tcontrol.cmmn.AES256_KEY;
 import com.k4m.dx.tcontrol.cmmn.CmmnUtils;
+import com.k4m.dx.tcontrol.cmmn.client.ClientAdapter;
 import com.k4m.dx.tcontrol.cmmn.client.ClientInfoCmmn;
 import com.k4m.dx.tcontrol.cmmn.client.ClientProtocolID;
+import com.k4m.dx.tcontrol.cmmn.client.ClientTranCodeType;
 import com.k4m.dx.tcontrol.common.service.AgentInfoVO;
 import com.k4m.dx.tcontrol.common.service.CmmnServerInfoService;
 import com.k4m.dx.tcontrol.common.service.HistoryVO;
@@ -104,11 +106,11 @@ public class AccessControlController {
 	@RequestMapping(value = "/accessControl.do")
 	public ModelAndView serverAccessControl(@ModelAttribute("historyVO") HistoryVO historyVO,
 			HttpServletRequest request) {
-	
 		CmmnUtils cu = new CmmnUtils();
 		dbSvrAut = cu.selectUserDBSvrAutList(dbAuthorityService);
-
 		ModelAndView mv = new ModelAndView();
+		ClientInfoCmmn cic = new ClientInfoCmmn();
+		JSONObject serverObj = new JSONObject();
 		try {
 			if(dbSvrAut.get(0).get("acs_cntr_aut_yn").equals("N")){
 				mv.setViewName("error/autError");				
@@ -118,6 +120,8 @@ public class AccessControlController {
 				historyVO.setExe_dtl_cd("DX-T0027");
 				accessHistoryService.insertHistory(historyVO);
 	
+				AES256 dec = new AES256(AES256_KEY.ENC_KEY);
+				
 				int db_svr_id = Integer.parseInt(request.getParameter("db_svr_id"));
 				
 				DbServerVO schDbServerVO = new DbServerVO();
@@ -129,13 +133,29 @@ public class AccessControlController {
 				AgentInfoVO agentInfo =  (AgentInfoVO) cmmnServerInfoService.selectAgentInfo(vo);
 		
 				if(agentInfo == null) {
-					mv.addObject("extName", "agent");
-					mv.setViewName("dbserver/accesscontrol");
+					mv.addObject("extName", "agent");	
 				}else{
-					mv.addObject("db_svr_nm", dbServerVO.getDb_svr_nm());
-					mv.addObject("db_svr_id", db_svr_id);
-					mv.setViewName("dbserver/accesscontrol");	
+					
+					String IP = dbServerVO.getIpadr();
+					int PORT = agentInfo.getSOCKET_PORT();
+					String strExtname = "pgaudit";
+					
+					serverObj.put(ClientProtocolID.SERVER_NAME, dbServerVO.getDb_svr_nm());
+					serverObj.put(ClientProtocolID.SERVER_IP, dbServerVO.getIpadr());
+					serverObj.put(ClientProtocolID.SERVER_PORT, dbServerVO.getPortno());
+					serverObj.put(ClientProtocolID.DATABASE_NAME, dbServerVO.getDft_db_nm());
+					serverObj.put(ClientProtocolID.USER_ID, dbServerVO.getSvr_spr_usr_id());
+					serverObj.put(ClientProtocolID.USER_PWD, dec.aesDecode(dbServerVO.getSvr_spr_scm_pwd()));
+					
+					List<Object> result = cic.extension_select(serverObj,IP,PORT,strExtname);
+					if(result == null || result.size() == 0) {
+						mv.addObject("extName", strExtname);	
+					}else{
+						mv.addObject("db_svr_nm", dbServerVO.getDb_svr_nm());
+						mv.addObject("db_svr_id", db_svr_id);	
+					}
 				}
+				mv.setViewName("dbserver/accesscontrol");
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
