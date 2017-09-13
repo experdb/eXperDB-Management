@@ -79,7 +79,6 @@ $(function() {
 	        } 
 
 	         var usr_id = userTable.row('.selected').data().usr_id;
-	         
 	        /* ********************************************************
 	         * 선택된 유저 대한 메뉴권한 조회
 	        ******************************************************** */
@@ -95,8 +94,7 @@ $(function() {
 	    		},
 	    		success : function(result) {
       				for(var i = 0; i<result.length; i++){  
-      					if(result[i].mnu_cd != "MN0001" && result[i].mnu_cd != "MN0002" && result[i].mnu_cd != "MN0003"){
-      						
+      					if(result[i].mnu_cd != "MN0001" && result[i].mnu_cd != "MN0002" && result[i].mnu_cd != "MN0003" && result[i].mnu_cd != "MN0005" && result[i].mnu_cd != "MN0006" && result[i].mnu_cd != "MN0007" && result[i].mnu_cd != "MN0009" && result[i].mnu_cd != "MN00010"){
 	     					//읽기권한
 	  						if(result[i].read_aut_yn == "Y"){	  									
 	  							document.getElementById("r_"+result[i].mnu_cd).checked = true;
@@ -243,7 +241,7 @@ function fn_save(){
 												<tbody>
 													<tr>
 														<th scope="row" rowspan="5">Functions</th>
-														<th scope="row" rowspan="3">Scheduler</th>
+														<th scope="row" rowspan="3">스케줄정보</th>
 														<td>스케줄 등록</td>
 														<td>
 															<div class="inp_chk">
@@ -259,7 +257,7 @@ function fn_save(){
 														</td>
 													</tr>
 													<tr>
-														<td>스케줄 조회</td>
+														<td>스케줄 관리</td>
 														<td>
 															<div class="inp_chk">
 																<input type="checkbox" id="r_MN000102" name="r_mnu_nm" />
@@ -274,7 +272,7 @@ function fn_save(){
 														</td>													
 													</tr>
 													<tr>
-														<td>스케줄 이력</td>
+														<td>스케줄 수행이력</td>
 														<td>
 															<div class="inp_chk">
 																<input type="checkbox" id="r_MN000103" name="r_mnu_nm"  />
@@ -289,8 +287,8 @@ function fn_save(){
 														</td>										
 													</tr>
 													<tr>
-														<th scope="row" rowspan="2">Transfer</th>
-														<td>전송설정</td>
+														<th scope="row" rowspan="2">데이터전송정보</th>
+														<td>데이터전송설정</td>
 														<td>
 															<div class="inp_chk">
 																<input type="checkbox" id="r_MN000201" name="r_mnu_nm" />
@@ -305,7 +303,7 @@ function fn_save(){
 														</td>										
 													</tr>
 													<tr>
-														<td>Kafka-Conetcor 등록</td>
+														<td>컨넥터 등록</td>
 														<td>
 															<div class="inp_chk">
 																<input type="checkbox" id="r_MN000202" name="r_mnu_nm" />
@@ -320,9 +318,9 @@ function fn_save(){
 														</td>											
 													</tr>
 													<tr>
-														<th scope="row" rowspan="9">Admin</th>
-														<th scope="row" rowspan="3">DB 서버관리</th>
-														<td>DB Tree</td>
+														<th scope="row" rowspan="10">Admin</th>
+														<th scope="row" rowspan="3">DBMS 정보</th>
+														<td>DBMS 등록</td>
 														<td>
 															<div class="inp_chk">
 																<input type="checkbox" id="r_MN000301" name="r_mnu_nm" />
@@ -337,7 +335,7 @@ function fn_save(){
 														</td>										
 													</tr>
 													<tr>
-														<td>DB Server</td>
+														<td>DBMS 관리</td>
 														<td>
 															<div class="inp_chk">
 																<input type="checkbox" id="r_MN000302" name="r_mnu_nm" />
@@ -352,7 +350,7 @@ function fn_save(){
 														</td>										
 													</tr>
 													<tr>
-														<td>Database</td>
+														<td>DataBase 관리</td>
 														<td>
 															<div class="inp_chk">
 																<input type="checkbox" id="r_MN000303" name="r_mnu_nm" />
@@ -381,53 +379,98 @@ function fn_save(){
 															</div>
 														</td>								
 													</tr>
+													
+													
 													<tr>
-														<td colspan="2">메뉴권한관리</td>
+														<th scope="row" rowspan="3">권한관리</th>
+														<td>메뉴권한관리</td>
 														<td>
 															<div class="inp_chk">
-																<input type="checkbox" id="r_MN0005" name="r_mnu_nm"  />
-																<label for="r_MN0005"></label>
+																<input type="checkbox" id="r_MN000501" name="r_mnu_nm" />
+																<label for="r_MN000501"></label>
 															</div>
 														</td>
 														<td>
 															<div class="inp_chk">
-																<input type="checkbox" id="w_MN0005" name="w_mnu_nm"  />
-																<label for="w_MN0005"></label>
+																<input type="checkbox" id="w_MN000501" name="w_mnu_nm" />
+																<label for="w_MN000501"></label>
 															</div>
-														</td>												
+														</td>										
 													</tr>
 													<tr>
-														<td colspan="2">DB 권한관리</td>
+														<td>DB서버 메뉴권한</td>
 														<td>
 															<div class="inp_chk">
-																<input type="checkbox" id="r_MN0006" name="r_mnu_nm"  />
-																<label for="r_MN0006"></label>
+																<input type="checkbox" id="r_MN000502" name="r_mnu_nm" />
+																<label for="r_MN000502"></label>
 															</div>
 														</td>
 														<td>
 															<div class="inp_chk">
-																<input type="checkbox" id="w_MN0006" name="w_mnu_nm"  />
-																<label for="w_MN0006"></label>
+																<input type="checkbox" id="w_MN000502" name="w_mnu_nm"  />
+																<label for="w_MN000502"></label>
+															</div>
+														</td>										
+													</tr>
+													<tr>
+														<td>DB권한관리</td>
+														<td>
+															<div class="inp_chk">
+																<input type="checkbox" id="r_MN000503" name="r_mnu_nm" />
+																<label for="r_MN000503"></label>
+															</div>
+														</td>
+														<td>
+															<div class="inp_chk">
+																<input type="checkbox" id="w_MN000503" name="w_mnu_nm" />
+																<label for="w_MN000503"></label>
 															</div>
 														</td>											
 													</tr>
+													
+													
+													
+													
 													<tr>
-														<td colspan="2">화면접근이력</td>
+														<th scope="row" rowspan="1">이력관리</th>
+														<td>화면접근이력</td>
 														<td>
 															<div class="inp_chk">
-																<input type="checkbox" id="r_MN0007" name="r_mnu_nm"  />
-																<label for="r_MN0007"></label>
+																<input type="checkbox" id="r_MN000601" name="r_mnu_nm" />
+																<label for="r_MN000601"></label>
 															</div>
 														</td>
 														<td>
 															<div class="inp_chk">
-																<input type="checkbox" id="w_MN0007" name="w_mnu_nm"  />
-																<label for="w_MN0007"></label>
+																<input type="checkbox" id="w_MN000601" name="w_mnu_nm" />
+																<label for="w_MN000601"></label>
 															</div>
-														</td>												
+														</td>										
 													</tr>
+													
+													
 													<tr>
-														<td colspan="2">Agent모니터링</td>
+														<th scope="row" rowspan="1">모니터링</th>
+														<td>에이전트 모니터링</td>
+														<td>
+															<div class="inp_chk">
+																<input type="checkbox" id="r_MN000701" name="r_mnu_nm" />
+																<label for="r_MN000701"></label>
+															</div>
+														</td>
+														<td>
+															<div class="inp_chk">
+																<input type="checkbox" id="w_MN000701" name="w_mnu_nm" />
+																<label for="w_MN000701"></label>
+															</div>
+														</td>										
+													</tr>
+													
+
+													
+
+													<tr>
+														<td colspan="2">확장설치 조회</td>
 														<td>
 															<div class="inp_chk">
 																<input type="checkbox" id="r_MN0008" name="r_mnu_nm"  />
@@ -439,21 +482,6 @@ function fn_save(){
 																<input type="checkbox" id="w_MN0008" name="w_mnu_nm"  />
 																<label for="w_MN0008"></label>
 															</div>
-														</td>											
-													</tr>
-													<tr>
-														<td colspan="2">확장설치 조회</td>
-														<td>
-															<div class="inp_chk">
-																<input type="checkbox" id="r_MN0009" name="r_mnu_nm"  />
-																<label for="r_MN0009"></label>
-															</div>
-														</td>
-														<td>
-															<div class="inp_chk">
-																<input type="checkbox" id="w_MN0009" name="w_mnu_nm"  />
-																<label for="w_MN0009"></label>
-															</div>
 													<input type="hidden"  name="mnu_id" value="2">		
 													<input type="hidden"  name="mnu_id" value="3">		
 													<input type="hidden"  name="mnu_id" value="4">		
@@ -462,12 +490,14 @@ function fn_save(){
 													<input type="hidden"  name="mnu_id" value="9">		
 													<input type="hidden"  name="mnu_id" value="10">		
 													<input type="hidden"  name="mnu_id" value="11">			
-													<input type="hidden"  name="mnu_id" value="12">		
-													<input type="hidden"  name="mnu_id" value="13" >		
+													<input type="hidden"  name="mnu_id" value="12">			
 													<input type="hidden"  name="mnu_id" value="14" >		
 													<input type="hidden"  name="mnu_id" value="15">		
 													<input type="hidden"  name="mnu_id" value="16" >		
-													<input type="hidden"  name="mnu_id" value="17">		
+													<input type="hidden"  name="mnu_id" value="18">	
+													<input type="hidden"  name="mnu_id" value="20">
+													<input type="hidden"  name="mnu_id" value="21">	
+													
 														</td>											
 													</tr>																									
 												</tbody>

@@ -90,44 +90,71 @@ $(window.document).ready(function() {
 						}
 					}	
 				} 
-				
-				
-				
+										
 		 		if(result[i].mnu_cd == "MN0004"){
 					if(result[i].read_aut_yn == "N"){
 						 document.getElementById("MN0004").style.display = 'none';
 					}else{
 						document.getElementById("MN0004").style.display = '';
 					}
-				}else if(result[i].mnu_cd == "MN0005"){
-					if(result[i].read_aut_yn == "N"){
-						 document.getElementById("MN0005").style.display = 'none';
-					}else{
-						 document.getElementById("MN0005").style.display = '';
+				}
+		 		
+				if((result[13].mnu_cd == "MN000501" &&  result[13].read_aut_yn == "N") &&  (result[14].mnu_cd == "MN000502" && result[14].read_aut_yn == "N") && (result[15].mnu_cd == "MN000503" && result[15].read_aut_yn == "N")){
+ 					document.getElementById("MN0005").style.display = 'none';
+				}else{
+					document.getElementById("MN0005").style.display = '';
+					if(result[i].mnu_cd == "MN000501"){
+						if(result[i].read_aut_yn == "N"){
+							 document.getElementById("MN000501").style.display = 'none';
+						}else{
+							 document.getElementById("MN000501").style.display = '';
+						}
+					}else if(result[i].mnu_cd == "MN000502"){
+						if(result[i].read_aut_yn == "N"){
+							 document.getElementById("MN000502").style.display = 'none';
+						}else{
+							 document.getElementById("MN000502").style.display = '';
+						}
+					}else if(result[i].mnu_cd == "MN000503"){
+						if(result[i].read_aut_yn == "N"){
+							 document.getElementById("MN000503").style.display = 'none';
+						}else{
+							 document.getElementById("MN000503").style.display = '';
+						}
 					}	
-				}else if(result[i].mnu_cd == "MN0006"){
-					if(result[i].read_aut_yn == "N"){
-						 document.getElementById("MN0006").style.display = 'none';
-					}else{
-						 document.getElementById("MN0006").style.display = '';
-					}
-				}else if(result[i].mnu_cd == "MN0007"){
-					if(result[i].read_aut_yn == "N"){
-						 document.getElementById("MN0007").style.display = 'none';
-					}else{
-						 document.getElementById("MN0007").style.display = '';
-					}
-				}else if(result[i].mnu_cd == "MN0008"){
+				} 
+		 			 				 		
+				if((result[17].mnu_cd == "MN000601" &&  result[17].read_aut_yn == "N")) {
+ 					document.getElementById("MN0006").style.display = 'none';
+				}else{
+					document.getElementById("MN0006").style.display = '';
+					if(result[i].mnu_cd == "MN000601"){
+						if(result[i].read_aut_yn == "N"){
+							 document.getElementById("MN000601").style.display = 'none';
+						}else{
+							 document.getElementById("MN000601").style.display = '';
+						}
+					}				
+				} 
+							
+				if((result[19].mnu_cd == "MN000701" &&  result[19].read_aut_yn == "N")) {
+ 					document.getElementById("MN0007").style.display = 'none';
+				}else{
+					document.getElementById("MN0007").style.display = '';
+					if(result[i].mnu_cd == "MN000701"){
+						if(result[i].read_aut_yn == "N"){
+							 document.getElementById("MN000701").style.display = 'none';
+						}else{
+							 document.getElementById("MN000701").style.display = '';
+						}
+					}				
+				} 
+				
+				 if(result[i].mnu_cd == "MN0008"){
 					if(result[i].read_aut_yn == "N"){
 						 document.getElementById("MN0008").style.display = 'none';
 					}else{
 						 document.getElementById("MN0008").style.display = '';
-					}
-				}else if(result[i].mnu_cd == "MN0009"){
-					if(result[i].read_aut_yn == "N"){
-						 document.getElementById("MN0009").style.display = 'none';
-					}else{
-						 document.getElementById("MN0009").style.display = '';
 					}
 				} 
 			}
@@ -176,7 +203,7 @@ function fn_cookie(url) {
 							<li><a href="#n" id="MN0005">권한관리</a>
 					        	<ul class="depth_3">
 									<li><a href="/menuAuthority.do" onClick="fn_cookie(null)" id="MN000501">메뉴권한관리</a></li>
-									<li><a href="/dbAuthority.do" onClick="fn_cookie(null)" id="MN000502">서버권한관리</a></li>
+									<li><a href="/dbAuthority.do" onClick="fn_cookie(null)" id="MN000502">DB서버 메뉴권한</a></li>
 									<li><a href="/dbAuthority.do" onClick="fn_cookie(null)" id="MN000503">DB권한관리</a></li>									
 								</ul>
 					        </li>	        					        

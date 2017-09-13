@@ -68,7 +68,7 @@ public class AccessHistoryController {
 		ModelAndView mv = new ModelAndView();
 		try {
 			CmmnUtils cu = new CmmnUtils();
-			menuAut = cu.selectMenuAut(menuAuthorityService, "MN0007");
+			menuAut = cu.selectMenuAut(menuAuthorityService, "MN000601");
 			
 			if(menuAut.get(0).get("read_aut_yn").equals("N")){
 				mv.setViewName("error/autError");
@@ -119,7 +119,7 @@ public class AccessHistoryController {
 		ModelAndView mv = new ModelAndView();
 		try {		
 			CmmnUtils cu = new CmmnUtils();
-			menuAut = cu.selectMenuAut(menuAuthorityService, "MN0007");
+			menuAut = cu.selectMenuAut(menuAuthorityService, "MN000601");
 			
 			if(menuAut.get(0).get("read_aut_yn").equals("N")){
 				mv.setViewName("error/autError");
@@ -201,7 +201,7 @@ public class AccessHistoryController {
 		Map<String, Object> param = new HashMap<String, Object>();
 		try {
 			CmmnUtils cu = new CmmnUtils();
-			menuAut = cu.selectMenuAut(menuAuthorityService, "MN0007");
+			menuAut = cu.selectMenuAut(menuAuthorityService, "MN000601");
 			
 			if(menuAut.get(0).get("read_aut_yn").equals("N")){
 				response.sendRedirect("/autError.do");
