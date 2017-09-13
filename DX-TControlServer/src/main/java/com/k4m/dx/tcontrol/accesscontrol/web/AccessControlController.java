@@ -149,8 +149,7 @@ public class AccessControlController {
 					
 					List<Object> result = cic.extension_select(serverObj,IP,PORT,strExtname);
 					if(result == null || result.size() == 0) {
-						String strExtName = "pgaudit";
-						mv.addObject("extName", strExtName);	
+						mv.addObject("extName", strExtname);	
 					}else{
 						mv.addObject("db_svr_nm", dbServerVO.getDb_svr_nm());
 						mv.addObject("db_svr_id", db_svr_id);	
