@@ -53,7 +53,7 @@
 			cnr_ipadr.focus();
 			return false;
 		}
-
+		
 		var cnr_portno = document.getElementById("cnr_portno");
 		if (cnr_portno.value == "") {
 			alert("포트를 입력하여 주십시오.");

@@ -205,7 +205,7 @@
 <div id="contents">
 	<div class="contents_wrap">
 		<div class="contents_tit">
-			<h4>전송대상 설정 <a href="#n"><img src="../images/ico_tit.png" alt="" /></a></h4>
+			<h4>전송대상 설정 화면<a href="#n"><img src="../images/ico_tit.png" alt="" /></a></h4>
 			<div class="location">
 				<ul>
 					<li>Transfer</li>
