@@ -56,6 +56,46 @@ public class DbAuthorityController {
 	
 	private List<Map<String, Object>> menuAut;
 	
+	
+	/**
+	 * DB서버 메뉴 권한관리 화면을 보여준다.
+	 * 
+	 * @param historyVO
+	 * @param request
+	 * @return ModelAndView mv
+	 * @throws Exception
+	 */
+	@RequestMapping(value = "/dbServerAuthority.do")
+	public ModelAndView dbServerAuthority(@ModelAttribute("historyVO") HistoryVO historyVO, HttpServletRequest request) {
+		
+		//해당메뉴 권한 조회 (공통메소드호출),
+		CmmnUtils cu = new CmmnUtils();
+		menuAut = cu.selectMenuAut(menuAuthorityService, "MN000502");
+				
+		ModelAndView mv = new ModelAndView();
+		try {
+			//읽기 권한이 없는경우 에러페이지 호출 [추후 Exception 처리예정]
+			if(menuAut.get(0).get("read_aut_yn").equals("N")){
+				mv.setViewName("error/autError");
+			}else{
+				
+				// DB권한관리 이력 남기기
+				CmmnUtils.saveHistory(request, historyVO);
+				historyVO.setExe_dtl_cd("DX-T0035");
+				accessHistoryService.insertHistory(historyVO);
+				
+				mv.addObject("read_aut_yn", menuAut.get(0).get("read_aut_yn"));
+				mv.addObject("wrt_aut_yn", menuAut.get(0).get("wrt_aut_yn"));
+				mv.setViewName("admin/dbAuthority/dbServerAuthority");
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return mv;
+
+	}
+	
+	
 	/**
 	 * DB권한관리 화면을 보여준다.
 	 * 
@@ -69,7 +109,7 @@ public class DbAuthorityController {
 		
 		//해당메뉴 권한 조회 (공통메소드호출),
 		CmmnUtils cu = new CmmnUtils();
-		menuAut = cu.selectMenuAut(menuAuthorityService, "MN0006");
+		menuAut = cu.selectMenuAut(menuAuthorityService, "MN000503");
 				
 		ModelAndView mv = new ModelAndView();
 		try {
@@ -77,6 +117,7 @@ public class DbAuthorityController {
 			if(menuAut.get(0).get("read_aut_yn").equals("N")){
 				mv.setViewName("error/autError");
 			}else{
+				
 				// DB권한관리 이력 남기기
 				CmmnUtils.saveHistory(request, historyVO);
 				historyVO.setExe_dtl_cd("DX-T0035");
@@ -146,7 +187,7 @@ public class DbAuthorityController {
 		
 		//해당메뉴 권한 조회 (공통메소드호출),
 		CmmnUtils cu = new CmmnUtils();
-		menuAut = cu.selectMenuAut(menuAuthorityService, "MN0006");
+		menuAut = cu.selectMenuAut(menuAuthorityService, "MN000502");
 		List<Map<String, Object>> resultSet = null;
 		
 		try {	
@@ -177,7 +218,7 @@ public class DbAuthorityController {
 		
 		//해당메뉴 권한 조회 (공통메소드호출),
 		CmmnUtils cu = new CmmnUtils();
-		menuAut = cu.selectMenuAut(menuAuthorityService, "MN0006");
+		menuAut = cu.selectMenuAut(menuAuthorityService, "MN000502");
 				
 		List<Map<String, Object>> resultSet = null;
 		
@@ -217,7 +258,7 @@ public class DbAuthorityController {
 		
 		//해당메뉴 권한 조회 (공통메소드호출),
 		CmmnUtils cu = new CmmnUtils();
-		menuAut = cu.selectMenuAut(menuAuthorityService, "MN0006");
+		menuAut = cu.selectMenuAut(menuAuthorityService, "MN000502");
 				
 		int cnt = 0; 
 		
@@ -262,7 +303,7 @@ public class DbAuthorityController {
 		
 		//해당메뉴 권한 조회 (공통메소드호출),
 		CmmnUtils cu = new CmmnUtils();
-		menuAut = cu.selectMenuAut(menuAuthorityService, "MN0006");
+		menuAut = cu.selectMenuAut(menuAuthorityService, "MN000503");
 				
 		List<Map<String, Object>> resultSet = null;		
 		try {	
@@ -292,7 +333,7 @@ public class DbAuthorityController {
 		
 		//해당메뉴 권한 조회 (공통메소드호출),
 		CmmnUtils cu = new CmmnUtils();
-		menuAut = cu.selectMenuAut(menuAuthorityService, "MN0006");
+		menuAut = cu.selectMenuAut(menuAuthorityService, "MN000503");
 				
 		List<Map<String, Object>> resultSet = null;		
 		try {	
@@ -329,7 +370,7 @@ public class DbAuthorityController {
 		
 		//해당메뉴 권한 조회 (공통메소드호출),
 		CmmnUtils cu = new CmmnUtils();
-		menuAut = cu.selectMenuAut(menuAuthorityService, "MN0006");
+		menuAut = cu.selectMenuAut(menuAuthorityService, "MN000503");
 				
 		int cnt = 0;
 		try {
