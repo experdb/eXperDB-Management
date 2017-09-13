@@ -32,12 +32,12 @@
 	<div class="contents_wrap">
 		<div class="contents_tit">
 			<h4>
-				개인정보 수정 <a href="#n"><img src="../images/ico_tit.png" alt="" /></a>
+				사용자정보관리 화면 <a href="#n"><img src="../images/ico_tit.png" alt="" /></a>
 			</h4>
 			<div class="location">
 				<ul>
 					<li>My PAGE</li>
-					<li class="on">개인정보 수정</li>
+					<li class="on">사용자정보관리</li>
 				</ul>
 			</div>
 		</div>

@@ -370,13 +370,13 @@ function fn_dataCompareChcek(svrDbList){
 <div id="contents">
 	<div class="contents_wrap">
 		<div class="contents_tit">
-			<h4>DB 서버 Tree 화면 <a href="#n"><img src="../images/ico_tit.png"alt="" /></a>
+			<h4>DBMS 등록 화면 <a href="#n"><img src="../images/ico_tit.png"alt="" /></a>
 			</h4>
 			<div class="location">
 				<ul>
 					<li>Admin</li>
-					<li>DB서버관리</li>
-					<li class="on">DB Tree</li>
+					<li>DBMS 정보</li>
+					<li class="on">DBMS 등록</li>
 				</ul>
 			</div>
 		</div>

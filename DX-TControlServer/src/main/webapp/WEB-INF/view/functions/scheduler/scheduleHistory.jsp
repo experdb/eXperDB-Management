@@ -109,12 +109,12 @@
 <div id="contents">
 	<div class="contents_wrap">
 		<div class="contents_tit">
-			<h4>스케줄이력 화면 <a href="#n"><img src="../images/ico_tit.png" alt="" /></a></h4>
+			<h4>스케줄 수행이력 화면 <a href="#n"><img src="../images/ico_tit.png" alt="" /></a></h4>
 			<div class="location">
 				<ul>
 					<li>Function</li>
-					<li>Scheduler</li>
-					<li class="on">스케줄이력</li>
+					<li>스케줄정보</li>
+					<li class="on">스케줄 수행이력</li>
 				</ul>
 			</div>
 		</div>

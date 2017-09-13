@@ -35,11 +35,12 @@
 			<div id="contents">
 				<div class="contents_wrap">
 					<div class="contents_tit">
-						<h4>Agent 모니터링 <a href="#n"><img src="../images/ico_tit.png" alt="" /></a></h4>
+						<h4>에이전트 모니터링 화면<a href="#n"><img src="../images/ico_tit.png" alt="" /></a></h4>
 						<div class="location">
 							<ul>
 								<li>Admin</li>
-								<li class="on">Agent 모니터링</li>
+								<li>모니터링</li>
+								<li class="on">에이전트 모니터링</li>
 							</ul>
 						</div>
 					</div>

@@ -179,12 +179,12 @@ function fn_regRe_popup(){
 <div id="contents">
 	<div class="contents_wrap">
 		<div class="contents_tit">
-			<h4>DB 서버 화면 <a href="#n"><img src="../images/ico_tit.png" alt="" /></a></h4>
+			<h4>DBMS 관리 화면 <a href="#n"><img src="../images/ico_tit.png" alt="" /></a></h4>
 			<div class="location">
 				<ul>
 					<li>Admin</li>
-					<li>DB서버관리</li>
-					<li class="on">DB 서버</li>
+					<li>DBMS 정보</li>
+					<li class="on">DBMS 관리</li>
 				</ul>
 			</div>
 		</div>

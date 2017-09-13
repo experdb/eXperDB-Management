@@ -122,11 +122,12 @@
 	<div id="contents">
 		<div class="contents_wrap">
 			<div class="contents_tit">
-				<h4>사용자 접근내역화면 <a href="#n"><img src="../images/ico_tit.png" alt="" /></a></h4>
+				<h4>화면접근이력 화면 <a href="#n"><img src="../images/ico_tit.png" alt="" /></a></h4>
 					<div class="location">
 						<ul>
 							<li>Admin</li>
-							<li class="on">사용자 접근내역</li>
+							<li>이력관리</li>
+							<li class="on">화면접근이력</li>
 						</ul>
 					</div>
 				</div>

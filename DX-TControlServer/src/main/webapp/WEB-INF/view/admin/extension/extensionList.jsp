@@ -149,12 +149,12 @@ $(function() {
 <div id="contents">
 	<div class="contents_wrap">
 		<div class="contents_tit">
-			<h4>확장설치조회 화면 <a href="#n"><img src="../images/ico_tit.png"alt="" /></a>
+			<h4>확장팩설치정보 화면 <a href="#n"><img src="../images/ico_tit.png"alt="" /></a>
 			</h4>
 			<div class="location">
 				<ul>
 					<li>Admin</li>
-					<li>확장설치조회</li>
+					<li>확장팩설치정보</li>
 
 				</ul>
 			</div>

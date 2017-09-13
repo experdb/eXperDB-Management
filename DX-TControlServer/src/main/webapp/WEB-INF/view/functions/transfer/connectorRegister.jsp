@@ -189,12 +189,12 @@
 <div id="contents">
 	<div class="contents_wrap">
 		<div class="contents_tit">
-			<h4>Kafka-Connector 등록 화면 <a href="#n"><img src="../images/ico_tit.png"alt="" /></a></h4>
+			<h4>커넥터 등록 화면 <a href="#n"><img src="../images/ico_tit.png"alt="" /></a></h4>
 			<div class="location">
 				<ul>
 					<li>Function</li>
-					<li>Transfer</li>
-					<li class="on">Kafka-Connector 등록</li>
+					<li>데이터전송정보</li>
+					<li class="on">커넥터 등록</li>
 				</ul>
 			</div>
 		</div>
