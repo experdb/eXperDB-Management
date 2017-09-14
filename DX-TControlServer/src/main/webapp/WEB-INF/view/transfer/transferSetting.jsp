@@ -212,7 +212,7 @@
 	<div class="contents_wrap">
 		<div class="contents_tit">
 			<h4>
-				전송설정 화면 <a href="#n"><img src="../images/ico_tit.png" alt="" /></a>
+				데이터 전송설정 화면 <a href="#n"><img src="../images/ico_tit.png" alt="" /></a>
 			</h4>
 			<div class="location">
 				<ul>

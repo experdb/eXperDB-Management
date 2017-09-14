@@ -223,12 +223,11 @@ function fn_modifyScheduleListView(){
 <div id="contents">
 	<div class="contents_wrap">
 		<div class="contents_tit">
-			<h4>스케쥴 리스트화면 <a href="#n"><img src="../images/ico_tit.png" alt="" /></a></h4>
+			<h4>My스케줄 화면 <a href="#n"><img src="../images/ico_tit.png" alt="" /></a></h4>
 			<div class="location">
 				<ul>
-					<li>Function</li>
-					<li>Scheduler</li>
-					<li class="on">스케쥴 리스트</li>
+					<li>My PAGE</li>
+					<li class="on">My스케줄</li>
 				</ul>
 			</div>
 		</div>

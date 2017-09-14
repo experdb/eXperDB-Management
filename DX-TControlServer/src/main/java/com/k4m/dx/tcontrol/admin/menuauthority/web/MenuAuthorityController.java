@@ -68,7 +68,7 @@ public class MenuAuthorityController {
 		
 		//해당메뉴 권한 조회 (공통메소드호출),
 		CmmnUtils cu = new CmmnUtils();
-		menuAut = cu.selectMenuAut(menuAuthorityService, "MN0005");
+		menuAut = cu.selectMenuAut(menuAuthorityService, "MN000501");
 				
 		ModelAndView mv = new ModelAndView();
 		try {
@@ -105,7 +105,7 @@ public class MenuAuthorityController {
 		
 		//해당메뉴 권한 조회 (공통메소드호출),
 		CmmnUtils cu = new CmmnUtils();
-		menuAut = cu.selectMenuAut(menuAuthorityService, "MN0005");
+		menuAut = cu.selectMenuAut(menuAuthorityService, "MN000501");
 				
 		List<UserVO> resultSet = null;
 		Map<String, Object> param = new HashMap<String, Object>();
@@ -146,7 +146,7 @@ public class MenuAuthorityController {
 		
 		//해당메뉴 권한 조회 (공통메소드호출),
 		CmmnUtils cu = new CmmnUtils();
-		menuAut = cu.selectMenuAut(menuAuthorityService, "MN0005");
+		menuAut = cu.selectMenuAut(menuAuthorityService, "MN000501");
 				
 		List<MenuAuthorityVO> resultSet = null;
 		try {		
@@ -183,7 +183,7 @@ public class MenuAuthorityController {
 		
 		//해당메뉴 권한 조회 (공통메소드호출),
 		CmmnUtils cu = new CmmnUtils();
-		menuAut = cu.selectMenuAut(menuAuthorityService, "MN0005");
+		menuAut = cu.selectMenuAut(menuAuthorityService, "MN000501");
 				
 		List<MenuAuthorityVO> resultSet = null;
 		try {		
@@ -213,7 +213,7 @@ public class MenuAuthorityController {
 	public void updateUsrMnuAut(@ModelAttribute("historyVO") HistoryVO historyVO, HttpServletRequest request, HttpServletResponse response) {
 		//해당메뉴 권한 조회 (공통메소드호출),
 		CmmnUtils cu = new CmmnUtils();
-		menuAut = cu.selectMenuAut(menuAuthorityService, "MN0005");
+		menuAut = cu.selectMenuAut(menuAuthorityService, "MN000501");
 
 		try {
 			//쓰기 권한이 없는경우 에러페이지 호출 [추후 Exception 처리예정]

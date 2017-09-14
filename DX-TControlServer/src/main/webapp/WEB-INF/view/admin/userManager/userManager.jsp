@@ -200,7 +200,7 @@ function fn_delete(){
 	<div class="contents_wrap">
 		<div class="contents_tit">
 			<h4>
-				사용자 관리화면 <a href="#n"><img src="../images/ico_tit.png" alt="" /></a>
+				사용자 관리 화면 <a href="#n"><img src="../images/ico_tit.png" alt="" /></a>
 			</h4>
 			<div class="location">
 				<ul>

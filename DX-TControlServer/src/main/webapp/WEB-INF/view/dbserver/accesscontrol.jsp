@@ -294,7 +294,7 @@
 	<div class="contents_wrap">
 		<div class="contents_tit">
 			<h4>
-				접근제어 리스트 <a href="#n"><img src="../images/ico_tit.png" alt="" /></a>
+				서버접근제어 화면<a href="#n"><img src="../images/ico_tit.png" alt="" /></a>
 			</h4>
 			<div class="location">
 				<ul>
@@ -334,7 +334,7 @@
 							<span class="btn" onclick="fn_insert();"><button>등록</button></span>
 							<span class="btn" onclick="fn_update();"><button>수정</button></span>
 							<span class="btn" onclick="fn_delete();"><button>삭제</button></span>
-							<span class="btn" onclick="fn_save();"><button>저장</button></span>
+							<span class="btn" onclick="fn_save();"><button>적용</button></span>
 						</div>
 						<div class="inner">
 							<p class="tit">접근제어 리스트</p>
