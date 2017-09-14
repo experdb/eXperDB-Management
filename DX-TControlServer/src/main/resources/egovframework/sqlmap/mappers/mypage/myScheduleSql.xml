@@ -12,26 +12,27 @@
        SELECT 
       		(ROW_NUMBER() OVER()) AS ROWNUM
 			, (ROW_NUMBER() OVER()) AS IDX
-      		, SCD_ID
-			, SCD_NM
-            , SCD_EXP
-			, EXE_PERD_CD
-			, EXE_DT
-			, EXE_HMS
-			, TO_CHAR(PREV_EXE_DTM,'YYYY-MM-DD HH24:MI:SS') AS PREV_EXE_DTM
-			, TO_CHAR(NXT_EXE_DTM,'YYYY-MM-DD HH24:MI:SS') AS NXT_EXE_DTM
-			, FRST_REGR_ID
-			, TO_CHAR(FRST_REG_DTM,'YYYY-MM-DD HH24:MI:SS') AS FRST_REG_DTM
-			, LST_MDFR_ID
-			, TO_CHAR(LST_MDF_DTM,'YYYY-MM-DD HH24:MI:SS') AS LST_MDF_DTM
-      FROM T_SCD_M
+      		, A.SCD_ID
+			, A.SCD_NM
+            , A.SCD_EXP
+			, A.EXE_PERD_CD
+			, A.EXE_DT
+			, A.EXE_HMS
+			, (SELECT COUNT(*) FROM T_SCD_D WHERE SCD_ID = A.SCD_ID) AS WRK_CNT
+			, TO_CHAR(A.PREV_EXE_DTM,'YYYY-MM-DD HH24:MI:SS') AS PREV_EXE_DTM
+			, TO_CHAR(A.NXT_EXE_DTM,'YYYY-MM-DD HH24:MI:SS') AS NXT_EXE_DTM
+			, A.FRST_REGR_ID
+			, TO_CHAR(A.FRST_REG_DTM,'YYYY-MM-DD HH24:MI:SS') AS FRST_REG_DTM
+			, A.LST_MDFR_ID
+			, TO_CHAR(A.LST_MDF_DTM,'YYYY-MM-DD HH24:MI:SS') AS LST_MDF_DTM
+      FROM T_SCD_M A
       WHERE 1=1	
-      AND LST_MDFR_ID = #{lst_mdfr_id}
+      AND A.LST_MDFR_ID = #{lst_mdfr_id}
       <if test="scd_nm != null and scd_nm != '' ">
-      AND SCD_NM LIKE  '%' || #{scd_nm} || '%'
+      AND A.SCD_NM LIKE  '%' || #{scd_nm} || '%'
 	  </if>
       <if test="scd_exp != null and scd_exp != '' ">
-      	AND SCD_EXP LIKE CONCAT('%',#{scd_exp},'%')
+      	AND A.SCD_EXP LIKE CONCAT('%',#{scd_exp},'%')
       </if>
     </select>	
 	

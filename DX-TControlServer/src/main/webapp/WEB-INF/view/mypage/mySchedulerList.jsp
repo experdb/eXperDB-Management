@@ -19,6 +19,7 @@ function fn_init(){
 		{data : "idx", className : "dt-center", defaultContent : ""}, 
 		{data : "scd_nm", className : "dt-center", defaultContent : ""},
 		{data : "scd_exp", className : "dt-center", defaultContent : ""}, 
+		{data : "wrk_cnt", className : "dt-center", defaultContent : ""}, 
 		{data : "prev_exe_dtm", className : "dt-center", defaultContent : ""}, 
 		{data : "nxt_exe_dtm", className : "dt-center", defaultContent : ""}, 
 		{data : "status", 
@@ -112,6 +113,22 @@ function fn_init(){
 	       }
 	    } 
 	}); 
+ 	
+ 	
+	//더블 클릭시
+	 $('#scheduleList tbody').on('dblclick','tr',function() {
+		var scd_id = table.row(this).data().scd_id;
+		
+		var popUrl = "/scheduleWrkListVeiw.do?scd_id="+scd_id; // 서버 url 팝업경로
+		var width = 1120;
+		var height = 655;
+		var left = (window.screen.width / 2) - (width / 2);
+		var top = (window.screen.height /2) - (height / 2);
+		var popOption = "width="+width+", height="+height+", top="+top+", left="+left+", resizable=no, scrollbars=yes, status=no, toolbar=no, titlebar=yes, location=no,";
+				
+		window.open(popUrl,"",popOption);
+	});		 
+	
 }
 
 
@@ -268,6 +285,7 @@ function fn_modifyScheduleListView(){
 							<th>No</th>
 							<th>스케줄명</th>
 							<th>설명</th>
+							<th>Work갯수</th>
 							<th>이전수행시간</th>
 							<th>다음수행시간</th>
 							<th>구동상태</th>

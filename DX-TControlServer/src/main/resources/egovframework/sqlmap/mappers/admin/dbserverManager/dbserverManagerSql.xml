@@ -12,6 +12,7 @@
           SELECT 
                   (ROW_NUMBER() OVER()) AS ROWNUM
 				, (ROW_NUMBER() OVER()) AS IDX
+				, DB_SVR_ID
                 , DB_ID
                 , DB_NM
                 , DB_USR_ID

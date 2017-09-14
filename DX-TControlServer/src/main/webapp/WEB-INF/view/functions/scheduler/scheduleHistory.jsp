@@ -131,11 +131,12 @@
 							<col style="width: 150px;" />
 							<col style="width: 350px;" />
 							<col style="width: 150px;" />
-					
+							<col style="width: 350px;" />
+							<col style="width: 150px;" />
 						</colgroup>
 						<tbody>
 								<tr>
-									<th scope="row" class="t10" >접근일자</th>
+									<th scope="row" class="t10" >작업일자</th>
 									<td>
 										<div class="calendar_area">
 											<a href="#n" class="calendar_btn">달력열기</a> 
@@ -147,7 +148,7 @@
 								</tr>
 								 <tr>
 									<th scope="row" class="t9 line" >스케줄명</th>
-									<td><input type="text" class="txt t2" id="scd_nm" name="scd_nm"/ style="width: 700px;"></td>
+									<td><input type="text" class="txt t2" id="scd_nm" name="scd_nm" style="width: 700px;"></td>
 								</tr>
 								<tr>
 									<th scope="row" class="t9 line">DB 서버명</th>
@@ -164,6 +165,8 @@
 												<option value="TC001702">실패</option>
 										</select>	
 									</td>
+									<th scope="row" class="t9 line" >WORK명</th>
+									<td><input type="text" class="txt t2" id="wrk_nm" name="wrk_nm" style="width: 200px;"></td>
 								</tr>		
 						</tbody>
 					</table>
@@ -186,8 +189,8 @@
 							<tr style="border-bottom: 1px solid #b8c3c6;">
 								<th scope="col">NO</th>
 								<th scope="col">스케줄명</th>
-								<th scope="col">서버명</th>
 								<th scope="col">Work명</th>
+								<th scope="col">서버명</th>							
 								<th scope="col">작업시작일시</th>
 								<th scope="col">작업종료일시</th>
 								<th scope="col">결과</th>
@@ -198,11 +201,20 @@
 								<tr>
 									<td><c:out value="${paginationInfo.totalRecordCount+1 - ((pagingVO.pageIndex-1) * pagingVO.pageSize + status.count)}" /></td>
 									<td><c:out value="${result.scd_nm}" /></td>
-									<td><c:out value="${result.db_svr_nm}" /></td>
-									<td><c:out value="${result.wrk_nm}" /></td>									
+									<td><c:out value="${result.wrk_nm}" /></td>	
+									<td><c:out value="${result.db_svr_nm}" /></td>								
 									<td><c:out value="${result.wrk_strt_dtm}" /></td>
 									<td><c:out value="${result.wrk_end_dtm}" /></td>
-									<td><c:out value="${result.exe_result}" /></td>
+									<td>
+										<c:choose>
+											<c:when test="${result.exe_result eq 'Success'}">
+											    <img src="../images/ico_w_20.png" alt="" />
+											</c:when>
+									    	<c:otherwise>
+									    		<img src="../images/ico_w_19.png" alt="" />
+									    	</c:otherwise>
+										</c:choose>	
+									</td>
 								</tr>
 							</c:forEach>
 						</tbody>

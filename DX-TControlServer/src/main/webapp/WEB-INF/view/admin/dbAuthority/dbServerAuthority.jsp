@@ -80,14 +80,14 @@
 				var parseData = $.parseJSON(result);
 			 	var html1 = "";
 			 	html1+='<table class="db_table">';
-				html1+='<caption>DB서버 권한</caption>';
+				html1+='<caption>DB서버 메뉴</caption>';
 				html1+='<colgroup>';
 				html1+=	'<col style="width:70%" />';
 				html1+=	'<col style="width:30%" />';
 				html1+='</colgroup>';
 				html1+='<thead>';
 				html1+=	'<tr>';
-				html1+=		'<th scope="col">DB서버 권한</th>';
+				html1+=		'<th scope="col">DB서버 메뉴</th>';
 				html1+=		'<th scope="col">권한</th>';
 				html1+=	'</tr>';
 				html1+='</thead>';
@@ -312,11 +312,12 @@
 			<div id="contents">
 				<div class="contents_wrap">
 					<div class="contents_tit">
-						<h4>DB 권한 관리 <a href="#n"><img src="../images/ico_tit.png" alt="" /></a></h4>
+						<h4>서버권한관리 <a href="#n"><img src="../images/ico_tit.png" alt="" /></a></h4>
 						<div class="location">
 							<ul>
 								<li>Admin</li>
-								<li class="on">DB 권한 관리</li>
+								<li>권한관리</li>
+								<li class="on">서버권한관리</li>
 							</ul>
 						</div>
 					</div>
@@ -352,7 +353,7 @@
 										<span class="btn"><button onClick="fn_svr_save();" id="server_button">저장</button></span>
 									</div>
 									<div class="inner">
-										<p class="tit">DB서버 권한</p>
+										<p class="tit">DB서버 메뉴권한 관리</p>
 										<div class="overflow_area">
 											<div id="svrAutList"></div>
 										</div>

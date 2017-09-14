@@ -77,7 +77,7 @@
       AND WRK_ID IN
       <foreach item="item" index="index" collection="work_id" open="(" separator="," close=")"> 
 				 #{item}::numeric
-		</foreach>
+	   </foreach>
     </select>
     
    
@@ -178,30 +178,31 @@
        SELECT 
       		(ROW_NUMBER() OVER()) AS ROWNUM
 			, (ROW_NUMBER() OVER()) AS IDX
-      		, SCD_ID
-			, SCD_NM
-            , SCD_EXP
-			, EXE_PERD_CD
-			, EXE_DT
-			, EXE_MONTH
-			, EXE_DAY
-			, EXE_HMS
-			, TO_CHAR(PREV_EXE_DTM,'YYYY-MM-DD HH24:MI:SS') AS PREV_EXE_DTM
-			, TO_CHAR(NXT_EXE_DTM,'YYYY-MM-DD HH24:MI:SS') AS NXT_EXE_DTM
+      		, A.SCD_ID
+			, A.SCD_NM
+            , A.SCD_EXP
+			, A.EXE_PERD_CD
+			, A.EXE_DT
+			, A.EXE_MONTH
+			, A.EXE_DAY
+			, A.EXE_HMS
+			, (SELECT COUNT(*) FROM T_SCD_D WHERE SCD_ID = A.SCD_ID) AS WRK_CNT
+			, TO_CHAR(A.PREV_EXE_DTM,'YYYY-MM-DD HH24:MI:SS') AS PREV_EXE_DTM
+			, TO_CHAR(A.NXT_EXE_DTM,'YYYY-MM-DD HH24:MI:SS') AS NXT_EXE_DTM
 			, FRST_REGR_ID
-			, TO_CHAR(FRST_REG_DTM,'YYYY-MM-DD HH24:MI:SS') AS FRST_REG_DTM
+			, TO_CHAR(A.FRST_REG_DTM,'YYYY-MM-DD HH24:MI:SS') AS FRST_REG_DTM
 			, LST_MDFR_ID
-			, TO_CHAR(LST_MDF_DTM,'YYYY-MM-DD HH24:MI:SS') AS LST_MDF_DTM
-      FROM T_SCD_M
+			, TO_CHAR(A.LST_MDF_DTM,'YYYY-MM-DD HH24:MI:SS') AS LST_MDF_DTM
+      FROM T_SCD_M A
       WHERE 1=1	
       <if test="scd_nm != null and scd_nm != '' ">
-      AND SCD_NM LIKE  '%' || #{scd_nm} || '%'
+      AND A.SCD_NM LIKE  '%' || #{scd_nm} || '%'
 	  </if>
       <if test="scd_exp != null and scd_exp != '' ">
-      	AND SCD_EXP LIKE CONCAT('%',#{scd_exp},'%')
+      	AND A.SCD_EXP LIKE CONCAT('%',#{scd_exp},'%')
       </if>
       <if test="scd_cndt != null and scd_cndt != '' ">
-      	AND SCD_CNDT LIKE  '%' || #{scd_cndt} || '%'
+      	AND A.SCD_CNDT LIKE  '%' || #{scd_cndt} || '%'
       </if>
     </select>	
     
@@ -481,4 +482,31 @@
 		FROM T_SCD_M
 		WHERE SCD_NM = #{scd_nm}
 	</select>	
+	
+	
+		<select id="selectWrkScheduleList" resultType="Map" parameterType="HashMap">
+		/**
+	 	* Query ID : selectWrkScheduleList
+	 	* Description :  work List 조회
+	 	* Author : 변승우
+	 	**/
+	 	SELECT 
+      		(ROW_NUMBER() OVER()) AS ROWNUM
+      		,(ROW_NUMBER() OVER()) AS IDX
+      		, A.WRK_ID
+			, A.DB_SVR_ID
+            , B.SCD_ID
+            , (SELECT DB_SVR_NM FROM T_DBSVR_I WHERE A.DB_SVR_ID = DB_SVR_ID ) AS DB_SVR_NM
+			, A.DB_ID
+			, (CASE WHEN DB_ID>0 THEN (SELECT DB_NM FROM T_DB_I WHERE A.DB_ID=DB_ID AND USEYN = 'Y') ELSE '' END) AS DB_NM
+			, A.BCK_BSN_DSCD
+			, (SELECT SYS_CD_NM FROM T_SYSDTL_C WHERE A.BCK_BSN_DSCD = SYS_CD ) AS BCK_BSN_DSCD_NM
+			, A.WRK_NM
+			, A.WRK_EXP
+			, 'N' AS NXT_EXE_YN
+      FROM T_WRKCNG_I A, T_SCD_D B
+      WHERE 1=1
+      AND A.WRK_ID = B.WRK_ID
+      AND B.SCD_ID = #{scd_id}
+	 	</select>
 </mapper>

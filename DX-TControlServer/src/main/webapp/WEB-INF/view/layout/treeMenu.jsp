@@ -217,7 +217,7 @@
 				<div class="logout">
 					<a href="#"><button onClick="fn_logout();">LOGOUT</button></a>
 				</div>
-				<div id="treeTitle"><img src="../images/ico_lnb_1.png" id="treeImg">DB 서버
+				<div id="treeTitle"><img src="../images/ico_lnb_1.png" id="treeImg"><a href="/dbTree.do">DB 서버</a>
 					<div id="sidetreecontrol" style="float: right;">
 						<a href="?#"><img src="../images/ico_lnb_close.png"></a>
 						<a href="?#"><img src="../images/ico_lnb_open.png"></a>

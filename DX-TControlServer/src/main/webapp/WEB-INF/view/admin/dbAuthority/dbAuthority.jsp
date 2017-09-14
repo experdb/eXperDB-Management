@@ -248,11 +248,12 @@
 			<div id="contents">
 				<div class="contents_wrap">
 					<div class="contents_tit">
-						<h4>DB 권한 관리 <a href="#n"><img src="../images/ico_tit.png" alt="" /></a></h4>
+						<h4>DB권한관리 <a href="#n"><img src="../images/ico_tit.png" alt="" /></a></h4>
 						<div class="location">
 							<ul>
 								<li>Admin</li>
-								<li class="on">DB 권한 관리</li>
+								<li>권한관리</li>
+								<li class="on">DB권한관리</li>
 							</ul>
 						</div>
 					</div>

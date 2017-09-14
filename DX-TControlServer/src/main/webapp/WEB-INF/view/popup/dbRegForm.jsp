@@ -123,7 +123,9 @@ function fn_svr_db(db_svr_nm, db_svr_id){
 function fn_dataCompareChcek(svrDbList,db_svr_id){
 	$.ajax({
 		url : "/selectDBList.do",
-		data : {},
+		data : {
+			db_svr_id:db_svr_id
+		},
 		async:true,
 		dataType : "json",
 		type : "post",

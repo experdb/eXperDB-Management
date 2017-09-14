@@ -45,6 +45,9 @@
 		<if test="scd_nm != null and scd_nm != '' ">
 			AND C.SCD_NM LIKE #{scd_nm}
 		</if>		
+		<if test="wrk_nm != null and wrk_nm != '' ">
+			AND B.WRK_NM LIKE #{wrk_nm}
+		</if>	
 		AND A.EXE_RSLT_CD LIKE #{exe_result}
 		ORDER BY WRK_END_DTM DESC
 		LIMIT #{recordCountPerPage} OFFSET #{firstIndex} )A
@@ -73,6 +76,10 @@
 		<if test="scd_nm != null and scd_nm != '' ">
 			AND C.SCD_NM LIKE #{scd_nm}
 		</if>
+		<if test="wrk_nm != null and wrk_nm != '' ">
+			AND B.WRK_NM LIKE #{wrk_nm}
+		</if>	
+		AND A.EXE_RSLT_CD LIKE #{exe_result}
 	</select>
 	
 	

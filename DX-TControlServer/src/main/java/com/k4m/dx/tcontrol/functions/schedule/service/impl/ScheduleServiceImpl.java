@@ -218,4 +218,10 @@ public class ScheduleServiceImpl implements ScheduleService{
 	public int scd_nmCheck(String scd_nm) throws Exception {
 		return scheduleDAO.scd_nmCheck( scd_nm);
 	}
+
+
+	@Override
+	public List<Map<String, Object>> selectWrkScheduleList(int scd_id) throws Exception {
+		return scheduleDAO.selectWrkScheduleList(scd_id);
+	}
 }

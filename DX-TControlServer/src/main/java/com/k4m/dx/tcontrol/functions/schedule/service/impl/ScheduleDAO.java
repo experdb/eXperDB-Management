@@ -142,4 +142,11 @@ public class ScheduleDAO extends EgovAbstractMapper{
 		return resultSet;
 	}
 
+
+	public List<Map<String, Object>> selectWrkScheduleList(int scd_id) {
+		List<Map<String, Object>> sl = null;
+		sl = (List<Map<String, Object>>) list("scheduleSql.selectWrkScheduleList", scd_id);		
+		return sl;
+	}
+
 }

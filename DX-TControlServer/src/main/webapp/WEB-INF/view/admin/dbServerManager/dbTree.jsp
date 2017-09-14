@@ -338,8 +338,7 @@ function fn_dataCompareChcek(svrDbList){
 			}
 		},
 		success : function(result) {
-		//	var db_svr_id =  table_dbServer.row('.selected').data().db_svr_id
-		
+			//var db_svr_id =  table_dbServer.row('.selected').data().db_svr_id
 			if(svrDbList.data.length>0){
  				for(var i = 0; i<svrDbList.data.length; i++){
 					for(var j = 0; j<result.length; j++){						
@@ -353,7 +352,7 @@ function fn_dataCompareChcek(svrDbList){
 					for(var j = 0; j<result.length; j++){
 						list[j].value = result[j].db_exp;
 						if(result[j].useyn == "Y"){
-							 if(db_svr_id == result[j].db_svr_id && svrDbList.data[i].dft_db_nm == result[j].db_nm){										 
+							 if(db_svr_id == result[j].db_svr_id && svrDbList.data[i].dft_db_nm == result[j].db_nm){			
 								 $('input', table_db.rows(i).nodes()).prop('checked', true); 
 								 table_db.rows(i).nodes().to$().addClass('selected');	
 							}

@@ -203,7 +203,7 @@ function fn_cookie(url) {
 							<li><a href="#n" id="MN0005">권한관리</a>
 					        	<ul class="depth_3">
 									<li><a href="/menuAuthority.do" onClick="fn_cookie(null)" id="MN000501">메뉴권한관리</a></li>
-									<li><a href="/dbServerAuthority.do" onClick="fn_cookie(null)" id="MN000502">DB서버 메뉴권한</a></li>
+									<li><a href="/dbServerAuthority.do" onClick="fn_cookie(null)" id="MN000502">서버권한관리</a></li>
 									<li><a href="/dbAuthority.do" onClick="fn_cookie(null)" id="MN000503">DB권한관리</a></li>									
 								</ul>
 					        </li>	        					        

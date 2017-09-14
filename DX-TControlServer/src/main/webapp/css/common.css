@@ -23,7 +23,7 @@ caption,legend{line-height:0;font-size:1px;overflow:hidden;}
 hr{display:none;}
 em{font-style:normal;}
 header,section,nav,hgroup,footer,aside,article,figure{display:block;}
-a{color:#000;text-decoration:none;}
+a{color:#ff9900;text-decoration:none;}
 a:link,a:hover,a:active{text-decoration:none;}
 .ui-loader{display:none;}
 input[type="password"]{font-family:돋움, Dotum, Arial, sans-serif;}

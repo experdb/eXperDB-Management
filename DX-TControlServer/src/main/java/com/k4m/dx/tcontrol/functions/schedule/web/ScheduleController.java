@@ -421,6 +421,7 @@ public class ScheduleController {
 					mp.put("frst_reg_dtm", result.get(i).get("frst_reg_dtm"));
 					mp.put("lst_mdfr_id", result.get(i).get("lst_mdfr_id"));
 					mp.put("lst_mdf_dtm", result.get(i).get("lst_mdfr_id"));
+					mp.put("wrk_cnt", result.get(i).get("wrk_cnt"));
 					for(int j=0; j<scheduler.getJobGroupNames().size(); j++){	
 						if(result.get(i).get("scd_id").toString().equals(scheduler.getJobGroupNames().get(j).toString())){	
 							mp.put("status", "s");
@@ -735,5 +736,78 @@ public class ScheduleController {
 			e.printStackTrace();
 		}
 		return "true";
+	}
+	
+	
+	
+	/**
+	 * 스케줄 WRK 리스트 화면을 보여준다.
+	 * 
+	 * @param
+	 * @return ModelAndView mv
+	 * @throws Exception
+	 */
+	@RequestMapping(value = "/scheduleWrkListVeiw.do")
+	public ModelAndView scheduleWrkListVeiw(@ModelAttribute("historyVO") HistoryVO historyVO, HttpServletRequest request, HttpServletResponse response) {
+		
+		//해당메뉴 권한 조회 (공통메소드호출)
+		CmmnUtils cu = new CmmnUtils();
+		menuAut = cu.selectMenuAut(menuAuthorityService, "MN000102");
+		
+		ModelAndView mv = new ModelAndView();
+		
+		try {
+			//쓰기 권한이 없는경우 error페이지 호출 , [추후 Exception 처리예정]
+			if(menuAut.get(0).get("wrt_aut_yn").equals("N")){
+				mv.setViewName("error/autError");
+			}else{	
+				//이력 남기기
+				CmmnUtils.saveHistory(request, historyVO);
+				historyVO.setExe_dtl_cd("DX-T0039_03");
+				accessHistoryService.insertHistory(historyVO);
+				
+				String scd_id = request.getParameter("scd_id");
+				mv.addObject("read_aut_yn", menuAut.get(0).get("read_aut_yn"));
+				mv.addObject("wrt_aut_yn", menuAut.get(0).get("wrt_aut_yn"));
+				mv.setViewName("popup/scheduleWrkList");
+				mv.addObject("scd_id", scd_id);
+			}			
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return mv;
+	}
+	
+	
+	
+	/**
+	 *  WRK 리스트 정보 조회
+	 * 
+	 * @param
+	 * @return 
+	 * @throws Exception
+	 */
+	@RequestMapping(value = "/selectWrkScheduleList.do")
+	@ResponseBody
+	public List<Map<String, Object>> selectWrkScheduleList(@ModelAttribute("historyVO") HistoryVO historyVO, HttpServletRequest request, HttpServletResponse response) {
+		
+		//해당메뉴 권한 조회 (공통메소드호출)
+		CmmnUtils cu = new CmmnUtils();
+		menuAut = cu.selectMenuAut(menuAuthorityService, "MN000102");
+		
+		List<Map<String, Object>> result = null;
+		try {		
+			//읽기 권한이 없는경우 error페이지 호출 , [추후 Exception 처리예정]
+			if(menuAut.get(0).get("read_aut_yn").equals("N")){	
+				response.sendRedirect("/autError.do");
+			}else{
+				int scd_id  = Integer.parseInt(request.getParameter("scd_id").toString());
+				result = scheduleService.selectWrkScheduleList(scd_id);
+			}
+
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return result;		
 	}
 }

@@ -20,7 +20,8 @@ function fn_init(){
 		{data : "rownum", defaultContent : "", targets : 0, orderable : false, checkboxes : {'selectRow' : true}}, 
 		{data : "idx", className : "dt-center", defaultContent : ""}, 
 		{data : "scd_nm", className : "dt-center", defaultContent : ""},
-		{data : "scd_exp", className : "dt-center", defaultContent : ""}, 
+		{data : "scd_exp", className : "dt-center", defaultContent : ""},
+		{data : "wrk_cnt", className : "dt-center", defaultContent : ""}, //work갯수
 		{data : "prev_exe_dtm", className : "dt-center", defaultContent : ""}, 
 		{data : "nxt_exe_dtm", className : "dt-center", defaultContent : ""}, 
 		{data : "status", 
@@ -116,6 +117,20 @@ function fn_init(){
 	       }
 	    } 
 	}); 
+ 	
+	//더블 클릭시
+	 $('#scheduleList tbody').on('dblclick','tr',function() {
+		var scd_id = table.row(this).data().scd_id;
+		
+		var popUrl = "/scheduleWrkListVeiw.do?scd_id="+scd_id; // 서버 url 팝업경로
+		var width = 1120;
+		var height = 655;
+		var left = (window.screen.width / 2) - (width / 2);
+		var top = (window.screen.height /2) - (height / 2);
+		var popOption = "width="+width+", height="+height+", top="+top+", left="+left+", resizable=no, scrollbars=yes, status=no, toolbar=no, titlebar=yes, location=no,";
+				
+		window.open(popUrl,"",popOption);
+	});		 
 }
 
 
@@ -127,6 +142,9 @@ function fn_init(){
  * 페이지 시작시 함수
  ******************************************************** */
 $(window.document).ready(function() {
+	fn_makeHour();
+	fn_makeMin();
+	
 	scd_cndt = "${scd_cndt}";
 	fn_buttonAut();
 	fn_init();
@@ -247,6 +265,50 @@ function fn_modifyScheduleListView(){
 	return;
 	
 }
+
+
+/* ********************************************************
+ * 시간
+ ******************************************************** */
+function fn_makeHour(){
+	var hour = "";
+	var hourHtml ="";
+	
+	hourHtml += '<select class="select t7" name="exe_h" id="exe_h">';	
+	for(var i=0; i<=23; i++){
+		if(i >= 0 && i<10){
+			hour = "0" + i;
+		}else{
+			hour = i;
+		}
+		hourHtml += '<option value="'+hour+'">'+hour+'</option>';
+	}
+	hourHtml += '</select> 시';	
+	$( "#b_hour" ).append(hourHtml);
+	$( "#a_hour" ).append(hourHtml);
+}
+
+
+/* ********************************************************
+ * 분
+ ******************************************************** */
+function fn_makeMin(){
+	var min = "";
+	var minHtml ="";
+	
+	minHtml += '<select class="select t7" name="exe_m" id="exe_m">';	
+	for(var i=0; i<=59; i++){
+		if(i >= 0 && i<10){
+			min = "0" + i;
+		}else{
+			min = i;
+		}
+		minHtml += '<option value="'+min+'">'+min+'</option>';
+	}
+	minHtml += '</select> 분';	
+	$( "#b_min" ).append(minHtml);
+	$( "#a_min" ).append(minHtml);
+}
 </script>
 
 <form name="modifyForm" method="post">
@@ -277,7 +339,9 @@ function fn_modifyScheduleListView(){
 					<table class="write">
 						<caption>검색 조회</caption>
 						<colgroup>
-							<col style="width:90px;" />
+							<col style="width:120px;" />
+							<col style="width:1050px;" />
+
 							<col />
 						</colgroup>
 						<tbody>
@@ -287,7 +351,37 @@ function fn_modifyScheduleListView(){
 								</tr>
 								<tr>
 									<th scope="row" class="t9 line">설명</th>
-									<td><textarea class="tbd1" name="scd_exp" id="scd_exp"></textarea></td>
+									<td><input type="text" class="txt t2" id="scd_exp" name="scd_exp" style="width:500px;"/></td>
+								</tr>
+								<tr>
+									<th scope="row" class="t9 line">다음수행시간</th>
+									<td>
+										<span id="calendar">
+												<div class="calendar_area">
+														<a href="#n" class="calendar_btn">달력열기</a>
+														<input type="text" class="calendar" id="datepicker1" name="exe_dt" title="스케줄시간설정" readonly />
+														<span id="b_hour"></span>
+														<span id="b_min"></span>
+												</div>
+										</span>
+									~
+										<span id="calendar">
+												<div class="calendar_area">
+														<a href="#n" class="calendar_btn">달력열기</a>
+														<input type="text" class="calendar" id="datepicker1" name="exe_dt" title="스케줄시간설정" readonly />
+														<span id="a_hour"></span>
+														<span id="a_min"></span>
+												</div>
+										</span>
+									</td>
+								</tr>
+								<tr>
+									<th scope="row" class="t9 line">구동상태</th>
+									<td><input type="text" class="txt t2" id="scd_exp" name="scd_exp" /></td>								
+								</tr>
+								<tr>
+									<th scope="row" class="t9 line">등록자</th>
+									<td><input type="text" class="txt t2" id="scd_exp" name="scd_exp" /></td>
 								</tr>
 						</tbody>
 					</table>
@@ -302,6 +396,7 @@ function fn_modifyScheduleListView(){
 							<th>No</th>
 							<th>스케줄명</th>
 							<th>설명</th>
+							<th>Work갯수</th>
 							<th>이전수행시간</th>
 							<th>다음수행시간</th>
 							<th>구동상태</th>

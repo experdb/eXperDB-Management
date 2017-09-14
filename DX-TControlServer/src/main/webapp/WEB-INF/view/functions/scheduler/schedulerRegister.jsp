@@ -554,8 +554,8 @@ function fn_check() {
 												<th></th>
 												<th>서버명</th>
 												<th>구분</th>
-												<th>work명</th>
-												<th>Work설명</th>
+												<th>Work명</th>
+												<th>Work설명</th>												
 												<th>실행순서</th>
 												<th>OnError</th>
 											</tr>
