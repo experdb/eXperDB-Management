@@ -53,7 +53,7 @@
 			cnr_ipadr.focus();
 			return false;
 		}
-		
+		 
 		var cnr_portno = document.getElementById("cnr_portno");
 		if (cnr_portno.value == "") {
 			alert("포트를 입력하여 주십시오.");
@@ -124,13 +124,13 @@
 			<div class="pop_cts">
 				<input type="hidden" name="cnr_id" id="cnr_id" value="${cnr_id}">
 				<p class="tit">
-					<c:if test="${act == 'i'}">Kafka-Connector 등록하기</c:if>
-					<c:if test="${act == 'u'}">Kafka-Connector 수정하기</c:if>
+					<c:if test="${act == 'i'}">커넥터 등록하기</c:if>
+					<c:if test="${act == 'u'}">커넥터 수정하기</c:if>
 				</p>
 				<table class="write">
 					<caption>
-						<c:if test="${act == 'i'}">Kafka-Connector 등록하기</c:if>
-						<c:if test="${act == 'u'}">Kafka-Connector 수정하기</c:if>
+						<c:if test="${act == 'i'}">커넥터 등록하기</c:if>
+						<c:if test="${act == 'u'}">커넥터 수정하기</c:if>
 					</caption>
 					<colgroup>
 						<col style="width: 140px;" />
@@ -140,8 +140,8 @@
 					</colgroup>
 					<tbody>
 						<tr>
-							<th scope="row" class="ico_t1">Kafka-Connector 명</th>
-							<td><input type="text" class="txt" name="cnr_nm" id="cnr_nm" value="${cnr_nm}"/></td>
+							<th scope="row" class="ico_t1">Connector 명</th>
+							<td><input type="text" class="txt" name="cnr_nm" id="cnr_nm" value="${cnr_nm}" maxlength="20"/></td>
 							<th scope="row" class="ico_t1">IP(*)</th>
 							<td><input type="text" class="txt" name="cnr_ipadr" id="cnr_ipadr" value="${cnr_ipadr}"/></td>
 						</tr>

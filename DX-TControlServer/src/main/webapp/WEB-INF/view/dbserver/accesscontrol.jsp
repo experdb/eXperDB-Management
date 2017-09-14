@@ -120,10 +120,13 @@
 	$(window.document).ready(function() {
 		var extName = "${extName}";
 		if(extName == "agent") {
-			alert("서버에 T엔진이 설치되지 않았습니다.");
+			alert("서버에 experdb엔진이 설치되지 않았습니다.");
 			history.go(-1);
 		}else if(extName == "pgaudit"){
 			alert("서버에 pgaudit Extension 이 설치되지 않았습니다.");
+			history.go(-1);
+		}else if(extName == "agentfail"){
+			alert("experdb엔진 상태를 확인해주세요.");
 			history.go(-1);
 		}else{
 			fn_init();
@@ -156,28 +159,21 @@
 
 	/* 조회 버튼 클릭시*/
 	function fn_select() {
-		var check= document.getElementsByName("check");
-		for (var i=0; i<check.length; i++){
-			if(check[i].checked ==true){
-				var db_id = check[i].value;
-			}
-		}
 		 $.ajax({
-				url : "/selectAccessControl.do",
-				data : {
- 					db_id : db_id,
-					db_svr_id : "${db_svr_id}",
-				},
-				dataType : "json",
-				type : "post",
-				error : function(xhr, status, error) {
+			url : "/selectAccessControl.do",
+			data : {
+				db_svr_id : "${db_svr_id}",
+			},
+			dataType : "json",
+			type : "post",
+			error : function(xhr, status, error) {
 					alert("실패")
-				},
-				success : function(result) {
-					table.clear().draw();
-					table.rows.add(result.data).draw();
-				}
-			}); 
+			},
+			success : function(result) {
+				table.clear().draw();
+				table.rows.add(result.data).draw();
+			}
+		}); 
 	}
 
 	/* 등록 버튼 클릭시*/
@@ -257,12 +253,6 @@
 	/* 저장 버튼 클릭시 */
 	function fn_save(){
 		if (!confirm("저장하시겠습니까?")) return false;
-  		var check= document.getElementsByName("check");
-		for (var i=0; i<check.length; i++){
-			if(check[i].checked ==true){
-				var db_id = check[i].value;
-			}
-		}
 		var rowList = [];
 		var data = table.rows().data();
         for (var i = 0; i < data.length; i++) {
@@ -273,7 +263,6 @@
  			url : "/changeAccessControl.do",
  			data : {
  				rowList : JSON.stringify(rowList),
- 				db_id : db_id,
  				db_svr_id : "${db_svr_id}",
  			},
  			dataType : "json",

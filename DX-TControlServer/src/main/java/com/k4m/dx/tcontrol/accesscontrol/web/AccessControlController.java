@@ -28,10 +28,8 @@ import com.k4m.dx.tcontrol.admin.dbserverManager.service.DbServerVO;
 import com.k4m.dx.tcontrol.cmmn.AES256;
 import com.k4m.dx.tcontrol.cmmn.AES256_KEY;
 import com.k4m.dx.tcontrol.cmmn.CmmnUtils;
-import com.k4m.dx.tcontrol.cmmn.client.ClientAdapter;
 import com.k4m.dx.tcontrol.cmmn.client.ClientInfoCmmn;
 import com.k4m.dx.tcontrol.cmmn.client.ClientProtocolID;
-import com.k4m.dx.tcontrol.cmmn.client.ClientTranCodeType;
 import com.k4m.dx.tcontrol.common.service.AgentInfoVO;
 import com.k4m.dx.tcontrol.common.service.CmmnServerInfoService;
 import com.k4m.dx.tcontrol.common.service.HistoryVO;
@@ -131,11 +129,12 @@ public class AccessControlController {
 				AgentInfoVO vo = new AgentInfoVO();
 				vo.setIPADR(strIpAdr);		
 				AgentInfoVO agentInfo =  (AgentInfoVO) cmmnServerInfoService.selectAgentInfo(vo);
-		
+
 				if(agentInfo == null) {
 					mv.addObject("extName", "agent");	
+				}else if(agentInfo.getAGT_CNDT_CD().equals("TC001102")){
+					mv.addObject("extName", "agentfail");	
 				}else{
-					
 					String IP = dbServerVO.getIpadr();
 					int PORT = agentInfo.getSOCKET_PORT();
 					String strExtname = "pgaudit";
@@ -462,7 +461,12 @@ public class AccessControlController {
 		JSONObject serverObj = new JSONObject();
 		ClientInfoCmmn cic = new ClientInfoCmmn();
 		ArrayList arrSeq = new ArrayList();
-		try {	
+		try {
+			// 접근제어 삭제 이력 남기기
+			CmmnUtils.saveHistory(request, historyVO);
+			historyVO.setExe_dtl_cd("DX-T0027_01");
+			accessHistoryService.insertHistory(historyVO);
+			
 			AES256 dec = new AES256(AES256_KEY.ENC_KEY);
 			int db_svr_id = Integer.parseInt(request.getParameter("db_svr_id"));
 			
@@ -493,7 +497,7 @@ public class AccessControlController {
 			
 			cic.dbAccess_delete(serverObj, arrSeq, IP, PORT);
 
-			/*DBid 서버접근제어 전체 삭제*/
+			/*서버접근제어 전체 삭제*/
 			accessControlService.deleteDbAccessControl(db_svr_id);
 			
 			HttpSession session = request.getSession();
@@ -597,7 +601,7 @@ public class AccessControlController {
 				cic.dbAccess_create(serverObj, acObj, IP, PORT);
 			}
 			
-			/*DBid 서버접근제어 전체 삭제*/
+			/*서버접근제어 전체 삭제*/
 			accessControlService.deleteDbAccessControl(db_svr_id);
 			
 			HttpSession session = request.getSession();

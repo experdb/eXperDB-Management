@@ -350,9 +350,9 @@ public class UserManagerController {
 				userManagerService.deleteUserManager(param[i]);
 			}
 
-			// 사용자관리 이력 남기기
+			// 사용자삭제 이력 남기기
 			CmmnUtils.saveHistory(request, historyVO);
-			historyVO.setExe_dtl_cd("DX-T0031_01");
+			historyVO.setExe_dtl_cd("DX-T0031_02");
 			accessHistoryService.insertHistory(historyVO);
 			
 			return true;
