@@ -36,13 +36,13 @@
 		(
 		    SELECT 
 		        A.DB_SVR_ID
-		        , (SELECT COUNT(DISTINCT SCD_ID) FROM T_SCD_D C, T_WRKCNG_I D
+		        , (SELECT COUNT(DISTINCT SCD_ID) FROM T_SCD_D C, T_BCK_WRKCNG_I D
 		          WHERE D.db_svr_id = A.DB_SVR_ID 
 		          AND C.WRK_ID = D.WRK_ID) AS schedule_cnt
 		        , (
 		        	SELECT 
 		        		COUNT(DISTINCT C.SCD_ID) 
-		        	FROM T_SCD_D C, T_WRKCNG_I D, T_SCD_M E
+		        	FROM T_SCD_D C, T_BCK_WRKCNG_I D, T_SCD_M E
 		          	WHERE 
 		          		D.db_svr_id = A.DB_SVR_ID 
 		          		AND C.SCD_ID = E.SCD_ID
@@ -52,7 +52,7 @@
 		        , SUM(CASE WHEN B.WRK_ID IS NULL THEN 0 ELSE 1 END) AS backup_cnt
 		    FROM
 		        T_DBSVR_I A
-		        LEFT OUTER JOIN T_WRKCNG_I B
+		        LEFT OUTER JOIN T_BCK_WRKCNG_I B
 		    ON 
 		        A.DB_SVR_ID = B.DB_SVR_ID
              GROUP BY A.DB_SVR_ID
@@ -70,7 +70,7 @@
 		  	, (SELECT DB_SVR_NM FROM T_DBSVR_I WHERE DB_SVR_ID = AAA.DB_SVR_ID) AS db_svr_nm
 		    , COUNT(AAA.WRK_ID) AS wrk_cnt
 		    , (SELECT COUNT(*) FROM T_DB_I WHERE DB_SVR_ID = AAA.DB_SVR_ID AND USEYN = 'Y') AS db_cnt
-		    , (SELECT COUNT(DISTINCT SCD_ID) FROM T_SCD_D A, T_WRKCNG_I B 
+		    , (SELECT COUNT(DISTINCT SCD_ID) FROM T_SCD_D A, T_BCK_WRKCNG_I B 
 		          WHERE B.db_svr_id = AAA.DB_SVR_ID 
 		          AND A.WRK_ID = B.WRK_ID) AS schedule_cnt
 		    , SUM(AAA.success_cnt) AS success_cnt
@@ -95,7 +95,7 @@
 		            , B.SCD_ID
 		        FROM
 		             T_DBSVR_I  A
-		           LEFT OUTER JOIN T_WRKCNG_I C ON A.DB_SVR_ID = C.DB_SVR_ID
+		           LEFT OUTER JOIN T_BCK_WRKCNG_I C ON A.DB_SVR_ID = C.DB_SVR_ID
 		           LEFT OUTER JOIN T_SCD_D B ON B.WRK_ID = C.WRK_ID
 		        ) AA 
 		    ) AAA
