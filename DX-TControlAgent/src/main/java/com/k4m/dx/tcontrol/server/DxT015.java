@@ -67,7 +67,8 @@ public class DxT015 extends SocketCtl{
 		
 		JSONObject outputObj = new JSONObject();
 		
-		//strLogFileDir = "/home/devel/experdb/data/pg_log";
+		//strLogFileDir = "/home/devel/experdb/data/pg_log"
+		socketLogger.info("File Dir : " + strLogFileDir);
 		
 		try {
 

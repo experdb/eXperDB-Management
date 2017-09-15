@@ -1,10 +1,10 @@
 #!/bin/sh
 echo "DX-TcontrolAgent start run .. "
 
-JAVA_HOME=/home/devel/DX-TcontrolAgent/java/jre1.7.0_80
+JAVA_HOME=/home/experdb/DX-TcontrolAgent/java/jre1.7.0_80
 
 
-PROJECT_HOME=/home/devel
+PROJECT_HOME=/home/experdb
 CURRENT_DIR=$PROJECT_HOME/DX-TcontrolAgent
 
 LOG_DIR=$CURRENT_DIR/logs
