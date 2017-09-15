@@ -385,13 +385,18 @@ public class DxT006 extends SocketCtl{
 
 					PgHbaConfigLine conf = new PgHbaConfigLine(arrData[i].toString());
 					
-					if(intSeq == intUpdateSeq) {
-						buffer += config.getText() + "\n";
-					} else {
+					
+					if(conf.isComment()) {
 						buffer += arrData[i].toString() + "\n";
+					} else {
+						if(intSeq == intUpdateSeq) {
+							buffer += config.getText() + "\n";
+						} else {
+							buffer += arrData[i].toString() + "\n";
+						}
 					}
 					
-					if(conf.isValid() || (!conf.isValid() && !conf.isComment()) && !(conf.getText()).isEmpty()){
+					if(!conf.isComment()){
 						System.out.println(intSeq + " ==> " + arrData[i].toString());
 						intSeq ++;
 					}

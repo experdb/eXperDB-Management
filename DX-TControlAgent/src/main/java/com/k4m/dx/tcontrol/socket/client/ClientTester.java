@@ -42,7 +42,7 @@ public class ClientTester {
 		ClientTester clientTester = new ClientTester();
 		
 		String Ip = "222.110.153.162";
-		 Ip = "127.0.0.1";
+		 //Ip = "127.0.0.1";
 		int port = 9001;
 		try {
 			
@@ -53,7 +53,7 @@ public class ClientTester {
 			//clientTester.dxT005(Ip, port);
 			//clientTester.dxT006_C(Ip, port);
 			//clientTester.dxT006_R(Ip, port);
-			//clientTester.dxT006_U(Ip, port);
+			clientTester.dxT006_U(Ip, port);
 			//clientTester.dxT006_D(Ip, port);
 			//clientTester.dxT007_C(Ip, port);
 			//clientTester.dxT007_R(Ip, port);
@@ -73,7 +73,7 @@ public class ClientTester {
 			//clientTester.dxT015_R(Ip, port);
 			//clientTester.dxT015_V(Ip, port);
 			//clientTester.dxT015_DL(Ip, port);
-			clientTester.dxT016(Ip, port);
+			//clientTester.dxT016(Ip, port);
 			//clientTester.dxT017_insert(Ip, port);
 			//clientTester.dxT017_delete(Ip, port);
 			//clientTester.dxT017_select(Ip, port);
@@ -470,12 +470,12 @@ public class ClientTester {
 
 			
 			JSONObject acObj = new JSONObject();
-			acObj.put(ClientProtocolID.AC_SEQ, "5");
-			acObj.put(ClientProtocolID.AC_SET, "0");
-			acObj.put(ClientProtocolID.AC_TYPE, "host");
+			acObj.put(ClientProtocolID.AC_SEQ, "0");
+			acObj.put(ClientProtocolID.AC_SET, "1");
+			acObj.put(ClientProtocolID.AC_TYPE, "local");
 			acObj.put(ClientProtocolID.AC_DATABASE, "experdba");
 			acObj.put(ClientProtocolID.AC_USER, "experdba");
-			acObj.put(ClientProtocolID.AC_IP, "222.110.153.254");
+			acObj.put(ClientProtocolID.AC_IP, "");
 			acObj.put(ClientProtocolID.AC_METHOD, "trust");
 			acObj.put(ClientProtocolID.AC_OPTION, "");
 
