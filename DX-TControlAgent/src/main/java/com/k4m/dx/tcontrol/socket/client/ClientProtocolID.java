@@ -44,6 +44,7 @@ public class ClientProtocolID {
 	public static final String AC_DATABASE = "Database";
 	public static final String AC_USER = "User";
 	public static final String AC_IP = "Ip";
+	public static final String AC_IPMASK = "Ipmask";
 	public static final String AC_METHOD = "Method";
 	public static final String AC_OPTION = "Option";
 	public static final String AC_COMMENT = "Comment";

@@ -31,6 +31,7 @@ public class PgHbaConfigLine {
 	private String database;
 	private String user;
 	private String ipaddress;
+	private String ipmask;
 	private String option;
 	private int connectType;
 	private int method;
@@ -123,6 +124,15 @@ public class PgHbaConfigLine {
 		    	return;
 		    
 	    	strTemp = st.nextToken();
+	    	
+	    	String strIpMask = strTemp.replaceAll(".", "");
+	    	
+	    	//IP-MASK 가 있다면
+	    	if(StrUtil.isStringDouble(strIpMask)) {
+	    		ipmask = strTemp;
+	    		
+	    		strTemp = st.nextToken();
+	    	} 
 	    	
 		    for(int i = 0; i < pgHbaMethodStrings.length; i++){
 		    	if(pgHbaMethodStrings[i].endsWith(strTemp)){
@@ -262,6 +272,16 @@ public class PgHbaConfigLine {
 			this.changed = changed;
 		}
 		
+		public String getIpmask() {
+			return ipmask;
+		}
+
+
+		public void setIpmask(String ipmask) {
+			this.ipmask = ipmask;
+		}
+
+
 		public static void main(String[] args) {
 	    	String strTemp = "#local   replication     postgres                                trust";
 	    	if(strTemp.contains("#")){

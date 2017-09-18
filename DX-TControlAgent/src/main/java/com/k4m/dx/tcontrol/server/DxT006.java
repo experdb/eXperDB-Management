@@ -179,6 +179,7 @@ public class DxT006 extends SocketCtl{
 					aclLine.put("Database", config.getDatabase());
 					aclLine.put("User", config.getUser());
 					aclLine.put("Ip", config.getIpaddress());
+					aclLine.put("Ipmask", config.getIpmask());
 					aclLine.put("Method", config.getMethod());
 					aclLine.put("Option", config.getOption());
 					aclLine.put("Changed", "");
@@ -242,12 +243,15 @@ public class DxT006 extends SocketCtl{
 		} else {
 			config.setComment(true);
 		}
-		config.setConnectType((String)acInfoObj.get("Type"));
-		config.setDatabase((String)acInfoObj.get("Database"));
-		config.setUser((String)acInfoObj.get("User"));
-		config.setIpaddress((String)acInfoObj.get("Ip"));
-		config.setMethod((String)acInfoObj.get("Method"));
-		config.setOption((String)acInfoObj.get("Option"));
+		
+		config.setConnectType((String)acInfoObj.get(ProtocolID.AC_TYPE));
+		config.setDatabase((String)acInfoObj.get(ProtocolID.AC_DATABASE));
+		config.setUser((String)acInfoObj.get(ProtocolID.AC_USER));
+		config.setIpaddress((String)acInfoObj.get(ProtocolID.AC_IP));
+		config.setIpmask((String)acInfoObj.get(ProtocolID.AC_IPMASK));
+		config.setMethod((String)acInfoObj.get(ProtocolID.AC_METHOD));
+		config.setOption((String)acInfoObj.get(ProtocolID.AC_OPTION));
+		
 		
 		SqlSessionFactory sqlSessionFactory = null;
 		
@@ -330,14 +334,15 @@ public class DxT006 extends SocketCtl{
 		} else {
 			config.setComment(true);
 		}
-		config.setConnectType((String)acInfoObj.get("Type"));
-		config.setDatabase((String)acInfoObj.get("Database"));
-		config.setUser((String)acInfoObj.get("User"));
-		config.setIpaddress((String)acInfoObj.get("Ip"));
-		config.setMethod((String)acInfoObj.get("Method"));
-		config.setOption((String)acInfoObj.get("Option"));
+		config.setConnectType((String)acInfoObj.get(ProtocolID.AC_TYPE));
+		config.setDatabase((String)acInfoObj.get(ProtocolID.AC_DATABASE));
+		config.setUser((String)acInfoObj.get(ProtocolID.AC_USER));
+		config.setIpaddress((String)acInfoObj.get(ProtocolID.AC_IP));
+		config.setIpmask((String)acInfoObj.get(ProtocolID.AC_IPMASK));
+		config.setMethod((String)acInfoObj.get(ProtocolID.AC_METHOD));
+		config.setOption((String)acInfoObj.get(ProtocolID.AC_OPTION));
 		
-		String strSeq = (String) acInfoObj.get("Seq");
+		String strSeq = (String) acInfoObj.get(ProtocolID.AC_SEQ);
 		
 		int intUpdateSeq = Integer.parseInt(strSeq);
 		
