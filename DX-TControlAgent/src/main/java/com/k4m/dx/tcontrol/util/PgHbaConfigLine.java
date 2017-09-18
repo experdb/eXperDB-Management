@@ -116,7 +116,7 @@ public class PgHbaConfigLine {
 			    
 			    ipaddress = st.nextToken();
 			    if(!ipaddress.contains("/")){
-			    	ipaddress += "/32";
+			    	//ipaddress += "/32";
 			    }
 			}
 //5		    
@@ -125,7 +125,7 @@ public class PgHbaConfigLine {
 		    
 	    	strTemp = st.nextToken();
 	    	
-	    	String strIpMask = strTemp.replaceAll(".", "");
+	    	String strIpMask = strTemp.replaceAll("\\.", "");
 	    	
 	    	//IP-MASK 가 있다면
 	    	if(StrUtil.isStringDouble(strIpMask)) {
@@ -283,12 +283,16 @@ public class PgHbaConfigLine {
 
 
 		public static void main(String[] args) {
-	    	String strTemp = "#local   replication     postgres                                trust";
+/*	    	String strTemp = "#local   replication     postgres                                trust";
 	    	if(strTemp.contains("#")){
 	    		strTemp = strTemp.replaceFirst("#","");
 	    		
 	    		System.out.println(strTemp);
 
-	    	}
+	    	}*/
+			
+			String strTemp = "255.255.255.255";
+			strTemp = strTemp.replaceAll("\\.", "");
+			System.out.println("strTemp : " + strTemp);
 		}
 }
