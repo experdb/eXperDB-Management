@@ -353,6 +353,7 @@ public class ClientTester {
 			acObj.put(ClientProtocolID.AC_DATABASE, "experdba");
 			acObj.put(ClientProtocolID.AC_USER, "experdba");
 			acObj.put(ClientProtocolID.AC_IP, "222.110.153.254");
+			acObj.put(ClientProtocolID.AC_IPMASK, "222.110.153.254");
 			acObj.put(ClientProtocolID.AC_METHOD, "trust");
 			acObj.put(ClientProtocolID.AC_OPTION, "");
 
@@ -408,6 +409,7 @@ public class ClientTester {
 			acObj.put(ClientProtocolID.AC_DATABASE, "experdba");
 			acObj.put(ClientProtocolID.AC_USER, "experdba");
 			acObj.put(ClientProtocolID.AC_IP, "222.110.153.254");
+			acObj.put(ClientProtocolID.AC_IPMASK, "222.110.153.254");
 			acObj.put(ClientProtocolID.AC_METHOD, "trust");
 			acObj.put(ClientProtocolID.AC_OPTION, "");
 
@@ -436,14 +438,15 @@ public class ClientTester {
 			for(int i=0; i<selectDBList.size()-1; i++) {
 				JSONObject mp = (JSONObject) selectDBList.get(i);
 				
-				System.out.println("seq : " +  mp.get("Seq")
-				                + " Set : " +  mp.get("Set")
-				                + " Type : " +  mp.get("Type")
-								+ " Database : " +  mp.get("Database")
-								+ " User : " +  mp.get("User")
-								+ " Ip : " +  mp.get("Ip")
-								+ " Method : " +  mp.get("Method")
-								+ " Option : " +  mp.get("Option"));
+				System.out.println("seq : " +  mp.get(ClientProtocolID.AC_SEQ)
+				                + " Set : " +  mp.get(ClientProtocolID.AC_SET)
+				                + " Type : " +  mp.get(ClientProtocolID.AC_TYPE)
+								+ " Database : " +  mp.get(ClientProtocolID.AC_DATABASE)
+								+ " User : " +  mp.get(ClientProtocolID.AC_USER)
+								+ " Ip : " +  mp.get(ClientProtocolID.AC_IP)
+								+ " Ipmask : " +  mp.get(ClientProtocolID.AC_IPMASK)
+								+ " Method : " +  mp.get(ClientProtocolID.AC_METHOD)
+								+ " Option : " +  mp.get(ClientProtocolID.AC_OPTION));
 
 			}
 			
