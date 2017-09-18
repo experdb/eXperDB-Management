@@ -51,8 +51,8 @@ public class ClientTester {
 			//clientTester.dxT003(Ip, port);
 			//clientTester.dxT004(Ip, port);
 			//clientTester.dxT005(Ip, port);
-			//clientTester.dxT006_C(Ip, port);
-			clientTester.dxT006_R(Ip, port);
+			clientTester.dxT006_C(Ip, port);
+			//clientTester.dxT006_R(Ip, port);
 			//clientTester.dxT006_U(Ip, port);
 			//clientTester.dxT006_D(Ip, port);
 			//clientTester.dxT007_C(Ip, port);

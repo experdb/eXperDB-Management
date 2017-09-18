@@ -196,8 +196,10 @@ public class PgHbaConfigLine {
 			       +  tabspace + database
 			       +  tabspace + user;
 
-			if (connectType != PGC_LOCAL)
+			if (connectType != PGC_LOCAL) {
 				str += tabspace + ipaddress;
+				str += tabspace + ipmask;
+			}
 
 			str += tabspace + getMethod();
 
