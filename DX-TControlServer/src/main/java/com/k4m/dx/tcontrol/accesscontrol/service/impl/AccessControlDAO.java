@@ -5,6 +5,7 @@ import java.util.List;
 
 import org.springframework.stereotype.Repository;
 
+import com.k4m.dx.tcontrol.accesscontrol.service.AccessControlHistoryVO;
 import com.k4m.dx.tcontrol.accesscontrol.service.AccessControlVO;
 import com.k4m.dx.tcontrol.accesscontrol.service.DbAutVO;
 import com.k4m.dx.tcontrol.accesscontrol.service.DbIDbServerVO;
@@ -47,6 +48,16 @@ public class AccessControlDAO extends EgovAbstractMapper {
 	 */
 	public void insertAccessControl(AccessControlVO accessControlVO) throws SQLException {
 		insert("accessControlSql.insertAccessControl", accessControlVO);
+	}
+	
+	/**
+	 * 접근제어 이력 등록
+	 * 
+	 * @param accessControlVO
+	 * @throws Exception
+	 */
+	public void insertAccessControlHistory(AccessControlHistoryVO accessControlHistoryVO) {
+		insert("accessControlSql.insertAccessControlHistory", accessControlHistoryVO);
 	}
 
 

@@ -24,6 +24,7 @@
 		table = $('#accessControlTable').DataTable({
 			scrollY : "280px",
 			bSort: false,
+			paging: false,
 			columns : [
 				{ data : "Seq", defaultContent : "", targets : 0, orderable : false, checkboxes : {'selectRow' : true}}, 
 				{ data : "", className : "dt-center", defaultContent : ""}, 
@@ -31,7 +32,9 @@
 				{ data : "Database", className : "dt-center", defaultContent : ""}, 
 				{ data : "User", className : "dt-center", defaultContent : ""}, 
 				{ data : "Ipadr", className : "dt-center", defaultContent : ""}, 
+				{ data : "Ipmask", className : "dt-center", defaultContent : ""}, 
 				{ data : "Method", className : "dt-center", defaultContent : ""}, 
+				{ data : "Option", className : "dt-center", defaultContent : ""}, 
 				{ data : "",	
 					className: "dt-center",							
 					defaultContent : "",
@@ -104,8 +107,9 @@
 			var Database = table.row(this).data().Database;
 			var Type = table.row(this).data().Type;
 			var Ipadr = table.row(this).data().Ipadr;
+			var Ipmask = table.row(this).data().Ipmask;
 			
-			var popUrl = "/popup/accessControlRegForm.do?act=u&&db_svr_id=${db_svr_id}&&User="+User+"&&Seq="+Seq+"&&Method="+Method+"&&Database="+Database+"&&Type="+Type+"&&Ipadr="+Ipadr; // 서버 url 팝업경로
+			var popUrl = "/popup/accessControlRegForm.do?act=u&&db_svr_id=${db_svr_id}&&User="+User+"&&Seq="+Seq+"&&Method="+Method+"&&Database="+Database+"&&Type="+Type+"&&Ipadr="+Ipadr+"&&Ipmask="+Ipmask; // 서버 url 팝업경로
 			var width = 920;
 			var height = 420;
 			var left = (window.screen.width / 2) - (width / 2);
@@ -199,8 +203,9 @@
 			var Database = table.row('.selected').data().Database;
 			var Type = table.row('.selected').data().Type;
 			var Ipadr = table.row('.selected').data().Ipadr;
+			var Ipmask = table.row('.selected').data().Ipmask;
 				
-			var popUrl = "/popup/accessControlRegForm.do?act=u&&db_svr_id=${db_svr_id}&&User="+User+"&&Seq="+Seq+"&&Method="+Method+"&&Database="+Database+"&&Type="+Type+"&&Ipadr="+Ipadr; // 서버 url 팝업경로
+			var popUrl = "/popup/accessControlRegForm.do?act=u&&db_svr_id=${db_svr_id}&&User="+User+"&&Seq="+Seq+"&&Method="+Method+"&&Database="+Database+"&&Type="+Type+"&&Ipadr="+Ipadr+"&&Ipmask="+Ipmask; // 서버 url 팝업경로
 			var width = 920;
 			var height = 420;
 			var left = (window.screen.width / 2) - (width / 2);
@@ -278,6 +283,19 @@
 	
 
 </script>
+<style>
+.inner .tit {
+    height: 28px;
+    line-height: 28px;
+    padding-left: 27px;
+    border: 1px solid #b8c3c6;
+    border-bottom: none;
+    background: #e4e9ec;
+    color: #101922;
+    font-size: 13px;
+    font-family: 'Nanum Square Bold';  
+}
+</style>
 <!-- contents -->
 <div id="contents">
 	<div class="contents_wrap">
@@ -295,56 +313,36 @@
 		</div>
 		<div class="contents">
 			<div class="cmm_grp">
-				<div class="control_grp">
-					<div class="control_lt">
-						<div class="inner">
-							<p class="tit">DB 서버</p>
-							<div class="control_list">
-								<ul>
-									<li>
-<!-- 									<img src="/images/ico_left_1.png" style="line-height: 22px; margin: 0px 10px 0 0;"> -->
-										<div class="inp_rdo">
-											<input type="radio" id="${db_svr_nm}" name="check"value="${db_svr_nm}" checked="checked"/> 
-											<label for="${db_svr_nm}">${db_svr_nm}</label>
-										</div>
-									</li>
-								</ul>
-							</div>
+				<div class="btn_type_01">
+					<span>
+						<div class="search_area">
+							<input type="text" class="txt search" id="select" />
+							<button class="search_btn">검색</button>
 						</div>
-					</div>
-					<div class="control_rt">
-						<div class="btn_type_01">
-							<span>
-								<div class="search_area">
-									<input type="text" class="txt search" id="select" />
-									<button class="search_btn">검색</button>
-								</div>
-							</span>
-							<span class="btn" onclick="fn_insert();"><button>등록</button></span>
-							<span class="btn" onclick="fn_update();"><button>수정</button></span>
-							<span class="btn" onclick="fn_delete();"><button>삭제</button></span>
-							<span class="btn" onclick="fn_save();"><button>적용</button></span>
-						</div>
-						<div class="inner">
-							<p class="tit">접근제어 리스트</p>
-							<div class="overflow_area">
-								<table id="accessControlTable" class="display" cellspacing="0"
-									width="100%">
-									<thead>
-										<tr>
-											<th></th>
-											<th>No</th>
-											<th>Type</th>
-											<th>Database</th>
-											<th>User</th>
-											<th>IP Address</th>
-											<th>Method</th>
-											<th>순서</th>
-										</tr>
-									</thead>
-								</table>
-							</div>
-						</div>
+					</span> <span class="btn" onclick="fn_insert();"><button>등록</button></span>
+					<span class="btn" onclick="fn_update();"><button>수정</button></span>
+					<span class="btn" onclick="fn_delete();"><button>삭제</button></span>
+					<span class="btn" onclick="fn_save();"><button>적용</button></span>
+				</div>
+				<div class="inner">
+					<p class="tit"><img src="/images/ico_left_1.png" style="line-height: 22px; margin: 0px 10px 0 0;">${db_svr_nm}</p>
+					<div class="overflow_area">
+						<table id="accessControlTable" class="display" cellspacing="0" width="100%">
+							<thead>
+								<tr>
+									<th></th>
+									<th>No</th>
+									<th>Type</th>
+									<th>Database</th>
+									<th>User</th>
+									<th>IP Address</th>
+									<th>IP Mask</th>
+									<th>Method</th>
+									<th>Option</th>
+									<th>순서</th>
+								</tr>
+							</thead>
+						</table>
 					</div>
 				</div>
 			</div>

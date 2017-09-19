@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
+import com.k4m.dx.tcontrol.accesscontrol.service.AccessControlHistoryVO;
 import com.k4m.dx.tcontrol.accesscontrol.service.AccessControlService;
 import com.k4m.dx.tcontrol.accesscontrol.service.AccessControlVO;
 import com.k4m.dx.tcontrol.accesscontrol.service.DbAutVO;
@@ -269,6 +270,7 @@ public class AccessControlController {
 				mv.addObject("ctf_mth_nm",request.getParameter("Method").equals("undefined") ? "" : request.getParameter("Method"));
 				mv.addObject("ctf_tp_nm",request.getParameter("Type").equals("undefined") ? "" : request.getParameter("Type"));
 				mv.addObject("dtb",request.getParameter("Database").equals("undefined") ? "" : request.getParameter("Database"));
+				mv.addObject("ipmask",request.getParameter("Ipmask").equals("undefined") ? "" : request.getParameter("Ipmask"));
 			}
 			
 			mv.addObject("db_svr_nm", dbServerVO.getDb_svr_nm());
@@ -290,7 +292,7 @@ public class AccessControlController {
 	 * @throws Exception
 	 */
 	@RequestMapping(value = "/insertAccessControl.do")
-	public @ResponseBody void insertAccessControl(@ModelAttribute("accessControlVO") AccessControlVO accessControlVO,
+	public @ResponseBody void insertAccessControl(@ModelAttribute("accessControlHistoryVO") AccessControlHistoryVO accessControlHistoryVO,@ModelAttribute("accessControlVO") AccessControlVO accessControlVO,
 			HttpServletRequest request, @ModelAttribute("historyVO") HistoryVO historyVO) {
 		ClientInfoCmmn cic = new ClientInfoCmmn();
 		JSONObject serverObj = new JSONObject();
@@ -318,7 +320,7 @@ public class AccessControlController {
 			
 			String IP = dbServerVO.getIpadr();
 			int PORT = agentInfo.getSOCKET_PORT();
-			
+		
 			serverObj.put(ClientProtocolID.SERVER_NAME, dbServerVO.getDb_svr_nm());
 			serverObj.put(ClientProtocolID.SERVER_IP, dbServerVO.getIpadr());
 			serverObj.put(ClientProtocolID.SERVER_PORT, dbServerVO.getPortno());
@@ -331,6 +333,7 @@ public class AccessControlController {
 			acObj.put(ClientProtocolID.AC_DATABASE, accessControlVO.getDtb());
 			acObj.put(ClientProtocolID.AC_USER, accessControlVO.getPrms_usr_id());
 			acObj.put(ClientProtocolID.AC_IP, accessControlVO.getPrms_ipadr());
+			acObj.put(ClientProtocolID.AC_IPMASK, accessControlVO.getPrms_ipmaskadr());
 			acObj.put(ClientProtocolID.AC_METHOD, accessControlVO.getCtf_mth_nm());
 			acObj.put(ClientProtocolID.AC_OPTION, accessControlVO.getOpt_nm());
 			
@@ -349,12 +352,24 @@ public class AccessControlController {
 					accessControlVO.setPrms_seq(Integer.parseInt((String) jsonObj.get("Seq")));
 					accessControlVO.setPrms_set((String) jsonObj.get("Set"));
 					accessControlVO.setPrms_ipadr((String) jsonObj.get("Ipadr"));
+					accessControlVO.setPrms_ipmaskadr((String) jsonObj.get("Ipmask"));
 					accessControlVO.setPrms_usr_id((String) jsonObj.get("User"));
 					accessControlVO.setCtf_mth_nm((String) jsonObj.get("Method"));
 					accessControlVO.setCtf_tp_nm((String) jsonObj.get("Type"));
 					accessControlVO.setOpt_nm((String) jsonObj.get("Option"));
 					accessControlVO.setDtb((String) jsonObj.get("Database"));
 					accessControlService.insertAccessControl(accessControlVO);
+					
+					accessControlHistoryVO.setDb_svr_id(db_svr_id);
+					accessControlHistoryVO.setDtb((String) jsonObj.get("Database"));
+					accessControlHistoryVO.setPrms_ipadr((String)jsonObj.get("Ipadr"));
+					accessControlHistoryVO.setPrms_ipmaskadr((String) jsonObj.get("Ipmask"));
+					accessControlHistoryVO.setPrms_usr_id((String)jsonObj.get("User"));
+					accessControlHistoryVO.setPrms_seq(Integer.parseInt((String) jsonObj.get("Seq")));
+					accessControlHistoryVO.setPrms_set((String)jsonObj.get("Set"));
+					accessControlHistoryVO.setCtf_mth_nm((String)jsonObj.get("Method"));
+					accessControlHistoryVO.setOpt_nm((String)jsonObj.get("Option"));
+					accessControlService.insertAccessControlHistory(accessControlHistoryVO);
 				}
 			}
 		} catch (Exception e) {
@@ -371,7 +386,7 @@ public class AccessControlController {
 	 * @throws Exception
 	 */
 	@RequestMapping(value = "/updateAccessControl.do")
-	public @ResponseBody void updateAccessControl(@ModelAttribute("accessControlVO") AccessControlVO accessControlVO,
+	public @ResponseBody void updateAccessControl(@ModelAttribute("accessControlHistoryVO") AccessControlHistoryVO accessControlHistoryVO,@ModelAttribute("accessControlVO") AccessControlVO accessControlVO,
 			HttpServletRequest request, @ModelAttribute("historyVO") HistoryVO historyVO) {
 		JSONObject serverObj = new JSONObject();
 		JSONObject acObj = new JSONObject();
@@ -410,6 +425,7 @@ public class AccessControlController {
 			acObj.put(ClientProtocolID.AC_DATABASE, accessControlVO.getDtb());
 			acObj.put(ClientProtocolID.AC_USER, accessControlVO.getPrms_usr_id());
 			acObj.put(ClientProtocolID.AC_IP, accessControlVO.getPrms_ipadr());
+			acObj.put(ClientProtocolID.AC_IPMASK, accessControlVO.getPrms_ipmaskadr());
 			acObj.put(ClientProtocolID.AC_METHOD, accessControlVO.getCtf_mth_nm());
 			acObj.put(ClientProtocolID.AC_OPTION, accessControlVO.getOpt_nm());
 			
@@ -431,12 +447,24 @@ public class AccessControlController {
 					accessControlVO.setPrms_seq(Integer.parseInt((String) jsonObj.get("Seq")));
 					accessControlVO.setPrms_set((String) jsonObj.get("Set"));
 					accessControlVO.setPrms_ipadr((String) jsonObj.get("Ipadr"));
+					accessControlVO.setPrms_ipmaskadr((String) jsonObj.get("Ipmask"));
 					accessControlVO.setPrms_usr_id((String) jsonObj.get("User"));
 					accessControlVO.setCtf_mth_nm((String) jsonObj.get("Method"));
 					accessControlVO.setCtf_tp_nm((String) jsonObj.get("Type"));
 					accessControlVO.setOpt_nm((String) jsonObj.get("Option"));
 					accessControlVO.setDtb((String) jsonObj.get("Database"));
 					accessControlService.insertAccessControl(accessControlVO);
+					
+					accessControlHistoryVO.setDb_svr_id(db_svr_id);
+					accessControlHistoryVO.setDtb((String) jsonObj.get("Database"));
+					accessControlHistoryVO.setPrms_ipadr((String)jsonObj.get("Ipadr"));
+					accessControlHistoryVO.setPrms_ipmaskadr((String) jsonObj.get("Ipmask"));
+					accessControlHistoryVO.setPrms_usr_id((String)jsonObj.get("User"));
+					accessControlHistoryVO.setPrms_seq(Integer.parseInt((String) jsonObj.get("Seq")));
+					accessControlHistoryVO.setPrms_set((String)jsonObj.get("Set"));
+					accessControlHistoryVO.setCtf_mth_nm((String)jsonObj.get("Method"));
+					accessControlHistoryVO.setOpt_nm((String)jsonObj.get("Option"));
+					accessControlService.insertAccessControlHistory(accessControlHistoryVO);
 				}
 			}
 		} catch (Exception e) {
@@ -454,7 +482,7 @@ public class AccessControlController {
 	 * @throws Exception
 	 */
 	@RequestMapping(value = "/deleteAccessControl.do")
-	public @ResponseBody boolean deleteAccessControl(@ModelAttribute("accessControlVO") AccessControlVO accessControlVO,
+	public @ResponseBody boolean deleteAccessControl(@ModelAttribute("accessControlHistoryVO") AccessControlHistoryVO accessControlHistoryVO,@ModelAttribute("accessControlVO") AccessControlVO accessControlVO,
 			HttpServletRequest request, @ModelAttribute("historyVO") HistoryVO historyVO) {
 	
 		DbServerVO schDbServerVO = new DbServerVO();
@@ -513,12 +541,24 @@ public class AccessControlController {
 					accessControlVO.setPrms_seq(Integer.parseInt((String) jsonObj.get("Seq")));
 					accessControlVO.setPrms_set((String) jsonObj.get("Set"));
 					accessControlVO.setPrms_ipadr((String) jsonObj.get("Ipadr"));
+					accessControlVO.setPrms_ipmaskadr((String) jsonObj.get("Ipmask"));
 					accessControlVO.setPrms_usr_id((String) jsonObj.get("User"));
 					accessControlVO.setCtf_mth_nm((String) jsonObj.get("Method"));
 					accessControlVO.setCtf_tp_nm((String) jsonObj.get("Type"));
 					accessControlVO.setOpt_nm((String) jsonObj.get("Option"));
 					accessControlVO.setDtb((String) jsonObj.get("Database"));
 					accessControlService.insertAccessControl(accessControlVO);
+					
+					accessControlHistoryVO.setDb_svr_id(db_svr_id);
+					accessControlHistoryVO.setDtb((String) jsonObj.get("Database"));
+					accessControlHistoryVO.setPrms_ipadr((String)jsonObj.get("Ipadr"));
+					accessControlHistoryVO.setPrms_ipmaskadr((String) jsonObj.get("Ipmask"));
+					accessControlHistoryVO.setPrms_usr_id((String)jsonObj.get("User"));
+					accessControlHistoryVO.setPrms_seq(Integer.parseInt((String) jsonObj.get("Seq")));
+					accessControlHistoryVO.setPrms_set((String)jsonObj.get("Set"));
+					accessControlHistoryVO.setCtf_mth_nm((String)jsonObj.get("Method"));
+					accessControlHistoryVO.setOpt_nm((String)jsonObj.get("Option"));
+					accessControlService.insertAccessControlHistory(accessControlHistoryVO);
 				}
 			}		
 		} catch (Exception e) {
@@ -537,7 +577,7 @@ public class AccessControlController {
 	 * @throws Exception
 	 */
 	@RequestMapping(value = "/changeAccessControl.do")
-	public @ResponseBody boolean changeAccessControl(HttpServletRequest request,@ModelAttribute("accessControlVO") AccessControlVO accessControlVO) {
+	public @ResponseBody boolean changeAccessControl(@ModelAttribute("accessControlHistoryVO") AccessControlHistoryVO accessControlHistoryVO,HttpServletRequest request,@ModelAttribute("accessControlVO") AccessControlVO accessControlVO) {
 
 		DbServerVO schDbServerVO = new DbServerVO();
 		JSONObject serverObj = new JSONObject();
@@ -586,15 +626,17 @@ public class AccessControlController {
 				String Type=(String) jObj.get("Type");
 				String Set=(String) jObj.get("Set");
 				String Ipadr=(String) jObj.get("Ipadr");
+				String Ipmask=(String) jObj.get("Ipmask");
 				String Option=(String) jObj.get("Option");
 				String Database=(String) jObj.get("Database");
-				
+						
 				JSONObject acObj = new JSONObject();
 				acObj.put(ClientProtocolID.AC_SET, Set);
 				acObj.put(ClientProtocolID.AC_TYPE, Type);
 				acObj.put(ClientProtocolID.AC_DATABASE, Database);
 				acObj.put(ClientProtocolID.AC_USER, User);
 				acObj.put(ClientProtocolID.AC_IP, Ipadr);
+				acObj.put(ClientProtocolID.AC_IPMASK, Ipmask==null ? "" : Ipmask);
 				acObj.put(ClientProtocolID.AC_METHOD, Method);
 				acObj.put(ClientProtocolID.AC_OPTION, Option);
 
@@ -617,12 +659,24 @@ public class AccessControlController {
 					accessControlVO.setPrms_seq(Integer.parseInt((String) jsonObj.get("Seq")));
 					accessControlVO.setPrms_set((String) jsonObj.get("Set"));
 					accessControlVO.setPrms_ipadr((String) jsonObj.get("Ipadr"));
+					accessControlVO.setPrms_ipmaskadr((String) jsonObj.get("Ipmask"));
 					accessControlVO.setPrms_usr_id((String) jsonObj.get("User"));
 					accessControlVO.setCtf_mth_nm((String) jsonObj.get("Method"));
 					accessControlVO.setCtf_tp_nm((String) jsonObj.get("Type"));
 					accessControlVO.setOpt_nm((String) jsonObj.get("Option"));
 					accessControlVO.setDtb((String) jsonObj.get("Database"));
 					accessControlService.insertAccessControl(accessControlVO);
+					
+					accessControlHistoryVO.setDb_svr_id(db_svr_id);
+					accessControlHistoryVO.setDtb((String) jsonObj.get("Database"));
+					accessControlHistoryVO.setPrms_ipadr((String)jsonObj.get("Ipadr"));
+					accessControlHistoryVO.setPrms_ipmaskadr((String) jsonObj.get("Ipmask"));
+					accessControlHistoryVO.setPrms_usr_id((String)jsonObj.get("User"));
+					accessControlHistoryVO.setPrms_seq(Integer.parseInt((String) jsonObj.get("Seq")));
+					accessControlHistoryVO.setPrms_set((String)jsonObj.get("Set"));
+					accessControlHistoryVO.setCtf_mth_nm((String)jsonObj.get("Method"));
+					accessControlHistoryVO.setOpt_nm((String)jsonObj.get("Option"));
+					accessControlService.insertAccessControlHistory(accessControlHistoryVO);
 				}
 			}
 			return true;
@@ -631,4 +685,45 @@ public class AccessControlController {
 			return false;
 		}
 	}
+	
+	
+	
+	/**
+	 * 접근제어이력 화면을 보여준다.
+	 * 
+	 * @param
+	 * @return ModelAndView mv
+	 * @throws Exception
+	 */
+	@RequestMapping(value = "/accessControlHistory.do")
+	public ModelAndView serverAccessControlHistory(@ModelAttribute("historyVO") HistoryVO historyVO,
+			HttpServletRequest request) {
+		CmmnUtils cu = new CmmnUtils();
+		dbSvrAut = cu.selectUserDBSvrAutList(dbAuthorityService);
+		ModelAndView mv = new ModelAndView();
+		try {
+//			if(dbSvrAut.get(0).get("acs_cntr_aut_yn").equals("N")){
+//				mv.setViewName("error/autError");				
+//			}else{
+				// 접근제어관리 이력 남기기
+//				CmmnUtils.saveHistory(request, historyVO);
+//				historyVO.setExe_dtl_cd("DX-T0027");
+//				accessHistoryService.insertHistory(historyVO);
+	
+				int db_svr_id = Integer.parseInt(request.getParameter("db_svr_id"));
+				
+				DbServerVO schDbServerVO = new DbServerVO();
+				schDbServerVO.setDb_svr_id(db_svr_id);
+				DbServerVO dbServerVO = (DbServerVO)  cmmnServerInfoService.selectServerInfo(schDbServerVO);
+				
+				
+				mv.addObject("db_svr_nm", dbServerVO.getDb_svr_nm());
+				mv.setViewName("dbserver/accesscontrolHistory");
+//		}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return mv;
+	}
+
 }

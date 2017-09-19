@@ -1,36 +1,26 @@
 package com.k4m.dx.tcontrol.accesscontrol.service;
 
-public class AccessControlVO {
-	private int rownum;
-	private int idx;
-	private int svr_acs_cntr_id;//서버_접근_제어_ID 
-	private int db_svr_id;//DB_서버_ID    
-	private String dtb; //DATABASE      
-	private String prms_ipadr;//허용_IP주소      
-	private String prms_ipmaskadr; //허용_IPMASK주소
-	private String prms_usr_id;//허용_사용자_ID 
+public class AccessControlHistoryVO {
+	private int svr_acs_cntr_his_id; //서버_접근_제어_이력_ID
+	private int svr_acs_cntr_id;//서버_접근_제어_ID
+	private int db_svr_id;//DB_서버_ID
+	private String dtb;//DATABASE
+	private String prms_ipadr;//허용_IP주소
+	private String prms_ipmaskadr;//허용_IPMASK주소
+	private String prms_usr_id;//허용_사용자_ID
 	private int prms_seq;//허용순번
 	private String prms_set;//인증사용여부
-	private String ctf_mth_nm;//인증_방법_명      
-	private String ctf_tp_nm;//인증_유형_명       
-	private String opt_nm;//옵션_명          
-	private String cmd_cnts;//명령어_내용       
-	private String frst_regr_id;//최초_등록자_ID    
-	private String frst_reg_dtm;//최초_등록_일시    
-	private String lst_mdfr_id;//최종_수정자_ID     
+	private String ctf_mth_nm;//인증_방법_명
+	private String ctf_tp_nm;//인증_유형_명
+	private String opt_nm;//옵션_명
+	private String cmd_cnts;//명령어_내용
 	private String lst_mdf_dtm;//최종_수정_일시
 	
-	public int getRownum() {
-		return rownum;
+	public int getSvr_acs_cntr_his_id() {
+		return svr_acs_cntr_his_id;
 	}
-	public void setRownum(int rownum) {
-		this.rownum = rownum;
-	}
-	public int getIdx() {
-		return idx;
-	}
-	public void setIdx(int idx) {
-		this.idx = idx;
+	public void setSvr_acs_cntr_his_id(int svr_acs_cntr_his_id) {
+		this.svr_acs_cntr_his_id = svr_acs_cntr_his_id;
 	}
 	public int getSvr_acs_cntr_id() {
 		return svr_acs_cntr_id;
@@ -103,24 +93,6 @@ public class AccessControlVO {
 	}
 	public void setCmd_cnts(String cmd_cnts) {
 		this.cmd_cnts = cmd_cnts;
-	}
-	public String getFrst_regr_id() {
-		return frst_regr_id;
-	}
-	public void setFrst_regr_id(String frst_regr_id) {
-		this.frst_regr_id = frst_regr_id;
-	}
-	public String getFrst_reg_dtm() {
-		return frst_reg_dtm;
-	}
-	public void setFrst_reg_dtm(String frst_reg_dtm) {
-		this.frst_reg_dtm = frst_reg_dtm;
-	}
-	public String getLst_mdfr_id() {
-		return lst_mdfr_id;
-	}
-	public void setLst_mdfr_id(String lst_mdfr_id) {
-		this.lst_mdfr_id = lst_mdfr_id;
 	}
 	public String getLst_mdf_dtm() {
 		return lst_mdf_dtm;
