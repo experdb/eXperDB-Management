@@ -58,7 +58,7 @@ public class DxT019 extends SocketCtl{
 
 		try {
 			
-			String strCmd = "host";
+			String strCmd = "hostname";
 
 			String host = CommonUtil.getPidExec(strCmd);
 				
