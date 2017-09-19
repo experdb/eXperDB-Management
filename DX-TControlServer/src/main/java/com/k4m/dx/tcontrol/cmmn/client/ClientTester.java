@@ -32,6 +32,9 @@ import org.json.simple.parser.JSONParser;
  * 15. 감사로그 파일 리스트 조회 / 내용보기
  * 16. 디렉터리 존재유무 체크
  * 17. tbl_mapps 등록/삭제/조회
+ * 18. kafka_con_config 등록/삭제
+ * 19. Hostname 조회
+ * 
  * @author thpark
  *
  */
@@ -42,7 +45,7 @@ public class ClientTester {
 		ClientTester clientTester = new ClientTester();
 		
 		String Ip = "222.110.153.162";
-		 //Ip = "127.0.0.1";
+		 Ip = "127.0.0.1";
 		int port = 9001;
 		try {
 			
@@ -52,7 +55,7 @@ public class ClientTester {
 			//clientTester.dxT004(Ip, port);
 			//clientTester.dxT005(Ip, port);
 			//clientTester.dxT006_C(Ip, port);
-			//clientTester.dxT006_R(Ip, port);
+//			clientTester.dxT006_R(Ip, port);
 			clientTester.dxT006_U(Ip, port);
 			//clientTester.dxT006_D(Ip, port);
 			//clientTester.dxT007_C(Ip, port);
@@ -473,12 +476,13 @@ public class ClientTester {
 
 			
 			JSONObject acObj = new JSONObject();
-			acObj.put(ClientProtocolID.AC_SEQ, "0");
+			acObj.put(ClientProtocolID.AC_SEQ, "5");
 			acObj.put(ClientProtocolID.AC_SET, "1");
-			acObj.put(ClientProtocolID.AC_TYPE, "local");
+			acObj.put(ClientProtocolID.AC_TYPE, "host");
 			acObj.put(ClientProtocolID.AC_DATABASE, "experdba");
 			acObj.put(ClientProtocolID.AC_USER, "experdba");
-			acObj.put(ClientProtocolID.AC_IP, "");
+			acObj.put(ClientProtocolID.AC_IP, "222.110.153.254");
+			acObj.put(ClientProtocolID.AC_IPMASK, "222.110.153.253");
 			acObj.put(ClientProtocolID.AC_METHOD, "trust");
 			acObj.put(ClientProtocolID.AC_OPTION, "");
 
@@ -1765,6 +1769,55 @@ public class ClientTester {
 			
 				
 			//CA.close();
+		} catch(Exception e) {
+			e.printStackTrace();
+		}
+	}
+	
+	
+	private void dxT019(String Ip, int port) {
+		try {
+			
+
+			JSONObject serverObj = new JSONObject();
+			
+			
+			serverObj.put(ClientProtocolID.SERVER_NAME, "222.110.153.162");
+			serverObj.put(ClientProtocolID.SERVER_IP, "222.110.153.162");
+			serverObj.put(ClientProtocolID.SERVER_PORT, "6432");
+			serverObj.put(ClientProtocolID.DATABASE_NAME, "test_db1");
+			serverObj.put(ClientProtocolID.USER_ID, "experdba");
+			serverObj.put(ClientProtocolID.USER_PWD, "experdba");
+			
+			JSONObject jObj = new JSONObject();
+			
+			
+			jObj.put(ClientProtocolID.DX_EX_CODE, ClientTranCodeType.DxT019);
+			jObj.put(ClientProtocolID.SERVER_INFO, serverObj);
+			
+
+			JSONObject objList;
+			
+			ClientAdapter CA = new ClientAdapter(Ip, port);
+			CA.open(); 
+
+			objList = CA.dxT019(jObj);
+			
+			CA.close();
+			
+			String strErrMsg = (String)objList.get(ClientProtocolID.ERR_MSG);
+			String strErrCode = (String)objList.get(ClientProtocolID.ERR_CODE);
+			String strDxExCode = (String)objList.get(ClientProtocolID.DX_EX_CODE);
+			String strResultCode = (String)objList.get(ClientProtocolID.RESULT_CODE);
+			System.out.println("RESULT_CODE : " +  strResultCode);
+			System.out.println("ERR_CODE : " +  strErrCode);
+			System.out.println("ERR_MSG : " +  strErrMsg);
+
+			String host = (String) objList.get(ClientProtocolID.RESULT_DATA);
+			
+			System.out.println("host : " + host);
+			
+			
 		} catch(Exception e) {
 			e.printStackTrace();
 		}
