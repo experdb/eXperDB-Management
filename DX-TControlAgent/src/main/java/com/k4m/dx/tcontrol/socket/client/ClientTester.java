@@ -1779,22 +1779,11 @@ public class ClientTester {
 	private void dxT019(String Ip, int port) {
 		try {
 			
-
-			JSONObject serverObj = new JSONObject();
-			
-			
-			serverObj.put(ClientProtocolID.SERVER_NAME, "222.110.153.162");
-			serverObj.put(ClientProtocolID.SERVER_IP, "222.110.153.162");
-			serverObj.put(ClientProtocolID.SERVER_PORT, "6432");
-			serverObj.put(ClientProtocolID.DATABASE_NAME, "test_db1");
-			serverObj.put(ClientProtocolID.USER_ID, "experdba");
-			serverObj.put(ClientProtocolID.USER_PWD, "experdba");
 			
 			JSONObject jObj = new JSONObject();
 			
 			
 			jObj.put(ClientProtocolID.DX_EX_CODE, ClientTranCodeType.DxT019);
-			jObj.put(ClientProtocolID.SERVER_INFO, serverObj);
 			
 
 			JSONObject objList;
