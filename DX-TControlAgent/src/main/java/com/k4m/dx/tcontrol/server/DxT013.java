@@ -48,6 +48,8 @@ public class DxT013 extends SocketCtl{
 	}
 
 	public void execute(String strDxExCode, JSONObject jObj) throws Exception {
+		socketLogger.info("DxT013.execute : " + strDxExCode);
+		
 		byte[] sendBuff = null;
 		String strErrCode = "";
 		String strErrMsg = "";

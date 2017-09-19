@@ -51,6 +51,7 @@ import com.k4m.dx.tcontrol.util.PgHbaConfigLine;
 public class DxT006 extends SocketCtl{
 	
 	private static Logger errLogger = LoggerFactory.getLogger("errorToFile");
+	private static Logger socketLogger = LoggerFactory.getLogger("socketLogger");
 	
 	public DxT006(Socket socket, BufferedInputStream is, BufferedOutputStream	os) {
 		this.client = socket;
@@ -59,6 +60,8 @@ public class DxT006 extends SocketCtl{
 	}
 
 	public void execute(String strDxExCode, JSONObject jObj) throws Exception {
+		socketLogger.info("DxT006.execute : " + strDxExCode);
+		
 		byte[] sendBuff = null;
 		String strErrCode = "";
 		String strErrMsg = "";

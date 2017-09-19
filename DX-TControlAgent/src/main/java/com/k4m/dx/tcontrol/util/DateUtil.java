@@ -108,6 +108,18 @@ public class DateUtil {
 		return transDate;
 	}
 	
+	/**
+	 * 년월일시분초 반환
+	 * @param dt
+	 * @return
+	 * @throws Exception
+	 */
+	public static String getDateTime(Date dt) throws Exception {
+		SimpleDateFormat formatter = new SimpleDateFormat("yyyyMMddHHmmss");
+		
+		return formatter.format(dt);
+	}
+	
 	public static void main(String args[]) throws Exception{
 		DateUtil dt = new DateUtil();
 		

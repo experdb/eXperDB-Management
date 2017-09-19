@@ -20,9 +20,10 @@ import com.k4m.dx.tcontrol.db.SqlSessionManager;
 import com.k4m.dx.tcontrol.socket.ProtocolID;
 import com.k4m.dx.tcontrol.socket.SocketCtl;
 import com.k4m.dx.tcontrol.socket.TranCodeType;
+import com.k4m.dx.tcontrol.util.CommonUtil;
 
 /**
- * 23.	kafka_con_config 등록/삭제
+ * 24.	Hostname 조회
  *
  * @author 박태혁
  * @see <pre>
@@ -34,12 +35,12 @@ import com.k4m.dx.tcontrol.socket.TranCodeType;
  * </pre>
  */
 
-public class DxT018 extends SocketCtl{
+public class DxT019 extends SocketCtl{
 	
 	private static Logger errLogger = LoggerFactory.getLogger("errorToFile");
 	private static Logger socketLogger = LoggerFactory.getLogger("socketLogger");
 	
-	public DxT018(Socket socket, BufferedInputStream is, BufferedOutputStream	os) {
+	public DxT019(Socket socket, BufferedInputStream is, BufferedOutputStream	os) {
 		this.client = socket;
 		this.is = is;
 		this.os = os;
@@ -47,51 +48,31 @@ public class DxT018 extends SocketCtl{
 
 	public void execute(String strDxExCode, JSONObject jObj) throws Exception {
 		
-		socketLogger.info("DxT018.execute : " + strDxExCode);
+		socketLogger.info("DxT019.execute : " + strDxExCode);
 		byte[] sendBuff = null;
 		String strErrCode = "";
 		String strErrMsg = "";
 		String strSuccessCode = "0";
-
-		String strCommandCode = (String) jObj.get(ProtocolID.COMMAND_CODE);
 	
 		JSONObject outputObj = new JSONObject();
-		List<Object> selectDataList = new ArrayList<Object>();
+
 		try {
 			
-			if(strCommandCode.equals(ProtocolID.COMMAND_CODE_C)) {
+			String strCmd = "host";
 
-
-				insertKafkaConConfig(jObj);
+			String host = CommonUtil.getPidExec(strCmd);
 				
-				outputObj.put(ProtocolID.DX_EX_CODE, strDxExCode);
-				outputObj.put(ProtocolID.RESULT_CODE, strSuccessCode);
-				outputObj.put(ProtocolID.ERR_CODE, strErrCode);
-				outputObj.put(ProtocolID.ERR_MSG, strErrMsg);
+			outputObj.put(ProtocolID.DX_EX_CODE, strDxExCode);
+			outputObj.put(ProtocolID.RESULT_CODE, strSuccessCode);
+			outputObj.put(ProtocolID.ERR_CODE, strErrCode);
+			outputObj.put(ProtocolID.ERR_MSG, strErrMsg);
+			outputObj.put(ProtocolID.RESULT_DATA, host);
 
-			} else if(strCommandCode.equals(ProtocolID.COMMAND_CODE_R)) {
-
-			} else if(strCommandCode.equals(ProtocolID.COMMAND_CODE_U)) {
-				
-			} else if(strCommandCode.equals(ProtocolID.COMMAND_CODE_D)) {
-				
-				deleteKafkaConConfig(jObj);
-				
-				outputObj.put(ProtocolID.DX_EX_CODE, strDxExCode);
-				outputObj.put(ProtocolID.RESULT_CODE, strSuccessCode);
-				outputObj.put(ProtocolID.ERR_CODE, strErrCode);
-				outputObj.put(ProtocolID.ERR_MSG, strErrMsg);
-				
-			}
-
-
-
-			
 			sendBuff = outputObj.toString().getBytes();
 			send(4, sendBuff);
 			
 		} catch (Exception e) {
-			errLogger.error("DxT018 {} ", e.toString());
+			errLogger.error("DxT019 {} ", e.toString());
 			
 			outputObj.put(ProtocolID.DX_EX_CODE, TranCodeType.DxT018);
 			outputObj.put(ProtocolID.RESULT_CODE, "1");

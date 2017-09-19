@@ -46,6 +46,8 @@ public class DxT005 extends SocketCtl{
 	}
 
 	public void execute(String strDxExCode, JSONArray arrCmd) throws Exception {
+		socketLogger.info("DxT005.execute : " + strDxExCode);
+		
 		byte[] sendBuff = null;
 		String strErrCode = "";
 		String strErrMsg = "";

@@ -38,6 +38,7 @@ import com.k4m.dx.tcontrol.socket.TranCodeType;
 public class DxT010 extends SocketCtl{
 	
 	private static Logger errLogger = LoggerFactory.getLogger("errorToFile");
+	private static Logger socketLogger = LoggerFactory.getLogger("socketLogger");
 	
 	public DxT010(Socket socket, BufferedInputStream is, BufferedOutputStream	os) {
 		this.client = socket;
@@ -46,6 +47,8 @@ public class DxT010 extends SocketCtl{
 	}
 
 	public void execute(String strDxExCode, JSONObject dbInfoObj) throws Exception {
+		socketLogger.info("DxT010.execute : " + strDxExCode);
+		
 		byte[] sendBuff = null;
 		
 		SqlSessionFactory sqlSessionFactory = null;
