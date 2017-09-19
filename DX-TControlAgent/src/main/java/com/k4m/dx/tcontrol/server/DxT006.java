@@ -402,7 +402,7 @@ public class DxT006 extends SocketCtl{
 					}
 					
 					if(!conf.isComment()){
-						System.out.println(intSeq + " ==> " + arrData[i].toString());
+						//System.out.println(intSeq + " ==> " + arrData[i].toString());
 						intSeq ++;
 					}
 				}
@@ -507,10 +507,10 @@ public class DxT006 extends SocketCtl{
 						if(!blnAcSeqCheck) {
 							buffer += arrData[i].toString() + "\n";
 							
-							System.out.println(intSeq + " buffer ==> " + arrData[i].toString());
+							//System.out.println(intSeq + " buffer ==> " + arrData[i].toString());
 						}
 						
-						System.out.println(intSeq + " ==> " + arrData[i].toString());
+						//System.out.println(intSeq + " ==> " + arrData[i].toString());
 						intSeq ++;
 					} else {
 						buffer += arrData[i].toString() + "\n";
