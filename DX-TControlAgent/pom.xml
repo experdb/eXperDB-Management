@@ -194,11 +194,6 @@
 	    <version>3.0.0</version>
 	</dependency>
 	<dependency>
-	    <groupId>com.kenai.nbpwr</groupId>
-	    <artifactId>org-slf4j-jdk14</artifactId>
-	    <version>1.6.1-201106101300</version>
-	</dependency>
-	<dependency>
 	    <groupId>commons-logging</groupId>
 	    <artifactId>commons-logging</artifactId>
 	    <version>1.2</version>
