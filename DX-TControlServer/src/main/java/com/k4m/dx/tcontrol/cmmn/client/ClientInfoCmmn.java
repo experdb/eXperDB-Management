@@ -1,8 +1,6 @@
 package com.k4m.dx.tcontrol.cmmn.client;
 
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -289,6 +287,7 @@ public class ClientInfoCmmn {
 						String Database = (String) hp.get("Database");
 						String User = (String) hp.get("User");
 						String Ipadr = (String) hp.get("Ip");
+						String Ipmask = (String) hp.get("Ipmask");
 						String Method = (String) hp.get("Method");
 						String Option = (String) hp.get("Option");
 
@@ -298,12 +297,13 @@ public class ClientInfoCmmn {
 						jsonObj.put("Database", Database);
 						jsonObj.put("User", User);
 						jsonObj.put("Ipadr", Ipadr);
+						jsonObj.put("Ipmask", Ipmask);
 						jsonObj.put("Method", Method);
 						jsonObj.put("Option", Option);
 
 						jsonArray.add(jsonObj);
 						System.out.println("seq : " + Seq + " Set : " + Set + " Type : " + Type + " Database : "
-								+ Database + " User : " + User + " Ip : " + Ipadr + " Method : " + Method + " Option : "
+								+ Database + " User : " + User + " Ip : " + Ipadr + " Ipmask : " + Ipmask + " Method : " + Method + " Option : "
 								+ Option);
 					}
 
@@ -368,6 +368,7 @@ public class ClientInfoCmmn {
 				String Database = (String) hp.get("Database");
 				String User = (String) hp.get("User");
 				String Ipadr = (String) hp.get("Ip");
+				String Ipmask = (String) hp.get("Ipmask");
 				String Method = (String) hp.get("Method");
 				String Option = (String) hp.get("Option");
 
@@ -377,13 +378,15 @@ public class ClientInfoCmmn {
 				jsonObj.put("Database", Database);
 				jsonObj.put("User", User);
 				jsonObj.put("Ipadr", Ipadr);
+				jsonObj.put("Ipmask", Ipmask);
 				jsonObj.put("Method", Method);
 				jsonObj.put("Option", Option);
 
 				jsonArray.add(jsonObj);
 
-				System.out.println("seq : " + Seq + " Set : " + Set + " Type : " + Type + " Database : " + Database
-						+ " User : " + User + " Ip : " + Ipadr + " Method : " + Method + " Option : " + Option);
+				System.out.println("seq : " + Seq + " Set : " + Set + " Type : " + Type + " Database : "
+						+ Database + " User : " + User + " Ip : " + Ipadr + " Ipmask : " + Ipmask + " Method : " + Method + " Option : "
+						+ Option);
 			}
 			result.put("data", jsonArray);
 

@@ -7,6 +7,7 @@ public class AccessControlVO {
 	private int db_svr_id;//DB_서버_ID    
 	private String dtb; //DATABASE      
 	private String prms_ipadr;//허용_IP주소      
+	private String prms_ipmaskadr; //허용_IPMASK주소
 	private String prms_usr_id;//허용_사용자_ID 
 	private int prms_seq;//허용순번
 	private String prms_set;//인증사용여부
@@ -54,6 +55,12 @@ public class AccessControlVO {
 	}
 	public void setPrms_ipadr(String prms_ipadr) {
 		this.prms_ipadr = prms_ipadr;
+	}
+	public String getPrms_ipmaskadr() {
+		return prms_ipmaskadr;
+	}
+	public void setPrms_ipmaskadr(String prms_ipmaskadr) {
+		this.prms_ipmaskadr = prms_ipmaskadr;
 	}
 	public String getPrms_usr_id() {
 		return prms_usr_id;
@@ -120,7 +127,7 @@ public class AccessControlVO {
 	}
 	public void setLst_mdf_dtm(String lst_mdf_dtm) {
 		this.lst_mdf_dtm = lst_mdf_dtm;
-	} 
+	}
 
 	
 }

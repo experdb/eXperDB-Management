@@ -6,6 +6,7 @@ import javax.annotation.Resource;
 
 import org.springframework.stereotype.Service;
 
+import com.k4m.dx.tcontrol.accesscontrol.service.AccessControlHistoryVO;
 import com.k4m.dx.tcontrol.accesscontrol.service.AccessControlService;
 import com.k4m.dx.tcontrol.accesscontrol.service.AccessControlVO;
 import com.k4m.dx.tcontrol.accesscontrol.service.DbAutVO;
@@ -30,6 +31,12 @@ public class AccessControlServiceImpl implements AccessControlService {
 	@Override
 	public void insertAccessControl(AccessControlVO accessControlVO) throws Exception {
 		accessControlDAO.insertAccessControl(accessControlVO);
+	}
+
+	@Override
+	public void insertAccessControlHistory(AccessControlHistoryVO accessControlHistoryVO) throws Exception {
+		accessControlDAO.insertAccessControlHistory(accessControlHistoryVO);
+		
 	}
 
 

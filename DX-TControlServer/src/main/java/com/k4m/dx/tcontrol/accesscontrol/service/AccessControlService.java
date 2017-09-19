@@ -30,5 +30,13 @@ public interface AccessControlService {
 	 */
 	void insertAccessControl(AccessControlVO accessControlVO) throws Exception;
 
+	/**
+	 * 접근제어 이력 등록
+	 * 
+	 * @param accessControlHistoryVO
+	 * @throws Exception
+	 */
+	void insertAccessControlHistory(AccessControlHistoryVO accessControlHistoryVO)  throws Exception;
+
 	
 }

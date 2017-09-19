@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
+import com.k4m.dx.tcontrol.accesscontrol.service.AccessControlHistoryVO;
 import com.k4m.dx.tcontrol.accesscontrol.service.AccessControlService;
 import com.k4m.dx.tcontrol.accesscontrol.service.AccessControlVO;
 import com.k4m.dx.tcontrol.admin.accesshistory.service.AccessHistoryService;
@@ -247,7 +248,7 @@ public class TreeController {
 	 * @throws Exception
 	 */
 	@RequestMapping(value = "/insertTreeDB.do")
-	public @ResponseBody boolean insertTreeDB(@ModelAttribute("accessControlVO") AccessControlVO accessControlVO,@ModelAttribute("dbServerVO") DbServerVO dbServerVO, @ModelAttribute("historyVO") HistoryVO historyVO, HttpServletRequest request, HttpServletResponse response) throws ParseException {
+	public @ResponseBody boolean insertTreeDB(@ModelAttribute("accessControlHistoryVO") AccessControlHistoryVO accessControlHistoryVO,@ModelAttribute("accessControlVO") AccessControlVO accessControlVO,@ModelAttribute("dbServerVO") DbServerVO dbServerVO, @ModelAttribute("historyVO") HistoryVO historyVO, HttpServletRequest request, HttpServletResponse response) throws ParseException {
 	
 		//해당메뉴 권한 조회 (공통메소드호출)
 		CmmnUtils cu = new CmmnUtils();
@@ -350,6 +351,7 @@ public class TreeController {
 								accessControlVO.setDb_svr_id(db_svr_id);
 								accessControlVO.setDtb((String) jsonObj.get("Database"));
 								accessControlVO.setPrms_ipadr((String)jsonObj.get("Ipadr"));
+								accessControlVO.setPrms_ipmaskadr((String) jsonObj.get("Ipmask"));
 								accessControlVO.setPrms_usr_id((String)jsonObj.get("User"));
 								accessControlVO.setCtf_mth_nm((String)jsonObj.get("Method"));
 								accessControlVO.setCtf_tp_nm((String)jsonObj.get("Type"));
@@ -357,6 +359,17 @@ public class TreeController {
 								accessControlVO.setPrms_seq(Integer.parseInt((String) jsonObj.get("Seq")));
 								accessControlVO.setPrms_set((String)jsonObj.get("Set"));
 								accessControlService.insertAccessControl(accessControlVO);
+								
+								accessControlHistoryVO.setDb_svr_id(db_svr_id);
+								accessControlHistoryVO.setDtb((String) jsonObj.get("Database"));
+								accessControlHistoryVO.setPrms_ipadr((String)jsonObj.get("Ipadr"));
+								accessControlHistoryVO.setPrms_ipmaskadr((String) jsonObj.get("Ipmask"));
+								accessControlHistoryVO.setPrms_usr_id((String)jsonObj.get("User"));
+								accessControlHistoryVO.setPrms_seq(Integer.parseInt((String) jsonObj.get("Seq")));
+								accessControlHistoryVO.setPrms_set((String)jsonObj.get("Set"));
+								accessControlHistoryVO.setCtf_mth_nm((String)jsonObj.get("Method"));
+								accessControlHistoryVO.setOpt_nm((String)jsonObj.get("Option"));
+								accessControlService.insertAccessControlHistory(accessControlHistoryVO);
 							}
 						}	
 					}

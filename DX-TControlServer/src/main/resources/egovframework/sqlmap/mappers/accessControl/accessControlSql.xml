@@ -53,11 +53,13 @@
 		, DB_SVR_ID
 		, DTB
 		, PRMS_IPADR
+		, PRMS_IPMASKADR
 		, PRMS_USR_ID
 		, PRMS_SEQ
 		, PRMS_SET
 		, CTF_MTH_NM
 		, CTF_TP_NM
+		, OPT_NM
 		, CMD_CNTS
 		, FRST_REGR_ID
 		, FRST_REG_DTM
@@ -70,10 +72,12 @@
 		, #{db_svr_id}
 		, #{dtb}
 		, #{prms_ipadr}
+		, #{prms_ipmaskadr}
 		, #{prms_usr_id}
 		, #{prms_seq}
 		, #{prms_set}
 		, #{ctf_mth_nm}
+		, #{opt_nm}
 		, #{ctf_tp_nm}
 		, #{cmd_cnts}
 		, #{frst_regr_id}
@@ -82,5 +86,47 @@
 		, clock_timestamp()
 		) 
 	</insert>
-
+	
+	<insert id="insertAccessControlHistory" parameterType="accessControlHistoryVO">
+		/**
+	 	*  Query ID : insertAccessControlHistory
+	 	* Description : 접근제어 이력 등록
+	 	* Author : 김주영
+	 	**/
+	 	<selectKey resultType="int" keyProperty="svr_acs_cntr_id" order="BEFORE">
+        	SELECT setval('q_svracscntr_i_01',nextval('q_svracscntr_i_01')-1);    
+   	 	</selectKey>
+   	 	INSERT INTO T_SVRACSCNTR_HIS_I
+		(
+		  SVR_ACS_CNTR_HIS_ID
+		, SVR_ACS_CNTR_ID
+		, DB_SVR_ID
+		, DTB
+		, PRMS_IPADR
+		, PRMS_IPMASKADR
+		, PRMS_USR_ID
+		, PRMS_SEQ
+		, PRMS_SET
+		, CTF_MTH_NM
+		, CTF_TP_NM
+		, OPT_NM
+		, LST_MDF_DTM
+		)
+		VALUES
+		(
+		  nextval('q_svracscntr_his_i_01')
+		, #{svr_acs_cntr_id}
+		, #{db_svr_id}
+		, #{dtb}
+		, #{prms_ipadr}
+		, #{prms_ipmaskadr}
+		, #{prms_usr_id}
+		, #{prms_seq}
+		, #{prms_set}
+		, #{ctf_mth_nm}
+		, #{ctf_tp_nm}
+		, #{opt_nm}
+		, clock_timestamp()
+		)
+	</insert>
 </mapper>

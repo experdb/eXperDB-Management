@@ -40,25 +40,26 @@
 	/* Validation */
 	function fn_accessControl() {
 		/*Type=local -> ip입력 안함*/
-		if ($("#ctf_tp_nm option:selected").val() == "local") {
-			$("#prms_ipadr").val();
-			return true;
-		} else {
+		if ($("#ctf_tp_nm option:selected").val() != "local") {
 			var ip = document.getElementById("ip");
 			if (ip.value == "") {
 				alert("IP를 입력하여 주십시오.");
 				ip.focus();
 				return false;
 			}
-
 			var prefix = document.getElementById("prefix");
-			if (prefix.value == "") {
-				alert("Prefix를 입력하여 주십시오.");
+			var prms_ipmaskadr = document.getElementById("prms_ipmaskadr");
+			if(prefix.value == "" && prms_ipmaskadr.value == ""){
+				alert("prefix,Ipmask 중 하나를 입력하여 주십시오.");
+				return false;
+			}
+			if (prefix.value !="" &&!valid_numeric(prefix.value)) {
+				alert("Prefix는 숫자만 입력가능합니다.");
 				prefix.focus();
 				return false;
 			}
-			if (!valid_numeric(prefix.value)) {
-				alert("Prefix는 숫자만 입력가능합니다.");
+			if(prefix.value !="" && prefix.value>32){
+				alert("Prefix는 0~32만 입력가능합니다.");
 				prefix.focus();
 				return false;
 			}
@@ -69,18 +70,29 @@
 	/* 등록 버튼 클릭시*/
 	function fn_insert() {
 		if (!fn_accessControl())return false;
-		var ip = document.getElementById("ip").value;
-		var prefix = document.getElementById("prefix").value;
-		var prms_ipadr = ip + "/" + prefix;
+		var type = $("#ctf_tp_nm").val();
+		var prms_ipadr = "";
+		if(type!="local"){
+			var ip = document.getElementById("ip").value;
+			var prefix = document.getElementById("prefix").value;
+			if(prefix!=""){
+				prms_ipadr = ip + "/" + prefix;	
+			}else{
+				prms_ipadr = ip;
+			}	
+		}
+			
 		$.ajax({
 			url : "/insertAccessControl.do",
 			data : {
 				db_svr_id : '${db_svr_id}',
 				prms_ipadr : prms_ipadr,
+				prms_ipmaskadr : $("#prms_ipmaskadr").val(),
 				dtb : $("#dtb").val(),
 				prms_usr_id : $("#prms_usr_id").val(),
 				ctf_mth_nm : $("#ctf_mth_nm").val(),
 				ctf_tp_nm : $("#ctf_tp_nm").val(),
+				opt_nm : $("#opt_nm").val()				
 			},
 			type : "post",
 			error : function(request, status, error) {
@@ -97,26 +109,29 @@
 	/* 수정 버튼 클릭시*/
 	function fn_update() {
 		if (!fn_accessControl())return false;
-		
 		var type = $("#ctf_tp_nm").val();
-		if(type=="local"){
-			var prms_ipadr = "";
-		}else{
+		var prms_ipadr = "";
+		if(type!="local"){
 			var ip = document.getElementById("ip").value;
 			var prefix = document.getElementById("prefix").value;
-			var prms_ipadr = ip + "/" + prefix;
+			if(prefix!=""){
+				prms_ipadr = ip + "/" + prefix;	
+			}else{
+				prms_ipadr = ip;
+			}	
 		}
-
 		$.ajax({
 			url : "/updateAccessControl.do",
 			data : {
 				prms_seq : '${prms_seq}',
 				db_svr_id : '${db_svr_id}',
 				prms_ipadr : prms_ipadr,
+				prms_ipmaskadr : $("#prms_ipmaskadr").val(),
 				dtb : $("#dtb").val(),
 				prms_usr_id : $("#prms_usr_id").val(),
 				ctf_mth_nm : $("#ctf_mth_nm").val(),
 				ctf_tp_nm : $("#ctf_tp_nm").val(),
+				opt_nm : $("#opt_nm").val()
 			},
 			type : "post",
 			error : function(request, status, error) {
@@ -135,12 +150,18 @@
 		if (ctf_tp_nm == "local") {
 			$('#ip').attr('disabled', 'true');
 			$('#prefix').attr('disabled', 'true');
+			$('#prms_ipmaskadr').attr('disabled', 'true');
 		}
 		if ("${act}" == "u") {
 			var prms_ipadr = "${prms_ipadr}";
 			var str = prms_ipadr.split("/");
 			$('#ip').val(str[0]);
 			$('#prefix').val(str[1]);
+			if(str[1]==null){
+				$('#prefix').attr('disabled', 'true');
+			}else{
+				$('#prms_ipmaskadr').attr('disabled', 'true');
+			}
 		}
 	});
 
@@ -148,10 +169,34 @@
 		if (selectObj.value == "local") {
 			$('#ip').attr('disabled', 'true');
 			$('#prefix').attr('disabled', 'true');
+			$('#prms_ipmaskadr').attr('disabled', 'true');
+			$('#ip').val("");
+			$('#prefix').val("");
+			$('#prms_ipmaskadr').val("");
+			
 		} else {
 			$('#ip').removeAttr('disabled');
 			$('#prefix').removeAttr('disabled');
+			$('#prms_ipmaskadr').removeAttr('disabled');
 		}
+	}
+	
+	function changePrefix() {
+		var prefix = $("#prefix").val();
+		if(prefix==""){
+			$('#prms_ipmaskadr').removeAttr('disabled');
+		}else{
+			$('#prms_ipmaskadr').attr('disabled', 'true');
+		}		
+	}
+
+	function changeIpmaskadr() {
+		var ipmaskadr = $("#prms_ipmaskadr").val();
+		if(ipmaskadr==""){
+			$('#prefix').removeAttr('disabled');
+		}else{
+			$('#prefix').attr('disabled', 'true');
+		}		
 	}
 </script>
 <body>
@@ -219,7 +264,7 @@
 						<th scope="row" class="ico_t1">IP<br>(127.0.0.1/32)</th>
 						<td>
 							<input type="text" class="txt" name="ip" id="ip" style="width: 130px;"/> /
-							<input type="text" class="txt" name="prefix" id="prefix" style="width: 100px;"/>
+							<input type="text" class="txt" name="prefix" id="prefix" style="width: 100px;" onchange="changePrefix()" />
 						</td>
 					</tr>
 					<tr>
@@ -232,7 +277,10 @@
 								</c:forEach>
 							</select>
 						</td>
-						
+						<th scope="row" class="ico_t1">Ipmask</th>
+						<td><input type="text" class="txt" name="prms_ipmaskadr" id="prms_ipmaskadr" onchange="changeIpmaskadr()" value="${ipmask}"/></td>
+					</tr>
+					<tr>
 						<th scope="row" class="ico_t1">Method</th>
 						<td>
 							<select id="ctf_mth_nm" name="ctf_mth_nm" id="ctf_mth_nm" class="select">
@@ -253,6 +301,8 @@
 								<option value="peer" ${ctf_mth_nm == 'peer' ? 'selected="selected"' : ''}>peer</option>
 							</select>
 						</td>
+						<th scope="row" class="ico_t1">Option</th>
+						<td><input type="text" class="txt" name="opt_nm" id="opt_nm"/></td>		
 					</tr>
 				</tbody>
 			</table>
