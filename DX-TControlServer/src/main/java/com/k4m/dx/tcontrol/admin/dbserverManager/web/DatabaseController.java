@@ -359,6 +359,9 @@ public class DatabaseController {
 				String strExtName = "pgaudit";
 				List<Object> results = cic.extension_select(serverObj,IP,PORT,strExtName);
 				if(results != null && result.size() != 0) {
+					int current_his_grp= accessControlService.selectCurrenthisrp();
+					accessControlHistoryVO.setHis_grp_id(current_his_grp);
+					
 					result = cic.dbAccess_selectAll(serverObj,IP,PORT);
 					for(int j=0; j<result.size(); j++){
 						 JSONArray data = (JSONArray)result.get("data");
@@ -386,6 +389,7 @@ public class DatabaseController {
 								accessControlHistoryVO.setPrms_seq(Integer.parseInt((String) jsonObj.get("Seq")));
 								accessControlHistoryVO.setPrms_set((String)jsonObj.get("Set"));
 								accessControlHistoryVO.setCtf_mth_nm((String)jsonObj.get("Method"));
+								accessControlHistoryVO.setCtf_tp_nm((String) jsonObj.get("Type"));
 								accessControlHistoryVO.setOpt_nm((String)jsonObj.get("Option"));
 								accessControlService.insertAccessControlHistory(accessControlHistoryVO);
 								
