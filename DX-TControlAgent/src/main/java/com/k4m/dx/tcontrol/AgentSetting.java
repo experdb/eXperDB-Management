@@ -4,10 +4,16 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
+import java.sql.Connection;
+import java.sql.DriverManager;
 import java.util.Properties;
 import java.util.Scanner;
 
 import org.jasypt.encryption.pbe.StandardPBEStringEncryptor;
+import org.json.simple.JSONObject;
+
+import com.k4m.dx.tcontrol.socket.ProtocolID;
+import com.k4m.dx.tcontrol.socket.TranCodeType;
 
 public class AgentSetting {
 	
@@ -104,6 +110,28 @@ public class AgentSetting {
 		    	System.exit(0);
 		    }
 		    
+			Connection conn = null;
+			
+			try {
+				Class.forName("org.postgresql.Driver");
+				
+				Properties props = new Properties();
+				props.setProperty("user", strDatabaseUsername);
+				props.setProperty("password", strDatabasePassword);
+				
+				String strConnUrl = strDatabaseUrl;
+
+				conn = DriverManager.getConnection(strConnUrl, props);
+
+				System.out.println("Repository database Connection success !!");
+				
+			} catch (Exception e) {
+				System.out.println("Exit(0) Error : database Connection failed !! " + e.toString());
+				System.exit(0);
+			} finally {
+				if(conn != null) conn.close();
+			}	
+		    
 		    prop.setProperty("database.url", "ENC(" + url + ")");
 		    prop.setProperty("database.username", "ENC(" + username + ")");
 		    prop.setProperty("database.password", "ENC(" + password + ")");
@@ -114,7 +142,7 @@ public class AgentSetting {
 		    try {
 		    	prop.store(new FileOutputStream(path + "context.properties"), "");
 		    } catch(FileNotFoundException e) {
-		    	System.out.println("Exit(0) File Not Found ");
+		    	System.out.println("Exit(0) Error : File Not Found ");
 		    	System.exit(0);
 		    } catch(Exception e) {
 		    	System.out.println("Exit(0) Error : " + e.toString());

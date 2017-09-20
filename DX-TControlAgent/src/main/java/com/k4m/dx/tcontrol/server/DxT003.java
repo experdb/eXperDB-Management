@@ -53,8 +53,6 @@ public class DxT003 extends SocketCtl{
 
 		JSONArray outputArray = new JSONArray();
 
-		
-		String poolName = "ConnectionTest";
 		Connection conn = null;
 		
 		JSONObject outputObj = new JSONObject();
@@ -84,13 +82,8 @@ public class DxT003 extends SocketCtl{
 			sendBuff = outputObj.toString().getBytes();
 			send(4, sendBuff);
 		} finally {
-			if (poolName != null){
-				DBCPPoolManager.shutdownDriver(poolName);
-			}
+			if(conn != null) conn.close();
 		}	    
-		
-
-
 
 	}
 }
