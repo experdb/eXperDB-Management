@@ -172,7 +172,11 @@ function fn_delete(){
 			return false;
 		var rowList = [];
 		for (var i = 0; i < datas.length; i++) {
-			rowList += datas[i].usr_id + ',';
+			if(datas[i].usr_id=="admin"){
+				alert("관리자는 삭제할 수 없습니다.");
+				return false;
+			}
+			rowList += datas[i].usr_id + ',';		
 		}
 		$.ajax({
 			url : "/deleteUserManager.do",

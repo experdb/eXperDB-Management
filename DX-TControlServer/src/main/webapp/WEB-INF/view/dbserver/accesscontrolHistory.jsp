@@ -16,7 +16,98 @@
 	*/
 %>
 <script>
+var table = null;
 
+	function fn_init() {
+		table = $('#accesscontrolHistoryTable').DataTable({
+			scrollY : "250px",
+			paging: false,
+			searching : false,
+			columns : [
+			{ data : "", className : "dt-center", defaultContent : ""}, 
+			{ data : "ctf_tp_nm", className : "dt-center", defaultContent : ""}, 
+			{ data : "dtb", className : "dt-center", defaultContent : ""}, 
+			{ data : "prms_usr_id", className : "dt-center", defaultContent : ""}, 
+			{ data : "prms_ipadr", className : "dt-center", defaultContent : ""},
+			{ data : "prms_ipmaskadr", className : "dt-center", defaultContent : ""}, 
+			{ data : "ctf_mth_nm", className : "dt-center", defaultContent : ""}, 
+			{ data : "opt_nm", className : "dt-center", defaultContent : ""}, 
+			 ]
+		});
+		
+		table.on('order.dt', function () {
+			table.column(0, {search:'applied', order:'applied'}).nodes().each( function (cell, i) {
+	            cell.innerHTML = i+1;
+	        } );
+	    } ).draw();
+	}
+	
+	$(window.document).ready(function() {
+		fn_init();
+		$.ajax({
+			url : "/selectAccessControlHistory.do",
+			data : {
+				svr_acs_cntr_his_id : $("#lst_mdf_dtm").val()
+			},
+			dataType : "json",
+			type : "post",
+			error : function(xhr, status, error) {
+				alert("실패")
+			},
+			success : function(result) {
+				table.clear().draw();
+				table.rows.add(result).draw();
+			}
+		});
+	});
+	
+	/*조회버튼 클릭시*/
+	function fn_select(){
+		$.ajax({
+			url : "/selectAccessControlHistory.do",
+			data : {
+				svr_acs_cntr_his_id : $("#lst_mdf_dtm").val()
+			},
+			dataType : "json",
+			type : "post",
+			error : function(xhr, status, error) {
+				alert("실패")
+			},
+			success : function(result) {
+				table.clear().draw();
+				table.rows.add(result).draw();
+			}
+		});
+	}
+	
+	/*복원버튼 클릭시*/
+	function fn_recovery(){
+		if (!confirm("정말 복원하시겠습니까?")) return false;
+		$.ajax({
+			url : "/recoveryAccessControlHistory.do",
+			data : {
+				db_svr_id : "${db_svr_id}",
+				svr_acs_cntr_his_id : $("#lst_mdf_dtm").val()
+			},
+			dataType : "json",
+			type : "post",
+			error : function(xhr, status, error) {
+				alert("실패")
+			},
+			success : function(result) {			
+				if (result=="true") {
+					alert("복원되었습니다.");
+				}else if(result=="pgaudit"){
+					alert("서버에 pgaudit Extension 이 설치되지 않았습니다.");
+				}else if(result=="agent"){
+					alert("서버에 experdb엔진이 설치되지 않았습니다.");
+				}else {
+					alert("처리 실패");
+				}
+			}
+		});
+	}
+	
 
 </script>
 <style>
@@ -50,8 +141,8 @@
 		<div class="contents">
 			<div class="cmm_grp">
 				<div class="btn_type_01">
-					<span class="btn"><button onclick="fn_select()" id="btnSelect">조회</button></span>
-					<span class="btn"><button onclick="fn_insert()" id="btnInsert">복원</button></span>
+					<span class="btn"><button onclick="fn_select()">조회</button></span>
+					<span class="btn"><button onclick="fn_recovery()">복원</button></span>
 				</div>
 				<div class="sch_form">
 					<table class="write">
@@ -64,9 +155,13 @@
 						<tbody>
 							<tr>
 								<th scope="row" class="t9">수정일시</th>
-								<td><select class="select t5" id="use_yn">
-										<option value="%">전체</option>
-								</select></td>
+								<td>
+									<select class="select t3" id="lst_mdf_dtm">
+										<c:forEach var="result" items="${lst_mdf_dtm}">
+												<option value="${result.svr_acs_cntr_his_id}">${result.lst_mdf_dtm}</option>
+										</c:forEach>
+									</select>
+								</td>
 							</tr>
 						</tbody>
 					</table>

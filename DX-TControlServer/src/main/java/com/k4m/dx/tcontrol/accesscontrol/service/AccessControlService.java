@@ -36,7 +36,31 @@ public interface AccessControlService {
 	 * @param accessControlHistoryVO
 	 * @throws Exception
 	 */
-	void insertAccessControlHistory(AccessControlHistoryVO accessControlHistoryVO)  throws Exception;
+	void insertAccessControlHistory(AccessControlHistoryVO accessControlHistoryVO) throws Exception;
 
-	
+	/**
+	 * 접근제어이력 수정 일시 조회
+	 * 
+	 * @param db_svr_id
+	 * @return AccessControlHistoryVO
+	 * @throws Exception
+	 */
+	List<AccessControlHistoryVO> selectLstmdfdtm(int db_svr_id) throws Exception;
+
+	/**
+	 * 현재 이력_그룹_ID 조회
+	 * 
+	 * @return
+	 * @throws Exception
+	 */
+	int selectCurrenthisrp() throws Exception;
+
+	/**
+	 * 접근제어이력 조회
+	 * 
+	 * @param accessControlHistoryVO
+	 * @return AccessControlHistoryVO
+	 */
+	List<AccessControlHistoryVO> selectAccessControlHistory(AccessControlHistoryVO accessControlHistoryVO) throws Exception;
+
 }

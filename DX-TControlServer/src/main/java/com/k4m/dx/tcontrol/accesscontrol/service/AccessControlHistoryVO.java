@@ -15,7 +15,14 @@ public class AccessControlHistoryVO {
 	private String opt_nm;//옵션_명
 	private String cmd_cnts;//명령어_내용
 	private String lst_mdf_dtm;//최종_수정_일시
+	private int his_grp_id;//이력_그룹_ID
 	
+	public int getHis_grp_id() {
+		return his_grp_id;
+	}
+	public void setHis_grp_id(int his_grp_id) {
+		this.his_grp_id = his_grp_id;
+	}
 	public int getSvr_acs_cntr_his_id() {
 		return svr_acs_cntr_his_id;
 	}

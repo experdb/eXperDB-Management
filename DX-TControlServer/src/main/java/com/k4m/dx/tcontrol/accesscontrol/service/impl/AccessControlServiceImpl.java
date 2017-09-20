@@ -39,6 +39,22 @@ public class AccessControlServiceImpl implements AccessControlService {
 		
 	}
 
+	@Override
+	public List<AccessControlHistoryVO> selectLstmdfdtm(int db_svr_id) throws Exception {
+		return accessControlDAO.selectLstmdfdtm(db_svr_id);
+	}
+
+	@Override
+	public int selectCurrenthisrp() throws Exception{
+		return accessControlDAO.selectCurrenthisrp();
+	}
+
+	@Override
+	public List<AccessControlHistoryVO> selectAccessControlHistory(AccessControlHistoryVO accessControlHistoryVO)
+			throws Exception {
+		return accessControlDAO.selectAccessControlHistory(accessControlHistoryVO);
+	}
+
 
 
 }

@@ -94,7 +94,7 @@
 	 	* Author : 김주영
 	 	**/
 	 	<selectKey resultType="int" keyProperty="svr_acs_cntr_id" order="BEFORE">
-        	SELECT setval('q_svracscntr_i_01',nextval('q_svracscntr_i_01')-1);    
+        	SELECT setval('q_svracscntr_i_01',nextval('q_svracscntr_i_01')-1)
    	 	</selectKey>
    	 	INSERT INTO T_SVRACSCNTR_HIS_I
 		(
@@ -111,6 +111,7 @@
 		, CTF_TP_NM
 		, OPT_NM
 		, LST_MDF_DTM
+		, HIS_GRP_ID
 		)
 		VALUES
 		(
@@ -127,6 +128,61 @@
 		, #{ctf_tp_nm}
 		, #{opt_nm}
 		, clock_timestamp()
+		, #{his_grp_id}
 		)
 	</insert>
+	
+	<select id="selectLstmdfdtm" parameterType="int" resultType="accessControlHistoryVO">
+		/**
+	 	*  Query ID : selectLstmdfdtm
+	 	* Description : 접근제어 이력 수정 일시 조회
+	 	* Author : 김주영
+	 	**/	
+	 	SELECT 
+	 	  TO_CHAR(LST_MDF_DTM, 'YYYY-MM-DD HH:MM:SS')AS LST_MDF_DTM 
+	 	, SVR_ACS_CNTR_HIS_ID
+	 	FROM T_SVRACSCNTR_HIS_I
+		WHERE DB_SVR_ID=#{db_svr_id}
+		AND PRMS_SEQ = 0
+		ORDER BY LST_MDF_DTM DESC
+	</select>
+	
+	<select id="selectCurrenthisrp" resultType="int">
+		/**
+	 	*  Query ID : selectCurrenthisrp
+	 	* Description : 현재 이력_그룹_ID 조회
+	 	* Author : 김주영
+	 	**/		
+	 	SELECT setval('q_svracscntr_his_grp_i_01',nextval('q_svracscntr_his_grp_i_01'))
+	</select>
+	
+	<select id="selectAccessControlHistory" parameterType="accessControlHistoryVO" resultType="accessControlHistoryVO">
+		/**
+	 	*  Query ID : selectAccessControlHistory
+	 	* Description : 접근제어이력 조회
+	 	* Author : 김주영
+	 	**/
+	 	SELECT 
+	 	  SVR_ACS_CNTR_HIS_ID
+	 	, SVR_ACS_CNTR_ID
+	 	, DB_SVR_ID
+	 	, DTB
+	 	, PRMS_IPADR
+	 	, PRMS_IPMASKADR
+	 	, PRMS_USR_ID
+	 	, PRMS_SEQ
+	 	, PRMS_SET
+	 	, CTF_MTH_NM
+	 	, CTF_TP_NM
+	 	, OPT_NM
+	 	, CMD_CNTS
+	 	, LST_MDF_DTM
+	 	, HIS_GRP_ID
+		FROM T_SVRACSCNTR_HIS_I
+		WHERE HIS_GRP_ID = (
+			SELECT HIS_GRP_ID 
+			FROM T_SVRACSCNTR_HIS_I 
+			WHERE SVR_ACS_CNTR_HIS_ID=#{svr_acs_cntr_his_id}
+		)			
+	</select>
 </mapper>

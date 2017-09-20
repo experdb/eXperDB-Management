@@ -22,7 +22,7 @@
 	
 	function fn_init() {
 		table = $('#accessControlTable').DataTable({
-			scrollY : "280px",
+			scrollY : "250px",
 			bSort: false,
 			paging: false,
 			columns : [
@@ -151,11 +151,7 @@
 	 			},
 	 			success : function(result) {
 	 				table.clear().draw();
-	 				if(result.data == null){
-	     				alert("서버상태를 확인해주세요.");
-	     			}else{
-	 					table.rows.add(result.data).draw();
-	     			}
+	 				table.rows.add(result.data).draw();
 	 			}
 	 		}); 
 		}	
@@ -301,13 +297,13 @@
 	<div class="contents_wrap">
 		<div class="contents_tit">
 			<h4>
-				서버접근제어 화면<a href="#n"><img src="../images/ico_tit.png" alt="" /></a>
+				접근제어 화면<a href="#n"><img src="../images/ico_tit.png" alt="" /></a>
 			</h4>
 			<div class="location">
 				<ul>
 					<li>${db_svr_nm}</li>
 					<li>접근제어관리</li>
-					<li class="on">서버접근제어</li>
+					<li class="on">접근제어</li>
 				</ul>
 			</div>
 		</div>

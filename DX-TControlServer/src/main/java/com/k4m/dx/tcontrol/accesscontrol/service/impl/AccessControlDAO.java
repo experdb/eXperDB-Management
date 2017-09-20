@@ -49,9 +49,9 @@ public class AccessControlDAO extends EgovAbstractMapper {
 	public void insertAccessControl(AccessControlVO accessControlVO) throws SQLException {
 		insert("accessControlSql.insertAccessControl", accessControlVO);
 	}
-	
+
 	/**
-	 * 접근제어 이력 등록
+	 * 접근제어이력 등록
 	 * 
 	 * @param accessControlVO
 	 * @throws Exception
@@ -60,6 +60,41 @@ public class AccessControlDAO extends EgovAbstractMapper {
 		insert("accessControlSql.insertAccessControlHistory", accessControlHistoryVO);
 	}
 
+	/**
+	 * 접근제어이력 수정 일시 조회
+	 * 
+	 * @param db_svr_id
+	 * @throws Exception
+	 * @return AccessControlHistoryVO
+	 */
+	@SuppressWarnings({ "deprecation", "unchecked" })
+	public List<AccessControlHistoryVO> selectLstmdfdtm(int db_svr_id) {
+		List<AccessControlHistoryVO> result = null;
+		result = (List<AccessControlHistoryVO>) list("accessControlSql.selectLstmdfdtm", db_svr_id);
+		return result;
+	}
 
+	/**
+	 * 현재 이력_그룹_ID 조회
+	 * 
+	 * @return
+	 * @throws Exception
+	 */
+	public int selectCurrenthisrp() {
+		return (int) getSqlSession().selectOne("accessControlSql.selectCurrenthisrp");
+	}
+
+	/**
+	 * 접근제어이력 조회
+	 * 
+	 * @param accessControlHistoryVO
+	 * @return
+	 */
+	@SuppressWarnings({ "deprecation", "unchecked" })
+	public List<AccessControlHistoryVO> selectAccessControlHistory(AccessControlHistoryVO accessControlHistoryVO) {
+		List<AccessControlHistoryVO> result = null;
+		result = (List<AccessControlHistoryVO>) list("accessControlSql.selectAccessControlHistory", accessControlHistoryVO);
+		return result;
+	}
 
 }

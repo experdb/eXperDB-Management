@@ -87,6 +87,7 @@
 			, LST_MDF_DTM
 			FROM T_USR_I
 			WHERE 1=1	
+			AND USR_ID !='k4m'
 			<if test="search != null and search != '' ">
 				AND ${type} LIKE #{search}
 			</if>
