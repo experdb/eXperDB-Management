@@ -26,8 +26,11 @@ function fn_init() {
 		 ******************************************************** */
 		table = $('#serverList').DataTable({
 		scrollY : "300px",
+		scrollX: true,	
 		processing : true,
-		searching : false,		
+		paging : false,
+		searching : false,	
+		deferRender : true,
 		columns : [
 		{data : "rownum", defaultContent : "", targets : 0, orderable : false, checkboxes : {'selectRow' : true}}, 
 		{data : "idx", className : "dt-center", defaultContent : ""},
@@ -42,6 +45,19 @@ function fn_init() {
 		{data : "lst_mdf_dtm", className : "dt-center", defaultContent : ""}
 		]
 	});
+		
+		table.tables().header().to$().find('th:eq(0)').css('min-width', '10px');
+		table.tables().header().to$().find('th:eq(1)').css('min-width', '20px');
+		table.tables().header().to$().find('th:eq(2)').css('min-width', '130px');
+		table.tables().header().to$().find('th:eq(3)').css('min-width', '100px');
+		table.tables().header().to$().find('th:eq(4)').css('min-width', '130px');
+		table.tables().header().to$().find('th:eq(5)').css('min-width', '70px');
+		table.tables().header().to$().find('th:eq(6)').css('min-width', '70px');
+		table.tables().header().to$().find('th:eq(7)').css('min-width', '65px');  
+		table.tables().header().to$().find('th:eq(8)').css('min-width', '100px');
+		table.tables().header().to$().find('th:eq(9)').css('min-width', '65px');
+		table.tables().header().to$().find('th:eq(10)').css('min-width', '100px');
+	    $(window).trigger('resize'); 
 }
 
 
@@ -221,34 +237,20 @@ function fn_regRe_popup(){
 						</tbody>
 					</table>
 				</div>
-				<table id="serverList" class="cell-border display">
-					<colgroup>
-						<col style="width: 5%;" />
-						<col style="width: 5%;" />
-						<col style="width: 10%;" />
-						<col style="width: 10%;" />
-						<col style="width: 10%;" />
-						<col style="width: 10%;" />
-						<col style="width: 10%;" />
-						<col style="width: 10%;" />
-						<col style="width: 10%;" />
-						<col style="width: 10%;" />
-						<col style="width: 10%;" />
-					</colgroup>
-
+				<table id="serverList" class="cell-border display" width="100%">
 					<thead>
 						<tr>
-							<th></th>
-							<th>No</th>
-							<th>서버명</th>
-							<th>아이피</th>
-							<th>database</th>
-							<th>포트</th>
-							<th>User</th>
-							<th>등록자</th>
-							<th>등록일시</th>
-							<th>수정자</th>
-							<th>수정일시</th>
+							<th width="10"></th>
+							<th width="20">No</th>
+							<th width="130">서버명</th>
+							<th width="100">아이피</th>
+							<th width="130">database</th>
+							<th width="70">포트</th>
+							<th width="70">User</th>
+							<th width="65">등록자</th>
+							<th width="100">등록일시</th>
+							<th width="65">수정자</th>
+							<th width="100">수정일시</th>
 						</tr>
 					</thead>
 				</table>
