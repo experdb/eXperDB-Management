@@ -16,8 +16,34 @@ public class DbServerVO {
 	private String lst_mdf_dtm;
 	private String pghome_pth;
 	private String pgdata_pth;
-
+	private String agt_cndt_cd;
+	private String useyn;
+	private int socket_port;
 	
+	public int getSocket_port() {
+		return socket_port;
+	}
+
+	public void setSocket_port(int socket_port) {
+		this.socket_port = socket_port;
+	}
+
+	public String getUseyn() {
+		return useyn;
+	}
+
+	public void setUseyn(String useyn) {
+		this.useyn = useyn;
+	}
+
+	public String getAgt_cndt_cd() {
+		return agt_cndt_cd;
+	}
+
+	public void setAgt_cndt_cd(String agt_cndt_cd) {
+		this.agt_cndt_cd = agt_cndt_cd;
+	}
+
 	public String getPghome_pth() {
 		return pghome_pth;
 	}

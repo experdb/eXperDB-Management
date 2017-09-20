@@ -158,4 +158,11 @@ public class DbServerManagerDAO extends EgovAbstractMapper{
 		return sl;
 	}
 
+
+	public List<Map<String, Object>> selectIpList() {
+		List<Map<String, Object>>  sl = null;
+		sl = (List<Map<String, Object>>) list("dbserverManagerSql.selectIpList",null);
+		return sl;
+	}
+
 }

@@ -11,6 +11,7 @@
 	 	**/
 	 	
       SELECT 
+      		BCK_WRK_ID,
       		WRK_ID,
 			DB_SVR_ID,
 			DB_ID,
@@ -42,7 +43,7 @@
 			BCK_PTH,
 			ACV_FILE_STGDT,
 			ACV_FILE_MTNCNT
-      FROM T_WRKCNG_I A
+      FROM T_BCK_WRKCNG_I A
       WHERE 1=1	
       	AND DB_SVR_ID=#{db_svr_id}
       	AND BCK_BSN_DSCD=#{bck_bsn_dscd}
@@ -83,14 +84,46 @@
     	ORDER BY EXPS_ORD
     </select>
 
+	<insert id="insertWork" parameterType="workVO">
+		/**
+	 	* Query ID : "insertWork"
+	 	* Description : Work등록
+	 	* Author : 변승우
+	 	**/
+	 	INSERT INTO T_WRKCNG_I
+	 		(
+	 		WRK_ID
+	 		, BSN_DSCD
+	 		, WRK_NM
+	 		, WRK_EXP
+	 		, FRST_REGR_ID
+	 		, FRST_REG_DTM
+	 		, LST_MDFR_ID
+	 		, LST_MDF_DTM
+	 		)
+	 		VALUES
+	 		(
+	 		nextval('q_wrkcng_i_01')
+	 		, 'TC001901'
+	 		, #{wrk_nm}
+			, #{wrk_exp}
+			, #{frst_regr_id}
+			, now()
+			, #{frst_regr_id}
+			, now()
+	 		)
+	</insert>
+
+
 	<insert id="insertRmanWork" parameterType="workVO">
 		/**
 	 	* Query ID : insertRmanWork
 	 	* Description : Rman백업 insert
 	 	* Author : Yoon jh
 	 	**/
-		INSERT INTO T_WRKCNG_I
+		INSERT INTO T_BCK_WRKCNG_I
 			(
+			BCK_WRK_ID,
 			wrk_id,
 			db_svr_id,
 			bck_bsn_dscd,
@@ -114,7 +147,8 @@
 			)
 		VALUES
 			(
-			nextval('q_wrkcng_i_01'),
+			nextval('q_bck_wrkcng_i'),
+			#{wrk_id},
 			#{db_svr_id},
 			'TC000201',
 			#{wrk_nm},
@@ -143,8 +177,9 @@
 	 	* Description : Dump백업 insert
 	 	* Author : Yoon jh
 	 	**/
-		INSERT INTO T_WRKCNG_I
+		INSERT INTO T_BCK_WRKCNG_I
 			(
+			BCK_WRK_ID,
 			wrk_id,
 			db_svr_id,
 			bck_bsn_dscd,
@@ -166,7 +201,8 @@
 			)
 		VALUES
 			(
-			nextval('q_wrkcng_i_01'),
+			nextval('q_bck_wrkcng_i'),
+			#{wrk_id},
 			#{db_svr_id},
 			'TC000202',
 			#{wrk_nm},
@@ -193,7 +229,7 @@
 	 	* Description : Rman백업 update
 	 	* Author : Yoon jh
 	 	**/
-		UPDATE T_WRKCNG_I SET
+		UPDATE T_BCK_WRKCNG_I SET
 			wrk_nm = #{wrk_nm},
 			wrk_exp = #{wrk_exp},
 			bck_opt_cd = #{bck_opt_cd},
@@ -219,7 +255,7 @@
 	 	* Description : Dump백업 update
 	 	* Author : Yoon jh
 	 	**/
-		UPDATE T_WRKCNG_I SET
+		UPDATE T_BCK_WRKCNG_I SET
 			wrk_nm = #{wrk_nm},
 			wrk_exp = #{wrk_exp},
 			db_id = #{db_id},
@@ -298,7 +334,7 @@
 	 	* Description : 백업 delete
 	 	* Author : Yoon jh
 	 	**/	
-		DELETE FROM T_WRKCNG_I
+		DELETE FROM T_BCK_WRKCNG_I
 		WHERE
 			WRK_ID = #{wrk_id}
 	</delete>
@@ -399,7 +435,7 @@
 	 		to_char(TWG.FRST_REG_DTM,'YYYY-MM-DD HH24:MI') AS FRST_REG_DTM,
 	 		TWG.LST_MDFR_ID AS LST_MDFR_ID,
 	 		to_char(TWG.LST_MDF_DTM,'YYYY-MM-DD HH24:MI') AS LST_MDF_DTM
-	 	FROM T_WRKEXE_G TWG, T_WRKCNG_I TWI
+	 	FROM T_WRKEXE_G TWG, T_BCK_WRKCNG_I TWI
 	 	WHERE 1=1
 	 		AND TWG.WRK_ID = TWI.WRK_ID
 	 	<if test="wrk_id != null and wrk_id != '' ">
@@ -512,7 +548,7 @@
 		**/
 		SELECT 
 				 COUNT(*)
-		FROM T_WRKCNG_I
+		FROM T_BCK_WRKCNG_I
 		WHERE WRK_NM = #{wrk_nm}
 	</select>	
 </mapper>

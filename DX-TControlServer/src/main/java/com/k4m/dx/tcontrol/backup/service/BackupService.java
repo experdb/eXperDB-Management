@@ -140,4 +140,12 @@ public interface BackupService {
 	 * @throws Exception
 	 */
 	public int wrk_nmCheck(String wrk_nm) throws Exception;
+	
+	
+	/**
+	 * 잡등록
+	 * @param WorkVO
+	 * @throws Exception
+	 */
+	public void insertWork(WorkVO workVO);
 }

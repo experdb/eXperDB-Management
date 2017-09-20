@@ -21,6 +21,7 @@ public class ScheduleHistoryDAO extends EgovAbstractMapper{
 		params.put("scd_nm", param.get("scd_nm"));
 		params.put("db_svr_nm", param.get("db_svr_nm"));
 		params.put("exe_result", param.get("exe_result"));
+		params.put("wrk_nm", param.get("wrk_nm"));
 		params.put("recordCountPerPage", pagingVO.getRecordCountPerPage());
 		params.put("firstIndex", pagingVO.getFirstIndex());
 

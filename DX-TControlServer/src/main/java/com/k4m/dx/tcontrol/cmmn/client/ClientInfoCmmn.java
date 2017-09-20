@@ -1051,4 +1051,37 @@ public class ClientInfoCmmn {
 		}
 	}
 
+	public Map<String, Object> getHostName(String IP, int PORT) {
+		Map<String, Object> result = new HashMap<String, Object>();
+		try {
+		JSONObject jObj = new JSONObject();
+			
+		jObj.put(ClientProtocolID.DX_EX_CODE, ClientTranCodeType.DxT019);
+		JSONObject objList;
+		
+		ClientAdapter CA = new ClientAdapter(IP, PORT);
+		CA.open(); 
+
+		objList = CA.dxT019(jObj);	
+		CA.close();
+		
+		String strErrMsg = (String)objList.get(ClientProtocolID.ERR_MSG);
+		String strErrCode = (String)objList.get(ClientProtocolID.ERR_CODE);
+		String strDxExCode = (String)objList.get(ClientProtocolID.DX_EX_CODE);
+		String strResultCode = (String)objList.get(ClientProtocolID.RESULT_CODE);
+		System.out.println("RESULT_CODE : " +  strResultCode);
+		System.out.println("ERR_CODE : " +  strErrCode);
+		System.out.println("ERR_MSG : " +  strErrMsg);
+
+		String host = (String) objList.get(ClientProtocolID.RESULT_DATA);
+		
+		System.out.println("host : " + host);
+		result.put("host", host);
+		} catch(Exception e) {
+			e.printStackTrace();
+		}
+		
+		return result;
+	}
+
 }

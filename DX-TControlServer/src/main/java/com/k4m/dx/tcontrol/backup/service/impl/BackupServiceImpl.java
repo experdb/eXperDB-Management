@@ -94,4 +94,9 @@ public class BackupServiceImpl implements BackupService{
 	public int wrk_nmCheck(String wrk_nm) throws Exception {
 		return backupDAO.wrk_nmCheck(wrk_nm);
 	}
+
+	@Override
+	public void insertWork(WorkVO workVO) {
+		backupDAO.insertWork(workVO);
+	}
 }

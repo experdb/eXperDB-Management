@@ -309,16 +309,42 @@ public class BackupController {
 	@RequestMapping(value = "/popup/workRmanWrite.do")
 	public void workRmanWrite(@ModelAttribute("workVO") WorkVO workVO, HttpServletResponse response, HttpServletRequest request) throws IOException {
 		String result = "S";
+		
+		String wrkid_result = "S";
+		WorkVO resultSet = null;
 
 		try {
 			HttpSession session = request.getSession();
 			String usr_id = (String) session.getAttribute("usr_id");
 			workVO.setFrst_regr_id(usr_id);
-			backupService.insertRmanWork(workVO);
+			
+			//작업 정보등록
+			backupService.insertWork(workVO);
+			//backupService.insertRmanWork(workVO);
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 			result = "F";
+		}
+	
+		// Get Last wrk_id
+		if(result.equals("S")){
+			try {
+				resultSet = backupService.lastWorkId();
+				workVO.setWrk_id(resultSet.getWrk_id());		
+			} catch (Exception e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+		
+		if(wrkid_result.equals("S")){
+			try {	
+				backupService.insertRmanWork(workVO);
+			} catch (Exception e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 		}
 		
 		response.getWriter().println(result);
@@ -334,13 +360,15 @@ public class BackupController {
 	public void workDumpWrite(@ModelAttribute("workVO") WorkVO workVO, HttpServletResponse response, HttpServletRequest request) throws IOException{
 		WorkVO resultSet = null;
 		String result = "S";
+		String wrkid_result = "S";
 
 		// Data Insert
 		try {
 			HttpSession session = request.getSession();
 			String usr_id = (String) session.getAttribute("usr_id");
 			workVO.setFrst_regr_id(usr_id);
-			backupService.insertDumpWork(workVO);
+			//작업 정보등록
+			backupService.insertWork(workVO);			
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -351,15 +379,22 @@ public class BackupController {
 		if(result.equals("S")){
 			try {
 				resultSet = backupService.lastWorkId();
+				workVO.setWrk_id(resultSet.getWrk_id());
 			} catch (Exception e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 		}
-
-		// Return wrk_id=0 for Insert Fail
-		if(result.equals("F")) resultSet.setWrk_id(0);
-
+		
+		if(wrkid_result.equals("S")){
+			try {	
+				backupService.insertDumpWork(workVO);
+			} catch (Exception e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+		
 		response.getWriter().println(resultSet.getWrk_id());
 	}
 	

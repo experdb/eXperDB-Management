@@ -458,4 +458,61 @@ public class DbServerManagerController {
 		}
 		return "true";
 	}
+	
+	
+	/**
+	 * Agent IP SelectBox 
+	 * 
+	 * @return resultSet
+	 * @throws Exception
+	 */
+	@SuppressWarnings("unused")
+	@RequestMapping(value = "/selectIpList.do")
+	@ResponseBody
+	public List<Map<String, Object>> selectIpList(HttpServletRequest request) {
+	
+		List<Map<String, Object>> resultSet = null;
+		try {			
+			resultSet = dbServerManagerService.selectIpList();	
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return resultSet;
+	}
+	
+	
+	/**
+	 * 호스트명 가져오기
+	 * 
+	 * @return resultSet
+	 * @throws Exception
+	 */
+	@SuppressWarnings("unused")
+	@RequestMapping(value = "/getHostNm.do")
+	@ResponseBody
+	public Map<String, Object> getHostNm(HttpServletRequest request) {
+	
+		Map<String, Object> result = null;
+		try {		
+			String ipadr = request.getParameter("ipadr");
+			System.out.println(ipadr);
+			AgentInfoVO vo = new AgentInfoVO();
+			vo.setIPADR(ipadr);
+			
+			AgentInfoVO agentInfo =  (AgentInfoVO) cmmnServerInfoService.selectAgentInfo(vo);
+			
+			String IP = ipadr;
+			int PORT = agentInfo.getSOCKET_PORT();
+			System.out.println("아이피:" + IP);
+			System.out.println("포트:" + PORT);
+			ClientInfoCmmn cic = new ClientInfoCmmn();
+			result = cic.getHostName(IP, PORT);
+			System.out.println(result);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return result;
+		
+	}
+	
 }

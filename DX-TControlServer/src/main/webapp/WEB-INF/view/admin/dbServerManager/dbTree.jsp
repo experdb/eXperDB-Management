@@ -32,6 +32,7 @@ function fn_init() {
 		scrollY : "245px",
 		searching : false,
 		paging : false,
+		//dom: 'C<"clear">RZlfrtip',
 		columns : [
 		{data : "rownum", defaultContent : "", className : "dt-center", 
 			targets: 0,
@@ -43,17 +44,41 @@ function fn_init() {
 	           }
 	           return data;
 	        }}, 
-		{data : "idx", className : "dt-center", defaultContent : "" ,visible: false},
-		{data : "db_svr_id", className : "dt-center", defaultContent : "", visible: false},
-		{data : "db_svr_nm", className : "dt-center", defaultContent : ""},
-		{data : "ipadr", className : "dt-center", defaultContent : "", visible: false},
+		{data : "ipadr", className : "dt-center", defaultContent : ""},
+		{data : "db_svr_nm", className : "dt-center", defaultContent : ""},		
+		{data : "agt_cndt_cd", defaultContent : "", className : "dt-center", 
+			targets: 0,
+	        searchable: false,
+	        orderable: false,
+	        render: function(data, type, full, meta){
+	           if(full.agt_cndt_cd == 'TC001101'){
+	              data = '<img src="../images/ico_agent_1.png" alt="" />';      
+	           }else{
+	        	  data = '<img src="../images/ico_agent_2.png" alt="" />';    
+	           }
+	           return data;
+	        }}, 
+        {data : "useyn", defaultContent : "", className : "dt-center", 
+			targets: 0,
+	        searchable: false,
+	        orderable: false,
+	        render: function(data, type, full, meta){
+	           if(full.useyn == 'Y'){
+	              data = '사용';      
+	           }else{
+	        	  data ='미사용';
+	           }
+	           return data;
+	        }}, 
 		{data : "dft_db_nm", className : "dt-center", defaultContent : "", visible: false},
 		{data : "portno", className : "dt-center", defaultContent : "", visible: false},
 		{data : "svr_spr_usr_id", className : "dt-center", defaultContent : "", visible: false},
 		{data : "frst_regr_id", className : "dt-center", defaultContent : "", visible: false},
 		{data : "frst_reg_dtm", className : "dt-center", defaultContent : "", visible: false},
 		{data : "lst_mdfr_id", className : "dt-center", defaultContent : "", visible: false},
-		{data : "lst_mdf_dtm", className : "dt-center", defaultContent : "", visible: false}			
+		{data : "lst_mdf_dtm", className : "dt-center", defaultContent : "", visible: false},
+		{data : "idx", className : "dt-center", defaultContent : "" ,visible: false},
+		{data : "db_svr_id", className : "dt-center", defaultContent : "", visible: false}
 		]
 	});
 
@@ -79,6 +104,24 @@ function fn_init() {
 		{data : "rownum", defaultContent : "", targets : 0, orderable : false, checkboxes : {'selectRow' : true}}, 		
 		]
 	});
+	
+	
+	table_dbServer.tables().header().to$().find('th:eq(0)').css('min-width', '10px');
+	table_dbServer.tables().header().to$().find('th:eq(1)').css('min-width', '150px');
+	table_dbServer.tables().header().to$().find('th:eq(2)').css('min-width', '100px');
+	table_dbServer.tables().header().to$().find('th:eq(3)').css('min-width', '30px');
+	table_dbServer.tables().header().to$().find('th:eq(4)').css('min-width', '30px');
+	table_dbServer.tables().header().to$().find('th:eq(5)').css('min-width', '0px');
+	table_dbServer.tables().header().to$().find('th:eq(6)').css('min-width', '0px');
+	table_dbServer.tables().header().to$().find('th:eq(7)').css('min-width', '0px');  
+	table_dbServer.tables().header().to$().find('th:eq(8)').css('min-width', '0px');
+	table_dbServer.tables().header().to$().find('th:eq(9)').css('min-width', '0px');
+    table_dbServer.tables().header().to$().find('th:eq(10)').css('min-width', '0px');
+    table_dbServer.tables().header().to$().find('th:eq(11)').css('min-width', '0px');
+    table_dbServer.tables().header().to$().find('th:eq(12)').css('min-width', '0px');  
+    table_dbServer.tables().header().to$().find('th:eq(13)').css('min-width', '0px');
+    table_dbServer.tables().header().to$().find('th:eq(14)').css('min-width', '0px');      
+    $(window).trigger('resize'); 
 	
 }
 
@@ -395,18 +438,20 @@ function fn_dataCompareChcek(svrDbList){
 							<table id="dbServerList" class="display" cellspacing="0" align="right">
 								<thead>
 									<tr>
-										<th>선택</th>
-										<th></th>
-										<th></th>
-										<th>DB 서버</th>
-										<th></th>
-										<th></th>
-										<th></th>
-										<th></th>
-										<th></th>
-										<th></th>
-										<th></th>
-										<th></th>
+										<th width="10">선택</th>									
+										<th width="150">IP</th>
+										<th width="100">DB서버</th>
+										<th width="30">Agent상태</th>
+										<th width="30">사용유무</th>
+										<th width="0"></th>
+										<th width="0"></th>
+										<th width="0"></th>
+										<th width="0"></th>
+										<th width="0"></th>
+										<th width="0"></th>
+										<th width="0"></th>
+										<th width="0"></th>
+										<th width="0"></th>
 									</tr>
 								</thead>
 							</table>

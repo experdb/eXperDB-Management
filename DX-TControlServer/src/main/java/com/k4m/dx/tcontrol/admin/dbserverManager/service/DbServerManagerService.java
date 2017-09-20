@@ -96,5 +96,8 @@ public interface DbServerManagerService {
 
 
 	List<DbVO> selectDbListTree(int db_svr_id) throws Exception;
+
+
+	List<Map<String, Object>> selectIpList() throws Exception;
 	
 }

@@ -101,4 +101,8 @@ public class BackupDAO extends EgovAbstractMapper{
 		resultSet = (int) getSqlSession().selectOne("backupSQL.wrk_nmCheck", wrk_nm);
 		return resultSet;
 	}
+
+	public void insertWork(WorkVO workVO) {
+		insert("backupSQL.insertWork",workVO);	
+	}
 }

@@ -363,9 +363,10 @@ function checkFolder(){
 			},
 			success : function(data) {
 				if(data.result.ERR_CODE == ""){
-					if(data.result.RESULT_DATA == 0){
+					if(data.result.RESULT_DATA.IS_DIRECTORY == 0){
 						$("#check_path").val("Y");
 						alert("입력하신 경로는 존재합니다.");
+						var volume = data.result.RESULT_DATA.CAPACITY;
 					}else{
 						alert("입력하신 경로는 존재하지 않습니다.");
 					}

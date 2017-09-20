@@ -36,6 +36,52 @@ var db_svr_nmChk ="fail";
 var pghomeCheck="fail";
 var pgdataCheck ="fail";
 
+
+/* ********************************************************
+ * 페이지 시작시(서버 조회)
+ ******************************************************** */
+$(window.document).ready(function() {
+	
+  	$.ajax({
+		url : "/selectIpList.do",
+		data : {},
+		dataType : "json",
+		type : "post",
+		beforeSend: function(xhr) {
+	        xhr.setRequestHeader("AJAX", true);
+	     },
+		error : function(xhr, status, error) {
+			if(xhr.status == 401) {
+				alert("인증에 실패 했습니다. 로그인 페이지로 이동합니다.");
+				 location.href = "/";
+			} else if(xhr.status == 403) {
+				alert("세션이 만료가 되었습니다. 로그인 페이지로 이동합니다.");
+	             location.href = "/";
+			} else {
+				alert("ERROR CODE : "
+						+ xhr.status
+						+ "\n\n"
+						+ "ERROR Message : "
+						+ error
+						+ "\n\n"
+						+ "Error Detail : "
+						+ xhr.responseText.replace(
+								/(<([^>]+)>)/gi, ""));
+			}
+		},
+		success : function(result) {
+			$("#ipadr").children().remove();
+			$("#ipadr").append("<option value='%'>선택</option>");
+			if(result.length > 0){
+				for(var i=0; i<result.length; i++){
+					$("#ipadr").append("<option value='"+result[i].ipadr+"'>"+result[i].ipadr+"</option>");	
+				}									
+			}
+			$("#ipadr").val(ipadr).attr("selected", "selected");
+		}
+	});
+});
+
 //숫자체크
 function valid_numeric(objValue)
 {
@@ -62,7 +108,7 @@ function fn_dbServerValidation(){
   			 dft_db_nm.focus();
   			   return false;
   		}
- 		var ipadr = document.getElementById("ipadr");
+/*  		var ipadr = document.getElementById("ipadr");
  		if (ipadr.value == "") {
   			   alert("IP를 입력하여 주십시오.");
   			 ipadr.focus();
@@ -70,7 +116,7 @@ function fn_dbServerValidation(){
   		}else if(idCheck != "success"){
 			alert("IP 중복검사를 하셔야합니다.");
 			return false;
-		}
+		} */
 
  		var portno = document.getElementById("portno");
 		if (portno.value == "") {
@@ -196,13 +242,9 @@ function fn_dbServerCancle(){
 
 
 //아이디 중복체크
-function fn_ipCheck() {
+function fn_ipadrChange() {
 	var ipadr = document.getElementById("ipadr");
-	if (ipadr.value == "") {
-		alert("IP를 입력하세요.");
-		document.getElementById('ipadr').focus();
-		return;
-	}
+
 	$.ajax({
 		url : '/dbServerIpCheck.do',
 		type : 'post',
@@ -211,13 +253,13 @@ function fn_ipCheck() {
 		},
 		success : function(result) {
 			if (result == "true") {
-				alert("등록가능한 IP 입니다.");
-				document.getElementById("ipadr").focus();
 				idCheck = "success";
+				fn_getHostNm($("#ipadr").val());
 			} else {
+				document.getElementById("db_svr_nm").value = "";
 				alert("중복된 IP가 존재합니다.");
-				document.getElementById("ipadr").focus();
-			}
+				return false;
+			}			
 		},
 		error : function(request, status, error) {
 			alert("실패");
@@ -225,6 +267,23 @@ function fn_ipCheck() {
 	});
 }
 	
+	
+//호스트명 가져오기
+function fn_getHostNm(ipadr) {
+	$.ajax({
+		url : '/getHostNm.do',
+		type : 'post',
+		data : {
+			ipadr : ipadr
+		},
+		success : function(result) {
+			document.getElementById("db_svr_nm").value = result.host;
+		},
+		error : function(request, status, error) {
+			alert("실패");
+		}
+	});
+}
 	
 //서버명 중복체크
 function fn_svrnmCheck() {
@@ -361,17 +420,22 @@ function checkPghome(){
 			</colgroup>
 			<tbody>
 				<tr>
-					<th scope="row" class="ico_t1" >서버명(*)</th>
-					<td><input type="text" class="txt" name="db_svr_nm" id="db_svr_nm"  style="width:230px"/>
-					<span class="btn btnC_01"><button type="button" class= "btn_type_02" onclick="fn_svrnmCheck()" style="width: 60px; margin-right: -60px; margin-top: 0;">중복체크</button></span>
+					<th scope="row" class="ico_t1">IP(*)</th>
+					<td>
+						<select class="select"  id="ipadr" name="ipadr" onChange="fn_ipadrChange();" >
+							<option value="%">선택</option>
+						</select>
 					</td>
+<!-- 					<td><input type="text" class="txt" name="ipadr" id="ipadr" style="width:230px"/>
+					<span class="btn btnC_01"><button type="button" class= "btn_type_02" onclick="fn_ipCheck()" style="width: 60px; margin-right: -60px; margin-top: 0;">중복체크</button></span>
+					</td> -->
 					<th scope="row" class="ico_t1" style="width: 60px; margin-right: -160px; margin-top: 0;">Database(*)</th>
 					<td><input type="text" class="txt" name="dft_db_nm" id="dft_db_nm" /></td>
 				</tr>
 				<tr>
-					<th scope="row" class="ico_t1">IP(*)</th>
-					<td><input type="text" class="txt" name="ipadr" id="ipadr" style="width:230px"/>
-					<span class="btn btnC_01"><button type="button" class= "btn_type_02" onclick="fn_ipCheck()" style="width: 60px; margin-right: -60px; margin-top: 0;">중복체크</button></span>
+					<th scope="row" class="ico_t1" >서버명(*)</th>
+					<td><input type="text" class="txt" name="db_svr_nm" id="db_svr_nm"  style="width:230px"/>
+					<span class="btn btnC_01"><button type="button" class= "btn_type_02" onclick="fn_svrnmCheck()" style="width: 60px; margin-right: -60px; margin-top: 0;">중복체크</button></span>
 					</td>
 					<th scope="row" class="ico_t1">Port(*)</th>
 					<td><input type="text" class="txt" name="portno" id="portno" /></td>

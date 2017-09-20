@@ -623,10 +623,10 @@ body.bg{background:#fff url(../images/login_bg.png) center center no-repeat;}
 #login_wrap .inr .btn_wrap button{display:block;width:100%;height:51px;line-height:51px;text-align:center;font-size:18px;color:#fff;background:#f58220;font-family:'Nanum Square Bold';cursor:pointer;}
 
 /* tree_grp */ 
-.tree_grp{max-width:1200px;}
+
 .tree_grp:after{display:block;content:"";clear:both;}
-.tree_grp .tree_lt{float:left;width:38%;}
-.tree_grp .tree_rt{float:left;width:52%;margin-left:10%;}
+.tree_grp .tree_lt{float:left;width:54%;}
+.tree_grp .tree_rt{float:left;width:36%;margin-left:10%;}
 .tree_grp .inner{border:1px solid #b8c3c6;}
 .tree_grp .inner > div{height:370px;overflow-y:auto;}
 .tree_grp .inner .tit{height:28px;line-height:28px;padding-left:27px;border-bottom:1px solid #b8c3c6;background:#e4e9ec;color:#101922;font-size:12px;font-family:'Nanum Square Bold';font-weight:700;}

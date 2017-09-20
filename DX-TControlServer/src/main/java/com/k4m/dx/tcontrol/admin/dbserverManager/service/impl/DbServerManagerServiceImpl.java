@@ -83,4 +83,9 @@ public class DbServerManagerServiceImpl implements DbServerManagerService {
 		return dbServerManagerDAO.selectDbListTree(db_svr_id);
 	}
 
+	@Override
+	public List<Map<String, Object>> selectIpList() throws Exception {
+		return dbServerManagerDAO.selectIpList();
+	}
+
 }
