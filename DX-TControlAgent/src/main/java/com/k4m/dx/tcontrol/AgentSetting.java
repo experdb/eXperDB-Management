@@ -34,31 +34,31 @@ public class AgentSetting {
 		
 		Scanner scan = new Scanner(System.in);
 		
-		System.out.println("database IP 를  입력하세요:");
+		System.out.println("database IP :");
 		
 		strDatabaseIp = scan.nextLine();
 		
-		System.out.println("database Port 를  입력하세요:");
+		System.out.println("database Port :");
 		
 		strDatabasePort = scan.nextLine();
 		
-		System.out.println("database Name 를  입력하세요:");
+		System.out.println("database Name :");
 		
 		strDatabaseName = scan.nextLine();
 		
-		System.out.println("database.username 을  입력하세요:");
+		System.out.println("database.username :");
 		
 		strDatabaseUsername = scan.nextLine();
 		
-		System.out.println("database.password 을  입력하세요:");
+		System.out.println("database.password :");
 		
 		strDatabasePassword = scan.nextLine();
 		
-		System.out.println("Agent IP 를  입력하세요:");
+		System.out.println("agent ip :");
 		
 		strAgentIp = scan.nextLine();
 		
-		System.out.println("Agent port 를  입력하세요:");
+		System.out.println("agent port :");
 		
 		strAgentPort = scan.nextLine();
 		
@@ -68,8 +68,8 @@ public class AgentSetting {
 		System.out.println("database 접속정보 :" + strDatabaseUrl);
 		System.out.println("database.username :" + strDatabaseUsername);
 		System.out.println("database.password :" + strDatabasePassword);
-		System.out.println("Agent IP :" + strAgentIp);
-		System.out.println("Agent port :" + strAgentPort);
+		System.out.println("agent ip :" + strAgentIp);
+		System.out.println("agent port :" + strAgentPort);
 		System.out.println("#####################################################");
 		
 		System.out.println("입력한 내용으로 적용하시겠습니까? (y, n)");
