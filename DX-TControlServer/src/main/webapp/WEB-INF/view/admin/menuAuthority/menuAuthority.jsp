@@ -186,6 +186,7 @@ function fn_save(){
 						<div class="location">
 							<ul>
 								<li>Admin</li>
+								<li>권한관리</li>
 								<li class="on">메뉴 권한 관리</li>
 							</ul>
 						</div>
