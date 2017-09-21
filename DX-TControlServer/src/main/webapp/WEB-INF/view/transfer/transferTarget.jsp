@@ -21,7 +21,9 @@
 	
 	function fn_init() {
 		table = $('#transferTargetTable').DataTable({
-			scrollY : "250px",
+			scrollY : "230px",
+			deferRender : true,
+			scrollX: true,
 			columns : [
 			{ data : "", defaultContent : "", targets : 0, orderable : false, checkboxes : {'selectRow' : true}}, 
 			{ data : "", className : "dt-center", defaultContent : ""}, 
@@ -39,6 +41,13 @@
 			]
 		});
 		
+		table.tables().header().to$().find('th:eq(0)').css('min-width', '10px');
+		table.tables().header().to$().find('th:eq(1)').css('min-width', '20px');
+		table.tables().header().to$().find('th:eq(2)').css('min-width', '100px');
+		table.tables().header().to$().find('th:eq(3)').css('min-width', '100px');
+		table.tables().header().to$().find('th:eq(4)').css('min-width', '80px');
+	    $(window).trigger('resize'); 
+	    
 		table.on( 'order.dt search.dt', function () {
 			table.column(1, {search:'applied', order:'applied'}).nodes().each( function (cell, i) {
 	            cell.innerHTML = i+1;
@@ -205,10 +214,10 @@
 <div id="contents">
 	<div class="contents_wrap">
 		<div class="contents_tit">
-			<h4>전송대상 설정 화면<a href="#n"><img src="../images/ico_tit.png" alt="" /></a></h4>
+			<h4>전송대상 설정<a href="#n"><img src="../images/ico_tit.png" alt="" /></a></h4>
 			<div class="location">
 				<ul>
-					<li>Transfer</li>
+					<li>데이터전송</li>
 					<li>${cnr_nm}</li>
 					<li class="on">전송대상 설정</li>
 				</ul>
@@ -240,11 +249,11 @@
 					<table id="transferTargetTable" class="display" cellspacing="0" width="100%">
 						<thead>
 							<tr>
-								<th></th>
-								<th>No</th>
-								<th>연결이름</th>
-								<th>Target URL</th>
-								<th>상세조회</th>
+								<th width="10"></th>
+								<th width="20">No</th>
+								<th width="100">연결이름</th>
+								<th width="100">Target URL</th>
+								<th width="80">상세조회</th>
 							</tr>
 						</thead>
 					</table>

@@ -25,6 +25,7 @@
 			scrollY : "250px",
 			bSort: false,
 			paging: false,
+			scrollX: true,
 			columns : [
 				{ data : "Seq", defaultContent : "", targets : 0, orderable : false, checkboxes : {'selectRow' : true}}, 
 				{ data : "", className : "dt-center", defaultContent : ""}, 
@@ -58,6 +59,19 @@
 				}
 		});
 		
+		table.tables().header().to$().find('th:eq(0)').css('min-width', '10px');
+		table.tables().header().to$().find('th:eq(1)').css('min-width', '20px');
+		table.tables().header().to$().find('th:eq(2)').css('min-width', '50px');
+		table.tables().header().to$().find('th:eq(3)').css('min-width', '100px');
+		table.tables().header().to$().find('th:eq(4)').css('min-width', '100px');
+		table.tables().header().to$().find('th:eq(5)').css('min-width', '100px');
+		table.tables().header().to$().find('th:eq(6)').css('min-width', '100px');
+		table.tables().header().to$().find('th:eq(7)').css('min-width', '80px');
+		table.tables().header().to$().find('th:eq(8)').css('min-width', '100px');
+		table.tables().header().to$().find('th:eq(9)').css('min-width', '100px');
+	    $(window).trigger('resize');
+	    
+	    
 		// Move the row up
 		function moveUp() {
 			var tr = $(this).parents('tr');
@@ -99,6 +113,8 @@
 	        } );
 	    } ).draw();
 		
+
+	    
 		//더블 클릭시
 		$('#accessControlTable tbody').on('dblclick','tr',function() {
 			var User = table.row(this).data().User;
@@ -297,7 +313,7 @@
 	<div class="contents_wrap">
 		<div class="contents_tit">
 			<h4>
-				접근제어 화면<a href="#n"><img src="../images/ico_tit.png" alt="" /></a>
+				접근제어<a href="#n"><img src="../images/ico_tit.png" alt="" /></a>
 			</h4>
 			<div class="location">
 				<ul>
@@ -326,16 +342,16 @@
 						<table id="accessControlTable" class="display" cellspacing="0" width="100%">
 							<thead>
 								<tr>
-									<th></th>
-									<th>No</th>
-									<th>Type</th>
-									<th>Database</th>
-									<th>User</th>
-									<th>IP Address</th>
-									<th>IP Mask</th>
-									<th>Method</th>
-									<th>Option</th>
-									<th>순서</th>
+									<th width="10"></th>
+									<th width="20">No</th>
+									<th width="50">Type</th>
+									<th width="100">Database</th>
+									<th width="100">User</th>
+									<th width="100">IP Address</th>
+									<th width="100">IP Mask</th>
+									<th width="80">Method</th>
+									<th width="100">Option</th>
+									<th width="100">순서</th>
 								</tr>
 							</thead>
 						</table>

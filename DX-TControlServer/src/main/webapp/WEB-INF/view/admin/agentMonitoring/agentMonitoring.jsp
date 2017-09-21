@@ -35,7 +35,7 @@
 			<div id="contents">
 				<div class="contents_wrap">
 					<div class="contents_tit">
-						<h4>에이전트 모니터링 화면<a href="#n"><img src="../images/ico_tit.png" alt="" /></a></h4>
+						<h4>에이전트 모니터링<a href="#n"><img src="../images/ico_tit.png" alt="" /></a></h4>
 						<div class="location">
 							<ul>
 								<li>Admin</li>
@@ -59,7 +59,7 @@
 									<tbody>
 										<tr>
 											<th scope="row" class="t2">DB 서버명</th>
-											<td><input type="text" id="DB_SVR_NM" name="DB_SVR_NM" class="txt t2"/></td>
+											<td><input type="text" id="DB_SVR_NM" name="DB_SVR_NM" class="txt t2" value="${db_svr_nm}" /></td>
 										</tr>
 									</tbody>
 								</table>

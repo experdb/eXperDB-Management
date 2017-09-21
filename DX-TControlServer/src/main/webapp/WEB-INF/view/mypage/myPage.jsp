@@ -25,14 +25,50 @@
 	var popOption = "width="+width+", height="+height+", top="+top+", left="+left+", resizable=no, scrollbars=yes, status=no, toolbar=no, titlebar=yes, location=no,";
 	
 	window.open(popUrl,"",popOption);
-}	
+}
+	
+	/* 개인정보수정 Validation */
+	function fn_mypageValidation() {
+		var usr_nm = document.getElementById("usr_nm");
+		if (usr_nm.value == "") {
+			alert("사용자명을 입력하여 주십시오.");
+			usr_nm.focus();
+			return false;
+		}
+		return true;
+	}
+
+	/*개인정보수정 저장 버튼 클릭시*/
+	function fn_update() {
+		if (!fn_mypageValidation())return false;
+		$.ajax({
+			url : '/updateMypage.do',
+			type : 'post',
+			data : {
+				usr_id : '${usr_id}',
+				usr_nm : $("#usr_nm").val(),
+				bln_nm : $("#bln_nm").val(),
+				dept_nm : $("#dept_nm").val(),
+				pst_nm : $("#pst_nm").val(),
+				cpn : $("#cpn").val(),
+				rsp_bsn_nm : $("#rsp_bsn_nm").val()
+			},
+			success : function(result) {
+				alert("저장하였습니다.");
+				
+			},
+			error : function(request, status, error) {
+				alert("실패");
+			}
+		});
+	}
 </script>
 
 <div id="contents">
 	<div class="contents_wrap">
 		<div class="contents_tit">
 			<h4>
-				사용자정보관리 화면 <a href="#n"><img src="../images/ico_tit.png" alt="" /></a>
+				사용자정보관리<a href="#n"><img src="../images/ico_tit.png" alt="" /></a>
 			</h4>
 			<div class="location">
 				<ul>
@@ -55,7 +91,7 @@
 					</colgroup>
 					<tbody>
 						<tr>
-							<th scope="row">사용자 아이디</th>
+							<th scope="row">사용자 아이디 (*)</th>
 							<td>${usr_id}</td>
 						</tr>
 						<tr>
@@ -67,23 +103,23 @@
 							<td><a href="#n" onclick="fn_pwdPopup()"><img src="../images/ico_pwd_ud.png" alt="패스워드변경" /></a></td>
 						</tr>
 						<tr>
-							<th scope="row">소속 (*)</th>
+							<th scope="row">소속</th>
 							<td><input type="text" class="txt" name="bln_nm" id="bln_nm" value="${bln_nm}" /></td>
 						</tr>
 						<tr>
-							<th scope="row">부서 (*)</th>
+							<th scope="row">부서</th>
 							<td><input type="text" class="txt" name="dept_nm" id="dept_nm" value="${dept_nm}" /></td>
 						</tr>
 						<tr>
-							<th scope="row">직급 (*)</th>
+							<th scope="row">직급</th>
 							<td><input type="text" class="txt" name="pst_nm" id="pst_nm" value="${pst_nm}" /></td>
 						</tr>
 						<tr>
-							<th scope="row">휴대폰 번호 (*)</th>
+							<th scope="row">휴대폰 번호</th>
 							<td><input type="text" class="txt" name="cpn" id="cpn" value="${cpn}" /></td>
 						</tr>
 						<tr>
-							<th scope="row">담당 업무 (*)</th>
+							<th scope="row">담당 업무</th>
 							<td><input type="text" class="txt" name="rsp_bsn_nm" id="rsp_bsn_nm" value="${rsp_bsn_nm}" /></td>
 						</tr>
 						<tr>

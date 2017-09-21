@@ -69,6 +69,7 @@ public class AgentMonitoringController {
 
 			
 			model.addAttribute("list", list);
+			model.addAttribute("db_svr_nm",strDB_SVR_NM);
 			
 			mv.setViewName("admin/agentMonitoring/agentMonitoring");
 		} catch (Exception e) {

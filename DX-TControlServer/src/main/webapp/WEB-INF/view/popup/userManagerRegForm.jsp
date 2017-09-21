@@ -181,6 +181,9 @@
 				$("#rsp_bsn_nm").attr("onfocus", "idcheck_alert();");
 				$("#cpn").attr("onfocus", "idcheck_alert();");
 				$("#use_yn").attr("onfocus", "idcheck_alert();");
+				$("#datepicker3").attr("onfocus", "idcheck_alert();");
+			}else{
+				$("#datepicker3").datepicker();
 			}
 		};
 	});
@@ -189,6 +192,8 @@
 		if (idCheck != 1) {
 			alert("아이디를 입력한 후 중복 체크를 해주세요");
 			document.getElementById('usr_id').focus();
+		}else{
+			$("#datepicker3").datepicker();
 		}
 	}
 	
@@ -279,7 +284,7 @@
 						<td>
 							<div class="calendar_area big">
 								<a href="#n" class="calendar_btn">달력열기</a>
-								<input type="text" class="calendar" id="datepicker1" title="사용자 만료일 날짜 검색"  value="${usr_expr_dt}" readonly />
+								<input type="text" class="calendar" id="datepicker3" title="사용자 만료일 날짜 검색"  value="${usr_expr_dt}" readonly />
 							</div>
 						</td>
 					</tr>

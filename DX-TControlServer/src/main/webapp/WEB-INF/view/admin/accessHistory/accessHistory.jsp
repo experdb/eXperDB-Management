@@ -103,7 +103,7 @@
 	/*조회버튼 클릭시*/
 	function fn_select() {
 		$("#historyCheck").val("historyCheck");
-		document.selectList.action = "/selectAccessHistory.do";
+		document.selectList.action = "/selectSearchAccessHistory.do";
 		document.selectList.submit();
 	}
 
@@ -118,11 +118,13 @@
 		<input type="hidden" name="lgi_dtm_start" id="lgi_dtm_start">
 		<input type="hidden" name="lgi_dtm_end" id="lgi_dtm_end"> 
 		<input type="hidden" name="user_nm" id="user_nm">
+		<input type="hidden" name="order_type" id=order_type>
+		<input type="hidden" name="order" id="order">
 	</form>
 	<div id="contents">
 		<div class="contents_wrap">
 			<div class="contents_tit">
-				<h4>화면접근이력 화면 <a href="#n"><img src="../images/ico_tit.png" alt="" /></a></h4>
+				<h4>화면접근이력<a href="#n"><img src="../images/ico_tit.png" alt="" /></a></h4>
 					<div class="location">
 						<ul>
 							<li>Admin</li>
@@ -163,6 +165,21 @@
 										<th scope="row" class="t9">사용자</th>
 										<td><input type="text" class="txt t2" id="usr_nm" name="usr_nm" value="${usr_nm}"/></td>
 									</tr>
+									<tr>
+									<th scope="row" class="t9">정렬</th>
+										<td>
+											<select class="select t5" id="order_type" name="order_type">
+												<option value="exedtm" ${order_type == 'exedtm' ? 'selected="selected"' : ''}>일자,시간</option>
+												<option value="usr_id" ${order_type == 'usr_id' ? 'selected="selected"' : ''}>아이디</option>
+											</select>							
+											<select class="select t5" id="order" name="order">
+												<option value="desc" ${order == 'desc' ? 'selected="selected"' : ''}>내림차순</option>
+												<option value="asc" ${order == 'asc' ? 'selected="selected"' : ''}>오름차순</option>		
+											</select>
+										</td>
+									
+									</tr>
+
 								</tbody>
 							</table>
 						</div>

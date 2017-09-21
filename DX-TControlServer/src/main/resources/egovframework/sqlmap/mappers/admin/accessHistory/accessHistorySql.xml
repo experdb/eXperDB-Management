@@ -39,7 +39,7 @@
 			<if test="usr_nm != null and usr_nm != '' ">
 				AND I.USR_NM LIKE #{usr_nm}
 			</if>
-			ORDER BY EXEDTM DESC
+			ORDER BY ${order_type} #{order}
 			LIMIT #{recordCountPerPage} OFFSET #{firstIndex}	
 			)A
 	</select>

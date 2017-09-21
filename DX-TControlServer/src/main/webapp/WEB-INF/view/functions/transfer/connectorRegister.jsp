@@ -22,6 +22,8 @@
 			scrollY : "300px",
 			processing : true,
 			searching : false,
+			deferRender : true,
+			scrollX: true,
 			columns : [ 
 						{ data : "rownum", defaultContent : "", targets : 0, orderable : false, checkboxes : {'selectRow' : true}},
 			            { data : "idx", className : "dt-center", defaultContent : ""}, 
@@ -38,6 +40,18 @@
 			         ]
 		});
 		
+		table.tables().header().to$().find('th:eq(0)').css('min-width', '10px');
+		table.tables().header().to$().find('th:eq(1)').css('min-width', '20px');
+		table.tables().header().to$().find('th:eq(2)').css('min-width', '120px');
+		table.tables().header().to$().find('th:eq(3)').css('min-width', '100px');
+		table.tables().header().to$().find('th:eq(4)').css('min-width', '70px');
+		table.tables().header().to$().find('th:eq(5)').css('min-width', '70px');
+		table.tables().header().to$().find('th:eq(6)').css('min-width', '70px');
+		table.tables().header().to$().find('th:eq(7)').css('min-width', '120px');
+		table.tables().header().to$().find('th:eq(8)').css('min-width', '70px');
+		table.tables().header().to$().find('th:eq(9)').css('min-width', '120px');
+	    $(window).trigger('resize'); 
+	    
 		//더블 클릭시 -> 쓰기 권한이 Y일 경우
 		if("${wrt_aut_yn}" == "Y"){
 			$('#connectorTable tbody').on('dblclick','tr',function() {
@@ -189,12 +203,12 @@
 <div id="contents">
 	<div class="contents_wrap">
 		<div class="contents_tit">
-			<h4>커넥터 등록 화면 <a href="#n"><img src="../images/ico_tit.png"alt="" /></a></h4>
+			<h4>커넥터 관리 <a href="#n"><img src="../images/ico_tit.png"alt="" /></a></h4>
 			<div class="location">
 				<ul>
 					<li>Function</li>
 					<li>데이터전송정보</li>
-					<li class="on">커넥터 등록</li>
+					<li class="on">커넥터 관리</li>
 				</ul>
 			</div>
 		</div>
@@ -229,16 +243,16 @@
 				<table id="connectorTable" class="display" cellspacing="0" width="100%">
 					<thead>
 						<tr>
-							<th></th>
-							<th>NO</th>
-							<th>Kafka-Connector명</th>
-							<th>아이피</th>
-							<th>포트</th>
-							<th>유형</th>
-							<th>등록자</th>
-							<th>등록일시</th>
-							<th>수정자</th>
-							<th>수정일시</th>
+							<th width="10"></th>
+							<th width="20">NO</th>
+							<th width="120">Kafka-Connector명</th>
+							<th width="100">아이피</th>
+							<th width="70">포트</th>
+							<th width="70">유형</th>
+							<th width="70">등록자</th>
+							<th width="120">등록일시</th>
+							<th width="70">수정자</th>
+							<th width="120">수정일시</th>
 						</tr>
 					</thead>
 				</table>

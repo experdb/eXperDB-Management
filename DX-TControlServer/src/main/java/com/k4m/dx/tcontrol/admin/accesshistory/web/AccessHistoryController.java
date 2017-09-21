@@ -142,6 +142,9 @@ public class AccessHistoryController {
 			String lgi_dtm_start = request.getParameter("lgi_dtm_start");
 			String lgi_dtm_end = request.getParameter("lgi_dtm_end");
 			String usr_nm = request.getParameter("usr_nm");
+			String order_type= request.getParameter("order_type");
+			String order= request.getParameter("order");
+			
 			if(usr_nm!=null){
 				model.addAttribute("usr_nm", usr_nm);
 				usr_nm="%"+usr_nm+"%";
@@ -150,13 +153,9 @@ public class AccessHistoryController {
 			param.put("lgi_dtm_start", lgi_dtm_start);
 			param.put("lgi_dtm_end", lgi_dtm_end);
 			param.put("usr_nm", usr_nm);
-
-			System.out.println("********PARAMETER*******");
-			System.out.println("사용자 : "+ usr_nm);
-			System.out.println("시작날짜 : "+ lgi_dtm_start);
-			System.out.println("종료날짜 : " +lgi_dtm_end);
-			System.out.println("*************************");
-			
+			param.put("order_type", order_type);
+			param.put("order", order);
+					
 			/** EgovPropertyService.sample */
 			pagingVO.setPageUnit(propertiesService.getInt("pageUnit"));
 			pagingVO.setPageSize(propertiesService.getInt("pageSize"));
@@ -178,6 +177,8 @@ public class AccessHistoryController {
 			
 			model.addAttribute("lgi_dtm_start", lgi_dtm_start);
 			model.addAttribute("lgi_dtm_end", lgi_dtm_end);
+			model.addAttribute("order", order);
+			model.addAttribute("order_type", order_type);
 			model.addAttribute("paginationInfo", paginationInfo);
 			model.addAttribute("result", result);
 					
@@ -188,6 +189,87 @@ public class AccessHistoryController {
 		return mv;
 	}
 
+	/**
+	 * 접근이력을 조회한다.
+	 * 
+	 * @return resultSet
+	 * @throws Exception
+	 */
+	@RequestMapping(value = "/selectSearchAccessHistory.do")
+	@ResponseBody
+	public ModelAndView selectSearchAccessHistory(@ModelAttribute("pagingVO") PagingVO pagingVO,ModelMap model,@ModelAttribute("historyVO") HistoryVO historyVO, HttpServletRequest request) {
+		ModelAndView mv = new ModelAndView();
+		try {		
+			CmmnUtils cu = new CmmnUtils();
+			menuAut = cu.selectMenuAut(menuAuthorityService, "MN000601");
+			
+			if(menuAut.get(0).get("read_aut_yn").equals("N")){
+				mv.setViewName("error/autError");
+				return mv;
+			}
+			
+			mv.addObject("read_aut_yn", menuAut.get(0).get("read_aut_yn"));
+			mv.addObject("wrt_aut_yn", menuAut.get(0).get("wrt_aut_yn"));
+				
+			String historyCheck = request.getParameter("historyCheck");
+			if(historyCheck.equals("historyCheck")){
+				// 화면접근이력 조회 이력 남기기
+				CmmnUtils.saveHistory(request, historyVO);
+				historyVO.setExe_dtl_cd("DX-T0036_02");
+				accessHistoryService.insertHistory(historyVO);
+			}
+					
+			Map<String, Object> param = new HashMap<String, Object>();
+
+			String lgi_dtm_start = request.getParameter("lgi_dtm_start");
+			String lgi_dtm_end = request.getParameter("lgi_dtm_end");
+			String usr_nm = request.getParameter("usr_nm");
+			String order_type= request.getParameter("order_type");
+			String order= request.getParameter("order");
+			
+			if(usr_nm!=null){
+				model.addAttribute("usr_nm", usr_nm);
+				usr_nm="%"+usr_nm+"%";
+			}
+			
+			param.put("lgi_dtm_start", lgi_dtm_start);
+			param.put("lgi_dtm_end", lgi_dtm_end);
+			param.put("usr_nm", usr_nm);
+			param.put("order_type", order_type);
+			param.put("order", order);
+	
+			/** EgovPropertyService.sample */
+			pagingVO.setPageUnit(propertiesService.getInt("pageUnit"));
+			pagingVO.setPageSize(propertiesService.getInt("pageSize"));
+
+			/** pageing setting */
+			PaginationInfo paginationInfo = new PaginationInfo();
+			paginationInfo.setCurrentPageNo(1);
+			paginationInfo.setRecordCountPerPage(pagingVO.getPageUnit());
+			paginationInfo.setPageSize(pagingVO.getPageSize());
+
+			pagingVO.setFirstIndex(paginationInfo.getFirstRecordIndex());
+			pagingVO.setLastIndex(paginationInfo.getLastRecordIndex());
+			pagingVO.setRecordCountPerPage(paginationInfo.getRecordCountPerPage());
+	
+			List<UserVO> result = accessHistoryService.selectAccessHistory(pagingVO,param);
+
+			int totCnt = accessHistoryService.selectAccessHistoryTotCnt(param);
+			paginationInfo.setTotalRecordCount(totCnt);
+			
+			model.addAttribute("lgi_dtm_start", lgi_dtm_start);
+			model.addAttribute("lgi_dtm_end", lgi_dtm_end);
+			model.addAttribute("order", order);
+			model.addAttribute("order_type", order_type);
+			model.addAttribute("paginationInfo", paginationInfo);
+			model.addAttribute("result", result);
+					
+			mv.setViewName("admin/accessHistory/accessHistory");
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return mv;
+	}
 	
 	/**
 	 * 접근이력 엑셀을 저장한다.
@@ -216,17 +298,15 @@ public class AccessHistoryController {
 			String lgi_dtm_start = request.getParameter("lgi_dtm_start");
 			String lgi_dtm_end = request.getParameter("lgi_dtm_end");
 			String usr_nm = request.getParameter("user_nm");
-			
-			System.out.println("********PARAMETER*******");
-			System.out.println("사용자 : "+ usr_nm);
-			System.out.println("시작날짜 : "+ lgi_dtm_start);
-			System.out.println("종료날짜 : " +lgi_dtm_end);
-			System.out.println("*************************");
+			String order_type= request.getParameter("order_type");
+			String order= request.getParameter("order");
 			
 			param.put("lgi_dtm_start", lgi_dtm_start);
 			param.put("lgi_dtm_end", lgi_dtm_end);
 			param.put("usr_nm", usr_nm);
-
+			param.put("order_type", order_type);
+			param.put("order", order);
+			
 			resultSet = accessHistoryService.selectAccessHistoryExcel(param);
 			
 			Map<String, Object> map = new HashMap<String, Object>();

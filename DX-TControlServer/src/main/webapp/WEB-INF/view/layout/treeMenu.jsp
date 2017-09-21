@@ -234,7 +234,7 @@
 						</div>
 				</div>
 				
-				<div id="treeTitle"><img src="../images/ico_main_tit_1.png" id="treeImg">Schedule
+				<div id="treeTitle"><img src="../images/ico_main_tit_1.png" id="treeImg">스케줄
 				</div>	
 				<div id="sidetree">						
 						<div class="treeborder">
@@ -244,7 +244,7 @@
 						</div>
 				</div>
 				
-				<div id="treeSub"><img src="../images/ico_lnb_2.png" id="treeImg">Transfer
+				<div id="treeSub"><img src="../images/ico_lnb_2.png" id="treeImg">데이터전송
 						<div id="sidetreecontrol2" style="float: right;">							
 							<a href="?#"><img src="../images/ico_lnb_close.png"></a>
 							<a href="?#"><img src="../images/ico_lnb_open.png"></a>

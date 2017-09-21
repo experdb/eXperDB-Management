@@ -23,6 +23,8 @@
 		table = $('#transferDetailTable').DataTable({
 			scrollY : "250px",
 			searching : false,
+			deferRender : true,
+			scrollX: true,
 			columns : [
 			{ data : "trf_trg_cnn_nm", className : "dt-center", defaultContent : ""}, 
 			{ data : "db_svr_nm", className : "dt-center", defaultContent : ""}, 
@@ -64,7 +66,15 @@
 			{ data : "db_id", visible: false, render : function (data, type, set){if (data!=null){return data;}else{return null;} } }
 			]
 		});
-		
+
+		table.tables().header().to$().find('th:eq(0)').css('min-width', '100px');
+		table.tables().header().to$().find('th:eq(1)').css('min-width', '100px');
+		table.tables().header().to$().find('th:eq(2)').css('min-width', '100px');
+		table.tables().header().to$().find('th:eq(3)').css('min-width', '50px');
+		table.tables().header().to$().find('th:eq(4)').css('min-width', '100px');
+		table.tables().header().to$().find('th:eq(5)').css('min-width', '70px');
+	    $(window).trigger('resize'); 
+	    
 	    //맵핑설정버튼 클릭시
 		 $('#transferDetailTable tbody').on('click','#mappingBtn', function () {
 		 		var $this = $(this);
@@ -192,10 +202,10 @@
 <div id="contents">
 	<div class="contents_wrap">
 		<div class="contents_tit">
-			<h4>전송상세 설정 화면 <a href="#n"><img src="../images/ico_tit.png" alt="" /></a></h4>
+			<h4>전송상세 설정<a href="#n"><img src="../images/ico_tit.png" alt="" /></a></h4>
 			<div class="location">
 				<ul>
-					<li>Transfer</li>
+					<li>데이터전송</li>
 					<li>${cnr_nm }</li>
 					<li class="on">전송상세 설정</li>
 				</ul>
@@ -229,12 +239,12 @@
 					<table id="transferDetailTable" class="display" cellspacing="0" width="100%">
 						<thead>
 							<tr>
-								<th>Connector명</th>
-								<th>서버명</th>
-								<th>Database명</th>
-								<th>구동상태</th>
-								<th>BottleWater실행</th>
-								<th>맵핑설정</th>
+								<th width="100">Connector명</th>
+								<th width="100">서버명</th>
+								<th width="100">Database명</th>
+								<th width="50">구동상태</th>
+								<th width="100">BottleWater실행</th>
+								<th width="70">맵핑설정</th>
 							</tr>
 						</thead>
 					</table>

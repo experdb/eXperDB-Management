@@ -1,5 +1,4 @@
-<%@ page language="java" contentType="text/html; charset=UTF-8"
-	pageEncoding="UTF-8"%>
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%
 	/**
 	* @Class Name : userManager.jsp
@@ -22,6 +21,8 @@ function fn_init() {
 	table = $('#userListTable').DataTable({
 		scrollY : "250px",
 		searching : false,
+		deferRender : true,
+		scrollX: true,
 		columns : [
 		{ data : "rownum", defaultContent : "", targets : 0, orderable : false, checkboxes : {'selectRow' : true}}, 
 		{ data : "idx", className : "dt-center", defaultContent : ""}, 
@@ -42,9 +43,21 @@ function fn_init() {
 			},
 			className : "dt-center",
 			defaultContent : ""
-		} ]
+		},
+		{ data : "usr_expr_dt", className : "dt-center", defaultContent : ""}
+		]
 	});
 
+	table.tables().header().to$().find('th:eq(0)').css('min-width', '10px');
+	table.tables().header().to$().find('th:eq(1)').css('min-width', '20px');
+	table.tables().header().to$().find('th:eq(2)').css('min-width', '120px');
+	table.tables().header().to$().find('th:eq(3)').css('min-width', '100px');
+	table.tables().header().to$().find('th:eq(4)').css('min-width', '100px');
+	table.tables().header().to$().find('th:eq(5)').css('min-width', '100px');
+	table.tables().header().to$().find('th:eq(6)').css('min-width', '80px');
+	table.tables().header().to$().find('th:eq(7)').css('min-width', '100px');
+    $(window).trigger('resize'); 
+    
 	//더블 클릭시
 	if("${wrt_aut_yn}" == "Y"){
 		$('#userListTable tbody').on('dblclick','tr',function() {
@@ -163,6 +176,7 @@ function fn_update() {
 
 /*삭제 버튼 클릭시*/
 function fn_delete(){
+	var usr_id = "<%=(String)session.getAttribute("usr_id")%>"
 	var datas = table.rows('.selected').data();
 	if (datas.length <= 0) {
 		alert("하나의 항목을 선택해주세요.");
@@ -175,8 +189,13 @@ function fn_delete(){
 			if(datas[i].usr_id=="admin"){
 				alert("관리자는 삭제할 수 없습니다.");
 				return false;
+			}else if(datas[i].usr_id==usr_id){
+				alert("본인은 삭제할 수 없습니다.");
+				return false;
+			}else{
+				rowList += datas[i].usr_id + ',';	
 			}
-			rowList += datas[i].usr_id + ',';		
+				
 		}
 		$.ajax({
 			url : "/deleteUserManager.do",
@@ -204,7 +223,7 @@ function fn_delete(){
 	<div class="contents_wrap">
 		<div class="contents_tit">
 			<h4>
-				사용자 관리 화면 <a href="#n"><img src="../images/ico_tit.png" alt="" /></a>
+				사용자 관리<a href="#n"><img src="../images/ico_tit.png" alt="" /></a>
 			</h4>
 			<div class="location">
 				<ul>
@@ -254,13 +273,14 @@ function fn_delete(){
 					<table id="userListTable" class="display" cellspacing="0" width="100%">
 						<thead>
 							<tr>
-								<th></th>
-								<th>No</th>
-								<th>아이디</th>
-								<th>소속</th>
-								<th>사용자명</th>
-								<th>연락처</th>
-								<th>사용여부</th>
+								<th width="10"></th>
+								<th width="20">No</th>
+								<th width="120">아이디</th>
+								<th width="100">소속</th>
+								<th width="100">사용자명</th>
+								<th width="100">연락처</th>
+								<th width="80">사용여부</th>
+								<th width="100">사용자만료일</th>
 							</tr>
 						</thead>
 					</table>

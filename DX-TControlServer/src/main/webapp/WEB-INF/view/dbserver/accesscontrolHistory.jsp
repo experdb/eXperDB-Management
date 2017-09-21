@@ -23,6 +23,7 @@ var table = null;
 			scrollY : "250px",
 			paging: false,
 			searching : false,
+			scrollX: true,			
 			columns : [
 			{ data : "", className : "dt-center", defaultContent : ""}, 
 			{ data : "ctf_tp_nm", className : "dt-center", defaultContent : ""}, 
@@ -40,48 +41,70 @@ var table = null;
 	            cell.innerHTML = i+1;
 	        } );
 	    } ).draw();
+		
+		table.tables().header().to$().find('th:eq(0)').css('min-width', '20px');
+		table.tables().header().to$().find('th:eq(1)').css('min-width', '60px');
+		table.tables().header().to$().find('th:eq(2)').css('min-width', '100px');
+		table.tables().header().to$().find('th:eq(3)').css('min-width', '100px');
+		table.tables().header().to$().find('th:eq(4)').css('min-width', '100px');
+		table.tables().header().to$().find('th:eq(5)').css('min-width', '100px');
+		table.tables().header().to$().find('th:eq(6)').css('min-width', '100px');
+		table.tables().header().to$().find('th:eq(7)').css('min-width', '100px');
+
+	    $(window).trigger('resize');
 	}
 	
 	$(window.document).ready(function() {
 		fn_init();
-		$.ajax({
-			url : "/selectAccessControlHistory.do",
-			data : {
-				svr_acs_cntr_his_id : $("#lst_mdf_dtm").val()
-			},
-			dataType : "json",
-			type : "post",
-			error : function(xhr, status, error) {
-				alert("실패")
-			},
-			success : function(result) {
-				table.clear().draw();
-				table.rows.add(result).draw();
-			}
-		});
+		if($("#lst_mdf_dtm").val()!=null){
+			$.ajax({
+				url : "/selectAccessControlHistory.do",
+				data : {
+					svr_acs_cntr_his_id : $("#lst_mdf_dtm").val()
+				},
+				dataType : "json",
+				type : "post",
+				error : function(xhr, status, error) {
+					alert("실패")
+				},
+				success : function(result) {
+					table.clear().draw();
+					table.rows.add(result).draw();
+				}
+			});
+		}
+
 	});
 	
 	/*조회버튼 클릭시*/
 	function fn_select(){
-		$.ajax({
-			url : "/selectAccessControlHistory.do",
-			data : {
-				svr_acs_cntr_his_id : $("#lst_mdf_dtm").val()
-			},
-			dataType : "json",
-			type : "post",
-			error : function(xhr, status, error) {
-				alert("실패")
-			},
-			success : function(result) {
-				table.clear().draw();
-				table.rows.add(result).draw();
-			}
-		});
+		if($("#lst_mdf_dtm").val()==null){
+			alert("접근제어이력이 없습니다.");
+			return false;
+		}
+			$.ajax({
+				url : "/selectAccessControlHistory.do",
+				data : {
+					svr_acs_cntr_his_id : $("#lst_mdf_dtm").val()
+				},
+				dataType : "json",
+				type : "post",
+				error : function(xhr, status, error) {
+					alert("실패")
+				},
+				success : function(result) {
+					table.clear().draw();
+					table.rows.add(result).draw();
+				}
+			});
 	}
 	
 	/*복원버튼 클릭시*/
 	function fn_recovery(){
+		if($("#lst_mdf_dtm").val()==null){
+			alert("접근제어이력이 없습니다.");
+			return false;
+		}
 		if (!confirm("정말 복원하시겠습니까?")) return false;
 		$.ajax({
 			url : "/recoveryAccessControlHistory.do",
@@ -127,7 +150,7 @@ var table = null;
 	<div class="contents_wrap">
 		<div class="contents_tit">
 			<h4>
-				접근제어이력 화면 <a href="#n"><img src="../images/ico_tit.png" alt="" /></a>
+				접근제어이력<a href="#n"><img src="../images/ico_tit.png" alt="" /></a>
 			</h4>
 			<div class="location">
 				<ul>
@@ -149,7 +172,6 @@ var table = null;
 						<caption>검색 조회</caption>
 						<colgroup>
 							<col style="width: 130px;" />
-							<col style="width: 180px;" />
 							<col />
 						</colgroup>
 						<tbody>
@@ -172,14 +194,14 @@ var table = null;
 						<table id="accesscontrolHistoryTable" class="display" cellspacing="0" width="100%">
 							<thead>
 								<tr>
-									<th>No</th>
-									<th>Type</th>
-									<th>Database</th>
-									<th>User</th>
-									<th>IP Address</th>
-									<th>IP Mask</th>
-									<th>Method</th>
-									<th>Option</th>
+									<th width="20">No</th>
+									<th width="60">Type</th>
+									<th width="100">Database</th>
+									<th width="100">User</th>
+									<th width="100">IP Address</th>
+									<th width="100">IP Mask</th>
+									<th width="100">Method</th>
+									<th width="100">Option</th>
 								</tr>
 							</thead>
 						</table>
