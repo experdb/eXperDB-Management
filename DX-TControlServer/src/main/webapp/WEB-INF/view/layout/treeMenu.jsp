@@ -225,7 +225,7 @@
 						<a href="?#"><img src="../images/ico_lnb_open.png"></a>
 					</div>
 				</div>
-				<div id="sidetree1">				
+				<div id="sidetree">				
 						
 						<div class="treeborder">
 						<ul id="tree">
@@ -250,7 +250,7 @@
 							<a href="?#"><img src="../images/ico_lnb_open.png"></a>
 						</div>
 				</div>
-				<div id="sidetree">				
+				<div id="sidetree1">				
 			
 						<div class="treeborder">
 						<ul id="tree2">
