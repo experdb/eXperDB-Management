@@ -13,9 +13,12 @@ function fn_init(){
 	 ******************************************************** */
 	table = $('#scheduleList').DataTable({
 	scrollY : "245px",
+	scrollX: true,	
 	bDestroy: true,
+	paging : false,
 	processing : true,
 	searching : false,	
+	deferRender : true,
 	columns : [
 		{data : "rownum", defaultContent : "", targets : 0, orderable : false, checkboxes : {'selectRow' : true}}, 
 		{data : "idx", className : "dt-center", defaultContent : ""}, 
@@ -131,6 +134,23 @@ function fn_init(){
 				
 		window.open(popUrl,"",popOption);
 	});		 
+	
+	
+	  table.tables().header().to$().find('th:eq(0)').css('min-width', '10px');
+	  table.tables().header().to$().find('th:eq(1)').css('min-width', '30px');
+	  table.tables().header().to$().find('th:eq(2)').css('min-width', '250px');
+	  table.tables().header().to$().find('th:eq(3)').css('min-width', '395px');
+	  table.tables().header().to$().find('th:eq(4)').css('min-width', '60px');
+	  table.tables().header().to$().find('th:eq(5)').css('min-width', '130px');
+	  table.tables().header().to$().find('th:eq(6)').css('min-width', '130px');
+	  table.tables().header().to$().find('th:eq(7)').css('min-width', '70px');  
+	  table.tables().header().to$().find('th:eq(8)').css('min-width', '130px');
+	  table.tables().header().to$().find('th:eq(9)').css('min-width', '65px');
+	  table.tables().header().to$().find('th:eq(10)').css('min-width', '130px');
+	  table.tables().header().to$().find('th:eq(11)').css('min-width', '65px'); 
+	  table.tables().header().to$().find('th:eq(12)').css('min-width', '130px'); 
+	  table.tables().header().to$().find('th:eq(13)').css('min-width', '0px');
+    $(window).trigger('resize'); 
 }
 
 
@@ -195,6 +215,7 @@ function fn_selectScheduleList(){
 			alert("실패")
 		},
 		success : function(result) {
+			alert(JSON.stringify(result));
 			table.clear().draw();
 			table.rows.add(result).draw();
 		}
@@ -318,7 +339,7 @@ function fn_makeMin(){
 <div id="contents">
 	<div class="contents_wrap">
 		<div class="contents_tit">
-			<h4>스케줄 관리 화면 <a href="#n"><img src="../images/ico_tit.png" alt="" /></a></h4>
+			<h4>스케줄 관리 <a href="#n"><img src="../images/ico_tit.png" alt="" /></a></h4>
 			<div class="location">
 				<ul>
 					<li>Function</li>
@@ -392,20 +413,20 @@ function fn_makeMin(){
 				<caption>스케쥴 리스트</caption>
 					<thead>
 						<tr>
-							<th></th>
-							<th>No</th>
-							<th>스케줄명</th>
-							<th>설명</th>
-							<th>Work갯수</th>
-							<th>이전수행시간</th>
-							<th>다음수행시간</th>
-							<th>구동상태</th>
-							<th>실행</th>
-							<th>등록자</th>
-							<th>등록일시</th>
-							<th>수정자</th>
-							<th>수정일시</th>
-							<th></th>
+							<th width="10"></th>
+							<th width="30">No</th>
+							<th width="250">스케줄명</th>
+							<th width="395">설명</th>
+							<th width="60">Work갯수</th>
+							<th width="130">이전수행시간</th>
+							<th width="130">다음수행시간</th>
+							<th width="70">구동상태</th>
+							<th width="130">실행</th>
+							<th width="65">등록자</th>
+							<th width="130">등록일시</th>
+							<th width="65">수정자</th>
+							<th width="130">수정일시</th>
+							<th width="0"></th>
 						</tr>
 					</thead>
 				</table>						

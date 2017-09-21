@@ -109,6 +109,7 @@
 			, SVR_SPR_SCM_PWD
 			, PGHOME_PTH
 			, PGDATA_PTH
+			, USEYN
 			, FRST_REGR_ID
 			, FRST_REG_DTM
 			, LST_MDFR_ID
@@ -125,6 +126,7 @@
 			, #{svr_spr_scm_pwd}
 			, #{pghome_pth}
 			, #{pgdata_pth}
+			, 'Y'
 			, #{frst_regr_id}
 			, clock_timestamp()
 			, #{lst_mdfr_id}
@@ -150,6 +152,7 @@
 			  , SVR_SPR_SCM_PWD=#{svr_spr_scm_pwd}
 			  , PGHOME_PTH=#{pghome_pth}
 			  , PGDATA_PTH=#{pgdata_pth}
+			  , USEYN = #{useyn}
 			  , LST_MDFR_ID=#{lst_mdfr_id}
 			  , LST_MDF_DTM=clock_timestamp()	
 		WHERE DB_SVR_ID=#{db_svr_id}

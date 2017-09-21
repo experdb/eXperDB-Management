@@ -113,6 +113,7 @@
 	
 
   		function GetJsonData(data, aut) {
+  			
 			var parseData = $.parseJSON(data);
 		 	var html1 = "";
  /*   			html1 += '<div class="lnb_tit">DB 서버';
@@ -122,7 +123,7 @@
 			html1 += '</div>'; 
 			html1 += '</div>';    */
 			var html = "";
- 				$(data).each(function (index, item) {			
+ 				$(data).each(function (index, item) {
  					if(aut.length != 0 && aut[index].bck_cng_aut_yn != "N" && aut[index].bck_hist_aut_yn != "N" && aut[index].acs_cntr_aut_yn != "N" && aut[index].adt_cng_aut_yn != "N" && aut[index].adt_hist_aut_yn != "N" ){			
 					html1+='<ul class="depth_1 lnbMenu">';
 					html1+='	<li><div class="border"><a href="#n" onClick=javascript:fn_GoLink("#n");><img src="../images/ico_lnb_3.png" id="treeImg">'+item.db_svr_nm+'</a></div>';
@@ -161,7 +162,7 @@
 		
 
 		
-	      function GetJsonDataConnector(data, aut) {                  
+	      function GetJsonDataConnector(data, aut) {      
 	          var parseData = $.parseJSON(data);
 	          var html = "";      
 	         

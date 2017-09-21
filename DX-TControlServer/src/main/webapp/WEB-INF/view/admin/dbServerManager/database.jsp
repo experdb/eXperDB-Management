@@ -27,8 +27,11 @@ function fn_init() {
 		 ******************************************************** */
 		table = $('#repoDBList').DataTable({
 		scrollY : "300px",
+		scrollX: true,	
 		processing : true,
 		searching : false,
+		paging : false,
+		deferRender : true,
 		columns : [
 		{data : "rownum", defaultContent : "", targets : 0, orderable : false, checkboxes : {'selectRow' : true}}, 
 		{data : "idx", className : "dt-center", defaultContent : ""},		
@@ -43,6 +46,19 @@ function fn_init() {
 		{data : "db_id", className : "dt-center", defaultContent : "", visible: false}
 		]
 	});
+		
+		table.tables().header().to$().find('th:eq(0)').css('min-width', '10px');
+		table.tables().header().to$().find('th:eq(1)').css('min-width', '20px');
+		table.tables().header().to$().find('th:eq(2)').css('min-width', '130px');
+		table.tables().header().to$().find('th:eq(3)').css('min-width', '150px');
+		table.tables().header().to$().find('th:eq(4)').css('min-width', '70px');
+		table.tables().header().to$().find('th:eq(5)').css('min-width', '130px');
+		table.tables().header().to$().find('th:eq(6)').css('min-width', '65px');
+		table.tables().header().to$().find('th:eq(7)').css('min-width', '100px');  
+		table.tables().header().to$().find('th:eq(8)').css('min-width', '65px');
+		table.tables().header().to$().find('th:eq(9)').css('min-width', '100px');
+		table.tables().header().to$().find('th:eq(10)').css('min-width', '0px');
+	    $(window).trigger('resize'); 
 }
 
 $(window.document).ready(function() {
@@ -196,7 +212,7 @@ function fn_reg_popup(){
 <div id="contents">
 	<div class="contents_wrap">
 		<div class="contents_tit">
-			<h4>DataBase 관리 화면 <a href="#n"><img src="../images/ico_tit.png" alt="" /></a></h4>
+			<h4>DataBase 관리 <a href="#n"><img src="../images/ico_tit.png" alt="" /></a></h4>
 			<div class="location">
 				<ul>
 					<li>Admin</li>
@@ -240,20 +256,20 @@ function fn_reg_popup(){
 					</table>
 				</div>
 				<!-- 메인 테이블 -->
-				<table id="repoDBList" class="display" cellspacing="0">
+				<table id="repoDBList" class="display" cellspacing="0" width="100%">
 					<thead>
 						<tr>
-							<th></th>
-							<th>No</th>
-							<th>서버명</th>
-							<th>아이피</th>
-							<th>포트</th>
-							<th>DB명</th>
-							<th>등록자</th>
-							<th>등록일시</th>
-							<th>수정자</th>
-							<th>수정일시</th>
-							<th></th>
+							<th width="10"></th>
+							<th width="20">No</th>
+							<th width="130">서버명</th>
+							<th width="150">아이피</th>
+							<th width="70">포트</th>
+							<th width="130">DB명</th>
+							<th width="65">등록자</th>
+							<th width="100">등록일시</th>
+							<th width="65">수정자</th>
+							<th width="100">수정일시</th>
+							<th width="0"></th>
 						</tr>
 					</thead>
 				</table>

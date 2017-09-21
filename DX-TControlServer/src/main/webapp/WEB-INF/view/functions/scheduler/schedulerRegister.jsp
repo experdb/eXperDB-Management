@@ -29,13 +29,15 @@ function fn_init(){
 	 ******************************************************** */
 	table = $('#workList').DataTable({
 	scrollY : "245px",
+	scrollX: true,	
 	bDestroy: true,
+	paging : false,
 	processing : true,
 	searching : false,	
+	deferRender : true,
 	columns : [
 	{data : "rownum", defaultContent : "", targets : 0, orderable : false, checkboxes : {'selectRow' : true}}, 
 	{data : "idx", columnDefs: [ { searchable: false, orderable: false, targets: 0} ], order: [[ 1, 'asc' ]], className : "dt-center", defaultContent : ""},
-	{data : "wrk_id", className : "dt-center", defaultContent : "", visible: false },
 	{data : "db_svr_nm", className : "dt-center", defaultContent : ""}, //서버명
 	{data : "bck_bsn_dscd_nm", className : "dt-center", defaultContent : ""}, //구분
 	{data : "wrk_nm", className : "dt-center", defaultContent : ""}, //work명
@@ -68,7 +70,8 @@ function fn_init(){
         		onError +='</select>';
         		return onError;	
         	}
-          }
+          },
+	{data : "wrk_id", className : "dt-center", defaultContent : "", visible: false }
 	],
  		'drawCallback': function (settings) {
 				// Remove previous binding before adding it
@@ -119,6 +122,19 @@ function fn_init(){
     table.row(index + rownum).data(data1);
     table.draw(true);
 	}
+  
+  
+	  table.tables().header().to$().find('th:eq(0)').css('min-width', '10px');
+	  table.tables().header().to$().find('th:eq(1)').css('min-width', '30px');
+	  table.tables().header().to$().find('th:eq(2)').css('min-width', '130px');
+	  table.tables().header().to$().find('th:eq(3)').css('min-width', '70px');
+	  table.tables().header().to$().find('th:eq(4)').css('min-width', '100px');
+	  table.tables().header().to$().find('th:eq(5)').css('min-width', '150px');
+	  table.tables().header().to$().find('th:eq(6)').css('min-width', '30px');
+	  table.tables().header().to$().find('th:eq(7)').css('min-width', '30px');  
+	  table.tables().header().to$().find('th:eq(8)').css('min-width', '0px');
+
+    $(window).trigger('resize'); 
 }
 
 /* ********************************************************
@@ -442,7 +458,7 @@ function fn_check() {
 			<div id="contents">
 				<div class="contents_wrap">
 					<div class="contents_tit">
-						<h4>스케줄 등록 화면 <a href="#n"><img src="../images/ico_tit.png" alt="" /></a></h4>
+						<h4>스케줄 등록 <a href="#n"><img src="../images/ico_tit.png" alt="" /></a></h4>
 						<div class="location">
 							<ul>
 								<li>Function</li>
@@ -472,9 +488,7 @@ function fn_check() {
 										</tr>
 										<tr>
 											<th scope="row" class="t9 line">설명</th>
-											<td>
-												<textarea class="tbd1" name="scd_exp" id="scd_exp"></textarea>
-											</td>
+											<td><input type="text" class="txt t2" id="scd_exp" name="scd_exp" style="width:500px;"/></td>
 										</tr>
 									</tbody>
 								</table>
@@ -539,25 +553,25 @@ function fn_check() {
 
 							<div class="cmm_bd">
 								<div class="sub_tit">
-									<p>Work 등록</p>
+									<p>Work 추가</p>
 									<div class="sub_btn">
 										<a href="#n" class="btn btnF_04 btnC_01" onclick="fn_workAdd();"><span id="add_button">추가</span></a>
 										<a href="#n" class="btn btnF_04" onclick="fn_workDel();"><span id="del_button">삭제</span></a>
 									</div>
 								</div>
 								<div class="overflow_area">							
-									<table id="workList" class="cell-border display" >
+									<table id="workList" class="cell-border display" width="100%">
 										<thead>
 											<tr>
-												<th></th>
-												<th>No</th>
-												<th></th>
-												<th>서버명</th>
-												<th>구분</th>
-												<th>Work명</th>
-												<th>Work설명</th>												
-												<th>실행순서</th>
-												<th>OnError</th>
+												<th width="10"></th>
+												<th width="30">No</th>												
+												<th width="130">서버명</th>
+												<th width="70">구분</th>
+												<th width="100">Work명</th>
+												<th width="150">Work설명</th>												
+												<th width="30">실행순서</th>
+												<th width="30">OnError</th>
+												<th width="0"></th>
 											</tr>
 										</thead>
 									</table>											

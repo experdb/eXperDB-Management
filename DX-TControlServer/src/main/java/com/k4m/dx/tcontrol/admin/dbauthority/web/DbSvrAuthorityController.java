@@ -24,23 +24,8 @@ import com.k4m.dx.tcontrol.cmmn.CmmnUtils;
 import com.k4m.dx.tcontrol.common.service.HistoryVO;
 import com.k4m.dx.tcontrol.login.service.UserVO;
 
-/**
- * DB권한 관리 컨트롤러 클래스를 정의한다.
- *
- * @author 변승우
- * @see
- * 
- *      <pre>
- * == 개정이력(Modification Information) ==
- *
- *   수정일       수정자           수정내용
- *  -------     --------    ---------------------------
- *  2017.05.29   변승우  최초 생성
- *      </pre>
- */
-
 @Controller
-public class DbAuthorityController {
+public class DbSvrAuthorityController {
 	
 	@Autowired
 	private MenuAuthorityService menuAuthorityService;
@@ -56,21 +41,21 @@ public class DbAuthorityController {
 	
 	private List<Map<String, Object>> menuAut;
 	
-
+	
 	/**
-	 * DB권한관리 화면을 보여준다.
+	 * DB서버 메뉴 권한관리 화면을 보여준다.
 	 * 
 	 * @param historyVO
 	 * @param request
 	 * @return ModelAndView mv
 	 * @throws Exception
 	 */
-	@RequestMapping(value = "/dbAuthority.do")
-	public ModelAndView dbAuthority(@ModelAttribute("historyVO") HistoryVO historyVO, HttpServletRequest request) {
+	@RequestMapping(value = "/dbServerAuthority.do")
+	public ModelAndView dbServerAuthority(@ModelAttribute("historyVO") HistoryVO historyVO, HttpServletRequest request) {
 		
 		//해당메뉴 권한 조회 (공통메소드호출),
 		CmmnUtils cu = new CmmnUtils();
-		menuAut = cu.selectMenuAut(menuAuthorityService, "MN000503");
+		menuAut = cu.selectMenuAut(menuAuthorityService, "MN000502");
 				
 		ModelAndView mv = new ModelAndView();
 		try {
@@ -86,7 +71,7 @@ public class DbAuthorityController {
 				
 				mv.addObject("read_aut_yn", menuAut.get(0).get("read_aut_yn"));
 				mv.addObject("wrt_aut_yn", menuAut.get(0).get("wrt_aut_yn"));
-				mv.setViewName("admin/dbAuthority/dbAuthority");
+				mv.setViewName("admin/dbAuthority/dbServerAuthority");
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -103,12 +88,12 @@ public class DbAuthorityController {
 	 * @return resultSet
 	 * @throws Exception
 	 */
-	@RequestMapping(value = "/selectDBAutUserManager.do")
-	public @ResponseBody List<UserVO> selectUserManager(HttpServletRequest request, HttpServletResponse response) {
+	@RequestMapping(value = "/selectDBSvrAutUserManager.do")
+	public @ResponseBody List<UserVO> selectDBSvrAutUserManager(HttpServletRequest request, HttpServletResponse response) {
 		
 		//해당메뉴 권한 조회 (공통메소드호출),
 		CmmnUtils cu = new CmmnUtils();
-		menuAut = cu.selectMenuAut(menuAuthorityService, "MN000503");
+		menuAut = cu.selectMenuAut(menuAuthorityService, "MN000502");
 				
 		List<UserVO> resultSet = null;
 		Map<String, Object> param = new HashMap<String, Object>();
@@ -135,66 +120,71 @@ public class DbAuthorityController {
 
 	}
 	
-
+	
+	
 	/**
-	 * 디비 권한정보를 조회한다.
+	 * 서버 권한정보를 조회한다.
 	 * 
 	 * @param request
 	 * @return resultSet
 	 * @throws Exception
 	 */
-	@RequestMapping(value = "/selectDBAutInfo.do")
-	public @ResponseBody List<Map<String, Object>> selectDBAutInfo(HttpServletRequest request, HttpServletResponse response) {
+	@RequestMapping(value = "/selectDBSrvAutInfo.do")
+	public @ResponseBody List<Map<String, Object>> selectDBSrvAutInfo(HttpServletRequest request, HttpServletResponse response) {
 		
 		//해당메뉴 권한 조회 (공통메소드호출),
 		CmmnUtils cu = new CmmnUtils();
-		menuAut = cu.selectMenuAut(menuAuthorityService, "MN000503");
-				
-		List<Map<String, Object>> resultSet = null;		
+		menuAut = cu.selectMenuAut(menuAuthorityService, "MN000502");
+		List<Map<String, Object>> resultSet = null;
+		
 		try {	
 			//읽기 권한이 없는경우 에러페이지 호출 [추후 Exception 처리예정]
 			if(menuAut.get(0).get("read_aut_yn").equals("N")){
 				response.sendRedirect("/autError.do");
 				return resultSet;
 			}else{
-				resultSet = dbAuthorityService.selectDBAutInfo();	
+				resultSet = dbAuthorityService.selectSvrList();
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 		return resultSet;
+
 	}
 	
 	
 	/**
-	 * 디비 유저 권한정보를 조회한다.
+	 * 서버 권한정보를 조회한다.
 	 * 
 	 * @param request
 	 * @return resultSet
 	 * @throws Exception
 	 */
-	@RequestMapping(value = "/selectUsrDBAutInfo.do")
-	public @ResponseBody List<Map<String, Object>> selectUsrDBAutInfo(HttpServletRequest request, HttpServletResponse response) {
+	@RequestMapping(value = "/selectUsrDBSrvAutInfo.do")
+	public @ResponseBody List<Map<String, Object>> selectUsrDBSrvAutInfo(HttpServletRequest request, HttpServletResponse response) {
 		
 		//해당메뉴 권한 조회 (공통메소드호출),
 		CmmnUtils cu = new CmmnUtils();
-		menuAut = cu.selectMenuAut(menuAuthorityService, "MN000503");
+		menuAut = cu.selectMenuAut(menuAuthorityService, "MN000502");
 				
-		List<Map<String, Object>> resultSet = null;		
+		List<Map<String, Object>> resultSet = null;
+		
 		try {	
 			//읽기 권한이 없는경우 에러페이지 호출 [추후 Exception 처리예정]
-			if(menuAut.get(0).get("read_aut_yn").equals("N")){
-				response.sendRedirect("/autError.do");
-				return resultSet;
-			}else{
-				String usr_id ="";				
+//			if(menuAut.get(0).get("read_aut_yn").equals("N")){
+//				response.sendRedirect("/autError.do");
+//				return resultSet;
+//			}else{
+				String usr_id ="";
+				
 				if(request.getParameter("usr_id") == null){
 					usr_id = (String) request.getSession().getAttribute("usr_id");
 				}else{
 					usr_id = request.getParameter("usr_id");
 				}
-					resultSet = dbAuthorityService.selectUsrDBAutInfo(usr_id);	
-			}
+				
+				resultSet = dbAuthorityService.selectUsrDBSrvAutInfo(usr_id);	
+			//}
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -203,46 +193,48 @@ public class DbAuthorityController {
 	
 	
 	/**
-	 * DB권한 업데이트
+	 * DB서버권한 업데이트
 	 * 
 	 * @param
 	 * @return ModelAndView mv
 	 * @throws Exception
 	 */
-	@RequestMapping(value = "/updateUsrDBAutInfo.do")
+	@RequestMapping(value = "/updateUsrDBSrvAutInfo.do")
 	@ResponseBody
-	public void updateUsrDBAutInfo(@ModelAttribute("historyVO") HistoryVO historyVO,  HttpServletRequest request, HttpServletResponse response) {
+	public void updateUsrDBSrvAutInfo(@ModelAttribute("historyVO") HistoryVO historyVO, HttpServletRequest request, HttpServletResponse response) {
 		
 		//해당메뉴 권한 조회 (공통메소드호출),
 		CmmnUtils cu = new CmmnUtils();
-		menuAut = cu.selectMenuAut(menuAuthorityService, "MN000503");
+		menuAut = cu.selectMenuAut(menuAuthorityService, "MN000502");
 				
-		int cnt = 0;
+		int cnt = 0; 
+		
 		try {
 			//쓰기 권한이 없는경우 에러페이지 호출 [추후 Exception 처리예정]
 			if(menuAut.get(0).get("wrt_aut_yn").equals("N")){
 				response.sendRedirect("/autError.do");
-			}else{			
+			}else{
 				// DB권한관리 이력 남기기
 				CmmnUtils.saveHistory(request, historyVO);
-				historyVO.setExe_dtl_cd("DX-T0035_02");
+				historyVO.setExe_dtl_cd("DX-T0035_01");
 				accessHistoryService.insertHistory(historyVO);
-				
+											
 				String strRows = request.getParameter("datasArr").toString().replaceAll("&quot;", "\"");
 				JSONArray rows = (JSONArray) new JSONParser().parse(strRows);
-				
+						
 				for(int i=0; i<rows.size(); i++){
-					cnt = dbAuthorityService.selectUsrDBAutInfoCnt(rows.get(i));
+					cnt = dbAuthorityService.selectUsrDBSrvAutInfoCnt(rows.get(i));
 					
 					if(cnt==0){
-						dbAuthorityService.insertUsrDBAutInfo(rows.get(i));
+						dbAuthorityService.insertUsrDBSrvAutInfo(rows.get(i));
 					}else{
-						dbAuthorityService.updateUsrDBAutInfo(rows.get(i));
-					}						
+						dbAuthorityService.updateUsrDBSrvAutInfo(rows.get(i));
+					}			
 				}
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 	}
+	
 }

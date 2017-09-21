@@ -29,10 +29,11 @@ function fn_init() {
 	 * 서버 (데이터테이블)
 	 ******************************************************** */
 	table_dbServer = $('#dbServerList').DataTable({
-		scrollY : "245px",
+		scrollY : "235px",
+		scrollX: true,	
 		searching : false,
 		paging : false,
-		//dom: 'C<"clear">RZlfrtip',
+		deferRender : true,
 		columns : [
 		{data : "rownum", defaultContent : "", className : "dt-center", 
 			targets: 0,
@@ -86,9 +87,11 @@ function fn_init() {
 	 * 디비 (데이터테이블)
 	 ******************************************************** */
 	table_db = $('#dbList').DataTable({
-		scrollY : "285px",
+		scrollY : "265px",
+		scrollX: true,	
 		searching : false,
-		paging : false,
+		paging : false,		
+		deferRender : true,
 		columns : [
 		{data : "dft_db_nm", className : "dt-center", defaultContent : ""}, 
 		{data : "db_exp", defaultContent : "", className : "dt-center", 
@@ -106,11 +109,11 @@ function fn_init() {
 	});
 	
 	
-	table_dbServer.tables().header().to$().find('th:eq(0)').css('min-width', '10px');
-	table_dbServer.tables().header().to$().find('th:eq(1)').css('min-width', '150px');
-	table_dbServer.tables().header().to$().find('th:eq(2)').css('min-width', '100px');
-	table_dbServer.tables().header().to$().find('th:eq(3)').css('min-width', '30px');
-	table_dbServer.tables().header().to$().find('th:eq(4)').css('min-width', '30px');
+	table_dbServer.tables().header().to$().find('th:eq(0)').css('min-width', '50px');
+	table_dbServer.tables().header().to$().find('th:eq(1)').css('min-width', '200px');
+	table_dbServer.tables().header().to$().find('th:eq(2)').css('min-width', '232px');
+	table_dbServer.tables().header().to$().find('th:eq(3)').css('min-width', '70px');
+	table_dbServer.tables().header().to$().find('th:eq(4)').css('min-width', '50px');
 	table_dbServer.tables().header().to$().find('th:eq(5)').css('min-width', '0px');
 	table_dbServer.tables().header().to$().find('th:eq(6)').css('min-width', '0px');
 	table_dbServer.tables().header().to$().find('th:eq(7)').css('min-width', '0px');  
@@ -120,7 +123,12 @@ function fn_init() {
     table_dbServer.tables().header().to$().find('th:eq(11)').css('min-width', '0px');
     table_dbServer.tables().header().to$().find('th:eq(12)').css('min-width', '0px');  
     table_dbServer.tables().header().to$().find('th:eq(13)').css('min-width', '0px');
-    table_dbServer.tables().header().to$().find('th:eq(14)').css('min-width', '0px');      
+    
+    table_db.tables().header().to$().find('th:eq(0)').css('min-width', '150px');
+    table_db.tables().header().to$().find('th:eq(1)').css('min-width', '130px');
+    table_db.tables().header().to$().find('th:eq(2)').css('min-width', '10px');
+    
+    
     $(window).trigger('resize'); 
 	
 }
@@ -261,7 +269,7 @@ function fn_regRe_popup(){
 	var datas = table_dbServer.rows('.selected').data();
 	if (datas.length == 1) {
 		var db_svr_id = table_dbServer.row('.selected').data().db_svr_id;
-		window.open("/popup/dbServerRegReForm.do?db_svr_id="+db_svr_id+"&flag=tree","dbServerRegRePop","location=no,menubar=no,resizable=yes,scrollbars=yes,status=no,width=950,height=470");
+		window.open("/popup/dbServerRegReForm.do?db_svr_id="+db_svr_id+"&flag=tree","dbServerRegRePop","location=no,menubar=no,resizable=yes,scrollbars=yes,status=no,width=950,height=495");
 	} else {
 		alert("하나의 항목을 선택해주세요.");
 	}	
@@ -412,7 +420,7 @@ function fn_dataCompareChcek(svrDbList){
 <div id="contents">
 	<div class="contents_wrap">
 		<div class="contents_tit">
-			<h4>DBMS 등록 화면 <a href="#n"><img src="../images/ico_tit.png"alt="" /></a>
+			<h4>DBMS 등록 <a href="#n"><img src="../images/ico_tit.png"alt="" /></a>
 			</h4>
 			<div class="location">
 				<ul>
@@ -429,13 +437,12 @@ function fn_dataCompareChcek(svrDbList){
 					<div id="wrt_button">
 						<span class="btn"><button onclick="fn_reg_popup();">등록</button></span>
 						<span class="btn"><button onClick="fn_regRe_popup();">수정</button></span>		
-						<a href="#n" class="btn"><span>삭제</span></a>
 					</div>
 					</div>
 					<div class="inner">
 						<p class="tit">DB 서버 목록</p>
 						<div class="tree_server">
-							<table id="dbServerList" class="display" cellspacing="0" align="right">
+							<table id="dbServerList" class="cell-border display" cellspacing="0" align="left">
 								<thead>
 									<tr>
 										<th width="10">선택</th>									
@@ -467,12 +474,12 @@ function fn_dataCompareChcek(svrDbList){
 					<div class="inner">
 						<p class="tit">DB 목록</p>
 						<div class="tree_list">
-							<table id="dbList" class="display" cellspacing="0" align="left">
+							<table id="dbList" class="cell-border display" cellspacing="0" align="left">
 								<thead>
 									<tr>
-										<th>데이터베이스</th>
-										<th>설명</th>
-										<th><input name="select" value="1" type="checkbox"></th>
+										<th width="150">데이터베이스</th>
+										<th width="130">설명</th>
+										<th width="10"><input name="select" value="1" type="checkbox"></th>
 									</tr>
 								</thead>
 							</table>

@@ -22,8 +22,10 @@
 	function fn_init() {
 		userTable = $('#user').DataTable({
 			scrollY : "378px",
+			scrollX: true,	
 			searching : false,
 			paging : false,
+			deferRender : true,
 			columns : [ 
 			            {data : "rownum",className : "dt-center",defaultContent : ""}, 
 			            {data : "usr_id",className : "dt-center",defaultContent : ""}, 
@@ -39,6 +41,15 @@
 			            {data : "",className : "dt-center",defaultContent : ""} 
 			          ]
 		});	
+		
+		
+		userTable.tables().header().to$().find('th:eq(0)').css('min-width', '30px');
+		userTable.tables().header().to$().find('th:eq(1)').css('min-width', '100px');
+		userTable.tables().header().to$().find('th:eq(2)').css('min-width', '100px');
+
+	    $(window).trigger('resize'); 		
+		
+		
 	}
 	
 	function fn_buttonAut(){
@@ -56,11 +67,11 @@
 		fn_init();
 		
 		$.ajax({
-			url : "/selectDBAutUserManager.do",
+			url : "/selectDBSvrAutUserManager.do",
 			dataType : "json",
 			type : "post",
 			error : function(xhr, status, error) {
-				alert("실패")
+				alert("실패1")
 			},
 			success : function(result) {
 				userTable.clear().draw();
@@ -73,7 +84,7 @@
 			dataType : "json",
 			type : "post",
 			error : function(xhr, status, error) {
-				alert("실패")
+				alert("실패2")
 			},
 			success : function(result) {	
 				svr_server = result;
@@ -174,7 +185,7 @@
 		    		dataType : "json",
 		    		type : "post",
 		    		error : function(xhr, status, error) {
-		    			alert("실패")
+		    			alert("실패3")
 		    		},
 		    		success : function(result) {
 		    			if(result.length != 0){
@@ -337,9 +348,9 @@
 											<table id="user" class="display" cellspacing="0" width="100%">
 												<thead>
 													<tr>
-														<th>No</th>
-														<th>아이디</th>
-														<th>사용자명</th>
+														<th width="30">No</th>
+														<th width="100">아이디</th>
+														<th width="100">사용자명</th>
 													</tr>
 												</thead>
 											</table>

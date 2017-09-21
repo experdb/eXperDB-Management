@@ -110,11 +110,9 @@ function fn_buttonAut(){
 	if("${wrt_aut_yn}" == "Y"){
 		int_button.style.display = '';
 		mdf_button.style.display = '';
-		del_button.style.display = '';
 	}else{
 		int_button.style.display = 'none';
 		mdf_button.style.display = 'none';
-		del_button.style.display = 'none';
 	}
 		
 	if("${read_aut_yn}" == "Y"){
@@ -171,7 +169,7 @@ function fn_search(){
  * 서버 등록 팝업페이지 호출
  ******************************************************** */
 function fn_reg_popup(){
-	window.open("/popup/dbServerRegForm.do?flag=server","dbServerRegPop","location=no,menubar=no,resizable=yes,scrollbars=yes,status=no,width=920,height=405,top=0,left=0");
+	window.open("/popup/dbServerRegForm.do?flag=server","dbServerRegPop","location=no,menubar=no,resizable=yes,scrollbars=yes,status=no,width=950,height=470,top=0,left=0");
 }
 
 
@@ -182,7 +180,7 @@ function fn_regRe_popup(){
 	var datas = table.rows('.selected').data();
 	if (datas.length == 1) {
 		var db_svr_id = table.row('.selected').data().db_svr_id;
-		window.open("/popup/dbServerRegReForm.do?db_svr_id="+db_svr_id+"&flag=server","dbServerRegRePop","location=no,menubar=no,resizable=yes,scrollbars=yes,status=no,width=920,height=405,top=0,left=0");
+		window.open("/popup/dbServerRegReForm.do?db_svr_id="+db_svr_id+"&flag=server","dbServerRegRePop","location=no,menubar=no,resizable=yes,scrollbars=yes,status=no,width=950,height=495,top=0,left=0");
 	} else {
 		alert("하나의 항목을 선택해주세요.");
 	}	
@@ -195,7 +193,7 @@ function fn_regRe_popup(){
 <div id="contents">
 	<div class="contents_wrap">
 		<div class="contents_tit">
-			<h4>DBMS 관리 화면 <a href="#n"><img src="../images/ico_tit.png" alt="" /></a></h4>
+			<h4>DBMS 관리 <a href="#n"><img src="../images/ico_tit.png" alt="" /></a></h4>
 			<div class="location">
 				<ul>
 					<li>Admin</li>
@@ -212,7 +210,7 @@ function fn_regRe_popup(){
 						<span class="btn" onClick="fn_search()" id="read_button"><button>조회</button></span>
 						<span class="btn" onclick="fn_reg_popup();" id="int_button"><button>등록</button></span>
 						<span class="btn" onclick="fn_regRe_popup();" id="mdf_button"><button>수정</button></span>
-						<a href="#n" class="btn" id="del_button"><span>삭제</span></a>
+						
 				</div>
 				<div class="sch_form">
 					<table class="write">

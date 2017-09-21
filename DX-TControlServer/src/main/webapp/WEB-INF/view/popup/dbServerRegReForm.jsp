@@ -35,11 +35,11 @@ var pgdataCheck ="fail";
 
 function fn_dbServerValidation(){
 	 if(pghomeCheck != "success"){
-			alert("PG_HOME경로 중복검사를 하셔야합니다.");
+			alert("PG_HOME경로 확인 하셔야합니다.");
 			return false;
 		}
  		if(pgdataCheck != "success"){
-			alert("PG_DATA경로 중복검사를 하셔야합니다.");
+			alert("PG_DATA경로 확인 하셔야합니다.");
 			return false;
 		}
  		if(connCheck != "success"){
@@ -75,6 +75,12 @@ $(window.document).ready(function() {
 			document.getElementById('svr_spr_scm_pwd').value= result[0].svr_spr_scm_pwd;
 			document.getElementById('pghome_pth').value= result[0].pghome_pth;
 			document.getElementById('pgdata_pth').value= result[0].pgdata_pth;
+			if(result[0].useyn == 'Y'){
+				$("#useyn_Y").prop("checked", true);
+			}else{
+				$("#useyn_N").prop("checked", true);
+			}
+			
 		}
 	});   
 
@@ -118,7 +124,8 @@ function fn_dbServerConnTest(){
 
 //DBserver 수정
 function fn_updateDbServer(){
-	
+	 var useyn = $(":input:radio[name=useyn]:checked").val();
+
 	if (!fn_dbServerValidation()) return false;
 	
 	$.ajax({
@@ -132,7 +139,8 @@ function fn_updateDbServer(){
 			svr_spr_usr_id : $("#svr_spr_usr_id").val(),
 			svr_spr_scm_pwd : $("#svr_spr_scm_pwd").val(),
 			pghome_pth : $("#pghome_pth").val(),
-			pgdata_pth : $("#pgdata_pth").val()
+			pgdata_pth : $("#pgdata_pth").val(),
+			useyn : useyn
 		},
 		type : "post",
 		error : function(xhr, status, error) {
@@ -140,6 +148,7 @@ function fn_updateDbServer(){
 		},
 		success : function(result) {
 			alert("수정 되었습니다.");
+			opener.location.reload();
 			self.close();			
 		}
 	}); 
@@ -286,6 +295,11 @@ function checkPghome(){
 					<td>
 					<span class="btn btnC_01"><button type="button" class= "btn_type_02" onclick="checkPgdata()" style="width: 60px; margin-left: 237px; margin-top: 0;">경로체크</button></span>
 					</td>					
+				</tr>	
+				<tr>
+					<th scope="row" class="ico_t1">사용유무</th>
+					<td>
+					사용<input type="radio" name="useyn" id="useyn_Y" value="Y"> 미사용<input type="radio" name="useyn"  id="useyn_N" value="N"></td>			
 				</tr>	
 			</tbody>
 		</table>
