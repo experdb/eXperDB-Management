@@ -398,7 +398,7 @@ function fn_save(){
 														</td>										
 													</tr>
 													<tr>
-														<td>DB서버 메뉴권한</td>
+														<td>서버권한관리</td>
 														<td>
 															<div class="inp_chk">
 																<input type="checkbox" id="r_MN000502" name="r_mnu_nm" />

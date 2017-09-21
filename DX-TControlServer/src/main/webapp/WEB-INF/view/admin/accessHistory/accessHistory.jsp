@@ -117,7 +117,8 @@
 	<form name="excelForm" method="post">
 		<input type="hidden" name="lgi_dtm_start" id="lgi_dtm_start">
 		<input type="hidden" name="lgi_dtm_end" id="lgi_dtm_end"> 
-		<input type="hidden" name="user_nm" id="user_nm">
+		<input type="hidden" name="type" id="type">
+		<input type="hidden" name="search" id="search">
 		<input type="hidden" name="order_type" id=order_type>
 		<input type="hidden" name="order" id="order">
 	</form>
@@ -146,9 +147,10 @@
 							<table class="write">
 								<caption>검색 조회</caption>
 								<colgroup>
-									<col style="width: 90px;" />
+									<col style="width: 80px;" />
 									<col style="width: 400px;" />
 									<col style="width: 80px;" />
+									<col style="width: 180px;" />
 									<col />
 								</colgroup>
 								<tbody>
@@ -163,7 +165,13 @@
 											</div>
 										</td>
 										<th scope="row" class="t9">사용자</th>
-										<td><input type="text" class="txt t2" id="usr_nm" name="usr_nm" value="${usr_nm}"/></td>
+											<td>
+												<select class="select t5" id="type" name="type">
+													<option value="usr_nm" ${type == 'usr_nm' ? 'selected="selected"' : ''}>사용자명</option>
+													<option value="usr_id" ${type == 'usr_id' ? 'selected="selected"' : ''}>아이디</option>
+												</select>
+											</td>
+										<td><input type="text" class="txt t2" id="search" name="search" value="${search}"/></td>
 									</tr>
 									<tr>
 									<th scope="row" class="t9">정렬</th>
@@ -191,12 +199,12 @@
 									<col style="width: 5%;" />
 									<col style="width: 10%;" />
 									<col style="width: 10%;" />
-									<col style="width: 10%;" />
-									<col style="width: 15%;" />
-									<col style="width: 15%;" />
+									<col style="width: 25%;" />
 									<col style="width: 10%;" />
 									<col style="width: 10%;" />
-									<col style="width: 15%;" />
+									<col style="width: 10%;" />
+									<col style="width: 10%;" />
+									<col style="width: 10%;" />
 								</colgroup>
 								<thead>
 									<tr style="border-bottom: 1px solid #b8c3c6;">

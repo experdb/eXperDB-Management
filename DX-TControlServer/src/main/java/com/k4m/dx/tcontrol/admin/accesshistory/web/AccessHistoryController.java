@@ -141,18 +141,20 @@ public class AccessHistoryController {
 
 			String lgi_dtm_start = request.getParameter("lgi_dtm_start");
 			String lgi_dtm_end = request.getParameter("lgi_dtm_end");
-			String usr_nm = request.getParameter("usr_nm");
+			String type=request.getParameter("type");
+			String search = request.getParameter("search");	
 			String order_type= request.getParameter("order_type");
 			String order= request.getParameter("order");
 			
-			if(usr_nm!=null){
-				model.addAttribute("usr_nm", usr_nm);
-				usr_nm="%"+usr_nm+"%";
+			if(search!=null){
+				model.addAttribute("search", search);
+				search="%"+search+"%";
 			}
 			
 			param.put("lgi_dtm_start", lgi_dtm_start);
 			param.put("lgi_dtm_end", lgi_dtm_end);
-			param.put("usr_nm", usr_nm);
+			param.put("type", type);
+			param.put("search", search);
 			param.put("order_type", order_type);
 			param.put("order", order);
 					
@@ -177,6 +179,7 @@ public class AccessHistoryController {
 			
 			model.addAttribute("lgi_dtm_start", lgi_dtm_start);
 			model.addAttribute("lgi_dtm_end", lgi_dtm_end);
+			model.addAttribute("type", type);
 			model.addAttribute("order", order);
 			model.addAttribute("order_type", order_type);
 			model.addAttribute("paginationInfo", paginationInfo);
@@ -223,18 +226,20 @@ public class AccessHistoryController {
 
 			String lgi_dtm_start = request.getParameter("lgi_dtm_start");
 			String lgi_dtm_end = request.getParameter("lgi_dtm_end");
-			String usr_nm = request.getParameter("usr_nm");
+			String type=request.getParameter("type");
+			String search = request.getParameter("search");
 			String order_type= request.getParameter("order_type");
 			String order= request.getParameter("order");
-			
-			if(usr_nm!=null){
-				model.addAttribute("usr_nm", usr_nm);
-				usr_nm="%"+usr_nm+"%";
+					
+			if(search!=null){
+				model.addAttribute("search", search);
+				search="%"+search+"%";
 			}
 			
 			param.put("lgi_dtm_start", lgi_dtm_start);
 			param.put("lgi_dtm_end", lgi_dtm_end);
-			param.put("usr_nm", usr_nm);
+			param.put("type", type);
+			param.put("search", search);
 			param.put("order_type", order_type);
 			param.put("order", order);
 	
@@ -259,6 +264,7 @@ public class AccessHistoryController {
 			
 			model.addAttribute("lgi_dtm_start", lgi_dtm_start);
 			model.addAttribute("lgi_dtm_end", lgi_dtm_end);
+			model.addAttribute("type", type);
 			model.addAttribute("order", order);
 			model.addAttribute("order_type", order_type);
 			model.addAttribute("paginationInfo", paginationInfo);
@@ -297,13 +303,15 @@ public class AccessHistoryController {
 			
 			String lgi_dtm_start = request.getParameter("lgi_dtm_start");
 			String lgi_dtm_end = request.getParameter("lgi_dtm_end");
-			String usr_nm = request.getParameter("user_nm");
+			String type=request.getParameter("type");
+			String search = request.getParameter("search");
 			String order_type= request.getParameter("order_type");
 			String order= request.getParameter("order");
 			
 			param.put("lgi_dtm_start", lgi_dtm_start);
 			param.put("lgi_dtm_end", lgi_dtm_end);
-			param.put("usr_nm", usr_nm);
+			param.put("type", type);
+			param.put("search", search);
 			param.put("order_type", order_type);
 			param.put("order", order);
 			

@@ -36,10 +36,10 @@
 			<if test="lgi_dtm_start != null and lgi_dtm_start != '' ">
 				AND to_char(G.EXEDTM,'YYYY-MM-DD') between #{lgi_dtm_start} and #{lgi_dtm_end}
 			</if>
-			<if test="usr_nm != null and usr_nm != '' ">
-				AND I.USR_NM LIKE #{usr_nm}
+			<if test="search != null and search != '' ">
+				AND ${type} LIKE #{search}
 			</if>
-			ORDER BY ${order_type} #{order}
+			ORDER BY ${order_type} ${order} 
 			LIMIT #{recordCountPerPage} OFFSET #{firstIndex}	
 			)A
 	</select>
@@ -57,8 +57,8 @@
 		<if test="lgi_dtm_start != null and lgi_dtm_start != '' ">
 				AND to_char(G.EXEDTM,'YYYY-MM-DD') between #{lgi_dtm_start} and #{lgi_dtm_end}
 		</if>
-		<if test="usr_nm != null and usr_nm != '' ">
-				AND I.USR_NM LIKE #{usr_nm}
+		<if test="search != null and search != '' ">
+				AND ${type} LIKE #{search}
 		</if>
 	</select>
 	
@@ -120,10 +120,10 @@
 			<if test="lgi_dtm_start != null and lgi_dtm_start != '' ">
 				AND to_char(G.EXEDTM,'YYYY-MM-DD') between #{lgi_dtm_start} and #{lgi_dtm_end}
 			</if>
-			<if test="usr_nm != null and usr_nm != '' ">
-				AND I.USR_NM LIKE #{usr_nm}
+			<if test="search != null and search != '' ">
+				AND ${type} LIKE #{search}
 			</if>
-			ORDER BY EXEDTM DESC
+			ORDER BY ${order_type} ${order} 
 			)A	
 	</select>
 	

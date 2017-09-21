@@ -200,7 +200,7 @@ function selectTab(intab){
 <div id="contents">
 	<div class="contents_wrap">
 		<div class="contents_tit">
-			<h4>백업 관리 화면 <a href="#n"><img src="/images/ico_tit.png" alt="" /></a></h4>
+			<h4>백업 이력<a href="#n"><img src="/images/ico_tit.png" alt="" /></a></h4>
 			<div class="location">
 				<ul>
 					<li>${db_svr_nm}</li>

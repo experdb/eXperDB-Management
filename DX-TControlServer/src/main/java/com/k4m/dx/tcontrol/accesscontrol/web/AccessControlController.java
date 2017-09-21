@@ -271,6 +271,7 @@ public class AccessControlController {
 				mv.addObject("ctf_tp_nm",request.getParameter("Type").equals("undefined") ? "" : request.getParameter("Type"));
 				mv.addObject("dtb",request.getParameter("Database").equals("undefined") ? "" : request.getParameter("Database"));
 				mv.addObject("ipmask",request.getParameter("Ipmask").equals("undefined") ? "" : request.getParameter("Ipmask"));
+				mv.addObject("opt_nm",request.getParameter("Option").equals("undefined") ? "" : request.getParameter("Option"));
 			}
 
 			mv.addObject("db_svr_nm", dbServerVO.getDb_svr_nm());

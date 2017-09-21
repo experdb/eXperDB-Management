@@ -145,7 +145,7 @@ $(function() {
 
 	<div class="contents_wrap">
 		<div class="contents_tit">
-			<h4>Dump 백업관리화면<a href="#n"><img src="/images/ico_tit.png" alt="" /></a></h4>
+			<h4>Dump 백업관리<a href="#n"><img src="/images/ico_tit.png" alt="" /></a></h4>
 			<div class="location">
 				<ul>
 					<li>DB서버</li>

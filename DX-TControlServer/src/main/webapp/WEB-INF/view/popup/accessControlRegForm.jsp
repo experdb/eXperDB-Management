@@ -152,6 +152,15 @@
 			$('#prefix').attr('disabled', 'true');
 			$('#prms_ipmaskadr').attr('disabled', 'true');
 		}
+		
+		var ctf_mth_nm = $("#ctf_mth_nm").val();
+		if(ctf_mth_nm=="ident" || ctf_mth_nm=="pam" || ctf_mth_nm=="ldap" || ctf_mth_nm=="gss" || ctf_mth_nm=="sspi" 
+				|| ctf_mth_nm=="cert" || ctf_mth_nm=="crypt"){
+			$('#opt_nm').removeAttr('disabled');
+		}else{
+			$('#opt_nm').attr('disabled', 'true');
+		}
+		
 		if ("${act}" == "u") {
 			var prms_ipadr = "${prms_ipadr}";
 			var str = prms_ipadr.split("/");
@@ -197,6 +206,16 @@
 		}else{
 			$('#prefix').attr('disabled', 'true');
 		}		
+	}
+	
+	function changeMethod() {
+		var ctf_mth_nm = $("#ctf_mth_nm").val();
+		if(ctf_mth_nm=="ident" || ctf_mth_nm=="pam" || ctf_mth_nm=="ldap" || ctf_mth_nm=="gss" || ctf_mth_nm=="sspi" ||
+			ctf_mth_nm=="cert" || ctf_mth_nm=="crypt"){
+			$('#opt_nm').removeAttr('disabled');
+		}else{
+			$('#opt_nm').attr('disabled', 'true');
+		}
 	}
 </script>
 <body>
@@ -283,7 +302,7 @@
 					<tr>
 						<th scope="row" class="ico_t1">Method</th>
 						<td>
-							<select id="ctf_mth_nm" name="ctf_mth_nm" id="ctf_mth_nm" class="select">
+							<select id="ctf_mth_nm" name="ctf_mth_nm" id="ctf_mth_nm" class="select" onchange="changeMethod()">
 								<option value="trust"  ${ctf_mth_nm == 'trust' ? 'selected="selected"' : ''}>trust</option>
 								<option value="reject" ${ctf_mth_nm == 'reject' ? 'selected="selected"' : ''}>reject</option>
 								<option value="md5" ${ctf_mth_nm == 'md5' ? 'selected="selected"' : ''}>md5</option>
@@ -302,7 +321,7 @@
 							</select>
 						</td>
 						<th scope="row" class="ico_t1">Option</th>
-						<td><input type="text" class="txt" name="opt_nm" id="opt_nm"/></td>		
+						<td><input type="text" class="txt" name="opt_nm" id="opt_nm" value="${opt_nm}"/></td>		
 					</tr>
 				</tbody>
 			</table>

@@ -205,9 +205,9 @@ function fn_chkExtName(extName) {
 												</div>
 											</td>
 											<td>
-	<div id="auditloading" style="display:none">
-			<img src="/images/spin.gif" alt="" /> 다운로드 중입니다... ......... .. <a href="javascript:fn_progressClose();">확인</a>
-	</div>
+												<div id="auditloading" style="display:none">
+														<img src="/images/spin.gif" alt="" /> 다운로드 중입니다... ......... .. <a href="javascript:fn_progressClose();">확인</a>
+												</div>
 											</td>
 										</tr>
 									</tbody>
@@ -248,7 +248,7 @@ function fn_chkExtName(extName) {
 									<c:forEach var="log" items="${logFileList}" varStatus="status">
 										<tr>
 											<td>${status.count}</td>
-											<td><a href="javascript:fn_openLogView('${log.file_name}', '${log.file_size}')">${log.file_name}</a></td>
+											<td><a href="javascript:fn_openLogView('${log.file_name}', '${log.file_size}')" style="font-weight:bold; color:#F56600;">${log.file_name}</a></td>
 											<td>${log.file_size}</td>
 											<td>${log.file_lastmodified}</td>
 											<td><span class="btn"><button id="btnDownload" name="btnDownload" onClick="javascript:fn_download('${log.file_name}', '${log.file_size}');">다운로드</button></span></td>

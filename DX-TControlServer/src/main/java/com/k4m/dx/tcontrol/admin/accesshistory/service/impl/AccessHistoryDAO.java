@@ -29,7 +29,10 @@ public class AccessHistoryDAO extends EgovAbstractMapper{
 		HashMap<String, Object> params= new HashMap<String, Object>();
 		params.put("lgi_dtm_start", param.get("lgi_dtm_start"));
 		params.put("lgi_dtm_end", param.get("lgi_dtm_end"));
-		params.put("usr_nm", param.get("usr_nm"));
+		params.put("type", param.get("type"));
+		params.put("search", param.get("search"));
+		params.put("order_type", param.get("order_type"));
+		params.put("order", param.get("order"));
 		params.put("recordCountPerPage", searchVO.getRecordCountPerPage());
 		params.put("firstIndex", searchVO.getFirstIndex());
 
