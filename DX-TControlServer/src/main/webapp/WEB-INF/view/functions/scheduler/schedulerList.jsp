@@ -215,7 +215,6 @@ function fn_selectScheduleList(){
 			alert("실패")
 		},
 		success : function(result) {
-			alert(JSON.stringify(result));
 			table.clear().draw();
 			table.rows.add(result).draw();
 		}
@@ -360,11 +359,11 @@ function fn_makeMin(){
 					<table class="write">
 						<caption>검색 조회</caption>
 						<colgroup>
-							<col style="width:120px;" />
-							<col style="width:1050px;" />
-
+							<col style="width:130px;" />
+							<col style="width:550px;" />
+							<col style="width:130px;" />
 							<col />
-						</colgroup>
+						</colgroup> 
 						<tbody>
 								<tr>
 									<th scope="row" class="t9 line">스케줄명</th>
@@ -397,12 +396,10 @@ function fn_makeMin(){
 									</td>
 								</tr>
 								<tr>
-									<th scope="row" class="t9 line">구동상태</th>
-									<td><input type="text" class="txt t2" id="scd_exp" name="scd_exp" /></td>								
-								</tr>
-								<tr>
+									<th scope="row" class="t9 line" >구동상태</th>
+									<td ><input type="text" class="txt t2" id="scd_exp" name="scd_exp" /></td>								
 									<th scope="row" class="t9 line">등록자</th>
-									<td><input type="text" class="txt t2" id="scd_exp" name="scd_exp" /></td>
+									<td ><input type="text" class="txt t2" id="scd_exp" name="scd_exp" /></td>
 								</tr>
 						</tbody>
 					</table>
