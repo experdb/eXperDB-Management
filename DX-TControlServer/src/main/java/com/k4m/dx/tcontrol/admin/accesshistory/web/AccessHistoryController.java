@@ -303,10 +303,10 @@ public class AccessHistoryController {
 			
 			String lgi_dtm_start = request.getParameter("lgi_dtm_start");
 			String lgi_dtm_end = request.getParameter("lgi_dtm_end");
-			String type=request.getParameter("type");
-			String search = request.getParameter("search");
-			String order_type= request.getParameter("order_type");
-			String order= request.getParameter("order");
+			String type=request.getParameter("excel_type");
+			String search = request.getParameter("excel_search");
+			String order_type= request.getParameter("excel_order_type");
+			String order= request.getParameter("excel_order");		
 			
 			param.put("lgi_dtm_start", lgi_dtm_start);
 			param.put("lgi_dtm_end", lgi_dtm_end);

@@ -85,14 +85,20 @@
 		} else {
 			var lgi_dtm_start = $("#from").val();
 			var lgi_dtm_end = $("#to").val();
-			var usr_nm = "%" + $("#usr_nm").val() + "%";
-
+			var search = "%" + $("#search").val() + "%";
+			var type = $("#type").val();
+			var order_type = $("#order_type").val();
+			var order = $("#order").val();
+			
 			var form = document.excelForm;
 
 			$("#lgi_dtm_start").val(lgi_dtm_start);
 			$("#lgi_dtm_end").val(lgi_dtm_end);
-			$("#user_nm").val(usr_nm);
-
+			$("#excel_search").val(search);
+			$("#excel_type").val(type);
+			$("#excel_order_type").val(order_type);
+			$("#excel_order").val(order);
+			
 			form.action = "/accessHistory_Excel.do";
 			form.submit();
 			return;
@@ -117,10 +123,10 @@
 	<form name="excelForm" method="post">
 		<input type="hidden" name="lgi_dtm_start" id="lgi_dtm_start">
 		<input type="hidden" name="lgi_dtm_end" id="lgi_dtm_end"> 
-		<input type="hidden" name="type" id="type">
-		<input type="hidden" name="search" id="search">
-		<input type="hidden" name="order_type" id=order_type>
-		<input type="hidden" name="order" id="order">
+		<input type="hidden" name="excel_type" id="excel_type">
+		<input type="hidden" name="excel_search" id="excel_search">
+		<input type="hidden" name="excel_order_type" id=excel_order_type>
+		<input type="hidden" name="excel_order" id="excel_order">
 	</form>
 	<div id="contents">
 		<div class="contents_wrap">
