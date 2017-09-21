@@ -360,8 +360,11 @@ function fn_makeMin(){
 						<caption>검색 조회</caption>
 						<colgroup>
 							<col style="width:130px;" />
-							<col style="width:550px;" />
-							<col style="width:130px;" />
+							<col style="width:330px;" />
+							<col style="width:30px;" />
+							<col style="width:330px;" />
+							<col style="width:100px;" />
+							<col style="width:10px;" />
 							<col />
 						</colgroup> 
 						<tbody>
@@ -384,7 +387,9 @@ function fn_makeMin(){
 														<span id="b_min"></span>
 												</div>
 										</span>
-									~
+									</td>
+									<td>~</td>
+									<td>
 										<span id="calendar">
 												<div class="calendar_area">
 														<a href="#n" class="calendar_btn">달력열기</a>
@@ -397,7 +402,9 @@ function fn_makeMin(){
 								</tr>
 								<tr>
 									<th scope="row" class="t9 line" >구동상태</th>
-									<td ><input type="text" class="txt t2" id="scd_exp" name="scd_exp" /></td>								
+									<td ><input type="text" class="txt t2" id="scd_exp" name="scd_exp" /></td>				
+								</tr>				
+								<tr>
 									<th scope="row" class="t9 line">등록자</th>
 									<td ><input type="text" class="txt t2" id="scd_exp" name="scd_exp" /></td>
 								</tr>
