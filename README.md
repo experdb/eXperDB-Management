@@ -1,5 +1,5 @@
 ## Introduction
-X-Tcontrol is a PostgreSQL integrated operations management tool. Use backup settings and regular scheduling to prepare for system failure, grants access to the system and view the history of backup and access control.
+DX-Tcontrol is a PostgreSQL integrated operations management tool. Use backup settings and regular scheduling to prepare for system failure, grants access to the system and view the history of backup and access control.
 
 
 ## Features
