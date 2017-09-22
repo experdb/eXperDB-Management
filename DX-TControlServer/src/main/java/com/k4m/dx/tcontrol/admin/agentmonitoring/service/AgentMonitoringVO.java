@@ -13,8 +13,15 @@ public class AgentMonitoringVO {
 	private String LST_MDFR_ID;
 	private String LST_MDF_DTM;
 	private String AGT_VERSION;
+	private String SET_YN;
 	
 	
+	public String getSET_YN() {
+		return SET_YN;
+	}
+	public void setSET_YN(String sET_YN) {
+		SET_YN = sET_YN;
+	}
 	public String getAGT_VERSION() {
 		return AGT_VERSION;
 	}

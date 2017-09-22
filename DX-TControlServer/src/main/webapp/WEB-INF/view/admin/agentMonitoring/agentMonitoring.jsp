@@ -80,7 +80,7 @@
 											<th scope="col">NO</th>
 											<th scope="col">DB서버</th>
 											<th scope="col">구동일시</th>
-											<th scope="col">설치여부</th>
+											<th scope="col">등록여부</th>
 											<th scope="col">Agent Version</th>
 											<th scope="col">Agent 상태</th>
 										</tr>
@@ -99,11 +99,11 @@
 											<td>${data.DB_SVR_NM}</td>											
 											<td>${data.STRT_DTM}</td>
 											<td>
-											<c:if test="${data.ISTCNF_YN == 'Y'}">
-											설치
+											<c:if test="${data.SET_YN == 'Y'}">
+											예
 											</c:if>
-											<c:if test="${data.ISTCNF_YN == 'N' || data.ISTCNF_YN == null}">
-											<font color="red">미설치</font>
+											<c:if test="${data.SET_YN == 'N' || data.ISTCNF_YN == null}">
+											<font color="red">아니오</font>
 											</c:if>
 											</td>
 											<td>
