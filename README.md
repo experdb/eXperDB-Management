@@ -7,7 +7,7 @@ X-Tcontrol is a PostgreSQL integrated operations management tool. Use backup set
   - Full backup, Incremental backup, Other backups with the pg_dump options
 * Access control
   - Access control settings based on pg_hba.conf and audit 
-* Schedule
+* Scheduling
   - Schedule for tasks that need to be done on a regular basis
 * Data transmission
   - Real-time data transfer from PostgreSQL to HDFS
