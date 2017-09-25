@@ -76,9 +76,10 @@ public class AuditController {
 			if(dbSvrAut.get(0).get("adt_cng_aut_yn").equals("N")){
 				mv.setViewName("error/autError");				
 			}else{		
-				// 감사설정 이력 남기기
+				// 화면접근이력 이력 남기기
 				CmmnUtils.saveHistory(request, historyVO);
-				historyVO.setExe_dtl_cd("DX-T0029");
+				historyVO.setExe_dtl_cd("DX-T0031");
+				historyVO.setMnu_id(30);
 				accessHistoryService.insertHistory(historyVO);
 				
 				String strDbSvrId = request.getParameter("db_svr_id");
@@ -330,9 +331,10 @@ public class AuditController {
 			if(dbSvrAut.get(0).get("adt_hist_aut_yn").equals("N")){
 				mv.setViewName("error/autError");				
 			}else{	
-				// 감사설정 이력 남기기
+				// 화면접근이력 이력 남기기
 				CmmnUtils.saveHistory(request, historyVO);
-				historyVO.setExe_dtl_cd("DX-T0030");
+				historyVO.setExe_dtl_cd("DX-T0032");
+				historyVO.setMnu_id(31);
 				accessHistoryService.insertHistory(historyVO); 
 				
 				String strDbSvrId = request.getParameter("db_svr_id");

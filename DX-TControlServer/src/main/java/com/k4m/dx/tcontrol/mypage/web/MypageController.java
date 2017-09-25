@@ -63,9 +63,10 @@ public class MypageController {
 			HttpSession session = request.getSession();
 			String usr_id = (String) session.getAttribute("usr_id");
 
-			// 개인정보수정 이력 남기기
+			// 화면접근이력 이력 남기기
 			CmmnUtils.saveHistory(request, historyVO);
-			historyVO.setExe_dtl_cd("DX-T0042");
+			historyVO.setExe_dtl_cd("DX-T0048");
+			historyVO.setMnu_id(22);
 			accessHistoryService.insertHistory(historyVO);
 			
 			
@@ -106,9 +107,10 @@ public class MypageController {
 			
 			myPageService.updateMypage(userVo);
 			
-			//개인정보수정 이력 남기기
+			// 화면접근이력 이력 남기기
 			CmmnUtils.saveHistory(request, historyVO);
-			historyVO.setExe_dtl_cd("DX-T0042_01");
+			historyVO.setExe_dtl_cd("DX-T0048_01");
+			historyVO.setMnu_id(22);
 			accessHistoryService.insertHistory(historyVO);
 			
 		} catch (Exception e) {
@@ -128,9 +130,10 @@ public class MypageController {
 	public ModelAndView connectorReg(HttpServletRequest request,@ModelAttribute("historyVO") HistoryVO historyVO) {
 		ModelAndView mv = new ModelAndView();
 		try {
-			//패스워드변경 팝업 이력 남기기
+			// 화면접근이력 이력 남기기
 			CmmnUtils.saveHistory(request, historyVO);
-			historyVO.setExe_dtl_cd("DX-T0043");
+			historyVO.setExe_dtl_cd("DX-T0049");
+			historyVO.setMnu_id(22);
 			accessHistoryService.insertHistory(historyVO);
 					
 			mv.setViewName("popup/pwdRegForm");	
@@ -188,9 +191,10 @@ public class MypageController {
 			userVo.setPwd(SHA256.SHA256(userVo.getPwd()));
 			myPageService.updatePwd(userVo);
 			
-			//패스워드변경 이력 남기기
+			// 화면접근이력 이력 남기기
 			CmmnUtils.saveHistory(request, historyVO);
-			historyVO.setExe_dtl_cd("DX-T0043_01");
+			historyVO.setExe_dtl_cd("DX-T0049_01");
+			historyVO.setMnu_id(22);
 			accessHistoryService.insertHistory(historyVO);
 			
 		} catch (Exception e) {

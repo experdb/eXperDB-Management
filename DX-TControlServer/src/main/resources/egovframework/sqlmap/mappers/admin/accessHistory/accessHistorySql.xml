@@ -3,6 +3,42 @@
 
 <mapper namespace="accessHistorySql">
 
+	<insert id="insertHistory" parameterType="historyVO">
+		/**
+		* Query ID : insertHistory
+		* Description : 화면접근 이력 등록
+		* Author : 김주영
+		**/
+
+		INSERT INTO T_SYSWRK_G
+		(
+		  WRK_SN
+		, USR_ID
+		, MNU_ID
+		, EXE_DTL_CD
+		, EXEDTM
+		, LGI_IPADR
+		)
+		VALUES
+		(
+		  nextval('q_syswrk_g_01')
+		, #{usr_id}
+		, #{mnu_id}
+		, #{exe_dtl_cd}
+		, clock_timestamp()
+		, #{lgi_ipadr}
+		)
+	</insert>
+	
+	<select id="selectAccessScreenName" resultType="historyVO">
+		SELECT 
+		  SYS_CD
+		, SYS_CD_NM
+		FROM T_SYSDTL_C 
+		WHERE GRP_CD = 'TC0001'
+		AND SYS_CD NOT LIKE '%#_%' ESCAPE '#';
+	</select>
+	
 	<select id="selectAccessHistory" resultType="historyVO" parameterType="hashmap" >
 		/**
 		* Query ID : selectAccessHistory
@@ -39,6 +75,9 @@
 			<if test="search != null and search != '' ">
 				AND ${type} LIKE #{search}
 			</if>
+			<if test="sys_cd != null and sys_cd != '' ">
+				AND  C.SYS_CD = #{sys_cd}
+			</if>	
 			ORDER BY ${order_type} ${order} 
 			LIMIT #{recordCountPerPage} OFFSET #{firstIndex}	
 			)A
@@ -60,32 +99,12 @@
 		<if test="search != null and search != '' ">
 				AND ${type} LIKE #{search}
 		</if>
+		<if test="sys_cd != null and sys_cd != '' ">
+				AND  C.SYS_CD = #{sys_cd}
+		</if>	
 	</select>
 	
-	<insert id="insertHistory" parameterType="historyVO">
-		/**
-		* Query ID : insertHistory
-		* Description : 화면접근 이력 등록
-		* Author : 김주영
-		**/
-
-		INSERT INTO T_SYSWRK_G
-		(
-		  WRK_SN
-		, USR_ID
-		, EXE_DTL_CD
-		, EXEDTM
-		, LGI_IPADR
-		)
-		VALUES
-		(
-		  nextval('q_syswrk_g_01')
-		, #{usr_id}
-		, #{exe_dtl_cd}
-		, clock_timestamp()
-		, #{lgi_ipadr}
-		)
-	</insert>	
+	
 	
 	<select id="selectAccessHistoryExcel" resultType="historyVO" parameterType="hashmap" >
 		/**
@@ -123,6 +142,9 @@
 			<if test="search != null and search != '' ">
 				AND ${type} LIKE #{search}
 			</if>
+			<if test="sys_cd != null and sys_cd != '' ">
+				AND  C.SYS_CD = #{sys_cd}
+			</if>	
 			ORDER BY ${order_type} ${order} 
 			)A	
 	</select>

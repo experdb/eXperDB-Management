@@ -93,9 +93,10 @@ public class TreeController {
 			if(menuAut.get(0).get("read_aut_yn").equals("N")){
 				mv.setViewName("error/autError");
 			}else{
-				//이력 남기기
+				// 화면접근이력 이력 남기기
 				CmmnUtils.saveHistory(request, historyVO);
 				historyVO.setExe_dtl_cd("DX-T0005");
+				historyVO.setMnu_id(9);
 				accessHistoryService.insertHistory(historyVO);
 				
 				mv.addObject("read_aut_yn", menuAut.get(0).get("read_aut_yn"));
@@ -260,9 +261,10 @@ public class TreeController {
 				response.sendRedirect("/autError.do");
 				return false;
 			}else{
-				//이력 남기기
+				// 화면접근이력 이력 남기기
 				CmmnUtils.saveHistory(request, historyVO);
-				historyVO.setExe_dtl_cd("DX-T0005_04");
+				historyVO.setExe_dtl_cd("DX-T0005_01");
+				historyVO.setMnu_id(9);
 				accessHistoryService.insertHistory(historyVO);
 				
 				String id = (String) request.getSession().getAttribute("usr_id");

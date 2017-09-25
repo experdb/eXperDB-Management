@@ -51,9 +51,10 @@ public class ExtensionController {
 	public ModelAndView extensionList(@ModelAttribute("historyVO") HistoryVO historyVO, HttpServletRequest request) {
 		ModelAndView mv = new ModelAndView();
 		try {
-			// Agent모니터링 이력 남기기
+			// 화면접근이력 이력 남기기
 			CmmnUtils.saveHistory(request, historyVO);
-			historyVO.setExe_dtl_cd("DX-T0038");
+			historyVO.setExe_dtl_cd("DX-T0041");
+			historyVO.setMnu_id(21);
 			accessHistoryService.insertHistory(historyVO);
 			
 			mv.setViewName("admin/extension/extensionList");

@@ -89,6 +89,7 @@
 			var type = $("#type").val();
 			var order_type = $("#order_type").val();
 			var order = $("#order").val();
+			var sys_cd = $("#sys_cd").val();
 			
 			var form = document.excelForm;
 
@@ -98,6 +99,7 @@
 			$("#excel_type").val(type);
 			$("#excel_order_type").val(order_type);
 			$("#excel_order").val(order);
+			$("#excel_sys_cd").val(sys_cd);
 			
 			form.action = "/accessHistory_Excel.do";
 			form.submit();
@@ -108,7 +110,6 @@
 	
 	/*조회버튼 클릭시*/
 	function fn_select() {
-		$("#historyCheck").val("historyCheck");
 		document.selectList.action = "/selectSearchAccessHistory.do";
 		document.selectList.submit();
 	}
@@ -127,6 +128,7 @@
 		<input type="hidden" name="excel_search" id="excel_search">
 		<input type="hidden" name="excel_order_type" id=excel_order_type>
 		<input type="hidden" name="excel_order" id="excel_order">
+		<input type="hidden" name="excel_sys_cd" id="excel_sys_cd">
 	</form>
 	<div id="contents">
 		<div class="contents_wrap">
@@ -148,7 +150,6 @@
 					</div>
 
 					<form:form commandName="pagingVO" name="selectList" id="selectList" method="post">
-						<input type="hidden" name="historyCheck" id="historyCheck">
 						<div class="sch_form">
 							<table class="write">
 								<caption>검색 조회</caption>
@@ -156,7 +157,7 @@
 									<col style="width: 80px;" />
 									<col style="width: 400px;" />
 									<col style="width: 80px;" />
-									<col style="width: 180px;" />
+									<col style="width: 400px;" />
 									<col />
 								</colgroup>
 								<tbody>
@@ -176,11 +177,20 @@
 													<option value="usr_nm" ${type == 'usr_nm' ? 'selected="selected"' : ''}>사용자명</option>
 													<option value="usr_id" ${type == 'usr_id' ? 'selected="selected"' : ''}>아이디</option>
 												</select>
-											</td>
-										<td><input type="text" class="txt t2" id="search" name="search" value="${search}"/></td>
+												<input type="text" class="txt t2" id="search" name="search" value="${search}"/>
+											</td>				
 									</tr>
 									<tr>
-									<th scope="row" class="t9">정렬</th>
+										<th scope="row" class="t9">화면선택</th>
+										<td>
+											<select class="select t5" id="sys_cd" name="sys_cd">
+												<option value="" ${sys_cd == '' ? 'selected="selected"' : ''}>전체</option>	
+												<c:forEach var="ScreenNames" items="${ScreenNames}">
+													<option value="${ScreenNames.sys_cd}" ${ScreenNames.sys_cd == sys_cd ? 'selected="selected"' : ''}>${ScreenNames.sys_cd_nm}</option>							
+												</c:forEach>
+											</select>
+										</td>
+										<th scope="row" class="t9">정렬</th>
 										<td>
 											<select class="select t5" id="order_type" name="order_type">
 												<option value="exedtm" ${order_type == 'exedtm' ? 'selected="selected"' : ''}>일자,시간</option>
@@ -191,7 +201,6 @@
 												<option value="asc" ${order == 'asc' ? 'selected="selected"' : ''}>오름차순</option>		
 											</select>
 										</td>
-									
 									</tr>
 
 								</tbody>
@@ -205,7 +214,8 @@
 									<col style="width: 5%;" />
 									<col style="width: 10%;" />
 									<col style="width: 10%;" />
-									<col style="width: 25%;" />
+									<col style="width: 15%;" />
+									<col style="width: 15%;" />
 									<col style="width: 10%;" />
 									<col style="width: 10%;" />
 									<col style="width: 10%;" />
@@ -217,7 +227,8 @@
 										<th scope="col">NO</th>
 										<th scope="col">일자</th>
 										<th scope="col">시간</th>
-										<th scope="col">구분</th>
+										<th scope="col">화면</th>
+										<th scope="col">버튼</th>
 										<th scope="col">아이디</th>
 										<th scope="col">사용자명</th>
 										<th scope="col">부서</th>
@@ -231,6 +242,7 @@
 											<td><c:out value="${paginationInfo.totalRecordCount+1 - ((pagingVO.pageIndex-1) * pagingVO.pageSize + status.count)}" /></td>
 											<td><c:out value="${result.exedtm_date}" /></td>
 											<td><c:out value="${result.exedtm_hour}" /></td>
+											<td><c:out value="${result.sys_cd_nm}" /></td>
 											<td><c:out value="${result.sys_cd_nm}" /></td>
 											<td><c:out value="${result.usr_id}" /></td>
 											<td><c:out value="${result.usr_nm}" /></td>

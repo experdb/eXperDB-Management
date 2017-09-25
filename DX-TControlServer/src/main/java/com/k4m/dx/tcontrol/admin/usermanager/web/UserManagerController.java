@@ -77,9 +77,10 @@ public class UserManagerController {
 				mv.addObject("read_aut_yn", menuAut.get(0).get("read_aut_yn"));
 				mv.addObject("wrt_aut_yn", menuAut.get(0).get("wrt_aut_yn"));
 				
-				// 사용자관리 이력 남기기
+				// 화면접근이력 이력 남기기
 				CmmnUtils.saveHistory(request, historyVO);
-				historyVO.setExe_dtl_cd("DX-T0031");
+				historyVO.setExe_dtl_cd("DX-T0033");
+				historyVO.setMnu_id(12);
 				accessHistoryService.insertHistory(historyVO);
 				
 				mv.setViewName("admin/userManager/userManager");
@@ -98,7 +99,7 @@ public class UserManagerController {
 	 * @throws Exception
 	 */
 	@RequestMapping(value = "/selectUserManager.do")
-	public @ResponseBody List<UserVO> selectUserManager(HttpServletRequest request,HttpServletResponse response) {
+	public @ResponseBody List<UserVO> selectUserManager(@ModelAttribute("historyVO") HistoryVO historyVO,HttpServletRequest request,HttpServletResponse response) {
 		List<UserVO> resultSet = null;
 		Map<String, Object> param = new HashMap<String, Object>();
 		try {
@@ -109,6 +110,12 @@ public class UserManagerController {
 				response.sendRedirect("/autError.do.do");
 				return resultSet;
 			}
+			
+			// 화면접근이력 이력 남기기
+			CmmnUtils.saveHistory(request, historyVO);
+			historyVO.setExe_dtl_cd("DX-T0033_01");
+			historyVO.setMnu_id(12);
+			accessHistoryService.insertHistory(historyVO);
 			
 			String type=request.getParameter("type");
 			String search = request.getParameter("search");
@@ -147,14 +154,16 @@ public class UserManagerController {
 				CmmnUtils.saveHistory(request, historyVO);
 				
 				if(act.equals("i")){
-					// 사용자등록 화면 이력 남기기
-					historyVO.setExe_dtl_cd("DX-T0032");
+					// 화면접근이력 이력 남기기
+					historyVO.setExe_dtl_cd("DX-T0034");
+					historyVO.setMnu_id(12);
 					accessHistoryService.insertHistory(historyVO);			
 				}
 
 				if(act.equals("u")){
-					// 사용자수정 화면 이력 남기기
-					historyVO.setExe_dtl_cd("DX-T0033");
+					// 화면접근이력 이력 남기기
+					historyVO.setExe_dtl_cd("DX-T0035");
+					historyVO.setMnu_id(12);
 					accessHistoryService.insertHistory(historyVO);
 								
 					String usr_id = request.getParameter("usr_id");
@@ -205,9 +214,10 @@ public class UserManagerController {
 				response.sendRedirect("/autError.do");
 			}
 			
-			// 사용자 등록 이력 남기기
+			// 화면접근이력 이력 남기기
 			CmmnUtils.saveHistory(request, historyVO);
-			historyVO.setExe_dtl_cd("DX-T0032_01");
+			historyVO.setExe_dtl_cd("DX-T0034_01");
+			historyVO.setMnu_id(12);
 			accessHistoryService.insertHistory(historyVO);
 			
 			//패스워드 암호화
@@ -217,6 +227,10 @@ public class UserManagerController {
 			String usr_id = (String)session.getAttribute("usr_id");
 			userVo.setFrst_regr_id(usr_id);
 			userVo.setLst_mdfr_id(usr_id);
+			
+			if(userVo.getUsr_expr_dt() ==null){
+				userVo.setUsr_expr_dt("20990101");
+			}
 			
 			userManagerService.insertUserManager(userVo);
 			
@@ -279,7 +293,8 @@ public class UserManagerController {
 			}
 			// 사용자 수정 이력 남기기
 			CmmnUtils.saveHistory(request, historyVO);
-			historyVO.setExe_dtl_cd("DX-T0033_01");
+			historyVO.setExe_dtl_cd("DX-T0035_01");
+			historyVO.setMnu_id(12);
 			accessHistoryService.insertHistory(historyVO);
 			
 			HttpSession session = request.getSession();
@@ -350,9 +365,10 @@ public class UserManagerController {
 				userManagerService.deleteUserManager(param[i]);
 			}
 
-			// 사용자삭제 이력 남기기
+			// 화면접근이력 이력 남기기
 			CmmnUtils.saveHistory(request, historyVO);
-			historyVO.setExe_dtl_cd("DX-T0031_02");
+			historyVO.setExe_dtl_cd("DX-T0033_02");
+			historyVO.setMnu_id(12);
 			accessHistoryService.insertHistory(historyVO);
 			
 			return true;

@@ -46,9 +46,9 @@ public class HelpController {
 	public ModelAndView aboutTcontrol(@ModelAttribute("historyVO") HistoryVO historyVO, HttpServletRequest request) {
 		ModelAndView mv = new ModelAndView();
 		try {
-			//About Tcontrol 이력 남기기
+			// 화면접근이력 이력 남기기
 			CmmnUtils.saveHistory(request, historyVO);
-			historyVO.setExe_dtl_cd("DX-T0046");
+			historyVO.setExe_dtl_cd("DX-T0053");
 			accessHistoryService.insertHistory(historyVO);
 			
 			mv.setViewName("help/aboutTcontrol");

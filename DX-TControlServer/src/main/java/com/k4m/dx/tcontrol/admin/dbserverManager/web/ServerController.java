@@ -71,9 +71,10 @@ public class ServerController {
 				///에러 페이지
 				mv.setViewName("error/autError");
 			}else{
-				//이력 남기기
+				// 화면접근이력 이력 남기기
 				CmmnUtils.saveHistory(request, historyVO);
-				historyVO.setExe_dtl_cd("DX-T0006");
+				historyVO.setExe_dtl_cd("DX-T0008");
+				historyVO.setMnu_id(10);
 				accessHistoryService.insertHistory(historyVO);
 				
 				mv.addObject("read_aut_yn", menuAut.get(0).get("read_aut_yn"));
@@ -112,9 +113,10 @@ public class ServerController {
 				response.sendRedirect("/autError.do");
 				return resultSet;
 			}else{				
-			//이력 남기기
+			// 화면접근이력 이력 남기기
 			CmmnUtils.saveHistory(request, historyVO);
-			historyVO.setExe_dtl_cd("DX-T0006_01");
+			historyVO.setExe_dtl_cd("DX-T0008_01");
+			historyVO.setMnu_id(10);
 			accessHistoryService.insertHistory(historyVO);
 				
 			System.out.println("=======parameter=======");

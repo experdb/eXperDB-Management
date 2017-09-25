@@ -1,10 +1,6 @@
 package com.k4m.dx.tcontrol.functions.schedule.web;
 
-import java.io.IOException;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -17,7 +13,6 @@ import javax.servlet.http.HttpSession;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
-import org.json.simple.parser.ParseException;
 import org.quartz.Scheduler;
 import org.quartz.impl.StdSchedulerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -102,9 +97,10 @@ public class ScheduleController {
 			if(menuAut.get(0).get("read_aut_yn").equals("N")){
 				mv.setViewName("error/autError");
 			}else{				
-				//스케줄 등록 화면 이력 남기기
+				// 화면접근이력 이력 남기기
 				CmmnUtils.saveHistory(request, historyVO);
-				historyVO.setExe_dtl_cd("DX-T0040");
+				historyVO.setExe_dtl_cd("DX-T0042");
+				historyVO.setMnu_id(2);
 				accessHistoryService.insertHistory(historyVO);
 				
 				mv.addObject("read_aut_yn", menuAut.get(0).get("read_aut_yn"));
@@ -138,9 +134,10 @@ public class ScheduleController {
 			if(menuAut.get(0).get("wrt_aut_yn").equals("N")){
 				mv.setViewName("error/autError");
 			}else{	
-				//스케줄 등록 화면 이력 남기기
+				// 화면접근이력 이력 남기기
 				CmmnUtils.saveHistory(request, historyVO);
-				historyVO.setExe_dtl_cd("DX-T0041");
+				historyVO.setExe_dtl_cd("DX-T0043");
+				historyVO.setMnu_id(2);
 				accessHistoryService.insertHistory(historyVO);
 				
 				mv.setViewName("popup/scheduleRegForm");	
@@ -174,9 +171,10 @@ public class ScheduleController {
 				response.sendRedirect("/autError.do");
 				return resultSet;
 			}else{		
-				//스케줄 work 조회 이력 남기기
+				// 화면접근이력 이력 남기기
 				CmmnUtils.saveHistory(request, historyVO);
-				historyVO.setExe_dtl_cd("DX-T0040_01");
+				historyVO.setExe_dtl_cd("DX-T0043_01");
+				historyVO.setMnu_id(3);
 				accessHistoryService.insertHistory(historyVO);
 				
 				System.out.println("=======parameter=======");
@@ -271,9 +269,10 @@ public class ScheduleController {
 			response.sendRedirect("/autError.do");
 		}else{		
 			
-			//스케줄 등록 남기기
+			// 화면접근이력 이력 남기기
 			CmmnUtils.saveHistory(request, historyVO);
-			historyVO.setExe_dtl_cd("DX-T0040_01");
+			historyVO.setExe_dtl_cd("DX-T0042_01");
+			historyVO.setMnu_id(2);
 			accessHistoryService.insertHistory(historyVO);
 			
 			// 1. 스케줄ID 시퀀스 조회
@@ -352,11 +351,6 @@ public class ScheduleController {
 			if(menuAut.get(0).get("read_aut_yn").equals("N")){
 				mv.setViewName("error/autError");
 			}else{				
-				//이력 남기기
-				CmmnUtils.saveHistory(request, historyVO);
-				historyVO.setExe_dtl_cd("DX-T0039");
-				accessHistoryService.insertHistory(historyVO);
-				
 				mv.addObject("read_aut_yn", menuAut.get(0).get("read_aut_yn"));
 				mv.addObject("wrt_aut_yn", menuAut.get(0).get("wrt_aut_yn"));
 				if(scd_cndt != null){
@@ -395,9 +389,10 @@ public class ScheduleController {
 				response.sendRedirect("/autError.do");
 				return resultSet;
 			}else{
-				//이력 남기기
+				// 화면접근이력 이력 남기기
 				CmmnUtils.saveHistory(request, historyVO);
-				historyVO.setExe_dtl_cd("DX-T0039_01");
+				historyVO.setExe_dtl_cd("DX-T0045_01");
+				historyVO.setMnu_id(3);
 				accessHistoryService.insertHistory(historyVO);
 				
 				//현재 서비스 올라간 스케줄 그룹 정보

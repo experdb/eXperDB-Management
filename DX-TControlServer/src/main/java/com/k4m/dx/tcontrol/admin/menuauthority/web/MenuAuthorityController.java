@@ -76,9 +76,10 @@ public class MenuAuthorityController {
 			if(menuAut.get(0).get("read_aut_yn").equals("N")){
 				mv.setViewName("error/autError");
 			}else{
-				// 메뉴권한관리 이력 남기기
+				// 화면접근이력 이력 남기기
 				CmmnUtils.saveHistory(request, historyVO);
-				historyVO.setExe_dtl_cd("DX-T0034");
+				historyVO.setExe_dtl_cd("DX-T0036");
+				historyVO.setMnu_id(14);
 				accessHistoryService.insertHistory(historyVO);
 		
 				mv.addObject("read_aut_yn", menuAut.get(0).get("read_aut_yn"));
@@ -220,9 +221,10 @@ public class MenuAuthorityController {
 			if(menuAut.get(0).get("wrt_aut_yn").equals("N")){
 				response.sendRedirect("/autError.do");
 			}else{
-				// 메뉴권한관리 이력 남기기
+				// 화면접근이력 이력 남기기
 				CmmnUtils.saveHistory(request, historyVO);
-				historyVO.setExe_dtl_cd("DX-T0034_01");
+				historyVO.setExe_dtl_cd("DX-T0036_01");
+				historyVO.setMnu_id(14);
 				accessHistoryService.insertHistory(historyVO);
 							
 				String strRows = request.getParameter("datasArr").toString().replaceAll("&quot;", "\"");

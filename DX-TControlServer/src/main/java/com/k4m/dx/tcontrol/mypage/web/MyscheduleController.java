@@ -59,9 +59,10 @@ public class MyscheduleController {
 		ModelAndView mv = new ModelAndView();
 		try {
 			
-			//이력 남기기
+			// 화면접근이력 이력 남기기
 			CmmnUtils.saveHistory(request, historyVO);
-			historyVO.setExe_dtl_cd("DX-T0044");
+			historyVO.setExe_dtl_cd("DX-T0050");
+			historyVO.setMnu_id(23);
 			accessHistoryService.insertHistory(historyVO);
 			
 			mv.setViewName("mypage/mySchedulerList");
@@ -87,9 +88,10 @@ public class MyscheduleController {
 		List<Map<String, Object>> resultSet = new ArrayList<Map<String, Object>>();
 		
 		try {
-			//이력 남기기
+			// 화면접근이력 이력 남기기
 			CmmnUtils.saveHistory(request, historyVO);
-			historyVO.setExe_dtl_cd("DX-T0044_01");
+			historyVO.setExe_dtl_cd("DX-T0050_01");
+			historyVO.setMnu_id(23);
 			accessHistoryService.insertHistory(historyVO);
 		
 			HttpSession session = request.getSession();

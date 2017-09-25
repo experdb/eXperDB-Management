@@ -89,9 +89,10 @@ public class DbServerManagerController {
 			if(menuAut.get(0).get("wrt_aut_yn").equals("N")){
 				mv.setViewName("error/autError");
 			}else{
-				//이력 남기기
+				// 화면접근이력 이력 남기기
 				CmmnUtils.saveHistory(request, historyVO);
-				historyVO.setExe_dtl_cd("DX-T0007");
+				historyVO.setExe_dtl_cd("DX-T0006");
+				historyVO.setMnu_id(9);
 				accessHistoryService.insertHistory(historyVO);
 				
 				mv.addObject("read_aut_yn", menuAut.get(0).get("read_aut_yn"));
@@ -151,9 +152,10 @@ public class DbServerManagerController {
 		vo.setIPADR(dbServerVO.getIpadr());
 		
 		try {
-			//이력 남기기
+			// 화면접근이력 이력 남기기
 			CmmnUtils.saveHistory(request, historyVO);
-			historyVO.setExe_dtl_cd("DX-T0007_02");
+			historyVO.setExe_dtl_cd("DX-T0006_02");
+			historyVO.setMnu_id(9);
 			accessHistoryService.insertHistory(historyVO);
 			
 			AgentInfoVO agentInfo =  (AgentInfoVO) cmmnServerInfoService.selectAgentInfo(vo);
@@ -210,9 +212,10 @@ public class DbServerManagerController {
 	public @ResponseBody String insertDbServer(@ModelAttribute("dbServerVO") DbServerVO dbServerVO, @ModelAttribute("historyVO") HistoryVO historyVO,HttpServletRequest request) throws Exception {
 		AES256 aes = new AES256(AES256_KEY.ENC_KEY);
 		try {
-			//이력 남기기
+			// 화면접근이력 이력 남기기
 			CmmnUtils.saveHistory(request, historyVO);
-			historyVO.setExe_dtl_cd("DX-T0007_01");
+			historyVO.setExe_dtl_cd("DX-T0006_01");
+			historyVO.setMnu_id(9);
 			accessHistoryService.insertHistory(historyVO);
 			
 			String id = (String) request.getSession().getAttribute("usr_id");
@@ -269,9 +272,10 @@ public class DbServerManagerController {
 			if(menuAut.get(0).get("wrt_aut_yn").equals("N")){
 				mv.setViewName("error/autError");
 			}else{
-				//이력 남기기
+				// 화면접근이력 이력 남기기
 				CmmnUtils.saveHistory(request, historyVO);
-				historyVO.setExe_dtl_cd("DX-T0008");
+				historyVO.setExe_dtl_cd("DX-T0007");
+				historyVO.setMnu_id(9);
 				accessHistoryService.insertHistory(historyVO);
 				
 				mv.addObject("read_aut_yn", menuAut.get(0).get("read_aut_yn"));
@@ -294,9 +298,10 @@ public class DbServerManagerController {
 	@RequestMapping(value = "/updateDbServer.do")
 	public @ResponseBody boolean updateDbServer(@ModelAttribute("historyVO") HistoryVO historyVO, @ModelAttribute("dbServerVO") DbServerVO dbServerVO, HttpServletRequest request){
 		try {
-			//이력 남기기
+			// 화면접근이력 이력 남기기
 			CmmnUtils.saveHistory(request, historyVO);
-			historyVO.setExe_dtl_cd("DX-T0008_01");
+			historyVO.setExe_dtl_cd("DX-T0007_01");
+			historyVO.setMnu_id(9);
 			accessHistoryService.insertHistory(historyVO);
 			
 			String usr_id = (String) request.getSession().getAttribute("usr_id");

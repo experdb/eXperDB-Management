@@ -33,16 +33,16 @@
 <script type="text/javascript" src="/js/calendar.js"></script>
 </head>
 <script>
-	var idCheck = null;
+	var idCheck = 0;
 	var act = "${act}";
-	
+
 	/* Validation */
-	function fn_userManagerValidation(formName){
+	function fn_userManagerValidation(formName) {
 		var id = document.getElementById('usr_id');
 		var nm = document.getElementById('usr_nm');
 		var pwd = document.getElementById('pwd');
 		var pwdCheck = document.getElementById('pwdCheck');
-		
+
 		if (id.value == "" || id.value == "undefind" || id.value == null) {
 			alert("사용자 아이디를 넣어주세요");
 			id.focus();
@@ -58,7 +58,8 @@
 			pwd1.focus();
 			return false;
 		}
-		if (pwdCheck.value == "" || pwdCheck.value == "undefind" || pwdCheck.value == null) {
+		if (pwdCheck.value == "" || pwdCheck.value == "undefind"
+				|| pwdCheck.value == null) {
 			alert("패스워드확인을 넣어주세요");
 			pwd.focus();
 			return false;
@@ -67,13 +68,17 @@
 			alert("패스워드 정보가 일치하지 않습니다.");
 			return false;
 		}
-		return true;	
+		if (idCheck != 1) {
+			alert("아이디를 입력 후 중복체크를 해주세요.");
+			return false;
+		}
+
+		return true;
 	}
-	
+
 	//등록버튼 클릭시
 	function fn_insert() {
-		
-		if (!fn_userManagerValidation()) return false;	
+		if (!fn_userManagerValidation())return false;
 		$.ajax({
 			url : '/insertUserManager.do',
 			type : 'post',
@@ -86,59 +91,58 @@
 				pst_nm : $("#pst_nm").val(),
 				rsp_bsn_nm : $("#rsp_bsn_nm").val(),
 				cpn : $("#cpn").val(),
-// 				aut_id : $("#aut_id").val(),
+				// 				aut_id : $("#aut_id").val(),
 				usr_expr_dt : $("#datepicker1").val(),
 				use_yn : $("#use_yn").val(),
 			},
 			success : function(result) {
 				alert("저장하였습니다.");
-				 if(confirm("유저에 권한을 부여하시겠습니까?")){
-					 window.close();
-					 opener.location.href="/menuAuthority.do";
-				 }else{
+				if (confirm("유저에 권한을 부여하시겠습니까?")) {
+					window.close();
+					opener.location.href = "/menuAuthority.do";
+				} else {
 					window.close();
 					opener.fn_select();
-				 }
+				}
 			},
 			error : function(request, status, error) {
 				alert("실패");
 			}
 		});
 	}
-	
+
 	//수정버튼 클릭시
 	function fn_update() {
-		if (!fn_userManagerValidation()) return false;	
-			$.ajax({
-				url : '/updateUserManager.do',
-				type : 'post',
-				data : {
-					usr_id : $("#usr_id").val(),
-					usr_nm : $("#usr_nm").val(),
-					pwd : $("#pwd").val(),
-					bln_nm : $("#bln_nm").val(),
-					dept_nm : $("#dept_nm").val(),
-					pst_nm : $("#pst_nm").val(),
-					rsp_bsn_nm : $("#rsp_bsn_nm").val(),
-					cpn : $("#cpn").val(),
-	// 				aut_id : $("#aut_id").val(),
-					usr_expr_dt : $("#datepicker1").val(),
-					use_yn : $("#use_yn").val(),
-				},
-				success : function(result) {
-					alert("수정하였습니다.");
-					window.close();
-					opener.fn_select();
-				},
-				error : function(request, status, error) {
-					alert("실패");
-				}
-			});
+		if (!fn_userManagerValidation())return false;
+		$.ajax({
+			url : '/updateUserManager.do',
+			type : 'post',
+			data : {
+				usr_id : $("#usr_id").val(),
+				usr_nm : $("#usr_nm").val(),
+				pwd : $("#pwd").val(),
+				bln_nm : $("#bln_nm").val(),
+				dept_nm : $("#dept_nm").val(),
+				pst_nm : $("#pst_nm").val(),
+				rsp_bsn_nm : $("#rsp_bsn_nm").val(),
+				cpn : $("#cpn").val(),
+				// 				aut_id : $("#aut_id").val(),
+				usr_expr_dt : $("#datepicker1").val(),
+				use_yn : $("#use_yn").val(),
+			},
+			success : function(result) {
+				alert("수정하였습니다.");
+				window.close();
+				opener.fn_select();
+			},
+			error : function(request, status, error) {
+				alert("실패");
+			}
+		});
 	}
-	
+
 	//아이디 중복체크
 	function fn_idCheck() {
-		idCheck = 1;
 		var usr_id = document.getElementById("usr_id");
 		if (usr_id.value == "") {
 			alert("사용자 아이디를 넣어주세요");
@@ -156,6 +160,7 @@
 				if (result == "true") {
 					alert("사용자아이디를 사용하실 수 있습니다.");
 					document.getElementById("usr_nm").focus();
+					idCheck = 1;
 				} else {
 					alert("중복된 사용자아이디가 존재합니다.");
 					document.getElementById("usr_id").focus();
@@ -168,138 +173,119 @@
 		});
 	}
 
-	$(function() {
-		window.onload = function() {
-			if (act == "i") {
-				document.getElementById("usr_id").focus();
-				$("#usr_nm").attr("onfocus", "idcheck_alert();");
-				$("#pwd").attr("onfocus", "idcheck_alert();");
-				$("#pwdCheck").attr("onfocus", "idcheck_alert();");
-				$("#bln_nm").attr("onfocus", "idcheck_alert();");
-				$("#dept_nm").attr("onfocus", "idcheck_alert();");
-				$("#pst_nm").attr("onfocus", "idcheck_alert();");
-				$("#rsp_bsn_nm").attr("onfocus", "idcheck_alert();");
-				$("#cpn").attr("onfocus", "idcheck_alert();");
-				$("#use_yn").attr("onfocus", "idcheck_alert();");
-				$("#datepicker3").attr("onfocus", "idcheck_alert();");
-			}else{
-				$("#datepicker3").datepicker();
-			}
-		};
-	});
-
-	function idcheck_alert() {
-		if (idCheck != 1) {
-			alert("아이디를 입력한 후 중복 체크를 해주세요");
-			document.getElementById('usr_id').focus();
-		}else{
-			$("#datepicker3").datepicker();
-		}
-	}
-	
 	$(window.document).ready(function() {
 		$.datepicker.setDefaults({
-			dateFormat: 'yymmdd'
+			dateFormat : 'yymmdd',
 		});
+		$("#datepicker3").datepicker();
 		
+
 	})
+
+	
+	function NumObj(obj) {
+		if (event.keyCode >= 48 && event.keyCode <= 57) { //숫자키만 입력
+			return true;
+		} else {
+			event.returnValue = false;
+		}
+	}
+
 </script>
 <body>
 
-<div class="pop_container">
-	<div class="pop_cts">
-		<p class="tit">
-			<c:if test="${act == 'i'}">사용자 등록하기</c:if>
-			<c:if test="${act == 'u'}">사용자 수정하기</c:if>
-		</p>
-		<table class="write">
-			<caption>
+	<div class="pop_container">
+		<div class="pop_cts">
+			<p class="tit">
 				<c:if test="${act == 'i'}">사용자 등록하기</c:if>
 				<c:if test="${act == 'u'}">사용자 수정하기</c:if>
-			</caption>
-			<colgroup>
-				<col style="width:110px;" />
-				<col />
-				<col style="width:110px;" />
-				<col />
-			</colgroup>
-			<tbody>
-				<tr>
-					<th scope="row" class="ico_t1">사용자아이디(*)</th>
-					<td>
-						<c:if test="${act == 'i'}">
-							<input type="text" class="txt" name="usr_id" id="usr_id" value="${get_usr_id}" style="width: 230px;"/>
-							<span class="btn btnC_01"><button type="button" class= "btn_type_02" onclick="fn_idCheck()" style="width: 60px; margin-right: -60px; margin-top: 0;">중복체크</button></span>
-						</c:if>
-						<c:if test="${act == 'u'}">
-							<input type="text" class="txt" name="usr_id" id="usr_id" value="${get_usr_id}" readonly="readonly"/>
-						</c:if>							
-					</td>
-					<th scope="row" class="ico_t1">사용자명(*)</th>
-					<td><input type="text" class="txt" name="usr_nm" id="usr_nm" value="${usr_nm}"/></td>
-				</tr>
-				<tr>
-					<th scope="row" class="ico_t1">패스워드(*)</th>
-					<td><input type="password" class="txt" name="pwd" id="pwd" value="${pwd}"/></td>
-					<th scope="row" class="ico_t1">패스워드확인(*)</th>
-					<td><input type="password" class="txt" name="pwdCheck" id="pwdCheck" value="${pwd}"/></td>
-				</tr>
-			</tbody>
-		</table>
-		<div class="pop_cmm2">
+			</p>
 			<table class="write">
-				<caption>사용자 등록하기</caption>
+				<caption>
+					<c:if test="${act == 'i'}">사용자 등록하기</c:if>
+					<c:if test="${act == 'u'}">사용자 수정하기</c:if>
+				</caption>
 				<colgroup>
-					<col style="width:100px;" />
+					<col style="width: 110px;" />
 					<col />
-					<col style="width:100px;" />
+					<col style="width: 110px;" />
 					<col />
 				</colgroup>
 				<tbody>
 					<tr>
-						<th scope="row" class="ico_t1">소속</th>
-						<td><input type="text" class="txt" name="bln_nm" id="bln_nm" value="${bln_nm}" /></td>
-						<th scope="row" class="ico_t1">부서</th>
-						<td><input type="text" class="txt" name="dept_nm" id="dept_nm" value="${dept_nm}" /></td>
-					</tr>
-					<tr>
-						<th scope="row" class="ico_t1">직급</th>
-						<td><input type="text" class="txt" name="pst_nm" id="pst_nm" value="${pst_nm}" /></td>
-						<th scope="row" class="ico_t1">담당업무</th>
-						<td><input type="text" class="txt" name="rsp_bsn_nm" id="rsp_bsn_nm" value="${rsp_bsn_nm}" /></td>
-					</tr>
-					<tr>
-						<th scope="row" class="ico_t1">휴대폰번호</th>
-						<td><input type="text" class="txt" name="cpn" id="cpn" value="${cpn}" /></td>
-						<th scope="row" class="ico_t1">사용여부</th>
+						<th scope="row" class="ico_t1">사용자아이디(*)</th>
 						<td>
-							<select class="select" id="use_yn" name="use_yn">
-								<option value="Y" ${use_yn == 'Y' ? 'selected="selected"' : ''}>사용</option>
-								<option value="N" ${use_yn == 'N' ? 'selected="selected"' : ''}>미사용</option>
-							</select>
+							<c:if test="${act == 'i'}">
+								<input type="text" class="txt" name="usr_id" id="usr_id" value="${get_usr_id}" maxlength="15" style="width: 230px;" />
+								<span class="btn btnC_01"><button type="button" class="btn_type_02" onclick="fn_idCheck()" style="width: 60px; margin-right: -60px; margin-top: 0;">중복체크</button></span>
+							</c:if> 
+							<c:if test="${act == 'u'}">
+								<input type="text" class="txt" name="usr_id" id="usr_id" value="${get_usr_id}" readonly="readonly" />
+							</c:if>
 						</td>
+						<th scope="row" class="ico_t1">사용자명(*)</th>
+						<td><input type="text" class="txt" name="usr_nm" id="usr_nm" value="${usr_nm}" maxlength="9" /></td>
 					</tr>
 					<tr>
-						<th scope="row" class="ico_t1">사용자만료일</th>
-						<td>
-							<div class="calendar_area big">
-								<a href="#n" class="calendar_btn">달력열기</a>
-								<input type="text" class="calendar" id="datepicker3" title="사용자 만료일 날짜 검색"  value="${usr_expr_dt}" readonly />
-							</div>
-						</td>
+						<th scope="row" class="ico_t1">패스워드(*)</th>
+						<td><input type="password" class="txt" name="pwd" id="pwd" value="${pwd}" maxlength="50" /></td>
+						<th scope="row" class="ico_t1">패스워드확인(*)</th>
+						<td><input type="password" class="txt" name="pwdCheck" id="pwdCheck" value="${pwd}" maxlength="50" /></td>
 					</tr>
 				</tbody>
 			</table>
-		</div>
-		<div class="btn_type_02">
-			<span class="btn btnC_01">
-				<c:if test="${act == 'i'}"><button type="button" onclick="fn_insert()">등록</button></c:if> 
-				<c:if test="${act == 'u'}"><button type="button" onclick="fn_update()">수정</button></c:if> 
-			</span>
-			<a href="#n" class="btn" onclick="window.close();"><span>취소</span></a>
+			<div class="pop_cmm2">
+				<table class="write">
+					<caption>사용자 등록하기</caption>
+					<colgroup>
+						<col style="width: 100px;" />
+						<col />
+						<col style="width: 100px;" />
+						<col />
+					</colgroup>
+					<tbody>
+						<tr>
+							<th scope="row" class="ico_t1">소속</th>
+							<td><input type="text" class="txt" name="bln_nm" id="bln_nm" value="${bln_nm}" maxlength="25" /></td>
+							<th scope="row" class="ico_t1">부서</th>
+							<td><input type="text" class="txt" name="dept_nm" id="dept_nm" value="${dept_nm}" maxlength="25" /></td>
+						</tr>
+						<tr>
+							<th scope="row" class="ico_t1">직급</th>
+							<td><input type="text" class="txt" name="pst_nm" id="pst_nm" value="${pst_nm}" maxlength="25" /></td>
+							<th scope="row" class="ico_t1">담당업무</th>
+							<td><input type="text" class="txt" name="rsp_bsn_nm" id="rsp_bsn_nm" value="${rsp_bsn_nm}" maxlength="25" /></td>
+						</tr>
+						<tr>
+							<th scope="row" class="ico_t1">휴대폰번호</th>
+							<td><input type="text" class="txt" name="cpn" id="cpn" value="${cpn}" maxlength="20"  style="ime-mode:disabled;" onKeyPress="NumObj(this);"/></td>
+							<th scope="row" class="ico_t1">사용여부</th>
+							<td><select class="select" id="use_yn" name="use_yn">
+									<option value="Y" ${use_yn == 'Y' ? 'selected="selected"' : ''}>사용</option>
+									<option value="N" ${use_yn == 'N' ? 'selected="selected"' : ''}>미사용</option>
+							</select></td>
+						</tr>
+						<tr>
+							<th scope="row" class="ico_t1">사용자만료일</th>
+							<td>
+								<div class="calendar_area big">
+									<a href="#n" class="calendar_btn">달력열기</a> <input type="text" class="calendar" id="datepicker3" title="사용자 만료일 날짜 검색" value="${usr_expr_dt}" readonly />
+								</div>
+							</td>
+						</tr>
+					</tbody>
+				</table>
+			</div>
+			<div class="btn_type_02">
+				<span class="btn btnC_01"> <c:if test="${act == 'i'}">
+						<button type="button" onclick="fn_insert()">등록</button>
+					</c:if> <c:if test="${act == 'u'}">
+						<button type="button" onclick="fn_update()">수정</button>
+					</c:if>
+				</span> <a href="#n" class="btn" onclick="window.close();"><span>취소</span></a>			
+			</div>
 		</div>
 	</div>
-</div>
 
 </body>
 </html>

@@ -92,9 +92,10 @@ public class DatabaseController {
 			if(menuAut.get(0).get("read_aut_yn").equals("N")){
 				mv.setViewName("error/autError");
 			}else{
-				//이력 남기기
+				// 화면접근이력 이력 남기기
 				CmmnUtils.saveHistory(request, historyVO);
 				historyVO.setExe_dtl_cd("DX-T0009");
+				historyVO.setMnu_id(11);
 				accessHistoryService.insertHistory(historyVO);
 				
 				mv.addObject("read_aut_yn", menuAut.get(0).get("read_aut_yn"));
@@ -167,9 +168,10 @@ public class DatabaseController {
 				response.sendRedirect("/autError.do");
 				return resultSet;
 			}else{
-				//이력 남기기
+				// 화면접근이력 이력 남기기
 				CmmnUtils.saveHistory(request, historyVO);
-				historyVO.setExe_dtl_cd("DX-T0009_01");
+				historyVO.setExe_dtl_cd("DX-T0009_02");
+				historyVO.setMnu_id(11);
 				accessHistoryService.insertHistory(historyVO);
 				
 				String db_svr_nm = request.getParameter("db_svr_nm");
@@ -210,9 +212,10 @@ public class DatabaseController {
 			if(menuAut.get(0).get("wrt_aut_yn").equals("N")){
 				mv.setViewName("error/autError");
 			}else{
-				//이력 남기기
+				// 화면접근이력 이력 남기기
 				CmmnUtils.saveHistory(request, historyVO);
 				historyVO.setExe_dtl_cd("DX-T0010");
+				historyVO.setMnu_id(11);
 				accessHistoryService.insertHistory(historyVO);
 				
 				mv.addObject("read_aut_yn", menuAut.get(0).get("read_aut_yn"));
@@ -279,9 +282,10 @@ public class DatabaseController {
 				response.sendRedirect("/autError.do");
 				return false;
 			}else{
-				//이력 남기기
+				// 화면접근이력 이력 남기기
 				CmmnUtils.saveHistory(request, historyVO);
 				historyVO.setExe_dtl_cd("DX-T0010_01");
+				historyVO.setMnu_id(11);
 				accessHistoryService.insertHistory(historyVO);
 				
 				String id = (String) request.getSession().getAttribute("usr_id");

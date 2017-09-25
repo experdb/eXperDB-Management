@@ -79,9 +79,10 @@ public class DbAuthorityController {
 				mv.setViewName("error/autError");
 			}else{
 				
-				// DB권한관리 이력 남기기
+				// 화면접근이력 이력 남기기
 				CmmnUtils.saveHistory(request, historyVO);
-				historyVO.setExe_dtl_cd("DX-T0035");
+				historyVO.setExe_dtl_cd("DX-T0038");
+				historyVO.setMnu_id(16);
 				accessHistoryService.insertHistory(historyVO);
 				
 				mv.addObject("read_aut_yn", menuAut.get(0).get("read_aut_yn"));
@@ -223,9 +224,10 @@ public class DbAuthorityController {
 			if(menuAut.get(0).get("wrt_aut_yn").equals("N")){
 				response.sendRedirect("/autError.do");
 			}else{			
-				// DB권한관리 이력 남기기
+				// 화면접근이력 이력 남기기
 				CmmnUtils.saveHistory(request, historyVO);
-				historyVO.setExe_dtl_cd("DX-T0035_02");
+				historyVO.setExe_dtl_cd("DX-T0038_01");
+				historyVO.setMnu_id(16);
 				accessHistoryService.insertHistory(historyVO);
 				
 				String strRows = request.getParameter("datasArr").toString().replaceAll("&quot;", "\"");

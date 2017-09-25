@@ -114,9 +114,10 @@ public class AccessControlController {
 			if (dbSvrAut.get(0).get("acs_cntr_aut_yn").equals("N")) {
 				mv.setViewName("error/autError");
 			} else {
-				// 접근제어관리 이력 남기기
+				// 화면접근이력 이력 남기기
 				CmmnUtils.saveHistory(request, historyVO);
 				historyVO.setExe_dtl_cd("DX-T0027");
+				historyVO.setMnu_id(28);
 				accessHistoryService.insertHistory(historyVO);
 
 				AES256 dec = new AES256(AES256_KEY.ENC_KEY);
@@ -254,14 +255,16 @@ public class AccessControlController {
 			mv.addObject("resultSet", resultSet);
 
 			if (act.equals("i")) {
-				// 접근제어 등록 팝업 이력 남기기
+				// 화면접근이력 이력 남기기
 				historyVO.setExe_dtl_cd("DX-T0028");
+				historyVO.setMnu_id(28);
 				accessHistoryService.insertHistory(historyVO);
 			}
 
 			if (act.equals("u")) {
-				// 접근제어 수정 팝업 이력 남기기
-				historyVO.setExe_dtl_cd("DX-T0028_01");
+				// 화면접근이력 이력 남기기
+				historyVO.setExe_dtl_cd("DX-T0029");
+				historyVO.setMnu_id(28);
 				accessHistoryService.insertHistory(historyVO);
 
 				mv.addObject("prms_seq",request.getParameter("Seq").equals("undefined") ? "" : request.getParameter("Seq"));
@@ -302,9 +305,10 @@ public class AccessControlController {
 		JSONObject acObj = new JSONObject();
 
 		try {
-			// 접근제어 등록 이력 남기기
+			// 화면접근이력 이력 남기기
 			CmmnUtils.saveHistory(request, historyVO);
-			historyVO.setExe_dtl_cd("DX-T0028_02");
+			historyVO.setExe_dtl_cd("DX-T0028_01");
+			historyVO.setMnu_id(28);
 			accessHistoryService.insertHistory(historyVO);
 
 			AES256 dec = new AES256(AES256_KEY.ENC_KEY);
@@ -402,9 +406,10 @@ public class AccessControlController {
 
 		ClientInfoCmmn cic = new ClientInfoCmmn();
 		try {
-			// 접근제어 수정 이력 남기기
+			// 화면접근이력 이력 남기기
 			CmmnUtils.saveHistory(request, historyVO);
-			historyVO.setExe_dtl_cd("DX-T0028_03");
+			historyVO.setExe_dtl_cd("DX-T0029_01");
+			historyVO.setMnu_id(28);
 			accessHistoryService.insertHistory(historyVO);
 
 			AES256 dec = new AES256(AES256_KEY.ENC_KEY);
@@ -505,9 +510,10 @@ public class AccessControlController {
 		ClientInfoCmmn cic = new ClientInfoCmmn();
 		ArrayList arrSeq = new ArrayList();
 		try {
-			// 접근제어 삭제 이력 남기기
+			// 화면접근이력 이력 남기기
 			CmmnUtils.saveHistory(request, historyVO);
 			historyVO.setExe_dtl_cd("DX-T0027_01");
+			historyVO.setMnu_id(28);
 			accessHistoryService.insertHistory(historyVO);
 
 			AES256 dec = new AES256(AES256_KEY.ENC_KEY);
@@ -598,7 +604,7 @@ public class AccessControlController {
 	@RequestMapping(value = "/changeAccessControl.do")
 	public @ResponseBody boolean changeAccessControl(
 			@ModelAttribute("accessControlHistoryVO") AccessControlHistoryVO accessControlHistoryVO,
-			HttpServletRequest request, @ModelAttribute("accessControlVO") AccessControlVO accessControlVO) {
+			HttpServletRequest request, @ModelAttribute("accessControlVO") AccessControlVO accessControlVO,@ModelAttribute("historyVO") HistoryVO historyVO) {
 
 		DbServerVO schDbServerVO = new DbServerVO();
 		JSONObject serverObj = new JSONObject();
@@ -606,7 +612,13 @@ public class AccessControlController {
 		try {
 			AES256 dec = new AES256(AES256_KEY.ENC_KEY);
 			int db_svr_id = Integer.parseInt(request.getParameter("db_svr_id"));
-
+			
+			// 접근제어 이력 남기기
+			CmmnUtils.saveHistory(request, historyVO);
+			historyVO.setExe_dtl_cd("DX-T0027_02");
+			historyVO.setMnu_id(28);
+			accessHistoryService.insertHistory(historyVO);
+			
 			schDbServerVO.setDb_svr_id(db_svr_id);
 			DbServerVO dbServerVO = (DbServerVO) cmmnServerInfoService.selectServerInfo(schDbServerVO);
 			String IP = dbServerVO.getIpadr();
@@ -729,10 +741,12 @@ public class AccessControlController {
 			// if(dbSvrAut.get(0).get("acs_cntr_aut_yn").equals("N")){
 			// mv.setViewName("error/autError");
 			// }else{
-			// 접근제어관리 이력 남기기
-			// CmmnUtils.saveHistory(request, historyVO);
-			// historyVO.setExe_dtl_cd("DX-T0027");
-			// accessHistoryService.insertHistory(historyVO);
+			
+			// 화면접근이력 이력 남기기
+			 CmmnUtils.saveHistory(request, historyVO);
+			 historyVO.setExe_dtl_cd("DX-T0030");
+			 historyVO.setMnu_id(29);
+			 accessHistoryService.insertHistory(historyVO);
 
 			int db_svr_id = Integer.parseInt(request.getParameter("db_svr_id"));
 
@@ -762,13 +776,14 @@ public class AccessControlController {
 	@RequestMapping(value = "/selectAccessControlHistory.do")
 	public @ResponseBody List<AccessControlHistoryVO> selectAccessControlHistory(
 			@ModelAttribute("accessControlHistoryVO") AccessControlHistoryVO accessControlHistoryVO,
-			HttpServletRequest request) {
+			HttpServletRequest request,@ModelAttribute("historyVO") HistoryVO historyVO) {
 		List<AccessControlHistoryVO> resultSet = null;
 		try {
-			// 접근제어관리 이력 남기기
-			// CmmnUtils.saveHistory(request, historyVO);
-			// historyVO.setExe_dtl_cd("DX-T0027");
-			// accessHistoryService.insertHistory(historyVO);
+			// 화면접근이력 이력 남기기
+			 CmmnUtils.saveHistory(request, historyVO);
+			 historyVO.setExe_dtl_cd("DX-T0030_01");
+			 historyVO.setMnu_id(29);
+			 accessHistoryService.insertHistory(historyVO);
 
 			resultSet = accessControlService.selectAccessControlHistory(accessControlHistoryVO);
 		} catch (Exception e) {
@@ -788,10 +803,11 @@ public class AccessControlController {
 		JSONObject acObj = new JSONObject();
 		ArrayList arrSeq = new ArrayList();
 		try {
-			// 접근제어관리 이력 남기기
-			// CmmnUtils.saveHistory(request, historyVO);
-			// historyVO.setExe_dtl_cd("DX-T0027");
-			// accessHistoryService.insertHistory(historyVO);
+			// 화면접근이력 이력 남기기
+			 CmmnUtils.saveHistory(request, historyVO);
+			 historyVO.setExe_dtl_cd("DX-T0030_02");
+			 historyVO.setMnu_id(29);
+			 accessHistoryService.insertHistory(historyVO);
 
 			AES256 dec = new AES256(AES256_KEY.ENC_KEY);
 			int db_svr_id = Integer.parseInt(request.getParameter("db_svr_id"));

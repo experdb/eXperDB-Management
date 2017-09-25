@@ -108,14 +108,15 @@ public class BackupController {
 	public List<WorkVO> rmanDataList(@ModelAttribute("workVo") WorkVO workVO, HttpServletRequest request, @ModelAttribute("historyVO") HistoryVO historyVO){
 		List<WorkVO> resultSet = null;
 		
-		// 사용자관리 이력 남기기
+		// 화면접근이력 이력 남기기
 		try {
 			CmmnUtils.saveHistory(request, historyVO);
 			if(workVO.getBck_bsn_dscd().equals("TC000201")){
-				historyVO.setExe_dtl_cd("DX-T0019");
+				historyVO.setExe_dtl_cd("DX-T0021_01");		
 			}else{
-				historyVO.setExe_dtl_cd("DX-T0021");
+				historyVO.setExe_dtl_cd("DX-T0021_03");
 			}
+			historyVO.setMnu_id(25);
 			accessHistoryService.insertHistory(historyVO);
 		} catch (Exception e2) {
 			// TODO Auto-generated catch block
@@ -186,14 +187,15 @@ public class BackupController {
 	@ResponseBody
 	public List<WorkLogVO> selectWorkLogList(@ModelAttribute("workLogVo") WorkLogVO workLogVO, HttpServletRequest request, @ModelAttribute("historyVO") HistoryVO historyVO) throws Exception{
 		
-		// 사용자관리 이력 남기기
+		// 화면접근이력 이력 남기기
 		try {
 			CmmnUtils.saveHistory(request, historyVO);
 			if(workLogVO.getBck_bsn_dscd().equals("TC000201")){
-				historyVO.setExe_dtl_cd("DX-T0025");
+				historyVO.setExe_dtl_cd("DX-T0026_01");
 			}else{
-				historyVO.setExe_dtl_cd("DX-T0026");
+				historyVO.setExe_dtl_cd("DX-T0026_02");
 			}
+			historyVO.setMnu_id(26);
 			accessHistoryService.insertHistory(historyVO);
 		} catch (Exception e2) {
 			// TODO Auto-generated catch block
@@ -216,10 +218,11 @@ public class BackupController {
 	public ModelAndView rmanRegForm(@ModelAttribute("workVo") WorkVO workVO, HttpServletRequest request, @ModelAttribute("historyVO") HistoryVO historyVO) {
 		ModelAndView mv = new ModelAndView();
 
-		// 사용자관리 이력 남기기
+		// 화면접근이력 이력 남기기
 		try {
 			CmmnUtils.saveHistory(request, historyVO);
-			historyVO.setExe_dtl_cd("DX-T0020");
+			historyVO.setExe_dtl_cd("DX-T0022");
+			historyVO.setMnu_id(25);
 			accessHistoryService.insertHistory(historyVO);
 		} catch (Exception e2) {
 			// TODO Auto-generated catch block
@@ -241,10 +244,11 @@ public class BackupController {
 	public ModelAndView dumpRegForm(@ModelAttribute("workVo") WorkVO workVO, HttpServletRequest request, @ModelAttribute("historyVO") HistoryVO historyVO) {
 		ModelAndView mv = new ModelAndView();
 		
-		// 사용자관리 이력 남기기
+		// 화면접근이력 이력 남기기
 		try {
 			CmmnUtils.saveHistory(request, historyVO);
-			historyVO.setExe_dtl_cd("DX-T0022");
+			historyVO.setExe_dtl_cd("DX-T0024");
+			historyVO.setMnu_id(25);
 			accessHistoryService.insertHistory(historyVO);
 		} catch (Exception e2) {
 			// TODO Auto-generated catch block
@@ -425,10 +429,11 @@ public class BackupController {
 	public ModelAndView rmanRegReForm(@ModelAttribute("workVo") WorkVO workVO, HttpServletRequest request, @ModelAttribute("historyVO") HistoryVO historyVO)  {
 		ModelAndView mv = new ModelAndView();
 
-		// 사용자관리 이력 남기기
+		// 화면접근이력 이력 남기기
 		try {
 			CmmnUtils.saveHistory(request, historyVO);
-			historyVO.setExe_dtl_cd("DX-T0020_01");
+			historyVO.setExe_dtl_cd("DX-T0023");
+			historyVO.setMnu_id(25);
 			accessHistoryService.insertHistory(historyVO);
 		} catch (Exception e2) {
 			// TODO Auto-generated catch block
@@ -472,10 +477,11 @@ public class BackupController {
 	public ModelAndView dumpRegReForm(@ModelAttribute("workVo") WorkVO workVO, HttpServletRequest request, @ModelAttribute("historyVO") HistoryVO historyVO) {
 		ModelAndView mv = new ModelAndView();
 
-		// 사용자관리 이력 남기기
+		// 화면접근이력 이력 남기기
 		try {
 			CmmnUtils.saveHistory(request, historyVO);
-			historyVO.setExe_dtl_cd("DX-T0022_01");
+			historyVO.setExe_dtl_cd("DX-T0025");
+			historyVO.setMnu_id(25);
 			accessHistoryService.insertHistory(historyVO);
 		} catch (Exception e2) {
 			// TODO Auto-generated catch block
@@ -632,10 +638,11 @@ public class BackupController {
 	@RequestMapping(value = "/popup/workDelete.do")
 	public void workDelete(@ModelAttribute("workVO") WorkVO workVO, HttpServletResponse response, HttpServletRequest request, @ModelAttribute("historyVO") HistoryVO historyVO) throws IOException{
 		
-		// 사용자관리 이력 남기기
+		// 화면접근이력 이력 남기기
 		try {
 			CmmnUtils.saveHistory(request, historyVO);
-			historyVO.setExe_dtl_cd("DX-T0020_02");
+			historyVO.setExe_dtl_cd("DX-T0021_02");
+			historyVO.setMnu_id(25);
 			accessHistoryService.insertHistory(historyVO);
 		} catch (Exception e2) {
 			// TODO Auto-generated catch block

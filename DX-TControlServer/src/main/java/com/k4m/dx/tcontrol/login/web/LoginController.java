@@ -87,7 +87,7 @@ public class LoginController {
 					request.getSession().setAttribute("ip", ip);
 
 					
-					// 로그인 이력 남기기
+					// 화면접근이력 이력 남기기
 					CmmnUtils.saveHistory(request, historyVO);
 					historyVO.setExe_dtl_cd("DX-T0003");
 					accessHistoryService.insertHistory(historyVO);
@@ -114,7 +114,7 @@ public class LoginController {
 	@RequestMapping(value = "/logout.do")
 	public String loginout(@ModelAttribute("userVo") UserVO userVo, @ModelAttribute("historyVO") HistoryVO historyVO, HttpServletRequest request) {
 		try {
-			// 로그아웃 이력 남기기
+			// 화면접근이력 이력 남기기
 			CmmnUtils.saveHistory(request, historyVO);
 			historyVO.setExe_dtl_cd("DX-T0003_01");
 			accessHistoryService.insertHistory(historyVO);

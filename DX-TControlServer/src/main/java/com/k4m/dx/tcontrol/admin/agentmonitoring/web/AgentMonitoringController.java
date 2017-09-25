@@ -53,9 +53,11 @@ public class AgentMonitoringController {
 	public ModelAndView agentMonitoring(@ModelAttribute("historyVO") HistoryVO historyVO, HttpServletRequest request, ModelMap model) {
 		ModelAndView mv = new ModelAndView();
 		try {
-			// Agent모니터링 이력 남기기
+				
+			// 화면접근이력 이력 남기기
 			CmmnUtils.saveHistory(request, historyVO);
-			historyVO.setExe_dtl_cd("DX-T0037");
+			historyVO.setExe_dtl_cd("DX-T0040");
+			historyVO.setMnu_id(20);
 			accessHistoryService.insertHistory(historyVO);
 			
 			String strDB_SVR_NM = request.getParameter("DB_SVR_NM");
