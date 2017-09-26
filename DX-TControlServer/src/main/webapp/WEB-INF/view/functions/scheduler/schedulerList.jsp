@@ -360,16 +360,16 @@ function fn_makeMin(){
 						<caption>검색 조회</caption>
 						<colgroup>
 							<col style="width:130px;" />
-							<col style="width:330px;" />
+							<col style="width:230px;" />
 							<col style="width:30px;" />
 							<col style="width:330px;" />
 							<col style="width:100px;" />
-							<col style="width:10px;" />
+
 							<col />
 						</colgroup> 
-						<tbody>
+						<tbody>0.
 								<tr>
-									<th scope="row" class="t9 line">스케줄명</th>
+									<th scope="row" class="t9 line" style="width:130px;">스케줄명</th>
 									<td><input type="text" class="txt t2" id="scd_nm" name="scd_nm"/></td>
 								</tr>
 								<tr>

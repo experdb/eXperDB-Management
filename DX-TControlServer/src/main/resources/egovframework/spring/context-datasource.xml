@@ -54,7 +54,7 @@
 	        </property>  
 	</bean> 
 	
-     <bean id="dataSource" class="org.springframework.jdbc.datasource.SimpleDriverDataSource">
+    <bean id="dataSource" class="org.springframework.jdbc.datasource.SimpleDriverDataSource">
         <property name="driverClass" value="org.postgresql.Driver"/>
         <property name="url" value="${database.url}"/>
         <property name="username" value="${database.username}" />

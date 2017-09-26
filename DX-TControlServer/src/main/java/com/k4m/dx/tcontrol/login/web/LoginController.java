@@ -3,7 +3,9 @@ package com.k4m.dx.tcontrol.login.web;
 import java.net.InetAddress;
 import java.util.List;
 
+import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,12 +13,15 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.context.request.RequestAttributes;
+import org.springframework.web.context.request.RequestContextHolder;
 
 import com.k4m.dx.tcontrol.admin.accesshistory.service.AccessHistoryService;
 import com.k4m.dx.tcontrol.cmmn.CmmnUtils;
 import com.k4m.dx.tcontrol.cmmn.SHA256;
 import com.k4m.dx.tcontrol.cmmn.cmmnExcepHndlr;
 import com.k4m.dx.tcontrol.common.service.HistoryVO;
+import com.k4m.dx.tcontrol.egovTest.LoginVO;
 import com.k4m.dx.tcontrol.login.service.LoginService;
 import com.k4m.dx.tcontrol.login.service.UserVO;
 
@@ -55,7 +60,7 @@ public class LoginController {
 	 * @throws Exception
 	 */
 	@RequestMapping(value = "/login.do")
-	public String login(@ModelAttribute("userVo") UserVO userVo, ModelMap model, HttpServletRequest request,@ModelAttribute("historyVO") HistoryVO historyVO) {
+	public String login(@ModelAttribute("userVo") UserVO userVo, ModelMap model, HttpServletResponse response, HttpServletRequest request,@ModelAttribute("historyVO") HistoryVO historyVO) {
 
 		System.out.println("유저아이디 : " + userVo.getUsr_id());
 		System.out.println("유저비밀번호 : " + userVo.getPwd());
@@ -77,6 +82,15 @@ public class LoginController {
 				} else if (!pw.equals(userList.get(0).getPwd())) {
 					System.out.println("비밀번호가 틀립니다.");
 				} else {
+
+					//쿠키설정
+					Cookie idCookie = new Cookie("s_login_id", userList.get(0).getUsr_id());
+					idCookie.setMaxAge(-1);					
+					if(idCookie != null && !idCookie.equals("")) {
+						 idCookie.setPath("/");
+						   }				
+					response.addCookie(idCookie);
+					 					
 					// session 설정
 					HttpSession session = request.getSession();
 					request.getSession().setAttribute("session", session);
@@ -87,7 +101,7 @@ public class LoginController {
 					request.getSession().setAttribute("ip", ip);
 
 					
-					// 화면접근이력 이력 남기기
+					// 로그인 이력 남기기
 					CmmnUtils.saveHistory(request, historyVO);
 					historyVO.setExe_dtl_cd("DX-T0003");
 					accessHistoryService.insertHistory(historyVO);
@@ -112,9 +126,17 @@ public class LoginController {
 	 * @throws Exception
 	 */
 	@RequestMapping(value = "/logout.do")
-	public String loginout(@ModelAttribute("userVo") UserVO userVo, @ModelAttribute("historyVO") HistoryVO historyVO, HttpServletRequest request) {
+	public String loginout(@ModelAttribute("userVo") UserVO userVo, @ModelAttribute("historyVO") HistoryVO historyVO, HttpServletRequest request, HttpServletResponse response) {
 		try {
-			// 화면접근이력 이력 남기기
+			//쿠키설정
+			Cookie idCookie = new Cookie("s_logout_id", request.getSession().getId());
+			idCookie.setMaxAge(-1);			
+			 if(idCookie != null && !idCookie.equals("")) {
+				 idCookie.setPath("/");
+				   }		 
+			 response.addCookie(idCookie);
+			
+			// 로그아웃 이력 남기기
 			CmmnUtils.saveHistory(request, historyVO);
 			historyVO.setExe_dtl_cd("DX-T0003_01");
 			accessHistoryService.insertHistory(historyVO);
