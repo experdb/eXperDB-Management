@@ -1,5 +1,5 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
-    pageEncoding="UTF-8"%>
+	pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form"%>
 <%@ taglib prefix="ui" uri="http://egovframework.gov/ctl/ui"%>
@@ -14,75 +14,86 @@
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <title>eXperDB</title>
 <script type="text/javascript">
+	
+	function fn_validation() {
+		var strid = document.getElementById('usr_id');
+		var strpw = document.getElementById('pwd');
 
-	function fn_login(){
-			var strid = document.getElementById('usr_id').value;
-			var strpw = document.getElementById('pwd').value; 
-			 
-			if (strid == "" || strid == "undefind" || strid == null)
-			{
-				alert("아이디를 넣어주세요");
-				document.getElementById('usr_id').focus();
-				return false;
-			}
-			if (strpw == "" || strpw == "undefind" || strpw == null){
-					alert("비밀번호를 넣어주세요");
-					document.getElementById('usr_id').focus();
-					return false;
-			}
-	    	document.loginForm.action = "<c:url value='/login.do'/>";
-	       	document.loginForm.submit();
+		if (strid.value == "" || strid.value == "undefind" || strid.value == null) {
+			alert("아이디를 넣어주세요");
+			strid.focus();
+			return false;
 		}
+		if (strpw.value == "" || strpw.value == "undefind" || strpw.value == null) {
+			alert("비밀번호를 넣어주세요");
+			strpw.focus();
+			return false;
+		}
+		return true;
+	}
 
-
-	$(window.document).ready(
-			function() {				
-				 document.getElementById("usr_id").focus();		
-			});
-
+	$(window.document).ready(function() {
+		document.getElementById("usr_id").focus();
+	});
+	
+	function fn_login() {
+		if (!fn_validation())return false;
+		$.ajax({
+			url : "/login.do",
+			data : {
+				usr_id : $("#usr_id").val(),
+				pwd : $("#pwd").val()
+			},
+			type : "post",
+			error : function(request, status, error) {
+				alert("실패");
+			},
+			success : function(result) {
+				var html ="";
+				if(result == "idFail"){
+					html += '<p>등록되지 않은 사용자 입니다.<br>관리자에게 문의 하여주십시오.</p>';
+				}else if(result == "passwordFail"){
+					html += '<p>Password가 틀렸습니다.</p>';
+				}else if(result == "useynFail"){
+					html += '<p>사용할 수 없는 아이디 입니다.</p>';
+				}else if(result=="usrexprdtFail"){
+					html += '<p>사용 만료된 아이디 입니다.</p>';
+				}else if(result == "loginSuccess"){
+					 location.href = "/index.do";
+				}else{
+					 location.href ="/";
+				}
+				$("#errormessage").empty();
+				$("#errormessage").append(html);
+			}
+		});
+	}
 </script>
 
 </head>
 
 <body class="bg">
-	<form name="loginForm" id="loginForm" method="post">
-	<div id="login_wrap">
-		<div class="inr">
-			<div class="logo"><img src="../images/login_logo.png" alt="eXperDB"></div>
-			<div class="inp_bx">
-				<p class="tit">MEMBER LOGIN</p>
-				<div class="inp_wrap t1">
-					<label for="member_id">ID</label>
-					<input type="text" class="txt" id="usr_id" name="usr_id" title="아이디 입력" maxlength="" placeholder="아이디를 입력하세요."/>
+		<div id="login_wrap">
+			<div class="inr">
+				<div class="logo">
+					<img src="../images/login_logo.png" alt="eXperDB">
 				</div>
-				<div class="inp_wrap t2">
-					<label for="member_pwd">Password</label>
-					<input type="password" class="txt" id="pwd" name="pwd" title="비밀번호 입력" maxlength="" placeholder="비밀번호를 입력하세요." />
-				</div>
-				<div class="btn_wrap">
-					<button onClick="fn_login()">LOGIN</button>
+				<div class="inp_bx">
+					<p class="tit">MEMBER LOGIN</p>
+					<div class="inp_wrap t1">
+						<label for="member_id">ID</label> 
+						<input type="text" class="txt" id="usr_id" name="usr_id" title="아이디 입력" maxlength="" placeholder="아이디를 입력하세요." />
+					</div>
+					<div class="inp_wrap t2">
+						<label for="member_pwd">Password</label> <input type="password" class="txt" id="pwd" name="pwd" title="비밀번호 입력" maxlength="" placeholder="비밀번호를 입력하세요." />
+					</div>	
+					<div class="inp_wrap t2" id="errormessage">
+					</div>			
+					<div class="btn_wrap">
+						<button onClick="fn_login()">LOGIN</button>
+					</div>
 				</div>
 			</div>
 		</div>
-	</div>
-</form>
-
-<%-- 	<form name="loginForm" id="loginForm" method="post">
- 		<div class="login-page">
-			  <div class="form">
-			    <img src="<c:url value='/images/egovframework/example/DX-Tcontrol_title.png'/>" alt="DX-TCONTROL" />
-			    <br><br>
-			      <input type="text" placeholder="id" id="usr_id"  name="usr_id" />
-			      <input type="password" placeholder="password" id="pwd" name="pwd"/>
-			      <button onClick="fn_login()">login</button>
-			      <c:out value="${loginException.message}"/>
-			  </div>
-				<div class="footer">
-				<br>
-					<strong>Copyright (c) 2017 K4m Corp.  All rights reserved.</strong>
-			  </div>
-		</div>
-	</form> --%>
-	
 </body>
 </html>

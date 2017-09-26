@@ -13,11 +13,11 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.k4m.dx.tcontrol.admin.accesshistory.service.AccessHistoryService;
 import com.k4m.dx.tcontrol.cmmn.CmmnUtils;
 import com.k4m.dx.tcontrol.cmmn.SHA256;
-import com.k4m.dx.tcontrol.cmmn.cmmnExcepHndlr;
 import com.k4m.dx.tcontrol.common.service.HistoryVO;
 import com.k4m.dx.tcontrol.login.service.LoginService;
 import com.k4m.dx.tcontrol.login.service.UserVO;
@@ -45,7 +45,7 @@ public class LoginController {
 
 	@Autowired
 	private AccessHistoryService accessHistoryService;
-	
+
 	/**
 	 * 로그인을 한다.
 	 * 
@@ -57,60 +57,54 @@ public class LoginController {
 	 * @throws Exception
 	 */
 	@RequestMapping(value = "/login.do")
-	public String login(@ModelAttribute("userVo") UserVO userVo, ModelMap model, HttpServletResponse response, HttpServletRequest request,@ModelAttribute("historyVO") HistoryVO historyVO) {
-
-		System.out.println("유저아이디 : " + userVo.getUsr_id());
-		System.out.println("유저비밀번호 : " + userVo.getPwd());
-
-		String id = userVo.getUsr_id();
-		String pw = SHA256.SHA256(userVo.getPwd());
-
+	public @ResponseBody String login(@ModelAttribute("userVo") UserVO userVo, ModelMap model, HttpServletResponse response,
+			HttpServletRequest request, @ModelAttribute("historyVO") HistoryVO historyVO) {
 		try {
+			System.out.println("아이디 : " + userVo.getUsr_id());
+			System.out.println("패스워드 : " + userVo.getPwd());
+			
+			String pw = SHA256.SHA256(userVo.getPwd());
 			List<UserVO> userList = loginService.selectUserList(userVo);
-
 			int intLoginCnt = userList.size();
-
 			if (intLoginCnt == 0) {
-				throw new cmmnExcepHndlr("등록되지 않은 사용자 입니다. 관리자에게 문의 하여주십시오.");
-				// System.out.println("등록되지 않은 사용자 입니다. 관리자에게 문의 하여주십시오.");
+				return "idFail";
 			} else {
-				if (!id.equals(userList.get(0).getUsr_id())) {
-					System.out.println("유저 ID가 틀립니다.");
-				} else if (!pw.equals(userList.get(0).getPwd())) {
-					System.out.println("비밀번호가 틀립니다.");
-				} else {
-
-					//쿠키설정
+				if (!pw.equals(userList.get(0).getPwd())) {
+					return "passwordFail";
+				}else if(userList.get(0).getUse_yn().equals("N")){
+					return "useynFail";
+				}else if(userList.get(0).getUsr_expr_dt().equals("N")){
+					return "usrexprdtFail";
+				}else {
+					// 쿠키설정
 					Cookie idCookie = new Cookie("s_login_id", userList.get(0).getUsr_id());
-					idCookie.setMaxAge(-1);					
-					if(idCookie != null && !idCookie.equals("")) {
-						 idCookie.setPath("/");
-						   }				
+					idCookie.setMaxAge(-1);
+					if (idCookie != null && !idCookie.equals("")) {
+						idCookie.setPath("/");
+					}
 					response.addCookie(idCookie);
-					 					
+
 					// session 설정
 					HttpSession session = request.getSession();
 					request.getSession().setAttribute("session", session);
 					request.getSession().setAttribute("usr_id", userList.get(0).getUsr_id());
-					
+
 					InetAddress local = InetAddress.getLocalHost();
 					String ip = local.getHostAddress();
 					request.getSession().setAttribute("ip", ip);
 
-					
 					// 로그인 이력 남기기
 					CmmnUtils.saveHistory(request, historyVO);
 					historyVO.setExe_dtl_cd("DX-T0003");
 					accessHistoryService.insertHistory(historyVO);
-					
 
-					return "redirect:/index.do";
+					return "loginSuccess";
 				}
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		return "redirect:/";
+		return "false";
 	}
 
 	/**
@@ -123,21 +117,22 @@ public class LoginController {
 	 * @throws Exception
 	 */
 	@RequestMapping(value = "/logout.do")
-	public String loginout(@ModelAttribute("userVo") UserVO userVo, @ModelAttribute("historyVO") HistoryVO historyVO, HttpServletRequest request, HttpServletResponse response) {
+	public String loginout(@ModelAttribute("userVo") UserVO userVo, @ModelAttribute("historyVO") HistoryVO historyVO,
+			HttpServletRequest request, HttpServletResponse response) {
 		try {
-			//쿠키설정
+			// 쿠키설정
 			Cookie idCookie = new Cookie("s_logout_id", request.getSession().getId());
-			idCookie.setMaxAge(-1);			
-			 if(idCookie != null && !idCookie.equals("")) {
-				 idCookie.setPath("/");
-				   }		 
-			 response.addCookie(idCookie);
-			
+			idCookie.setMaxAge(-1);
+			if (idCookie != null && !idCookie.equals("")) {
+				idCookie.setPath("/");
+			}
+			response.addCookie(idCookie);
+
 			// 로그아웃 이력 남기기
 			CmmnUtils.saveHistory(request, historyVO);
 			historyVO.setExe_dtl_cd("DX-T0003_01");
 			accessHistoryService.insertHistory(historyVO);
-			
+
 			HttpSession session = request.getSession();
 			session.invalidate();
 			return "redirect:/";

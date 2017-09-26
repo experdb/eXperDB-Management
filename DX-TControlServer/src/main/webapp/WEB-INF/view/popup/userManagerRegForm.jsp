@@ -92,7 +92,7 @@
 				rsp_bsn_nm : $("#rsp_bsn_nm").val(),
 				cpn : $("#cpn").val(),
 				// 				aut_id : $("#aut_id").val(),
-				usr_expr_dt : $("#datepicker1").val(),
+				usr_expr_dt : $("#datepicker3").val(),
 				use_yn : $("#use_yn").val(),
 			},
 			success : function(result) {
@@ -113,6 +113,7 @@
 
 	//수정버튼 클릭시
 	function fn_update() {
+		idCheck = 1;
 		if (!fn_userManagerValidation())return false;
 		$.ajax({
 			url : '/updateUserManager.do',
@@ -127,7 +128,7 @@
 				rsp_bsn_nm : $("#rsp_bsn_nm").val(),
 				cpn : $("#cpn").val(),
 				// 				aut_id : $("#aut_id").val(),
-				usr_expr_dt : $("#datepicker1").val(),
+				usr_expr_dt : $("#datepicker3").val(),
 				use_yn : $("#use_yn").val(),
 			},
 			success : function(result) {

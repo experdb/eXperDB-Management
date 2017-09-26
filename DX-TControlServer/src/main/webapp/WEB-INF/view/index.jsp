@@ -158,8 +158,8 @@
 									<th scope="col" colspan="4">백업관리</th>
 									<th scope="col">접근제어</th>
 
-									<th scope="col" colspan="2">Transfer</th>
-									<th scope="col" rowspan="2">T엔진</th>								
+									<th scope="col" colspan="2">데이터전송</th>
+									<th scope="col" rowspan="2">experdb엔진</th>								
 								</tr>
 								<tr>
 									<th scope="col">등록</th>

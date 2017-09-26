@@ -43,6 +43,7 @@
 		SELECT 
 				 mnu_id
 		FROM T_MNU_I
+		WHERE mnu_id &lt; 24
     </select>
   
   
