@@ -1,7 +1,5 @@
 package com.k4m.dx.tcontrol.cmmn;
 
-import java.util.List;
-
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -9,9 +7,6 @@ import javax.servlet.http.HttpSession;
 
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.handler.HandlerInterceptorAdapter;
-
-import com.k4m.dx.tcontrol.egovTest.LoginVO;
-import com.k4m.dx.tcontrol.login.service.UserVO;
 
 public class SessionCheckInterceptor extends HandlerInterceptorAdapter{
 
