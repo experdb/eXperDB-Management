@@ -12,35 +12,40 @@
        SELECT 
       		(ROW_NUMBER() OVER()) AS ROWNUM
 			, (ROW_NUMBER() OVER()) AS IDX
-      		, WRK_ID
-			, DB_SVR_ID
-            , (SELECT DB_SVR_NM FROM T_DBSVR_I WHERE A.DB_SVR_ID = DB_SVR_ID ) AS DB_SVR_NM
-			, DB_ID
-			, (CASE WHEN DB_ID>0 THEN (SELECT DB_NM FROM T_DB_I WHERE A.DB_ID=DB_ID AND USEYN = 'Y') ELSE '' END) AS DB_NM
-			, BCK_BSN_DSCD
-			, (SELECT SYS_CD_NM FROM T_SYSDTL_C WHERE A.BCK_BSN_DSCD = SYS_CD ) AS BCK_BSN_DSCD_NM
-			, WRK_NM
-			, WRK_EXP
-			, BCK_OPT_CD
-			, (SELECT SYS_CD_NM FROM T_SYSDTL_C WHERE A.BCK_OPT_CD = SYS_CD ) AS BCK_OPT_CD_NM
-			, BCK_MTN_ECNT
-			, CPS_YN
-			, LOG_FILE_BCK_YN
-			, LOG_FILE_STG_DCNT
-			, LOG_FILE_MTN_ECNT
-			, CPRT
-			, SAVE_PTH
-			, FILE_FMT_CD
-			, FILE_STG_DCNT
-			, ENCD_MTH_NM
-			, USR_ROLE_NM
-			, FRST_REGR_ID
-			, TO_CHAR(FRST_REG_DTM,'YYYY-MM-DD HH24:MI:SS') AS FRST_REG_DTM
-			, LST_MDFR_ID
-			, TO_CHAR(LST_MDF_DTM,'YYYY-MM-DD HH24:MI:SS') AS LST_MDF_DTM
-      FROM T_WRKCNG_I A
+      		, A.WRK_ID
+			, B.DB_SVR_ID
+            , (SELECT DB_SVR_NM FROM T_DBSVR_I WHERE B.DB_SVR_ID = DB_SVR_ID ) AS DB_SVR_NM
+			, B.DB_ID
+			, (CASE WHEN DB_ID>0 THEN (SELECT DB_NM FROM T_DB_I WHERE B.DB_ID=DB_ID AND USEYN = 'Y') ELSE '' END) AS DB_NM
+			, A.BSN_DSCD
+            , (SELECT SYS_CD_NM FROM T_SYSDTL_C WHERE A.BSN_DSCD = SYS_CD ) AS BSN_DSCD_NM 
+            , B.BCK_BSN_DSCD
+			, (SELECT SYS_CD_NM FROM T_SYSDTL_C WHERE B.BCK_BSN_DSCD = SYS_CD ) AS BCK_BSN_DSCD_NM
+			, B.WRK_NM
+			, B.WRK_EXP
+			, B.BCK_OPT_CD
+			, (SELECT SYS_CD_NM FROM T_SYSDTL_C WHERE B.BCK_OPT_CD = SYS_CD ) AS BCK_OPT_CD_NM
+			, B.BCK_MTN_ECNT
+			, B.CPS_YN
+			, B.LOG_FILE_BCK_YN
+			, B.LOG_FILE_STG_DCNT
+			, B.LOG_FILE_MTN_ECNT
+			, B.CPRT
+			, B.SAVE_PTH
+			, B.FILE_FMT_CD
+			, B.FILE_STG_DCNT
+			, B.ENCD_MTH_NM
+			, B.USR_ROLE_NM
+			, A.FRST_REGR_ID
+			, TO_CHAR(A.FRST_REG_DTM,'YYYY-MM-DD HH24:MI:SS') AS FRST_REG_DTM
+			, A.LST_MDFR_ID
+			, TO_CHAR(A.LST_MDF_DTM,'YYYY-MM-DD HH24:MI:SS') AS LST_MDF_DTM
+      FROM T_WRKCNG_I A, T_BCK_WRKCNG_I B 
       WHERE 1=1	
-      AND BCK_BSN_DSCD=#{bck_bsn_dscd}
+      AND A.WRK_ID = B.WRK_ID
+      <if test="bsn_dscd != null and bsn_dscd != '' ">
+      AND A.BSN_DSCD LIKE #{bsn_dscd}
+      </if>
       <if test="db_svr_nm != null and db_svr_nm != '' ">
       AND DB_SVR_ID IN(SELECT 
 						    			DB_SVR_ID 
@@ -72,7 +77,7 @@
 			, WRK_NM
 			, WRK_EXP
 			, 'N' AS NXT_EXE_YN
-      FROM T_WRKCNG_I A
+      FROM T_BCK_WRKCNG_I A
       WHERE 1=1	
       AND WRK_ID IN
       <foreach item="item" index="index" collection="work_id" open="(" separator="," close=")"> 
@@ -189,9 +194,9 @@
 			, (SELECT COUNT(*) FROM T_SCD_D WHERE SCD_ID = A.SCD_ID) AS WRK_CNT
 			, TO_CHAR(A.PREV_EXE_DTM,'YYYY-MM-DD HH24:MI:SS') AS PREV_EXE_DTM
 			, TO_CHAR(A.NXT_EXE_DTM,'YYYY-MM-DD HH24:MI:SS') AS NXT_EXE_DTM
-			, FRST_REGR_ID
+			, A.FRST_REGR_ID
 			, TO_CHAR(A.FRST_REG_DTM,'YYYY-MM-DD HH24:MI:SS') AS FRST_REG_DTM
-			, LST_MDFR_ID
+			, A.LST_MDFR_ID
 			, TO_CHAR(A.LST_MDF_DTM,'YYYY-MM-DD HH24:MI:SS') AS LST_MDF_DTM
       FROM T_SCD_M A
       WHERE 1=1	
@@ -203,6 +208,9 @@
       </if>
       <if test="scd_cndt != null and scd_cndt != '' ">
       	AND A.SCD_CNDT LIKE  '%' || #{scd_cndt} || '%'
+      </if>
+      <if test="frst_regr_id != null and frst_regr_id != '' ">
+      	AND A.FRST_REGR_ID LIKE  '%' || #{frst_regr_id} || '%'
       </if>
     </select>	
     
@@ -274,7 +282,7 @@
 				, B.ACV_FILE_STGDT
 				, B.ACV_FILE_MTNCNT
 				, B.BCK_FILENM
-		FROM T_SCD_D A, T_WRKCNG_I B
+		FROM T_SCD_D A, T_BCK_WRKCNG_I B
 		WHERE 1 = 1
 		AND A.WRK_ID = B.WRK_ID
 		AND A.SCD_ID = #{scd_id}::numeric
@@ -340,14 +348,15 @@
 	 	**/
 	     SELECT 
 	    		 A.WRK_ID
+	    		, A.BCK_WRK_ID
 	            , B.GRP_CD
 	            , (SELECT GRP_CD_NM FROM T_SYSGRP_C WHERE B.GRP_CD = GRP_CD ) AS GRP_CD_NM
 	            , B.OPT_CD
 	            , (SELECT SYS_CD_NM FROM T_SYSDTL_C WHERE B.OPT_CD = SYS_CD ) AS OPT_CD_NM
 	            , B.BCK_OPT_VAL
-		 FROM T_WRKCNG_I A, T_BCKOPT_I B
+		 FROM T_BCK_WRKCNG_I A, T_BCKOPT_I B
 	     WHERE 1 = 1
-	     AND A.WRK_ID = B.WRK_ID
+	     AND A.BCK_WRK_ID = B.BCK_WRK_ID
 	     AND A.WRK_ID = #{wrk_id}
 	</select>
 
@@ -364,9 +373,9 @@
 			            , (SELECT DB_NM FROM T_DB_I WHERE A.DB_ID = DB_ID  AND USEYN = 'Y') AS DB_NM
 			            , B.SCM_NM
 			            , B.OBJ_NM
-			 FROM T_WRKCNG_I A, T_BCKOBJ_L B
+			 FROM T_BCK_WRKCNG_I A, T_BCKOBJ_L B
 		     WHERE 1 = 1
-		     AND A.WRK_ID = B.WRK_ID
+		     AND A.BCK_WRK_ID = B.BCK_WRK_ID
 	</select>		
 		
 			
@@ -504,9 +513,24 @@
 			, A.WRK_NM
 			, A.WRK_EXP
 			, 'N' AS NXT_EXE_YN
-      FROM T_WRKCNG_I A, T_SCD_D B
+      FROM T_BCK_WRKCNG_I A, T_SCD_D B
       WHERE 1=1
       AND A.WRK_ID = B.WRK_ID
       AND B.SCD_ID = #{scd_id}
 	 	</select>
+	 	
+	 	
+	 	
+	 <select id="selectWorkDivList" resultType="Map" parameterType="HashMap">
+		/**
+	 	* Query ID : selectWorkDivList
+	 	* Description :  work List 조회
+	 	* Author : 변승우
+	 	**/
+		SELECT 
+	    	BSN_DSCD
+	        , (SELECT SYS_CD_NM FROM T_SYSDTL_C WHERE BSN_DSCD = SYS_CD ) AS BSN_DSCD_NM
+	    FROM T_WRKCNG_I
+	    GROUP BY BSN_DSCD
+	 </select>
 </mapper>

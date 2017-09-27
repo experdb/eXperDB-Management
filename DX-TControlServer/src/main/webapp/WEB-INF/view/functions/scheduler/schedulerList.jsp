@@ -205,8 +205,9 @@ function fn_selectScheduleList(){
   	$.ajax({
 		url : "/selectScheduleList.do",
 		data : {
-			scd_cndt : scd_cndt,
+			scd_cndt : $("#scd_cndt").val(),
 			scd_nm : $("#scd_nm").val(),
+			frst_regr_id : $("#frst_regr_id").val(),
 			scd_exp : $("#scd_exp").val()
 		},
 		dataType : "json",
@@ -367,7 +368,7 @@ function fn_makeMin(){
 
 							<col />
 						</colgroup> 
-						<tbody>0.
+						<tbody>
 								<tr>
 									<th scope="row" class="t9 line" style="width:130px;">스케줄명</th>
 									<td><input type="text" class="txt t2" id="scd_nm" name="scd_nm"/></td>
@@ -382,7 +383,7 @@ function fn_makeMin(){
 										<span id="calendar">
 												<div class="calendar_area">
 														<a href="#n" class="calendar_btn">달력열기</a>
-														<input type="text" class="calendar" id="datepicker1" name="exe_dt" title="스케줄시간설정" readonly />
+														<input type="text" class="calendar" id="from" name="b_exe_dt" title="스케줄시간설정" readonly />
 														<span id="b_hour"></span>
 														<span id="b_min"></span>
 												</div>
@@ -393,7 +394,7 @@ function fn_makeMin(){
 										<span id="calendar">
 												<div class="calendar_area">
 														<a href="#n" class="calendar_btn">달력열기</a>
-														<input type="text" class="calendar" id="datepicker1" name="exe_dt" title="스케줄시간설정" readonly />
+														<input type="text" class="calendar" id="to" name="a_exe_dt" title="스케줄시간설정" readonly />
 														<span id="a_hour"></span>
 														<span id="a_min"></span>
 												</div>
@@ -402,11 +403,16 @@ function fn_makeMin(){
 								</tr>
 								<tr>
 									<th scope="row" class="t9 line" >구동상태</th>
-									<td ><input type="text" class="txt t2" id="scd_exp" name="scd_exp" /></td>				
+									<td>
+									<select class="select t8" name="scd_cndt" id="scd_cndt">
+										<option value="%">전체</option>
+										<option value="TC001801">실행</option>
+										<option value="TC001802">중지</option>
+									</select>	</td>				
 								</tr>				
 								<tr>
 									<th scope="row" class="t9 line">등록자</th>
-									<td ><input type="text" class="txt t2" id="scd_exp" name="scd_exp" /></td>
+									<td ><input type="text" class="txt t2" id="frst_regr_id" name="frst_regr_id" /></td>
 								</tr>
 						</tbody>
 					</table>

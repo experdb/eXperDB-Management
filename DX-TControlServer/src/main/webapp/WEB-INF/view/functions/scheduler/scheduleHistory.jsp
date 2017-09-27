@@ -5,6 +5,24 @@
 <%@ taglib prefix="ui" uri="http://egovframework.gov/ctl/ui"%>
 
     <script>
+    function fn_validation(){
+    	
+    	 var arySrtDt = $('#from').val(); // ex) 시작일자(2007-10-09)
+    	 var aryEndDt = $('#to').val(); // ex) 종료일자(2007-12-05)
+    	 
+    	 var startDt = new Date(arySrtDt);
+    	 var endDt	= new Date(aryEndDt);
+
+    	resultDt	= Math.round((endDt.valueOf() - startDt.valueOf())/(1000*60*60*24*365/12));
+    	
+    	alert(resultDt);
+    	
+    	 return false; 
+    	
+    	 //return false;
+    }
+    
+    
 	$(window.document).ready(function() {
 		fn_buttonAut();
 		
@@ -92,6 +110,7 @@
 	
 	/*조회버튼 클릭시*/
 	function fn_selectScheduleHistory() {
+		if (!fn_validation()) return false;
 		document.selectScheduleHistory.action = "/selectScheduleHistory.do";
 		document.selectScheduleHistory.submit();
 	}

@@ -87,7 +87,7 @@ function fn_init() {
 	 * 디비 (데이터테이블)
 	 ******************************************************** */
 	table_db = $('#dbList').DataTable({
-		scrollY : "265px",
+		scrollY : "300px",
 		scrollX: true,	
 		searching : false,
 		paging : false,		

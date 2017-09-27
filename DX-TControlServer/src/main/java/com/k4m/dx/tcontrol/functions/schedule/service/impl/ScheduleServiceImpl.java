@@ -224,4 +224,10 @@ public class ScheduleServiceImpl implements ScheduleService{
 	public List<Map<String, Object>> selectWrkScheduleList(int scd_id) throws Exception {
 		return scheduleDAO.selectWrkScheduleList(scd_id);
 	}
+
+
+	@Override
+	public List<Map<String, Object>> selectWorkDivList() throws Exception {
+		return scheduleDAO.selectWorkDivList();
+	}
 }

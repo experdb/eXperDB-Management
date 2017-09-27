@@ -166,4 +166,7 @@ public interface ScheduleService {
 
 	List<Map<String, Object>> selectWrkScheduleList(int scd_id) throws Exception;
 
+
+	List<Map<String, Object>> selectWorkDivList() throws Exception;
+
 }

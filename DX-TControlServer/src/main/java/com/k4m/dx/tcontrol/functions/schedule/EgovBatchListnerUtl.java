@@ -27,7 +27,7 @@ import com.k4m.dx.tcontrol.functions.schedule.service.ScheduleVO;
 public class EgovBatchListnerUtl implements JobListener {
 	
 	private ScheduleService scheduleService;
-	
+	Date beforeTime = null;
 	/** Log Service */
 	private static final Logger LOGGER = LoggerFactory.getLogger(EgovBatchListnerUtl.class);
 	
@@ -55,17 +55,9 @@ public class EgovBatchListnerUtl implements JobListener {
 		try
 		{
 			System.out.println("▶▶▶ JOB 시작 시 수행!!!");		
-			
-			HashMap<String , Object> hp = new HashMap<String , Object>();
-			
-			String scd_id = context.getJobDetail().getJobDataMap().getString("scd_id");
-			Date nFireTime  = context.getNextFireTime();
 
-			hp.put("scd_id", scd_id);
-			hp.put("nFireTime", nFireTime);
-
-			scheduleService.updatePrevJobTime(hp);
-		
+			beforeTime  = context.getNextFireTime();
+			
 		}
 		catch(Exception e)
 		{
@@ -107,13 +99,15 @@ public class EgovBatchListnerUtl implements JobListener {
 		{
 			LOGGER.debug("▶▶▶ JOB 수행 완료");
 		
-			HashMap<String , Object> hp = new HashMap<String , Object>();
+			HashMap<String , Object> hp1 = new HashMap<String , Object>();
+			HashMap<String , Object> hp2 = new HashMap<String , Object>();
 			
 			String scd_id = context.getJobDetail().getJobDataMap().getString("scd_id");
 			
 			List<Map<String, Object>> result = scheduleService.selectModifyScheduleList(Integer.parseInt(scd_id));
-			hp.put("scd_id", scd_id);
-
+			hp1.put("scd_id", scd_id);
+			hp2.put("scd_id", scd_id);
+			
 			String exe_perd_cd = (String) result.get(0).get("exe_perd_cd");
 			
 			Date nFireTime  = context.getNextFireTime();
@@ -125,42 +119,48 @@ public class EgovBatchListnerUtl implements JobListener {
 							
 			if(exe_perd_cd.equals("TC001601")){
 				 cal.add(Calendar.DATE, 1); 
-				 hp.put("nFireTime", cal.getTime());
-				 System.out.println("▶▶▶ 다음 작업 수행시간 업데이트");
-				scheduleService.updateNxtJobTime(hp);
+				 hp1.put("nFireTime", beforeTime);
+				 hp2.put("nFireTime", cal.getTime());	
+				 System.out.println("▶▶▶ 이전 작업 수행시간 업데이트");
+				scheduleService.updatePrevJobTime(hp1);
+				System.out.println("▶▶▶ 다음 작업 수행시간 업데이트");
+				scheduleService.updateNxtJobTime(hp2);
 			}else if(exe_perd_cd.equals("TC001602")){
 				 cal.add(Calendar.DATE, 7); 
-				 hp.put("nFireTime", cal.getTime());
-				 System.out.println("▶▶▶ 다음 작업 수행시간 업데이트");
-				scheduleService.updateNxtJobTime(hp);
+				 hp1.put("nFireTime", beforeTime);
+				 hp2.put("nFireTime", cal.getTime());
+				 System.out.println("▶▶▶ 이전 작업 수행시간 업데이트");
+				scheduleService.updatePrevJobTime(hp1);
+				System.out.println("▶▶▶ 다음 작업 수행시간 업데이트");
+				scheduleService.updateNxtJobTime(hp2);
 			}else if(exe_perd_cd.equals("TC001603")){
 				 cal.add(Calendar.MONTH, 1); 
-				 hp.put("nFireTime", cal.getTime());
-				 System.out.println("▶▶▶ 다음 작업 수행시간 업데이트");
-				scheduleService.updateNxtJobTime(hp);
+				 hp1.put("nFireTime", beforeTime);
+				 hp2.put("nFireTime", cal.getTime());
+				 System.out.println("▶▶▶ 이전 작업 수행시간 업데이트");
+				scheduleService.updatePrevJobTime(hp1);
+				System.out.println("▶▶▶ 다음 작업 수행시간 업데이트");
+				scheduleService.updateNxtJobTime(hp2);
 			}else if(exe_perd_cd.equals("TC001604")){
 				 cal.add(Calendar.YEAR, 1); 
-				 hp.put("nFireTime", cal.getTime());
-				 System.out.println("▶▶▶ 다음 작업 수행시간 업데이트");
-				 scheduleService.updateNxtJobTime(hp);
+				 hp1.put("nFireTime", beforeTime);
+				 hp2.put("nFireTime", cal.getTime());
+				 System.out.println("▶▶▶ 이전 작업 수행시간 업데이트");
+				scheduleService.updatePrevJobTime(hp1);
+				System.out.println("▶▶▶ 다음 작업 수행시간 업데이트");
+				scheduleService.updateNxtJobTime(hp2);
 			}else{
 				ScheduleVO scheduleVO = new ScheduleVO();
 				scheduleVO.setScd_id(Integer.parseInt(scd_id));
 				scheduleVO.setScd_cndt("TC001802");
-				hp.put("nFireTime", context.getScheduledFireTime());	
-				scheduleService.updatePrevJobTime(hp);
-				scheduleService.updateNxtJobTime(hp);
+				hp1.put("nFireTime", beforeTime);
+				hp2.put("nFireTime", context.getScheduledFireTime());	
+				 System.out.println("▶▶▶ 이전 작업 수행시간 업데이트");
+				scheduleService.updatePrevJobTime(hp1);
+				System.out.println("▶▶▶ 다음 작업 수행시간 업데이트");
+				scheduleService.updateNxtJobTime(hp2);
 				scheduleService.updateScheduleStatus(scheduleVO);		
-			}
-
-	/*		JobKey job_key = context.getJobDetail().getKey();
-			String job_name = context.getJobDetail().getKey().getName();
-			String job_group= context.getJobDetail().getKey().getGroup();
-	
-			LOGGER.debug("▶▶▶ 수행완료된 JOB 삭제");
-			ScheduleUtl sUtl = new ScheduleUtl();
-			sUtl.deleteSchdul(job_key);*/
-			
+			}			
 		}
 		catch(Exception e)
 		{
