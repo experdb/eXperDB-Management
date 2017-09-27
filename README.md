@@ -17,6 +17,9 @@ DX-Tcontrol is a PostgreSQL integrated operations management tool. Use backup se
 [![LICENSE](https://img.shields.io/badge/LICENSE-GPLv3-ff69b4.svg)](https://github.com/experdb/DX-TControl/blob/master/LICENSE)
 
 
+## Installation
+### Requirements
+
 ## Copyright
 Copyright (c) 2016-2017, eXperDB Development Team
 All rights reserved.
