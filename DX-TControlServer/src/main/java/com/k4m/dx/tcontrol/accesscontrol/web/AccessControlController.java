@@ -639,8 +639,7 @@ public class AccessControlController {
 			ArrayList arrSeq = new ArrayList();
 
 			JSONParser jParser = new JSONParser();
-			JSONArray jArr = (JSONArray) jParser
-					.parse(request.getParameter("rowList").toString().replace("&quot;", "\""));
+			JSONArray jArr = (JSONArray) jParser.parse(request.getParameter("rowList").toString().replace("&quot;", "\""));
 
 			for (int i = 0; i < jArr.size(); i++) {
 				JSONObject jObj = (JSONObject) jArr.get(i);
@@ -840,16 +839,20 @@ public class AccessControlController {
 			if (resultExt == null || resultExt.size() == 0) {
 				return "pgaudit";
 			}
-			
-			List<AccessControlHistoryVO> resultSet = accessControlService.selectAccessControlHistory(accessControlHistoryVO);
-			
-			for(int j=0; j<resultSet.size(); j++){
-				HashMap<String, String> hpSeq = new HashMap<String, String>();
-				hpSeq.put(ClientProtocolID.AC_SEQ, Integer.toString(resultSet.get(j).getPrms_seq()));
-				arrSeq.add(hpSeq);
+				
+			JSONObject results = cic.dbAccess_selectAll(serverObj, IP, PORT);
+			for (int i = 0; i < results.size(); i++) {
+				JSONArray data = (JSONArray) results.get("data");
+				for (int j = 0; j < data.size(); j++) {
+					JSONObject jsonObj = (JSONObject) data.get(j);	
+					HashMap<String, String> hpSeq = new HashMap<String, String>();
+					hpSeq.put(ClientProtocolID.AC_SEQ, (String) jsonObj.get("Seq"));
+					arrSeq.add(hpSeq);
+				}
 			}
 			cic.dbAccess_delete(serverObj, arrSeq, IP, PORT);
 			
+			List<AccessControlHistoryVO> resultSet = accessControlService.selectAccessControlHistory(accessControlHistoryVO);
 			for(int i=0; i<resultSet.size(); i++){
 				acObj.put(ClientProtocolID.AC_SET, "1");
 				acObj.put(ClientProtocolID.AC_TYPE, resultSet.get(i).getCtf_tp_nm());

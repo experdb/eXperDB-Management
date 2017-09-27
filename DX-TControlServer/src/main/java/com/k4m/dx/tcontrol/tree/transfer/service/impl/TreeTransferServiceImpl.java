@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 
 import com.k4m.dx.tcontrol.accesscontrol.service.DbAutVO;
 import com.k4m.dx.tcontrol.accesscontrol.service.DbIDbServerVO;
+import com.k4m.dx.tcontrol.admin.dbserverManager.service.DbServerVO;
 import com.k4m.dx.tcontrol.tree.transfer.service.BottlewaterVO;
 import com.k4m.dx.tcontrol.tree.transfer.service.TblKafkaConfigVO;
 import com.k4m.dx.tcontrol.tree.transfer.service.TransferDetailMappingVO;
@@ -102,5 +103,10 @@ public class TreeTransferServiceImpl implements TreeTransferService {
 	@Override
 	public void updateBottleWaterBwpid(TransferDetailVO transferDetailVO) throws Exception {
 		treeTransferDAO.updateBottleWaterBwpid(transferDetailVO);
+	}
+
+	@Override
+	public List<DbServerVO> selectDbServerList(DbServerVO dbServerVO) throws Exception {
+		return treeTransferDAO.selectDbServerList(dbServerVO);
 	}
 }

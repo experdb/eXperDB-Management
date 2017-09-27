@@ -88,6 +88,7 @@ public class LoginController {
 					HttpSession session = request.getSession();
 					request.getSession().setAttribute("session", session);
 					request.getSession().setAttribute("usr_id", userList.get(0).getUsr_id());
+					request.getSession().setAttribute("usr_nm", userList.get(0).getUsr_nm());
 
 					InetAddress local = InetAddress.getLocalHost();
 					String ip = local.getHostAddress();

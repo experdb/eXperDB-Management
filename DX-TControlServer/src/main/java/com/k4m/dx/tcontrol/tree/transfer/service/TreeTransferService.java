@@ -4,6 +4,7 @@ import java.util.List;
 
 import com.k4m.dx.tcontrol.accesscontrol.service.DbAutVO;
 import com.k4m.dx.tcontrol.accesscontrol.service.DbIDbServerVO;
+import com.k4m.dx.tcontrol.admin.dbserverManager.service.DbServerVO;
 
 public interface TreeTransferService {
 
@@ -135,7 +136,6 @@ public interface TreeTransferService {
 	 */
 	List<TblKafkaConfigVO> selectTblKafkaConfigInfo(int trf_trg_id) throws Exception;
 
-
 	/**
 	 * Bottlewater bwpid 업데이트
 	 * 
@@ -144,4 +144,13 @@ public interface TreeTransferService {
 	 * @throws Exception
 	 */
 	void updateBottleWaterBwpid(TransferDetailVO transferDetailVO) throws Exception;
+
+	/**
+	 * DB서버 리스트 조회
+	 * 
+	 * @param dbServerVO
+	 * @return dbServerVO
+	 * @throws Exception
+	 */
+	List<DbServerVO> selectDbServerList(DbServerVO dbServerVO) throws Exception;
 }

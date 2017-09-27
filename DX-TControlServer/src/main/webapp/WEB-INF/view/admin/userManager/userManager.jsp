@@ -61,18 +61,16 @@ function fn_init() {
 	//더블 클릭시
 	if("${wrt_aut_yn}" == "Y"){
 		$('#userListTable tbody').on('dblclick','tr',function() {
-				var data = table.row(this).data();
-				var usr_id = data.usr_id;
-				
-				var popUrl = "/popup/userManagerRegForm.do?act=u&usr_id=" + usr_id; // 서버 url 팝업경로
-				var width = 920;
-				var height = 570;
-				var left = (window.screen.width / 2) - (width / 2);
-				var top = (window.screen.height /2) - (height / 2);
-				var popOption = "width="+width+", height="+height+", top="+top+", left="+left+", resizable=no, scrollbars=yes, status=no, toolbar=no, titlebar=yes, location=no,";
-				
-				window.open(popUrl,"",popOption);
-			});	
+			var data = table.row(this).data();
+			var usr_id = data.usr_id;				
+			var popUrl = "/popup/userManagerRegForm.do?act=u&usr_id=" + usr_id; // 서버 url 팝업경로
+			var width = 920;
+			var height = 570;
+			var left = (window.screen.width / 2) - (width / 2);
+			var top = (window.screen.height /2) - (height / 2);
+			var popOption = "width="+width+", height="+height+", top="+top+", left="+left+", resizable=no, scrollbars=yes, status=no, toolbar=no, titlebar=yes, location=no,";
+			window.open(popUrl,"",popOption);
+		});	
 	}
 }
 $(window.document).ready(function() {
@@ -151,7 +149,6 @@ function fn_insert() {
 	var left = (window.screen.width / 2) - (width / 2);
 	var top = (window.screen.height /2) - (height / 2);
 	var popOption = "width="+width+", height="+height+", top="+top+", left="+left+", resizable=no, scrollbars=yes, status=no, toolbar=no, titlebar=yes, location=no,";
-	
 	window.open(popUrl,"",popOption);
 }
 
@@ -159,16 +156,15 @@ function fn_insert() {
 function fn_update() {
 	var rowCnt = table.rows('.selected').data().length;
 	if (rowCnt == 1) {
-			var usr_id = table.row('.selected').data().usr_id;
-			var popUrl = "/popup/userManagerRegForm.do?act=u&usr_id=" + usr_id; // 서버 url 팝업경로
-			var width = 920;
-			var height = 570;
-			var left = (window.screen.width / 2) - (width / 2);
-			var top = (window.screen.height /2) - (height / 2);
-			var popOption = "width="+width+", height="+height+", top="+top+", left="+left+", resizable=no, scrollbars=yes, status=no, toolbar=no, titlebar=yes, location=no,";
-			
-			window.open(popUrl,"",popOption);
-		} else {
+		var usr_id = table.row('.selected').data().usr_id;
+		var popUrl = "/popup/userManagerRegForm.do?act=u&usr_id=" + usr_id; // 서버 url 팝업경로
+		var width = 920;
+		var height = 570;
+		var left = (window.screen.width / 2) - (width / 2);
+		var top = (window.screen.height /2) - (height / 2);
+		var popOption = "width="+width+", height="+height+", top="+top+", left="+left+", resizable=no, scrollbars=yes, status=no, toolbar=no, titlebar=yes, location=no,";			
+		window.open(popUrl,"",popOption);
+	} else {
 		alert("하나의 항목을 선택해주세요.");
 		return false;
 	}
@@ -182,8 +178,7 @@ function fn_delete(){
 		alert("하나의 항목을 선택해주세요.");
 		return false;
 	} else {
-		if (!confirm("삭제하시겠습니까?"))
-			return false;
+		if (!confirm("삭제하시겠습니까?"))return false;
 		var rowList = [];
 		for (var i = 0; i < datas.length; i++) {
 			if(datas[i].usr_id=="admin"){
@@ -194,8 +189,7 @@ function fn_delete(){
 				return false;
 			}else{
 				rowList += datas[i].usr_id + ',';	
-			}
-				
+			}				
 		}
 		$.ajax({
 			url : "/deleteUserManager.do",
@@ -254,17 +248,21 @@ function fn_delete(){
 						<tbody>
 							<tr>
 								<th scope="row" class="t9">검색조건</th>
-								<td><select class="select t5" id="type">
+								<td>
+									<select class="select t5" id="type">
 										<option value="usr_nm">사용자명</option>
 										<option value="usr_id">아이디</option>
-								</select></td>
+									</select>
+								</td>
 								<td><input type="text" class="txt t2" id="search" /></td>
 								<th scope="row" class="t9">사용여부</th>
-								<td><select class="select t5" id="use_yn">
+								<td>
+									<select class="select t5" id="use_yn">
 										<option value="%">전체</option>
 										<option value="Y">사용</option>
 										<option value="N">미사용</option>
-								</select></td>
+									</select>
+								</td>
 							</tr>
 						</tbody>
 					</table>

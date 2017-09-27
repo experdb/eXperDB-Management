@@ -628,7 +628,7 @@ public class TreeTransferController {
 				mv.addObject("result", result);
 			}
 
-			resultSet = dbServerManagerService.selectDbServerList(dbServerVO);
+			resultSet = treeTransferService.selectDbServerList(dbServerVO);
 			mv.addObject("resultSet", resultSet);
 			mv.addObject("trf_trg_id", request.getParameter("trf_trg_id"));
 			mv.addObject("cnr_id", request.getParameter("cnr_id"));
@@ -831,11 +831,18 @@ public class TreeTransferController {
 		JSONObject param = new JSONObject();
 		try {
 			/*
-			 * 실행순서 1. bottlewater 실행 및 중지 bw_pid가 0이면 -> 실행 1-1.tbl_mapps
-			 * DELETE 1-2.kafka_con_config DELETE 1-3.tbl_mapps INSERT
-			 * 1-4.kafka_con_config INSERT 1-5.bottledwater_start 1-6.bw_pid
-			 * update(1) bw_pid가 0이 아니면-> 중지 1-1.bottledwater_end 1-2.bw_pid
-			 * update(0)
+			 * 실행순서 
+			 * 1. bottlewater 실행 및 중지 
+			 *  bw_pid가 0이면 -> 실행 
+			 *   1-1.tbl_mapps DELETE
+			 *   1-2.kafka_con_config DELETE 
+			 *   1-3.tbl_mapps INSERT
+			 *   1-4.kafka_con_config INSERT
+			 *   1-5.bottledwater_start
+			 *   1-6.bw_pid update(1)
+			 *  bw_pid가 0이 아니면-> 중지 
+			 *   1-1.bottledwater_end
+			 *   1-2.bw_pid update(0)
 			 */
 			AES256 dec = new AES256(AES256_KEY.ENC_KEY);
 

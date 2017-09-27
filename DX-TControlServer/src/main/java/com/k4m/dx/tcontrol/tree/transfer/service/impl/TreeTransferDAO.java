@@ -7,6 +7,7 @@ import org.springframework.stereotype.Repository;
 
 import com.k4m.dx.tcontrol.accesscontrol.service.DbAutVO;
 import com.k4m.dx.tcontrol.accesscontrol.service.DbIDbServerVO;
+import com.k4m.dx.tcontrol.admin.dbserverManager.service.DbServerVO;
 import com.k4m.dx.tcontrol.tree.transfer.service.BottlewaterVO;
 import com.k4m.dx.tcontrol.tree.transfer.service.TblKafkaConfigVO;
 import com.k4m.dx.tcontrol.tree.transfer.service.TransferDetailMappingVO;
@@ -195,7 +196,7 @@ public class TreeTransferDAO extends EgovAbstractMapper {
 		result = (List<TblKafkaConfigVO>) list("treeTransferSql.selectTblKafkaConfigInfo", trf_trg_id);
 		return result;
 	}
-	
+
 	/**
 	 * Bottlewater bwpid 업데이트
 	 * 
@@ -205,6 +206,20 @@ public class TreeTransferDAO extends EgovAbstractMapper {
 	 */
 	public void updateBottleWaterBwpid(TransferDetailVO transferDetailVO) throws SQLException {
 		update("treeTransferSql.updateBottleWaterBwpid", transferDetailVO);
+	}
+
+	/**
+	 * DB서버 리스트 조회
+	 * 
+	 * @param dbServerVO
+	 * @return dbServerVO
+	 * @throws Exception
+	 */
+	@SuppressWarnings({ "deprecation", "unchecked" })
+	public List<DbServerVO> selectDbServerList(DbServerVO dbServerVO) {
+		List<DbServerVO> result = null;
+		result = (List<DbServerVO>) list("treeTransferSql.selectDbServerList", dbServerVO);
+		return result;
 	}
 
 }

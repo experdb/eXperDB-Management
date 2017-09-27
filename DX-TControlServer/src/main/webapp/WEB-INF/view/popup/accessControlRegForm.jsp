@@ -252,6 +252,7 @@
 									</option>
 								</c:forEach>
 							</select>
+						</td>
 					</tr>
 				</tbody>
 			</table>

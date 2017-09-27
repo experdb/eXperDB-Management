@@ -62,7 +62,7 @@ public class BackupController {
 	 * @throws Exception
 	 */
 	@RequestMapping(value = "/backup/workList.do")
-	public ModelAndView workList(@ModelAttribute("workVo") WorkVO workVO, HttpServletRequest request) {
+	public ModelAndView workList(@ModelAttribute("historyVO") HistoryVO historyVO,@ModelAttribute("workVo") WorkVO workVO, HttpServletRequest request) {
 		
 		//유저 디비서버 권한 조회 (공통메소드호출),
 		CmmnUtils cu = new CmmnUtils();
@@ -73,8 +73,14 @@ public class BackupController {
 		//읽기 권한이 없는경우 error페이지 호출 , [추후 Exception 처리예정]
 		if(dbSvrAut.get(0).get("bck_cng_aut_yn").equals("N")){
 			mv.setViewName("error/autError");				
-		}else{	
+		}else{			
 			try {
+				// 화면접근이력 이력 남기기
+				CmmnUtils.saveHistory(request, historyVO);
+				historyVO.setExe_dtl_cd("DX-T0021");
+				historyVO.setMnu_id(25);
+				accessHistoryService.insertHistory(historyVO);
+				
 				HttpSession session = request.getSession();
 				String usr_id = (String) session.getAttribute("usr_id");
 				workVO.setUsr_id(usr_id);
@@ -139,7 +145,7 @@ public class BackupController {
 	 * @return ModelAndView
 	 */
 	@RequestMapping(value = "/backup/workLogList.do")
-	public ModelAndView rmanLogList(@ModelAttribute("workVo") WorkVO workVO, HttpServletRequest request) {
+	public ModelAndView rmanLogList(@ModelAttribute("historyVO") HistoryVO historyVO,@ModelAttribute("workVo") WorkVO workVO, HttpServletRequest request) {
 		
 		//유저 디비서버 권한 조회 (공통메소드호출),
 		CmmnUtils cu = new CmmnUtils();
@@ -151,8 +157,15 @@ public class BackupController {
 		if(dbSvrAut.get(0).get("bck_hist_aut_yn").equals("N")){
 			mv.setViewName("error/autError");				
 		}else{	
+			
 			// Get DB list
 			try {
+				// 화면접근이력 이력 남기기
+				CmmnUtils.saveHistory(request, historyVO);
+				historyVO.setExe_dtl_cd("DX-T0026");
+				historyVO.setMnu_id(25);
+				accessHistoryService.insertHistory(historyVO);
+				
 				HttpSession session = request.getSession();
 				String usr_id = (String) session.getAttribute("usr_id");
 				workVO.setUsr_id(usr_id);
@@ -311,13 +324,19 @@ public class BackupController {
 	 * @throws IOException 
 	 */
 	@RequestMapping(value = "/popup/workRmanWrite.do")
-	public void workRmanWrite(@ModelAttribute("workVO") WorkVO workVO, HttpServletResponse response, HttpServletRequest request) throws IOException {
+	public void workRmanWrite(@ModelAttribute("historyVO") HistoryVO historyVO,@ModelAttribute("workVO") WorkVO workVO, HttpServletResponse response, HttpServletRequest request) throws IOException {
 		String result = "S";
 		
 		String wrkid_result = "S";
 		WorkVO resultSet = null;
 
 		try {
+			// 화면접근이력 이력 남기기
+			CmmnUtils.saveHistory(request, historyVO);
+			historyVO.setExe_dtl_cd("DX-T0022_01");
+			historyVO.setMnu_id(25);
+			accessHistoryService.insertHistory(historyVO);
+			
 			HttpSession session = request.getSession();
 			String usr_id = (String) session.getAttribute("usr_id");
 			workVO.setFrst_regr_id(usr_id);
@@ -361,13 +380,19 @@ public class BackupController {
 	 * @throws IOException 
 	 */
 	@RequestMapping(value = "/popup/workDumpWrite.do")
-	public void workDumpWrite(@ModelAttribute("workVO") WorkVO workVO, HttpServletResponse response, HttpServletRequest request) throws IOException{
+	public void workDumpWrite(@ModelAttribute("historyVO") HistoryVO historyVO,@ModelAttribute("workVO") WorkVO workVO, HttpServletResponse response, HttpServletRequest request) throws IOException{
 		WorkVO resultSet = null;
 		String result = "S";
 		String wrkid_result = "S";
 
 		// Data Insert
 		try {
+			// 화면접근이력 이력 남기기
+			CmmnUtils.saveHistory(request, historyVO);
+			historyVO.setExe_dtl_cd("DX-T0024_01");
+			historyVO.setMnu_id(25);
+			accessHistoryService.insertHistory(historyVO);
+			
 			HttpSession session = request.getSession();
 			String usr_id = (String) session.getAttribute("usr_id");
 			workVO.setFrst_regr_id(usr_id);
@@ -569,10 +594,16 @@ public class BackupController {
 	 * @throws IOException 
 	 */
 	@RequestMapping(value = "/popup/workRmanReWrite.do")
-	public void workRmanReWrite(@ModelAttribute("workVO") WorkVO workVO, HttpServletResponse response, HttpServletRequest request) throws IOException{
+	public void workRmanReWrite(@ModelAttribute("historyVO") HistoryVO historyVO,@ModelAttribute("workVO") WorkVO workVO, HttpServletResponse response, HttpServletRequest request) throws IOException{
 		String result = "S";
 
 		try {
+			// 화면접근이력 이력 남기기
+			CmmnUtils.saveHistory(request, historyVO);
+			historyVO.setExe_dtl_cd("DX-T0023_01");
+			historyVO.setMnu_id(25);
+			accessHistoryService.insertHistory(historyVO);
+			
 			HttpSession session = request.getSession();
 			String usr_id = (String) session.getAttribute("usr_id");
 			workVO.setLst_mdfr_id(usr_id);
@@ -593,10 +624,16 @@ public class BackupController {
 	 * @throws IOException 
 	 */
 	@RequestMapping(value = "/popup/workDumpReWrite.do")
-	public void workDumpReWrite(@ModelAttribute("workVO") WorkVO workVO, HttpServletResponse response, HttpServletRequest request) throws IOException{
+	public void workDumpReWrite(@ModelAttribute("historyVO") HistoryVO historyVO,@ModelAttribute("workVO") WorkVO workVO, HttpServletResponse response, HttpServletRequest request) throws IOException{
 		String result = "F";
 
 		try {
+			// 화면접근이력 이력 남기기
+			CmmnUtils.saveHistory(request, historyVO);
+			historyVO.setExe_dtl_cd("DX-T0025_01");
+			historyVO.setMnu_id(25);
+			accessHistoryService.insertHistory(historyVO);
+			
 			HttpSession session = request.getSession();
 			String usr_id = (String) session.getAttribute("usr_id");
 			workVO.setLst_mdfr_id(usr_id);
