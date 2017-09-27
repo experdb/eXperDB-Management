@@ -18,7 +18,16 @@ DX-Tcontrol is a PostgreSQL integrated operations management tool. Use backup se
 
 
 ## Installation
-### Requirements
+### System Requirements
+* OS : Developed and tested on Linux and Windows, but work on any UNIX-like system and Windows System
+* JDK : JDK 1.7 or later
+* CPU : At least 4core, recommended 8core
+* HDD : 100GB or more
+
+### Components
+* eXperDB T-Agent
+* eXperDB T-Web Console
+* eXperDB T-Repository
 
 ## Copyright
 Copyright (c) 2016-2017, eXperDB Development Team
