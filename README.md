@@ -50,7 +50,9 @@ DX-Tcontrol is a PostgreSQL integrated operations management tool. Use backup se
 ![](https://github.com/YONGWOOLEE/ltr/blob/master/images/1-3-7.png)
 
 1-4. Starting and stopping the agent
+
 1-4-1. Start : ./startup.sh
+
 1-4-2. stop : ./stop.sh
 
 
