@@ -170,7 +170,7 @@ public class UserManagerController {
 					UserVO result= (UserVO)userManagerService.selectDetailUserManager(usr_id);
 					
 					mv.addObject("get_usr_id",result.getUsr_id());
-					mv.addObject("usr_nm",result.getUsr_nm());
+					mv.addObject("get_usr_nm",result.getUsr_nm());
 					mv.addObject("pwd",result.getPwd());
 					mv.addObject("bln_nm",result.getBln_nm());
 					mv.addObject("dept_nm",result.getDept_nm());

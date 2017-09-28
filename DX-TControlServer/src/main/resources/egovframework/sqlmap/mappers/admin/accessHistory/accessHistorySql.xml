@@ -73,7 +73,7 @@
 				AND to_char(G.EXEDTM,'YYYY-MM-DD') between #{lgi_dtm_start} and #{lgi_dtm_end}
 			</if>
 			<if test="search != null and search != '' ">
-				AND ${type} LIKE #{search}
+				AND I.${type} LIKE #{search}
 			</if>
 			<if test="sys_cd != null and sys_cd != '' ">
 				AND  C.SYS_CD = #{sys_cd}
@@ -97,7 +97,7 @@
 				AND to_char(G.EXEDTM,'YYYY-MM-DD') between #{lgi_dtm_start} and #{lgi_dtm_end}
 		</if>
 		<if test="search != null and search != '' ">
-				AND ${type} LIKE #{search}
+				AND I.${type} LIKE #{search}
 		</if>
 		<if test="sys_cd != null and sys_cd != '' ">
 				AND  C.SYS_CD = #{sys_cd}

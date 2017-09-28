@@ -984,7 +984,47 @@ public class ClientInfoCmmn {
 			e.printStackTrace();
 		}
 	}
+	
+	// 17.tbl_mapps select
+	public int tblmapps_select(String IP, int PORT, JSONObject serverObj,ArrayList<HashMap<String, String>> arrTableInfo) {
+		int tblmappsSize =0;
+		try {
+			JSONObject jObj = new JSONObject();
+			
+			jObj.put(ClientProtocolID.DX_EX_CODE, ClientTranCodeType.DxT017);
+			jObj.put(ClientProtocolID.COMMAND_CODE, ClientProtocolID.COMMAND_CODE_R);
+			jObj.put(ClientProtocolID.SERVER_INFO, serverObj);
+			
+			jObj.put(ClientProtocolID.TABLE_INFO, arrTableInfo);
 
+			JSONObject objList;
+			
+			ClientAdapter CA = new ClientAdapter(IP, PORT);
+			CA.open(); 
+
+			objList = CA.dxT017(jObj);
+			
+			CA.close();
+			
+			String strErrMsg = (String)objList.get(ClientProtocolID.ERR_MSG);
+			String strErrCode = (String)objList.get(ClientProtocolID.ERR_CODE);
+			String strDxExCode = (String)objList.get(ClientProtocolID.DX_EX_CODE);
+			String strResultCode = (String)objList.get(ClientProtocolID.RESULT_CODE);
+			System.out.println("RESULT_CODE : " +  strResultCode);
+			System.out.println("ERR_CODE : " +  strErrCode);
+			System.out.println("ERR_MSG : " +  strErrMsg);
+
+			List<Object> selectDBList =(ArrayList<Object>) objList.get(ClientProtocolID.RESULT_DATA);
+			
+			tblmappsSize= selectDBList.size();
+			return tblmappsSize;
+			//CA.close();
+		} catch(Exception e) {
+			e.printStackTrace();
+		}
+		return tblmappsSize;
+	}
+	
 	// kafka_con_config insert
 	public void kafkaConConfig_insert(String IP, int PORT, JSONObject serverObj, JSONObject tableInfoObj) {
 		try {

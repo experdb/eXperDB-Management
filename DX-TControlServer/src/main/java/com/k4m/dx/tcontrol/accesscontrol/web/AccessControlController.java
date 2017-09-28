@@ -850,6 +850,7 @@ public class AccessControlController {
 					arrSeq.add(hpSeq);
 				}
 			}
+			
 			cic.dbAccess_delete(serverObj, arrSeq, IP, PORT);
 			
 			List<AccessControlHistoryVO> resultSet = accessControlService.selectAccessControlHistory(accessControlHistoryVO);

@@ -225,7 +225,7 @@
 							</c:if>
 						</td>
 						<th scope="row" class="ico_t1">사용자명(*)</th>
-						<td><input type="text" class="txt" name="usr_nm" id="usr_nm" value="${usr_nm}" maxlength="9" /></td>
+						<td><input type="text" class="txt" name="usr_nm" id="usr_nm" value="${get_usr_nm}" maxlength="9" /></td>
 					</tr>
 					<tr>
 						<th scope="row" class="ico_t1">패스워드(*)</th>

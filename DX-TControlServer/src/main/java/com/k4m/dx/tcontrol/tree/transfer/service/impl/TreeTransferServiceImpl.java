@@ -81,6 +81,11 @@ public class TreeTransferServiceImpl implements TreeTransferService {
 	}
 
 	@Override
+	public List<TransferDetailMappingVO> selectTransferMappingAll(int cnr_id) throws Exception {
+		return treeTransferDAO.selectTransferMappingAll(cnr_id);
+	}
+
+	@Override
 	public void deleteTransferRelation(int trf_trg_mpp_id) throws Exception {
 		treeTransferDAO.deleteTransferRelation(trf_trg_mpp_id);
 	}
@@ -99,7 +104,7 @@ public class TreeTransferServiceImpl implements TreeTransferService {
 	public List<TblKafkaConfigVO> selectTblKafkaConfigInfo(int trf_trg_id) throws Exception {
 		return treeTransferDAO.selectTblKafkaConfigInfo(trf_trg_id);
 	}
-	
+
 	@Override
 	public void updateBottleWaterBwpid(TransferDetailVO transferDetailVO) throws Exception {
 		treeTransferDAO.updateBottleWaterBwpid(transferDetailVO);
@@ -109,4 +114,5 @@ public class TreeTransferServiceImpl implements TreeTransferService {
 	public List<DbServerVO> selectDbServerList(DbServerVO dbServerVO) throws Exception {
 		return treeTransferDAO.selectDbServerList(dbServerVO);
 	}
+
 }

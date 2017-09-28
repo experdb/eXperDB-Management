@@ -101,6 +101,15 @@ public interface TreeTransferService {
 	List<TransferDetailMappingVO> selectTransferMapping(int trf_trg_id) throws Exception;
 
 	/**
+	 * 전송매핑테이블내역 전체 조회
+	 * 
+	 * @param cnr_id
+	 * @return
+	 * @throws Exception
+	 */
+	List<TransferDetailMappingVO> selectTransferMappingAll(int cnr_id) throws Exception;
+
+	/**
 	 * 전송대상매핑관계 삭제
 	 * 
 	 * @param trf_trg_mpp_id
@@ -153,4 +162,5 @@ public interface TreeTransferService {
 	 * @throws Exception
 	 */
 	List<DbServerVO> selectDbServerList(DbServerVO dbServerVO) throws Exception;
+
 }

@@ -27,7 +27,7 @@
 <script type="text/javascript" src="../js/jquery-1.9.1.min.js"></script>
 <script type="text/javascript" src="../js/common.js"></script>
 <script>
-	var nmCheck = null;
+	var nmCheck = 0;
 	
 	/* Validation */
 	function fn_transferTargetValidation(){
@@ -36,6 +36,12 @@
 			trf_trg_url.focus();
 			return false;
 		}
+		
+		if (nmCheck != 1) {
+			alert("아이디를 입력 후 중복체크를 해주세요.");
+			return false;
+		}
+		
 		return true;	
 	}
 
@@ -76,6 +82,7 @@
 	
 	/*저장버튼 클릭시update*/
 	function fn_update(){
+		nmCheck = 1;
 		if (!fn_transferTargetValidation()) return false;
 		if (!confirm("저장하시겠습니까?")) return false;
 			$.ajax({
@@ -117,13 +124,6 @@
 			
 			document.getElementById("trf_trg_cnn_nm").focus();
 			
-			$("#trf_trg_url").attr("onfocus", "fn_nmCheck_alert();");
-			$("#connector_class").attr("onfocus", "fn_nmCheck_alert();");	
-			$("#task_max").attr("onfocus", "fn_nmCheck_alert();");	
-			$("#hadoop_conf_dir").attr("onfocus", "fn_nmCheck_alert();");	
-			$("#hadoop_home").attr("onfocus", "fn_nmCheck_alert();");	
-			$("#flush_size").attr("onfocus", "fn_nmCheck_alert();");	
-			$("#rotate_interval_ms").attr("onfocus", "fn_nmCheck_alert();");	
 		}
 		if(act=="u"){
 			$("#trf_trg_cnn_nm").attr("readonly",true);
@@ -132,7 +132,6 @@
 	
 	/* Connect명 중복체크*/
 	function fn_nmCheck(){
-		nmCheck = 1;
 		var str = document.getElementById("trf_trg_cnn_nm").value;
 		var err = 0; 
 		for (var i=0; i<str.length; i++)  { 
@@ -157,6 +156,7 @@
 				if (result == "true") {
 					alert("Connect명을 사용하실 수 있습니다.");
 					document.getElementById("trf_trg_url").focus();
+					nmCheck = 1;
 				}else {
 					alert("중복된 Connect명이 존재합니다.");
 					document.getElementById("trf_trg_cnn_nm").focus();
@@ -169,12 +169,6 @@
 		});
 	}
 	
-	function fn_nmCheck_alert(){
-		if (nmCheck != 1) {
-			alert("Connect명을 입력한 후 중복 체크를 해주세요");
-			document.getElementById("trf_trg_cnn_nm").focus();
-		}
-	}
 </script>
 </head>
 <body>
