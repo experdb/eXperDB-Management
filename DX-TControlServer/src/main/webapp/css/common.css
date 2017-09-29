@@ -548,7 +548,7 @@ body.bg{background:#fff url(../images/login_bg.png) center center no-repeat;}
 #container:after{content:"";display:block;clear:both;}
 #contents{float:left;width:100%;margin-top:77px;display:block;min-width:1020px;padding:30px;}
 
-.infobox{line-height:20px;padding-left:43px;margin-bottom:4px; background:#fff;font-size:12px;font-family:'Nanum Square Bold';font-weight:700;}
+.infobox{line-height:20px;padding-left:43px;margin-bottom:4px; background:#fff;font-size:12px;font-family:'Nanum Square Bold';font-weight:700; padding-top:10px; padding-bottom:10px;}
 
 .contents_wrap .contents_tit{position:relative;border-top:4px solid #ff9900;}
 .contents_wrap h4{height:44px;line-height:44px;padding-left:42px;margin-bottom:4px;background:#fff url(../images/ico_header.png) 15px 58% no-repeat;font-size:12px;font-family:'Nanum Square Bold';font-weight:700;}
