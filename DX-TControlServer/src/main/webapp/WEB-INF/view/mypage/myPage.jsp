@@ -67,9 +67,12 @@
 <div id="contents">
 	<div class="contents_wrap">
 		<div class="contents_tit">
-			<h4>
-				사용자정보관리<a href="#n"><img src="../images/ico_tit.png" alt="" /></a>
-			</h4>
+			<h4>사용자정보관리<a href="#n"><img src="../images/ico_tit.png" class="btn_info"/></a></h4>
+			<div class="infobox"> 
+				<ul>
+					<li>- 현재 로그인한 사용자의 정보를 조회 또는 수정합니다.</li>
+				</ul>
+			</div>
 			<div class="location">
 				<ul>
 					<li>My PAGE</li>

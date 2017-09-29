@@ -228,8 +228,7 @@ public class UserManagerController {
 			userVo.setFrst_regr_id(usr_id);
 			userVo.setLst_mdfr_id(usr_id);
 			
-			System.out.println(userVo.getUsr_expr_dt() + "****");
-			if(userVo.getUsr_expr_dt() ==null){
+			if(userVo.getUsr_expr_dt() ==null | userVo.getUsr_expr_dt().equals("")){
 				userVo.setUsr_expr_dt("20990101");
 			}
 			

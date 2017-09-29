@@ -257,7 +257,12 @@
 			<div id="contents">
 				<div class="contents_wrap">
 					<div class="contents_tit">
-						<h4>DB권한관리 <a href="#n"><img src="../images/ico_tit.png" alt="" /></a></h4>
+						<h4>DB권한관리 <a href="#n"><img src="../images/ico_tit.png" class="btn_info"/></a></h4>
+						<div class="infobox"> 
+							<ul>
+								<li>- 사용자에게 각 DBMS에 생성된 데이터베이스에 대하여 접근할 수 있는 권한을 부여합니다.</li>
+							</ul>
+						</div>
 						<div class="location">
 							<ul>
 								<li>Admin</li>

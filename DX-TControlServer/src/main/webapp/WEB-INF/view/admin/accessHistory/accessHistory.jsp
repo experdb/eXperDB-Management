@@ -133,7 +133,13 @@
 	<div id="contents">
 		<div class="contents_wrap">
 			<div class="contents_tit">
-				<h4>화면접근이력<a href="#n"><img src="../images/ico_tit.png" alt="" /></a></h4>
+				<h4>화면접근이력<a href="#n"><img src="../images/ico_tit.png" class="btn_info"/></a></h4>
+					<div class="infobox"> 
+							<ul>
+								<li>- 지정한 기간 동안 통합 관리 시스템에 접속한 사용자와 페이지 접근 및 수행한 작업 이력을 조회할 수 있습니다.</li>
+								<li>- 검색 조건에 사용자명을 입력하여 특정 사용자에 대한 정보만 조회할 수 있습니다. </li>	
+							</ul>
+					</div>
 					<div class="location">
 						<ul>
 							<li>Admin</li>

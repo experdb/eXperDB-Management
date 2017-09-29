@@ -212,8 +212,14 @@
 	<div class="contents_wrap">
 		<div class="contents_tit">
 			<h4>
-				데이터 전송설정<a href="#n"><img src="../images/ico_tit.png" alt="" /></a>
+				데이터 전송설정<a href="#n"><img src="../images/ico_tit.png" class="btn_info" /></a>
 			</h4>
+			<div class="infobox"> 
+				<ul>
+					<li>- eXperDB에서 하둡 분산 파일 시스템으로 데이터 전송을 하기 위한 도구를 설정합니다.</li>
+					<li>- 데이터 전송을 위해 구성할 각 요소별로 설정된 정보를 입력합니다.</li>	
+				</ul>
+			</div>		
 			<div class="location">
 				<ul>
 					<li>Function</li>

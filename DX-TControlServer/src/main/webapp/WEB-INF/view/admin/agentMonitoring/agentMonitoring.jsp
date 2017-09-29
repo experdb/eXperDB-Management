@@ -35,7 +35,13 @@
 			<div id="contents">
 				<div class="contents_wrap">
 					<div class="contents_tit">
-						<h4>에이전트 모니터링<a href="#n"><img src="../images/ico_tit.png" alt="" /></a></h4>
+						<h4>에이전트 모니터링<a href="#n"><img src="../images/ico_tit.png" class="btn_info"/></a></h4>
+						<div class="infobox"> 
+							<ul>
+								<li>- 관리 대상 데이터베이스 서버에 설치된 통합 관리 시스템의 Agent 상태를 모니터링합니다.</li>
+								<li>- Agent가 설치된 서버와 구동 상태, 구동 일시 등의 정보를 표시됩니다.</li>
+							</ul>
+						</div>
 						<div class="location">
 							<ul>
 								<li>Admin</li>

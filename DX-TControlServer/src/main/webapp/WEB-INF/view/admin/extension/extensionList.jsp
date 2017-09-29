@@ -149,7 +149,12 @@ $(function() {
 <div id="contents">
 	<div class="contents_wrap">
 		<div class="contents_tit">
-			<h4>확장팩설치정보 화면 <a href="#n"><img src="../images/ico_tit.png"alt="" /></a>
+			<h4>확장팩설치정보 화면 <a href="#n"><img src="../images/ico_tit.png" class="btn_info"/></a>
+			<div class="infobox"> 
+				<ul>
+					<li>- 선택한 데이터베이스 서버에 설치된 확장팩 목록을 조회합니다.</li>
+				</ul>
+			</div>
 			</h4>
 			<div class="location">
 				<ul>
