@@ -3,6 +3,16 @@
 })(jQuery);
 
 $(window).ready(function(){
+	$('.infobox').hide();
+	
+	$(".btn_info").toggle(			
+			function(){
+				$(".infobox").css("display","block");
+			},
+			function(){
+				$(".infobox").css("display","none");
+			}
+		);
 	
 	$('#loading').hide();
 	

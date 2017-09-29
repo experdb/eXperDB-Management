@@ -31,4 +31,9 @@ public class ScheduleHistoryServiceImpl implements ScheduleHistoryService{
 	public List<Map<String, Object>> selectScheduleHistoryFail() throws Exception {
 		return scheduleHistoryDAO.selectScheduleHistoryFail();
 	}
+
+	@Override
+	public List<Map<String, Object>> selectScheduleNmList(Map<String, Object> param) throws Exception {
+		return scheduleHistoryDAO.selectScheduleNmList(param);
+	}
 }

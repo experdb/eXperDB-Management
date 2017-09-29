@@ -10,8 +10,14 @@
 <div id="contents" class="main">
 	<div class="contents_wrap">
 		<div class="contents_tit">
-			<h4>Dashboard <a href="#n"><img src="../images/ico_tit.png" alt="" /></a></h4>
+			<h4>Dashboard <a href="#n"><img src="../images/ico_tit.png" alt="" class="btn_info"/></a></h4>
+			<div class="infobox"> 
+				<ul>
+					<li> - 관리 대상 데이터베이스 서버의 목록과 설정 정보를 통합적으로 조회합니다.</li>				
+				</ul>
+			</div>
 		</div>
+		
 		<div class="contents">
 			<div class="main_grp">
 				<div class="main_info">
