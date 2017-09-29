@@ -25,7 +25,7 @@ public class DBPasswordCreate {
 	   // String password = pbeEnc.encrypt("edcsusr");
 	    
 	    //운영
-	    String url = pbeEnc.encrypt("jdbc:postgresql://222.110.153.162:6432/postgres");
+	    String url = pbeEnc.encrypt("jdbc:postgresql://222.110.153.251:5433/tcontroldb");
 	    String username = pbeEnc.encrypt("tcontrol");
 	    String password = pbeEnc.encrypt("tcontrol");
 	 
