@@ -509,7 +509,7 @@ function fn_check() {
 									</colgroup>
 									<tbody>
 										<tr>
-											<th scope="row" class="ico_t4">스케쥴시간설정</th>
+											<th scope="row" class="ico_t4">스케줄시간설정</th>
 											<td>
 												<div class="schedule_wrap">
 													<span>

@@ -248,15 +248,11 @@ public class DbSvrAuthorityController {
 	
 		List<Map<String, Object>> resultSet = null;
 		try {		
-			int db_svr_id = 0;
 			
-			if(request.getParameter("db_svr_id") != null){
-				db_svr_id = Integer.parseInt(request.getParameter("db_svr_id"));		
-				System.out.println(db_svr_id);
-			}
+			String usr_id = (String) request.getSession().getAttribute("usr_id");
 
 			
-			resultSet = dbAuthorityService.selectTreeDBSvrList(db_svr_id);	
+			resultSet = dbAuthorityService.selectTreeDBSvrList(usr_id);	
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
