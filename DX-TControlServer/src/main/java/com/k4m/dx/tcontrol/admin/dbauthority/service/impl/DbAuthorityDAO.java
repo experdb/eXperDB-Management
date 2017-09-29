@@ -106,4 +106,10 @@ public class DbAuthorityDAO extends EgovAbstractMapper{
 		return sl;
 	}
 
+	public List<Map<String, Object>> selectTreeDBSvrList(int db_svr_id) {
+		List<Map<String, Object>>  sl = null;
+		sl = (List<Map<String, Object>>) list("dbAuthoritySql.selectTreeDBSvrList", db_svr_id);
+		return sl;
+	}
+
 }

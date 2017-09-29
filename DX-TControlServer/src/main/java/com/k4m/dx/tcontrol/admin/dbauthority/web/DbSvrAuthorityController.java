@@ -238,5 +238,28 @@ public class DbSvrAuthorityController {
 			e.printStackTrace();
 		}
 	}
+
 	
+
+	@SuppressWarnings("unused")
+	@RequestMapping(value = "/selectTreeDBSvrList.do")
+	@ResponseBody
+	public List<Map<String, Object>> selectTreeDBSvrList(HttpServletRequest request) {
+	
+		List<Map<String, Object>> resultSet = null;
+		try {		
+			int db_svr_id = 0;
+			
+			if(request.getParameter("db_svr_id") != null){
+				db_svr_id = Integer.parseInt(request.getParameter("db_svr_id"));		
+				System.out.println(db_svr_id);
+			}
+
+			
+			resultSet = dbAuthorityService.selectTreeDBSvrList(db_svr_id);	
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return resultSet;
+	}
 }

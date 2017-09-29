@@ -143,4 +143,7 @@ public interface DbAuthorityService {
 	 */
 	List<Map<String, Object>> selectUserDBSvrAutList(String usr_id);
 
+
+	List<Map<String, Object>> selectTreeDBSvrList(int db_svr_id) throws Exception;
+
 }
