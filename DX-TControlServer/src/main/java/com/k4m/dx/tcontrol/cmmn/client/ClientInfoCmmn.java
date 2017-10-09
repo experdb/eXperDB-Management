@@ -79,6 +79,7 @@ public class ClientInfoCmmn {
 
 					jsonObj.put("dft_db_nm", datname);
 					jsonObj.put("db_exp", "");
+					jsonObj.put("rownum", i);
 					jsonArray.add(jsonObj);
 				}
 				result.put("data", jsonArray);
