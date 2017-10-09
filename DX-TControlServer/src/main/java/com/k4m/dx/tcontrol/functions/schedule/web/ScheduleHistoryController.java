@@ -139,8 +139,8 @@ public class ScheduleHistoryController {
 				
 				//이력 남기기
 				CmmnUtils.saveHistory(request, historyVO);
-				historyVO.setExe_dtl_cd("DX-T0048_01");
-				accessHistoryService.insertHistory(historyVO);
+			//	historyVO.setExe_dtl_cd("DX-T0048_01");
+			//	accessHistoryService.insertHistory(historyVO);
 				
 				Map<String, Object> param = new HashMap<String, Object>();
 	
@@ -202,6 +202,7 @@ public class ScheduleHistoryController {
 				model.addAttribute("svr_nm", db_svr_nm);
 				model.addAttribute("exe_result", exe_result);
 				model.addAttribute("wrk_nm", wrk_nm);
+				model.addAttribute("scd_nm", scd_nm);
 				
 				mv.addObject("read_aut_yn", menuAut.get(0).get("read_aut_yn"));
 				mv.addObject("wrt_aut_yn", menuAut.get(0).get("wrt_aut_yn"));
@@ -242,8 +243,8 @@ public class ScheduleHistoryController {
 				//스케줄 등록 화면 이력 남기기
 				CmmnUtils.saveHistory(request, historyVO);
 				//수정
-				historyVO.setExe_dtl_cd("DX-T0048_01");
-				accessHistoryService.insertHistory(historyVO);
+			//	historyVO.setExe_dtl_cd("DX-T0048_01");
+			//	accessHistoryService.insertHistory(historyVO);
 				
 				mv.addObject("read_aut_yn", menuAut.get(0).get("read_aut_yn"));
 				mv.addObject("wrt_aut_yn", menuAut.get(0).get("wrt_aut_yn"));
@@ -315,8 +316,8 @@ public class ScheduleHistoryController {
 		try {					
 			//이력 남기기
 			CmmnUtils.saveHistory(request, historyVO);
-			historyVO.setExe_dtl_cd("DX-T0048_02");
-			accessHistoryService.insertHistory(historyVO);
+		//	historyVO.setExe_dtl_cd("DX-T0048_02");
+		//	accessHistoryService.insertHistory(historyVO);
 			
 			//읽기 권한이 없는경우 error페이지 호출 , [추후 Exception 처리예정]
 			if(menuAut.get(0).get("read_aut_yn").equals("N")){
@@ -329,5 +330,34 @@ public class ScheduleHistoryController {
 			e.printStackTrace();
 		}
 		return result;
+	}
+	
+	
+	/**
+	 * 스케줄명 조회 [SELECT BOX] 
+	 * 
+	 * @return resultSet
+	 * @throws Exception
+	 */
+	@SuppressWarnings("unused")
+	@RequestMapping(value = "/selectScheduleNmList.do")
+	@ResponseBody
+	public List<Map<String, Object>> selectScheduleNmList(HttpServletRequest request) {
+	
+		List<Map<String, Object>> resultSet = null;
+		try {			
+			Map<String, Object> param = new HashMap<String, Object>();
+			
+			String wrk_start_dtm = request.getParameter("wrk_start_dtm");
+			String wrk_end_dtm = request.getParameter("wrk_end_dtm");
+			
+			param.put("wrk_start_dtm", wrk_start_dtm);
+			param.put("wrk_end_dtm", wrk_end_dtm);
+			
+			resultSet = scheduleHistoryService.selectScheduleNmList(param);	
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return resultSet;
 	}
 }

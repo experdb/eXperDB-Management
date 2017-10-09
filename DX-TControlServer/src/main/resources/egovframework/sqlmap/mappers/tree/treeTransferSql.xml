@@ -118,7 +118,7 @@
 					FROM T_TRFTRGCNG_I SI LEFT OUTER JOIN T_TRFTRGMPP_R MR 
 						ON SI.TRF_TRG_ID = MR.TRF_TRG_ID 
 					) AS T LEFT OUTER JOIN T_DB_I D ON T.DB_ID=D.DB_ID AND D.USEYN='Y'
-				) AS TD LEFT OUTER JOIN T_DBSVR_I S ON TD.DB_SVR_ID = S.DB_SVR_ID 
+				) AS TD LEFT OUTER JOIN T_DBSVR_I S ON TD.DB_SVR_ID = S.DB_SVR_ID AND S.USEYN='Y'
 			WHERE TD.CNR_ID=#{cnr_id}
 			AND TD.TRF_TRG_CNN_NM LIKE #{trf_trg_cnn_nm}
 			) TMP
@@ -264,9 +264,41 @@
 		AND R.DB_ID =D.DB_ID
 		AND D.DB_SVR_ID =S.DB_SVR_ID
 		AND D.USEYN='Y'
+		and S.USEYN='Y'
 		AND I.TRF_TRG_ID =#{trf_trg_id}
     </select>
-    
+
+    <select id="selectTransferMappingAll" parameterType="int" resultType="transferDetailMappingVO">
+    	/**
+	 	*  Query ID : selectTransferMappingAll
+	 	* Description : 전송매핑테이블내역 전체 조회
+	 	* Author : 김주영
+	 	**/
+		SELECT 
+		  I.TRF_TRG_ID
+		, R.TRF_TRG_MPP_ID
+		, L.TRF_TB_ID
+		, I.TRF_TRG_CNN_NM
+		, L.SCM_NM
+		, L.TB_ENGL_NM
+		, D.DB_ID
+		, D.DB_NM
+		, S.DB_SVR_NM
+		FROM 
+		   T_TRFTRGCNG_I I
+		,  T_TRFTRGMPP_R R
+		,  T_TRFMPPTB_L L
+		,  T_DB_I D
+		,  T_DBSVR_I S
+		WHERE I.TRF_TRG_ID=R.TRF_TRG_ID
+		AND R.TRF_TRG_MPP_ID=L.TRF_TRG_MPP_ID
+		AND R.DB_ID =D.DB_ID
+		AND D.DB_SVR_ID =S.DB_SVR_ID
+		AND D.USEYN='Y'
+		AND S.USEYN='Y'
+		AND R.CNR_ID=#{cnr_id}
+    </select>
+        
     <delete id="deleteTransferRelation" parameterType="int">
         /**
 	 	*  Query ID : deleteTransferRelation
@@ -349,5 +381,57 @@
 		, LST_MDF_DTM= clock_timestamp()
 		WHERE TRF_TRG_ID=#{trf_trg_id}
     </update>    
+    
+    
+    <select id="selectDbServerList" resultType="dbServerVO">
+		/**
+	 	*  Query ID : selectDbServerList
+	 	* Description : DB서버 리스트 조회
+	 	* Author : 김주영
+	 	**/
+	  SELECT
+      		(ROW_NUMBER() OVER()) AS ROWNUM
+			, (ROW_NUMBER() OVER()) AS IDX
+			, AA.DB_SVR_ID
+			, AA.DB_SVR_NM
+			, AA.IPADR
+			, AA.PORTNO
+			, AA.DFT_DB_NM
+			, AA.SVR_SPR_USR_ID
+			, AA.SVR_SPR_SCM_PWD
+			, AA.PGHOME_PTH
+			, AA.PGDATA_PTH
+			, AA.USEYN
+			, AA.AGT_CNDT_CD
+			, AA.SOCKET_PORT
+			, AA.FRST_REGR_ID
+			, AA.FRST_REG_DTM
+			, AA.LST_MDFR_ID
+			, AA.LST_MDF_DTM
+      FROM(      
+          SELECT 
+                 A.DB_SVR_ID
+                , A.DB_SVR_NM
+                , A.IPADR
+                , A.PORTNO
+                , A.DFT_DB_NM
+                , A.SVR_SPR_USR_ID
+                , A.SVR_SPR_SCM_PWD
+                , A.PGHOME_PTH
+				, A.PGDATA_PTH
+				, A.FRST_REGR_ID
+				, A.USEYN
+				, B.AGT_CNDT_CD
+				, B.SOCKET_PORT
+				, TO_CHAR(A.FRST_REG_DTM,'YYYY-MM-DD HH24:MI:SS') AS FRST_REG_DTM
+				, A.LST_MDFR_ID
+				, TO_CHAR(A.LST_MDF_DTM,'YYYY-MM-DD HH24:MI:SS') AS LST_MDF_DTM
+          FROM T_DBSVR_I A, T_AGTCNDT_I B
+          WHERE 1 = 1
+          AND A.IPADR = B.IPADR
+          AND A.USEYN = 'Y'
+		  ORDER BY DB_SVR_ID
+      ) AA			 	
+	 </select>
 
 </mapper>

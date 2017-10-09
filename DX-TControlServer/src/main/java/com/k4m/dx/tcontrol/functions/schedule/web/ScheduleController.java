@@ -31,6 +31,7 @@ import com.k4m.dx.tcontrol.admin.accesshistory.service.AccessHistoryService;
 import com.k4m.dx.tcontrol.admin.menuauthority.service.MenuAuthorityService;
 import com.k4m.dx.tcontrol.backup.service.WorkVO;
 import com.k4m.dx.tcontrol.cmmn.CmmnUtils;
+import com.k4m.dx.tcontrol.common.service.CmmnServerInfoService;
 import com.k4m.dx.tcontrol.common.service.HistoryVO;
 import com.k4m.dx.tcontrol.functions.schedule.ScheduleUtl;
 import com.k4m.dx.tcontrol.functions.schedule.service.ScheduleDtlVO;
@@ -178,7 +179,7 @@ public class ScheduleController {
 				accessHistoryService.insertHistory(historyVO);
 				
 				System.out.println("=======parameter=======");
-				System.out.println("구분 : " + workVO.getBck_bsn_dscd());
+				System.out.println("구분 : " + workVO.getBsn_dscd());
 				System.out.println("워크명 : " + workVO.getWrk_nm());
 				System.out.println("=====================");
 				
@@ -804,5 +805,27 @@ public class ScheduleController {
 			e.printStackTrace();
 		}
 		return result;		
+	}
+	
+	
+	
+	/**
+	 * Work 구분 Select BOX 가져오기 
+	 * 
+	 * @return resultSet
+	 * @throws Exception
+	 */
+	@SuppressWarnings("unused")
+	@RequestMapping(value = "/selectWorkDivList.do")
+	@ResponseBody
+	public List<Map<String, Object>> selectWorkDivList(HttpServletRequest request) {
+	
+		List<Map<String, Object>> resultSet = null;
+		try {			
+			resultSet = scheduleService.selectWorkDivList();	
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return resultSet;
 	}
 }

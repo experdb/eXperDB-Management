@@ -37,7 +37,22 @@ public class WorkVO {
 	private int acv_file_mtncnt;
 	private String usr_id;
 	private int bck_wrk_id;
+	private String bsn_dscd;
+	private String bsn_dscd_nm;
+	
 
+	public String getBsn_dscd_nm() {
+		return bsn_dscd_nm;
+	}
+	public void setBsn_dscd_nm(String bsn_dscd_nm) {
+		this.bsn_dscd_nm = bsn_dscd_nm;
+	}
+	public String getBsn_dscd() {
+		return bsn_dscd;
+	}
+	public void setBsn_dscd(String bsn_dscd) {
+		this.bsn_dscd = bsn_dscd;
+	}
 	public int getBck_wrk_id() {
 		return bck_wrk_id;
 	}

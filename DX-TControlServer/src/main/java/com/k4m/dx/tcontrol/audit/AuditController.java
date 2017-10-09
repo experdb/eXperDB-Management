@@ -85,18 +85,16 @@ public class AuditController {
 				String strDbSvrId = request.getParameter("db_svr_id");
 				int db_svr_id = Integer.parseInt(strDbSvrId);
 				
-	
 				DbServerVO schDbServerVO = new DbServerVO();
 				schDbServerVO.setDb_svr_id(db_svr_id);
 				
 				DbServerVO dbServerVO = (DbServerVO)  cmmnServerInfoService.selectServerInfo(schDbServerVO);
 				String strIpAdr = dbServerVO.getIpadr();
-				
+			
 				AgentInfoVO vo = new AgentInfoVO();
 				vo.setIPADR(strIpAdr);
 				
 				AgentInfoVO agentInfo =  (AgentInfoVO) cmmnServerInfoService.selectAgentInfo(vo);
-				
 				
 				JSONObject serverObj = new JSONObject();
 				
@@ -110,13 +108,11 @@ public class AuditController {
 				serverObj.put(ClientProtocolID.SERVER_PORT, dbServerVO.getPortno());
 				serverObj.put(ClientProtocolID.DATABASE_NAME, dbServerVO.getDft_db_nm());
 				serverObj.put(ClientProtocolID.USER_ID, dbServerVO.getSvr_spr_usr_id());
-				serverObj.put(ClientProtocolID.USER_PWD, strPwd);
-				
+				serverObj.put(ClientProtocolID.USER_PWD, strPwd);	
 				
 				String IP = dbServerVO.getIpadr();
 				
 				if(agentInfo == null) {
-					
 					mv.addObject("extName", "agent");
 					mv.setViewName("dbserver/auditManagement");
 					return mv;
@@ -127,7 +123,6 @@ public class AuditController {
 				//IP = "127.0.0.1";
 				ClientAdapter CA = new ClientAdapter(IP, PORT);
 				 
-				
 				JSONObject objList;
 				
 				String strExtName = "pgaudit";
@@ -137,8 +132,6 @@ public class AuditController {
 				CA.close();
 				
 				List<Object> selectExtList  = (ArrayList<Object>) objExtList.get(ClientProtocolID.RESULT_DATA);
-				
-	
 				
 				if(selectExtList == null || selectExtList.size() == 0) {
 					strExtName = "";
@@ -169,8 +162,6 @@ public class AuditController {
 				
 				List<Object> selectRoleList =(ArrayList<Object>) objRoleList.get(ClientProtocolID.RESULT_DATA);
 	
-				
-				
 				String strIsActive = "on";
 				
 				String auditActive = (String) selectData.get("log");
@@ -196,11 +187,15 @@ public class AuditController {
 	}
 	
 	@RequestMapping(value = "/saveAudit.do")
-	public @ResponseBody boolean auditSave( HttpServletRequest request) throws Exception {
+	public @ResponseBody boolean auditSave(@ModelAttribute("historyVO") HistoryVO historyVO,HttpServletRequest request) throws Exception {
+		
+		// 화면접근이력 이력 남기기
+		CmmnUtils.saveHistory(request, historyVO);
+		historyVO.setExe_dtl_cd("DX-T0031_01");
+		historyVO.setMnu_id(30);
+		accessHistoryService.insertHistory(historyVO);
 		
 		int db_svr_id = Integer.parseInt(request.getParameter("db_svr_id"));
-		
-
 		
 		DbServerVO schDbServerVO = new DbServerVO();
 		schDbServerVO.setDb_svr_id(db_svr_id);
@@ -213,9 +208,7 @@ public class AuditController {
 		
 		AgentInfoVO agentInfo =  (AgentInfoVO) cmmnServerInfoService.selectAgentInfo(vo);
 		
-		
 		String strLogActive = request.getParameter("chkLogActive") == null?"":request.getParameter("chkLogActive");
-		
 		
 		String strLogLevel = request.getParameter("log_level") == null?"":request.getParameter("log_level");
 		
@@ -280,7 +273,6 @@ public class AuditController {
 		serverObj.put(ClientProtocolID.USER_ID, dbServerVO.getSvr_spr_usr_id());
 		serverObj.put(ClientProtocolID.USER_PWD, strPwd);
 		
-		
 		JSONObject objSettingInfo = new JSONObject();
 		
 		//로그종류 
@@ -309,8 +301,6 @@ public class AuditController {
 		if(strResultCode.equals("1")) {
 			blnReturn = false;
 		}
-		
-		
 		
 		return blnReturn;
 	}
@@ -353,7 +343,6 @@ public class AuditController {
 				searchInfoObj.put(ClientProtocolID.START_DATE, strStartDate);
 				searchInfoObj.put(ClientProtocolID.END_DATE, strEndDate);
 				
-				
 				DbServerVO schDbServerVO = new DbServerVO();
 				schDbServerVO.setDb_svr_id(db_svr_id);
 				
@@ -365,7 +354,6 @@ public class AuditController {
 				vo.setIPADR(strIpAdr);
 				
 				AgentInfoVO agentInfo =  (AgentInfoVO) cmmnServerInfoService.selectAgentInfo(vo);
-				
 				
 				String strDirectory = dbServerVO.getPgdata_pth() + "/pg_log/";
 				
@@ -391,9 +379,6 @@ public class AuditController {
 				jObj.put(ClientProtocolID.FILE_DIRECTORY, strDirectory);
 				jObj.put(ClientProtocolID.SEARCH_INFO, searchInfoObj);
 				
-				
-				
-				
 				String IP = dbServerVO.getIpadr();
 				
 				if(agentInfo == null) {
@@ -405,8 +390,6 @@ public class AuditController {
 				
 				int PORT = agentInfo.getSOCKET_PORT();
 				
-				
-				
 				//IP = "127.0.0.1";
 				ClientAdapter CA = new ClientAdapter(IP, PORT);
 				
@@ -417,9 +400,7 @@ public class AuditController {
 				CA.close();
 				
 				List<Object> selectExtList  = (ArrayList<Object>) objExtList.get(ClientProtocolID.RESULT_DATA);
-				
 	
-				
 				if(selectExtList == null || selectExtList.size() == 0) {
 					strExtName = "";
 					mv.addObject("extName", strExtName);
@@ -441,8 +422,6 @@ public class AuditController {
 				
 				List<HashMap<String, String>> fileList = (List<HashMap<String, String>>) objList.get(ClientProtocolID.RESULT_DATA);
 				
-	
-				
 				mv.addObject("serverName", dbServerVO.getDb_svr_nm());
 				mv.addObject("db_svr_id", strDbSvrId);
 				mv.addObject("logFileList", fileList);
@@ -460,11 +439,17 @@ public class AuditController {
 	
 	
 	@RequestMapping(value = "/audit/auditLogSearchList.do")
-	public ModelAndView auditLogSearchList(@ModelAttribute("auditVO") AuditVO auditVO, ModelMap model, HttpServletRequest request) throws Exception{
+	public ModelAndView auditLogSearchList(@ModelAttribute("historyVO") HistoryVO historyVO,@ModelAttribute("auditVO") AuditVO auditVO, ModelMap model, HttpServletRequest request) throws Exception{
 		ModelAndView mv = new ModelAndView();
 
 		//mv.addObject("db_svr_id",workVO.getDb_svr_id());
 		try {
+			// 화면접근이력 이력 남기기
+			CmmnUtils.saveHistory(request, historyVO);
+			historyVO.setExe_dtl_cd("DX-T0032_01");
+			historyVO.setMnu_id(31);
+			accessHistoryService.insertHistory(historyVO); 
+			
 			String strDbSvrId = request.getParameter("db_svr_id");
 			int db_svr_id = Integer.parseInt(strDbSvrId);
 			
@@ -495,7 +480,6 @@ public class AuditController {
 			//System.out.println("KEY : " + dbServerVO.getSvr_spr_scm_pwd());
 			String strPwd = dec.aesDecode(dbServerVO.getSvr_spr_scm_pwd());
 			
-			
 			serverObj.put(ClientProtocolID.SERVER_NAME, dbServerVO.getDb_svr_nm());
 			serverObj.put(ClientProtocolID.SERVER_IP, dbServerVO.getIpadr());
 			serverObj.put(ClientProtocolID.SERVER_PORT, dbServerVO.getPortno());
@@ -503,14 +487,12 @@ public class AuditController {
 			serverObj.put(ClientProtocolID.USER_ID, dbServerVO.getSvr_spr_usr_id());
 			serverObj.put(ClientProtocolID.USER_PWD, strPwd);
 
-			
 			JSONObject jObj = new JSONObject();
 			jObj.put(ClientProtocolID.DX_EX_CODE, ClientTranCodeType.DxT015);
 			jObj.put(ClientProtocolID.SERVER_INFO, serverObj);
 			jObj.put(ClientProtocolID.COMMAND_CODE, ClientProtocolID.COMMAND_CODE_R);
 			jObj.put(ClientProtocolID.FILE_DIRECTORY, strDirectory);
 			jObj.put(ClientProtocolID.SEARCH_INFO, searchInfoObj);
-			
 			
 			String IP = dbServerVO.getIpadr();
 			
@@ -534,8 +516,6 @@ public class AuditController {
 			
 			List<Object> selectExtList  = (ArrayList<Object>) objExtList.get(ClientProtocolID.RESULT_DATA);
 			
-
-			
 			if(selectExtList == null || selectExtList.size() == 0) {
 				strExtName = "";
 				mv.addObject("extName", strExtName);
@@ -557,8 +537,6 @@ public class AuditController {
 			
 			List<HashMap<String, String>> fileList = (List<HashMap<String, String>>) objList.get(ClientProtocolID.RESULT_DATA);
 			
-
-			
 			mv.addObject("serverName", dbServerVO.getDb_svr_nm());
 			mv.addObject("db_svr_id", strDbSvrId);
 			mv.addObject("logFileList", fileList);
@@ -574,14 +552,19 @@ public class AuditController {
 	}
 	
 	@RequestMapping(value = "/audit/auditLogView.do")
-	public ModelAndView auditLogView(@ModelAttribute("auditVO") AuditVO auditVO, ModelMap model, HttpServletRequest request) throws Exception{
+	public ModelAndView auditLogView(@ModelAttribute("historyVO") HistoryVO historyVO,@ModelAttribute("auditVO") AuditVO auditVO, ModelMap model, HttpServletRequest request) throws Exception{
 		ModelAndView mv = new ModelAndView();
 
 		//mv.addObject("db_svr_id",workVO.getDb_svr_id());
 		try {
+			// 화면접근이력 이력 남기기
+			CmmnUtils.saveHistory(request, historyVO);
+			historyVO.setExe_dtl_cd("DX-T0032_02");
+			historyVO.setMnu_id(31);
+			accessHistoryService.insertHistory(historyVO);
+			
 			String strDbSvrId = request.getParameter("db_svr_id");
 			int db_svr_id = Integer.parseInt(strDbSvrId);
-			
 			
 			DbServerVO schDbServerVO = new DbServerVO();
 			schDbServerVO.setDb_svr_id(db_svr_id);
@@ -600,12 +583,9 @@ public class AuditController {
 			
 			JSONObject serverObj = new JSONObject();
 			
-
-			
 			serverObj.put(ClientProtocolID.SERVER_NAME, dbServerVO.getDb_svr_nm());
 			serverObj.put(ClientProtocolID.SERVER_IP, dbServerVO.getIpadr());
 			serverObj.put(ClientProtocolID.SERVER_PORT, dbServerVO.getPortno());
-
 			
 			JSONObject jObj = new JSONObject();
 			jObj.put(ClientProtocolID.DX_EX_CODE, ClientTranCodeType.DxT015);
@@ -613,7 +593,6 @@ public class AuditController {
 			jObj.put(ClientProtocolID.COMMAND_CODE, ClientProtocolID.COMMAND_CODE_V);
 			jObj.put(ClientProtocolID.FILE_DIRECTORY, strDirectory);
 			jObj.put(ClientProtocolID.FILE_NAME, strFileName);
-			
 			
 			String IP = dbServerVO.getIpadr();
 			int PORT = agentInfo.getSOCKET_PORT();
@@ -644,8 +623,6 @@ public class AuditController {
 			mv.addObject("db_svr_id", strDbSvrId);
 			mv.addObject("logView", strBuffer);
 			
-			
-			
 		} catch (Exception e) {
 			e.printStackTrace();
 		} finally {
@@ -655,14 +632,19 @@ public class AuditController {
 	}
 	
 	@RequestMapping(value = "/audit/auditLogDownload.do")
-	public void auditLogDownload( HttpServletRequest request, HttpServletResponse response) throws Exception{
+	public void auditLogDownload(@ModelAttribute("historyVO") HistoryVO historyVO, HttpServletRequest request, HttpServletResponse response) throws Exception{
 		ModelAndView mv = new ModelAndView();
 
 		//mv.addObject("db_svr_id",workVO.getDb_svr_id());
 		try {
+			// 화면접근이력 이력 남기기
+			CmmnUtils.saveHistory(request, historyVO);
+			historyVO.setExe_dtl_cd("DX-T0032_02");
+			historyVO.setMnu_id(31);
+			accessHistoryService.insertHistory(historyVO);
+			
 			String strDbSvrId = request.getParameter("db_svr_id");
 			int db_svr_id = Integer.parseInt(strDbSvrId);
-			
 			
 			DbServerVO schDbServerVO = new DbServerVO();
 			schDbServerVO.setDb_svr_id(db_svr_id);
@@ -683,20 +665,16 @@ public class AuditController {
 			
 			JSONObject serverObj = new JSONObject();
 			
-
-			
 			serverObj.put(ClientProtocolID.SERVER_NAME, dbServerVO.getDb_svr_nm());
 			serverObj.put(ClientProtocolID.SERVER_IP, dbServerVO.getIpadr());
 			serverObj.put(ClientProtocolID.SERVER_PORT, dbServerVO.getPortno());
 
-			
 			JSONObject jObj = new JSONObject();
 			jObj.put(ClientProtocolID.DX_EX_CODE, ClientTranCodeType.DxT015_DL);
 			jObj.put(ClientProtocolID.SERVER_INFO, serverObj);
 			jObj.put(ClientProtocolID.COMMAND_CODE, ClientProtocolID.COMMAND_CODE_DL);
 			jObj.put(ClientProtocolID.FILE_DIRECTORY, strDirectory);
 			jObj.put(ClientProtocolID.FILE_NAME, strFileName);
-			
 			
 			String IP = dbServerVO.getIpadr();
 			int PORT = agentInfo.getSOCKET_PORT();

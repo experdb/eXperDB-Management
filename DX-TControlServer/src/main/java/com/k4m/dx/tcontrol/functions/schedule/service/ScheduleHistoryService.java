@@ -12,4 +12,6 @@ public interface ScheduleHistoryService {
 	int selectScheduleHistoryTotCnt(Map<String, Object> param) throws Exception;
 
 	List<Map<String, Object>> selectScheduleHistoryFail() throws Exception;
+
+	List<Map<String, Object>> selectScheduleNmList(Map<String, Object> param) throws Exception;
 }

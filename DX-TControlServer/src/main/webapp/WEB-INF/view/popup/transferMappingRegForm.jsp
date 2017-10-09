@@ -78,7 +78,7 @@
 	    			alert("실패")
 	    		},
 	    		success : function(result) {  
-	    				var option = "<option value=''>선택</option>";
+	    				var option = "<option value='no'>선택</option>";
 						for(var i=0; i<result.length; i++){	
 							 option += "<option value='"+result[i].db_id+"'>"+result[i].db_nm;
 							 if(result[i].db_exp!=""){
@@ -116,7 +116,7 @@
     			alert("실패")
     		},
     		success : function(result) {  
-    				var option = "<option value=''>선택</option>";
+    				var option = "<option value='no'>선택</option>";
 					for(var i=0; i<result.length; i++){	
 						 option += "<option value='"+result[i].db_id+"'>"+result[i].db_nm+"</option>";		 
 					}
@@ -142,16 +142,27 @@
 	    		},
 	    		success : function(result) {
 	    			if(result.data == null){
-	    				alert("서버에 T엔진이 설치되지 않았습니다.");
+	    				alert("experdb 엔진을 확인해주세요.");
 	    			}else{
 	    				tableList.clear().draw();	
+	    				<c:forEach items="${result}" var="result">
 		    			for(var i=0; i<result.data.length;i++){
-		    				<c:forEach items="${result}" var="result">
 		    				if("${result.scm_nm}" == result.data[i].table_schema && "${result.tb_engl_nm}"== result.data[i].table_name){
 		    					result.data.splice(i,1);
 			    			}
-		    				</c:forEach>		
+		    					
 			    		}
+		    			</c:forEach>
+		    			
+		    			<c:forEach items="${resultset}" var="resultset">
+		    			for(var i=0; i<result.data.length;i++){
+		    				if("${resultset.scm_nm}" == result.data[i].table_schema && "${resultset.tb_engl_nm}"== result.data[i].table_name){
+		    					result.data.splice(i,1);
+			    			}
+		    					
+			    		}
+		    			</c:forEach>
+		    			
 		    			
 		    			<c:forEach items="${result}" var="result">
 		    			connectorTableList.row.add( {
@@ -169,8 +180,7 @@
 	    		}
 	    	});	
 		}
-		// DB명을 선택 눌렀을 경우 조회 안되는 조건
-		else if($("#db_nm").val()!=""){
+		else if($("#db_nm").val()!="no"){
 			connectorTableList.clear().draw();
 			$.ajax({
 	    		url : "/selectMappingTableList.do",
@@ -184,16 +194,26 @@
 	    		},
 	    		success : function(result) {
 	    			if(result.data == null){
-	    				alert("서버에 T엔진이 설치되지 않았습니다.");
+	    				alert("experdb 엔진을 확인해주세요.");
 	    			}else{
 		    			tableList.clear().draw();		
+		    			
+		    			<c:forEach items="${resultset}" var="resultset">
+		    			for(var i=0; i<result.data.length;i++){
+		    				if("${resultset.scm_nm}" == result.data[i].table_schema && "${resultset.tb_engl_nm}"== result.data[i].table_name){
+		    					result.data.splice(i,1);
+			    			}
+		    					
+			    		}
+		    			</c:forEach>
 		    			tableList.rows.add(result.data).draw();
+		    			
 		    	    	$('.selected').removeClass('selected');
 		    	    	$("input[type=checkbox]").prop("checked", false);
 	    			}
 	    		}
 	    	});	
-		}else if($("#db_nm").val()==""){
+		}else if($("#db_nm").val()=="no"){
 			connectorTableList.clear().draw();
 		}
 	}

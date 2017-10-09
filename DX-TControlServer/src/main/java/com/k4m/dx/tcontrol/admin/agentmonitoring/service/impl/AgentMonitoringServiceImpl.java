@@ -10,8 +10,10 @@ import org.springframework.stereotype.Service;
 import com.k4m.dx.tcontrol.admin.agentmonitoring.service.AgentMonitoringService;
 import com.k4m.dx.tcontrol.admin.agentmonitoring.service.AgentMonitoringVO;
 
+import egovframework.rte.fdl.cmmn.EgovAbstractServiceImpl;
+
 @Service("AgentMonitoringServiceImpl")
-public class AgentMonitoringServiceImpl implements AgentMonitoringService{
+public class AgentMonitoringServiceImpl extends EgovAbstractServiceImpl implements AgentMonitoringService{
 	
 	@Resource(name = "agentMonitoringDAO")
 	private AgentMonitoringDAO agentMonitoringDAO;

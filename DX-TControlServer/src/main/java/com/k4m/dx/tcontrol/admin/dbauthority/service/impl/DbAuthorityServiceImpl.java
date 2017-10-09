@@ -150,4 +150,10 @@ public class DbAuthorityServiceImpl implements DbAuthorityService{
 		return dbAuthorityDAO.selectUserDBSvrAutList(usr_id);
 	}
 
+
+	@Override
+	public List<Map<String, Object>> selectTreeDBSvrList(String usr_id) throws Exception {
+		return dbAuthorityDAO.selectTreeDBSvrList(usr_id);
+	}
+
 }

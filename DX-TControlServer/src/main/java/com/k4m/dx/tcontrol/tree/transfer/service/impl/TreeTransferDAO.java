@@ -7,6 +7,7 @@ import org.springframework.stereotype.Repository;
 
 import com.k4m.dx.tcontrol.accesscontrol.service.DbAutVO;
 import com.k4m.dx.tcontrol.accesscontrol.service.DbIDbServerVO;
+import com.k4m.dx.tcontrol.admin.dbserverManager.service.DbServerVO;
 import com.k4m.dx.tcontrol.tree.transfer.service.BottlewaterVO;
 import com.k4m.dx.tcontrol.tree.transfer.service.TblKafkaConfigVO;
 import com.k4m.dx.tcontrol.tree.transfer.service.TransferDetailMappingVO;
@@ -147,6 +148,19 @@ public class TreeTransferDAO extends EgovAbstractMapper {
 	}
 
 	/**
+	 * 전송매핑테이블내역 전체 조회
+	 * 
+	 * @param cnr_id
+	 * @throws SQLException
+	 */
+	@SuppressWarnings({ "deprecation", "unchecked" })
+	public List<TransferDetailMappingVO> selectTransferMappingAll(int cnr_id) {
+		List<TransferDetailMappingVO> result = null;
+		result = (List<TransferDetailMappingVO>) list("treeTransferSql.selectTransferMappingAll", cnr_id);
+		return result;
+	}
+
+	/**
 	 * 전송대상매핑관계 삭제
 	 * 
 	 * @param trf_trg_id
@@ -195,7 +209,7 @@ public class TreeTransferDAO extends EgovAbstractMapper {
 		result = (List<TblKafkaConfigVO>) list("treeTransferSql.selectTblKafkaConfigInfo", trf_trg_id);
 		return result;
 	}
-	
+
 	/**
 	 * Bottlewater bwpid 업데이트
 	 * 
@@ -205,6 +219,20 @@ public class TreeTransferDAO extends EgovAbstractMapper {
 	 */
 	public void updateBottleWaterBwpid(TransferDetailVO transferDetailVO) throws SQLException {
 		update("treeTransferSql.updateBottleWaterBwpid", transferDetailVO);
+	}
+
+	/**
+	 * DB서버 리스트 조회
+	 * 
+	 * @param dbServerVO
+	 * @return dbServerVO
+	 * @throws Exception
+	 */
+	@SuppressWarnings({ "deprecation", "unchecked" })
+	public List<DbServerVO> selectDbServerList(DbServerVO dbServerVO) {
+		List<DbServerVO> result = null;
+		result = (List<DbServerVO>) list("treeTransferSql.selectDbServerList", dbServerVO);
+		return result;
 	}
 
 }

@@ -170,7 +170,7 @@ public class UserManagerController {
 					UserVO result= (UserVO)userManagerService.selectDetailUserManager(usr_id);
 					
 					mv.addObject("get_usr_id",result.getUsr_id());
-					mv.addObject("usr_nm",result.getUsr_nm());
+					mv.addObject("get_usr_nm",result.getUsr_nm());
 					mv.addObject("pwd",result.getPwd());
 					mv.addObject("bln_nm",result.getBln_nm());
 					mv.addObject("dept_nm",result.getDept_nm());
@@ -228,8 +228,7 @@ public class UserManagerController {
 			userVo.setFrst_regr_id(usr_id);
 			userVo.setLst_mdfr_id(usr_id);
 			
-			System.out.println(userVo.getUsr_expr_dt() + "****");
-			if(userVo.getUsr_expr_dt() ==null){
+			if(userVo.getUsr_expr_dt() ==null | userVo.getUsr_expr_dt().equals("")){
 				userVo.setUsr_expr_dt("20990101");
 			}
 			

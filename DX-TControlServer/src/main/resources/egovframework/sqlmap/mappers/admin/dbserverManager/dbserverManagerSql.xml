@@ -312,6 +312,7 @@
 			<if test="value != null and value != 0">
 			AND A.DB_SVR_ID = #{value}
 			</if>
+			AND A.USEYN = 'Y'
 			AND B.USEYN = 'Y'
             GROUP BY A.DB_SVR_NM, A.DB_SVR_ID, A.IPADR, A.PORTNO
      </select>	

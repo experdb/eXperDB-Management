@@ -33,7 +33,7 @@
 				, TO_CHAR(A.WRK_STRT_DTM,'YYYY-MM-DD HH24:MI:SS') AS WRK_STRT_DTM
 				, TO_CHAR(A.WRK_END_DTM,'YYYY-MM-DD HH24:MI:SS') AS WRK_END_DTM
 		        , (SELECT SYS_CD_NM FROM T_SYSDTL_C WHERE A.EXE_RSLT_CD = SYS_CD ) AS EXE_RESULT
-		FROM T_WRKEXE_G A, T_WRKCNG_I B, T_SCD_M C, T_DBSVR_I D
+		FROM T_WRKEXE_G A, T_BCK_WRKCNG_I B, T_SCD_M C, T_DBSVR_I D
 		WHERE 1= 1
 		AND A.WRK_ID = B.WRK_ID
 		AND C.SCD_ID = A.SCD_ID
@@ -64,7 +64,7 @@
 	 	
 		SELECT 
 				COUNT(*) totcnt
-		FROM T_WRKEXE_G A, T_WRKCNG_I B, T_SCD_M C, T_DBSVR_I D
+		FROM T_WRKEXE_G A, T_BCK_WRKCNG_I B, T_SCD_M C, T_DBSVR_I D
 		WHERE 1= 1
 		AND A.WRK_ID = B.WRK_ID
 		AND C.SCD_ID = A.SCD_ID
@@ -122,4 +122,18 @@
         WHERE A.EXE_RESULT = 'Fail'
 	</select>
 	
+	
+	<select id="selectScheduleNmList" resultType="hashmap" >
+		/**
+		* Query ID : selectScheduleNmList
+		* Description : 스케줄명 조회
+		* Author : 변승우
+		**/	
+		SELECT 
+				A.SCD_NM
+		FROM T_SCD_M A, T_WRKEXE_G B
+		WHERE A.SCD_ID = B.SCD_ID
+		AND to_char(B.WRK_END_DTM,'YYYY-MM-DD') between #{wrk_start_dtm} and #{wrk_end_dtm}
+		GROUP BY A.SCD_NM	
+	</select>
 </mapper>

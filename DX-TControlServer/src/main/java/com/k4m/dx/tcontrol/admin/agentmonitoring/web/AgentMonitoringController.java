@@ -62,7 +62,15 @@ public class AgentMonitoringController {
 			
 			String strDB_SVR_NM = request.getParameter("DB_SVR_NM");
 			
-			if(strDB_SVR_NM == null) strDB_SVR_NM = "";
+			if(strDB_SVR_NM == null) {
+				strDB_SVR_NM = "";
+			}else{
+				// 화면접근이력 이력 남기기
+				CmmnUtils.saveHistory(request, historyVO);
+				historyVO.setExe_dtl_cd("DX-T0040_01");
+				historyVO.setMnu_id(20);
+				accessHistoryService.insertHistory(historyVO);
+			}
 			
 			AgentMonitoringVO vo = new AgentMonitoringVO();
 			vo.setDB_SVR_NM(strDB_SVR_NM);

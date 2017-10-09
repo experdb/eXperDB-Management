@@ -49,6 +49,8 @@ function fn_init() {
 		{data : "db_svr_nm", className : "dt-center", defaultContent : ""},
 		{data : "db_id", className : "dt-center", defaultContent : "", visible: false},
 		{data : "db_nm", className : "dt-center", defaultContent : "", visible: false},
+		{data : "bsn_dscd", className : "dt-center", defaultContent : "", visible: false},
+		{data : "bsn_dscd_nm", className : "dt-center", defaultContent : ""},
 		{data : "bck_bsn_dscd", className : "dt-center", defaultContent : "", visible: false},
 		{data : "bck_bsn_dscd_nm", className : "dt-center", defaultContent : ""},
 		{data : "wrk_nm", className : "dt-center", defaultContent : ""},
@@ -101,6 +103,28 @@ $(window.document).ready(function() {
 			}
 		}); 
 	 
+	 
+		 /* ********************************************************
+		  * 페이지 시작시, work 구분
+		  ******************************************************** */
+		  	$.ajax({
+				url : "/selectWorkDivList.do",
+				data : {},
+				dataType : "json",
+				type : "post",
+				error : function(xhr, status, error) {
+					alert("실패")
+				},
+				success : function(result) {		
+					$("#work").children().remove();
+					$("#work").append("<option value='%'>전체</option>");
+					if(result.length > 0){
+						for(var i=0; i<result.length; i++){
+							$("#work").append("<option value='"+result[i].bsn_dscd+"'>"+result[i].bsn_dscd_nm+"</option>");	
+						}									
+					}
+				}
+			}); 
 });
 
 /* ********************************************************
@@ -117,7 +141,7 @@ function fn_search(){
 	$.ajax({
 		url : "/selectWorkList.do",
 		data : {
-			bck_bsn_dscd : $("#bck_bsn_dscd").val(),
+			bsn_dscd : $("#work").val(),
 			db_svr_nm : $("#db_svr_nm").val(),
 			wrk_nm : $("#wrk_nm").val()
 		},
@@ -158,7 +182,7 @@ function fn_workAdd(){
 <body>
 <div class="pop_container">
 	<div class="pop_cts">
-		<p class="tit">스케줄 Work등록</p>
+		<p class="tit">Work등록</p>
 			<div class="btn_type_01">
 				<span class="btn"><button onClick="fn_search();">조회</button></span>
 			</div>
@@ -182,9 +206,8 @@ function fn_workAdd(){
 						</select>	
 						<th scope="row" class="ico_t1">구분</th>
 						<td>
-						<select class="select t8" name="bck_bsn_dscd" id="bck_bsn_dscd">
-							<option value="TC000201">Rman백업</option>
-							<option value="TC000202">Dump백업</option>
+						<select class="select t8" name="work" id="work">
+								<option value="%">전체</option>
 						</select>						
 						</td>									
 						<th scope="row" class="ico_t1" style="magin-left:50px;" >Work명</th>
@@ -207,6 +230,8 @@ function fn_workAdd(){
 						<th>서버명</th>
 						<th></th>
 						<th></th>
+						<th></th>
+						<th>구분</th>
 						<th></th>
 						<th>백업구분</th>
 						<th>Work명</th>

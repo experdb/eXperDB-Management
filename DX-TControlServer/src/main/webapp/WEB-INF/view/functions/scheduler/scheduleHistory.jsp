@@ -5,9 +5,26 @@
 <%@ taglib prefix="ui" uri="http://egovframework.gov/ctl/ui"%>
 
     <script>
+    function fn_validation(){
+    	
+    	 var arySrtDt = $('#from').val(); // ex) 시작일자(2007-10-09)
+    	 var aryEndDt = $('#to').val(); // ex) 종료일자(2007-12-05)
+    	 
+    	 var startDt = new Date(arySrtDt);
+    	 var endDt	= new Date(aryEndDt);
+
+    	resultDt	= Math.round((endDt.valueOf() - startDt.valueOf())/(1000*60*60*24*365/12));
+    	
+    	if(resultDt>6){
+    		alert("작업일자 범위가 6개월을 초과 하였습니다.");
+    		return false; 
+    	}
+    	return true;
+    }
+    
+    
 	$(window.document).ready(function() {
-		fn_buttonAut();
-		
+		fn_buttonAut();		
 		var lgi_dtm_start = "${lgi_dtm_start}";
 		var lgi_dtm_end = "${lgi_dtm_end}";
 		if (lgi_dtm_start != "" && lgi_dtm_end != "") {
@@ -20,6 +37,7 @@
 		
 		var exe_result = "${exe_result}";
 		var svr_nm = "${svr_nm}";
+		var scd_nm = "${scd_nm}";
 		
 		if(exe_result == "" || exe_result==null){
 			document.getElementById("exe_result").value="%";
@@ -50,6 +68,9 @@
 					$("#db_svr_nm").val(svr_nm).attr("selected", "selected");
 				}
 			});	 
+		 
+		 fn_ScheduleNmList(scd_nm);
+	
 	});
 	
 	$(function() {
@@ -92,6 +113,7 @@
 	
 	/*조회버튼 클릭시*/
 	function fn_selectScheduleHistory() {
+		if (!fn_validation()) return false;
 		document.selectScheduleHistory.action = "/selectScheduleHistory.do";
 		document.selectScheduleHistory.submit();
 	}
@@ -103,13 +125,83 @@
 		document.selectScheduleHistory.submit();
 	}
 	
+	
+	function setSearchDate(start){
+
+		var num = start.substring(0,1);
+		var str = start.substring(1,2);
+
+		var today = new Date();
+
+		//var year = today.getFullYear();
+		//var month = today.getMonth() + 1;
+		//var day = today.getDate();
+		
+		var endDate = $.datepicker.formatDate('yy-mm-dd', today);
+		$('#to').val(endDate);
+		
+		if(str == 'd'){
+			today.setDate(today.getDate() - num);
+		}else if (str == 'w'){
+			today.setDate(today.getDate() - (num*7));
+		}else if (str == 'm'){
+			today.setMonth(today.getMonth() - num);
+			today.setDate(today.getDate() + 1);
+		}
+
+		var startDate = $.datepicker.formatDate('yy-mm-dd', today);
+		$('#from').val(startDate);
+				
+		// 종료일은 시작일 이전 날짜 선택하지 못하도록 비활성화
+		$("#to").datepicker( "option", "minDate", startDate );
+		
+		// 시작일은 종료일 이후 날짜 선택하지 못하도록 비활성화
+		$("#from").datepicker( "option", "maxDate", endDate );
+
+	}
+
+	function fn_ScheduleNmList(scd_nm){
+	 /* ********************************************************
+	  * 페이지 시작시, Repository DB에 등록되어 있는 디비의 서버명 SelectBox 
+	  ******************************************************** */
+	  var lgi_dtm_start = $('#from').val();
+	  var lgi_dtm_end = $('#from').val();
+	  
+	  	$.ajax({
+			url : "/selectScheduleNmList.do",
+			data : {
+				wrk_start_dtm : lgi_dtm_start,
+				wrk_end_dtm : 	lgi_dtm_end				
+			},
+			dataType : "json",
+			type : "post",
+			error : function(xhr, status, error) {
+				alert("실패")
+			},
+			success : function(result) {		
+				$("#scd_nm").children().remove();
+				$("#scd_nm").append("<option value='%'>전체</option>");
+				if(result.length > 0){
+					for(var i=0; i<result.length; i++){
+						$("#scd_nm").append("<option value='"+result[i].scd_nm+"'>"+result[i].scd_nm+"</option>");	
+					}									
+				}
+				$("#scd_nm").val(scd_nm).attr("selected", "selected");
+			}
+		});	 
+	}
     </script>
     
 <!-- contents -->
 <div id="contents">
 	<div class="contents_wrap">
 		<div class="contents_tit">
-			<h4>스케줄 수행이력 화면 <a href="#n"><img src="../images/ico_tit.png" alt="" /></a></h4>
+			<h4>스케줄 수행이력 화면 <a href="#n"><img src="../images/ico_tit.png" class="btn_info"/></a></h4>
+			<div class="infobox"> 
+				<ul>
+					<li>- 지정된 기간 동안의 스케줄 수행 이력을 조회합니다.</li>
+				</ul>
+			</div>					
 			<div class="location">
 				<ul>
 					<li>Function</li>
@@ -143,12 +235,69 @@
 											<input type="text" class="calendar" id="from" name="lgi_dtm_start" title="기간검색 시작날짜" readonly="readonly" /> <span class="wave">~</span>
 											<a href="#n" class="calendar_btn">달력열기</a> 
 											<input type="text" class="calendar" id="to" name="lgi_dtm_end" title="기간검색 종료날짜" readonly="readonly" />
-										</div>
+										</div>							
+									</td>
+									<td>
+										<ul class="searchDate">
+											<li>
+												<span class="chkbox2">
+													<input type="radio" name="dateType" id="dateType1" onclick="setSearchDate('0d')"/>
+													<label for="dateType1">당일</label>
+												</span>
+											</li>
+											<li>
+												<span class="chkbox2">
+													<input type="radio" name="dateType" id="dateType2" onclick="setSearchDate('3d')"/>
+													<label for="dateType2">3일</label>
+												</span>
+											</li>
+											<li>
+												<span class="chkbox2">
+													<input type="radio" name="dateType" id="dateType3" onclick="setSearchDate('1w')"/>
+													<label for="dateType3">1주</label>
+												</span>
+											</li>
+											<li>
+												<span class="chkbox2">
+													<input type="radio" name="dateType" id="dateType4" onclick="setSearchDate('2w')"/>
+													<label for="dateType4">2주</label>
+												</span>
+											</li>
+											<li>
+												<span class="chkbox2">
+													<input type="radio" name="dateType" id="dateType5" onclick="setSearchDate('1m')"/>
+													<label for="dateType5">1개월</label>
+												</span>
+											</li>
+											<li>
+												<span class="chkbox2">
+													<input type="radio" name="dateType" id="dateType6" onclick="setSearchDate('3m')"/>
+													<label for="dateType6">3개월</label>
+												</span>
+											</li>
+											<li>
+												<span class="chkbox2">
+													<input type="radio" name="dateType" id="dateType7" onclick="setSearchDate('6m')"/>
+													<label for="dateType7">6개월</label>
+												</span>
+											</li>
+										</ul>
+
 									</td>
 								</tr>
 								 <tr>
 									<th scope="row" class="t9 line" >스케줄명</th>
-									<td><input type="text" class="txt t2" id="scd_nm" name="scd_nm" style="width: 700px;"></td>
+									<td>
+										<select class="select t8" name="scd_nm" id="scd_nm"  style="width: 200px;">
+												<option value="%">전체</option>
+										</select>	
+									</td>
+									<th scope="row" class="t9 line">WORK명</th>
+									<td>
+										<select class="select t8" name="wrk_nm" id="wrk_nm"  style="width:200px";>
+												<option value="%">전체</option>
+										</select>	
+									</td>
 								</tr>
 								<tr>
 									<th scope="row" class="t9 line">DB 서버명</th>
@@ -165,8 +314,8 @@
 												<option value="TC001702">실패</option>
 										</select>	
 									</td>
-									<th scope="row" class="t9 line" >WORK명</th>
-									<td><input type="text" class="txt t2" id="wrk_nm" name="wrk_nm" style="width: 200px;"></td>
+									<th </th>
+									<td></td>
 								</tr>		
 						</tbody>
 					</table>

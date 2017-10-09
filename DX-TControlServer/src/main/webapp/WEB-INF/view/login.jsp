@@ -68,6 +68,16 @@
 			}
 		});
 	}
+	
+	function onKeyDown()
+	{
+	     if(event.keyCode == 13)
+	     {
+	    	 fn_login();
+	     }
+	}
+
+
 </script>
 
 </head>
@@ -82,14 +92,14 @@
 					<p class="tit">MEMBER LOGIN</p>
 					<div class="inp_wrap t1">
 						<label for="member_id">ID</label> 
-						<input type="text" class="txt" id="usr_id" name="usr_id" title="아이디 입력" maxlength="" placeholder="아이디를 입력하세요." />
+						<input type="text" class="txt" id="usr_id" name="usr_id" title="아이디 입력" maxlength="" placeholder="아이디를 입력하세요."  onKeyDown="onKeyDown();"/>
 					</div>
 					<div class="inp_wrap t2">
-						<label for="member_pwd">Password</label> <input type="password" class="txt" id="pwd" name="pwd" title="비밀번호 입력" maxlength="" placeholder="비밀번호를 입력하세요." />
+						<label for="member_pwd">Password</label> <input type="password" class="txt" id="pwd" name="pwd" title="비밀번호 입력" maxlength="" placeholder="비밀번호를 입력하세요."  onKeyDown="onKeyDown();"/>
 					</div>	
 					<div class="inp_wrap t2" id="errormessage">
 					</div>			
-					<div class="btn_wrap">
+					<div class="btn_wrap" >
 						<button onClick="fn_login()">LOGIN</button>
 					</div>
 				</div>

@@ -238,5 +238,24 @@ public class DbSvrAuthorityController {
 			e.printStackTrace();
 		}
 	}
+
 	
+
+	@SuppressWarnings("unused")
+	@RequestMapping(value = "/selectTreeDBSvrList.do")
+	@ResponseBody
+	public List<Map<String, Object>> selectTreeDBSvrList(HttpServletRequest request) {
+	
+		List<Map<String, Object>> resultSet = null;
+		try {		
+			
+			String usr_id = (String) request.getSession().getAttribute("usr_id");
+
+			
+			resultSet = dbAuthorityService.selectTreeDBSvrList(usr_id);	
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return resultSet;
+	}
 }
