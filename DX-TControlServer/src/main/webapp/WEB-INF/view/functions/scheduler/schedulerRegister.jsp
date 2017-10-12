@@ -344,8 +344,8 @@ function fn_workAddCallback(rowList){
 		},
 		dataType : "json",
 		type : "post",
-		error : function(xhr, status, error) {
-			alert("실패")
+		error : function(request, status, error) {
+			alert("ERROR CODE : "+ request.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ request.responseText.replace(/(<([^>]+)>)/gi, ""));
 		},
 		success : function(result) {		
 			table.clear().draw();
@@ -409,8 +409,8 @@ function fn_insertSchedule(){
 			},
 			dataType : "json",
 			type : "post",
-			error : function(xhr, status, error) {
-				alert("실패")
+			error : function(request, status, error) {
+				alert("ERROR CODE : "+ request.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ request.responseText.replace(/(<([^>]+)>)/gi, ""));
 			},
 			success : function(result) {
 				alert("스케줄이 등록되었습니다.");
@@ -449,7 +449,7 @@ function fn_check() {
 			}
 		},
 		error : function(request, status, error) {
-			alert("실패");
+			alert("ERROR CODE : "+ request.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ request.responseText.replace(/(<([^>]+)>)/gi, ""));
 		}
 	});
 }

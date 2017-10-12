@@ -104,7 +104,7 @@
 				}
 			},
 			error : function(request, status, error) {
-				alert("실패");
+				alert("ERROR CODE : "+ request.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ request.responseText.replace(/(<([^>]+)>)/gi, ""));
 			}
 		});
 	}
@@ -135,7 +135,7 @@
 				opener.fn_select();
 			},
 			error : function(request, status, error) {
-				alert("실패");
+				alert("ERROR CODE : "+ request.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ request.responseText.replace(/(<([^>]+)>)/gi, ""));
 			}
 		});
 	}
@@ -167,7 +167,7 @@
 				}
 			},
 			error : function(request, status, error) {
-				alert("실패");
+				alert("ERROR CODE : "+ request.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ request.responseText.replace(/(<([^>]+)>)/gi, ""));
 			}
 		});
 	}

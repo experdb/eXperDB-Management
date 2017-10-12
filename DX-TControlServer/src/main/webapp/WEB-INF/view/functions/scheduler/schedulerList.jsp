@@ -81,9 +81,9 @@ function fn_init(){
 		    		},
 		    		dataType : "json",
 		    		type : "post",
-		    		error : function(xhr, status, error) {
-		    			alert("실패")
-		    		},
+					error : function(request, status, error) {
+						alert("ERROR CODE : "+ request.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ request.responseText.replace(/(<([^>]+)>)/gi, ""));
+					},
 		    		success : function(result) {
 		    			location.reload();
 		    		}
@@ -110,9 +110,9 @@ function fn_init(){
 		    		},
 		    		dataType : "json",
 		    		type : "post",
-		    		error : function(xhr, status, error) {
-		    			alert("실패")
-		    		},
+					error : function(request, status, error) {
+						alert("ERROR CODE : "+ request.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ request.responseText.replace(/(<([^>]+)>)/gi, ""));
+					},
 		    		success : function(result) {
 		    			location.reload();
 		    		}
@@ -212,8 +212,8 @@ function fn_selectScheduleList(){
 		},
 		dataType : "json",
 		type : "post",
-		error : function(xhr, status, error) {
-			alert("실패")
+		error : function(request, status, error) {
+			alert("ERROR CODE : "+ request.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ request.responseText.replace(/(<([^>]+)>)/gi, ""));
 		},
 		success : function(result) {
 			table.clear().draw();
@@ -253,8 +253,8 @@ function fn_deleteScheduleList(){
 			},
 			dataType : "json",
 			type : "post",
-			error : function(xhr, status, error) {
-				alert("실패")
+			error : function(request, status, error) {
+				alert("ERROR CODE : "+ request.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ request.responseText.replace(/(<([^>]+)>)/gi, ""));
 			},
 			success : function(result) {
 				alert("삭제 되었습니다.");

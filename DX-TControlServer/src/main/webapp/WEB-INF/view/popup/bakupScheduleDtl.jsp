@@ -187,8 +187,8 @@ $(window.document).ready(function() {
 		},
 		dataType : "json",
 		type : "post",
-		error : function(xhr, status, error) {
-			alert("실패")
+		error : function(request, status, error) {
+			alert("ERROR CODE : "+ request.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ request.responseText.replace(/(<([^>]+)>)/gi, ""));
 		},
 		success : function(result) {	
 			document.getElementById('scd_nm').value= result[0].scd_nm;
@@ -268,8 +268,8 @@ function fn_workAddCallback(rowList){
 		},
 		dataType : "json",
 		type : "post",
-		error : function(xhr, status, error) {
-			alert("실패")
+		error : function(request, status, error) {
+			alert("ERROR CODE : "+ request.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ request.responseText.replace(/(<([^>]+)>)/gi, ""));
 		},
 		success : function(result) {		
 			table.clear().draw();
@@ -289,9 +289,9 @@ function fn_scheduleStop(){
     		},
     		dataType : "json",
     		type : "post",
-    		error : function(xhr, status, error) {
-    			alert("실패")
-    		},
+			error : function(request, status, error) {
+				alert("ERROR CODE : "+ request.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ request.responseText.replace(/(<([^>]+)>)/gi, ""));
+			},
     		success : function(result) {
     			fn_updateSchedule();
     		}

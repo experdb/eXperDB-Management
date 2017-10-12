@@ -11,8 +11,8 @@
 			  	data : {},
 				dataType : "json",
 				type : "post",
-				error : function(xhr, status, error) {
-					alert("실패");
+				error : function(request, status, error) {
+					alert("ERROR CODE : "+ request.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ request.responseText.replace(/(<([^>]+)>)/gi, ""));
 				},
 				success : function(result) {
 					fn_UsrDBSrvAut(result);					
@@ -26,8 +26,8 @@
 			  	data : {},
 				dataType : "json",
 				type : "post",
-				error : function(xhr, status, error) {
-					alert("실패");
+				error : function(request, status, error) {
+					alert("ERROR CODE : "+ request.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ request.responseText.replace(/(<([^>]+)>)/gi, ""));
 				},
 				success : function(result) {
 					fn_usrMenuAut(result);
@@ -84,8 +84,8 @@
 			data : {},
 			dataType : "json",
 			type : "post",
-			error : function(xhr, status, error) {
-				alert("실패")
+			error : function(request, status, error) {
+				alert("ERROR CODE : "+ request.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ request.responseText.replace(/(<([^>]+)>)/gi, ""));
 			},
 			success : function(result) {
 				GetJsonData(data, result);
@@ -101,8 +101,8 @@
 			data : {},
 			dataType : "json",
 			type : "post",
-			error : function(xhr, status, error) {
-				alert("실패d")
+			error : function(request, status, error) {
+				alert("ERROR CODE : "+ request.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ request.responseText.replace(/(<([^>]+)>)/gi, ""));
 			},
 			success : function(result) {
 				Schedule(result);
