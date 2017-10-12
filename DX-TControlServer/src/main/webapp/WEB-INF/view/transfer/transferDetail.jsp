@@ -118,8 +118,8 @@
 						},
 						dataType : "json",
 						type : "post",
-						error : function(xhr, status, error) {
-							alert("실패")
+						error : function(request, status, error) {
+							alert("ERROR CODE : "+ request.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ request.responseText.replace(/(<([^>]+)>)/gi, ""));
 						},
 						success : function(result) {
 							if(result =='start'){
@@ -132,7 +132,7 @@
 								alert("전송설정을 등록 해주세요.");
 							}
 							else{
-								alert("서버에 T엔진이 설치되지 않았습니다.");
+								alert("서버에 experdb엔진이 설치되지 않았습니다.");
 							}	
 						}
 					});		
@@ -153,8 +153,8 @@
 			},
 			dataType : "json",
 			type : "post",
-			error : function(xhr, status, error) {
-				alert("실패")
+			error : function(request, status, error) {
+				alert("ERROR CODE : "+ request.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ request.responseText.replace(/(<([^>]+)>)/gi, ""));
 			},
 			success : function(result) {
 				table.clear().draw();
@@ -175,8 +175,8 @@
 			},
 			dataType : "json",
 			type : "post",
-			error : function(xhr, status, error) {
-				alert("실패")
+			error : function(request, status, error) {
+				alert("ERROR CODE : "+ request.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ request.responseText.replace(/(<([^>]+)>)/gi, ""));
 			},
 			success : function(result) {
 				table.clear().draw();

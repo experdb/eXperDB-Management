@@ -88,7 +88,7 @@
 					window.close();
 				},
 				error : function(request, status, error) {
-					alert("실패");
+					alert("ERROR CODE : "+ request.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ request.responseText.replace(/(<([^>]+)>)/gi, ""));
 				}
 			});
 	}
@@ -113,7 +113,7 @@
 					window.close();
 				},
 				error : function(request, status, error) {
-					alert("실패");
+					alert("ERROR CODE : "+ request.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ request.responseText.replace(/(<([^>]+)>)/gi, ""));
 				}
 			});
 	}

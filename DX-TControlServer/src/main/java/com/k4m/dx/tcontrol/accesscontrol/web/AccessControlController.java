@@ -83,7 +83,6 @@ public class AccessControlController {
 		List<ConnectorVO> resultSet = null;
 		Map<String, Object> param = new HashMap<String, Object>();
 		try {
-
 			HttpSession session = request.getSession();
 			String usr_id = (String) session.getAttribute("usr_id");
 			param.put("usr_id", usr_id);
@@ -235,7 +234,6 @@ public class AccessControlController {
 			String IP = dbServerVO.getIpadr();
 			int PORT = agentInfo.getSOCKET_PORT();
 
-			/* TODO ip,port ROLE LIST조회 */
 			serverObj.put(ClientProtocolID.SERVER_NAME, dbServerVO.getDb_svr_nm());
 			serverObj.put(ClientProtocolID.SERVER_IP, dbServerVO.getIpadr());
 			serverObj.put(ClientProtocolID.SERVER_PORT, dbServerVO.getPortno());
@@ -244,7 +242,7 @@ public class AccessControlController {
 			serverObj.put(ClientProtocolID.USER_PWD, dec.aesDecode(dbServerVO.getSvr_spr_scm_pwd()));
 
 			ClientInfoCmmn cic = new ClientInfoCmmn();
-			result = cic.role_List(serverObj);
+			result = cic.role_List(serverObj,IP,PORT);
 			mv.addObject("result", result);
 
 			DbAutVO dbAutVO = new DbAutVO();
@@ -753,7 +751,7 @@ public class AccessControlController {
 			schDbServerVO.setDb_svr_id(db_svr_id);
 			DbServerVO dbServerVO = (DbServerVO) cmmnServerInfoService.selectServerInfo(schDbServerVO);
 			List<AccessControlHistoryVO> result = accessControlService.selectLstmdfdtm(db_svr_id);
-
+			
 			mv.addObject("lst_mdf_dtm", result);
 			mv.addObject("db_svr_nm", dbServerVO.getDb_svr_nm());
 			mv.addObject("db_svr_id", db_svr_id);
@@ -849,7 +847,7 @@ public class AccessControlController {
 					hpSeq.put(ClientProtocolID.AC_SEQ, (String) jsonObj.get("Seq"));
 					arrSeq.add(hpSeq);
 				}
-			}
+			}			
 			
 			cic.dbAccess_delete(serverObj, arrSeq, IP, PORT);
 			

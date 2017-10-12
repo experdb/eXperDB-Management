@@ -85,7 +85,10 @@
 	      </if>	      
 	      <if test="dft_db_nm != null and dft_db_nm != ''">
 	      AND DFT_DB_NM LIKE  '%' || #{dft_db_nm} || '%'
-	      </if>         
+	      </if>   
+	      <if test="useyn != null and useyn != ''">
+	      AND USEYN LIKE  '%' || #{useyn} || '%'
+	      </if>      
           ORDER BY DB_SVR_ID
       ) AA		
     </select>

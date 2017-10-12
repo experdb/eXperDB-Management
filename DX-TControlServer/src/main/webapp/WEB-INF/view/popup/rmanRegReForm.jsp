@@ -62,8 +62,8 @@ function fn_update_work(){
 		  		acv_file_mtncnt : $("#acv_file_mtncnt").val()
 		  	},
 			type : "post",
-			error : function(request, xhr, status, error) {
-				alert("실패");
+			error : function(request, status, error) {
+				alert("ERROR CODE : "+ request.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ request.responseText.replace(/(<([^>]+)>)/gi, ""));
 			},
 			success : function(data) {
 				result(data);
@@ -151,8 +151,8 @@ function checkFolder(keyType){
 		  		path : save_path
 		  	},
 			type : "post",
-			error : function(request, xhr, status, error) {
-				alert("실패");
+			error : function(request, status, error) {
+				alert("ERROR CODE : "+ request.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ request.responseText.replace(/(<([^>]+)>)/gi, ""));
 			},
 			success : function(data) {
 				if(data.result.ERR_CODE == ""){
@@ -203,13 +203,13 @@ function checkFolder(keyType){
 						<tbody>
 							<tr>
 								<th scope="row" class="ico_t1">Work명</th>
-								<td><input type="text" class="txt" name="wrk_nm" id="wrk_nm" maxlength=50 value="<c:out value="${workInfo[0].wrk_nm}"/>"/></td>
+								<td><input type="text" class="txt" name="wrk_nm" id="wrk_nm" maxlength=25 value="<c:out value="${workInfo[0].wrk_nm}"/>"/></td>
 							</tr>
 							<tr>
 								<th scope="row" class="ico_t1">Work<br/>설명</th>
 								<td>
 									<div class="textarea_grp">
-										<textarea name="wrk_exp" id="wrk_exp" maxlength=200><c:out value="${workInfo[0].wrk_exp}"/></textarea>
+										<textarea name="wrk_exp" id="wrk_exp" maxlength=25><c:out value="${workInfo[0].wrk_exp}"/></textarea>
 									</div>
 								</td>
 							</tr>
@@ -246,11 +246,11 @@ function checkFolder(keyType){
 								
 								<tr>
 										<th scope="row" class="ico_t1">데이터경로</th>
-										<td><input type="text" class="txt" name="data_pth" id="data_pth" maxlength=50  value="<c:out value="${workInfo[0].data_pth}"/>" style="width:230px" onKeydown="$('#check_path1').val('N')"/>
+										<td><input type="text" class="txt" name="data_pth" id="data_pth" maxlength=200  value="<c:out value="${workInfo[0].data_pth}"/>" style="width:230px" onKeydown="$('#check_path1').val('N')"/>
 											<span class="btn btnC_01"><button type="button" class= "btn_type_02" onclick="checkFolder(1)" style="width: 60px; margin-right: -60px; margin-top: 0;">경로체크</button></span>
 										</td>
 										<th scope="row" class="ico_t1">백업경로</th>
-										<td><input type="text" class="txt" name="bck_pth" id="bck_pth" maxlength=50  value="<c:out value="${workInfo[0].bck_pth}"/>" style="width:230px" onKeydown="$('#check_path2').val('N')"/>
+										<td><input type="text" class="txt" name="bck_pth" id="bck_pth" maxlength=200  value="<c:out value="${workInfo[0].bck_pth}"/>" style="width:230px" onKeydown="$('#check_path2').val('N')"/>
 											<span class="btn btnC_01"><button type="button" class= "btn_type_02" onclick="checkFolder(2)" style="width: 60px; margin-right: -60px; margin-top: 0;">경로체크</button></span>
 										</td>
 									</tr>
@@ -274,25 +274,25 @@ function checkFolder(keyType){
 										<li>
 											<div class="inner">
 												<p>Full 백업파일 보관일</p>
-												<span><input type="text" class="txt" name="file_stg_dcnt" id="file_stg_dcnt" value="<c:out value="${workInfo[0].file_stg_dcnt}"/>" maxlength=3/> 일</span>
+												<span><input type="number" class="txt" name="file_stg_dcnt" id="file_stg_dcnt" value="<c:out value="${workInfo[0].file_stg_dcnt}"/>" maxlength="3" min="0"/> 일</span>
 											</div>
 										</li>
 										<li>
 											<div class="inner">
 												<p>Full 백업파일 유지갯수</p>
-												<span><input type="text" class="txt" name="bck_mtn_ecnt" id="bck_mtn_ecnt" value="<c:out value="${workInfo[0].bck_mtn_ecnt}"/>" maxlength=3/> 일</span>
+												<span><input type="number" class="txt" name="bck_mtn_ecnt" id="bck_mtn_ecnt" value="<c:out value="${workInfo[0].bck_mtn_ecnt}"/>" maxlength="3" min="0"/> 일</span>
 											</div>
 										</li>
 										<li>
 											<div class="inner">
 												<p>아카이브 파일보관일</p>
-												<span><input type="text" class="txt" name="acv_file_stgdt" id="acv_file_stgdt" value="<c:out value="${workInfo[0].acv_file_stgdt}"/>" maxlength=3/> 일</span>
+												<span><input type="number" class="txt" name="acv_file_stgdt" id="acv_file_stgdt" value="<c:out value="${workInfo[0].acv_file_stgdt}"/>" maxlength="3" min="0"/> 일</span>
 											</div>
 										</li>
 										<li>
 											<div class="inner">
 												<p>아카이브 파일유지갯수</p>
-												<span><input type="text" class="txt" name="acv_file_mtncnt" id="acv_file_mtncnt" value="<c:out value="${workInfo[0].acv_file_mtncnt}"/>" maxlength=3/> 일</span>
+												<span><input type="number" class="txt" name="acv_file_mtncnt" id="acv_file_mtncnt" value="<c:out value="${workInfo[0].acv_file_mtncnt}"/>" maxlength="3" min="0"/> 일</span>
 											</div>
 										</li>
 									</ul>
@@ -312,13 +312,13 @@ function checkFolder(keyType){
 											<li>
 												<div class="inner">
 													<p>서버로그 파일 보관일수</p>
-													<span><input type="text" class="txt" name="log_file_stg_dcnt" id="log_file_stg_dcnt" value="<c:out value="${workInfo[0].log_file_stg_dcnt}"/>" maxlength=3/> 일</span>
+													<span><input type="number" class="txt" name="log_file_stg_dcnt" id="log_file_stg_dcnt" value="<c:out value="${workInfo[0].log_file_stg_dcnt}"/>" maxlength="3" min="0"/> 일</span>
 												</div>
 											</li>
 											<li>
 												<div class="inner">
 													<p>서버로그 파일 유지갯수</p>
-													<span><input type="text" class="txt" name="log_file_mtn_ecnt" id="log_file_mtn_ecnt" value="<c:out value="${workInfo[0].log_file_mtn_ecnt}"/>" maxlength=3/> 일</span>
+													<span><input type="number" class="txt" name="log_file_mtn_ecnt" id="log_file_mtn_ecnt" value="<c:out value="${workInfo[0].log_file_mtn_ecnt}"/>" maxlength="3" min="0"/> 일</span>
 												</div>
 											</li>
 										</ul>

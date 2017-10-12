@@ -10,8 +10,10 @@ import org.springframework.stereotype.Service;
 import com.k4m.dx.tcontrol.admin.usermanager.service.UserManagerService;
 import com.k4m.dx.tcontrol.login.service.UserVO;
 
+import egovframework.rte.fdl.cmmn.EgovAbstractServiceImpl;
+
 @Service("UserManagerServiceImpl")
-public class UserManagerServiceImpl implements UserManagerService {
+public class UserManagerServiceImpl extends EgovAbstractServiceImpl implements UserManagerService {
 
 	@Resource(name = "userManagerDAO")
 	private UserManagerDAO userManagerDAO;

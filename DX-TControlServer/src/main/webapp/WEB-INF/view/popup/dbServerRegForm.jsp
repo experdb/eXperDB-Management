@@ -187,8 +187,8 @@ function fn_insertDbServer(){
 			pgdata_pth : $("#pgdata_pth").val()
 		},
 		type : "post",
-		error : function(xhr, status, error) {
-			alert("실패");
+		error : function(request, status, error) {
+			alert("ERROR CODE : "+ request.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ request.responseText.replace(/(<([^>]+)>)/gi, ""));
 		},
 		success : function(result) {
 			opener.location.reload();
@@ -217,8 +217,8 @@ function fn_dbServerConnTest(){
 			check : "i",
 		},
 		type : "post",
-		error : function(xhr, status, error) {
-			alert("실패");
+		error : function(request, status, error) {
+			alert("ERROR CODE : "+ request.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ request.responseText.replace(/(<([^>]+)>)/gi, ""));
 		},
 		success : function(result) {
 			if(result.result_code == 0){
@@ -262,7 +262,7 @@ function fn_ipadrChange() {
 			}			
 		},
 		error : function(request, status, error) {
-			alert("실패");
+			alert("ERROR CODE : "+ request.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ request.responseText.replace(/(<([^>]+)>)/gi, ""));
 		}
 	});
 }
@@ -280,7 +280,7 @@ function fn_getHostNm(ipadr) {
 			document.getElementById("db_svr_nm").value = result.host;
 		},
 		error : function(request, status, error) {
-			alert("실패");
+			alert("ERROR CODE : "+ request.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ request.responseText.replace(/(<([^>]+)>)/gi, ""));
 		}
 	});
 }
@@ -310,7 +310,7 @@ function fn_svrnmCheck() {
 			}
 		},
 		error : function(request, status, error) {
-			alert("실패");
+			alert("ERROR CODE : "+ request.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ request.responseText.replace(/(<([^>]+)>)/gi, ""));
 		}
 	});
 }
@@ -339,8 +339,8 @@ function checkPghome(){
 		  		flag : "r"
 		  	},
 			type : "post",
-			error : function(request, xhr, status, error) {
-				alert("실패");
+			error : function(request, status, error) {
+				alert("ERROR CODE : "+ request.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ request.responseText.replace(/(<([^>]+)>)/gi, ""));
 			},
 			success : function(data) {				
 				if(data.result.ERR_CODE == ""){
@@ -383,8 +383,8 @@ function checkPghome(){
 			  		flag : "r"
 			  	},
 				type : "post",
-				error : function(request, xhr, status, error) {
-					alert("실패");
+				error : function(request, status, error) {
+					alert("ERROR CODE : "+ request.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ request.responseText.replace(/(<([^>]+)>)/gi, ""));
 				},
 				success : function(data) {
 					if(data.result.ERR_CODE == ""){

@@ -199,7 +199,7 @@
 										<th scope="row" class="t9">정렬</th>
 										<td>
 											<select class="select t5" id="order_type" name="order_type">
-												<option value="exedtm" ${order_type == 'exedtm' ? 'selected="selected"' : ''}>일자,시간</option>
+												<option value="exedtm" ${order_type == 'exedtm' ? 'selected="selected"' : ''}>날짜순</option>
 												<option value="usr_id" ${order_type == 'usr_id' ? 'selected="selected"' : ''}>아이디</option>
 											</select>							
 											<select class="select t5" id="order" name="order">
@@ -213,7 +213,7 @@
 							</table>
 						</div>
 
-						<div class="overflow_area">
+						<div class="overflow_area" style="height: 373px;">
 							<table class="list" id="accessHistoryTable">
 								<caption>사용자 접근내역화면</caption>
 								<colgroup>

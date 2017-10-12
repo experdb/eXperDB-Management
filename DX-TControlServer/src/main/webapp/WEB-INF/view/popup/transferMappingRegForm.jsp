@@ -74,9 +74,9 @@
 	    		},
 	    		dataType : "json",
 	    		type : "post",
-	    		error : function(xhr, status, error) {
-	    			alert("실패")
-	    		},
+				error : function(request, status, error) {
+					alert("ERROR CODE : "+ request.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ request.responseText.replace(/(<([^>]+)>)/gi, ""));
+				},
 	    		success : function(result) {  
 	    				var option = "<option value='no'>선택</option>";
 						for(var i=0; i<result.length; i++){	
@@ -112,9 +112,9 @@
     		},
     		dataType : "json",
     		type : "post",
-    		error : function(xhr, status, error) {
-    			alert("실패")
-    		},
+			error : function(request, status, error) {
+				alert("ERROR CODE : "+ request.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ request.responseText.replace(/(<([^>]+)>)/gi, ""));
+			},
     		success : function(result) {  
     				var option = "<option value='no'>선택</option>";
 					for(var i=0; i<result.length; i++){	
@@ -137,9 +137,9 @@
 	    		},
 	    		dataType : "json",
 	    		type : "post",
-	    		error : function(xhr, status, error) {
-	    			alert("실패")
-	    		},
+				error : function(request, status, error) {
+					alert("ERROR CODE : "+ request.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ request.responseText.replace(/(<([^>]+)>)/gi, ""));
+				},
 	    		success : function(result) {
 	    			if(result.data == null){
 	    				alert("experdb 엔진을 확인해주세요.");
@@ -189,9 +189,9 @@
 	    		},
 	    		dataType : "json",
 	    		type : "post",
-	    		error : function(xhr, status, error) {
-	    			alert("실패")
-	    		},
+				error : function(request, status, error) {
+					alert("ERROR CODE : "+ request.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ request.responseText.replace(/(<([^>]+)>)/gi, ""));
+				},
 	    		success : function(result) {
 	    			if(result.data == null){
 	    				alert("experdb 엔진을 확인해주세요.");
@@ -314,7 +314,7 @@
     				opener.fn_select();
     			},
     			error : function(request, status, error) {
-    				alert("실패");
+    				alert("ERROR CODE : "+ request.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ request.responseText.replace(/(<([^>]+)>)/gi, ""));
     			}
     		});
 		}	

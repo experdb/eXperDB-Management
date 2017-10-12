@@ -39,6 +39,18 @@ function fn_init() {
 		{data : "dft_db_nm", className : "dt-center", defaultContent : ""},
 		{data : "portno", className : "dt-center", defaultContent : ""},
 		{data : "svr_spr_usr_id", className : "dt-center", defaultContent : ""},
+        {data : "useyn", defaultContent : "", className : "dt-center", 
+			targets: 0,
+	        searchable: false,
+	        orderable: false,
+	        render: function(data, type, full, meta){
+	           if(full.useyn == 'Y'){
+	              data = '사용';      
+	           }else{
+	        	  data ='미사용';
+	           }
+	           return data;
+	        }},
 		{data : "frst_regr_id", className : "dt-center", defaultContent : ""},
 		{data : "frst_reg_dtm", className : "dt-center", defaultContent : ""},
 		{data : "lst_mdfr_id", className : "dt-center", defaultContent : ""},
@@ -53,10 +65,11 @@ function fn_init() {
 		table.tables().header().to$().find('th:eq(4)').css('min-width', '130px');
 		table.tables().header().to$().find('th:eq(5)').css('min-width', '70px');
 		table.tables().header().to$().find('th:eq(6)').css('min-width', '70px');
-		table.tables().header().to$().find('th:eq(7)').css('min-width', '65px');  
-		table.tables().header().to$().find('th:eq(8)').css('min-width', '100px');
-		table.tables().header().to$().find('th:eq(9)').css('min-width', '65px');
-		table.tables().header().to$().find('th:eq(10)').css('min-width', '100px');
+		table.tables().header().to$().find('th:eq(7)').css('min-width', '70px');
+		table.tables().header().to$().find('th:eq(8)').css('min-width', '65px');  
+		table.tables().header().to$().find('th:eq(9)').css('min-width', '100px');
+		table.tables().header().to$().find('th:eq(10)').css('min-width', '65px');
+		table.tables().header().to$().find('th:eq(11)').css('min-width', '100px');
 	    $(window).trigger('resize'); 
 }
 
@@ -132,6 +145,7 @@ function fn_search(){
 			db_svr_nm : $("#db_svr_nm").val(),
 			ipadr : $("#ipadr").val(),
 			dft_db_nm : $("#dft_db_nm").val(),
+			useyn: $("#useyn").val()
 		},
 		dataType : "json",
 		type : "post",
@@ -226,7 +240,9 @@ function fn_regRe_popup(){
 							<col />
 							<col style="width: 70px;" />
 							<col />
-							<col style="width: 90px;" />
+							<col style="width: 80px;" />
+							<col />
+							<col style="width: 80px;" />
 							<col />
 						</colgroup>
 						<tbody>
@@ -237,6 +253,14 @@ function fn_regRe_popup(){
 								<td><input type="text" class="txt" name="ipadr" id="ipadr" /></td>
 								<th scope="row" class="t4">Database</th>
 								<td><input type="text" class="txt" name="dft_db_nm" id="dft_db_nm" /></td>
+								<th scope="row" class="t9">사용유무</th>
+								<td>
+									<select class="select t5" id="useyn">
+										<option value="%">전체</option>
+										<option value="Y">사용</option>
+										<option value="N">미사용</option>
+									</select>
+								</td>
 							</tr>
 						</tbody>
 					</table>
@@ -251,6 +275,7 @@ function fn_regRe_popup(){
 							<th width="130">database</th>
 							<th width="70">포트</th>
 							<th width="70">User</th>
+							<th width="70">사용유무</th>
 							<th width="65">등록자</th>
 							<th width="100">등록일시</th>
 							<th width="65">수정자</th>

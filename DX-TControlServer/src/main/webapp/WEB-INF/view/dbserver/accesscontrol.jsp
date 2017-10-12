@@ -59,8 +59,8 @@
 				}
 		});
 		
-		table.tables().header().to$().find('th:eq(0)').css('min-width', '10px');
-		table.tables().header().to$().find('th:eq(1)').css('min-width', '20px');
+		table.tables().header().to$().find('th:eq(0)').css('min-width', '20px');
+		table.tables().header().to$().find('th:eq(1)').css('min-width', '40px');
 		table.tables().header().to$().find('th:eq(2)').css('min-width', '50px');
 		table.tables().header().to$().find('th:eq(3)').css('min-width', '100px');
 		table.tables().header().to$().find('th:eq(4)').css('min-width', '100px');
@@ -163,8 +163,8 @@
 	 			},
 	 			dataType : "json",
 	 			type : "post",
-	 			error : function(xhr, status, error) {
-	 				alert("실패")
+	 			error : function(request, status, error) {
+	 				alert("ERROR CODE : "+ request.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ request.responseText.replace(/(<([^>]+)>)/gi, ""));
 	 			},
 	 			success : function(result) {
 	 				table.clear().draw();
@@ -183,8 +183,8 @@
 			},
 			dataType : "json",
 			type : "post",
-			error : function(xhr, status, error) {
-					alert("실패")
+			error : function(request, status, error) {
+				alert("ERROR CODE : "+ request.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ request.responseText.replace(/(<([^>]+)>)/gi, ""));
 			},
 			success : function(result) {
 				table.clear().draw();
@@ -254,15 +254,15 @@
 					},
 					dataType : "json",
 					type : "post",
-					error : function(xhr, status, error) {
-						alert("실패")
+					error : function(request, status, error) {
+						alert("ERROR CODE : "+ request.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ request.responseText.replace(/(<([^>]+)>)/gi, ""));
 					},
 					success : function(result) {
 						if (result) {
 							alert("삭제되었습니다.");
 							fn_select();
-						} else {
-							alert("처리 실패");
+						}else{
+							alert("접근제어삭제를 실패하였습니다.");
 						}
 					}
 				}); 	
@@ -286,8 +286,8 @@
  			},
  			dataType : "json",
  			type : "post",
- 			error : function(xhr, status, error) {
- 				alert("실패")
+ 			error : function(request, status, error) {
+ 				alert("ERROR CODE : "+ request.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ request.responseText.replace(/(<([^>]+)>)/gi, ""));
  			},
  			success : function(result) {
  			}
@@ -319,7 +319,7 @@
 			</h4>
 			<div class="location">
 				<ul>
-					<li>${db_svr_nm}</li>
+					<li class="bold">${db_svr_nm}</li>
 					<li>접근제어관리</li>
 					<li class="on">접근제어</li>
 				</ul>
@@ -333,7 +333,8 @@
 							<input type="text" class="txt search" id="select" />
 							<button class="search_btn">검색</button>
 						</div>
-					</span> <span class="btn" onclick="fn_insert();"><button>등록</button></span>
+					</span>
+					<span class="btn" onclick="fn_insert();"><button>등록</button></span>
 					<span class="btn" onclick="fn_update();"><button>수정</button></span>
 					<span class="btn" onclick="fn_delete();"><button>삭제</button></span>
 					<span class="btn" onclick="fn_save();"><button>적용</button></span>
@@ -344,8 +345,8 @@
 						<table id="accessControlTable" class="display" cellspacing="0" width="100%">
 							<thead>
 								<tr>
-									<th width="10"></th>
-									<th width="20">No</th>
+									<th width="20"></th>
+									<th width="40">No</th>
 									<th width="50">Type</th>
 									<th width="100">Database</th>
 									<th width="100">User</th>

@@ -12,8 +12,10 @@ import com.k4m.dx.tcontrol.common.service.HistoryVO;
 import com.k4m.dx.tcontrol.login.service.UserVO;
 import com.k4m.dx.tcontrol.sample.service.PagingVO;
 
+import egovframework.rte.fdl.cmmn.EgovAbstractServiceImpl;
+
 @Service("AccessHistoryServiceImpl")
-public class AccessHistoryServiceImpl implements AccessHistoryService {
+public class AccessHistoryServiceImpl extends EgovAbstractServiceImpl implements AccessHistoryService {
 
 	@Resource(name = "accessHistoryDAO")
 	private AccessHistoryDAO accessHistoryDAO;

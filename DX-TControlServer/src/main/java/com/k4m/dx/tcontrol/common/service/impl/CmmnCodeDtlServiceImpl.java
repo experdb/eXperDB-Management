@@ -10,9 +10,11 @@ import com.k4m.dx.tcontrol.common.service.CmmnCodeDtlService;
 import com.k4m.dx.tcontrol.common.service.CmmnCodeVO;
 import com.k4m.dx.tcontrol.common.service.PageVO;
 
+import egovframework.rte.fdl.cmmn.EgovAbstractServiceImpl;
+
 
 @Service("cmmnCodeDtlServiceImpl")
-public class CmmnCodeDtlServiceImpl implements CmmnCodeDtlService {
+public class CmmnCodeDtlServiceImpl extends EgovAbstractServiceImpl implements CmmnCodeDtlService {
 	
     @Resource(name="cmmnCodeDtlDAO")
     private CmmnCodeDtlDAO cmmnCodeDtlDAO;

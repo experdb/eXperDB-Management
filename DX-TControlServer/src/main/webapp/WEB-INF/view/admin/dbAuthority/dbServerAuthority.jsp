@@ -70,8 +70,8 @@
 			url : "/selectDBSvrAutUserManager.do",
 			dataType : "json",
 			type : "post",
-			error : function(xhr, status, error) {
-				alert("실패1")
+			error : function(request, status, error) {
+				alert("ERROR CODE : "+ request.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ request.responseText.replace(/(<([^>]+)>)/gi, ""));
 			},
 			success : function(result) {
 				userTable.clear().draw();
@@ -83,8 +83,8 @@
 			url : "/selectDBSrvAutInfo.do",
 			dataType : "json",
 			type : "post",
-			error : function(xhr, status, error) {
-				alert("실패2")
+			error : function(request, status, error) {
+				alert("ERROR CODE : "+ request.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ request.responseText.replace(/(<([^>]+)>)/gi, ""));
 			},
 			success : function(result) {	
 				svr_server = result;
@@ -184,8 +184,8 @@
 		    		},
 		    		dataType : "json",
 		    		type : "post",
-		    		error : function(xhr, status, error) {
-		    			alert("실패3")
+		    		error : function(request, status, error) {
+		    			alert("ERROR CODE : "+ request.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ request.responseText.replace(/(<([^>]+)>)/gi, ""));
 		    		},
 		    		success : function(result) {
 		    			if(result.length != 0){
@@ -302,8 +302,8 @@
 					},
 					dataType : "json",
 					type : "post",
-					error : function(xhr, status, error) {
-						alert("실패")
+					error : function(request, status, error) {
+						alert("ERROR CODE : "+ request.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ request.responseText.replace(/(<([^>]+)>)/gi, ""));
 					},
 					success : function(result) {
 						location.reload();
@@ -314,6 +314,25 @@
 			}
 	}	
 
+ 	//유저조회버튼 클릭시
+ 	function fn_search(){
+ 		$.ajax({
+ 			url : "/selectMenuAutUserManager.do",
+ 			data : {
+ 				type : "usr_id",
+ 				search : "%" + $("#search").val() + "%",
+ 			},
+ 			dataType : "json",
+ 			type : "post",
+ 			error : function(request, status, error) {
+ 				alert("ERROR CODE : "+ request.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ request.responseText.replace(/(<([^>]+)>)/gi, ""));
+ 			},
+ 			success : function(result) {
+ 				userTable.clear().draw();
+ 				userTable.rows.add(result).draw();
+ 			}
+ 		});
+ 	}
 </script>
 
 
@@ -343,8 +362,8 @@
 								<div class="db_roll_lt">
 									<div class="btn_type_01">
 										<div class="search_area">
-											<input type="text" class="txt search">
-											<button class="search_btn">검색</button>
+											<input type="text" class="txt search" id="search">
+											<button class="search_btn" onClick="fn_search()">검색</button>
 										</div>
 									</div>
 									<div class="inner">

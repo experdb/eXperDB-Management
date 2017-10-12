@@ -21,6 +21,21 @@ public class DashboardVO {
 	private int access_cnt;
 	private String agt_cndt_cd;
 	
+	private int connect_cnt;
+	private int execute_cnt;
+	
+	public int getConnect_cnt() {
+		return connect_cnt;
+	}
+	public void setConnect_cnt(int connect_cnt) {
+		this.connect_cnt = connect_cnt;
+	}
+	public int getExecute_cnt() {
+		return execute_cnt;
+	}
+	public void setExecute_cnt(int execute_cnt) {
+		this.execute_cnt = execute_cnt;
+	}
 	
 	public int getSchedule_run_cnt() {
 		return schedule_run_cnt;

@@ -16,9 +16,11 @@ import com.k4m.dx.tcontrol.backup.service.WorkOptDetailVO;
 import com.k4m.dx.tcontrol.backup.service.WorkOptVO;
 import com.k4m.dx.tcontrol.backup.service.WorkVO;
 
+import egovframework.rte.fdl.cmmn.EgovAbstractServiceImpl;
+
 
 @Service("backupServiceImpl")
-public class BackupServiceImpl implements BackupService{
+public class BackupServiceImpl extends EgovAbstractServiceImpl implements BackupService{
 	
 	@Resource(name = "BackupDAO")
 	private BackupDAO backupDAO;

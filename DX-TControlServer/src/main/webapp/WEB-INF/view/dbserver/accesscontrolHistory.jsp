@@ -64,8 +64,8 @@ var table = null;
 				},
 				dataType : "json",
 				type : "post",
-				error : function(xhr, status, error) {
-					alert("실패")
+				error : function(request, status, error) {
+					alert("ERROR CODE : "+ request.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ request.responseText.replace(/(<([^>]+)>)/gi, ""));
 				},
 				success : function(result) {
 					table.clear().draw();
@@ -89,8 +89,8 @@ var table = null;
 				},
 				dataType : "json",
 				type : "post",
-				error : function(xhr, status, error) {
-					alert("실패")
+				error : function(request, status, error) {
+					alert("ERROR CODE : "+ request.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ request.responseText.replace(/(<([^>]+)>)/gi, ""));
 				},
 				success : function(result) {
 					table.clear().draw();
@@ -114,8 +114,8 @@ var table = null;
 			},
 			dataType : "json",
 			type : "post",
-			error : function(xhr, status, error) {
-				alert("실패")
+			error : function(request, status, error) {
+				alert("ERROR CODE : "+ request.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ request.responseText.replace(/(<([^>]+)>)/gi, ""));
 			},
 			success : function(result) {			
 				if (result=="true") {
@@ -125,7 +125,7 @@ var table = null;
 				}else if(result=="agent"){
 					alert("서버에 experdb엔진이 설치되지 않았습니다.");
 				}else {
-					alert("처리 실패");
+					alert("복원에 실패하였습니다.");
 				}
 			}
 		});
@@ -154,7 +154,7 @@ var table = null;
 			</h4>
 			<div class="location">
 				<ul>
-					<li>${db_svr_nm}</li>
+					<li class="bold">${db_svr_nm}</li>
 					<li>접근제어관리</li>
 					<li class="on">접근제어이력</li>
 				</ul>

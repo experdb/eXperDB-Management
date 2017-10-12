@@ -10,8 +10,10 @@ import org.springframework.stereotype.Service;
 import com.k4m.dx.tcontrol.login.service.UserVO;
 import com.k4m.dx.tcontrol.mypage.service.MyPageService;
 
+import egovframework.rte.fdl.cmmn.EgovAbstractServiceImpl;
+
 @Service("myPageServiceImpl")
-public class MyPageServiceImpl implements MyPageService{
+public class MyPageServiceImpl extends EgovAbstractServiceImpl implements MyPageService{
 	
 	@Resource(name = "myPageDAO")
 	private MyPageDAO myPageDAO;

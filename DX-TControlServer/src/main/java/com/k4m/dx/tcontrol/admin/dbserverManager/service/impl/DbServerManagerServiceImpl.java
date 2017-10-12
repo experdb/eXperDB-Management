@@ -12,8 +12,10 @@ import com.k4m.dx.tcontrol.admin.dbserverManager.service.DbServerManagerService;
 import com.k4m.dx.tcontrol.admin.dbserverManager.service.DbServerVO;
 import com.k4m.dx.tcontrol.backup.service.DbVO;
 
+import egovframework.rte.fdl.cmmn.EgovAbstractServiceImpl;
+
 @Service("DbServerManagerServiceImpl")
-public class DbServerManagerServiceImpl implements DbServerManagerService {
+public class DbServerManagerServiceImpl extends EgovAbstractServiceImpl implements DbServerManagerService {
 
 	@Resource(name = "dbServerManagerDAO")
 	private DbServerManagerDAO dbServerManagerDAO;

@@ -77,6 +77,8 @@
 		    , SUM(AAA.fail_cnt) AS fail_cnt
 			, (SELECT COUNT(*) FROM T_SVRACSCNTR_I WHERE DB_SVR_ID = AAA.DB_SVR_ID AND PRMS_SET = '1') AS access_cnt
 		    , (SELECT DISTINCT AGT_CNDT_CD FROM T_AGTCNDT_I WHERE IPADR = AAA.IPADR) AS agt_cndt_cd
+		    , (SELECT COUNT(*) FROM t_trftrgmpp_r r, t_db_i i WHERE DB_SVR_ID = AAA.DB_SVR_ID  AND r.db_id =i.db_id)AS connect_cnt
+		    , (SELECT COUNT(*) FROM t_trftrgmpp_r r, t_db_i d, t_trftrgcng_i i where DB_SVR_ID = AAA.DB_SVR_ID AND r.db_id=d.db_id AND i.trf_trg_id=r.trf_trg_id AND i.bw_pid=1)AS execute_cnt
 		  FROM
 		  (
 		      SELECT

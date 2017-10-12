@@ -76,8 +76,8 @@ function fn_update_work(){
 		  		bck_filenm : $("#bck_filenm").val()
 		  	},
 			type : "post",
-			error : function(request, xhr, status, error) {
-				alert("실패");
+			error : function(request, status, error) {
+				alert("ERROR CODE : "+ request.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ request.responseText.replace(/(<([^>]+)>)/gi, ""));
 			},
 			success : function(data) {
 				if($.trim(data) == "S"){
@@ -219,8 +219,8 @@ function fn_get_object_list(in_db_id,in_db_nm){
 		  		db_nm : db_nm
 		  	},
 			type : "post",
-			error : function(request, xhr, status, error) {
-				alert("실패");
+			error : function(request, status, error) {
+				alert("ERROR CODE : "+ request.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ request.responseText.replace(/(<([^>]+)>)/gi, ""));
 			},
 			success : function(data) {
 				fn_make_object_list(data);
@@ -389,8 +389,8 @@ function checkFolder(){
 		  		path : save_pth
 		  	},
 			type : "post",
-			error : function(request, xhr, status, error) {
-				alert("실패");
+			error : function(request, status, error) {
+				alert("ERROR CODE : "+ request.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ request.responseText.replace(/(<([^>]+)>)/gi, ""));
 			},
 			success : function(data) {
 				if(data.result.ERR_CODE == ""){
@@ -427,13 +427,13 @@ function checkFolder(){
 				<tbody>
 					<tr>
 						<th scope="row" class="ico_t1">Work명</th>
-						<td><input type="text" class="txt" name="wrk_nm" id="wrk_nm" maxlength=50 value="<c:out value="${workInfo[0].wrk_nm}"/>"/></td>
+						<td><input type="text" class="txt" name="wrk_nm" id="wrk_nm" maxlength=25 value="<c:out value="${workInfo[0].wrk_nm}"/>"/></td>
 					</tr>
 					<tr>
 						<th scope="row" class="ico_t1">Work<br/>설명</th>
 						<td>
 							<div class="textarea_grp">
-								<textarea name="wrk_exp" id="wrk_exp" maxlength=200><c:out value="${workInfo[0].wrk_exp}"/></textarea>
+								<textarea name="wrk_exp" id="wrk_exp" maxlength=25><c:out value="${workInfo[0].wrk_exp}"/></textarea>
 							</div>
 						</td>
 					</tr>
@@ -528,9 +528,9 @@ function checkFolder(){
 								<option value="9">9Level</option>
 							</select> %</td>
 						<th scope="row" class="ico_t2">파일보관일수</th>
-						<td><input type="text" class="txt t6" name="file_stg_dcnt" id="file_stg_dcnt" maxlength=3 value="<c:out value="${workInfo[0].file_stg_dcnt}"/>"/> 일</td>
+						<td><input type="number" class="txt t6" name="file_stg_dcnt" id="file_stg_dcnt" maxlength=3 min=0 value="<c:out value="${workInfo[0].file_stg_dcnt}"/>"/> 일</td>
 						<th scope="row" class="ico_t2">백업유지갯수</th>
-						<td><input type="text" class="txt t6" name="bck_mtn_ecnt" id="bck_mtn_ecnt" maxlength=3 value="<c:out value="${workInfo[0].bck_mtn_ecnt}"/>"/></td>
+						<td><input type="number" class="txt t6" name="bck_mtn_ecnt" id="bck_mtn_ecnt" maxlength=3 min=0 value="<c:out value="${workInfo[0].bck_mtn_ecnt}"/>"/></td>
 					</tr>
 				</tbody>
 			</table>

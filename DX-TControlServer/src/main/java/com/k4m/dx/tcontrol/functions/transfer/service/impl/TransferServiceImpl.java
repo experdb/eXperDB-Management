@@ -12,8 +12,10 @@ import com.k4m.dx.tcontrol.functions.transfer.service.TransferService;
 import com.k4m.dx.tcontrol.functions.transfer.service.TransferVO;
 import com.k4m.dx.tcontrol.tree.transfer.service.TransferMappingVO;
 
+import egovframework.rte.fdl.cmmn.EgovAbstractServiceImpl;
+
 @Service("transferServiceImpl")
-public class TransferServiceImpl implements TransferService {
+public class TransferServiceImpl extends EgovAbstractServiceImpl implements TransferService {
 
 	@Resource(name = "transferDAO")
 	private TransferDAO transferDAO;

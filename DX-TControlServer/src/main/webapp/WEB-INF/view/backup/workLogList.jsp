@@ -104,8 +104,8 @@ function fn_get_rman_list(){
 	  	},
 		dataType : "json",
 		type : "post",
-		error : function(xhr, status, error) {
-			alert("실패")
+		error : function(request, status, error) {
+			alert("ERROR CODE : "+ request.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ request.responseText.replace(/(<([^>]+)>)/gi, ""));
 		},
 		success : function(result) {
 			tableRman.clear().draw();
@@ -132,8 +132,8 @@ function fn_get_dump_list(){
 	  	},
 		dataType : "json",
 		type : "post",
-		error : function(xhr, status, error) {
-			alert("실패")
+		error : function(request, status, error) {
+			alert("ERROR CODE : "+ request.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ request.responseText.replace(/(<([^>]+)>)/gi, ""));
 		},
 		success : function(result) {
 			tableDump.clear().draw();
@@ -203,7 +203,7 @@ function selectTab(intab){
 			<h4>백업 이력<a href="#n"><img src="/images/ico_tit.png" alt="" /></a></h4>
 			<div class="location">
 				<ul>
-					<li>${db_svr_nm}</li>
+					<li class="bold">${db_svr_nm}</li>
 					<li>백업관리</li>
 					<li class="on">백업 이력</li>
 				</ul>

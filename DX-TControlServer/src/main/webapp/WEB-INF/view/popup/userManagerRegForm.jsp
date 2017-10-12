@@ -58,8 +58,7 @@
 			pwd1.focus();
 			return false;
 		}
-		if (pwdCheck.value == "" || pwdCheck.value == "undefind"
-				|| pwdCheck.value == null) {
+		if (pwdCheck.value == "" || pwdCheck.value == "undefind" || pwdCheck.value == null) {
 			alert("패스워드확인을 넣어주세요");
 			pwd.focus();
 			return false;
@@ -72,7 +71,6 @@
 			alert("아이디를 입력 후 중복체크를 해주세요.");
 			return false;
 		}
-
 		return true;
 	}
 
@@ -99,7 +97,7 @@
 				alert("저장하였습니다.");
 				if (confirm("유저에 권한을 부여하시겠습니까?")) {
 					window.close();
-					opener.location.href = "/menuAuthority.do";
+					opener.location.href = "/menuAuthority.do?usr_id="+$("#usr_id").val();
 				} else {
 					window.close();
 					opener.fn_select();
@@ -182,7 +180,6 @@
 		
 
 	})
-
 	
 	function NumObj(obj) {
 		if (event.keyCode >= 48 && event.keyCode <= 57) { //숫자키만 입력
@@ -194,7 +191,6 @@
 
 </script>
 <body>
-
 	<div class="pop_container">
 		<div class="pop_cts">
 			<p class="tit">
@@ -259,12 +255,14 @@
 						</tr>
 						<tr>
 							<th scope="row" class="ico_t1">휴대폰번호</th>
-							<td><input type="text" class="txt" name="cpn" id="cpn" value="${cpn}" maxlength="20"  style="ime-mode:disabled;" onKeyPress="NumObj(this);"/></td>
+							<td><input type="text" class="txt" name="cpn" id="cpn" value="${cpn}" maxlength="20"  onKeyPress="NumObj(this);"/></td>
 							<th scope="row" class="ico_t1">사용여부</th>
-							<td><select class="select" id="use_yn" name="use_yn">
+							<td>
+								<select class="select" id="use_yn" name="use_yn">
 									<option value="Y" ${use_yn == 'Y' ? 'selected="selected"' : ''}>사용</option>
 									<option value="N" ${use_yn == 'N' ? 'selected="selected"' : ''}>미사용</option>
-							</select></td>
+								</select>
+							</td>
 						</tr>
 						<tr>
 							<th scope="row" class="ico_t1">사용자만료일</th>

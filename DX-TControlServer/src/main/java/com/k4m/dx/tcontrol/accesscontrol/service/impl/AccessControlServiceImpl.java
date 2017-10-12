@@ -12,8 +12,10 @@ import com.k4m.dx.tcontrol.accesscontrol.service.AccessControlVO;
 import com.k4m.dx.tcontrol.accesscontrol.service.DbAutVO;
 import com.k4m.dx.tcontrol.accesscontrol.service.DbIDbServerVO;
 
+import egovframework.rte.fdl.cmmn.EgovAbstractServiceImpl;
+
 @Service("AccessControlServiceImpl")
-public class AccessControlServiceImpl implements AccessControlService {
+public class AccessControlServiceImpl extends EgovAbstractServiceImpl implements AccessControlService {
 
 	@Resource(name = "accessControlDAO")
 	private AccessControlDAO accessControlDAO;

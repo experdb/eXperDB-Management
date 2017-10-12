@@ -342,7 +342,7 @@ public class TreeController {
 				
 				String strExtName = "pgaudit";
 				List<Object> results = cic.extension_select(serverObj,IP,PORT,strExtName);
-				if(results != null && result.size() != 0) {
+				if(results != null || result.size() != 0) {
 					int current_his_grp= accessControlService.selectCurrenthisrp();
 					accessControlHistoryVO.setHis_grp_id(current_his_grp);
 					

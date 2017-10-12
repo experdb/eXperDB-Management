@@ -9,9 +9,11 @@ import org.springframework.stereotype.Service;
 import com.k4m.dx.tcontrol.login.service.LoginService;
 import com.k4m.dx.tcontrol.login.service.UserVO;
 
+import egovframework.rte.fdl.cmmn.EgovAbstractServiceImpl;
+
 
 @Service("loginServiceImpl")
-public class LoginServiceImpl implements LoginService{
+public class LoginServiceImpl extends EgovAbstractServiceImpl implements LoginService{
 
 	@Resource(name = "loginDAO")
 	private LoginDAO loginDAO;

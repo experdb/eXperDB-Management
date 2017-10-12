@@ -10,8 +10,10 @@ import com.k4m.dx.tcontrol.admin.dbserverManager.service.DbServerVO;
 import com.k4m.dx.tcontrol.common.service.AgentInfoVO;
 import com.k4m.dx.tcontrol.common.service.CmmnServerInfoService;
 
+import egovframework.rte.fdl.cmmn.EgovAbstractServiceImpl;
+
 @Service("cmmnServerInfoServiceImpl")
-public class CmmnServerInfoServiceImpl implements CmmnServerInfoService {
+public class CmmnServerInfoServiceImpl extends EgovAbstractServiceImpl implements CmmnServerInfoService {
 
 	@Resource(name = "cmmnServerInfoDAO")
 	private CmmnServerInfoDAO cmmnServerInfoDAO;

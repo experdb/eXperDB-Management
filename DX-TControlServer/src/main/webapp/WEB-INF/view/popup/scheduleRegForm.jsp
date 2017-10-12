@@ -89,8 +89,8 @@ $(window.document).ready(function() {
 			data : {},
 			dataType : "json",
 			type : "post",
-			error : function(xhr, status, error) {
-				alert("실패")
+			error : function(request, status, error) {
+				alert("ERROR CODE : "+ request.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ request.responseText.replace(/(<([^>]+)>)/gi, ""));
 			},
 			success : function(result) {		
 				$("#db_svr_nm").children().remove();
@@ -112,8 +112,8 @@ $(window.document).ready(function() {
 				data : {},
 				dataType : "json",
 				type : "post",
-				error : function(xhr, status, error) {
-					alert("실패")
+				error : function(request, status, error) {
+					alert("ERROR CODE : "+ request.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ request.responseText.replace(/(<([^>]+)>)/gi, ""));
 				},
 				success : function(result) {		
 					$("#work").children().remove();
@@ -147,8 +147,8 @@ function fn_search(){
 		},
 		dataType : "json",
 		type : "post",
-		error : function(xhr, status, error) {
-			alert("실패")
+		error : function(request, status, error) {
+			alert("ERROR CODE : "+ request.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ request.responseText.replace(/(<([^>]+)>)/gi, ""));
 		},
 		success : function(result) {
 			table.clear().draw();

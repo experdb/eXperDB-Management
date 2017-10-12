@@ -30,7 +30,7 @@
 									</span>
 								</p>
 								<a href="/selectScheduleListView.do"><p class="state_num c1">${backupInfo.schedule_cnt}</p></a>
-								<p class="state_txt">스캐줄등록</p>
+								<p class="state_txt">스케줄등록</p>
 							</li>
 							<li>
 								<p class="state">
@@ -55,9 +55,7 @@
 							</li>
 							<li>
 								<p class="state">
-									<img src="../images/ico_state_09.png" alt="Scheduled for today" /><span>Scheduled
-										<br />for today
-									</span>
+									<img src="../images/ico_state_09.png" alt="Scheduled for today" /><span>Scheduled<br/>for today</span>
 								</p>
 								<p class="state_num c2 double">${scheduleInfo.today_cnt}</p>
 								<p class="state_txt">금일예정</p>
@@ -83,8 +81,7 @@
 							</li>
 							<li>
 								<p class="state">
-									<img src="../images/ico_state_11.png" alt="Backup" /><span>Backup
-									</span>
+									<img src="../images/ico_state_11.png" alt="Backup" /><span>Backup</span>
 								</p>
 								<p class="state_num c1">${backupInfo.backup_cnt}</p>
 								<p class="state_txt">백업등록</p>
@@ -106,6 +103,25 @@
 							</li> --%>
 						</ul>
 					</div>
+					<div class="m_info_lt">
+						<p class="m_tit">데이터 전송 정보</p>
+						<ul>
+							<li>
+								<p class="state">
+									<img src="../images/ico_lnb_5.png" alt="connet" /><span>connet</span>
+								</p>
+								<a href=""><p class="state_num c1">0</p></a>
+								<p class="state_txt">connet수</p>
+							</li>
+							<li>
+								<p class="state">
+									<img src="../images/ico_state_03.png" alt="Running Transfer" /><span>Running Transfer</span>
+								</p>
+								<a href=""><p class="state_num c3">0</p></a>
+								<p class="state_txt">실행중</p>
+							</li>
+						</ul>
+					</div>				
 				</div>
 
 				<div class="main_server_info">
@@ -181,7 +197,6 @@
 								<c:if test="${fn:length(serverInfo) == 0}">
 										<tr>
 											<td colspan="11">Not Found Data !!</td>
-
 										</tr>
 								</c:if>
 								<c:forEach var="data" items="${serverInfo}" varStatus="status">
@@ -193,9 +208,8 @@
 									<td>${data.success_cnt}</td>
 									<td>${data.fail_cnt}</td>
 									<td>${data.access_cnt}</td>
-
-									<td>0</td>
-									<td>0</td>
+									<td>${data.connect_cnt}</td>
+									<td>${data.execute_cnt}</td>
 									<td>
 									<c:if test="${data.agt_cndt_cd == null}">
 										<span class="work_state"><img src="../images/ico_state_08.png" alt="Not Install" /></span>Not Install
@@ -213,8 +227,6 @@
 						</table>
 					</div>
 				</div>
-
-
 			</div>
 		</div>
 	</div>

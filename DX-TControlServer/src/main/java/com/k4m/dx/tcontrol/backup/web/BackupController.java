@@ -1,7 +1,6 @@
 package com.k4m.dx.tcontrol.backup.web;
 
 import java.io.IOException;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -12,7 +11,6 @@ import javax.servlet.http.HttpSession;
 import org.json.simple.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -26,7 +24,6 @@ import com.k4m.dx.tcontrol.backup.service.BackupService;
 import com.k4m.dx.tcontrol.backup.service.DbVO;
 import com.k4m.dx.tcontrol.backup.service.WorkLogVO;
 import com.k4m.dx.tcontrol.backup.service.WorkObjVO;
-import com.k4m.dx.tcontrol.backup.service.WorkOptDetailVO;
 import com.k4m.dx.tcontrol.backup.service.WorkOptVO;
 import com.k4m.dx.tcontrol.backup.service.WorkVO;
 import com.k4m.dx.tcontrol.cmmn.AES256;
@@ -34,8 +31,10 @@ import com.k4m.dx.tcontrol.cmmn.AES256_KEY;
 import com.k4m.dx.tcontrol.cmmn.CmmnUtils;
 import com.k4m.dx.tcontrol.cmmn.client.ClientInfoCmmn;
 import com.k4m.dx.tcontrol.cmmn.client.ClientProtocolID;
+import com.k4m.dx.tcontrol.common.service.AgentInfoVO;
 import com.k4m.dx.tcontrol.common.service.CmmnCodeDtlService;
 import com.k4m.dx.tcontrol.common.service.CmmnCodeVO;
+import com.k4m.dx.tcontrol.common.service.CmmnServerInfoService;
 import com.k4m.dx.tcontrol.common.service.HistoryVO;
 import com.k4m.dx.tcontrol.common.service.PageVO;
 
@@ -52,6 +51,10 @@ public class BackupController {
 	
 	@Autowired
 	private DbAuthorityService dbAuthorityService;
+	
+	@Autowired
+	private CmmnServerInfoService cmmnServerInfoService;
+
 	
 	private List<Map<String, Object>> dbSvrAut;
 	
@@ -294,6 +297,19 @@ public class BackupController {
 		// Get DB ROLE List
 		try {
 			AES256 aes = new AES256(AES256_KEY.ENC_KEY);
+			
+			int db_svr_id = workVO.getDb_svr_id();
+			DbServerVO schDbServerVO = new DbServerVO();
+			schDbServerVO.setDb_svr_id(db_svr_id);
+			DbServerVO DbServerVO = (DbServerVO) cmmnServerInfoService.selectServerInfo(schDbServerVO);
+			String strIpAdr = DbServerVO.getIpadr();
+			AgentInfoVO vo = new AgentInfoVO();
+			vo.setIPADR(strIpAdr);
+			AgentInfoVO agentInfo = (AgentInfoVO) cmmnServerInfoService.selectAgentInfo(vo);
+			
+			String IP = DbServerVO.getIpadr();
+			int PORT = agentInfo.getSOCKET_PORT();
+			
 			DbServerVO dbServerVO = backupService.selectDbSvrNm(workVO);
 			JSONObject serverObj = new JSONObject();
 			
@@ -306,7 +322,7 @@ public class BackupController {
 			serverObj.put(ClientProtocolID.USER_PWD, aes.aesDecode(dbServerVO.getSvr_spr_scm_pwd()));
 			ClientInfoCmmn cic = new ClientInfoCmmn();
 
-			mv.addObject("roleList",cic.role_List(serverObj));
+			mv.addObject("roleList",cic.role_List(serverObj,IP,PORT));
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -564,6 +580,19 @@ public class BackupController {
 		// Server Role List
 		try {
 			AES256 aes = new AES256(AES256_KEY.ENC_KEY);
+			
+			int db_svr_id = workVO.getDb_svr_id();
+			DbServerVO schDbServerVO = new DbServerVO();
+			schDbServerVO.setDb_svr_id(db_svr_id);
+			DbServerVO DbServerVO = (DbServerVO) cmmnServerInfoService.selectServerInfo(schDbServerVO);
+			String strIpAdr = DbServerVO.getIpadr();
+			AgentInfoVO vo = new AgentInfoVO();
+			vo.setIPADR(strIpAdr);
+			AgentInfoVO agentInfo = (AgentInfoVO) cmmnServerInfoService.selectAgentInfo(vo);
+			
+			String IP = DbServerVO.getIpadr();
+			int PORT = agentInfo.getSOCKET_PORT();
+			
 			DbServerVO dbServerVO = backupService.selectDbSvrNm(workVO);
 			JSONObject serverObj = new JSONObject();
 			
@@ -575,7 +604,7 @@ public class BackupController {
 			serverObj.put(ClientProtocolID.USER_PWD, aes.aesDecode(dbServerVO.getSvr_spr_scm_pwd()));
 			
 			ClientInfoCmmn cic = new ClientInfoCmmn();
-			mv.addObject("roleList",cic.role_List(serverObj));
+			mv.addObject("roleList",cic.role_List(serverObj,IP,PORT));
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

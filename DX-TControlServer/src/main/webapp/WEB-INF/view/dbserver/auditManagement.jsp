@@ -98,8 +98,8 @@
 				dataType : "json",
 				type : "post",
 				data : formData,
-				error : function(xhr, status, error) {
-					alert("audit 저장이 실패하였습니다.");
+				error : function(request, status, error) {
+					alert("ERROR CODE : "+ request.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ request.responseText.replace(/(<([^>]+)>)/gi, ""));
 				},
 				success : function(result) {
 					if(result == false) {
@@ -123,7 +123,7 @@
 						<h4>감사설정<a href="#n"><img src="../images/ico_tit.png" alt="" /></a></h4>
 						<div class="location">
 							<ul>
-								<li>${serverName}</li>
+								<li class="bold">${serverName}</li>
 								<li>접근제어관리</li>
 								<li class="on">감사설정</li>
 							</ul>

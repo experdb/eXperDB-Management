@@ -84,8 +84,8 @@ $(window.document).ready(function() {
 		data : {},
 		dataType : "json",
 		type : "post",
-		error : function(xhr, status, error) {
-			alert("실패")
+		error : function(request, status, error) {
+			alert("ERROR CODE : "+ request.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ request.responseText.replace(/(<([^>]+)>)/gi, ""));
 		},
 		success : function(result) {
 			table_dbServer.clear().draw();
@@ -125,8 +125,8 @@ $(function() {
     		},
     		dataType : "json",
     		type : "post",
-    		error : function(xhr, status, error) {
-    			alert("실패")
+    		error : function(request, status, error) {
+    			alert("ERROR CODE : "+ request.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ request.responseText.replace(/(<([^>]+)>)/gi, ""));
     		},
     		success : function(result) {
     			table_db.clear().draw();

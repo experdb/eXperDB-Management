@@ -9,10 +9,12 @@ import org.springframework.stereotype.Service;
 
 import com.k4m.dx.tcontrol.admin.dbauthority.service.DbAuthorityService;
 
+import egovframework.rte.fdl.cmmn.EgovAbstractServiceImpl;
+
 
 
 @Service("DbAuthorityServiceImpl")
-public class DbAuthorityServiceImpl implements DbAuthorityService{
+public class DbAuthorityServiceImpl extends EgovAbstractServiceImpl implements DbAuthorityService{
 
 	@Resource(name = "dbAuthorityDAO")
 	private DbAuthorityDAO dbAuthorityDAO;

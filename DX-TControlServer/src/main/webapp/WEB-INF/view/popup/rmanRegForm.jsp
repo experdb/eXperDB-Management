@@ -74,8 +74,8 @@ $(window.document).ready(function() {
 		  		acv_file_mtncnt : $("#acv_file_mtncnt").val()
 		  	},
 			type : "post",
-			error : function(request, xhr, status, error) {
-				alert("실패");
+			error : function(request, status, error) {
+				alert("ERROR CODE : "+ request.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ request.responseText.replace(/(<([^>]+)>)/gi, ""));
 			},
 			success : function(data) {
 				result(data);
@@ -180,8 +180,8 @@ function checkFolder(keyType){
 		  		path : save_path
 		  	},
 			type : "post",
-			error : function(request, xhr, status, error) {
-				alert("실패");
+			error : function(request, status, error) {
+				alert("ERROR CODE : "+ request.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ request.responseText.replace(/(<([^>]+)>)/gi, ""));
 			},
 			success : function(data) {
 				if(data.result.ERR_CODE == ""){
@@ -240,7 +240,7 @@ function fn_check() {
 			}
 		},
 		error : function(request, status, error) {
-			alert("실패");
+			alert("ERROR CODE : "+ request.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ request.responseText.replace(/(<([^>]+)>)/gi, ""));
 		}
 	});
 }

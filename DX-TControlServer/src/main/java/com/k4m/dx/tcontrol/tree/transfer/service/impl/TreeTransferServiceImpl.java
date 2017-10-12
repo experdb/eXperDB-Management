@@ -18,8 +18,10 @@ import com.k4m.dx.tcontrol.tree.transfer.service.TransferRelationVO;
 import com.k4m.dx.tcontrol.tree.transfer.service.TransferTargetVO;
 import com.k4m.dx.tcontrol.tree.transfer.service.TreeTransferService;
 
+import egovframework.rte.fdl.cmmn.EgovAbstractServiceImpl;
+
 @Service("TreeTransferServiceImpl")
-public class TreeTransferServiceImpl implements TreeTransferService {
+public class TreeTransferServiceImpl extends EgovAbstractServiceImpl implements TreeTransferService {
 
 	@Resource(name = "TreeTransferDAO")
 	private TreeTransferDAO treeTransferDAO;

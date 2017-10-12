@@ -82,6 +82,12 @@ public class MenuAuthorityController {
 				historyVO.setMnu_id(14);
 				accessHistoryService.insertHistory(historyVO);
 		
+				String usr_id = request.getParameter("usr_id")==null?"":request.getParameter("usr_id");
+				if(usr_id != null){
+					mv.addObject("usr_id", usr_id);
+				}
+				 
+				 
 				mv.addObject("read_aut_yn", menuAut.get(0).get("read_aut_yn"));
 				mv.addObject("wrt_aut_yn", menuAut.get(0).get("wrt_aut_yn"));				
 				mv.setViewName("admin/menuAuthority/menuAuthority");

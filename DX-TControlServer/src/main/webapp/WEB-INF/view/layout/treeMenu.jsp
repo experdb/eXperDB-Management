@@ -126,7 +126,7 @@
  				$(data).each(function (index, item) {		
  					if(aut.length != 0 && aut[index].bck_cng_aut_yn != "N" && aut[index].bck_hist_aut_yn != "N" && aut[index].acs_cntr_aut_yn != "N" && aut[index].adt_cng_aut_yn != "N" && aut[index].adt_hist_aut_yn != "N" ){			
 					html1+='<ul class="depth_1 lnbMenu">';
-					html1+='	<li><div class="border"><a href="#n" onClick=javascript:fn_GoLink("#n");><img src="../images/ico_lnb_3.png" id="treeImg">'+item.db_svr_nm+'</a></div>';
+					html1+='	<li><div class="border" style="overflow: hidden;white-space: nowrap;text-overflow: ellipsis;" ><a href="#n" onClick=javascript:fn_GoLink("#n");><img src="../images/ico_lnb_3.png" id="treeImg">'+item.db_svr_nm+'</a></div>';
 					html1+='		<ul class="depth_2">';
 					html1+='			<li class="ico2_1"><a href="#n"><img src="../images/ico_lnb_6.png" id="treeImg">백업관리</a>';
 					html1+='				<ul class="depth_3">';
@@ -173,7 +173,7 @@
 		          }
 	          }
 	          $(data).each(function (index, item) {
-	          html += '      <ul class="depth_1 lnbMenu"><li class="t2"><div class="border"><a href="#n"><img src="../images/ico_lnb_5.png" id="treeImg">'+item.cnr_nm+'</a></div>';
+	          html += '      <ul class="depth_1 lnbMenu"><li class="t2"><div class="border" style="overflow: hidden;white-space: nowrap;text-overflow: ellipsis;"><a href="#n"><img src="../images/ico_lnb_5.png" id="treeImg">'+item.cnr_nm+'</a></div>';
 	          html += '         <ul class="depth_2">';
 	          html += '              <li class="ico2_3"><a href="/transferTarget.do?cnr_id='+item.cnr_id+'&&cnr_nm='+item.cnr_nm+'" onClick=javascript:fn_GoLink("/transferTarget.do?cnr_id='+item.cnr_id+'&&cnr_nm='+item.cnr_nm+'");><img src="../images/ico_lnb_8.png" id="treeImg">전송대상 설정</a></li>';
 	          html += '            <li class="ico2_4"><a href="/transferDetail.do?cnr_id='+item.cnr_id+'&&cnr_nm='+item.cnr_nm+'" onClick=javascript:fn_GoLink("/transferDetail.do?cnr_id='+item.cnr_id+'&&cnr_nm='+item.cnr_nm+'");><img src="../images/ico_lnb_9.png" id="treeImg">전송상세 설정</a></li>';

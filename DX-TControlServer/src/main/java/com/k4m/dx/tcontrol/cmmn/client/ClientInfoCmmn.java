@@ -493,7 +493,7 @@ public class ClientInfoCmmn {
 	
 	// 11. Role 리스트 (roleList)
 	@SuppressWarnings({ "unchecked", "rawtypes" })
-	public JSONObject role_List(JSONObject serverObj) {
+	public JSONObject role_List(JSONObject serverObj,String IP, int PORT) {
 
 		JSONArray jsonArray = new JSONArray(); // 객체를 담기위해 JSONArray 선언.
 		JSONObject result = new JSONObject();
@@ -501,7 +501,7 @@ public class ClientInfoCmmn {
 		try {
 			JSONObject objList;
 
-			ClientAdapter CA = new ClientAdapter(Ip, port);
+			ClientAdapter CA = new ClientAdapter(IP, PORT);
 			CA.open();
 
 			objList = CA.dxT011(ClientTranCodeType.DxT011, serverObj);

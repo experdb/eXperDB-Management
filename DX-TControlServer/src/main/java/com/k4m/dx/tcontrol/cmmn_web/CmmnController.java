@@ -78,6 +78,8 @@ public class CmmnController {
 		//백업정보
 		DashboardVO backupInfoVO = (DashboardVO) dashboardService.selectDashboardBackupInfo();
 		
+		//데이터전송정보
+		
 		DashboardVO vo = new DashboardVO();
 		
 		List<DashboardVO> serverInfoVO = (List<DashboardVO>) dashboardService.selectDashboardServerInfo(vo);

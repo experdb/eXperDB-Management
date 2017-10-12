@@ -77,8 +77,8 @@
 			data : {},
 			dataType : "json",
 			type : "post",
-			error : function(xhr, status, error) {
-				alert("실패")
+			error : function(request, status, error) {
+				alert("ERROR CODE : "+ request.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ request.responseText.replace(/(<([^>]+)>)/gi, ""));
 			},
 			success : function(result) {
 				table.clear().draw();
@@ -120,8 +120,8 @@
 			},
 			dataType : "json",
 			type : "post",
-			error : function(xhr, status, error) {
-				alert("실패");
+			error : function(request, status, error) {
+				alert("ERROR CODE : "+ request.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ request.responseText.replace(/(<([^>]+)>)/gi, ""));
 			},
 			success : function(result) {
 				table.clear().draw();
@@ -184,15 +184,15 @@
 				},
 				dataType : "json",
 				type : "post",
-				error : function(xhr, status, error) {
-					alert("실패")
+				error : function(request, status, error) {
+					alert("ERROR CODE : "+ request.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ request.responseText.replace(/(<([^>]+)>)/gi, ""));
 				},
 				success : function(result) {
 					if (result) {
 						alert("삭제되었습니다.");
 						location.reload();
 					} else {
-						alert("처리 실패");
+						alert("커넥터삭제를 실패하였습니다.");
 					}
 				}
 			});

@@ -11,9 +11,11 @@ import com.k4m.dx.tcontrol.admin.menuauthority.service.MenuAuthorityService;
 import com.k4m.dx.tcontrol.admin.menuauthority.service.MenuAuthorityVO;
 import com.k4m.dx.tcontrol.login.service.UserVO;
 
+import egovframework.rte.fdl.cmmn.EgovAbstractServiceImpl;
+
 
 @Service("menuAuthorityService")
-public class MenuAuthorityServiceImpl implements MenuAuthorityService{
+public class MenuAuthorityServiceImpl extends EgovAbstractServiceImpl implements MenuAuthorityService{
 	
 	@Resource(name = "MenuAuthorityDAO")
 	private MenuAuthorityDAO menuAuthorityDAO;

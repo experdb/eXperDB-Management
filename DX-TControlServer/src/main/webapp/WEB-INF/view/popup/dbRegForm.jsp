@@ -70,8 +70,8 @@ $(window.document).ready(function() {
 			data : {},
 			dataType : "json",
 			type : "post",
-			error : function(xhr, status, error) {
-				alert("실패")
+			error : function(request, status, error) {
+				alert("ERROR CODE : "+ request.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ request.responseText.replace(/(<([^>]+)>)/gi, ""));
 			},
 			success : function(result) {		
 				$("#db_svr_id").children().remove();
@@ -101,8 +101,8 @@ function fn_svr_db(db_svr_nm, db_svr_id){
 		},
 		dataType : "json",
 		type : "post",
-		error : function(xhr, status, error) {
-			alert("실패")
+		error : function(request, status, error) {
+			alert("ERROR CODE : "+ request.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ request.responseText.replace(/(<([^>]+)>)/gi, ""));
 		},
 		success : function(result) {
 			table_db.clear().draw();
@@ -129,8 +129,8 @@ function fn_dataCompareChcek(svrDbList,db_svr_id){
 		async:true,
 		dataType : "json",
 		type : "post",
-		error : function(xhr, status, error) {
-			alert("실패");
+		error : function(request, status, error) {
+			alert("ERROR CODE : "+ request.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ request.responseText.replace(/(<([^>]+)>)/gi, ""));
 		},
 		success : function(result) {
 			if(svrDbList.data.length>0){
@@ -172,8 +172,8 @@ function fn_dataCompareChcek(svrDbList,db_svr_id){
 				},
 				dataType : "json",
 				type : "post",
-				error : function(xhr, status, error) {
-					alert("실패")
+				error : function(request, status, error) {
+					alert("ERROR CODE : "+ request.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ request.responseText.replace(/(<([^>]+)>)/gi, ""));
 				},
 				success : function(result) {		
 					document.serverList.ipadr.value = result[0].ipadr;
@@ -232,8 +232,8 @@ function fn_dataCompareChcek(svrDbList,db_svr_id){
  				async:true,
  				dataType : "json",
  				type : "post",
- 				error : function(xhr, status, error) {
- 					alert("실패");
+ 				error : function(request, status, error) {
+ 					alert("ERROR CODE : "+ request.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ request.responseText.replace(/(<([^>]+)>)/gi, ""));
  				},
  				success : function(result) {
  					alert("저장되었습니다.");

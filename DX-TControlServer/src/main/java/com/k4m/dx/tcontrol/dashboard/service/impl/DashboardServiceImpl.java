@@ -11,8 +11,10 @@ import com.k4m.dx.tcontrol.admin.agentmonitoring.service.AgentMonitoringVO;
 import com.k4m.dx.tcontrol.dashboard.service.DashboardService;
 import com.k4m.dx.tcontrol.dashboard.service.DashboardVO;
 
+import egovframework.rte.fdl.cmmn.EgovAbstractServiceImpl;
+
 @Service("DashboardService")
-public class DashboardServiceImpl implements DashboardService{
+public class DashboardServiceImpl extends EgovAbstractServiceImpl implements DashboardService{
 	
 	@Resource(name = "dashboardDAO")
 	private DashboardDAO dashboardDAO;

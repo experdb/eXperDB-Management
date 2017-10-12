@@ -169,7 +169,7 @@ function fn_chkExtName(extName) {
 						<h4>감사이력<a href="#n"><img src="../images/ico_tit.png" alt="" /></a></h4>
 						<div class="location">
 							<ul>
-								<li>${serverName}</li>
+								<li class="bold">${serverName}</li>
 								<li>접근제어관리</li>
 								<li class="on">감사 이력</li>
 							</ul>

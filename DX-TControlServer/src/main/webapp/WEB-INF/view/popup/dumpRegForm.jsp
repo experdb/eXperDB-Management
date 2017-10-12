@@ -56,8 +56,8 @@ function fn_insert_work(){
 		  		bck_filenm : $("#bck_filenm").val()
 		  	},
 			type : "post",
-			error : function(request, xhr, status, error) {
-				alert("실패");
+			error : function(request, status, error) {
+				alert("ERROR CODE : "+ request.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ request.responseText.replace(/(<([^>]+)>)/gi, ""));
 			},
 			success : function(data) {
 				fn_insert_opt(data);
@@ -196,8 +196,8 @@ function fn_get_object_list(){
 		  		db_nm : db_nm
 		  	},
 			type : "post",
-			error : function(request, xhr, status, error) {
-				alert("실패");
+			error : function(request, status, error) {
+				alert("ERROR CODE : "+ request.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ request.responseText.replace(/(<([^>]+)>)/gi, ""));
 			},
 			success : function(data) {
 				fn_make_object_list(data);
@@ -358,8 +358,8 @@ function checkFolder(){
 		  		path : save_pth
 		  	},
 			type : "post",
-			error : function(request, xhr, status, error) {
-				alert("실패");
+			error : function(request, status, error) {
+				alert("ERROR CODE : "+ request.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ request.responseText.replace(/(<([^>]+)>)/gi, ""));
 			},
 			success : function(data) {
 				if(data.result.ERR_CODE == ""){
@@ -404,7 +404,7 @@ function fn_check() {
 			}
 		},
 		error : function(request, status, error) {
-			alert("실패");
+			alert("ERROR CODE : "+ request.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ request.responseText.replace(/(<([^>]+)>)/gi, ""));
 		}
 	});
 }
@@ -427,7 +427,7 @@ function fn_check() {
 				<tbody>
 					<tr>
 						<th scope="row" class="ico_t1">Work명</th>
-						<td><input type="text" class="txt" name="wrk_nm" id="wrk_nm" maxlength=50/>
+						<td><input type="text" class="txt" name="wrk_nm" id="wrk_nm" maxlength=25/>
 						<span class="btn btnC_01"><button type="button" class= "btn_type_02" onclick="fn_check()" style="width: 60px; margin-right: -60px; margin-top: 0;">중복체크</button></span>
 						</td>
 					</tr>
@@ -435,7 +435,7 @@ function fn_check() {
 						<th scope="row" class="ico_t1">Work<br/>설명</th>
 						<td>
 							<div class="textarea_grp">
-								<textarea name="wrk_exp" id="wrk_exp" maxlength=200></textarea>
+								<textarea name="wrk_exp" id="wrk_exp" maxlength=25></textarea>
 							</div>
 						</td>
 					</tr>
@@ -528,9 +528,9 @@ function fn_check() {
 								<option value="9">9Level</option>
 							</select> %</td>
 						<th scope="row" class="ico_t2">파일보관일수</th>
-						<td><input type="text" class="txt t6" name="file_stg_dcnt" id="file_stg_dcnt" maxlength=3 value="0"/> 일</td>
+						<td><input type="number" class="txt t6" name="file_stg_dcnt" id="file_stg_dcnt" maxlength=3 min=0 value="0"/> 일</td>
 						<th scope="row" class="ico_t2">백업유지갯수</th>
-						<td><input type="text" class="txt t6" name="bck_mtn_ecnt" id="bck_mtn_ecnt" maxlength=3 value="0"/></td>
+						<td><input type="number" class="txt t6" name="bck_mtn_ecnt" id="bck_mtn_ecnt" maxlength=3 min=0 value="0"/></td>
 					</tr>
 				</tbody>
 			</table>

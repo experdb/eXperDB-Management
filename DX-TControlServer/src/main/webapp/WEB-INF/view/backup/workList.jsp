@@ -114,8 +114,8 @@ function getRmanDataList(wrk_nm, bck_opt_cd){
 	  	},
 		dataType : "json",
 		type : "post",
-		error : function(xhr, status, error) {
-			alert("실패")
+		error : function(request, status, error) {
+			alert("ERROR CODE : "+ request.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ request.responseText.replace(/(<([^>]+)>)/gi, ""));
 		},
 		success : function(data) {
 			dataRmanList(data);
@@ -138,8 +138,8 @@ function getDumpDataList(wrk_nm, db_id){
 	  	},
 		dataType : "json",
 		type : "post",
-		error : function(xhr, status, error) {
-			alert("실패")
+		error : function(request, status, error) {
+			alert("ERROR CODE : "+ request.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ request.responseText.replace(/(<([^>]+)>)/gi, ""));
 		},
 		success : function(data) {
 			dataDumpList(data);
@@ -287,8 +287,8 @@ function fn_rman_work_delete(){
 				  	},
 					dataType : "json",
 					type : "post",
-					error : function(xhr, status, error) {
-						alert("실패")
+					error : function(request, status, error) {
+						alert("ERROR CODE : "+ request.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ request.responseText.replace(/(<([^>]+)>)/gi, ""));
 					},
 					success : function(data) {
 					}
@@ -322,8 +322,8 @@ function fn_dump_work_delete(){
 				  	},
 					dataType : "json",
 					type : "post",
-					error : function(xhr, status, error) {
-						alert("실패")
+					error : function(request, status, error) {
+						alert("ERROR CODE : "+ request.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ request.responseText.replace(/(<([^>]+)>)/gi, ""));
 					},
 					success : function(data) {
 					}
@@ -367,7 +367,7 @@ function selectTab(tab){
 			<h4>백업 설정<a href="#n"><img src="/images/ico_tit.png" alt="" /></a></h4>
 			<div class="location">
 				<ul>
-					<li>${db_svr_nm}</li>
+					<li class="bold">${db_svr_nm}</li>
 					<li>백업관리</li>
 					<li class="on">백업 설정</li>
 				</ul>

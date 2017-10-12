@@ -124,6 +124,7 @@ public class ServerController {
 			System.out.println("서버명 : " + dbServerVO.getDb_svr_nm());
 			System.out.println("아이피 : " + dbServerVO.getIpadr());
 			System.out.println("Database : " + dbServerVO.getDft_db_nm());
+			System.out.println("사용유무 : " + dbServerVO.getUseyn());
 			System.out.println("=====================");
 			
 			resultSet = dbServerManagerService.selectDbServerList(dbServerVO);

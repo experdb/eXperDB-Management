@@ -62,8 +62,8 @@ $(window.document).ready(function() {
 		},
 		dataType : "json",
 		type : "post",
-		error : function(xhr, status, error) {
-			alert("실패")
+		error : function(request, status, error) {
+			alert("ERROR CODE : "+ request.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ request.responseText.replace(/(<([^>]+)>)/gi, ""));
 		},
 		success : function(result) {
 			document.getElementById('db_svr_id').value= result[0].db_svr_id;
@@ -104,8 +104,8 @@ function fn_dbServerConnTest(){
 			check : "u",
 		},
 		type : "post",
-		error : function(xhr, status, error) {
-			alert("실패");
+		error : function(request, status, error) {
+			alert("ERROR CODE : "+ request.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ request.responseText.replace(/(<([^>]+)>)/gi, ""));
 		},
 		success : function(result) {
 			if(result.result_code == 0){
@@ -143,8 +143,8 @@ function fn_updateDbServer(){
 			useyn : useyn
 		},
 		type : "post",
-		error : function(xhr, status, error) {
-			alert("실패");
+		error : function(request, status, error) {
+			alert("ERROR CODE : "+ request.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ request.responseText.replace(/(<([^>]+)>)/gi, ""));
 		},
 		success : function(result) {
 			alert("수정 되었습니다.");
@@ -179,8 +179,8 @@ function checkPghome(){
 		  		flag : "m"
 		  	},
 			type : "post",
-			error : function(request, xhr, status, error) {
-				alert("실패");
+			error : function(request, status, error) {
+				alert("ERROR CODE : "+ request.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ request.responseText.replace(/(<([^>]+)>)/gi, ""));
 			},
 			success : function(data) {
 				if(data.result.ERR_CODE == ""){
@@ -223,8 +223,8 @@ function checkPghome(){
 			  		flag : "m"
 			  	},
 				type : "post",
-				error : function(request, xhr, status, error) {
-					alert("실패");
+				error : function(request, status, error) {
+					alert("ERROR CODE : "+ request.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ request.responseText.replace(/(<([^>]+)>)/gi, ""));
 				},
 				success : function(data) {
 					if(data.result.ERR_CODE == ""){
