@@ -1,6 +1,7 @@
 package com.k4m.dx.tcontrol.backup.service.impl;
 
 import java.util.List;
+import java.util.Map;
 
 import javax.annotation.Resource;
 
@@ -98,5 +99,10 @@ public class BackupServiceImpl implements BackupService{
 	@Override
 	public void insertWork(WorkVO workVO) {
 		backupDAO.insertWork(workVO);
+	}
+
+	@Override
+	public List<Map<String, Object>> selectBckSchedule(int db_svr_id) {
+		return backupDAO.selectBckSchedule(db_svr_id);
 	}
 }

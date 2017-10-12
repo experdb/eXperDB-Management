@@ -75,7 +75,6 @@ $(window.document).ready(function() {
 });
 
 function fn_find_list(){
-	alert("a");
 	var db_id = $("#db_id").val();
 	//if(db_id == "") db_id = 0;
 	var wrk_strt_dtm = $("#wrk_strt_dtm").val();

@@ -1,6 +1,7 @@
 package com.k4m.dx.tcontrol.backup.service;
 
 import java.util.List;
+import java.util.Map;
 
 import com.k4m.dx.tcontrol.admin.dbserverManager.service.DbServerVO;
 
@@ -148,4 +149,13 @@ public interface BackupService {
 	 * @throws Exception
 	 */
 	public void insertWork(WorkVO workVO);
+
+	
+	/**
+	 * 백업스케줄 조회
+	 * @param db_svr_id 
+	 * @param 
+	 * @throws Exception
+	 */
+	public List<Map<String, Object>> selectBckSchedule(int db_svr_id);
 }

@@ -32,6 +32,15 @@
 var wrk_id = null;
 var wrk_nmChk ="fail";
 
+$(window.document).ready(function() {
+
+		$("#dataVolume").empty();
+		$( "#dataVolume" ).append(0);
+
+		$("#backupVolume").empty();
+		$( "#backupVolume" ).append(0);
+	
+});
 /* ********************************************************
  * Rman Backup Insert
  ******************************************************** */
@@ -114,6 +123,10 @@ function valCheck(){
 		alert("백업경로를 입력해 주세요.");
 		$("#bck_pth").focus();
 		return false;
+	}else if($("#log_pth").val() == ""){
+		alert("로그경로를 입력해 주세요.");
+		$("#log_pth").focus();
+		return false;
 	}else if($("#check_path1").val() != "Y"){
 		alert("데이터경로에 서버에 존재하는 경로를 입력후 경로체크를 해 주세요.");
 		$("#data_pth").focus();
@@ -121,6 +134,10 @@ function valCheck(){
 	}else if($("#check_path2").val() != "Y"){
 		alert("백업경로에 서버에 존재하는 경로를 입력후 경로체크를 해 주세요.");
 		$("#bck_pth").focus();
+		return false;
+	}else if($("#check_path3").val() != "Y"){
+		alert("로그경로에 서버에 존재하는 경로를 입력후 경로체크를 해 주세요.");
+		$("#log_pth").focus();
 		return false;
 	}else if(wrk_nmChk =="fail"){
 		alert("WORK명 중복체크 바랍니다.");;
@@ -139,16 +156,21 @@ function checkFolder(keyType){
 	
 	if(keyType == 1){
 		save_path = $("#data_pth").val();
-	}else{
+	}else if(keyType == 1){
 		save_path = $("#bck_pth").val();
+	}else{
+		save_path = $("#log_pth").val();
 	}
 
 	if(save_path == "" && keyType == 1){
 		alert("데이터경로를 입력해 주세요.");
 		$("#data_pth").focus();
-	}else if(save_path == ""){
+	}else if(save_path == "" && keyType == 2){
 		alert("백업경로를 입력해 주세요.");
 		$("#bck_pth").focus();
+	}else if(save_path == "" && keyType == 3){
+		alert("로그경로를 입력해 주세요.");
+		$("#log_pth").focus();
 	}else{
 		$.ajax({
 			async : false,
@@ -166,15 +188,17 @@ function checkFolder(keyType){
 					if(data.result.RESULT_DATA.IS_DIRECTORY == 0){
 						if(keyType == 1){
 							$("#check_path1").val("Y");
-						}else{
+						}else if(keyType == 2){
 							$("#check_path2").val("Y");
+						}else{
+							$("#check_path3").val("Y");
 						}
 						alert("입력하신 경로는 존재합니다.");
 							var volume = data.result.RESULT_DATA.CAPACITY;
 						if(keyType == 1){
 							$("#dataVolume").empty();
 							$( "#dataVolume" ).append(volume);
-						}else{
+						}else if(keyType == 2) {
 							$("#backupVolume").empty();
 							$( "#backupVolume" ).append(volume);
 						}
@@ -227,6 +251,7 @@ function fn_check() {
 <input type="hidden" name="db_svr_id" id="db_svr_id" value="${db_svr_id}"/>
 <input type="hidden" name="check_path1" id="check_path1" value="N"/>
 <input type="hidden" name="check_path2" id="check_path2" value="N"/>
+<input type="hidden" name="check_path3" id="check_path3" value="N"/>
 	<div id="pop_layer">
 		<div class="pop-container">
 			<div class="pop_cts">
@@ -257,6 +282,12 @@ function fn_check() {
 					</table>
 				</div>
 				<div class="pop_cmm mt25">
+							<span class="chk">
+								<div class="inp_chk chk3">
+									<input type="checkbox" name="cps_yn" id="cps_yn" value="Y" />
+									<label for="cps_yn">압축하기</label>
+								</div>
+							</span>
 					<div class="bak_option">
 						<div class="option">
 							<span class="tit">백업옵션</span>
@@ -267,13 +298,12 @@ function fn_check() {
 									<option value="TC000303">archive</option>
 								</select>
 							</span>
-							<span class="chk">
-								<div class="inp_chk chk3">
-									<input type="checkbox" name="cps_yn" id="cps_yn" value="Y" />
-									<label for="cps_yn">압축하기</label>
-								</div>
-							</span>
-
+							<span class="tit" style="margin-right: 5px;">로그경로</span>
+							<span style="margin-right: 5px;">
+								<input type="text" class="txt" name="log_pth" id="log_pth" maxlength=50 style="width:230px" onKeydown="$('#check_path3').val('N')"/>
+								<span class="btn btnC_01"><button type="button" class= "btn_type_02" onclick="checkFolder(3)" style="width: 60px; margin-right: -60px; margin-top: 0;">경로체크</button></span>
+							</span>			
+	
 							<table class="write">
 								<colgroup>
 									<col style="width:90px;" />
@@ -296,10 +326,10 @@ function fn_check() {
 									
 									
 									<tr>										
-										<th> 용량 : </th>
+										<th> 용량  </th>
 										<td><div id="dataVolume"></div></td>
 										</div>
-										<th> 용량 :</th>
+										<th> 용량 </th>
 										<td><div id="backupVolume"></div></td>
 									</tr>
 									</div>

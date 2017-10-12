@@ -249,11 +249,11 @@ function fn_reg_popup(){
 						</colgroup>
 						<tbody>
 							<tr>
-								<th scope="row" class="t2">DB 서버명</th>
+								<th scope="row" class="t2">DBMS 명</th>
 								<td><select id="db_svr_nm" name="db_svr_nm">
 										<option value="%">전체</option>
 								</select></td>
-								<th scope="row" class="t3">아이피</th>
+								<th scope="row" class="t3">DBMS 아이피</th>
 								<td><input type="text" class="txt" name="ipadr" id="ipadr" /></td>
 								<th scope="row" class="t4">Database</th>
 								<td><input type="text" class="txt" name="dft_db_nm" id="dft_db_nm" /></td>
@@ -267,10 +267,10 @@ function fn_reg_popup(){
 						<tr>
 							<th width="10"></th>
 							<th width="20">No</th>
-							<th width="130">서버명</th>
-							<th width="150">아이피</th>
+							<th width="130">DBMS</th>
+							<th width="150">DBMS 아이피</th>
 							<th width="70">포트</th>
-							<th width="130">DB명</th>
+							<th width="130">Database명</th>
 							<th width="65">등록자</th>
 							<th width="100">등록일시</th>
 							<th width="65">수정자</th>

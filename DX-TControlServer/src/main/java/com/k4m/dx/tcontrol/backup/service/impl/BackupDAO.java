@@ -2,6 +2,7 @@ package com.k4m.dx.tcontrol.backup.service.impl;
 
 import java.sql.SQLException;
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.stereotype.Repository;
 
@@ -104,5 +105,11 @@ public class BackupDAO extends EgovAbstractMapper{
 
 	public void insertWork(WorkVO workVO) {
 		insert("backupSQL.insertWork",workVO);	
+	}
+
+	public List<Map<String, Object>> selectBckSchedule(int db_svr_id) {
+		List<Map<String, Object>> sl = null;
+		sl = (List<Map<String, Object>>) list("backupSQL.selectBckSchedule", db_svr_id);		
+		return sl;
 	}
 }

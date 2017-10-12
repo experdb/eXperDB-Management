@@ -445,14 +445,14 @@ function fn_dataCompareChcek(svrDbList){
 					</div>
 					</div>
 					<div class="inner">
-						<p class="tit">DB 서버 목록</p>
+						<p class="tit">DBMS 목록</p>
 						<div class="tree_server">
 							<table id="dbServerList" class="cell-border display" cellspacing="0" align="left">
 								<thead>
 									<tr>
 										<th width="10">선택</th>									
-										<th width="150">IP</th>
-										<th width="100">DB서버</th>
+										<th width="150">DBMS 아이피</th>
+										<th width="100">DBMS 명</th>
 										<th width="30">Agent상태</th>
 										<th width="30">사용유무</th>
 										<th width="0"></th>
@@ -477,12 +477,12 @@ function fn_dataCompareChcek(svrDbList){
 						</div>
 					</div>
 					<div class="inner">
-						<p class="tit">DB 목록</p>
+						<p class="tit">Database 목록</p>
 						<div class="tree_list">
 							<table id="dbList" class="cell-border display" cellspacing="0" align="left">
 								<thead>
 									<tr>
-										<th width="150">데이터베이스</th>
+										<th width="150">Database</th>
 										<th width="130">설명</th>
 										<th width="10"><input name="select" value="1" type="checkbox"></th>
 									</tr>

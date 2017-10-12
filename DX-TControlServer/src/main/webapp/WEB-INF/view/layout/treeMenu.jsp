@@ -136,6 +136,7 @@
 					if(aut.length != 0 && aut[index].bck_hist_aut_yn == "Y"){
 						html1+='					<li class="ico3_2"><a href=/backup/workLogList.do?db_svr_id='+item.db_svr_id+' onClick=javascript:fn_GoLink("/backup/workLogList.do?db_svr_id='+item.db_svr_id+'");><img src="../images/ico_lnb_11.png" id="treeImg">백업이력</a></li>';
 					}
+					html1+='			<li class="ico2_2"><a href=/schedulerView.do?db_svr_id='+item.db_svr_id+' onClick=javascript:fn_GoLink("/schedulerView.do?db_svr_id='+item.db_svr_id+'");><img src="../images/ico_main_tit_1.png" id="treeImg">백업스케줄러</a>';
 					html1+='				</ul>';
 					html1+='			</li>';
 					html1+='			<li class="ico2_2"><a href="#n"><img src="../images/ico_lnb_7.png" id="treeImg">접근제어관리</a>';
@@ -261,3 +262,7 @@
 				</div>
 		</form>
 </div>
+
+
+
+

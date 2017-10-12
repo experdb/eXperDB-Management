@@ -769,4 +769,118 @@ public class BackupController {
 		}
 		return "true";
 	}
+		
+	/**
+	 * 스케줄러 화면을 보여준다.
+	 * 
+	 * @param
+	 * @return ModelAndView mv
+	 * @throws Exception
+	 */
+	@RequestMapping(value = "/schedulerView.do")
+	public ModelAndView schedulerView(@ModelAttribute("workVO") WorkVO workVO, @ModelAttribute("historyVO") HistoryVO historyVO, HttpServletRequest request) {
+		
+		//해당메뉴 권한 조회 (공통메소드호출)
+		CmmnUtils cu = new CmmnUtils();
+	
+		ModelAndView mv = new ModelAndView();
+		List<DbVO> resultSet = null;
+		
+		try {			
+			int db_svr_id = Integer.parseInt(request.getParameter("db_svr_id"));
+			
+			HttpSession session = request.getSession();
+			String usr_id = (String) session.getAttribute("usr_id");
+			workVO.setDb_svr_id(db_svr_id);
+			workVO.setUsr_id(usr_id);
+			
+			resultSet=backupService.selectDbList(workVO);
+			
+			mv.addObject("dbList",resultSet);		
+			mv.addObject("db_svr_id",db_svr_id);
+			mv.setViewName("functions/scheduler/schedulerView");				
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return mv;
+	}
+	
+	
+	/**
+	 *   백업스케줄 리스트(주별)
+	 * 
+	 * @param
+	 * @return 
+	 * @throws Exception
+	 */
+	@RequestMapping(value = "/selectBckSchedule.do")
+	@ResponseBody
+	public List<Map<String, Object>> selectBckSchedule(@ModelAttribute("historyVO") HistoryVO historyVO, HttpServletRequest request, HttpServletResponse response) {
+		
+		List<Map<String, Object>> result = null;
+		try {		
+				int db_svr_id = Integer.parseInt(request.getParameter("db_svr_id"));
+				result = backupService.selectBckSchedule(db_svr_id);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return result;		
+	}	
+	
+
+	/**
+	 * 백업스케줄 등록 뷰
+	 * 
+	 * @param
+	 * @return ModelAndView mv
+	 * @throws Exception
+	 */
+	@RequestMapping(value = "/bckScheduleInsertVeiw.do")
+	public ModelAndView bckScheduleInsertVeiw(@ModelAttribute("workVO") WorkVO workVO, @ModelAttribute("historyVO") HistoryVO historyVO, HttpServletRequest request, HttpServletResponse response) {
+	
+		ModelAndView mv = new ModelAndView();
+		List<DbVO> resultSet = null;
+		
+		try {
+			int db_svr_id = Integer.parseInt(request.getParameter("db_svr_id"));
+			
+			HttpSession session = request.getSession();
+			String usr_id = (String) session.getAttribute("usr_id");
+			workVO.setDb_svr_id(db_svr_id);
+			workVO.setUsr_id(usr_id);
+			
+			resultSet=backupService.selectDbList(workVO);
+			
+			mv.addObject("dbList",resultSet);		
+			mv.addObject("db_svr_id",db_svr_id);
+			mv.setViewName("popup/bckScheduleInsertVeiw");	
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return mv;
+	}
+	
+	
+	/**
+	 * 백업스케줄 상세정보
+	 * 
+	 * @param
+	 * @return ModelAndView mv
+	 * @throws Exception
+	 */
+	@RequestMapping(value = "/bckScheduleDtlVeiw.do")
+	public ModelAndView bckScheduleDtlVeiw(@ModelAttribute("historyVO") HistoryVO historyVO, HttpServletRequest request, HttpServletResponse response) {
+	
+		ModelAndView mv = new ModelAndView();
+		
+		try {
+				String scd_id = request.getParameter("scd_id");
+				mv.setViewName("popup/bakupScheduleDtl");
+				mv.addObject("scd_id", scd_id);				
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return mv;
+	}
 }

@@ -29,7 +29,7 @@ function fn_init(){
 		{data : "nxt_exe_dtm", className : "dt-center", defaultContent : ""}, 
 		{data : "status", 
 			render: function (data, type, full){
-				if(full.status == "s"){
+				if(full.status.substring(0,1)=="1"){
 					var html = '<img src="../images/ico_agent_1.png" alt="" />';
 						return html;
 				}else{
