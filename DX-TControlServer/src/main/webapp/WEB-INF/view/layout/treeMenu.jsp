@@ -218,7 +218,7 @@
 	<div id="lnb_menu">
 		<form name="treeView" id="treeView">
 				<div class="logout">
-					<div style="color: white; margin-bottom: 5%;"><%=(String)session.getAttribute("usr_id")%>님 환영합니다.</div>
+					<div style="color: white; margin-bottom: 5%;"><%=(String)session.getAttribute("usr_nm")%>님 환영합니다.</div>
 					<a href="#"><button onClick="fn_logout();">LOGOUT</button></a>
 				</div>
 				<div id="treeTitle"><img src="../images/ico_lnb_1.png" id="treeImg"><a href="/dbTree.do">DB 서버</a>

@@ -459,17 +459,17 @@ function selectTab(tab){
 						<caption>Rman백업관리 화면 리스트</caption>
 						<thead>
 							<tr>
-								<th scope="col">
+								<th scope="col" style="width: 70px;">
 									<div class="inp_chk">
 										<input type="checkBox" name="rmanCheckAll" id="rmanCheckAll" onClick="fn_rman_check_all()">
 										<label for="rmanCheckAll"></label>
 									</div>
 								</th>
-								<th scope="col">NO</th>
+								<th scope="col" style="width: 100px;">NO</th>
 								<th scope="col">백업설정</th>
-								<th scope="col">Work명</th>
-								<th scope="col">백업구분</th>
-								<th scope="col">파일보관일</th>
+								<th scope="col" style="width: 300px;">Work명</th>
+								<th scope="col" style="width: 200px;">백업구분</th>
+								<th scope="col" style="width: 80px;">파일보관일</th>
 								<th scope="col">등록자</th>
 								<th scope="col">등록일시</th>
 								<th scope="col">수정자</th>
@@ -483,15 +483,15 @@ function selectTab(tab){
 						<caption>Rman백업관리 화면 리스트</caption>
 						<thead>
 							<tr>
-								<th scope="col">
+								<th scope="col" style="width: 70px;">
 									<div class="inp_chk">
 										<input type="checkbox"  name="dumpCheckAll" id="dumpCheckAll" onClick="fn_dump_check_all()" />
 										<label for="dumpCheckAll"></label>
 									</div>
 								</th>
-								<th scope="col">NO</th>
+								<th scope="col" style="width: 100px;">NO</th>
 								<th scope="col">백업구분</th>
-								<th scope="col">Work명</th>
+								<th scope="col" style="width: 200px;">Work명</th>
 								<th scope="col">Database</th>
 								<th scope="col">파일포맷</th>
 								<th scope="col">파일보관일</th>

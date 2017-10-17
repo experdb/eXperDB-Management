@@ -318,7 +318,7 @@ function selectTab(intab){
 										<option value="TC000303">archive</option>
 									</select>
 								</td>
-								<th scope="row" class="t9 search_dump" style="display:none;">Database명</th>
+								<th scope="row" class="t9 search_dump" style="display:none;">Database</th>
 								<td class="search_dump" style="display:none;">
 									<select name="db_id" id="db_id" class="select t5">
 										<option value="">선택</option>
@@ -333,7 +333,7 @@ function selectTab(intab){
 					</form>
 				</div>
 				<div class="overflow_area" id="logRmanListDiv">
-					<table class="list" id="logRmanList" cellspacing="0" width="100%">
+					<table class="display" id="logRmanList" cellspacing="0" width="100%">
 						<thead>
 							<tr>
 								<th width="40">NO</th>
@@ -347,7 +347,7 @@ function selectTab(intab){
 					</table>
 				</div>
 				<div class="overflow_area" style="display:none;" id="logDumpListDiv">
-					<table class="list" id="logDumpList" cellspacing="0" width="100%">
+					<table class="display" id="logDumpList" cellspacing="0" width="100%">
 						<caption>Dump 백업관리 이력화면 리스트</caption>
 						<thead>
 							<tr>

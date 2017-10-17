@@ -172,7 +172,7 @@ function valCheck(){
 		return false;
 	}
 	if($("#check_path").val() != "Y"){
-		alert("서버에 존재하는 경로를 입력후 경로체크를 해 주세요.");
+		alert("유효한 경로를 입력후 경로체크를 해 주세요.");
 		$("#save_pth").focus();
 		return false;
 	}
@@ -365,10 +365,10 @@ function checkFolder(){
 				if(data.result.ERR_CODE == ""){
 					if(data.result.RESULT_DATA.IS_DIRECTORY == 0){
 						$("#check_path").val("Y");
-						alert("입력하신 경로는 존재합니다.");
+						alert("유효한 경로입니다.");
 						var volume = data.result.RESULT_DATA.CAPACITY;
 					}else{
-						alert("입력하신 경로는 존재하지 않습니다.");
+						alert("유효하지 않는 경로입니다.");
 					}
 				}else{
 					alert("경로체크 중 서버에러로 인하여 실패하였습니다.")

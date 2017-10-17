@@ -112,11 +112,11 @@ function valCheck(){
 		$("#bck_pth").focus();
 		return false;
 	}else if($("#check_path1").val() != "Y"){
-		alert("데이터경로에 서버에 존재하는 경로를 입력후 경로체크를 해 주세요.");
+		alert("데이터경로에 유효한 경로를 입력후 경로체크를 해 주세요.");
 		$("#data_pth").focus();
 		return false;
 	}else if($("#check_path2").val() != "Y"){
-		alert("백업경로에 서버에 존재하는 경로를 입력후 경로체크를 해 주세요.");
+		alert("백업경로에 유효한 경로를 입력후 경로체크를 해 주세요.");
 		$("#bck_pth").focus();
 		return false;		
 	}else{
@@ -162,7 +162,7 @@ function checkFolder(keyType){
 						}else{
 							$("#check_path2").val("Y");
 						}
-						alert("입력하신 경로는 존재합니다.");
+						alert("유효한 경로입니다.");
 							var volume = data.result.RESULT_DATA.CAPACITY;
 						if(keyType == 1){
 							$("#dataVolume").empty();
@@ -172,7 +172,7 @@ function checkFolder(keyType){
 							$( "#backupVolume" ).append(volume);
 						}
 					}else{
-						alert("입력하신 경로는 존재하지 않습니다.");
+						alert("유효하지 않는 경로입니다.");
 					}
 				}else{
 					alert("경로체크 중 서버에러로 인하여 실패하였습니다.")
