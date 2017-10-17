@@ -554,7 +554,7 @@ body.bg{background:#fff url(../images/login_bg.png) center center no-repeat;}
 .contents_wrap h4{height:44px;line-height:44px;padding-left:42px;margin-bottom:4px;background:#fff url(../images/ico_header.png) 15px 58% no-repeat;font-size:12px;font-family:'Nanum Square Bold';font-weight:700;}
 .contents_wrap h4 img{display:inline-block;margin-left:10px;}
 
-.contents_pop{position:relative;background:#fff;padding:67px 50px 50px;}
+.contents_pop{position:relative;background:#fff;min-height:429px;padding:67px 50px 50px;}
 
 .contents{position:relative;background:#fff;min-height:657px;padding:67px 50px 50px;}
 .contents .cmm_tab{width:100%;position:absolute;top:0;left:0;}
