@@ -243,8 +243,8 @@ function fn_modifyScheduleListView(){
 			<h4>My스케줄<a href="#n"><img src="../images/ico_tit.png" class="btn_info"/></a></h4>
 			<div class="infobox"> 
 				<ul>
-					<li>- 로그인한 사용자가 생성한 스케줄 정보를 조회합니다.</li>
-					<li>- 로그인한 사용자로 신규 스케줄을 생성하거나 이미 생성된 스케줄을 수정 또는 삭제 합니다.</li>
+					<li>로그인한 사용자가 생성한 스케줄 정보를 조회합니다.</li>
+					<li>로그인한 사용자로 신규 스케줄을 생성하거나 이미 생성된 스케줄을 수정 또는 삭제 합니다.</li>
 				</ul>
 			</div>
 			<div class="location">

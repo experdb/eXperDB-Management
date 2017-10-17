@@ -4,30 +4,41 @@ import java.sql.SQLException;
 import java.util.List;
 
 public interface DashboardService {
-	
+
 	/**
 	 * Dashboard 스케줄정보 조회
-	 * @param param 
+	 * 
+	 * @param param
 	 * @param userVo
 	 * @return
 	 * @throws Exception
 	 */
 	public DashboardVO selectDashboardScheduleInfo() throws SQLException;
-	
+
 	/**
 	 * Dashboard 백업정보 조회
+	 * 
 	 * @return
 	 * @throws SQLException
 	 */
 	public DashboardVO selectDashboardBackupInfo() throws SQLException;
-	
+
 	/**
 	 * 서버 정보 조회
+	 * 
 	 * @param vo
 	 * @return
 	 * @throws SQLException
 	 */
 	public List<DashboardVO> selectDashboardServerInfo(DashboardVO vo) throws SQLException;
-	
-	
+
+	/**
+	 * 데이터 전송 정보 조회
+	 * 
+	 * @param vo
+	 * @return
+	 * @throws SQLException
+	 */
+	public DashboardVO selectDashboardTransferInfoVO() throws SQLException;
+
 }

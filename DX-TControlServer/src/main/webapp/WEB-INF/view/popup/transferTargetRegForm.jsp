@@ -175,13 +175,13 @@
 <div class="pop_container">
 	<div class="pop_cts">
 		<p class="tit">
-			<c:if test="${act == 'i'}">전송대상 설정 등록하기</c:if>
-			<c:if test="${act == 'u'}">전송대상 설정 수정하기</c:if>
+			<c:if test="${act == 'i'}">전송대상 설정 등록</c:if>
+			<c:if test="${act == 'u'}">전송대상 설정 수정</c:if>
 		</p>
 		<table class="write">
 			<caption>
-				<c:if test="${act == 'i'}">전송대상 설정 등록하기</c:if>
-				<c:if test="${act == 'u'}">전송대상 설정 수정하기</c:if>
+				<c:if test="${act == 'i'}">전송대상 설정 등록</c:if>
+				<c:if test="${act == 'u'}">전송대상 설정 수정</c:if>
 			</caption>
 			<colgroup>
 				<col style="width:150px;" />

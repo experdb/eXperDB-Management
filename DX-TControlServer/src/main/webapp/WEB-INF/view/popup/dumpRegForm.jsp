@@ -394,7 +394,7 @@ function fn_check() {
 		},
 		success : function(result) {
 			if (result == "true") {
-				alert("등록가능한 WORK명 입니다.");
+				alert("등록 가능한 WORK명 입니다.");
 				document.getElementById("wrk_nm").focus();
 				wrk_nmChk = "success";
 			} else {
@@ -413,13 +413,13 @@ function fn_check() {
 <body>
 <div class="pop_container">
 	<div class="pop_cts">
-		<p class="tit">Dump 백업 등록하기</p>
+		<p class="tit">Dump 백업 등록</p>
 		<div class="pop_cmm">
 			<form name="workRegForm">
 			<input type="hidden" name="db_svr_id" id="db_svr_id" value="${db_svr_id}"/>
 			<input type="hidden" name="check_path" id="check_path" value="N"/>
 			<table class="write">
-				<caption>Dump 백업 등록하기</caption>
+				<caption>Dump 백업 등록</caption>
 				<colgroup>
 					<col style="width:95px;" />
 					<col />
@@ -467,7 +467,7 @@ function fn_check() {
 		</div>
 		<div class="pop_cmm mt25">
 			<table class="write">
-				<caption>백업 등록하기</caption>
+				<caption>백업 등록</caption>
 				<colgroup>
 					<col style="width:80px;" />
 					<col style="width:178px;" />

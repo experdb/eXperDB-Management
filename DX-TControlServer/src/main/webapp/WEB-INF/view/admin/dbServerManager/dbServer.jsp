@@ -210,8 +210,8 @@ function fn_regRe_popup(){
 			<h4>DBMS 관리 <a href="#n"><img src="../images/ico_tit.png" class="btn_info"/></a></h4>
 			<div class="infobox"> 
 				<ul>
-					<li>- 관리 대상 데이터베이스 서버 정보를 조회합니다.</li>
-					<li>- 관리 대상 데이터베이스 서버를 신규로 등록하거나 이미 등록된 서버를 수정 또는 삭제합니다.</li>						
+					<li>관리 대상 데이터베이스 서버 정보를 조회합니다.</li>
+					<li>관리 대상 데이터베이스 서버를 신규로 등록하거나 이미 등록된 서버를 수정 또는 삭제합니다.</li>						
 				</ul>
 			</div>
 			<div class="location">
@@ -234,23 +234,22 @@ function fn_regRe_popup(){
 				</div>
 				<div class="sch_form">
 					<table class="write">
-						<caption>DB Server 조회하기</caption>
+						<caption>DB Server 조회</caption>
 						<colgroup>
-							<col style="width: 70px;" />
-							<col />
-							<col style="width: 70px;" />
-							<col />
-							<col style="width: 80px;" />
-							<col />
-							<col style="width: 80px;" />
+							<col style="width: 100px;" />
+							<col style="width: 250px;" />
+							<col style="width: 100px;" />
+							<col style="width: 250px;" />
 							<col />
 						</colgroup>
 						<tbody>
 							<tr>
-								<th scope="row" class="t2">서버명</th>
+								<th scope="row" class="t2">DBMS명</th>
 								<td><input type="text" class="txt" name="db_svr_nm" id="db_svr_nm" /></td>
-								<th scope="row" class="t3">아이피</th>
+								<th scope="row" class="t3">DBMS 아이피</th>
 								<td><input type="text" class="txt" name="ipadr" id="ipadr" /></td>
+							</tr>
+							<tr>
 								<th scope="row" class="t4">Database</th>
 								<td><input type="text" class="txt" name="dft_db_nm" id="dft_db_nm" /></td>
 								<th scope="row" class="t9">사용유무</th>
@@ -270,11 +269,11 @@ function fn_regRe_popup(){
 						<tr>
 							<th width="10"></th>
 							<th width="20">No</th>
-							<th width="130">서버명</th>
-							<th width="100">아이피</th>
-							<th width="130">database</th>
+							<th width="130">DBMS명</th>
+							<th width="100">DBMS 아이피</th>
+							<th width="130">Database</th>
 							<th width="70">포트</th>
-							<th width="70">User</th>
+							<th width="70">계정</th>
 							<th width="70">사용유무</th>
 							<th width="65">등록자</th>
 							<th width="100">등록일시</th>

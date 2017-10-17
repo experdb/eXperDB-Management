@@ -408,10 +408,10 @@ function checkPghome(){
 
 <div class="pop_container">
 	<div class="pop_cts">
-		<p class="tit">DB Server 등록하기</p>
+		<p class="tit">DBMS 등록</p>
 		<form name="dbserverInsert" id="dbserverInsert" method="post">
 		<table class="write">
-			<caption>DB Server 등록하기</caption>
+			<caption>DBMS 등록</caption>
 			<colgroup>
 				<col style="width:120px;" />
 				<col />
@@ -420,7 +420,7 @@ function checkPghome(){
 			</colgroup>
 			<tbody>
 				<tr>
-					<th scope="row" class="ico_t1">IP(*)</th>
+					<th scope="row" class="ico_t1">DBMS 아이피(*)</th>
 					<td>
 						<select class="select"  id="ipadr" name="ipadr" onChange="fn_ipadrChange();" >
 							<option value="%">선택</option>
@@ -433,15 +433,14 @@ function checkPghome(){
 					<td><input type="text" class="txt" name="dft_db_nm" id="dft_db_nm" /></td>
 				</tr>
 				<tr>
-					<th scope="row" class="ico_t1" >서버명(*)</th>
+					<th scope="row" class="ico_t1" >DBMS명(*)</th>
 					<td><input type="text" class="txt" name="db_svr_nm" id="db_svr_nm"  style="width:230px"/>
-					<span class="btn btnC_01"><button type="button" class= "btn_type_02" onclick="fn_svrnmCheck()" style="width: 60px; margin-right: -60px; margin-top: 0;">중복체크</button></span>
-					</td>
-					<th scope="row" class="ico_t1">Port(*)</th>
+					<span class="btn btnC_01"><button type="button" class= "btn_type_02" onclick="fn_svrnmCheck()" style="width: 60px; margin-right: -60px; margin-top: 0;">중복체크</button></span></td>
+					<th scope="row" class="ico_t1">포트(*)</th>
 					<td><input type="text" class="txt" name="portno" id="portno" /></td>
 				</tr>
 				<tr>
-					<th scope="row" class="ico_t1">User(*)</th>
+					<th scope="row" class="ico_t1">계정(*)</th>
 					<td><input type="text" class="txt" name="svr_spr_usr_id" id="svr_spr_usr_id" /></td>
 					<th scope="row" class="ico_t1">Password(*)</th>
 					<td><input type="password" class="txt" name="svr_spr_scm_pwd" id="svr_spr_scm_pwd" /></td>

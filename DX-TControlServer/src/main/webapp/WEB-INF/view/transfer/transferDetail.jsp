@@ -202,7 +202,13 @@
 <div id="contents">
 	<div class="contents_wrap">
 		<div class="contents_tit">
-			<h4>전송상세 설정<a href="#n"><img src="../images/ico_tit.png" alt="" /></a></h4>
+			<h4>전송상세 설정<a href="#n"><img src="../images/ico_tit.png" class="btn_info"/></a></h4>
+			<div class="infobox"> 
+				<ul>
+					<li>전송대상 설정에서 생성된 연결에 전송 대상 소스 정보를 설정합니다.</li>
+					<li>설정된 연결을 시작 또는 중지합니다.</li>
+				</ul>
+			</div>
 			<div class="location">
 				<ul>
 					<li>데이터전송</li>

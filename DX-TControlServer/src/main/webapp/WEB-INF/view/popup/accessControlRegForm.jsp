@@ -222,14 +222,14 @@
 <div class="pop_container">
 	<div class="pop_cts">
 		<p class="tit">
-			<c:if test="${act == 'i'}">접근제어 등록하기</c:if>
-			<c:if test="${act == 'u'}">접근제어 수정하기</c:if>
+			<c:if test="${act == 'i'}">접근제어 등록</c:if>
+			<c:if test="${act == 'u'}">접근제어 수정</c:if>
 		</p>
 		<div class="pop_cmm">
 			<table class="write">
 				<caption>
-					<c:if test="${act == 'i'}">접근제어 등록하기</c:if>
-					<c:if test="${act == 'u'}">접근제어 수정하기</c:if>
+					<c:if test="${act == 'i'}">접근제어 등록</c:if>
+					<c:if test="${act == 'u'}">접근제어 수정</c:if>
 				</caption>
 				<colgroup>
 					<col style="width:85px;" />
@@ -260,8 +260,8 @@
 		<div class="pop_cmm mt25">
 			<table class="write">
 				<caption>
-					<c:if test="${act == 'i'}">접근제어 등록하기</c:if>
-					<c:if test="${act == 'u'}">접근제어 수정하기</c:if>
+					<c:if test="${act == 'i'}">접근제어 등록</c:if>
+					<c:if test="${act == 'u'}">접근제어 수정</c:if>
 				</caption>
 				<colgroup>
 					<col style="width:85px;" />

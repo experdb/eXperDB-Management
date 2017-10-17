@@ -149,9 +149,12 @@ var table = null;
 <div id="contents">
 	<div class="contents_wrap">
 		<div class="contents_tit">
-			<h4>
-				접근제어이력<a href="#n"><img src="../images/ico_tit.png" alt="" /></a>
-			</h4>
+			<h4>접근제어이력<a href="#n"><img src="../images/ico_tit.png" class="btn_info"/></a></h4>
+			<div class="infobox"> 
+				<ul>
+					<li>접근제어 변경 이력을 조회하고, 조회된 이력 중 원하는 항목으로 복원합니다.</li>
+				</ul>
+			</div>
 			<div class="location">
 				<ul>
 					<li class="bold">${db_svr_nm}</li>

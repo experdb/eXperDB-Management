@@ -223,8 +223,8 @@ function fn_search(){
 						<h4>메뉴 권한 관리 <a href="#n"><img src="../images/ico_tit.png" class="btn_info"/></a></h4>
 						<div class="infobox"> 
 							<ul>
-								<li>- 등록된 사용자 별로 각 메뉴에 대하여 접근할 수 있는 권한을 부여합니다.</li>
-								<li>- 사용 권한은 읽기와 쓰기로 구분되며, 각각의 메뉴에 대하여 개별적으로 설정 가능합니다.</li>	
+								<li>등록된 사용자 별로 각 메뉴에 대하여 접근할 수 있는 권한을 부여합니다.</li>
+								<li>사용 권한은 읽기와 쓰기로 구분되며, 각각의 메뉴에 대하여 개별적으로 설정 가능합니다.</li>	
 							</ul>
 						</div>
 						<div class="location">

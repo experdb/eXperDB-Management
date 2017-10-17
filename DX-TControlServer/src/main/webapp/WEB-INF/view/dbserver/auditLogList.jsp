@@ -166,7 +166,12 @@ function fn_chkExtName(extName) {
 			<div id="contents">
 				<div class="contents_wrap">
 					<div class="contents_tit">
-						<h4>감사이력<a href="#n"><img src="../images/ico_tit.png" alt="" /></a></h4>
+						<h4>감사이력<a href="#n"><img src="../images/ico_tit.png" class="btn_info"/></a></h4>
+						<div class="infobox"> 
+							<ul>
+								<li>지정된 기간동안의 감사 로그를 조회합니다.</li>
+							</ul>
+						</div>
 						<div class="location">
 							<ul>
 								<li class="bold">${serverName}</li>

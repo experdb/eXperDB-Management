@@ -230,7 +230,7 @@ function fn_check() {
 		},
 		success : function(result) {
 			if (result == "true") {
-				alert("등록가능한 WORK명 입니다.");
+				alert("등록 가능한 WORK명 입니다.");
 				document.getElementById("wrk_nm").focus();
 				wrk_nmChk = "success";
 			} else {
@@ -255,10 +255,10 @@ function fn_check() {
 	<div id="pop_layer">
 		<div class="pop-container">
 			<div class="pop_cts">
-				<p class="tit">Rman 백업 등록하기</p>
+				<p class="tit">Rman 백업 등록</p>
 				<div class="pop_cmm">
 					<table class="write">
-						<caption>Rman 백업 등록하기</caption>
+						<caption>Rman 백업 등록</caption>
 						<colgroup>
 							<col style="width:85px;" />
 							<col />
@@ -312,7 +312,6 @@ function fn_check() {
 									<col />
 								</colgroup>
 								<tbody>
-
 									<tr>
 										<th scope="row" class="ico_t1">데이터경로</th>
 										<td><input type="text" class="txt" name="data_pth" id="data_pth" maxlength=50 style="width:230px" onKeydown="$('#check_path1').val('N')"/>
@@ -323,8 +322,6 @@ function fn_check() {
 											<span class="btn btnC_01"><button type="button" class= "btn_type_02" onclick="checkFolder(2)" style="width: 60px; margin-right: -60px; margin-top: 0;">경로체크</button></span>
 										</td>
 									</tr>
-									
-									
 									<tr>										
 										<th> 용량  </th>
 										<td><div id="dataVolume"></div></td>
@@ -344,25 +341,25 @@ function fn_check() {
 										<li>
 											<div class="inner">
 												<p>Full 백업파일보관일</p>
-												<span><input type="text" class="txt" name="file_stg_dcnt" id="file_stg_dcnt" value="0" maxlength=3/> 일</span>
+												<span><input type="number" class="txt" name="file_stg_dcnt" id="file_stg_dcnt" value="0" maxlength=3/> 일</span>
 											</div>
 										</li>
 										<li>
 											<div class="inner">
 												<p>Full 백업파일 유지갯수</p>
-												<span><input type="text" class="txt" name="bck_mtn_ecnt" id="bck_mtn_ecnt" value="0" maxlength=3/> 일</span>
+												<span><input type="number" class="txt" name="bck_mtn_ecnt" id="bck_mtn_ecnt" value="0" maxlength="3" min="0"/> 일</span>
 											</div>
 										</li>
 										<li>
 											<div class="inner">
 												<p>아카이브 파일보관일</p>
-												<span><input type="text" class="txt" name="acv_file_stgdt" id="acv_file_stgdt" value="0" maxlength=3/> 일</span>
+												<span><input type="number" class="txt" name="acv_file_stgdt" id="acv_file_stgdt" value="0" maxlength="3" min="0"/> 일</span>
 											</div>
 										</li>
 										<li>
 											<div class="inner">
 												<p>아카이브 파일유지갯수</p>
-												<span><input type="text" class="txt" name="acv_file_mtncnt" id="acv_file_mtncnt" value="0" maxlength=3/> 일</span>
+												<span><input type="number" class="txt" name="acv_file_mtncnt" id="acv_file_mtncnt" value="0" maxlength="3" min="0"/> 일</span>
 											</div>
 										</li>
 									</ul>
@@ -382,13 +379,13 @@ function fn_check() {
 											<li>
 												<div class="inner">
 													<p>서버로그 파일 보관일수</p>
-													<span><input type="text" class="txt" name="log_file_stg_dcnt" id="log_file_stg_dcnt" value="0" maxlength=3/> 일</span>
+													<span><input type="number" class="txt" name="log_file_stg_dcnt" id="log_file_stg_dcnt" value="0" maxlength="3" min="0"/> 일</span>
 												</div>
 											</li>
 											<li>
 												<div class="inner">
 													<p>서버로그 파일 유지갯수</p>
-													<span><input type="text" class="txt" name="log_file_mtn_ecnt" id="log_file_mtn_ecnt" value="0" maxlength=3/> 일</span>
+													<span><input type="number" class="txt" name="log_file_mtn_ecnt" id="log_file_mtn_ecnt" value="0" maxlength="3" min="0"/> 일</span>
 												</div>
 											</li>
 										</ul>

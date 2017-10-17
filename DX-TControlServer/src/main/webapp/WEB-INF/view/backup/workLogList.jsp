@@ -56,15 +56,37 @@ function fn_rman_init(){
    	tableRman = $('#logRmanList').DataTable({	
 		scrollY: "250px",
 		searching : false,
+		scrollX: true,
 	    columns : [
 		         	{ data: "rownum", className: "dt-center", defaultContent: ""}, 
 		         	{ data: "wrk_nm", className: "dt-center", defaultContent: ""}, 
  		         	{ data: "bck_opt_cd_nm", className: "dt-center", defaultContent: ""}, 
  		         	{ data: "wrk_strt_dtm", className: "dt-center", defaultContent: ""}, 
  		         	{ data: "wrk_end_dtm", className: "dt-center", defaultContent: ""}, 
- 		         	{ data: "exe_rslt_cd_nm", className: "dt-center", defaultContent: ""}, 
+	 		   		{
+	 					data : "exe_rslt_cd_nm",
+	 					render : function(data, type, full, meta) {
+	 						var html = '';
+	 						if (data == 'Success') {
+	 							html += ' <img src="../images/ico_w_20.png" alt="" />';
+	 						} else {
+	 							html += ' <img src="../images/ico_w_19.png" alt="" />';
+	 						}
+	 						return html;
+	 					},
+	 					className : "dt-center",
+	 					defaultContent : ""
+	 				}
  		        ] 
 	});
+   	
+   	tableRman.tables().header().to$().find('th:eq(0)').css('min-width', '40px');
+   	tableRman.tables().header().to$().find('th:eq(1)').css('min-width', '100px');
+   	tableRman.tables().header().to$().find('th:eq(2)').css('min-width', '100px');
+   	tableRman.tables().header().to$().find('th:eq(3)').css('min-width', '100px');
+   	tableRman.tables().header().to$().find('th:eq(4)').css('min-width', '100px');
+   	tableRman.tables().header().to$().find('th:eq(5)').css('min-width', '100px');
+    $(window).trigger('resize'); 
 }
 
 /* ********************************************************
@@ -74,6 +96,7 @@ function fn_dump_init(){
    	tableDump = $('#logDumpList').DataTable({	
 		scrollY: "250px",	
 		searching : false,
+		scrollX: true,
 	    columns : [
 		         	{ data: "rownum", className: "dt-center", defaultContent: ""}, 
  		         	{ data: "db_nm", className: "dt-center", defaultContent: ""}, 
@@ -82,9 +105,32 @@ function fn_dump_init(){
  		         	{ data: "file_sz", className: "dt-center", defaultContent: ""},
  		         	{ data: "bck_file_pth", className: "dt-center", defaultContent: ""},
  		         	{ data: "bck_filenm", className: "dt-center", defaultContent: ""},
- 		         	{ data: "exe_rslt_cd_nm", className: "dt-center", defaultContent: ""}
+	 		   		{
+	 					data : "exe_rslt_cd_nm",
+	 					render : function(data, type, full, meta) {
+	 						var html = '';
+	 						if (data == 'Success') {
+	 							html += ' <img src="../images/ico_w_20.png" alt="" />';
+	 						} else {
+	 							html += ' <img src="../images/ico_w_19.png" alt="" />';
+	 						}
+	 						return html;
+	 					},
+	 					className : "dt-center",
+	 					defaultContent : ""
+	 				}
  		        ] 
 	});
+   	
+   	tableDump.tables().header().to$().find('th:eq(0)').css('min-width', '40px');
+   	tableDump.tables().header().to$().find('th:eq(1)').css('min-width', '100px');
+   	tableDump.tables().header().to$().find('th:eq(2)').css('min-width', '100px');
+   	tableDump.tables().header().to$().find('th:eq(3)').css('min-width', '100px');
+   	tableDump.tables().header().to$().find('th:eq(4)').css('min-width', '100px');
+   	tableDump.tables().header().to$().find('th:eq(5)').css('min-width', '100px');
+   	tableDump.tables().header().to$().find('th:eq(6)').css('min-width', '100px');
+   	tableDump.tables().header().to$().find('th:eq(7)').css('min-width', '100px');
+    $(window).trigger('resize');
 }
 
 
@@ -200,18 +246,21 @@ function selectTab(intab){
 <div id="contents">
 	<div class="contents_wrap">
 		<div class="contents_tit">
-			<h4>백업 이력<a href="#n"><img src="/images/ico_tit.png" alt="" /></a></h4>
+			<h4>백업이력<a href="#n"><img src="/images/ico_tit.png" class="btn_info"/></a></h4>
+			<div class="infobox"> 
+				<ul>
+					<li>지정한 기간 동안 수행된 백업 이력을 조회합니다.</li>
+				</ul>
+			</div>
 			<div class="location">
 				<ul>
 					<li class="bold">${db_svr_nm}</li>
 					<li>백업관리</li>
-					<li class="on">백업 이력</li>
+					<li class="on">백업이력</li>
 				</ul>
 			</div>
 		</div>
 	
-	
-
 		<div class="contents">
 			<div class="cmm_tab">
 				<ul id="tab_rman">
@@ -287,12 +336,12 @@ function selectTab(intab){
 					<table class="list" id="logRmanList" cellspacing="0" width="100%">
 						<thead>
 							<tr>
-								<th scope="col">NO</th>
-								<th scope="col">WORK명</th>
-								<th scope="col">Mode</th>
-								<th scope="col">작업시작 시간</th>
-								<th scope="col">작업종료 시간</th>
-								<th scope="col">상태</th>
+								<th width="40">NO</th>
+								<th width="100">WORK명</th>
+								<th width="100">Mode</th>
+								<th width="100">작업시작 시간</th>
+								<th width="100">작업종료 시간</th>
+								<th width="100">상태</th>
 							</tr>
 						</thead>
 					</table>
@@ -302,14 +351,14 @@ function selectTab(intab){
 						<caption>Dump 백업관리 이력화면 리스트</caption>
 						<thead>
 							<tr>
-								<th scope="col">NO</th>
-								<th scope="col">Database</th>
-								<th scope="col">작업시작 시간</th>
-								<th scope="col">작업종료 시간</th>
-								<th scope="col">Size</th>
-								<th scope="col">백업파일경로</th>
-								<th scope="col">백업파일명</th>
-								<th scope="col">상태</th>
+								<th width="40">NO</th>
+								<th width="100">Database</th>
+								<th width="100">작업시작 시간</th>
+								<th width="100">작업종료 시간</th>
+								<th width="100">Size</th>
+								<th width="100">백업파일경로</th>
+								<th width="100">백업파일명</th>
+								<th width="100">상태</th>
 							</tr>
 						</thead>
 					</table>

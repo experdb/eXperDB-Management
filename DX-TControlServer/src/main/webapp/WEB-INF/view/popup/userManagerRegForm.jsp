@@ -77,6 +77,7 @@
 	//등록버튼 클릭시
 	function fn_insert() {
 		if (!fn_userManagerValidation())return false;
+		if (!confirm("등록하시겠습니까?")) return false;
 		$.ajax({
 			url : '/insertUserManager.do',
 			type : 'post',
@@ -113,6 +114,7 @@
 	function fn_update() {
 		idCheck = 1;
 		if (!fn_userManagerValidation())return false;
+		if (!confirm("수정하시겠습니까?")) return false;
 		$.ajax({
 			url : '/updateUserManager.do',
 			type : 'post',
@@ -194,13 +196,13 @@
 	<div class="pop_container">
 		<div class="pop_cts">
 			<p class="tit">
-				<c:if test="${act == 'i'}">사용자 등록하기</c:if>
-				<c:if test="${act == 'u'}">사용자 수정하기</c:if>
+				<c:if test="${act == 'i'}">사용자 등록</c:if>
+				<c:if test="${act == 'u'}">사용자 수정</c:if>
 			</p>
 			<table class="write">
 				<caption>
-					<c:if test="${act == 'i'}">사용자 등록하기</c:if>
-					<c:if test="${act == 'u'}">사용자 수정하기</c:if>
+					<c:if test="${act == 'i'}">사용자 등록</c:if>
+					<c:if test="${act == 'u'}">사용자 수정</c:if>
 				</caption>
 				<colgroup>
 					<col style="width: 110px;" />
@@ -233,7 +235,7 @@
 			</table>
 			<div class="pop_cmm2">
 				<table class="write">
-					<caption>사용자 등록하기</caption>
+					<caption>사용자 등록</caption>
 					<colgroup>
 						<col style="width: 100px;" />
 						<col />

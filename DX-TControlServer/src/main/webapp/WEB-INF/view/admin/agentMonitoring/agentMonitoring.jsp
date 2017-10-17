@@ -38,8 +38,8 @@
 						<h4>에이전트 모니터링<a href="#n"><img src="../images/ico_tit.png" class="btn_info"/></a></h4>
 						<div class="infobox"> 
 							<ul>
-								<li>- 관리 대상 데이터베이스 서버에 설치된 통합 관리 시스템의 Agent 상태를 모니터링합니다.</li>
-								<li>- Agent가 설치된 서버와 구동 상태, 구동 일시 등의 정보를 표시됩니다.</li>
+								<li>관리 대상 데이터베이스 서버에 설치된 통합 관리 시스템의 Agent 상태를 모니터링합니다.</li>
+								<li>Agent가 설치된 서버와 구동 상태, 구동 일시 등의 정보를 표시됩니다.</li>
 							</ul>
 						</div>
 						<div class="location">
@@ -64,7 +64,7 @@
 									</colgroup>
 									<tbody>
 										<tr>
-											<th scope="row" class="t2">DB 서버명</th>
+											<th scope="row" class="t2">DBMS명</th>
 											<td><input type="text" id="DB_SVR_NM" name="DB_SVR_NM" class="txt t2" value="${db_svr_nm}" /></td>
 										</tr>
 									</tbody>
@@ -84,7 +84,7 @@
 									<thead>
 										<tr>
 											<th scope="col">NO</th>
-											<th scope="col">DB서버</th>
+											<th scope="col">DBMS명</th>
 											<th scope="col">구동일시</th>
 											<th scope="col">등록여부</th>
 											<th scope="col">Agent Version</th>

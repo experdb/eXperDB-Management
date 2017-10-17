@@ -342,8 +342,8 @@ function fn_makeMin(){
 			<h4>스케줄 관리 <a href="#n"><img src="../images/ico_tit.png" class="btn_info"/></a></h4>
 				<div class="infobox"> 
 					<ul>
-						<li>- 현재 등록되어 있는 스케줄 정보를 조회합니다.</li>
-						<li>- 현재 등록되어 있는 스케줄을 실행 또는 중지합니다.</li>	
+						<li>현재 등록되어 있는 스케줄 정보를 조회합니다.</li>
+						<li>현재 등록되어 있는 스케줄을 실행 또는 중지합니다.</li>	
 						</ul>
 				</div>
 			<div class="location">

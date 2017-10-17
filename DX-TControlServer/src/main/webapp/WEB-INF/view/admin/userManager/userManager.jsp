@@ -219,9 +219,9 @@ function fn_delete(){
 			<h4>사용자 관리<a href="#n"><img src="../images/ico_tit.png" class="btn_info"/></a></h4>
 			<div class="infobox"> 
 				<ul>
-					<li>- eXperDB 통합 관리 시스템에 접근 가능한 사용자를 관리합니다.</li>
-					<li>- 신규로 등록하거나 등록된 사용자를 조회, 수정, 삭제할 수 있습니다.</li>	
-					<li>- 신규로 사용자를 등록하는 경우 해당 사용자가 접근할 수 있는 메뉴 설정을 병행할 수 있습니다.</li>					
+					<li>eXperDB 통합 관리 시스템에 접근 가능한 사용자를 관리합니다.</li>
+					<li>신규로 등록하거나 등록된 사용자를 조회, 수정, 삭제할 수 있습니다.</li>	
+					<li>신규로 사용자를 등록하는 경우 해당 사용자가 접근할 수 있는 메뉴 설정을 병행할 수 있습니다.</li>					
 				</ul>
 			</div>
 			<div class="location">

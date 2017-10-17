@@ -206,9 +206,8 @@
 			<h4>커넥터 관리 <a href="#n"><img src="../images/ico_tit.png" class="btn_info"/></a></h4>
 			<div class="infobox"> 
 				<ul>
-					<li>- eXperDB에서 하둡 분산 파일 시스템으로 데이터 전송을 하기 위한 커넥터를 설정합니다.</li>
-					<li>- 신규로 등록하거나 이미 등록된 커넥터를 조회, 수정, 삭제 합니다.</li>	
-					<li>- 커넥터를 등록 후 데이터 전송 메뉴에서 소스 시스템과 타겟 시스템을 매핑하여 전송을 수행합니다.</li>					
+					<li>eXperDB에서 하둡 분산 파일 시스템으로 데이터 전송을 하기 위한 커넥터를 설정합니다.</li>
+					<li>신규로 등록하거나 이미 등록된 커넥터를 조회, 수정, 삭제 합니다.</li>	
 				</ul>
 			</div>
 			<div class="location">
@@ -230,7 +229,7 @@
 				</div>
 				<div class="sch_form">
 					<table class="write">
-						<caption>DB Server 조회하기</caption>
+						<caption>커넥터 조회</caption>
 						<colgroup>
 							<col style="width: 130px;" />
 							<col />

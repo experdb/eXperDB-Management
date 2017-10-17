@@ -254,26 +254,26 @@ function fn_dataCompareChcek(svrDbList,db_svr_id){
 <body>
 <div class="pop_container">
 	<div class="pop_cts">
-		<p class="tit">Datebase 등록하기</p>
+		<p class="tit">Datebase 등록</p>
 		<div class="pop_type1">
 			<div class="pop_lt">			
 				<form name="serverList" id="serverList">
 				<table class="write">
-					<caption>Datebase 등록하기</caption>
+					<caption>Datebase 등록</caption>
 					<colgroup>
-						<col style="width:85px;" />
+						<col style="width:100px;" />
 						<col />
 					</colgroup>
 					<tbody>
 						<tr>
-							<th scope="row" class="ico_t1 type2">서버명</th>
+							<th scope="row" class="ico_t1 type2">DBMS명</th>
 							<td>
 								<select class="select"  id="db_svr_nm" name="db_svr_nm" onChange="fn_dbserverChange();">
 								</select>
 							</td>
 						</tr>
 						<tr>
-							<th scope="row" class="ico_t1">IP</th>
+							<th scope="row" class="ico_t1">DBMS 아이피</th>
 							<td><input type="text" class="txt bg1" name="ipadr" id="ipadr" readonly/></td>
 						</tr>
 						<tr>
@@ -288,7 +288,7 @@ function fn_dataCompareChcek(svrDbList,db_svr_id){
 					<table id="dbList" class="cell-border display" cellspacing="0"  align="left">
 						<thead>
 							<tr>
-								<th>데이터베이스</th>
+								<th>Database</th>
 								<th>설명</th>
 								<th>등록선택</th>
 							</tr>

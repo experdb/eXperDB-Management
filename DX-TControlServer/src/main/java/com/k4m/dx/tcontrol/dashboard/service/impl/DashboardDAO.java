@@ -19,18 +19,21 @@ public class DashboardDAO extends EgovAbstractMapper{
 	 * @param param
 	 * @throws SQLException
 	 */
-	@SuppressWarnings({ "unchecked", "deprecation" })
 	public DashboardVO selectDashboardScheduleInfo() throws SQLException{
 		return (DashboardVO) selectOne("dashboardSql.selectDashboardScheduleInfo");
 	}
 	
-	@SuppressWarnings({ "unchecked", "deprecation" })
 	public DashboardVO selectDashboardBackupInfo() throws SQLException{
 		return (DashboardVO) selectOne("dashboardSql.selectDashboardBackupInfo");
 	}
 	
+	@SuppressWarnings({ "deprecation", "unchecked" })
 	public List<DashboardVO> selectDashboardServerInfo(DashboardVO vo) throws SQLException{
 		return (List<DashboardVO>) list("dashboardSql.selectDashboardServerInfo", vo);
+	}
+
+	public DashboardVO selectDashboardTransferInfoVO() {
+		return (DashboardVO) selectOne("dashboardSql.selectDashboardTransferInfoVO");
 	}
 	
 }

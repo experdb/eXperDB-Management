@@ -570,7 +570,7 @@ body.bg{background:#fff url(../images/login_bg.png) center center no-repeat;}
 .location li.on{color:#f15a22;}
 .location li:before{display:block;content:"";position:absolute;top:0;left:0;width:4px;height:11px;background:url(../images/ico_location.png) 0 0 no-repeat;}
 .location li:first-child:before{display:none;}
-.location li.bold{color: #101922; font-size: 13px; font-family: 'Nanum Square Bold'; line-height: 28px;}
+.location li.bold{color: #101922; font-size: 17px; font-family: 'Nanum Square Bold'; line-height: 28px;}
 
 /* Lnb menu
 -------------------------------------------------------------- */
@@ -735,7 +735,8 @@ box-shadow: 1px 1px 2px 0px rgba(0,0,0,0.5);}
 .main_grp .main_info > div{float:left;background:#e4e9ec;padding:0 20px 20px; margin-right: 30px;}
 .main_grp .main_info .m_info_lt{margin-right:30px;}
 .main_grp .main_info .m_info_lt .m_tit{background:url(../images/ico_main_tit_1.png) 0 48% no-repeat;}
-.main_grp .main_info .m_info_rt .m_tit{background:url(../images/ico_main_tit_2.png) 0 48% no-repeat;}
+.main_grp .main_info .m_info_ct .m_tit{background:url(../images/ico_main_tit_2.png) 0 48% no-repeat;}
+.main_grp .main_info .m_info_rt .m_tit{background:url(../images/ico_main_tit_3.png) 0 48% no-repeat;}
 .main_grp .main_info ul:after{display:block;content:"";clear:both;}
 .main_grp .main_info ul > li{float:left;width:87px;height:149px;background:#fff;margin-left:6px;text-align:center;}
 .main_grp .main_info ul > li:first-child{margin-left:0;}

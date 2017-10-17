@@ -249,10 +249,10 @@ function checkPghome(){
 
 <div class="pop_container">
 	<div class="pop_cts">
-		<p class="tit">DB Server 수정하기</p>
+		<p class="tit">DBMS 수정</p>
 		 <form name="dbserverInsert" id="dbserverInsert" method="post">
 		<table class="write">
-			<caption>DB Server 수정하기</caption>
+			<caption>DBMS 수정</caption>
 			<colgroup>
 				<col style="width:120px;" />
 				<col />
@@ -261,19 +261,19 @@ function checkPghome(){
 			</colgroup>
 			<tbody>
 				<tr>
-					<th scope="row" class="ico_t1">서버명(*)</th>
+					<th scope="row" class="ico_t1">DBMS명(*)</th>
 					<td><input type="text" class="txt bg1" name="db_svr_nm" id="db_svr_nm"  readonly="readonly"  /></td>
 					<th scope="row" class="ico_t1">Database(*)</th>
 					<td><input type="text" class="txt" name="dft_db_nm" id="dft_db_nm" /></td>
 				</tr>
 				<tr>
-					<th scope="row" class="ico_t1">IP(*)</th>
+					<th scope="row" class="ico_t1">DBMS 아이피(*)</th>
 					<td><input type="text" class="txt" name="ipadr" id="ipadr" /></td>
-					<th scope="row" class="ico_t1">Port(*)</th>
+					<th scope="row" class="ico_t1">포트(*)</th>
 					<td><input type="text" class="txt" name="portno" id="portno" /></td>
 				</tr>
 				<tr>
-					<th scope="row" class="ico_t1">User(*)</th>
+					<th scope="row" class="ico_t1">계정(*)</th>
 					<td><input type="text" class="txt" name="svr_spr_usr_id" id="svr_spr_usr_id"  /></td>
 					<th scope="row" class="ico_t1">Password(*)</th>
 					<td><input type="password" class="txt" name="svr_spr_scm_pwd" id="svr_spr_scm_pwd" /></td>

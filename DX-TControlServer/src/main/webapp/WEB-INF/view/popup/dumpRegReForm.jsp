@@ -412,14 +412,14 @@ function checkFolder(){
 <body>
 <div class="pop_container">
 	<div class="pop_cts">
-		<p class="tit">Dump 백업 수정하기</p>
+		<p class="tit">Dump 백업 수정</p>
 		<div class="pop_cmm">
 			<form name="workRegForm">
 			<input type="hidden" name="db_svr_id" id="db_svr_id" value="${db_svr_id}"/>
 			<input type="hidden" name="wrk_id" id="wrk_id" value="${wrk_id}"/>
 			<input type="hidden" name="check_path" id="check_path" value="Y"/>
 			<table class="write">
-				<caption>Dump 백업 수정하기</caption>
+				<caption>Dump 백업 수정</caption>
 				<colgroup>
 					<col style="width:95px;" />
 					<col />
@@ -467,7 +467,7 @@ function checkFolder(){
 		</div>
 		<div class="pop_cmm mt25">
 			<table class="write">
-				<caption>백업 등록하기</caption>
+				<caption>백업 등록</caption>
 				<colgroup>
 					<col style="width:80px;" />
 					<col style="width:178px;" />
@@ -739,7 +739,7 @@ function checkFolder(){
 			</form>
 		</div>
 		<div class="btn_type_02">
-			<span class="btn btnC_01" onClick="fn_update_work();return false;"><button>수정등록</button></span>
+			<span class="btn btnC_01" onClick="fn_update_work();return false;"><button>수정</button></span>
 			<a href="#n" class="btn" onclick="self.close();return false;"><span>취소</span></a>
 		</div>
 	</div>

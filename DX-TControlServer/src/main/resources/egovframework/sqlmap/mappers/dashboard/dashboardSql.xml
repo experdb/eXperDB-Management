@@ -104,6 +104,15 @@
 		 GROUP BY AAA.DB_SVR_ID, AAA.IPADR
 	</select>
     
-    
-   
+
+	<select id="selectDashboardTransferInfoVO" parameterType="dashboardVO" resultType="dashboardVO">
+		/**
+	 	* Query ID : selectDashboardTransferInfoVO
+	 	* Description : 데이터 전송 정보 조회
+	 	* Author : 김주영
+	 	**/ 
+	 	SELECT count(*) AS connect_cnt,
+		(SELECT count(*) from t_trftrgcng_i where bw_pid = 1) AS execute_cnt
+		FROM t_trftrgcng_i   
+   </select>
 </mapper>

@@ -345,7 +345,7 @@
 						<h4>서버권한관리 <a href="#n"><img src="../images/ico_tit.png" class="btn_info"/></a></h4>
 						<div class="infobox"> 
 							<ul>
-								<li>- 사용자에게 각 데이터베이스 서버에서 수행할 수 있는 작업에 대하여 권한을 부여합니다.</li>
+								<li>사용자에게 각 데이터베이스 서버에서 수행할 수 있는 작업에 대하여 권한을 부여합니다.</li>
 							</ul>
 						</div>
 						<div class="location">

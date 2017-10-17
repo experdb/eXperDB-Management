@@ -29,16 +29,6 @@
 <script type="text/javascript" src="../js/common.js"></script>
 </head>
 <script>
-	
-	/* 숫자체크 */
-	function valid_numeric(objValue) {
-		if (objValue.match(/^[0-9]+$/) == null) {
-			return false;
-		} else {
-			return true;
-		}
-	}
-
 	/* Validation */
 	function fn_connectorValidation() {
 		var cnr_nm = document.getElementById("cnr_nm");
@@ -57,11 +47,6 @@
 		var cnr_portno = document.getElementById("cnr_portno");
 		if (cnr_portno.value == "") {
 			alert("포트를 입력하여 주십시오.");
-			cnr_portno.focus();
-			return false;
-		}
-		if (!valid_numeric(cnr_portno.value)) {
-			alert("포트는 숫자만 입력가능합니다.");
 			cnr_portno.focus();
 			return false;
 		}
@@ -117,20 +102,27 @@
 				}
 			});
 	}
-
+	
+	function NumObj(obj) {
+		if (event.keyCode >= 48 && event.keyCode <= 57) { //숫자키만 입력
+			return true;
+		} else {
+			event.returnValue = false;
+		}
+	}
 </script>
 <body>
 	<div class="pop-container">
 			<div class="pop_cts">
 				<input type="hidden" name="cnr_id" id="cnr_id" value="${cnr_id}">
 				<p class="tit">
-					<c:if test="${act == 'i'}">커넥터 등록하기</c:if>
-					<c:if test="${act == 'u'}">커넥터 수정하기</c:if>
+					<c:if test="${act == 'i'}">커넥터 등록</c:if>
+					<c:if test="${act == 'u'}">커넥터 수정</c:if>
 				</p>
 				<table class="write">
 					<caption>
-						<c:if test="${act == 'i'}">커넥터 등록하기</c:if>
-						<c:if test="${act == 'u'}">커넥터 수정하기</c:if>
+						<c:if test="${act == 'i'}">커넥터 등록</c:if>
+						<c:if test="${act == 'u'}">커넥터 수정</c:if>
 					</caption>
 					<colgroup>
 						<col style="width: 140px;" />
@@ -153,7 +145,7 @@
 								</select>
 							</td>
 							<th scope="row" class="ico_t1">Port(*)</th>
-							<td><input type="text" class="txt" name="cnr_portno" id="cnr_portno" value="${cnr_portno}"/></td>
+							<td><input type="text" class="txt" name="cnr_portno" id="cnr_portno" value="${cnr_portno}" onKeyPress="NumObj(this);" /></td>
 						</tr>
 					</tbody>
 				</table>

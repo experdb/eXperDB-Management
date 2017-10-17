@@ -13,7 +13,7 @@
 			<h4>Dashboard <a href="#n"><img src="../images/ico_tit.png" alt="" class="btn_info"/></a></h4>
 			<div class="infobox"> 
 				<ul>
-					<li> - 관리 대상 데이터베이스 서버의 목록과 설정 정보를 통합적으로 조회합니다.</li>				
+					<li>관리 대상 데이터베이스 서버의 목록과 설정 정보를 통합적으로 조회합니다.</li>				
 				</ul>
 			</div>
 		</div>
@@ -34,7 +34,7 @@
 							</li>
 							<li>
 								<p class="state">
-									<img src="../images/ico_state_03.png" alt="Running Schedule" /><span>Running Schedule</span>
+									<img src="../images/ico_state_03.png" alt="Running Schedule" /><span>Running</span>
 								</p>
 								<a href="/selectScheduleListView.do?scd_cndt=TC001801"><p class="state_num c3">${backupInfo.schedule_run_cnt}</p></a>
 								<p class="state_txt">실행중</p>
@@ -55,7 +55,7 @@
 							</li>
 							<li>
 								<p class="state">
-									<img src="../images/ico_state_09.png" alt="Scheduled for today" /><span>Scheduled<br/>for today</span>
+									<img src="../images/ico_state_09.png" alt="Scheduled for today" /><span>Today</span>
 								</p>
 								<p class="state_num c2 double">${scheduleInfo.today_cnt}</p>
 								<p class="state_txt">금일예정</p>
@@ -69,7 +69,7 @@
 							</li>
 						</ul>
 					</div>
-					<div class="m_info_rt">
+					<div class="m_info_ct">
 						<p class="m_tit">백업 정보</p>
 						<ul>
 							<li>
@@ -103,21 +103,21 @@
 							</li> --%>
 						</ul>
 					</div>
-					<div class="m_info_lt">
+					<div class="m_info_rt">
 						<p class="m_tit">데이터 전송 정보</p>
 						<ul>
 							<li>
 								<p class="state">
-									<img src="../images/ico_lnb_5.png" alt="connet" /><span>connet</span>
+									<img src="../images/ico_lnb_5.png" alt="connet" /><span>Connet</span>
 								</p>
-								<a href=""><p class="state_num c1">0</p></a>
+								<a href=""><p class="state_num c1">${transferInfo.connect_cnt}</p></a>
 								<p class="state_txt">connet수</p>
 							</li>
 							<li>
 								<p class="state">
-									<img src="../images/ico_state_03.png" alt="Running Transfer" /><span>Running Transfer</span>
+									<img src="../images/ico_state_03.png" alt="Running Transfer" /><span>Running</span>
 								</p>
-								<a href=""><p class="state_num c3">0</p></a>
+								<a href=""><p class="state_num c3">${transferInfo.execute_cnt}</p></a>
 								<p class="state_txt">실행중</p>
 							</li>
 						</ul>
@@ -125,7 +125,7 @@
 				</div>
 
 				<div class="main_server_info">
-					<p class="tit">서버 정보</p>
+					<p class="tit">DBMS 정보</p>
 					<div class="inner">
 					<!--
 						<div class="sch_form">
@@ -159,7 +159,7 @@
 						
 					-->
 						<table class="list">
-							<caption>서버 정보</caption>
+							<caption>DBMS 정보</caption>
 							<colgroup>
 								<col style="width: 10%;" />
 								<col style="width: 10%;" />
@@ -175,7 +175,7 @@
 							</colgroup>
 							<thead>
 								<tr>
-									<th scope="col" rowspan="2">서버명</th>
+									<th scope="col" rowspan="2">DBMS명</th>
 									<th scope="col" rowspan="2">관리DB</th>
 									<th scope="col" colspan="4">백업관리</th>
 									<th scope="col">접근제어</th>

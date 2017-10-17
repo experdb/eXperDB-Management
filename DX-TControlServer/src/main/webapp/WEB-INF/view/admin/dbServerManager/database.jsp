@@ -215,8 +215,8 @@ function fn_reg_popup(){
 			<h4>DataBase 관리 <a href="#n"><img src="../images/ico_tit.png" class="btn_info"/></a></h4>
 			<div class="infobox"> 
 				<ul>
-					<li>- 관리 대상 데이터베이스 정보를 조회합니다.</li>
-					<li>- 관리 대상 데이터베이스를 신규로 등록하거나 삭제합니다.</li>						
+					<li>관리 대상 데이터베이스 정보를 조회합니다.</li>
+					<li>관리 대상 데이터베이스를 신규로 등록하거나 삭제합니다.</li>						
 				</ul>
 			</div>
 			<div class="location">
@@ -236,11 +236,11 @@ function fn_reg_popup(){
 				</div>
 				<div class="sch_form">
 					<table class="write">
-						<caption>DB Server 조회하기</caption>
+						<caption>DataBase 조회</caption>
 						<colgroup>
 							<col style="width: 90px;" />
 							<col />
-							<col style="width: 70px;" />
+							<col style="width: 100px;" />
 							<col />
 							<col style="width: 90px;" />
 							<col />
@@ -249,7 +249,7 @@ function fn_reg_popup(){
 						</colgroup>
 						<tbody>
 							<tr>
-								<th scope="row" class="t2">DBMS 명</th>
+								<th scope="row" class="t2">DBMS명</th>
 								<td><select id="db_svr_nm" name="db_svr_nm">
 										<option value="%">전체</option>
 								</select></td>
@@ -267,7 +267,7 @@ function fn_reg_popup(){
 						<tr>
 							<th width="10"></th>
 							<th width="20">No</th>
-							<th width="130">DBMS</th>
+							<th width="130">DBMS명</th>
 							<th width="150">DBMS 아이피</th>
 							<th width="70">포트</th>
 							<th width="130">Database명</th>

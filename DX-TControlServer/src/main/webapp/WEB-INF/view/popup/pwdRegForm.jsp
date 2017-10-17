@@ -94,9 +94,9 @@
 <body>
 	<div class="pop_container">
 		<div class="pop_cts">
-			<p class="tit">패스워드 변경하기</p>
+			<p class="tit">패스워드 변경</p>
 			<table class="write">
-				<caption>패스워드 변경하기</caption>
+				<caption>패스워드 변경</caption>
 				<colgroup>
 					<col style="width: 120px;" />
 					<col />
@@ -111,7 +111,7 @@
 			</table>
 			<div class="pop_cmm2">
 				<table class="write">
-					<caption>패스워드 변경하기</caption>
+					<caption>패스워드 변경</caption>
 					<colgroup>
 						<col style="width: 120px;" />
 						<col />

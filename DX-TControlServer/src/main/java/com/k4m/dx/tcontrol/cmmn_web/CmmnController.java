@@ -79,18 +79,17 @@ public class CmmnController {
 		DashboardVO backupInfoVO = (DashboardVO) dashboardService.selectDashboardBackupInfo();
 		
 		//데이터전송정보
+		DashboardVO transferInfoVO = (DashboardVO) dashboardService.selectDashboardTransferInfoVO();
 		
 		DashboardVO vo = new DashboardVO();
 		
 		List<DashboardVO> serverInfoVO = (List<DashboardVO>) dashboardService.selectDashboardServerInfo(vo);
 		
-		
-		
-		
 		ModelAndView mv = new ModelAndView();
 		mv.addObject("scheduleInfo", scheduleInfoVO);
 		mv.addObject("backupInfo", backupInfoVO);
 		mv.addObject("serverInfo", serverInfoVO);
+		mv.addObject("transferInfo", transferInfoVO);
 		
 		mv.setViewName("view/index");
 		return mv;	

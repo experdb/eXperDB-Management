@@ -461,9 +461,9 @@ function fn_check() {
 						<h4>스케줄 등록 <a href="#n"><img src="../images/ico_tit.png" class="btn_info"/></a></h4>
 						<div class="infobox"> 
 							<ul>
-								<li>- 정기적으로 수행할 스케줄을 등록합니다.</li>
-								<li>- 스케줄 등록은 JOB 생성, Work 등록, 스케줄 등록의 절차로 진행 됩니다.</li>	
-								<li>- 현재 Work로 등록할 수 있는 요소는 백업 설정, Work 생성 전에 백업 설정이 먼저 등록되어 있어야 한다.</li>					
+								<li>정기적으로 수행할 스케줄을 등록합니다.</li>
+								<li>스케줄 등록은 JOB 생성, Work 등록, 스케줄 등록의 절차로 진행 됩니다.</li>	
+								<li>현재 버전에서 Work로 등록 가능한 기능은 [백업설정]입니다.</li>					
 							</ul>
 						</div>
 						<div class="location">

@@ -324,9 +324,9 @@
 <body>
 <div class="pop_container">
 	<div class="pop_cts">
-		<p class="tit">Database 매핑 설정하기</p>
+		<p class="tit">Database 매핑 설정</p>
 		<table class="write">
-			<caption>전송대상 설정 등록하기</caption>
+			<caption>전송대상 설정 등록</caption>
 			<colgroup>
 				<col style="width:105px;" />
 				<col style="width:280px;" />

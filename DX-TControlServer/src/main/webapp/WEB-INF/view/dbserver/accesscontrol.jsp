@@ -314,9 +314,12 @@
 <div id="contents">
 	<div class="contents_wrap">
 		<div class="contents_tit">
-			<h4>
-				접근제어<a href="#n"><img src="../images/ico_tit.png" alt="" /></a>
-			</h4>
+			<h4>접근제어<a href="#n"><img src="../images/ico_tit.png" class="btn_info"/></a></h4>
+			<div class="infobox"> 
+				<ul>
+					<li>선택된 데이터베이스 서버에 대한 접근제어 정책을 설정합니다.</li>
+				</ul>
+			</div>
 			<div class="location">
 				<ul>
 					<li class="bold">${db_svr_nm}</li>

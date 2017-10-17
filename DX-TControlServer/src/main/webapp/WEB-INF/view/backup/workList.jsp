@@ -364,12 +364,18 @@ function selectTab(tab){
 <div id="contents">
 	<div class="contents_wrap">
 		<div class="contents_tit">
-			<h4>백업 설정<a href="#n"><img src="/images/ico_tit.png" alt="" /></a></h4>
+			<h4>백업설정<a href="#n"><img src="/images/ico_tit.png" class="btn_info"/></a></h4>
+			<div class="infobox"> 
+				<ul>
+					<li>데이터베이스 서버에 생성된 백업 작업을 조회하거나 신규로 등록 또는 삭제 합니다.</li>
+					<li>작업 조회 목록에서 Work명을 클릭하여 해당 백업 작업을 수정합니다.</li>	
+				</ul>
+			</div>
 			<div class="location">
 				<ul>
 					<li class="bold">${db_svr_nm}</li>
 					<li>백업관리</li>
-					<li class="on">백업 설정</li>
+					<li class="on">백업설정</li>
 				</ul>
 			</div>
 		</div>	
@@ -412,7 +418,7 @@ function selectTab(tab){
 							<tr>
 								<th scope="row" class="t8">Work명</th>
 								<td><input type="text" name="wrk_nm" id="wrk_nm" class="txt t3"/></td>
-								<th scope="row" class="t9">구분</th>
+								<th scope="row" class="t9">Mode</th>
 								<td><select name="bck_opt_cd" id="bck_opt_cd" class="txt t3" style="width:150px;">
 										<option value="">선택</option>
 										<option value="TC000301">FULL</option>
@@ -428,14 +434,14 @@ function selectTab(tab){
 						<colgroup>
 							<col style="width:80px;" />
 							<col style="width:230px;" />
-							<col style="width:60px;" />
+							<col style="width:100px;" />
 							<col />
 						</colgroup>
 						<tbody>
 							<tr>
 								<th scope="row" class="t8">Work명</th>
 								<td><input type="text" class="txt t3" name="wrk_nm" id="wrk_nm"/></td>
-								<th scope="row" class="t4">DB명</th>
+								<th scope="row" class="t4">Database</th>
 								<td>
 									<select name="db_id" id="db_id" class="txt t3" style="width:150px;">
 										<option value="">선택</option>
@@ -486,7 +492,7 @@ function selectTab(tab){
 								<th scope="col">NO</th>
 								<th scope="col">백업구분</th>
 								<th scope="col">Work명</th>
-								<th scope="col">database</th>
+								<th scope="col">Database</th>
 								<th scope="col">파일포맷</th>
 								<th scope="col">파일보관일</th>
 								<th scope="col">백업파일유지수</th>

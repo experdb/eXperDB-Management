@@ -192,10 +192,10 @@ function checkFolder(keyType){
 	<div id="pop_layer">
 		<div class="pop-container">
 			<div class="pop_cts">
-				<p class="tit">Rman 백업 수정하기</p>
+				<p class="tit">Rman 백업 수정</p>
 				<div class="pop_cmm">
 					<table class="write">
-						<caption>Rman 백업 수정하기</caption>
+						<caption>Rman 백업 수정</caption>
 						<colgroup>
 							<col style="width:85px;" />
 							<col />
@@ -329,7 +329,7 @@ function checkFolder(keyType){
 					</div>
 				</div>
 				<div class="btn_type_02">
-					<span class="btn btnC_01" onClick="fn_update_work();return false;"><button>등록</button></span>
+					<span class="btn btnC_01" onClick="fn_update_work();return false;"><button>수정</button></span>
 					<span class="btn" onclick="self.close();return false;"><button>취소</button></span>
 				</div>
 			</div>
