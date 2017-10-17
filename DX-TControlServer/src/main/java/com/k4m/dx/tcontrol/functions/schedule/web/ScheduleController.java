@@ -29,6 +29,7 @@ import org.springframework.web.servlet.ModelAndView;
 
 import com.k4m.dx.tcontrol.admin.accesshistory.service.AccessHistoryService;
 import com.k4m.dx.tcontrol.admin.menuauthority.service.MenuAuthorityService;
+import com.k4m.dx.tcontrol.backup.service.BackupService;
 import com.k4m.dx.tcontrol.backup.service.WorkVO;
 import com.k4m.dx.tcontrol.cmmn.CmmnUtils;
 import com.k4m.dx.tcontrol.common.service.CmmnServerInfoService;
@@ -54,6 +55,9 @@ import com.k4m.dx.tcontrol.functions.schedule.service.ScheduleVO;
  */
 @Controller
 public class ScheduleController {
+	
+	@Autowired
+	private BackupService backupService;
 	
 	@Autowired
 	private AccessHistoryService accessHistoryService;
@@ -829,4 +833,95 @@ public class ScheduleController {
 		return resultSet;
 	}
 	
+	
+	/**
+	 * 백업 스케쥴을 간편등록 등록한다.
+	 * 
+	 * @return 
+	 * @throws Exception
+	 */
+	
+	/*
+	 * 1. 스케줄ID 시퀀스 조회
+	 * 2. 스케줄 마스터 등록
+	 * 3. 스케줄 상세정보 등록
+	 */
+	@RequestMapping(value = "/insert_bckSchedule.do")
+	public void insert_bckSchedule(@ModelAttribute("historyVO") HistoryVO historyVO, @ModelAttribute("scheduleVO") ScheduleVO scheduleVO,@ModelAttribute("scheduleDtlVO") ScheduleDtlVO scheduleDtlVO, HttpServletResponse response, HttpServletRequest request, @RequestParam Map<String,String> reqJson) throws Exception{
+		
+		//해당메뉴 권한 조회 (공통메소드호출)
+		CmmnUtils cu = new CmmnUtils();
+		menuAut = cu.selectMenuAut(menuAuthorityService, "MN000101");
+		WorkVO resultSet = null;
+		
+		// Transaction 
+		DefaultTransactionDefinition def  = new DefaultTransactionDefinition();
+		def.setPropagationBehavior(TransactionDefinition.PROPAGATION_REQUIRED);
+		TransactionStatus status = txManager.getTransaction(def);
+		
+		HttpSession session = request.getSession();
+		String usr_id = (String) session.getAttribute("usr_id");
+		
+		String mInsertResult = "S";
+		String dInsertResult = "S";
+								
+		//쓰기 권한이 없는경우 error페이지 호출 , [추후 Exception 처리예정]
+		if(menuAut.get(0).get("wrt_aut_yn").equals("N")){
+			response.sendRedirect("/autError.do");
+		}else{		
+			
+			// 화면접근이력 이력 남기기
+			CmmnUtils.saveHistory(request, historyVO);
+			historyVO.setExe_dtl_cd("DX-T0042_01");
+			historyVO.setMnu_id(2);
+			accessHistoryService.insertHistory(historyVO);
+			
+			// 1. 스케줄ID 시퀀스 조회
+			try {							
+				int scd_id = scheduleService.selectScd_id();
+				System.out.println("스케줄ID 시퀀스 값 : " + scd_id );
+				scheduleVO.setScd_id(scd_id);
+				scheduleDtlVO.setScd_id(scd_id);
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+					
+			
+			// 1. 스케쥴 마스터 등록
+			try {			
+				scheduleVO.setFrst_regr_id(usr_id);
+					scheduleService.insertSchedule(scheduleVO);
+			} catch (Exception e) {
+				e.printStackTrace();
+				mInsertResult = "F";
+			}
+							
+			// 3. 스케쥴 상세정보 등록
+			if(mInsertResult.equals("S")){
+				try {
+					resultSet = backupService.lastWorkId();
+					
+						scheduleDtlVO.setWrk_id(resultSet.getWrk_id());  
+						scheduleDtlVO.setExe_ord(1);
+						scheduleDtlVO.setNxt_exe_yn("N");
+						scheduleDtlVO.setFrst_regr_id(usr_id);
+						scheduleService.insertScheduleDtl(scheduleDtlVO);			
+					
+				} catch (Exception e) {
+					e.printStackTrace();
+					dInsertResult = "F";
+				}
+			}
+			txManager.commit(status);
+			
+			if(dInsertResult.equals("S")){
+				try{
+					System.out.println(">>> Sehcdule Controller  - 스케줄 등록");
+					scheduleUtl.insertSchdul(scheduleVO);			
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			}
+		}
+	}	
 }

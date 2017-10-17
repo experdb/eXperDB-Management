@@ -15,10 +15,12 @@ import com.k4m.dx.tcontrol.functions.schedule.service.ScheduleDtlVO;
 import com.k4m.dx.tcontrol.functions.schedule.service.ScheduleService;
 import com.k4m.dx.tcontrol.functions.schedule.service.ScheduleVO;
 
+import egovframework.rte.fdl.cmmn.EgovAbstractServiceImpl;
+
 
 
 @Service("scheduleService")
-public class ScheduleServiceImpl implements ScheduleService{
+public class ScheduleServiceImpl extends EgovAbstractServiceImpl  implements ScheduleService{
 
 	@Resource(name = "ScheduleDAO")
 	private ScheduleDAO scheduleDAO;

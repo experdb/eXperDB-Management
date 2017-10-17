@@ -912,4 +912,62 @@ public class BackupController {
 		}
 		return mv;
 	}
+	
+	
+	
+	/**
+	 * 백업 간편등록
+	 * @param WorkVO
+	 * @return String
+	 * @throws IOException 
+	 */
+	@RequestMapping(value = "/popup/insertBckJob.do")
+	public void insertBckJob(@ModelAttribute("historyVO") HistoryVO historyVO,@ModelAttribute("workVO") WorkVO workVO, HttpServletResponse response, HttpServletRequest request) throws IOException {
+		String result = "S";
+		
+		String wrkid_result = "S";
+		WorkVO resultSet = null;
+
+		try {
+			// 화면접근이력 이력 남기기
+			CmmnUtils.saveHistory(request, historyVO);
+			// historyVO.setExe_dtl_cd("DX-T0022_01");
+			// historyVO.setMnu_id(25);
+			// accessHistoryService.insertHistory(historyVO);
+			
+			HttpSession session = request.getSession();
+			String usr_id = (String) session.getAttribute("usr_id");
+			workVO.setFrst_regr_id(usr_id);
+			
+			//작업 정보등록
+			backupService.insertWork(workVO);
+			//backupService.insertRmanWork(workVO);
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			result = "F";
+		}
+	
+		// Get Last wrk_id
+		if(result.equals("S")){
+			try {
+				resultSet = backupService.lastWorkId();
+				workVO.setWrk_id(resultSet.getWrk_id());		
+			} catch (Exception e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+		
+		if(wrkid_result.equals("S")){
+			try {	
+				backupService.insertRmanWork(workVO);
+			} catch (Exception e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+		
+		response.getWriter().println(result);
+	}	
 }

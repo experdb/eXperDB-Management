@@ -186,18 +186,18 @@ public class ScheduleQuartzJob implements Job{
 				}
 				
 				//2.5 rolename 명령어 생성		
-				if(!resultWork.get(i).get("usr_role_nm").equals("")){
+				if(resultWork.get(i).get("incd") != null && !resultWork.get(i).get("usr_role_nm").equals("")){
 					strCmd +=" --role="+resultWork.get(i).get("usr_role_nm").toString().toLowerCase();
 				}
 				
 			//3. 부가옵션 명령어 생성
 			for(int j =0; j<addOption.size(); j++){
 				// Sections
-				if(addOption.get(j).get("grp_cd").toString().equals("TC0006")){
+				if(addOption.get(j).get("grp_cd").toString() != null && addOption.get(j).get("grp_cd").toString().equals("TC0006")){
 					strCmd +=" --section="+addOption.get(j).get("opt_cd_nm").toString().toLowerCase();
 				}
 				// Object형태
-				if(addOption.get(j).get("opt_cd").toString().equals("TC0007")){
+				if(addOption.get(j).get("opt_cd").toString() != null && addOption.get(j).get("opt_cd").toString().equals("TC0007")){
 					// Object형태(Only data)
 					if(addOption.get(j).get("opt_cd").toString().equals("TC000701")){
 						strCmd +=" --data-only";
@@ -210,11 +210,11 @@ public class ScheduleQuartzJob implements Job{
 					}
 				}
 				// 저장제외항목
-				if(addOption.get(j).get("grp_cd").toString().equals("TC0008")){
+				if(addOption.get(j).get("grp_cd").toString() != null && addOption.get(j).get("grp_cd").toString().equals("TC0008")){
 					strCmd +=" --no-"+addOption.get(j).get("opt_cd_nm").toString().toLowerCase();
 				}
 				// 쿼리
-				if(addOption.get(j).get("grp_cd").toString().equals("TC0009")){
+				if(addOption.get(j).get("grp_cd").toString() != null && addOption.get(j).get("grp_cd").toString().equals("TC0009")){
 					// 쿼리(Use Column Inserts)
 					if(addOption.get(j).get("opt_cd").toString().equals("TC000901")){
 						strCmd +=" --column-insert";
@@ -230,7 +230,7 @@ public class ScheduleQuartzJob implements Job{
 					}
 				}
 				// Miscellaneous
-				if(addOption.get(j).get("grp_cd").toString().equals("TC0010")){
+				if(addOption.get(j).get("grp_cd").toString() != null && addOption.get(j).get("grp_cd").toString().equals("TC0010")){
 					// Miscellaneous(With OID(s))
 					if(addOption.get(j).get("opt_cd").toString().equals("TC001001")){
 						strCmd +=" --oids";

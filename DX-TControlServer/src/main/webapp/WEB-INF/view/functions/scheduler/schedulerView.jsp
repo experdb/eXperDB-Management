@@ -26,7 +26,7 @@ function fn_init(){
 	 * work리스트
 	 ******************************************************** */
 	table = $('#bck_scheduleList').DataTable({
-	scrollY : "245px",
+	scrollY : "380px",
 	scrollX: true,	
 	paging : false,
 	searching : false,	
@@ -37,37 +37,61 @@ function fn_init(){
 			var strArr = full.bck_bsn_dscd.split(',');		
 			var html = null;
 				if(full.exe_dt.substring(0,1)=="1"){			
-					if(full.scd_cndt == 'TC001801'){
-					    html = '<img src="../images/ico_agent_1.png" alt=""  style="margin-right:10px"  width="10px" height="10px" />';		
-					    html +=	'<span onClick=javascript:fn_popup("'+full.scd_id+'");>'+full.exe_hms+ '   ';
-						html +=  full.scd_nm+'</span>';	
-					   // html += full.scd_nm;
-					}else{
-						    html = '<img src="../images/ico_agent_2.png" alt=""  style="margin-right:10px"  width="10px" height="10px" />';		
-						    html +=	'<span onClick=javascript:fn_popup("'+full.scd_id+'");>'+full.exe_hms+ '   ';
-							html +=  full.scd_nm+'</span>';	
-						}										
-					for(var i=0; i<strArr.length; i++){
+					var bar = new Array(0, 0, 0, 0);
+					for(var i=0; i<strArr.length; i++){							
 						if(strArr[i] == "TC000201"){
-							html += ' <img src="../images/r.png" id="rman"/>';
 							if(full.bck_opt_cd == "TC000301"){
-								html += ' <img src="../images/f.png" id="full"/>';
+								bar[0] = bar[0]+1;
 							}else if (full.bck_opt_cd == "TC000302"){
-								html += ' <img src="../images/i.png"  id="incremental"/>';
+								bar[1] = bar[1]+1;
 							}else{
-								html += ' <img src="../images/a.png" id="archive"/>';
+								bar[2] = bar[2]+1;
 							}
 						}else{
-							html += ' <img src="../images/d.png" id="dump"/>';
+							bar[3] = bar[3]+1;
 						}	
 					}
+					if(bar[0] > 0 ){
+						html = ' <img src="../images/af.png" id="full"/>';
+					}else{
+						html = ' <img src="../images/df.png" id="full"/>';
+					}
+					if(bar[1] > 0 ){
+						html += ' <img src="../images/ai.png"  id="incremental"/>';
+					}else{
+						html += ' <img src="../images/di.png"  id="incremental"/>';
+					}
+					if(bar[2] > 0 ){
+						html += ' <img src="../images/aa.png" id="archive"/>';
+					}else{
+						html += ' <img src="../images/da.png" id="archive"/>';
+					}
+					if(bar[3] > 0 ){
+						html += ' <img src="../images/ad.png" id="dump"/>';
+					}else{
+						html += ' <img src="../images/dd.png" id="dump"/>';
+					}
+					
+					if(full.scd_cndt == 'TC001801'){
+						html += '<div>';
+					    html += '<img src="../images/ico_agent_1.png" alt=""  style="margin-right:10px"  width="10px" height="10px" />';	
+					    html +=	'<span onClick=javascript:fn_popup("'+full.scd_id+'");>'+full.exe_hms+ '   ';
+						html +=  full.scd_nm+'</span>';	
+						html += '</div>';
+					}else{
+							html += '<div>';
+						    html += '<img src="../images/ico_agent_2.png" alt=""  style="margin-right:10px"  width="10px" height="10px" />';		
+						    html +=	'<span onClick=javascript:fn_popup("'+full.scd_id+'");>'+full.exe_hms+ '   ';
+							html +=  full.scd_nm+'</span>';	
+							html += '</div>';
+					}	
 						return html;
 				}else{
 					return html;
 				}					
 			return data;				
 			},
-			className : "dt-center", defaultContent : "" 	
+			defaultContent : "" 	
 		},	
 		
 		// 월요일
@@ -76,36 +100,61 @@ function fn_init(){
 				var strArr = full.bck_bsn_dscd.split(',');		
 				var html = null;
 					if(full.exe_dt.substring(1,2)=="1"){
-						if(full.scd_cndt == 'TC001801'){
-						    html = '<img src="../images/ico_agent_1.png" alt=""  style="margin-right:10px"  width="10px" height="10px" />';			
-						    html +=	'<span onClick=javascript:fn_popup("'+full.scd_id+'");>'+full.exe_hms+ '   ';
-							html +=  full.scd_nm+'</span>';	
-							}else{
-							    html = '<img src="../images/ico_agent_2.png" alt=""  style="margin-right:10px"  width="10px" height="10px" />';			
-							    html +=	'<span onClick=javascript:fn_popup("'+full.scd_id+'");>'+full.exe_hms+ '   ';
-								html +=  full.scd_nm+'</span>';	
-							}												
-						for(var i=0; i<strArr.length; i++){
+						var bar = new Array(0, 0, 0, 0);
+						for(var i=0; i<strArr.length; i++){							
 							if(strArr[i] == "TC000201"){
-								html += ' <img src="../images/r.png" id="rman"/>';
 								if(full.bck_opt_cd == "TC000301"){
-									html += ' <img src="../images/f.png" id="full"/>';
+									bar[0] = bar[0]+1;
 								}else if (full.bck_opt_cd == "TC000302"){
-									html += ' <img src="../images/i.png"  id="incremental"/>';
+									bar[1] = bar[1]+1;
 								}else{
-									html += ' <img src="../images/a.png" id="archive"/>';
+									bar[2] = bar[2]+1;
 								}
 							}else{
-								html += ' <img src="../images/d.png" id="dump"/>';
+								bar[3] = bar[3]+1;
 							}	
 						}
+						if(bar[0] > 0 ){
+							html = ' <img src="../images/af.png" id="full"/>';
+						}else{
+							html = ' <img src="../images/df.png" id="full"/>';
+						}
+						if(bar[1] > 0 ){
+							html += ' <img src="../images/ai.png"  id="incremental"/>';
+						}else{
+							html += ' <img src="../images/di.png"  id="incremental"/>';
+						}
+						if(bar[2] > 0 ){
+							html += ' <img src="../images/aa.png" id="archive"/>';
+						}else{
+							html += ' <img src="../images/da.png" id="archive"/>';
+						}
+						if(bar[3] > 0 ){
+							html += ' <img src="../images/ad.png" id="dump"/>';
+						}else{
+							html += ' <img src="../images/dd.png" id="dump"/>';
+						}
+						
+						if(full.scd_cndt == 'TC001801'){
+							html += '<div>';
+						    html += '<img src="../images/ico_agent_1.png" alt=""  style="margin-right:10px"  width="10px" height="10px" />';	
+						    html +=	'<span onClick=javascript:fn_popup("'+full.scd_id+'");>'+full.exe_hms+ '   ';
+							html +=  full.scd_nm+'</span>';	
+							html += '</div>';
+						}else{
+								html += '<div>';
+							    html += '<img src="../images/ico_agent_2.png" alt=""  style="margin-right:10px"  width="10px" height="10px" />';		
+							    html +=	'<span onClick=javascript:fn_popup("'+full.scd_id+'");>'+full.exe_hms+ '   ';
+								html +=  full.scd_nm+'</span>';	
+								html += '</div>';
+						}	
 							return html;
 					}else{
 						return html;
 					}					
 				return data;				
 			},
-			className : "dt-center", defaultContent : "" 	
+			defaultContent : "" 	
 		},	
 		
 		// 화요일
@@ -113,37 +162,62 @@ function fn_init(){
 			render: function (data, type, full){
 				var strArr = full.bck_bsn_dscd.split(',');		
 				var html = null;
-					if(full.exe_dt.substring(2,3)=="1"){
-						if(full.scd_cndt == 'TC001801'){
-						    html = '<img src="../images/ico_agent_1.png" alt=""  style="margin-right:10px"  width="10px" height="10px" />';			
-						    html +=	'<span onClick=javascript:fn_popup("'+full.scd_id+'");>'+full.exe_hms+ '   ';
-							html +=  full.scd_nm+'</span>';	
-							}else{
-							    html = '<img src="../images/ico_agent_2.png" alt=""  style="margin-right:10px"  width="10px" height="10px" />';			
-							    html +=	'<span onClick=javascript:fn_popup("'+full.scd_id+'");>'+full.exe_hms+ '   ';
-								html +=  full.scd_nm+'</span>';	
-							}											
-						for(var i=0; i<strArr.length; i++){
+					if(full.exe_dt.substring(2,3)=="1"){		
+						var bar = new Array(0, 0, 0, 0);
+						for(var i=0; i<strArr.length; i++){							
 							if(strArr[i] == "TC000201"){
-								html += ' <img src="../images/r.png" id="rman"/>';
 								if(full.bck_opt_cd == "TC000301"){
-									html += ' <img src="../images/f.png" id="full"/>';
+									bar[0] = bar[0]+1;
 								}else if (full.bck_opt_cd == "TC000302"){
-									html += ' <img src="../images/i.png"  id="incremental"/>';
+									bar[1] = bar[1]+1;
 								}else{
-									html += ' <img src="../images/a.png" id="archive"/>';
+									bar[2] = bar[2]+1;
 								}
 							}else{
-								html += ' <img src="../images/d.png" id="dump"/>';
+								bar[3] = bar[3]+1;
 							}	
 						}
+						if(bar[0] > 0 ){
+							html = ' <img src="../images/af.png" id="full"/>';
+						}else{
+							html = ' <img src="../images/df.png" id="full"/>';
+						}
+						if(bar[1] > 0 ){
+							html += ' <img src="../images/ai.png"  id="incremental"/>';
+						}else{
+							html += ' <img src="../images/di.png"  id="incremental"/>';
+						}
+						if(bar[2] > 0 ){
+							html += ' <img src="../images/aa.png" id="archive"/>';
+						}else{
+							html += ' <img src="../images/da.png" id="archive"/>';
+						}
+						if(bar[3] > 0 ){
+							html += ' <img src="../images/ad.png" id="dump"/>';
+						}else{
+							html += ' <img src="../images/dd.png" id="dump"/>';
+						}
+						
+						if(full.scd_cndt == 'TC001801'){
+							html += '<div>';
+						    html += '<img src="../images/ico_agent_1.png" alt=""  style="margin-right:10px"  width="10px" height="10px" />';	
+						    html +=	'<span onClick=javascript:fn_popup("'+full.scd_id+'");>'+full.exe_hms+ '   ';
+							html +=  full.scd_nm+'</span>';	
+							html += '</div>';
+						}else{
+								html += '<div>';
+							    html += '<img src="../images/ico_agent_2.png" alt=""  style="margin-right:10px"  width="10px" height="10px" />';		
+							    html +=	'<span onClick=javascript:fn_popup("'+full.scd_id+'");>'+full.exe_hms+ '   ';
+								html +=  full.scd_nm+'</span>';	
+								html += '</div>';
+						}	
 							return html;
 					}else{
 						return html;
 					}					
 				return data;				
 			},
-			className : "dt-center", defaultContent : "" 	
+			defaultContent : "" 	
 		},	
 		
 		// 수요일
@@ -151,37 +225,62 @@ function fn_init(){
 			render: function (data, type, full){
 				var strArr = full.bck_bsn_dscd.split(',');		
 				var html = null;
-					if(full.exe_dt.substring(3,4)=="1"){
-						if(full.scd_cndt == 'TC001801'){
-						    html = '<img src="../images/ico_agent_1.png" alt=""  style="margin-right:10px"  width="10px" height="10px" />';	
-						    html +=	'<span onClick=javascript:fn_popup("'+full.scd_id+'");>'+full.exe_hms+ '   ';
-							html +=  full.scd_nm+'</span>';	
-							}else{
-							    html = '<img src="../images/ico_agent_2.png" alt=""  style="margin-right:10px"  width="10px" height="10px" />';		
-							    html +=	'<span onClick=javascript:fn_popup("'+full.scd_id+'");>'+full.exe_hms+ '   ';
-								html +=  full.scd_nm+'</span>';	
-							}												
-						for(var i=0; i<strArr.length; i++){
+					if(full.exe_dt.substring(3,4)=="1"){	
+						var bar = new Array(0, 0, 0, 0);
+						for(var i=0; i<strArr.length; i++){							
 							if(strArr[i] == "TC000201"){
-								html += ' <img src="../images/r.png" id="rman"/>';
 								if(full.bck_opt_cd == "TC000301"){
-									html += ' <img src="../images/f.png" id="full"/>';
+									bar[0] = bar[0]+1;
 								}else if (full.bck_opt_cd == "TC000302"){
-									html += ' <img src="../images/i.png"  id="incremental"/>';
+									bar[1] = bar[1]+1;
 								}else{
-									html += ' <img src="../images/a.png" id="archive"/>';
+									bar[2] = bar[2]+1;
 								}
 							}else{
-								html += ' <img src="../images/d.png" id="dump"/>';
+								bar[3] = bar[3]+1;
 							}	
 						}
+						if(bar[0] > 0 ){
+							html = ' <img src="../images/af.png" id="full"/>';
+						}else{
+							html = ' <img src="../images/df.png" id="full"/>';
+						}
+						if(bar[1] > 0 ){
+							html += ' <img src="../images/ai.png"  id="incremental"/>';
+						}else{
+							html += ' <img src="../images/di.png"  id="incremental"/>';
+						}
+						if(bar[2] > 0 ){
+							html += ' <img src="../images/aa.png" id="archive"/>';
+						}else{
+							html += ' <img src="../images/da.png" id="archive"/>';
+						}
+						if(bar[3] > 0 ){
+							html += ' <img src="../images/ad.png" id="dump"/>';
+						}else{
+							html += ' <img src="../images/dd.png" id="dump"/>';
+						}
+						
+						if(full.scd_cndt == 'TC001801'){
+							html += '<div>';
+						    html += '<img src="../images/ico_agent_1.png" alt=""  style="margin-right:10px"  width="10px" height="10px" />';	
+						    html +=	'<span onClick=javascript:fn_popup("'+full.scd_id+'");>'+full.exe_hms+ '   ';
+							html +=  full.scd_nm+'</span>';	
+							html += '</div>';
+						}else{
+								html += '<div>';
+							    html += '<img src="../images/ico_agent_2.png" alt=""  style="margin-right:10px"  width="10px" height="10px" />';		
+							    html +=	'<span onClick=javascript:fn_popup("'+full.scd_id+'");>'+full.exe_hms+ '   ';
+								html +=  full.scd_nm+'</span>';	
+								html += '</div>';
+						}	
 							return html;
 					}else{
 						return html;
 					}					
 				return data;				
 			},
-			className : "dt-center", defaultContent : "" 	
+			defaultContent : "" 	
 		},	
 		
 		// 목요일
@@ -190,36 +289,61 @@ function fn_init(){
 				var strArr = full.bck_bsn_dscd.split(',');		
 				var html = null;
 					if(full.exe_dt.substring(4,5)=="1"){
-						if(full.scd_cndt == 'TC001801'){
-						    html = '<img src="../images/ico_agent_1.png" alt=""  style="margin-right:10px"  width="10px" height="10px" />';	
-						    html +=	'<span onClick=javascript:fn_popup("'+full.scd_id+'");>'+full.exe_hms+ '   ';
-							html +=  full.scd_nm+'</span>';	
-							}else{
-							    html = '<img src="../images/ico_agent_2.png" alt=""  style="margin-right:10px"  width="10px" height="10px" />';		
-							    html +=	'<span onClick=javascript:fn_popup("'+full.scd_id+'");>'+full.exe_hms+ '   ';
-								html +=  full.scd_nm+'</span>';	
-							}											
-						for(var i=0; i<strArr.length; i++){
+						var bar = new Array(0, 0, 0, 0);
+						for(var i=0; i<strArr.length; i++){							
 							if(strArr[i] == "TC000201"){
-								html += ' <img src="../images/r.png" id="rman"/>';
 								if(full.bck_opt_cd == "TC000301"){
-									html += ' <img src="../images/f.png" id="full"/>';
+									bar[0] = bar[0]+1;
 								}else if (full.bck_opt_cd == "TC000302"){
-									html += ' <img src="../images/i.png"  id="incremental"/>';
+									bar[1] = bar[1]+1;
 								}else{
-									html += ' <img src="../images/a.png" id="archive"/>';
+									bar[2] = bar[2]+1;
 								}
 							}else{
-								html += ' <img src="../images/d.png" id="dump"/>';
+								bar[3] = bar[3]+1;
 							}	
 						}
+						if(bar[0] > 0 ){
+							html = ' <img src="../images/af.png" id="full"/>';
+						}else{
+							html = ' <img src="../images/df.png" id="full"/>';
+						}
+						if(bar[1] > 0 ){
+							html += ' <img src="../images/ai.png"  id="incremental"/>';
+						}else{
+							html += ' <img src="../images/di.png"  id="incremental"/>';
+						}
+						if(bar[2] > 0 ){
+							html += ' <img src="../images/aa.png" id="archive"/>';
+						}else{
+							html += ' <img src="../images/da.png" id="archive"/>';
+						}
+						if(bar[3] > 0 ){
+							html += ' <img src="../images/ad.png" id="dump"/>';
+						}else{
+							html += ' <img src="../images/dd.png" id="dump"/>';
+						}
+						
+						if(full.scd_cndt == 'TC001801'){
+							html += '<div>';
+						    html += '<img src="../images/ico_agent_1.png" alt=""  style="margin-right:10px"  width="10px" height="10px" />';	
+						    html +=	'<span onClick=javascript:fn_popup("'+full.scd_id+'");>'+full.exe_hms+ '   ';
+							html +=  full.scd_nm+'</span>';	
+							html += '</div>';
+						}else{
+								html += '<div>';
+							    html += '<img src="../images/ico_agent_2.png" alt=""  style="margin-right:10px"  width="10px" height="10px" />';		
+							    html +=	'<span onClick=javascript:fn_popup("'+full.scd_id+'");>'+full.exe_hms+ '   ';
+								html +=  full.scd_nm+'</span>';	
+								html += '</div>';
+						}	
 							return html;
 					}else{
 						return html;
 					}					
 				return data;				
 			},
-			className : "dt-center", defaultContent : "" 	
+			defaultContent : "" 	
 		},	
 		
 		// 금요일
@@ -228,36 +352,61 @@ function fn_init(){
 				var strArr = full.bck_bsn_dscd.split(',');		
 				var html = null;
 					if(full.exe_dt.substring(5,6)=="1"){
-						if(full.scd_cndt == 'TC001801'){
-						    html = '<img src="../images/ico_agent_1.png" alt=""  style="margin-right:10px"  width="10px" height="10px" />';			
-						    html +=	'<span onClick=javascript:fn_popup("'+full.scd_id+'");>'+full.exe_hms+ '   ';
-							html +=  full.scd_nm+'</span>';	
-							}else{
-							    html = '<img src="../images/ico_agent_2.png" alt=""  style="margin-right:10px"  width="10px" height="10px" />';			
-							    html +=	'<span onClick=javascript:fn_popup("'+full.scd_id+'");>'+full.exe_hms+ '   ';
-								html +=  full.scd_nm+'</span>';	;	
-							}													
-						for(var i=0; i<strArr.length; i++){
+						var bar = new Array(0, 0, 0, 0);
+						for(var i=0; i<strArr.length; i++){							
 							if(strArr[i] == "TC000201"){
-								html += ' <img src="../images/r.png" id="rman"/>';
 								if(full.bck_opt_cd == "TC000301"){
-									html += ' <img src="../images/f.png" id="full"/>';
+									bar[0] = bar[0]+1;
 								}else if (full.bck_opt_cd == "TC000302"){
-									html += ' <img src="../images/i.png"  id="incremental"/>';
+									bar[1] = bar[1]+1;
 								}else{
-									html += ' <img src="../images/a.png" id="archive"/>';
+									bar[2] = bar[2]+1;
 								}
 							}else{
-								html += ' <img src="../images/d.png" id="dump"/>';
+								bar[3] = bar[3]+1;
 							}	
 						}
+						if(bar[0] > 0 ){
+							html = ' <img src="../images/af.png" id="full"/>';
+						}else{
+							html = ' <img src="../images/df.png" id="full"/>';
+						}
+						if(bar[1] > 0 ){
+							html += ' <img src="../images/ai.png"  id="incremental"/>';
+						}else{
+							html += ' <img src="../images/di.png"  id="incremental"/>';
+						}
+						if(bar[2] > 0 ){
+							html += ' <img src="../images/aa.png" id="archive"/>';
+						}else{
+							html += ' <img src="../images/da.png" id="archive"/>';
+						}
+						if(bar[3] > 0 ){
+							html += ' <img src="../images/ad.png" id="dump"/>';
+						}else{
+							html += ' <img src="../images/dd.png" id="dump"/>';
+						}
+						
+						if(full.scd_cndt == 'TC001801'){
+							html += '<div>';
+						    html += '<img src="../images/ico_agent_1.png" alt=""  style="margin-right:10px"  width="10px" height="10px" />';	
+						    html +=	'<span onClick=javascript:fn_popup("'+full.scd_id+'");>'+full.exe_hms+ '   ';
+							html +=  full.scd_nm+'</span>';	
+							html += '</div>';
+						}else{
+								html += '<div>';
+							    html += '<img src="../images/ico_agent_2.png" alt=""  style="margin-right:10px"  width="10px" height="10px" />';		
+							    html +=	'<span onClick=javascript:fn_popup("'+full.scd_id+'");>'+full.exe_hms+ '   ';
+								html +=  full.scd_nm+'</span>';	
+								html += '</div>';
+						}	
 							return html;
 					}else{
 						return html;
 					}					
 				return data;				
 			},
-			className : "dt-center", defaultContent : "" 	
+			defaultContent : "" 	
 		},	
 		
 		// 토요일
@@ -266,36 +415,61 @@ function fn_init(){
 				var strArr = full.bck_bsn_dscd.split(',');		
 				var html = null;
 					if(full.exe_dt.substring(6,7)=="1"){
-						if(full.scd_cndt == 'TC001801'){
-						    html = '<img src="../images/ico_agent_1.png" alt=""  style="margin-right:10px"  width="10px" height="10px" />';		
-						    html +=	'<span onClick=javascript:fn_popup("'+full.scd_id+'");>'+full.exe_hms+ '   ';
-							html +=  full.scd_nm+'</span>';	
-							}else{
-							    html = '<img src="../images/ico_agent_2.png" alt=""  style="margin-right:10px"  width="10px" height="10px" />';		
-							    html +=	'<span onClick=javascript:fn_popup("'+full.scd_id+'");>'+full.exe_hms+ '   ';
-								html +=  full.scd_nm+'</span>';	
-							}	
-						for(var i=0; i<strArr.length; i++){
+						var bar = new Array(0, 0, 0, 0);
+						for(var i=0; i<strArr.length; i++){							
 							if(strArr[i] == "TC000201"){
-								html += ' <img src="../images/r.png" id="rman"/>';
 								if(full.bck_opt_cd == "TC000301"){
-									html += ' <img src="../images/f.png" id="full"/>';
+									bar[0] = bar[0]+1;
 								}else if (full.bck_opt_cd == "TC000302"){
-									html += ' <img src="../images/i.png"  id="incremental"/>';
+									bar[1] = bar[1]+1;
 								}else{
-									html += ' <img src="../images/a.png" id="archive"/>';
+									bar[2] = bar[2]+1;
 								}
 							}else{
-								html += ' <img src="../images/d.png" id="dump"/>';
+								bar[3] = bar[3]+1;
 							}	
 						}
+						if(bar[0] > 0 ){
+							html = ' <img src="../images/af.png" id="full"/>';
+						}else{
+							html = ' <img src="../images/df.png" id="full"/>';
+						}
+						if(bar[1] > 0 ){
+							html += ' <img src="../images/ai.png"  id="incremental"/>';
+						}else{
+							html += ' <img src="../images/di.png"  id="incremental"/>';
+						}
+						if(bar[2] > 0 ){
+							html += ' <img src="../images/aa.png" id="archive"/>';
+						}else{
+							html += ' <img src="../images/da.png" id="archive"/>';
+						}
+						if(bar[3] > 0 ){
+							html += ' <img src="../images/ad.png" id="dump"/>';
+						}else{
+							html += ' <img src="../images/dd.png" id="dump"/>';
+						}
+						
+						if(full.scd_cndt == 'TC001801'){
+							html += '<div>';
+						    html += '<img src="../images/ico_agent_1.png" alt=""  style="margin-right:10px"  width="10px" height="10px" />';	
+						    html +=	'<span onClick=javascript:fn_popup("'+full.scd_id+'");>'+full.exe_hms+ '   ';
+							html +=  full.scd_nm+'</span>';	
+							html += '</div>';
+						}else{
+								html += '<div>';
+							    html += '<img src="../images/ico_agent_2.png" alt=""  style="margin-right:10px"  width="10px" height="10px" />';		
+							    html +=	'<span onClick=javascript:fn_popup("'+full.scd_id+'");>'+full.exe_hms+ '   ';
+								html +=  full.scd_nm+'</span>';	
+								html += '</div>';
+						}	
 							return html;
 					}else{
 						return html;
 					}					
 				return data;				
 			},
-			className : "dt-center", defaultContent : "" 	
+			 defaultContent : "" 	
 		},	
 	]
 });
@@ -456,7 +630,7 @@ function fn_insertSchedule(){
 												<th width="130">토</th>
 											</tr>
 										</thead>
-									</table>											-
+									</table>											
 								</div>
 							</div>		
 						</div>

@@ -10,8 +10,10 @@ import org.springframework.stereotype.Service;
 import com.k4m.dx.tcontrol.functions.schedule.service.ScheduleHistoryService;
 import com.k4m.dx.tcontrol.sample.service.PagingVO;
 
+import egovframework.rte.fdl.cmmn.EgovAbstractServiceImpl;
+
 @Service("scheduleHistoryService")
-public class ScheduleHistoryServiceImpl implements ScheduleHistoryService{
+public class ScheduleHistoryServiceImpl extends EgovAbstractServiceImpl implements ScheduleHistoryService{
 
 	@Resource(name = "ScheduleHistoryDAO")
 	private ScheduleHistoryDAO scheduleHistoryDAO;
