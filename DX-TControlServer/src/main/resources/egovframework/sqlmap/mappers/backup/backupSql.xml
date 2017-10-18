@@ -488,7 +488,7 @@
 		INSERT INTO t_bckobj_l
 			(
 			obj_sn,
-			wrk_id,
+			bck_wrk_id,
 			db_id,
 			scm_nm,
 			obj_nm,
@@ -500,7 +500,7 @@
 		VALUES
 			(
 			NEXTVAL('q_bckobj_l_01'),
-			#{wrk_id},
+			#{bck_wrk_id},
 			#{db_id},
 			#{scm_nm},
 			#{obj_nm},
@@ -524,7 +524,7 @@
 			obj_nm
 		FROM t_bckobj_l	
 		WHERE
-			wrk_id = #{wrk_id}
+			bck_wrk_id = #{bck_wrk_id}
 		ORDER BY obj_sn
     </select>
 	
@@ -536,7 +536,7 @@
 	 	**/	
 		DELETE FROM t_bckobj_l
 		WHERE 1=1
-			AND wrk_id = #{wrk_id}
+			AND bck_wrk_id = #{bck_wrk_id}
 	</delete>
 	
 	

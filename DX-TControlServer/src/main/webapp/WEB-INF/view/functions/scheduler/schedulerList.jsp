@@ -27,9 +27,9 @@ function fn_init(){
 		{data : "wrk_cnt", className : "dt-center", defaultContent : ""}, //work갯수
 		{data : "prev_exe_dtm", className : "dt-center", defaultContent : ""}, 
 		{data : "nxt_exe_dtm", className : "dt-center", defaultContent : ""}, 
-		{data : "status", 
+		{data : "scd_cndt", 
 			render: function (data, type, full){
-				if(full.status.substring(0,1)=="1"){
+				if(full.scd_cndt=="TC001801"){
 					var html = '<img src="../images/ico_agent_1.png" alt="" />';
 						return html;
 				}else{
@@ -156,19 +156,67 @@ function fn_init(){
 
 
 
+$(function() {
+	var dateFormat = "yyyy-mm-dd", from = $("#from").datepicker({
+		changeMonth : false,
+		changeYear : false,
+		onClose : function(selectedDate) {
+			$("#to").datepicker("option", "minDate", selectedDate);
+		}
+	})
 
+	to = $("#to").datepicker({
+		changeMonth : false,
+		changeYear : false,
+		onClose : function(selectedDate) {
+			$("#from").datepicker("option", "maxDate", selectedDate);
+		}
+	})
+
+	function getDate(element) {
+		var date;
+		try {
+			date = $.datepicker.parseDate(dateFormat, element.value);
+		} catch (error) {
+			date = null;
+		}
+		return date;
+	}
+});
 		
 /* ********************************************************
  * 페이지 시작시 함수
  ******************************************************** */
 $(window.document).ready(function() {
-	fn_makeHour();
-	fn_makeMin();
+	fn_makeFromHour();
+	fn_makeFromMin();
+	fn_makeToHour();
+	fn_makeToMin();
 	
 	scd_cndt = "${scd_cndt}";
 	fn_buttonAut();
 	fn_init();
-	fn_selectScheduleList();
+
+
+  	$.ajax({
+		url : "/selectScheduleList.do",
+		data : {
+			scd_cndt : $("#scd_cndt").val(),
+			scd_nm : $("#scd_nm").val(),
+			frst_regr_id : $("#frst_regr_id").val(),
+			scd_exp : $("#scd_exp").val()
+		},
+		dataType : "json",
+		type : "post",
+		error : function(request, status, error) {
+			alert("ERROR CODE : "+ request.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ request.responseText.replace(/(<([^>]+)>)/gi, ""));
+		},
+		success : function(result) {
+			table.clear().draw();
+			table.rows.add(result).draw();
+		}
+	}); 
+  	
 });
 
 
@@ -202,13 +250,18 @@ function fn_buttonAut(){
  * 스케줄 리스트 조회
  ******************************************************** */
 function fn_selectScheduleList(){
+	var nxt_exe_from = $("#from").val() + " " + $("#from_exe_h").val() + ":" + $("#from_exe_m").val();
+	var nxt_exe_to = $("#to").val() + " " + $("#to_exe_h").val() + ":" + $("#to_exe_m").val();
+	
   	$.ajax({
 		url : "/selectScheduleList.do",
 		data : {
 			scd_cndt : $("#scd_cndt").val(),
 			scd_nm : $("#scd_nm").val(),
 			frst_regr_id : $("#frst_regr_id").val(),
-			scd_exp : $("#scd_exp").val()
+			scd_exp : $("#scd_exp").val(),
+			nxt_exe_from : nxt_exe_from,
+			nxt_exe_to : nxt_exe_to
 		},
 		dataType : "json",
 		type : "post",
@@ -291,11 +344,11 @@ function fn_modifyScheduleListView(){
 /* ********************************************************
  * 시간
  ******************************************************** */
-function fn_makeHour(){
+function fn_makeFromHour(){
 	var hour = "";
 	var hourHtml ="";
 	
-	hourHtml += '<select class="select t7" name="exe_h" id="exe_h">';	
+	hourHtml += '<select class="select t7" name="from_exe_h" id="from_exe_h">';	
 	for(var i=0; i<=23; i++){
 		if(i >= 0 && i<10){
 			hour = "0" + i;
@@ -306,18 +359,17 @@ function fn_makeHour(){
 	}
 	hourHtml += '</select> 시';	
 	$( "#b_hour" ).append(hourHtml);
-	$( "#a_hour" ).append(hourHtml);
 }
 
 
 /* ********************************************************
  * 분
  ******************************************************** */
-function fn_makeMin(){
+function fn_makeFromMin(){
 	var min = "";
 	var minHtml ="";
 	
-	minHtml += '<select class="select t7" name="exe_m" id="exe_m">';	
+	minHtml += '<select class="select t7" name="from_exe_m" id="from_exe_m">';	
 	for(var i=0; i<=59; i++){
 		if(i >= 0 && i<10){
 			min = "0" + i;
@@ -328,6 +380,47 @@ function fn_makeMin(){
 	}
 	minHtml += '</select> 분';	
 	$( "#b_min" ).append(minHtml);
+}
+
+
+/* ********************************************************
+ * 시간
+ ******************************************************** */
+function fn_makeToHour(){
+	var hour = "";
+	var hourHtml ="";
+	
+	hourHtml += '<select class="select t7" name="to_exe_h" id="to_exe_h">';	
+	for(var i=0; i<=23; i++){
+		if(i >= 0 && i<10){
+			hour = "0" + i;
+		}else{
+			hour = i;
+		}
+		hourHtml += '<option value="'+hour+'">'+hour+'</option>';
+	}
+	hourHtml += '</select> 시';	
+	$( "#a_hour" ).append(hourHtml);
+}
+
+
+/* ********************************************************
+ * 분
+ ******************************************************** */
+function fn_makeToMin(){
+	var min = "";
+	var minHtml ="";
+	
+	minHtml += '<select class="select t7" name="to_exe_m" id="to_exe_m">';	
+	for(var i=0; i<=59; i++){
+		if(i >= 0 && i<10){
+			min = "0" + i;
+		}else{
+			min = i;
+		}
+		minHtml += '<option value="'+min+'">'+min+'</option>';
+	}
+	minHtml += '</select> 분';	
 	$( "#a_min" ).append(minHtml);
 }
 </script>
@@ -366,11 +459,8 @@ function fn_makeMin(){
 					<table class="write">
 						<caption>검색 조회</caption>
 						<colgroup>
-							<col style="width:130px;" />
-							<col style="width:230px;" />
-							<col style="width:30px;" />
-							<col style="width:330px;" />
-							<col style="width:100px;" />
+							<col style="width:120px;" />
+							<col  />
 
 							<col />
 						</colgroup> 
@@ -387,23 +477,21 @@ function fn_makeMin(){
 									<th scope="row" class="t9 line">다음수행시간</th>
 									<td>
 										<span id="calendar">
-												<div class="calendar_area">
+												<span class="calendar_area">
 														<a href="#n" class="calendar_btn">달력열기</a>
-														<input type="text" class="calendar" id="from" name="b_exe_dt" title="스케줄시간설정" readonly />
+														<input type="text" class="calendar" id="from" name="b_exe_dt" title="스케줄시간설정"  />
 														<span id="b_hour"></span>
 														<span id="b_min"></span>
-												</div>
+												</span>
 										</span>
-									</td>
-									<td>~</td>
-									<td>
+										 &nbsp&nbsp&nbsp&nbsp&nbsp  ~ &nbsp&nbsp&nbsp&nbsp&nbsp  
 										<span id="calendar">
-												<div class="calendar_area">
+												<span class="calendar_area">
 														<a href="#n" class="calendar_btn">달력열기</a>
-														<input type="text" class="calendar" id="to" name="a_exe_dt" title="스케줄시간설정" readonly />
+														<input type="text" class="calendar" id="to" name="a_exe_dt" title="스케줄시간설정"  />
 														<span id="a_hour"></span>
 														<span id="a_min"></span>
-												</div>
+												</span>
 										</span>
 									</td>
 								</tr>

@@ -23,6 +23,8 @@ public class ScheduleVO {
 	private String lst_mdfr_id;
 	private String lst_mdf_dtm;
 	private String status;
+	private String nxt_exe_from;
+	private String nxt_exe_to;
 
 	public int getRownum() {
 		return rownum;
@@ -190,6 +192,22 @@ public class ScheduleVO {
 
 	public void setScd_cndt(String scd_cndt) {
 		this.scd_cndt = scd_cndt;
+	}
+
+	public String getNxt_exe_from() {
+		return nxt_exe_from;
+	}
+
+	public void setNxt_exe_from(String nxt_exe_from) {
+		this.nxt_exe_from = nxt_exe_from;
+	}
+
+	public String getNxt_exe_to() {
+		return nxt_exe_to;
+	}
+
+	public void setNxt_exe_to(String nxt_exe_to) {
+		this.nxt_exe_to = nxt_exe_to;
 	}
 
 }

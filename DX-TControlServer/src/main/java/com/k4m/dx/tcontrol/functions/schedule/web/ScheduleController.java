@@ -412,6 +412,7 @@ public class ScheduleController {
 					mp.put("idx", result.get(i).get("idx"));
 					mp.put("scd_id", result.get(i).get("scd_id"));
 					mp.put("scd_nm", result.get(i).get("scd_nm"));
+					mp.put("scd_cndt", result.get(i).get("scd_cndt"));
 					mp.put("scd_exp", result.get(i).get("scd_exp"));
 					mp.put("exe_perd_cd", result.get(i).get("exe_perd_cd"));			
 					mp.put("exe_hms", result.get(i).get("exe_hms"));
@@ -420,7 +421,7 @@ public class ScheduleController {
 					mp.put("frst_regr_id", result.get(i).get("frst_regr_id"));
 					mp.put("frst_reg_dtm", result.get(i).get("frst_reg_dtm"));
 					mp.put("lst_mdfr_id", result.get(i).get("lst_mdfr_id"));
-					mp.put("lst_mdf_dtm", result.get(i).get("lst_mdfr_id"));
+					mp.put("lst_mdf_dtm", result.get(i).get("lst_mdf_dtm"));
 					mp.put("wrk_cnt", result.get(i).get("wrk_cnt"));
 					for(int j=0; j<scheduler.getJobGroupNames().size(); j++){	
 						if(result.get(i).get("scd_id").toString().equals(scheduler.getJobGroupNames().get(j).toString())){	

@@ -161,11 +161,9 @@
 	}
 
 	function fn_ScheduleNmList(scd_nm){
-	 /* ********************************************************
-	  * 페이지 시작시, Repository DB에 등록되어 있는 디비의 서버명 SelectBox 
-	  ******************************************************** */
+
 	  var lgi_dtm_start = $('#from').val();
-	  var lgi_dtm_end = $('#from').val();
+	  var lgi_dtm_end = $('#to').val();
 	  
 	  	$.ajax({
 			url : "/selectScheduleNmList.do",
@@ -189,6 +187,15 @@
 				$("#scd_nm").val(scd_nm).attr("selected", "selected");
 			}
 		});	 
+	}
+	
+	
+	function fn_dtm(){
+		fn_ScheduleNmList();
+	}
+	
+	function fn_selectedWork(){
+		
 	}
     </script>
     
@@ -232,9 +239,9 @@
 									<td>
 										<div class="calendar_area">
 											<a href="#n" class="calendar_btn">달력열기</a> 
-											<input type="text" class="calendar" id="from" name="lgi_dtm_start" title="기간검색 시작날짜" readonly="readonly" /> <span class="wave">~</span>
+											<input type="text" class="calendar" id="from" name="lgi_dtm_start" title="기간검색 시작날짜"  onChange="fn_dtm();" /> <span class="wave">~</span>
 											<a href="#n" class="calendar_btn">달력열기</a> 
-											<input type="text" class="calendar" id="to" name="lgi_dtm_end" title="기간검색 종료날짜" readonly="readonly" />
+											<input type="text" class="calendar" id="to" name="lgi_dtm_end" title="기간검색 종료날짜" onChange="fn_dtm();"  />
 										</div>							
 									</td>
 									<td>
@@ -288,7 +295,7 @@
 								 <tr>
 									<th scope="row" class="t9 line" >스케줄명</th>
 									<td>
-										<select class="select t8" name="scd_nm" id="scd_nm"  style="width: 200px;">
+										<select class="select t8" name="scd_nm" id="scd_nm"  style="width: 200px;" onChange="fn_selectedWork();">
 												<option value="%">전체</option>
 										</select>	
 									</td>
