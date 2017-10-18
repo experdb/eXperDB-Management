@@ -1,18 +1,6 @@
 package com.k4m.dx.tcontrol.deamon;
 
-/**
- * <p>화면에 로그 메시지를 출력한다.</p>
- * 
- * <p>"net.kldp.jsd.log" 시스템 프라퍼티가 on 일 때만 로그를 출력한다.
- * 기본값은 off이다.</p>
- * 
- * <p>DxDaemon을 사용하는 Java 프로그램을 실행 시킬때 JVM 옵션으로 로깅을
- * 끄고 켤 수 있다.<br />
- *  <code>$ java -Dnet.kldp.jsd.log=true net.kldp.jsd.sample.ShowTime<code>
- * </p>
- * 
- * @@author Son KwonNam(kwon37xi@@yahoo.co.kr)
- */
+
 public class DxLogger {
 	/** 로그 출력 여부를 결정하는 시스템 프라퍼티 */
 	private static String DXLOGGER_PROPERTY = "net.kldp.jsd.log";

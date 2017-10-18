@@ -297,7 +297,6 @@ public class DxDaemonManager {
 	 * 종료 표시자 파일이 생성되었는지 주기적으로 검사하는
 	 * 쓰레드.
 	 * 
-	 * @@author Son KwonNam(kwon37xi@@yahoo.co.kr)
 	 */
 	protected class ExitFlagFilePoll extends Thread {
 
