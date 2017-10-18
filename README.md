@@ -63,6 +63,7 @@ Project > Run As > Maven Install --> DX-Tcontrol.war
 2-2. Connect to the server where T-Webconsole will be installed and create a directory.    
 >2-2-1. mkdir DX-Tcontrol/server    
 >2-2-2. Copy the DX-Tcontrol.war file to its path    
+
 2-3. Starting and stopping the agent    
 >2-3-1. Start : DX-Tcontrol/server/bin/start.sh    
 >2-3-2. Stop : DX-Tcontrol/server/bin/shutdown.sh    
