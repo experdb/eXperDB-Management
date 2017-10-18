@@ -1,5 +1,5 @@
 ## Introduction
-DX-Tcontrol is a PostgreSQL integrated operations management tool. Use backup settings and regular scheduling to prepare for system failure, grants access to the system and view the history of backup and access control.
+eXperDB-Management is a PostgreSQL integrated operations management tool. Use backup settings and regular scheduling to prepare for system failure, grants access to the system and view the history of backup and access control.
 
 
 ## Features
@@ -14,7 +14,7 @@ DX-Tcontrol is a PostgreSQL integrated operations management tool. Use backup se
 
 
 ## License
-[![LICENSE](https://img.shields.io/badge/LICENSE-GPLv3-ff69b4.svg)](https://github.com/experdb/DX-TControl/blob/master/LICENSE)
+[![LICENSE](https://img.shields.io/badge/LICENSE-GPLv3-ff69b4.svg)](https://github.com/experdb/eXperDB-Management/blob/master/LICENSE)
 
 
 ## Installation
