@@ -95,7 +95,7 @@
 				use_yn : $("#use_yn").val(),
 			},
 			success : function(result) {
-				alert("저장하였습니다.");
+				alert("등록하였습니다.");
 				if (confirm("유저에 권한을 부여하시겠습니까?")) {
 					window.close();
 					opener.location.href = "/menuAuthority.do?usr_id="+$("#usr_id").val();
@@ -287,6 +287,7 @@
 			</div>
 		</div>
 	</div>
-
+	
+<div id="loading"><img src="/images/spin.gif" alt="" /></div>
 </body>
 </html>

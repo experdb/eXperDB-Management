@@ -197,15 +197,6 @@
 	    				alert("experdb 엔진을 확인해주세요.");
 	    			}else{
 		    			tableList.clear().draw();		
-		    			
-		    			<c:forEach items="${resultset}" var="resultset">
-		    			for(var i=0; i<result.data.length;i++){
-		    				if("${resultset.scm_nm}" == result.data[i].table_schema && "${resultset.tb_engl_nm}"== result.data[i].table_name){
-		    					result.data.splice(i,1);
-			    			}
-		    					
-			    		}
-		    			</c:forEach>
 		    			tableList.rows.add(result.data).draw();
 		    			
 		    	    	$('.selected').removeClass('selected');

@@ -21,7 +21,18 @@
 	*
 	*/
 %>
-
+<style>
+#auditloading{
+position:absolute;
+top:50%;
+left:50%;
+transform: translate(-50%,-50%);
+width: 300px;
+background: #fff;
+border: 3px solid #b8c3c6;
+padding: 20px;
+}
+</style>
 <script language="javascript">
 $(window.document).ready(function() {
 	var lgi_dtm_start = "${start_date}";
@@ -92,7 +103,7 @@ function fn_chkExtName(extName) {
 		alert("서버에 pgaudit Extension 이 설치되지 않았습니다.");
 		history.go(-1);
 	} else if(extName == "agent") {
-		alert("서버에 T엔진이 설치되지 않았습니다.");
+		alert("서버에 experdb엔진이 설치되지 않았습니다.");
 		history.go(-1);
 	}
 	
@@ -209,11 +220,6 @@ function fn_chkExtName(extName) {
 													<input type="text" class="calendar" id="to" name="end_date" title="기간검색 종료날짜" readonly="readonly" />
 												</div>
 											</td>
-											<td>
-												<div id="auditloading" style="display:none">
-														<img src="/images/spin.gif" alt="" /> 다운로드 중입니다... ......... .. <a href="javascript:fn_progressClose();">확인</a>
-												</div>
-											</td>
 										</tr>
 									</tbody>
 								</table>
@@ -269,3 +275,8 @@ function fn_chkExtName(extName) {
 				</div>
 			</div>
 </form>
+
+<div id="auditloading" style="display:none">
+<p class="tit"><img src="/images/popup/ico_p_1.png" style="margin-right: 10px;">다운로드 중입니다.</p>
+<div class="btn_type_02"><img src="/images/spin.gif" style="padding-bottom: 10px;"><br><a class="btn" onclick="javascript:fn_progressClose();"><span>닫기</span></a></div>
+</div>

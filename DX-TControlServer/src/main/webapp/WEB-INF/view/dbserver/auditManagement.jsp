@@ -76,7 +76,7 @@
 			alert("서버에 pgaudit Extension 이 설치되지 않았습니다.");
 			history.go(-1);
 		} else if(extName == "agent") {
-			alert("서버에 T엔진이 설치되지 않았습니다.");
+			alert("서버에 experdb엔진이 설치되지 않았습니다.");
 			history.go(-1);
 		}
 		

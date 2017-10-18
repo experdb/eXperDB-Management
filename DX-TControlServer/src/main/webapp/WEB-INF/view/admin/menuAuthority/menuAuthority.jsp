@@ -79,8 +79,39 @@ $(window.document).ready(function() {
 			success : function(result) {
 				userTable.clear().draw();
 				userTable.rows.add(result).draw();
+				$('.odd').addClass('selected');
 			}
 		});
+     	$.ajax({
+    		url : "/selectUsrmnuautList.do",
+    		data : {
+    			usr_id: usr_id,			
+    		},
+    		dataType : "json",
+    		type : "post",
+    		error : function(request, status, error) {
+    			alert("ERROR CODE : "+ request.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ request.responseText.replace(/(<([^>]+)>)/gi, ""));
+    		},
+    		success : function(result) {
+  				for(var i = 0; i<result.length; i++){  
+  					if(result[i].mnu_cd != "MN0001" && result[i].mnu_cd != "MN0002" && result[i].mnu_cd != "MN0003" && result[i].mnu_cd != "MN0005" && result[i].mnu_cd != "MN0006" && result[i].mnu_cd != "MN0007" && result[i].mnu_cd != "MN0009" && result[i].mnu_cd != "MN00010"){
+     					//읽기권한
+  						if(result[i].read_aut_yn == "Y"){	  									
+  							document.getElementById("r_"+result[i].mnu_cd).checked = true;
+  						}else{
+  							document.getElementById("r_"+result[i].mnu_cd).checked = false;
+  						}
+
+  						//쓰기권한
+  						if(result[i].wrt_aut_yn == "Y"){
+  							document.getElementById("w_"+result[i].mnu_cd).checked = true;
+  						}else{
+  							document.getElementById("w_"+result[i].mnu_cd).checked = false;
+  						}
+  					}
+				}	  			    				
+    		}
+    	});
 	}
 	
 });
@@ -132,6 +163,26 @@ $(function() {
 	    	});	
 	        
 	    } );   
+	   
+	   
+		//읽기 선택 전체 체크박스 
+		$("#read").click(function() { 
+			if ($("#read").prop("checked")) {
+				$("input[name=r_mnu_nm]").prop("checked", true);
+			} else {
+				$("input[name=r_mnu_nm]").prop("checked", false);
+			}
+		});
+		
+		//쓰기 선택 전체 체크박스 
+		$("#write").click(function() { 
+			if ($("#write").prop("checked")) {
+				$("input[name=w_mnu_nm]").prop("checked", true);
+			} else {
+				$("input[name=w_mnu_nm]").prop("checked", false);
+			}
+		});
+
 } );
 
 function fn_buttonAut(){
@@ -214,7 +265,10 @@ function fn_search(){
 			userTable.rows.add(result).draw();
 		}
 	});
+	
+	$("input[type=checkbox]").prop("checked",false);
 }
+
 </script>
 			<!-- contents -->
 			<div id="contents">
@@ -279,13 +333,24 @@ function fn_search(){
 												<thead>
 													<tr>
 														<th scope="col" colspan="3">메뉴</th>
-														<th scope="col">읽기</th>
-														<th scope="col">쓰기</th>
+														<th scope="col">읽기
+															<div class="inp_chk" style="margin-top: 5px;">
+																<input type="checkbox" id="read" name="read" />
+																<label for="read"></label>
+															</div>
+														</th>
+														<th scope="col">쓰기
+															<div class="inp_chk" style="margin-top: 5px;">
+																<input type="checkbox" id="write" name="write" />
+																<label for="write"></label>
+															</div>
+														</th>
 													</tr>
 												</thead>
 												<tbody>
 													<tr>
-														<th scope="row" rowspan="5">Functions</th>
+														<th scope="row" rowspan="5">Functions
+														</th>
 														<th scope="row" rowspan="3">스케줄정보</th>
 														<td>스케줄 등록</td>
 														<td>
@@ -363,7 +428,8 @@ function fn_search(){
 														</td>											
 													</tr>
 													<tr>
-														<th scope="row" rowspan="10">Admin</th>
+														<th scope="row" rowspan="10">Admin
+														</th>
 														<th scope="row" rowspan="3">DBMS 정보</th>
 														<td>DBMS 등록</td>
 														<td>
@@ -472,10 +538,6 @@ function fn_search(){
 															</div>
 														</td>											
 													</tr>
-													
-													
-													
-													
 													<tr>
 														<th scope="row" rowspan="1">이력관리</th>
 														<td>화면접근이력</td>
@@ -492,8 +554,6 @@ function fn_search(){
 															</div>
 														</td>										
 													</tr>
-													
-													
 													<tr>
 														<th scope="row" rowspan="1">모니터링</th>
 														<td>에이전트 모니터링</td>
@@ -510,10 +570,6 @@ function fn_search(){
 															</div>
 														</td>										
 													</tr>
-													
-
-													
-
 													<tr>
 														<td colspan="2">확장설치 조회</td>
 														<td>
