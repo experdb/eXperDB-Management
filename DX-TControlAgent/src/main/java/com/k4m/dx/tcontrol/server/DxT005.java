@@ -143,6 +143,7 @@ public class DxT005 extends SocketCtl{
 							WrkExeVO endVO = new WrkExeVO();
 							endVO.setEXE_RSLT_CD("TC001702");
 							endVO.setEXE_SN(intSeq);
+							endVO.setRSLT_MSG("An Error is Zero File Size");
 							
 							service.updateT_WRKEXE_G(endVO);
 							
@@ -164,6 +165,7 @@ public class DxT005 extends SocketCtl{
 					endVO.setEXE_SN(intSeq);
 					endVO.setFILE_SZ(Integer.parseInt(strFileSize));
 					endVO.setBCK_FILENM(strFileName);
+					endVO.setRSLT_MSG(retVal);
 					
 					if(strLOG_YN.equals("Y")) {
 						service.updateT_WRKEXE_G(endVO);
@@ -176,6 +178,7 @@ public class DxT005 extends SocketCtl{
 					WrkExeVO endVO = new WrkExeVO();
 					endVO.setEXE_RSLT_CD(strResultCode);
 					endVO.setEXE_SN(intSeq);
+					endVO.setRSLT_MSG(retVal);
 					
 					service.updateT_WRKEXE_G(endVO);
 					

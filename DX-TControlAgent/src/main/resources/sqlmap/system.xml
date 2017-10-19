@@ -172,6 +172,7 @@
 			, EXE_RSLT_CD = #{EXE_RSLT_CD}
 			, FILE_SZ = #{FILE_SZ}
 			, BCK_FILENM = #{BCK_FILENM}
+			, RSLT_MSG = #{RSLT_MSG}
 		WHERE
 			EXE_SN = #{EXE_SN}
 				

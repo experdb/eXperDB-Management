@@ -17,10 +17,17 @@ public class WrkExeVO {
 	private String LST_MDFR_ID;
 	private String LST_MDF_DTM;
 	private String BCK_FILENM;
+	private String RSLT_MSG;
 	
 	
 
 	
+	public String getRSLT_MSG() {
+		return RSLT_MSG;
+	}
+	public void setRSLT_MSG(String rSLT_MSG) {
+		RSLT_MSG = rSLT_MSG;
+	}
 	public String getBCK_FILENM() {
 		return BCK_FILENM;
 	}
