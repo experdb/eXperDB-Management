@@ -194,8 +194,30 @@
 		fn_ScheduleNmList();
 	}
 	
-	function fn_selectedWork(){
-		
+	function fn_selectedWork(scd_nm){
+		alert(scd_nm);
+	  	/* $.ajax({
+			url : "selectedWork.do",
+			data : {
+				wrk_start_dtm : lgi_dtm_start,
+				wrk_end_dtm : 	lgi_dtm_end				
+			},
+			dataType : "json",
+			type : "post",
+			error : function(request, status, error) {
+				alert("ERROR CODE : "+ request.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ request.responseText.replace(/(<([^>]+)>)/gi, ""));
+			},
+			success : function(result) {		
+				$("#wrk_nm").children().remove();
+				$("#wrk_nm").append("<option value='%'>전체</option>");
+				if(result.length > 0){
+					for(var i=0; i<result.length; i++){
+						$("#wrk_nm").append("<option value='"+result[i].wrk_nm+"'>"+result[i].wrk_nm+"</option>");	
+					}									
+				}
+				$("#wrk_nm").val(wrk_nm).attr("selected", "selected");
+			}
+		});	 */
 	}
     </script>
     
@@ -295,7 +317,7 @@
 								 <tr>
 									<th scope="row" class="t9 line" >스케줄명</th>
 									<td>
-										<select class="select t8" name="scd_nm" id="scd_nm"  style="width: 200px;" onChange="fn_selectedWork();">
+										<select class="select t8" name="scd_nm" id="scd_nm"  style="width: 200px;" onChange="fn_selectedWork(this);">
 												<option value="%">전체</option>
 										</select>	
 									</td>

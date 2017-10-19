@@ -288,19 +288,20 @@
 	 	**/
 		INSERT INTO t_bckopt_i
 			(
-			wrk_id,
+			bck_wrk_id,
 			opt_sn,
 			grp_cd,
 			opt_cd,
 			bck_opt_val,
 			frst_regr_id,
 			frst_reg_dtm,
+			
 			lst_mdfr_id,
 			lst_mdf_dtm
 			)
 		VALUES
 			(
-			#{wrk_id},
+			#{bck_wrk_id},
 			#{opt_sn},
 			#{grp_cd},
 			#{opt_cd},
@@ -320,7 +321,7 @@
 	 	**/	
 		DELETE FROM t_bckopt_i
 		WHERE
-			WRK_ID = #{wrk_id}
+			BCK_WRK_ID = #{bck_wrk_id}
 			<if test="opt_sn != null and opt_sn != '' ">
 				<if test='opt_sn != "0"'>
 			AND OPT_SN = #{opt_sn}
@@ -347,7 +348,7 @@
 	 	**/
 	 	
       SELECT 
-      		WRK_ID,
+      		BCK_WRK_ID,
 			OPT_SN,
 			GRP_CD,
 			OPT_CD,
@@ -358,7 +359,7 @@
 			LST_MDF_DTM
       FROM T_BCKOPT_I
       WHERE 1=1	
-      	AND WRK_ID = #{wrk_id}
+      	AND BCK_WRK_ID = #{bck_wrk_id}
       ORDER BY OPT_SN DESC
     </select>
     
