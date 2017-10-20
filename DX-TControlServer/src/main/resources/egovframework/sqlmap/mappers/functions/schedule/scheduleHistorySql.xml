@@ -136,4 +136,14 @@
 		AND to_char(B.WRK_END_DTM,'YYYY-MM-DD') between #{wrk_start_dtm} and #{wrk_end_dtm}
 		GROUP BY A.SCD_NM	
 	</select>
+	
+	<select id="selectWrkNmList" resultType="hashmap" >
+		SELECT 
+				C.WRK_NM
+		FROM T_SCD_M A, T_WRKEXE_G B, T_BCK_WRKCNG_I C
+		WHERE A.SCD_ID = B.SCD_ID
+        AND B.WRK_ID = C.WRK_ID
+		AND A.SCD_NM = #{scd_nm}
+		GROUP BY C.WRK_NM
+	</select>
 </mapper>

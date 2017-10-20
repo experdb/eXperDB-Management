@@ -298,7 +298,7 @@ public class ScheduleHistoryController {
 	
 	
 	/**
-	 * 스케쥴 실패 work List를 조회한다.
+	 * 스케줄 실패 work List를 조회한다.
 	 * 
 	 * @return resultSet
 	 * @throws Exception
@@ -355,6 +355,32 @@ public class ScheduleHistoryController {
 			param.put("wrk_end_dtm", wrk_end_dtm);
 			
 			resultSet = scheduleHistoryService.selectScheduleNmList(param);	
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return resultSet;
+	}
+	
+	/**
+	 * 스케줄명 조회 [SELECT BOX] 
+	 * 
+	 * @return resultSet
+	 * @throws Exception
+	 */
+	@SuppressWarnings("unused")
+	@RequestMapping(value = "/selectWrkNmList.do")
+	@ResponseBody
+	public List<Map<String, Object>> selectWrkNmList(HttpServletRequest request) {
+	
+		List<Map<String, Object>> resultSet = null;
+		try {			
+			Map<String, Object> param = new HashMap<String, Object>();
+			
+			String scd_nm = request.getParameter("scd_nm");
+
+			param.put("scd_nm", scd_nm);
+
+			resultSet = scheduleHistoryService.selectWrkNmList(param);	
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

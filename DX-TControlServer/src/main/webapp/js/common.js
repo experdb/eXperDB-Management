@@ -241,3 +241,58 @@ function toggleLayer( obj, s ) {
 		obj.removeClass("PopupLayer").css('visibility','hidden');
 	}
 }
+
+
+function fn_scdLayer(scd_nm){
+	$.ajax({
+		url : "selectScdInfo.do",
+		data : {
+			scd_nm : scd_nm
+		},
+		dataType : "json",
+		type : "post",
+		error : function(request, status, error) {
+			alert("ERROR CODE : "+ request.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ request.responseText.replace(/(<([^>]+)>)/gi, ""));
+		},
+		success : function(result) {
+			var hms = "";
+			
+			hms += result[0].exe_hms.substring(4,6)+"시 ";	
+			hms += result[0].exe_hms.substring(2,4)+"분 ";	
+			hms += result[0].exe_hms.substring(0,2)+"초";		
+			
+			var day = "";
+			if(result[0].exe_perd_cd == "TC001602"){
+				day += "(";
+				if(result[0].exe_dt.substring(0,1)=="1"){
+					day += "일, ";
+				}
+				if(result[0].exe_dt.substring(1,2)=="1"){
+					day += "월, ";
+				}
+				if(result[0].exe_dt.substring(2,3)=="1"){
+					day += "화, ";
+				}
+				if(result[0].exe_dt.substring(3,4)=="1"){
+					day += "수, ";
+				}
+				if(result[0].exe_dt.substring(4,5)=="1"){
+					day += "목, ";
+				}
+				if(result[0].exe_dt.substring(5,6)=="1"){
+					day += "금, ";
+				}
+				if(result[0].exe_dt.substring(6,7)=="1"){
+					day += "토";
+				}
+				day += ")";
+			}		
+			document.getElementById('scd_nm_info').value= result[0].scd_nm;
+			document.getElementById('scd_exp_info').value= result[0].scd_exp;						
+			document.getElementById('scd_cndt_info').value= result[0].scd_cndt_nm;				
+			document.getElementById('exe_perd_cd_info').value= result[0].exe_perd_cd_nm + " " + day ;
+			document.getElementById('scd_exe_hms').value= hms;			
+		}
+	});
+	toggleLayer($('#pop_layer'), 'on');
+}

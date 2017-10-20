@@ -51,4 +51,11 @@ public class ScheduleHistoryDAO extends EgovAbstractMapper{
 		return sl;
 	}
 
+
+	public List<Map<String, Object>> selectWrkNmList(Map<String, Object> param) {
+		List<Map<String, Object>> sl = null;
+		sl = (List<Map<String, Object>>) list("scheduleHistorySql.selectWrkNmList", param);		
+		return sl;
+	}
+
 }

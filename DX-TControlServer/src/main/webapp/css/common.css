@@ -235,7 +235,7 @@ input[type="text"]:disabled, input[type="text"].disabled {background:#e4e9ec;col
 /* window_popup */
 .pop_container{width:100%;}
 .pop_container.type2{height:100%;}
-.pop_cts{position:relative;width:100%;min-width:920px;min-height:385px;padding:48px 55px 25px;margin:auto;background:#fff;border:3px solid #b8c3c6;}
+.pop_cts{position:relative;padding:48px 55px 25px;margin:auto;background:#fff;border:3px solid #b8c3c6;}
 .pop_cts.data{min-height:540px;padding:90px 115px;}
 .pop_cts > .tit{height:15px;line-height:15px;padding-left:25px;margin-bottom:35px;color:#324452;font-family:'Nanum Square Bold';font-weight:700;background:url(../images/popup/ico_p_1.png) 4px 50% no-repeat;}
 .pop_cts .pop_type1:after{display:block;content:"";clear:both;}

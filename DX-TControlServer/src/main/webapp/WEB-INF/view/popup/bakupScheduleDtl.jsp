@@ -43,7 +43,11 @@ function fn_init(){
 	{data : "wrk_id", className : "dt-center", defaultContent : "", visible: false },
 	{data : "db_svr_nm", className : "dt-center", defaultContent : ""}, //서버명
 	{data : "bck_bsn_dscd_nm", className : "dt-center", defaultContent : ""}, //구분
-	{data : "wrk_nm", className : "dt-center", defaultContent : ""}, //work명
+	{data : "wrk_nm", className : "dt-center", defaultContent : ""
+		,"render": function (data, type, full) {
+			  return '<span onClick=javascript:aaaa("'+full.wrk_nm+'"); style=cursor:pointer>' + full.wrk_nm + '</span>';
+		}
+	}, //work명
 	{data : "wrk_exp", className : "dt-center", defaultContent : ""}, //work설명
 	],
 });
@@ -55,8 +59,11 @@ function fn_init(){
     } ).draw();
     
  
+ 
 }
-
+function aaaa(wrk_nm){
+	alert(wrk_nm);
+}
 
 /* ********************************************************
  * 월
@@ -306,6 +313,44 @@ function fn_scheduleStop(){
 <title>Insert title here</title>
 </head>
 <body>
+<div id="rmanInfo">
+ <div id="pop_layer" class="pop-layer">
+		<div class="pop-container">
+			<div class="pop_cts" style="width: 20%;">
+				<p class="tit">스케줄 정보</p>
+				<table border="1">
+					<caption>스케줄 정보</caption>
+					<tbody>
+						<tr>
+							<td style="width: 70px; height: 20px;">스케줄명</td>
+							<td style="width: 70%;"><input type="text" name="scd_nm_info" id="scd_nm_info" style="width: 100%;"/></td>
+						</tr>	
+						<tr>
+							<td style="width: 70px; height: 20px;">스케줄 설명</td>
+							<td style="width: 70%;"><input type="text" name="scd_exp_info" id="scd_exp_info" style="width: 100%;"/></td>
+						</tr>	
+						<tr>
+							<td style="width: 70px; height: 20px;">실행상태</td>
+							<td style="width: 70%;"><input type="text"  name="scd_cndt_info" id="scd_cndt_info" style="width: 100%;"/></td>
+						</tr>	
+						<tr>
+							<td style="width: 70px; height: 20px;">실행주기</td>
+							<td style="width: 70%;"><input type="text" name="exe_perd_cd_info" id="exe_perd_cd_info" style="width: 100%;"/></td>
+						</tr>	
+						<tr>
+							<td style="width: 70px; height: 20px;">실행일자</td>
+							<td style="width: 70%;"><input type="text"  name="scd_exe_hms" id="scd_exe_hms" style="width: 100%;"/></td>
+						</tr>						
+					</tbody>
+				</table>
+				<div class="btn_type_02">
+					<a href="#n" class="btn" onclick="toggleLayer($('#pop_layer'), 'off');"><span>닫기</span></a>
+				</div>
+			</div>
+		</div><!-- //pop-container -->
+	</div>
+</div>
+
 				<div class="contents_wrap">
 					<div class="contents">
 						<div class="cmm_grp">

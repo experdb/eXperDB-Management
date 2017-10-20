@@ -38,6 +38,8 @@
 		var exe_result = "${exe_result}";
 		var svr_nm = "${svr_nm}";
 		var scd_nm = "${scd_nm}";
+		var wrk_nm = "${wrk_nm}";
+		
 		
 		if(exe_result == "" || exe_result==null){
 			document.getElementById("exe_result").value="%";
@@ -73,7 +75,7 @@
 	
 	});
 	
-	$(function() {
+	$(function() {		
 		var dateFormat = "yyyy-mm-dd", from = $("#from").datepicker({
 			changeMonth : false,
 			changeYear : false,
@@ -184,7 +186,8 @@
 						$("#scd_nm").append("<option value='"+result[i].scd_nm+"'>"+result[i].scd_nm+"</option>");	
 					}									
 				}
-				$("#scd_nm").val(scd_nm).attr("selected", "selected");
+				$("#scd_nm").val(scd_nm).attr("selected", "selected");		
+				fn_selectedWork(scd_nm);
 			}
 		});	 
 	}
@@ -195,12 +198,10 @@
 	}
 	
 	function fn_selectedWork(scd_nm){
-		alert(scd_nm);
-	  	/* $.ajax({
-			url : "selectedWork.do",
+	  	 $.ajax({
+			url : "selectWrkNmList.do",
 			data : {
-				wrk_start_dtm : lgi_dtm_start,
-				wrk_end_dtm : 	lgi_dtm_end				
+				scd_nm : scd_nm
 			},
 			dataType : "json",
 			type : "post",
@@ -215,12 +216,39 @@
 						$("#wrk_nm").append("<option value='"+result[i].wrk_nm+"'>"+result[i].wrk_nm+"</option>");	
 					}									
 				}
-				$("#wrk_nm").val(wrk_nm).attr("selected", "selected");
+				$("#wrk_nm").val(wrk_nm).attr("selected", "selected");	
 			}
-		});	 */
+		});
 	}
+	
+	function fn_selectWrkNmList(scd_nm){
+	  	 $.ajax({
+			url : "selectWrkNmList.do",
+			data : {
+				scd_nm : scd_nm.value
+			},
+			dataType : "json",
+			type : "post",
+			error : function(request, status, error) {
+				alert("ERROR CODE : "+ request.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ request.responseText.replace(/(<([^>]+)>)/gi, ""));
+			},
+			success : function(result) {		
+				$("#wrk_nm").children().remove();
+				$("#wrk_nm").append("<option value='%'>전체</option>");
+				if(result.length > 0){
+					for(var i=0; i<result.length; i++){
+						$("#wrk_nm").append("<option value='"+result[i].wrk_nm+"'>"+result[i].wrk_nm+"</option>");	
+					}									
+				}
+			}
+		});
+	}
+
     </script>
     
+<%@include file="../../cmmn/scheduleInfo.jsp"%>
+
+
 <!-- contents -->
 <div id="contents">
 	<div class="contents_wrap">
@@ -317,7 +345,7 @@
 								 <tr>
 									<th scope="row" class="t9 line" >스케줄명</th>
 									<td>
-										<select class="select t8" name="scd_nm" id="scd_nm"  style="width: 200px;" onChange="fn_selectedWork(this);">
+										<select class="select t8" name="scd_nm" id="scd_nm"  style="width: 200px;" onChange="fn_selectWrkNmList(this);">
 												<option value="%">전체</option>
 										</select>	
 									</td>
@@ -356,7 +384,6 @@
 						<colgroup>
 							<col style="width: 5%;" />
 							<col style="width: 35%;" />
-							<col style="width: 25%;" />
 							<col style="width: 20%;" />
 							<col style="width: 15%;" />
 							<col style="width: 15%;" />
@@ -367,7 +394,6 @@
 							<tr style="border-bottom: 1px solid #b8c3c6;">
 								<th scope="col">NO</th>
 								<th scope="col">스케줄명</th>
-								<th scope="col">Work명</th>
 								<th scope="col">서버명</th>							
 								<th scope="col">작업시작일시</th>
 								<th scope="col">작업종료일시</th>
@@ -378,8 +404,7 @@
 							<c:forEach var="result" items="${result}" varStatus="status">
 								<tr>
 									<td><c:out value="${paginationInfo.totalRecordCount+1 - ((pagingVO.pageIndex-1) * pagingVO.pageSize + status.count)}" /></td>
-									<td><c:out value="${result.scd_nm}" /></td>
-									<td><c:out value="${result.wrk_nm}" /></td>	
+									<td><span onclick="fn_scdLayer('${result.scd_nm}');" style="cursor:pointer"><c:out value="${result.scd_nm}" /></span></td>
 									<td><c:out value="${result.db_svr_nm}" /></td>								
 									<td><c:out value="${result.wrk_strt_dtm}" /></td>
 									<td><c:out value="${result.wrk_end_dtm}" /></td>
