@@ -248,7 +248,7 @@
 							<option value="replication" ${dtb == 'replication' ? 'selected="selected"' : ''}>replication</option>
 								<c:forEach var="resultSet" items="${resultSet}">
 									<option value="${resultSet.db_nm}" ${dtb eq resultSet.db_nm ? "selected='selected'" : ""}>${resultSet.db_nm}
-									<c:if test="${!empty resultSet.db_exp}">(${resultSet.db_exp})</c:if>
+										<c:if test="${!empty resultSet.db_exp}">(${resultSet.db_exp})</c:if>
 									</option>
 								</c:forEach>
 							</select>
@@ -274,10 +274,9 @@
 						<th scope="row" class="ico_t1">Type</th>
 						<td>					
 							<select id="ctf_tp_nm" name="ctf_tp_nm" id="ctf_tp_nm" class="select t4" onChange="javascript:change(this)">
-								<option value="local" ${ctf_tp_nm == 'local' ? 'selected="selected"' : ''}>local</option>
-								<option value="host" ${ctf_tp_nm == 'host' ? 'selected="selected"' : ''}>host</option>
-								<option value="hostssl" ${ctf_tp_nm == 'hostssl' ? 'selected="selected"' : ''}>hostssl</option>
-								<option value="hostnossl" ${ctf_tp_nm == 'hostnossl' ? 'selected="selected"' : ''}>hostnossl</option>
+								<c:forEach var="resultType" items="${resultType}">
+									<option value="${resultType.ctf_tp_nm}" ${ctf_tp_nm eq resultType.ctf_tp_nm ? "selected='selected'" : ""}>${resultType.ctf_tp_nm}</option>
+								</c:forEach>
 							</select>
 						</td>
 						
@@ -304,21 +303,9 @@
 						<th scope="row" class="ico_t1">Method</th>
 						<td>
 							<select id="ctf_mth_nm" name="ctf_mth_nm" id="ctf_mth_nm" class="select" onchange="changeMethod()">
-								<option value="trust"  ${ctf_mth_nm == 'trust' ? 'selected="selected"' : ''}>trust</option>
-								<option value="reject" ${ctf_mth_nm == 'reject' ? 'selected="selected"' : ''}>reject</option>
-								<option value="md5" ${ctf_mth_nm == 'md5' ? 'selected="selected"' : ''}>md5</option>
-								<option value="password" ${ctf_mth_nm == 'password' ? 'selected="selected"' : ''}>password</option>
-								<option value="krb4" ${ctf_mth_nm == 'Krb4' ? 'selected="selected"' : ''}>Krb4</option>
-								<option value="krb5" ${ctf_mth_nm == 'krb5' ? 'selected="selected"' : ''}>krb5</option>
-								<option value="ident" ${ctf_mth_nm == 'ident' ? 'selected="selected"' : ''}>ident</option>
-								<option value="pam" ${ctf_mth_nm == 'pam' ? 'selected="selected"' : ''}>pam</option>
-								<option value="ldap" ${ctf_mth_nm == 'ldap' ? 'selected="selected"' : ''}>ldap</option>
-								<option value="gss" ${ctf_mth_nm == 'gss' ? 'selected="selected"' : ''}>gss</option>
-								<option value="sspi" ${ctf_mth_nm == 'Sspi' ? 'selected="selected"' : ''}>sspi</option>
-								<option value="cert" ${ctf_mth_nm == 'cert' ? 'selected="selected"' : ''}>cert</option>
-								<option value="crypt" ${ctf_mth_nm == 'crypt' ? 'selected="selected"' : ''}>crypt</option>
-								<option value="radius" ${ctf_mth_nm == 'radius' ? 'selected="selected"' : ''}>radius</option>
-								<option value="peer" ${ctf_mth_nm == 'peer' ? 'selected="selected"' : ''}>peer</option>
+								<c:forEach var="resultMethod" items="${resultMethod}">
+									<option value="${resultMethod.ctf_mth_nm}" ${ctf_mth_nm eq resultMethod.ctf_mth_nm ? "selected='selected'" : ""}>${resultMethod.ctf_mth_nm}</option>
+								</c:forEach>							
 							</select>
 						</td>
 						<th scope="row" class="ico_t1">Option</th>

@@ -28,7 +28,28 @@
 		AND D.USEYN = 'Y'
 		AND A.AUT_YN = 'Y'
     </select>
-   
+    
+	<select id="selectCodeMethod" parameterType="string" resultType="accessControlVO">
+		/**
+	 	*  Query ID : selectCodeMethod
+	 	* Description : 공통코드 method 조회
+	 	* Author : 김주영
+	 	**/
+	 	SELECT SYS_CD_NM AS CTF_MTH_NM 
+	 	FROM T_SYSDTL_C 
+	 	where GRP_CD = #{grp_cd}
+	</select>
+	
+	<select id="selectCodeType" parameterType="string" resultType="accessControlVO">
+		/**
+	 	*  Query ID : selectCodeType
+	 	* Description : 공통코드 type 조회
+	 	* Author : 김주영
+	 	**/
+	 	SELECT SYS_CD_NM AS CTF_TP_NM 
+	 	FROM T_SYSDTL_C 
+	 	where GRP_CD = #{grp_cd}
+	</select>   
  	   
 	<delete id="deleteDbAccessControl" parameterType="int">
        	/**
@@ -185,4 +206,5 @@
 			WHERE SVR_ACS_CNTR_HIS_ID=#{svr_acs_cntr_his_id}
 		)			
 	</select>
+	
 </mapper>

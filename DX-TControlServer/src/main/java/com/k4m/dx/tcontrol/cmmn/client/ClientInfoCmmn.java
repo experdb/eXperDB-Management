@@ -545,7 +545,7 @@ public class ClientInfoCmmn {
 		try {
 			JSONObject objList;
 
-			ClientAdapter CA = new ClientAdapter(Ip, port);
+			ClientAdapter CA = new ClientAdapter(IP, PORT);
 			CA.open();
 
 			objList = CA.dxT012(ClientTranCodeType.DxT012, serverObj);

@@ -169,4 +169,7 @@ public interface ScheduleService {
 
 	List<Map<String, Object>> selectWorkDivList() throws Exception;
 
+
+	List<Map<String, Object>> selectScdInfo(String scd_nm) throws Exception;
+
 }

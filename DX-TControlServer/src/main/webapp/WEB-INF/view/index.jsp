@@ -57,7 +57,7 @@
 								<p class="state">
 									<img src="../images/ico_state_09.png" alt="Scheduled for today" /><span>Today</span>
 								</p>
-								<p class="state_num c2 double">${scheduleInfo.today_cnt}</p>
+								<p class="state_num c1">${scheduleInfo.today_cnt}</p>
 								<p class="state_txt">금일예정</p>
 							</li>
 							<li>
@@ -104,20 +104,20 @@
 						</ul>
 					</div>
 					<div class="m_info_rt">
-						<p class="m_tit">데이터 전송 정보</p>
+						<p class="m_tit">데이터전송 정보</p>
 						<ul>
 							<li>
 								<p class="state">
-									<img src="../images/ico_lnb_5.png" alt="connet" /><span>Connet</span>
+									<img src="../images/ico_state_10.png" alt="connet" /><span>Connet</span>
 								</p>
-								<a href=""><p class="state_num c1">${transferInfo.connect_cnt}</p></a>
+								<p class="state_num c1">${transferInfo.connect_cnt}</p>
 								<p class="state_txt">connet수</p>
 							</li>
 							<li>
 								<p class="state">
 									<img src="../images/ico_state_03.png" alt="Running Transfer" /><span>Running</span>
 								</p>
-								<a href=""><p class="state_num c3">${transferInfo.execute_cnt}</p></a>
+								<p class="state_num c3">${transferInfo.execute_cnt}</p>
 								<p class="state_txt">실행중</p>
 							</li>
 						</ul>

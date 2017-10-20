@@ -278,5 +278,5 @@ function fn_chkExtName(extName) {
 
 <div id="auditloading" style="display:none">
 <p class="tit"><img src="/images/popup/ico_p_1.png" style="margin-right: 10px;">다운로드 중입니다.</p>
-<div class="btn_type_02"><img src="/images/spin.gif" style="padding-bottom: 10px;"><br><a class="btn" onclick="javascript:fn_progressClose();"><span>닫기</span></a></div>
+<div class="btn_type_02"><img src="/images/spin.gif" style="padding-bottom: 10px;"></div>
 </div>

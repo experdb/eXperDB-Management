@@ -136,8 +136,8 @@
 						html2+='		<th scope="row">'+result[i].db_nm+'</th>';
 						html2+='		<td>';
 						html2+='			<div class="inp_chk">';
-						html2+='				<input type="checkbox" id="'+item.db_svr_id+'_'+result[i].db_id+'" name="aut_yn"  />';
-						html2+='       		<label for="'+item.db_svr_id+'_'+result[i].db_id+'"></label>';
+						html2+='				<input type="checkbox" id="'+result[i].db_svr_id+'_'+result[i].db_id+'" name="aut_yn"  />';
+						html2+='       		<label for="'+result[i].db_svr_id+'_'+result[i].db_id+'"></label>';
 						html2+='			</div>';
 						html2+='		</td>';
 						html2+='	</tr>';
@@ -209,7 +209,7 @@
 			 return false;
 		 }else{
 			 var usr_id = userTable.row('.selected').data().usr_id;
-			 
+
 			 var db_svr_id = $("input[name='db_svr_id']");
 			 var db_id = $("input[name='db_id']");
 			 var aut_yn = $("input[name='aut_yn']");
@@ -228,7 +228,6 @@
 			     datasArr.push(datas);
 			 } 
 		 }
-		 
 			if (confirm("DB권한 설정 하시겠습니까?")){
 				$.ajax({
 					url : "/updateUsrDBAutInfo.do",

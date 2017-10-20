@@ -30,6 +30,7 @@ import com.k4m.dx.tcontrol.common.service.CmmnVO;
 import com.k4m.dx.tcontrol.common.service.HistoryVO;
 import com.k4m.dx.tcontrol.dashboard.service.DashboardService;
 import com.k4m.dx.tcontrol.dashboard.service.DashboardVO;
+import com.k4m.dx.tcontrol.functions.schedule.service.ScheduleService;
 
 /**
  * 공통 컨트롤러 클래스를 정의한다.
@@ -59,6 +60,9 @@ public class CmmnController {
 	
 	@Autowired
 	private DashboardService dashboardService;
+	
+	@Autowired
+	private ScheduleService scheduleService;
 	
 	/**
 	 * 메인(홈)을 보여준다.
@@ -227,7 +231,7 @@ public class CmmnController {
 			serverObj.put(ClientProtocolID.SERVER_NAME, dbServerVO.getDb_svr_nm());
 			serverObj.put(ClientProtocolID.SERVER_IP, dbServerVO.getIpadr());
 			serverObj.put(ClientProtocolID.SERVER_PORT, dbServerVO.getPortno());
-			serverObj.put(ClientProtocolID.DATABASE_NAME, workVO.getDb_nm());
+			serverObj.put(ClientProtocolID.DATABASE_NAME,  dbServerVO.getDft_db_nm());
 			serverObj.put(ClientProtocolID.USER_ID, dbServerVO.getSvr_spr_usr_id());
 			//serverObj.put(ClientProtocolID.USER_PWD, dbServerVO.getSvr_spr_scm_pwd());
 			serverObj.put(ClientProtocolID.USER_PWD, aes.aesDecode(dbServerVO.getSvr_spr_scm_pwd()));
@@ -277,6 +281,29 @@ public class CmmnController {
 			result = cic.directory_exist(serverObj,directory_path, IP, PORT);
 			
 			//System.out.println(result);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return result;
+	}
+	
+	
+	/**
+	 * 스케줄 정보
+	 * @param 
+	 * @return resultSet
+	 * @throws Exception
+	 */
+	@SuppressWarnings("unchecked")
+	@RequestMapping(value = "/selectScdInfo.do")
+	@ResponseBody
+	public List<Map<String, Object>> selectScdInfo(HttpServletRequest request) {
+		List<Map<String, Object>> result = null;
+		
+		try {
+			String scd_nm = request.getParameter("scd_nm");
+			
+			result = scheduleService.selectScdInfo(scd_nm);	
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

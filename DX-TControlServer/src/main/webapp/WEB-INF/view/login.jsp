@@ -53,7 +53,7 @@
 				if(result == "idFail"){
 					html += '<p>등록되지 않은 사용자 입니다.<br>관리자에게 문의 하여주십시오.</p>';
 				}else if(result == "passwordFail"){
-					html += '<p>Password가 틀렸습니다.</p>';
+					html += '<p>아이디나 비밀번호가 잘못되었습니다.</p>';
 				}else if(result == "useynFail"){
 					html += '<p>사용할 수 없는 아이디 입니다.</p>';
 				}else if(result=="usrexprdtFail"){

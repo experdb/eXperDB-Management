@@ -677,7 +677,7 @@ public class BackupController {
 		// work option delete
 		try {
 			WorkOptVO workOptVO = new WorkOptVO();
-			workOptVO.setWrk_id(workVO.getWrk_id());
+			workOptVO.setBck_wrk_id(workVO.getBck_wrk_id());
 			backupService.deleteWorkOpt(workOptVO);
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
@@ -717,7 +717,7 @@ public class BackupController {
 
 		// work option delete
 		WorkOptVO workOptVO = new WorkOptVO();
-		workOptVO.setWrk_id(workVO.getWrk_id());
+		workOptVO.setBck_wrk_id(workVO.getBck_wrk_id());
 		try {
 			backupService.deleteWorkOpt(workOptVO);
 		} catch (Exception e) {

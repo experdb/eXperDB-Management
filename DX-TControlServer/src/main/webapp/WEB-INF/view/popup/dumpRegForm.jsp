@@ -90,12 +90,12 @@ function fn_insert_opt(data){
 /* ********************************************************
  * Dump Backup Each Option Insert
  ******************************************************** */
-function fn_insert_opt_val(wrk_id, opt_sn, grp_cd, opt_cd, bck_opt_val){
+function fn_insert_opt_val(bck_wrk_id, opt_sn, grp_cd, opt_cd, bck_opt_val){
 	$.ajax({
 		async : false,
 		url : "/popup/workOptWrite.do",
 	  	data : {
-	  		wrk_id : wrk_id,
+	  		bck_wrk_id : bck_wrk_id,
 	  		opt_sn : opt_sn,
 	  		grp_cd : grp_cd,
 	  		opt_cd : opt_cd,
@@ -127,7 +127,7 @@ function fn_insert_object(data){
 /* ********************************************************
  * Dump Backup Each Object Insert
  ******************************************************** */
-function fn_insert_object_val(wrk_id,otype,scm_nm,obj_nm){
+function fn_insert_object_val(bck_wrk_id,otype,scm_nm,obj_nm){
 	var db_id = $("#db_id").val();
 
 	if(otype != "table") obj_nm = "";
@@ -135,7 +135,7 @@ function fn_insert_object_val(wrk_id,otype,scm_nm,obj_nm){
 		async : false,
 		url : "/popup/workObjWrite.do",
 	  	data : {
-	  		wrk_id : wrk_id,
+	  		bck_wrk_id : bck_wrk_id,
 	  		db_id : db_id,
 	  		scm_nm : scm_nm,
 	  		obj_nm : obj_nm

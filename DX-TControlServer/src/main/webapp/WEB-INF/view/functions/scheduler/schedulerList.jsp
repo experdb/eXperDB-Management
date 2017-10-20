@@ -193,11 +193,12 @@ $(window.document).ready(function() {
 	fn_makeToHour();
 	fn_makeToMin();
 	
-	scd_cndt = "${scd_cndt}";
+	var scd_cndt = "${scd_cndt}";
+	$('#scd_cndt').val(scd_cndt);
+	
 	fn_buttonAut();
 	fn_init();
-
-
+	
   	$.ajax({
 		url : "/selectScheduleList.do",
 		data : {
@@ -216,6 +217,7 @@ $(window.document).ready(function() {
 			table.rows.add(result).draw();
 		}
 	}); 
+ 
   	
 });
 
@@ -461,8 +463,6 @@ function fn_makeToMin(){
 						<colgroup>
 							<col style="width:120px;" />
 							<col  />
-
-							<col />
 						</colgroup> 
 						<tbody>
 								<tr>
@@ -514,7 +514,7 @@ function fn_makeToMin(){
 				<div class="overflow_area">
 				
 				<table id="scheduleList" class="cell-border display" >
-				<caption>스케쥴 리스트</caption>
+				<caption>스케줄 리스트</caption>
 					<thead>
 						<tr>
 							<th width="10"></th>
