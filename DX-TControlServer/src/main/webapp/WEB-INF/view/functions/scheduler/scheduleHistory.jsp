@@ -129,7 +129,9 @@
 	
 	
 	function setSearchDate(start){
-
+// 		$('input:not(:checked)').parent(".chkbox2").removeClass("on");
+//         $('input:checked').parent(".chkbox2").addClass("on");    
+        
 		var num = start.substring(0,1);
 		var str = start.substring(1,2);
 

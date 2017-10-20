@@ -287,11 +287,18 @@ function fn_scdLayer(scd_nm){
 				}
 				day += ")";
 			}		
-			document.getElementById('scd_nm_info').value= result[0].scd_nm;
-			document.getElementById('scd_exp_info').value= result[0].scd_exp;						
-			document.getElementById('scd_cndt_info').value= result[0].scd_cndt_nm;				
-			document.getElementById('exe_perd_cd_info').value= result[0].exe_perd_cd_nm + " " + day ;
-			document.getElementById('scd_exe_hms').value= hms;			
+			
+			$("#scd_nm_info").html(result[0].scd_nm);
+			$("#scd_exp_info").html(result[0].scd_exp);
+			$("#scd_cndt_info").html(result[0].scd_cndt_nm);
+			$("#exe_perd_cd_info").html(result[0].exe_perd_cd_nm + " " + day);
+			$("#scd_exe_hms").html(hms);
+			
+//			document.getElementById('scd_nm_info').value= result[0].scd_nm;
+//			document.getElementById('scd_exp_info').value= result[0].scd_exp;						
+//			document.getElementById('scd_cndt_info').value= result[0].scd_cndt_nm;				
+//			document.getElementById('exe_perd_cd_info').value= result[0].exe_perd_cd_nm + " " + day ;
+//			document.getElementById('scd_exe_hms').value= hms;			
 		}
 	});
 	toggleLayer($('#pop_layer'), 'on');
