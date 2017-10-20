@@ -112,6 +112,15 @@
 
 	//수정버튼 클릭시
 	function fn_update() {
+		var session_usr_id = "<%=(String)session.getAttribute("usr_id")%>"
+		var usr_id=$("#usr_id").val();
+		if(usr_id=='admin'){
+			if(session_usr_id!=usr_id){
+				alert("관리자는 수정할 수 없습니다.");
+				return false;
+			}
+		}
+		
 		idCheck = 1;
 		if (!fn_userManagerValidation())return false;
 		if (!confirm("수정하시겠습니까?")) return false;
@@ -179,8 +188,6 @@
 			dateFormat : 'yymmdd',
 		});
 		$("#datepicker3").datepicker();
-		
-
 	})
 	
 	function NumObj(obj) {

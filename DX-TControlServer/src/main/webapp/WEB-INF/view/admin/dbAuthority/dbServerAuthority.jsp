@@ -127,7 +127,7 @@
 					html1+=	'</td>';
 					html1+='</tr>';
 					html1+='<tr>';
-					html1+=	'<th scope="row">서버접근제어</th>';
+					html1+=	'<th scope="row">접근제어</th>';
 					html1+=	'<td>';
 					html1+=		'<div class="inp_chk">';
 					html1+=			'<input type="checkbox" id="'+item.db_svr_nm+'_acs_cntr" name="acs_cntr_aut"  />';

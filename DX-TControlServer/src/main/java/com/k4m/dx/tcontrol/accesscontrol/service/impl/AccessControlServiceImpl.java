@@ -24,7 +24,16 @@ public class AccessControlServiceImpl extends EgovAbstractServiceImpl implements
 	public List<DbIDbServerVO> selectDatabaseList(DbAutVO dbAutVO) throws Exception {
 		return accessControlDAO.selectDatabaseList(dbAutVO);
 	}
+	@Override
+	public List<AccessControlVO> selectCodeMethod(String grp_cd) throws Exception {
+		return accessControlDAO.selectCodeMethod(grp_cd);
+	}
 	
+	@Override
+	public List<AccessControlVO> selectCodeType(String grp_cd) throws Exception {
+		return accessControlDAO.selectCodeType(grp_cd);
+	}
+
 	@Override
 	public void deleteDbAccessControl(int db_svr_id) throws Exception {
 		accessControlDAO.deleteDbAccessControl(db_svr_id);
@@ -56,6 +65,8 @@ public class AccessControlServiceImpl extends EgovAbstractServiceImpl implements
 			throws Exception {
 		return accessControlDAO.selectAccessControlHistory(accessControlHistoryVO);
 	}
+
+
 
 
 

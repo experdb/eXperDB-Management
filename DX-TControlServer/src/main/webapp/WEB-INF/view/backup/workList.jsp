@@ -58,6 +58,33 @@ function fn_rman_reg_popup(){
 /* ********************************************************
  * Rman Backup Reregist Window Open
  ******************************************************** */
+function fn_rman_regreg_popup(){
+	var checkCnt = 0;	
+	$("input:checkbox[name='rmanWorkId']").each(function(){
+		if(this.checked) checkCnt++;
+	});
+	if(checkCnt == 1){
+		$("input:checkbox[name='rmanWorkId']").each(function(){
+		if(this.checked){		
+			var popUrl = "/popup/rmanRegReForm.do?db_svr_id=${db_svr_id}&wrk_id="+this.value;
+			var width = 954;
+			var height = 650;
+			var left = (window.screen.width / 2) - (width / 2);
+			var top = (window.screen.height /2) - (height / 2);
+			var popOption = "width="+width+", height="+height+", top="+top+", left="+left+", resizable=no, scrollbars=yes, status=no, toolbar=no, titlebar=yes, location=no,";
+			
+			var winPop = window.open(popUrl,"rmanRegPop",popOption);
+			winPop.focus();		
+			}
+		});
+	}else{
+		alert("하나의 항목을 선택해주세요.");
+	}
+}
+
+/* ********************************************************
+ * Rman Backup Reregist Window Open
+ ******************************************************** */
 function fn_rman_reform_popup(wrk_id){
 	var popUrl = "/popup/rmanRegReForm.do?db_svr_id=${db_svr_id}&wrk_id="+wrk_id;
 	var width = 954;
@@ -83,6 +110,33 @@ function fn_dump_reg_popup(){
 	
 	var winPop = window.open(popUrl,"dumpRegPop",popOption);
 	winPop.focus();
+}
+
+/* ********************************************************
+ * Dump Backup Reregist Window Open
+ ******************************************************** */
+function fn_dump_regreg_popup(){
+	var checkCnt = 0;	
+	$("input:checkbox[name='dumpWorkId']").each(function(){
+		if(this.checked) checkCnt++;
+	});
+	if(checkCnt == 1){
+		$("input:checkbox[name='dumpWorkId']").each(function(){
+		if(this.checked){		
+			var popUrl = "/popup/dumpRegReForm.do?db_svr_id=${db_svr_id}&wrk_id="+this.value;
+			var width = 954;
+			var height = 900;
+			var left = (window.screen.width / 2) - (width / 2);
+			var top = (window.screen.height /2) - (height / 2);
+			var popOption = "width="+width+", height="+height+", top="+top+", left="+left+", resizable=no, scrollbars=yes, status=no, toolbar=no, titlebar=yes, location=no,";
+			
+			var winPop = window.open(popUrl,"dumpRegPop",popOption);
+			winPop.focus();	
+			}
+		});
+	}else{
+		alert("하나의 항목을 선택해주세요.");
+	}
 }
 
 /* ********************************************************
@@ -394,13 +448,13 @@ function selectTab(tab){
 				<div class="btn_type_01" id="btnRman">
 					<a class="btn" onClick="fn_rman_find_list();"><button>조회</button></a>
 					<span class="btn" onclick="fn_rman_reg_popup()"><button>등록</button></span>
-					<!-- <span class="btn"><button>수정</button></span>-->
+					<span class="btn" onClick="fn_rman_regreg_popup()"><button>수정</button></span>
 					<span class="btn" onClick="fn_rman_work_delete()"><button>삭제</button></span>
 				</div>
 				<div class="btn_type_01" id="btnDump" style="display:none;">
 					<span class="btn" onclick="fn_dump_find_list()"><button>조회</button></span>
 					<span class="btn" onclick="fn_dump_reg_popup()"><button>등록</button></span>
-					<!-- <span class="btn"><button>수정</button></span> -->
+					<span class="btn" onclick="fn_dump_regreg_popup()"><button>수정</button></span>
 					<span class="btn" onclick="fn_dump_work_delete()"><button>삭제</button></span>
 				</div>
 				<form name="findList" id="findList" method="post">

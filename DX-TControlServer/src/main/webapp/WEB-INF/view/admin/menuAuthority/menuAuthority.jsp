@@ -120,6 +120,7 @@ $(window.document).ready(function() {
 $(function() {
 	
 	   $('#user tbody').on( 'click', 'tr', function () {
+		   $("input[type=checkbox]").prop("checked",false);
 	         if ( $(this).hasClass('selected') ) {
 	        	}
 	        else {	        	
@@ -183,6 +184,101 @@ $(function() {
 			}
 		});
 
+		//functions 선택 전체 체크박스 
+		$("#functions").click(function() { 
+			var array = new Array("MN000101","MN000102","MN000103","MN000201","MN000202");
+			if ($("#functions").prop("checked")) {
+				for(var i=0; i<array.length; i++){
+					document.getElementById("r_"+array[i]).checked = true;
+					document.getElementById("w_"+array[i]).checked = true;
+				}
+			} else {
+				for(var i=0; i<array.length; i++){
+					document.getElementById("r_"+array[i]).checked = false;
+					document.getElementById("w_"+array[i]).checked = false;
+				}
+			}
+		});
+		
+		//admin 선택 전체 체크박스 
+		$("#admin").click(function() { 
+			var array = new Array("MN000301","MN000302","MN000303","MN0004","MN000501","MN000502","MN000503","MN000601","MN000701","MN0008","MN0001101","MN0001102","MN0001201","MN0001202","MN0001203","MN0001204","MN0001301","MN0001302");
+			if ($("#admin").prop("checked")) {
+				for(var i=0; i<array.length; i++){
+					document.getElementById("r_"+array[i]).checked = true;
+					document.getElementById("w_"+array[i]).checked = true;
+				}
+			} else {
+				for(var i=0; i<array.length; i++){
+					document.getElementById("r_"+array[i]).checked = false;
+					document.getElementById("w_"+array[i]).checked = false;
+				}
+			}
+		});
+		
+		//스케줄정보 선택 전체 체크박스
+		$("#schinfo").click(function() { 
+			var array = new Array("MN000101","MN000102","MN000103");
+			if ($("#schinfo").prop("checked")) {
+				for(var i=0; i<array.length; i++){
+					document.getElementById("r_"+array[i]).checked = true;
+					document.getElementById("w_"+array[i]).checked = true;
+				}
+			} else {
+				for(var i=0; i<array.length; i++){
+					document.getElementById("r_"+array[i]).checked = false;
+					document.getElementById("w_"+array[i]).checked = false;
+				}
+			}
+		});
+		
+		//데이터전송정보 선택 전체 체크박스
+		$("#transferinfo").click(function() { 
+			var array = new Array("MN000201","MN000202");
+			if ($("#transferinfo").prop("checked")) {
+				for(var i=0; i<array.length; i++){
+					document.getElementById("r_"+array[i]).checked = true;
+					document.getElementById("w_"+array[i]).checked = true;
+				}
+			} else {
+				for(var i=0; i<array.length; i++){
+					document.getElementById("r_"+array[i]).checked = false;
+					document.getElementById("w_"+array[i]).checked = false;
+				}
+			}
+		});
+		
+		//DBMS정보 선택 전체 체크박스
+		$("#dbmsinfo").click(function() { 
+			var array = new Array("MN000301","MN000302","MN000303");
+			if ($("#dbmsinfo").prop("checked")) {
+				for(var i=0; i<array.length; i++){
+					document.getElementById("r_"+array[i]).checked = true;
+					document.getElementById("w_"+array[i]).checked = true;
+				}
+			} else {
+				for(var i=0; i<array.length; i++){
+					document.getElementById("r_"+array[i]).checked = false;
+					document.getElementById("w_"+array[i]).checked = false;
+				}
+			}
+		});
+		
+		//권한관리 선택 전체 체크박스
+		$("#authmanage").click(function() { 
+			var array = new Array("MN000501","MN000502","MN000503");
+			if ($("#authmanage").prop("checked")) {
+				for(var i=0; i<array.length; i++){
+					document.getElementById("r_"+array[i]).checked = true;
+					document.getElementById("w_"+array[i]).checked = true;
+				}
+			} else {
+				for(var i=0; i<array.length; i++){
+					document.getElementById("r_"+array[i]).checked = false;
+					document.getElementById("w_"+array[i]).checked = false;
+				}
+			}
+		});
 } );
 
 function fn_buttonAut(){
@@ -349,9 +445,18 @@ function fn_search(){
 												</thead>
 												<tbody>
 													<tr>
-														<th scope="row" rowspan="5">Functions
+														<th scope="row" rowspan="5">
+															<div class="inp_chk">
+																<input type="checkbox" id="functions" name="functions"/>
+																<label for="functions">Functions</label>
+															</div>
 														</th>
-														<th scope="row" rowspan="3">스케줄정보</th>
+														<th scope="row" rowspan="3">
+															<div class="inp_chk">
+																<input type="checkbox" id="schinfo" name="schinfo"/>
+																<label for="schinfo">스케줄정보</label>
+															</div>
+														</th>
 														<td>스케줄 등록</td>
 														<td>
 															<div class="inp_chk">
@@ -397,7 +502,12 @@ function fn_search(){
 														</td>										
 													</tr>
 													<tr>
-														<th scope="row" rowspan="2">데이터전송정보</th>
+														<th scope="row" rowspan="2">
+															<div class="inp_chk">
+																<input type="checkbox" id="transferinfo" name="transferinfo"/>
+																<label for="transferinfo">데이터전송정보</label>
+															</div>
+														</th>
 														<td>데이터전송설정</td>
 														<td>
 															<div class="inp_chk">
@@ -413,7 +523,7 @@ function fn_search(){
 														</td>										
 													</tr>
 													<tr>
-														<td>컨넥터 등록</td>
+														<td>커넥터 관리</td>
 														<td>
 															<div class="inp_chk">
 																<input type="checkbox" id="r_MN000202" name="r_mnu_nm" />
@@ -428,9 +538,18 @@ function fn_search(){
 														</td>											
 													</tr>
 													<tr>
-														<th scope="row" rowspan="10">Admin
+														<th scope="row" rowspan="10">
+															<div class="inp_chk">
+																<input type="checkbox" id="admin" name="admin"/>
+																<label for="admin">Admin</label>
+															</div>
 														</th>
-														<th scope="row" rowspan="3">DBMS 정보</th>
+														<th scope="row" rowspan="3">
+															<div class="inp_chk">
+																<input type="checkbox" id="dbmsinfo" name="dbmsinfo"/>
+																<label for="dbmsinfo">DBMS 정보</label>
+															</div>
+														</th>
 														<td>DBMS 등록</td>
 														<td>
 															<div class="inp_chk">
@@ -493,7 +612,12 @@ function fn_search(){
 													
 													
 													<tr>
-														<th scope="row" rowspan="3">권한관리</th>
+														<th scope="row" rowspan="3">
+															<div class="inp_chk">
+																<input type="checkbox" id="authmanage" name="authmanage"/>
+																<label for="authmanage">권한관리</label>
+															</div>
+														</th>
 														<td>메뉴권한관리</td>
 														<td>
 															<div class="inp_chk">

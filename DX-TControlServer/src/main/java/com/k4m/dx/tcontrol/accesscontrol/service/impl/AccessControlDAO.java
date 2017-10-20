@@ -30,6 +30,32 @@ public class AccessControlDAO extends EgovAbstractMapper {
 	}
 
 	/**
+	 * 공통코드 method 조회
+	 * 
+	 * @param grp_cd
+	 * @return AccessControlVO
+	 */
+	@SuppressWarnings({ "deprecation", "unchecked" })
+	public List<AccessControlVO> selectCodeMethod(String grp_cd) throws SQLException {
+		List<AccessControlVO> result = null;
+		result = (List<AccessControlVO>) list("accessControlSql.selectCodeMethod", grp_cd);
+		return result;
+	}
+	
+	/**
+	 * 공통코드 type 조회
+	 * 
+	 * @param grp_cd
+	 * @return AccessControlVO
+	 */
+	@SuppressWarnings({ "deprecation", "unchecked" })
+	public List<AccessControlVO> selectCodeType(String grp_cd) throws SQLException {
+		List<AccessControlVO> result = null;
+		result = (List<AccessControlVO>) list("accessControlSql.selectCodeType", grp_cd);
+		return result;
+	}
+	
+	/**
 	 * DB접근제어 전체 삭제
 	 * 
 	 * @param db_svr_id
@@ -56,7 +82,7 @@ public class AccessControlDAO extends EgovAbstractMapper {
 	 * @param accessControlVO
 	 * @throws Exception
 	 */
-	public void insertAccessControlHistory(AccessControlHistoryVO accessControlHistoryVO) {
+	public void insertAccessControlHistory(AccessControlHistoryVO accessControlHistoryVO) throws SQLException {
 		insert("accessControlSql.insertAccessControlHistory", accessControlHistoryVO);
 	}
 
@@ -68,7 +94,7 @@ public class AccessControlDAO extends EgovAbstractMapper {
 	 * @return AccessControlHistoryVO
 	 */
 	@SuppressWarnings({ "deprecation", "unchecked" })
-	public List<AccessControlHistoryVO> selectLstmdfdtm(int db_svr_id) {
+	public List<AccessControlHistoryVO> selectLstmdfdtm(int db_svr_id) throws SQLException {
 		List<AccessControlHistoryVO> result = null;
 		result = (List<AccessControlHistoryVO>) list("accessControlSql.selectLstmdfdtm", db_svr_id);
 		return result;
@@ -77,10 +103,10 @@ public class AccessControlDAO extends EgovAbstractMapper {
 	/**
 	 * 현재 이력_그룹_ID 조회
 	 * 
-	 * @return
+	 * @return int
 	 * @throws Exception
 	 */
-	public int selectCurrenthisrp() {
+	public int selectCurrenthisrp() throws SQLException {
 		return (int) getSqlSession().selectOne("accessControlSql.selectCurrenthisrp");
 	}
 
@@ -88,13 +114,15 @@ public class AccessControlDAO extends EgovAbstractMapper {
 	 * 접근제어이력 조회
 	 * 
 	 * @param accessControlHistoryVO
-	 * @return
+	 * @return accessControlHistoryVO
 	 */
 	@SuppressWarnings({ "deprecation", "unchecked" })
-	public List<AccessControlHistoryVO> selectAccessControlHistory(AccessControlHistoryVO accessControlHistoryVO) {
+	public List<AccessControlHistoryVO> selectAccessControlHistory(AccessControlHistoryVO accessControlHistoryVO) throws SQLException {
 		List<AccessControlHistoryVO> result = null;
-		result = (List<AccessControlHistoryVO>) list("accessControlSql.selectAccessControlHistory", accessControlHistoryVO);
+		result = (List<AccessControlHistoryVO>) list("accessControlSql.selectAccessControlHistory",
+				accessControlHistoryVO);
 		return result;
 	}
+
 
 }

@@ -251,7 +251,11 @@ public class AccessControlController {
 			dbAutVO.setUsr_id((String) session.getAttribute("usr_id"));
 			List<DbIDbServerVO> resultSet = accessControlService.selectDatabaseList(dbAutVO);
 			mv.addObject("resultSet", resultSet);
-
+			List<AccessControlVO> resultType = accessControlService.selectCodeType("TC0011");
+			mv.addObject("resultType", resultType);
+			List<AccessControlVO> resultMethod = accessControlService.selectCodeMethod("TC0012");
+			mv.addObject("resultMethod", resultMethod);
+			
 			if (act.equals("i")) {
 				// 화면접근이력 이력 남기기
 				historyVO.setExe_dtl_cd("DX-T0028");

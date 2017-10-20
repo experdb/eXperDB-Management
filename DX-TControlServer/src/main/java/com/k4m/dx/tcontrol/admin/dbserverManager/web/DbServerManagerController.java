@@ -120,6 +120,7 @@ public class DbServerManagerController {
 		List<DbServerVO> result = null;
 		List<DbServerVO> resultSet = null;
 		try {
+			AES256 aes = new AES256(AES256_KEY.ENC_KEY);
 			
 			System.out.println("=======parameter=======");
 			System.out.println("서버명 : " + dbServerVO.getDb_svr_id());
@@ -129,7 +130,10 @@ public class DbServerManagerController {
 			System.out.println("=====================");
 			
 			resultSet = dbServerManagerService.selectDbServerList(dbServerVO);
-
+			
+			String svr_spr_scm_pwd = resultSet.get(0).getSvr_spr_scm_pwd();
+			resultSet.get(0).setSvr_spr_scm_pwd(aes.aesDecode(svr_spr_scm_pwd));
+			
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -162,7 +166,6 @@ public class DbServerManagerController {
 			String IP = dbServerVO.getIpadr();
 			int PORT = agentInfo.getSOCKET_PORT();
 			
-			AES256 aes = new AES256(AES256_KEY.ENC_KEY);
 			System.out.println("=======parameter=======");
 			System.out.println("서버명 : " + dbServerVO.getDb_svr_nm());
 			System.out.println("Database : " + dbServerVO.getDft_db_nm());
@@ -178,13 +181,8 @@ public class DbServerManagerController {
 			serverObj.put(ClientProtocolID.SERVER_IP, dbServerVO.getIpadr());
 			serverObj.put(ClientProtocolID.SERVER_PORT, dbServerVO.getPortno());
 			serverObj.put(ClientProtocolID.DATABASE_NAME, dbServerVO.getDft_db_nm());
-			serverObj.put(ClientProtocolID.USER_ID, dbServerVO.getSvr_spr_usr_id());			
-			if(request.getParameter("check").equals("i")){
-				serverObj.put(ClientProtocolID.USER_PWD, dbServerVO.getSvr_spr_scm_pwd());
-			}else{
-				//암호 복호화
-				serverObj.put(ClientProtocolID.USER_PWD, aes.aesDecode(dbServerVO.getSvr_spr_scm_pwd()));
-			}
+			serverObj.put(ClientProtocolID.USER_ID, dbServerVO.getSvr_spr_usr_id());
+			serverObj.put(ClientProtocolID.USER_PWD, dbServerVO.getSvr_spr_scm_pwd());
 			
 			ClientInfoCmmn conn  = new ClientInfoCmmn();
 			

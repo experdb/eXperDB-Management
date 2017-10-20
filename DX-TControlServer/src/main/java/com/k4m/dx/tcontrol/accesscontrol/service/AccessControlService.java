@@ -14,6 +14,22 @@ public interface AccessControlService {
 	List<DbIDbServerVO> selectDatabaseList(DbAutVO dbAutVO) throws Exception;
 
 	/**
+	 * 공통코드 type 조회
+	 * 
+	 * @param grp_cd
+	 * @return AccessControlVO
+	 */
+	List<AccessControlVO> selectCodeType(String grp_cd) throws Exception;
+
+	/**
+	 * 공통코드 method 조회
+	 * 
+	 * @param grp_cd
+	 * @return AccessControlVO
+	 */
+	List<AccessControlVO> selectCodeMethod(String grp_cd) throws Exception;
+
+	/**
 	 * DB접근제어 전체 삭제
 	 * 
 	 * @param db_svr_id
@@ -61,6 +77,7 @@ public interface AccessControlService {
 	 * @param accessControlHistoryVO
 	 * @return AccessControlHistoryVO
 	 */
-	List<AccessControlHistoryVO> selectAccessControlHistory(AccessControlHistoryVO accessControlHistoryVO) throws Exception;
+	List<AccessControlHistoryVO> selectAccessControlHistory(AccessControlHistoryVO accessControlHistoryVO)
+			throws Exception;
 
 }
