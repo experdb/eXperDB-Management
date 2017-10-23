@@ -218,7 +218,7 @@
 						$("#wrk_nm").append("<option value='"+result[i].wrk_nm+"'>"+result[i].wrk_nm+"</option>");	
 					}									
 				}
-				$("#wrk_nm").val(wrk_nm).attr("selected", "selected");	
+				//$("#wrk_nm").val(wrk_nm).attr("selected", "selected");	
 			}
 		});
 	}
