@@ -172,4 +172,7 @@ public interface ScheduleService {
 
 	List<Map<String, Object>> selectScdInfo(String scd_nm) throws Exception;
 
+
+	List<Map<String, Object>> selectWrkInfo(String wrk_nm) throws Exception;
+
 }

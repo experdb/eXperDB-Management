@@ -11,11 +11,11 @@
 					<tbody>
 						<tr>
 							<td style="width: 70px; height: 20px;">스케줄명</td>
-							<td style="width: 70%;" id="scd_nm_info"></td>
+							<td style="width: 70%;" id="scd_nm_info" ></td>
 						</tr>	
 						<tr>
 							<td style="width: 70px; height: 20px;">스케줄 설명</td>
-							<td style="width: 70%;" id="scd_exp_info"></td>
+							<td style="width: 50%;" id="scd_exp_info" ></td>
 						</tr>	
 						<tr>
 							<td style="width: 70px; height: 20px;">실행상태</td>

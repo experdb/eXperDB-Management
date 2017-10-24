@@ -243,6 +243,7 @@ function toggleLayer( obj, s ) {
 }
 
 
+// 스케줄정보
 function fn_scdLayer(scd_nm){
 	$.ajax({
 		url : "selectScdInfo.do",
@@ -294,12 +295,105 @@ function fn_scdLayer(scd_nm){
 			$("#exe_perd_cd_info").html(result[0].exe_perd_cd_nm + " " + day);
 			$("#scd_exe_hms").html(hms);
 			
-//			document.getElementById('scd_nm_info').value= result[0].scd_nm;
-//			document.getElementById('scd_exp_info').value= result[0].scd_exp;						
-//			document.getElementById('scd_cndt_info').value= result[0].scd_cndt_nm;				
-//			document.getElementById('exe_perd_cd_info').value= result[0].exe_perd_cd_nm + " " + day ;
-//			document.getElementById('scd_exe_hms').value= hms;			
 		}
 	});
 	toggleLayer($('#pop_layer'), 'on');
+}
+
+
+
+// WORK정보
+function fn_workLayer(wrk_nm){
+	$.ajax({
+		url : "/selectWrkInfo.do",
+		data : {
+			wrk_nm : wrk_nm
+		},
+		dataType : "json",
+		type : "post",
+		error : function(request, status, error) {
+			alert("실패");
+			alert("ERROR CODE : "+ request.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ request.responseText.replace(/(<([^>]+)>)/gi, ""));
+		},
+		success : function(result) {
+			// RMAN
+			if(result[0].bck_bsn_dscd == "TC000201"){
+				$("#r_bck_bsn_dscd_nm").html(result[0].bck_bsn_dscd_nm);
+				$("#bck_opt_cd_nm").html(result[0].bck_opt_cd_nm);
+				$("#r_wrk_nm").html(result[0].wrk_nm);
+				$("#r_wrk_exp").html(result[0].wrk_exp);
+				$("#cps_yn").html(result[0].cps_yn);
+				$("#log_file_pth").html(result[0].log_file_pth);
+				$("#data_pth").html(result[0].data_pth);
+				$("#bck_pth").html(result[0].bck_pth);
+				$("#file_stg_dcnt").html(result[0].file_stg_dcnt);
+				$("#bck_mtn_ecnt").html(result[0].bck_mtn_ecnt);
+				$("#acv_file_stgdt").html(result[0].acv_file_stgdt);
+				$("#acv_file_mtncnt").html(result[0].acv_file_mtncnt);
+				$("#log_file_bck_yn").html(result[0].log_file_bck_yn);
+				$("#r_log_file_stg_dcnt").html(result[0].log_file_stg_dcnt);
+				$("#r_log_file_mtn_ecnt").html(result[0].log_file_mtn_ecnt);
+				
+				toggleLayer($('#pop_layer_rman'), 'on');			
+			// DUMP
+			}else{
+				$("#d_bck_bsn_dscd_nm").html(result[0].bck_bsn_dscd_nm);
+				$("#d_wrk_nm").html(result[0].wrk_nm);
+				$("#d_wrk_exp").html(result[0].wrk_exp);
+				$("#db_nm").html(result[0].db_nm);
+				$("#save_pth").html(result[0].save_pth);
+				$("#file_fmt_cd_nm").html(result[0].file_fmt_cd_nm);
+				$("#cprt").html(result[0].cprt);
+				$("#encd_mth_nm").html(result[0].encd_mth_nm);
+				$("#usr_role_nm").html(result[0].usr_role_nm);
+				$("#d_file_stg_dcnt").html(result[0].file_stg_dcnt);
+				$("#d_bck_mtn_ecnt").html(result[0].bck_mtn_ecnt);
+				
+				fn_workOptionLayer(result[0].bck_wrk_id);
+				toggleLayer($('#pop_layer_dump'), 'on');		
+			}		
+		}
+	});	
+}
+
+
+//WORK OPTION정보
+function fn_workOptionLayer(bck_wrk_id){
+	$.ajax({
+		url : "/workOptionLayer.do",
+		data : {
+			bck_wrk_id : bck_wrk_id
+		},
+		dataType : "json",
+		type : "post",
+		error : function(request, status, error) {
+			alert("ERROR CODE : "+ request.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ request.responseText.replace(/(<([^>]+)>)/gi, ""));
+		},
+		success : function(result) {		
+			var sections = "";
+			var objectType = "";
+			var save_yn = "";
+			var query = "";
+			var etc = "";
+
+				for(var i=0; i<result.length; i++){
+					if(result[i].grp_cd == "TC0006"){
+						sections += result[i].opt_cd_nm + "  /  ";
+					}else if (result[i].grp_cd == "TC0007"){
+						objectType += result[i].opt_cd_nm + "  /  ";
+					}else if (result[i].grp_cd == "TC0008"){
+						save_yn += result[i].opt_cd_nm + "  /  ";
+					}else if (result[i].grp_cd == "TC0009"){
+						query += result[i].opt_cd_nm + "  /  ";
+					}else{
+						etc += result[i].opt_cd_nm + "  /  ";
+					}
+				}
+				$("#sections").html(sections);
+				$("#objectType").html(objectType);
+				$("#save_yn").html(save_yn);
+				$("#query").html(query);
+				$("#etc").html(etc);			
+			}		
+	});
 }

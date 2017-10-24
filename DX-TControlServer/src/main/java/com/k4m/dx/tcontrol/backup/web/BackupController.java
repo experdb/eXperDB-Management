@@ -611,6 +611,7 @@ public class BackupController {
 		}
 
 		mv.addObject("db_svr_id",workVO.getDb_svr_id());
+		mv.addObject("bck_wrk_id",workVO.getBck_wrk_id());
 		mv.addObject("wrk_id",workVO.getWrk_id());
 		mv.setViewName("popup/dumpRegReForm");
 		return mv;	

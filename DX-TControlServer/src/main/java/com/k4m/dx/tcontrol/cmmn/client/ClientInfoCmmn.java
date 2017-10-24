@@ -157,10 +157,8 @@ public class ClientInfoCmmn {
 					objJob.put(ClientProtocolID.BCK_FILE_PTH, resultWork.get(i).get("bck_pth")); // 저장경로
 					objJob.put(ClientProtocolID.BCK_FILENM, ""); // 저장파일명
 				} else {
-					objJob.put(ClientProtocolID.BCK_OPT_CD, ""); // 백업종류
-					objJob.put(ClientProtocolID.BCK_FILE_PTH, resultWork.get(i).get("save_pth")); // 저장경로					
-					objJob.put(ClientProtocolID.BCK_FILENM, BCKNM.get(i)); // 저장파일명
-					System.out.println(BCKNM.get(i));
+					objJob.put(ClientProtocolID.BCK_OPT_CD, resultWork.get(i).get("bck_opt_cd")); // 백업종류
+					objJob.put(ClientProtocolID.BCK_FILE_PTH, resultWork.get(i).get("save_pth")); // 저장경로										
 				}
 				objJob.put(ClientProtocolID.LOG_YN, "Y"); // 로그저장 유무
 				objJob.put(ClientProtocolID.REQ_CMD, CMD.get(i));// 명령어
