@@ -3,10 +3,11 @@ package com.k4m.dx.tcontrol.functions.schedule.service.impl;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
 import org.springframework.stereotype.Repository;
 
-import com.k4m.dx.tcontrol.login.service.UserVO;
 import com.k4m.dx.tcontrol.sample.service.PagingVO;
+
 import egovframework.rte.psl.dataaccess.EgovAbstractMapper;
 
 @Repository("ScheduleHistoryDAO")
@@ -55,6 +56,20 @@ public class ScheduleHistoryDAO extends EgovAbstractMapper{
 	public List<Map<String, Object>> selectWrkNmList(Map<String, Object> param) {
 		List<Map<String, Object>> sl = null;
 		sl = (List<Map<String, Object>>) list("scheduleHistorySql.selectWrkNmList", param);		
+		return sl;
+	}
+
+
+	public List<Map<String, Object>> selectScheduleHistoryDetail(int exe_sn) {
+		List<Map<String, Object>> sl = null;
+		sl = (List<Map<String, Object>>) list("scheduleHistorySql.selectScheduleHistoryDetail", exe_sn);		
+		return sl;
+	}
+
+
+	public List<Map<String, Object>> selectScheduleHistoryWorkDetail(int exe_sn) {
+		List<Map<String, Object>> sl = null;
+		sl = (List<Map<String, Object>>) list("scheduleHistorySql.selectScheduleHistoryWorkDetail", exe_sn);		
 		return sl;
 	}
 

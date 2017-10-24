@@ -246,6 +246,16 @@
 		});
 	}
 
+	function fn_detail(exe_sn){
+		var popUrl = "/popup/scheduleHistoryDetail.do?exe_sn="+exe_sn; // 서버 url 팝업경로
+		var width = 930;
+		var height = 635;
+		var left = (window.screen.width / 2) - (width / 2);
+		var top = (window.screen.height /2) - (height / 2);
+		var popOption = "width="+width+", height="+height+", top="+top+", left="+left+", resizable=no, scrollbars=yes, status=no, toolbar=no, titlebar=yes, location=no,";
+			
+		window.open(popUrl,"",popOption);
+	}
     </script>
     
 <%@include file="../../cmmn/scheduleInfo.jsp"%>
@@ -390,7 +400,7 @@
 							<col style="width: 15%;" />
 							<col style="width: 15%;" />
 							<col style="width: 10%;" />
-			
+							<col style="width: 15%;" />
 						</colgroup>
 						<thead>
 							<tr style="border-bottom: 1px solid #b8c3c6;">
@@ -400,6 +410,7 @@
 								<th scope="col">작업시작일시</th>
 								<th scope="col">작업종료일시</th>
 								<th scope="col">결과</th>
+								<th scope="col">상세보기</th>
 							</tr>
 						</thead>
 						<tbody>
@@ -420,6 +431,8 @@
 									    	</c:otherwise>
 										</c:choose>	
 									</td>
+									<td><span class='btn btnC_01 btnF_02' onclick='fn_detail(${result.exe_sn})'>
+									<input type="button" value="상세조회"></span></td>
 								</tr>
 							</c:forEach>
 						</tbody>

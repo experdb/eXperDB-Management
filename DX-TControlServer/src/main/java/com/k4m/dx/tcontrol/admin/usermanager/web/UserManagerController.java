@@ -291,7 +291,7 @@ public class UserManagerController {
 			if(menuAut.get(0).get("wrt_aut_yn").equals("N")){
 				response.sendRedirect("/autError.do");
 			}
-			// 사용자 수정 이력 남기기
+			// 화면접근이력 이력 남기기
 			CmmnUtils.saveHistory(request, historyVO);
 			historyVO.setExe_dtl_cd("DX-T0035_01");
 			historyVO.setMnu_id(12);

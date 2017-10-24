@@ -15,6 +15,7 @@
 	        , (ROW_NUMBER() OVER()) AS IDX
 	        , A.DB_SVR_NM
 	        , A.SCD_ID
+	        , A.EXE_SN
 	        , A.SCD_NM
 	        , A.SCD_ID
 	        , A.SCD_NM
@@ -27,6 +28,7 @@
 		(SELECT
 		         D.DB_SVR_NM
 		        , A.SCD_ID
+		        , A.EXE_SN
 		        , C.SCD_NM
 		        , A.WRK_ID
 		        , B.WRK_NM
@@ -146,4 +148,32 @@
 		AND A.SCD_NM = #{scd_nm}
 		GROUP BY C.WRK_NM
 	</select>
+	
+	<select id="selectScheduleHistoryDetail" resultType="hashmap" parameterType="int" >
+		SELECT 
+		  SCD_NM
+		, SCD_EXP 
+		,(SELECT TO_CHAR(WRK_STRT_DTM,'YYYY-MM-DD HH24:MI:SS') FROM T_WRKEXE_G WHERE EXE_SN=#{exe_sn}) AS WRK_STRT_DTM
+		,(SELECT TO_CHAR(WRK_END_DTM,'YYYY-MM-DD HH24:MI:SS') FROM T_WRKEXE_G WHERE EXE_SN=#{exe_sn}) AS WRK_END_DTM
+		FROM T_SCD_M 
+		WHERE SCD_ID=(SELECT SCD_ID FROM T_WRKEXE_G WHERE EXE_SN=#{exe_sn})
+	</select>
+	
+	<select id="selectScheduleHistoryWorkDetail" resultType="hashmap" parameterType="int" >
+		SELECT
+		 (ROW_NUMBER() OVER()) AS ROWNUM
+		, A.WRK_NM
+		, A.WRK_EXP
+		, A.WRK_ID
+		,(SELECT TO_CHAR(WRK_STRT_DTM,'YYYY-MM-DD HH24:MI:SS') FROM T_WRKEXE_G WHERE EXE_SN=#{exe_sn}) AS WRK_STRT_DTM
+		,(SELECT TO_CHAR(WRK_END_DTM,'YYYY-MM-DD HH24:MI:SS') FROM T_WRKEXE_G WHERE EXE_SN=#{exe_sn}) AS WRK_END_DTM
+		FROM 
+			(SELECT 
+			  WRK_NM 
+			, WRK_EXP
+			, WRK_ID 
+			FROM T_BCK_WRKCNG_I
+			WHERE WRK_ID IN (SELECT WRK_ID FROM T_SCD_D WHERE SCD_ID =(SELECT SCD_ID FROM T_WRKEXE_G WHERE EXE_SN=#{exe_sn}))
+			)A
+	</select>	
 </mapper>

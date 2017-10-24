@@ -48,7 +48,7 @@ public class HelpController {
 		try {
 			// 화면접근이력 이력 남기기
 			CmmnUtils.saveHistory(request, historyVO);
-			historyVO.setExe_dtl_cd("DX-T0053");
+			historyVO.setExe_dtl_cd("DX-T0054");
 			accessHistoryService.insertHistory(historyVO);
 			
 			mv.setViewName("help/aboutTcontrol");
