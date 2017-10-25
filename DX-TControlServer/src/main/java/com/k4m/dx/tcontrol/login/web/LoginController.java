@@ -60,9 +60,6 @@ public class LoginController {
 	public @ResponseBody String login(@ModelAttribute("userVo") UserVO userVo, ModelMap model, HttpServletResponse response,
 			HttpServletRequest request, @ModelAttribute("historyVO") HistoryVO historyVO) {
 		try {
-			System.out.println("아이디 : " + userVo.getUsr_id());
-			System.out.println("패스워드 : " + userVo.getPwd());
-			
 			String pw = SHA256.SHA256(userVo.getPwd());
 			List<UserVO> userList = loginService.selectUserList(userVo);
 			int intLoginCnt = userList.size();

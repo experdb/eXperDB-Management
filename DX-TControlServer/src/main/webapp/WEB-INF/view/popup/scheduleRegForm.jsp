@@ -199,7 +199,7 @@ function fn_workAdd(){
 				</colgroup>
 				<tbody>
 					<tr>
-						<th scope="row" class="ico_t1">DB 서버명</th>
+						<th scope="row" class="ico_t1">DBMS명</th>
 						<td>
 						<select class="select t8" name="db_svr_nm" id="db_svr_nm" style="width: 170px;">
 								<option value="%">선택</option>
