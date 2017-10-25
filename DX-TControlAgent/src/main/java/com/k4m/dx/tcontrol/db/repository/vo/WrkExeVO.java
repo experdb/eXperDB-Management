@@ -18,10 +18,17 @@ public class WrkExeVO {
 	private String LST_MDF_DTM;
 	private String BCK_FILENM;
 	private String RSLT_MSG;
+	private int EXE_GRP_SN;
 	
 	
 
 	
+	public int getEXE_GRP_SN() {
+		return EXE_GRP_SN;
+	}
+	public void setEXE_GRP_SN(int eXE_GRP_SN) {
+		EXE_GRP_SN = eXE_GRP_SN;
+	}
 	public String getRSLT_MSG() {
 		return RSLT_MSG;
 	}

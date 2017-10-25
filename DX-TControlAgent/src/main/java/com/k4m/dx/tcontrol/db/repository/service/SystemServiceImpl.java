@@ -101,4 +101,8 @@ public class SystemServiceImpl implements SystemService{
 	public void updateT_TRFTRGCNG_I(TrfTrgCngVO vo) throws Exception {
 		systemDAO.updateT_TRFTRGCNG_I(vo);
 	}
+	
+	public int selectQ_WRKEXE_G_02_SEQ() throws Exception  {
+		return (int) systemDAO.selectQ_WRKEXE_G_02_SEQ();
+	}
 }

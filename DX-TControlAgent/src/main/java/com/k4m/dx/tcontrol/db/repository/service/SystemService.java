@@ -87,4 +87,11 @@ public interface SystemService {
 	 * @throws Exception
 	 */
 	public void updateT_TRFTRGCNG_I(TrfTrgCngVO vo) throws Exception;
+	
+	/**
+	 * 스케쥴실행 로그 실행 그룹 seq 조회
+	 * @return
+	 * @throws Exception
+	 */
+	public int selectQ_WRKEXE_G_02_SEQ() throws Exception;
 }

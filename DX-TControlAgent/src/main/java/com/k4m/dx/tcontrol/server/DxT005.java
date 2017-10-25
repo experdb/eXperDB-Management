@@ -64,6 +64,8 @@ public class DxT005 extends SocketCtl{
 		String strResultCode = "TC001701";
 
 		try {
+			
+			int intGrpSeq = service.selectQ_WRKEXE_G_02_SEQ();
 
 			for(int i=0;i<arrCmd.size();i++){
 				System.out.println("Start : "+ (i+1));
@@ -92,6 +94,7 @@ public class DxT005 extends SocketCtl{
 				vo.setBCK_OPT_CD(strBCK_OPT_CD);
 				vo.setDB_ID(Integer.parseInt(strDB_ID));
 				vo.setBCK_FILE_PTH(strBCK_FILE_PTH);
+				vo.setEXE_GRP_SN(intGrpSeq);
 				
 				if(strLOG_YN.equals("Y")) {
 					service.insertT_WRKEXE_G(vo);

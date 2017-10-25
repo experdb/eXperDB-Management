@@ -56,6 +56,10 @@ public class SystemDAO {
 		 session.update("system.updateT_TRFTRGCNG_I", vo);
 	}
 	
+	public int selectQ_WRKEXE_G_02_SEQ() throws Exception  {
+		return (int) session.selectOne("system.selectQ_WRKEXE_G_02_SEQ");
+	}
+	
 	
 	
 }

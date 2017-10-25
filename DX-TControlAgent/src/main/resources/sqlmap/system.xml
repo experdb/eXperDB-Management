@@ -191,6 +191,14 @@
 	 		TRF_TRG_ID = #{TRF_TRG_ID}
     </update>
     
+	<select id="selectQ_WRKEXE_G_02_SEQ" resultType="int">
+   		/**
+	 	* Query ID : selectQ_WRKEXE_G_02_SEQ
+	 	* Description : 작업실행로그 실행그룹 seq 조회
+	 	* Author : 박태혁
+	 	**/
+    	SELECT NEXTVAL('Q_WRKEXE_G_02')
+    </select>
     
     
 </mapper>
