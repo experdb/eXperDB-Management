@@ -140,6 +140,7 @@
 			, BCK_FILE_PTH
 			, FRST_REGR_ID
 			, LST_MDFR_ID
+			, EXE_GRP_SN
 	 	)
 	 	VALUES
 	 	(
@@ -156,6 +157,7 @@
 			, #{BCK_FILE_PTH}
 			, 'system'
 			, 'system'
+			, #{EXE_GRP_SN}
 	 	)
 	 	
     </insert>
