@@ -11,6 +11,8 @@
 	 	**/
 	 	
       SELECT 
+      		(ROW_NUMBER() OVER()) AS ROWNUM,
+			(ROW_NUMBER() OVER()) AS IDX,
       		BCK_WRK_ID,
       		WRK_ID,
 			DB_SVR_ID,
@@ -53,9 +55,9 @@
       	<if test="bck_opt_cd != null and bck_opt_cd != '' ">
       		AND BCK_OPT_CD=#{bck_opt_cd}
       	</if>
-      	<if test="wrk_id != null and wrk_id != '' ">
-      		<if test='wrk_id != "0"'>
-	      		AND WRK_ID=#{wrk_id}
+      	<if test="bck_wrk_id != null and bck_wrk_id != '' ">
+      		<if test='bck_wrk_id != "0"'>
+	      		AND bck_wrk_id=#{bck_wrk_id}
 			</if>
       	</if>
       	<if test="db_id != null and db_id != '' ">
@@ -246,7 +248,7 @@
 			acv_file_stgdt = #{acv_file_stgdt},
 			acv_file_mtncnt = #{acv_file_mtncnt}
 		WHERE
-			WRK_ID = #{wrk_id}
+			bck_wrk_id = #{bck_wrk_id}
 	</update>
 	
 	<update id="updateDumpWork" parameterType="workVO">
@@ -270,7 +272,7 @@
 			lst_mdf_dtm = now(),
 			bck_filenm = #{bck_filenm}
 		WHERE
-			WRK_ID = #{wrk_id}
+			bck_wrk_id = #{bck_wrk_id}
 	</update>
 	
 	<select id="lastWorkId"  resultType="workVO">
@@ -294,8 +296,7 @@
 			opt_cd,
 			bck_opt_val,
 			frst_regr_id,
-			frst_reg_dtm,
-			
+			frst_reg_dtm,			
 			lst_mdfr_id,
 			lst_mdf_dtm
 			)
@@ -337,7 +338,7 @@
 	 	**/	
 		DELETE FROM T_BCK_WRKCNG_I
 		WHERE
-			WRK_ID = #{wrk_id}
+			bck_wrk_id = #{bck_wrk_id}
 	</delete>
 	
 	<select id="selectWorkOptList" parameterType="workVO" resultType="workOptVO">
@@ -352,14 +353,16 @@
 			OPT_SN,
 			GRP_CD,
 			OPT_CD,
+			(SELECT GRP_CD_NM FROM T_SYSGRP_C WHERE A.GRP_CD = GRP_CD ) AS GRP_CD_NM,
+            (SELECT SYS_CD_NM FROM T_SYSDTL_C WHERE A.OPT_CD = SYS_CD ) AS OPT_CD_NM,
 			BCK_OPT_VAL,
 			FRST_REGR_ID,
 			FRST_REG_DTM,
 			LST_MDFR_ID,
 			LST_MDF_DTM
-      FROM T_BCKOPT_I
+      FROM T_BCKOPT_I A
       WHERE 1=1	
-      	AND BCK_WRK_ID = #{bck_wrk_id}
+      	AND A.BCK_WRK_ID = #{bck_wrk_id}
       ORDER BY OPT_SN DESC
     </select>
     
@@ -579,5 +582,28 @@
 	    AND A.EXE_PERD_CD = 'TC001602'
 	    GROUP BY A.SCD_ID, A.SCD_NM , A.SCD_EXP
 	    ORDER BY EXE_HMS
+	 </select>
+	 
+	 <select id="selectWorkOptionLayer" resultType="hashMap" parameterType="int">
+		/**
+	 	* Query ID : selectWorkOptionLayer
+	 	* Description : 백업 덤프 옵션 조회
+	 	* Author : 변승우
+	 	**/
+	 	SELECT 
+      		BCK_WRK_ID,
+			OPT_SN,
+			GRP_CD,
+			OPT_CD,
+			(SELECT GRP_CD_NM FROM T_SYSGRP_C WHERE A.GRP_CD = GRP_CD ) AS GRP_CD_NM,
+            (SELECT SYS_CD_NM FROM T_SYSDTL_C WHERE A.OPT_CD = SYS_CD ) AS OPT_CD_NM,
+			BCK_OPT_VAL,
+			FRST_REGR_ID,
+			FRST_REG_DTM,
+			LST_MDFR_ID,
+			LST_MDF_DTM
+      FROM T_BCKOPT_I A
+      WHERE 1=1	
+      AND A.BCK_WRK_ID = #{bck_wrk_id}
 	 </select>
 </mapper>

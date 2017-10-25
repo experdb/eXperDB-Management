@@ -32,7 +32,6 @@ import com.k4m.dx.tcontrol.admin.menuauthority.service.MenuAuthorityService;
 import com.k4m.dx.tcontrol.backup.service.BackupService;
 import com.k4m.dx.tcontrol.backup.service.WorkVO;
 import com.k4m.dx.tcontrol.cmmn.CmmnUtils;
-import com.k4m.dx.tcontrol.common.service.CmmnServerInfoService;
 import com.k4m.dx.tcontrol.common.service.HistoryVO;
 import com.k4m.dx.tcontrol.functions.schedule.ScheduleUtl;
 import com.k4m.dx.tcontrol.functions.schedule.service.ScheduleDtlVO;
@@ -593,9 +592,9 @@ public class ScheduleController {
 			if(menuAut.get(0).get("wrt_aut_yn").equals("N")){
 				mv.setViewName("error/autError");
 			}else{	
-				//이력 남기기
+				//화면접근이력 남기기
 				CmmnUtils.saveHistory(request, historyVO);
-				historyVO.setExe_dtl_cd("DX-T0039_03");
+				historyVO.setExe_dtl_cd("DX-T0044");
 				accessHistoryService.insertHistory(historyVO);
 				
 				String scd_id = request.getParameter("scd_id");
@@ -678,9 +677,9 @@ public class ScheduleController {
 			response.sendRedirect("/autError.do");
 		}else{
 
-			//이력 남기기
+			//화면접근이력 남기기
 			CmmnUtils.saveHistory(request, historyVO);
-			historyVO.setExe_dtl_cd("DX-T0039_02");
+			historyVO.setExe_dtl_cd("DX-T0044_01");
 			accessHistoryService.insertHistory(historyVO);
 			
 			// 1. 스케줄 마스터 업데이트

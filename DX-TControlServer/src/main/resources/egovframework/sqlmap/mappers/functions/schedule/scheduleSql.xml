@@ -539,7 +539,7 @@
 	 </select>
 	 
 	 
-	    <select id="selectScdInfo" resultType="hashMap" parameterType="string">
+	<select id="selectScdInfo" resultType="hashMap" parameterType="string">
    		/**
 	 	* Query ID : selectScdInfo
 	 	* Description : 스케줄 정보 조회
@@ -561,5 +561,47 @@
 				, EXE_HMS      
 	      FROM T_SCD_M 
 	      WHERE SCD_NM = #{scd_nm} 
+	</select>
+	
+
+	<select id="selectWrkInfo" resultType="hashMap" parameterType="string">
+   		/**
+	 	* Query ID : selectWrkInfo
+	 	* Description : work 정보 조회
+	 	* Author : 변승우
+	 	**/
+		SELECT 
+				B.BCK_WRK_ID
+				, A.BSN_DSCD
+		        ,(SELECT SYS_CD_NM FROM T_SYSDTL_C WHERE A.BSN_DSCD = SYS_CD ) AS BSN_DSCD_NM
+				, A.WRK_ID
+		        , A.WRK_NM
+		        , A.WRK_EXP
+		        , B.BCK_BSN_DSCD
+		        , B.BCK_OPT_CD
+		        ,(SELECT SYS_CD_NM FROM T_SYSDTL_C WHERE B.BCK_OPT_CD = SYS_CD ) AS BCK_OPT_CD_NM
+		        ,(SELECT SYS_CD_NM FROM T_SYSDTL_C WHERE B.BCK_BSN_DSCD = SYS_CD ) AS BCK_BSN_DSCD_NM
+		        , B.CPS_YN 
+		        , B.LOG_FILE_PTH 
+		        , B.DATA_PTH 
+		        , B.BCK_PTH 
+		        , B.FILE_STG_DCNT
+		        , B.BCK_MTN_ECNT
+		        , B.ACV_FILE_STGDT 
+		        , B.ACV_FILE_MTNCNT    
+		        , B.LOG_FILE_BCK_YN
+		        , B.LOG_FILE_STG_DCNT
+		        , B.LOG_FILE_MTN_ECNT
+		        , B.DB_ID
+                , (SELECT DB_NM FROM T_DB_I WHERE B.DB_ID = DB_ID ) AS DB_NM
+                , B.SAVE_PTH
+                , B.FILE_FMT_CD
+                , (SELECT SYS_CD_NM FROM T_SYSDTL_C WHERE B.FILE_FMT_CD = SYS_CD ) AS FILE_FMT_CD_NM
+                , B.CPRT
+                , B.ENCD_MTH_NM
+                , B.USR_ROLE_NM
+		FROM T_WRKCNG_I A, T_BCK_WRKCNG_I B        
+		WHERE A.WRK_ID = B.WRK_ID
+		AND A.WRK_NM = #{wrk_nm}  
 	</select>
 </mapper>

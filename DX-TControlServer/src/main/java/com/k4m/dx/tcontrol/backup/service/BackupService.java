@@ -148,7 +148,7 @@ public interface BackupService {
 	 * @param WorkVO
 	 * @throws Exception
 	 */
-	public void insertWork(WorkVO workVO);
+	public void insertWork(WorkVO workVO) throws Exception;
 
 	
 	/**
@@ -157,5 +157,8 @@ public interface BackupService {
 	 * @param 
 	 * @throws Exception
 	 */
-	public List<Map<String, Object>> selectBckSchedule(int db_svr_id);
+	public List<Map<String, Object>> selectBckSchedule(int db_svr_id) throws Exception;
+
+	
+	public List<Map<String, Object>> selectWorkOptionLayer(int bck_wrk_id) throws Exception;
 }

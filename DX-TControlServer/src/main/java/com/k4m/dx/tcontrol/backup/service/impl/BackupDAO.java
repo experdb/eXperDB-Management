@@ -112,4 +112,10 @@ public class BackupDAO extends EgovAbstractMapper{
 		sl = (List<Map<String, Object>>) list("backupSQL.selectBckSchedule", db_svr_id);		
 		return sl;
 	}
+
+	public List<Map<String, Object>> selectWorkOptionLayer(int bck_wrk_id) {
+		List<Map<String, Object>> sl = null;
+		sl = (List<Map<String, Object>>) list("backupSQL.selectWorkOptionLayer", bck_wrk_id);		
+		return sl;
+	}
 }

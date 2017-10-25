@@ -43,4 +43,14 @@ public class ScheduleHistoryServiceImpl extends EgovAbstractServiceImpl implemen
 	public List<Map<String, Object>> selectWrkNmList(Map<String, Object> param) throws Exception {
 		return scheduleHistoryDAO.selectWrkNmList(param);
 	}
+
+	@Override
+	public List<Map<String, Object>> selectScheduleHistoryDetail(int exe_sn) throws Exception {
+		return scheduleHistoryDAO.selectScheduleHistoryDetail(exe_sn);
+	}
+
+	@Override
+	public List<Map<String, Object>> selectScheduleHistoryWorkDetail(int exe_sn) throws Exception {
+		return scheduleHistoryDAO.selectScheduleHistoryWorkDetail(exe_sn);
+	}
 }

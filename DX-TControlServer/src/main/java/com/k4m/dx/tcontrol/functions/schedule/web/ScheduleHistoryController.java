@@ -1,6 +1,5 @@
 package com.k4m.dx.tcontrol.functions.schedule.web;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -83,9 +82,10 @@ public class ScheduleHistoryController {
 				
 				String exe_result = request.getParameter("exe_result");
 				
-				//이력 남기기
+				//화면접근이력 남기기
 				CmmnUtils.saveHistory(request, historyVO);
-				historyVO.setExe_dtl_cd("DX-T0048");
+				historyVO.setExe_dtl_cd("DX-T0046");
+				historyVO.setMnu_id(4);
 				accessHistoryService.insertHistory(historyVO);
 				
 				mv.addObject("read_aut_yn", menuAut.get(0).get("read_aut_yn"));
@@ -115,7 +115,6 @@ public class ScheduleHistoryController {
 		return mv;
 	}
 	
-
 	/**
 	 * 스케줄이력을 조회한다.
 	 * 
@@ -137,10 +136,11 @@ public class ScheduleHistoryController {
 				mv.setViewName("error/autError");
 			}else{		
 				
-				//이력 남기기
+				//화면접근이력 남기기
 				CmmnUtils.saveHistory(request, historyVO);
-			//	historyVO.setExe_dtl_cd("DX-T0048_01");
-			//	accessHistoryService.insertHistory(historyVO);
+				historyVO.setExe_dtl_cd("DX-T0046_01");
+				historyVO.setMnu_id(4);
+				accessHistoryService.insertHistory(historyVO);
 				
 				Map<String, Object> param = new HashMap<String, Object>();
 	
@@ -215,10 +215,73 @@ public class ScheduleHistoryController {
 		return mv;
 	}
 	
+	/**
+	 * 스케줄수행이력 상세보기 화면을 보여준다.
+	 * 
+	 * @param
+	 * @return ModelAndView mv
+	 * @throws Exception
+	 */
+	@RequestMapping(value = "/popup/scheduleHistoryDetail.do")
+	public ModelAndView transferTargetDetail(@ModelAttribute("historyVO") HistoryVO historyVO,
+			HttpServletRequest request) {
+		ModelAndView mv = new ModelAndView();
+		try {
+			// 화면접근이력 이력 남기기
+//			CmmnUtils.saveHistory(request, historyVO);
+//			historyVO.setExe_dtl_cd("DX-T0018");
+//			historyVO.setMnu_id(33);
+//			accessHistoryService.insertHistory(historyVO);
+			
+			int exe_sn=Integer.parseInt(request.getParameter("exe_sn"));
+			mv.addObject("exe_sn",exe_sn);
+			mv.setViewName("popup/scheduleHistoryDetail");
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return mv;
+	}	
 	
 	
-	
-	
+	/**
+	 * 스케줄 정보를 조회한다.
+	 * 
+	 * @param request
+	 * @return resultSet
+	 * @throws Exception
+	 */
+	@RequestMapping(value = "/selectScheduleHistoryDetail.do")
+	public @ResponseBody List<Map<String, Object>> selectScheduleHistoryDetail(@ModelAttribute("historyVO") HistoryVO historyVO,HttpServletRequest request,HttpServletResponse response) {
+		List<Map<String, Object>> result = null;
+		try {
+			int exe_sn = Integer.parseInt(request.getParameter("exe_sn")); 
+			result = scheduleHistoryService.selectScheduleHistoryDetail(exe_sn);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return result;
+
+	}	
+
+	/**
+	 * work 정보를 조회한다.
+	 * 
+	 * @param request
+	 * @return resultSet
+	 * @throws Exception
+	 */
+	@RequestMapping(value = "/selectScheduleHistoryWorkDetail.do")
+	public @ResponseBody List<Map<String, Object>> selectScheduleHistoryWorkDetail(@ModelAttribute("historyVO") HistoryVO historyVO,HttpServletRequest request,HttpServletResponse response) {
+		List<Map<String, Object>> result = null;
+		try {
+			int exe_sn = Integer.parseInt(request.getParameter("exe_sn")); 
+			result = scheduleHistoryService.selectScheduleHistoryWorkDetail(exe_sn);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return result;
+
+	}
 	
 	/**
 	 * 스케줄실패 화면을 보여준다.
@@ -240,11 +303,10 @@ public class ScheduleHistoryController {
 			if(menuAut.get(0).get("read_aut_yn").equals("N")){
 				mv.setViewName("error/autError");
 			}else{				
-				//스케줄 등록 화면 이력 남기기
+				//화면접근이력 이력 남기기
 				CmmnUtils.saveHistory(request, historyVO);
-				//수정
-			//	historyVO.setExe_dtl_cd("DX-T0048_01");
-			//	accessHistoryService.insertHistory(historyVO);
+				historyVO.setExe_dtl_cd("DX-T0047");
+				accessHistoryService.insertHistory(historyVO);
 				
 				mv.addObject("read_aut_yn", menuAut.get(0).get("read_aut_yn"));
 				mv.addObject("wrt_aut_yn", menuAut.get(0).get("wrt_aut_yn"));

@@ -61,6 +61,7 @@ function fn_update_work(){
 			async : false,
 			url : "/popup/workDumpReWrite.do",
 		  	data : {
+		  		bck_wrk_id : $("#bck_wrk_id").val(),
 		  		wrk_id : $("#wrk_id").val(),
 		  		wrk_nm : $("#wrk_nm").val(),
 		  		wrk_exp : $("#wrk_exp").val(),
@@ -97,7 +98,7 @@ function fn_insert_opt(){
 	var sn = 1;
 	$("input[name=opt]").each(function(){
 		if( $(this).not(":disabled") && $(this).is(":checked")){
-			fn_insert_opt_val($("#wrk_id").val(),sn,$(this).attr("grp_cd"),$(this).attr("opt_cd"),"Y");
+			fn_insert_opt_val($("#bck_wrk_id").val(),$("#wrk_id").val(),sn,$(this).attr("grp_cd"),$(this).attr("opt_cd"),"Y");
 		}
 		sn++;
 	});
@@ -108,11 +109,12 @@ function fn_insert_opt(){
 /* ********************************************************
  * Dump Backup Each Option Insert
  ******************************************************** */
-function fn_insert_opt_val(wrk_id, opt_sn, grp_cd, opt_cd, bck_opt_val){
+function fn_insert_opt_val(bck_wrk_id, wrk_id, opt_sn, grp_cd, opt_cd, bck_opt_val){
 	$.ajax({
 		async : false,
 		url : "/popup/workOptWrite.do",
 	  	data : {
+	  		bck_wrk_id: bck_wrk_id,
 	  		wrk_id : wrk_id,
 	  		opt_sn : opt_sn,
 	  		grp_cd : grp_cd,
@@ -131,7 +133,7 @@ function fn_insert_opt_val(wrk_id, opt_sn, grp_cd, opt_cd, bck_opt_val){
 function fn_insert_object(){
 	$("input[name=tree]").each(function(){
 		if( $(this).is(":checked")){
-			fn_insert_object_val($("#wrk_id").val(),$(this).attr("otype"),$(this).attr("schema"),$(this).val());
+			fn_insert_object_val($("#bck_wrk_id").val(),$("#wrk_id").val(),$(this).attr("otype"),$(this).attr("schema"),$(this).val());
 		}
 	});
 
@@ -143,7 +145,7 @@ function fn_insert_object(){
 /* ********************************************************
  * Dump Backup Each Object Insert
  ******************************************************** */
-function fn_insert_object_val(wrk_id,otype,scm_nm,obj_nm){
+function fn_insert_object_val(bck_wrk_id, wrk_id,otype,scm_nm,obj_nm){
 	var db_id = $("#db_id").val();
 
 	if(otype != "table") obj_nm = "";
@@ -151,6 +153,7 @@ function fn_insert_object_val(wrk_id,otype,scm_nm,obj_nm){
 		async : false,
 		url : "/popup/workObjWrite.do",
 	  	data : {
+	  		bck_wrk_id : bck_wrk_id,
 	  		wrk_id : wrk_id,
 	  		db_id : db_id,
 	  		scm_nm : scm_nm,
@@ -183,11 +186,6 @@ function valCheck(){
 	if($("#save_pth").val() == ""){
 		alert("저장경로를 입력해 주세요.");
 		$("#save_pth").focus();
-		return false;
-	}
-	if($("#bck_filenm").val() == ""){
-		alert("백업파일명을 입력해 주세요.");
-		$("#bck_filenm").focus();
 		return false;
 	}
 	if($("#check_path").val() != "Y"){
@@ -417,6 +415,7 @@ function checkFolder(){
 			<form name="workRegForm">
 			<input type="hidden" name="db_svr_id" id="db_svr_id" value="${db_svr_id}"/>
 			<input type="hidden" name="wrk_id" id="wrk_id" value="${wrk_id}"/>
+			<input type="hidden" name="bck_wrk_id" id="bck_wrk_id" value="${bck_wrk_id}"/>
 			<input type="hidden" name="check_path" id="check_path" value="Y"/>
 			<table class="write">
 				<caption>Dump 백업 수정</caption>
@@ -459,8 +458,6 @@ function checkFolder(){
 								</c:forEach>
 							</select>
 						</td>
-						<th scope="row" class="ico_t1">백업파일명</th>
-						<td><input type="text" class="txt" name="bck_filenm" id="bck_filenm" maxlength=50 value="<c:out value="${workInfo[0].bck_filenm}"/>"/></td>
 					</tr>
 				</tbody>
 			</table>

@@ -163,4 +163,11 @@ public class ScheduleDAO extends EgovAbstractMapper{
 		return sl;
 	}
 
+
+	public List<Map<String, Object>> selectWrkInfo(String wrk_nm) {
+		List<Map<String, Object>> sl = null;
+		sl = (List<Map<String, Object>>) list("scheduleSql.selectWrkInfo", wrk_nm);		
+		return sl;
+	}
+
 }

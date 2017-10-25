@@ -615,7 +615,7 @@ public class AccessControlController {
 			AES256 dec = new AES256(AES256_KEY.ENC_KEY);
 			int db_svr_id = Integer.parseInt(request.getParameter("db_svr_id"));
 			
-			// 접근제어 이력 남기기
+			// 화면접근이력 이력 남기기
 			CmmnUtils.saveHistory(request, historyVO);
 			historyVO.setExe_dtl_cd("DX-T0027_02");
 			historyVO.setMnu_id(28);

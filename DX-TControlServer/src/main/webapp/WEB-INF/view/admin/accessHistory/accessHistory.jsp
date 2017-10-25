@@ -221,7 +221,6 @@
 									<col style="width: 10%;" />
 									<col style="width: 10%;" />
 									<col style="width: 15%;" />
-									<col style="width: 15%;" />
 									<col style="width: 10%;" />
 									<col style="width: 10%;" />
 									<col style="width: 10%;" />
@@ -234,7 +233,6 @@
 										<th scope="col">일자</th>
 										<th scope="col">시간</th>
 										<th scope="col">화면</th>
-										<th scope="col">버튼</th>
 										<th scope="col">아이디</th>
 										<th scope="col">사용자명</th>
 										<th scope="col">부서</th>
@@ -248,7 +246,6 @@
 											<td><c:out value="${paginationInfo.totalRecordCount+1 - ((pagingVO.pageIndex-1) * pagingVO.pageSize + status.count)}" /></td>
 											<td><c:out value="${result.exedtm_date}" /></td>
 											<td><c:out value="${result.exedtm_hour}" /></td>
-											<td><c:out value="${result.sys_cd_nm}" /></td>
 											<td><c:out value="${result.sys_cd_nm}" /></td>
 											<td><c:out value="${result.usr_id}" /></td>
 											<td><c:out value="${result.usr_nm}" /></td>

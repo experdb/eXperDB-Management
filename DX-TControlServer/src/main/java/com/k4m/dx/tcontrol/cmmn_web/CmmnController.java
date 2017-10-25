@@ -309,4 +309,53 @@ public class CmmnController {
 		}
 		return result;
 	}
+	
+	
+	/**
+	 * WORK 정보
+	 * @param 
+	 * @return resultSet
+	 * @throws Exception
+	 */
+	@SuppressWarnings("unchecked")
+	@RequestMapping(value = "/selectWrkInfo.do")
+	@ResponseBody
+	public List<Map<String, Object>> selectWrkInfo(HttpServletRequest request) {
+		List<Map<String, Object>> result = null;
+		
+		try {
+			String wrk_nm = request.getParameter("wrk_nm");
+			
+			result = scheduleService.selectWrkInfo(wrk_nm);	
+			System.out.println(result.size());
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return result;
+	}	
+	
+	
+	/**
+	 * WORK OPTION 정보(DUMP)
+	 * @param 
+	 * @return resultSet
+	 * @throws Exception
+	 */
+	@SuppressWarnings("unchecked")
+	@RequestMapping(value = "/workOptionLayer.do")
+	@ResponseBody
+	public List<Map<String, Object>> workOptionLayer(@ModelAttribute("workVO") WorkVO workVO, HttpServletRequest request) {
+		List<Map<String, Object>> result = null;
+		
+		try {
+			int bck_wrk_id = Integer.parseInt(request.getParameter("bck_wrk_id"));	
+			result = backupService.selectWorkOptionLayer(bck_wrk_id);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return result;
+	}	
+	
+	
+
 }
