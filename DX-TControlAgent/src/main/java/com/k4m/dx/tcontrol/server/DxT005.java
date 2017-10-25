@@ -53,7 +53,6 @@ public class DxT005 extends SocketCtl{
 		String strErrMsg = "";
 		String strSuccessCode = "0";
 		
-		socketLogger.info("execute(String strDxExCode, JSONArray arrCmd)");
 
 		JSONArray outputArray = new JSONArray();
 		JSONObject outputObj = new JSONObject();
@@ -72,6 +71,7 @@ public class DxT005 extends SocketCtl{
 				
 				JSONObject objJob = (JSONObject) arrCmd.get(i);
 				
+
 				
 				String strSCD_ID = objJob.get(ProtocolID.SCD_ID).toString();
 				String strWORK_ID = objJob.get(ProtocolID.WORK_ID).toString();
@@ -82,7 +82,6 @@ public class DxT005 extends SocketCtl{
 				String strBCK_FILE_PTH = objJob.get(ProtocolID.BCK_FILE_PTH).toString();
 				String strLOG_YN = objJob.get(ProtocolID.LOG_YN).toString();
 				String strBCK_FILENM = objJob.get(ProtocolID.BCK_FILENM).toString();
-				
 
 				int intSeq = service.selectQ_WRKEXE_G_01_SEQ();
 				
