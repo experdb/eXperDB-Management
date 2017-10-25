@@ -44,7 +44,8 @@
 			DATA_PTH,
 			BCK_PTH,
 			ACV_FILE_STGDT,
-			ACV_FILE_MTNCNT
+			ACV_FILE_MTNCNT,
+			LOG_FILE_PTH
       FROM T_BCK_WRKCNG_I A
       WHERE 1=1	
       	AND DB_SVR_ID=#{db_svr_id}
@@ -145,7 +146,8 @@
 			data_pth,
 			bck_pth,
 			acv_file_stgdt,
-			acv_file_mtncnt
+			acv_file_mtncnt,
+			log_file_pth
 			)
 		VALUES
 			(
@@ -169,7 +171,8 @@
 			#{data_pth},
 			#{bck_pth},
 			#{acv_file_stgdt},
-			#{acv_file_mtncnt}
+			#{acv_file_mtncnt},
+			#{log_file_pth}
 			)
 	</insert>
 	
@@ -199,7 +202,8 @@
 			frst_reg_dtm,
 			lst_mdfr_id,
 			lst_mdf_dtm,
-			bck_filenm
+			bck_filenm,
+			log_file_pth			
 			)
 		VALUES
 			(
@@ -221,7 +225,8 @@
 			now(),
 			#{frst_regr_id},
 			now(),
-			#{bck_filenm}
+			#{bck_filenm},
+			#{log_file_pth}
 			)
 	</insert>
 	
@@ -246,7 +251,8 @@
 			data_pth = #{data_pth},
 			bck_pth = #{bck_pth},
 			acv_file_stgdt = #{acv_file_stgdt},
-			acv_file_mtncnt = #{acv_file_mtncnt}
+			acv_file_mtncnt = #{acv_file_mtncnt},
+			log_file_pth = #{log_file_pth}
 		WHERE
 			bck_wrk_id = #{bck_wrk_id}
 	</update>
@@ -270,7 +276,8 @@
 			bck_mtn_ecnt = #{bck_mtn_ecnt},
 			lst_mdfr_id = #{lst_mdfr_id},
 			lst_mdf_dtm = now(),
-			bck_filenm = #{bck_filenm}
+			bck_filenm = #{bck_filenm},
+			log_file_pth = #{log_file_pth}
 		WHERE
 			bck_wrk_id = #{bck_wrk_id}
 	</update>
@@ -606,4 +613,22 @@
       WHERE 1=1	
       AND A.BCK_WRK_ID = #{bck_wrk_id}
 	 </select>
+	 
+	 
+	 <select id="selectWorkObjectLayer" parameterType="workVO" resultType="workObjVO">
+		/**
+	 	* Query ID : selectWorkObjectLayer
+	 	* Description : 백업 Object 조회
+	 	* Author : 변승우
+	 	**/
+	 	SELECT
+			obj_sn,
+			db_id,
+			scm_nm,
+			obj_nm
+		FROM t_bckobj_l	
+		WHERE
+			bck_wrk_id = #{bck_wrk_id}
+		ORDER BY obj_sn
+    </select>
 </mapper>

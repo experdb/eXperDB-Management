@@ -299,6 +299,7 @@ public class ScheduleQuartzJob implements Job{
 		rmanCmd += " --keep-srvlog-files="+resultWork.get(i).get("log_file_mtn_ecnt");
 		rmanCmd += " --keep-srvlog-days="+resultWork.get(i).get("log_file_stg_dcnt");
 
+		rmanCmd += " > "+resultWork.get(i).get("log_file_pth");
 		return rmanCmd;	
 	}
 	

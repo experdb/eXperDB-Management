@@ -9,7 +9,7 @@
 				<table border="1" class="list">
 					<caption>WORK 정보</caption>
 						<div class="btn btnF_04 btnC_01">
-							<a href="#n" class="btn" onclick="toggleLayer($('#pop_layer_rman'), 'off');"><span style="margin-left: 243px;">닫기</span></a>
+							<a href="#n" class="btn" onclick="toggleLayer($('#pop_layer_rman'), 'off');"><img src="/images/ico_state_01.png"  style="margin-left: 320px;"/></a>
 						</div>
 					<p><h3 style="height: 20px;">기본정보</h3></p>
 					<tbody>						
