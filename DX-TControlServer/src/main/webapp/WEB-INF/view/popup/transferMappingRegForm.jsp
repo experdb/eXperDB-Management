@@ -321,7 +321,7 @@
 			<colgroup>
 				<col style="width:105px;" />
 				<col style="width:280px;" />
-				<col style="width:80px;" />
+				<col style="width:100px;" />
 				<col />
 			</colgroup>
 			<tbody>
@@ -332,7 +332,7 @@
 					<td>&nbsp;</td>
 				</tr>
 				<tr>
-					<th scope="row" class="ico_t1">서버명</th>
+					<th scope="row" class="ico_t1">DBMS명</th>
 					<td>	
 						<select class="select t3" name="db_svr_nm" id="db_svr_nm" onchange="fn_serverChange()">
 							<c:forEach var="resultSet" items="${resultSet}" varStatus="status">
@@ -340,7 +340,7 @@
 							</c:forEach>
 						</select>		
 					</td>
-					<th scope="row" class="ico_t1">DB명</th>
+					<th scope="row" class="ico_t1">Database</th>
 					<td>
 						<select class="select" name="db_nm" id="db_nm" onchange="fn_dbChange()"></select>
 					</td>

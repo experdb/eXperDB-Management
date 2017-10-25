@@ -270,7 +270,7 @@ function fn_reg_popup(){
 							<th width="130">DBMS명</th>
 							<th width="150">DBMS 아이피</th>
 							<th width="70">포트</th>
-							<th width="130">Database명</th>
+							<th width="130">Database</th>
 							<th width="65">등록자</th>
 							<th width="100">등록일시</th>
 							<th width="65">수정자</th>

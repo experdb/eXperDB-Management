@@ -369,7 +369,7 @@
 									</td>
 								</tr>
 								<tr>
-									<th scope="row" class="t9 line">DB 서버명</th>
+									<th scope="row" class="t9 line">DBMS명</th>
 									<td>
 										<select class="select t8" name="db_svr_nm" id="db_svr_nm"  style="width:200px";>
 												<option value="%">전체</option>
@@ -406,7 +406,7 @@
 							<tr style="border-bottom: 1px solid #b8c3c6;">
 								<th scope="col">NO</th>
 								<th scope="col">스케줄명</th>
-								<th scope="col">서버명</th>							
+								<th scope="col">DBMS명</th>							
 								<th scope="col">작업시작일시</th>
 								<th scope="col">작업종료일시</th>
 								<th scope="col">결과</th>

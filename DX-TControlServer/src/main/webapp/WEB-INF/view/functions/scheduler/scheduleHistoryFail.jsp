@@ -78,7 +78,7 @@
 						<tr>
 							<th>No</th>
 							<th>스케줄명</th>
-							<th>서버명</th>
+							<th>DBMS명</th>
 							<th>Work명</th>
 							<th>작업시작일시</th>
 							<th>작업종료일시</th>

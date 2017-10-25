@@ -227,7 +227,7 @@ function fn_workAdd(){
 						<th>No</th>
 						<th></th>
 						<th></th>
-						<th>서버명</th>
+						<th>DBMS명</th>
 						<th></th>
 						<th></th>
 						<th></th>
