@@ -17,7 +17,11 @@ function fn_init(){
 	columns : [
 		{data : "rownum", defaultContent : "", targets : 0, orderable : false, checkboxes : {'selectRow' : true}}, 
 		{data : "idx", className : "dt-center", defaultContent : ""}, 
-		{data : "scd_nm", className : "dt-center", defaultContent : ""},
+		{data : "scd_nm", className : "dt-center", defaultContent : ""
+			,render: function (data, type, full) {
+				  return '<span onClick=javascript:fn_scdLayer("'+full.scd_nm+'"); style=cursor:pointer>' + full.scd_nm + '</span>';
+			}
+		},
 		{data : "scd_exp", className : "dt-center", defaultContent : ""}, 
 		{data : "wrk_cnt", className : "dt-center", defaultContent : ""}, 
 		{data : "prev_exe_dtm", className : "dt-center", defaultContent : ""}, 

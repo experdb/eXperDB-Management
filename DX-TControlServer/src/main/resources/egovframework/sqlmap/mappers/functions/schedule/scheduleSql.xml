@@ -213,9 +213,6 @@
       <if test="frst_regr_id != null and frst_regr_id != '' ">
       	AND A.FRST_REGR_ID LIKE  '%' || #{frst_regr_id} || '%'
       </if>
-      <if test="nxt_exe_from != null and nxt_exe_from != '' and nxt_exe_to != null and nxt_exe_to != '' ">
-       AND TO_CHAR(A.NXT_EXE_DTM,'YYYY-MM-DD HH24:MI:SS') BETWEEN  #{nxt_exe_from} AND #{nxt_exe_to}
-      </if>
     </select>	
     
     <select id="selectInitScheduleList" resultType="scheduleVO">
