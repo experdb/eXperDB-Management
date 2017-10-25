@@ -239,7 +239,7 @@
 				</colgroup>
 				<tbody>
 					<tr>
-						<th scope="row" class="ico_t1">서버명</th>
+						<th scope="row" class="ico_t1">DBMS명</th>
 						<td><input type="text" class="txt bg1" value="${db_svr_nm}" readonly="readonly"/></td>
 						<th scope="row" class="ico_t1">Database</th>
 						<td>
