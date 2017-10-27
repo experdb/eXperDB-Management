@@ -111,6 +111,14 @@ public class DxT006 extends SocketCtl{
 				outputObj.put(ProtocolID.ERR_CODE, "");
 				outputObj.put(ProtocolID.ERR_MSG, "");
 				outputObj.put(ProtocolID.RESULT_DATA, "success");
+			} else if(strCommandCode.equals(ProtocolID.COMMAND_CODE_D_A)) {
+				deleteAllAuthentication(jObj);
+				
+				outputObj.put(ProtocolID.DX_EX_CODE, strDxExCode);
+				outputObj.put(ProtocolID.RESULT_CODE, "0");
+				outputObj.put(ProtocolID.ERR_CODE, "");
+				outputObj.put(ProtocolID.ERR_MSG, "");
+				outputObj.put(ProtocolID.RESULT_DATA, "success");
 			}
 			
 			send(TotalLengthBit, outputObj.toString().getBytes());
@@ -539,4 +547,82 @@ public class DxT006 extends SocketCtl{
 		
 	}
 	
+	
+	private void deleteAllAuthentication(JSONObject jObj) throws Exception {
+		
+		JSONObject serverInfoObj = (JSONObject) jObj.get(ProtocolID.SERVER_INFO);
+		
+
+		SqlSessionFactory sqlSessionFactory = null;
+		
+		sqlSessionFactory = SqlSessionManager.getInstance();
+		
+		
+		String poolName = "" + serverInfoObj.get(ProtocolID.SERVER_NAME) + "_" + serverInfoObj.get(ProtocolID.DATABASE_NAME);
+		
+		Connection connDB = null;
+		SqlSession sessDB = null;
+		List<Object> selectList = new ArrayList<Object>();
+		
+		try {
+			SocketExt.setupDriverPool(serverInfoObj, poolName);
+
+			//DB 컨넥션을 가져온다.
+			connDB = DriverManager.getConnection("jdbc:apache:commons:dbcp:" + poolName);
+			
+			//connDB.setAutoCommit(false);
+			
+			sessDB = sqlSessionFactory.openSession(connDB);
+
+			selectList = sessDB.selectList("app.selectAuthentication");
+			
+			String[] arrData = null;
+			HashMap<Integer, PgHbaConfigLine> hba = new LinkedHashMap<Integer, PgHbaConfigLine>();
+			
+			String buffer = "";
+			
+			if(selectList.size() > 0) {
+				HashMap hp = new HashMap();
+				hp = (HashMap) selectList.get(0);
+				String strPgHbaData = (String) hp.get("pg_read_file");
+				
+				//System.out.println(strPgHbaData);
+
+				arrData = strPgHbaData.split("\n");
+				
+				int intSeq = 0;
+				
+				
+				for(int i=0; i<arrData.length; i++) {
+					
+					boolean blnAcSeqCheck = false;
+
+					PgHbaConfigLine conf = new PgHbaConfigLine(arrData[i].toString());
+					
+
+					if(conf.isValid() || (!conf.isValid() && !conf.isComment()) && !(conf.getText()).isEmpty()){
+						
+					} else {
+						buffer += arrData[i].toString() + "\n";
+					}
+				}
+			}
+			
+			HashMap hp = new HashMap();
+			hp.put("hbadata", buffer);
+			
+			sessDB.selectList("app.selectPgConfUnlink");
+			sessDB.selectList("app.selectPgConfWrite", hp);
+			sessDB.selectList("app.selectPgConfRename");
+			sessDB.selectList("app.selectPgConfReload");
+			
+			
+		} catch(Exception e) {
+			errLogger.error("deleteAuthentication {} ", e.toString());
+		} finally {
+			sessDB.close();
+			connDB.close();
+		}	
+		
+	}
 }
