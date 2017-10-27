@@ -1,6 +1,7 @@
 package com.k4m.dx.tcontrol.accesscontrol.service;
 
 public class AccessControlHistoryVO {
+	private int rownum;
 	private int svr_acs_cntr_his_id; //서버_접근_제어_이력_ID
 	private int svr_acs_cntr_id;//서버_접근_제어_ID
 	private int db_svr_id;//DB_서버_ID
@@ -17,11 +18,11 @@ public class AccessControlHistoryVO {
 	private String lst_mdf_dtm;//최종_수정_일시
 	private int his_grp_id;//이력_그룹_ID
 	
-	public int getHis_grp_id() {
-		return his_grp_id;
+	public int getRownum() {
+		return rownum;
 	}
-	public void setHis_grp_id(int his_grp_id) {
-		this.his_grp_id = his_grp_id;
+	public void setRownum(int rownum) {
+		this.rownum = rownum;
 	}
 	public int getSvr_acs_cntr_his_id() {
 		return svr_acs_cntr_his_id;
@@ -107,6 +108,14 @@ public class AccessControlHistoryVO {
 	public void setLst_mdf_dtm(String lst_mdf_dtm) {
 		this.lst_mdf_dtm = lst_mdf_dtm;
 	}
+	public int getHis_grp_id() {
+		return his_grp_id;
+	}
+	public void setHis_grp_id(int his_grp_id) {
+		this.his_grp_id = his_grp_id;
+	}
 
+	
+	
 	
 }

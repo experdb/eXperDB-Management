@@ -16,7 +16,6 @@
 	*
 	*/
 %>
-
 <script>
 	var table = null;
 	
@@ -170,7 +169,7 @@
 	 				table.clear().draw();
 	 				table.rows.add(result.data).draw();
 	 			}
-	 		}); 
+	 		});  			
 		}	
 	});
 
@@ -191,8 +190,28 @@
 				table.rows.add(result.data).draw();
 			}
 		}); 
+		 
 	}
 
+	function fn_isnertSave(prms_ipadr,prms_ipmaskadr,dtb,prms_usr_id,ctf_mth_nm,ctf_tp_nm,opt_nm){
+		table.row.add( {
+			        "Type":		ctf_tp_nm,
+			        "Database":	dtb,
+			        "User":		prms_usr_id,
+			        "Ipadr":	prms_ipadr,
+			        "Ipmask":	prms_ipmaskadr,
+			        "Method":	ctf_mth_nm,
+			        "Option":	opt_nm
+			    } ).draw();	
+	}
+	
+	function fn_updateSave(prms_seq,prms_ipadr,prms_ipmaskadr,dtb,prms_usr_id,ctf_mth_nm,ctf_tp_nm,opt_nm){
+		alert(prms_seq);
+		alert(dtb);
+		alert(prms_usr_id);
+	}
+	
+	
 	/* 등록 버튼 클릭시*/
 	function fn_insert(){
 		var popUrl = "/popup/accessControlRegForm.do?act=i&&db_svr_id=${db_svr_id}"; // 서버 url 팝업경로
@@ -218,7 +237,7 @@
 			var Ipadr = table.row('.selected').data().Ipadr;
 			var Ipmask = table.row('.selected').data().Ipmask;
 			var Option = table.row('.selected').data().Option;
-				
+			
 			var popUrl = "/popup/accessControlRegForm.do?act=u&&db_svr_id=${db_svr_id}&&User="+User+"&&Seq="+Seq+"&&Method="+Method+"&&Database="+Database+"&&Type="+Type+"&&Ipadr="+Ipadr+"&&Ipmask="+Ipmask+"&&Option="+Option; // 서버 url 팝업경로
 			var width = 920;
 			var height = 420;
@@ -233,7 +252,6 @@
 		}			
 	}
 
-	
 	/* 삭제 버튼 클릭시*/
 	function fn_delete() {
 		var datas = table.rows('.selected').data();
@@ -242,44 +260,45 @@
 			return false;
 		} else {
 			if (!confirm("삭제하시겠습니까?")) return false;
-			var rowList = [];
-			for (var i = 0; i < datas.length; i++) {
-				rowList += datas[i].Seq + ',';
-			}
-	 			$.ajax({
-					url : "/deleteAccessControl.do",
-					data : {
-						db_svr_id : "${db_svr_id}",
-						rowList : rowList,
-					},
-					dataType : "json",
-					type : "post",
-					error : function(request, status, error) {
-						alert("ERROR CODE : "+ request.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ request.responseText.replace(/(<([^>]+)>)/gi, ""));
-					},
-					success : function(result) {
-						if (result) {
-							alert("삭제되었습니다.");
-							fn_select();
-						}else{
-							alert("접근제어삭제를 실패하였습니다.");
-						}
-					}
-				}); 	
+			var rows = table.rows( '.selected' ).remove().draw();
+			
+// 			var rowList = [];
+// 			for (var i = 0; i < datas.length; i++) {
+// 				rowList += datas[i].Seq + ',';
+// 			}			
+// 	 			$.ajax({
+// 					url : "/deleteAccessControl.do",
+// 					data : {
+// 						db_svr_id : "${db_svr_id}",
+// 						rowList : rowList,
+// 					},
+// 					dataType : "json",
+// 					type : "post",
+// 					error : function(request, status, error) {
+// 						alert("ERROR CODE : "+ request.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ request.responseText.replace(/(<([^>]+)>)/gi, ""));
+// 					},
+// 					success : function(result) {
+// 						if (result) {
+// 							alert("삭제되었습니다.");
+// 							fn_select();
+// 						}else{
+// 							alert("접근제어삭제를 실패하였습니다.");
+// 						}
+// 					}
+// 				}); 	
 			}
 	}
 	
-	/* 저장 버튼 클릭시 */
+	/* 적용 버튼 클릭시 */
 	function fn_save(){
-		if (!confirm("저장하시겠습니까?")) return false;
+		if (!confirm("적용하시겠습니까?")) return false;
 		var rowList = [];
 		var data = table.rows().data();
         for (var i = 0; i < data.length; i++) {
            rowList.push(table.rows().data()[i]);
         }    
-  		//change
  		 $.ajax({
- 			url : "/changeAccessControl.do",
+ 			url : "/applyAccessControl.do",
  			data : {
  				rowList : JSON.stringify(rowList),
  				db_svr_id : "${db_svr_id}",
@@ -337,7 +356,7 @@
 							<button class="search_btn">검색</button>
 						</div>
 					</span>
-					<span class="btn" onclick="fn_insert();"><button>등록</button></span>
+					<span class="btn" onclick="fn_insert();"><button>추가</button></span>
 					<span class="btn" onclick="fn_update();"><button>수정</button></span>
 					<span class="btn" onclick="fn_delete();"><button>삭제</button></span>
 					<span class="btn" onclick="fn_save();"><button>적용</button></span>

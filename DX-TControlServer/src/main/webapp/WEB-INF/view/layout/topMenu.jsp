@@ -184,7 +184,7 @@ function fn_cookie(url) {
 							</li>
 							<li><a href="#n" id="MN0002">데이터전송정보</a>
 								<ul class="depth_3">
-									<li><a href="/transferSetting.do" onClick="fn_cookie(null)" id="MN000201">데이터 전송설정</a></li>
+									<li><a href="/transferSetting.do" onClick="fn_cookie(null)" id="MN000201">전송서버설정</a></li>
 									<li><a href="/connectorRegister.do" onClick="fn_cookie(null)" id="MN000202">커넥터 관리</a></li>
 								</ul>
 							</li>

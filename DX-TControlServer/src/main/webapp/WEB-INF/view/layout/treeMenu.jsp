@@ -167,11 +167,11 @@
 	          var parseData = $.parseJSON(data);
 	          var html = "";      
 	         
-	          for(var i=0; i<aut.length; i++){ 	  
-		          if(aut.length != 0 && aut[i].read_aut_yn == "Y" && aut[i].mnu_cd == "MN000201"){	        	 
-		        	  html += '<ul class="depth_1 lnbMenu"><li class="t1"><a href="/treeTransferSetting.do"><img src="../images/ico_lnb_4.png" id="treeImg">데이터 전송설정</a></li>';
-		          }
-	          }
+// 	          for(var i=0; i<aut.length; i++){ 	  
+// 		          if(aut.length != 0 && aut[i].read_aut_yn == "Y" && aut[i].mnu_cd == "MN000201"){	        	 
+// 		        	  html += '<ul class="depth_1 lnbMenu"><li class="t1"><a href="/treeTransferSetting.do"><img src="../images/ico_lnb_4.png" id="treeImg">데이터 전송설정</a></li>';
+// 		          }
+// 	          }
 	          $(data).each(function (index, item) {
 	          html += '      <ul class="depth_1 lnbMenu"><li class="t2"><div class="border" style="overflow: hidden;white-space: nowrap;text-overflow: ellipsis;"><a href="#n"><img src="../images/ico_lnb_5.png" id="treeImg">'+item.cnr_nm+'</a></div>';
 	          html += '         <ul class="depth_2">';
@@ -246,7 +246,7 @@
 						</div>
 				</div>
 				
-				<div id="treeSub"><img src="../images/ico_lnb_2.png" id="treeImg"><a href="/connectorRegister.do">데이터전송</a>
+				<div id="treeSub"><img src="../images/ico_lnb_2.png" id="treeImg"><a href="/connectorRegister.do">데이터 전송</a>
 						<div id="sidetreecontrol2" style="float: right;">							
 							<a href="?#"><img src="../images/ico_lnb_close.png"></a>
 							<a href="?#"><img src="../images/ico_lnb_open.png"></a>

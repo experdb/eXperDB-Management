@@ -23,9 +23,10 @@ var table = null;
 			scrollY : "250px",
 			paging: false,
 			searching : false,
-			scrollX: true,			
+			scrollX: true,
+			sort: false,
 			columns : [
-			{ data : "", className : "dt-center", defaultContent : ""}, 
+			{ data : "rownum", className : "dt-center", defaultContent : ""}, 
 			{ data : "ctf_tp_nm", className : "dt-center", defaultContent : ""}, 
 			{ data : "dtb", className : "dt-center", defaultContent : ""}, 
 			{ data : "prms_usr_id", className : "dt-center", defaultContent : ""}, 
@@ -35,12 +36,6 @@ var table = null;
 			{ data : "opt_nm", className : "dt-center", defaultContent : ""}, 
 			 ]
 		});
-		
-		table.on('order.dt', function () {
-			table.column(0, {search:'applied', order:'applied'}).nodes().each( function (cell, i) {
-	            cell.innerHTML = i+1;
-	        } );
-	    } ).draw();
 		
 		table.tables().header().to$().find('th:eq(0)').css('min-width', '20px');
 		table.tables().header().to$().find('th:eq(1)').css('min-width', '60px');

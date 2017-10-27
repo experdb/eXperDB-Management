@@ -276,7 +276,6 @@ public class AccessControlController {
 				mv.addObject("ctf_tp_nm",request.getParameter("Type").equals("undefined") ? "" : request.getParameter("Type"));
 				mv.addObject("dtb",request.getParameter("Database").equals("undefined") ? "" : request.getParameter("Database"));
 				mv.addObject("ipmask",request.getParameter("Ipmask").equals("undefined") ? "" : request.getParameter("Ipmask"));
-				mv.addObject("opt_nm",request.getParameter("Option").equals("undefined") ? "" : request.getParameter("Option"));
 			}
 
 			mv.addObject("db_svr_nm", dbServerVO.getDb_svr_nm());
@@ -596,15 +595,15 @@ public class AccessControlController {
 	}
 
 	/**
-	 * 접근제어를 수정한다.
+	 * 접근제어를 적용한다.
 	 * 
 	 * @param accessControlVO
 	 * @param request
 	 * @return
 	 * @throws Exception
 	 */
-	@RequestMapping(value = "/changeAccessControl.do")
-	public @ResponseBody boolean changeAccessControl(
+	@RequestMapping(value = "/applyAccessControl.do")
+	public @ResponseBody boolean applyAccessControl(
 			@ModelAttribute("accessControlHistoryVO") AccessControlHistoryVO accessControlHistoryVO,
 			HttpServletRequest request, @ModelAttribute("accessControlVO") AccessControlVO accessControlVO,@ModelAttribute("historyVO") HistoryVO historyVO) {
 
@@ -664,9 +663,9 @@ public class AccessControlController {
 				String Ipmask = (String) jObj.get("Ipmask");
 				String Option = (String) jObj.get("Option");
 				String Database = (String) jObj.get("Database");
-
+					
 				JSONObject acObj = new JSONObject();
-				acObj.put(ClientProtocolID.AC_SET, Set);
+				acObj.put(ClientProtocolID.AC_SET, "1");
 				acObj.put(ClientProtocolID.AC_TYPE, Type);
 				acObj.put(ClientProtocolID.AC_DATABASE, Database);
 				acObj.put(ClientProtocolID.AC_USER, User);

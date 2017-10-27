@@ -212,7 +212,7 @@
 	<div class="contents_wrap">
 		<div class="contents_tit">
 			<h4>
-				데이터 전송설정<a href="#n"><img src="../images/ico_tit.png" class="btn_info" /></a>
+				전송서버설정<a href="#n"><img src="../images/ico_tit.png" class="btn_info" /></a>
 			</h4>
 			<div class="infobox"> 
 				<ul>
@@ -224,7 +224,7 @@
 				<ul>
 					<li>Function</li>
 					<li>데이터전송정보</li>
-					<li class="on">데이터 전송설정</li>
+					<li class="on">전송서버설정</li>
 				</ul>
 			</div>
 		</div>
