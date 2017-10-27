@@ -8,7 +8,7 @@
 				<table border="1" class="list">
 					<caption>WORK 정보</caption>
 						<div class="btn btnF_04 btnC_01">
-							<a href="#n" class="btn" onclick="toggleLayer($('#pop_layer_dump'), 'off');"><span style="margin-left: 243px;">닫기</span></a>
+							<a href="#n" class="btn" onclick="toggleLayer($('#pop_layer_dump'), 'off');"><img src="/images/ico_state_01.png"  style="margin-left: 320px;"/></a>
 						</div>
 					<p><h3 style="height: 20px;">기본정보</h3></p>
 					<tbody>
@@ -98,8 +98,10 @@
 					<caption>부가옵션3</caption>
 					<tbody>
 						<tr>
-							<td style="width: 70px; height: 20px;">Object</td>
-							<td style="width: 70%; text-align: left" id="log_file_bck_yn"></td>
+							<div class="view">
+								<div class="tNav" >								
+								</div>
+							</div>
 						</tr>									
 					</tbody>
 				</table>

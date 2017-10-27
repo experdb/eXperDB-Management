@@ -263,7 +263,8 @@
 		 		  		data_pth : $("#data_pth").val(),
 		 		  		bck_pth : $("#bck_pth").val(),
 		 		  		acv_file_stgdt : "7",
-		 		  		acv_file_mtncnt : "7"
+		 		  		acv_file_mtncnt : "7",
+		 		  		log_file_pth : $("#log_pth").val()
 		 		  	},
 		 			type : "post",
 		 			error : function(request, status, error) {

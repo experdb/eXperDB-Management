@@ -71,7 +71,8 @@ $(window.document).ready(function() {
 		  		data_pth : $("#data_pth").val(),
 		  		bck_pth : $("#bck_pth").val(),
 		  		acv_file_stgdt : $("#acv_file_stgdt").val(),
-		  		acv_file_mtncnt : $("#acv_file_mtncnt").val()
+		  		acv_file_mtncnt : $("#acv_file_mtncnt").val(),
+		  		log_file_pth : $("#log_file_pth").val()
 		  	},
 			type : "post",
 			error : function(request, status, error) {
@@ -137,7 +138,7 @@ function valCheck(){
 		return false;
 	}else if($("#check_path3").val() != "Y"){
 		alert("로그경로에 유효한 경로를 입력후 경로체크를 해 주세요.");
-		$("#log_pth").focus();
+		$("#log_file_pth").focus();
 		return false;
 	}else if(wrk_nmChk =="fail"){
 		alert("WORK명 중복체크 바랍니다.");
@@ -159,7 +160,7 @@ function checkFolder(keyType){
 	}else if(keyType == 2){
 		save_path = $("#bck_pth").val();
 	}else{
-		save_path = $("#log_pth").val();
+		save_path = $("#log_file_pth").val();
 	}
 
 	if(save_path == "" && keyType == 1){
@@ -170,7 +171,7 @@ function checkFolder(keyType){
 		$("#bck_pth").focus();
 	}else if(save_path == "" && keyType == 3){
 		alert("로그경로를 입력해 주세요.");
-		$("#log_pth").focus();
+		$("#log_file_pth").focus();
 	}else{
 		$.ajax({
 			async : false,
@@ -300,7 +301,7 @@ function fn_check() {
 							</span>
 							<span class="tit" style="margin-right: 5px;">로그경로</span>
 							<span style="margin-right: 5px;">
-								<input type="text" class="txt" name="log_pth" id="log_pth" maxlength=50 style="width:230px" onKeydown="$('#check_path3').val('N')"/>
+								<input type="text" class="txt" name="log_file_pth" id="log_file_pth" maxlength=50 style="width:230px" onKeydown="$('#check_path3').val('N')"/>
 								<span class="btn btnC_01"><button type="button" class= "btn_type_02" onclick="checkFolder(3)" style="width: 60px; margin-right: -60px; margin-top: 0;">경로체크</button></span>
 							</span>			
 	

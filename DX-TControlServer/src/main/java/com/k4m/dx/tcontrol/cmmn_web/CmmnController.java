@@ -355,7 +355,29 @@ public class CmmnController {
 		}
 		return result;
 	}	
+
 	
 	
+	
+	/**
+	 * WORK Object 리스트 조회
+	 * @param 
+	 * @return resultSet
+	 * @throws Exception
+	 */
+	@SuppressWarnings("unchecked")
+	@RequestMapping(value = "/workObjectListTreeLayer.do")
+	@ResponseBody
+	public List<Map<String, Object>> workObjectListTreeLayer(@ModelAttribute("workVO") WorkVO workVO, HttpServletRequest request) {
+		List<Map<String, Object>> result = null;
+		
+		try {
+			int bck_wrk_id = Integer.parseInt(request.getParameter("bck_wrk_id"));	
+			result = backupService.selectWorkObjectLayer(bck_wrk_id);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return result;
+	}	
 
 }

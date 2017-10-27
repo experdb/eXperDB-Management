@@ -210,7 +210,7 @@ function fn_chkExtName(extName) {
 									<tbody>
 
 										<tr>
-											<th scope="row" class="t10">작업기간</th>
+											<th scope="row" class="t10">로그기간</th>
 											<td colspan="4">
 												<div class="calendar_area">
 													<a href="#n" class="calendar_btn">달력열기</a>

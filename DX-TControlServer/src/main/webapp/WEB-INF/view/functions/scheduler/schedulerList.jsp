@@ -1,6 +1,8 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
-    
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<%@ taglib prefix="form" uri="http://www.springframework.org/tags/form"%>
+<%@ taglib prefix="ui" uri="http://egovframework.gov/ctl/ui"%>
 <%
 	String usr_id = (String)session.getAttribute("usr_id");
 %>
@@ -22,7 +24,11 @@ function fn_init(){
 	columns : [
 		{data : "rownum", defaultContent : "", targets : 0, orderable : false, checkboxes : {'selectRow' : true}}, 
 		{data : "idx", className : "dt-center", defaultContent : ""}, 
-		{data : "scd_nm", className : "dt-center", defaultContent : ""},
+		{data : "scd_nm", className : "dt-center", defaultContent : ""
+			,render: function (data, type, full) {
+				  return '<span onClick=javascript:fn_scdLayer("'+full.scd_nm+'"); style=cursor:pointer>' + full.scd_nm + '</span>';
+			}
+		},
 		{data : "scd_exp", className : "dt-center", defaultContent : ""},
 		{data : "wrk_cnt", className : "dt-center", defaultContent : ""}, //work갯수
 		{data : "prev_exe_dtm", className : "dt-center", defaultContent : ""}, 

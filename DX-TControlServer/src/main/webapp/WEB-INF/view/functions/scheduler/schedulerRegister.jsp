@@ -572,7 +572,7 @@ function fn_check() {
 											<tr>
 												<th width="10"></th>
 												<th width="30">No</th>												
-												<th width="130">서버명</th>
+												<th width="130">DBMS명</th>
 												<th width="70">구분</th>
 												<th width="100">Work명</th>
 												<th width="150">Work설명</th>												

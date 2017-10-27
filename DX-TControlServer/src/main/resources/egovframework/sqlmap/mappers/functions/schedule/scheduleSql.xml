@@ -213,9 +213,6 @@
       <if test="frst_regr_id != null and frst_regr_id != '' ">
       	AND A.FRST_REGR_ID LIKE  '%' || #{frst_regr_id} || '%'
       </if>
-      <if test="nxt_exe_from != null and nxt_exe_from != '' and nxt_exe_to != null and nxt_exe_to != '' ">
-       AND TO_CHAR(A.NXT_EXE_DTM,'YYYY-MM-DD HH24:MI:SS') BETWEEN  #{nxt_exe_from} AND #{nxt_exe_to}
-      </if>
     </select>	
     
     <select id="selectInitScheduleList" resultType="scheduleVO">
@@ -286,6 +283,7 @@
 				, B.ACV_FILE_STGDT
 				, B.ACV_FILE_MTNCNT
 				, B.BCK_FILENM
+				, B.LOG_FILE_PTH
 		FROM T_SCD_D A, T_BCK_WRKCNG_I B
 		WHERE 1 = 1
 		AND A.WRK_ID = B.WRK_ID
@@ -600,8 +598,11 @@
                 , B.CPRT
                 , B.ENCD_MTH_NM
                 , B.USR_ROLE_NM
-		FROM T_WRKCNG_I A, T_BCK_WRKCNG_I B        
+                , C.DB_SVR_ID
+                , C.DB_NM
+		FROM T_WRKCNG_I A, T_BCK_WRKCNG_I B, T_DB_I C      
 		WHERE A.WRK_ID = B.WRK_ID
 		AND A.WRK_NM = #{wrk_nm}  
+		AND B.DB_ID = C.DB_ID
 	</select>
 </mapper>

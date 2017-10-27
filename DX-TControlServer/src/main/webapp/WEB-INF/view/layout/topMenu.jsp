@@ -184,7 +184,7 @@ function fn_cookie(url) {
 							</li>
 							<li><a href="#n" id="MN0002">데이터전송정보</a>
 								<ul class="depth_3">
-									<li><a href="/transferSetting.do" onClick="fn_cookie(null)" id="MN000201">데이터 전송설정</a></li>
+									<li><a href="/transferSetting.do" onClick="fn_cookie(null)" id="MN000201">전송서버설정</a></li>
 									<li><a href="/connectorRegister.do" onClick="fn_cookie(null)" id="MN000202">커넥터 관리</a></li>
 								</ul>
 							</li>
@@ -196,7 +196,7 @@ function fn_cookie(url) {
 								<ul class="depth_3">
 									<li><a href="/dbTree.do" onClick="fn_cookie(null)" id="MN000301">DBMS 등록</a></li>
 									<li><a href="/dbServer.do" onClick="fn_cookie(null)" id="MN000302">DBMS 관리</a></li>
-									<li><a href="/database.do" onClick="fn_cookie(null)" id="MN000303">DataBase 관리</a></li>
+									<li><a href="/database.do" onClick="fn_cookie(null)" id="MN000303">Database 관리</a></li>
 								</ul>
 							</li>				
 						    <li><a href="/userManager.do" onClick="fn_cookie(null)" id="MN0004">사용자관리</a></li>

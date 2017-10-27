@@ -184,7 +184,8 @@
 	 	* Author : 김주영
 	 	**/
 	 	SELECT 
-	 	  SVR_ACS_CNTR_HIS_ID
+	 	(ROW_NUMBER() OVER()) AS ROWNUM
+	 	, SVR_ACS_CNTR_HIS_ID
 	 	, SVR_ACS_CNTR_ID
 	 	, DB_SVR_ID
 	 	, DTB

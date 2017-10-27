@@ -348,8 +348,7 @@ function fn_workLayer(wrk_nm){
 				$("#usr_role_nm").html(result[0].usr_role_nm);
 				$("#d_file_stg_dcnt").html(result[0].file_stg_dcnt);
 				$("#d_bck_mtn_ecnt").html(result[0].bck_mtn_ecnt);
-				
-				fn_workOptionLayer(result[0].bck_wrk_id);
+				fn_workOptionLayer(result[0].bck_wrk_id, result[0].db_svr_id, result[0].db_nm);
 				toggleLayer($('#pop_layer_dump'), 'on');		
 			}		
 		}
@@ -358,7 +357,8 @@ function fn_workLayer(wrk_nm){
 
 
 //WORK OPTION정보
-function fn_workOptionLayer(bck_wrk_id){
+function fn_workOptionLayer(bck_wrk_id, db_svr_id, db_nm){
+	var db_svr_id = db_svr_id;
 	$.ajax({
 		url : "/workOptionLayer.do",
 		data : {
@@ -394,6 +394,96 @@ function fn_workOptionLayer(bck_wrk_id){
 				$("#save_yn").html(save_yn);
 				$("#query").html(query);
 				$("#etc").html(etc);			
+				
+				
+				fn_workObjectListTreeLayer(bck_wrk_id, db_svr_id, db_nm);
 			}		
 	});
+}
+
+
+function fn_workObjectListTreeLayer(bck_wrk_id, db_svr_id, db_nm){
+	$.ajax({
+		async : false,
+		url : "/workObjectListTreeLayer.do",
+	  	data : {
+	  		bck_wrk_id : bck_wrk_id
+	  	},
+		type : "post",
+		error : function(request, status, error) {
+			alert("ERROR CODE : "+ request.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ request.responseText.replace(/(<([^>]+)>)/gi, ""));
+		},
+		success : function(result) {
+			fn_workObjectTreeLayer(db_svr_id, db_nm, result);
+		}
+	});	
+}
+
+
+//WORK OPTION정보
+function fn_workObjectTreeLayer(db_svr_id, db_nm, workObj){
+	$.ajax({
+		async : false,
+		url : "/getObjectList.do",
+	  	data : {
+	  		db_svr_id : db_svr_id,
+	  		db_nm : db_nm
+	  	},
+		type : "post",
+		error : function(request, status, error) {
+			alert("ERROR CODE : "+ request.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ request.responseText.replace(/(<([^>]+)>)/gi, ""));
+		},
+		success : function(data) {
+			fn_make_object_list(data, workObj);
+		}
+	});
+}
+
+
+/* ********************************************************
+ * Make Object Tree
+ ******************************************************** */
+function fn_make_object_list(data, workObj){
+	var html = "<ul>";
+	var schema = "";
+	var schemaCnt = 0;
+	$(data.data).each(function (index, item) {
+		var inSchema = item.schema;
+		
+		if(schemaCnt > 0 && schema != inSchema){
+			html += "</ul></li>\n";
+		}
+		if(schema != inSchema){
+			var checkStr = "";
+			$(workObj).each(function(i,v){
+				if(v.scm_nm == item.schema && v.obj_nm == "") checkStr = " checked";
+			});
+			html += "<li class='active'><a href='#'>"+item.schema+"</a>";
+			html += "<div class='inp_chk'>";
+			html += "<input type='checkbox' id='schema"+schemaCnt+"' name='tree' value='"+item.schema+"' otype='schema' schema='"+item.schema+"'"+checkStr+"/><label for='schema"+schemaCnt+"'></label>";
+			html += "</div>";
+			html += "<ul>\n";
+		}
+		
+		var checkStr = "";
+		$(workObj).each(function(i,v){
+			if(v.scm_nm == item.schema && v.obj_nm == item.name) checkStr = " checked";
+		});
+		html += "<li><a href='#'>"+item.name+"</a>";
+		html += "<div class='inp_chk'>";
+		html += "<input type='checkbox' id='table"+index+"' name='tree' value='"+item.name+"' otype='table' schema='"+item.schema+"'"+checkStr+"/><label for='table"+index+"'></label>";
+		html += "</div>";
+		html += "</li>\n";
+
+		if(schema != inSchema){
+			schema = inSchema;
+			schemaCnt++;
+		}
+	});
+	if(schemaCnt > 0) html += "</ul></li>";
+	html += "</ul>";
+
+	$(".tNav").html("");
+	$(".tNav").html(html);
+	$.getScript( "/js/common.js", function() {});
 }

@@ -161,4 +161,6 @@ public interface BackupService {
 
 	
 	public List<Map<String, Object>> selectWorkOptionLayer(int bck_wrk_id) throws Exception;
+
+	public List<Map<String, Object>> selectWorkObjectLayer(int bck_wrk_id) throws Exception;
 }

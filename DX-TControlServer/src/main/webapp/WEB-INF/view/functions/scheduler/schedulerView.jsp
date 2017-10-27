@@ -614,9 +614,9 @@ function fn_insertSchedule(){
 								<span class="btn"  onClick="fn_insertSchedule();" id="int_button"><button>백업 스케줄 등록</button></span>
 							</div>
 							<div class="cmm_bd">
-								<div class="sub_tit">
-									<p>스케줄 현황</p>
-								</div>
+								<p><img src="../images/ico_sch_9.png" />
+									스케줄 현황</p>
+								
 								<div class="overflow_area">							
 									<table id="bck_scheduleList" class="cell-border display" width="100%">
 										<thead>

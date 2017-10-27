@@ -142,7 +142,7 @@
 							<div class="sch_form p1">
 								<div class="inp_chk chk3">
 									<input type="checkbox" id="chkLogActive" name="chkLogActive"<c:if test="${fn:toLowerCase(audit.isActive) == 'on'}"> checked="checked"</c:if>  onClick="javascript:fnChkLogActive();">
-									<label for="chkLogActive"><span class="chk_img"><img src="../images/popup/ico_box_1.png" alt="" /></span>감사로그 활성화</label>
+									<label for="chkLogActive"><span class="chk_img"><img src="../images/popup/ico_box_1.png" alt="" /></span>감사활성화</label>
 								</div>
 							</div>
 							<div class="layout_grp">
@@ -157,7 +157,7 @@
 										</colgroup>
 										<tbody>
 											<tr>
-												<th scope="row">로그수준${fn:toUpperCase(audit.log_level)}</th>
+												<th scope="row">로그수준</th>
 												<td colspan="3">
 													<select class="select" name="log_level" id="log_level">
 														<option value="DEBUG"<c:if test="${fn:toUpperCase(audit.log_level) == 'DEBUG'}"> selected</c:if>>DEBUG</option>
@@ -265,7 +265,7 @@
 														</div>
 													</th>
 													<th scope="col">NO</th>
-													<th scope="col">Role</th>
+													<th scope="col">감사 대상 계정</th>
 												</tr>
 											</thead>
 											<tbody>

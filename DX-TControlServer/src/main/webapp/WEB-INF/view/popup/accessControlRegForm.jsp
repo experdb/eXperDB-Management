@@ -71,78 +71,101 @@
 	function fn_insert() {
 		if (!fn_accessControl())return false;
 		var type = $("#ctf_tp_nm").val();
-		var prms_ipadr = "";
+		var prms_ipadr = "''";
 		if(type!="local"){
 			var ip = document.getElementById("ip").value;
 			var prefix = document.getElementById("prefix").value;
 			if(prefix!=""){
-				prms_ipadr = ip + "/" + prefix;	
+				prms_ipadr = "'"+ip + "/" + prefix+"'";	
 			}else{
-				prms_ipadr = ip;
+				prms_ipadr = "'"+ip+"'";
 			}	
 		}
 			
-		$.ajax({
-			url : "/insertAccessControl.do",
-			data : {
-				db_svr_id : '${db_svr_id}',
-				prms_ipadr : prms_ipadr,
-				prms_ipmaskadr : $("#prms_ipmaskadr").val(),
-				dtb : $("#dtb").val(),
-				prms_usr_id : $("#prms_usr_id").val(),
-				ctf_mth_nm : $("#ctf_mth_nm").val(),
-				ctf_tp_nm : $("#ctf_tp_nm").val(),
-				opt_nm : $("#opt_nm").val()				
-			},
-			type : "post",
-			error : function(request, status, error) {
-				alert("ERROR CODE : "+ request.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ request.responseText.replace(/(<([^>]+)>)/gi, ""));
-			},
-			success : function(result) {
-				alert("저장하였습니다.");
-				window.close();
-				opener.fn_select();
-			}
-		});
+		var prms_ipmaskadr = "'"+$("#prms_ipmaskadr").val()+"'";
+		var dtb = "'"+$("#dtb").val()+"'";
+		var prms_usr_id = "'"+$("#prms_usr_id").val()+"'";
+		var ctf_mth_nm = "'"+$("#ctf_mth_nm").val()+"'";
+		var ctf_tp_nm = "'"+$("#ctf_tp_nm").val()+"'";
+		var opt_nm = "'"+$("#opt_nm").val()+"'";
+		opener.location.href = "javascript:fn_isnertSave("+prms_ipadr+","+prms_ipmaskadr+","+dtb+","+prms_usr_id+","+ctf_mth_nm+","+ctf_tp_nm+","+opt_nm+");";
+		window.close();
+		 
+// 		$.ajax({
+// 			url : "/insertAccessControl.do",
+// 			data : {
+// 				db_svr_id : '${db_svr_id}',
+// 				prms_ipadr : prms_ipadr,
+// 				prms_ipmaskadr : $("#prms_ipmaskadr").val(),
+// 				dtb : $("#dtb").val(),
+// 				prms_usr_id : $("#prms_usr_id").val(),
+// 				ctf_mth_nm : $("#ctf_mth_nm").val(),
+// 				ctf_tp_nm : $("#ctf_tp_nm").val(),
+// 				opt_nm : $("#opt_nm").val()				
+// 			},
+// 			type : "post",
+// 			error : function(request, status, error) {
+// 				alert("ERROR CODE : "+ request.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ request.responseText.replace(/(<([^>]+)>)/gi, ""));
+// 			},
+// 			success : function(result) {
+// 				alert("저장하였습니다.");
+// 				window.close();
+// 				opener.fn_select();
+// 			}
+// 		});
 	}
 
 	/* 수정 버튼 클릭시*/
 	function fn_update() {
 		if (!fn_accessControl())return false;
 		var type = $("#ctf_tp_nm").val();
-		var prms_ipadr = "";
+		var prms_ipadr = "''";
 		if(type!="local"){
 			var ip = document.getElementById("ip").value;
 			var prefix = document.getElementById("prefix").value;
 			if(prefix!=""){
-				prms_ipadr = ip + "/" + prefix;	
+				prms_ipadr = "'"+ip + "/" + prefix+"'";	
 			}else{
-				prms_ipadr = ip;
+				prms_ipadr = "'"+ip+"'";
 			}	
 		}
-		$.ajax({
-			url : "/updateAccessControl.do",
-			data : {
-				prms_seq : '${prms_seq}',
-				db_svr_id : '${db_svr_id}',
-				prms_ipadr : prms_ipadr,
-				prms_ipmaskadr : $("#prms_ipmaskadr").val(),
-				dtb : $("#dtb").val(),
-				prms_usr_id : $("#prms_usr_id").val(),
-				ctf_mth_nm : $("#ctf_mth_nm").val(),
-				ctf_tp_nm : $("#ctf_tp_nm").val(),
-				opt_nm : $("#opt_nm").val()
-			},
-			type : "post",
-			error : function(request, status, error) {
-				alert("ERROR CODE : "+ request.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ request.responseText.replace(/(<([^>]+)>)/gi, ""));
-			},
-			success : function(result) {
-				alert("저장하였습니다.");
-				window.close();
-				opener.fn_select();
-			}
-		});
+		
+		var prms_seq = '${prms_seq}';
+		var prms_ipmaskadr = "'"+$("#prms_ipmaskadr").val()+"'";
+		var dtb = "'"+$("#dtb").val()+"'";
+		var prms_usr_id = "'"+$("#prms_usr_id").val()+"'";
+		var ctf_mth_nm = "'"+$("#ctf_mth_nm").val()+"'";
+		var ctf_tp_nm = "'"+$("#ctf_tp_nm").val()+"'";
+		var opt_nm = "'"+$("#opt_nm").val()+"'";
+		opener.location.href = "javascript:fn_updateSave("+prms_seq+","+prms_ipadr+","+prms_ipmaskadr+","+dtb+","+prms_usr_id+","+ctf_mth_nm+","+ctf_tp_nm+","+opt_nm+");";
+		window.close();
+		
+		
+		
+		
+// 		$.ajax({
+// 			url : "/updateAccessControl.do",
+// 			data : {
+// 				prms_seq : '${prms_seq}',
+// 				db_svr_id : '${db_svr_id}',
+// 				prms_ipadr : prms_ipadr,
+// 				prms_ipmaskadr : $("#prms_ipmaskadr").val(),
+// 				dtb : $("#dtb").val(),
+// 				prms_usr_id : $("#prms_usr_id").val(),
+// 				ctf_mth_nm : $("#ctf_mth_nm").val(),
+// 				ctf_tp_nm : $("#ctf_tp_nm").val(),
+// 				opt_nm : $("#opt_nm").val()
+// 			},
+// 			type : "post",
+// 			error : function(request, status, error) {
+// 				alert("ERROR CODE : "+ request.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ request.responseText.replace(/(<([^>]+)>)/gi, ""));
+// 			},
+// 			success : function(result) {
+// 				alert("저장하였습니다.");
+// 				window.close();
+// 				opener.fn_select();
+// 			}
+// 		});
 	}
 
 	$(window.document).ready(function() {
@@ -239,7 +262,7 @@
 				</colgroup>
 				<tbody>
 					<tr>
-						<th scope="row" class="ico_t1">서버명</th>
+						<th scope="row" class="ico_t1">DBMS명</th>
 						<td><input type="text" class="txt bg1" value="${db_svr_nm}" readonly="readonly"/></td>
 						<th scope="row" class="ico_t1">Database</th>
 						<td>
@@ -317,7 +340,7 @@
 		<div class="btn_type_02">
 			<span class="btn btnC_01">					
 				<c:if test="${act == 'i'}">
-					<button type="button" onclick="fn_insert()">저장</button>
+					<button type="button" onclick="fn_insert()" >저장</button>
 				</c:if>
 				<c:if test="${act == 'u'}">
 					<button type="button" onclick="fn_update()">저장</button>

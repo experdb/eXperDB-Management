@@ -59,7 +59,8 @@ function fn_update_work(){
 		  		data_pth : $("#data_pth").val(),
 		  		bck_pth : $("#bck_pth").val(),
 		  		acv_file_stgdt : $("#acv_file_stgdt").val(),
-		  		acv_file_mtncnt : $("#acv_file_mtncnt").val()
+		  		acv_file_mtncnt : $("#acv_file_mtncnt").val(),
+		  		log_file_pth : $("#log_file_pth").val()
 		  	},
 			type : "post",
 			error : function(request, status, error) {
@@ -119,6 +120,10 @@ function valCheck(){
 		alert("백업경로에 유효한 경로를 입력후 경로체크를 해 주세요.");
 		$("#bck_pth").focus();
 		return false;		
+	}else if($("#check_path3").val() != "Y"){
+		alert("로그경로에 유효한 경로를 입력후 경로체크를 해 주세요.");
+		$("#log_file_pth").focus();
+		return false;
 	}else{
 		return true;
 	}
@@ -142,6 +147,9 @@ function checkFolder(keyType){
 	}else if(save_path == ""){
 		alert("백업경로를 입력해 주세요.");
 		$("#bck_pth").focus();
+	}else if(save_path == "" && keyType == 3){
+		alert("로그경로를 입력해 주세요.");
+		$("#log_file_pth").focus();
 	}else{
 		$.ajax({
 			async : false,
@@ -159,8 +167,10 @@ function checkFolder(keyType){
 					if(data.result.RESULT_DATA.IS_DIRECTORY == 0){
 						if(keyType == 1){
 							$("#check_path1").val("Y");
-						}else{
+						}else if(keyType == 2){
 							$("#check_path2").val("Y");
+						}else{
+							$("#check_path3").val("Y");
 						}
 						alert("유효한 경로입니다.");
 							var volume = data.result.RESULT_DATA.CAPACITY;
@@ -189,6 +199,7 @@ function checkFolder(keyType){
 <input type="hidden" name="wrk_id" id="wrk_id" value="${wrk_id}"/>
 <input type="hidden" name="check_path1" id="check_path1" value="Y"/>
 <input type="hidden" name="check_path2" id="check_path2" value="Y"/>
+<input type="hidden" name="check_path3" id="check_path3" value="Y"/>
 	<div id="pop_layer">
 		<div class="pop-container">
 			<div class="pop_cts">
@@ -217,6 +228,12 @@ function checkFolder(keyType){
 					</table>
 				</div>
 				<div class="pop_cmm mt25">
+							<span class="chk">
+								<div class="inp_chk chk3">
+									<input type="checkbox" name="cps_yn" id="cps_yn" value="Y" <c:if test="${workInfo[0].cps_yn eq 'Y'}"> checked</c:if>/>
+									<label for="cps_yn">압축하기</label>
+								</div>
+							</span>
 					<div class="bak_option">
 						<div class="option">
 							<span class="tit">백업옵션</span>
@@ -227,13 +244,12 @@ function checkFolder(keyType){
 									<option value="TC000302"<c:if test="${workInfo[0].bck_opt_cd == 'TC000302'}"> selected</c:if>>incremental</option>
 									<option value="TC000303"<c:if test="${workInfo[0].bck_opt_cd == 'TC000303'}"> selected</c:if>>archive</option>
 								</select>
-							</span>
-							<span class="chk">
-								<div class="inp_chk chk3">
-									<input type="checkbox" name="cps_yn" id="cps_yn" value="Y" <c:if test="${workInfo[0].cps_yn eq 'Y'}"> checked</c:if>/>
-									<label for="cps_yn">압축하기</label>
-								</div>
-							</span>
+							</span>						
+							<span class="tit" style="margin-right: 5px;">로그경로</span>
+							<span style="margin-right: 5px;">
+								<input type="text" class="txt" name="log_file_pth" id="log_file_pth" maxlength=200  value="<c:out value="${workInfo[0].log_file_pth}"/>" style="width:230px" onKeydown="$('#check_path3').val('N')"/>
+								<span class="btn btnC_01"><button type="button" class= "btn_type_02" onclick="checkFolder(3)" style="width: 60px; margin-right: -60px; margin-top: 0;">경로체크</button></span>
+							</span>	
 							
 							<table class="write">
 								<colgroup>

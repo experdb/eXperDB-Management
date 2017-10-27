@@ -817,6 +817,12 @@ public class BackupController {
 		List<DbVO> resultSet = null;
 		
 		try {			
+			//화면접근이력 남기기
+			CmmnUtils.saveHistory(request, historyVO);
+			historyVO.setExe_dtl_cd("DX-T0051");
+			historyVO.setMnu_id(35);
+			accessHistoryService.insertHistory(historyVO);
+			
 			int db_svr_id = Integer.parseInt(request.getParameter("db_svr_id"));
 			
 			HttpSession session = request.getSession();
@@ -872,6 +878,12 @@ public class BackupController {
 		List<DbVO> resultSet = null;
 		
 		try {
+			//화면접근이력 남기기
+			CmmnUtils.saveHistory(request, historyVO);
+			historyVO.setExe_dtl_cd("DX-T0052");
+			historyVO.setMnu_id(35);
+			accessHistoryService.insertHistory(historyVO);
+			
 			int db_svr_id = Integer.parseInt(request.getParameter("db_svr_id"));
 			
 			HttpSession session = request.getSession();
