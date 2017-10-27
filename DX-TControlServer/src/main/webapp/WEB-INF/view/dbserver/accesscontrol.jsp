@@ -205,10 +205,14 @@
 			    } ).draw();	
 	}
 	
-	function fn_updateSave(prms_seq,prms_ipadr,prms_ipmaskadr,dtb,prms_usr_id,ctf_mth_nm,ctf_tp_nm,opt_nm){
-		alert(prms_seq);
-		alert(dtb);
-		alert(prms_usr_id);
+	function fn_updateSave(result){
+		table.cell(result.idx, 2).data(result.ctf_tp_nm).draw();
+		table.cell(result.idx, 3).data(result.dtb).draw();
+		table.cell(result.idx, 4).data(result.prms_usr_id).draw();
+		table.cell(result.idx, 5).data(result.prms_ipadr).draw();
+		table.cell(result.idx, 6).data(result.prms_ipmaskadr).draw();
+		table.cell(result.idx, 7).data(result.ctf_mth_nm).draw();
+		table.cell(result.idx, 8).data(result.opt_nm).draw();
 	}
 	
 	
@@ -227,6 +231,7 @@
 	
 	/* 수정 버튼 클릭시*/
 	function fn_update(){
+		var idx = table.row('.selected').index();
 		var rowCnt = table.rows('.selected').data().length;
 		if (rowCnt == 1) {
 			var User = table.row('.selected').data().User;
@@ -238,7 +243,7 @@
 			var Ipmask = table.row('.selected').data().Ipmask;
 			var Option = table.row('.selected').data().Option;
 			
-			var popUrl = "/popup/accessControlRegForm.do?act=u&&db_svr_id=${db_svr_id}&&User="+User+"&&Seq="+Seq+"&&Method="+Method+"&&Database="+Database+"&&Type="+Type+"&&Ipadr="+Ipadr+"&&Ipmask="+Ipmask+"&&Option="+Option; // 서버 url 팝업경로
+			var popUrl = "/popup/accessControlRegForm.do?act=u&&db_svr_id=${db_svr_id}&&User="+User+"&&Seq="+Seq+"&&Method="+Method+"&&Database="+Database+"&&Type="+Type+"&&Ipadr="+Ipadr+"&&Ipmask="+Ipmask+"&&Option="+Option+"&&idx="+idx; // 서버 url 팝업경로
 			var width = 920;
 			var height = 420;
 			var left = (window.screen.width / 2) - (width / 2);
