@@ -93,11 +93,6 @@ public class TreeTransferServiceImpl extends EgovAbstractServiceImpl implements 
 	}
 
 	@Override
-	public List<TransferDetailMappingVO> selectTransferMappingAll(int cnr_id) throws Exception {
-		return treeTransferDAO.selectTransferMappingAll(cnr_id);
-	}
-
-	@Override
 	public void deleteTransferRelation(int trf_trg_mpp_id) throws Exception {
 		treeTransferDAO.deleteTransferRelation(trf_trg_mpp_id);
 	}

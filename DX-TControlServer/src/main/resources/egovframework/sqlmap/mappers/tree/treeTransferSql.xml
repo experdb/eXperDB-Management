@@ -303,38 +303,7 @@
 		and S.USEYN='Y'
 		AND I.TRF_TRG_ID =#{trf_trg_id}
     </select>
-
-    <select id="selectTransferMappingAll" parameterType="int" resultType="transferDetailMappingVO">
-    	/**
-	 	*  Query ID : selectTransferMappingAll
-	 	* Description : 전송매핑테이블내역 전체 조회
-	 	* Author : 김주영
-	 	**/
-		SELECT 
-		  I.TRF_TRG_ID
-		, R.TRF_TRG_MPP_ID
-		, L.TRF_TB_ID
-		, I.TRF_TRG_CNN_NM
-		, L.SCM_NM
-		, L.TB_ENGL_NM
-		, D.DB_ID
-		, D.DB_NM
-		, S.DB_SVR_NM
-		FROM 
-		   T_TRFTRGCNG_I I
-		,  T_TRFTRGMPP_R R
-		,  T_TRFMPPTB_L L
-		,  T_DB_I D
-		,  T_DBSVR_I S
-		WHERE I.TRF_TRG_ID=R.TRF_TRG_ID
-		AND R.TRF_TRG_MPP_ID=L.TRF_TRG_MPP_ID
-		AND R.DB_ID =D.DB_ID
-		AND D.DB_SVR_ID =S.DB_SVR_ID
-		AND D.USEYN='Y'
-		AND S.USEYN='Y'
-		AND R.CNR_ID=#{cnr_id}
-    </select>
-        
+     
     <delete id="deleteTransferRelation" parameterType="int">
         /**
 	 	*  Query ID : deleteTransferRelation
