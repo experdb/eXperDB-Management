@@ -30,20 +30,37 @@ function fn_init(){
 	 ******************************************************** */
 	tableRman = $('#rmanDataTable').DataTable({
 	scrollY : "245px",
+	scrollX : true,
 	paging : false,
 	searching : false,	
 	deferRender : true,
 	columns : [
 		{data : "rownum", defaultContent : "", targets : 0, orderable : false, checkboxes : {'selectRow' : true}}, 
 		{data : "idx", className : "dt-center", defaultContent : ""}, 
-		{data : "bck_bsn_dscd_nm", className : "dt-center", defaultContent : ""},
 		{data : "wrk_nm", className : "dt-center", defaultContent : ""
 			,"render": function (data, type, full) {
 				  return '<span onClick=javascript:fn_workLayer("'+full.wrk_nm+'"); style=cursor:pointer>' + full.wrk_nm + '</span>';
 			}
 		}, //work명
-		{data : "bck_opt_cd_nm", className : "dt-center", defaultContent : ""},
-		{data : "file_stg_dcnt", className : "dt-center", defaultContent : ""}, 
+		{data : "wrk_exp", className : "dt-center", defaultContent : ""},	
+		{data : "bck_opt_cd_nm", className : "dt-center", defaultContent : ""
+			,"render": function (data, type, full) {
+				if(full.bck_opt_cd=="TC000301"){
+					var html = '전체백업';
+						return html;
+				}else if(full.bck_opt_cd=="TC000302"){
+					var html = '증분백업';
+					return html;
+				}else{
+					var html = '변경로그백업';
+					return html;
+				}
+				return data;
+			}
+		},
+		{data : "data_pth", className : "dt-center", defaultContent : ""},	
+		{data : "bck_pth", className : "dt-center", defaultContent : ""},	
+		{data : "log_file_pth", className : "dt-center", defaultContent : ""},	
 		{data : "frst_regr_id", className : "dt-center", defaultContent : ""},
 		{data : "frst_reg_dtm", className : "dt-center", defaultContent : ""},
 		{data : "lst_mdfr_id", className : "dt-center", defaultContent : ""},
@@ -58,22 +75,41 @@ function fn_init(){
 	 ******************************************************** */
 	tableDump = $('#dumpDataTable').DataTable({
 		scrollY : "245px",
+		scrollX : true,
 		paging : false,
 		searching : false,	
 		deferRender : true,
 	columns : [
+	   	    //NO
+		    //WORK명
+		    //WORK설명
+		    //데이터베이스
+		    //파일포멧
+		    //압축율
+		    //인코딩방식
+		    //Rolename
+		    //파일보관일수
+		    //백업유지개수
+		    //등록자
+		    //등록일시
+		    //수정자
+		    //수정일시
 		{data : "rownum", defaultContent : "", targets : 0, orderable : false, checkboxes : {'selectRow' : true}}, 
 		{data : "idx", className : "dt-center", defaultContent : ""}, 
-		{data : "bck_bsn_dscd_nm", className : "dt-center", defaultContent : ""},
 		{data : "wrk_nm", className : "dt-center", defaultContent : ""
 			,"render": function (data, type, full) {				
 				  return '<span onClick=javascript:fn_workLayer("'+full.wrk_nm+'"); style=cursor:pointer>' + full.wrk_nm + '</span>';
 			}
-		}, //work명
+		},
+		{data : "wrk_exp", className : "dt-center", defaultContent : ""},
 		{data : "db_nm", className : "dt-center", defaultContent : ""}, 
+		{data : "save_pth", className : "dt-center", defaultContent : ""},
 		{data : "file_fmt_cd_nm", className : "dt-center", defaultContent : ""}, 
+		{data : "cprt", className : "dt-center", defaultContent : ""}, 
+		{data : "encd_mth_nm", className : "dt-center", defaultContent : ""}, 
+		{data : "usr_role_name", className : "dt-center", defaultContent : ""}, 
 		{data : "file_stg_dcnt", className : "dt-center", defaultContent : ""}, 	
-		{data : "bck_mtn_ecnt", className : "dt-center", defaultContent : ""}, 
+		{data : "bck_mtn_ecnt", className : "dt-center", defaultContent : ""}, 		
 		{data : "frst_regr_id", className : "dt-center", defaultContent : ""},
 		{data : "frst_reg_dtm", className : "dt-center", defaultContent : ""},
 		{data : "lst_mdfr_id", className : "dt-center", defaultContent : ""},
@@ -84,29 +120,36 @@ function fn_init(){
 	
 	tableRman.tables().header().to$().find('th:eq(0)').css('min-width', '10px');
 	tableRman.tables().header().to$().find('th:eq(1)').css('min-width', '30px');
-	tableRman.tables().header().to$().find('th:eq(2)').css('min-width', '150px');
+	tableRman.tables().header().to$().find('th:eq(2)').css('min-width', '200px');
 	tableRman.tables().header().to$().find('th:eq(3)').css('min-width', '200px');
-	tableRman.tables().header().to$().find('th:eq(4)').css('min-width', '60px');
-	tableRman.tables().header().to$().find('th:eq(5)').css('min-width', '100px');
-	tableRman.tables().header().to$().find('th:eq(6)').css('min-width', '70px');
-	tableRman.tables().header().to$().find('th:eq(7)').css('min-width', '100px');  
-	tableRman.tables().header().to$().find('th:eq(8)').css('min-width', '70px');
-	tableRman.tables().header().to$().find('th:eq(9)').css('min-width', '100px');
-	tableRman.tables().header().to$().find('th:eq(10)').css('min-width', '0px');
+	tableRman.tables().header().to$().find('th:eq(4)').css('min-width', '100px');
+	tableRman.tables().header().to$().find('th:eq(5)').css('min-width', '230px');
+	tableRman.tables().header().to$().find('th:eq(6)').css('min-width', '230px');
+	tableRman.tables().header().to$().find('th:eq(7)').css('min-width', '230px');
+	tableRman.tables().header().to$().find('th:eq(8)').css('min-width', '100px');
+	tableRman.tables().header().to$().find('th:eq(9)').css('min-width', '100px');  
+	tableRman.tables().header().to$().find('th:eq(10)').css('min-width', '100px');
+	tableRman.tables().header().to$().find('th:eq(11)').css('min-width', '100px');
+	tableRman.tables().header().to$().find('th:eq(12)').css('min-width', '0px');
+
 
 	tableDump.tables().header().to$().find('th:eq(0)').css('min-width', '10px');
     tableDump.tables().header().to$().find('th:eq(1)').css('min-width', '30px');
-	tableDump.tables().header().to$().find('th:eq(2)').css('min-width', '150px');
-	tableDump.tables().header().to$().find('th:eq(3)').css('min-width', '150px');
-	tableDump.tables().header().to$().find('th:eq(4)').css('min-width', '150px');
-	tableDump.tables().header().to$().find('th:eq(5)').css('min-width', '70px');
-	tableDump.tables().header().to$().find('th:eq(6)').css('min-width', '100px');
-	tableDump.tables().header().to$().find('th:eq(7)').css('min-width', '100px');  
-	tableDump.tables().header().to$().find('th:eq(8)').css('min-width', '70px');
+	tableDump.tables().header().to$().find('th:eq(2)').css('min-width', '200px');
+	tableDump.tables().header().to$().find('th:eq(3)').css('min-width', '200px');
+	tableDump.tables().header().to$().find('th:eq(4)').css('min-width', '130px');
+	tableDump.tables().header().to$().find('th:eq(5)').css('min-width', '250px');
+	tableDump.tables().header().to$().find('th:eq(6)').css('min-width', '60px');
+	tableDump.tables().header().to$().find('th:eq(7)').css('min-width', '60px');
+	tableDump.tables().header().to$().find('th:eq(8)').css('min-width', '100px');  
 	tableDump.tables().header().to$().find('th:eq(9)').css('min-width', '100px');
-	tableDump.tables().header().to$().find('th:eq(10)').css('min-width', '70px');  
-	tableDump.tables().header().to$().find('th:eq(11)').css('min-width', '100px');
-	tableDump.tables().header().to$().find('th:eq(12)').css('min-width', '0px');
+	tableDump.tables().header().to$().find('th:eq(10)').css('min-width', '90px');  
+	tableDump.tables().header().to$().find('th:eq(11)').css('min-width', '90px');
+	tableDump.tables().header().to$().find('th:eq(12)').css('min-width', '70px');
+	tableDump.tables().header().to$().find('th:eq(13)').css('min-width', '100px');
+	tableDump.tables().header().to$().find('th:eq(14)').css('min-width', '70px');  
+	tableDump.tables().header().to$().find('th:eq(15)').css('min-width', '100px');
+	tableDump.tables().header().to$().find('th:eq(16)').css('min-width', '0px');
 	$(window).trigger('resize'); 
 }
 
@@ -145,7 +188,7 @@ function fn_dump_find_list(){
 function fn_rman_reg_popup(){
 	var popUrl = "/popup/rmanRegForm.do?db_svr_id=${db_svr_id}";
 	var width = 954;
-	var height = 650;
+	var height = 600;
 	var left = (window.screen.width / 2) - (width / 2);
 	var top = (window.screen.height /2) - (height / 2);
 	var popOption = "width="+width+", height="+height+", top="+top+", left="+left+", resizable=no, scrollbars=yes, status=no, toolbar=no, titlebar=yes, location=no,";
@@ -305,72 +348,7 @@ function getDumpDataList(wrk_nm, db_id){
 	});
 }
 
-/* ********************************************************
- * Make Rman Data Table
- ******************************************************** */
-/* function dataRmanList(data){
-	var i = 1;
-	$("#rmanDataTable > tbody:last > tr").remove();
-	$(data).each(function (index, item) {	
-		var html = "";
-		html += "<tr>";
-		html += "<td align='center'><div class='inp_chk'><input type='checkBox' name='rmanWorkId' id='rmanWorkId"+i+"' value='"+item.wrk_id+"' onClick=\"fn_rman_check_close()\"><label for='rmanWorkId"+i+"'></label></div></td>";
-		html += "<td align='center'>"+i+"</td>";
-		html += "<td align='center'>"+item.bck_bsn_dscd_nm+"</td>";
-		html += "<td align='center''><a href='javascript:fn_rman_reform_popup(\""+item.wrk_id+"\")'><b>"+item.wrk_nm+"</b></a></td>";
-		html += "<td align='left'>"+item.bck_opt_cd_nm+"</td>";
-		html += "<td align='center'>"+item.file_stg_dcnt+"</td>";
-		html += "<td align='center'>"+item.frst_regr_id+"</td>";
-		html += "<td align='center'>"+item.frst_reg_dtm+"</td>";
-		html += "<td align='center'>"+item.lst_mdfr_id+"</td>";
-		html += "<td align='center'>"+item.lst_mdf_dtm+"</td>";		
-		html += "</tr>";
-		$("#rmanDataTable > tbody:last").append(html);
-		i++;
-	});
-	
-	if(data.length == 0){
-		var html = "";
-		$("#rmanDataTable > tbody:last > tr:last").remove();
-		html += "<tr><td colspan=10 align='center'>등록된 내역이 없습니다.</td></tr>";
-		$("#rmanDataTable > tbody:last").append(html);
-	}
-} */
 
-/* ********************************************************
- * Make Dump Data Table
- ******************************************************** */
-/* function dataDumpList(data){
-	var i = 1;
-	$("#dumpDataTable > tbody:last > tr").remove();
-	$(data).each(function (index, item) {	
-		var html = "";
-		html += "<tr>";
-		html += "<td align='center'><div class='inp_chk'><input type='checkBox' name='dumpWorkId' id='dumpWorkId"+i+"' value='"+item.bck_wrk_id+"' onClick=\"fn_dump_check_close()\"><label for='dumpWorkId"+i+"'></label></div></td>";
-		html += "<td align='center'>"+i+"</td>";
-		html += "<td align='center'>"+item.bck_bsn_dscd_nm+"</td>";
-		html += "<td align='center'><a href='javascript:fn_dump_reform_popup(\""+item.bck_wrk_id+"\")'><b>"+item.wrk_nm+"</a></a></td>";
-		html += "<td align='left'>"+item.db_nm+"</td>";
-		html += "<td align='center'>"+item.file_fmt_cd_nm+"</td>";
-		html += "<td align='center'>"+item.file_stg_dcnt+"</td>";
-		html += "<td align='center'>"+item.bck_mtn_ecnt+"</td>";
-		html += "<td align='center'>"+item.frst_regr_id+"</td>";
-		html += "<td align='center'>"+item.frst_reg_dtm+"</td>";
-		html += "<td align='center'>"+item.lst_mdfr_id+"</td>";
-		html += "<td align='center'>"+item.lst_mdf_dtm+"</td>";		
-		html += "</tr>";
-		$("#dumpDataTable > tbody:last").append(html);
-		i++;
-	});
-	
-	if(data.length == 0){
-		var html = "";
-		$("#dumpDataTable > tbody:last > tr:last").remove();
-		html += "<tr><td colspan=12 align='center'>등록된 내역이 없습니다.</td></tr>";
-		$("#dumpDataTable > tbody:last").append(html);
-	}
-}
- */
 /* ********************************************************
  * Rman Data List Checkbox Check
  ******************************************************** */
@@ -578,19 +556,19 @@ function selectTab(tab){
 						<colgroup>
 							<col style="width:80px;" />
 							<col style="width:230px;" />
-							<col style="width:60px;" />
+							<col style="width:90px;" />
 							<col />
 						</colgroup>
 						<tbody>
 							<tr>
 								<th scope="row" class="t8">Work명</th>
 								<td><input type="text" name="wrk_nm" id="wrk_nm" class="txt t3"/></td>
-								<th scope="row" class="t9">Mode</th>
+								<th scope="row" class="t9" >백업옵션</th>
 								<td><select name="bck_opt_cd" id="bck_opt_cd" class="txt t3" style="width:150px;">
 										<option value="">선택</option>
-										<option value="TC000301">FULL</option>
-										<option value="TC000302">incremental</option>
-										<option value="TC000303">archive</option>
+										<option value="TC000301">전체백업</option>
+										<option value="TC000302">증분백업</option>
+										<option value="TC000303">변경로그백업</option>
 									</select>
 								</td>
 							</tr>
@@ -630,19 +608,22 @@ function selectTab(tab){
 								<tr>
 									<th width="10"></th>
 									<th width="30">No</th>
-									<th width="100">백업설정</th>
-									<th width="100">Work명</th>
-									<th width="60">백업구분</th>
-									<th width="10">파일보관일</th>
-									<th width="70">등록자</th>
+									<th width="200">Work명</th>
+									<th width="200">Work설명</th>
+									<th width="100">백업옵션</th>
+									<th width="230">데이터경로</th>
+									<th width="230">백업경로</th>
+									<th width="230">로그경로</th>
+									<th width="100">등록자</th>
 									<th width="100">등록일시</th>
-									<th width="70">수정자</th>
+									<th width="100">수정자</th>
 									<th width="100">수정일시</th>
 									<th width="0"></th>
 								</tr>
 							</thead>
 						</table>	
 				
+
 	
 					<table id="dumpDataTable" class="cell-border" >
 						<caption>Dump백업관리 화면 리스트</caption>
@@ -650,12 +631,16 @@ function selectTab(tab){
 								<tr>
 									<th width="10"></th>
 									<th width="30">No</th>
-									<th width="150">백업설정</th>
-									<th width="150">Work명</th>
-									<th width="150">Database</th>
-									<th width="70">파일포맷</th>
-									<th width="100">파일보관일</th>
-									<th width="30">백업파일유지수</th>
+									<th width="200">Work명</th>
+									<th width="200">Work설명</th>
+									<th width="130">Database</th>
+									<th width="250">저장경로</th>
+									<th width="60">파일포맷</th>
+									<th width="60">압축률</th>
+									<th width="100">인코딩방식</th>
+									<th width="100">Rolename</th>
+									<th width="90">파일보관일</th>
+									<th width="90">백업파일유지수</th>
 									<th width="70">등록자</th>
 									<th width="100">등록일시</th>
 									<th width="70">수정자</th>

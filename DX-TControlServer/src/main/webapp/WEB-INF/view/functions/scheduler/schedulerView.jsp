@@ -25,8 +25,8 @@ function fn_init(){
 	/* ********************************************************
 	 * work리스트
 	 ******************************************************** */
-	table = $('#bck_scheduleList').DataTable({
-	scrollY : "380px",
+	table = $('#week_scheduleList').DataTable({
+	scrollY : "350px",
 	scrollX: true,	
 	paging : false,
 	searching : false,	
@@ -503,6 +503,13 @@ function fn_popup(scd_id){
 $(window.document).ready(function() {
 	fn_init();
 	fn_selectBckSchedule();
+	//fn_selectMonthBckSchedule();
+	$("#week_scheduleList").show();
+	$("#week_scheduleList_wrapper").show();
+	$("#month_scheduleList").hide();
+	$("#month_scheduleList_wrapper").hide();
+	$("#btnWeek").show();
+	$("#btnMonth").hide();
 });
 
 function fn_selectBckSchedule(){
@@ -522,73 +529,21 @@ function fn_selectBckSchedule(){
 }
 
 
-/* function fn_insertSchedule(){
-	var exe_perd_cd = $("#exe_perd_cd").val(); 
-		
-	if(exe_perd_cd == "TC001602"){
-	    var dayWeek = new Array();
-	    var list = $("input[name='chk']");
-	    for(var i = 0; i < list.length; i++){
-	        if(list[i].checked){ //선택되어 있으면 배열에 값을 저장함
-	        	dayWeek.push(1);
-	        }else{
-	        	dayWeek.push(list[i].value);
-	        }
-	    }	    
-		var exe_dt = dayWeek.toString().replace(/,/gi,'').trim();
-	}else if(exe_perd_cd == "TC001605"){
-		var exe_dt = $("#datepicker1").val().replace(/-/gi,'').trim();
-	}	
-
-	if (!fn_validation()) return false;
-	
-	var datas = table.rows().data();
-
-	if(datas.length < 1){
-		alert("WORK 정보가 존재 하지않습니다.");
-		return false;
-	}
-	
-	var arrmaps = [];
-	for (var i = 0; i < datas.length; i++){
-		var tmpmap = new Object();
-		tmpmap["index"] = i+1;
-		tmpmap["wrk_nm"] = table.rows().data()[i].wrk_nm;
-        tmpmap["wrk_id"] = table.rows().data()[i].wrk_id;      
-        tmpmap["nxt_exe_yn"] = table.$('select option:selected', i).val();
-		arrmaps.push(tmpmap);	
+function fn_selectMonthBckSchedule(){
+	$.ajax({
+		url : "/selectMonthBckSchedule.do",
+		data : {db_svr_id : db_svr_id},
+		dataType : "json",
+		type : "post",
+		error : function(xhr, status, error) {
+			alert("실패")
+		},
+		success : function(result) {
+			table.clear().draw();
+			table.rows.add(result).draw();
 		}
-
-	if (confirm("스케줄을 등록 하시겠습니까?")){
-		$.ajax({
-			url : "/insertSchedule.do",
-			data : {
-				 scd_nm : $("#scd_nm").val(),
-				 scd_exp : $("#scd_exp").val(),
-				 exe_perd_cd : $("#exe_perd_cd").val(),
-				 exe_dt : exe_dt,
-				 exe_month : $("#exe_month").val(),
-				 exe_day : $("#exe_day").val(),
-				 exe_h : $("#exe_h").val(),
-				 exe_m : $("#exe_m").val(),
-				 exe_s	 : $("#exe_s").val(),			 
-				 exe_hms : $("#exe_s").val()+$("#exe_m").val()+$("#exe_h").val(),
-				 sWork : JSON.stringify(arrmaps)
-			},
-			dataType : "json",
-			type : "post",
-			error : function(xhr, status, error) {
-				alert("실패")
-			},
-			success : function(result) {
-				alert("스케줄이 등록되었습니다.");
-				location.href='/selectScheduleListView.do' ;
-			}
-		}); 	
-	}else{
-		return false;
-	}
-} */
+	}); 	
+}
 
 
 function fn_insertSchedule(){
@@ -602,23 +557,57 @@ function fn_insertSchedule(){
 	window.open(popUrl,"",popOption);
 }
 
+
+/* ********************************************************
+ * Tab Click
+ ******************************************************** */
+function selectTab(tab){
+	if(tab == "month"){
+		$("#month_scheduleList").show();
+		$("#month_scheduleList_wrapper").show();
+		$("#week_scheduleList").hide();
+		$("#week_scheduleList_wrapper").hide();
+		$("#tab1").hide();
+		$("#tab2").show();
+		$("#btnMonth").show();
+		$("#btnWeek").hide();
+	}else{
+		$("#week_scheduleList").show();
+		$("#week_scheduleList_wrapper").show();
+		$("#month_scheduleList").hide();
+		$("#month_scheduleList_wrapper").hide();
+		$("#tab1").show();
+		$("#tab2").hide();
+		$("#btnWeek").show();
+		$("#btnMonth").hide();
+	}
+}
 </script>
-			<div id="contents">
+			<div id="contents">			
 				<div class="contents_wrap">
 					<div class="contents_tit">
 						<h4>백업 스케줄 <a href="#n"><img src="../images/ico_tit.png" class="btn_info"/></a></h4>
 					</div>
 					<div class="contents">
+						<div class="cmm_tab">
+							<ul id="tab1">
+								<li class="atv"><a href="javascript:selectTab('week')">주별 스케줄현황</a></li>
+								<li><a href="javascript:selectTab('month')">월별 스케줄현황</a></li>
+							</ul>
+							<ul id="tab2" style="display:none;">
+								<li><a href="javascript:selectTab('week')">주별 스케줄현황</a></li>
+								<li class="atv"><a href="javascript:selectTab('month')">월별 스케줄현황</a></li>
+							</ul>
+						</div>
 						<div class="cmm_grp">
-							<div class="btn_type_01">
-								<span class="btn"  onClick="fn_insertSchedule();" id="int_button"><button>백업 스케줄 등록</button></span>
+							<div class="btn_type_01" id="btnWeek">
+								<span class="btn"  onClick="fn_insertSchedule();" id="int_button"><button>주별 스케줄등록</button></span>
 							</div>
-							<div class="cmm_bd">
-								<p><img src="../images/ico_sch_9.png" />
-									스케줄 현황</p>
-								
-								<div class="overflow_area">							
-									<table id="bck_scheduleList" class="cell-border display" width="100%">
+							<div class="btn_type_01" id="btnMonth">
+								<span class="btn"  onClick="fn_insertSchedule();" id="int_button"><button>월별 스케줄등록</button></span>
+							</div>
+							<div class="cmm_bd">																			
+									<table id="week_scheduleList" class="cell-border display" width="100%">
 										<thead>
 											<tr>
 												<th width="130">일</th>
@@ -630,8 +619,27 @@ function fn_insertSchedule(){
 												<th width="130">토</th>
 											</tr>
 										</thead>
-									</table>											
-								</div>
+									</table>		
+									
+									
+									<table id="month_scheduleList" class="cell-border display" width="100%">
+										<thead>
+											<tr>
+												<th width="130">1월</th>
+												<th width="130">2월</th>												
+												<th width="130">3월</th>
+												<th width="130">4월</th>
+												<th width="130">5월</th>
+												<th width="130">6월</th>												
+												<th width="130">7월</th>
+												<th width="130">8월</th>
+												<th width="130">9월</th>
+												<th width="130">10월</th>
+												<th width="130">11월</th>												
+												<th width="130">12월</th>
+											</tr>
+										</thead>
+									</table>																
 							</div>		
 						</div>
 					</div>

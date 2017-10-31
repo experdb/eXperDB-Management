@@ -294,13 +294,13 @@ function fn_check() {
 							<span class="tit">백업옵션</span>
 							<span>
 								<select name="bck_opt_cd" id="bck_opt_cd" class="select">
-									<option value="TC000301">FULL</option>
-									<option value="TC000302">incremental</option>
-									<option value="TC000303">archive</option>
+									<option value="TC000301">전체백업</option>
+									<option value="TC000302">증분백업</option>
+									<option value="TC000303">변경로그백업</option>
 								</select>
 							</span>
-							<span class="tit" style="margin-right: 5px;">로그경로</span>
-							<span style="margin-right: 5px;">
+							<span class="tit"  style="margin-left: 40px;">로그경로</span>
+							<span>
 								<input type="text" class="txt" name="log_file_pth" id="log_file_pth" maxlength=50 style="width:230px" onKeydown="$('#check_path3').val('N')"/>
 								<span class="btn btnC_01"><button type="button" class= "btn_type_02" onclick="checkFolder(3)" style="width: 60px; margin-right: -60px; margin-top: 0;">경로체크</button></span>
 							</span>			

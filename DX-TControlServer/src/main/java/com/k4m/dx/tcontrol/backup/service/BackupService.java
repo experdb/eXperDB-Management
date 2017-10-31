@@ -152,7 +152,7 @@ public interface BackupService {
 
 	
 	/**
-	 * 백업스케줄 조회
+	 * 주별 백업스케줄 조회
 	 * @param db_svr_id 
 	 * @param 
 	 * @throws Exception
@@ -163,4 +163,12 @@ public interface BackupService {
 	public List<Map<String, Object>> selectWorkOptionLayer(int bck_wrk_id) throws Exception;
 
 	public List<Map<String, Object>> selectWorkObjectLayer(int bck_wrk_id) throws Exception;
+
+	/**
+	 * 월별 백업스케줄 조회
+	 * @param db_svr_id 
+	 * @param 
+	 * @throws Exception
+	 */
+	public List<Map<String, Object>> selectMonthBckSchedule(int db_svr_id) throws Exception;
 }

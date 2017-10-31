@@ -396,7 +396,7 @@ function checkFolder(){
 						$("#check_path").val("Y");
 						alert("유효한 경로입니다.");
 					}else{
-						alert("유효하지 않는 경로입니다.");
+						alert("유효하지 않은 경로입니다.");
 					}
 				}else{
 					alert("경로체크 중 서버에러로 인하여 실패하였습니다.")
@@ -537,7 +537,7 @@ function checkFolder(){
 				<ul class="tab">
 					<li class="on"><a href="#n">부가옵션 #1</a></li>
 					<li><a href="#n">부가옵션 #2</a></li>
-					<li><a href="#n">object 선택</a></li>
+					<li><a href="#n">오브젝트 선택</a></li>
 				</ul>
 				<div class="tab_view">
 					<div class="view on addOption_inr">
@@ -572,7 +572,7 @@ function checkFolder(){
 								</div>
 							</li>
 							<li>
-								<p class="op_tit">Object 형태</p>
+								<p class="op_tit">오브젝트 형태</p>
 								<div class="inp_chk">
 									<span>
 										<input type="checkbox" id="option_2_1" name="opt" value="Y" grp_cd="TC0007" opt_cd="TC000701" onClick="checkObject('TC000701');"

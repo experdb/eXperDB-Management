@@ -44,17 +44,19 @@ function fn_init() {
 		columns : [
 		{data : "rownum", defaultContent : "", targets : 0, orderable : false, checkboxes : {'selectRow' : true}}, 
 		{data : "idx", className : "dt-center", defaultContent : ""},
-		{data : "wrk_id", className : "dt-center", defaultContent : "", visible: false },
-		{data : "db_svr_id", className : "dt-center", defaultContent : "", visible: false},
-		{data : "db_svr_nm", className : "dt-center", defaultContent : ""},
-		{data : "db_id", className : "dt-center", defaultContent : "", visible: false},
-		{data : "db_nm", className : "dt-center", defaultContent : "", visible: false},
-		{data : "bsn_dscd", className : "dt-center", defaultContent : "", visible: false},
-		{data : "bsn_dscd_nm", className : "dt-center", defaultContent : ""},
-		{data : "bck_bsn_dscd", className : "dt-center", defaultContent : "", visible: false},
-		{data : "bck_bsn_dscd_nm", className : "dt-center", defaultContent : ""},
 		{data : "wrk_nm", className : "dt-center", defaultContent : ""},
 		{data : "wrk_exp", className : "dt-center", defaultContent : ""},	
+		{data : "bsn_dscd_nm", className : "dt-center", defaultContent : ""},
+		{data : "bck_bsn_dscd_nm", className : "dt-center", defaultContent : ""},
+		{data : "db_svr_nm", className : "dt-center", defaultContent : ""},		
+		{data : "frst_regr_id", className : "dt-center", defaultContent : ""},
+		{data : "frst_reg_dtm", className : "dt-center", defaultContent : ""},		
+		{data : "wrk_id", className : "dt-center", defaultContent : "", visible: false },
+		{data : "db_svr_id", className : "dt-center", defaultContent : "", visible: false},		
+		{data : "db_id", className : "dt-center", defaultContent : "", visible: false},
+		{data : "db_nm", className : "dt-center", defaultContent : "", visible: false},
+		{data : "bsn_dscd", className : "dt-center", defaultContent : "", visible: false},		
+		{data : "bck_bsn_dscd", className : "dt-center", defaultContent : "", visible: false},	
 		{data : "bck_opt_cd", className : "dt-center", defaultContent : "", visible: false},
 		{data : "bck_opt_cd_nm", className : "dt-center", defaultContent : "", visible: false},
 		{data : "bck_mtn_ecnt", className : "dt-center", defaultContent : "", visible: false},
@@ -67,12 +69,43 @@ function fn_init() {
 		{data : "file_stg_dcnt", className : "dt-center", defaultContent : "", visible: false},
 		{data : "encd_mth_nm", className : "dt-center", defaultContent : "", visible: false},
 		{data : "usr_role_nm", className : "dt-center", defaultContent : "", visible: false},	
-		{data : "frst_regr_id", className : "dt-center", defaultContent : ""},
-		{data : "frst_reg_dtm", className : "dt-center", defaultContent : ""},
 		{data : "lst_mdfr_id", className : "dt-center", defaultContent : "", visible: false},
 		{data : "lst_mdf_dtm", className : "dt-center", defaultContent : "", visible: false}
 		]
 	});
+		
+		
+		table.tables().header().to$().find('th:eq(0)').css('min-width', '10px');
+		table.tables().header().to$().find('th:eq(1)').css('min-width', '35px');
+		table.tables().header().to$().find('th:eq(2)').css('min-width', '100px');
+		table.tables().header().to$().find('th:eq(3)').css('min-width', '130px');
+		table.tables().header().to$().find('th:eq(4)').css('min-width', '70px');
+		table.tables().header().to$().find('th:eq(5)').css('min-width', '85px');
+		table.tables().header().to$().find('th:eq(6)').css('min-width', '150px');
+		table.tables().header().to$().find('th:eq(7)').css('min-width', '100px');  
+		table.tables().header().to$().find('th:eq(8)').css('min-width', '100px');
+		table.tables().header().to$().find('th:eq(9)').css('min-width', '0px');
+		table.tables().header().to$().find('th:eq(10)').css('min-width', '0px');  
+		table.tables().header().to$().find('th:eq(11)').css('min-width', '0px');
+		table.tables().header().to$().find('th:eq(12)').css('min-width', '0px');
+		table.tables().header().to$().find('th:eq(13)').css('min-width', '0px');
+		table.tables().header().to$().find('th:eq(14)').css('min-width', '0px');
+		table.tables().header().to$().find('th:eq(15)').css('min-width', '0px');  
+		table.tables().header().to$().find('th:eq(16)').css('min-width', '0px');
+		table.tables().header().to$().find('th:eq(17)').css('min-width', '0px');
+		table.tables().header().to$().find('th:eq(18)').css('min-width', '0px');
+		table.tables().header().to$().find('th:eq(19)').css('min-width', '0px');
+		table.tables().header().to$().find('th:eq(20)').css('min-width', '0px');  
+		table.tables().header().to$().find('th:eq(21)').css('min-width', '0px');
+		table.tables().header().to$().find('th:eq(22)').css('min-width', '0px');
+		table.tables().header().to$().find('th:eq(23)').css('min-width', '0px');  
+		table.tables().header().to$().find('th:eq(24)').css('min-width', '0px');
+		table.tables().header().to$().find('th:eq(25)').css('min-width', '0px');
+		table.tables().header().to$().find('th:eq(26)').css('min-width', '0px');  
+		table.tables().header().to$().find('th:eq(27)').css('min-width', '0px');
+		table.tables().header().to$().find('th:eq(28)').css('min-width', '0px');
+		
+		$(window).trigger('resize'); 
 }
 
 /* ********************************************************
@@ -223,35 +256,35 @@ function fn_workAdd(){
 				<table id="workList" class="cell-border display" >
 				<thead>
 					<tr>
-						<th></th>
-						<th>No</th>
-						<th></th>
-						<th></th>
-						<th>DBMS명</th>
-						<th></th>
-						<th></th>
-						<th></th>
-						<th>구분</th>
-						<th></th>
-						<th>백업구분</th>
-						<th>Work명</th>
-						<th>Work설명</th>
-						<th></th>
-						<th></th>
-						<th></th>
-						<th></th>
-						<th></th>
-						<th></th>
-						<th></th>
-						<th></th>
-						<th></th>
-						<th></th>
-						<th></th>
-						<th></th>
-						<th>등록자</th>
-						<th>등록일시</th>
-						<th></th>
-						<th></th>
+						<th width="10"></th>
+						<th width="35">No</th>
+						<th width="100">Work명</th>
+						<th width="130">Work설명</th>
+						<th width="70">구분</th>
+						<th width="85">백업구분</th>
+						<th width="150">DBMS명</th>
+						<th width="100">등록자</th>
+						<th width="100">등록일시</th>						
+						<th width="0"></th>
+						<th width="0"></th>						
+						<th width="0"></th>
+						<th width="0"></th>
+						<th width="0"></th>
+						<th width="0"></th>
+						<th width="0"></th>
+						<th width="0"></th>
+						<th width="0"></th>
+						<th width="0"></th>
+						<th width="0"></th>
+						<th width="0"></th>
+						<th width="0"></th>
+						<th width="0"></th>
+						<th width="0"></th>
+						<th width="0"></th>
+						<th width="0"></th>
+						<th width="0"></th>
+						<th width="0"></th>
+						<th width="0"></th>
 					</tr>
 				</thead>
 			</table>		
