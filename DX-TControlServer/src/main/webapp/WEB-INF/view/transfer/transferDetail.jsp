@@ -61,7 +61,6 @@
 				className : "dt-center",
 				defaultContent : ""
 			}, 
-			{ data : "", className : "dt-center", defaultContent : "<a href='#n'><img src='../images/mappin_btn.png' alt='맵핑설정버튼' id='mappingBtn'/></a>"},
 			{ data : "trf_trg_id", visible: false}, 
 			{ data : "db_id", visible: false, render : function (data, type, set){if (data!=null){return data;}else{return null;} } }
 			]
@@ -72,29 +71,8 @@
 		table.tables().header().to$().find('th:eq(2)').css('min-width', '100px');
 		table.tables().header().to$().find('th:eq(3)').css('min-width', '50px');
 		table.tables().header().to$().find('th:eq(4)').css('min-width', '100px');
-		table.tables().header().to$().find('th:eq(5)').css('min-width', '70px');
 	    $(window).trigger('resize'); 
 	    
-	    //맵핑설정버튼 클릭시
-		 $('#transferDetailTable tbody').on('click','#mappingBtn', function () {
-		 		var $this = $(this);
-		    	var $row = $this.parent().parent().parent();
-		    	$row.addClass('select-detail');
-		    	var datas = table.rows('.select-detail').data();
-		    	if(datas.length==1) {
-		    		var row = datas[0];
-			    	$row.removeClass('select-detail');
-					var popUrl = "/popup/transferMappingRegForm.do?trf_trg_id="+row.trf_trg_id+"&&cnr_id="+cnr_id+"&&trf_trg_cnn_nm="+row.trf_trg_cnn_nm; // 서버 url 팝업경로
-					var width = 920;
-					var height = 675;
-					var left = (window.screen.width / 2) - (width / 2);
-					var top = (window.screen.height /2) - (height / 2);
-					var popOption = "width="+width+", height="+height+", top="+top+", left="+left+", resizable=no, scrollbars=yes, status=no, toolbar=no, titlebar=yes, location=no,";
-					
-					window.open(popUrl,"",popOption);
-					
-		    	}
-			});
 	    
 		 //bottlewater 버튼 클릭시 -> bottleWater 실행,종료
 		 $('#transferDetailTable tbody').on('click','#bottleWaterBtn', function () {
@@ -106,7 +84,7 @@
 		    		var row = datas[0];
 			    	$row.removeClass('select-detail');
 			    	if(row.db_id==null){
-			    		alert("맵핑설정을 해주세요.");
+			    		alert("매핑설정을 해주세요.");
 			    		return false;
 			    	}
 					$.ajax({
@@ -202,7 +180,7 @@
 <div id="contents">
 	<div class="contents_wrap">
 		<div class="contents_tit">
-			<h4>전송상세 설정<a href="#n"><img src="../images/ico_tit.png" class="btn_info"/></a></h4>
+			<h4>전송대상 설정<a href="#n"><img src="../images/ico_tit.png" class="btn_info"/></a></h4>
 			<div class="infobox"> 
 				<ul>
 					<li>전송대상 설정에서 생성된 연결에 전송 대상 소스 정보를 설정합니다.</li>
@@ -211,9 +189,9 @@
 			</div>
 			<div class="location">
 				<ul>
-					<li>데이터전송</li>
+					<li>데이터 전송</li>
 					<li>${cnr_nm }</li>
-					<li class="on">전송상세 설정</li>
+					<li class="on">전송대상 설정</li>
 				</ul>
 			</div>
 		</div>
@@ -233,9 +211,9 @@
 						</colgroup>
 						<tbody>
 							<tr>
-								<th scope="row" class="t7">Connector명</th>
+								<th scope="row" class="t7">Connect명</th>
 								<td><input type="text" class="txt t3" name="" id="trf_trg_cnn_nm"/></td>
-								<th scope="row" class="t4">Database명</th>
+								<th scope="row" class="t4">Database</th>
 								<td><input type="text" class="txt t3" name="" id="db_nm"/></td>
 							</tr>
 						</tbody>
@@ -245,12 +223,11 @@
 					<table id="transferDetailTable" class="display" cellspacing="0" width="100%">
 						<thead>
 							<tr>
-								<th width="100">Connector명</th>
-								<th width="100">서버명</th>
-								<th width="100">Database명</th>
+								<th width="100">Connect명</th>
+								<th width="100">DBMS명</th>
+								<th width="100">Database</th>
 								<th width="50">구동상태</th>
-								<th width="100">BottleWater실행</th>
-								<th width="70">맵핑설정</th>
+								<th width="100">전송 서버 실행</th>
 							</tr>
 						</thead>
 					</table>

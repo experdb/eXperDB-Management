@@ -58,6 +58,11 @@ public class TreeTransferServiceImpl extends EgovAbstractServiceImpl implements 
 	}
 
 	@Override
+	public TransferDetailVO selectMappingInfo(String name) throws Exception {
+		return treeTransferDAO.selectMappingInfo(name);
+	}
+
+	@Override
 	public List<DbIDbServerVO> selectServerDbList(DbAutVO dbAutVO) throws Exception {
 		return treeTransferDAO.selectServerDbList(dbAutVO);
 	}
@@ -75,6 +80,11 @@ public class TreeTransferServiceImpl extends EgovAbstractServiceImpl implements 
 	@Override
 	public void insertTransferMapping(TransferMappingVO transferMappingVO) throws Exception {
 		treeTransferDAO.insertTransferMapping(transferMappingVO);
+	}
+
+	@Override
+	public int selectTrftrgid(String trf_trg_cnn_nm) throws Exception {
+		return treeTransferDAO.selectTrftrgid(trf_trg_cnn_nm);
 	}
 
 	@Override

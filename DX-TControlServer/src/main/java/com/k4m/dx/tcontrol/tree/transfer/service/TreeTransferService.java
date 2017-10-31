@@ -57,6 +57,14 @@ public interface TreeTransferService {
 	List<TransferDetailVO> selectTransferDetail(TransferDetailVO transferDetailVO) throws Exception;
 
 	/**
+	 * 매핑정보 조회
+	 * 
+	 * @param name
+	 * @throws Exception
+	 */
+	TransferDetailVO selectMappingInfo(String name)throws Exception;
+
+	/**
 	 * 데이터베이스 조회
 	 * 
 	 * @param dbAutVO
@@ -90,6 +98,15 @@ public interface TreeTransferService {
 	 * @throws Exception
 	 */
 	void insertTransferMapping(TransferMappingVO transferMappingVO) throws Exception;
+
+	/**
+	 * trf_trg_id 조회
+	 * 
+	 * @param trf_trg_cnn_nm
+	 * @return String
+	 * @throws Exception
+	 */
+	int selectTrftrgid(String trf_trg_cnn_nm) throws Exception;
 
 	/**
 	 * 전송매핑테이블내역 조회

@@ -238,7 +238,7 @@
 						</colgroup>
 						<tbody>
 							<tr>
-								<th scope="row" class="t2">Kafka-Connector명</th>
+								<th scope="row" class="t2">커넥터 명</th>
 								<td><input type="text" class="txt" name="cnr_nm" id="cnr_nm" /></td>
 								<th scope="row" class="t3">아이피</th>
 								<td><input type="text" class="txt" name="cnr_ipadr" id="cnr_ipadr" /></td>
@@ -251,7 +251,7 @@
 						<tr>
 							<th width="10"></th>
 							<th width="20">NO</th>
-							<th width="120">Kafka-Connector명</th>
+							<th width="120">커넥터 명</th>
 							<th width="100">아이피</th>
 							<th width="70">포트</th>
 							<th width="70">유형</th>

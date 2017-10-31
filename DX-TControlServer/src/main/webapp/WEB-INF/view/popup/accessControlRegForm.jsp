@@ -71,48 +71,30 @@
 	function fn_insert() {
 		if (!fn_accessControl())return false;
 		var type = $("#ctf_tp_nm").val();
-		var prms_ipadr = "''";
+		var prms_ipadr = "";
 		if(type!="local"){
 			var ip = document.getElementById("ip").value;
 			var prefix = document.getElementById("prefix").value;
 			if(prefix!=""){
-				prms_ipadr = "'"+ip + "/" + prefix+"'";	
+				prms_ipadr = ip + "/" + prefix;	
 			}else{
-				prms_ipadr = "'"+ip+"'";
+				prms_ipadr = ip;
 			}	
 		}
-			
-		var prms_ipmaskadr = "'"+$("#prms_ipmaskadr").val()+"'";
-		var dtb = "'"+$("#dtb").val()+"'";
-		var prms_usr_id = "'"+$("#prms_usr_id").val()+"'";
-		var ctf_mth_nm = "'"+$("#ctf_mth_nm").val()+"'";
-		var ctf_tp_nm = "'"+$("#ctf_tp_nm").val()+"'";
-		var opt_nm = "'"+$("#opt_nm").val()+"'";
-		opener.location.href = "javascript:fn_isnertSave("+prms_ipadr+","+prms_ipmaskadr+","+dtb+","+prms_usr_id+","+ctf_mth_nm+","+ctf_tp_nm+","+opt_nm+");";
+		
+		accessResult = new Object();
+        
+		accessResult.prms_ipmaskadr = $("#prms_ipmaskadr").val();
+		accessResult.prms_ipadr = prms_ipadr;
+		accessResult.dtb = $("#dtb").val();
+		accessResult.prms_usr_id = $("#prms_usr_id").val();
+		accessResult.ctf_mth_nm = $("#ctf_mth_nm").val();
+		accessResult.ctf_tp_nm = $("#ctf_tp_nm").val();
+		accessResult.opt_nm = $("#opt_nm").val();
+
+		opener.fn_isnertSave(accessResult);   
 		window.close();
-		 
-// 		$.ajax({
-// 			url : "/insertAccessControl.do",
-// 			data : {
-// 				db_svr_id : '${db_svr_id}',
-// 				prms_ipadr : prms_ipadr,
-// 				prms_ipmaskadr : $("#prms_ipmaskadr").val(),
-// 				dtb : $("#dtb").val(),
-// 				prms_usr_id : $("#prms_usr_id").val(),
-// 				ctf_mth_nm : $("#ctf_mth_nm").val(),
-// 				ctf_tp_nm : $("#ctf_tp_nm").val(),
-// 				opt_nm : $("#opt_nm").val()				
-// 			},
-// 			type : "post",
-// 			error : function(request, status, error) {
-// 				alert("ERROR CODE : "+ request.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ request.responseText.replace(/(<([^>]+)>)/gi, ""));
-// 			},
-// 			success : function(result) {
-// 				alert("저장하였습니다.");
-// 				window.close();
-// 				opener.fn_select();
-// 			}
-// 		});
+		
 	}
 
 	/* 수정 버튼 클릭시*/
@@ -130,7 +112,6 @@
 			}	
 		}
 		
-		
 		accessResult = new Object();
         
 		accessResult.idx = "${idx}";
@@ -144,33 +125,6 @@
 
 		opener.fn_updateSave(accessResult);   
 		window.close();
-		
-		
-		
-		
-// 		$.ajax({
-// 			url : "/updateAccessControl.do",
-// 			data : {
-// 				prms_seq : '${prms_seq}',
-// 				db_svr_id : '${db_svr_id}',
-// 				prms_ipadr : prms_ipadr,
-// 				prms_ipmaskadr : $("#prms_ipmaskadr").val(),
-// 				dtb : $("#dtb").val(),
-// 				prms_usr_id : $("#prms_usr_id").val(),
-// 				ctf_mth_nm : $("#ctf_mth_nm").val(),
-// 				ctf_tp_nm : $("#ctf_tp_nm").val(),
-// 				opt_nm : $("#opt_nm").val()
-// 			},
-// 			type : "post",
-// 			error : function(request, status, error) {
-// 				alert("ERROR CODE : "+ request.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ request.responseText.replace(/(<([^>]+)>)/gi, ""));
-// 			},
-// 			success : function(result) {
-// 				alert("저장하였습니다.");
-// 				window.close();
-// 				opener.fn_select();
-// 			}
-// 		});
 	}
 
 	$(window.document).ready(function() {
@@ -202,7 +156,7 @@
 		}
 	});
 
-	function change(selectObj) {
+	function changeType(selectObj) {
 		if (selectObj.value == "local") {
 			$('#ip').attr('disabled', 'true');
 			$('#prefix').attr('disabled', 'true');
@@ -215,6 +169,17 @@
 			$('#ip').removeAttr('disabled');
 			$('#prefix').removeAttr('disabled');
 			$('#prms_ipmaskadr').removeAttr('disabled');
+			
+			var prefix = document.getElementById("prefix").value;
+			if(prefix !=""){
+				$('#prms_ipmaskadr').attr('disabled', 'true');
+				$('#prms_ipmaskadr').val("");
+			}
+			var prms_ipmaskadr = document.getElementById("prms_ipmaskadr").value;
+			if(prms_ipmaskadr !=""){
+				$('#prefix').attr('disabled', 'true');
+				$('#prefix').val("");
+			}
 		}
 	}
 	
@@ -301,7 +266,7 @@
 					<tr>
 						<th scope="row" class="ico_t1">Type</th>
 						<td>					
-							<select id="ctf_tp_nm" name="ctf_tp_nm" id="ctf_tp_nm" class="select t4" onChange="javascript:change(this)">
+							<select id="ctf_tp_nm" name="ctf_tp_nm" id="ctf_tp_nm" class="select t4" onChange="changeType(this)">
 								<c:forEach var="resultType" items="${resultType}">
 									<option value="${resultType.ctf_tp_nm}" ${ctf_tp_nm eq resultType.ctf_tp_nm ? "selected='selected'" : ""}>${resultType.ctf_tp_nm}</option>
 								</c:forEach>
@@ -337,7 +302,7 @@
 							</select>
 						</td>
 						<th scope="row" class="ico_t1">Option</th>
-						<td><input type="text" class="txt" name="opt_nm" id="opt_nm" value="${opt_nm}"/></td>		
+						<td><input type="text" class="txt t4" name="opt_nm" id="opt_nm" value="${opt_nm}"/></td>		
 					</tr>
 				</tbody>
 			</table>

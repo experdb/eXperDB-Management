@@ -33,7 +33,7 @@
 	function fn_connectorValidation() {
 		var cnr_nm = document.getElementById("cnr_nm");
 		if (cnr_nm.value == "") {
-			alert("Connector명을 입력하여 주십시오.");
+			alert("커넥터 명을 입력하여 주십시오.");
 			cnr_nm.focus();
 			return false;
 		}
@@ -132,7 +132,7 @@
 					</colgroup>
 					<tbody>
 						<tr>
-							<th scope="row" class="ico_t1">Connector 명</th>
+							<th scope="row" class="ico_t1">커넥터 명</th>
 							<td><input type="text" class="txt" name="cnr_nm" id="cnr_nm" value="${cnr_nm}" maxlength="20"/></td>
 							<th scope="row" class="ico_t1">IP(*)</th>
 							<td><input type="text" class="txt" name="cnr_ipadr" id="cnr_ipadr" value="${cnr_ipadr}"/></td>

@@ -363,7 +363,7 @@
 				</div>
 			</div>
 			<div class="mapping_rt">
-				<p class="tit">Connector 테이블 리스트</p>
+				<p class="tit">전송대상 테이블</p>
 				<div class="overflow_area">
 					<table id="connectorTableList" class="display" cellspacing="0" width="100%">
 						<thead>

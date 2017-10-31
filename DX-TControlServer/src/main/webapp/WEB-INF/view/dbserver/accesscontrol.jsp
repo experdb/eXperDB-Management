@@ -116,6 +116,7 @@
 	    
 		//더블 클릭시
 		$('#accessControlTable tbody').on('dblclick','tr',function() {
+			var idx = table.row(this).index();
 			var User = table.row(this).data().User;
 			var Seq = table.row(this).data().Seq;
 			var Method = table.row(this).data().Method;
@@ -125,9 +126,9 @@
 			var Ipmask = table.row(this).data().Ipmask;
 			var Option = table.row(this).data().Option;
 			
-			var popUrl = "/popup/accessControlRegForm.do?act=u&&db_svr_id=${db_svr_id}&&User="+User+"&&Seq="+Seq+"&&Method="+Method+"&&Database="+Database+"&&Type="+Type+"&&Ipadr="+Ipadr+"&&Ipmask="+Ipmask+"&&Option="+Option; // 서버 url 팝업경로
+			var popUrl = "/popup/accessControlRegForm.do?act=u&&db_svr_id=${db_svr_id}&&User="+User+"&&Seq="+Seq+"&&Method="+Method+"&&Database="+Database+"&&Type="+Type+"&&Ipadr="+Ipadr+"&&Ipmask="+Ipmask+"&&Option="+Option+"&&idx="+idx; // 서버 url 팝업경로
 			var width = 920;
-			var height = 440;
+			var height = 390;
 			var left = (window.screen.width / 2) - (width / 2);
 			var top = (window.screen.height /2) - (height / 2);
 			var popOption = "width="+width+", height="+height+", top="+top+", left="+left+", resizable=no, scrollbars=no, status=no, toolbar=no, titlebar=yes, location=no,";
@@ -193,15 +194,15 @@
 		 
 	}
 
-	function fn_isnertSave(prms_ipadr,prms_ipmaskadr,dtb,prms_usr_id,ctf_mth_nm,ctf_tp_nm,opt_nm){
+	function fn_isnertSave(result){
 		table.row.add( {
-			        "Type":		ctf_tp_nm,
-			        "Database":	dtb,
-			        "User":		prms_usr_id,
-			        "Ipadr":	prms_ipadr,
-			        "Ipmask":	prms_ipmaskadr,
-			        "Method":	ctf_mth_nm,
-			        "Option":	opt_nm
+			        "Type":		result.ctf_tp_nm,
+			        "Database":	result.dtb,
+			        "User":		result.prms_usr_id,
+			        "Ipadr":	result.prms_ipadr,
+			        "Ipmask":	result.prms_ipmaskadr,
+			        "Method":	result.ctf_mth_nm,
+			        "Option":	result.opt_nm
 			    } ).draw();	
 	}
 	
@@ -220,7 +221,7 @@
 	function fn_insert(){
 		var popUrl = "/popup/accessControlRegForm.do?act=i&&db_svr_id=${db_svr_id}"; // 서버 url 팝업경로
 		var width = 920;
-		var height = 420;
+		var height = 390;
 		var left = (window.screen.width / 2) - (width / 2);
 		var top = (window.screen.height /2) - (height / 2);
 		var popOption = "width="+width+", height="+height+", top="+top+", left="+left+", resizable=no, scrollbars=yes, status=no, toolbar=no, titlebar=yes, location=no,";
@@ -245,7 +246,7 @@
 			
 			var popUrl = "/popup/accessControlRegForm.do?act=u&&db_svr_id=${db_svr_id}&&User="+User+"&&Seq="+Seq+"&&Method="+Method+"&&Database="+Database+"&&Type="+Type+"&&Ipadr="+Ipadr+"&&Ipmask="+Ipmask+"&&Option="+Option+"&&idx="+idx; // 서버 url 팝업경로
 			var width = 920;
-			var height = 420;
+			var height = 390;
 			var left = (window.screen.width / 2) - (width / 2);
 			var top = (window.screen.height /2) - (height / 2);
 			var popOption = "width="+width+", height="+height+", top="+top+", left="+left+", resizable=no, scrollbars=yes, status=no, toolbar=no, titlebar=yes, location=no,";
@@ -266,32 +267,7 @@
 		} else {
 			if (!confirm("삭제하시겠습니까?")) return false;
 			var rows = table.rows( '.selected' ).remove().draw();
-			
-// 			var rowList = [];
-// 			for (var i = 0; i < datas.length; i++) {
-// 				rowList += datas[i].Seq + ',';
-// 			}			
-// 	 			$.ajax({
-// 					url : "/deleteAccessControl.do",
-// 					data : {
-// 						db_svr_id : "${db_svr_id}",
-// 						rowList : rowList,
-// 					},
-// 					dataType : "json",
-// 					type : "post",
-// 					error : function(request, status, error) {
-// 						alert("ERROR CODE : "+ request.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ request.responseText.replace(/(<([^>]+)>)/gi, ""));
-// 					},
-// 					success : function(result) {
-// 						if (result) {
-// 							alert("삭제되었습니다.");
-// 							fn_select();
-// 						}else{
-// 							alert("접근제어삭제를 실패하였습니다.");
-// 						}
-// 					}
-// 				}); 	
-			}
+		}
 	}
 	
 	/* 적용 버튼 클릭시 */
@@ -314,6 +290,7 @@
  				alert("ERROR CODE : "+ request.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ request.responseText.replace(/(<([^>]+)>)/gi, ""));
  			},
  			success : function(result) {
+ 				alert("적용하였습니다.");
  			}
  		});
 
@@ -355,12 +332,12 @@
 		<div class="contents">
 			<div class="cmm_grp">
 				<div class="btn_type_01">
-					<span>
-						<div class="search_area">
-							<input type="text" class="txt search" id="select" />
-							<button class="search_btn">검색</button>
-						</div>
-					</span>
+<!-- 					<span> -->
+<!-- 						<div class="search_area"> -->
+<!-- 							<input type="text" class="txt search" id="select" /> -->
+<!-- 							<button class="search_btn">검색</button> -->
+<!-- 						</div> -->
+<!-- 					</span> -->
 					<span class="btn" onclick="fn_insert();"><button>추가</button></span>
 					<span class="btn" onclick="fn_update();"><button>수정</button></span>
 					<span class="btn" onclick="fn_delete();"><button>삭제</button></span>

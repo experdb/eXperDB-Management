@@ -439,7 +439,7 @@ public class ClientInfoCmmn {
 
 			JSONObject jObj = new JSONObject();
 			jObj.put(ClientProtocolID.DX_EX_CODE, ClientTranCodeType.DxT006);
-			jObj.put(ClientProtocolID.COMMAND_CODE, ClientProtocolID.COMMAND_CODE_D);
+			jObj.put(ClientProtocolID.COMMAND_CODE, ClientProtocolID.COMMAND_CODE_D_A);
 			jObj.put(ClientProtocolID.SERVER_INFO, serverObj);
 			jObj.put(ClientProtocolID.ARR_AC_SEQ, arrSeq);
 
@@ -736,6 +736,9 @@ public class ClientInfoCmmn {
 						HashMap hp = (HashMap) obj;
 						String name = (String) hp.get("name");
 						String hdfs_url = (String) hp.get("hdfs.url");
+						String tasks_max = (String) hp.get("tasks.max");
+						String flush_size = (String) hp.get("flush.size");
+						String rotate_interval_ms = (String) hp.get("rotate.interval.ms");
 
 						System.out.println(i + " " + hp);
 						System.out.println(i + " name : " + name);
@@ -744,6 +747,9 @@ public class ClientInfoCmmn {
 						jsonObj.put("hp", hp);
 						jsonObj.put("name", name);
 						jsonObj.put("hdfs_url", hdfs_url);
+						jsonObj.put("tasks_max", tasks_max);
+						jsonObj.put("flush_size", flush_size);
+						jsonObj.put("rotate_interval_ms", rotate_interval_ms);
 
 						jsonArray.add(jsonObj);
 

@@ -125,6 +125,31 @@
 		WHERE TMP.DB_NM LIKE #{db_nm}
 	</select>
 	
+	<select id="selectMappingInfo" parameterType="String" resultType="transferDetailVO">
+		/**
+		* Query ID : selectMappingInfo
+		* Description : 매핑정보 조회
+		* Author : 김주영
+		**/
+		SELECT 
+		   TMP.TRF_TRG_CNN_NM
+		,  TMP.TRF_TRG_ID
+		,  TMP.DB_NM
+		,  TMP.DB_SVR_NM
+		,  TMP.BW_PID
+		,  (SELECT DB_ID FROM T_DB_I WHERE DB_ID=TMP.DB_ID AND USEYN ='Y')
+		FROM (
+		SELECT TD.TRF_TRG_CNN_NM,TD.TRF_TRG_ID,(CASE WHEN TD.DB_NM IS NOT NULL THEN TD.DB_NM ELSE '' END) AS DB_NM,S.DB_SVR_NM,TD.BW_PID,TD.DB_ID
+			FROM (SELECT T.*,D.DB_SVR_ID,D.DB_NM
+				FROM (SELECT SI.*, MR.DB_ID
+					FROM T_TRFTRGCNG_I SI LEFT OUTER JOIN T_TRFTRGMPP_R MR 
+						ON SI.TRF_TRG_ID = MR.TRF_TRG_ID 
+					) AS T LEFT OUTER JOIN T_DB_I D ON T.DB_ID=D.DB_ID AND D.USEYN='Y'
+				) AS TD LEFT OUTER JOIN T_DBSVR_I S ON TD.DB_SVR_ID = S.DB_SVR_ID AND S.USEYN='Y'
+			WHERE  TD.trf_trg_cnn_nm=#{name}
+			)TMP
+	</select>
+	
 	<select id="selectServerDbList" parameterType="dbAutVO" resultType="dbidbserverVO">
 		/**
 		* Query ID : selectServerDbList
@@ -235,7 +260,18 @@
 		, #{lst_mdfr_id}
 		, clock_timestamp()
 		)		
-    </insert>       
+    </insert>    
+       
+    <select id="selectTrftrgid" parameterType="String" resultType="int">
+        /**
+	 	*  Query ID : selectTrftrgid
+	 	* Description : trf_trg_id 조회
+	 	* Author : 김주영
+	 	**/
+	 	SELECT TRF_TRG_ID
+	 	FROM T_TRFTRGCNG_I
+	 	WHERE TRF_TRG_CNN_NM = #{trf_trg_cnn_nm}
+    </select>
     
     <select id="selectTransferMapping" parameterType="int" resultType="transferDetailMappingVO">
     	/**

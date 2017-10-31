@@ -167,6 +167,16 @@ public class TreeTransferController {
 			serverObj.put(ClientProtocolID.SERVER_PORT, strServerPort);
 			result = cic.kafakConnect_select(serverObj, strName, IP, PORT);
 
+			JSONArray data =(JSONArray)result.get("data");
+			for(int i=0; i<data.size(); i++){
+				JSONObject jsonObj = (JSONObject) data.get(i);
+				String name = (String) jsonObj.get("name");
+				TransferDetailVO mappingInfo = (TransferDetailVO)treeTransferService.selectMappingInfo(name);
+				if(mappingInfo!=null){
+					jsonObj.put("db_nm", mappingInfo.getDb_nm());
+					jsonObj.put("db_svr_nm", mappingInfo.getDb_svr_nm());
+				}
+			}
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -619,9 +629,11 @@ public class TreeTransferController {
 			historyVO.setExe_dtl_cd("DX-T0020");
 			historyVO.setMnu_id(34);
 			accessHistoryService.insertHistory(historyVO);
-
+			
+			int trf_trg_id = treeTransferService.selectTrftrgid(request.getParameter("trf_trg_cnn_nm"));
+			
 			//전송매핑테이블내역 조회
-			result = treeTransferService.selectTransferMapping(Integer.parseInt(request.getParameter("trf_trg_id")));
+			result = treeTransferService.selectTransferMapping(trf_trg_id);
 			if (result.size() > 0) {
 				mv.addObject("result", result);
 			}
@@ -633,8 +645,9 @@ public class TreeTransferController {
 			}
 			
 			resultSet = treeTransferService.selectDbServerList(dbServerVO);
+				
 			mv.addObject("resultSet", resultSet);
-			mv.addObject("trf_trg_id", request.getParameter("trf_trg_id"));
+			mv.addObject("trf_trg_id", trf_trg_id);
 			mv.addObject("cnr_id", request.getParameter("cnr_id"));
 			mv.addObject("trf_trg_cnn_nm", request.getParameter("trf_trg_cnn_nm"));
 			mv.setViewName("popup/transferMappingRegForm");
@@ -663,6 +676,7 @@ public class TreeTransferController {
 			dbAutVO.setUsr_id((String) session.getAttribute("usr_id"));
 
 			resultSet = treeTransferService.selectServerDbList(dbAutVO);
+				
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

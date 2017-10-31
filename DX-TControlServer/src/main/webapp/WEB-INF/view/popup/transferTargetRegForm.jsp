@@ -62,7 +62,6 @@
 					hadoop_home : $("#hadoop_home").val(),
 					flush_size : $("#flush_size").val(),
 					rotate_interval_ms : $("#rotate_interval_ms").val(),
-					
 				},
 				success : function(result) {
 					if(result){
@@ -70,9 +69,8 @@
 						window.close();
 						opener.fn_select();
 					}else{
-						alert("Kafka-Connector 상태를 확인해주세요.");
+						alert("커넥터 상태를 확인해주세요.");
 					}
-					
 				},
 				error : function(request, status, error) {
 					alert("ERROR CODE : "+ request.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ request.responseText.replace(/(<([^>]+)>)/gi, ""));
@@ -106,7 +104,7 @@
 						window.close();
 						opener.fn_select();
 					}else{
-						alert("Kafka-Connector 상태를 확인해주세요.");
+						alert("커넥터 상태를 확인해주세요.");
 					}
 				},
 				error : function(request, status, error) {
@@ -123,7 +121,6 @@
 			$("#rotate_interval_ms").val("3000");	
 			
 			document.getElementById("trf_trg_cnn_nm").focus();
-			
 		}
 		if(act=="u"){
 			$("#trf_trg_cnn_nm").attr("readonly",true);
@@ -141,7 +138,7 @@
 		    } 
 		} 
 		if (err > 0) { 
-		    alert("숫자 및 소문자 영문만 입력가능합니다."); 
+		    alert("숫자 또는 영문 소문자만 입력 가능합니다."); 
 		    document.getElementById('trf_trg_cnn_nm').focus();
 			nmCheck = 0;
 		    return;
@@ -203,8 +200,8 @@
 					</td>
 				</tr>
 				<tr>
-					<th scope="row" class="ico_t1">hdfs.url<br>ex)hdfs://ip:port/</th>
-					<td><input type="text" class="txt t2" name="trf_trg_url" id="trf_trg_url" value="${trf_trg_url}" style="width: 500px;"/></td>
+					<th scope="row" class="ico_t1">hdfs.url</th>
+					<td><input type="text" class="txt t2" name="trf_trg_url" id="trf_trg_url" value="${trf_trg_url}" style="width: 500px;" value=""/><span style="">예시 hdfs://ip:port/HadoopPath</span></td>
 				</tr>
 				<tr>
 					<th scope="row" class="ico_t1">connector.class</th>

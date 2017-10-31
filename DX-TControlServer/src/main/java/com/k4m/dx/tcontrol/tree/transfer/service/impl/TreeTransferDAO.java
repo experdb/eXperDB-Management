@@ -91,6 +91,16 @@ public class TreeTransferDAO extends EgovAbstractMapper {
 	}
 
 	/**
+	 * 매핑정보 조회
+	 * 
+	 * @param name
+	 * @throws SQLException
+	 */
+	public TransferDetailVO selectMappingInfo(String name) {
+		return (TransferDetailVO) selectOne("treeTransferSql.selectMappingInfo", name);
+	}
+
+	/**
 	 * 데이터베이스 조회
 	 * 
 	 * @param db_svr_nm
@@ -132,6 +142,16 @@ public class TreeTransferDAO extends EgovAbstractMapper {
 	 */
 	public void insertTransferMapping(TransferMappingVO transferMappingVO) throws SQLException {
 		insert("treeTransferSql.insertTransferMapping", transferMappingVO);
+	}
+
+	/**
+	 * trf_trg_id 조회
+	 * 
+	 * @param trf_trg_cnn_nm
+	 * @throws SQLException
+	 */
+	public int selectTrftrgid(String trf_trg_cnn_nm) {
+		return (int) selectOne("treeTransferSql.selectTrftrgid", trf_trg_cnn_nm);
 	}
 
 	/**
