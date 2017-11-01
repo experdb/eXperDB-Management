@@ -80,20 +80,6 @@ function fn_init(){
 		searching : false,	
 		deferRender : true,
 	columns : [
-	   	    //NO
-		    //WORK명
-		    //WORK설명
-		    //데이터베이스
-		    //파일포멧
-		    //압축율
-		    //인코딩방식
-		    //Rolename
-		    //파일보관일수
-		    //백업유지개수
-		    //등록자
-		    //등록일시
-		    //수정자
-		    //수정일시
 		{data : "rownum", defaultContent : "", targets : 0, orderable : false, checkboxes : {'selectRow' : true}}, 
 		{data : "idx", className : "dt-center", defaultContent : ""}, 
 		{data : "wrk_nm", className : "dt-center", defaultContent : ""

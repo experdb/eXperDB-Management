@@ -5,7 +5,9 @@
 <div id="pop_layer" class="pop-layer">
 		<div class="pop-container">
 			<div class="pop_cts" style="width: 20%;">
-				<p class="tit">스케줄 정보</p>
+				<p class="tit" style="margin-bottom: 15px;">스케줄 정보
+					<a href="#n" class="btn" onclick="toggleLayer($('#pop_layer'), 'off');"><img src="/images/ico_state_01.png" style="margin-left: 252px;"/></a>
+				</p>
 				<table class="list" style="border:1px solid #99abb0;">
 					<caption>스케줄 정보</caption>
 					<tbody>
@@ -30,10 +32,7 @@
 							<td style="width: 70%;" id="scd_exe_hms"></td>
 						</tr>						
 					</tbody>
-				</table>
-				<div class="btn_type_02">
-					<a href="#n" class="btn" onclick="toggleLayer($('#pop_layer'), 'off');"><span>닫기</span></a>
-				</div>
+				</table>				
 			</div>
 		</div><!-- //pop-container -->
 	</div>
