@@ -105,4 +105,8 @@ public class SystemServiceImpl implements SystemService{
 	public int selectQ_WRKEXE_G_02_SEQ() throws Exception  {
 		return (int) systemDAO.selectQ_WRKEXE_G_02_SEQ();
 	}
+	
+	public void updateSCD_CNDT(WrkExeVO vo) throws Exception  {
+		systemDAO.updateSCD_CNDT(vo);
+	}
 }

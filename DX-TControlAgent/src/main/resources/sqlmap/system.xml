@@ -202,5 +202,19 @@
     	SELECT NEXTVAL('Q_WRKEXE_G_02')
     </select>
     
+    <update id="updateSCD_CNDT"  parameterType="WrkExeVO">
+   		/**
+	 	* Query ID : updateSCD_CNDT
+	 	* Description : 작업상태변경
+	 	* Author : 박태혁
+	 	**/
+		UPDATE T_SCD_M
+		SET
+			SCD_CNDT = #{SCD_CNDT}
+			, LST_MDF_DTM = now()
+		WHERE
+			SCD_ID = #{SCD_ID}
+				
+    </update>
     
 </mapper>

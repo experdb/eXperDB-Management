@@ -19,10 +19,17 @@ public class WrkExeVO {
 	private String BCK_FILENM;
 	private String RSLT_MSG;
 	private int EXE_GRP_SN;
+	private String SCD_CNDT;
 	
 	
 
 	
+	public String getSCD_CNDT() {
+		return SCD_CNDT;
+	}
+	public void setSCD_CNDT(String sCD_CNDT) {
+		SCD_CNDT = sCD_CNDT;
+	}
 	public int getEXE_GRP_SN() {
 		return EXE_GRP_SN;
 	}

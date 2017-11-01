@@ -60,6 +60,8 @@ public class SystemDAO {
 		return (int) session.selectOne("system.selectQ_WRKEXE_G_02_SEQ");
 	}
 	
-	
+	public void updateSCD_CNDT(WrkExeVO vo) throws Exception  {
+		 session.insert("system.updateSCD_CNDT", vo);
+	}
 	
 }

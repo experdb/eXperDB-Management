@@ -37,6 +37,11 @@ public class DxT005 extends SocketCtl{
 	private static Logger errLogger = LoggerFactory.getLogger("errorToFile");
 	private static Logger socketLogger = LoggerFactory.getLogger("socketLogger");
 	
+	private static String TC001801 = "TC001801"; //대기
+	private static String TC001802 = "TC001801"; //실행중
+
+	
+	
 	ApplicationContext context;
 	
 	public DxT005(Socket socket, BufferedInputStream is, BufferedOutputStream	os) {
@@ -94,8 +99,13 @@ public class DxT005 extends SocketCtl{
 				vo.setDB_ID(Integer.parseInt(strDB_ID));
 				vo.setBCK_FILE_PTH(strBCK_FILE_PTH);
 				vo.setEXE_GRP_SN(intGrpSeq);
+				vo.setSCD_CNDT(TC001802); //실행중
 				
 				if(strLOG_YN.equals("Y")) {
+					//스케줄 상태변경
+					service.updateSCD_CNDT(vo);
+					
+					//스케줄 이력등록
 					service.insertT_WRKEXE_G(vo);
 				}
 				
@@ -147,6 +157,13 @@ public class DxT005 extends SocketCtl{
 							endVO.setEXE_SN(intSeq);
 							endVO.setRSLT_MSG("An Error is Zero File Size");
 							
+							endVO.setSCD_ID(Integer.parseInt(strSCD_ID));
+							endVO.setSCD_CNDT(TC001801); //대기중
+							
+							//스케줄 상태변경
+							service.updateSCD_CNDT(endVO);
+							
+							//스캐줄 이력 update
 							service.updateT_WRKEXE_G(endVO);
 							
 							if(strNXT_EXD_YN.equals("y")) {
@@ -169,6 +186,12 @@ public class DxT005 extends SocketCtl{
 					endVO.setBCK_FILENM(strFileName);
 					endVO.setRSLT_MSG(retVal);
 					
+					endVO.setSCD_ID(Integer.parseInt(strSCD_ID));
+					endVO.setSCD_CNDT(TC001801); //대기중
+					
+					//스케줄 상태변경
+					service.updateSCD_CNDT(endVO);
+					
 					if(strLOG_YN.equals("Y")) {
 						service.updateT_WRKEXE_G(endVO);
 					}
@@ -181,6 +204,12 @@ public class DxT005 extends SocketCtl{
 					endVO.setEXE_RSLT_CD(strResultCode);
 					endVO.setEXE_SN(intSeq);
 					endVO.setRSLT_MSG(retVal);
+					
+					endVO.setSCD_ID(Integer.parseInt(strSCD_ID));
+					endVO.setSCD_CNDT(TC001801); //대기중
+					
+					//스케줄 상태변경
+					service.updateSCD_CNDT(endVO);
 					
 					service.updateT_WRKEXE_G(endVO);
 					

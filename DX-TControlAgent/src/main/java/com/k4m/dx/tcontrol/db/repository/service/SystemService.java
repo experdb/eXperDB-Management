@@ -94,4 +94,11 @@ public interface SystemService {
 	 * @throws Exception
 	 */
 	public int selectQ_WRKEXE_G_02_SEQ() throws Exception;
+	
+	/**
+	 * 스캐줄 상태 변경
+	 * @param vo
+	 * @throws Exception
+	 */
+	public void updateSCD_CNDT(WrkExeVO vo) throws Exception;
 }
