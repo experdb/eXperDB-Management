@@ -5,12 +5,11 @@
 <div id="pop_layer_rman" class="pop-layer">
 		<div class="pop-container">
 			<div class="pop_cts" style="width: 20%; height: 550px; overflow: auto;">
-				<p class="tit">WORK 정보</p>
+				<p class="tit" style="margin-bottom: 15px;">WORK 정보
+					<a href="#n" class="btn" onclick="toggleLayer($('#pop_layer_rman'), 'off');"><img src="/images/ico_state_01.png" style="margin-left: 235px;"/></a>
+				</p>
 				<table border="1" class="list">
-					<caption>WORK 정보</caption>
-						<div class="btn btnF_04 btnC_01">
-							<a href="#n" class="btn" onclick="toggleLayer($('#pop_layer_rman'), 'off');"><img src="/images/ico_state_01.png"  style="margin-left: 320px;"/></a>
-						</div>
+					<caption>WORK 정보</caption>			
 					<p><h3 style="height: 20px;">기본정보</h3></p>
 					<tbody>						
 						<tr>

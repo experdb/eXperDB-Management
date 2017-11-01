@@ -73,13 +73,13 @@ function fn_init(){
 					}
 					
 					if(full.scd_cndt == 'TC001801'){
-						html += '<div>';
+						html += '<div style="margin-top: 7px;">';
 					    html += '<img src="../images/ico_agent_1.png" alt=""  style="margin-right:10px"  width="10px" height="10px" />';	
 					    html +=	'<span onClick=javascript:fn_popup("'+full.scd_id+'");>'+full.exe_hms+ '   ';
 						html +=  full.scd_nm+'</span>';	
 						html += '</div>';
 					}else{
-							html += '<div>';
+							html += '<div style="margin-top: 7px;">';
 						    html += '<img src="../images/ico_agent_2.png" alt=""  style="margin-right:10px"  width="10px" height="10px" />';		
 						    html +=	'<span onClick=javascript:fn_popup("'+full.scd_id+'");>'+full.exe_hms+ '   ';
 							html +=  full.scd_nm+'</span>';	
@@ -136,13 +136,13 @@ function fn_init(){
 						}
 						
 						if(full.scd_cndt == 'TC001801'){
-							html += '<div>';
+							html += '<div style="margin-top: 7px;">';
 						    html += '<img src="../images/ico_agent_1.png" alt=""  style="margin-right:10px"  width="10px" height="10px" />';	
 						    html +=	'<span onClick=javascript:fn_popup("'+full.scd_id+'");>'+full.exe_hms+ '   ';
 							html +=  full.scd_nm+'</span>';	
 							html += '</div>';
 						}else{
-								html += '<div>';
+								html += '<div style="margin-top: 7px;">';
 							    html += '<img src="../images/ico_agent_2.png" alt=""  style="margin-right:10px"  width="10px" height="10px" />';		
 							    html +=	'<span onClick=javascript:fn_popup("'+full.scd_id+'");>'+full.exe_hms+ '   ';
 								html +=  full.scd_nm+'</span>';	
@@ -199,13 +199,13 @@ function fn_init(){
 						}
 						
 						if(full.scd_cndt == 'TC001801'){
-							html += '<div>';
+							html += '<div style="margin-top: 7px;">';
 						    html += '<img src="../images/ico_agent_1.png" alt=""  style="margin-right:10px"  width="10px" height="10px" />';	
 						    html +=	'<span onClick=javascript:fn_popup("'+full.scd_id+'");>'+full.exe_hms+ '   ';
 							html +=  full.scd_nm+'</span>';	
 							html += '</div>';
 						}else{
-								html += '<div>';
+								html += '<div style="margin-top: 7px;">';
 							    html += '<img src="../images/ico_agent_2.png" alt=""  style="margin-right:10px"  width="10px" height="10px" />';		
 							    html +=	'<span onClick=javascript:fn_popup("'+full.scd_id+'");>'+full.exe_hms+ '   ';
 								html +=  full.scd_nm+'</span>';	
@@ -262,13 +262,13 @@ function fn_init(){
 						}
 						
 						if(full.scd_cndt == 'TC001801'){
-							html += '<div>';
+							html += '<div style="margin-top: 7px;">';
 						    html += '<img src="../images/ico_agent_1.png" alt=""  style="margin-right:10px"  width="10px" height="10px" />';	
 						    html +=	'<span onClick=javascript:fn_popup("'+full.scd_id+'");>'+full.exe_hms+ '   ';
 							html +=  full.scd_nm+'</span>';	
 							html += '</div>';
 						}else{
-								html += '<div>';
+								html += '<div style="margin-top: 7px;">';
 							    html += '<img src="../images/ico_agent_2.png" alt=""  style="margin-right:10px"  width="10px" height="10px" />';		
 							    html +=	'<span onClick=javascript:fn_popup("'+full.scd_id+'");>'+full.exe_hms+ '   ';
 								html +=  full.scd_nm+'</span>';	
@@ -325,13 +325,13 @@ function fn_init(){
 						}
 						
 						if(full.scd_cndt == 'TC001801'){
-							html += '<div>';
+							html += '<div style="margin-top: 7px;">';
 						    html += '<img src="../images/ico_agent_1.png" alt=""  style="margin-right:10px"  width="10px" height="10px" />';	
 						    html +=	'<span onClick=javascript:fn_popup("'+full.scd_id+'");>'+full.exe_hms+ '   ';
 							html +=  full.scd_nm+'</span>';	
 							html += '</div>';
 						}else{
-								html += '<div>';
+								html += '<div style="margin-top: 7px;">';
 							    html += '<img src="../images/ico_agent_2.png" alt=""  style="margin-right:10px"  width="10px" height="10px" />';		
 							    html +=	'<span onClick=javascript:fn_popup("'+full.scd_id+'");>'+full.exe_hms+ '   ';
 								html +=  full.scd_nm+'</span>';	
@@ -388,13 +388,13 @@ function fn_init(){
 						}
 						
 						if(full.scd_cndt == 'TC001801'){
-							html += '<div>';
+							html += '<div style="margin-top: 7px;">';
 						    html += '<img src="../images/ico_agent_1.png" alt=""  style="margin-right:10px"  width="10px" height="10px" />';	
 						    html +=	'<span onClick=javascript:fn_popup("'+full.scd_id+'");>'+full.exe_hms+ '   ';
 							html +=  full.scd_nm+'</span>';	
 							html += '</div>';
 						}else{
-								html += '<div>';
+								html += '<div style="margin-top: 7px;">';
 							    html += '<img src="../images/ico_agent_2.png" alt=""  style="margin-right:10px"  width="10px" height="10px" />';		
 							    html +=	'<span onClick=javascript:fn_popup("'+full.scd_id+'");>'+full.exe_hms+ '   ';
 								html +=  full.scd_nm+'</span>';	
@@ -449,15 +449,14 @@ function fn_init(){
 						}else{
 							html += ' <img src="../images/dd.png" id="dump"/>';
 						}
-						
 						if(full.scd_cndt == 'TC001801'){
-							html += '<div>';
+							html += '<div style="margin-top: 7px;">';
 						    html += '<img src="../images/ico_agent_1.png" alt=""  style="margin-right:10px"  width="10px" height="10px" />';	
 						    html +=	'<span onClick=javascript:fn_popup("'+full.scd_id+'");>'+full.exe_hms+ '   ';
 							html +=  full.scd_nm+'</span>';	
 							html += '</div>';
 						}else{
-								html += '<div>';
+								html += '<div style="margin-top: 7px;">';
 							    html += '<img src="../images/ico_agent_2.png" alt=""  style="margin-right:10px"  width="10px" height="10px" />';		
 							    html +=	'<span onClick=javascript:fn_popup("'+full.scd_id+'");>'+full.exe_hms+ '   ';
 								html +=  full.scd_nm+'</span>';	

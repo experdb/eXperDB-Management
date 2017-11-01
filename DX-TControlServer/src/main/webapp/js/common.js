@@ -322,7 +322,12 @@ function fn_workLayer(wrk_nm){
 				$("#bck_opt_cd_nm").html(result[0].bck_opt_cd_nm);
 				$("#r_wrk_nm").html(result[0].wrk_nm);
 				$("#r_wrk_exp").html(result[0].wrk_exp);
-				$("#cps_yn").html(result[0].cps_yn);
+				if(result[0].cps_yn == "N"){
+					$("#cps_yn").html("아니오");
+				}else{
+					$("#cps_yn").html("예");
+				}
+				//$("#cps_yn").html(result[0].cps_yn);
 				$("#log_file_pth").html(result[0].log_file_pth);
 				$("#data_pth").html(result[0].data_pth);
 				$("#bck_pth").html(result[0].bck_pth);
@@ -330,7 +335,12 @@ function fn_workLayer(wrk_nm){
 				$("#bck_mtn_ecnt").html(result[0].bck_mtn_ecnt);
 				$("#acv_file_stgdt").html(result[0].acv_file_stgdt);
 				$("#acv_file_mtncnt").html(result[0].acv_file_mtncnt);
-				$("#log_file_bck_yn").html(result[0].log_file_bck_yn);
+				if(result[0].log_file_bck_yn == "N"){
+					$("#log_file_bck_yn").html("아니오");
+				}else{
+					$("#log_file_bck_yn").html("예");
+				}
+				//$("#log_file_bck_yn").html(result[0].log_file_bck_yn);
 				$("#r_log_file_stg_dcnt").html(result[0].log_file_stg_dcnt);
 				$("#r_log_file_mtn_ecnt").html(result[0].log_file_mtn_ecnt);
 				
