@@ -24,17 +24,12 @@
    		<!-- loginf-processing-url 로그인 페이지 form actio에 입력 할 주소 지정 -->
    		<!-- default-target-url : 로그인 성송시 이동 주소 -->
    		<!-- authentication-failure-url : 로그인 실패인 경우 호울할 주소 지정 -->
-		<form-login login-page="/" 
-					username-parameter="usr_id" 
-					password-parameter="pwd"		
-					default-target-url="/index.do" 
-					authentication-failure-url="/?fail=true"	
-					always-use-default-target='true'
-					login-processing-url="/login.do"></form-login>
+
 					
 	
 		<custom-filter after="EXCEPTION_TRANSLATION_FILTER" ref="ajaxSessionTimeoutFilter"/>
 		
+		<csrf disabled="true"/>
 	</http>
 
  	<beans:bean id="ajaxSessionTimeoutFilter" class="com.k4m.dx.tcontrol.cmmn.AjaxSessionCheckFilter" />
