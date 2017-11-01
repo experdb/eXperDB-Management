@@ -101,10 +101,10 @@
 						},
 						success : function(result) {
 							if(result =='start'){
-								alert("실행하였습니다");
+								alert("전송 서버를 실행하였습니다");
 								fn_select();
 							}else if(result =='stop'){
-								alert("중지하였습니다");
+								alert("전송 서버를 중지하였습니다");
 								fn_select();
 							}else if(result =='transfersetting'){
 								alert("전송설정을 등록 해주세요.");

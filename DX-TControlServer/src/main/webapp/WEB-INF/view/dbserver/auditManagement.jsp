@@ -103,9 +103,9 @@
 				},
 				success : function(result) {
 					if(result == false) {
-						alert("audit 저장이 실패하였습니다.");
+						alert("audit 적용이 실패하였습니다.");
 					} else {
-						alert("저장하였습니다.");
+						alert("적용하였습니다.");
 					}
 					
 				}
@@ -137,7 +137,7 @@
 					<div class="contents">
 						<div class="cmm_grp">
 							<div class="btn_type_01">
-								<span class="btn btnC_01"><button id="btnSave">저장</button></span>
+								<span class="btn btnC_01"><button id="btnSave">적용</button></span>
 							</div>
 							<div class="sch_form p1">
 								<div class="inp_chk chk3">

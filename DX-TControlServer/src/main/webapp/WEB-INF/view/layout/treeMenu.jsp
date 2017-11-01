@@ -9,7 +9,7 @@
 
 .tooltip .tooltiptext {
     visibility: hidden;
-    width: 120px;
+    width: 130px;
     background-color: black;
     color: #fff;
     text-align: center;
@@ -201,7 +201,7 @@
 // 		          }
 // 	          }
 	          $(data).each(function (index, item) {
-	          html += '      <ul class="depth_1 lnbMenu"><li class="t2"><div class="border" style="overflow: hidden;white-space: nowrap;text-overflow: ellipsis;"><a href="#n"><img src="../images/ico_lnb_5.png" id="treeImg">'+item.cnr_nm+'</a></div>';
+	          html += '      <ul class="depth_1 lnbMenu"><li class="t2"><div class="border" ><a href="#n"><img src="../images/ico_lnb_5.png" id="treeImg"><div class="tooltip">'+item.cnr_nm+'<span class="tooltiptext">'+item.cnr_nm+'</span></div></a></div>';
 	          html += '         <ul class="depth_2">';
 	          html += '              <li class="ico2_3"><a href="/transferTarget.do?cnr_id='+item.cnr_id+'&&cnr_nm='+item.cnr_nm+'" onClick=javascript:fn_GoLink("/transferTarget.do?cnr_id='+item.cnr_id+'&&cnr_nm='+item.cnr_nm+'");><img src="../images/ico_lnb_8.png" id="treeImg">커넥터 설정</a></li>';
 	          html += '            <li class="ico2_4"><a href="/transferDetail.do?cnr_id='+item.cnr_id+'&&cnr_nm='+item.cnr_nm+'" onClick=javascript:fn_GoLink("/transferDetail.do?cnr_id='+item.cnr_id+'&&cnr_nm='+item.cnr_nm+'");><img src="../images/ico_lnb_9.png" id="treeImg">전송대상 설정</a></li>';

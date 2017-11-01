@@ -182,7 +182,7 @@ function checkFolder(keyType){
 							$( "#backupVolume" ).append(volume);
 						}
 					}else{
-						alert("유효하지 않는 경로입니다.");
+						alert("유효하지 않은 경로입니다.");
 					}
 				}else{
 					alert("경로체크 중 서버에러로 인하여 실패하였습니다.")
@@ -240,13 +240,13 @@ function checkFolder(keyType){
 							<span>
 								<select name="bck_opt_cd" id="bck_opt_cd" class="select">
 									<option value="">선택</option>
-									<option value="TC000301"<c:if test="${workInfo[0].bck_opt_cd == 'TC000301'}"> selected</c:if>>FULL</option>
-									<option value="TC000302"<c:if test="${workInfo[0].bck_opt_cd == 'TC000302'}"> selected</c:if>>incremental</option>
-									<option value="TC000303"<c:if test="${workInfo[0].bck_opt_cd == 'TC000303'}"> selected</c:if>>archive</option>
+									<option value="TC000301"<c:if test="${workInfo[0].bck_opt_cd == 'TC000301'}"> selected</c:if>>전체백업</option>
+									<option value="TC000302"<c:if test="${workInfo[0].bck_opt_cd == 'TC000302'}"> selected</c:if>>증분백업</option>
+									<option value="TC000303"<c:if test="${workInfo[0].bck_opt_cd == 'TC000303'}"> selected</c:if>>변경로그백업</option>
 								</select>
 							</span>						
-							<span class="tit" style="margin-right: 5px;">로그경로</span>
-							<span style="margin-right: 5px;">
+							<span class="tit" style="margin-left: 48px;">로그경로</span>
+							<span>
 								<input type="text" class="txt" name="log_file_pth" id="log_file_pth" maxlength=200  value="<c:out value="${workInfo[0].log_file_pth}"/>" style="width:230px" onKeydown="$('#check_path3').val('N')"/>
 								<span class="btn btnC_01"><button type="button" class= "btn_type_02" onclick="checkFolder(3)" style="width: 60px; margin-right: -60px; margin-top: 0;">경로체크</button></span>
 							</span>	

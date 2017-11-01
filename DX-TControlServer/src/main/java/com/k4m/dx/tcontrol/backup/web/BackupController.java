@@ -865,6 +865,28 @@ public class BackupController {
 	
 
 	/**
+	 *   백업스케줄 리스트(월별)
+	 * 
+	 * @param
+	 * @return 
+	 * @throws Exception
+	 */
+	@RequestMapping(value = "/selectMonthBckSchedule.do")
+	@ResponseBody
+	public List<Map<String, Object>> selectMonthBckSchedule(@ModelAttribute("historyVO") HistoryVO historyVO, HttpServletRequest request, HttpServletResponse response) {
+		
+		List<Map<String, Object>> result = null;
+		try {		
+				int db_svr_id = Integer.parseInt(request.getParameter("db_svr_id"));
+				result = backupService.selectMonthBckSchedule(db_svr_id);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return result;		
+	}	
+	
+	
+	/**
 	 * 백업스케줄 등록 뷰
 	 * 
 	 * @param

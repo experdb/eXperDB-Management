@@ -60,9 +60,13 @@ function fn_rman_init(){
 	    columns : [
 		         	{ data: "rownum", className: "dt-center", defaultContent: ""}, 
 		         	{ data: "wrk_nm", className: "dt-center", defaultContent: ""}, 
+		         	{ data: "wrk_exp", className: "dt-center", defaultContent: ""}, 		         	
  		         	{ data: "bck_opt_cd_nm", className: "dt-center", defaultContent: ""}, 
+ 		         	{ data: "file_sz", className: "dt-center", defaultContent: ""}, 
+		         	{ data: "bck_file_pth", className: "dt-center", defaultContent: ""}, 
  		         	{ data: "wrk_strt_dtm", className: "dt-center", defaultContent: ""}, 
  		         	{ data: "wrk_end_dtm", className: "dt-center", defaultContent: ""}, 
+ 		         	{ data: "wrk_dtm", className: "dt-center", defaultContent: ""}, 
 	 		   		{
 	 					data : "exe_rslt_cd_nm",
 	 					render : function(data, type, full, meta) {
@@ -86,6 +90,10 @@ function fn_rman_init(){
    	tableRman.tables().header().to$().find('th:eq(3)').css('min-width', '100px');
    	tableRman.tables().header().to$().find('th:eq(4)').css('min-width', '100px');
    	tableRman.tables().header().to$().find('th:eq(5)').css('min-width', '100px');
+   	tableRman.tables().header().to$().find('th:eq(6)').css('min-width', '100px');
+   	tableRman.tables().header().to$().find('th:eq(7)').css('min-width', '100px');
+   	tableRman.tables().header().to$().find('th:eq(8)').css('min-width', '100px');
+   	tableRman.tables().header().to$().find('th:eq(9)').css('min-width', '100px');
     $(window).trigger('resize'); 
 }
 
@@ -99,12 +107,14 @@ function fn_dump_init(){
 		scrollX: true,
 	    columns : [
 		         	{ data: "rownum", className: "dt-center", defaultContent: ""}, 
+		         	{ data: "wrk_nm", className: "dt-center", defaultContent: ""}, 
+		         	{ data: "wrk_exp", className: "dt-center", defaultContent: ""}, 
  		         	{ data: "db_nm", className: "dt-center", defaultContent: ""}, 
- 		         	{ data: "wrk_strt_dtm", className: "dt-center", defaultContent: ""}, 
- 		         	{ data: "wrk_end_dtm", className: "dt-center", defaultContent: ""},  		         	
  		         	{ data: "file_sz", className: "dt-center", defaultContent: ""},
  		         	{ data: "bck_file_pth", className: "dt-center", defaultContent: ""},
- 		         	{ data: "bck_filenm", className: "dt-center", defaultContent: ""},
+ 		         	{ data: "wrk_strt_dtm", className: "dt-center", defaultContent: ""}, 
+ 		         	{ data: "wrk_end_dtm", className: "dt-center", defaultContent: ""},  		         			         	
+ 		         	{ data: "wrk_dtm", className: "dt-center", defaultContent: ""},
 	 		   		{
 	 					data : "exe_rslt_cd_nm",
 	 					render : function(data, type, full, meta) {
@@ -130,6 +140,8 @@ function fn_dump_init(){
    	tableDump.tables().header().to$().find('th:eq(5)').css('min-width', '100px');
    	tableDump.tables().header().to$().find('th:eq(6)').css('min-width', '100px');
    	tableDump.tables().header().to$().find('th:eq(7)').css('min-width', '100px');
+   	tableDump.tables().header().to$().find('th:eq(8)').css('min-width', '100px');
+   	tableDump.tables().header().to$().find('th:eq(9)').css('min-width', '100px');
     $(window).trigger('resize');
 }
 
@@ -309,13 +321,13 @@ function selectTab(intab){
 										<option value="TC001702">Fail</option>
 									</select>
 								</td>
-								<th scope="row" class="t9 search_rman">Mode</th>
+								<th scope="row" class="t9 search_rman">백업옵션</th>
 								<td class="search_rman">
 									<select name="bck_opt_cd" id="bck_opt_cd" class="select t5">
 										<option value="">선택</option>
-										<option value="TC000301">FULL</option>
-										<option value="TC000302">incremental</option>
-										<option value="TC000303">archive</option>
+										<option value="TC000301">전체백업</option>
+										<option value="TC000302">증분백업</option>
+										<option value="TC000303">변경로그백업</option>
 									</select>
 								</td>
 								<th scope="row" class="t9 search_dump" style="display:none;">Database</th>
@@ -338,9 +350,13 @@ function selectTab(intab){
 							<tr>
 								<th width="40">NO</th>
 								<th width="100">WORK명</th>
-								<th width="100">Mode</th>
+								<th width="100">WORK설명</th>
+								<th width="100">백업옵션</th>
+								<th width="100">사이즈</th>
+								<th width="100">백업파일경로</th>
 								<th width="100">작업시작 시간</th>
 								<th width="100">작업종료 시간</th>
+								<th width="100">경과시간</th>
 								<th width="100">상태</th>
 							</tr>
 						</thead>
@@ -352,12 +368,14 @@ function selectTab(intab){
 						<thead>
 							<tr>
 								<th width="40">NO</th>
+								<th width="100">WORK명</th>
+								<th width="100">WORK설명</th>
 								<th width="100">Database</th>
+								<th width="100">사이즈</th>
+								<th width="100">백업파일경로</th>								
 								<th width="100">작업시작 시간</th>
 								<th width="100">작업종료 시간</th>
-								<th width="100">Size</th>
-								<th width="100">백업파일경로</th>
-								<th width="100">백업파일명</th>
+								<th width="100">경과시간</th>
 								<th width="100">상태</th>
 							</tr>
 						</thead>

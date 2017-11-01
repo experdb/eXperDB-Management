@@ -117,4 +117,9 @@ public class BackupServiceImpl extends EgovAbstractServiceImpl implements Backup
 	public List<Map<String, Object>> selectWorkObjectLayer(int bck_wrk_id) throws Exception {
 		return backupDAO.selectWorkObjectLayer(bck_wrk_id);
 	}
+
+	@Override
+	public List<Map<String, Object>> selectMonthBckSchedule(int db_svr_id) throws Exception {
+		return backupDAO.selectMonthBckSchedule(db_svr_id);
+	}
 }

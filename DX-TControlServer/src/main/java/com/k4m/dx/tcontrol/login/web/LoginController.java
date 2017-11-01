@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import com.k4m.dx.tcontrol.admin.accesshistory.service.AccessHistoryService;
 import com.k4m.dx.tcontrol.cmmn.CmmnUtils;
 import com.k4m.dx.tcontrol.cmmn.SHA256;
+import com.k4m.dx.tcontrol.cmmn.cmmnExcepHndlr;
 import com.k4m.dx.tcontrol.common.service.HistoryVO;
 import com.k4m.dx.tcontrol.login.service.LoginService;
 import com.k4m.dx.tcontrol.login.service.UserVO;
@@ -57,52 +58,60 @@ public class LoginController {
 	 * @throws Exception
 	 */
 	@RequestMapping(value = "/login.do")
-	public @ResponseBody String login(@ModelAttribute("userVo") UserVO userVo, ModelMap model, HttpServletResponse response,
-			HttpServletRequest request, @ModelAttribute("historyVO") HistoryVO historyVO) {
-		try {
-			String pw = SHA256.SHA256(userVo.getPwd());
-			List<UserVO> userList = loginService.selectUserList(userVo);
-			int intLoginCnt = userList.size();
-			if (intLoginCnt == 0) {
-				return "idFail";
-			} else {
-				if (!pw.equals(userList.get(0).getPwd())) {
-					return "passwordFail";
-				}else if(userList.get(0).getUse_yn().equals("N")){
-					return "useynFail";
-				}else if(userList.get(0).getUsr_expr_dt().equals("N")){
-					return "usrexprdtFail";
-				}else {
-					// 쿠키설정
-					Cookie idCookie = new Cookie("s_login_id", userList.get(0).getUsr_id());
-					idCookie.setMaxAge(-1);
-					if (idCookie != null && !idCookie.equals("")) {
-						idCookie.setPath("/");
-					}
-					response.addCookie(idCookie);
+	public String login(@ModelAttribute("userVo") UserVO userVo, ModelMap model, HttpServletResponse response, HttpServletRequest request,@ModelAttribute("historyVO") HistoryVO historyVO) {
 
+		System.out.println("유저아이디 : " + userVo.getUsr_id());
+		System.out.println("유저비밀번호 : " + userVo.getPwd());
+
+		String id = userVo.getUsr_id();
+		String pw = SHA256.SHA256(userVo.getPwd());
+
+		try {
+			List<UserVO> userList = loginService.selectUserList(userVo);
+
+			int intLoginCnt = userList.size();
+
+			if (intLoginCnt == 0) {
+				throw new cmmnExcepHndlr("등록되지 않은 사용자 입니다. 관리자에게 문의 하여주십시오.");
+				// System.out.println("등록되지 않은 사용자 입니다. 관리자에게 문의 하여주십시오.");
+			} else {
+				if (!id.equals(userList.get(0).getUsr_id())) {
+					System.out.println("유저 ID가 틀립니다.");
+				} else if (!pw.equals(userList.get(0).getPwd())) {
+					System.out.println("비밀번호가 틀립니다.");
+				} else {
+
+					//쿠키설정
+					Cookie idCookie = new Cookie("s_login_id", userList.get(0).getUsr_id());
+					idCookie.setMaxAge(-1);					
+					if(idCookie != null && !idCookie.equals("")) {
+						 idCookie.setPath("/");
+						   }				
+					response.addCookie(idCookie);
+					 					
 					// session 설정
 					HttpSession session = request.getSession();
 					request.getSession().setAttribute("session", session);
 					request.getSession().setAttribute("usr_id", userList.get(0).getUsr_id());
-					request.getSession().setAttribute("usr_nm", userList.get(0).getUsr_nm());
-
+					
 					InetAddress local = InetAddress.getLocalHost();
 					String ip = local.getHostAddress();
 					request.getSession().setAttribute("ip", ip);
 
+					
 					// 로그인 이력 남기기
 					CmmnUtils.saveHistory(request, historyVO);
 					historyVO.setExe_dtl_cd("DX-T0003");
 					accessHistoryService.insertHistory(historyVO);
+					
 
-					return "loginSuccess";
+					return "redirect:/index.do";
 				}
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		return "false";
+		return "redirect:/";
 	}
 
 	/**
