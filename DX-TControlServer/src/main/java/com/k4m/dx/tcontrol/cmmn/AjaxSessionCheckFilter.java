@@ -40,13 +40,19 @@ import org.springframework.security.core.AuthenticationException;
 	        HttpServletResponse res = (HttpServletResponse) response;
 	        
 	        if(isAjaxRequest(req)) {
-	                try {
-	                	chain.doFilter(req, res);
-	                } catch (AccessDeniedException e) {
-	                    res.sendError(HttpServletResponse.SC_FORBIDDEN);
-	                } catch (AuthenticationException e) {
-	                    res.sendError(HttpServletResponse.SC_UNAUTHORIZED);
-	                }
+                if(req.getSession().getAttribute("usr_id") == null){
+                	res.sendError(HttpServletResponse.SC_FORBIDDEN);
+                }
+                
+                try {
+                	chain.doFilter(req, res);
+                } catch (AccessDeniedException e) {
+                    res.sendError(HttpServletResponse.SC_FORBIDDEN);
+                } catch (AuthenticationException e) {
+                    res.sendError(HttpServletResponse.SC_UNAUTHORIZED);
+                }
+	                
+
 	        } else
 	        	chain.doFilter(req, res);
 		}
