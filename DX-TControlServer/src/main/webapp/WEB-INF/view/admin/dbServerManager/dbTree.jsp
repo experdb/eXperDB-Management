@@ -146,7 +146,7 @@ $(window.document).ready(function() {
   	$.ajax({
 		url : "/selectTreeDbServerList.do",
 		data : {},
-		dataType : "json",
+		//dataType : "json",
 		type : "post",
 		beforeSend: function(xhr) {
 	        xhr.setRequestHeader("AJAX", true);
@@ -216,8 +216,11 @@ $(function() {
     		data : {
     			db_svr_nm: db_svr_nm,			
     		},
-    		dataType : "json",
+    		//dataType : "json",
     		type : "post",
+    		beforeSend: function(xhr) {
+    	        xhr.setRequestHeader("AJAX", true);
+    	     },
     		error : function(xhr, status, error) {
     			if(xhr.status == 401) {
     				alert("인증에 실패 했습니다. 로그인 페이지로 이동합니다.");
@@ -325,8 +328,11 @@ function fn_insertDB(){
 					rows : JSON.stringify(datasArr)
 				},
 				async:true,
-				dataType : "json",
+				//dataType : "json",
 				type : "post",
+				beforeSend: function(xhr) {
+			        xhr.setRequestHeader("AJAX", true);
+			     },
 				error : function(xhr, status, error) {
 					if(xhr.status == 401) {
 						alert("인증에 실패 했습니다. 로그인 페이지로 이동합니다.");
@@ -367,8 +373,11 @@ function fn_dataCompareChcek(svrDbList){
 		url : "/selectTreeDBList.do",
 		data : {db_svr_id : db_svr_id},
 		async:true,
-		dataType : "json",
+		//dataType : "json",
 		type : "post",
+		beforeSend: function(xhr) {
+	        xhr.setRequestHeader("AJAX", true);
+	     },
 		error : function(xhr, status, error) {
 			if(xhr.status == 401) {
 				alert("인증에 실패 했습니다. 로그인 페이지로 이동합니다.");
@@ -414,7 +423,6 @@ function fn_dataCompareChcek(svrDbList){
 		}
 	});	
 }
-
 
 </script>
 <div id="contents">
