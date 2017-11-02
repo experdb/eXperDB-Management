@@ -275,6 +275,19 @@
 	    <version>1.9.2</version>
 	</dependency>
 
+	<dependency>
+		<groupId>org.apache.httpcomponents</groupId>
+		<artifactId>httpclient</artifactId>
+		<version>4.5.3</version>
+	</dependency>
+	
+	<dependency>
+			<groupId>net.sf.json-lib</groupId>
+			<artifactId>json-lib</artifactId>
+			<version>2.2.3</version>
+			<classifier>jdk13</classifier>
+			<scope>compile</scope>
+	</dependency>
    </dependencies>
 
    <build>
