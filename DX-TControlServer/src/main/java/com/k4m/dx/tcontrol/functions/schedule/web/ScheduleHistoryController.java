@@ -149,12 +149,8 @@ public class ScheduleHistoryController {
 				String scd_nm = request.getParameter("scd_nm");
 				String db_svr_nm = request.getParameter("db_svr_nm");
 				String exe_result = request.getParameter("exe_result");
-				String wrk_nm = request.getParameter("wrk_nm");
 				if(scd_nm.equals("") ){
 					scd_nm="%";
-				}
-				if(wrk_nm.equals("") ){
-					wrk_nm="%";
 				}
 				
 				param.put("lgi_dtm_start", lgi_dtm_start);
@@ -162,7 +158,6 @@ public class ScheduleHistoryController {
 				param.put("scd_nm", scd_nm);
 				param.put("db_svr_nm", db_svr_nm);
 				param.put("exe_result", exe_result);
-				param.put("wrk_nm", wrk_nm);
 	
 				System.out.println("********PARAMETER*******");
 				System.out.println("DB서버 : "+ db_svr_nm);
@@ -170,7 +165,6 @@ public class ScheduleHistoryController {
 				System.out.println("시작날짜 : "+ lgi_dtm_start);
 				System.out.println("종료날짜 : " +lgi_dtm_end);
 				System.out.println("실행결과 : " +exe_result);
-				System.out.println("WORK명 : " +wrk_nm);
 				System.out.println("*************************");
 				
 				/** EgovPropertyService.sample */
@@ -201,7 +195,6 @@ public class ScheduleHistoryController {
 				model.addAttribute("paginationInfo", paginationInfo);
 				model.addAttribute("svr_nm", db_svr_nm);
 				model.addAttribute("exe_result", exe_result);
-				model.addAttribute("wrk_nm", wrk_nm);
 				model.addAttribute("scd_nm", scd_nm);
 				
 				mv.addObject("read_aut_yn", menuAut.get(0).get("read_aut_yn"));

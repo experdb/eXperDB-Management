@@ -56,8 +56,19 @@
 				data : {},
 				dataType : "json",
 				type : "post",
-				error : function(request, status, error) {
-					alert("ERROR CODE : "+ request.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ request.responseText.replace(/(<([^>]+)>)/gi, ""));
+				beforeSend: function(xhr) {
+			        xhr.setRequestHeader("AJAX", true);
+			     },
+				error : function(xhr, status, error) {
+					if(xhr.status == 401) {
+						alert("인증에 실패 했습니다. 로그인 페이지로 이동합니다.");
+						 location.href = "/";
+					} else if(xhr.status == 403) {
+						alert("세션이 만료가 되었습니다. 로그인 페이지로 이동합니다.");
+			             location.href = "/";
+					} else {
+						alert("ERROR CODE : "+ request.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ request.responseText.replace(/(<([^>]+)>)/gi, ""));
+					}
 				},
 				success : function(result) {		
 					$("#db_svr_nm").children().remove();
@@ -177,8 +188,19 @@
 			},
 			dataType : "json",
 			type : "post",
-			error : function(request, status, error) {
-				alert("ERROR CODE : "+ request.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ request.responseText.replace(/(<([^>]+)>)/gi, ""));
+			beforeSend: function(xhr) {
+		        xhr.setRequestHeader("AJAX", true);
+		     },
+			error : function(xhr, status, error) {
+				if(xhr.status == 401) {
+					alert("인증에 실패 했습니다. 로그인 페이지로 이동합니다.");
+					 location.href = "/";
+				} else if(xhr.status == 403) {
+					alert("세션이 만료가 되었습니다. 로그인 페이지로 이동합니다.");
+		             location.href = "/";
+				} else {
+					alert("ERROR CODE : "+ request.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ request.responseText.replace(/(<([^>]+)>)/gi, ""));
+				}
 			},
 			success : function(result) {		
 				$("#scd_nm").children().remove();
@@ -189,7 +211,7 @@
 					}									
 				}
 				$("#scd_nm").val(scd_nm).attr("selected", "selected");		
-				fn_selectedWork(scd_nm);
+// 				fn_selectedWork(scd_nm);
 			}
 		});	 
 	}
@@ -199,29 +221,29 @@
 		fn_ScheduleNmList();
 	}
 	
-	function fn_selectedWork(scd_nm){
-	  	 $.ajax({
-			url : "selectWrkNmList.do",
-			data : {
-				scd_nm : scd_nm
-			},
-			dataType : "json",
-			type : "post",
-			error : function(request, status, error) {
-				alert("ERROR CODE : "+ request.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ request.responseText.replace(/(<([^>]+)>)/gi, ""));
-			},
-			success : function(result) {		
-				$("#wrk_nm").children().remove();
-				$("#wrk_nm").append("<option value='%'>전체</option>");
-				if(result.length > 0){
-					for(var i=0; i<result.length; i++){
-						$("#wrk_nm").append("<option value='"+result[i].wrk_nm+"'>"+result[i].wrk_nm+"</option>");	
-					}									
-				}
-				//$("#wrk_nm").val(wrk_nm).attr("selected", "selected");	
-			}
-		});
-	}
+// 	function fn_selectedWork(scd_nm){
+// 	  	 $.ajax({
+// 			url : "selectWrkNmList.do",
+// 			data : {
+// 				scd_nm : scd_nm
+// 			},
+// 			dataType : "json",
+// 			type : "post",
+// 			error : function(request, status, error) {
+// 				alert("ERROR CODE : "+ request.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ request.responseText.replace(/(<([^>]+)>)/gi, ""));
+// 			},
+// 			success : function(result) {		
+// 				$("#wrk_nm").children().remove();
+// 				$("#wrk_nm").append("<option value='%'>전체</option>");
+// 				if(result.length > 0){
+// 					for(var i=0; i<result.length; i++){
+// 						$("#wrk_nm").append("<option value='"+result[i].wrk_nm+"'>"+result[i].wrk_nm+"</option>");	
+// 					}									
+// 				}
+// 				//$("#wrk_nm").val(wrk_nm).attr("selected", "selected");	
+// 			}
+// 		});
+// 	}
 	
 	function fn_selectWrkNmList(scd_nm){
 	  	 $.ajax({
@@ -231,8 +253,19 @@
 			},
 			dataType : "json",
 			type : "post",
-			error : function(request, status, error) {
-				alert("ERROR CODE : "+ request.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ request.responseText.replace(/(<([^>]+)>)/gi, ""));
+			beforeSend: function(xhr) {
+		        xhr.setRequestHeader("AJAX", true);
+		     },
+			error : function(xhr, status, error) {
+				if(xhr.status == 401) {
+					alert("인증에 실패 했습니다. 로그인 페이지로 이동합니다.");
+					 location.href = "/";
+				} else if(xhr.status == 403) {
+					alert("세션이 만료가 되었습니다. 로그인 페이지로 이동합니다.");
+		             location.href = "/";
+				} else {
+					alert("ERROR CODE : "+ request.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ request.responseText.replace(/(<([^>]+)>)/gi, ""));
+				}
 			},
 			success : function(result) {		
 				$("#wrk_nm").children().remove();
@@ -289,11 +322,11 @@
 					<table class="write">
 						<caption>검색 조회</caption>
 						<colgroup>
-							<col style="width: 150px;" />
+							<col style="width: 100px;" />
 							<col style="width: 350px;" />
-							<col style="width: 150px;" />
+							<col style="width: 100px;" />
 							<col style="width: 350px;" />
-							<col style="width: 150px;" />
+							<col style="width: 100px;" />
 						</colgroup>
 						<tbody>
 								<tr>
@@ -361,20 +394,6 @@
 												<option value="%">전체</option>
 										</select>	
 									</td>
-									<th scope="row" class="t9 line">WORK명</th>
-									<td>
-										<select class="select t8" name="wrk_nm" id="wrk_nm"  style="width:200px";>
-												<option value="%">전체</option>
-										</select>	
-									</td>
-								</tr>
-								<tr>
-									<th scope="row" class="t9 line">DBMS명</th>
-									<td>
-										<select class="select t8" name="db_svr_nm" id="db_svr_nm"  style="width:200px";>
-												<option value="%">전체</option>
-										</select>	
-									</td>
 									<th scope="row" class="t9 line">실행결과</th>
 									<td>
 										<select class="select t8" name="exe_result" id="exe_result"  style="width:200px";>
@@ -383,8 +402,12 @@
 												<option value="TC001702">실패</option>
 										</select>	
 									</td>
-									<th </th>
-									<td></td>
+									<th scope="row" class="t9 line">DBMS명</th>
+									<td>
+										<select class="select t8" name="db_svr_nm" id="db_svr_nm"  style="width:200px";>
+												<option value="%">전체</option>
+										</select>	
+									</td>
 								</tr>		
 						</tbody>
 					</table>
@@ -399,6 +422,7 @@
 							<col style="width: 20%;" />
 							<col style="width: 15%;" />
 							<col style="width: 15%;" />
+							<col style="width: 15%;" />
 							<col style="width: 10%;" />
 							<col style="width: 15%;" />
 						</colgroup>
@@ -409,6 +433,7 @@
 								<th scope="col">DBMS명</th>							
 								<th scope="col">작업시작일시</th>
 								<th scope="col">작업종료일시</th>
+								<th scope="col">작업시간</th>
 								<th scope="col">결과</th>
 								<th scope="col">상세보기</th>
 							</tr>
@@ -421,6 +446,7 @@
 									<td><c:out value="${result.db_svr_nm}" /></td>								
 									<td><c:out value="${result.wrk_strt_dtm}" /></td>
 									<td><c:out value="${result.wrk_end_dtm}" /></td>
+									<td><c:out value="${result.wrk_dtm}" /></td>
 									<td>
 										<c:choose>
 											<c:when test="${result.exe_result eq 'Success'}">
@@ -429,7 +455,7 @@
 									    	<c:otherwise>
 									    		<img src="../images/ico_w_19.png" alt="" />
 									    	</c:otherwise>
-										</c:choose>	
+										</c:choose>
 									</td>
 									<td><span class='btn btnC_01 btnF_02' onclick='fn_detail(${result.exe_sn})'>
 									<input type="button" value="상세조회"></span></td>
@@ -438,7 +464,6 @@
 						</tbody>
 					</table>
 				</div>		
-				
 				<Br><BR>
 						<div id="paging" class="paging">
 							<ul id='pagininfo'>

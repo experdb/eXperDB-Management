@@ -75,8 +75,19 @@ $(window.document).ready(function() {
 		  		log_file_pth : $("#log_file_pth").val()
 		  	},
 			type : "post",
-			error : function(request, status, error) {
-				alert("ERROR CODE : "+ request.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ request.responseText.replace(/(<([^>]+)>)/gi, ""));
+			beforeSend: function(xhr) {
+		        xhr.setRequestHeader("AJAX", true);
+		     },
+			error : function(xhr, status, error) {
+				if(xhr.status == 401) {
+					alert("인증에 실패 했습니다. 로그인 페이지로 이동합니다.");
+					 location.href = "/";
+				} else if(xhr.status == 403) {
+					alert("세션이 만료가 되었습니다. 로그인 페이지로 이동합니다.");
+		             location.href = "/";
+				} else {
+					alert("ERROR CODE : "+ request.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ request.responseText.replace(/(<([^>]+)>)/gi, ""));
+				}
 			},
 			success : function(data) {
 				result(data);
@@ -181,8 +192,19 @@ function checkFolder(keyType){
 		  		path : save_path
 		  	},
 			type : "post",
-			error : function(request, status, error) {
-				alert("ERROR CODE : "+ request.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ request.responseText.replace(/(<([^>]+)>)/gi, ""));
+			beforeSend: function(xhr) {
+		        xhr.setRequestHeader("AJAX", true);
+		     },
+			error : function(xhr, status, error) {
+				if(xhr.status == 401) {
+					alert("인증에 실패 했습니다. 로그인 페이지로 이동합니다.");
+					 location.href = "/";
+				} else if(xhr.status == 403) {
+					alert("세션이 만료가 되었습니다. 로그인 페이지로 이동합니다.");
+		             location.href = "/";
+				} else {
+					alert("ERROR CODE : "+ request.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ request.responseText.replace(/(<([^>]+)>)/gi, ""));
+				}
 			},
 			success : function(data) {
 				if(data.result.ERR_CODE == ""){
@@ -240,8 +262,19 @@ function fn_check() {
 				document.getElementById("wrk_nm").focus();
 			}
 		},
-		error : function(request, status, error) {
-			alert("ERROR CODE : "+ request.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ request.responseText.replace(/(<([^>]+)>)/gi, ""));
+		beforeSend: function(xhr) {
+	        xhr.setRequestHeader("AJAX", true);
+	     },
+		error : function(xhr, status, error) {
+			if(xhr.status == 401) {
+				alert("인증에 실패 했습니다. 로그인 페이지로 이동합니다.");
+				 location.href = "/";
+			} else if(xhr.status == 403) {
+				alert("세션이 만료가 되었습니다. 로그인 페이지로 이동합니다.");
+	             location.href = "/";
+			} else {
+				alert("ERROR CODE : "+ request.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ request.responseText.replace(/(<([^>]+)>)/gi, ""));
+			}
 		}
 	});
 }

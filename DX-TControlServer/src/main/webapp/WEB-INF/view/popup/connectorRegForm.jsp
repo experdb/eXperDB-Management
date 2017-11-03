@@ -39,7 +39,7 @@
 		}
 		var cnr_ipadr = document.getElementById("cnr_ipadr");
 		if (cnr_ipadr.value == "") {
-			alert("IP를 입력하여 주십시오.");
+			alert("아이피를 입력하여 주십시오.");
 			cnr_ipadr.focus();
 			return false;
 		}
@@ -72,8 +72,19 @@
 					opener.location.reload();
 					window.close();
 				},
-				error : function(request, status, error) {
-					alert("ERROR CODE : "+ request.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ request.responseText.replace(/(<([^>]+)>)/gi, ""));
+				beforeSend: function(xhr) {
+			        xhr.setRequestHeader("AJAX", true);
+			     },
+				error : function(xhr, status, error) {
+					if(xhr.status == 401) {
+						alert("인증에 실패 했습니다. 로그인 페이지로 이동합니다.");
+						 location.href = "/";
+					} else if(xhr.status == 403) {
+						alert("세션이 만료가 되었습니다. 로그인 페이지로 이동합니다.");
+			             location.href = "/";
+					} else {
+						alert("ERROR CODE : "+ request.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ request.responseText.replace(/(<([^>]+)>)/gi, ""));
+					}
 				}
 			});
 	}
@@ -97,8 +108,19 @@
 					opener.location.reload();
 					window.close();
 				},
-				error : function(request, status, error) {
-					alert("ERROR CODE : "+ request.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ request.responseText.replace(/(<([^>]+)>)/gi, ""));
+				beforeSend: function(xhr) {
+			        xhr.setRequestHeader("AJAX", true);
+			     },
+				error : function(xhr, status, error) {
+					if(xhr.status == 401) {
+						alert("인증에 실패 했습니다. 로그인 페이지로 이동합니다.");
+						 location.href = "/";
+					} else if(xhr.status == 403) {
+						alert("세션이 만료가 되었습니다. 로그인 페이지로 이동합니다.");
+			             location.href = "/";
+					} else {
+						alert("ERROR CODE : "+ request.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ request.responseText.replace(/(<([^>]+)>)/gi, ""));
+					}
 				}
 			});
 	}
@@ -134,17 +156,17 @@
 						<tr>
 							<th scope="row" class="ico_t1">커넥터 명</th>
 							<td><input type="text" class="txt" name="cnr_nm" id="cnr_nm" value="${cnr_nm}" maxlength="20"/></td>
-							<th scope="row" class="ico_t1">IP(*)</th>
+							<th scope="row" class="ico_t1">아이피(*)</th>
 							<td><input type="text" class="txt" name="cnr_ipadr" id="cnr_ipadr" value="${cnr_ipadr}"/></td>
 						</tr>
 						<tr>
-							<th scope="row" class="ico_t1">연결유형(*)</th>
+							<th scope="row" class="ico_t1">유형(*)</th>
 							<td>
 								<select class="select" name="cnr_cnn_tp_cd" id="cnr_cnn_tp_cd">
 									<option value="HDFS" ${cnr_cnn_tp_cd == 'HDFS' ? 'selected="selected"' : ''}>HDFS</option>
 								</select>
 							</td>
-							<th scope="row" class="ico_t1">Port(*)</th>
+							<th scope="row" class="ico_t1">포트(*)</th>
 							<td><input type="text" class="txt" name="cnr_portno" id="cnr_portno" value="${cnr_portno}" onKeyPress="NumObj(this);" /></td>
 						</tr>
 					</tbody>

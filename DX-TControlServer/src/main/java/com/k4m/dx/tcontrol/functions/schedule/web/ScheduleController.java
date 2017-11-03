@@ -460,7 +460,8 @@ public class ScheduleController {
 			}else{
 				//이력 남기기
 				CmmnUtils.saveHistory(request, historyVO);
-				historyVO.setExe_dtl_cd("DX-T0039_05");
+				historyVO.setExe_dtl_cd("DX-T0050_04");
+				historyVO.setMnu_id(23);
 				accessHistoryService.insertHistory(historyVO);
 				
 				String scd_id = request.getParameter("scd_id").toString();	
@@ -501,7 +502,8 @@ public class ScheduleController {
 			}else{
 				//이력 남기기
 				CmmnUtils.saveHistory(request, historyVO);
-				historyVO.setExe_dtl_cd("DX-T0039_06");
+				historyVO.setExe_dtl_cd("DX-T0050_04");
+				historyVO.setMnu_id(23);
 				accessHistoryService.insertHistory(historyVO);
 				
 				String strRows = request.getParameter("sWork").toString().replaceAll("&quot;", "\"");
@@ -555,7 +557,8 @@ public class ScheduleController {
 			}else{
 				//이력 남기기
 				CmmnUtils.saveHistory(request, historyVO);
-				historyVO.setExe_dtl_cd("DX-T0039_04");
+				historyVO.setExe_dtl_cd("DX-T0050_02");
+				historyVO.setMnu_id(23);
 				accessHistoryService.insertHistory(historyVO);
 				
 				String strRows = request.getParameter("rowList").toString().replaceAll("&quot;", "\"");

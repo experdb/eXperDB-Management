@@ -11,9 +11,10 @@ import javax.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
+import org.springframework.validation.Errors;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.servlet.ModelAndView;
 
 import com.k4m.dx.tcontrol.admin.accesshistory.service.AccessHistoryService;
 import com.k4m.dx.tcontrol.cmmn.CmmnUtils;
@@ -58,61 +59,54 @@ public class LoginController {
 	 * @throws Exception
 	 */
 	@RequestMapping(value = "/login.do")
-	public String login(@ModelAttribute("userVo") UserVO userVo, ModelMap model, HttpServletResponse response, HttpServletRequest request,@ModelAttribute("historyVO") HistoryVO historyVO) {
-
-		System.out.println("유저아이디 : " + userVo.getUsr_id());
-		System.out.println("유저비밀번호 : " + userVo.getPwd());
-
+	public ModelAndView login(@ModelAttribute("userVo") UserVO userVo, ModelMap model, HttpServletResponse response,
+			HttpServletRequest request, @ModelAttribute("historyVO") HistoryVO historyVO) {
+		ModelAndView mv = new ModelAndView();
 		String id = userVo.getUsr_id();
 		String pw = SHA256.SHA256(userVo.getPwd());
-
 		try {
 			List<UserVO> userList = loginService.selectUserList(userVo);
-
+			mv.setViewName("login");
 			int intLoginCnt = userList.size();
-
 			if (intLoginCnt == 0) {
-				throw new cmmnExcepHndlr("등록되지 않은 사용자 입니다. 관리자에게 문의 하여주십시오.");
-				// System.out.println("등록되지 않은 사용자 입니다. 관리자에게 문의 하여주십시오.");
+				mv.addObject("error", "등록되지 않은 사용자 입니다.");
+			} else if (!id.equals(userList.get(0).getUsr_id()) || !pw.equals(userList.get(0).getPwd())) {
+				mv.addObject("error", "아이디나 비밀번호가 잘못되었습니다.");
+			} else if (userList.get(0).getUse_yn().equals("N")) {
+				mv.addObject("error", "사용할 수 없는 아이디 입니다.");
+			} else if (userList.get(0).getUsr_expr_dt().equals("N")) {
+				mv.addObject("error", "사용 만료된 아이디 입니다.");
 			} else {
-				if (!id.equals(userList.get(0).getUsr_id())) {
-					System.out.println("유저 ID가 틀립니다.");
-				} else if (!pw.equals(userList.get(0).getPwd())) {
-					System.out.println("비밀번호가 틀립니다.");
-				} else {
-
-					//쿠키설정
-					Cookie idCookie = new Cookie("s_login_id", userList.get(0).getUsr_id());
-					idCookie.setMaxAge(-1);					
-					if(idCookie != null && !idCookie.equals("")) {
-						 idCookie.setPath("/");
-						   }				
-					response.addCookie(idCookie);
-					 					
-					// session 설정
-					HttpSession session = request.getSession();
-					request.getSession().setAttribute("session", session);
-					request.getSession().setAttribute("usr_id", userList.get(0).getUsr_id());
-					request.getSession().setAttribute("usr_nm", userList.get(0).getUsr_nm());
-					
-					InetAddress local = InetAddress.getLocalHost();
-					String ip = local.getHostAddress();
-					request.getSession().setAttribute("ip", ip);
-
-					
-					// 로그인 이력 남기기
-					CmmnUtils.saveHistory(request, historyVO);
-					historyVO.setExe_dtl_cd("DX-T0003");
-					accessHistoryService.insertHistory(historyVO);
-					
-
-					return "redirect:/index.do";
+				// 쿠키설정
+				Cookie idCookie = new Cookie("s_login_id", userList.get(0).getUsr_id());
+				idCookie.setMaxAge(-1);
+				if (idCookie != null && !idCookie.equals("")) {
+					idCookie.setPath("/");
 				}
+				response.addCookie(idCookie);
+
+				// session 설정
+				HttpSession session = request.getSession();
+				request.getSession().setAttribute("session", session);
+				request.getSession().setAttribute("usr_id", userList.get(0).getUsr_id());
+				request.getSession().setAttribute("usr_nm", userList.get(0).getUsr_nm());
+
+				InetAddress local = InetAddress.getLocalHost();
+				String ip = local.getHostAddress();
+				request.getSession().setAttribute("ip", ip);
+
+				// 로그인 이력 남기기
+				CmmnUtils.saveHistory(request, historyVO);
+				historyVO.setExe_dtl_cd("DX-T0003");
+				accessHistoryService.insertHistory(historyVO);
+
+				mv.setViewName("redirect:/index.do");
 			}
+
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		return "redirect:/";
+		return mv;
 	}
 
 	/**

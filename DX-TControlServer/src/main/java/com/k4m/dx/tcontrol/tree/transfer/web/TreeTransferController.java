@@ -769,7 +769,6 @@ public class TreeTransferController {
 			treeTransferService.deleteTransferMapping(Integer.parseInt(request.getParameter("trf_trg_mpp_id")));
 			/* 전송대상매핑관계 DELETE */
 			treeTransferService.deleteTransferRelation(Integer.parseInt(request.getParameter("trf_trg_mpp_id")));
-
 			/* 전송대상매핑관계 INSERT */
 			treeTransferService.insertTransferRelation(transferRelationVO);
 
@@ -800,8 +799,7 @@ public class TreeTransferController {
 
 			}
 
-			ConnectorVO connectInfo = (ConnectorVO) transferService
-					.selectDetailConnectorRegister(Integer.parseInt(request.getParameter("cnr_id")));
+			ConnectorVO connectInfo = (ConnectorVO) transferService.selectDetailConnectorRegister(Integer.parseInt(request.getParameter("cnr_id")));
 
 			TransferVO tengInfo = (TransferVO) transferService.selectTengInfo(usr_id);
 			String IP = tengInfo.getTeng_ip();

@@ -74,9 +74,20 @@
 	    		},
 	    		dataType : "json",
 	    		type : "post",
-				error : function(request, status, error) {
-					alert("ERROR CODE : "+ request.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ request.responseText.replace(/(<([^>]+)>)/gi, ""));
-				},
+	    		beforeSend: function(xhr) {
+	    	        xhr.setRequestHeader("AJAX", true);
+	    	     },
+	    		error : function(xhr, status, error) {
+	    			if(xhr.status == 401) {
+	    				alert("인증에 실패 했습니다. 로그인 페이지로 이동합니다.");
+	    				 location.href = "/";
+	    			} else if(xhr.status == 403) {
+	    				alert("세션이 만료가 되었습니다. 로그인 페이지로 이동합니다.");
+	    	             location.href = "/";
+	    			} else {
+	    				alert("ERROR CODE : "+ request.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ request.responseText.replace(/(<([^>]+)>)/gi, ""));
+	    			}
+	    		},
 	    		success : function(result) {  
 	    				var option = "<option value='no'>선택</option>";
 						for(var i=0; i<result.length; i++){	
@@ -112,9 +123,20 @@
     		},
     		dataType : "json",
     		type : "post",
-			error : function(request, status, error) {
-				alert("ERROR CODE : "+ request.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ request.responseText.replace(/(<([^>]+)>)/gi, ""));
-			},
+    		beforeSend: function(xhr) {
+    	        xhr.setRequestHeader("AJAX", true);
+    	     },
+    		error : function(xhr, status, error) {
+    			if(xhr.status == 401) {
+    				alert("인증에 실패 했습니다. 로그인 페이지로 이동합니다.");
+    				 location.href = "/";
+    			} else if(xhr.status == 403) {
+    				alert("세션이 만료가 되었습니다. 로그인 페이지로 이동합니다.");
+    	             location.href = "/";
+    			} else {
+    				alert("ERROR CODE : "+ request.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ request.responseText.replace(/(<([^>]+)>)/gi, ""));
+    			}
+    		},
     		success : function(result) {  
     				var option = "<option value='no'>선택</option>";
 					for(var i=0; i<result.length; i++){	
@@ -137,9 +159,20 @@
 	    		},
 	    		dataType : "json",
 	    		type : "post",
-				error : function(request, status, error) {
-					alert("ERROR CODE : "+ request.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ request.responseText.replace(/(<([^>]+)>)/gi, ""));
-				},
+	    		beforeSend: function(xhr) {
+	    	        xhr.setRequestHeader("AJAX", true);
+	    	     },
+	    		error : function(xhr, status, error) {
+	    			if(xhr.status == 401) {
+	    				alert("인증에 실패 했습니다. 로그인 페이지로 이동합니다.");
+	    				 location.href = "/";
+	    			} else if(xhr.status == 403) {
+	    				alert("세션이 만료가 되었습니다. 로그인 페이지로 이동합니다.");
+	    	             location.href = "/";
+	    			} else {
+	    				alert("ERROR CODE : "+ request.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ request.responseText.replace(/(<([^>]+)>)/gi, ""));
+	    			}
+	    		},
 	    		success : function(result) {
 	    			if(result.data == null){
 	    				alert("experdb 엔진을 확인해주세요.");
@@ -169,8 +202,7 @@
 	    			
 	    		}
 	    	});	
-		}
-		else if($("#db_nm").val()!="no"){
+		}else if($("#db_nm").val()!="no"){
 			connectorTableList.clear().draw();
 			$.ajax({
 	    		url : "/selectMappingTableList.do",
@@ -179,9 +211,20 @@
 	    		},
 	    		dataType : "json",
 	    		type : "post",
-				error : function(request, status, error) {
-					alert("ERROR CODE : "+ request.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ request.responseText.replace(/(<([^>]+)>)/gi, ""));
-				},
+	    		beforeSend: function(xhr) {
+	    	        xhr.setRequestHeader("AJAX", true);
+	    	     },
+	    		error : function(xhr, status, error) {
+	    			if(xhr.status == 401) {
+	    				alert("인증에 실패 했습니다. 로그인 페이지로 이동합니다.");
+	    				 location.href = "/";
+	    			} else if(xhr.status == 403) {
+	    				alert("세션이 만료가 되었습니다. 로그인 페이지로 이동합니다.");
+	    	             location.href = "/";
+	    			} else {
+	    				alert("ERROR CODE : "+ request.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ request.responseText.replace(/(<([^>]+)>)/gi, ""));
+	    			}
+	    		},
 	    		success : function(result) {
 	    			if(result.bottledwater !=null){
 	    				alert("bottledwater extension을 설치해주세요.");
@@ -296,8 +339,19 @@
     				window.close();
     				opener.fn_select();
     			},
-    			error : function(request, status, error) {
-    				alert("ERROR CODE : "+ request.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ request.responseText.replace(/(<([^>]+)>)/gi, ""));
+    			beforeSend: function(xhr) {
+    		        xhr.setRequestHeader("AJAX", true);
+    		     },
+    			error : function(xhr, status, error) {
+    				if(xhr.status == 401) {
+    					alert("인증에 실패 했습니다. 로그인 페이지로 이동합니다.");
+    					 location.href = "/";
+    				} else if(xhr.status == 403) {
+    					alert("세션이 만료가 되었습니다. 로그인 페이지로 이동합니다.");
+    		             location.href = "/";
+    				} else {
+    					alert("ERROR CODE : "+ request.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ request.responseText.replace(/(<([^>]+)>)/gi, ""));
+    				}
     			}
     		});
 		}	

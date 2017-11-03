@@ -96,20 +96,30 @@
 						},
 						dataType : "json",
 						type : "post",
-						error : function(request, status, error) {
-							alert("ERROR CODE : "+ request.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ request.responseText.replace(/(<([^>]+)>)/gi, ""));
+						beforeSend: function(xhr) {
+					        xhr.setRequestHeader("AJAX", true);
+					     },
+						error : function(xhr, status, error) {
+							if(xhr.status == 401) {
+								alert("인증에 실패 했습니다. 로그인 페이지로 이동합니다.");
+								 location.href = "/";
+							} else if(xhr.status == 403) {
+								alert("세션이 만료가 되었습니다. 로그인 페이지로 이동합니다.");
+					             location.href = "/";
+							} else {
+								alert("ERROR CODE : "+ request.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ request.responseText.replace(/(<([^>]+)>)/gi, ""));
+							}
 						},
 						success : function(result) {
 							if(result =='start'){
-								alert("전송 서버를 실행하였습니다");
+								alert("전송을 활성화 하였습니다.");
 								fn_select();
 							}else if(result =='stop'){
-								alert("전송 서버를 중지하였습니다");
+								alert("전송을 비활성화 하였습니다.");
 								fn_select();
 							}else if(result =='transfersetting'){
 								alert("전송설정을 등록 해주세요.");
-							}
-							else{
+							}else{
 								alert("서버에 experdb엔진이 설치되지 않았습니다.");
 							}	
 						}
@@ -131,8 +141,19 @@
 			},
 			dataType : "json",
 			type : "post",
-			error : function(request, status, error) {
-				alert("ERROR CODE : "+ request.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ request.responseText.replace(/(<([^>]+)>)/gi, ""));
+			beforeSend: function(xhr) {
+		        xhr.setRequestHeader("AJAX", true);
+		     },
+			error : function(xhr, status, error) {
+				if(xhr.status == 401) {
+					alert("인증에 실패 했습니다. 로그인 페이지로 이동합니다.");
+					 location.href = "/";
+				} else if(xhr.status == 403) {
+					alert("세션이 만료가 되었습니다. 로그인 페이지로 이동합니다.");
+		             location.href = "/";
+				} else {
+					alert("ERROR CODE : "+ request.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ request.responseText.replace(/(<([^>]+)>)/gi, ""));
+				}
 			},
 			success : function(result) {
 				table.clear().draw();
@@ -153,8 +174,19 @@
 			},
 			dataType : "json",
 			type : "post",
-			error : function(request, status, error) {
-				alert("ERROR CODE : "+ request.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ request.responseText.replace(/(<([^>]+)>)/gi, ""));
+			beforeSend: function(xhr) {
+		        xhr.setRequestHeader("AJAX", true);
+		     },
+			error : function(xhr, status, error) {
+				if(xhr.status == 401) {
+					alert("인증에 실패 했습니다. 로그인 페이지로 이동합니다.");
+					 location.href = "/";
+				} else if(xhr.status == 403) {
+					alert("세션이 만료가 되었습니다. 로그인 페이지로 이동합니다.");
+		             location.href = "/";
+				} else {
+					alert("ERROR CODE : "+ request.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ request.responseText.replace(/(<([^>]+)>)/gi, ""));
+				}
 			},
 			success : function(result) {
 				table.clear().draw();
@@ -227,7 +259,7 @@
 								<th width="100">DBMS명</th>
 								<th width="100">Database</th>
 								<th width="50">구동상태</th>
-								<th width="100">전송 서버 실행</th>
+								<th width="100">전송 활성화</th>
 							</tr>
 						</thead>
 					</table>
