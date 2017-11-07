@@ -46,6 +46,8 @@ public interface SystemService {
 	 */
 	public AgentInfoVO selectAgentInfo(AgentInfoVO vo) throws Exception;
 	
+	public AgentInfoVO selectMasterGbm() throws Exception;
+	
 	/**
 	 * Agent 실행
 	 * @param dbServerInfo

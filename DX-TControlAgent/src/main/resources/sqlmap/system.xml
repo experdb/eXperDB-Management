@@ -114,7 +114,7 @@
 		]]>
 	</select>
 	
-	<select id="selectMasterGbm" parameterType="AgentInfoVO" resultType="AgentInfoVO">
+	<select id="selectMasterGbm"  resultType="AgentInfoVO">
 		<![CDATA[
 			/**
 		 	* Query ID : selectMasterGbm
@@ -123,9 +123,9 @@
 		 	**/
 		
 			SELECT
-			CASE WHEN pg_is_in_recovery() is true THEN 'S' ELSE 'M' END MASTER_GBN 
+			CASE WHEN pg_is_in_recovery() is true THEN 'S' 
+			ELSE 'M' END MASTER_GBN 
 		]]>
-	</select>
 	</select>
 	
 	<select id="selectQ_WRKEXE_G_01_SEQ" resultType="int">
