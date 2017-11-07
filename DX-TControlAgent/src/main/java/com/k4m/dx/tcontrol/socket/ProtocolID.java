@@ -114,4 +114,8 @@ public class ProtocolID {
 	
 	public static final String SLOT = "SLOT";
 	
+	public static final String MASTER_GBN = "MASTER_GBN";
+	public static final String ARR_SERVER_INFO = "ARR_SERVER_INFO";
+	
+	
 }

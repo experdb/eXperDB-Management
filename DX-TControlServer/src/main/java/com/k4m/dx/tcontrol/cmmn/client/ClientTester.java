@@ -44,9 +44,9 @@ public class ClientTester {
 		
 		ClientTester clientTester = new ClientTester();
 		
-		//String Ip = "222.110.153.162";
-		String Ip = "222.110.153.251";
-		 //Ip = "127.0.0.1";
+		String Ip = "222.110.153.162";
+		Ip = "222.110.153.251";
+		 Ip = "127.0.0.1";
 		int port = 9001;
 		try {
 			
@@ -83,7 +83,8 @@ public class ClientTester {
 			//clientTester.dxT017_select(Ip, port);
 			//clientTester.dxT018_insert(Ip, port);
 			//clientTester.dxT018_delete(Ip, port);
-			clientTester.dxT019(Ip, port);
+			//clientTester.dxT019(Ip, port);
+			clientTester.dxT020(Ip, port);
 			
 			//clientTester.test();
 		} catch(Exception e) {
@@ -1809,6 +1810,88 @@ public class ClientTester {
 			System.out.println("host : " + host);
 			
 			
+		} catch(Exception e) {
+			e.printStackTrace();
+		}
+	}
+	
+	
+	private void dxT020(String Ip, int port) {
+		try {
+			
+			JSONArray arrServerInfo = new JSONArray();
+
+			JSONObject serverObj01 = new JSONObject();
+			
+			
+			serverObj01.put(ClientProtocolID.SERVER_NAME, "222.110.153.251");
+			serverObj01.put(ClientProtocolID.SERVER_IP, "222.110.153.251");
+			serverObj01.put(ClientProtocolID.SERVER_PORT, "5433");
+			serverObj01.put(ClientProtocolID.DATABASE_NAME, "tcontroldb");
+			serverObj01.put(ClientProtocolID.USER_ID, "tcontrol");
+			serverObj01.put(ClientProtocolID.USER_PWD, "tcontrol");
+			
+			arrServerInfo.add(serverObj01);
+			
+			
+			JSONObject serverObj02 = new JSONObject();
+			
+			
+			serverObj02.put(ClientProtocolID.SERVER_NAME, "222.110.153.231");
+			serverObj02.put(ClientProtocolID.SERVER_IP, "222.110.153.231");
+			serverObj02.put(ClientProtocolID.SERVER_PORT, "5433");
+			serverObj02.put(ClientProtocolID.DATABASE_NAME, "tcontroldb");
+			serverObj02.put(ClientProtocolID.USER_ID, "tcontrol");
+			serverObj02.put(ClientProtocolID.USER_PWD, "tcontrol");
+			
+			arrServerInfo.add(serverObj02);
+			
+			JSONObject jObj = new JSONObject();
+			
+			
+			jObj.put(ClientProtocolID.DX_EX_CODE, ClientTranCodeType.DxT020);
+			jObj.put(ClientProtocolID.ARR_SERVER_INFO, arrServerInfo);
+
+			JSONObject objList;
+			
+			ClientAdapter CA = new ClientAdapter(Ip, port);
+			CA.open(); 
+
+			objList = CA.dxT020(jObj);
+			
+			CA.close();
+			
+			String strErrMsg = (String)objList.get(ClientProtocolID.ERR_MSG);
+			String strErrCode = (String)objList.get(ClientProtocolID.ERR_CODE);
+			String strDxExCode = (String)objList.get(ClientProtocolID.DX_EX_CODE);
+			String strResultCode = (String)objList.get(ClientProtocolID.RESULT_CODE);
+			
+			JSONArray arrResult = (JSONArray) objList.get(ClientProtocolID.RESULT_DATA);
+			
+			System.out.println("RESULT_CODE : " +  strResultCode);
+			System.out.println("ERR_CODE : " +  strErrCode);
+			System.out.println("ERR_MSG : " +  strErrMsg);
+			
+			if(strResultCode.equals("0")) {
+				for(int i=0; i<arrResult.size(); i++) {
+					
+					JSONObject outObj = new JSONObject();
+					outObj = (JSONObject) arrResult.get(i);
+					
+					String strServerIP = (String) outObj.get(ClientProtocolID.SERVER_IP);
+					String strServerPort = (String) outObj.get(ClientProtocolID.SERVER_PORT);
+					String strDatabaseName = (String) outObj.get(ClientProtocolID.DATABASE_NAME);
+					String strMasterGbn = (String) outObj.get(ClientProtocolID.MASTER_GBN); 
+					
+					System.out.println(strServerIP + " " + strServerPort + " " + strDatabaseName + " " + strMasterGbn);
+					
+				}
+			}
+			
+			
+			
+				
+			//CA.close();
 		} catch(Exception e) {
 			e.printStackTrace();
 		}

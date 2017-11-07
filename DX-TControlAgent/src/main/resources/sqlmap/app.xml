@@ -441,5 +441,17 @@
 	 	select pg_drop_replication_slot(#{SLOT_NAME});
   	</select>
   	
-  	
+	<select id="selectMasterGbm"  resultType="hashmap">
+		<![CDATA[
+			/**
+		 	* Query ID : selectMasterGbm
+		 	* Description : Master / Slave 구분
+		 	* Author : 박태혁
+		 	**/
+		
+			SELECT
+			CASE WHEN pg_is_in_recovery() is true THEN 'S' 
+			ELSE 'M' END MASTER_GBN 
+		]]>
+	</select>
 </mapper>

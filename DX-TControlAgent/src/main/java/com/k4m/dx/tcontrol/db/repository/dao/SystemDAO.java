@@ -40,11 +40,6 @@ public class SystemDAO {
 		return (AgentInfoVO) session.selectOne("system.selectAgentInfo", vo);
 	}
 	
-	public AgentInfoVO selectMasterGbm() throws Exception  {
-		return (AgentInfoVO) session.selectOne("system.selectMasterGbm");
-	}
-	
-
 	public int selectQ_WRKEXE_G_01_SEQ() throws Exception  {
 		return (int) session.selectOne("system.selectQ_WRKEXE_G_01_SEQ");
 	}
