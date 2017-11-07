@@ -43,6 +43,7 @@
 			, AGT_VERSION
 			, STRT_DTM
 			, ISTCNF_YN
+			, MASTER_GBN
 			, FRST_REGR_ID
 			, FRST_REG_DTM
 			, LST_MDFR_ID
@@ -57,6 +58,7 @@
 			, #{AGT_VERSION}
 			, now()
 			, #{ISTCNF_YN}
+			, #{MASTER_GBN}
 			, #{FRST_REGR_ID}
 			, now()
 			, #{LST_MDFR_ID}
@@ -77,6 +79,7 @@
 	 		, AGT_VERSION = #{AGT_VERSION}
 	 		, SOCKET_PORT = #{SOCKET_PORT}
 	 		, ISTCNF_YN = #{ISTCNF_YN}
+	 		, MASTER_GBN = #{MASTER_GBN}
 	 		, LST_MDF_DTM = now()
 	 		, STRT_DTM = now()
 	 	WHERE
@@ -99,6 +102,7 @@
 				, STRT_DTM
 				, ISTCNF_YN
 				, AGT_VERSION
+				, CASE WHEN pg_is_in_recovery() is true THEN 'S' ELSE 'M' END MASTER_GBN 
 				, FRST_REGR_ID
 				, FRST_REG_DTM
 				, LST_MDFR_ID
@@ -108,6 +112,20 @@
 				IPADR = #{IPADR}
 			LIMIT 1
 		]]>
+	</select>
+	
+	<select id="selectMasterGbm" parameterType="AgentInfoVO" resultType="AgentInfoVO">
+		<![CDATA[
+			/**
+		 	* Query ID : selectMasterGbm
+		 	* Description : Master / Slave 구분
+		 	* Author : 박태혁
+		 	**/
+		
+			SELECT
+			CASE WHEN pg_is_in_recovery() is true THEN 'S' ELSE 'M' END MASTER_GBN 
+		]]>
+	</select>
 	</select>
 	
 	<select id="selectQ_WRKEXE_G_01_SEQ" resultType="int">

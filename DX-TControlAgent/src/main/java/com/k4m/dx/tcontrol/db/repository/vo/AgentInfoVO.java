@@ -8,6 +8,7 @@ public class AgentInfoVO {
 	private String STRT_DTM;
 	private String ISTCNF_YN;
 	private String AGT_VERSION;
+	private String MASTER_GBN;
 	private String FRST_REGR_ID;
 	private String FRST_REG_DTM;
 	private String LST_MDFR_ID;
@@ -19,6 +20,12 @@ public class AgentInfoVO {
 
 
 	
+	public String getMASTER_GBN() {
+		return MASTER_GBN;
+	}
+	public void setMASTER_GBN(String mASTER_GBN) {
+		MASTER_GBN = mASTER_GBN;
+	}
 	public String getAGT_VERSION() {
 		return AGT_VERSION;
 	}

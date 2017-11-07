@@ -41,6 +41,11 @@ public class SystemServiceImpl implements SystemService{
 		return (AgentInfoVO) systemDAO.selectAgentInfo(vo);
 	}
 	
+	public AgentInfoVO selectMasterGbm() throws Exception  {
+		return (AgentInfoVO) systemDAO.selectMasterGbm();
+	}
+	
+	
 	/**
 	 * 설치정보 관리
 	 * @param dbServerInfo
@@ -54,6 +59,8 @@ public class SystemServiceImpl implements SystemService{
 			
 			AgentInfoVO agentInfo = this.selectAgentInfo(searchAgentInfoVO);
 			
+			AgentInfoVO masterGbnVO = this.selectMasterGbm();
+			
 			AgentInfoVO vo = new AgentInfoVO();
 			
 			vo.setIPADR(strSocketIp);
@@ -61,6 +68,7 @@ public class SystemServiceImpl implements SystemService{
 			vo.setAGT_VERSION(strVersion);
 			vo.setAGT_CNDT_CD(AgentInfoVO.TC001101); //실행
 			vo.setISTCNF_YN("Y");
+			vo.setMASTER_GBN(masterGbnVO.getMASTER_GBN());
 			vo.setFRST_REGR_ID("system");
 			vo.setLST_MDFR_ID("system");
 			
