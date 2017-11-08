@@ -247,9 +247,16 @@ public class DxT005 extends SocketCtl{
 	}
 	
 	public static void main(String[] args) {
-		String test = "/k4m/DxTcontrolWorkspace/";
-		String test2 = test.substring(test.length()-1, test.length());
+		//String test = "/k4m/DxTcontrolWorkspace/";
+		//String test2 = test.substring(test.length()-1, test.length());
 		
-		System.out.println("@@@@@@@@@@@@@@@@" + test2);
+		try {
+		String strCmd = "df";
+		String result = CommonUtil.getPidExec(strCmd);
+		
+		System.out.println("@@@@@@@@@@@@@@@@" + result);
+		} catch (Exception e) {
+			
+		}
 	}
 }

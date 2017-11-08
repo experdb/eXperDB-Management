@@ -10,12 +10,11 @@ import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 
 import com.k4m.dx.tcontrol.db.repository.service.SystemServiceImpl;
-import com.k4m.dx.tcontrol.db.repository.vo.AgentInfoVO;
-import com.k4m.dx.tcontrol.db.repository.vo.DbServerInfoVO;
 import com.k4m.dx.tcontrol.deamon.DxDaemon;
 import com.k4m.dx.tcontrol.deamon.DxDaemonManager;
 import com.k4m.dx.tcontrol.deamon.IllegalDxDaemonClassException;
 import com.k4m.dx.tcontrol.socket.DXTcontrolAgentSocket;
+import com.k4m.dx.tcontrol.socket.listener.ServerCheckListener;
 import com.k4m.dx.tcontrol.util.FileUtil;
 
 public class DaemonStart implements DxDaemon{
@@ -27,6 +26,7 @@ public class DaemonStart implements DxDaemon{
 	private static Logger server = LoggerFactory.getLogger("server");
 	
 	private DXTcontrolAgentSocket socketService;
+	private ServerCheckListener serverCheckListener ;
 
 	public static void main(String args[]) {
 		// -shutdown 옵션이 있을 경우 데몬을 종료시킨다.
@@ -79,6 +79,7 @@ public class DaemonStart implements DxDaemon{
 		try {
 		
 			context = new ClassPathXmlApplicationContext(new String[] {"context-tcontrol.xml"});
+			SystemServiceImpl service = (SystemServiceImpl) context.getBean("SystemService");
 
 			// SqlSessionManager 초기화
 			try {
@@ -88,7 +89,7 @@ public class DaemonStart implements DxDaemon{
 				
 
 				
-				SystemServiceImpl service = (SystemServiceImpl) context.getBean("SystemService");
+				
 
 				
 				service.agentInfoStartMng(strIpadr, strPort, strVersion);
@@ -118,6 +119,9 @@ public class DaemonStart implements DxDaemon{
 	
 			socketService = new DXTcontrolAgentSocket();
 			socketService.start();
+			
+			serverCheckListener = new ServerCheckListener(service);
+			serverCheckListener.run();
 		
 		} catch(Exception e) {
 			errLogger.error("데몬 시작시 에러가 발생하였습니다. {}", e.toString());

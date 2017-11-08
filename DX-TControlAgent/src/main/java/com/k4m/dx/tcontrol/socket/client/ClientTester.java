@@ -45,8 +45,9 @@ public class ClientTester {
 		ClientTester clientTester = new ClientTester();
 		
 		String Ip = "222.110.153.162";
-		Ip = "222.110.153.251";
+		//Ip = "222.110.153.251";
 		 Ip = "127.0.0.1";
+		 //Ip = "222.110.153.231";
 		int port = 9001;
 		try {
 			
@@ -1838,10 +1839,10 @@ public class ClientTester {
 			
 			
 			serverObj02.put(ClientProtocolID.SERVER_NAME, "222.110.153.231");
-			serverObj02.put(ClientProtocolID.SERVER_IP, "222.110.153.231");
+			serverObj02.put(ClientProtocolID.SERVER_IP, "222.110.153.233");
 			serverObj02.put(ClientProtocolID.SERVER_PORT, "5433");
-			serverObj02.put(ClientProtocolID.DATABASE_NAME, "tcontroldb");
-			serverObj02.put(ClientProtocolID.USER_ID, "tcontrol");
+			serverObj02.put(ClientProtocolID.DATABASE_NAME, "tcontroldbd");
+			serverObj02.put(ClientProtocolID.USER_ID, "tcontrol1");
 			serverObj02.put(ClientProtocolID.USER_PWD, "tcontrol");
 			
 			arrServerInfo.add(serverObj02);
@@ -1882,8 +1883,10 @@ public class ClientTester {
 					String strServerPort = (String) outObj.get(ClientProtocolID.SERVER_PORT);
 					String strDatabaseName = (String) outObj.get(ClientProtocolID.DATABASE_NAME);
 					String strMasterGbn = (String) outObj.get(ClientProtocolID.MASTER_GBN); 
+					String strConnectYn = (String) outObj.get(ClientProtocolID.CONNECT_YN); 
 					
-					System.out.println(strServerIP + " " + strServerPort + " " + strDatabaseName + " " + strMasterGbn);
+					System.out.println(strServerIP + " " + strServerPort + " " + strDatabaseName + " " 
+					+ strMasterGbn + " " + strConnectYn);
 					
 				}
 			}

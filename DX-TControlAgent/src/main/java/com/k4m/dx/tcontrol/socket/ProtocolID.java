@@ -116,6 +116,7 @@ public class ProtocolID {
 	
 	public static final String MASTER_GBN = "MASTER_GBN";
 	public static final String ARR_SERVER_INFO = "ARR_SERVER_INFO";
+	public static final String CONNECT_YN = "CONNECT_YN";
 	
 	
 }

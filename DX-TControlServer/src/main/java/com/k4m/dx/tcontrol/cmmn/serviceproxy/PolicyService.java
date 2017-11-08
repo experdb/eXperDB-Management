@@ -24,17 +24,33 @@ public class PolicyService {
 	public static void main(String[] args) throws Exception {
 		
 		String ip = "222.110.153.204";
+		ip = "222.110.153.211";
+		//ip = "localhost";
 		int port = 9443;
+		port = 8443;
 		
 		PolicyService entityService = new PolicyService(ip, port);
-		entityService.selectProfileListTest();
+		//entityService.selectProfileListTest();
+		
+		//entityService.selectProfileProtectionContents();
+		entityService.selectProfileProtection();
 	}
 	
+	/**
+	 * /policyService/selectProfileList
+	 * 
+	 * output :
+	 * resultUid = null
+	 * totalListCount = 2
+	 * resultCode = 0000000000
+	 * list = [{"createDateTime":"2017-10-11 13:54:59.751","profileTypeName":"PROTECTION","profileTypeCode":"PTPR","profileStatusCode":"PS50","profileNote":"","profileStatusName":"ACTIVE","createName":"ê¸°ë³¸ê´\u0080ë¦¬ì\u009E\u0090","createUid":"00000000-0000-0000-0000-000000000001","profileName":"1212","profileUid":"7819aa5f-20a6-4405-b15c-50e30c2dcd6a"},{"createDateTime":"2017-09-15 11:13:11.947","profileTypeCode":"PTPR","profileNote":"55435435","createName":"ê¸°ë³¸ê´\u0080ë¦¬ì\u009E\u0090","profileTypeName":"PROTECTION","updateName":"ê¸°ë³¸ê´\u0080ë¦¬ì\u009E\u0090","profileStatusCode":"PS50","updateUid":"00000000-0000-0000-0000-000000000001","profileStatusName":"ACTIVE","profileName":"AES256","updateDateTime":"2017-10-11 13:53:14.254","createUid":"00000000-0000-0000-0000-000000000001","profileUid":"045c13fb-9915-47b3-936d-c6116d91ed24"}]
+	 * resultMessage = SUCCESS
+	 * 
+	 * @throws Exception
+	 */
 	private void selectProfileListTest() throws Exception {
 		
-		PolicyService api = new PolicyService(restIp, restPort);
 
-		
 		String strService = "policyService";
 		String strCommand = "selectProfileList";
 		
@@ -52,7 +68,7 @@ public class PolicyService {
 		header.put(SystemCode.FieldName.TOKEN_VALUE, "13HhTVDF0R7KoD2+ScNnAHM2HrAhtIk8sAZzYtvAOKI=");
 		header.put(SystemCode.FieldName.ADDRESS, "");
 		
-		JSONObject resultList = api.selectProfileList(strService, strCommand, header, parameters);
+		JSONObject resultList = selectRestRequest(strService, strCommand, header, parameters);
 		
 		String resultCode = resultList.get("resultCode").toString();
 		String totalListCount = resultList.get("totalListCount").toString();
@@ -79,22 +95,73 @@ public class PolicyService {
 		}
 	}
 	
-	/**
-	 * /policyService/selectProfileList
-	 * input :
-	 * 
-	 * 
-	 * output :
-	 * resultUid = null
-	 * totalListCount = 2
-	 * resultCode = 0000000000
-	 * list = [{"createDateTime":"2017-10-11 13:54:59.751","profileTypeName":"PROTECTION","profileTypeCode":"PTPR","profileStatusCode":"PS50","profileNote":"","profileStatusName":"ACTIVE","createName":"ê¸°ë³¸ê´\u0080ë¦¬ì\u009E\u0090","createUid":"00000000-0000-0000-0000-000000000001","profileName":"1212","profileUid":"7819aa5f-20a6-4405-b15c-50e30c2dcd6a"},{"createDateTime":"2017-09-15 11:13:11.947","profileTypeCode":"PTPR","profileNote":"55435435","createName":"ê¸°ë³¸ê´\u0080ë¦¬ì\u009E\u0090","profileTypeName":"PROTECTION","updateName":"ê¸°ë³¸ê´\u0080ë¦¬ì\u009E\u0090","profileStatusCode":"PS50","updateUid":"00000000-0000-0000-0000-000000000001","profileStatusName":"ACTIVE","profileName":"AES256","updateDateTime":"2017-10-11 13:53:14.254","createUid":"00000000-0000-0000-0000-000000000001","profileUid":"045c13fb-9915-47b3-936d-c6116d91ed24"}]
-	 * resultMessage = SUCCESS
+	
+	private void selectProfileProtectionContents() throws Exception {
+		
+		String strService = "policyService";
+		String strCommand = "selectProfileProtectionContents";
+		
+		ProfileVO vo = new ProfileVO();
+		vo.setProfileUid("045c13fb-9915-47b3-936d-c6116d91ed24");
+		
+		HashMap header = new HashMap();
+		header.put(SystemCode.FieldName.LOGIN_ID, "admin");
+		header.put(SystemCode.FieldName.ENTITY_UID, "00000000-0000-0000-0000-000000000001");
+		header.put(SystemCode.FieldName.PASSWORD, "password");
+		header.put(SystemCode.FieldName.TOKEN_VALUE, "uWooiTQOxoLvXXIsVMqu5hbqZtdBzRex/6kDL3Ob92A=");
+		header.put(SystemCode.FieldName.ADDRESS, "");
+		
+		JSONObject parameters = new JSONObject();
+		parameters.put("ProfileProtection", vo);
+		
+		JSONObject resultList = selectRestRequest(strService, strCommand, header, parameters);
+		
+		for (int i = 0; i < resultList.size(); i++) {
+			JSONArray data = (JSONArray) resultList.get("map");
+			for (int j = 0; j < data.size(); j++) {
+				JSONObject jsonObj = (JSONObject) data.get(j);
+				
+				String createDateTime = (String) jsonObj.get("createDateTime");
+				String profileTypeName = (String) jsonObj.get("profileTypeName");
+				String profileTypeCode = (String) jsonObj.get("profileTypeCode");
+				String profileStatusCode = (String) jsonObj.get("profileStatusCode");
+				String profileNote = (String) jsonObj.get("profileNote");
+				String profileStatusName = (String) jsonObj.get("profileStatusName");
+				String createName = (String) jsonObj.get("createName");
+				String createUid = (String) jsonObj.get("createUid");
+				String profileName = (String) jsonObj.get("profileName");
+				String profileUid = (String) jsonObj.get("profileUid");
 
-	 * 
-	 * @throws Exception
-	 */
-	private JSONObject selectProfileList(String strService, String strCommand, HashMap header, JSONObject parameters) throws Exception {
+			}
+		}
+		
+	}
+
+	private void selectProfileProtection() throws Exception {
+		
+		String strService = "policyService";
+		String strCommand = "selectProfileProtection";
+		
+		ProfileVO vo = new ProfileVO();
+		vo.setProfileUid("045c13fb-9915-47b3-936d-c6116d91ed24");
+		
+		HashMap header = new HashMap();
+		header.put(SystemCode.FieldName.LOGIN_ID, "admin");
+		header.put(SystemCode.FieldName.ENTITY_UID, "00000000-0000-0000-0000-000000000001");
+		header.put(SystemCode.FieldName.PASSWORD, "password");
+		header.put(SystemCode.FieldName.TOKEN_VALUE, "uWooiTQOxoLvXXIsVMqu5hbqZtdBzRex/6kDL3Ob92A=");
+		header.put(SystemCode.FieldName.ADDRESS, "");
+		
+		JSONObject parameters = new JSONObject();
+		parameters.put("ProfileProtection", vo);
+		
+		JSONObject resultList = selectRestRequest(strService, strCommand, header, parameters);
+		
+		
+	}
+
+
+	private JSONObject selectRestRequest(String strService, String strCommand, HashMap header, JSONObject parameters) throws Exception {
 		
 		JSONObject resultJsonObjectMap = null;
 		

@@ -72,15 +72,27 @@ public class DxT020 extends SocketCtl{
 				String strServerPort = objJob.get(ProtocolID.SERVER_PORT).toString();
 				String strDatabaseName = objJob.get(ProtocolID.DATABASE_NAME).toString();
 				
-				String strMasterGbn = selectConnectInfo(objJob);
-				
-				JSONObject objReturn = new JSONObject();
-				objReturn.put(ProtocolID.SERVER_IP, strServerIP);
-				objReturn.put(ProtocolID.SERVER_PORT, strServerPort);
-				objReturn.put(ProtocolID.DATABASE_NAME, strDatabaseName);
-				objReturn.put(ProtocolID.MASTER_GBN, strMasterGbn);
-				
-				arrOut.add(objReturn);
+				try {
+					String strMasterGbn = selectConnectInfo(objJob);
+					
+					JSONObject objReturn = new JSONObject();
+					objReturn.put(ProtocolID.SERVER_IP, strServerIP);
+					objReturn.put(ProtocolID.SERVER_PORT, strServerPort);
+					objReturn.put(ProtocolID.DATABASE_NAME, strDatabaseName);
+					objReturn.put(ProtocolID.MASTER_GBN, strMasterGbn);
+					objReturn.put(ProtocolID.CONNECT_YN, "Y");
+					
+					arrOut.add(objReturn);
+				} catch(Exception e) {
+					JSONObject objReturn = new JSONObject();
+					objReturn.put(ProtocolID.SERVER_IP, strServerIP);
+					objReturn.put(ProtocolID.SERVER_PORT, strServerPort);
+					objReturn.put(ProtocolID.DATABASE_NAME, strDatabaseName);
+					objReturn.put(ProtocolID.MASTER_GBN, "N");
+					objReturn.put(ProtocolID.CONNECT_YN, "N");
+					
+					arrOut.add(objReturn);
+				}
 
 			}
 				

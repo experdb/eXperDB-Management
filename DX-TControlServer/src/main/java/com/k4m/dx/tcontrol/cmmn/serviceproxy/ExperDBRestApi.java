@@ -1,8 +1,5 @@
 package com.k4m.dx.tcontrol.cmmn.serviceproxy;
 
-import java.security.KeyManagementException;
-import java.security.KeyStoreException;
-import java.security.NoSuchAlgorithmException;
 import java.security.SecureRandom;
 import java.security.cert.CertificateException;
 import java.util.HashMap;
@@ -15,21 +12,17 @@ import javax.net.ssl.SSLContext;
 import javax.net.ssl.TrustManager;
 import javax.net.ssl.X509TrustManager;
 
-import org.apache.http.client.HttpClient;
+import org.apache.http.conn.ssl.DefaultHostnameVerifier;
 import org.apache.http.conn.ssl.SSLConnectionSocketFactory;
-import org.apache.http.conn.ssl.TrustSelfSignedStrategy;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClients;
-import org.apache.http.ssl.SSLContextBuilder;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
-import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.client.HttpComponentsClientHttpRequestFactory;
-import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
 import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.ResourceAccessException;
 import org.springframework.web.client.RestTemplate;
@@ -111,7 +104,7 @@ public class ExperDBRestApi {
 		//url = makeRestURL("policyService", "selectProfileProtectionVersion");
 		url = makeRestURL(strService, strCommand);
 		
-		SSLConnectionSocketFactory csf = new SSLConnectionSocketFactory(ctx);
+		SSLConnectionSocketFactory csf = new SSLConnectionSocketFactory(ctx, new DefaultHostnameVerifier());
 		 
 		// here we create the Http Client using our SSL Socket Factory and so trust relation
 		CloseableHttpClient httpClient = HttpClients.custom().setSSLSocketFactory(csf).build();
