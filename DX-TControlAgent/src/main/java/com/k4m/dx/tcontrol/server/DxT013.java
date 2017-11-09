@@ -161,7 +161,7 @@ public class DxT013 extends SocketCtl{
 
 			sqlSessionFactory = SqlSessionManager.getInstance();
 			
-			String poolName = "" + objSERVER_INFO.get(ProtocolID.SERVER_IP) + "_" + objSERVER_INFO.get(ProtocolID.DATABASE_NAME);
+			String poolName = "" + objSERVER_INFO.get(ProtocolID.SERVER_IP) + "_" + objSERVER_INFO.get(ProtocolID.DATABASE_NAME) + "_" + objSERVER_INFO.get(ProtocolID.SERVER_PORT);
 			
 			Connection connDB = null;
 			SqlSession sessDB = null;

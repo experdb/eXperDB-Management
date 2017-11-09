@@ -1840,7 +1840,7 @@ public class ClientTester {
 			
 			serverObj02.put(ClientProtocolID.SERVER_NAME, "222.110.153.231");
 			serverObj02.put(ClientProtocolID.SERVER_IP, "222.110.153.231");
-			serverObj02.put(ClientProtocolID.SERVER_PORT, "5433");
+			serverObj02.put(ClientProtocolID.SERVER_PORT, "1234");
 			serverObj02.put(ClientProtocolID.DATABASE_NAME, "experdb");
 			serverObj02.put(ClientProtocolID.USER_ID, "experdb");
 			serverObj02.put(ClientProtocolID.USER_PWD, "experdb");
