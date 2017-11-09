@@ -45,7 +45,7 @@ public class ClientTester {
 		ClientTester clientTester = new ClientTester();
 		
 		String Ip = "222.110.153.162";
-		//Ip = "222.110.153.251";
+		Ip = "222.110.153.251";
 		 Ip = "127.0.0.1";
 		 //Ip = "222.110.153.231";
 		int port = 9001;
@@ -1828,9 +1828,9 @@ public class ClientTester {
 			serverObj01.put(ClientProtocolID.SERVER_NAME, "222.110.153.251");
 			serverObj01.put(ClientProtocolID.SERVER_IP, "222.110.153.251");
 			serverObj01.put(ClientProtocolID.SERVER_PORT, "5433");
-			serverObj01.put(ClientProtocolID.DATABASE_NAME, "tcontroldb");
-			serverObj01.put(ClientProtocolID.USER_ID, "tcontrol");
-			serverObj01.put(ClientProtocolID.USER_PWD, "tcontrol");
+			serverObj01.put(ClientProtocolID.DATABASE_NAME, "experdb");
+			serverObj01.put(ClientProtocolID.USER_ID, "experdb");
+			serverObj01.put(ClientProtocolID.USER_PWD, "experdb");
 			
 			arrServerInfo.add(serverObj01);
 			
@@ -1839,11 +1839,11 @@ public class ClientTester {
 			
 			
 			serverObj02.put(ClientProtocolID.SERVER_NAME, "222.110.153.231");
-			serverObj02.put(ClientProtocolID.SERVER_IP, "222.110.153.233");
+			serverObj02.put(ClientProtocolID.SERVER_IP, "222.110.153.231");
 			serverObj02.put(ClientProtocolID.SERVER_PORT, "5433");
-			serverObj02.put(ClientProtocolID.DATABASE_NAME, "tcontroldbd");
-			serverObj02.put(ClientProtocolID.USER_ID, "tcontrol1");
-			serverObj02.put(ClientProtocolID.USER_PWD, "tcontrol");
+			serverObj02.put(ClientProtocolID.DATABASE_NAME, "experdb");
+			serverObj02.put(ClientProtocolID.USER_ID, "experdb");
+			serverObj02.put(ClientProtocolID.USER_PWD, "experdb");
 			
 			arrServerInfo.add(serverObj02);
 			

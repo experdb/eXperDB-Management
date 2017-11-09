@@ -26,7 +26,7 @@ public class ServerCheckListener implements Runnable {
 				
 				i++;
 				
-				System.out.println("SSSSSSSSSS" + i);
+				//System.out.println("SSSSSSSSSS" + i);
 
 				Thread.sleep(3000);
 				

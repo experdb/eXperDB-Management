@@ -108,7 +108,7 @@ public class DxT008 extends SocketCtl{
 		
 		sqlSessionFactory = SqlSessionManager.getInstance();
 		
-		String poolName = "" + serverInfoObj.get(ProtocolID.SERVER_NAME) + "_" + serverInfoObj.get(ProtocolID.DATABASE_NAME);
+		String poolName = "" + serverInfoObj.get(ProtocolID.SERVER_IP) + "_" + serverInfoObj.get(ProtocolID.DATABASE_NAME);
 		
 		Connection connDB = null;
 		SqlSession sessDB = null;
@@ -153,7 +153,7 @@ public class DxT008 extends SocketCtl{
 		
 		sqlSessionFactory = SqlSessionManager.getInstance();
 		
-		String poolName = "" + serverInfoObj.get(ProtocolID.SERVER_NAME) + "_" + serverInfoObj.get(ProtocolID.DATABASE_NAME);
+		String poolName = "" + serverInfoObj.get(ProtocolID.SERVER_IP) + "_" + serverInfoObj.get(ProtocolID.DATABASE_NAME);
 		
 		Connection connDB = null;
 		SqlSession sessDB = null;

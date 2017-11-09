@@ -56,7 +56,7 @@ public class DxT010 extends SocketCtl{
 		sqlSessionFactory = SqlSessionManager.getInstance();
 		JSONObject objSERVER_INFO = (JSONObject) dbInfoObj.get(ProtocolID.SERVER_INFO);
 		
-		String poolName = "" + objSERVER_INFO.get(ProtocolID.SERVER_NAME) + "_" + objSERVER_INFO.get(ProtocolID.DATABASE_NAME);
+		String poolName = "" + objSERVER_INFO.get(ProtocolID.SERVER_IP) + "_" + objSERVER_INFO.get(ProtocolID.DATABASE_NAME);
 		
 		Connection connDB = null;
 		SqlSession sessDB = null;
