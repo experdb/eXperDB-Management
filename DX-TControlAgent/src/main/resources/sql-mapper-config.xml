@@ -16,7 +16,7 @@
     	<typeAlias alias="WrkExeVO" type="com.k4m.dx.tcontrol.db.repository.vo.WrkExeVO" />
     	<typeAlias alias="TrfTrgCngVO" type="com.k4m.dx.tcontrol.db.repository.vo.TrfTrgCngVO" />
     	<typeAlias alias="ServerInfoVO" type="com.k4m.dx.tcontrol.db.repository.vo.ServerInfoVO" />
-    	<typeAlias alias="DatabaseVO" type="com.k4m.dx.tcontrol.db.repository.vo.DatabaseVO" />
+    	<typeAlias alias="TablespaceVO" type="com.k4m.dx.tcontrol.db.repository.vo.TablespaceVO" />
 
     </typeAliases>
     

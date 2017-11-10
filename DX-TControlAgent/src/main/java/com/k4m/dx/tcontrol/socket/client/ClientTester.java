@@ -86,7 +86,8 @@ public class ClientTester {
 			//clientTester.dxT018_insert(Ip, port);
 			//clientTester.dxT018_delete(Ip, port);
 			//clientTester.dxT019(Ip, port);
-			clientTester.dxT020(Ip, port);
+			//clientTester.dxT020(Ip, port);
+			clientTester.dxT021(Ip, port);
 			
 			//clientTester.test();
 		} catch(Exception e) {

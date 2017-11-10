@@ -353,7 +353,7 @@
 	</select>
 	
 	
-    <select id="selectTablespaceInfo" resultType="DatabaseVO">
+    <select id="selectTablespaceInfo" resultType="TablespaceVO">
 		<![CDATA[
 	   		/**
 		 	* Query ID : selectTablespaceInfo
