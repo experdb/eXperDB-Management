@@ -12,7 +12,7 @@ import com.k4m.dx.tcontrol.common.service.AgentInfoVO;
 import egovframework.rte.psl.dataaccess.EgovAbstractMapper;
 
 @Repository("cmmnServerInfoDAO")
-public class CmmnServerInfoDAO extends EgovAbstractMapper{
+public class CmmnServerInfoDAO extends EgovAbstractMapper {
 
 	/**
 	 * DB Server 정보 리스트
@@ -23,12 +23,13 @@ public class CmmnServerInfoDAO extends EgovAbstractMapper{
 	@SuppressWarnings({ "deprecation", "unchecked" })
 	public List<DbServerVO> selectDbServerList(String db_svr_nm) {
 		List<DbServerVO> sl = null;
-		sl = (List<DbServerVO>) list("cmmnSql.selectDbServerList", db_svr_nm);	
+		sl = (List<DbServerVO>) list("cmmnSql.selectDbServerList", db_svr_nm);
 		return sl;
 	}
-	
+
 	/**
 	 * Agent 정보 조회
+	 * 
 	 * @param vo
 	 * @return
 	 * @throws Exception
@@ -39,6 +40,7 @@ public class CmmnServerInfoDAO extends EgovAbstractMapper{
 
 	/**
 	 * 서버 정보 조회
+	 * 
 	 * @param vo
 	 * @return
 	 * @throws Exception
@@ -47,15 +49,29 @@ public class CmmnServerInfoDAO extends EgovAbstractMapper{
 		return (DbServerVO) selectOne("cmmnSql.selectServerInfo", vo);
 	}
 
-	
+	/**
+	 * 서버 정보 조회(Slave)
+	 * 
+	 * @param vo
+	 * @return
+	 * @throws Exception
+	 */
+	@SuppressWarnings({ "deprecation", "unchecked" })
+	public List<DbServerVO> selectServerInfoSlave(DbServerVO vo) {
+		List<DbServerVO> sl = null;
+		sl = (List<DbServerVO>) list("cmmnSql.selectServerInfoSlave", vo);
+		return sl;
+	}
+
 	@SuppressWarnings({ "unchecked", "deprecation" })
 	public List<Map<String, Object>> selectIpadrList(int db_svr_id) {
 		List<Map<String, Object>> sl = null;
-		sl = (List<Map<String, Object>>) list("cmmnSql.selectIpadrList", db_svr_id);	
+		sl = (List<Map<String, Object>>) list("cmmnSql.selectIpadrList", db_svr_id);
 		return sl;
 	}
 
 	public void deleteIpadr(DbServerVO dbServerVO) {
-		insert("cmmnSql.deleteIpadr", dbServerVO);	
+		insert("cmmnSql.deleteIpadr", dbServerVO);
 	}
+
 }

@@ -302,6 +302,39 @@ public class AuditController {
 			blnReturn = false;
 		}
 		
+		/*slave*/
+		boolean blnReturnSlave= true;
+		schDbServerVO = new DbServerVO();
+		schDbServerVO.setDb_svr_id(db_svr_id);
+		List<DbServerVO> slaveInfo= cmmnServerInfoService.selectServerInfoSlave(schDbServerVO);
+		if(slaveInfo.size()!=0){
+			for(int s=0; s<slaveInfo.size(); s++){
+				IP = slaveInfo.get(s).getIpadr();
+				vo = new AgentInfoVO();
+				vo.setIPADR(IP);
+				agentInfo =  (AgentInfoVO) cmmnServerInfoService.selectAgentInfo(vo);
+				PORT = agentInfo.getSOCKET_PORT();
+				serverObj.put(ClientProtocolID.SERVER_NAME, slaveInfo.get(s).getDb_svr_nm());
+				serverObj.put(ClientProtocolID.SERVER_IP, slaveInfo.get(s).getIpadr());
+				serverObj.put(ClientProtocolID.SERVER_PORT, slaveInfo.get(s).getPortno());
+				serverObj.put(ClientProtocolID.DATABASE_NAME, slaveInfo.get(s).getDft_db_nm());
+				serverObj.put(ClientProtocolID.USER_ID, slaveInfo.get(s).getSvr_spr_usr_id());
+				serverObj.put(ClientProtocolID.USER_PWD, dec.aesDecode(slaveInfo.get(s).getSvr_spr_scm_pwd()));
+				
+				CA = new ClientAdapter(IP, PORT);
+				CA.open(); 
+				
+				objList = CA.dxT007(ClientTranCodeType.DxT007, ClientProtocolID.COMMAND_CODE_C, serverObj, objSettingInfo);
+				CA.close();				
+				strResultCode = (String)objList.get(ClientProtocolID.RESULT_CODE);
+				if(strResultCode.equals("1")) {
+					blnReturnSlave = false;
+				}
+			}
+			
+			blnReturn=blnReturnSlave;
+		}
+		
 		return blnReturn;
 	}
 	

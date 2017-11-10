@@ -15,8 +15,6 @@
 			, D.DB_EXP
 			, S.DB_SVR_ID
 			, S.DB_SVR_NM
-			, S.IPADR
-			, S.PORTNO
 			, S.DFT_DB_NM
 			, S.SVR_SPR_USR_ID
 			, S.SVR_SPR_SCM_PWD

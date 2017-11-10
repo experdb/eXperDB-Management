@@ -18,12 +18,12 @@ public class CmmnServerInfoServiceImpl extends EgovAbstractServiceImpl implement
 
 	@Resource(name = "cmmnServerInfoDAO")
 	private CmmnServerInfoDAO cmmnServerInfoDAO;
-	
+
 	/**
 	 * 서버정보 리스트
 	 */
 	public List<DbServerVO> selectDbServerList(String db_svr_nm) throws Exception {
-        return cmmnServerInfoDAO.selectDbServerList(db_svr_nm);
+		return cmmnServerInfoDAO.selectDbServerList(db_svr_nm);
 	}
 
 	@Override
@@ -47,6 +47,11 @@ public class CmmnServerInfoServiceImpl extends EgovAbstractServiceImpl implement
 	public void deleteIpadr(DbServerVO dbServerVO) throws Exception {
 		cmmnServerInfoDAO.deleteIpadr(dbServerVO);
 	}
-	
-	
+
+	@Override
+	public List<DbServerVO> selectServerInfoSlave(DbServerVO vo) throws Exception {
+		// TODO Auto-generated method stub
+		return cmmnServerInfoDAO.selectServerInfoSlave(vo);
+	}
+
 }

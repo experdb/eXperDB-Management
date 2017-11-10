@@ -318,11 +318,9 @@ public class AccessControlController {
 			schDbServerVO.setDb_svr_id(db_svr_id);
 			DbServerVO dbServerVO = (DbServerVO) cmmnServerInfoService.selectServerInfo(schDbServerVO);
 			String IP = dbServerVO.getIpadr();
-			String strIpAdr = dbServerVO.getIpadr();
 			AgentInfoVO vo = new AgentInfoVO();
-			vo.setIPADR(strIpAdr);
+			vo.setIPADR(IP);
 			AgentInfoVO agentInfo = (AgentInfoVO) cmmnServerInfoService.selectAgentInfo(vo);
-
 			int PORT = agentInfo.getSOCKET_PORT();
 
 			serverObj.put(ClientProtocolID.SERVER_NAME, dbServerVO.getDb_svr_nm());
@@ -404,6 +402,59 @@ public class AccessControlController {
 					accessControlService.insertAccessControlHistory(accessControlHistoryVO);
 				}
 			}
+			
+			/*slave*/
+			schDbServerVO.setDb_svr_id(db_svr_id);
+			List<DbServerVO> slaveInfo= cmmnServerInfoService.selectServerInfoSlave(schDbServerVO);
+			System.out.println("slave 잇나여 없나여");
+			if(slaveInfo.size()!=0){
+				System.out.println("slave 잇어요~~" + slaveInfo.size());
+				for(int s=0; s<slaveInfo.size(); s++){
+					System.out.println("slave------>"+s + slaveInfo.get(s).getIpadr());
+					
+					IP = slaveInfo.get(s).getIpadr();
+					vo = new AgentInfoVO();
+					vo.setIPADR(IP);
+					agentInfo = (AgentInfoVO) cmmnServerInfoService.selectAgentInfo(vo);
+					PORT = agentInfo.getSOCKET_PORT();	
+					
+					serverObj.put(ClientProtocolID.SERVER_NAME, slaveInfo.get(s).getDb_svr_nm());
+					serverObj.put(ClientProtocolID.SERVER_IP, slaveInfo.get(s).getIpadr());
+					serverObj.put(ClientProtocolID.SERVER_PORT, slaveInfo.get(s).getPortno());
+					serverObj.put(ClientProtocolID.DATABASE_NAME, slaveInfo.get(s).getDft_db_nm());
+					serverObj.put(ClientProtocolID.USER_ID, slaveInfo.get(s).getSvr_spr_usr_id());
+					serverObj.put(ClientProtocolID.USER_PWD, dec.aesDecode(slaveInfo.get(s).getSvr_spr_scm_pwd()));
+					
+					/*pg_hba.conf 전체 삭제*/
+					cic.dbAccess_delete(serverObj, arrSeq, IP, PORT);
+					
+					for (int i = 0; i < jArr.size(); i++) {
+						JSONObject jObj = (JSONObject) jArr.get(i);
+						String User = (String) jObj.get("User");
+						String Seq = String.valueOf(jObj.get("Seq"));
+						String Method = (String) jObj.get("Method");
+						String Type = (String) jObj.get("Type");
+						String Set = (String) jObj.get("Set");
+						String Ipadr = (String) jObj.get("Ipadr");
+						String Ipmask = (String) jObj.get("Ipmask");
+						String Option = (String) jObj.get("Option");
+						String Database = (String) jObj.get("Database");
+							
+						JSONObject acObj = new JSONObject();
+						acObj.put(ClientProtocolID.AC_SET, "1");
+						acObj.put(ClientProtocolID.AC_TYPE, Type);
+						acObj.put(ClientProtocolID.AC_DATABASE, Database);
+						acObj.put(ClientProtocolID.AC_USER, User);
+						acObj.put(ClientProtocolID.AC_IP, Ipadr);
+						acObj.put(ClientProtocolID.AC_IPMASK, Ipmask == null ? "" : Ipmask);
+						acObj.put(ClientProtocolID.AC_METHOD, Method);
+						acObj.put(ClientProtocolID.AC_OPTION, Option);
+
+						cic.dbAccess_create(serverObj, acObj, IP, PORT);
+					}
+				}
+			}
+			
 			return true;
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -499,9 +550,6 @@ public class AccessControlController {
 			AES256 dec = new AES256(AES256_KEY.ENC_KEY);
 			int db_svr_id = Integer.parseInt(request.getParameter("db_svr_id"));
 
-			/* 서버접근제어 전체 삭제 */
-			accessControlService.deleteDbAccessControl(db_svr_id);
-
 			DbServerVO schDbServerVO = new DbServerVO();
 			schDbServerVO.setDb_svr_id(db_svr_id);
 			DbServerVO dbServerVO = (DbServerVO) cmmnServerInfoService.selectServerInfo(schDbServerVO);
@@ -553,7 +601,10 @@ public class AccessControlController {
 				acObj.put(ClientProtocolID.AC_OPTION, resultSet.get(i).getOpt_nm());
 				cic.dbAccess_create(serverObj, acObj, IP, PORT);	
 			}
-					
+			
+			/* 서버접근제어 전체 삭제 */
+			accessControlService.deleteDbAccessControl(db_svr_id);
+			
 			String id = (String) request.getSession().getAttribute("usr_id");
 			accessControlVO.setFrst_regr_id(id);
 			accessControlVO.setLst_mdfr_id(id);
@@ -591,6 +642,63 @@ public class AccessControlController {
 					accessControlService.insertAccessControlHistory(accessControlHistoryVO);
 				}
 			}
+			
+			/*slave*/
+			schDbServerVO = new DbServerVO();
+			schDbServerVO.setDb_svr_id(db_svr_id);
+			List<DbServerVO> slaveInfo= cmmnServerInfoService.selectServerInfoSlave(schDbServerVO);
+			if(slaveInfo.size()!=0){
+				for(int s=0; s<slaveInfo.size(); s++){
+					IP = slaveInfo.get(s).getIpadr();
+					vo = new AgentInfoVO();
+					vo.setIPADR(IP);
+					agentInfo = (AgentInfoVO) cmmnServerInfoService.selectAgentInfo(vo);
+					if (agentInfo == null) {
+						return "agent";
+					}
+					PORT = agentInfo.getSOCKET_PORT();
+					serverObj.put(ClientProtocolID.SERVER_NAME, slaveInfo.get(s).getDb_svr_nm());
+					serverObj.put(ClientProtocolID.SERVER_IP, slaveInfo.get(s).getIpadr());
+					serverObj.put(ClientProtocolID.SERVER_PORT, slaveInfo.get(s).getPortno());
+					serverObj.put(ClientProtocolID.DATABASE_NAME, slaveInfo.get(s).getDft_db_nm());
+					serverObj.put(ClientProtocolID.USER_ID, slaveInfo.get(s).getSvr_spr_usr_id());
+					serverObj.put(ClientProtocolID.USER_PWD, dec.aesDecode(slaveInfo.get(s).getSvr_spr_scm_pwd()));
+					
+					strExtname = "pgaudit";
+					resultExt = cic.extension_select(serverObj, IP, PORT, strExtname);
+					if (resultExt == null || resultExt.size() == 0) {
+						return "pgaudit";
+					}
+						
+					results = cic.dbAccess_selectAll(serverObj, IP, PORT);
+					for (int i = 0; i < results.size(); i++) {
+						JSONArray data = (JSONArray) results.get("data");
+						for (int j = 0; j < data.size(); j++) {
+							JSONObject jsonObj = (JSONObject) data.get(j);	
+							HashMap<String, String> hpSeq = new HashMap<String, String>();
+							hpSeq.put(ClientProtocolID.AC_SEQ, (String) jsonObj.get("Seq"));
+							arrSeq.add(hpSeq);
+						}
+					}			
+					
+					cic.dbAccess_delete(serverObj, arrSeq, IP, PORT);
+					
+					resultSet = accessControlService.selectAccessControlHistory(accessControlHistoryVO);
+					for(int i=0; i<resultSet.size(); i++){
+						acObj.put(ClientProtocolID.AC_SET, "1");
+						acObj.put(ClientProtocolID.AC_TYPE, resultSet.get(i).getCtf_tp_nm());
+						acObj.put(ClientProtocolID.AC_DATABASE, resultSet.get(i).getDtb());
+						acObj.put(ClientProtocolID.AC_USER, resultSet.get(i).getPrms_usr_id());
+						acObj.put(ClientProtocolID.AC_IP, resultSet.get(i).getPrms_ipadr());
+						acObj.put(ClientProtocolID.AC_IPMASK, resultSet.get(i).getPrms_ipmaskadr() == null ? "" : resultSet.get(i).getPrms_ipmaskadr());
+						acObj.put(ClientProtocolID.AC_METHOD, resultSet.get(i).getCtf_mth_nm());
+						acObj.put(ClientProtocolID.AC_OPTION, resultSet.get(i).getOpt_nm());
+						cic.dbAccess_create(serverObj, acObj, IP, PORT);	
+					}
+				}
+			}
+					
+		
 			return "true";
 		} catch (Exception e) {
 			e.printStackTrace();

@@ -9,22 +9,25 @@ public interface CmmnServerInfoService {
 
 	/**
 	 * DBMS 서버 리스트 조회
+	 * 
 	 * @param db_svr_nm
 	 * @return
 	 * @throws Exception
 	 */
 	List<DbServerVO> selectDbServerList(String db_svr_nm) throws Exception;
-	
+
 	/**
 	 * Agent 정보 조회
+	 * 
 	 * @param vo
 	 * @return
 	 * @throws Exception
 	 */
 	public AgentInfoVO selectAgentInfo(AgentInfoVO vo) throws Exception;
-	
+
 	/**
 	 * 서버 정보 조회
+	 * 
 	 * @param vo
 	 * @return
 	 * @throws Exception
@@ -33,6 +36,7 @@ public interface CmmnServerInfoService {
 
 	/**
 	 * 아이피 정보 조회
+	 * 
 	 * @param db_svr_id
 	 * @return
 	 * @throws Exception
@@ -41,10 +45,19 @@ public interface CmmnServerInfoService {
 
 	/**
 	 * 아이피 정보 삭제
+	 * 
 	 * @param dbServerVO
 	 * @return
 	 * @throws Exception
 	 */
 	void deleteIpadr(DbServerVO dbServerVO) throws Exception;
 
+	/**
+	 * 서버 정보 조회(Slave)
+	 * 
+	 * @param vo
+	 * @return
+	 * @throws Exception
+	 */
+	List<DbServerVO> selectServerInfoSlave(DbServerVO vo) throws Exception;
 }
