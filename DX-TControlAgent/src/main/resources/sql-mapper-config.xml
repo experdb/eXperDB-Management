@@ -15,9 +15,9 @@
     	<typeAlias alias="AuditVO" type="com.k4m.dx.tcontrol.server.AuditVO" />
     	<typeAlias alias="WrkExeVO" type="com.k4m.dx.tcontrol.db.repository.vo.WrkExeVO" />
     	<typeAlias alias="TrfTrgCngVO" type="com.k4m.dx.tcontrol.db.repository.vo.TrfTrgCngVO" />
-    	
-    	
-    	
+    	<typeAlias alias="ServerInfoVO" type="com.k4m.dx.tcontrol.db.repository.vo.ServerInfoVO" />
+    	<typeAlias alias="DatabaseVO" type="com.k4m.dx.tcontrol.db.repository.vo.DatabaseVO" />
+
     </typeAliases>
     
  	<mappers>

@@ -117,5 +117,38 @@ public class ClientProtocolID {
 	public static final String MASTER_GBN = "MASTER_GBN";
 	public static final String ARR_SERVER_INFO = "ARR_SERVER_INFO";
 	public static final String CONNECT_YN = "CONNECT_YN";
+	
+	public static final String CMD_HOSTNAME = "CMD_HOSTNAME";
+	public static final String CMD_OS_VERSION = "CMD_OS_VERSION";
+	public static final String CMD_OS_KERNUL = "CMD_OS_KERNUL";
+	public static final String CMD_CPU = "CMD_CPU";
+	public static final String CMD_MEMORY = "CMD_MEMORY";
+	
+	public static final String CMD_DBMS_PATH = "CMD_DBMS_PATH";
+	public static final String CMD_DATA_PATH = "CMD_DATA_PATH";
+	public static final String CMD_BACKUP_PATH = "CMD_BACKUP_PATH";
+	public static final String CMD_ARCHIVE_PATH = "CMD_ARCHIVE_PATH";
+	public static final String CMD_DATABASE_INFO = "CMD_DATABASE_INFO";
+	
+	public static final String CMD_LISTEN_ADDRESSES = "CMD_LISTEN_ADDRESSES";
+	public static final String CMD_PORT = "CMD_PORT";
+	public static final String CMD_MAX_CONNECTIONS = "CMD_MAX_CONNECTIONS";
+	public static final String CMD_SHARED_BUFFERS = "CMD_SHARED_BUFFERS";
+	public static final String CMD_EFFECTIVE_CACHE_SIZE = "CMD_EFFECTIVE_CACHE_SIZE";
+	public static final String CMD_WORK_MEM = "CMD_WORK_MEM";
+	public static final String CMD_MAINTENANCE_WORK_MEM = "CMD_MAINTENANCE_WORK_MEM";
+	public static final String CMD_MIN_WAL_SIZE = "CMD_MIN_WAL_SIZE";
+	public static final String CMD_MAX_WAL_SIZE = "CMD_MAX_WAL_SIZE";
+	public static final String CMD_WAL_LEVEL = "CMD_WAL_LEVEL";
+	public static final String CMD_WAL_BUFFERS = "CMD_WAL_BUFFERS";
+	public static final String CMD_WAL_KEEP_SEGMENTS = "CMD_WAL_KEEP_SEGMENTS";
+	public static final String CMD_ARCHIVE_MODE = "CMD_ARCHIVE_MODE";
+	public static final String CMD_ARCHIVE_COMMAND = "CMD_ARCHIVE_COMMAND";
+	public static final String CMD_CONFIG_FILE = "CMD_CONFIG_FILE";
+	public static final String CMD_DATA_DIRECTORY = "CMD_DATA_DIRECTORY";
+	public static final String CMD_HOT_STANDBY = "CMD_HOT_STANDBY";
+	public static final String CMD_TIMEZONE = "CMD_TIMEZONE";
+	public static final String CMD_SHARED_PRELOAD_LIBRARIES = "CMD_SHARED_PRELOAD_LIBRARIES";
+	public static final String CMD_TABLESPACE_INFO = "CMD_TABLESPACE_INFO";
 
 }

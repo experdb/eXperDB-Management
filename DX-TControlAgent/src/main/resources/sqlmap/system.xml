@@ -217,4 +217,166 @@
 				
     </update>
     
+    <select id="selectPostgreSqlServerInfo" resultType="ServerInfoVO">
+		<![CDATA[
+	   		/**
+		 	* Query ID : selectPostgreSqlServerInfo
+		 	* Description : PostgreSQL 서버 정보 조회
+		 	* Author : 박태혁
+		 	**/
+			SELECT SKEY, SDATA FROM
+			(
+				SELECT 1 AS SN, 'POSTGRESQL_VERSION' AS SKEY, version() AS  SDATA
+				UNION
+				SELECT  2 AS SN, 'DATA_PATH' AS SKEY, setting AS SDATA FROM pg_settings WHERE name='data_directory'
+				UNION
+				SELECT  3 AS SN, 'LOG_PATH' AS SKEY, setting AS SDATA  FROM pg_settings WHERE name='log_directory'
+				UNION
+				SELECT  4 AS SN, 'ARCHIVE_PATH' AS SKEY, setting AS SDATA from pg_settings where name='archive_command'
+			) A
+			ORDER BY A.SN ASC
+		]]>
+	</select>
+
+    <select id="selectListen_addresses" resultType="String">
+		<![CDATA[
+			show listen_addresses
+		]]>
+	</select>
+	
+    <select id="selectPort" resultType="String">
+		<![CDATA[
+			show port
+		]]>
+	</select>
+	
+    <select id="selectMax_connections" resultType="String">
+		<![CDATA[
+			show max_connections
+		]]>
+	</select>
+	
+    <select id="selectShared_buffers" resultType="String">
+		<![CDATA[
+			show shared_buffers
+		]]>
+	</select>
+
+    <select id="selectEffective_cach_size" resultType="String">
+		<![CDATA[
+			show effective_cach_size
+		]]>
+	</select>
+
+    <select id="selectWork_mem" resultType="String">
+		<![CDATA[
+			show work_mem
+		]]>
+	</select>
+
+    <select id="selectMaintenance_work_mem" resultType="String">
+		<![CDATA[
+			show maintenance_work_mem
+		]]>
+	</select>
+
+    <select id="selectMin_wal_size" resultType="String">
+		<![CDATA[
+			show min_wal_size
+		]]>
+	</select>
+
+    <select id="selectMax_wal_size" resultType="String">
+		<![CDATA[
+			show max_wal_size
+		]]>
+	</select>
+
+    <select id="selectWal_level" resultType="String">
+		<![CDATA[
+			show wal_level
+		]]>
+	</select>
+
+    <select id="selectWal_buffers" resultType="String">
+		<![CDATA[
+			show wal_buffers
+		]]>
+	</select>
+
+    <select id="selectWal_keep_segments" resultType="String">
+		<![CDATA[
+			show wal_keep_segments
+		]]>
+	</select>
+
+    <select id="selectArchive_mode" resultType="String">
+		<![CDATA[
+			show archive_mode
+		]]>
+	</select>
+
+    <select id="selectArchive_command" resultType="String">
+		<![CDATA[
+			show archive_command
+		]]>
+	</select>
+
+    <select id="selectConfig_file" resultType="String">
+		<![CDATA[
+			show config_file
+		]]>
+	</select>
+
+    <select id="selectData_directory" resultType="String">
+		<![CDATA[
+			show data_directory
+		]]>
+	</select>
+
+    <select id="selectHot_standby" resultType="String">
+		<![CDATA[
+			show hot_standby
+		]]>
+	</select>
+
+    <select id="selectTimezone" resultType="String">
+		<![CDATA[
+			show timezone
+		]]>
+	</select>
+
+    <select id="selectShared_preload_libraries" resultType="String">
+		<![CDATA[
+			show shared_preload_libraries
+		]]>
+	</select>
+	
+	
+    <select id="selectTablespaceInfo" resultType="DatabaseVO">
+		<![CDATA[
+	   		/**
+		 	* Query ID : selectTablespaceInfo
+		 	* Description : 테이블 스페이스 정보 조회
+		 	* Author : 박태혁
+		 	**/
+			SELECT d.datname as name,
+			       pg_catalog.pg_get_userbyid(d.datdba) as owner,
+			       pg_catalog.pg_encoding_to_char(d.encoding) as encoding,
+			       d.datcollate as collate,
+			       d.datctype as ctype,
+			       CASE WHEN pg_catalog.has_database_privilege(d.datname, 'CONNECT')
+			            THEN pg_catalog.pg_size_pretty(pg_catalog.pg_database_size(d.datname))
+			            ELSE 'No Access'
+			       END as size,
+			       t.spcname as tablespace,
+			       pg_catalog.shobj_description(d.oid, 'pg_database') as description
+			FROM pg_catalog.pg_database d
+			  JOIN pg_catalog.pg_tablespace t on d.dattablespace = t.oid
+			ORDER BY 1
+		]]>
+	</select>
+	
+	
+	
 </mapper>
