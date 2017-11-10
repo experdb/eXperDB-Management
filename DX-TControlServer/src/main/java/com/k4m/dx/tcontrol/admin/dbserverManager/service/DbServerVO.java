@@ -7,6 +7,7 @@ public class DbServerVO {
 	private String db_svr_nm;
 	private String ipadr;
 	private int portno;
+	private String master_gbn;
 	private String dft_db_nm;
 	private String svr_spr_usr_id;
 	private String svr_spr_scm_pwd;
@@ -19,7 +20,15 @@ public class DbServerVO {
 	private String agt_cndt_cd;
 	private String useyn;
 	private int socket_port;
-	
+
+	public String getMaster_gbn() {
+		return master_gbn;
+	}
+
+	public void setMaster_gbn(String master_gbn) {
+		this.master_gbn = master_gbn;
+	}
+
 	public int getSocket_port() {
 		return socket_port;
 	}

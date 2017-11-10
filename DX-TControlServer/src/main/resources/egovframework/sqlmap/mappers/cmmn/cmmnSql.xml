@@ -42,61 +42,68 @@
 		  SELECT
 	      		(ROW_NUMBER() OVER()) AS ROWNUM
 				, (ROW_NUMBER() OVER()) AS IDX
-				, A.DB_SVR_ID
-				, A.DB_SVR_NM
-				, A.IPADR
-				, A.PORTNO
-				, A.DFT_DB_NM
-				, A.SVR_SPR_USR_ID
-				, A.SVR_SPR_SCM_PWD
-				, A.FRST_REGR_ID
-				, A.FRST_REG_DTM
-				, A.LST_MDFR_ID
-				, A.LST_MDF_DTM
+				, AA.DB_SVR_ID
+				, AA.DB_SVR_NM
+				, AA.IPADR
+				, AA.PORTNO
+				, AA.MASTER_GBN
+				, AA.DFT_DB_NM
+				, AA.SVR_SPR_USR_ID
+				, AA.SVR_SPR_SCM_PWD
+				, AA.FRST_REGR_ID
+				, AA.FRST_REG_DTM
+				, AA.LST_MDFR_ID
+				, AA.LST_MDF_DTM
 	      FROM(      
 	          SELECT 
-	                 DB_SVR_ID
-	                , DB_SVR_NM
-	                , IPADR
-	                , PORTNO
-	                , DFT_DB_NM
-	                , SVR_SPR_USR_ID
-	                , SVR_SPR_SCM_PWD
-	                , FRST_REGR_ID
-	                , FRST_REG_DTM
-	                , LST_MDFR_ID
-	                , LST_MDF_DTM
-	          FROM T_DBSVR_I	
-	          WHERE 1 = 1         
-		      AND DB_SVR_NM = #{db_svr_nm}
+	                 A.DB_SVR_ID
+	                , A.DB_SVR_NM
+	                , B.IPADR
+	                , B.PORTNO
+	                , B.MASTER_GBN
+	                , A.DFT_DB_NM
+	                , A.SVR_SPR_USR_ID
+	                , A.SVR_SPR_SCM_PWD
+	                , A.FRST_REGR_ID
+	                , A.FRST_REG_DTM
+	                , A.LST_MDFR_ID
+	                , A.LST_MDF_DTM
+	          FROM T_DBSVR_I A, T_DBSVRIPADR_I B
+	          WHERE 1 = 1
+	          AND A.DB_SVR_ID = B.DB_SVR_ID      
+		      AND A.DB_SVR_NM = #{db_svr_nm}
+		      AND B.MASTER_GBN = 'M'
 	          ORDER BY DB_SVR_ID
-	      ) A		
+	      ) AA	
     </select>
 
 
 	<select id="selectServerInfo" resultType="dbServerVO" parameterType="dbServerVO">
 				/**
-		 	*  Query ID : selectDbServerList
+		 	*  Query ID : selectServerInfo
 		 	* Description : DB서버 정보 조회
 		 	* Author : 박태혁
 		 	**/
 	          SELECT 
-	                 DB_SVR_ID
-	                , DB_SVR_NM
-	                , IPADR
-	                , PORTNO
-	                , DFT_DB_NM
-	                , PGHOME_PTH
-	                , PGDATA_PTH
-	                , SVR_SPR_USR_ID
-	                , SVR_SPR_SCM_PWD
-	                , FRST_REGR_ID
-	                , FRST_REG_DTM
-	                , LST_MDFR_ID
-	                , LST_MDF_DTM
-	          FROM T_DBSVR_I
-	          WHERE
-	          	DB_SVR_ID = #{db_svr_id}
+	                 A.DB_SVR_ID
+	                , A.DB_SVR_NM
+	                , B.IPADR
+	                , B.PORTNO
+	                , B.MASTER_GBN
+	                , A.DFT_DB_NM
+	                , A.PGHOME_PTH
+	                , A.PGDATA_PTH
+	                , A.SVR_SPR_USR_ID
+	                , A.SVR_SPR_SCM_PWD
+	                , A.FRST_REGR_ID
+	                , A.FRST_REG_DTM
+	                , A.LST_MDFR_ID
+	                , A.LST_MDF_DTM
+	          FROM T_DBSVR_I A, T_DBSVRIPADR_I B
+	          WHERE 1 = 1
+	          AND A.DB_SVR_ID = B.DB_SVR_ID      
+		      AND A.DB_SVR_ID = #{db_svr_id}
+		      AND B.MASTER_GBN = 'M'
 	</select>
 	
 	<select id="selectAgentInfo" resultType="agentInfoVO" parameterType="agentInfoVO">

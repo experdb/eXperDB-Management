@@ -12,38 +12,42 @@
 	  SELECT
       		(ROW_NUMBER() OVER()) AS ROWNUM
 			, (ROW_NUMBER() OVER()) AS IDX
-			, A.DB_SVR_ID
-			, A.DB_SVR_NM
-			, A.IPADR
-			, A.PORTNO
-			, A.DFT_DB_NM
-			, A.SVR_SPR_USR_ID
-			, A.SVR_SPR_SCM_PWD
-			, A.PGHOME_PTH
-            , A.PGDATA_PTH
-			, A.FRST_REGR_ID
-			, FRST_REG_DTM
-			, A.LST_MDFR_ID
-			, LST_MDF_DTM
+			, AA.DB_SVR_ID
+			, AA.DB_SVR_NM
+			, AA.IPADR
+			, AA.PORTNO
+			, AA.MASTER_GBN
+			, AA.DFT_DB_NM
+			, AA.SVR_SPR_USR_ID
+			, AA.SVR_SPR_SCM_PWD
+			, AA.PGHOME_PTH
+            , AA.PGDATA_PTH
+			, AA.FRST_REGR_ID
+			, AA.FRST_REG_DTM
+			, AA.LST_MDFR_ID
+			, AA.LST_MDF_DTM
       FROM(      
           SELECT 
-                 DB_SVR_ID
-                , DB_SVR_NM
-                , IPADR
-                , PORTNO
-                , DFT_DB_NM
-                , SVR_SPR_USR_ID
-                , SVR_SPR_SCM_PWD
-                , PGHOME_PTH
-                , PGDATA_PTH
-			, FRST_REGR_ID
-			, TO_CHAR(FRST_REG_DTM,'YYYY-MM-DD HH24:MI:SS') AS FRST_REG_DTM
-			, LST_MDFR_ID
-			, TO_CHAR(LST_MDF_DTM,'YYYY-MM-DD HH24:MI:SS') AS LST_MDF_DTM
-          FROM T_DBSVR_I	
+                 A.DB_SVR_ID
+                , A.DB_SVR_NM
+                , B.IPADR
+                , B.PORTNO
+                , B.MASTER_GBN
+                , A.DFT_DB_NM
+                , A.SVR_SPR_USR_ID
+                , A.SVR_SPR_SCM_PWD
+                , A.PGHOME_PTH
+                , A.PGDATA_PTH
+			, A.FRST_REGR_ID
+			, TO_CHAR(A.FRST_REG_DTM,'YYYY-MM-DD HH24:MI:SS') AS FRST_REG_DTM
+			, A.LST_MDFR_ID
+			, TO_CHAR(A.LST_MDF_DTM,'YYYY-MM-DD HH24:MI:SS') AS LST_MDF_DTM
+          FROM T_DBSVR_I A, T_DBSVRIPADR_I B
           WHERE 1 = 1
+          AND A.DB_SVR_ID = B.DB_SVR_ID
+          AND B.MASTER_GBN = 'M'
           ORDER BY DB_SVR_ID
-      ) A	
+      ) AA	
 	</select>
 	
 	
@@ -389,6 +393,7 @@
 			, AA.DB_SVR_NM
 			, AA.IPADR
 			, AA.PORTNO
+			, AA.MASTER_GBN
 			, AA.DFT_DB_NM
 			, AA.SVR_SPR_USR_ID
 			, AA.SVR_SPR_SCM_PWD
@@ -402,8 +407,9 @@
           SELECT 
                  A.DB_SVR_ID
                 , A.DB_SVR_NM
-                , A.IPADR
-                , A.PORTNO
+                , C.IPADR
+                , C.PORTNO
+                , C.MASTER_GBN
                 , A.DFT_DB_NM
                 , A.SVR_SPR_USR_ID
                 , A.SVR_SPR_SCM_PWD
@@ -413,9 +419,11 @@
 			, TO_CHAR(A.FRST_REG_DTM,'YYYY-MM-DD HH24:MI:SS') AS FRST_REG_DTM
 			, A.LST_MDFR_ID
 			, TO_CHAR(A.LST_MDF_DTM,'YYYY-MM-DD HH24:MI:SS') AS LST_MDF_DTM
-          FROM T_DBSVR_I A, T_USRDBSVRAUT_I B	
+          FROM T_DBSVR_I A, T_USRDBSVRAUT_I B, T_DBSVRIPADR_I C
           WHERE 1 = 1
           AND A.DB_SVR_ID = B.DB_SVR_ID
+          AND A.DB_SVR_ID = C.DB_SVR_ID
+          AND C.MASTER_GBN = 'M'
           AND B.USR_ID = #{usr_id}
           ORDER BY A.DB_SVR_ID 
       ) AA	

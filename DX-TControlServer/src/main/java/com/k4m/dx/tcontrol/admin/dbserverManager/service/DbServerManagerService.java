@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.Map;
 
 import com.k4m.dx.tcontrol.backup.service.DbVO;
+import com.k4m.dx.tcontrol.common.service.AgentInfoVO;
 
 public interface DbServerManagerService {
 
@@ -98,6 +99,12 @@ public interface DbServerManagerService {
 	List<DbVO> selectDbListTree(int db_svr_id) throws Exception;
 
 
-	List<Map<String, Object>> selectIpList() throws Exception;
+	List<Map<String, Object>> selectIpList(AgentInfoVO agentInfoVO) throws Exception;
+
+
+	int selectDbsvrid() throws Exception;
+
+
+	void insertIpadr(IpadrVO ipadrVO) throws Exception;
 	
 }

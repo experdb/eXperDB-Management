@@ -10,7 +10,9 @@ import org.springframework.stereotype.Service;
 
 import com.k4m.dx.tcontrol.admin.dbserverManager.service.DbServerManagerService;
 import com.k4m.dx.tcontrol.admin.dbserverManager.service.DbServerVO;
+import com.k4m.dx.tcontrol.admin.dbserverManager.service.IpadrVO;
 import com.k4m.dx.tcontrol.backup.service.DbVO;
+import com.k4m.dx.tcontrol.common.service.AgentInfoVO;
 
 import egovframework.rte.fdl.cmmn.EgovAbstractServiceImpl;
 
@@ -86,8 +88,18 @@ public class DbServerManagerServiceImpl extends EgovAbstractServiceImpl implemen
 	}
 
 	@Override
-	public List<Map<String, Object>> selectIpList() throws Exception {
-		return dbServerManagerDAO.selectIpList();
+	public List<Map<String, Object>> selectIpList(AgentInfoVO agentInfoVO) throws Exception {
+		return dbServerManagerDAO.selectIpList(agentInfoVO);
+	}
+
+	@Override
+	public int selectDbsvrid() throws Exception {
+		return dbServerManagerDAO.selectDbsvrid();
+	}
+
+	@Override
+	public void insertIpadr(IpadrVO ipadrVO) throws Exception {
+		dbServerManagerDAO.insertIpadr(ipadrVO);
 	}
 
 }

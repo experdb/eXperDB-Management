@@ -6,6 +6,12 @@ import com.k4m.dx.tcontrol.admin.dbserverManager.service.DbServerVO;
 
 public interface CmmnServerInfoService {
 
+	/**
+	 * DBMS 서버 리스트 조회
+	 * @param db_svr_nm
+	 * @return
+	 * @throws Exception
+	 */
 	List<DbServerVO> selectDbServerList(String db_svr_nm) throws Exception;
 	
 	/**

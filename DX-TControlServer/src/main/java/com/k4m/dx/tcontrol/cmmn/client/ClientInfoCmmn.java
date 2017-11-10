@@ -1130,4 +1130,77 @@ public class ClientInfoCmmn {
 		return result;
 	}
 
+	public Map<String, Object> DbserverConnTest(JSONArray rows, String IP, int PORT) {
+		Map<String, Object> result = new HashMap<String, Object>();
+		try {
+			
+			JSONArray arrServerInfo = new JSONArray();
+
+			for(int i=0; i<rows.size(); i++){
+				JSONObject jsonObject = (JSONObject) rows.get(i);
+				JSONObject serverObj = new JSONObject();			
+				
+				serverObj.put(ClientProtocolID.SERVER_NAME, jsonObject.get("SERVER_IP").toString());
+				serverObj.put(ClientProtocolID.SERVER_IP, jsonObject.get("SERVER_IP").toString());
+				serverObj.put(ClientProtocolID.SERVER_PORT, jsonObject.get("SERVER_PORT").toString());
+				serverObj.put(ClientProtocolID.DATABASE_NAME, jsonObject.get("DATABASE_NAME").toString());
+				serverObj.put(ClientProtocolID.USER_ID, jsonObject.get("USER_ID").toString());
+				serverObj.put(ClientProtocolID.USER_PWD, jsonObject.get("USER_PWD").toString());
+				arrServerInfo.add(serverObj);
+			}
+			
+			JSONObject jObj = new JSONObject();
+			
+			
+			jObj.put(ClientProtocolID.DX_EX_CODE, ClientTranCodeType.DxT020);
+			jObj.put(ClientProtocolID.ARR_SERVER_INFO, arrServerInfo);
+
+			JSONObject objList;
+			
+			ClientAdapter CA = new ClientAdapter(IP, PORT);
+			CA.open(); 
+
+			objList = CA.dxT020(jObj);
+			
+			CA.close();
+			
+			String strErrMsg = (String)objList.get(ClientProtocolID.ERR_MSG);
+			String strErrCode = (String)objList.get(ClientProtocolID.ERR_CODE);
+			String strDxExCode = (String)objList.get(ClientProtocolID.DX_EX_CODE);
+			String strResultCode = (String)objList.get(ClientProtocolID.RESULT_CODE);
+			
+			JSONArray arrResult = (JSONArray) objList.get(ClientProtocolID.RESULT_DATA);
+			
+			System.out.println("RESULT_CODE : " +  strResultCode);
+			System.out.println("ERR_CODE : " +  strErrCode);
+			System.out.println("ERR_MSG : " +  strErrMsg);
+			
+			if(strResultCode.equals("0")) {
+				for(int i=0; i<arrResult.size(); i++) {
+					
+					JSONObject outObj = new JSONObject();
+					outObj = (JSONObject) arrResult.get(i);
+
+					String strServerIP = (String) outObj.get(ClientProtocolID.SERVER_IP);
+					String strServerPort = (String) outObj.get(ClientProtocolID.SERVER_PORT);
+					String strDatabaseName = (String) outObj.get(ClientProtocolID.DATABASE_NAME);
+					String strMasterGbn = (String) outObj.get(ClientProtocolID.MASTER_GBN); 
+					String strConnectYn = (String) outObj.get(ClientProtocolID.CONNECT_YN); 
+					
+					System.out.println(strServerIP + " " + strServerPort + " " + strDatabaseName + " " 
+							+ strMasterGbn + " " + strConnectYn);
+					
+					result.put("result_code", strResultCode);
+					result.put("result_data", arrResult);
+					/*result.put("ipadr", strServerIP);
+					result.put("master_gbn", strMasterGbn);
+					result.put("connYn", strConnectYn);*/
+				}
+			}
+		} catch(Exception e) {
+			e.printStackTrace();
+		}
+		return result;
+	}
+
 }

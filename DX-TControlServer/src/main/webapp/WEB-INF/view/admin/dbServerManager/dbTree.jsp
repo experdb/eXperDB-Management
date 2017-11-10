@@ -199,14 +199,14 @@ $(function() {
             
         } 
          var db_svr_nm = table_dbServer.row('.selected').data().db_svr_nm;
-
+         var ipadr = table_dbServer.row('.selected').data().ipadr;
         /* ********************************************************
          * 선택된 서버에 대한 디비 조회
         ******************************************************** */
        	$.ajax({
     		url : "/selectTreeServerDBList.do",
     		data : {
-    			db_svr_nm: db_svr_nm,			
+    			db_svr_nm: db_svr_nm
     		},
     		//dataType : "json",
     		type : "post",
