@@ -85,7 +85,7 @@ var table = null;
 	/*조회버튼 클릭시*/
 	function fn_select(){
 		if($("#lst_mdf_dtm").val()==null){
-			alert("접근제어이력이 없습니다.");
+			alert("정책변경이력이 없습니다.");
 			return false;
 		}
 			$.ajax({
@@ -119,7 +119,7 @@ var table = null;
 	/*복원버튼 클릭시*/
 	function fn_recovery(){
 		if($("#lst_mdf_dtm").val()==null){
-			alert("접근제어이력이 없습니다.");
+			alert("정책변경이력이 없습니다.");
 			return false;
 		}
 		if (!confirm("정말 복원하시겠습니까?")) return false;
@@ -177,7 +177,7 @@ var table = null;
 <div id="contents">
 	<div class="contents_wrap">
 		<div class="contents_tit">
-			<h4>접근제어이력<a href="#n"><img src="../images/ico_tit.png" class="btn_info"/></a></h4>
+			<h4>정책변경이력<a href="#n"><img src="../images/ico_tit.png" class="btn_info"/></a></h4>
 			<div class="infobox"> 
 				<ul>
 					<li>접근제어 변경 이력을 조회하고, 조회된 이력 중 원하는 항목으로 복원합니다.</li>
@@ -187,7 +187,7 @@ var table = null;
 				<ul>
 					<li class="bold">${db_svr_nm}</li>
 					<li>접근제어관리</li>
-					<li class="on">접근제어이력</li>
+					<li class="on">정책변경이력</li>
 				</ul>
 			</div>
 		</div>

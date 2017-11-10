@@ -65,7 +65,7 @@ function fn_init() {
 			var usr_id = data.usr_id;				
 			var popUrl = "/popup/userManagerRegForm.do?act=u&usr_id=" + usr_id; // 서버 url 팝업경로
 			var width = 920;
-			var height = 570;
+			var height = 480;
 			var left = (window.screen.width / 2) - (width / 2);
 			var top = (window.screen.height /2) - (height / 2);
 			var popOption = "width="+width+", height="+height+", top="+top+", left="+left+", resizable=no, scrollbars=yes, status=no, toolbar=no, titlebar=yes, location=no,";
@@ -167,7 +167,7 @@ function fn_select(){
 function fn_insert() {
 	var popUrl = "/popup/userManagerRegForm.do?act=i"; // 서버 url 팝업경로
 	var width = 920;
-	var height = 570;
+	var height = 480;
 	var left = (window.screen.width / 2) - (width / 2);
 	var top = (window.screen.height /2) - (height / 2);
 	var popOption = "width="+width+", height="+height+", top="+top+", left="+left+", resizable=no, scrollbars=yes, status=no, toolbar=no, titlebar=yes, location=no,";
@@ -181,7 +181,7 @@ function fn_update() {
 		var usr_id = table.row('.selected').data().usr_id;
 		var popUrl = "/popup/userManagerRegForm.do?act=u&usr_id=" + usr_id; // 서버 url 팝업경로
 		var width = 920;
-		var height = 570;
+		var height = 480;
 		var left = (window.screen.width / 2) - (width / 2);
 		var top = (window.screen.height /2) - (height / 2);
 		var popOption = "width="+width+", height="+height+", top="+top+", left="+left+", resizable=no, scrollbars=yes, status=no, toolbar=no, titlebar=yes, location=no,";			

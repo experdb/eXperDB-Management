@@ -502,7 +502,7 @@ public class ScheduleController {
 			}else{
 				//이력 남기기
 				CmmnUtils.saveHistory(request, historyVO);
-				historyVO.setExe_dtl_cd("DX-T0050_04");
+				historyVO.setExe_dtl_cd("DX-T0050_03");
 				historyVO.setMnu_id(23);
 				accessHistoryService.insertHistory(historyVO);
 				
