@@ -2,6 +2,7 @@ package com.k4m.dx.tcontrol.cmmn.client;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
@@ -45,8 +46,8 @@ public class ClientTester {
 		ClientTester clientTester = new ClientTester();
 		
 		String Ip = "222.110.153.162";
-		//Ip = "222.110.153.251";
-		 Ip = "127.0.0.1";
+		Ip = "222.110.153.251";
+		 //	Ip = "127.0.0.1";
 		 //Ip = "222.110.153.231";
 		int port = 9001;
 		try {
@@ -85,7 +86,8 @@ public class ClientTester {
 			//clientTester.dxT018_insert(Ip, port);
 			//clientTester.dxT018_delete(Ip, port);
 			//clientTester.dxT019(Ip, port);
-			clientTester.dxT020(Ip, port);
+			//clientTester.dxT020(Ip, port);
+			clientTester.dxT021(Ip, port);
 			
 			//clientTester.test();
 		} catch(Exception e) {
@@ -1840,7 +1842,7 @@ public class ClientTester {
 			
 			serverObj02.put(ClientProtocolID.SERVER_NAME, "222.110.153.231");
 			serverObj02.put(ClientProtocolID.SERVER_IP, "222.110.153.231");
-			serverObj02.put(ClientProtocolID.SERVER_PORT, "5433");
+			serverObj02.put(ClientProtocolID.SERVER_PORT, "1234");
 			serverObj02.put(ClientProtocolID.DATABASE_NAME, "experdb");
 			serverObj02.put(ClientProtocolID.USER_ID, "experdb");
 			serverObj02.put(ClientProtocolID.USER_PWD, "experdb");
@@ -1895,6 +1897,58 @@ public class ClientTester {
 			
 				
 			//CA.close();
+		} catch(Exception e) {
+			e.printStackTrace();
+		}
+	}
+	
+	
+	private void dxT021(String Ip, int port) {
+		try {
+
+
+			JSONObject serverObj = new JSONObject();
+
+			serverObj.put(ClientProtocolID.SERVER_NAME, "222.110.153.251");
+			serverObj.put(ClientProtocolID.SERVER_IP, "222.110.153.251");
+			serverObj.put(ClientProtocolID.SERVER_PORT, "5433");
+			serverObj.put(ClientProtocolID.DATABASE_NAME, "experdb");
+			serverObj.put(ClientProtocolID.USER_ID, "experdb");
+			serverObj.put(ClientProtocolID.USER_PWD, "experdb");
+		
+			JSONObject jObj = new JSONObject();
+			
+			
+			jObj.put(ClientProtocolID.DX_EX_CODE, ClientTranCodeType.DxT021);
+			jObj.put(ClientProtocolID.SERVER_INFO, serverObj);
+			
+			
+			JSONObject objList;
+			
+			ClientAdapter CA = new ClientAdapter(Ip, port);
+			CA.open(); 
+
+			objList = CA.dxT021(jObj);
+			
+			CA.close();
+			
+			String strErrMsg = (String)objList.get(ClientProtocolID.ERR_MSG);
+			String strErrCode = (String)objList.get(ClientProtocolID.ERR_CODE);
+			String strDxExCode = (String)objList.get(ClientProtocolID.DX_EX_CODE);
+			String strResultCode = (String)objList.get(ClientProtocolID.RESULT_CODE);
+			
+			HashMap resultHp = (HashMap) objList.get(ClientProtocolID.RESULT_DATA);
+			
+			
+			Iterator<String> keys = resultHp.keySet().iterator();
+
+	        while( keys.hasNext() ){
+	            String key = keys.next();
+	            System.out.println( String.format("키 : %s, 값 : %s", key, resultHp.get(key)) );
+	        }
+	
+				
+			CA.close();
 		} catch(Exception e) {
 			e.printStackTrace();
 		}

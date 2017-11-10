@@ -47,7 +47,7 @@ public class ClientTester {
 		
 		String Ip = "222.110.153.162";
 		Ip = "222.110.153.251";
-		 	Ip = "127.0.0.1";
+		 //	Ip = "127.0.0.1";
 		 //Ip = "222.110.153.231";
 		int port = 9001;
 		try {
