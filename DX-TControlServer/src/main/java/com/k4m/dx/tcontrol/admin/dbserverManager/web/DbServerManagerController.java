@@ -6,9 +6,15 @@ import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 
+import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
+import org.json.simple.parser.JSONParser;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.transaction.PlatformTransactionManager;
+import org.springframework.transaction.TransactionDefinition;
+import org.springframework.transaction.TransactionStatus;
+import org.springframework.transaction.support.DefaultTransactionDefinition;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -19,6 +25,7 @@ import com.k4m.dx.tcontrol.accesscontrol.service.AccessControlService;
 import com.k4m.dx.tcontrol.admin.accesshistory.service.AccessHistoryService;
 import com.k4m.dx.tcontrol.admin.dbserverManager.service.DbServerManagerService;
 import com.k4m.dx.tcontrol.admin.dbserverManager.service.DbServerVO;
+import com.k4m.dx.tcontrol.admin.dbserverManager.service.IpadrVO;
 import com.k4m.dx.tcontrol.admin.menuauthority.service.MenuAuthorityService;
 import com.k4m.dx.tcontrol.cmmn.AES256;
 import com.k4m.dx.tcontrol.cmmn.AES256_KEY;
@@ -63,6 +70,12 @@ public class DbServerManagerController {
 	private CmmnServerInfoService cmmnServerInfoService;
 
 	private List<Map<String, Object>> menuAut;
+	
+	/**
+	 * Mybatis Transaction 
+	 */
+	@Autowired
+	private PlatformTransactionManager txManager;
 	
 	/**
 	 * DB서버 등록 팝업 화면을 보여준다.
@@ -166,30 +179,15 @@ public class DbServerManagerController {
 			String IP = dbServerVO.getIpadr();
 			int PORT = agentInfo.getSOCKET_PORT();
 			
-			System.out.println("=======parameter=======");
-			System.out.println("서버명 : " + dbServerVO.getDb_svr_nm());
-			System.out.println("Database : " + dbServerVO.getDft_db_nm());
-			System.out.println("아이피 : " + dbServerVO.getIpadr());			
-			System.out.println("포트 : " + dbServerVO.getPortno());
-			System.out.println("유저 : " + dbServerVO.getSvr_spr_usr_id());
-			System.out.println("패스워드 : " + dbServerVO.getSvr_spr_scm_pwd());
-			System.out.println("=====================");
 			
-			JSONObject serverObj = new JSONObject();			
-			
-			serverObj.put(ClientProtocolID.SERVER_NAME, dbServerVO.getDb_svr_nm());
-			serverObj.put(ClientProtocolID.SERVER_IP, dbServerVO.getIpadr());
-			serverObj.put(ClientProtocolID.SERVER_PORT, dbServerVO.getPortno());
-			serverObj.put(ClientProtocolID.DATABASE_NAME, dbServerVO.getDft_db_nm());
-			serverObj.put(ClientProtocolID.USER_ID, dbServerVO.getSvr_spr_usr_id());
-			serverObj.put(ClientProtocolID.USER_PWD, dbServerVO.getSvr_spr_scm_pwd());
-			
+			String strRows = request.getParameter("datasArr").toString().replaceAll("&quot;", "\"");
+			JSONArray rows = (JSONArray) new JSONParser().parse(strRows);
+						
 			ClientInfoCmmn conn  = new ClientInfoCmmn();
 			
-			result = conn.DbserverConn(serverObj, IP, PORT);
-			
-			System.out.println(result.get("result_data"));
-			
+
+			result = conn.DbserverConnTest(rows, IP, PORT);
+		
 		}catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -207,22 +205,28 @@ public class DbServerManagerController {
 	 * @throws Exception
 	 */
 	@RequestMapping(value = "/insertDbServer.do")
-	public @ResponseBody String insertDbServer(@ModelAttribute("dbServerVO") DbServerVO dbServerVO, @ModelAttribute("historyVO") HistoryVO historyVO,HttpServletRequest request) throws Exception {
+	public @ResponseBody void insertDbServer(@ModelAttribute("dbServerVO") DbServerVO dbServerVO, @ModelAttribute("ipadrVO") IpadrVO ipadrVO, @ModelAttribute("historyVO") HistoryVO historyVO,HttpServletRequest request) throws Exception {
 		AES256 aes = new AES256(AES256_KEY.ENC_KEY);
-		try {
-			// 화면접근이력 이력 남기기
-			CmmnUtils.saveHistory(request, historyVO);
-			historyVO.setExe_dtl_cd("DX-T0006_01");
-			historyVO.setMnu_id(9);
-			accessHistoryService.insertHistory(historyVO);
-			
-			String id = (String) request.getSession().getAttribute("usr_id");
-			System.out.println(id);
-			
-			dbServerVO.setFrst_regr_id(id);
-			dbServerVO.setLst_mdfr_id(id);
-			
-			
+		
+		// Transaction 
+		DefaultTransactionDefinition def  = new DefaultTransactionDefinition();
+		def.setPropagationBehavior(TransactionDefinition.PROPAGATION_REQUIRED);
+		TransactionStatus status = txManager.getTransaction(def);
+				
+		CmmnUtils.saveHistory(request, historyVO);
+		historyVO.setExe_dtl_cd("DX-T0006_01");
+		historyVO.setMnu_id(9);
+		accessHistoryService.insertHistory(historyVO);
+		
+		String insertResult = "S";
+		
+		String id = (String) request.getSession().getAttribute("usr_id");
+
+		dbServerVO.setFrst_regr_id(id);
+		dbServerVO.setLst_mdfr_id(id);
+		
+		// 1. 스케쥴 마스터 등록
+		try {			
 			//비밀번호 암호화
 			//String pw = SHA256.SHA256(dbServerVO.getSvr_spr_scm_pwd());
 			String pw = aes.aesEncode(dbServerVO.getSvr_spr_scm_pwd());
@@ -231,18 +235,47 @@ public class DbServerManagerController {
 			System.out.println("=======parameter=======");
 			System.out.println("서버명 : " + dbServerVO.getDb_svr_nm());
 			System.out.println("Database : " + dbServerVO.getDft_db_nm());
-			System.out.println("아이피 : " + dbServerVO.getIpadr());			
-			System.out.println("포트 : " + dbServerVO.getPortno());
 			System.out.println("유저 : " + dbServerVO.getSvr_spr_usr_id());
 			System.out.println("패스워드 : " + dbServerVO.getSvr_spr_scm_pwd());
 			System.out.println("=====================");
 			
 			dbServerManagerService.insertDbServer(dbServerVO);
-			
+		} catch (Exception e) {
+			e.printStackTrace();
+			insertResult = "F";
+		}
+		
+		
+		// 1. 스케줄ID 시퀀스 조회
+		try {							
+			int db_svr_id = dbServerManagerService.selectDbsvrid();
+			ipadrVO.setDb_svr_id(db_svr_id);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		return null;
+							
+		
+		// ip등록
+		if(insertResult.equals("S")){
+			try {
+				String strRows = request.getParameter("ipadrArr").toString().replaceAll("&quot;", "\"");
+				JSONArray rows = (JSONArray) new JSONParser().parse(strRows);
+
+				for (int i = 0; i < rows.size(); i++) {
+					JSONObject jsrow = (JSONObject) rows.get(i);
+					ipadrVO.setDb_svr_id(ipadrVO.getDb_svr_id());
+					ipadrVO.setIPadr(jsrow.get("ipadr").toString());
+					ipadrVO.setPortno(Integer.parseInt(jsrow.get("portno").toString()));
+					ipadrVO.setMaster_gbn(jsrow.get("master_gbn").toString());
+					ipadrVO.setFrst_regr_id(id);
+					ipadrVO.setLst_mdfr_id(id);
+					dbServerManagerService.insertIpadr(ipadrVO);			
+				}
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		}
+		txManager.commit(status);
 	}
 	
 	/**
@@ -472,11 +505,12 @@ public class DbServerManagerController {
 	@SuppressWarnings("unused")
 	@RequestMapping(value = "/selectIpList.do")
 	@ResponseBody
-	public List<Map<String, Object>> selectIpList(HttpServletRequest request) {
+	public List<Map<String, Object>> selectIpList(@ModelAttribute("agentInfoVO") AgentInfoVO agentInfoVO) {
 	
 		List<Map<String, Object>> resultSet = null;
+	
 		try {			
-			resultSet = dbServerManagerService.selectIpList();	
+			resultSet = dbServerManagerService.selectIpList(agentInfoVO);	
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

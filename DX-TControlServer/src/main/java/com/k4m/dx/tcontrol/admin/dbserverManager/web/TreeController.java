@@ -385,4 +385,13 @@ public class TreeController {
 		}
 		return true;
 	}
+	
+	@RequestMapping(value = "/dbinfo.do")
+	public ModelAndView workList(@ModelAttribute("historyVO") HistoryVO historyVO,HttpServletRequest request) {
+		ModelAndView mv = new ModelAndView();
+		mv.setViewName("dbserver/dbmsInformation");
+		
+		return mv;
+	}
+
 }

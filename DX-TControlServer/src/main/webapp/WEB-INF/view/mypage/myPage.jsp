@@ -19,7 +19,7 @@
 	function fn_pwdPopup(){
 	var popUrl = "/popup/pwdRegForm.do"; // 서버 url 팝업경로
 	var width = 920;
-	var height = 430;
+	var height = 315;
 	var left = (window.screen.width / 2) - (width / 2);
 	var top = (window.screen.height /2) - (height / 2);
 	var popOption = "width="+width+", height="+height+", top="+top+", left="+left+", resizable=no, scrollbars=yes, status=no, toolbar=no, titlebar=yes, location=no,";

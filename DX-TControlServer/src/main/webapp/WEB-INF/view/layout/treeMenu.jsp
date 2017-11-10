@@ -216,7 +216,7 @@
 					if(aut.length != 0 && aut[index].acs_cntr_aut_yn == "Y"){
 						html1+='					<li class="ico3_3"><a href=/accessControl.do?db_svr_id='+item.db_svr_id+' onClick=javascript:fn_GoLink("/accessControl.do?db_svr_id='+item.db_svr_id+'");><img src="../images/ico_lnb_12.png" id="treeImg">접근제어</a></li>';
 					}
-					html1+='					<li class="ico3_3"><a href=/accessControlHistory.do?db_svr_id='+item.db_svr_id+' onClick=javascript:fn_GoLink("/accessControlHistory.do?db_svr_id='+item.db_svr_id+'");><img src="../images/ico_lnb_14.png" id="treeImg">접근제어이력</a></li>';
+					html1+='					<li class="ico3_3"><a href=/accessControlHistory.do?db_svr_id='+item.db_svr_id+' onClick=javascript:fn_GoLink("/accessControlHistory.do?db_svr_id='+item.db_svr_id+'");><img src="../images/ico_lnb_14.png" id="treeImg">정책변경이력</a></li>';
 					if(aut.length != 0 && aut[index].adt_cng_aut_yn == "Y"){
 						html1+='					<li class="ico3_4"><a href=/audit/auditManagement.do?db_svr_id='+item.db_svr_id+' onClick=javascript:fn_GoLink("/audit/auditManagement.do?db_svr_id='+item.db_svr_id+'");><img src="../images/ico_lnb_13.png" id="treeImg">감사설정</a></li>';
 					}

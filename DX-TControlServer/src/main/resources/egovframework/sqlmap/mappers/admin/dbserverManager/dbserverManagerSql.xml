@@ -41,6 +41,7 @@
 			, AA.DB_SVR_NM
 			, AA.IPADR
 			, AA.PORTNO
+			, AA.MASTER_GBN
 			, AA.DFT_DB_NM
 			, AA.SVR_SPR_USR_ID
 			, AA.SVR_SPR_SCM_PWD
@@ -54,11 +55,12 @@
 			, AA.LST_MDFR_ID
 			, AA.LST_MDF_DTM
       FROM(      
-          SELECT 
+         SELECT 
                  A.DB_SVR_ID
                 , A.DB_SVR_NM
-                , A.IPADR
-                , A.PORTNO
+                , C.IPADR
+                , C.PORTNO
+                , C.MASTER_GBN
                 , A.DFT_DB_NM
                 , A.SVR_SPR_USR_ID
                 , A.SVR_SPR_SCM_PWD
@@ -71,23 +73,25 @@
 				, TO_CHAR(A.FRST_REG_DTM,'YYYY-MM-DD HH24:MI:SS') AS FRST_REG_DTM
 				, A.LST_MDFR_ID
 				, TO_CHAR(A.LST_MDF_DTM,'YYYY-MM-DD HH24:MI:SS') AS LST_MDF_DTM
-          FROM T_DBSVR_I	A, T_AGTCNDT_I B
+          FROM T_DBSVR_I	A, T_AGTCNDT_I B, T_DBSVRIPADR_I C
           WHERE 1 = 1
-          AND A.IPADR = B.IPADR
+          AND A.DB_SVR_ID = C.DB_SVR_ID
+          AND C.IPADR = B.IPADR
+          AND C.MASTER_GBN = 'M'
   	      <if test="db_svr_id != null and db_svr_id != '' and db_svr_id != 0">
-	      AND DB_SVR_ID = #{db_svr_id}
+	      AND A.DB_SVR_ID = #{db_svr_id}
 	      </if>	         
 	      <if test="db_svr_nm != null and db_svr_nm != ''">
-	      AND DB_SVR_NM LIKE '%' || #{db_svr_nm} || '%'
+	      AND A.DB_SVR_NM LIKE '%' || #{db_svr_nm} || '%'
 	      </if>	     
 	      <if test="ipadr != null and ipadr != ''">
-	      AND IPADR LIKE '%' || #{ipadr} || '%'
+	      AND C.IPADR LIKE '%' || #{ipadr} || '%'
 	      </if>	      
 	      <if test="dft_db_nm != null and dft_db_nm != ''">
-	      AND DFT_DB_NM LIKE  '%' || #{dft_db_nm} || '%'
+	      AND A.DFT_DB_NM LIKE  '%' || #{dft_db_nm} || '%'
 	      </if>   
 	      <if test="useyn != null and useyn != ''">
-	      AND USEYN LIKE  '%' || #{useyn} || '%'
+	      AND A.USEYN LIKE  '%' || #{useyn} || '%'
 	      </if>      
           ORDER BY DB_SVR_ID
       ) AA		
@@ -260,6 +264,7 @@
             , AA.DB_SVR_NM
             , AA.IPADR
             , AA.PORTNO
+            , AA.MASTER_GBN
             , AA.DB_ID
             , AA.DB_NM
             , AA.DB_EXP
@@ -270,8 +275,9 @@
         FROM(
 	            SELECT
 	                 A.DB_SVR_NM
-	                , A.IPADR
-	                , A.PORTNO
+	                , C.IPADR
+	                , C.PORTNO
+	                , C.MASTER_GBN
 	                , B.DB_ID
 	                , B.DB_NM
 	                , B.DB_EXP
@@ -279,14 +285,16 @@
 					, TO_CHAR(A.FRST_REG_DTM,'YYYY-MM-DD HH24:MI:SS') AS FRST_REG_DTM
 					, A.LST_MDFR_ID
 					, TO_CHAR(A.LST_MDF_DTM,'YYYY-MM-DD HH24:MI:SS') AS LST_MDF_DTM
-	            FROM T_DBSVR_I A, T_DB_I B
+	            FROM T_DBSVR_I A, T_DB_I B, T_DBSVRIPADR_I C
 	            WHERE 1 = 1
 	            AND A.DB_SVR_ID = B.DB_SVR_ID
+	            AND A.DB_SVR_ID = C.DB_SVR_ID
+	            AND C.MASTER_GBN = 'M'
 			    <if test="db_svr_nm != null and db_svr_nm != ''">
 			    AND A.DB_SVR_NM LIKE '%' || #{db_svr_nm} || '%'
 			    </if>	     
 			    <if test="ipadr != null and ipadr != ''">
-			    AND A.IPADR LIKE '%' || #{ipadr} || '%'
+			    AND C.IPADR LIKE '%' || #{ipadr} || '%'
 			    </if>	      
 			    <if test="dft_db_nm != null and dft_db_nm != ''">
 			    AND B.DB_NM LIKE  '%' || #{dft_db_nm} || '%'
@@ -307,17 +315,20 @@
             SELECT
             		A.DB_SVR_ID
                  	, A.DB_SVR_NM
-	                , A.IPADR
-	                , A.PORTNO
-            FROM T_DBSVR_I A, T_DB_I B
+	                , C.IPADR
+	                , C.PORTNO
+	                , C.MASTER_GBN
+            FROM T_DBSVR_I A, T_DB_I B, T_DBSVRIPADR_I C
             WHERE 1 = 1
             AND A.DB_SVR_ID = B.DB_SVR_ID
+            AND A.DB_SVR_ID = C.DB_SVR_ID
+            AND C.MASTER_GBN = 'M'
 			<if test="value != null and value != 0">
 			AND A.DB_SVR_ID = #{value}
 			</if>
 			AND A.USEYN = 'Y'
 			AND B.USEYN = 'Y'
-            GROUP BY A.DB_SVR_NM, A.DB_SVR_ID, A.IPADR, A.PORTNO
+            GROUP BY A.DB_SVR_NM, A.DB_SVR_ID, C.IPADR, C.PORTNO, C.MASTER_GBN
      </select>	
      
      
@@ -329,8 +340,11 @@
 		**/
 		SELECT 
 				 COUNT(*)
-		FROM T_DBSVR_I
-		WHERE IPADR = #{ipadr}	
+		FROM T_DBSVR_I A, T_DBSVRIPADR_B		
+		WHERE 1=1
+		AND A.DB_SVR_ID = B.DB_SVR_ID 
+		AND B.MASTER_GBN = 'M'
+		AND B.IPADR = #{ipadr}	
 	</select>
 	
 	
@@ -378,7 +392,7 @@
 	</select>	
 	
 	
-	<select id="selectIpList" resultType="HashMap">
+	<select id="selectIpList" resultType="HashMap" >
 		/**
 		* Query ID : selectIpList
 		* Description : 등록된 Agent IP 리스트
@@ -391,4 +405,44 @@
 		AND AGT_CNDT_CD = 'TC001101'
 		AND ISTCNF_YN = 'Y'
 	</select>	
+	
+	<select id="selectDbsvrid"  resultType="int">
+		SELECT
+			COALESCE(MAX(DB_SVR_ID),0) AS db_svr_id
+		FROM
+		T_DBSVR_I
+	</select>
+
+   <insert id="insertIpadr" parameterType="ipadrVO">
+    	/**
+	 	*  Query ID : insertIpadr
+	 	* Description : insertIpadr 등록
+	 	* Author : 변승우
+	 	**/
+	 	
+		INSERT INTO T_DBSVRIPADR_I
+		(
+			  DB_SVR_IPADR_ID
+			, DB_SVR_ID
+			, IPADR
+			, PORTNO
+			, MASTER_GBN
+			, FRST_REGR_ID
+			, FRST_REG_DTM
+			, LST_MDFR_ID
+			, LST_MDF_DTM
+		) 
+		VALUES
+		(
+			  nextval('q_dbsvripadr_i_01')
+			, #{db_svr_id}
+			, #{ipadr}
+			, #{portno}
+			, #{master_gbn}
+			, #{frst_regr_id}
+			, clock_timestamp()
+			, #{lst_mdfr_id}
+			, clock_timestamp()	
+		)
+	</insert>    	
 </mapper>

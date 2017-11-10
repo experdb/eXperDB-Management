@@ -8,7 +8,9 @@ import java.util.Map;
 import org.springframework.stereotype.Repository;
 
 import com.k4m.dx.tcontrol.admin.dbserverManager.service.DbServerVO;
+import com.k4m.dx.tcontrol.admin.dbserverManager.service.IpadrVO;
 import com.k4m.dx.tcontrol.backup.service.DbVO;
+import com.k4m.dx.tcontrol.common.service.AgentInfoVO;
 
 import egovframework.rte.psl.dataaccess.EgovAbstractMapper;
 
@@ -159,10 +161,22 @@ public class DbServerManagerDAO extends EgovAbstractMapper{
 	}
 
 
-	public List<Map<String, Object>> selectIpList() {
+	public List<Map<String, Object>> selectIpList(AgentInfoVO agentInfoVO) {
 		List<Map<String, Object>>  sl = null;
-		sl = (List<Map<String, Object>>) list("dbserverManagerSql.selectIpList",null);
+		sl = (List<Map<String, Object>>) list("dbserverManagerSql.selectIpList",agentInfoVO);
 		return sl;
+	}
+
+
+	public int selectDbsvrid() {
+		int resultSet = 0;
+		resultSet = (int) getSqlSession().selectOne("dbserverManagerSql.selectDbsvrid", null);
+		return resultSet;
+	}
+
+
+	public void insertIpadr(IpadrVO ipadrVO) {
+		insert("dbserverManagerSql.insertIpadr", ipadrVO);		
 	}
 
 }

@@ -25,17 +25,17 @@ public class DBPasswordCreate {
 	   // String password = pbeEnc.encrypt("edcsusr");
 	    
 	    //운영
-	    String url = pbeEnc.encrypt("jdbc:postgresql://222.110.153.251:5433/tcontroldb");
-	    String username = pbeEnc.encrypt("tcontrol");
-	    String password = pbeEnc.encrypt("tcontrol");
+	    String url = pbeEnc.encrypt("jdbc:postgresql://222.110.153.251:5433/experdb");
+	    String username = pbeEnc.encrypt("experdb");
+	    String password = pbeEnc.encrypt("experdb");
 	 
 	    System.out.println(url);
 	    System.out.println(username);
 	    System.out.println(password);
 	    
-	    System.out.println(pbeEnc.decrypt("MmhDrnt2SFbQU/+8g/AKV39tHQMILggXdmNu64JQTw/dTFoWvLoAmrJOySq6UGr5LuzAsXmvDKI="));
-	    System.out.println(pbeEnc.decrypt("t7H2IA527cOXhtefsQYbTC84krKCdG2P"));
-	    System.out.println(pbeEnc.decrypt("VIQnbfng4J+P7dESt4TJO49hfKTIuhPf"));
+	    System.out.println(pbeEnc.decrypt("OdWrmRiT7caQNhkgGcZlATrVnBy6Xwskp46CVxlP/CK1HPn7GT6Ex9RjF97SnrC/L0B9OMzwTME="));
+	    System.out.println(pbeEnc.decrypt("HMKCoKjqSqrwCGspGtv4Tw=="));
+	    System.out.println(pbeEnc.decrypt("x6P0Om4GPszgt4+Whx1f7Q=="));
 	    
 	    
 		} catch(Exception e) {
