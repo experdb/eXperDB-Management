@@ -667,7 +667,7 @@ function fn_ipadrDelForm(){
 
 
 <div class="pop_container">
-	<div class="pop_cts">
+	<div class="pop_cts" style="padding-bottom: 70px;">
 		<p class="tit">DBMS 등록</p>
 		<form name="dbserverInsert" id="dbserverInsert" method="post">
 		<table class="write">
