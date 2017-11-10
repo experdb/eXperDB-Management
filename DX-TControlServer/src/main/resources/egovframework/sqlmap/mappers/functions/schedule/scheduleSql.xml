@@ -325,20 +325,22 @@
 	 	* Author : 변승우
 	 	**/
 	          SELECT 
-                 DB_SVR_ID
-                , DB_SVR_NM
-                , IPADR
-                , PORTNO
-                , DFT_DB_NM
-                , SVR_SPR_USR_ID
-                , SVR_SPR_SCM_PWD
-			, FRST_REGR_ID
-			, TO_CHAR(FRST_REG_DTM,'YYYY-MM-DD HH24:MI:SS') AS FRST_REG_DTM
-			, LST_MDFR_ID
-			, TO_CHAR(LST_MDF_DTM,'YYYY-MM-DD HH24:MI:SS') AS LST_MDF_DTM
-          FROM T_DBSVR_I	
+                 A.DB_SVR_ID
+                , A.DB_SVR_NM
+                , B.IPADR
+                , B.PORTNO
+                , A.DFT_DB_NM
+                , A.SVR_SPR_USR_ID
+                , A.SVR_SPR_SCM_PWD
+			, A.FRST_REGR_ID
+			, TO_CHAR(A.FRST_REG_DTM,'YYYY-MM-DD HH24:MI:SS') AS FRST_REG_DTM
+			, A.LST_MDFR_ID
+			, TO_CHAR(A.LST_MDF_DTM,'YYYY-MM-DD HH24:MI:SS') AS LST_MDF_DTM
+          FROM T_DBSVR_I A, T_DBSVRIPADR_I B	
           WHERE 1 = 1
-	      AND DB_SVR_ID = #{db_svr_id}
+          AND A.DB_SVR_ID = B.DB_SVR_ID
+          AND B.MASTER_GBN = 'M'
+	      AND A.DB_SVR_ID = #{db_svr_id}
 	</select>
 		
 		

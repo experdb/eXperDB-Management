@@ -1,6 +1,7 @@
 package com.k4m.dx.tcontrol.common.service;
 
 import java.util.List;
+import java.util.Map;
 
 import com.k4m.dx.tcontrol.admin.dbserverManager.service.DbServerVO;
 
@@ -29,5 +30,21 @@ public interface CmmnServerInfoService {
 	 * @throws Exception
 	 */
 	public DbServerVO selectServerInfo(DbServerVO vo) throws Exception;
+
+	/**
+	 * 아이피 정보 조회
+	 * @param db_svr_id
+	 * @return
+	 * @throws Exception
+	 */
+	List<Map<String, Object>> selectIpadrList(int db_svr_id) throws Exception;
+
+	/**
+	 * 아이피 정보 삭제
+	 * @param dbServerVO
+	 * @return
+	 * @throws Exception
+	 */
+	void deleteIpadr(DbServerVO dbServerVO) throws Exception;
 
 }

@@ -406,15 +406,17 @@
 	 	* Author : Yoon jh
 	 	**/
 	 	SELECT
-			DB_SVR_NM,
-			IPADR,
-			PORTNO,
-			DFT_DB_NM,
-			SVR_SPR_USR_ID,
-			SVR_SPR_SCM_PWD
-		FROM T_DBSVR_I	
-		WHERE
-			DB_SVR_ID = #{db_svr_id}
+			A.DB_SVR_NM,
+			B.IPADR,
+			B.PORTNO,
+			A.DFT_DB_NM,
+			A.SVR_SPR_USR_ID,
+			A.SVR_SPR_SCM_PWD
+		FROM T_DBSVR_I A, T_DBSVRIPADR_I B	
+		WHERE 1=1
+		AND A.DB_SVR_ID = B.DB_SVR_ID
+		AND B.MASTER_GBN = 'M'
+		AND A.DB_SVR_ID = #{db_svr_id}
     </select>
     
     <select id="selectWorkLogList" parameterType="workLogVO" resultType="workLogVO">

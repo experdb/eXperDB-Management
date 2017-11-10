@@ -380,4 +380,25 @@ public class CmmnController {
 		return result;
 	}	
 
+	
+	/**
+	 * 아이피 정보
+	 * @param 
+	 * @return resultSet
+	 * @throws Exception
+	 */
+	@SuppressWarnings("unchecked")
+	@RequestMapping(value = "/selectIpadrList.do")
+	@ResponseBody
+	public List<Map<String, Object>> selectIpadrList(HttpServletRequest request) {
+		List<Map<String, Object>> result = null;
+		
+		try {
+			int db_svr_id = Integer.parseInt(request.getParameter("db_svr_id"));			
+			result = cmmnServerInfoService.selectIpadrList(db_svr_id);	
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return result;
+	}	
 }

@@ -2,6 +2,7 @@ package com.k4m.dx.tcontrol.common.service.impl;
 
 import java.sql.SQLException;
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.stereotype.Repository;
 
@@ -45,8 +46,16 @@ public class CmmnServerInfoDAO extends EgovAbstractMapper{
 	public DbServerVO selectServerInfo(DbServerVO vo) throws Exception {
 		return (DbServerVO) selectOne("cmmnSql.selectServerInfo", vo);
 	}
+
 	
+	@SuppressWarnings({ "unchecked", "deprecation" })
+	public List<Map<String, Object>> selectIpadrList(int db_svr_id) {
+		List<Map<String, Object>> sl = null;
+		sl = (List<Map<String, Object>>) list("cmmnSql.selectIpadrList", db_svr_id);	
+		return sl;
+	}
 
-
-
+	public void deleteIpadr(DbServerVO dbServerVO) {
+		insert("cmmnSql.deleteIpadr", dbServerVO);	
+	}
 }

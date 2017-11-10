@@ -225,7 +225,7 @@ public class DbServerManagerController {
 		dbServerVO.setFrst_regr_id(id);
 		dbServerVO.setLst_mdfr_id(id);
 		
-		// 1. 스케쥴 마스터 등록
+		// T_DBSVR_I 데이터 등록
 		try {			
 			//비밀번호 암호화
 			//String pw = SHA256.SHA256(dbServerVO.getSvr_spr_scm_pwd());
@@ -246,7 +246,7 @@ public class DbServerManagerController {
 		}
 		
 		
-		// 1. 스케줄ID 시퀀스 조회
+		// T_DBSVR_I 시퀀스 조회
 		try {							
 			int db_svr_id = dbServerManagerService.selectDbsvrid();
 			ipadrVO.setDb_svr_id(db_svr_id);
@@ -327,26 +327,76 @@ public class DbServerManagerController {
 	 * @return "forward:/cmmnCodeList.do"
 	 */
 	@RequestMapping(value = "/updateDbServer.do")
-	public @ResponseBody boolean updateDbServer(@ModelAttribute("historyVO") HistoryVO historyVO, @ModelAttribute("dbServerVO") DbServerVO dbServerVO, HttpServletRequest request){
-		try {
+	public @ResponseBody void updateDbServer(@ModelAttribute("historyVO") HistoryVO historyVO, @ModelAttribute("ipadrVO") IpadrVO ipadrVO, @ModelAttribute("dbServerVO") DbServerVO dbServerVO, HttpServletRequest request){
+						
+		String updateResult = "S";
+		String deleteResult = "S";
+		
+		// Transaction 
+		DefaultTransactionDefinition def  = new DefaultTransactionDefinition();
+		def.setPropagationBehavior(TransactionDefinition.PROPAGATION_REQUIRED);
+		TransactionStatus status = txManager.getTransaction(def);
+					
+		String id = (String) request.getSession().getAttribute("usr_id");
+
+		dbServerVO.setFrst_regr_id(id);
+		dbServerVO.setLst_mdfr_id(id);
+		
+		// T_DBSVR_I 데이터 업데이트
+		try {			
+			AES256 aes = new AES256(AES256_KEY.ENC_KEY);
+			
 			// 화면접근이력 이력 남기기
 			CmmnUtils.saveHistory(request, historyVO);
 			historyVO.setExe_dtl_cd("DX-T0007_01");
 			historyVO.setMnu_id(9);
 			accessHistoryService.insertHistory(historyVO);
 			
-			String usr_id = (String) request.getSession().getAttribute("usr_id");
-			dbServerVO.setLst_mdfr_id(usr_id);
-
-			String pw = dbServerVO.getSvr_spr_scm_pwd();
+			//비밀번호 암호화
+			//String pw = SHA256.SHA256(dbServerVO.getSvr_spr_scm_pwd());
+			String pw = aes.aesEncode(dbServerVO.getSvr_spr_scm_pwd());
 			dbServerVO.setSvr_spr_scm_pwd(pw);
 			
 			dbServerManagerService.updateDbServer(dbServerVO);
 		} catch (Exception e) {
 			e.printStackTrace();
-			return false;
+			updateResult = "F";
 		}
-		return true;
+				
+		//IP정보 삭제
+		if(updateResult.equals("S")){
+			try {			
+				System.out.println(dbServerVO.getDb_svr_id());
+				cmmnServerInfoService.deleteIpadr(dbServerVO);
+				System.out.println("IP정보 삭제 완료");
+			} catch (Exception e) {
+				e.printStackTrace();
+				deleteResult = "F";
+			}
+		}
+				
+		//아이피  등록
+		if(deleteResult.equals("S")){
+			try {
+				String strRows = request.getParameter("ipadrArr").toString().replaceAll("&quot;", "\"");
+				JSONArray rows = (JSONArray) new JSONParser().parse(strRows);
+
+				for (int i = 0; i < rows.size(); i++) {
+					JSONObject jsrow = (JSONObject) rows.get(i);
+					ipadrVO.setDb_svr_id(ipadrVO.getDb_svr_id());
+					ipadrVO.setIPadr(jsrow.get("ipadr").toString());
+					ipadrVO.setPortno(Integer.parseInt(jsrow.get("portno").toString()));
+					ipadrVO.setMaster_gbn(jsrow.get("master_gbn").toString());
+					ipadrVO.setFrst_regr_id(id);
+					ipadrVO.setLst_mdfr_id(id);
+					dbServerManagerService.insertIpadr(ipadrVO);		
+					System.out.println("IP정보 등록 완료");
+				}
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		}
+		txManager.commit(status);
 	}
 	
 	

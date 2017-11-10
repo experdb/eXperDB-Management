@@ -181,7 +181,7 @@ function fn_regRe_popup(){
 	var datas = table.rows('.selected').data();
 	if (datas.length == 1) {
 		var db_svr_id = table.row('.selected').data().db_svr_id;
-		window.open("/popup/dbServerRegReForm.do?db_svr_id="+db_svr_id+"&flag=server","dbServerRegRePop","location=no,menubar=no,resizable=yes,scrollbars=yes,status=no,width=950,height=495,top=0,left=0");
+		window.open("/popup/dbServerRegReForm.do?db_svr_id="+db_svr_id+"&flag=server","dbServerRegRePop","location=no,menubar=no,resizable=yes,scrollbars=yes,status=no,width=950,height=638,top=0,left=0");
 	} else {
 		alert("하나의 항목을 선택해주세요.");
 	}	

@@ -109,7 +109,6 @@ $(function() {
 	 ******************************************************** */
     $('#serverIpadr tbody').on( 'click', 'tr', function () {
     	var check = table.row( this ).index()+1
-    	alert(check);
     	$(":radio[name=input:radio][value="+check+"]").prop("checked", true);
          if ( $(this).hasClass('selected') ) {
         }
@@ -224,10 +223,31 @@ function fn_ipadrValidation(){
 }
 
 
+function fn_saveValidation(){
+	var mCnt = 0;
+	var dataCnt = table.column(0).data().length;
+	
+	for(var i=0; i<dataCnt; i++){
+		if(table.rows().data()[i].master_gbn == "M"){
+			mCnt += 1;
+		}
+	}
+	if(mCnt == 0){
+		alert("마스터가 존재하지 않습니다.");
+		return false;
+	}else if(mCnt > 1){
+		alert("2개 이상의 마스터가 존재합니다.");
+		return false;
+	}
+	return true;
+}
+
 // DBserver 등록
 function fn_insertDbServer(){
 
 	if (!fn_dbServerValidation()) return false;
+	if (!fn_saveValidation()) return false;
+	
 	var datas = table.rows().data();
 	
 	var arrmaps = [];
@@ -462,6 +482,22 @@ function fn_svrnmCheck() {
  * PG_HOME 경로의 존재유무 체크
  ******************************************************** */
 function checkPghome(){
+	var ipadr = null;
+	var portno = null;
+	
+	var dataCnt = table.column(0).data().length;
+	
+	for(var i=0; i<dataCnt; i++){
+		if(table.rows().data()[i].master_gbn == "M"){
+			ipadr = table.rows().data()[i].ipadr;
+			portno = table.rows().data()[i].portno;
+		}
+	}
+	if(ipadr == null){
+		alert("마스터가 존재하지 않습니다.");
+		return false;
+	}
+	
 	var save_pth = $("#pghome_pth").val();
 	if(save_pth == ""){
 		alert("저장경로를 입력해 주세요.");
@@ -473,8 +509,8 @@ function checkPghome(){
 		  	data : {
 				db_svr_nm : $("#db_svr_nm").val(),
 				dft_db_nm : $("#dft_db_nm").val(),
-				ipadr : $("#ipadr").val(),
-				portno : $("#portno").val(),
+				ipadr : ipadr,
+				portno : portno,
 				svr_spr_usr_id : $("#svr_spr_usr_id").val(),
 				svr_spr_scm_pwd : $("#svr_spr_scm_pwd").val(),
 		  		path : save_pth,
@@ -517,6 +553,22 @@ function checkPghome(){
  * PG_DATA 경로의 존재유무 체크
  ******************************************************** */
  function checkPgdata(){
+	 var ipadr = null;
+	var portno = null;
+		
+		var dataCnt = table.column(0).data().length;
+		
+		for(var i=0; i<dataCnt; i++){
+			if(table.rows().data()[i].master_gbn == "M"){
+				ipadr = table.rows().data()[i].ipadr;
+				portno = table.rows().data()[i].portno;
+			}
+		}
+		if(ipadr == null){
+			alert("마스터가 존재하지 않습니다.");
+			return false;
+		}
+		
 		var save_pth = $("#pgdata_pth").val();
 		if(save_pth == ""){
 			alert("저장경로를 입력해 주세요.");
@@ -528,8 +580,8 @@ function checkPghome(){
 			  	data : {
 					db_svr_nm : $("#db_svr_nm").val(),
 					dft_db_nm : $("#dft_db_nm").val(),
-					ipadr : $("#ipadr").val(),
-					portno : $("#portno").val(),
+					ipadr : ipadr,
+					portno : portno,
 					svr_spr_usr_id : $("#svr_spr_usr_id").val(),
 					svr_spr_scm_pwd : $("#svr_spr_scm_pwd").val(),
 			  		path : save_pth,
@@ -624,7 +676,7 @@ function fn_ipadrAdd(){
 
 
 function fn_ipadrDelForm(){
-	
+	 table.row('.selected').remove().draw();
 }
 </script>
 </head>

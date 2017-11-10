@@ -1,6 +1,7 @@
 package com.k4m.dx.tcontrol.common.service.impl;
 
 import java.util.List;
+import java.util.Map;
 
 import javax.annotation.Resource;
 
@@ -35,6 +36,16 @@ public class CmmnServerInfoServiceImpl extends EgovAbstractServiceImpl implement
 	public DbServerVO selectServerInfo(DbServerVO vo) throws Exception {
 		// TODO Auto-generated method stub
 		return (DbServerVO) cmmnServerInfoDAO.selectServerInfo(vo);
+	}
+
+	@Override
+	public List<Map<String, Object>> selectIpadrList(int db_svr_id) throws Exception {
+		return cmmnServerInfoDAO.selectIpadrList(db_svr_id);
+	}
+
+	@Override
+	public void deleteIpadr(DbServerVO dbServerVO) throws Exception {
+		cmmnServerInfoDAO.deleteIpadr(dbServerVO);
 	}
 	
 	
