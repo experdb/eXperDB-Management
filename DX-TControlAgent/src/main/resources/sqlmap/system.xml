@@ -262,9 +262,9 @@
 		]]>
 	</select>
 
-    <select id="selectEffective_cach_size" resultType="String">
+    <select id="selectEffective_cache_size" resultType="String">
 		<![CDATA[
-			show effective_cach_size
+			show effective_cache_size
 		]]>
 	</select>
 
@@ -353,7 +353,7 @@
 	</select>
 	
 	
-    <select id="selectTablespaceInfo" resultType="TablespaceVO">
+    <select id="selectTablespaceInfo" resultType="String">
 		<![CDATA[
 	   		/**
 		 	* Query ID : selectTablespaceInfo

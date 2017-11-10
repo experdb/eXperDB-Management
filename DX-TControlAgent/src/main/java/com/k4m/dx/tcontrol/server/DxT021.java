@@ -5,6 +5,7 @@ import java.io.BufferedOutputStream;
 import java.net.Socket;
 import java.sql.Connection;
 import java.sql.DriverManager;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
@@ -63,7 +64,7 @@ public class DxT021 extends SocketCtl{
 		
 		JSONObject serverInfoObj = (JSONObject) jObj.get(ProtocolID.SERVER_INFO);
 		
-		socketLogger.info("DxT020.execute : " + strDxExCode);
+		socketLogger.info("execute : " + strDxExCode);
 		byte[] sendBuff = null;
 		String strErrCode = "";
 		String strErrMsg = "";
@@ -110,8 +111,8 @@ public class DxT021 extends SocketCtl{
 			setShowData(serverInfoObj, resultHP);
 
 			//tablespace
-			List<TablespaceVO> list = selectTablespaceInfo(serverInfoObj);
-			resultHP.put(ProtocolID.CMD_TABLESPACE_INFO, list);
+			//ArrayList list = (ArrayList)selectTablespaceInfo(serverInfoObj);
+			//resultHP.put(ProtocolID.CMD_TABLESPACE_INFO, list);
 			
 
 			//DBMS 경로
@@ -144,7 +145,7 @@ public class DxT021 extends SocketCtl{
 		}	    
 	}
 	
-	private List<TablespaceVO> selectTablespaceInfo(JSONObject serverInfoObj) throws Exception {
+	private ArrayList selectTablespaceInfo(JSONObject serverInfoObj) throws Exception {
 		
 		
 		SqlSessionFactory sqlSessionFactory = null;
@@ -156,7 +157,7 @@ public class DxT021 extends SocketCtl{
 		Connection connDB = null;
 		SqlSession sessDB = null;
 		
-		List<TablespaceVO> list = null;
+		ArrayList list = null;
 		
 		try {
 			
@@ -167,7 +168,7 @@ public class DxT021 extends SocketCtl{
 
 			sessDB = sqlSessionFactory.openSession(connDB);
 			
-			list =  sessDB.selectList("system.selectTablespaceInfo");
+			list =  (ArrayList) sessDB.selectList("system.selectTablespaceInfo");
 				
 
 		} catch(Exception e) {
@@ -283,7 +284,10 @@ public class DxT021 extends SocketCtl{
 			resultHP.put(ProtocolID.CMD_TIMEZONE, timezone);
 			String shared_preload_libraries = sessDB.selectOne("system.selectShared_preload_libraries");
 			resultHP.put(ProtocolID.CMD_SHARED_PRELOAD_LIBRARIES, shared_preload_libraries);
-
+			
+			ArrayList list = (ArrayList)sessDB.selectList("system.selectTablespaceInfo");
+			resultHP.put(ProtocolID.CMD_TABLESPACE_INFO, list);
+			
 		} catch(Exception e) {
 			errLogger.error("selectDatabaseInfo {} ", e.toString());
 			throw e;

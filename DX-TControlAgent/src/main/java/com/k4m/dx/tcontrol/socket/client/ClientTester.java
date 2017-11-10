@@ -1919,7 +1919,7 @@ public class ClientTester {
 			JSONObject jObj = new JSONObject();
 			
 			
-			jObj.put(ClientProtocolID.DX_EX_CODE, ClientTranCodeType.DxT020);
+			jObj.put(ClientProtocolID.DX_EX_CODE, ClientTranCodeType.DxT021);
 			jObj.put(ClientProtocolID.SERVER_INFO, serverObj);
 			
 			
@@ -1928,7 +1928,7 @@ public class ClientTester {
 			ClientAdapter CA = new ClientAdapter(Ip, port);
 			CA.open(); 
 
-			objList = CA.dxT020(jObj);
+			objList = CA.dxT021(jObj);
 			
 			CA.close();
 			
