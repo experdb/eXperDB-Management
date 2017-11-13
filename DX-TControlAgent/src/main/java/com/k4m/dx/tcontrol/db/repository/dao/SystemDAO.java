@@ -64,4 +64,16 @@ public class SystemDAO {
 		 session.insert("system.updateSCD_CNDT", vo);
 	}
 	
+	public DbServerInfoVO selectDatabaseConnInfo(DbServerInfoVO vo) throws Exception  {
+		return (DbServerInfoVO) session.selectOne("system.selectDatabaseConnInfo", vo);
+	}
+	
+	public void updateDB_CNDT(DbServerInfoVO vo) throws Exception {
+		session.insert("system.updateDB_CNDT", vo);
+	}
+	
+	public void updateDBSlaveAll(DbServerInfoVO vo) throws Exception {
+		session.insert("system.updateDBSlaveAll", vo);
+	}
+	
 }

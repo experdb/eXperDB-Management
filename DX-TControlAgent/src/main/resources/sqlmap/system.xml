@@ -377,6 +377,55 @@
 		]]>
 	</select>
 	
+    <select id="selectDatabaseConnInfo" parameterType="DbServerInfoVO" resultType="DbServerInfoVO">
+		<![CDATA[
+   		/**
+	 	* Query ID : selectDatabaseConnInfo
+	 	* Description : Database 접속정보 조회
+	 	* Author : 박태혁
+	 	**/
+			SELECT 
+				A.IPADR
+				, A.PORTNO
+				, B.DB_SVR_NM
+				, B.DFT_DB_NM
+				, B.SVR_SPR_USR_ID
+				, B.SVR_SPR_SCM_PWD
+			FROM T_DBSVRIPADR_I A, T_DBSVR_I B
+			WHERE
+				A.DB_SVR_ID = B.DB_SVR_ID
+				AND A.IPADR = #{IPADR}
+				AND B.USEYN = 'Y'
+		]]>
+	</select>
 	
-	
+	<update id="updateDB_CNDT"  parameterType="DbServerInfoVO">
+   		/**
+	 	* Query ID : updateDB_CNDT
+	 	* Description : Database 상태변경
+	 	* Author : 박태혁
+	 	**/
+		UPDATE T_DBSVRIPADR_I
+		SET
+			MASTER_GBN = #{MASTER_GBN}
+			, DB_CNDT = #{DB_CNDT}
+			, LST_MDF_DTM = now()
+		WHERE
+			 A.IPADR = #{IPADR}
+				
+    </update>
+    
+    <update id="updateDBSlaveAll"  parameterType="DbServerInfoVO">
+   		/**
+	 	* Query ID : updateDBSlaveAll
+	 	* Description : Slave로 상태변경
+	 	* Author : 박태혁
+	 	**/
+		UPDATE T_DBSVRIPADR_I
+		SET
+			MASTER_GBN = 'S'
+			, LST_MDF_DTM = now()
+		WHERE
+			 DB_SVR_ID = (SELECT DB_SVR_ID FROM T_DBSVR_I WHERE IPADR = #{IPADR})
+    </update>
 </mapper>

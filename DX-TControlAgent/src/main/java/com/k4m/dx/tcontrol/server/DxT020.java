@@ -75,11 +75,14 @@ public class DxT020 extends SocketCtl{
 				try {
 					String strMasterGbn = selectConnectInfo(objJob);
 					
+					String CMD_HOSTNAME = CommonUtil.getPidExec("echo $HOSTNAME");
+					
 					JSONObject objReturn = new JSONObject();
 					objReturn.put(ProtocolID.SERVER_IP, strServerIP);
 					objReturn.put(ProtocolID.SERVER_PORT, strServerPort);
 					objReturn.put(ProtocolID.DATABASE_NAME, strDatabaseName);
 					objReturn.put(ProtocolID.MASTER_GBN, strMasterGbn);
+					objReturn.put(ProtocolID.CMD_HOSTNAME, CMD_HOSTNAME);
 					objReturn.put(ProtocolID.CONNECT_YN, "Y");
 					
 					arrOut.add(objReturn);

@@ -101,4 +101,28 @@ public interface SystemService {
 	 * @throws Exception
 	 */
 	public void updateSCD_CNDT(WrkExeVO vo) throws Exception;
+	
+	/**
+	 * DB접속정보 조회
+	 * @param vo
+	 * @return
+	 * @throws Exception
+	 */
+	public DbServerInfoVO selectDatabaseConnInfo(DbServerInfoVO vo) throws Exception;
+	
+	
+	/**
+	 * db서버 정보 update
+	 * @param vo
+	 * @throws Exception
+	 */
+	public void updateDB_CNDT(DbServerInfoVO vo) throws Exception;
+	
+	
+	/**
+	 * Slave 로 update
+	 * @param vo
+	 * @throws Exception
+	 */
+	public void updateDBSlaveAll(DbServerInfoVO vo) throws Exception;
 }

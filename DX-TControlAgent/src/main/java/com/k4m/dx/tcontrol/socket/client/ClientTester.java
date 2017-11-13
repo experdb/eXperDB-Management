@@ -1886,9 +1886,10 @@ public class ClientTester {
 					String strDatabaseName = (String) outObj.get(ClientProtocolID.DATABASE_NAME);
 					String strMasterGbn = (String) outObj.get(ClientProtocolID.MASTER_GBN); 
 					String strConnectYn = (String) outObj.get(ClientProtocolID.CONNECT_YN); 
+					String strDBHostName = (String) outObj.get(ClientProtocolID.CMD_HOSTNAME); 
 					
 					System.out.println(strServerIP + " " + strServerPort + " " + strDatabaseName + " " 
-					+ strMasterGbn + " " + strConnectYn);
+					+ strMasterGbn + " " + strConnectYn + " " + strDBHostName);
 					
 				}
 			}

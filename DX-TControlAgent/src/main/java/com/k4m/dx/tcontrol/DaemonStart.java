@@ -87,11 +87,6 @@ public class DaemonStart implements DxDaemon{
 				String strPort = FileUtil.getPropertyValue("context.properties", "socket.server.port");
 				String strVersion = FileUtil.getPropertyValue("context.properties", "agent.install.version");
 				
-
-				
-				
-
-				
 				service.agentInfoStartMng(strIpadr, strPort, strVersion);
 				
 			} catch (Exception e) {

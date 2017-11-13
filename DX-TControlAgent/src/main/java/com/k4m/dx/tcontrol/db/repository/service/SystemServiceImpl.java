@@ -41,6 +41,11 @@ public class SystemServiceImpl implements SystemService{
 		return (AgentInfoVO) systemDAO.selectAgentInfo(vo);
 	}
 	
+	public DbServerInfoVO selectDatabaseConnInfo(DbServerInfoVO vo) throws Exception  {
+		return (DbServerInfoVO) systemDAO.selectDatabaseConnInfo(vo);
+	}
+
+	
 	/**
 	 * 설치정보 관리
 	 * @param dbServerInfo
@@ -108,5 +113,13 @@ public class SystemServiceImpl implements SystemService{
 	
 	public void updateSCD_CNDT(WrkExeVO vo) throws Exception  {
 		systemDAO.updateSCD_CNDT(vo);
+	}
+	
+	public void updateDB_CNDT(DbServerInfoVO vo) throws Exception {
+		systemDAO.updateDB_CNDT(vo);
+	}
+	
+	public void updateDBSlaveAll(DbServerInfoVO vo) throws Exception {
+		systemDAO.updateDBSlaveAll(vo);
 	}
 }

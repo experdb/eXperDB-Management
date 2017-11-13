@@ -12,8 +12,22 @@ public class DbServerInfoVO {
 	private String FRST_REG_DTM;
 	private String LST_MDFR_ID;
 	private String LST_MDF_DTM;
+	private String DB_CNDT;
+	private String MASTER_GBN;
 	
 	
+	public String getDB_CNDT() {
+		return DB_CNDT;
+	}
+	public void setDB_CNDT(String dB_CNDT) {
+		DB_CNDT = dB_CNDT;
+	}
+	public String getMASTER_GBN() {
+		return MASTER_GBN;
+	}
+	public void setMASTER_GBN(String mASTER_GBN) {
+		MASTER_GBN = mASTER_GBN;
+	}
 	public int getDB_SVR_ID() {
 		return DB_SVR_ID;
 	}
