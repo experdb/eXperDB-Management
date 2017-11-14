@@ -104,7 +104,7 @@ public class ExperDBRestApi {
 		//url = makeRestURL("policyService", "selectProfileProtectionVersion");
 		url = makeRestURL(strService, strCommand);
 		
-		SSLConnectionSocketFactory csf = new SSLConnectionSocketFactory(ctx, new DefaultHostnameVerifier());
+		SSLConnectionSocketFactory csf = new SSLConnectionSocketFactory(ctx, SSLConnectionSocketFactory.ALLOW_ALL_HOSTNAME_VERIFIER);
 		 
 		// here we create the Http Client using our SSL Socket Factory and so trust relation
 		CloseableHttpClient httpClient = HttpClients.custom().setSSLSocketFactory(csf).build();

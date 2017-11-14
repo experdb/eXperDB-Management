@@ -24,8 +24,8 @@ public class PolicyService {
 	public static void main(String[] args) throws Exception {
 		
 		String ip = "222.110.153.204";
-		ip = "222.110.153.211";
-		//ip = "localhost";
+		//ip = "222.110.153.211";
+		ip = "localhost";
 		int port = 9443;
 		port = 8443;
 		
