@@ -23,6 +23,7 @@ public class ClientTranCodeType {
 	public static final String DxT019 = "DxT019";
 	public static final String DxT020 = "DxT020";
 	public static final String DxT021 = "DxT021";
+	public static final String DxT022 = "DxT022";
 	
 	public static final String STATUS = "STATUS";
 	public static final String STOP = "STOP";

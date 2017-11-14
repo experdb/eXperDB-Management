@@ -23,6 +23,7 @@ import com.k4m.dx.tcontrol.socket.ProtocolID;
 import com.k4m.dx.tcontrol.socket.SocketCtl;
 import com.k4m.dx.tcontrol.socket.TranCodeType;
 import com.k4m.dx.tcontrol.util.CommonUtil;
+import com.k4m.dx.tcontrol.util.FileUtil;
 import com.k4m.dx.tcontrol.util.NetworkUtil;
 
 /**
@@ -38,22 +39,13 @@ import com.k4m.dx.tcontrol.util.NetworkUtil;
  * </pre>
  */
 
-public class DxT021 extends SocketCtl{
+public class DxT022 extends SocketCtl{
 	
 	private static Logger errLogger = LoggerFactory.getLogger("errorToFile");
 	private static Logger socketLogger = LoggerFactory.getLogger("socketLogger");
 	
-	private String[] arrCmd = {
-				                "echo $HOSTNAME" //호스트명
-								, "uname -r" //커널
-								, "grep -c processor /proc/cpuinfo" //cpu
-								, "free -h | awk 'NR>1&&NR<3{print $2}'" //메모리
-								, "echo $PGHOME"
-								, "echo $PGRBAK"
-
-							   };
 	
-	public DxT021(Socket socket, BufferedInputStream is, BufferedOutputStream	os) {
+	public DxT022(Socket socket, BufferedInputStream is, BufferedOutputStream	os) {
 		this.client = socket;
 		this.is = is;
 		this.os = os;
@@ -74,68 +66,40 @@ public class DxT021 extends SocketCtl{
 		JSONArray arrOut = new JSONArray();
 
 		try {
-			HashMap resultHP = new HashMap();
+			String strFileName = "pg_rman.ini";
+			String strBackupPath = (String) jObj.get(ProtocolID.CMD_BACKUP_PATH);
+			String strCmd = "pg_rman init -B " + strBackupPath + " -D $PGDATA";
 			
-			//호스트명
-			String CMD_HOSTNAME = CommonUtil.getPidExec(arrCmd[0]);
-			resultHP.put(ProtocolID.CMD_HOSTNAME, CMD_HOSTNAME);
-			
-			//OS 정보
-			String CMD_OS_VERSION = System.getProperty("os.name") + System.getProperty("os.version");
-			resultHP.put(ProtocolID.CMD_OS_VERSION, CMD_OS_VERSION);
-			
-			//커널
-			String CMD_OS_KERNUL = CommonUtil.getPidExec(arrCmd[1]);
-			resultHP.put(ProtocolID.CMD_OS_KERNUL, CMD_OS_KERNUL);
-			
-			//CPU
-			String CMD_CPU =  CommonUtil.getPidExec(arrCmd[2]);
-			resultHP.put(ProtocolID.CMD_CPU, CMD_CPU);
-			
-			//메모리
-			String CMD_MEMORY =  CommonUtil.getPidExec(arrCmd[3]);
-			resultHP.put(ProtocolID.CMD_MEMORY, CMD_MEMORY);
-			
-			//맥주소
-			String CMD_MACADDRESS = NetworkUtil.getMacAddress();
-			resultHP.put(ProtocolID.CMD_MACADDRESS, CMD_MACADDRESS);
-			
-			
-			//PostgreSQL 버젼, DATA 경로, LOG 경로, ARCHIVE 경로
-			List<ServerInfoVO> serverInfoList = selectPostgreSqlServerInfo(serverInfoObj);
-			
-			for(ServerInfoVO vo:serverInfoList) {
-				resultHP.put(vo.getSKEY(), vo.getSDATA());
+			boolean blnIsDirectory = FileUtil.isDirectory(strBackupPath);
+			if(!blnIsDirectory) {
+				throw new Exception("디렉터리가 존재하지 않습니다.");
 			}
 			
-			setShowData(serverInfoObj, resultHP);
-
-			//tablespace
-			//ArrayList list = (ArrayList)selectTablespaceInfo(serverInfoObj);
-			//resultHP.put(ProtocolID.CMD_TABLESPACE_INFO, list);
+			boolean blnIsFile = FileUtil.isFile(strBackupPath + System.getProperty("file.separator") + strFileName);
 			
+			if(!blnIsFile) {
+				 CommonUtil.getPidExec(strCmd);
+			}
 
-			//DBMS 경로
-			String CMD_DBMS_PATH = CommonUtil.getPidExec(arrCmd[4]);
+
 
 			outputObj.put(ProtocolID.DX_EX_CODE, strDxExCode);
 			outputObj.put(ProtocolID.RESULT_CODE, strSuccessCode);
 			outputObj.put(ProtocolID.ERR_CODE, strErrCode);
 			outputObj.put(ProtocolID.ERR_MSG, strErrMsg);
 			
-			outputObj.put(ProtocolID.RESULT_DATA, resultHP);
 
 			sendBuff = outputObj.toString().getBytes();
 			send(4, sendBuff);
 			
 		} catch (Exception e) {
-			errLogger.error("DxT021 {} ", e.toString());
+			errLogger.error("DxT022 {} ", e.toString());
 			
-			outputObj.put(ProtocolID.DX_EX_CODE, TranCodeType.DxT021);
+			outputObj.put(ProtocolID.DX_EX_CODE, TranCodeType.DxT022);
 			outputObj.put(ProtocolID.RESULT_CODE, "1");
-			outputObj.put(ProtocolID.ERR_CODE, TranCodeType.DxT021);
-			outputObj.put(ProtocolID.ERR_MSG, "DxT021 Error [" + e.toString() + "]");
-			outputObj.put(ProtocolID.RESULT_DATA, "failed");
+			outputObj.put(ProtocolID.ERR_CODE, TranCodeType.DxT022);
+			outputObj.put(ProtocolID.ERR_MSG, "DxT022 Error [" + e.toString() + "]");
+
 			
 			sendBuff = outputObj.toString().getBytes();
 			send(4, sendBuff);

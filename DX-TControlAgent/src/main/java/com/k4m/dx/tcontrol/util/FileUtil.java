@@ -229,6 +229,12 @@ public class FileUtil {
 		return size;
 	}
 	
+	/**
+	 * 파일 최종 수정일시 조회
+	 * @param fileLastModified
+	 * @return
+	 * @throws Exception
+	 */
 	public static String getFileLastModifiedDate(long fileLastModified) throws Exception {
 		String strLastModified = "";
 		
@@ -242,6 +248,12 @@ public class FileUtil {
 		return strLastModified;
 	}
 	
+	/**
+	 * 디렉터리 존재 유무 검색
+	 * @param strDirectory
+	 * @return
+	 * @throws Exception
+	 */
 	public static boolean isDirectory(String strDirectory) throws Exception {
 		boolean blnReturn = false;
 		
@@ -254,6 +266,30 @@ public class FileUtil {
 		return blnReturn;
 	}
 	
+	/**
+	 * 파일 존재유무 검색
+	 * @param strFile
+	 * @return
+	 * @throws Exception
+	 */
+	public static boolean isFile(String strFile) throws Exception {
+		boolean blnReturn = false;
+	    File f = new File(strFile);
+
+	    // 파일 존재 여부 판단
+	    if (f.isFile()) {
+	    	blnReturn = true;
+	    }
+	    
+	    return blnReturn;
+	}
+	
+	/**
+	 * 파일 size 조회
+	 * @param strFile
+	 * @return
+	 * @throws Exception
+	 */
 	public static long getFileSize(String strFile) throws Exception {
 		long lFileSize = 0 ;
 		
