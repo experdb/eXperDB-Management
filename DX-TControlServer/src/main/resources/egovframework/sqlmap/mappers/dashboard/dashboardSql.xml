@@ -92,7 +92,7 @@
 		       (
 		       SELECT 
 		             A.DB_SVR_ID
-                   , A.IPADR
+                   , (SELECT IPADR FROM T_DBSVRIPADR_I WHERE MASTER_GBN ='M' AND DB_SVR_ID=A.DB_SVR_ID GROUP BY IPADR) AS IPADR
 		            , C.WRK_ID
 		            , B.SCD_ID
 		        FROM

@@ -10,21 +10,20 @@
 	 	* Author : 박태혁
 	 	**/
 	 	
-	 	SELECT 
-	 		A.DB_SVR_NM
-	 		, B.AGT_CNDT_CD
-	 		, TO_CHAR(B.STRT_DTM,'YYYY-MM-DD HH24:MI:SS') AS STRT_DTM
-	 		, B.ISTCNF_YN
-	 		, B.AGT_VERSION
-            , CASE WHEN A.DB_SVR_NM is null THEN 'N' ELSE 'Y' END AS SET_YN
-	 	FROM T_AGTCNDT_I B  LEFT OUTER JOIN T_DBSVR_I A
-	 		ON  B.IPADR = A.IPADR
-	 		
+			SELECT 
+	 		  A.DB_SVR_NM
+	 		, C.AGT_CNDT_CD
+	 		, TO_CHAR(C.STRT_DTM,'YYYY-MM-DD HH24:MI:SS') AS STRT_DTM
+	 		, C.ISTCNF_YN
+	 		, C.AGT_VERSION
+			, CASE WHEN A.DB_SVR_NM IS NULL THEN 'N' ELSE 'Y' END AS SET_YN
+	 		FROM T_DBSVR_I A, T_DBSVRIPADR_I B,T_AGTCNDT_I C
+	 		WHERE A.DB_SVR_ID = B.DB_SVR_ID
+	 		AND B.IPADR=C.IPADR	
 		<if test="DB_SVR_NM != null and DB_SVR_NM != '' ">
-			WHERE A.DB_SVR_NM LIKE '%' || #{DB_SVR_NM} || '%'
-		</if>
-		
-      ORDER BY B.LST_MDF_DTM DESC
+			AND A.DB_SVR_NM LIKE '%' || #{DB_SVR_NM} || '%'
+		</if>	
+      ORDER BY C.LST_MDF_DTM DESC
     </select>
     
    

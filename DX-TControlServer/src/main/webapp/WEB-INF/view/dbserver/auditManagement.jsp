@@ -291,10 +291,16 @@
 												</tr>
 											</c:if>
 											<c:forEach var="role" items="${roleList}" varStatus="status">
+												<c:set var="checkName" value="" />
+													<c:forEach var="roleName" items="${fn:split(audit.log_roles,',')}">
+														<c:if test="${fn:toLowerCase(roleName) == fn:toLowerCase(role.rolname)}" >
+														 <c:set var="checkName" value="checked" />
+														</c:if>
+													</c:forEach>
 												<tr>
 													<td>
 														<div class="inp_chk">
-															<input type="checkbox" id="chkRole_${status.count}" name="chkRoles"  value="${role.rolname}" <c:if test="${fn:contains(fn:toLowerCase(audit.log_roles), fn:toLowerCase(role.rolname))}"> checked="checked"</c:if> />
+															<input type="checkbox" id="chkRole_${status.count}" name="chkRoles" value="${role.rolname}" ${checkName} />
 															<label for="chkRole_${status.count}"></label>
 														</div>
 													</td>

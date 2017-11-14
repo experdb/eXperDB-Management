@@ -636,6 +636,10 @@ public class TreeTransferController {
 			if (result.size() > 0) {
 				mv.addObject("result", result);
 			}
+			
+			HttpSession session = request.getSession();
+			dbServerVO.setUsr_id((String) session.getAttribute("usr_id"));
+			
 			resultSet = treeTransferService.selectDbServerList(dbServerVO);
 			mv.addObject("resultSet", resultSet);
 			mv.addObject("trf_trg_id", trf_trg_id);

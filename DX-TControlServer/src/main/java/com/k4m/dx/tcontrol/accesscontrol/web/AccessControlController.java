@@ -406,12 +406,8 @@ public class AccessControlController {
 			/*slave*/
 			schDbServerVO.setDb_svr_id(db_svr_id);
 			List<DbServerVO> slaveInfo= cmmnServerInfoService.selectServerInfoSlave(schDbServerVO);
-			System.out.println("slave 잇나여 없나여");
 			if(slaveInfo.size()!=0){
-				System.out.println("slave 잇어요~~" + slaveInfo.size());
 				for(int s=0; s<slaveInfo.size(); s++){
-					System.out.println("slave------>"+s + slaveInfo.get(s).getIpadr());
-					
 					IP = slaveInfo.get(s).getIpadr();
 					vo = new AgentInfoVO();
 					vo.setIPADR(IP);

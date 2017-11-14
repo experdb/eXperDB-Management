@@ -181,9 +181,25 @@
 	 	* Description : 접근제어이력 조회
 	 	* Author : 김주영
 	 	**/
+		SELECT 
+		(ROW_NUMBER() OVER()) AS ROWNUM
+		, A.SVR_ACS_CNTR_HIS_ID
+	 	, A.DB_SVR_ID
+	 	, A.DTB
+	 	, A.PRMS_IPADR
+	 	, A.PRMS_IPMASKADR
+	 	, A.PRMS_USR_ID
+	 	, A.PRMS_SEQ
+	 	, A.PRMS_SET
+	 	, A.CTF_MTH_NM
+	 	, A.CTF_TP_NM
+	 	, A.OPT_NM
+	 	, A.CMD_CNTS
+	 	, A.LST_MDF_DTM
+	 	, A.HIS_GRP_ID
+		FROM (
 	 	SELECT 
-	 	(ROW_NUMBER() OVER()) AS ROWNUM
-	 	, SVR_ACS_CNTR_HIS_ID
+	 	 SVR_ACS_CNTR_HIS_ID
 	 	, SVR_ACS_CNTR_ID
 	 	, DB_SVR_ID
 	 	, DTB
@@ -202,8 +218,11 @@
 		WHERE HIS_GRP_ID = (
 			SELECT HIS_GRP_ID 
 			FROM T_SVRACSCNTR_HIS_I 
-			WHERE SVR_ACS_CNTR_HIS_ID=#{svr_acs_cntr_his_id}
-		)			
+			WHERE SVR_ACS_CNTR_HIS_ID=#{svr_acs_cntr_his_id}		
+		)
+		)A
+		WHERE PRMS_SET='1'
+				
 	</select>
 	
 </mapper>
