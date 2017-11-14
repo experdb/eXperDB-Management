@@ -1954,4 +1954,47 @@ public class ClientTester {
 			e.printStackTrace();
 		}
 	}
+	
+	
+	private void dxT022(String Ip, int port) {
+		try {
+
+
+			JSONObject serverObj = new JSONObject();
+
+			serverObj.put(ClientProtocolID.SERVER_NAME, "222.110.153.251");
+			serverObj.put(ClientProtocolID.SERVER_IP, "222.110.153.251");
+			serverObj.put(ClientProtocolID.SERVER_PORT, "5433");
+			serverObj.put(ClientProtocolID.DATABASE_NAME, "experdb");
+			serverObj.put(ClientProtocolID.USER_ID, "experdb");
+			serverObj.put(ClientProtocolID.USER_PWD, "experdb");
+		
+			JSONObject jObj = new JSONObject();
+			
+			String strPath = "/home/experdb/pg_data/backup";
+			
+			jObj.put(ClientProtocolID.DX_EX_CODE, ClientTranCodeType.DxT022);
+			jObj.put(ClientProtocolID.SERVER_INFO, serverObj);
+			jObj.put(ClientProtocolID.CMD_BACKUP_PATH, strPath);
+			
+			
+			JSONObject objList;
+			
+			ClientAdapter CA = new ClientAdapter(Ip, port);
+			CA.open(); 
+
+			objList = CA.dxT022(jObj);
+			
+			CA.close();
+			
+			String strErrMsg = (String)objList.get(ClientProtocolID.ERR_MSG);
+			String strErrCode = (String)objList.get(ClientProtocolID.ERR_CODE);
+			String strDxExCode = (String)objList.get(ClientProtocolID.DX_EX_CODE);
+			String strResultCode = (String)objList.get(ClientProtocolID.RESULT_CODE);
+
+			System.out.println("Result : " + strResultCode);
+		} catch(Exception e) {
+			e.printStackTrace();
+		}
+	}
 }
