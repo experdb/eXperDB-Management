@@ -87,7 +87,8 @@ public class ClientTester {
 			//clientTester.dxT018_delete(Ip, port);
 			//clientTester.dxT019(Ip, port);
 			//clientTester.dxT020(Ip, port);
-			clientTester.dxT021(Ip, port);
+			//clientTester.dxT021(Ip, port);
+			clientTester.dxT022(Ip, port);
 			
 			//clientTester.test();
 		} catch(Exception e) {
@@ -1971,7 +1972,7 @@ public class ClientTester {
 		
 			JSONObject jObj = new JSONObject();
 			
-			String strPath = "/home/experdb/pg_data/backup";
+			String strPath = "/home/experdb/pgdata/bckDir/rman";
 			
 			jObj.put(ClientProtocolID.DX_EX_CODE, ClientTranCodeType.DxT022);
 			jObj.put(ClientProtocolID.SERVER_INFO, serverObj);

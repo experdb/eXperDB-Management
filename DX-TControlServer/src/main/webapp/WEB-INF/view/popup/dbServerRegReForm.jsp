@@ -75,7 +75,8 @@ function fn_init() {
 		{data : "ipadr", className : "dt-center", defaultContent : ""},
 		{data : "portno", className : "dt-center", defaultContent : ""},
 		{data : "master_gbn", className : "dt-center", defaultContent : ""},
-		{data : "connYn", className : "dt-center", defaultContent : ""}	
+		{data : "connYn", className : "dt-center", defaultContent : ""},
+		{data : "svr_host_nm", className : "dt-center", defaultContent : "", visible: false}
 		]
 	});
 	
@@ -84,6 +85,7 @@ function fn_init() {
 	table.tables().header().to$().find('th:eq(2)').css('min-width', '117px');
 	table.tables().header().to$().find('th:eq(3)').css('min-width', '130px');
 	table.tables().header().to$().find('th:eq(4)').css('min-width', '130px');
+	table.tables().header().to$().find('th:eq(5)').css('min-width', '0px');
     $(window).trigger('resize'); 
 }
 
@@ -275,6 +277,7 @@ function fn_dbServerConnTest(){
 					if(table.rows().data()[i].ipadr == result.result_data[i].SERVER_IP){
 						table.cell(i, 3).data(result.result_data[i].MASTER_GBN).draw();
 						table.cell(i, 4).data(result.result_data[i].CONNECT_YN).draw();
+						table.cell(i, 5).data(result.result_data[i].CMD_HOSTNAME).draw();	
 					}
 					if(result.result_data[i].MASTER_GBN == "N" || result.result_data[i].CONNECT_YN == "N"){
 							connCheck = "fail"
@@ -310,6 +313,7 @@ function fn_updateDbServer(){
 		tmpmap["ipadr"] = table.rows().data()[i].ipadr;
         tmpmap["portno"] = table.rows().data()[i].portno;      
         tmpmap["master_gbn"] = table.rows().data()[i].master_gbn;
+        tmpmap["svr_host_nm"] = table.rows().data()[i].svr_host_nm;
 		arrmaps.push(tmpmap);	
 		}
 	
@@ -616,7 +620,8 @@ function checkPghome(){
 										<th width="150">DBMS아이피</th>
 										<th width="117">포트</th>
 										<th width="130">구분</th>
-										<th width="130">연결여부</th>										
+										<th width="130">연결여부</th>	
+										<th width="0"></th>									
 									</tr>
 								</thead>
 							</table>

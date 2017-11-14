@@ -8,10 +8,25 @@ public class IpadrVO {
 	private String ipadr;
 	private int portno;
 	private String master_gbn;
+	private String svr_host_nm;
 	private String frst_regr_id;
 	private String frst_reg_dtm;
 	private String lst_mdfr_id;
 	private String lst_mdf_dtm;
+
+	
+	
+	public String getSvr_host_nm() {
+		return svr_host_nm;
+	}
+
+	public void setSvr_host_nm(String svr_host_nm) {
+		this.svr_host_nm = svr_host_nm;
+	}
+
+	public void setIpadr(String ipadr) {
+		this.ipadr = ipadr;
+	}
 
 	public int getRownum() {
 		return rownum;

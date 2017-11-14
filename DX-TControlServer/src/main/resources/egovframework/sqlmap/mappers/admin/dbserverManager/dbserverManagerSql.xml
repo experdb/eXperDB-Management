@@ -431,6 +431,7 @@
 			, IPADR
 			, PORTNO
 			, MASTER_GBN
+			, SVR_HOST_NM
 			, FRST_REGR_ID
 			, FRST_REG_DTM
 			, LST_MDFR_ID
@@ -443,6 +444,7 @@
 			, #{ipadr}
 			, #{portno}
 			, #{master_gbn}
+			, #{svr_host_nm}
 			, #{frst_regr_id}
 			, clock_timestamp()
 			, #{lst_mdfr_id}

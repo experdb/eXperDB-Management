@@ -267,6 +267,7 @@ public class DbServerManagerController {
 					ipadrVO.setIPadr(jsrow.get("ipadr").toString());
 					ipadrVO.setPortno(Integer.parseInt(jsrow.get("portno").toString()));
 					ipadrVO.setMaster_gbn(jsrow.get("master_gbn").toString());
+					ipadrVO.setSvr_host_nm(jsrow.get("svr_host_nm").toString());
 					ipadrVO.setFrst_regr_id(id);
 					ipadrVO.setLst_mdfr_id(id);
 					dbServerManagerService.insertIpadr(ipadrVO);			
@@ -387,6 +388,7 @@ public class DbServerManagerController {
 					ipadrVO.setIPadr(jsrow.get("ipadr").toString());
 					ipadrVO.setPortno(Integer.parseInt(jsrow.get("portno").toString()));
 					ipadrVO.setMaster_gbn(jsrow.get("master_gbn").toString());
+					ipadrVO.setSvr_host_nm(jsrow.get("svr_host_nm").toString());
 					ipadrVO.setFrst_regr_id(id);
 					ipadrVO.setLst_mdfr_id(id);
 					dbServerManagerService.insertIpadr(ipadrVO);		
