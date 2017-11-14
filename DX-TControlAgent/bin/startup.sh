@@ -1,11 +1,11 @@
 #!/bin/sh
-echo "DX-TcontrolAgent start run .. "
+echo "experDB-Management-Agent start run .. "
 
-JAVA_HOME=/home/devel/DX-TcontrolAgent/java/jre1.7.0_80
+JAVA_HOME=/home/experdb/experDB-Management-Agent/java/jre1.7.0_80
 
 
-PROJECT_HOME=/home/devel
-CURRENT_DIR=$PROJECT_HOME/DX-TcontrolAgent
+PROJECT_HOME=/home/experdb
+CURRENT_DIR=$PROJECT_HOME/experDB-Management-Agent
 
 LOG_DIR=$CURRENT_DIR/logs
 
@@ -20,6 +20,6 @@ LIB=$CURRENT_DIR/lib/*
 JAVA_CLASSPATH=$APP_HOME:$LIB
 
 
-#$JAVA_HOME/bin/java -Du=DX-TcontrolAgent -Dlog.base=$LOG_DIR -classpath $JAVA_CLASSPATH $MAIN_CLASS
+#$JAVA_HOME/bin/java -Du=experDB-Management-Agent -Dlog.base=$LOG_DIR -classpath $JAVA_CLASSPATH $MAIN_CLASS
 
-nohup $JAVA_HOME/bin/java -Du=DX-TcontrolAgent -Dlog.base=$LOG_DIR -classpath $JAVA_CLASSPATH $MAIN_CLASS 1> /dev/null 2>&1 &
+nohup $JAVA_HOME/bin/java -Du=experDB-Management-Agent -Dlog.base=$LOG_DIR -classpath $JAVA_CLASSPATH $MAIN_CLASS 1> /dev/null 2>&1 &

@@ -1,11 +1,11 @@
 #!/bin/sh
-echo "DX-TcontrolAgent setting .. "
+echo "experDB-Management-Agent setting .. "
 
-JAVA_HOME=/home/devel/DX-TcontrolAgent/java/jre1.7.0_80
+JAVA_HOME=/home/experdb/experDB-Management-Agent/java/jre1.7.0_80
 
 
-PROJECT_HOME=/home/devel
-CURRENT_DIR=$PROJECT_HOME/DX-TcontrolAgent
+PROJECT_HOME=/home/experdb
+CURRENT_DIR=$PROJECT_HOME/experDB-Management-Agent
 
 LOG_DIR=$CURRENT_DIR/logs
 

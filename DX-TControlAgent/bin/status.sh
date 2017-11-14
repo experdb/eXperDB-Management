@@ -1,7 +1,7 @@
 #!/bin/sh
 
 
-PGM_NAME=DX-TcontrolAgent
+PGM_NAME=experDB-Management-Agent
 DATE=`date +%Y%m%d-%H%M%S`
  
 Cnt=`ps -ef|grep $PGM_NAME|grep -v grep|grep -v vi|wc -l`
