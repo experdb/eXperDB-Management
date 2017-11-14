@@ -8,9 +8,16 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
+import org.json.simple.parser.JSONParser;
+import org.json.simple.parser.ParseException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.transaction.PlatformTransactionManager;
+import org.springframework.transaction.TransactionDefinition;
+import org.springframework.transaction.TransactionStatus;
+import org.springframework.transaction.support.DefaultTransactionDefinition;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -57,6 +64,12 @@ public class BackupController {
 
 	
 	private List<Map<String, Object>> dbSvrAut;
+	
+	/**
+	 * Mybatis Transaction 
+	 */
+	@Autowired
+	private PlatformTransactionManager txManager;
 	
 	/**
 	 * Work List View page
@@ -679,7 +692,7 @@ public class BackupController {
 		try {
 			WorkOptVO workOptVO = new WorkOptVO();
 			workOptVO.setBck_wrk_id(workVO.getBck_wrk_id());
-			backupService.deleteWorkOpt(workOptVO);
+		//	backupService.deleteWorkOpt(workOptVO);
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -687,7 +700,7 @@ public class BackupController {
 		
 		// work object delete 
 		try {
-			backupService.deleteWorkObj(workVO);
+		//	backupService.deleteWorkObj(workVO);
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -701,9 +714,14 @@ public class BackupController {
 	 * @param WorkVO
 	 * @return String
 	 * @throws IOException 
+	 * @throws ParseException 
 	 */
 	@RequestMapping(value = "/popup/workDelete.do")
-	public void workDelete(@ModelAttribute("workVO") WorkVO workVO, HttpServletResponse response, HttpServletRequest request, @ModelAttribute("historyVO") HistoryVO historyVO) throws IOException{
+	public void workDelete(@ModelAttribute("workVO") WorkVO workVO, HttpServletResponse response, HttpServletRequest request, @ModelAttribute("historyVO") HistoryVO historyVO) throws IOException, ParseException{
+		// Transaction 
+		DefaultTransactionDefinition def  = new DefaultTransactionDefinition();
+		def.setPropagationBehavior(TransactionDefinition.PROPAGATION_REQUIRED);
+		TransactionStatus status = txManager.getTransaction(def);
 		
 		// 화면접근이력 이력 남기기
 		try {
@@ -712,37 +730,56 @@ public class BackupController {
 			historyVO.setMnu_id(25);
 			accessHistoryService.insertHistory(historyVO);
 		} catch (Exception e2) {
-			// TODO Auto-generated catch block
 			e2.printStackTrace();
 		}
 
-		// work option delete
-		WorkOptVO workOptVO = new WorkOptVO();
-		workOptVO.setBck_wrk_id(workVO.getBck_wrk_id());
+		String bck_wrk_id_Rows = request.getParameter("bck_wrk_id_List").toString().replaceAll("&quot;", "\"");
+		JSONArray bck_wrk_ids = (JSONArray) new JSONParser().parse(bck_wrk_id_Rows);		
+		
+		String wrk_id_Rows = request.getParameter("wrk_id_List").toString().replaceAll("&quot;", "\"");
+		JSONArray wrk_ids = (JSONArray) new JSONParser().parse(wrk_id_Rows);	
+		
+			
 		try {
-			backupService.deleteWorkOpt(workOptVO);
+			for(int i=0; i<bck_wrk_ids.size(); i++){
+				int bck_wrk_id = Integer.parseInt(bck_wrk_ids.get(i).toString());
+				backupService.deleteWorkOpt(bck_wrk_id);				
+			}
 		} catch (Exception e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		
 		// work object delete
 		try {
-			backupService.deleteWorkObj(workVO);
+			for(int i=0; i<bck_wrk_ids.size(); i++){
+				int bck_wrk_id = Integer.parseInt(bck_wrk_ids.get(i).toString());
+				backupService.deleteWorkObj(bck_wrk_id);
+			}			
 		} catch (Exception e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+		
+		// bckwork delete
+		try {
+			for(int i=0; i<bck_wrk_ids.size(); i++){
+				int bck_wrk_id = Integer.parseInt(bck_wrk_ids.get(i).toString());
+				backupService.deleteBckWork(bck_wrk_id);
+			}			
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+				
 		
 		// work delete
 		try {
-			backupService.deleteWork(workVO);
+			for(int i=0; i<wrk_ids.size(); i++){
+				int wrk_id = Integer.parseInt(wrk_ids.get(i).toString());
+				backupService.deleteWork(wrk_id);
+			}			
 		} catch (Exception e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		
-		response.getWriter().println(workVO.getWrk_id());
+		txManager.commit(status);
 	}
 	
 	/**
@@ -771,7 +808,7 @@ public class BackupController {
 	@RequestMapping(value = "/popup/workObjDelete.do")
 	public void workObjDelete(@ModelAttribute("WorkVO") WorkVO workVO, HttpServletResponse response){
 		try {
-			backupService.deleteWorkObj(workVO);
+			//backupService.deleteWorkObj(workVO);
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

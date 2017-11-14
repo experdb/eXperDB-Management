@@ -93,7 +93,7 @@ function fn_init(){
 		{data : "file_fmt_cd_nm", className : "dt-center", defaultContent : ""}, 
 		{data : "cprt", className : "dt-center", defaultContent : ""}, 
 		{data : "encd_mth_nm", className : "dt-center", defaultContent : ""}, 
-		{data : "usr_role_name", className : "dt-center", defaultContent : ""}, 
+		{data : "usr_role_nm", className : "dt-center", defaultContent : ""}, 
 		{data : "file_stg_dcnt", className : "dt-center", defaultContent : ""}, 	
 		{data : "bck_mtn_ecnt", className : "dt-center", defaultContent : ""}, 		
 		{data : "frst_regr_id", className : "dt-center", defaultContent : ""},
@@ -287,7 +287,7 @@ function fn_dump_reform_popup(bck_wrk_id){
  ******************************************************** */
 function getRmanDataList(wrk_nm, bck_opt_cd){
 	$.ajax({
-		url : "/backup/getWorkList.do",
+		url : "/backup/getWorkList.do", 
 	  	data : {
 	  		db_svr_id : '<c:out value="${db_svr_id}"/>',
 	  		bck_opt_cd : bck_opt_cd,
@@ -413,21 +413,26 @@ function fn_dump_check_all(){
  * Rman Data Delete
  ******************************************************** */
 function fn_rman_work_delete(){
-	var checkCnt = 0;	
-	$("input:checkbox[name='rmanWorkId']").each(function(){
-		if(this.checked) checkCnt++;
-	});
+	var datas = tableDump.rows('.selected').data();
 	
-	if(checkCnt < 1){
-		alert("삭제할 작업을 선택해 주세요.")
-	}else if(confirm("선택하신 작업을 삭제하시겠습니까?")){
-		$("input:checkbox[name='rmanWorkId']").each(function(){
-			if(this.checked){
+	if(datas.length < 1){
+		alert("삭제할 작업을 선택해 주세요.");
+		return false;
+	}
+	
+	var bck_wrk_id_List = [];
+	var wrk_id_List = [];
+    for (var i = 0; i < datas.length; i++) {
+    	bck_wrk_id_List.push( tableRman.rows('.selected').data()[i].bck_wrk_id);   
+    	wrk_id_List.push( tableRman.rows('.selected').data()[i].wrk_id);   
+  	}	
+		
+	if(confirm("선택하신 작업을 삭제하시겠습니까?")){
 				$.ajax({
 					url : "/popup/workDelete.do",
 				  	data : {
-				  		db_svr_id : '<c:out value="${db_svr_id}"/>',
-				  		wrk_id : this.value
+				  		bck_wrk_id_List : JSON.stringify(bck_wrk_id_List),
+				  		wrk_id_List : JSON.stringify(wrk_id_List)
 				  	},
 					dataType : "json",
 					type : "post",
@@ -447,9 +452,7 @@ function fn_rman_work_delete(){
 					},
 					success : function(data) {
 					}
-				});
-			}
-		});
+				});			
 		alert("선택한 작업이 삭제되었습니다.");
 		fn_rman_find_list();
 	}
@@ -459,21 +462,26 @@ function fn_rman_work_delete(){
  * Dump Data Delete
  ******************************************************** */
 function fn_dump_work_delete(){
-	var checkCnt = 0;	
-	$("input:checkbox[name='dumpWorkId']").each(function(){
-		if(this.checked) checkCnt++;
-	});
+	var datas = tableDump.rows('.selected').data();
 	
-	if(checkCnt < 1){
+	if(datas.length < 1){
 		alert("삭제할 작업을 선택해 주세요.")
-	}else if(confirm("선택하신 작업을 삭제하시겠습니까?")){
-		$("input:checkbox[name='dumpWorkId']").each(function(){
-			if(this.checked){
+		return false;
+	}
+	
+	var bck_wrk_id_List = [];
+	var wrk_id_List = [];
+    for (var i = 0; i < datas.length; i++) {
+    	bck_wrk_id_List.push( tableDump.rows('.selected').data()[i].bck_wrk_id);   
+    	wrk_id_List.push( tableDump.rows('.selected').data()[i].wrk_id);   
+  	}	
+	
+	if(confirm("선택하신 작업을 삭제하시겠습니까?")){
 				$.ajax({
 					url : "/popup/workDelete.do",
 				  	data : {
-				  		db_svr_id : '<c:out value="${db_svr_id}"/>',
-				  		wrk_id : this.value
+				  		bck_wrk_id_List : JSON.stringify(bck_wrk_id_List),
+				  		wrk_id_List : JSON.stringify(wrk_id_List)
 				  	},
 					dataType : "json",
 					type : "post",
@@ -494,8 +502,6 @@ function fn_dump_work_delete(){
 					success : function(data) {
 					}
 				});
-			}
-		});
 		alert("선택한 작업이 삭제되었습니다.");
 		fn_dump_find_list();
 	}

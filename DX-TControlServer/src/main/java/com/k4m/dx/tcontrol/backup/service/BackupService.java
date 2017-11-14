@@ -79,14 +79,14 @@ public interface BackupService {
 	 * @param WorkOptVO
 	 * @throws Exception
 	 */
-	public void deleteWorkOpt(WorkOptVO workOptVO) throws Exception;
+	public void deleteWorkOpt(int bck_wrk_id) throws Exception;
 	
 	/**
 	 * Work delete
 	 * @param WorkVO
 	 * @throws Exception
 	 */
-	public void deleteWork(WorkVO workVO) throws Exception;
+	public void deleteWork(int wrk_id) throws Exception;
 	
 	/**
 	 * DB 목록 조회
@@ -132,7 +132,7 @@ public interface BackupService {
 	 * @param WorkVO
 	 * @throws Exception
 	 */
-	public void deleteWorkObj(WorkVO workVO) throws Exception;
+	public void deleteWorkObj(int bck_wrk_id) throws Exception;
 
 	
 	/**
@@ -171,4 +171,6 @@ public interface BackupService {
 	 * @throws Exception
 	 */
 	public List<Map<String, Object>> selectMonthBckSchedule(int db_svr_id) throws Exception;
+
+	public void deleteBckWork(int bck_wrk_id) throws Exception;
 }

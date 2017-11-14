@@ -62,12 +62,12 @@ public class BackupDAO extends EgovAbstractMapper{
 		return (List<WorkOptVO>) list("backupSQL.selectWorkOptList",workVO);
 	}
 	
-	public void deleteWorkOpt(WorkOptVO workOptVO) throws Exception{
-		delete("backupSQL.deleteWorkOpt",workOptVO);
+	public void deleteWorkOpt(int bck_wrk_id) throws Exception{
+		delete("backupSQL.deleteWorkOpt",bck_wrk_id);
 	}
 	
-	public void deleteWork(WorkVO workVO) throws Exception{
-		delete("backupSQL.deleteWork",workVO);
+	public void deleteWork(int wrk_id) throws Exception{
+		delete("backupSQL.deleteWork",wrk_id);
 	}
 
 	@SuppressWarnings({ "unchecked", "deprecation" })
@@ -93,8 +93,8 @@ public class BackupDAO extends EgovAbstractMapper{
 		return (List<WorkObjVO>) list("backupSQL.selectWorkObj",workVO);
 	}
 	
-	public void deleteWorkObj(WorkVO workVO) throws Exception{
-		delete("backupSQL.deleteWorkObj",workVO);
+	public void deleteWorkObj(int bck_wrk_id) throws Exception{
+		delete("backupSQL.deleteWorkObj",bck_wrk_id);
 	}
 
 	public int wrk_nmCheck(String wrk_nm) {
@@ -129,5 +129,9 @@ public class BackupDAO extends EgovAbstractMapper{
 		List<Map<String, Object>> sl = null;
 		sl = (List<Map<String, Object>>) list("backupSQL.selectMonthBckSchedule", db_svr_id);		
 		return sl;
+	}
+
+	public void deleteBckWork(int bck_wrk_id) {
+		delete("backupSQL.deleteBckWork",bck_wrk_id);
 	}
 }

@@ -232,11 +232,11 @@ $(function() {
     								/(<([^>]+)>)/gi, ""));
     			}
     		},
-    		success : function(result) {
-    			table_db.clear().draw();
+    		success : function(result) {    	
     			if(result.data == null){
     				alert("서버상태를 확인해주세요.");
     			}else{
+    				table_db.clear().draw();
 	    			table_db.rows.add(result.data).draw();
 	    			fn_dataCompareChcek(result);
     			}
@@ -352,7 +352,7 @@ function fn_insertDB(){
  * 서버에 등록된 디비,  <=>  Repository에 등록된 디비 비교
  ******************************************************** */
 function fn_dataCompareChcek(svrDbList){
-	var db_svr_id =  table_dbServer.row('.selected').data().db_svr_id
+	var db_svr_id =  table_dbServer.row('.selected').data().db_svr_id;
 	$.ajax({
 		url : "/selectTreeDBList.do",
 		data : {db_svr_id : db_svr_id},
@@ -374,19 +374,22 @@ function fn_dataCompareChcek(svrDbList){
 			}
 		},
 		success : function(result) {
+			var list = $("input[name='db_exp']");
 			//var db_svr_id =  table_dbServer.row('.selected').data().db_svr_id
 			if(svrDbList.data.length>0){
+				for(var k=0; k<list.length; k++){
+					list[k].value = result[k].db_exp;
+				}		
  				for(var i = 0; i<svrDbList.data.length; i++){
 					for(var j = 0; j<result.length; j++){						
 							 $('input', table_db.rows(i).nodes()).prop('checked', false); 	
 							 table_db.rows(i).nodes().to$().removeClass('selected');	
 					}
 				}	 	
-				for(var i = 0; i<svrDbList.data.length; i++){
-					var list = $("input[name='db_exp']");
-					
+ 				for(var i = 0; i<svrDbList.data.length; i++){
+					//var list = $("input[name='db_exp']");	
 					for(var j = 0; j<result.length; j++){
-						list[j].value = result[j].db_exp;
+						//list[j].value = result[j].db_exp;
 						if(result[j].useyn == "Y"){
 							 if(db_svr_id == result[j].db_svr_id && svrDbList.data[i].dft_db_nm == result[j].db_nm){			
 								 $('input', table_db.rows(i).nodes()).prop('checked', true); 

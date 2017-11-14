@@ -36,7 +36,7 @@ var wrk_nmChk ="fail";
  * Dump Backup Insert
  ******************************************************** */
 function fn_insert_work(){
-	if(valCheck()){
+	if (!valCheck()) return false;
 		$.ajax({
 			async : false,
 			url : "/popup/workDumpWrite.do",
@@ -74,8 +74,6 @@ function fn_insert_work(){
 				fn_insert_opt(data);
 			}
 		});  
-	}
-	return false;
 }
 
 /* ********************************************************
@@ -101,13 +99,12 @@ function fn_insert_opt(data){
 /* ********************************************************
  * Dump Backup Each Option Insert
  ******************************************************** */
-function fn_insert_opt_val(bck_wrk_id, opt_sn, grp_cd, opt_cd, bck_opt_val){
+function fn_insert_opt_val(bck_wrk_id, grp_cd, opt_cd, bck_opt_val){
 	$.ajax({
 		async : false,
 		url : "/popup/workOptWrite.do",
 	  	data : {
 	  		bck_wrk_id : bck_wrk_id,
-	  		opt_sn : opt_sn,
 	  		grp_cd : grp_cd,
 	  		opt_cd : opt_cd,
 	  		bck_opt_val : bck_opt_val
@@ -127,8 +124,7 @@ function fn_insert_opt_val(bck_wrk_id, opt_sn, grp_cd, opt_cd, bck_opt_val){
 				alert("ERROR CODE : "+ request.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ request.responseText.replace(/(<([^>]+)>)/gi, ""));
 			}
 		},
-		success : function() {
-		}
+		success : function() {}
 	});
 }
 

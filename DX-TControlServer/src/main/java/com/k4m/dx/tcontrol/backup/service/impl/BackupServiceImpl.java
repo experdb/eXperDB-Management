@@ -61,12 +61,12 @@ public class BackupServiceImpl extends EgovAbstractServiceImpl implements Backup
 		return backupDAO.selectWorkOptList(workVO);
 	}
 	
-	public void deleteWorkOpt(WorkOptVO workOptVO) throws Exception{
-		backupDAO.deleteWorkOpt(workOptVO);
+	public void deleteWorkOpt(int  bck_wrk_id) throws Exception{
+		backupDAO.deleteWorkOpt(bck_wrk_id);
 	}
 	
-	public void deleteWork(WorkVO workVO) throws Exception{
-		backupDAO.deleteWork(workVO);
+	public void deleteWork(int wrk_id) throws Exception{
+		backupDAO.deleteWork(wrk_id);
 	}
 	
 	public List<DbVO> selectDbList(WorkVO workVO) throws Exception{
@@ -89,8 +89,8 @@ public class BackupServiceImpl extends EgovAbstractServiceImpl implements Backup
 		return backupDAO.selectWorkObj(workVO);
 	}
 	
-	public void deleteWorkObj(WorkVO workVO) throws Exception{
-		backupDAO.deleteWorkObj(workVO);
+	public void deleteWorkObj(int bck_wrk_id) throws Exception{
+		backupDAO.deleteWorkObj(bck_wrk_id);
 	}
 
 	@Override
@@ -121,5 +121,10 @@ public class BackupServiceImpl extends EgovAbstractServiceImpl implements Backup
 	@Override
 	public List<Map<String, Object>> selectMonthBckSchedule(int db_svr_id) throws Exception {
 		return backupDAO.selectMonthBckSchedule(db_svr_id);
+	}
+
+	@Override
+	public void deleteBckWork(int bck_wrk_id) throws Exception {
+		backupDAO.deleteBckWork(bck_wrk_id);
 	}
 }
