@@ -1,6 +1,7 @@
 package com.k4m.dx.tcontrol.admin.dbserverManager.web;
 
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
@@ -386,20 +387,50 @@ public class TreeController {
 
 	@RequestMapping(value = "/dbinfo.do")
 	public ModelAndView workList(@ModelAttribute("historyVO") HistoryVO historyVO, HttpServletRequest request) {
-		// // 화면접근이력 이력 남기기
-		// CmmnUtils.saveHistory(request, historyVO);
-		// historyVO.setExe_dtl_cd("DX-T0027");
-		// historyVO.setMnu_id(28);
-		// accessHistoryService.insertHistory(historyVO);
 		ModelAndView mv = new ModelAndView();
+		ClientInfoCmmn cic = new ClientInfoCmmn();
+		JSONObject serverObj = new JSONObject();
 		try {
+			// // 화면접근이력 이력 남기기
+			// CmmnUtils.saveHistory(request, historyVO);
+			// historyVO.setExe_dtl_cd("DX-T0027");
+			// historyVO.setMnu_id(28);
+			// accessHistoryService.insertHistory(historyVO);
+		
+			AES256 dec = new AES256(AES256_KEY.ENC_KEY);
 			int db_svr_id = Integer.parseInt(request.getParameter("db_svr_id"));
+			
 			DbServerVO schDbServerVO = new DbServerVO();
 			schDbServerVO.setDb_svr_id(db_svr_id);
 			DbServerVO dbServerVO = (DbServerVO) cmmnServerInfoService.selectServerInfo(schDbServerVO);
-			mv.addObject("db_svr_nm", dbServerVO.getDb_svr_nm());
-			mv.addObject("db_svr_id", db_svr_id);
+			String strIpAdr = dbServerVO.getIpadr();
+			AgentInfoVO vo = new AgentInfoVO();
+			vo.setIPADR(strIpAdr);
+			AgentInfoVO agentInfo = (AgentInfoVO) cmmnServerInfoService.selectAgentInfo(vo);
+			
+			if (agentInfo == null) {
+				mv.addObject("extName", "agent");
+			} else if (agentInfo.getAGT_CNDT_CD().equals("TC001102")) {
+				mv.addObject("extName", "agentfail");
+			} else {
+				String IP = dbServerVO.getIpadr();
+				int PORT = agentInfo.getSOCKET_PORT();
+				
+				serverObj.put(ClientProtocolID.SERVER_NAME, dbServerVO.getDb_svr_nm());
+				serverObj.put(ClientProtocolID.SERVER_IP, dbServerVO.getIpadr());
+				serverObj.put(ClientProtocolID.SERVER_PORT, dbServerVO.getPortno());
+				serverObj.put(ClientProtocolID.DATABASE_NAME, dbServerVO.getDft_db_nm());
+				serverObj.put(ClientProtocolID.USER_ID, dbServerVO.getSvr_spr_usr_id());
+				serverObj.put(ClientProtocolID.USER_PWD, dec.aesDecode(dbServerVO.getSvr_spr_scm_pwd()));
 
+				HashMap result = cic.dbms_inforamtion(IP, PORT,serverObj);
+				
+				mv.addObject("result",result);
+				mv.addObject("db_svr_nm", dbServerVO.getDb_svr_nm());
+				mv.addObject("db_svr_id", db_svr_id);
+			}
+			
+		
 			mv.setViewName("dbserver/dbmsInformation");
 		} catch (Exception e) {
 			e.printStackTrace();

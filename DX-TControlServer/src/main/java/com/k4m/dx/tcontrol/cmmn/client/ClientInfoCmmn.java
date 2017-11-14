@@ -2,6 +2,7 @@ package com.k4m.dx.tcontrol.cmmn.client;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
@@ -1204,4 +1205,36 @@ public class ClientInfoCmmn {
 		return result;
 	}
 
+	// DBMS정보
+	public HashMap dbms_inforamtion(String IP, int PORT, JSONObject serverObj) {
+		HashMap resultHp = null;
+		try {
+			JSONObject jObj = new JSONObject();
+			jObj.put(ClientProtocolID.DX_EX_CODE, ClientTranCodeType.DxT021);
+			jObj.put(ClientProtocolID.SERVER_INFO, serverObj);
+			JSONObject objList;
+			ClientAdapter CA = new ClientAdapter(IP, PORT);
+			CA.open(); 
+			objList = CA.dxT021(jObj);
+			CA.close();
+			
+			String strErrMsg = (String)objList.get(ClientProtocolID.ERR_MSG);
+			String strErrCode = (String)objList.get(ClientProtocolID.ERR_CODE);
+			String strDxExCode = (String)objList.get(ClientProtocolID.DX_EX_CODE);
+			String strResultCode = (String)objList.get(ClientProtocolID.RESULT_CODE);
+			
+			resultHp = (HashMap) objList.get(ClientProtocolID.RESULT_DATA);
+			Iterator<String> keys = resultHp.keySet().iterator();
+
+	        while( keys.hasNext() ){
+	            String key = keys.next();
+	            System.out.println( String.format("키 : %s, 값 : %s", key, resultHp.get(key)) );
+	        }
+	
+			CA.close();
+		} catch(Exception e) {
+			e.printStackTrace();
+		}
+		return resultHp;
+	}	
 }
