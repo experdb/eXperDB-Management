@@ -192,7 +192,7 @@
 		      AND B.MASTER_GBN = 'S'	 			
     </select>	
     
-	<select id="selectAllIpadrList" parameterType="int" resultType="hashmap">
+	<select id="selectAllIpadrList" parameterType="int" resultType="DbServerVO">
 		/**
 	 	* Query ID : selectAllIpadrList
 	 	* Description : DB서버 정보 조회(Master, Slave)
