@@ -160,7 +160,7 @@ public class ClientInfoCmmn {
 				} else {
 					objJob.put(ClientProtocolID.BCK_OPT_CD, ""); // 백업종류
 					objJob.put(ClientProtocolID.BCK_FILE_PTH, resultWork.get(i).get("save_pth")); // 저장경로					
-					objJob.put(ClientProtocolID.BCK_FILENM, ""); // 저장파일명								
+					objJob.put(ClientProtocolID.BCK_FILENM, BCKNM.get(i)); // 저장파일명								
 				}
 				objJob.put(ClientProtocolID.LOG_YN, "Y"); // 로그저장 유무
 				objJob.put(ClientProtocolID.REQ_CMD, CMD.get(i));// 명령어
@@ -1237,4 +1237,49 @@ public class ClientInfoCmmn {
 		}
 		return resultHp;
 	}	
+	
+	
+	
+	private Map<String, Object> setInit(String IP, int PORT) {
+		try {
+
+
+			JSONObject serverObj = new JSONObject();
+
+			serverObj.put(ClientProtocolID.SERVER_NAME, "222.110.153.251");
+			serverObj.put(ClientProtocolID.SERVER_IP, "222.110.153.251");
+			serverObj.put(ClientProtocolID.SERVER_PORT, "5433");
+			serverObj.put(ClientProtocolID.DATABASE_NAME, "experdb");
+			serverObj.put(ClientProtocolID.USER_ID, "experdb");
+			serverObj.put(ClientProtocolID.USER_PWD, "experdb");
+		
+			JSONObject jObj = new JSONObject();
+			
+			String strPath = "/home/experdb/pgdata/bckDir/rman";
+			
+			jObj.put(ClientProtocolID.DX_EX_CODE, ClientTranCodeType.DxT022);
+			jObj.put(ClientProtocolID.SERVER_INFO, serverObj);
+			jObj.put(ClientProtocolID.CMD_BACKUP_PATH, strPath);
+			
+			
+			JSONObject objList;
+			
+			ClientAdapter CA = new ClientAdapter(Ip, port);
+			CA.open(); 
+
+			objList = CA.dxT022(jObj);
+			
+			CA.close();
+			
+			String strErrMsg = (String)objList.get(ClientProtocolID.ERR_MSG);
+			String strErrCode = (String)objList.get(ClientProtocolID.ERR_CODE);
+			String strDxExCode = (String)objList.get(ClientProtocolID.DX_EX_CODE);
+			String strResultCode = (String)objList.get(ClientProtocolID.RESULT_CODE);
+
+			System.out.println("Result : " + strResultCode);
+		} catch(Exception e) {
+			e.printStackTrace();
+		}
+		return null;
+	}
 }
