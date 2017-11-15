@@ -68,6 +68,6 @@ public interface CmmnServerInfoService {
 	 * @return
 	 * @throws Exception
 	 */
-	List<Map<String, Object>> selectAllIpadrList(int db_svr_id) throws Exception;
+	List<DbServerVO> selectAllIpadrList(int db_svr_id) throws Exception;
 
 }

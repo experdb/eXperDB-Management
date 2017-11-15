@@ -54,7 +54,7 @@ public class CmmnServerInfoServiceImpl extends EgovAbstractServiceImpl implement
 	}
 
 	@Override
-	public List<Map<String, Object>> selectAllIpadrList(int db_svr_id) throws Exception {
+	public List<DbServerVO> selectAllIpadrList(int db_svr_id) throws Exception {
 		return cmmnServerInfoDAO.selectAllIpadrList(db_svr_id);
 	}
 
