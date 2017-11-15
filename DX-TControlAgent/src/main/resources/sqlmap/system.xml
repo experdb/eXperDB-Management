@@ -352,12 +352,11 @@
 		]]>
 	</select>
 	
-	
-    <select id="selectTablespaceInfo" resultType="String">
+	    <select id="selectDatabaseInfo" resultType="hashmap">
 		<![CDATA[
 	   		/**
-		 	* Query ID : selectTablespaceInfo
-		 	* Description : 테이블 스페이스 정보 조회
+		 	* Query ID : selectDatabaseInfo
+		 	* Description : 데이터베이스 정보 조회
 		 	* Author : 박태혁
 		 	**/
 			SELECT d.datname as name,
@@ -374,6 +373,24 @@
 			FROM pg_catalog.pg_database d
 			  JOIN pg_catalog.pg_tablespace t on d.dattablespace = t.oid
 			ORDER BY 1
+		]]>
+	</select>
+	
+    <select id="selectTablespaceInfo" resultType="hashmap">
+		<![CDATA[
+	   		/**
+		 	* Query ID : selectTablespaceInfo
+		 	* Description : 테이블 스페이스 정보 조회
+		 	* Author : 박태혁
+		 	**/
+			SELECT spcname AS "Name",
+			  pg_catalog.pg_get_userbyid(spcowner) AS "Owner",
+			  pg_catalog.pg_tablespace_location(oid) AS "Location",
+			  spcoptions AS "Options",
+			  pg_catalog.pg_size_pretty(pg_catalog.pg_tablespace_size(oid)) AS "Size",
+			  pg_catalog.shobj_description(oid, 'pg_tablespace') AS "Description"
+			FROM pg_catalog.pg_tablespace
+			ORDER BY 1;
 		]]>
 	</select>
 	

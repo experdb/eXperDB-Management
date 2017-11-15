@@ -45,6 +45,7 @@ public class DxT021 extends SocketCtl{
 	
 	private String[] arrCmd = {
 				                "echo $HOSTNAME" //호스트명
+			                    , "cat /etc/*-release | awk 'NR==1{print;}'" //버젼
 								, "uname -r" //커널
 								, "grep -c processor /proc/cpuinfo" //cpu
 								, "free -h | awk 'NR>1&&NR<3{print $2}'" //메모리
@@ -81,19 +82,20 @@ public class DxT021 extends SocketCtl{
 			resultHP.put(ProtocolID.CMD_HOSTNAME, CMD_HOSTNAME);
 			
 			//OS 정보
-			String CMD_OS_VERSION = System.getProperty("os.name") + System.getProperty("os.version");
+			//String CMD_OS_VERSION = System.getProperty("os.name") + System.getProperty("os.version");
+			String CMD_OS_VERSION = CommonUtil.getPidExec(arrCmd[1]);
 			resultHP.put(ProtocolID.CMD_OS_VERSION, CMD_OS_VERSION);
 			
 			//커널
-			String CMD_OS_KERNUL = CommonUtil.getPidExec(arrCmd[1]);
+			String CMD_OS_KERNUL = CommonUtil.getPidExec(arrCmd[2]);
 			resultHP.put(ProtocolID.CMD_OS_KERNUL, CMD_OS_KERNUL);
 			
 			//CPU
-			String CMD_CPU =  CommonUtil.getPidExec(arrCmd[2]);
+			String CMD_CPU =  CommonUtil.getPidExec(arrCmd[3]);
 			resultHP.put(ProtocolID.CMD_CPU, CMD_CPU);
 			
 			//메모리
-			String CMD_MEMORY =  CommonUtil.getPidExec(arrCmd[3]);
+			String CMD_MEMORY =  CommonUtil.getPidExec(arrCmd[4]);
 			resultHP.put(ProtocolID.CMD_MEMORY, CMD_MEMORY);
 			
 			//맥주소
@@ -116,7 +118,12 @@ public class DxT021 extends SocketCtl{
 			
 
 			//DBMS 경로
-			String CMD_DBMS_PATH = CommonUtil.getPidExec(arrCmd[4]);
+			String CMD_DBMS_PATH = CommonUtil.getPidExec(arrCmd[5]);
+			resultHP.put(ProtocolID.CMD_DBMS_PATH, CMD_DBMS_PATH);
+			
+			//백업경로 
+			String CMD_BACKUP_PATH = CommonUtil.getPidExec(arrCmd[6]);
+			resultHP.put(ProtocolID.CMD_BACKUP_PATH, CMD_BACKUP_PATH);
 
 			outputObj.put(ProtocolID.DX_EX_CODE, strDxExCode);
 			outputObj.put(ProtocolID.RESULT_CODE, strSuccessCode);
@@ -284,6 +291,10 @@ public class DxT021 extends SocketCtl{
 			resultHP.put(ProtocolID.CMD_TIMEZONE, timezone);
 			String shared_preload_libraries = sessDB.selectOne("system.selectShared_preload_libraries");
 			resultHP.put(ProtocolID.CMD_SHARED_PRELOAD_LIBRARIES, shared_preload_libraries);
+			
+			
+			ArrayList databaseInfoList = (ArrayList)sessDB.selectList("system.selectDatabaseInfo");
+			resultHP.put(ProtocolID.CMD_DATABASE_INFO, databaseInfoList);
 			
 			ArrayList list = (ArrayList)sessDB.selectList("system.selectTablespaceInfo");
 			resultHP.put(ProtocolID.CMD_TABLESPACE_INFO, list);
