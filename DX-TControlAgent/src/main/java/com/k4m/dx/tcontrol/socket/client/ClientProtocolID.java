@@ -123,6 +123,10 @@ public class ClientProtocolID {
 	public static final String CMD_OS_KERNUL = "CMD_OS_KERNUL";
 	public static final String CMD_CPU = "CMD_CPU";
 	public static final String CMD_MEMORY = "CMD_MEMORY";
+	public static final String CMD_MACADDRESS = "CMD_MACADDRESS";
+	public static final String CMD_IPADDRESS = "CMD_IPADDRESS";
+	public static final String CMD_NETWORK = "CMD_NETWORK";
+	public static final String CMD_NETWORK_INTERFACE = "CMD_NETWORK_INTERFACE";
 	
 	public static final String CMD_DBMS_PATH = "CMD_DBMS_PATH";
 	public static final String CMD_DATA_PATH = "CMD_DATA_PATH";

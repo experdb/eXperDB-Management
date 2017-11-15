@@ -2,6 +2,7 @@ package com.k4m.dx.tcontrol.server;
 
 import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
+import java.net.InetAddress;
 import java.net.Socket;
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -77,7 +78,7 @@ public class DxT021 extends SocketCtl{
 		try {
 			HashMap resultHP = new HashMap();
 			
-			//호스트명
+		//호스트명
 			String CMD_HOSTNAME = CommonUtil.getPidExec(arrCmd[0]);
 			resultHP.put(ProtocolID.CMD_HOSTNAME, CMD_HOSTNAME);
 			
@@ -98,9 +99,12 @@ public class DxT021 extends SocketCtl{
 			String CMD_MEMORY =  CommonUtil.getPidExec(arrCmd[4]);
 			resultHP.put(ProtocolID.CMD_MEMORY, CMD_MEMORY);
 			
-			//맥주소
-			String CMD_MACADDRESS = NetworkUtil.getMacAddress();
-			resultHP.put(ProtocolID.CMD_MACADDRESS, CMD_MACADDRESS);
+			
+			//network정보
+			ArrayList<HashMap<String, String>> ipList = NetworkUtil.getNetworkInfo();
+
+
+			resultHP.put(ProtocolID.CMD_NETWORK, ipList);
 			
 			
 			//PostgreSQL 버젼, DATA 경로, LOG 경로, ARCHIVE 경로

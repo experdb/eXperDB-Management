@@ -125,6 +125,9 @@ public class ProtocolID {
 	public static final String CMD_CPU = "CMD_CPU";
 	public static final String CMD_MEMORY = "CMD_MEMORY";
 	public static final String CMD_MACADDRESS = "CMD_MACADDRESS";
+	public static final String CMD_NETWORK_IP = "CMD_NETWORK_IP";
+	public static final String CMD_NETWORK = "CMD_NETWORK";
+	public static final String CMD_NETWORK_INTERFACE = "CMD_NETWORK_INTERFACE";
 	
 	public static final String CMD_DBMS_PATH = "CMD_DBMS_PATH";
 	public static final String CMD_DATA_PATH = "CMD_DATA_PATH";
