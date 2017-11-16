@@ -1,5 +1,6 @@
 package com.k4m.dx.tcontrol.backup.service;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -171,6 +172,10 @@ public interface BackupService {
 	 * @throws Exception
 	 */
 	public List<Map<String, Object>> selectMonthBckSchedule(int db_svr_id) throws Exception;
+	
+	
+	public List<Map<String, Object>> selectMonthBckScheduleSearch(HashMap<String,Object> hp) throws Exception;
+
 
 	public void deleteBckWork(int bck_wrk_id) throws Exception;
 }

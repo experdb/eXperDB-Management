@@ -1,6 +1,9 @@
 package com.k4m.dx.tcontrol.backup.web;
 
 import java.io.IOException;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -869,6 +872,13 @@ public class BackupController {
 			
 			resultSet=backupService.selectDbList(workVO);
 			
+			SimpleDateFormat frm= new SimpleDateFormat ("yyyyMMdd");
+			Calendar cal = Calendar.getInstance();
+			String end_date = frm.format(cal.getTime());
+
+			mv.addObject("month",end_date);
+			
+			
 			mv.addObject("dbList",resultSet);		
 			mv.addObject("db_svr_id",db_svr_id);
 			mv.setViewName("functions/scheduler/schedulerView");				
@@ -922,6 +932,22 @@ public class BackupController {
 		return result;		
 	}	
 	
+	@RequestMapping(value = "/selectMonthBckScheduleSearch.do")
+	@ResponseBody
+	public List<Map<String, Object>> selectMonthBckScheduleSearch(HttpServletRequest request, HttpServletResponse response) {
+		
+		List<Map<String, Object>> result = null;
+		try {		
+			HashMap<String,Object> paramvalue = new HashMap<String, Object>();
+			paramvalue.put("datest",(String)request.getParameter("stdate"));
+			paramvalue.put("dateed", (String)request.getParameter("eddate"));
+			
+				result = backupService.selectMonthBckScheduleSearch(paramvalue);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return result;		
+	}	
 	
 	/**
 	 * 백업스케줄 등록 뷰

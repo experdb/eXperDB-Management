@@ -628,7 +628,15 @@
 	    GROUP BY A.SCD_ID, A.SCD_NM , A.SCD_EXP
 	    ORDER BY EXE_HMS
 	 </select>
-	 
+
+	 	<select id="selectMonthBckScheduleSearch" resultType="hashMap" parameterType="int">
+		/**
+	 	* Query ID : selectMonthBckScheduleSearch
+	 	* Description : 백업스케줄(월 단위) 조회
+	 	* Author : 박태혁
+	 	**/
+	 	
+	 	</select>
 	 
 	 <select id="selectWorkOptionLayer" resultType="hashMap" parameterType="int">
 		/**

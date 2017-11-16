@@ -603,6 +603,114 @@ function selectTab(tab){
 		$("#btnMonth").hide();
 	}
 }
+
+$(function(){
+	var intyear = parseInt("${month}".substr(0,4));
+	var stryear = ""; 
+	for(var i=-10;i<11;i++){
+		stryear += "<option>"+(intyear+i)+"</option>";
+	}
+	$("#cmbyear").append(stryear);
+	$("#cmbyear").val("${month}".substr(0,4));
+	$("#cmbmonth").val("${month}".substr(4,2));
+	
+	$("#btnGetData").click(function(){
+
+			var stmondt = new Date($("#cmbyear").val(),parseInt($("#cmbmonth").val())-1,1,0,0,0,0);
+			var stdt = stmondt;
+			var stweekofday = stmondt.getDay();
+			if (stweekofday >= 0)
+				stdt = addDays(stdt , stweekofday * -1);
+			var eddt = addDays(stdt,35);
+
+			$.ajax({
+				url : "/selectMonthBckScheduleSearch.do",
+				data : {"stdate" : stdt.format("yyyyMMdd")
+					     , "eddate" : eddt.format("yyyyMMdd")
+					    },
+				dataType : "json",
+				type : "post",
+				beforeSend: function(xhr) {
+			        xhr.setRequestHeader("AJAX", true);
+			     },
+				error : function(xhr, status, error) {
+					if(xhr.status == 401) {
+						alert("인증에 실패 했습니다. 로그인 페이지로 이동합니다.");
+						 location.href = "/";
+					} else if(xhr.status == 403) {
+						alert("세션이 만료가 되었습니다. 로그인 페이지로 이동합니다.");
+			             location.href = "/";
+					} else {
+						alert("ERROR CODE : "+ request.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ request.responseText.replace(/(<([^>]+)>)/gi, ""));
+					}
+				},
+				success : function(result) {
+					$("#calendarbody").empty();
+					for(var irow=0;irow<5;irow++){
+						var tmparr = new Object();
+						tmparr[0] = [];
+						tmparr[1] = [];
+						tmparr[2] = [];
+						tmparr[3] = [];
+						tmparr[4] = [];
+						tmparr[5] = [];
+						tmparr[6] = [];
+						/**
+						for(var i=0;i<result.length;i++){
+							var tmpdata = result[i];
+							var nowdt = new Date(tmpdata.sort.substr(0,4),parseInt(tmpdata.sort.substr(4,2))-1,tmpdata.sort.substr(6,2),0,0,0,0);
+							var intgap = DateDiff.inDays(stdt, nowdt);
+							if (intgap > -1 && intgap < 7 ){
+								tmparr[intgap].push(result[i]);
+							}
+						}
+						**/
+						var appendnew = "<div class='line2'>";
+						// data
+						var maxcnt = 0;
+						for(var i=0;i<7;i++){
+							maxcnt = (maxcnt>tmparr[i].length)?maxcnt:tmparr[i].length;							
+						}
+						var height = "120px";
+						if (maxcnt > 4)
+							height = String(30 * maxcnt) + "px"
+
+						for(var i=0;i<7;i++){
+							var showdt = stdt.format("MM/dd");
+							switch (i) {
+				            case 0:
+				            	appendnew += "<div class='cell' style='height:"+height+";'>";
+				            	appendnew += "<a href='#' class='date sun'>"+showdt+"</a>";    // 좌상단 날짜 
+				            break;
+				            case 6:
+				            	appendnew += "<div class='cell' style='height:"+height+";'>";
+				            	appendnew += "<a href='#' class='date sat'>"+showdt+"</a>";
+				            break;
+				            default:
+				            	appendnew += "<div class='cell' style='height:"+height+";'>";
+				            	appendnew += "<a href='#' class='date'>"+showdt+"</a>";
+				        	}
+
+							for(var j=0;j<tmparr[i].length;j++){
+								if (tmparr[i][j].runtype == "B"){
+									appendnew += "<div style='clear:both;overflow:hidden;padding-left:5px;'><a style='color:green;' href='#' onclick='fn_showpopup2(\""+tmparr[i][j].job_id+"\",\""+tmparr[i][j].sort+"\");return false;'><b>["+tmparr[i][j].count+" 회]"+tmparr[i][j].job_nm+"</b></a></div>";
+								}else{
+									appendnew += "<div style='clear:both;overflow:hidden;padding-left:5px;'><a style='color:blue;' href='#' onclick='fn_showpopup(\""+tmparr[i][j].job_id+"\",\""+tmparr[i][j].sort+"\");return false;'><b>["+tmparr[i][j].count+" 회]"+tmparr[i][j].job_nm+"</b></a></div>";
+								}
+							}
+							appendnew +="</div>";
+							stdt = addDays(stdt, 1);
+						}
+						appendnew += "</div>";
+						$("#calendarbody").append(appendnew);
+					}
+				}
+			}); 
+
+
+		});
+
+})
 </script>
 			<div id="contents">			
 				<div class="contents_wrap">
@@ -643,24 +751,49 @@ function selectTab(tab){
 									</table>		
 									
 									
-									<table id="month_scheduleList" class="cell-border display" width="100%">
-										<thead>
-											<tr>
-												<th width="130">1월</th>
-												<th width="130">2월</th>												
-												<th width="130">3월</th>
-												<th width="130">4월</th>
-												<th width="130">5월</th>
-												<th width="130">6월</th>												
-												<th width="130">7월</th>
-												<th width="130">8월</th>
-												<th width="130">9월</th>
-												<th width="130">10월</th>
-												<th width="130">11월</th>												
-												<th width="130">12월</th>
+							<div id="month_scheduleList" class="calendar_box">
+								<div class="sch_form">
+									<table width="100%"  class="write">
+						<colgroup>
+							<col style="width:80px;" />
+							<col style="width:300px;" />
+							<col/>
+						</colgroup>
+						<tbody>
+											<tr style="height:35px;">
+												<th  scope="row" class="t10">조회년월</th>
+												<td>
+													<select id="cmbyear"  style="width:100px" class="select t5">
+													</select> 년&nbsp;&nbsp;
+													<select id="cmbmonth"  class="select t6">
+														<option>01</option><option>02</option><option>03</option><option>04</option><option>05</option><option>06</option>
+														<option>07</option><option>08</option><option>09</option><option>10</option><option>11</option><option>12</option>
+													</select> 월
+
+												</td>
+												<td align="right">
+	
+													<span class="btn"  onClick="fn_insertSchedule();" id="btnGetData"><button>조 회</button></span>
+												</td>
 											</tr>
-										</thead>
-									</table>																
+
+									</table>
+								</div>
+								
+								<div class="line1">
+									<div class="cell date_brdleft"><span>일</span></div>
+									<div class="cell"><span>월</span></div>
+									<div class="cell"><span>화</span></div>
+									<div class="cell"><span>수</span></div>
+									<div class="cell"><span>목</span></div>
+									<div class="cell"><span>금</span></div>
+									<div class="cell"><span>토</span></div>
+								</div>
+								<div id="calendarbody">
+								</div>
+							</div>
+									
+																
 							</div>		
 						</div>
 					</div>
