@@ -18,17 +18,17 @@ public class NetworkUtil {
 		ArrayList<HashMap<String, String>> listNetwork = new ArrayList<HashMap<String, String>>();
 		try
 		{
-			Enumeration<NetworkInterface> enu = NetworkInterface.getNetworkInterfaces();
-			while(enu.hasMoreElements())
+			Enumeration<NetworkInterface> networkInterfaces = NetworkInterface.getNetworkInterfaces();
+			while(networkInterfaces.hasMoreElements())
 			{
 				HashMap<String, String> hp = new HashMap<String, String>();
 				
-				NetworkInterface inf = enu.nextElement();
-				List<InterfaceAddress> adds = inf.getInterfaceAddresses();
+				NetworkInterface networkInterface = networkInterfaces.nextElement();
+				List<InterfaceAddress> adds = networkInterface.getInterfaceAddresses();
 				if(adds == null)
 					continue;
 				
-				hp.put(ProtocolID.CMD_NETWORK_INTERFACE, inf.getDisplayName().toString());
+				hp.put(ProtocolID.CMD_NETWORK_INTERFACE, networkInterface.getDisplayName().toString());
 
 				String strHostAddress = "";
 				String CMD_MACADDRESS = "";
@@ -40,9 +40,9 @@ public class NetworkUtil {
 						System.out.println("InterfaceAddress is null");
 						continue;
 					}
-					System.out.println("InterfaceAddres:"+add.getAddress());
-					System.out.println("Prefixlaenge: "+add.getNetworkPrefixLength());
-					System.out.println("InterfaceBrodacast:"+add.getBroadcast()+"\n");
+					//System.out.println("InterfaceAddres:"+add.getAddress());
+					//System.out.println("Prefixlaenge: "+add.getNetworkPrefixLength());
+					//System.out.println("InterfaceBrodacast:"+add.getBroadcast()+"\n");
 					
 					//listIP.add(add.getAddress());
 					strHostAddress += add.getAddress().getHostAddress() + "|";
@@ -54,8 +54,6 @@ public class NetworkUtil {
 				hp.put(ProtocolID.CMD_MACADDRESS, CMD_MACADDRESS);
 				
 				listNetwork.add(hp);
-				
-				System.out.println("###");
 				
 			}
 			
