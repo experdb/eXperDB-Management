@@ -60,4 +60,14 @@ public interface CmmnServerInfoService {
 	 * @throws Exception
 	 */
 	List<DbServerVO> selectServerInfoSlave(DbServerVO vo) throws Exception;
+
+	/**
+	 * 서버 정보 조회(Master, Slave)
+	 * 
+	 * @param db_svr_id
+	 * @return
+	 * @throws Exception
+	 */
+	List<DbServerVO> selectAllIpadrList(int db_svr_id) throws Exception;
+
 }

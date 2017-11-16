@@ -357,11 +357,27 @@ public class BackupController {
 	 */
 	@RequestMapping(value = "/popup/workRmanWrite.do")
 	public void workRmanWrite(@ModelAttribute("historyVO") HistoryVO historyVO,@ModelAttribute("workVO") WorkVO workVO, HttpServletResponse response, HttpServletRequest request) throws IOException {
-		String result = "S";
 		
+		String initResult ="F";
+		List<Map<String, Object>> ipResult = null;
+		AgentInfoVO vo = new AgentInfoVO();
+		String result = "S";		
 		String wrkid_result = "S";
 		WorkVO resultSet = null;
 
+		try{
+			int db_svr_id = Integer.parseInt(request.getParameter("db_svr_id"));
+			ipResult = cmmnServerInfoService.selectAllIpadrList(db_svr_id);	
+			
+			for(int i=0; i<ipResult.size(); i++){
+				
+			}
+			
+		}catch (Exception e) {
+			e.printStackTrace();
+		}
+		
+		
 		try {
 			// 화면접근이력 이력 남기기
 			CmmnUtils.saveHistory(request, historyVO);
@@ -375,9 +391,7 @@ public class BackupController {
 			
 			//작업 정보등록
 			backupService.insertWork(workVO);
-			//backupService.insertRmanWork(workVO);
 		} catch (Exception e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 			result = "F";
 		}
@@ -388,7 +402,6 @@ public class BackupController {
 				resultSet = backupService.lastWorkId();
 				workVO.setWrk_id(resultSet.getWrk_id());		
 			} catch (Exception e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 		}
@@ -397,7 +410,6 @@ public class BackupController {
 			try {	
 				backupService.insertRmanWork(workVO);
 			} catch (Exception e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 		}

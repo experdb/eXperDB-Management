@@ -74,4 +74,11 @@ public class CmmnServerInfoDAO extends EgovAbstractMapper {
 		insert("cmmnSql.deleteIpadr", dbServerVO);
 	}
 
+	@SuppressWarnings({ "deprecation", "unchecked" })
+	public List<DbServerVO> selectAllIpadrList(int db_svr_id) {
+		List<DbServerVO> sl = null;
+		sl = (List<DbServerVO>) list("cmmnSql.selectAllIpadrList", db_svr_id);
+		return sl;
+	}
+
 }

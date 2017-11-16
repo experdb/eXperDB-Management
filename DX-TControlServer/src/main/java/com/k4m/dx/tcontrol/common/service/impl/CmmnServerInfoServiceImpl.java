@@ -50,8 +50,12 @@ public class CmmnServerInfoServiceImpl extends EgovAbstractServiceImpl implement
 
 	@Override
 	public List<DbServerVO> selectServerInfoSlave(DbServerVO vo) throws Exception {
-		// TODO Auto-generated method stub
 		return cmmnServerInfoDAO.selectServerInfoSlave(vo);
+	}
+
+	@Override
+	public List<DbServerVO> selectAllIpadrList(int db_svr_id) throws Exception {
+		return cmmnServerInfoDAO.selectAllIpadrList(db_svr_id);
 	}
 
 }

@@ -191,4 +191,32 @@
 		      AND A.DB_SVR_ID = #{db_svr_id}
 		      AND B.MASTER_GBN = 'S'	 			
     </select>	
+    
+	<select id="selectAllIpadrList" parameterType="int" resultType="DbServerVO">
+		/**
+	 	* Query ID : selectAllIpadrList
+	 	* Description : DB서버 정보 조회(Master, Slave)
+	 	* Author : 변승우
+	 	**/
+ 			SELECT 
+	                 A.DB_SVR_ID
+	                , A.DB_SVR_NM
+	                , B.IPADR
+	                , B.PORTNO
+	                , B.MASTER_GBN
+	                , A.DFT_DB_NM
+	                , A.PGHOME_PTH
+	                , A.PGDATA_PTH
+	                , A.SVR_SPR_USR_ID
+	                , A.SVR_SPR_SCM_PWD
+	                , A.FRST_REGR_ID
+	                , A.FRST_REG_DTM
+	                , A.LST_MDFR_ID
+	                , A.LST_MDF_DTM
+	          FROM T_DBSVR_I A, T_DBSVRIPADR_I B
+	          WHERE 1 = 1
+	          AND A.DB_SVR_ID = B.DB_SVR_ID      
+		      AND A.DB_SVR_ID = #{db_svr_id}
+		
+    </select>	    
 </mapper>
