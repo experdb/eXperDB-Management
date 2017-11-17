@@ -677,4 +677,21 @@
 			bck_wrk_id = #{bck_wrk_id}
 		ORDER BY obj_sn
     </select>
+    
+	 <select id="selectMonthBckScheduleSearch" parameterType="hashmap" resultType="hashmap">
+		/**
+	 	* Query ID : selectMonthBckScheduleSearch
+	 	* Description : 백업 월별 조회
+	 	* Author : 박태혁
+	 	**/
+		<![CDATA[
+			WITH RECURSIVE T(TIME) AS (
+			    SELECT NOW()
+			  UNION ALL
+			    SELECT TIME + INTERVAL '1 MINUTE' FROM T WHERE TIME < (TO_TIMESTAMP(#{dateed} || '2359','YYYYMMDDHH24MI') - INTERVAL '1 SECOND') - INTERVAL '1 MINUTE'
+			)SELECT SCD_ID, SCD_NM, SCD_CNDT, EXE_PERD_CD, EXE_MONTH, EXE_DAY FROM T_SCD_M
+		]]>
+    </select>
+    
+    
 </mapper>

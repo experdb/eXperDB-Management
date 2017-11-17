@@ -1,6 +1,7 @@
 package com.k4m.dx.tcontrol.backup.service.impl;
 
 import java.sql.SQLException;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -137,5 +138,9 @@ public class BackupDAO extends EgovAbstractMapper{
 
 	public WorkVO lastBckWorkId() {
 		return (WorkVO)getSqlSession().selectOne("backupSQL.lastBckWorkId");
+	}
+	
+	public List selectMonthBckScheduleSearch(HashMap<String,Object> hp) throws Exception{
+		return (List) getSqlSession().selectList("backupSQL.selectMonthBckScheduleSearch", hp);	
 	}
 }

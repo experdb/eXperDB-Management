@@ -174,8 +174,8 @@ font-weight:bold;
 .calendar_box .line1 .cell{
 float:left;
 width:14%;
-height:17px;
-padding:4px 0 0 0;
+height:28px;
+padding:8px 0 0 0;
 text-align:center;
 border-right:1px solid #ccc;
 border-bottom:1px solid #ccc;

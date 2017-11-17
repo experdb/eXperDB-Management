@@ -509,6 +509,7 @@ $(window.document).ready(function() {
 	$("#month_scheduleList_wrapper").hide();
 	$("#btnWeek").show();
 	$("#btnMonth").hide();
+	
 });
 
 function fn_selectBckSchedule(){
@@ -592,6 +593,7 @@ function selectTab(tab){
 		$("#tab2").show();
 		$("#btnMonth").show();
 		$("#btnWeek").hide();
+		$("#btnGetData").click();
 	}else{
 		$("#week_scheduleList").show();
 		$("#week_scheduleList_wrapper").show();
@@ -601,6 +603,7 @@ function selectTab(tab){
 		$("#tab2").hide();
 		$("#btnWeek").show();
 		$("#btnMonth").hide();
+		
 	}
 }
 
@@ -680,15 +683,15 @@ $(function(){
 							switch (i) {
 				            case 0:
 				            	appendnew += "<div class='cell' style='height:"+height+";'>";
-				            	appendnew += "<a href='#' class='date sun'>"+showdt+"</a>";    // 좌상단 날짜 
+				            	appendnew += "<font color=red>" + showdt + "</font>";    // 좌상단 날짜 
 				            break;
 				            case 6:
 				            	appendnew += "<div class='cell' style='height:"+height+";'>";
-				            	appendnew += "<a href='#' class='date sat'>"+showdt+"</a>";
+				            	appendnew += "<font color=blue>" + showdt + "</font>";
 				            break;
 				            default:
 				            	appendnew += "<div class='cell' style='height:"+height+";'>";
-				            	appendnew += "<a href='#' class='date'>"+showdt+"</a>";
+				            	appendnew += showdt;
 				        	}
 
 							for(var j=0;j<tmparr[i].length;j++){
@@ -711,6 +714,100 @@ $(function(){
 		});
 
 })
+
+function addDays(theDate, days) {
+    return new Date(theDate.getTime() + days*24*60*60*1000);
+}
+
+Date.prototype.format = function(f) {
+    if (!this.valueOf()) return " ";
+ 
+    var weekName = ["일요일", "월요일", "화요일", "수요일", "목요일", "금요일", "토요일"];
+    var d = this;
+     
+    return f.replace(/(yyyy|yy|MM|dd|E|hh|mm|ss|a\/p)/gi, function($1) {
+        switch ($1) {
+            case "yyyy": return d.getFullYear();
+            case "yy": return (d.getFullYear() % 1000).zf(2);
+            case "MM": return (d.getMonth() + 1).zf(2);
+            case "dd": return d.getDate().zf(2);
+            case "E": return weekName[d.getDay()];
+            case "HH": return d.getHours().zf(2);
+            case "hh": return ((h = d.getHours() % 12) ? h : 12).zf(2);
+            case "mm": return d.getMinutes().zf(2);
+            case "ss": return d.getSeconds().zf(2);
+            case "a/p": return d.getHours() < 12 ? "오전" : "오후";
+            default: return $1;
+        }
+    });
+};
+ 
+String.prototype.string = function(len){var s = '', i = 0; while (i++ < len) { s += this; } return s;};
+String.prototype.zf = function(len){return "0".string(len - this.length) + this;};
+Number.prototype.zf = function(len){return this.toString().zf(len);};
+
+
+
+/**
+ * Day of Year  
+ * @returns
+ */
+Date.prototype.DayOfYear = function(){
+	var onejan = new Date(this.getFullYear(),0,1);
+	return Math.ceil((this - onejan) / 86400000); 
+};
+ 
+
+/**
+ * Convert String Format to Date Object 
+ * @param _format   "yyyy-mm-dd"    
+ * @param _delimeter  "-"
+ * @returns {Date}
+ */
+function StringToDate(_date , _format , _delimiter){
+    var formatLowerCase=_format.toLowerCase();
+    var formatItems=formatLowerCase.split(_delimiter);
+    var dateItems=_date.split(_delimiter);
+    var monthIndex=formatItems.indexOf("mm");
+    var dayIndex=formatItems.indexOf("dd");
+    var yearIndex=formatItems.indexOf("yyyy");
+    var month=parseInt(dateItems[monthIndex]);
+    month-=1;
+    var formatedDate = new Date(dateItems[yearIndex],month,dateItems[dayIndex]);
+    return formatedDate;
+}
+
+
+
+
+var DateDiff =  {
+	    inDays: function(d1, d2) {
+	        var t2 = d2.getTime();
+	        var t1 = d1.getTime();
+	 
+	        return parseInt((t2-t1)/(24*3600*1000));
+	    },
+	 
+	    inWeeks: function(d1, d2) {
+	        var t2 = d2.getTime();
+	        var t1 = d1.getTime();
+	 
+	        return parseInt((t2-t1)/(24*3600*1000*7));
+	    },
+	 
+	    inMonths: function(d1, d2) {
+	        var d1Y = d1.getFullYear();
+	        var d2Y = d2.getFullYear();
+	        var d1M = d1.getMonth();
+	        var d2M = d2.getMonth();
+	 
+	        return (d2M+12*d2Y)-(d1M+12*d1Y);
+	    },
+	 
+	    inYears: function(d1, d2) {
+	        return d2.getFullYear()-d1.getFullYear();
+	    }
+};
 </script>
 			<div id="contents">			
 				<div class="contents_wrap">
@@ -754,13 +851,13 @@ $(function(){
 							<div id="month_scheduleList" class="calendar_box">
 								<div class="sch_form">
 									<table width="100%"  class="write">
-						<colgroup>
-							<col style="width:80px;" />
-							<col style="width:300px;" />
-							<col/>
-						</colgroup>
-						<tbody>
-											<tr style="height:35px;">
+										<colgroup>
+											<col style="width:80px;" />
+											<col style="width:300px;" />
+											<col/>
+										</colgroup>
+										<tbody>
+											<tr style="height:50px;">
 												<th  scope="row" class="t10">조회년월</th>
 												<td>
 													<select id="cmbyear"  style="width:100px" class="select t5">
@@ -773,21 +870,21 @@ $(function(){
 												</td>
 												<td align="right">
 	
-													<span class="btn"  onClick="fn_insertSchedule();" id="btnGetData"><button>조 회</button></span>
+													<span class="btn"  id="btnGetData"><button>조 회</button></span>
 												</td>
 											</tr>
-
+										</tbody>
 									</table>
 								</div>
 								
 								<div class="line1">
-									<div class="cell date_brdleft"><span>일</span></div>
+									<div class="cell date_brdleft"><span><font color="red">일</font></span></div>
 									<div class="cell"><span>월</span></div>
 									<div class="cell"><span>화</span></div>
 									<div class="cell"><span>수</span></div>
 									<div class="cell"><span>목</span></div>
 									<div class="cell"><span>금</span></div>
-									<div class="cell"><span>토</span></div>
+									<div class="cell"><span><font color="blue">토</font></span></div>
 								</div>
 								<div id="calendarbody">
 								</div>
