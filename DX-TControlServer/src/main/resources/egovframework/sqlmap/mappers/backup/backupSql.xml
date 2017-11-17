@@ -692,6 +692,147 @@
 			)SELECT SCD_ID, SCD_NM, SCD_CNDT, EXE_PERD_CD, EXE_MONTH, EXE_DAY FROM T_SCD_M
 		]]>
     </select>
+     <select id="selectMonthBckScheduleYearSearch" parameterType="hashmap" resultType="hashmap">
+		/**
+	 	* Query ID : selectMonthBckScheduleYearSearch
+	 	* Description : 백업 매년 조회
+	 	* Author : 박태혁
+	 	**/
+		<![CDATA[
+			select 
+            	scd_id
+                , scd_nm
+                , scd_exp
+                , scd_cndt
+                , exe_perd_cd
+                , exe_month
+                , exe_day
+                , exe_hms
+            from T_SCD_M
+            where SCD_ID IN (
+                select SCD_ID from T_SCD_D
+                where wrk_id in (
+                select wrk_id from T_BCK_WRKCNG_I
+                where db_svr_id = 2
+                group by wrk_id
+                    )
+              )
+              AND exe_perd_cd = 'TC001604'
+              order by SCD_ID 
+              
+              -- TC001601 매일
+              -- TC001602 매주
+              -- TC001603 매월
+              -- TC001604 매년
+              -- TC001605 1회 실행
+		]]>
+    </select>
     
+ <select id="selectMonthBckScheduleMonthSearch" parameterType="hashmap" resultType="hashmap">
+		/**
+	 	* Query ID : selectMonthBckScheduleMonthSearch
+	 	* Description : 백업 매월 조회
+	 	* Author : 박태혁
+	 	**/
+		<![CDATA[
+			select 
+            	scd_id
+                , scd_nm
+                , scd_exp
+                , scd_cndt
+                , exe_perd_cd
+                , exe_month
+                , exe_day
+                , exe_hms
+            from T_SCD_M
+            where SCD_ID IN (
+                select SCD_ID from T_SCD_D
+                where wrk_id in (
+                select wrk_id from T_BCK_WRKCNG_I
+                where db_svr_id = 2
+                group by wrk_id
+                    )
+              )
+              AND exe_perd_cd = 'TC001603'
+              order by SCD_ID 
+              
+              -- TC001601 매일
+              -- TC001602 매주
+              -- TC001603 매월
+              -- TC001604 매년
+              -- TC001605 1회 실행
+		]]>
+    </select>
+
+ <select id="selectMonthBckScheduleWeekSearch" parameterType="hashmap" resultType="hashmap">
+		/**
+	 	* Query ID : selectMonthBckScheduleWeekSearch
+	 	* Description : 백업 매주 조회
+	 	* Author : 박태혁
+	 	**/
+		<![CDATA[
+			select 
+            	scd_id
+                , scd_nm
+                , scd_exp
+                , scd_cndt
+                , exe_perd_cd
+                , exe_month
+                , exe_day
+                , exe_hms
+            from T_SCD_M
+            where SCD_ID IN (
+                select SCD_ID from T_SCD_D
+                where wrk_id in (
+                select wrk_id from T_BCK_WRKCNG_I
+                where db_svr_id = 2
+                group by wrk_id
+                    )
+              )
+              AND exe_perd_cd = 'TC001602'
+              order by SCD_ID 
+              
+              -- TC001601 매일
+              -- TC001602 매주
+              -- TC001603 매월
+              -- TC001604 매년
+              -- TC001605 1회 실행
+		]]>
+    </select>
     
+ <select id="selectMonthBckScheduleDaySearch" parameterType="hashmap" resultType="hashmap">
+		/**
+	 	* Query ID : selectMonthBckScheduleDaySearch
+	 	* Description : 백업 매일 조회
+	 	* Author : 박태혁
+	 	**/
+		<![CDATA[
+			select 
+            	scd_id
+                , scd_nm
+                , scd_exp
+                , scd_cndt
+                , exe_perd_cd
+                , exe_month
+                , exe_day
+                , exe_hms
+            from T_SCD_M
+            where SCD_ID IN (
+                select SCD_ID from T_SCD_D
+                where wrk_id in (
+                select wrk_id from T_BCK_WRKCNG_I
+                where db_svr_id = 2
+                group by wrk_id
+                    )
+              )
+              AND exe_perd_cd = 'TC001601'
+              order by SCD_ID 
+              
+              -- TC001601 매일
+              -- TC001602 매주
+              -- TC001603 매월
+              -- TC001604 매년
+              -- TC001605 1회 실행
+		]]>
+    </select>
 </mapper>
