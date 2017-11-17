@@ -1,8 +1,6 @@
 package com.k4m.dx.tcontrol.backup.web;
 
 import java.io.IOException;
-import java.text.SimpleDateFormat;
-import java.util.Calendar;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -355,28 +353,34 @@ public class BackupController {
 	 * @return String
 	 * @throws IOException 
 	 */
+	@SuppressWarnings("unchecked")
 	@RequestMapping(value = "/popup/workRmanWrite.do")
-	public void workRmanWrite(@ModelAttribute("historyVO") HistoryVO historyVO,@ModelAttribute("workVO") WorkVO workVO, HttpServletResponse response, HttpServletRequest request) throws IOException {
-		
-		String initResult ="F";
-		List<Map<String, Object>> ipResult = null;
+	public void workRmanWrite(@ModelAttribute("historyVO") HistoryVO historyVO, @ModelAttribute("dbServerVO") DbServerVO dbServerVO, @ModelAttribute("workVO") WorkVO workVO, HttpServletResponse response, HttpServletRequest request) throws IOException {
+		Map<String, Object> initResult =new HashMap<String, Object>();
 		AgentInfoVO vo = new AgentInfoVO();
-		String result = "S";		
-		String wrkid_result = "S";
-		WorkVO resultSet = null;
-
+		List<DbServerVO> ipResult = null;		
+		
+		String bck_pth = request.getParameter("bck_pth");
+		int db_svr_id = Integer.parseInt(request.getParameter("db_svr_id"));
 		try{
-			int db_svr_id = Integer.parseInt(request.getParameter("db_svr_id"));
-			ipResult = cmmnServerInfoService.selectAllIpadrList(db_svr_id);	
+			ipResult = (List<DbServerVO>) cmmnServerInfoService.selectAllIpadrList(db_svr_id);
 			
 			for(int i=0; i<ipResult.size(); i++){
-				
-			}
-			
+				vo.setIPADR(ipResult.get(i).getIpadr());		
+				AgentInfoVO agentInfo =  (AgentInfoVO) cmmnServerInfoService.selectAgentInfo(vo);
+				String IP = ipResult.get(i).getIpadr();
+				int PORT = agentInfo.getSOCKET_PORT();
+
+				ClientInfoCmmn cic = new ClientInfoCmmn();
+				initResult = cic.setInit(IP, PORT, bck_pth);
+			}					
 		}catch (Exception e) {
 			e.printStackTrace();
 		}
 		
+		String result = "S";		
+		String wrkid_result = "S";
+		WorkVO resultSet = null;
 		
 		try {
 			// 화면접근이력 이력 남기기
@@ -413,7 +417,6 @@ public class BackupController {
 				e.printStackTrace();
 			}
 		}
-		
 		response.getWriter().println(result);
 	}
 
@@ -428,6 +431,7 @@ public class BackupController {
 		WorkVO resultSet = null;
 		String result = "S";
 		String wrkid_result = "S";
+		String istDumpWork = "S";
 
 		// Data Insert
 		try {
@@ -463,12 +467,20 @@ public class BackupController {
 			try {	
 				backupService.insertDumpWork(workVO);
 			} catch (Exception e) {
-				// TODO Auto-generated catch block
+				istDumpWork = "F";
 				e.printStackTrace();
 			}
 		}
 		
-		response.getWriter().println(resultSet.getWrk_id());
+		// Get Last bck_wrk_id
+		if(istDumpWork.equals("S")){
+			try {
+				resultSet = backupService.lastBckWorkId();
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		}
+		response.getWriter().println(resultSet.getBck_wrk_id());
 	}
 	
 	/**
@@ -531,6 +543,7 @@ public class BackupController {
 		
 		mv.addObject("db_svr_id",workVO.getDb_svr_id());
 		mv.addObject("wrk_id",workVO.getWrk_id());
+		mv.addObject("bck_wrk_id",workVO.getBck_wrk_id());
 		
 		mv.setViewName("popup/rmanRegReForm");
 		return mv;	
@@ -684,7 +697,8 @@ public class BackupController {
 	@RequestMapping(value = "/popup/workDumpReWrite.do")
 	public void workDumpReWrite(@ModelAttribute("historyVO") HistoryVO historyVO,@ModelAttribute("workVO") WorkVO workVO, HttpServletResponse response, HttpServletRequest request) throws IOException{
 		String result = "F";
-
+		int bck_wrk_id = workVO.getBck_wrk_id();
+		
 		try {
 			// 화면접근이력 이력 남기기
 			CmmnUtils.saveHistory(request, historyVO);
@@ -705,9 +719,7 @@ public class BackupController {
 		
 		// work option delete
 		try {
-			WorkOptVO workOptVO = new WorkOptVO();
-			workOptVO.setBck_wrk_id(workVO.getBck_wrk_id());
-		//	backupService.deleteWorkOpt(workOptVO);
+			backupService.deleteWorkOpt(bck_wrk_id);
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -715,7 +727,7 @@ public class BackupController {
 		
 		// work object delete 
 		try {
-		//	backupService.deleteWorkObj(workVO);
+			backupService.deleteWorkObj(bck_wrk_id);
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -884,13 +896,6 @@ public class BackupController {
 			
 			resultSet=backupService.selectDbList(workVO);
 			
-			SimpleDateFormat frm= new SimpleDateFormat ("yyyyMMdd");
-			Calendar cal = Calendar.getInstance();
-			String end_date = frm.format(cal.getTime());
-
-			mv.addObject("month",end_date);
-			
-			
 			mv.addObject("dbList",resultSet);		
 			mv.addObject("db_svr_id",db_svr_id);
 			mv.setViewName("functions/scheduler/schedulerView");				
@@ -944,22 +949,6 @@ public class BackupController {
 		return result;		
 	}	
 	
-	@RequestMapping(value = "/selectMonthBckScheduleSearch.do")
-	@ResponseBody
-	public List<Map<String, Object>> selectMonthBckScheduleSearch(HttpServletRequest request, HttpServletResponse response) {
-		
-		List<Map<String, Object>> result = null;
-		try {		
-			HashMap<String,Object> paramvalue = new HashMap<String, Object>();
-			paramvalue.put("datest",(String)request.getParameter("stdate"));
-			paramvalue.put("dateed", (String)request.getParameter("eddate"));
-			
-				result = backupService.selectMonthBckScheduleSearch(paramvalue);
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-		return result;		
-	}	
 	
 	/**
 	 * 백업스케줄 등록 뷰

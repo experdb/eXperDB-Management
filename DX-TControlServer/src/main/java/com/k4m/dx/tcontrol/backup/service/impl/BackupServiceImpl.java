@@ -1,6 +1,5 @@
 package com.k4m.dx.tcontrol.backup.service.impl;
 
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -123,13 +122,14 @@ public class BackupServiceImpl extends EgovAbstractServiceImpl implements Backup
 	public List<Map<String, Object>> selectMonthBckSchedule(int db_svr_id) throws Exception {
 		return backupDAO.selectMonthBckSchedule(db_svr_id);
 	}
-	
-	public List<Map<String, Object>> selectMonthBckScheduleSearch(HashMap<String,Object> hp) throws Exception {
-		return backupDAO.selectMonthBckScheduleSearch(hp);
-	}
 
 	@Override
 	public void deleteBckWork(int bck_wrk_id) throws Exception {
 		backupDAO.deleteBckWork(bck_wrk_id);
+	}
+
+	@Override
+	public WorkVO lastBckWorkId() throws Exception {
+		return backupDAO.lastBckWorkId();
 	}
 }

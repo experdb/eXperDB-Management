@@ -1,4 +1,6 @@
-<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+    pageEncoding="UTF-8"%>
+ <%@ taglib uri="http://tiles.apache.org/tags-tiles" prefix="tiles"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form"%>
 <%@ taglib prefix="ui" uri="http://egovframework.gov/ctl/ui"%>
@@ -28,9 +30,12 @@
 <script type="text/javascript" src="/js/jquery-1.9.1.min.js"></script>
 <script type="text/javascript" src="/js/common.js"></script>
 <script type="text/javascript">
-// 저장후 작업ID
-var wrk_id = null;
+//저장후 작업ID
 var wrk_nmChk ="fail";
+
+$(window.document).ready(function() {
+	
+});
 
 /* ********************************************************
  * Dump Backup Insert
@@ -99,65 +104,16 @@ function fn_insert_opt(data){
 /* ********************************************************
  * Dump Backup Each Option Insert
  ******************************************************** */
-function fn_insert_opt_val(bck_wrk_id, grp_cd, opt_cd, bck_opt_val){
+function fn_insert_opt_val(bck_wrk_id, opt_sn, grp_cd, opt_cd, bck_opt_val){
 	$.ajax({
 		async : false,
 		url : "/popup/workOptWrite.do",
 	  	data : {
 	  		bck_wrk_id : bck_wrk_id,
+	  		opt_sn : opt_sn,
 	  		grp_cd : grp_cd,
 	  		opt_cd : opt_cd,
 	  		bck_opt_val : bck_opt_val
-	  	},
-		type : "post",
-		beforeSend: function(xhr) {
-	        xhr.setRequestHeader("AJAX", true);
-	     },
-		error : function(xhr, status, error) {
-			if(xhr.status == 401) {
-				alert("인증에 실패 했습니다. 로그인 페이지로 이동합니다.");
-				 location.href = "/";
-			} else if(xhr.status == 403) {
-				alert("세션이 만료가 되었습니다. 로그인 페이지로 이동합니다.");
-	             location.href = "/";
-			} else {
-				alert("ERROR CODE : "+ request.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ request.responseText.replace(/(<([^>]+)>)/gi, ""));
-			}
-		},
-		success : function() {}
-	});
-}
-
-/* ********************************************************
- * Dump Backup Object Insert
- ******************************************************** */
-function fn_insert_object(data){
-	$("input[name=tree]").each(function(){
-		if( $(this).is(":checked")){
-			fn_insert_object_val(data,$(this).attr("otype"),$(this).attr("schema"),$(this).val());
-		}
-	});
-
-	opener.fn_dump_find_list();
-	alert("등록이 완료되었습니다.");
-	self.close();
-}
-
-/* ********************************************************
- * Dump Backup Each Object Insert
- ******************************************************** */
-function fn_insert_object_val(bck_wrk_id,otype,scm_nm,obj_nm){
-	var db_id = $("#db_id").val();
-
-	if(otype != "table") obj_nm = "";
-	$.ajax({
-		async : false,
-		url : "/popup/workObjWrite.do",
-	  	data : {
-	  		bck_wrk_id : bck_wrk_id,
-	  		db_id : db_id,
-	  		scm_nm : scm_nm,
-	  		obj_nm : obj_nm
 	  	},
 		type : "post",
 		beforeSend: function(xhr) {
@@ -178,6 +134,46 @@ function fn_insert_object_val(bck_wrk_id,otype,scm_nm,obj_nm){
 		}
 	});
 }
+
+/* ********************************************************
+ * Dump Backup Object Insert
+ ******************************************************** */
+function fn_insert_object(data){
+	$("input[name=tree]").each(function(){
+		if( $(this).is(":checked")){
+			fn_insert_object_val(data,$(this).attr("otype"),$(this).attr("schema"),$(this).val());
+		}
+	});
+
+	opener.fn_dump_find_list();
+	alert("등록이 완료되었습니다.");
+	self.close();
+}
+
+
+/* ********************************************************
+ * Dump Backup Each Object Insert
+ ******************************************************** */
+ function fn_insert_object_val(bck_wrk_id,otype,scm_nm,obj_nm){
+		var db_id = $("#db_id").val();
+
+		if(otype != "table") obj_nm = "";
+		$.ajax({
+			async : false,
+			url : "/popup/workObjWrite.do",
+		  	data : {
+		  		bck_wrk_id : bck_wrk_id,
+		  		db_id : db_id,
+		  		scm_nm : scm_nm,
+		  		obj_nm : obj_nm
+		  	},
+			type : "post",
+			error : function(request, xhr, status, error) {
+			},
+			success : function() {
+			}
+		});
+	}
 
 /* ********************************************************
  * Validation Check
@@ -421,7 +417,7 @@ function checkFolder(){
 						alert("유효한 경로입니다.");
 						var volume = data.result.RESULT_DATA.CAPACITY;
 					}else{
-						alert("유효하지 않은 경로입니다.");
+						alert(data.SERVERIP+" 서버에 디렉토리가 존재하지 않습니다." );
 					}
 				}else{
 					alert("경로체크 중 서버에러로 인하여 실패하였습니다.")
@@ -726,8 +722,8 @@ function fn_check() {
 			</form>
 		</div>
 		<div class="btn_type_02">
-			<span class="btn btnC_01" onClick="fn_insert_work();return false;"><button>등록</button></span>
-			<a href="#n" class="btn" onclick="self.close();return false;"><span>취소</span></a>
+			<span class="btn btnC_01" onClick="fn_insert_work();"><button>등록</button></span>
+			<a href="#n" class="btn" onclick="self.close();"><span>취소</span></a>
 		</div>
 	</div>
 </div>

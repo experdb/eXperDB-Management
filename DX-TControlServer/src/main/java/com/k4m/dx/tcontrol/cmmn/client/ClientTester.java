@@ -46,9 +46,9 @@ public class ClientTester {
 		ClientTester clientTester = new ClientTester();
 		
 		String Ip = "222.110.153.162";
-		Ip = "222.110.153.251";
+		//Ip = "222.110.153.251";
 		 //	Ip = "127.0.0.1";
-		 //Ip = "222.110.153.231";
+		 Ip = "222.110.153.231";
 		int port = 9001;
 		try {
 			
@@ -1963,19 +1963,14 @@ public class ClientTester {
 
 			JSONObject serverObj = new JSONObject();
 
-			serverObj.put(ClientProtocolID.SERVER_NAME, "222.110.153.251");
-			serverObj.put(ClientProtocolID.SERVER_IP, "222.110.153.251");
-			serverObj.put(ClientProtocolID.SERVER_PORT, "5433");
-			serverObj.put(ClientProtocolID.DATABASE_NAME, "experdb");
-			serverObj.put(ClientProtocolID.USER_ID, "experdb");
-			serverObj.put(ClientProtocolID.USER_PWD, "experdb");
+	
 		
 			JSONObject jObj = new JSONObject();
 			
 			String strPath = "/home/experdb/pgdata/bckDir/rman";
 			
 			jObj.put(ClientProtocolID.DX_EX_CODE, ClientTranCodeType.DxT022);
-			jObj.put(ClientProtocolID.SERVER_INFO, serverObj);
+
 			jObj.put(ClientProtocolID.CMD_BACKUP_PATH, strPath);
 			
 			

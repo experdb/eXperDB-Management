@@ -17,8 +17,6 @@ import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 
 import com.k4m.dx.tcontrol.admin.dbserverManager.service.DbServerVO;
-import com.k4m.dx.tcontrol.cmmn.AES256;
-import com.k4m.dx.tcontrol.cmmn.AES256_KEY;
 import com.k4m.dx.tcontrol.cmmn.client.ClientInfoCmmn;
 import com.k4m.dx.tcontrol.common.service.AgentInfoVO;
 import com.k4m.dx.tcontrol.common.service.CmmnServerInfoService;
@@ -80,6 +78,7 @@ public class ScheduleQuartzJob implements Job{
 			
 			ScheduleService scheduleService = (ScheduleService) context.getBean("scheduleService");			
 		
+			
 			// 2. 해당 스케줄ID에 해당하는 스케줄 상세정보 조회(work 정보)
 			resultWork= scheduleService.selectExeScheduleList(scd_id);
 		
@@ -89,6 +88,9 @@ public class ScheduleQuartzJob implements Job{
 	        
 	        String bck_fileNm ="";
 			
+	        
+	        
+	        //WORK 갯수만큼 루프
 			for(int i =0; i<resultWork.size(); i++){
 		        
 		        bck_fileNm = "eXperDB_"+resultWork.get(i).get("wrk_id")+"_"+today+".dump";
@@ -96,7 +98,7 @@ public class ScheduleQuartzJob implements Job{
 				int db_svr_id = Integer.parseInt(resultWork.get(i).get("db_svr_id").toString());
 				int wrk_id = Integer.parseInt(resultWork.get(i).get("wrk_id").toString());
 				
-				// 3. DB 접속정보 조회
+					
 				resultDbconn= scheduleService.selectDbconn(db_svr_id);
 				
 				// 4. 부가옵션 조회
@@ -152,9 +154,8 @@ public class ScheduleQuartzJob implements Job{
 		String strCmd = "pg_dump";
 		String strLast = "";
 		
-		try {			
-			AES256 aes = new AES256(AES256_KEY.ENC_KEY);
-			
+		try {		
+
 			//1. Connection Option 명령어 생성
 			for(int k =0; k<resultDbconn.size(); k++){
 				//1.1 연결할 데이터베이스의 이름 지정
@@ -169,103 +170,136 @@ public class ScheduleQuartzJob implements Job{
 			}
 			
 			//2. 기본옵션 명령어 생성
-				strLast +=" "+resultWork.get(i).get("db_nm")+"  > "+resultWork.get(i).get("save_pth")+"/"+bck_fileNm;
-				
-				if(resultWork.get(i).get("file_fmt_cd_nm") != null && resultWork.get(i).get("file_fmt_cd_nm") != ""){
-					//2.2 파일포멧에 따른 명령어 생성
-					strCmd += " --format="+resultWork.get(i).get("file_fmt_cd_nm").toString().toLowerCase();
-					//2.3 파일포멧이 tar일경우 압축률 명령어 생성
-					if(resultWork.get(i).get("file_fmt_cd_nm") == "tar"){
-						strCmd += " --compress="+resultWork.get(i).get("cprt").toString().toLowerCase();
-					}
-				}
-				
-				//2.4 인코딩 방식 명령어 생성
-				if(resultWork.get(i).get("incd") != null && resultWork.get(i).get("incd") != ""){
-					strCmd +=" --encoding="+resultWork.get(i).get("incd").toString().toLowerCase();
-				}
-				
-				//2.5 rolename 명령어 생성		
-				if(resultWork.get(i).get("incd") != null && !resultWork.get(i).get("usr_role_nm").equals("")){
-					strCmd +=" --role="+resultWork.get(i).get("usr_role_nm").toString().toLowerCase();
-				}
-				
-			//3. 부가옵션 명령어 생성
-			for(int j =0; j<addOption.size(); j++){
-				// Sections
-				if(addOption.get(j).get("grp_cd").toString() != null && addOption.get(j).get("grp_cd").toString().equals("TC0006")){
-					strCmd +=" --section="+addOption.get(j).get("opt_cd_nm").toString().toLowerCase();
-				}
-				// Object형태
-				if(addOption.get(j).get("opt_cd").toString() != null && addOption.get(j).get("opt_cd").toString().equals("TC0007")){
-					// Object형태(Only data)
-					if(addOption.get(j).get("opt_cd").toString().equals("TC000701")){
-						strCmd +=" --data-only";
-					// Object형태(Only Schema)
-					}else if (addOption.get(j).get("opt_cd").toString().equals("TC000702")){
-						strCmd +=" --schema-only";
-					// Object형태(Blobs)
-					}else{
-						strCmd +=" --blobs";
-					}
-				}
-				// 저장제외항목
-				if(addOption.get(j).get("grp_cd").toString() != null && addOption.get(j).get("grp_cd").toString().equals("TC0008")){
-					strCmd +=" --no-"+addOption.get(j).get("opt_cd_nm").toString().toLowerCase();
-				}
-				// 쿼리
-				if(addOption.get(j).get("grp_cd").toString() != null && addOption.get(j).get("grp_cd").toString().equals("TC0009")){
-					// 쿼리(Use Column Inserts)
-					if(addOption.get(j).get("opt_cd").toString().equals("TC000901")){
-						strCmd +=" --column-insert";
-					// 쿼리(Use Insert Commands)
-					}else if (addOption.get(j).get("opt_cd").toString().equals("TC000902")){
-						strCmd +=" --attribute-inserts";
-					// 쿼리(Include CREATE DATABASE statement)
-					}else if(addOption.get(j).get("opt_cd").toString().equals("TC000903")){
-						strCmd +=" --create";
-					// 쿼리(Include DROP DATABASE statement)
-					}else{
-						strCmd +=" --clean";
-					}
-				}
-				// Miscellaneous
-				if(addOption.get(j).get("grp_cd").toString() != null && addOption.get(j).get("grp_cd").toString().equals("TC0010")){
-					// Miscellaneous(With OID(s))
-					if(addOption.get(j).get("opt_cd").toString().equals("TC001001")){
-						strCmd +=" --oids";
-					// Miscellaneous(Verbose messages)
-					}else if (addOption.get(j).get("opt_cd").toString().equals("TC001002")){
-						strCmd +=" --verbose";
-					// Miscellaneous(Force double quote on identifiers)
-					}else if(addOption.get(j).get("opt_cd").toString().equals("TC001003")){
-						strCmd +=" --quote-all-identifiers";
-					// Miscellaneous(Use SET SESSION AUTHORIZATION)
-					}else{
-						strCmd +=" --use-set-session-authorization";
-					}
-				}
-			}
+			
+				String basicOpt = fn_basicOptCmd(resultWork, i, bck_fileNm);
+				strLast +=basicOpt;
+								
+				String addObjCmd = fn_addOption(addOption);	
+				strCmd += addObjCmd;
+			
 			
 			if(addObject.size() != 0){
-				//4. 오브젝트옵션 명령어 생성
-				for(int n=0; n<addObject.size(); n++){		
-					if(addObject.get(n).get("obj_nm").equals(null) || addObject.get(n).get("obj_nm").equals("")){
-						strCmd+=" -n "+addObject.get(n).get("scm_nm").toString().toLowerCase();
-					}else{
-						strCmd+=" -t "+addObject.get(n).get("obj_nm").toString().toLowerCase();
-					}
-				}
+				String addObjectCmd = fn_addObject(addObject);	
+				strCmd += addObjectCmd;
 			}			
+			
+			
 			strCmd += strLast;
-		} catch (UnsupportedEncodingException e) {			
+		} catch (Exception e) {			
 			e.printStackTrace();
 		}		
 		return strCmd;
 	}
 
 	
+	private String fn_addObject(List<Map<String, Object>> addObject) {
+		
+		String basicObj = null;
+		
+		//4. 오브젝트옵션 명령어 생성
+		for(int n=0; n<addObject.size(); n++){			
+			if(addObject.get(n).get("obj_nm").equals(null) || addObject.get(n).get("obj_nm").equals("")){
+				basicObj+=" -n "+addObject.get(n).get("scm_nm").toString().toLowerCase();
+			}else{
+				basicObj+=" -t "+addObject.get(n).get("obj_nm").toString().toLowerCase();
+			}
+		}
+		return basicObj;
+	}
+
+
+	//3. 부가옵션 명령어 생성
+	private String fn_addOption(List<Map<String, Object>> addOption) {
+		
+		String basicOpt = null;
+		
+		for(int j =0; j<addOption.size(); j++){
+			// Sections
+			if(addOption.get(j).get("grp_cd").toString() != null && addOption.get(j).get("grp_cd").toString().equals("TC0006")){
+				basicOpt +=" --section="+addOption.get(j).get("opt_cd_nm").toString().toLowerCase();
+			}
+			// Object형태
+			if(addOption.get(j).get("opt_cd").toString() != null && addOption.get(j).get("opt_cd").toString().equals("TC0007")){
+				// Object형태(Only data)
+				if(addOption.get(j).get("opt_cd").toString().equals("TC000701")){
+					basicOpt +=" --data-only";
+				// Object형태(Only Schema)
+				}else if (addOption.get(j).get("opt_cd").toString().equals("TC000702")){
+					basicOpt +=" --schema-only";
+				// Object형태(Blobs)
+				}else{
+					basicOpt +=" --blobs";
+				}
+			}
+			// 저장제외항목
+			if(addOption.get(j).get("grp_cd").toString() != null && addOption.get(j).get("grp_cd").toString().equals("TC0008")){
+				basicOpt +=" --no-"+addOption.get(j).get("opt_cd_nm").toString().toLowerCase();
+			}
+			// 쿼리
+			if(addOption.get(j).get("grp_cd").toString() != null && addOption.get(j).get("grp_cd").toString().equals("TC0009")){
+				// 쿼리(Use Column Inserts)
+				if(addOption.get(j).get("opt_cd").toString().equals("TC000901")){
+					basicOpt +=" --column-insert";
+				// 쿼리(Use Insert Commands)
+				}else if (addOption.get(j).get("opt_cd").toString().equals("TC000902")){
+					basicOpt +=" --attribute-inserts";
+				// 쿼리(Include CREATE DATABASE statement)
+				}else if(addOption.get(j).get("opt_cd").toString().equals("TC000903")){
+					basicOpt +=" --create";
+				// 쿼리(Include DROP DATABASE statement)
+				}else{
+					basicOpt +=" --clean";
+				}
+			}
+			// Miscellaneous
+			if(addOption.get(j).get("grp_cd").toString() != null && addOption.get(j).get("grp_cd").toString().equals("TC0010")){
+				// Miscellaneous(With OID(s))
+				if(addOption.get(j).get("opt_cd").toString().equals("TC001001")){
+					basicOpt +=" --oids";
+				// Miscellaneous(Verbose messages)
+				}else if (addOption.get(j).get("opt_cd").toString().equals("TC001002")){
+					basicOpt +=" --verbose";
+				// Miscellaneous(Force double quote on identifiers)
+				}else if(addOption.get(j).get("opt_cd").toString().equals("TC001003")){
+					basicOpt +=" --quote-all-identifiers";
+				// Miscellaneous(Use SET SESSION AUTHORIZATION)
+				}else{
+					basicOpt +=" --use-set-session-authorization";
+				}
+			}
+		}
+		return basicOpt;
+	}
+
+
+	private String fn_basicOptCmd(List<Map<String, Object>> resultWork, int i, String bck_fileNm) {
+		String basicOpt = null;
 	
+		basicOpt +=" "+resultWork.get(i).get("db_nm")+"  > "+resultWork.get(i).get("save_pth")+"/"+bck_fileNm;
+		
+		if(resultWork.get(i).get("file_fmt_cd_nm") != null && resultWork.get(i).get("file_fmt_cd_nm") != ""){
+			//2.2 파일포멧에 따른 명령어 생성
+			basicOpt += " --format="+resultWork.get(i).get("file_fmt_cd_nm").toString().toLowerCase();
+			//2.3 파일포멧이 tar일경우 압축률 명령어 생성
+			if(resultWork.get(i).get("file_fmt_cd_nm") == "tar"){
+				basicOpt += " --compress="+resultWork.get(i).get("cprt").toString().toLowerCase();
+			}
+		}
+		
+		//2.4 인코딩 방식 명령어 생성
+		if(resultWork.get(i).get("incd") != null && resultWork.get(i).get("incd") != ""){
+			basicOpt +=" --encoding="+resultWork.get(i).get("incd").toString().toLowerCase();
+		}
+		
+		//2.5 rolename 명령어 생성		
+		if(resultWork.get(i).get("incd") != null && !resultWork.get(i).get("usr_role_nm").equals("")){
+			basicOpt +=" --role="+resultWork.get(i).get("usr_role_nm").toString().toLowerCase();
+		}
+		
+		return basicOpt;
+	}
+
+
 	private String rmanBackupMakeCmd(List<Map<String, Object>> resultWork, int i) {
 		String rmanCmd = "pg_rman backup";
 
@@ -283,6 +317,8 @@ public class ScheduleQuartzJob implements Job{
 		}else{
 			rmanCmd += " --backup-mode=archive";
 		}
+		
+		rmanCmd += " -A $PGDATA/pg_xlog/archive_status/";
 		
 		if(resultWork.get(i).get("cps_yn").toString().equals("Y")){
 			rmanCmd += " --with-serverlog";
@@ -305,27 +341,30 @@ public class ScheduleQuartzJob implements Job{
 	
 	
 	public void agentCall(List<Map<String, Object>> resultWork, ArrayList<String> CMD, ArrayList<String> BCKNM) {
-		ClientInfoCmmn clc = new ClientInfoCmmn();
-		
-		DbServerVO schDbServerVO = new DbServerVO();
-		schDbServerVO.setDb_svr_id(Integer.parseInt(resultWork.get(0).get("db_svr_id").toString()));
-	
-		try {
-			DbServerVO dbServerVO = (DbServerVO)  cmmnServerInfoService.selectServerInfo(schDbServerVO);
-			String strIpAdr = dbServerVO.getIpadr();
-			
-			AgentInfoVO vo = new AgentInfoVO();
-			vo.setIPADR(strIpAdr);
-			
-			AgentInfoVO agentInfo =  (AgentInfoVO) cmmnServerInfoService.selectAgentInfo(vo);
-			
-			String IP = dbServerVO.getIpadr();
-			int PORT = agentInfo.getSOCKET_PORT();
+		List<DbServerVO> ipResult = null;	
+		int db_svr_id = Integer.parseInt(resultWork.get(0).get("db_svr_id").toString());
 
-			clc.db_backup(resultWork, CMD, IP ,PORT, BCKNM);
+		try {
+			
+			ipResult = cmmnServerInfoService.selectAllIpadrList(db_svr_id);
+			
+			for(int i=0; i<ipResult.size(); i++){
+				AgentInfoVO vo = new AgentInfoVO();
+				vo.setIPADR(ipResult.get(i).getIpadr());
+				
+				AgentInfoVO agentInfo =  (AgentInfoVO) cmmnServerInfoService.selectAgentInfo(vo);
+				
+				String IP = ipResult.get(i).getIpadr();
+				int PORT = agentInfo.getSOCKET_PORT();
+				
+				ClientInfoCmmn clc = new ClientInfoCmmn();
+				clc.db_backup(resultWork, CMD, IP ,PORT, BCKNM);
+			}			
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}
+	
+
 }

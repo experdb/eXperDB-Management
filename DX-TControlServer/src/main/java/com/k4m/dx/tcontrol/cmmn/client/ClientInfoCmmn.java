@@ -145,8 +145,11 @@ public class ClientInfoCmmn {
 			JSONObject reqJObj = new JSONObject();
 			JSONArray arrCmd = new JSONArray();
 
+			System.out.println("SERVER IP : "+IP);
+			
 			int j = 0;
 			for (int i = 0; i < resultWork.size(); i++) {
+				System.out.println("======"+resultWork.get(i).get("bck_bsn_dscd")+"  백업 시작 ======");	
 				JSONObject objJob = new JSONObject();
 				objJob.put(ClientProtocolID.SCD_ID, resultWork.get(i).get("scd_id")); // 스캐쥴ID
 				objJob.put(ClientProtocolID.WORK_ID, resultWork.get(i).get("wrk_id")); // 작업ID
@@ -170,6 +173,7 @@ public class ClientInfoCmmn {
 				// [pg_rman validate -B 백업경로] 명령어 실행해줘여함
 				// [pg_rman validate -B 백업경로] 정합성 체크하는 명령어, 안할실 복구불가능
 				if (resultWork.get(i).get("bck_bsn_dscd").equals("TC000201")) {
+					System.out.println("============== RMAN Validataion 시작 ===============");
 					j++;
 					JSONObject objJob2 = new JSONObject();
 					objJob2.put(ClientProtocolID.SCD_ID, resultWork.get(i).get("scd_id")); // 스캐쥴ID
@@ -184,7 +188,6 @@ public class ClientInfoCmmn {
 					objJob2.put(ClientProtocolID.REQ_CMD, "pg_rman validate -B " + resultWork.get(i).get("bck_pth"));// 명령어
 					arrCmd.add(j, objJob2);
 				}
-
 				j++;
 			}
 
@@ -202,6 +205,7 @@ public class ClientInfoCmmn {
 			CA.open();
 			CA.dxT005(reqJObj);
 			CA.close();
+			
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -925,8 +929,6 @@ public class ClientInfoCmmn {
 	public Map<String, Object> directory_exist(JSONObject serverObj, String folderPath, String IP, int PORT) {
 		Map<String, Object> result = new HashMap<String, Object>();
 		try {
-			JSONObject connectorInfoObj = new JSONObject();
-
 			JSONObject jObj = new JSONObject();
 			jObj.put(ClientProtocolID.DX_EX_CODE, ClientTranCodeType.DxT016);
 			jObj.put(ClientProtocolID.SERVER_INFO, serverObj);
@@ -943,15 +945,26 @@ public class ClientInfoCmmn {
 			String strDxExCode = (String) objList.get(ClientProtocolID.DX_EX_CODE);
 			String strResultCode = (String) objList.get(ClientProtocolID.RESULT_CODE);
 			Object strResultData =  objList.get(ClientProtocolID.RESULT_DATA);
+			
+			System.out.println("SERVERIP : "  +serverObj.get(ClientProtocolID.SERVER_IP));
 			System.out.println("RESULT_CODE : " + strResultCode);
 			System.out.println("ERR_CODE : " + strErrCode);
 			System.out.println("ERR_MSG : " + strErrMsg);
 			System.out.println("RESULT_DATA : " + strResultData);
-
 			CA.close();
-
+			
+			HashMap obj = (HashMap)objList.get(ClientProtocolID.RESULT_DATA);			
+			int checkDir = Integer.parseInt(obj.get(ClientProtocolID.IS_DIRECTORY).toString());
+			
+			if(checkDir == 1){
+				result.put("resultCode", 1);				
+			}else{
+				result.put("resultCode", 0);
+			}
+			
+			result.put("SERVERIP", serverObj.get(ClientProtocolID.SERVER_IP));
 			result.put("result", objList);
-			return result;
+				
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -1240,31 +1253,21 @@ public class ClientInfoCmmn {
 	
 	
 	
-	private Map<String, Object> setInit(String IP, int PORT) {
-		try {
-
-
-			JSONObject serverObj = new JSONObject();
-
-			serverObj.put(ClientProtocolID.SERVER_NAME, "222.110.153.251");
-			serverObj.put(ClientProtocolID.SERVER_IP, "222.110.153.251");
-			serverObj.put(ClientProtocolID.SERVER_PORT, "5433");
-			serverObj.put(ClientProtocolID.DATABASE_NAME, "experdb");
-			serverObj.put(ClientProtocolID.USER_ID, "experdb");
-			serverObj.put(ClientProtocolID.USER_PWD, "experdb");
-		
+	public Map<String, Object> setInit(String IP, int PORT, String bck_pth) {
+		Map<String, Object> result = new HashMap<String, Object>();
+		try {	
 			JSONObject jObj = new JSONObject();
 			
-			String strPath = "/home/experdb/pgdata/bckDir/rman";
+			System.out.println("Agent아이피 : "+IP);
+			System.out.println("백업경로 : "+bck_pth);
+			String strPath = bck_pth;
 			
 			jObj.put(ClientProtocolID.DX_EX_CODE, ClientTranCodeType.DxT022);
-			jObj.put(ClientProtocolID.SERVER_INFO, serverObj);
 			jObj.put(ClientProtocolID.CMD_BACKUP_PATH, strPath);
-			
-			
+				
 			JSONObject objList;
 			
-			ClientAdapter CA = new ClientAdapter(Ip, port);
+			ClientAdapter CA = new ClientAdapter(IP, PORT);
 			CA.open(); 
 
 			objList = CA.dxT022(jObj);
@@ -1276,10 +1279,14 @@ public class ClientInfoCmmn {
 			String strDxExCode = (String)objList.get(ClientProtocolID.DX_EX_CODE);
 			String strResultCode = (String)objList.get(ClientProtocolID.RESULT_CODE);
 
+			System.out.println("ServerIP : " + IP);
+			System.out.println("BackupPath : " + bck_pth);
 			System.out.println("Result : " + strResultCode);
+			result.put("result", strResultCode);
+			
 		} catch(Exception e) {
 			e.printStackTrace();
 		}
-		return null;
+		return result;
 	}
 }

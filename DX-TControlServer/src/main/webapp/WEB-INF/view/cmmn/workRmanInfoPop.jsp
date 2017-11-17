@@ -80,11 +80,11 @@
 						</tr>	
 						<tr>
 							<td style="width: 70px; height: 20px;">서버로그파일 보관일</td>
-							<td style="width: 110px; text-align: left" id="log_file_stg_dcnt"></td>
+							<td style="width: 110px; text-align: left" id="r_log_file_stg_dcnt"></td>
 						</tr>	
 						<tr>
 							<td style="width: 110px; height: 20px;">서버로그파일 유지갯수</td>
-							<td style="width: 110px; text-align: left" id="log_file_mtn_ecnt"></td>
+							<td style="width: 110px; text-align: left" id="r_log_file_mtn_ecnt"></td>
 						</tr>								
 					</tbody>
 				</table>			

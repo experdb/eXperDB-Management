@@ -44,7 +44,11 @@ function fn_init(){
 	{data : "wrk_id", className : "dt-center", defaultContent : "", visible: false },
 	{data : "db_svr_nm", className : "dt-center", defaultContent : ""}, //서버명
 	{data : "bck_bsn_dscd_nm", className : "dt-center", defaultContent : ""}, //구분
-	{data : "wrk_nm", className : "dt-center", defaultContent : ""}, //work명
+	{data : "wrk_nm", className : "dt-center", defaultContent : ""
+		,"render": function (data, type, full) {
+			  return '<span onClick=javascript:fn_workLayer("'+full.wrk_nm+'"); style=cursor:pointer>' + full.wrk_nm + '</span>';
+		}
+	}, //work명
 	{data : "wrk_exp", className : "dt-center", defaultContent : ""}, //work설명
 	{data : "nxt_exe_yn",  
 		className: "dt-center",
@@ -113,6 +117,8 @@ $(window.document).ready(function() {
 });
 
 </script>
+	<%@include file="../cmmn/workRmanInfoPop.jsp"%>
+	<%@include file="../cmmn/workDumpInfoPop.jsp"%>
 					<div class="contents">
 						<div class="cmm_grp">						
 							<div class="cmm_bd">

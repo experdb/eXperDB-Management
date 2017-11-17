@@ -255,31 +255,41 @@ public class CmmnController {
 	@SuppressWarnings("unchecked")
 	@RequestMapping(value = "/existDirCheck.do")
 	@ResponseBody
-	public Map<String, Object> existDirCheck (@ModelAttribute("workVO") WorkVO workVO, HttpServletRequest request) {
+	public Map<String, Object> existDirCheck (@ModelAttribute("workVO") WorkVO workVO, HttpServletRequest request, @ModelAttribute("dbServerVO") DbServerVO dbServerVO) {
 		Map<String, Object> result =new HashMap<String, Object>();
 		String directory_path = request.getParameter("path");
+		List<DbServerVO> ipResult = null;		
+		
+		int db_svr_id = Integer.parseInt(request.getParameter("db_svr_id"));
 		try {
-			AES256 aes = new AES256(AES256_KEY.ENC_KEY);
-			DbServerVO dbServerVO = backupService.selectDbSvrNm(workVO);
-			JSONObject serverObj = new JSONObject();
+			ipResult = (List<DbServerVO>) cmmnServerInfoService.selectAllIpadrList(db_svr_id);
 			
-			AgentInfoVO vo = new AgentInfoVO();
-			vo.setIPADR(dbServerVO.getIpadr());
-			
-			AgentInfoVO agentInfo =  (AgentInfoVO) cmmnServerInfoService.selectAgentInfo(vo);
-			
-			String IP = dbServerVO.getIpadr();
-			int PORT = agentInfo.getSOCKET_PORT();
-			
-			serverObj.put(ClientProtocolID.SERVER_NAME, dbServerVO.getDb_svr_nm());
-			serverObj.put(ClientProtocolID.SERVER_IP, dbServerVO.getIpadr());
-			serverObj.put(ClientProtocolID.SERVER_PORT, dbServerVO.getPortno());
-			//serverObj.put(ClientProtocolID.USER_PWD, dbServerVO.getSvr_spr_scm_pwd());
-			serverObj.put(ClientProtocolID.USER_PWD, aes.aesDecode(dbServerVO.getSvr_spr_scm_pwd()));
+			for(int i=0; i<ipResult.size(); i++){
+				JSONObject serverObj = new JSONObject();
+				
+				AgentInfoVO vo = new AgentInfoVO();
+				vo.setIPADR(ipResult.get(i).getIpadr());
+				
+				AgentInfoVO agentInfo =  (AgentInfoVO) cmmnServerInfoService.selectAgentInfo(vo);
+				
+				String IP = ipResult.get(i).getIpadr();
+				int PORT = agentInfo.getSOCKET_PORT();
+				
+				serverObj.put(ClientProtocolID.SERVER_NAME, ipResult.get(i).getDb_svr_nm());
+				serverObj.put(ClientProtocolID.SERVER_IP, ipResult.get(i).getIpadr());
+				serverObj.put(ClientProtocolID.SERVER_PORT, ipResult.get(i).getPortno());
 
-			ClientInfoCmmn cic = new ClientInfoCmmn();
-			result = cic.directory_exist(serverObj,directory_path, IP, PORT);
-			
+				ClientInfoCmmn cic = new ClientInfoCmmn();
+				result = cic.directory_exist(serverObj,directory_path, IP, PORT);	
+				
+
+				int resultCd = Integer.parseInt(result.get("resultCode").toString());
+				
+				if(resultCd == 1){
+					return result;
+				}
+				
+			}	
 			//System.out.println(result);
 		} catch (Exception e) {
 			e.printStackTrace();

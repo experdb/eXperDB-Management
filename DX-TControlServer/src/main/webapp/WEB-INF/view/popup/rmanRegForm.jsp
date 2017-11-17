@@ -226,7 +226,7 @@ function checkFolder(keyType){
 							$( "#backupVolume" ).append(volume);
 						}
 					}else{
-						alert("유효하지 않는 경로입니다.");
+						alert(data.SERVERIP+" 서버에 디렉토리가 존재하지 않습니다." );
 					}
 				}else{
 					alert("경로체크 중 서버에러로 인하여 실패하였습니다.")

@@ -184,7 +184,7 @@
 	 	**/
 		INSERT INTO T_BCK_WRKCNG_I
 			(
-			BCK_WRK_ID,
+			bck_wrk_id,
 			wrk_id,
 			db_svr_id,
 			bck_bsn_dscd,
@@ -203,7 +203,7 @@
 			lst_mdfr_id,
 			lst_mdf_dtm,
 			bck_filenm,
-			log_file_pth			
+			log_file_pth	
 			)
 		VALUES
 			(
@@ -289,6 +289,13 @@
 		T_WRKCNG_I
 	</select>
 	
+	<select id="lastBckWorkId"  resultType="workVO">
+		SELECT
+			COALESCE(MAX(BCK_WRK_ID),0) AS bck_wrk_id
+		FROM
+		T_BCK_WRKCNG_I
+	</select>
+	
 	<insert id="insertWorkOpt" parameterType="workOptVO">
 		/**
 	 	* Query ID : insertWorkOpt
@@ -310,7 +317,7 @@
 		VALUES
 			(
 			#{bck_wrk_id},
-			nextval('q_bckopt_i_01'),
+			#{opt_sn},
 			#{grp_cd},
 			#{opt_cd},
 			#{bck_opt_val},
@@ -628,15 +635,7 @@
 	    GROUP BY A.SCD_ID, A.SCD_NM , A.SCD_EXP
 	    ORDER BY EXE_HMS
 	 </select>
-
-	 	<select id="selectMonthBckScheduleSearch" resultType="hashMap" parameterType="int">
-		/**
-	 	* Query ID : selectMonthBckScheduleSearch
-	 	* Description : 백업스케줄(월 단위) 조회
-	 	* Author : 박태혁
-	 	**/
-	 	
-	 	</select>
+	 
 	 
 	 <select id="selectWorkOptionLayer" resultType="hashMap" parameterType="int">
 		/**

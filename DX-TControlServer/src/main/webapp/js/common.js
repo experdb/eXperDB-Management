@@ -331,8 +331,8 @@ function fn_workLayer(wrk_nm){
 				$("#log_file_pth").html(result[0].log_file_pth);
 				$("#data_pth").html(result[0].data_pth);
 				$("#bck_pth").html(result[0].bck_pth);
-				$("#file_stg_dcnt").html(result[0].file_stg_dcnt);
-				$("#bck_mtn_ecnt").html(result[0].bck_mtn_ecnt);
+				$("#r_file_stg_dcnt").html(result[0].file_stg_dcnt);
+				$("#r_bck_mtn_ecnt").html(result[0].bck_mtn_ecnt);
 				$("#acv_file_stgdt").html(result[0].acv_file_stgdt);
 				$("#acv_file_mtncnt").html(result[0].acv_file_mtncnt);
 				if(result[0].log_file_bck_yn == "N"){

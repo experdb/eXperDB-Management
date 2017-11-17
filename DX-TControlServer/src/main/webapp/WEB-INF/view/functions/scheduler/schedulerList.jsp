@@ -488,6 +488,8 @@ function fn_makeToMin(){
 }
 </script>
 
+<%@include file="../../cmmn/scheduleInfo.jsp"%>
+
 <form name="modifyForm" method="post">
 </form>
 

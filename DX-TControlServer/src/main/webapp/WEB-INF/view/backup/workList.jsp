@@ -413,7 +413,7 @@ function fn_dump_check_all(){
  * Rman Data Delete
  ******************************************************** */
 function fn_rman_work_delete(){
-	var datas = tableDump.rows('.selected').data();
+	var datas = tableRman.rows('.selected').data();
 	
 	if(datas.length < 1){
 		alert("삭제할 작업을 선택해 주세요.");

@@ -30,6 +30,7 @@
 <script type="text/javascript">
 // 저장후 작업ID
 var wrk_id = null;
+var bck_wrk_id = null;
 
 /* ********************************************************
  * Rman Backup Update
@@ -46,6 +47,7 @@ function fn_update_work(){
 			async : false,
 			url : "/popup/workRmanReWrite.do",
 		  	data : {
+		  		bck_wrk_id : $("#bck_wrk_id").val(),
 		  		wrk_id : $("#wrk_id").val(),
 		  		wrk_nm : $("#wrk_nm").val(),
 		  		wrk_exp : $("#wrk_exp").val(),
@@ -204,7 +206,7 @@ function checkFolder(keyType){
 							$( "#backupVolume" ).append(volume);
 						}
 					}else{
-						alert("유효하지 않은 경로입니다.");
+						alert(data.SERVERIP+" 서버에 디렉토리가 존재하지 않습니다." );
 					}
 				}else{
 					alert("경로체크 중 서버에러로 인하여 실패하였습니다.")
@@ -219,6 +221,7 @@ function checkFolder(keyType){
 <form name="workRegForm">
 <input type="hidden" name="db_svr_id" id="db_svr_id" value="${db_svr_id}"/>
 <input type="hidden" name="wrk_id" id="wrk_id" value="${wrk_id}"/>
+<input type="hidden" name="bck_wrk_id" id="bck_wrk_id" value="${bck_wrk_id}"/>
 <input type="hidden" name="check_path1" id="check_path1" value="Y"/>
 <input type="hidden" name="check_path2" id="check_path2" value="Y"/>
 <input type="hidden" name="check_path3" id="check_path3" value="Y"/>

@@ -59,7 +59,11 @@ function fn_rman_init(){
 		scrollX: true,
 	    columns : [
 		         	{ data: "rownum", className: "dt-center", defaultContent: ""}, 
-		         	{ data: "wrk_nm", className: "dt-center", defaultContent: ""}, 
+		         	{data : "wrk_nm", className : "dt-center", defaultContent : ""
+		    			,"render": function (data, type, full) {				
+		    				  return '<span onClick=javascript:fn_workLayer("'+full.wrk_nm+'"); style=cursor:pointer>' + full.wrk_nm + '</span>';
+		    			}
+		    		},
 		         	{ data: "wrk_exp", className: "dt-center", defaultContent: ""}, 		         	
  		         	{ data: "bck_opt_cd_nm", className: "dt-center", defaultContent: ""}, 
  		         	{ data: "file_sz", className: "dt-center", defaultContent: ""}, 
@@ -107,7 +111,11 @@ function fn_dump_init(){
 		scrollX: true,
 	    columns : [
 		         	{ data: "rownum", className: "dt-center", defaultContent: ""}, 
-		         	{ data: "wrk_nm", className: "dt-center", defaultContent: ""}, 
+		         	{data : "wrk_nm", className : "dt-center", defaultContent : ""
+		    			,"render": function (data, type, full) {				
+		    				  return '<span onClick=javascript:fn_workLayer("'+full.wrk_nm+'"); style=cursor:pointer>' + full.wrk_nm + '</span>';
+		    			}
+		    		}, 
 		         	{ data: "wrk_exp", className: "dt-center", defaultContent: ""}, 
  		         	{ data: "db_nm", className: "dt-center", defaultContent: ""}, 
  		         	{ data: "file_sz", className: "dt-center", defaultContent: ""},
@@ -276,6 +284,10 @@ function selectTab(intab){
 }
 
 </script>
+
+<%@include file="../cmmn/workRmanInfo.jsp"%>
+<%@include file="../cmmn/workDumpInfo.jsp"%>
+
 <!-- contents -->
 <div id="contents">
 	<div class="contents_wrap">
