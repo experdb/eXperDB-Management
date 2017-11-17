@@ -40,23 +40,23 @@ public class AgentSetting {
 		
 		Scanner scan = new Scanner(System.in);
 		
-		System.out.println("database IP :");
+		System.out.println("Repository database IP :");
 		
 		strDatabaseIp = scan.nextLine();
 		
-		System.out.println("database Port :");
+		System.out.println("Repository database Port :");
 		
 		strDatabasePort = scan.nextLine();
 		
-		System.out.println("database Name :");
+		System.out.println("Repository database Name :");
 		
 		strDatabaseName = scan.nextLine();
 		
-		System.out.println("database.username :");
+		System.out.println("Repository database.username :");
 		
 		strDatabaseUsername = scan.nextLine();
 		
-		System.out.println("database.password :");
+		System.out.println("Repository database.password :");
 		
 		strDatabasePassword = scan.nextLine();
 		
