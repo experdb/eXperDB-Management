@@ -222,7 +222,7 @@
 		)
 		)A
 		WHERE PRMS_SET='1'
-				
+		ORDER BY PRMS_SEQ
 	</select>
 	
 </mapper>

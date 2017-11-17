@@ -198,7 +198,7 @@
  					if(aut.length != 0 && aut[index].bck_cng_aut_yn != "N" && aut[index].bck_hist_aut_yn != "N" && aut[index].acs_cntr_aut_yn != "N" && aut[index].adt_cng_aut_yn != "N" && aut[index].adt_hist_aut_yn != "N" ){			
 					html1+='<ul class="depth_1 lnbMenu">';
 					//html1+='	<li><div class="border" style="overflow: hidden;white-space: nowrap;text-overflow: ellipsis;" ><a href="#n" onClick=javascript:fn_GoLink("#n");><img src="../images/ico_lnb_3.png" id="treeImg"><div class="tooltip">'+item.db_svr_nm+'<span class="tooltiptext">'+item.db_svr_nm+'</span></div></a></div>';
-					html1+='	<li><div class="border"  ><a href="/dbinfo.do?db_svr_id='+item.db_svr_id+'" onClick=javascript:fn_GoLink("#n");><img src="../images/ico_lnb_3.png" id="treeImg"><div class="tooltip">'+item.db_svr_nm+'<span class="tooltiptext">'+item.db_svr_nm+'</span></div></a></div>';
+					html1+='	<li><div class="border"  ><a href="/property.do?db_svr_id='+item.db_svr_id+'" onClick=javascript:fn_GoLink("#n");><img src="../images/ico_lnb_3.png" id="treeImg"><div class="tooltip">'+item.db_svr_nm+'<span class="tooltiptext">'+item.db_svr_nm+'</span></div></a></div>';
 					html1+='		<ul class="depth_2">';
 					html1+='			<li class="ico2_1"><a href="#n"><img src="../images/ico_lnb_6.png" id="treeImg">백업관리</a>';
 					html1+='				<ul class="depth_3">';

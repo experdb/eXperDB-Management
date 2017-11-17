@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper   PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="treeSql">
+
+	<select id="selectConnectorRegister" resultType="connectorVO">
+		/**
+		* Query ID : selectConnectorRegister
+		* Description : Connector 조회
+		* Author : 김주영
+		**/
+		SELECT
+			(ROW_NUMBER() OVER()) AS ROWNUM
+			, (ROW_NUMBER() OVER()) AS IDX
+			, A.CNR_ID
+			, A.CNR_NM
+			, A.CNR_IPADR
+			, A.CNR_PORTNO
+			, A.CNR_CNN_TP_CD
+			, A.FRST_REGR_ID
+			, A.FRST_REG_DTM
+			, A.LST_MDFR_ID
+			, A.LST_MDF_DTM
+			FROM(
+			SELECT
+			CNR_ID
+			, CNR_NM
+			, CNR_IPADR
+			, CNR_PORTNO
+			, CNR_CNN_TP_CD
+			, FRST_REGR_ID
+			, to_char(T_CNR_I.FRST_REG_DTM,'YYYY-MM-DD HH:mm:ss')FRST_REG_DTM
+			, LST_MDFR_ID
+			, to_char(T_CNR_I.LST_MDF_DTM,'YYYY-MM-DD HH:mm:ss')LST_MDF_DTM
+			FROM T_CNR_I
+			WHERE 1=1
+			AND FRST_REGR_ID = #{usr_id}
+			ORDER BY LST_MDF_DTM DESC
+		)A
+	</select>
+
+</mapper>

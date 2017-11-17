@@ -21,7 +21,9 @@ public class DbServerVO {
 	private String useyn;
 	private int socket_port;
 	private String usr_id;
-	
+	private String svr_host_nm;
+	private String db_cndt;
+
 	public int getRownum() {
 		return rownum;
 	}
@@ -141,6 +143,18 @@ public class DbServerVO {
 	}
 	public void setUsr_id(String usr_id) {
 		this.usr_id = usr_id;
+	}
+	public String getSvr_host_nm() {
+		return svr_host_nm;
+	}
+	public void setSvr_host_nm(String svr_host_nm) {
+		this.svr_host_nm = svr_host_nm;
+	}
+	public String getDb_cndt() {
+		return db_cndt;
+	}
+	public void setDb_cndt(String db_cndt) {
+		this.db_cndt = db_cndt;
 	}
 
 

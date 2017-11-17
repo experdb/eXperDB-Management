@@ -188,156 +188,107 @@ public class AuditController {
 	
 	@RequestMapping(value = "/saveAudit.do")
 	public @ResponseBody boolean auditSave(@ModelAttribute("historyVO") HistoryVO historyVO,HttpServletRequest request) throws Exception {
-		
-		// 화면접근이력 이력 남기기
-		CmmnUtils.saveHistory(request, historyVO);
-		historyVO.setExe_dtl_cd("DX-T0031_01");
-		historyVO.setMnu_id(30);
-		accessHistoryService.insertHistory(historyVO);
-		
-		int db_svr_id = Integer.parseInt(request.getParameter("db_svr_id"));
-		
-		DbServerVO schDbServerVO = new DbServerVO();
-		schDbServerVO.setDb_svr_id(db_svr_id);
-		
-		DbServerVO dbServerVO = (DbServerVO)  cmmnServerInfoService.selectServerInfo(schDbServerVO);
-		String strIpAdr = dbServerVO.getIpadr();
-		
+		boolean blnReturn = true;
 		AgentInfoVO vo = new AgentInfoVO();
-		vo.setIPADR(strIpAdr);
-		
-		AgentInfoVO agentInfo =  (AgentInfoVO) cmmnServerInfoService.selectAgentInfo(vo);
-		
-		String strLogActive = request.getParameter("chkLogActive") == null?"":request.getParameter("chkLogActive");
-		
-		String strLogLevel = request.getParameter("log_level") == null?"":request.getParameter("log_level");
-		
-		String strRead = request.getParameter("chkRead") == null?"":request.getParameter("chkRead");
-		if(strRead.equals("on")) strRead = "read";
-		
-		String strWrite = request.getParameter("chkWrite") == null?"":request.getParameter("chkWrite");
-		if(strWrite.equals("on")) strWrite = "write";
-		
-		String strFunc = request.getParameter("chkFunction") == null?"":request.getParameter("chkFunction");
-		if(strFunc.equals("on")) strFunc = "function";
-		
-		String strRole =  request.getParameter("chkRole") == null?"":request.getParameter("chkRole");
-		if(strRole.equals("on")) strRole = "role";
-		
-		String strDdl =  request.getParameter("chkDdl") == null?"":request.getParameter("chkDdl");
-		if(strDdl.equals("on")) strDdl = "ddl";
-		
-		String strMisc =  request.getParameter("chkMisc") == null?"":request.getParameter("chkMisc");
-		if(strMisc.equals("on")) strMisc = "misc";
-		
-		String strAllLog = (strRead == ""?"":strRead + ",") 
-							+ (strWrite == ""?"":strWrite + ",")
-							+ (strFunc == ""?"":strFunc + ",")
-							+ (strRole == ""?"":strRole + ",")
-							+ (strDdl == ""?"":strDdl + ",")
-							+ (strMisc == ""?"":strMisc + ",");
-		
-		strAllLog = replaceLast(strAllLog, ",", "");
-		
-		String strCatalog =  request.getParameter("chkCatalog") == null?"off":request.getParameter("chkCatalog");
-		String strParameter =  request.getParameter("chkParameter") == null?"off":request.getParameter("chkParameter");
-		String strRelation =  request.getParameter("chkRelation") == null?"off":request.getParameter("chkRelation");
-		String strStatement = request.getParameter("chkStatement") == null?"off":request.getParameter("chkStatement");
-		
-		
-		String strRoles = "";
-		
-		String[] arrRoles = request.getParameterValues("chkRoles");
-		
-		if(arrRoles!= null && arrRoles.length > 0) {
-			for(int i=0; i<arrRoles.length; i++) {
-				strRoles += arrRoles[i] + ",";
+		JSONObject serverObj = new JSONObject();
+		try{
+			// 화면접근이력 이력 남기기
+			CmmnUtils.saveHistory(request, historyVO);
+			historyVO.setExe_dtl_cd("DX-T0031_01");
+			historyVO.setMnu_id(30);
+			accessHistoryService.insertHistory(historyVO);
+					
+			String strLogActive = request.getParameter("chkLogActive") == null?"":request.getParameter("chkLogActive");
+			String strLogLevel = request.getParameter("log_level") == null?"":request.getParameter("log_level");
+			String strRead = request.getParameter("chkRead") == null?"":request.getParameter("chkRead");
+			if(strRead.equals("on")) strRead = "read";
+			
+			String strWrite = request.getParameter("chkWrite") == null?"":request.getParameter("chkWrite");
+			if(strWrite.equals("on")) strWrite = "write";
+			
+			String strFunc = request.getParameter("chkFunction") == null?"":request.getParameter("chkFunction");
+			if(strFunc.equals("on")) strFunc = "function";
+			
+			String strRole =  request.getParameter("chkRole") == null?"":request.getParameter("chkRole");
+			if(strRole.equals("on")) strRole = "role";
+			
+			String strDdl =  request.getParameter("chkDdl") == null?"":request.getParameter("chkDdl");
+			if(strDdl.equals("on")) strDdl = "ddl";
+			
+			String strMisc =  request.getParameter("chkMisc") == null?"":request.getParameter("chkMisc");
+			if(strMisc.equals("on")) strMisc = "misc";
+			
+			String strAllLog = (strRead == ""?"":strRead + ",") 
+								+ (strWrite == ""?"":strWrite + ",")
+								+ (strFunc == ""?"":strFunc + ",")
+								+ (strRole == ""?"":strRole + ",")
+								+ (strDdl == ""?"":strDdl + ",")
+								+ (strMisc == ""?"":strMisc + ",");
+			
+			strAllLog = replaceLast(strAllLog, ",", "");
+			
+			String strCatalog =  request.getParameter("chkCatalog") == null?"off":request.getParameter("chkCatalog");
+			String strParameter =  request.getParameter("chkParameter") == null?"off":request.getParameter("chkParameter");
+			String strRelation =  request.getParameter("chkRelation") == null?"off":request.getParameter("chkRelation");
+			String strStatement = request.getParameter("chkStatement") == null?"off":request.getParameter("chkStatement");
+			
+			String strRoles = "";
+			
+			String[] arrRoles = request.getParameterValues("chkRoles");
+			
+			if(arrRoles!= null && arrRoles.length > 0) {
+				for(int i=0; i<arrRoles.length; i++) {
+					strRoles += arrRoles[i] + ",";
+				}
+				
+				strRoles = replaceLast(strRoles, ",", "");
 			}
 			
-			strRoles = replaceLast(strRoles, ",", "");
-		}
+			AES256 dec = new AES256(AES256_KEY.ENC_KEY);
+			int db_svr_id = Integer.parseInt(request.getParameter("db_svr_id"));
 		
-		String IP = dbServerVO.getIpadr();
-		int PORT = agentInfo.getSOCKET_PORT();
-		
-		JSONObject serverObj = new JSONObject();
-		
-		AES256 dec = new AES256(AES256_KEY.ENC_KEY);
-		//System.out.println("KEY : " + dbServerVO.getSvr_spr_scm_pwd());
-		String strPwd = dec.aesDecode(dbServerVO.getSvr_spr_scm_pwd());
-		
-		serverObj.put(ClientProtocolID.SERVER_NAME, dbServerVO.getDb_svr_nm());
-		serverObj.put(ClientProtocolID.SERVER_IP, dbServerVO.getIpadr());
-		serverObj.put(ClientProtocolID.SERVER_PORT, dbServerVO.getPortno());
-		serverObj.put(ClientProtocolID.DATABASE_NAME, dbServerVO.getDft_db_nm());
-		serverObj.put(ClientProtocolID.USER_ID, dbServerVO.getSvr_spr_usr_id());
-		serverObj.put(ClientProtocolID.USER_PWD, strPwd);
-		
-		JSONObject objSettingInfo = new JSONObject();
-		
-		//로그종류 
-		objSettingInfo.put(ClientProtocolID.AUDIT_USE_YN, (strLogActive.equals("on")?"Y" : "N"));
-		objSettingInfo.put(ClientProtocolID.AUDIT_LOG, strAllLog);
-		objSettingInfo.put(ClientProtocolID.AUDIT_LEVEL, strLogLevel);
-		objSettingInfo.put(ClientProtocolID.AUDIT_CATALOG, strCatalog);
-		objSettingInfo.put(ClientProtocolID.AUDIT_PARAMETER, strParameter);
-		objSettingInfo.put(ClientProtocolID.AUDIT_RELATION, strRelation);
-		objSettingInfo.put(ClientProtocolID.AUDIT_STATEMENT_ONCE, strStatement);
-		objSettingInfo.put(ClientProtocolID.AUDIT_ROLE, strRoles);
-
-		JSONObject objList;
-
-		//IP = "127.0.0.1";
-		
-		ClientAdapter CA = new ClientAdapter(IP, PORT);
-		CA.open(); 
-		
-		objList = CA.dxT007(ClientTranCodeType.DxT007, ClientProtocolID.COMMAND_CODE_C, serverObj, objSettingInfo);
-		CA.close();
-		
-		boolean blnReturn = true;
-		
-		String strResultCode = (String)objList.get(ClientProtocolID.RESULT_CODE);
-		if(strResultCode.equals("1")) {
-			blnReturn = false;
-		}
-		
-		/*slave*/
-		boolean blnReturnSlave= true;
-		schDbServerVO = new DbServerVO();
-		schDbServerVO.setDb_svr_id(db_svr_id);
-		List<DbServerVO> slaveInfo= cmmnServerInfoService.selectServerInfoSlave(schDbServerVO);
-		if(slaveInfo.size()!=0){
-			for(int s=0; s<slaveInfo.size(); s++){
-				IP = slaveInfo.get(s).getIpadr();
-				vo = new AgentInfoVO();
+			List<DbServerVO> dbServerVO = cmmnServerInfoService.selectAllIpadrList(db_svr_id);
+			for(int m=0; m<dbServerVO.size(); m++){
+				String IP = dbServerVO.get(m).getIpadr();
 				vo.setIPADR(IP);
-				agentInfo =  (AgentInfoVO) cmmnServerInfoService.selectAgentInfo(vo);
-				PORT = agentInfo.getSOCKET_PORT();
-				serverObj.put(ClientProtocolID.SERVER_NAME, slaveInfo.get(s).getDb_svr_nm());
-				serverObj.put(ClientProtocolID.SERVER_IP, slaveInfo.get(s).getIpadr());
-				serverObj.put(ClientProtocolID.SERVER_PORT, slaveInfo.get(s).getPortno());
-				serverObj.put(ClientProtocolID.DATABASE_NAME, slaveInfo.get(s).getDft_db_nm());
-				serverObj.put(ClientProtocolID.USER_ID, slaveInfo.get(s).getSvr_spr_usr_id());
-				serverObj.put(ClientProtocolID.USER_PWD, dec.aesDecode(slaveInfo.get(s).getSvr_spr_scm_pwd()));
+				AgentInfoVO agentInfo = (AgentInfoVO) cmmnServerInfoService.selectAgentInfo(vo);
+				int PORT = agentInfo.getSOCKET_PORT();
+				serverObj.put(ClientProtocolID.SERVER_NAME, dbServerVO.get(m).getDb_svr_nm());
+				serverObj.put(ClientProtocolID.SERVER_IP, dbServerVO.get(m).getIpadr());
+				serverObj.put(ClientProtocolID.SERVER_PORT, dbServerVO.get(m).getPortno());
+				serverObj.put(ClientProtocolID.DATABASE_NAME, dbServerVO.get(m).getDft_db_nm());
+				serverObj.put(ClientProtocolID.USER_ID, dbServerVO.get(m).getSvr_spr_usr_id());
+				serverObj.put(ClientProtocolID.USER_PWD, dec.aesDecode(dbServerVO.get(m).getSvr_spr_scm_pwd()));
 				
-				CA = new ClientAdapter(IP, PORT);
+				JSONObject objSettingInfo = new JSONObject();
+				
+				//로그종류 
+				objSettingInfo.put(ClientProtocolID.AUDIT_USE_YN, (strLogActive.equals("on")?"Y" : "N"));
+				objSettingInfo.put(ClientProtocolID.AUDIT_LOG, strAllLog);
+				objSettingInfo.put(ClientProtocolID.AUDIT_LEVEL, strLogLevel);
+				objSettingInfo.put(ClientProtocolID.AUDIT_CATALOG, strCatalog);
+				objSettingInfo.put(ClientProtocolID.AUDIT_PARAMETER, strParameter);
+				objSettingInfo.put(ClientProtocolID.AUDIT_RELATION, strRelation);
+				objSettingInfo.put(ClientProtocolID.AUDIT_STATEMENT_ONCE, strStatement);
+				objSettingInfo.put(ClientProtocolID.AUDIT_ROLE, strRoles);
+	
+				JSONObject objList;
+	
+				ClientAdapter CA = new ClientAdapter(IP, PORT);
 				CA.open(); 
-				
 				objList = CA.dxT007(ClientTranCodeType.DxT007, ClientProtocolID.COMMAND_CODE_C, serverObj, objSettingInfo);
-				CA.close();				
-				strResultCode = (String)objList.get(ClientProtocolID.RESULT_CODE);
+				CA.close();
+				
+				String strResultCode = (String)objList.get(ClientProtocolID.RESULT_CODE);
 				if(strResultCode.equals("1")) {
-					blnReturnSlave = false;
+					blnReturn = false;
 				}
 			}
-			
-			blnReturn=blnReturnSlave;
+		} catch (Exception e) {
+			e.printStackTrace();
 		}
-		
 		return blnReturn;
 	}
-	
 	
 	@RequestMapping(value = "/audit/auditLogList.do")
 	public ModelAndView auditLogList(@ModelAttribute("historyVO") HistoryVO historyVO,@ModelAttribute("auditVO") AuditVO auditVO, ModelMap model, HttpServletRequest request) throws Exception{

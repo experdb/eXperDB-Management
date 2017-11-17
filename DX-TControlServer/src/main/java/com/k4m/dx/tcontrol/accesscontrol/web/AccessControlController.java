@@ -34,8 +34,6 @@ import com.k4m.dx.tcontrol.cmmn.client.ClientProtocolID;
 import com.k4m.dx.tcontrol.common.service.AgentInfoVO;
 import com.k4m.dx.tcontrol.common.service.CmmnServerInfoService;
 import com.k4m.dx.tcontrol.common.service.HistoryVO;
-import com.k4m.dx.tcontrol.functions.transfer.service.ConnectorVO;
-import com.k4m.dx.tcontrol.functions.transfer.service.TransferService;
 
 /**
  * 접근제어관리 컨트롤러 클래스를 정의한다.
@@ -59,9 +57,6 @@ public class AccessControlController {
 	private AccessHistoryService accessHistoryService;
 
 	@Autowired
-	private TransferService transferService;
-
-	@Autowired
 	private AccessControlService accessControlService;
 
 	@Autowired
@@ -72,27 +67,6 @@ public class AccessControlController {
 
 	private List<Map<String, Object>> dbSvrAut;
 
-	/**
-	 * 트리 Connector 리스트를 조회한다.
-	 * 
-	 * @return resultSet
-	 * @throws Exception
-	 */
-	@RequestMapping(value = "/selectTreeConnectorRegister.do")
-	public @ResponseBody List<ConnectorVO> selectTreeConnectorRegister(HttpServletRequest request) {
-		List<ConnectorVO> resultSet = null;
-		Map<String, Object> param = new HashMap<String, Object>();
-		try {
-			HttpSession session = request.getSession();
-			String usr_id = (String) session.getAttribute("usr_id");
-			param.put("usr_id", usr_id);
-
-			resultSet = transferService.selectConnectorRegister(param);
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-		return resultSet;
-	}
 
 	/**
 	 * 서버접근제어 화면을 보여준다.
@@ -301,13 +275,14 @@ public class AccessControlController {
 	public @ResponseBody boolean applyAccessControl(
 			@ModelAttribute("accessControlHistoryVO") AccessControlHistoryVO accessControlHistoryVO,
 			HttpServletRequest request, @ModelAttribute("accessControlVO") AccessControlVO accessControlVO,@ModelAttribute("historyVO") HistoryVO historyVO) {
-
-		DbServerVO schDbServerVO = new DbServerVO();
 		JSONObject serverObj = new JSONObject();
 		ClientInfoCmmn cic = new ClientInfoCmmn();
+		AgentInfoVO vo = new AgentInfoVO();
+		JSONParser jParser = new JSONParser();
 		try {
 			AES256 dec = new AES256(AES256_KEY.ENC_KEY);
 			int db_svr_id = Integer.parseInt(request.getParameter("db_svr_id"));
+			JSONArray jArr = (JSONArray) jParser.parse(request.getParameter("rowList").toString().replace("&quot;", "\""));
 			
 			// 화면접근이력 이력 남기기
 			CmmnUtils.saveHistory(request, historyVO);
@@ -315,142 +290,88 @@ public class AccessControlController {
 			historyVO.setMnu_id(28);
 			accessHistoryService.insertHistory(historyVO);
 			
-			schDbServerVO.setDb_svr_id(db_svr_id);
-			DbServerVO dbServerVO = (DbServerVO) cmmnServerInfoService.selectServerInfo(schDbServerVO);
-			String IP = dbServerVO.getIpadr();
-			AgentInfoVO vo = new AgentInfoVO();
-			vo.setIPADR(IP);
-			AgentInfoVO agentInfo = (AgentInfoVO) cmmnServerInfoService.selectAgentInfo(vo);
-			int PORT = agentInfo.getSOCKET_PORT();
+			List<DbServerVO> dbServerVO = cmmnServerInfoService.selectAllIpadrList(db_svr_id);
+			for(int m=0; m<dbServerVO.size(); m++){
+				String IP = dbServerVO.get(m).getIpadr();
+				vo.setIPADR(IP);
+				AgentInfoVO agentInfo = (AgentInfoVO) cmmnServerInfoService.selectAgentInfo(vo);
+				int PORT = agentInfo.getSOCKET_PORT();
 
-			serverObj.put(ClientProtocolID.SERVER_NAME, dbServerVO.getDb_svr_nm());
-			serverObj.put(ClientProtocolID.SERVER_IP, dbServerVO.getIpadr());
-			serverObj.put(ClientProtocolID.SERVER_PORT, dbServerVO.getPortno());
-			serverObj.put(ClientProtocolID.DATABASE_NAME, dbServerVO.getDft_db_nm());
-			serverObj.put(ClientProtocolID.USER_ID, dbServerVO.getSvr_spr_usr_id());
-			serverObj.put(ClientProtocolID.USER_PWD, dec.aesDecode(dbServerVO.getSvr_spr_scm_pwd()));
+				serverObj.put(ClientProtocolID.SERVER_NAME, dbServerVO.get(m).getDb_svr_nm());
+				serverObj.put(ClientProtocolID.SERVER_IP, dbServerVO.get(m).getIpadr());
+				serverObj.put(ClientProtocolID.SERVER_PORT, dbServerVO.get(m).getPortno());
+				serverObj.put(ClientProtocolID.DATABASE_NAME, dbServerVO.get(m).getDft_db_nm());
+				serverObj.put(ClientProtocolID.USER_ID, dbServerVO.get(m).getSvr_spr_usr_id());
+				serverObj.put(ClientProtocolID.USER_PWD, dec.aesDecode(dbServerVO.get(m).getSvr_spr_scm_pwd()));
 
-			/*pg_hba.conf 전체 삭제*/
-			ArrayList arrSeq = new ArrayList();
-			cic.dbAccess_delete(serverObj, arrSeq, IP, PORT);
-			
-			JSONParser jParser = new JSONParser();
-			JSONArray jArr = (JSONArray) jParser.parse(request.getParameter("rowList").toString().replace("&quot;", "\""));
-			
-			for (int i = 0; i < jArr.size(); i++) {
-				JSONObject jObj = (JSONObject) jArr.get(i);
-				String User = (String) jObj.get("User");
-				String Seq = String.valueOf(jObj.get("Seq"));
-				String Method = (String) jObj.get("Method");
-				String Type = (String) jObj.get("Type");
-				String Set = (String) jObj.get("Set");
-				String Ipadr = (String) jObj.get("Ipadr");
-				String Ipmask = (String) jObj.get("Ipmask");
-				String Option = (String) jObj.get("Option");
-				String Database = (String) jObj.get("Database");
-					
-				JSONObject acObj = new JSONObject();
-				acObj.put(ClientProtocolID.AC_SET, "1");
-				acObj.put(ClientProtocolID.AC_TYPE, Type);
-				acObj.put(ClientProtocolID.AC_DATABASE, Database);
-				acObj.put(ClientProtocolID.AC_USER, User);
-				acObj.put(ClientProtocolID.AC_IP, Ipadr);
-				acObj.put(ClientProtocolID.AC_IPMASK, Ipmask == null ? "" : Ipmask);
-				acObj.put(ClientProtocolID.AC_METHOD, Method);
-				acObj.put(ClientProtocolID.AC_OPTION, Option);
-
-				cic.dbAccess_create(serverObj, acObj, IP, PORT);
-			}
-
-			/* 서버접근제어 전체 삭제 */
-			accessControlService.deleteDbAccessControl(db_svr_id);
-
-			HttpSession session = request.getSession();
-			String usr_id = (String) session.getAttribute("usr_id");
-			accessControlVO.setFrst_regr_id(usr_id);
-			accessControlVO.setLst_mdfr_id(usr_id);
-
-			int current_his_grp = accessControlService.selectCurrenthisrp();
-			accessControlHistoryVO.setHis_grp_id(current_his_grp);
-
-			JSONObject result = cic.dbAccess_selectAll(serverObj, IP, PORT);
-			for (int i = 0; i < result.size(); i++) {
-				JSONArray data = (JSONArray) result.get("data");
-				for (int j = 0; j < data.size(); j++) {
-					JSONObject jsonObj = (JSONObject) data.get(j);
-					accessControlVO.setPrms_seq(Integer.parseInt((String) jsonObj.get("Seq")));
-					accessControlVO.setPrms_set((String) jsonObj.get("Set"));
-					accessControlVO.setPrms_ipadr((String) jsonObj.get("Ipadr"));
-					accessControlVO.setPrms_ipmaskadr((String) jsonObj.get("Ipmask"));
-					accessControlVO.setPrms_usr_id((String) jsonObj.get("User"));
-					accessControlVO.setCtf_mth_nm((String) jsonObj.get("Method"));
-					accessControlVO.setCtf_tp_nm((String) jsonObj.get("Type"));
-					accessControlVO.setOpt_nm((String) jsonObj.get("Option"));
-					accessControlVO.setDtb((String) jsonObj.get("Database"));
-					accessControlService.insertAccessControl(accessControlVO);
-
-					accessControlHistoryVO.setDb_svr_id(db_svr_id);
-					accessControlHistoryVO.setDtb((String) jsonObj.get("Database"));
-					accessControlHistoryVO.setPrms_ipadr((String) jsonObj.get("Ipadr"));
-					accessControlHistoryVO.setPrms_ipmaskadr((String) jsonObj.get("Ipmask"));
-					accessControlHistoryVO.setPrms_usr_id((String) jsonObj.get("User"));
-					accessControlHistoryVO.setPrms_seq(Integer.parseInt((String) jsonObj.get("Seq")));
-					accessControlHistoryVO.setPrms_set((String) jsonObj.get("Set"));
-					accessControlHistoryVO.setCtf_mth_nm((String) jsonObj.get("Method"));
-					accessControlHistoryVO.setCtf_tp_nm((String) jsonObj.get("Type"));
-					accessControlHistoryVO.setOpt_nm((String) jsonObj.get("Option"));
-					accessControlService.insertAccessControlHistory(accessControlHistoryVO);
-				}
-			}
-			
-			/*slave*/
-			schDbServerVO.setDb_svr_id(db_svr_id);
-			List<DbServerVO> slaveInfo= cmmnServerInfoService.selectServerInfoSlave(schDbServerVO);
-			if(slaveInfo.size()!=0){
-				for(int s=0; s<slaveInfo.size(); s++){
-					IP = slaveInfo.get(s).getIpadr();
-					vo = new AgentInfoVO();
-					vo.setIPADR(IP);
-					agentInfo = (AgentInfoVO) cmmnServerInfoService.selectAgentInfo(vo);
-					PORT = agentInfo.getSOCKET_PORT();	
-					
-					serverObj.put(ClientProtocolID.SERVER_NAME, slaveInfo.get(s).getDb_svr_nm());
-					serverObj.put(ClientProtocolID.SERVER_IP, slaveInfo.get(s).getIpadr());
-					serverObj.put(ClientProtocolID.SERVER_PORT, slaveInfo.get(s).getPortno());
-					serverObj.put(ClientProtocolID.DATABASE_NAME, slaveInfo.get(s).getDft_db_nm());
-					serverObj.put(ClientProtocolID.USER_ID, slaveInfo.get(s).getSvr_spr_usr_id());
-					serverObj.put(ClientProtocolID.USER_PWD, dec.aesDecode(slaveInfo.get(s).getSvr_spr_scm_pwd()));
-					
-					/*pg_hba.conf 전체 삭제*/
-					cic.dbAccess_delete(serverObj, arrSeq, IP, PORT);
-					
-					for (int i = 0; i < jArr.size(); i++) {
-						JSONObject jObj = (JSONObject) jArr.get(i);
-						String User = (String) jObj.get("User");
-						String Seq = String.valueOf(jObj.get("Seq"));
-						String Method = (String) jObj.get("Method");
-						String Type = (String) jObj.get("Type");
-						String Set = (String) jObj.get("Set");
-						String Ipadr = (String) jObj.get("Ipadr");
-						String Ipmask = (String) jObj.get("Ipmask");
-						String Option = (String) jObj.get("Option");
-						String Database = (String) jObj.get("Database");
+				/*pg_hba.conf 전체 삭제*/
+				ArrayList arrSeq = new ArrayList();
+				cic.dbAccess_delete(serverObj, arrSeq, IP, PORT);
 							
-						JSONObject acObj = new JSONObject();
-						acObj.put(ClientProtocolID.AC_SET, "1");
-						acObj.put(ClientProtocolID.AC_TYPE, Type);
-						acObj.put(ClientProtocolID.AC_DATABASE, Database);
-						acObj.put(ClientProtocolID.AC_USER, User);
-						acObj.put(ClientProtocolID.AC_IP, Ipadr);
-						acObj.put(ClientProtocolID.AC_IPMASK, Ipmask == null ? "" : Ipmask);
-						acObj.put(ClientProtocolID.AC_METHOD, Method);
-						acObj.put(ClientProtocolID.AC_OPTION, Option);
+				for (int i = 0; i < jArr.size(); i++) {
+					JSONObject jObj = (JSONObject) jArr.get(i);
+					String User = (String) jObj.get("User");
+					String Seq = String.valueOf(jObj.get("Seq"));
+					String Method = (String) jObj.get("Method");
+					String Type = (String) jObj.get("Type");
+					String Set = (String) jObj.get("Set");
+					String Ipadr = (String) jObj.get("Ipadr");
+					String Ipmask = (String) jObj.get("Ipmask");
+					String Option = (String) jObj.get("Option");
+					String Database = (String) jObj.get("Database");
+						
+					JSONObject acObj = new JSONObject();
+					acObj.put(ClientProtocolID.AC_SET, "1");
+					acObj.put(ClientProtocolID.AC_TYPE, Type);
+					acObj.put(ClientProtocolID.AC_DATABASE, Database);
+					acObj.put(ClientProtocolID.AC_USER, User);
+					acObj.put(ClientProtocolID.AC_IP, Ipadr);
+					acObj.put(ClientProtocolID.AC_IPMASK, Ipmask == null ? "" : Ipmask);
+					acObj.put(ClientProtocolID.AC_METHOD, Method);
+					acObj.put(ClientProtocolID.AC_OPTION, Option);
 
-						cic.dbAccess_create(serverObj, acObj, IP, PORT);
+					cic.dbAccess_create(serverObj, acObj, IP, PORT);
+				}
+				
+				if(dbServerVO.get(m).getMaster_gbn().equals("M")){
+					accessControlService.deleteDbAccessControl(db_svr_id);
+					HttpSession session = request.getSession();
+					String usr_id = (String) session.getAttribute("usr_id");
+					accessControlVO.setFrst_regr_id(usr_id);
+					accessControlVO.setLst_mdfr_id(usr_id);
+					int current_his_grp = accessControlService.selectCurrenthisrp();
+					accessControlHistoryVO.setHis_grp_id(current_his_grp);
+					JSONObject result = cic.dbAccess_selectAll(serverObj, IP, PORT);
+					for (int i = 0; i < result.size(); i++) {
+						JSONArray data = (JSONArray) result.get("data");
+						for (int j = 0; j < data.size(); j++) {
+							JSONObject jsonObj = (JSONObject) data.get(j);
+							accessControlVO.setPrms_seq(Integer.parseInt((String) jsonObj.get("Seq")));
+							accessControlVO.setPrms_set((String) jsonObj.get("Set"));
+							accessControlVO.setPrms_ipadr((String) jsonObj.get("Ipadr"));
+							accessControlVO.setPrms_ipmaskadr((String) jsonObj.get("Ipmask"));
+							accessControlVO.setPrms_usr_id((String) jsonObj.get("User"));
+							accessControlVO.setCtf_mth_nm((String) jsonObj.get("Method"));
+							accessControlVO.setCtf_tp_nm((String) jsonObj.get("Type"));
+							accessControlVO.setOpt_nm((String) jsonObj.get("Option"));
+							accessControlVO.setDtb((String) jsonObj.get("Database"));
+							accessControlService.insertAccessControl(accessControlVO);
+
+							accessControlHistoryVO.setDb_svr_id(db_svr_id);
+							accessControlHistoryVO.setDtb((String) jsonObj.get("Database"));
+							accessControlHistoryVO.setPrms_ipadr((String) jsonObj.get("Ipadr"));
+							accessControlHistoryVO.setPrms_ipmaskadr((String) jsonObj.get("Ipmask"));
+							accessControlHistoryVO.setPrms_usr_id((String) jsonObj.get("User"));
+							accessControlHistoryVO.setPrms_seq(Integer.parseInt((String) jsonObj.get("Seq")));
+							accessControlHistoryVO.setPrms_set((String) jsonObj.get("Set"));
+							accessControlHistoryVO.setCtf_mth_nm((String) jsonObj.get("Method"));
+							accessControlHistoryVO.setCtf_tp_nm((String) jsonObj.get("Type"));
+							accessControlHistoryVO.setOpt_nm((String) jsonObj.get("Option"));
+							accessControlService.insertAccessControlHistory(accessControlHistoryVO);
+						}
 					}
 				}
-			}
-			
+			}		
 			return true;
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -535,7 +456,7 @@ public class AccessControlController {
 		ClientInfoCmmn cic = new ClientInfoCmmn();
 		JSONObject serverObj = new JSONObject();
 		JSONObject acObj = new JSONObject();
-		ArrayList arrSeq = new ArrayList();
+		AgentInfoVO vo = new AgentInfoVO();
 		try {
 			// 화면접근이력 이력 남기기
 			 CmmnUtils.saveHistory(request, historyVO);
@@ -546,155 +467,85 @@ public class AccessControlController {
 			AES256 dec = new AES256(AES256_KEY.ENC_KEY);
 			int db_svr_id = Integer.parseInt(request.getParameter("db_svr_id"));
 
-			DbServerVO schDbServerVO = new DbServerVO();
-			schDbServerVO.setDb_svr_id(db_svr_id);
-			DbServerVO dbServerVO = (DbServerVO) cmmnServerInfoService.selectServerInfo(schDbServerVO);
-			String strIpAdr = dbServerVO.getIpadr();
-			AgentInfoVO vo = new AgentInfoVO();
-			vo.setIPADR(strIpAdr);
-			AgentInfoVO agentInfo = (AgentInfoVO) cmmnServerInfoService.selectAgentInfo(vo);
-			if (agentInfo == null) {
-				return "agent";
-			}
-			String IP = dbServerVO.getIpadr();
-			int PORT = agentInfo.getSOCKET_PORT();
+			List<DbServerVO> dbServerVO = cmmnServerInfoService.selectAllIpadrList(db_svr_id);
+			for(int m=0; m<dbServerVO.size(); m++){
+				String IP = dbServerVO.get(m).getIpadr();
+				vo.setIPADR(IP);
+				AgentInfoVO agentInfo = (AgentInfoVO) cmmnServerInfoService.selectAgentInfo(vo);
+				int PORT = agentInfo.getSOCKET_PORT();
 
-			serverObj.put(ClientProtocolID.SERVER_NAME, dbServerVO.getDb_svr_nm());
-			serverObj.put(ClientProtocolID.SERVER_IP, dbServerVO.getIpadr());
-			serverObj.put(ClientProtocolID.SERVER_PORT, dbServerVO.getPortno());
-			serverObj.put(ClientProtocolID.DATABASE_NAME, dbServerVO.getDft_db_nm());
-			serverObj.put(ClientProtocolID.USER_ID, dbServerVO.getSvr_spr_usr_id());
-			serverObj.put(ClientProtocolID.USER_PWD, dec.aesDecode(dbServerVO.getSvr_spr_scm_pwd()));
+				serverObj.put(ClientProtocolID.SERVER_NAME, dbServerVO.get(m).getDb_svr_nm());
+				serverObj.put(ClientProtocolID.SERVER_IP, dbServerVO.get(m).getIpadr());
+				serverObj.put(ClientProtocolID.SERVER_PORT, dbServerVO.get(m).getPortno());
+				serverObj.put(ClientProtocolID.DATABASE_NAME, dbServerVO.get(m).getDft_db_nm());
+				serverObj.put(ClientProtocolID.USER_ID, dbServerVO.get(m).getSvr_spr_usr_id());
+				serverObj.put(ClientProtocolID.USER_PWD, dec.aesDecode(dbServerVO.get(m).getSvr_spr_scm_pwd()));
 
-			String strExtname = "pgaudit";
-			List<Object> resultExt = cic.extension_select(serverObj, IP, PORT, strExtname);
-			if (resultExt == null || resultExt.size() == 0) {
-				return "pgaudit";
-			}
+				String strExtname = "pgaudit";
+				List<Object> resultExt = cic.extension_select(serverObj, IP, PORT, strExtname);
+				if (resultExt == null || resultExt.size() == 0) {
+					return "pgaudit";
+				}
 				
-			JSONObject results = cic.dbAccess_selectAll(serverObj, IP, PORT);
-			for (int i = 0; i < results.size(); i++) {
-				JSONArray data = (JSONArray) results.get("data");
-				for (int j = 0; j < data.size(); j++) {
-					JSONObject jsonObj = (JSONObject) data.get(j);	
-					HashMap<String, String> hpSeq = new HashMap<String, String>();
-					hpSeq.put(ClientProtocolID.AC_SEQ, (String) jsonObj.get("Seq"));
-					arrSeq.add(hpSeq);
+				/*pg_hba.conf 전체 삭제*/
+				ArrayList arrSeq = new ArrayList();
+				cic.dbAccess_delete(serverObj, arrSeq, IP, PORT);
+				
+				List<AccessControlHistoryVO> resultSet = accessControlService.selectAccessControlHistory(accessControlHistoryVO);
+				for(int i=0; i<resultSet.size(); i++){
+					acObj.put(ClientProtocolID.AC_SET, "1");
+					acObj.put(ClientProtocolID.AC_TYPE, resultSet.get(i).getCtf_tp_nm());
+					acObj.put(ClientProtocolID.AC_DATABASE, resultSet.get(i).getDtb());
+					acObj.put(ClientProtocolID.AC_USER, resultSet.get(i).getPrms_usr_id());
+					acObj.put(ClientProtocolID.AC_IP, resultSet.get(i).getPrms_ipadr());
+					acObj.put(ClientProtocolID.AC_IPMASK, resultSet.get(i).getPrms_ipmaskadr() == null ? "" : resultSet.get(i).getPrms_ipmaskadr());
+					acObj.put(ClientProtocolID.AC_METHOD, resultSet.get(i).getCtf_mth_nm());
+					acObj.put(ClientProtocolID.AC_OPTION, resultSet.get(i).getOpt_nm());
+					cic.dbAccess_create(serverObj, acObj, IP, PORT);	
 				}
-			}			
-			
-			cic.dbAccess_delete(serverObj, arrSeq, IP, PORT);
-			
-			List<AccessControlHistoryVO> resultSet = accessControlService.selectAccessControlHistory(accessControlHistoryVO);
-			for(int i=0; i<resultSet.size(); i++){
-				acObj.put(ClientProtocolID.AC_SET, "1");
-				acObj.put(ClientProtocolID.AC_TYPE, resultSet.get(i).getCtf_tp_nm());
-				acObj.put(ClientProtocolID.AC_DATABASE, resultSet.get(i).getDtb());
-				acObj.put(ClientProtocolID.AC_USER, resultSet.get(i).getPrms_usr_id());
-				acObj.put(ClientProtocolID.AC_IP, resultSet.get(i).getPrms_ipadr());
-				acObj.put(ClientProtocolID.AC_IPMASK, resultSet.get(i).getPrms_ipmaskadr() == null ? "" : resultSet.get(i).getPrms_ipmaskadr());
-				acObj.put(ClientProtocolID.AC_METHOD, resultSet.get(i).getCtf_mth_nm());
-				acObj.put(ClientProtocolID.AC_OPTION, resultSet.get(i).getOpt_nm());
-				cic.dbAccess_create(serverObj, acObj, IP, PORT);	
-			}
-			
-			/* 서버접근제어 전체 삭제 */
-			accessControlService.deleteDbAccessControl(db_svr_id);
-			
-			String id = (String) request.getSession().getAttribute("usr_id");
-			accessControlVO.setFrst_regr_id(id);
-			accessControlVO.setLst_mdfr_id(id);
 
-			int current_his_grp = accessControlService.selectCurrenthisrp();
-			accessControlHistoryVO.setHis_grp_id(current_his_grp);
-
-			JSONObject result = cic.dbAccess_selectAll(serverObj, IP, PORT);
-
-			for (int i = 0; i < result.size(); i++) {
-				JSONArray data = (JSONArray) result.get("data");
-				for (int j = 0; j < data.size(); j++) {
-					JSONObject jsonObj = (JSONObject) data.get(j);
-					accessControlVO.setPrms_seq(Integer.parseInt((String) jsonObj.get("Seq")));
-					accessControlVO.setPrms_set((String) jsonObj.get("Set"));
-					accessControlVO.setPrms_ipadr((String) jsonObj.get("Ipadr"));
-					accessControlVO.setPrms_ipmaskadr((String) jsonObj.get("Ipmask"));
-					accessControlVO.setPrms_usr_id((String) jsonObj.get("User"));
-					accessControlVO.setCtf_mth_nm((String) jsonObj.get("Method"));
-					accessControlVO.setCtf_tp_nm((String) jsonObj.get("Type"));
-					accessControlVO.setOpt_nm((String) jsonObj.get("Option"));
-					accessControlVO.setDtb((String) jsonObj.get("Database"));
-					accessControlService.insertAccessControl(accessControlVO);
-
-					accessControlHistoryVO.setDb_svr_id(db_svr_id);
-					accessControlHistoryVO.setDtb((String) jsonObj.get("Database"));
-					accessControlHistoryVO.setPrms_ipadr((String) jsonObj.get("Ipadr"));
-					accessControlHistoryVO.setPrms_ipmaskadr((String) jsonObj.get("Ipmask"));
-					accessControlHistoryVO.setPrms_usr_id((String) jsonObj.get("User"));
-					accessControlHistoryVO.setPrms_seq(Integer.parseInt((String) jsonObj.get("Seq")));
-					accessControlHistoryVO.setPrms_set((String) jsonObj.get("Set"));
-					accessControlHistoryVO.setCtf_mth_nm((String) jsonObj.get("Method"));
-					accessControlHistoryVO.setCtf_tp_nm((String) jsonObj.get("Type"));
-					accessControlHistoryVO.setOpt_nm((String) jsonObj.get("Option"));
-					accessControlService.insertAccessControlHistory(accessControlHistoryVO);
-				}
-			}
-			
-			/*slave*/
-			schDbServerVO = new DbServerVO();
-			schDbServerVO.setDb_svr_id(db_svr_id);
-			List<DbServerVO> slaveInfo= cmmnServerInfoService.selectServerInfoSlave(schDbServerVO);
-			if(slaveInfo.size()!=0){
-				for(int s=0; s<slaveInfo.size(); s++){
-					IP = slaveInfo.get(s).getIpadr();
-					vo = new AgentInfoVO();
-					vo.setIPADR(IP);
-					agentInfo = (AgentInfoVO) cmmnServerInfoService.selectAgentInfo(vo);
-					if (agentInfo == null) {
-						return "agent";
-					}
-					PORT = agentInfo.getSOCKET_PORT();
-					serverObj.put(ClientProtocolID.SERVER_NAME, slaveInfo.get(s).getDb_svr_nm());
-					serverObj.put(ClientProtocolID.SERVER_IP, slaveInfo.get(s).getIpadr());
-					serverObj.put(ClientProtocolID.SERVER_PORT, slaveInfo.get(s).getPortno());
-					serverObj.put(ClientProtocolID.DATABASE_NAME, slaveInfo.get(s).getDft_db_nm());
-					serverObj.put(ClientProtocolID.USER_ID, slaveInfo.get(s).getSvr_spr_usr_id());
-					serverObj.put(ClientProtocolID.USER_PWD, dec.aesDecode(slaveInfo.get(s).getSvr_spr_scm_pwd()));
+				if(dbServerVO.get(m).getMaster_gbn().equals("M")){
+					accessControlService.deleteDbAccessControl(db_svr_id);
 					
-					strExtname = "pgaudit";
-					resultExt = cic.extension_select(serverObj, IP, PORT, strExtname);
-					if (resultExt == null || resultExt.size() == 0) {
-						return "pgaudit";
-					}
-						
-					results = cic.dbAccess_selectAll(serverObj, IP, PORT);
-					for (int i = 0; i < results.size(); i++) {
-						JSONArray data = (JSONArray) results.get("data");
+					String id = (String) request.getSession().getAttribute("usr_id");
+					accessControlVO.setFrst_regr_id(id);
+					accessControlVO.setLst_mdfr_id(id);
+	
+					int current_his_grp = accessControlService.selectCurrenthisrp();
+					accessControlHistoryVO.setHis_grp_id(current_his_grp);
+					JSONObject result = cic.dbAccess_selectAll(serverObj, IP, PORT);
+					for (int i = 0; i < result.size(); i++) {
+						JSONArray data = (JSONArray) result.get("data");
 						for (int j = 0; j < data.size(); j++) {
-							JSONObject jsonObj = (JSONObject) data.get(j);	
-							HashMap<String, String> hpSeq = new HashMap<String, String>();
-							hpSeq.put(ClientProtocolID.AC_SEQ, (String) jsonObj.get("Seq"));
-							arrSeq.add(hpSeq);
+							JSONObject jsonObj = (JSONObject) data.get(j);
+							accessControlVO.setPrms_seq(Integer.parseInt((String) jsonObj.get("Seq")));
+							accessControlVO.setPrms_set((String) jsonObj.get("Set"));
+							accessControlVO.setPrms_ipadr((String) jsonObj.get("Ipadr"));
+							accessControlVO.setPrms_ipmaskadr((String) jsonObj.get("Ipmask"));
+							accessControlVO.setPrms_usr_id((String) jsonObj.get("User"));
+							accessControlVO.setCtf_mth_nm((String) jsonObj.get("Method"));
+							accessControlVO.setCtf_tp_nm((String) jsonObj.get("Type"));
+							accessControlVO.setOpt_nm((String) jsonObj.get("Option"));
+							accessControlVO.setDtb((String) jsonObj.get("Database"));
+							accessControlService.insertAccessControl(accessControlVO);
+		
+							accessControlHistoryVO.setDb_svr_id(db_svr_id);
+							accessControlHistoryVO.setDtb((String) jsonObj.get("Database"));
+							accessControlHistoryVO.setPrms_ipadr((String) jsonObj.get("Ipadr"));
+							accessControlHistoryVO.setPrms_ipmaskadr((String) jsonObj.get("Ipmask"));
+							accessControlHistoryVO.setPrms_usr_id((String) jsonObj.get("User"));
+							accessControlHistoryVO.setPrms_seq(Integer.parseInt((String) jsonObj.get("Seq")));
+							accessControlHistoryVO.setPrms_set((String) jsonObj.get("Set"));
+							accessControlHistoryVO.setCtf_mth_nm((String) jsonObj.get("Method"));
+							accessControlHistoryVO.setCtf_tp_nm((String) jsonObj.get("Type"));
+							accessControlHistoryVO.setOpt_nm((String) jsonObj.get("Option"));
+							accessControlService.insertAccessControlHistory(accessControlHistoryVO);
 						}
-					}			
-					
-					cic.dbAccess_delete(serverObj, arrSeq, IP, PORT);
-					
-					resultSet = accessControlService.selectAccessControlHistory(accessControlHistoryVO);
-					for(int i=0; i<resultSet.size(); i++){
-						acObj.put(ClientProtocolID.AC_SET, "1");
-						acObj.put(ClientProtocolID.AC_TYPE, resultSet.get(i).getCtf_tp_nm());
-						acObj.put(ClientProtocolID.AC_DATABASE, resultSet.get(i).getDtb());
-						acObj.put(ClientProtocolID.AC_USER, resultSet.get(i).getPrms_usr_id());
-						acObj.put(ClientProtocolID.AC_IP, resultSet.get(i).getPrms_ipadr());
-						acObj.put(ClientProtocolID.AC_IPMASK, resultSet.get(i).getPrms_ipmaskadr() == null ? "" : resultSet.get(i).getPrms_ipmaskadr());
-						acObj.put(ClientProtocolID.AC_METHOD, resultSet.get(i).getCtf_mth_nm());
-						acObj.put(ClientProtocolID.AC_OPTION, resultSet.get(i).getOpt_nm());
-						cic.dbAccess_create(serverObj, acObj, IP, PORT);	
 					}
 				}
+
 			}
-					
-		
+							
 			return "true";
 		} catch (Exception e) {
 			e.printStackTrace();
