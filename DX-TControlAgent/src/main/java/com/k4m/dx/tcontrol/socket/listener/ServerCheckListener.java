@@ -7,6 +7,8 @@ import java.util.HashMap;
 import org.apache.ibatis.session.SqlSession;
 import org.apache.ibatis.session.SqlSessionFactory;
 import org.json.simple.JSONObject;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.k4m.dx.tcontrol.db.SqlSessionManager;
 import com.k4m.dx.tcontrol.db.repository.service.SystemServiceImpl;
@@ -20,7 +22,8 @@ import com.k4m.dx.tcontrol.util.FileUtil;
 public class ServerCheckListener implements Runnable {
 	
 	private SystemServiceImpl service;
-
+	private static Logger socketLogger = LoggerFactory.getLogger("socketLogger");
+	private static Logger errLogger = LoggerFactory.getLogger("errorToFile");
 
 	public ServerCheckListener(SystemServiceImpl service)  throws Exception {
 		this.service = service;
@@ -62,6 +65,8 @@ public class ServerCheckListener implements Runnable {
 				String strMasterGbn = "";
 				String strIsMasterGbn = "";
 				
+				//socketLogger.info("@@@@@@ before : " + strMasterGbn + " @@@@ after : " + strMasterGbn);
+				
 				try {
 					strMasterGbn = selectConnectInfo(serverObj);
 					
@@ -74,6 +79,8 @@ public class ServerCheckListener implements Runnable {
 					dbServerInfoVO.setMASTER_GBN(strMasterGbn);
 					dbServerInfoVO.setDB_CNDT("Y");
 					
+					//socketLogger.info("@@@@@@ before : " + strMasterGbn + " @@@@ after : " + strMasterGbn);
+					
 					if(!strIsMasterGbn.equals(strMasterGbn)) {
 						if(strMasterGbn.equals("M")) {
 							service.updateDBSlaveAll(dbServerInfoVO);
@@ -83,6 +90,9 @@ public class ServerCheckListener implements Runnable {
 					}
 
 				} catch(Exception e) {
+					
+					errLogger.error("Master/Slave Check Error {}", e.toString());
+					//socketLogger.info("@@@@@@ err : " + e.toString());
 					strMasterGbn = "S";
 					dbServerInfoVO.setMASTER_GBN(strMasterGbn);
 					dbServerInfoVO.setDB_CNDT("N");
