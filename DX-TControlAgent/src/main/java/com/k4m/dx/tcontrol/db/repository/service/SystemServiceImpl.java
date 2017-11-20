@@ -122,4 +122,8 @@ public class SystemServiceImpl implements SystemService{
 	public void updateDBSlaveAll(DbServerInfoVO vo) throws Exception {
 		systemDAO.updateDBSlaveAll(vo);
 	}
+	
+	public DbServerInfoVO selectISMasterGbm(DbServerInfoVO vo) throws Exception  {
+		return (DbServerInfoVO) systemDAO.selectISMasterGbm(vo);
+	}
 }

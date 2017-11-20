@@ -60,18 +60,27 @@ public class ServerCheckListener implements Runnable {
 				serverObj.put(ProtocolID.USER_PWD, aes.aesDecode(SVR_SPR_SCM_PWD));
 				
 				String strMasterGbn = "";
+				String strIsMasterGbn = "";
 				
 				try {
 					strMasterGbn = selectConnectInfo(serverObj);
 					
+					DbServerInfoVO masterGbnVo = new DbServerInfoVO();
+					masterGbnVo.setIPADR(strIpadr);
+					DbServerInfoVO resultMasterGbnVO = service.selectISMasterGbm(masterGbnVo);
+					
+					strIsMasterGbn = resultMasterGbnVO.getMASTER_GBN();
+					
 					dbServerInfoVO.setMASTER_GBN(strMasterGbn);
 					dbServerInfoVO.setDB_CNDT("Y");
 					
-					if(strMasterGbn.equals("M")) {
-						service.updateDBSlaveAll(dbServerInfoVO);
+					if(!strIsMasterGbn.equals(strMasterGbn)) {
+						if(strMasterGbn.equals("M")) {
+							service.updateDBSlaveAll(dbServerInfoVO);
+						}
+						
+						service.updateDB_CNDT(dbServerInfoVO);
 					}
-					
-					service.updateDB_CNDT(dbServerInfoVO);
 
 				} catch(Exception e) {
 					strMasterGbn = "S";
@@ -131,5 +140,8 @@ public class ServerCheckListener implements Runnable {
 		return strMasterGbn;
 		
 	}
+	
+	
+
 
 }

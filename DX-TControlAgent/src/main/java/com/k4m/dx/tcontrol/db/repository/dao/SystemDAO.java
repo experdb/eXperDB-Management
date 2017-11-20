@@ -76,4 +76,8 @@ public class SystemDAO {
 		session.insert("system.updateDBSlaveAll", vo);
 	}
 	
+	public DbServerInfoVO selectISMasterGbm(DbServerInfoVO vo) throws Exception  {
+		return (DbServerInfoVO) session.selectOne("system.selectISMasterGbm", vo);
+	}
+	
 }

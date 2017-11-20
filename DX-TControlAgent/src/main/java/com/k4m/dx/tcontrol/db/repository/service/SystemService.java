@@ -125,4 +125,12 @@ public interface SystemService {
 	 * @throws Exception
 	 */
 	public void updateDBSlaveAll(DbServerInfoVO vo) throws Exception;
+	
+	/**
+	 * 
+	 * @param vo
+	 * @return
+	 * @throws Exception
+	 */
+	public DbServerInfoVO selectISMasterGbm(DbServerInfoVO vo) throws Exception ;
 }

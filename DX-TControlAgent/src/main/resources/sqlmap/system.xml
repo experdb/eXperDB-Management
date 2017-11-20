@@ -428,7 +428,7 @@
 			, DB_CNDT = #{DB_CNDT}
 			, LST_MDF_DTM = now()
 		WHERE
-			 A.IPADR = #{IPADR}
+			 IPADR = #{IPADR}
 				
     </update>
     
@@ -445,4 +445,21 @@
 		WHERE
 			 DB_SVR_ID = (SELECT DB_SVR_ID FROM T_DBSVR_I WHERE IPADR = #{IPADR})
     </update>
+    
+    <select id="selectISMasterGbm"  parameterType="hashmap" resultType="hashmap">
+		<![CDATA[
+			/**
+		 	* Query ID : selectMasterGbm
+		 	* Description : Master / Slave 구분
+		 	* Author : 박태혁
+		 	**/
+		
+			SELECT 
+				MASTER_GBN
+			FROM 
+				T_DBSVRIPADR_I
+			WHERE
+				IPADR = #{IPADR}
+		]]>
+	</select>
 </mapper>
