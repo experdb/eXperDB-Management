@@ -772,7 +772,7 @@ $(function(){
 				                			imgName = "ico_agent_2.png";
 				                		}
 				                		appendnew += '<img src="../images/' + imgName + '" alt=""  style="margin-right:10px"  width="10px" height="10px" />';
-				                		appendnew += "[매일]<a style='color:green;' href='#' onclick=javascript:fn_popup(" + scd_id + ");><b>"+scd_nm+"[" + exe_hms +"]</b></a></div>";
+				                		appendnew += "[1회실행]<a style='color:green;' href='#' onclick=javascript:fn_popup(" + scd_id + ");><b>"+scd_nm+"[" + exe_hms +"]</b></a></div>";
 				                	}
 			                	}
 				                
