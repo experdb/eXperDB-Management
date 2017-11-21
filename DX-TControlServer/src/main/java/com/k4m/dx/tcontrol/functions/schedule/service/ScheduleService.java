@@ -97,7 +97,7 @@ public interface ScheduleService {
 	 * @param 
 	 * @throws Exception
 	 */
-	List<Map<String, Object>> selectDbconn(int db_id) throws Exception;
+	List<Map<String, Object>> selectDbconn(int scd_id) throws Exception;
 
 	
 	/**

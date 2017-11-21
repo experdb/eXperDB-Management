@@ -139,8 +139,8 @@ public class ScheduleServiceImpl extends EgovAbstractServiceImpl  implements Sch
 	 * @throws Exception
 	 */
 	@Override
-	public List<Map<String, Object>> selectDbconn(int db_id) throws Exception {
-		return scheduleDAO.selectDbconn(db_id);
+	public List<Map<String, Object>> selectDbconn(int scd_id) throws Exception {
+		return scheduleDAO.selectDbconn(scd_id);
 	}
 
 

@@ -84,9 +84,9 @@ public class ScheduleDAO extends EgovAbstractMapper{
 
 
 	@SuppressWarnings({ "deprecation", "unchecked" })
-	public List<Map<String, Object>> selectDbconn(int db_id) {
+	public List<Map<String, Object>> selectDbconn(int scd_id) {
 		List<Map<String, Object>> sl = null;
-		sl = (List<Map<String, Object>>) list("scheduleSql.selectDbconn", db_id);		
+		sl = (List<Map<String, Object>>) list("scheduleSql.selectDbconn", scd_id);		
 		return sl;
 	}
 
