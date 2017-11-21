@@ -967,6 +967,7 @@ public class BackupController {
 			HashMap<String,Object> paramvalue = new HashMap<String, Object>();
 			paramvalue.put("datest",(String)request.getParameter("stdate"));
 			paramvalue.put("dateed", (String)request.getParameter("eddate"));
+			paramvalue.put("db_svr_id", (String)request.getParameter("db_svr_id"));
 			
 				result = backupService.selectMonthBckScheduleSearch(paramvalue);
 		} catch (Exception e) {

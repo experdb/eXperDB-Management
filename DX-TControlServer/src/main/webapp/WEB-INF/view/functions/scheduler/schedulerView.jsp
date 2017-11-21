@@ -630,6 +630,7 @@ $(function(){
 				url : "/selectMonthBckScheduleSearch.do",
 				data : {"stdate" : stdt.format("yyyyMMdd")
 					     , "eddate" : eddt.format("yyyyMMdd")
+					     , "db_svr_id" : db_svr_id
 					    },
 				dataType : "json",
 				type : "post",
@@ -658,16 +659,8 @@ $(function(){
 						tmparr[4] = [];
 						tmparr[5] = [];
 						tmparr[6] = [];
-						/**
-						for(var i=0;i<result.length;i++){
-							var tmpdata = result[i];
-							var nowdt = new Date(tmpdata.sort.substr(0,4),parseInt(tmpdata.sort.substr(4,2))-1,tmpdata.sort.substr(6,2),0,0,0,0);
-							var intgap = DateDiff.inDays(stdt, nowdt);
-							if (intgap > -1 && intgap < 7 ){
-								tmparr[intgap].push(result[i]);
-							}
-						}
-						**/
+						
+						
 						var appendnew = "<div class='line2'>";
 						// data
 						var maxcnt = 0;
@@ -680,6 +673,10 @@ $(function(){
 
 						for(var i=0;i<7;i++){
 							var showdt = stdt.format("MM/dd");
+							var checkDt = stdt.format("MMdd");
+							var checkDay = stdt.format("dd");
+							var checkYear = stdt.format("yyyyMMdd");
+							
 							switch (i) {
 				            case 0:
 				            	appendnew += "<div class='cell' style='height:"+height+";'>";
@@ -694,13 +691,93 @@ $(function(){
 				            	appendnew += showdt;
 				        	}
 
-							for(var j=0;j<tmparr[i].length;j++){
-								if (tmparr[i][j].runtype == "B"){
-									appendnew += "<div style='clear:both;overflow:hidden;padding-left:5px;'><a style='color:green;' href='#' onclick='fn_showpopup2(\""+tmparr[i][j].job_id+"\",\""+tmparr[i][j].sort+"\");return false;'><b>["+tmparr[i][j].count+" 회]"+tmparr[i][j].job_nm+"</b></a></div>";
-								}else{
-									appendnew += "<div style='clear:both;overflow:hidden;padding-left:5px;'><a style='color:blue;' href='#' onclick='fn_showpopup(\""+tmparr[i][j].job_id+"\",\""+tmparr[i][j].sort+"\");return false;'><b>["+tmparr[i][j].count+" 회]"+tmparr[i][j].job_nm+"</b></a></div>";
-								}
+							//for(var j=0;j<tmparr[i].length;j++){
+								//if (tmparr[i][j].runtype == "B"){
+							//		appendnew += "<div style='clear:both;overflow:hidden;padding-left:5px;'><a style='color:green;' href='#' onclick='fn_showpopup2(\""+tmparr[i][j].job_id+"\",\""+tmparr[i][j].sort+"\");return false;'><b>["+tmparr[i][j].count+" 회]"+tmparr[i][j].job_nm+"</b></a></div>";
+								//}else{
+									//appendnew += "<div style='clear:both;overflow:hidden;padding-left:5px;'><a style='color:blue;' href='#' onclick='fn_showpopup(\""+tmparr[i][j].job_id+"\",\""+tmparr[i][j].sort+"\");return false;'><b>["+tmparr[i][j].count+" 회]"+tmparr[i][j].job_nm+"</b></a></div>";
+								//}
+							//}
+							for(var j=0;j<result.length;j++){
+
+				            	var scd_id = result[j].scd_id;
+				                var scd_nm = result[j].scd_nm;
+				                var scd_exp = result[j].scd_exp;
+				                var scd_cndt = result[j].scd_cndt;
+				                var exe_perd_cd = result[j].exe_perd_cd;
+				                var exe_month = result[j].exe_month;
+				                var exe_day = result[j].exe_day;
+				                var exe_hms = result[j].exe_hms;
+				                var exe_dt = result[j].exe_dt;
+				                var imgName = "";
+				                
+				                var resultYearCheckDt = exe_month + "" + exe_day;
+				                
+				                //매년
+				                if(exe_perd_cd == 'TC001604') {
+				                	
+				                	if(resultYearCheckDt == checkDt) {
+				                		appendnew += "<div style='clear:both;overflow:hidden;padding-left:5px;'>";
+				                		if(scd_cndt == 'TC001801') {
+				                			imgName = "ico_agent_1.png";
+				                		} else {
+				                			imgName = "ico_agent_2.png";
+				                		}
+				                		appendnew += '<img src="../images/' + imgName + '" alt=""  style="margin-right:10px"  width="10px" height="10px" />';
+				                		appendnew += "[매년]<a style='color:green;' href='#' onclick=javascript:fn_popup(" + scd_id + ");><b>"+scd_nm+"[" + exe_hms +"]</b></a></div>";
+				                	} 
+				                //매월
+				                } else if(exe_perd_cd == 'TC001603') {
+				                	if(exe_day == checkDay) {
+				                		appendnew += "<div style='clear:both;overflow:hidden;padding-left:5px;'>";
+				                		if(scd_cndt == 'TC001801') {
+				                			imgName = "ico_agent_1.png";
+				                		} else {
+				                			imgName = "ico_agent_2.png";
+				                		}
+				                		appendnew += '<img src="../images/' + imgName + '" alt=""  style="margin-right:10px"  width="10px" height="10px" />';
+				                		appendnew += "[매월]<a style='color:green;' href='#' onclick=javascript:fn_popup(" + scd_id + ");><b>"+scd_nm+"[" + exe_hms +"]</b></a></div>";
+				                	} 
+				                // 매주
+				                } else if(exe_perd_cd == 'TC001602') {
+				           
+				                	if(exe_dt.substr(i,1) == '1') {
+				                		appendnew += "<div style='clear:both;overflow:hidden;padding-left:5px;'>";
+				                		if(scd_cndt == 'TC001801') {
+				                			imgName = "ico_agent_1.png";
+				                		} else {
+				                			imgName = "ico_agent_2.png";
+				                		}
+				                		appendnew += '<img src="../images/' + imgName + '" alt=""  style="margin-right:10px"  width="10px" height="10px" />';
+				                		appendnew += "[매주]<a style='color:green;' href='#' onclick=javascript:fn_popup(" + scd_id + ");><b>"+scd_nm+"[" + exe_hms +"]</b></a></div>";
+				                	} 
+				                //매일
+				                } else if(exe_perd_cd == 'TC001601') {
+							           
+				                		appendnew += "<div style='clear:both;overflow:hidden;padding-left:5px;'>";
+				                		if(scd_cndt == 'TC001801') {
+				                			imgName = "ico_agent_1.png";
+				                		} else {
+				                			imgName = "ico_agent_2.png";
+				                		}
+				                		appendnew += '<img src="../images/' + imgName + '" alt=""  style="margin-right:10px"  width="10px" height="10px" />';
+				                		appendnew += "[매일]<a style='color:green;' href='#' onclick=javascript:fn_popup(" + scd_id + ");><b>"+scd_nm+"[" + exe_hms +"]</b></a></div>";
+								//1회실행
+				                } else if(exe_perd_cd == 'TC001605') {
+				                	if(exe_dt == checkYear) {   
+				                		appendnew += "<div style='clear:both;overflow:hidden;padding-left:5px;'>";
+				                		if(scd_cndt == 'TC001801') {
+				                			imgName = "ico_agent_1.png";
+				                		} else {
+				                			imgName = "ico_agent_2.png";
+				                		}
+				                		appendnew += '<img src="../images/' + imgName + '" alt=""  style="margin-right:10px"  width="10px" height="10px" />';
+				                		appendnew += "[매일]<a style='color:green;' href='#' onclick=javascript:fn_popup(" + scd_id + ");><b>"+scd_nm+"[" + exe_hms +"]</b></a></div>";
+				                	}
+			                	}
+				                
 							}
+							
 							appendnew +="</div>";
 							stdt = addDays(stdt, 1);
 						}
@@ -830,7 +907,7 @@ var DateDiff =  {
 								<span class="btn"  onClick="fn_insertSchedule();" id="int_button"><button>주별 스케줄등록</button></span>
 							</div>
 							<div class="btn_type_01" id="btnMonth">
-								<span class="btn"  onClick="fn_insertSchedule();" id="int_button"><button>월별 스케줄등록</button></span>
+								<!--  <span class="btn"  onClick="fn_insertSchedule();" id="int_button"><button>월별 스케줄등록</button></span>-->
 							</div>
 							<div class="cmm_bd">																			
 									<table id="week_scheduleList" class="cell-border display" width="100%">
