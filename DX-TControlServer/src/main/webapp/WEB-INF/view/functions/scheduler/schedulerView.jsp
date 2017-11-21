@@ -717,62 +717,62 @@ $(function(){
 				                if(exe_perd_cd == 'TC001604') {
 				                	
 				                	if(resultYearCheckDt == checkDt) {
-				                		appendnew += "<div style='clear:both;overflow:hidden;padding-left:5px;'>";
+				                		appendnew += "<div class='cellDate'>";
 				                		if(scd_cndt == 'TC001801') {
 				                			imgName = "ico_agent_1.png";
 				                		} else {
 				                			imgName = "ico_agent_2.png";
 				                		}
 				                		appendnew += '<img src="../images/' + imgName + '" alt=""  style="margin-right:10px"  width="10px" height="10px" />';
-				                		appendnew += "[매년]<a style='color:green;' href='#' onclick=javascript:fn_popup(" + scd_id + ");><b>"+scd_nm+"[" + exe_hms +"]</b></a></div>";
+				                		appendnew += "[매년] <a style='color:green;' href='#' onclick=javascript:fn_popup(" + scd_id + ");><b>"+scd_nm+"[" + exe_hms +"]</b></a></div>";
 				                	} 
 				                //매월
 				                } else if(exe_perd_cd == 'TC001603') {
 				                	if(exe_day == checkDay) {
-				                		appendnew += "<div style='clear:both;overflow:hidden;padding-left:5px;'>";
+				                		appendnew += "<div class='cellDate'>";
 				                		if(scd_cndt == 'TC001801') {
 				                			imgName = "ico_agent_1.png";
 				                		} else {
 				                			imgName = "ico_agent_2.png";
 				                		}
 				                		appendnew += '<img src="../images/' + imgName + '" alt=""  style="margin-right:10px"  width="10px" height="10px" />';
-				                		appendnew += "[매월]<a style='color:green;' href='#' onclick=javascript:fn_popup(" + scd_id + ");><b>"+scd_nm+"[" + exe_hms +"]</b></a></div>";
+				                		appendnew += "[매월] <a style='color:green;' href='#' onclick=javascript:fn_popup(" + scd_id + ");><b>"+scd_nm+"[" + exe_hms +"]</b></a></div>";
 				                	} 
 				                // 매주
 				                } else if(exe_perd_cd == 'TC001602') {
 				           
 				                	if(exe_dt.substr(i,1) == '1') {
-				                		appendnew += "<div style='clear:both;overflow:hidden;padding-left:5px;'>";
+				                		appendnew += "<div class='cellDate'>";
 				                		if(scd_cndt == 'TC001801') {
 				                			imgName = "ico_agent_1.png";
 				                		} else {
 				                			imgName = "ico_agent_2.png";
 				                		}
 				                		appendnew += '<img src="../images/' + imgName + '" alt=""  style="margin-right:10px"  width="10px" height="10px" />';
-				                		appendnew += "[매주]<a style='color:green;' href='#' onclick=javascript:fn_popup(" + scd_id + ");><b>"+scd_nm+"[" + exe_hms +"]</b></a></div>";
+				                		appendnew += "[매주] <a style='color:green;' href='#' onclick=javascript:fn_popup(" + scd_id + ");><b>"+scd_nm+"[" + exe_hms +"]</b></a></div>";
 				                	} 
 				                //매일
 				                } else if(exe_perd_cd == 'TC001601') {
 							           
-				                		appendnew += "<div style='clear:both;overflow:hidden;padding-left:5px;'>";
+				                		appendnew += "<div class='cellDate'>";
 				                		if(scd_cndt == 'TC001801') {
 				                			imgName = "ico_agent_1.png";
 				                		} else {
 				                			imgName = "ico_agent_2.png";
 				                		}
 				                		appendnew += '<img src="../images/' + imgName + '" alt=""  style="margin-right:10px"  width="10px" height="10px" />';
-				                		appendnew += "[매일]<a style='color:green;' href='#' onclick=javascript:fn_popup(" + scd_id + ");><b>"+scd_nm+"[" + exe_hms +"]</b></a></div>";
+				                		appendnew += "[매일] <a style='color:green;' href='#' onclick=javascript:fn_popup(" + scd_id + ");><b>"+scd_nm+"[" + exe_hms +"]</b></a></div>";
 								//1회실행
 				                } else if(exe_perd_cd == 'TC001605') {
 				                	if(exe_dt == checkYear) {   
-				                		appendnew += "<div style='clear:both;overflow:hidden;padding-left:5px;'>";
+				                		appendnew += "<div class='cellDate'>";
 				                		if(scd_cndt == 'TC001801') {
 				                			imgName = "ico_agent_1.png";
 				                		} else {
 				                			imgName = "ico_agent_2.png";
 				                		}
 				                		appendnew += '<img src="../images/' + imgName + '" alt=""  style="margin-right:10px"  width="10px" height="10px" />';
-				                		appendnew += "[1회실행]<a style='color:green;' href='#' onclick=javascript:fn_popup(" + scd_id + ");><b>"+scd_nm+"[" + exe_hms +"]</b></a></div>";
+				                		appendnew += "[1회실행] <a style='color:green;' href='#' onclick=javascript:fn_popup(" + scd_id + ");><b>"+scd_nm+"[" + exe_hms +"]</b></a></div>";
 				                	}
 			                	}
 				                

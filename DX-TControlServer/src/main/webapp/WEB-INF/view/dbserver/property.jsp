@@ -341,13 +341,13 @@
 				<div id="settinginfo">
 					<div class="cmm_bd">
 						<div class="sub_tit"><p>주요환경설정 정보</p></div>
-						<div class="overflow_area" style="height: 663px;">
+						<div class="overflow_area" style="height: 663px; width: 60%">
 							<table class="list pd_type3">
 								<caption>주요환경설정 정보</caption>
 								<colgroup>
-									<col style="width: 25%;">
-									<col style="width: 25%;">
-									<col style="width: 50%;">
+									<col style="width: 10%;">
+									<col style="width: 20%;">
+									<col style="width: 30%;">
 								</colgroup>
 								<thead>
 									<tr>
@@ -360,84 +360,84 @@
 									<tr>
 										<td rowspan="3">접속 및 인증</td>
 										<td>listen_addresses</td>
-										<td>${result.CMD_LISTEN_ADDRESSES}</td>
+										<td style="text-align: left; padding: 4px 16px;">${result.CMD_LISTEN_ADDRESSES}</td>
 									</tr>
 									<tr>
 										<td>port</td>
-										<td>${result.CMD_PORT}</td>
+										<td style="text-align: left; padding: 4px 16px;">${result.CMD_PORT}</td>
 									</tr>
 									<tr>
 										<td>max_connections</td>
-										<td>${result.CMD_MAX_CONNECTIONS}</td>
+										<td style="text-align: left; padding: 4px 16px;">${result.CMD_MAX_CONNECTIONS}</td>
 									</tr>
 									<tr>
 										<td rowspan="5">자원설정</td>
 										<td>shared_buffers</td>
-										<td>${result.CMD_SHARED_BUFFERS}</td>
+										<td style="text-align: left; padding: 4px 16px;">${result.CMD_SHARED_BUFFERS}</td>
 									</tr>
 									<tr>
 										<td>work_mem</td>
-										<td>${result.CMD_WORK_MEM}</td>
+										<td style="text-align: left; padding: 4px 16px;">${result.CMD_WORK_MEM}</td>
 									</tr>
 									<tr>
 										<td>maintenance_work_mem</td>
-										<td>${result.CMD_MAINTENANCE_WORK_MEM}</td>
+										<td style="text-align: left; padding: 4px 16px;">${result.CMD_MAINTENANCE_WORK_MEM}</td>
 									</tr>
 									<tr>
 										<td>effective_cache_size</td>
-										<td>${result.CMD_EFFECTIVE_CACHE_SIZE}</td>
+										<td style="text-align: left; padding: 4px 16px;">${result.CMD_EFFECTIVE_CACHE_SIZE}</td>
 									</tr>
 									<tr>
 										<td>shared_preload_libraries</td>
-										<td>${result.CMD_SHARED_PRELOAD_LIBRARIES}</td>
+										<td style="text-align: left; padding: 4px 16px;">${result.CMD_SHARED_PRELOAD_LIBRARIES}</td>
 									</tr>
 									<tr>
 										<td rowspan="6">WAL 설정</td>
 										<td>wal_level</td>
-										<td>${result.CMD_WAL_LEVEL}</td>
+										<td style="text-align: left; padding: 4px 16px;">${result.CMD_WAL_LEVEL}</td>
 									</tr>
 									<tr>
 										<td>wal_buffers</td>
-										<td>${result.CMD_WAL_BUFFERS}</td>
+										<td style="text-align: left; padding: 4px 16px;">${result.CMD_WAL_BUFFERS}</td>
 									</tr>
 									<tr>
 										<td>archive_mode</td>
-										<td>${result.CMD_ARCHIVE_MODE}</td>
+										<td style="text-align: left; padding: 4px 16px;">${result.CMD_ARCHIVE_MODE}</td>
 									</tr>
 									<tr>
 										<td>archive_command</td>
-										<td>${result.CMD_ARCHIVE_COMMAND}</td>
+										<td style="text-align: left; padding: 4px 16px;">${result.CMD_ARCHIVE_COMMAND}</td>
 									</tr>
 									<tr>
 										<td>min_wal_size</td>
-										<td>${result.CMD_MIN_WAL_SIZE}</td>
+										<td style="text-align: left; padding: 4px 16px;">${result.CMD_MIN_WAL_SIZE}</td>
 									</tr>
 									<tr>
 										<td>max_wal_size</td>
-										<td>${result.CMD_MAX_WAL_SIZE}</td>
+										<td style="text-align: left; padding: 4px 16px;">${result.CMD_MAX_WAL_SIZE}</td>
 									</tr>
 									<tr>
 										<td rowspan="2">복제</td>
 										<td>hot_standby</td>
-										<td>${result.CMD_HOT_STANDBY}</td>
+										<td style="text-align: left; padding: 4px 16px;">${result.CMD_HOT_STANDBY}</td>
 									</tr>
 									<tr>
 										<td>wal_keep_segments</td>
-										<td>${result.CMD_WAL_KEEP_SEGMENTS}</td>
+										<td style="text-align: left; padding: 4px 16px;">${result.CMD_WAL_KEEP_SEGMENTS}</td>
 									</tr>
 									<tr>
 										<td rowspan="2">파일위치</td>
 										<td>config_file</td>
-										<td>${result.CMD_CONFIG_FILE}</td>
+										<td style="text-align: left; padding: 4px 16px;">${result.CMD_CONFIG_FILE}</td>
 									</tr>
 									<tr>
 										<td>data_directory</td>
-										<td>${result.CMD_DATA_DIRECTORY}</td>
+										<td style="text-align: left; padding: 4px 16px;">${result.CMD_DATA_DIRECTORY}</td>
 									</tr>
 									<tr>
 										<td>data_directory</td>
 										<td>TimeZone</td>
-										<td>${result.CMD_TIMEZONE}</td>
+										<td style="text-align: left; padding: 4px 16px;">${result.CMD_TIMEZONE}</td>
 									</tr>
 								</tbody>
 							</table>
@@ -461,18 +461,16 @@
 								</colgroup>
 								<thead>
 									<tr>
-										<th scope="col" colspan="5">테이블스페이스</th>
+										<th scope="col">Name</th>
+										<th scope="col">Owner</th>
+										<th scope="col">Location</th>
+										<th scope="col">Options</th>
+										<th scope="col">Size</th>
+										<th scope="col">Description</th>
 									</tr>
 								</thead>
 								<tbody>
-									<tr>
-										<td>Name</td>
-										<td>Owner</td>
-										<td>Location</td>
-										<td>Options</td>
-										<td>Size</td>
-										<td>Description</td>
-									</tr>
+									
 									<c:forEach var="tablespaceinfo" items="${result.CMD_TABLESPACE_INFO}">
 										<tr>
 											<td>${tablespaceinfo.Name}</td>

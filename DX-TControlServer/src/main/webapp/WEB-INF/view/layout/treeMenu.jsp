@@ -101,10 +101,16 @@
             $("#tree3").treeview({
                 collapsed: false,
                 animated: "medium",
-                control:"#sidetreecontrol",
+                control:"#sidetreecontrol3",
                 persist: "location"
             });
             
+            $("#tree4").treeview({
+                collapsed: false,
+                animated: "medium",
+                control:"#sidetreecontrol4",
+                persist: "location"
+            });
         });
 	
 
@@ -266,7 +272,7 @@
 	    	  html3 += '         <ul class="depth_1 lnbMenu"><li class="ico2_2"><a href="/selectScheduleHistoryView.do" onClick=javascript:fn_GoLink("/selectScheduleHistoryView.do");><img src="../images/ico_lnb_14.png" id="treeImg">스케줄 수행이력</a></li></ul>';
 	    	  	}
 		      }
-	          $( "#tree3" ).append(html3);
+	          $( "#tree4" ).append(html3);
 	      }
 		
 	function fn_logout(){
@@ -300,7 +306,6 @@
 					</div>
 				</div>
 				<div id="sidetree">				
-						
 						<div class="treeborder">
 						<ul id="tree">
 							<div id="tree1"></div>
@@ -308,27 +313,26 @@
 						</div>
 				</div>
 				
-				<div id="treeTitle"><img src="../images/ico_main_tit_1.png" id="treeImg"><a href="/selectScheduleListView.do">스케줄</a>
-				</div>	
-				<div id="sidetree">						
-						<div class="treeborder">
-						<ul id="tree">
-							<div id="tree3"></div>
-						</ul>
-						</div>
-				</div>
-				
-				<div id="treeSub"><img src="../images/ico_lnb_2.png" id="treeImg"><a href="/connectorRegister.do">데이터 전송</a>
+				<div id="treeTitle"><img src="../images/ico_lnb_2.png" id="treeImg"><a href="/connectorRegister.do">데이터 전송</a>
 						<div id="sidetreecontrol2" style="float: right;">							
 							<a href="?#"><img src="../images/ico_lnb_close.png"></a>
 							<a href="?#"><img src="../images/ico_lnb_open.png"></a>
 						</div>
 				</div>
-				<div id="sidetree1">				
-			
+				<div id="sidetree">				
 						<div class="treeborder">
-						<ul id="tree2">
+						<ul id="tree">
 							<div id="tree2"></div>
+						</ul>
+						</div>
+				</div>
+
+				<div id="treeTitle"><img src="../images/ico_main_tit_1.png" id="treeImg"><a href="/selectScheduleListView.do">스케줄</a></div>	
+				<div id="sidetree1">						
+						<div class="treeborder">
+						<ul id="tree">
+							<div id="tree4">
+							</div>
 						</ul>
 						</div>
 				</div>

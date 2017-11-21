@@ -338,14 +338,17 @@ public class AccessControlController {
 					HttpSession session = request.getSession();
 					String usr_id = (String) session.getAttribute("usr_id");
 					accessControlVO.setFrst_regr_id(usr_id);
-					accessControlVO.setLst_mdfr_id(usr_id);
-					int current_his_grp = accessControlService.selectCurrenthisrp();
-					accessControlHistoryVO.setHis_grp_id(current_his_grp);
+					accessControlVO.setLst_mdfr_id(usr_id);					
+					int current_his_grp = accessControlService.selectCurrenthisrp();	
+					accessControlHistoryVO.setHis_grp_id(current_his_grp);					
 					JSONObject result = cic.dbAccess_selectAll(serverObj, IP, PORT);
 					for (int i = 0; i < result.size(); i++) {
 						JSONArray data = (JSONArray) result.get("data");
 						for (int j = 0; j < data.size(); j++) {
 							JSONObject jsonObj = (JSONObject) data.get(j);
+							int svr_acs_cntr_id= accessControlService.selectCurrentCntrid();
+							
+							accessControlVO.setSvr_acs_cntr_id(svr_acs_cntr_id);
 							accessControlVO.setPrms_seq(Integer.parseInt((String) jsonObj.get("Seq")));
 							accessControlVO.setPrms_set((String) jsonObj.get("Set"));
 							accessControlVO.setPrms_ipadr((String) jsonObj.get("Ipadr"));
@@ -358,6 +361,7 @@ public class AccessControlController {
 							accessControlService.insertAccessControl(accessControlVO);
 
 							accessControlHistoryVO.setDb_svr_id(db_svr_id);
+							accessControlHistoryVO.setSvr_acs_cntr_id(svr_acs_cntr_id);
 							accessControlHistoryVO.setDtb((String) jsonObj.get("Database"));
 							accessControlHistoryVO.setPrms_ipadr((String) jsonObj.get("Ipadr"));
 							accessControlHistoryVO.setPrms_ipmaskadr((String) jsonObj.get("Ipmask"));
@@ -510,14 +514,16 @@ public class AccessControlController {
 					String id = (String) request.getSession().getAttribute("usr_id");
 					accessControlVO.setFrst_regr_id(id);
 					accessControlVO.setLst_mdfr_id(id);
-	
-					int current_his_grp = accessControlService.selectCurrenthisrp();
-					accessControlHistoryVO.setHis_grp_id(current_his_grp);
+					int current_his_grp = accessControlService.selectCurrenthisrp();				
+					accessControlHistoryVO.setHis_grp_id(current_his_grp);				
 					JSONObject result = cic.dbAccess_selectAll(serverObj, IP, PORT);
 					for (int i = 0; i < result.size(); i++) {
 						JSONArray data = (JSONArray) result.get("data");
 						for (int j = 0; j < data.size(); j++) {
-							JSONObject jsonObj = (JSONObject) data.get(j);
+							JSONObject jsonObj = (JSONObject) data.get(j);	
+							int svr_acs_cntr_id= accessControlService.selectCurrentCntrid();
+							
+							accessControlVO.setSvr_acs_cntr_id(svr_acs_cntr_id);
 							accessControlVO.setPrms_seq(Integer.parseInt((String) jsonObj.get("Seq")));
 							accessControlVO.setPrms_set((String) jsonObj.get("Set"));
 							accessControlVO.setPrms_ipadr((String) jsonObj.get("Ipadr"));
@@ -530,6 +536,7 @@ public class AccessControlController {
 							accessControlService.insertAccessControl(accessControlVO);
 		
 							accessControlHistoryVO.setDb_svr_id(db_svr_id);
+							accessControlHistoryVO.setSvr_acs_cntr_id(svr_acs_cntr_id);
 							accessControlHistoryVO.setDtb((String) jsonObj.get("Database"));
 							accessControlHistoryVO.setPrms_ipadr((String) jsonObj.get("Ipadr"));
 							accessControlHistoryVO.setPrms_ipmaskadr((String) jsonObj.get("Ipmask"));

@@ -80,4 +80,12 @@ public interface AccessControlService {
 	List<AccessControlHistoryVO> selectAccessControlHistory(AccessControlHistoryVO accessControlHistoryVO)
 			throws Exception;
 
+	/**
+	 * 현재 서버_접근_제어_ID 조회
+	 * 
+	 * @return
+	 * @throws Exception
+	 */
+	int selectCurrentCntrid() throws Exception;
+
 }
