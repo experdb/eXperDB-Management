@@ -20,10 +20,24 @@ public class WrkExeVO {
 	private String RSLT_MSG;
 	private int EXE_GRP_SN;
 	private String SCD_CNDT;
+	private String SCD_NM;
+	private String WRK_NM;
 	
 	
 
 	
+	public String getSCD_NM() {
+		return SCD_NM;
+	}
+	public void setSCD_NM(String sCD_NM) {
+		SCD_NM = sCD_NM;
+	}
+	public String getWRK_NM() {
+		return WRK_NM;
+	}
+	public void setWRK_NM(String wRK_NM) {
+		WRK_NM = wRK_NM;
+	}
 	public String getSCD_CNDT() {
 		return SCD_CNDT;
 	}
