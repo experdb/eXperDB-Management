@@ -25,6 +25,8 @@ em{font-style:normal;}
 header,section,nav,hgroup,footer,aside,article,figure{display:block;}
 a{color:#ff9900;text-decoration:none;}
 a:link,a:hover,a:active{text-decoration:none;}
+a.bold{font-weight:bold; color:#F56600;}
+span.bold{font-weight:bold; color:#F56600; cursor:pointer;}
 .ui-loader{display:none;}
 input[type="password"]{font-family:돋움, Dotum, Arial, sans-serif;}
 
@@ -636,7 +638,7 @@ body.bg{background:#fff url(../images/login_bg.png) center center no-repeat;}
 .tree_grp .inner{border:1px solid #b8c3c6;}
 .tree_grp .inner > div{height:370px;overflow-y:auto;}
 .tree_grp .inner .tit{height:28px;line-height:28px;padding-left:27px;border-bottom:1px solid #b8c3c6;background:#e4e9ec;color:#101922;font-size:12px;font-family:'Nanum Square Bold';font-weight:700;}
-.tree_grp .inner .tree_server{padding:40px 25px;}
+.tree_grp .inner .tree_server{padding:20px 25px;}
 .tree_grp .inner .tree_server li{margin-top:12px;}
 .tree_grp .inner .tree_server li:first-child{margin-top:0;}
 

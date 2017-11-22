@@ -541,7 +541,7 @@ function fn_scheduleReStart(){
 			<div id="contents">
 				<div class="contents_wrap">
 					<div class="contents_tit">
-						<h4>스케줄 등록수정 <a href="#n"><img src="../images/ico_tit.png" alt="" /></a></h4>
+						<h4>스케줄 수정 <a href="#n"><img src="../images/ico_tit.png" alt="" /></a></h4>
 						<div class="location">
 							<ul>
 								<li>Function</li>
@@ -643,7 +643,7 @@ function fn_scheduleReStart(){
 									</div>
 								</div>
 								<div class="overflow_area">							
-									<table id="workList" class="cell-border display" >
+									<table id="workList" class="display" cellspacing="0" width="100%">
 										<thead>
 											<tr>
 												<th></th>

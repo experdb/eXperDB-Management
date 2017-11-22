@@ -359,8 +359,7 @@
 					<span class="btn" onclick="fn_save();"><button>적용</button></span>
 				</div>
 				<div class="overflow_area">
-					<table id="accessControlTable" class="display" cellspacing="0"
-						width="100%">
+					<table id="accessControlTable" class="display" cellspacing="0" width="100%">
 						<thead>
 							<tr>
 								<th width="20"></th>
