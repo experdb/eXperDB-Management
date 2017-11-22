@@ -124,5 +124,15 @@ public class AccessControlDAO extends EgovAbstractMapper {
 		return result;
 	}
 
+	/**
+	 * 현재 서버_접근_제어_ID 조회
+	 * 
+	 * @return int
+	 * @throws Exception
+	 */
+	public int selectCurrentCntrid() {
+		return (int) getSqlSession().selectOne("accessControlSql.selectCurrentCntrid");
+	}
+
 
 }

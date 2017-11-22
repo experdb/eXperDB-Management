@@ -1,4 +1,5 @@
-<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+	pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%
 	/**
@@ -20,7 +21,7 @@ var table = null;
 
 	function fn_init() {
 		table = $('#accesscontrolHistoryTable').DataTable({
-			scrollY : "250px",
+			scrollY : "270px",
 			paging: false,
 			searching : false,
 			scrollX: true,
@@ -161,24 +162,13 @@ var table = null;
 	
 
 </script>
-<style>
-.inner .tit {
-    height: 28px;
-    line-height: 28px;
-    padding-left: 27px;
-    border: 1px solid #b8c3c6;
-    border-bottom: none;
-    background: #e4e9ec;
-    color: #101922;
-    font-size: 13px;
-    font-family: 'Nanum Square Bold';  
-}
-</style>
+
 <div id="contents">
 	<div class="contents_wrap">
 		<div class="contents_tit">
-			<h4>정책변경이력<a href="#n"><img src="../images/ico_tit.png" class="btn_info"/></a></h4>
-			<div class="infobox"> 
+			<h4>정책변경이력<a href="#n"><img src="../images/ico_tit.png" class="btn_info" /></a>
+			</h4>
+			<div class="infobox">
 				<ul>
 					<li>접근제어 변경 이력을 조회하고, 조회된 이력 중 원하는 항목으로 복원합니다.</li>
 				</ul>
@@ -208,36 +198,32 @@ var table = null;
 						<tbody>
 							<tr>
 								<th scope="row" class="t9">수정일시</th>
-								<td>
-									<select class="select t3" id="lst_mdf_dtm">
+								<td><select class="select t3" id="lst_mdf_dtm">
 										<c:forEach var="result" items="${lst_mdf_dtm}">
-												<option value="${result.svr_acs_cntr_his_id}">${result.lst_mdf_dtm}</option>
+											<option value="${result.svr_acs_cntr_his_id}">${result.lst_mdf_dtm}</option>
 										</c:forEach>
-									</select>
-								</td>
+								</select></td>
 							</tr>
 						</tbody>
 					</table>
 				</div>
-				<div class="inner">
-					<p class="tit"><img src="/images/ico_left_1.png" style="line-height: 22px; margin: 0px 10px 0 0;">${db_svr_nm}</p>				
-					<div class="overflow_area">
-						<table id="accesscontrolHistoryTable" class="display" cellspacing="0" width="100%">
-							<thead>
-								<tr>
-									<th width="20">No</th>
-									<th width="60">Type</th>
-									<th width="100">Database</th>
-									<th width="100">User</th>
-									<th width="100">IP Address</th>
-									<th width="100">IP Mask</th>
-									<th width="100">Method</th>
-									<th width="100">Option</th>
-								</tr>
-							</thead>
-						</table>
-					</div>
-				</div>	
+				<div class="overflow_area">
+					<table id="accesscontrolHistoryTable" class="display"
+						cellspacing="0" width="100%">
+						<thead>
+							<tr>
+								<th width="20">No</th>
+								<th width="60">Type</th>
+								<th width="100">Database</th>
+								<th width="100">User</th>
+								<th width="100">IP Address</th>
+								<th width="100">IP Mask</th>
+								<th width="100">Method</th>
+								<th width="100">Option</th>
+							</tr>
+						</thead>
+					</table>
+				</div>
 			</div>
 		</div>
 	</div>

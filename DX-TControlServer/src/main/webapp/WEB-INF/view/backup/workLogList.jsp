@@ -54,14 +54,14 @@ $(window.document).ready(function() {
  ******************************************************** */
 function fn_rman_init(){
    	tableRman = $('#logRmanList').DataTable({	
-		scrollY: "250px",
+		scrollY: "245px",
 		searching : false,
 		scrollX: true,
 	    columns : [
 		         	{ data: "rownum", className: "dt-center", defaultContent: ""}, 
 		         	{data : "wrk_nm", className : "dt-center", defaultContent : ""
 		    			,"render": function (data, type, full) {				
-		    				  return '<span onClick=javascript:fn_workLayer("'+full.wrk_nm+'"); style=cursor:pointer>' + full.wrk_nm + '</span>';
+		    				  return '<span onClick=javascript:fn_workLayer("'+full.wrk_nm+'"); class="bold">' + full.wrk_nm + '</span>';
 		    			}
 		    		},
 		         	{ data: "wrk_exp", className: "dt-center", defaultContent: ""}, 		         	
@@ -93,7 +93,7 @@ function fn_rman_init(){
    	tableRman.tables().header().to$().find('th:eq(2)').css('min-width', '100px');
    	tableRman.tables().header().to$().find('th:eq(3)').css('min-width', '100px');
    	tableRman.tables().header().to$().find('th:eq(4)').css('min-width', '100px');
-   	tableRman.tables().header().to$().find('th:eq(5)').css('min-width', '100px');
+   	tableRman.tables().header().to$().find('th:eq(5)').css('min-width', '150px');
    	tableRman.tables().header().to$().find('th:eq(6)').css('min-width', '100px');
    	tableRman.tables().header().to$().find('th:eq(7)').css('min-width', '100px');
    	tableRman.tables().header().to$().find('th:eq(8)').css('min-width', '100px');
@@ -106,14 +106,14 @@ function fn_rman_init(){
  ******************************************************** */
 function fn_dump_init(){
    	tableDump = $('#logDumpList').DataTable({	
-		scrollY: "250px",	
+		scrollY: "245px",	
 		searching : false,
 		scrollX: true,
 	    columns : [
 		         	{ data: "rownum", className: "dt-center", defaultContent: ""}, 
 		         	{data : "wrk_nm", className : "dt-center", defaultContent : ""
 		    			,"render": function (data, type, full) {				
-		    				  return '<span onClick=javascript:fn_workLayer("'+full.wrk_nm+'"); style=cursor:pointer>' + full.wrk_nm + '</span>';
+		    				  return '<span onClick=javascript:fn_workLayer("'+full.wrk_nm+'"); class="bold">' + full.wrk_nm + '</span>';
 		    			}
 		    		}, 
 		         	{ data: "wrk_exp", className: "dt-center", defaultContent: ""}, 
@@ -145,7 +145,7 @@ function fn_dump_init(){
    	tableDump.tables().header().to$().find('th:eq(2)').css('min-width', '100px');
    	tableDump.tables().header().to$().find('th:eq(3)').css('min-width', '100px');
    	tableDump.tables().header().to$().find('th:eq(4)').css('min-width', '100px');
-   	tableDump.tables().header().to$().find('th:eq(5)').css('min-width', '100px');
+   	tableDump.tables().header().to$().find('th:eq(5)').css('min-width', '150px');
    	tableDump.tables().header().to$().find('th:eq(6)').css('min-width', '100px');
    	tableDump.tables().header().to$().find('th:eq(7)').css('min-width', '100px');
    	tableDump.tables().header().to$().find('th:eq(8)').css('min-width', '100px');
@@ -387,7 +387,7 @@ function selectTab(intab){
 								<th width="100">WORK설명</th>
 								<th width="100">백업옵션</th>
 								<th width="100">사이즈</th>
-								<th width="100">백업파일경로</th>
+								<th width="150">백업파일경로</th>
 								<th width="100">작업시작 시간</th>
 								<th width="100">작업종료 시간</th>
 								<th width="100">경과시간</th>
@@ -406,7 +406,7 @@ function selectTab(intab){
 								<th width="100">WORK설명</th>
 								<th width="100">Database</th>
 								<th width="100">사이즈</th>
-								<th width="100">백업파일경로</th>								
+								<th width="150">백업파일경로</th>								
 								<th width="100">작업시작 시간</th>
 								<th width="100">작업종료 시간</th>
 								<th width="100">경과시간</th>

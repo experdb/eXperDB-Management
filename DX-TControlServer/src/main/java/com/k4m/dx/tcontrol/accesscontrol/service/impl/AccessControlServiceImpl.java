@@ -65,6 +65,10 @@ public class AccessControlServiceImpl extends EgovAbstractServiceImpl implements
 			throws Exception {
 		return accessControlDAO.selectAccessControlHistory(accessControlHistoryVO);
 	}
+	@Override
+	public int selectCurrentCntrid() throws Exception {
+		return accessControlDAO.selectCurrentCntrid();
+	}
 
 
 

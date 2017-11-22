@@ -234,7 +234,7 @@ $(function() {
 					</form>
 				</div>
 				<div class="overflow_area">
-					<table class="list" id="logList" cellspacing="0" width="100%">
+					<table class="display" id="logList" cellspacing="0" width="100%">
 						<caption>Dump 백업관리 이력화면 리스트</caption>
 						<thead>
 							<tr>

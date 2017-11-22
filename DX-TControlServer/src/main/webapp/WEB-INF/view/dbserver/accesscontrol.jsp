@@ -21,7 +21,7 @@
 	
 	function fn_init() {
 		table = $('#accessControlTable').DataTable({
-			scrollY : "250px",
+			scrollY : "270px",
 			bSort: false,
 			paging: false,
 			scrollX: true,
@@ -331,25 +331,13 @@
 	
 
 </script>
-<style>
-.inner .tit {
-    height: 28px;
-    line-height: 28px;
-    padding-left: 27px;
-    border: 1px solid #b8c3c6;
-    border-bottom: none;
-    background: #e4e9ec;
-    color: #101922;
-    font-size: 13px;
-    font-family: 'Nanum Square Bold';  
-}
-</style>
+
 <!-- contents -->
 <div id="contents">
 	<div class="contents_wrap">
 		<div class="contents_tit">
-			<h4>접근제어<a href="#n"><img src="../images/ico_tit.png" class="btn_info"/></a></h4>
-			<div class="infobox"> 
+			<h4>접근제어<a href="#n"><img src="../images/ico_tit.png" class="btn_info" /></a></h4>
+			<div class="infobox">
 				<ul>
 					<li>선택된 데이터베이스 서버에 대한 접근제어 정책을 설정합니다.</li>
 				</ul>
@@ -365,37 +353,28 @@
 		<div class="contents">
 			<div class="cmm_grp">
 				<div class="btn_type_01">
-<!-- 					<span> -->
-<!-- 						<div class="search_area"> -->
-<!-- 							<input type="text" class="txt search" id="select" /> -->
-<!-- 							<button class="search_btn">검색</button> -->
-<!-- 						</div> -->
-<!-- 					</span> -->
 					<span class="btn" onclick="fn_insert();"><button>추가</button></span>
 					<span class="btn" onclick="fn_update();"><button>수정</button></span>
 					<span class="btn" onclick="fn_delete();"><button>삭제</button></span>
 					<span class="btn" onclick="fn_save();"><button>적용</button></span>
 				</div>
-				<div class="inner">
-					<p class="tit"><img src="/images/ico_left_1.png" style="line-height: 22px; margin: 0px 10px 0 0;">${db_svr_nm}</p>
-					<div class="overflow_area">
-						<table id="accessControlTable" class="display" cellspacing="0" width="100%">
-							<thead>
-								<tr>
-									<th width="20"></th>
-									<th width="40">No</th>
-									<th width="50">Type</th>
-									<th width="100">Database</th>
-									<th width="100">User</th>
-									<th width="100">IP Address</th>
-									<th width="100">IP Mask</th>
-									<th width="80">Method</th>
-									<th width="100">Option</th>
-									<th width="100">순서</th>
-								</tr>
-							</thead>
-						</table>
-					</div>
+				<div class="overflow_area">
+					<table id="accessControlTable" class="display" cellspacing="0" width="100%">
+						<thead>
+							<tr>
+								<th width="20"></th>
+								<th width="40">No</th>
+								<th width="50">Type</th>
+								<th width="100">Database</th>
+								<th width="100">User</th>
+								<th width="100">IP Address</th>
+								<th width="100">IP Mask</th>
+								<th width="80">Method</th>
+								<th width="100">Option</th>
+								<th width="100">순서</th>
+							</tr>
+						</thead>
+					</table>
 				</div>
 			</div>
 		</div>

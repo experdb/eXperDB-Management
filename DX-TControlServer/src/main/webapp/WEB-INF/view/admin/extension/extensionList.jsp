@@ -29,7 +29,7 @@ function fn_init() {
 	 * 서버 (데이터테이블)
 	 ******************************************************** */
 	table_dbServer = $('#dbServerList').DataTable({
-		scrollY : "245px",
+		scrollY : "230px",
 		searching : false,
 		paging : false,
 		columns : [
@@ -61,7 +61,7 @@ function fn_init() {
 	 * 디비 (데이터테이블)
 	 ******************************************************** */
 	table_db = $('#dbList').DataTable({
-		scrollY : "285px",
+		scrollY : "275px",
 		searching : false,
 		paging : false,
 		columns : [
@@ -195,7 +195,7 @@ $(function() {
 					<div class="inner">
 						<p class="tit">확장설치조회</p>
 						<div class="tree_server">
-							<table id="dbServerList" class="display" cellspacing="0" align="right">
+							<table id="dbServerList" class="display" cellspacing="0" width="100%" align="right">
 								<thead>
 									<tr>
 										<th>선택</th>
@@ -223,7 +223,7 @@ $(function() {
 					<div class="inner">
 						<p class="tit">확장 목록</p>
 						<div class="tree_list">
-							<table id="dbList" class="display" cellspacing="0" align="left">
+							<table id="dbList" class="display" cellspacing="0" width="100%" align="left">
 								<thead>
 									<tr>
 										<th>확장명</th>

@@ -1,3 +1,12 @@
+/*추가 달력날짜사이의 간격*/
+.cellDate{
+	clear:both;
+	overflow:hidden;
+	padding-left:5px;
+	margin-top:7px;
+}
+
+
 /* 레이어달력 */
 .layer_calendar{
 	width:231px;
@@ -159,7 +168,7 @@ text-overflow:ellipsis;
 white-space:nowrap;
 }
 .calendar_box .date_brdleft{
-border-left:1px solid #ccc;
+border-left:1px solid #b8c3c6;
 }
 .calendar_box .wid_dif{
 width:14.4% !important;
@@ -177,10 +186,10 @@ width:14%;
 height:28px;
 padding:8px 0 0 0;
 text-align:center;
-border-right:1px solid #ccc;
-border-bottom:1px solid #ccc;
-border-top:1px solid #ccc;
-background:#DEE4EB;
+border-right: 1px solid #b8c3c6;
+border-bottom: 1px solid #b8c3c6;
+border-top: 1px solid #b8c3c6;
+background:#e4e9ec;
 }
 .calendar_box .line2{
 width:100%;
@@ -194,10 +203,11 @@ float:left;
 width:14%;
 min-height:80px;
 height:auto;
-border-right:1px solid #ccc;
-border-bottom:1px solid #ccc;
+border-right:1px solid #b8c3c6;
+border-bottom:1px solid #b8c3c6;
 position:relative;
 z-index:1500;
+padding: 7px;
 }
 .calendar_box .line2 .disable{
 background:#F9F9F9;

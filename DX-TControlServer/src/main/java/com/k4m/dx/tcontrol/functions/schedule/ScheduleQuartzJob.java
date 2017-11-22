@@ -1,6 +1,5 @@
 package com.k4m.dx.tcontrol.functions.schedule;
 
-import java.io.UnsupportedEncodingException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -34,10 +33,11 @@ public class ScheduleQuartzJob implements Job{
 	
 	/**
 	 * 1. 스케줄ID를 가져옴
-	 * 2. 해당 스케줄ID에 해당하는 스케줄 상세정보 조회(work 정보)
-	 * 3. 디비서버_ID 추출하여 접속정보 조회
-	 * 4. 부가옵션 조회
-	 * 5. 오브젝트 옵션
+	 * 2. DBMS정보 조회(Master, Slave)
+	 * 3. 해당 스케줄ID에 해당하는 스케줄 상세정보 조회(work 정보)
+	 * 4. 디비서버_ID 추출하여 접속정보 조회
+	 * 5. 부가옵션 조회
+	 * 6. 오브젝트 옵션
 	 */
 	@Override
 	public void execute(JobExecutionContext jobContext) throws JobExecutionException {
@@ -51,7 +51,7 @@ public class ScheduleQuartzJob implements Job{
 			
 		try{
 			
-			List<Map<String, Object>> resultWork = null;
+			List<Map<String, Object>> resultWork = null;		
 			List<Map<String, Object>> resultDbconn = null;
 			List<Map<String, Object>> addOption = null;
 			List<Map<String, Object>> addObject = null;
@@ -78,8 +78,10 @@ public class ScheduleQuartzJob implements Job{
 			
 			ScheduleService scheduleService = (ScheduleService) context.getBean("scheduleService");			
 		
-			
-			// 2. 해당 스케줄ID에 해당하는 스케줄 상세정보 조회(work 정보)
+			// 2. scd_id에 대한 (Master,Slave)DB접속 정보 가지고옴
+			resultDbconn= scheduleService.selectDbconn(Integer.parseInt(scd_id));
+						
+			// 3. 해당 스케줄ID에 해당하는 스케줄 상세정보 조회(work 정보)
 			resultWork= scheduleService.selectExeScheduleList(scd_id);
 		
 			Calendar calendar = Calendar.getInstance();				
@@ -87,41 +89,36 @@ public class ScheduleQuartzJob implements Job{
 	        String today = (new SimpleDateFormat("yyyyMMddHHmmss").format(date));
 	        
 	        String bck_fileNm ="";
-			
+		       
 	        
-	        
-	        //WORK 갯수만큼 루프
-			for(int i =0; i<resultWork.size(); i++){
-		        
-		        bck_fileNm = "eXperDB_"+resultWork.get(i).get("wrk_id")+"_"+today+".dump";
-				
-				int db_svr_id = Integer.parseInt(resultWork.get(i).get("db_svr_id").toString());
-				int wrk_id = Integer.parseInt(resultWork.get(i).get("wrk_id").toString());
-				
+	        //마스터,슬레이브 DB갯수만큼 루프
+	        for(int h=0; h<resultDbconn.size(); h++){
+		        //WORK 갯수만큼 루프
+				for(int i =0; i<resultWork.size(); i++){
+			        
+			        bck_fileNm = "eXperDB_"+resultWork.get(i).get("wrk_id")+"_"+today+".dump";			
+					int wrk_id = Integer.parseInt(resultWork.get(i).get("wrk_id").toString());
+												
+					//부가옵션 조회
+					addOption= scheduleService.selectAddOption(wrk_id);
 					
-				resultDbconn= scheduleService.selectDbconn(db_svr_id);
-				
-				// 4. 부가옵션 조회
-				addOption= scheduleService.selectAddOption(wrk_id);
-				
-				// 5. 오브젝트옵션 조회
-				addObject= scheduleService.selectAddObject(wrk_id);
-				
-				
-				
-				// 백업 내용이 DUMP 백업일경우 
-				if(resultWork.get(i).get("bck_bsn_dscd").equals("TC000202")){
-					String strCmd = dumpBackupMakeCmd(resultDbconn, resultWork, addOption, addObject, i, bck_fileNm);	
-					BCK_NM.add(bck_fileNm);
-					CMD.add(strCmd);
-				// 백업 내용이 RMAN 백업일경우	
-				}else{
-					String rmanCmd = rmanBackupMakeCmd(resultWork, i);		
-					CMD.add(rmanCmd);
-				}
-			}			
-			System.out.println("명령어="+CMD);
-			agentCall(resultWork, CMD, BCK_NM);
+					//오브젝트옵션 조회
+					addObject= scheduleService.selectAddObject(wrk_id);
+											
+					// 백업 내용이 DUMP 백업일경우 
+					if(resultWork.get(i).get("bck_bsn_dscd").equals("TC000202")){
+						String strCmd = dumpBackupMakeCmd(resultDbconn, resultWork, addOption, addObject, i, bck_fileNm, h);	
+						BCK_NM.add(bck_fileNm);
+						CMD.add(strCmd);
+					// 백업 내용이 RMAN 백업일경우	
+					}else{
+						String rmanCmd = rmanBackupMakeCmd(resultWork, i, resultDbconn, h);		
+						CMD.add(rmanCmd);
+					}
+				}		
+				System.out.println("명령어="+CMD);
+				agentCall(resultWork, CMD, BCK_NM, resultDbconn, h);
+	        }
 		}catch(Exception e){
 			e.printStackTrace();
 		}
@@ -131,59 +128,40 @@ public class ScheduleQuartzJob implements Job{
 
 	/**
 	 * 1. Connection Option 명령어 생성
-	 *   1.1 데이터베이스명
-	 *   1.2 호스트명
-	 *   1.3 포트
-	 *   1.4 사용자명
 	 * 2. 기본옵션 명령어 생성
-	 *   2.1 저장경로
-	 *   2.2 파일포멧
-	 *   2.3 압축률
-	 *   2.4 인코딩방식
-	 *   2.5 Rolename
 	 * 3. 부가옵션 명령어 생성  
+	 * 4. 오브젝트옵션 명령어 생성
 	 * @param addObject 
 	 * @param i 
+	 * @param h 
 	 * @param resultDbconn2 
 	 * @param result
 	 * @return
 	 */
 	@SuppressWarnings("unused")
-	private String dumpBackupMakeCmd(List<Map<String, Object>> resultDbconn, List<Map<String, Object>> resultWork, List<Map<String, Object>> addOption, List<Map<String, Object>> addObject, int i, String bck_fileNm) {
+	private String dumpBackupMakeCmd(List<Map<String, Object>> resultDbconn, List<Map<String, Object>> resultWork, List<Map<String, Object>> addOption, List<Map<String, Object>> addObject, int i, String bck_fileNm, int h) {
 
-		String strCmd = "pg_dump";
+		String strCmd = "pg_dump ";
 		String strLast = "";
 		
 		try {		
-
-			//1. Connection Option 명령어 생성
-			for(int k =0; k<resultDbconn.size(); k++){
-				//1.1 연결할 데이터베이스의 이름 지정
-				//strCmd += "--dbname="+resultDbconn.get(k).get("dft_db_nm");
-				//1.2 호스트 이름 지정
-				//strCmd += " --host="+resultDbconn.get(k).get("ipadr");
-				//1.3 서버가 연결을 청취하는 TCP포트 설정
-				strCmd += " --port="+resultDbconn.get(k).get("portno");
-				//1.4 연결할 사용자이름
-				strCmd += " --username="+resultDbconn.get(k).get("svr_spr_usr_id");	
-				strCmd += " --no-password";	
-			}
+			//DBMS정보 추출
+			String dbmsInfo = fn_dbmsInfo(resultDbconn, h);
+			strCmd += dbmsInfo;
 			
-			//2. 기본옵션 명령어 생성
-			
-				String basicOpt = fn_basicOptCmd(resultWork, i, bck_fileNm);
-				strLast +=basicOpt;
-								
-				String addObjCmd = fn_addOption(addOption);	
-				strCmd += addObjCmd;
-			
-			
+			//기본옵션 명령어 생성	
+			String basicOpt = fn_basicOptCmd(resultWork, i, bck_fileNm);
+			strLast +=basicOpt;
+						
+			//부가옵션 명령어 생성
+			String addObjCmd = fn_addOption(addOption);	
+			strCmd += addObjCmd;
+					
+			//오브젝트옵션 명령어 생성
 			if(addObject.size() != 0){
 				String addObjectCmd = fn_addObject(addObject);	
 				strCmd += addObjectCmd;
-			}			
-			
-			
+			}					
 			strCmd += strLast;
 		} catch (Exception e) {			
 			e.printStackTrace();
@@ -192,26 +170,48 @@ public class ScheduleQuartzJob implements Job{
 	}
 
 	
-	private String fn_addObject(List<Map<String, Object>> addObject) {
-		
-		String basicObj = null;
-		
-		//4. 오브젝트옵션 명령어 생성
-		for(int n=0; n<addObject.size(); n++){			
-			if(addObject.get(n).get("obj_nm").equals(null) || addObject.get(n).get("obj_nm").equals("")){
-				basicObj+=" -n "+addObject.get(n).get("scm_nm").toString().toLowerCase();
-			}else{
-				basicObj+=" -t "+addObject.get(n).get("obj_nm").toString().toLowerCase();
-			}
-		}
-		return basicObj;
+	private String fn_dbmsInfo(List<Map<String, Object>> resultDbconn, int h) {
+		String DBMS = "";
+		//1.1 연결할 데이터베이스의 이름 지정
+		DBMS += "--dbname="+resultDbconn.get(h).get("dft_db_nm");
+		//1.2 호스트 이름 지정
+		DBMS += " --host="+resultDbconn.get(h).get("ipadr");
+		//1.3 서버가 연결을 청취하는 TCP포트 설정
+		DBMS += " --port="+resultDbconn.get(h).get("portno");
+		//1.4 연결할 사용자이름
+		DBMS += " --username="+resultDbconn.get(h).get("svr_spr_usr_id");	
+		DBMS += " --no-password";	
+		return DBMS;
 	}
 
-
-	//3. 부가옵션 명령어 생성
-	private String fn_addOption(List<Map<String, Object>> addOption) {
+	private String fn_basicOptCmd(List<Map<String, Object>> resultWork, int i, String bck_fileNm) {
+		String basicOpt = "";
+	
+		basicOpt +=" "+resultWork.get(i).get("db_nm")+"  > "+resultWork.get(i).get("save_pth")+"/"+bck_fileNm;
 		
-		String basicOpt = null;
+		if(resultWork.get(i).get("file_fmt_cd_nm") != null && resultWork.get(i).get("file_fmt_cd_nm") != ""){
+			//파일포멧에 따른 명령어 생성
+			basicOpt += " --format="+resultWork.get(i).get("file_fmt_cd_nm").toString().toLowerCase();
+			//파일포멧이 tar일경우 압축률 명령어 생성
+			if(resultWork.get(i).get("file_fmt_cd_nm") == "tar"){
+				basicOpt += " --compress="+resultWork.get(i).get("cprt").toString().toLowerCase();
+			}
+		}
+		
+		//인코딩 방식 명령어 생성
+		if(resultWork.get(i).get("incd") != null && resultWork.get(i).get("incd") != ""){
+			basicOpt +=" --encoding="+resultWork.get(i).get("incd").toString().toLowerCase();
+		}		
+		
+		//rolename 명령어 생성		
+		if(resultWork.get(i).get("incd") != null && !resultWork.get(i).get("usr_role_nm").equals("")){
+			basicOpt +=" --role="+resultWork.get(i).get("usr_role_nm").toString().toLowerCase();
+		}		
+		return basicOpt;
+	}
+	
+	private String fn_addOption(List<Map<String, Object>> addOption) {	
+		String basicOpt = "";
 		
 		for(int j =0; j<addOption.size(); j++){
 			// Sections
@@ -271,38 +271,27 @@ public class ScheduleQuartzJob implements Job{
 		return basicOpt;
 	}
 
-
-	private String fn_basicOptCmd(List<Map<String, Object>> resultWork, int i, String bck_fileNm) {
-		String basicOpt = null;
-	
-		basicOpt +=" "+resultWork.get(i).get("db_nm")+"  > "+resultWork.get(i).get("save_pth")+"/"+bck_fileNm;
-		
-		if(resultWork.get(i).get("file_fmt_cd_nm") != null && resultWork.get(i).get("file_fmt_cd_nm") != ""){
-			//2.2 파일포멧에 따른 명령어 생성
-			basicOpt += " --format="+resultWork.get(i).get("file_fmt_cd_nm").toString().toLowerCase();
-			//2.3 파일포멧이 tar일경우 압축률 명령어 생성
-			if(resultWork.get(i).get("file_fmt_cd_nm") == "tar"){
-				basicOpt += " --compress="+resultWork.get(i).get("cprt").toString().toLowerCase();
+	private String fn_addObject(List<Map<String, Object>> addObject) {	
+		String basicObj = "";
+		for(int n=0; n<addObject.size(); n++){			
+			if(addObject.get(n).get("obj_nm").equals(null) || addObject.get(n).get("obj_nm").equals("")){
+				basicObj+=" -n "+addObject.get(n).get("scm_nm").toString().toLowerCase();
+			}else{
+				basicObj+=" -t "+addObject.get(n).get("obj_nm").toString().toLowerCase();
 			}
 		}
-		
-		//2.4 인코딩 방식 명령어 생성
-		if(resultWork.get(i).get("incd") != null && resultWork.get(i).get("incd") != ""){
-			basicOpt +=" --encoding="+resultWork.get(i).get("incd").toString().toLowerCase();
-		}
-		
-		//2.5 rolename 명령어 생성		
-		if(resultWork.get(i).get("incd") != null && !resultWork.get(i).get("usr_role_nm").equals("")){
-			basicOpt +=" --role="+resultWork.get(i).get("usr_role_nm").toString().toLowerCase();
-		}
-		
-		return basicOpt;
+		return basicObj;
 	}
 
 
-	private String rmanBackupMakeCmd(List<Map<String, Object>> resultWork, int i) {
-		String rmanCmd = "pg_rman backup";
 
+	private String rmanBackupMakeCmd(List<Map<String, Object>> resultWork, int i, List<Map<String, Object>> resultDbconn, int h) {
+		String rmanCmd = "pg_rman backup ";
+
+		//DBMS정보 추출
+		String dbmsInfo = fn_dbmsInfo(resultDbconn, h);
+		rmanCmd += dbmsInfo;
+		
 		//데이터베이스 클러스터의 절대경로
 		rmanCmd += " --pgdata="+resultWork.get(i).get("data_pth").toString();
 		
@@ -340,28 +329,14 @@ public class ScheduleQuartzJob implements Job{
 	}
 	
 	
-	public void agentCall(List<Map<String, Object>> resultWork, ArrayList<String> CMD, ArrayList<String> BCKNM) {
-		List<DbServerVO> ipResult = null;	
-		int db_svr_id = Integer.parseInt(resultWork.get(0).get("db_svr_id").toString());
-
+	public void agentCall(List<Map<String, Object>> resultWork, ArrayList<String> CMD, ArrayList<String> BCKNM, List<Map<String, Object>> resultDbconn, int h) {
 		try {
-			
-			ipResult = cmmnServerInfoService.selectAllIpadrList(db_svr_id);
-			
-			for(int i=0; i<ipResult.size(); i++){
-				AgentInfoVO vo = new AgentInfoVO();
-				vo.setIPADR(ipResult.get(i).getIpadr());
-				
-				AgentInfoVO agentInfo =  (AgentInfoVO) cmmnServerInfoService.selectAgentInfo(vo);
-				
-				String IP = ipResult.get(i).getIpadr();
-				int PORT = agentInfo.getSOCKET_PORT();
+				String IP = (String) resultDbconn.get(h).get("ipadr");
+				int PORT = Integer.parseInt(resultDbconn.get(h).get("portno").toString());
 				
 				ClientInfoCmmn clc = new ClientInfoCmmn();
-				clc.db_backup(resultWork, CMD, IP ,PORT, BCKNM);
-			}			
+				clc.db_backup(resultWork, CMD, IP ,PORT, BCKNM);	
 		} catch (Exception e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}

@@ -87,7 +87,7 @@
 		)
 		VALUES
 		(
-		  nextval('q_svracscntr_i_01')
+		  #{svr_acs_cntr_id}
 		, #{db_svr_id}
 		, #{dtb}
 		, #{prms_ipadr}
@@ -112,9 +112,6 @@
 	 	* Description : 접근제어 이력 등록
 	 	* Author : 김주영
 	 	**/
-	 	<selectKey resultType="int" keyProperty="svr_acs_cntr_id" order="BEFORE">
-        	SELECT setval('q_svracscntr_i_01',nextval('q_svracscntr_i_01')-1)
-   	 	</selectKey>
    	 	INSERT INTO T_SVRACSCNTR_HIS_I
 		(
 		  SVR_ACS_CNTR_HIS_ID
@@ -225,4 +222,12 @@
 		ORDER BY PRMS_SEQ
 	</select>
 	
+	<select id="selectCurrentCntrid" resultType="int">
+		/**
+	 	*  Query ID : selectCurrentCntrid
+	 	* Description : 현재 서버_접근_제어_ID 조회
+	 	* Author : 김주영
+	 	**/		
+	 	SELECT setval('q_svracscntr_i_01',nextval('q_svracscntr_i_01'))
+	</select>
 </mapper>

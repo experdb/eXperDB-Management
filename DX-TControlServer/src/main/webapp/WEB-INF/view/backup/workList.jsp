@@ -31,7 +31,6 @@ function fn_init(){
 	tableRman = $('#rmanDataTable').DataTable({
 	scrollY : "245px",
 	scrollX : true,
-	paging : false,
 	searching : false,	
 	deferRender : true,
 	columns : [
@@ -39,7 +38,7 @@ function fn_init(){
 		{data : "idx", className : "dt-center", defaultContent : ""}, 
 		{data : "wrk_nm", className : "dt-center", defaultContent : ""
 			,"render": function (data, type, full) {
-				  return '<span onClick=javascript:fn_workLayer("'+full.wrk_nm+'"); style=cursor:pointer>' + full.wrk_nm + '</span>';
+				  return '<span onClick=javascript:fn_workLayer("'+full.wrk_nm+'"); class="bold">' + full.wrk_nm + '</span>';
 			}
 		}, //work명
 		{data : "wrk_exp", className : "dt-center", defaultContent : ""},	
@@ -75,8 +74,10 @@ function fn_init(){
 	 ******************************************************** */
 	tableDump = $('#dumpDataTable').DataTable({
 		scrollY : "245px",
-		scrollX : true,
-		paging : false,
+		scrollX: true,	
+		bDestroy: true,
+		paging : true,
+		processing : true,
 		searching : false,	
 		deferRender : true,
 	columns : [
@@ -84,7 +85,7 @@ function fn_init(){
 		{data : "idx", className : "dt-center", defaultContent : ""}, 
 		{data : "wrk_nm", className : "dt-center", defaultContent : ""
 			,"render": function (data, type, full) {				
-				  return '<span onClick=javascript:fn_workLayer("'+full.wrk_nm+'"); style=cursor:pointer>' + full.wrk_nm + '</span>';
+				  return '<span onClick=javascript:fn_workLayer("'+full.wrk_nm+'"); class="bold">' + full.wrk_nm + '</span>';
 			}
 		},
 		{data : "wrk_exp", className : "dt-center", defaultContent : ""},
@@ -638,7 +639,7 @@ function selectTab(tab){
 				
 				
 				<div class="overflow_area">
-					<table id="rmanDataTable" class="cell-border" >
+					<table id="rmanDataTable" class="display" cellspacing="0" width="100%">
 						<caption>Rman백업관리 화면 리스트</caption>
 							<thead>
 								<tr>
@@ -661,7 +662,7 @@ function selectTab(tab){
 				
 
 	
-					<table id="dumpDataTable" class="cell-border" >
+					<table id="dumpDataTable" class="display" cellspacing="0" width="100%">
 						<caption>Dump백업관리 화면 리스트</caption>
 							<thead>
 								<tr>
