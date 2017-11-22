@@ -204,6 +204,7 @@ width:14%;
 min-height:80px;
 height:auto;
 border-right:1px solid #b8c3c6;
+border-left:1px solid #b8c3c6;
 border-bottom:1px solid #b8c3c6;
 position:relative;
 z-index:1500;
