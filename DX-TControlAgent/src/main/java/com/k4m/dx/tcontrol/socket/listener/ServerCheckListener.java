@@ -79,6 +79,10 @@ public class ServerCheckListener implements Runnable {
 					dbServerInfoVO.setMASTER_GBN(strMasterGbn);
 					dbServerInfoVO.setDB_CNDT("Y");
 					
+					if(resultMasterGbnVO.getDB_CNDT().equals("N")) {
+						service.updateDB_CNDT(dbServerInfoVO);
+					}
+					
 					//socketLogger.info("@@@@@@ before : " + strMasterGbn + " @@@@ after : " + strMasterGbn);
 					
 					if(!strIsMasterGbn.equals(strMasterGbn)) {

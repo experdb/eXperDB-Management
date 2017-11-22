@@ -456,6 +456,7 @@
 		
 			SELECT 
 				MASTER_GBN
+				, DB_CNDT
 			FROM 
 				T_DBSVRIPADR_I
 			WHERE
