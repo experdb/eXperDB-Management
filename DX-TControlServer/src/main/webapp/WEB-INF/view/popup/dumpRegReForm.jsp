@@ -46,10 +46,13 @@ var workObj = {"obj":[
  ******************************************************** */
 $(window.document).ready(
 	function() {
-		fn_get_object_list("${workInfo[0].db_id}","${workInfo[0].db_nm}");
+		//fn_get_object_list("${workInfo[0].db_id}","${workInfo[0].db_nm}");
 		checkSection();
 		changeFileFmtCd();
 		checkOid();
+
+		setTimeout("fn_get_object_list('','')", 100); 
+
 });
 
 /* ********************************************************
@@ -275,6 +278,10 @@ function fn_get_object_list(in_db_id,in_db_nm){
 	}else{
 		$(".tNav").html("");
 	}
+}
+
+function fn_checkAll() {
+	
 }
 
 /* ********************************************************
