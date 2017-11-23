@@ -280,8 +280,22 @@ function fn_get_object_list(in_db_id,in_db_nm){
 	}
 }
 
-function fn_checkAll() {
-	
+function fn_checkAll(schema_id, schema_name) {
+    var schemaChkBox = document.getElementById("schema"+schema_id);
+
+    if(schemaChkBox.checked) { 
+    	$("input[name=tree]").each(function(){
+    		if($(this).attr("schema") == schema_name) {
+    			this.checked = true;
+    		}
+    	});
+    } else { 
+    	$("input[name=tree]").each(function(){
+    		if($(this).attr("schema") == schema_name) {
+    			this.checked = false;
+    		}
+    	});
+    }
 }
 
 /* ********************************************************
@@ -304,7 +318,7 @@ function fn_make_object_list(data){
 			});
 			html += "<li class='active'><a href='#'>"+item.schema+"</a>";
 			html += "<div class='inp_chk'>";
-			html += "<input type='checkbox' id='schema"+schemaCnt+"' name='tree' value='"+item.schema+"' otype='schema' schema='"+item.schema+"'"+checkStr+"/><label for='schema"+schemaCnt+"'></label>";
+			html += "<input type='checkbox' onClick=fn_checkAll('" + schemaCnt + "','"+item.schema+"') id='schema"+schemaCnt+"' name='tree' value='"+item.schema+"' otype='schema' schema='"+item.schema+"'"+checkStr+"/><label for='schema"+schemaCnt+"'></label>";
 			html += "</div>";
 			html += "<ul>\n";
 		}
