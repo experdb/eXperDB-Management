@@ -282,7 +282,7 @@
 	function fn_detail(exe_sn){
 		var popUrl = "/popup/scheduleHistoryDetail.do?exe_sn="+exe_sn; // 서버 url 팝업경로
 		var width = 930;
-		var height = 635;
+		var height = 700;
 		var left = (window.screen.width / 2) - (width / 2);
 		var top = (window.screen.height /2) - (height / 2);
 		var popOption = "width="+width+", height="+height+", top="+top+", left="+left+", resizable=no, scrollbars=yes, status=no, toolbar=no, titlebar=yes, location=no,";

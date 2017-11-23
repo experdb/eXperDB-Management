@@ -88,7 +88,7 @@
 			<div class="cmm_grp">
 				<div class="overflow_area">
 				
-				<table id="scheduleFailList" class="cell-border display" >
+				<table id="scheduleFailList" class="display" cellspacing="0" width="100%">
 				<caption>스케줄 실패 리스트</caption>
 					<thead>
 						<tr>

@@ -36,11 +36,11 @@ function fn_init() {
 		 * 서버리스트 (데이터테이블)
 		 ******************************************************** */
 		table = $('#workList').DataTable({
-		scrollY : "271px",
+		scrollY : "230px",
 		
 		processing : true,
 		searching : false,
-		paging : false,	
+		paging : true,	
 		columns : [
 		{data : "rownum", defaultContent : "", targets : 0, orderable : false, checkboxes : {'selectRow' : true}}, 
 		{data : "idx", className : "dt-center", defaultContent : ""},
@@ -286,7 +286,7 @@ function fn_workAdd(){
 		<div class="pop_cmm3">
 			<p class="pop_s_tit">Work 리스트</p>
 			<div class="overflow_area">
-				<table id="workList" class="cell-border display" >
+				<table id="workList" class="display" cellspacing="0" width="100%">
 				<thead>
 					<tr>
 						<th width="10"></th>

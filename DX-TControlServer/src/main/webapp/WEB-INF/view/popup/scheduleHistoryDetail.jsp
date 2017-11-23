@@ -46,7 +46,8 @@ var workTable = null;
 
 function fn_init() {
 	schTable = $('#schTable').DataTable({
-		scrollY : "60px",
+		scrollY : "50px",
+		scrollX: false,
 		searching : false,
 		paging: false,
 		columns : [
@@ -60,7 +61,7 @@ function fn_init() {
 
     
     workTable = $('#workTable').DataTable({
-		scrollY : "180px",
+		scrollY : "190px",
 		searching : false,
 		paging: false,
 		columns : [
@@ -153,7 +154,7 @@ $(window.document).ready(function() {
 				</div>
 				<br><br>
 				<p class="pop_s_tit">work정보</p>
-				<div class="overflow_area" style="height: 290px;">
+				<div class="overflow_area" style="height: 300px;">
 					<table id="workTable" class="display" cellspacing="0" width="100%">
 						<thead>
 							<tr>

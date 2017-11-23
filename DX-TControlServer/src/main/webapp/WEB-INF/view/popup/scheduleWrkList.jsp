@@ -126,7 +126,7 @@ $(window.document).ready(function() {
 									<p>Work  리스트</p>
 								</div>
 								<div class="overflow_area">							
-									<table id="workList" class="cell-border display" >
+									<table id="workList" class="display" cellspacing="0" width="100%">
 										<thead>
 											<tr>
 												<th>No</th>

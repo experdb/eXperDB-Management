@@ -251,7 +251,7 @@ function fn_regRe_popup(){
 						</tbody>
 					</table>
 				</div>
-				<table id="serverList" class="cell-border display" width="100%">
+				<table id="serverList" class="display" cellspacing="0" width="100%">
 					<thead>
 						<tr>
 							<th width="10"></th>

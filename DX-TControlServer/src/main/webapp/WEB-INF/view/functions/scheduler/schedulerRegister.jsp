@@ -31,7 +31,7 @@ function fn_init(){
 	scrollY : "245px",
 	scrollX: true,	
 	bDestroy: true,
-	paging : false,
+	paging : true,
 	processing : true,
 	searching : false,	
 	deferRender : true,
@@ -286,7 +286,7 @@ function fn_buttonAut(){
 function fn_workAdd(){
 	var popUrl = "/popup/scheduleRegForm.do"; 
 	var width = 1220;
-	var height = 800;
+	var height = 680;
 	var left = (window.screen.width / 2) - (width / 2);
 	var top = (window.screen.height /2) - (height / 2);
 	var popOption = "width="+width+", height="+height+", top="+top+", left="+left+", resizable=no, scrollbars=yes, status=no, toolbar=no, titlebar=yes, location=no,";
@@ -600,7 +600,7 @@ function fn_check() {
 									</div>
 								</div>
 								<div class="overflow_area">							
-									<table id="workList" class="cell-border display" width="100%">
+									<table id="workList" class="display" cellspacing="0" width="100%">
 										<thead>
 											<tr>
 												<th width="10"></th>
