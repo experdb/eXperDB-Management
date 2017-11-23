@@ -36,11 +36,11 @@ function fn_init() {
 		 * 서버리스트 (데이터테이블)
 		 ******************************************************** */
 		table = $('#workList').DataTable({
-		scrollY : "271px",
+		scrollY : "230px",
 		
 		processing : true,
 		searching : false,
-		paging : false,	
+		paging : true,	
 		columns : [
 		{data : "rownum", defaultContent : "", targets : 0, orderable : false, checkboxes : {'selectRow' : true}}, 
 		{data : "idx", className : "dt-center", defaultContent : ""},
@@ -133,7 +133,7 @@ $(window.document).ready(function() {
 					alert("세션이 만료가 되었습니다. 로그인 페이지로 이동합니다.");
 		             location.href = "/";
 				} else {
-					alert("ERROR CODE : "+ request.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ request.responseText.replace(/(<([^>]+)>)/gi, ""));
+					alert("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""));
 				}
 			},
 			success : function(result) {		
@@ -167,7 +167,7 @@ $(window.document).ready(function() {
 						alert("세션이 만료가 되었습니다. 로그인 페이지로 이동합니다.");
 			             location.href = "/";
 					} else {
-						alert("ERROR CODE : "+ request.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ request.responseText.replace(/(<([^>]+)>)/gi, ""));
+						alert("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""));
 					}
 				},
 				success : function(result) {		
@@ -213,7 +213,7 @@ function fn_search(){
 				alert("세션이 만료가 되었습니다. 로그인 페이지로 이동합니다.");
 	             location.href = "/";
 			} else {
-				alert("ERROR CODE : "+ request.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ request.responseText.replace(/(<([^>]+)>)/gi, ""));
+				alert("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""));
 			}
 		},
 		success : function(result) {
@@ -286,7 +286,7 @@ function fn_workAdd(){
 		<div class="pop_cmm3">
 			<p class="pop_s_tit">Work 리스트</p>
 			<div class="overflow_area">
-				<table id="workList" class="cell-border display" >
+				<table id="workList" class="display" cellspacing="0" width="100%">
 				<thead>
 					<tr>
 						<th width="10"></th>

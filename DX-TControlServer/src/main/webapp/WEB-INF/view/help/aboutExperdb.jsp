@@ -2,8 +2,8 @@
 	pageEncoding="UTF-8"%>
 <%
 	/**
-	* @Class Name : aboutTcontrol.jsp
-	* @Description : aboutTcontrol 화면
+	* @Class Name : aboutExperdb.jsp
+	* @Description : aboutExperdb 화면
 	* @Modification Information
 	*
 	*   수정일         수정자                   수정내용
@@ -19,7 +19,7 @@
 	<div class="contents_wrap">
 		<div class="contents">
 			<table class="view">
-				<caption>version,copyright 팝업</caption>
+				<caption>version,copyright</caption>
 				<colgroup>
 					<col style="width: 170px;" />
 					<col />
@@ -31,7 +31,7 @@
 					</tr>
 					<tr>
 						<th scope="row" class="t1">Copyright</th>
-						<td>2017, The Tcontrol Development Team</td>
+						<td>2017, The eXperDB-Management Development Team</td>
 					</tr>
 				</tbody>
 			</table>

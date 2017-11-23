@@ -81,4 +81,10 @@ public class CmmnServerInfoDAO extends EgovAbstractMapper {
 		return sl;
 	}
 
+	public List<Map<String, Object>> selectWrkErrorMsg(int exe_sn) {
+		List<Map<String, Object>> sl = null;
+		sl = (List<Map<String, Object>>) list("cmmnSql.selectWrkErrorMsg", exe_sn);		
+		return sl;
+	}
+
 }

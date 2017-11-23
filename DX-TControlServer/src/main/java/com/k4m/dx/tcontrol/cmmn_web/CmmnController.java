@@ -411,4 +411,26 @@ public class CmmnController {
 		}
 		return result;
 	}	
+	
+	
+	/**
+	 * 작업로그정보
+	 * @param 
+	 * @return resultSet
+	 * @throws Exception
+	 */
+	@SuppressWarnings("unchecked")
+	@RequestMapping(value = "/selectWrkErrorMsg.do")
+	@ResponseBody
+	public List<Map<String, Object>> selectWrkErrorMsg(HttpServletRequest request) {
+		List<Map<String, Object>> result = null;
+		
+		try {
+			int exe_sn = Integer.parseInt(request.getParameter("exe_sn"));			
+			result = cmmnServerInfoService.selectWrkErrorMsg(exe_sn);	
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return result;
+	}		
 }

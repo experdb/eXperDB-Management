@@ -42,7 +42,7 @@ public class HelpController {
 	 * @return ModelAndView mv
 	 * @throws Exception
 	 */
-	@RequestMapping(value = "/aboutTcontrol.do")
+	@RequestMapping(value = "/aboutExperdb.do")
 	public ModelAndView aboutTcontrol(@ModelAttribute("historyVO") HistoryVO historyVO, HttpServletRequest request) {
 		ModelAndView mv = new ModelAndView();
 		try {
@@ -51,7 +51,7 @@ public class HelpController {
 			historyVO.setExe_dtl_cd("DX-T0054");
 			accessHistoryService.insertHistory(historyVO);
 			
-			mv.setViewName("help/aboutTcontrol");
+			mv.setViewName("help/aboutExperdb");
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

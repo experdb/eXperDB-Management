@@ -58,4 +58,9 @@ public class CmmnServerInfoServiceImpl extends EgovAbstractServiceImpl implement
 		return cmmnServerInfoDAO.selectAllIpadrList(db_svr_id);
 	}
 
+	@Override
+	public List<Map<String, Object>> selectWrkErrorMsg(int exe_sn) throws Exception {
+		return cmmnServerInfoDAO.selectWrkErrorMsg(exe_sn);
+	}
+
 }

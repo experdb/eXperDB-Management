@@ -39,6 +39,7 @@ function fn_init(){
 	searching : false,	
 	paging :false,
 	columns : [
+	{data : "rownum", defaultContent : "", targets : 0, orderable : false, checkboxes : {'selectRow' : true}}, 
 	{data : "idx", columnDefs: [ { searchable: false, orderable: false, targets: 0} ], order: [[ 1, 'asc' ]], className : "dt-center", defaultContent : ""},
 	{data : "wrk_id", className : "dt-center", defaultContent : "", visible: false },
 	{data : "db_svr_nm", className : "dt-center", defaultContent : ""}, //서버명
@@ -49,6 +50,9 @@ function fn_init(){
 		}
 	}, //work명
 	{data : "wrk_exp", className : "dt-center", defaultContent : ""}, //work설명
+	{data : "bck_wrk_id", className : "dt-center", defaultContent : "", visible: false },
+	{data : "bck_bsn_dscd", className : "dt-center", defaultContent : "", visible: false },
+	{data : "db_svr_id", className : "dt-center", defaultContent : "", visible: false }
 	],
 });
 
@@ -203,7 +207,7 @@ $(window.document).ready(function() {
 				alert("세션이 만료가 되었습니다. 로그인 페이지로 이동합니다.");
 	             location.href = "/";
 			} else {
-				alert("ERROR CODE : "+ request.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ request.responseText.replace(/(<([^>]+)>)/gi, ""));
+				alert("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""));
 			}
 		},
 		success : function(result) {	
@@ -295,7 +299,7 @@ function fn_workAddCallback(rowList){
 				alert("세션이 만료가 되었습니다. 로그인 페이지로 이동합니다.");
 	             location.href = "/";
 			} else {
-				alert("ERROR CODE : "+ request.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ request.responseText.replace(/(<([^>]+)>)/gi, ""));
+				alert("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""));
 			}
 		},
 		success : function(result) {		
@@ -327,7 +331,7 @@ function fn_scheduleStop(){
     				alert("세션이 만료가 되었습니다. 로그인 페이지로 이동합니다.");
     	             location.href = "/";
     			} else {
-    				alert("ERROR CODE : "+ request.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ request.responseText.replace(/(<([^>]+)>)/gi, ""));
+    				alert("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""));
     			}
     		},
     		success : function(result) {
@@ -337,6 +341,43 @@ function fn_scheduleStop(){
 	}
 }
 
+
+function fn_bckModifyPopup(){
+	var works = table.rows('.selected').data();
+	var bck_wrk_id = table.row('.selected').data().bck_wrk_id;
+	var bck_mode = table.row('.selected').data().bck_bsn_dscd;
+	var db_svr_id = table.row('.selected').data().db_svr_id;
+
+	if (works.length <= 0) {
+		alert("선택된 항목이 없습니다.");
+		return false;
+	}else if(works.length > 1){
+		alert("하나의 항목을 선택해주세요.");
+		return false;
+	}else{
+		if(bck_mode == "TC000201"){
+			var popUrl = "/popup/rmanRegReForm.do?db_svr_id="+db_svr_id+"&bck_wrk_id="+bck_wrk_id;
+			var width = 954;
+			var height = 650;
+			var left = (window.screen.width / 2) - (width / 2);
+			var top = (window.screen.height /2) - (height / 2);
+			var popOption = "width="+width+", height="+height+", top="+top+", left="+left+", resizable=no, scrollbars=yes, status=no, toolbar=no, titlebar=yes, location=no,";
+			
+			var winPop = window.open(popUrl,"rmanRegPop",popOption);
+			winPop.focus();	
+		}else{
+			var popUrl = "/popup/dumpRegReForm.do?db_svr_id="+db_svr_id+"&bck_wrk_id="+bck_wrk_id;
+			var width = 954;
+			var height = 900;
+			var left = (window.screen.width / 2) - (width / 2);
+			var top = (window.screen.height /2) - (height / 2);
+			var popOption = "width="+width+", height="+height+", top="+top+", left="+left+", resizable=no, scrollbars=yes, status=no, toolbar=no, titlebar=yes, location=no,";
+			
+			var winPop = window.open(popUrl,"dumpRegPop",popOption);
+			winPop.focus();	
+		}
+	}
+}
 
 
 </script>
@@ -350,6 +391,9 @@ function fn_scheduleStop(){
 				<div class="contents_wrap">
 					<div class="contents">
 						<div class="cmm_grp">
+								<div class="btn_type_01">
+									<span class="btn" onClick="fn_bckModifyPopup()"><button>수정</button></span>
+								</div>
 							<div class="sch_form">
 								<table class="write">
 									<caption>검색 조회</caption>
@@ -436,12 +480,13 @@ function fn_scheduleStop(){
 									<table id="workList" class="cell-border display" >
 										<thead>
 											<tr>
+												<th></th>
 												<th>No</th>
 												<th></th>
 												<th>서버명</th>
 												<th>구분</th>
 												<th>work명</th>
-												<th>Work설명</th>
+												<th>Work설명</th>	
 											</tr>
 										</thead>
 									</table>											

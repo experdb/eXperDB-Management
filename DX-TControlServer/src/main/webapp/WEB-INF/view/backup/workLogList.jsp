@@ -78,7 +78,7 @@ function fn_rman_init(){
 	 						if (data == 'Success') {
 	 							html += ' <img src="../images/ico_w_20.png" alt="" />';
 	 						} else {
-	 							html += ' <img src="../images/ico_w_19.png" alt="" />';
+	 							html += ' <span onClick=javascript:fn_failLog("'+full.exe_sn+'");> <img src="../images/ico_w_19.png" alt="" /> </span>';
 	 						}
 	 						return html;
 	 					},
@@ -124,13 +124,13 @@ function fn_dump_init(){
  		         	{ data: "wrk_end_dtm", className: "dt-center", defaultContent: ""},  		         			         	
  		         	{ data: "wrk_dtm", className: "dt-center", defaultContent: ""},
 	 		   		{
-	 					data : "exe_rslt_cd_nm",
+	 					data : "exe_rslt_cd",
 	 					render : function(data, type, full, meta) {
 	 						var html = '';
-	 						if (data == 'Success') {
+	 						if (full.exe_rslt_cd == 'TC001701') {
 	 							html += ' <img src="../images/ico_w_20.png" alt="" />';
 	 						} else {
-	 							html += ' <img src="../images/ico_w_19.png" alt="" />';
+	 							html += ' <span onClick=javascript:fn_failLog("'+full.exe_sn+'");><img src="../images/ico_w_19.png" alt="" /></span>';
 	 						}
 	 						return html;
 	 					},
@@ -181,7 +181,7 @@ function fn_get_rman_list(){
 				alert("세션이 만료가 되었습니다. 로그인 페이지로 이동합니다.");
 	             location.href = "/";
 			} else {
-				alert("ERROR CODE : "+ request.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ request.responseText.replace(/(<([^>]+)>)/gi, ""));
+				alert("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""));
 			}
 		},
 		success : function(result) {
@@ -220,7 +220,7 @@ function fn_get_dump_list(){
 				alert("세션이 만료가 되었습니다. 로그인 페이지로 이동합니다.");
 	             location.href = "/";
 			} else {
-				alert("ERROR CODE : "+ request.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ request.responseText.replace(/(<([^>]+)>)/gi, ""));
+				alert("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""));
 			}
 		},
 		success : function(result) {
@@ -283,8 +283,9 @@ function selectTab(intab){
 	}
 }
 
-</script>
 
+</script>
+<%@include file="../cmmn/wrkLog.jsp"%>
 <%@include file="../cmmn/workRmanInfo.jsp"%>
 <%@include file="../cmmn/workDumpInfo.jsp"%>
 

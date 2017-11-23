@@ -77,6 +77,7 @@
 			, WRK_NM
 			, WRK_EXP
 			, 'N' AS NXT_EXE_YN
+			, BCK_WRK_ID
       FROM T_BCK_WRKCNG_I A
       WHERE 1=1	
       AND WRK_ID IN
@@ -429,9 +430,13 @@
 			, A.EXE_HMS      
 			, TO_CHAR(A.PREV_EXE_DTM,'YYYY-MM-DD HH24:MI:SS') AS PREV_EXE_DTM
 			, TO_CHAR(A.NXT_EXE_DTM,'YYYY-MM-DD HH24:MI:SS') AS NXT_EXE_DTM
-            , B.WRK_ID
-      FROM T_SCD_M A, T_SCD_D B
+			, B.WRK_ID
+            , C.BCK_WRK_ID
+            , C.BCK_BSN_DSCD
+            , C.DB_SVR_ID
+      FROM T_SCD_M A, T_SCD_D B, T_BCK_WRKCNG_I C
       WHERE 1=1	
+      AND B.WRK_ID = C.WRK_ID
       AND A.SCD_ID = B.SCD_ID
       AND A.SCD_ID = #{scd_id}
       ORDER BY EXE_ORD

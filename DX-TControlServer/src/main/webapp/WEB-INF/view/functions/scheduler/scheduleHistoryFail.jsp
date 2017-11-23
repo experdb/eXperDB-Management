@@ -51,7 +51,7 @@
    					alert("세션이 만료가 되었습니다. 로그인 페이지로 이동합니다.");
    		             location.href = "/";
    				} else {
-   					alert("ERROR CODE : "+ request.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ request.responseText.replace(/(<([^>]+)>)/gi, ""));
+   					alert("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""));
    				}
    			},
    			success : function(result) {
@@ -88,7 +88,7 @@
 			<div class="cmm_grp">
 				<div class="overflow_area">
 				
-				<table id="scheduleFailList" class="cell-border display" >
+				<table id="scheduleFailList" class="display" cellspacing="0" width="100%">
 				<caption>스케줄 실패 리스트</caption>
 					<thead>
 						<tr>

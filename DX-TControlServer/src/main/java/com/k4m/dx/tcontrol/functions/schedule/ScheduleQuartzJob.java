@@ -28,7 +28,7 @@ public class ScheduleQuartzJob implements Job{
 	
 	private ConfigurableApplicationContext context;
 	
-	ArrayList<String> CMD = new ArrayList<String>();
+	
 	ArrayList<String> BCK_NM = new ArrayList<String>();
 	
 	/**
@@ -93,6 +93,7 @@ public class ScheduleQuartzJob implements Job{
 	        
 	        //마스터,슬레이브 DB갯수만큼 루프
 	        for(int h=0; h<resultDbconn.size(); h++){
+	        	ArrayList<String> CMD = new ArrayList<String>();
 		        //WORK 갯수만큼 루프
 				for(int i =0; i<resultWork.size(); i++){
 			        
@@ -107,12 +108,14 @@ public class ScheduleQuartzJob implements Job{
 											
 					// 백업 내용이 DUMP 백업일경우 
 					if(resultWork.get(i).get("bck_bsn_dscd").equals("TC000202")){
-						String strCmd = dumpBackupMakeCmd(resultDbconn, resultWork, addOption, addObject, i, bck_fileNm, h);	
+						String strCmd ="";
+						strCmd = dumpBackupMakeCmd(resultDbconn, resultWork, addOption, addObject, i, bck_fileNm, h);	
 						BCK_NM.add(bck_fileNm);
 						CMD.add(strCmd);
 					// 백업 내용이 RMAN 백업일경우	
 					}else{
-						String rmanCmd = rmanBackupMakeCmd(resultWork, i, resultDbconn, h);		
+						String rmanCmd ="";
+						rmanCmd = rmanBackupMakeCmd(resultWork, i, resultDbconn, h);		
 						CMD.add(rmanCmd);
 					}
 				}		
@@ -146,30 +149,30 @@ public class ScheduleQuartzJob implements Job{
 		
 		try {		
 			//DBMS정보 추출
-			String dbmsInfo = fn_dbmsInfo(resultDbconn, h);
-			strCmd += dbmsInfo;
+			String DBMS = fn_dbmsInfo(resultDbconn, h);
+			strCmd += DBMS;
 			
 			//기본옵션 명령어 생성	
-			String basicOpt = fn_basicOptCmd(resultWork, i, bck_fileNm);
-			strLast +=basicOpt;
+			String basicCmd = fn_basicOption(resultWork, i, bck_fileNm);
+			strCmd +=basicCmd;
 						
 			//부가옵션 명령어 생성
-			String addObjCmd = fn_addOption(addOption);	
-			strCmd += addObjCmd;
+			String addCmd = fn_addOption(addOption);	
+			strCmd += addCmd;
 					
 			//오브젝트옵션 명령어 생성
 			if(addObject.size() != 0){
-				String addObjectCmd = fn_addObject(addObject);	
-				strCmd += addObjectCmd;
+				String objCmd = fn_objOption(addObject);	
+				strCmd += objCmd;
 			}					
-			strCmd += strLast;
+			strCmd += " "+resultWork.get(i).get("db_nm")+"  > "+resultWork.get(i).get("save_pth")+"/"+bck_fileNm;
 		} catch (Exception e) {			
 			e.printStackTrace();
 		}		
 		return strCmd;
 	}
 
-	
+
 	private String fn_dbmsInfo(List<Map<String, Object>> resultDbconn, int h) {
 		String DBMS = "";
 		//1.1 연결할 데이터베이스의 이름 지정
@@ -184,103 +187,101 @@ public class ScheduleQuartzJob implements Job{
 		return DBMS;
 	}
 
-	private String fn_basicOptCmd(List<Map<String, Object>> resultWork, int i, String bck_fileNm) {
-		String basicOpt = "";
-	
-		basicOpt +=" "+resultWork.get(i).get("db_nm")+"  > "+resultWork.get(i).get("save_pth")+"/"+bck_fileNm;
-		
+	private String fn_basicOption(List<Map<String, Object>> resultWork, int i, String bck_fileNm) {
+		String strBasic = "";
+
 		if(resultWork.get(i).get("file_fmt_cd_nm") != null && resultWork.get(i).get("file_fmt_cd_nm") != ""){
 			//파일포멧에 따른 명령어 생성
-			basicOpt += " --format="+resultWork.get(i).get("file_fmt_cd_nm").toString().toLowerCase();
+			strBasic += " --format="+resultWork.get(i).get("file_fmt_cd_nm").toString().toLowerCase();
 			//파일포멧이 tar일경우 압축률 명령어 생성
 			if(resultWork.get(i).get("file_fmt_cd_nm") == "tar"){
-				basicOpt += " --compress="+resultWork.get(i).get("cprt").toString().toLowerCase();
+				strBasic += " --compress="+resultWork.get(i).get("cprt").toString().toLowerCase();
 			}
 		}
 		
 		//인코딩 방식 명령어 생성
 		if(resultWork.get(i).get("incd") != null && resultWork.get(i).get("incd") != ""){
-			basicOpt +=" --encoding="+resultWork.get(i).get("incd").toString().toLowerCase();
+			strBasic +=" --encoding="+resultWork.get(i).get("incd").toString().toLowerCase();
 		}		
 		
 		//rolename 명령어 생성		
 		if(resultWork.get(i).get("incd") != null && !resultWork.get(i).get("usr_role_nm").equals("")){
-			basicOpt +=" --role="+resultWork.get(i).get("usr_role_nm").toString().toLowerCase();
+			strBasic +=" --role="+resultWork.get(i).get("usr_role_nm").toString().toLowerCase();
 		}		
-		return basicOpt;
+		return strBasic;
 	}
 	
 	private String fn_addOption(List<Map<String, Object>> addOption) {	
-		String basicOpt = "";
+		String strAdd = "";
 		
 		for(int j =0; j<addOption.size(); j++){
 			// Sections
 			if(addOption.get(j).get("grp_cd").toString() != null && addOption.get(j).get("grp_cd").toString().equals("TC0006")){
-				basicOpt +=" --section="+addOption.get(j).get("opt_cd_nm").toString().toLowerCase();
+				strAdd +=" --section="+addOption.get(j).get("opt_cd_nm").toString().toLowerCase();
 			}
 			// Object형태
 			if(addOption.get(j).get("opt_cd").toString() != null && addOption.get(j).get("opt_cd").toString().equals("TC0007")){
 				// Object형태(Only data)
 				if(addOption.get(j).get("opt_cd").toString().equals("TC000701")){
-					basicOpt +=" --data-only";
+					strAdd +=" --data-only";
 				// Object형태(Only Schema)
 				}else if (addOption.get(j).get("opt_cd").toString().equals("TC000702")){
-					basicOpt +=" --schema-only";
+					strAdd +=" --schema-only";
 				// Object형태(Blobs)
 				}else{
-					basicOpt +=" --blobs";
+					strAdd +=" --blobs";
 				}
 			}
 			// 저장제외항목
 			if(addOption.get(j).get("grp_cd").toString() != null && addOption.get(j).get("grp_cd").toString().equals("TC0008")){
-				basicOpt +=" --no-"+addOption.get(j).get("opt_cd_nm").toString().toLowerCase();
+				strAdd +=" --no-"+addOption.get(j).get("opt_cd_nm").toString().toLowerCase();
 			}
 			// 쿼리
 			if(addOption.get(j).get("grp_cd").toString() != null && addOption.get(j).get("grp_cd").toString().equals("TC0009")){
 				// 쿼리(Use Column Inserts)
 				if(addOption.get(j).get("opt_cd").toString().equals("TC000901")){
-					basicOpt +=" --column-insert";
+					strAdd +=" --column-insert";
 				// 쿼리(Use Insert Commands)
 				}else if (addOption.get(j).get("opt_cd").toString().equals("TC000902")){
-					basicOpt +=" --attribute-inserts";
+					strAdd +=" --attribute-inserts";
 				// 쿼리(Include CREATE DATABASE statement)
 				}else if(addOption.get(j).get("opt_cd").toString().equals("TC000903")){
-					basicOpt +=" --create";
+					strAdd +=" --create";
 				// 쿼리(Include DROP DATABASE statement)
 				}else{
-					basicOpt +=" --clean";
+					strAdd +=" --clean";
 				}
 			}
 			// Miscellaneous
 			if(addOption.get(j).get("grp_cd").toString() != null && addOption.get(j).get("grp_cd").toString().equals("TC0010")){
 				// Miscellaneous(With OID(s))
 				if(addOption.get(j).get("opt_cd").toString().equals("TC001001")){
-					basicOpt +=" --oids";
+					strAdd +=" --oids";
 				// Miscellaneous(Verbose messages)
 				}else if (addOption.get(j).get("opt_cd").toString().equals("TC001002")){
-					basicOpt +=" --verbose";
+					strAdd +=" --verbose";
 				// Miscellaneous(Force double quote on identifiers)
 				}else if(addOption.get(j).get("opt_cd").toString().equals("TC001003")){
-					basicOpt +=" --quote-all-identifiers";
+					strAdd +=" --quote-all-identifiers";
 				// Miscellaneous(Use SET SESSION AUTHORIZATION)
 				}else{
-					basicOpt +=" --use-set-session-authorization";
+					strAdd +=" --use-set-session-authorization";
 				}
 			}
 		}
-		return basicOpt;
+		return strAdd;
 	}
 
-	private String fn_addObject(List<Map<String, Object>> addObject) {	
-		String basicObj = "";
+	private String fn_objOption(List<Map<String, Object>> addObject) {	
+		String strObj = "";
 		for(int n=0; n<addObject.size(); n++){			
 			if(addObject.get(n).get("obj_nm").equals(null) || addObject.get(n).get("obj_nm").equals("")){
-				basicObj+=" -n "+addObject.get(n).get("scm_nm").toString().toLowerCase();
+				strObj+=" -n "+addObject.get(n).get("scm_nm").toString().toLowerCase();
 			}else{
-				basicObj+=" -t "+addObject.get(n).get("obj_nm").toString().toLowerCase();
+				strObj+=" -t "+addObject.get(n).get("obj_nm").toString().toLowerCase();
 			}
 		}
-		return basicObj;
+		return strObj;
 	}
 
 
@@ -331,9 +332,13 @@ public class ScheduleQuartzJob implements Job{
 	
 	public void agentCall(List<Map<String, Object>> resultWork, ArrayList<String> CMD, ArrayList<String> BCKNM, List<Map<String, Object>> resultDbconn, int h) {
 		try {
+	
 				String IP = (String) resultDbconn.get(h).get("ipadr");
-				int PORT = Integer.parseInt(resultDbconn.get(h).get("portno").toString());
-				
+				AgentInfoVO vo = new AgentInfoVO();
+				vo.setIPADR(IP);			
+				AgentInfoVO agentInfo =  (AgentInfoVO) cmmnServerInfoService.selectAgentInfo(vo);	
+				int PORT = agentInfo.getSOCKET_PORT();
+						
 				ClientInfoCmmn clc = new ClientInfoCmmn();
 				clc.db_backup(resultWork, CMD, IP ,PORT, BCKNM);	
 		} catch (Exception e) {

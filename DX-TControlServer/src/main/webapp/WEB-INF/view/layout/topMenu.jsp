@@ -27,7 +27,7 @@ $(window.document).ready(function() {
 				alert("세션이 만료가 되었습니다. 로그인 페이지로 이동합니다.");
 	             location.href = "/";
 			} else {
-				alert("ERROR CODE : "+ request.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ request.responseText.replace(/(<([^>]+)>)/gi, ""));
+				alert("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""));
 			}
 		},
 		success : function(result) {
@@ -240,7 +240,7 @@ function fn_cookie(url) {
 					<li><a href="#n"><span><img src="/images/ico_h_8.png" alt="HELP" /></span></a>
 						<ul class="depth_2">
 							<li><a href="#n" onClick="fn_cookie(null)">Online Help</a></li>
-							<li><a href="/aboutTcontrol.do" onClick="fn_cookie(null)">About Tcontrol</a></li>
+							<li><a href="/aboutExperdb.do" onClick="fn_cookie(null)">About eXperDB-Management</a></li>
 						</ul>
 					</li>
 				</ul>

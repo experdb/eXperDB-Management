@@ -46,7 +46,8 @@ var workTable = null;
 
 function fn_init() {
 	schTable = $('#schTable').DataTable({
-		scrollY : "60px",
+		scrollY : "50px",
+		scrollX: false,
 		searching : false,
 		paging: false,
 		columns : [
@@ -60,7 +61,7 @@ function fn_init() {
 
     
     workTable = $('#workTable').DataTable({
-		scrollY : "180px",
+		scrollY : "190px",
 		searching : false,
 		paging: false,
 		columns : [
@@ -95,7 +96,7 @@ $(window.document).ready(function() {
 				alert("세션이 만료가 되었습니다. 로그인 페이지로 이동합니다.");
 	             location.href = "/";
 			} else {
-				alert("ERROR CODE : "+ request.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ request.responseText.replace(/(<([^>]+)>)/gi, ""));
+				alert("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""));
 			}
 		},
 		success : function(result) {
@@ -122,7 +123,7 @@ $(window.document).ready(function() {
 				alert("세션이 만료가 되었습니다. 로그인 페이지로 이동합니다.");
 	             location.href = "/";
 			} else {
-				alert("ERROR CODE : "+ request.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ request.responseText.replace(/(<([^>]+)>)/gi, ""));
+				alert("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""));
 			}
 		},
 		success : function(result) {
@@ -153,7 +154,7 @@ $(window.document).ready(function() {
 				</div>
 				<br><br>
 				<p class="pop_s_tit">work정보</p>
-				<div class="overflow_area" style="height: 290px;">
+				<div class="overflow_area" style="height: 300px;">
 					<table id="workTable" class="display" cellspacing="0" width="100%">
 						<thead>
 							<tr>
