@@ -75,8 +75,8 @@ function fn_rman_init(){
 	 					data : "exe_rslt_cd_nm",
 	 					render : function(data, type, full, meta) {
 	 						var html = '';
-	 						if (data == 'Success') {
-	 							html += ' <img src="../images/ico_w_20.png" alt="" />';
+	 						if (full.exe_rslt_cd == 'TC001701') {
+	 							html += ' <span onClick=javascript:fn_failLog("'+full.exe_sn+'");> <img src="../images/ico_w_20.png" alt="" /> </span>';
 	 						} else {
 	 							html += ' <span onClick=javascript:fn_failLog("'+full.exe_sn+'");> <img src="../images/ico_w_19.png" alt="" /> </span>';
 	 						}
@@ -128,7 +128,7 @@ function fn_dump_init(){
 	 					render : function(data, type, full, meta) {
 	 						var html = '';
 	 						if (full.exe_rslt_cd == 'TC001701') {
-	 							html += ' <img src="../images/ico_w_20.png" alt="" />';
+	 							html += ' <span onClick=javascript:fn_failLog("'+full.exe_sn+'");><img src="../images/ico_w_20.png" alt="" /></span>';
 	 						} else {
 	 							html += ' <span onClick=javascript:fn_failLog("'+full.exe_sn+'");><img src="../images/ico_w_19.png" alt="" /></span>';
 	 						}
