@@ -56,7 +56,7 @@ public class ClientTester {
 			//clientTester.dxT002(Ip, port);
 			//clientTester.dxT003(Ip, port);
 			//clientTester.dxT004(Ip, port);
-			//clientTester.dxT005(Ip, port);
+			clientTester.dxT005(Ip, port);
 			//clientTester.dxT006_C(Ip, port);
 //			clientTester.dxT006_R(Ip, port);
 			//clientTester.dxT006_U(Ip, port);
@@ -87,7 +87,7 @@ public class ClientTester {
 			//clientTester.dxT018_delete(Ip, port);
 			//clientTester.dxT019(Ip, port);
 			//clientTester.dxT020(Ip, port);
-			clientTester.dxT021(Ip, port);
+			//clientTester.dxT021(Ip, port);
 			
 			//clientTester.test();
 		} catch(Exception e) {
@@ -275,8 +275,10 @@ public class ClientTester {
 				};*/
 			
 			String[] CMD = {
-					"java -version",
-					"java -version"
+					"pg_rman backup --dbname=experdb --host=222.110.153.251 --port=5433 --username=experdb "
+					+ "--no-password --pgdata=/home/experdb/pgdata/data --backup-path=/home/experdb/pgdata/bckDir/dump/aaa --backup-mode=incremental -A $PGDATA/pg_xlog/archive_status/ "
+					+ "--keep-data-generations=0 --keep-data-days=0 --keep-arclog-files=0 --keep-arclog-days=0 --keep-srvlog-files=0 --keep-srvlog-days=0"
+					//+ " >> /home/experdb/pgdata/bckLogs/error_Test.log 2>&1"
 				};
 			
 			JSONObject reqJObj = new JSONObject();
@@ -284,15 +286,15 @@ public class ClientTester {
 			JSONArray arrCmd = new JSONArray();
 			
 			JSONObject objJob_01 = new JSONObject();
-			objJob_01.put(ClientProtocolID.SCD_ID, ""); //스캐쥴ID
-			objJob_01.put(ClientProtocolID.WORK_ID, ""); //작업ID
-			objJob_01.put(ClientProtocolID.EXD_ORD, ""); //실행순서
-			objJob_01.put(ClientProtocolID.NXT_EXD_YN, ""); //다음실행여부
+			objJob_01.put(ClientProtocolID.SCD_ID, "1"); //스캐쥴ID
+			objJob_01.put(ClientProtocolID.WORK_ID, "1"); //작업ID
+			objJob_01.put(ClientProtocolID.EXD_ORD, "1"); //실행순서
+			objJob_01.put(ClientProtocolID.NXT_EXD_YN, "1"); //다음실행여부
 			objJob_01.put(ClientProtocolID.REQ_CMD, CMD[0]);
-			objJob_01.put(ClientProtocolID.BCK_OPT_CD, "");
-			objJob_01.put(ClientProtocolID.DB_ID, "");
-			objJob_01.put(ClientProtocolID.BCK_FILE_PTH, "");
-			objJob_01.put(ClientProtocolID.BCK_FILENM, "");
+			objJob_01.put(ClientProtocolID.BCK_OPT_CD, "1");
+			objJob_01.put(ClientProtocolID.DB_ID, "1");
+			objJob_01.put(ClientProtocolID.BCK_FILE_PTH, "1");
+			objJob_01.put(ClientProtocolID.BCK_FILENM, "1");
 			objJob_01.put(ClientProtocolID.LOG_YN, "Y");
 			
 			JSONObject objJob_02 = new JSONObject();
@@ -320,8 +322,8 @@ public class ClientTester {
 			objJob_03.put(ClientProtocolID.BCK_FILENM, "");
 			
 			arrCmd.add(0, objJob_01);
-			arrCmd.add(1, objJob_02);
-			arrCmd.add(2, objJob_03);
+			//arrCmd.add(1, objJob_02);
+			//arrCmd.add(2, objJob_03);
 
 			JSONObject serverObj = new JSONObject();
 			

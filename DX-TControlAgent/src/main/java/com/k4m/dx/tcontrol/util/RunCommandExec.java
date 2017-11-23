@@ -1,14 +1,25 @@
 package com.k4m.dx.tcontrol.util;
 
+import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.io.OutputStream;
+import java.util.Scanner;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class RunCommandExec extends Thread {
 
+	private static Logger errLogger = LoggerFactory.getLogger("errorToFile");
+	private static Logger socketLogger = LoggerFactory.getLogger("socketLogger");
+	
 	public String CMD = null;
 	public String retVal = null;
 	public String consoleTxt = null;
+	
+	private String returnMessage = "";
 	
 	public RunCommandExec(String cmd){
 		this.CMD = cmd;
@@ -16,11 +27,15 @@ public class RunCommandExec extends Thread {
 	
 	@Override
 	public void run(){
-		runExec(CMD);
+		runExecRtn2(CMD);
 	}
 	
 	public String call(){
 		return this.retVal;
+	}
+	
+	public String getMessage() {
+		return this.returnMessage;
 	}
 	
 	public String callConsoleTxt(){
@@ -44,13 +59,16 @@ public class RunCommandExec extends Thread {
 			this.retVal = "success";
 		}catch(IOException e){
 			System.out.println(e);
-			this.retVal = "IOException";
+			this.retVal = "IOException" + e.toString();
 		}catch(InterruptedException e){
 			System.out.println(e);
-			retVal = "InterruptedException";
+			retVal = "InterruptedException" + e.toString();
 		}catch(Exception e){
 			System.out.println(e);
-			this.retVal = "Exception";
+			this.retVal = "Exception" + e.toString();
+		} finally {
+			proc.destroy();
+			System.out.println("Exec End");
 		}
 		
 		/*
@@ -61,8 +79,90 @@ public class RunCommandExec extends Thread {
 			e.printStackTrace();
 		}
 		*/
-		proc.destroy();
-		System.out.println("Exec End");
+
+	}
+	
+	public void runExecRtn(String cmd){
+		Process proc = null;
+		String strResult = "";
+		String strScanner = "";
+		try{
+			//proc = Runtime.getRuntime().exec(cmd);
+			proc = Runtime.getRuntime().exec(new String[]{"/bin/sh", "-c", cmd}); 
+			
+			BufferedReader br = new BufferedReader(new InputStreamReader(proc.getInputStream()));
+			
+			Scanner scanner = new Scanner(br); scanner.useDelimiter(System.getProperty("line.separator"));
+
+			while(scanner.hasNext()) {
+				strScanner = scanner.next();
+				System.out.println(strScanner); 
+				strResult += strScanner;
+				
+				socketLogger.info("scanner : " + strResult);
+			}
+			scanner.close(); 
+			br.close();
+
+			this.returnMessage = strResult;
+			this.retVal = "success";
+		}catch(IOException e){
+			System.out.println(e);
+			this.retVal = "IOException" + e.toString();
+			this.returnMessage = "IOException" + e.toString();
+		}catch(Exception e){
+			System.out.println(e);
+			this.retVal = "Exception" + e.toString();
+			this.returnMessage = "Exception" + e.toString();
+		} finally {
+			proc.destroy();
+			System.out.println("Exec End");
+		}
+	}
+	
+	public void runExecRtn2(String cmd){
+		Process proc = null;
+		String strResult = "";
+		String strScanner = "";
+		String strReturnVal = "";
+		try{
+			//proc = Runtime.getRuntime().exec(cmd);
+			proc = Runtime.getRuntime().exec(new String[]{"/bin/sh", "-c", cmd}); 
+			proc.waitFor ();
+			
+		//	socketLogger.info("@@@@@@@@@ scanner start" );
+			
+			if ( proc.exitValue() != 0 ) {
+				BufferedReader err = new BufferedReader ( new InputStreamReader ( proc.getErrorStream() ) );
+				while ( err.ready() ) {
+					strResult += err.readLine();
+				}
+				err.close();
+				strReturnVal = "failed";
+			} else {
+				BufferedReader out = new BufferedReader ( new InputStreamReader ( proc.getInputStream() ) );
+				while ( out.ready() ) {
+					strResult += out.readLine();
+				}
+				out.close();
+				strReturnVal = "success";
+			}
+			//socketLogger.info("@@@@@@@@@ scanner end" );
+
+			this.returnMessage = strResult;
+			this.retVal = strReturnVal;
+		}catch(IOException e){
+			System.out.println(e);
+			this.retVal = "IOException" + e.toString();
+			this.returnMessage = "IOException" + e.toString();
+		}catch(Exception e){
+			System.out.println(e);
+			this.retVal = "Exception" + e.toString();
+			this.returnMessage = "Exception" + e.toString();
+		} finally {
+			proc.destroy();
+			System.out.println("Exec End");
+		}
 	}
 	
 	public void copy_old(InputStream input, OutputStream output) throws IOException {

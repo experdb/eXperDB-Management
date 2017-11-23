@@ -121,8 +121,9 @@ public class DxT005 extends SocketCtl{
 					ie.printStackTrace();
 				}
 				String retVal = r.call();
+				String strResultMessge = r.getMessage();
 				
-				socketLogger.info("##### 결과 : " + retVal);
+				//socketLogger.info("##### 결과 : " + retVal + " message : " + strResultMessge);
 				//다음실행여부가 Y 이면 에러나도 다음 시행함.
 				if(retVal.equals("success")) {
 					String strFileName = strBCK_FILENM;
@@ -184,7 +185,7 @@ public class DxT005 extends SocketCtl{
 					endVO.setEXE_SN(intSeq);
 					endVO.setFILE_SZ(Integer.parseInt(strFileSize));
 					endVO.setBCK_FILENM(strFileName);
-					endVO.setRSLT_MSG(retVal);
+					endVO.setRSLT_MSG(retVal + " " + strResultMessge);
 					
 					endVO.setSCD_ID(Integer.parseInt(strSCD_ID));
 					endVO.setSCD_CNDT(TC001801); //대기중
@@ -203,7 +204,7 @@ public class DxT005 extends SocketCtl{
 					WrkExeVO endVO = new WrkExeVO();
 					endVO.setEXE_RSLT_CD(strResultCode);
 					endVO.setEXE_SN(intSeq);
-					endVO.setRSLT_MSG(retVal);
+					endVO.setRSLT_MSG(retVal + " " + strResultMessge);
 					
 					endVO.setSCD_ID(Integer.parseInt(strSCD_ID));
 					endVO.setSCD_CNDT(TC001801); //대기중
