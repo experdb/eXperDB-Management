@@ -26,6 +26,15 @@ public class WorkLogVO {
 	private String lst_mdf_dtm;
 	private String bck_bsn_dscd;
 	private String wrk_dtm;
+	private String rslt_msg;
+
+	public String getRslt_msg() {
+		return rslt_msg;
+	}
+
+	public void setRslt_msg(String rslt_msg) {
+		this.rslt_msg = rslt_msg;
+	}
 
 	public String getWrk_dtm() {
 		return wrk_dtm;

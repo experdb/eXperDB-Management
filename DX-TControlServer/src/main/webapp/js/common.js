@@ -301,6 +301,37 @@ function fn_scdLayer(scd_nm){
 }
 
 
+//ERROR 로그 정보 출력
+function fn_failLog(exe_sn){
+	$.ajax({
+		url : "/selectWrkErrorMsg.do",
+		data : {
+			exe_sn : exe_sn
+		},
+		dataType : "json",
+		type : "post",
+		beforeSend: function(xhr) {
+	        xhr.setRequestHeader("AJAX", true);
+	     },
+		error : function(xhr, status, error) {
+			if(xhr.status == 401) {
+				alert("인증에 실패 했습니다. 로그인 페이지로 이동합니다.");
+				 location.href = "/";
+			} else if(xhr.status == 403) {
+				alert("세션이 만료가 되었습니다. 로그인 페이지로 이동합니다.");
+	             location.href = "/";
+			} else {
+				alert("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""));
+			}
+		},
+		success : function(result) {
+				$("#wrkLogInfo").html(result[0].rslt_msg);
+				toggleLayer($('#pop_layer_wrkLog'), 'on');						
+		}
+	});	
+}
+
+
 
 // WORK정보
 function fn_workLayer(wrk_nm){
@@ -311,10 +342,20 @@ function fn_workLayer(wrk_nm){
 		},
 		dataType : "json",
 		type : "post",
-		error : function(request, status, error) {
-			alert("실패");
-			alert("ERROR CODE : "+ request.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ request.responseText.replace(/(<([^>]+)>)/gi, ""));
-		},
+		beforeSend: function(xhr) {
+	        xhr.setRequestHeader("AJAX", true);
+	     },
+	     error : function(xhr, status, error) {
+				if(xhr.status == 401) {
+					alert("인증에 실패 했습니다. 로그인 페이지로 이동합니다.");
+					 location.href = "/";
+				} else if(xhr.status == 403) {
+					alert("세션이 만료가 되었습니다. 로그인 페이지로 이동합니다.");
+		             location.href = "/";
+				} else {
+					alert("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""));
+				}
+			},
 		success : function(result) {
 			// RMAN
 			if(result[0].bck_bsn_dscd == "TC000201"){
@@ -376,9 +417,20 @@ function fn_workOptionLayer(bck_wrk_id, db_svr_id, db_nm){
 		},
 		dataType : "json",
 		type : "post",
-		error : function(request, status, error) {
-			alert("ERROR CODE : "+ request.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ request.responseText.replace(/(<([^>]+)>)/gi, ""));
-		},
+		beforeSend: function(xhr) {
+	        xhr.setRequestHeader("AJAX", true);
+	     },
+	     error : function(xhr, status, error) {
+				if(xhr.status == 401) {
+					alert("인증에 실패 했습니다. 로그인 페이지로 이동합니다.");
+					 location.href = "/";
+				} else if(xhr.status == 403) {
+					alert("세션이 만료가 되었습니다. 로그인 페이지로 이동합니다.");
+		             location.href = "/";
+				} else {
+					alert("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""));
+				}
+			},
 		success : function(result) {		
 			var sections = "";
 			var objectType = "";
@@ -420,9 +472,20 @@ function fn_workObjectListTreeLayer(bck_wrk_id, db_svr_id, db_nm){
 	  		bck_wrk_id : bck_wrk_id
 	  	},
 		type : "post",
-		error : function(request, status, error) {
-			alert("ERROR CODE : "+ request.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ request.responseText.replace(/(<([^>]+)>)/gi, ""));
-		},
+		beforeSend: function(xhr) {
+	        xhr.setRequestHeader("AJAX", true);
+	     },
+	     error : function(xhr, status, error) {
+				if(xhr.status == 401) {
+					alert("인증에 실패 했습니다. 로그인 페이지로 이동합니다.");
+					 location.href = "/";
+				} else if(xhr.status == 403) {
+					alert("세션이 만료가 되었습니다. 로그인 페이지로 이동합니다.");
+		             location.href = "/";
+				} else {
+					alert("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""));
+				}
+			},
 		success : function(result) {
 			fn_workObjectTreeLayer(db_svr_id, db_nm, result);
 		}
@@ -440,8 +503,19 @@ function fn_workObjectTreeLayer(db_svr_id, db_nm, workObj){
 	  		db_nm : db_nm
 	  	},
 		type : "post",
-		error : function(request, status, error) {
-			alert("ERROR CODE : "+ request.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ request.responseText.replace(/(<([^>]+)>)/gi, ""));
+		beforeSend: function(xhr) {
+	        xhr.setRequestHeader("AJAX", true);
+	     },
+		error : function(xhr, status, error) {
+			if(xhr.status == 401) {
+				alert("인증에 실패 했습니다. 로그인 페이지로 이동합니다.");
+				 location.href = "/";
+			} else if(xhr.status == 403) {
+				alert("세션이 만료가 되었습니다. 로그인 페이지로 이동합니다.");
+	             location.href = "/";
+			} else {
+				alert("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""));
+			}
 		},
 		success : function(data) {
 			fn_make_object_list(data, workObj);

@@ -72,7 +72,7 @@ function fn_insert_work(){
 					alert("세션이 만료가 되었습니다. 로그인 페이지로 이동합니다.");
 		             location.href = "/";
 				} else {
-					alert("ERROR CODE : "+ request.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ request.responseText.replace(/(<([^>]+)>)/gi, ""));
+					alert("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""));
 				}
 			},
 			success : function(data) {
@@ -234,7 +234,7 @@ function fn_get_object_list(){
 					alert("세션이 만료가 되었습니다. 로그인 페이지로 이동합니다.");
 		             location.href = "/";
 				} else {
-					alert("ERROR CODE : "+ request.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ request.responseText.replace(/(<([^>]+)>)/gi, ""));
+					alert("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""));
 				}
 			},
 			success : function(data) {
@@ -407,7 +407,7 @@ function checkFolder(){
 					alert("세션이 만료가 되었습니다. 로그인 페이지로 이동합니다.");
 		             location.href = "/";
 				} else {
-					alert("ERROR CODE : "+ request.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ request.responseText.replace(/(<([^>]+)>)/gi, ""));
+					alert("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""));
 				}
 			},
 			success : function(data) {
@@ -463,7 +463,7 @@ function fn_check() {
 				alert("세션이 만료가 되었습니다. 로그인 페이지로 이동합니다.");
 	             location.href = "/";
 			} else {
-				alert("ERROR CODE : "+ request.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ request.responseText.replace(/(<([^>]+)>)/gi, ""));
+				alert("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""));
 			}
 		}
 	});
