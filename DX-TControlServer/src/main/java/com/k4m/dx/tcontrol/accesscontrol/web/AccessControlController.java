@@ -476,6 +476,15 @@ public class AccessControlController {
 				String IP = dbServerVO.get(m).getIpadr();
 				vo.setIPADR(IP);
 				AgentInfoVO agentInfo = (AgentInfoVO) cmmnServerInfoService.selectAgentInfo(vo);
+				
+				if (agentInfo == null) {
+					return "agent";
+				} 
+				
+				if (agentInfo.getAGT_CNDT_CD().equals("TC001102")) {
+					return "agentfail";
+				}
+				
 				int PORT = agentInfo.getSOCKET_PORT();
 
 				serverObj.put(ClientProtocolID.SERVER_NAME, dbServerVO.get(m).getDb_svr_nm());

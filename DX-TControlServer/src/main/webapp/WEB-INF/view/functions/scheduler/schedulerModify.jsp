@@ -541,7 +541,12 @@ function fn_scheduleReStart(){
 			<div id="contents">
 				<div class="contents_wrap">
 					<div class="contents_tit">
-						<h4>스케줄 수정 <a href="#n"><img src="../images/ico_tit.png" alt="" /></a></h4>
+						<h4>스케줄 수정 <a href="#n"><img src="../images/ico_tit.png" class="btn_info"/></a></h4>
+						<div class="infobox"> 
+							<ul>
+								<li>선택한 스케줄의 기본 정보를 수정하거나 수행 일정 및 내용을 변경합니다.</li>
+							</ul>
+						</div>
 						<div class="location">
 							<ul>
 								<li>Function</li>

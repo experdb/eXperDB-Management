@@ -597,7 +597,7 @@
 			        ,A.EXE_DT
 			        ,A.EXE_MONTH
 			        ,A.EXE_DAY
-			        , '(' || substring(A.EXE_HMS from 5 for 2) || ':' || substring(A.EXE_HMS from 3 for 2) || ')' AS EXE_HMS
+			        , '[' || substring(A.EXE_HMS from 5 for 2) || ':' || substring(A.EXE_HMS from 3 for 2) || ']' AS EXE_HMS
 	            , ARRAY_TO_STRING(ARRAY_AGG(C.BCK_BSN_DSCD),',') AS BCK_BSN_DSCD
 	            , ARRAY_TO_STRING(ARRAY_AGG(C.BCK_OPT_CD),',') AS BCK_OPT_CD
 	    FROM T_SCD_M A, T_SCD_D B, T_BCK_WRKCNG_I C

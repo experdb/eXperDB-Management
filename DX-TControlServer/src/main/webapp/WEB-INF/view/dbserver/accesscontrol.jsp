@@ -294,7 +294,7 @@
 	
 	/* 적용 버튼 클릭시 */
 	function fn_save(){
-		if (!confirm("적용하시겠습니까?")) return false;
+		if (!confirm("변경된 내용을 서버에 적용하시겠습니까?")) return false;
 		var rowList = [];
 		var data = table.rows().data();
         for (var i = 0; i < data.length; i++) {

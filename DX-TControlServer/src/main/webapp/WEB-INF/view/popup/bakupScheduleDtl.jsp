@@ -1,29 +1,33 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
-    pageEncoding="UTF-8"%>
- <%@ taglib uri="http://tiles.apache.org/tags-tiles" prefix="tiles"%>
+	pageEncoding="UTF-8"%>
+<%@ taglib uri="http://tiles.apache.org/tags-tiles" prefix="tiles"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form"%>
 <%@ taglib prefix="ui" uri="http://egovframework.gov/ctl/ui"%>
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags"%>
-    
+
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head>
 <title>eXperDB</title>
 <link rel="stylesheet" type="text/css" href="/css/jquery-ui.css">
 <link rel="stylesheet" type="text/css" href="/css/common.css">
-<link rel = "stylesheet" type = "text/css" media = "screen" href = "<c:url value='/css/dt/jquery.dataTables.min.css'/>"/>
-<link rel = "stylesheet" type = "text/css" media = "screen" href = "<c:url value='/css/dt/dataTables.jqueryui.min.css'/>"/> 
-<link rel="stylesheet" type="text/css" href="<c:url value='/css/dt/dataTables.colVis.css'/>"/>
-<link rel="stylesheet" type="text/css" href="<c:url value='/css/dt/dataTables.checkboxes.css'/>"/>
+<link rel="stylesheet" type="text/css" media="screen"
+	href="<c:url value='/css/dt/jquery.dataTables.min.css'/>" />
+<link rel="stylesheet" type="text/css" media="screen"
+	href="<c:url value='/css/dt/dataTables.jqueryui.min.css'/>" />
+<link rel="stylesheet" type="text/css"
+	href="<c:url value='/css/dt/dataTables.colVis.css'/>" />
+<link rel="stylesheet" type="text/css"
+	href="<c:url value='/css/dt/dataTables.checkboxes.css'/>" />
 
-<script src ="/js/jquery/jquery-1.7.2.min.js" type="text/javascript"></script>
-<script src ="/js/jquery/jquery-ui.js" type="text/javascript"></script>
+<script src="/js/jquery/jquery-1.7.2.min.js" type="text/javascript"></script>
+<script src="/js/jquery/jquery-ui.js" type="text/javascript"></script>
 <script src="/js/jquery/jquery.dataTables.min.js" type="text/javascript"></script>
 <script src="/js/dt/dataTables.jqueryui.min.js" type="text/javascript"></script>
 <script src="/js/dt/dataTables.colResize.js" type="text/javascript"></script>
-<script src="/js/dt/dataTables.checkboxes.min.js" type="text/javascript"></script>	
-<script src="/js/dt/dataTables.colVis.js" type="text/javascript"></script>	
+<script src="/js/dt/dataTables.checkboxes.min.js" type="text/javascript"></script>
+<script src="/js/dt/dataTables.colVis.js" type="text/javascript"></script>
 <script type="text/javascript" src="/js/common.js"></script>
 <script>
 var scd_id = ${scd_id};
@@ -33,7 +37,7 @@ function fn_init(){
 	 * work리스트
 	 ******************************************************** */
 	table = $('#workList').DataTable({
-	scrollY : "145px",
+	scrollY : "195px",
 	bDestroy: true,
 	processing : true,
 	searching : false,	
@@ -46,7 +50,7 @@ function fn_init(){
 	{data : "bck_bsn_dscd_nm", className : "dt-center", defaultContent : ""}, //구분
 	{data : "wrk_nm", className : "dt-center", defaultContent : ""
 		,"render": function (data, type, full) {
-			  return '<span onClick=javascript:fn_workLayer("'+full.wrk_nm+'"); style=cursor:pointer>' + full.wrk_nm + '</span>';
+			  return '<span onClick=javascript:fn_workLayer("'+full.wrk_nm+'"); class="bold">' + full.wrk_nm + '</span>';
 		}
 	}, //work명
 	{data : "wrk_exp", className : "dt-center", defaultContent : ""}, //work설명
@@ -387,112 +391,115 @@ function fn_bckModifyPopup(){
 <body>
 	<%@include file="../cmmn/workRmanInfoPop.jsp"%>
 	<%@include file="../cmmn/workDumpInfoPop.jsp"%>
-	
-				<div class="contents_wrap">
-					<div class="contents">
-						<div class="cmm_grp">
-								<div class="btn_type_01">
-									<span class="btn" onClick="fn_bckModifyPopup()"><button>수정</button></span>
-								</div>
-							<div class="sch_form">
-								<table class="write">
-									<caption>검색 조회</caption>
-									<colgroup>
-										<col style="width:90px;" />
-										<col />
-									</colgroup>
-									<tbody>
-										<tr>
-											<th scope="row" class="t9 line">스케줄명</th>
-											<td><input type="text" class="txt t2" id="scd_nm" name="scd_nm" readonly="readonly" /></td>
-										</tr>
-										<tr>
-											<th scope="row" class="t9 line">설명</th>
-											<td>
-												<input type="text" class="txt t2" id="scd_exp" name="scd_exp" readonly="readonly" />
-											</td>
-										</tr>
-									</tbody>
-								</table>
-							</div>
-							<div class="sch_form">
-								<table class="write">
-									<caption>스케줄 등록</caption>
-									<colgroup>
-										<col style="width:115px;" />
-										<col />
-									</colgroup>
-									<tbody>
-										<tr>
-											<th scope="row" class="ico_t4">스케쥴시간설정</th>
-											<td>
-												<div class="schedule_wrap">
-													<span>
-														<select class="select t5" name="exe_perd_cd" id="exe_perd_cd" onChange="fn_exe_pred();" disabled="disabled">
-															<option value="TC001601">매일</option>
-															<option value="TC001602">매주</option>
-															<option value="TC001603">매월</option>
-															<option value="TC001604">매년</option>
-															<option value="TC001605">1회실행</option>
-														</select>
-													</span>
-													<span id="weekDay" >
-							                            <input type="checkbox" id="chk0" name="chk" value="0" onclick="return false;" >일요일
-							                            <input type="checkbox" id="chk1" name="chk" value="0" onclick="return false;" >월요일
-							                            <input type="checkbox" id="chk2" name="chk" value="0" onclick="return false;" >화요일
-							                            <input type="checkbox" id="chk3" name="chk" value="0" onclick="return false;" >수요일
-							                            <input type="checkbox" id="chk4" name="chk" value="0" onclick="return false;" >목요일
-							                            <input type="checkbox" id="chk5" name="chk" value="0" onclick="return false;" >금요일
-							                            <input type="checkbox" id="chk6" name="chk" value="0" onclick="return false;" >토요일
-                        							</span>
-													<span id="calendar">
-														<div class="calendar_area">
-															<a href="#n" class="calendar_btn">달력열기</a>
-															<input type="text" class="calendar" id="datepicker1" name="exe_dt" title="스케줄시간설정" readonly />
-														</div>
-													</span>
-													<span>
-															<div id="month" disabled="disabled"></div>
-													</span>
-													<span>
-															<div id="day" disabled="disabled"></div>
-													</span>
-													<span>
-															<div id="hour" disabled="disabled"></div>
-													</span>
-													<span>
-															<div id="min" disabled="disabled"></div>
-													</span>
-													<span>
-															<div id="sec" disabled="disabled"></div>
-													</span>
-												</div>
-											</td>
-										</tr>
-									</tbody>
-								</table>
-							</div>
 
-							<div class="cmm_bd">
-								<div class="sub_tit">
-									<p>Work</p>
-								</div>				
-									<table id="workList" class="cell-border display" >
-										<thead>
-											<tr>
-												<th></th>
-												<th>No</th>
-												<th></th>
-												<th>서버명</th>
-												<th>구분</th>
-												<th>work명</th>
-												<th>Work설명</th>	
-											</tr>
-										</thead>
-									</table>											
-							</div>		
-						</div>
-					</div>
+	<div class="pop_container">
+		<div class="pop_cts">
+			<p class="tit">스케줄 상세보기</p>
+			<div class="cmm_grp">
+				<div class="btn_type_01">
+					<span class="btn" onClick="fn_bckModifyPopup()"><button>수정</button></span>
 				</div>
+				<div class="sch_form">
+					<table class="write">
+						<caption>검색 조회</caption>
+						<colgroup>
+							<col style="width: 90px;" />
+							<col />
+						</colgroup>
+						<tbody>
+							<tr>
+								<th scope="row" class="t9 line">스케줄명</th>
+								<td><input type="text" class="txt t2" id="scd_nm" name="scd_nm" readonly="readonly" /></td>
+							</tr>
+							<tr>
+								<th scope="row" class="t9 line">설명</th>
+								<td><input type="text" class="txt t2" id="scd_exp" name="scd_exp" readonly="readonly" /></td>
+							</tr>
+						</tbody>
+					</table>
+				</div>
+				<div class="sch_form">
+					<table class="write">
+						<caption>스케줄 등록</caption>
+						<colgroup>
+							<col style="width: 115px;" />
+							<col />
+						</colgroup>
+						<tbody>
+							<tr>
+								<th scope="row" class="ico_t4">스케쥴시간설정</th>
+								<td>
+									<div class="schedule_wrap">
+										<span> 
+										<select class="select t5" name="exe_perd_cd" id="exe_perd_cd" onChange="fn_exe_pred();"disabled="disabled">
+												<option value="TC001601">매일</option>
+												<option value="TC001602">매주</option>
+												<option value="TC001603">매월</option>
+												<option value="TC001604">매년</option>
+												<option value="TC001605">1회실행</option>
+										</select>
+										</span> 
+										<span id="weekDay"> 
+										<input type="checkbox" id="chk0" name="chk" value="0" onclick="return false;">일요일 
+										<input type="checkbox" id="chk1" name="chk" value="0" onclick="return false;">월요일 
+										<input type="checkbox" id="chk2" name="chk" value="0" onclick="return false;">화요일
+										<input type="checkbox" id="chk3" name="chk" value="0" onclick="return false;">수요일 
+										<input type="checkbox" id="chk4" name="chk" value="0" onclick="return false;">목요일
+										<input type="checkbox" id="chk5" name="chk" value="0" onclick="return false;">금요일 
+										<input type="checkbox" id="chk6" name="chk" value="0" onclick="return false;">토요일
+										</span> 
+										<span id="calendar">
+											<div class="calendar_area">
+												<a href="#n" class="calendar_btn">달력열기</a> 
+												<input type="text" class="calendar" id="datepicker1" name="exe_dt" title="스케줄시간설정" readonly />
+											</div>
+										</span> 
+										<span>
+											<div id="month" disabled="disabled"></div>
+										</span> 
+										<span>
+											<div id="day" disabled="disabled"></div>
+										</span> 
+										<span>
+											<div id="hour" disabled="disabled"></div>
+										</span> 
+										<span>
+											<div id="min" disabled="disabled"></div>
+										</span> 
+										<span>
+											<div id="sec" disabled="disabled"></div>
+										</span>
+									</div>
+								</td>
+							</tr>
+						</tbody>
+					</table>
+				</div>
+
+				<div class="cmm_bd">
+					<div class="sub_tit">
+						<p>Work</p>
+					</div>
+					<table id="workList" class="display" cellspacing="0" width="100%">
+						<thead>
+							<tr>
+								<th></th>
+								<th>No</th>
+								<th></th>
+								<th>서버명</th>
+								<th>구분</th>
+								<th>work명</th>
+								<th>Work설명</th>
+							</tr>
+						</thead>
+					</table>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<div id="loading">
+		<img src="/images/spin.gif" alt="" />
+	</div>
 </body>
 </html>

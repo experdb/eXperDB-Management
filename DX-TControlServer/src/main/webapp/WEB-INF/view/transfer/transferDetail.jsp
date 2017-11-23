@@ -215,8 +215,8 @@
 			<h4>전송대상 설정<a href="#n"><img src="../images/ico_tit.png" class="btn_info"/></a></h4>
 			<div class="infobox"> 
 				<ul>
-					<li>전송대상 설정에서 생성된 연결에 전송 대상 소스 정보를 설정합니다.</li>
-					<li>설정된 연결을 시작 또는 중지합니다.</li>
+					<li>커넥터 설정에서 등록한 커넥터를 활성화 또는 비활성화 합니다.</li>
+					<li>커넥터의 구동 상태를 조회합니다.</li>
 				</ul>
 			</div>
 			<div class="location">

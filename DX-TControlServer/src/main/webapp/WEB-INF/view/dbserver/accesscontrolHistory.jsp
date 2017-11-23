@@ -153,6 +153,9 @@ var table = null;
 					alert("서버에 pgaudit Extension 이 설치되지 않았습니다.");
 				}else if(result=="agent"){
 					alert("서버에 experdb엔진이 설치되지 않았습니다.");
+				}else if(extName == "agentfail"){
+					alert("experdb엔진 상태를 확인해주세요.");
+					history.go(-1);
 				}else {
 					alert("복원에 실패하였습니다.");
 				}
