@@ -142,7 +142,7 @@
 			, LST_MDFR_ID
 			, EXE_GRP_SN
 			, SCD_NM
-	
+			, WRK_NM
 	 	)
 	 	VALUES
 	 	(
