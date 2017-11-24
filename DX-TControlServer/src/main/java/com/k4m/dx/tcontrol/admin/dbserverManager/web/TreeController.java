@@ -277,39 +277,42 @@ public class TreeController {
 
 				accessControlService.deleteDbAccessControl(dbServerVO.getDb_svr_id());
 
-				//HashMap<String, Object> paramvalue = new HashMap<String, Object>();
+				HashMap<String, Object> paramvalue = new HashMap<String, Object>();
 				
 				int db_svr_id = dbServerVO.getDb_svr_id();
 				resultSet = dbServerManagerService.selectDbListTree(db_svr_id);
 
-				//화면에서 들고온 DB
-				for (int i = 0; i < rows.size(); i++) {
-					HashMap<String, Object> paramvalue = new HashMap<String, Object>();
-					int chk= 0;
-					//레파지토리 DB  리스트
-					for(int j=0; j<resultSet.size(); j++){
+				for (int i = 0; i < rows.size(); i++) {					
+					int cnt = 0; 
+					for(int j=0; j<resultSet.size(); j++){					
 						JSONObject jsrow = (JSONObject) rows.get(i);
 						String dft_db_nm = jsrow.get("dft_db_nm").toString();
 						String useyn = jsrow.get("useyn").toString();
 						String db_exp = jsrow.get("db_exp").toString();
-						
-						if(resultSet.get(j).getDb_nm() == dft_db_nm ){
-							paramvalue.put("db_svr_id", dbServerVO.getDb_svr_id());
-							paramvalue.put("dft_db_nm", dft_db_nm);
-							paramvalue.put("frst_regr_id", dbServerVO.getFrst_regr_id());
-							paramvalue.put("lst_mdfr_id", dbServerVO.getLst_mdfr_id());
-							paramvalue.put("useyn", useyn);
-							paramvalue.put("db_exp", db_exp);
-							chk += 1;
-						}										
-					}
-					if(chk == 1){
-						dbServerManagerService.updateDB(paramvalue);
+						if(dft_db_nm.equals(resultSet.get(j).getDb_nm())){
+							cnt ++;
+						}	
+						paramvalue.put("db_svr_id", dbServerVO.getDb_svr_id());
+						paramvalue.put("dft_db_nm", dft_db_nm);
+						paramvalue.put("frst_regr_id", dbServerVO.getFrst_regr_id());
+						paramvalue.put("lst_mdfr_id", dbServerVO.getLst_mdfr_id());
+						paramvalue.put("useyn", useyn);
+						paramvalue.put("db_exp", db_exp);
+					}	
+					if(cnt == 1){
+						System.out.println("============== update Data ==============");
+						System.out.println("DB 명 : "+ paramvalue.get("dft_db_nm"));
+						System.out.println("사용여부 : "+ paramvalue.get("useyn"));
+						System.out.println("====================================");
+						dbServerManagerService.updateDB(paramvalue);			
 					}else{
-						dbServerManagerService.insertDB(paramvalue);
-					}
+						System.out.println("============== insert data ==============");
+						System.out.println("DB 명 : "+ paramvalue.get("dft_db_nm"));
+						System.out.println("사용여부 : "+ paramvalue.get("useyn"));
+						System.out.println("====================================");
+						dbServerManagerService.insertDB(paramvalue);	
+					}							
 				}
-
 				/* 접근제어 정보 INSERT */
 				AES256 dec = new AES256(AES256_KEY.ENC_KEY);
 				//int db_svr_id = dbServerVO.getDb_svr_id();
