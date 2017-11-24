@@ -119,7 +119,7 @@ public class MyscheduleController {
 				mp.put("frst_regr_id", result.get(i).get("frst_regr_id"));
 				mp.put("frst_reg_dtm", result.get(i).get("frst_reg_dtm"));
 				mp.put("lst_mdfr_id", result.get(i).get("lst_mdfr_id"));
-				mp.put("lst_mdf_dtm", result.get(i).get("lst_mdfr_id"));
+				mp.put("lst_mdf_dtm", result.get(i).get("lst_mdf_dtm"));
 				mp.put("wrk_cnt", result.get(i).get("wrk_cnt"));
 				for(int j=0; j<scheduler.getJobGroupNames().size(); j++){	
 					if(result.get(i).get("scd_id").toString().equals(scheduler.getJobGroupNames().get(j).toString())){	

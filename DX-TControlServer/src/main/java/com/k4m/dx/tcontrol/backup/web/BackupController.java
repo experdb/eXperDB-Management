@@ -357,6 +357,7 @@ public class BackupController {
 	 */
 	@SuppressWarnings("unchecked")
 	@RequestMapping(value = "/popup/workRmanWrite.do")
+	@ResponseBody
 	public void workRmanWrite(@ModelAttribute("historyVO") HistoryVO historyVO, @ModelAttribute("dbServerVO") DbServerVO dbServerVO, @ModelAttribute("workVO") WorkVO workVO, HttpServletResponse response, HttpServletRequest request) throws IOException {
 		Map<String, Object> initResult =new HashMap<String, Object>();
 		AgentInfoVO vo = new AgentInfoVO();
@@ -429,7 +430,8 @@ public class BackupController {
 	 * @throws IOException 
 	 */
 	@RequestMapping(value = "/popup/workDumpWrite.do")
-	public void workDumpWrite(@ModelAttribute("historyVO") HistoryVO historyVO,@ModelAttribute("workVO") WorkVO workVO, HttpServletResponse response, HttpServletRequest request) throws IOException{
+	@ResponseBody
+	public String workDumpWrite(@ModelAttribute("historyVO") HistoryVO historyVO,@ModelAttribute("workVO") WorkVO workVO, HttpServletResponse response, HttpServletRequest request) throws IOException{
 		WorkVO resultSet = null;
 		String result = "S";
 		String wrkid_result = "S";
@@ -482,7 +484,8 @@ public class BackupController {
 				e.printStackTrace();
 			}
 		}
-		response.getWriter().println(resultSet.getBck_wrk_id());
+		return Integer.toString(resultSet.getBck_wrk_id());
+				
 	}
 	
 	/**
@@ -491,6 +494,7 @@ public class BackupController {
 	 * @return
 	 */
 	@RequestMapping(value = "/popup/workOptWrite.do")
+	@ResponseBody
 	public void workOptWrite(@ModelAttribute("WorkOptVO") WorkOptVO workOptVO, HttpServletRequest request){
 		HttpSession session = request.getSession();
 		String usr_id = (String) session.getAttribute("usr_id");
@@ -667,7 +671,8 @@ public class BackupController {
 	 * @throws IOException 
 	 */
 	@RequestMapping(value = "/popup/workRmanReWrite.do")
-	public void workRmanReWrite(@ModelAttribute("historyVO") HistoryVO historyVO,@ModelAttribute("workVO") WorkVO workVO, HttpServletResponse response, HttpServletRequest request) throws IOException{
+	@ResponseBody
+	public String workRmanReWrite(@ModelAttribute("historyVO") HistoryVO historyVO,@ModelAttribute("workVO") WorkVO workVO, HttpServletResponse response, HttpServletRequest request) throws IOException{
 		String result = "S";
 
 		try {
@@ -686,8 +691,7 @@ public class BackupController {
 			e.printStackTrace();
 			result = "F";
 		}
-
-		response.getWriter().println(result);
+		return result;
 	}
 	
 	/**
@@ -697,7 +701,8 @@ public class BackupController {
 	 * @throws IOException 
 	 */
 	@RequestMapping(value = "/popup/workDumpReWrite.do")
-	public void workDumpReWrite(@ModelAttribute("historyVO") HistoryVO historyVO,@ModelAttribute("workVO") WorkVO workVO, HttpServletResponse response, HttpServletRequest request) throws IOException{
+	@ResponseBody
+	public String workDumpReWrite(@ModelAttribute("historyVO") HistoryVO historyVO,@ModelAttribute("workVO") WorkVO workVO, HttpServletResponse response, HttpServletRequest request) throws IOException{
 		String result = "F";
 		int bck_wrk_id = workVO.getBck_wrk_id();
 		
@@ -734,8 +739,7 @@ public class BackupController {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-
-		response.getWriter().println(result);
+		return result;
 	}
 	
 	/**
@@ -746,6 +750,7 @@ public class BackupController {
 	 * @throws ParseException 
 	 */
 	@RequestMapping(value = "/popup/workDelete.do")
+	@ResponseBody
 	public void workDelete(@ModelAttribute("workVO") WorkVO workVO, HttpServletResponse response, HttpServletRequest request, @ModelAttribute("historyVO") HistoryVO historyVO) throws IOException, ParseException{
 		// Transaction 
 		DefaultTransactionDefinition def  = new DefaultTransactionDefinition();
@@ -817,6 +822,7 @@ public class BackupController {
 	 * @return 
 	 */
 	@RequestMapping(value = "/popup/workObjWrite.do")
+	@ResponseBody
 	public void workObjWrite(@ModelAttribute("WorkObjVO") WorkObjVO workObjVO, HttpServletRequest request){
 		HttpSession session = request.getSession();
 		String usr_id = (String) session.getAttribute("usr_id");
@@ -835,6 +841,7 @@ public class BackupController {
 	 * @return 
 	 */
 	@RequestMapping(value = "/popup/workObjDelete.do")
+	@ResponseBody
 	public void workObjDelete(@ModelAttribute("WorkVO") WorkVO workVO, HttpServletResponse response){
 		try {
 			//backupService.deleteWorkObj(workVO);
@@ -1048,7 +1055,7 @@ public class BackupController {
 	 * @throws IOException 
 	 */
 	@RequestMapping(value = "/popup/insertBckJob.do")
-	public void insertBckJob(@ModelAttribute("historyVO") HistoryVO historyVO,@ModelAttribute("workVO") WorkVO workVO, HttpServletResponse response, HttpServletRequest request) throws IOException {
+	public String insertBckJob(@ModelAttribute("historyVO") HistoryVO historyVO,@ModelAttribute("workVO") WorkVO workVO, HttpServletResponse response, HttpServletRequest request) throws IOException {
 		String result = "S";
 		
 		String wrkid_result = "S";
@@ -1094,6 +1101,7 @@ public class BackupController {
 			}
 		}
 		
-		response.getWriter().println(result);
+
+		return result;
 	}	
 }

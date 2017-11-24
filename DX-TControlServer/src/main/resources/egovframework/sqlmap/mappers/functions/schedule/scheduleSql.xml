@@ -214,6 +214,7 @@
       <if test="frst_regr_id != null and frst_regr_id != '' ">
       	AND A.FRST_REGR_ID LIKE  '%' || #{frst_regr_id} || '%'
       </if>
+      ORDER BY LST_MDF_DTM DESC
     </select>	
     
     <select id="selectInitScheduleList" resultType="scheduleVO">
@@ -242,6 +243,7 @@
       FROM T_SCD_M
       WHERE 1=1	
       AND SCD_CNDT = 'TC001801'
+      ORDER BY LST_MDF_DTM DESC
     </select>	
     
     

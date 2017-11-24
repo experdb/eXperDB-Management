@@ -23,7 +23,17 @@
     		{data : "wrk_nm", className : "dt-center", defaultContent : ""}, 
     		{data : "wrk_strt_dtm", className : "dt-center", defaultContent : ""}, 
     		{data : "wrk_end_dtm", className : "dt-center", defaultContent : ""}, 
-    		{data : "exe_result", className : "dt-center", defaultContent : ""},
+    		//{data : "exe_result", className : "dt-center", defaultContent : ""},
+	   		{
+				data : "exe_result",
+				render : function(data, type, full, meta) {
+					var html = '';
+					html += ' <span onClick=javascript:fn_failLog("'+full.exe_sn+'");> <img src="../images/ico_w_19.png" alt="" /> </span>';
+					return html;
+				},
+				className : "dt-center",
+				defaultContent : ""
+			}
     	]
     	});
     }
@@ -65,6 +75,8 @@
     
     
     </script>
+    
+    <%@include file="../../cmmn/wrkLog.jsp"%>
     
 <!-- contents -->
 <div id="contents">

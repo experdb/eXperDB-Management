@@ -90,6 +90,7 @@
 	        (ROW_NUMBER() OVER()) AS ROWNUM
 	        , (ROW_NUMBER() OVER()) AS IDX
 	        , A.DB_SVR_NM
+	        , A.EXE_SN
 	        , A.SCD_ID
 	        , A.SCD_NM
 	        , A.SCD_ID
@@ -102,6 +103,7 @@
 		FROM
 		(SELECT
 		         D.DB_SVR_NM
+		        , A.EXE_SN
 		        , A.SCD_ID
 		        , C.SCD_NM
 		        , A.WRK_ID

@@ -52,24 +52,24 @@ function fn_init(){
 						}	
 					}
 					if(bar[0] > 0 ){
-						html = ' <img src="../images/af.png" id="full"/>';
+						html = ' <img src="../images/af.png" id="full" alt="FULL 백업"/>';
 					}else{
-						html = ' <img src="../images/df.png" id="full"/>';
+						html = ' <img src="../images/df.png" id="full" alt="FULL 백업"/>';
 					}
 					if(bar[1] > 0 ){
-						html += ' <img src="../images/ai.png"  id="incremental"/>';
+						html += ' <img src="../images/ai.png"  id="incremental" alt="Incremental 백업"/>';
 					}else{
-						html += ' <img src="../images/di.png"  id="incremental"/>';
+						html += ' <img src="../images/di.png"  id="incremental" alt="Incremental 백업"/>';
 					}
 					if(bar[2] > 0 ){
-						html += ' <img src="../images/aa.png" id="archive"/>';
+						html += ' <img src="../images/aa.png" id="archive" alt="Archive 백업"/>';
 					}else{
-						html += ' <img src="../images/da.png" id="archive"/>';
+						html += ' <img src="../images/da.png" id="archive" alt="Archive 백업"/>';
 					}
 					if(bar[3] > 0 ){
-						html += ' <img src="../images/ad.png" id="dump"/>';
+						html += ' <img src="../images/ad.png" id="dump" alt="DUMP 백업"/>';
 					}else{
-						html += ' <img src="../images/dd.png" id="dump"/>';
+						html += ' <img src="../images/dd.png" id="dump" alt="DUMP 백업"/>';
 					}
 					
 					if(full.scd_cndt == 'TC001801'){

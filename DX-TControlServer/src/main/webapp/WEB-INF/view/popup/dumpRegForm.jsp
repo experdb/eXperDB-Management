@@ -38,14 +38,6 @@ $(window.document).ready(function() {
 });
 
 
-$(function() {
-	$("#schema0").click(function() {
-		alert("A");
-		//$("input[name=box]:checkbox").each(function() {
-		//	$(this).attr("checked", true);
-		//});
-	});
-});
 /* ********************************************************
  * Dump Backup Insert
  ******************************************************** */

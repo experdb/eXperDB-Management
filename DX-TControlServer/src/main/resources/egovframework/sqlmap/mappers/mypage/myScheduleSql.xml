@@ -34,6 +34,7 @@
       <if test="scd_exp != null and scd_exp != '' ">
       	AND A.SCD_EXP LIKE CONCAT('%',#{scd_exp},'%')
       </if>
+      ORDER BY LST_MDF_DTM DESC
     </select>	
 	
 </mapper>

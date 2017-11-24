@@ -84,6 +84,7 @@ function fn_update_work(){
 		        xhr.setRequestHeader("AJAX", true);
 		     },
 			error : function(xhr, status, error) {
+				alert("a");
 				if(xhr.status == 401) {
 					alert("인증에 실패 했습니다. 로그인 페이지로 이동합니다.");
 					 location.href = "/";
@@ -95,11 +96,7 @@ function fn_update_work(){
 				}
 			},
 			success : function(data) {
-				if($.trim(data) == "S"){
 					fn_insert_opt();
-				}else{
-					alert("저장중에 에러가 발생했습니다. 다시 시도해 주세요.");
-				}
 			}
 		});  
 	}

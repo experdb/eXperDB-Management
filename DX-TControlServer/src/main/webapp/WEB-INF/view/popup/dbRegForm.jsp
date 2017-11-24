@@ -166,7 +166,23 @@ function fn_dataCompareChcek(svrDbList,db_svr_id){
 			}
 		},
 		success : function(result) {
-			if(svrDbList.data.length>0){
+			//DB목록 그리드의 설명 부분을 리스트로 가지고옴
+			var list = $("input[name='db_exp']");
+			
+			//서버디비 갯수
+			for(var i = 0; i<svrDbList.data.length; i++){
+				//repo디비 갯수
+				for(var j = 0; j<result.length; j++){				
+					list[j].value = result[j].db_exp;
+					if(result[j].useyn == "Y"){
+						 if(db_svr_id == result[j].db_svr_id && svrDbList.data[i].dft_db_nm == result[j].db_nm){		
+							 $('input', table_db.rows(i).nodes()).prop('checked', true); 
+							 table_db.rows(i).nodes().to$().addClass('selected');	
+						}
+					}
+				}
+			}	 
+/* 			if(svrDbList.data.length>0){
  				for(var i = 0; i<svrDbList.data.length; i++){
 					for(var j = 0; j<result.length; j++){						
 							 $('input', table_db.rows(i).nodes()).prop('checked', false); 	
@@ -185,7 +201,7 @@ function fn_dataCompareChcek(svrDbList,db_svr_id){
 						}
 					}
 				}		
-			} 
+			}  */
 		}
 	});	
 }
@@ -246,7 +262,6 @@ function fn_dataCompareChcek(svrDbList,db_svr_id){
      		var org_dbName = table_db.rows().data()[i].dft_db_nm;
 			var returnValue = false;
      		
-     		//기존에 있으면 업데이트 없으면 인서트
      		for(var j=0; j<checkCnt; j++) {    			           	 	
      			var chkDBName = table_db.rows('.selected').data()[j].dft_db_nm;
      			if(org_dbName  == chkDBName) {
