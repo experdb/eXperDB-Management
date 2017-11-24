@@ -449,11 +449,11 @@
 									<td><c:out value="${result.wrk_dtm}" /></td>
 									<td>
 										<c:choose>
-											<c:when test="${result.exe_result eq 'Success'}">
-											    <span onclick='fn_failLog(${result.exe_sn})'><img src="../images/ico_w_20.png" alt="" /></span>
+											<c:when test="${result.exe_rslt_cd eq 'TC001701'}">
+											    <img src="../images/ico_w_20.png" alt="" />
 											</c:when>
 									    	<c:otherwise>
-									    		<span onclick='fn_failLog(${result.exe_sn})'><img src="../images/ico_w_19.png" alt="" /></span>
+									    		<img src="../images/ico_w_19.png" alt="" />
 									    	</c:otherwise>
 										</c:choose>
 									</td>

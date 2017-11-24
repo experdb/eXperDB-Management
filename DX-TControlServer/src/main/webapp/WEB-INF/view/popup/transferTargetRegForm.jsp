@@ -153,6 +153,11 @@
 	function fn_nmCheck(){
 		var str = document.getElementById("trf_trg_cnn_nm").value;
 		var err = 0; 
+		if( str == '' || str == null ){
+		    alert( 'Connect명을 입력해주세요' );
+		    return;
+		}
+
 		for (var i=0; i<str.length; i++)  { 
 		    var chk = str.substring(i,i+1); 
 		    if ( str.match(/[^a-z0-9]/) != null ) {

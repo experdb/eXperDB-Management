@@ -9,57 +9,40 @@
 		* Description : 스케줄이력 조회
 		* Author : 변승우
 		**/
-		select
-	    (ROW_NUMBER() OVER()) AS ROWNUM
-	    , (ROW_NUMBER() OVER()) AS IDX
-	    , A.DB_SVR_NM
-	    , A.SCD_NM
-	    , A.SCD_ID
-	    , A.WRK_ID
-	    , A.WRK_NM
-	    , A.WRK_STRT_DTM
-	    , A.WRK_END_DTM
-	    , A.WRK_DTM
-	    , A.EXE_SN
-	    , A.EXE_RESULT
-		from(
-		select 
-		 D.DB_SVR_NM
-		, A.SCD_ID
-		, C.SCD_NM
-		, A.WRK_ID
-		, B.WRK_NM
+		SELECT
+		  (ROW_NUMBER() OVER()) AS ROWNUM
+		, (ROW_NUMBER() OVER()) AS IDX
+		, A.EXE_GRP_SN
+		, A.SCD_NM
+		, A.EXE_SN
+		, A.EXE_RSLT_CD
+		, A.DB_SVR_NM
 		, TO_CHAR(A.WRK_STRT_DTM,'YYYY-MM-DD HH24:MI:SS') AS WRK_STRT_DTM
 		, TO_CHAR(A.WRK_END_DTM,'YYYY-MM-DD HH24:MI:SS') AS WRK_END_DTM
 		, A.WRK_DTM
-		, A.EXE_SN
-		, (SELECT SYS_CD_NM FROM T_SYSDTL_C WHERE A.EXE_RSLT_CD = SYS_CD ) AS EXE_RESULT
-		from(
-		select 
-		  exe_grp_sn
-		, min(scd_id) as scd_id
-		, min(exe_sn) as exe_sn
-		, max(EXE_RSLT_CD) as EXE_RSLT_CD
-		, min(wrk_id) as wrk_id
-		, MIN(wrk_strt_dtm) as wrk_strt_dtm
-		, MAX(wrk_end_dtm) as wrk_end_dtm
-		, TO_CHAR(TO_CHAR(MAX(wrk_end_dtm),'YYYY-MM-DD HH24:MI:SS')::timestamp - TO_CHAR(MIN(wrk_strt_dtm),'YYYY-MM-DD HH24:MI:SS')::timestamp, 'HH24시MI분SS초') AS WRK_DTM
-		from T_WRKEXE_G
-		group by exe_grp_sn)A,T_BCK_WRKCNG_I B, T_SCD_M C, T_DBSVR_I D
-		WHERE 1= 1
-		AND A.WRK_ID = B.WRK_ID
-		AND C.SCD_ID = A.SCD_ID
-		AND B.DB_SVR_ID = D.DB_SVR_ID
-		AND D.DB_SVR_NM LIKE #{db_svr_nm}
-		<if test="lgi_dtm_start != null and lgi_dtm_start != '' ">
-		 AND to_char(A.WRK_END_DTM,'YYYY-MM-DD') between #{lgi_dtm_start} and #{lgi_dtm_end}
-		</if>
-		<if test="scd_nm != null and scd_nm != '' ">
-		AND C.SCD_NM LIKE #{scd_nm}
-		</if>		
-		AND A.EXE_RSLT_CD LIKE #{exe_result}
-		ORDER BY WRK_END_DTM DESC
-		LIMIT #{recordCountPerPage} OFFSET #{firstIndex} )A
+		FROM(
+			SELECT 
+	          EXE_GRP_SN 
+			, SCD_NM
+			, MIN(A.EXE_SN) AS EXE_SN
+			, MAX(A.EXE_RSLT_CD) AS EXE_RSLT_CD
+			, (SELECT S.DB_SVR_NM FROM T_DBSVR_I S,T_DB_I D WHERE S.DB_SVR_ID=D.DB_SVR_ID AND D.DB_ID=A.DB_ID)AS DB_SVR_NM
+			, MIN(A.WRK_STRT_DTM) AS WRK_STRT_DTM
+			, MAX(A.WRK_END_DTM) AS WRK_END_DTM
+			, TO_CHAR(TO_CHAR(MAX(A.WRK_END_DTM),'YYYY-MM-DD HH24:MI:SS')::TIMESTAMP - TO_CHAR(MIN(A.WRK_STRT_DTM),'YYYY-MM-DD HH24:MI:SS')::TIMESTAMP, 'HH24시MI분SS초') AS WRK_DTM
+			FROM T_WRKEXE_G A
+			WHERE 1= 1
+			<if test="lgi_dtm_start != null and lgi_dtm_start != '' ">
+			 AND to_char(A.WRK_END_DTM,'YYYY-MM-DD') between #{lgi_dtm_start} and #{lgi_dtm_end}
+			</if>
+			<if test="scd_nm != null and scd_nm != '' ">
+			AND A.SCD_NM LIKE #{scd_nm}
+			</if>		
+			AND A.EXE_RSLT_CD LIKE #{exe_result}
+			GROUP BY EXE_GRP_SN, SCD_NM, DB_ID
+			ORDER BY WRK_END_DTM DESC
+			LIMIT #{recordCountPerPage} OFFSET #{firstIndex}
+		)A
 	</select>
 
 
@@ -70,32 +53,29 @@
 	 	* Description : 스케줄이력 총 갯수 조회
 	 	* Author : 변승우
 	 	**/
-		select 
-		COUNT(*) totcnt
-		from(
-		select 
-		  exe_grp_sn
-		, min(scd_id) as scd_id
-		, min(exe_sn) as exe_sn
-		, max(EXE_RSLT_CD) as EXE_RSLT_CD
-		, min(wrk_id) as wrk_id
-		, MIN(wrk_strt_dtm) as wrk_strt_dtm
-		, MAX(wrk_end_dtm) as wrk_end_dtm
-		, TO_CHAR(TO_CHAR(MAX(wrk_end_dtm),'YYYY-MM-DD HH24:MI:SS')::timestamp - TO_CHAR(MIN(wrk_strt_dtm),'YYYY-MM-DD HH24:MI:SS')::timestamp, 'HH24시MI분SS초') AS WRK_DTM
-		from T_WRKEXE_G
-		group by exe_grp_sn)A,T_BCK_WRKCNG_I B, T_SCD_M C, T_DBSVR_I D
-		WHERE 1= 1
-		AND A.WRK_ID = B.WRK_ID
-		AND C.SCD_ID = A.SCD_ID
-		AND B.DB_SVR_ID = D.DB_SVR_ID
-		AND D.DB_SVR_NM LIKE #{db_svr_nm}
-		<if test="lgi_dtm_start != null and lgi_dtm_start != '' ">
-		 AND to_char(A.WRK_END_DTM,'YYYY-MM-DD') between #{lgi_dtm_start} and #{lgi_dtm_end}
-		</if>
-		<if test="scd_nm != null and scd_nm != '' ">
-		AND C.SCD_NM LIKE #{scd_nm}
-		</if>			
-		AND A.EXE_RSLT_CD LIKE #{exe_result}
+	 	SELECT
+			COUNT(*) totcnt
+		FROM(
+			SELECT 
+	          EXE_GRP_SN 
+			, SCD_NM
+			, MIN(A.EXE_SN) AS EXE_SN
+			, MAX(A.EXE_RSLT_CD) AS EXE_RSLT_CD
+			, (SELECT S.DB_SVR_NM FROM T_DBSVR_I S,T_DB_I D WHERE S.DB_SVR_ID=D.DB_SVR_ID AND D.DB_ID=A.DB_ID)AS DB_SVR_NM
+			, MIN(A.WRK_STRT_DTM) AS WRK_STRT_DTM
+			, MAX(A.WRK_END_DTM) AS WRK_END_DTM
+			, TO_CHAR(TO_CHAR(MAX(A.WRK_END_DTM),'YYYY-MM-DD HH24:MI:SS')::TIMESTAMP - TO_CHAR(MIN(A.WRK_STRT_DTM),'YYYY-MM-DD HH24:MI:SS')::TIMESTAMP, 'HH24시MI분SS초') AS WRK_DTM
+			FROM T_WRKEXE_G A
+			WHERE 1= 1
+			<if test="lgi_dtm_start != null and lgi_dtm_start != '' ">
+			 AND to_char(A.WRK_END_DTM,'YYYY-MM-DD') between #{lgi_dtm_start} and #{lgi_dtm_end}
+			</if>
+			<if test="scd_nm != null and scd_nm != '' ">
+			AND A.SCD_NM LIKE #{scd_nm}
+			</if>		
+			AND A.EXE_RSLT_CD LIKE #{exe_result}
+			GROUP BY EXE_GRP_SN, SCD_NM, DB_ID
+		)A
 	</select>
 	
 	
@@ -165,38 +145,38 @@
 	
 	<select id="selectScheduleHistoryDetail" resultType="hashmap" parameterType="int" >
 		SELECT 
-		(SELECT SCD_NM FROM T_SCD_M WHERE SCD_ID=A.SCD_ID)
-		,(SELECT SCD_EXP FROM T_SCD_M WHERE SCD_ID=A.SCD_ID)
-		,A.SCD_ID
-		,A.WRK_STRT_DTM
-		,A.WRK_END_DTM
-		,A.WRK_DTM
-		FROM(
-		SELECT
-		MIN(SCD_ID) AS SCD_ID 	 
-		, TO_CHAR(MIN(WRK_STRT_DTM),'YYYY-MM-DD HH24:MI:SS')AS WRK_STRT_DTM
-		, TO_CHAR(MAX(WRK_END_DTM),'YYYY-MM-DD HH24:MI:SS')AS WRK_END_DTM
-		, TO_CHAR(TO_CHAR(MAX(WRK_END_DTM),'YYYY-MM-DD HH24:MI:SS')::TIMESTAMP - TO_CHAR(MIN(WRK_STRT_DTM),'YYYY-MM-DD HH24:MI:SS')::TIMESTAMP, 'HH24시MI분SS초') AS WRK_DTM 
-		FROM T_WRKEXE_G
-		WHERE EXE_GRP_SN IN(
-		SELECT EXE_GRP_SN FROM T_WRKEXE_G
-		WHERE EXE_SN=#{exe_sn})
-		GROUP BY EXE_GRP_SN)A
+			  A.SCD_NM
+			, A.EXE_SN
+			, TO_CHAR(A.WRK_STRT_DTM,'YYYY-MM-DD HH24:MI:SS') AS WRK_STRT_DTM
+			, TO_CHAR(A.WRK_END_DTM,'YYYY-MM-DD HH24:MI:SS') AS WRK_END_DTM
+			, A.WRK_DTM
+			,(SELECT SCD_EXP FROM T_SCD_M M WHERE A.SCD_NM = M.SCD_NM)AS SCD_EXP
+			FROM(
+				SELECT 
+				 	  SCD_NM
+					, MIN(A.EXE_SN) AS EXE_SN
+					, MIN(A.WRK_STRT_DTM) AS WRK_STRT_DTM
+					, MAX(A.WRK_END_DTM) AS WRK_END_DTM
+					, TO_CHAR(TO_CHAR(MAX(A.WRK_END_DTM),'YYYY-MM-DD HH24:MI:SS')::TIMESTAMP - TO_CHAR(MIN(A.WRK_STRT_DTM),'YYYY-MM-DD HH24:MI:SS')::TIMESTAMP, 'HH24시MI분SS초') AS WRK_DTM
+					FROM T_WRKEXE_G A
+					WHERE 1= 1
+					AND EXE_SN=#{exe_sn}
+					GROUP BY EXE_GRP_SN, SCD_NM, DB_ID
+				)A
 	</select>
 	
 	<select id="selectScheduleHistoryWorkDetail" resultType="hashmap" parameterType="int" >
-		SELECT
+		SELECT 
 		  (ROW_NUMBER() OVER()) AS ROWNUM
-		, B.WRK_NM
-		, B.WRK_EXP
+		, EXE_SN
 		, TO_CHAR(A.WRK_STRT_DTM,'YYYY-MM-DD HH24:MI:SS') AS WRK_STRT_DTM
 		, TO_CHAR(A.WRK_END_DTM,'YYYY-MM-DD HH24:MI:SS') AS WRK_END_DTM
 		, TO_CHAR(TO_CHAR(A.WRK_END_DTM,'YYYY-MM-DD HH24:MI:SS')::TIMESTAMP - TO_CHAR(A.WRK_STRT_DTM,'YYYY-MM-DD HH24:MI:SS')::TIMESTAMP, 'HH24시MI분SS초') AS WRK_DTM
-		FROM T_WRKEXE_G A, T_BCK_WRKCNG_I B
+		, WRK_NM
+		, (SELECT B.WRK_EXP FROM T_BCK_WRKCNG_I B WHERE A.WRK_NM = B.WRK_NM) AS WRK_EXP
+		, EXE_RSLT_CD
+		FROM T_WRKEXE_G A
 		WHERE EXE_GRP_SN IN(
-		SELECT EXE_GRP_SN
-		FROM T_WRKEXE_G
-		WHERE EXE_SN = #{exe_sn})
-		AND A.WRK_ID =B.WRK_ID
+			SELECT EXE_GRP_SN FROM T_WRKEXE_G WHERE EXE_SN=#{exe_sn})
 	</select>	
 </mapper>

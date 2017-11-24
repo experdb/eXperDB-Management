@@ -628,11 +628,7 @@ public class TreeTransferController {
 			historyVO.setExe_dtl_cd("DX-T0020");
 			historyVO.setMnu_id(34);
 			accessHistoryService.insertHistory(historyVO);
-			System.out.println("111111111");
 			int trf_trg_id = treeTransferService.selectTrftrgid(request.getParameter("trf_trg_cnn_nm"));
-			if(trf_trg_id == 0){
-				System.out.println("222222222222");
-			}
 			
 			// 전송매핑테이블내역 조회
 			result = treeTransferService.selectTransferMapping(trf_trg_id);
