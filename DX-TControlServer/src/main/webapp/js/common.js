@@ -246,7 +246,7 @@ function toggleLayer( obj, s ) {
 // 스케줄정보
 function fn_scdLayer(scd_nm){
 	$.ajax({
-		url : "selectScdInfo.do",
+		url : "/selectScdInfo.do",
 		data : {
 			scd_nm : scd_nm
 		},
@@ -256,48 +256,54 @@ function fn_scdLayer(scd_nm){
 			alert("ERROR CODE : "+ request.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ request.responseText.replace(/(<([^>]+)>)/gi, ""));
 		},
 		success : function(result) {
-			var hms = "";
-			
-			hms += result[0].exe_hms.substring(4,6)+"시 ";	
-			hms += result[0].exe_hms.substring(2,4)+"분 ";	
-			hms += result[0].exe_hms.substring(0,2)+"초";		
-			
-			var day = "";
-			if(result[0].exe_perd_cd == "TC001602"){
-				day += "(";
-				if(result[0].exe_dt.substring(0,1)=="1"){
-					day += "일, ";
-				}
-				if(result[0].exe_dt.substring(1,2)=="1"){
-					day += "월, ";
-				}
-				if(result[0].exe_dt.substring(2,3)=="1"){
-					day += "화, ";
-				}
-				if(result[0].exe_dt.substring(3,4)=="1"){
-					day += "수, ";
-				}
-				if(result[0].exe_dt.substring(4,5)=="1"){
-					day += "목, ";
-				}
-				if(result[0].exe_dt.substring(5,6)=="1"){
-					day += "금, ";
-				}
-				if(result[0].exe_dt.substring(6,7)=="1"){
-					day += "토";
-				}
-				day += ")";
-			}		
-			
-			$("#scd_nm_info").html(result[0].scd_nm);
-			$("#scd_exp_info").html(result[0].scd_exp);
-			$("#scd_cndt_info").html(result[0].scd_cndt_nm);
-			$("#exe_perd_cd_info").html(result[0].exe_perd_cd_nm + " " + day);
-			$("#scd_exe_hms").html(hms);
+			if(result.length==0){
+				alert("스케줄이 삭제되어 스케줄 정보를 확인할 수 없습니다.");
+			}else{
+				var hms = "";
+				
+				hms += result[0].exe_hms.substring(4,6)+"시 ";	
+				hms += result[0].exe_hms.substring(2,4)+"분 ";	
+				hms += result[0].exe_hms.substring(0,2)+"초";		
+				
+				var day = "";
+				if(result[0].exe_perd_cd == "TC001602"){
+					day += "(";
+					if(result[0].exe_dt.substring(0,1)=="1"){
+						day += "일, ";
+					}
+					if(result[0].exe_dt.substring(1,2)=="1"){
+						day += "월, ";
+					}
+					if(result[0].exe_dt.substring(2,3)=="1"){
+						day += "화, ";
+					}
+					if(result[0].exe_dt.substring(3,4)=="1"){
+						day += "수, ";
+					}
+					if(result[0].exe_dt.substring(4,5)=="1"){
+						day += "목, ";
+					}
+					if(result[0].exe_dt.substring(5,6)=="1"){
+						day += "금, ";
+					}
+					if(result[0].exe_dt.substring(6,7)=="1"){
+						day += "토";
+					}
+					day += ")";
+				}		
+				
+				$("#scd_nm_info").html(result[0].scd_nm);
+				$("#scd_exp_info").html(result[0].scd_exp);
+				$("#scd_cndt_info").html(result[0].scd_cndt_nm);
+				$("#exe_perd_cd_info").html(result[0].exe_perd_cd_nm + " " + day);
+				$("#scd_exe_hms").html(hms);
+				
+				toggleLayer($('#pop_layer'), 'on');
+			}
 			
 		}
 	});
-	toggleLayer($('#pop_layer'), 'on');
+	
 }
 
 
@@ -357,51 +363,56 @@ function fn_workLayer(wrk_nm){
 				}
 			},
 		success : function(result) {
-			// RMAN
-			if(result[0].bck_bsn_dscd == "TC000201"){
-				$("#r_bck_bsn_dscd_nm").html(result[0].bck_bsn_dscd_nm);
-				$("#bck_opt_cd_nm").html(result[0].bck_opt_cd_nm);
-				$("#r_wrk_nm").html(result[0].wrk_nm);
-				$("#r_wrk_exp").html(result[0].wrk_exp);
-				if(result[0].cps_yn == "N"){
-					$("#cps_yn").html("아니오");
-				}else{
-					$("#cps_yn").html("예");
-				}
-				//$("#cps_yn").html(result[0].cps_yn);
-				$("#log_file_pth").html(result[0].log_file_pth);
-				$("#data_pth").html(result[0].data_pth);
-				$("#bck_pth").html(result[0].bck_pth);
-				$("#r_file_stg_dcnt").html(result[0].file_stg_dcnt);
-				$("#r_bck_mtn_ecnt").html(result[0].bck_mtn_ecnt);
-				$("#acv_file_stgdt").html(result[0].acv_file_stgdt);
-				$("#acv_file_mtncnt").html(result[0].acv_file_mtncnt);
-				if(result[0].log_file_bck_yn == "N"){
-					$("#log_file_bck_yn").html("아니오");
-				}else{
-					$("#log_file_bck_yn").html("예");
-				}
-				//$("#log_file_bck_yn").html(result[0].log_file_bck_yn);
-				$("#r_log_file_stg_dcnt").html(result[0].log_file_stg_dcnt);
-				$("#r_log_file_mtn_ecnt").html(result[0].log_file_mtn_ecnt);
-				
-				toggleLayer($('#pop_layer_rman'), 'on');			
-			// DUMP
+			if(result.length==0){
+				alert("Work가 삭제되어 Work 정보를 확인할 수 없습니다.");
 			}else{
-				$("#d_bck_bsn_dscd_nm").html(result[0].bck_bsn_dscd_nm);
-				$("#d_wrk_nm").html(result[0].wrk_nm);
-				$("#d_wrk_exp").html(result[0].wrk_exp);
-				$("#db_nm").html(result[0].db_nm);
-				$("#save_pth").html(result[0].save_pth);
-				$("#file_fmt_cd_nm").html(result[0].file_fmt_cd_nm);
-				$("#cprt").html(result[0].cprt);
-				$("#encd_mth_nm").html(result[0].encd_mth_nm);
-				$("#usr_role_nm").html(result[0].usr_role_nm);
-				$("#d_file_stg_dcnt").html(result[0].file_stg_dcnt);
-				$("#d_bck_mtn_ecnt").html(result[0].bck_mtn_ecnt);
-				fn_workOptionLayer(result[0].bck_wrk_id, result[0].db_svr_id, result[0].db_nm);
-				toggleLayer($('#pop_layer_dump'), 'on');		
-			}		
+				// RMAN
+				if(result[0].bck_bsn_dscd == "TC000201"){
+					$("#r_bck_bsn_dscd_nm").html(result[0].bck_bsn_dscd_nm);
+					$("#bck_opt_cd_nm").html(result[0].bck_opt_cd_nm);
+					$("#r_wrk_nm").html(result[0].wrk_nm);
+					$("#r_wrk_exp").html(result[0].wrk_exp);
+					if(result[0].cps_yn == "N"){
+						$("#cps_yn").html("아니오");
+					}else{
+						$("#cps_yn").html("예");
+					}
+					//$("#cps_yn").html(result[0].cps_yn);
+					$("#log_file_pth").html(result[0].log_file_pth);
+					$("#data_pth").html(result[0].data_pth);
+					$("#bck_pth").html(result[0].bck_pth);
+					$("#r_file_stg_dcnt").html(result[0].file_stg_dcnt);
+					$("#r_bck_mtn_ecnt").html(result[0].bck_mtn_ecnt);
+					$("#acv_file_stgdt").html(result[0].acv_file_stgdt);
+					$("#acv_file_mtncnt").html(result[0].acv_file_mtncnt);
+					if(result[0].log_file_bck_yn == "N"){
+						$("#log_file_bck_yn").html("아니오");
+					}else{
+						$("#log_file_bck_yn").html("예");
+					}
+					//$("#log_file_bck_yn").html(result[0].log_file_bck_yn);
+					$("#r_log_file_stg_dcnt").html(result[0].log_file_stg_dcnt);
+					$("#r_log_file_mtn_ecnt").html(result[0].log_file_mtn_ecnt);
+					
+					toggleLayer($('#pop_layer_rman'), 'on');			
+				// DUMP
+				}else{
+					$("#d_bck_bsn_dscd_nm").html(result[0].bck_bsn_dscd_nm);
+					$("#d_wrk_nm").html(result[0].wrk_nm);
+					$("#d_wrk_exp").html(result[0].wrk_exp);
+					$("#db_nm").html(result[0].db_nm);
+					$("#save_pth").html(result[0].save_pth);
+					$("#file_fmt_cd_nm").html(result[0].file_fmt_cd_nm);
+					$("#cprt").html(result[0].cprt);
+					$("#encd_mth_nm").html(result[0].encd_mth_nm);
+					$("#usr_role_nm").html(result[0].usr_role_nm);
+					$("#d_file_stg_dcnt").html(result[0].file_stg_dcnt);
+					$("#d_bck_mtn_ecnt").html(result[0].bck_mtn_ecnt);
+					fn_workOptionLayer(result[0].bck_wrk_id, result[0].db_svr_id, result[0].db_nm);
+					toggleLayer($('#pop_layer_dump'), 'on');		
+				}	
+			}
+	
 		}
 	});	
 }

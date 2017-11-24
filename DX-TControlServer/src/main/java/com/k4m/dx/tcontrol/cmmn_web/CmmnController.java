@@ -312,7 +312,6 @@ public class CmmnController {
 		
 		try {
 			String scd_nm = request.getParameter("scd_nm");
-			
 			result = scheduleService.selectScdInfo(scd_nm);	
 		} catch (Exception e) {
 			e.printStackTrace();

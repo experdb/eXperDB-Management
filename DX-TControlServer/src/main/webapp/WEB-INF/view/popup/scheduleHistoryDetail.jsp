@@ -53,8 +53,12 @@ function fn_init() {
 		paging: false,
 		scrollX: true,
 		columns : [
-		{ data : "scd_nm", className : "dt-center", defaultContent : ""}, 
-		{ data : "scd_exp", className : "dt-center", defaultContent : ""}, 
+		{data : "scd_nm", className : "dt-left", defaultContent : ""
+			,render: function (data, type, full) {
+				  return '<span onClick=javascript:fn_scdLayer("'+full.scd_nm+'"); class="bold">' + full.scd_nm + '</span>';
+			}
+		},
+		{ data : "scd_exp", className : "dt-left", defaultContent : ""}, 
 		{ data : "wrk_strt_dtm", className : "dt-center", defaultContent : ""}, 
 		{ data : "wrk_end_dtm", className : "dt-center", defaultContent : ""}, 
 		{ data : "wrk_dtm", className : "dt-center", defaultContent : ""}
@@ -75,8 +79,12 @@ function fn_init() {
 		scrollX: true,
 		columns : [
 		{ data : "rownum", className : "dt-center", defaultContent : ""}, 
-		{ data : "wrk_nm", className : "dt-center", defaultContent : ""}, 
-		{ data : "wrk_exp", className : "dt-center", defaultContent : ""}, 
+		{data : "wrk_nm", className : "dt-left", defaultContent : ""
+			,"render": function (data, type, full) {
+				  return '<span onClick=javascript:fn_workLayer("'+full.wrk_nm+'"); class="bold">' + full.wrk_nm + '</span>';
+			}
+		},
+		{ data : "wrk_exp", className : "dt-left", defaultContent : ""}, 
 		{ data : "wrk_strt_dtm", className : "dt-center", defaultContent : ""},  
 		{ data : "wrk_end_dtm", className : "dt-center", defaultContent : ""},
 		{ data : "wrk_dtm", className : "dt-center", defaultContent : ""},
@@ -162,7 +170,19 @@ $(window.document).ready(function() {
 });
 </script>
 <body>
+<style>
+#scdinfo{
+width: 30% !important;
+}
 
+#workinfo{
+width: 45% !important;
+height: 630px !important;
+}
+</style>
+<%@include file="../cmmn/workRmanInfo.jsp"%>
+<%@include file="../cmmn/workDumpInfo.jsp"%>
+<%@include file="../cmmn/scheduleInfo.jsp"%>
  <!--  popup -->
 	<div id="pop_layer_wrkLog" class="pop-layer">
 		<div class="pop-container">
@@ -177,7 +197,7 @@ $(window.document).ready(function() {
 					</tbody>
 				</table>
 				<div class="btn_type_02">
-					<a href="#n" class="btn" onclick="toggleLayer($('#pop_layer_wrkLog'), 'off');"><span>취소</span></a>
+					<a href="#n" class="btn" onclick="toggleLayer($('#pop_layer_wrkLog'), 'off');"><span>닫기</span></a>
 				</div>
 			</div>
 		</div><!-- //pop-container -->

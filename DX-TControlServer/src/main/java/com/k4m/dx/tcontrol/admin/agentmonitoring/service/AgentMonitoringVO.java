@@ -14,20 +14,9 @@ public class AgentMonitoringVO {
 	private String LST_MDF_DTM;
 	private String AGT_VERSION;
 	private String SET_YN;
+	private String MASTER_GBN;
+	private String IPADR;
 	
-	
-	public String getSET_YN() {
-		return SET_YN;
-	}
-	public void setSET_YN(String sET_YN) {
-		SET_YN = sET_YN;
-	}
-	public String getAGT_VERSION() {
-		return AGT_VERSION;
-	}
-	public void setAGT_VERSION(String aGT_VERSION) {
-		AGT_VERSION = aGT_VERSION;
-	}
 	public String getDB_SVR_ID() {
 		return DB_SVR_ID;
 	}
@@ -88,6 +77,32 @@ public class AgentMonitoringVO {
 	public void setLST_MDF_DTM(String lST_MDF_DTM) {
 		LST_MDF_DTM = lST_MDF_DTM;
 	}
+	public String getAGT_VERSION() {
+		return AGT_VERSION;
+	}
+	public void setAGT_VERSION(String aGT_VERSION) {
+		AGT_VERSION = aGT_VERSION;
+	}
+	public String getSET_YN() {
+		return SET_YN;
+	}
+	public void setSET_YN(String sET_YN) {
+		SET_YN = sET_YN;
+	}
+	public String getMASTER_GBN() {
+		return MASTER_GBN;
+	}
+	public void setMASTER_GBN(String mASTER_GBN) {
+		MASTER_GBN = mASTER_GBN;
+	}
+	public String getIPADR() {
+		return IPADR;
+	}
+	public void setIPADR(String iPADR) {
+		IPADR = iPADR;
+	}
+
 	
+
 	
 }

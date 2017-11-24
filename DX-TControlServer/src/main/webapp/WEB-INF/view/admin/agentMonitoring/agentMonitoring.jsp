@@ -78,6 +78,8 @@
 										<col style="width:35%;" />
 										<col style="width:15%;" />
 										<col style="width:15%;" />
+										<col style="width:15%;" />
+										<col style="width:15%;" />
 										<col style="width:10%;" />
 										<col style="width:15%;" />
 									</colgroup>
@@ -85,6 +87,8 @@
 										<tr>
 											<th scope="col">NO</th>
 											<th scope="col">DBMS명</th>
+											<th scope="col">IP</th>
+											<th scope="col">서버유형</th>
 											<th scope="col">구동일시</th>
 											<th scope="col">등록여부</th>
 											<th scope="col">Agent Version</th>
@@ -102,7 +106,12 @@
 									<c:forEach var="data" items="${list}" varStatus="status">
 										<tr>
 											<td>${status.count}</td>
-											<td>${data.DB_SVR_NM}</td>											
+											<td>${data.DB_SVR_NM}</td>
+											<td>${data.IPADR}</td>		
+											<td>
+												<c:if test="${data.MASTER_GBN == 'M'}">master</c:if>
+												<c:if test="${data.MASTER_GBN == 'S'}">slave</c:if>
+											</td>											
 											<td>${data.STRT_DTM}</td>
 											<td>
 											<c:if test="${data.SET_YN == 'Y'}">

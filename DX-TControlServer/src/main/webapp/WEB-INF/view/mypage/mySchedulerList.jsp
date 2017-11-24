@@ -17,15 +17,16 @@ function fn_init(){
 	bDestroy: true,
 	processing : true,
 	searching : false,	
+	scrollX: true,
 	columns : [
 		{data : "rownum", defaultContent : "", targets : 0, orderable : false, checkboxes : {'selectRow' : true}}, 
 		{data : "idx", className : "dt-center", defaultContent : ""}, 
-		{data : "scd_nm", className : "dt-center", defaultContent : ""
+		{data : "scd_nm", className : "dt-left", defaultContent : ""
 			,render: function (data, type, full) {
-				  return '<span onClick=javascript:fn_scdLayer("'+full.scd_nm+'"); style=cursor:pointer>' + full.scd_nm + '</span>';
+				  return '<span onClick=javascript:fn_scdLayer("'+full.scd_nm+'"); class="bold">' + full.scd_nm + '</span>';
 			}
 		},
-		{data : "scd_exp", className : "dt-center", defaultContent : ""}, 
+		{data : "scd_exp", className : "dt-left", defaultContent : ""}, 
 		{data : "wrk_cnt", className : "dt-center", defaultContent : ""}, 
 		{data : "prev_exe_dtm", className : "dt-center", defaultContent : ""}, 
 		{data : "nxt_exe_dtm", className : "dt-center", defaultContent : ""}, 
@@ -63,6 +64,23 @@ function fn_init(){
 	]
 	});
 	
+	table.tables().header().to$().find('th:eq(0)').css('min-width', '10px');
+	table.tables().header().to$().find('th:eq(1)').css('min-width', '20px');
+	table.tables().header().to$().find('th:eq(2)').css('min-width', '100px');
+	table.tables().header().to$().find('th:eq(3)').css('min-width', '150px');
+	table.tables().header().to$().find('th:eq(4)').css('min-width', '50px');
+	table.tables().header().to$().find('th:eq(5)').css('min-width', '100px');
+	table.tables().header().to$().find('th:eq(6)').css('min-width', '100px');
+	table.tables().header().to$().find('th:eq(7)').css('min-width', '50px');
+	table.tables().header().to$().find('th:eq(8)').css('min-width', '50px');
+	table.tables().header().to$().find('th:eq(9)').css('min-width', '50px');
+	table.tables().header().to$().find('th:eq(10)').css('min-width', '100px');
+	table.tables().header().to$().find('th:eq(11)').css('min-width', '50px');
+	table.tables().header().to$().find('th:eq(12)').css('min-width', '100px');
+	table.tables().header().to$().find('th:eq(13)').css('min-width', '0px');
+    $(window).trigger('resize'); 
+    
+    
  	$('#scheduleList tbody').on('click','#scheduleStop', function () {
  	    var $this = $(this);
 	    var $row = $this.parent().parent();
@@ -340,20 +358,20 @@ function fn_modifyScheduleListView(){
 				<caption>스케쥴 리스트</caption>
 					<thead>
 						<tr>
-							<th></th>
-							<th>No</th>
-							<th>스케줄명</th>
-							<th>설명</th>
-							<th>Work갯수</th>
-							<th>이전수행시간</th>
-							<th>다음수행시간</th>
-							<th>구동상태</th>
-							<th>실행</th>
-							<th>등록자</th>
-							<th>등록일시</th>
-							<th>수정자</th>
-							<th>수정일시</th>
-							<th></th>
+							<th width="10"></th>
+							<th width="20">No</th>
+							<th width="100">스케줄명</th>
+							<th width="150">설명</th>
+							<th width="50">Work갯수</th>
+							<th width="100">이전수행시간</th>
+							<th width="100">다음수행시간</th>
+							<th width="50">구동상태</th>
+							<th width="50">실행</th>
+							<th width="50">등록자</th>
+							<th width="100">등록일시</th>
+							<th width="50">수정자</th>
+							<th width="100">수정일시</th>
+							<th width="0"></th>
 						</tr>
 					</thead>
 				</table>						

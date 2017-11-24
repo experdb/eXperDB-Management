@@ -59,15 +59,15 @@ function fn_rman_init(){
 		scrollX: true,
 	    columns : [
 		         	{ data: "rownum", className: "dt-center", defaultContent: ""}, 
-		         	{data : "wrk_nm", className : "dt-center", defaultContent : ""
+		         	{data : "wrk_nm", className : "dt-left", defaultContent : ""
 		    			,"render": function (data, type, full) {				
 		    				  return '<span onClick=javascript:fn_workLayer("'+full.wrk_nm+'"); class="bold">' + full.wrk_nm + '</span>';
 		    			}
 		    		},
-		         	{ data: "wrk_exp", className: "dt-center", defaultContent: ""}, 		         	
+		         	{ data: "wrk_exp", className: "dt-left", defaultContent: ""}, 		         	
  		         	{ data: "bck_opt_cd_nm", className: "dt-center", defaultContent: ""}, 
  		         	{ data: "file_sz", className: "dt-center", defaultContent: ""}, 
-		         	{ data: "bck_file_pth", className: "dt-center", defaultContent: ""}, 
+		         	{ data: "bck_file_pth", className: "dt-left", defaultContent: ""}, 
  		         	{ data: "wrk_strt_dtm", className: "dt-center", defaultContent: ""}, 
  		         	{ data: "wrk_end_dtm", className: "dt-center", defaultContent: ""}, 
  		         	{ data: "wrk_dtm", className: "dt-center", defaultContent: ""}, 
@@ -111,15 +111,15 @@ function fn_dump_init(){
 		scrollX: true,
 	    columns : [
 		         	{ data: "rownum", className: "dt-center", defaultContent: ""}, 
-		         	{data : "wrk_nm", className : "dt-center", defaultContent : ""
+		         	{data : "wrk_nm", className : "dt-left", defaultContent : ""
 		    			,"render": function (data, type, full) {				
 		    				  return '<span onClick=javascript:fn_workLayer("'+full.wrk_nm+'"); class="bold">' + full.wrk_nm + '</span>';
 		    			}
 		    		}, 
-		         	{ data: "wrk_exp", className: "dt-center", defaultContent: ""}, 
+		         	{ data: "wrk_exp", className: "dt-left", defaultContent: ""}, 
  		         	{ data: "db_nm", className: "dt-center", defaultContent: ""}, 
  		         	{ data: "file_sz", className: "dt-center", defaultContent: ""},
- 		         	{ data: "bck_file_pth", className: "dt-center", defaultContent: ""},
+ 		         	{ data: "bck_file_pth", className: "dt-left", defaultContent: ""},
  		         	{ data: "wrk_strt_dtm", className: "dt-center", defaultContent: ""}, 
  		         	{ data: "wrk_end_dtm", className: "dt-center", defaultContent: ""},  		         			         	
  		         	{ data: "wrk_dtm", className: "dt-center", defaultContent: ""},
@@ -297,6 +297,7 @@ function selectTab(intab){
 			<div class="infobox"> 
 				<ul>
 					<li>지정한 기간 동안 수행된 백업 이력을 조회합니다.</li>
+					<li>조회 목록에서 Work명을 클릭하여 상세 정보를 조회할 수 있습니다.</li>
 				</ul>
 			</div>
 			<div class="location">

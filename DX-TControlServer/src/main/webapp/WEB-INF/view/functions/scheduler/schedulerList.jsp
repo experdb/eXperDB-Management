@@ -24,12 +24,12 @@ function fn_init(){
 	columns : [
 		{data : "rownum", defaultContent : "", targets : 0, orderable : false, checkboxes : {'selectRow' : true}}, 
 		{data : "idx", className : "dt-center", defaultContent : ""}, 
-		{data : "scd_nm", className : "dt-center", defaultContent : ""
+		{data : "scd_nm", className : "dt-left", defaultContent : ""
 			,render: function (data, type, full) {
 				  return '<span onClick=javascript:fn_scdLayer("'+full.scd_nm+'"); class="bold">' + full.scd_nm + '</span>';
 			}
 		},
-		{data : "scd_exp", className : "dt-center", defaultContent : ""},
+		{data : "scd_exp", className : "dt-left", defaultContent : ""},
 		{data : "wrk_cnt", className : "dt-center", defaultContent : ""}, //work갯수
 		{data : "prev_exe_dtm", className : "dt-center", defaultContent : ""}, 
 		{data : "nxt_exe_dtm", className : "dt-center", defaultContent : ""}, 

@@ -442,7 +442,7 @@
 							<c:forEach var="result" items="${result}" varStatus="status">
 								<tr>
 									<td><c:out value="${paginationInfo.totalRecordCount+1 - ((pagingVO.pageIndex-1) * pagingVO.pageSize + status.count)}" /></td>
-									<td><span onclick="fn_scdLayer('${result.scd_nm}');" class="bold"><c:out value="${result.scd_nm}" /></span></td>
+									<td style="text-align: left;"><span onclick="fn_scdLayer('${result.scd_nm}');" class="bold"><c:out value="${result.scd_nm}" /></span></td>
 									<td><c:out value="${result.db_svr_nm}" /></td>								
 									<td><c:out value="${result.wrk_strt_dtm}" /></td>
 									<td><c:out value="${result.wrk_end_dtm}" /></td>

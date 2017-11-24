@@ -36,12 +36,12 @@ function fn_init(){
 	columns : [
 		{data : "rownum", defaultContent : "", targets : 0, orderable : false, checkboxes : {'selectRow' : true}}, 
 		{data : "idx", className : "dt-center", defaultContent : ""}, 
-		{data : "wrk_nm", className : "dt-center", defaultContent : ""
+		{data : "wrk_nm", className : "dt-left", defaultContent : ""
 			,"render": function (data, type, full) {
 				  return '<span onClick=javascript:fn_workLayer("'+full.wrk_nm+'"); class="bold">' + full.wrk_nm + '</span>';
 			}
 		}, //work명
-		{data : "wrk_exp", className : "dt-center", defaultContent : ""},	
+		{data : "wrk_exp", className : "dt-left", defaultContent : ""},	
 		{data : "bck_opt_cd_nm", className : "dt-center", defaultContent : ""
 			,"render": function (data, type, full) {
 				if(full.bck_opt_cd=="TC000301"){
@@ -57,9 +57,9 @@ function fn_init(){
 				return data;
 			}
 		},
-		{data : "data_pth", className : "dt-center", defaultContent : ""},	
-		{data : "bck_pth", className : "dt-center", defaultContent : ""},	
-		{data : "log_file_pth", className : "dt-center", defaultContent : ""},	
+		{data : "data_pth", className : "dt-left", defaultContent : ""},	
+		{data : "bck_pth", className : "dt-left", defaultContent : ""},	
+		{data : "log_file_pth", className : "dt-left", defaultContent : ""},	
 		{data : "frst_regr_id", className : "dt-center", defaultContent : ""},
 		{data : "frst_reg_dtm", className : "dt-center", defaultContent : ""},
 		{data : "lst_mdfr_id", className : "dt-center", defaultContent : ""},
@@ -83,14 +83,14 @@ function fn_init(){
 	columns : [
 		{data : "rownum", defaultContent : "", targets : 0, orderable : false, checkboxes : {'selectRow' : true}}, 
 		{data : "idx", className : "dt-center", defaultContent : ""}, 
-		{data : "wrk_nm", className : "dt-center", defaultContent : ""
+		{data : "wrk_nm", className : "dt-left", defaultContent : ""
 			,"render": function (data, type, full) {				
 				  return '<span onClick=javascript:fn_workLayer("'+full.wrk_nm+'"); class="bold">' + full.wrk_nm + '</span>';
 			}
 		},
-		{data : "wrk_exp", className : "dt-center", defaultContent : ""},
+		{data : "wrk_exp", className : "dt-left", defaultContent : ""},
 		{data : "db_nm", className : "dt-center", defaultContent : ""}, 
-		{data : "save_pth", className : "dt-center", defaultContent : ""},
+		{data : "save_pth", className : "dt-left", defaultContent : ""},
 		{data : "file_fmt_cd_nm", className : "dt-center", defaultContent : ""}, 
 		{data : "cprt", className : "dt-center", defaultContent : ""}, 
 		{data : "encd_mth_nm", className : "dt-center", defaultContent : ""}, 
@@ -550,7 +550,8 @@ function selectTab(tab){
 			<div class="infobox"> 
 				<ul>
 					<li>데이터베이스 서버에 생성된 백업 작업을 조회하거나 신규로 등록 또는 삭제 합니다.</li>
-					<li>작업 조회 목록에서 Work명을 클릭하여 해당 백업 작업을 수정합니다.</li>	
+					<li>작업 조회 목록에서 Work를 클릭하여 해당 백업 작업을 수정합니다.</li>
+					<li>조회 목록에서 Work명을 클릭하여 상세 정보를 조회할 수 있습니다.</li>	
 				</ul>
 			</div>
 			<div class="location">

@@ -4,9 +4,9 @@
 
 <div id="pop_layer_rman" class="pop-layer">
 		<div class="pop-container">
-			<div class="pop_cts" style="width: 20%; height: 550px; overflow: auto;">
+			<div class="pop_cts" style="width: 30%; height: 750px; overflow: auto; padding: 20px; margin: 0 auto;" id="workinfo">
 				<p class="tit" style="margin-bottom: 15px;">WORK 정보
-					<a href="#n" class="btn" onclick="toggleLayer($('#pop_layer_rman'), 'off');"><img src="/images/ico_state_01.png" style="margin-left: 235px;"/></a>
+					<a href="#n" class="btn" onclick="toggleLayer($('#pop_layer_rman'), 'off');" style="float: right;"><img src="/images/ico_state_01.png" style="margin-left: 235px;"/></a>
 				</p>
 				<table border="1" class="list">
 					<caption>WORK 정보</caption>			
@@ -87,7 +87,11 @@
 							<td style="width: 110px; text-align: left" id="r_log_file_mtn_ecnt"></td>
 						</tr>								
 					</tbody>
-				</table>			
+				</table>		
+				
+				<div class="btn_type_02">
+					<a href="#n" class="btn" onclick="toggleLayer($('#pop_layer_rman'), 'off');"><span>닫기</span></a>
+				</div>		
 			</div>
 		</div><!-- //pop-container -->
 	</div>
