@@ -371,6 +371,9 @@ public class DatabaseController {
 						 JSONArray data = (JSONArray)result.get("data");
 						for(int m=0; m<data.size(); m++){
 								JSONObject jsonObj = (JSONObject)data.get(m);
+								int svr_acs_cntr_id= accessControlService.selectCurrentCntrid();
+								
+								accessControlVO.setSvr_acs_cntr_id(svr_acs_cntr_id);
 								accessControlVO.setFrst_regr_id(id);
 								accessControlVO.setLst_mdfr_id(id);
 								accessControlVO.setDb_svr_id(db_svr_id);
@@ -386,6 +389,7 @@ public class DatabaseController {
 								accessControlService.insertAccessControl(accessControlVO);
 								
 								accessControlHistoryVO.setDb_svr_id(db_svr_id);
+								accessControlHistoryVO.setSvr_acs_cntr_id(svr_acs_cntr_id);
 								accessControlHistoryVO.setDtb((String) jsonObj.get("Database"));
 								accessControlHistoryVO.setPrms_ipadr((String)jsonObj.get("Ipadr"));
 								accessControlHistoryVO.setPrms_ipmaskadr((String) jsonObj.get("Ipmask"));
