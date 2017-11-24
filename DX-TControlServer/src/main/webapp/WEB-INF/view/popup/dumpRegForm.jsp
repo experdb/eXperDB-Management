@@ -37,6 +37,15 @@ $(window.document).ready(function() {
 	
 });
 
+
+$(function() {
+	$("#schema0").click(function() {
+		alert("A");
+		//$("input[name=box]:checkbox").each(function() {
+		//	$(this).attr("checked", true);
+		//});
+	});
+});
 /* ********************************************************
  * Dump Backup Insert
  ******************************************************** */
@@ -298,6 +307,10 @@ function fn_make_object_list(data){
 	$.getScript( "/js/common.js", function() {});
 }
 
+function fn_schemaChk(){
+	alert("a");
+}
+
 /* ********************************************************
  * File Format에 따른 Checkbox disabled Check
  ******************************************************** */
@@ -333,7 +346,6 @@ function checkSection(){
 			check = true;
 		}
 	});
-	
 	$("input[name=opt]").each(function(){
 		if( $(this).attr("opt_cd") == "TC000701" || $(this).attr("opt_cd") == "TC000702" ){
 			if(check){
@@ -480,6 +492,8 @@ function fn_check() {
 		}
 	});
 }
+
+
 </script>
 </head>
 <body>
@@ -725,8 +739,7 @@ function fn_check() {
 						</ul>
 					</div>
 					<div class="view">
-						<div class="tNav" >
-							
+						<div class="tNav" >						
 						</div>
 					</div>
 				</div>

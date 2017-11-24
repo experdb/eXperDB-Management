@@ -96,7 +96,7 @@ public class TreeTransferDAO extends EgovAbstractMapper {
 	 * @param name
 	 * @throws SQLException
 	 */
-	public TransferDetailVO selectMappingInfo(String name) {
+	public TransferDetailVO selectMappingInfo(String name) throws SQLException{
 		return (TransferDetailVO) selectOne("treeTransferSql.selectMappingInfo", name);
 	}
 
@@ -150,7 +150,7 @@ public class TreeTransferDAO extends EgovAbstractMapper {
 	 * @param trf_trg_cnn_nm
 	 * @throws SQLException
 	 */
-	public int selectTrftrgid(String trf_trg_cnn_nm) {
+	public int selectTrftrgid(String trf_trg_cnn_nm) throws SQLException{
 		return (int) selectOne("treeTransferSql.selectTrftrgid", trf_trg_cnn_nm);
 	}
 
@@ -197,7 +197,7 @@ public class TreeTransferDAO extends EgovAbstractMapper {
 	 * @throws Exception
 	 */
 	@SuppressWarnings({ "deprecation", "unchecked" })
-	public List<BottlewaterVO> selectBottlewaterinfo(int trf_trg_id) {
+	public List<BottlewaterVO> selectBottlewaterinfo(int trf_trg_id) throws SQLException{
 		List<BottlewaterVO> result = null;
 		result = (List<BottlewaterVO>) list("treeTransferSql.selectBottlewaterinfo", trf_trg_id);
 		return result;
@@ -211,7 +211,7 @@ public class TreeTransferDAO extends EgovAbstractMapper {
 	 * @throws Exception
 	 */
 	@SuppressWarnings({ "deprecation", "unchecked" })
-	public List<TblKafkaConfigVO> selectTblKafkaConfigInfo(int trf_trg_id) {
+	public List<TblKafkaConfigVO> selectTblKafkaConfigInfo(int trf_trg_id) throws SQLException{
 		List<TblKafkaConfigVO> result = null;
 		result = (List<TblKafkaConfigVO>) list("treeTransferSql.selectTblKafkaConfigInfo", trf_trg_id);
 		return result;
@@ -236,7 +236,7 @@ public class TreeTransferDAO extends EgovAbstractMapper {
 	 * @throws Exception
 	 */
 	@SuppressWarnings({ "deprecation", "unchecked" })
-	public List<DbServerVO> selectDbServerList(DbServerVO dbServerVO) {
+	public List<DbServerVO> selectDbServerList(DbServerVO dbServerVO) throws SQLException{
 		List<DbServerVO> result = null;
 		result = (List<DbServerVO>) list("treeTransferSql.selectDbServerList", dbServerVO);
 		return result;

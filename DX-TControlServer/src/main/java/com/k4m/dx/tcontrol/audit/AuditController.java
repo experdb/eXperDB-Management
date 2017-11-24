@@ -118,6 +118,12 @@ public class AuditController {
 					return mv;
 				}
 				
+				if(agentInfo.getAGT_CNDT_CD().equals("TC001102")){
+					mv.addObject("extName", "agentfail");
+					mv.setViewName("dbserver/auditManagement");
+					return mv;
+				}
+				
 				int PORT = agentInfo.getSOCKET_PORT();
 				
 				//IP = "127.0.0.1";

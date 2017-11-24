@@ -78,6 +78,9 @@
 		} else if(extName == "agent") {
 			alert("서버에 experdb엔진이 설치되지 않았습니다.");
 			history.go(-1);
+		}else if(extName == "agentfail"){
+			alert("experdb엔진 상태를 확인해주세요.");
+			history.go(-1);
 		}
 		
 	}

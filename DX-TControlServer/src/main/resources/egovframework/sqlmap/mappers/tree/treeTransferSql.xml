@@ -392,7 +392,8 @@
 	 	* Description : DB서버 리스트 조회
 	 	* Author : 김주영
 	 	**/
-	 	SELECT * FROM T_DBSVR_I A,T_USRDBSVRAUT_I B
+	 	SELECT DB_SVR_NM 
+	 	FROM T_DBSVR_I A,T_USRDBSVRAUT_I B
 		WHERE A.DB_SVR_ID = B.DB_SVR_ID
 		AND USR_ID =#{usr_id}
 		AND USEYN ='Y'	

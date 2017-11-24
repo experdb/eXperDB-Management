@@ -281,7 +281,8 @@
 			<h4>커넥터 설정<a href="#n"><img src="../images/ico_tit.png" class="btn_info"/></a></h4>
 			<div class="infobox"> 
 				<ul>
-					<li>데이터가 전송될 HDFS 정보를 등록하여 연결을 생성합니다.</li>
+					<li>커넥터 별로 전송 대상이 되는 소스 시스템과 타겟 시스템을 설정합니다.</li>
+					<li>데이터 전송을 위한 옵션을 설정합니다.</li>
 				</ul>
 			</div>
 			<div class="location">

@@ -227,7 +227,7 @@
 	    		},
 	    		success : function(result) {
 	    			if(result.bottledwater !=null){
-	    				alert("bottledwater extension을 설치해주세요.");
+	    				alert("bottledwater extension을 설치 해 주세요.");
 	    			}else if(result.data == null){
 	    				alert("experdb 엔진을 확인해주세요.");
 	    			}else{

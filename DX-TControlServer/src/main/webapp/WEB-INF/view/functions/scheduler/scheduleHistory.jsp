@@ -292,7 +292,7 @@
     </script>
     
 <%@include file="../../cmmn/scheduleInfo.jsp"%>
-
+<%@include file="../../cmmn/wrkLog.jsp"%>
 
 <!-- contents -->
 <div id="contents">
@@ -450,15 +450,14 @@
 									<td>
 										<c:choose>
 											<c:when test="${result.exe_result eq 'Success'}">
-											    <img src="../images/ico_w_20.png" alt="" />
+											    <span onclick='fn_failLog(${result.exe_sn})'><img src="../images/ico_w_20.png" alt="" /></span>
 											</c:when>
 									    	<c:otherwise>
-									    		<img src="../images/ico_w_19.png" alt="" />
+									    		<span onclick='fn_failLog(${result.exe_sn})'><img src="../images/ico_w_19.png" alt="" /></span>
 									    	</c:otherwise>
 										</c:choose>
 									</td>
-									<td><span class='btn btnC_01 btnF_02' onclick='fn_detail(${result.exe_sn})'>
-									<input type="button" value="상세조회"></span></td>
+									<td><span class='btn btnC_01 btnF_02' onclick='fn_detail(${result.exe_sn})'><input type="button" value="상세조회"></span></td>
 								</tr>
 							</c:forEach>
 						</tbody>
