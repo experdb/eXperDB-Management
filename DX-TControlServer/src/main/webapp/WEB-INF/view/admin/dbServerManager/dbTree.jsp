@@ -136,11 +136,9 @@ function fn_init() {
 
 /* ********************************************************
  * 페이지 시작시(서버 조회)
- ******************************************************** */
-$(window.document).ready(function() {
-	
-	fn_buttonAut();
-	
+ ******************************************************* */
+$(window.document).ready(function() {	
+	fn_buttonAut();	
 	fn_init();
 	
   	$.ajax({
@@ -290,7 +288,6 @@ function fn_insertDB(){
      		
      		var returnValue = false;
      		
-     		//기존에 있으면 업데이트 없으면 인서트
      		for(var j=0; j<checkCnt; j++) {    			           	 	
      			var chkDBName = table_db.rows('.selected').data()[j].dft_db_nm;
      			if(org_dbName  == chkDBName) {
@@ -310,7 +307,6 @@ function fn_insertDB(){
      		}   		 
     		datasArr.push(rows);
 		}
-
     	if (confirm("선택된 DB를 저장하시겠습니까?")){
 			$.ajax({
 				url : "/insertTreeDB.do",
@@ -374,7 +370,25 @@ function fn_dataCompareChcek(svrDbList){
 			}
 		},
 		success : function(result) {
+			//DB목록 그리드의 설명 부분을 리스트로 가지고옴
 			var list = $("input[name='db_exp']");
+			
+			//서버디비 갯수
+			for(var i = 0; i<svrDbList.data.length; i++){
+				//repo디비 갯수
+				for(var j = 0; j<result.length; j++){				
+					list[j].value = result[j].db_exp;
+					if(result[j].useyn == "Y"){
+						 if(db_svr_id == result[j].db_svr_id && svrDbList.data[i].dft_db_nm == result[j].db_nm){		
+							 $('input', table_db.rows(i).nodes()).prop('checked', true); 
+							 table_db.rows(i).nodes().to$().addClass('selected');	
+						}
+					}
+				}
+			}	 
+			
+			
+/* 			var list = $("input[name='db_exp']");
 			//var db_svr_id =  table_dbServer.row('.selected').data().db_svr_id
 			if(svrDbList.data.length>0){
 				for(var k=0; k<list.length; k++){
@@ -398,7 +412,7 @@ function fn_dataCompareChcek(svrDbList){
 						}
 					}
 				}		
-			} 
+			}  */
 		}
 	});	
 }

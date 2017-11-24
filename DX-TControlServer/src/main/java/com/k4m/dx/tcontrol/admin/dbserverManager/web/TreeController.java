@@ -253,7 +253,8 @@ public class TreeController {
 		// 해당메뉴 권한 조회 (공통메소드호출)
 		CmmnUtils cu = new CmmnUtils();
 		menuAut = cu.selectMenuAut(menuAuthorityService, "MN000301");
-
+		List<DbVO> resultSet = null;
+		
 		try {
 			// 쓰기 권한이 없는경우 error페이지 호출 , [추후 Exception 처리예정]
 			if (menuAut.get(0).get("wrt_aut_yn").equals("N")) {
@@ -276,42 +277,42 @@ public class TreeController {
 
 				accessControlService.deleteDbAccessControl(dbServerVO.getDb_svr_id());
 
-				HashMap<String, Object> paramvalue = new HashMap<String, Object>();
+				//HashMap<String, Object> paramvalue = new HashMap<String, Object>();
+				
+				int db_svr_id = dbServerVO.getDb_svr_id();
+				resultSet = dbServerManagerService.selectDbListTree(db_svr_id);
 
+				//화면에서 들고온 DB
 				for (int i = 0; i < rows.size(); i++) {
-					int cnt = 0;
-
-					JSONObject jsrow = (JSONObject) rows.get(i);
-					String dft_db_nm = jsrow.get("dft_db_nm").toString();
-					String useyn = jsrow.get("useyn").toString();
-					String db_exp = jsrow.get("db_exp").toString();
-
-					paramvalue.put("db_svr_id", dbServerVO.getDb_svr_id());
-					paramvalue.put("dft_db_nm", dft_db_nm);
-					paramvalue.put("frst_regr_id", dbServerVO.getFrst_regr_id());
-					paramvalue.put("lst_mdfr_id", dbServerVO.getLst_mdfr_id());
-					paramvalue.put("useyn", useyn);
-					paramvalue.put("db_exp", db_exp);
-
-					System.out.println("============== parameter ==============");
-					System.out.println("DB 서버 ID : " + paramvalue.get("db_svr_id"));
-					System.out.println("DB 명 : " + paramvalue.get("dft_db_nm"));
-					System.out.println("사용여부 : " + paramvalue.get("useyn"));
-					System.out.println("등록자 : " + paramvalue.get("frst_regr_id"));
-					System.out.println("수정자 : " + paramvalue.get("lst_mdfr_id"));
-					System.out.println("====================================");
-
-					cnt = dbServerManagerService.selectDBcnt(paramvalue);
-					if (cnt == 0) {
-						dbServerManagerService.insertDB(paramvalue);
-					} else {
+					HashMap<String, Object> paramvalue = new HashMap<String, Object>();
+					int chk= 0;
+					//레파지토리 DB  리스트
+					for(int j=0; j<resultSet.size(); j++){
+						JSONObject jsrow = (JSONObject) rows.get(i);
+						String dft_db_nm = jsrow.get("dft_db_nm").toString();
+						String useyn = jsrow.get("useyn").toString();
+						String db_exp = jsrow.get("db_exp").toString();
+						
+						if(resultSet.get(j).getDb_nm() == dft_db_nm ){
+							paramvalue.put("db_svr_id", dbServerVO.getDb_svr_id());
+							paramvalue.put("dft_db_nm", dft_db_nm);
+							paramvalue.put("frst_regr_id", dbServerVO.getFrst_regr_id());
+							paramvalue.put("lst_mdfr_id", dbServerVO.getLst_mdfr_id());
+							paramvalue.put("useyn", useyn);
+							paramvalue.put("db_exp", db_exp);
+							chk += 1;
+						}										
+					}
+					if(chk == 1){
 						dbServerManagerService.updateDB(paramvalue);
+					}else{
+						dbServerManagerService.insertDB(paramvalue);
 					}
 				}
 
 				/* 접근제어 정보 INSERT */
 				AES256 dec = new AES256(AES256_KEY.ENC_KEY);
-				int db_svr_id = dbServerVO.getDb_svr_id();
+				//int db_svr_id = dbServerVO.getDb_svr_id();
 
 				/* 서버접근제어 전체 삭제 */
 				accessControlService.deleteDbAccessControl(db_svr_id);
@@ -384,4 +385,35 @@ public class TreeController {
 		return true;
 	}
 
+	
+	/**
+	 * [DB TREE] Reposytory DB 갯수를 조회한다.
+	 * 
+	 * @return resultSet
+	 * @throws Exception
+	 */
+	@SuppressWarnings("unused")
+	@RequestMapping(value = "/fn_repoDBcnt.do")
+	@ResponseBody
+	public List<DbVO> fn_repoDBcnt(HttpServletResponse response,
+			HttpServletRequest request) {
+
+		// 해당메뉴 권한 조회 (공통메소드호출)
+		CmmnUtils cu = new CmmnUtils();
+		menuAut = cu.selectMenuAut(menuAuthorityService, "MN000301");
+
+		List<DbVO> resultSet = null;
+		try {
+			// 읽기 권한이 없는경우 error페이지 호출 , [추후 Exception 처리예정]
+			if (menuAut.get(0).get("read_aut_yn").equals("N")) {
+				response.sendRedirect("/autError.do");
+				return resultSet;
+			} else {
+			
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return resultSet;
+	}
 }
