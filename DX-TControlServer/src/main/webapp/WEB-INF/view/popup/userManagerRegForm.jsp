@@ -96,7 +96,7 @@
 			},
 			success : function(result) {
 				alert("등록하였습니다.");
-				if (confirm("유저에 권한을 부여하시겠습니까?")) {
+				if (confirm("사용자에게 메뉴권한을 주시겠습니까?")) {
 					window.close();
 					opener.location.href = "/menuAuthority.do?usr_id="+$("#usr_id").val();
 				} else {

@@ -41,37 +41,10 @@
 <script type="text/javascript" src="/js/common.js"></script>
 </head>
 <script>
-var schTable = null;
 var workTable = null;
 
 function fn_init() {
-	schTable = $('#schTable').DataTable({
-		scrollY : "50px",
-		bSort: false,
-		scrollX: false,
-		searching : false,
-		paging: false,
-		scrollX: true,
-		columns : [
-		{data : "scd_nm", className : "dt-left", defaultContent : ""
-			,render: function (data, type, full) {
-				  return '<span onClick=javascript:fn_scdLayer("'+full.scd_nm+'"); class="bold">' + full.scd_nm + '</span>';
-			}
-		},
-		{ data : "scd_exp", className : "dt-left", defaultContent : ""}, 
-		{ data : "wrk_strt_dtm", className : "dt-center", defaultContent : ""}, 
-		{ data : "wrk_end_dtm", className : "dt-center", defaultContent : ""}, 
-		{ data : "wrk_dtm", className : "dt-center", defaultContent : ""}
-		]
-	});
-	
-	schTable.tables().header().to$().find('th:eq(0)').css('min-width', '50px');
-	schTable.tables().header().to$().find('th:eq(1)').css('min-width', '50px');
-	schTable.tables().header().to$().find('th:eq(2)').css('min-width', '50px');
-	schTable.tables().header().to$().find('th:eq(3)').css('min-width', '50px');
-	schTable.tables().header().to$().find('th:eq(4)').css('min-width', '50px');
-    $(window).trigger('resize');
-    
+
     workTable = $('#workTable').DataTable({
 		scrollY : "190px",
 		searching : false,
@@ -114,32 +87,6 @@ function fn_init() {
 
 $(window.document).ready(function() {
 	fn_init();
-	$.ajax({
-		url : "/selectScheduleHistoryDetail.do",
-		data : {
-			exe_sn : "${exe_sn}"
-		},
-		dataType : "json",
-		type : "post",
-		beforeSend: function(xhr) {
-	        xhr.setRequestHeader("AJAX", true);
-	     },
-		error : function(xhr, status, error) {
-			if(xhr.status == 401) {
-				alert("인증에 실패 했습니다. 로그인 페이지로 이동합니다.");
-				 location.href = "/";
-			} else if(xhr.status == 403) {
-				alert("세션이 만료가 되었습니다. 로그인 페이지로 이동합니다.");
-	             location.href = "/";
-			} else {
-				alert("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""));
-			}
-		},
-		success : function(result) {
-			schTable.clear().draw();
-			schTable.rows.add(result).draw();
-		}
-	});
 	
 	$.ajax({
 		url : "/selectScheduleHistoryWorkDetail.do",
@@ -208,19 +155,28 @@ height: 630px !important;
 			<p class="tit">스케줄수행이력 상세보기</p>
 			<div class="pop_cmm3">
 				<p class="pop_s_tit">스케줄정보</p>
-				<div class="overflow_area" style="height: 160px;">
-					<table id="schTable" class="display" cellspacing="0" width="100%">
+					<table class="list" style="border:1px solid #b8c3c6;">
 						<thead>
 							<tr>
-								<th width="50">스케줄명</th>
-								<th width="50">스케줄설명</th>
-								<th width="50">작업시작일시</th>
-								<th width="50">작업종료일시</th>
-								<th width="50">작업시간</th>
+								<th scope="col">스케줄명</th>
+								<th scope="col">스케줄설명</th>
+								<th scope="col">작업시작일시</th>
+								<th scope="col">작업종료일시</th>
+								<th scope="col">작업시간</th>
 							</tr>
 						</thead>
+						<tbody>
+							<c:forEach var="result" items="${result}" varStatus="status">
+								<tr>
+									<td><span onClick='javascript:fn_scdLayer("${result.scd_nm}");' class="bold">${result.scd_nm}</span></td>
+									<td>${result.scd_exp}</td>
+									<td>${result.wrk_strt_dtm}</td>
+									<td>${result.wrk_end_dtm}</td>
+									<td>${result.wrk_dtm}</td>
+								</tr>
+							</c:forEach>
+						</tbody>
 					</table>
-				</div>
 				<br><br>
 				<p class="pop_s_tit">work정보</p>
 				<div class="overflow_area" style="height: 300px;">

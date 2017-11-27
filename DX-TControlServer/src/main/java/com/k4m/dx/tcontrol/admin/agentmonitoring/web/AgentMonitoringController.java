@@ -61,9 +61,11 @@ public class AgentMonitoringController {
 			accessHistoryService.insertHistory(historyVO);
 			
 			String strDB_SVR_NM = request.getParameter("DB_SVR_NM");
+			String strIPADR = request.getParameter("IPADR");
 			
-			if(strDB_SVR_NM == null) {
+			if(strDB_SVR_NM == null && strIPADR ==null) {
 				strDB_SVR_NM = "";
+				strIPADR ="";
 			}else{
 				// 화면접근이력 이력 남기기
 				CmmnUtils.saveHistory(request, historyVO);
@@ -74,12 +76,14 @@ public class AgentMonitoringController {
 			
 			AgentMonitoringVO vo = new AgentMonitoringVO();
 			vo.setDB_SVR_NM(strDB_SVR_NM);
+			vo.setIPADR(strIPADR);
 			
 			List<AgentMonitoringVO> list = (List<AgentMonitoringVO>) agentMonitoringService.selectAgentMonitoringList(vo);
 
 			
 			model.addAttribute("list", list);
 			model.addAttribute("db_svr_nm",strDB_SVR_NM);
+			model.addAttribute("ipadr",strIPADR);
 			
 			mv.setViewName("admin/agentMonitoring/agentMonitoring");
 		} catch (Exception e) {

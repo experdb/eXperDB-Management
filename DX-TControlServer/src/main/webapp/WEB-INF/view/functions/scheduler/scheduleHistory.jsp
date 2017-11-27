@@ -282,7 +282,7 @@
 	function fn_detail(exe_sn){
 		var popUrl = "/popup/scheduleHistoryDetail.do?exe_sn="+exe_sn; // 서버 url 팝업경로
 		var width = 930;
-		var height = 700;
+		var height = 620;
 		var left = (window.screen.width / 2) - (width / 2);
 		var top = (window.screen.height /2) - (height / 2);
 		var popOption = "width="+width+", height="+height+", top="+top+", left="+left+", resizable=no, scrollbars=yes, status=no, toolbar=no, titlebar=yes, location=no,";
@@ -449,12 +449,8 @@
 									<td><c:out value="${result.wrk_dtm}" /></td>
 									<td>
 										<c:choose>
-											<c:when test="${result.exe_rslt_cd eq 'TC001701'}">
-											    <img src="../images/ico_w_20.png" alt="" />
-											</c:when>
-									    	<c:otherwise>
-									    		<img src="../images/ico_w_19.png" alt="" />
-									    	</c:otherwise>
+											<c:when test="${result.exe_rslt_cd eq 'TC001701'}">Success</c:when>
+									    	<c:otherwise>Fail</c:otherwise>
 										</c:choose>
 									</td>
 									<td><span class='btn btnC_01 btnF_02' onclick='fn_detail(${result.exe_sn})'><input type="button" value="상세조회"></span></td>

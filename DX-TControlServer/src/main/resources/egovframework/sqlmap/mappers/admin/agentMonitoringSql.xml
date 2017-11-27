@@ -25,6 +25,9 @@
 		<if test="DB_SVR_NM != null and DB_SVR_NM != '' ">
 			AND A.DB_SVR_NM LIKE '%' || #{DB_SVR_NM} || '%'
 		</if>	
+		<if test="IPADR != null and IPADR != '' ">
+			AND C.IPADR LIKE '%' || #{IPADR} || '%'
+		</if>
       ORDER BY C.LST_MDF_DTM DESC
     </select>
     

@@ -219,6 +219,7 @@ public class ScheduleHistoryController {
 	public ModelAndView transferTargetDetail(@ModelAttribute("historyVO") HistoryVO historyVO,
 			HttpServletRequest request) {
 		ModelAndView mv = new ModelAndView();
+		List<Map<String, Object>> result = null;
 		try {
 			// 화면접근이력 이력 남기기
 //			CmmnUtils.saveHistory(request, historyVO);
@@ -227,7 +228,10 @@ public class ScheduleHistoryController {
 //			accessHistoryService.insertHistory(historyVO);
 			
 			int exe_sn=Integer.parseInt(request.getParameter("exe_sn"));
+			result = scheduleHistoryService.selectScheduleHistoryDetail(exe_sn);
+			
 			mv.addObject("exe_sn",exe_sn);
+			mv.addObject("result",result);
 			mv.setViewName("popup/scheduleHistoryDetail");
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -236,26 +240,6 @@ public class ScheduleHistoryController {
 	}	
 	
 	
-	/**
-	 * 스케줄 정보를 조회한다.
-	 * 
-	 * @param request
-	 * @return resultSet
-	 * @throws Exception
-	 */
-	@RequestMapping(value = "/selectScheduleHistoryDetail.do")
-	public @ResponseBody List<Map<String, Object>> selectScheduleHistoryDetail(@ModelAttribute("historyVO") HistoryVO historyVO,HttpServletRequest request,HttpServletResponse response) {
-		List<Map<String, Object>> result = null;
-		try {
-			int exe_sn = Integer.parseInt(request.getParameter("exe_sn")); 
-			result = scheduleHistoryService.selectScheduleHistoryDetail(exe_sn);
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-		return result;
-
-	}	
-
 	/**
 	 * work 정보를 조회한다.
 	 * 

@@ -240,7 +240,7 @@ function fn_cookie(url) {
 					<li><a href="#n"><span><img src="/images/ico_h_8.png" alt="HELP" /></span></a>
 						<ul class="depth_2">
 							<li><a href="#n" onClick="fn_cookie(null)">Online Help</a></li>
-							<li><a href="/aboutExperdb.do" onClick="fn_cookie(null)">About eXperDB-Management</a></li>
+							<li><a href="/aboutExperdb.do" onClick="fn_cookie(null)">About eXperDB</a></li>
 						</ul>
 					</li>
 				</ul>

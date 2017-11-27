@@ -5,7 +5,7 @@
 		<div class="pop-container">
 			<div class="pop_cts" style="width: 30%; height: 750px; overflow: auto; padding: 20px; margin: 0 auto;" id="workinfo">
 				<p class="tit" style="margin-bottom: 15px;">WORK 정보
-					<a href="#n" class="btn" onclick="toggleLayer($('#pop_layer_dump'), 'off');" style="float: right;"><img src="/images/ico_state_01.png" /></a>
+					<a href="#n" class="btn" onclick="toggleLayer($('#pop_layer_dump'), 'off');" style="float: right;"><img src="/images/ico_state_01.png" style="position: fixed;"/></a>
 				</p>
 				<table border="1" class="list">
 					<caption>WORK 정보</caption>						

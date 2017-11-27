@@ -239,7 +239,7 @@
 				</tr>
 				<tr>
 					<th scope="row" class="ico_t1">hdfs.url</th>
-					<td><input type="text" class="txt t2" name="trf_trg_url" id="trf_trg_url" value="${trf_trg_url}" style="width: 500px;" value=""/><span style="">예시 hdfs://ip:port/HadoopPath</span></td>
+					<td><input type="text" class="txt t2" name="trf_trg_url" id="trf_trg_url" value="${trf_trg_url}" placeholder="예시 hdfs://ip:port/HadoopPath" style="width: 500px;""/><span style=""></span></td>
 				</tr>
 				<tr>
 					<th scope="row" class="ico_t1">connector.class</th>

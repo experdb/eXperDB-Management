@@ -59,14 +59,20 @@
 								<table class="write">
 									<caption>검색 조회</caption>
 									<colgroup>
-										<col style="width:90px;" />
+										<col style="width: 120px;" />
+										<col style="width: 200px;" />
+										<col style="width: 120px;" />
+										<col style="width: 200px;" />
 										<col />
 									</colgroup>
 									<tbody>
 										<tr>
 											<th scope="row" class="t2">DBMS명</th>
 											<td><input type="text" id="DB_SVR_NM" name="DB_SVR_NM" class="txt t2" value="${db_svr_nm}" /></td>
+											<th scope="row" class="t2">DBMS 아이피</th>
+											<td><input type="text" id="IPADR" name="IPADR" class="txt t2" value="${ipadr}" /></td>
 										</tr>
+										
 									</tbody>
 								</table>
 							</div>
@@ -87,7 +93,7 @@
 										<tr>
 											<th scope="col">NO</th>
 											<th scope="col">DBMS명</th>
-											<th scope="col">IP</th>
+											<th scope="col">DBMS 아이피</th>
 											<th scope="col">서버유형</th>
 											<th scope="col">구동일시</th>
 											<th scope="col">등록여부</th>
@@ -99,7 +105,7 @@
 
 									<c:if test="${fn:length(list) == 0}">
 										<tr>
-											<td colspan="5">Not Found Data !!</td>
+											<td colspan="8">Not Found Data !!</td>
 
 										</tr>
 									</c:if>
