@@ -561,6 +561,130 @@ public class AuditController {
 			
 			DbServerVO dbServerVO = (DbServerVO)  cmmnServerInfoService.selectServerInfo(schDbServerVO);
 			
+
+			String strFileName = request.getParameter("file_name");
+			
+			
+			String strBuffer = "";
+
+			
+			mv.addObject("serverName", dbServerVO.getDb_svr_nm());
+			mv.addObject("db_svr_id", strDbSvrId);
+			mv.addObject("file_name", strFileName);
+			
+			mv.addObject("logView", strBuffer);
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+		}
+		mv.setViewName("popup/auditLogView");
+		return mv;
+	}
+	
+	@RequestMapping(value = "/audit/auditLogViewAjax.do")
+	@ResponseBody
+	public HashMap auditLogViewAjax(@ModelAttribute("historyVO") HistoryVO historyVO, HttpServletRequest request) throws Exception{
+
+		HashMap hp = new HashMap();
+		String strBuffer = "";
+		
+		try {
+
+			String strDbSvrId = request.getParameter("db_svr_id");
+			int db_svr_id = Integer.parseInt(strDbSvrId);
+			
+			int intDwlen = 1;
+			String dwLen = request.getParameter("dwLen");
+			String startLen = request.getParameter("startLen");
+			//intDwlen = Integer.parseInt(dwLen);
+			
+			DbServerVO schDbServerVO = new DbServerVO();
+			schDbServerVO.setDb_svr_id(db_svr_id);
+			
+			DbServerVO dbServerVO = (DbServerVO)  cmmnServerInfoService.selectServerInfo(schDbServerVO);
+			
+			String strIpAdr = dbServerVO.getIpadr();
+			
+			AgentInfoVO vo = new AgentInfoVO();
+			vo.setIPADR(strIpAdr);
+			
+			AgentInfoVO agentInfo =  (AgentInfoVO) cmmnServerInfoService.selectAgentInfo(vo);
+			
+			String strDirectory = dbServerVO.getPgdata_pth()+ "/pg_log/";
+			String strFileName = request.getParameter("file_name");
+			
+			JSONObject serverObj = new JSONObject();
+			
+			serverObj.put(ClientProtocolID.SERVER_NAME, dbServerVO.getDb_svr_nm());
+			serverObj.put(ClientProtocolID.SERVER_IP, dbServerVO.getIpadr());
+			serverObj.put(ClientProtocolID.SERVER_PORT, dbServerVO.getPortno());
+			
+			JSONObject jObj = new JSONObject();
+			jObj.put(ClientProtocolID.DX_EX_CODE, ClientTranCodeType.DxT015);
+			jObj.put(ClientProtocolID.SERVER_INFO, serverObj);
+			jObj.put(ClientProtocolID.COMMAND_CODE, ClientProtocolID.COMMAND_CODE_V);
+			jObj.put(ClientProtocolID.FILE_DIRECTORY, strDirectory);
+			jObj.put(ClientProtocolID.FILE_NAME, strFileName);
+			jObj.put(ClientProtocolID.DW_LEN, dwLen);
+			jObj.put(ClientProtocolID.START_LEN, startLen);
+			
+			String IP = dbServerVO.getIpadr();
+			int PORT = agentInfo.getSOCKET_PORT();
+			
+			//IP = "127.0.0.1";
+			ClientAdapter CA = new ClientAdapter(IP, PORT);
+			CA.open(); 
+			
+			JSONObject objList = CA.dxT015_V(jObj);
+			
+			CA.close();
+			
+			String strErrMsg = (String)objList.get(ClientProtocolID.ERR_MSG);
+			String strErrCode = (String)objList.get(ClientProtocolID.ERR_CODE);
+			String strDxExCode = (String)objList.get(ClientProtocolID.DX_EX_CODE);
+			String strResultCode = (String)objList.get(ClientProtocolID.RESULT_CODE);
+			System.out.println("RESULT_CODE : " +  strResultCode);
+			System.out.println("ERR_CODE : " +  strErrCode);
+			System.out.println("ERR_MSG : " +  strErrMsg);
+			
+			String strEndFlag = (String)objList.get(ClientProtocolID.END_FLAG);
+			strBuffer = (String)objList.get(ClientProtocolID.RESULT_DATA);
+
+			
+			hp.put("data", strBuffer);
+			hp.put("fSize", strBuffer.length());
+			//hp.put("fChrSize", intLastLength - intFirstLength);
+			hp.put("dwLen", intDwlen);
+			hp.put("endFlag", strEndFlag);
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+		}
+
+		return hp;
+	}
+	
+	public HashMap auditLogViewAjax_old(@ModelAttribute("historyVO") HistoryVO historyVO, HttpServletRequest request) throws Exception{
+
+		HashMap hp = new HashMap();
+		String strBuffer = "";
+		
+		try {
+
+			String strDbSvrId = request.getParameter("db_svr_id");
+			int db_svr_id = Integer.parseInt(strDbSvrId);
+			
+			int intDwlen = 1;
+			String dwLen = request.getParameter("dwLen");
+			intDwlen = Integer.parseInt(dwLen);
+			
+			DbServerVO schDbServerVO = new DbServerVO();
+			schDbServerVO.setDb_svr_id(db_svr_id);
+			
+			DbServerVO dbServerVO = (DbServerVO)  cmmnServerInfoService.selectServerInfo(schDbServerVO);
+			
 			String strIpAdr = dbServerVO.getIpadr();
 			
 			AgentInfoVO vo = new AgentInfoVO();
@@ -607,18 +731,46 @@ public class AuditController {
 
 			byte[] buffer = (byte[]) objList.get(ClientProtocolID.RESULT_DATA);
 			
-			String strBuffer = new String(buffer);
+			int intBufLength = buffer.length;
 			
-			mv.addObject("serverName", dbServerVO.getDb_svr_nm());
-			mv.addObject("db_svr_id", strDbSvrId);
-			mv.addObject("logView", strBuffer);
+			int intLastLength = 5000000;
+			int intFirstLength = 0;
+			if(intBufLength < 5000000) {
+				intLastLength = buffer.length;
+			} else {
+				int intFirstDwlen = 0;
+				if(intDwlen > 1 ) intFirstDwlen = intDwlen -1;
+				
+				intFirstLength = intLastLength * intFirstDwlen;
+				intLastLength = intLastLength * intDwlen;
+			}
+			
+			int intEndFlag = 0;
+			
+		
+			
+			if(intBufLength <= intLastLength) {
+				//intFirstLength = buffer.length;
+				intLastLength = intBufLength - 1;
+				intEndFlag = 1;
+			} else {
+				intDwlen = intDwlen + 1;
+			}
+			System.out.println(" intBufLength : " + intBufLength + " intFirstLength : " + intFirstLength + " intLastLength : " + intLastLength + " intLastLength - intFirstLength :" + (intLastLength - intFirstLength));
+			
+			strBuffer = new String(buffer, intFirstLength, intLastLength - intFirstLength);
+			hp.put("data", strBuffer);
+			hp.put("fSize", strBuffer.length());
+			hp.put("fChrSize", intLastLength - intFirstLength);
+			hp.put("dwLen", intDwlen);
+			hp.put("endFlag", intEndFlag);
 			
 		} catch (Exception e) {
 			e.printStackTrace();
 		} finally {
 		}
-		mv.setViewName("popup/auditLogView");
-		return mv;
+
+		return hp;
 	}
 	
 	@RequestMapping(value = "/audit/auditLogDownload.do")

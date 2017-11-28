@@ -50,6 +50,60 @@ public class FileUtil {
 
 		return strView;
 	}
+	
+	
+	public static HashMap getFileView(File file, int intStartLength, int intDwlenCount) throws Exception {
+		String strView = "";
+		BufferedReader br = null;
+		HashMap hp = new HashMap();
+		try {
+			br = new BufferedReader(new FileReader(file));
+			char[] c = new char[(int) file.length()];
+			br.read(c);
+			
+			int intBufLength = c.length;
+			
+			int intLastLength = intStartLength;
+			int intFirstLength = 0;
+			if(intBufLength < intStartLength) {
+				intLastLength = intBufLength;
+			} else {
+				int intFirstDwlen = 0;
+				if(intDwlenCount > 1 ) intFirstDwlen = intDwlenCount -1;
+				
+				intFirstLength = intLastLength * intFirstDwlen;
+				intLastLength = intLastLength * intDwlenCount;
+			}
+			
+			String strEndFlag = "0";
+
+			if(intBufLength <= intLastLength) {
+				//intFirstLength = buffer.length;
+				intLastLength = intBufLength ;
+				strEndFlag = "1";
+			} else {
+				intDwlenCount = intDwlenCount + 1;
+			}
+			
+			strView = new String(c, intFirstLength, intLastLength - intFirstLength);
+			
+			hp.put("file_desc", strView);
+			hp.put("file_size", c.length);
+			hp.put("dw_len", intDwlenCount);
+			hp.put("end_flag", strEndFlag);
+
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			if (br != null)
+				try {
+					br.close();
+				} catch (IOException e) {
+				}
+		}
+
+		return hp;
+	}
 
 	/**
 	 * 프로퍼티 get value

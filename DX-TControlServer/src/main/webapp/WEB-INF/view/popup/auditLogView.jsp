@@ -67,16 +67,7 @@
 	}
 	
 	$(window.document).ready(function() {
-		//document.getElementById("auditlog").scrollTop = document.getElementById("auditlog").scrollHeight;
-		setTimeout(function(){
-		    var t = performance.timing;
-		    console.log(t.loadEventEnd - t.responseEnd);
-		    var loadTime = (t.loadEventEnd - t.responseEnd) / 60;
-		    
-		    $("#recTime").text("응답시간 :" + fn_sec(loadTime.toFixed(1)));
-		    //alert(fn_sec(loadTime.toFixed(1)));
-		  }, 0);
-
+		fn_addView();
 	});
 	
 	function fn_Show() {
@@ -98,21 +89,99 @@
 		return sec;
 	}
 	
+	function fn_addView() {
+		var v_db_svr_id = $("#db_svr_id").val();
+		var v_dwLen = $("#dwLen").val();
+		var v_file_name = $("#file_name").val();
+
+		var v_endFlag = $("#endFlag").val();
+		
+		if(v_endFlag > 0) {
+			alert("파일을 모두 읽었습니다.");
+			return;
+		}
+		
+		$("#auditloading").show();
+		
+		$.ajax({
+			url : "/audit/auditLogViewAjax.do",
+			dataType : "json",
+			type : "post",
+ 			data : {
+ 				db_svr_id : v_db_svr_id,
+ 				dwLen : v_dwLen,
+ 				file_name : v_file_name,
+ 				startLen : "500000"
+ 			},
+			beforeSend: function(xhr) {
+		        xhr.setRequestHeader("AJAX", true);
+		     },
+			error : function(xhr, status, error) {
+				if(xhr.status == 401) {
+					alert("인증에 실패 했습니다. 로그인 페이지로 이동합니다.");
+					 location.href = "/";
+				} else if(xhr.status == 403) {
+					alert("세션이 만료가 되었습니다. 로그인 페이지로 이동합니다.");
+		             location.href = "/";
+				} else {
+					alert("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""));
+				}
+			},
+			success : function(result) {
+				//alert(result.fSize);
+				var v_afterData = $("#db_svr_id").val();
+				var v_isData = v_afterData + "\n" + result.data;
+				$("#auditlog").val(v_isData);
+				//var v_fChrSize = Number($("#fChrSize").val()) + result.fChrSize;
+				//$("#fChrSize").val(v_fChrSize);
+				
+				var v_fileSize = Number($("#fSize").val()) + result.fSize;
+
+				$("#fSize").val(v_fileSize);
+				$("#dwLen").val(result.dwLen);
+				$("#endFlag").val(result.endFlag);
+				
+				v_fileSize = byteConvertor(v_fileSize);
+				document.getElementById("fSizeDev").innerHTML = v_fileSize;
+				
+
+				fn_Show();
+			}
+		});
+	}
+
+	function byteConvertor(bytes) {
+
+		bytes = parseInt(bytes);
+
+		var s = ['bytes', 'KB', 'MB', 'GB', 'TB', 'PB'];
+
+		var e = Math.floor(Math.log(bytes)/Math.log(1024));
+
+		if(e == "-Infinity") return "0 "+s[0]; 
+
+		else return (bytes/Math.pow(1024, Math.floor(e))).toFixed(2)+" "+s[e];
+
+	}
 
 </script>
+<input type="hidden" id="dwLen" name="dwLen" value="1">
+<input type="hidden" id="db_svr_id" name="db_svr_id" value="${db_svr_id}">
+<input type="hidden" id="file_name" name="file_name" value="${file_name}">
+<input type="hidden" id="fSize" name="fSize">
+<input type="hidden" id="endFlag" name="endFlag" value="0">
+<input type="hidden" id="fChrSize" name="fChrSize" value="0">
+
 
 <div class="pop_container">
 	<div class="pop_cts">
 		<p class="tit">감사이력 보기</p>
 		<div class="btn_type_01">
+			<span class="btn btnC_01"><button onClick="fn_addView();">더보기</button></span>
 			<span class="btn btnC_01"><button onClick="fn_copy();">복사</button></span>
 			<a href="#n" class="btn" onclick="window.close();"><span>취소</span></a>
 		</div>
 		
-	<div id="auditloading">
-			<img src="/images/spin.gif" alt="" />
-	</div>
-	
 		<div class="pop_cmm">
 			<table class="write">
 				<caption>감사이력 보기</caption>
@@ -121,12 +190,6 @@
 					<col />
 				</colgroup>
 				<tbody>
-					<tr>
-						<td>
-							50MB load 시 약 1분 소요됩니다.
-							
-						</td>
-					</tr>
 					<tr>
 						<td>
 							<div class="textarea_grp">
@@ -138,7 +201,7 @@
 						</td>
 					</tr>
 					<tr>
-						<td> <div id="recTime"></div>
+						<td> <div id="fSizeDev"></div>
 						</td>
 					</tr>
 				</tbody>
@@ -149,6 +212,9 @@
 
 	</div>
 </div>
-<script>fn_Show();</script>
+<div id="auditloading" style="display:none">
+<p class="tit"><img src="/images/popup/ico_p_1.png" style="margin: 0 auto;">다운로드 중입니다.</p>
+<div class="btn_type_02"><img src="/images/spin.gif" style="margin: 0 auto;"></div>
+</div>
 </body>
 </html>

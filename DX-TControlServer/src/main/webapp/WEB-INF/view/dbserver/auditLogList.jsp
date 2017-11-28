@@ -119,18 +119,18 @@ function fn_chkExtName(extName) {
 	
 	function fn_openLogView(file_name, file_size) {
 		var db_svr_id = $("#db_svr_id").val();
-		var param = "db_svr_id=" + db_svr_id + "&file_name=" + file_name;
+		var param = "db_svr_id=" + db_svr_id + "&file_name=" + file_name + "&dwLen=1";
 		
 		var v_size = file_size.replace("Mb", "");
 		
-		if(v_size >60) {
+/* 		if(v_size >60) {
 			if(confirm("다운로드 후 확인가능합니다. 다운로드하시겠습니까?")) {
 				fn_download(file_name, file_size);
 			}
 		} else {
 			window.open("/audit/auditLogView.do?" + param  ,"popLogView","location=no,menubar=no,resizable=yes,scrollbars=yes,status=no,width=915,height=800,top=0,left=0");
-		}
-		
+		} */
+		window.open("/audit/auditLogView.do?" + param  ,"popLogView","location=no,menubar=no,resizable=yes,scrollbars=yes,status=no,width=915,height=800,top=0,left=0");
 	}
 	
 	function fn_download(file_name, file_size) {
@@ -232,7 +232,7 @@ function fn_chkExtName(extName) {
 										<col style="width:50%;" />
 										<col style="width:15%;" />
 										<col style="width:20%;" />
-										<col style="width:10%;" />
+										<!--<col style="width:10%;" />-->
 
 									</colgroup>
 									<thead>
@@ -241,7 +241,7 @@ function fn_chkExtName(extName) {
 											<th scope="col">로그파일명</th>
 											<th scope="col">Size</th>
 											<th scope="col">수정일시</th>
-											<th scope="col">다운로드</th>
+											<!--<th scope="col">다운로드</th>-->
 										</tr>
 									</thead>
 									<tbody>
@@ -252,7 +252,7 @@ function fn_chkExtName(extName) {
 											<td></td>
 											<td></td>
 											<td></td>
-											<td></td>
+											<!--<td></td>-->
 											
 										</tr>
 									</c:if>
@@ -262,7 +262,8 @@ function fn_chkExtName(extName) {
 											<td><a href="javascript:fn_openLogView('${log.file_name}', '${log.file_size}')" class="bold">${log.file_name}</a></td>
 											<td>${log.file_size}</td>
 											<td>${log.file_lastmodified}</td>
-											<td><span class="btn"><button id="btnDownload" name="btnDownload" onClick="javascript:fn_download('${log.file_name}', '${log.file_size}');">다운로드</button></span></td>
+											<!--<td><span class="btn"><button id="btnDownload" name="btnDownload" onClick="javascript:fn_download('${log.file_name}', '${log.file_size}');">다운로드</button></span></td>
+											-->
 											
 										</tr>
 									</c:forEach>

@@ -59,6 +59,9 @@ public class DxT015 extends SocketCtl{
 
 		String strCommandCode = (String) jObj.get(ProtocolID.COMMAND_CODE);
 		String strLogFileDir = (String) jObj.get(ProtocolID.FILE_DIRECTORY);
+		
+		String startLen = (String) jObj.get(ProtocolID.START_LEN);
+		String dwLen = (String) jObj.get(ProtocolID.DW_LEN);
 
 
 		List<Map<String, Object>> outputArray = new ArrayList<Map<String, Object>>();
@@ -127,16 +130,21 @@ public class DxT015 extends SocketCtl{
 				
 
 				String strFileName = (String) jObj.get(ProtocolID.FILE_NAME);
+				//strLogFileDir = "C:\\logs\\";
+				//strFileName = "webconsole.log.2017-05-31";
 				File inFile = new File(strLogFileDir, strFileName);
 				
-				byte[] buffer = FileUtil.getFileToByte(inFile);
-				//String strFileTxt = FileUtil.getFileView(inFile);
+				//byte[] buffer = FileUtil.getFileToByte(inFile);
+				HashMap hp = FileUtil.getFileView(inFile, Integer.parseInt(startLen), Integer.parseInt(dwLen));
 				
 				outputObj.put(ProtocolID.DX_EX_CODE, strDxExCode);
 				outputObj.put(ProtocolID.RESULT_CODE, strSuccessCode);
 				outputObj.put(ProtocolID.ERR_CODE, strErrCode);
 				outputObj.put(ProtocolID.ERR_MSG, strErrMsg);
-				outputObj.put(ProtocolID.RESULT_DATA, buffer);
+				outputObj.put(ProtocolID.RESULT_DATA, hp.get("file_desc"));
+				outputObj.put(ProtocolID.FILE_SIZE, hp.get("file_size"));
+				outputObj.put(ProtocolID.DW_LEN, hp.get("dw_len"));
+				outputObj.put(ProtocolID.END_FLAG, hp.get("end_flag"));
 				
 				send(outputObj);
 			} else if(strCommandCode.equals(ProtocolID.COMMAND_CODE_DL)) {
