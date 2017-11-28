@@ -70,8 +70,6 @@ public interface CmmnServerInfoService {
 	 */
 	List<DbServerVO> selectAllIpadrList(int db_svr_id) throws Exception;
 
-	
-	
 	/**
 	 * 작업로그 정보
 	 * 
@@ -80,5 +78,14 @@ public interface CmmnServerInfoService {
 	 * @throws Exception
 	 */
 	List<Map<String, Object>> selectWrkErrorMsg(int exe_sn) throws Exception;
+
+	/**
+	 * RepoDB 조회
+	 * 
+	 * @param dbServerVO
+	 * @return
+	 * @throws Exception
+	 */
+	List<DbServerVO> selectRepoDBList(DbServerVO dbServerVO) throws Exception;
 
 }

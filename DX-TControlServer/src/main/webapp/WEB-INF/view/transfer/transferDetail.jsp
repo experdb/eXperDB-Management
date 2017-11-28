@@ -212,7 +212,7 @@
 <div id="contents">
 	<div class="contents_wrap">
 		<div class="contents_tit">
-			<h4>전송대상 설정<a href="#n"><img src="../images/ico_tit.png" class="btn_info"/></a></h4>
+			<h4>커넥터 실행/중지<a href="#n"><img src="../images/ico_tit.png" class="btn_info"/></a></h4>
 			<div class="infobox"> 
 				<ul>
 					<li>커넥터 설정에서 등록한 커넥터를 활성화 또는 비활성화 합니다.</li>
@@ -223,7 +223,7 @@
 				<ul>
 					<li>데이터 전송</li>
 					<li>${cnr_nm }</li>
-					<li class="on">전송대상 설정</li>
+					<li class="on">커넥터 실행/중지</li>
 				</ul>
 			</div>
 		</div>

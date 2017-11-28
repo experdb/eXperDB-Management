@@ -14,10 +14,6 @@ import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.config.AutowireCapableBeanFactory;
-import org.springframework.context.ConfigurableApplicationContext;
-import org.springframework.context.support.ClassPathXmlApplicationContext;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
@@ -25,7 +21,6 @@ import org.springframework.web.context.request.ServletRequestAttributes;
 import com.k4m.dx.tcontrol.admin.dbauthority.service.DbAuthorityService;
 import com.k4m.dx.tcontrol.admin.menuauthority.service.MenuAuthorityService;
 import com.k4m.dx.tcontrol.common.service.HistoryVO;
-import com.k4m.dx.tcontrol.functions.schedule.service.ScheduleService;
 
 public class CmmnUtils {
 		

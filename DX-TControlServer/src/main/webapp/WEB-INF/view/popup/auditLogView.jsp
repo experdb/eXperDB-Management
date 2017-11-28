@@ -71,7 +71,6 @@
 	});
 	
 	function fn_Show() {
-		$("#auditloading").hide();
 		$("#auditlog").scrollTop($("#auditlog")[0].scrollHeight);
 		
 	}
@@ -101,7 +100,6 @@
 			return;
 		}
 		
-		$("#auditloading").show();
 		
 		$.ajax({
 			url : "/audit/auditLogViewAjax.do",
@@ -212,9 +210,7 @@
 
 	</div>
 </div>
-<div id="auditloading" style="display:none">
-<p class="tit"><img src="/images/popup/ico_p_1.png" style="margin: 0 auto;">다운로드 중입니다.</p>
-<div class="btn_type_02"><img src="/images/spin.gif" style="margin: 0 auto;"></div>
-</div>
+
+<div id="loading"><img src="/images/spin.gif" alt="" /></div>
 </body>
 </html>

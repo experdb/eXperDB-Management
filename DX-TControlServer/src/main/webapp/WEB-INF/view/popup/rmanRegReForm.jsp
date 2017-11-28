@@ -307,8 +307,9 @@ function checkFolder(keyType){
 <input type="hidden" name="bck_wrk_id" id="bck_wrk_id" value="${bck_wrk_id}"/>
 <input type="hidden" name="check_path1" id="check_path1" value="Y"/>
 <input type="hidden" name="check_path2" id="check_path2" value="Y"/>
+</form>
 	<div id="pop_layer">
-		<div class="pop-container">
+		<div class="pop_container">
 			<div class="pop_cts">
 				<p class="tit">Rman 백업 수정</p>
 				<div class="pop_cmm">
@@ -358,13 +359,13 @@ function checkFolder(keyType){
 								<tr>
 									<th scope="row" class="ico_t1">데이터경로</th>
 									<td>
-										<input type="text" class="txt" name="data_pth" id="data_pth" maxlength=200  value="<c:out value="${workInfo[0].data_pth}"/>" style="width:610px" readonly/>											
+										<input type="text" class="txt" name="data_pth" id="data_pth" maxlength=200  value="<c:out value="${workInfo[0].data_pth}"/>" style="width:560px" readonly/>											
 									</td>
 								</tr>									
 								<tr>		
 									<th scope="row" class="ico_t1">백업로그경로</th>
 									<td>
-										<input type="text" class="txt" name="log_file_pth" id="log_file_pth" maxlength=200  value="<c:out value="${workInfo[0].log_file_pth}"/>" style="width:550px" onKeydown="$('#check_path1').val('N')"/>
+										<input type="text" class="txt" name="log_file_pth" id="log_file_pth" maxlength=200  value="<c:out value="${workInfo[0].log_file_pth}"/>" style="width:500px" onKeydown="$('#check_path1').val('N')"/>
 										<span class="btn btnC_01"><button type="button" class= "btn_type_02" onclick="checkFolder(1)" style="width: 60px; margin-right: -60px; margin-top: 0;">경로체크</button></span>
 										<span id="logVolume" style="margin:63px;"></span>	
 									</td>
@@ -372,7 +373,7 @@ function checkFolder(keyType){
 								<tr>	
 										<th scope="row" class="ico_t1">백업경로</th>
 										<td>
-											<input type="text" class="txt" name="bck_pth" id="bck_pth" maxlength=200  value="<c:out value="${workInfo[0].bck_pth}"/>" style="width:550px" onKeydown="$('#check_path2').val('N')"/>
+											<input type="text" class="txt" name="bck_pth" id="bck_pth" maxlength=200  value="<c:out value="${workInfo[0].bck_pth}"/>" style="width:500px" onKeydown="$('#check_path2').val('N')"/>
 											<span class="btn btnC_01"><button type="button" class= "btn_type_02" onclick="checkFolder(2)" style="width: 60px; margin-right: -60px; margin-top: 0;">경로체크</button></span>
 											<span id="backupVolume" style="margin:63px;"></span>	
 										</td>
@@ -457,6 +458,5 @@ function checkFolder(keyType){
 			</div>
 		</div><!-- //pop-container -->
 	</div>
-</form>	
 </body>
 </html>

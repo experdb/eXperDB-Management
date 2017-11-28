@@ -175,7 +175,7 @@ function fn_dump_find_list(){
 function fn_rman_reg_popup(){
 	var popUrl = "/popup/rmanRegForm.do?db_svr_id=${db_svr_id}";
 	var width = 954;
-	var height = 600;
+	var height = 799;
 	var left = (window.screen.width / 2) - (width / 2);
 	var top = (window.screen.height /2) - (height / 2);
 	var popOption = "width="+width+", height="+height+", top="+top+", left="+left+", resizable=no, scrollbars=yes, status=no, toolbar=no, titlebar=yes, location=no,";
@@ -200,7 +200,7 @@ function fn_rman_regreg_popup(){
 		}else{
 			var popUrl = "/popup/rmanRegReForm.do?db_svr_id=${db_svr_id}&bck_wrk_id="+bck_wrk_id;
 			var width = 954;
-			var height = 650;
+			var height = 799;
 			var left = (window.screen.width / 2) - (width / 2);
 			var top = (window.screen.height /2) - (height / 2);
 			var popOption = "width="+width+", height="+height+", top="+top+", left="+left+", resizable=no, scrollbars=yes, status=no, toolbar=no, titlebar=yes, location=no,";

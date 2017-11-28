@@ -257,6 +257,17 @@
 		, clock_timestamp()
 		)		
     </insert>    
+    
+    <select id="selectTrftrgidCheck" parameterType="String" resultType="int">
+        /**
+	 	*  Query ID : selectTrftrgid
+	 	* Description : trf_trg_id 조회
+	 	* Author : 김주영
+	 	**/
+	 	SELECT COUNT(*)
+	 	FROM T_TRFTRGCNG_I
+	 	WHERE TRF_TRG_CNN_NM = #{trf_trg_cnn_nm}
+    </select>
        
     <select id="selectTrftrgid" parameterType="String" resultType="int">
         /**

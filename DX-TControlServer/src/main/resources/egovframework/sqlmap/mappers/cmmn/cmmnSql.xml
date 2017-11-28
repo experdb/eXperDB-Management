@@ -222,9 +222,7 @@
 		
     </select>	    
     
-    
-    
-    	<select id="selectWrkErrorMsg" parameterType="int" resultType="hashMap">
+    <select id="selectWrkErrorMsg" parameterType="int" resultType="hashMap">
 		/**
 	 	* Query ID : selectWrkErrorMsg
 	 	* Description : 작업로그정보 
@@ -235,5 +233,18 @@
 	          FROM T_WRKEXE_G
 	          WHERE 1 = 1
 		      AND EXE_SN = #{exe_sn}		
-    </select>	    
+    </select>	
+        
+     <select id="selectRepoDBList" parameterType="DbServerVO" resultType="DbServerVO">
+		/**
+	 	* Query ID : selectRepoDBList
+	 	* Description : RepoDB 조회
+	 	* Author : 김주영
+	 	**/
+		SELECT DB_NM FROM T_DB_I D,T_USRDBAUT_I I
+		WHERE D.DB_ID =I.DB_ID
+		AND I.DB_SVR_ID=#{db_svr_id}
+		AND I.USR_ID=#{usr_id}
+		AND I.AUT_YN ='Y'
+    </select>	     
 </mapper>

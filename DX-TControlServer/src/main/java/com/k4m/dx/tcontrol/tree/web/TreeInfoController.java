@@ -52,7 +52,7 @@ public class TreeInfoController {
 	
 	@Autowired
 	private TreeInfoService treeInfoService;
-
+	
 	/**
 	 * 트리 Connector 리스트를 조회한다.
 	 * 
@@ -117,10 +117,16 @@ public class TreeInfoController {
 				serverObj.put(ClientProtocolID.USER_PWD, dec.aesDecode(dbServerVO.getSvr_spr_scm_pwd()));
 
 				HashMap result = cic.dbms_inforamtion(IP, PORT, serverObj);
-				List<DbServerVO> resultSet = cmmnServerInfoService.selectAllIpadrList(db_svr_id);
+				List<DbServerVO> resultIpadr = cmmnServerInfoService.selectAllIpadrList(db_svr_id);
+				
+				HttpSession session = request.getSession();
+				String usr_id = (String) session.getAttribute("usr_id");
+				dbServerVO.setUsr_id(usr_id);
+				List<DbServerVO> resultRepoDB = cmmnServerInfoService.selectRepoDBList(dbServerVO);
 				
 				mv.addObject("result", result);
-				mv.addObject("resultSet", resultSet);
+				mv.addObject("resultIpadr", resultIpadr);
+				mv.addObject("resultRepoDB", resultRepoDB);
 				mv.addObject("db_svr_nm", dbServerVO.getDb_svr_nm());
 				mv.addObject("db_svr_id", db_svr_id);
 			}

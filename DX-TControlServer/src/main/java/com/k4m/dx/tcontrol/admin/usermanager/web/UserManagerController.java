@@ -230,6 +230,8 @@ public class UserManagerController {
 			
 			if(userVo.getUsr_expr_dt() ==null | userVo.getUsr_expr_dt().equals("")){
 				userVo.setUsr_expr_dt("20990101");
+			}else{
+				userVo.setUsr_expr_dt(userVo.getUsr_expr_dt().replace("-", ""));
 			}
 			
 			userManagerService.insertUserManager(userVo);
@@ -307,6 +309,8 @@ public class UserManagerController {
 				//패스워드 암호화
 				userVo.setPwd(SHA256.SHA256(userVo.getPwd()));
 			}
+			userVo.setUsr_expr_dt(userVo.getUsr_expr_dt().replace("-", ""));
+	
 			userManagerService.updateUserManager(userVo);
 		} catch (Exception e) {
 			e.printStackTrace();

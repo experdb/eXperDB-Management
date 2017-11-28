@@ -117,8 +117,8 @@ $(window.document).ready(function() {
 });
 
 </script>
-	<%@include file="../cmmn/workRmanInfoPop.jsp"%>
-	<%@include file="../cmmn/workDumpInfoPop.jsp"%>
+	<%@include file="../cmmn/workRmanInfo.jsp"%>
+	<%@include file="../cmmn/workDumpInfo.jsp"%>
 					<div class="contents">
 						<div class="cmm_grp">						
 							<div class="cmm_bd">

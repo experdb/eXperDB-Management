@@ -61,6 +61,9 @@
 
 	
 	$(window.document).ready(function() {
+		if("${error}"!=""){
+			alert("${error}");
+		}
 		fn_init();
 		if("${result}" == ""){
 			fn_dbSelect($("#db_svr_nm").val());

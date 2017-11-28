@@ -311,7 +311,7 @@ function fn_modifyScheduleListView(){
 <div id="contents">
 	<div class="contents_wrap">
 		<div class="contents_tit">
-			<h4>My스케줄<a href="#n"><img src="../images/ico_tit.png" class="btn_info"/></a></h4>
+			<h4>My스케줄 관리<a href="#n"><img src="../images/ico_tit.png" class="btn_info"/></a></h4>
 			<div class="infobox"> 
 				<ul>
 					<li>로그인한 사용자가 생성한 스케줄 정보를 조회합니다.</li>
@@ -321,7 +321,7 @@ function fn_modifyScheduleListView(){
 			<div class="location">
 				<ul>
 					<li>My PAGE</li>
-					<li class="on">My스케줄</li>
+					<li class="on">My스케줄 관리</li>
 				</ul>
 			</div>
 		</div>

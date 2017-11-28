@@ -497,7 +497,7 @@ function fn_makeToMin(){
 <div id="contents">
 	<div class="contents_wrap">
 		<div class="contents_tit">
-			<h4>스케줄 관리 <a href="#n"><img src="../images/ico_tit.png" class="btn_info"/></a></h4>
+			<h4>스케줄 실행/중지<a href="#n"><img src="../images/ico_tit.png" class="btn_info"/></a></h4>
 				<div class="infobox"> 
 					<ul>
 						<li>현재 등록되어 있는 스케줄 정보를 조회합니다.</li>
@@ -508,7 +508,7 @@ function fn_makeToMin(){
 				<ul>
 					<li>Function</li>
 					<li>스케줄정보</li>
-					<li class="on">스케줄 관리</li>
+					<li class="on">스케줄 실행/중지</li>
 				</ul>
 			</div>
 		</div>
