@@ -50,7 +50,7 @@ function fn_init(){
 	{data : "bck_bsn_dscd_nm", className : "dt-center", defaultContent : ""}, //구분
 	{data : "wrk_nm", className : "dt-center", defaultContent : ""
 		,"render": function (data, type, full) {
-			  return '<span onClick=javascript:fn_workLayer("'+full.wrk_nm+'"); class="bold">' + full.wrk_nm + '</span>';
+			  return '<span onClick=javascript:fn_workLayer("'+full.wrk_id+'"); class="bold">' + full.wrk_nm + '</span>';
 		}
 	}, //work명
 	{data : "wrk_exp", className : "dt-center", defaultContent : ""}, //work설명

@@ -46,8 +46,8 @@
 <script type="text/javascript">
 
 var connCheck = "fail";
-var pghomeCheck="fail";
-var pgdataCheck ="fail";
+/* var pghomeCheck="fail";
+var pgdataCheck ="fail"; */
 
 function fn_init() {
 	
@@ -91,14 +91,14 @@ function fn_init() {
 
 
 function fn_dbServerValidation(){
-	 if(pghomeCheck != "success"){
+/* 	 if(pghomeCheck != "success"){
 			alert("PG_HOME경로 확인 하셔야합니다.");
 			return false;
 		}
  		if(pgdataCheck != "success"){
 			alert("PG_DATA경로 확인 하셔야합니다.");
 			return false;
-		}
+		} */
  		if(connCheck != "success"){
 			alert("연결테스트를 하셔야합니다.");
 			return false;
@@ -285,6 +285,8 @@ function fn_dbServerConnTest(){
 							return false;
 					}else{
 						connCheck = "success";
+						alert("[ 연결 테스트 성공! ]");
+						fn_pathCall(ipadr, datasArr);
 					}
 				} 				
 			}else{
@@ -297,6 +299,35 @@ function fn_dbServerConnTest(){
 
 }
 
+
+function fn_pathCall(ipadr, datasArr){
+	$.ajax({
+		url : "/pathCall.do",
+		data : {
+			ipadr : ipadr,
+			datasArr : JSON.stringify(datasArr)
+		},
+		type : "post",
+		beforeSend: function(xhr) {
+	        xhr.setRequestHeader("AJAX", true);
+	     },
+		error : function(xhr, status, error) {
+			if(xhr.status == 401) {
+				alert("인증에 실패 했습니다. 로그인 페이지로 이동합니다.");
+				 location.href = "/";
+			} else if(xhr.status == 403) {
+				alert("세션이 만료가 되었습니다. 로그인 페이지로 이동합니다.");
+	             location.href = "/";
+			} else {
+				alert("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""));
+			}
+		},
+		success : function(result) {		
+			document.getElementById("pghome_pth").value=result.CMD_DBMS_PATH;
+			document.getElementById("pgdata_pth").value=result.DATA_PATH;
+		}
+	}); 
+}
 
 //DBserver 수정
 function fn_updateDbServer(){
@@ -317,6 +348,7 @@ function fn_updateDbServer(){
 		arrmaps.push(tmpmap);	
 		}
 	
+	if (confirm("DBMS를 수정 하시겠습니까?")){	
 	$.ajax({
 		url : "/updateDbServer.do",
 		data : {
@@ -351,7 +383,9 @@ function fn_updateDbServer(){
 			self.close();			
 		}
 	}); 
-	
+	}else{
+		return false;
+	}	
 }
 
 
@@ -642,20 +676,20 @@ function checkPghome(){
 				<tr>
 					<th scope="row" class="ico_t1">PG_HOME경로(*)</th>
 					<td>
-					<input type="text" class="txt" name="pghome_pth" id="pghome_pth" style="width:690px" /></td>
-					<th scope="row" class="ico_t1"></th>
+					<input type="text" class="txt" name="pghome_pth" id="pghome_pth" style="width:750px" readonly="readonly"/></td>
+<!-- 					<th scope="row" class="ico_t1"></th>
 					<td>
 					<span class="btn btnC_01"><button type="button" class= "btn_type_02" onclick="checkPghome()" style="width: 60px; margin-left: 237px; margin-top: 0;">경로체크</button></span>
-					</td>					
+					</td>		 -->			
 				</tr>
 				<tr>
 					<th scope="row" class="ico_t1">PG_DATA경로(*)</th>
 					<td>
-					<input type="text" class="txt" name="pgdata_pth" id="pgdata_pth" style="width:690px" /></td>
-					<th scope="row" class="ico_t1"></th>
+					<input type="text" class="txt" name="pgdata_pth" id="pgdata_pth" style="width:750px" readonly="readonly"/></td>
+					<!-- <th scope="row" class="ico_t1"></th>
 					<td>
 					<span class="btn btnC_01"><button type="button" class= "btn_type_02" onclick="checkPgdata()" style="width: 60px; margin-left: 237px; margin-top: 0;">경로체크</button></span>
-					</td>					
+					</td> -->					
 				</tr>	
 				<tr>
 					<th scope="row" class="ico_t1">사용유무</th>

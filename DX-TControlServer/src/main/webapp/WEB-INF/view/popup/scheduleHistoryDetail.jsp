@@ -54,7 +54,7 @@ function fn_init() {
 		{ data : "rownum", className : "dt-center", defaultContent : ""}, 
 		{data : "wrk_nm", className : "dt-left", defaultContent : ""
 			,"render": function (data, type, full) {
-				  return '<span onClick=javascript:fn_workLayer("'+full.wrk_nm+'"); class="bold">' + full.wrk_nm + '</span>';
+				  return '<span onClick=javascript:fn_workLayer("'+full.wrk_id+'"); class="bold">' + full.wrk_nm + '</span>';
 			}
 		},
 		{ data : "wrk_exp", className : "dt-left", defaultContent : ""}, 
@@ -71,7 +71,8 @@ function fn_init() {
 					return html;
 				}
 			}
-		}
+		},
+		{data : "scd_id", className : "dt-center", defaultContent : "", visible: false }
 		]
 	});
     
@@ -81,6 +82,7 @@ function fn_init() {
     workTable.tables().header().to$().find('th:eq(3)').css('min-width', '100px');
     workTable.tables().header().to$().find('th:eq(4)').css('min-width', '100px');
 	workTable.tables().header().to$().find('th:eq(5)').css('min-width', '50px');
+	workTable.tables().header().to$().find('th:eq(6)').css('min-width', '0px');
     $(window).trigger('resize');
     
 }
@@ -168,7 +170,7 @@ height: 630px !important;
 						<tbody>
 							<c:forEach var="result" items="${result}" varStatus="status">
 								<tr>
-									<td><span onClick='javascript:fn_scdLayer("${result.scd_nm}");' class="bold">${result.scd_nm}</span></td>
+									<td><span onClick='javascript:fn_scdLayer("${result.scd_id}");' class="bold">${result.scd_nm}</span></td>
 									<td>${result.scd_exp}</td>
 									<td>${result.wrk_strt_dtm}</td>
 									<td>${result.wrk_end_dtm}</td>
@@ -190,6 +192,7 @@ height: 630px !important;
 								<th width="100">작업종료일시</th>
 								<th width="50">작업시간</th>
 								<th width="50">결과</th>
+								<th width="0"></th>
 							</tr>
 						</thead>
 					</table>

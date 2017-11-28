@@ -23,7 +23,7 @@ function fn_init(){
 		{data : "idx", className : "dt-center", defaultContent : ""}, 
 		{data : "scd_nm", className : "dt-left", defaultContent : ""
 			,render: function (data, type, full) {
-				  return '<span onClick=javascript:fn_scdLayer("'+full.scd_nm+'"); class="bold">' + full.scd_nm + '</span>';
+				  return '<span onClick=javascript:fn_scdLayer("'+full.scd_id+'"); class="bold">' + full.scd_nm + '</span>';
 			}
 		},
 		{data : "scd_exp", className : "dt-left", defaultContent : ""}, 

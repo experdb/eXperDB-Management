@@ -53,8 +53,8 @@ var connCheck = "fail";
 var idCheck = "fail";
 var db_svr_nmChk ="fail";
 
-var pghomeCheck="fail";
-var pgdataCheck ="fail";
+/* var pghomeCheck="fail";
+var pgdataCheck ="fail"; */
 
 
 function fn_init() {
@@ -182,7 +182,7 @@ function fn_dbServerValidation(){
   			 svr_spr_scm_pwd.focus();
   			   return false;
   		}		
- 		var pghome_pth = document.getElementById("pghome_pth");
+/*  		var pghome_pth = document.getElementById("pghome_pth");
  		if (pghome_pth.value == "") {
   			   alert("PG_HOME 경로를 입력하여 주십시오.");
   			 pghome_pth.focus();
@@ -199,7 +199,7 @@ function fn_dbServerValidation(){
   		}else if(pgdataCheck != "success"){
 			alert("PG_DATA경로 중복검사를 하셔야합니다.");
 			return false;
-		}
+		} */
  		if(connCheck != "success"){
 			alert("연결테스트를 하셔야합니다.");
 			return false;
@@ -249,7 +249,6 @@ function fn_insertDbServer(){
 
 	if (!fn_dbServerValidation()) return false;
 	if (!fn_saveValidation()) return false;
-	
 	var datas = table.rows().data();
 	
 	var arrmaps = [];
@@ -262,6 +261,7 @@ function fn_insertDbServer(){
 		arrmaps.push(tmpmap);	
 		}
 	
+	if (confirm("DBMS를 등록 하시겠습니까?")){	
   	$.ajax({
 		url : "/insertDbServer.do",
 		data : {
@@ -290,10 +290,14 @@ function fn_insertDbServer(){
 			}
 		},
 		success : function(result) {
+			alert("등록하였습니다.");
 			opener.location.reload();
 			self.close();	 			
 		}
 	}); 
+	}else{
+		return false;
+	}
 } 
 
 
@@ -303,6 +307,7 @@ function fn_dbServerConnTest(){
 	//if (!fn_dbServerValidation()) return false;
 	var datasArr = new Array();
 	var ipadrCnt = table.column(0).data().length;
+	var ipadr = table.rows().data()[0].ipadr;
 	
 	
 	for(var i = 0; i < ipadrCnt; i++){
@@ -321,7 +326,7 @@ function fn_dbServerConnTest(){
 	$.ajax({
 		url : "/dbServerConnTest.do",
 		data : {
-			ipadr : table.rows().data()[0].ipadr,
+			ipadr : ipadr,
 			datasArr : JSON.stringify(datasArr)
 		},
 		type : "post",
@@ -353,6 +358,8 @@ function fn_dbServerConnTest(){
 							return false;
 					}else{
 						connCheck = "success";
+						alert("[ 연결 테스트 성공! ]");
+						fn_pathCall(ipadr, datasArr);
 					}
 				} 				
 			}else{
@@ -363,6 +370,35 @@ function fn_dbServerConnTest(){
 		}
 	}); 
 
+}
+
+function fn_pathCall(ipadr, datasArr){
+	$.ajax({
+		url : "/pathCall.do",
+		data : {
+			ipadr : ipadr,
+			datasArr : JSON.stringify(datasArr)
+		},
+		type : "post",
+		beforeSend: function(xhr) {
+	        xhr.setRequestHeader("AJAX", true);
+	     },
+		error : function(xhr, status, error) {
+			if(xhr.status == 401) {
+				alert("인증에 실패 했습니다. 로그인 페이지로 이동합니다.");
+				 location.href = "/";
+			} else if(xhr.status == 403) {
+				alert("세션이 만료가 되었습니다. 로그인 페이지로 이동합니다.");
+	             location.href = "/";
+			} else {
+				alert("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""));
+			}
+		},
+		success : function(result) {		
+			document.getElementById("pghome_pth").value=result.CMD_DBMS_PATH;
+			document.getElementById("pgdata_pth").value=result.DATA_PATH;
+		}
+	}); 
 }
 
 
@@ -772,20 +808,12 @@ function fn_ipadrDelForm(){
 				<tr>
 					<th scope="row" class="ico_t1">PG_HOME경로(*)</th>
 					<td>
-					<input type="text" class="txt" name="pghome_pth" id="pghome_pth" style="width:690px" /></td>
-					<th scope="row" class="ico_t1"></th>
-					<td>
-					<span class="btn btnC_01"><button type="button" class= "btn_type_02" onclick="checkPghome()" style="width: 60px; margin-left: 237px; margin-top: 0;">경로체크</button></span>
-					</td>					
+					<input type="text" class="txt" name="pghome_pth" id="pghome_pth" style="width:750px" readonly="readonly" /></td>				
 				</tr>
 				<tr>
 					<th scope="row" class="ico_t1">PG_DATA경로(*)</th>
 					<td>
-					<input type="text" class="txt" name="pgdata_pth" id="pgdata_pth" style="width:690px" /></td>
-					<th scope="row" class="ico_t1"></th>
-					<td>
-					<span class="btn btnC_01"><button type="button" class= "btn_type_02" onclick="checkPgdata()" style="width: 60px; margin-left: 237px; margin-top: 0;">경로체크</button></span>
-					</td>					
+					<input type="text" class="txt" name="pgdata_pth" id="pgdata_pth" style="width:750px" readonly="readonly" /></td>				
 				</tr>				
 			</tbody>
 		</table>

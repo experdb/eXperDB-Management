@@ -12,6 +12,7 @@
 		SELECT
 		  (ROW_NUMBER() OVER()) AS ROWNUM
 		, (ROW_NUMBER() OVER()) AS IDX
+		, A.SCD_ID
 		, A.EXE_GRP_SN
 		, A.SCD_NM
 		, A.EXE_SN
@@ -22,7 +23,8 @@
 		, A.WRK_DTM
 		FROM(
 			SELECT 
-	          EXE_GRP_SN 
+	        SCD_ID
+	        , EXE_GRP_SN 
 			, SCD_NM
 			, MIN(A.EXE_SN) AS EXE_SN
 			, MAX(A.EXE_RSLT_CD) AS EXE_RSLT_CD
@@ -39,7 +41,7 @@
 			AND A.SCD_NM LIKE #{scd_nm}
 			</if>		
 			AND A.EXE_RSLT_CD LIKE #{exe_result}
-			GROUP BY EXE_GRP_SN, SCD_NM, DB_ID
+			GROUP BY EXE_GRP_SN, SCD_NM, DB_ID,SCD_ID
 			ORDER BY WRK_END_DTM DESC
 			LIMIT #{recordCountPerPage} OFFSET #{firstIndex}
 		)A
@@ -170,6 +172,8 @@
 	<select id="selectScheduleHistoryWorkDetail" resultType="hashmap" parameterType="int" >
 		SELECT 
 		  (ROW_NUMBER() OVER()) AS ROWNUM
+		, WRK_ID
+		, SCD_ID
 		, EXE_SN
 		, TO_CHAR(A.WRK_STRT_DTM,'YYYY-MM-DD HH24:MI:SS') AS WRK_STRT_DTM
 		, TO_CHAR(A.WRK_END_DTM,'YYYY-MM-DD HH24:MI:SS') AS WRK_END_DTM

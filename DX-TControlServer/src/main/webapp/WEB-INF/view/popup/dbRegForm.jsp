@@ -50,7 +50,7 @@ function fn_init(){
 	        orderable: false,
 	        render: function(data, type, full, meta){
 	           if(type === 'display'){
-	              data = '<input type="text" class="txt" name="db_exp" value="' +full.db_exp + '" style="height: 25px;">';      
+	              data = '<input type="text" class="txt" name="db_exp" value="' +full.db_exp + '" style="width: 350px; height: 25px;">';      
 	           }
 	           return data;
 	        }}, 
@@ -325,30 +325,31 @@ function fn_dataCompareChcek(svrDbList,db_svr_id){
 <div class="pop_container">
 	<div class="pop_cts">
 		<p class="tit">Datebase 등록</p>
-		<div class="pop_type1">
+		<div class="pop_cmm mt25" >
 			<div class="pop_lt">			
 				<form name="serverList" id="serverList">
 				<table class="write">
 					<caption>Datebase 등록</caption>
 					<colgroup>
-						<col style="width:100px;" />
-						<col />
+					<col style="width:110px;" />
+					<col style="width:250px;" />
+					<col style="width:75px;" />
+					<col />
 					</colgroup>
 					<tbody>
 						<tr>
 							<th scope="row" class="ico_t1 type2">DBMS명</th>
 							<td>
-								<select class="select"  id="db_svr_nm" name="db_svr_nm" onChange="fn_dbserverChange();">
+								<select class="select"  id="db_svr_nm" name="db_svr_nm" style="width: 200px;" onChange="fn_dbserverChange();">
 								</select>
 							</td>
 						</tr>
 						<tr>
 							<th scope="row" class="ico_t1">DBMS 아이피</th>
-							<td><input type="text" class="txt bg1" name="ipadr" id="ipadr" readonly/></td>
-						</tr>
-						<tr>
+							<td><input type="text" class="txt bg1" name="ipadr" id="ipadr"  style="width: 200px;" readonly/></td>
+					
 							<th scope="row" class="ico_t1">포트</th>
-							<td><input type="text" class="txt bg1" name="portno" id="portno"  readonly/></td>
+							<td><input type="text" class="txt bg1" name="portno" id="portno"  style="width: 200px;" readonly/></td>
 						</tr>
 					</tbody>
 				</table>
@@ -367,7 +368,7 @@ function fn_dataCompareChcek(svrDbList,db_svr_id){
 			</div>
 		</div>
 		
-		<div class="btn_type_03">
+		<div class="btn_type_02">
 			<span class="btn"><button onClick="fn_insertDB();">저장</button></span>
 			<a href="#n" class="btn" onClick="window.close();"><span>취소</span></a>
 		</div>

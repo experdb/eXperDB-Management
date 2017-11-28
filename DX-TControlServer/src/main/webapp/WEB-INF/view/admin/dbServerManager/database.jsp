@@ -101,14 +101,11 @@ $(window.document).ready(function() {
 function fn_buttonAut(){
 	var read_button = document.getElementById("read_button"); 
 	var int_button = document.getElementById("int_button"); 
-	var del_button = document.getElementById("del_button"); 
 	
 	if("${wrt_aut_yn}" == "Y"){
 		int_button.style.display = '';
-		del_button.style.display = '';
 	}else{
 		int_button.style.display = 'none';
-		del_button.style.display = 'none';
 	}
 		
 	if("${read_aut_yn}" == "Y"){
@@ -187,7 +184,7 @@ function fn_search(){
  * 디비 등록 팝업 호출
  ******************************************************** */
 function fn_reg_popup(){
-	window.open("/popup/dbRegForm.do","dbRegPop","location=no,menubar=no,resizable=yes,scrollbars=yes,status=no,width=915,height=555,top=0,left=0");
+	window.open("/popup/dbRegForm.do","dbRegPop","location=no,menubar=no,resizable=yes,scrollbars=yes,status=no,width=685,height=613,top=0,left=0");
 }
 
 
@@ -216,8 +213,7 @@ function fn_reg_popup(){
 			<div class="cmm_grp">
 				<div class="btn_type_01">
 					<span class="btn" onClick="fn_search();" id="read_button"><button>조회</button></span>
-					<span class="btn" onclick="fn_reg_popup();" id="int_button"><button>등록</button></span>
-					<a href="#n" class="btn" id="del_button"><span>삭제</span></a>
+					<span class="btn" onclick="fn_reg_popup();" id="int_button"><button>관리</button></span>
 				</div>
 				<div class="sch_form">
 					<table class="write">
