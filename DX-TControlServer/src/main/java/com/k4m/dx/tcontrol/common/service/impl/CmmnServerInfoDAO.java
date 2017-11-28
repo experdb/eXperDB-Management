@@ -81,9 +81,23 @@ public class CmmnServerInfoDAO extends EgovAbstractMapper {
 		return sl;
 	}
 
+	@SuppressWarnings({ "deprecation", "unchecked" })
 	public List<Map<String, Object>> selectWrkErrorMsg(int exe_sn) {
 		List<Map<String, Object>> sl = null;
-		sl = (List<Map<String, Object>>) list("cmmnSql.selectWrkErrorMsg", exe_sn);		
+		sl = (List<Map<String, Object>>) list("cmmnSql.selectWrkErrorMsg", exe_sn);
+		return sl;
+	}
+
+	/**
+	 * RepoDB 조회
+	 * 
+	 * @param db_svr_id
+	 * @return
+	 */
+	@SuppressWarnings({ "unchecked", "deprecation" })
+	public List<DbServerVO> selectRepoDBList(DbServerVO dbServerVO) {
+		List<DbServerVO> sl = null;
+		sl = (List<DbServerVO>) list("cmmnSql.selectRepoDBList", dbServerVO);
 		return sl;
 	}
 

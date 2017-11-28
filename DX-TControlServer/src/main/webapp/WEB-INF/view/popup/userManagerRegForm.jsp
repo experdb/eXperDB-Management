@@ -218,7 +218,7 @@
 
 	$(window.document).ready(function() {
 		$.datepicker.setDefaults({
-			dateFormat : 'yymmdd',
+			dateFormat : 'yy-mm-dd',
 		});
 		$("#datepicker3").datepicker();
 	})

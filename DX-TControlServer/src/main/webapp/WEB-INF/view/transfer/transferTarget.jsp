@@ -43,7 +43,7 @@
 				className : "dt-center",
 				defaultContent : ""
 			}, 
-			{ data : "", className : "dt-center", defaultContent : "<a href='#n'><img src='../images/mappin_btn.png' alt='맵핑설정버튼' id='mappingBtn'/></a>"},
+			{ data : "", className : "dt-center", defaultContent : "<span class='btn btnC_01 btnF_02'><button id='mappingBtn'>테이블 매핑</button></span>"},
 			]
 		});
 		
@@ -154,7 +154,9 @@
 			},
 			success : function(result) {
 				table.clear().draw();
-				if(result.data != null){
+				if(result.error != null){
+					alert(result.error);
+				}else if(result.data != null){
 					table.rows.add(result.data).draw();
 				}
 			}

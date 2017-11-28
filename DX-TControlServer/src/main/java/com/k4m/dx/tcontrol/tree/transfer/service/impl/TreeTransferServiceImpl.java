@@ -83,6 +83,11 @@ public class TreeTransferServiceImpl extends EgovAbstractServiceImpl implements 
 	}
 
 	@Override
+	public int selectTrftrgidCheck(String trf_trg_cnn_nm) throws Exception {
+		return treeTransferDAO.selectTrftrgidCheck(trf_trg_cnn_nm);
+	}
+
+	@Override
 	public int selectTrftrgid(String trf_trg_cnn_nm) throws Exception {
 		return treeTransferDAO.selectTrftrgid(trf_trg_cnn_nm);
 	}

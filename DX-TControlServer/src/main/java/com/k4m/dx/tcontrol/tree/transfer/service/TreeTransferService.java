@@ -100,6 +100,15 @@ public interface TreeTransferService {
 	void insertTransferMapping(TransferMappingVO transferMappingVO) throws Exception;
 
 	/**
+	 * trf_trg_cnn_nm 체크
+	 * 
+	 * @param trf_trg_cnn_nm
+	 * @return
+	 * @throws Exception
+	 */
+	int selectTrftrgidCheck(String trf_trg_cnn_nm) throws Exception;
+
+	/**
 	 * trf_trg_id 조회
 	 * 
 	 * @param trf_trg_cnn_nm

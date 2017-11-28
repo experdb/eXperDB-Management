@@ -23,7 +23,14 @@ public class DbServerVO {
 	private String usr_id;
 	private String svr_host_nm;
 	private String db_cndt;
+	private String db_nm;
 
+	public String getDb_nm() {
+		return db_nm;
+	}
+	public void setDb_nm(String db_nm) {
+		this.db_nm = db_nm;
+	}
 	public int getRownum() {
 		return rownum;
 	}

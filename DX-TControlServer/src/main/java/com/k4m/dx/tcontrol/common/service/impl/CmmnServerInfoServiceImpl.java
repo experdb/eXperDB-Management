@@ -63,4 +63,9 @@ public class CmmnServerInfoServiceImpl extends EgovAbstractServiceImpl implement
 		return cmmnServerInfoDAO.selectWrkErrorMsg(exe_sn);
 	}
 
+	@Override
+	public List<DbServerVO> selectRepoDBList(DbServerVO dbServerVO) throws Exception {
+		return cmmnServerInfoDAO.selectRepoDBList(dbServerVO);
+	}
+
 }

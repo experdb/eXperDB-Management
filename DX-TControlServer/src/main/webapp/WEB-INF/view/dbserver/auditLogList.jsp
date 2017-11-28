@@ -21,18 +21,6 @@
 	*
 	*/
 %>
-<style>
-#auditloading{
-position:absolute;
-top:50%;
-left:50%;
-transform: translate(-50%,-50%);
-width: 300px;
-background: #fff;
-border: 3px solid #b8c3c6;
-padding: 20px;
-}
-</style>
 <script language="javascript">
 $(window.document).ready(function() {
 	var lgi_dtm_start = "${start_date}";
@@ -134,7 +122,6 @@ function fn_chkExtName(extName) {
 	}
 	
 	function fn_download(file_name, file_size) {
-		$("#auditloading").show();
 		var db_svr_id = $("#db_svr_id").val();
 		var param = "db_svr_id=" + db_svr_id + "&file_name=" + file_name;
 
@@ -165,7 +152,6 @@ function fn_chkExtName(extName) {
 	}
 	
 	function fn_progressClose() {
-		$("#auditloading").hide();
 		fn_buttonState(false);
 		//$("#btnDownload").prop("disabled", false);
 	}
@@ -277,7 +263,3 @@ function fn_chkExtName(extName) {
 			</div>
 </form>
 
-<div id="auditloading" style="display:none">
-<p class="tit"><img src="/images/popup/ico_p_1.png" style="margin-right: 10px;">다운로드 중입니다.</p>
-<div class="btn_type_02"><img src="/images/spin.gif" style="padding-bottom: 10px;"></div>
-</div>

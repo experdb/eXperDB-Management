@@ -217,8 +217,16 @@ input[type="text"]:disabled, input[type="text"].disabled {background:#e4e9ec;col
 	height:24px;
 	line-height:24px;
 }
-.btn.btnC_01 input, .btn.btnC_01 span, .btn.btnC_01 button{background:#324452;color:#fff;}
+
+.btn.btnC_01 input, .btn.btnC_01 span, .btn.btnC_01 button{background:#fff;color:#324452;}
 .btn.btnBd_01 input, .btn.btnBd_01 span, .btn.btnBd_01 button{border:1px solid #99abb0;}
+
+.btn.btnC_01:hover input
+, .btn.btnC_01:hover span
+, .btn.btnC_01:hover button{
+	background:#324452;
+	color:#fff;
+}
 
 /* popup
 -------------------------------------------------------------- */
@@ -256,7 +264,7 @@ input[type="text"]:disabled, input[type="text"].disabled {background:#e4e9ec;col
 .mapping_area:after{display:block;content:"";clear:both;}
 .mapping_area .tit{height:28px;line-height:28px;padding-left:27px;border-bottom:1px solid #b8c3c6;background:#e4e9ec;color:#101922;font-size:12px;font-family:'Nanum Square Bold';font-weight:700;}
 .mapping_area .mapping_lt,
-.mapping_area .mapping_rt{width:333px;border:1px solid #b8c3c6;}
+.mapping_area .mapping_rt{width:380px;border:1px solid #b8c3c6;}
 .mapping_area .mapping_lt{float:left;}
 .mapping_area .mapping_rt{float:right;}
 .mapping_area .overflow_area{height:305px;border:none;}
@@ -395,6 +403,14 @@ table.list2 .inp_rdo input[type="radio"] + label:before{margin:0;}
 table.list2 .url_area{position:relative;top:0;left:0;padding-right:160px;}
 table.list2 .url_area > a{display:block;}
 table.list2 .url_area .btn{position:absolute;top:50%;right:32px;margin-top:-11.5px;}
+
+table.list3{width:100%;table-layout:fixed;}
+table.list3 tr th{padding:14px 0;border-right:1px solid #b8c3c6;font-size:14px;font-family:'Nanum Square';font-weight:400;}
+table.list3 tr td{height:33px;padding:5px;border-top:1px solid #b8c3c6;border-right:1px solid #b8c3c6;}
+table.list3 th {background:#e4e9ec;text-align:center;}
+table.list3 .color{background:#e4e9ec;text-align:center;}
+table.list3 .left{text-align: left; padding: 4px 16px;}
+table.list3 .center{text-align: center;}
 
 table.write{width:100%;table-layout:fixed;}
 table.write tr th,

@@ -282,7 +282,14 @@
 								<tbody>
 									<c:forEach var="databaseInfo" items="${result.CMD_DATABASE_INFO}">
 										<tr>
-											<td>${databaseInfo.name}</td>
+											<td>
+											<c:forEach var="dbnmInfo" items="${resultRepoDB}">
+												<c:if test="${dbnmInfo.db_nm eq databaseInfo.name}" >
+												<img src="../images/ico_state_05.png" style="margin-right: 5px;"/></c:if>	
+											</c:forEach>
+											${databaseInfo.name}
+											</td>
+											
 											<td>${databaseInfo.owner}</td>
 											<td>${databaseInfo.encoding}</td>
 											<td>${databaseInfo.collate}</td>
@@ -316,7 +323,7 @@
 									</tr>
 								</thead>
 								<tbody>
-									<c:forEach var="hainfo" items="${resultSet}">
+									<c:forEach var="hainfo" items="${resultIpadr}">
 										<tr>
 											<td>${hainfo.ipadr}</td>
 											<td>
@@ -341,8 +348,8 @@
 				<div id="settinginfo">
 					<div class="cmm_bd">
 						<div class="sub_tit"><p>주요환경설정 정보</p></div>
-						<div class="overflow_area" style="height: 663px; width: 60%">
-							<table class="list pd_type3">
+						<div class="overflow_area" style="height: 670px; width: 100%">
+							<table class="list3">
 								<caption>주요환경설정 정보</caption>
 								<colgroup>
 									<col style="width: 10%;">
@@ -358,86 +365,86 @@
 								</thead>
 								<tbody>
 									<tr>
-										<td rowspan="3">접속 및 인증</td>
-										<td>listen_addresses</td>
-										<td style="text-align: left; padding: 4px 16px;">${result.CMD_LISTEN_ADDRESSES}</td>
+										<td rowspan="3" class="color">접속 및 인증</td>
+										<td class="center">listen_addresses</td>
+										<td class="left">${result.CMD_LISTEN_ADDRESSES}</td>
 									</tr>
 									<tr>
-										<td>port</td>
-										<td style="text-align: left; padding: 4px 16px;">${result.CMD_PORT}</td>
+										<td class="center">port</td>
+										<td class="left">${result.CMD_PORT}</td>
 									</tr>
 									<tr>
-										<td>max_connections</td>
-										<td style="text-align: left; padding: 4px 16px;">${result.CMD_MAX_CONNECTIONS}</td>
+										<td class="center">max_connections</td>
+										<td class="left">${result.CMD_MAX_CONNECTIONS}</td>
 									</tr>
 									<tr>
-										<td rowspan="5">자원설정</td>
-										<td>shared_buffers</td>
-										<td style="text-align: left; padding: 4px 16px;">${result.CMD_SHARED_BUFFERS}</td>
+										<td rowspan="5" class="color">자원설정</td>
+										<td class="center">shared_buffers</td>
+										<td class="left">${result.CMD_SHARED_BUFFERS}</td>
 									</tr>
 									<tr>
-										<td>work_mem</td>
-										<td style="text-align: left; padding: 4px 16px;">${result.CMD_WORK_MEM}</td>
+										<td class="center">work_mem</td>
+										<td class="left">${result.CMD_WORK_MEM}</td>
 									</tr>
 									<tr>
-										<td>maintenance_work_mem</td>
-										<td style="text-align: left; padding: 4px 16px;">${result.CMD_MAINTENANCE_WORK_MEM}</td>
+										<td class="center">maintenance_work_mem</td>
+										<td class="left">${result.CMD_MAINTENANCE_WORK_MEM}</td>
 									</tr>
 									<tr>
-										<td>effective_cache_size</td>
-										<td style="text-align: left; padding: 4px 16px;">${result.CMD_EFFECTIVE_CACHE_SIZE}</td>
+										<td class="center">effective_cache_size</td>
+										<td class="left">${result.CMD_EFFECTIVE_CACHE_SIZE}</td>
 									</tr>
 									<tr>
-										<td>shared_preload_libraries</td>
-										<td style="text-align: left; padding: 4px 16px;">${result.CMD_SHARED_PRELOAD_LIBRARIES}</td>
+										<td class="center">shared_preload_libraries</td>
+										<td class="left">${result.CMD_SHARED_PRELOAD_LIBRARIES}</td>
 									</tr>
 									<tr>
-										<td rowspan="6">WAL 설정</td>
-										<td>wal_level</td>
-										<td style="text-align: left; padding: 4px 16px;">${result.CMD_WAL_LEVEL}</td>
+										<td rowspan="6" class="color">WAL 설정</td>
+										<td class="center">wal_level</td>
+										<td class="left">${result.CMD_WAL_LEVEL}</td>
 									</tr>
 									<tr>
-										<td>wal_buffers</td>
-										<td style="text-align: left; padding: 4px 16px;">${result.CMD_WAL_BUFFERS}</td>
+										<td class="center">wal_buffers</td>
+										<td class="left">${result.CMD_WAL_BUFFERS}</td>
 									</tr>
 									<tr>
-										<td>archive_mode</td>
-										<td style="text-align: left; padding: 4px 16px;">${result.CMD_ARCHIVE_MODE}</td>
+										<td class="center">archive_mode</td>
+										<td class="left">${result.CMD_ARCHIVE_MODE}</td>
 									</tr>
 									<tr>
-										<td>archive_command</td>
-										<td style="text-align: left; padding: 4px 16px;">${result.CMD_ARCHIVE_COMMAND}</td>
+										<td class="center">archive_command</td>
+										<td class="left">${result.CMD_ARCHIVE_COMMAND}</td>
 									</tr>
 									<tr>
-										<td>min_wal_size</td>
-										<td style="text-align: left; padding: 4px 16px;">${result.CMD_MIN_WAL_SIZE}</td>
+										<td class="center">min_wal_size</td>
+										<td class="left">${result.CMD_MIN_WAL_SIZE}</td>
 									</tr>
 									<tr>
-										<td>max_wal_size</td>
-										<td style="text-align: left; padding: 4px 16px;">${result.CMD_MAX_WAL_SIZE}</td>
+										<td class="center">max_wal_size</td>
+										<td class="left">${result.CMD_MAX_WAL_SIZE}</td>
 									</tr>
 									<tr>
-										<td rowspan="2">복제</td>
-										<td>hot_standby</td>
-										<td style="text-align: left; padding: 4px 16px;">${result.CMD_HOT_STANDBY}</td>
+										<td rowspan="2" class="color">복제</td>
+										<td class="center">hot_standby</td>
+										<td class="left">${result.CMD_HOT_STANDBY}</td>
 									</tr>
 									<tr>
-										<td>wal_keep_segments</td>
-										<td style="text-align: left; padding: 4px 16px;">${result.CMD_WAL_KEEP_SEGMENTS}</td>
+										<td class="center">wal_keep_segments</td>
+										<td class="left">${result.CMD_WAL_KEEP_SEGMENTS}</td>
 									</tr>
 									<tr>
-										<td rowspan="2">파일위치</td>
-										<td>config_file</td>
-										<td style="text-align: left; padding: 4px 16px;">${result.CMD_CONFIG_FILE}</td>
+										<td rowspan="2" class="color">파일위치</td>
+										<td class="center">config_file</td>
+										<td class="left">${result.CMD_CONFIG_FILE}</td>
 									</tr>
 									<tr>
-										<td>data_directory</td>
-										<td style="text-align: left; padding: 4px 16px;">${result.CMD_DATA_DIRECTORY}</td>
+										<td class="center">data_directory</td>
+										<td class="left">${result.CMD_DATA_DIRECTORY}</td>
 									</tr>
 									<tr>
-										<td>data_directory</td>
-										<td>TimeZone</td>
-										<td style="text-align: left; padding: 4px 16px;">${result.CMD_TIMEZONE}</td>
+										<td class="color">data_directory</td>
+										<td class="center">TimeZone</td>
+										<td class="left">${result.CMD_TIMEZONE}</td>
 									</tr>
 								</tbody>
 							</table>

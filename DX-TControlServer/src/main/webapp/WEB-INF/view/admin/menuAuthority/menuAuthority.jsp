@@ -538,7 +538,7 @@ function fn_search(){
 														</td>
 													</tr>
 													<tr>
-														<td>스케줄 관리</td>
+														<td>스케줄 실행/중지</td>
 														<td>
 															<div class="inp_chk">
 																<input type="checkbox" id="r_MN000102" name="r_mnu_nm" />
@@ -574,7 +574,7 @@ function fn_search(){
 																<label for="transferinfo">데이터전송정보</label>
 															</div>
 														</th>
-														<td>데이터전송설정</td>
+														<td>전송서버설정</td>
 														<td>
 															<div class="inp_chk">
 																<input type="checkbox" id="r_MN000201" name="r_mnu_nm" />

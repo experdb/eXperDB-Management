@@ -178,7 +178,7 @@ function fn_cookie(url) {
 	$.cookie('menu_url' , url, { path : '/' });
 }
 </script>
-
+<%@include file="../help/aboutExperdbLayer.jsp"%>
 <div id="header">
 			<h1 class="logo"><a href="/index.do" onClick="fn_cookie(null)"><img src="/images/ico_logo_2.png" alt="eXperDB" /></a></h1>
 			<div id="gnb_menu">
@@ -189,7 +189,7 @@ function fn_cookie(url) {
 							<li><a href="#n" id="MN0001">스케줄정보</a>
 								<ul class="depth_3">
 									<li><a href="/insertScheduleView.do" onClick="fn_cookie(null)" id="MN000101">스케줄 등록</a></li>
-									<li><a href="/selectScheduleListView.do" onClick="fn_cookie(null)" id="MN000102">스케줄 관리</a></li>
+									<li><a href="/selectScheduleListView.do" onClick="fn_cookie(null)" id="MN000102">스케줄 실행/중지</a></li>
 									<li><a href="/selectScheduleHistoryView.do" onClick="fn_cookie(null)" id="MN000103">스케줄 수행이력</a></li>
 								</ul>
 							</li>
@@ -234,13 +234,13 @@ function fn_cookie(url) {
 					<li><a href="#n"><span><img src="/images/ico_h_7.png" alt="MY PAGE" /></span></a>
 						<ul class="depth_2">
 							<li><a href="/myPage.do" onClick="fn_cookie(null)">사용자정보관리</a></li>
-        					<li><a href="/myScheduleListView.do" onClick="fn_cookie(null)">My스케줄</a></li>
+        					<li><a href="/myScheduleListView.do" onClick="fn_cookie(null)">My스케줄 관리</a></li>
 						</ul>
 					</li>
 					<li><a href="#n"><span><img src="/images/ico_h_8.png" alt="HELP" /></span></a>
 						<ul class="depth_2">
 							<li><a href="#n" onClick="fn_cookie(null)">Online Help</a></li>
-							<li><a href="/aboutExperdb.do" onClick="fn_cookie(null)">About eXperDB</a></li>
+							<li><a href="#n" onClick="fn_aboutExperdb()">About eXperDB</a></li>
 						</ul>
 					</li>
 				</ul>

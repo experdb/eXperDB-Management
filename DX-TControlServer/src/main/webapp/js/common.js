@@ -242,6 +242,10 @@ function toggleLayer( obj, s ) {
 	}
 }
 
+//About eXperDB
+function fn_aboutExperdb(){
+	toggleLayer($('#pop_layer_aboutExperdb'), 'on');
+}
 
 // 스케줄정보
 function fn_scdLayer(scd_id){
