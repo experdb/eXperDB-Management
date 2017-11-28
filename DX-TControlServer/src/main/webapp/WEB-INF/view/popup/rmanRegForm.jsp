@@ -349,19 +349,19 @@ function fn_check() {
 									</tr>
 									<tr>
 										<th scope="row" class="ico_t1">데이터경로</th>
-										<td><input type="text" class="txt" name="data_pth" id="data_pth" maxlength=50 style="width:610px" readonly/>											
+										<td><input type="text" class="txt" name="data_pth" id="data_pth" maxlength=50 style="width:560px" readonly/>											
 										</td>
 									</tr>
 									<tr>
 										<th scope="row" class="ico_t1">백업로그경로</th>
-										<td><input type="text" class="txt" name="log_file_pth" id="log_file_pth" maxlength=50 style="width:550px" onKeydown="$('#check_path1').val('N')"/>
+										<td><input type="text" class="txt" name="log_file_pth" id="log_file_pth" maxlength=50 style="width:500px" onKeydown="$('#check_path1').val('N')"/>
 											<span class="btn btnC_01"><button type="button" class= "btn_type_02" onclick="checkFolder(1)" style="width: 60px; margin-right: -60px; margin-top: 0;">경로체크</button></span>
 											<span id="logVolume" style="margin:63px;"></span>	
 										</td>
 									</tr>									
 									<tr>	
 										<th scope="row" class="ico_t1">백업경로</th>
-										<td><input type="text" class="txt" name="bck_pth" id="bck_pth" maxlength=50 style="width:550px" onKeydown="$('#check_path2').val('N')"/>
+										<td><input type="text" class="txt" name="bck_pth" id="bck_pth" maxlength=50 style="width:500px" onKeydown="$('#check_path2').val('N')"/>
 											<span class="btn btnC_01"><button type="button" class= "btn_type_02" onclick="checkFolder(2)" style="width: 60px; margin-right: -60px; margin-top: 0;">경로체크</button></span>
 											<span id="backupVolume" style="margin:63px;"></span>											
 										</td>										
