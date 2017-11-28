@@ -311,8 +311,8 @@ public class CmmnController {
 		List<Map<String, Object>> result = null;
 		
 		try {
-			String scd_nm = request.getParameter("scd_nm");
-			result = scheduleService.selectScdInfo(scd_nm);	
+			int scd_id = Integer.parseInt(request.getParameter("scd_id"));
+			result = scheduleService.selectScdInfo(scd_id);	
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -333,9 +333,9 @@ public class CmmnController {
 		List<Map<String, Object>> result = null;
 		
 		try {
-			String wrk_nm = request.getParameter("wrk_nm");
+			int wrk_id = Integer.parseInt(request.getParameter("wrk_id"));
 			
-			result = scheduleService.selectWrkInfo(wrk_nm);	
+			result = scheduleService.selectWrkInfo(wrk_id);	
 			System.out.println(result.size());
 		} catch (Exception e) {
 			e.printStackTrace();

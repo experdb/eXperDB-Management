@@ -244,11 +244,11 @@ function toggleLayer( obj, s ) {
 
 
 // 스케줄정보
-function fn_scdLayer(scd_nm){
+function fn_scdLayer(scd_id){
 	$.ajax({
 		url : "/selectScdInfo.do",
 		data : {
-			scd_nm : scd_nm
+			scd_id : scd_id
 		},
 		dataType : "json",
 		type : "post",
@@ -340,11 +340,11 @@ function fn_failLog(exe_sn){
 
 
 // WORK정보
-function fn_workLayer(wrk_nm){
+function fn_workLayer(wrk_id){
 	$.ajax({
 		url : "/selectWrkInfo.do",
 		data : {
-			wrk_nm : wrk_nm
+			wrk_id : wrk_id
 		},
 		dataType : "json",
 		type : "post",

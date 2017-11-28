@@ -549,7 +549,7 @@
 	 </select>
 	 
 	 
-	<select id="selectScdInfo" resultType="hashMap" parameterType="string">
+	<select id="selectScdInfo" resultType="hashMap" parameterType="int">
    		/**
 	 	* Query ID : selectScdInfo
 	 	* Description : 스케줄 정보 조회
@@ -570,11 +570,11 @@
 				, EXE_DT
 				, EXE_HMS      
 	      FROM T_SCD_M 
-	      WHERE SCD_NM = #{scd_nm} 
+	      WHERE SCD_ID = #{scd_id} 
 	</select>
 	
 
-	<select id="selectWrkInfo" resultType="hashMap" parameterType="string">
+	<select id="selectWrkInfo" resultType="hashMap" parameterType="int">
    		/**
 	 	* Query ID : selectWrkInfo
 	 	* Description : work 정보 조회
@@ -614,7 +614,7 @@
                 , C.DB_NM
 		FROM T_WRKCNG_I A, T_BCK_WRKCNG_I B, T_DB_I C      
 		WHERE A.WRK_ID = B.WRK_ID
-		AND A.WRK_NM = #{wrk_nm}  
+		AND A.WRK_ID = #{wrk_id}  
 		AND B.DB_ID = C.DB_ID
 	</select>
 </mapper>

@@ -48,7 +48,7 @@ public class ClientTester {
 		String Ip = "222.110.153.162";
 		//Ip = "222.110.153.251";
 		 //	Ip = "127.0.0.1";
-		 Ip = "222.110.153.231";
+		// Ip = "222.110.153.231";
 		int port = 9001;
 		try {
 			
@@ -56,7 +56,7 @@ public class ClientTester {
 			//clientTester.dxT002(Ip, port);
 			//clientTester.dxT003(Ip, port);
 			//clientTester.dxT004(Ip, port);
-			clientTester.dxT005(Ip, port);
+			//clientTester.dxT005(Ip, port);
 			//clientTester.dxT006_C(Ip, port);
 //			clientTester.dxT006_R(Ip, port);
 			//clientTester.dxT006_U(Ip, port);
@@ -87,7 +87,7 @@ public class ClientTester {
 			//clientTester.dxT018_delete(Ip, port);
 			//clientTester.dxT019(Ip, port);
 			//clientTester.dxT020(Ip, port);
-			//clientTester.dxT021(Ip, port);
+			clientTester.dxT021(Ip, port);
 			//clientTester.dxT022(Ip, port);
 			
 			//clientTester.test();

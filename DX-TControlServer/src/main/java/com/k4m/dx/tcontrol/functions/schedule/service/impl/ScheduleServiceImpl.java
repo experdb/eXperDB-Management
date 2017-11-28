@@ -235,13 +235,13 @@ public class ScheduleServiceImpl extends EgovAbstractServiceImpl  implements Sch
 
 
 	@Override
-	public List<Map<String, Object>> selectScdInfo(String scd_nm) throws Exception {
-		return scheduleDAO.selectScdInfo(scd_nm);
+	public List<Map<String, Object>> selectScdInfo(int scd_id) throws Exception {
+		return scheduleDAO.selectScdInfo(scd_id);
 	}
 
 
 	@Override
-	public List<Map<String, Object>> selectWrkInfo(String wrk_nm) throws Exception {
-		return scheduleDAO.selectWrkInfo(wrk_nm);
+	public List<Map<String, Object>> selectWrkInfo(int wrk_id) throws Exception {
+		return scheduleDAO.selectWrkInfo(wrk_id);
 	}
 }

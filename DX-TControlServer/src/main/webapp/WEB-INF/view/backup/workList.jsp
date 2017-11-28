@@ -38,7 +38,7 @@ function fn_init(){
 		{data : "idx", className : "dt-center", defaultContent : ""}, 
 		{data : "wrk_nm", className : "dt-left", defaultContent : ""
 			,"render": function (data, type, full) {
-				  return '<span onClick=javascript:fn_workLayer("'+full.wrk_nm+'"); class="bold">' + full.wrk_nm + '</span>';
+				  return '<span onClick=javascript:fn_workLayer("'+full.wrk_id+'"); class="bold">' + full.wrk_nm + '</span>';
 			}
 		}, //work명
 		{data : "wrk_exp", className : "dt-left", defaultContent : ""},	
@@ -85,7 +85,7 @@ function fn_init(){
 		{data : "idx", className : "dt-center", defaultContent : ""}, 
 		{data : "wrk_nm", className : "dt-left", defaultContent : ""
 			,"render": function (data, type, full) {				
-				  return '<span onClick=javascript:fn_workLayer("'+full.wrk_nm+'"); class="bold">' + full.wrk_nm + '</span>';
+				  return '<span onClick=javascript:fn_workLayer("'+full.wrk_id+'"); class="bold">' + full.wrk_nm + '</span>';
 			}
 		},
 		{data : "wrk_exp", className : "dt-left", defaultContent : ""},
