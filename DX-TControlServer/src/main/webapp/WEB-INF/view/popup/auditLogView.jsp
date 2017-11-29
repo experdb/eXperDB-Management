@@ -100,6 +100,8 @@
 			return;
 		}
 		
+		//alert(v_dwLen);
+		
 		
 		$.ajax({
 			url : "/audit/auditLogViewAjax.do",
@@ -127,9 +129,13 @@
 			},
 			success : function(result) {
 				//alert(result.fSize);
-				var v_afterData = $("#db_svr_id").val();
-				var v_isData = v_afterData + "\n" + result.data;
-				$("#auditlog").val(v_isData);
+				//var v_afterData = $("#auditlog").val();
+				//var v_isData = v_afterData + "\n" + result.data;
+				//$("#auditlog").val(v_isData);
+				
+				var obj=document.getElementById("auditlog");
+				obj.value += result.data;
+				
 				//var v_fChrSize = Number($("#fChrSize").val()) + result.fChrSize;
 				//$("#fChrSize").val(v_fChrSize);
 				
@@ -192,7 +198,7 @@
 						<td>
 							<div class="textarea_grp">
 								
-								<textarea name="auditlog"  id="auditlog" style="height:550px">${logView}</textarea>
+								<textarea name="auditlog"  id="auditlog" style="height:550px"></textarea>
 								
 							</div>
 							

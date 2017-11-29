@@ -614,6 +614,9 @@ public class AuditController {
 			String strDirectory = dbServerVO.getPgdata_pth()+ "/pg_log/";
 			String strFileName = request.getParameter("file_name");
 			
+			//strDirectory = "C:\\k4m\\01-1. DX 제폼개발\\06. DX-Tcontrol\\07. 시험\\";
+			//strFileName = "postgresql-2017-11-19.log";
+			
 			JSONObject serverObj = new JSONObject();
 			
 			serverObj.put(ClientProtocolID.SERVER_NAME, dbServerVO.getDb_svr_nm());
@@ -650,7 +653,8 @@ public class AuditController {
 			
 			String strEndFlag = (String)objList.get(ClientProtocolID.END_FLAG);
 			strBuffer = (String)objList.get(ClientProtocolID.RESULT_DATA);
-
+			
+			intDwlen = (int)objList.get(ClientProtocolID.DW_LEN);
 			
 			hp.put("data", strBuffer);
 			hp.put("fSize", strBuffer.length());
