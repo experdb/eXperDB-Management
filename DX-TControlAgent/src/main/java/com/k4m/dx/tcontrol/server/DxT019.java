@@ -66,31 +66,26 @@ public class DxT019 extends SocketCtl{
 								, "echo $PGDLOG"
 			};
 			
-			String strCmd = "";
+			String CMD_HOSTNAME = CommonUtil.getPidExec(arrCmd[0]);
+			String PGHOME = CommonUtil.getPidExec(arrCmd[1]);
+			String PGRBAK = CommonUtil.getPidExec(arrCmd[2]);
+			String PGDBAK = CommonUtil.getPidExec(arrCmd[3]);
+			String PGRLOG = CommonUtil.getPidExec(arrCmd[4]);
+			String PGDLOG = CommonUtil.getPidExec(arrCmd[5]);
 			
-			String strCommandCode = (String) jObj.get(ProtocolID.COMMAND_CODE);
-			
-			if(strCommandCode.equals(ProtocolID.CMD_HOSTNAME)) {
-				strCmd = arrCmd[0];
-			} else if(strCommandCode.equals(ProtocolID.PGHOME)) {
-				strCmd = arrCmd[1];
-			} else if(strCommandCode.equals(ProtocolID.PGRBAK)) {
-				strCmd = arrCmd[2];
-			} else if(strCommandCode.equals(ProtocolID.PGDBAK)) {
-				strCmd = arrCmd[3];
-			} else if(strCommandCode.equals(ProtocolID.PGRLOG)) {
-				strCmd = arrCmd[4];
-			} else if(strCommandCode.equals(ProtocolID.PGDLOG)) {
-				strCmd = arrCmd[5];
-			}
-			
-			String strResult = CommonUtil.getPidExec(strCmd);
+			HashMap hp = new HashMap();
+			hp.put(ProtocolID.CMD_HOSTNAME, CMD_HOSTNAME);
+			hp.put(ProtocolID.PGHOME, PGHOME);
+			hp.put(ProtocolID.PGRBAK, PGRBAK);
+			hp.put(ProtocolID.PGDBAK, PGDBAK);
+			hp.put(ProtocolID.PGRLOG, PGRLOG);
+			hp.put(ProtocolID.PGDLOG, PGDLOG);
 				
 			outputObj.put(ProtocolID.DX_EX_CODE, strDxExCode);
 			outputObj.put(ProtocolID.RESULT_CODE, strSuccessCode);
 			outputObj.put(ProtocolID.ERR_CODE, strErrCode);
 			outputObj.put(ProtocolID.ERR_MSG, strErrMsg);
-			outputObj.put(ProtocolID.RESULT_DATA, strResult);
+			outputObj.put(ProtocolID.RESULT_DATA, hp);
 
 			sendBuff = outputObj.toString().getBytes();
 			send(4, sendBuff);
@@ -102,7 +97,8 @@ public class DxT019 extends SocketCtl{
 			outputObj.put(ProtocolID.RESULT_CODE, "1");
 			outputObj.put(ProtocolID.ERR_CODE, TranCodeType.DxT019);
 			outputObj.put(ProtocolID.ERR_MSG, "DxT019 Error [" + e.toString() + "]");
-			outputObj.put(ProtocolID.RESULT_DATA, "failed");
+			HashMap hp = new HashMap();
+			outputObj.put(ProtocolID.RESULT_DATA, hp);
 			
 			sendBuff = outputObj.toString().getBytes();
 			send(4, sendBuff);

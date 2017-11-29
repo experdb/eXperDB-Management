@@ -1789,14 +1789,6 @@ public class ClientTester {
 			
 			JSONObject jObj = new JSONObject();
 			
-			//hostname
-			//jObj.put(ClientProtocolID.COMMAND_CODE, ClientProtocolID.CMD_HOSTNAME);
-			//pghome
-			jObj.put(ClientProtocolID.COMMAND_CODE, ClientProtocolID.PGHOME);
-			//jObj.put(ClientProtocolID.COMMAND_CODE, ClientProtocolID.PGRBAK);
-			//jObj.put(ClientProtocolID.COMMAND_CODE, ClientProtocolID.PGDBAK);
-			//jObj.put(ClientProtocolID.COMMAND_CODE, ClientProtocolID.PGRLOG);
-			//jObj.put(ClientProtocolID.COMMAND_CODE, ClientProtocolID.PGDLOG);
 			
 			jObj.put(ClientProtocolID.DX_EX_CODE, ClientTranCodeType.DxT019);
 			
@@ -1818,9 +1810,15 @@ public class ClientTester {
 			System.out.println("ERR_CODE : " +  strErrCode);
 			System.out.println("ERR_MSG : " +  strErrMsg);
 
-			String host = (String) objList.get(ClientProtocolID.RESULT_DATA);
+			HashMap resultHp = (HashMap) objList.get(ClientProtocolID.RESULT_DATA);
 			
-			System.out.println("host : " + host);
+			
+			Iterator<String> keys = resultHp.keySet().iterator();
+
+	        while( keys.hasNext() ){
+	            String key = keys.next();
+	            System.out.println( String.format("키 : %s, 값 : %s", key, resultHp.get(key)) );
+	        }
 			
 			
 		} catch(Exception e) {
