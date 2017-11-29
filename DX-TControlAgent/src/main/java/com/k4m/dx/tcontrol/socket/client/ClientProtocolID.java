@@ -158,5 +158,12 @@ public class ClientProtocolID {
 	public static final String START_LEN = "START_LEN";
 	public static final String DW_LEN = "DW_LEN";
 	public static final String END_FLAG = "END_FLAG";
+	
+	public static final String PGHOME = "PGHOME";
+	public static final String PGDATA = "PGDATA";
+	public static final String PGRBAK = "PGRBAK";
+	public static final String PGDBAK = "PGDBAK";
+	public static final String PGRLOG = "PGRLOG";
+	public static final String PGDLOG = "PGDLOG";
 
 }

@@ -58,15 +58,39 @@ public class DxT019 extends SocketCtl{
 
 		try {
 			
-			String strCmd = "hostname";
-
-			String host = CommonUtil.getPidExec(strCmd);
+			String[] arrCmd = {"hostname"
+								, "echo $PGHOME"
+								, "echo $PGRBAK"
+								, "echo $PGDBAK"
+								, "echo $PGRLOG"
+								, "echo $PGDLOG"
+			};
+			
+			String strCmd = "";
+			
+			String strCommandCode = (String) jObj.get(ProtocolID.COMMAND_CODE);
+			
+			if(strCommandCode.equals(ProtocolID.CMD_HOSTNAME)) {
+				strCmd = arrCmd[0];
+			} else if(strCommandCode.equals(ProtocolID.PGHOME)) {
+				strCmd = arrCmd[1];
+			} else if(strCommandCode.equals(ProtocolID.PGRBAK)) {
+				strCmd = arrCmd[2];
+			} else if(strCommandCode.equals(ProtocolID.PGDBAK)) {
+				strCmd = arrCmd[3];
+			} else if(strCommandCode.equals(ProtocolID.PGRLOG)) {
+				strCmd = arrCmd[4];
+			} else if(strCommandCode.equals(ProtocolID.PGDLOG)) {
+				strCmd = arrCmd[5];
+			}
+			
+			String strResult = CommonUtil.getPidExec(strCmd);
 				
 			outputObj.put(ProtocolID.DX_EX_CODE, strDxExCode);
 			outputObj.put(ProtocolID.RESULT_CODE, strSuccessCode);
 			outputObj.put(ProtocolID.ERR_CODE, strErrCode);
 			outputObj.put(ProtocolID.ERR_MSG, strErrMsg);
-			outputObj.put(ProtocolID.RESULT_DATA, host);
+			outputObj.put(ProtocolID.RESULT_DATA, strResult);
 
 			sendBuff = outputObj.toString().getBytes();
 			send(4, sendBuff);
@@ -74,10 +98,10 @@ public class DxT019 extends SocketCtl{
 		} catch (Exception e) {
 			errLogger.error("DxT019 {} ", e.toString());
 			
-			outputObj.put(ProtocolID.DX_EX_CODE, TranCodeType.DxT018);
+			outputObj.put(ProtocolID.DX_EX_CODE, TranCodeType.DxT019);
 			outputObj.put(ProtocolID.RESULT_CODE, "1");
-			outputObj.put(ProtocolID.ERR_CODE, TranCodeType.DxT018);
-			outputObj.put(ProtocolID.ERR_MSG, "DxT018 Error [" + e.toString() + "]");
+			outputObj.put(ProtocolID.ERR_CODE, TranCodeType.DxT019);
+			outputObj.put(ProtocolID.ERR_MSG, "DxT019 Error [" + e.toString() + "]");
 			outputObj.put(ProtocolID.RESULT_DATA, "failed");
 			
 			sendBuff = outputObj.toString().getBytes();

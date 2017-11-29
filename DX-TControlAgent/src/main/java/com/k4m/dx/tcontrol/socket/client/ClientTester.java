@@ -85,9 +85,9 @@ public class ClientTester {
 			//clientTester.dxT017_select(Ip, port);
 			//clientTester.dxT018_insert(Ip, port);
 			//clientTester.dxT018_delete(Ip, port);
-			//clientTester.dxT019(Ip, port);
+			clientTester.dxT019(Ip, port);
 			//clientTester.dxT020(Ip, port);
-			clientTester.dxT021(Ip, port);
+			//clientTester.dxT021(Ip, port);
 			
 			//clientTester.test();
 		} catch(Exception e) {
@@ -1789,6 +1789,14 @@ public class ClientTester {
 			
 			JSONObject jObj = new JSONObject();
 			
+			//hostname
+			//jObj.put(ClientProtocolID.COMMAND_CODE, ClientProtocolID.CMD_HOSTNAME);
+			//pghome
+			jObj.put(ClientProtocolID.COMMAND_CODE, ClientProtocolID.PGHOME);
+			//jObj.put(ClientProtocolID.COMMAND_CODE, ClientProtocolID.PGRBAK);
+			//jObj.put(ClientProtocolID.COMMAND_CODE, ClientProtocolID.PGDBAK);
+			//jObj.put(ClientProtocolID.COMMAND_CODE, ClientProtocolID.PGRLOG);
+			//jObj.put(ClientProtocolID.COMMAND_CODE, ClientProtocolID.PGDLOG);
 			
 			jObj.put(ClientProtocolID.DX_EX_CODE, ClientTranCodeType.DxT019);
 			
