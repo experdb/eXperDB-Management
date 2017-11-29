@@ -272,28 +272,29 @@ function fn_dbServerConnTest(){
 			}
 		},
 		success : function(result) {
-			if(result.result_code == 0){
-				 for(var i=0; i<result.result_data.length; i++){
-					if(table.rows().data()[i].ipadr == result.result_data[i].SERVER_IP){
-						table.cell(i, 3).data(result.result_data[i].MASTER_GBN).draw();
-						table.cell(i, 4).data(result.result_data[i].CONNECT_YN).draw();
-						table.cell(i, 5).data(result.result_data[i].CMD_HOSTNAME).draw();	
-					}
-					if(result.result_data[i].MASTER_GBN == "N" || result.result_data[i].CONNECT_YN == "N"){
-							connCheck = "fail"
+			if(result.legnth != 0 ){
+				for(var i=0; i<result.length; i++){
+					if(result[i].result_code == 0){					
+						if(table.rows().data()[i].ipadr == result[i].result_data[0].SERVER_IP){
+							table.cell(i, 3).data(result[i].result_data[0].MASTER_GBN).draw();
+							table.cell(i, 4).data(result[i].result_data[0].CONNECT_YN).draw();
+							table.cell(i, 5).data(result[i].result_data[0].CMD_HOSTNAME).draw();	
+						}
+						if(result[i].result_data[0].MASTER_GBN == "N" || result[i].result_data[0].CONNECT_YN == "N"){
+								connCheck = "fail"
+								alert("[ 연결 테스트 실패! ]");
+								return false;
+						}
+					}else{
+						connCheck = "fail"
 							alert("[ 연결 테스트 실패! ]");
 							return false;
-					}else{
-						connCheck = "success";
-						alert("[ 연결 테스트 성공! ]");
-						fn_pathCall(ipadr, datasArr);
-					}
-				} 				
-			}else{
-			connCheck = "fail"
-			alert("[ 연결 테스트 실패! ]");
-			return false;
-			}	
+					}		
+				}
+				connCheck = "success";
+				alert("[ 연결 테스트 성공! ]");
+				fn_pathCall(ipadr, datasArr);
+			}
 		}
 	}); 
 
@@ -595,7 +596,7 @@ function checkPghome(){
 	<!--  popup -->
 	<div id="pop_layer" class="pop-layer">
 		<div class="pop-container">
-			<div class="pop_cts" style="width:530px; margin-left: 200px; padding:50px;">
+			<div class="pop_cts" style="width:530px;">
 				<p class="tit">DBMS IP등록하기</p>
 					<form name="ipadr_form">
 						<table class="write">
@@ -629,7 +630,7 @@ function checkPghome(){
 	</div>
 	
 <div class="pop_container">
-	<div class="pop_cts" style="padding-bottom: 70px;">
+	<div class="pop_cts">
 		<p class="tit">DBMS 수정</p>
 		 <form name="dbserverInsert" id="dbserverInsert" method="post">
 		<table class="write">

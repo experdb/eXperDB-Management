@@ -1,5 +1,6 @@
 package com.k4m.dx.tcontrol.admin.dbserverManager.web;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -161,10 +162,10 @@ public class DbServerManagerController {
 	 * @throws Exception
 	 */
 	@RequestMapping(value="/dbServerConnTest.do")
-	public @ResponseBody Map<String, Object> dbServerConnTest(@ModelAttribute("historyVO") HistoryVO historyVO, @ModelAttribute("dbServerVO") DbServerVO dbServerVO, HttpServletRequest request) {
-		
+	public @ResponseBody List<Map<String, Object>> dbServerConnTest(@ModelAttribute("historyVO") HistoryVO historyVO, @ModelAttribute("dbServerVO") DbServerVO dbServerVO, HttpServletRequest request) {
+		List<Map<String, Object>> list = new ArrayList<Map<String, Object>>();
 		Map<String, Object> result =new HashMap<String, Object>();
-		
+		JSONObject serverObj = new JSONObject();
 		AgentInfoVO vo = new AgentInfoVO();
 		vo.setIPADR(dbServerVO.getIpadr());
 		
@@ -175,23 +176,32 @@ public class DbServerManagerController {
 			historyVO.setMnu_id(9);
 			accessHistoryService.insertHistory(historyVO);
 			
-			AgentInfoVO agentInfo =  (AgentInfoVO) cmmnServerInfoService.selectAgentInfo(vo);
-			String IP = dbServerVO.getIpadr();
-			int PORT = agentInfo.getSOCKET_PORT();
-			
-			
 			String strRows = request.getParameter("datasArr").toString().replaceAll("&quot;", "\"");
 			JSONArray rows = (JSONArray) new JSONParser().parse(strRows);
 						
-			ClientInfoCmmn conn  = new ClientInfoCmmn();
+			for (int i = 0; i < rows.size(); i++) {
+				JSONObject jsonObject = (JSONObject) rows.get(i);		
+				
+				AgentInfoVO agentInfo =  (AgentInfoVO) cmmnServerInfoService.selectAgentInfo(vo);
+				String IP = jsonObject.get("SERVER_IP").toString();
+				int PORT = agentInfo.getSOCKET_PORT();
+				
+				serverObj.put(ClientProtocolID.SERVER_NAME, jsonObject.get("SERVER_IP").toString());
+				serverObj.put(ClientProtocolID.SERVER_IP, jsonObject.get("SERVER_IP").toString());
+				serverObj.put(ClientProtocolID.SERVER_PORT, jsonObject.get("SERVER_PORT").toString());
+				serverObj.put(ClientProtocolID.DATABASE_NAME, jsonObject.get("DATABASE_NAME").toString());
+				serverObj.put(ClientProtocolID.USER_ID, jsonObject.get("USER_ID").toString());
+				serverObj.put(ClientProtocolID.USER_PWD, jsonObject.get("USER_PWD").toString());
+				
+				ClientInfoCmmn conn  = new ClientInfoCmmn();
+				result = conn.DbserverConnTest(serverObj, IP, PORT);
+				list.add(result);
+			}
 			
-
-			result = conn.DbserverConnTest(rows, IP, PORT);
-		
 		}catch (Exception e) {
 			e.printStackTrace();
 		}
-		return result;		
+		return list;		
 	}
 	
 	
