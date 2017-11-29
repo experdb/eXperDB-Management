@@ -4,7 +4,7 @@
 
 <div id="pop_layer" class="pop-layer">
 		<div class="pop-container">
-			<div class="pop_cts" style="width: 20%; padding: 20px; margin: 0 auto;" id="scdinfo">
+			<div class="pop_cts" style="width: 20%; padding: 20px; margin: 0 auto; min-height:0; min-width:0;" id="scdinfo">
 				<p class="tit" style="margin-bottom: 15px;">스케줄 정보
 					<a href="#n" class="btn" onclick="toggleLayer($('#pop_layer'), 'off');" style="float: right;"><img src="/images/ico_state_01.png"/></a>
 				</p>
@@ -12,24 +12,24 @@
 					<caption>스케줄 정보</caption>
 					<tbody>
 						<tr>
-							<td style="width: 70px; height: 20px;">스케줄명</td>
-							<td style="width: 70%;" id="scd_nm_info" ></td>
+							<td>스케줄명</td>
+							<td id="scd_nm_info" ></td>
 						</tr>	
 						<tr>
-							<td style="width: 70px; height: 20px;">스케줄 설명</td>
-							<td style="width: 50%;" id="scd_exp_info" ></td>
+							<td>스케줄 설명</td>
+							<td id="scd_exp_info" ></td>
 						</tr>	
 						<tr>
-							<td style="width: 70px; height: 20px;">실행상태</td>
-							<td style="width: 70%;" id="scd_cndt_info"></td>
+							<td>실행상태</td>
+							<td id="scd_cndt_info"></td>
 						</tr>	
 						<tr>
-							<td style="width: 70px; height: 20px;">실행주기</td>
-							<td style="width: 70%;" id="exe_perd_cd_info"></td>
+							<td>실행주기</td>
+							<td id="exe_perd_cd_info"></td>
 						</tr>	
 						<tr>
-							<td style="width: 70px; height: 20px;">실행일자</td>
-							<td style="width: 70%;" id="scd_exe_hms"></td>
+							<td>실행일자</td>
+							<td id="scd_exe_hms"></td>
 						</tr>						
 					</tbody>
 				</table>		

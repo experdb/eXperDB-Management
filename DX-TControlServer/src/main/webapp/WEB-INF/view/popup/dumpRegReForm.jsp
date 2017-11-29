@@ -552,9 +552,15 @@ function checkFolder(){
 				</colgroup>
 				<tbody>
 					<tr>
-						<th scope="row" class="ico_t2">저장경로</th>
+						<th scope="row" class="ico_t2">백업경로</th>
 						<td colspan="5"><input type="text" class="txt t4" name="save_pth" id="save_pth" style="width:650px" value="<c:out value="${workInfo[0].save_pth}"/>" onKeydown="$('#check_path').val('N')"/>
 							<span class="btn btnC_01"><button type="button" class= "btn_type_02" onclick="checkFolder()" style="width: 60px; margin-right: -60px; margin-top: 0;">경로체크</button></span>
+						</td>
+					</tr>
+					<tr>
+						<th scope="row" class="ico_t2">백업로그경로</th>
+						<td colspan="5"><input type="text" class="txt t4" name="log_file_pth" id="log_file_pth" style="width:650px" onKeydown="$('#check_path').val('N')"/>
+							<span class="btn btnC_01"><button type="button" class= "btn_type_02" onclick="checkFolder()" style="width: 60px; margin-right: -60px; margin-top: 0;">경로체크</button></span>							
 						</td>
 					</tr>
 					<tr>
@@ -604,7 +610,7 @@ function checkFolder(){
 						<th scope="row" class="ico_t2">파일보관일수</th>
 						<td><input type="number" class="txt t6" name="file_stg_dcnt" id="file_stg_dcnt" maxlength=3 min=0 value="<c:out value="${workInfo[0].file_stg_dcnt}"/>"/> 일</td>
 						<th scope="row" class="ico_t2">백업유지갯수</th>
-						<td><input type="number" class="txt t6" name="bck_mtn_ecnt" id="bck_mtn_ecnt" maxlength=3 min=0 value="<c:out value="${workInfo[0].bck_mtn_ecnt}"/>"/></td>
+						<td><input type="number" class="txt t6" name="bck_mtn_ecnt" id="bck_mtn_ecnt" maxlength=3 min=0 value="<c:out value="${workInfo[0].bck_mtn_ecnt}"/>"/> 개</td>
 					</tr>
 				</tbody>
 			</table>

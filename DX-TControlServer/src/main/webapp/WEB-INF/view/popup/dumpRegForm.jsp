@@ -53,6 +53,7 @@ function fn_insert_work(){
 		  		db_id : $("#db_id").val(),
 		  		bck_bsn_dscd : "TC000202",
 		  		save_pth : $("#save_pth").val(),
+		  		log_file_pth : $("#log_file_pth").val(),
 		  		file_fmt_cd : $("#file_fmt_cd").val(),
 		  		cprt : $("#cprt").val(),
 		  		encd_mth_nm : $("#encd_mth_nm").val(),
@@ -575,13 +576,13 @@ function fn_check() {
 				</colgroup>
 				<tbody>
 					<tr>
-						<th scope="row" class="ico_t2">저장경로</th>
+						<th scope="row" class="ico_t2">백업경로</th>
 						<td colspan="5"><input type="text" class="txt t4" name="save_pth" id="save_pth" style="width:650px" onKeydown="$('#check_path').val('N')"/>
 							<span class="btn btnC_01"><button type="button" class= "btn_type_02" onclick="checkFolder()" style="width: 60px; margin-right: -60px; margin-top: 0;">경로체크</button></span>							
 						</td>
 					</tr>
 					<tr>
-						<th scope="row" class="ico_t2">로그경로</th>
+						<th scope="row" class="ico_t2">백업로그경로</th>
 						<td colspan="5"><input type="text" class="txt t4" name="log_file_pth" id="log_file_pth" style="width:650px" onKeydown="$('#check_path').val('N')"/>
 							<span class="btn btnC_01"><button type="button" class= "btn_type_02" onclick="checkFolder()" style="width: 60px; margin-right: -60px; margin-top: 0;">경로체크</button></span>							
 						</td>
