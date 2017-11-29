@@ -72,7 +72,7 @@
 				var name = data.name;
 	 			var popUrl = "/popup/transferTargetDetailRegForm.do?&&cnr_id=${cnr_id}&&name="+name; // 서버 url 팝업경로
 	 			var width = 930;
-	 			var height = 550;
+	 			var height = 640;
 	 			var left = (window.screen.width / 2) - (width / 2);
 	 			var top = (window.screen.height /2) - (height / 2);
 	 			var popOption = "width="+width+", height="+height+", top="+top+", left="+left+", resizable=no, scrollbars=yes, status=no, toolbar=no, titlebar=yes, location=no,";
@@ -92,7 +92,7 @@
 		 			var name  = row.name;
 		 			var popUrl = "/popup/transferTargetDetailRegForm.do?cnr_id=${cnr_id}&&name="+name; // 서버 url 팝업경로
 		 			var width = 930;
-		 			var height = 550;
+		 			var height = 640;
 		 			var left = (window.screen.width / 2) - (width / 2);
 		 			var top = (window.screen.height /2) - (height / 2);
 		 			var popOption = "width="+width+", height="+height+", top="+top+", left="+left+", resizable=no, scrollbars=yes, status=no, toolbar=no, titlebar=yes, location=no,";
@@ -112,8 +112,8 @@
 		    		var row = datas[0];
 			    	$row.removeClass('detail');
 					var popUrl = "/popup/transferMappingRegForm.do?cnr_id=${cnr_id}&&trf_trg_cnn_nm="+row.name; // 서버 url 팝업경로
-					var width = 920;
-					var height = 580;
+					var width = 1000;
+					var height = 680;
 					var left = (window.screen.width / 2) - (width / 2);
 					var top = (window.screen.height /2) - (height / 2);
 					var popOption = "width="+width+", height="+height+", top="+top+", left="+left+", resizable=no, scrollbars=yes, status=no, toolbar=no, titlebar=yes, location=no,";
@@ -201,7 +201,7 @@
 	function fn_insert(){
 		var popUrl = "/popup/transferTargetRegForm.do?act=i&&cnr_id="+cnr_id; // 서버 url 팝업경로
 		var width = 930;
-		var height = 540;
+		var height = 630;
 		var left = (window.screen.width / 2) - (width / 2);
 		var top = (window.screen.height /2) - (height / 2);
 		var popOption = "width="+width+", height="+height+", top="+top+", left="+left+", resizable=no, scrollbars=yes, status=no, toolbar=no, titlebar=yes, location=no,";
@@ -216,7 +216,7 @@
 			var name = table.row('.selected').data().name;
 			var popUrl = "/popup/transferTargetRegForm.do?act=u&&cnr_id=${cnr_id}&&name="+name; // 서버 url 팝업경로
 			var width = 930;
-			var height = 540;
+			var height = 630;
 			var left = (window.screen.width / 2) - (width / 2);
 			var top = (window.screen.height /2) - (height / 2);
 			var popOption = "width="+width+", height="+height+", top="+top+", left="+left+", resizable=no, scrollbars=yes, status=no, toolbar=no, titlebar=yes, location=no,";

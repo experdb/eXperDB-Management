@@ -264,7 +264,7 @@ input[type="text"]:disabled, input[type="text"].disabled {background:#e4e9ec;col
 .mapping_area:after{display:block;content:"";clear:both;}
 .mapping_area .tit{height:28px;line-height:28px;padding-left:27px;border-bottom:1px solid #b8c3c6;background:#e4e9ec;color:#101922;font-size:12px;font-family:'Nanum Square Bold';font-weight:700;}
 .mapping_area .mapping_lt,
-.mapping_area .mapping_rt{width:380px;border:1px solid #b8c3c6;}
+.mapping_area .mapping_rt{width:333px;border:1px solid #b8c3c6;}
 .mapping_area .mapping_lt{float:left;}
 .mapping_area .mapping_rt{float:right;}
 .mapping_area .overflow_area{height:305px;border:none;}
