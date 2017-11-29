@@ -356,7 +356,7 @@
 		]]>
 	</select>
 	
-	    <select id="selectDatabaseInfo" resultType="hashmap">
+	<select id="selectDatabaseInfo" resultType="hashmap">
 		<![CDATA[
 	   		/**
 		 	* Query ID : selectDatabaseInfo

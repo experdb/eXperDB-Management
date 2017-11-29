@@ -8,8 +8,10 @@ import java.io.FileOutputStream;
 import java.io.FileReader;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.Locale;
 import java.util.Properties;
 
@@ -385,29 +387,79 @@ public class FileUtil {
 			 * 
 			 **/
 			
-			String strFilePath = "C:\\k4m\\01-1. DX 제폼개발\\04. 시험\\pg_log1\\";
+			//String strFilePath = "C:\\k4m\\01-1. DX 제폼개발\\04. 시험\\pg_log1\\";
 			
-			boolean blnReturn = isDirectory(strFilePath);
+			//boolean blnReturn = isDirectory(strFilePath);
 			
-			System.out.println(blnReturn);
+			//System.out.println(blnReturn);
 
 			// 파일읽기
-			/**
-			String strFilePath = "C:\\k4m\\01-1. DX 제폼개발\\04. 시험\\pg_log\\";
-			String strFileName = "postgresql-2017-07-25_095614.log";
+			
+			String strFilePath = "C:\\k4m\\DxTcontrolWorkspace\\DX-TControl\\DX-TControlAgent\\build\\install\\";
+			String strFileName = "test.out";
 
-			File inFile = new File(strFilePath, strFileName);
+			//File inFile = new File(strFilePath, strFileName);
 
+			 BufferedReader in = new BufferedReader(new FileReader(strFilePath+ strFileName));
+		      String s;
+		      
+		      ArrayList<HashMap<String, String>> list = new ArrayList<HashMap<String, String>>();
+		      
+		      int j = 0;
+		      while ((s = in.readLine()) != null) {
+		        //System.out.println(s.replace(" ", ""));
+		    	  
+		    	  if(j > 0) {
+		    		  HashMap hp = new HashMap();
+			    	  String[] arrStr = s.split(" ");
+			    	  int lineT = 0;
+			    	  for(int i=0; i<arrStr.length; i++) {
+			    		  System.out.println(arrStr[i].toString());
+			    		  
+			    		  if(!arrStr[i].toString().trim().equals("")) {
+				    		  if(lineT == 0) {
+				    			  hp.put("filesystem", arrStr[i].toString());
+				    		  } else if(lineT == 1) {
+				    			  hp.put("size", arrStr[i].toString());
+				    		  } else if(lineT == 2) {
+				    			  hp.put("used", arrStr[i].toString());
+				    		  } else if(lineT == 3) {
+				    			  hp.put("avail", arrStr[i].toString());
+				    		  } else if(lineT == 4) {
+				    			  hp.put("use", arrStr[i].toString());
+				    		  } else if(lineT == 5) {
+				    			  hp.put("mounton", arrStr[i].toString());
+				    		  }
+				    		  
+				    		  lineT++;
+			    		  }
+			    	  }
+			    	  list.add(hp);
+		    	  }
+		    	  
+		    	  j++;
+		      }
+		      in.close();
+		      
+		      for(HashMap hp2: list) {
+					Iterator<String> keys = hp2.keySet().iterator();
+
+			        while( keys.hasNext() ){
+			            String key = keys.next();
+			            System.out.print( String.format("키 : %s, 값 : %s", key, hp2.get(key)) );
+			        }
+			        System.out.println("");
+		      }
+		      
 			//String strFileTxt = FileUtil.getFileView(inFile);
 
 			//System.out.println(strFileTxt);
 			
 			
 			//file LastModified
-			String strLastModified = FileUtil.getFileLastModifiedDate(inFile.lastModified());
-			System.out.println(strLastModified);
-			**
-			*/
+			//String strLastModified = FileUtil.getFileLastModifiedDate(inFile.lastModified());
+			//System.out.println(strLastModified);
+
 			
 			//Date date = new Date("2017-07-26");
 

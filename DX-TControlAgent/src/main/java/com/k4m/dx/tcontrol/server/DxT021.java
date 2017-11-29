@@ -52,7 +52,7 @@ public class DxT021 extends SocketCtl{
 								, "free -h | awk 'NR>1&&NR<3{print $2}'" //메모리
 								, "echo $PGHOME"
 								, "echo $PGRBAK"
-
+								, "df -h"
 							   };
 	
 	public DxT021(Socket socket, BufferedInputStream is, BufferedOutputStream	os) {
@@ -128,6 +128,7 @@ public class DxT021 extends SocketCtl{
 			//백업경로 
 			String CMD_BACKUP_PATH = CommonUtil.getPidExec(arrCmd[6]);
 			resultHP.put(ProtocolID.CMD_BACKUP_PATH, CMD_BACKUP_PATH);
+			
 
 			outputObj.put(ProtocolID.DX_EX_CODE, strDxExCode);
 			outputObj.put(ProtocolID.RESULT_CODE, strSuccessCode);
@@ -154,6 +155,49 @@ public class DxT021 extends SocketCtl{
 		} finally {
 
 		}	    
+	}
+	
+	private ArrayList fileSystemList(String strFileSystem) throws Exception {
+		ArrayList<HashMap<String, String>> list = new ArrayList<HashMap<String, String>>();
+		
+		if(strFileSystem.length() > 0) {
+			String[] arrFileSystem = strFileSystem.split("\n");
+			int intFileI = 0;
+			for(String st: arrFileSystem) {
+				
+				if(intFileI > 0) {
+					HashMap hp = new HashMap();
+			    	  String[] arrStr = st.split(" ");
+			    	  int lineT = 0;
+			    	  for(int i=0; i<arrStr.length; i++) {
+			    		  System.out.println(arrStr[i].toString());
+			    		  
+			    		  if(!arrStr[i].toString().trim().equals("")) {
+				    		  if(lineT == 0) {
+				    			  hp.put("filesystem", arrStr[i].toString());
+				    		  } else if(lineT == 1) {
+				    			  hp.put("size", arrStr[i].toString());
+				    		  } else if(lineT == 2) {
+				    			  hp.put("used", arrStr[i].toString());
+				    		  } else if(lineT == 3) {
+				    			  hp.put("avail", arrStr[i].toString());
+				    		  } else if(lineT == 4) {
+				    			  hp.put("use", arrStr[i].toString());
+				    		  } else if(lineT == 5) {
+				    			  hp.put("mounton", arrStr[i].toString());
+				    		  }
+				    		  
+				    		  lineT++;
+			    		  }
+			    	  }
+			    	  list.add(hp);
+				}
+				
+				intFileI++;
+			}
+		}
+		
+		return list;
 	}
 	
 	private ArrayList selectTablespaceInfo(JSONObject serverInfoObj) throws Exception {
@@ -300,8 +344,18 @@ public class DxT021 extends SocketCtl{
 			ArrayList databaseInfoList = (ArrayList)sessDB.selectList("system.selectDatabaseInfo");
 			resultHP.put(ProtocolID.CMD_DATABASE_INFO, databaseInfoList);
 			
-			ArrayList list = (ArrayList)sessDB.selectList("system.selectTablespaceInfo");
-			resultHP.put(ProtocolID.CMD_TABLESPACE_INFO, list);
+			
+			//TableSpace 정보
+			ArrayList<HashMap<String, String>> listTableSpaceInfo = (ArrayList)sessDB.selectList("system.selectTablespaceInfo");
+			//resultHP.put(ProtocolID.CMD_TABLESPACE_INFO, listTableSpaceInfo);
+			
+			//파일시스템정보
+			String strFileSystem = CommonUtil.getCmdExec(arrCmd[7]);
+			ArrayList<HashMap<String, String>> flist = fileSystemList(strFileSystem);
+			
+			ArrayList<HashMap<String, String>> mappingList = mappingSystem(flist, listTableSpaceInfo, data_directory);
+			
+			resultHP.put(ProtocolID.CMD_TABLESPACE_INFO, mappingList);
 			
 		} catch(Exception e) {
 			errLogger.error("selectDatabaseInfo {} ", e.toString());
@@ -311,6 +365,146 @@ public class DxT021 extends SocketCtl{
 			connDB.close();
 		}	
 		
+	}
+	
+	/**
+	 * 파일시스템 정보, 테이블스페이스 정보 매핑
+	 * @param flist
+	 * @param listTableSpaceInfo
+	 * @return
+	 * @throws Exception
+	 */
+	private ArrayList<HashMap<String, String>> mappingSystem(ArrayList<HashMap<String, String>> flist
+			, ArrayList<HashMap<String, String>> listTableSpaceInfo
+			, String data_directory) throws Exception {
+		
+		String pg_default = data_directory + "/base";
+		String pg_global = data_directory + "/global";
+		
+		ArrayList<HashMap<String, String>> arrMapping = new ArrayList<HashMap<String, String>>();
+		
+
+		String default_mounton = "";
+		String default_use = "";
+		String default_avail = "";
+		String default_used = "";
+		String default_filesystem = "";
+		String default_fsize = "";
+		
+		for(HashMap hp:flist) {
+			HashMap hpMapping = new HashMap();
+			
+			String mounton = (String) hp.get("mounton");
+			String use = (String) hp.get("use");
+			String avail = (String) hp.get("avail");
+			String used = (String) hp.get("used");
+			String filesystem = (String) hp.get("filesystem");
+			String fsize = (String) hp.get("size");
+			
+			if(mounton.equals("/")) {
+				default_mounton = mounton;
+				default_use = use;
+				default_avail = avail;
+				default_used = used;
+				default_filesystem = filesystem;
+				default_fsize = fsize;
+			}
+			
+			int intMappTs = 0;
+			for(HashMap hpSpace: listTableSpaceInfo) {
+				String Name = (String) hpSpace.get("Name");
+				String Owner = (String) hpSpace.get("Owner");
+				String Location = (String) hpSpace.get("Location");
+				String Options = (String) hpSpace.get("Options");
+				String Size = (String) hpSpace.get("Size");
+				String Description = (String) hpSpace.get("Description");
+				
+				if(Name.equals("pg_default")) Location = pg_default;
+				if(Name.equals("pg_global")) Location = pg_global;
+				
+				if(Location.contains(filesystem)) {
+					hpMapping.put("mounton", mounton);
+					hpMapping.put("use", use);
+					hpMapping.put("avail", avail);
+					hpMapping.put("used", used);
+					hpMapping.put("filesystem", filesystem);
+					hpMapping.put("fsize", fsize);
+					
+					hpMapping.put("name", Name);
+					hpMapping.put("owner", Owner);
+					hpMapping.put("location", Location);
+					hpMapping.put("options", Options);
+					hpMapping.put("size", Size);
+					hpMapping.put("description", Description);
+					
+					arrMapping.add(hpMapping);
+					
+					intMappTs ++;
+				}
+
+			}
+			
+			if(intMappTs == 0) {
+				hpMapping.put("mounton", mounton);
+				hpMapping.put("use", use);
+				hpMapping.put("avail", avail);
+				hpMapping.put("used", used);
+				hpMapping.put("filesystem", filesystem);
+				hpMapping.put("fsize", fsize);
+				
+				hpMapping.put("name", "");
+				hpMapping.put("owner", "");
+				hpMapping.put("location", "");
+				hpMapping.put("options", "");
+				hpMapping.put("size", "");
+				hpMapping.put("description", "");
+				
+				arrMapping.add(hpMapping);
+			}
+		}
+		
+		for(HashMap hpSpace: listTableSpaceInfo) {
+			HashMap hpMapping = new HashMap();
+			
+			String Name = (String) hpSpace.get("Name");
+			String Owner = (String) hpSpace.get("Owner");
+			String Location = (String) hpSpace.get("Location");
+			String Options = (String) hpSpace.get("Options");
+			String Size = (String) hpSpace.get("Size");
+			String Description = (String) hpSpace.get("Description");
+			
+			if(Name.equals("pg_default")) Location = pg_default;
+			if(Name.equals("pg_global")) Location = pg_global;
+			
+			int intContainCnt = 0;
+			for(HashMap hp:flist) {
+
+				String filesystem = (String) hp.get("filesystem");
+				
+				if(!Location.contains(filesystem)) {
+					intContainCnt++;
+				}
+			}
+			
+			if(intContainCnt > 0) {
+				hpMapping.put("mounton", default_mounton);
+				hpMapping.put("use", default_use);
+				hpMapping.put("avail", default_avail);
+				hpMapping.put("used", default_used);
+				hpMapping.put("filesystem", default_filesystem);
+				hpMapping.put("fsize", default_fsize);
+				
+				hpMapping.put("name", Name);
+				hpMapping.put("owner", Owner);
+				hpMapping.put("location", Location);
+				hpMapping.put("options", Options);
+				hpMapping.put("size", Size);
+				hpMapping.put("description", Description);
+				
+				arrMapping.add(hpMapping);
+			}
+		}
+		return arrMapping;
 	}
 
 }

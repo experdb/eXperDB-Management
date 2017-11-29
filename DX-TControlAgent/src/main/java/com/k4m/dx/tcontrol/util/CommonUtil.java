@@ -193,4 +193,36 @@ public class CommonUtil {
 
 		   return sb.toString();
 		}
+	   
+	   
+	   public static String getCmdExec(String command) throws Exception {
+		   
+
+		   String strResult = "";
+
+           Runtime runtime = Runtime.getRuntime();
+
+           Process process = runtime.exec(new String[]{"/bin/sh", "-c", command});
+           
+           strResult = getResultCmdData(process);
+
+           
+          return strResult;
+	   }
+	   
+	   public static String  getResultCmdData(Process p) throws Exception{
+
+		   StringBuffer sb = new StringBuffer();
+
+		   BufferedReader in = new BufferedReader(new InputStreamReader(p.getInputStream()));
+           String cl = null;
+           while((cl=in.readLine())!=null){
+               sb.append(cl + "\n");
+               //break;
+           }
+
+           in.close();
+
+		   return sb.toString();
+		}
 }
