@@ -263,11 +263,11 @@
 				</tr>
 				<tr>
 					<th scope="row" class="ico_t1">flush.size</th>
-					<td><input type="number" class="txt t2" name="flush_size" id="flush_size" value="${flush_size}" style="width: 200px;"/></td>
+					<td><input type="number" class="txt t2" name="flush_size" id="flush_size" value="${flush_size}" style="width: 100px; margin-right: 5px;"/>Byte</td>
 				</tr>
 				<tr>
 					<th scope="row" class="ico_t1">rotate.interval.ms</th>
-					<td><input type="number" class="txt t2" name="rotate_interval_ms" id="rotate_interval_ms" value="${rotate_interval_ms}" style="width: 200px;"/></td>
+					<td><input type="number" class="txt t2" name="rotate_interval_ms" id="rotate_interval_ms" value="${rotate_interval_ms}" style="width: 100px;"/></td>
 				</tr>
 			</tbody>
 		</table>

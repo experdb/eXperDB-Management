@@ -137,26 +137,13 @@ function fn_dbServerValidation(){
 			   alert("서버명을 입력하여 주십시오.");
 			   db_svr_nm.focus();
 			   return false;
-		}/* else if(db_svr_nmChk != "success"){
-			alert("서버명 중복검사를 하셔야합니다.");
-			return false;
-		} */
+		}
 		var dft_db_nm = document.getElementById("dft_db_nm");
  		if (dft_db_nm.value == "") {
   			   alert("데이터베이스명을 입력하여 주십시오.");
   			 dft_db_nm.focus();
   			   return false;
   		}
-/*  		var ipadr = document.getElementById("ipadr");
- 		if (ipadr.value == "") {
-  			   alert("IP를 입력하여 주십시오.");
-  			 ipadr.focus();
-  			   return false;
-  		}else if(idCheck != "success"){
-			alert("IP 중복검사를 하셔야합니다.");
-			return false;
-		} */
-
  		var portno = document.getElementById("portno");
 		if (portno.value == "") {
 			   alert("포트를 입력하여 주십시오.");
@@ -165,7 +152,7 @@ function fn_dbServerValidation(){
 		}
  		if(!valid_numeric(portno.value))
 	 	{
- 			 alert("포트는 숫자만 입력가능합니다.");
+ 			alert("포트는 숫자만 입력가능합니다.");
  			portno.focus();
 		 	return false;
 		}
@@ -182,32 +169,12 @@ function fn_dbServerValidation(){
   			 svr_spr_scm_pwd.focus();
   			   return false;
   		}		
-/*  		var pghome_pth = document.getElementById("pghome_pth");
- 		if (pghome_pth.value == "") {
-  			   alert("PG_HOME 경로를 입력하여 주십시오.");
-  			 pghome_pth.focus();
-  			   return false;
-  		}else if(pghomeCheck != "success"){
-			alert("PG_HOME경로 중복검사를 하셔야합니다.");
-			return false;
-		}
- 		var pgdata_pth = document.getElementById("pgdata_pth");
- 		if (pgdata_pth.value == "") {
-  			  alert("PG_DATA경로를 입력하여 주십시오.");
-  			 pgdata_pth.focus();
-  			   return false;
-  		}else if(pgdataCheck != "success"){
-			alert("PG_DATA경로 중복검사를 하셔야합니다.");
-			return false;
-		} */
  		if(connCheck != "success"){
 			alert("연결테스트를 하셔야합니다.");
 			return false;
 		}
  		return true;
 }
-
-
 
 function fn_ipadrValidation(){
 	var ipadr = document.getElementById("ipadr");
@@ -724,7 +691,7 @@ function fn_ipadrDelForm(){
 	<!--  popup -->
 	<div id="pop_layer" class="pop-layer">
 		<div class="pop-container">
-			<div class="pop_cts" style="width:530px; margin-left: 200px; padding:50px;">
+			<div class="pop_cts" style="width:530px;">
 				<p class="tit">DBMS IP등록하기</p>
 					<form name="ipadr_form">
 						<table class="write">
@@ -744,7 +711,7 @@ function fn_ipadrDelForm(){
 								</tr>
 								<tr>
 									<th scope="row" class="ico_t1">Port(*)</th>
-									<td><input type="text" class="txt" name="portno" id="portno"/></td>
+									<td><input type="text" class="txt" name="portno" id="portno" maxlength="5"/></td>
 								</tr>
 							</tbody>
 						</table>
@@ -759,7 +726,7 @@ function fn_ipadrDelForm(){
 
 
 <div class="pop_container">
-	<div class="pop_cts" style="padding-bottom: 70px;">
+	<div class="pop_cts">
 		<p class="tit">DBMS 등록</p>
 		<form name="dbserverInsert" id="dbserverInsert" method="post">
 		<table class="write">
@@ -793,14 +760,14 @@ function fn_ipadrDelForm(){
 				</tr>
 				<tr>
 					<th scope="row" class="ico_t1" >DBMS명(*)</th>
-					<td><input type="text" class="txt" name="db_svr_nm" id="db_svr_nm"  style="width:230px"/>
+					<td><input type="text" class="txt" name="db_svr_nm" id="db_svr_nm"  style="width:230px" maxlength="20"/>
 					<span class="btn btnC_01"><button type="button" class= "btn_type_02" onclick="fn_svrnmCheck()" style="width: 60px; margin-right: -60px; margin-top: 0;">중복체크</button></span></td>
 					<th scope="row" class="ico_t1" style="width: 60px; margin-right: -160px; margin-top: 0;">Database(*)</th>
-					<td><input type="text" class="txt" name="dft_db_nm" id="dft_db_nm" /></td>
+					<td><input type="text" class="txt" name="dft_db_nm" id="dft_db_nm" maxlength="30"/></td>
 				</tr>
 				<tr>
 					<th scope="row" class="ico_t1">계정(*)</th>
-					<td><input type="text" class="txt" name="svr_spr_usr_id" id="svr_spr_usr_id" /></td>
+					<td><input type="text" class="txt" name="svr_spr_usr_id" id="svr_spr_usr_id" maxlength="30"/></td>
 					<th scope="row" class="ico_t1">Password(*)</th>
 					<td><input type="password" class="txt" name="svr_spr_scm_pwd" id="svr_spr_scm_pwd" /></td>
 				</tr>				

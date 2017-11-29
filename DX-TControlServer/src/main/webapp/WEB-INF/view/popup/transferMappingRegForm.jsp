@@ -63,6 +63,7 @@
 	$(window.document).ready(function() {
 		if("${error}"!=""){
 			alert("${error}");
+			window.close();
 		}
 		fn_init();
 		if("${result}" == ""){

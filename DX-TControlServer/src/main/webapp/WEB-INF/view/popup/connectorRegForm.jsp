@@ -134,7 +134,7 @@
 	}
 </script>
 <body>
-	<div class="pop-container">
+	<div class="pop_container">
 			<div class="pop_cts">
 				<input type="hidden" name="cnr_id" id="cnr_id" value="${cnr_id}">
 				<p class="tit">

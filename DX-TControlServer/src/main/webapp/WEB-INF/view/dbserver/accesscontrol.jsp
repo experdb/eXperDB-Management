@@ -127,8 +127,8 @@
 			var Option = table.row(this).data().Option;
 			
 			var popUrl = "/popup/accessControlRegForm.do?act=u&&db_svr_id=${db_svr_id}&&User="+User+"&&Seq="+Seq+"&&Method="+Method+"&&Database="+Database+"&&Type="+Type+"&&Ipadr="+Ipadr+"&&Ipmask="+Ipmask+"&&Option="+Option+"&&idx="+idx; // 서버 url 팝업경로
-			var width = 920;
-			var height = 390;
+			var width = 1000;
+			var height = 480;
 			var left = (window.screen.width / 2) - (width / 2);
 			var top = (window.screen.height /2) - (height / 2);
 			var popOption = "width="+width+", height="+height+", top="+top+", left="+left+", resizable=no, scrollbars=no, status=no, toolbar=no, titlebar=yes, location=no,";
@@ -217,6 +217,21 @@
 	}
 
 	function fn_isnertSave(result){
+		var data = table.rows().data();
+        for (var i = 0; i < data.length; i++) {
+        	if(result.ctf_tp_nm==(table.rows().data()[i].Type==undefined?'':table.rows().data()[i].Type)
+        		&& 	result.dtb==(table.rows().data()[i].Database==undefined?'':table.rows().data()[i].Database)
+        		&& 	result.prms_usr_id==(table.rows().data()[i].User==undefined?'':table.rows().data()[i].User)
+        		&& 	result.prms_ipadr==(table.rows().data()[i].Ipadr==undefined?'':table.rows().data()[i].Ipadr)
+        		&& 	result.prms_ipmaskadr==(table.rows().data()[i].Ipmask==undefined?'':table.rows().data()[i].Ipmask)
+        		&& 	result.ctf_mth_nm==(table.rows().data()[i].Method==undefined?'':table.rows().data()[i].Method)
+        		&& 	result.opt_nm==(table.rows().data()[i].Option==undefined?'':table.rows().data()[i].Option)
+        	){
+        		alert("중복된 값이 존재하여 추가할 수 없습니다.");
+        		return false;
+        	}
+        }    
+		
 		table.row.add( {
 			        "Type":		result.ctf_tp_nm,
 			        "Database":	result.dtb,
@@ -226,9 +241,25 @@
 			        "Method":	result.ctf_mth_nm,
 			        "Option":	result.opt_nm
 			    } ).draw();	
+		
 	}
 	
 	function fn_updateSave(result){
+		var data = table.rows().data();
+        for (var i = 0; i < data.length; i++) {
+        	if(result.ctf_tp_nm==(table.rows().data()[i].Type==undefined?'':table.rows().data()[i].Type)
+        		&& 	result.dtb==(table.rows().data()[i].Database==undefined?'':table.rows().data()[i].Database)
+        		&& 	result.prms_usr_id==(table.rows().data()[i].User==undefined?'':table.rows().data()[i].User)
+        		&& 	result.prms_ipadr==(table.rows().data()[i].Ipadr==undefined?'':table.rows().data()[i].Ipadr)
+        		&& 	result.prms_ipmaskadr==(table.rows().data()[i].Ipmask==undefined?'':table.rows().data()[i].Ipmask)
+        		&& 	result.ctf_mth_nm==(table.rows().data()[i].Method==undefined?'':table.rows().data()[i].Method)
+        		&& 	result.opt_nm==(table.rows().data()[i].Option==undefined?'':table.rows().data()[i].Option)
+        	){
+        		alert("중복된 값이 존재하여 수정할 수 없습니다.");
+        		return false;
+        	}
+        }    
+        
 		table.cell(result.idx, 2).data(result.ctf_tp_nm).draw();
 		table.cell(result.idx, 3).data(result.dtb).draw();
 		table.cell(result.idx, 4).data(result.prms_usr_id).draw();
@@ -242,8 +273,8 @@
 	/* 등록 버튼 클릭시*/
 	function fn_insert(){
 		var popUrl = "/popup/accessControlRegForm.do?act=i&&db_svr_id=${db_svr_id}"; // 서버 url 팝업경로
-		var width = 920;
-		var height = 390;
+		var width = 1000;
+		var height = 480;
 		var left = (window.screen.width / 2) - (width / 2);
 		var top = (window.screen.height /2) - (height / 2);
 		var popOption = "width="+width+", height="+height+", top="+top+", left="+left+", resizable=no, scrollbars=yes, status=no, toolbar=no, titlebar=yes, location=no,";
@@ -267,8 +298,8 @@
 			var Option = table.row('.selected').data().Option;
 			
 			var popUrl = "/popup/accessControlRegForm.do?act=u&&db_svr_id=${db_svr_id}&&User="+User+"&&Seq="+Seq+"&&Method="+Method+"&&Database="+Database+"&&Type="+Type+"&&Ipadr="+Ipadr+"&&Ipmask="+Ipmask+"&&Option="+Option+"&&idx="+idx; // 서버 url 팝업경로
-			var width = 920;
-			var height = 390;
+			var width = 1000;
+			var height = 480;
 			var left = (window.screen.width / 2) - (width / 2);
 			var top = (window.screen.height /2) - (height / 2);
 			var popOption = "width="+width+", height="+height+", top="+top+", left="+left+", resizable=no, scrollbars=yes, status=no, toolbar=no, titlebar=yes, location=no,";

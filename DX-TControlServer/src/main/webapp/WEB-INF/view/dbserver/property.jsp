@@ -459,33 +459,48 @@
 							<table class="list pd_type3">
 								<caption>테이블스페이스 정보</caption>
 								<colgroup>
-									<col style="width: 20%;">
+									<col style="width: 15%;">
+									<col style="width: 10%;">
+									<col style="width: 5%;">
+									<col style="width: 5%;">
+									<col style="width: 5%;">
 									<col style="width: 15%;">
 									<col style="width: 15%;">
-									<col style="width: 15%;">
-									<col style="width: 15%;">
-									<col style="width: 20%;">
+									<col style="width: 10%;">
+									<col style="width: 10%;">
+									<col style="width: 10%;">
 								</colgroup>
 								<thead>
 									<tr>
-										<th scope="col">Name</th>
-										<th scope="col">Owner</th>
-										<th scope="col">Location</th>
-										<th scope="col">Options</th>
-										<th scope="col">Size</th>
-										<th scope="col">Description</th>
+										<th scope="col" colspan="4">파일시스템</th>
+										<th scope="col" colspan="5">테이블스페이스</th>
 									</tr>
 								</thead>
 								<tbody>
-									
+									<tr>
+										<td>Filesystem</td>
+										<td>Mounted on</td>
+										<td>Total size</td>
+										<td>Used</td>
+										<td>Name</td>
+										<td>Owner</td>
+										<td>Location</td>
+										<td>Options</td>
+										<td>Size</td>
+										<td>Description</td>
+									</tr>
 									<c:forEach var="tablespaceinfo" items="${result.CMD_TABLESPACE_INFO}">
 										<tr>
-											<td>${tablespaceinfo.Name}</td>
-											<td>${tablespaceinfo.Owner}</td>
-											<td>${tablespaceinfo.Location}</td>
-											<td>${tablespaceinfo.Options}</td>
-											<td>${tablespaceinfo.Size}</td>
-											<td>${tablespaceinfo.Description}</td>
+											<td style="text-align: left; padding: 4px 16px;">${tablespaceinfo.filesystem}</td>
+											<td style="text-align: left; padding: 4px 16px;">${tablespaceinfo.mounton}</td>
+											<td>${tablespaceinfo.fsize}</td>
+											<td>${tablespaceinfo.used}</td>
+											<td>${tablespaceinfo.name}</td>
+											<td>${tablespaceinfo.owner}</td>
+											<td style="text-align: left; padding: 4px 16px;">${tablespaceinfo.location}</td>
+											<td>${tablespaceinfo.options}</td>
+											<td>${tablespaceinfo.size}</td>
+											<td>${tablespaceinfo.description}</td>
 										</tr>
 									</c:forEach>	
 								</tbody>

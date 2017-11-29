@@ -1144,13 +1144,14 @@ public class ClientInfoCmmn {
 		return result;
 	}
 
-	public Map<String, Object> DbserverConnTest(JSONArray rows, String IP, int PORT) {
+	public Map<String, Object> DbserverConnTest(JSONObject serverObj, String IP, int PORT) {
+		
 		Map<String, Object> result = new HashMap<String, Object>();
 		try {
 			
 			JSONArray arrServerInfo = new JSONArray();
-
-			for(int i=0; i<rows.size(); i++){
+			arrServerInfo.add(serverObj);
+/*			for(int i=0; i<rows.size(); i++){
 				JSONObject jsonObject = (JSONObject) rows.get(i);
 				JSONObject serverObj = new JSONObject();			
 				
@@ -1161,7 +1162,7 @@ public class ClientInfoCmmn {
 				serverObj.put(ClientProtocolID.USER_ID, jsonObject.get("USER_ID").toString());
 				serverObj.put(ClientProtocolID.USER_PWD, jsonObject.get("USER_PWD").toString());
 				arrServerInfo.add(serverObj);
-			}
+			}*/
 			
 			JSONObject jObj = new JSONObject();
 			

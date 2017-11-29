@@ -47,12 +47,6 @@
 				ip.focus();
 				return false;
 			}
-			var prefix = document.getElementById("prefix");
-			var prms_ipmaskadr = document.getElementById("prms_ipmaskadr");
-			if(prefix.value == "" && prms_ipmaskadr.value == ""){
-				alert("prefix,Ipmask 중 하나를 입력하여 주십시오.");
-				return false;
-			}
 			if (prefix.value !="" &&!valid_numeric(prefix.value)) {
 				alert("Prefix는 숫자만 입력가능합니다.");
 				prefix.focus();
@@ -92,11 +86,14 @@
 		accessResult.ctf_tp_nm = $("#ctf_tp_nm").val();
 		accessResult.opt_nm = $("#opt_nm").val();
 
-		opener.fn_isnertSave(accessResult);   
-		window.close();
+		var returnCheck= opener.fn_isnertSave(accessResult);   
+		if(returnCheck!=false){
+			window.close();
+		}
+		
 		
 	}
-
+	
 	/* 수정 버튼 클릭시*/
 	function fn_update() {
 		if (!fn_accessControl())return false;
@@ -123,8 +120,10 @@
 		accessResult.ctf_tp_nm = $("#ctf_tp_nm").val();
 		accessResult.opt_nm = $("#opt_nm").val();
 
-		opener.fn_updateSave(accessResult);   
-		window.close();
+		var returnCheck=opener.fn_updateSave(accessResult);   
+		if(returnCheck!=false){
+			window.close();
+		}
 	}
 
 	$(window.document).ready(function() {
