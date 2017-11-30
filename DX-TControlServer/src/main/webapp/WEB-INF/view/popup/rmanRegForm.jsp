@@ -39,7 +39,7 @@ $(window.document).ready(function() {
 		$("#backupVolume").empty();
 		$( "#backupVolume" ).append("용량 : 0");
 		
-		/* $.ajax({
+		 $.ajax({
 			async : false,
 			url : "/selectPathInfo.do",
 		  	data : {
@@ -61,12 +61,14 @@ $(window.document).ready(function() {
 				}
 			},
 			success : function(result) {
-				alert(JSON.stringify(result));
-				document.getElementById("data_pth").value=result.DATA_PATH;
-				document.getElementById("log_file_pth").value=result.CMD_DBMS_PATH;
-				document.getElementById("bck_pth").value=result.DATA_PATH;
+				document.getElementById("data_pth").value=result[0].DATA_PATH;
+				document.getElementById("log_file_pth").value=result[1].PGRLOG;
+				document.getElementById("bck_pth").value=result[1].PGRBAK;
+				
+				fn_checkFolderVol(1);
+				fn_checkFolderVol(2);
 			}
-		}); */
+		}); 
 });
 /* ********************************************************
  * Rman Backup Insert
@@ -238,7 +240,7 @@ function checkFolder(keyType){
 							$( "#backupVolume" ).append("용량 : "+volume);
 						}
 					}else{
-						alert(data.SERVERIP+" 서버에 디렉토리가 존재하지 않습니다." );
+						alert("HA 구성된 클러스터 중 해당 경로가 존재하지 않는 클러스터가 있습니다." );
 					}
 				}else{
 					alert("경로체크 중 서버에러로 인하여 실패하였습니다.")

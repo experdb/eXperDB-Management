@@ -52,6 +52,36 @@ $(window.document).ready(
 		checkOid();
 
 		setTimeout("fn_get_object_list('','')", 100); 
+		
+		fn_checkFolderVol(1);
+		fn_checkFolderVol(2);
+
+		 /* $.ajax({
+			async : false,
+			url : "/selectPathInfo.do",
+		  	data : {
+		  		db_svr_id : db_svr_id
+		  	},
+			type : "post",
+			beforeSend: function(xhr) {
+		        xhr.setRequestHeader("AJAX", true);
+		     },
+			error : function(xhr, status, error) {
+				if(xhr.status == 401) {
+					alert("인증에 실패 했습니다. 로그인 페이지로 이동합니다.");
+					 location.href = "/";
+				} else if(xhr.status == 403) {
+					alert("세션이 만료가 되었습니다. 로그인 페이지로 이동합니다.");
+		             location.href = "/";
+				} else {
+					alert("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""));
+				}
+			},
+			success : function(result) {
+				document.getElementById("log_file_pth").value=result[1].PGDLOG;
+				document.getElementById("save_pth").value=result[1].PGDBAK;		
+			}
+		});  */
 
 });
 
@@ -77,7 +107,8 @@ function fn_update_work(){
 		  		usr_role_nm : $("#usr_role_nm").val(),
 		  		file_stg_dcnt : $("#file_stg_dcnt").val(),
 		  		bck_mtn_ecnt : $("#bck_mtn_ecnt").val(),
-		  		bck_filenm : $("#bck_filenm").val()
+		  		bck_filenm : $("#bck_filenm").val(),
+		  		log_file_pth : $("#log_file_pth").val()
 		  	},
 			type : "post",
 			beforeSend: function(xhr) {
@@ -209,28 +240,33 @@ function valCheck(){
 	if($("#db_id option:selected" ).val() == ""){
 		alert("백업할 Database를 선택하세요.");
 		return false;
-	}
-	if($("#wrk_nm").val() == ""){
+	}else if($("#wrk_nm").val() == ""){
 		alert("Work명을 입력해 주세요.");
 		$("#wrk_nm").focus();
 		return false;
-	}
-	if($("#wrk_exp").val() == ""){
+	}else if($("#wrk_exp").val() == ""){
 		alert("Work설명을 입력해 주세요.");
 		$("#wrk_exp").focus();
 		return false;
-	}
-	if($("#save_pth").val() == ""){
-		alert("저장경로를 입력해 주세요.");
+	}else if($("#log_file_pth").val() == ""){
+		alert("백업로그경로를 입력해 주세요.");
+		$("#log_file_pth").focus();
+		return false;
+	}else if($("#save_pth").val() == ""){
+		alert("백업경로를 입력해 주세요.");
 		$("#save_pth").focus();
 		return false;
-	}
-	if($("#check_path").val() != "Y"){
-		alert("유효한 경로를 입력후 경로체크를 해 주세요.");
+	}else if($("#check_path1").val() != "Y"){
+		alert("백업로그경로에 유효한 경로를 입력후 경로체크를 해 주세요.");
+		$("#log_file_pth").focus();
+		return false;
+	}else if($("#check_path2").val() != "Y"){
+		alert("백업경로에 유효한 경로를 입력후 경로체크를 해 주세요.");		
 		$("#save_pth").focus();
 		return false;
+	}else{
+		return true;
 	}
-	return true;
 }
 
 /* ********************************************************
@@ -439,10 +475,18 @@ function checkOid(){
 /* ********************************************************
  * 저장경로의 존재유무 체크
  ******************************************************** */
-function checkFolder(){
-	var save_pth = $("#save_pth").val();
-	if(save_pth == ""){
-		alert("저장경로를 입력해 주세요.");
+function checkFolder(keyType){
+	if(keyType == 1){
+		save_path = $("#log_file_pth").val();
+	}else{
+		save_path = $("#save_pth").val();
+	}
+	
+	if(save_path == "" && keyType == 1){
+		alert("백업로그 경로를 입력해 주세요.");
+		$("#log_file_pth").focus();
+	}else if(save_path == "" && keyType == 2){
+		alert("백업경로를 입력해 주세요.");
 		$("#save_pth").focus();
 	}else{
 		$.ajax({
@@ -470,10 +514,22 @@ function checkFolder(){
 			success : function(data) {
 				if(data.result.ERR_CODE == ""){
 					if(data.result.RESULT_DATA == 0){
-						$("#check_path").val("Y");
+						if(keyType == 1){
+							$("#check_path1").val("Y");
+						}else if(keyType == 2){
+							$("#check_path2").val("Y");
+						}
 						alert("유효한 경로입니다.");
+						var volume = data.result.RESULT_DATA.CAPACITY;
+						if(keyType == 1){
+							$("#logVolume").empty();
+							$( "#logVolume" ).append("용량 : "+volume);						
+						}else if(keyType == 2) {
+							$("#backupVolume").empty();
+							$( "#backupVolume" ).append("용량 : "+volume);
+						}
 					}else{
-						alert(data.SERVERIP+" 서버에 디렉토리가 존재하지 않습니다." );
+						alert("HA 구성된 클러스터 중 해당 경로가 존재하지 않는 클러스터가 있습니다." );
 					}
 				}else{
 					alert("경로체크 중 서버에러로 인하여 실패하였습니다.")
@@ -493,7 +549,8 @@ function checkFolder(){
 			<input type="hidden" name="db_svr_id" id="db_svr_id" value="${db_svr_id}"/>
 			<input type="hidden" name="wrk_id" id="wrk_id" value="${wrk_id}"/>
 			<input type="hidden" name="bck_wrk_id" id="bck_wrk_id" value="${bck_wrk_id}"/>
-			<input type="hidden" name="check_path" id="check_path" value="Y"/>
+			<input type="hidden" name="check_path1" id="check_path1" value="N"/>
+			<input type="hidden" name="check_path2" id="check_path2" value="N"/>
 			<table class="write">
 				<caption>Dump 백업 수정</caption>
 				<colgroup>
@@ -552,17 +609,17 @@ function checkFolder(){
 				</colgroup>
 				<tbody>
 					<tr>
-						<th scope="row" class="ico_t2">백업경로</th>
-						<td colspan="5"><input type="text" class="txt t4" name="save_pth" id="save_pth" style="width:650px" value="<c:out value="${workInfo[0].save_pth}"/>" onKeydown="$('#check_path').val('N')"/>
-							<span class="btn btnC_01"><button type="button" class= "btn_type_02" onclick="checkFolder()" style="width: 60px; margin-right: -60px; margin-top: 0;">경로체크</button></span>
+						<th scope="row" class="ico_t2">백업로그경로</th>
+						<td colspan="5"><input type="text" class="txt t4" name="log_file_pth" id="log_file_pth" style="width:650px" value="<c:out value="${workInfo[0].log_file_pth}"/>" onKeydown="$('#check_path1').val('N')"/>
+							<span class="btn btnC_01"><button type="button" class= "btn_type_02" onclick="checkFolder(1)" style="width: 60px; margin-right: -60px; margin-top: 0;">경로체크</button></span>							
 						</td>
 					</tr>
 					<tr>
-						<th scope="row" class="ico_t2">백업로그경로</th>
-						<td colspan="5"><input type="text" class="txt t4" name="log_file_pth" id="log_file_pth" style="width:650px" onKeydown="$('#check_path').val('N')"/>
-							<span class="btn btnC_01"><button type="button" class= "btn_type_02" onclick="checkFolder()" style="width: 60px; margin-right: -60px; margin-top: 0;">경로체크</button></span>							
+						<th scope="row" class="ico_t2">백업경로</th>
+						<td colspan="5"><input type="text" class="txt t4" name="save_pth" id="save_pth" style="width:650px" value="<c:out value="${workInfo[0].save_pth}"/>" onKeydown="$('#check_path2').val('N')"/>
+							<span class="btn btnC_01"><button type="button" class= "btn_type_02" onclick="checkFolder(2)" style="width: 60px; margin-right: -60px; margin-top: 0;">경로체크</button></span>
 						</td>
-					</tr>
+					</tr>					
 					<tr>
 						<th scope="row" class="ico_t2">파일포맷</th>
 						<td>

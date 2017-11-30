@@ -319,6 +319,7 @@ function fn_dbServerConnTest(){
 						table.cell(i, 4).data(result.result_data[i].CONNECT_YN).draw();					
 						table.cell(i, 5).data(result.result_data[i].CMD_HOSTNAME).draw();	
 					}
+					alert(result.result_data[i].CONNECT_YN);
 					if(result.result_data[i].MASTER_GBN == "N" || result.result_data[i].CONNECT_YN == "N"){
 							connCheck = "fail"
 							alert("[ 연결 테스트 실패! ]");
@@ -543,9 +544,9 @@ function checkPghome(){
 					if(data.result.RESULT_DATA.IS_DIRECTORY== 0){
 						$("#check_path").val("Y");
 						pghomeCheck = "success";
-						alert("입력하신 경로는 존재합니다.");
+						alert("유효한 경로입니다.");
 					}else{
-						alert("입력하신 경로는 존재하지 않습니다.");
+						alert("HA 구성된 클러스터 중 해당 경로가 존재하지 않는 클러스터가 있습니다.");
 					}
 				}else{
 					alert("경로체크 중 서버에러로 인하여 실패하였습니다.")

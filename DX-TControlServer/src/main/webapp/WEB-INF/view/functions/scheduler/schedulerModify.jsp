@@ -473,7 +473,7 @@ function fn_updateSchedule(){
 				}
 			},
 			success : function(result) {
-				if(confirm("수정되었습니다. 스케줄 실행 하시겠습니까?")){
+				if(confirm("수정되었습니다. 스케줄을 실행 하시겠습니까?")){
 					fn_scheduleReStart();
 				}else{
 				}

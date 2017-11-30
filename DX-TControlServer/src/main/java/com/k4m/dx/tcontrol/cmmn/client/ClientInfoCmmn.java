@@ -1204,7 +1204,7 @@ public class ClientInfoCmmn {
 					String strDBHostName = (String) outObj.get(ClientProtocolID.CMD_HOSTNAME); 
 					
 					System.out.println(strServerIP + " " + strServerPort + " " + strDatabaseName + " " 
-							+ strMasterGbn + " " + strConnectYn);
+							+ strMasterGbn + " " + strConnectYn + " " + strDBHostName);
 					
 					result.put("result_code", strResultCode);
 					result.put("result_data", arrResult);
@@ -1289,5 +1289,44 @@ public class ClientInfoCmmn {
 			e.printStackTrace();
 		}
 		return result;
+	}
+	
+	
+	public HashMap back_path_call(String IP, int PORT) {
+		HashMap resultHp = null;
+		try {			
+			JSONObject jObj = new JSONObject();	
+			jObj.put(ClientProtocolID.DX_EX_CODE, ClientTranCodeType.DxT019);
+		
+			JSONObject objList;
+			
+			ClientAdapter CA = new ClientAdapter(IP, PORT);
+			CA.open(); 
+
+			objList = CA.dxT019(jObj);
+			
+			CA.close();
+			
+			String strErrMsg = (String)objList.get(ClientProtocolID.ERR_MSG);
+			String strErrCode = (String)objList.get(ClientProtocolID.ERR_CODE);
+			String strDxExCode = (String)objList.get(ClientProtocolID.DX_EX_CODE);
+			String strResultCode = (String)objList.get(ClientProtocolID.RESULT_CODE);
+			System.out.println("RESULT_CODE : " +  strResultCode);
+			System.out.println("ERR_CODE : " +  strErrCode);
+			System.out.println("ERR_MSG : " +  strErrMsg);
+
+			resultHp = (HashMap) objList.get(ClientProtocolID.RESULT_DATA);
+						
+			Iterator<String> keys = resultHp.keySet().iterator();
+
+	        while( keys.hasNext() ){
+	            String key = keys.next();
+	            System.out.println( String.format("키 : %s, 값 : %s", key, resultHp.get(key)) );
+	        }
+				
+		} catch(Exception e) {
+			e.printStackTrace();
+		}
+		return resultHp;
 	}
 }
