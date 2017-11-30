@@ -463,13 +463,13 @@
 							<table class="list3">
 								<caption>테이블스페이스 정보</caption>
 								<colgroup>
-									<col style="width: 15%;">
+									<col style="width: 12%;">
 									<col style="width: 10%;">
-									<col style="width: 5%;">
-									<col style="width: 5%;">
-									<col style="width: 5%;">
-									<col style="width: 15%;">
-									<col style="width: 15%;">
+									<col style="width: 8%;">
+									<col style="width: 8%;">
+									<col style="width: 10%;">
+									<col style="width: 10%;">
+									<col style="width: 12%;">
 									<col style="width: 10%;">
 									<col style="width: 10%;">
 									<col style="width: 10%;">
