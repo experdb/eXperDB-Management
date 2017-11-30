@@ -24,37 +24,29 @@
 <script type="text/javascript" src="../js/jquery-1.9.1.min.js"></script>
 <script type="text/javascript" src="../js/common.js"></script>
 <script>
-	/*Validation*/
-	function fn_pwdValidation() {
+	/* PW Validation*/
+	function fn_pwValidation(str){
+		 var reg_pwd = /^.*(?=.{6,20})(?=.*[0-9])(?=.*[a-zA-Z]).*$/;
+		 if(!reg_pwd.test(str)){
+		 	alert("영문,숫자를 혼합하여 6~20자 이내를 입력해 주십시오.");
+		 	return false;
+		 }
+		 	return true;
+	}
+
+	/*확인버튼 클릭시*/
+	function fn_update() {
 		var nowpwd = document.getElementById("nowpwd");
+		var newpwd = document.getElementById("newpwd");
+		var pwd = document.getElementById("pwd");
 		if (nowpwd.value == "") {
 			alert("현재 패스워드를 입력하여 주십시오.");
 			nowpwd.focus();
 			return false;
 		}
-		var newpwd = document.getElementById("newpwd");
-		if (newpwd.value == "") {
-			alert("새 패스워드를 입력하여 주십시오.");
-			newpwd.focus();
-			return false;
-		}
-		var pwd = document.getElementById("pwd");
-		if (pwd.value == "") {
-			alert("새 패스워드 확인를 입력하여 주십시오.");
-			pwd.focus();
-			return false;
-		}
-		if (newpwd.value != pwd.value) {
-			alert("새 패스워드 정보가 일치하지 않습니다.");
-			return false;
-		}
-		return true;
-	}
 
-	/*확인버튼 클릭시*/
-	function fn_update() {
-		if (!fn_pwdValidation())
-			return false;
+		if (!fn_pwValidation(nowpwd.value))return false;
+		
 		$.ajax({
 			url : '/checkPwd.do',
 			type : 'post',
@@ -63,6 +55,30 @@
 			},
 			success : function(result) {
 				if (result) {
+					if (newpwd.value == "") {
+						alert("새 패스워드를 입력하여 주십시오.");
+						newpwd.focus();
+						return false;
+					}
+					if (!fn_pwValidation(newpwd.value))return false;
+					
+					if (pwd.value == "") {
+						alert("새 패스워드 확인를 입력하여 주십시오.");
+						pwd.focus();
+						return false;
+					}
+					if (!fn_pwValidation(pwd.value))return false;
+					
+					if (newpwd.value != pwd.value) {
+						alert("새 패스워드 정보가 일치하지 않습니다.");
+						return false;
+					}
+					
+					if(nowpwd.value == newpwd.value){
+						alert("현재 패스워드 정보와 새 패스워드 정보가 일치합니다.");
+						return false;
+					}
+					
 					$.ajax({
 						url : '/updatePwd.do',
 						type : 'post',
@@ -89,7 +105,7 @@
 						}
 					});
 				} else {
-					alert("현재 비밀번호가 틀렸습니다.");
+					alert("현재 패스워드를 정확히 입력해 주십시오.");
 				}
 
 			},
@@ -126,8 +142,7 @@
 				<tbody>
 					<tr>
 						<th scope="row" class="ico_t1">현재 패스워드</th>
-						<td><input type="password" class="txt" name="nowpwd"
-							id="nowpwd" /></td>
+						<td><input type="password" class="txt" name="nowpwd" id="nowpwd" /></td>
 					</tr>
 				</tbody>
 			</table>
@@ -141,8 +156,7 @@
 					<tbody>
 						<tr>
 							<th scope="row" class="ico_t1">새 패스워드</th>
-							<td><input type="password" class="txt" name="newpwd"
-								id="newpwd" /></td>
+							<td><input type="password" class="txt" name="newpwd" id="newpwd" /></td>
 						</tr>
 						<tr>
 							<th scope="row" class="ico_t1">새 패스워드 확인</th>

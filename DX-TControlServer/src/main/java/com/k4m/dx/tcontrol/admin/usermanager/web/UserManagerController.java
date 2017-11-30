@@ -302,7 +302,7 @@ public class UserManagerController {
 			HttpSession session = request.getSession();
 			String usr_id = (String)session.getAttribute("usr_id");
 			userVo.setLst_mdfr_id(usr_id);
-			UserVO userInfo= (UserVO)userManagerService.selectDetailUserManager(usr_id);
+			UserVO userInfo= (UserVO)userManagerService.selectDetailUserManager(userVo.getUsr_id());
 			if(userInfo.getPwd().equals(userVo.getPwd())){
 				userVo.setPwd(userVo.getPwd());
 			}else{
