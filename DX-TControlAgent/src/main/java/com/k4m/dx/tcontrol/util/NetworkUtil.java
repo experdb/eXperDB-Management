@@ -45,7 +45,7 @@ public class NetworkUtil {
 					//System.out.println("InterfaceBrodacast:"+add.getBroadcast()+"\n");
 					
 					//listIP.add(add.getAddress());
-					strHostAddress += add.getAddress().getHostAddress() + "|";
+					strHostAddress = add.getAddress().getHostAddress();
 					
 					CMD_MACADDRESS = getMacAddress(add.getAddress());
 					

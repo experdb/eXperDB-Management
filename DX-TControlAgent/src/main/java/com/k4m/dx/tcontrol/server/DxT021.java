@@ -391,8 +391,10 @@ public class DxT021 extends SocketCtl{
 		String default_filesystem = "";
 		String default_fsize = "";
 		
+		socketLogger.info("##################### system mapping start ");
+		
 		for(HashMap hp:flist) {
-			HashMap hpMapping = new HashMap();
+			
 			
 			String mounton = (String) hp.get("mounton");
 			String use = (String) hp.get("use");
@@ -408,43 +410,9 @@ public class DxT021 extends SocketCtl{
 				default_used = used;
 				default_filesystem = filesystem;
 				default_fsize = fsize;
-			}
-			
-			int intMappTs = 0;
-			for(HashMap hpSpace: listTableSpaceInfo) {
-				String Name = (String) hpSpace.get("Name");
-				String Owner = (String) hpSpace.get("Owner");
-				String Location = (String) hpSpace.get("Location");
-				String Options = (String) hpSpace.get("Options");
-				String Size = (String) hpSpace.get("Size");
-				String Description = (String) hpSpace.get("Description");
 				
-				if(Name.equals("pg_default")) Location = pg_default;
-				if(Name.equals("pg_global")) Location = pg_global;
+				HashMap hpMapping = new HashMap();
 				
-				if(Location.contains(filesystem)) {
-					hpMapping.put("mounton", mounton);
-					hpMapping.put("use", use);
-					hpMapping.put("avail", avail);
-					hpMapping.put("used", used);
-					hpMapping.put("filesystem", filesystem);
-					hpMapping.put("fsize", fsize);
-					
-					hpMapping.put("name", Name);
-					hpMapping.put("owner", Owner);
-					hpMapping.put("location", Location);
-					hpMapping.put("options", Options);
-					hpMapping.put("size", Size);
-					hpMapping.put("description", Description);
-					
-					arrMapping.add(hpMapping);
-					
-					intMappTs ++;
-				}
-
-			}
-			
-			if(intMappTs == 0) {
 				hpMapping.put("mounton", mounton);
 				hpMapping.put("use", use);
 				hpMapping.put("avail", avail);
@@ -460,11 +428,70 @@ public class DxT021 extends SocketCtl{
 				hpMapping.put("description", "");
 				
 				arrMapping.add(hpMapping);
+			} else {
+				
+				
+				int intMappTs = 0;
+				for(HashMap hpSpace: listTableSpaceInfo) {
+					String Name = (String) hpSpace.get("Name");
+					String Owner = (String) hpSpace.get("Owner");
+					String Location = (String) hpSpace.get("Location");
+					String Options = (String) hpSpace.get("Options");
+					String Size = (String) hpSpace.get("Size");
+					String Description = (String) hpSpace.get("Description");
+					
+					if(Name.equals("pg_default")) Location = pg_default;
+					if(Name.equals("pg_global")) Location = pg_global;
+					
+					if(!mounton.equals("/") && Location.contains(mounton)) {
+						HashMap hpMapping = new HashMap();
+						
+						hpMapping.put("mounton", mounton);
+						hpMapping.put("use", use);
+						hpMapping.put("avail", avail);
+						hpMapping.put("used", used);
+						hpMapping.put("filesystem", filesystem);
+						hpMapping.put("fsize", fsize);
+						
+						hpMapping.put("name", Name);
+						hpMapping.put("owner", Owner);
+						hpMapping.put("location", Location);
+						hpMapping.put("options", Options);
+						hpMapping.put("size", Size);
+						hpMapping.put("description", Description);
+						
+						arrMapping.add(hpMapping);
+						
+						intMappTs ++;
+					}
+	
+				}
+			
+				if(intMappTs == 0) {
+
+					HashMap hpMapping = new HashMap();
+					
+					hpMapping.put("mounton", mounton);
+					hpMapping.put("use", use);
+					hpMapping.put("avail", avail);
+					hpMapping.put("used", used);
+					hpMapping.put("filesystem", filesystem);
+					hpMapping.put("fsize", fsize);
+					
+					hpMapping.put("name", "");
+					hpMapping.put("owner", "");
+					hpMapping.put("location", "");
+					hpMapping.put("options", "");
+					hpMapping.put("size", "");
+					hpMapping.put("description", "");
+					
+					arrMapping.add(hpMapping);
+				}
 			}
 		}
 		
 		for(HashMap hpSpace: listTableSpaceInfo) {
-			HashMap hpMapping = new HashMap();
+			
 			
 			String Name = (String) hpSpace.get("Name");
 			String Owner = (String) hpSpace.get("Owner");
@@ -478,15 +505,17 @@ public class DxT021 extends SocketCtl{
 			
 			int intContainCnt = 0;
 			for(HashMap hp:flist) {
-
+				String mounton = (String) hp.get("mounton");
 				String filesystem = (String) hp.get("filesystem");
 				
-				if(!Location.contains(filesystem)) {
+				if(!mounton.equals("/") && Location.contains(mounton)) {
 					intContainCnt++;
 				}
 			}
 			
-			if(intContainCnt > 0) {
+			if(intContainCnt == 0) {
+				HashMap hpMapping = new HashMap();
+
 				hpMapping.put("mounton", default_mounton);
 				hpMapping.put("use", default_use);
 				hpMapping.put("avail", default_avail);
@@ -503,6 +532,8 @@ public class DxT021 extends SocketCtl{
 				
 				arrMapping.add(hpMapping);
 			}
+			
+			socketLogger.info("################### system mapping end ");
 		}
 		return arrMapping;
 	}
