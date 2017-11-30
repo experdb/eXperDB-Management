@@ -111,7 +111,7 @@
  				db_svr_id : v_db_svr_id,
  				dwLen : v_dwLen,
  				file_name : v_file_name,
- 				startLen : "500000"
+ 				startLen : "5000000"
  			},
 			beforeSend: function(xhr) {
 		        xhr.setRequestHeader("AJAX", true);
@@ -133,11 +133,14 @@
 				//var v_isData = v_afterData + "\n" + result.data;
 				//$("#auditlog").val(v_isData);
 				
-				var obj=document.getElementById("auditlog");
-				obj.value += result.data;
+				//var obj=document.getElementById("auditlog");
+				//obj.value += result.data;
 				
 				//var v_fChrSize = Number($("#fChrSize").val()) + result.fChrSize;
 				//$("#fChrSize").val(v_fChrSize);
+				
+				$("#auditlog").append(result.data); 
+
 				
 				var v_fileSize = Number($("#fSize").val()) + result.fSize;
 
@@ -149,7 +152,7 @@
 				document.getElementById("fSizeDev").innerHTML = v_fileSize;
 				
 
-				fn_Show();
+				//fn_Show();
 			}
 		});
 	}
@@ -196,16 +199,21 @@
 				<tbody>
 					<tr>
 						<td>
+						<!--  
+						<div class="overflow_area" name="auditlog"  id="auditlog">
+						-->
+						</div>
+						
 							<div class="textarea_grp">
 								
 								<textarea name="auditlog"  id="auditlog" style="height:550px"></textarea>
 								
 							</div>
-							
+					  
 						</td>
 					</tr>
 					<tr>
-						<td> <div id="fSizeDev"></div>
+						<td><p> <div id="fSizeDev"></div></p>
 						</td>
 					</tr>
 				</tbody>
