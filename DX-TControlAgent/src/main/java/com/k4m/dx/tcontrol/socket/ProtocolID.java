@@ -160,6 +160,9 @@ public class ProtocolID {
 	public static final String DW_LEN = "DW_LEN";
 	public static final String END_FLAG = "END_FLAG";
 	
+	public static final String SEEK = "SEEK";
+	public static final String READLINE = "READLINE";
+	
 	public static final String PGHOME = "PGHOME";
 	public static final String PGDATA = "PGDATA";
 	public static final String PGRBAK = "PGRBAK";

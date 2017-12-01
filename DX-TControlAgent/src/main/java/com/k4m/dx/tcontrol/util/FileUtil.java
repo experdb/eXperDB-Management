@@ -7,6 +7,7 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.FileReader;
 import java.io.IOException;
+import java.io.RandomAccessFile;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -53,6 +54,73 @@ public class FileUtil {
 		return strView;
 	}
 	
+	public static HashMap getRandomAccessFileView(File file, int intReadLine, int intSeekPoint) throws Exception {
+		String strView = "";
+
+		HashMap hp = new HashMap();
+		RandomAccessFile rdma = null;
+		String strEndFlag = "0";
+		try {
+			rdma = new RandomAccessFile(file,"r");
+			
+			//int intStartLine = intReadLine * intDwlenCount;
+			
+			rdma.seek(intSeekPoint);
+			String temp; 
+			 long recnum = 1;
+	        while((temp = rdma.readLine()) != null)  
+	        {  
+
+	            
+	            strView +=  recnum + " " + new String(temp.getBytes("ISO-8859-1"), "UTF-8") + "<br>";
+
+
+	            if(((++recnum)%(intReadLine+1)) == 0)  
+	            {  
+	                break;  
+	            }  
+	        }  
+	        
+	        if(recnum != (intReadLine+1)) strEndFlag = "1";
+	        
+	        System.out.println("recnum : " + recnum);
+	        System.out.println("intReadLine : " + intReadLine);
+	        
+	        
+			hp.put("file_desc", strView);
+			hp.put("file_size", strView.length());
+			hp.put("seek", rdma.getFilePointer());
+			hp.put("end_flag", strEndFlag);
+
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			if (rdma != null)
+				try {
+					rdma.close();
+				} catch (IOException e) {
+				}
+		}
+
+		return hp;
+	}
+	
+	
+    private static long readLines(RandomAccessFile rf, int intReadline) throws IOException {  
+        long recnum = 1;  
+        String temp;  
+        while((temp = rf.readLine()) != null)  
+        {  
+            System.out.println("Line " + recnum + " : " + temp);  
+            if(((++recnum)%intReadline) == 0)  
+            {  
+                break;  
+            }  
+        }  
+        return rf.getFilePointer();  
+    }  
+      
+
 	
 	public static HashMap getFileView(File file, int intStartLength, int intDwlenCount) throws Exception {
 		String strView = "";

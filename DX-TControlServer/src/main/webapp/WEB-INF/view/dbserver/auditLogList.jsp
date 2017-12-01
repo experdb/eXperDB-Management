@@ -118,7 +118,7 @@ function fn_chkExtName(extName) {
 		} else {
 			window.open("/audit/auditLogView.do?" + param  ,"popLogView","location=no,menubar=no,resizable=yes,scrollbars=yes,status=no,width=915,height=800,top=0,left=0");
 		} */
-		window.open("/audit/auditLogView.do?" + param  ,"popLogView","location=no,menubar=no,resizable=yes,scrollbars=yes,status=no,width=915,height=800,top=0,left=0");
+		window.open("/audit/auditLogView.do?" + param  ,"popLogView","location=no,menubar=no,resizable=yes,scrollbars=yes,status=no,width=1200,height=970,top=0,left=0");
 	}
 	
 	function fn_download(file_name, file_size) {

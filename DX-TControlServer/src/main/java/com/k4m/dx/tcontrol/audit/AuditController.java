@@ -594,9 +594,9 @@ public class AuditController {
 			String strDbSvrId = request.getParameter("db_svr_id");
 			int db_svr_id = Integer.parseInt(strDbSvrId);
 			
-			int intDwlen = 1;
-			String dwLen = request.getParameter("dwLen");
-			String startLen = request.getParameter("startLen");
+	
+			String strSeek = request.getParameter("seek");
+			String strReadLine = request.getParameter("readLine");
 			//intDwlen = Integer.parseInt(dwLen);
 			
 			DbServerVO schDbServerVO = new DbServerVO();
@@ -629,8 +629,8 @@ public class AuditController {
 			jObj.put(ClientProtocolID.COMMAND_CODE, ClientProtocolID.COMMAND_CODE_V);
 			jObj.put(ClientProtocolID.FILE_DIRECTORY, strDirectory);
 			jObj.put(ClientProtocolID.FILE_NAME, strFileName);
-			jObj.put(ClientProtocolID.DW_LEN, dwLen);
-			jObj.put(ClientProtocolID.START_LEN, startLen);
+			jObj.put(ClientProtocolID.SEEK, strSeek);
+			jObj.put(ClientProtocolID.READLINE, strReadLine);
 			
 			String IP = dbServerVO.getIpadr();
 			int PORT = agentInfo.getSOCKET_PORT();
@@ -654,12 +654,12 @@ public class AuditController {
 			String strEndFlag = (String)objList.get(ClientProtocolID.END_FLAG);
 			strBuffer = (String)objList.get(ClientProtocolID.RESULT_DATA);
 			
-			intDwlen = (int)objList.get(ClientProtocolID.DW_LEN);
+			Long lngSeek= (Long)objList.get(ClientProtocolID.SEEK);
 			
 			hp.put("data", strBuffer);
 			hp.put("fSize", strBuffer.length());
 			//hp.put("fChrSize", intLastLength - intFirstLength);
-			hp.put("dwLen", intDwlen);
+			hp.put("seek", lngSeek.toString());
 			hp.put("endFlag", strEndFlag);
 			
 		} catch (Exception e) {

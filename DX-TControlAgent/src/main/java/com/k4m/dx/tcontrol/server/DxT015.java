@@ -60,8 +60,8 @@ public class DxT015 extends SocketCtl{
 		String strCommandCode = (String) jObj.get(ProtocolID.COMMAND_CODE);
 		String strLogFileDir = (String) jObj.get(ProtocolID.FILE_DIRECTORY);
 		
-		String startLen = (String) jObj.get(ProtocolID.START_LEN);
-		String dwLen = (String) jObj.get(ProtocolID.DW_LEN);
+		String strReadLine = (String) jObj.get(ProtocolID.READLINE);
+		String strSeek = (String) jObj.get(ProtocolID.SEEK);
 
 
 		List<Map<String, Object>> outputArray = new ArrayList<Map<String, Object>>();
@@ -135,7 +135,9 @@ public class DxT015 extends SocketCtl{
 				File inFile = new File(strLogFileDir, strFileName);
 				
 				//byte[] buffer = FileUtil.getFileToByte(inFile);
-				HashMap hp = FileUtil.getFileView(inFile, Integer.parseInt(startLen), Integer.parseInt(dwLen));
+				//HashMap hp = FileUtil.getFileView(inFile, Integer.parseInt(startLen), Integer.parseInt(dwLen));
+				//HashMap hp = FileUtil.getRandomAccessFileView(inFile, Integer.parseInt(startLen), Integer.parseInt(dwLen));
+				HashMap hp = FileUtil.getRandomAccessFileView(inFile, Integer.parseInt(strReadLine), Integer.parseInt(strSeek));
 				
 				outputObj.put(ProtocolID.DX_EX_CODE, strDxExCode);
 				outputObj.put(ProtocolID.RESULT_CODE, strSuccessCode);
@@ -143,7 +145,7 @@ public class DxT015 extends SocketCtl{
 				outputObj.put(ProtocolID.ERR_MSG, strErrMsg);
 				outputObj.put(ProtocolID.RESULT_DATA, hp.get("file_desc"));
 				outputObj.put(ProtocolID.FILE_SIZE, hp.get("file_size"));
-				outputObj.put(ProtocolID.DW_LEN, hp.get("dw_len"));
+				outputObj.put(ProtocolID.SEEK, hp.get("seek"));
 				outputObj.put(ProtocolID.END_FLAG, hp.get("end_flag"));
 				
 				send(outputObj);
@@ -235,6 +237,24 @@ public class DxT015 extends SocketCtl{
             // TODO Auto-generated method stub
             return o1.getLastModified() < o2.getLastModified() ? -1 : o1.getLastModified() > o2.getLastModified() ? 1:0;
         }        
+    }
+    
+    public static void main(String[] args) throws Exception {
+		String strLogFileDir = "C:\\logs\\";
+		String strFileName = "webconsole.log.2017-05-31";
+		String startLen = "100";
+		String seek = "0";
+		
+		File inFile = new File(strLogFileDir, strFileName);
+		
+		//byte[] buffer = FileUtil.getFileToByte(inFile);
+		//HashMap hp = FileUtil.getFileView(inFile, Integer.parseInt(startLen), Integer.parseInt(dwLen));
+		HashMap hp = FileUtil.getRandomAccessFileView(inFile, Integer.parseInt(startLen), Integer.parseInt(seek));
+		
+		System.out.println(hp.get("file_desc"));
+		System.out.println(hp.get("file_size"));
+		System.out.println(hp.get("seek"));
+		System.out.println(hp.get("end_flag"));
     }
 
 }

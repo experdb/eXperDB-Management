@@ -358,6 +358,7 @@ input[type="text"]:disabled, input[type="text"].disabled {background:#e4e9ec;col
 .overflow_area{height:365px;overflow-y:auto;border:1px solid #b8c3c6;}
 .overflow_area2{position:relative;top:0;left:0;height:365px;overflow-y:auto;border:1px solid #b8c3c6;padding-left:101px;}
 .overflow_area2 .row_th{width:101px;min-height:370px;position:absolute;top:0;left:0;border-right:1px solid #b8c3c6;padding-top:14px;text-align:center;color:#324452;font-size:14px;}
+.overflow_area3{height:700px;overflow-y:auto;border:1px solid #b8c3c6;}
 .overflow_area > table.list,
 .overflow_area > table.list2{border:none;}
 .overflow_area > table.list tr td,

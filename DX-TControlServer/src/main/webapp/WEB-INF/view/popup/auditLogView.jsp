@@ -90,7 +90,7 @@
 	
 	function fn_addView() {
 		var v_db_svr_id = $("#db_svr_id").val();
-		var v_dwLen = $("#dwLen").val();
+		var v_seek = $("#seek").val();
 		var v_file_name = $("#file_name").val();
 
 		var v_endFlag = $("#endFlag").val();
@@ -109,9 +109,9 @@
 			type : "post",
  			data : {
  				db_svr_id : v_db_svr_id,
- 				dwLen : v_dwLen,
+ 				seek : v_seek,
  				file_name : v_file_name,
- 				startLen : "5000000"
+ 				readLine : "5000"
  			},
 			beforeSend: function(xhr) {
 		        xhr.setRequestHeader("AJAX", true);
@@ -128,24 +128,13 @@
 				}
 			},
 			success : function(result) {
-				//alert(result.fSize);
-				//var v_afterData = $("#auditlog").val();
-				//var v_isData = v_afterData + "\n" + result.data;
-				//$("#auditlog").val(v_isData);
-				
-				//var obj=document.getElementById("auditlog");
-				//obj.value += result.data;
-				
-				//var v_fChrSize = Number($("#fChrSize").val()) + result.fChrSize;
-				//$("#fChrSize").val(v_fChrSize);
-				
+
 				$("#auditlog").append(result.data); 
 
-				
 				var v_fileSize = Number($("#fSize").val()) + result.fSize;
 
 				$("#fSize").val(v_fileSize);
-				$("#dwLen").val(result.dwLen);
+				$("#seek").val(result.seek);
 				$("#endFlag").val(result.endFlag);
 				
 				v_fileSize = byteConvertor(v_fileSize);
@@ -172,7 +161,7 @@
 	}
 
 </script>
-<input type="hidden" id="dwLen" name="dwLen" value="1">
+<input type="hidden" id="seek" name="seek" value="0">
 <input type="hidden" id="db_svr_id" name="db_svr_id" value="${db_svr_id}">
 <input type="hidden" id="file_name" name="file_name" value="${file_name}">
 <input type="hidden" id="fSize" name="fSize">
@@ -199,22 +188,32 @@
 				<tbody>
 					<tr>
 						<td>
-						<!--  
-						<div class="overflow_area" name="auditlog"  id="auditlog">
-						-->
+						 
+						<div class="overflow_area3" name="auditlog"  id="auditlog">
 						</div>
 						
+						<!-- 
 							<div class="textarea_grp">
 								
 								<textarea name="auditlog"  id="auditlog" style="height:550px"></textarea>
 								
 							</div>
-					  
+					  -->
 						</td>
 					</tr>
 					<tr>
-						<td><p> <div id="fSizeDev"></div></p>
+						<td>
+							<table>
+								<tr>
+									<td>파일명 : &nbsp;&nbsp;</td>
+									<td><b>${file_name}</b> &nbsp;&nbsp;</td>
+									<td>size : </td>
+									<td><b><div id="fSizeDev"></div></b></td>
+								</tr>
+							</table>
+
 						</td>
+
 					</tr>
 				</tbody>
 			</table>
