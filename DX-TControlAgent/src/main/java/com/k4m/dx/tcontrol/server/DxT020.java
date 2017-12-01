@@ -137,6 +137,8 @@ public class DxT020 extends SocketCtl{
 		+ "_" + (String)serverInfoObj.get(ProtocolID.USER_ID)
 		+ "_" + (String)serverInfoObj.get(ProtocolID.USER_PWD);
 		
+		socketLogger.info("@@@@ poolName : " + poolName);
+		
 		Connection connDB = null;
 		SqlSession sessDB = null;
 		
