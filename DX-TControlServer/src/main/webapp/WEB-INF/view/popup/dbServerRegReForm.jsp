@@ -274,11 +274,13 @@ function fn_dbServerConnTest(){
 		success : function(result) {
 			if(result.legnth != 0 ){
 				for(var i=0; i<result.length; i++){
-					if(result[i].result_code == 0){					
+					if(result[i].result_code == 0){				
 						if(table.rows().data()[i].ipadr == result[i].result_data[0].SERVER_IP){
 							table.cell(i, 3).data(result[i].result_data[0].MASTER_GBN).draw();
 							table.cell(i, 4).data(result[i].result_data[0].CONNECT_YN).draw();
-							table.cell(i, 5).data(result[i].result_data[0].CMD_HOSTNAME).draw();	
+							if(result[i].result_data[0].CMD_HOSTNAME != undefined){
+								table.cell(i, 5).data(result[i].result_data[0].CMD_HOSTNAME).draw();
+							}
 						}
 						if(result[i].result_data[0].MASTER_GBN == "N" || result[i].result_data[0].CONNECT_YN == "N"){
 								connCheck = "fail"
@@ -448,9 +450,9 @@ function checkPghome(){
 					if(data.result.RESULT_DATA.IS_DIRECTORY == 0){
 						$("#check_path").val("Y");
 						pghomeCheck = "success";
-						alert("입력하신 경로는 존재합니다.");
+						alert("유효한 경로입니다.");
 					}else{
-						alert("입력하신 경로는 존재하지 않습니다.");
+						alert("HA 구성된 클러스터 중 해당 경로가 존재하지 않는 클러스터가 있습니다.");
 					}
 				}else{
 					alert("경로체크 중 서버에러로 인하여 실패하였습니다.")

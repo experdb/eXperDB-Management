@@ -2,6 +2,7 @@ package com.k4m.dx.tcontrol.backup.web;
 
 import java.io.IOException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.HashMap;
 import java.util.List;
@@ -1100,8 +1101,58 @@ public class BackupController {
 				e.printStackTrace();
 			}
 		}
-		
-
 		return result;
+	}	
+	
+	
+	/**
+	 * PATH  정보 호출
+	 * 
+	 * @return resultSet
+	 * @throws Exception
+	 */
+	@RequestMapping(value = "/selectPathInfo.do")
+	@ResponseBody
+	public List<Map<String, Object>> selectPathInfo (HttpServletRequest request) {
+		List<Map<String, Object>> list = new ArrayList<Map<String, Object>>();
+		
+		Map<String, Object> pgdataResult =new HashMap<String, Object>();
+		Map<String, Object> bckpathResult =new HashMap<String, Object>();
+		JSONObject serverObj = new JSONObject();		
+	
+		try {
+			AES256 dec = new AES256(AES256_KEY.ENC_KEY);
+			
+			int db_svr_id = Integer.parseInt(request.getParameter("db_svr_id"));
+			DbServerVO schDbServerVO = new DbServerVO();
+			schDbServerVO.setDb_svr_id(db_svr_id);
+			DbServerVO dbServerVO = (DbServerVO) cmmnServerInfoService.selectServerInfo(schDbServerVO);
+			String strIpAdr = dbServerVO.getIpadr();
+			AgentInfoVO vo = new AgentInfoVO();
+			vo.setIPADR(strIpAdr);
+			AgentInfoVO agentInfo = (AgentInfoVO) cmmnServerInfoService.selectAgentInfo(vo);
+
+			String IP = dbServerVO.getIpadr();
+			int PORT = agentInfo.getSOCKET_PORT();
+
+			serverObj.put(ClientProtocolID.SERVER_NAME, dbServerVO.getDb_svr_nm());
+			serverObj.put(ClientProtocolID.SERVER_IP, dbServerVO.getIpadr());
+			serverObj.put(ClientProtocolID.SERVER_PORT, dbServerVO.getPortno());
+			serverObj.put(ClientProtocolID.DATABASE_NAME, dbServerVO.getDft_db_nm());
+			serverObj.put(ClientProtocolID.USER_ID, dbServerVO.getSvr_spr_usr_id());
+			serverObj.put(ClientProtocolID.USER_PWD, dec.aesDecode(dbServerVO.getSvr_spr_scm_pwd()));
+
+			ClientInfoCmmn cic = new ClientInfoCmmn();
+			pgdataResult = cic.dbms_inforamtion(IP, PORT, serverObj);
+			bckpathResult = cic.back_path_call(IP, PORT);
+	
+			list.add(pgdataResult);
+			list.add(bckpathResult);
+			
+			//System.out.println(result);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return list;
 	}	
 }

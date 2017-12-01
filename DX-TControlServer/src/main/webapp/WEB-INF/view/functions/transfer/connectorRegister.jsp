@@ -59,7 +59,7 @@
 				var cnr_id = data.cnr_id;
 				var popUrl = "/popup/connectorRegForm.do?act=u&cnr_id=" + cnr_id; // 서버 url 팝업경로
 				var width = 955;
-				var height = 400;
+				var height = 385;
 				var left = (window.screen.width / 2) - (width / 2);
 				var top = (window.screen.height /2) - (height / 2);
 				var popOption = "width="+width+", height="+height+", top="+top+", left="+left+", resizable=no, scrollbars=yes, status=no, toolbar=no, titlebar=yes, location=no,";
@@ -156,7 +156,7 @@
 	function fn_insert() {
 		var popUrl = "/popup/connectorRegForm.do?act=i"; // 서버 url 팝업경로
 		var width = 955;
-		var height = 400;
+		var height = 385;
 		var left = (window.screen.width / 2) - (width / 2);
 		var top = (window.screen.height /2) - (height / 2);
 		var popOption = "width="+width+", height="+height+", top="+top+", left="+left+", resizable=no, scrollbars=yes, status=no, toolbar=no, titlebar=yes, location=no,";
@@ -172,7 +172,7 @@
 			
 			var popUrl = "/popup/connectorRegForm.do?act=u&cnr_id=" + cnr_id; // 서버 url 팝업경로
 			var width = 955;
-			var height = 400;
+			var height = 385;
 			var left = (window.screen.width / 2) - (width / 2);
 			var top = (window.screen.height /2) - (height / 2);
 			var popOption = "width="+width+", height="+height+", top="+top+", left="+left+", resizable=no, scrollbars=yes, status=no, toolbar=no, titlebar=yes, location=no,";
@@ -225,7 +225,7 @@
 						alert("삭제되었습니다.");
 						location.reload();
 					} else {
-						alert("커넥터삭제를 실패하였습니다.");
+						alert("커넥터 삭제를 실패하였습니다.");
 					}
 				}
 			});

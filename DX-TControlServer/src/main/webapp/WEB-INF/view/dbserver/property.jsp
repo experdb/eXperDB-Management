@@ -50,15 +50,15 @@
 			</c:forEach>
 			count = count*2;
 			
-			html += '<tr><th scope="row" colspan="3" rowspan="'+count+'">네트워크</th>';
+			html += '<tr><td colspan="3" rowspan="'+count+'" class="color">네트워크</td>';
 			<c:forEach items="${result.CMD_NETWORK}" var="networkinfo" varStatus="status">
 			if('${status.index}'!=0){
 				html +='<tr>'
 			}
-			html += '<th scope="row" rowspan="2">${networkinfo.CMD_NETWORK_INTERFACE}</th>';
-			html += '<th scope="row">ip</th>';
+			html += '<td rowspan="2" class="color">${networkinfo.CMD_NETWORK_INTERFACE}</td>';
+			html += '<td class="color">ip</td>';
 			html += '<td>${networkinfo.CMD_NETWORK_IP}</td></tr>';
-			html += '<tr><th scope="row">mac</th><td>${networkinfo.CMD_MACADDRESS}</td></tr>';
+			html += '<tr><td class="color">mac</td><td>${networkinfo.CMD_MACADDRESS}</td></tr>';
 			</c:forEach>
 			
 			$("#systemInfo").append(html);
@@ -175,40 +175,41 @@
 				<div id="systeminfo">
 					<div class="cmm_bd">
 						<div class="sub_tit"><p>시스템 정보</p></div>
-						<div class="overflow_area" style="border: none;">
-							<table class="write2" id="systemInfo">
+						<div class="overflow_areas" style="height: 365px;">
+							<table class="list3" id="systemInfo">
 								<caption>시스템 정보</caption>
 								<colgroup>
-									<col style="width: 50px;" />
-									<col style="width: 50px;" />
-									<col style="width: 50px;" />
-									<col style="width: 100px;" />
-									<col style="width: 200px;" />
+									<col style="width: 5%;" />
+									<col style="width: 5%;" />
+									<col style="width: 5%;" />
+									<col style="width: 5%;" />
+									<col style="width: 5%;" />
+									<col style="width: 75%;" />
 									<col />
 								</colgroup>
 								<tr>
-									<th scope="row" colspan="5">항목</th>
-									<td>내용</td>
+									<th colspan="5">항목</th>
+									<th>내용</th>
 								</tr>
 								<tr>
-									<th scope="row" colspan="5">호스트명</th>
+									<td colspan="5" class="color">호스트명</td>
 									<td>${result.CMD_HOSTNAME}</td>
 								</tr>
 								<tr>
-									<th scope="row" colspan="2" rowspan="2">OS 정보</th>
-									<th scope="row" colspan="3">버전</th>
+									<td colspan="2" rowspan="2" class="color">OS 정보</td>
+									<td colspan="3" class="color">버전</td>
 									<td>${result.CMD_OS_VERSION}</td>
 								</tr>
 								<tr>
-									<th scope="row" colspan="3">커널</th>
+									<td colspan="3" class="color">커널</td>
 									<td>${result.CMD_OS_KERNUL}</td>
 								</tr>
 								<tr>
-									<th scope="row" colspan="5">CPU</th>
+									<td colspan="5" class="color">CPU</td>
 									<td>${result.CMD_CPU}</td>
 								</tr>
 								<tr>
-									<th scope="row" colspan="5">메모리</th>
+									<td colspan="5" class="color">메모리</td>
 									<td>${result.CMD_MEMORY}</td>
 								</tr>														
 							</table>
@@ -219,43 +220,48 @@
 				<div id="dbmisinfo">
 					<div class="cmm_bd">
 						<div class="sub_tit"><p>기본 정보</p></div>
-						<div class="overflow_area" style="height: 200px; border: none;">
-							<table class="write2">
+						<div class="overflow_areas">
+							<table class="list3">
 								<caption>기본 정보</caption>
 								<colgroup>
-									<col style="width: 200px;" />
+									<col style="width: 25%;" />
+									<col style="width: 75%;" />
 									<col />
 								</colgroup>
 								<tr>
-									<th scope="row">POSTGRESQL 버전</th>
+									<th>항목</th>
+									<th>내용</th>
+								</tr>
+								<tr>
+									<td>POSTGRESQL 버전</td>
 									<td>${result.POSTGRESQL_VERSION}</td>
 								</tr>
 								<tr>
-									<th scope="row">DBMS 경로</th>
+									<td>DBMS 경로</td>
 									<td>${result.CMD_DBMS_PATH}</td>
 								</tr>
 								<tr>
-									<th scope="row">DATA 경로</th>
+									<td>DATA 경로</td>
 									<td>${result.DATA_PATH}</td>
 								</tr>
 								<tr>
-									<th scope="row">로그 경로</th>
+									<td>로그 경로</td>
 									<td>${result.LOG_PATH}</td>
 								</tr>
 								<tr>
-									<th scope="row">백업 경로</th>
+									<td>백업 경로</td>
 									<td>${result.CMD_BACKUP_PATH}</td>
 								</tr>
-								<tr>
-									<th scope="row">Archive 백업 경로</th>
-									<td>${result.ARCHIVE_PATH}</td>
-								</tr>
+<!-- 								<tr> -->
+<!-- 									<th >Archive 백업 경로</th> -->
+<%-- 									<td>${result.ARCHIVE_PATH}</td> --%>
+<!-- 								</tr> -->
 							</table>
 						</div>
-
+						<br><br>
 						<div class="sub_tit"><p>데이터베이스 정보</p></div>
-						<div class="overflow_area" style="height: 200px;">
-							<table class="list pd_type3">
+						<div class="overflow_areas" style="height: 365px;">
+							<table class="list3">
 								<caption>데이터베이스 정보</caption>
 								<colgroup>
 									<col style="width: 20%;">
@@ -283,13 +289,12 @@
 									<c:forEach var="databaseInfo" items="${result.CMD_DATABASE_INFO}">
 										<tr>
 											<td>
-											<c:forEach var="dbnmInfo" items="${resultRepoDB}">
-												<c:if test="${dbnmInfo.db_nm eq databaseInfo.name}" >
-												<img src="../images/ico_state_05.png" style="margin-right: 5px;"/></c:if>	
-											</c:forEach>
-											${databaseInfo.name}
+												<c:forEach var="dbnmInfo" items="${resultRepoDB}">
+													<c:if test="${dbnmInfo.db_nm eq databaseInfo.name}" >
+													<img src="../images/ico_state_05.png" style="margin-right: 5px;"/></c:if>	
+												</c:forEach>
+												${databaseInfo.name}
 											</td>
-											
 											<td>${databaseInfo.owner}</td>
 											<td>${databaseInfo.encoding}</td>
 											<td>${databaseInfo.collate}</td>
@@ -302,11 +307,10 @@
 								</tbody>
 							</table>
 						</div>
-						<br>
-						
+						<br><br>
 						<div class="sub_tit"><p>HA구성정보</p></div>
-						<div class="overflow_area" style="height: 200px;">
-							<table class="list pd_type3">
+						<div class="overflow_areas">
+							<table class="list3">
 								<caption>HA구성정보</caption>
 								<colgroup>
 									<col style="width: 25%;">
@@ -325,14 +329,14 @@
 								<tbody>
 									<c:forEach var="hainfo" items="${resultIpadr}">
 										<tr>
-											<td>${hainfo.ipadr}</td>
-											<td>
+											<td class="center">${hainfo.ipadr}</td>
+											<td class="center">
 												<c:choose><c:when test="${hainfo.master_gbn eq 'M'}">master</c:when>
 												<c:when test="${hainfo.master_gbn eq 'S'}">slave</c:when>
 												</c:choose>
 											</td>
-											<td>${hainfo.svr_host_nm}</td>
-											<td>
+											<td class="center">${hainfo.svr_host_nm}</td>
+											<td class="center">
 												<c:choose><c:when test="${hainfo.db_cndt eq 'Y'}"><span class="work_state"><img src="../images/ico_state_03.png" alt="Running" /></span>Running</c:when>
 												<c:when test="${hainfo.db_cndt eq 'N'}"><span class="work_state"><img src="../images/ico_state_07.png" alt="Stop" /></span>Stop</c:when>
 												</c:choose>
@@ -348,7 +352,7 @@
 				<div id="settinginfo">
 					<div class="cmm_bd">
 						<div class="sub_tit"><p>주요환경설정 정보</p></div>
-						<div class="overflow_area" style="height: 670px; width: 100%">
+						<div class="overflow_areas" style="height: 670px;">
 							<table class="list3">
 								<caption>주요환경설정 정보</caption>
 								<colgroup>
@@ -367,84 +371,84 @@
 									<tr>
 										<td rowspan="3" class="color">접속 및 인증</td>
 										<td class="center">listen_addresses</td>
-										<td class="left">${result.CMD_LISTEN_ADDRESSES}</td>
+										<td >${result.CMD_LISTEN_ADDRESSES}</td>
 									</tr>
 									<tr>
 										<td class="center">port</td>
-										<td class="left">${result.CMD_PORT}</td>
+										<td>${result.CMD_PORT}</td>
 									</tr>
 									<tr>
 										<td class="center">max_connections</td>
-										<td class="left">${result.CMD_MAX_CONNECTIONS}</td>
+										<td>${result.CMD_MAX_CONNECTIONS}</td>
 									</tr>
 									<tr>
 										<td rowspan="5" class="color">자원설정</td>
 										<td class="center">shared_buffers</td>
-										<td class="left">${result.CMD_SHARED_BUFFERS}</td>
+										<td>${result.CMD_SHARED_BUFFERS}</td>
 									</tr>
 									<tr>
 										<td class="center">work_mem</td>
-										<td class="left">${result.CMD_WORK_MEM}</td>
+										<td>${result.CMD_WORK_MEM}</td>
 									</tr>
 									<tr>
 										<td class="center">maintenance_work_mem</td>
-										<td class="left">${result.CMD_MAINTENANCE_WORK_MEM}</td>
+										<td>${result.CMD_MAINTENANCE_WORK_MEM}</td>
 									</tr>
 									<tr>
 										<td class="center">effective_cache_size</td>
-										<td class="left">${result.CMD_EFFECTIVE_CACHE_SIZE}</td>
+										<td>${result.CMD_EFFECTIVE_CACHE_SIZE}</td>
 									</tr>
 									<tr>
 										<td class="center">shared_preload_libraries</td>
-										<td class="left">${result.CMD_SHARED_PRELOAD_LIBRARIES}</td>
+										<td>${result.CMD_SHARED_PRELOAD_LIBRARIES}</td>
 									</tr>
 									<tr>
 										<td rowspan="6" class="color">WAL 설정</td>
 										<td class="center">wal_level</td>
-										<td class="left">${result.CMD_WAL_LEVEL}</td>
+										<td>${result.CMD_WAL_LEVEL}</td>
 									</tr>
 									<tr>
 										<td class="center">wal_buffers</td>
-										<td class="left">${result.CMD_WAL_BUFFERS}</td>
+										<td>${result.CMD_WAL_BUFFERS}</td>
 									</tr>
 									<tr>
 										<td class="center">archive_mode</td>
-										<td class="left">${result.CMD_ARCHIVE_MODE}</td>
+										<td>${result.CMD_ARCHIVE_MODE}</td>
 									</tr>
 									<tr>
 										<td class="center">archive_command</td>
-										<td class="left">${result.CMD_ARCHIVE_COMMAND}</td>
+										<td>${result.CMD_ARCHIVE_COMMAND}</td>
 									</tr>
 									<tr>
 										<td class="center">min_wal_size</td>
-										<td class="left">${result.CMD_MIN_WAL_SIZE}</td>
+										<td>${result.CMD_MIN_WAL_SIZE}</td>
 									</tr>
 									<tr>
 										<td class="center">max_wal_size</td>
-										<td class="left">${result.CMD_MAX_WAL_SIZE}</td>
+										<td>${result.CMD_MAX_WAL_SIZE}</td>
 									</tr>
 									<tr>
 										<td rowspan="2" class="color">복제</td>
 										<td class="center">hot_standby</td>
-										<td class="left">${result.CMD_HOT_STANDBY}</td>
+										<td>${result.CMD_HOT_STANDBY}</td>
 									</tr>
 									<tr>
 										<td class="center">wal_keep_segments</td>
-										<td class="left">${result.CMD_WAL_KEEP_SEGMENTS}</td>
+										<td>${result.CMD_WAL_KEEP_SEGMENTS}</td>
 									</tr>
 									<tr>
 										<td rowspan="2" class="color">파일위치</td>
 										<td class="center">config_file</td>
-										<td class="left">${result.CMD_CONFIG_FILE}</td>
+										<td>${result.CMD_CONFIG_FILE}</td>
 									</tr>
 									<tr>
 										<td class="center">data_directory</td>
-										<td class="left">${result.CMD_DATA_DIRECTORY}</td>
+										<td>${result.CMD_DATA_DIRECTORY}</td>
 									</tr>
 									<tr>
-										<td class="color">data_directory</td>
+										<td class="color">표준시간대</td>
 										<td class="center">TimeZone</td>
-										<td class="left">${result.CMD_TIMEZONE}</td>
+										<td>${result.CMD_TIMEZONE}</td>
 									</tr>
 								</tbody>
 							</table>
@@ -455,17 +459,17 @@
 				<div id="tablespaceinfo">
 					<div class="cmm_bd">
 						<div class="sub_tit"><p>테이블스페이스 정보</p></div>
-						<div class="overflow_area">
-							<table class="list pd_type3">
+						<div class="overflow_areas" style="height: 365px;">
+							<table class="list3">
 								<caption>테이블스페이스 정보</caption>
 								<colgroup>
-									<col style="width: 15%;">
+									<col style="width: 12%;">
 									<col style="width: 10%;">
-									<col style="width: 5%;">
-									<col style="width: 5%;">
-									<col style="width: 5%;">
-									<col style="width: 15%;">
-									<col style="width: 15%;">
+									<col style="width: 8%;">
+									<col style="width: 8%;">
+									<col style="width: 10%;">
+									<col style="width: 10%;">
+									<col style="width: 12%;">
 									<col style="width: 10%;">
 									<col style="width: 10%;">
 									<col style="width: 10%;">
@@ -473,31 +477,31 @@
 								<thead>
 									<tr>
 										<th scope="col" colspan="4">파일시스템</th>
-										<th scope="col" colspan="5">테이블스페이스</th>
+										<th scope="col" colspan="6">테이블스페이스</th>
 									</tr>
 								</thead>
 								<tbody>
 									<tr>
-										<td>Filesystem</td>
-										<td>Mounted on</td>
-										<td>Total size</td>
-										<td>Used</td>
-										<td>Name</td>
-										<td>Owner</td>
-										<td>Location</td>
-										<td>Options</td>
-										<td>Size</td>
-										<td>Description</td>
+										<td class="color">Filesystem</td>
+										<td class="color">Mounted on</td>
+										<td class="color">Total size</td>
+										<td class="color">Used</td>
+										<td class="color">Name</td>
+										<td class="color">Owner</td>
+										<td class="color">Location</td>
+										<td class="color">Options</td>
+										<td class="color">Size</td>
+										<td class="color">Description</td>
 									</tr>
 									<c:forEach var="tablespaceinfo" items="${result.CMD_TABLESPACE_INFO}">
 										<tr>
-											<td style="text-align: left; padding: 4px 16px;">${tablespaceinfo.filesystem}</td>
-											<td style="text-align: left; padding: 4px 16px;">${tablespaceinfo.mounton}</td>
+											<td >${tablespaceinfo.filesystem}</td>
+											<td >${tablespaceinfo.mounton}</td>
 											<td>${tablespaceinfo.fsize}</td>
 											<td>${tablespaceinfo.used}</td>
 											<td>${tablespaceinfo.name}</td>
 											<td>${tablespaceinfo.owner}</td>
-											<td style="text-align: left; padding: 4px 16px;">${tablespaceinfo.location}</td>
+											<td>${tablespaceinfo.location}</td>
 											<td>${tablespaceinfo.options}</td>
 											<td>${tablespaceinfo.size}</td>
 											<td>${tablespaceinfo.description}</td>

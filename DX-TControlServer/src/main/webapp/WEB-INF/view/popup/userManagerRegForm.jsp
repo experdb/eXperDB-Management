@@ -35,34 +35,51 @@
 <script>
 	var idCheck = 0;
 	var act = "${act}";
-
+	
+	/* PW Validation*/
+	function fn_pwValidation(str){
+		 var reg_pwd = /^.*(?=.{6,20})(?=.*[0-9])(?=.*[a-zA-Z]).*$/;
+		 if(!reg_pwd.test(str)){
+		 	alert("영문,숫자를 혼합하여 6~20자 이내를 입력해 주십시오.");
+		 	return false;
+		 }
+		 	return true;
+	}
+	
 	/* Validation */
 	function fn_userManagerValidation(formName) {
 		var id = document.getElementById('usr_id');
 		var nm = document.getElementById('usr_nm');
 		var pwd = document.getElementById('pwd');
 		var pwdCheck = document.getElementById('pwdCheck');
-
+		var err = 0; 
+		
 		if (id.value == "" || id.value == "undefind" || id.value == null) {
-			alert("사용자 아이디를 넣어주세요");
+			alert("사용자 아이디를 입력해 주십시오.");
 			id.focus();
 			return false;
 		}
 		if (nm.value == "" || nm.value == "undefind" || nm.value == null) {
-			alert("사용자명을 넣어주세요");
+			alert("사용자명을 입력해 주십시오.");
 			nm.focus();
 			return false;
 		}
 		if (pwd.value == "" || pwd.value == "undefind" || pwd.value == null) {
-			alert("패스워드를 넣어주세요");
-			pwd1.focus();
-			return false;
-		}
-		if (pwdCheck.value == "" || pwdCheck.value == "undefind" || pwdCheck.value == null) {
-			alert("패스워드확인을 넣어주세요");
+			alert("패스워드를 입력해 주십시오.");
 			pwd.focus();
 			return false;
 		}
+		
+		if (!fn_pwValidation(pwd.value))return false;
+		
+		if (pwdCheck.value == "" || pwdCheck.value == "undefind" || pwdCheck.value == null) {
+			alert("패스워드확인을 입력해 주십시오.");
+			pwd.focus();
+			return false;
+		}
+		
+		if (!fn_pwValidation(pwdCheck.value))return false;
+		
 		if (pwd.value != pwdCheck.value) {
 			alert("패스워드 정보가 일치하지 않습니다.");
 			return false;
@@ -96,7 +113,7 @@
 			},
 			success : function(result) {
 				alert("등록하였습니다.");
-				if (confirm("사용자에게 메뉴권한을 주시겠습니까?")) {
+				if (confirm("사용자에게 메뉴권한을 부여하시겠습니까?")) {
 					window.close();
 					opener.location.href = "/menuAuthority.do?usr_id="+$("#usr_id").val();
 				} else {
