@@ -29,7 +29,7 @@ function fn_init() {
 	 * 서버 (데이터테이블)
 	 ******************************************************** */
 	table_dbServer = $('#dbServerList').DataTable({
-		scrollY : "235px",
+		scrollY : "279px",
 		scrollX: true,	
 		searching : false,
 		paging : false,
@@ -71,7 +71,7 @@ function fn_init() {
 	           }
 	           return data;
 	        }}, 
-		{data : "dft_db_nm", className : "dt-center", defaultContent : "", visible: false},
+/* 		{data : "dft_db_nm", className : "dt-center", defaultContent : "", visible: false},
 		{data : "portno", className : "dt-center", defaultContent : "", visible: false},
 		{data : "svr_spr_usr_id", className : "dt-center", defaultContent : "", visible: false},
 		{data : "frst_regr_id", className : "dt-center", defaultContent : "", visible: false},
@@ -79,7 +79,7 @@ function fn_init() {
 		{data : "lst_mdfr_id", className : "dt-center", defaultContent : "", visible: false},
 		{data : "lst_mdf_dtm", className : "dt-center", defaultContent : "", visible: false},
 		{data : "idx", className : "dt-center", defaultContent : "" ,visible: false},
-		{data : "db_svr_id", className : "dt-center", defaultContent : "", visible: false}
+		{data : "db_svr_id", className : "dt-center", defaultContent : "", visible: false} */
 		]
 	});
 
@@ -87,7 +87,7 @@ function fn_init() {
 	 * 디비 (데이터테이블)
 	 ******************************************************** */
 	table_db = $('#dbList').DataTable({
-		scrollY : "300px",
+		scrollY : "278px",
 		scrollX: true,	
 		searching : false,
 		paging : false,		
@@ -100,7 +100,7 @@ function fn_init() {
 	        orderable: false,
 	        render: function(data, type, full, meta){
 	           if(type === 'display'){
-	              data = '<input type="text" class="txt" name="db_exp" value="' +full.db_exp + '" style="height: 25px;">';      
+	              data = '<input type="text" class="txt" name="db_exp" value="' +full.db_exp + '" style="width: 350px; height: 25px;">';      
 	           }
 	           return data;
 	        }}, 
@@ -114,7 +114,7 @@ function fn_init() {
 	table_dbServer.tables().header().to$().find('th:eq(2)').css('min-width', '232px');
 	table_dbServer.tables().header().to$().find('th:eq(3)').css('min-width', '70px');
 	table_dbServer.tables().header().to$().find('th:eq(4)').css('min-width', '50px');
-	table_dbServer.tables().header().to$().find('th:eq(5)').css('min-width', '0px');
+/* 	table_dbServer.tables().header().to$().find('th:eq(5)').css('min-width', '0px');
 	table_dbServer.tables().header().to$().find('th:eq(6)').css('min-width', '0px');
 	table_dbServer.tables().header().to$().find('th:eq(7)').css('min-width', '0px');  
 	table_dbServer.tables().header().to$().find('th:eq(8)').css('min-width', '0px');
@@ -122,10 +122,10 @@ function fn_init() {
     table_dbServer.tables().header().to$().find('th:eq(10)').css('min-width', '0px');
     table_dbServer.tables().header().to$().find('th:eq(11)').css('min-width', '0px');
     table_dbServer.tables().header().to$().find('th:eq(12)').css('min-width', '0px');  
-    table_dbServer.tables().header().to$().find('th:eq(13)').css('min-width', '0px');
+    table_dbServer.tables().header().to$().find('th:eq(13)').css('min-width', '0px'); */
     
-    table_db.tables().header().to$().find('th:eq(0)').css('min-width', '150px');
-    table_db.tables().header().to$().find('th:eq(1)').css('min-width', '130px');
+    table_db.tables().header().to$().find('th:eq(0)').css('min-width', '80px');
+    table_db.tables().header().to$().find('th:eq(1)').css('min-width', '150px');
     table_db.tables().header().to$().find('th:eq(2)').css('min-width', '10px');
     
     
@@ -244,6 +244,18 @@ $(function() {
     } );
     
 
+	
+    $('#dbList tbody').on( 'click', 'tr', function () {
+    	
+        /* if ( $(this).hasClass('selected') ) {
+            $(this).removeClass('selected');
+        }
+        else {
+        	table_db.$('tr.selected').removeClass('selected');
+            $(this).addClass('selected');
+        }*/
+    } ); 
+	
 })
 
 
@@ -452,10 +464,11 @@ function fn_dataCompareChcek(svrDbList){
 								<thead>
 									<tr>
 										<th width="10">선택</th>									
-										<th width="150">DBMS 아이피</th>
-										<th width="100">DBMS 명</th>
-										<th width="30">Agent상태</th>
-										<th width="30">사용유무</th>
+										<th width="200">DBMS 아이피</th>
+										<th width="130">DBMS 명</th>
+										<th width="50">Agent상태</th>
+										<th width="50">사용유무</th>
+										<!-- <th width="0"></th>
 										<th width="0"></th>
 										<th width="0"></th>
 										<th width="0"></th>
@@ -463,15 +476,14 @@ function fn_dataCompareChcek(svrDbList){
 										<th width="0"></th>
 										<th width="0"></th>
 										<th width="0"></th>
-										<th width="0"></th>
-										<th width="0"></th>
+										<th width="0"></th> -->
 									</tr>
 								</thead>
 							</table>
 						</div>
 					</div>
 				</div>
-				<div class="tree_rt">
+				<div class="tree_rt"  style="width: 44%; margin-left: 2%;">
 					<div class="btn_type_01">
 						<div id="save_button">
 						<span class="btn"><button onClick="fn_insertDB()">저장</button></span>
@@ -483,8 +495,8 @@ function fn_dataCompareChcek(svrDbList){
 							<table id="dbList" class="cell-border display" cellspacing="0" align="left">
 								<thead>
 									<tr>
-										<th width="150">Database</th>
-										<th width="130">설명</th>
+										<th width="90">Database</th>
+										<th width="150">설명</th>
 										<th width="10"><input name="select" value="1" type="checkbox"></th>
 									</tr>
 								</thead>

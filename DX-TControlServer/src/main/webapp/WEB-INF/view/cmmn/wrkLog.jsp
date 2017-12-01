@@ -6,11 +6,11 @@
 		<div class="pop-container">
 			<div class="pop_cts" style="width: 800px; height: 450px; margin-right: 450px;">
 				<p class="tit" style="margin-bottom: 15px;">작업로그 정보</p>
-				<table class="write" border="">
+				<table class="write" border="0">
 					<caption>작업로그 정보</caption>
 					<tbody>
 						<tr>
-							<td name="wrkLogInfo" id="wrkLogInfo" style="height: 270px;"></td>
+							<td><textarea name="wrkLogInfo" id="wrkLogInfo" style="height: 250px;"> </textarea></td>
 						</tr>
 					</tbody>
 				</table>

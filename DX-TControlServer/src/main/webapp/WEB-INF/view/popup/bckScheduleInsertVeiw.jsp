@@ -35,22 +35,90 @@
 </head>
 
 <script language="javascript">
+var scd_nmChk = "fail";
+var db_svr_id = "${db_svr_id}";
+
 	/* ********************************************************
 	 * 페이지 시작시 함수
 	 ******************************************************** */
 	$(window.document).ready(function() {
-		$("#r_log_pth").hide();
 		$("#r_data_pth").hide();
+		$("#r_log_pth").hide();
 		$("#r_bck_pth").hide();
+		$("#d_log_pth").hide();
 		$("#d_bck_pth").hide();
 		$("#rman_bck_opt").hide();
 		$("#dump_bck_opt").hide();
-
+		
 		fn_makeHour();
 		fn_makeMin();
-
 	});
 	
+	
+	function getTimeStamp() {
+		  var d = new Date();
+		  var s =
+		    leadingZeros(d.getFullYear(), 4) + 
+		    leadingZeros(d.getMonth() + 1, 2) + 
+		    leadingZeros(d.getDate(), 2) + 
+		    leadingZeros(d.getHours(), 2) +
+		    leadingZeros(d.getMinutes(), 2) +
+		    leadingZeros(d.getSeconds(), 2);
+		  return s;
+		}
+
+		function leadingZeros(n, digits) {
+		  var zero = '';
+		  n = n.toString();
+		  if (n.length < digits) {
+		    for (i = 0; i < digits - n.length; i++)
+		      zero += '0';
+		  }
+		  return zero + n;
+		}
+		
+	/* ********************************************************
+	 * Validation Check
+	 ******************************************************** */
+	function fn_validation(){		
+		if($("#scd_nm").val() == ""){
+			alert("스케줄명을 입력해 주세요.");
+			$("#scd_nm").focus();
+			return false;
+		}else if($("#check_path1").val() != "Y"){
+			alert("데이터경로에 유효한 경로를 입력후 경로체크를 해 주세요.");
+			$("#data_pth").focus();
+			return false;
+		}else if(scd_nmChk == "fail"){
+			alert("스케줄명 중복체크 해주세요.");
+			return false;
+		}else if($("#input:checkbox[name=chk]:checked").length == 0){
+			alert("스케줄을 체크해 주세요.");
+			return false;
+		}else if($("#check_path1").val() != "Y"){
+			alert("데이터경로에 유효한 경로를 입력후 경로체크를 해 주세요.");
+			$("#data_pth").focus();
+			return false;
+		}else if($("#check_path2").val() != "Y"){
+			alert("백업로그경로에 유효한 경로를 입력후 경로체크를 해 주세요.");		
+			$("#rlog_file_pth").focus();
+			return false;
+		}else if($("#check_path3").val() != "Y"){
+			alert("백업경로에 유효한 경로를 입력후 경로체크를 해 주세요.");
+			$("#bck_pth").focus();
+			return false;
+		}else if($("#check_path4").val() != "Y"){
+			alert("백업로그경로에 유효한 경로를 입력후 경로체크를 해 주세요.");
+			$("#dlog_file_pth").focus();
+			return false;
+		}else if($("#check_path5").val() != "Y"){
+			alert("백업경로에 유효한 경로를 입력후 경로체크를 해 주세요.");
+			$("#save_pth").focus();
+			return false;
+		}else{
+			return true;
+		}
+	}
 	
 	/* ********************************************************
 	 * 시간
@@ -139,6 +207,41 @@
 
 
 	 function fn_bck(){
+		 $.ajax({
+				async : false,
+				url : "/selectPathInfo.do",
+			  	data : {
+			  		db_svr_id : db_svr_id
+			  	},
+				type : "post",
+				beforeSend: function(xhr) {
+			        xhr.setRequestHeader("AJAX", true);
+			     },
+				error : function(xhr, status, error) {
+					if(xhr.status == 401) {
+						alert("인증에 실패 했습니다. 로그인 페이지로 이동합니다.");
+						 location.href = "/";
+					} else if(xhr.status == 403) {
+						alert("세션이 만료가 되었습니다. 로그인 페이지로 이동합니다.");
+			             location.href = "/";
+					} else {
+						alert("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""));
+					}
+				},
+				success : function(result) {
+					document.getElementById("data_pth").value=result[0].DATA_PATH;
+					document.getElementById("rlog_file_pth").value=result[1].PGRLOG;		
+					document.getElementById("bck_pth").value=result[1].PGRBAK;
+					document.getElementById("dlog_file_pth").value=result[1].PGDLOG;
+					document.getElementById("save_pth").value=result[1].PGDBAK; 
+					fn_checkFolderVol(1);
+					fn_checkFolderVol(2);
+					fn_checkFolderVol(3);
+					fn_checkFolderVol(4);
+					fn_checkFolderVol(5);
+				}
+			}); 
+		 
 		var bck = $("#bck").val();
 		
 		if(bck == "rman"){
@@ -146,10 +249,12 @@
 			$("#r_log_pth").show();
 			$("#r_data_pth").show();
 			$("#r_bck_pth").show();
+			$("#d_log_pth").hide();
 			$("#d_bck_pth").hide();
 			$("#dump_bck_opt").hide();
 		}else if(bck == "dump"){
 			$("#d_bck_pth").show();
+			$("#d_log_pth").show();
 			$("#dump_bck_opt").show();
 			$("#r_log_pth").hide();
 			$("#r_data_pth").hide();
@@ -157,6 +262,7 @@
 			$("#rman_bck_opt").hide();
 		}else{
 			$("#d_bck_pth").hide();
+			$("#d_log_pth").hide();
 			$("#r_log_pth").hide();
 			$("#r_data_pth").hide();
 			$("#r_bck_pth").hide();
@@ -164,6 +270,86 @@
 			$("#dump_bck_opt").hide();
 		}	
 	} 	
+	 
+	 
+	 
+	 function fn_checkFolderVol(keyType){
+		 var save_path = "";
+		 	
+		 	if(keyType == 1){
+		 		save_path = $("#data_pth").val();
+		 	}else if(keyType == 2){
+		 		save_path = $("#rlog_file_pth").val();
+		 	}else if(keyType == 3){
+		 		save_path = $("#bck_pth").val();
+		 	}else if(keyType == 4){
+		 		save_path = $("#dlog_file_pth").val();
+		 	}else{
+		 		save_path = $("#save_pth").val();
+		 	}
+		 	
+		 	$.ajax({
+	 			async : false,
+	 			url : "/existDirCheck.do",
+	 		  	data : {
+	 		  		db_svr_id : $("#db_svr_id").val(),
+	 		  		path : save_path
+	 		  	},
+	 			type : "post",
+	 			beforeSend: function(xhr) {
+	 		        xhr.setRequestHeader("AJAX", true);
+	 		     },
+	 			error : function(xhr, status, error) {
+	 				if(xhr.status == 401) {
+	 					alert("인증에 실패 했습니다. 로그인 페이지로 이동합니다.");
+	 					 location.href = "/";
+	 				} else if(xhr.status == 403) {
+	 					alert("세션이 만료가 되었습니다. 로그인 페이지로 이동합니다.");
+	 		             location.href = "/";
+	 				} else {
+	 					alert("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""));
+	 				}
+	 			},
+	 			success : function(data) {
+	 				if(data.result.ERR_CODE == ""){
+	 					if(data.result.RESULT_DATA.IS_DIRECTORY == 0){
+	 						if(keyType == 1){
+	 							$("#check_path1").val("Y");
+	 						}else if(keyType == 2){
+	 							$("#check_path2").val("Y");
+	 						}else if(keyType == 3){
+	 							$("#check_path3").val("Y");
+	 						}else if(keyType == 4){
+	 							$("#check_path4").val("Y");
+	 						}else{
+	 							$("#check_path5").val("Y");
+	 						}
+	 							var volume = "용량: "+data.result.RESULT_DATA.CAPACITY;
+	 						if(keyType == 1){
+	 							$("#dataVolume").empty();
+	 							$( "#dataVolume" ).append(volume);
+	 						}else if(keyType == 2) {
+	 							$("#rlogVolume").empty();
+	 							$( "#rlogVolume" ).append(volume);
+	 						}else if(keyType == 3) {
+	 							$("#backupVolume").empty();
+	 							$( "#backupVolume" ).append(volume);
+	 						}else if(keyType == 4) {
+	 							$("#dlogVolume").empty();
+	 							$( "#dlogVolume" ).append(volume);
+	 						}else if(keyType == 5) {
+	 							$("#saveVolume").empty();
+	 							$( "#saveVolume" ).append(volume);
+	 						}
+	 					}else{
+	 						alert("HA 구성된 클러스터 중 해당 경로가 존재하지 않는 클러스터가 있습니다.");
+	 					}
+	 				}else{
+	 					alert("경로체크 중 서버에러로 인하여 실패하였습니다.")
+	 				}
+	 			}
+	 		});
+	 }
 	 
 	 
 	 /* ********************************************************
@@ -175,9 +361,11 @@
 	 	if(keyType == 1){
 	 		save_path = $("#data_pth").val();
 	 	}else if(keyType == 2){
-	 		save_path = $("#bck_pth").val();
+	 		save_path = $("#rlog_file_pth").val();
 	 	}else if(keyType == 3){
-	 		save_path = $("#log_pth").val();
+	 		save_path = $("#bck_pth").val();
+	 	}else if(keyType == 4){
+	 		save_path = $("#dlog_file_pth").val();
 	 	}else{
 	 		save_path = $("#save_pth").val();
 	 	}
@@ -186,13 +374,16 @@
 	 		alert("데이터경로를 입력해 주세요.");
 	 		$("#data_pth").focus();
 	 	}else if(save_path == "" && keyType == 2){
+	 		alert("백업로그경로를 입력해 주세요.");
+	 		$("#rlog_file_pth").focus();
+	 	}else if(save_path == "" && keyType == 3){
 	 		alert("백업경로를 입력해 주세요.");
 	 		$("#bck_pth").focus();
-	 	}else if(save_path == "" && keyType == 3){
-	 		alert("로그경로를 입력해 주세요.");
-	 		$("#log_pth").focus();
 	 	}else if(save_path == "" && keyType == 4){
-	 		alert("저장경로를 입력해 주세요.");
+	 		alert("백업로그경로를 입력해 주세요.");
+	 		$("#dlog_file_pth").focus();
+	 	}else if(save_path == "" && keyType == 5){
+	 		alert("백업경로를 입력해 주세요.");
 	 		$("#save_pth").focus();
 	 	}
 	 	else{
@@ -227,26 +418,31 @@
 	 							$("#check_path2").val("Y");
 	 						}else if(keyType == 3){
 	 							$("#check_path3").val("Y");
-	 						}else{
+	 						}else if(keyType == 4){
 	 							$("#check_path4").val("Y");
+	 						}else{
+	 							$("#check_path5").val("Y");
 	 						}
-	 						alert("입력하신 경로는 존재합니다.");
-	 							var volume = "용량 "+data.result.RESULT_DATA.CAPACITY;
+	 						alert("유효한 경로입니다.");
+	 							var volume = "용량: "+data.result.RESULT_DATA.CAPACITY;
 	 						if(keyType == 1){
 	 							$("#dataVolume").empty();
 	 							$( "#dataVolume" ).append(volume);
 	 						}else if(keyType == 2) {
+	 							$("#rlogVolume").empty();
+	 							$( "#rlogVolume" ).append(volume);
+	 						}else if(keyType == 3) {
 	 							$("#backupVolume").empty();
 	 							$( "#backupVolume" ).append(volume);
-	 						}else if(keyType == 3) {
-	 							$("#logVolume").empty();
-	 							$( "#logVolume" ).append(volume);
 	 						}else if(keyType == 4) {
+	 							$("#dlogVolume").empty();
+	 							$( "#dlogVolume" ).append(volume);
+	 						}else if(keyType == 5) {
 	 							$("#saveVolume").empty();
 	 							$( "#saveVolume" ).append(volume);
 	 						}
 	 					}else{
-	 						alert("입력하신 경로는 존재하지 않습니다.");
+	 						alert("HA 구성된 클러스터 중 해당 경로가 존재하지 않는 클러스터가 있습니다.");
 	 					}
 	 				}else{
 	 					alert("경로체크 중 서버에러로 인하여 실패하였습니다.")
@@ -263,6 +459,8 @@
 	  ******************************************************** */
 	  function fn_insert_bckScheduler(){
 		 
+		  if (!fn_validation()) return false;
+		 
 		  var bck = $('#bck').val();
 
 		  if(bck =="rman"){		  
@@ -271,7 +469,7 @@
 		 			url : "/popup/workRmanWrite.do",
 		 		  	data : {
 		 		  		db_svr_id : $("#db_svr_id").val(),
-		 		  		wrk_nm : $("#scd_nm").val(),
+		 		  		wrk_nm : $("#scd_nm").val()+"_"+getTimeStamp(),
 		 		  		wrk_exp : $("#scd_nm").val(),
 		 		  		bck_opt_cd : $("#bck_opt_cd").val(),
 		 		  		bck_mtn_ecnt : "7",
@@ -286,7 +484,7 @@
 		 		  		bck_pth : $("#bck_pth").val(),
 		 		  		acv_file_stgdt : "7",
 		 		  		acv_file_mtncnt : "7",
-		 		  		log_file_pth : $("#log_pth").val()
+		 		  		log_file_pth : $("#rlog_file_pth").val()
 		 		  	},
 		 			type : "post",
 		 			beforeSend: function(xhr) {
@@ -313,14 +511,15 @@
 					url : "/popup/workDumpWrite.do",
 				  	data : {
 				  		db_svr_id : $("#db_svr_id").val(),
-				  		wrk_nm : $("#scd_nm").val(),
+				  		wrk_nm : $("#scd_nm").val()+"_"+getTimeStamp(),
 				  		wrk_exp : $("#scd_nm").val(),
 				  		db_id : $("#db_id").val(),
 				  		bck_bsn_dscd : "TC000202",
 				  		save_pth : $("#save_pth").val(),
 				  		cprt : "0",
 				  		file_stg_dcnt : "0",
-				  		bck_mtn_ecnt : "0"
+				  		bck_mtn_ecnt : "0",
+				  		log_file_pth : $("#dlog_file_pth").val()
 				  	},
 					type : "post",
 					beforeSend: function(xhr) {
@@ -403,7 +602,7 @@
 							<table class="write">
 								<caption>검색 조회</caption>
 								<colgroup>
-									<col style="width: 90px;" />
+									<col style="width: 110px;" />
 									<col />
 								</colgroup>
 								<tbody>
@@ -440,38 +639,46 @@
 										</td>
 									</tr>
 									
-									<tr id="r_log_pth">
-										<th scope="row" class="t9 line">로그경로</th>
-										<td>
-											<input type="text" class="txt" name="log_pth" id="log_pth" maxlength=50 style="width:230px" onKeydown="$('#check_path3').val('N')"/>
-											<span class="btn btnF_04 btnC_01"><button type="button" class= "btn_type_02" onclick="checkFolder(3)" style="width: 60px; margin-right: -60px; margin-top: 0;">경로체크</button></span>
-											<span id="logVolume" style="margin:70px;"></span>
-										</td>
-									</tr>
-	
 									<tr id="r_data_pth">
 										<th scope="row" class="t9 line">데이터경로</th>
 										<td>
-											<input type="text" class="txt" name="data_pth" id="data_pth" maxlength=50 style="width:230px" onKeydown="$('#check_path1').val('N')"/>
+											<input type="text" class="txt" name="data_pth" id="data_pth" maxlength=50 style="width:450px" onKeydown="$('#check_path1').val('N')"/>
 											<span class="btn btnF_04 btnC_01"><button type="button" class= "btn_type_02" onclick="checkFolder(1)" style="width: 60px; margin-right: -60px; margin-top: 0;">경로체크</button></span>
 											<span id="dataVolume" style="margin:70px;"></span>
+										</td>
+									</tr>
+									<tr id="r_log_pth">
+										<th scope="row" class="t9 line">백업로그경로</th>
+										<td>
+											<input type="text" class="txt" name="rlog_file_pth" id="rlog_file_pth" maxlength=50 style="width:450px" onKeydown="$('#check_path2').val('N')"/>
+											<span class="btn btnF_04 btnC_01"><button type="button" class= "btn_type_02" onclick="checkFolder(2)" style="width: 60px; margin-right: -60px; margin-top: 0;">경로체크</button></span>
+											<span id="rlogVolume" style="margin:70px;"></span>
 										</td>
 									</tr>
 	
 									<tr id="r_bck_pth" rowsapn="2">	
 										<th scope="row" class="t9 line">백업경로</th>
 										<td>
-											<input type="text" class="txt" name="bck_pth" id="bck_pth" maxlength=50 style="width:230px" onKeydown="$('#check_path2').val('N')"/>
-											<span class="btn btnF_04 btnC_01"><button type="button" class= "btn_type_02" onclick="checkFolder(2)" style="width: 60px; margin-right: -60px; margin-top: 0;">경로체크</button></span>
+											<input type="text" class="txt" name="bck_pth" id="bck_pth" maxlength=50 style="width:450px" onKeydown="$('#check_path3').val('N')"/>
+											<span class="btn btnF_04 btnC_01"><button type="button" class= "btn_type_02" onclick="checkFolder(3)" style="width: 60px; margin-right: -60px; margin-top: 0;">경로체크</button></span>
 											<span id="backupVolume" style="margin:70px;"></span>
 										</td>
 									</tr>
 									
-									<tr id="d_bck_pth">
-										<th scope="row" class="t9 line">저장경로</th>
+									<tr id="d_log_pth">
+										<th scope="row" class="t9 line">백업로그경로</th>
 										<td>
-											<input type="text" class="txt" name="save_pth" id="save_pth" maxlength=50 style="width:230px" onKeydown="$('#check_path4').val('N')"/>
+											<input type="text" class="txt" name="dlog_file_pth" id="dlog_file_pth" maxlength=50 style="width:450px" onKeydown="$('#check_path4').val('N')"/>
 											<span class="btn btnF_04 btnC_01"><button type="button" class= "btn_type_02" onclick="checkFolder(4)" style="width: 60px; margin-right: -60px; margin-top: 0;">경로체크</button></span>							
+											<span id="dlogVolume" style="margin:70px;"></span>
+										</td>
+									</tr>
+									
+									<tr id="d_bck_pth">
+										<th scope="row" class="t9 line">백업경로</th>
+										<td>
+											<input type="text" class="txt" name="save_pth" id="save_pth" maxlength=50 style="width:450px" onKeydown="$('#check_path5').val('N')"/>
+											<span class="btn btnF_04 btnC_01"><button type="button" class= "btn_type_02" onclick="checkFolder(5)" style="width: 60px; margin-right: -60px; margin-top: 0;">경로체크</button></span>							
 											<span id="saveVolume" style="margin:70px;"></span>
 										</td>
 									</tr>
@@ -501,7 +708,8 @@
 									<input type="hidden" name="check_path1" id="check_path1" value="N"/>
 									<input type="hidden" name="check_path2" id="check_path2" value="N"/>
 									<input type="hidden" name="check_path3" id="check_path3" value="N"/>
-									<input type="hidden" name="check_path3" id="check_path4" value="N"/>
+									<input type="hidden" name="check_path4" id="check_path4" value="N"/>
+									<input type="hidden" name="check_path5" id="check_path5" value="N"/>
 								</tbody>
 							</table>
 						</div>
