@@ -76,9 +76,9 @@ function fn_rman_init(){
 	 					render : function(data, type, full, meta) {
 	 						var html = '';
 	 						if (full.exe_rslt_cd == 'TC001701') {
-	 							html += ' <span onClick=javascript:fn_failLog("'+full.exe_sn+'");> <img src="../images/ico_w_20.png" alt="" /> </span>';
+	 							html += ' <span class="btn btnC_01 btnF_02" onClick=javascript:fn_failLog("'+full.exe_sn+'");><input type="button" value="SUCCESS"></span>';
 	 						} else {
-	 							html += ' <span onClick=javascript:fn_failLog("'+full.exe_sn+'");> <img src="../images/ico_w_19.png" alt="" /> </span>';
+	 							html += ' <span class="btn btnC_01 btnF_02" onClick=javascript:fn_failLog("'+full.exe_sn+'");><input type="button" value="FAIL"></span>';
 	 						}
 	 						return html;
 	 					},
@@ -128,9 +128,9 @@ function fn_dump_init(){
 	 					render : function(data, type, full, meta) {
 	 						var html = '';
 	 						if (full.exe_rslt_cd == 'TC001701') {
-	 							html += ' <span onClick=javascript:fn_failLog("'+full.exe_sn+'");><img src="../images/ico_w_20.png" alt="" /></span>';
+	 							html += ' <span class="btn btnC_01 btnF_02" onClick=javascript:fn_failLog("'+full.exe_sn+'");><input type="button" value="SUCCESS"></span>';
 	 						} else {
-	 							html += ' <span onClick=javascript:fn_failLog("'+full.exe_sn+'");><img src="../images/ico_w_19.png" alt="" /></span>';
+	 							html += ' <span class="btn btnC_01 btnF_02" onClick=javascript:fn_failLog("'+full.exe_sn+'");><input type="button" value="FAIL"></span>';
 	 						}
 	 						return html;
 	 					},
