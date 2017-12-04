@@ -95,6 +95,9 @@
 
 		var v_endFlag = $("#endFlag").val();
 		
+		var v_dwLen = $("#dwLen").val();
+		var v_log_line = $("#log_line").val();
+		
 		if(v_endFlag > 0) {
 			alert("파일을 모두 읽었습니다.");
 			return;
@@ -111,7 +114,8 @@
  				db_svr_id : v_db_svr_id,
  				seek : v_seek,
  				file_name : v_file_name,
- 				readLine : "5000"
+ 				dwLen : v_dwLen,
+ 				readLine : v_log_line
  			},
 			beforeSend: function(xhr) {
 		        xhr.setRequestHeader("AJAX", true);
@@ -136,6 +140,8 @@
 				$("#fSize").val(v_fileSize);
 				$("#seek").val(result.seek);
 				$("#endFlag").val(result.endFlag);
+				$("#dwLen").val(result.dwLen);
+				
 				
 				v_fileSize = byteConvertor(v_fileSize);
 				document.getElementById("fSizeDev").innerHTML = v_fileSize;
@@ -162,6 +168,7 @@
 
 </script>
 <input type="hidden" id="seek" name="seek" value="0">
+<input type="hidden" id="dwLen" name="dwLen" value="0">
 <input type="hidden" id="db_svr_id" name="db_svr_id" value="${db_svr_id}">
 <input type="hidden" id="file_name" name="file_name" value="${file_name}">
 <input type="hidden" id="fSize" name="fSize">
@@ -172,11 +179,28 @@
 <div class="pop_container">
 	<div class="pop_cts">
 		<p class="tit">감사이력 보기</p>
-		<div class="btn_type_01">
-			<span class="btn btnC_01"><button onClick="fn_addView();">더보기</button></span>
-			<span class="btn btnC_01"><button onClick="fn_copy();">복사</button></span>
-			<a href="#n" class="btn" onclick="window.close();"><span>취소</span></a>
+		<div>
+			<table  class="log_table">
+				<tr>
+					<td>
+						<select class="select" name="log_line" id="log_line">
+								<option value="500">500 Line</option>
+								<option value="1000">1000 Line</option>
+								<option value="3000" selected>3000 Line</option>
+								<option value="5000">5000 Line</option>
+						</select>
+					</td>
+					<td>
+						<div class="btn_type_01">
+							<span class="btn btnC_01"><button onClick="fn_addView();">더보기</button></span>
+							<span class="btn btnC_01"><button onClick="fn_copy();">복사</button></span>
+							<a href="#n" class="btn" onclick="window.close();"><span>취소</span></a>
+						</div>
+					</td>
+				</tr>
+			</table>
 		</div>
+
 		
 		<div class="pop_cmm">
 			<table class="write">

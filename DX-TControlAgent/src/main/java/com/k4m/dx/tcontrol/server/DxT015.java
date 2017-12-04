@@ -60,9 +60,6 @@ public class DxT015 extends SocketCtl{
 		String strCommandCode = (String) jObj.get(ProtocolID.COMMAND_CODE);
 		String strLogFileDir = (String) jObj.get(ProtocolID.FILE_DIRECTORY);
 		
-		String strReadLine = (String) jObj.get(ProtocolID.READLINE);
-		String strSeek = (String) jObj.get(ProtocolID.SEEK);
-
 
 		List<Map<String, Object>> outputArray = new ArrayList<Map<String, Object>>();
 		
@@ -128,7 +125,15 @@ public class DxT015 extends SocketCtl{
 				
 			} else if(strCommandCode.equals(ProtocolID.COMMAND_CODE_V)) {
 				
-
+				String strReadLine = (String) jObj.get(ProtocolID.READLINE);
+				String strSeek = (String) jObj.get(ProtocolID.SEEK);
+				String dwLen = (String) jObj.get(ProtocolID.DW_LEN);
+				
+				int intDwlen = Integer.parseInt(dwLen);
+				int intReadLine = Integer.parseInt(strReadLine);
+				
+				int intLastLine = intDwlen;
+				
 				String strFileName = (String) jObj.get(ProtocolID.FILE_NAME);
 				//strLogFileDir = "C:\\logs\\";
 				//strFileName = "webconsole.log.2017-05-31";
@@ -137,7 +142,7 @@ public class DxT015 extends SocketCtl{
 				//byte[] buffer = FileUtil.getFileToByte(inFile);
 				//HashMap hp = FileUtil.getFileView(inFile, Integer.parseInt(startLen), Integer.parseInt(dwLen));
 				//HashMap hp = FileUtil.getRandomAccessFileView(inFile, Integer.parseInt(startLen), Integer.parseInt(dwLen));
-				HashMap hp = FileUtil.getRandomAccessFileView(inFile, Integer.parseInt(strReadLine), Integer.parseInt(strSeek));
+				HashMap hp = FileUtil.getRandomAccessFileView(inFile, Integer.parseInt(strReadLine), Integer.parseInt(strSeek), intLastLine);
 				
 				outputObj.put(ProtocolID.DX_EX_CODE, strDxExCode);
 				outputObj.put(ProtocolID.RESULT_CODE, strSuccessCode);
@@ -146,6 +151,7 @@ public class DxT015 extends SocketCtl{
 				outputObj.put(ProtocolID.RESULT_DATA, hp.get("file_desc"));
 				outputObj.put(ProtocolID.FILE_SIZE, hp.get("file_size"));
 				outputObj.put(ProtocolID.SEEK, hp.get("seek"));
+				outputObj.put(ProtocolID.DW_LEN, intLastLine + Integer.parseInt(strReadLine));
 				outputObj.put(ProtocolID.END_FLAG, hp.get("end_flag"));
 				
 				send(outputObj);
@@ -249,7 +255,7 @@ public class DxT015 extends SocketCtl{
 		
 		//byte[] buffer = FileUtil.getFileToByte(inFile);
 		//HashMap hp = FileUtil.getFileView(inFile, Integer.parseInt(startLen), Integer.parseInt(dwLen));
-		HashMap hp = FileUtil.getRandomAccessFileView(inFile, Integer.parseInt(startLen), Integer.parseInt(seek));
+		HashMap hp = FileUtil.getRandomAccessFileView(inFile, Integer.parseInt(startLen), Integer.parseInt(seek), 0);
 		
 		System.out.println(hp.get("file_desc"));
 		System.out.println(hp.get("file_size"));

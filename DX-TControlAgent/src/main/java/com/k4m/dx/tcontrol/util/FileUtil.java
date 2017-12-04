@@ -54,7 +54,7 @@ public class FileUtil {
 		return strView;
 	}
 	
-	public static HashMap getRandomAccessFileView(File file, int intReadLine, int intSeekPoint) throws Exception {
+	public static HashMap getRandomAccessFileView(File file, int intReadLine, int intSeekPoint, int intLastLine) throws Exception {
 		String strView = "";
 
 		HashMap hp = new HashMap();
@@ -67,12 +67,12 @@ public class FileUtil {
 			
 			rdma.seek(intSeekPoint);
 			String temp; 
-			 long recnum = 1;
+			 int recnum = 1;
 	        while((temp = rdma.readLine()) != null)  
 	        {  
 
 	            
-	            strView +=  recnum + " " + new String(temp.getBytes("ISO-8859-1"), "UTF-8") + "<br>";
+	            strView +=  (intLastLine + recnum) + " " + new String(temp.getBytes("ISO-8859-1"), "UTF-8") + "<br>";
 
 
 	            if(((++recnum)%(intReadLine+1)) == 0)  
@@ -83,8 +83,8 @@ public class FileUtil {
 	        
 	        if(recnum != (intReadLine+1)) strEndFlag = "1";
 	        
-	        System.out.println("recnum : " + recnum);
-	        System.out.println("intReadLine : " + intReadLine);
+	       // System.out.println("recnum : " + recnum);
+	       // System.out.println("intReadLine : " + intReadLine);
 	        
 	        
 			hp.put("file_desc", strView);

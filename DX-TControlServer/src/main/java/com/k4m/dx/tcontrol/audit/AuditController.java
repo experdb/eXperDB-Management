@@ -597,6 +597,7 @@ public class AuditController {
 	
 			String strSeek = request.getParameter("seek");
 			String strReadLine = request.getParameter("readLine");
+			String dwLen = request.getParameter("dwLen");
 			//intDwlen = Integer.parseInt(dwLen);
 			
 			DbServerVO schDbServerVO = new DbServerVO();
@@ -630,6 +631,7 @@ public class AuditController {
 			jObj.put(ClientProtocolID.FILE_DIRECTORY, strDirectory);
 			jObj.put(ClientProtocolID.FILE_NAME, strFileName);
 			jObj.put(ClientProtocolID.SEEK, strSeek);
+			jObj.put(ClientProtocolID.DW_LEN, dwLen);
 			jObj.put(ClientProtocolID.READLINE, strReadLine);
 			
 			String IP = dbServerVO.getIpadr();
@@ -654,12 +656,15 @@ public class AuditController {
 			String strEndFlag = (String)objList.get(ClientProtocolID.END_FLAG);
 			strBuffer = (String)objList.get(ClientProtocolID.RESULT_DATA);
 			
+			int intDwlen = (int)objList.get(ClientProtocolID.DW_LEN);
+			
 			Long lngSeek= (Long)objList.get(ClientProtocolID.SEEK);
 			
 			hp.put("data", strBuffer);
 			hp.put("fSize", strBuffer.length());
 			//hp.put("fChrSize", intLastLength - intFirstLength);
 			hp.put("seek", lngSeek.toString());
+			hp.put("dwLen", Integer.toString(intDwlen));
 			hp.put("endFlag", strEndFlag);
 			
 		} catch (Exception e) {
