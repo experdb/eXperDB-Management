@@ -100,6 +100,7 @@
 		
 		if(v_endFlag > 0) {
 			alert("파일을 모두 읽었습니다.");
+			$("#endFlag").val("0");
 			return;
 		}
 		
