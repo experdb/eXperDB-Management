@@ -188,8 +188,8 @@
 					<td>
 						<select class="select" name="log_line" id="log_line">
 								<option value="500">500 Line</option>
-								<option value="1000">1000 Line</option>
-								<option value="3000" selected>3000 Line</option>
+								<option value="1000" selected>1000 Line</option>
+								<option value="3000">3000 Line</option>
 								<option value="5000">5000 Line</option>
 						</select>
 					</td>
