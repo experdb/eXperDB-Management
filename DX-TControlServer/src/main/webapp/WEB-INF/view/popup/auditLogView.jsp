@@ -62,7 +62,9 @@
 	}
 	
 	function fn_copy() {
-		var v_log = $("#auditlog").val();
+		//var v_log = $("#auditlog").val();
+		var v_log =document.getElementById("auditlog").innerText;
+		//alert(v_log);
 		copy_to_clipboard(v_log);
 	}
 	
