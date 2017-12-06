@@ -6,6 +6,7 @@ import java.util.Map;
 
 import javax.annotation.Resource;
 
+import org.json.simple.JSONArray;
 import org.springframework.stereotype.Service;
 
 import com.k4m.dx.tcontrol.admin.dbserverManager.service.DbServerVO;
@@ -137,5 +138,10 @@ public class BackupServiceImpl extends EgovAbstractServiceImpl implements Backup
 	@Override
 	public List selectMonthBckScheduleSearch(HashMap<String,Object> hp) throws Exception {
 		return backupDAO.selectMonthBckScheduleSearch(hp);
+	}
+
+	@Override
+	public int selectScheduleCheckCnt(HashMap<String, Object> paramvalue) {
+		return backupDAO.selectScheduleCheckCnt(paramvalue);
 	}
 }

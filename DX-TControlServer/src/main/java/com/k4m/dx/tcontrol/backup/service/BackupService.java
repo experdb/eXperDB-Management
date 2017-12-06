@@ -4,6 +4,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.json.simple.JSONArray;
+
 import com.k4m.dx.tcontrol.admin.dbserverManager.service.DbServerVO;
 
 public interface BackupService {
@@ -178,5 +180,7 @@ public interface BackupService {
 	public WorkVO lastBckWorkId() throws Exception;
 	
 	public List selectMonthBckScheduleSearch(HashMap<String,Object> hp) throws Exception;
+
+	public int selectScheduleCheckCnt(HashMap<String, Object> paramvalue);
 	
 }

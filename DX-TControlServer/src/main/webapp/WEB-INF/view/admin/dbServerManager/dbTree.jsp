@@ -246,7 +246,8 @@ $(function() {
 
 	
     $('#dbList tbody').on( 'click', 'tr', function () {
-    	
+    	var rowIdx = table_db.cell( this ).index().columnVisible;
+    	alert(rowIdx);
         /* if ( $(this).hasClass('selected') ) {
             $(this).removeClass('selected');
         }

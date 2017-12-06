@@ -743,6 +743,56 @@ public class BackupController {
 		return result;
 	}
 	
+	
+	/**
+	 * Work scheduleCheck
+	 * @param wrk_id
+	 * @return String
+	 * @throws IOException 
+	 * @throws ParseException 
+	 */
+	@RequestMapping(value = "/popup/scheduleCheck.do")
+	@ResponseBody
+	public int scheduleCheck(@ModelAttribute("workVO") WorkVO workVO, HttpServletResponse response, HttpServletRequest request, @ModelAttribute("historyVO") HistoryVO historyVO) throws IOException, ParseException{
+		// Transaction 
+		DefaultTransactionDefinition def  = new DefaultTransactionDefinition();
+		def.setPropagationBehavior(TransactionDefinition.PROPAGATION_REQUIRED);
+		TransactionStatus status = txManager.getTransaction(def);
+		
+		int totCnt = 0;
+		// 화면접근이력 이력 남기기
+		try {
+			CmmnUtils.saveHistory(request, historyVO);
+			historyVO.setExe_dtl_cd("DX-T0021_02");
+			historyVO.setMnu_id(25);
+			accessHistoryService.insertHistory(historyVO);
+		} catch (Exception e2) {
+			e2.printStackTrace();
+		}
+
+
+		String wrk_id_Rows = request.getParameter("wrk_id_List").toString().replaceAll("&quot;", "\"");
+		JSONArray wrk_ids = (JSONArray) new JSONParser().parse(wrk_id_Rows);	
+		List<String> ids = new ArrayList<String>(); 
+		HashMap<String , Object> paramvalue = new HashMap<String, Object>();
+		
+		try {
+			for(int i=0; i<wrk_ids.size(); i++){
+				ids.add(wrk_ids.get(i).toString()); 
+			}
+			paramvalue.put("work_id", ids);
+			
+			totCnt = backupService.selectScheduleCheckCnt(paramvalue);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return totCnt;
+	
+	}
+	
+	
+	
+	
 	/**
 	 * Work Delete
 	 * @param WorkVO

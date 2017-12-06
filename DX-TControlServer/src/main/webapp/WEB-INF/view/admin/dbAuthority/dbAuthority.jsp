@@ -272,7 +272,7 @@
 			     datasArr.push(datas);
 			 } 
 		 }
-			if (confirm("DB권한 설정 하시겠습니까?")){
+			if (confirm("DB권한을 설정하시겠습니까?")){
 				$.ajax({
 					url : "/updateUsrDBAutInfo.do",
 					data : {

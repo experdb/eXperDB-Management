@@ -190,7 +190,7 @@ height: 630px !important;
 								<th width="75">work설명</th>
 								<th width="100">작업시작일시</th>
 								<th width="100">작업종료일시</th>
-								<th width="50">작업시간</th>
+								<th width="100">작업시간</th>
 								<th width="50">결과</th>
 								<th width="0"></th>
 							</tr>

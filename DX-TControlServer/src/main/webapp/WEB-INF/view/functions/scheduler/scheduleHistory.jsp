@@ -281,8 +281,8 @@
 
 	function fn_detail(exe_sn){
 		var popUrl = "/popup/scheduleHistoryDetail.do?exe_sn="+exe_sn; // 서버 url 팝업경로
-		var width = 930;
-		var height = 620;
+		var width = 950;
+		var height = 673;
 		var left = (window.screen.width / 2) - (width / 2);
 		var top = (window.screen.height /2) - (height / 2);
 		var popOption = "width="+width+", height="+height+", top="+top+", left="+left+", resizable=no, scrollbars=yes, status=no, toolbar=no, titlebar=yes, location=no,";
@@ -394,18 +394,18 @@
 												<option value="%">전체</option>
 										</select>	
 									</td>
+									<th scope="row" class="t9 line">DBMS명</th>
+									<td>
+										<select class="select t8" name="db_svr_nm" id="db_svr_nm"  style="width:200px";>
+												<option value="%">전체</option>
+										</select>	
+									</td>									
 									<th scope="row" class="t9 line">실행결과</th>
 									<td>
 										<select class="select t8" name="exe_result" id="exe_result"  style="width:200px";>
 												<option value="%">전체</option>
 												<option value="TC001701">성공</option>
 												<option value="TC001702">실패</option>
-										</select>	
-									</td>
-									<th scope="row" class="t9 line">DBMS명</th>
-									<td>
-										<select class="select t8" name="db_svr_nm" id="db_svr_nm"  style="width:200px";>
-												<option value="%">전체</option>
 										</select>	
 									</td>
 								</tr>		
