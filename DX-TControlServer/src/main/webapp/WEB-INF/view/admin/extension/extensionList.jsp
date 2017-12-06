@@ -171,13 +171,12 @@ $(function() {
 <div id="contents">
 	<div class="contents_wrap">
 		<div class="contents_tit">
-			<h4>확장팩설치정보 화면 <a href="#n"><img src="../images/ico_tit.png" class="btn_info"/></a>
+			<h4>확장팩설치정보 화면 <a href="#n"><img src="../images/ico_tit.png" class="btn_info"/></a></h4>
 			<div class="infobox"> 
 				<ul>
 					<li>선택한 데이터베이스 서버에 설치된 확장팩 목록을 조회합니다.</li>
 				</ul>
 			</div>
-			</h4>
 			<div class="location">
 				<ul>
 					<li>Admin</li>
@@ -190,7 +189,6 @@ $(function() {
 			<div class="tree_grp">
 				<div class="tree_lt">
 					<div class="btn_type_01">
-
 					</div>
 					<div class="inner">
 						<p class="tit">확장설치조회</p>

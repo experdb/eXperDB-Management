@@ -64,10 +64,10 @@ function fn_init() {
 		{data : "exe_rslt_cd", className : "dt-center", defaultContent : ""
 			,"render": function (data, type, full) {
 				if(full.exe_rslt_cd=="TC001701"){
-					var html = '<span onclick="fn_failLog('+full.exe_sn+')"><img src="../images/ico_w_20.png" alt="" id="rsltcd"/></span>';
+					var html = '<span class="btn btnC_01 btnF_02"><button><img src="../images/ico_state_02.png" style="margin-right:3px;"/>Success</button></span>';
 						return html;
 				}else{
-					var html = '<span onclick="fn_failLog('+full.exe_sn+')"><img src="../images/ico_w_19.png" alt="" id="rsltcd"/></span>';
+					var html = '<span class="btn btnC_01 btnF_02"><button onclick="fn_failLog('+full.exe_sn+')"><img src="../images/ico_state_01.png" style="margin-right:3px;"/>Fail</button></span>';
 					return html;
 				}
 			}
@@ -121,36 +121,26 @@ $(window.document).ready(function() {
 <body>
 <style>
 #scdinfo{
-width: 30% !important;
+	width: 30% !important;
 }
 
 #workinfo{
-width: 45% !important;
-height: 630px !important;
+	width: 60% !important;
+	height: 625px !important;
+}
+
+#pop_cts_wrkLog
+{
+	width: 70% !important; 
+	margin: 0 auto !important;
+	min-height:0 !important; 
+	min-width:0 !important;
 }
 </style>
 <%@include file="../cmmn/workRmanInfo.jsp"%>
 <%@include file="../cmmn/workDumpInfo.jsp"%>
 <%@include file="../cmmn/scheduleInfo.jsp"%>
- <!--  popup -->
-	<div id="pop_layer_wrkLog" class="pop-layer">
-		<div class="pop-container">
-			<div class="pop_cts" style="width: 600px; margin: 0 auto;">
-				<p class="tit" style="margin-bottom: 15px;">작업로그 정보</p>
-				<table class="write" border="">
-					<caption>작업로그 정보</caption>
-					<tbody>
-						<tr>
-							<td name="wrkLogInfo" id="wrkLogInfo" style="height: 270px;"></td>
-						</tr>
-					</tbody>
-				</table>
-				<div class="btn_type_02">
-					<a href="#n" class="btn" onclick="toggleLayer($('#pop_layer_wrkLog'), 'off');"><span>닫기</span></a>
-				</div>
-			</div>
-		</div><!-- //pop-container -->
-	</div>
+<%@include file="../cmmn/wrkLog.jsp"%>
 	
 	<div class="pop_container">
 		<div class="pop_cts">

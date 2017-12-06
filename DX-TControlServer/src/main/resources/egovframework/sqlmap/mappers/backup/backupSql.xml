@@ -698,6 +698,7 @@
                 , exe_day
                 , substring(exe_hms from 5 for 2) || ':' || substring(exe_hms from 3 for 2) AS exe_hms
                 , exe_dt
+                , TO_CHAR(frst_reg_dtm::TIMESTAMP,'yyyyMMdd')as frst_reg_dtm
             FROM
             	T_SCD_M
             WHERE SCD_ID IN (

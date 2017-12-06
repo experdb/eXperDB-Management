@@ -151,6 +151,7 @@
 		SELECT 
 			  A.SCD_NM
 			, A.EXE_SN
+			, A.SCD_ID
 			, TO_CHAR(A.WRK_STRT_DTM,'YYYY-MM-DD HH24:MI:SS') AS WRK_STRT_DTM
 			, TO_CHAR(A.WRK_END_DTM,'YYYY-MM-DD HH24:MI:SS') AS WRK_END_DTM
 			, A.WRK_DTM
@@ -158,6 +159,7 @@
 			FROM(
 				SELECT 
 				 	  SCD_NM
+				 	, SCD_ID
 					, MIN(A.EXE_SN) AS EXE_SN
 					, MIN(A.WRK_STRT_DTM) AS WRK_STRT_DTM
 					, MAX(A.WRK_END_DTM) AS WRK_END_DTM
@@ -165,7 +167,7 @@
 					FROM T_WRKEXE_G A
 					WHERE 1= 1
 					AND EXE_SN=#{exe_sn}
-					GROUP BY EXE_GRP_SN, SCD_NM, DB_ID
+					GROUP BY EXE_GRP_SN, SCD_NM, DB_ID, SCD_ID
 				)A
 	</select>
 	

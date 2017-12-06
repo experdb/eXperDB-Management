@@ -123,6 +123,29 @@
 	line-height: 24px;
 	background: url(../images/popup/ico_p_2.png) 8px 48% no-repeat;
 }
+
+.iGraph {
+    white-space: nowrap;
+    line-height: normal;
+}
+.iGraph .gBar {
+    display: inline-block;
+    width: 35px;
+    height: 10px;
+    margin: 0 5px 0 0;
+    border: 1px solid #ccc;
+    background: #e9e9e9;
+}
+.iGraph .gAction {
+    display: inline-block;
+    height: 10px;
+    border: 1px solid #8c9bac;
+    background: #99a6b6;
+    margin: -1px;
+}
+.iGraph .gPercent {
+    font: 10px;
+}
 </style>
 <!-- contents -->
 <div id="contents">
@@ -460,32 +483,37 @@
 					<div class="cmm_bd">
 						<div class="sub_tit"><p>테이블스페이스 정보</p></div>
 						<div class="overflow_areas" style="height: 365px;">
-							<table class="list3">
+							<table class="list3" >
 								<caption>테이블스페이스 정보</caption>
 								<colgroup>
-									<col style="width: 12%;">
 									<col style="width: 10%;">
+									<col style="width: 7%;">
+									<col style="width: 6%;">
+									<col style="width: 7%;">
+									<col style="width: 8%;">
+									<col style="width: 10%;">
+									
 									<col style="width: 8%;">
 									<col style="width: 8%;">
-									<col style="width: 10%;">
-									<col style="width: 10%;">
-									<col style="width: 12%;">
-									<col style="width: 10%;">
-									<col style="width: 10%;">
+									<col style="width: 11%;">
+									<col style="width: 8%;">
+									<col style="width: 7%;">
 									<col style="width: 10%;">
 								</colgroup>
 								<thead>
 									<tr>
-										<th scope="col" colspan="4">파일시스템</th>
+										<th scope="col" colspan="6">파일시스템</th>
 										<th scope="col" colspan="6">테이블스페이스</th>
 									</tr>
 								</thead>
 								<tbody>
 									<tr>
 										<td class="color">Filesystem</td>
-										<td class="color">Mounted on</td>
-										<td class="color">Total size</td>
+										<td class="color">Size</td>
 										<td class="color">Used</td>
+										<td class="color">Avail</td>
+										<td class="color">Use%</td>
+										<td class="color">Mounted on</td>	
 										<td class="color">Name</td>
 										<td class="color">Owner</td>
 										<td class="color">Location</td>
@@ -496,9 +524,16 @@
 									<c:forEach var="tablespaceinfo" items="${result.CMD_TABLESPACE_INFO}">
 										<tr>
 											<td >${tablespaceinfo.filesystem}</td>
-											<td >${tablespaceinfo.mounton}</td>
 											<td>${tablespaceinfo.fsize}</td>
-											<td>${tablespaceinfo.used}</td>
+											<td >${tablespaceinfo.used}</td>
+											<td >${tablespaceinfo.avail}</td>
+											<td>
+											<span class="iGraph">
+												<span class="gBar"><span class="gAction" style="width:${tablespaceinfo.use}"></span></span>
+												<span class="gPercent">${tablespaceinfo.use}</span>
+											</span>	
+											</td>
+											<td >${tablespaceinfo.mounton}</td>
 											<td>${tablespaceinfo.name}</td>
 											<td>${tablespaceinfo.owner}</td>
 											<td>${tablespaceinfo.location}</td>
