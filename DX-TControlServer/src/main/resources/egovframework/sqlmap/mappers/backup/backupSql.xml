@@ -442,6 +442,34 @@
 	 	**/
 	 	SELECT
 	 		(ROW_NUMBER() OVER()) AS ROWNUM,
+            AA.IPADR,
+	 		AA.EXE_SN,
+	 		AA.SCD_ID,
+	 		AA.SCD_NM,
+	 		AA.WRK_ID,
+	 		AA.WRK_NM,
+	 		AA.WRK_EXP,
+	 		AA.WRK_STRT_DTM,
+	 		AA.WRK_END_DTM,
+	 		AA.WRK_DTM,
+	 		AA.EXE_RSLT_CD,
+	 		AA.EXE_RSLT_CD_NM,
+	 		AA.BCK_OPT_CD,
+	 		AA.BCK_OPT_CD_NM,
+	 		AA.TLI,
+	 		AA.FILE_SZ,
+	 		AA.DB_ID,
+	 		AA.DB_NM,
+	 		AA.BCK_FILE_PTH,
+	 		AA.BCK_FILENM,
+	 		AA.FRST_REGR_ID,
+	 		AA.RSLT_MSG,
+	 		AA.FRST_REG_DTM,
+	 		AA.LST_MDFR_ID,
+	 		AA.LST_MDF_DTM
+        FROM
+        (SELECT
+	 		B.IPADR,
 	 		TWG.EXE_SN AS EXE_SN,
 	 		TWG.SCD_ID AS SCD_ID,
 	 		(SELECT SCD_NM FROM T_SCD_M WHERE TWG.SCD_ID = SCD_ID ) AS SCD_NM,
@@ -466,9 +494,11 @@
 	 		to_char(TWG.FRST_REG_DTM,'YYYY-MM-DD HH24:MI') AS FRST_REG_DTM,
 	 		TWG.LST_MDFR_ID AS LST_MDFR_ID,
 	 		to_char(TWG.LST_MDF_DTM,'YYYY-MM-DD HH24:MI') AS LST_MDF_DTM
-	 	FROM T_WRKEXE_G TWG, T_BCK_WRKCNG_I TWI
+	 	FROM T_WRKEXE_G TWG, T_BCK_WRKCNG_I TWI, T_DB_I A, T_DBSVRIPADR_I B
 	 	WHERE 1=1
 	 		AND TWG.WRK_ID = TWI.WRK_ID
+	 		AND TWG.DB_ID = A.DB_ID
+            AND A.DB_SVR_ID = B.DB_SVR_ID
 	 	<if test="wrk_id != null and wrk_id != '' ">
       		<if test='wrk_id != "0"'>
 	      		AND TWG.WRK_ID=#{wrk_id}
@@ -507,7 +537,8 @@
       	<if test="exe_rslt_cd != null and exe_rslt_cd != '' ">
       		AND TWG.EXE_RSLT_CD=#{exe_rslt_cd}
       	</if>     	
-      	ORDER BY TWG.EXE_SN DESC
+      		ORDER BY WRK_END_DTM DESC
+      	)AA
     </select>
 
 	<insert id="insertWorkObj" parameterType="workObjVO">

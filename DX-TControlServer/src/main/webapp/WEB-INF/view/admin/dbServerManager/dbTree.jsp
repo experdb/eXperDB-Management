@@ -102,6 +102,7 @@ function fn_init() {
 	           if(type === 'display'){
 	              data = '<input type="text" class="txt" name="db_exp" value="' +full.db_exp + '" style="width: 350px; height: 25px;">';      
 	           }
+	           
 	           return data;
 	        }}, 
 		{data : "rownum", defaultContent : "", targets : 0, orderable : false, checkboxes : {'selectRow' : true}}, 		
@@ -246,8 +247,6 @@ $(function() {
 
 	
     $('#dbList tbody').on( 'click', 'tr', function () {
-    	var rowIdx = table_db.cell( this ).index().columnVisible;
-    	alert(rowIdx);
         /* if ( $(this).hasClass('selected') ) {
             $(this).removeClass('selected');
         }

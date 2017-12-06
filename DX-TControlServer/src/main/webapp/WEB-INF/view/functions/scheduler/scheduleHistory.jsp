@@ -423,6 +423,7 @@
 							<col style="width: 15%;" />
 							<col style="width: 15%;" />
 							<col style="width: 15%;" />
+							<col style="width: 15%;" />
 							<col style="width: 10%;" />
 							<col style="width: 15%;" />
 						</colgroup>
@@ -430,7 +431,8 @@
 							<tr style="border-bottom: 1px solid #b8c3c6;">
 								<th scope="col">NO</th>
 								<th scope="col">스케줄명</th>
-								<th scope="col">DBMS명</th>							
+								<th scope="col">DBMS명</th>
+								<th scope="col">DBMS아이피</th>							
 								<th scope="col">작업시작일시</th>
 								<th scope="col">작업종료일시</th>
 								<th scope="col">작업시간</th>
@@ -443,7 +445,8 @@
 								<tr>
 									<td><c:out value="${paginationInfo.totalRecordCount+1 - ((pagingVO.pageIndex-1) * pagingVO.pageSize + status.count)}" /></td>
 									<td style="text-align: left;"><span onclick="fn_scdLayer('${result.scd_id}');" class="bold"><c:out value="${result.scd_nm}" /></span></td>
-									<td><c:out value="${result.db_svr_nm}" /></td>								
+									<td><c:out value="${result.db_svr_nm}" /></td>		
+									<td><c:out value="${result.ipadr}" /></td>						
 									<td><c:out value="${result.wrk_strt_dtm}" /></td>
 									<td><c:out value="${result.wrk_end_dtm}" /></td>
 									<td><c:out value="${result.wrk_dtm}" /></td>

@@ -184,8 +184,7 @@
 		});
 	});
 		
-	$(function() {
-		
+	$(function() {		
 		   $('#user tbody').on( 'click', 'tr', function () {
 		         if ( $(this).hasClass('selected') ) {
 		        	}
