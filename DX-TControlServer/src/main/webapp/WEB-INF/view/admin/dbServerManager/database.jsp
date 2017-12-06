@@ -33,7 +33,6 @@ function fn_init() {
 		paging : false,
 		deferRender : true,
 		columns : [
-		{data : "rownum", defaultContent : "", targets : 0, orderable : false, checkboxes : {'selectRow' : true}}, 
 		{data : "idx", className : "dt-center", defaultContent : ""},		
 		{data : "db_svr_nm", className : "dt-center", defaultContent : ""},
 		{data : "ipadr", className : "dt-center", defaultContent : ""},
@@ -47,17 +46,16 @@ function fn_init() {
 		]
 	});
 		
-		table.tables().header().to$().find('th:eq(0)').css('min-width', '10px');
-		table.tables().header().to$().find('th:eq(1)').css('min-width', '20px');
-		table.tables().header().to$().find('th:eq(2)').css('min-width', '130px');
-		table.tables().header().to$().find('th:eq(3)').css('min-width', '150px');
-		table.tables().header().to$().find('th:eq(4)').css('min-width', '70px');
-		table.tables().header().to$().find('th:eq(5)').css('min-width', '130px');
-		table.tables().header().to$().find('th:eq(6)').css('min-width', '65px');
-		table.tables().header().to$().find('th:eq(7)').css('min-width', '100px');  
-		table.tables().header().to$().find('th:eq(8)').css('min-width', '65px');
-		table.tables().header().to$().find('th:eq(9)').css('min-width', '100px');
-		table.tables().header().to$().find('th:eq(10)').css('min-width', '0px');
+		table.tables().header().to$().find('th:eq(0)').css('min-width', '20px');
+		table.tables().header().to$().find('th:eq(1)').css('min-width', '130px');
+		table.tables().header().to$().find('th:eq(2)').css('min-width', '150px');
+		table.tables().header().to$().find('th:eq(3)').css('min-width', '70px');
+		table.tables().header().to$().find('th:eq(4)').css('min-width', '130px');
+		table.tables().header().to$().find('th:eq(5)').css('min-width', '65px');
+		table.tables().header().to$().find('th:eq(6)').css('min-width', '100px');  
+		table.tables().header().to$().find('th:eq(7)').css('min-width', '65px');
+		table.tables().header().to$().find('th:eq(8)').css('min-width', '100px');
+		table.tables().header().to$().find('th:eq(9)').css('min-width', '0px');
 	    $(window).trigger('resize'); 
 }
 
@@ -184,7 +182,7 @@ function fn_search(){
  * 디비 등록 팝업 호출
  ******************************************************** */
 function fn_reg_popup(){
-	window.open("/popup/dbRegForm.do","dbRegPop","location=no,menubar=no,resizable=yes,scrollbars=yes,status=no,width=685,height=613,top=0,left=0");
+	window.open("/popup/dbRegForm.do","dbRegPop","location=no,menubar=no,resizable=no,scrollbars=yes,status=no,width=920,height=675,top=0,left=0");
 }
 
 
@@ -246,7 +244,6 @@ function fn_reg_popup(){
 				<table id="repoDBList" class="display" cellspacing="0" width="100%">
 					<thead>
 						<tr>
-							<th width="10"></th>
 							<th width="20">No</th>
 							<th width="130">DBMS명</th>
 							<th width="150">DBMS 아이피</th>

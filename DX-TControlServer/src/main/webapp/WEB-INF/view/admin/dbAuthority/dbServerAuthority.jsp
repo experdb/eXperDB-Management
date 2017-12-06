@@ -327,7 +327,7 @@
 			 } 
 		 }
 		 
-			if (confirm("DB서버권한 설정 하시겠습니까?")){
+			if (confirm("DB서버권한을 설정하시겠습니까?")){
 				$.ajax({
 					url : "/updateUsrDBSrvAutInfo.do",
 					data : {

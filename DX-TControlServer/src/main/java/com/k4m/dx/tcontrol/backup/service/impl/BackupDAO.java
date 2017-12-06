@@ -5,6 +5,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.json.simple.JSONArray;
 import org.springframework.stereotype.Repository;
 
 import com.k4m.dx.tcontrol.admin.dbserverManager.service.DbServerVO;
@@ -142,5 +143,11 @@ public class BackupDAO extends EgovAbstractMapper{
 	
 	public List selectMonthBckScheduleSearch(HashMap<String,Object> hp) throws Exception{
 		return (List) getSqlSession().selectList("backupSQL.selectMonthBckScheduleSearch", hp);	
+	}
+
+	public int selectScheduleCheckCnt(HashMap<String, Object> paramvalue) {
+		int resultSet = 0;
+		resultSet = (int) getSqlSession().selectOne("backupSQL.selectScheduleCheckCnt", paramvalue);
+		return resultSet;
 	}
 }

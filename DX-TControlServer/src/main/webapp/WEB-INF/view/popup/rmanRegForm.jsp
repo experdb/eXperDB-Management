@@ -313,7 +313,7 @@ function fn_check() {
 						<tbody>
 							<tr>
 								<th scope="row" class="ico_t1">Work명</th>
-								<td><input type="text" class="txt" name="wrk_nm" id="wrk_nm" maxlength=50/>
+								<td><input type="text" class="txt" name="wrk_nm" id="wrk_nm" maxlength="20"/>
 								<span class="btn btnC_01"><button type="button" class= "btn_type_02" onclick="fn_check()" style="width: 60px; margin-right: -60px; margin-top: 0;">중복체크</button></span>
 								</td>
 							</tr>

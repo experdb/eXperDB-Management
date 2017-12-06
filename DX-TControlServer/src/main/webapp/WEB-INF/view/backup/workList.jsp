@@ -9,7 +9,6 @@
 	* @Modification Information
 	*
 	*   수정일         수정자                   수정내용
-	*  ------------    -----------    ---------------------------
 	*  2017.06.07     최초 생성
 	*  2017.10.23 	 변승우			테이블 -> 데이터테이블 변환
     *	
@@ -414,6 +413,7 @@ function fn_dump_check_all(){
  * Rman Data Delete
  ******************************************************** */
 function fn_rman_work_delete(){
+	var scheduleChk = null;
 	var datas = tableRman.rows('.selected').data();
 	
 	if(datas.length < 1){
@@ -428,41 +428,78 @@ function fn_rman_work_delete(){
     	wrk_id_List.push( tableRman.rows('.selected').data()[i].wrk_id);   
   	}	
 		
-	if(confirm("선택하신 작업을 삭제하시겠습니까?")){
-				$.ajax({
-					url : "/popup/workDelete.do",
-				  	data : {
-				  		bck_wrk_id_List : JSON.stringify(bck_wrk_id_List),
-				  		wrk_id_List : JSON.stringify(wrk_id_List)
-				  	},
-					dataType : "json",
-					type : "post",
-					beforeSend: function(xhr) {
-				        xhr.setRequestHeader("AJAX", true);
-				     },
-					error : function(xhr, status, error) {
-						if(xhr.status == 401) {
-							alert("인증에 실패 했습니다. 로그인 페이지로 이동합니다.");
-							 location.href = "/";
-						} else if(xhr.status == 403) {
-							alert("세션이 만료가 되었습니다. 로그인 페이지로 이동합니다.");
-				             location.href = "/";
-						} else {
-							alert("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""));
-						}
-					},
-					success : function(data) {
-					}
-				});			
-		alert("선택한 작업이 삭제되었습니다.");
-		fn_rman_find_list();
-	}
+    
+    $.ajax({
+		url : "/popup/scheduleCheck.do",
+	  	data : {
+	  		bck_wrk_id_List : JSON.stringify(bck_wrk_id_List),
+	  		wrk_id_List : JSON.stringify(wrk_id_List)
+	  	},
+		dataType : "json",
+		type : "post",
+		beforeSend: function(xhr) {
+	        xhr.setRequestHeader("AJAX", true);
+	     },
+		error : function(xhr, status, error) {
+			if(xhr.status == 401) {
+				alert("인증에 실패 했습니다. 로그인 페이지로 이동합니다.");
+				 location.href = "/";
+			} else if(xhr.status == 403) {
+				alert("세션이 만료가 되었습니다. 로그인 페이지로 이동합니다.");
+	             location.href = "/";
+			} else {
+				alert("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""));
+			}
+		},
+		success : function(data) {
+			scheduleChk =data;
+		}
+	});	
+    
+		if(scheduleChk != 0 ){
+			alert("등록된 스케줄이 존재하여 삭제할수 없습니다.");
+			return false;
+		}else{   
+			if(confirm("선택하신 작업을 삭제하시겠습니까?")){
+						$.ajax({
+							url : "/popup/workDelete.do",
+						  	data : {
+						  		bck_wrk_id_List : JSON.stringify(bck_wrk_id_List),
+						  		wrk_id_List : JSON.stringify(wrk_id_List)
+						  	},
+							dataType : "json",
+							type : "post",
+							beforeSend: function(xhr) {
+						        xhr.setRequestHeader("AJAX", true);
+						     },
+							error : function(xhr, status, error) {
+								if(xhr.status == 401) {
+									alert("인증에 실패 했습니다. 로그인 페이지로 이동합니다.");
+									 location.href = "/";
+								} else if(xhr.status == 403) {
+									alert("세션이 만료가 되었습니다. 로그인 페이지로 이동합니다.");
+						             location.href = "/";
+								} else {
+									alert("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""));
+								}
+							},
+							success : function(data) {
+							}
+						});			
+				alert("선택한 작업이 삭제되었습니다.");
+				fn_rman_find_list();
+			}
+		}
 }
+
+
+
 
 /* ********************************************************
  * Dump Data Delete
  ******************************************************** */
 function fn_dump_work_delete(){
+	var scheduleChk = null;
 	var datas = tableDump.rows('.selected').data();
 	
 	if(datas.length < 1){
@@ -476,35 +513,67 @@ function fn_dump_work_delete(){
     	bck_wrk_id_List.push( tableDump.rows('.selected').data()[i].bck_wrk_id);   
     	wrk_id_List.push( tableDump.rows('.selected').data()[i].wrk_id);   
   	}	
+    
+    $.ajax({
+		url : "/popup/scheduleCheck.do",
+	  	data : {
+	  		bck_wrk_id_List : JSON.stringify(bck_wrk_id_List),
+	  		wrk_id_List : JSON.stringify(wrk_id_List)
+	  	},
+		dataType : "json",
+		type : "post",
+		beforeSend: function(xhr) {
+	        xhr.setRequestHeader("AJAX", true);
+	     },
+		error : function(xhr, status, error) {
+			if(xhr.status == 401) {
+				alert("인증에 실패 했습니다. 로그인 페이지로 이동합니다.");
+				 location.href = "/";
+			} else if(xhr.status == 403) {
+				alert("세션이 만료가 되었습니다. 로그인 페이지로 이동합니다.");
+	             location.href = "/";
+			} else {
+				alert("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""));
+			}
+		},
+		success : function(data) {
+			scheduleChk =data;
+		}
+	});	
 	
-	if(confirm("선택하신 작업을 삭제하시겠습니까?")){
-				$.ajax({
-					url : "/popup/workDelete.do",
-				  	data : {
-				  		bck_wrk_id_List : JSON.stringify(bck_wrk_id_List),
-				  		wrk_id_List : JSON.stringify(wrk_id_List)
-				  	},
-					dataType : "json",
-					type : "post",
-					beforeSend: function(xhr) {
-				        xhr.setRequestHeader("AJAX", true);
-				     },
-					error : function(xhr, status, error) {
-						if(xhr.status == 401) {
-							alert("인증에 실패 했습니다. 로그인 페이지로 이동합니다.");
-							 location.href = "/";
-						} else if(xhr.status == 403) {
-							alert("세션이 만료가 되었습니다. 로그인 페이지로 이동합니다.");
-				             location.href = "/";
-						} else {
-							alert("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""));
+    if(scheduleChk != 0 ){
+		alert("등록된 스케줄이 존재하여 삭제할수 없습니다.");
+		return false;
+	}else{   
+		if(confirm("선택하신 작업을 삭제하시겠습니까?")){
+					$.ajax({
+						url : "/popup/workDelete.do",
+					  	data : {
+					  		bck_wrk_id_List : JSON.stringify(bck_wrk_id_List),
+					  		wrk_id_List : JSON.stringify(wrk_id_List)
+					  	},
+						dataType : "json",
+						type : "post",
+						beforeSend: function(xhr) {
+					        xhr.setRequestHeader("AJAX", true);
+					     },
+						error : function(xhr, status, error) {
+							if(xhr.status == 401) {
+								alert("인증에 실패 했습니다. 로그인 페이지로 이동합니다.");
+								 location.href = "/";
+							} else if(xhr.status == 403) {
+								alert("세션이 만료가 되었습니다. 로그인 페이지로 이동합니다.");
+					             location.href = "/";
+							} else {
+								alert("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""));
+							}
+						},
+						success : function(data) {
 						}
-					},
-					success : function(data) {
-					}
-				});
-		alert("선택한 작업이 삭제되었습니다.");
-		fn_dump_find_list();
+					});
+			alert("선택한 작업이 삭제되었습니다.");
+			fn_dump_find_list();
+		}
 	}
 }
 

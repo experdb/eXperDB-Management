@@ -31,7 +31,7 @@
 		 	alert("영문,숫자를 혼합하여 6~20자 이내를 입력해 주십시오.");
 		 	return false;
 		 }
-		 	return true;
+		 return true;
 	}
 
 	/*확인버튼 클릭시*/
