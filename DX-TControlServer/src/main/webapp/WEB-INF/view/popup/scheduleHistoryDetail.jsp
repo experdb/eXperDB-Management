@@ -64,7 +64,7 @@ function fn_init() {
 		{data : "exe_rslt_cd", className : "dt-center", defaultContent : ""
 			,"render": function (data, type, full) {
 				if(full.exe_rslt_cd=="TC001701"){
-					var html = '<span class="btn btnC_01 btnF_02"><button><img src="../images/ico_state_02.png" style="margin-right:3px;"/>Success</button></span>';
+					var html = '<span class="btn btnC_01 btnF_02"><img src="../images/ico_state_02.png" style="margin-right:3px;"/>Success</span>';
 						return html;
 				}else{
 					var html = '<span class="btn btnC_01 btnF_02"><button onclick="fn_failLog('+full.exe_sn+')"><img src="../images/ico_state_01.png" style="margin-right:3px;"/>Fail</button></span>';
@@ -126,16 +126,9 @@ $(window.document).ready(function() {
 
 #workinfo{
 	width: 60% !important;
-	height: 625px !important;
+	height: 610px !important;
 }
 
-#pop_cts_wrkLog
-{
-	width: 70% !important; 
-	margin: 0 auto !important;
-	min-height:0 !important; 
-	min-width:0 !important;
-}
 </style>
 <%@include file="../cmmn/workRmanInfo.jsp"%>
 <%@include file="../cmmn/workDumpInfo.jsp"%>

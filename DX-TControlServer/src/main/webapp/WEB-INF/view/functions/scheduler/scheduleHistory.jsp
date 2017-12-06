@@ -452,8 +452,10 @@
 									<td><c:out value="${result.wrk_dtm}" /></td>
 									<td>
 										<c:choose>
-											<c:when test="${result.exe_rslt_cd eq 'TC001701'}">Success</c:when>
-									    	<c:otherwise>Fail</c:otherwise>
+											<c:when test="${result.exe_rslt_cd eq 'TC001701'}"><img src="../images/ico_state_02.png" style="margin-right:3px;"/>Success</c:when>
+									    	<c:otherwise>
+									    	<img src="../images/ico_state_01.png" style="margin-right:3px;"/>Fail
+									    	</c:otherwise>
 										</c:choose>
 									</td>
 									<td><span class='btn btnC_01 btnF_02' onclick='fn_detail(${result.exe_sn})'><input type="button" value="상세조회"></span></td>
