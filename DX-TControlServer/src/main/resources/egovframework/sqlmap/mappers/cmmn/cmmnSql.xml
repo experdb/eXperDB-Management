@@ -241,10 +241,8 @@
 	 	* Description : RepoDB 조회
 	 	* Author : 김주영
 	 	**/
-		SELECT DB_NM FROM T_DB_I D,T_USRDBAUT_I I
-		WHERE D.DB_ID =I.DB_ID
-		AND I.DB_SVR_ID=#{db_svr_id}
-		AND I.USR_ID=#{usr_id}
-		AND I.AUT_YN ='Y'
+		SELECT DB_NM FROM T_DB_I D
+		WHERE D.DB_SVR_ID=#{db_svr_id}
+		AND D.USEYN='Y'
     </select>	     
 </mapper>

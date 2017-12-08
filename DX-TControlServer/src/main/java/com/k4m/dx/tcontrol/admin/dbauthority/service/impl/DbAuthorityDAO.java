@@ -1,5 +1,6 @@
 package com.k4m.dx.tcontrol.admin.dbauthority.service.impl;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import org.springframework.stereotype.Repository;
@@ -100,12 +101,13 @@ public class DbAuthorityDAO extends EgovAbstractMapper{
 	}
 
 	@SuppressWarnings({ "deprecation", "unchecked" })
-	public List<Map<String, Object>> selectUserDBSvrAutList(String usr_id) {
+	public List<Map<String, Object>> selectUserDBSvrAutList(HashMap<String, Object> param) {
 		List<Map<String, Object>>  sl = null;
-		sl = (List<Map<String, Object>>) list("dbAuthoritySql.selectUserDBSvrAutList", usr_id);
+		sl = (List<Map<String, Object>>) list("dbAuthoritySql.selectUserDBSvrAutList", param);
 		return sl;
 	}
 
+	@SuppressWarnings({ "deprecation", "unchecked" })
 	public List<Map<String, Object>> selectTreeDBSvrList(String usr_id) {
 		List<Map<String, Object>>  sl = null;
 		sl = (List<Map<String, Object>>) list("dbAuthoritySql.selectTreeDBSvrList", usr_id);

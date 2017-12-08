@@ -207,7 +207,7 @@
 			},
 			success : function(result) {
 				if (result == "true") {
-					alert("사용자아이디를 사용하실 수 있습니다.");
+					alert("사용 가능한 아이디입니다.");
 					document.getElementById("usr_nm").focus();
 					idCheck = 1;
 				} else {

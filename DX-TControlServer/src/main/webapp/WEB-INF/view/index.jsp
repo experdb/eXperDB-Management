@@ -29,14 +29,40 @@
 									<img src="../images/ico_state_09.png" alt="Backup" /><span>Schedule
 									</span>
 								</p>
-								<a href="/selectScheduleListView.do"><p class="state_num c1">${backupInfo.schedule_cnt}</p></a>
+								<a href="/selectScheduleListView.do">
+								<c:choose>
+						           <c:when test="${fn:length(fn:escapeXml(backupInfo.schedule_cnt))>2}">
+						           <p class="state_num c1" style="font-size: 40px;">
+						            <c:out value="${backupInfo.schedule_cnt}"/>
+						            </p>
+						           </c:when>
+						           <c:otherwise>
+						           <p class="state_num c1">
+						            <c:out value="${backupInfo.schedule_cnt}"/>
+						            </p>
+						           </c:otherwise> 
+						         </c:choose>
+								</a>
 								<p class="state_txt">스케줄등록</p>
 							</li>
 							<li>
 								<p class="state">
 									<img src="../images/ico_state_03.png" alt="Running Schedule" /><span>Running</span>
 								</p>
-								<a href="/selectScheduleListView.do?scd_cndt=TC001801"><p class="state_num c3">${backupInfo.schedule_run_cnt}</p></a>
+								<a href="/selectScheduleListView.do?scd_cndt=TC001801">
+								 <c:choose>
+						           <c:when test="${fn:length(fn:escapeXml(backupInfo.schedule_run_cnt))>2}">
+						           <p class="state_num c3" style="font-size: 40px;">
+						            <c:out value="${backupInfo.schedule_run_cnt}"/>
+						            </p>
+						           </c:when>
+						           <c:otherwise>
+						           <p class="state_num c3">
+						            <c:out value="${backupInfo.schedule_run_cnt}"/>
+						            </p>
+						           </c:otherwise> 
+						         </c:choose>
+								</a>
 								<p class="state_txt">실행중</p>
 							</li>
 							<%-- <li>
@@ -50,21 +76,60 @@
 								<p class="state">
 									<img src="../images/ico_state_07.png" alt="Stop" /><span>Stop</span>
 								</p>
-								<a href="/selectScheduleListView.do?scd_cndt=TC001802"><p class="state_num c1">${scheduleInfo.stop_cnt}</p></a>
+								<a href="/selectScheduleListView.do?scd_cndt=TC001802">
+								 <c:choose>
+						           <c:when test="${fn:length(fn:escapeXml(scheduleInfo.stop_cnt))>2}">
+						           <p class="state_num c1" style="font-size: 40px;">
+						            <c:out value="${scheduleInfo.stop_cnt}"/>
+						            </p>
+						           </c:when>
+						           <c:otherwise>
+						           <p class="state_num c1">
+						            <c:out value="${scheduleInfo.stop_cnt}"/>
+						            </p>
+						           </c:otherwise> 
+						         </c:choose>
+								</a>
 								<p class="state_txt">중지</p>
 							</li>
 							<li>
 								<p class="state">
 									<img src="../images/ico_state_09.png" alt="Scheduled for today" /><span>Today</span>
 								</p>
-								<p class="state_num c1">${scheduleInfo.today_cnt}</p>
+								
+								<c:choose>
+						           <c:when test="${fn:length(fn:escapeXml(scheduleInfo.today_cnt))>2}">
+						           <p class="state_num c1" style="font-size: 40px;">
+						            <c:out value="${scheduleInfo.today_cnt}"/>
+						            </p>
+						           </c:when>
+						           <c:otherwise>
+						           <p class="state_num c1">
+						            <c:out value="${scheduleInfo.today_cnt}"/>
+						            </p>
+						           </c:otherwise> 
+						         </c:choose>
+						         
 								<p class="state_txt">금일예정</p>
 							</li>
 							<li>
 								<p class="state">
 									<img src="../images/ico_state_01.png" alt="Fail" /><span>Fail</span>
 								</p>
-								<a href="/selectScheduleHistoryFail.do"><p class="state_num c3">${scheduleInfo.fail_cnt}</p></a>
+								<a href="/selectScheduleHistoryFail.do">
+								<c:choose>
+						           <c:when test="${fn:length(fn:escapeXml(scheduleInfo.fail_cnt))>2}">
+						           <p class="state_num c3" style="font-size: 40px;">
+						            <c:out value="${scheduleInfo.fail_cnt}"/>
+						            </p>
+						           </c:when>
+						           <c:otherwise>
+						           <p class="state_num c3">
+						            <c:out value="${scheduleInfo.fail_cnt}"/>
+						            </p>
+						           </c:otherwise> 
+						         </c:choose>
+								</a>
 								<p class="state_txt">오류</p>
 							</li>
 						</ul>
@@ -76,14 +141,38 @@
 								<p class="state">
 									<img src="../images/ico_state_10.png" alt="Server" /><span>Server</span>
 								</p>
-								<a href="/dbServer.do"><p class="state_num c1">${backupInfo.server_cnt}</p></a>
+								<a href="/dbServer.do">
+								 <c:choose>
+						           <c:when test="${fn:length(fn:escapeXml(backupInfo.server_cnt))>2}">
+						           <p class="state_num c1" style="font-size: 40px;">
+						            <c:out value="${backupInfo.stop_cnt}"/>
+						            </p>
+						           </c:when>
+						           <c:otherwise>
+						           <p class="state_num c1">
+						            <c:out value="${backupInfo.server_cnt}"/>
+						            </p>
+						           </c:otherwise> 
+						         </c:choose>
+								</a>
 								<p class="state_txt">서버</p>
 							</li>
 							<li>
 								<p class="state">
 									<img src="../images/ico_state_11.png" alt="Backup" /><span>Backup</span>
 								</p>
-								<p class="state_num c1">${backupInfo.backup_cnt}</p>
+								 <c:choose>
+						           <c:when test="${fn:length(fn:escapeXml(backupInfo.backup_cnt))>2}">
+						           <p class="state_num c1" style="font-size: 40px;">
+						            <c:out value="${backupInfo.backup_cnt}"/>
+						            </p>
+						           </c:when>
+						           <c:otherwise>
+						           <p class="state_num c1">
+						            <c:out value="${backupInfo.backup_cnt}"/>
+						            </p>
+						           </c:otherwise> 
+						         </c:choose>
 								<p class="state_txt">백업등록</p>
 							</li>
 							<%-- <li>
@@ -110,14 +199,36 @@
 								<p class="state">
 									<img src="../images/ico_state_10.png" alt="connet" /><span>Connet</span>
 								</p>
-								<p class="state_num c1">${transferInfo.connect_cnt}</p>
+								<c:choose>
+						           <c:when test="${fn:length(fn:escapeXml(transferInfo.connect_cnt))>2}">
+						           <p class="state_num c1" style="font-size: 40px;">
+						            <c:out value="${transferInfo.connect_cnt}"/>
+						            </p>
+						           </c:when>
+						           <c:otherwise>
+						           <p class="state_num c1">
+						            <c:out value="${transferInfo.connect_cnt}"/>
+						            </p>
+						           </c:otherwise> 
+						         </c:choose>
 								<p class="state_txt">connet수</p>
 							</li>
 							<li>
 								<p class="state">
 									<img src="../images/ico_state_03.png" alt="Running Transfer" /><span>Running</span>
 								</p>
-								<p class="state_num c3">${transferInfo.execute_cnt}</p>
+								<c:choose>
+						           <c:when test="${fn:length(fn:escapeXml(transferInfo.execute_cnt))>2}">
+						           <p class="state_num c3" style="font-size: 40px;">
+						            <c:out value="${transferInfo.execute_cnt}"/>
+						            </p>
+						           </c:when>
+						           <c:otherwise>
+						           <p class="state_num c3">
+						            <c:out value="${transferInfo.execute_cnt}"/>
+						            </p>
+						           </c:otherwise> 
+						         </c:choose>
 								<p class="state_txt">실행중</p>
 							</li>
 						</ul>

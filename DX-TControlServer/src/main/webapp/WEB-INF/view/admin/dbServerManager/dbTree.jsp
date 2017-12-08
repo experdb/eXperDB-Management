@@ -100,7 +100,7 @@ function fn_init() {
 	        orderable: false,
 	        render: function(data, type, full, meta){
 	           if(type === 'display'){
-	              data = '<input type="text" class="txt" name="db_exp" value="' +full.db_exp + '" style="width: 350px; height: 25px;">';      
+	              data = '<input type="text" class="txt" name="db_exp" value="' +full.db_exp + '" style="width: 350px; height: 25px;" id="db_exp">';      
 	           }
 	           
 	           return data;
@@ -192,10 +192,8 @@ $(function() {
          if ( $(this).hasClass('selected') ) {
         }
         else {
-        	
         	table_dbServer.$('tr.selected').removeClass('selected');
             $(this).addClass('selected');
-            
         } 
          var db_svr_nm = table_dbServer.row('.selected').data().db_svr_nm;
          var ipadr = table_dbServer.row('.selected').data().ipadr;
@@ -245,7 +243,7 @@ $(function() {
     } );
     
 
-	
+
     $('#dbList tbody').on( 'click', 'tr', function () {
         /* if ( $(this).hasClass('selected') ) {
             $(this).removeClass('selected');
@@ -254,7 +252,12 @@ $(function() {
         	table_db.$('tr.selected').removeClass('selected');
             $(this).addClass('selected');
         }*/
-    } ); 
+    }); 
+    
+    
+    $('#dbList tbody').on('click','#db_exp', function () {
+    	console.log("선택 변화없어라!!!");
+    }); 
 	
 })
 

@@ -11,7 +11,6 @@ import javax.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
-import org.springframework.validation.Errors;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
@@ -19,7 +18,6 @@ import org.springframework.web.servlet.ModelAndView;
 import com.k4m.dx.tcontrol.admin.accesshistory.service.AccessHistoryService;
 import com.k4m.dx.tcontrol.cmmn.CmmnUtils;
 import com.k4m.dx.tcontrol.cmmn.SHA256;
-import com.k4m.dx.tcontrol.cmmn.cmmnExcepHndlr;
 import com.k4m.dx.tcontrol.common.service.HistoryVO;
 import com.k4m.dx.tcontrol.login.service.LoginService;
 import com.k4m.dx.tcontrol.login.service.UserVO;
@@ -47,7 +45,26 @@ public class LoginController {
 
 	@Autowired
 	private AccessHistoryService accessHistoryService;
-
+	
+	
+	
+	@RequestMapping(value = "/")
+	public ModelAndView loginCheck(HttpServletRequest request) {
+		ModelAndView mv = new ModelAndView();
+		try {
+			HttpSession session = request.getSession();
+			String usr_id = (String) session.getAttribute("usr_id");
+			if(usr_id==null){
+				mv.setViewName("login");
+			}else{
+				mv.setViewName("redirect:/index.do");
+			}		
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return mv;
+	}
+	
 	/**
 	 * 로그인을 한다.
 	 * 

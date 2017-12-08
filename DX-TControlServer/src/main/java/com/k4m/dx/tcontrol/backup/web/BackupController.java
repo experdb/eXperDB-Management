@@ -83,13 +83,11 @@ public class BackupController {
 	 */
 	@RequestMapping(value = "/backup/workList.do")
 	public ModelAndView workList(@ModelAttribute("historyVO") HistoryVO historyVO,@ModelAttribute("workVo") WorkVO workVO, HttpServletRequest request) {
-		
+		int db_svr_id=workVO.getDb_svr_id();
 		//유저 디비서버 권한 조회 (공통메소드호출),
 		CmmnUtils cu = new CmmnUtils();
-		dbSvrAut = cu.selectUserDBSvrAutList(dbAuthorityService);
-		
+		dbSvrAut = cu.selectUserDBSvrAutList(dbAuthorityService,db_svr_id);
 		ModelAndView mv = new ModelAndView();
-		
 		//읽기 권한이 없는경우 error페이지 호출 , [추후 Exception 처리예정]
 		if(dbSvrAut.get(0).get("bck_cng_aut_yn").equals("N")){
 			mv.setViewName("error/autError");				
@@ -166,10 +164,10 @@ public class BackupController {
 	 */
 	@RequestMapping(value = "/backup/workLogList.do")
 	public ModelAndView rmanLogList(@ModelAttribute("historyVO") HistoryVO historyVO,@ModelAttribute("workVo") WorkVO workVO, HttpServletRequest request) {
-		
+		int db_svr_id=workVO.getDb_svr_id();
 		//유저 디비서버 권한 조회 (공통메소드호출),
 		CmmnUtils cu = new CmmnUtils();
-		dbSvrAut = cu.selectUserDBSvrAutList(dbAuthorityService);
+		dbSvrAut = cu.selectUserDBSvrAutList(dbAuthorityService,db_svr_id);
 				
 		ModelAndView mv = new ModelAndView();
 
@@ -933,38 +931,40 @@ public class BackupController {
 	 */
 	@RequestMapping(value = "/schedulerView.do")
 	public ModelAndView schedulerView(@ModelAttribute("workVO") WorkVO workVO, @ModelAttribute("historyVO") HistoryVO historyVO, HttpServletRequest request) {
-		
+		int db_svr_id = Integer.parseInt(request.getParameter("db_svr_id"));
 		//해당메뉴 권한 조회 (공통메소드호출)
 		CmmnUtils cu = new CmmnUtils();
-	
+		dbSvrAut = cu.selectUserDBSvrAutList(dbAuthorityService,db_svr_id);
 		ModelAndView mv = new ModelAndView();
 		List<DbVO> resultSet = null;
 		
 		try {			
-			//화면접근이력 남기기
-			CmmnUtils.saveHistory(request, historyVO);
-			historyVO.setExe_dtl_cd("DX-T0051");
-			historyVO.setMnu_id(35);
-			accessHistoryService.insertHistory(historyVO);
-			
-			int db_svr_id = Integer.parseInt(request.getParameter("db_svr_id"));
-			
-			HttpSession session = request.getSession();
-			String usr_id = (String) session.getAttribute("usr_id");
-			workVO.setDb_svr_id(db_svr_id);
-			workVO.setUsr_id(usr_id);
-			
-			resultSet=backupService.selectDbList(workVO);
-			
-			SimpleDateFormat frm= new SimpleDateFormat ("yyyyMMdd");
-			Calendar cal = Calendar.getInstance();
-			String end_date = frm.format(cal.getTime());
-
-			mv.addObject("month",end_date);
-			
-			mv.addObject("dbList",resultSet);		
-			mv.addObject("db_svr_id",db_svr_id);
-			mv.setViewName("functions/scheduler/schedulerView");				
+			 if(dbSvrAut.get(0).get("policy_change_his_aut_yn").equals("N")){
+				 mv.setViewName("error/autError");
+			 }else{
+				//화면접근이력 남기기
+				CmmnUtils.saveHistory(request, historyVO);
+				historyVO.setExe_dtl_cd("DX-T0051");
+				historyVO.setMnu_id(35);
+				accessHistoryService.insertHistory(historyVO);
+				
+				HttpSession session = request.getSession();
+				String usr_id = (String) session.getAttribute("usr_id");
+				workVO.setDb_svr_id(db_svr_id);
+				workVO.setUsr_id(usr_id);
+				
+				resultSet=backupService.selectDbList(workVO);
+				
+				SimpleDateFormat frm= new SimpleDateFormat ("yyyyMMdd");
+				Calendar cal = Calendar.getInstance();
+				String end_date = frm.format(cal.getTime());
+	
+				mv.addObject("month",end_date);
+				
+				mv.addObject("dbList",resultSet);		
+				mv.addObject("db_svr_id",db_svr_id);
+				mv.setViewName("functions/scheduler/schedulerView");
+			 }
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

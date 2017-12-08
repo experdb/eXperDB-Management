@@ -322,11 +322,12 @@
 					<table class="write">
 						<caption>검색 조회</caption>
 						<colgroup>
-							<col style="width: 100px;" />
-							<col style="width: 350px;" />
-							<col style="width: 100px;" />
-							<col style="width: 350px;" />
-							<col style="width: 100px;" />
+							<col style="width: 60px;" />
+							<col style="width: 200px;" />
+							<col style="width: 60px;" />
+							<col style="width: 150px;" />
+							<col style="width: 60px;" />
+							<col style="width: 150px;" />
 						</colgroup>
 						<tbody>
 								<tr>
@@ -390,19 +391,19 @@
 								 <tr>
 									<th scope="row" class="t9 line" >스케줄명</th>
 									<td>
-										<select class="select t8" name="scd_nm" id="scd_nm"  style="width: 200px;" onChange="fn_selectWrkNmList(this);">
+										<select class="select t4" name="scd_nm" id="scd_nm" onChange="fn_selectWrkNmList(this);">
 												<option value="%">전체</option>
 										</select>	
 									</td>
 									<th scope="row" class="t9 line">DBMS명</th>
 									<td>
-										<select class="select t8" name="db_svr_nm" id="db_svr_nm"  style="width:200px";>
+										<select class="select t4" name="db_svr_nm" id="db_svr_nm" >
 												<option value="%">전체</option>
 										</select>	
 									</td>									
 									<th scope="row" class="t9 line">실행결과</th>
 									<td>
-										<select class="select t8" name="exe_result" id="exe_result"  style="width:200px";>
+										<select class="select t4" name="exe_result" id="exe_result">
 												<option value="%">전체</option>
 												<option value="TC001701">성공</option>
 												<option value="TC001702">실패</option>

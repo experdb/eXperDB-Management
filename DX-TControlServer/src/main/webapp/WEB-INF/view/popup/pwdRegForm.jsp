@@ -45,8 +45,6 @@
 			return false;
 		}
 
-		if (!fn_pwValidation(nowpwd.value))return false;
-		
 		$.ajax({
 			url : '/checkPwd.do',
 			type : 'post',
@@ -75,7 +73,7 @@
 					}
 					
 					if(nowpwd.value == newpwd.value){
-						alert("현재 패스워드 정보와 새 패스워드 정보가 일치합니다.");
+						alert("현재 패스워드와 동일한 패스워드로는 변경하실 수 없습니다.");
 						return false;
 					}
 					

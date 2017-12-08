@@ -1,5 +1,6 @@
 package com.k4m.dx.tcontrol.admin.dbauthority.service.impl;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -148,8 +149,8 @@ public class DbAuthorityServiceImpl extends EgovAbstractServiceImpl implements D
 
 
 	@Override
-	public List<Map<String, Object>> selectUserDBSvrAutList(String usr_id) {
-		return dbAuthorityDAO.selectUserDBSvrAutList(usr_id);
+	public List<Map<String, Object>> selectUserDBSvrAutList(HashMap<String, Object> param) {
+		return dbAuthorityDAO.selectUserDBSvrAutList(param);
 	}
 
 
