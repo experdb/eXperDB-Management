@@ -65,7 +65,7 @@ public class ClientTester {
 			//clientTester.dxT007_R(Ip, port);
 			
 			
-			//clientTester.dxT010(Ip, port);
+			clientTester.dxT010(Ip, port);
 			//clientTester.dxT011(Ip, port);
 			//clientTester.dxT012(Ip, port);
 			
@@ -86,7 +86,7 @@ public class ClientTester {
 			//clientTester.dxT018_insert(Ip, port);
 			//clientTester.dxT018_delete(Ip, port);
 			//clientTester.dxT019(Ip, port);
-			clientTester.dxT020(Ip, port);
+			//clientTester.dxT020(Ip, port);
 			//clientTester.dxT021(Ip, port);
 			
 			//clientTester.test();
@@ -166,9 +166,9 @@ public class ClientTester {
 			serverObj.put(ClientProtocolID.USER_ID, "pgmon");
 			serverObj.put(ClientProtocolID.USER_PWD, "pgmon");*/
 			
-			serverObj.put(ClientProtocolID.SERVER_NAME, "222.110.153.251");
-			serverObj.put(ClientProtocolID.SERVER_IP, "222.110.153.251");
-			serverObj.put(ClientProtocolID.SERVER_PORT, "5433");
+			serverObj.put(ClientProtocolID.SERVER_NAME, "222.110.153.162");
+			serverObj.put(ClientProtocolID.SERVER_IP, "222.110.153.162");
+			serverObj.put(ClientProtocolID.SERVER_PORT, "6432");
 			serverObj.put(ClientProtocolID.DATABASE_NAME, "postgres");
 			serverObj.put(ClientProtocolID.USER_ID, "experdba");
 			serverObj.put(ClientProtocolID.USER_PWD, "experdba");
@@ -217,12 +217,12 @@ public class ClientTester {
 		try {
 			JSONObject serverObj = new JSONObject();
 			
-			serverObj.put(ClientProtocolID.SERVER_NAME, "222.110.153.251");
-			serverObj.put(ClientProtocolID.SERVER_IP, "222.110.153.251");
-			serverObj.put(ClientProtocolID.SERVER_PORT, "5433");
-			serverObj.put(ClientProtocolID.DATABASE_NAME, "experdb");
-			serverObj.put(ClientProtocolID.USER_ID, "experdba121212");
-			serverObj.put(ClientProtocolID.USER_PWD, "experdba121212");
+			serverObj.put(ClientProtocolID.SERVER_NAME, "222.110.153.162");
+			serverObj.put(ClientProtocolID.SERVER_IP, "222.110.153.162");
+			serverObj.put(ClientProtocolID.SERVER_PORT, "6432");
+			serverObj.put(ClientProtocolID.DATABASE_NAME, "postgres");
+			serverObj.put(ClientProtocolID.USER_ID, "experdba");
+			serverObj.put(ClientProtocolID.USER_PWD, "experdba");
 			
 			JSONObject objList;
 			
@@ -739,12 +739,12 @@ public class ClientTester {
 			JSONObject serverObj = new JSONObject();
 			
 			
-			serverObj.put(ClientProtocolID.SERVER_NAME, "222.110.153.162");
-			serverObj.put(ClientProtocolID.SERVER_IP, "222.110.153.162");
-			serverObj.put(ClientProtocolID.SERVER_PORT, "6432");
-			serverObj.put(ClientProtocolID.DATABASE_NAME, "postgres");
-			serverObj.put(ClientProtocolID.USER_ID, "experdba");
-			serverObj.put(ClientProtocolID.USER_PWD, "experdba");
+			serverObj.put(ClientProtocolID.SERVER_NAME, "222.110.153.251");
+			serverObj.put(ClientProtocolID.SERVER_IP, "222.110.153.251");
+			serverObj.put(ClientProtocolID.SERVER_PORT, "5433");
+			serverObj.put(ClientProtocolID.DATABASE_NAME, "experdb");
+			serverObj.put(ClientProtocolID.USER_ID, "experdb");
+			serverObj.put(ClientProtocolID.USER_PWD, "experdb");
 			
 			String strExtname = "pgaudit";
 			
@@ -852,12 +852,12 @@ public class ClientTester {
 			JSONObject serverObj = new JSONObject();
 			
 			
-			serverObj.put(ClientProtocolID.SERVER_NAME, "222.110.153.162");
-			serverObj.put(ClientProtocolID.SERVER_IP, "222.110.153.162");
-			serverObj.put(ClientProtocolID.SERVER_PORT, "6432");
-			serverObj.put(ClientProtocolID.DATABASE_NAME, "postgres");
-			serverObj.put(ClientProtocolID.USER_ID, "experdba");
-			serverObj.put(ClientProtocolID.USER_PWD, "experdba");
+			serverObj.put(ClientProtocolID.SERVER_NAME, "222.110.153.251");
+			serverObj.put(ClientProtocolID.SERVER_IP, "222.110.153.251");
+			serverObj.put(ClientProtocolID.SERVER_PORT, "5433");
+			serverObj.put(ClientProtocolID.DATABASE_NAME, "migratordb");
+			serverObj.put(ClientProtocolID.USER_ID, "experdb");
+			serverObj.put(ClientProtocolID.USER_PWD, "experdb");
 			
 			
 			/**
@@ -1839,13 +1839,13 @@ public class ClientTester {
 			serverObj01.put(ClientProtocolID.SERVER_IP, "222.110.153.251");
 			serverObj01.put(ClientProtocolID.SERVER_PORT, "5433");
 			serverObj01.put(ClientProtocolID.DATABASE_NAME, "experdb");
-			serverObj01.put(ClientProtocolID.USER_ID, "experdb");
-			serverObj01.put(ClientProtocolID.USER_PWD, "experdba");
+			serverObj01.put(ClientProtocolID.USER_ID, "experdba");
+			serverObj01.put(ClientProtocolID.USER_PWD, "experdbadddd");
 			
 			arrServerInfo.add(serverObj01);
 			
 			
-			JSONObject serverObj02 = new JSONObject();
+/*			JSONObject serverObj02 = new JSONObject();
 			
 			
 			serverObj02.put(ClientProtocolID.SERVER_NAME, "222.110.153.231");
@@ -1856,6 +1856,7 @@ public class ClientTester {
 			serverObj02.put(ClientProtocolID.USER_PWD, "experdb");
 			
 			arrServerInfo.add(serverObj02);
+			*/
 			
 			JSONObject jObj = new JSONObject();
 			
