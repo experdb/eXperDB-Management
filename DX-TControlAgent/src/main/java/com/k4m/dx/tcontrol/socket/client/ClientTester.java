@@ -46,8 +46,8 @@ public class ClientTester {
 		ClientTester clientTester = new ClientTester();
 		
 		String Ip = "222.110.153.162";
-		Ip = "222.110.153.251";
-		 //	Ip = "127.0.0.1";
+		//Ip = "222.110.153.251";
+		 	Ip = "127.0.0.1";
 		// Ip = "222.110.153.231";
 		int port = 9001;
 		try {
@@ -67,7 +67,7 @@ public class ClientTester {
 			
 			//clientTester.dxT010(Ip, port);
 			//clientTester.dxT011(Ip, port);
-			//clientTester.dxT012(Ip, port);
+			clientTester.dxT012(Ip, port);
 			
 			//clientTester.dxT013(Ip, port);
 
@@ -86,7 +86,7 @@ public class ClientTester {
 			//clientTester.dxT018_insert(Ip, port);
 			//clientTester.dxT018_delete(Ip, port);
 			//clientTester.dxT019(Ip, port);
-			clientTester.dxT020(Ip, port);
+			//clientTester.dxT020(Ip, port);
 			//clientTester.dxT021(Ip, port);
 			
 			//clientTester.test();
@@ -852,12 +852,12 @@ public class ClientTester {
 			JSONObject serverObj = new JSONObject();
 			
 			
-			serverObj.put(ClientProtocolID.SERVER_NAME, "222.110.153.162");
-			serverObj.put(ClientProtocolID.SERVER_IP, "222.110.153.162");
-			serverObj.put(ClientProtocolID.SERVER_PORT, "6432");
-			serverObj.put(ClientProtocolID.DATABASE_NAME, "postgres");
-			serverObj.put(ClientProtocolID.USER_ID, "experdba");
-			serverObj.put(ClientProtocolID.USER_PWD, "experdba");
+			serverObj.put(ClientProtocolID.SERVER_NAME, "222.110.153.251");
+			serverObj.put(ClientProtocolID.SERVER_IP, "222.110.153.251");
+			serverObj.put(ClientProtocolID.SERVER_PORT, "5433");
+			serverObj.put(ClientProtocolID.DATABASE_NAME, "experdb");
+			serverObj.put(ClientProtocolID.USER_ID, "experdb");
+			serverObj.put(ClientProtocolID.USER_PWD, "experdb");
 			
 			
 			/**

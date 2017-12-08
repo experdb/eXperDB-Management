@@ -196,7 +196,7 @@
 					<td>
 						<div class="btn_type_01">
 							<span class="btn btnC_01"><button onClick="fn_addView();">더보기</button></span>
-							<span class="btn btnC_01"><button onClick="fn_copy();">복사</button></span>
+							<!--  <span class="btn btnC_01"><button onClick="fn_copy();">복사</button></span>-->
 							<a href="#n" class="btn" onclick="window.close();"><span>취소</span></a>
 						</div>
 					</td>
