@@ -68,4 +68,9 @@ public class CmmnServerInfoServiceImpl extends EgovAbstractServiceImpl implement
 		return cmmnServerInfoDAO.selectRepoDBList(dbServerVO);
 	}
 
+	@Override
+	public List<Map<String, Object>> selectHaCnt(int db_svr_id) throws Exception {
+		return cmmnServerInfoDAO.selectHaCnt(db_svr_id);
+	}
+
 }

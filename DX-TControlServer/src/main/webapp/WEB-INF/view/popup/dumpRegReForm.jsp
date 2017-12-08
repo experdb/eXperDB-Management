@@ -30,6 +30,7 @@
 <script type="text/javascript">
 // 저장후 작업ID
 var wrk_id = null;
+var haCnt =0;
 
 /* ********************************************************
  * DB Object initialization
@@ -46,6 +47,33 @@ var workObj = {"obj":[
  ******************************************************** */
 $(window.document).ready(
 	function() {
+		
+		 $.ajax({
+				async : false,
+				url : "/selectHaCnt.do",
+			  	data : {
+			  		db_svr_id : db_svr_id
+			  	},
+				type : "post",
+				beforeSend: function(xhr) {
+			        xhr.setRequestHeader("AJAX", true);
+			     },
+				error : function(xhr, status, error) {
+					if(xhr.status == 401) {
+						alert("인증에 실패 했습니다. 로그인 페이지로 이동합니다.");
+						 location.href = "/";
+					} else if(xhr.status == 403) {
+						alert("세션이 만료가 되었습니다. 로그인 페이지로 이동합니다.");
+			             location.href = "/";
+					} else {
+						alert("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""));
+					}
+				},
+				success : function(result) {
+					haCnt = result[0].hacnt;			
+				}
+			}); 
+		 
 		//fn_get_object_list("${workInfo[0].db_id}","${workInfo[0].db_nm}");
 		checkSection();
 		changeFileFmtCd();
@@ -53,8 +81,8 @@ $(window.document).ready(
 
 		setTimeout("fn_get_object_list('','')", 100); 
 		
-		fn_checkFolderVol(1);
-		fn_checkFolderVol(2);
+		//fn_checkFolderVol(1);
+		//fn_checkFolderVol(2);
 
 		 /* $.ajax({
 			async : false,
@@ -115,7 +143,6 @@ function fn_update_work(){
 		        xhr.setRequestHeader("AJAX", true);
 		     },
 			error : function(xhr, status, error) {
-				alert("a");
 				if(xhr.status == 401) {
 					alert("인증에 실패 했습니다. 로그인 페이지로 이동합니다.");
 					 location.href = "/";
@@ -476,12 +503,13 @@ function checkOid(){
  * 저장경로의 존재유무 체크
  ******************************************************** */
 function checkFolder(keyType){
+	var save_path = "";
+	
 	if(keyType == 1){
 		save_path = $("#log_file_pth").val();
 	}else{
 		save_path = $("#save_pth").val();
 	}
-	
 	if(save_path == "" && keyType == 1){
 		alert("백업로그 경로를 입력해 주세요.");
 		$("#log_file_pth").focus();
@@ -494,7 +522,7 @@ function checkFolder(keyType){
 			url : "/existDirCheck.do",
 		  	data : {
 		  		db_svr_id : $("#db_svr_id").val(),
-		  		path : save_pth
+		  		path : save_path
 		  	},
 			type : "post",
 			beforeSend: function(xhr) {
@@ -513,23 +541,27 @@ function checkFolder(keyType){
 			},
 			success : function(data) {
 				if(data.result.ERR_CODE == ""){
-					if(data.result.RESULT_DATA == 0){
+					if(data.result.RESULT_DATA.IS_DIRECTORY == 0){
 						if(keyType == 1){
 							$("#check_path1").val("Y");
-						}else if(keyType == 2){
+						}else{
 							$("#check_path2").val("Y");
 						}
 						alert("유효한 경로입니다.");
-						var volume = data.result.RESULT_DATA.CAPACITY;
+							var volume = data.result.RESULT_DATA.CAPACITY;
 						if(keyType == 1){
 							$("#logVolume").empty();
-							$( "#logVolume" ).append("용량 : "+volume);						
+							$( "#logVolume" ).append("용량 : "+volume);
 						}else if(keyType == 2) {
 							$("#backupVolume").empty();
 							$( "#backupVolume" ).append("용량 : "+volume);
 						}
 					}else{
-						alert("HA 구성된 클러스터 중 해당 경로가 존재하지 않는 클러스터가 있습니다." );
+						if(haCnt > 1){
+							alert("HA 구성된 클러스터 중 해당 경로가 존재하지 않는 클러스터가 있습니다.");
+						}else{
+							alert("유효하지 않은 경로입니다.");
+						}
 					}
 				}else{
 					alert("경로체크 중 서버에러로 인하여 실패하였습니다.")

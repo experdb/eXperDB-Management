@@ -88,4 +88,6 @@ public interface CmmnServerInfoService {
 	 */
 	List<DbServerVO> selectRepoDBList(DbServerVO dbServerVO) throws Exception;
 
+	List<Map<String, Object>> selectHaCnt(int db_svr_id) throws Exception;
+
 }

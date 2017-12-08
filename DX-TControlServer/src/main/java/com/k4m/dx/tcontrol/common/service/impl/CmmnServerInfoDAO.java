@@ -101,4 +101,10 @@ public class CmmnServerInfoDAO extends EgovAbstractMapper {
 		return sl;
 	}
 
+	public List<Map<String, Object>> selectHaCnt(int db_svr_id) {
+		List<Map<String, Object>> sl = null;
+		sl = (List<Map<String, Object>>) list("cmmnSql.selectHaCnt", db_svr_id);
+		return sl;
+	}
+
 }

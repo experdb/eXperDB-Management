@@ -32,12 +32,40 @@
 var wrk_id = null;
 var wrk_nmChk ="fail";
 var db_svr_id = "${db_svr_id}";
+var haCnt =0;
+
 
 $(window.document).ready(function() {
 		$("#logVolume").empty();
 		$( "#logVolume" ).append("용량 : 0");
 		$("#backupVolume").empty();
 		$( "#backupVolume" ).append("용량 : 0");
+		
+		 $.ajax({
+				async : false,
+				url : "/selectHaCnt.do",
+			  	data : {
+			  		db_svr_id : db_svr_id
+			  	},
+				type : "post",
+				beforeSend: function(xhr) {
+			        xhr.setRequestHeader("AJAX", true);
+			     },
+				error : function(xhr, status, error) {
+					if(xhr.status == 401) {
+						alert("인증에 실패 했습니다. 로그인 페이지로 이동합니다.");
+						 location.href = "/";
+					} else if(xhr.status == 403) {
+						alert("세션이 만료가 되었습니다. 로그인 페이지로 이동합니다.");
+			             location.href = "/";
+					} else {
+						alert("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""));
+					}
+				},
+				success : function(result) {
+					haCnt = result[0].hacnt;			
+				}
+			}); 
 		
 		 $.ajax({
 			async : false,
@@ -65,8 +93,8 @@ $(window.document).ready(function() {
 				document.getElementById("log_file_pth").value=result[1].PGRLOG;
 				document.getElementById("bck_pth").value=result[1].PGRBAK;
 				
-				fn_checkFolderVol(1);
-				fn_checkFolderVol(2);
+				//fn_checkFolderVol(1);
+				//fn_checkFolderVol(2);
 			}
 		}); 
 });
@@ -240,7 +268,11 @@ function checkFolder(keyType){
 							$( "#backupVolume" ).append("용량 : "+volume);
 						}
 					}else{
-						alert("HA 구성된 클러스터 중 해당 경로가 존재하지 않는 클러스터가 있습니다." );
+						if(haCnt > 1){
+							alert("HA 구성된 클러스터 중 해당 경로가 존재하지 않는 클러스터가 있습니다.");
+						}else{
+							alert("유효하지 않은 경로입니다.");
+						}	
 					}
 				}else{
 					alert("경로체크 중 서버에러로 인하여 실패하였습니다.")

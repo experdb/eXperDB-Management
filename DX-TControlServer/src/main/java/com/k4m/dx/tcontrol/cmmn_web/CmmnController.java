@@ -434,4 +434,26 @@ public class CmmnController {
 		}
 		return result;
 	}		
+	
+	
+	/**
+	 * HA구성확인
+	 * @param 
+	 * @return resultSet
+	 * @throws Exception
+	 */
+	@SuppressWarnings("unchecked")
+	@RequestMapping(value = "/selectHaCnt.do")
+	@ResponseBody
+	public List<Map<String, Object>> selectHaCnt(HttpServletRequest request) {
+		List<Map<String, Object>> result = null;
+		
+		try {
+			int db_svr_id = Integer.parseInt(request.getParameter("db_svr_id"));			
+			result = cmmnServerInfoService.selectHaCnt(db_svr_id);	
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return result;
+	}		
 }

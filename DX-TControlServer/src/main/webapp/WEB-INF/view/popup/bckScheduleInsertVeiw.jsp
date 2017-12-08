@@ -79,7 +79,7 @@ var db_svr_id = "${db_svr_id}";
 		
 	/* ********************************************************
 	 * Validation Check
-	 ******************************************************** */
+	 ******************************************************** */		
 	function fn_validation(){		
 		if($("#scd_nm").val() == ""){
 			alert("스케줄명을 입력해 주세요.");
@@ -92,9 +92,19 @@ var db_svr_id = "${db_svr_id}";
 		}else if(scd_nmChk == "fail"){
 			alert("스케줄명 중복체크 해주세요.");
 			return false;
-		}else if($("#input:checkbox[name=chk]:checked").length == 0){
+		}else if($("input[name=chk]:checkbox:checked").length == 0){
 			alert("스케줄을 체크해 주세요.");
 			return false;
+		}else if($('#bck').val() == "rman"){
+			if($('#bck_opt_cd').val() == "선택"){
+				alert("백업옵션을 선택해 주세요.");
+				return false;
+				}			
+		}else if($('#bck').val() == "dump"){
+			if($('#db_id').val() == "선택"){
+				alert("데이터베이스를 선택해 주세요.");
+				return false;
+				}			
 		}else if($("#check_path1").val() != "Y"){
 			alert("데이터경로에 유효한 경로를 입력후 경로체크를 해 주세요.");
 			$("#data_pth").focus();
@@ -458,7 +468,7 @@ var db_svr_id = "${db_svr_id}";
 	  * Backup Insert
 	  ******************************************************** */
 	  function fn_insert_bckScheduler(){
-		 
+
 		  if (!fn_validation()) return false;
 		 
 		  var bck = $('#bck').val();
@@ -596,7 +606,7 @@ var db_svr_id = "${db_svr_id}";
 	  }
 </script>
 <body>
-	<div class="pop_container">
+<div class="pop_container">
 		<div class="pop_cts">
 			<p class="tit">주별 스케줄등록</p>
 			<div class="sch_form">
@@ -609,7 +619,7 @@ var db_svr_id = "${db_svr_id}";
 					<tbody>
 						<tr>
 							<th scope="row" class="t9 line">스케줄명</th>
-							<td><input type="text" class="txt t2" id="scd_nm"name="scd_nm" /> 
+							<td><input type="text" class="txt t2" id="scd_nm" name="scd_nm" /> 
 							<span class="btn btnF_04 btnC_01">
 									<button type="button" class="btn_type_02" onclick="fn_check()"style="width: 60px; margin-right: -60px; margin-top: 0;">중복체크</button>
 							</span>
@@ -721,12 +731,9 @@ var db_svr_id = "${db_svr_id}";
 			</div>
 			<div class="btn_type_02">
 				<span class="btn btnC_01"
-					onClick="fn_insert_bckScheduler();return false;"><button>등록</button></span>
+					onClick="fn_insert_bckScheduler();"><button>등록</button></span>
 			</div>
 		</div>
 	</div>
-
-
-
 </body>
 </html>
