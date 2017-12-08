@@ -78,8 +78,9 @@ public class AccessControlController {
 	@RequestMapping(value = "/accessControl.do")
 	public ModelAndView serverAccessControl(@ModelAttribute("historyVO") HistoryVO historyVO,
 			HttpServletRequest request) {
+		int db_svr_id = Integer.parseInt(request.getParameter("db_svr_id"));
 		CmmnUtils cu = new CmmnUtils();
-		dbSvrAut = cu.selectUserDBSvrAutList(dbAuthorityService);
+		dbSvrAut = cu.selectUserDBSvrAutList(dbAuthorityService,db_svr_id);
 		ModelAndView mv = new ModelAndView();
 		ClientInfoCmmn cic = new ClientInfoCmmn();
 		JSONObject serverObj = new JSONObject();
@@ -94,8 +95,6 @@ public class AccessControlController {
 				accessHistoryService.insertHistory(historyVO);
 
 				AES256 dec = new AES256(AES256_KEY.ENC_KEY);
-
-				int db_svr_id = Integer.parseInt(request.getParameter("db_svr_id"));
 
 				DbServerVO schDbServerVO = new DbServerVO();
 				schDbServerVO.setDb_svr_id(db_svr_id);
@@ -393,32 +392,30 @@ public class AccessControlController {
 	@RequestMapping(value = "/accessControlHistory.do")
 	public ModelAndView accessControlHistory(@ModelAttribute("historyVO") HistoryVO historyVO,
 			HttpServletRequest request) {
+		int db_svr_id = Integer.parseInt(request.getParameter("db_svr_id"));
 		CmmnUtils cu = new CmmnUtils();
-		dbSvrAut = cu.selectUserDBSvrAutList(dbAuthorityService);
+		dbSvrAut = cu.selectUserDBSvrAutList(dbAuthorityService,db_svr_id);
 		ModelAndView mv = new ModelAndView();
 		try {
-			// if(dbSvrAut.get(0).get("acs_cntr_aut_yn").equals("N")){
-			// mv.setViewName("error/autError");
-			// }else{
-			
-			// 화면접근이력 이력 남기기
-			 CmmnUtils.saveHistory(request, historyVO);
-			 historyVO.setExe_dtl_cd("DX-T0030");
-			 historyVO.setMnu_id(29);
-			 accessHistoryService.insertHistory(historyVO);
-
-			int db_svr_id = Integer.parseInt(request.getParameter("db_svr_id"));
-
-			DbServerVO schDbServerVO = new DbServerVO();
-			schDbServerVO.setDb_svr_id(db_svr_id);
-			DbServerVO dbServerVO = (DbServerVO) cmmnServerInfoService.selectServerInfo(schDbServerVO);
-			List<AccessControlHistoryVO> result = accessControlService.selectLstmdfdtm(db_svr_id);
-			
-			mv.addObject("lst_mdf_dtm", result);
-			mv.addObject("db_svr_nm", dbServerVO.getDb_svr_nm());
-			mv.addObject("db_svr_id", db_svr_id);
-			mv.setViewName("dbserver/accesscontrolHistory");
-			// }
+			 if(dbSvrAut.get(0).get("policy_change_his_aut_yn").equals("N")){
+			 mv.setViewName("error/autError");
+			 }else{
+				// 화면접근이력 이력 남기기
+				 CmmnUtils.saveHistory(request, historyVO);
+				 historyVO.setExe_dtl_cd("DX-T0030");
+				 historyVO.setMnu_id(29);
+				 accessHistoryService.insertHistory(historyVO);
+	
+				DbServerVO schDbServerVO = new DbServerVO();
+				schDbServerVO.setDb_svr_id(db_svr_id);
+				DbServerVO dbServerVO = (DbServerVO) cmmnServerInfoService.selectServerInfo(schDbServerVO);
+				List<AccessControlHistoryVO> result = accessControlService.selectLstmdfdtm(db_svr_id);
+				
+				mv.addObject("lst_mdf_dtm", result);
+				mv.addObject("db_svr_nm", dbServerVO.getDb_svr_nm());
+				mv.addObject("db_svr_id", db_svr_id);
+				mv.setViewName("dbserver/accesscontrolHistory");
+			 }
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

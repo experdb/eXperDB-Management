@@ -1,5 +1,6 @@
 package com.k4m.dx.tcontrol.admin.dbauthority.service;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -141,7 +142,7 @@ public interface DbAuthorityService {
 	 * @param 
 	 * @throws Exception
 	 */
-	List<Map<String, Object>> selectUserDBSvrAutList(String usr_id);
+	List<Map<String, Object>> selectUserDBSvrAutList(HashMap<String, Object> param) throws Exception;
 
 
 	List<Map<String, Object>> selectTreeDBSvrList(String usr_id) throws Exception;

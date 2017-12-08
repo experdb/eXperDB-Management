@@ -2,7 +2,7 @@
     pageEncoding="UTF-8"%>
 
     <div id="pop_layer_dump" class="pop-layer">
-		<div class="pop-container">
+		<div class="pop-container" style="padding: 0px;">
 			<div class="pop_cts" style="width: 35%; height: 750px; overflow: auto; padding: 20px; margin: 0 auto; min-height:0; min-width:0;" id="workinfo">
 				<p class="tit" style="margin-bottom: 15px;">WORK 정보
 					<a href="#n" class="btn" onclick="toggleLayer($('#pop_layer_dump'), 'off');" style="float: right;"><img src="/images/ico_state_01.png" style="position: fixed;"/></a>
@@ -92,7 +92,7 @@
 					</tbody>
 				</table>
 				
-				<p><h3 style="height: 20px; margin-top: 25px;"">부가옵션3 - 선택한 Object</h3></p>
+				<p><h3 style="height: 20px; margin-top: 25px;">부가옵션3 - 선택한 Object</h3></p>
 				<table class="list" style="border:1px solid #b8c3c6;">
 					<caption>부가옵션3 - 선택한 Object</caption>
 					<tbody>

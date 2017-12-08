@@ -82,7 +82,7 @@ public class CmmnUtils {
 	
 	
 	//유저디비서버권한 조회
-	public List<Map<String, Object>> selectUserDBSvrAutList(DbAuthorityService dbAuthorityService) {		
+	public List<Map<String, Object>> selectUserDBSvrAutList(DbAuthorityService dbAuthorityService,int db_svr_id) {		
 		
 		List<Map<String, Object>> result = null;		
 		
@@ -93,7 +93,11 @@ public class CmmnUtils {
 			HttpSession session = request.getSession();
 			String usr_id = (String) session.getAttribute("usr_id");
 			
-			result = dbAuthorityService.selectUserDBSvrAutList(usr_id);		
+			HashMap<String, Object> param = new HashMap<String, Object>();
+			param.put("usr_id", usr_id);
+			param.put("db_svr_id",db_svr_id);
+			
+			result = dbAuthorityService.selectUserDBSvrAutList(param);		
 		}catch(Exception e){
 			e.printStackTrace();
 		}		

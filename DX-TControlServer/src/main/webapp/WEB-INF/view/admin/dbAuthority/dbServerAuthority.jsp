@@ -149,11 +149,29 @@
 					html1+=	'</td>';
 					html1+='</tr>';
 					html1+='<tr>';
+					html1+=	'<th scope="row">백업스케줄러</th>';
+					html1+=	'<td>';
+					html1+=		'<div class="inp_chk">';
+					html1+=			'<input type="checkbox" id="'+item.db_svr_nm+'_bck_scdr" name="bck_scdr_aut"  />';
+					html1+=			'<label for="'+item.db_svr_nm+'_bck_scdr"></label>';
+					html1+=		'</div>';
+					html1+=	'</td>';
+					html1+='</tr>';
+					html1+='<tr>';
 					html1+=	'<th scope="row">접근제어</th>';
 					html1+=	'<td>';
 					html1+=		'<div class="inp_chk">';
 					html1+=			'<input type="checkbox" id="'+item.db_svr_nm+'_acs_cntr" name="acs_cntr_aut"  />';
 					html1+=			'<label for="'+item.db_svr_nm+'_acs_cntr"></label>';
+					html1+=		'</div>';
+					html1+=	'</td>';
+					html1+='</tr>';
+					html1+='<tr>';
+					html1+=	'<th scope="row">정책변경이력</th>';
+					html1+=	'<td>';
+					html1+=		'<div class="inp_chk">';
+					html1+=			'<input type="checkbox" id="'+item.db_svr_nm+'_policy_change_his" name="policy_change_his_aut"  />';
+					html1+=			'<label for="'+item.db_svr_nm+'_policy_change_his"></label>';
 					html1+=		'</div>';
 					html1+=	'</td>';
 					html1+='</tr>';
@@ -184,8 +202,7 @@
 		});
 	});
 		
-	$(function() {
-		
+	$(function() {		
 		   $('#user tbody').on( 'click', 'tr', function () {
 		         if ( $(this).hasClass('selected') ) {
 		        	}
@@ -238,11 +255,25 @@
 		  							document.getElementById(result[i].db_svr_nm+"_bck_hist").checked = false;
 		  						}
 		  						
+		  						//백업스케줄러 권한
+		  						if(result.length != 0 && result[i].bck_scdr_aut_yn == "Y"){
+		  							document.getElementById(result[i].db_svr_nm+"_bck_scdr").checked = true;
+		  						}else{
+		  							document.getElementById(result[i].db_svr_nm+"_bck_scdr").checked = false;
+		  						}
+		  						
 		  						//서버접근제어 권한
 		  						if(result.length != 0 && result[i].acs_cntr_aut_yn == "Y"){
 		  							document.getElementById(result[i].db_svr_nm+"_acs_cntr").checked = true;
 		  						}else{
 		  							document.getElementById(result[i].db_svr_nm+"_acs_cntr").checked = false;
+		  						}
+		  						
+		  						//정책변경이력 권한
+		  						if(result.length != 0 && result[i].policy_change_his_aut_yn == "Y"){
+		  							document.getElementById(result[i].db_svr_nm+"_policy_change_his").checked = true;
+		  						}else{
+		  							document.getElementById(result[i].db_svr_nm+"_policy_change_his").checked = false;
 		  						}
 		  						
 		  						//감사설정 권한
@@ -262,7 +293,9 @@
 		    			}else{
 		    				document.getElementById(svr_server[0].db_svr_nm+"_bck_cng").checked = false;
 		    				document.getElementById(svr_server[0].db_svr_nm+"_bck_hist").checked = false;
+		    				document.getElementById(svr_server[0].db_svr_nm+"_bck_scdr").checked = false;
 		    				document.getElementById(svr_server[0].db_svr_nm+"_acs_cntr").checked = false;
+		    				document.getElementById(svr_server[0].db_svr_nm+"_policy_change_hist").checked = false;
 		    				document.getElementById(svr_server[0].db_svr_nm+"_adt_cng").checked = false;
 		    				document.getElementById(svr_server[0].db_svr_nm+"_adt_hist").checked = false;
     					}	
@@ -285,7 +318,9 @@
 			 var db_svr_id = $("input[name='db_svr_id']");
 			 var bck_cng_aut = $("input[name='bck_cng_aut']");
 			 var bck_hist_aut = $("input[name='bck_hist_aut']");
+			 var bck_scdr_aut = $("input[name='bck_scdr_aut']");
 			 var acs_cntr_aut = $("input[name='acs_cntr_aut']");
+			 var policy_change_his_aut = $("input[name='policy_change_his_aut']");
 			 var adt_cng_aut = $("input[name='adt_cng_aut']");
 			 var adt_hist_aut = $("input[name='adt_hist_aut']");
 			 
@@ -306,10 +341,22 @@
 			        	rows.bck_hist_aut_yn = "N";
 			        }
 			     
+			     if(bck_scdr_aut[i].checked){ //선택되어 있으면 배열에 값을 저장함
+			    		rows.bck_scdr_aut_yn = "Y";   
+			        }else{
+			        	rows.bck_scdr_aut_yn = "N";
+			        }
+			     
 			     if(acs_cntr_aut[i].checked){ //선택되어 있으면 배열에 값을 저장함
 			    	 	rows.acs_cntr_aut_yn = "Y";   
 			        }else{
 			        	rows.acs_cntr_aut_yn = "N";
+			        }
+			     
+			     if(policy_change_his_aut[i].checked){ //선택되어 있으면 배열에 값을 저장함
+			    	 	rows.policy_change_his_aut_yn = "Y";   
+			        }else{
+			        	rows.policy_change_his_aut_yn = "N";
 			        }
 			     
 			     if(adt_cng_aut[i].checked){ //선택되어 있으면 배열에 값을 저장함

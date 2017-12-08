@@ -190,7 +190,6 @@
 	
 
   		function GetJsonData(data, aut) {
-  			
 			var parseData = $.parseJSON(data);
 		 	var html1 = "";
  /*   			html1 += '<div class="lnb_tit">DB 서버';
@@ -200,10 +199,11 @@
 			html1 += '</div>'; 
 			html1 += '</div>';    */
 			var html = "";
- 				$(data).each(function (index, item) {		
- 					if(aut.length != 0 && aut[index].bck_cng_aut_yn != "N" && aut[index].bck_hist_aut_yn != "N" && aut[index].acs_cntr_aut_yn != "N" && aut[index].adt_cng_aut_yn != "N" && aut[index].adt_hist_aut_yn != "N" ){			
-					html1+='<ul class="depth_1 lnbMenu">';
-					//html1+='	<li><div class="border" style="overflow: hidden;white-space: nowrap;text-overflow: ellipsis;" ><a href="#n" onClick=javascript:fn_GoLink("#n");><img src="../images/ico_lnb_3.png" id="treeImg"><div class="tooltip">'+item.db_svr_nm+'<span class="tooltiptext">'+item.db_svr_nm+'</span></div></a></div>';
+
+ 			$(data).each(function (index, item) {
+ 				if(aut.length != 0 && aut[index].bck_cng_aut_yn == "N" && aut[index].bck_hist_aut_yn == "N" && aut[index].bck_scdr_aut_yn == "N" && aut[index].acs_cntr_aut_yn == "N" && aut[index].policy_change_his_aut_yn == "N" && aut[index].adt_cng_aut_yn == "N" && aut[index].adt_hist_aut_yn == "N" ){	
+ 				}else{
+ 					html1+='<ul class="depth_1 lnbMenu">';
 					html1+='	<li><div class="border"  ><a href="/property.do?db_svr_id='+item.db_svr_id+'" onClick=javascript:fn_GoLink("#n");><img src="../images/ico_lnb_3.png" id="treeImg"><div class="tooltip">'+item.db_svr_nm+'<span class="tooltiptext">'+item.ipadr+'</span></div></a></div>';
 					html1+='		<ul class="depth_2">';
 					html1+='			<li class="ico2_1"><a href="#n"><img src="../images/ico_lnb_6.png" id="treeImg">백업관리</a>';
@@ -214,7 +214,9 @@
 					if(aut.length != 0 && aut[index].bck_hist_aut_yn == "Y"){
 						html1+='					<li class="ico3_2"><a href=/backup/workLogList.do?db_svr_id='+item.db_svr_id+' onClick=javascript:fn_GoLink("/backup/workLogList.do?db_svr_id='+item.db_svr_id+'");><img src="../images/ico_lnb_11.png" id="treeImg">백업이력</a></li>';
 					}
+					if(aut.length != 0 && aut[index].bck_scdr_aut_yn == "Y"){
 					html1+='			<li class="ico2_2"><a href=/schedulerView.do?db_svr_id='+item.db_svr_id+' onClick=javascript:fn_GoLink("/schedulerView.do?db_svr_id='+item.db_svr_id+'");><img src="../images/ico_main_tit_1.png" id="treeImg">백업스케줄러</a>';
+					}
 					html1+='				</ul>';
 					html1+='			</li>';
 					html1+='			<li class="ico2_2"><a href="#n"><img src="../images/ico_lnb_7.png" id="treeImg">접근제어관리</a>';
@@ -222,7 +224,9 @@
 					if(aut.length != 0 && aut[index].acs_cntr_aut_yn == "Y"){
 						html1+='					<li class="ico3_3"><a href=/accessControl.do?db_svr_id='+item.db_svr_id+' onClick=javascript:fn_GoLink("/accessControl.do?db_svr_id='+item.db_svr_id+'");><img src="../images/ico_lnb_12.png" id="treeImg">접근제어</a></li>';
 					}
+					if(aut.length != 0 && aut[index].policy_change_his_aut_yn == "Y"){
 					html1+='					<li class="ico3_3"><a href=/accessControlHistory.do?db_svr_id='+item.db_svr_id+' onClick=javascript:fn_GoLink("/accessControlHistory.do?db_svr_id='+item.db_svr_id+'");><img src="../images/ico_lnb_14.png" id="treeImg">정책변경이력</a></li>';
+					}
 					if(aut.length != 0 && aut[index].adt_cng_aut_yn == "Y"){
 						html1+='					<li class="ico3_4"><a href=/audit/auditManagement.do?db_svr_id='+item.db_svr_id+' onClick=javascript:fn_GoLink("/audit/auditManagement.do?db_svr_id='+item.db_svr_id+'");><img src="../images/ico_lnb_13.png" id="treeImg">감사설정</a></li>';
 					}

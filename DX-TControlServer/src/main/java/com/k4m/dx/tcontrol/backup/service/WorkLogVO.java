@@ -27,6 +27,17 @@ public class WorkLogVO {
 	private String bck_bsn_dscd;
 	private String wrk_dtm;
 	private String rslt_msg;
+	private String ipadr;
+	
+	
+
+	public String getIpadr() {
+		return ipadr;
+	}
+
+	public void setIpadr(String ipadr) {
+		this.ipadr = ipadr;
+	}
 
 	public String getRslt_msg() {
 		return rslt_msg;

@@ -64,10 +64,12 @@ public class AuditController {
 	
 	@RequestMapping(value = "/audit/auditManagement.do")
 	public ModelAndView auditManagement(@ModelAttribute("historyVO") HistoryVO historyVO,@ModelAttribute("auditVO") AuditVO auditVO, ModelMap model, HttpServletRequest request) throws Exception{
+		String strDbSvrId = request.getParameter("db_svr_id");
+		int db_svr_id = Integer.parseInt(strDbSvrId);
 		
 		//유저 디비서버 권한 조회 (공통메소드호출),
 		CmmnUtils cu = new CmmnUtils();
-		dbSvrAut = cu.selectUserDBSvrAutList(dbAuthorityService);
+		dbSvrAut = cu.selectUserDBSvrAutList(dbAuthorityService,db_svr_id);
 		ModelAndView mv = new ModelAndView();
 
 		//mv.addObject("db_svr_id",workVO.getDb_svr_id());
@@ -81,9 +83,6 @@ public class AuditController {
 				historyVO.setExe_dtl_cd("DX-T0031");
 				historyVO.setMnu_id(30);
 				accessHistoryService.insertHistory(historyVO);
-				
-				String strDbSvrId = request.getParameter("db_svr_id");
-				int db_svr_id = Integer.parseInt(strDbSvrId);
 				
 				DbServerVO schDbServerVO = new DbServerVO();
 				schDbServerVO.setDb_svr_id(db_svr_id);
@@ -298,10 +297,11 @@ public class AuditController {
 	
 	@RequestMapping(value = "/audit/auditLogList.do")
 	public ModelAndView auditLogList(@ModelAttribute("historyVO") HistoryVO historyVO,@ModelAttribute("auditVO") AuditVO auditVO, ModelMap model, HttpServletRequest request) throws Exception{
-		
+		String strDbSvrId = request.getParameter("db_svr_id");
+		int db_svr_id = Integer.parseInt(strDbSvrId);
 		//유저 디비서버 권한 조회 (공통메소드호출),
 		CmmnUtils cu = new CmmnUtils();
-		dbSvrAut = cu.selectUserDBSvrAutList(dbAuthorityService);
+		dbSvrAut = cu.selectUserDBSvrAutList(dbAuthorityService,db_svr_id);
 		
 		ModelAndView mv = new ModelAndView();
 
@@ -316,9 +316,6 @@ public class AuditController {
 				historyVO.setExe_dtl_cd("DX-T0032");
 				historyVO.setMnu_id(31);
 				accessHistoryService.insertHistory(historyVO); 
-				
-				String strDbSvrId = request.getParameter("db_svr_id");
-				int db_svr_id = Integer.parseInt(strDbSvrId);
 				
 				SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
 	

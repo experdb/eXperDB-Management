@@ -64,6 +64,7 @@ function fn_rman_init(){
 		    				  return '<span onClick=javascript:fn_workLayer("'+full.wrk_id+'"); class="bold">' + full.wrk_nm + '</span>';
 		    			}
 		    		},
+		    		{ data: "ipadr", className: "dt-left", defaultContent: ""},
 		         	{ data: "wrk_exp", className: "dt-left", defaultContent: ""}, 		         	
  		         	{ data: "bck_opt_cd_nm", className: "dt-center", defaultContent: ""}, 
  		         	{ data: "file_sz", className: "dt-center", defaultContent: ""}, 
@@ -76,9 +77,9 @@ function fn_rman_init(){
 	 					render : function(data, type, full, meta) {
 	 						var html = '';
 	 						if (full.exe_rslt_cd == 'TC001701') {
-	 							html += ' <span class="btn btnC_01 btnF_02" onClick=javascript:fn_failLog("'+full.exe_sn+'");><input type="button" value="SUCCESS"></span>';
+	 							html += '<span class="btn btnC_01 btnF_02"><img src="../images/ico_state_02.png" style="margin-right:3px;"/>Success</span>';
 	 						} else {
-	 							html += ' <span class="btn btnC_01 btnF_02" onClick=javascript:fn_failLog("'+full.exe_sn+'");><input type="button" value="FAIL"></span>';
+	 							html += '<span class="btn btnC_01 btnF_02"><button onclick="fn_failLog('+full.exe_sn+')"><img src="../images/ico_state_01.png" style="margin-right:3px;"/>Fail</button></span>';
 	 						}
 	 						return html;
 	 					},
@@ -93,11 +94,12 @@ function fn_rman_init(){
    	tableRman.tables().header().to$().find('th:eq(2)').css('min-width', '100px');
    	tableRman.tables().header().to$().find('th:eq(3)').css('min-width', '100px');
    	tableRman.tables().header().to$().find('th:eq(4)').css('min-width', '100px');
-   	tableRman.tables().header().to$().find('th:eq(5)').css('min-width', '150px');
-   	tableRman.tables().header().to$().find('th:eq(6)').css('min-width', '100px');
+   	tableRman.tables().header().to$().find('th:eq(5)').css('min-width', '100px');
+   	tableRman.tables().header().to$().find('th:eq(6)').css('min-width', '150px');
    	tableRman.tables().header().to$().find('th:eq(7)').css('min-width', '100px');
    	tableRman.tables().header().to$().find('th:eq(8)').css('min-width', '100px');
    	tableRman.tables().header().to$().find('th:eq(9)').css('min-width', '100px');
+   	tableRman.tables().header().to$().find('th:eq(10)').css('min-width', '100px');
     $(window).trigger('resize'); 
 }
 
@@ -116,6 +118,7 @@ function fn_dump_init(){
 		    				  return '<span onClick=javascript:fn_workLayer("'+full.wrk_id+'"); class="bold">' + full.wrk_nm + '</span>';
 		    			}
 		    		}, 
+		    		{ data: "ipadr", className: "dt-left", defaultContent: ""},
 		         	{ data: "wrk_exp", className: "dt-left", defaultContent: ""}, 
  		         	{ data: "db_nm", className: "dt-center", defaultContent: ""}, 
  		         	{ data: "file_sz", className: "dt-center", defaultContent: ""},
@@ -145,11 +148,12 @@ function fn_dump_init(){
    	tableDump.tables().header().to$().find('th:eq(2)').css('min-width', '100px');
    	tableDump.tables().header().to$().find('th:eq(3)').css('min-width', '100px');
    	tableDump.tables().header().to$().find('th:eq(4)').css('min-width', '100px');
-   	tableDump.tables().header().to$().find('th:eq(5)').css('min-width', '150px');
-   	tableDump.tables().header().to$().find('th:eq(6)').css('min-width', '100px');
+   	tableDump.tables().header().to$().find('th:eq(5)').css('min-width', '100px');
+   	tableDump.tables().header().to$().find('th:eq(6)').css('min-width', '150px');
    	tableDump.tables().header().to$().find('th:eq(7)').css('min-width', '100px');
    	tableDump.tables().header().to$().find('th:eq(8)').css('min-width', '100px');
    	tableDump.tables().header().to$().find('th:eq(9)').css('min-width', '100px');
+   	tableDump.tables().header().to$().find('th:eq(10)').css('min-width', '100px');
     $(window).trigger('resize');
 }
 
@@ -386,6 +390,7 @@ function selectTab(intab){
 							<tr>
 								<th width="40">NO</th>
 								<th width="100">WORK명</th>
+								<th width="100">DBMS아이피</th>
 								<th width="100">WORK설명</th>
 								<th width="100">백업옵션</th>
 								<th width="100">사이즈</th>
@@ -405,6 +410,7 @@ function selectTab(intab){
 							<tr>
 								<th width="40">NO</th>
 								<th width="100">WORK명</th>
+								<th width="100">DBMS아이피</th>
 								<th width="100">WORK설명</th>
 								<th width="100">Database</th>
 								<th width="100">사이즈</th>

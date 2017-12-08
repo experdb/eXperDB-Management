@@ -596,127 +596,137 @@ var db_svr_id = "${db_svr_id}";
 	  }
 </script>
 <body>
-				<div class="contents_pop">
-					<div class="cmm_grp">				
-						<div class="sch_form">					
-							<table class="write">
-								<caption>검색 조회</caption>
-								<colgroup>
-									<col style="width: 110px;" />
-									<col />
-								</colgroup>
-								<tbody>
-									<tr>
-										<th scope="row" class="t9 line">스케줄명</th>
-										<td><input type="text" class="txt t2" id="scd_nm" name="scd_nm" /> <span class="btn btnF_04 btnC_01">
-												<button type="button" class="btn_type_02" onclick="fn_check()" style="width: 60px; margin-right: -60px; margin-top: 0;">중복체크</button></span>
-										</td>
-									</tr>
-									<tr>
-										<th scope="row" class="t9 line">백업설정</th>
-										<td>
-												<select name="bck" id="bck" class="txt t3" style="width: 150px;" onChange="fn_bck();">
-													<option value="">선택</option>
-													<option value="rman">RMAN</option>
-													<option value="dump">DUMP</option>
-												</select> 
-												<span id="rman_bck_opt"> 											
-													<select name="bck_opt_cd" id="bck_opt_cd" class="txt t3" style="width: 150px;">
-														<option value="">선택</option>
-														<option value="TC000301">FULL</option>
-														<option value="TC000302">incremental</option>
-														<option value="TC000303">archive</option>
-													</select>
-												</span> 
-												<span id="dump_bck_opt"> 
-													<select name="db_id" id="db_id" class="txt t3" style="width: 150px;">
-														<option value="">선택</option>
-														<c:forEach var="result" items="${dbList}" varStatus="status">
-															<option value="<c:out value="${result.db_id}"/>"><c:out value="${result.db_nm}" /></option>
-														</c:forEach>
-													</select>
-												</span>
-										</td>
-									</tr>
-									
-									<tr id="r_data_pth">
-										<th scope="row" class="t9 line">데이터경로</th>
-										<td>
-											<input type="text" class="txt" name="data_pth" id="data_pth" maxlength=50 style="width:450px" onKeydown="$('#check_path1').val('N')"/>
-											<span class="btn btnF_04 btnC_01"><button type="button" class= "btn_type_02" onclick="checkFolder(1)" style="width: 60px; margin-right: -60px; margin-top: 0;">경로체크</button></span>
-											<span id="dataVolume" style="margin:70px;"></span>
-										</td>
-									</tr>
-									<tr id="r_log_pth">
-										<th scope="row" class="t9 line">백업로그경로</th>
-										<td>
-											<input type="text" class="txt" name="rlog_file_pth" id="rlog_file_pth" maxlength=50 style="width:450px" onKeydown="$('#check_path2').val('N')"/>
-											<span class="btn btnF_04 btnC_01"><button type="button" class= "btn_type_02" onclick="checkFolder(2)" style="width: 60px; margin-right: -60px; margin-top: 0;">경로체크</button></span>
-											<span id="rlogVolume" style="margin:70px;"></span>
-										</td>
-									</tr>
-	
-									<tr id="r_bck_pth" rowsapn="2">	
-										<th scope="row" class="t9 line">백업경로</th>
-										<td>
-											<input type="text" class="txt" name="bck_pth" id="bck_pth" maxlength=50 style="width:450px" onKeydown="$('#check_path3').val('N')"/>
-											<span class="btn btnF_04 btnC_01"><button type="button" class= "btn_type_02" onclick="checkFolder(3)" style="width: 60px; margin-right: -60px; margin-top: 0;">경로체크</button></span>
-											<span id="backupVolume" style="margin:70px;"></span>
-										</td>
-									</tr>
-									
-									<tr id="d_log_pth">
-										<th scope="row" class="t9 line">백업로그경로</th>
-										<td>
-											<input type="text" class="txt" name="dlog_file_pth" id="dlog_file_pth" maxlength=50 style="width:450px" onKeydown="$('#check_path4').val('N')"/>
-											<span class="btn btnF_04 btnC_01"><button type="button" class= "btn_type_02" onclick="checkFolder(4)" style="width: 60px; margin-right: -60px; margin-top: 0;">경로체크</button></span>							
-											<span id="dlogVolume" style="margin:70px;"></span>
-										</td>
-									</tr>
-									
-									<tr id="d_bck_pth">
-										<th scope="row" class="t9 line">백업경로</th>
-										<td>
-											<input type="text" class="txt" name="save_pth" id="save_pth" maxlength=50 style="width:450px" onKeydown="$('#check_path5').val('N')"/>
-											<span class="btn btnF_04 btnC_01"><button type="button" class= "btn_type_02" onclick="checkFolder(5)" style="width: 60px; margin-right: -60px; margin-top: 0;">경로체크</button></span>							
-											<span id="saveVolume" style="margin:70px;"></span>
-										</td>
-									</tr>
-									
-									<tr>
-										<th scope="row" class="t9 line">스케줄설정</th>
-										<td>
-											<div class="schedule_wrap">
-												<span id="weekDay"> 
-													일 <input type="checkbox" id="chk" name="chk" value="0"> 
-													월 <input type="checkbox" id="chk" name="chk" value="0"> 
-													화 <input type="checkbox" id="chk" name="chk" value="0"> 
-													수 <input type="checkbox" id="chk" name="chk" value="0"> 
-													목 <input type="checkbox" id="chk" name="chk" value="0"> 
-													금 <input type="checkbox" id="chk" name="chk" value="0"> 
-													토 <input type="checkbox" id="chk" name="chk" value="0">
-												</span> <span>
-													<div id="hour"></div>
-												</span> <span>
-													<div id="min"></div>
-												</span>
-											</div>
-										</td>
-									</tr>
-		
-									<input type="hidden" name="db_svr_id" id="db_svr_id" value="${db_svr_id}"/>
-									<input type="hidden" name="check_path1" id="check_path1" value="N"/>
-									<input type="hidden" name="check_path2" id="check_path2" value="N"/>
-									<input type="hidden" name="check_path3" id="check_path3" value="N"/>
-									<input type="hidden" name="check_path4" id="check_path4" value="N"/>
-									<input type="hidden" name="check_path5" id="check_path5" value="N"/>
-								</tbody>
-							</table>
-						</div>
-					<div class="btn_type_02">
-						<span class="btn btnC_01" onClick="fn_insert_bckScheduler();return false;"><button>등록</button></span>
-					</div>
-				</div>
+	<div class="pop_container">
+		<div class="pop_cts">
+			<p class="tit">주별 스케줄등록</p>
+			<div class="sch_form">
+				<table class="write">
+					<caption>주별 스케줄등록</caption>
+					<colgroup>
+						<col style="width: 110px;" />
+						<col />
+					</colgroup>
+					<tbody>
+						<tr>
+							<th scope="row" class="t9 line">스케줄명</th>
+							<td><input type="text" class="txt t2" id="scd_nm"name="scd_nm" /> 
+							<span class="btn btnF_04 btnC_01">
+									<button type="button" class="btn_type_02" onclick="fn_check()"style="width: 60px; margin-right: -60px; margin-top: 0;">중복체크</button>
+							</span>
+							</td>
+						</tr>
+						<tr>
+							<th scope="row" class="t9 line">백업설정</th>
+							<td>
+							<select name="bck" id="bck" class="txt t3" style="width: 150px;" onChange="fn_bck();">
+									<option value="">선택</option>
+									<option value="rman">RMAN</option>
+									<option value="dump">DUMP</option>
+							</select> 
+							<span id="rman_bck_opt"> 
+							<select name="bck_opt_cd" id="bck_opt_cd" class="txt t3" style="width: 150px;">
+										<option value="">선택</option>
+										<option value="TC000301">FULL</option>
+										<option value="TC000302">incremental</option>
+										<option value="TC000303">archive</option>
+								</select>
+							</span> 
+							<span id="dump_bck_opt"> 
+							<select name="db_id" id="db_id" class="txt t3" style="width: 150px;">
+										<option value="">선택</option>
+										<c:forEach var="result" items="${dbList}" varStatus="status">
+											<option value="<c:out value="${result.db_id}"/>"><c:out
+													value="${result.db_nm}" /></option>
+										</c:forEach>
+								</select>
+							</span></td>
+						</tr>
+
+						<tr id="r_data_pth">
+							<th scope="row" class="t9 line">데이터경로</th>
+							<td>
+								<input type="text" class="txt" name="data_pth"id="data_pth" maxlength=50 style="width: 450px" onKeydown="$('#check_path1').val('N')" /> 
+								<span class="btn btnF_04 btnC_01">
+								<button type="button" class="btn_type_02" onclick="checkFolder(1)" style="width: 60px; margin-right: -60px; margin-top: 0;">경로체크</button>
+								</span>
+								<span id="dataVolume" style="margin: 70px;"></span>
+							</td>
+						</tr>
+						<tr id="r_log_pth">
+							<th scope="row" class="t9 line">백업로그경로</th>
+							<td>
+								<input type="text" class="txt" name="rlog_file_pth" id="rlog_file_pth" maxlength=50 style="width: 450px" onKeydown="$('#check_path2').val('N')" /> 
+								<span class="btn btnF_04 btnC_01"><button type="button" class="btn_type_02" onclick="checkFolder(2)" style="width: 60px; margin-right: -60px; margin-top: 0;">경로체크</button></span>
+								<span id="rlogVolume" style="margin: 70px;"></span>
+							</td>
+						</tr>
+
+						<tr id="r_bck_pth" rowsapn="2">
+							<th scope="row" class="t9 line">백업경로</th>
+							<td>
+								<input type="text" class="txt" name="bck_pth" id="bck_pth" maxlength=50 style="width: 450px" onKeydown="$('#check_path3').val('N')" /> 
+								<span class="btn btnF_04 btnC_01"><button type="button" class="btn_type_02" onclick="checkFolder(3)"style="width: 60px; margin-right: -60px; margin-top: 0;">경로체크</button></span>
+								<span id="backupVolume" style="margin: 70px;"></span>
+							</td>
+						</tr>
+
+						<tr id="d_log_pth">
+							<th scope="row" class="t9 line">백업로그경로</th>
+							<td>
+								<input type="text" class="txt" name="dlog_file_pth" id="dlog_file_pth" maxlength=50 style="width: 450px" onKeydown="$('#check_path4').val('N')" /> 
+								<span class="btn btnF_04 btnC_01">
+								<button type="button" class="btn_type_02" onclick="checkFolder(4)" style="width: 60px; margin-right: -60px; margin-top: 0;">경로체크</button></span>
+								<span id="dlogVolume" style="margin: 70px;"></span>
+							</td>
+						</tr>
+
+						<tr id="d_bck_pth">
+							<th scope="row" class="t9 line">백업경로</th>
+							<td>
+								<input type="text" class="txt" name="save_pth" id="save_pth" maxlength=50 style="width: 450px" onKeydown="$('#check_path5').val('N')" /> 
+								<span class="btn btnF_04 btnC_01">
+								<button type="button" class="btn_type_02" onclick="checkFolder(5)" style="width: 60px; margin-right: -60px; margin-top: 0;">경로체크</button></span>
+								<span id="saveVolume" style="margin: 70px;"></span>
+							</td>
+						</tr>
+
+						<tr>
+							<th scope="row" class="t9 line">스케줄설정</th>
+							<td>
+								<div class="schedule_wrap">
+									<span id="weekDay"> 일 <input type="checkbox" id="chk"name="chk" value="0"> 
+									월 <input type="checkbox" id="chk" name="chk" value="0"> 
+									화 <input type="checkbox" id="chk" name="chk" value="0"> 
+									수 <input type="checkbox" id="chk" name="chk" value="0"> 
+									목 <input type="checkbox" id="chk" name="chk" value="0"> 
+									금 <input type="checkbox" id="chk" name="chk" value="0"> 
+									토 <input type="checkbox" id="chk" name="chk" value="0">
+									</span> <span>
+										<div id="hour"></div>
+									</span> <span>
+										<div id="min"></div>
+									</span>
+								</div>
+							</td>
+						</tr>
+
+						<input type="hidden" name="db_svr_id" id="db_svr_id" value="${db_svr_id}" />
+						<input type="hidden" name="check_path1" id="check_path1" value="N" />
+						<input type="hidden" name="check_path2" id="check_path2" value="N" />
+						<input type="hidden" name="check_path3" id="check_path3" value="N" />
+						<input type="hidden" name="check_path4" id="check_path4" value="N" />
+						<input type="hidden" name="check_path5" id="check_path5" value="N" />
+					</tbody>
+				</table>
 			</div>
+			<div class="btn_type_02">
+				<span class="btn btnC_01"
+					onClick="fn_insert_bckScheduler();return false;"><button>등록</button></span>
+			</div>
+		</div>
+	</div>
+
+
+
 </body>
 </html>

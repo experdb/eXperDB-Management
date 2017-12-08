@@ -322,11 +322,12 @@
 					<table class="write">
 						<caption>검색 조회</caption>
 						<colgroup>
-							<col style="width: 100px;" />
-							<col style="width: 350px;" />
-							<col style="width: 100px;" />
-							<col style="width: 350px;" />
-							<col style="width: 100px;" />
+							<col style="width: 60px;" />
+							<col style="width: 200px;" />
+							<col style="width: 60px;" />
+							<col style="width: 150px;" />
+							<col style="width: 60px;" />
+							<col style="width: 150px;" />
 						</colgroup>
 						<tbody>
 								<tr>
@@ -390,19 +391,19 @@
 								 <tr>
 									<th scope="row" class="t9 line" >스케줄명</th>
 									<td>
-										<select class="select t8" name="scd_nm" id="scd_nm"  style="width: 200px;" onChange="fn_selectWrkNmList(this);">
+										<select class="select t4" name="scd_nm" id="scd_nm" onChange="fn_selectWrkNmList(this);">
 												<option value="%">전체</option>
 										</select>	
 									</td>
 									<th scope="row" class="t9 line">DBMS명</th>
 									<td>
-										<select class="select t8" name="db_svr_nm" id="db_svr_nm"  style="width:200px";>
+										<select class="select t4" name="db_svr_nm" id="db_svr_nm" >
 												<option value="%">전체</option>
 										</select>	
 									</td>									
 									<th scope="row" class="t9 line">실행결과</th>
 									<td>
-										<select class="select t8" name="exe_result" id="exe_result"  style="width:200px";>
+										<select class="select t4" name="exe_result" id="exe_result">
 												<option value="%">전체</option>
 												<option value="TC001701">성공</option>
 												<option value="TC001702">실패</option>
@@ -423,6 +424,7 @@
 							<col style="width: 15%;" />
 							<col style="width: 15%;" />
 							<col style="width: 15%;" />
+							<col style="width: 15%;" />
 							<col style="width: 10%;" />
 							<col style="width: 15%;" />
 						</colgroup>
@@ -430,7 +432,8 @@
 							<tr style="border-bottom: 1px solid #b8c3c6;">
 								<th scope="col">NO</th>
 								<th scope="col">스케줄명</th>
-								<th scope="col">DBMS명</th>							
+								<th scope="col">DBMS명</th>
+								<th scope="col">DBMS아이피</th>							
 								<th scope="col">작업시작일시</th>
 								<th scope="col">작업종료일시</th>
 								<th scope="col">작업시간</th>
@@ -443,14 +446,17 @@
 								<tr>
 									<td><c:out value="${paginationInfo.totalRecordCount+1 - ((pagingVO.pageIndex-1) * pagingVO.pageSize + status.count)}" /></td>
 									<td style="text-align: left;"><span onclick="fn_scdLayer('${result.scd_id}');" class="bold"><c:out value="${result.scd_nm}" /></span></td>
-									<td><c:out value="${result.db_svr_nm}" /></td>								
+									<td><c:out value="${result.db_svr_nm}" /></td>		
+									<td><c:out value="${result.ipadr}" /></td>						
 									<td><c:out value="${result.wrk_strt_dtm}" /></td>
 									<td><c:out value="${result.wrk_end_dtm}" /></td>
 									<td><c:out value="${result.wrk_dtm}" /></td>
 									<td>
 										<c:choose>
-											<c:when test="${result.exe_rslt_cd eq 'TC001701'}">Success</c:when>
-									    	<c:otherwise>Fail</c:otherwise>
+											<c:when test="${result.exe_rslt_cd eq 'TC001701'}"><img src="../images/ico_state_02.png" style="margin-right:3px;"/>Success</c:when>
+									    	<c:otherwise>
+									    	<img src="../images/ico_state_01.png" style="margin-right:3px;"/>Fail
+									    	</c:otherwise>
 										</c:choose>
 									</td>
 									<td><span class='btn btnC_01 btnF_02' onclick='fn_detail(${result.exe_sn})'><input type="button" value="상세조회"></span></td>

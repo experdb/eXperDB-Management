@@ -179,6 +179,8 @@
 				, A.ACS_CNTR_AUT_YN
 				, A.ADT_CNG_AUT_YN
 				, A.ADT_HIST_AUT_YN
+				, A.BCK_SCDR_AUT_YN
+				, A.POLICY_CHANGE_HIS_AUT_YN	 
 				, C.IPADR
 		FROM T_USRDBSVRAUT_I A, T_DBSVR_I B,T_DBSVRIPADR_I C
 		WHERE 1 = 1
@@ -186,6 +188,7 @@
 		AND B.DB_SVR_ID = C.DB_SVR_ID
 		AND C.MASTER_GBN = 'M'
 		AND A.USR_ID = #{usr_id}
+		ORDER BY A.DB_SVR_ID
 	</select>
 	
 	
@@ -201,7 +204,9 @@
 				, BCK_HIST_AUT_YN = #{bck_hist_aut_yn} 
 				, ACS_CNTR_AUT_YN = #{acs_cntr_aut_yn} 
 				, ADT_CNG_AUT_YN = #{adt_cng_aut_yn} 
-				, ADT_HIST_AUT_YN = #{adt_hist_aut_yt} 	 	
+				, ADT_HIST_AUT_YN = #{adt_hist_aut_yt}
+				, BCK_SCDR_AUT_YN = #{bck_scdr_aut_yn}
+				, POLICY_CHANGE_HIS_AUT_YN = #{policy_change_his_aut_yn} 	 	
 	 	WHERE USR_ID=#{usr_id}
 	 	AND DB_SVR_ID = #{db_svr_id}::numeric
 	</update>	
@@ -292,6 +297,8 @@
 			, ACS_CNTR_AUT_YN
 			, ADT_CNG_AUT_YN
 			, ADT_HIST_AUT_YN
+			, BCK_SCDR_AUT_YN
+			, POLICY_CHANGE_HIS_AUT_YN
 			, FRST_REGR_ID
 			, FRST_REG_DTM
 			, LST_MDFR_ID
@@ -307,6 +314,8 @@
 			, #{acs_cntr_aut_yn} 
 			, #{adt_cng_aut_yn} 
 			, #{adt_hist_aut_yt}
+			, #{bck_scdr_aut_yn}
+			, #{policy_change_his_aut_yn}
 			, #{usr_id}
 			, clock_timestamp()
 			, #{usr_id}
@@ -365,7 +374,7 @@
 	</insert>	
 	
 	
-	<select id="selectUserDBSvrAutList" resultType="HashMap">
+	<select id="selectUserDBSvrAutList" parameterType="HashMap" resultType="HashMap">
 		/**
 	 	*  Query ID : selectUserDBSvrAutList
 	 	* Description : 유저 서버 DB정보 조회
@@ -376,7 +385,9 @@
 		        , DB_SVR_ID
 		        , BCK_CNG_AUT_YN
 		        , BCK_HIST_AUT_YN
+				, BCK_SCDR_AUT_YN
 		        , ACS_CNTR_AUT_YN
+		        , POLICY_CHANGE_HIS_AUT_YN
 		        , ADT_CNG_AUT_YN
 		        , ADT_HIST_AUT_YN
 		        , FRST_REGR_ID
@@ -384,7 +395,8 @@
 				, LST_MDFR_ID
 				, LST_MDF_DTM
 		FROM T_USRDBSVRAUT_I
-		WHERE USR_ID = #{usr_id}	  
+		WHERE USR_ID = #{usr_id}
+		AND DB_SVR_ID = #{db_svr_id}	  
 	 </select>
 	 
 	 

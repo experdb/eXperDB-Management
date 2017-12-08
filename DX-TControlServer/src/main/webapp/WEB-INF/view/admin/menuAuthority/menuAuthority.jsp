@@ -48,6 +48,7 @@ function fn_init() {
 
 
 $(window.document).ready(function() {
+
 	fn_buttonAut();
 	fn_init();
 	var usr_id = "${usr_id}";
