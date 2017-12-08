@@ -56,7 +56,12 @@ function fn_init(){
 	        }}, 
 		{data : "rownum", defaultContent : "", targets : 0, orderable : false, checkboxes : {'selectRow' : true}}, 		
 		]
-	});      
+	});
+	
+     table_db.tables().header().to$().find('th:eq(0)').css('min-width', '200px');
+     table_db.tables().header().to$().find('th:eq(1)').css('min-width', '300px');
+     table_db.tables().header().to$().find('th:eq(2)').css('min-width', '100px');
+	 $(window).trigger('resize');
 }
 
 $(window.document).ready(function() {
@@ -356,12 +361,12 @@ function fn_dataCompareChcek(svrDbList,db_svr_id){
 				</form>
 			</div>
 			<div class="pop_rt">
-					<table id="dbList" class="cell-border display" cellspacing="0"  align="left">
+					<table id="dbList" class="display" cellspacing="0" align="left"  width="100%">
 						<thead>
 							<tr>
-								<th>Database</th>
-								<th>설명</th>
-								<th>등록선택</th>
+								<th width="200">Database</th>
+								<th width="300">설명</th>
+								<th width="100">등록선택</th>
 							</tr>
 						</thead>
 					</table>

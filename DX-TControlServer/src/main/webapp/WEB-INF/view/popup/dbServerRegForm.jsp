@@ -718,7 +718,7 @@ function fn_ipadrDelForm(){
 						</table>
 					</form>
 				<div class="btn_type_02">
-					<a href="#n" class="btn" onclick="fn_ipadrAdd();"><span><button>추가</button></span></a>
+					<a href="#n" class="btn" onclick="fn_ipadrAdd();"><span>추가</span></a>
 					<a href="#n" class="btn" onclick="toggleLayer($('#pop_layer'), 'off');"><span>취소</span></a>
 				</div>
 			</div>

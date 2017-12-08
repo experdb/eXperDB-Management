@@ -256,9 +256,20 @@ function fn_scdLayer(scd_id){
 		},
 		dataType : "json",
 		type : "post",
-		error : function(request, status, error) {
-			alert("ERROR CODE : "+ request.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ request.responseText.replace(/(<([^>]+)>)/gi, ""));
+		error : function(xhr, status, error) {
+			if(xhr.status == 401) {
+				alert("인증에 실패 했습니다. 로그인 페이지로 이동합니다.");
+				 location.href = "/";
+			} else if(xhr.status == 403) {
+				alert("세션이 만료가 되었습니다. 로그인 페이지로 이동합니다.");
+	             location.href = "/";
+			} else {
+				alert("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""));
+			}
 		},
+		beforeSend: function(xhr) {
+	        xhr.setRequestHeader("AJAX", true);
+	     },
 		success : function(result) {
 			if(result.length==0){
 				alert("스케줄이 삭제되어 스케줄 정보를 확인할 수 없습니다.");

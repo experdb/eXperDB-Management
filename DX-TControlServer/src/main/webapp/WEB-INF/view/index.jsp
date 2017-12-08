@@ -197,7 +197,7 @@
 						<ul>
 							<li>
 								<p class="state">
-									<img src="../images/ico_state_10.png" alt="connet" /><span>Connet</span>
+									<img src="../images/ico_state_10.png" alt="connet" /><span>Connector</span>
 								</p>
 								<c:choose>
 						           <c:when test="${fn:length(fn:escapeXml(transferInfo.connect_cnt))>2}">
@@ -300,7 +300,7 @@
 									<th scope="col">성공</th>
 									<th scope="col">실패</th>
 									<th scope="col">등록수</th>
-									<th scope="col">connect 수</th>
+									<th scope="col">커넥터수</th>
 									<th scope="col">실행</th>
 								</tr>
 							</thead>

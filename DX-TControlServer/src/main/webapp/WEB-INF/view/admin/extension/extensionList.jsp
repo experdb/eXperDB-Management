@@ -39,14 +39,14 @@ function fn_init() {
 	        orderable: false,
 	        render: function(data, type, full, meta){
 	           if(type === 'display'){
-	              data = '<input type="radio" name="radio" value="' + data + '">';      
+// 	              data = '<input type="radio" name="radio" value="' + data + '">';      
 	           }
 	           return data;
 	        }}, 
 		{data : "idx", className : "dt-center", defaultContent : "" ,visible: false},
 		{data : "db_svr_id", className : "dt-center", defaultContent : "", visible: false},
 		{data : "db_svr_nm", className : "dt-center", defaultContent : ""},
-		{data : "ipadr", className : "dt-center", defaultContent : "", visible: false},
+		{data : "ipadr", className : "dt-center", defaultContent : ""},
 		{data : "dft_db_nm", className : "dt-center", defaultContent : "", visible: false},
 		{data : "portno", className : "dt-center", defaultContent : "", visible: false},
 		{data : "svr_spr_usr_id", className : "dt-center", defaultContent : "", visible: false},
@@ -66,6 +66,7 @@ function fn_init() {
 		paging : false,
 		columns : [
 		{data : "extname", className : "dt-center", defaultContent : ""}, 
+		{data : "extversion", className : "dt-center", defaultContent : ""},
 		{data : "installYn", className : "dt-center", defaultContent : "설치"}, 		
 		]
 	});
@@ -171,7 +172,7 @@ $(function() {
 <div id="contents">
 	<div class="contents_wrap">
 		<div class="contents_tit">
-			<h4>확장팩설치정보 화면 <a href="#n"><img src="../images/ico_tit.png" class="btn_info"/></a></h4>
+			<h4>확장팩설치정보 <a href="#n"><img src="../images/ico_tit.png" class="btn_info"/></a></h4>
 			<div class="infobox"> 
 				<ul>
 					<li>선택한 데이터베이스 서버에 설치된 확장팩 목록을 조회합니다.</li>
@@ -191,16 +192,16 @@ $(function() {
 					<div class="btn_type_01">
 					</div>
 					<div class="inner">
-						<p class="tit">확장설치조회</p>
+						<p class="tit">DBMS 리스트</p>
 						<div class="tree_server">
 							<table id="dbServerList" class="display" cellspacing="0" width="100%" align="right">
 								<thead>
 									<tr>
-										<th>선택</th>
+										<th>NO</th>
 										<th></th>
 										<th></th>
-										<th>DB 서버</th>
-										<th></th>
+										<th>DBMS명</th>
+										<th>DBMS 아이피</th>
 										<th></th>
 										<th></th>
 										<th></th>
@@ -219,12 +220,13 @@ $(function() {
 						
 					</div>
 					<div class="inner">
-						<p class="tit">확장 목록</p>
+						<p class="tit">확장모듈 리스트</p>
 						<div class="tree_list">
 							<table id="dbList" class="display" cellspacing="0" width="100%" align="left">
 								<thead>
 									<tr>
 										<th>확장명</th>
+										<th>버전</th>
 										<th>설치여부</th>
 									</tr>
 								</thead>
