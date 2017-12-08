@@ -855,7 +855,7 @@ public class ClientTester {
 			serverObj.put(ClientProtocolID.SERVER_NAME, "222.110.153.251");
 			serverObj.put(ClientProtocolID.SERVER_IP, "222.110.153.251");
 			serverObj.put(ClientProtocolID.SERVER_PORT, "5433");
-			serverObj.put(ClientProtocolID.DATABASE_NAME, "experdb");
+			serverObj.put(ClientProtocolID.DATABASE_NAME, "migratordb");
 			serverObj.put(ClientProtocolID.USER_ID, "experdb");
 			serverObj.put(ClientProtocolID.USER_PWD, "experdb");
 			
