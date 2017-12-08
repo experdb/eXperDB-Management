@@ -111,7 +111,7 @@
 	 	* Description : Extension List 조회
 	 	* Author : 박태혁
 	 	**/
-	    SELECT extname from pg_extension
+	    SELECT extname, extversion from pg_extension
 	    WHERE
 	    	extname is not null
 	    	<if test="extname != null and extname != '' ">
