@@ -90,15 +90,15 @@ function fn_rman_init(){
 	});
    	
    	tableRman.tables().header().to$().find('th:eq(0)').css('min-width', '40px');
-   	tableRman.tables().header().to$().find('th:eq(1)').css('min-width', '100px');
+   	tableRman.tables().header().to$().find('th:eq(1)').css('min-width', '150px');
    	tableRman.tables().header().to$().find('th:eq(2)').css('min-width', '100px');
-   	tableRman.tables().header().to$().find('th:eq(3)').css('min-width', '100px');
-   	tableRman.tables().header().to$().find('th:eq(4)').css('min-width', '100px');
-   	tableRman.tables().header().to$().find('th:eq(5)').css('min-width', '100px');
-   	tableRman.tables().header().to$().find('th:eq(6)').css('min-width', '150px');
+   	tableRman.tables().header().to$().find('th:eq(3)').css('min-width', '150px');
+   	tableRman.tables().header().to$().find('th:eq(4)').css('min-width', '70px');
+   	tableRman.tables().header().to$().find('th:eq(5)').css('min-width', '70px');
+   	tableRman.tables().header().to$().find('th:eq(6)').css('min-width', '230px');
    	tableRman.tables().header().to$().find('th:eq(7)').css('min-width', '100px');
    	tableRman.tables().header().to$().find('th:eq(8)').css('min-width', '100px');
-   	tableRman.tables().header().to$().find('th:eq(9)').css('min-width', '100px');
+   	tableRman.tables().header().to$().find('th:eq(9)').css('min-width', '70px');
    	tableRman.tables().header().to$().find('th:eq(10)').css('min-width', '100px');
     $(window).trigger('resize'); 
 }
@@ -389,15 +389,15 @@ function selectTab(intab){
 						<thead>
 							<tr>
 								<th width="40">NO</th>
-								<th width="100">WORK명</th>
+								<th width="150">WORK명</th>
 								<th width="100">DBMS아이피</th>
-								<th width="100">WORK설명</th>
-								<th width="100">백업옵션</th>
-								<th width="100">사이즈</th>
-								<th width="150">백업파일경로</th>
+								<th width="150">WORK설명</th>
+								<th width="70">백업옵션</th>
+								<th width="70">사이즈</th>
+								<th width="230">백업파일경로</th>
 								<th width="100">작업시작 시간</th>
 								<th width="100">작업종료 시간</th>
-								<th width="100">경과시간</th>
+								<th width="70">경과시간</th>
 								<th width="100">상태</th>
 							</tr>
 						</thead>
