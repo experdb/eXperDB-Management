@@ -312,24 +312,24 @@ function fn_dbServerConnTest(){
 			}
 		},
 		success : function(result) {
-			if(result.result_code == 0){
-				 for(var i=0; i<result.result_data.length; i++){
-					if(table.rows().data()[i].ipadr == result.result_data[i].SERVER_IP){
-						table.cell(i, 3).data(result.result_data[i].MASTER_GBN).draw();
-						table.cell(i, 4).data(result.result_data[i].CONNECT_YN).draw();					
-						table.cell(i, 5).data(result.result_data[i].CMD_HOSTNAME).draw();	
-					}
-					alert(result.result_data[i].CONNECT_YN);
-					if(result.result_data[i].MASTER_GBN == "N" || result.result_data[i].CONNECT_YN == "N"){
+			if(result[0].result_code == 0){
+				 for(var i=0; i<result.length; i++){		
+					if(table.rows().data()[i].ipadr == result[i].result_data[0].SERVER_IP){
+						table.cell(i, 3).data(result[i].result_data[0].MASTER_GBN).draw();
+						table.cell(i, 4).data(result[i].result_data[0].CONNECT_YN).draw();					
+						table.cell(i, 5).data(result[i].result_data[0].CMD_HOSTNAME).draw();	
+					}				
+					 if(result[i].result_data[0].MASTER_GBN == "N" || result[i].result_data[0].CONNECT_YN == "N"){
 							connCheck = "fail"
 							alert("[ 연결 테스트 실패! ]");
 							return false;
-					}else{
-						connCheck = "success";
-						alert("[ 연결 테스트 성공! ]");
-						fn_pathCall(ipadr, datasArr);
 					}
-				} 				
+				 }
+				 
+				connCheck = "success";
+				alert("[ 연결 테스트 성공! ]");
+				fn_pathCall(ipadr, datasArr);
+				
 			}else{
 			connCheck = "fail"
 			alert("[ 연결 테스트 실패! ]");
