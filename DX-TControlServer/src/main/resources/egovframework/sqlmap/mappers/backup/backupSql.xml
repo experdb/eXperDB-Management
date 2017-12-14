@@ -203,8 +203,7 @@
 			frst_reg_dtm,
 			lst_mdfr_id,
 			lst_mdf_dtm,
-			bck_filenm,
-			log_file_pth	
+			bck_filenm
 			)
 		VALUES
 			(
@@ -227,8 +226,7 @@
 			now(),
 			#{frst_regr_id},
 			now(),
-			#{bck_filenm},
-			#{log_file_pth}
+			#{bck_filenm}
 			)
 	</insert>
 	

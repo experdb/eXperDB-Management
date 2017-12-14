@@ -151,9 +151,9 @@ function fn_insert_opt(data){
 		});
 		fn_insert_object(data);
 	}else{
-		alert("동일Work명이 존재합니다. 다른 Work명을 입력해주세요.");
+		/* alert("동일Work명이 존재합니다. 다른 Work명을 입력해주세요.");
 		$("#wrk_nm").val("");
-		$("#wrk_nm").focus();
+		$("#wrk_nm").focus(); */
 	}
 }
 
@@ -566,11 +566,11 @@ function fn_check() {
 				alert("등록 가능한 WORK명 입니다.");
 				document.getElementById("wrk_nm").focus();
 				wrk_nmChk = "success";
-			} else {
+			} /* else {
 				scd_nmChk = "fail";
 				alert("중복된 WORK명이 존재합니다.");
 				document.getElementById("wrk_nm").focus();
-			}
+			} */
 		},
 		beforeSend: function(xhr) {
 	        xhr.setRequestHeader("AJAX", true);

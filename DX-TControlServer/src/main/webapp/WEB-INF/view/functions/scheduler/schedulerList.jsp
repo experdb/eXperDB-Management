@@ -33,9 +33,9 @@ function fn_init(){
 		{data : "wrk_cnt", className : "dt-center", defaultContent : ""}, //work갯수
 		{data : "prev_exe_dtm", className : "dt-center", defaultContent : ""}, 
 		{data : "nxt_exe_dtm", className : "dt-center", defaultContent : ""}, 
-		{data : "scd_cndt", 
+		{data : "status", 
 			render: function (data, type, full){
-				if(full.scd_cndt=="TC001801"){
+				if(full.status == "s"){
 					var html = '<img src="../images/ico_agent_1.png" alt="" />';
 						return html;
 				}else{

@@ -65,7 +65,7 @@ public class ClientTester {
 			//clientTester.dxT007_R(Ip, port);
 			
 			
-			clientTester.dxT010(Ip, port);
+			//clientTester.dxT010(Ip, port);
 			//clientTester.dxT011(Ip, port);
 			//clientTester.dxT012(Ip, port);
 			
@@ -86,7 +86,7 @@ public class ClientTester {
 			//clientTester.dxT018_insert(Ip, port);
 			//clientTester.dxT018_delete(Ip, port);
 			//clientTester.dxT019(Ip, port);
-			//clientTester.dxT020(Ip, port);
+			clientTester.dxT020(Ip, port);
 			//clientTester.dxT021(Ip, port);
 			
 			//clientTester.test();

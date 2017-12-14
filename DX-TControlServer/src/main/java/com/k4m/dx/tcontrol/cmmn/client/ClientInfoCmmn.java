@@ -1133,10 +1133,13 @@ public class ClientInfoCmmn {
 		System.out.println("ERR_CODE : " +  strErrCode);
 		System.out.println("ERR_MSG : " +  strErrMsg);
 
-		String host = (String) objList.get(ClientProtocolID.RESULT_DATA);
-		
+		HashMap resultHp = (HashMap) objList.get(ClientProtocolID.RESULT_DATA);
+
+		String host = resultHp.get("CMD_HOSTNAME").toString();
 		System.out.println("host : " + host);
 		result.put("host", host);
+		
+		
 		} catch(Exception e) {
 			e.printStackTrace();
 		}
