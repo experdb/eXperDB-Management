@@ -332,7 +332,7 @@ function fn_get_object_list(in_db_id,in_db_nm){
 				}
 			},
 			success : function(data) {
-				fn_make_object_list(data);
+				fn_make_object_list1(data);
 			}
 		});
 	}else{
@@ -361,7 +361,7 @@ function fn_checkAll(schema_id, schema_name) {
 /* ********************************************************
  * Make Object Tree
  ******************************************************** */
-function fn_make_object_list(data){
+function fn_make_object_list1(data){
 	var html = "<ul>";
 	var schema = "";
 	var schemaCnt = 0;
