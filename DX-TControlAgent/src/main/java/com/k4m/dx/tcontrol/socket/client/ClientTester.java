@@ -49,7 +49,10 @@ public class ClientTester {
 		Ip = "222.110.153.251";
 		 //	Ip = "127.0.0.1";
 		// Ip = "222.110.153.231";
+		
+		Ip = "222.110.153.204";
 		int port = 9001;
+		port = 5869;
 		try {
 			
 			//clientTester.dxT001(Ip, port);
