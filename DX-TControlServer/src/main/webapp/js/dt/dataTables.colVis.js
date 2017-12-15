@@ -347,6 +347,7 @@ ColVis.prototype = {
 	"_fnDrawCallback": function ()
 	{
 		var columns = this.s.dt.aoColumns;
+		//alert(columns);
 		var buttons = this.dom.buttons;
 		var groups = this.s.aoGroups;
 		var button;
@@ -355,7 +356,9 @@ ColVis.prototype = {
 			button = buttons[i];
 
 			if ( button.__columnIdx !== undefined ) {
+				//alert(columns[ button.__columnIdx ]);
 				$('input', button).prop( 'checked', columns[ button.__columnIdx ].bVisible );
+
 			}
 		}
 
@@ -432,11 +435,14 @@ ColVis.prototype = {
 		if ( $.inArray( 'all', this.s.aiExclude ) === -1 ) {
 			for ( var i=0, iLen=columns.length ; i<iLen ; i++ )
 			{
-				if ( $.inArray( i, this.s.aiExclude ) === -1 )
-				{
-					nButton = this._fnDomColumnButton( i );
-					nButton.__columnIdx = i;
-					this.dom.buttons.push( nButton );
+				//박태혁 추가 2017.12.15
+				if(columns[i].bVisible == true) {
+					if ( $.inArray( i, this.s.aiExclude ) === -1 )
+					{
+						nButton = this._fnDomColumnButton( i );
+						nButton.__columnIdx = i;
+						this.dom.buttons.push( nButton );
+					}
 				}
 			}
 		}
@@ -590,10 +596,14 @@ ColVis.prototype = {
 			that = this,
 			column = this.s.dt.aoColumns[i],
 			dt = this.s.dt;
+		
 
 		var title = this.s.fnLabel===null ?
 			column.sTitle :
 			this.s.fnLabel( i, column.sTitle, column.nTh );
+		
+		//박태혁 추가 2017.12.15
+		if(this.s.dt.aoColumns[i].bVisible == false) return '';
 
 		return $(
 				'<li '+(dt.bJUI ? 'class="ui-button ui-state-default"' : '')+'>'+
