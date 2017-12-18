@@ -72,7 +72,7 @@ public class DxT005 extends SocketCtl{
 			int intGrpSeq = service.selectQ_WRKEXE_G_02_SEQ();
 
 			for(int i=0;i<arrCmd.size();i++){
-				System.out.println("Start : "+ (i+1));
+				//System.out.println("Start : "+ (i+1));
 				
 				JSONObject objJob = (JSONObject) arrCmd.get(i);
 				
@@ -145,8 +145,8 @@ public class DxT005 extends SocketCtl{
 						strFileSize = CommonUtil.getPidExec(strCmd);
 						
 						
-						socketLogger.info("##### strFileSize cmd : " + strCmd );
-						socketLogger.info("##### strFileSize : " + strFileSize );
+						//socketLogger.info("##### strFileSize cmd : " + strCmd );
+						//socketLogger.info("##### strFileSize : " + strFileSize );
 						
 						if(strFileSize == null) strFileSize = "0";
 						
@@ -194,11 +194,16 @@ public class DxT005 extends SocketCtl{
 					service.updateSCD_CNDT(endVO);
 					
 					if(strLOG_YN.equals("Y")) {
+						socketLogger.info("DxT005 SCD_ID[" + strSCD_ID + "] " + strResultMessge);
+						
 						service.updateT_WRKEXE_G(endVO);
 					}
 					
 					continue;
 				} else {
+					
+					errLogger.error("DxT005 SCD_ID[" + strSCD_ID + "] Error : ", strResultMessge);
+					
 					strResultCode = "TC001702";
 					
 					WrkExeVO endVO = new WrkExeVO();
