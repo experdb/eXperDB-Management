@@ -52,7 +52,7 @@ $(window.document).ready(
 				async : false,
 				url : "/selectHaCnt.do",
 			  	data : {
-			  		db_svr_id : db_svr_id
+			  		db_svr_id : $("#db_svr_id").val()
 			  	},
 				type : "post",
 				beforeSend: function(xhr) {
