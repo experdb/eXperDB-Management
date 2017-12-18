@@ -126,7 +126,7 @@
 		<input type="hidden" name="lgi_dtm_end" id="lgi_dtm_end"> 
 		<input type="hidden" name="excel_type" id="excel_type">
 		<input type="hidden" name="excel_search" id="excel_search">
-		<input type="hidden" name="excel_order_type" id=excel_order_type>
+		<input type="hidden" name="excel_order_type" id="excel_order_type">
 		<input type="hidden" name="excel_order" id="excel_order">
 		<input type="hidden" name="excel_sys_cd" id="excel_sys_cd">
 	</form>
