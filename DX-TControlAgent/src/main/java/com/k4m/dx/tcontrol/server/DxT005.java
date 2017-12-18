@@ -194,7 +194,7 @@ public class DxT005 extends SocketCtl{
 					service.updateSCD_CNDT(endVO);
 					
 					if(strLOG_YN.equals("Y")) {
-						socketLogger.info("DxT005 SCD_ID[" + strSCD_ID + "] " + strResultMessge);
+						socketLogger.info("[SUCCESS] DxT005 SCD_ID[" + strSCD_ID + "] " + retVal + " " + strResultMessge);
 						
 						service.updateT_WRKEXE_G(endVO);
 					}
@@ -202,7 +202,7 @@ public class DxT005 extends SocketCtl{
 					continue;
 				} else {
 					
-					errLogger.error("DxT005 SCD_ID[" + strSCD_ID + "] Error : ", strResultMessge);
+					errLogger.error("[ERROR] DxT005 SCD_ID[" + strSCD_ID + "] ", retVal + " " + strResultMessge);
 					
 					strResultCode = "TC001702";
 					
