@@ -1,6 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
-
+<%@ taglib prefix="spring" uri="http://www.springframework.org/tags"%>
 
 <%
 	String usr_id = (String)session.getAttribute("usr_id");
@@ -186,55 +186,55 @@ function fn_cookie(url) {
 				<ul class="depth_1" id="gnb">
 					<li><a href="#n"><span><img src="/images/ico_h_5.png" alt="FUNCTION" /></span></a>
 						<ul class="depth_2">
-							<li><a href="#n" id="MN0001">스케줄정보</a>
+							<li><a href="#n" id="MN0001"><spring:message code="menu.schedule_information" /></a>
 								<ul class="depth_3">
-									<li><a href="/insertScheduleView.do" onClick="fn_cookie(null)" id="MN000101">스케줄 등록</a></li>
-									<li><a href="/selectScheduleListView.do" onClick="fn_cookie(null)" id="MN000102">스케줄 실행/중지</a></li>
-									<li><a href="/selectScheduleHistoryView.do" onClick="fn_cookie(null)" id="MN000103">스케줄 수행이력</a></li>
+									<li><a href="/insertScheduleView.do" onClick="fn_cookie(null)" id="MN000101"><spring:message code="menu.schedule_registration" /></a></li>
+									<li><a href="/selectScheduleListView.do" onClick="fn_cookie(null)" id="MN000102"><spring:message code="menu.schedule_run_stop" /></a></li>
+									<li><a href="/selectScheduleHistoryView.do" onClick="fn_cookie(null)" id="MN000103"><spring:message code="menu.shedule_execution_history" /></a></li>
 								</ul>
 							</li>
-							<li><a href="#n" id="MN0002">데이터전송정보</a>
+							<li><a href="#n" id="MN0002"><spring:message code="menu.data_transfer_information" /></a>
 								<ul class="depth_3">
-									<li><a href="/transferSetting.do" onClick="fn_cookie(null)" id="MN000201">전송서버설정</a></li>
-									<li><a href="/connectorRegister.do" onClick="fn_cookie(null)" id="MN000202">커넥터 관리</a></li>
+									<li><a href="/transferSetting.do" onClick="fn_cookie(null)" id="MN000201"><spring:message code="menu.transfer_server_settings" /></a></li>
+									<li><a href="/connectorRegister.do" onClick="fn_cookie(null)" id="MN000202"><spring:message code="menu.connector_management" /></a></li>
 								</ul>
 							</li>
 						</ul>
 					</li>
 					<li><a href="#n"><span><img src="/images/ico_h_6.png" alt="ADMIN" /></span></a>
 						<ul class="depth_2">
-							<li><a href="#n" id="MN0003">DBMS 정보</a>
+							<li><a href="#n" id="MN0003"><spring:message code="menu.dbms_information" /></a>
 								<ul class="depth_3">
-									<li><a href="/dbTree.do" onClick="fn_cookie(null)" id="MN000301">DBMS 등록</a></li>
-									<li><a href="/dbServer.do" onClick="fn_cookie(null)" id="MN000302">DBMS 관리</a></li>
-									<li><a href="/database.do" onClick="fn_cookie(null)" id="MN000303">Database 관리</a></li>
+									<li><a href="/dbTree.do" onClick="fn_cookie(null)" id="MN000301"><spring:message code="menu.dbms_registration" /></a></li>
+									<li><a href="/dbServer.do" onClick="fn_cookie(null)" id="MN000302"><spring:message code="menu.dbms_management" /></a></li>
+									<li><a href="/database.do" onClick="fn_cookie(null)" id="MN000303"><spring:message code="menu.database_management" /></a></li>
 								</ul>
 							</li>				
-						    <li><a href="/userManager.do" onClick="fn_cookie(null)" id="MN0004">사용자관리</a></li>
-							<li><a href="#n" id="MN0005">권한관리</a>
+						    <li><a href="/userManager.do" onClick="fn_cookie(null)" id="MN0004"><spring:message code="menu.user_management" /></a></li>
+							<li><a href="#n" id="MN0005"><spring:message code="menu.auth_management" /></a>
 					        	<ul class="depth_3">
-									<li><a href="/menuAuthority.do" onClick="fn_cookie(null)" id="MN000501">메뉴권한관리</a></li>
-									<li><a href="/dbServerAuthority.do" onClick="fn_cookie(null)" id="MN000502">서버권한관리</a></li>
-									<li><a href="/dbAuthority.do" onClick="fn_cookie(null)" id="MN000503">DB권한관리</a></li>									
+									<li><a href="/menuAuthority.do" onClick="fn_cookie(null)" id="MN000501"><spring:message code="menu.menu_auth_management" /></a></li>
+									<li><a href="/dbServerAuthority.do" onClick="fn_cookie(null)" id="MN000502"><spring:message code="menu.server_auth_management" /></a></li>
+									<li><a href="/dbAuthority.do" onClick="fn_cookie(null)" id="MN000503"><spring:message code="menu.database_auth_management" /></a></li>									
 								</ul>
 					        </li>	        					        
-					        <li><a href="#n" id="MN0006">이력관리</a>
+					        <li><a href="#n" id="MN0006"><spring:message code="menu.history_management" /></a>
 					        	<ul class="depth_3">
-									<li><a href="/accessHistory.do" onClick="fn_cookie(null)" id="MN000601">화면접근이력</a></li>
+									<li><a href="/accessHistory.do" onClick="fn_cookie(null)" id="MN000601"><spring:message code="menu.screen_access_history" /></a></li>
 								</ul>
 					        </li>
-					        <li><a href="#n" id="MN0007">모니터링</a>
+					        <li><a href="#n" id="MN0007"><spring:message code="menu.monitoring"/></a>
 					        	<ul class="depth_3">
-									<li><a href="/agentMonitoring.do" onClick="fn_cookie(null)" id="MN000701">에이전트 모니터링</a></li>
+									<li><a href="/agentMonitoring.do" onClick="fn_cookie(null)" id="MN000701"><spring:message code="menu.agent_monitoring"/></a></li>
 								</ul>
 					        </li>
-							<li><a href="/extensionList.do" onClick="fn_cookie(null)" id="MN0008">확장팩설치 정보</a></li>
+							<li><a href="/extensionList.do" onClick="fn_cookie(null)" id="MN0008"><spring:message code="menu.extension_pack_installation_information"/></a></li>
 						</ul>
 					</li>
 					<li><a href="#n"><span><img src="/images/ico_h_7.png" alt="MY PAGE" /></span></a>
 						<ul class="depth_2">
-							<li><a href="/myPage.do" onClick="fn_cookie(null)">사용자정보관리</a></li>
-        					<li><a href="/myScheduleListView.do" onClick="fn_cookie(null)">My스케줄 관리</a></li>
+							<li><a href="/myPage.do" onClick="fn_cookie(null)"><spring:message code="menu.user_information_management"/></a></li>
+        					<li><a href="/myScheduleListView.do" onClick="fn_cookie(null)"><spring:message code="menu.my_schedule_management"/></a></li>
 						</ul>
 					</li>
 					<li><a href="#n"><span><img src="/images/ico_h_8.png" alt="HELP" /></span></a>

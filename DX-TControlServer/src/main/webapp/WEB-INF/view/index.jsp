@@ -10,10 +10,10 @@
 <div id="contents" class="main">
 	<div class="contents_wrap">
 		<div class="contents_tit">
-			<h4>Dashboard <a href="#n"><img src="../images/ico_tit.png" alt="" class="btn_info"/></a></h4>
+			<h4><spring:message code="menu.dashboard" /> <a href="#n"><img src="../images/ico_tit.png" alt="" class="btn_info"/></a></h4>
 			<div class="infobox"> 
 				<ul>
-					<li>관리 대상 데이터베이스 서버의 목록과 설정 정보를 통합적으로 조회합니다.</li>				
+					<li><spring:message code="help.dashboard" /> </li>				
 				</ul>
 			</div>
 		</div>
@@ -22,7 +22,7 @@
 			<div class="main_grp">
 				<div class="main_info">
 					<div class="m_info_lt">
-						<p class="m_tit">스케줄 정보</p>
+						<p class="m_tit"><spring:message code="menu.schedule_information" /></p>
 						<ul>
 							<li>
 								<p class="state">
@@ -43,7 +43,7 @@
 						           </c:otherwise> 
 						         </c:choose>
 								</a>
-								<p class="state_txt">스케줄등록</p>
+								<p class="state_txt"><spring:message code="menu.schedule_registration" /></p>
 							</li>
 							<li>
 								<p class="state">
@@ -63,7 +63,7 @@
 						           </c:otherwise> 
 						         </c:choose>
 								</a>
-								<p class="state_txt">실행중</p>
+								<p class="state_txt"><spring:message code="dashboard.running" /></p>
 							</li>
 							<%-- <li>
 								<p class="state">
@@ -110,7 +110,7 @@
 						           </c:otherwise> 
 						         </c:choose>
 						         
-								<p class="state_txt">금일예정</p>
+								<p class="state_txt"><spring:message code="dashboard.scheduled_today" /></p>
 							</li>
 							<li>
 								<p class="state">
@@ -130,7 +130,7 @@
 						           </c:otherwise> 
 						         </c:choose>
 								</a>
-								<p class="state_txt">오류</p>
+								<p class="state_txt"><spring:message code="dashboard.failed" /></p>
 							</li>
 						</ul>
 					</div>
@@ -155,7 +155,7 @@
 						           </c:otherwise> 
 						         </c:choose>
 								</a>
-								<p class="state_txt">서버</p>
+								<p class="state_txt"><spring:message code="dashboard.server" /></p>
 							</li>
 							<li>
 								<p class="state">
@@ -173,7 +173,7 @@
 						            </p>
 						           </c:otherwise> 
 						         </c:choose>
-								<p class="state_txt">백업등록</p>
+								<p class="state_txt"><spring:message code="dashboard.Register.backup" /></p>
 							</li>
 							<%-- <li>
 								<p class="state">
@@ -193,7 +193,7 @@
 						</ul>
 					</div>
 					<div class="m_info_rt">
-						<p class="m_tit">데이터전송 정보</p>
+						<p class="m_tit"><spring:message code="menu.data_transfer_information" /></p>
 						<ul>
 							<li>
 								<p class="state">
@@ -211,7 +211,7 @@
 						            </p>
 						           </c:otherwise> 
 						         </c:choose>
-								<p class="state_txt">connet수</p>
+								<p class="state_txt"><spring:message code="dashboard.connect_count" /></p>
 							</li>
 							<li>
 								<p class="state">
@@ -229,14 +229,14 @@
 						            </p>
 						           </c:otherwise> 
 						         </c:choose>
-								<p class="state_txt">실행중</p>
+								<p class="state_txt"><spring:message code="dashboard.running" /></p>
 							</li>
 						</ul>
 					</div>				
 				</div>
 
 				<div class="main_server_info">
-					<p class="tit">DBMS 정보</p>
+					<p class="tit"><spring:message code="menu.dbms_information" /></p>
 					<div class="inner">
 					<!--
 						<div class="sch_form">
@@ -286,22 +286,22 @@
 							</colgroup>
 							<thead>
 								<tr>
-									<th scope="col" rowspan="2">DBMS명</th>
-									<th scope="col" rowspan="2">관리DB</th>
-									<th scope="col" colspan="4">백업관리</th>
-									<th scope="col">접근제어</th>
+									<th scope="col" rowspan="2"><spring:message code="common.dbms_name" /> </th>
+									<th scope="col" rowspan="2"><spring:message code="dashboard.management_db" />  </th>
+									<th scope="col" colspan="4"><spring:message code="menu.backup_management" /></th>
+									<th scope="col"><spring:message code="menu.access_control" /></th>
 
-									<th scope="col" colspan="2">데이터전송</th>
-									<th scope="col" rowspan="2">experdb엔진</th>								
+									<th scope="col" colspan="2"><spring:message code="menu.data_transfer" /></th>
+									<th scope="col" rowspan="2"><spring:message code="data_transfer.experdb_agent" /></th>								
 								</tr>
 								<tr>
-									<th scope="col">등록</th>
-									<th scope="col">스케줄</th>
-									<th scope="col">성공</th>
-									<th scope="col">실패</th>
-									<th scope="col">등록수</th>
-									<th scope="col">커넥터수</th>
-									<th scope="col">실행</th>
+									<th scope="col"><spring:message code="common.registory" /></th>
+									<th scope="col"><spring:message code="menu.schedule" /></th>
+									<th scope="col"><spring:message code="common.success" /></th>
+									<th scope="col"><spring:message code="common.failed" /> </th>
+									<th scope="col"><spring:message code="dashboard.regist_count" /></th>
+									<th scope="col"><spring:message code="dashboard.connect_count" /></th>
+									<th scope="col"><spring:message code="schedule.run" /></th>
 								</tr>
 							</thead>
 							<tbody>

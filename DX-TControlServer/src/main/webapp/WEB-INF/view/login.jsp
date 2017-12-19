@@ -21,12 +21,12 @@ function fn_login(){
 	 
 	if (strid == "" || strid == "undefind" || strid == null)
 	{
-		alert("아이디를 넣어주세요");
+		alert('<spring:message code="message.msg128" />');
 		document.getElementById('usr_id').focus();
 		return false;
 	}
 	if (strpw == "" || strpw == "undefind" || strpw == null){
-			alert("비밀번호를 넣어주세요");
+			alert('<spring:message code="message.msg129" />');
 			document.getElementById('usr_id').focus();
 			return false;
 	}
@@ -49,12 +49,12 @@ $(window.document).ready(function() {
 			<div class="inp_bx">
 				<p class="tit">MEMBER LOGIN</p>
 				<div class="inp_wrap t1">
-					<label for="member_id">ID</label>
-					<input type="text" class="txt" id="usr_id" name="usr_id" title="아이디 입력" maxlength="" placeholder="아이디를 입력하세요."/>
+					<label for="member_id"><spring:message code="user_management.id" /></label>
+					<input type="text" class="txt" id="usr_id" name="usr_id" maxlength="" placeholder='<spring:message code="message.msg128" />'/>
 				</div>
 				<div class="inp_wrap t2">
-					<label for="member_pwd">Password</label>
-					<input type="password" class="txt" id="pwd" name="pwd" title="비밀번호 입력" maxlength="" placeholder="비밀번호를 입력하세요." />
+					<label for="member_pwd"><spring:message code="user_management.password" /></label>
+					<input type="password" class="txt" id="pwd" name="pwd" maxlength="" placeholder='<spring:message code="message.msg129" />'/>
 				</div>
 				<div class="inp_wrap t2" id="errormessage"><c:if test="${not empty error}"><c:out value="${error}"/></c:if></div>	
 				<div class="btn_wrap">

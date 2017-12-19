@@ -82,6 +82,13 @@ public class LoginController {
 		String id = userVo.getUsr_id();
 		String pw = SHA256.SHA256(userVo.getPwd());
 		try {
+			
+			int masterCheck = loginService.selectMasterCheck();
+			if(masterCheck>1){
+				mv.addObject("error", "서버 HA구성에서 Master 가 중복 됩니다.");
+				return mv;
+			}
+			
 			List<UserVO> userList = loginService.selectUserList(userVo);
 			mv.setViewName("login");
 			int intLoginCnt = userList.size();
@@ -94,6 +101,7 @@ public class LoginController {
 			} else if (userList.get(0).getUsr_expr_dt().equals("N")) {
 				mv.addObject("error", "사용 만료된 아이디 입니다.");
 			} else {
+				
 				// 쿠키설정
 				Cookie idCookie = new Cookie("s_login_id", userList.get(0).getUsr_id());
 				idCookie.setMaxAge(-1);

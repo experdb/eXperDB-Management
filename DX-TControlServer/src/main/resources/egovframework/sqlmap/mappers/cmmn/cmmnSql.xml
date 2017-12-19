@@ -31,6 +31,23 @@
       AND  USR_ID = #{usr_id}		
     </select>
 
+	<select id="selectMasterCheck" resultType="int">
+		/**
+	 	* Query ID : selectMasterCheck
+	 	* Description : HA구성 master 체크
+	 	* Author : 김주영
+	 	**/
+	 	SELECT
+        sum(coalesce(A.master_couble_chk, 0)) as master_couble_chk_cnt
+		FROM
+		(
+		  SELECT
+		 case when count(IPADR) > 1 then 1
+		    else 0 end as master_couble_chk
+		  FROM T_DBSVRIPADR_I WHERE MASTER_GBN ='M'  GROUP BY IPADR
+		 ) A
+	 	
+	</select>
 
 	<select id="selectDbServerList" resultType="dbServerVO" parameterType="string">
 			/**
