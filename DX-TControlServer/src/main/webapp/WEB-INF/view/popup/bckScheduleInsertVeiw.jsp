@@ -37,11 +37,39 @@
 <script language="javascript">
 var scd_nmChk = "fail";
 var db_svr_id = "${db_svr_id}";
+var haCnt = 0;
 
 	/* ********************************************************
 	 * 페이지 시작시 함수
 	 ******************************************************** */
 	$(window.document).ready(function() {
+		
+		 $.ajax({
+				async : false,
+				url : "/selectHaCnt.do",
+			  	data : {
+			  		db_svr_id : db_svr_id
+			  	},
+				type : "post",
+				beforeSend: function(xhr) {
+			        xhr.setRequestHeader("AJAX", true);
+			     },
+				error : function(xhr, status, error) {
+					if(xhr.status == 401) {
+						alert("인증에 실패 했습니다. 로그인 페이지로 이동합니다.");
+						 location.href = "/";
+					} else if(xhr.status == 403) {
+						alert("세션이 만료가 되었습니다. 로그인 페이지로 이동합니다.");
+			             location.href = "/";
+					} else {
+						alert("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""));
+					}
+				},
+				success : function(result) {
+					haCnt = result[0].hacnt;			
+				}
+			}); 
+		 
 		$("#r_data_pth").hide();
 		$("#r_log_pth").hide();
 		$("#r_bck_pth").hide();
@@ -95,17 +123,21 @@ var db_svr_id = "${db_svr_id}";
 		}else if($("input[name=chk]:checkbox:checked").length == 0){
 			alert("스케줄을 체크해 주세요.");
 			return false;
-		}else if($('#bck').val() == "rman"){
-			if($('#bck_opt_cd').val() == "선택"){
+		}
+		
+		if($('#bck').val() == "rman"){
+			if($('#bck_opt_cd').val() == ""){
 				alert("백업옵션을 선택해 주세요.");
 				return false;
 				}			
-		}else if($('#bck').val() == "dump"){
-			if($('#db_id').val() == "선택"){
+		}else{
+			if($('#db_id').val() == ""){
 				alert("데이터베이스를 선택해 주세요.");
 				return false;
 				}			
-		}else if($("#check_path1").val() != "Y"){
+		}
+		
+		if($("#check_path1").val() != "Y"){
 			alert("데이터경로에 유효한 경로를 입력후 경로체크를 해 주세요.");
 			$("#data_pth").focus();
 			return false;
@@ -352,7 +384,11 @@ var db_svr_id = "${db_svr_id}";
 	 							$( "#saveVolume" ).append(volume);
 	 						}
 	 					}else{
-	 						alert("HA 구성된 클러스터 중 해당 경로가 존재하지 않는 클러스터가 있습니다.");
+	 						if(haCnt > 1){
+	 							alert("HA 구성된 클러스터 중 "+data.SERVERIP+" 노드에 해당 경로가 존재하지 않습니다.");
+							}else{
+								alert("유효하지 않은 경로입니다.");
+							}	
 	 					}
 	 				}else{
 	 					alert("경로체크 중 서버에러로 인하여 실패하였습니다.")
@@ -434,7 +470,7 @@ var db_svr_id = "${db_svr_id}";
 	 							$("#check_path5").val("Y");
 	 						}
 	 						alert("유효한 경로입니다.");
-	 							var volume = "용량: "+data.result.RESULT_DATA.CAPACITY;
+	 						var volume = "용량: "+data.result.RESULT_DATA.CAPACITY;
 	 						if(keyType == 1){
 	 							$("#dataVolume").empty();
 	 							$( "#dataVolume" ).append(volume);
@@ -470,7 +506,6 @@ var db_svr_id = "${db_svr_id}";
 	  function fn_insert_bckScheduler(){
 
 		  if (!fn_validation()) return false;
-		 
 		  var bck = $('#bck').val();
 
 		  if(bck =="rman"){		  

@@ -534,7 +534,7 @@ function checkFolder(keyType){
 						}
 					}else{
 						if(haCnt > 1){
-							alert("HA 구성된 클러스터 중 해당 경로가 존재하지 않는 클러스터가 있습니다.");
+							alert("HA 구성된 클러스터 중 "+data.SERVERIP+" 노드에 해당 경로가 존재하지 않습니다.");
 						}else{
 							alert("유효하지 않은 경로입니다.");
 						}						
