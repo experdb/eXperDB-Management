@@ -269,11 +269,11 @@
 	      function Schedule(aut){
 	    	  for(var i=0; i<aut.length; i++){ 	  
 		          if(aut.length != 0 && aut[i].read_aut_yn == "Y" && aut[i].mnu_cd == "MN000101"){	      
-	    	  var html3 = '      <ul class="depth_1 lnbMenu"><li class="ico2_2"><a href="/insertScheduleView.do" onClick=javascript:fn_GoLink("/insertScheduleView.do");><img src="../images/ico_lnb_13.png" id="treeImg"><spring:message code="menu.schedule_information" /></a></li></ul>';
+	    	  var html3 = '      <ul class="depth_1 lnbMenu"><li class="ico2_2"><a href="/insertScheduleView.do" onClick=javascript:fn_GoLink("/insertScheduleView.do");><img src="../images/ico_lnb_13.png" id="treeImg"><spring:message code="menu.schedule_registration" /></a></li></ul>';
 		          }else if(aut.length != 0 && aut[i].read_aut_yn == "Y" && aut[i].mnu_cd == "MN000102"){
-	    	  html3 += '         <ul class="depth_1 lnbMenu"><li class="ico2_2"><a href="/selectScheduleListView.do" onClick=javascript:fn_GoLink("/selectScheduleListView.do");><img src="../images/ico_lnb_11.png" id="treeImg"><spring:message code="menu.schedule_registration" /></a></li></ul>';
+	    	  html3 += '         <ul class="depth_1 lnbMenu"><li class="ico2_2"><a href="/selectScheduleListView.do" onClick=javascript:fn_GoLink("/selectScheduleListView.do");><img src="../images/ico_lnb_11.png" id="treeImg"><spring:message code="menu.schedule_run_stop" /></a></li></ul>';
 		          }else if(aut.length != 0 && aut[i].read_aut_yn == "Y" && aut[i].mnu_cd == "MN000103"){
-	    	  html3 += '         <ul class="depth_1 lnbMenu"><li class="ico2_2"><a href="/selectScheduleHistoryView.do" onClick=javascript:fn_GoLink("/selectScheduleHistoryView.do");><img src="../images/ico_lnb_14.png" id="treeImg"><spring:message code="menu.schedule_run_stop" /></a></li></ul>';
+	    	  html3 += '         <ul class="depth_1 lnbMenu"><li class="ico2_2"><a href="/selectScheduleHistoryView.do" onClick=javascript:fn_GoLink("/selectScheduleHistoryView.do");><img src="../images/ico_lnb_14.png" id="treeImg"><spring:message code="menu.shedule_execution_history" /></a></li></ul>';
 	    	  	}
 		      }
 	          $( "#tree4" ).append(html3);
