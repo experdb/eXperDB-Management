@@ -111,7 +111,7 @@ public class DxT005 extends SocketCtl{
 				
 				String strCommand = objJob.get(ProtocolID.REQ_CMD).toString();
 
-				socketLogger.info(strCommand);
+				socketLogger.info("[COMMAND] " + strCommand);
 
 				RunCommandExec r = new RunCommandExec(strCommand);
 				r.start();
@@ -230,16 +230,16 @@ public class DxT005 extends SocketCtl{
 
 				//System.out.println("retVal "+(i+1)+" : "+ retVal);
 			}
-			socketLogger.info("send start");
+			//socketLogger.info("send start");
 			outputObj = DxT005ResultJSON(strDxExCode, strSuccessCode, strErrCode, strErrMsg);
 			sendBuff = outputObj.toString().getBytes();
 			
 			send(TotalLengthBit, sendBuff);
 			
-			socketLogger.info("send end");
+			//socketLogger.info("send end");
 
 		} catch (Exception e) {
-			errLogger.error("DxT005 {} ", e.toString());
+			errLogger.error("[ERROR] DxT005 {} ", e.toString());
 			outputObj.put(ProtocolID.DX_EX_CODE, TranCodeType.DxT005);
 			outputObj.put(ProtocolID.RESULT_CODE, "1");
 			outputObj.put(ProtocolID.ERR_CODE, TranCodeType.DxT005);
