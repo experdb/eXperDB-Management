@@ -205,7 +205,7 @@
 			},
 			success : function(result) {		
 				$("#scd_nm").children().remove();
-				$("#scd_nm").append("<option value='%'>전체</option>");
+				$("#scd_nm").append("<option value='%'><spring:message code="schedule.total" /></option>");
 				if(result.length > 0){
 					for(var i=0; i<result.length; i++){
 						$("#scd_nm").append("<option value='"+result[i].scd_nm+"'>"+result[i].scd_nm+"</option>");	

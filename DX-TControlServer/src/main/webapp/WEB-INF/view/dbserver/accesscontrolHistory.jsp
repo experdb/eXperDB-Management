@@ -1,6 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<%@ taglib prefix="spring" uri="http://www.springframework.org/tags"%>
 <%
 	/**
 	* @Class Name : accesscontrolHistory.jsp
@@ -65,10 +66,10 @@ var table = null;
 			     },
 				error : function(xhr, status, error) {
 					if(xhr.status == 401) {
-						alert("인증에 실패 했습니다. 로그인 페이지로 이동합니다.");
+						alert('<spring:message code="message.msg02" />');
 						 location.href = "/";
 					} else if(xhr.status == 403) {
-						alert("세션이 만료가 되었습니다. 로그인 페이지로 이동합니다.");
+						alert('<spring:message code="message.msg03" />');
 			             location.href = "/";
 					} else {
 						alert("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""));
@@ -86,7 +87,7 @@ var table = null;
 	/*조회버튼 클릭시*/
 	function fn_select(){
 		if($("#lst_mdf_dtm").val()==null){
-			alert("정책변경이력이 없습니다.");
+			alert('<spring:message code="message.msg30" />');
 			return false;
 		}
 			$.ajax({
@@ -101,10 +102,10 @@ var table = null;
 			     },
 				error : function(xhr, status, error) {
 					if(xhr.status == 401) {
-						alert("인증에 실패 했습니다. 로그인 페이지로 이동합니다.");
+						alert('<spring:message code="message.msg02" />');
 						 location.href = "/";
 					} else if(xhr.status == 403) {
-						alert("세션이 만료가 되었습니다. 로그인 페이지로 이동합니다.");
+						alert('<spring:message code="message.msg03" />');
 			             location.href = "/";
 					} else {
 						alert("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""));
@@ -120,7 +121,7 @@ var table = null;
 	/*복원버튼 클릭시*/
 	function fn_recovery(){
 		if($("#lst_mdf_dtm").val()==null){
-			alert("정책변경이력이 없습니다.");
+			alert('<spring:message code="message.msg30" />');
 			return false;
 		}
 		if (!confirm("정말 복원하시겠습니까?")) return false;
@@ -137,10 +138,10 @@ var table = null;
 		     },
 			error : function(xhr, status, error) {
 				if(xhr.status == 401) {
-					alert("인증에 실패 했습니다. 로그인 페이지로 이동합니다.");
+					alert('<spring:message code="message.msg02" />');
 					 location.href = "/";
 				} else if(xhr.status == 403) {
-					alert("세션이 만료가 되었습니다. 로그인 페이지로 이동합니다.");
+					alert('<spring:message code="message.msg03" />');
 		             location.href = "/";
 				} else {
 					alert("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""));
@@ -148,16 +149,16 @@ var table = null;
 			},
 			success : function(result) {			
 				if (result=="true") {
-					alert("복원되었습니다.");
+					alert('<spring:message code="message.msg31" />');
 				}else if(result=="pgaudit"){
-					alert("서버에 pgaudit Extension 이 설치되지 않았습니다.");
+					alert('<spring:message code="message.msg26" />');
 				}else if(result=="agent"){
-					alert("서버에 experdb엔진이 설치되지 않았습니다.");
+					alert('<spring:message code="message.msg25" />');
 				}else if(extName == "agentfail"){
-					alert("experdb엔진 상태를 확인해주세요.");
+					alert('<spring:message code="message.msg27" /> ');
 					history.go(-1);
 				}else {
-					alert("복원에 실패하였습니다.");
+					alert('<spring:message code="message.msg32" />');
 				}
 			}
 		});
@@ -169,18 +170,18 @@ var table = null;
 <div id="contents">
 	<div class="contents_wrap">
 		<div class="contents_tit">
-			<h4>정책변경이력<a href="#n"><img src="../images/ico_tit.png" class="btn_info" /></a>
+			<h4><spring:message code="menu.policy_changes_history" /><a href="#n"><img src="../images/ico_tit.png" class="btn_info" /></a>
 			</h4>
 			<div class="infobox">
 				<ul>
-					<li>접근제어 변경 이력을 조회하고, 조회된 이력 중 원하는 항목으로 복원합니다.</li>
+					<li><spring:message code="help.policy_changes_history" /></li>
 				</ul>
 			</div>
 			<div class="location">
 				<ul>
 					<li class="bold">${db_svr_nm}</li>
-					<li>접근제어관리</li>
-					<li class="on">정책변경이력</li>
+					<li><spring:message code="menu.access_control_management" /></li>
+					<li class="on"><spring:message code="menu.policy_changes_history" /></li>
 				</ul>
 			</div>
 		</div>
@@ -188,8 +189,8 @@ var table = null;
 		<div class="contents">
 			<div class="cmm_grp">
 				<div class="btn_type_01">
-					<span class="btn"><button onclick="fn_select()">조회</button></span>
-					<span class="btn"><button onclick="fn_recovery()">복원</button></span>
+					<span class="btn"><button onclick="fn_select()"><spring:message code="common.search" /></button></span>
+					<span class="btn"><button onclick="fn_recovery()"><spring:message code="common.restore" /></button></span>
 				</div>
 				<div class="sch_form">
 					<table class="write">
@@ -200,7 +201,7 @@ var table = null;
 						</colgroup>
 						<tbody>
 							<tr>
-								<th scope="row" class="t9">수정일시</th>
+								<th scope="row" class="t9"><spring:message code="common.modify_datetime" /></th>
 								<td><select class="select t3" id="lst_mdf_dtm">
 										<c:forEach var="result" items="${lst_mdf_dtm}">
 											<option value="${result.svr_acs_cntr_his_id}">${result.lst_mdf_dtm}</option>
@@ -215,14 +216,14 @@ var table = null;
 						cellspacing="0" width="100%">
 						<thead>
 							<tr>
-								<th width="20">No</th>
-								<th width="60">Type</th>
-								<th width="100">Database</th>
-								<th width="100">User</th>
-								<th width="100">IP Address</th>
-								<th width="100">IP Mask</th>
-								<th width="100">Method</th>
-								<th width="100">Option</th>
+								<th width="20"><spring:message code="common.no" /></th>
+								<th width="60"><spring:message code="access_control_management.type" /></th>
+								<th width="100"><spring:message code="access_control_management.database" /></th>
+								<th width="100"><spring:message code="access_control_management.user" /></th>
+								<th width="100"><spring:message code="access_control_management.ip_address" /></th>
+								<th width="100"><spring:message code="access_control_management.ip_mask" /></th>
+								<th width="100"><spring:message code="access_control_management.method" /></th>
+								<th width="100"><spring:message code="access_control_management.option" /></th>
 							</tr>
 						</thead>
 					</table>

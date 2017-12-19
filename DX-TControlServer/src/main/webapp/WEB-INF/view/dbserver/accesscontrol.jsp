@@ -1,6 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<%@ taglib prefix="spring" uri="http://www.springframework.org/tags"%>
 <%
 	/**
 	* @Class Name : accesscontrol.jsp
@@ -141,13 +142,13 @@
 	$(window.document).ready(function() {
 		var extName = "${extName}";
 		if(extName == "agent") {
-			alert("서버에 experdb엔진이 설치되지 않았습니다.");
+			alert('<spring:message code="message.msg25" />');
 			history.go(-1);
 		}else if(extName == "pgaudit"){
-			alert("서버에 pgaudit Extension 이 설치되지 않았습니다.");
+			alert('<spring:message code="message.msg26" />');
 			history.go(-1);
 		}else if(extName == "agentfail"){
-			alert("experdb엔진 상태를 확인해주세요.");
+			alert('<spring:message code="message.msg27" />');
 			history.go(-1);
 		}else{
 			fn_init();
@@ -168,10 +169,10 @@
 	 		     },
 	 			error : function(xhr, status, error) {
 	 				if(xhr.status == 401) {
-	 					alert("인증에 실패 했습니다. 로그인 페이지로 이동합니다.");
+	 					alert('<spring:message code="message.msg02" />');
 	 					 location.href = "/";
 	 				} else if(xhr.status == 403) {
-	 					alert("세션이 만료가 되었습니다. 로그인 페이지로 이동합니다.");
+	 					alert('<spring:message code="message.msg03" />');
 	 		             location.href = "/";
 	 				} else {
 	 					alert("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""));
@@ -199,10 +200,10 @@
 		     },
 			error : function(xhr, status, error) {
 				if(xhr.status == 401) {
-					alert("인증에 실패 했습니다. 로그인 페이지로 이동합니다.");
+					alert('<spring:message code="message.msg02" />');
 					 location.href = "/";
 				} else if(xhr.status == 403) {
-					alert("세션이 만료가 되었습니다. 로그인 페이지로 이동합니다.");
+					alert('<spring:message code="message.msg03" />');
 		             location.href = "/";
 				} else {
 					alert("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""));
@@ -227,7 +228,7 @@
         		&& 	result.ctf_mth_nm==(table.rows().data()[i].Method==undefined?'':table.rows().data()[i].Method)
         		&& 	result.opt_nm==(table.rows().data()[i].Option==undefined?'':table.rows().data()[i].Option)
         	){
-        		alert("중복된 값이 존재하여 추가할 수 없습니다.");
+        		alert('<spring:message code="message.msg28" />');
         		return false;
         	}
         }    
@@ -306,7 +307,7 @@
 				
 			window.open(popUrl,"",popOption);
 		}else{
-			alert("하나의 항목을 선택해주세요.");
+			alert('<spring:message code="message.msg04" />');
 			return false;
 		}			
 	}
@@ -315,10 +316,10 @@
 	function fn_delete() {
 		var datas = table.rows('.selected').data();
 		if (datas.length <= 0) {
-			alert("하나의 항목을 선택해주세요.");
+			alert('<spring:message code="message.msg04" />');
 			return false;
 		} else {
-			if (!confirm("삭제하시겠습니까?")) return false;
+			if (!confirm('<spring:message code="message.msg17" />')) return false;
 			var rows = table.rows( '.selected' ).remove().draw();
 		}
 	}
@@ -344,17 +345,17 @@
  		     },
  			error : function(xhr, status, error) {
  				if(xhr.status == 401) {
- 					alert("인증에 실패 했습니다. 로그인 페이지로 이동합니다.");
+ 					alert('<spring:message code="message.msg02" />');
  					 location.href = "/";
  				} else if(xhr.status == 403) {
- 					alert("세션이 만료가 되었습니다. 로그인 페이지로 이동합니다.");
+ 					alert('<spring:message code="message.msg03" />');
  		             location.href = "/";
  				} else {
  					alert("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""));
  				}
  			},
  			success : function(result) {
- 				alert("적용하였습니다.");
+ 				alert('<spring:message code="message.msg29" />');
  			}
  		});
 
@@ -367,42 +368,42 @@
 <div id="contents">
 	<div class="contents_wrap">
 		<div class="contents_tit">
-			<h4>접근제어<a href="#n"><img src="../images/ico_tit.png" class="btn_info" /></a></h4>
+			<h4><spring:message code="menu.access_control" /><a href="#n"><img src="../images/ico_tit.png" class="btn_info" /></a></h4>
 			<div class="infobox">
 				<ul>
-					<li>선택된 데이터베이스 서버에 대한 접근제어 정책을 설정합니다.</li>
+					<li><spring:message code="help.access_control" /></li>
 				</ul>
 			</div>
 			<div class="location">
 				<ul>
 					<li class="bold">${db_svr_nm}</li>
-					<li>접근제어관리</li>
-					<li class="on">접근제어</li>
+					<li><spring:message code="menu.access_control_management" /></li>
+					<li class="on"><spring:message code="menu.access_control" /></li>
 				</ul>
 			</div>
 		</div>
 		<div class="contents">
 			<div class="cmm_grp">
 				<div class="btn_type_01">
-					<span class="btn" onclick="fn_insert();"><button>추가</button></span>
-					<span class="btn" onclick="fn_update();"><button>수정</button></span>
-					<span class="btn" onclick="fn_delete();"><button>삭제</button></span>
-					<span class="btn" onclick="fn_save();"><button>적용</button></span>
+					<span class="btn" onclick="fn_insert();"><button><spring:message code="common.add" /></button></span>
+					<span class="btn" onclick="fn_update();"><button><spring:message code="button.modify" /></button></span>
+					<span class="btn" onclick="fn_delete();"><button><spring:message code="button.delete" /></button></span>
+					<span class="btn" onclick="fn_save();"><button><spring:message code="common.apply" /></button></span>
 				</div>
 				<div class="overflow_area">
 					<table id="accessControlTable" class="display" cellspacing="0" width="100%">
 						<thead>
 							<tr>
 								<th width="20"></th>
-								<th width="40">No</th>
-								<th width="50">Type</th>
-								<th width="100">Database</th>
-								<th width="100">User</th>
-								<th width="100">IP Address</th>
-								<th width="100">IP Mask</th>
-								<th width="80">Method</th>
-								<th width="100">Option</th>
-								<th width="100">순서</th>
+								<th width="40"><spring:message code="common.no" /></th>
+								<th width="50"><spring:message code="access_control_management.type" /></th>
+								<th width="100"><spring:message code="access_control_management.database" /></th>
+								<th width="100"><spring:message code="access_control_management.user" /></th>
+								<th width="100"><spring:message code="access_control_management.ip_address" /></th>
+								<th width="100"><spring:message code="access_control_management.ip_mask" /></th>
+								<th width="80"><spring:message code="access_control_management.method" /></th>
+								<th width="100"><spring:message code="access_control_management.option" /></th>
+								<th width="100"><spring:message code="access_control_management.order" /></th>
 							</tr>
 						</thead>
 					</table>

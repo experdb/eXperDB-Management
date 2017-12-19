@@ -73,13 +73,13 @@
 	
 	function fn_chkExtName(extName) {
 		if(extName == "") {
-			alert("서버에 pgaudit Extension 이 설치되지 않았습니다.");
+			alert('<spring:message code="message.msg26" />');
 			history.go(-1);
 		} else if(extName == "agent") {
-			alert("서버에 experdb엔진이 설치되지 않았습니다.");
+			alert('<spring:message code="message.msg25" />');
 			history.go(-1);
 		}else if(extName == "agentfail"){
-			alert("experdb엔진 상태를 확인해주세요.");
+			alert('<spring:message code="message.msg27" />');
 			history.go(-1);
 		}
 		
@@ -88,7 +88,7 @@
 	function fn_save() {
  		var extName = "${extName}";
 		if(extName == "") {
-			alert("서버에 pgaudit Extension 이 설치되지 않았습니다.");
+			alert('<spring:message code="message.msg26" />');
 			
 			return false;
 
@@ -106,10 +106,10 @@
 			     },
 				error : function(xhr, status, error) {
 					if(xhr.status == 401) {
-						alert("인증에 실패 했습니다. 로그인 페이지로 이동합니다.");
+						alert('<spring:message code="message.msg02" />');
 						 location.href = "/";
 					} else if(xhr.status == 403) {
-						alert("세션이 만료가 되었습니다. 로그인 페이지로 이동합니다.");
+						alert('<spring:message code="message.msg03" />');
 			             location.href = "/";
 					} else {
 						alert("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""));
@@ -117,9 +117,9 @@
 				},
 				success : function(result) {
 					if(result == false) {
-						alert("audit 적용이 실패하였습니다.");
+						alert('<spring:message code="message.msg33" />');
 					} else {
-						alert("적용하였습니다.");
+						alert('<spring:message code="message.msg29" />');
 					}
 					
 				}
@@ -134,35 +134,35 @@
 			<div id="contents">
 				<div class="contents_wrap">
 					<div class="contents_tit">
-						<h4>감사설정<a href="#n"><img src="../images/ico_tit.png" class="btn_info"/></a></h4>
+						<h4><spring:message code="menu.audit_settings" /><a href="#n"><img src="../images/ico_tit.png" class="btn_info"/></a></h4>
 						<div class="infobox"> 
 							<ul>
-								<li>데이터베이스 접근 및 작업에 대한 감사로그를 설정합니다.</li>
+								<li><spring:message code="help.audit_settings" /></li>
 							</ul>
 						</div>
 						<div class="location">
 							<ul>
 								<li class="bold">${serverName}</li>
-								<li>접근제어관리</li>
-								<li class="on">감사설정</li>
+								<li><spring:message code="menu.access_control_management" /></li>
+								<li class="on"><spring:message code="menu.audit_settings" /></li>
 							</ul>
 						</div>
 					</div>
 					<div class="contents">
 						<div class="cmm_grp">
 							<div class="btn_type_01">
-								<span class="btn btnC_01"><button id="btnSave">적용</button></span>
+								<span class="btn btnC_01"><button id="btnSave"><spring:message code="common.apply" /></button></span>
 							</div>
 							<div class="sch_form p1">
 								<div class="inp_chk chk3">
 									<input type="checkbox" id="chkLogActive" name="chkLogActive"<c:if test="${fn:toLowerCase(audit.isActive) == 'on'}"> checked="checked"</c:if>  onClick="javascript:fnChkLogActive();">
-									<label for="chkLogActive"><span class="chk_img"><img src="../images/popup/ico_box_1.png" alt="" /></span>감사활성화</label>
+									<label for="chkLogActive"><span class="chk_img"><img src="../images/popup/ico_box_1.png" alt="" /></span><spring:message code="access_control_management.audit_activation" /></label>
 								</div>
 							</div>
 							<div class="layout_grp">
 								<div class="layout_lt">
 									<table class="log_table">
-										<caption>로그수준</caption>
+										<caption><spring:message code="access_control_management.log_level" /></caption>
 										<colgroup>
 											<col style="width:128px" />
 											<col />
@@ -171,7 +171,7 @@
 										</colgroup>
 										<tbody>
 											<tr>
-												<th scope="row">로그수준</th>
+												<th scope="row"><spring:message code="access_control_management.log_level" /></th>
 												<td colspan="3">
 													<select class="select" name="log_level" id="log_level">
 														<option value="DEBUG"<c:if test="${fn:toUpperCase(audit.log_level) == 'DEBUG'}"> selected</c:if>>DEBUG</option>
@@ -183,7 +183,7 @@
 												</td>
 											</tr>
 											<tr>
-												<th scope="row">로그종류</th>
+												<th scope="row"><spring:message code="access_control_management.log_type" /></th>
 												<td colspan="3">
 													<div class="log_list">
 														<span>
@@ -226,34 +226,34 @@
 												</td>
 											</tr>
 											<tr>
-												<th scope="row">로그카탈로그</th>
+												<th scope="row"><spring:message code="access_control_management.log_catalog" /></th>
 												<td>
 													<div class="inp_chk">
 														<input type="checkbox" id="chkCatalog" name="chkCatalog"<c:if test="${fn:toLowerCase(audit.log_catalog) == 'on'}"> checked="checked"</c:if>>
-														<label for="chkCatalog">활성화</label>
+														<label for="chkCatalog"><spring:message code="access_control_management.activation" /></label>
 													</div>
 												</td>
-												<th scope="row" class="double">로그 Parameter</th>
+												<th scope="row" class="double"><spring:message code="access_control_management.log_parameter" /></th>
 												<td>
 													<div class="inp_chk">
 														<input type="checkbox" id="chkParameter" name="chkParameter"<c:if test="${fn:toLowerCase(audit.log_parameter) == 'on'}"> checked="checked"</c:if>>
-														<label for="chkParameter">활성화</label>
+														<label for="chkParameter"><spring:message code="access_control_management.activation" /></label>
 													</div>
 												</td>
 											</tr>
 											<tr>
-												<th scope="row">로그 Relation</th>
+												<th scope="row"><spring:message code="access_control_management.log_relation" /></th>
 												<td>
 													<div class="inp_chk">
 														<input type="checkbox" id="chkRelation" name="chkRelation"<c:if test="${fn:toLowerCase(audit.log_relation) == 'on'}"> checked="checked"</c:if>>
-														<label for="chkRelation">활성화</label>
+														<label for="chkRelation"><spring:message code="access_control_management.activation" /></label>
 													</div>
 												</td>
-												<th scope="row" class="double">로그 Statement</th>
+												<th scope="row" class="double"><spring:message code="access_control_management.log_statement" /></th>
 												<td>
 													<div class="inp_chk">
 														<input type="checkbox" id="chkStatement" name="chkStatement"<c:if test="${fn:toLowerCase(audit.log_statement_once) == 'on'}"> checked="checked"</c:if>>
-														<label for="chkStatement">활성화</label>
+														<label for="chkStatement"><spring:message code="access_control_management.activation" /></label>
 													</div>
 												</td>
 											</tr>
@@ -278,8 +278,8 @@
 															<label for="chkRoleAll"></label>
 														</div>
 													</th>
-													<th scope="col">NO</th>
-													<th scope="col">감사 대상 계정</th>
+													<th scope="col"><spring:message code="common.no" /></th>
+													<th scope="col"><spring:message code="access_control_management.audit_target_account" /></th>
 												</tr>
 											</thead>
 											<tbody>

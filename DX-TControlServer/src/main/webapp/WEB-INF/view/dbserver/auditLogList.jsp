@@ -88,10 +88,10 @@ $(function() {
 
 function fn_chkExtName(extName) {
 	if(extName == "") {
-		alert("서버에 pgaudit Extension 이 설치되지 않았습니다.");
+		alert('<spring:message code="message.msg26" />');
 		history.go(-1);
 	} else if(extName == "agent") {
-		alert("서버에 experdb엔진이 설치되지 않았습니다.");
+		alert('<spring:message code="message.msg27" />');
 		history.go(-1);
 	}
 	
@@ -163,24 +163,24 @@ function fn_chkExtName(extName) {
 			<div id="contents">
 				<div class="contents_wrap">
 					<div class="contents_tit">
-						<h4>감사이력<a href="#n"><img src="../images/ico_tit.png" class="btn_info"/></a></h4>
+						<h4><spring:message code="menu.audit_history" /><a href="#n"><img src="../images/ico_tit.png" class="btn_info"/></a></h4>
 						<div class="infobox"> 
 							<ul>
-								<li>지정된 기간동안의 감사 로그를 조회합니다.</li>
+								<li><spring:message code="help.audit_history" /></li>
 							</ul>
 						</div>
 						<div class="location">
 							<ul>
 								<li class="bold">${serverName}</li>
-								<li>접근제어관리</li>
-								<li class="on">감사 이력</li>
+								<li><spring:message code="menu.access_control_management" /></li>
+								<li class="on"><spring:message code="menu.audit_history" /></li>
 							</ul>
 						</div>
 					</div>
 					<div class="contents">
 						<div class="cmm_grp">
 							<div class="btn_type_01">
-								<span class="btn"><button onClick="javascript:fn_search();">조회</button></span>
+								<span class="btn"><button onClick="javascript:fn_search();"><spring:message code="common.search" /></button></span>
 							</div>
 							<div class="sch_form">
 								<table class="write">
@@ -196,7 +196,7 @@ function fn_chkExtName(extName) {
 									<tbody>
 
 										<tr>
-											<th scope="row" class="t10">로그기간</th>
+											<th scope="row" class="t10"><spring:message code="access_control_management.log_term" /></th>
 											<td colspan="4">
 												<div class="calendar_area">
 													<a href="#n" class="calendar_btn">달력열기</a>
@@ -223,10 +223,10 @@ function fn_chkExtName(extName) {
 									</colgroup>
 									<thead>
 										<tr>
-											<th scope="col">No</th>
-											<th scope="col">로그파일명</th>
-											<th scope="col">Size</th>
-											<th scope="col">수정일시</th>
+											<th scope="col"><spring:message code="common.no" /></th>
+											<th scope="col"><spring:message code="access_control_management.log_file_name" /></th>
+											<th scope="col"><spring:message code="common.size" /></th>
+											<th scope="col"><spring:message code="common.modify_datetime" /></th>
 											<!--<th scope="col">다운로드</th>-->
 										</tr>
 									</thead>
