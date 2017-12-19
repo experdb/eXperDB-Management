@@ -1,5 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
+<%@ taglib prefix="spring" uri="http://www.springframework.org/tags"%>
 
 <%
 	/**
@@ -201,7 +202,7 @@ function fn_regRe_popup(){
 		
 // 		window.open("/popup/dbServerRegReForm.do?db_svr_id="+db_svr_id+"&flag=server","dbServerRegRePop","location=no,menubar=no,resizable=yes,scrollbars=yes,status=no,width=950,height=638,top=0,left=0");
 	} else {
-		alert("하나의 항목을 선택해주세요.");
+		alert('<spring:message code="message.msg04" />');
 	}	
 }
 </script>
@@ -215,15 +216,15 @@ function fn_regRe_popup(){
 			<h4>DBMS 관리 <a href="#n"><img src="../images/ico_tit.png" class="btn_info"/></a></h4>
 			<div class="infobox"> 
 				<ul>
-					<li>관리 대상 데이터베이스 서버 정보를 조회합니다.</li>
-					<li>관리 대상 데이터베이스 서버를 신규로 등록하거나 이미 등록된 서버를 수정 또는 삭제합니다.</li>						
+					<li><spring:message code="help.dbms_management_01" /></li>
+					<li><spring:message code="help.dbms_management_02" /></li>						
 				</ul>
 			</div>
 			<div class="location">
 				<ul>
 					<li>Admin</li>
-					<li>DBMS 정보</li>
-					<li class="on">DBMS 관리</li>
+					<li><spring:message code="menu.dbms_information" /></li>
+					<li class="on"><spring:message code="menu.dbms_management" /></li>
 				</ul>
 			</div>
 		</div>
@@ -232,9 +233,9 @@ function fn_regRe_popup(){
 		<div class="contents">
 			<div class="cmm_grp">
 				<div class="btn_type_01">
-						<span class="btn" onClick="fn_search()" id="read_button"><button>조회</button></span>
-						<span class="btn" onclick="fn_reg_popup();" id="int_button"><button>등록</button></span>
-						<span class="btn" onclick="fn_regRe_popup();" id="mdf_button"><button>수정</button></span>
+						<span class="btn" onClick="fn_search()" id="read_button"><button><spring:message code="common.search" /></button></span>
+						<span class="btn" onclick="fn_reg_popup();" id="int_button"><button><spring:message code="common.registory" /></button></span>
+						<span class="btn" onclick="fn_regRe_popup();" id="mdf_button"><button><spring:message code="common.modify" /></button></span>
 						
 				</div>
 				<div class="sch_form">
@@ -249,20 +250,20 @@ function fn_regRe_popup(){
 						</colgroup>
 						<tbody>
 							<tr>
-								<th scope="row" class="t2">DBMS명</th>
+								<th scope="row" class="t2"><spring:message code="common.dbms_name" /></th>
 								<td><input type="text" class="txt" name="db_svr_nm" id="db_svr_nm" /></td>
-								<th scope="row" class="t3">DBMS 아이피</th>
+								<th scope="row" class="t3"><spring:message code="dbms_information.dbms_ip"/></th>
 								<td><input type="text" class="txt" name="ipadr" id="ipadr" /></td>
 							</tr>
 							<tr>
-								<th scope="row" class="t4">Database</th>
+								<th scope="row" class="t4"><spring:message code="common.database" /></th>
 								<td><input type="text" class="txt" name="dft_db_nm" id="dft_db_nm" /></td>
-								<th scope="row" class="t9">사용유무</th>
+								<th scope="row" class="t9"><spring:message code="dbms_information.use_yn" /></th>
 								<td>
 									<select class="select t5" id="useyn">
-										<option value="%">전체</option>
-										<option value="Y">사용</option>
-										<option value="N">미사용</option>
+										<option value="%"><spring:message code="common.total" /></option>
+										<option value="Y"><spring:message code="dbms_information.use" /></option>
+										<option value="N"><spring:message code="dbms_information.unuse" /> </option>
 									</select>
 								</td>
 							</tr>
@@ -274,16 +275,16 @@ function fn_regRe_popup(){
 						<tr>
 							<th width="10"></th>
 							<th width="20">No</th>
-							<th width="130">DBMS명</th>
-							<th width="100">DBMS 아이피</th>
-							<th width="130">Database</th>
-							<th width="70">포트</th>
-							<th width="70">계정</th>
-							<th width="70">사용유무</th>
-							<th width="65">등록자</th>
-							<th width="100">등록일시</th>
-							<th width="65">수정자</th>
-							<th width="100">수정일시</th>
+							<th width="130"><spring:message code="common.dbms_name" /></th>
+							<th width="100"><spring:message code="dbms_information.dbms_ip"/></th>
+							<th width="130"><spring:message code="common.database" /></th>
+							<th width="70"><spring:message code="data_transfer.port" /></th>
+							<th width="70"><spring:message code="dbms_information.account" /></th>
+							<th width="70"><spring:message code="dbms_information.use_yn" /></th>
+							<th width="65"><spring:message code="common.register" /></th>
+							<th width="100"><spring:message code="common.regist_datetime" /></th>
+							<th width="65"><spring:message code="common.modifier" /></th>
+							<th width="100"><spring:message code="common.modify_datetime" /></th>
 						</tr>
 					</thead>
 				</table>

@@ -1,5 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
+<%@ taglib prefix="spring" uri="http://www.springframework.org/tags"%>
 
 <%
 	/**
@@ -87,7 +88,7 @@ $(window.document).ready(function() {
 			},
 			success : function(result) {				
 				$("#db_svr_nm").children().remove();
-				$("#db_svr_nm").append("<option value='%'>전체</option>");
+				$("#db_svr_nm").append("<option value='%'><spring:message code='common.total' /></option>");
 				if(result.length > 0){
 					for(var i=0; i<result.length; i++){
 						$("#db_svr_nm").append("<option value='"+result[i].db_svr_nm+"'>"+result[i].db_svr_nm+"</option>");	
@@ -192,25 +193,25 @@ function fn_reg_popup(){
 <div id="contents">
 	<div class="contents_wrap">
 		<div class="contents_tit">
-			<h4>DataBase 관리 <a href="#n"><img src="../images/ico_tit.png" class="btn_info"/></a></h4>
+			<h4><spring:message code="menu.database_management" /><a href="#n"><img src="../images/ico_tit.png" class="btn_info"/></a></h4>
 			<div class="infobox"> 
 				<ul>
-					<li>관리 대상 데이터베이스 정보를 조회합니다.</li>
-					<li>관리 대상 데이터베이스를 신규로 등록하거나 삭제합니다.</li>						
+					<li><spring:message code="help.database_management_01" /></li>
+					<li><spring:message code="help.database_management_02" /></li>						
 				</ul>
 			</div>
 			<div class="location">
 				<ul>
 					<li>Admin</li>
-					<li>DBMS 정보</li>
-					<li class="on">DataBase 관리</li>
+					<li><spring:message code="menu.dbms_information" /></li>
+					<li class="on"><spring:message code="menu.database_management" /></li>
 				</ul>
 			</div>
 		</div>
 		<div class="contents">
 			<div class="cmm_grp">
 				<div class="btn_type_01">
-					<span class="btn" onClick="fn_search();" id="read_button"><button>조회</button></span>
+					<span class="btn" onClick="fn_search();" id="read_button"><button><spring:message code="common.search" /></button></span>
 					<span class="btn" onclick="fn_reg_popup();" id="int_button"><button>관리</button></span>
 				</div>
 				<div class="sch_form">
@@ -228,13 +229,13 @@ function fn_reg_popup(){
 						</colgroup>
 						<tbody>
 							<tr>
-								<th scope="row" class="t2">DBMS명</th>
+								<th scope="row" class="t2"><spring:message code="common.dbms_name" /></th>
 								<td><select id="db_svr_nm" name="db_svr_nm">
-										<option value="%">전체</option>
+										<option value="%"><spring:message code="common.total" /> </option>
 								</select></td>
-								<th scope="row" class="t3">DBMS 아이피</th>
+								<th scope="row" class="t3"><spring:message code="dbms_information.dbms_ip" /></th>
 								<td><input type="text" class="txt" name="ipadr" id="ipadr" /></td>
-								<th scope="row" class="t4">Database</th>
+								<th scope="row" class="t4"><spring:message code="common.database" /></th>
 								<td><input type="text" class="txt" name="dft_db_nm" id="dft_db_nm" /></td>
 							</tr>
 						</tbody>
@@ -245,14 +246,14 @@ function fn_reg_popup(){
 					<thead>
 						<tr>
 							<th width="20">No</th>
-							<th width="130">DBMS명</th>
-							<th width="150">DBMS 아이피</th>
-							<th width="70">포트</th>
-							<th width="130">Database</th>
-							<th width="65">등록자</th>
-							<th width="100">등록일시</th>
-							<th width="65">수정자</th>
-							<th width="100">수정일시</th>
+							<th width="130"><spring:message code="common.dbms_name" /></th>
+							<th width="150"><spring:message code="dbms_information.dbms_ip" /></th>
+							<th width="70"><spring:message code="data_transfer.port" /></th>
+							<th width="130"><spring:message code="common.database" /></th>
+							<th width="65"><spring:message code="common.register" /></th>
+							<th width="100"><spring:message code="common.regist_datetime" /></th>
+							<th width="65"><spring:message code="common.modifier" /></th>
+							<th width="100"><spring:message code="common.modify_datetime" /></th>
 							<th width="0"></th>
 						</tr>
 					</thead>

@@ -23,4 +23,9 @@ public class LoginServiceImpl extends EgovAbstractServiceImpl implements LoginSe
 		return loginDAO.selectUserList(userVo);
 	}
 
+	@Override
+	public int selectMasterCheck() throws Exception {
+		return loginDAO.selectMasterCheck();
+	}
+
 }

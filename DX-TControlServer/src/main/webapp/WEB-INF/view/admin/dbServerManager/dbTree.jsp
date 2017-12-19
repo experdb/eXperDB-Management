@@ -1,4 +1,5 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<%@ taglib prefix="spring" uri="http://www.springframework.org/tags"%>
 
 <%
 	/**
@@ -296,7 +297,7 @@ function fn_regRe_popup(){
 		window.open(popUrl,"",popOption);
 // 		window.open("/popup/dbServerRegReForm.do?db_svr_id="+db_svr_id+"&flag=tree","dbServerRegRePop","location=no,menubar=no,resizable=yes,scrollbars=yes,status=no,width=1050,height=638");
 	} else {
-		alert("하나의 항목을 선택해주세요.");
+		alert('<spring:message code="message.msg04" />');
 	}	
 }
 
@@ -365,7 +366,7 @@ function fn_insertDB(){
 					}
 				},
 				success : function(result) {
-					alert("저장되었습니다.");
+					alert('<spring:message code="message.msg07" />');
 					location.reload();
 				}
 			});	
@@ -453,18 +454,18 @@ function fn_dataCompareChcek(svrDbList){
 <div id="contents">
 	<div class="contents_wrap">
 		<div class="contents_tit">
-			<h4>DBMS 등록 <a href="#n"><img src="../images/ico_tit.png" class="btn_info"/></a></h4>
+			<h4><spring:message code="menu.dbms_registration" /><a href="#n"><img src="../images/ico_tit.png" class="btn_info"/></a></h4>
 			<div class="infobox"> 
 				<ul>
-					<li>관리 대상 데이터베이스 서버를 신규로 등록하거나 이미 등록된 서버를 수정 또는 삭제합니다.</li>
-					<li>등록된 데이터베이스 서버 생성된 각 데이터베이스 중 관리 대상 데이터베이스를 지정합니다.</li>						
+					<li><spring:message code="help.dbms_registration_01" /></li>
+					<li><spring:message code="help.dbms_registration_02" /></li>						
 				</ul>
 			</div>
 			<div class="location">
 				<ul>
 					<li>Admin</li>
-					<li>DBMS 정보</li>
-					<li class="on">DBMS 등록</li>
+					<li><spring:message code="menu.dbms_information" /></li>
+					<li class="on"><spring:message code="menu.dbms_registration" /></li>
 				</ul>
 			</div>
 		</div>
@@ -473,21 +474,21 @@ function fn_dataCompareChcek(svrDbList){
 				<div class="tree_lt">
 					<div class="btn_type_01">
 					<div id="wrt_button">
-						<span class="btn"><button onclick="fn_reg_popup();">등록</button></span>
-						<span class="btn"><button onClick="fn_regRe_popup();">수정</button></span>		
+						<span class="btn"><button onclick="fn_reg_popup();"><spring:message code="common.registory" /></button></span>
+						<span class="btn"><button onClick="fn_regRe_popup();"><spring:message code="common.modify" /></button></span>		
 					</div>
 					</div>
 					<div class="inner">
-						<p class="tit">DBMS 목록</p>
+						<p class="tit"><spring:message code="dbms_information.dbms_list" /></p>
 						<div class="tree_server">
 							<table id="dbServerList" class="cell-border display" cellspacing="0" align="left">
 								<thead>
 									<tr>
-										<th width="10">선택</th>									
-										<th width="200">DBMS 아이피</th>
-										<th width="130">DBMS 명</th>
-										<th width="50">Agent상태</th>
-										<th width="50">사용유무</th>
+										<th width="10"><spring:message code="common.choice" /></th>									
+										<th width="200"><spring:message code="dbms_information.dbms_ip" /></th>
+										<th width="130"><spring:message code="common.dbms_name" /></th>
+										<th width="50"><spring:message code="dbms_information.agent_status" /></th>
+										<th width="50"><spring:message code="dbms_information.use_yn" /></th>
 										<!-- <th width="0"></th>
 										<th width="0"></th>
 										<th width="0"></th>
@@ -515,8 +516,8 @@ function fn_dataCompareChcek(svrDbList){
 							<table id="dbList" class="cell-border display" cellspacing="0" align="left">
 								<thead>
 									<tr>
-										<th width="90">Database</th>
-										<th width="150">설명</th>
+										<th width="90"><spring:message code="common.database" /></th>
+										<th width="150"><spring:message code="common.desc" /></th>
 										<th width="10"><input name="select" value="1" type="checkbox"></th>
 									</tr>
 								</thead>

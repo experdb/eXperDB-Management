@@ -1,4 +1,5 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<%@ taglib prefix="spring" uri="http://www.springframework.org/tags"%>
 <%
 	/**
 	* @Class Name : userManager.jsp
@@ -249,18 +250,18 @@ function fn_delete(){
 <div id="contents">
 	<div class="contents_wrap">
 		<div class="contents_tit">
-			<h4>사용자 관리<a href="#n"><img src="../images/ico_tit.png" class="btn_info"/></a></h4>
+			<h4><spring:message code="menu.user_management" /><a href="#n"><img src="../images/ico_tit.png" class="btn_info"/></a></h4>
 			<div class="infobox"> 
 				<ul>
-					<li>eXperDB 통합 관리 시스템에 접근 가능한 사용자를 관리합니다.</li>
-					<li>신규로 등록하거나 등록된 사용자를 조회, 수정, 삭제할 수 있습니다.</li>	
-					<li>신규로 사용자를 등록하는 경우 해당 사용자가 접근할 수 있는 메뉴 설정을 병행할 수 있습니다.</li>					
+					<li><spring:message code="help.user_management_01" /> </li>
+					<li><spring:message code="help.user_management_02" /> </li>	
+					<li><spring:message code="help.user_management_03" /> </li>					
 				</ul>
 			</div>
 			<div class="location">
 				<ul>
 					<li>Admin</li>
-					<li class="on">사용자 관리</li>
+					<li class="on"><spring:message code="menu.user_management" /></li>
 				</ul>
 			</div>
 		</div>
@@ -268,10 +269,10 @@ function fn_delete(){
 		<div class="contents">
 			<div class="cmm_grp">
 				<div class="btn_type_01">
-					<span class="btn"><button onclick="fn_select()" id="btnSelect">조회</button></span>
-					<span class="btn"><button onclick="fn_insert()" id="btnInsert">등록</button></span>
-					<span class="btn"><button onclick="fn_update()" id="btnUpdate">수정</button></span>
-					<a href="#n" class="btn" id="btnDelete" onclick="fn_delete()"><span>삭제</span></a>
+					<span class="btn"><button onclick="fn_select()" id="btnSelect"><spring:message code="common.search" /></button></span>
+					<span class="btn"><button onclick="fn_insert()" id="btnInsert"><spring:message code="common.registory" /></button></span>
+					<span class="btn"><button onclick="fn_update()" id="btnUpdate"><spring:message code="common.modify" /></button></span>
+					<a href="#n" class="btn" id="btnDelete" onclick="fn_delete()"><span><spring:message code="common.delete" /></span></a>
 				</div>
 				<div class="sch_form">
 					<table class="write">
@@ -288,17 +289,17 @@ function fn_delete(){
 								<th scope="row" class="t9">검색조건</th>
 								<td>
 									<select class="select t5" id="type">
-										<option value="usr_nm">사용자명</option>
-										<option value="usr_id">아이디</option>
+										<option value="usr_nm"><spring:message code="user_management.user_name" /></option>
+										<option value="usr_id"><spring:message code="user_management.id" /></option>
 									</select>
 								</td>
 								<td><input type="text" class="txt t2" id="search" /></td>
-								<th scope="row" class="t9">사용여부</th>
+								<th scope="row" class="t9"><spring:message code="user_management.use_yn" /></th>
 								<td>
 									<select class="select t5" id="use_yn">
-										<option value="%">전체</option>
-										<option value="Y">사용</option>
-										<option value="N">미사용</option>
+										<option value="%"><spring:message code="common.total" /></option>
+										<option value="Y"><spring:message code="dbms_information.use" /></option>
+										<option value="N"><spring:message code="dbms_information.unuse" /></option>
 									</select>
 								</td>
 							</tr>
@@ -311,12 +312,12 @@ function fn_delete(){
 							<tr>
 								<th width="10"></th>
 								<th width="20">No</th>
-								<th width="120">아이디</th>
-								<th width="100">소속</th>
-								<th width="100">사용자명</th>
-								<th width="100">연락처</th>
-								<th width="80">사용여부</th>
-								<th width="100">사용자만료일</th>
+								<th width="120"><spring:message code="user_management.id" /></th>
+								<th width="100"><spring:message code="user_management.company" /></th>
+								<th width="100"><spring:message code="user_management.user_name" /></th>
+								<th width="100"><spring:message code="user_management.contact" /></th>
+								<th width="80"><spring:message code="user_management.use_yn" /> </th>
+								<th width="100"><spring:message code="user_management.expiration_date" /></th>
 							</tr>
 						</thead>
 					</table>

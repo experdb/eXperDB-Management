@@ -26,4 +26,8 @@ public class LoginDAO extends EgovAbstractMapper{
 		return result;
 	}
 
+	public int selectMasterCheck() {
+		return (int) getSqlSession().selectOne("cmmnSql.selectMasterCheck");
+	}
+
 }
