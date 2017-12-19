@@ -3,7 +3,7 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form"%>
 <%@ taglib prefix="ui" uri="http://egovframework.gov/ctl/ui"%>
-    
+<%@ taglib prefix="spring" uri="http://www.springframework.org/tags"%>
     
 <script>
 var table = null;
@@ -46,7 +46,7 @@ function fn_init(){
 		{data : "status", 
 			render: function (data, type, full){
 				if(full.status == "s"){
-					var html = '<img src="../images/ico_w_25.png" alt="실행중" id="scheduleStop"/>';
+					var html = '<img src="../images/ico_w_25.png" alt="<spring:message code="dashboard.running" />" id="scheduleStop"/>';
 						return html;
 				}else{
 					var html = '<img src="../images/ico_w_24.png" alt="중지중" id="scheduleStart" />';
@@ -104,10 +104,10 @@ function fn_init(){
 		    	     },
 		    		error : function(xhr, status, error) {
 		    			if(xhr.status == 401) {
-		    				alert("인증에 실패 했습니다. 로그인 페이지로 이동합니다.");
+		    				alert('<spring:message code="message.msg02" />');
 		    				 location.href = "/";
 		    			} else if(xhr.status == 403) {
-		    				alert("세션이 만료가 되었습니다. 로그인 페이지로 이동합니다.");
+		    				alert('<spring:message code="message.msg03" />');
 		    	             location.href = "/";
 		    			} else {
 		    				alert("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""));
@@ -144,10 +144,10 @@ function fn_init(){
 		    	     },
 		    		error : function(xhr, status, error) {
 		    			if(xhr.status == 401) {
-		    				alert("인증에 실패 했습니다. 로그인 페이지로 이동합니다.");
+		    				alert('<spring:message code="message.msg02" />');
 		    				 location.href = "/";
 		    			} else if(xhr.status == 403) {
-		    				alert("세션이 만료가 되었습니다. 로그인 페이지로 이동합니다.");
+		    				alert('<spring:message code="message.msg03" />');
 		    	             location.href = "/";
 		    			} else {
 		    				alert("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""));
@@ -209,10 +209,10 @@ function fn_selectScheduleList(){
 	     },
 		error : function(xhr, status, error) {
 			if(xhr.status == 401) {
-				alert("인증에 실패 했습니다. 로그인 페이지로 이동합니다.");
+				alert('<spring:message code="message.msg02" />');
 				 location.href = "/";
 			} else if(xhr.status == 403) {
-				alert("세션이 만료가 되었습니다. 로그인 페이지로 이동합니다.");
+				alert('<spring:message code="message.msg03" />');
 	             location.href = "/";
 			} else {
 				alert("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""));
@@ -235,7 +235,7 @@ function fn_deleteScheduleList(){
 	var datas = table.rows('.selected').data();
 	
 	if (datas.length <= 0) {
-		alert("선택된 항목이 없습니다.");
+		alert('<spring:message code="message.msg35" />');
 		return false;
 	} 
 	
@@ -243,7 +243,7 @@ function fn_deleteScheduleList(){
     for (var i = 0; i < datas.length; i++) {
         rowList.push( table.rows('.selected').data()[i].scd_id);   
        if(table.rows('.selected').data()[i].status == "s"){
-    	   alert("실행중인 스케줄이 존재합니다.");
+    	   alert('<spring:message code="message.msg59" />');
     	   return false;
        }
   }	
@@ -261,17 +261,17 @@ function fn_deleteScheduleList(){
 		     },
 			error : function(xhr, status, error) {
 				if(xhr.status == 401) {
-					alert("인증에 실패 했습니다. 로그인 페이지로 이동합니다.");
+					alert('<spring:message code="message.msg02" />');
 					 location.href = "/";
 				} else if(xhr.status == 403) {
-					alert("세션이 만료가 되었습니다. 로그인 페이지로 이동합니다.");
+					alert('<spring:message code="message.msg03" />');
 		             location.href = "/";
 				} else {
 					alert("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""));
 				}
 			},
 			success : function(result) {
-				alert("삭제 되었습니다.");
+				alert('<spring:message code="message.msg37" />');
 				location.reload();
 			}
 		}); 		   
@@ -286,10 +286,10 @@ function fn_modifyScheduleListView(){
 	var datas = table.rows('.selected').data();
 	
 	if (datas.length <= 0) {
-		alert("선택된 항목이 없습니다.");
+		alert('<spring:message code="message.msg35" />');
 		return false;
 	}else if (datas.length >1){
-		alert("하나만 선택하셔야 합니다.")
+		alert('<spring:message code="message.msg38" />');
 	}
 	
 	var scd_id = table.row('.selected').data().scd_id;
@@ -311,27 +311,27 @@ function fn_modifyScheduleListView(){
 <div id="contents">
 	<div class="contents_wrap">
 		<div class="contents_tit">
-			<h4>My스케줄 관리<a href="#n"><img src="../images/ico_tit.png" class="btn_info"/></a></h4>
+			<h4><spring:message code="menu.my_schedule_management" /><a href="#n"><img src="../images/ico_tit.png" class="btn_info"/></a></h4>
 			<div class="infobox"> 
 				<ul>
-					<li>로그인한 사용자가 생성한 스케줄 정보를 조회합니다.</li>
-					<li>로그인한 사용자로 신규 스케줄을 생성하거나 이미 생성된 스케줄을 수정 또는 삭제 합니다.</li>
+					<li><spring:message code="help.my_schedule_management01" /> </li>
+					<li><spring:message code="help.my_schedule_management02" /></li>
 				</ul>
 			</div>
 			<div class="location">
 				<ul>
 					<li>My PAGE</li>
-					<li class="on">My스케줄 관리</li>
+					<li class="on"><spring:message code="menu.my_schedule_management" /></li>
 				</ul>
 			</div>
 		</div>
 		<div class="contents">
 			<div class="cmm_grp">
 				<div class="btn_type_01">
-					<span class="btn"><button onClick="fn_selectScheduleList();">조회</button></span>		
-					<span class="btn" id="int_button"><a href="/insertScheduleView.do"><button>등록</button></a></span>
-					<span class="btn" id="mdf_button"><button onClick="fn_modifyScheduleListView();">수정</button></span>
-					<span class="btn" id="del_button"><button onClick="fn_deleteScheduleList();">삭제</button></span>
+					<span class="btn"><button onClick="fn_selectScheduleList();"><spring:message code="common.search" /></button></span>		
+					<span class="btn" id="int_button"><a href="/insertScheduleView.do"><button><spring:message code="common.registory" /></button></a></span>
+					<span class="btn" id="mdf_button"><button onClick="fn_modifyScheduleListView();"><spring:message code="common.modify" /></button></span>
+					<span class="btn" id="del_button"><button onClick="fn_deleteScheduleList();"><spring:message code="common.delete" /></button></span>
 				</div>
 				<div class="sch_form">
 					<table class="write">
@@ -342,11 +342,11 @@ function fn_modifyScheduleListView(){
 						</colgroup>
 						<tbody>
 								<tr>
-									<th scope="row" class="t9 line">스케줄명</th>
+									<th scope="row" class="t9 line"><spring:message code="schedule.schedule_name" /></th>
 									<td><input type="text" class="txt t2" id="scd_nm" name="scd_nm"/></td>
 								</tr>
 								<tr>
-									<th scope="row" class="t9 line">설명</th>
+									<th scope="row" class="t9 line"><spring:message code="common.desc" /></th>
 									<td><textarea class="tbd1" name="scd_exp" id="scd_exp"></textarea></td>
 								</tr>
 						</tbody>
@@ -359,18 +359,18 @@ function fn_modifyScheduleListView(){
 					<thead>
 						<tr>
 							<th width="10"></th>
-							<th width="20">No</th>
-							<th width="100">스케줄명</th>
-							<th width="150">설명</th>
-							<th width="50">Work갯수</th>
-							<th width="100">이전수행시간</th>
-							<th width="100">다음수행시간</th>
-							<th width="50">구동상태</th>
-							<th width="50">실행</th>
-							<th width="50">등록자</th>
-							<th width="100">등록일시</th>
-							<th width="50">수정자</th>
-							<th width="100">수정일시</th>
+							<th width="20"><spring:message code="common.no" /></th>
+							<th width="100"><spring:message code="schedule.schedule_name" /></th>
+							<th width="150"><spring:message code="common.desc" /></th>
+							<th width="50"><spring:message code="schedule.work_count" /></th>
+							<th width="100"><spring:message code="schedule.pre_run_time" /></th>
+							<th width="100"><spring:message code="schedule.next_run_time" /></th>
+							<th width="50"><spring:message code="common.run_status" /></th>
+							<th width="50"><spring:message code="schedule.run" /></th>
+							<th width="50"><spring:message code="common.register" /></th>
+							<th width="100"><spring:message code="common.regist_datetime" /></th>
+							<th width="50"><spring:message code="common.modifier" /></th>
+							<th width="100"><spring:message code="common.modify_datetime" /></th>
 							<th width="0"></th>
 						</tr>
 					</thead>

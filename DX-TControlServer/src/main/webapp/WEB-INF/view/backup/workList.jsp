@@ -2,6 +2,7 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form"%>
 <%@ taglib prefix="ui" uri="http://egovframework.gov/ctl/ui"%>
+<%@ taglib prefix="spring" uri="http://www.springframework.org/tags"%>
 <%
 	/**
 	* @Class Name : workList.jsp
@@ -44,13 +45,13 @@ function fn_init(){
 		{data : "bck_opt_cd_nm", className : "dt-center", defaultContent : ""
 			,"render": function (data, type, full) {
 				if(full.bck_opt_cd=="TC000301"){
-					var html = '전체백업';
+					var html = '<spring:message code="backup_management.full_backup" />';
 						return html;
 				}else if(full.bck_opt_cd=="TC000302"){
-					var html = '증분백업';
+					var html = '<spring:message code="backup_management.incremental_backup" />';
 					return html;
 				}else{
-					var html = '변경로그백업';
+					var html = '<spring:message code="backup_management.change_log_backup" />';
 					return html;
 				}
 				return data;
@@ -191,10 +192,10 @@ function fn_rman_regreg_popup(){
 		var datas = tableRman.rows('.selected').data();
 		var bck_wrk_id = tableRman.row('.selected').data().bck_wrk_id;
 		if (datas.length <= 0) {
-			alert("선택된 항목이 없습니다.");
+			alert('<spring:message code="message.msg35" />');
 			return false;
 		}else if(datas.length > 1){
-			alert("하나의 항목을 선택해주세요.");
+			alert('<spring:message code="message.msg04" />');
 			return false;
 		}else{
 			var popUrl = "/popup/rmanRegReForm.do?db_svr_id=${db_svr_id}&bck_wrk_id="+bck_wrk_id;
@@ -247,10 +248,10 @@ function fn_dump_regreg_popup(){
 	var datas = tableDump.rows('.selected').data();
 	var bck_wrk_id = tableDump.row('.selected').data().bck_wrk_id;
 	if (datas.length <= 0) {
-		alert("선택된 항목이 없습니다.");
+		alert('<spring:message code="message.msg35" />');
 		return false;
 	}else if(datas.length > 1){
-		alert("하나의 항목을 선택해주세요.");
+		alert('<spring:message code="message.msg04" />');
 		return false;
 	}else{
 		var popUrl = "/popup/dumpRegReForm.do?db_svr_id=${db_svr_id}&bck_wrk_id="+bck_wrk_id;
@@ -301,10 +302,10 @@ function getRmanDataList(wrk_nm, bck_opt_cd){
 	     },
 		error : function(xhr, status, error) {
 			if(xhr.status == 401) {
-				alert("인증에 실패 했습니다. 로그인 페이지로 이동합니다.");
+				alert('<spring:message code="message.msg02" />');
 				 location.href = "/";
 			} else if(xhr.status == 403) {
-				alert("세션이 만료가 되었습니다. 로그인 페이지로 이동합니다.");
+				alert('<spring:message code="message.msg03" />');
 	             location.href = "/";
 			} else {
 				alert("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""));
@@ -340,10 +341,10 @@ function getDumpDataList(wrk_nm, db_id){
 	     },
 		error : function(xhr, status, error) {
 			if(xhr.status == 401) {
-				alert("인증에 실패 했습니다. 로그인 페이지로 이동합니다.");
+				alert('<spring:message code="message.msg02" />');
 				 location.href = "/";
 			} else if(xhr.status == 403) {
-				alert("세션이 만료가 되었습니다. 로그인 페이지로 이동합니다.");
+				alert('<spring:message code="message.msg03" />');
 	             location.href = "/";
 			} else {
 				alert("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""));
@@ -417,7 +418,7 @@ function fn_rman_work_delete(){
 	var datas = tableRman.rows('.selected').data();
 	
 	if(datas.length < 1){
-		alert("삭제할 작업을 선택해 주세요.");
+		alert('<spring:message code="message.msg16" /> ');
 		return false;
 	}
 	
@@ -442,10 +443,10 @@ function fn_rman_work_delete(){
 	     },
 		error : function(xhr, status, error) {
 			if(xhr.status == 401) {
-				alert("인증에 실패 했습니다. 로그인 페이지로 이동합니다.");
+				alert('<spring:message code="message.msg02" />');
 				 location.href = "/";
 			} else if(xhr.status == 403) {
-				alert("세션이 만료가 되었습니다. 로그인 페이지로 이동합니다.");
+				alert('<spring:message code="message.msg03" />');
 	             location.href = "/";
 			} else {
 				alert("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""));
@@ -460,7 +461,7 @@ function fn_rman_work_delete(){
 			alert("등록된 스케줄이 존재하여 삭제할수 없습니다.");
 			return false;
 		}else{   
-			if(confirm("선택하신 작업을 삭제하시겠습니까?")){
+			if(confirm('<spring:message code="message.msg17" />')){
 						$.ajax({
 							url : "/popup/workDelete.do",
 						  	data : {
@@ -474,10 +475,10 @@ function fn_rman_work_delete(){
 						     },
 							error : function(xhr, status, error) {
 								if(xhr.status == 401) {
-									alert("인증에 실패 했습니다. 로그인 페이지로 이동합니다.");
+									alert('<spring:message code="message.msg02" />');
 									 location.href = "/";
 								} else if(xhr.status == 403) {
-									alert("세션이 만료가 되었습니다. 로그인 페이지로 이동합니다.");
+									alert('<spring:message code="message.msg03" />');
 						             location.href = "/";
 								} else {
 									alert("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""));
@@ -486,7 +487,7 @@ function fn_rman_work_delete(){
 							success : function(data) {
 							}
 						});			
-				alert("선택한 작업이 삭제되었습니다.");
+				alert('<spring:message code="message.msg18" />');
 				fn_rman_find_list();
 			}
 		}
@@ -503,7 +504,7 @@ function fn_dump_work_delete(){
 	var datas = tableDump.rows('.selected').data();
 	
 	if(datas.length < 1){
-		alert("삭제할 작업을 선택해 주세요.")
+		alert('<spring:message code="message.msg16" />');
 		return false;
 	}
 	
@@ -527,10 +528,10 @@ function fn_dump_work_delete(){
 	     },
 		error : function(xhr, status, error) {
 			if(xhr.status == 401) {
-				alert("인증에 실패 했습니다. 로그인 페이지로 이동합니다.");
+				alert('<spring:message code="message.msg02" />');
 				 location.href = "/";
 			} else if(xhr.status == 403) {
-				alert("세션이 만료가 되었습니다. 로그인 페이지로 이동합니다.");
+				alert('<spring:message code="message.msg03" />');
 	             location.href = "/";
 			} else {
 				alert("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""));
@@ -545,7 +546,7 @@ function fn_dump_work_delete(){
 		alert("등록된 스케줄이 존재하여 삭제할수 없습니다.");
 		return false;
 	}else{   
-		if(confirm("선택하신 작업을 삭제하시겠습니까?")){
+		if(confirm('<spring:message code="message.msg17" />')){
 					$.ajax({
 						url : "/popup/workDelete.do",
 					  	data : {
@@ -559,10 +560,10 @@ function fn_dump_work_delete(){
 					     },
 						error : function(xhr, status, error) {
 							if(xhr.status == 401) {
-								alert("인증에 실패 했습니다. 로그인 페이지로 이동합니다.");
+								alert('<spring:message code="message.msg02" />');
 								 location.href = "/";
 							} else if(xhr.status == 403) {
-								alert("세션이 만료가 되었습니다. 로그인 페이지로 이동합니다.");
+								alert('<spring:message code="message.msg03" />');
 					             location.href = "/";
 							} else {
 								alert("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""));
@@ -571,7 +572,7 @@ function fn_dump_work_delete(){
 						success : function(data) {
 						}
 					});
-			alert("선택한 작업이 삭제되었습니다.");
+			alert('<spring:message code="message.msg18" />');
 			fn_dump_find_list();
 		}
 	}
@@ -615,45 +616,45 @@ function selectTab(tab){
 <div id="contents">
 	<div class="contents_wrap">
 		<div class="contents_tit">
-			<h4>백업설정<a href="#n"><img src="/images/ico_tit.png" class="btn_info"/></a></h4>
+			<h4><spring:message code="menu.backup_settings" /><a href="#n"><img src="/images/ico_tit.png" class="btn_info"/></a></h4>
 			<div class="infobox"> 
 				<ul>
-					<li>데이터베이스 서버에 생성된 백업 작업을 조회하거나 신규로 등록 또는 삭제 합니다.</li>
-					<li>작업 조회 목록에서 Work를 클릭하여 해당 백업 작업을 수정합니다.</li>
-					<li>조회 목록에서 Work명을 클릭하여 상세 정보를 조회할 수 있습니다.</li>	
+					<li><spring:message code="help.backup_settings_01" /> </li>
+					<li><spring:message code="help.backup_settings_02" /></li>
+					<li><spring:message code="help.backup_settings_03" /></li>	
 				</ul>
 			</div>
 			<div class="location">
 				<ul>
 					<li class="bold">${db_svr_nm}</li>
-					<li>백업관리</li>
-					<li class="on">백업설정</li>
+					<li><spring:message code="menu.backup_management" /></li>
+					<li class="on"><spring:message code="menu.backup_settings" /></li>
 				</ul>
 			</div>
 		</div>	
 		<div class="contents">
 			<div class="cmm_tab">
 				<ul id="tab1">
-					<li class="atv"><a href="javascript:selectTab('rman')">Rman 백업</a></li>
+					<li class="atv"><a href="javascript:selectTab('rman')"><spring:message code="backup_management.rman_backup" /></a></li>
 					<li><a href="javascript:selectTab('dump')">Dump 백업</a></li>
 				</ul>
 				<ul id="tab2" style="display:none;">
-					<li><a href="javascript:selectTab('rman')">Rman 백업</a></li>
+					<li><a href="javascript:selectTab('rman')"><spring:message code="backup_management.rman_backup" /></a></li>
 					<li class="atv"><a href="javascript:selectTab('dump')">Dump 백업</a></li>
 				</ul>
 			</div>
 			<div class="cmm_grp">
 				<div class="btn_type_01" id="btnRman">
-					<a class="btn" onClick="fn_rman_find_list();"><button>조회</button></a>
-					<span class="btn" onclick="fn_rman_reg_popup()"><button>등록</button></span>
-					<span class="btn" onClick="fn_rman_regreg_popup()"><button>수정</button></span>
-					<span class="btn" onClick="fn_rman_work_delete()"><button>삭제</button></span>
+					<a class="btn" onClick="fn_rman_find_list();"><button><spring:message code="common.search" /></button></a>
+					<span class="btn" onclick="fn_rman_reg_popup()"><button><spring:message code="common.registory" /></button></span>
+					<span class="btn" onClick="fn_rman_regreg_popup()"><button><spring:message code="common.modify" /></button></span>
+					<span class="btn" onClick="fn_rman_work_delete()"><button><spring:message code="common.delete" /></button></span>
 				</div>
 				<div class="btn_type_01" id="btnDump" style="display:none;">
-					<span class="btn" onclick="fn_dump_find_list()"><button>조회</button></span>
-					<span class="btn" onclick="fn_dump_reg_popup()"><button>등록</button></span>
-					<span class="btn" onclick="fn_dump_regreg_popup()"><button>수정</button></span>
-					<span class="btn" onclick="fn_dump_work_delete()"><button>삭제</button></span>
+					<span class="btn" onclick="fn_dump_find_list()"><button><spring:message code="common.search" /></button></span>
+					<span class="btn" onclick="fn_dump_reg_popup()"><button><spring:message code="common.registory" /></button></span>
+					<span class="btn" onclick="fn_dump_regreg_popup()"><button><spring:message code="common.modify" /></button></span>
+					<span class="btn" onclick="fn_dump_work_delete()"><button><spring:message code="common.delete" /></button></span>
 				</div>
 				<form name="findList" id="findList" method="post">
 				<input type="hidden" name="db_svr_id" id="db_svr_id" value="${db_svr_id}"/>				
@@ -668,14 +669,14 @@ function selectTab(tab){
 						</colgroup>
 						<tbody>
 							<tr>
-								<th scope="row" class="t8">Work명</th>
+								<th scope="row" class="t8"><spring:message code="common.work_name" /></th>
 								<td><input type="text" name="wrk_nm" id="wrk_nm" class="txt t3"/></td>
-								<th scope="row" class="t9" >백업옵션</th>
+								<th scope="row" class="t9" ><spring:message code="backup_management.backup_option" /></th>
 								<td><select name="bck_opt_cd" id="bck_opt_cd" class="txt t3" style="width:150px;">
-										<option value="">선택</option>
-										<option value="TC000301">전체백업</option>
-										<option value="TC000302">증분백업</option>
-										<option value="TC000303">변경로그백업</option>
+										<option value=""><spring:message code="common.choice" /></option>
+										<option value="TC000301"><spring:message code="backup_management.full_backup" /></option>
+										<option value="TC000302"><spring:message code="backup_management.incremental_backup" /></option>
+										<option value="TC000303"><spring:message code="backup_management.change_log_backup" /></option>
 									</select>
 								</td>
 							</tr>
@@ -691,12 +692,12 @@ function selectTab(tab){
 						</colgroup>
 						<tbody>
 							<tr>
-								<th scope="row" class="t8">Work명</th>
+								<th scope="row" class="t8"><spring:message code="common.work_name" /></th>
 								<td><input type="text" class="txt t3" name="wrk_nm" id="wrk_nm"/></td>
-								<th scope="row" class="t4">Database</th>
+								<th scope="row" class="t4"><spring:message code="common.database" /></th>
 								<td>
 									<select name="db_id" id="db_id" class="txt t3" style="width:150px;">
-										<option value="">선택</option>
+										<option value=""><spring:message code="common.choice" /></option>
 										<c:forEach var="result" items="${dbList}" varStatus="status">
 										<option value="<c:out value="${result.db_id}"/>"><c:out value="${result.db_nm}"/></option>
 										</c:forEach>
@@ -714,17 +715,17 @@ function selectTab(tab){
 							<thead>
 								<tr>
 									<th width="10"></th>
-									<th width="30">No</th>
-									<th width="200">Work명</th>
-									<th width="200">Work설명</th>
-									<th width="100">백업옵션</th>
-									<th width="230">데이터경로</th>
-									<th width="230">백업경로</th>
-									<th width="230">로그경로</th>
-									<th width="100">등록자</th>
-									<th width="100">등록일시</th>
-									<th width="100">수정자</th>
-									<th width="100">수정일시</th>
+									<th width="30"><spring:message code="common.no" /></th>
+									<th width="200"><spring:message code="common.work_name" /></th>
+									<th width="200"><spring:message code="common.work_description" /></th>
+									<th width="100"><spring:message code="backup_management.backup_option" /></th>
+									<th width="230"><spring:message code="backup_management.data_dir" /></th>
+									<th width="230"><spring:message code="backup_management.backup_dir" /></th>
+									<th width="230"><spring:message code="backup_management.backup_log_dir" /></th>
+									<th width="100"><spring:message code="common.register" /> </th>
+									<th width="100"><spring:message code="common.regist_datetime" /></th>
+									<th width="100"><spring:message code="common.modifier" /></th>
+									<th width="100"><spring:message code="common.modify_datetime" /></th>
 									<th width="0"></th>
 								</tr>
 							</thead>
@@ -737,21 +738,21 @@ function selectTab(tab){
 							<thead>
 								<tr>
 									<th width="10"></th>
-									<th width="30">No</th>
-									<th width="200">Work명</th>
-									<th width="200">Work설명</th>
-									<th width="130">Database</th>
-									<th width="250">저장경로</th>
-									<th width="60">파일포맷</th>
-									<th width="60">압축률</th>
-									<th width="100">인코딩방식</th>
-									<th width="100">Rolename</th>
-									<th width="90">파일보관일</th>
-									<th width="90">백업파일유지수</th>
-									<th width="70">등록자</th>
-									<th width="100">등록일시</th>
-									<th width="70">수정자</th>
-									<th width="100">수정일시</th>
+									<th width="30"><spring:message code="common.no" /></th>
+									<th width="200"><spring:message code="common.work_name" /></th>
+									<th width="200"><spring:message code="common.work_description" /></th>
+									<th width="130"><spring:message code="common.database" /></th>
+									<th width="250"><spring:message code="backup_management.backup_dir" /></th>
+									<th width="60"><spring:message code="backup_management.file_format" /></th>
+									<th width="60"><spring:message code="backup_management.compressibility" /></th>
+									<th width="100"><spring:message code="backup_management.incording_method" /></th>
+									<th width="100"><spring:message code="backup_management.rolename" /></th>
+									<th width="90"><spring:message code="backup_management.file_keep_day" /></th>
+									<th width="90"><spring:message code="backup_management.backup_maintenance_count" /></th>
+									<th width="70"><spring:message code="common.register" /></th>
+									<th width="100"><spring:message code="common.regist_datetime" /></th>
+									<th width="70"><spring:message code="common.modifier" /></th>
+									<th width="100"><spring:message code="common.modify_datetime" /></th>
 									<th width="0"></th>
 								</tr>
 							</thead>

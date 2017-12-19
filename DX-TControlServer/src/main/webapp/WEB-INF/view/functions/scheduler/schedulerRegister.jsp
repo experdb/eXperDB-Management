@@ -1,6 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
-
+<%@ taglib prefix="spring" uri="http://www.springframework.org/tags"%>
 <script>
 var table = null;
 var scd_nmChk = "fail";
@@ -8,17 +8,17 @@ var scd_nmChk = "fail";
 function fn_validation(){
 	var scd_nm = document.getElementById("scd_nm");
 		if (scd_nm.value == "") {
-			   alert("스케줄명을 입력하여 주십시오.");
+			   alert('<spring:message code="message.msg40" />');
 			   scd_nm.focus();
 			   return false;
 		}
 		var scd_exp = document.getElementById("scd_exp");
  		if (scd_exp.value == "") {
-  			   alert("스케줄설명을 입력하여 주십시오.");
+  			   alert('<spring:message code="message.msg41" />');
   			 scd_exp.focus();
   			   return false;
   		}if(scd_nmChk == "fail"){
-  			"스케줄명 중복체크 하셔야합니다.";
+  			alert('<spring:message code="message.msg42" />');
   		}
  		return true;
 }
@@ -153,7 +153,7 @@ function fn_makeMonth(){
 		}
 		monthHtml += '<option value="'+month+'">'+month+'</option>';
 	}
-	monthHtml += '</select> 월';	
+	monthHtml += '</select> <spring:message code="schedule.month" />';	
 	$( "#month" ).append(monthHtml);
 }
 
@@ -174,7 +174,7 @@ function fn_makeDay(){
 		}
 		dayHtml += '<option value="'+day+'">'+day+'</option>';
 	}
-		dayHtml += '</select> 일';	
+		dayHtml += '</select> <spring:message code="schedule.day" />';	
 	$( "#day" ).append(dayHtml);
 }
 
@@ -196,7 +196,7 @@ function fn_makeHour(){
 		}
 		hourHtml += '<option value="'+hour+'">'+hour+'</option>';
 	}
-	hourHtml += '</select> 시';	
+	hourHtml += '</select> <spring:message code="schedule.our" />';	
 	$( "#hour" ).append(hourHtml);
 }
 
@@ -217,7 +217,7 @@ function fn_makeMin(){
 		}
 		minHtml += '<option value="'+min+'">'+min+'</option>';
 	}
-	minHtml += '</select> 분';	
+	minHtml += '</select> <spring:message code="schedule.minute" />';	
 	$( "#min" ).append(minHtml);
 }
 
@@ -237,7 +237,7 @@ function fn_makeMin(){
 		}
 		secHtml += '<option value="'+sec+'">'+sec+'</option>';
 	}
-	secHtml += '</select> 초';	
+	secHtml += '</select> <spring:message code="schedule.second" />';	
 	$( "#sec" ).append(secHtml);
 } 
 
@@ -349,10 +349,10 @@ function fn_workAddCallback(rowList){
 	     },
 		error : function(xhr, status, error) {
 			if(xhr.status == 401) {
-				alert("인증에 실패 했습니다. 로그인 페이지로 이동합니다.");
+				alert('<spring:message code="message.msg02" />');
 				 location.href = "/";
 			} else if(xhr.status == 403) {
-				alert("세션이 만료가 되었습니다. 로그인 페이지로 이동합니다.");
+				alert('<spring:message code="message.msg03" />');
 	             location.href = "/";
 			} else {
 				alert("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""));
@@ -388,7 +388,7 @@ function fn_insertSchedule(){
 	var datas = table.rows().data();
 
 	if(datas.length < 1){
-		alert("WORK 정보가 존재 하지않습니다.");
+		alert('<spring:message code="message.msg39" />');
 		return false;
 	}
 	
@@ -425,17 +425,17 @@ function fn_insertSchedule(){
 		     },
 			error : function(xhr, status, error) {
 				if(xhr.status == 401) {
-					alert("인증에 실패 했습니다. 로그인 페이지로 이동합니다.");
+					alert('<spring:message code="message.msg02" />');
 					 location.href = "/";
 				} else if(xhr.status == 403) {
-					alert("세션이 만료가 되었습니다. 로그인 페이지로 이동합니다.");
+					alert('<spring:message code="message.msg03" />');
 		             location.href = "/";
 				} else {
 					alert("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""));
 				}
 			},
 			success : function(result) {
-				alert("스케줄이 등록되었습니다.");
+				alert('<spring:message code="message.msg43" />');
 				location.href='/selectScheduleListView.do' ;
 			}
 		}); 	
@@ -449,7 +449,7 @@ function fn_insertSchedule(){
 function fn_check() {
 	var scd_nm = document.getElementById("scd_nm");
 	if (scd_nm.value == "") {
-		alert("스케줄명을 입력하세요.");
+		alert('<spring:message code="message.msg40" />');
 		document.getElementById('scd_nm').focus();
 		return;
 	}
@@ -461,12 +461,12 @@ function fn_check() {
 		},
 		success : function(result) {
 			if (result == "true") {
-				alert("등록가능한 스케줄명 입니다.");
+				alert('<spring:message code="message.msg45" /> ');
 				document.getElementById("scd_nm").focus();
 				scd_nmChk = "success";
 			} else {
 				scd_nmChk = "fail";
-				alert("중복된 스케줄명이 존재합니다.");
+				alert('<spring:message code="message.msg46" />');
 				document.getElementById("scd_nm").focus();
 			}
 		},
@@ -475,10 +475,10 @@ function fn_check() {
 	     },
 		error : function(xhr, status, error) {
 			if(xhr.status == 401) {
-				alert("인증에 실패 했습니다. 로그인 페이지로 이동합니다.");
+				alert('<spring:message code="message.msg02" />');
 				 location.href = "/";
 			} else if(xhr.status == 403) {
-				alert("세션이 만료가 되었습니다. 로그인 페이지로 이동합니다.");
+				alert('<spring:message code="message.msg03" />');
 	             location.href = "/";
 			} else {
 				alert("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""));
@@ -491,26 +491,26 @@ function fn_check() {
 			<div id="contents">
 				<div class="contents_wrap">
 					<div class="contents_tit">
-						<h4>스케줄 등록 <a href="#n"><img src="../images/ico_tit.png" class="btn_info"/></a></h4>
+						<h4><spring:message code="menu.schedule_registration" /> <a href="#n"><img src="../images/ico_tit.png" class="btn_info"/></a></h4>
 						<div class="infobox"> 
 							<ul>
-								<li>정기적으로 수행할 스케줄을 등록합니다.</li>
-								<li>스케줄 등록은 JOB 생성, Work 등록, 스케줄 등록의 절차로 진행 됩니다.</li>	
-								<li>현재 버전에서 Work로 등록 가능한 기능은 [백업설정]입니다.</li>					
+								<li><spring:message code="help.schedule_registration_01" /></li>
+								<li><spring:message code="help.schedule_registration_02" /></li>	
+								<li><spring:message code="help.schedule_registration_03" /></li>					
 							</ul>
 						</div>
 						<div class="location">
 							<ul>
 								<li>Function</li>
-								<li>스케줄 정보</li>
-								<li class="on">스케줄 등록</li>
+								<li><spring:message code="menu.schedule_information" /></li>
+								<li class="on"><spring:message code="menu.schedule_registration" /></li>
 							</ul>
 						</div>
 					</div>
 					<div class="contents">
 						<div class="cmm_grp">
 							<div class="btn_type_01">
-								<span class="btn"  onClick="fn_insertSchedule();" id="int_button"><button>등록</button></span>
+								<span class="btn"  onClick="fn_insertSchedule();" id="int_button"><button><spring:message code="common.registory" /></button></span>
 							</div>
 							<div class="sch_form">
 								<table class="write">
@@ -521,13 +521,13 @@ function fn_check() {
 									</colgroup>
 									<tbody>
 										<tr>
-											<th scope="row" class="t9 line">스케줄명</th>
+											<th scope="row" class="t9 line"><spring:message code="schedule.schedule_name" /></th>
 											<td><input type="text" class="txt t2" id="scd_nm" name="scd_nm" maxlength="20"/>
 											<span class="btn btnF_04 btnC_01"><button type="button" class= "btn_type_02" onclick="fn_check()" style="width: 60px; margin-right: -60px; margin-top: 0;">중복체크</button></span>
 											</td>
 										</tr>
 										<tr>
-											<th scope="row" class="t9 line">설명</th>
+											<th scope="row" class="t9 line"><spring:message code="common.desc" /></th>
 											<td><input type="text" class="txt t2" id="scd_exp" name="scd_exp" style="width:500px;"/></td>
 										</tr>
 									</tbody>
@@ -542,26 +542,26 @@ function fn_check() {
 									</colgroup>
 									<tbody>
 										<tr>
-											<th scope="row" class="ico_t4">스케줄시간설정</th>
+											<th scope="row" class="ico_t4"><spring:message code="schedule.schedule_time_settings" /></th>
 											<td>
 												<div class="schedule_wrap">
 													<span>
 														<select class="select t5" name="exe_perd_cd" id="exe_perd_cd" onChange="fn_exe_pred();">
-															<option value="TC001601">매일</option>
-															<option value="TC001602">매주</option>
-															<option value="TC001603">매월</option>
-															<option value="TC001604">매년</option>
-															<option value="TC001605">1회실행</option>
+															<option value="TC001601"><spring:message code="schedule.everyday" /></option>
+															<option value="TC001602"><spring:message code="schedule.everyweek" /></option>
+															<option value="TC001603"><spring:message code="schedule.everymonth" /></option>
+															<option value="TC001604"><spring:message code="schedule.everyyear" /></option>
+															<option value="TC001605"><spring:message code="schedule.one_time_run" /></option>
 														</select>
 													</span>
 													<span id="weekDay" >
-							                            <input type="checkbox" id="chk" name="chk" value="0">일요일
-							                            <input type="checkbox" id="chk" name="chk" value="0">월요일
-							                            <input type="checkbox" id="chk" name="chk" value="0">화요일
-							                            <input type="checkbox" id="chk" name="chk" value="0">수요일
-							                            <input type="checkbox" id="chk" name="chk" value="0">목요일
-							                            <input type="checkbox" id="chk" name="chk" value="0">금요일
-							                            <input type="checkbox" id="chk" name="chk" value="0">토요일
+							                            <input type="checkbox" id="chk" name="chk" value="0"><spring:message code="schedule.sunday" />
+							                            <input type="checkbox" id="chk" name="chk" value="0"><spring:message code="schedule.monday" />
+							                            <input type="checkbox" id="chk" name="chk" value="0"><spring:message code="schedule.thuesday" />
+							                            <input type="checkbox" id="chk" name="chk" value="0"><spring:message code="schedule.wednesday" />
+							                            <input type="checkbox" id="chk" name="chk" value="0"><spring:message code="schedule.thursday" />
+							                            <input type="checkbox" id="chk" name="chk" value="0"><spring:message code="schedule.friday" />
+							                            <input type="checkbox" id="chk" name="chk" value="0"><spring:message code="schedule.saturday" />
                         							</span>
 													<span id="calendar">
 														<div class="calendar_area">
@@ -593,10 +593,10 @@ function fn_check() {
 
 							<div class="cmm_bd">
 								<div class="sub_tit">
-									<p>Work 추가</p>
+									<p>Work <span id="add_button"></p>
 									<div class="sub_btn">
-										<a href="#n" class="btn btnF_04 btnC_01" onclick="fn_workAdd();"><span id="add_button">추가</span></a>
-										<a href="#n" class="btn btnF_04" onclick="fn_workDel();"><span id="del_button">삭제</span></a>
+										<a href="#n" class="btn btnF_04 btnC_01" onclick="fn_workAdd();"><span id="add_button"><spring:message code="common.add" /></span></a>
+										<a href="#n" class="btn btnF_04" onclick="fn_workDel();"><span id="del_button"><spring:message code="button.delete" /></span></a>
 									</div>
 								</div>
 								<div class="overflow_area">							
@@ -604,12 +604,12 @@ function fn_check() {
 										<thead>
 											<tr>
 												<th width="10"></th>
-												<th width="30">No</th>												
-												<th width="130">DBMS명</th>
-												<th width="70">구분</th>
-												<th width="100">Work명</th>
-												<th width="150">Work설명</th>												
-												<th width="30">실행순서</th>
+												<th width="30"><spring:message code="common.no" /></th>												
+												<th width="130"><spring:message code="common.dbms_name" /></th>
+												<th width="70"><spring:message code="common.division" /></th>
+												<th width="100"><spring:message code="common.work_name" /> </th>
+												<th width="150"><spring:message code="common.work_description" /></th>												
+												<th width="30"><spring:message code="data_transfer.run_order" /></th>
 												<th width="30">OnError</th>
 												<th width="0"></th>
 											</tr>

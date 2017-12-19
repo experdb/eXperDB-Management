@@ -1,7 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
-
+<%@ taglib prefix="spring" uri="http://www.springframework.org/tags"%>
 
 <script>
 var table = null;
@@ -11,12 +11,12 @@ var db_svr_id = ${db_svr_id};
 function fn_validation(){
 	var scd_nm = document.getElementById("scd_nm");
 		if (scd_nm.value == "") {
-			   alert("스케줄명을 입력하여 주십시오.");
+			   alert('<spring:message code="message.msg40" /> ');
 			   scd_nm.focus();
 			   return false;
 		}
 		if(scd_nmChk == "fail"){
-  			"스케줄명 중복체크 하셔야합니다.";
+  			aler('<spring:message code="message.msg42" /> ');
   		}
  		return true;
 }
@@ -509,10 +509,10 @@ function fn_selectBckSchedule(){
 	     },
 		error : function(xhr, status, error) {
 			if(xhr.status == 401) {
-				alert("인증에 실패 했습니다. 로그인 페이지로 이동합니다.");
+				alert('<spring:message code="message.msg02" />');
 				 location.href = "/";
 			} else if(xhr.status == 403) {
-				alert("세션이 만료가 되었습니다. 로그인 페이지로 이동합니다.");
+				alert('<spring:message code="message.msg03" />');
 	             location.href = "/";
 			} else {
 				alert("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""));
@@ -537,10 +537,10 @@ function fn_selectMonthBckSchedule(){
 	     },
 		error : function(xhr, status, error) {
 			if(xhr.status == 401) {
-				alert("인증에 실패 했습니다. 로그인 페이지로 이동합니다.");
+				alert('<spring:message code="message.msg02" />');
 				 location.href = "/";
 			} else if(xhr.status == 403) {
-				alert("세션이 만료가 되었습니다. 로그인 페이지로 이동합니다.");
+				alert('<spring:message code="message.msg03" />');
 	             location.href = "/";
 			} else {
 				alert("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""));
@@ -625,10 +625,10 @@ $(function(){
 			     },
 				error : function(xhr, status, error) {
 					if(xhr.status == 401) {
-						alert("인증에 실패 했습니다. 로그인 페이지로 이동합니다.");
+						alert('<spring:message code="message.msg02" />');
 						 location.href = "/";
 					} else if(xhr.status == 403) {
-						alert("세션이 만료가 되었습니다. 로그인 페이지로 이동합니다.");
+						alert('<spring:message code="message.msg03" />');
 			             location.href = "/";
 					} else {
 						alert("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""));
@@ -712,7 +712,7 @@ $(function(){
 					                			imgName = "ico_agent_2.png";
 					                		}
 					                		appendnew += '<img src="../images/' + imgName + '" alt=""  style="margin-right:10px"  width="10px" height="10px" />';
-					                		appendnew += "[매년] <a class='bold' href='#' onclick=javascript:fn_popup(" + scd_id + ");>"+scd_nm+"</a> [" + exe_hms +"]</div>";
+					                		appendnew += "[<spring:message code="schedule.everyyear" />] <a class='bold' href='#' onclick=javascript:fn_popup(" + scd_id + ");>"+scd_nm+"</a> [" + exe_hms +"]</div>";
 					                	} 
 				                	}
 				                //매월
@@ -726,7 +726,7 @@ $(function(){
 					                			imgName = "ico_agent_2.png";
 					                		}
 					                		appendnew += '<img src="../images/' + imgName + '" alt=""  style="margin-right:10px"  width="10px" height="10px" />';
-					                		appendnew += "[매월] <a class='bold' href='#' onclick=javascript:fn_popup(" + scd_id + ");>"+scd_nm+"</a> [" + exe_hms +"]</div>";
+					                		appendnew += "[<spring:message code="schedule.everymonth" />] <a class='bold' href='#' onclick=javascript:fn_popup(" + scd_id + ");>"+scd_nm+"</a> [" + exe_hms +"]</div>";
 					                	} 
 				                	}
 				                // 매주
@@ -740,7 +740,7 @@ $(function(){
 					                			imgName = "ico_agent_2.png";
 					                		}
 					                		appendnew += '<img src="../images/' + imgName + '" alt=""  style="margin-right:10px"  width="10px" height="10px" />';
-					                		appendnew += "[매주] <a class='bold' href='#' onclick=javascript:fn_popup(" + scd_id + ");>"+scd_nm+"</a> [" + exe_hms +"]</div>";
+					                		appendnew += "[<spring:message code="schedule.everyweek" />] <a class='bold' href='#' onclick=javascript:fn_popup(" + scd_id + ");>"+scd_nm+"</a> [" + exe_hms +"]</div>";
 					                	} 
 				           			}
 				                //매일
@@ -753,7 +753,7 @@ $(function(){
 				                			imgName = "ico_agent_2.png";
 				                		}
 				                		appendnew += '<img src="../images/' + imgName + '" alt=""  style="margin-right:10px"  width="10px" height="10px" />';
-				                		appendnew += "[매일] <a class='bold' href='#' onclick=javascript:fn_popup(" + scd_id + ");>"+scd_nm+"</a> [" + exe_hms +"]</div>";
+				                		appendnew += "[<spring:message code="schedule.everyday" />] <a class='bold' href='#' onclick=javascript:fn_popup(" + scd_id + ");>"+scd_nm+"</a> [" + exe_hms +"]</div>";
 				                	}
 								//1회실행
 				                } else if(exe_perd_cd == 'TC001605') {
@@ -765,7 +765,7 @@ $(function(){
 					                		imgName = "ico_agent_2.png";
 					                	}
 					                	appendnew += '<img src="../images/' + imgName + '" alt=""  style="margin-right:10px"  width="10px" height="10px" />';
-					                	appendnew += "[1회실행] <a class='bold' href='#' onclick=javascript:fn_popup(" + scd_id + ");>"+scd_nm+"</a> [" + exe_hms +"]</div>";
+					                	appendnew += "[<spring:message code="schedule.one_time_run" />] <a class='bold' href='#' onclick=javascript:fn_popup(" + scd_id + ");>"+scd_nm+"</a> [" + exe_hms +"]</div>";
 					                }
 			                	}
 				                
@@ -792,7 +792,7 @@ function addDays(theDate, days) {
 Date.prototype.format = function(f) {
     if (!this.valueOf()) return " ";
  
-    var weekName = ["일요일", "월요일", "화요일", "수요일", "목요일", "금요일", "토요일"];
+    var weekName = ["<spring:message code="schedule.sunday" /> ", "<spring:message code="schedule.monday" />", "<spring:message code="schedule.thuesday" />", "<spring:message code="schedule.wednesday" />", "<spring:message code="schedule.thursday" />", "<spring:message code="schedule.friday" />", "<spring:message code="schedule.saturday" /> "];
     var d = this;
      
     return f.replace(/(yyyy|yy|MM|dd|E|hh|mm|ss|a\/p)/gi, function($1) {
@@ -885,25 +885,25 @@ var DateDiff =  {
 						<h4>백업 스케줄 <a href="#n"><img src="../images/ico_tit.png" class="btn_info"/></a></h4>
 						<div class="infobox"> 
 							<ul>
-								<li>정기적으로 수행할 백업 작업을 간편하게 등록 및 조회할 수 있습니다.</li>
-								<li>등록된 스케줄은 MY PAGE > My스케줄에서 관리할 수 있습니다.</li>
+								<li><spring:message code="help.backup_scheduler_01" /> </li>
+								<li><spring:message code="help.backup_scheduler_02" /> </li>
 							</ul>
 						</div>
 					</div>
 					<div class="contents">
 						<div class="cmm_tab">
 							<ul id="tab1">
-								<li class="atv"><a href="javascript:selectTab('week')">주별 스케줄현황</a></li>
-								<li><a href="javascript:selectTab('month')">월별 스케줄현황</a></li>
+								<li class="atv"><a href="javascript:selectTab('week')"><spring:message code="backup_management.weekly_schedule_status" /> </a></li>
+								<li><a href="javascript:selectTab('month')"><spring:message code="backup_management.monthly_schedule_status" /></a></li>
 							</ul>
 							<ul id="tab2" style="display:none;">
-								<li><a href="javascript:selectTab('week')">주별 스케줄현황</a></li>
-								<li class="atv"><a href="javascript:selectTab('month')">월별 스케줄현황</a></li>
+								<li><a href="javascript:selectTab('week')"><spring:message code="backup_management.weekly_schedule_status" /> </a></li>
+								<li class="atv"><a href="javascript:selectTab('month')"><spring:message code="backup_management.monthly_schedule_status" /></a></li>
 							</ul>
 						</div>
 						<div class="cmm_grp">
 							<div class="btn_type_01" id="btnWeek">
-								<span class="btn"  onClick="fn_insertSchedule();" id="int_button"><button>주별 스케줄등록</button></span>
+								<span class="btn"  onClick="fn_insertSchedule();" id="int_button"><button><spring:message code="backup_management.weekly_schedule_registory" /></button></span>
 							</div>
 							<div class="btn_type_01" id="btnMonth">
 								<!--  <span class="btn"  onClick="fn_insertSchedule();" id="int_button"><button>월별 스케줄등록</button></span>-->
@@ -912,13 +912,13 @@ var DateDiff =  {
 									<table id="week_scheduleList" class="cell-border display" width="100%">
 										<thead>
 											<tr>
-												<th width="130">일</th>
-												<th width="130">월</th>												
-												<th width="130">화</th>
-												<th width="130">수</th>
-												<th width="130">목</th>
-												<th width="130">금</th>												
-												<th width="130">토</th>
+												<th width="130"><spring:message code="common.sun" /></th>
+												<th width="130"><spring:message code="common.mon" /></th>												
+												<th width="130"><spring:message code="common.tue" /></th>
+												<th width="130"><spring:message code="common.wed" /></th>
+												<th width="130"><spring:message code="common.thu" /></th>
+												<th width="130"><spring:message code="common.fri" /></th>												
+												<th width="130"><spring:message code="common.sat" /></th>
 											</tr>
 										</thead>
 									</table>		
@@ -934,19 +934,19 @@ var DateDiff =  {
 										</colgroup>
 										<tbody>
 											<tr style="height:50px;">
-												<th  scope="row" class="t10">조회년월</th>
+												<th  scope="row" class="t10"><spring:message code="common.search_year_month" /></th>
 												<td>
 													<select id="cmbyear"  style="width:100px" class="select t5">
 													</select> 년&nbsp;&nbsp;
 													<select id="cmbmonth"  class="select t6">
 														<option>01</option><option>02</option><option>03</option><option>04</option><option>05</option><option>06</option>
 														<option>07</option><option>08</option><option>09</option><option>10</option><option>11</option><option>12</option>
-													</select> 월
+													</select> <spring:message code="common.mon" /> 
 
 												</td>
 												<td align="right">
 	
-													<span class="btn"  id="btnGetData"><button>조 회</button></span>
+													<span class="btn"  id="btnGetData"><button><spring:message code="common.search" /> </button></span>
 												</td>
 											</tr>
 										</tbody>
@@ -954,13 +954,13 @@ var DateDiff =  {
 								</div>
 								
 								<div class="line1">
-									<div class="cell date_brdleft"><span><font color="red">일</font></span></div>
-									<div class="cell"><span>월</span></div>
-									<div class="cell"><span>화</span></div>
-									<div class="cell"><span>수</span></div>
-									<div class="cell"><span>목</span></div>
-									<div class="cell"><span>금</span></div>
-									<div class="cell"><span><font color="blue">토</font></span></div>
+									<div class="cell date_brdleft"><span><font color="red"><spring:message code="common.sun" /></font></span></div>
+									<div class="cell"><span><spring:message code="common.mon" /></span></div>
+									<div class="cell"><span><spring:message code="common.tue" /></span></div>
+									<div class="cell"><span><spring:message code="common.wed" /></span></div>
+									<div class="cell"><span><spring:message code="common.thu" /></span></div>
+									<div class="cell"><span><spring:message code="common.fri" /></span></div>
+									<div class="cell"><span><font color="blue"><spring:message code="common.sat" /></font></span></div>
 								</div>
 								<div id="calendarbody">
 								</div>

@@ -348,9 +348,6 @@ function fn_scheduleStop(){
 
 function fn_bckModifyPopup(){
 	var works = table.rows('.selected').data();
-	var bck_wrk_id = table.row('.selected').data().bck_wrk_id;
-	var bck_mode = table.row('.selected').data().bck_bsn_dscd;
-	var db_svr_id = table.row('.selected').data().db_svr_id;
 
 	if (works.length <= 0) {
 		alert("선택된 항목이 없습니다.");
@@ -359,6 +356,11 @@ function fn_bckModifyPopup(){
 		alert("하나의 항목을 선택해주세요.");
 		return false;
 	}else{
+		
+		var bck_wrk_id = table.row('.selected').data().bck_wrk_id;
+		var bck_mode = table.row('.selected').data().bck_bsn_dscd;
+		var db_svr_id = table.row('.selected').data().db_svr_id;
+		
 		if(bck_mode == "TC000201"){
 			var popUrl = "/popup/rmanRegReForm.do?db_svr_id="+db_svr_id+"&bck_wrk_id="+bck_wrk_id;
 			var width = 954;

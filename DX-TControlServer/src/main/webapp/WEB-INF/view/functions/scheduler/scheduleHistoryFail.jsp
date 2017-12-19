@@ -3,6 +3,7 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form"%>
 <%@ taglib prefix="ui" uri="http://egovframework.gov/ctl/ui"%>
+<%@ taglib prefix="spring" uri="http://www.springframework.org/tags"%>
 
     <script>
     var table = null;
@@ -63,10 +64,10 @@
    		     },
    			error : function(xhr, status, error) {
    				if(xhr.status == 401) {
-   					alert("인증에 실패 했습니다. 로그인 페이지로 이동합니다.");
+   					alert('<spring:message code="message.msg02" />');
    					 location.href = "/";
    				} else if(xhr.status == 403) {
-   					alert("세션이 만료가 되었습니다. 로그인 페이지로 이동합니다.");
+   					alert('<spring:message code="message.msg03" />');
    		             location.href = "/";
    				} else {
    					alert("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""));
@@ -100,7 +101,7 @@
 			<div class="location">
 				<ul>
 					<li>Function</li>
-					<li>스케줄</li>
+					<li><spring:message code="menu.schedule" /></li>
 					<li class="on">스케줄실패이력</li>
 				</ul>
 			</div>
@@ -113,13 +114,13 @@
 				<caption>스케줄 실패 리스트</caption>
 					<thead>
 						<tr>
-							<th>No</th>
-							<th>스케줄명</th>
-							<th>DBMS명</th>
-							<th>Work명</th>
-							<th>작업시작일시</th>
-							<th>작업종료일시</th>
-							<th>결과</th>
+							<th><spring:message code="common.no" /></th>
+							<th><spring:message code="schedule.schedule_name" /></th>
+							<th><spring:message code="common.dbms_name" /></th>
+							<th><spring:message code="common.work_name" /></th>
+							<th><spring:message code="schedule.work_start_datetime" /></th>
+							<th><spring:message code="schedule.work_end_datetime" /></th>
+							<th><spring:message code="schedule.result" /></th>
 						</tr>
 					</thead>
 				</table>						

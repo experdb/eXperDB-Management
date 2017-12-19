@@ -3,6 +3,7 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form"%>
 <%@ taglib prefix="ui" uri="http://egovframework.gov/ctl/ui"%>
+<%@ taglib prefix="spring" uri="http://www.springframework.org/tags"%>
 
     <script>
     function fn_validation(){
@@ -16,7 +17,7 @@
     	resultDt	= Math.round((endDt.valueOf() - startDt.valueOf())/(1000*60*60*24*365/12));
     	
     	if(resultDt>6){
-    		alert("작업일자 범위가 6개월을 초과 하였습니다.");
+    		alert('<spring:message code="message.msg34" />');
     		return false; 
     	}
     	return true;
@@ -61,10 +62,10 @@
 			     },
 				error : function(xhr, status, error) {
 					if(xhr.status == 401) {
-						alert("인증에 실패 했습니다. 로그인 페이지로 이동합니다.");
+						alert('<spring:message code="message.msg02" />');
 						 location.href = "/";
 					} else if(xhr.status == 403) {
-						alert("세션이 만료가 되었습니다. 로그인 페이지로 이동합니다.");
+						alert('<spring:message code="message.msg03" />');
 			             location.href = "/";
 					} else {
 						alert("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""));
@@ -72,7 +73,7 @@
 				},
 				success : function(result) {		
 					$("#db_svr_nm").children().remove();
-					$("#db_svr_nm").append("<option value='%'>전체</option>");
+					$("#db_svr_nm").append("<option value='%'><spring:message code="common.total" /></option>");
 					if(result.length > 0){
 						for(var i=0; i<result.length; i++){
 							$("#db_svr_nm").append("<option value='"+result[i].db_svr_nm+"'>"+result[i].db_svr_nm+"</option>");	
@@ -193,10 +194,10 @@
 		     },
 			error : function(xhr, status, error) {
 				if(xhr.status == 401) {
-					alert("인증에 실패 했습니다. 로그인 페이지로 이동합니다.");
+					alert('<spring:message code="message.msg02" />');
 					 location.href = "/";
 				} else if(xhr.status == 403) {
-					alert("세션이 만료가 되었습니다. 로그인 페이지로 이동합니다.");
+					alert('<spring:message code="message.msg03" />');
 		             location.href = "/";
 				} else {
 					alert("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""));
@@ -258,10 +259,10 @@
 		     },
 			error : function(xhr, status, error) {
 				if(xhr.status == 401) {
-					alert("인증에 실패 했습니다. 로그인 페이지로 이동합니다.");
+					alert('<spring:message code="message.msg02" />');
 					 location.href = "/";
 				} else if(xhr.status == 403) {
-					alert("세션이 만료가 되었습니다. 로그인 페이지로 이동합니다.");
+					alert('<spring:message code="message.msg03" />');
 		             location.href = "/";
 				} else {
 					alert("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""));
@@ -269,7 +270,7 @@
 			},
 			success : function(result) {		
 				$("#wrk_nm").children().remove();
-				$("#wrk_nm").append("<option value='%'>전체</option>");
+				$("#wrk_nm").append("<option value='%'><spring:message code="common.total" /></option>");
 				if(result.length > 0){
 					for(var i=0; i<result.length; i++){
 						$("#wrk_nm").append("<option value='"+result[i].wrk_nm+"'>"+result[i].wrk_nm+"</option>");	
@@ -298,24 +299,24 @@
 <div id="contents">
 	<div class="contents_wrap">
 		<div class="contents_tit">
-			<h4>스케줄 수행이력<a href="#n"><img src="../images/ico_tit.png" class="btn_info"/></a></h4>
+			<h4><spring:message code="menu.shedule_execution_history" /><a href="#n"><img src="../images/ico_tit.png" class="btn_info"/></a></h4>
 			<div class="infobox"> 
 				<ul>
-					<li>지정된 기간 동안의 스케줄 수행 이력을 조회합니다.</li>
+					<li><spring:message code="help.shedule_execution_history" /></li>
 				</ul>
 			</div>					
 			<div class="location">
 				<ul>
 					<li>Function</li>
-					<li>스케줄정보</li>
-					<li class="on">스케줄 수행이력</li>
+					<li><spring:message code="menu.schedule_information" /></li>
+					<li class="on"><spring:message code="menu.shedule_execution_history" /></li>
 				</ul>
 			</div>
 		</div>
 		<div class="contents">
 			<div class="cmm_grp">
 				<div class="btn_type_01">
-					<span class="btn" id="read_button"><button onClick="fn_selectScheduleHistory();">조회</button></span>
+					<span class="btn" id="read_button"><button onClick="fn_selectScheduleHistory();"><spring:message code="common.search" /></button></span>
 				</div>
 				<form:form commandName="pagingVO" name="selectScheduleHistory" id="selectScheduleHistory" method="post">
 				<div class="sch_form">
@@ -331,7 +332,7 @@
 						</colgroup>
 						<tbody>
 								<tr>
-									<th scope="row" class="t10" >작업일자</th>
+									<th scope="row" class="t10" ><spring:message code="schedule.work_day" /></th>
 									<td>
 										<div class="calendar_area">
 											<a href="#n" class="calendar_btn">달력열기</a> 
@@ -345,43 +346,43 @@
 											<li>
 												<span class="chkbox2">
 													<input type="radio" name="dateType" id="dateType1" onclick="setSearchDate('0d')"/>
-													<label for="dateType1">당일</label>
+													<label for="dateType1"><spring:message code="schedule.today" /></label>
 												</span>
 											</li>
 											<li>
 												<span class="chkbox2">
 													<input type="radio" name="dateType" id="dateType2" onclick="setSearchDate('3d')"/>
-													<label for="dateType2">3일</label>
+													<label for="dateType2"><spring:message code="schedule.three_day" /></label>
 												</span>
 											</li>
 											<li>
 												<span class="chkbox2">
 													<input type="radio" name="dateType" id="dateType3" onclick="setSearchDate('1w')"/>
-													<label for="dateType3">1주</label>
+													<label for="dateType3"><spring:message code="schedule.one_week" /></label>
 												</span>
 											</li>
 											<li>
 												<span class="chkbox2">
 													<input type="radio" name="dateType" id="dateType4" onclick="setSearchDate('2w')"/>
-													<label for="dateType4">2주</label>
+													<label for="dateType4"><spring:message code="schedule.two_weeks" /></label>
 												</span>
 											</li>
 											<li>
 												<span class="chkbox2">
 													<input type="radio" name="dateType" id="dateType5" onclick="setSearchDate('1m')"/>
-													<label for="dateType5">1개월</label>
+													<label for="dateType5"><spring:message code="schedule.one_month" /> </label>
 												</span>
 											</li>
 											<li>
 												<span class="chkbox2">
 													<input type="radio" name="dateType" id="dateType6" onclick="setSearchDate('3m')"/>
-													<label for="dateType6">3개월</label>
+													<label for="dateType6"><spring:message code="schedule.three_month" /></label>
 												</span>
 											</li>
 											<li>
 												<span class="chkbox2">
 													<input type="radio" name="dateType" id="dateType7" onclick="setSearchDate('6m')"/>
-													<label for="dateType7">6개월</label>
+													<label for="dateType7"><spring:message code="schedule.six_month" /></label>
 												</span>
 											</li>
 										</ul>
@@ -389,24 +390,24 @@
 									</td>
 								</tr>
 								 <tr>
-									<th scope="row" class="t9 line" >스케줄명</th>
+									<th scope="row" class="t9 line" ><spring:message code="schedule.schedule_name" /> </th>
 									<td>
 										<select class="select t4" name="scd_nm" id="scd_nm" onChange="fn_selectWrkNmList(this);">
-												<option value="%">전체</option>
+												<option value="%"><spring:message code="schedule.total" /></option>
 										</select>	
 									</td>
-									<th scope="row" class="t9 line">DBMS명</th>
+									<th scope="row" class="t9 line"><spring:message code="common.dbms_name" /></th>
 									<td>
 										<select class="select t4" name="db_svr_nm" id="db_svr_nm" >
-												<option value="%">전체</option>
+												<option value="%"><spring:message code="schedule.total" /></option>
 										</select>	
 									</td>									
-									<th scope="row" class="t9 line">실행결과</th>
+									<th scope="row" class="t9 line"><spring:message code="schedule.result" /></th>
 									<td>
 										<select class="select t4" name="exe_result" id="exe_result">
-												<option value="%">전체</option>
-												<option value="TC001701">성공</option>
-												<option value="TC001702">실패</option>
+												<option value="%"><spring:message code="schedule.total" /></option>
+												<option value="TC001701"><spring:message code="common.success" /></option>
+												<option value="TC001702"><spring:message code="common.failed" /></option>
 										</select>	
 									</td>
 								</tr>		
@@ -430,15 +431,15 @@
 						</colgroup>
 						<thead>
 							<tr style="border-bottom: 1px solid #b8c3c6;">
-								<th scope="col">NO</th>
-								<th scope="col">스케줄명</th>
-								<th scope="col">DBMS명</th>
-								<th scope="col">DBMS아이피</th>							
-								<th scope="col">작업시작일시</th>
-								<th scope="col">작업종료일시</th>
-								<th scope="col">작업시간</th>
-								<th scope="col">결과</th>
-								<th scope="col">상세보기</th>
+								<th scope="col"><spring:message code="common.no" /></th>
+								<th scope="col"><spring:message code="schedule.schedule_name" /></th>
+								<th scope="col"><spring:message code="common.dbms_name" /></th>
+								<th scope="col"><spring:message code="dbms_information.dbms_ip" /></th>							
+								<th scope="col"><spring:message code="schedule.work_start_datetime" /></th>
+								<th scope="col"><spring:message code="schedule.work_end_datetime" /></th>
+								<th scope="col"><spring:message code="schedule.work_start_time" /></th>
+								<th scope="col"><spring:message code="schedule.result" /></th>
+								<th scope="col"><spring:message code="schedule.detail_view" /></th>
 							</tr>
 						</thead>
 						<tbody>
@@ -459,7 +460,7 @@
 									    	</c:otherwise>
 										</c:choose>
 									</td>
-									<td><span class='btn btnC_01 btnF_02' onclick='fn_detail(${result.exe_sn})'><input type="button" value="상세조회"></span></td>
+									<td><span class='btn btnC_01 btnF_02' onclick='fn_detail(${result.exe_sn})'><input type="button" value="<spring:message code="schedule.detail_view" />"></span></td>
 								</tr>
 							</c:forEach>
 						</tbody>
