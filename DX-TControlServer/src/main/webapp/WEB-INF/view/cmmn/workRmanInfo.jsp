@@ -1,5 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
+    <%@ taglib prefix="spring" uri="http://www.springframework.org/tags"%>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 
 <div id="pop_layer_rman" class="pop-layer">
@@ -10,7 +11,7 @@
 				</p>
 				<table class="list" style="border:1px solid #b8c3c6;">
 					<caption>WORK 정보</caption>			
-					<p><h3 style="height: 20px;">기본정보</h3></p>
+					<p><h3 style="height: 20px;"><spring:message code="properties.basic_info" /></h3></p>
 					<tbody>						
 						<tr>
 							<td>백업구분</td>
@@ -21,69 +22,69 @@
 							<td style="text-align: left" id="bck_opt_cd_nm"></td>
 						</tr>	
 						<tr>
-							<td>WORK 명</td>
+							<td><spring:message code="common.work_name" /></td>
 							<td style="text-align: left" id="r_wrk_nm"></td>
 						</tr>	
 						<tr>
-							<td>WORK 설명</td>
+							<td><spring:message code="common.work_description" /></td>
 							<td style="text-align: left" id="r_wrk_exp"></td>
 						</tr>							
 						<tr>
-							<td>압축여부</td>
+							<td><spring:message code="backup_management.compress" /></td>
 							<td style="text-align: left" id="cps_yn"></td>
 						</tr>	
 						<tr>
-							<td>로그경로</td>
+							<td><spring:message code="backup_management.backup_log_dir" /></td>
 							<td style="text-align: left" id="log_file_pth"></td>
 						</tr>	
 						<tr>
-							<td>데이터경로</td>
+							<td><spring:message code="backup_management.data_dir" /></td>
 							<td style="text-align: left" id="data_pth"></td>
 						</tr>	
 						<tr>
-							<td>백업경로</td>
+							<td><spring:message code="backup_management.backup_dir" /></td>
 							<td style="text-align: left" id="bck_pth"></td>
 						</tr>						
 					</tbody>
 				</table>
 				
-				<p><h3 style="height: 20px; margin-top: 25px;">백업파일옵션</h3></p>
+				<p><h3 style="height: 20px; margin-top: 25px;"><spring:message code="backup_management.backup_file_option" /></h3></p>
 				<table class="list" style="border:1px solid #b8c3c6;">
-					<caption>백업파일옵션</caption>
+					<caption><spring:message code="backup_management.backup_file_option" /></caption>
 					<tbody>
 						<tr>
-							<td>FULL백업파일 보관일</td>
+							<td><spring:message code="backup_management.full_backup_file_keep_day" /></td>
 							<td style="text-align: left" id="r_file_stg_dcnt"></td>
 						</tr>	
 						<tr>
-							<td>FULL백업파일 유지갯수</td>
+							<td><spring:message code="backup_management.full_backup_file_maintenance_count" /></td>
 							<td style="text-align: left" id="r_bck_mtn_ecnt"></td>
 						</tr>	
 						<tr>
-							<td>아카이브파일 보관일</td>
+							<td><spring:message code="backup_management.archive_file_keep_day" /></td>
 							<td style="text-align: left" id="acv_file_stgdt"></td>
 						</tr>	
 						<tr>
-							<td>아카이브파일 유지갯수</td>
+							<td><spring:message code="backup_management.archive_file_maintenance_count" /></td>
 							<td style="text-align: left" id="acv_file_mtncnt"></td>
 						</tr>							
 					</tbody>
 				</table>
 				
-				<p><h3 style="height: 20px; margin-top: 25px;">로그파일 옵션</h3></p>
+				<p><h3 style="height: 20px; margin-top: 25px;"><spring:message code="backup_management.log_file_option" /></h3></p>
 				<table class="list" style="border:1px solid #b8c3c6;">
-					<caption>로그파일 옵션</caption>
+					<caption><spring:message code="backup_management.log_file_option" /></caption>
 					<tbody>
 						<tr>
-							<td>로그파일 백업여부</td>
+							<td><spring:message code="backup_management.log_file_backup_yn" /></td>
 							<td style="text-align: left" id="log_file_bck_yn"></td>
 						</tr>	
 						<tr>
-							<td>서버로그파일 보관일</td>
+							<td><spring:message code="backup_management.server_log_file_keep_day" /></td>
 							<td style="text-align: left" id="r_log_file_stg_dcnt"></td>
 						</tr>	
 						<tr>
-							<td>서버로그파일 유지갯수</td>
+							<td><spring:message code="backup_management.server_log_file_maintenance_count" /></td>
 							<td style="text-align: left" id="r_log_file_mtn_ecnt"></td>
 						</tr>								
 					</tbody>

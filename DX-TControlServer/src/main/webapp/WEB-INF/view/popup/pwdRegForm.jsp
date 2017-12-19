@@ -1,5 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
+<%@ taglib prefix="spring" uri="http://www.springframework.org/tags"%>
 <%
 	/**
 	* @Class Name : pwdRegForm.jsp
@@ -28,7 +29,7 @@
 	function fn_pwValidation(str){
 		 var reg_pwd = /^.*(?=.{6,20})(?=.*[0-9])(?=.*[a-zA-Z]).*$/;
 		 if(!reg_pwd.test(str)){
-		 	alert("영문,숫자를 혼합하여 6~20자 이내를 입력해 주십시오.");
+		 	alert('<spring:message code="message.msg109" />');
 		 	return false;
 		 }
 		 return true;
@@ -40,7 +41,7 @@
 		var newpwd = document.getElementById("newpwd");
 		var pwd = document.getElementById("pwd");
 		if (nowpwd.value == "") {
-			alert("현재 패스워드를 입력하여 주십시오.");
+			alert('<spring:message code="message.msg110" />');
 			nowpwd.focus();
 			return false;
 		}
@@ -54,7 +55,7 @@
 			success : function(result) {
 				if (result) {
 					if (newpwd.value == "") {
-						alert("새 패스워드를 입력하여 주십시오.");
+						alert('<spring:message code="message.msg111" />');
 						newpwd.focus();
 						return false;
 					}
@@ -68,7 +69,7 @@
 					if (!fn_pwValidation(pwd.value))return false;
 					
 					if (newpwd.value != pwd.value) {
-						alert("새 패스워드 정보가 일치하지 않습니다.");
+						alert('<spring:message code="message.msg112" />');
 						return false;
 					}
 					
@@ -84,7 +85,7 @@
 							pwd : $("#pwd").val()
 						},
 						success : function(result) {
-							alert("저장하였습니다.");
+							alert('<spring:message code="message.msg57" /> ');
 							window.close();
 						},
 						beforeSend: function(xhr) {
@@ -92,10 +93,10 @@
 					     },
 						error : function(xhr, status, error) {
 							if(xhr.status == 401) {
-								alert("인증에 실패 했습니다. 로그인 페이지로 이동합니다.");
+								alert('<spring:message code="message.msg02" />');
 								 location.href = "/";
 							} else if(xhr.status == 403) {
-								alert("세션이 만료가 되었습니다. 로그인 페이지로 이동합니다.");
+								alert('<spring:message code="message.msg03" />');
 					             location.href = "/";
 							} else {
 								alert("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""));
@@ -103,7 +104,7 @@
 						}
 					});
 				} else {
-					alert("현재 패스워드를 정확히 입력해 주십시오.");
+					alert('<spring:message code="message.msg114" />');
 				}
 
 			},
@@ -112,10 +113,10 @@
 		     },
 			error : function(xhr, status, error) {
 				if(xhr.status == 401) {
-					alert("인증에 실패 했습니다. 로그인 페이지로 이동합니다.");
+					alert('<spring:message code="message.msg02" />');
 					 location.href = "/";
 				} else if(xhr.status == 403) {
-					alert("세션이 만료가 되었습니다. 로그인 페이지로 이동합니다.");
+					alert('<spring:message code="message.msg03" />');
 		             location.href = "/";
 				} else {
 					alert("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""));
@@ -130,9 +131,9 @@
 <body>
 	<div class="pop_container">
 		<div class="pop_cts">
-			<p class="tit">패스워드 변경</p>
+			<p class="tit"><spring:message code="user_management.edit_password" /></p>
 			<table class="write">
-				<caption>패스워드 변경</caption>
+				<caption><spring:message code="user_management.edit_password" /></caption>
 				<colgroup>
 					<col style="width: 120px;" />
 					<col />
@@ -146,7 +147,7 @@
 			</table>
 			<div class="pop_cmm2">
 				<table class="write">
-					<caption>패스워드 변경</caption>
+					<caption><spring:message code="user_management.edit_password" /></caption>
 					<colgroup>
 						<col style="width: 120px;" />
 						<col />
@@ -165,7 +166,7 @@
 			</div>
 			<div class="btn_type_02">
 				<span class="btn btnC_01"><button onclick="fn_update()">저장</button></span>
-				<a href="#n" class="btn" onclick="window.close();"><span>취소</span></a>
+				<a href="#n" class="btn" onclick="window.close();"><span><spring:message code="common.cancel" /></span></a>
 			</div>
 		</div>
 	</div>

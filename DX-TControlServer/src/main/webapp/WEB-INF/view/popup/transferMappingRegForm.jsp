@@ -83,17 +83,17 @@
 	    	     },
 	    		error : function(xhr, status, error) {
 	    			if(xhr.status == 401) {
-	    				alert("인증에 실패 했습니다. 로그인 페이지로 이동합니다.");
+	    				alert('<spring:message code="message.msg02" />');
 	    				 location.href = "/";
 	    			} else if(xhr.status == 403) {
-	    				alert("세션이 만료가 되었습니다. 로그인 페이지로 이동합니다.");
+	    				alert('<spring:message code="message.msg03" />');
 	    	             location.href = "/";
 	    			} else {
 	    				alert("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""));
 	    			}
 	    		},
 	    		success : function(result) {  
-	    				var option = "<option value='no'>선택</option>";
+	    				var option = "<option value='no'><spring:message code="common.choice" /></option>";
 						for(var i=0; i<result.length; i++){	
 							 option += "<option value='"+result[i].db_id+"'>"+result[i].db_nm;
 							 if(result[i].db_exp!=""){
@@ -132,17 +132,17 @@
     	     },
     		error : function(xhr, status, error) {
     			if(xhr.status == 401) {
-    				alert("인증에 실패 했습니다. 로그인 페이지로 이동합니다.");
+    				alert('<spring:message code="message.msg02" />');
     				 location.href = "/";
     			} else if(xhr.status == 403) {
-    				alert("세션이 만료가 되었습니다. 로그인 페이지로 이동합니다.");
+    				alert('<spring:message code="message.msg03" />');
     	             location.href = "/";
     			} else {
     				alert("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""));
     			}
     		},
     		success : function(result) {  
-    				var option = "<option value='no'>선택</option>";
+    				var option = "<option value='no'><spring:message code="common.choice" /></option>";
 					for(var i=0; i<result.length; i++){	
 						 option += "<option value='"+result[i].db_id+"'>"+result[i].db_nm+"</option>";		 
 					}
@@ -168,10 +168,10 @@
 	    	     },
 	    		error : function(xhr, status, error) {
 	    			if(xhr.status == 401) {
-	    				alert("인증에 실패 했습니다. 로그인 페이지로 이동합니다.");
+	    				alert('<spring:message code="message.msg02" />');
 	    				 location.href = "/";
 	    			} else if(xhr.status == 403) {
-	    				alert("세션이 만료가 되었습니다. 로그인 페이지로 이동합니다.");
+	    				alert('<spring:message code="message.msg03" />');
 	    	             location.href = "/";
 	    			} else {
 	    				alert("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""));
@@ -179,7 +179,7 @@
 	    		},
 	    		success : function(result) {
 	    			if(result.data == null){
-	    				alert("experdb 엔진을 확인해주세요.");
+	    				alert('<spring:message code="message.msg27" />');
 	    			}else{
 	    				tableList.clear().draw();	
 	    				<c:forEach items="${result}" var="result">
@@ -220,10 +220,10 @@
 	    	     },
 	    		error : function(xhr, status, error) {
 	    			if(xhr.status == 401) {
-	    				alert("인증에 실패 했습니다. 로그인 페이지로 이동합니다.");
+	    				alert('<spring:message code="message.msg02" />');
 	    				 location.href = "/";
 	    			} else if(xhr.status == 403) {
-	    				alert("세션이 만료가 되었습니다. 로그인 페이지로 이동합니다.");
+	    				alert('<spring:message code="message.msg03" />');
 	    	             location.href = "/";
 	    			} else {
 	    				alert("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""));
@@ -233,7 +233,7 @@
 	    			if(result.bottledwater !=null){
 	    				alert("bottledwater extension을 설치 해 주세요.");
 	    			}else if(result.data == null){
-	    				alert("experdb 엔진을 확인해주세요.");
+	    				alert('<spring:message code="message.msg27" />');
 	    			}else{
 		    			tableList.clear().draw();		
 		    			tableList.rows.add(result.data).draw();
@@ -252,7 +252,7 @@
  	function fn_rightMove(){
  		var datas = tableList.rows('.selected').data();
  		if(datas.length <1){
- 			alert("선택된 데이터가 없습니다.");	
+ 			alert('<spring:message code="message.msg35" />');	
  		}else{
  			var rows = [];
         	for (var i = 0;i<datas.length;i++) {
@@ -283,7 +283,7 @@
  	function fn_leftMove(){
  		var datas = connectorTableList.rows('.selected').data();
  		if(datas.length <1){
- 			alert("선택된 데이터가 없습니다.");	
+ 			alert('<spring:message code="message.msg35" />');	
  		}else{
  			var rows = [];
         	for (var i = 0;i<datas.length;i++) {
@@ -339,7 +339,7 @@
     				trf_trg_cnn_nm : '${trf_trg_cnn_nm}'
     			},
     			success : function(result) {
-    				alert("저장하였습니다.");
+    				alert('<spring:message code="message.msg57" />');
     				window.close();
     				opener.fn_select();
     			},
@@ -348,10 +348,10 @@
     		     },
     			error : function(xhr, status, error) {
     				if(xhr.status == 401) {
-    					alert("인증에 실패 했습니다. 로그인 페이지로 이동합니다.");
+    					alert('<spring:message code="message.msg02" />');
     					 location.href = "/";
     				} else if(xhr.status == 403) {
-    					alert("세션이 만료가 되었습니다. 로그인 페이지로 이동합니다.");
+    					alert('<spring:message code="message.msg03" />');
     		             location.href = "/";
     				} else {
     					alert("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""));
@@ -365,7 +365,7 @@
 <body>
 <div class="pop_container">
 	<div class="pop_cts">
-		<p class="tit">Database 매핑 설정</p>
+		<p class="tit">Database <spring:message code="data_transfer.mapping_settings" /></p>
 		<table class="write">
 			<caption>전송대상 설정 등록</caption>
 			<colgroup>
@@ -376,13 +376,13 @@
 			</colgroup>
 			<tbody>
 				<tr>
-					<th scope="row" class="ico_t1">Connector명</th>
+					<th scope="row" class="ico_t1"><spring:message code="data_transfer.connect_name" /></th>
 					<td><input type="text" class="txt t3 bg1" name="trf_trg_cnn_nm" value="${trf_trg_cnn_nm}" readonly="readonly"/></td>
 					<th>&nbsp;</th>
 					<td>&nbsp;</td>
 				</tr>
 				<tr>
-					<th scope="row" class="ico_t1">DBMS명</th>
+					<th scope="row" class="ico_t1"><spring:message code="common.dbms_name" /></th>
 					<td>	
 						<select class="select t3" name="db_svr_nm" id="db_svr_nm" onchange="fn_serverChange()">
 							<c:forEach var="resultSet" items="${resultSet}" varStatus="status">
@@ -390,7 +390,7 @@
 							</c:forEach>
 						</select>		
 					</td>
-					<th scope="row" class="ico_t1">Database</th>
+					<th scope="row" class="ico_t1"><spring:message code="common.database" /></th>
 					<td>
 						<select class="select" name="db_nm" id="db_nm" onchange="fn_dbChange()"></select>
 					</td>
@@ -434,8 +434,8 @@
 			</div>
 		</div>
 		<div class="btn_type_02">
-			<span class="btn btnC_01"><button onclick="fn_insert()">저장</button></span>
-			<a href="#n" class="btn" onclick="window.close();"><span>취소</span></a>
+			<span class="btn btnC_01"><button onclick="fn_insert()"><spring:message code="button.create" /></button></span>
+			<a href="#n" class="btn" onclick="window.close();"><span><spring:message code="common.cancel" /></span></a>
 		</div>
 	</div>
 </div>

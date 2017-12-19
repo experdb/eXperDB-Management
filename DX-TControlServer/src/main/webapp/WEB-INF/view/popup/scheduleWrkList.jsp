@@ -99,10 +99,10 @@ $(window.document).ready(function() {
 	     },
 		error : function(xhr, status, error) {
 			if(xhr.status == 401) {
-				alert("인증에 실패 했습니다. 로그인 페이지로 이동합니다.");
+				alert('<spring:message code="message.msg02" />');
 				 location.href = "/";
 			} else if(xhr.status == 403) {
-				alert("세션이 만료가 되었습니다. 로그인 페이지로 이동합니다.");
+				alert('<spring:message code="message.msg03" />');
 	             location.href = "/";
 			} else {
 				alert("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""));
@@ -129,13 +129,13 @@ $(window.document).ready(function() {
 									<table id="workList" class="display" cellspacing="0" width="100%">
 										<thead>
 											<tr>
-												<th>No</th>
+												<th><spring:message code="common.no" /></th>
 												<th></th>
-												<th>서버명</th>
-												<th>구분</th>
-												<th>Work명</th>
-												<th>Work설명</th>
-												<th>OnError</th>
+												<th><spring:message code="data_transfer.server_name" /></th>
+												<th><spring:message code="common.division" /></th>
+												<th><spring:message code="common.work_name" /></th>
+												<th><spring:message code="common.work_description" /></th>
+												<th><spring:message code="schedule.onerror" /></th>
 											</tr>
 										</thead>
 									</table>											

@@ -50,10 +50,10 @@ $(window.document).ready(function() {
 		     },
 			error : function(xhr, status, error) {
 				if(xhr.status == 401) {
-					alert("인증에 실패 했습니다. 로그인 페이지로 이동합니다.");
+					alert('<spring:message code="message.msg02" />');
 					 location.href = "/";
 				} else if(xhr.status == 403) {
-					alert("세션이 만료가 되었습니다. 로그인 페이지로 이동합니다.");
+					alert('<spring:message code="message.msg03" />');
 		             location.href = "/";
 				} else {
 					alert("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""));
@@ -131,10 +131,10 @@ function fn_update_work(){
 		     },
 			error : function(xhr, status, error) {
 				if(xhr.status == 401) {
-					alert("인증에 실패 했습니다. 로그인 페이지로 이동합니다.");
+					alert('<spring:message code="message.msg02" />');
 					 location.href = "/";
 				} else if(xhr.status == 403) {
-					alert("세션이 만료가 되었습니다. 로그인 페이지로 이동합니다.");
+					alert('<spring:message code="message.msg03" />');
 		             location.href = "/";
 				} else {
 					alert("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""));
@@ -156,7 +156,7 @@ function result(data){
 		alert("수정이 완료되었습니다.");
 		self.close();
 	}else{
-		alert("동일Work명이 존재합니다. 다른 Work명을 입력해주세요.");
+		alert('<spring:message code="message.msg105" />');
 		$("#wrk_nm").val();
 		$("#wrk_nm").focus();
 	}
@@ -167,11 +167,11 @@ function result(data){
  ******************************************************** */
 function valCheck(){
 	if($("#wrk_nm").val() == ""){
-		alert("Work명을 입력해 주세요.");
+		alert('<spring:message code="message.msg107" />');
 		$("#wrk_nm").focus();
 		return false;
 	}else if($("#wrk_exp").val() == ""){
-		alert("Work설명을 입력해 주세요.");
+		alert('<spring:message code="message.msg108" />');
 		$("#wrk_exp").focus();
 		return false;
 	}else if($("#bck_opt_cd").val() == ""){
@@ -179,15 +179,15 @@ function valCheck(){
 		$("#bck_opt_cd").focus();
 		return false;
 	}else if($("#log_file_pth").val() == ""){
-		alert("백업로그경로를 입력해 주세요.");
+		alert('<spring:message code="message.msg78" />');
 		$("#log_file_pth").focus();
 		return false;
 	}else if($("#bck_pth").val() == ""){
-		alert("백업경로를 입력해 주세요.");
+		alert('<spring:message code="message.msg79" />');
 		$("#bck_pth").focus();
 		return false;
 	}else if($("#check_path1").val() != "Y"){
-		alert("백업로그경로에 유효한 경로를 입력후 경로체크를 해 주세요.");
+		alert('<spring:message code="message.msg72" />');
 		$("#log_file_pth").focus();
 		return false;		
 	}else if($("#check_path2").val() != "Y"){
@@ -221,10 +221,10 @@ function fn_checkFolderVol(keyType){
 	     },
 		error : function(xhr, status, error) {
 			if(xhr.status == 401) {
-				alert("인증에 실패 했습니다. 로그인 페이지로 이동합니다.");
+				alert('<spring:message code="message.msg02" />');
 				 location.href = "/";
 			} else if(xhr.status == 403) {
-				alert("세션이 만료가 되었습니다. 로그인 페이지로 이동합니다.");
+				alert('<spring:message code="message.msg03" />');
 	             location.href = "/";
 			} else {
 				alert("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""));
@@ -241,16 +241,16 @@ function fn_checkFolderVol(keyType){
 						var volume = data.result.RESULT_DATA.CAPACITY;
 						if(keyType == 1){
 							$("#logVolume").empty();
-							$( "#logVolume" ).append("용량 : "+volume);
+							$( "#logVolume" ).append("<spring:message code="common.volume" /> : "+volume);
 						}else if(keyType == 2) {
 							$("#backupVolume").empty();
-							$( "#backupVolume" ).append("용량 : "+volume);
+							$( "#backupVolume" ).append("<spring:message code="common.volume" /> : "+volume);
 						}
 				}else{
 					alert(data.SERVERIP+" 서버에 디렉토리가 존재하지 않습니다." );
 				}
 			}else{
-				alert("경로체크 중 서버에러로 인하여 실패하였습니다.")
+				alert('<spring:message code="message.msg76" />')
 			}
 		}
 	});
@@ -269,10 +269,10 @@ function checkFolder(keyType){
 	}
 
 	if(save_path == "" && keyType == 1){
-		alert("백업로그경로를 입력해 주세요.");
+		alert('<spring:message code="message.msg78" />');
 		$("#bck_pth").focus();
 	}else if(save_path == ""){
-		alert("백업경로를 입력해 주세요.");
+		alert('<spring:message code="message.msg79" />');
 		$("#bck_pth").focus();
 	}else{
 		$.ajax({
@@ -288,10 +288,10 @@ function checkFolder(keyType){
 		     },
 			error : function(xhr, status, error) {
 				if(xhr.status == 401) {
-					alert("인증에 실패 했습니다. 로그인 페이지로 이동합니다.");
+					alert('<spring:message code="message.msg02" />');
 					 location.href = "/";
 				} else if(xhr.status == 403) {
-					alert("세션이 만료가 되었습니다. 로그인 페이지로 이동합니다.");
+					alert('<spring:message code="message.msg03" />');
 		             location.href = "/";
 				} else {
 					alert("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""));
@@ -305,14 +305,14 @@ function checkFolder(keyType){
 						}else if(keyType == 2){
 							$("#check_path2").val("Y");
 						}
-						alert("유효한 경로입니다.");
+						alert('<spring:message code="message.msg100" />');
 							var volume = data.result.RESULT_DATA.CAPACITY;
 							if(keyType == 1){
 								$("#logVolume").empty();
-								$( "#logVolume" ).append("용량 : "+volume);
+								$( "#logVolume" ).append("<spring:message code="common.volume" /> : "+volume);
 							}else if(keyType == 2) {
 								$("#backupVolume").empty();
-								$( "#backupVolume" ).append("용량 : "+volume);
+								$( "#backupVolume" ).append("<spring:message code="common.volume" /> : "+volume);
 							}
 					}else{
 						if(haCnt > 1){
@@ -322,7 +322,7 @@ function checkFolder(keyType){
 						}	
 					}
 				}else{
-					alert("경로체크 중 서버에러로 인하여 실패하였습니다.")
+					alert('<spring:message code="message.msg76" />');
 				}
 			}
 		});
@@ -351,11 +351,11 @@ function checkFolder(keyType){
 						</colgroup>
 						<tbody>
 							<tr>
-								<th scope="row" class="ico_t1">Work명</th>
+								<th scope="row" class="ico_t1"><spring:message code="common.work_name" /></th>
 								<td><input type="text" class="txt" name="wrk_nm" id="wrk_nm" maxlength=25 value="<c:out value="${workInfo[0].wrk_nm}"/>"/></td>
 							</tr>
 							<tr>
-								<th scope="row" class="ico_t1">Work<br/>설명</th>
+								<th scope="row" class="ico_t1"><spring:message code="common.work_description" /></th>
 								<td>
 									<div class="textarea_grp">
 										<textarea name="wrk_exp" id="wrk_exp" maxlength=25><c:out value="${workInfo[0].wrk_exp}"/></textarea>
@@ -376,35 +376,35 @@ function checkFolder(keyType){
 								</colgroup>
 								<tbody>
 									<tr>
-										<th scope="row" class="ico_t1">백업옵션</th>
+										<th scope="row" class="ico_t1"><spring:message code="backup_management.backup_option" /></th>
 										<td>
 											<select name="bck_opt_cd" id="bck_opt_cd" class="select">
 												<option value="">선택</option>
-												<option value="TC000301"<c:if test="${workInfo[0].bck_opt_cd == 'TC000301'}"> selected</c:if>>전체백업</option>
-												<option value="TC000302"<c:if test="${workInfo[0].bck_opt_cd == 'TC000302'}"> selected</c:if>>증분백업</option>
-												<option value="TC000303"<c:if test="${workInfo[0].bck_opt_cd == 'TC000303'}"> selected</c:if>>변경로그백업</option>
+												<option value="TC000301"<c:if test="${workInfo[0].bck_opt_cd == 'TC000301'}"> selected</c:if>><spring:message code="backup_management.full_backup" /></option>
+												<option value="TC000302"<c:if test="${workInfo[0].bck_opt_cd == 'TC000302'}"> selected</c:if>><spring:message code="backup_management.incremental_backup" /></option>
+												<option value="TC000303"<c:if test="${workInfo[0].bck_opt_cd == 'TC000303'}"> selected</c:if>><spring:message code="backup_management.change_log_backup" /></option>
 											</select>									
 										</td>
 									</tr>
 								<tr>
-									<th scope="row" class="ico_t1">데이터경로</th>
+									<th scope="row" class="ico_t1"><spring:message code="backup_management.data_dir" /></th>
 									<td>
 										<input type="text" class="txt" name="data_pth" id="data_pth" maxlength=200  value="<c:out value="${workInfo[0].data_pth}"/>" style="width:560px" readonly/>											
 									</td>
 								</tr>									
 								<tr>		
-									<th scope="row" class="ico_t1">백업로그경로</th>
+									<th scope="row" class="ico_t1"><spring:message code="backup_management.backup_log_dir" /></th>
 									<td>
 										<input type="text" class="txt" name="log_file_pth" id="log_file_pth" maxlength=200  value="<c:out value="${workInfo[0].log_file_pth}"/>" style="width:500px" onKeydown="$('#check_path1').val('N')"/>
-										<span class="btn btnC_01"><button type="button" class= "btn_type_02" onclick="checkFolder(1)" style="width: 60px; margin-right: -60px; margin-top: 0;">경로체크</button></span>
+										<span class="btn btnC_01"><button type="button" class= "btn_type_02" onclick="checkFolder(1)" style="width: 60px; margin-right: -60px; margin-top: 0;"><spring:message code="common.dir_check" /></button></span>
 										<span id="logVolume" style="margin:63px;"></span>	
 									</td>
 								</tr>									
 								<tr>	
-										<th scope="row" class="ico_t1">백업경로</th>
+										<th scope="row" class="ico_t1"><spring:message code="backup_management.backup_dir" /></th>
 										<td>
 											<input type="text" class="txt" name="bck_pth" id="bck_pth" maxlength=200  value="<c:out value="${workInfo[0].bck_pth}"/>" style="width:500px" onKeydown="$('#check_path2').val('N')"/>
-											<span class="btn btnC_01"><button type="button" class= "btn_type_02" onclick="checkFolder(2)" style="width: 60px; margin-right: -60px; margin-top: 0;">경로체크</button></span>
+											<span class="btn btnC_01"><button type="button" class= "btn_type_02" onclick="checkFolder(2)" style="width: 60px; margin-right: -60px; margin-top: 0;"><spring:message code="common.dir_check" /></button></span>
 											<span id="backupVolume" style="margin:63px;"></span>	
 										</td>
 									</tr>	
@@ -413,38 +413,38 @@ function checkFolder(keyType){
 						</div>
 						<div class="bak_inner">
 							<div class="bak_lt">
-								<p class="tit">백업파일옵션</p>
+								<p class="tit"><spring:message code="backup_management.backup_file_option" /></p>
 								<div class="option_list">
 									<ul>
 										<li>
 											<div class="inner">
-												<p>Full 백업파일 보관일</p>
-												<span><input type="number" class="txt" name="file_stg_dcnt" id="file_stg_dcnt" value="<c:out value="${workInfo[0].file_stg_dcnt}"/>" maxlength="3" min="0"/> 일</span>
+												<p><spring:message code="backup_management.full_backup_file_keep_day" /></p>
+												<span><input type="number" class="txt" name="file_stg_dcnt" id="file_stg_dcnt" value="<c:out value="${workInfo[0].file_stg_dcnt}"/>" maxlength="3" min="0"/> <spring:message code="common.day" /></span>
 											</div>
 										</li>
 										<li>
 											<div class="inner">
-												<p>Full 백업파일 유지갯수</p>
-												<span><input type="number" class="txt" name="bck_mtn_ecnt" id="bck_mtn_ecnt" value="<c:out value="${workInfo[0].bck_mtn_ecnt}"/>" maxlength="3" min="0"/> 일</span>
+												<p><spring:message code="backup_management.full_backup_file_maintenance_count" /></p>
+												<span><input type="number" class="txt" name="bck_mtn_ecnt" id="bck_mtn_ecnt" value="<c:out value="${workInfo[0].bck_mtn_ecnt}"/>" maxlength="3" min="0"/> <spring:message code="common.day" /></span>
 											</div>
 										</li>
 										<li>
 											<div class="inner">
-												<p>아카이브 파일보관일</p>
-												<span><input type="number" class="txt" name="acv_file_stgdt" id="acv_file_stgdt" value="<c:out value="${workInfo[0].acv_file_stgdt}"/>" maxlength="3" min="0"/> 일</span>
+												<p><spring:message code="backup_management.archive_file_keep_day" /></p>
+												<span><input type="number" class="txt" name="acv_file_stgdt" id="acv_file_stgdt" value="<c:out value="${workInfo[0].acv_file_stgdt}"/>" maxlength="3" min="0"/> <spring:message code="common.day" /></span>
 											</div>
 										</li>
 										<li>
 											<div class="inner">
-												<p>아카이브 파일유지갯수</p>
-												<span><input type="number" class="txt" name="acv_file_mtncnt" id="acv_file_mtncnt" value="<c:out value="${workInfo[0].acv_file_mtncnt}"/>" maxlength="3" min="0"/> 일</span>
+												<p><spring:message code="backup_management.archive_file_maintenance_count" /></p>
+												<span><input type="number" class="txt" name="acv_file_mtncnt" id="acv_file_mtncnt" value="<c:out value="${workInfo[0].acv_file_mtncnt}"/>" maxlength="3" min="0"/> <spring:message code="common.day" /></span>
 											</div>
 										</li>
 										<li>
 											<span class="chk">
 												<div class="inp_chk chk3">
 													<input type="checkbox" name="cps_yn" id="cps_yn" value="Y" <c:if test="${workInfo[0].cps_yn eq 'Y'}"> checked</c:if>/>
-													<label for="cps_yn">압축하기</label>
+													<label for="cps_yn"><spring:message code="backup_management.compress" /></label>
 												</div>
 											</span>
 										</li>
@@ -452,26 +452,26 @@ function checkFolder(keyType){
 								</div>
 							</div>
 							<div class="bak_rt">
-								<p class="tit">로그파일옵션</p>
+								<p class="tit"><spring:message code="backup_management.log_file_option" /></p>
 								<div class="bak_rt_inr">
 									<div class="option_yn">
 										<div class="inp_chk chk3">
 											<input type="checkbox" name="log_file_bck_yn" id="log_file_bck_yn" value="Y" <c:if test="${workInfo[0].log_file_bck_yn eq 'Y'}"> checked</c:if>/>
-											<label for="log_file_bck_yn">로그파일백업 여부</label>
+											<label for="log_file_bck_yn"><spring:message code="backup_management.log_file_backup_yn" /></label>
 										</div>
 									</div>
 									<div class="option_list">
 										<ul>
 											<li>
 												<div class="inner">
-													<p>서버로그 파일 보관일수</p>
-													<span><input type="number" class="txt" name="log_file_stg_dcnt" id="log_file_stg_dcnt" value="<c:out value="${workInfo[0].log_file_stg_dcnt}"/>" maxlength="3" min="0"/> 일</span>
+													<p><spring:message code="backup_management.server_log_file_keep_day" /></p>
+													<span><input type="number" class="txt" name="log_file_stg_dcnt" id="log_file_stg_dcnt" value="<c:out value="${workInfo[0].log_file_stg_dcnt}"/>" maxlength="3" min="0"/> <spring:message code="common.day" /></span>
 												</div>
 											</li>
 											<li>
 												<div class="inner">
-													<p>서버로그 파일 유지갯수</p>
-													<span><input type="number" class="txt" name="log_file_mtn_ecnt" id="log_file_mtn_ecnt" value="<c:out value="${workInfo[0].log_file_mtn_ecnt}"/>" maxlength="3" min="0"/> 일</span>
+													<p><spring:message code="backup_management.server_log_file_maintenance_count" /></p>
+													<span><input type="number" class="txt" name="log_file_mtn_ecnt" id="log_file_mtn_ecnt" value="<c:out value="${workInfo[0].log_file_mtn_ecnt}"/>" maxlength="3" min="0"/> <spring:message code="common.day" /></span>
 												</div>
 											</li>
 										</ul>
@@ -482,8 +482,8 @@ function checkFolder(keyType){
 					</div>
 				</div>
 				<div class="btn_type_02">
-					<span class="btn btnC_01" onClick="fn_update_work();return false;"><button>수정</button></span>
-					<span class="btn" onclick="self.close();return false;"><button>취소</button></span>
+					<span class="btn btnC_01" onClick="fn_update_work();return false;"><button><spring:message code="common.modify" /></button></span>
+					<span class="btn" onclick="self.close();return false;"><button><spring:message code="common.cancel" /></button></span>
 				</div>
 			</div>
 		</div><!-- //pop-container -->

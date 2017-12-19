@@ -573,7 +573,7 @@ function fn_scheduleReStart(){
 											<td><input type="text" class="txt t2" id="scd_nm" name="scd_nm"/></td>
 										</tr>
 										<tr>
-											<th scope="row" class="t9 line"><spring:message code="common.desc" /></th>
+											<th scope="row" class="t9 line">스케줄설명</th>
 											<td>
 												<textarea class="tbd1" name="scd_exp" id="scd_exp"></textarea>
 											</td>

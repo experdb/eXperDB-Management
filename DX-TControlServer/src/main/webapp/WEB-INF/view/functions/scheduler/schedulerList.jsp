@@ -534,7 +534,7 @@ function fn_makeToMin(){
 									<td><input type="text" class="txt t2" id="scd_nm" name="scd_nm"/></td>
 								</tr>
 								<tr>
-									<th scope="row" class="t9 line"><spring:message code="common.desc" /></th>
+									<th scope="row" class="t9 line">스케줄설명</th>
 									<td><input type="text" class="txt t2" id="scd_exp" name="scd_exp" style="width:500px;"/></td>
 								</tr>
 								<tr>
@@ -584,7 +584,7 @@ function fn_makeToMin(){
 							<th width="10"></th>
 							<th width="30">No</th>
 							<th width="250"><spring:message code="schedule.schedule_name" /></th>
-							<th width="395"><spring:message code="common.desc" /></th>
+							<th width="395">스케줄설명</th>
 							<th width="60"><spring:message code="schedule.work_count" /></th>
 							<th width="130"><spring:message code="schedule.pre_run_time" /></th>
 							<th width="130"><spring:message code="schedule.next_run_time" /></th>

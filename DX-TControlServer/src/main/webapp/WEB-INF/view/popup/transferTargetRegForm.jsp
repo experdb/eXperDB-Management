@@ -65,11 +65,11 @@
 				},
 				success : function(result) {
 					if(result){
-						alert("저장하였습니다.");
+						alert('<spring:message code="message.msg07" />');
 						window.close();
 						opener.fn_select();
 					}else{
-						alert("커넥터 상태를 확인해주세요.");
+						alert('<spring:message code="message.msg115" />');
 					}
 				},
 				beforeSend: function(xhr) {
@@ -77,10 +77,10 @@
 			     },
 				error : function(xhr, status, error) {
 					if(xhr.status == 401) {
-						alert("인증에 실패 했습니다. 로그인 페이지로 이동합니다.");
+						alert('<spring:message code="message.msg02" />');
 						 location.href = "/";
 					} else if(xhr.status == 403) {
-						alert("세션이 만료가 되었습니다. 로그인 페이지로 이동합니다.");
+						alert('<spring:message code="message.msg03" />');
 			             location.href = "/";
 					} else {
 						alert("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""));
@@ -111,11 +111,11 @@
 				},
 				success : function(result) {
 					if(result){
-						alert("저장하였습니다.");
+						alert('<spring:message code="message.msg07" />');
 						window.close();
 						opener.fn_select();
 					}else{
-						alert("커넥터 상태를 확인해주세요.");
+						alert('<spring:message code="message.msg115" />');
 					}
 				},
 				beforeSend: function(xhr) {
@@ -123,10 +123,10 @@
 			     },
 				error : function(xhr, status, error) {
 					if(xhr.status == 401) {
-						alert("인증에 실패 했습니다. 로그인 페이지로 이동합니다.");
+						alert('<spring:message code="message.msg02" />');
 						 location.href = "/";
 					} else if(xhr.status == 403) {
-						alert("세션이 만료가 되었습니다. 로그인 페이지로 이동합니다.");
+						alert('<spring:message code="message.msg03" />');
 			             location.href = "/";
 					} else {
 						alert("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""));
@@ -154,7 +154,7 @@
 		var str = document.getElementById("trf_trg_cnn_nm").value;
 		var err = 0; 
 		if( str == '' || str == null ){
-		    alert( 'Connect명을 입력해주세요' );
+		    alert( '<spring:message code="message.msg116" />' );
 		    return;
 		}
 
@@ -165,7 +165,7 @@
 		    } 
 		} 
 		if (err > 0) { 
-		    alert("숫자 또는 영문 소문자만 입력 가능합니다."); 
+		    alert('<spring:message code="message.msg117" />'); 
 		    document.getElementById('trf_trg_cnn_nm').focus();
 			nmCheck = 0;
 		    return;
@@ -178,11 +178,11 @@
 			},
 			success : function(result) {
 				if (result == "true") {
-					alert("Connect명을 사용하실 수 있습니다.");
+					alert('<spring:message code="message.msg118" />');
 					document.getElementById("trf_trg_url").focus();
 					nmCheck = 1;
 				}else {
-					alert("중복된 Connect명이 존재합니다.");
+					alert('<spring:message code="message.msg119" />');
 					document.getElementById("trf_trg_cnn_nm").focus();
 					nmCheck = 0;
 				}
@@ -192,10 +192,10 @@
 		     },
 			error : function(xhr, status, error) {
 				if(xhr.status == 401) {
-					alert("인증에 실패 했습니다. 로그인 페이지로 이동합니다.");
+					alert('<spring:message code="message.msg02" />');
 					 location.href = "/";
 				} else if(xhr.status == 403) {
-					alert("세션이 만료가 되었습니다. 로그인 페이지로 이동합니다.");
+					alert('<spring:message code="message.msg03" />');
 		             location.href = "/";
 				} else {
 					alert("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""));
@@ -224,12 +224,12 @@
 			</colgroup>
 			<tbody>
 				<tr>
-					<th scope="row" class="ico_t1">Connect명</th>
+					<th scope="row" class="ico_t1"><spring:message code="data_transfer.connect_name" /></th>
 					<td>
 						<c:if test="${act == 'i'}">
 							<input type="text" class="txt" name="trf_trg_cnn_nm" id="trf_trg_cnn_nm" value="${trf_trg_cnn_nm}" style="width: 300px;"/>
 							<span class="btn btnC_01">
-								<button type="button" class= "btn_type_02" onclick="fn_nmCheck()" style="width: 60px; margin-right: -60px; margin-top: 0;">중복체크</button>
+								<button type="button" class= "btn_type_02" onclick="fn_nmCheck()" style="width: 60px; margin-right: -60px; margin-top: 0;"><spring:message code="common.overlap_check" /></button>
 							</span>
 						</c:if>
 						<c:if test="${act == 'u'}">
@@ -272,9 +272,9 @@
 			</tbody>
 		</table>
 		<div class="btn_type_02">
-			<c:if test="${act == 'i'}"><span class="btn" onclick="fn_insert();"><button>저장</button></span></c:if>
-			<c:if test="${act == 'u'}"><span class="btn" onclick="fn_update();"><button>저장</button></span></c:if>
-			<a href="#n" class="btn" onclick="window.close();"><span>취소</span></a>
+			<c:if test="${act == 'i'}"><span class="btn" onclick="fn_insert();"><button><spring:message code="button.create" /></button></span></c:if>
+			<c:if test="${act == 'u'}"><span class="btn" onclick="fn_update();"><button><spring:message code="button.modify" /></button></span></c:if>
+			<a href="#n" class="btn" onclick="window.close();"><span><spring:message code="common.cancel" /></span></a>
 		</div>
 	</div>
 </div>

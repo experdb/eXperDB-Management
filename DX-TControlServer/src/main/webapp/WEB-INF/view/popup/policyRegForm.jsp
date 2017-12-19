@@ -207,7 +207,7 @@
 			}
 			hourHtml += '<option value="'+hour+'">'+hour+'</option>';
 		}
-		hourHtml += '</select>시';	
+		hourHtml += '</select><spring:message code="schedule.our" />';	
 		$( "#a_hour" ).append(hourHtml);
 	}
 
@@ -228,7 +228,7 @@
 			}
 			minHtml += '<option value="'+min+'">'+min+'</option>';
 		}
-		minHtml += '</select>분';	
+		minHtml += '</select><spring:message code="schedule.minute" />';	
 		$( "#a_min" ).append(minHtml);
 	}
 	
@@ -248,7 +248,7 @@
 			}
 			hourHtml += '<option value="'+hour+'">'+hour+'</option>';
 		}
-		hourHtml += '</select> 시';	
+		hourHtml += '</select> <spring:message code="schedule.our" />';	
 		$( "#b_hour" ).append(hourHtml);
 	}
 
@@ -269,7 +269,7 @@
 			}
 			minHtml += '<option value="'+min+'">'+min+'</option>';
 		}
-		minHtml += '</select> 분';	
+		minHtml += '</select> <spring:message code="schedule.minute" />';	
 		$( "#b_min" ).append(minHtml);
 	}	
 	
@@ -308,17 +308,17 @@
 			<div class="contents">
 				<div class="cmm_tab">
 					<ul id="tab1">
-						<li class="atv"><a href="javascript:selectTab('info')">기본정보</a></li>
+						<li class="atv"><a href="javascript:selectTab('info')"><spring:message code="properties.basic_info" /></a></li>
 						<li><a href="javascript:selectTab('option')">옵션</a></li>
 						<li><a href="javascript:selectTab('accessControl')">접근제어정책</a></li>
 					</ul>
 					<ul id="tab2" style="display: none;">
-						<li><a href="javascript:selectTab('info')">기본정보</a></li>
+						<li><a href="javascript:selectTab('info')"><spring:message code="properties.basic_info" /></a></li>
 						<li class="atv"><a href="javascript:selectTab('option')">옵션</a></li>
 						<li><a href="javascript:selectTab('accessControl')">접근제어정책</a></li>
 					</ul>
 					<ul id="tab3" style="display: none;">
-						<li><a href="javascript:selectTab('info')">기본정보</a></li>
+						<li><a href="javascript:selectTab('info')"><spring:message code="properties.basic_info" /></a></li>
 						<li><a href="javascript:selectTab('option')">옵션</a></li>
 						<li class="atv"><a
 							href="javascript:selectTab('accessControl')">접근제어정책</a></li>
@@ -327,7 +327,7 @@
 
 				<div id="info">
 					<table class="write">
-						<caption>기본정보</caption>
+						<caption><spring:message code="properties.basic_info" /></caption>
 						<colgroup>
 							<col style="width: 110px;" />
 							<col />

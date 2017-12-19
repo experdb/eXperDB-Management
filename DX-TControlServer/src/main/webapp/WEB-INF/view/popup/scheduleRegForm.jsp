@@ -127,10 +127,10 @@ $(window.document).ready(function() {
 		     },
 			error : function(xhr, status, error) {
 				if(xhr.status == 401) {
-					alert("인증에 실패 했습니다. 로그인 페이지로 이동합니다.");
+					alert('<spring:message code="message.msg02" />');
 					 location.href = "/";
 				} else if(xhr.status == 403) {
-					alert("세션이 만료가 되었습니다. 로그인 페이지로 이동합니다.");
+					alert('<spring:message code="message.msg03" />');
 		             location.href = "/";
 				} else {
 					alert("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""));
@@ -138,7 +138,7 @@ $(window.document).ready(function() {
 			},
 			success : function(result) {		
 				$("#db_svr_nm").children().remove();
-				$("#db_svr_nm").append("<option value='%'>선택</option>");
+				$("#db_svr_nm").append("<option value='%'><spring:message code="common.choice" /></option>");
 				if(result.length > 0){
 					for(var i=0; i<result.length; i++){
 						$("#db_svr_nm").append("<option value='"+result[i].db_svr_nm+"'>"+result[i].db_svr_nm+"</option>");	
@@ -161,10 +161,10 @@ $(window.document).ready(function() {
 			     },
 				error : function(xhr, status, error) {
 					if(xhr.status == 401) {
-						alert("인증에 실패 했습니다. 로그인 페이지로 이동합니다.");
+						alert('<spring:message code="message.msg02" />');
 						 location.href = "/";
 					} else if(xhr.status == 403) {
-						alert("세션이 만료가 되었습니다. 로그인 페이지로 이동합니다.");
+						alert('<spring:message code="message.msg03" />');
 			             location.href = "/";
 					} else {
 						alert("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""));
@@ -172,7 +172,7 @@ $(window.document).ready(function() {
 				},
 				success : function(result) {		
 					$("#work").children().remove();
-					$("#work").append("<option value='%'>전체</option>");
+					$("#work").append("<option value='%'><spring:message code="common.total" /></option>");
 					if(result.length > 0){
 						for(var i=0; i<result.length; i++){
 							$("#work").append("<option value='"+result[i].bsn_dscd+"'>"+result[i].bsn_dscd_nm+"</option>");	
@@ -207,10 +207,10 @@ function fn_search(){
 	     },
 		error : function(xhr, status, error) {
 			if(xhr.status == 401) {
-				alert("인증에 실패 했습니다. 로그인 페이지로 이동합니다.");
+				alert('<spring:message code="message.msg02" />');
 				 location.href = "/";
 			} else if(xhr.status == 403) {
-				alert("세션이 만료가 되었습니다. 로그인 페이지로 이동합니다.");
+				alert('<spring:message code="message.msg03" />');
 	             location.href = "/";
 			} else {
 				alert("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""));
@@ -230,7 +230,7 @@ function fn_search(){
 function fn_workAdd(){
 	var datas = table.rows('.selected').data();
 	if (datas.length <= 0) {
-		alert("선택된 항목이 없습니다.");
+		alert('<spring:message code="message.msg35" />');
 		return false;
 	} 
 	
@@ -250,11 +250,11 @@ function fn_workAdd(){
 	<div class="pop_cts">
 		<p class="tit">Work등록</p>
 			<div class="btn_type_01">
-				<span class="btn"><button onClick="fn_search();">조회</button></span>
+				<span class="btn"><button onClick="fn_search();"><spring:message code="common.search" /></button></span>
 			</div>
 		<div class="pop_cmm">							
 			<table class="write bdtype1">
-				<caption>스케줄 등록</caption>				
+				<caption><spring:message code="menu.schedule_registration" /></caption>				
 				<colgroup>
 					<col style="width:30px;" />
 					<col style="width:50px;" />
@@ -265,18 +265,18 @@ function fn_workAdd(){
 				</colgroup>
 				<tbody>
 					<tr>
-						<th scope="row" class="ico_t1">DBMS명</th>
+						<th scope="row" class="ico_t1"><spring:message code="common.dbms_name" /></th>
 						<td>
 						<select class="select t8" name="db_svr_nm" id="db_svr_nm" style="width: 170px;">
-								<option value="%">선택</option>
+								<option value="%"><spring:message code="common.choice" /></option>
 						</select>	
-						<th scope="row" class="ico_t1">구분</th>
+						<th scope="row" class="ico_t1"><spring:message code="common.division" /></th>
 						<td>
 						<select class="select t8" name="work" id="work">
-								<option value="%">전체</option>
+								<option value="%"><spring:message code="common.total" /></option>
 						</select>						
 						</td>									
-						<th scope="row" class="ico_t1" style="magin-left:50px;" >Work명</th>
+						<th scope="row" class="ico_t1" style="magin-left:50px;" ><spring:message code="common.work_name" /></th>
 						<td><input type="text" class="txt t4" name="wrk_nm" id="wrk_nm" /></td>				
 					</tr>
 				</tbody>
@@ -290,14 +290,14 @@ function fn_workAdd(){
 				<thead>
 					<tr>
 						<th width="10"></th>
-						<th width="35">No</th>
-						<th width="100">Work명</th>
-						<th width="130">Work설명</th>
-						<th width="70">구분</th>
+						<th width="35"><spring:message code="common.no" /></th>
+						<th width="100"><spring:message code="common.work_name" /></th>
+						<th width="130"><spring:message code="common.work_description" /></th>
+						<th width="70"><spring:message code="common.division" /></th>
 						<th width="85">백업구분</th>
-						<th width="150">DBMS명</th>
-						<th width="100">등록자</th>
-						<th width="100">등록일시</th>						
+						<th width="150"><spring:message code="common.dbms_name" /></th>
+						<th width="100"><spring:message code="common.register" /></th>
+						<th width="100"><spring:message code="common.regist_datetime" /></th>						
 						<th width="0"></th>
 						<th width="0"></th>						
 						<th width="0"></th>
@@ -325,8 +325,8 @@ function fn_workAdd(){
 		</div>
 		
 		<div class="btn_type_02">
-			<span class="btn btnC_01"><button onClick="fn_workAdd();">추가</button></span>
-			<a href="#n" class="btn" onclick="window.close();"><span>취소</span></a>
+			<span class="btn btnC_01"><button onClick="fn_workAdd();"><spring:message code="common.add" /></button></span>
+			<a href="#n" class="btn" onclick="window.close();"><span><spring:message code="common.cancel" /></span></a>
 		</div>
 	</div>
 </div>

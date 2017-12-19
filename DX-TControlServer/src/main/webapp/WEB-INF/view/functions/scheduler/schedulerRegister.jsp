@@ -527,7 +527,7 @@ function fn_check() {
 											</td>
 										</tr>
 										<tr>
-											<th scope="row" class="t9 line"><spring:message code="common.desc" /></th>
+											<th scope="row" class="t9 line">스케줄설명</th>
 											<td><input type="text" class="txt t2" id="scd_exp" name="scd_exp" style="width:500px;"/></td>
 										</tr>
 									</tbody>

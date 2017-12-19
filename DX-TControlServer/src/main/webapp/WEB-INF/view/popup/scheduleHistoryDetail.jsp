@@ -102,10 +102,10 @@ $(window.document).ready(function() {
 	     },
 		error : function(xhr, status, error) {
 			if(xhr.status == 401) {
-				alert("인증에 실패 했습니다. 로그인 페이지로 이동합니다.");
+				alert('<spring:message code="message.msg02" />');
 				 location.href = "/";
 			} else if(xhr.status == 403) {
-				alert("세션이 만료가 되었습니다. 로그인 페이지로 이동합니다.");
+				alert('<spring:message code="message.msg03" />');
 	             location.href = "/";
 			} else {
 				alert("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""));
@@ -139,14 +139,14 @@ $(window.document).ready(function() {
 		<div class="pop_cts">
 			<p class="tit">스케줄수행이력 상세보기</p>
 			<div class="pop_cmm3">
-				<p class="pop_s_tit">스케줄정보</p>
+				<p class="pop_s_tit"><spring:message code="menu.schedule_information" /></p>
 					<table class="list" style="border:1px solid #b8c3c6;">
 						<thead>
 							<tr>
-								<th scope="col">스케줄명</th>
+								<th scope="col"><spring:message code="schedule.schedule_name" /></th>
 								<th scope="col">스케줄설명</th>
-								<th scope="col">작업시작일시</th>
-								<th scope="col">작업종료일시</th>
+								<th scope="col"><spring:message code="schedule.work_start_datetime" /></th>
+								<th scope="col"><spring:message code="schedule.work_end_datetime" /></th>
 								<th scope="col">작업시간</th>
 							</tr>
 						</thead>
@@ -169,12 +169,12 @@ $(window.document).ready(function() {
 						<thead>
 							<tr>
 								<th width="40">No</th>
-								<th width="50">work명</th>
-								<th width="75">work설명</th>
-								<th width="100">작업시작일시</th>
-								<th width="100">작업종료일시</th>
+								<th width="50"><spring:message code="common.work_name" /></th>
+								<th width="75"><spring:message code="common.work_description" /></th>
+								<th width="100"><spring:message code="schedule.work_start_datetime" /></th>
+								<th width="100"><spring:message code="schedule.work_end_datetime" /></th>
 								<th width="100">작업시간</th>
-								<th width="50">결과</th>
+								<th width="50"><spring:message code="schedule.result" /></th>
 								<th width="0"></th>
 							</tr>
 						</thead>

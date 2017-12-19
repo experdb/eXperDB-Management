@@ -40,7 +40,7 @@
 	function fn_pwValidation(str){
 		 var reg_pwd = /^.*(?=.{6,20})(?=.*[0-9])(?=.*[a-zA-Z]).*$/;
 		 if(!reg_pwd.test(str)){
-		 	alert("영문,숫자를 혼합하여 6~20자 이내를 입력해 주십시오.");
+		 	alert('<spring:message code="message.msg109" />');
 		 	return false;
 		 }
 		 	return true;
@@ -55,12 +55,12 @@
 		var err = 0; 
 		
 		if (id.value == "" || id.value == "undefind" || id.value == null) {
-			alert("사용자 아이디를 입력해 주십시오.");
+			alert('<spring:message code="message.msg121" />');
 			id.focus();
 			return false;
 		}
 		if (nm.value == "" || nm.value == "undefind" || nm.value == null) {
-			alert("사용자명을 입력해 주십시오.");
+			alert('<spring:message code="message.msg58" />');
 			nm.focus();
 			return false;
 		}
@@ -126,10 +126,10 @@
 		     },
 			error : function(xhr, status, error) {
 				if(xhr.status == 401) {
-					alert("인증에 실패 했습니다. 로그인 페이지로 이동합니다.");
+					alert('<spring:message code="message.msg02" />');
 					 location.href = "/";
 				} else if(xhr.status == 403) {
-					alert("세션이 만료가 되었습니다. 로그인 페이지로 이동합니다.");
+					alert('<spring:message code="message.msg03" />');
 		             location.href = "/";
 				} else {
 					alert("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""));
@@ -144,7 +144,7 @@
 		var usr_id=$("#usr_id").val();
 		if(usr_id=='admin'){
 			if(session_usr_id!=usr_id){
-				alert("관리자는 수정할 수 없습니다.");
+				alert('<spring:message code="message.msg120" />');
 				return false;
 			}
 		}
@@ -169,7 +169,7 @@
 				use_yn : $("#use_yn").val(),
 			},
 			success : function(result) {
-				alert("수정하였습니다.");
+				alert('<spring:message code="message.msg84" />');
 				window.close();
 				opener.fn_select();
 			},
@@ -178,10 +178,10 @@
 		     },
 			error : function(xhr, status, error) {
 				if(xhr.status == 401) {
-					alert("인증에 실패 했습니다. 로그인 페이지로 이동합니다.");
+					alert('<spring:message code="message.msg02" />');
 					 location.href = "/";
 				} else if(xhr.status == 403) {
-					alert("세션이 만료가 되었습니다. 로그인 페이지로 이동합니다.");
+					alert('<spring:message code="message.msg03" />');
 		             location.href = "/";
 				} else {
 					alert("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""));
@@ -194,7 +194,7 @@
 	function fn_idCheck() {
 		var usr_id = document.getElementById("usr_id");
 		if (usr_id.value == "") {
-			alert("사용자 아이디를 넣어주세요");
+			alert('<spring:message code="message.msg121" />');
 			document.getElementById('usr_id').focus();
 			idCheck = 0;
 			return;
@@ -207,11 +207,11 @@
 			},
 			success : function(result) {
 				if (result == "true") {
-					alert("사용 가능한 아이디입니다.");
+					alert('<spring:message code="message.msg122" />');
 					document.getElementById("usr_nm").focus();
 					idCheck = 1;
 				} else {
-					alert("중복된 사용자아이디가 존재합니다.");
+					alert('<spring:message code="message.msg123" />');
 					document.getElementById("usr_id").focus();
 					idCheck = 0;
 				}
@@ -221,10 +221,10 @@
 		     },
 			error : function(xhr, status, error) {
 				if(xhr.status == 401) {
-					alert("인증에 실패 했습니다. 로그인 페이지로 이동합니다.");
+					alert('<spring:message code="message.msg02" />');
 					 location.href = "/";
 				} else if(xhr.status == 403) {
-					alert("세션이 만료가 되었습니다. 로그인 페이지로 이동합니다.");
+					alert('<spring:message code="message.msg03" />');
 		             location.href = "/";
 				} else {
 					alert("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""));
@@ -269,23 +269,23 @@
 				</colgroup>
 				<tbody>
 					<tr>
-						<th scope="row" class="ico_t1">사용자아이디(*)</th>
+						<th scope="row" class="ico_t1">spring:message code="user_management.user_id" />(*)</th>
 						<td>
 							<c:if test="${act == 'i'}">
 								<input type="text" class="txt" name="usr_id" id="usr_id" value="${get_usr_id}" maxlength="15" style="width: 230px;" />
-								<span class="btn btnC_01"><button type="button" class="btn_type_02" onclick="fn_idCheck()" style="width: 60px; margin-right: -60px; margin-top: 0;">중복체크</button></span>
+								<span class="btn btnC_01"><button type="button" class="btn_type_02" onclick="fn_idCheck()" style="width: 60px; margin-right: -60px; margin-top: 0;"><spring:message code="common.overlap_check" /></button></span>
 							</c:if> 
 							<c:if test="${act == 'u'}">
 								<input type="text" class="txt" name="usr_id" id="usr_id" value="${get_usr_id}" readonly="readonly" />
 							</c:if>
 						</td>
-						<th scope="row" class="ico_t1">사용자명(*)</th>
+						<th scope="row" class="ico_t1"><spring:message code="user_management.user_name" />(*)</th>
 						<td><input type="text" class="txt" name="usr_nm" id="usr_nm" value="${get_usr_nm}" maxlength="9" /></td>
 					</tr>
 					<tr>
-						<th scope="row" class="ico_t1">패스워드(*)</th>
+						<th scope="row" class="ico_t1"><spring:message code="user_management.password" />(*)</th>
 						<td><input type="password" class="txt" name="pwd" id="pwd" value="${pwd}" maxlength="50" /></td>
-						<th scope="row" class="ico_t1">패스워드확인(*)</th>
+						<th scope="row" class="ico_t1"><spring:message code="user_management.confirm_password" />(*)</th>
 						<td><input type="password" class="txt" name="pwdCheck" id="pwdCheck" value="${pwd}" maxlength="50" /></td>
 					</tr>
 				</tbody>
@@ -301,30 +301,30 @@
 					</colgroup>
 					<tbody>
 						<tr>
-							<th scope="row" class="ico_t1">소속</th>
+							<th scope="row" class="ico_t1"><spring:message code="user_management.company" /></th>
 							<td><input type="text" class="txt" name="bln_nm" id="bln_nm" value="${bln_nm}" maxlength="25" /></td>
-							<th scope="row" class="ico_t1">부서</th>
+							<th scope="row" class="ico_t1"><spring:message code="user_management.department" /></th>
 							<td><input type="text" class="txt" name="dept_nm" id="dept_nm" value="${dept_nm}" maxlength="25" /></td>
 						</tr>
 						<tr>
-							<th scope="row" class="ico_t1">직급</th>
+							<th scope="row" class="ico_t1"><spring:message code="user_management.position" /></th>
 							<td><input type="text" class="txt" name="pst_nm" id="pst_nm" value="${pst_nm}" maxlength="25" /></td>
-							<th scope="row" class="ico_t1">담당업무</th>
+							<th scope="row" class="ico_t1"><spring:message code="user_management.Responsibilities" /></th>
 							<td><input type="text" class="txt" name="rsp_bsn_nm" id="rsp_bsn_nm" value="${rsp_bsn_nm}" maxlength="25" /></td>
 						</tr>
 						<tr>
-							<th scope="row" class="ico_t1">휴대폰번호</th>
+							<th scope="row" class="ico_t1"><spring:message code="user_management.mobile_phone_number" /></th>
 							<td><input type="text" class="txt" name="cpn" id="cpn" value="${cpn}" maxlength="20"  onKeyPress="NumObj(this);"/></td>
-							<th scope="row" class="ico_t1">사용여부</th>
+							<th scope="row" class="ico_t1"><spring:message code="dbms_information.use_yn" /></th>
 							<td>
 								<select class="select" id="use_yn" name="use_yn">
-									<option value="Y" ${use_yn == 'Y' ? 'selected="selected"' : ''}>사용</option>
-									<option value="N" ${use_yn == 'N' ? 'selected="selected"' : ''}>미사용</option>
+									<option value="Y" ${use_yn == 'Y' ? 'selected="selected"' : ''}><spring:message code="dbms_information.use" /></option>
+									<option value="N" ${use_yn == 'N' ? 'selected="selected"' : ''}><spring:message code="dbms_information.unuse" /></option>
 								</select>
 							</td>
 						</tr>
 						<tr>
-							<th scope="row" class="ico_t1">사용자만료일</th>
+							<th scope="row" class="ico_t1"><spring:message code="user_management.expiration_date" /></th>
 							<td>
 								<div class="calendar_area big">
 									<a href="#n" class="calendar_btn">달력열기</a> <input type="text" class="calendar" id="datepicker3" title="사용자 만료일 날짜 검색" value="${usr_expr_dt}" readonly />
@@ -336,11 +336,11 @@
 			</div>
 			<div class="btn_type_02">
 				<span class="btn btnC_01"> <c:if test="${act == 'i'}">
-						<button type="button" onclick="fn_insert()">등록</button>
+						<button type="button" onclick="fn_insert()"><spring:message code="button.create" /></button>
 					</c:if> <c:if test="${act == 'u'}">
-						<button type="button" onclick="fn_update()">수정</button>
+						<button type="button" onclick="fn_update()"><spring:message code="button.modify" /></button>
 					</c:if>
-				</span> <a href="#n" class="btn" onclick="window.close();"><span>취소</span></a>			
+				</span> <a href="#n" class="btn" onclick="window.close();"><span><spring:message code="common.cancel" /></span></a>			
 			</div>
 		</div>
 	</div>

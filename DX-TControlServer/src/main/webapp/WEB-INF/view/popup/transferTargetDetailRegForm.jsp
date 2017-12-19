@@ -64,7 +64,7 @@
 						</colgroup>
 						<thead>
 							<tr>
-								<th scope="col">항목</th>
+								<th scope="col"><spring:message code="properties.item" /></th>
 								<th scope="col">값</th>
 							</tr>
 						</thead>
