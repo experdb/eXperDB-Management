@@ -33,20 +33,20 @@
 	function fn_connectorValidation() {
 		var cnr_nm = document.getElementById("cnr_nm");
 		if (cnr_nm.value == "") {
-			alert("커넥터 명을 입력하여 주십시오.");
+			alert('<spring:message code="message.msg81" /> ');
 			cnr_nm.focus();
 			return false;
 		}
 		var cnr_ipadr = document.getElementById("cnr_ipadr");
 		if (cnr_ipadr.value == "") {
-			alert("아이피를 입력하여 주십시오.");
+			alert('<spring:message code="message.msg82" /> ');
 			cnr_ipadr.focus();
 			return false;
 		}
 		 
 		var cnr_portno = document.getElementById("cnr_portno");
 		if (cnr_portno.value == "") {
-			alert("포트를 입력하여 주십시오.");
+			alert('<spring:message code="message.msg83" />');
 			cnr_portno.focus();
 			return false;
 		}
@@ -68,7 +68,7 @@
 					cnr_cnn_tp_cd : $("#cnr_cnn_tp_cd").val()
 				},
 				success : function(result) {
-					alert("저장하였습니다.");
+					alert('<spring:message code="message.msg57" />');
 					opener.location.reload();
 					window.close();
 				},
@@ -77,10 +77,10 @@
 			     },
 				error : function(xhr, status, error) {
 					if(xhr.status == 401) {
-						alert("인증에 실패 했습니다. 로그인 페이지로 이동합니다.");
+						alert('<spring:message code="message.msg02" />');
 						 location.href = "/";
 					} else if(xhr.status == 403) {
-						alert("세션이 만료가 되었습니다. 로그인 페이지로 이동합니다.");
+						alert('<spring:message code="message.msg03" />');
 			             location.href = "/";
 					} else {
 						alert("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""));
@@ -104,7 +104,7 @@
 					cnr_cnn_tp_cd : $("#cnr_cnn_tp_cd").val()
 				},
 				success : function(result) {
-					alert("수정하였습니다.");
+					alert('<spring:message code="message.msg84" />');
 					opener.location.reload();
 					window.close();
 				},
@@ -113,10 +113,10 @@
 			     },
 				error : function(xhr, status, error) {
 					if(xhr.status == 401) {
-						alert("인증에 실패 했습니다. 로그인 페이지로 이동합니다.");
+						alert('<spring:message code="message.msg02" />');
 						 location.href = "/";
 					} else if(xhr.status == 403) {
-						alert("세션이 만료가 되었습니다. 로그인 페이지로 이동합니다.");
+						alert('<spring:message code="message.msg03" />');
 			             location.href = "/";
 					} else {
 						alert("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""));
@@ -156,17 +156,17 @@
 						<tr>
 							<th scope="row" class="ico_t1">커넥터 명</th>
 							<td><input type="text" class="txt" name="cnr_nm" id="cnr_nm" value="${cnr_nm}" maxlength="20"/></td>
-							<th scope="row" class="ico_t1">아이피(*)</th>
+							<th scope="row" class="ico_t1"><spring:message code="data_transfer.ip" />(*)</th>
 							<td><input type="text" class="txt" name="cnr_ipadr" id="cnr_ipadr" value="${cnr_ipadr}"/></td>
 						</tr>
 						<tr>
-							<th scope="row" class="ico_t1">유형(*)</th>
+							<th scope="row" class="ico_t1"><spring:message code="data_transfer.type" />(*)</th>
 							<td>
 								<select class="select" name="cnr_cnn_tp_cd" id="cnr_cnn_tp_cd">
 									<option value="HDFS" ${cnr_cnn_tp_cd == 'HDFS' ? 'selected="selected"' : ''}>HDFS</option>
 								</select>
 							</td>
-							<th scope="row" class="ico_t1">포트(*)</th>
+							<th scope="row" class="ico_t1"><spring:message code="data_transfer.port" />(*)</th>
 							<td><input type="text" class="txt" name="cnr_portno" id="cnr_portno" value="${cnr_portno}" onKeyPress="NumObj(this);" /></td>
 						</tr>
 					</tbody>
@@ -176,9 +176,9 @@
 						<span class="btn"><button type="button" onclick="fn_insert()">저장</button></span>
 					</c:if>
 					<c:if test="${act == 'u'}">
-						<span class="btn"><button type="button" onclick="fn_update()">수정</button></span>
+						<span class="btn"><button type="button" onclick="fn_update()"><spring:message code="common.modify" /></button></span>
 					</c:if>
-					<a href="#n" class="btn" onclick="window.close();"><span>취소</span></a>
+					<a href="#n" class="btn" onclick="window.close();"><span><spring:message code="common.cancel" /></span></a>
 				</div>
 		</div>
 	</div>

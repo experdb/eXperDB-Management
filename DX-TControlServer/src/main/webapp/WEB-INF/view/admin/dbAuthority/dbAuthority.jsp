@@ -1,4 +1,5 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<%@ taglib prefix="spring" uri="http://www.springframework.org/tags"%>
 <%
 	/**
 	* @Class Name : dbAuthority.jsp
@@ -76,10 +77,10 @@
 		     },
 			error : function(xhr, status, error) {
 				if(xhr.status == 401) {
-					alert("인증에 실패 했습니다. 로그인 페이지로 이동합니다.");
+					alert('<spring:message code="message.msg02" />');
 					 location.href = "/";
 				} else if(xhr.status == 403) {
-					alert("세션이 만료가 되었습니다. 로그인 페이지로 이동합니다.");
+					alert('<spring:message code="message.msg03" />');
 		             location.href = "/";
 				} else {
 					alert("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""));
@@ -100,10 +101,10 @@
 		     },
 			error : function(xhr, status, error) {
 				if(xhr.status == 401) {
-					alert("인증에 실패 했습니다. 로그인 페이지로 이동합니다.");
+					alert('<spring:message code="message.msg02" />');
 					 location.href = "/";
 				} else if(xhr.status == 403) {
-					alert("세션이 만료가 되었습니다. 로그인 페이지로 이동합니다.");
+					alert('<spring:message code="message.msg03" />');
 		             location.href = "/";
 				} else {
 					alert("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""));
@@ -126,10 +127,10 @@
 			     },
 				error : function(xhr, status, error) {
 					if(xhr.status == 401) {
-						alert("인증에 실패 했습니다. 로그인 페이지로 이동합니다.");
+						alert('<spring:message code="message.msg02" />');
 						 location.href = "/";
 					} else if(xhr.status == 403) {
-						alert("세션이 만료가 되었습니다. 로그인 페이지로 이동합니다.");
+						alert('<spring:message code="message.msg03" />');
 			             location.href = "/";
 					} else {
 						alert("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""));
@@ -153,7 +154,7 @@
 			html2+='</colgroup>';
 			html2+='<thead>';
 			html2+=	'<tr>';
-			html2+=		'<th scope="col">DB 권한</th>';
+			html2+=		'<th scope="col"><spring:message code="auth_management.db_auth" /> </th>';
 			html2+=		'<th scope="col">권한</th>';
 			html2+=	'</tr>';
 			html2+='</thead>';
@@ -216,10 +217,10 @@
 				     },
 					error : function(xhr, status, error) {
 						if(xhr.status == 401) {
-							alert("인증에 실패 했습니다. 로그인 페이지로 이동합니다.");
+							alert('<spring:message code="message.msg02" />');
 							 location.href = "/";
 						} else if(xhr.status == 403) {
-							alert("세션이 만료가 되었습니다. 로그인 페이지로 이동합니다.");
+							alert('<spring:message code="message.msg03" />');
 				             location.href = "/";
 						} else {
 							alert("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""));
@@ -285,10 +286,10 @@
 				     },
 					error : function(xhr, status, error) {
 						if(xhr.status == 401) {
-							alert("인증에 실패 했습니다. 로그인 페이지로 이동합니다.");
+							alert('<spring:message code="message.msg02" />');
 							 location.href = "/";
 						} else if(xhr.status == 403) {
-							alert("세션이 만료가 되었습니다. 로그인 페이지로 이동합니다.");
+							alert('<spring:message code="message.msg03" />');
 				             location.href = "/";
 						} else {
 							alert("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""));
@@ -318,10 +319,10 @@
 		     },
 			error : function(xhr, status, error) {
 				if(xhr.status == 401) {
-					alert("인증에 실패 했습니다. 로그인 페이지로 이동합니다.");
+					alert('<spring:message code="message.msg02" />');
 					 location.href = "/";
 				} else if(xhr.status == 403) {
-					alert("세션이 만료가 되었습니다. 로그인 페이지로 이동합니다.");
+					alert('<spring:message code="message.msg03" />');
 		             location.href = "/";
 				} else {
 					alert("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""));
@@ -342,17 +343,17 @@
 			<div id="contents">
 				<div class="contents_wrap">
 					<div class="contents_tit">
-						<h4>DB권한관리 <a href="#n"><img src="../images/ico_tit.png" class="btn_info"/></a></h4>
+						<h4><spring:message code="menu.database_auth_management" /><a href="#n"><img src="../images/ico_tit.png" class="btn_info"/></a></h4>
 						<div class="infobox"> 
 							<ul>
-								<li>사용자에게 각 DBMS에 생성된 데이터베이스에 대하여 접근할 수 있는 권한을 부여합니다.</li>
+								<li><spring:message code="help.database_auth_management" /> </li>
 							</ul>
 						</div>
 						<div class="location">
 							<ul>
 								<li>Admin</li>
-								<li>권한관리</li>
-								<li class="on">DB권한관리</li>
+								<li><spring:message code="menu.auth_management" /></li>
+								<li class="on"><spring:message code="menu.database_auth_management" /></li>
 							</ul>
 						</div>
 					</div>
@@ -373,8 +374,8 @@
 												<thead>
 													<tr>
 														<th width="30">No</th>
-														<th width="100">아이디</th>
-														<th width="100">사용자명</th>
+														<th width="100"><spring:message code="user_management.id" /></th>
+														<th width="100"><spring:message code="user_management.user_name" /></th>
 													</tr>
 												</thead>
 											</table>
@@ -388,7 +389,7 @@
 										<span class="btn"><button onClick="fn_db_save();" id="db_button">저장</button></span>
 									</div>
 									<div class="inner">
-										<p class="tit">DB 권한</p>
+										<p class="tit"><spring:message code="auth_management.db_auth" /></p>
 										<div class="overflow_area">
 												<div id="dbAutList"></div>
 										</div>

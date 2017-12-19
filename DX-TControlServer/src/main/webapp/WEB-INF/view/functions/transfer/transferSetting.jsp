@@ -1,4 +1,5 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<%@ taglib prefix="spring" uri="http://www.springframework.org/tags"%>
 <%
 	/**
 	* @Class Name : transferSetting.jsp
@@ -28,74 +29,74 @@
 	function fn_transferValidation(){
  		var kafka_broker_ip = document.getElementById("kafka_broker_ip");
 		if (kafka_broker_ip.value == "") {
-			alert("kafka Broker 아이피를 입력하여 주십시오.");
+			alert('<spring:message code="message.msg47" />');
 			kafka_broker_ip.focus();
 			return false;
 		}
 
  		var kafka_broker_port = document.getElementById("kafka_broker_port");
 		if (kafka_broker_port.value == "") {
-			alert("kafka Broker 포트를 입력하여 주십시오.");
+			alert('<spring:message code="message.msg48" />');
 			kafka_broker_port.focus();
 			return false;
 		}
  		if(!valid_numeric(kafka_broker_port.value))
 	 	{
- 			alert("포트는 숫자만 입력가능합니다.");
+ 			alert('<spring:message code="message.msg49" />');
  			kafka_broker_port.focus();
 		 	return false;
 		}		
  		var schema_registry_ip = document.getElementById("schema_registry_ip");
 		if (schema_registry_ip.value == "") {
-			alert("schema registry 아이피를 입력하여 주십시오.");
+			alert('<spring:message code="message.msg50" />');
 			schema_registry_ip.focus();
 			return false;
 		}	
  		var schema_registry_port = document.getElementById("schema_registry_port");
 		if (schema_registry_port.value == "") {
-			alert("schema registry 포트를 입력하여 주십시오.");
+			alert('<spring:message code="message.msg51" />');
 			schema_registry_port.focus();
 			return false;
 		}
  		if(!valid_numeric(schema_registry_port.value))
 	 	{
- 			alert("포트는 숫자만 입력가능합니다.");
+ 			alert('<spring:message code="message.msg49" />');
  			srportno.focus();
 		 	return false;
 		}
  		var zookeeper_ip = document.getElementById("zookeeper_ip");
 		if (zookeeper_ip.value == "") {
-			alert("zookeeper 아이피를 입력하여 주십시오.");
+			alert('<spring:message code="message.msg52" />');
 			zookeeper_ip.focus();
 			return false;
 		}
  		var zookeeper_port = document.getElementById("zookeeper_port");
 		if (zookeeper_port.value == "") {
-			alert("zookeeper 포트를 입력하여 주십시오.");
+			alert('<spring:message code="message.msg53" />');
 			zookeeper_port.focus();
 			return false;
 		}
  		if(!valid_numeric(zookeeper_port.value))
 	 	{
- 			alert("포트는 숫자만 입력가능합니다.");
+ 			alert('<spring:message code="message.msg49" />');
  			zookeeper_port.focus();
 		 	return false;
 		}
  		var teng_ip = document.getElementById("teng_ip");
 		if (teng_ip.value == "") {
-			alert("experdb엔진 아이피를 입력하여 주십시오.");
+			alert('<spring:message code="message.msg54" />');
 			teng_ip.focus();
 			return false;
 		}
  		var teng_port = document.getElementById("teng_port");
 		if (teng_port.value == "") {
-			alert("experdb엔진 포트를 입력하여 주십시오.");
+			alert('<spring:message code="message.msg55" />');
 			teng_port.focus();
 			return false;
 		}
  		if(!valid_numeric(teng_port.value))
 	 	{
- 			alert("포트는 숫자만 입력가능합니다.");
+ 			alert('<spring:message code="message.msg49" />');
  			teng_port.focus();
 		 	return false;
 		}
@@ -129,7 +130,7 @@
 				
 			},
 			success : function(result) {
-				alert("저장하였습니다.");
+				alert('<spring:message code="message.msg57" />');
 				window.location.reload();
 			},
 			beforeSend: function(xhr) {
@@ -245,19 +246,19 @@
 	<div class="contents_wrap">
 		<div class="contents_tit">
 			<h4>
-				전송서버설정<a href="#n"><img src="../images/ico_tit.png" class="btn_info" /></a>
+				<spring:message code="menu.transfer_server_settings" /><a href="#n"><img src="../images/ico_tit.png" class="btn_info" /></a>
 			</h4>
 			<div class="infobox"> 
 				<ul>
-					<li>eXperDB에서 하둡 분산 파일 시스템으로 데이터 전송을 하기 위한 도구를 설정합니다.</li>
-					<li>데이터 전송을 위해 구성할 각 요소별로 설정된 정보를 입력합니다.</li>	
+					<li><spring:message code="help.transfer_server_settings_01" /> </li>
+					<li><spring:message code="help.transfer_server_settings_02" /> </li>	
 				</ul>
 			</div>		
 			<div class="location">
 				<ul>
 					<li>Function</li>
-					<li>데이터전송정보</li>
-					<li class="on">전송서버설정</li>
+					<li><spring:message code="menu.data_transfer_information" /></li>
+					<li class="on"><spring:message code="menu.transfer_server_settings" /></li>
 				</ul>
 			</div>
 		</div>
@@ -273,9 +274,9 @@
 					</colgroup>
 					<thead>
 						<tr>
-							<th scope="col">서버명</th>
-							<th scope="col">아이피</th>
-							<th scope="col">포트</th>
+							<th scope="col"><spring:message code="data_transfer.server_name" /></th>
+							<th scope="col"><spring:message code="data_transfer.ip" /></th>
+							<th scope="col"><spring:message code="data_transfer.port" /></th>
 						</tr>
 					</thead>
 					<tbody>

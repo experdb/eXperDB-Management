@@ -35,25 +35,25 @@
 			<div id="contents">
 				<div class="contents_wrap">
 					<div class="contents_tit">
-						<h4>에이전트 모니터링<a href="#n"><img src="../images/ico_tit.png" class="btn_info"/></a></h4>
+						<h4><spring:message code="menu.agent_monitoring" /><a href="#n"><img src="../images/ico_tit.png" class="btn_info"/></a></h4>
 						<div class="infobox"> 
 							<ul>
-								<li>관리 대상 데이터베이스 서버에 설치된 통합 관리 시스템의 Agent 상태를 모니터링합니다.</li>
-								<li>Agent가 설치된 서버와 구동 상태, 구동 일시 등의 정보를 표시됩니다.</li>
+								<li><spring:message code="help.agent_monitoring_01" /> </li>
+								<li><spring:message code="help.agent_monitoring_02" /> </li>
 							</ul>
 						</div>
 						<div class="location">
 							<ul>
 								<li>Admin</li>
-								<li>모니터링</li>
-								<li class="on">에이전트 모니터링</li>
+								<li><spring:message code="menu.monitoring" /></li>
+								<li class="on"><spring:message code="menu.agent_monitoring" /></li>
 							</ul>
 						</div>
 					</div>
 					<div class="contents">
 						<div class="cmm_grp">
 							<div class="btn_type_01">
-								<span class="btn"><button>조회</button></span>
+								<span class="btn"><button><spring:message code="common.search" /></button></span>
 							</div>
 							<div class="sch_form">
 								<table class="write">
@@ -67,9 +67,9 @@
 									</colgroup>
 									<tbody>
 										<tr>
-											<th scope="row" class="t2">DBMS명</th>
+											<th scope="row" class="t2"><spring:message code="common.dbms_name" /></th>
 											<td><input type="text" id="DB_SVR_NM" name="DB_SVR_NM" class="txt t2" value="${db_svr_nm}" /></td>
-											<th scope="row" class="t2">DBMS 아이피</th>
+											<th scope="row" class="t2"><spring:message code="dbms_information.dbms_ip" /> </th>
 											<td><input type="text" id="IPADR" name="IPADR" class="txt t2" value="${ipadr}" /></td>
 										</tr>
 										
@@ -92,13 +92,13 @@
 									<thead>
 										<tr>
 											<th scope="col">NO</th>
-											<th scope="col">DBMS명</th>
-											<th scope="col">DBMS 아이피</th>
-											<th scope="col">서버유형</th>
-											<th scope="col">구동일시</th>
-											<th scope="col">등록여부</th>
-											<th scope="col">Agent Version</th>
-											<th scope="col">Agent 상태</th>
+											<th scope="col"><spring:message code="common.dbms_name" /></th>
+											<th scope="col"><spring:message code="dbms_information.dbms_ip" /> </th>
+											<th scope="col"><spring:message code="properties.server_type" /> </th>
+											<th scope="col"><spring:message code="agent_monitoring.run_date" /> </th>
+											<th scope="col"><spring:message code="agent_monitoring.regist_yn" /></th>
+											<th scope="col"><spring:message code="agent_monitoring.agent_version" /></th>
+											<th scope="col"><spring:message code="agent_monitoring.agent_status" /></th>
 										</tr>
 									</thead>
 									<tbody>

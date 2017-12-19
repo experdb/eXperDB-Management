@@ -1,4 +1,5 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<%@ taglib prefix="spring" uri="http://www.springframework.org/tags"%>
 <%
 	/**
 	* @Class Name : connectorRegister.jsp
@@ -82,10 +83,10 @@
 		     },
 			error : function(xhr, status, error) {
 				if(xhr.status == 401) {
-					alert("인증에 실패 했습니다. 로그인 페이지로 이동합니다.");
+					alert('<spring:message code="message.msg02" />');
 					 location.href = "/";
 				} else if(xhr.status == 403) {
-					alert("세션이 만료가 되었습니다. 로그인 페이지로 이동합니다.");
+					alert('<spring:message code="message.msg03" />');
 		             location.href = "/";
 				} else {
 					alert("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""));
@@ -136,11 +137,11 @@
 		     },
 			error : function(xhr, status, error) {
 				if(xhr.status == 401) {
-					alert("인증에 실패 했습니다. 로그인 페이지로 이동합니다.");
-					 location.href = "/";
+					alert('<spring:message code="message.msg02" />');
+					location.href = "/";
 				} else if(xhr.status == 403) {
-					alert("세션이 만료가 되었습니다. 로그인 페이지로 이동합니다.");
-		             location.href = "/";
+					alert('<spring:message code="message.msg03" />');
+		            location.href = "/";
 				} else {
 					alert("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""));
 				}
@@ -180,7 +181,7 @@
 			window.open(popUrl,"",popOption);	
 			
 		} else {
-			alert("하나의 항목을 선택해주세요.");
+			alert('<spring:message code="message.msg09" />');
 			return false;
 		}
 	}
@@ -189,7 +190,7 @@
 	function fn_delete() {
 		var datas = table.rows('.selected').data();
 		if (datas.length <= 0) {
-			alert("하나의 항목을 선택해주세요.");
+			alert('<spring:message code="message.msg09" />');
 			return false;
 		}else{
 			if (!confirm("삭제하시겠습니까?"))
@@ -211,10 +212,10 @@
 			     },
 				error : function(xhr, status, error) {
 					if(xhr.status == 401) {
-						alert("인증에 실패 했습니다. 로그인 페이지로 이동합니다.");
+						alert('<spring:message code="message.msg02" />');
 						 location.href = "/";
 					} else if(xhr.status == 403) {
-						alert("세션이 만료가 되었습니다. 로그인 페이지로 이동합니다.");
+						alert('<spring:message code="message.msg03" />');
 			             location.href = "/";
 					} else {
 						alert("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""));
@@ -222,7 +223,7 @@
 				},
 				success : function(result) {
 					if (result) {
-						alert("삭제되었습니다.");
+						alert('<spring:message code="message.msg37" />');
 						location.reload();
 					} else {
 						alert("커넥터 삭제를 실패하였습니다.");
@@ -236,18 +237,18 @@
 <div id="contents">
 	<div class="contents_wrap">
 		<div class="contents_tit">
-			<h4>커넥터 관리 <a href="#n"><img src="../images/ico_tit.png" class="btn_info"/></a></h4>
+			<h4><spring:message code="menu.connector_management" /><a href="#n"><img src="../images/ico_tit.png" class="btn_info"/></a></h4>
 			<div class="infobox"> 
 				<ul>
-					<li>eXperDB에서 하둡 분산 파일 시스템으로 데이터 전송을 하기 위한 커넥터를 설정합니다.</li>
-					<li>신규로 등록하거나 이미 등록된 커넥터를 조회, 수정, 삭제 합니다.</li>	
+					<li><spring:message code="help.connector_management_01" /></li>
+					<li><spring:message code="help.connector_management_02" /></li>	
 				</ul>
 			</div>
 			<div class="location">
 				<ul>
 					<li>Function</li>
-					<li>데이터전송정보</li>
-					<li class="on">커넥터 관리</li>
+					<li><spring:message code="menu.data_transfer_information" /></li>
+					<li class="on"><spring:message code="menu.connector_management" /></li>
 				</ul>
 			</div>
 		</div>
@@ -255,10 +256,10 @@
 		<div class="contents">
 			<div class="cmm_grp">
 				<div class="btn_type_01">
-					<span class="btn"><button onclick="fn_select()" id="btnSelect">조회</button></span>
-					<span class="btn"><button onclick="fn_insert()" id="btnInsert">등록</button></span>
-					<span class="btn"><button onclick="fn_update()" id="btnUpdate">수정</button></span>
-					<span class="btn"><button onclick="fn_delete()" id="btnDelete">삭제</button></span>
+					<span class="btn"><button onclick="fn_select()" id="btnSelect"><spring:message code="common.search" /></button></span>
+					<span class="btn"><button onclick="fn_insert()" id="btnInsert"><spring:message code="common.registory" /></button></span>
+					<span class="btn"><button onclick="fn_update()" id="btnUpdate"><spring:message code="common.modify" /> </button></span>
+					<span class="btn"><button onclick="fn_delete()" id="btnDelete"><spring:message code="common.delete" /> </button></span>
 				</div>
 				<div class="sch_form">
 					<table class="write">
@@ -273,7 +274,7 @@
 							<tr>
 								<th scope="row" class="t2">커넥터 명</th>
 								<td><input type="text" class="txt" name="cnr_nm" id="cnr_nm" /></td>
-								<th scope="row" class="t3">아이피</th>
+								<th scope="row" class="t3"><spring:message code="data_transfer.ip" /> </th>
 								<td><input type="text" class="txt" name="cnr_ipadr" id="cnr_ipadr" /></td>
 							</tr>
 						</tbody>
@@ -285,13 +286,13 @@
 							<th width="10"></th>
 							<th width="20">NO</th>
 							<th width="120">커넥터 명</th>
-							<th width="100">아이피</th>
-							<th width="70">포트</th>
-							<th width="70">유형</th>
-							<th width="70">등록자</th>
-							<th width="120">등록일시</th>
-							<th width="70">수정자</th>
-							<th width="120">수정일시</th>
+							<th width="100"><spring:message code="data_transfer.ip" /></th>
+							<th width="70"><spring:message code="data_transfer.port" /> </th>
+							<th width="70"><spring:message code="data_transfer.type" /></th>
+							<th width="70"><spring:message code="common.register" /></th>
+							<th width="120"><spring:message code="common.regist_datetime" /></th>
+							<th width="70"><spring:message code="common.modifier" /></th>
+							<th width="120"><spring:message code="common.modify_datetime" /></th>
 						</tr>
 					</thead>
 				</table>

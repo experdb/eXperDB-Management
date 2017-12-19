@@ -2,6 +2,7 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form"%>
 <%@ taglib prefix="ui" uri="http://egovframework.gov/ctl/ui"%>
+<%@ taglib prefix="spring" uri="http://www.springframework.org/tags"%>
 <%
 	/**
 	* @Class Name : accessHistory.jsp
@@ -80,7 +81,7 @@
 		var dataCnt = table.rows.length;
 
 		if (dataCnt ==1) {
-			alert("데이터가 존재하지 않습니다.")
+			alert('<spring:message code="message.msg01" />')
 			return false;
 		} else {
 			var lgi_dtm_start = $("#from").val();
@@ -133,26 +134,26 @@
 	<div id="contents">
 		<div class="contents_wrap">
 			<div class="contents_tit">
-				<h4>화면접근이력<a href="#n"><img src="../images/ico_tit.png" class="btn_info"/></a></h4>
+				<h4><spring:message code="menu.screen_access_history" /><a href="#n"><img src="../images/ico_tit.png" class="btn_info"/></a></h4>
 					<div class="infobox"> 
 							<ul>
-								<li>지정한 기간 동안 통합 관리 시스템에 접속한 사용자와 페이지 접근 및 수행한 작업 이력을 조회할 수 있습니다.</li>
-								<li>검색 조건에 사용자명을 입력하여 특정 사용자에 대한 정보만 조회할 수 있습니다. </li>	
+								<li><spring:message code="help.screen_access_history_01" /></li>
+								<li><spring:message code="help.screen_access_history_02" /></li>	
 							</ul>
 					</div>
 					<div class="location">
 						<ul>
 							<li>Admin</li>
-							<li>이력관리</li>
-							<li class="on">화면접근이력</li>
+							<li><spring:message code="menu.history_management" /></li>
+							<li class="on"><spring:message code="menu.screen_access_history" /></li>
 						</ul>
 					</div>
 				</div>
 			<div class="contents">
 				<div class="cmm_grp">
 					<div class="btn_type_float">
-						<span class="btn btnC_01 btn_fl"><button id="btnExcel" onclick="fn_ExportExcel()">엑셀저장</button></span> 
-								<span class="btn btn_fr"><button id="btnSelect"onclick="fn_select()">조회</button></span>															
+						<span class="btn btnC_01 btn_fl"><button id="btnExcel" onclick="fn_ExportExcel()"><spring:message code="history_management.excel_save" /></button></span> 
+								<span class="btn btn_fr"><button id="btnSelect"onclick="fn_select()"><spring:message code="common.search" /></button></span>															
 					</div>
 
 					<form:form commandName="pagingVO" name="selectList" id="selectList" method="post">
@@ -160,7 +161,7 @@
 							<table class="write">
 								<caption>검색 조회</caption>
 								<colgroup>
-									<col style="width: 80px;" />
+									<col style="width: 100px;" />
 									<col style="width: 400px;" />
 									<col style="width: 80px;" />
 									<col style="width: 400px;" />
@@ -168,7 +169,7 @@
 								</colgroup>
 								<tbody>
 									<tr>
-										<th scope="row" class="t10">접근일자</th>
+										<th scope="row" class="t10"><spring:message code="history_management.access_date" /></th>
 										<td>
 											<div class="calendar_area">
 												<a href="#n" class="calendar_btn">달력열기</a> 
@@ -177,17 +178,17 @@
 												<input type="text" class="calendar" id="to" name="lgi_dtm_end" title="기간검색 종료날짜" readonly="readonly" />
 											</div>
 										</td>
-										<th scope="row" class="t9">사용자</th>
+										<th scope="row" class="t9"><spring:message code="history_management.user" /></th>
 											<td>
 												<select class="select t5" id="type" name="type">
-													<option value="usr_nm" ${type == 'usr_nm' ? 'selected="selected"' : ''}>사용자명</option>
-													<option value="usr_id" ${type == 'usr_id' ? 'selected="selected"' : ''}>아이디</option>
+													<option value="usr_nm" ${type == 'usr_nm' ? 'selected="selected"' : ''}><spring:message code="history_management.user_name" /></option>
+													<option value="usr_id" ${type == 'usr_id' ? 'selected="selected"' : ''}><spring:message code="history_management.id" /> </option>
 												</select>
 												<input type="text" class="txt t2" id="search" name="search" value="${search}"/>
 											</td>				
 									</tr>
 									<tr>
-										<th scope="row" class="t9">화면선택</th>
+										<th scope="row" class="t9"><spring:message code="history_management.screen_choice" /></th>
 										<td>
 											<select class="select t5" id="sys_cd" name="sys_cd">
 												<option value="" ${sys_cd == '' ? 'selected="selected"' : ''}>전체</option>	
@@ -196,15 +197,15 @@
 												</c:forEach>
 											</select>
 										</td>
-										<th scope="row" class="t9">정렬</th>
+										<th scope="row" class="t9"><spring:message code="history_management.sort" /></th>
 										<td>
 											<select class="select t5" id="order_type" name="order_type">
-												<option value="exedtm" ${order_type == 'exedtm' ? 'selected="selected"' : ''}>날짜순</option>
-												<option value="usr_id" ${order_type == 'usr_id' ? 'selected="selected"' : ''}>아이디</option>
+												<option value="exedtm" ${order_type == 'exedtm' ? 'selected="selected"' : ''}><spring:message code="history_management.bydate" /></option>
+												<option value="usr_id" ${order_type == 'usr_id' ? 'selected="selected"' : ''}><spring:message code="history_management.id" /></option>
 											</select>							
 											<select class="select t5" id="order" name="order">
-												<option value="desc" ${order == 'desc' ? 'selected="selected"' : ''}>내림차순</option>
-												<option value="asc" ${order == 'asc' ? 'selected="selected"' : ''}>오름차순</option>		
+												<option value="desc" ${order == 'desc' ? 'selected="selected"' : ''}><spring:message code="history_management.descending_order" /></option>
+												<option value="asc" ${order == 'asc' ? 'selected="selected"' : ''}><spring:message code="history_management.ascending_order" /> </option>		
 											</select>
 										</td>
 									</tr>
@@ -230,14 +231,14 @@
 								<thead>
 									<tr style="border-bottom: 1px solid #b8c3c6;">
 										<th scope="col">NO</th>
-										<th scope="col">일자</th>
-										<th scope="col">시간</th>
-										<th scope="col">화면</th>
-										<th scope="col">아이디</th>
-										<th scope="col">사용자명</th>
-										<th scope="col">부서</th>
-										<th scope="col">직급</th>
-										<th scope="col">아이피</th>
+										<th scope="col"><spring:message code="history_management.date" /></th>
+										<th scope="col"><spring:message code="history_management.time" /></th>
+										<th scope="col"><spring:message code="history_management.screen" /></th>
+										<th scope="col"><spring:message code="history_management.id" /></th>
+										<th scope="col"><spring:message code="history_management.user_name" /></th>
+										<th scope="col"><spring:message code="history_management.department" /></th>
+										<th scope="col"><spring:message code="history_management.position" /></th>
+										<th scope="col"><spring:message code="history_management.ip" /></th>
 									</tr>
 								</thead>
 								<tbody>

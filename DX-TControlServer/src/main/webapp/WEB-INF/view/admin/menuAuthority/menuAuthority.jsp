@@ -1,4 +1,5 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<%@ taglib prefix="spring" uri="http://www.springframework.org/tags"%>
 <%
 	/**
 	* @Class Name : menuAuthority.jsp
@@ -62,10 +63,10 @@ $(window.document).ready(function() {
 		     },
 			error : function(xhr, status, error) {
 				if(xhr.status == 401) {
-					alert("인증에 실패 했습니다. 로그인 페이지로 이동합니다.");
+					alert('<spring:message code="message.msg02" />');
 					 location.href = "/";
 				} else if(xhr.status == 403) {
-					alert("세션이 만료가 되었습니다. 로그인 페이지로 이동합니다.");
+					alert('<spring:message code="message.msg03" />');
 		             location.href = "/";
 				} else {
 					alert("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""));
@@ -90,10 +91,10 @@ $(window.document).ready(function() {
 		     },
 			error : function(xhr, status, error) {
 				if(xhr.status == 401) {
-					alert("인증에 실패 했습니다. 로그인 페이지로 이동합니다.");
+					alert('<spring:message code="message.msg02" />');
 					 location.href = "/";
 				} else if(xhr.status == 403) {
-					alert("세션이 만료가 되었습니다. 로그인 페이지로 이동합니다.");
+					alert('<spring:message code="message.msg03" />');
 		             location.href = "/";
 				} else {
 					alert("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""));
@@ -117,10 +118,10 @@ $(window.document).ready(function() {
     	     },
     		error : function(xhr, status, error) {
     			if(xhr.status == 401) {
-    				alert("인증에 실패 했습니다. 로그인 페이지로 이동합니다.");
+    				alert('<spring:message code="message.msg02" />');
     				 location.href = "/";
     			} else if(xhr.status == 403) {
-    				alert("세션이 만료가 되었습니다. 로그인 페이지로 이동합니다.");
+    				alert('<spring:message code="message.msg03" />');
     	             location.href = "/";
     			} else {
     				alert("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""));
@@ -178,10 +179,10 @@ $(function() {
 	    	     },
 	    		error : function(xhr, status, error) {
 	    			if(xhr.status == 401) {
-	    				alert("인증에 실패 했습니다. 로그인 페이지로 이동합니다.");
+	    				alert('<spring:message code="message.msg02" />');
 	    				 location.href = "/";
 	    			} else if(xhr.status == 403) {
-	    				alert("세션이 만료가 되었습니다. 로그인 페이지로 이동합니다.");
+	    				alert('<spring:message code="message.msg03" />');;
 	    	             location.href = "/";
 	    			} else {
 	    				alert("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""));
@@ -380,10 +381,10 @@ function fn_save(){
 			     },
 				error : function(xhr, status, error) {
 					if(xhr.status == 401) {
-						alert("인증에 실패 했습니다. 로그인 페이지로 이동합니다.");
+						alert('<spring:message code="message.msg02" />');
 						 location.href = "/";
 					} else if(xhr.status == 403) {
-						alert("세션이 만료가 되었습니다. 로그인 페이지로 이동합니다.");
+						alert('<spring:message code="message.msg03" />');
 			             location.href = "/";
 					} else {
 						alert("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""));
@@ -414,10 +415,10 @@ function fn_search(){
 	     },
 		error : function(xhr, status, error) {
 			if(xhr.status == 401) {
-				alert("인증에 실패 했습니다. 로그인 페이지로 이동합니다.");
+				alert('<spring:message code="message.msg02" />');
 				 location.href = "/";
 			} else if(xhr.status == 403) {
-				alert("세션이 만료가 되었습니다. 로그인 페이지로 이동합니다.");
+				alert('<spring:message code="message.msg03" />');
 	             location.href = "/";
 			} else {
 				alert("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""));
@@ -437,18 +438,18 @@ function fn_search(){
 			<div id="contents">
 				<div class="contents_wrap">
 					<div class="contents_tit">
-						<h4>메뉴 권한 관리 <a href="#n"><img src="../images/ico_tit.png" class="btn_info"/></a></h4>
+						<h4><spring:message code="menu.menu_auth_management" /><a href="#n"><img src="../images/ico_tit.png" class="btn_info"/></a></h4>
 						<div class="infobox"> 
 							<ul>
-								<li>등록된 사용자 별로 각 메뉴에 대하여 접근할 수 있는 권한을 부여합니다.</li>
-								<li>사용 권한은 읽기와 쓰기로 구분되며, 각각의 메뉴에 대하여 개별적으로 설정 가능합니다.</li>	
+								<li><spring:message code="help.menu_auth_management_01" /> </li>
+								<li><spring:message code="help.menu_auth_management_02" /> </li>	
 							</ul>
 						</div>
 						<div class="location">
 							<ul>
 								<li>Admin</li>
-								<li>권한관리</li>
-								<li class="on">메뉴 권한 관리</li>
+								<li><spring:message code="menu.auth_management" /></li>
+								<li class="on"><spring:message code="menu.menu_auth_management" /></li>
 							</ul>
 						</div>
 					</div>
@@ -469,8 +470,8 @@ function fn_search(){
 												<thead>
 													<tr>
 														<th>No</th>
-														<th>아이디</th>
-														<th>사용자명</th>
+														<th><spring:message code="user_management.id" /> </th>
+														<th><spring:message code="user_management.user_name" /> </th>
 													</tr>
 													</thead>
 											</table>
@@ -521,10 +522,10 @@ function fn_search(){
 														<th scope="row" rowspan="3">
 															<div class="inp_chk">
 																<input type="checkbox" id="schinfo" name="schinfo"/>
-																<label for="schinfo">스케줄정보</label>
+																<label for="schinfo"><spring:message code="menu.schedule_information" /></label>
 															</div>
 														</th>
-														<td>스케줄 등록</td>
+														<td><spring:message code="menu.schedule_registration" /> </td>
 														<td>
 															<div class="inp_chk">
 																<input type="checkbox" id="r_MN000101" name="r_mnu_nm" />
@@ -539,7 +540,7 @@ function fn_search(){
 														</td>
 													</tr>
 													<tr>
-														<td>스케줄 실행/중지</td>
+														<td><spring:message code="menu.schedule_run_stop" /></td>
 														<td>
 															<div class="inp_chk">
 																<input type="checkbox" id="r_MN000102" name="r_mnu_nm" />
@@ -554,7 +555,7 @@ function fn_search(){
 														</td>													
 													</tr>
 													<tr>
-														<td>스케줄 수행이력</td>
+														<td><spring:message code="menu.shedule_execution_history" /></td>
 														<td>
 															<div class="inp_chk">
 																<input type="checkbox" id="r_MN000103" name="r_mnu_nm"  />
@@ -572,10 +573,10 @@ function fn_search(){
 														<th scope="row" rowspan="2">
 															<div class="inp_chk">
 																<input type="checkbox" id="transferinfo" name="transferinfo"/>
-																<label for="transferinfo">데이터전송정보</label>
+																<label for="transferinfo"><spring:message code="menu.data_transfer_information" /></label>
 															</div>
 														</th>
-														<td>전송서버설정</td>
+														<td><spring:message code="menu.transfer_server_settings" /></td>
 														<td>
 															<div class="inp_chk">
 																<input type="checkbox" id="r_MN000201" name="r_mnu_nm" />
@@ -590,7 +591,7 @@ function fn_search(){
 														</td>										
 													</tr>
 													<tr>
-														<td>커넥터 관리</td>
+														<td><spring:message code="menu.connector_management" /></td>
 														<td>
 															<div class="inp_chk">
 																<input type="checkbox" id="r_MN000202" name="r_mnu_nm" />
@@ -614,10 +615,10 @@ function fn_search(){
 														<th scope="row" rowspan="3">
 															<div class="inp_chk">
 																<input type="checkbox" id="dbmsinfo" name="dbmsinfo"/>
-																<label for="dbmsinfo">DBMS 정보</label>
+																<label for="dbmsinfo"><spring:message code="menu.dbms_information" /></label>
 															</div>
 														</th>
-														<td>DBMS 등록</td>
+														<td><spring:message code="menu.dbms_registration" /></td>
 														<td>
 															<div class="inp_chk">
 																<input type="checkbox" id="r_MN000301" name="r_mnu_nm" />
@@ -632,7 +633,7 @@ function fn_search(){
 														</td>										
 													</tr>
 													<tr>
-														<td>DBMS 관리</td>
+														<td><spring:message code="menu.dbms_management" /></td>
 														<td>
 															<div class="inp_chk">
 																<input type="checkbox" id="r_MN000302" name="r_mnu_nm" />
@@ -647,7 +648,7 @@ function fn_search(){
 														</td>										
 													</tr>
 													<tr>
-														<td>DataBase 관리</td>
+														<td><spring:message code="menu.database_management" /></td>
 														<td>
 															<div class="inp_chk">
 																<input type="checkbox" id="r_MN000303" name="r_mnu_nm" />
@@ -662,7 +663,7 @@ function fn_search(){
 														</td>											
 													</tr>
 													<tr>
-														<td colspan="2">사용자관리</td>
+														<td colspan="2"><spring:message code="menu.user_management" /></td>
 														<td>
 															<div class="inp_chk">
 																<input type="checkbox" id="r_MN0004" name="r_mnu_nm"  />
@@ -682,10 +683,10 @@ function fn_search(){
 														<th scope="row" rowspan="3">
 															<div class="inp_chk">
 																<input type="checkbox" id="authmanage" name="authmanage"/>
-																<label for="authmanage">권한관리</label>
+																<label for="authmanage"><spring:message code="menu.auth_management" /></label>
 															</div>
 														</th>
-														<td>메뉴권한관리</td>
+														<td><spring:message code="menu.menu_auth_management" /></td>
 														<td>
 															<div class="inp_chk">
 																<input type="checkbox" id="r_MN000501" name="r_mnu_nm" />
@@ -700,7 +701,7 @@ function fn_search(){
 														</td>										
 													</tr>
 													<tr>
-														<td>서버권한관리</td>
+														<td><spring:message code="menu.server_auth_management" /></td>
 														<td>
 															<div class="inp_chk">
 																<input type="checkbox" id="r_MN000502" name="r_mnu_nm" />
@@ -715,7 +716,7 @@ function fn_search(){
 														</td>										
 													</tr>
 													<tr>
-														<td>DB권한관리</td>
+														<td><spring:message code="menu.database_auth_management" /></td>
 														<td>
 															<div class="inp_chk">
 																<input type="checkbox" id="r_MN000503" name="r_mnu_nm" />
@@ -730,8 +731,8 @@ function fn_search(){
 														</td>											
 													</tr>
 													<tr>
-														<th scope="row" rowspan="1">이력관리</th>
-														<td>화면접근이력</td>
+														<th scope="row" rowspan="1"><spring:message code="menu.history_management" /></th>
+														<td><spring:message code="menu.screen_access_history" /></td>
 														<td>
 															<div class="inp_chk">
 																<input type="checkbox" id="r_MN000601" name="r_mnu_nm" />
@@ -746,8 +747,8 @@ function fn_search(){
 														</td>										
 													</tr>
 													<tr>
-														<th scope="row" rowspan="1">모니터링</th>
-														<td>에이전트 모니터링</td>
+														<th scope="row" rowspan="1"><spring:message code="menu.monitoring" /></th>
+														<td><spring:message code="menu.agent_monitoring" /></td>
 														<td>
 															<div class="inp_chk">
 																<input type="checkbox" id="r_MN000701" name="r_mnu_nm" />
@@ -762,7 +763,7 @@ function fn_search(){
 														</td>										
 													</tr>
 													<tr>
-														<td colspan="2">확장설치 조회</td>
+														<td colspan="2"><spring:message code="menu.extension_pack_installation_information" /></td>
 														<td>
 															<div class="inp_chk">
 																<input type="checkbox" id="r_MN0008" name="r_mnu_nm"  />

@@ -3,6 +3,7 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form"%>
 <%@ taglib prefix="ui" uri="http://egovframework.gov/ctl/ui"%>
+<%@ taglib prefix="spring" uri="http://www.springframework.org/tags"%>
 <%
 	/**
 	* @Class Name : dbmsInformation.jsp
@@ -27,10 +28,10 @@
 	$(window.document).ready(function() {
 		var extName = "${extName}";
 		if(extName == "agent") {
-			alert("서버에 experdb엔진이 설치되지 않았습니다.");
+			alert('<spring:message code="message.msg25" /> ');
 			history.go(-1);
 		}else if(extName == "agentfail"){
-			alert("experdb엔진 상태를 확인해주세요.");
+			alert('<spring:message code="message.msg27" />');
 			history.go(-1);
 		}else{		
 			$("#tab1").show();
@@ -50,7 +51,7 @@
 			</c:forEach>
 			count = count*2;
 			
-			html += '<tr><td colspan="3" rowspan="'+count+'" class="color">네트워크</td>';
+			html += '<tr><td colspan="3" rowspan="'+count+'" class="color"><spring:message code="properties.network" /></td>';
 			<c:forEach items="${result.CMD_NETWORK}" var="networkinfo" varStatus="status">
 			if('${status.index}'!=0){
 				html +='<tr>'
@@ -156,8 +157,8 @@
 			</h4>
 			<div class="infobox">
 				<ul>
-					<li>선택한 DBMS가 설치된 시스템의 주요 정보를 조회합니다.</li>
-					<li>선택한 DBMS의 기본 정보와 주요 설정 정보를 조회합니다</li>
+					<li><spring:message code="help.properties_01" /></li>
+					<li><spring:message code="help.properties_02" /></li>
 				</ul>
 			</div>
 			<div class="location">
@@ -170,34 +171,34 @@
 		<div class="contents">
 			<div class="cmm_tab">
 				<ul id="tab1">
-					<li class="atv"><a href="javascript:selectTab('systeminfo')">시스템정보</a></li>
-					<li><a href="javascript:selectTab('dbmisinfo')">DBMS정보</a></li>
-					<li><a href="javascript:selectTab('settinginfo')">주요환경설정 정보</a></li>
-					<li><a href="javascript:selectTab('tablespaceinfo')">테이블스페이스 정보</a></li>
+					<li class="atv"><a href="javascript:selectTab('systeminfo')"><spring:message code="properties.system_info" /></a></li>
+					<li><a href="javascript:selectTab('dbmisinfo')"><spring:message code="menu.dbms_information" /></a></li>
+					<li><a href="javascript:selectTab('settinginfo')"><spring:message code="properties.about_preferences" /> </a></li>
+					<li><a href="javascript:selectTab('tablespaceinfo')"><spring:message code="properties.tablespace_info" /></a></li>
 				</ul>
 				<ul id="tab2" style="display: none;">
-					<li><a href="javascript:selectTab('systeminfo')">시스템정보</a></li>
-					<li class="atv"><a href="javascript:selectTab('dbmisinfo')">DBMS정보</a></li>
-					<li><a href="javascript:selectTab('settinginfo')">주요환경설정 정보</a></li>
-					<li><a href="javascript:selectTab('tablespaceinfo')">테이블스페이스 정보</a></li>
+					<li><a href="javascript:selectTab('systeminfo')"><spring:message code="properties.system_info" /></a></li>
+					<li class="atv"><a href="javascript:selectTab('dbmisinfo')"><spring:message code="menu.dbms_information" /></a></li>
+					<li><a href="javascript:selectTab('settinginfo')"><spring:message code="properties.about_preferences" /> </a></li>
+					<li><a href="javascript:selectTab('tablespaceinfo')"><spring:message code="properties.tablespace_info" /></a></li>
 				</ul>
 				<ul id="tab3" style="display: none;">
-					<li><a href="javascript:selectTab('systeminfo')">시스템정보</a></li>
-					<li><a href="javascript:selectTab('dbmisinfo')">DBMS정보</a></li>
-					<li class="atv"><a href="javascript:selectTab('settinginfo')">주요환경설정 정보</a></li>
-					<li><a href="javascript:selectTab('tablespaceinfo')">테이블스페이스 정보</a></li>
+					<li><a href="javascript:selectTab('systeminfo')"><spring:message code="properties.system_info" /></a></li>
+					<li><a href="javascript:selectTab('dbmisinfo')"><spring:message code="menu.dbms_information" /></a></li>
+					<li class="atv"><a href="javascript:selectTab('settinginfo')"><spring:message code="properties.about_preferences" /> </a></li>
+					<li><a href="javascript:selectTab('tablespaceinfo')"><spring:message code="properties.tablespace_info" /></a></li>
 				</ul>
 				<ul id="tab4" style="display: none;">
-					<li><a href="javascript:selectTab('systeminfo')">시스템정보</a></li>
-					<li><a href="javascript:selectTab('dbmisinfo')">DBMS정보</a></li>
-					<li><a href="javascript:selectTab('settinginfo')">주요환경설정 정보</a></li>
-					<li class="atv"><a href="javascript:selectTab('tablespaceinfo')">테이블스페이스 정보</a></li>
+					<li><a href="javascript:selectTab('systeminfo')"><spring:message code="properties.system_info" /></a></li>
+					<li><a href="javascript:selectTab('dbmisinfo')"><spring:message code="menu.dbms_information" /></a></li>
+					<li><a href="javascript:selectTab('settinginfo')"><spring:message code="properties.about_preferences" /> </a></li>
+					<li class="atv"><a href="javascript:selectTab('tablespaceinfo')"><spring:message code="properties.tablespace_info" /></a></li>
 				</ul>
 			</div>
 			<div class="cmm_grp">
 				<div id="systeminfo">
 					<div class="cmm_bd">
-						<div class="sub_tit"><p>시스템 정보</p></div>
+						<div class="sub_tit"><p><spring:message code="properties.system_info" /></p></div>
 						<div class="overflow_areas" style="height: 365px;">
 							<table class="list3" id="systemInfo">
 								<caption>시스템 정보</caption>
@@ -211,28 +212,28 @@
 									<col />
 								</colgroup>
 								<tr>
-									<th colspan="5">항목</th>
-									<th>내용</th>
+									<th colspan="5"><spring:message code="properties.item" /></th>
+									<th><spring:message code="properties.description" /> </th>
 								</tr>
 								<tr>
-									<td colspan="5" class="color">호스트명</td>
+									<td colspan="5" class="color"><spring:message code="properties.host" /> </td>
 									<td>${result.CMD_HOSTNAME}</td>
 								</tr>
 								<tr>
-									<td colspan="2" rowspan="2" class="color">OS 정보</td>
-									<td colspan="3" class="color">버전</td>
+									<td colspan="2" rowspan="2" class="color"><spring:message code="properties.os_info" /></td>
+									<td colspan="3" class="color"><spring:message code="properties.version" /></td>
 									<td>${result.CMD_OS_VERSION}</td>
 								</tr>
 								<tr>
-									<td colspan="3" class="color">커널</td>
+									<td colspan="3" class="color"><spring:message code="properties.kernel" /></td>
 									<td>${result.CMD_OS_KERNUL}</td>
 								</tr>
 								<tr>
-									<td colspan="5" class="color">CPU</td>
+									<td colspan="5" class="color"><spring:message code="properties.cpu" /></td>
 									<td>${result.CMD_CPU}</td>
 								</tr>
 								<tr>
-									<td colspan="5" class="color">메모리</td>
+									<td colspan="5" class="color"><spring:message code="properties.memory" /></td>
 									<td>${result.CMD_MEMORY}</td>
 								</tr>														
 							</table>
@@ -242,7 +243,7 @@
 
 				<div id="dbmisinfo">
 					<div class="cmm_bd">
-						<div class="sub_tit"><p>기본 정보</p></div>
+						<div class="sub_tit"><p><spring:message code="properties.basic_info" /></p></div>
 						<div class="overflow_areas">
 							<table class="list3">
 								<caption>기본 정보</caption>
@@ -252,27 +253,27 @@
 									<col />
 								</colgroup>
 								<tr>
-									<th>항목</th>
-									<th>내용</th>
+									<th><spring:message code="properties.item" /></th>
+									<th><spring:message code="properties.description" /></th>
 								</tr>
 								<tr>
-									<td>POSTGRESQL 버전</td>
+									<td><spring:message code="properties.postgresql_version" /></td>
 									<td>${result.POSTGRESQL_VERSION}</td>
 								</tr>
 								<tr>
-									<td>DBMS 경로</td>
+									<td><spring:message code="properties.dbms_path" /></td>
 									<td>${result.CMD_DBMS_PATH}</td>
 								</tr>
 								<tr>
-									<td>DATA 경로</td>
+									<td><spring:message code="properties.data_path" /></td>
 									<td>${result.DATA_PATH}</td>
 								</tr>
 								<tr>
-									<td>로그 경로</td>
+									<td><spring:message code="properties.log_path" /></td>
 									<td>${result.LOG_PATH}</td>
 								</tr>
 								<tr>
-									<td>백업 경로</td>
+									<td><spring:message code="properties.backup_path" /></td>
 									<td>${result.CMD_BACKUP_PATH}</td>
 								</tr>
 <!-- 								<tr> -->
@@ -282,7 +283,7 @@
 							</table>
 						</div>
 						<br><br>
-						<div class="sub_tit"><p>데이터베이스 정보</p></div>
+						<div class="sub_tit"><p><spring:message code="properties.database_info" /></p></div>
 						<div class="overflow_areas" style="height: 365px;">
 							<table class="list3">
 								<caption>데이터베이스 정보</caption>
@@ -298,14 +299,14 @@
 								</colgroup>
 								<thead>
 									<tr>
-										<th scope="col">이름</th>
-										<th scope="col">소유자</th>
-										<th scope="col">인코딩</th>
-										<th scope="col">COLLATE</th>
-										<th scope="col">CTYPE</th>
-										<th scope="col">사이즈</th>
-										<th scope="col">테이블스페이스</th>
-										<th scope="col">설명</th>
+										<th scope="col"><spring:message code="properties.name" /></th>
+										<th scope="col"><spring:message code="properties.owner" /></th>
+										<th scope="col"><spring:message code="properties.incording" /></th>
+										<th scope="col"><spring:message code="properties.collate" /> </th>
+										<th scope="col"><spring:message code="properties.ctype" /></th>
+										<th scope="col"><spring:message code="properties.size" /></th>
+										<th scope="col"><spring:message code="properties.tablespace" /></th>
+										<th scope="col"><spring:message code="properties.explanation" /></th>
 									</tr>
 								</thead>
 								<tbody>
@@ -331,7 +332,7 @@
 							</table>
 						</div>
 						<br><br>
-						<div class="sub_tit"><p>HA구성정보</p></div>
+						<div class="sub_tit"><p><spring:message code="properties.ha_config" /></p></div>
 						<div class="overflow_areas">
 							<table class="list3">
 								<caption>HA구성정보</caption>
@@ -343,10 +344,10 @@
 								</colgroup>
 								<thead>
 									<tr>
-										<th scope="col">IP</th>
-										<th scope="col">서버유형</th>
-										<th scope="col">호스트명</th>
-										<th scope="col">상태</th>
+										<th scope="col"><spring:message code="properties.ip" /></th>
+										<th scope="col"><spring:message code="properties.server_type" /></th>
+										<th scope="col"><spring:message code="properties.host" /></th>
+										<th scope="col"><spring:message code="properties.status" /> </th>
 									</tr>
 								</thead>
 								<tbody>
@@ -374,7 +375,7 @@
 
 				<div id="settinginfo">
 					<div class="cmm_bd">
-						<div class="sub_tit"><p>주요환경설정 정보</p></div>
+						<div class="sub_tit"><p><spring:message code="properties.about_preferences" /></p></div>
 						<div class="overflow_areas" style="height: 670px;">
 							<table class="list3">
 								<caption>주요환경설정 정보</caption>
@@ -385,14 +386,14 @@
 								</colgroup>
 								<thead>
 									<tr>
-										<th scope="col">구분</th>
-										<th scope="col">항목</th>
-										<th scope="col">설정값</th>
+										<th scope="col"><spring:message code="properties.division" /></th>
+										<th scope="col"><spring:message code="properties.item" /></th>
+										<th scope="col"><spring:message code="properties.setting_value" /></th>
 									</tr>
 								</thead>
 								<tbody>
 									<tr>
-										<td rowspan="3" class="color">접속 및 인증</td>
+										<td rowspan="3" class="color"><spring:message code="properties.connection_authentication" /></td>
 										<td class="center">listen_addresses</td>
 										<td >${result.CMD_LISTEN_ADDRESSES}</td>
 									</tr>
@@ -405,7 +406,7 @@
 										<td>${result.CMD_MAX_CONNECTIONS}</td>
 									</tr>
 									<tr>
-										<td rowspan="5" class="color">자원설정</td>
+										<td rowspan="5" class="color"><spring:message code="properties.resource_settings" /></td>
 										<td class="center">shared_buffers</td>
 										<td>${result.CMD_SHARED_BUFFERS}</td>
 									</tr>
@@ -426,7 +427,7 @@
 										<td>${result.CMD_SHARED_PRELOAD_LIBRARIES}</td>
 									</tr>
 									<tr>
-										<td rowspan="6" class="color">WAL 설정</td>
+										<td rowspan="6" class="color"><spring:message code="properties.wal_settings" /></td>
 										<td class="center">wal_level</td>
 										<td>${result.CMD_WAL_LEVEL}</td>
 									</tr>
@@ -451,7 +452,7 @@
 										<td>${result.CMD_MAX_WAL_SIZE}</td>
 									</tr>
 									<tr>
-										<td rowspan="2" class="color">복제</td>
+										<td rowspan="2" class="color"><spring:message code="properties.replication" /></td>
 										<td class="center">hot_standby</td>
 										<td>${result.CMD_HOT_STANDBY}</td>
 									</tr>
@@ -460,7 +461,7 @@
 										<td>${result.CMD_WAL_KEEP_SEGMENTS}</td>
 									</tr>
 									<tr>
-										<td rowspan="2" class="color">파일위치</td>
+										<td rowspan="2" class="color"><spring:message code="properties.file_location" /></td>
 										<td class="center">config_file</td>
 										<td>${result.CMD_CONFIG_FILE}</td>
 									</tr>
@@ -469,7 +470,7 @@
 										<td>${result.CMD_DATA_DIRECTORY}</td>
 									</tr>
 									<tr>
-										<td class="color">표준시간대</td>
+										<td class="color"><spring:message code="properties.standard_time" /></td>
 										<td class="center">TimeZone</td>
 										<td>${result.CMD_TIMEZONE}</td>
 									</tr>
@@ -481,7 +482,7 @@
 
 				<div id="tablespaceinfo">
 					<div class="cmm_bd">
-						<div class="sub_tit"><p>테이블스페이스 정보</p></div>
+						<div class="sub_tit"><p><spring:message code="properties.tablespace_info" /></p></div>
 						<div class="overflow_areas" style="height: 365px;">
 							<table class="list3" >
 								<caption>테이블스페이스 정보</caption>
@@ -502,8 +503,8 @@
 								</colgroup>
 								<thead>
 									<tr>
-										<th scope="col" colspan="6">파일시스템</th>
-										<th scope="col" colspan="6">테이블스페이스</th>
+										<th scope="col" colspan="6"><spring:message code="properties.filesystem" /></th>
+										<th scope="col" colspan="6"><spring:message code="properties.tablespace" /></th>
 									</tr>
 								</thead>
 								<tbody>

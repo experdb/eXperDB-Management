@@ -1,5 +1,5 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
-
+<%@ taglib prefix="spring" uri="http://www.springframework.org/tags"%>
 <%
 	/**
 	* @Class Name : dbTree.jsp
@@ -90,10 +90,10 @@ $(window.document).ready(function() {
 	     },
 		error : function(xhr, status, error) {
 			if(xhr.status == 401) {
-				alert("인증에 실패 했습니다. 로그인 페이지로 이동합니다.");
+				alert('<spring:message code="message.msg02" />');
 				 location.href = "/";
 			} else if(xhr.status == 403) {
-				alert("세션이 만료가 되었습니다. 로그인 페이지로 이동합니다.");
+				alert('<spring:message code="message.msg03" />');
 	             location.href = "/";
 			} else {
 				alert("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""));
@@ -142,10 +142,10 @@ $(function() {
     	     },
     		error : function(xhr, status, error) {
     			if(xhr.status == 401) {
-    				alert("인증에 실패 했습니다. 로그인 페이지로 이동합니다.");
+    				alert('<spring:message code="message.msg02" />');
     				 location.href = "/";
     			} else if(xhr.status == 403) {
-    				alert("세션이 만료가 되었습니다. 로그인 페이지로 이동합니다.");
+    				alert('<spring:message code="message.msg03" />');
     	             location.href = "/";
     			} else {
     				alert("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""));
@@ -172,7 +172,7 @@ $(function() {
 <div id="contents">
 	<div class="contents_wrap">
 		<div class="contents_tit">
-			<h4>확장팩설치정보 <a href="#n"><img src="../images/ico_tit.png" class="btn_info"/></a></h4>
+			<h4><spring:message code="menu.extension_pack_installation_information" /> <a href="#n"><img src="../images/ico_tit.png" class="btn_info"/></a></h4>
 			<div class="infobox"> 
 				<ul>
 					<li>선택한 데이터베이스 서버에 설치된 확장팩 목록을 조회합니다.</li>
@@ -181,7 +181,7 @@ $(function() {
 			<div class="location">
 				<ul>
 					<li>Admin</li>
-					<li>확장팩설치정보</li>
+					<li><spring:message code="menu.extension_pack_installation_information" /></li>
 
 				</ul>
 			</div>
@@ -200,8 +200,8 @@ $(function() {
 										<th>NO</th>
 										<th></th>
 										<th></th>
-										<th>DBMS명</th>
-										<th>DBMS 아이피</th>
+										<th><spring:message code="common.dbms_name" /></th>
+										<th><spring:message code="dbms_information.dbms_ip" /> </th>
 										<th></th>
 										<th></th>
 										<th></th>
@@ -225,9 +225,9 @@ $(function() {
 							<table id="dbList" class="display" cellspacing="0" width="100%" align="left">
 								<thead>
 									<tr>
-										<th>확장명</th>
-										<th>버전</th>
-										<th>설치여부</th>
+										<th><spring:message code="extension_pack_installation_information.extension_name" /></th>
+										<th><spring:message code="properties.version" /></th>
+										<th><spring:message code="extension_pack_installation_information.install_yn" /> </th>
 									</tr>
 								</thead>
 							</table>
