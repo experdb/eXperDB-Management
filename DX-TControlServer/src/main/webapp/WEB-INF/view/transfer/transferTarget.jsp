@@ -155,7 +155,7 @@
 			success : function(result) {
 				table.clear().draw();
 				if(result.error != null){
-					alert(result.error);
+					alert("전송서버설정을 등록해주세요.");
 				}else if(result.data != null){
 					table.rows.add(result.data).draw();
 				}

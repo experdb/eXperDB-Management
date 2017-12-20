@@ -73,7 +73,7 @@
 				},
 				success : function(result) {		
 					$("#db_svr_nm").children().remove();
-					$("#db_svr_nm").append("<option value='%'><spring:message code="common.total" /></option>");
+					$("#db_svr_nm").append("<option value='%'><spring:message code='common.total' /></option>");
 					if(result.length > 0){
 						for(var i=0; i<result.length; i++){
 							$("#db_svr_nm").append("<option value='"+result[i].db_svr_nm+"'>"+result[i].db_svr_nm+"</option>");	
@@ -205,7 +205,7 @@
 			},
 			success : function(result) {		
 				$("#scd_nm").children().remove();
-				$("#scd_nm").append("<option value='%'><spring:message code="schedule.total" /></option>");
+				$("#scd_nm").append("<option value='%'><spring:message code='schedule.total' /></option>");
 				if(result.length > 0){
 					for(var i=0; i<result.length; i++){
 						$("#scd_nm").append("<option value='"+result[i].scd_nm+"'>"+result[i].scd_nm+"</option>");	
@@ -270,7 +270,7 @@
 			},
 			success : function(result) {		
 				$("#wrk_nm").children().remove();
-				$("#wrk_nm").append("<option value='%'><spring:message code="common.total" /></option>");
+				$("#wrk_nm").append("<option value='%'><spring:message code='common.total' /></option>");
 				if(result.length > 0){
 					for(var i=0; i<result.length; i++){
 						$("#wrk_nm").append("<option value='"+result[i].wrk_nm+"'>"+result[i].wrk_nm+"</option>");	

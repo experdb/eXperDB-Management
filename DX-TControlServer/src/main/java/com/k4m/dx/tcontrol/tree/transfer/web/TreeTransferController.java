@@ -157,7 +157,7 @@ public class TreeTransferController {
 			TransferVO tengInfo = (TransferVO) transferService.selectTengInfo(usr_id);
 			
 			if(tengInfo ==null){
-				result.put("error","전송서버설정을 등록해주세요.");
+				result.put("error","error");
 				return result;
 			}
 			
@@ -636,7 +636,7 @@ public class TreeTransferController {
 			accessHistoryService.insertHistory(historyVO);
 			int trf_trg_id_check = treeTransferService.selectTrftrgidCheck(request.getParameter("trf_trg_cnn_nm"));
 			if(trf_trg_id_check==0){
-				mv.addObject("error", "통합관리콘솔을 통하여 생성한 커넥터만 매핑설정 및 조회가 가능합니다.");
+				mv.addObject("error", "error");
 				mv.setViewName("popup/transferMappingRegForm");
 				return mv;
 			}
