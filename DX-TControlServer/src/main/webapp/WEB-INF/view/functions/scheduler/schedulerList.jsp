@@ -346,7 +346,7 @@ function fn_deleteScheduleList(){
     for (var i = 0; i < datas.length; i++) {
         rowList.push( table.rows('.selected').data()[i].scd_id);   
        if(table.rows('.selected').data()[i].status == "s"){
-    	   alert('<spring:message code="message.msg36" />');
+    	   alert("<spring:message code='message.msg36'/>");
     	   return false;
        }
   }	

@@ -181,7 +181,7 @@ $(function() {
 			<div class="location">
 				<ul>
 					<li>Admin</li>
-					<li><spring:message code="menu.extension_pack_installation_information" /></li>
+					<li class="on"><spring:message code="menu.extension_pack_installation_information" /></li>
 
 				</ul>
 			</div>

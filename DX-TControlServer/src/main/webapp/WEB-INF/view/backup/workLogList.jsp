@@ -179,10 +179,10 @@ function fn_get_rman_list(){
 	     },
 		error : function(xhr, status, error) {
 			if(xhr.status == 401) {
-				alert("인증에 실패 했습니다. 로그인 페이지로 이동합니다.");
+				alert('<spring:message code="message.msg02" />');
 				 location.href = "/";
 			} else if(xhr.status == 403) {
-				alert("세션이 만료가 되었습니다. 로그인 페이지로 이동합니다.");
+				alert('<spring:message code="message.msg03" />');
 	             location.href = "/";
 			} else {
 				alert("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""));
@@ -243,12 +243,12 @@ $(function() {
 		var wrk_end_dtm = $("#wrk_end_dtm").val();
 
 		if (wrk_strt_dtm != "" && wrk_end_dtm == "") {
-			alert("종료일자를 선택해 주세요");
+			alert('<spring:message code="message.msg14" />');
 			return false;
 		}
 
 		if (wrk_end_dtm != "" && wrk_strt_dtm == "") {
-			alert("시작일자를 선택해 주세요");
+			alert('<spring:message code="message.msg15" />');
 			return false;
 		}
 
@@ -297,18 +297,18 @@ function selectTab(intab){
 <div id="contents">
 	<div class="contents_wrap">
 		<div class="contents_tit">
-			<h4>백업이력<a href="#n"><img src="/images/ico_tit.png" class="btn_info"/></a></h4>
+			<h4><spring:message code="menu.backup_history" /><a href="#n"><img src="/images/ico_tit.png" class="btn_info"/></a></h4>
 			<div class="infobox"> 
 				<ul>
-					<li>지정한 기간 동안 수행된 백업 이력을 조회합니다.</li>
-					<li>조회 목록에서 Work명을 클릭하여 상세 정보를 조회할 수 있습니다.</li>
+					<li><spring:message code="help.backup_history_01" /></li>
+					<li><spring:message code="help.backup_history_02" /></li>
 				</ul>
 			</div>
 			<div class="location">
 				<ul>
 					<li class="bold">${db_svr_nm}</li>
-					<li>백업관리</li>
-					<li class="on">백업이력</li>
+					<li><spring:message code="menu.backup_management" /></li>
+					<li class="on"><spring:message code="menu.backup_history" /></li>
 				</ul>
 			</div>
 		</div>
@@ -326,7 +326,7 @@ function selectTab(intab){
 			</div>
 			<div class="cmm_grp">
 				<div class="btn_type_01">
-					<span class="btn"><button id="btnSelect">조회</button></span>
+					<span class="btn"><button id="btnSelect"><spring:message code="common.search" /></button></span>
 				</div>
 				<div class="sch_form">
 				<form name="findList" id="findList" method="post">
@@ -341,7 +341,7 @@ function selectTab(intab){
 						</colgroup>
 						<tbody>
 							<tr>
-								<th scope="row" class="t10">작업기간</th>
+								<th scope="row" class="t10"><spring:message code="common.work_term" /></th>
 								<td colspan="3">
 									<div class="calendar_area">
 										<a href="#n" class="calendar_btn">달력열기</a>
@@ -353,27 +353,27 @@ function selectTab(intab){
 								</td>
 							</tr>
 							<tr style="height:35px;">
-								<th scope="row" class="t9">상태</th>
+								<th scope="row" class="t9"><spring:message code="common.status" /></th>
 								<td>
 									<select name="exe_rslt_cd" id="exe_rslt_cd" class="select t5">
-										<option value="">선택</option>
-										<option value="TC001701">Success</option>
-										<option value="TC001702">Fail</option>
+										<option value=""><spring:message code="common.choice" /></option>
+										<option value="TC001701"><spring:message code="common.success" /></option>
+										<option value="TC001702"><spring:message code="common.failed" /></option>
 									</select>
 								</td>
-								<th scope="row" class="t9 search_rman">백업옵션</th>
+								<th scope="row" class="t9 search_rman"><spring:message code="backup_management.backup_option" /></th>
 								<td class="search_rman">
 									<select name="bck_opt_cd" id="bck_opt_cd" class="select t5">
-										<option value="">선택</option>
-										<option value="TC000301">전체백업</option>
-										<option value="TC000302">증분백업</option>
-										<option value="TC000303">변경로그백업</option>
+										<option value=""><spring:message code="common.choice" /></option>
+										<option value="TC000301"><spring:message code="backup_management.full_backup" /></option>
+										<option value="TC000302"><spring:message code="backup_management.incremental_backup" /></option>
+										<option value="TC000303"><spring:message code="backup_management.change_log_backup" /></option>
 									</select>
 								</td>
-								<th scope="row" class="t9 search_dump" style="display:none;">Database</th>
+								<th scope="row" class="t9 search_dump" style="display:none;"><spring:message code="common.database" /></th>
 								<td class="search_dump" style="display:none;">
 									<select name="db_id" id="db_id" class="select t5">
-										<option value="">선택</option>
+										<option value=""><spring:message code="common.choice" /></option>
 										<c:forEach var="result" items="${dbList}" varStatus="status">
 										<option value="<c:out value="${result.db_id}"/>"><c:out value="${result.db_nm}"/></option>
 										</c:forEach>
@@ -389,16 +389,16 @@ function selectTab(intab){
 						<thead>
 							<tr>
 								<th width="40">NO</th>
-								<th width="150">WORK명</th>
-								<th width="100">DBMS아이피</th>
-								<th width="150">WORK설명</th>
-								<th width="70">백업옵션</th>
-								<th width="70">사이즈</th>
+								<th width="150"><spring:message code="common.work_name" /></th>
+								<th width="100"><spring:message code="dbms_information.dbms_ip" /></th>
+								<th width="150"><spring:message code="common.work_description" /></th>
+								<th width="70"><spring:message code="backup_management.backup_option" /></th>
+								<th width="70"><spring:message code="backup_management.size" /></th>
 								<th width="230">백업파일경로</th>
-								<th width="100">작업시작 시간</th>
-								<th width="100">작업종료 시간</th>
-								<th width="70">경과시간</th>
-								<th width="100">상태</th>
+								<th width="100"><spring:message code="backup_management.work_start_time" /> </th>
+								<th width="100"><spring:message code="backup_management.work_end_time" /></th>
+								<th width="70"><spring:message code="backup_management.elapsed_time" /></th>
+								<th width="100"><spring:message code="common.status" /></th>
 							</tr>
 						</thead>
 					</table>
@@ -409,16 +409,16 @@ function selectTab(intab){
 						<thead>
 							<tr>
 								<th width="40">NO</th>
-								<th width="100">WORK명</th>
-								<th width="100">DBMS아이피</th>
-								<th width="100">WORK설명</th>
-								<th width="100">Database</th>
-								<th width="100">사이즈</th>
+								<th width="100"><spring:message code="common.work_name" /></th>
+								<th width="100"><spring:message code="dbms_information.dbms_ip" /></th>
+								<th width="100"><spring:message code="common.work_description" /></th>
+								<th width="100"><spring:message code="common.database" /></th>
+								<th width="100"><spring:message code="backup_management.size" /></th>
 								<th width="150">백업파일경로</th>								
-								<th width="100">작업시작 시간</th>
-								<th width="100">작업종료 시간</th>
-								<th width="100">경과시간</th>
-								<th width="100">상태</th>
+								<th width="100"><spring:message code="backup_management.work_start_time" /></th>
+								<th width="100"><spring:message code="backup_management.work_end_time" /></th>
+								<th width="100"><spring:message code="backup_management.elapsed_time" /></th>
+								<th width="100"><spring:message code="common.status" /></th>
 							</tr>
 						</thead>
 					</table>

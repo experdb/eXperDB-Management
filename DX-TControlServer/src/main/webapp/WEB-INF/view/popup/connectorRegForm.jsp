@@ -173,7 +173,7 @@
 				</table>
 				<div class="btn_type_02">
 					<c:if test="${act == 'i'}">
-						<span class="btn"><button type="button" onclick="fn_insert()">저장</button></span>
+						<span class="btn"><button type="button" onclick="fn_insert()"><spring:message code="common.registory" /></button></span>
 					</c:if>
 					<c:if test="${act == 'u'}">
 						<span class="btn"><button type="button" onclick="fn_update()"><spring:message code="common.modify" /></button></span>

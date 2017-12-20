@@ -334,10 +334,10 @@ function fn_check() {
 </form>	
 		<div class="pop_container">
 			<div class="pop_cts">
-				<p class="tit">Rman <spring:message code="dashboard.Register backup" /></p>
+				<p class="tit">Rman <spring:message code="dashboard.Register.backup" /></p>
 				<div class="pop_cmm">
 					<table class="write">
-						<caption>Rman <spring:message code="dashboard.Register backup" /></caption>
+						<caption>Rman <spring:message code="dashboard.Register.backup" /></caption>
 						<colgroup>
 							<col style="width:85px;" />
 							<col />

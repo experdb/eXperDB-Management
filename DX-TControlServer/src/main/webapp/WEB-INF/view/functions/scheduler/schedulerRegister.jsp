@@ -523,7 +523,7 @@ function fn_check() {
 										<tr>
 											<th scope="row" class="t9 line"><spring:message code="schedule.schedule_name" /></th>
 											<td><input type="text" class="txt t2" id="scd_nm" name="scd_nm" maxlength="20"/>
-											<span class="btn btnF_04 btnC_01"><button type="button" class= "btn_type_02" onclick="fn_check()" style="width: 60px; margin-right: -60px; margin-top: 0;">중복체크</button></span>
+											<span class="btn btnF_04 btnC_01"><button type="button" class= "btn_type_02" onclick="fn_check()" style="width: 60px; margin-right: -60px; margin-top: 0;"><spring:message code="common.overlap_check" /></button></span>
 											</td>
 										</tr>
 										<tr>
