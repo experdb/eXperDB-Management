@@ -741,7 +741,7 @@ function fn_check() {
 								<div class="inp_chk">
 									<span>
 										<input type="checkbox" id="option_1_1" name="opt" value="Y" grp_cd="TC0006" opt_cd="TC000601" onClick="checkSection();" />
-										<label for="option_1_1"><spring:message code="backup_management.pre-data " /></label>
+										<label for="option_1_1"><spring:message code="backup_management.pre-data" /></label>
 									</span>
 									<span>
 										<input type="checkbox" id="option_1_2" name="opt" value="Y" grp_cd="TC0006" opt_cd="TC000602" onClick="checkSection();"/>
@@ -749,7 +749,7 @@ function fn_check() {
 									</span>
 									<span>
 										<input type="checkbox" id="option_1_3" name="opt" value="Y" grp_cd="TC0006" opt_cd="TC000603" onClick="checkSection();"/>
-										<label for="option_1_3"><spring:message code="backup_management.post-data " /></label>
+										<label for="option_1_3"><spring:message code="backup_management.post-data" /></label>
 									</span>
 								</div>
 							</li>
@@ -758,15 +758,15 @@ function fn_check() {
 								<div class="inp_chk">
 									<span>
 										<input type="checkbox" id="option_2_1" name="opt" value="Y" grp_cd="TC0007" opt_cd="TC000701" onClick="checkObject('TC000701');"/>
-										<label for="option_2_1"><spring:message code="backup_management.only_data " /></label>
+										<label for="option_2_1"><spring:message code="backup_management.only_data" /></label>
 									</span>
 									<span>
 										<input type="checkbox" id="option_2_2" name="opt" value="Y" grp_cd="TC0007" opt_cd="TC000702" onClick="checkObject('TC000702');"/>
-										<label for="option_2_2"><spring:message code="backup_management.only_schema " /> </label>
+										<label for="option_2_2"><spring:message code="backup_management.only_schema" /> </label>
 									</span>
 									<span>
 										<input type="checkbox" id="option_2_3" name="opt" value="Y" grp_cd="TC0007" opt_cd="TC000703"/>
-										<label for="option_2_3"><spring:message code="backup_management.blobs " /></label>
+										<label for="option_2_3"><spring:message code="backup_management.blobs" /></label>
 									</span>
 								</div>
 							</li>
@@ -775,19 +775,19 @@ function fn_check() {
 								<div class="inp_chk">
 									<span>
 										<input type="checkbox" id="option_3_1" name="opt" value="Y" grp_cd="TC0008" opt_cd="TC000801" disabled/>
-										<label for="option_3_1"><spring:message code="backup_management.owner " /> </label>
+										<label for="option_3_1"><spring:message code="backup_management.owner" /> </label>
 									</span>
 									<span>
 										<input type="checkbox" id="option_3_2" name="opt" value="Y" grp_cd="TC0008" opt_cd="TC000802"/>
-										<label for="option_3_2"><spring:message code="backup_management.privilege " /></label>
+										<label for="option_3_2"><spring:message code="backup_management.privilege" /></label>
 									</span>
 									<span>
 										<input type="checkbox" id="option_3_3" name="opt" value="Y" grp_cd="TC0008" opt_cd="TC000803"/>
-										<label for="option_3_3"><spring:message code="backup_management.tablespace " /></label>
+										<label for="option_3_3"><spring:message code="backup_management.tablespace" /></label>
 									</span>
 									<span>
 										<input type="checkbox" id="option_3_4" name="opt" value="Y" grp_cd="TC0008" opt_cd="TC000804"/>
-										<label for="option_3_4"><spring:message code="backup_management.unlogged table data" /></label>
+										<label for="option_3_4"><spring:message code="backup_management.unlogged_table_data" /></label>
 									</span>
 								</div>
 							</li>
@@ -800,11 +800,11 @@ function fn_check() {
 								<div class="inp_chk double">
 									<span>
 										<input type="checkbox" id="option_4_1" name="opt" value="Y" grp_cd="TC0009" opt_cd="TC000901" onClick="checkOid();"/>
-										<label for="option_4_1"><spring:message code="backup_management.use_column_inserts " /></label>
+										<label for="option_4_1"><spring:message code="backup_management.use_column_inserts" /></label>
 									</span>
 									<span>
 										<input type="checkbox" id="option_4_2" name="opt" value="Y" grp_cd="TC0009" opt_cd="TC000902" onClick="checkOid();"/>
-										<label for="option_4_2"><spring:message code="backup_management.use_column_commands " /></label>
+										<label for="option_4_2"><spring:message code="backup_management.use_column_commands" /></label>
 									</span>
 									<span>
 										<input type="checkbox" id="option_4_3" name="opt" value="Y" grp_cd="TC0009" opt_cd="TC000903" disabled/>
