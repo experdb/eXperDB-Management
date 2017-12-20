@@ -664,13 +664,13 @@ var haCnt = 0;
 							<th scope="row" class="t9 line"><spring:message code="menu.backup_settings" /></th>
 							<td>
 							<select name="bck" id="bck" class="txt t3" style="width: 150px;" onChange="fn_bck();">
-									<option value=""><spring:message code="common.choice" /></option>
+									<option value=""><spring:message code="schedule.total" /></option>
 									<option value="rman">RMAN</option>
 									<option value="dump">DUMP</option>
 							</select> 
 							<span id="rman_bck_opt"> 
 							<select name="bck_opt_cd" id="bck_opt_cd" class="txt t3" style="width: 150px;">
-										<option value=""><spring:message code="common.choice" /></option>
+										<option value=""><spring:message code="schedule.total" /></option>
 										<option value="TC000301">FULL</option>
 										<option value="TC000302">incremental</option>
 										<option value="TC000303">archive</option>
@@ -678,7 +678,7 @@ var haCnt = 0;
 							</span> 
 							<span id="dump_bck_opt"> 
 							<select name="db_id" id="db_id" class="txt t3" style="width: 150px;">
-										<option value=""><spring:message code="common.choice" /></option>
+										<option value=""><spring:message code="schedule.total" /></option>
 										<c:forEach var="result" items="${dbList}" varStatus="status">
 											<option value="<c:out value="${result.db_id}"/>"><c:out
 													value="${result.db_nm}" /></option>

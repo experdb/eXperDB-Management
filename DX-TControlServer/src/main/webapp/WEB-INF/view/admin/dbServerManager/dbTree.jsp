@@ -484,7 +484,7 @@ function fn_dataCompareChcek(svrDbList){
 							<table id="dbServerList" class="cell-border display" cellspacing="0" align="left">
 								<thead>
 									<tr>
-										<th width="10"><spring:message code="common.choice" /></th>									
+										<th width="10"><spring:message code="schedule.total" /></th>									
 										<th width="200"><spring:message code="dbms_information.dbms_ip" /></th>
 										<th width="130"><spring:message code="common.dbms_name" /></th>
 										<th width="50"><spring:message code="dbms_information.agent_status" /></th>

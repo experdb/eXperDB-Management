@@ -356,7 +356,7 @@ function selectTab(intab){
 								<th scope="row" class="t9"><spring:message code="common.status" /></th>
 								<td>
 									<select name="exe_rslt_cd" id="exe_rslt_cd" class="select t5">
-										<option value=""><spring:message code="common.choice" /></option>
+										<option value=""><spring:message code="schedule.total" /></option>
 										<option value="TC001701"><spring:message code="common.success" /></option>
 										<option value="TC001702"><spring:message code="common.failed" /></option>
 									</select>
@@ -364,7 +364,7 @@ function selectTab(intab){
 								<th scope="row" class="t9 search_rman"><spring:message code="backup_management.backup_option" /></th>
 								<td class="search_rman">
 									<select name="bck_opt_cd" id="bck_opt_cd" class="select t5">
-										<option value=""><spring:message code="common.choice" /></option>
+										<option value=""><spring:message code="schedule.total" /></option>
 										<option value="TC000301"><spring:message code="backup_management.full_backup" /></option>
 										<option value="TC000302"><spring:message code="backup_management.incremental_backup" /></option>
 										<option value="TC000303"><spring:message code="backup_management.change_log_backup" /></option>
@@ -373,7 +373,7 @@ function selectTab(intab){
 								<th scope="row" class="t9 search_dump" style="display:none;"><spring:message code="common.database" /></th>
 								<td class="search_dump" style="display:none;">
 									<select name="db_id" id="db_id" class="select t5">
-										<option value=""><spring:message code="common.choice" /></option>
+										<option value=""><spring:message code="schedule.total" /></option>
 										<c:forEach var="result" items="${dbList}" varStatus="status">
 										<option value="<c:out value="${result.db_id}"/>"><c:out value="${result.db_nm}"/></option>
 										</c:forEach>

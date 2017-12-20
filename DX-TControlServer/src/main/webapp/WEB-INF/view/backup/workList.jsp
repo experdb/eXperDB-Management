@@ -673,7 +673,7 @@ function selectTab(tab){
 								<td><input type="text" name="wrk_nm" id="wrk_nm" class="txt t3"/></td>
 								<th scope="row" class="t9" ><spring:message code="backup_management.backup_option" /></th>
 								<td><select name="bck_opt_cd" id="bck_opt_cd" class="txt t3" style="width:150px;">
-										<option value=""><spring:message code="common.choice" /></option>
+										<option value=""><spring:message code="schedule.total" /></option>
 										<option value="TC000301"><spring:message code="backup_management.full_backup" /></option>
 										<option value="TC000302"><spring:message code="backup_management.incremental_backup" /></option>
 										<option value="TC000303"><spring:message code="backup_management.change_log_backup" /></option>
@@ -697,7 +697,7 @@ function selectTab(tab){
 								<th scope="row" class="t4"><spring:message code="common.database" /></th>
 								<td>
 									<select name="db_id" id="db_id" class="txt t3" style="width:150px;">
-										<option value=""><spring:message code="common.choice" /></option>
+										<option value=""><spring:message code="schedule.total" /></option>
 										<c:forEach var="result" items="${dbList}" varStatus="status">
 										<option value="<c:out value="${result.db_id}"/>"><c:out value="${result.db_nm}"/></option>
 										</c:forEach>

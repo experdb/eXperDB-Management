@@ -93,7 +93,7 @@
 	    			}
 	    		},
 	    		success : function(result) {  
-	    				var option = "<option value='no'><spring:message code="common.choice" /></option>";
+	    				var option = "<option value='no'><spring:message code="schedule.total" /></option>";
 						for(var i=0; i<result.length; i++){	
 							 option += "<option value='"+result[i].db_id+"'>"+result[i].db_nm;
 							 if(result[i].db_exp!=""){
@@ -142,7 +142,7 @@
     			}
     		},
     		success : function(result) {  
-    				var option = "<option value='no'><spring:message code="common.choice" /></option>";
+    				var option = "<option value='no'><spring:message code="schedule.total" /></option>";
 					for(var i=0; i<result.length; i++){	
 						 option += "<option value='"+result[i].db_id+"'>"+result[i].db_nm+"</option>";		 
 					}

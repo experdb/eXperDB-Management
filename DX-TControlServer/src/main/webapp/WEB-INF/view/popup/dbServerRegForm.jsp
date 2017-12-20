@@ -706,7 +706,7 @@ function fn_ipadrDelForm(){
 									<th scope="row" class="ico_t1"><spring:message code="dbms_information.dbms_ip" />(*)</th>
 									<td>
 										<select class="select"  id="ipadr" name="ipadr" onChange="fn_ipadrChange();" >
-											<option value="%"><spring:message code="common.choice" /> </option>
+											<option value="%"><spring:message code="schedule.total" /> </option>
 										</select>
 									</td>
 								</tr>

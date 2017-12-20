@@ -618,7 +618,7 @@ function checkFolder(keyType){
 						<th scope="row" class="ico_t1">Database</th>
 						<td>
 							<select name="db_id" id="db_id" class="select"  onChange="fn_get_object_list('','');">
-								<option value=""><spring:message code="common.choice" /></option>
+								<option value=""><spring:message code="schedule.total" /></option>
 								<c:forEach var="result" items="${dbList}" varStatus="status">
 								<option value="<c:out value="${result.db_id}"/>" <c:if test="${result.db_id eq workInfo[0].db_id}"> selected</c:if>><c:out value="${result.db_nm}"/></option>
 								</c:forEach>
@@ -656,7 +656,7 @@ function checkFolder(keyType){
 						<th scope="row" class="ico_t2"><spring:message code="backup_management.file_format" /></th>
 						<td>
 							<select name="file_fmt_cd" id="file_fmt_cd" onChange="changeFileFmtCd();" class="select t5">
-								<option value=""><spring:message code="common.choice" /></option>
+								<option value=""><spring:message code="schedule.total" /></option>
 								<option value="TC000401"<c:if test="${workInfo[0].file_fmt_cd eq 'TC000401' }"> selected</c:if>>tar</option>
 								<option value="TC000402"<c:if test="${workInfo[0].file_fmt_cd eq 'TC000402' }"> selected</c:if>>plain</option>
 								<option value="TC000403"<c:if test="${workInfo[0].file_fmt_cd eq 'TC000403' }"> selected</c:if>>directory</option>
@@ -665,7 +665,7 @@ function checkFolder(keyType){
 						<th scope="row" class="ico_t2"><spring:message code="backup_management.incording_method" /></th>
 						<td>
 							<select name="encd_mth_nm" id="encd_mth_nm" class="select t5">
-								<option value=""><spring:message code="common.choice" /></option>
+								<option value=""><spring:message code="schedule.total" /></option>
 								<c:forEach var="result" items="${incodeList}" varStatus="status">
 									<option value="<c:out value="${result.sys_cd}"/>"<c:if test="${workInfo[0].encd_mth_nm eq result.sys_cd }"> selected</c:if>><c:out value="${result.sys_cd_nm}"/></option>
 								</c:forEach>
@@ -674,7 +674,7 @@ function checkFolder(keyType){
 						<th scope="row" class="ico_t2"><spring:message code="backup_management.rolename" /></th>
 						<td>
 							<select name="usr_role_nm" id="usr_role_nm" class="select t4">
-								<option value=""><spring:message code="common.choice" /></option>
+								<option value=""><spring:message code="schedule.total" /></option>
 								<c:forEach var="result" items="${roleList.data}" varStatus="status">
 								<option value="<c:out value="${result.rolname}"/>"<c:if test="${workInfo[0].usr_role_nm eq result.rolname }"> selected</c:if>><c:out value="${result.rolname}"/></option>
 								</c:forEach>

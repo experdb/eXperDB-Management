@@ -638,7 +638,7 @@ function fn_check() {
 						<th scope="row" class="ico_t1"><spring:message code="common.database" /></th>
 						<td>
 							<select name="db_id" id="db_id" class="select"  onChange="fn_get_object_list();">
-								<option value=""><spring:message code="common.choice" /></option>
+								<option value=""><spring:message code="schedule.total" /></option>
 								<c:forEach var="result" items="${dbList}" varStatus="status">
 								<option value="<c:out value="${result.db_id}"/>"><c:out value="${result.db_nm}"/></option>
 								</c:forEach>
@@ -678,7 +678,7 @@ function fn_check() {
 						<th scope="row" class="ico_t2"><spring:message code="backup_management.file_format" /></th>
 						<td>
 							<select name="file_fmt_cd" id="file_fmt_cd" onChange="changeFileFmtCd();" class="select t5">
-								<option value=""><spring:message code="common.choice" /></option>
+								<option value=""><spring:message code="schedule.total" /></option>
 								<option value="TC000401">tar</option>
 								<option value="TC000402">plain</option>
 								<option value="TC000403">directory</option>
@@ -687,7 +687,7 @@ function fn_check() {
 						<th scope="row" class="ico_t2"><spring:message code="backup_management.incording_method" /></th>
 						<td>
 							<select name="encd_mth_nm" id="encd_mth_nm" class="select t5">
-								<option value=""><spring:message code="common.choice" /></option>
+								<option value=""><spring:message code="schedule.total" /></option>
 								<c:forEach var="result" items="${incodeList}" varStatus="status">
 									<option value="<c:out value="${result.sys_cd}"/>"><c:out value="${result.sys_cd_nm}"/></option>
 								</c:forEach>
@@ -696,7 +696,7 @@ function fn_check() {
 						<th scope="row" class="ico_t2"><spring:message code="backup_management.rolename" /></th>
 						<td>
 							<select name="usr_role_nm" id="usr_role_nm" class="select t4">
-								<option value=""><spring:message code="common.choice" /></option>
+								<option value=""><spring:message code="schedule.total" /></option>
 								<c:forEach var="result" items="${roleList.data}" varStatus="status">
 								<option value="<c:out value="${result.rolname}"/>"><c:out value="${result.rolname}"/></option>
 								</c:forEach>

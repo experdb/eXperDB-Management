@@ -138,7 +138,7 @@ $(window.document).ready(function() {
 			},
 			success : function(result) {		
 				$("#db_svr_nm").children().remove();
-				$("#db_svr_nm").append("<option value='%'><spring:message code="common.choice" /></option>");
+				$("#db_svr_nm").append("<option value='%'><spring:message code='schedule.total' /></option>");
 				if(result.length > 0){
 					for(var i=0; i<result.length; i++){
 						$("#db_svr_nm").append("<option value='"+result[i].db_svr_nm+"'>"+result[i].db_svr_nm+"</option>");	
@@ -268,7 +268,7 @@ function fn_workAdd(){
 						<th scope="row" class="ico_t1"><spring:message code="common.dbms_name" /></th>
 						<td>
 						<select class="select t8" name="db_svr_nm" id="db_svr_nm" style="width: 170px;">
-								<option value="%"><spring:message code="common.choice" /></option>
+								<option value="%"><spring:message code="schedule.total" /></option>
 						</select>	
 						<th scope="row" class="ico_t1"><spring:message code="common.division" /></th>
 						<td>
