@@ -62,7 +62,7 @@
 	
 	$(window.document).ready(function() {
 		if("${error}"!=""){
-			alert("${error}");
+			alert("통합관리콘솔을 통하여 생성한 커넥터만 매핑설정 및 조회가 가능합니다.");
 			window.close();
 		}
 		fn_init();

@@ -307,7 +307,7 @@
 							<tbody>
 								<c:if test="${fn:length(serverInfo) == 0}">
 										<tr>
-											<td colspan="11">Not Found Data !!</td>
+											<td colspan="11"><spring:message code="message.msg01" /></td>
 										</tr>
 								</c:if>
 								<c:forEach var="data" items="${serverInfo}" varStatus="status">

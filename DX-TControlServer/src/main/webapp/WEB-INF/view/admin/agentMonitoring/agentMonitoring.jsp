@@ -105,7 +105,7 @@
 
 									<c:if test="${fn:length(list) == 0}">
 										<tr>
-											<td colspan="8">Not Found Data !!</td>
+											<td colspan="8"><spring:message code="message.msg01" /></td>
 
 										</tr>
 									</c:if>
@@ -121,10 +121,10 @@
 											<td>${data.STRT_DTM}</td>
 											<td>
 											<c:if test="${data.SET_YN == 'Y'}">
-											예
+											<spring:message code="agent_monitoring.yes" />
 											</c:if>
 											<c:if test="${data.SET_YN == 'N' || data.ISTCNF_YN == null}">
-											<font color="red">아니오</font>
+											<font color="red"><spring:message code="agent_monitoring.no" /></font>
 											</c:if>
 											</td>
 											<td>

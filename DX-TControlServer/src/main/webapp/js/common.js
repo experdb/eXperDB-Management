@@ -258,10 +258,10 @@ function fn_scdLayer(scd_id){
 		type : "post",
 		error : function(xhr, status, error) {
 			if(xhr.status == 401) {
-				alert("인증에 실패 했습니다. 로그인 페이지로 이동합니다.");
+				alert('<spring:message code="message.msg02" />');
 				 location.href = "/";
 			} else if(xhr.status == 403) {
-				alert("세션이 만료가 되었습니다. 로그인 페이지로 이동합니다.");
+				alert('<spring:message code="message.msg03" />');
 	             location.href = "/";
 			} else {
 				alert("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""));
@@ -336,10 +336,10 @@ function fn_failLog(exe_sn){
 	     },
 		error : function(xhr, status, error) {
 			if(xhr.status == 401) {
-				alert("인증에 실패 했습니다. 로그인 페이지로 이동합니다.");
+				alert('<spring:message code="message.msg02" />');
 				 location.href = "/";
 			} else if(xhr.status == 403) {
-				alert("세션이 만료가 되었습니다. 로그인 페이지로 이동합니다.");
+				alert('<spring:message code="message.msg03" />');
 	             location.href = "/";
 			} else {
 				alert("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""));
@@ -368,10 +368,10 @@ function fn_workLayer(wrk_id){
 	     },
 	     error : function(xhr, status, error) {
 				if(xhr.status == 401) {
-					alert("인증에 실패 했습니다. 로그인 페이지로 이동합니다.");
+					alert('<spring:message code="message.msg02" />');
 					 location.href = "/";
 				} else if(xhr.status == 403) {
-					alert("세션이 만료가 되었습니다. 로그인 페이지로 이동합니다.");
+					alert('<spring:message code="message.msg03" />');
 		             location.href = "/";
 				} else {
 					alert("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""));
@@ -448,10 +448,10 @@ function fn_workOptionLayer(bck_wrk_id, db_svr_id, db_nm){
 	     },
 	     error : function(xhr, status, error) {
 				if(xhr.status == 401) {
-					alert("인증에 실패 했습니다. 로그인 페이지로 이동합니다.");
+					alert('<spring:message code="message.msg02" />');
 					 location.href = "/";
 				} else if(xhr.status == 403) {
-					alert("세션이 만료가 되었습니다. 로그인 페이지로 이동합니다.");
+					alert('<spring:message code="message.msg03" />');
 		             location.href = "/";
 				} else {
 					alert("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""));
@@ -503,10 +503,10 @@ function fn_workObjectListTreeLayer(bck_wrk_id, db_svr_id, db_nm){
 	     },
 	     error : function(xhr, status, error) {
 				if(xhr.status == 401) {
-					alert("인증에 실패 했습니다. 로그인 페이지로 이동합니다.");
+					alert('<spring:message code="message.msg02" />');
 					 location.href = "/";
 				} else if(xhr.status == 403) {
-					alert("세션이 만료가 되었습니다. 로그인 페이지로 이동합니다.");
+					alert('<spring:message code="message.msg03" />');
 		             location.href = "/";
 				} else {
 					alert("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""));
@@ -534,10 +534,10 @@ function fn_workObjectTreeLayer(db_svr_id, db_nm, workObj){
 	     },
 		error : function(xhr, status, error) {
 			if(xhr.status == 401) {
-				alert("인증에 실패 했습니다. 로그인 페이지로 이동합니다.");
+				alert('<spring:message code="message.msg02" />');
 				 location.href = "/";
 			} else if(xhr.status == 403) {
-				alert("세션이 만료가 되었습니다. 로그인 페이지로 이동합니다.");
+				alert('<spring:message code="message.msg03" />');
 	             location.href = "/";
 			} else {
 				alert("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""));

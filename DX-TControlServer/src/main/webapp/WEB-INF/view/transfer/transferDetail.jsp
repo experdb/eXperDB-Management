@@ -213,7 +213,8 @@
 <div id="contents">
 	<div class="contents_wrap">
 		<div class="contents_tit">
-			<h4><spring:message code="menu.connector_run_stop" /><a href="#n"><img src="../images/ico_tit.png" class="btn_info"/></a></h4>
+			<h4><spring:message code="menu.connector_run_stop" />
+			<a href="#n"><img src="../images/ico_tit.png" class="btn_info"/></a></h4>
 			<div class="infobox"> 
 				<ul>
 					<li><spring:message code="help.connector_run_stop_01" /></li>

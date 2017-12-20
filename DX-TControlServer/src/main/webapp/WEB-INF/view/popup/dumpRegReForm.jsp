@@ -220,7 +220,7 @@ function fn_insert_object(){
 	});
 
 	opener.fn_dump_find_list();
-	alert("수정이 완료되었습니다.");
+	alert('<spring:message code="message.msg84" />');
 	self.close();
 }
 
@@ -630,7 +630,7 @@ function checkFolder(keyType){
 		</div>
 		<div class="pop_cmm mt25">
 			<table class="write">
-				<caption><spring:message code="dashboard.Register backup" /></caption>
+				<caption><spring:message code="dashboard.Register.backup" /></caption>
 				<colgroup>
 					<col style="width:80px;" />
 					<col style="width:178px;" />
@@ -805,7 +805,7 @@ function checkFolder(keyType){
 											<c:if test="${optVal.grp_cd eq 'TC0008' && optVal.opt_cd eq 'TC000804'}">checked</c:if>
 										</c:forEach>
 										/>
-										<label for="option_3_4"><spring:message code="backup_management.unlogged_table data" /></label>
+										<label for="option_3_4"><spring:message code="backup_management.unlogged_table_data" /></label>
 									</span>
 								</div>
 							</li>
