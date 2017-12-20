@@ -116,6 +116,12 @@
 		AND A.TRF_TRG_ID =B.TRF_TRG_ID
 		AND A.DB_ID = C.DB_ID
 		AND C.DB_SVR_ID=D.DB_SVR_ID
+		<if test="trf_trg_cnn_nm != null and trf_trg_cnn_nm != '' ">
+		AND TRF_TRG_CNN_NM LIKE #{trf_trg_cnn_nm}
+		</if>
+		<if test="db_nm != null and db_nm != '' ">
+		AND DB_NM LIKE #{db_nm}
+		</if>
 	</select>
 	
 	<select id="selectMappingInfo" parameterType="String" resultType="transferDetailVO">

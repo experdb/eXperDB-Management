@@ -269,7 +269,7 @@
 				</colgroup>
 				<tbody>
 					<tr>
-						<th scope="row" class="ico_t1">spring:message code="user_management.user_id" />(*)</th>
+						<th scope="row" class="ico_t1"><spring:message code="user_management.user_id" />(*)</th>
 						<td>
 							<c:if test="${act == 'i'}">
 								<input type="text" class="txt" name="usr_id" id="usr_id" value="${get_usr_id}" maxlength="15" style="width: 230px;" />
