@@ -80,10 +80,10 @@ $(window.document).ready(function() {
 		     },
 			error : function(xhr, status, error) {
 				if(xhr.status == 401) {
-					alert("인증에 실패 했습니다. 로그인 페이지로 이동합니다.");
+					alert('<spring:message code="message.msg02" />');
 					 location.href = "/";
 				} else if(xhr.status == 403) {
-					alert("세션이 만료가 되었습니다. 로그인 페이지로 이동합니다.");
+					alert('<spring:message code="message.msg03" />');
 		             location.href = "/";
 				} else {
 					alert("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""));
@@ -122,10 +122,10 @@ function fn_svr_db(db_svr_nm, db_svr_id){
 	     },
 		error : function(xhr, status, error) {
 			if(xhr.status == 401) {
-				alert("인증에 실패 했습니다. 로그인 페이지로 이동합니다.");
+				alert('<spring:message code="message.msg02" />');
 				 location.href = "/";
 			} else if(xhr.status == 403) {
-				alert("세션이 만료가 되었습니다. 로그인 페이지로 이동합니다.");
+				alert('<spring:message code="message.msg03" />');
 	             location.href = "/";
 			} else {
 				alert("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""));
@@ -134,7 +134,7 @@ function fn_svr_db(db_svr_nm, db_svr_id){
 		success : function(result) {
 			table_db.clear().draw();
 			if(result.data == null){
-				alert("서버상태를 확인해주세요.");
+				alert('<spring:message code="message.msg05" />');
 			}else{
 				table_db.rows.add(result.data).draw();
 				fn_dataCompareChcek(result,db_svr_id);
@@ -161,10 +161,10 @@ function fn_dataCompareChcek(svrDbList,db_svr_id){
 	     },
 		error : function(xhr, status, error) {
 			if(xhr.status == 401) {
-				alert("인증에 실패 했습니다. 로그인 페이지로 이동합니다.");
+				alert('<spring:message code="message.msg02" />');
 				 location.href = "/";
 			} else if(xhr.status == 403) {
-				alert("세션이 만료가 되었습니다. 로그인 페이지로 이동합니다.");
+				alert('<spring:message code="message.msg03" />');
 	             location.href = "/";
 			} else {
 				alert("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""));
@@ -231,10 +231,10 @@ function fn_dataCompareChcek(svrDbList,db_svr_id){
 			     },
 				error : function(xhr, status, error) {
 					if(xhr.status == 401) {
-						alert("인증에 실패 했습니다. 로그인 페이지로 이동합니다.");
+						alert('<spring:message code="message.msg02" />');
 						 location.href = "/";
 					} else if(xhr.status == 403) {
-						alert("세션이 만료가 되었습니다. 로그인 페이지로 이동합니다.");
+						alert('<spring:message code="message.msg03" />');
 			             location.href = "/";
 					} else {
 						alert("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""));
@@ -301,17 +301,17 @@ function fn_dataCompareChcek(svrDbList,db_svr_id){
  			     },
  				error : function(xhr, status, error) {
  					if(xhr.status == 401) {
- 						alert("인증에 실패 했습니다. 로그인 페이지로 이동합니다.");
+ 						alert('<spring:message code="message.msg02" />');
  						 location.href = "/";
  					} else if(xhr.status == 403) {
- 						alert("세션이 만료가 되었습니다. 로그인 페이지로 이동합니다.");
+ 						alert('<spring:message code="message.msg03" />');
  			             location.href = "/";
  					} else {
  						alert("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""));
  					}
  				},
  				success : function(result) {
- 					alert("저장되었습니다.");
+ 					alert('<spring:message code="message.msg07" /> ');
  					opener.location.reload();
  					self.close();	 
  				}
@@ -320,7 +320,7 @@ function fn_dataCompareChcek(svrDbList,db_svr_id){
      		return false;
      	}
  	}else{
- 		alert("하나의 항목을 선택해주세요.");
+ 		alert('<spring:message code="message.msg06" />');
  	}
  }
  
@@ -343,17 +343,17 @@ function fn_dataCompareChcek(svrDbList,db_svr_id){
 					</colgroup>
 					<tbody>
 						<tr>
-							<th scope="row" class="ico_t1 type2">DBMS명</th>
+							<th scope="row" class="ico_t1 type2"><spring:message code="common.dbms_name" /></th>
 							<td>
 								<select class="select"  id="db_svr_nm" name="db_svr_nm" style="width: 200px;" onChange="fn_dbserverChange();">
 								</select>
 							</td>
 						</tr>
 						<tr>
-							<th scope="row" class="ico_t1">DBMS 아이피</th>
+							<th scope="row" class="ico_t1"><spring:message code="dbms_information.dbms_ip" /></th>
 							<td><input type="text" class="txt bg1" name="ipadr" id="ipadr"  style="width: 200px;" readonly/></td>
 					
-							<th scope="row" class="ico_t1">포트</th>
+							<th scope="row" class="ico_t1"><spring:message code="data_transfer.port" /></th>
 							<td><input type="text" class="txt bg1" name="portno" id="portno"  style="width: 200px;" readonly/></td>
 						</tr>
 					</tbody>
@@ -364,8 +364,8 @@ function fn_dataCompareChcek(svrDbList,db_svr_id){
 					<table id="dbList" class="display" cellspacing="0" align="left"  width="100%">
 						<thead>
 							<tr>
-								<th width="200">Database</th>
-								<th width="300">설명</th>
+								<th width="200"><spring:message code="common.database" /></th>
+								<th width="300"><spring:message code="common.desc" /> </th>
 								<th width="100">등록선택</th>
 							</tr>
 						</thead>
@@ -374,8 +374,8 @@ function fn_dataCompareChcek(svrDbList,db_svr_id){
 		</div>
 		
 		<div class="btn_type_02">
-			<span class="btn"><button onClick="fn_insertDB();">저장</button></span>
-			<a href="#n" class="btn" onClick="window.close();"><span>취소</span></a>
+			<span class="btn"><button onClick="fn_insertDB();"><spring:message code="common.registory" /></button></span>
+			<a href="#n" class="btn" onClick="window.close();"><span><spring:message code="common.cancel" /></span></a>
 		</div>
 	</div>
 </div>

@@ -43,17 +43,17 @@
 		if ($("#ctf_tp_nm option:selected").val() != "local") {
 			var ip = document.getElementById("ip");
 			if (ip.value == "") {
-				alert("IP를 입력하여 주십시오.");
+				alert('<spring:message code="message.msg62" /> ');
 				ip.focus();
 				return false;
 			}
 			if (prefix.value !="" &&!valid_numeric(prefix.value)) {
-				alert("Prefix는 숫자만 입력가능합니다.");
+				alert('<spring:message code="message.msg63" />');
 				prefix.focus();
 				return false;
 			}
 			if(prefix.value !="" && prefix.value>32){
-				alert("Prefix는 0~32만 입력가능합니다.");
+				alert('<spring:message code="message.msg64" />');
 				prefix.focus();
 				return false;
 			}
@@ -231,7 +231,7 @@
 				</colgroup>
 				<tbody>
 					<tr>
-						<th scope="row" class="ico_t1">DBMS명</th>
+						<th scope="row" class="ico_t1"><spring:message code="common.dbms_name" /></th>
 						<td><input type="text" class="txt bg1" value="${db_svr_nm}" readonly="readonly"/></td>
 						<th scope="row" class="ico_t1">Database</th>
 						<td>
@@ -315,7 +315,7 @@
 					<button type="button" onclick="fn_update()">저장</button>
 				</c:if>
 			</span>
-			<a href="#n" class="btn" onclick="window.close();"><span>취소</span></a>
+			<a href="#n" class="btn" onclick="window.close();"><span><spring:message code="common.cancel" /></span></a>
 		</div>
 	</div>
 </div>

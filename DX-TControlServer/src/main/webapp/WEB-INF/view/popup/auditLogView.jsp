@@ -45,7 +45,7 @@
 	function copy_to_clipboard(str) {
 	  if ( window.clipboardData ){ 
 	    window.clipboardData.setData("Text", str);
-	    alert("클립보드에 복사되었습니다. \n [Ctrl+v]를 사용하여 원하는 곳에 붙여넣기 하세요.");
+	    alert('<spring:message code="message.msg65" />');
 	    return;
 	  }
 	  else {
@@ -54,7 +54,7 @@
 
 		  var successful = document.execCommand( "copy", false, null ); 
 		  if(successful) {
-			  alert("클립보드에 복사되었습니다. \n [Ctrl+v]를 사용하여 원하는 곳에 붙여넣기 하세요.");
+			  alert('<spring:message code="message.msg65" />');
 		  }
 
 	  }
@@ -79,11 +79,11 @@
 	
 	function fn_sec(sec) {
 		if (sec < 60) {
-		 	sec = sec + '초';
+		 	sec = sec + '<spring:message code="schedule.second" />';
 		} else if (sec < 3600){
-		 	sec = Math.floor(sec%3600/60) + '분 ' + sec%60 + '초';
+		 	sec = Math.floor(sec%3600/60) + '<spring:message code="schedule.minute" />' + sec%60 + '<spring:message code="schedule.second" />';
 		} else {
-		 	sec = Math.floor(sec/3600) + '시간 ' + Math.floor(sec%3600/60) + '분 ' + sec%60 + '초';
+		 	sec = Math.floor(sec/3600) + '<spring:message code="history_management.time" /> ' + Math.floor(sec%3600/60) + '<spring:message code="schedule.minute" /> ' + sec%60 + '<spring:message code="schedule.second" />';
 		}
 		
 		
@@ -101,7 +101,7 @@
 		var v_log_line = $("#log_line").val();
 		
 		if(v_endFlag > 0) {
-			alert("파일을 모두 읽었습니다.");
+			alert('<spring:message code="message.msg66" />');
 			$("#endFlag").val("0");
 			return;
 		}
@@ -125,10 +125,10 @@
 		     },
 			error : function(xhr, status, error) {
 				if(xhr.status == 401) {
-					alert("인증에 실패 했습니다. 로그인 페이지로 이동합니다.");
+					alert('<spring:message code="message.msg02" />');
 					 location.href = "/";
 				} else if(xhr.status == 403) {
-					alert("세션이 만료가 되었습니다. 로그인 페이지로 이동합니다.");
+					alert('<spring:message code="message.msg03" />');
 		             location.href = "/";
 				} else {
 					alert("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""));
@@ -197,7 +197,7 @@
 						<div class="btn_type_01">
 							<span class="btn btnC_01"><button onClick="fn_addView();">더보기</button></span>
 							<!--  <span class="btn btnC_01"><button onClick="fn_copy();">복사</button></span>-->
-							<a href="#n" class="btn" onclick="window.close();"><span>취소</span></a>
+							<a href="#n" class="btn" onclick="window.close();"><span><spring:message code="common.cancel" /></span></a>
 						</div>
 					</td>
 				</tr>
@@ -232,7 +232,7 @@
 						<td>
 							<table>
 								<tr>
-									<td>파일명 : &nbsp;&nbsp;</td>
+									<td><spring:message code="access_control_management.log_file_name" /> : &nbsp;&nbsp;</td>
 									<td><b>${file_name}</b> &nbsp;&nbsp;</td>
 									<td>size : </td>
 									<td><b><div id="fSizeDev"></div></b></td>

@@ -129,7 +129,7 @@ function fn_makeHour(){
 		}
 		hourHtml += '<option value="'+hour+'">'+hour+'</option>';
 	}
-	hourHtml += '</select> 시';	
+	hourHtml += '</select> <spring:message code="schedule.our" />';	
 	$( "#hour" ).append(hourHtml);
 }
 
@@ -150,7 +150,7 @@ function fn_makeMin(){
 		}
 		minHtml += '<option value="'+min+'">'+min+'</option>';
 	}
-	minHtml += '</select> 분';	
+	minHtml += '</select> <spring:message code="schedule.minute" />';	
 	$( "#min" ).append(minHtml);
 }
 
@@ -170,7 +170,7 @@ function fn_makeMin(){
 		}
 		secHtml += '<option value="'+sec+'">'+sec+'</option>';
 	}
-	secHtml += '</select> 초';	
+	secHtml += '</select> <spring:message code="schedule.second" />';	
 	$( "#sec" ).append(secHtml);
 } 
 
@@ -205,10 +205,10 @@ $(window.document).ready(function() {
 	     },
 		error : function(xhr, status, error) {
 			if(xhr.status == 401) {
-				alert("인증에 실패 했습니다. 로그인 페이지로 이동합니다.");
+				alert('<spring:message code="message.msg02" />');
 				 location.href = "/";
 			} else if(xhr.status == 403) {
-				alert("세션이 만료가 되었습니다. 로그인 페이지로 이동합니다.");
+				alert('<spring:message code="message.msg03" />');
 	             location.href = "/";
 			} else {
 				alert("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""));
@@ -297,10 +297,10 @@ function fn_workAddCallback(rowList){
 	     },
 		error : function(xhr, status, error) {
 			if(xhr.status == 401) {
-				alert("인증에 실패 했습니다. 로그인 페이지로 이동합니다.");
+				alert('<spring:message code="message.msg02" />');
 				 location.href = "/";
 			} else if(xhr.status == 403) {
-				alert("세션이 만료가 되었습니다. 로그인 페이지로 이동합니다.");
+				alert('<spring:message code="message.msg03" />');
 	             location.href = "/";
 			} else {
 				alert("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""));
@@ -329,10 +329,10 @@ function fn_scheduleStop(){
     	     },
     		error : function(xhr, status, error) {
     			if(xhr.status == 401) {
-    				alert("인증에 실패 했습니다. 로그인 페이지로 이동합니다.");
+    				alert('<spring:message code="message.msg02" />');
     				 location.href = "/";
     			} else if(xhr.status == 403) {
-    				alert("세션이 만료가 되었습니다. 로그인 페이지로 이동합니다.");
+    				alert('<spring:message code="message.msg03" />');
     	             location.href = "/";
     			} else {
     				alert("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""));
@@ -350,10 +350,10 @@ function fn_bckModifyPopup(){
 	var works = table.rows('.selected').data();
 
 	if (works.length <= 0) {
-		alert("선택된 항목이 없습니다.");
+		alert('<spring:message code="message.msg35" />');
 		return false;
 	}else if(works.length > 1){
-		alert("하나의 항목을 선택해주세요.");
+		alert('<spring:message code="message.msg04" />');
 		return false;
 	}else{
 		
@@ -399,7 +399,7 @@ function fn_bckModifyPopup(){
 			<p class="tit">스케줄 상세보기</p>
 			<div class="cmm_grp">
 				<div class="btn_type_01">
-					<span class="btn" onClick="fn_bckModifyPopup()"><button>수정</button></span>
+					<span class="btn" onClick="fn_bckModifyPopup()"><button><spring:message code="common.modify" /></button></span>
 				</div>
 				<div class="sch_form">
 					<table class="write">
@@ -410,11 +410,11 @@ function fn_bckModifyPopup(){
 						</colgroup>
 						<tbody>
 							<tr>
-								<th scope="row" class="t9 line">스케줄명</th>
+								<th scope="row" class="t9 line"><spring:message code="schedule.schedule_name" /></th>
 								<td><input type="text" class="txt t2" id="scd_nm" name="scd_nm" readonly="readonly" /></td>
 							</tr>
 							<tr>
-								<th scope="row" class="t9 line">설명</th>
+								<th scope="row" class="t9 line"><spring:message code="common.desc" /></th>
 								<td><input type="text" class="txt t2" id="scd_exp" name="scd_exp" readonly="readonly" /></td>
 							</tr>
 						</tbody>
@@ -429,26 +429,26 @@ function fn_bckModifyPopup(){
 						</colgroup>
 						<tbody>
 							<tr>
-								<th scope="row" class="ico_t4">스케쥴시간설정</th>
+								<th scope="row" class="ico_t4"><spring:message code="schedule.schedule_time_settings" /></th>
 								<td>
 									<div class="schedule_wrap">
 										<span> 
 										<select class="select t5" name="exe_perd_cd" id="exe_perd_cd" onChange="fn_exe_pred();"disabled="disabled">
-												<option value="TC001601">매일</option>
-												<option value="TC001602">매주</option>
-												<option value="TC001603">매월</option>
-												<option value="TC001604">매년</option>
-												<option value="TC001605">1회실행</option>
+												<option value="TC001601"><spring:message code="schedule.everyday" /></option>
+												<option value="TC001602"><spring:message code="schedule.everyweek" /></option>
+												<option value="TC001603"><spring:message code="schedule.everymonth" /></option>
+												<option value="TC001604"><spring:message code="schedule.everyyear" /></option>
+												<option value="TC001605"><spring:message code="schedule.one_time_run" /></option>
 										</select>
 										</span> 
 										<span id="weekDay"> 
-										<input type="checkbox" id="chk0" name="chk" value="0" onclick="return false;">일요일 
-										<input type="checkbox" id="chk1" name="chk" value="0" onclick="return false;">월요일 
-										<input type="checkbox" id="chk2" name="chk" value="0" onclick="return false;">화요일
-										<input type="checkbox" id="chk3" name="chk" value="0" onclick="return false;">수요일 
-										<input type="checkbox" id="chk4" name="chk" value="0" onclick="return false;">목요일
-										<input type="checkbox" id="chk5" name="chk" value="0" onclick="return false;">금요일 
-										<input type="checkbox" id="chk6" name="chk" value="0" onclick="return false;">토요일
+										<input type="checkbox" id="chk0" name="chk" value="0" onclick="return false;"><spring:message code="schedule.sunday" />  
+										<input type="checkbox" id="chk1" name="chk" value="0" onclick="return false;"><spring:message code="schedule.monday" /> 
+										<input type="checkbox" id="chk2" name="chk" value="0" onclick="return false;"><spring:message code="schedule.thuesday" />
+										<input type="checkbox" id="chk3" name="chk" value="0" onclick="return false;"><spring:message code="schedule.wednesday" /> 
+										<input type="checkbox" id="chk4" name="chk" value="0" onclick="return false;"><spring:message code="schedule.thursday" />
+										<input type="checkbox" id="chk5" name="chk" value="0" onclick="return false;"><spring:message code="schedule.friday" />  
+										<input type="checkbox" id="chk6" name="chk" value="0" onclick="return false;"><spring:message code="schedule.saturday" /> 
 										</span> 
 										<span id="calendar">
 											<div class="calendar_area">
@@ -488,10 +488,10 @@ function fn_bckModifyPopup(){
 								<th></th>
 								<th>No</th>
 								<th></th>
-								<th>서버명</th>
-								<th>구분</th>
-								<th>work명</th>
-								<th>Work설명</th>
+								<th><spring:message code="data_transfer.server_name" /></th>
+								<th><spring:message code="common.division" /></th>
+								<th><spring:message code="common.work_name" /></th>
+								<th><spring:message code="common.work_description" /></th>
 							</tr>
 						</thead>
 					</table>

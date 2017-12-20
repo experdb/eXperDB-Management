@@ -48,10 +48,10 @@ $(window.document).ready(function() {
 		     },
 			error : function(xhr, status, error) {
 				if(xhr.status == 401) {
-					alert("인증에 실패 했습니다. 로그인 페이지로 이동합니다.");
+					alert('<spring:message code="message.msg02" />');
 					 location.href = "/";
 				} else if(xhr.status == 403) {
-					alert("세션이 만료가 되었습니다. 로그인 페이지로 이동합니다.");
+					alert('<spring:message code="message.msg03" />');
 		             location.href = "/";
 				} else {
 					alert("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""));
@@ -75,10 +75,10 @@ $(window.document).ready(function() {
 		     },
 			error : function(xhr, status, error) {
 				if(xhr.status == 401) {
-					alert("인증에 실패 했습니다. 로그인 페이지로 이동합니다.");
+					alert('<spring:message code="message.msg02" />');
 					 location.href = "/";
 				} else if(xhr.status == 403) {
-					alert("세션이 만료가 되었습니다. 로그인 페이지로 이동합니다.");
+					alert('<spring:message code="message.msg03" />');
 		             location.href = "/";
 				} else {
 					alert("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""));
@@ -122,10 +122,10 @@ function fn_insert_work(){
 		     },
 			error : function(xhr, status, error) {
 				if(xhr.status == 401) {
-					alert("인증에 실패 했습니다. 로그인 페이지로 이동합니다.");
+					alert('<spring:message code="message.msg02" />');
 					 location.href = "/";
 				} else if(xhr.status == 403) {
-					alert("세션이 만료가 되었습니다. 로그인 페이지로 이동합니다.");
+					alert('<spring:message code="message.msg03" />');
 		             location.href = "/";
 				} else {
 					alert("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""));
@@ -177,10 +177,10 @@ function fn_insert_opt_val(bck_wrk_id, opt_sn, grp_cd, opt_cd, bck_opt_val){
 	     },
 		error : function(xhr, status, error) {
 			if(xhr.status == 401) {
-				alert("인증에 실패 했습니다. 로그인 페이지로 이동합니다.");
+				alert('<spring:message code="message.msg02" />');
 				 location.href = "/";
 			} else if(xhr.status == 403) {
-				alert("세션이 만료가 되었습니다. 로그인 페이지로 이동합니다.");
+				alert('<spring:message code="message.msg03" />');
 	             location.href = "/";
 			} else {
 				alert("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""));
@@ -202,7 +202,7 @@ function fn_insert_object(data){
 	});
 
 	opener.fn_dump_find_list();
-	alert("등록이 완료되었습니다.");
+	alert('<spring:message code="message.msg106" />');
 	self.close();
 }
 
@@ -229,10 +229,10 @@ function fn_insert_object(data){
 		     },
 			error : function(xhr, status, error) {
 				if(xhr.status == 401) {
-					alert("인증에 실패 했습니다. 로그인 페이지로 이동합니다.");
+					alert('<spring:message code="message.msg02" />');
 					 location.href = "/";
 				} else if(xhr.status == 403) {
-					alert("세션이 만료가 되었습니다. 로그인 페이지로 이동합니다.");
+					alert('<spring:message code="message.msg03" />');
 		             location.href = "/";
 				} else {
 					alert("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""));
@@ -252,24 +252,24 @@ function valCheck(){
 		return false;
 	}
 	else if($("#wrk_nm").val() == ""){
-		alert("Work명을 입력해 주세요.");
+		alert('<spring:message code="message.msg107" />');
 		$("#wrk_nm").focus();
 		return false;
 	}
 	else if($("#wrk_exp").val() == ""){
-		alert("Work설명을 입력해 주세요.");
+		alert('<spring:message code="message.msg108" />');
 		$("#wrk_exp").focus();
 		return false;
 	}else if($("#log_file_pth").val() == ""){
-		alert("백업로그경로를 입력해 주세요.");
+		alert('<spring:message code="message.msg78" />');
 		$("#log_file_pth").focus();
 		return false;
 	}else if($("#save_pth").val() == ""){
-		alert("백업경로를 입력해 주세요.");
+		alert('<spring:message code="message.msg79" />');
 		$("#save_pth").focus();
 		return false;
 	}else if($("#check_path1").val() != "Y"){
-		alert("백업로그경로에 유효한 경로를 입력후 경로체크를 해 주세요.");
+		alert('<spring:message code="message.msg72" />');
 		$("#log_file_pth").focus();
 		return false;
 	}else if($("#check_path2").val() != "Y"){
@@ -302,10 +302,10 @@ function fn_get_object_list(){
 		     },
 			error : function(xhr, status, error) {
 				if(xhr.status == 401) {
-					alert("인증에 실패 했습니다. 로그인 페이지로 이동합니다.");
+					alert('<spring:message code="message.msg02" />');
 					 location.href = "/";
 				} else if(xhr.status == 403) {
-					alert("세션이 만료가 되었습니다. 로그인 페이지로 이동합니다.");
+					alert('<spring:message code="message.msg03" />');
 		             location.href = "/";
 				} else {
 					alert("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""));
@@ -487,10 +487,10 @@ function checkFolder(keyType){
 	
 	
 	if(save_path == "" && keyType == 1){
-		alert("백업로그 경로를 입력해 주세요.");
+		alert('<spring:message code="message.msg78" />');
 		$("#log_file_pth").focus();
 	}else if(save_path == "" && keyType == 2){
-		alert("백업경로를 입력해 주세요.");
+		alert('<spring:message code="message.msg79" />');
 		$("#save_pth").focus();
 	}else{
 		$.ajax({
@@ -506,10 +506,10 @@ function checkFolder(keyType){
 		     },
 			error : function(xhr, status, error) {
 				if(xhr.status == 401) {
-					alert("인증에 실패 했습니다. 로그인 페이지로 이동합니다.");
+					alert('<spring:message code="message.msg02" />');
 					 location.href = "/";
 				} else if(xhr.status == 403) {
-					alert("세션이 만료가 되었습니다. 로그인 페이지로 이동합니다.");
+					alert('<spring:message code="message.msg03" />');
 		             location.href = "/";
 				} else {
 					alert("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""));
@@ -523,14 +523,14 @@ function checkFolder(keyType){
 						}else if(keyType == 2){
 							$("#check_path2").val("Y");
 						}
-						alert("유효한 경로입니다.");
+						alert('<spring:message code="message.msg100" />');
 						var volume = data.result.RESULT_DATA.CAPACITY;
 						if(keyType == 1){
 							$("#logVolume").empty();
-							$( "#logVolume" ).append("용량 : "+volume);						
+							$( "#logVolume" ).append("<spring:message code='common.volume' /> : "+volume);						
 						}else if(keyType == 2) {
 							$("#backupVolume").empty();
-							$( "#backupVolume" ).append("용량 : "+volume);
+							$( "#backupVolume" ).append("<spring:message code='common.volume' /> : "+volume);
 						}
 					}else{
 						if(haCnt > 1){
@@ -540,7 +540,7 @@ function checkFolder(keyType){
 						}						
 					}
 				}else{
-					alert("경로체크 중 서버에러로 인하여 실패하였습니다.")
+					alert('<spring:message code="message.msg76" /> ')
 				}
 			}
 		});
@@ -551,7 +551,7 @@ function checkFolder(keyType){
 function fn_check() {
 	var wrk_nm = document.getElementById("wrk_nm");
 	if (wrk_nm.value == "") {
-		alert("WORK명을 입력하세요.");
+		alert('<spring:message code="message.msg107" /> ');
 		document.getElementById('wrk_nm').focus();
 		return;
 	}
@@ -577,10 +577,10 @@ function fn_check() {
 	     },
 		error : function(xhr, status, error) {
 			if(xhr.status == 401) {
-				alert("인증에 실패 했습니다. 로그인 페이지로 이동합니다.");
+				alert('<spring:message code="message.msg02" />');
 				 location.href = "/";
 			} else if(xhr.status == 403) {
-				alert("세션이 만료가 되었습니다. 로그인 페이지로 이동합니다.");
+				alert('<spring:message code="message.msg03" />');
 	             location.href = "/";
 			} else {
 				alert("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""));
@@ -609,13 +609,13 @@ function fn_check() {
 				</colgroup>
 				<tbody>
 					<tr>
-						<th scope="row" class="ico_t1">Work명</th>
+						<th scope="row" class="ico_t1"><spring:message code="common.work_name" /></th>
 						<td><input type="text" class="txt" name="wrk_nm" id="wrk_nm" maxlength="20"/>
 						<span class="btn btnC_01"><button type="button" class= "btn_type_02" onclick="fn_check()" style="width: 60px; margin-right: -60px; margin-top: 0;">중복체크</button></span>
 						</td>
 					</tr>
 					<tr>
-						<th scope="row" class="ico_t1">Work<br/>설명</th>
+						<th scope="row" class="ico_t1"><spring:message code="common.work_description" /></th>
 						<td>
 							<div class="textarea_grp">
 								<textarea name="wrk_exp" id="wrk_exp" maxlength=25></textarea>
@@ -635,10 +635,10 @@ function fn_check() {
 				</colgroup>
 				<tbody>
 					<tr>
-						<th scope="row" class="ico_t1">Database</th>
+						<th scope="row" class="ico_t1"><spring:message code="common.database" /></th>
 						<td>
 							<select name="db_id" id="db_id" class="select"  onChange="fn_get_object_list();">
-								<option value="">선택</option>
+								<option value=""><spring:message code="common.choice" /></option>
 								<c:forEach var="result" items="${dbList}" varStatus="status">
 								<option value="<c:out value="${result.db_id}"/>"><c:out value="${result.db_nm}"/></option>
 								</c:forEach>
@@ -661,42 +661,42 @@ function fn_check() {
 				</colgroup>
 				<tbody>
 					<tr>
-						<th scope="row" class="ico_t2">백업로그경로</th>
+						<th scope="row" class="ico_t2"><spring:message code="backup_management.backup_log_dir" /></th>
 						<td colspan="5"><input type="text" class="txt t4" name="log_file_pth" id="log_file_pth" style="width:530px" onKeydown="$('#check_path1').val('N')"/>
 							<span class="btn btnC_01"><button type="button" class= "btn_type_02" onclick="checkFolder(1)" style="width: 60px; margin-right: -60px; margin-top: 0;">경로체크</button></span>							
 							<span id="logVolume" style="margin:63px;"></span>	
 						</td>
 					</tr>
 					<tr>
-						<th scope="row" class="ico_t2">백업경로</th>
+						<th scope="row" class="ico_t2"><spring:message code="backup_management.backup_dir" /></th>
 						<td colspan="5"><input type="text" class="txt t4" name="save_pth" id="save_pth" style="width:530px" onKeydown="$('#check_path2').val('N')"/>
 							<span class="btn btnC_01"><button type="button" class= "btn_type_02" onclick="checkFolder(2)" style="width: 60px; margin-right: -60px; margin-top: 0;">경로체크</button></span>							
 							<span id="backupVolume" style="margin:63px;"></span>	
 						</td>
 					</tr>
 					<tr>
-						<th scope="row" class="ico_t2">파일포맷</th>
+						<th scope="row" class="ico_t2"><spring:message code="backup_management.file_format" /></th>
 						<td>
 							<select name="file_fmt_cd" id="file_fmt_cd" onChange="changeFileFmtCd();" class="select t5">
-								<option value="">선택</option>
+								<option value=""><spring:message code="common.choice" /></option>
 								<option value="TC000401">tar</option>
 								<option value="TC000402">plain</option>
 								<option value="TC000403">directory</option>
 							</select>
 						</td>
-						<th scope="row" class="ico_t2">인코딩방식</th>
+						<th scope="row" class="ico_t2"><spring:message code="backup_management.incording_method" /></th>
 						<td>
 							<select name="encd_mth_nm" id="encd_mth_nm" class="select t5">
-								<option value="">선택</option>
+								<option value=""><spring:message code="common.choice" /></option>
 								<c:forEach var="result" items="${incodeList}" varStatus="status">
 									<option value="<c:out value="${result.sys_cd}"/>"><c:out value="${result.sys_cd_nm}"/></option>
 								</c:forEach>
 							</select>
 						</td>
-						<th scope="row" class="ico_t2">Rolename</th>
+						<th scope="row" class="ico_t2"><spring:message code="backup_management.rolename" /></th>
 						<td>
 							<select name="usr_role_nm" id="usr_role_nm" class="select t4">
-								<option value="">선택</option>
+								<option value=""><spring:message code="common.choice" /></option>
 								<c:forEach var="result" items="${roleList.data}" varStatus="status">
 								<option value="<c:out value="${result.rolname}"/>"><c:out value="${result.rolname}"/></option>
 								</c:forEach>
@@ -704,10 +704,10 @@ function fn_check() {
 						</td>
 					</tr>
 					<tr>
-						<th scope="row" class="ico_t2">압축률</th>
+						<th scope="row" class="ico_t2"><spring:message code="backup_management.compressibility" /></th>
 						<td>
 							<select name="cprt" id="cprt" class="select t4" style="width:80px;">
-								<option value="0">미압축</option>
+								<option value="0"><spring:message code="backup_management.uncompressed" /></option>
 								<option value="1">1Level</option>
 								<option value="2">2Level</option>
 								<option value="3">3Level</option>
@@ -718,9 +718,9 @@ function fn_check() {
 								<option value="8">8Level</option>
 								<option value="9">9Level</option>
 							</select> %</td>
-						<th scope="row" class="ico_t2">파일보관일수</th>
-						<td><input type="number" class="txt t6" name="file_stg_dcnt" id="file_stg_dcnt" maxlength=3 min=0 value="0"/> 일</td>
-						<th scope="row" class="ico_t2">백업유지갯수</th>
+						<th scope="row" class="ico_t2"><spring:message code="backup_management.file_keep_day" /></th>
+						<td><input type="number" class="txt t6" name="file_stg_dcnt" id="file_stg_dcnt" maxlength=3 min=0 value="0"/> <spring:message code="common.day" /></td>
+						<th scope="row" class="ico_t2"><spring:message code="backup_management.backup_maintenance_count" /></th>
 						<td><input type="number" class="txt t6" name="bck_mtn_ecnt" id="bck_mtn_ecnt" maxlength=3 min=0 value="0"/>개</td>
 					</tr>
 				</tbody>
@@ -729,65 +729,65 @@ function fn_check() {
 		<div class="pop_cmm c2 mt25">
 			<div class="addOption_grp">
 				<ul class="tab">
-					<li class="on"><a href="#n">부가옵션 #1</a></li>
-					<li><a href="#n">부가옵션 #2</a></li>
-					<li><a href="#n">오브젝트 선택</a></li>
+					<li class="on"><a href="#n"><spring:message code="backup_management.add_option" /> #1</a></li>
+					<li><a href="#n"><spring:message code="backup_management.add_option" /> #2</a></li>
+					<li><a href="#n"><spring:message code="backup_management.object_choice" /></a></li>
 				</ul>
 				<div class="tab_view">
 					<div class="view on addOption_inr">
 						<ul>
 							<li>
-								<p class="op_tit">Sections</p>
+								<p class="op_tit"><spring:message code="backup_management.sections" /></p>
 								<div class="inp_chk">
 									<span>
 										<input type="checkbox" id="option_1_1" name="opt" value="Y" grp_cd="TC0006" opt_cd="TC000601" onClick="checkSection();" />
-										<label for="option_1_1">Pre-data</label>
+										<label for="option_1_1"><spring:message code="backup_management.pre-data " /></label>
 									</span>
 									<span>
 										<input type="checkbox" id="option_1_2" name="opt" value="Y" grp_cd="TC0006" opt_cd="TC000602" onClick="checkSection();"/>
-										<label for="option_1_2">data</label>
+										<label for="option_1_2"><spring:message code="backup_management.data" /></label>
 									</span>
 									<span>
 										<input type="checkbox" id="option_1_3" name="opt" value="Y" grp_cd="TC0006" opt_cd="TC000603" onClick="checkSection();"/>
-										<label for="option_1_3">Post-data</label>
+										<label for="option_1_3"><spring:message code="backup_management.post-data " /></label>
 									</span>
 								</div>
 							</li>
 							<li>
-								<p class="op_tit">오브젝트 형태</p>
+								<p class="op_tit"><spring:message code="backup_management.object_type" /></p>
 								<div class="inp_chk">
 									<span>
 										<input type="checkbox" id="option_2_1" name="opt" value="Y" grp_cd="TC0007" opt_cd="TC000701" onClick="checkObject('TC000701');"/>
-										<label for="option_2_1">Only data</label>
+										<label for="option_2_1"><spring:message code="backup_management.only_data " /></label>
 									</span>
 									<span>
 										<input type="checkbox" id="option_2_2" name="opt" value="Y" grp_cd="TC0007" opt_cd="TC000702" onClick="checkObject('TC000702');"/>
-										<label for="option_2_2">Only Schema</label>
+										<label for="option_2_2"><spring:message code="backup_management.only_schema " /> </label>
 									</span>
 									<span>
 										<input type="checkbox" id="option_2_3" name="opt" value="Y" grp_cd="TC0007" opt_cd="TC000703"/>
-										<label for="option_2_3">Blobs</label>
+										<label for="option_2_3"><spring:message code="backup_management.blobs " /></label>
 									</span>
 								</div>
 							</li>
 							<li>
-								<p class="op_tit">저장여부선택</p>
+								<p class="op_tit"><spring:message code="backup_management.save_yn_choice" /></p>
 								<div class="inp_chk">
 									<span>
 										<input type="checkbox" id="option_3_1" name="opt" value="Y" grp_cd="TC0008" opt_cd="TC000801" disabled/>
-										<label for="option_3_1">Owner</label>
+										<label for="option_3_1"><spring:message code="backup_management.owner " /> </label>
 									</span>
 									<span>
 										<input type="checkbox" id="option_3_2" name="opt" value="Y" grp_cd="TC0008" opt_cd="TC000802"/>
-										<label for="option_3_2">Privilege</label>
+										<label for="option_3_2"><spring:message code="backup_management.privilege " /></label>
 									</span>
 									<span>
 										<input type="checkbox" id="option_3_3" name="opt" value="Y" grp_cd="TC0008" opt_cd="TC000803"/>
-										<label for="option_3_3">Tablespace</label>
+										<label for="option_3_3"><spring:message code="backup_management.tablespace " /></label>
 									</span>
 									<span>
 										<input type="checkbox" id="option_3_4" name="opt" value="Y" grp_cd="TC0008" opt_cd="TC000804"/>
-										<label for="option_3_4">Unlogged Table data</label>
+										<label for="option_3_4"><spring:message code="backup_management.unlogged table data" /></label>
 									</span>
 								</div>
 							</li>
@@ -796,23 +796,23 @@ function fn_check() {
 					<div class="view addOption_inr">
 						<ul>
 							<li>
-								<p class="op_tit">쿼리</p>
+								<p class="op_tit"><spring:message code="backup_management.query" /></p>
 								<div class="inp_chk double">
 									<span>
 										<input type="checkbox" id="option_4_1" name="opt" value="Y" grp_cd="TC0009" opt_cd="TC000901" onClick="checkOid();"/>
-										<label for="option_4_1">Use Column Inserts</label>
+										<label for="option_4_1"><spring:message code="backup_management.use_column_inserts " /></label>
 									</span>
 									<span>
 										<input type="checkbox" id="option_4_2" name="opt" value="Y" grp_cd="TC0009" opt_cd="TC000902" onClick="checkOid();"/>
-										<label for="option_4_2">Use Insert Commands</label>
+										<label for="option_4_2"><spring:message code="backup_management.use_column_commands " /></label>
 									</span>
 									<span>
 										<input type="checkbox" id="option_4_3" name="opt" value="Y" grp_cd="TC0009" opt_cd="TC000903" disabled/>
-										<label for="option_4_3">CREATE DATABASE포함</label>
+										<label for="option_4_3"><spring:message code="backup_management.create_database_include" /></label>
 									</span>
 									<span>
 										<input type="checkbox" id="option_4_4" name="opt" value="Y" grp_cd="TC0009" opt_cd="TC000904" disabled/>
-										<label for="option_4_4">DROP DATABASE포함</label>
+										<label for="option_4_4"><spring:message code="backup_management.drop_database_include" /></label>
 									</span>
 								</div>
 							</li>
@@ -821,23 +821,23 @@ function fn_check() {
 								<div class="inp_chk third">
 									<span>
 										<input type="checkbox" id="option_5_1" name="opt" value="Y" grp_cd="TC0010" opt_cd="TC001001"/>
-										<label for="option_5_1">OIDS포함</label>
+										<label for="option_5_1"><spring:message code="backup_management.oids_include" /> </label>
 									</span>
 									<span>
 										<input type="checkbox" id="option_5_2" name="opt" value="Y" grp_cd="TC0010" opt_cd="TC001002"/>
-										<label for="option_5_2">인용문포함</label>
+										<label for="option_5_2"><spring:message code="backup_management.quote_include" /> </label>
 									</span>
 									<span>
 										<input type="checkbox" id="option_5_3" name="opt" value="Y" grp_cd="TC0010" opt_cd="TC001003"/>
-										<label for="option_5_3">식별자에 ""적용</label>
+										<label for="option_5_3"><spring:message code="backup_management.Identifier_quotes_apply" /> </label>
 									</span>
 									<span>
 										<input type="checkbox" id="option_5_4" name="opt" value="Y" grp_cd="TC0010" opt_cd="TC001004"/>
-										<label for="option_5_4">Set Session authorization사용</label>
+										<label for="option_5_4"><spring:message code="backup_management.set_session_auth_use" /> </label>
 									</span>
 									<span>
 										<input type="checkbox" id="option_5_5" name="opt" value="Y" grp_cd="TC0010" opt_cd="TC001005"/>
-										<label for="option_5_5">자세한 메시지 포함</label>
+										<label for="option_5_5"><spring:message code="backup_management.detail_message_include" /></label>
 									</span>
 								</div>
 							</li>
@@ -852,8 +852,8 @@ function fn_check() {
 			</form>
 		</div>
 		<div class="btn_type_02">
-			<span class="btn btnC_01" onClick="fn_insert_work();"><button>등록</button></span>
-			<a href="#n" class="btn" onclick="self.close();"><span>취소</span></a>
+			<span class="btn btnC_01" onClick="fn_insert_work();"><button><spring:message code="common.registory" /></button></span>
+			<a href="#n" class="btn" onclick="self.close();"><span><spring:message code="common.cancel" /></span></a>
 		</div>
 	</div>
 </div>

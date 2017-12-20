@@ -56,10 +56,10 @@ var haCnt = 0;
 			     },
 				error : function(xhr, status, error) {
 					if(xhr.status == 401) {
-						alert("인증에 실패 했습니다. 로그인 페이지로 이동합니다.");
+						alert('<spring:message code="message.msg02" />');
 						 location.href = "/";
 					} else if(xhr.status == 403) {
-						alert("세션이 만료가 되었습니다. 로그인 페이지로 이동합니다.");
+						alert('<spring:message code="message.msg03" />');
 			             location.href = "/";
 					} else {
 						alert("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""));
@@ -110,18 +110,18 @@ var haCnt = 0;
 	 ******************************************************** */		
 	function fn_validation(){		
 		if($("#scd_nm").val() == ""){
-			alert("스케줄명을 입력해 주세요.");
+			alert('<spring:message code="message.msg67" />');
 			$("#scd_nm").focus();
 			return false;
 		}else if($("#check_path1").val() != "Y"){
-			alert("데이터경로에 유효한 경로를 입력후 경로체크를 해 주세요.");
+			alert('<spring:message code="message.msg71" />');
 			$("#data_pth").focus();
 			return false;
 		}else if(scd_nmChk == "fail"){
-			alert("스케줄명 중복체크 해주세요.");
+			alert('<spring:message code="message.msg69" />');
 			return false;
 		}else if($("input[name=chk]:checkbox:checked").length == 0){
-			alert("스케줄을 체크해 주세요.");
+			alert('<spring:message code="message.msg70" />');
 			return false;
 		}
 		
@@ -138,11 +138,11 @@ var haCnt = 0;
 		}
 		
 		if($("#check_path1").val() != "Y"){
-			alert("데이터경로에 유효한 경로를 입력후 경로체크를 해 주세요.");
+			alert('<spring:message code="message.msg71" />');
 			$("#data_pth").focus();
 			return false;
 		}else if($("#check_path2").val() != "Y"){
-			alert("백업로그경로에 유효한 경로를 입력후 경로체크를 해 주세요.");		
+			alert('<spring:message code="message.msg72" /> ');		
 			$("#rlog_file_pth").focus();
 			return false;
 		}else if($("#check_path3").val() != "Y"){
@@ -150,7 +150,7 @@ var haCnt = 0;
 			$("#bck_pth").focus();
 			return false;
 		}else if($("#check_path4").val() != "Y"){
-			alert("백업로그경로에 유효한 경로를 입력후 경로체크를 해 주세요.");
+			alert('<spring:message code="message.msg72" />');
 			$("#dlog_file_pth").focus();
 			return false;
 		}else if($("#check_path5").val() != "Y"){
@@ -178,7 +178,7 @@ var haCnt = 0;
 			}
 			hourHtml += '<option value="'+hour+'">'+hour+'</option>';
 		}
-		hourHtml += '</select> 시';	
+		hourHtml += '</select> <spring:message code="schedule.our" />';	
 		$( "#hour" ).append(hourHtml);
 	}
 
@@ -199,7 +199,7 @@ var haCnt = 0;
 			}
 			minHtml += '<option value="'+min+'">'+min+'</option>';
 		}
-		minHtml += '</select> 분';	
+		minHtml += '</select> <spring:message code="schedule.minute" />';	
 		$( "#min" ).append(minHtml);
 	}
 
@@ -209,7 +209,7 @@ var haCnt = 0;
 	function fn_check() {
 		var scd_nm = document.getElementById("scd_nm");
 		if (scd_nm.value == "") {
-			alert("스케줄명을 입력하세요.");
+			alert('<spring:message code="message.msg44" />');
 			document.getElementById('scd_nm').focus();
 			return;
 		}
@@ -221,12 +221,12 @@ var haCnt = 0;
 			},
 			success : function(result) {
 				if (result == "true") {
-					alert("등록가능한 스케줄명 입니다.");
+					alert('<spring:message code="message.msg45" />');
 					document.getElementById("scd_nm").focus();
 					scd_nmChk = "success";
 				} else {
 					scd_nmChk = "fail";
-					alert("중복된 스케줄명이 존재합니다.");
+					alert('<spring:message code="message.msg46" />');
 					document.getElementById("scd_nm").focus();
 				}
 			},
@@ -235,10 +235,10 @@ var haCnt = 0;
 		     },
 			error : function(xhr, status, error) {
 				if(xhr.status == 401) {
-					alert("인증에 실패 했습니다. 로그인 페이지로 이동합니다.");
+					alert('<spring:message code="message.msg02" />');
 					 location.href = "/";
 				} else if(xhr.status == 403) {
-					alert("세션이 만료가 되었습니다. 로그인 페이지로 이동합니다.");
+					alert('<spring:message code="message.msg03" />');
 		             location.href = "/";
 				} else {
 					alert("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""));
@@ -261,10 +261,10 @@ var haCnt = 0;
 			     },
 				error : function(xhr, status, error) {
 					if(xhr.status == 401) {
-						alert("인증에 실패 했습니다. 로그인 페이지로 이동합니다.");
+						alert('<spring:message code="message.msg02" />');
 						 location.href = "/";
 					} else if(xhr.status == 403) {
-						alert("세션이 만료가 되었습니다. 로그인 페이지로 이동합니다.");
+						alert('<spring:message code="message.msg03" />');
 			             location.href = "/";
 					} else {
 						alert("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""));
@@ -343,10 +343,10 @@ var haCnt = 0;
 	 		     },
 	 			error : function(xhr, status, error) {
 	 				if(xhr.status == 401) {
-	 					alert("인증에 실패 했습니다. 로그인 페이지로 이동합니다.");
+	 					alert('<spring:message code="message.msg02" />');
 	 					 location.href = "/";
 	 				} else if(xhr.status == 403) {
-	 					alert("세션이 만료가 되었습니다. 로그인 페이지로 이동합니다.");
+	 					alert('<spring:message code="message.msg03" />');
 	 		             location.href = "/";
 	 				} else {
 	 					alert("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""));
@@ -366,7 +366,7 @@ var haCnt = 0;
 	 						}else{
 	 							$("#check_path5").val("Y");
 	 						}
-	 							var volume = "용량: "+data.result.RESULT_DATA.CAPACITY;
+	 							var volume = "<spring:message code='common.volume' />: "+data.result.RESULT_DATA.CAPACITY;
 	 						if(keyType == 1){
 	 							$("#dataVolume").empty();
 	 							$( "#dataVolume" ).append(volume);
@@ -391,7 +391,7 @@ var haCnt = 0;
 							}	
 	 					}
 	 				}else{
-	 					alert("경로체크 중 서버에러로 인하여 실패하였습니다.")
+	 					alert('<spring:message code="message.msg76" />')
 	 				}
 	 			}
 	 		});
@@ -417,19 +417,19 @@ var haCnt = 0;
 	 	}
 
 	 	if(save_path == "" && keyType == 1){
-	 		alert("데이터경로를 입력해 주세요.");
+	 		alert('<spring:message code="message.msg77" />');
 	 		$("#data_pth").focus();
 	 	}else if(save_path == "" && keyType == 2){
-	 		alert("백업로그경로를 입력해 주세요.");
+	 		alert('<spring:message code="message.msg78" />');
 	 		$("#rlog_file_pth").focus();
 	 	}else if(save_path == "" && keyType == 3){
-	 		alert("백업경로를 입력해 주세요.");
+	 		alert('<spring:message code="message.msg79" />');
 	 		$("#bck_pth").focus();
 	 	}else if(save_path == "" && keyType == 4){
-	 		alert("백업로그경로를 입력해 주세요.");
+	 		alert('<spring:message code="message.msg78" />');
 	 		$("#dlog_file_pth").focus();
 	 	}else if(save_path == "" && keyType == 5){
-	 		alert("백업경로를 입력해 주세요.");
+	 		alert('<spring:message code="message.msg79" />');
 	 		$("#save_pth").focus();
 	 	}
 	 	else{
@@ -446,10 +446,10 @@ var haCnt = 0;
 	 		     },
 	 			error : function(xhr, status, error) {
 	 				if(xhr.status == 401) {
-	 					alert("인증에 실패 했습니다. 로그인 페이지로 이동합니다.");
+	 					alert('<spring:message code="message.msg02" />');
 	 					 location.href = "/";
 	 				} else if(xhr.status == 403) {
-	 					alert("세션이 만료가 되었습니다. 로그인 페이지로 이동합니다.");
+	 					alert('<spring:message code="message.msg03" />');
 	 		             location.href = "/";
 	 				} else {
 	 					alert("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""));
@@ -469,8 +469,8 @@ var haCnt = 0;
 	 						}else{
 	 							$("#check_path5").val("Y");
 	 						}
-	 						alert("유효한 경로입니다.");
-	 						var volume = "용량: "+data.result.RESULT_DATA.CAPACITY;
+	 						alert('<spring:message code="message.msg100" />');
+	 						var volume = "<spring:message code='common.volume' />: "+data.result.RESULT_DATA.CAPACITY;
 	 						if(keyType == 1){
 	 							$("#dataVolume").empty();
 	 							$( "#dataVolume" ).append(volume);
@@ -488,10 +488,10 @@ var haCnt = 0;
 	 							$( "#saveVolume" ).append(volume);
 	 						}
 	 					}else{
-	 						alert("HA 구성된 클러스터 중 해당 경로가 존재하지 않는 클러스터가 있습니다.");
+	 						alert('<spring:message code="message.msg75" />');
 	 					}
 	 				}else{
-	 					alert("경로체크 중 서버에러로 인하여 실패하였습니다.")
+	 					alert('<spring:message code="message.msg76" />')
 	 				}
 	 			}
 	 		});
@@ -537,10 +537,10 @@ var haCnt = 0;
 		 		     },
 		 			error : function(xhr, status, error) {
 		 				if(xhr.status == 401) {
-		 					alert("인증에 실패 했습니다. 로그인 페이지로 이동합니다.");
+		 					alert('<spring:message code="message.msg02" />');
 		 					 location.href = "/";
 		 				} else if(xhr.status == 403) {
-		 					alert("세션이 만료가 되었습니다. 로그인 페이지로 이동합니다.");
+		 					alert('<spring:message code="message.msg03" />');
 		 		             location.href = "/";
 		 				} else {
 		 					alert("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""));
@@ -572,10 +572,10 @@ var haCnt = 0;
 				     },
 					error : function(xhr, status, error) {
 						if(xhr.status == 401) {
-							alert("인증에 실패 했습니다. 로그인 페이지로 이동합니다.");
+							alert('<spring:message code="message.msg02" />');
 							 location.href = "/";
 						} else if(xhr.status == 403) {
-							alert("세션이 만료가 되었습니다. 로그인 페이지로 이동합니다.");
+							alert('<spring:message code="message.msg03" />');
 				             location.href = "/";
 						} else {
 							alert("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""));
@@ -623,17 +623,17 @@ var haCnt = 0;
 			     },
 				error : function(xhr, status, error) {
 					if(xhr.status == 401) {
-						alert("인증에 실패 했습니다. 로그인 페이지로 이동합니다.");
+						alert('<spring:message code="message.msg02" />');
 						 location.href = "/";
 					} else if(xhr.status == 403) {
-						alert("세션이 만료가 되었습니다. 로그인 페이지로 이동합니다.");
+						alert('<spring:message code="message.msg03" />');
 			             location.href = "/";
 					} else {
 						alert("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""));
 					}
 				},
 				success : function(result) {
-					alert("스케줄이 등록되었습니다.");
+					alert('<spring:message code="message.msg80" />');
 					opener.location.reload();
 					self.close();
 				}
@@ -653,7 +653,7 @@ var haCnt = 0;
 					</colgroup>
 					<tbody>
 						<tr>
-							<th scope="row" class="t9 line">스케줄명</th>
+							<th scope="row" class="t9 line"><spring:message code="schedule.schedule_name" /></th>
 							<td><input type="text" class="txt t2" id="scd_nm" name="scd_nm" /> 
 							<span class="btn btnF_04 btnC_01">
 									<button type="button" class="btn_type_02" onclick="fn_check()"style="width: 60px; margin-right: -60px; margin-top: 0;">중복체크</button>
@@ -661,16 +661,16 @@ var haCnt = 0;
 							</td>
 						</tr>
 						<tr>
-							<th scope="row" class="t9 line">백업설정</th>
+							<th scope="row" class="t9 line"><spring:message code="menu.backup_settings" /></th>
 							<td>
 							<select name="bck" id="bck" class="txt t3" style="width: 150px;" onChange="fn_bck();">
-									<option value="">선택</option>
+									<option value=""><spring:message code="common.choice" /></option>
 									<option value="rman">RMAN</option>
 									<option value="dump">DUMP</option>
 							</select> 
 							<span id="rman_bck_opt"> 
 							<select name="bck_opt_cd" id="bck_opt_cd" class="txt t3" style="width: 150px;">
-										<option value="">선택</option>
+										<option value=""><spring:message code="common.choice" /></option>
 										<option value="TC000301">FULL</option>
 										<option value="TC000302">incremental</option>
 										<option value="TC000303">archive</option>
@@ -678,7 +678,7 @@ var haCnt = 0;
 							</span> 
 							<span id="dump_bck_opt"> 
 							<select name="db_id" id="db_id" class="txt t3" style="width: 150px;">
-										<option value="">선택</option>
+										<option value=""><spring:message code="common.choice" /></option>
 										<c:forEach var="result" items="${dbList}" varStatus="status">
 											<option value="<c:out value="${result.db_id}"/>"><c:out
 													value="${result.db_nm}" /></option>
@@ -688,7 +688,7 @@ var haCnt = 0;
 						</tr>
 
 						<tr id="r_data_pth">
-							<th scope="row" class="t9 line">데이터경로</th>
+							<th scope="row" class="t9 line"><spring:message code="backup_management.data_dir" /></th>
 							<td>
 								<input type="text" class="txt" name="data_pth"id="data_pth" maxlength=50 style="width: 450px" onKeydown="$('#check_path1').val('N')" /> 
 								<span class="btn btnF_04 btnC_01">
@@ -698,7 +698,7 @@ var haCnt = 0;
 							</td>
 						</tr>
 						<tr id="r_log_pth">
-							<th scope="row" class="t9 line">백업로그경로</th>
+							<th scope="row" class="t9 line"><spring:message code="backup_management.backup_log_dir" /></th>
 							<td>
 								<input type="text" class="txt" name="rlog_file_pth" id="rlog_file_pth" maxlength=50 style="width: 450px" onKeydown="$('#check_path2').val('N')" /> 
 								<span class="btn btnF_04 btnC_01"><button type="button" class="btn_type_02" onclick="checkFolder(2)" style="width: 60px; margin-right: -60px; margin-top: 0;">경로체크</button></span>
@@ -707,7 +707,7 @@ var haCnt = 0;
 						</tr>
 
 						<tr id="r_bck_pth" rowsapn="2">
-							<th scope="row" class="t9 line">백업경로</th>
+							<th scope="row" class="t9 line"><spring:message code="backup_management.backup_dir" /></th>
 							<td>
 								<input type="text" class="txt" name="bck_pth" id="bck_pth" maxlength=50 style="width: 450px" onKeydown="$('#check_path3').val('N')" /> 
 								<span class="btn btnF_04 btnC_01"><button type="button" class="btn_type_02" onclick="checkFolder(3)"style="width: 60px; margin-right: -60px; margin-top: 0;">경로체크</button></span>
@@ -716,7 +716,7 @@ var haCnt = 0;
 						</tr>
 
 						<tr id="d_log_pth">
-							<th scope="row" class="t9 line">백업로그경로</th>
+							<th scope="row" class="t9 line"><spring:message code="backup_management.backup_log_dir" /></th>
 							<td>
 								<input type="text" class="txt" name="dlog_file_pth" id="dlog_file_pth" maxlength=50 style="width: 450px" onKeydown="$('#check_path4').val('N')" /> 
 								<span class="btn btnF_04 btnC_01">
@@ -726,7 +726,7 @@ var haCnt = 0;
 						</tr>
 
 						<tr id="d_bck_pth">
-							<th scope="row" class="t9 line">백업경로</th>
+							<th scope="row" class="t9 line"><spring:message code="backup_management.backup_dir" /></th>
 							<td>
 								<input type="text" class="txt" name="save_pth" id="save_pth" maxlength=50 style="width: 450px" onKeydown="$('#check_path5').val('N')" /> 
 								<span class="btn btnF_04 btnC_01">
@@ -739,13 +739,14 @@ var haCnt = 0;
 							<th scope="row" class="t9 line">스케줄설정</th>
 							<td>
 								<div class="schedule_wrap">
-									<span id="weekDay"> 일 <input type="checkbox" id="chk"name="chk" value="0"> 
-									월 <input type="checkbox" id="chk" name="chk" value="0"> 
-									화 <input type="checkbox" id="chk" name="chk" value="0"> 
-									수 <input type="checkbox" id="chk" name="chk" value="0"> 
-									목 <input type="checkbox" id="chk" name="chk" value="0"> 
-									금 <input type="checkbox" id="chk" name="chk" value="0"> 
-									토 <input type="checkbox" id="chk" name="chk" value="0">
+									<span id="weekDay"> 
+									<spring:message code="common.sun" /> <input type="checkbox" id="chk"name="chk" value="0"> 
+									<spring:message code="common.mon" /> <input type="checkbox" id="chk" name="chk" value="0"> 
+									<spring:message code="common.tue" /> <input type="checkbox" id="chk" name="chk" value="0"> 
+									<spring:message code="common.wed" /> <input type="checkbox" id="chk" name="chk" value="0"> 
+									<spring:message code="common.thu" /> <input type="checkbox" id="chk" name="chk" value="0"> 
+									<spring:message code="common.fri" /> <input type="checkbox" id="chk" name="chk" value="0"> 
+									<spring:message code="common.sat" /> <input type="checkbox" id="chk" name="chk" value="0">
 									</span> <span>
 										<div id="hour"></div>
 									</span> <span>
@@ -766,7 +767,7 @@ var haCnt = 0;
 			</div>
 			<div class="btn_type_02">
 				<span class="btn btnC_01"
-					onClick="fn_insert_bckScheduler();"><button>등록</button></span>
+					onClick="fn_insert_bckScheduler();"><button><spring:message code="common.registory" /></button></span>
 			</div>
 		</div>
 	</div>

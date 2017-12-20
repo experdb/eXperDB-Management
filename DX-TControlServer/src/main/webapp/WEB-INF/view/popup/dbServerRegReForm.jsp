@@ -100,7 +100,7 @@ function fn_dbServerValidation(){
 			return false;
 		} */
  		if(connCheck != "success"){
-			alert("연결테스트를 하셔야합니다.");
+			alert('<spring:message code="message.msg89" /> ');
 			return false;
 		}
  		return true;
@@ -111,11 +111,11 @@ function fn_ipadrValidation(){
 	var ipadr = document.getElementById("ipadr");
 	var portno = document.getElementById("portno");
 		if (ipadr.value == "%") {
-			   alert("아이피를 선택하여 주십시오.");
+			   alert('<spring:message code="message.msg90" />');
 			   ipadr.focus();
 			   return false;
 		}else if(portno.value == ""){
-			alert("포트를 입력하여 주십시오.");
+			alert('<spring:message code="message.msg83" />');
 			portno.focus();
 			   return false;
 		}
@@ -132,10 +132,10 @@ function fn_saveValidation(){
 		}
 	}
 	if(mCnt == 0){
-		alert("마스터가 존재하지 않습니다.");
+		alert('<spring:message code="message.msg98" />');
 		return false;
 	}else if(mCnt > 1){
-		alert("2개 이상의 마스터가 존재합니다.");
+		alert('<spring:message code="message.msg91" />');
 		return false;
 	}
 	return true;
@@ -157,10 +157,10 @@ $(window.document).ready(function() {
 	     },
 		error : function(xhr, status, error) {
 			if(xhr.status == 401) {
-				alert("인증에 실패 했습니다. 로그인 페이지로 이동합니다.");
+				alert('<spring:message code="message.msg02" />');
 				 location.href = "/";
 			} else if(xhr.status == 403) {
-				alert("세션이 만료가 되었습니다. 로그인 페이지로 이동합니다.");
+				alert('<spring:message code="message.msg03" />');
 	             location.href = "/";
 			} else {
 				alert("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""));
@@ -204,10 +204,10 @@ function fn_selectDbServerList(db_svr_id){
 	     },
 		error : function(xhr, status, error) {
 			if(xhr.status == 401) {
-				alert("인증에 실패 했습니다. 로그인 페이지로 이동합니다.");
+				alert('<spring:message code="message.msg02" />');
 				 location.href = "/";
 			} else if(xhr.status == 403) {
-				alert("세션이 만료가 되었습니다. 로그인 페이지로 이동합니다.");
+				alert('<spring:message code="message.msg03" />');
 	             location.href = "/";
 			} else {
 				alert("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""));
@@ -262,10 +262,10 @@ function fn_dbServerConnTest(){
 	     },
 		error : function(xhr, status, error) {
 			if(xhr.status == 401) {
-				alert("인증에 실패 했습니다. 로그인 페이지로 이동합니다.");
+				alert('<spring:message code="message.msg02" />');
 				 location.href = "/";
 			} else if(xhr.status == 403) {
-				alert("세션이 만료가 되었습니다. 로그인 페이지로 이동합니다.");
+				alert('<spring:message code="message.msg03" />');
 	             location.href = "/";
 			} else {
 				alert("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""));
@@ -284,17 +284,17 @@ function fn_dbServerConnTest(){
 						}
 						if(result[i].result_data[0].MASTER_GBN == "N" || result[i].result_data[0].CONNECT_YN == "N"){
 								connCheck = "fail"
-								alert("[ 연결 테스트 실패! ]");
+								alert('<spring:message code="message.msg92" />');
 								return false;
 						}
 					}else{
 						connCheck = "fail"
-							alert("[ 연결 테스트 실패! ]");
+							alert('<spring:message code="message.msg92" />');
 							return false;
 					}		
 				}
 				connCheck = "success";
-				alert("[ 연결 테스트 성공! ]");
+				alert('<spring:message code="message.msg93" />');
 				fn_pathCall(ipadr, datasArr);
 			}
 		}
@@ -316,10 +316,10 @@ function fn_pathCall(ipadr, datasArr){
 	     },
 		error : function(xhr, status, error) {
 			if(xhr.status == 401) {
-				alert("인증에 실패 했습니다. 로그인 페이지로 이동합니다.");
+				alert('<spring:message code="message.msg02" />');
 				 location.href = "/";
 			} else if(xhr.status == 403) {
-				alert("세션이 만료가 되었습니다. 로그인 페이지로 이동합니다.");
+				alert('<spring:message code="message.msg03" />');
 	             location.href = "/";
 			} else {
 				alert("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""));
@@ -371,17 +371,17 @@ function fn_updateDbServer(){
 	     },
 		error : function(xhr, status, error) {
 			if(xhr.status == 401) {
-				alert("인증에 실패 했습니다. 로그인 페이지로 이동합니다.");
+				alert('<spring:message code="message.msg02" />');
 				 location.href = "/";
 			} else if(xhr.status == 403) {
-				alert("세션이 만료가 되었습니다. 로그인 페이지로 이동합니다.");
+				alert('<spring:message code="message.msg03" />');
 	             location.href = "/";
 			} else {
 				alert("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""));
 			}
 		},
 		success : function(result) {
-			alert("수정 되었습니다.");
+			alert('<spring:message code="message.msg84" />');
 			opener.location.reload();
 			self.close();			
 		}
@@ -408,13 +408,13 @@ function checkPghome(){
 		}
 	}
 	if(ipadr == null){
-		alert("마스터가 존재하지 않습니다.");
+		alert('<spring:message code="message.msg98" />');
 		return false;
 	}
 	
 	var save_pth = $("#pghome_pth").val();
 	if(save_pth == ""){
-		alert("저장경로를 입력해 주세요.");
+		alert('<spring:message code="message.msg99" />');
 		$("#pghome_pth").focus();
 	}else{
 		$.ajax({
@@ -436,10 +436,10 @@ function checkPghome(){
 		     },
 			error : function(xhr, status, error) {
 				if(xhr.status == 401) {
-					alert("인증에 실패 했습니다. 로그인 페이지로 이동합니다.");
+					alert('<spring:message code="message.msg02" />');
 					 location.href = "/";
 				} else if(xhr.status == 403) {
-					alert("세션이 만료가 되었습니다. 로그인 페이지로 이동합니다.");
+					alert('<spring:message code="message.msg03" />');
 		             location.href = "/";
 				} else {
 					alert("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""));
@@ -450,12 +450,12 @@ function checkPghome(){
 					if(data.result.RESULT_DATA.IS_DIRECTORY == 0){
 						$("#check_path").val("Y");
 						pghomeCheck = "success";
-						alert("유효한 경로입니다.");
+						alert('<spring:message code="message.msg100" />');
 					}else{
-						alert("HA 구성된 클러스터 중 해당 경로가 존재하지 않는 클러스터가 있습니다.");
+						alert('<spring:message code="message.msg75" />');
 					}
 				}else{
-					alert("경로체크 중 서버에러로 인하여 실패하였습니다.")
+					alert('<spring:message code="message.msg76" />')
 				}
 			}
 		});
@@ -479,13 +479,13 @@ function checkPghome(){
 			}
 		}
 		if(ipadr == null){
-			alert("마스터가 존재하지 않습니다.");
+			alert('<spring:message code="message.msg98" />');
 			return false;
 		}
 		
 		var save_pth = $("#pgdata_pth").val();
 		if(save_pth == ""){
-			alert("저장경로를 입력해 주세요.");
+			alert('<spring:message code="message.msg99" />');
 			$("#pgdata_pth").focus();
 		}else{
 			$.ajax({
@@ -507,10 +507,10 @@ function checkPghome(){
 			     },
 				error : function(xhr, status, error) {
 					if(xhr.status == 401) {
-						alert("인증에 실패 했습니다. 로그인 페이지로 이동합니다.");
+						alert('<spring:message code="message.msg02" />');
 						 location.href = "/";
 					} else if(xhr.status == 403) {
-						alert("세션이 만료가 되었습니다. 로그인 페이지로 이동합니다.");
+						alert('<spring:message code="message.msg03" />');
 			             location.href = "/";
 					} else {
 						alert("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""));
@@ -521,12 +521,12 @@ function checkPghome(){
 						if(data.result.RESULT_DATA.IS_DIRECTORY == 0){
 							$("#check_path").val("Y");
 							pgdataCheck = "success";
-							alert("입력하신 경로는 존재합니다.");
+							alert('<spring:message code="message.msg104" />');
 						}else{
 							alert("입력하신 경로는 존재하지 않습니다.");
 						}
 					}else{
-						alert("경로체크 중 서버에러로 인하여 실패하였습니다.")
+						alert('<spring:message code="message.msg76" />')
 					}
 				}
 			});
@@ -545,10 +545,10 @@ function checkPghome(){
 		     },
 			error : function(xhr, status, error) {
 				if(xhr.status == 401) {
-					alert("인증에 실패 했습니다. 로그인 페이지로 이동합니다.");
+					alert('<spring:message code="message.msg02" />');
 					 location.href = "/";
 				} else if(xhr.status == 403) {
-					alert("세션이 만료가 되었습니다. 로그인 페이지로 이동합니다.");
+					alert('<spring:message code="message.msg03" />');
 		             location.href = "/";
 				} else {
 					alert("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""));
@@ -556,7 +556,7 @@ function checkPghome(){
 			},
 			success : function(result) {
 				$("#ipadr").children().remove();
-				$("#ipadr").append("<option value='%'>선택</option>");
+				$("#ipadr").append("<option value='%'><spring:message code='common.choice' /></option>");
 				if(result.length > 0){
 					for(var i=0; i<result.length; i++){
 						$("#ipadr").append("<option value='"+result[i].ipadr+"'>"+result[i].ipadr+"</option>");	
@@ -609,23 +609,23 @@ function checkPghome(){
 							</colgroup>
 							<tbody>
 								<tr>
-									<th scope="row" class="ico_t1">DBMS 아이피(*)</th>
+									<th scope="row" class="ico_t1"><spring:message code="dbms_information.dbms_ip" />(*)</th>
 									<td>
 										<select class="select"  id="ipadr" name="ipadr" onChange="fn_ipadrChange();" >
-											<option value="%">선택</option>
+											<option value="%"><spring:message code="common.choice" /></option>
 										</select>
 									</td>
 								</tr>
 								<tr>
-									<th scope="row" class="ico_t1">Port(*)</th>
+									<th scope="row" class="ico_t1"><spring:message code="data_transfer.port" />(*)</th>
 									<td><input type="text" class="txt" name="portno" id="portno"/></td>
 								</tr>
 							</tbody>
 						</table>
 					</form>
 				<div class="btn_type_02">
-					<a href="#n" class="btn" onclick="fn_ipadrAdd();"><span>추가</span></a>
-					<a href="#n" class="btn" onclick="toggleLayer($('#pop_layer'), 'off');"><span>취소</span></a>
+					<a href="#n" class="btn" onclick="fn_ipadrAdd();"><span><spring:message code="common.add" /></span></a>
+					<a href="#n" class="btn" onclick="toggleLayer($('#pop_layer'), 'off');"><span><spring:message code="common.cancel" /></span></a>
 				</div>
 			</div>
 		</div><!-- //pop-container -->
@@ -645,7 +645,7 @@ function checkPghome(){
 			</colgroup>
 			<tbody>
 			<tr>
-				<th scope="row" class="ico_t1" >DBMS아이피(*)</th>
+				<th scope="row" class="ico_t1" ><spring:message code="dbms_information.dbms_ip" />(*)</th>
 					<td colspan="3">
 						<!-- 메인 테이블 -->
 						<span onclick="fn_ipadrAddForm();" style="cursor:pointer"><img src="../images/popup/plus.png" alt="" style="margin-left: 88%;"/></span>
@@ -654,9 +654,9 @@ function checkPghome(){
 								<thead>
 									<tr>
 										<th width="10"></th>
-										<th width="150">DBMS아이피</th>
-										<th width="117">포트</th>
-										<th width="130">구분</th>
+										<th width="150"><spring:message code="dbms_information.dbms_ip" /></th>
+										<th width="117"><spring:message code="data_transfer.port" /></th>
+										<th width="130"><spring:message code="common.division" /></th>
 										<th width="130">연결여부</th>	
 										<th width="0"></th>									
 									</tr>
@@ -665,13 +665,13 @@ function checkPghome(){
 					</td>
 				</tr>
 				<tr>
-					<th scope="row" class="ico_t1">DBMS명(*)</th>
+					<th scope="row" class="ico_t1"><spring:message code="common.dbms_name" />(*)</th>
 					<td><input type="text" class="txt bg1" name="db_svr_nm" id="db_svr_nm"  readonly="readonly"  /></td>
 					<th scope="row" class="ico_t1">Database(*)</th>
 					<td><input type="text" class="txt" name="dft_db_nm" id="dft_db_nm" /></td>
 				</tr>
 				<tr>
-					<th scope="row" class="ico_t1">계정(*)</th>
+					<th scope="row" class="ico_t1"><spring:message code="dbms_information.account" />(*)</th>
 					<td><input type="text" class="txt" name="svr_spr_usr_id" id="svr_spr_usr_id"  /></td>
 					<th scope="row" class="ico_t1">Password(*)</th>
 					<td><input type="password" class="txt" name="svr_spr_scm_pwd" id="svr_spr_scm_pwd" /></td>
@@ -695,9 +695,10 @@ function checkPghome(){
 					</td> -->					
 				</tr>	
 				<tr>
-					<th scope="row" class="ico_t1">사용유무</th>
+					<th scope="row" class="ico_t1"><spring:message code="dbms_information.use_yn" /></th>
 					<td>
-					사용<input type="radio" name="useyn" id="useyn_Y" value="Y"> 미사용<input type="radio" name="useyn"  id="useyn_N" value="N"></td>			
+					<spring:message code="dbms_information.use" /><input type="radio" name="useyn" id="useyn_Y" value="Y"> 
+					<spring:message code="dbms_information.unuse" /><input type="radio" name="useyn"  id="useyn_N" value="N"></td>			
 				</tr>	
 			</tbody>
 		</table>
@@ -706,7 +707,7 @@ function checkPghome(){
 		<div class="btn_type_02">
 			<span class="btn"><button onClick="fn_updateDbServer();">저장</button></span>
 			<span class="btn btnF_01 btnC_01"><button onClick="fn_dbServerConnTest();">연결테스트</button></span>
-			<a href="#n" class="btn" onclick="window.close();"><span>취소</span></a>
+			<a href="#n" class="btn" onclick="window.close();"><span><spring:message code="common.cancel" /></span></a>
 		</div>
 	</div>
 </div>

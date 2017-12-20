@@ -1,4 +1,5 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<%@ taglib prefix="spring" uri="http://www.springframework.org/tags"%>
 <%
 	/**
 	* @Class Name : transferDetail.jsp
@@ -84,7 +85,7 @@
 		    		var row = datas[0];
 			    	$row.removeClass('select-detail');
 			    	if(row.db_id==null){
-			    		alert("매핑설정을 해주세요.");
+			    		alert('<spring:message code="message.msg124" />');
 			    		return false;
 			    	}
 					$.ajax({
@@ -101,10 +102,10 @@
 					     },
 						error : function(xhr, status, error) {
 							if(xhr.status == 401) {
-								alert("인증에 실패 했습니다. 로그인 페이지로 이동합니다.");
+								alert('<spring:message code="message.msg02" />');
 								 location.href = "/";
 							} else if(xhr.status == 403) {
-								alert("세션이 만료가 되었습니다. 로그인 페이지로 이동합니다.");
+								alert('<spring:message code="message.msg03" />');
 					             location.href = "/";
 							} else {
 								alert("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""));
@@ -112,15 +113,15 @@
 						},
 						success : function(result) {
 							if(result =='start'){
-								alert("전송을 활성화 하였습니다.");
+								alert('<spring:message code="message.msg125" />');
 								fn_select();
 							}else if(result =='stop'){
-								alert("전송을 비활성화 하였습니다.");
+								alert('<spring:message code="message.msg126" />');
 								fn_select();
 							}else if(result =='transfersetting'){
-								alert("전송설정을 등록 해주세요.");
+								alert('<spring:message code="message.msg127" />');
 							}else{
-								alert("서버에 experdb엔진이 설치되지 않았습니다.");
+								alert('<spring:message code="message.msg25" />');
 							}	
 						}
 					});		
@@ -146,10 +147,10 @@
 		     },
 			error : function(xhr, status, error) {
 				if(xhr.status == 401) {
-					alert("인증에 실패 했습니다. 로그인 페이지로 이동합니다.");
+					alert('<spring:message code="message.msg02" />');
 					 location.href = "/";
 				} else if(xhr.status == 403) {
-					alert("세션이 만료가 되었습니다. 로그인 페이지로 이동합니다.");
+					alert('<spring:message code="message.msg03" />');
 		             location.href = "/";
 				} else {
 					alert("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""));
@@ -179,10 +180,10 @@
 		     },
 			error : function(xhr, status, error) {
 				if(xhr.status == 401) {
-					alert("인증에 실패 했습니다. 로그인 페이지로 이동합니다.");
+					alert('<spring:message code="message.msg02" />');
 					 location.href = "/";
 				} else if(xhr.status == 403) {
-					alert("세션이 만료가 되었습니다. 로그인 페이지로 이동합니다.");
+					alert('<spring:message code="message.msg03" />');
 		             location.href = "/";
 				} else {
 					alert("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""));
@@ -212,25 +213,25 @@
 <div id="contents">
 	<div class="contents_wrap">
 		<div class="contents_tit">
-			<h4>커넥터 실행/중지<a href="#n"><img src="../images/ico_tit.png" class="btn_info"/></a></h4>
+			<h4><spring:message code="menu.connector_run_stop" /><a href="#n"><img src="../images/ico_tit.png" class="btn_info"/></a></h4>
 			<div class="infobox"> 
 				<ul>
-					<li>커넥터 설정에서 등록한 커넥터를 활성화 또는 비활성화 합니다.</li>
-					<li>커넥터의 구동 상태를 조회합니다.</li>
+					<li><spring:message code="help.connector_run_stop_01" /></li>
+					<li><spring:message code="help.connector_run_stop_02" /></li>
 				</ul>
 			</div>
 			<div class="location">
 				<ul>
-					<li>데이터 전송</li>
+					<li><spring:message code="menu.data_transfer" /></li>
 					<li>${cnr_nm }</li>
-					<li class="on">커넥터 실행/중지</li>
+					<li class="on"><spring:message code="menu.connector_run_stop" /></li>
 				</ul>
 			</div>
 		</div>
 		<div class="contents">
 			<div class="cmm_grp">
 				<div class="btn_type_01">
-					<span class="btn"><button onclick="fn_select()">조회</button></span> 
+					<span class="btn"><button onclick="fn_select()"><spring:message code="common.search" /></button></span> 
 				</div>
 				<div class="sch_form">
 					<table class="write">
@@ -243,9 +244,9 @@
 						</colgroup>
 						<tbody>
 							<tr>
-								<th scope="row" class="t7">Connect명</th>
+								<th scope="row" class="t7"><spring:message code="data_transfer.connect_name" /></th>
 								<td><input type="text" class="txt t3" name="" id="trf_trg_cnn_nm"/></td>
-								<th scope="row" class="t4">Database</th>
+								<th scope="row" class="t4"><spring:message code="common.database" /></th>
 								<td><input type="text" class="txt t3" name="" id="db_nm"/></td>
 							</tr>
 						</tbody>
@@ -255,10 +256,10 @@
 					<table id="transferDetailTable" class="display" cellspacing="0" width="100%">
 						<thead>
 							<tr>
-								<th width="100">Connect명</th>
-								<th width="100">DBMS명</th>
-								<th width="100">Database</th>
-								<th width="50">구동상태</th>
+								<th width="100"><spring:message code="data_transfer.connect_name" /></th>
+								<th width="100"><spring:message code="common.dbms_name" /></th>
+								<th width="100"><spring:message code="common.database" /></th>
+								<th width="50"><spring:message code="common.run_status" /></th>
 								<th width="100">전송 활성화</th>
 							</tr>
 						</thead>

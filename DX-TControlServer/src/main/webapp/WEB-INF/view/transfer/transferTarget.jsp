@@ -37,13 +37,13 @@
 			{
 				data : "",
 				render : function(data, type, full, meta) {
-					var html = "<span class='btn btnC_01 btnF_02'><button id='detail'>상세조회</button></span>";
+					var html = "<span class='btn btnC_01 btnF_02'><button id='detail'><spring:message code='data_transfer.detail_search' /> </button></span>";
 					return html;
 				},
 				className : "dt-center",
 				defaultContent : ""
 			}, 
-			{ data : "", className : "dt-center", defaultContent : "<span class='btn btnC_01 btnF_02'><button id='mappingBtn'>테이블 매핑</button></span>"},
+			{ data : "", className : "dt-center", defaultContent : "<span class='btn btnC_01 btnF_02'><button id='mappingBtn'><spring:message code='data_transfer.table_mapping' /></button></span>"},
 			]
 		});
 		
@@ -143,10 +143,10 @@
 		     },
 			error : function(xhr, status, error) {
 				if(xhr.status == 401) {
-					alert("인증에 실패 했습니다. 로그인 페이지로 이동합니다.");
+					alert('<spring:message code="message.msg02" />');
 					 location.href = "/";
 				} else if(xhr.status == 403) {
-					alert("세션이 만료가 되었습니다. 로그인 페이지로 이동합니다.");
+					alert('<spring:message code="message.msg03" />');
 		             location.href = "/";
 				} else {
 					alert("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""));
@@ -179,10 +179,10 @@
 		     },
 			error : function(xhr, status, error) {
 				if(xhr.status == 401) {
-					alert("인증에 실패 했습니다. 로그인 페이지로 이동합니다.");
+					alert('<spring:message code="message.msg02" />');
 					 location.href = "/";
 				} else if(xhr.status == 403) {
-					alert("세션이 만료가 되었습니다. 로그인 페이지로 이동합니다.");
+					alert('<spring:message code="message.msg03" />');
 		             location.href = "/";
 				} else {
 					alert("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""));
@@ -223,7 +223,7 @@
 			
 			window.open(popUrl,"",popOption);
 		} else {
-			alert("하나의 항목을 선택해주세요.");
+			alert('<spring:message code="message.msg04" />');
 			return false;
 		}
 
@@ -233,7 +233,7 @@
 	function fn_delete(){
 		var datas = table.rows('.selected').data();
 		if (datas.length <= 0) {
-			alert("하나의 항목을 선택해주세요.");
+			alert('<spring:message code="message.msg04" />');
 			return false;
 		} else {
 			if (!confirm("삭제하시겠습니까?"))return false;
@@ -255,10 +255,10 @@
 			     },
 				error : function(xhr, status, error) {
 					if(xhr.status == 401) {
-						alert("인증에 실패 했습니다. 로그인 페이지로 이동합니다.");
+						alert('<spring:message code="message.msg02" />');
 						 location.href = "/";
 					} else if(xhr.status == 403) {
-						alert("세션이 만료가 되었습니다. 로그인 페이지로 이동합니다.");
+						alert('<spring:message code="message.msg03" />');
 			             location.href = "/";
 					} else {
 						alert("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""));
@@ -266,7 +266,7 @@
 				},
 				success : function(result) {
 					if (result) {
-						alert("삭제되었습니다.");
+						alert('<spring:message code="message.msg60" />');
 						fn_select();
 					} else {
 						alert("Connector삭제를 실패하였습니다.");
@@ -280,27 +280,27 @@
 <div id="contents">
 	<div class="contents_wrap">
 		<div class="contents_tit">
-			<h4>커넥터 설정<a href="#n"><img src="../images/ico_tit.png" class="btn_info"/></a></h4>
+			<h4><spring:message code="menu.connector_settings" /><a href="#n"><img src="../images/ico_tit.png" class="btn_info"/></a></h4>
 			<div class="infobox"> 
 				<ul>
-					<li>커넥터 별로 전송 대상이 되는 소스 시스템과 타겟 시스템을 설정합니다.</li>
-					<li>데이터 전송을 위한 옵션을 설정합니다.</li>
+					<li><spring:message code="help.connector_settings_01" /></li>
+					<li><spring:message code="help.connector_settings_02" /></li>
 				</ul>
 			</div>
 			<div class="location">
 				<ul>
-					<li>데이터 전송</li>
+					<li><spring:message code="menu.data_transfer" /></li>
 					<li>${cnr_nm}</li>
-					<li class="on">커넥터 설정</li>
+					<li class="on"><spring:message code="menu.connector_settings" /></li>
 				</ul>
 			</div>
 		</div>
 		<div class="contents">
 			<div class="cmm_grp">
 				<div class="btn_type_01">
-					<span class="btn" onclick="fn_insert();"><button>등록</button></span> 
-					<span class="btn" onclick="fn_update();"><button>수정</button></span> 
-					<span class="btn" onclick="fn_delete();"><button>삭제</button></span>
+					<span class="btn" onclick="fn_insert();"><button><spring:message code="common.registory" /></button></span> 
+					<span class="btn" onclick="fn_update();"><button><spring:message code="common.modify" /></button></span> 
+					<span class="btn" onclick="fn_delete();"><button><spring:message code="common.delete" /></button></span>
 				</div>
 				<div class="sch_form">
 					<table class="write">
@@ -311,7 +311,7 @@
 						</colgroup>
 						<tbody>
 							<tr>
-								<th scope="row" class="t5">Connect명</th>
+								<th scope="row" class="t5"><spring:message code="data_transfer.connect_name" /></th>
 								<td><input type="text" class="txt t2" name="trf_trg_cnn_nm" id="select"/></td>
 							</tr>
 						</tbody>
@@ -323,15 +323,15 @@
 							<tr>
 								<th width="10"></th>
 								<th width="20">No</th>
-								<th width="100">Connect명</th>
-								<th width="350">hdfs.url</th>
-								<th width="60">task.max</th>
-								<th width="60">flush.size</th>
-								<th width="100">rotate.interval.ms</th>
-								<th width="100">DBMS명</th>
-								<th width="100">Database</th>
-								<th width="100">상세조회</th>
-								<th width="90">매핑설정</th>
+								<th width="100"><spring:message code="data_transfer.connect_name" /></th>
+								<th width="350"><spring:message code="data_transfer.hdfs_url" /> </th>
+								<th width="60"><spring:message code="data_transfer.tasks_max" />  </th>
+								<th width="60"><spring:message code="data_transfer.flush_size" /> </th>
+								<th width="100"><spring:message code="data_transfer.rotate_interval_ms" /></th>
+								<th width="100"><spring:message code="common.dbms_name" /> </th>
+								<th width="100"><spring:message code="common.database" /> </th>
+								<th width="100"><spring:message code="data_transfer.detail_search" />  </th>
+								<th width="90"><spring:message code="data_transfer.mapping_settings" /></th>
 							</tr>
 						</thead>
 					</table>
