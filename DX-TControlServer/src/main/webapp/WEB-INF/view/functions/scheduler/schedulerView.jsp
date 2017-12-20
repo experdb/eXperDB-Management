@@ -3,6 +3,13 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags"%>
 
+<!-- <style>
+	.cellDate{
+		text-overflow:ellipsis;
+		overflow:hidden;
+		white-space:nowrap;
+	} 
+</style> -->
 <script>
 var table = null;
 var scd_nmChk = "fail";
@@ -495,7 +502,6 @@ $(window.document).ready(function() {
 	$("#month_scheduleList_wrapper").hide();
 	$("#btnWeek").show();
 	$("#btnMonth").hide();
-	
 });
 
 function fn_selectBckSchedule(){
@@ -594,6 +600,18 @@ function selectTab(tab){
 }
 
 $(function(){
+	
+/* 	$('div').each(function(){
+		
+		var length =7;
+		
+		$(this).each(function(){
+			if($(this).text().length >= length){
+				$(this).text($(this).text().substr(0,length)+'...');
+			}
+		})
+	}); */
+	
 	var intyear = parseInt("${month}".substr(0,4));
 	var stryear = ""; 
 	for(var i=-10;i<11;i++){

@@ -28,8 +28,16 @@ public class WorkLogVO {
 	private String wrk_dtm;
 	private String rslt_msg;
 	private String ipadr;
+	private String db_svr_id;
 	
-	
+
+	public String getDb_svr_id() {
+		return db_svr_id;
+	}
+
+	public void setDb_svr_id(String db_svr_id) {
+		this.db_svr_id = db_svr_id;
+	}
 
 	public String getIpadr() {
 		return ipadr;

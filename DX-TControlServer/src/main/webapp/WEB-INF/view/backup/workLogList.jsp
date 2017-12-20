@@ -162,10 +162,10 @@ function fn_dump_init(){
  * Get Rman Log List
  ******************************************************** */
 function fn_get_rman_list(){
-
 	$.ajax({
 		url : "/backup/selectWorkLogList.do",
 	  	data : {
+	  		db_svr_id : $("#db_svr_id").val(),
 	  		bck_bsn_dscd : "TC000201",
 	  		bck_opt_cd : $("#bck_opt_cd").val(),
 	  		wrk_strt_dtm : $("#wrk_strt_dtm").val(),
@@ -205,6 +205,7 @@ function fn_get_dump_list(){
 	$.ajax({
 		url : "/backup/selectWorkLogList.do",
 	  	data : {
+	  		db_svr_id : $("#db_svr_id").val(),
 	  		bck_bsn_dscd : "TC000202",
 	  		db_id : db_id,
 	  		wrk_strt_dtm : $("#wrk_strt_dtm").val(),

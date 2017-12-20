@@ -497,6 +497,7 @@
 	 		AND TWG.WRK_ID = TWI.WRK_ID
 	 		AND TWG.DB_ID = A.DB_ID
             AND A.DB_SVR_ID = B.DB_SVR_ID
+            AND A.DB_SVR_ID=#{db_svr_id}::numeric 
 	 	<if test="wrk_id != null and wrk_id != '' ">
       		<if test='wrk_id != "0"'>
 	      		AND TWG.WRK_ID=#{wrk_id}
