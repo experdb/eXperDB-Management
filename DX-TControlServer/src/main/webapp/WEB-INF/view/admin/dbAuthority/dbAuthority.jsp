@@ -155,7 +155,7 @@
 			html2+='<thead>';
 			html2+=	'<tr>';
 			html2+=		'<th scope="col"><spring:message code="auth_management.db_auth" /> </th>';
-			html2+=		'<th scope="col">권한</th>';
+			html2+=		'<th scope="col"><spring:message code="auth_management.auth" /></th>';
 			html2+=	'</tr>';
 			html2+='</thead>';
  			$(svr_server).each(function (index, item) {
@@ -250,7 +250,7 @@
 		 var datasArr = new Array();	
 		 var datas = userTable.row('.selected').length;
 		 if(datas != 1){
-			 alert("선택된 유저가 없습니다.");
+			 alert('<spring:message code="message.msg165"/>');
 			 return false;
 		 }else{
 			 var usr_id = userTable.row('.selected').data().usr_id;
@@ -273,7 +273,7 @@
 			     datasArr.push(datas);
 			 } 
 		 }
-			if (confirm("DB권한을 설정하시겠습니까?")){
+			if (confirm('<spring:message code="message.msg167"/>')){
 				$.ajax({
 					url : "/updateUsrDBAutInfo.do",
 					data : {
@@ -373,7 +373,7 @@
 											<table id="user" class="display" cellspacing="0" width="100%">
 												<thead>
 													<tr>
-														<th width="30">No</th>
+														<th width="30"><spring:message code="common.order"/></th>
 														<th width="100"><spring:message code="user_management.id" /></th>
 														<th width="100"><spring:message code="user_management.user_name" /></th>
 													</tr>
@@ -386,7 +386,7 @@
 								
 								<div class="db_roll_last">
 									<div class="btn_type_01">
-										<span class="btn"><button onClick="fn_db_save();" id="db_button">저장</button></span>
+										<span class="btn"><button onClick="fn_db_save();" id="db_button"><spring:message code="common.save"/></button></span>
 									</div>
 									<div class="inner">
 										<p class="tit"><spring:message code="auth_management.db_auth" /></p>

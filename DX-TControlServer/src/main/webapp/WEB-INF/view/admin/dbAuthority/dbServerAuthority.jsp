@@ -121,8 +121,8 @@
 				html1+='</colgroup>';
 				html1+='<thead>';
 				html1+=	'<tr>';
-				html1+=		'<th scope="col">DB서버 메뉴</th>';
-				html1+=		'<th scope="col">권한</th>';
+				html1+=		'<th scope="col"><spring:message code="auth_management.db_server_menu" /></th>';
+				html1+=		'<th scope="col"><spring:message code="auth_management.auth" /></th>';
 				html1+=	'</tr>';
 				html1+='</thead>';
 	 			$(result).each(function (index, item) {
@@ -475,7 +475,7 @@
 											<table id="user" class="display" cellspacing="0" width="100%">
 												<thead>
 													<tr>
-														<th width="30">No</th>
+														<th width="30"><spring:message code="common.order"/></th>
 														<th width="100"><spring:message code="user_management.id" /></th>
 														<th width="100"><spring:message code="user_management.user_name" /></th>
 													</tr>

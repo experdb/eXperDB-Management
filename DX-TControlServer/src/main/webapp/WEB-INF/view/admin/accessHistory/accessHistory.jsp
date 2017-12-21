@@ -191,7 +191,7 @@
 										<th scope="row" class="t9"><spring:message code="history_management.screen_choice" /></th>
 										<td>
 											<select class="select t5" id="sys_cd" name="sys_cd">
-												<option value="" ${sys_cd == '' ? 'selected="selected"' : ''}>전체</option>	
+												<option value="" ${sys_cd == '' ? 'selected="selected"' : ''}><spring:message code="common.total" /></option>	
 												<c:forEach var="ScreenNames" items="${ScreenNames}">
 													<option value="${ScreenNames.sys_cd}" ${ScreenNames.sys_cd == sys_cd ? 'selected="selected"' : ''}>${ScreenNames.sys_cd_nm}</option>							
 												</c:forEach>
@@ -230,7 +230,7 @@
 								</colgroup>
 								<thead>
 									<tr style="border-bottom: 1px solid #b8c3c6;">
-										<th scope="col">NO</th>
+										<th scope="col"><spring:message code="common.order"/></th>
 										<th scope="col"><spring:message code="history_management.date" /></th>
 										<th scope="col"><spring:message code="history_management.time" /></th>
 										<th scope="col"><spring:message code="history_management.screen" /></th>
