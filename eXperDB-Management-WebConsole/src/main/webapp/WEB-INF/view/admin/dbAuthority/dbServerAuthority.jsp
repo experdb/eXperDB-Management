@@ -135,7 +135,7 @@
 					html1+='		<th scope="row"><spring:message code="menu.backup_settings" /></th>';
 					html1+='		<td>';
 					html1+='			<div class="inp_chk">';
-					html1+='				<input type="checkbox" id="'+item.db_svr_nm+'_bck_cng" name="bck_cng_aut"  />';
+					html1+='				<input type="checkbox" id="'+item.db_svr_nm+'_bck_cng" name="bck_cng_aut" onClick="fn_userCheck();"/>';
 					html1+='       		<label for="'+item.db_svr_nm+'_bck_cng"></label>';
 					html1+='			</div>';
 					html1+='		</td>';
@@ -144,7 +144,7 @@
 					html1+=	'<th scope="row"><spring:message code="menu.backup_history" /></th>';
 					html1+=	'<td>';
 					html1+=		'<div class="inp_chk">';
-					html1+=			'<input type="checkbox" id="'+item.db_svr_nm+'_bck_hist" name="bck_hist_aut"  />';
+					html1+=			'<input type="checkbox" id="'+item.db_svr_nm+'_bck_hist" name="bck_hist_aut" onClick="fn_userCheck();" />';
 					html1+=			'<label for="'+item.db_svr_nm+'_bck_hist"></label>';
 					html1+=		'</div>';
 					html1+=	'</td>';
@@ -153,7 +153,7 @@
 					html1+=	'<th scope="row"><spring:message code="menu.backup_scheduler" /></th>';
 					html1+=	'<td>';
 					html1+=		'<div class="inp_chk">';
-					html1+=			'<input type="checkbox" id="'+item.db_svr_nm+'_bck_scdr" name="bck_scdr_aut"  />';
+					html1+=			'<input type="checkbox" id="'+item.db_svr_nm+'_bck_scdr" name="bck_scdr_aut" onClick="fn_userCheck();" />';
 					html1+=			'<label for="'+item.db_svr_nm+'_bck_scdr"></label>';
 					html1+=		'</div>';
 					html1+=	'</td>';
@@ -162,7 +162,7 @@
 					html1+=	'<th scope="row"><spring:message code="menu.access_control" /></th>';
 					html1+=	'<td>';
 					html1+=		'<div class="inp_chk">';
-					html1+=			'<input type="checkbox" id="'+item.db_svr_nm+'_acs_cntr" name="acs_cntr_aut"  />';
+					html1+=			'<input type="checkbox" id="'+item.db_svr_nm+'_acs_cntr" name="acs_cntr_aut" onClick="fn_userCheck();" />';
 					html1+=			'<label for="'+item.db_svr_nm+'_acs_cntr"></label>';
 					html1+=		'</div>';
 					html1+=	'</td>';
@@ -171,7 +171,7 @@
 					html1+=	'<th scope="row"><spring:message code="menu.policy_changes_history" /></th>';
 					html1+=	'<td>';
 					html1+=		'<div class="inp_chk">';
-					html1+=			'<input type="checkbox" id="'+item.db_svr_nm+'_policy_change_his" name="policy_change_his_aut"  />';
+					html1+=			'<input type="checkbox" id="'+item.db_svr_nm+'_policy_change_his" name="policy_change_his_aut" onClick="fn_userCheck();" />';
 					html1+=			'<label for="'+item.db_svr_nm+'_policy_change_his"></label>';
 					html1+=		'</div>';
 					html1+=	'</td>';
@@ -180,7 +180,7 @@
 					html1+=	'<th scope="row"><spring:message code="menu.audit_settings" /></th>';
 					html1+=	'<td>';
 					html1+=		'<div class="inp_chk">';
-					html1+=			'<input type="checkbox" id="'+item.db_svr_nm+'_adt_cng" name="adt_cng_aut" />';
+					html1+=			'<input type="checkbox" id="'+item.db_svr_nm+'_adt_cng" name="adt_cng_aut" onClick="fn_userCheck();"/>';
 					html1+=			'<label for="'+item.db_svr_nm+'_adt_cng"></label>';
 					html1+=		'</div>';
 					html1+=	'</td>';
@@ -189,7 +189,7 @@
 					html1+=	'<th scope="row"><spring:message code="menu.audit_history" /></th>';
 					html1+=	'<td>';
 					html1+=		'<div class="inp_chk">';
-					html1+=			'<input type="checkbox" id="'+item.db_svr_nm+'_adt_hist" name="adt_hist_aut" />';
+					html1+=			'<input type="checkbox" id="'+item.db_svr_nm+'_adt_hist" name="adt_hist_aut"  onClick="fn_userCheck();"/>';
 					html1+=			'<label for="'+item.db_svr_nm+'_adt_hist"></label>';
 					html1+=		'</div>';
 					html1+=	'</td>';
@@ -203,7 +203,17 @@
 		});
 	});
 		
+	function fn_userCheck(){
+		var datas = userTable.row('.selected').length;
+		 if(datas != 1){
+			 alert('<spring:message code="message.msg165"/>');
+			 $("input[type=checkbox]").prop("checked",false);
+			 return false;
+		 }
+	}
+	
 	$(function() {		
+
 		   $('#user tbody').on( 'click', 'tr', function () {
 		         if ( $(this).hasClass('selected') ) {
 		        	}

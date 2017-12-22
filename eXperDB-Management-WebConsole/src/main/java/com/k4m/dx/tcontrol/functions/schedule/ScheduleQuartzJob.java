@@ -332,7 +332,6 @@ public class ScheduleQuartzJob implements Job{
 	
 	public void agentCall(List<Map<String, Object>> resultWork, ArrayList<String> CMD, ArrayList<String> BCKNM, List<Map<String, Object>> resultDbconn, int h) {
 		try {
-	
 				String IP = (String) resultDbconn.get(h).get("ipadr");
 				AgentInfoVO vo = new AgentInfoVO();
 				vo.setIPADR(IP);			

@@ -19,6 +19,7 @@ function fn_validation(){
   			   return false;
   		}if(scd_nmChk == "fail"){
   			alert('<spring:message code="message.msg42" />');
+  			return false;
   		}
  		return true;
 }

@@ -170,7 +170,7 @@
 						html2+='		<th scope="row">'+result[i].db_nm+'</th>';
 						html2+='		<td>';
 						html2+='			<div class="inp_chk">';
-						html2+='				<input type="checkbox" id="'+result[i].db_svr_id+'_'+result[i].db_id+'" name="aut_yn"  />';
+						html2+='				<input type="checkbox" id="'+result[i].db_svr_id+'_'+result[i].db_id+'" name="aut_yn" onClick="fn_userCheck();" />';
 						html2+='       		<label for="'+result[i].db_svr_id+'_'+result[i].db_id+'"></label>';
 						html2+='			</div>';
 						html2+='		</td>';
@@ -187,9 +187,18 @@
 			$( "#dbAutList" ).append(html2);
 		}	
 	});
-		
+
+	function fn_userCheck(){
+		var datas = userTable.row('.selected').length;
+		 if(datas != 1){
+			 alert('<spring:message code="message.msg165"/>');
+			 $("input[type=checkbox]").prop("checked",false);
+			 return false;
+		 }
+	}
+	
 	$(function() {
-		
+
 		   $('#user tbody').on( 'click', 'tr', function () {
 		         if ( $(this).hasClass('selected') ) {
 		        	}

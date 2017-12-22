@@ -214,7 +214,13 @@ $(function() {
 	   
 		//읽기 선택 전체 체크박스 
 		$("#read").click(function() { 
+			var datas = userTable.row('.selected').length;
+			 if(datas != 1){
+				 alert('<spring:message code="message.msg165"/>');
+				 return false;
+			 }
 			if ($("#read").prop("checked")) {
+				
 				$("input[name=r_mnu_nm]").prop("checked", true);
 			} else {
 				$("input[name=r_mnu_nm]").prop("checked", false);
@@ -223,6 +229,11 @@ $(function() {
 		
 		//쓰기 선택 전체 체크박스 
 		$("#write").click(function() { 
+			var datas = userTable.row('.selected').length;
+			 if(datas != 1){
+				 alert('<spring:message code="message.msg165"/>');
+				 return false;
+			 }
 			if ($("#write").prop("checked")) {
 				$("input[name=w_mnu_nm]").prop("checked", true);
 			} else {
@@ -233,6 +244,11 @@ $(function() {
 		//functions 선택 전체 체크박스 
 		$("#functions").click(function() { 
 			var array = new Array("MN000101","MN000102","MN000103","MN000201","MN000202");
+			var datas = userTable.row('.selected').length;
+			 if(datas != 1){
+				 alert('<spring:message code="message.msg165"/>');
+				 return false;
+			 }
 			if ($("#functions").prop("checked")) {
 				for(var i=0; i<array.length; i++){
 					document.getElementById("r_"+array[i]).checked = true;
@@ -249,6 +265,11 @@ $(function() {
 		//admin 선택 전체 체크박스 
 		$("#admin").click(function() { 
 			var array = new Array("MN000301","MN000302","MN000303","MN0004","MN000501","MN000502","MN000503","MN000601","MN000701","MN0008","MN0001101","MN0001102","MN0001201","MN0001202","MN0001203","MN0001204","MN0001301","MN0001302");
+			var datas = userTable.row('.selected').length;
+			 if(datas != 1){
+				 alert('<spring:message code="message.msg165"/>');
+				 return false;
+			 }
 			if ($("#admin").prop("checked")) {
 				for(var i=0; i<array.length; i++){
 					document.getElementById("r_"+array[i]).checked = true;
@@ -265,6 +286,11 @@ $(function() {
 		//스케줄정보 선택 전체 체크박스
 		$("#schinfo").click(function() { 
 			var array = new Array("MN000101","MN000102","MN000103");
+			var datas = userTable.row('.selected').length;
+			 if(datas != 1){
+				 alert('<spring:message code="message.msg165"/>');
+				 return false;
+			 }
 			if ($("#schinfo").prop("checked")) {
 				for(var i=0; i<array.length; i++){
 					document.getElementById("r_"+array[i]).checked = true;
@@ -281,6 +307,11 @@ $(function() {
 		//데이터전송정보 선택 전체 체크박스
 		$("#transferinfo").click(function() { 
 			var array = new Array("MN000201","MN000202");
+			var datas = userTable.row('.selected').length;
+			 if(datas != 1){
+				 alert('<spring:message code="message.msg165"/>');
+				 return false;
+			 }
 			if ($("#transferinfo").prop("checked")) {
 				for(var i=0; i<array.length; i++){
 					document.getElementById("r_"+array[i]).checked = true;
@@ -297,6 +328,11 @@ $(function() {
 		//DBMS정보 선택 전체 체크박스
 		$("#dbmsinfo").click(function() { 
 			var array = new Array("MN000301","MN000302","MN000303");
+			var datas = userTable.row('.selected').length;
+			 if(datas != 1){
+				 alert('<spring:message code="message.msg165"/>');
+				 return false;
+			 }
 			if ($("#dbmsinfo").prop("checked")) {
 				for(var i=0; i<array.length; i++){
 					document.getElementById("r_"+array[i]).checked = true;
@@ -313,6 +349,11 @@ $(function() {
 		//권한관리 선택 전체 체크박스
 		$("#authmanage").click(function() { 
 			var array = new Array("MN000501","MN000502","MN000503");
+			var datas = userTable.row('.selected').length;
+			 if(datas != 1){
+				 alert('<spring:message code="message.msg165"/>');
+				 return false;
+			 }
 			if ($("#authmanage").prop("checked")) {
 				for(var i=0; i<array.length; i++){
 					document.getElementById("r_"+array[i]).checked = true;
@@ -325,6 +366,18 @@ $(function() {
 				}
 			}
 		});
+		
+		//체크박스 클릭시 사용자 선택 검사
+		$(".inp_chk").click(function() { 
+			var datas = userTable.row('.selected').length;
+			 if(datas != 1){
+				 alert('<spring:message code="message.msg165"/>');
+				 return false;
+			 }
+		});
+		
+		
+
 } );
 
 function fn_buttonAut(){

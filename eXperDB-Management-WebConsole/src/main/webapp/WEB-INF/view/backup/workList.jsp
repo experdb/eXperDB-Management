@@ -620,7 +620,7 @@ function selectTab(tab){
 			<div class="infobox"> 
 				<ul>
 					<li><spring:message code="help.backup_settings_01" /> </li>
-					<li><spring:message code="help.backup_settings_02" /></li>
+					<%-- <li><spring:message code="help.backup_settings_02" /></li> --%>
 					<li><spring:message code="help.backup_settings_03" /></li>	
 				</ul>
 			</div>

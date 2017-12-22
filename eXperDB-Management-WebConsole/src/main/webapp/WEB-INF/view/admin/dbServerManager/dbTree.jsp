@@ -294,6 +294,7 @@ function fn_insertDB(){
 	var ipadr = table_dbServer.row('.selected').data().ipadr;
 	var datas = table_db.rows().data();
 
+	//체크된갯수
 	var checkCnt = table_db.rows('.selected').data().length;
 	var rows = [];
     	for (var i = 0; i<datas.length; i++) {

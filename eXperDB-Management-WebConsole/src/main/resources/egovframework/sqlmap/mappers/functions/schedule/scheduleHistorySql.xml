@@ -122,6 +122,7 @@
 		AND B.DB_SVR_ID = D.DB_SVR_ID
         )A
         WHERE A.EXE_RESULT = 'Fail'
+        ORDER BY WRK_END_DTM DESC
 	</select>
 	
 	

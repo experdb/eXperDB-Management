@@ -74,12 +74,14 @@ function fn_rman_init(){
  		         	{ data: "wrk_dtm", className: "dt-center", defaultContent: ""}, 
 	 		   		{
 	 					data : "exe_rslt_cd_nm",
-	 					render : function(data, type, full, meta) {
+	 					render : function(data, type, full, meta) {	 						
 	 						var html = '';
 	 						if (full.exe_rslt_cd == 'TC001701') {
 	 							html += '<span class="btn btnC_01 btnF_02"><img src="../images/ico_state_02.png" style="margin-right:3px;"/>Success</span>';
-	 						} else {
+	 						} else if(full.exe_rslt_cd == 'TC001702'){
 	 							html += '<span class="btn btnC_01 btnF_02"><button onclick="fn_failLog('+full.exe_sn+')"><img src="../images/ico_state_01.png" style="margin-right:3px;"/>Fail</button></span>';
+	 						} else {
+	 							html +='';
 	 						}
 	 						return html;
 	 					},
@@ -123,6 +125,7 @@ function fn_dump_init(){
  		         	{ data: "db_nm", className: "dt-center", defaultContent: ""}, 
  		         	{ data: "file_sz", className: "dt-center", defaultContent: ""},
  		         	{ data: "bck_file_pth", className: "dt-left", defaultContent: ""},
+ 		         	{ data: "bck_filenm", className: "dt-left", defaultContent: ""},
  		         	{ data: "wrk_strt_dtm", className: "dt-center", defaultContent: ""}, 
  		         	{ data: "wrk_end_dtm", className: "dt-center", defaultContent: ""},  		         			         	
  		         	{ data: "wrk_dtm", className: "dt-center", defaultContent: ""},
@@ -144,16 +147,17 @@ function fn_dump_init(){
 	});
    	
    	tableDump.tables().header().to$().find('th:eq(0)').css('min-width', '40px');
-   	tableDump.tables().header().to$().find('th:eq(1)').css('min-width', '100px');
+   	tableDump.tables().header().to$().find('th:eq(1)').css('min-width', '200px');
    	tableDump.tables().header().to$().find('th:eq(2)').css('min-width', '100px');
-   	tableDump.tables().header().to$().find('th:eq(3)').css('min-width', '100px');
+   	tableDump.tables().header().to$().find('th:eq(3)').css('min-width', '200px');
    	tableDump.tables().header().to$().find('th:eq(4)').css('min-width', '100px');
    	tableDump.tables().header().to$().find('th:eq(5)').css('min-width', '100px');
-   	tableDump.tables().header().to$().find('th:eq(6)').css('min-width', '150px');
-   	tableDump.tables().header().to$().find('th:eq(7)').css('min-width', '100px');
+   	tableDump.tables().header().to$().find('th:eq(6)').css('min-width', '200px');
+   	tableDump.tables().header().to$().find('th:eq(7)').css('min-width', '150px');
    	tableDump.tables().header().to$().find('th:eq(8)').css('min-width', '100px');
    	tableDump.tables().header().to$().find('th:eq(9)').css('min-width', '100px');
    	tableDump.tables().header().to$().find('th:eq(10)').css('min-width', '100px');
+   	tableDump.tables().header().to$().find('th:eq(11)').css('min-width', '100px');
     $(window).trigger('resize');
 }
 
@@ -410,12 +414,13 @@ function selectTab(intab){
 						<thead>
 							<tr>
 								<th width="40">NO</th>
-								<th width="100"><spring:message code="common.work_name" /></th>
+								<th width="200"><spring:message code="common.work_name" /></th>
 								<th width="100"><spring:message code="dbms_information.dbms_ip" /></th>
-								<th width="100"><spring:message code="common.work_description" /></th>
+								<th width="200"><spring:message code="common.work_description" /></th>
 								<th width="100"><spring:message code="common.database" /></th>
 								<th width="100"><spring:message code="backup_management.size" /></th>
-								<th width="150"><spring:message code="etc.etc08"/></th>								
+								<th width="200"><spring:message code="etc.etc08"/></th>			
+								<th width="150">백업파일명</th>						
 								<th width="100"><spring:message code="backup_management.work_start_time" /></th>
 								<th width="100"><spring:message code="backup_management.work_end_time" /></th>
 								<th width="100"><spring:message code="backup_management.elapsed_time" /></th>

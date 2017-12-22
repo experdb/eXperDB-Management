@@ -18,7 +18,7 @@
 							<td style="text-align: left" id="r_bck_bsn_dscd_nm"></td>
 						</tr>	
 						<tr>
-							<td><spring:message code="etc.etc07"/></td>
+							<td><spring:message code="backup_management.backup_option"/></td>
 							<td style="text-align: left" id="bck_opt_cd_nm"></td>
 						</tr>	
 						<tr>
