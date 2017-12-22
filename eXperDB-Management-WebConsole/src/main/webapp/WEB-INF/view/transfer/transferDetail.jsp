@@ -261,7 +261,7 @@
 								<th width="100"><spring:message code="common.dbms_name" /></th>
 								<th width="100"><spring:message code="common.database" /></th>
 								<th width="50"><spring:message code="common.run_status" /></th>
-								<th width="100">전송 활성화</th>
+								<th width="100"><spring:message code="data_transfer.transfer_active"/></th>
 							</tr>
 						</thead>
 					</table>

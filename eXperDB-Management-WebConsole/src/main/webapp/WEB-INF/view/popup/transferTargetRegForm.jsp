@@ -32,13 +32,13 @@
 	/* Validation */
 	function fn_transferTargetValidation(){
 		if (trf_trg_url.value == "" || trf_trg_url.value == "undefind" || trf_trg_url.value == null) {
-			alert("Target URL을 넣어주세요");
+			alert('<spring:message code="message.msg149"/>');
 			trf_trg_url.focus();
 			return false;
 		}
 		
 		if (nmCheck != 1) {
-			alert("아이디를 입력 후 중복체크를 해주세요.");
+			alert('<spring:message code="message.msg142"/>');
 			return false;
 		}
 		
@@ -48,7 +48,7 @@
 	/*저장버튼 클릭시insert*/
 	function fn_insert() {
 		if (!fn_transferTargetValidation()) return false;
-		if (!confirm("저장하시겠습니까?")) return false;
+		if (!confirm('<spring:message code="message.msg148"/>')) return false;
 			$.ajax({
 				url : '/insertTransferTarget.do',
 				type : 'post',
@@ -93,7 +93,7 @@
 	function fn_update(){
 		nmCheck = 1;
 		if (!fn_transferTargetValidation()) return false;
-		if (!confirm("저장하시겠습니까?")) return false;
+		if (!confirm('<spring:message code="message.msg148"/>')) return false;
 			$.ajax({
 				url : '/updateTransferTarget.do',
 				type : 'post',
@@ -210,13 +210,13 @@
 <div class="pop_container">
 	<div class="pop_cts">
 		<p class="tit">
-			<c:if test="${act == 'i'}">전송대상 설정 등록</c:if>
-			<c:if test="${act == 'u'}">전송대상 설정 수정</c:if>
+			<c:if test="${act == 'i'}"><spring:message code="data_transfer.transfer_set_reg"/></c:if>
+			<c:if test="${act == 'u'}"><spring:message code="data_transfer.transfer_set_mod"/></c:if>
 		</p>
 		<table class="write">
 			<caption>
-				<c:if test="${act == 'i'}">전송대상 설정 등록</c:if>
-				<c:if test="${act == 'u'}">전송대상 설정 수정</c:if>
+				<c:if test="${act == 'i'}"><spring:message code="data_transfer.transfer_set_reg"/></c:if>
+				<c:if test="${act == 'u'}"><spring:message code="data_transfer.transfer_set_mod"/></c:if>
 			</caption>
 			<colgroup>
 				<col style="width:150px;" />

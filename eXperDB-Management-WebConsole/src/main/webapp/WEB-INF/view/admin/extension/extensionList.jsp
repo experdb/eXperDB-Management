@@ -154,7 +154,7 @@ $(function() {
     		success : function(result) {
     			table_db.clear().draw();
     			if(result == null){
-    				alert("서버상태를 확인해주세요.");
+    				alert('<spring:message code="message.msg05" />');
     			}else{
 	    			table_db.rows.add(result).draw();
 	    			//fn_dataCompareChcek(result);
@@ -192,7 +192,7 @@ $(function() {
 					<div class="btn_type_01">
 					</div>
 					<div class="inner">
-						<p class="tit">DBMS 리스트</p>
+						<p class="tit"><spring:message code="extension_pack_installation_information.dbms_list"/></p>
 						<div class="tree_server">
 							<table id="dbServerList" class="display" cellspacing="0" width="100%" align="right">
 								<thead>
@@ -220,7 +220,7 @@ $(function() {
 						
 					</div>
 					<div class="inner">
-						<p class="tit">확장모듈 리스트</p>
+						<p class="tit"><spring:message code="extension_pack_installation_information.exp_module_list"/></p>
 						<div class="tree_list">
 							<table id="dbList" class="display" cellspacing="0" width="100%" align="left">
 								<thead>

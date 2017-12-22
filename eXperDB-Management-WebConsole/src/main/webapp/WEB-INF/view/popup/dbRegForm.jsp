@@ -285,7 +285,7 @@ function fn_dataCompareChcek(svrDbList,db_svr_id){
      		}   		 
     		datasArr.push(rows);
  		}
-     	if (confirm("선택된 DB를 저장하시겠습니까?")){
+     	if (confirm('<spring:message code="message.msg160"/>')){
  			$.ajax({
  				url : "/insertDB.do",
  				data : {
@@ -329,12 +329,12 @@ function fn_dataCompareChcek(svrDbList,db_svr_id){
 <body>
 <div class="pop_container">
 	<div class="pop_cts">
-		<p class="tit">Datebase 등록</p>
+		<p class="tit">Datebase <spring:message code="button.create" /></p>
 		<div class="pop_cmm mt25" >
 			<div class="pop_lt">			
 				<form name="serverList" id="serverList">
 				<table class="write">
-					<caption>Datebase 등록</caption>
+					<caption>Datebase <spring:message code="button.create" /></caption>
 					<colgroup>
 					<col style="width:110px;" />
 					<col style="width:250px;" />
@@ -366,7 +366,7 @@ function fn_dataCompareChcek(svrDbList,db_svr_id){
 							<tr>
 								<th width="200"><spring:message code="common.database" /></th>
 								<th width="300"><spring:message code="common.desc" /> </th>
-								<th width="100">등록선택</th>
+								<th width="100"><spring:message code="dbms_information.regChoice"/></th>
 							</tr>
 						</thead>
 					</table>

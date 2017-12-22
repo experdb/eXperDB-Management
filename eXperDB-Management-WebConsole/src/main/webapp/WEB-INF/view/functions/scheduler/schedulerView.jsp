@@ -900,7 +900,7 @@ var DateDiff =  {
 			<div id="contents">			
 				<div class="contents_wrap">
 					<div class="contents_tit">
-						<h4>백업 스케줄 <a href="#n"><img src="../images/ico_tit.png" class="btn_info"/></a></h4>
+						<h4><spring:message code="schedule.bckSchedule"/> <a href="#n"><img src="../images/ico_tit.png" class="btn_info"/></a></h4>
 						<div class="infobox"> 
 							<ul>
 								<li><spring:message code="help.backup_scheduler_01" /> </li>
@@ -955,7 +955,7 @@ var DateDiff =  {
 												<th  scope="row" class="t10"><spring:message code="common.search_year_month" /></th>
 												<td>
 													<select id="cmbyear"  style="width:100px" class="select t5">
-													</select> 년&nbsp;&nbsp;
+													</select> <spring:message code="etc.etc09"/>&nbsp;&nbsp;
 													<select id="cmbmonth"  class="select t6">
 														<option>01</option><option>02</option><option>03</option><option>04</option><option>05</option><option>06</option>
 														<option>07</option><option>08</option><option>09</option><option>10</option><option>11</option><option>12</option>

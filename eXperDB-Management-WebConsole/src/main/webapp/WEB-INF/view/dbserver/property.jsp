@@ -153,7 +153,7 @@
 	<div class="contents_wrap">
 		<div class="contents_tit">
 			<h4>
-				속성<a href="#n"><img src="/images/ico_tit.png" class="btn_info" /></a>
+				<spring:message code="common.property"/><a href="#n"><img src="/images/ico_tit.png" class="btn_info" /></a>
 			</h4>
 			<div class="infobox">
 				<ul>
@@ -164,7 +164,7 @@
 			<div class="location">
 				<ul>
 					<li class="bold">${db_svr_nm}</li>
-					<li class="on">속성</li>
+					<li class="on"><spring:message code="common.property"/></li>
 				</ul>
 			</div>
 		</div>

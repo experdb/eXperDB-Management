@@ -189,7 +189,7 @@ function fn_search(){
 	var db_svr_nm = $("#db_svr_nm").val();
 	
 	if(db_svr_nm == '%'){
-		alert("서버명을 선택하셔야 합니다.");
+		alert('<spring:message code="message.msg152"/>');
 		return false;
 	}
 
@@ -248,7 +248,7 @@ function fn_workAdd(){
 <body>
 <div class="pop_container">
 	<div class="pop_cts">
-		<p class="tit">Work등록</p>
+		<p class="tit"><spring:message code="schedule.workReg"/></p>
 			<div class="btn_type_01">
 				<span class="btn"><button onClick="fn_search();"><spring:message code="common.search" /></button></span>
 			</div>
@@ -284,7 +284,7 @@ function fn_workAdd(){
 		</div>
 
 		<div class="pop_cmm3">
-			<p class="pop_s_tit">Work 리스트</p>
+			<p class="pop_s_tit"><spring:message code="schedule.workList"/></p>
 			<div class="overflow_area">
 				<table id="workList" class="display" cellspacing="0" width="100%">
 				<thead>
@@ -294,7 +294,7 @@ function fn_workAdd(){
 						<th width="100"><spring:message code="common.work_name" /></th>
 						<th width="130"><spring:message code="common.work_description" /></th>
 						<th width="70"><spring:message code="common.division" /></th>
-						<th width="85">백업구분</th>
+						<th width="85"><spring:message code="backup_management.bck_div"/></th>
 						<th width="150"><spring:message code="common.dbms_name" /></th>
 						<th width="100"><spring:message code="common.register" /></th>
 						<th width="100"><spring:message code="common.regist_datetime" /></th>						

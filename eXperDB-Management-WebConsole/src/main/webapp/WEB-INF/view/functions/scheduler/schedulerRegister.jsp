@@ -402,7 +402,7 @@ function fn_insertSchedule(){
 		arrmaps.push(tmpmap);	
 		}
 
-	if (confirm("스케줄을 등록 하시겠습니까?")){
+	if (confirm('<spring:message code="message.msg132"/>')){
 		$.ajax({
 			url : "/insertSchedule.do",
 			data : {
@@ -527,7 +527,7 @@ function fn_check() {
 											</td>
 										</tr>
 										<tr>
-											<th scope="row" class="t9 line">스케줄설명</th>
+											<th scope="row" class="t9 line"><spring:message code="schedule.scheduleExp"/></th>
 											<td><input type="text" class="txt t2" id="scd_exp" name="scd_exp" style="width:500px;"/></td>
 										</tr>
 									</tbody>

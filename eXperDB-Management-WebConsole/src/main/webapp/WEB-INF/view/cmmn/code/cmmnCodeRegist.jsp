@@ -31,7 +31,7 @@ function fn_cmmnCodeList(){
 function fn_egov_regist_CmmnCode(){
 	
 				if(fnCheckNotKorean(document.insertCmmnCode.grp_cd.value)){
-					window.alert("코드에 한글을 사용할 수 없습니다.");
+					window.alert('<spring:message code="message.msg22" />');
 					document.insertCmmnCode.grp_cd.select();
 					return;
 				}
@@ -42,7 +42,7 @@ function fn_egov_regist_CmmnCode(){
 					return;
 				}
 				
-				if(confirm("코드를 등록하시겠습니까?")){
+				if(confirm('<spring:message code="message.msg24" />')){
 					frm = document.insertCmmnCode;
 					frm.action = "/insertCmmnCode.do";
 					frm.submit();
@@ -90,9 +90,9 @@ function fnCheck(str){
 			<form name="insertCmmnCode" id="insertCmmnCode" method="post">
 				<div class="contsBody">
 					<div class="Btn">
-						<span class="bbsBtn"><a href="javascript:fn_cmmnCodeList()">목록</a></span>
+						<span class="bbsBtn"><a href="javascript:fn_cmmnCodeList()"><spring:message code="button.list" /></a></span>
 						<span class="bbsBtn"><a
-							href="javascript:fn_egov_regist_CmmnCode();">등록</a></span>
+							href="javascript:fn_egov_regist_CmmnCode();"><spring:message code="button.create" /></a></span>
 					</div>
 
 					<div class="bbsDetail">

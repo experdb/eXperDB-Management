@@ -155,7 +155,7 @@
 			success : function(result) {
 				table.clear().draw();
 				if(result.error != null){
-					alert("전송서버설정을 등록해주세요.");
+					alert('<spring:message code="message.msg173"/>');
 				}else if(result.data != null){
 					table.rows.add(result.data).draw();
 				}
@@ -236,7 +236,7 @@
 			alert('<spring:message code="message.msg04" />');
 			return false;
 		} else {
-			if (!confirm("삭제하시겠습니까?"))return false;
+			if (!confirm('<spring:message code="message.msg162"/>'))return false;
 			var rowList = [];
 			for (var i = 0; i < datas.length; i++) {
 				rowList += datas[i].name + ',';
@@ -269,7 +269,7 @@
 						alert('<spring:message code="message.msg60" />');
 						fn_select();
 					} else {
-						alert("Connector삭제를 실패하였습니다.");
+						alert('<spring:message code="message.msg168"/>');
 					}
 				}
 			});
@@ -322,7 +322,7 @@
 						<thead>
 							<tr>
 								<th width="10"></th>
-								<th width="20">No</th>
+								<th width="20"><spring:message code="common.no" /></th>
 								<th width="100"><spring:message code="data_transfer.connect_name" /></th>
 								<th width="350"><spring:message code="data_transfer.hdfs_url" /> </th>
 								<th width="60"><spring:message code="data_transfer.tasks_max" />  </th>

@@ -341,7 +341,7 @@ function fn_save(){
 	 var datasArr = new Array();	
 	 var datas = userTable.row('.selected').length;
 	 if(datas != 1){
-		 alert("선택된 유저가 없습니다.");
+		 alert('<spring:message code="message.msg165"/>');
 		 return false;
 	 }else{
 	 var usr_id = userTable.row('.selected').data().usr_id;
@@ -368,7 +368,7 @@ function fn_save(){
 	        datasArr.push(datas);
 	    }	    
 
-		if (confirm("저장 하시겠습니까?")){
+		if (confirm('<spring:message code="message.msg148"/>')){
 			$.ajax({
 				url : "/updateUsrMnuAut.do",
 				data : {
@@ -460,11 +460,11 @@ function fn_search(){
 									<div class="btn_type_01">
 										<div class="search_area">
 											<input type="text" class="txt search" id="search">
-											<button class="search_btn" onClick="fn_search()">검색</button>
+											<button class="search_btn" onClick="fn_search()"><spring:message code="button.search" /></button>
 										</div>
 									</div>
 									<div class="inner">
-										<p class="tit">사용자 선택</p>
+										<p class="tit"><spring:message code="auth_management.user_choice" /></p>
 										<div class="overflow_area">
 											<table id="user" class="display" cellspacing="0" width="100%">
 												<thead>
@@ -480,13 +480,13 @@ function fn_search(){
 								</div>
 								<div class="menu_roll_rt">
 									<div class="btn_type_01">
-										<span class="btn"><button onClick="fn_save()"; id="save_button">저장</button></span>
+										<span class="btn"><button onClick="fn_save()"; id="save_button"><spring:message code="common.save"/></button></span>
 									</div>
 									<div class="inner">
-										<p class="tit">메뉴권한</p>
+										<p class="tit"><spring:message code="auth_management.menu_auth" /></p>
 										<div class="overflow_area">
 											<table class="menu_table">
-												<caption>메뉴권한</caption>
+												<caption><spring:message code="auth_management.menu_auth" /></caption>
 												<colgroup>
 													<col />
 													<col style="width:30%" />
@@ -496,14 +496,14 @@ function fn_search(){
 												</colgroup>
 												<thead>
 													<tr>
-														<th scope="col" colspan="3">메뉴</th>
-														<th scope="col">읽기
+														<th scope="col" colspan="3"><spring:message code="common.menu"/></th>
+														<th scope="col"><spring:message code="common.read"/>
 															<div class="inp_chk" style="margin-top: 5px;">
 																<input type="checkbox" id="read" name="read" />
 																<label for="read"></label>
 															</div>
 														</th>
-														<th scope="col">쓰기
+														<th scope="col"><spring:message code="common.write"/>
 															<div class="inp_chk" style="margin-top: 5px;">
 																<input type="checkbox" id="write" name="write" />
 																<label for="write"></label>

@@ -437,7 +437,7 @@
 								<th scope="col"><spring:message code="dbms_information.dbms_ip" /></th>							
 								<th scope="col"><spring:message code="schedule.work_start_datetime" /></th>
 								<th scope="col"><spring:message code="schedule.work_end_datetime" /></th>
-								<th scope="col">작업시간</th>
+								<th scope="col"><spring:message code="schedule.jobTime"/></th>
 								<th scope="col"><spring:message code="schedule.result" /></th>
 								<th scope="col"><spring:message code="schedule.detail_view" /></th>
 							</tr>

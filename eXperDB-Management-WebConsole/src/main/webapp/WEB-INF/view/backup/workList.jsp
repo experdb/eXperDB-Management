@@ -458,7 +458,7 @@ function fn_rman_work_delete(){
 	});	
     
 		if(scheduleChk != 0 ){
-			alert("등록된 스케줄이 존재하여 삭제할수 없습니다.");
+			alert('<spring:message code="backup_management.reg_schedule_delete_no"/>');
 			return false;
 		}else{   
 			if(confirm('<spring:message code="message.msg17" />')){
@@ -543,7 +543,7 @@ function fn_dump_work_delete(){
 	});	
 	
     if(scheduleChk != 0 ){
-		alert("등록된 스케줄이 존재하여 삭제할수 없습니다.");
+		alert('<spring:message code="backup_management.reg_schedule_delete_no"/>');
 		return false;
 	}else{   
 		if(confirm('<spring:message code="message.msg17" />')){
@@ -636,11 +636,11 @@ function selectTab(tab){
 			<div class="cmm_tab">
 				<ul id="tab1">
 					<li class="atv"><a href="javascript:selectTab('rman')"><spring:message code="backup_management.rman_backup" /></a></li>
-					<li><a href="javascript:selectTab('dump')">Dump 백업</a></li>
+					<li><a href="javascript:selectTab('dump')"><spring:message code="backup_management.dumpBck"/></a></li>
 				</ul>
 				<ul id="tab2" style="display:none;">
 					<li><a href="javascript:selectTab('rman')"><spring:message code="backup_management.rman_backup" /></a></li>
-					<li class="atv"><a href="javascript:selectTab('dump')">Dump 백업</a></li>
+					<li class="atv"><a href="javascript:selectTab('dump')"><spring:message code="backup_management.dumpBck"/></a></li>
 				</ul>
 			</div>
 			<div class="cmm_grp">

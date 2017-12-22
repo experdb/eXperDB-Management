@@ -181,7 +181,7 @@ function valCheck(){
 		$("#wrk_exp").focus();
 		return false;
 	}else if($("#bck_opt_cd").val() == ""){
-		alert("백업옵션을 선택해 주세요.");
+		alert('<spring:message code="backup_management.bckOption_choice_please"/>');
 		$("#bck_opt_cd").focus();
 		return false;
 	}else if($("#log_file_pth").val() == ""){
@@ -197,11 +197,11 @@ function valCheck(){
 		$("#log_file_pth").focus();
 		return false;
 	}else if($("#check_path2").val() != "Y"){
-		alert("백업경로에 유효한 경로를 입력후 경로체크를 해 주세요.");		
+		alert('<spring:message code="backup_management.bckPath_effective_check"/>');		
 		$("#bck_pth").focus();
 		return false;
 	}else if(wrk_nmChk =="fail"){
-		alert("WORK명 중복체크 바랍니다.");
+		alert('<spring:message code="backup_management.work_overlap_check"/>');
 		return false;
 	}else{
 		return true;
@@ -269,10 +269,10 @@ function checkFolder(keyType){
 						}
 					}else{
 						if(haCnt > 1){
-							alert("HA 구성된 클러스터 중 "+data.SERVERIP+" 노드에 해당 경로가 존재하지 않습니다.");
+							alert('<spring:message code="backup_management.ha_configuration_cluster"/>'+data.SERVERIP+'<spring:message code="backup_management.node_path_no"/>');
 						}else{
-							alert("유효하지 않은 경로입니다.");
-						}	
+							alert('<spring:message code="backup_management.invalid_path"/>');
+						}		
 					}
 				}else{
 					alert('<spring:message code="message.msg76" />');
@@ -299,12 +299,12 @@ function fn_check() {
 		},
 		success : function(result) {
 			if (result == "true") {
-				alert("등록 가능한 WORK명 입니다.");
+				alert('<spring:message code="backup_management.reg_possible_work_nm"/>');
 				document.getElementById("wrk_nm").focus();
 				wrk_nmChk = "success";
 			} else {
 				scd_nmChk = "fail";
-				alert("중복된 WORK명이 존재합니다.");
+				alert('<spring:message code="backup_management.effective_work_nm"/>');
 				document.getElementById("wrk_nm").focus();
 			}
 		},

@@ -62,7 +62,7 @@
 	
 	$(window.document).ready(function() {
 		if("${error}"!=""){
-			alert("통합관리콘솔을 통하여 생성한 커넥터만 매핑설정 및 조회가 가능합니다.");
+			alert('<spring:message code="message.msg174"/>');
 			window.close();
 		}
 		fn_init();
@@ -231,7 +231,7 @@
 	    		},
 	    		success : function(result) {
 	    			if(result.bottledwater !=null){
-	    				alert("bottledwater extension을 설치 해 주세요.");
+	    				alert('<spring:message code="message.msg150"/>');
 	    			}else if(result.data == null){
 	    				alert('<spring:message code="message.msg27" />');
 	    			}else{
@@ -314,9 +314,9 @@
 	function fn_insert(){
 		var data = connectorTableList.rows().data();
 		if(data.length <1){
-			alert("저장할 데이터가 없습니다.");	
+			alert('<spring:message code="message.msg151"/>');	
 		}else{
-			 if (!confirm("저장하시겠습니까?")) return false;
+			 if (!confirm('<spring:message code="message.msg148"/>')) return false;
 			//connector 테이블 리스트가 있을 경우
 			var trf_trg_mpp_id = 0;
 			if("${result[0].trf_trg_mpp_id}" != ""){
@@ -399,28 +399,28 @@
 		</table>
 		<div class="mapping_area">
 			<div class="mapping_lt">
-				<p class="tit">테이블 리스트</p>
+				<p class="tit"><spring:message code="data_transfer.tableList"/></p>
 				<div class="overflow_area">
 					<table id="tableList" class="display" cellspacing="0" width="100%">
 						<thead>
 							<tr>
 								<th></th>
-								<th>Schema</th>
-								<th>Table명</th>
+								<th><spring:message code="data_transfer.schema"/></th>
+								<th><spring:message code="data_transfer.tableNm"/></th>
 							</tr>
 						</thead>
 					</table>
 				</div>
 			</div>
 			<div class="mapping_rt">
-				<p class="tit">전송대상 테이블</p>
+				<p class="tit"><spring:message code="data_transfer.transfer_table"/></p>
 				<div class="overflow_area">
 					<table id="connectorTableList" class="display" cellspacing="0" width="100%">
 						<thead>
 							<tr>
 								<th></th>
-								<th>Schema</th>
-								<th>Table명</th>
+								<th><spring:message code="data_transfer.schema"/></th>
+								<th><spring:message code="data_transfer.tableNm"/></th>
 							</tr>	
 							</thead>			
 					</table>

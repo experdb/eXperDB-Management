@@ -212,7 +212,7 @@ function fn_reg_popup(){
 			<div class="cmm_grp">
 				<div class="btn_type_01">
 					<span class="btn" onClick="fn_search();" id="read_button"><button><spring:message code="common.search" /></button></span>
-					<span class="btn" onclick="fn_reg_popup();" id="int_button"><button>관리</button></span>
+					<span class="btn" onclick="fn_reg_popup();" id="int_button"><button><spring:message code="common.management"/></button></span>
 				</div>
 				<div class="sch_form">
 					<table class="write">

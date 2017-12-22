@@ -127,12 +127,12 @@ var haCnt = 0;
 		
 		if($('#bck').val() == "rman"){
 			if($('#bck_opt_cd').val() == ""){
-				alert("백업옵션을 선택해 주세요.");
+				alert('<spring:message code="backup_management.bckOption_choice_please"/>');
 				return false;
 				}			
 		}else{
 			if($('#db_id').val() == ""){
-				alert("데이터베이스를 선택해 주세요.");
+				alert('<spring:message code="backup_management.database_choice_please"/>');
 				return false;
 				}			
 		}
@@ -146,7 +146,7 @@ var haCnt = 0;
 			$("#rlog_file_pth").focus();
 			return false;
 		}else if($("#check_path3").val() != "Y"){
-			alert("백업경로에 유효한 경로를 입력후 경로체크를 해 주세요.");
+			alert('<spring:message code="backup_management.bckPath_effective_check"/>');
 			$("#bck_pth").focus();
 			return false;
 		}else if($("#check_path4").val() != "Y"){
@@ -154,7 +154,7 @@ var haCnt = 0;
 			$("#dlog_file_pth").focus();
 			return false;
 		}else if($("#check_path5").val() != "Y"){
-			alert("백업경로에 유효한 경로를 입력후 경로체크를 해 주세요.");
+			alert('<spring:message code="backup_management.bckPath_effective_check"/>');
 			$("#save_pth").focus();
 			return false;
 		}else{
@@ -385,9 +385,9 @@ var haCnt = 0;
 	 						}
 	 					}else{
 	 						if(haCnt > 1){
-	 							alert("HA 구성된 클러스터 중 "+data.SERVERIP+" 노드에 해당 경로가 존재하지 않습니다.");
+								alert('<spring:message code="backup_management.ha_configuration_cluster"/>' +data.SERVERIP+ '<spring:message code="backup_management.node_path_no"/>');
 							}else{
-								alert("유효하지 않은 경로입니다.");
+								alert('<spring:message code="backup_management.invalid_path"/>');
 							}	
 	 					}
 	 				}else{
@@ -656,7 +656,7 @@ var haCnt = 0;
 							<th scope="row" class="t9 line"><spring:message code="schedule.schedule_name" /></th>
 							<td><input type="text" class="txt t2" id="scd_nm" name="scd_nm" /> 
 							<span class="btn btnF_04 btnC_01">
-									<button type="button" class="btn_type_02" onclick="fn_check()"style="width: 60px; margin-right: -60px; margin-top: 0;">중복체크</button>
+									<button type="button" class="btn_type_02" onclick="fn_check()"style="width: 60px; margin-right: -60px; margin-top: 0;"><spring:message code="common.overlap_check" /></button>
 							</span>
 							</td>
 						</tr>
@@ -692,7 +692,7 @@ var haCnt = 0;
 							<td>
 								<input type="text" class="txt" name="data_pth"id="data_pth" maxlength=50 style="width: 450px" onKeydown="$('#check_path1').val('N')" /> 
 								<span class="btn btnF_04 btnC_01">
-								<button type="button" class="btn_type_02" onclick="checkFolder(1)" style="width: 60px; margin-right: -60px; margin-top: 0;">경로체크</button>
+								<button type="button" class="btn_type_02" onclick="checkFolder(1)" style="width: 60px; margin-right: -60px; margin-top: 0;"><spring:message code="common.dir_check" /></button>
 								</span>
 								<span id="dataVolume" style="margin: 70px;"></span>
 							</td>
@@ -701,7 +701,7 @@ var haCnt = 0;
 							<th scope="row" class="t9 line"><spring:message code="backup_management.backup_log_dir" /></th>
 							<td>
 								<input type="text" class="txt" name="rlog_file_pth" id="rlog_file_pth" maxlength=50 style="width: 450px" onKeydown="$('#check_path2').val('N')" /> 
-								<span class="btn btnF_04 btnC_01"><button type="button" class="btn_type_02" onclick="checkFolder(2)" style="width: 60px; margin-right: -60px; margin-top: 0;">경로체크</button></span>
+								<span class="btn btnF_04 btnC_01"><button type="button" class="btn_type_02" onclick="checkFolder(2)" style="width: 60px; margin-right: -60px; margin-top: 0;"><spring:message code="common.dir_check" /></button></span>
 								<span id="rlogVolume" style="margin: 70px;"></span>
 							</td>
 						</tr>
@@ -710,7 +710,7 @@ var haCnt = 0;
 							<th scope="row" class="t9 line"><spring:message code="backup_management.backup_dir" /></th>
 							<td>
 								<input type="text" class="txt" name="bck_pth" id="bck_pth" maxlength=50 style="width: 450px" onKeydown="$('#check_path3').val('N')" /> 
-								<span class="btn btnF_04 btnC_01"><button type="button" class="btn_type_02" onclick="checkFolder(3)"style="width: 60px; margin-right: -60px; margin-top: 0;">경로체크</button></span>
+								<span class="btn btnF_04 btnC_01"><button type="button" class="btn_type_02" onclick="checkFolder(3)"style="width: 60px; margin-right: -60px; margin-top: 0;"><spring:message code="common.dir_check" /></button></span>
 								<span id="backupVolume" style="margin: 70px;"></span>
 							</td>
 						</tr>
@@ -720,7 +720,7 @@ var haCnt = 0;
 							<td>
 								<input type="text" class="txt" name="dlog_file_pth" id="dlog_file_pth" maxlength=50 style="width: 450px" onKeydown="$('#check_path4').val('N')" /> 
 								<span class="btn btnF_04 btnC_01">
-								<button type="button" class="btn_type_02" onclick="checkFolder(4)" style="width: 60px; margin-right: -60px; margin-top: 0;">경로체크</button></span>
+								<button type="button" class="btn_type_02" onclick="checkFolder(4)" style="width: 60px; margin-right: -60px; margin-top: 0;"><spring:message code="common.dir_check" /></button></span>
 								<span id="dlogVolume" style="margin: 70px;"></span>
 							</td>
 						</tr>
@@ -730,13 +730,13 @@ var haCnt = 0;
 							<td>
 								<input type="text" class="txt" name="save_pth" id="save_pth" maxlength=50 style="width: 450px" onKeydown="$('#check_path5').val('N')" /> 
 								<span class="btn btnF_04 btnC_01">
-								<button type="button" class="btn_type_02" onclick="checkFolder(5)" style="width: 60px; margin-right: -60px; margin-top: 0;">경로체크</button></span>
+								<button type="button" class="btn_type_02" onclick="checkFolder(5)" style="width: 60px; margin-right: -60px; margin-top: 0;"><spring:message code="common.dir_check" /></button></span>
 								<span id="saveVolume" style="margin: 70px;"></span>
 							</td>
 						</tr>
 
 						<tr>
-							<th scope="row" class="t9 line">스케줄설정</th>
+							<th scope="row" class="t9 line"><spring:message code="schedule.scheduleSetting"/></th>
 							<td>
 								<div class="schedule_wrap">
 									<span id="weekDay"> 

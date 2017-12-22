@@ -36,9 +36,9 @@ function fn_init() {
 			render : function(data, type, full, meta) {
 				var html = "";
 				if (data == "Y") {
-					html += "사용";
+					html += "<spring:message code="dbms_information.use" />";
 				} else {
-					html += "미사용";
+					html += "<spring:message code="dbms_information.unuse" />";
 				}
 				return html;
 			},
@@ -91,10 +91,10 @@ $(window.document).ready(function() {
 	     },
 		error : function(xhr, status, error) {
 			if(xhr.status == 401) {
-				alert("인증에 실패 했습니다. 로그인 페이지로 이동합니다.");
+				alert('<spring:message code="message.msg02" />');
 				 location.href = "/";
 			} else if(xhr.status == 403) {
-				alert("세션이 만료가 되었습니다. 로그인 페이지로 이동합니다.");
+				alert('<spring:message code="message.msg03" />');
 	             location.href = "/";
 			} else {
 				alert("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""));
@@ -147,10 +147,10 @@ function fn_select(){
 	     },
 		error : function(xhr, status, error) {
 			if(xhr.status == 401) {
-				alert("인증에 실패 했습니다. 로그인 페이지로 이동합니다.");
+				alert('<spring:message code="message.msg02" />');
 				 location.href = "/";
 			} else if(xhr.status == 403) {
-				alert("세션이 만료가 되었습니다. 로그인 페이지로 이동합니다.");
+				alert('<spring:message code="message.msg03" />');
 	             location.href = "/";
 			} else {
 				alert("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""));
@@ -188,7 +188,7 @@ function fn_update() {
 		var popOption = "width="+width+", height="+height+", top="+top+", left="+left+", resizable=no, scrollbars=yes, status=no, toolbar=no, titlebar=yes, location=no,";			
 		window.open(popUrl,"",popOption);
 	} else {
-		alert("하나의 항목을 선택해주세요.");
+		alert('<spring:message code="message.msg04" />');
 		return false;
 	}
 }
@@ -198,17 +198,17 @@ function fn_delete(){
 	var usr_id = "<%=(String)session.getAttribute("usr_id")%>"
 	var datas = table.rows('.selected').data();
 	if (datas.length <= 0) {
-		alert("하나의 항목을 선택해주세요.");
+		alert('<spring:message code="message.msg04" />');
 		return false;
 	} else {
-		if (!confirm("삭제하시겠습니까?"))return false;
+		if (!confirm('<spring:message code="message.msg162"/>'))return false;
 		var rowList = [];
 		for (var i = 0; i < datas.length; i++) {
 			if(datas[i].usr_id=="admin"){
-				alert("관리자는 삭제할 수 없습니다.");
+				alert('<spring:message code="message.msg10" />');
 				return false;
 			}else if(datas[i].usr_id==usr_id){
-				alert("본인은 삭제할 수 없습니다.");
+				alert('<spring:message code="message.msg11" />');
 				return false;
 			}else{
 				rowList += datas[i].usr_id + ',';	
@@ -226,10 +226,10 @@ function fn_delete(){
 		     },
 			error : function(xhr, status, error) {
 				if(xhr.status == 401) {
-					alert("인증에 실패 했습니다. 로그인 페이지로 이동합니다.");
+					alert('<spring:message code="message.msg02" />');
 					 location.href = "/";
 				} else if(xhr.status == 403) {
-					alert("세션이 만료가 되었습니다. 로그인 페이지로 이동합니다.");
+					alert('<spring:message code="message.msg03" />');
 		             location.href = "/";
 				} else {
 					alert("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""));
@@ -237,10 +237,10 @@ function fn_delete(){
 			},
 			success : function(result) {
 				if (result) {
-					alert("삭제되었습니다.");
+					alert('<spring:message code="message.msg37" />');
 					fn_select();
 				}else{
-					alert("유저삭제를 실패하였습니다.");
+					alert('<spring:message code="message.msg13" />');
 				}
 			}
 		});
@@ -286,7 +286,7 @@ function fn_delete(){
 						</colgroup>
 						<tbody>
 							<tr>
-								<th scope="row" class="t9">검색조건</th>
+								<th scope="row" class="t9"><spring:message code="common.searchCondition"/></th>
 								<td>
 									<select class="select t5" id="type">
 										<option value="usr_nm"><spring:message code="user_management.user_name" /></option>

@@ -265,7 +265,7 @@ function fn_insert_object_val(bck_wrk_id, wrk_id,otype,scm_nm,obj_nm){
  ******************************************************** */
 function valCheck(){
 	if($("#db_id option:selected" ).val() == ""){
-		alert("백업할 Database를 선택하세요.");
+		alert('<spring:message code="backup_management.bck_database_choice"/>');
 		return false;
 	}else if($("#wrk_nm").val() == ""){
 		alert('<spring:message code="message.msg107" />');
@@ -288,7 +288,7 @@ function valCheck(){
 		$("#log_file_pth").focus();
 		return false;
 	}else if($("#check_path2").val() != "Y"){
-		alert("백업경로에 유효한 경로를 입력후 경로체크를 해 주세요.");		
+		alert('<spring:message code="backup_management.bckPath_effective_check"/>');		
 		$("#save_pth").focus();
 		return false;
 	}else{
@@ -514,7 +514,7 @@ function checkFolder(keyType){
 		alert('<spring:message code="message.msg78" />');
 		$("#log_file_pth").focus();
 	}else if(save_path == "" && keyType == 2){
-		alert("백업경로를 입력해 주세요.");
+		alert('<spring:message code="backup_management.bckPath_input_please"/>');
 		$("#save_pth").focus();
 	}else{
 		$.ajax({
@@ -558,10 +558,10 @@ function checkFolder(keyType){
 						}
 					}else{
 						if(haCnt > 1){
-							alert("HA 구성된 클러스터 중 "+data.SERVERIP+" 노드에 해당 경로가 존재하지 않습니다.");
+							alert('<spring:message code="backup_management.ha_configuration_cluster"/>'+data.SERVERIP+'<spring:message code="backup_management.node_path_no"/>');
 						}else{
-							alert("유효하지 않은 경로입니다.");
-						}
+							alert('<spring:message code="backup_management.invalid_path"/>');
+						}	
 					}
 				}else{
 					alert('<spring:message code="message.msg76" />');
@@ -575,7 +575,7 @@ function checkFolder(keyType){
 <body>
 <div class="pop_container">
 	<div class="pop_cts">
-		<p class="tit">Dump 백업 수정</p>
+		<p class="tit"><spring:message code="backup_management.dump_bck_mod"/></p>
 		<div class="pop_cmm">
 			<form name="workRegForm">
 			<input type="hidden" name="db_svr_id" id="db_svr_id" value="${db_svr_id}"/>
@@ -584,7 +584,7 @@ function checkFolder(keyType){
 			<input type="hidden" name="check_path1" id="check_path1" value="N"/>
 			<input type="hidden" name="check_path2" id="check_path2" value="N"/>
 			<table class="write">
-				<caption>Dump 백업 수정</caption>
+				<caption><spring:message code="backup_management.dump_bck_mod"/></caption>
 				<colgroup>
 					<col style="width:95px;" />
 					<col />
@@ -699,7 +699,7 @@ function checkFolder(keyType){
 						<th scope="row" class="ico_t2"><spring:message code="backup_management.file_keep_day" /></th>
 						<td><input type="number" class="txt t6" name="file_stg_dcnt" id="file_stg_dcnt" maxlength=3 min=0 value="<c:out value="${workInfo[0].file_stg_dcnt}"/>"/> <spring:message code="schedule.day" /></td>
 						<th scope="row" class="ico_t2"><spring:message code="backup_management.backup_maintenance_count" /></th>
-						<td><input type="number" class="txt t6" name="bck_mtn_ecnt" id="bck_mtn_ecnt" maxlength=3 min=0 value="<c:out value="${workInfo[0].bck_mtn_ecnt}"/>"/> 개</td>
+						<td><input type="number" class="txt t6" name="bck_mtn_ecnt" id="bck_mtn_ecnt" maxlength=3 min=0 value="<c:out value="${workInfo[0].bck_mtn_ecnt}"/>"/> <spring:message code="backup_management.count"/></td>
 					</tr>
 				</tbody>
 			</table>

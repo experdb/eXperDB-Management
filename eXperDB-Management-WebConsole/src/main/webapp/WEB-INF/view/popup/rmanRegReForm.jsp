@@ -153,7 +153,7 @@ function fn_update_work(){
 function result(data){
 	if($.trim(data) == "S"){
 		opener.fn_rman_find_list();	
-		alert("수정이 완료되었습니다.");
+		alert('<spring:message code="message.msg155"/>');
 		self.close();
 	}else{
 		alert('<spring:message code="message.msg105" />');
@@ -175,7 +175,7 @@ function valCheck(){
 		$("#wrk_exp").focus();
 		return false;
 	}else if($("#bck_opt_cd").val() == ""){
-		alert("백업옵션을 선택해 주세요.");
+		alert('<spring:message code="backup_management.bckOption_choice_please"/>');
 		$("#bck_opt_cd").focus();
 		return false;
 	}else if($("#log_file_pth").val() == ""){
@@ -191,7 +191,7 @@ function valCheck(){
 		$("#log_file_pth").focus();
 		return false;		
 	}else if($("#check_path2").val() != "Y"){
-		alert("백업경로에 유효한 경로를 입력후 경로체크를 해 주세요.");
+		alert('<spring:message code="backup_management.bckPath_effective_check"/>');
 		$("#bck_pth").focus();
 		return false;
 	}else{
@@ -247,7 +247,11 @@ function fn_checkFolderVol(keyType){
 							$( "#backupVolume" ).append("<spring:message code="common.volume" /> : "+volume);
 						}
 				}else{
-					alert(data.SERVERIP+" 서버에 디렉토리가 존재하지 않습니다." );
+					if(haCnt > 1){
+						alert('<spring:message code="backup_management.ha_configuration_cluster"/>' +data.SERVERIP+ '<spring:message code="backup_management.node_path_no"/>');
+					}else{
+						alert('<spring:message code="backup_management.invalid_path"/>');
+					}	
 				}
 			}else{
 				alert('<spring:message code="message.msg76" />')
@@ -316,9 +320,9 @@ function checkFolder(keyType){
 							}
 					}else{
 						if(haCnt > 1){
-							alert("HA 구성된 클러스터 중 "+data.SERVERIP+" 노드에 해당 경로가 존재하지 않습니다.");
+							alert('<spring:message code="backup_management.ha_configuration_cluster"/>'+data.SERVERIP+'<spring:message code="backup_management.node_path_no"/>');
 						}else{
-							alert("유효하지 않은 경로입니다.");
+							alert('<spring:message code="backup_management.invalid_path"/>');
 						}	
 					}
 				}else{
@@ -341,10 +345,10 @@ function checkFolder(keyType){
 	<div id="pop_layer">
 		<div class="pop_container">
 			<div class="pop_cts">
-				<p class="tit">Rman 백업 수정</p>
+				<p class="tit">Rman <spring:message code="backup_management.bck_mod"/></p>
 				<div class="pop_cmm">
 					<table class="write">
-						<caption>Rman 백업 수정</caption>
+						<caption>Rman <spring:message code="backup_management.bck_mod"/></caption>
 						<colgroup>
 							<col style="width:85px;" />
 							<col />
@@ -379,7 +383,7 @@ function checkFolder(keyType){
 										<th scope="row" class="ico_t1"><spring:message code="backup_management.backup_option" /></th>
 										<td>
 											<select name="bck_opt_cd" id="bck_opt_cd" class="select">
-												<option value="">선택</option>
+												<option value=""><spring:message code="schedule.total" /></option>
 												<option value="TC000301"<c:if test="${workInfo[0].bck_opt_cd == 'TC000301'}"> selected</c:if>><spring:message code="backup_management.full_backup" /></option>
 												<option value="TC000302"<c:if test="${workInfo[0].bck_opt_cd == 'TC000302'}"> selected</c:if>><spring:message code="backup_management.incremental_backup" /></option>
 												<option value="TC000303"<c:if test="${workInfo[0].bck_opt_cd == 'TC000303'}"> selected</c:if>><spring:message code="backup_management.change_log_backup" /></option>

@@ -124,7 +124,7 @@ var table = null;
 			alert('<spring:message code="message.msg30" />');
 			return false;
 		}
-		if (!confirm("정말 복원하시겠습니까?")) return false;
+		if (!confirm('<spring:message code="message.msg138"/>')) return false;
 		$.ajax({
 			url : "/recoveryAccessControlHistory.do",
 			data : {

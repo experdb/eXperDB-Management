@@ -57,7 +57,7 @@
 	/* 등록버튼 클릭시 */
 	function fn_insert() {
 		if (!fn_connectorValidation()) return false;
-			if (!confirm("저장하시겠습니까?")) return false;
+			if (!confirm('<spring:message code="message.msg148"/>')) return false;
 			$.ajax({
 				url : '/insertConnectorRegister.do',
 				type : 'post',
@@ -92,7 +92,7 @@
 	/* 수정버튼 클릭시 */
 	function fn_update() {
 		if (!fn_connectorValidation()) return false;
-			if (!confirm("수정하시겠습니까?")) return false;
+			if (!confirm('<spring:message code="message.msg147"/>')) return false;
 			$.ajax({
 				url : '/updateConnectorRegister.do',
 				type : 'post',
@@ -138,13 +138,13 @@
 			<div class="pop_cts">
 				<input type="hidden" name="cnr_id" id="cnr_id" value="${cnr_id}">
 				<p class="tit">
-					<c:if test="${act == 'i'}">커넥터 등록</c:if>
-					<c:if test="${act == 'u'}">커넥터 수정</c:if>
+					<c:if test="${act == 'i'}"><spring:message code="etc.etc05"/></c:if>
+					<c:if test="${act == 'u'}"><spring:message code="etc.etc06"/></c:if>
 				</p>
 				<table class="write">
 					<caption>
-						<c:if test="${act == 'i'}">커넥터 등록</c:if>
-						<c:if test="${act == 'u'}">커넥터 수정</c:if>
+						<c:if test="${act == 'i'}"><spring:message code="etc.etc05"/></c:if>
+						<c:if test="${act == 'u'}"><spring:message code="etc.etc06"/></c:if>
 					</caption>
 					<colgroup>
 						<col style="width: 140px;" />
@@ -154,7 +154,7 @@
 					</colgroup>
 					<tbody>
 						<tr>
-							<th scope="row" class="ico_t1">커넥터 명</th>
+							<th scope="row" class="ico_t1"><spring:message code="etc.etc04"/></th>
 							<td><input type="text" class="txt" name="cnr_nm" id="cnr_nm" value="${cnr_nm}" maxlength="20"/></td>
 							<th scope="row" class="ico_t1"><spring:message code="data_transfer.ip" />(*)</th>
 							<td><input type="text" class="txt" name="cnr_ipadr" id="cnr_ipadr" value="${cnr_ipadr}"/></td>

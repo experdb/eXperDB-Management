@@ -317,12 +317,12 @@ function selectTab(intab){
 		<div class="contents">
 			<div class="cmm_tab">
 				<ul id="tab_rman">
-					<li class="atv"><a href="javascript:selectTab('rman');">Rman 백업 이력</a></li>
-					<li><a href="javascript:selectTab('dump');">Dump 백업 이력</a></li>
+					<li class="atv"><a href="javascript:selectTab('rman');">Rman <spring:message code="menu.backup_history" /></a></li>
+					<li><a href="javascript:selectTab('dump');">Dump <spring:message code="menu.backup_history" /></a></li>
 				</ul>
 				<ul id="tab_dump" style="display:none">
-					<li><a href="javascript:selectTab('rman');">Rman 백업 이력</a></li>
-					<li class="atv"><a href="javascript:selectTab('dump');">Dump 백업 이력</a></li>
+					<li><a href="javascript:selectTab('rman');">Rman <spring:message code="menu.backup_history" /></a></li>
+					<li class="atv"><a href="javascript:selectTab('dump');">Dump <spring:message code="menu.backup_history" /></a></li>
 				</ul>
 			</div>
 			<div class="cmm_grp">
@@ -395,7 +395,7 @@ function selectTab(intab){
 								<th width="150"><spring:message code="common.work_description" /></th>
 								<th width="70"><spring:message code="backup_management.backup_option" /></th>
 								<th width="70"><spring:message code="backup_management.size" /></th>
-								<th width="230">백업파일경로</th>
+								<th width="230"><spring:message code="etc.etc08"/></th>
 								<th width="100"><spring:message code="backup_management.work_start_time" /> </th>
 								<th width="100"><spring:message code="backup_management.work_end_time" /></th>
 								<th width="70"><spring:message code="backup_management.elapsed_time" /></th>
@@ -415,7 +415,7 @@ function selectTab(intab){
 								<th width="100"><spring:message code="common.work_description" /></th>
 								<th width="100"><spring:message code="common.database" /></th>
 								<th width="100"><spring:message code="backup_management.size" /></th>
-								<th width="150">백업파일경로</th>								
+								<th width="150"><spring:message code="etc.etc08"/></th>								
 								<th width="100"><spring:message code="backup_management.work_start_time" /></th>
 								<th width="100"><spring:message code="backup_management.work_end_time" /></th>
 								<th width="100"><spring:message code="backup_management.elapsed_time" /></th>

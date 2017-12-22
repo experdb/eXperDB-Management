@@ -92,17 +92,17 @@
 <div id="contents">
 	<div class="contents_wrap">
 		<div class="contents_tit">
-			<h4>스케줄실패이력<a href="#n"><img src="../images/ico_tit.png" class="btn_info"/></a></h4>
+			<h4><spring:message code="schedule.scheduleFailHistory"/><a href="#n"><img src="../images/ico_tit.png" class="btn_info"/></a></h4>
 			<div class="infobox"> 
 				<ul>
-					<li>정상적으로 완료되지 않은 스케줄 이력을 조회합니다.</li>	
+					<li><spring:message code="message.msg171"/></li>	
 				</ul>
 			</div>
 			<div class="location">
 				<ul>
 					<li>Function</li>
 					<li><spring:message code="menu.schedule" /></li>
-					<li class="on">스케줄실패이력</li>
+					<li class="on"><spring:message code="schedule.scheduleFailHistory"/></li>
 				</ul>
 			</div>
 		</div>

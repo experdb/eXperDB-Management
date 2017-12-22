@@ -91,7 +91,7 @@ function fn_init(){
 	       var row = datas[0];
 	       $row.removeClass('select-detail');
 	       
-	       if(confirm("스케줄을 중지 하시겠습니까?")){
+	       if(confirm('<spring:message code="message.msg131"/>')){
 		     	$.ajax({
 		    		url : "/scheduleStop.do",
 		    		data : {
@@ -131,7 +131,7 @@ function fn_init(){
 	       var row = datas[0];
 	       $row.removeClass('select-detail');
 	       
-	       if(confirm("스케줄을 실행 하시겠습니까?")){
+	       if(confirm('<spring:message code="message.msg130"/>')){
 		     	$.ajax({
 		    		url : "/scheduleReStart.do",
 		    		data : {
@@ -248,7 +248,7 @@ function fn_deleteScheduleList(){
        }
   }	
     
-   if(confirm("스케줄을 삭제하시겠습니까?")){
+   if(confirm('<spring:message code="message.msg134"/>')){
 	  	$.ajax({
 			url : "/deleteScheduleList.do",
 			data : {
@@ -346,7 +346,7 @@ function fn_modifyScheduleListView(){
 									<td><input type="text" class="txt t2" id="scd_nm" name="scd_nm"/></td>
 								</tr>
 								<tr>
-									<th scope="row" class="t9 line">스케줄설명</th>
+									<th scope="row" class="t9 line"><spring:message code="schedule.scheduleExp"/></th>
 									<td><textarea class="tbd1" name="scd_exp" id="scd_exp"></textarea></td>
 								</tr>
 						</tbody>
@@ -361,7 +361,7 @@ function fn_modifyScheduleListView(){
 							<th width="10"></th>
 							<th width="20"><spring:message code="common.no" /></th>
 							<th width="100"><spring:message code="schedule.schedule_name" /></th>
-							<th width="150">스케줄설명</th>
+							<th width="150"><spring:message code="schedule.scheduleExp"/></th>
 							<th width="50"><spring:message code="schedule.work_count" /></th>
 							<th width="100"><spring:message code="schedule.pre_run_time" /></th>
 							<th width="100"><spring:message code="schedule.next_run_time" /></th>

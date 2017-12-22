@@ -364,11 +364,11 @@
 									<div class="btn_type_01">
 										<div class="search_area">
 											<input type="text" class="txt search" id="search">
-											<button class="search_btn" onClick="fn_search()">검색</button>
+											<button class="search_btn" onClick="fn_search()"><spring:message code="button.search" /></button>
 										</div>
 									</div>
 									<div class="inner">
-										<p class="tit">사용자 선택</p>
+										<p class="tit"><spring:message code="auth_management.user_choice" /></p>
 										<div class="overflow_area">
 											<table id="user" class="display" cellspacing="0" width="100%">
 												<thead>

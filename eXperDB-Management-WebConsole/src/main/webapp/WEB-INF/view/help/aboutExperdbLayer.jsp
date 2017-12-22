@@ -1,5 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
+<%@ taglib prefix="spring" uri="http://www.springframework.org/tags"%>
 
 <div id="pop_layer_aboutExperdb" class="pop-layer">
 	<div class="pop-container">
@@ -29,7 +30,7 @@
 			<br><br><br><br><br><br><br><br><br>
 			<div class="btn_type_02">
 				<a href="#n" class="btn"
-					onclick="toggleLayer($('#pop_layer_aboutExperdb'), 'off');"><span>닫기</span></a>
+					onclick="toggleLayer($('#pop_layer_aboutExperdb'), 'off');"><span><spring:message code="common.close"/></span></a>
 			</div>
 		</div>
 	</div>

@@ -90,7 +90,7 @@
 						           </c:otherwise> 
 						         </c:choose>
 								</a>
-								<p class="state_txt">중지</p>
+								<p class="state_txt"><spring:message code="schedule.stop" /></p>
 							</li>
 							<li>
 								<p class="state">
@@ -135,7 +135,7 @@
 						</ul>
 					</div>
 					<div class="m_info_ct">
-						<p class="m_tit">백업 정보</p>
+						<p class="m_tit"><spring:message code="common.backInfo"/></p>
 						<ul>
 							<li>
 								<p class="state">
@@ -270,7 +270,7 @@
 						
 					-->
 						<table class="list">
-							<caption>DBMS 정보</caption>
+							<caption><spring:message code="dashboard.dbms_info" /></caption>
 							<colgroup>
 								<col style="width: 10%;" />
 								<col style="width: 10%;" />

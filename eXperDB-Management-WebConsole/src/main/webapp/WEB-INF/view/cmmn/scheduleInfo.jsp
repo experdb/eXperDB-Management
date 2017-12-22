@@ -16,26 +16,26 @@
 							<td id="scd_nm_info" ></td>
 						</tr>	
 						<tr>
-							<td>스케줄 설명</td>
+							<td><spring:message code="schedule.scheduleExp"/></td>
 							<td id="scd_exp_info" ></td>
 						</tr>	
 						<tr>
-							<td>실행상태</td>
+							<td><spring:message code="schedule.exeState"/></td>
 							<td id="scd_cndt_info"></td>
 						</tr>	
 						<tr>
-							<td>실행주기</td>
+							<td><spring:message code="schedule.exeCycle"/></td>
 							<td id="exe_perd_cd_info"></td>
 						</tr>	
 						<tr>
-							<td>실행일자</td>
+							<td><spring:message code="schedule.exeDate"/></td>
 							<td id="scd_exe_hms"></td>
 						</tr>						
 					</tbody>
 				</table>		
 		
 				<div class="btn_type_02">
-					<a href="#n" class="btn" onclick="toggleLayer($('#pop_layer'), 'off');"><span>닫기</span></a>
+					<a href="#n" class="btn" onclick="toggleLayer($('#pop_layer'), 'off');"><span><spring:message code="common.close"/></span></a>
 				</div>		
 			</div>
 		</div><!-- //pop-container -->
