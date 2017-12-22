@@ -83,6 +83,7 @@ public class DxT005 extends SocketCtl{
 				String strEXD_ORD = objJob.get(ProtocolID.EXD_ORD).toString();
 				String strNXT_EXD_YN = objJob.get(ProtocolID.NXT_EXD_YN).toString();
 				String strBCK_OPT_CD = objJob.get(ProtocolID.BCK_OPT_CD).toString();
+				String strBCK_BSN_DSCD = objJob.get(ProtocolID.BCK_BSN_DSCD).toString(); 
 				String strDB_ID = objJob.get(ProtocolID.DB_ID).toString();
 				String strBCK_FILE_PTH = objJob.get(ProtocolID.BCK_FILE_PTH).toString();
 				String strLOG_YN = objJob.get(ProtocolID.LOG_YN).toString();
@@ -130,7 +131,7 @@ public class DxT005 extends SocketCtl{
 					String strFileSize = "";
 					
 					//dump 일경우만 실행
-					if(strBCK_OPT_CD.equals("TC000202")) {
+					if(strBCK_BSN_DSCD.equals("TC000202")) {
 						
 						String strSlush = "/";
 
@@ -143,6 +144,8 @@ public class DxT005 extends SocketCtl{
 						
 						String strCmd = "ls -al " + strBCK_FILE_PTH + strSlush + strFileName + " | awk '{print $5}'";
 						strFileSize = CommonUtil.getPidExec(strCmd);
+						
+						socketLogger.info("[File COMMAND] " + strCmd);
 						
 						
 						//socketLogger.info("##### strFileSize cmd : " + strCmd );

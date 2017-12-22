@@ -103,6 +103,7 @@ public class ClientProtocolID {
 	public static final String CONTENTS = "CONTENTS";
 	public static final String REMARK = "REMARK";
 	
+	public static final String BCK_BSN_DSCD = "BCK_BSN_DSCD";
 	public static final String BCK_OPT_CD = "BCK_OPT_CD";
 	public static final String DB_ID = "DB_ID";
 	public static final String BCK_FILE_PTH = "BCK_FILE_PTH";

@@ -295,34 +295,14 @@ public class ClientTester {
 			objJob_01.put(ClientProtocolID.NXT_EXD_YN, "1"); //다음실행여부
 			objJob_01.put(ClientProtocolID.REQ_CMD, CMD[0]);
 			objJob_01.put(ClientProtocolID.BCK_OPT_CD, "1");
+			objJob_01.put(ClientProtocolID.BCK_BSN_DSCD, "TC000202");
+
 			objJob_01.put(ClientProtocolID.DB_ID, "1");
 			objJob_01.put(ClientProtocolID.BCK_FILE_PTH, "1");
 			objJob_01.put(ClientProtocolID.BCK_FILENM, "1");
 			objJob_01.put(ClientProtocolID.LOG_YN, "Y");
 			
-			JSONObject objJob_02 = new JSONObject();
-			objJob_02.put(ClientProtocolID.SCD_ID, ""); //스캐쥴ID
-			objJob_02.put(ClientProtocolID.WORK_ID, ""); //작업ID
-			objJob_02.put(ClientProtocolID.EXD_ORD, ""); //실행순서
-			objJob_02.put(ClientProtocolID.NXT_EXD_YN, ""); //다음실행여부
-			objJob_02.put(ClientProtocolID.REQ_CMD, CMD[0]);
-			objJob_02.put(ClientProtocolID.BCK_OPT_CD, "");
-			objJob_02.put(ClientProtocolID.DB_ID, "");
-			objJob_02.put(ClientProtocolID.BCK_FILE_PTH, "");
-			objJob_02.put(ClientProtocolID.LOG_YN, "Y");
-			objJob_02.put(ClientProtocolID.BCK_FILENM, "");
-			
-			JSONObject objJob_03 = new JSONObject();
-			objJob_03.put(ClientProtocolID.SCD_ID, ""); //스캐쥴ID
-			objJob_03.put(ClientProtocolID.WORK_ID, ""); //작업ID
-			objJob_03.put(ClientProtocolID.EXD_ORD, ""); //실행순서
-			objJob_03.put(ClientProtocolID.NXT_EXD_YN, ""); //다음실행여부
-			objJob_03.put(ClientProtocolID.REQ_CMD, CMD[0]); //명령어
-			objJob_03.put(ClientProtocolID.BCK_OPT_CD, "");
-			objJob_03.put(ClientProtocolID.DB_ID, "");
-			objJob_03.put(ClientProtocolID.BCK_FILE_PTH, "");
-			objJob_03.put(ClientProtocolID.LOG_YN, "Y");
-			objJob_03.put(ClientProtocolID.BCK_FILENM, "");
+
 			
 			arrCmd.add(0, objJob_01);
 			//arrCmd.add(1, objJob_02);
