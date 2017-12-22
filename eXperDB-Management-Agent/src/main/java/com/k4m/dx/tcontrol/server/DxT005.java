@@ -124,11 +124,16 @@ public class DxT005 extends SocketCtl{
 				String retVal = r.call();
 				String strResultMessge = r.getMessage();
 				
+				
+				socketLogger.info("[RESULT] " + retVal);
+				
 				//socketLogger.info("##### 결과 : " + retVal + " message : " + strResultMessge);
 				//다음실행여부가 Y 이면 에러나도 다음 시행함.
 				if(retVal.equals("success")) {
 					String strFileName = strBCK_FILENM;
 					String strFileSize = "";
+					
+					socketLogger.info("[BCK_BSN_DSCD] " + strBCK_BSN_DSCD);
 					
 					//dump 일경우만 실행
 					if(strBCK_BSN_DSCD.equals("TC000202")) {
@@ -205,7 +210,7 @@ public class DxT005 extends SocketCtl{
 					continue;
 				} else {
 					
-					errLogger.error("[ERROR] DxT005 SCD_ID[" + strSCD_ID + "] ", retVal + " " + strResultMessge);
+					errLogger.error("[ERROR] DxT005 SCD_ID[" + strSCD_ID + "] {} ", retVal + " " + strResultMessge);
 					
 					strResultCode = "TC001702";
 					

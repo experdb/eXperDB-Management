@@ -50,16 +50,16 @@ public class ClientTester {
 		 //	Ip = "127.0.0.1";
 		// Ip = "222.110.153.231";
 		
-		Ip = "222.110.153.204";
+		//Ip = "222.110.153.204";
 		int port = 9001;
-		port = 5869;
+		//port = 5869;
 		try {
 			
 			//clientTester.dxT001(Ip, port);
 			//clientTester.dxT002(Ip, port);
 			//clientTester.dxT003(Ip, port);
 			//clientTester.dxT004(Ip, port);
-			//clientTester.dxT005(Ip, port);
+			clientTester.dxT005(Ip, port);
 			//clientTester.dxT006_C(Ip, port);
 //			clientTester.dxT006_R(Ip, port);
 			//clientTester.dxT006_U(Ip, port);
@@ -68,7 +68,7 @@ public class ClientTester {
 			//clientTester.dxT007_R(Ip, port);
 			
 			
-			clientTester.dxT010(Ip, port);
+			//clientTester.dxT010(Ip, port);
 			//clientTester.dxT011(Ip, port);
 			//clientTester.dxT012(Ip, port);
 			
@@ -278,10 +278,8 @@ public class ClientTester {
 				};*/
 			
 			String[] CMD = {
-					"pg_rman backup --dbname=experdb --host=222.110.153.251 --port=5433 --username=experdb "
-					+ "--no-password --pgdata=/home/experdb/pgdata/data --backup-path=/home/experdb/pgdata/bckDir/dump/aaa --backup-mode=incremental -A $PGDATA/pg_xlog/archive_status/ "
-					+ "--keep-data-generations=0 --keep-data-days=0 --keep-arclog-files=0 --keep-arclog-days=0 --keep-srvlog-files=0 --keep-srvlog-days=0"
-					//+ " >> /home/experdb/pgdata/bckLogs/error_Test.log 2>&1"
+					"pg_dump --dbname=experdb --host=222.110.153.231 --port=5433 --username=experdb --no-password --section=data --section=post-data --no-privilege --no-tablespace -t test2 -t blob_test -t t_crypto_key -t t_auth_token -t t_auth_credential testdb  > /home/experdb/pgdata/bakup/dump/eXperDB_14_20171222163001.dump"
+
 				};
 			
 			JSONObject reqJObj = new JSONObject();
@@ -310,9 +308,9 @@ public class ClientTester {
 
 			JSONObject serverObj = new JSONObject();
 			
-			serverObj.put(ClientProtocolID.SERVER_NAME, "222.110.153.162");
-			serverObj.put(ClientProtocolID.SERVER_IP, "222.110.153.162");
-			serverObj.put(ClientProtocolID.SERVER_PORT, "6432");
+			serverObj.put(ClientProtocolID.SERVER_NAME, "222.110.153.251");
+			serverObj.put(ClientProtocolID.SERVER_IP, "222.110.153.251");
+			serverObj.put(ClientProtocolID.SERVER_PORT, "5432");
 			
 			reqJObj.put(ClientProtocolID.DX_EX_CODE, ClientTranCodeType.DxT005);
 			reqJObj.put(ClientProtocolID.SERVER_INFO, serverObj);
