@@ -248,7 +248,7 @@ function fn_insert_object(data){
  ******************************************************** */
 function valCheck(){
 	if($( "#db_id option:selected" ).val() == ""){
-		alert("백업할 Database를 선택하세요.");
+		alert('<spring:message code="backup_management.bck_database_choice"/>');
 		return false;
 	}
 	else if($("#wrk_nm").val() == ""){
@@ -273,7 +273,7 @@ function valCheck(){
 		$("#log_file_pth").focus();
 		return false;
 	}else if($("#check_path2").val() != "Y"){
-		alert("백업경로에 유효한 경로를 입력후 경로체크를 해 주세요.");		
+		alert('<spring:message code="backup_management.bckPath_effective_check"/>');		
 		$("#save_pth").focus();
 		return false;
 	}else{
@@ -534,10 +534,10 @@ function checkFolder(keyType){
 						}
 					}else{
 						if(haCnt > 1){
-							alert("HA 구성된 클러스터 중 "+data.SERVERIP+" 노드에 해당 경로가 존재하지 않습니다.");
+							alert('<spring:message code="backup_management.ha_configuration_cluster"/>'+data.SERVERIP+'<spring:message code="backup_management.node_path_no"/>');
 						}else{
-							alert("유효하지 않은 경로입니다.");
-						}						
+							alert('<spring:message code="backup_management.invalid_path"/>');
+						}							
 					}
 				}else{
 					alert('<spring:message code="message.msg76" /> ')
@@ -563,7 +563,7 @@ function fn_check() {
 		},
 		success : function(result) {
 			if (result == "true") {
-				alert("등록 가능한 WORK명 입니다.");
+				alert('<spring:message code="backup_management.reg_possible_work_nm"/>');
 				document.getElementById("wrk_nm").focus();
 				wrk_nmChk = "success";
 			} /* else {
@@ -595,14 +595,14 @@ function fn_check() {
 <body>
 <div class="pop_container">
 	<div class="pop_cts">
-		<p class="tit">Dump 백업 등록</p>
+		<p class="tit">Dump <spring:message code="dashboard.Register backup" /></p>
 		<div class="pop_cmm">
 			<form name="workRegForm">
 			<input type="hidden" name="db_svr_id" id="db_svr_id" value="${db_svr_id}"/>
 			<input type="hidden" name="check_path1" id="check_path1" value="N"/>
 			<input type="hidden" name="check_path2" id="check_path2" value="N"/>
 			<table class="write">
-				<caption>Dump 백업 등록</caption>
+				<caption>Dump <spring:message code="dashboard.Register backup" /></caption>
 				<colgroup>
 					<col style="width:105px;" />
 					<col />
@@ -650,7 +650,7 @@ function fn_check() {
 		</div>
 		<div class="pop_cmm mt25">
 			<table class="write">
-				<caption>백업 등록</caption>
+				<caption><spring:message code="dashboard.Register backup" /></caption>
 				<colgroup>
 					<col style="width:105px;" />
 					<col style="width:178px;" />
@@ -663,14 +663,14 @@ function fn_check() {
 					<tr>
 						<th scope="row" class="ico_t2"><spring:message code="backup_management.backup_log_dir" /></th>
 						<td colspan="5"><input type="text" class="txt t4" name="log_file_pth" id="log_file_pth" style="width:530px" onKeydown="$('#check_path1').val('N')"/>
-							<span class="btn btnC_01"><button type="button" class= "btn_type_02" onclick="checkFolder(1)" style="width: 60px; margin-right: -60px; margin-top: 0;">경로체크</button></span>							
+							<span class="btn btnC_01"><button type="button" class= "btn_type_02" onclick="checkFolder(1)" style="width: 60px; margin-right: -60px; margin-top: 0;"><spring:message code="common.dir_check" /></button></span>							
 							<span id="logVolume" style="margin:63px;"></span>	
 						</td>
 					</tr>
 					<tr>
 						<th scope="row" class="ico_t2"><spring:message code="backup_management.backup_dir" /></th>
 						<td colspan="5"><input type="text" class="txt t4" name="save_pth" id="save_pth" style="width:530px" onKeydown="$('#check_path2').val('N')"/>
-							<span class="btn btnC_01"><button type="button" class= "btn_type_02" onclick="checkFolder(2)" style="width: 60px; margin-right: -60px; margin-top: 0;">경로체크</button></span>							
+							<span class="btn btnC_01"><button type="button" class= "btn_type_02" onclick="checkFolder(2)" style="width: 60px; margin-right: -60px; margin-top: 0;"><spring:message code="common.dir_check" /></button></span>							
 							<span id="backupVolume" style="margin:63px;"></span>	
 						</td>
 					</tr>
@@ -721,7 +721,7 @@ function fn_check() {
 						<th scope="row" class="ico_t2"><spring:message code="backup_management.file_keep_day" /></th>
 						<td><input type="number" class="txt t6" name="file_stg_dcnt" id="file_stg_dcnt" maxlength=3 min=0 value="0"/> <spring:message code="common.day" /></td>
 						<th scope="row" class="ico_t2"><spring:message code="backup_management.backup_maintenance_count" /></th>
-						<td><input type="number" class="txt t6" name="bck_mtn_ecnt" id="bck_mtn_ecnt" maxlength=3 min=0 value="0"/>개</td>
+						<td><input type="number" class="txt t6" name="bck_mtn_ecnt" id="bck_mtn_ecnt" maxlength=3 min=0 value="0"/><spring:message code="backup_management.count"/></td>
 					</tr>
 				</tbody>
 			</table>

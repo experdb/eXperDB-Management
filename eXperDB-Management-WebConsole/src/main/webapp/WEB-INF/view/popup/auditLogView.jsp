@@ -181,7 +181,7 @@
 
 <div class="pop_container">
 	<div class="pop_cts">
-		<p class="tit">감사이력 보기</p>
+		<p class="tit"><spring:message code="auth_management.auditHistoryView"/></p>
 		<div>
 			<table  class="log_table">
 				<tr>
@@ -195,7 +195,7 @@
 					</td>
 					<td>
 						<div class="btn_type_01">
-							<span class="btn btnC_01"><button onClick="fn_addView();">더보기</button></span>
+							<span class="btn btnC_01"><button onClick="fn_addView();"><spring:message code="auth_management.viewMore"/></button></span>
 							<!--  <span class="btn btnC_01"><button onClick="fn_copy();">복사</button></span>-->
 							<a href="#n" class="btn" onclick="window.close();"><span><spring:message code="common.cancel" /></span></a>
 						</div>
@@ -207,7 +207,7 @@
 		
 		<div class="pop_cmm">
 			<table class="write">
-				<caption>감사이력 보기</caption>
+				<caption><spring:message code="auth_management.auditHistoryView"/></caption>
 				<colgroup>
 
 					<col />

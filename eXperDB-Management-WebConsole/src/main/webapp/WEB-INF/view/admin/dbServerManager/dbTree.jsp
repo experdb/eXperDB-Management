@@ -66,9 +66,9 @@ function fn_init() {
 	        orderable: false,
 	        render: function(data, type, full, meta){
 	           if(full.useyn == 'Y'){
-	              data = '사용';      
+	              data = '<spring:message code="dbms_information.use" />';      
 	           }else{
-	        	  data ='미사용';
+	        	  data ='<spring:message code="dbms_information.unuse" />';
 	           }
 	           return data;
 	        }}, 
@@ -106,7 +106,7 @@ function fn_init() {
 	           
 	           return data;
 	        }}, 
-		{data : "rownum", defaultContent : "", targets : 0, orderable : false, checkboxes : {'selectRow' : true}}, 		
+		{data : "rownum", defaultContent : "", targets : 0, orderable : false, checkboxes : {'selectRow' : false}}, 		
 		]
 	});
 	
@@ -232,7 +232,7 @@ $(function() {
     		},
     		success : function(result) {    	
     			if(result.data == null){
-    				alert("서버상태를 확인해주세요.");
+    				alert('<spring:message code="message.msg05" />');
     			}else{
     				table_db.clear().draw();
 	    			table_db.rows.add(result.data).draw();
@@ -242,24 +242,6 @@ $(function() {
     	});
         
     } );
-    
-
-
-    $('#dbList tbody').on( 'click', 'tr', function () {
-        /* if ( $(this).hasClass('selected') ) {
-            $(this).removeClass('selected');
-        }
-        else {
-        	table_db.$('tr.selected').removeClass('selected');
-            $(this).addClass('selected');
-        }*/
-    }); 
-    
-    
-    $('#dbList tbody').on('click','#db_exp', function () {
-    	console.log("선택 변화없어라!!!");
-    }); 
-	
 })
 
 
@@ -340,7 +322,7 @@ function fn_insertDB(){
      		}   		 
     		datasArr.push(rows);
 		}
-    	if (confirm("선택된 DB를 저장하시겠습니까?")){
+    	if (confirm('<spring:message code="message.msg160"/>')){
 			$.ajax({
 				url : "/insertTreeDB.do",
 				data : {
@@ -507,11 +489,11 @@ function fn_dataCompareChcek(svrDbList){
 				<div class="tree_rt"  style="width: 44%; margin-left: 2%;">
 					<div class="btn_type_01">
 						<div id="save_button">
-						<span class="btn"><button onClick="fn_insertDB()">저장</button></span>
+						<span class="btn"><button onClick="fn_insertDB()"><spring:message code="common.save"/></button></span>
 						</div>
 					</div>
 					<div class="inner">
-						<p class="tit">Database 목록</p>
+						<p class="tit"><spring:message code="dbms_information.databaseList"/></p>
 						<div class="tree_list">
 							<table id="dbList" class="cell-border display" cellspacing="0" align="left">
 								<thead>

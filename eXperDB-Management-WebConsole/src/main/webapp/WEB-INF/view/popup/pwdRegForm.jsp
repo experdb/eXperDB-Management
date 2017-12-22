@@ -62,7 +62,7 @@
 					if (!fn_pwValidation(newpwd.value))return false;
 					
 					if (pwd.value == "") {
-						alert("새 패스워드 확인를 입력하여 주십시오.");
+						alert('<spring:message code="message.msg153"/>');
 						pwd.focus();
 						return false;
 					}
@@ -74,7 +74,7 @@
 					}
 					
 					if(nowpwd.value == newpwd.value){
-						alert("현재 패스워드와 동일한 패스워드로는 변경하실 수 없습니다.");
+						alert('<spring:message code="message.msg154"/>');
 						return false;
 					}
 					
@@ -140,7 +140,7 @@
 				</colgroup>
 				<tbody>
 					<tr>
-						<th scope="row" class="ico_t1">현재 패스워드</th>
+						<th scope="row" class="ico_t1"><spring:message code="user_management.nowPw"/></th>
 						<td><input type="password" class="txt" name="nowpwd" id="nowpwd" /></td>
 					</tr>
 				</tbody>
@@ -154,18 +154,18 @@
 					</colgroup>
 					<tbody>
 						<tr>
-							<th scope="row" class="ico_t1">새 패스워드</th>
+							<th scope="row" class="ico_t1"><spring:message code="user_management.newPw"/></th>
 							<td><input type="password" class="txt" name="newpwd" id="newpwd" /></td>
 						</tr>
 						<tr>
-							<th scope="row" class="ico_t1">새 패스워드 확인</th>
+							<th scope="row" class="ico_t1"><spring:message code="user_management.newPwConfirm"/></th>
 							<td><input type="password" class="txt" name="pwd" id="pwd" /></td>
 						</tr>
 					</tbody>
 				</table>
 			</div>
 			<div class="btn_type_02">
-				<span class="btn btnC_01"><button onclick="fn_update()">저장</button></span>
+				<span class="btn btnC_01"><button onclick="fn_update()"><spring:message code="common.save"/></button></span>
 				<a href="#n" class="btn" onclick="window.close();"><span><spring:message code="common.cancel" /></span></a>
 			</div>
 		</div>

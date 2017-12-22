@@ -311,7 +311,7 @@
 		 var datasArr = new Array();	
 		 var datas = userTable.row('.selected').length;
 		 if(datas != 1){
-			 alert("선택된 유저가 없습니다.");
+			 alert('<spring:message code="message.msg165"/>');
 			 return false;
 		 }else{
 			 var usr_id = userTable.row('.selected').data().usr_id;
@@ -375,7 +375,7 @@
 			 } 
 		 }
 		 
-			if (confirm("DB서버권한을 설정하시겠습니까?")){
+			if (confirm('<spring:message code="message.msg166"/>')){
 				$.ajax({
 					url : "/updateUsrDBSrvAutInfo.do",
 					data : {
@@ -466,11 +466,11 @@
 									<div class="btn_type_01">
 										<div class="search_area">
 											<input type="text" class="txt search" id="search">
-											<button class="search_btn" onClick="fn_search()">검색</button>
+											<button class="search_btn" onClick="fn_search()"><spring:message code="button.search" /></button>
 										</div>
 									</div>
 									<div class="inner">
-										<p class="tit">사용자 선택</p>
+										<p class="tit"><spring:message code="auth_management.user_choice" /></p>
 										<div class="overflow_area">
 											<table id="user" class="display" cellspacing="0" width="100%">
 												<thead>
@@ -488,7 +488,7 @@
 								
 								<div class="db_roll_rt">
 									<div class="btn_type_01">
-										<span class="btn"><button onClick="fn_svr_save();" id="server_button">저장</button></span>
+										<span class="btn"><button onClick="fn_svr_save();" id="server_button"><spring:message code="common.save"/></button></span>
 									</div>
 									<div class="inner">
 										<p class="tit"><spring:message code="auth_management.db_server_menu_auth_mng" /></p>

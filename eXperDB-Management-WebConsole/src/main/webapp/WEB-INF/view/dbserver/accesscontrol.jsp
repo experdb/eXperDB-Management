@@ -256,7 +256,7 @@
         		&& 	result.ctf_mth_nm==(table.rows().data()[i].Method==undefined?'':table.rows().data()[i].Method)
         		&& 	result.opt_nm==(table.rows().data()[i].Option==undefined?'':table.rows().data()[i].Option)
         	){
-        		alert("중복된 값이 존재하여 수정할 수 없습니다.");
+        		alert('<spring:message code="message.msg136"/>');
         		return false;
         	}
         }    
@@ -326,7 +326,7 @@
 	
 	/* 적용 버튼 클릭시 */
 	function fn_save(){
-		if (!confirm("변경된 내용을 서버에 적용하시겠습니까?")) return false;
+		if (!confirm('<spring:message code="message.msg137"/>')) return false;
 		var rowList = [];
 		var data = table.rows().data();
         for (var i = 0; i < data.length; i++) {

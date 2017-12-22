@@ -46,9 +46,9 @@ function fn_init() {
 	        orderable: false,
 	        render: function(data, type, full, meta){
 	           if(full.useyn == 'Y'){
-	              data = '사용';      
+	              data = '<spring:message code="dbms_information.use" />';      
 	           }else{
-	        	  data ='미사용';
+	        	  data ='<spring:message code="dbms_information.unuse" />';
 	           }
 	           return data;
 	        }},
@@ -213,7 +213,7 @@ function fn_regRe_popup(){
 <div id="contents">
 	<div class="contents_wrap">
 		<div class="contents_tit">
-			<h4>DBMS 관리 <a href="#n"><img src="../images/ico_tit.png" class="btn_info"/></a></h4>
+			<h4><spring:message code="menu.dbms_management" /> <a href="#n"><img src="../images/ico_tit.png" class="btn_info"/></a></h4>
 			<div class="infobox"> 
 				<ul>
 					<li><spring:message code="help.dbms_management_01" /></li>

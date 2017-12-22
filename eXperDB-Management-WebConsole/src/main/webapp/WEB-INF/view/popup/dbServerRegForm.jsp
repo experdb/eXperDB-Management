@@ -228,7 +228,7 @@ function fn_insertDbServer(){
 		arrmaps.push(tmpmap);	
 		}
 	
-	if (confirm("DBMS를 등록 하시겠습니까?")){	
+	if (confirm('<spring:message code="message.msg169"/>')){	
   	$.ajax({
 		url : "/insertDbServer.do",
 		data : {
@@ -257,7 +257,7 @@ function fn_insertDbServer(){
 			}
 		},
 		success : function(result) {
-			alert("등록하였습니다.");
+			alert('<spring:message code="message.msg144"/>');
 			opener.location.reload();
 			self.close();	 			
 		}
@@ -617,7 +617,7 @@ function checkPghome(){
 							pgdataCheck = "success";
 							alert('<spring:message code="message.msg104" />');
 						}else{
-							alert("입력하신 경로는 존재하지 않습니다.");
+							alert('<spring:message code="backup_management.invalid_path"/>');
 						}
 					}else{
 						alert('<spring:message code="message.msg76" />');
@@ -670,7 +670,7 @@ function fn_ipadrAdd(){
 	
 	for(var i=0; i<dataCnt; i++){
 		if(table.rows().data()[i].ipadr == $("#ipadr").val()){
-			alert("이미 등록된 아이피가 존재 합니다.");
+			alert('<spring:message code="message.msg170"/>');
 			return false;
 		}
 	}
@@ -693,7 +693,7 @@ function fn_ipadrDelForm(){
 	<div id="pop_layer" class="pop-layer">
 		<div class="pop-container">
 			<div class="pop_cts" style="width:530px;">
-				<p class="tit">DBMS IP등록하기</p>
+				<p class="tit"><spring:message code="dbms_information.dbms_ip_reg"/></p>
 					<form name="ipadr_form">
 						<table class="write">
 							<caption>DBMS IP등록하기</caption>
@@ -728,7 +728,7 @@ function fn_ipadrDelForm(){
 
 <div class="pop_container">
 	<div class="pop_cts">
-		<p class="tit">DBMS 등록</p>
+		<p class="tit"><spring:message code="menu.dbms_registration" /></p>
 		<form name="dbserverInsert" id="dbserverInsert" method="post">
 		<table class="write">
 			<caption>DBMS 등록</caption>
@@ -752,7 +752,7 @@ function fn_ipadrDelForm(){
 										<th width="150"><spring:message code="dbms_information.dbms_ip" /></th>
 										<th width="117"><spring:message code="data_transfer.port" /></th>
 										<th width="130"><spring:message code="common.division" /></th>
-										<th width="130">연결여부</th>	
+										<th width="130"><spring:message code="dbms_information.conn_YN"/></th>	
 										<th width="0"></th>								
 									</tr>
 								</thead>
@@ -774,12 +774,12 @@ function fn_ipadrDelForm(){
 				</tr>				
 				</tr>				
 				<tr>
-					<th scope="row" class="ico_t1">PG_HOME경로(*)</th>
+					<th scope="row" class="ico_t1"><spring:message code="dbms_information.pgHomePath"/>(*)</th>
 					<td>
 					<input type="text" class="txt" name="pghome_pth" id="pghome_pth" style="width:750px" readonly="readonly" /></td>				
 				</tr>
 				<tr>
-					<th scope="row" class="ico_t1">PG_DATA경로(*)</th>
+					<th scope="row" class="ico_t1"><spring:message code="dbms_information.pgDataPath"/>(*)</th>
 					<td>
 					<input type="text" class="txt" name="pgdata_pth" id="pgdata_pth" style="width:750px" readonly="readonly" /></td>				
 				</tr>				
@@ -788,7 +788,7 @@ function fn_ipadrDelForm(){
 		</form>
 		<div class="btn_type_02">
 			<span class="btn"><button onClick="fn_insertDbServer();"><spring:message code="common.registory" /></button></span>
-			<span class="btn btnF_01 btnC_01"><button onClick="fn_dbServerConnTest();">연결테스트</button></span>
+			<span class="btn btnF_01 btnC_01"><button onClick="fn_dbServerConnTest();"><spring:message code="dbms_information.conn_Test"/></button></span>
 			<a href="#n" class="btn" onclick="window.close();"><span><spring:message code="common.cancel" /> </span></a>
 		</div>
 	</div>

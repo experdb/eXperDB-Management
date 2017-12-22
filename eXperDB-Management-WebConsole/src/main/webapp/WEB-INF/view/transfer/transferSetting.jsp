@@ -28,80 +28,80 @@
 	function fn_transferValidation(){
  		var kafka_broker_ip = document.getElementById("kafka_broker_ip");
 		if (kafka_broker_ip.value == "") {
-			alert("kafka Broker 아이피를 입력하여 주십시오.");
+			alert('<spring:message code="message.msg47" />');
 			kafka_broker_ip.focus();
 			return false;
 		}
 
  		var kafka_broker_port = document.getElementById("kafka_broker_port");
 		if (kafka_broker_port.value == "") {
-			alert("kafka Broker 포트를 입력하여 주십시오.");
+			alert('<spring:message code="message.msg48" />');
 			kafka_broker_port.focus();
 			return false;
 		}
  		if(!valid_numeric(kafka_broker_port.value))
 	 	{
- 			alert("포트는 숫자만 입력가능합니다.");
+ 			alert('<spring:message code="message.msg49" />');
  			kafka_broker_port.focus();
 		 	return false;
 		}		
  		var schema_registry_ip = document.getElementById("schema_registry_ip");
 		if (schema_registry_ip.value == "") {
-			alert("schema registry 아이피를 입력하여 주십시오.");
+			alert('<spring:message code="message.msg50" />');
 			schema_registry_ip.focus();
 			return false;
 		}	
  		var schema_registry_port = document.getElementById("schema_registry_port");
 		if (schema_registry_port.value == "") {
-			alert("schema registry 포트를 입력하여 주십시오.");
+			alert('<spring:message code="message.msg51" />');
 			schema_registry_port.focus();
 			return false;
 		}
  		if(!valid_numeric(schema_registry_port.value))
 	 	{
- 			alert("포트는 숫자만 입력가능합니다.");
+ 			alert('<spring:message code="message.msg49" />');
  			srportno.focus();
 		 	return false;
 		}
  		var zookeeper_ip = document.getElementById("zookeeper_ip");
 		if (zookeeper_ip.value == "") {
-			alert("zookeeper 아이피를 입력하여 주십시오.");
+			alert('<spring:message code="message.msg52" />');
 			zookeeper_ip.focus();
 			return false;
 		}
  		var zookeeper_port = document.getElementById("zookeeper_port");
 		if (zookeeper_port.value == "") {
-			alert("zookeeper 포트를 입력하여 주십시오.");
+			alert('<spring:message code="message.msg53" />');
 			zookeeper_port.focus();
 			return false;
 		}
  		if(!valid_numeric(zookeeper_port.value))
 	 	{
- 			alert("포트는 숫자만 입력가능합니다.");
+ 			alert('<spring:message code="message.msg49" />');
  			zookeeper_port.focus();
 		 	return false;
 		}
  		var teng_ip = document.getElementById("teng_ip");
 		if (teng_ip.value == "") {
-			alert("T엔진 아이피를 입력하여 주십시오.");
+			alert('<spring:message code="message.msg54" />');
 			teng_ip.focus();
 			return false;
 		}
  		var teng_port = document.getElementById("teng_port");
 		if (teng_port.value == "") {
-			alert("T엔진 포트를 입력하여 주십시오.");
+			alert('<spring:message code="message.msg55" />');
 			teng_port.focus();
 			return false;
 		}
  		if(!valid_numeric(teng_port.value))
 	 	{
- 			alert("포트는 숫자만 입력가능합니다.");
+ 			alert('<spring:message code="message.msg49" />');
  			teng_port.focus();
 		 	return false;
 		}
  		var bw_home = document.getElementById("bw_home");
 		if (bw_home.value == "") {
-			alert("BottledWater home을 입력하여 주십시오.");
+			alert('<spring:message code="message.msg161"/>');
 			bw_home.focus();
 			return false;
 		}
@@ -129,7 +129,7 @@
 				
 			},
 			success : function(result) {
-				alert("저장하였습니다.");
+				alert('<spring:message code="message.msg57" />');
 				window.location.reload();
 			},
 			beforeSend: function(xhr) {
@@ -137,10 +137,10 @@
 		     },
 			error : function(xhr, status, error) {
 				if(xhr.status == 401) {
-					alert("인증에 실패 했습니다. 로그인 페이지로 이동합니다.");
+					alert('<spring:message code="message.msg02" />');
 					 location.href = "/";
 				} else if(xhr.status == 403) {
-					alert("세션이 만료가 되었습니다. 로그인 페이지로 이동합니다.");
+					alert('<spring:message code="message.msg03" />');
 		             location.href = "/";
 				} else {
 					alert("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""));
@@ -168,17 +168,17 @@
 				trf_cng_id : $("#trf_cng_id").val()
 			},
 			success : function(result) {
-				alert("저장하였습니다.");
+				alert('<spring:message code="message.msg57" />');
 			},
 			beforeSend: function(xhr) {
 		        xhr.setRequestHeader("AJAX", true);
 		     },
 			error : function(xhr, status, error) {
 				if(xhr.status == 401) {
-					alert("인증에 실패 했습니다. 로그인 페이지로 이동합니다.");
+					alert('<spring:message code="message.msg02" />');
 					 location.href = "/";
 				} else if(xhr.status == 403) {
-					alert("세션이 만료가 되었습니다. 로그인 페이지로 이동합니다.");
+					alert('<spring:message code="message.msg03" />');
 		             location.href = "/";
 				} else {
 					alert("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""));
@@ -198,10 +198,10 @@
 		     },
 			error : function(xhr, status, error) {
 				if(xhr.status == 401) {
-					alert("인증에 실패 했습니다. 로그인 페이지로 이동합니다.");
+					alert('<spring:message code="message.msg02" />');
 					 location.href = "/";
 				} else if(xhr.status == 403) {
-					alert("세션이 만료가 되었습니다. 로그인 페이지로 이동합니다.");
+					alert('<spring:message code="message.msg03" />');
 		             location.href = "/";
 				} else {
 					alert("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""));
@@ -209,9 +209,9 @@
 			},
 			success : function(data) {
  				if(data==null){
- 					$('<button onclick="fn_insert()" id="btnInsert"></button>').text('저장').appendTo('.btnC_01');
+ 					$('<button onclick="fn_insert()" id="btnInsert"></button>').text('<spring:message code="common.save"/>').appendTo('.btnC_01');
  				}else{
- 				  $('<button onclick="fn_update()" id="btnInsert"></button>').text('저장').appendTo('.btnC_01');
+ 				  $('<button onclick="fn_update()" id="btnInsert"></button>').text('<spring:message code="common.save"/>').appendTo('.btnC_01');
  				  $("#kafka_broker_ip").val(data.kafka_broker_ip);
  				  $("#kafka_broker_port").val(data.kafka_broker_port);
  				  $("#schema_registry_ip").val(data.schema_registry_ip);
@@ -245,18 +245,18 @@
 	<div class="contents_wrap">
 		<div class="contents_tit">
 			<h4>
-				데이터 전송설정<a href="#n"><img src="../images/ico_tit.png" class="btn_info" /></a>
+				<spring:message code="etc.etc15"/><a href="#n"><img src="../images/ico_tit.png" class="btn_info" /></a>
 			</h4>
 			<div class="infobox"> 
 				<ul>
-					<li>eXperDB에서 하둡 분산 파일 시스템으로 데이터 전송을 하기 위한 도구를 설정합니다.</li>
-					<li>데이터 전송을 위해 구성할 각 요소별로 설정된 정보를 입력합니다.</li>	
+					<li><spring:message code="help.transfer_server_settings_01" /></li>
+					<li><spring:message code="help.transfer_server_settings_02" /></li>	
 				</ul>
 			</div>		
 			<div class="location">
 				<ul>
-					<li>데이터전송</li>
-					<li class="on">데이터 전송설정</li>
+					<li><spring:message code="menu.data_transfer" /></li>
+					<li class="on"><spring:message code="etc.etc15"/></li>
 				</ul>
 			</div>
 		</div>
@@ -272,34 +272,34 @@
 					</colgroup>
 					<thead>
 						<tr>
-							<th scope="col">서버명</th>
-							<th scope="col">아이피</th>
-							<th scope="col">포트</th>
+							<th scope="col"><spring:message code="data_transfer.server_name" /></th>
+							<th scope="col"><spring:message code="data_transfer.ip" /></th>
+							<th scope="col"><spring:message code="data_transfer.port" /></th>
 						</tr>
 					</thead>
 					<tbody>
 						<tr>
-							<td>Kafka Broker</td>
+							<td><spring:message code="data_transfer.kafka_broker" /></td>
 							<td><input type="text" class="txt" name="kafka_broker_ip" id="kafka_broker_ip" /></td>
 							<td class="type2"><input type="text" class="txt" name="kafka_broker_port" id="kafka_broker_port" /></td>
 						</tr>
 						<tr>
-							<td>Schema registry</td>
+							<td><spring:message code="data_transfer.schema_registry" /></td>
 							<td><input type="text" class="txt" name="schema_registry_ip" id="schema_registry_ip" /></td>
 							<td class="type2"><input type="text" class="txt" name="schema_registry_port" id="schema_registry_port" /></td>
 						</tr>
 						<tr>
-							<td>Zookeeper</td>
+							<td><spring:message code="data_transfer.zookeeper" /></td>
 							<td><input type="text" class="txt" name="zookeeper_ip" id="zookeeper_ip" /></td>
 							<td class="type2"><input type="text" class="txt" name="zookeeper_port" id="zookeeper_port" /></td>
 						</tr>
 						<tr>
-							<td>T엔진</td>
+							<td><spring:message code="data_transfer.experdb_agent" /></td>
 							<td><input type="text" class="txt" name="teng_ip" id="teng_ip" /></td>
 							<td class="type2"><input type="text" class="txt" name="teng_port" id="teng_port" /></td>
 						</tr>
 						<tr>
-							<td>Bottledwater home</td>
+							<td><spring:message code="data_transfer.bottledwater_home" /></td>
 							<td colspan="2"><input type="text" class="txt" name="bw_home" id="bw_home" /></td>	
 						</tr>
 					</tbody>

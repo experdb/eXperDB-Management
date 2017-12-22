@@ -23,7 +23,7 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-<title>전송대상상세</title>
+<title><spring:message code="data_transfer.transfer_datile"/></title>
 <link rel="stylesheet" type="text/css" href="../css/common.css">
 <script type="text/javascript" src="../js/jquery-1.9.1.min.js"></script>
 <script type="text/javascript" src="../js/common.js"></script>
@@ -32,10 +32,10 @@
 
 	<div class="pop_container">
 		<div class="pop_cts">
-			<p class="tit">전송대상상세</p>
+			<p class="tit"><spring:message code="data_transfer.transfer_datile"/></p>
 			<div class="pop_cmm">
 				<table class="write bdtype1">
-					<caption>전송대상상세</caption>
+					<caption><spring:message code="data_transfer.transfer_datile"/></caption>
 					<colgroup>
 						<col style="width:80px;" />
 						<col style="width:300px;" />
@@ -44,9 +44,9 @@
 					</colgroup>
 					<tbody>
 						<tr>
-							<th scope="row" class="ico_t1">연결이름</th>
+							<th scope="row" class="ico_t1"><spring:message code="data_transfer.conn_name"/></th>
 							<td><input type="text" class="txt t4" name="" value="${trf_trg_cnn_nm}" readonly="readonly" /></td>
-							<th scope="row" class="ico_t1">연결유형</th>
+							<th scope="row" class="ico_t1"><spring:message code="data_transfer.conn_type"/></th>
 							<td><input type="text" class="txt t5" name="" value="${connector_type}" readonly="readonly" /></td>
 						</tr>
 					</tbody>
@@ -54,10 +54,10 @@
 			</div>
 
 			<div class="pop_cmm3">
-				<p class="pop_s_tit">상세옵션</p>
+				<p class="pop_s_tit"><spring:message code="data_transfer.detail_option"/></p>
 				<div class="overflow_area" style="height: 290px;">
 					<table class="list pd_type3">
-						<caption>상세옵션</caption>
+						<caption><spring:message code="data_transfer.detail_option"/></caption>
 						<colgroup>
 							<col style="width: 50%;" />
 							<col style="width: 50%;" />
@@ -65,7 +65,7 @@
 						<thead>
 							<tr>
 								<th scope="col"><spring:message code="properties.item" /></th>
-								<th scope="col">값</th>
+								<th scope="col"><spring:message code="data_transfer.value"/></th>
 							</tr>
 						</thead>
 						<tbody>
@@ -103,7 +103,7 @@
 			</div>
 
 			<div class="btn_type_02">
-				<a href="#n" class="btn" onclick="window.close();"><span>닫기</span></a>
+				<a href="#n" class="btn" onclick="window.close();"><span><spring:message code="common.close"/></span></a>
 			</div>
 		</div>
 	</div>

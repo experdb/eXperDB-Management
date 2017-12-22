@@ -375,7 +375,7 @@ function fn_workAddCallback(rowList){
 
 
 function fn_scheduleStop(){
-	if (confirm("스케줄을 수정 하시겠습니까?")){
+	if (confirm('<spring:message code="message.msg133"/>')){
      	$.ajax({
     		url : "/scheduleStop.do",
     		data : {
@@ -473,7 +473,7 @@ function fn_updateSchedule(){
 				}
 			},
 			success : function(result) {
-				if(confirm("수정되었습니다. 스케줄을 실행 하시겠습니까?")){
+				if(confirm('<spring:message code="message.msg135"/>')){
 					fn_scheduleReStart();
 				}else{
 				}
@@ -541,17 +541,17 @@ function fn_scheduleReStart(){
 			<div id="contents">
 				<div class="contents_wrap">
 					<div class="contents_tit">
-						<h4>스케줄 수정 <a href="#n"><img src="../images/ico_tit.png" class="btn_info"/></a></h4>
+						<h4><spring:message code="schedule.scheduleMod"/> <a href="#n"><img src="../images/ico_tit.png" class="btn_info"/></a></h4>
 						<div class="infobox"> 
 							<ul>
-								<li>선택한 스케줄의 기본 정보를 수정하거나 수행 일정 및 내용을 변경합니다.</li>
+								<li><spring:message code="message.msg172"/></li>
 							</ul>
 						</div>
 						<div class="location">
 							<ul>
 								<li>Function</li>
 								<li>Scheduler</li>
-								<li class="on">스케줄수정</li>
+								<li class="on"><spring:message code="schedule.scheduleMod"/></li>
 							</ul>
 						</div>
 					</div>
@@ -573,7 +573,7 @@ function fn_scheduleReStart(){
 											<td><input type="text" class="txt t2" id="scd_nm" name="scd_nm"/></td>
 										</tr>
 										<tr>
-											<th scope="row" class="t9 line">스케줄설명</th>
+											<th scope="row" class="t9 line"><spring:message code="schedule.scheduleExp"/></th>
 											<td>
 												<textarea class="tbd1" name="scd_exp" id="scd_exp"></textarea>
 											</td>

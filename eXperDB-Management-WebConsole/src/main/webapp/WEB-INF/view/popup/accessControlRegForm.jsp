@@ -22,7 +22,7 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-<title>접근제어 등록/수정 팝업</title>
+<title><spring:message code="etc.etc11"/></title>
 <link rel="stylesheet" type="text/css" href="../css/common.css">
 <script type="text/javascript" src="../js/jquery-1.9.1.min.js"></script>
 <script type="text/javascript" src="../js/common.js"></script>
@@ -214,14 +214,14 @@
 <div class="pop_container">
 	<div class="pop_cts">
 		<p class="tit">
-			<c:if test="${act == 'i'}">접근제어 등록</c:if>
-			<c:if test="${act == 'u'}">접근제어 수정</c:if>
+			<c:if test="${act == 'i'}"><spring:message code="menu.access_control" /> <spring:message code="common.registory" /></c:if>
+			<c:if test="${act == 'u'}"><spring:message code="menu.access_control" />  <spring:message code="common.modify" /></c:if>
 		</p>
 		<div class="pop_cmm">
 			<table class="write">
 				<caption>
-					<c:if test="${act == 'i'}">접근제어 등록</c:if>
-					<c:if test="${act == 'u'}">접근제어 수정</c:if>
+					<c:if test="${act == 'i'}"><spring:message code="menu.access_control" />  <spring:message code="common.registory" /></c:if>
+					<c:if test="${act == 'u'}"><spring:message code="menu.access_control" />  <spring:message code="common.modify" /></c:if>
 				</caption>
 				<colgroup>
 					<col style="width:85px;" />
@@ -252,8 +252,8 @@
 		<div class="pop_cmm mt25">
 			<table class="write">
 				<caption>
-					<c:if test="${act == 'i'}">접근제어 등록</c:if>
-					<c:if test="${act == 'u'}">접근제어 수정</c:if>
+					<c:if test="${act == 'i'}"><spring:message code="menu.access_control" /> <spring:message code="common.registory" /></c:if>
+					<c:if test="${act == 'u'}"><spring:message code="menu.access_control" />  <spring:message code="common.modify" /></c:if>
 				</caption>
 				<colgroup>
 					<col style="width:85px;" />
@@ -309,10 +309,10 @@
 		<div class="btn_type_02">
 			<span class="btn btnC_01">					
 				<c:if test="${act == 'i'}">
-					<button type="button" onclick="fn_insert()" >저장</button>
+					<button type="button" onclick="fn_insert()" ><spring:message code="common.save"/></button>
 				</c:if>
 				<c:if test="${act == 'u'}">
-					<button type="button" onclick="fn_update()">저장</button>
+					<button type="button" onclick="fn_update()"><spring:message code="common.save"/></button>
 				</c:if>
 			</span>
 			<a href="#n" class="btn" onclick="window.close();"><span><spring:message code="common.cancel" /></span></a>

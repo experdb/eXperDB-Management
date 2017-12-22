@@ -137,17 +137,17 @@ $(window.document).ready(function() {
 	
 	<div class="pop_container">
 		<div class="pop_cts">
-			<p class="tit">스케줄수행이력 상세보기</p>
+			<p class="tit"><spring:message code="schedule.scheduleHistoryDetail"/></p>
 			<div class="pop_cmm3">
 				<p class="pop_s_tit"><spring:message code="menu.schedule_information" /></p>
 					<table class="list" style="border:1px solid #b8c3c6;">
 						<thead>
 							<tr>
 								<th scope="col"><spring:message code="schedule.schedule_name" /></th>
-								<th scope="col">스케줄설명</th>
+								<th scope="col"><spring:message code="schedule.scheduleExp"/></th>
 								<th scope="col"><spring:message code="schedule.work_start_datetime" /></th>
 								<th scope="col"><spring:message code="schedule.work_end_datetime" /></th>
-								<th scope="col">작업시간</th>
+								<th scope="col"><spring:message code="schedule.jobTime"/></th>
 							</tr>
 						</thead>
 						<tbody>
@@ -163,7 +163,7 @@ $(window.document).ready(function() {
 						</tbody>
 					</table>
 				<br><br>
-				<p class="pop_s_tit">work정보</p>
+				<p class="pop_s_tit"><spring:message code="backup_management.work_info"/></p>
 				<div class="overflow_area" style="height: 300px;">
 					<table id="workTable" class="display" cellspacing="0" width="100%">
 						<thead>
@@ -173,7 +173,7 @@ $(window.document).ready(function() {
 								<th width="75"><spring:message code="common.work_description" /></th>
 								<th width="100"><spring:message code="schedule.work_start_datetime" /></th>
 								<th width="100"><spring:message code="schedule.work_end_datetime" /></th>
-								<th width="100">작업시간</th>
+								<th width="100"><spring:message code="schedule.jobTime"/></th>
 								<th width="50"><spring:message code="schedule.result" /></th>
 								<th width="0"></th>
 							</tr>
@@ -182,7 +182,7 @@ $(window.document).ready(function() {
 				</div>
 			</div>
 			<div class="btn_type_02">
-				<a href="#n" class="btn" onclick="window.close();"><span>닫기</span></a>
+				<a href="#n" class="btn" onclick="window.close();"><span><spring:message code="common.close"/></span></a>
 			</div>
 		</div>
 	</div>

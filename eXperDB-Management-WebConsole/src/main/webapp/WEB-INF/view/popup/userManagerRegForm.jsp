@@ -65,7 +65,7 @@
 			return false;
 		}
 		if (pwd.value == "" || pwd.value == "undefind" || pwd.value == null) {
-			alert("패스워드를 입력해 주십시오.");
+			alert('<spring:message code="message.msg140"/>');
 			pwd.focus();
 			return false;
 		}
@@ -73,7 +73,7 @@
 		if (!fn_pwValidation(pwd.value))return false;
 		
 		if (pwdCheck.value == "" || pwdCheck.value == "undefind" || pwdCheck.value == null) {
-			alert("패스워드확인을 입력해 주십시오.");
+			alert('<spring:message code="message.msg141"/>');
 			pwd.focus();
 			return false;
 		}
@@ -81,11 +81,11 @@
 		if (!fn_pwValidation(pwdCheck.value))return false;
 		
 		if (pwd.value != pwdCheck.value) {
-			alert("패스워드 정보가 일치하지 않습니다.");
+			alert('<spring:message code="etc.etc14"/>');
 			return false;
 		}
 		if (idCheck != 1) {
-			alert("아이디를 입력 후 중복체크를 해주세요.");
+			alert('spring:message code="message.msg142"/>');
 			return false;
 		}
 		return true;
@@ -94,7 +94,7 @@
 	//등록버튼 클릭시
 	function fn_insert() {
 		if (!fn_userManagerValidation())return false;
-		if (!confirm("등록하시겠습니까?")) return false;
+		if (!confirm('<spring:message code="message.msg143"/>')) return false;
 		$.ajax({
 			url : '/insertUserManager.do',
 			type : 'post',
@@ -112,8 +112,8 @@
 				use_yn : $("#use_yn").val(),
 			},
 			success : function(result) {
-				alert("등록하였습니다.");
-				if (confirm("사용자에게 메뉴권한을 부여하시겠습니까?")) {
+				alert('<spring:message code="message.msg144"/>');
+				if (confirm('<spring:message code="message.msg145"/>')) {
 					window.close();
 					opener.location.href = "/menuAuthority.do?usr_id="+$("#usr_id").val();
 				} else {
@@ -151,7 +151,7 @@
 		
 		idCheck = 1;
 		if (!fn_userManagerValidation())return false;
-		if (!confirm("수정하시겠습니까?")) return false;
+		if (!confirm('<spring:message code="message.msg147"/>')) return false;
 		$.ajax({
 			url : '/updateUserManager.do',
 			type : 'post',
@@ -253,13 +253,13 @@
 	<div class="pop_container">
 		<div class="pop_cts">
 			<p class="tit">
-				<c:if test="${act == 'i'}">사용자 등록</c:if>
-				<c:if test="${act == 'u'}">사용자 수정</c:if>
+				<c:if test="${act == 'i'}"><spring:message code="user_management.userReg"/></c:if>
+				<c:if test="${act == 'u'}"><spring:message code="user_management.userMod"/></c:if>
 			</p>
 			<table class="write">
 				<caption>
-					<c:if test="${act == 'i'}">사용자 등록</c:if>
-					<c:if test="${act == 'u'}">사용자 수정</c:if>
+					<c:if test="${act == 'i'}"><spring:message code="user_management.userReg"/></c:if>
+					<c:if test="${act == 'u'}"><spring:message code="user_management.userMod"/></c:if>
 				</caption>
 				<colgroup>
 					<col style="width: 110px;" />
@@ -292,7 +292,7 @@
 			</table>
 			<div class="pop_cmm2">
 				<table class="write">
-					<caption>사용자 등록</caption>
+					<caption><spring:message code="user_management.userReg"/></caption>
 					<colgroup>
 						<col style="width: 100px;" />
 						<col />

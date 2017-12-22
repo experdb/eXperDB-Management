@@ -6,19 +6,19 @@
 <div id="pop_layer_rman" class="pop-layer">
 		<div class="pop-container">
 			<div class="pop_cts" style="width: 30%; height: 550px; overflow: auto;">
-				<p class="tit" style="margin-bottom: 15px;">WORK 정보 
+				<p class="tit" style="margin-bottom: 15px;"><spring:message code="backup_management.work_info"/> 
 					<a href="#n" class="btn" onclick="toggleLayer($('#pop_layer_rman'), 'off');"><img src="/images/ico_state_01.png" style="margin-left: 245px;"/></a>					
 				</p>
 				<table border="1" class="list">
-					<caption>WORK 정보</caption>					
-					<p><h3 style="height: 20px;">기본정보</h3></p>
+					<caption><spring:message code="backup_management.work_info"/></caption>					
+					<p><h3 style="height: 20px;"><spring:message code="properties.basic_info" /></h3></p>
 					<tbody>						
 						<tr>
-							<td style="width: 70px; height: 20px;">백업구분</td>
+							<td style="width: 70px; height: 20px;"><spring:message code="backup_management.bck_div"/></td>
 							<td style="width: 110px; text-align: left" id="r_bck_bsn_dscd_nm"></td>
 						</tr>	
 						<tr>
-							<td style="width: 70px; height: 20px;">백업업무구분</td>
+							<td style="width: 70px; height: 20px;"><spring:message code="etc.etc07"/></td>
 							<td style="width: 110px; text-align: left" id="bck_opt_cd_nm"></td>
 						</tr>	
 						<tr>

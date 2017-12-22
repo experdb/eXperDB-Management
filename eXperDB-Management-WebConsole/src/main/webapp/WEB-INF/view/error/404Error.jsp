@@ -25,7 +25,7 @@
 			<div id="error">
 				<img src="../images/error404.png">
 				<div class="btn_wrap">
-					<button onclick="history.go(-1)">뒤로가기</button>
+					<button onclick="history.go(-1)"><spring:message code="common.back"/></button>
 				</div>
 			</div>
 		</div>

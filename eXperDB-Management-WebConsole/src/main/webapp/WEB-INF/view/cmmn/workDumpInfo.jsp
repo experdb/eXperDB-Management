@@ -4,15 +4,15 @@
     <div id="pop_layer_dump" class="pop-layer">
 		<div class="pop-container" style="padding: 0px;">
 			<div class="pop_cts" style="width: 35%; height: 750px; overflow: auto; padding: 20px; margin: 0 auto; min-height:0; min-width:0;" id="workinfo">
-				<p class="tit" style="margin-bottom: 15px;">WORK 정보
+				<p class="tit" style="margin-bottom: 15px;"><spring:message code="backup_management.work_info"/>
 					<a href="#n" class="btn" onclick="toggleLayer($('#pop_layer_dump'), 'off');" style="float: right;"><img src="/images/ico_state_01.png" style="position: fixed;"/></a>
 				</p>
 				<table class="list" style="border:1px solid #b8c3c6;">
-					<caption>WORK 정보</caption>						
+					<caption><spring:message code="backup_management.work_info"/></caption>						
 					<p><h3 style="height: 20px;"><spring:message code="properties.basic_info" /></h3></p>
 					<tbody>
 						<tr>
-							<td>백업구분</td>
+							<td><spring:message code="backup_management.bck_div"/></td>
 							<td style="text-align: left" id="d_bck_bsn_dscd_nm"></td>
 						</tr>	
 						<tr>
@@ -86,7 +86,7 @@
 							<td style="text-align: left" id="query"></td>
 						</tr>	
 						<tr>
-							<td>기타</td>
+							<td><spring:message code="common.etc"/></td>
 							<td style="text-align: left" id="etc"></td>
 						</tr>									
 					</tbody>
@@ -106,7 +106,7 @@
 				</table>
 				
 				<div class="btn_type_02">
-					<a href="#n" class="btn" onclick="toggleLayer($('#pop_layer_dump'), 'off');"><span>닫기</span></a>
+					<a href="#n" class="btn" onclick="toggleLayer($('#pop_layer_dump'), 'off');"><span><spring:message code="common.close"/></span></a>
 				</div>	
 			</div>
 		</div><!-- //pop-container -->

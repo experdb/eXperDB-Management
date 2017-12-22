@@ -123,7 +123,7 @@ $(window.document).ready(function() {
 						<div class="cmm_grp">						
 							<div class="cmm_bd">
 								<div class="sub_tit">
-									<p>Work  리스트</p>
+									<p><spring:message code="schedule.workList"/></p>
 								</div>
 								<div class="overflow_area">							
 									<table id="workList" class="display" cellspacing="0" width="100%">

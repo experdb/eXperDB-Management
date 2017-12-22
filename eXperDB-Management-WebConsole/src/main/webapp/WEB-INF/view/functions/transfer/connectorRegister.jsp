@@ -193,7 +193,7 @@
 			alert('<spring:message code="message.msg09" />');
 			return false;
 		}else{
-			if (!confirm("삭제하시겠습니까?"))
+			if (!confirm('<spring:message code="message.msg162"/>'))
 				return false;
 			var rowList = [];
 			for (var i = 0; i < datas.length; i++) {
@@ -226,7 +226,7 @@
 						alert('<spring:message code="message.msg37" />');
 						location.reload();
 					} else {
-						alert("커넥터 삭제를 실패하였습니다.");
+						alert('pring:message code="message.msg163"/>');
 					}
 				}
 			});
@@ -272,7 +272,7 @@
 						</colgroup>
 						<tbody>
 							<tr>
-								<th scope="row" class="t2">커넥터 명</th>
+								<th scope="row" class="t2"><spring:message code="etc.etc04"/></th>
 								<td><input type="text" class="txt" name="cnr_nm" id="cnr_nm" /></td>
 								<th scope="row" class="t3"><spring:message code="data_transfer.ip" /> </th>
 								<td><input type="text" class="txt" name="cnr_ipadr" id="cnr_ipadr" /></td>
@@ -285,7 +285,7 @@
 						<tr>
 							<th width="10"></th>
 							<th width="20">NO</th>
-							<th width="120">커넥터 명</th>
+							<th width="120"><spring:message code="etc.etc04"/></th>
 							<th width="100"><spring:message code="data_transfer.ip" /></th>
 							<th width="70"><spring:message code="data_transfer.port" /> </th>
 							<th width="70"><spring:message code="data_transfer.type" /></th>

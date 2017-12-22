@@ -87,7 +87,7 @@ function fn_makeMonth(){
 		}
 		monthHtml += '<option value="'+month+'">'+month+'</option>';
 	}
-	monthHtml += '</select> 월';	
+	monthHtml += '</select> <spring:message code="schedule.month" />';	
 	$( "#month" ).append(monthHtml);
 }
 
@@ -108,7 +108,7 @@ function fn_makeDay(){
 		}
 		dayHtml += '<option value="'+day+'">'+day+'</option>';
 	}
-		dayHtml += '</select> 일';	
+		dayHtml += '</select> <spring:message code="common.day" />';	
 	$( "#day" ).append(dayHtml);
 }
 
@@ -316,7 +316,7 @@ function fn_workAddCallback(rowList){
 
 
 function fn_scheduleStop(){
-	if (confirm("스케줄을 수정 하시겠습니까?")){
+	if (confirm('<spring:message code="message.msg133"/>')){
      	$.ajax({
     		url : "/scheduleStop.do",
     		data : {
@@ -396,7 +396,7 @@ function fn_bckModifyPopup(){
 
 	<div class="pop_container">
 		<div class="pop_cts">
-			<p class="tit">스케줄 상세보기</p>
+			<p class="tit">'<spring:message code="schedule.scheduleDetail"/>'</p>
 			<div class="cmm_grp">
 				<div class="btn_type_01">
 					<span class="btn" onClick="fn_bckModifyPopup()"><button><spring:message code="common.modify" /></button></span>
