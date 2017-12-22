@@ -7,7 +7,7 @@
   <version>0.0.1-SNAPSHOT</version>
   <packaging>jar</packaging>
 
-  <name>tcontrol</name>
+  <name>Agent</name>
   <url>http://maven.apache.org</url>
 
   <properties>
@@ -265,7 +265,7 @@
                                 <artifactItem>
                                     <!-- hardcode values, or use properties, depending on what you want
                                         to do -->
-                                    <groupId>DX-TcontrolAgent</groupId>
+                                    <groupId>eXperDB-Management-Agent</groupId>
                                     <artifactId>com.k4m.dx</artifactId>
                                     <version>0.0.1-SNAPSHOT</version>
                                     <type>[ packaging ]</type>

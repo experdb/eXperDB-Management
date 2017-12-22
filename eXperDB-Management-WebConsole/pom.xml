@@ -6,7 +6,7 @@
    <artifactId>eXperDB-Management-WebConsole</artifactId>
    <packaging>war</packaging>
    <version>v1.0</version>
-   <name>DX-Tcontrol</name>
+   <name>eXperDB-Management-WebConsole</name>
    <url>http://www.egovframe.go.kr</url>
 
    <properties>
