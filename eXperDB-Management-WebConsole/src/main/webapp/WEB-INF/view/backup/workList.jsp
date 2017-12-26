@@ -33,6 +33,7 @@ function fn_init(){
 	scrollX : true,
 	searching : false,	
 	deferRender : true,
+	bSort: false,
 	columns : [
 		{data : "rownum", defaultContent : "", targets : 0, orderable : false, checkboxes : {'selectRow' : true}}, 
 		{data : "idx", className : "dt-center", defaultContent : ""}, 
@@ -80,6 +81,7 @@ function fn_init(){
 		processing : true,
 		searching : false,	
 		deferRender : true,
+		bSort: false,
 	columns : [
 		{data : "rownum", defaultContent : "", targets : 0, orderable : false, checkboxes : {'selectRow' : true}}, 
 		{data : "idx", className : "dt-center", defaultContent : ""}, 

@@ -93,13 +93,13 @@ public class LoginController {
 			mv.setViewName("login");
 			int intLoginCnt = userList.size();
 			if (intLoginCnt == 0) {
-				mv.addObject("error", "등록되지 않은 사용자 입니다.");
+				mv.addObject("error", "msg156");
 			} else if (!id.equals(userList.get(0).getUsr_id()) || !pw.equals(userList.get(0).getPwd())) {
-				mv.addObject("error", "아이디나 비밀번호가 잘못되었습니다.");
+				mv.addObject("error", "msg157");
 			} else if (userList.get(0).getUse_yn().equals("N")) {
-				mv.addObject("error", "사용할 수 없는 아이디 입니다.");
+				mv.addObject("error", "msg158");
 			} else if (userList.get(0).getUsr_expr_dt().equals("N")) {
-				mv.addObject("error", "사용 만료된 아이디 입니다.");
+				mv.addObject("error", "msg159");
 			} else {
 				
 				// 쿠키설정

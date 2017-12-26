@@ -18,6 +18,7 @@ function fn_init(){
 	processing : true,
 	searching : false,	
 	scrollX: true,
+	bSort: false,
 	columns : [
 		{data : "rownum", defaultContent : "", targets : 0, orderable : false, checkboxes : {'selectRow' : true}}, 
 		{data : "idx", className : "dt-center", defaultContent : ""}, 

@@ -42,6 +42,7 @@ function fn_init(){
 	processing : true,
 	searching : false,	
 	paging :false,
+	bSort: false,
 	columns : [
 	{data : "rownum", defaultContent : "", targets : 0, orderable : false, checkboxes : {'selectRow' : true}}, 
 	{data : "idx", columnDefs: [ { searchable: false, orderable: false, targets: 0} ], order: [[ 1, 'asc' ]], className : "dt-center", defaultContent : ""},
@@ -486,7 +487,7 @@ function fn_bckModifyPopup(){
 						<thead>
 							<tr>
 								<th></th>
-								<th>No</th>
+								<th><spring:message code="common.no" /></th>
 								<th></th>
 								<th><spring:message code="data_transfer.server_name" /></th>
 								<th><spring:message code="common.division" /></th>

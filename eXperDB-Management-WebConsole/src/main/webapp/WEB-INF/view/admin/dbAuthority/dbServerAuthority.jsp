@@ -27,6 +27,7 @@
 			searching : false,
 			paging : false,
 			deferRender : true,
+			bSort: false,
 			columns : [ 
 			            {data : "rownum",className : "dt-center",defaultContent : ""}, 
 			            {data : "usr_id",className : "dt-center",defaultContent : ""}, 
@@ -37,6 +38,7 @@
 		dbServerTable = $('#dbserver').DataTable({
 			searching : false,
 			paging : false,
+			bSort: false,
 			columns : [ 
 			            {data : "",className : "dt-center",defaultContent : ""}, 
 			            {data : "",className : "dt-center",defaultContent : ""} 

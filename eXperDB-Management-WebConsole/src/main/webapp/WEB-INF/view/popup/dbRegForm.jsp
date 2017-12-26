@@ -42,6 +42,7 @@ function fn_init(){
 		scrollY : "300px",
 		searching : false,
 		paging :false,
+		bSort: false,
 		columns : [
 		{data : "dft_db_nm", className : "dt-center", defaultContent : ""}, 
 		{data : "db_exp", defaultContent : "", className : "dt-center", 

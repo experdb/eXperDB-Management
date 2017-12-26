@@ -91,7 +91,7 @@
 									</colgroup>
 									<thead>
 										<tr>
-											<th scope="col">NO</th>
+											<th scope="col"><spring:message code="common.no" /></th>
 											<th scope="col"><spring:message code="common.dbms_name" /></th>
 											<th scope="col"><spring:message code="dbms_information.dbms_ip" /> </th>
 											<th scope="col"><spring:message code="properties.server_type" /> </th>

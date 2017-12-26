@@ -36,6 +36,7 @@ function fn_init(){
 	processing : true,
 	searching : false,	
 	deferRender : true,
+	bSort: false,
 	columns : [
 	{data : "rownum", defaultContent : "", targets : 0, orderable : false, checkboxes : {'selectRow' : true}}, 
 	{data : "idx", columnDefs: [ { searchable: false, orderable: false, targets: 0} ], order: [[ 1, 'asc' ]], className : "dt-center", defaultContent : ""},

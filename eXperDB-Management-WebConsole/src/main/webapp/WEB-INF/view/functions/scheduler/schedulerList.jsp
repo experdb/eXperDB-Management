@@ -22,6 +22,7 @@ function fn_init(){
 	processing : true,
 	searching : false,	
 	deferRender : true,
+	bSort: false,
 	columns : [
 		{data : "rownum", defaultContent : "", targets : 0, orderable : false, checkboxes : {'selectRow' : true}}, 
 		{data : "idx", className : "dt-center", defaultContent : ""}, 
@@ -582,7 +583,7 @@ function fn_makeToMin(){
 					<thead>
 						<tr>
 							<th width="10"></th>
-							<th width="30">No</th>
+							<th width="30"><spring:message code="common.no" /></th>
 							<th width="250"><spring:message code="schedule.schedule_name" /></th>
 							<th width="395"><spring:message code="schedule.scheduleExp"/></th>
 							<th width="60"><spring:message code="schedule.work_count" /></th>

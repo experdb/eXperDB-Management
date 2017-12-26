@@ -26,7 +26,7 @@ var table = null;
 			paging: false,
 			searching : false,
 			scrollX: true,
-			sort: false,
+			bSort: false,
 			columns : [
 			{ data : "rownum", className : "dt-center", defaultContent : ""}, 
 			{ data : "ctf_tp_nm", className : "dt-center", defaultContent : ""}, 

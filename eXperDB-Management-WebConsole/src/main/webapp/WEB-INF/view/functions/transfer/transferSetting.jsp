@@ -28,14 +28,15 @@
 
 	/* Validation */
 	function fn_transferValidation(){
-		var filter = /^(([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])\.){3}([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])  {1}([:][0-9][0-9][0-9][0-9][0-9]?)$/;
- 		var kafka_broker_ip = document.getElementById("kafka_broker_ip");
+		var filter  = /^(1|2)?\d?\d([.](1|2)?\d?\d){3}$/;
+
+		var kafka_broker_ip = document.getElementById("kafka_broker_ip");
 		if (kafka_broker_ip.value == "") {
 			alert('<spring:message code="message.msg47" />');
 			kafka_broker_ip.focus();
 			return false;
 		}
-		if (filter.test(kafka_broker_ip) == false){
+		if (filter.test(kafka_broker_ip.value) == false){
 			alert('Kafka Broker <spring:message code="message.msg175" />');
 			return false;
 		}
@@ -58,7 +59,7 @@
 			schema_registry_ip.focus();
 			return false;
 		}	
-		if (filter.test(schema_registry_ip) == false){
+		if (filter.test(schema_registry_ip.value) == false){
 			alert('Schema registry <spring:message code="message.msg175" />');
 			return false;
 		}
@@ -80,7 +81,7 @@
 			zookeeper_ip.focus();
 			return false;
 		}
-		if (filter.test(zookeeper_ip) == false){
+		if (filter.test(zookeeper_ip.value) == false){
 			alert('Zookeeper <spring:message code="message.msg175" />');
 			return false;
 		}
@@ -102,7 +103,7 @@
 			teng_ip.focus();
 			return false;
 		}
-		if (filter.test(teng_ip) == false){
+		if (filter.test(teng_ip.value) == false){
 			alert('experdb엔진 <spring:message code="message.msg175" />');
 			return false;
 		}

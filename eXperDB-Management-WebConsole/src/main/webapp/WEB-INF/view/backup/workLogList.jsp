@@ -57,6 +57,7 @@ function fn_rman_init(){
 		scrollY: "245px",
 		searching : false,
 		scrollX: true,
+		bSort: false,
 	    columns : [
 		         	{ data: "rownum", className: "dt-center", defaultContent: ""}, 
 		         	{data : "wrk_nm", className : "dt-left", defaultContent : ""
@@ -113,6 +114,7 @@ function fn_dump_init(){
 		scrollY: "245px",	
 		searching : false,
 		scrollX: true,
+		bSort: false,
 	    columns : [
 		         	{ data: "rownum", className: "dt-center", defaultContent: ""}, 
 		         	{data : "wrk_nm", className : "dt-left", defaultContent : ""
@@ -393,7 +395,7 @@ function selectTab(intab){
 					<table class="display" id="logRmanList" cellspacing="0" width="100%">
 						<thead>
 							<tr>
-								<th width="40">NO</th>
+								<th width="40"><spring:message code="common.no" /></th>
 								<th width="150"><spring:message code="common.work_name" /></th>
 								<th width="100"><spring:message code="dbms_information.dbms_ip" /></th>
 								<th width="150"><spring:message code="common.work_description" /></th>
@@ -413,7 +415,7 @@ function selectTab(intab){
 						<caption>Dump 백업관리 이력화면 리스트</caption>
 						<thead>
 							<tr>
-								<th width="40">NO</th>
+								<th width="40"><spring:message code="common.no" /></th>
 								<th width="200"><spring:message code="common.work_name" /></th>
 								<th width="100"><spring:message code="dbms_information.dbms_ip" /></th>
 								<th width="200"><spring:message code="common.work_description" /></th>

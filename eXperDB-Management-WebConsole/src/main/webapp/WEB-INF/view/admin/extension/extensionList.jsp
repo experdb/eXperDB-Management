@@ -32,6 +32,7 @@ function fn_init() {
 		scrollY : "230px",
 		searching : false,
 		paging : false,
+		bSort: false,
 		columns : [
 		{data : "rownum", defaultContent : "", className : "dt-center", 
 			targets: 0,
@@ -64,6 +65,7 @@ function fn_init() {
 		scrollY : "275px",
 		searching : false,
 		paging : false,
+		bSort: false,
 		columns : [
 		{data : "extname", className : "dt-center", defaultContent : ""}, 
 		{data : "extversion", className : "dt-center", defaultContent : ""},
@@ -197,7 +199,7 @@ $(function() {
 							<table id="dbServerList" class="display" cellspacing="0" width="100%" align="right">
 								<thead>
 									<tr>
-										<th>NO</th>
+										<th><spring:message code="common.no" /></th>
 										<th></th>
 										<th></th>
 										<th><spring:message code="common.dbms_name" /></th>

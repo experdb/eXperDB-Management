@@ -25,6 +25,7 @@ function fn_init(){
    	table = $('#logList').DataTable({	
 		scrollY: "250px",	
 		searching : false,
+		bSort: false,
 	    columns : [
 		         	{ data: "rownum", className: "dt-center", defaultContent: ""}, 
  		         	{ data: "db_nm", className: "dt-center", defaultContent: ""}, 

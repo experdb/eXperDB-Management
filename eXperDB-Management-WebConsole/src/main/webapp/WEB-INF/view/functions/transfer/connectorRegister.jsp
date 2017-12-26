@@ -20,11 +20,11 @@
 
 	function fn_init() {
 		table = $('#connectorTable').DataTable({
-			scrollY : "300px",
-			processing : true,
+			scrollY : "245px",
 			searching : false,
 			deferRender : true,
 			scrollX: true,
+			bSort: false,
 			columns : [ 
 						{ data : "rownum", defaultContent : "", targets : 0, orderable : false, checkboxes : {'selectRow' : true}},
 			            { data : "idx", className : "dt-center", defaultContent : ""}, 
@@ -42,7 +42,7 @@
 		});
 		
 		table.tables().header().to$().find('th:eq(0)').css('min-width', '10px');
-		table.tables().header().to$().find('th:eq(1)').css('min-width', '20px');
+		table.tables().header().to$().find('th:eq(1)').css('min-width', '30px');
 		table.tables().header().to$().find('th:eq(2)').css('min-width', '120px');
 		table.tables().header().to$().find('th:eq(3)').css('min-width', '100px');
 		table.tables().header().to$().find('th:eq(4)').css('min-width', '70px');
@@ -280,22 +280,24 @@
 						</tbody>
 					</table>
 				</div>
-				<table id="connectorTable" class="display" cellspacing="0" width="100%">
-					<thead>
-						<tr>
-							<th width="10"></th>
-							<th width="20">NO</th>
-							<th width="120"><spring:message code="etc.etc04"/></th>
-							<th width="100"><spring:message code="data_transfer.ip" /></th>
-							<th width="70"><spring:message code="data_transfer.port" /> </th>
-							<th width="70"><spring:message code="data_transfer.type" /></th>
-							<th width="70"><spring:message code="common.register" /></th>
-							<th width="120"><spring:message code="common.regist_datetime" /></th>
-							<th width="70"><spring:message code="common.modifier" /></th>
-							<th width="120"><spring:message code="common.modify_datetime" /></th>
-						</tr>
-					</thead>
-				</table>
+				<div class="overflow_area">
+					<table id="connectorTable" class="display" cellspacing="0" width="100%">
+						<thead>
+							<tr>
+								<th width="10"></th>
+								<th width="30"><spring:message code="common.no" /></th>
+								<th width="120"><spring:message code="etc.etc04"/></th>
+								<th width="100"><spring:message code="data_transfer.ip" /></th>
+								<th width="70"><spring:message code="data_transfer.port" /> </th>
+								<th width="70"><spring:message code="data_transfer.type" /></th>
+								<th width="70"><spring:message code="common.register" /></th>
+								<th width="120"><spring:message code="common.regist_datetime" /></th>
+								<th width="70"><spring:message code="common.modifier" /></th>
+								<th width="120"><spring:message code="common.modify_datetime" /></th>
+							</tr>
+						</thead>
+					</table>
+				</div>
 			</div>
 		</div>
 	</div>

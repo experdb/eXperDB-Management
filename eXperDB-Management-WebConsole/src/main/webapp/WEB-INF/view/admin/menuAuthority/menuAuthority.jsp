@@ -25,6 +25,7 @@ function fn_init() {
 		processing : true,
 		searching : false,
 		paging: false,
+		bSort: false,
 		columns : [
 		{data : "rownum", className : "dt-center", defaultContent : ""}, 
 		{data : "usr_id", className : "dt-center", defaultContent : ""}, 
@@ -38,6 +39,7 @@ function fn_init() {
 		processing : true,
 		searching : false,
 		paging: false,
+		bSort: false,
 		columns : [
 		{data : "mnu_id", className : "dt-center", defaultContent : ""}, 
 		{data : "mnu_cd", className : "dt-center", defaultContent : ""}, 
@@ -522,7 +524,7 @@ function fn_search(){
 											<table id="user" class="display" cellspacing="0" width="100%">
 												<thead>
 													<tr>
-														<th>No</th>
+														<th><spring:message code="common.no" /></th>
 														<th><spring:message code="user_management.id" /> </th>
 														<th><spring:message code="user_management.user_name" /> </th>
 													</tr>

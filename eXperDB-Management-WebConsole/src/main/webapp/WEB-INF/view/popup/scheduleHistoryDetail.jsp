@@ -50,6 +50,7 @@ function fn_init() {
 		searching : false,
 		paging: false,
 		scrollX: true,
+		bSort: false,
 		columns : [
 		{ data : "rownum", className : "dt-center", defaultContent : ""}, 
 		{data : "wrk_nm", className : "dt-left", defaultContent : ""
@@ -168,7 +169,7 @@ $(window.document).ready(function() {
 					<table id="workTable" class="display" cellspacing="0" width="100%">
 						<thead>
 							<tr>
-								<th width="40">No</th>
+								<th width="40"><spring:message code="common.no" /></th>
 								<th width="50"><spring:message code="common.work_name" /></th>
 								<th width="75"><spring:message code="common.work_description" /></th>
 								<th width="100"><spring:message code="schedule.work_start_datetime" /></th>

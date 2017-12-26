@@ -17,6 +17,7 @@
     	bDestroy: true,
     	processing : true,
     	searching : false,	
+    	bSort: false,
     	columns : [
     		{data : "rownum", className : "dt-center", defaultContent : ""}, 
     		{data : "scd_nm", className : "dt-left", defaultContent : ""

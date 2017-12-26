@@ -37,7 +37,7 @@ function fn_init() {
 		 ******************************************************** */
 		table = $('#workList').DataTable({
 		scrollY : "230px",
-		
+		bSort: false,
 		processing : true,
 		searching : false,
 		paging : true,	

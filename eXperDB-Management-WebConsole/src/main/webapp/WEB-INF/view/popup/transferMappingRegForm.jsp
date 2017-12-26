@@ -40,6 +40,7 @@
 			scrollY : "250px",
 			searching : false,
 			paging: false,
+			bSort: false,
 			columns : [
 			{ data : "", defaultContent : "", targets : 0, orderable : false, checkboxes : {'selectRow' : true}}, 
 			{ data : "table_schema", className : "dt-center", defaultContent : ""}, 
@@ -51,6 +52,7 @@
 			scrollY : "250px",
 			searching : false,
 			paging: false,
+			bSort: false,
 			columns : [
 			{ data : "", defaultContent : "", targets : 0, orderable : false, checkboxes : {'selectRow' : true}}, 
 			{ data : "table_schema", className : "dt-center", defaultContent : ""}, 

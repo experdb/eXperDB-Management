@@ -26,6 +26,7 @@
 			searching : false,
 			deferRender : true,
 			scrollX: true,
+			bSort: false,
 			columns : [
 			{ data : "trf_trg_cnn_nm", className : "dt-center", defaultContent : ""}, 
 			{ data : "db_svr_nm", className : "dt-center", defaultContent : ""}, 

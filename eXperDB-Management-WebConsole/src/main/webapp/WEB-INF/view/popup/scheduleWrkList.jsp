@@ -39,6 +39,7 @@ function fn_init(){
 	bDestroy: true,
 	processing : true,
 	searching : false,	
+	bSort: false,
 	columns : [
 	{data : "idx", columnDefs: [ { searchable: false, orderable: false, targets: 0} ], order: [[ 1, 'asc' ]], className : "dt-center", defaultContent : ""},
 	{data : "wrk_id", className : "dt-center", defaultContent : "", visible: false },

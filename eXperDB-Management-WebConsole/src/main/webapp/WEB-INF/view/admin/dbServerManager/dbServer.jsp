@@ -25,13 +25,12 @@ function fn_init() {
 		/* ********************************************************
 		 * 서버리스트 (데이터테이블)
 		 ******************************************************** */
-		table = $('#serverList').DataTable({
-		scrollY : "300px",
-		scrollX: true,	
-		processing : true,
-		paging : false,
-		searching : false,	
+		table = $('#serverList').DataTable({	
+		scrollY : "245px",
+		searching : false,
 		deferRender : true,
+		scrollX: true,
+		bSort: false,
 		columns : [
 		{data : "rownum", defaultContent : "", targets : 0, orderable : false, checkboxes : {'selectRow' : true}}, 
 		{data : "idx", className : "dt-center", defaultContent : ""},
@@ -60,7 +59,7 @@ function fn_init() {
 	});
 		
 		table.tables().header().to$().find('th:eq(0)').css('min-width', '10px');
-		table.tables().header().to$().find('th:eq(1)').css('min-width', '20px');
+		table.tables().header().to$().find('th:eq(1)').css('min-width', '30px');
 		table.tables().header().to$().find('th:eq(2)').css('min-width', '130px');
 		table.tables().header().to$().find('th:eq(3)').css('min-width', '100px');
 		table.tables().header().to$().find('th:eq(4)').css('min-width', '130px');
@@ -270,24 +269,26 @@ function fn_regRe_popup(){
 						</tbody>
 					</table>
 				</div>
-				<table id="serverList" class="display" cellspacing="0" width="100%">
-					<thead>
-						<tr>
-							<th width="10"></th>
-							<th width="20">No</th>
-							<th width="130"><spring:message code="common.dbms_name" /></th>
-							<th width="100"><spring:message code="dbms_information.dbms_ip"/></th>
-							<th width="130"><spring:message code="common.database" /></th>
-							<th width="70"><spring:message code="data_transfer.port" /></th>
-							<th width="70"><spring:message code="dbms_information.account" /></th>
-							<th width="70"><spring:message code="dbms_information.use_yn" /></th>
-							<th width="65"><spring:message code="common.register" /></th>
-							<th width="100"><spring:message code="common.regist_datetime" /></th>
-							<th width="65"><spring:message code="common.modifier" /></th>
-							<th width="100"><spring:message code="common.modify_datetime" /></th>
-						</tr>
-					</thead>
-				</table>
+				<div class="overflow_area">
+					<table id="serverList" class="display" cellspacing="0" width="100%">
+						<thead>
+							<tr>
+								<th width="10"></th>
+								<th width="30"><spring:message code="common.no" /></th>
+								<th width="130"><spring:message code="common.dbms_name" /></th>
+								<th width="100"><spring:message code="dbms_information.dbms_ip"/></th>
+								<th width="130"><spring:message code="common.database" /></th>
+								<th width="70"><spring:message code="data_transfer.port" /></th>
+								<th width="70"><spring:message code="dbms_information.account" /></th>
+								<th width="70"><spring:message code="dbms_information.use_yn" /></th>
+								<th width="65"><spring:message code="common.register" /></th>
+								<th width="100"><spring:message code="common.regist_datetime" /></th>
+								<th width="65"><spring:message code="common.modifier" /></th>
+								<th width="100"><spring:message code="common.modify_datetime" /></th>
+							</tr>
+						</thead>
+					</table>
+				</div>
 			</div>
 		</div>
 	</div>

@@ -37,6 +37,7 @@ function fn_init(){
 	scrollX: true,	
 	paging : false,
 	searching : false,	
+	bSort: false,
 	columns : [
 	// 일요일
 	{data : "scd_nm", 

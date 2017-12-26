@@ -56,7 +56,23 @@ $(window.document).ready(function() {
 					<label for="member_pwd"><spring:message code="user_management.password" /></label>
 					<input type="password" class="txt" id="pwd" name="pwd" maxlength="" placeholder='<spring:message code="message.msg129" />'/>
 				</div>
-				<div class="inp_wrap t2" id="errormessage"><c:if test="${not empty error}"><c:out value="${error}"/></c:if></div>	
+				<div class="inp_wrap t2" id="errormessage">
+				<c:if test="${not empty error}">
+				  	<c:choose>
+				       <c:when test="${error == 'msg156'}">
+				           <spring:message code="message.msg156" />
+				       </c:when>
+				       <c:when test="${error == 'msg157'}">
+				           <spring:message code="message.msg157" />
+				       </c:when>
+				       <c:when test="${error == 'msg158'}">
+				           <spring:message code="message.msg158" />
+				       </c:when>
+				       <c:when test="${error == 'msg159'}">
+				           <spring:message code="message.msg159" />
+				       </c:when>
+					</c:choose>		
+				</c:if></div>	
 				<div class="btn_wrap">
 					<button onClick="fn_login()">LOGIN</button>
 				</div>

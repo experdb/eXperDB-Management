@@ -24,6 +24,7 @@ function fn_init() {
 		searching : false,
 		deferRender : true,
 		scrollX: true,
+		bSort: false,
 		columns : [
 		{ data : "rownum", defaultContent : "", targets : 0, orderable : false, checkboxes : {'selectRow' : true}}, 
 		{ data : "idx", className : "dt-center", defaultContent : ""}, 
@@ -311,7 +312,7 @@ function fn_delete(){
 						<thead>
 							<tr>
 								<th width="10"></th>
-								<th width="20">No</th>
+								<th width="20"><spring:message code="common.no" /></th>
 								<th width="120"><spring:message code="user_management.id" /></th>
 								<th width="100"><spring:message code="user_management.company" /></th>
 								<th width="100"><spring:message code="user_management.user_name" /></th>

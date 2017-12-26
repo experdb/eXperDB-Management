@@ -24,16 +24,17 @@
 			scrollY : "230px",
 			deferRender : true,
 			scrollX: true,
+// 			bSort: false,
 			columns : [
 			{ data : "", defaultContent : "", targets : 0, orderable : false, checkboxes : {'selectRow' : true}}, 
-			{ data : "", className : "dt-center", defaultContent : ""}, 
-			{ data : "name", className : "dt-center", defaultContent : ""}, 
-			{ data : "hdfs_url", className : "dt-center", defaultContent : ""}, 
-			{ data : "tasks_max", className : "dt-center", defaultContent : ""}, 
-			{ data : "flush_size", className : "dt-center", defaultContent : ""}, 
-			{ data : "rotate_interval_ms", className : "dt-center", defaultContent : ""}, 
-			{ data : "db_svr_nm", className : "dt-center", defaultContent : ""}, 
-			{ data : "db_nm", className : "dt-center", defaultContent : ""}, 
+			{ data : "", className : "dt-center", defaultContent : "",orderable : false}, 
+			{ data : "name", className : "dt-center", defaultContent : "",orderable : false}, 
+			{ data : "hdfs_url", className : "dt-center", defaultContent : "",orderable : false}, 
+			{ data : "tasks_max", className : "dt-center", defaultContent : "",orderable : false}, 
+			{ data : "flush_size", className : "dt-center", defaultContent : "",orderable : false}, 
+			{ data : "rotate_interval_ms", className : "dt-center", defaultContent : "",orderable : false}, 
+			{ data : "db_svr_nm", className : "dt-center", defaultContent : "",orderable : false}, 
+			{ data : "db_nm", className : "dt-center", defaultContent : "",orderable : false}, 
 			{
 				data : "",
 				render : function(data, type, full, meta) {
@@ -41,9 +42,10 @@
 					return html;
 				},
 				className : "dt-center",
-				defaultContent : ""
+				defaultContent : "",
+				orderable : false
 			}, 
-			{ data : "", className : "dt-center", defaultContent : "<span class='btn btnC_01 btnF_02'><button id='mappingBtn'><spring:message code='data_transfer.table_mapping' /></button></span>"},
+			{ data : "", className : "dt-center", orderable : false, defaultContent : "<span class='btn btnC_01 btnF_02'><button id='mappingBtn'><spring:message code='data_transfer.table_mapping' /></button></span>"},
 			]
 		});
 		

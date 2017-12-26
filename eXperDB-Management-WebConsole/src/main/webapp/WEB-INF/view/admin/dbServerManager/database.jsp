@@ -27,12 +27,11 @@ function fn_init() {
 		 * Repository 디비 리스트 (데이터테이블)
 		 ******************************************************** */
 		table = $('#repoDBList').DataTable({
-		scrollY : "300px",
-		scrollX: true,	
-		processing : true,
+		scrollY : "245px",
 		searching : false,
-		paging : false,
 		deferRender : true,
+		scrollX: true,
+		bSort: false,
 		columns : [
 		{data : "idx", className : "dt-center", defaultContent : ""},		
 		{data : "db_svr_nm", className : "dt-center", defaultContent : ""},
@@ -47,7 +46,7 @@ function fn_init() {
 		]
 	});
 		
-		table.tables().header().to$().find('th:eq(0)').css('min-width', '20px');
+		table.tables().header().to$().find('th:eq(0)').css('min-width', '30px');
 		table.tables().header().to$().find('th:eq(1)').css('min-width', '130px');
 		table.tables().header().to$().find('th:eq(2)').css('min-width', '150px');
 		table.tables().header().to$().find('th:eq(3)').css('min-width', '70px');
@@ -241,24 +240,26 @@ function fn_reg_popup(){
 						</tbody>
 					</table>
 				</div>
-				<!-- 메인 테이블 -->
-				<table id="repoDBList" class="display" cellspacing="0" width="100%">
-					<thead>
-						<tr>
-							<th width="20">No</th>
-							<th width="130"><spring:message code="common.dbms_name" /></th>
-							<th width="150"><spring:message code="dbms_information.dbms_ip" /></th>
-							<th width="70"><spring:message code="data_transfer.port" /></th>
-							<th width="130"><spring:message code="common.database" /></th>
-							<th width="65"><spring:message code="common.register" /></th>
-							<th width="100"><spring:message code="common.regist_datetime" /></th>
-							<th width="65"><spring:message code="common.modifier" /></th>
-							<th width="100"><spring:message code="common.modify_datetime" /></th>
-							<th width="0"></th>
-						</tr>
-					</thead>
-				</table>
-				<!-- /메인 테이블 -->
+				<div class="overflow_area">
+					<!-- 메인 테이블 -->
+					<table id="repoDBList" class="display" cellspacing="0" width="100%">
+						<thead>
+							<tr>
+								<th width="30"><spring:message code="common.no" /></th>
+								<th width="130"><spring:message code="common.dbms_name" /></th>
+								<th width="150"><spring:message code="dbms_information.dbms_ip" /></th>
+								<th width="70"><spring:message code="data_transfer.port" /></th>
+								<th width="130"><spring:message code="common.database" /></th>
+								<th width="65"><spring:message code="common.register" /></th>
+								<th width="100"><spring:message code="common.regist_datetime" /></th>
+								<th width="65"><spring:message code="common.modifier" /></th>
+								<th width="100"><spring:message code="common.modify_datetime" /></th>
+								<th width="0"></th>
+							</tr>
+						</thead>
+					</table>
+					<!-- /메인 테이블 -->
+				</div>	
 			</div>
 		</div>
 	</div>
