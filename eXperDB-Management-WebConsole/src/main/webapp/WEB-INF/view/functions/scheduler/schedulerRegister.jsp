@@ -42,8 +42,8 @@ function fn_init(){
 	{data : "idx", columnDefs: [ { searchable: false, orderable: false, targets: 0} ], order: [[ 1, 'asc' ]], className : "dt-center", defaultContent : ""},
 	{data : "db_svr_nm", className : "dt-center", defaultContent : ""}, //서버명
 	{data : "bck_bsn_dscd_nm", className : "dt-center", defaultContent : ""}, //구분
-	{data : "wrk_nm", className : "dt-center", defaultContent : ""}, //work명
-	{data : "wrk_exp", className : "dt-center", defaultContent : ""}, //work설명
+	{data : "wrk_nm", className : "dt-left", defaultContent : ""}, //work명
+	{data : "wrk_exp", className : "dt-left", defaultContent : ""}, //work설명
 	{data : "exe_ord",	
 			className: "dt-center",							
 			defaultContent : "",

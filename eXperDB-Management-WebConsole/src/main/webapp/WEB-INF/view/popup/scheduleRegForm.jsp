@@ -37,6 +37,7 @@ function fn_init() {
 		 ******************************************************** */
 		table = $('#workList').DataTable({
 		scrollY : "230px",
+		scrollX: true,	
 		bSort: false,
 		processing : true,
 		searching : false,
@@ -44,8 +45,8 @@ function fn_init() {
 		columns : [
 		{data : "rownum", defaultContent : "", targets : 0, orderable : false, checkboxes : {'selectRow' : true}}, 
 		{data : "idx", className : "dt-center", defaultContent : ""},
-		{data : "wrk_nm", className : "dt-center", defaultContent : ""},
-		{data : "wrk_exp", className : "dt-center", defaultContent : ""},	
+		{data : "wrk_nm", className : "dt-left", defaultContent : ""},
+		{data : "wrk_exp", className : "dt-left", defaultContent : ""},	
 		{data : "bsn_dscd_nm", className : "dt-center", defaultContent : ""},
 		{data : "bck_bsn_dscd_nm", className : "dt-center", defaultContent : ""},
 		{data : "db_svr_nm", className : "dt-center", defaultContent : ""},		
@@ -77,8 +78,8 @@ function fn_init() {
 		
 		table.tables().header().to$().find('th:eq(0)').css('min-width', '10px');
 		table.tables().header().to$().find('th:eq(1)').css('min-width', '35px');
-		table.tables().header().to$().find('th:eq(2)').css('min-width', '100px');
-		table.tables().header().to$().find('th:eq(3)').css('min-width', '130px');
+		table.tables().header().to$().find('th:eq(2)').css('min-width', '150px');
+		table.tables().header().to$().find('th:eq(3)').css('min-width', '200px');
 		table.tables().header().to$().find('th:eq(4)').css('min-width', '70px');
 		table.tables().header().to$().find('th:eq(5)').css('min-width', '85px');
 		table.tables().header().to$().find('th:eq(6)').css('min-width', '150px');
@@ -291,8 +292,8 @@ function fn_workAdd(){
 					<tr>
 						<th width="10"></th>
 						<th width="35"><spring:message code="common.no" /></th>
-						<th width="100"><spring:message code="common.work_name" /></th>
-						<th width="130"><spring:message code="common.work_description" /></th>
+						<th width="150"><spring:message code="common.work_name" /></th>
+						<th width="200"><spring:message code="common.work_description" /></th>
 						<th width="70"><spring:message code="common.division" /></th>
 						<th width="85"><spring:message code="backup_management.bck_div"/></th>
 						<th width="150"><spring:message code="common.dbms_name" /></th>

@@ -46,7 +46,7 @@
           WHERE 1 = 1
           AND A.DB_SVR_ID = B.DB_SVR_ID
           AND B.MASTER_GBN = 'M'
-          ORDER BY DB_SVR_ID
+          ORDER BY LST_MDF_DTM DESC
       ) AA	
 	</select>
 	

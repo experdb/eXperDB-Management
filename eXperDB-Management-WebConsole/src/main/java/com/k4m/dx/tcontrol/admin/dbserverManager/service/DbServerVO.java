@@ -24,7 +24,14 @@ public class DbServerVO {
 	private String svr_host_nm;
 	private String db_cndt;
 	private String db_nm;
+	private String db_exp;
 
+	public String getDb_exp() {
+		return db_exp;
+	}
+	public void setDb_exp(String db_exp) {
+		this.db_exp = db_exp;
+	}
 	public String getDb_nm() {
 		return db_nm;
 	}

@@ -325,7 +325,17 @@
 											<td>${databaseInfo.ctype}</td>
 											<td>${databaseInfo.size}</td>
 											<td>${databaseInfo.tablespace}</td>
-											<td>${databaseInfo.description}</td>
+											<td>
+											<c:if test="${!empty databaseInfo.description}">${databaseInfo.description}</c:if>
+											<c:if test="${empty databaseInfo.description}">
+											<c:forEach var="dbnmInfo" items="${resultRepoDB}">
+													<c:if test="${dbnmInfo.db_nm eq databaseInfo.name}" >
+													${dbnmInfo.db_exp}
+													</c:if>	
+												</c:forEach>
+											
+											</c:if>									
+											</td>
 										</tr>
 									</c:forEach>
 								</tbody>

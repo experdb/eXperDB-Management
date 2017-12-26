@@ -90,7 +90,7 @@
 	          AND A.DB_SVR_ID = B.DB_SVR_ID      
 		      AND A.DB_SVR_NM = #{db_svr_nm}
 		      AND B.MASTER_GBN = 'M'
-	          ORDER BY DB_SVR_ID
+	          ORDER BY LST_MDF_DTM DESC
 	      ) AA	
     </select>
 
@@ -252,13 +252,15 @@
 		      AND EXE_SN = #{exe_sn}		
     </select>	
         
-     <select id="selectRepoDBList" parameterType="DbServerVO" resultType="DbServerVO">
+     <select id="selectRepoDBList" parameterType="dbServerVO" resultType="dbServerVO">
 		/**
 	 	* Query ID : selectRepoDBList
 	 	* Description : RepoDB 조회
 	 	* Author : 김주영
 	 	**/
-		SELECT DB_NM FROM T_DB_I D
+		SELECT DB_NM
+		,DB_EXP
+		FROM T_DB_I D
 		WHERE D.DB_SVR_ID=#{db_svr_id}
 		AND D.USEYN='Y'
     </select>	     

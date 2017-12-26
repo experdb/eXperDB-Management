@@ -93,7 +93,7 @@
 	      <if test="useyn != null and useyn != ''">
 	      AND A.USEYN LIKE  '%' || #{useyn} || '%'
 	      </if>      
-          ORDER BY DB_SVR_ID
+          ORDER BY LST_MDF_DTM DESC
       ) AA		
     </select>
     
@@ -300,7 +300,7 @@
 			    AND B.DB_NM LIKE  '%' || #{dft_db_nm} || '%'
 			    </if>         	            
 			    AND B.USEYN = 'Y'
-	            ORDER BY A.DB_SVR_NM
+	            ORDER BY A.LST_MDF_DTM DESC
             	)AA
      </select>	
      

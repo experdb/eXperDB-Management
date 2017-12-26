@@ -9,10 +9,44 @@
 	 	* Description : workList 조회
 	 	* Author : Yoon jh
 	 	**/
-	 	
-      SELECT 
-      		(ROW_NUMBER() OVER()) AS ROWNUM,
+	  SELECT
+	        (ROW_NUMBER() OVER()) AS ROWNUM,
 			(ROW_NUMBER() OVER()) AS IDX,
+			A.BCK_WRK_ID,
+			A.WRK_ID,
+			A.DB_SVR_ID,
+			A.DB_ID,
+			A.DB_NM,
+			A.BCK_BSN_DSCD,
+			A.BCK_BSN_DSCD_NM,
+			A.WRK_NM,
+			A.WRK_EXP,
+			A.BCK_OPT_CD,
+			A.BCK_OPT_CD_NM,
+			A.BCK_MTN_ECNT,
+			A.CPS_YN,
+			A.LOG_FILE_BCK_YN,
+			A.LOG_FILE_STG_DCNT,
+			A.LOG_FILE_MTN_ECNT,
+			A.CPRT,
+			A.SAVE_PTH,
+			A.FILE_FMT_CD,
+			A.FILE_FMT_CD_NM,
+			A.FILE_STG_DCNT,
+			A.ENCD_MTH_NM,
+			A.USR_ROLE_NM,
+			A.FRST_REGR_ID,
+			A.FRST_REG_DTM,
+			A.LST_MDFR_ID,
+			A.LST_MDF_DTM,
+			A.BCK_FILENM,
+			A.DATA_PTH,
+			A.BCK_PTH,
+			A.ACV_FILE_STGDT,
+			A.ACV_FILE_MTNCNT,
+			A.LOG_FILE_PTH
+	  FROM(	
+      SELECT 
       		BCK_WRK_ID,
       		WRK_ID,
 			DB_SVR_ID,
@@ -66,7 +100,8 @@
 	      		AND DB_ID=#{db_id}
 			</if>
       	</if>
-      ORDER BY WRK_ID DESC
+      ORDER BY LST_MDF_DTM DESC
+      )A
     </select>
     
     <select id="selectOptDetailList" parameterType="workOptDetailVO" resultType="workOptDetailVO">
@@ -536,7 +571,7 @@
       	<if test="exe_rslt_cd != null and exe_rslt_cd != '' ">
       		AND TWG.EXE_RSLT_CD=#{exe_rslt_cd}
       	</if>     	
-      		ORDER BY WRK_END_DTM DESC
+      		ORDER BY LST_MDF_DTM DESC
       	)AA
     </select>
 
