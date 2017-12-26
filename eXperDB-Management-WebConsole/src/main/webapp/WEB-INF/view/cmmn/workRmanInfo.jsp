@@ -14,35 +14,35 @@
 					<p><h3 style="height: 20px;"><spring:message code="properties.basic_info" /></h3></p>
 					<tbody>						
 						<tr>
-							<td><spring:message code="backup_management.bck_div"/></td>
+							<td style="width: 170px;"><spring:message code="backup_management.bck_div"/></td>
 							<td style="text-align: left" id="r_bck_bsn_dscd_nm"></td>
 						</tr>	
 						<tr>
-							<td><spring:message code="backup_management.backup_option"/></td>
+							<td style="width: 170px;"><spring:message code="backup_management.backup_option"/></td>
 							<td style="text-align: left" id="bck_opt_cd_nm"></td>
 						</tr>	
 						<tr>
-							<td><spring:message code="common.work_name" /></td>
+							<td style="width: 170px;"><spring:message code="common.work_name" /></td>
 							<td style="text-align: left" id="r_wrk_nm"></td>
 						</tr>	
 						<tr>
-							<td><spring:message code="common.work_description" /></td>
+							<td style="width: 170px;"><spring:message code="common.work_description" /></td>
 							<td style="text-align: left" id="r_wrk_exp"></td>
 						</tr>							
 						<tr>
-							<td><spring:message code="backup_management.compress" /></td>
+							<td style="width: 170px;"><spring:message code="backup_management.compress" /></td>
 							<td style="text-align: left" id="cps_yn"></td>
 						</tr>	
 						<tr>
-							<td><spring:message code="backup_management.backup_log_dir" /></td>
+							<td style="width: 170px;"><spring:message code="backup_management.backup_log_dir" /></td>
 							<td style="text-align: left" id="log_file_pth"></td>
 						</tr>	
 						<tr>
-							<td><spring:message code="backup_management.data_dir" /></td>
+							<td style="width: 170px;"><spring:message code="backup_management.data_dir" /></td>
 							<td style="text-align: left" id="data_pth"></td>
 						</tr>	
 						<tr>
-							<td><spring:message code="backup_management.backup_dir" /></td>
+							<td style="width: 170px;"><spring:message code="backup_management.backup_dir" /></td>
 							<td style="text-align: left" id="bck_pth"></td>
 						</tr>						
 					</tbody>
@@ -53,19 +53,19 @@
 					<caption><spring:message code="backup_management.backup_file_option" /></caption>
 					<tbody>
 						<tr>
-							<td><spring:message code="backup_management.full_backup_file_keep_day" /></td>
+							<td style="width: 170px;"><spring:message code="backup_management.full_backup_file_keep_day" /></td>
 							<td style="text-align: left" id="r_file_stg_dcnt"></td>
 						</tr>	
 						<tr>
-							<td><spring:message code="backup_management.full_backup_file_maintenance_count" /></td>
+							<td style="width: 170px;"><spring:message code="backup_management.full_backup_file_maintenance_count" /></td>
 							<td style="text-align: left" id="r_bck_mtn_ecnt"></td>
 						</tr>	
 						<tr>
-							<td><spring:message code="backup_management.archive_file_keep_day" /></td>
+							<td style="width: 170px;"><spring:message code="backup_management.archive_file_keep_day" /></td>
 							<td style="text-align: left" id="acv_file_stgdt"></td>
 						</tr>	
 						<tr>
-							<td><spring:message code="backup_management.archive_file_maintenance_count" /></td>
+							<td style="width: 170px;"><spring:message code="backup_management.archive_file_maintenance_count" /></td>
 							<td style="text-align: left" id="acv_file_mtncnt"></td>
 						</tr>							
 					</tbody>
@@ -76,15 +76,15 @@
 					<caption><spring:message code="backup_management.log_file_option" /></caption>
 					<tbody>
 						<tr>
-							<td><spring:message code="backup_management.log_file_backup_yn" /></td>
+							<td style="width: 170px;"><spring:message code="backup_management.log_file_backup_yn" /></td>
 							<td style="text-align: left" id="log_file_bck_yn"></td>
 						</tr>	
 						<tr>
-							<td><spring:message code="backup_management.server_log_file_keep_day" /></td>
+							<td style="width: 170px;"><spring:message code="backup_management.server_log_file_keep_day" /></td>
 							<td style="text-align: left" id="r_log_file_stg_dcnt"></td>
 						</tr>	
 						<tr>
-							<td><spring:message code="backup_management.server_log_file_maintenance_count" /></td>
+							<td style="width: 170px;"><spring:message code="backup_management.server_log_file_maintenance_count" /></td>
 							<td style="text-align: left" id="r_log_file_mtn_ecnt"></td>
 						</tr>								
 					</tbody>

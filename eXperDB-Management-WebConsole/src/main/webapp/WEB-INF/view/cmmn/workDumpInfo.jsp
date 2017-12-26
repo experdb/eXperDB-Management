@@ -12,47 +12,47 @@
 					<p><h3 style="height: 20px;"><spring:message code="properties.basic_info" /></h3></p>
 					<tbody>
 						<tr>
-							<td><spring:message code="backup_management.bck_div"/></td>
+							<td style="width: 170px;"><spring:message code="backup_management.bck_div"/></td>
 							<td style="text-align: left" id="d_bck_bsn_dscd_nm"></td>
 						</tr>	
 						<tr>
-							<td><spring:message code="common.work_name" /></td>
+							<td style="width: 170px;"><spring:message code="common.work_name" /></td>
 							<td style="text-align: left" id="d_wrk_nm"></td>
 						</tr>	
 						<tr>
-							<td><spring:message code="common.work_description" /></td>
+							<td style="width: 170px;"><spring:message code="common.work_description" /></td>
 							<td style="text-align: left" id="d_wrk_exp"></td>
 						</tr>	
 						<tr>
-							<td><spring:message code="common.database" /></td>
+							<td style="width: 170px;"><spring:message code="common.database" /></td>
 							<td style="text-align: left" id="db_nm"></td>
 						</tr>							
 						<tr>
-							<td><spring:message code="backup_management.backup_dir" /></td>
+							<td style="width: 170px;"><spring:message code="backup_management.backup_dir" /></td>
 							<td style="text-align: left" id="save_pth"></td>
 						</tr>	
 						<tr>
-							<td><spring:message code="backup_management.file_format" /></td>
+							<td style="width: 170px;"><spring:message code="backup_management.file_format" /></td>
 							<td style="text-align: left" id="file_fmt_cd_nm"></td>
 						</tr>	
 						<tr>
-							<td><spring:message code="backup_management.compressibility" /></td>
+							<td style="width: 170px;"><spring:message code="backup_management.compressibility" /></td>
 							<td style="text-align: left" id="cprt"></td>
 						</tr>	
 						<tr>
-							<td><spring:message code="backup_management.incording_method" /></td>
+							<td style="width: 170px;"><spring:message code="backup_management.incording_method" /></td>
 							<td style="text-align: left" id="encd_mth_nm"></td>
 						</tr>	
 						<tr>
-							<td><spring:message code="backup_management.rolename" /></td>
+							<td style="width: 170px;"><spring:message code="backup_management.rolename" /></td>
 							<td style="text-align: left" id="usr_role_nm"></td>
 						</tr>		
 						<tr>
-							<td><spring:message code="backup_management.file_keep_day" /></td>
+							<td style="width: 170px;"><spring:message code="backup_management.file_keep_day" /></td>
 							<td style="text-align: left" id="d_file_stg_dcnt"></td>
 						</tr>			
 						<tr>
-							<td><spring:message code="backup_management.backup_maintenance_count" /></td>
+							<td style="width: 170px;"><spring:message code="backup_management.backup_maintenance_count" /></td>
 							<td style="text-align: left" id="d_bck_mtn_ecnt"></td>
 						</tr>						
 					</tbody>
@@ -63,15 +63,15 @@
 					<caption><spring:message code="backup_management.add_option" />1</caption>
 					<tbody>
 						<tr>
-							<td><spring:message code="backup_management.sections" /></td>
+							<td style="width: 170px;"><spring:message code="backup_management.sections" /></td>
 							<td style="text-align: left" id="sections"></td>
 						</tr>	
 						<tr>
-							<td><spring:message code="backup_management.object_type" /></td>
+							<td style="width: 170px;"><spring:message code="backup_management.object_type" /></td>
 							<td style="text-align: left" id="objectType"></td>
 						</tr>	
 						<tr>
-							<td><spring:message code="backup_management.save_yn_choice" /></td>
+							<td style="width: 170px;"><spring:message code="backup_management.save_yn_choice" /></td>
 							<td style="text-align: left" id="save_yn"></td>
 						</tr>							
 					</tbody>
@@ -82,11 +82,11 @@
 					<caption><spring:message code="backup_management.add_option" />2</caption>
 					<tbody>
 						<tr>
-							<td><spring:message code="backup_management.query" /></td>
+							<td style="width: 170px;"><spring:message code="backup_management.query" /></td>
 							<td style="text-align: left" id="query"></td>
 						</tr>	
 						<tr>
-							<td><spring:message code="common.etc"/></td>
+							<td style="width: 170px;"><spring:message code="common.etc"/></td>
 							<td style="text-align: left" id="etc"></td>
 						</tr>									
 					</tbody>

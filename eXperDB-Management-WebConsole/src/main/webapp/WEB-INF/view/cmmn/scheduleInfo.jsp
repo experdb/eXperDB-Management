@@ -12,24 +12,24 @@
 					<caption><spring:message code="menu.schedule_information" /></caption>
 					<tbody>
 						<tr>
-							<td><spring:message code="schedule.schedule_name" /></td>
-							<td id="scd_nm_info" ></td>
+							<td style="width: 100px;"><spring:message code="schedule.schedule_name" /></td>
+							<td style="text-align: left" id="scd_nm_info" ></td>
 						</tr>	
 						<tr>
-							<td><spring:message code="schedule.scheduleExp"/></td>
-							<td id="scd_exp_info" ></td>
+							<td style="width: 100px;"><spring:message code="schedule.scheduleExp"/></td>
+							<td style="text-align: left" id="scd_exp_info" ></td>
 						</tr>	
 						<tr>
-							<td><spring:message code="schedule.exeState"/></td>
-							<td id="scd_cndt_info"></td>
+							<td style="width: 100px;"><spring:message code="schedule.exeState"/></td>
+							<td style="text-align: left" id="scd_cndt_info"></td>
 						</tr>	
 						<tr>
-							<td><spring:message code="schedule.exeCycle"/></td>
-							<td id="exe_perd_cd_info"></td>
+							<td style="width: 100px;"><spring:message code="schedule.exeCycle"/></td>
+							<td style="text-align: left" id="exe_perd_cd_info"></td>
 						</tr>	
 						<tr>
-							<td><spring:message code="schedule.exeDate"/></td>
-							<td id="scd_exe_hms"></td>
+							<td style="width: 100px;"><spring:message code="schedule.exeDate"/></td>
+							<td style="text-align: left" id="scd_exe_hms"></td>
 						</tr>						
 					</tbody>
 				</table>		

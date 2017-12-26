@@ -1,4 +1,5 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<%@ taglib prefix="c"      uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags"%>
 <style>
 .tooltip {
@@ -30,8 +31,8 @@
 </style>
 
 <script type="text/javascript">
-	$(window.document).ready(   		
-		function() {	
+$(window.document).ready(   		
+		function() {			
    			$.ajax({
 				async : false,
 				url : "/selectTreeDBSvrList.do",
@@ -304,7 +305,7 @@
 	<div id="lnb_menu">
 		<form name="treeView" id="treeView">
 				<div class="logout">
-					<div style="color: white; margin-bottom: 5%;"><%=(String)session.getAttribute("usr_nm")%><spring:message code="common.wellcome"/></div>
+					    <div style="color: white; margin-bottom: 5%;"><%=(String)session.getAttribute("usr_nm")%><spring:message code="common.wellcome"/></div>		
 					<a href="#"><button onClick="fn_logout();"><spring:message code="common.logout"/></button></a>
 				</div>
 				<div id="treeTitle"><img src="../images/ico_lnb_1.png" id="treeImg"><a href="/dbTree.do">DB <spring:message code="dashboard.server" /></a>
