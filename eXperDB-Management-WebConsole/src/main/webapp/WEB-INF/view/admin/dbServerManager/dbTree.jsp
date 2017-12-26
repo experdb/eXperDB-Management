@@ -101,12 +101,16 @@ function fn_init() {
 	        orderable: false,
 	        render: function(data, type, full, meta){
 	           if(type === 'display'){
-	              data = '<input type="text" class="txt" name="db_exp" value="' +full.db_exp + '" style="width: 350px; height: 25px;" id="db_exp">';      
+	              data = '<input type="text" class="txt" name="db_exp" value="' +full.db_exp + '" style="width: 450px; height: 25px;" id="db_exp">';      
 	           }
 	           
 	           return data;
 	        }}, 
-		{data : "rownum", defaultContent : "", targets : 0, orderable : false, checkboxes : {'selectRow' : false}}, 		
+		{data : "dft_db_nm", defaultContent : "", targets : 0, orderable : false, className : "dt-center", 
+	    render: function (data, type, full, meta){
+		             return '<input type="checkbox" name="chk" onClick=checkedDisable()  value="' 
+		                + $('<div/>').text(data).html() + '">';		         
+		}}, 		
 		]
 	});
 	
@@ -127,7 +131,7 @@ function fn_init() {
     table_dbServer.tables().header().to$().find('th:eq(13)').css('min-width', '0px'); */
     
     table_db.tables().header().to$().find('th:eq(0)').css('min-width', '80px');
-    table_db.tables().header().to$().find('th:eq(1)').css('min-width', '150px');
+    table_db.tables().header().to$().find('th:eq(1)').css('min-width', '440px');
     table_db.tables().header().to$().find('th:eq(2)').css('min-width', '10px');
     
     
@@ -135,6 +139,12 @@ function fn_init() {
 	
 }
 
+//클릭시 체크 하이라이트 제거
+function checkedDisable(){
+	//$(this).hasClass('selected'); 
+	$(this).removeClass('selected');
+	//table_db.$(this).removeClass('selected');
+}
 
 /* ********************************************************
  * 페이지 시작시(서버 조회)
@@ -293,25 +303,33 @@ function fn_insertDB(){
 	var db_svr_id = table_dbServer.row('.selected').data().db_svr_id;
 	var ipadr = table_dbServer.row('.selected').data().ipadr;
 	var datas = table_db.rows().data();
-
+	
+	// CheckBox 검사
+	var chked = [];		
+	
 	//체크된갯수
-	var checkCnt = table_db.rows('.selected').data().length;
+	//var checkCnt = table_db.rows('.selected').data().length;
+	var checkCnt = $("input:checkbox[name='chk']:checked").length;
 	var rows = [];
     	for (var i = 0; i<datas.length; i++) {
      		var rows = new Object();
      		
-     		var org_dbName = table_db.rows().data()[i].dft_db_nm;
-     		
+     		var org_dbName = table_db.rows().data()[i].dft_db_nm;	
      		var returnValue = false;
-     		
-     		for(var j=0; j<checkCnt; j++) {    			           	 	
-     			var chkDBName = table_db.rows('.selected').data()[j].dft_db_nm;
+     		 
+     		//체크된값 배열로 받음
+     		$("input[name=chk]:checked").each(function() {
+     			chked.push($(this).val());
+     		});
+
+     		  for(var j=0; j<checkCnt; j++) {     			
+     			var chkDBName = chked[j];
      			if(org_dbName  == chkDBName) {
      				returnValue = true;
      				break;
      			}
-     		}
-     		
+     		}  
+
      	 	if(returnValue == true){
      	 		rows.db_exp = list[i].value;
      			rows.useyn = "Y";
@@ -323,6 +341,7 @@ function fn_insertDB(){
      		}   		 
     		datasArr.push(rows);
 		}
+    	
     	if (confirm('<spring:message code="message.msg160"/>')){
 			$.ajax({
 				url : "/insertTreeDB.do",
@@ -500,7 +519,7 @@ function fn_dataCompareChcek(svrDbList){
 								<thead>
 									<tr>
 										<th width="90"><spring:message code="common.database" /></th>
-										<th width="150"><spring:message code="common.desc" /></th>
+										<th width="450"><spring:message code="common.desc" /></th>
 										<th width="10"><input name="select" value="1" type="checkbox"></th>
 									</tr>
 								</thead>
