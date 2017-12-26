@@ -5,7 +5,7 @@
 
 <div id="pop_layer_rman" class="pop-layer">
 		<div class="pop-container" style="padding: 0px;">
-			<div class="pop_cts" style="width: 35%; height: 750px; overflow: auto; padding: 20px; margin: 0 auto; min-height:0; min-width:0;" id="workinfo">
+			<div class="pop_cts" style="width: 35%; height: 730px; overflow: auto; padding: 20px; margin: 0 auto; min-height:0; min-width:0;" id="workinfo">
 				<p class="tit" style="margin-bottom: 15px;"><spring:message code="backup_management.work_info"/>
 					<a href="#n" class="btn" onclick="toggleLayer($('#pop_layer_rman'), 'off');" style="float: right;"><img src="/images/ico_state_01.png" style="margin-left: 235px;"/></a>
 				</p>
