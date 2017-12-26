@@ -595,14 +595,14 @@ function fn_check() {
 <body>
 <div class="pop_container">
 	<div class="pop_cts">
-		<p class="tit">Dump <spring:message code="dashboard.Register backup" /></p>
+		<p class="tit">Dump <spring:message code="dashboard.Register.backup" /></p>
 		<div class="pop_cmm">
 			<form name="workRegForm">
 			<input type="hidden" name="db_svr_id" id="db_svr_id" value="${db_svr_id}"/>
 			<input type="hidden" name="check_path1" id="check_path1" value="N"/>
 			<input type="hidden" name="check_path2" id="check_path2" value="N"/>
 			<table class="write">
-				<caption>Dump <spring:message code="dashboard.Register backup" /></caption>
+				<caption>Dump <spring:message code="dashboard.Register.backup" /></caption>
 				<colgroup>
 					<col style="width:105px;" />
 					<col />

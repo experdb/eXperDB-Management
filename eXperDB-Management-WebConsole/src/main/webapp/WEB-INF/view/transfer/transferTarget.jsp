@@ -50,7 +50,7 @@
 		});
 		
 		table.tables().header().to$().find('th:eq(0)').css('min-width', '10px');
-		table.tables().header().to$().find('th:eq(1)').css('min-width', '20px');
+		table.tables().header().to$().find('th:eq(1)').css('min-width', '30px');
 		table.tables().header().to$().find('th:eq(2)').css('min-width', '100px');
 		table.tables().header().to$().find('th:eq(3)').css('min-width', '350px');
 		table.tables().header().to$().find('th:eq(4)').css('min-width', '60px');
@@ -324,15 +324,15 @@
 						<thead>
 							<tr>
 								<th width="10"></th>
-								<th width="20"><spring:message code="common.no" /></th>
+								<th width="30"><spring:message code="common.no" /></th>
 								<th width="100"><spring:message code="data_transfer.connect_name" /></th>
-								<th width="350"><spring:message code="data_transfer.hdfs_url" /> </th>
-								<th width="60"><spring:message code="data_transfer.tasks_max" />  </th>
-								<th width="60"><spring:message code="data_transfer.flush_size" /> </th>
+								<th width="350"><spring:message code="data_transfer.hdfs_url" /></th>
+								<th width="60"><spring:message code="data_transfer.tasks_max" /></th>
+								<th width="60"><spring:message code="data_transfer.flush_size" /></th>
 								<th width="100"><spring:message code="data_transfer.rotate_interval_ms" /></th>
-								<th width="100"><spring:message code="common.dbms_name" /> </th>
-								<th width="100"><spring:message code="common.database" /> </th>
-								<th width="100"><spring:message code="data_transfer.detail_search" />  </th>
+								<th width="100"><spring:message code="common.dbms_name" /></th>
+								<th width="100"><spring:message code="common.database" /></th>
+								<th width="100"><spring:message code="data_transfer.detail_search" /></th>
 								<th width="90"><spring:message code="data_transfer.mapping_settings" /></th>
 							</tr>
 						</thead>

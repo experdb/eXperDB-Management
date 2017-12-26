@@ -230,7 +230,7 @@
 								</colgroup>
 								<thead>
 									<tr style="border-bottom: 1px solid #b8c3c6;">
-										<th scope="col"><spring:message code="common.order"/></th>
+										<th scope="col"><spring:message code="common.no" /></th>
 										<th scope="col"><spring:message code="history_management.date" /></th>
 										<th scope="col"><spring:message code="history_management.time" /></th>
 										<th scope="col"><spring:message code="history_management.screen" /></th>

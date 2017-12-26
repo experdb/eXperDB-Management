@@ -487,7 +487,7 @@
 											<table id="user" class="display" cellspacing="0" width="100%">
 												<thead>
 													<tr>
-														<th width="30"><spring:message code="common.order"/></th>
+														<th width="30"><spring:message code="common.no"/></th>
 														<th width="100"><spring:message code="user_management.id" /></th>
 														<th width="100"><spring:message code="user_management.user_name" /></th>
 													</tr>

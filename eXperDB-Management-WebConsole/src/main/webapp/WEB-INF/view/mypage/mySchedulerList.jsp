@@ -66,14 +66,14 @@ function fn_init(){
 	});
 	
 	table.tables().header().to$().find('th:eq(0)').css('min-width', '10px');
-	table.tables().header().to$().find('th:eq(1)').css('min-width', '20px');
+	table.tables().header().to$().find('th:eq(1)').css('min-width', '30px');
 	table.tables().header().to$().find('th:eq(2)').css('min-width', '100px');
 	table.tables().header().to$().find('th:eq(3)').css('min-width', '150px');
 	table.tables().header().to$().find('th:eq(4)').css('min-width', '50px');
 	table.tables().header().to$().find('th:eq(5)').css('min-width', '100px');
 	table.tables().header().to$().find('th:eq(6)').css('min-width', '100px');
 	table.tables().header().to$().find('th:eq(7)').css('min-width', '50px');
-	table.tables().header().to$().find('th:eq(8)').css('min-width', '50px');
+	table.tables().header().to$().find('th:eq(8)').css('min-width', '100px');
 	table.tables().header().to$().find('th:eq(9)').css('min-width', '50px');
 	table.tables().header().to$().find('th:eq(10)').css('min-width', '100px');
 	table.tables().header().to$().find('th:eq(11)').css('min-width', '50px');
@@ -360,14 +360,14 @@ function fn_modifyScheduleListView(){
 					<thead>
 						<tr>
 							<th width="10"></th>
-							<th width="20"><spring:message code="common.no" /></th>
+							<th width="30"><spring:message code="common.no" /></th>
 							<th width="100"><spring:message code="schedule.schedule_name" /></th>
 							<th width="150"><spring:message code="schedule.scheduleExp"/></th>
 							<th width="50"><spring:message code="schedule.work_count" /></th>
 							<th width="100"><spring:message code="schedule.pre_run_time" /></th>
 							<th width="100"><spring:message code="schedule.next_run_time" /></th>
 							<th width="50"><spring:message code="common.run_status" /></th>
-							<th width="50"><spring:message code="schedule.run" /></th>
+							<th width="100"><spring:message code="schedule.run" /></th>
 							<th width="50"><spring:message code="common.register" /></th>
 							<th width="100"><spring:message code="common.regist_datetime" /></th>
 							<th width="50"><spring:message code="common.modifier" /></th>
