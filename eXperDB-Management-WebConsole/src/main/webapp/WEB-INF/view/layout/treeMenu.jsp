@@ -31,8 +31,9 @@
 </style>
 
 <script type="text/javascript">
+
 $(window.document).ready(   		
-		function() {			
+		function() {	
    			$.ajax({
 				async : false,
 				url : "/selectTreeDBSvrList.do",
@@ -294,6 +295,36 @@ $(window.document).ready(
  	function fn_GoLink(url) {	
  		$.cookie('menu_url' , url, { path : '/' });
  	}
+ 	
+ 	function fn_localeSetting(){
+ 		var locale = $("#language").val();
+ 		$.ajax({
+			async : false,
+			url : "/setChangeLocale.do",
+			data : {
+				locale:locale				
+			},
+			dataType : "json",
+			type : "post",
+			beforeSend: function(xhr) {
+		        xhr.setRequestHeader("AJAX", true);
+		     },
+			error : function(xhr, status, error) {
+				if(xhr.status == 401) {
+					alert('<spring:message code="message.msg02" />');
+					 location.href = "/";
+				} else if(xhr.status == 403) {
+					alert('<spring:message code="message.msg03" />');
+		             location.href = "/";
+				} else {
+					alert("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""));
+				}
+			},
+			success : function(result) {
+				location.reload();
+			}
+		})
+ 	}
     </script>
 
 
@@ -303,10 +334,19 @@ $(window.document).ready(
 
 
 	<div id="lnb_menu">
-		<form name="treeView" id="treeView">
+			<form name="treeView" id="treeView">
 				<div class="logout">
 					    <div style="color: white; margin-bottom: 5%;"><%=(String)session.getAttribute("usr_nm")%><spring:message code="common.wellcome"/></div>		
-					<a href="#"><button onClick="fn_logout();"><spring:message code="common.logout"/></button></a>
+					<a href="#"><button onClick="fn_logout();"><spring:message code="common.logout"/></button></a>		
+				</div>
+			</form>
+				<div style="text-align: center; color: white; margin-top: -5px; margin-bottom: 10px;" >
+					언어
+					<select id="language" name="language" style="width: 100px; margin-left: 5px;" onChange="fn_localeSetting();">
+									<option value="%"><spring:message code="common.choice" /> </option>
+									<option value="kr">한국어/Korean</option>
+									<option value="en">영어/English</option>
+					</select>
 				</div>
 				<div id="treeTitle"><img src="../images/ico_lnb_1.png" id="treeImg"><a href="/dbTree.do">DB <spring:message code="dashboard.server" /></a>
 					<div id="sidetreecontrol" style="float: right;">
@@ -345,7 +385,6 @@ $(window.document).ready(
 						</ul>
 						</div>
 				</div>
-		</form>
 </div>
 
 

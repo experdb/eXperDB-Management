@@ -1,9 +1,11 @@
 package com.k4m.dx.tcontrol.login.web;
 
+import java.io.FileInputStream;
 import java.net.InetAddress;
 import java.util.List;
+import java.util.Locale;
+import java.util.Properties;
 
-import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
@@ -11,9 +13,12 @@ import javax.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
+import org.springframework.util.ResourceUtils;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.servlet.LocaleResolver;
 import org.springframework.web.servlet.ModelAndView;
+import org.springframework.web.servlet.support.RequestContextUtils;
 
 import com.k4m.dx.tcontrol.admin.accesshistory.service.AccessHistoryService;
 import com.k4m.dx.tcontrol.cmmn.CmmnUtils;
@@ -46,14 +51,25 @@ public class LoginController {
 	@Autowired
 	private AccessHistoryService accessHistoryService;
 	
-	
-	
+
 	@RequestMapping(value = "/")
-	public ModelAndView loginCheck(HttpServletRequest request) {
+	public ModelAndView loginCheck(HttpServletRequest request, HttpServletResponse response) {
 		ModelAndView mv = new ModelAndView();
 		try {
+			
+			Properties props = new Properties();
+			props.load(new FileInputStream(ResourceUtils.getFile("classpath:egovframework/tcontrolProps/globals.properties")));
+		
+			String lang = props.get("lang").toString();
+			
+		    Locale locale = new Locale(lang);
+		    LocaleResolver localeResolver = RequestContextUtils.getLocaleResolver(request);
+		    localeResolver.setLocale(request, response, locale);
+
+		        
 			HttpSession session = request.getSession();
 			String usr_id = (String) session.getAttribute("usr_id");
+			
 			if(usr_id==null){
 				mv.setViewName("login");
 			}else{
@@ -101,15 +117,9 @@ public class LoginController {
 			} else if (userList.get(0).getUsr_expr_dt().equals("N")) {
 				mv.addObject("error", "msg159");
 			} else {
-				
-				// 쿠키설정
-				Cookie idCookie = new Cookie("s_login_id", userList.get(0).getUsr_id());
-				idCookie.setMaxAge(-1);
-				if (idCookie != null && !idCookie.equals("")) {
-					idCookie.setPath("/");
-				}
-				response.addCookie(idCookie);
 
+
+				
 				// session 설정
 				HttpSession session = request.getSession();
 				request.getSession().setAttribute("session", session);
@@ -120,6 +130,12 @@ public class LoginController {
 				String ip = local.getHostAddress();
 				request.getSession().setAttribute("ip", ip);
 
+				Properties props = new Properties();
+				props.load(new FileInputStream(ResourceUtils.getFile("classpath:egovframework/tcontrolProps/globals.properties")));
+			
+				String lang = props.get("lang").toString();
+				System.out.println(lang);
+				
 				// 로그인 이력 남기기
 				CmmnUtils.saveHistory(request, historyVO);
 				historyVO.setExe_dtl_cd("DX-T0003");
@@ -147,14 +163,6 @@ public class LoginController {
 	public String loginout(@ModelAttribute("userVo") UserVO userVo, @ModelAttribute("historyVO") HistoryVO historyVO,
 			HttpServletRequest request, HttpServletResponse response) {
 		try {
-			// 쿠키설정
-			Cookie idCookie = new Cookie("s_logout_id", request.getSession().getId());
-			idCookie.setMaxAge(-1);
-			if (idCookie != null && !idCookie.equals("")) {
-				idCookie.setPath("/");
-			}
-			response.addCookie(idCookie);
-
 			// 로그아웃 이력 남기기
 			CmmnUtils.saveHistory(request, historyVO);
 			historyVO.setExe_dtl_cd("DX-T0003_01");

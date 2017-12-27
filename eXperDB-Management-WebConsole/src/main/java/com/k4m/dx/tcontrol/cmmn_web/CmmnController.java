@@ -8,13 +8,18 @@ import javax.servlet.http.HttpServletRequest;
 
 import org.json.simple.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
+import org.springframework.util.ResourceUtils;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
-
+import java.io.FileInputStream;
+import java.net.URL;
+import java.util.Properties;
+ 
 import com.k4m.dx.tcontrol.admin.accesshistory.service.AccessHistoryService;
 import com.k4m.dx.tcontrol.admin.dbserverManager.service.DbServerVO;
 import com.k4m.dx.tcontrol.backup.service.BackupService;
@@ -49,6 +54,7 @@ import com.k4m.dx.tcontrol.functions.schedule.service.ScheduleService;
 
 @Controller
 public class CmmnController {
+	
 	@Autowired
 	private BackupService backupService;
 	
@@ -70,7 +76,7 @@ public class CmmnController {
 	 */	
 	@RequestMapping(value = "/index.do")
 	public ModelAndView index(@ModelAttribute("historyVO") HistoryVO historyVO, HttpServletRequest request, ModelMap model) throws Exception {
-		
+	
 		// 메인 이력 남기기
 		CmmnUtils.saveHistory(request, historyVO);
 		historyVO.setExe_dtl_cd("DX-T0004");
@@ -89,7 +95,14 @@ public class CmmnController {
 		
 		List<DashboardVO> serverInfoVO = (List<DashboardVO>) dashboardService.selectDashboardServerInfo(vo);
 		
+		Properties props = new Properties();
+		props.load(new FileInputStream(ResourceUtils.getFile("classpath:egovframework/tcontrolProps/globals.properties")));
+	
+		String lang = props.get("lang").toString();
+		System.out.println(lang);
+		
 		ModelAndView mv = new ModelAndView();
+
 		mv.addObject("scheduleInfo", scheduleInfoVO);
 		mv.addObject("backupInfo", backupInfoVO);
 		mv.addObject("serverInfo", serverInfoVO);

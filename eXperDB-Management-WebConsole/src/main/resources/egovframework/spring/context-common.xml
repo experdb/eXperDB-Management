@@ -19,8 +19,15 @@
 		<property name="cacheSeconds">
 			<value>60</value>
 		</property>
+		<property name="defaultEncoding">
+			<value>UTF-8</value>
+		</property>
 	</bean>
-	
+		
+	<bean id="localeResolver" class="org.springframework.web.servlet.i18n.SessionLocaleResolver">
+    	<property name="defaultLocale" value="ko" />
+  	</bean>
+
 	
 	<bean id="leaveaTrace" class="egovframework.rte.fdl.cmmn.trace.LeaveaTrace">
 		<property name="traceHandlerServices">
