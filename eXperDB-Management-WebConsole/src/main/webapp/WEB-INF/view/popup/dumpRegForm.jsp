@@ -650,7 +650,7 @@ function fn_check() {
 		</div>
 		<div class="pop_cmm mt25">
 			<table class="write">
-				<caption><spring:message code="dashboard.Register backup" /></caption>
+				<caption><spring:message code="dashboard.Register.backup" /></caption>
 				<colgroup>
 					<col style="width:105px;" />
 					<col style="width:178px;" />

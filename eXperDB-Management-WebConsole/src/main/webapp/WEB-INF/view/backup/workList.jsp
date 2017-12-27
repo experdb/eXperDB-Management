@@ -192,7 +192,7 @@ function fn_rman_reg_popup(){
 function fn_rman_regreg_popup(){
 	
 		var datas = tableRman.rows('.selected').data();
-		var bck_wrk_id = tableRman.row('.selected').data().bck_wrk_id;
+		
 		if (datas.length <= 0) {
 			alert('<spring:message code="message.msg35" />');
 			return false;
@@ -200,6 +200,7 @@ function fn_rman_regreg_popup(){
 			alert('<spring:message code="message.msg04" />');
 			return false;
 		}else{
+			var bck_wrk_id = tableRman.row('.selected').data().bck_wrk_id;
 			var popUrl = "/popup/rmanRegReForm.do?db_svr_id=${db_svr_id}&bck_wrk_id="+bck_wrk_id;
 			var width = 954;
 			var height = 799;
@@ -248,7 +249,7 @@ function fn_dump_reg_popup(){
  ******************************************************** */
 function fn_dump_regreg_popup(){
 	var datas = tableDump.rows('.selected').data();
-	var bck_wrk_id = tableDump.row('.selected').data().bck_wrk_id;
+
 	if (datas.length <= 0) {
 		alert('<spring:message code="message.msg35" />');
 		return false;
@@ -256,6 +257,7 @@ function fn_dump_regreg_popup(){
 		alert('<spring:message code="message.msg04" />');
 		return false;
 	}else{
+		var bck_wrk_id = tableDump.row('.selected').data().bck_wrk_id;
 		var popUrl = "/popup/dumpRegReForm.do?db_svr_id=${db_svr_id}&bck_wrk_id="+bck_wrk_id;
 		var width = 954;
 		var height = 900;
