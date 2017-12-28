@@ -48,10 +48,17 @@ build.xml > Run As > Ant Build --> eXperDB-Management-Agent.tar.gz
 1-3-7. vi startup.sh, vi stop.sh JAVA_HOME path verifying and modifying    
 ```
 
-1-4. Starting and stopping the agent
+1-4. Download JAVA  
+```
+1-4-1. jdk-8u144-linux-x64.tar.gz, jre-7u80-linux-x64.tar.gz download  
+1-4-2. mkdir experDB-Management-Agent/java
+1-4-3. tar -xvzf jdk-8u144-linux-x64.tar.gz, tar -xvzf jre-7u80-linux-x64.tar.gz 
+```
+
+1-5. Starting and stopping the agent
 ```    
-1-4-1. Start : experDB-Management-Agent/bin/startup.sh   
-1-4-2. stop : experDB-Management-Agent/bin/stop.sh
+1-5-1. Start : experDB-Management-Agent/bin/startup.sh   
+1-5-2. stop : experDB-Management-Agent/bin/stop.sh
 ``` 
 
 
