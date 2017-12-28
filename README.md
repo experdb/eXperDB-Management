@@ -26,47 +26,66 @@ eXperDB-Management is a PostgreSQL integrated operations management tool. Use ba
 * WAS : Apache-Tomcat
 
 ### Components
-* eXperDB T-Agent
-* eXperDB T-Web Console
-* eXperDB T-Repository
+* eXperDB-Management-Agent
+* eXperDB-Management-WebConsole
+* eXperDB-Management-Repository
 
-### 1. Installing eXperDB T-Agent
-1-1. Ant-build the DX-TControl / DX-TControlAgent / ant_build / build.xml file.
+### 1. Installing eXperDB-Management-Agent
 
-![](https://github.com/YONGWOOLEE/ltr/blob/master/images/1-1.png)
+1-1. Create eXperDB-Management-Agent.tar.gz
+build.xml > Run As > Ant Build --> eXperDB-Management-Agent.tar.gz
 
-1-2. Verify DX-TcontrolAgent.tar.gz in the build> install directory
+1-2. Verify eXperDB-Management-Agent.tar.gz in the build> install directory
 
-![](https://github.com/YONGWOOLEE/ltr/blob/master/images/1-2.png)
+1-3. Install agent using eXperDB-Management-Agent.tar.gz file    
+```
+1-3-1. Upload to installation target server using FTP program  
+1-3-2. Decompress    
+1-3-3. cd eXperDB-Management-Agent/bin    
+1-3-4. chmod 755 *    
+1-3-5. ./agent_setup.sh    
+1-3-6. Enter information (DBMS IP, Port, Default Database, Username, password, Agent IP, Agent Port)    
+1-3-7. vi startup.sh, vi stop.sh JAVA_HOME path verifying and modifying    
+```
 
-1-3. Install agent using DX-TcontrolAgent.tar.gz file    
->1-3-1. Upload to installation target server using FTP program    
->1-3-2. Decompress    
->1-3-3. cd DX-Tcontrol-Install/bin    
->1-3-4. chmod 755 *    
->1-3-5. ./agent_setup.sh    
->1-3-6. Enter information (DBMS IP, Port, Default Database, Username, password, Agent IP, Agent Port)    
->![](https://github.com/YONGWOOLEE/ltr/blob/master/images/1-3-6.png)    
->1-3-7. JAVA_HOME path verifying and modifying    
->![](https://github.com/YONGWOOLEE/ltr/blob/master/images/1-3-7.png)    
+1-4. Download JAVA  
+```
+1-4-1. jdk-8u144-linux-x64.tar.gz, jre-7u80-linux-x64.tar.gz download  
+1-4-2. mkdir experDB-Management-Agent/java
+1-4-3. tar -xvzf jdk-8u144-linux-x64.tar.gz, tar -xvzf jre-7u80-linux-x64.tar.gz 
+```
 
-1-4. Starting and stopping the agent    
->1-4-1. Start : ./startup.sh    
->1-4-2. stop : ./stop.sh    
+1-5. Starting and stopping the agent
+```    
+1-5-1. Start : experDB-Management-Agent/bin/startup.sh   
+1-5-2. stop : experDB-Management-Agent/bin/stop.sh
+``` 
 
 
 
-### 2. Installing eXperDB T-Web Console
-2-1. Create T-Webconsole War    
-Project > Run As > Maven Install --> DX-Tcontrol.war
+### 2. Installing eXperDB-Management-WebConsole
+2-1. Create eXperDB-Management-WebConsole.war
+Project > Run As > Maven Install --> eXperDB-Management-WebConsole.war
 
-2-2. Connect to the server where T-Webconsole will be installed and create a directory.    
->2-2-1. mkdir DX-Tcontrol/server    
->2-2-2. Copy the DX-Tcontrol.war file to its path    
+2-2. Connect to the server where eXperDB-Management-WebConsole will be installed and create a directory.
+```  
+2-2-1. mkdir eXperDB-Management-WebConsole/web  
+2-2-2. Copy the eXperDB-Management-WebConsole.war file to its path
+```
 
-2-3. Starting and stopping the agent    
->2-3-1. Start : DX-Tcontrol/server/bin/start.sh    
->2-3-2. Stop : DX-Tcontrol/server/bin/shutdown.sh    
+2-3. Download JAVA apache-tomcat  
+```
+2-3-1. https://tomcat.apache.org/download-80.cgi download  
+2-3-2. eXperDB-Management-WebConsole/server  
+2-3-3. Copy the apache-tomcat-8.0.44.tar.gz file to its path  
+2-3-4. vi eXperDB-Management-WebConsole/server/conf/server.xml verifying and modifying 
+```
+
+2-4. Starting and stopping the agent    
+```
+2-4-1. Start : eXperDB-Management-WebConsole/server/bin/start.sh   
+2-4-2. Stop : eXperDB-Management-WebConsole/server/bin/shutdown.sh  
+```
 
 
 
