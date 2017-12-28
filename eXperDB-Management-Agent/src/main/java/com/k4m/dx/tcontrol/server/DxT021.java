@@ -52,7 +52,7 @@ public class DxT021 extends SocketCtl{
 								, "free -h | awk 'NR>1&&NR<3{print $2}'" //메모리
 								, "echo $PGHOME"
 								, "echo $PGRBAK"
-								, "df -h"
+								, "df -P -h"
 							   };
 	
 	public DxT021(Socket socket, BufferedInputStream is, BufferedOutputStream	os) {
@@ -160,19 +160,22 @@ public class DxT021 extends SocketCtl{
 	private ArrayList fileSystemList(String strFileSystem) throws Exception {
 		ArrayList<HashMap<String, String>> list = new ArrayList<HashMap<String, String>>();
 		
+		System.out.println("### strFileSystem : " + strFileSystem);
+		
 		if(strFileSystem.length() > 0) {
 			String[] arrFileSystem = strFileSystem.split("\n");
 			int intFileI = 0;
 			for(String st: arrFileSystem) {
-				
+				System.out.println("### intFileI : " + intFileI);
 				if(intFileI > 0) {
 					HashMap hp = new HashMap();
 			    	  String[] arrStr = st.split(" ");
 			    	  int lineT = 0;
 			    	  for(int i=0; i<arrStr.length; i++) {
-			    		  System.out.println(arrStr[i].toString());
+			    		  //System.out.println(arrStr[i].toString());
 			    		  
 			    		  if(!arrStr[i].toString().trim().equals("")) {
+			    			  System.out.println(lineT + " :: " + arrStr[i].toString());
 				    		  if(lineT == 0) {
 				    			  hp.put("filesystem", arrStr[i].toString());
 				    		  } else if(lineT == 1) {
@@ -187,7 +190,9 @@ public class DxT021 extends SocketCtl{
 				    			  hp.put("mounton", arrStr[i].toString());
 				    		  }
 				    		  
-				    		  lineT++;
+				    		  lineT = lineT + 1;
+				    		  
+				    		  System.out.println("lineT : " + lineT);
 			    		  }
 			    	  }
 			    	  list.add(hp);
@@ -401,7 +406,6 @@ public class DxT021 extends SocketCtl{
 		
 		for(HashMap hp:flist) {
 			
-			
 			String mounton = (String) hp.get("mounton");
 			String use = (String) hp.get("use");
 			String avail = (String) hp.get("avail");
@@ -409,7 +413,9 @@ public class DxT021 extends SocketCtl{
 			String filesystem = (String) hp.get("filesystem");
 			String fsize = (String) hp.get("size");
 			
+			
 			if(mounton.equals("/")) {
+				
 				default_mounton = mounton;
 				default_use = use;
 				default_avail = avail;
@@ -434,8 +440,8 @@ public class DxT021 extends SocketCtl{
 				hpMapping.put("description", "");
 				
 				arrMapping.add(hpMapping);
-			} else {
 				
+			} else {
 				
 				int intMappTs = 0;
 				for(HashMap hpSpace: listTableSpaceInfo) {
@@ -472,8 +478,10 @@ public class DxT021 extends SocketCtl{
 					}
 	
 				}
+				
 			
 				if(intMappTs == 0) {
+					
 
 					HashMap hpMapping = new HashMap();
 					
@@ -492,9 +500,11 @@ public class DxT021 extends SocketCtl{
 					hpMapping.put("description", "");
 					
 					arrMapping.add(hpMapping);
+
 				}
 			}
 		}
+
 		
 		for(HashMap hpSpace: listTableSpaceInfo) {
 			
@@ -539,8 +549,10 @@ public class DxT021 extends SocketCtl{
 				arrMapping.add(hpMapping);
 			}
 			
-			socketLogger.info("################### system mapping end ");
 		}
+		
+		socketLogger.info("################### system mapping end ");
+		
 		return arrMapping;
 	}
 
