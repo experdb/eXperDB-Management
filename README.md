@@ -38,13 +38,14 @@ build.xml > Run As > Ant Build --> eXperDB-Management-Agent.tar.gz
 1-2. Verify eXperDB-Management-Agent.tar.gz in the build> install directory
 
 1-3. Install agent using eXperDB-Management-Agent.tar.gz file    
-```Upload to installation target server using FTP program  
-Decompress    
-cd eXperDB-Management-Agent/bin    
-chmod 755 *    
-./agent_setup.sh    
-Enter information (DBMS IP, Port, Default Database, Username, password, Agent IP, Agent Port)    
-vi startup.sh, vi stop.sh JAVA_HOME path verifying and modifying    
+```
+1-3-1. Upload to installation target server using FTP program  
+1-3-2. Decompress    
+1-3-3. cd eXperDB-Management-Agent/bin    
+1-3-4. chmod 755 *    
+1-3-5. ./agent_setup.sh    
+1-3-6. Enter information (DBMS IP, Port, Default Database, Username, password, Agent IP, Agent Port)    
+1-3-7. vi startup.sh, vi stop.sh JAVA_HOME path verifying and modifying    
 ```
 
 1-4. Starting and stopping the agent    
