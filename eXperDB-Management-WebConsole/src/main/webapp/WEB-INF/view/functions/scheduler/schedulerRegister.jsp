@@ -609,8 +609,8 @@ function fn_check() {
 												<th width="30"><spring:message code="common.no" /></th>												
 												<th width="130"><spring:message code="common.dbms_name" /></th>
 												<th width="70"><spring:message code="common.division" /></th>
-												<th width="100"><spring:message code="common.work_name" /> </th>
-												<th width="150"><spring:message code="common.work_description" /></th>												
+												<th width="100" class="dt-center"><spring:message code="common.work_name" /> </th>
+												<th width="150" class="dt-center"><spring:message code="common.work_description" /></th>												
 												<th width="30"><spring:message code="data_transfer.run_order" /></th>
 												<th width="30">OnError</th>
 												<th width="0"></th>

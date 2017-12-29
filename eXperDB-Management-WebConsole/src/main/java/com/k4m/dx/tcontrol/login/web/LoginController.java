@@ -16,6 +16,7 @@ import org.springframework.ui.ModelMap;
 import org.springframework.util.ResourceUtils;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.LocaleResolver;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.support.RequestContextUtils;
@@ -175,5 +176,17 @@ public class LoginController {
 			e.printStackTrace();
 		}
 		return "redirect:/";
+	}
+	
+	@RequestMapping(value = "/setChangeLocale.do")
+	public @ResponseBody void setChangeLocale(HttpServletRequest request, HttpServletResponse response) {
+		try {
+			String lang = request.getParameter("locale");
+			Locale locale = new Locale(lang);
+			LocaleResolver localeResolver = RequestContextUtils.getLocaleResolver(request);
+			localeResolver.setLocale(request, response, locale);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 	}
 }

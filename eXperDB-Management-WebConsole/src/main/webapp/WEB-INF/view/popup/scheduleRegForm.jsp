@@ -292,8 +292,8 @@ function fn_workAdd(){
 					<tr>
 						<th width="10"></th>
 						<th width="35"><spring:message code="common.no" /></th>
-						<th width="150"><spring:message code="common.work_name" /></th>
-						<th width="200"><spring:message code="common.work_description" /></th>
+						<th width="150" class="dt-center"><spring:message code="common.work_name" /></th>
+						<th width="200" class="dt-center"><spring:message code="common.work_description" /></th>
 						<th width="70"><spring:message code="common.division" /></th>
 						<th width="85"><spring:message code="backup_management.bck_div"/></th>
 						<th width="150"><spring:message code="common.dbms_name" /></th>

@@ -720,12 +720,12 @@ function selectTab(tab){
 								<tr>
 									<th width="10"></th>
 									<th width="30"><spring:message code="common.no" /></th>
-									<th width="200"><spring:message code="common.work_name" /></th>
-									<th width="200"><spring:message code="common.work_description" /></th>
+									<th width="200" class="dt-center"><spring:message code="common.work_name" /></th>
+									<th width="200" class="dt-center"><spring:message code="common.work_description" /></th>
 									<th width="100"><spring:message code="backup_management.backup_option" /></th>
-									<th width="230"><spring:message code="backup_management.data_dir" /></th>
-									<th width="230"><spring:message code="backup_management.backup_dir" /></th>
-									<th width="230"><spring:message code="backup_management.backup_log_dir" /></th>
+									<th width="230" class="dt-center"><spring:message code="backup_management.data_dir" /></th>
+									<th width="230" class="dt-center"><spring:message code="backup_management.backup_dir" /></th>
+									<th width="230" class="dt-center"><spring:message code="backup_management.backup_log_dir" /></th>
 									<th width="100"><spring:message code="common.register" /> </th>
 									<th width="100"><spring:message code="common.regist_datetime" /></th>
 									<th width="100"><spring:message code="common.modifier" /></th>
@@ -743,10 +743,10 @@ function selectTab(tab){
 								<tr>
 									<th width="10"></th>
 									<th width="30"><spring:message code="common.no" /></th>
-									<th width="200"><spring:message code="common.work_name" /></th>
-									<th width="200"><spring:message code="common.work_description" /></th>
+									<th width="200" class="dt-center"><spring:message code="common.work_name" /></th>
+									<th width="200" class="dt-center"><spring:message code="common.work_description" /></th>
 									<th width="130"><spring:message code="common.database" /></th>
-									<th width="250"><spring:message code="backup_management.backup_dir" /></th>
+									<th width="250" class="dt-center"><spring:message code="backup_management.backup_dir" /></th>
 									<th width="60"><spring:message code="backup_management.file_format" /></th>
 									<th width="60"><spring:message code="backup_management.compressibility" /></th>
 									<th width="100"><spring:message code="backup_management.incording_method" /></th>

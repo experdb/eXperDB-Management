@@ -206,10 +206,10 @@
 									<col style="width: 5%;" />
 									<col style="width: 5%;" />
 									<col style="width: 5%;" />
+									<col style="width: 7%;" />
 									<col style="width: 5%;" />
-									<col style="width: 5%;" />
-									<col style="width: 75%;" />
-									<col />
+									<col style="width: 73%;" />
+									<col /> 
 								</colgroup>
 								<tr>
 									<th colspan="5"><spring:message code="properties.item" /></th>

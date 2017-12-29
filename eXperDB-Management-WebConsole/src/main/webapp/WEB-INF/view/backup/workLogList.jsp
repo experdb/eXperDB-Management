@@ -65,7 +65,7 @@ function fn_rman_init(){
 		    				  return '<span onClick=javascript:fn_workLayer("'+full.wrk_id+'"); class="bold">' + full.wrk_nm + '</span>';
 		    			}
 		    		},
-		    		{ data: "ipadr", className: "dt-left", defaultContent: ""},
+		    		{ data: "ipadr", className: "dt-center", defaultContent: ""},
 		         	{ data: "wrk_exp", className: "dt-left", defaultContent: ""}, 		         	
  		         	{ data: "bck_opt_cd_nm", className: "dt-center", defaultContent: ""}, 
  		         	{ data: "file_sz", className: "dt-center", defaultContent: ""}, 
@@ -122,7 +122,7 @@ function fn_dump_init(){
 		    				  return '<span onClick=javascript:fn_workLayer("'+full.wrk_id+'"); class="bold">' + full.wrk_nm + '</span>';
 		    			}
 		    		}, 
-		    		{ data: "ipadr", className: "dt-left", defaultContent: ""},
+		    		{ data: "ipadr", className: "dt-center", defaultContent: ""},
 		         	{ data: "wrk_exp", className: "dt-left", defaultContent: ""}, 
  		         	{ data: "db_nm", className: "dt-center", defaultContent: ""}, 
  		         	{ data: "file_sz", className: "dt-center", defaultContent: ""},
@@ -155,7 +155,7 @@ function fn_dump_init(){
    	tableDump.tables().header().to$().find('th:eq(4)').css('min-width', '100px');
    	tableDump.tables().header().to$().find('th:eq(5)').css('min-width', '100px');
    	tableDump.tables().header().to$().find('th:eq(6)').css('min-width', '200px');
-   	tableDump.tables().header().to$().find('th:eq(7)').css('min-width', '150px');
+   	tableDump.tables().header().to$().find('th:eq(7)').css('min-width', '200px');
    	tableDump.tables().header().to$().find('th:eq(8)').css('min-width', '100px');
    	tableDump.tables().header().to$().find('th:eq(9)').css('min-width', '100px');
    	tableDump.tables().header().to$().find('th:eq(10)').css('min-width', '100px');
@@ -396,12 +396,12 @@ function selectTab(intab){
 						<thead>
 							<tr>
 								<th width="40"><spring:message code="common.no" /></th>
-								<th width="150"><spring:message code="common.work_name" /></th>
+								<th width="150" class="dt-center"><spring:message code="common.work_name" /></th>
 								<th width="100"><spring:message code="dbms_information.dbms_ip" /></th>
-								<th width="150"><spring:message code="common.work_description" /></th>
+								<th width="150" class="dt-center"><spring:message code="common.work_description" /></th>
 								<th width="70"><spring:message code="backup_management.backup_option" /></th>
 								<th width="70"><spring:message code="backup_management.size" /></th>
-								<th width="230"><spring:message code="etc.etc08"/></th>
+								<th width="230" class="dt-center"><spring:message code="etc.etc08"/></th>
 								<th width="100"><spring:message code="backup_management.work_start_time" /> </th>
 								<th width="100"><spring:message code="backup_management.work_end_time" /></th>
 								<th width="70"><spring:message code="backup_management.elapsed_time" /></th>
@@ -416,13 +416,13 @@ function selectTab(intab){
 						<thead>
 							<tr>
 								<th width="40"><spring:message code="common.no" /></th>
-								<th width="200"><spring:message code="common.work_name" /></th>
+								<th width="200" class="dt-center"><spring:message code="common.work_name" /></th>
 								<th width="100"><spring:message code="dbms_information.dbms_ip" /></th>
-								<th width="200"><spring:message code="common.work_description" /></th>
+								<th width="200" class="dt-center"><spring:message code="common.work_description" /></th>
 								<th width="100"><spring:message code="common.database" /></th>
 								<th width="100"><spring:message code="backup_management.size" /></th>
-								<th width="200"><spring:message code="etc.etc08"/></th>			
-								<th width="150">백업파일명</th>						
+								<th width="200" class="dt-center"><spring:message code="etc.etc08"/></th>			
+								<th width="200" class="dt-center">백업파일명</th>						
 								<th width="100"><spring:message code="backup_management.work_start_time" /></th>
 								<th width="100"><spring:message code="backup_management.work_end_time" /></th>
 								<th width="100"><spring:message code="backup_management.elapsed_time" /></th>

@@ -584,8 +584,8 @@ function fn_makeToMin(){
 						<tr>
 							<th width="10"></th>
 							<th width="30"><spring:message code="common.no" /></th>
-							<th width="250"><spring:message code="schedule.schedule_name" /></th>
-							<th width="395"><spring:message code="schedule.scheduleExp"/></th>
+							<th width="250" class="dt-center"><spring:message code="schedule.schedule_name" /></th>
+							<th width="395" class="dt-center"><spring:message code="schedule.scheduleExp"/></th>
 							<th width="60"><spring:message code="schedule.work_count" /></th>
 							<th width="130"><spring:message code="schedule.pre_run_time" /></th>
 							<th width="130"><spring:message code="schedule.next_run_time" /></th>

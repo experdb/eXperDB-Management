@@ -78,11 +78,11 @@ function fn_init() {
 	});
     
     workTable.tables().header().to$().find('th:eq(0)').css('min-width', '40px');
-    workTable.tables().header().to$().find('th:eq(1)').css('min-width', '50px');
-    workTable.tables().header().to$().find('th:eq(2)').css('min-width', '75px');
+    workTable.tables().header().to$().find('th:eq(1)').css('min-width', '150px');
+    workTable.tables().header().to$().find('th:eq(2)').css('min-width', '200px');
     workTable.tables().header().to$().find('th:eq(3)').css('min-width', '100px');
     workTable.tables().header().to$().find('th:eq(4)').css('min-width', '100px');
-	workTable.tables().header().to$().find('th:eq(5)').css('min-width', '50px');
+	workTable.tables().header().to$().find('th:eq(5)').css('min-width', '100px');
 	workTable.tables().header().to$().find('th:eq(6)').css('min-width', '0px');
     $(window).trigger('resize');
     
@@ -170,12 +170,12 @@ $(window.document).ready(function() {
 						<thead>
 							<tr>
 								<th width="40"><spring:message code="common.no" /></th>
-								<th width="50"><spring:message code="common.work_name" /></th>
-								<th width="75"><spring:message code="common.work_description" /></th>
+								<th width="150" class="dt-center"><spring:message code="common.work_name" /></th>
+								<th width="200" class="dt-center"><spring:message code="common.work_description" /></th>
 								<th width="100"><spring:message code="schedule.work_start_datetime" /></th>
 								<th width="100"><spring:message code="schedule.work_end_datetime" /></th>
 								<th width="100"><spring:message code="schedule.jobTime"/></th>
-								<th width="50"><spring:message code="schedule.result" /></th>
+								<th width="100"><spring:message code="schedule.result" /></th>
 								<th width="0"></th>
 							</tr>
 						</thead>

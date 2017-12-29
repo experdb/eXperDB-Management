@@ -9,10 +9,25 @@
 	 	* Description :  My스케줄  List 조회
 	 	* Author : 변승우
 	 	**/
-       SELECT 
-      		(ROW_NUMBER() OVER()) AS ROWNUM
+	   SELECT
+	         (ROW_NUMBER() OVER()) AS ROWNUM
 			, (ROW_NUMBER() OVER()) AS IDX
-      		, A.SCD_ID
+			, AA.SCD_ID
+			, AA.SCD_NM
+			, AA.SCD_EXP
+			, AA.EXE_PERD_CD
+			, AA.EXE_DT
+			, AA.EXE_HMS
+			, AA.WRK_CNT
+			, AA.PREV_EXE_DTM
+			, AA.NXT_EXE_DTM
+			, AA.FRST_REGR_ID
+			, AA.FRST_REG_DTM
+			, AA.LST_MDFR_ID
+			, AA.LST_MDF_DTM
+	   FROM(
+       SELECT 
+      		  A.SCD_ID
 			, A.SCD_NM
             , A.SCD_EXP
 			, A.EXE_PERD_CD
@@ -35,6 +50,7 @@
       	AND A.SCD_EXP LIKE CONCAT('%',#{scd_exp},'%')
       </if>
       ORDER BY LST_MDF_DTM DESC
+      )AA
     </select>	
 	
 </mapper>

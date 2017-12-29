@@ -67,6 +67,8 @@
 			, ACS_CNTR_AUT_YN
 			, ADT_CNG_AUT_YN
 			, ADT_HIST_AUT_YN
+			, BCK_SCDR_AUT_YN
+			, POLICY_CHANGE_HIS_AUT_YN
 			, FRST_REGR_ID
 			, FRST_REG_DTM
 			, LST_MDFR_ID
@@ -77,6 +79,8 @@
 			nextval('q_usrdbsvraut_i_01')
 			, #{user}
 			, #{db_svr_id}
+			, 'N'
+			, 'N'
 			, 'N'
 			, 'N'
 			, 'N'
