@@ -638,7 +638,7 @@ function checkPghome(){
 		<table class="write">
 			<caption>DBMS <spring:message code="common.modify" /></caption>
 			<colgroup>
-				<col style="width:120px;" />
+				<col style="width:130px;" />
 				<col />
 				<col style="width:100px;" />
 				<col />

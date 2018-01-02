@@ -68,7 +68,7 @@ function fn_init(){
 	table.tables().header().to$().find('th:eq(0)').css('min-width', '10px');
 	table.tables().header().to$().find('th:eq(1)').css('min-width', '30px');
 	table.tables().header().to$().find('th:eq(2)').css('min-width', '200px');
-	table.tables().header().to$().find('th:eq(3)').css('min-width', '200px');
+	table.tables().header().to$().find('th:eq(3)').css('min-width', '300px');
 	table.tables().header().to$().find('th:eq(4)').css('min-width', '70px');
 	table.tables().header().to$().find('th:eq(5)').css('min-width', '100px');
 	table.tables().header().to$().find('th:eq(6)').css('min-width', '100px');
@@ -362,7 +362,7 @@ function fn_modifyScheduleListView(){
 							<th width="10"></th>
 							<th width="30"><spring:message code="common.no" /></th>
 							<th width="200" class="dt-center"><spring:message code="schedule.schedule_name" /></th>
-							<th width="200" class="dt-center"><spring:message code="schedule.scheduleExp"/></th>
+							<th width="300" class="dt-center"><spring:message code="schedule.scheduleExp"/></th>
 							<th width="70"><spring:message code="schedule.work_count" /></th>
 							<th width="100"><spring:message code="schedule.pre_run_time" /></th>
 							<th width="100"><spring:message code="schedule.next_run_time" /></th>

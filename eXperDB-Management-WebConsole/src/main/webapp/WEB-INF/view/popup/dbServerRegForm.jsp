@@ -733,7 +733,7 @@ function fn_ipadrDelForm(){
 		<table class="write">
 			<caption>DBMS 등록</caption>
 			<colgroup>
-				<col style="width:120px;" />
+				<col style="width:130px;" />
 				<col />
 				<col style="width:100px;" />
 				<col />
@@ -762,7 +762,7 @@ function fn_ipadrDelForm(){
 				<tr>
 					<th scope="row" class="ico_t1" ><spring:message code="common.dbms_name" />(*)</th>
 					<td><input type="text" class="txt" name="db_svr_nm" id="db_svr_nm"  style="width:230px" maxlength="20"/>
-					<span class="btn btnC_01"><button type="button" class= "btn_type_02" onclick="fn_svrnmCheck()" style="width: 60px; margin-right: -60px; margin-top: 0;"><spring:message code="common.overlap_check" /></button></span></td>
+					<span class="btn btnC_01"><button type="button" class= "btn_type_02" onclick="fn_svrnmCheck()" style="width: 85px; margin-right: -60px; margin-top: 0;"><spring:message code="common.overlap_check" /></button></span></td>
 					<th scope="row" class="ico_t1" style="width: 60px; margin-right: -160px; margin-top: 0;">Database(*)</th>
 					<td><input type="text" class="txt" name="dft_db_nm" id="dft_db_nm" maxlength="30"/></td>
 				</tr>

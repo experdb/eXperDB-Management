@@ -36,7 +36,7 @@ function fn_init() {
 		 * 서버리스트 (데이터테이블)
 		 ******************************************************** */
 		table = $('#workList').DataTable({
-		scrollY : "230px",
+		scrollY : "245px",
 		scrollX: true,	
 		bSort: false,
 		processing : true,
@@ -78,8 +78,8 @@ function fn_init() {
 		
 		table.tables().header().to$().find('th:eq(0)').css('min-width', '10px');
 		table.tables().header().to$().find('th:eq(1)').css('min-width', '35px');
-		table.tables().header().to$().find('th:eq(2)').css('min-width', '150px');
-		table.tables().header().to$().find('th:eq(3)').css('min-width', '200px');
+		table.tables().header().to$().find('th:eq(2)').css('min-width', '200px');
+		table.tables().header().to$().find('th:eq(3)').css('min-width', '300px');
 		table.tables().header().to$().find('th:eq(4)').css('min-width', '70px');
 		table.tables().header().to$().find('th:eq(5)').css('min-width', '100px');
 		table.tables().header().to$().find('th:eq(6)').css('min-width', '150px');
@@ -292,8 +292,8 @@ function fn_workAdd(){
 					<tr>
 						<th width="10"></th>
 						<th width="35"><spring:message code="common.no" /></th>
-						<th width="150" class="dt-center"><spring:message code="common.work_name" /></th>
-						<th width="200" class="dt-center"><spring:message code="common.work_description" /></th>
+						<th width="200" class="dt-center"><spring:message code="common.work_name" /></th>
+						<th width="300" class="dt-center"><spring:message code="common.work_description" /></th>
 						<th width="70"><spring:message code="common.division" /></th>
 						<th width="100"><spring:message code="backup_management.bck_div"/></th>
 						<th width="150"><spring:message code="common.dbms_name" /></th>

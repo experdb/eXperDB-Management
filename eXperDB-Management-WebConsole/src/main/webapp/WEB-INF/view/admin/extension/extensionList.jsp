@@ -29,7 +29,7 @@ function fn_init() {
 	 * 서버 (데이터테이블)
 	 ******************************************************** */
 	table_dbServer = $('#dbServerList').DataTable({
-		scrollY : "230px",
+		scrollY : "275px",
 		searching : false,
 		paging : false,
 		bSort: false,

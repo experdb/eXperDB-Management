@@ -264,7 +264,7 @@
 				<colgroup>
 					<col style="width: 110px;" />
 					<col />
-					<col style="width: 110px;" />
+					<col style="width: 140px;" />
 					<col />
 				</colgroup>
 				<tbody>
@@ -273,7 +273,7 @@
 						<td>
 							<c:if test="${act == 'i'}">
 								<input type="text" class="txt" name="usr_id" id="usr_id" value="${get_usr_id}" maxlength="15" style="width: 230px;" />
-								<span class="btn btnC_01"><button type="button" class="btn_type_02" onclick="fn_idCheck()" style="width: 60px; margin-right: -60px; margin-top: 0;"><spring:message code="common.overlap_check" /></button></span>
+								<span class="btn btnC_01"><button type="button" class="btn_type_02" onclick="fn_idCheck()" style="width: 85px; margin-right: -60px; margin-top: 0;"><spring:message code="common.overlap_check" /></button></span>
 							</c:if> 
 							<c:if test="${act == 'u'}">
 								<input type="text" class="txt" name="usr_id" id="usr_id" value="${get_usr_id}" readonly="readonly" />
@@ -294,9 +294,9 @@
 				<table class="write">
 					<caption><spring:message code="user_management.userReg"/></caption>
 					<colgroup>
-						<col style="width: 100px;" />
+						<col style="width: 145px;" />
 						<col />
-						<col style="width: 100px;" />
+						<col style="width: 110px;" />
 						<col />
 					</colgroup>
 					<tbody>

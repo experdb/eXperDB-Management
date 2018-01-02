@@ -1,5 +1,4 @@
-<%@ page language="java" contentType="text/html; charset=UTF-8"
-    pageEncoding="UTF-8"%>
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags"%>
 <script>
 var table = null;
@@ -130,10 +129,10 @@ function fn_init(){
 	  table.tables().header().to$().find('th:eq(1)').css('min-width', '30px');
 	  table.tables().header().to$().find('th:eq(2)').css('min-width', '130px');
 	  table.tables().header().to$().find('th:eq(3)').css('min-width', '70px');
-	  table.tables().header().to$().find('th:eq(4)').css('min-width', '100px');
-	  table.tables().header().to$().find('th:eq(5)').css('min-width', '150px');
-	  table.tables().header().to$().find('th:eq(6)').css('min-width', '30px');
-	  table.tables().header().to$().find('th:eq(7)').css('min-width', '30px');  
+	  table.tables().header().to$().find('th:eq(4)').css('min-width', '200px');
+	  table.tables().header().to$().find('th:eq(5)').css('min-width', '300px');
+	  table.tables().header().to$().find('th:eq(6)').css('min-width', '80px');
+	  table.tables().header().to$().find('th:eq(7)').css('min-width', '80px');  
 	  table.tables().header().to$().find('th:eq(8)').css('min-width', '0px');
 
     $(window).trigger('resize'); 
@@ -518,14 +517,14 @@ function fn_check() {
 								<table class="write">
 									<caption>검색 조회</caption>
 									<colgroup>
-										<col style="width:120px;" />
+										<col style="width:140px;" />
 										<col />
 									</colgroup>
 									<tbody>
 										<tr>
 											<th scope="row" class="t9 line"><spring:message code="schedule.schedule_name" /></th>
 											<td><input type="text" class="txt t2" id="scd_nm" name="scd_nm" maxlength="20"/>
-											<span class="btn btnF_04 btnC_01"><button type="button" class= "btn_type_02" onclick="fn_check()" style="width: 80px; margin-right: -60px; margin-top: 0;"><spring:message code="common.overlap_check" /></button></span>
+											<span class="btn btnF_04 btnC_01"><button type="button" class= "btn_type_02" onclick="fn_check()" style="width: 100px; margin-right: -60px; margin-top: 0;"><spring:message code="common.overlap_check" /></button></span>
 											</td>
 										</tr>
 										<tr>
@@ -539,7 +538,7 @@ function fn_check() {
 								<table class="write">
 									<caption>스케줄 등록</caption>
 									<colgroup>
-										<col style="width:115px;" />
+										<col style="width:160px;" />
 										<col />
 									</colgroup>
 									<tbody>
@@ -609,10 +608,10 @@ function fn_check() {
 												<th width="30"><spring:message code="common.no" /></th>												
 												<th width="130"><spring:message code="common.dbms_name" /></th>
 												<th width="70"><spring:message code="common.division" /></th>
-												<th width="100" class="dt-center"><spring:message code="common.work_name" /> </th>
-												<th width="150" class="dt-center"><spring:message code="common.work_description" /></th>												
-												<th width="30"><spring:message code="data_transfer.run_order" /></th>
-												<th width="30">OnError</th>
+												<th width="200" class="dt-center"><spring:message code="common.work_name" /> </th>
+												<th width="300" class="dt-center"><spring:message code="common.work_description" /></th>												
+												<th width="80"><spring:message code="data_transfer.run_order" /></th>
+												<th width="80">OnError</th>
 												<th width="0"></th>
 											</tr>
 										</thead>

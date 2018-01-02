@@ -1,5 +1,4 @@
-<%@ page language="java" contentType="text/html; charset=UTF-8"
-    pageEncoding="UTF-8"%>
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form"%>
 <%@ taglib prefix="ui" uri="http://egovframework.gov/ctl/ui"%>
@@ -156,8 +155,8 @@ function fn_init(){
 		var scd_id = table.row(this).data().scd_id;
 		
 		var popUrl = "/scheduleWrkListVeiw.do?scd_id="+scd_id; // 서버 url 팝업경로
-		var width = 1120;
-		var height = 655;
+		var width = 1100;
+		var height = 550;
 		var left = (window.screen.width / 2) - (width / 2);
 		var top = (window.screen.height /2) - (height / 2);
 		var popOption = "width="+width+", height="+height+", top="+top+", left="+left+", resizable=no, scrollbars=yes, status=no, toolbar=no, titlebar=yes, location=no,";
@@ -168,9 +167,9 @@ function fn_init(){
 	
 	  table.tables().header().to$().find('th:eq(0)').css('min-width', '10px');
 	  table.tables().header().to$().find('th:eq(1)').css('min-width', '30px');
-	  table.tables().header().to$().find('th:eq(2)').css('min-width', '250px');
-	  table.tables().header().to$().find('th:eq(3)').css('min-width', '395px');
-	  table.tables().header().to$().find('th:eq(4)').css('min-width', '60px');
+	  table.tables().header().to$().find('th:eq(2)').css('min-width', '200px');
+	  table.tables().header().to$().find('th:eq(3)').css('min-width', '300px');
+	  table.tables().header().to$().find('th:eq(4)').css('min-width', '70px');
 	  table.tables().header().to$().find('th:eq(5)').css('min-width', '130px');
 	  table.tables().header().to$().find('th:eq(6)').css('min-width', '130px');
 	  table.tables().header().to$().find('th:eq(7)').css('min-width', '70px');  
@@ -526,7 +525,7 @@ function fn_makeToMin(){
 					<table class="write">
 						<caption>검색 조회</caption>
 						<colgroup>
-							<col style="width:120px;" />
+							<col style="width:140px;" />
 							<col  />
 						</colgroup> 
 						<tbody>
@@ -584,9 +583,9 @@ function fn_makeToMin(){
 						<tr>
 							<th width="10"></th>
 							<th width="30"><spring:message code="common.no" /></th>
-							<th width="250" class="dt-center"><spring:message code="schedule.schedule_name" /></th>
-							<th width="395" class="dt-center"><spring:message code="schedule.scheduleExp"/></th>
-							<th width="60"><spring:message code="schedule.work_count" /></th>
+							<th width="200" class="dt-center"><spring:message code="schedule.schedule_name" /></th>
+							<th width="300" class="dt-center"><spring:message code="schedule.scheduleExp"/></th>
+							<th width="70"><spring:message code="schedule.work_count" /></th>
 							<th width="130"><spring:message code="schedule.pre_run_time" /></th>
 							<th width="130"><spring:message code="schedule.next_run_time" /></th>
 							<th width="70"><spring:message code="common.run_status" /></th>

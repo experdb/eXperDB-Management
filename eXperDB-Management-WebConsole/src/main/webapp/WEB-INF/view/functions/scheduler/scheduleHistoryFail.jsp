@@ -1,5 +1,4 @@
-<%@ page language="java" contentType="text/html; charset=UTF-8"
-    pageEncoding="UTF-8"%>
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form"%>
 <%@ taglib prefix="ui" uri="http://egovframework.gov/ctl/ui"%>
@@ -14,6 +13,7 @@
     	 ******************************************************** */
     	table = $('#scheduleFailList').DataTable({
     	scrollY : "245px",
+    	scrollX : true,
     	bDestroy: true,
     	processing : true,
     	searching : false,	
@@ -46,6 +46,16 @@
 			}
     	]
     	});
+    	
+    	
+    	table.tables().header().to$().find('th:eq(0)').css('min-width', '30px');
+    	table.tables().header().to$().find('th:eq(1)').css('min-width', '200px');
+        table.tables().header().to$().find('th:eq(2)').css('min-width', '100px');
+        table.tables().header().to$().find('th:eq(3)').css('min-width', '200px');
+        table.tables().header().to$().find('th:eq(4)').css('min-width', '150px');
+        table.tables().header().to$().find('th:eq(5)').css('min-width', '150px');
+        table.tables().header().to$().find('th:eq(6)').css('min-width', '100px');
+        $(window).trigger('resize');
     }
 
     
@@ -115,13 +125,13 @@
 				<caption>스케줄 실패 리스트</caption>
 					<thead>
 						<tr>
-							<th><spring:message code="common.no" /></th>
-							<th><spring:message code="schedule.schedule_name" /></th>
-							<th><spring:message code="common.dbms_name" /></th>
-							<th><spring:message code="common.work_name" /></th>
-							<th><spring:message code="schedule.work_start_datetime" /></th>
-							<th><spring:message code="schedule.work_end_datetime" /></th>
-							<th><spring:message code="schedule.result" /></th>
+							<th width="30"><spring:message code="common.no"/></th>
+							<th width="200" class="dt-center"><spring:message code="schedule.schedule_name"/></th>
+							<th width="100"><spring:message code="common.dbms_name"/></th>
+							<th width="200"class="dt-center"><spring:message code="common.work_name"/></th>
+							<th width="150"><spring:message code="schedule.work_start_datetime"/></th>
+							<th width="150"><spring:message code="schedule.work_end_datetime"/></th>
+							<th width="100"><spring:message code="schedule.result"/></th>
 						</tr>
 					</thead>
 				</table>						
