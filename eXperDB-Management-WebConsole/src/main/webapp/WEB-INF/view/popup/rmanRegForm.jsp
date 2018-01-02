@@ -353,7 +353,7 @@ function fn_check() {
 								<th scope="row" class="ico_t1"><spring:message code="common.work_description" /></th>
 								<td>
 									<div class="textarea_grp">
-										<textarea name="wrk_exp" id="wrk_exp" maxlength=200></textarea>
+										<textarea name="wrk_exp" id="wrk_exp" maxlength=25></textarea>
 									</div>
 								</td>
 							</tr>

@@ -40,7 +40,7 @@
 <script type="text/javascript" src="/js/common.js"></script>
 <style>
 #serverIpadr_wrapper{
-	width:750px;
+	width:725px;
 }
 </style>
 <script type="text/javascript">
@@ -89,8 +89,8 @@ function fn_init() {
 	});
 	
 	table.tables().header().to$().find('th:eq(0)').css('min-width', '10px');
-	table.tables().header().to$().find('th:eq(1)').css('min-width', '177px');
-	table.tables().header().to$().find('th:eq(2)').css('min-width', '117px');
+	table.tables().header().to$().find('th:eq(1)').css('min-width', '150px');
+	table.tables().header().to$().find('th:eq(2)').css('min-width', '120px');
 	table.tables().header().to$().find('th:eq(3)').css('min-width', '130px');
 	table.tables().header().to$().find('th:eq(4)').css('min-width', '130px');
 	table.tables().header().to$().find('th:eq(5)').css('min-width', '0px');
@@ -132,6 +132,9 @@ function valid_numeric(objValue)
 
 
 function fn_dbServerValidation(){
+	
+	
+	
 	var db_svr_nm = document.getElementById("db_svr_nm");
 		if (db_svr_nm.value == "") {
 			   alert('<spring:message code="message.msg85" />');
@@ -144,18 +147,6 @@ function fn_dbServerValidation(){
   			 dft_db_nm.focus();
   			   return false;
   		}
- 		var portno = document.getElementById("portno");
-		if (portno.value == "") {
-			   alert('<spring:message code="message.msg83" />');
-			   portno.focus();
-			   return false;
-		}
- 		if(!valid_numeric(portno.value))
-	 	{
- 			alert('<spring:message code="message.msg49" />');
- 			portno.focus();
-		 	return false;
-		}
 
 		var svr_spr_usr_id = document.getElementById("svr_spr_usr_id");
  		if (svr_spr_usr_id.value == "") {
@@ -271,7 +262,7 @@ function fn_insertDbServer(){
 //DBserver 연결테스트
 function fn_dbServerConnTest(){
 	
-	//if (!fn_dbServerValidation()) return false;
+	if (!fn_dbServerValidation()) return false;
 	var datasArr = new Array();
 	var ipadrCnt = table.column(0).data().length;
 	var ipadr = table.rows().data()[0].ipadr;
@@ -750,7 +741,7 @@ function fn_ipadrDelForm(){
 									<tr>
 										<th width="10"></th>
 										<th width="150"><spring:message code="dbms_information.dbms_ip" /></th>
-										<th width="117"><spring:message code="data_transfer.port" /></th>
+										<th width="120"><spring:message code="data_transfer.port" /></th>
 										<th width="130"><spring:message code="common.division" /></th>
 										<th width="130"><spring:message code="dbms_information.conn_YN"/></th>	
 										<th width="0"></th>								
@@ -761,7 +752,7 @@ function fn_ipadrDelForm(){
 				</tr>
 				<tr>
 					<th scope="row" class="ico_t1" ><spring:message code="common.dbms_name" />(*)</th>
-					<td><input type="text" class="txt" name="db_svr_nm" id="db_svr_nm"  style="width:230px" maxlength="20"/>
+					<td><input type="text" class="txt" name="db_svr_nm" id="db_svr_nm"  style="width:210px" maxlength="20"/>
 					<span class="btn btnC_01"><button type="button" class= "btn_type_02" onclick="fn_svrnmCheck()" style="width: 85px; margin-right: -60px; margin-top: 0;"><spring:message code="common.overlap_check" /></button></span></td>
 					<th scope="row" class="ico_t1" style="width: 60px; margin-right: -160px; margin-top: 0;">Database(*)</th>
 					<td><input type="text" class="txt" name="dft_db_nm" id="dft_db_nm" maxlength="30"/></td>
@@ -776,12 +767,12 @@ function fn_ipadrDelForm(){
 				<tr>
 					<th scope="row" class="ico_t1"><spring:message code="dbms_information.pgHomePath"/>(*)</th>
 					<td>
-					<input type="text" class="txt" name="pghome_pth" id="pghome_pth" style="width:750px" readonly="readonly" /></td>				
+					<input type="text" class="txt" name="pghome_pth" id="pghome_pth" style="width:725px" readonly="readonly" /></td>				
 				</tr>
 				<tr>
 					<th scope="row" class="ico_t1"><spring:message code="dbms_information.pgDataPath"/>(*)</th>
 					<td>
-					<input type="text" class="txt" name="pgdata_pth" id="pgdata_pth" style="width:750px" readonly="readonly" /></td>				
+					<input type="text" class="txt" name="pgdata_pth" id="pgdata_pth" style="width:725px" readonly="readonly" /></td>				
 				</tr>				
 			</tbody>
 		</table>
