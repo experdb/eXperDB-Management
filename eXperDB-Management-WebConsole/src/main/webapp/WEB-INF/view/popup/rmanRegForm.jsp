@@ -339,7 +339,7 @@ function fn_check() {
 					<table class="write">
 						<caption>Rman <spring:message code="dashboard.Register.backup" /></caption>
 						<colgroup>
-							<col style="width:85px;" />
+							<col style="width:130px;" />
 							<col />
 						</colgroup>
 						<tbody>
@@ -365,7 +365,7 @@ function fn_check() {
 						<div class="option">
 							<table class="write">
 								<colgroup>
-									<col style="width:100px;" />
+									<col style="width:130px;" />
 									<col />
 									<col />
 								</colgroup>
@@ -383,19 +383,19 @@ function fn_check() {
 									</tr>
 									<tr>
 										<th scope="row" class="ico_t1"><spring:message code="backup_management.data_dir" /></th>
-										<td><input type="text" class="txt" name="data_pth" id="data_pth" maxlength=50 style="width:560px" readonly/>											
+										<td><input type="text" class="txt" name="data_pth" id="data_pth" maxlength=50 style="width:515px" readonly/>											
 										</td>
 									</tr>
 									<tr>
 										<th scope="row" class="ico_t1"><spring:message code="backup_management.backup_log_dir" /></th>
-										<td><input type="text" class="txt" name="log_file_pth" id="log_file_pth" maxlength=50 style="width:500px" onKeydown="$('#check_path1').val('N')"/>
+										<td><input type="text" class="txt" name="log_file_pth" id="log_file_pth" maxlength=50 style="width:450px" onKeydown="$('#check_path1').val('N')"/>
 											<span class="btn btnC_01"><button type="button" class= "btn_type_02" onclick="checkFolder(1)" style="width: 60px; margin-right: -60px; margin-top: 0;"><spring:message code="common.dir_check" /></button></span>
 											<span id="logVolume" style="margin:63px;"></span>	
 										</td>
 									</tr>									
 									<tr>	
 										<th scope="row" class="ico_t1"><spring:message code="backup_management.backup_dir" /></th>
-										<td><input type="text" class="txt" name="bck_pth" id="bck_pth" maxlength=50 style="width:500px" onKeydown="$('#check_path2').val('N')"/>
+										<td><input type="text" class="txt" name="bck_pth" id="bck_pth" maxlength=50 style="width:450px" onKeydown="$('#check_path2').val('N')"/>
 											<span class="btn btnC_01"><button type="button" class= "btn_type_02" onclick="checkFolder(2)" style="width: 60px; margin-right: -60px; margin-top: 0;"><spring:message code="common.dir_check" /></button></span>
 											<span id="backupVolume" style="margin:63px;"></span>											
 										</td>										

@@ -186,7 +186,7 @@ function fn_chkExtName(extName) {
 								<table class="write">
 									<caption>검색 조회</caption>
 									<colgroup>
-										<col style="width:90px;" />
+										<col style="width:50px;" />
 										<col style="width:200px;" />
 										<col style="width:80px;" />
 										<col style="width:200px;" />

@@ -922,7 +922,7 @@ var DateDiff =  {
 						</div>
 						<div class="cmm_grp">
 							<div class="btn_type_01" id="btnWeek">
-								<span class="btn"  onClick="fn_insertSchedule();" id="int_button"><button><spring:message code="backup_management.weekly_schedule_registory" /></button></span>
+								<span class="btn"  onClick="fn_insertSchedule();" id="int_button"><button style="width: 150px;"><spring:message code="backup_management.weekly_schedule_registory" /></button></span>
 							</div>
 							<div class="btn_type_01" id="btnMonth">
 								<!--  <span class="btn"  onClick="fn_insertSchedule();" id="int_button"><button>월별 스케줄등록</button></span>-->
@@ -947,7 +947,7 @@ var DateDiff =  {
 								<div class="sch_form">
 									<table width="100%"  class="write">
 										<colgroup>
-											<col style="width:80px;" />
+											<col style="width:130px;" />
 											<col style="width:300px;" />
 											<col/>
 										</colgroup>
@@ -956,7 +956,7 @@ var DateDiff =  {
 												<th  scope="row" class="t10"><spring:message code="common.search_year_month" /></th>
 												<td>
 													<select id="cmbyear"  style="width:100px" class="select t5">
-													</select> <spring:message code="etc.etc09"/>&nbsp;&nbsp;
+													</select> <spring:message code="etc.etc09"/>&nbsp;&nbsp;&nbsp;&nbsp;
 													<select id="cmbmonth"  class="select t6">
 														<option>01</option><option>02</option><option>03</option><option>04</option><option>05</option><option>06</option>
 														<option>07</option><option>08</option><option>09</option><option>10</option><option>11</option><option>12</option>

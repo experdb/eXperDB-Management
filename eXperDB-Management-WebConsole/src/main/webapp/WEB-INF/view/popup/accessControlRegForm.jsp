@@ -224,9 +224,9 @@
 					<c:if test="${act == 'u'}"><spring:message code="menu.access_control" />  <spring:message code="common.modify" /></c:if>
 				</caption>
 				<colgroup>
-					<col style="width:85px;" />
+					<col style="width:100px;" />
 					<col />
-					<col style="width:85px;" />
+					<col style="width:100px;" />
 					<col />
 				</colgroup>
 				<tbody>
@@ -235,7 +235,7 @@
 						<td><input type="text" class="txt bg1" value="${db_svr_nm}" readonly="readonly"/></td>
 						<th scope="row" class="ico_t1">Database</th>
 						<td>
-							<select id="dtb" name="dtb" class="select t4">
+							<select id="dtb" name="dtb" class="select">
 							<option value="all" ${dtb == 'all' ? 'selected="selected"' : ''}>all</option>
 							<option value="replication" ${dtb == 'replication' ? 'selected="selected"' : ''}>replication</option>
 								<c:forEach var="resultSet" items="${resultSet}">
@@ -256,7 +256,7 @@
 					<c:if test="${act == 'u'}"><spring:message code="menu.access_control" />  <spring:message code="common.modify" /></c:if>
 				</caption>
 				<colgroup>
-					<col style="width:85px;" />
+					<col style="width:100px;" />
 					<col />
 					<col style="width:110px;" />
 					<col />
@@ -265,7 +265,7 @@
 					<tr>
 						<th scope="row" class="ico_t1">Type</th>
 						<td>					
-							<select id="ctf_tp_nm" name="ctf_tp_nm" id="ctf_tp_nm" class="select t4" onChange="changeType(this)">
+							<select id="ctf_tp_nm" name="ctf_tp_nm" id="ctf_tp_nm" class="select" onChange="changeType(this)">
 								<c:forEach var="resultType" items="${resultType}">
 									<option value="${resultType.ctf_tp_nm}" ${ctf_tp_nm eq resultType.ctf_tp_nm ? "selected='selected'" : ""}>${resultType.ctf_tp_nm}</option>
 								</c:forEach>
@@ -281,7 +281,7 @@
 					<tr>
 						<th scope="row" class="ico_t1">User</th>
 						<td>									
-							<select id="prms_usr_id" name="prms_usr_id" class="select t4">
+							<select id="prms_usr_id" name="prms_usr_id" class="select">
 								<option value="all" ${prms_usr_id == 'all' ? 'selected="selected"' : ''}>all</option>
 								<c:forEach var="result" items="${result.data}">
 									<option value="${result.rolname}" ${prms_usr_id eq result.rolname ? "selected='selected'" : ""}>${result.rolname}</option>

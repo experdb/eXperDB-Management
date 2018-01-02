@@ -129,11 +129,11 @@ function fn_init(){
 	tableDump.tables().header().to$().find('th:eq(4)').css('min-width', '130px');
 	tableDump.tables().header().to$().find('th:eq(5)').css('min-width', '250px');
 	tableDump.tables().header().to$().find('th:eq(6)').css('min-width', '60px');
-	tableDump.tables().header().to$().find('th:eq(7)').css('min-width', '60px');
+	tableDump.tables().header().to$().find('th:eq(7)').css('min-width', '100px');
 	tableDump.tables().header().to$().find('th:eq(8)').css('min-width', '100px');  
 	tableDump.tables().header().to$().find('th:eq(9)').css('min-width', '100px');
 	tableDump.tables().header().to$().find('th:eq(10)').css('min-width', '90px');  
-	tableDump.tables().header().to$().find('th:eq(11)').css('min-width', '90px');
+	tableDump.tables().header().to$().find('th:eq(11)').css('min-width', '150px');
 	tableDump.tables().header().to$().find('th:eq(12)').css('min-width', '70px');
 	tableDump.tables().header().to$().find('th:eq(13)').css('min-width', '100px');
 	tableDump.tables().header().to$().find('th:eq(14)').css('min-width', '70px');  
@@ -666,9 +666,9 @@ function selectTab(tab){
 					<table class="write" id="searchRman">
 						<caption>검색 조회</caption>
 						<colgroup>
-							<col style="width:80px;" />
+							<col style="width:100px;" />
 							<col style="width:230px;" />
-							<col style="width:90px;" />
+							<col style="width:115px;" />
 							<col />
 						</colgroup>
 						<tbody>
@@ -689,7 +689,7 @@ function selectTab(tab){
 					<table class="write" id="searchDump" style="display:none;">
 						<caption>검색 조회</caption>
 						<colgroup>
-							<col style="width:80px;" />
+							<col style="width:100px;" />
 							<col style="width:230px;" />
 							<col style="width:100px;" />
 							<col />
@@ -748,11 +748,11 @@ function selectTab(tab){
 									<th width="130"><spring:message code="common.database" /></th>
 									<th width="250" class="dt-center"><spring:message code="backup_management.backup_dir" /></th>
 									<th width="60"><spring:message code="backup_management.file_format" /></th>
-									<th width="60"><spring:message code="backup_management.compressibility" /></th>
+									<th width="100"><spring:message code="backup_management.compressibility" /></th>
 									<th width="100"><spring:message code="backup_management.incording_method" /></th>
 									<th width="100"><spring:message code="backup_management.rolename" /></th>
 									<th width="90"><spring:message code="backup_management.file_keep_day" /></th>
-									<th width="90"><spring:message code="backup_management.backup_maintenance_count" /></th>
+									<th width="150"><spring:message code="backup_management.backup_maintenance_count" /></th>
 									<th width="70"><spring:message code="common.register" /></th>
 									<th width="100"><spring:message code="common.regist_datetime" /></th>
 									<th width="70"><spring:message code="common.modifier" /></th>

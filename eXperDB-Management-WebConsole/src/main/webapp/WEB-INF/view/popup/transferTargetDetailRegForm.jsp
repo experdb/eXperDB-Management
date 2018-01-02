@@ -37,9 +37,9 @@
 				<table class="write bdtype1">
 					<caption><spring:message code="data_transfer.transfer_datile"/></caption>
 					<colgroup>
-						<col style="width:80px;" />
+						<col style="width:115px;" />
 						<col style="width:300px;" />
-						<col style="width:80px;" />
+						<col style="width:115px;" />
 						<col />
 					</colgroup>
 					<tbody>

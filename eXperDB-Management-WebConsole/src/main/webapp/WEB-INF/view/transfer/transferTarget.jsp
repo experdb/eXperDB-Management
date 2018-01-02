@@ -308,7 +308,7 @@
 					<table class="write">
 						<caption>검색 조회</caption>
 						<colgroup>
-							<col style="width: 100px;" />
+							<col style="width: 115px;" />
 							<col />
 						</colgroup>
 						<tbody>

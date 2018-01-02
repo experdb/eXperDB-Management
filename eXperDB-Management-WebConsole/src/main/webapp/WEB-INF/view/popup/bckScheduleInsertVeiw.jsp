@@ -648,7 +648,7 @@ var haCnt = 0;
 				<table class="write">
 					<caption>주별 스케줄등록</caption>
 					<colgroup>
-						<col style="width: 110px;" />
+						<col style="width: 130px;" />
 						<col />
 					</colgroup>
 					<tbody>
@@ -656,7 +656,7 @@ var haCnt = 0;
 							<th scope="row" class="t9 line"><spring:message code="schedule.schedule_name" /></th>
 							<td><input type="text" class="txt t2" id="scd_nm" name="scd_nm" /> 
 							<span class="btn btnF_04 btnC_01">
-									<button type="button" class="btn_type_02" onclick="fn_check()"style="width: 60px; margin-right: -60px; margin-top: 0;"><spring:message code="common.overlap_check" /></button>
+									<button type="button" class="btn_type_02" onclick="fn_check()"style="width: 100px; margin-right: -60px; margin-top: 0;"><spring:message code="common.overlap_check" /></button>
 							</span>
 							</td>
 						</tr>

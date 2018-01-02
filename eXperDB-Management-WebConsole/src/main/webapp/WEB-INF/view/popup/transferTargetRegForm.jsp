@@ -229,7 +229,7 @@
 						<c:if test="${act == 'i'}">
 							<input type="text" class="txt" name="trf_trg_cnn_nm" id="trf_trg_cnn_nm" value="${trf_trg_cnn_nm}" style="width: 300px;"/>
 							<span class="btn btnC_01">
-								<button type="button" class= "btn_type_02" onclick="fn_nmCheck()" style="width: 60px; margin-right: -60px; margin-top: 0;"><spring:message code="common.overlap_check" /></button>
+								<button type="button" class= "btn_type_02" onclick="fn_nmCheck()" style="width: 100px; margin-right: -60px; margin-top: 0;"><spring:message code="common.overlap_check" /></button>
 							</span>
 						</c:if>
 						<c:if test="${act == 'u'}">

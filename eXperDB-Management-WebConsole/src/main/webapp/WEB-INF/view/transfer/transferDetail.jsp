@@ -239,7 +239,7 @@
 					<table class="write">
 						<caption>검색 조회</caption>
 						<colgroup>
-							<col style="width: 100px;" />
+							<col style="width: 110px;" />
 							<col style="width: 225px;" />
 							<col style="width: 95px;" />
 							<col />

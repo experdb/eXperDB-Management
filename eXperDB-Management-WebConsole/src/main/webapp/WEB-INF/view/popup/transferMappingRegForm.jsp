@@ -371,7 +371,7 @@
 		<table class="write">
 			<caption>전송대상 설정 등록</caption>
 			<colgroup>
-				<col style="width:105px;" />
+				<col style="width:115px;" />
 				<col style="width:280px;" />
 				<col style="width:100px;" />
 				<col />
