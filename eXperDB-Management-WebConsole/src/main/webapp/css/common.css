@@ -829,3 +829,9 @@ box-shadow: 1px 1px 2px 0px rgba(0,0,0,0.5);}
 .inpType{padding-left:6px;height:24px;line-height:24px;border:1px solid #dbdbdb}
 .btncalendar{display:inline-block;width:22px;height:22px;background:url(images/btn_calendar.gif) center center no-repeat;text-indent:-999em}
 
+
+.dotdotdot{
+		text-overflow:ellipsis;
+		overflow:hidden;
+		white-space:nowrap;
+	} 

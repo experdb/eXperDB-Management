@@ -27,7 +27,7 @@
 						</tr>	
 						<tr>
 							<td style="width: 170px;"><spring:message code="common.work_description" /></td>
-							<td style="text-align: left" id="r_wrk_exp"></td>
+							<td style="text-align: left; text-overflow:ellipsis; overflow:hidden; white-space:nowrap;" id="r_wrk_exp" ></td>
 						</tr>							
 						<tr>
 							<td style="width: 170px;"><spring:message code="backup_management.compress" /></td>

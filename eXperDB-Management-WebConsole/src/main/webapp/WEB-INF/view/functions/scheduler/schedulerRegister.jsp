@@ -530,7 +530,7 @@ function fn_check() {
 										</tr>
 										<tr>
 											<th scope="row" class="t9 line"><spring:message code="schedule.scheduleExp"/></th>
-											<td><input type="text" class="txt t2" id="scd_exp" name="scd_exp" style="width:500px;"/></td>
+											<td><textarea class="tbd1" name="scd_exp" id="scd_exp" maxlength="150"></textarea></td>
 										</tr>
 									</tbody>
 								</table>

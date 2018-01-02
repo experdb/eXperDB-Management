@@ -21,7 +21,7 @@
 						</tr>	
 						<tr>
 							<td style="width: 70px; height: 20px;"><spring:message code="common.work_description" /></td>
-							<td style="width: 70%; text-align: left" id="d_wrk_exp"></td>
+							<td style="width: 70%; text-align: left; text-overflow:ellipsis; overflow:hidden; white-space:nowrap;" id="d_wrk_exp"  title="d_wrk_exp"></td>
 						</tr>	
 						<tr>
 							<td style="width: 70px; height: 20px;"><spring:message code="common.database" /></td>

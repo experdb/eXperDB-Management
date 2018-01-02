@@ -42,7 +42,7 @@ function fn_init(){
 				  return '<span onClick=javascript:fn_workLayer("'+full.wrk_id+'"); class="bold">' + full.wrk_nm + '</span>';
 			}
 		}, //work명
-		{data : "wrk_exp", className : "dt-left", defaultContent : ""},	
+		{data : "wrk_exp", className : "dt-nowrap", defaultContent : ""},	
 		{data : "bck_opt_cd_nm", className : "dt-center", defaultContent : ""
 			,"render": function (data, type, full) {
 				if(full.bck_opt_cd=="TC000301"){
@@ -744,7 +744,7 @@ function selectTab(tab){
 									<th width="10"></th>
 									<th width="30"><spring:message code="common.no" /></th>
 									<th width="200" class="dt-center"><spring:message code="common.work_name" /></th>
-									<th width="200" class="dt-center"><spring:message code="common.work_description" /></th>
+									<th width="200" class="dt-center" ><spring:message code="common.work_description" /></th>
 									<th width="130"><spring:message code="common.database" /></th>
 									<th width="250" class="dt-center"><spring:message code="backup_management.backup_dir" /></th>
 									<th width="60"><spring:message code="backup_management.file_format" /></th>
