@@ -81,7 +81,7 @@ function fn_init() {
 		table.tables().header().to$().find('th:eq(2)').css('min-width', '150px');
 		table.tables().header().to$().find('th:eq(3)').css('min-width', '200px');
 		table.tables().header().to$().find('th:eq(4)').css('min-width', '70px');
-		table.tables().header().to$().find('th:eq(5)').css('min-width', '85px');
+		table.tables().header().to$().find('th:eq(5)').css('min-width', '100px');
 		table.tables().header().to$().find('th:eq(6)').css('min-width', '150px');
 		table.tables().header().to$().find('th:eq(7)').css('min-width', '100px');  
 		table.tables().header().to$().find('th:eq(8)').css('min-width', '100px');
@@ -295,7 +295,7 @@ function fn_workAdd(){
 						<th width="150" class="dt-center"><spring:message code="common.work_name" /></th>
 						<th width="200" class="dt-center"><spring:message code="common.work_description" /></th>
 						<th width="70"><spring:message code="common.division" /></th>
-						<th width="85"><spring:message code="backup_management.bck_div"/></th>
+						<th width="100"><spring:message code="backup_management.bck_div"/></th>
 						<th width="150"><spring:message code="common.dbms_name" /></th>
 						<th width="100"><spring:message code="common.register" /></th>
 						<th width="100"><spring:message code="common.regist_datetime" /></th>						

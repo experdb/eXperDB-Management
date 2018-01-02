@@ -135,7 +135,7 @@
 			<table class="write">
 				<caption><spring:message code="user_management.edit_password" /></caption>
 				<colgroup>
-					<col style="width: 120px;" />
+					<col style="width: 124px;" />
 					<col />
 				</colgroup>
 				<tbody>
@@ -149,7 +149,7 @@
 				<table class="write">
 					<caption><spring:message code="user_management.edit_password" /></caption>
 					<colgroup>
-						<col style="width: 120px;" />
+						<col style="width: 150px;" />
 						<col />
 					</colgroup>
 					<tbody>

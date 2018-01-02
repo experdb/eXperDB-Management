@@ -83,7 +83,8 @@ function fn_init() {
     workTable.tables().header().to$().find('th:eq(3)').css('min-width', '100px');
     workTable.tables().header().to$().find('th:eq(4)').css('min-width', '100px');
 	workTable.tables().header().to$().find('th:eq(5)').css('min-width', '100px');
-	workTable.tables().header().to$().find('th:eq(6)').css('min-width', '0px');
+	workTable.tables().header().to$().find('th:eq(6)').css('min-width', '100px');
+	workTable.tables().header().to$().find('th:eq(7)').css('min-width', '0px');
     $(window).trigger('resize');
     
 }

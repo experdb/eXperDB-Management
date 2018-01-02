@@ -101,7 +101,7 @@
 				<table class="write2">
 					<caption>개인정보 수정 저장 폼</caption>
 					<colgroup>
-						<col style="width: 122px;" />
+						<col style="width: 150px;" />
 						<col />
 					</colgroup>
 					<tbody>

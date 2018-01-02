@@ -388,7 +388,7 @@
 							<table class="list3">
 								<caption>주요환경설정 정보</caption>
 								<colgroup>
-									<col style="width: 10%;">
+									<col style="width: 15%;">
 									<col style="width: 20%;">
 									<col style="width: 30%;">
 								</colgroup>
@@ -532,17 +532,17 @@
 									</tr>
 									<c:forEach var="tablespaceinfo" items="${result.CMD_TABLESPACE_INFO}">
 										<tr>
-											<td >${tablespaceinfo.filesystem}</td>
+											<td>${tablespaceinfo.filesystem}</td>
 											<td>${tablespaceinfo.fsize}</td>
-											<td >${tablespaceinfo.used}</td>
-											<td >${tablespaceinfo.avail}</td>
+											<td>${tablespaceinfo.used}</td>
+											<td>${tablespaceinfo.avail}</td>
 											<td>
 											<span class="iGraph">
 												<span class="gBar"><span class="gAction" style="width:${tablespaceinfo.use}"></span></span>
 												<span class="gPercent">${tablespaceinfo.use}</span>
 											</span>	
 											</td>
-											<td >${tablespaceinfo.mounton}</td>
+											<td>${tablespaceinfo.mounton}</td>
 											<td>${tablespaceinfo.name}</td>
 											<td>${tablespaceinfo.owner}</td>
 											<td>${tablespaceinfo.location}</td>
