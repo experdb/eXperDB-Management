@@ -126,6 +126,11 @@ function fn_saveValidation(){
 	var mCnt = 0;
 	var dataCnt = table.column(0).data().length;
 	
+	if(connCheck != "success"){
+		alert('<spring:message code="message.msg89" />');
+		return false;
+	}
+	
 	for(var i=0; i<dataCnt; i++){
 		if(table.rows().data()[i].master_gbn == "M"){
 			mCnt += 1;

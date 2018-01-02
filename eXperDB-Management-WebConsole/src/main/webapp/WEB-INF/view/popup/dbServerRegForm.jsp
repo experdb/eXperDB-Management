@@ -133,7 +133,10 @@ function valid_numeric(objValue)
 
 function fn_dbServerValidation(){
 	
-	
+	if(table.rows().data().length < 1){
+		alert("등록된 DBMS IP가 존재하지 않습니다.")
+		return false;
+	}
 	
 	var db_svr_nm = document.getElementById("db_svr_nm");
 		if (db_svr_nm.value == "") {
@@ -160,10 +163,6 @@ function fn_dbServerValidation(){
   			 svr_spr_scm_pwd.focus();
   			   return false;
   		}		
- 		if(connCheck != "success"){
-			alert('<spring:message code="message.msg89" />');
-			return false;
-		}
  		return true;
 }
 
@@ -187,6 +186,11 @@ function fn_saveValidation(){
 	var mCnt = 0;
 	var dataCnt = table.column(0).data().length;
 	
+	if(connCheck != "success"){
+		alert('<spring:message code="message.msg89" />');
+		return false;
+	}
+		
 	for(var i=0; i<dataCnt; i++){
 		if(table.rows().data()[i].master_gbn == "M"){
 			mCnt += 1;
