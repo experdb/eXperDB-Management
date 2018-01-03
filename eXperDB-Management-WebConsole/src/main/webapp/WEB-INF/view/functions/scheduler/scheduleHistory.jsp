@@ -322,12 +322,12 @@
 					<table class="write">
 						<caption>검색 조회</caption>
 						<colgroup>
-							<col style="width: 70px;" />
-							<col style="width: 200px;" />
-							<col style="width: 60px;" />
-							<col style="width: 150px;" />
-							<col style="width: 60px;" />
-							<col style="width: 150px;" />
+							<col style="width: 10%;" />
+							<col style="width: 30%;" />
+							<col style="width: 10%;" />
+							<col style="width: 20%" />
+							<col style="width: 10%" />
+							<col style="width: 20%" />
 						</colgroup>
 						<tbody>
 								<tr>
@@ -340,7 +340,7 @@
 											<input type="text" class="calendar" id="to" name="lgi_dtm_end" title="기간검색 종료날짜" onChange="fn_dtm();"  />
 										</div>							
 									</td>
-									<td>
+									<td colspan="4">
 										<ul class="searchDate">
 											<li>
 												<span class="chkbox2">

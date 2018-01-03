@@ -43,7 +43,7 @@
 						           </c:otherwise> 
 						         </c:choose>
 								</a>
-								<p class="state_txt"><spring:message code="menu.schedule_registration" /></p>
+								<p class="state_txt"><spring:message code="dashboard.Register.schedule" /></p>
 							</li>
 							<li>
 								<p class="state">

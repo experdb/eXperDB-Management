@@ -354,7 +354,13 @@ public class ScheduleController {
 			//읽기 권한이 없는경우 error페이지 호출 , [추후 Exception 처리예정]
 			if(menuAut.get(0).get("read_aut_yn").equals("N")){
 				mv.setViewName("error/autError");
-			}else{				
+			}else{	
+				// 화면접근이력 이력 남기기
+				CmmnUtils.saveHistory(request, historyVO);
+				historyVO.setExe_dtl_cd("DX-T0045");
+				historyVO.setMnu_id(3);
+				accessHistoryService.insertHistory(historyVO);
+				
 				mv.addObject("read_aut_yn", menuAut.get(0).get("read_aut_yn"));
 				mv.addObject("wrt_aut_yn", menuAut.get(0).get("wrt_aut_yn"));
 				if(scd_cndt != null){

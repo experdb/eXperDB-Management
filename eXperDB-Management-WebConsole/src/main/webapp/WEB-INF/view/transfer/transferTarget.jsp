@@ -21,7 +21,7 @@
 	
 	function fn_init() {
 		table = $('#transferTargetTable').DataTable({
-			scrollY : "230px",
+			scrollY : "245px",
 			deferRender : true,
 			scrollX: true,
 // 			bSort: false,

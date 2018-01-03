@@ -59,20 +59,24 @@
 	 	* Description : 스케줄이력 총 갯수 조회
 	 	* Author : 변승우
 	 	**/
-	 	SELECT
+		SELECT
 			COUNT(*) totcnt
 		FROM(
-			SELECT 
-	          EXE_GRP_SN 
-			, SCD_NM
+			SELECT 		
+	        A.SCD_ID
+	        , C.IPADR
+	        , A.EXE_GRP_SN 
+			, A.SCD_NM
 			, MIN(A.EXE_SN) AS EXE_SN
 			, MAX(A.EXE_RSLT_CD) AS EXE_RSLT_CD
 			, (SELECT S.DB_SVR_NM FROM T_DBSVR_I S,T_DB_I D WHERE S.DB_SVR_ID=D.DB_SVR_ID AND D.DB_ID=A.DB_ID)AS DB_SVR_NM
 			, MIN(A.WRK_STRT_DTM) AS WRK_STRT_DTM
 			, MAX(A.WRK_END_DTM) AS WRK_END_DTM
 			, TO_CHAR(TO_CHAR(MAX(A.WRK_END_DTM),'YYYY-MM-DD HH24:MI:SS')::TIMESTAMP - TO_CHAR(MIN(A.WRK_STRT_DTM),'YYYY-MM-DD HH24:MI:SS')::TIMESTAMP, 'HH24시MI분SS초') AS WRK_DTM
-			FROM T_WRKEXE_G A
+			FROM T_WRKEXE_G A, T_DB_I B, T_DBSVRIPADR_I C
 			WHERE 1= 1
+			AND B.DB_SVR_ID = C.DB_SVR_ID
+            AND A.DB_ID = B.DB_ID
 			<if test="lgi_dtm_start != null and lgi_dtm_start != '' ">
 			 AND to_char(A.WRK_END_DTM,'YYYY-MM-DD') between #{lgi_dtm_start} and #{lgi_dtm_end}
 			</if>
@@ -80,8 +84,8 @@
 			AND A.SCD_NM LIKE #{scd_nm}
 			</if>		
 			AND A.EXE_RSLT_CD LIKE #{exe_result}
-			GROUP BY EXE_GRP_SN, SCD_NM, DB_ID
-		)A
+			GROUP BY A.EXE_GRP_SN, A.SCD_NM, A.DB_ID,A.SCD_ID,C.IPADR
+		)AA
 	</select>
 	
 	

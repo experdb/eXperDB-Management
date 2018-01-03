@@ -819,7 +819,6 @@ box-shadow: 1px 1px 2px 0px rgba(0,0,0,0.5);}
 .searchBox tbody th{padding:20px 10px 20px 35px;font-size:14px;font-weight:bold;text-align:left;vertical-align:top;border:none;background:#e6e6e6 }
 .searchBox tbody td{padding:12px 10px 12px 25px;border:none;background-color:#efefef}
 
-.searchDate{overflow:hidden;margin-bottom:10px;*zoom:1; width:700px;}
 .searchDate:after{display:block;clear:both;content:''}
 .searchDate li{position:relative;float:left;margin:0 7px 0 0}
 .searchDate li .chkbox2{display:block;text-align:center}

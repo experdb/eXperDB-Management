@@ -37,9 +37,9 @@ function fn_init() {
 			render : function(data, type, full, meta) {
 				var html = "";
 				if (data == "Y") {
-					html += "<spring:message code="dbms_information.use" />";
+					html += "<spring:message code='dbms_information.use' />";
 				} else {
-					html += "<spring:message code="dbms_information.unuse" />";
+					html += "<spring:message code='dbms_information.unuse' />";
 				}
 				return html;
 			},
@@ -65,7 +65,7 @@ function fn_init() {
 		$('#userListTable tbody').on('dblclick','tr',function() {
 			var data = table.row(this).data();
 			var usr_id = data.usr_id;				
-			var popUrl = "/popup/userManagerRegForm.do?act=u&usr_id=" + usr_id; // 서버 url 팝업경로
+			var popUrl = "/popup/userManagerRegForm.do?act=u&usr_id=" + encodeURI(usr_id); // 서버 url 팝업경로
 			var width = 1000;
 			var height = 570;
 			var left = (window.screen.width / 2) - (width / 2);
@@ -181,7 +181,7 @@ function fn_update() {
 	var rowCnt = table.rows('.selected').data().length;
 	if (rowCnt == 1) {
 		var usr_id = table.row('.selected').data().usr_id;
-		var popUrl = "/popup/userManagerRegForm.do?act=u&usr_id=" + usr_id; // 서버 url 팝업경로
+		var popUrl = "/popup/userManagerRegForm.do?act=u&usr_id=" +  encodeURI(usr_id); // 서버 url 팝업경로
 		var width = 1000;
 		var height = 570;
 		var left = (window.screen.width / 2) - (width / 2);
@@ -317,7 +317,7 @@ function fn_delete(){
 								<th width="100"><spring:message code="user_management.company" /></th>
 								<th width="100"><spring:message code="user_management.user_name" /></th>
 								<th width="100"><spring:message code="user_management.contact" /></th>
-								<th width="80"><spring:message code="user_management.use_yn" /> </th>
+								<th width="80"><spring:message code="user_management.use_yn" /></th>
 								<th width="100"><spring:message code="user_management.expiration_date" /></th>
 							</tr>
 						</thead>
