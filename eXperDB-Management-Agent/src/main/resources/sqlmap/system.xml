@@ -394,7 +394,7 @@
 			  pg_catalog.pg_size_pretty(pg_catalog.pg_tablespace_size(oid)) AS "Size",
 			  pg_catalog.shobj_description(oid, 'pg_tablespace') AS "Description"
 			FROM pg_catalog.pg_tablespace
-			ORDER BY 1;
+			ORDER BY 1
 		]]>
 	</select>
 	
@@ -467,4 +467,21 @@
 				IPADR = #{IPADR}
 		]]>
 	</select>
+	
+	<select id="selectDbmsInfo" resultType="hashmap">
+		<![CDATA[
+	   		/**
+		 	* Query ID : selectDbmsInfo
+		 	* Description : dbms 정보 조회
+		 	* Author : 박태혁
+		 	**/
+			SELECT 
+				NAME
+				, SETTING
+				, SHORT_DESC
+		    FROM PG_SETTINGS
+
+		]]>
+	</select>
+	
 </mapper>

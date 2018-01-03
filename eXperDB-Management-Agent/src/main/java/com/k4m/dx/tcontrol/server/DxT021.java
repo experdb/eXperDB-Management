@@ -360,6 +360,9 @@ public class DxT021 extends SocketCtl{
 			ArrayList<HashMap<String, String>> listTableSpaceInfo = (ArrayList)sessDB.selectList("system.selectTablespaceInfo");
 			//resultHP.put(ProtocolID.CMD_TABLESPACE_INFO, listTableSpaceInfo);
 			
+			ArrayList<HashMap<String, String>> dbmsInfo = (ArrayList)sessDB.selectList("system.selectDbmsInfo");
+			resultHP.put(ProtocolID.CMD_DBMS_INFO, dbmsInfo);
+			
 			//파일시스템정보
 			String strFileSystem = CommonUtil.getCmdExec(arrCmd[7]);
 			ArrayList<HashMap<String, String>> flist = fileSystemList(strFileSystem);
@@ -367,6 +370,7 @@ public class DxT021 extends SocketCtl{
 			ArrayList<HashMap<String, String>> mappingList = mappingSystem(flist, listTableSpaceInfo, data_directory);
 			
 			resultHP.put(ProtocolID.CMD_TABLESPACE_INFO, mappingList);
+			
 			
 		} catch(Exception e) {
 			errLogger.error("selectDatabaseInfo {} ", e.toString());

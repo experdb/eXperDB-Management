@@ -156,6 +156,7 @@ public class ProtocolID {
 	public static final String CMD_TIMEZONE = "CMD_TIMEZONE";
 	public static final String CMD_SHARED_PRELOAD_LIBRARIES = "CMD_SHARED_PRELOAD_LIBRARIES";
 	public static final String CMD_TABLESPACE_INFO = "CMD_TABLESPACE_INFO";
+	public static final String CMD_DBMS_INFO = "CMD_DBMS_INFO";
 	
 	public static final String START_LEN = "START_LEN";
 	public static final String DW_LEN = "DW_LEN";
