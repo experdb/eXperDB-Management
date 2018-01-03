@@ -340,13 +340,6 @@ $(window.document).ready(
 					<a href="#"><button onClick="fn_logout();"><spring:message code="common.logout"/></button></a>		
 				</div>
 			</form>
-				<div style="text-align: center; color: white; margin-top: -5px; margin-bottom: 10px;" >
-					언어
-					<select id="language" name="language" style="width: 100px; margin-left: 5px;" onChange="fn_localeSetting();">
-									<option value="ko" ${pageContext.response.locale eq 'ko' ? "selected='selected'" : ""}>한국어/Korean</option>
-									<option value="en" ${pageContext.response.locale eq 'en' ? "selected='selected'" : ""}>영어/English</option>
-					</select>
-				</div>
 				<div id="treeTitle"><img src="../images/ico_lnb_1.png" id="treeImg"><a href="/dbTree.do">DB <spring:message code="dashboard.server" /></a>
 					<div id="sidetreecontrol" style="float: right;">
 						<a href="?#"><img src="../images/ico_lnb_close.png"></a>

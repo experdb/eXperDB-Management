@@ -243,6 +243,7 @@ function fn_dbServerConnTest(){
 	var datasArr = new Array();
 	var ipadrCnt = table.column(0).data().length;
 	
+	
 	for(var i = 0; i < ipadrCnt; i++){
 		 var datas = new Object();
 		 datas.SERVER_NAME = $("#db_svr_nm").val();

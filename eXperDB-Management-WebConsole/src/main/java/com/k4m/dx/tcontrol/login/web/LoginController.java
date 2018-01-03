@@ -101,8 +101,8 @@ public class LoginController {
 		try {
 			
 			int masterCheck = loginService.selectMasterCheck();
-			if(masterCheck>1){
-				mv.addObject("error", "서버 HA구성에서 Master 가 중복 됩니다.");
+			if(masterCheck>0){
+				mv.addObject("error", "msg176");
 				return mv;
 			}
 			

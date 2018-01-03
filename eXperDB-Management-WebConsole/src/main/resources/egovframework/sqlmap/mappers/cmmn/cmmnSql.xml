@@ -42,9 +42,9 @@
 		FROM
 		(
 		  SELECT
-		 case when count(IPADR) > 1 then 1
+		 case when count(DB_SVR_ID) > 1 then 1
 		    else 0 end as master_couble_chk
-		  FROM T_DBSVRIPADR_I WHERE MASTER_GBN ='M'  GROUP BY IPADR
+		  FROM T_DBSVRIPADR_I WHERE MASTER_GBN ='M'  GROUP BY DB_SVR_ID
 		 ) A
 	 	
 	</select>

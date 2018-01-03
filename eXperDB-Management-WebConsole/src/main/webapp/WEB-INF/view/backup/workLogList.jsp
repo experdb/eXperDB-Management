@@ -97,12 +97,11 @@ function fn_rman_init(){
    	tableRman.tables().header().to$().find('th:eq(2)').css('min-width', '100px');
    	tableRman.tables().header().to$().find('th:eq(3)').css('min-width', '150px');
    	tableRman.tables().header().to$().find('th:eq(4)').css('min-width', '90px');
-   	tableRman.tables().header().to$().find('th:eq(5)').css('min-width', '70px');
-   	tableRman.tables().header().to$().find('th:eq(6)').css('min-width', '230px');
+   	tableRman.tables().header().to$().find('th:eq(5)').css('min-width', '230px');
+   	tableRman.tables().header().to$().find('th:eq(6)').css('min-width', '100px');
    	tableRman.tables().header().to$().find('th:eq(7)').css('min-width', '100px');
-   	tableRman.tables().header().to$().find('th:eq(8)').css('min-width', '100px');
-   	tableRman.tables().header().to$().find('th:eq(9)').css('min-width', '70px');
-   	tableRman.tables().header().to$().find('th:eq(10)').css('min-width', '100px');
+   	tableRman.tables().header().to$().find('th:eq(8)').css('min-width', '70px');
+   	tableRman.tables().header().to$().find('th:eq(9)').css('min-width', '100px');
     $(window).trigger('resize'); 
 }
 
@@ -400,7 +399,6 @@ function selectTab(intab){
 								<th width="100"><spring:message code="dbms_information.dbms_ip" /></th>
 								<th width="150" class="dt-center"><spring:message code="common.work_description" /></th>
 								<th width="90"><spring:message code="backup_management.backup_option" /></th>
-								<th width="70"><spring:message code="backup_management.size" /></th>
 								<th width="230" class="dt-center"><spring:message code="etc.etc08"/></th>
 								<th width="100"><spring:message code="backup_management.work_start_time" /> </th>
 								<th width="100"><spring:message code="backup_management.work_end_time" /></th>
