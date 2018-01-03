@@ -265,7 +265,7 @@ function fn_cookie(url) {
 						<ul class="depth_2">
 						    <li><a href="">Language</a>
         						<ul class="depth_3">
-									<li><a href="#n" onClick="fn_localeSet('kr')">Korean</a></li>
+									<li><a href="#n" onClick="fn_localeSet('ko')">Korean</a></li>
 									<li><a href="#n" onClick="fn_localeSet('en')">English</a></li>
 								</ul>
         					</li>

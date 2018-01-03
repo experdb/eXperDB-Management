@@ -135,7 +135,6 @@ public class LoginController {
 				props.load(new FileInputStream(ResourceUtils.getFile("classpath:egovframework/tcontrolProps/globals.properties")));
 			
 				String lang = props.get("lang").toString();
-				System.out.println(lang);
 				
 				// 로그인 이력 남기기
 				CmmnUtils.saveHistory(request, historyVO);

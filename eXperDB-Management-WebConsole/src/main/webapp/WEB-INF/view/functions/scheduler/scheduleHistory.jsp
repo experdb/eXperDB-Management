@@ -322,12 +322,12 @@
 					<table class="write">
 						<caption>검색 조회</caption>
 						<colgroup>
-							<col style="width: 10%;" />
-							<col style="width: 30%;" />
-							<col style="width: 10%;" />
-							<col style="width: 20%" />
-							<col style="width: 10%" />
-							<col style="width: 20%" />
+							<col style="width: 80px;" />
+							<col style="width: 210px;" />
+							<col style="width: 70px;" />
+							<col style="width: 150px;" />
+							<col style="width: 60px;" />
+							<col style="width: 150px;" />
 						</colgroup>
 						<tbody>
 								<tr>
