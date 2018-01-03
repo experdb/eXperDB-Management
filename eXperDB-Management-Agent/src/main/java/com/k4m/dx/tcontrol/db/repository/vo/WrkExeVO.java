@@ -22,9 +22,15 @@ public class WrkExeVO {
 	private String SCD_CNDT;
 	private String SCD_NM;
 	private String WRK_NM;
+	private int DB_SVR_IPADR_ID;
 	
 	
-
+	public int getDB_SVR_IPADR_ID() {
+		return DB_SVR_IPADR_ID;
+	}
+	public void setDB_SVR_IPADR_ID(int dB_SVR_IPADR_ID) {
+		DB_SVR_IPADR_ID = dB_SVR_IPADR_ID;
+	}
 	
 	public String getSCD_NM() {
 		return SCD_NM;

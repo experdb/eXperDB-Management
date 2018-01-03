@@ -143,6 +143,7 @@
 			, EXE_GRP_SN
 			, SCD_NM
 			, WRK_NM
+			, DB_SVR_IPADR_ID
 	 	)
 	 	VALUES
 	 	(
@@ -162,6 +163,7 @@
 			, #{EXE_GRP_SN}
 			, (SELECT SCD_NM FROM T_SCD_M WHERE SCD_ID = #{SCD_ID})
 			, (SELECT WRK_NM FROM T_WRKCNG_I WHERE WRK_ID = #{WRK_ID})
+			, #{DB_SVR_IPADR_ID}
 	 	)
 	 	
     </insert>

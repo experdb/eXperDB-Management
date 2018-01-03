@@ -59,7 +59,7 @@ public class ClientTester {
 			//clientTester.dxT002(Ip, port);
 			//clientTester.dxT003(Ip, port);
 			//clientTester.dxT004(Ip, port);
-			//clientTester.dxT005(Ip, port);
+			clientTester.dxT005(Ip, port);
 			//clientTester.dxT006_C(Ip, port);
 //			clientTester.dxT006_R(Ip, port);
 			//clientTester.dxT006_U(Ip, port);
@@ -90,7 +90,7 @@ public class ClientTester {
 			//clientTester.dxT018_delete(Ip, port);
 			//clientTester.dxT019(Ip, port);
 			//clientTester.dxT020(Ip, port);
-			clientTester.dxT021(Ip, port);
+			//clientTester.dxT021(Ip, port);
 			
 			//clientTester.test();
 		} catch(Exception e) {
@@ -297,6 +297,8 @@ public class ClientTester {
 			objJob_01.put(ClientProtocolID.REQ_CMD, CMD[1]);
 			objJob_01.put(ClientProtocolID.BCK_OPT_CD, "1");
 			objJob_01.put(ClientProtocolID.BCK_BSN_DSCD, "TC000201");
+			objJob_01.put(ClientProtocolID.DB_SVR_IPADR_ID, "1");
+			
 
 			objJob_01.put(ClientProtocolID.DB_ID, "1");
 			objJob_01.put(ClientProtocolID.BCK_FILE_PTH, "1");
@@ -312,6 +314,7 @@ public class ClientTester {
 			objJob_02.put(ClientProtocolID.REQ_CMD, CMD[2]);
 			objJob_02.put(ClientProtocolID.BCK_OPT_CD, "1");
 			objJob_02.put(ClientProtocolID.BCK_BSN_DSCD, "TC000201");
+			objJob_01.put(ClientProtocolID.DB_SVR_IPADR_ID, "1");
 
 			objJob_02.put(ClientProtocolID.DB_ID, "1");
 			objJob_02.put(ClientProtocolID.BCK_FILE_PTH, "1");
@@ -326,6 +329,7 @@ public class ClientTester {
 			objJob_03.put(ClientProtocolID.REQ_CMD, CMD[2]);
 			objJob_03.put(ClientProtocolID.BCK_OPT_CD, "1");
 			objJob_03.put(ClientProtocolID.BCK_BSN_DSCD, "TC000201");
+			objJob_01.put(ClientProtocolID.DB_SVR_IPADR_ID, "1");
 
 			objJob_03.put(ClientProtocolID.DB_ID, "1");
 			objJob_03.put(ClientProtocolID.BCK_FILE_PTH, "1");

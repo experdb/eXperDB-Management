@@ -88,6 +88,7 @@ public class DxT005 extends SocketCtl{
 				String strBCK_FILE_PTH = objJob.get(ProtocolID.BCK_FILE_PTH).toString();
 				String strLOG_YN = objJob.get(ProtocolID.LOG_YN).toString();
 				String strBCK_FILENM = objJob.get(ProtocolID.BCK_FILENM).toString();
+				String strDB_SVR_IPADR_ID = objJob.get(ProtocolID.DB_SVR_IPADR_ID).toString();
 
 				int intSeq = service.selectQ_WRKEXE_G_01_SEQ();
 				
@@ -101,6 +102,7 @@ public class DxT005 extends SocketCtl{
 				vo.setBCK_FILE_PTH(strBCK_FILE_PTH);
 				vo.setEXE_GRP_SN(intGrpSeq);
 				vo.setSCD_CNDT(TC001802); //실행중
+				vo.setDB_SVR_IPADR_ID(Integer.parseInt(strDB_SVR_IPADR_ID));
 				
 				if(strLOG_YN.equals("Y")) {
 					//스케줄 상태변경

@@ -24,6 +24,7 @@ public class ClientProtocolID {
 	
 	public static final String SCD_ID = "SCD_ID"; //스캐쥴ID
 	public static final String WORK_ID = "WORK_ID"; //작업ID
+	public static final String DB_SVR_IPADR_ID = "DB_SVR_IPADR_ID"; //DB_서버_IP주소_ID
 	public static final String EXD_ORD = "EXD_ORD"; //실행순서
 	public static final String NXT_EXD_YN = "NXT_EXD_YN"; //다음실행여부
 	public static final String REQ_CMD = "REQ_CMD"; //명령어
