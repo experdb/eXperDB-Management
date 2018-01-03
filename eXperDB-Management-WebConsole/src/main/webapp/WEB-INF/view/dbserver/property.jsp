@@ -327,7 +327,6 @@
 											<td>${databaseInfo.tablespace}</td>
 											<td>
 												<c:if test="${!empty databaseInfo.description}">${databaseInfo.description}</c:if>
-												
 												<c:if test="${empty databaseInfo.description}">
 												<c:forEach var="dbnmInfo" items="${resultRepoDB}">
 												<c:if test="${dbnmInfo.db_nm eq databaseInfo.name}" >${dbnmInfo.db_exp}</c:if>	
@@ -384,7 +383,6 @@
 				<div id="settinginfo">
 					<div class="cmm_bd">
 						<div class="sub_tit"><p><spring:message code="properties.about_preferences" /></p></div>
-						<div class="overflow_areas" style="height: 670px;">
 							<table class="list3">
 								<caption>주요환경설정 정보</caption>
 								<colgroup>
@@ -394,104 +392,28 @@
 								</colgroup>
 								<thead>
 									<tr>
-										<th scope="col"><spring:message code="properties.division" /></th>
 										<th scope="col"><spring:message code="properties.item" /></th>
 										<th scope="col"><spring:message code="properties.setting_value" /></th>
+										<th scope="col"><spring:message code="properties.explanation" /></th>
+										
 									</tr>
 								</thead>
 								<tbody>
-									<tr>
-										<td rowspan="3" class="color"><spring:message code="properties.connection_authentication" /></td>
-										<td class="center">listen_addresses</td>
-										<td >${result.CMD_LISTEN_ADDRESSES}</td>
-									</tr>
-									<tr>
-										<td class="center">port</td>
-										<td>${result.CMD_PORT}</td>
-									</tr>
-									<tr>
-										<td class="center">max_connections</td>
-										<td>${result.CMD_MAX_CONNECTIONS}</td>
-									</tr>
-									<tr>
-										<td rowspan="5" class="color"><spring:message code="properties.resource_settings" /></td>
-										<td class="center">shared_buffers</td>
-										<td>${result.CMD_SHARED_BUFFERS}</td>
-									</tr>
-									<tr>
-										<td class="center">work_mem</td>
-										<td>${result.CMD_WORK_MEM}</td>
-									</tr>
-									<tr>
-										<td class="center">maintenance_work_mem</td>
-										<td>${result.CMD_MAINTENANCE_WORK_MEM}</td>
-									</tr>
-									<tr>
-										<td class="center">effective_cache_size</td>
-										<td>${result.CMD_EFFECTIVE_CACHE_SIZE}</td>
-									</tr>
-									<tr>
-										<td class="center">shared_preload_libraries</td>
-										<td>${result.CMD_SHARED_PRELOAD_LIBRARIES}</td>
-									</tr>
-									<tr>
-										<td rowspan="6" class="color"><spring:message code="properties.wal_settings" /></td>
-										<td class="center">wal_level</td>
-										<td>${result.CMD_WAL_LEVEL}</td>
-									</tr>
-									<tr>
-										<td class="center">wal_buffers</td>
-										<td>${result.CMD_WAL_BUFFERS}</td>
-									</tr>
-									<tr>
-										<td class="center">archive_mode</td>
-										<td>${result.CMD_ARCHIVE_MODE}</td>
-									</tr>
-									<tr>
-										<td class="center">archive_command</td>
-										<td>${result.CMD_ARCHIVE_COMMAND}</td>
-									</tr>
-									<tr>
-										<td class="center">min_wal_size</td>
-										<td>${result.CMD_MIN_WAL_SIZE}</td>
-									</tr>
-									<tr>
-										<td class="center">max_wal_size</td>
-										<td>${result.CMD_MAX_WAL_SIZE}</td>
-									</tr>
-									<tr>
-										<td rowspan="2" class="color"><spring:message code="properties.replication" /></td>
-										<td class="center">hot_standby</td>
-										<td>${result.CMD_HOT_STANDBY}</td>
-									</tr>
-									<tr>
-										<td class="center">wal_keep_segments</td>
-										<td>${result.CMD_WAL_KEEP_SEGMENTS}</td>
-									</tr>
-									<tr>
-										<td rowspan="2" class="color"><spring:message code="properties.file_location" /></td>
-										<td class="center">config_file</td>
-										<td>${result.CMD_CONFIG_FILE}</td>
-									</tr>
-									<tr>
-										<td class="center">data_directory</td>
-										<td>${result.CMD_DATA_DIRECTORY}</td>
-									</tr>
-									<tr>
-										<td class="color"><spring:message code="properties.standard_time" /></td>
-										<td class="center">TimeZone</td>
-										<td>${result.CMD_TIMEZONE}</td>
-									</tr>
+									<c:forEach var="dbmsinfo" items="${result.CMD_DBMS_INFO}">
+										<tr>
+											<td>${dbmsinfo.name}</td>
+											<td>${dbmsinfo.setting}</td>
+											<td>${dbmsinfo.short_desc}</td>
+										</tr>
+									</c:forEach>
 								</tbody>
 							</table>
 						</div>
 					</div>
-				</div>
 
 				<div id="tablespaceinfo">
 					<div class="cmm_bd">
 						<div class="sub_tit"><p><spring:message code="properties.tablespace_info" /></p></div>
-						<div class="overflow_areas" style="height: 365px;">
 							<table class="list3" >
 								<caption>테이블스페이스 정보</caption>
 								<colgroup>
@@ -559,4 +481,3 @@
 			</div>
 		</div>
 	</div>
-</div>
