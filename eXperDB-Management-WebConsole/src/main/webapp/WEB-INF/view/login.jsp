@@ -71,6 +71,9 @@ $(window.document).ready(function() {
 				       <c:when test="${error == 'msg159'}">
 				           <spring:message code="message.msg159" />
 				       </c:when>
+				       <c:when test="${error == 'msg176'}">
+				          서버 HA구성에서 Master 가 중복 됩니다.
+				       </c:when>
 					</c:choose>		
 				</c:if></div>	
 				<div class="btn_wrap">

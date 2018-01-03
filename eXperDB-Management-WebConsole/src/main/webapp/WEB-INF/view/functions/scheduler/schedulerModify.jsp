@@ -266,7 +266,7 @@ $(window.document).ready(function() {
 			document.getElementById('scd_nm').value= result[0].scd_nm;
 			document.getElementById('scd_exp').value= result[0].scd_exp;				
 			document.getElementById('exe_perd_cd').value= result[0].exe_perd_cd;
-			document.getElementById('datepicker1').value= result[0].exe_dt;
+			document.getElementById('datepicker1').value= result[0].exe_dt==null?'':result[0].exe_dt;
 			document.getElementById('exe_month').value= result[0].exe_month;
 			document.getElementById('exe_day').value= result[0].exe_day;
  			document.getElementById('exe_h').value= result[0].exe_hms.substring(4, 6);
@@ -627,7 +627,7 @@ function fn_scheduleReStart(){
 													<span id="calendar">
 														<div class="calendar_area">
 															<a href="#n" class="calendar_btn">달력열기</a>
-															<input type="text" class="calendar" id="datepicker1" name="exe_dt" title="스케줄시간설정" readonly />
+															<input type="text" class="calendar" id="datepicker1" name="exe_dt" title="스케줄시간설정"readonly />
 														</div>
 													</span>
 													<span>
