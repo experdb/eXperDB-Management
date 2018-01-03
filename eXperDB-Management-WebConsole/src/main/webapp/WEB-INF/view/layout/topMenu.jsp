@@ -177,6 +177,36 @@ $(window.document).ready(function() {
 function fn_cookie(url) {
 	$.cookie('menu_url' , url, { path : '/' });
 }
+
+
+	function fn_localeSet(locale){
+ 		$.ajax({
+			async : false,
+			url : "/setChangeLocale.do",
+			data : {
+				locale:locale				
+			},
+			dataType : "json",
+			type : "post",
+			beforeSend: function(xhr) {
+		        xhr.setRequestHeader("AJAX", true);
+		     },
+			error : function(xhr, status, error) {
+				if(xhr.status == 401) {
+					alert('<spring:message code="message.msg02" />');
+					 location.href = "/";
+				} else if(xhr.status == 403) {
+					alert('<spring:message code="message.msg03" />');
+		             location.href = "/";
+				} else {
+					alert("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""));
+				}
+			},
+			success : function(result) {
+				location.reload();
+			}
+		})
+ 	}
 </script>
 <%@include file="../help/aboutExperdbLayer.jsp"%>
 <div id="header">
@@ -233,6 +263,12 @@ function fn_cookie(url) {
 					</li>
 					<li><a href="#n"><span><img src="/images/ico_h_7.png" alt="MY PAGE" /></span></a>
 						<ul class="depth_2">
+						    <li><a href="">Language</a>
+        						<ul class="depth_3">
+									<li><a href="#n" onClick="fn_localeSet('kr')">Korean</a></li>
+									<li><a href="#n" onClick="fn_localeSet('en')">English</a></li>
+								</ul>
+        					</li>
 							<li><a href="/myPage.do" onClick="fn_cookie(null)"><spring:message code="menu.user_information_management"/></a></li>
         					<li><a href="/myScheduleListView.do" onClick="fn_cookie(null)"><spring:message code="menu.my_schedule_management"/></a></li>
 						</ul>
