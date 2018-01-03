@@ -89,10 +89,11 @@ public class ScheduleQuartzJob implements Job{
 	        String today = (new SimpleDateFormat("yyyyMMddHHmmss").format(date));
 	        
 	        String bck_fileNm ="";
-		       
+	        int db_svr_ipadr_id =0;
 	        
 	        //마스터,슬레이브 DB갯수만큼 루프
 	        for(int h=0; h<resultDbconn.size(); h++){
+	        	db_svr_ipadr_id = Integer.parseInt(resultDbconn.get(h).get("db_svr_ipadr_id").toString());
 	        	ArrayList<String> CMD = new ArrayList<String>();
 		        //WORK 갯수만큼 루프
 				for(int i =0; i<resultWork.size(); i++){
@@ -120,7 +121,7 @@ public class ScheduleQuartzJob implements Job{
 					}
 				}		
 				System.out.println("명령어="+CMD);
-				agentCall(resultWork, CMD, BCK_NM, resultDbconn, h);
+				agentCall(resultWork, CMD, BCK_NM, resultDbconn, h, db_svr_ipadr_id);
 	        }
 		}catch(Exception e){
 			e.printStackTrace();
@@ -178,12 +179,18 @@ public class ScheduleQuartzJob implements Job{
 		//1.1 연결할 데이터베이스의 이름 지정
 		//DBMS += "--dbname="+resultDbconn.get(h).get("dft_db_nm");
 		//1.2 호스트 이름 지정
-		DBMS += " --host="+resultDbconn.get(h).get("ipadr");
+		DBMS += " --host="+resultDbconn.get(0).get("ipadr");
 		//1.3 서버가 연결을 청취하는 TCP포트 설정
-		DBMS += " --port="+resultDbconn.get(h).get("portno");
+		DBMS += " --port="+resultDbconn.get(0).get("portno");
 		//1.4 연결할 사용자이름
-		DBMS += " --username="+resultDbconn.get(h).get("svr_spr_usr_id");	
+		DBMS += " --username="+resultDbconn.get(0).get("svr_spr_usr_id");	
 		DBMS += " --no-password";	
+		
+		if(resultDbconn.get(h).get("master_gbn").equals("S")){
+			DBMS += " --standby-host="+resultDbconn.get(h).get("ipadr");
+			//1.3 서버가 연결을 청취하는 TCP포트 설정
+			DBMS += " --standby-port="+resultDbconn.get(h).get("portno");
+		}
 		return DBMS;
 	}
 
@@ -325,12 +332,12 @@ public class ScheduleQuartzJob implements Job{
 		rmanCmd += " --keep-srvlog-files="+resultWork.get(i).get("log_file_mtn_ecnt");
 		rmanCmd += " --keep-srvlog-days="+resultWork.get(i).get("log_file_stg_dcnt");
 
-		rmanCmd += " >> "+resultWork.get(i).get("log_file_pth")+"/"+resultWork.get(i).get("wrk_nm")+".log 2>&1";
+		rmanCmd += " >> "+resultWork.get(i).get("log_file_pth")+"/"+resultWork.get(i).get("wrk_nm").toString().replaceAll(" ", "")+".log 2>&1";
 		return rmanCmd;	
 	}
 	
 	
-	public void agentCall(List<Map<String, Object>> resultWork, ArrayList<String> CMD, ArrayList<String> BCKNM, List<Map<String, Object>> resultDbconn, int h) {
+	public void agentCall(List<Map<String, Object>> resultWork, ArrayList<String> CMD, ArrayList<String> BCKNM, List<Map<String, Object>> resultDbconn, int h, int db_svr_ipadr_id) {
 		try {
 				String IP = (String) resultDbconn.get(h).get("ipadr");
 				AgentInfoVO vo = new AgentInfoVO();
@@ -339,7 +346,7 @@ public class ScheduleQuartzJob implements Job{
 				int PORT = agentInfo.getSOCKET_PORT();
 						
 				ClientInfoCmmn clc = new ClientInfoCmmn();
-				clc.db_backup(resultWork, CMD, IP ,PORT, BCKNM);	
+				clc.db_backup(resultWork, CMD, IP ,PORT, BCKNM, db_svr_ipadr_id);	
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

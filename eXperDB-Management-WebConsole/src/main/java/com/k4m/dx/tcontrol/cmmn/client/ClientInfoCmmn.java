@@ -140,7 +140,7 @@ public class ClientInfoCmmn {
 	}
 
 	// 5. 백업실행
-	public void db_backup(List<Map<String, Object>> resultWork, ArrayList<String> CMD, String IP, int PORT, ArrayList<String> BCKNM) {
+	public void db_backup(List<Map<String, Object>> resultWork, ArrayList<String> CMD, String IP, int PORT, ArrayList<String> BCKNM, int db_svr_ipadr_id) {
 		try {
 			JSONObject reqJObj = new JSONObject();
 			JSONArray arrCmd = new JSONArray();
@@ -168,6 +168,7 @@ public class ClientInfoCmmn {
 				objJob.put(ClientProtocolID.BCK_BSN_DSCD, resultWork.get(i).get("bck_bsn_dscd")); //백업종류(RMAN or DUMP)
 				objJob.put(ClientProtocolID.LOG_YN, "Y"); // 로그저장 유무
 				objJob.put(ClientProtocolID.REQ_CMD, CMD.get(i));// 명령어
+				objJob.put(ClientProtocolID.DB_SVR_IPADR_ID, db_svr_ipadr_id);// 명령어
 				arrCmd.add(j, objJob);
 
 				// 백업명령 실행후,
@@ -187,7 +188,9 @@ public class ClientInfoCmmn {
 					objJob2.put(ClientProtocolID.BCK_FILENM, ""); // 저장파일명
 					objJob2.put(ClientProtocolID.LOG_YN, "N"); // 로그저장 유무
 					objJob2.put(ClientProtocolID.REQ_CMD, "pg_rman validate -B " + resultWork.get(i).get("bck_pth"));// 명령어
+					System.out.println("Validate 명령어 : "+objJob2.get(ClientProtocolID.REQ_CMD));
 					objJob2.put(ClientProtocolID.BCK_BSN_DSCD, resultWork.get(i).get("bck_bsn_dscd"));
+					objJob2.put(ClientProtocolID.DB_SVR_IPADR_ID, db_svr_ipadr_id);
 					arrCmd.add(j, objJob2);
 				}
 				j++;

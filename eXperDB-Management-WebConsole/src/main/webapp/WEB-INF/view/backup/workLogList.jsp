@@ -68,7 +68,6 @@ function fn_rman_init(){
 		    		{ data: "ipadr", className: "dt-center", defaultContent: ""},
 		         	{ data: "wrk_exp", className: "dt-left", defaultContent: ""}, 		         	
  		         	{ data: "bck_opt_cd_nm", className: "dt-center", defaultContent: ""}, 
- 		         	{ data: "file_sz", className: "dt-center", defaultContent: ""}, 
 		         	{ data: "bck_file_pth", className: "dt-left", defaultContent: ""}, 
  		         	{ data: "wrk_strt_dtm", className: "dt-center", defaultContent: ""}, 
  		         	{ data: "wrk_end_dtm", className: "dt-center", defaultContent: ""}, 
@@ -82,7 +81,7 @@ function fn_rman_init(){
 	 						} else if(full.exe_rslt_cd == 'TC001702'){
 	 							html += '<span class="btn btnC_01 btnF_02"><button onclick="fn_failLog('+full.exe_sn+')"><img src="../images/ico_state_01.png" style="margin-right:3px;"/>Fail</button></span>';
 	 						} else {
-	 							html +='';
+	 							html +='진행중';
 	 						}
 	 						return html;
 	 					},

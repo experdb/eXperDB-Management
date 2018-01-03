@@ -387,6 +387,7 @@
                 , A.SVR_SPR_USR_ID
                 , A.SVR_SPR_SCM_PWD
                 , B.MASTER_GBN
+                , B.DB_SVR_IPADR_ID
 			, A.FRST_REGR_ID
 			, TO_CHAR(A.FRST_REG_DTM,'YYYY-MM-DD HH24:MI:SS') AS FRST_REG_DTM
 			, A.LST_MDFR_ID
