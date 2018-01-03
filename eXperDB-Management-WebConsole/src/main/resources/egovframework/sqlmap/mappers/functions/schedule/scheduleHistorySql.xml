@@ -34,10 +34,9 @@
 			, MIN(A.WRK_STRT_DTM) AS WRK_STRT_DTM
 			, MAX(A.WRK_END_DTM) AS WRK_END_DTM
 			, TO_CHAR(TO_CHAR(MAX(A.WRK_END_DTM),'YYYY-MM-DD HH24:MI:SS')::TIMESTAMP - TO_CHAR(MIN(A.WRK_STRT_DTM),'YYYY-MM-DD HH24:MI:SS')::TIMESTAMP, 'HH24시MI분SS초') AS WRK_DTM
-			FROM T_WRKEXE_G A, T_DB_I B, T_DBSVRIPADR_I C
+			FROM T_WRKEXE_G A, T_DBSVRIPADR_I C
 			WHERE 1= 1
-			AND B.DB_SVR_ID = C.DB_SVR_ID
-            AND A.DB_ID = B.DB_ID
+			AND A.DB_SVR_IPADR_ID = C.DB_SVR_IPADR_ID
 			<if test="lgi_dtm_start != null and lgi_dtm_start != '' ">
 			 AND to_char(A.WRK_END_DTM,'YYYY-MM-DD') between #{lgi_dtm_start} and #{lgi_dtm_end}
 			</if>
@@ -73,10 +72,9 @@
 			, MIN(A.WRK_STRT_DTM) AS WRK_STRT_DTM
 			, MAX(A.WRK_END_DTM) AS WRK_END_DTM
 			, TO_CHAR(TO_CHAR(MAX(A.WRK_END_DTM),'YYYY-MM-DD HH24:MI:SS')::TIMESTAMP - TO_CHAR(MIN(A.WRK_STRT_DTM),'YYYY-MM-DD HH24:MI:SS')::TIMESTAMP, 'HH24시MI분SS초') AS WRK_DTM
-			FROM T_WRKEXE_G A, T_DB_I B, T_DBSVRIPADR_I C
+			FROM T_WRKEXE_G A, T_DBSVRIPADR_I C
 			WHERE 1= 1
-			AND B.DB_SVR_ID = C.DB_SVR_ID
-            AND A.DB_ID = B.DB_ID
+			AND A.DB_SVR_IPADR_ID = C.DB_SVR_IPADR_ID
 			<if test="lgi_dtm_start != null and lgi_dtm_start != '' ">
 			 AND to_char(A.WRK_END_DTM,'YYYY-MM-DD') between #{lgi_dtm_start} and #{lgi_dtm_end}
 			</if>
