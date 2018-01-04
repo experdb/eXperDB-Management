@@ -88,10 +88,10 @@ $(function() {
 
 function fn_chkExtName(extName) {
 	if(extName == "") {
-		alert('<spring:message code="message.msg26" />');
+		alert("<spring:message code='message.msg26' />");
 		history.go(-1);
 	} else if(extName == "agent") {
-		alert('<spring:message code="message.msg27" />');
+		alert("<spring:message code='message.msg27' />");
 		history.go(-1);
 	}
 	

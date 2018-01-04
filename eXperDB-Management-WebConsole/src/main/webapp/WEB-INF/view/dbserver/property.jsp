@@ -28,10 +28,10 @@
 	$(window.document).ready(function() {
 		var extName = "${extName}";
 		if(extName == "agent") {
-			alert('<spring:message code="message.msg25" /> ');
+			alert("<spring:message code='message.msg25' />");
 			history.go(-1);
 		}else if(extName == "agentfail"){
-			alert('<spring:message code="message.msg27" />');
+			alert("<spring:message code='message.msg27' />");
 			history.go(-1);
 		}else{		
 			$("#tab1").show();

@@ -142,13 +142,13 @@
 	$(window.document).ready(function() {
 		var extName = "${extName}";
 		if(extName == "agent") {
-			alert('<spring:message code="message.msg25" />');
+			alert("<spring:message code='message.msg25' />");
 			history.go(-1);
 		}else if(extName == "pgaudit"){
-			alert('<spring:message code="message.msg26" />');
+			alert("<spring:message code='message.msg26' />");
 			history.go(-1);
 		}else if(extName == "agentfail"){
-			alert('<spring:message code="message.msg27" />');
+			alert("<spring:message code='message.msg27' />");
 			history.go(-1);
 		}else{
 			fn_init();
@@ -169,10 +169,10 @@
 	 		     },
 	 			error : function(xhr, status, error) {
 	 				if(xhr.status == 401) {
-	 					alert('<spring:message code="message.msg02" />');
+	 					alert("<spring:message code='message.msg02' />");
 	 					 location.href = "/";
 	 				} else if(xhr.status == 403) {
-	 					alert('<spring:message code="message.msg03" />');
+	 					alert("<spring:message code='message.msg03' />");
 	 		             location.href = "/";
 	 				} else {
 	 					alert("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""));
@@ -200,10 +200,10 @@
 		     },
 			error : function(xhr, status, error) {
 				if(xhr.status == 401) {
-					alert('<spring:message code="message.msg02" />');
+					alert("<spring:message code='message.msg02' />");
 					 location.href = "/";
 				} else if(xhr.status == 403) {
-					alert('<spring:message code="message.msg03" />');
+					alert("<spring:message code='message.msg03' />");
 		             location.href = "/";
 				} else {
 					alert("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""));
@@ -228,7 +228,7 @@
         		&& 	result.ctf_mth_nm==(table.rows().data()[i].Method==undefined?'':table.rows().data()[i].Method)
         		&& 	result.opt_nm==(table.rows().data()[i].Option==undefined?'':table.rows().data()[i].Option)
         	){
-        		alert('<spring:message code="message.msg28" />');
+        		alert("<spring:message code='message.msg28' />");
         		return false;
         	}
         }    
@@ -256,7 +256,7 @@
         		&& 	result.ctf_mth_nm==(table.rows().data()[i].Method==undefined?'':table.rows().data()[i].Method)
         		&& 	result.opt_nm==(table.rows().data()[i].Option==undefined?'':table.rows().data()[i].Option)
         	){
-        		alert('<spring:message code="message.msg136"/>');
+        		alert("<spring:message code='message.msg136'/>");
         		return false;
         	}
         }    
@@ -307,7 +307,7 @@
 				
 			window.open(popUrl,"",popOption);
 		}else{
-			alert('<spring:message code="message.msg04" />');
+			alert("<spring:message code='message.msg04' />");
 			return false;
 		}			
 	}
@@ -316,10 +316,10 @@
 	function fn_delete() {
 		var datas = table.rows('.selected').data();
 		if (datas.length <= 0) {
-			alert('<spring:message code="message.msg04" />');
+			alert("<spring:message code='message.msg04' />");
 			return false;
 		} else {
-			if (!confirm('<spring:message code="message.msg17" />')) return false;
+			if (!confirm("<spring:message code='message.msg17' />")) return false;
 			var rows = table.rows( '.selected' ).remove().draw();
 		}
 	}
@@ -345,17 +345,17 @@
  		     },
  			error : function(xhr, status, error) {
  				if(xhr.status == 401) {
- 					alert('<spring:message code="message.msg02" />');
+ 					alert("<spring:message code='message.msg02' />");
  					 location.href = "/";
  				} else if(xhr.status == 403) {
- 					alert('<spring:message code="message.msg03" />');
+ 					alert("<spring:message code='message.msg03' />");
  		             location.href = "/";
  				} else {
  					alert("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""));
  				}
  			},
  			success : function(result) {
- 				alert('<spring:message code="message.msg29" />');
+ 				alert("<spring:message code='message.msg29' />");
  			}
  		});
 

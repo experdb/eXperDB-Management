@@ -73,13 +73,13 @@
 	
 	function fn_chkExtName(extName) {
 		if(extName == "") {
-			alert('<spring:message code="message.msg26" />');
+			alert("<spring:message code='message.msg26' />");
 			history.go(-1);
 		} else if(extName == "agent") {
-			alert('<spring:message code="message.msg25" />');
+			alert("<spring:message code='message.msg25' />");
 			history.go(-1);
 		}else if(extName == "agentfail"){
-			alert('<spring:message code="message.msg27" />');
+			alert("<spring:message code='message.msg27' />");
 			history.go(-1);
 		}
 		
@@ -88,7 +88,7 @@
 	function fn_save() {
  		var extName = "${extName}";
 		if(extName == "") {
-			alert('<spring:message code="message.msg26" />');
+			alert("<spring:message code='message.msg26' />");
 			
 			return false;
 
@@ -106,10 +106,10 @@
 			     },
 				error : function(xhr, status, error) {
 					if(xhr.status == 401) {
-						alert('<spring:message code="message.msg02" />');
+						alert("<spring:message code='message.msg02' />");
 						 location.href = "/";
 					} else if(xhr.status == 403) {
-						alert('<spring:message code="message.msg03" />');
+						alert("<spring:message code='message.msg03' />");
 			             location.href = "/";
 					} else {
 						alert("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""));
@@ -117,9 +117,9 @@
 				},
 				success : function(result) {
 					if(result == false) {
-						alert('<spring:message code="message.msg33" />');
+						alert("<spring:message code='message.msg33' />");
 					} else {
-						alert('<spring:message code="message.msg29" />');
+						alert("<spring:message code='message.msg29' />");
 					}
 					
 				}
