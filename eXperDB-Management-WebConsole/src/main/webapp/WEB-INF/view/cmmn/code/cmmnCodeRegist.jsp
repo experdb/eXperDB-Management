@@ -31,7 +31,7 @@ function fn_cmmnCodeList(){
 function fn_egov_regist_CmmnCode(){
 	
 				if(fnCheckNotKorean(document.insertCmmnCode.grp_cd.value)){
-					window.alert('<spring:message code="message.msg22" />');
+					window.alert("<spring:message code='message.msg22' />");
 					document.insertCmmnCode.grp_cd.select();
 					return;
 				}

@@ -66,10 +66,10 @@ var table = null;
 			     },
 				error : function(xhr, status, error) {
 					if(xhr.status == 401) {
-						alert('<spring:message code="message.msg02" />');
+						alert("<spring:message code='message.msg02' />");
 						 location.href = "/";
 					} else if(xhr.status == 403) {
-						alert('<spring:message code="message.msg03" />');
+						alert("<spring:message code='message.msg03' />");
 			             location.href = "/";
 					} else {
 						alert("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""));
@@ -87,7 +87,7 @@ var table = null;
 	/*조회버튼 클릭시*/
 	function fn_select(){
 		if($("#lst_mdf_dtm").val()==null){
-			alert('<spring:message code="message.msg30" />');
+			alert("<spring:message code='message.msg30' />");
 			return false;
 		}
 			$.ajax({
@@ -102,10 +102,10 @@ var table = null;
 			     },
 				error : function(xhr, status, error) {
 					if(xhr.status == 401) {
-						alert('<spring:message code="message.msg02" />');
+						alert("<spring:message code='message.msg02' />");
 						 location.href = "/";
 					} else if(xhr.status == 403) {
-						alert('<spring:message code="message.msg03" />');
+						alert("<spring:message code='message.msg03' />");
 			             location.href = "/";
 					} else {
 						alert("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""));
@@ -121,10 +121,10 @@ var table = null;
 	/*복원버튼 클릭시*/
 	function fn_recovery(){
 		if($("#lst_mdf_dtm").val()==null){
-			alert('<spring:message code="message.msg30" />');
+			alert("<spring:message code='message.msg30' />");
 			return false;
 		}
-		if (!confirm('<spring:message code="message.msg138"/>')) return false;
+		if (!confirm("<spring:message code='message.msg138'/>")) return false;
 		$.ajax({
 			url : "/recoveryAccessControlHistory.do",
 			data : {
@@ -138,10 +138,10 @@ var table = null;
 		     },
 			error : function(xhr, status, error) {
 				if(xhr.status == 401) {
-					alert('<spring:message code="message.msg02" />');
+					alert("<spring:message code='message.msg02' />");
 					 location.href = "/";
 				} else if(xhr.status == 403) {
-					alert('<spring:message code="message.msg03" />');
+					alert("<spring:message code='message.msg03' />");
 		             location.href = "/";
 				} else {
 					alert("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""));
@@ -149,16 +149,16 @@ var table = null;
 			},
 			success : function(result) {			
 				if (result=="true") {
-					alert('<spring:message code="message.msg31" />');
+					alert("<spring:message code='message.msg31' />");
 				}else if(result=="pgaudit"){
-					alert('<spring:message code="message.msg26" />');
+					alert("<spring:message code='message.msg26' />");
 				}else if(result=="agent"){
-					alert('<spring:message code="message.msg25" />');
+					alert("<spring:message code='message.msg25' />");
 				}else if(extName == "agentfail"){
-					alert('<spring:message code="message.msg27" /> ');
+					alert("<spring:message code='message.msg27' />");
 					history.go(-1);
 				}else {
-					alert('<spring:message code="message.msg32" />');
+					alert("<spring:message code='message.msg32' />");
 				}
 			}
 		});

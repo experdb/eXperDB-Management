@@ -78,10 +78,10 @@
 		     },
 			error : function(xhr, status, error) {
 				if(xhr.status == 401) {
-					alert('<spring:message code="message.msg02" />');
+					alert("<spring:message code='message.msg02' />");
 					 location.href = "/";
 				} else if(xhr.status == 403) {
-					alert('<spring:message code="message.msg03" />');
+					alert("<spring:message code='message.msg03' />");
 		             location.href = "/";
 				} else {
 					alert("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""));
@@ -102,10 +102,10 @@
 		     },
 			error : function(xhr, status, error) {
 				if(xhr.status == 401) {
-					alert('<spring:message code="message.msg02" />');
+					alert("<spring:message code='message.msg02' />");
 					 location.href = "/";
 				} else if(xhr.status == 403) {
-					alert('<spring:message code="message.msg03" />');
+					alert("<spring:message code='message.msg03' />");
 		             location.href = "/";
 				} else {
 					alert("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""));
@@ -208,7 +208,7 @@
 	function fn_userCheck(){
 		var datas = userTable.row('.selected').length;
 		 if(datas != 1){
-			 alert('<spring:message code="message.msg165"/>');
+			 alert("");
 			 $("input[type=checkbox]").prop("checked",false);
 			 return false;
 		 }
@@ -241,10 +241,10 @@
 		    	     },
 		    		error : function(xhr, status, error) {
 		    			if(xhr.status == 401) {
-		    				alert('<spring:message code="message.msg02" />');
+		    				alert("<spring:message code='message.msg02' />");
 		    				 location.href = "/";
 		    			} else if(xhr.status == 403) {
-		    				alert('<spring:message code="message.msg03" />');
+		    				alert("<spring:message code='message.msg03' />");
 		    	             location.href = "/";
 		    			} else {
 		    				alert("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""));
@@ -323,7 +323,7 @@
 		 var datasArr = new Array();	
 		 var datas = userTable.row('.selected').length;
 		 if(datas != 1){
-			 alert('<spring:message code="message.msg165"/>');
+			 alert("<spring:message code='message.msg165'/>");
 			 return false;
 		 }else{
 			 var usr_id = userTable.row('.selected').data().usr_id;
@@ -400,10 +400,10 @@
 				     },
 					error : function(xhr, status, error) {
 						if(xhr.status == 401) {
-							alert('<spring:message code="message.msg02" />');
+							alert("<spring:message code='message.msg02' />");
 							 location.href = "/";
 						} else if(xhr.status == 403) {
-							alert('<spring:message code="message.msg03" />');
+							alert("<spring:message code='message.msg03' />");
 				             location.href = "/";
 						} else {
 							alert("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""));
@@ -433,10 +433,10 @@
  		     },
  			error : function(xhr, status, error) {
  				if(xhr.status == 401) {
- 					alert('<spring:message code="message.msg02" />');
+ 					alert("<spring:message code='message.msg02' />");
  					 location.href = "/";
  				} else if(xhr.status == 403) {
- 					alert('<spring:message code="message.msg03" />');
+ 					alert("<spring:message code='message.msg03' />");
  		             location.href = "/";
  				} else {
  					alert("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""));
