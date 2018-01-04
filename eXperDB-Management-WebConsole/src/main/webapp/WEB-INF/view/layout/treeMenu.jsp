@@ -368,80 +368,71 @@ $(window.document).ready(
 						</div>
 				</div>
 
-<!-- 				<div id="treeTitle"><img src="../images/ico_lnb_2.png" id="treeImg"><a href="#">데이터 암호화</a> -->
-<!-- 						<div id="sidetreecontrol3" style="float: right;">							 -->
-<!-- 							<a href="?#"><img src="../images/ico_lnb_close.png"></a> -->
-<!-- 							<a href="?#"><img src="../images/ico_lnb_open.png"></a> -->
-<!-- 						</div> -->
-<!-- 				</div> -->
-<!-- 				<div id="sidetree">				 -->
-<!-- 					<div class="treeborder"> -->
-<!-- 						<ul id="tree"> -->
-<!-- 							<div id="tree3"> -->
-<!-- 								<ul class="depth_1 lnbMenu"> -->
-<!-- 									<li class="t2"><div class="border"> -->
-<!-- 									<a href="#n"><img src="../images/ico_lnb_5.png" id="treeImg"><div class="tooltip">보안정책<span class="tooltiptext">보안정책</span></div></a> -->
-<!-- 									</div> -->
-<!-- 					    				<ul class="depth_2"> -->
-<!-- 						   				    <li class="ico2_3"><a href="/policyList.do"><img src="../images/ico_lnb_8.png" id="treeImg">정책리스트</a></li> -->
-<!-- 						    			   	<li class="ico2_4"><a href="/policyInsert.do"><img src="../images/ico_lnb_9.png" id="treeImg">정책등록</a></li> -->
-<!-- 					   				  	</ul> -->
-<!-- 				   				  	</li> -->
+				<div id="treeTitle"><img src="../images/ico_lnb_2.png" id="treeImg"><a href="#">데이터 암호화</a>
+						<div id="sidetreecontrol3" style="float: right;">							
+							<a href="?#"><img src="../images/ico_lnb_close.png"></a>
+							<a href="?#"><img src="../images/ico_lnb_open.png"></a>
+						</div>
+				</div>
+				<div id="sidetree">				
+					<div class="treeborder">
+						<ul id="tree">
+							<div id="tree3">
+								<ul class="depth_1 lnbMenu">
+									<li class="t2"><div class="border">
+									<a href="#n"><img src="../images/ico_lnb_5.png" id="treeImg"><div class="tooltip">보안정책<span class="tooltiptext">보안정책</span></div></a>
+									</div>
+					    				<ul class="depth_2">
+						   				    <li class="ico2_3"><a href="/policyList.do"><img src="../images/ico_lnb_8.png" id="treeImg">정책리스트</a></li>
+						    			   	<li class="ico2_4"><a href="/policyInsert.do"><img src="../images/ico_lnb_9.png" id="treeImg">정책등록</a></li>
+					   				  	</ul>
+				   				  	</li>
 				   				  	
-<!-- 				   				  	<li class="t2"><div class="border"> -->
-<!-- 									<a href="#n"><img src="../images/ico_lnb_5.png" id="treeImg"><div class="tooltip">암호화키관리<span class="tooltiptext">암호화키관리</span></div></a> -->
-<!-- 									</div> -->
-<!-- 					    				<ul class="depth_2"> -->
-<!-- 						   				    <li class="ico2_3"><a href="#"><img src="../images/ico_lnb_8.png" id="treeImg">암호화키리스트</a></li> -->
-<!-- 						   				   	<li class="ico2_4"><a href="#"><img src="../images/ico_lnb_9.png" id="treeImg">암호화키등록</a></li> -->
-<!-- 					   				  	</ul> -->
-<!-- 				   				  	</li> -->
+				   				  	<li class="t2"><div class="border">
+									<a href="#n"><img src="../images/ico_lnb_5.png" id="treeImg"><div class="tooltip">암호화키관리<span class="tooltiptext">암호화키관리</span></div></a>
+									</div>
+					    				<ul class="depth_2">
+						   				    <li class="ico2_3"><a href="#"><img src="../images/ico_lnb_8.png" id="treeImg">암호화키리스트</a></li>
+						   				   	<li class="ico2_4"><a href="#"><img src="../images/ico_lnb_9.png" id="treeImg">암호화키등록</a></li>
+					   				  	</ul>
+				   				  	</li>
 				   				  	
-<!-- 				   				  	<li class="t2"><div class="border"> -->
-<!-- 									<a href="#n"><img src="../images/ico_lnb_5.png" id="treeImg"><div class="tooltip">백업/복원<span class="tooltiptext">백업/복원</span></div></a> -->
-<!-- 									</div> -->
-<!-- 					    				<ul class="depth_2"> -->
-<!-- 						    			    <li class="ico2_3"><a href="#"><img src="../images/ico_lnb_8.png" id="treeImg">관리데이터백업</a></li> -->
-<!-- 						     			   	<li class="ico2_4"><a href="#"><img src="../images/ico_lnb_9.png" id="treeImg">관리데이터복원</a></li> -->
-<!-- 					   				  	</ul> -->
-<!-- 				   				  	</li> -->
+				   				  	<li class="t2"><div class="border">
+									<a href="#n"><img src="../images/ico_lnb_5.png" id="treeImg"><div class="tooltip">백업/복원<span class="tooltiptext">백업/복원</span></div></a>
+									</div>
+					    				<ul class="depth_2">
+						    			    <li class="ico2_3"><a href="#"><img src="../images/ico_lnb_8.png" id="treeImg">관리데이터백업</a></li>
+						     			   	<li class="ico2_4"><a href="#"><img src="../images/ico_lnb_9.png" id="treeImg">관리데이터복원</a></li>
+					   				  	</ul>
+				   				  	</li>
 				   					  	
-<!-- 				   				  	<li class="t2"><div class="border"> -->
-<!-- 									<a href="#n"><img src="../images/ico_lnb_5.png" id="treeImg"><div class="tooltip">감사로그<span class="tooltiptext">감사로그</span></div></a> -->
-<!-- 									</div> -->
-<!-- 					    				<ul class="depth_2"> -->
-<!-- 						    			    <li class="ico2_3"><a href="#"><img src="../images/ico_lnb_8.png" id="treeImg">암복호화</a></li> -->
-<!-- 						     			   	<li class="ico2_4"><a href="#"><img src="../images/ico_lnb_9.png" id="treeImg">관리서버</a></li> -->
-<!-- 						     			   	<li class="ico2_4"><a href="#"><img src="../images/ico_lnb_9.png" id="treeImg">암복호화키</a></li> -->
-<!-- 						     			   	<li class="ico2_4"><a href="#"><img src="../images/ico_lnb_9.png" id="treeImg">백업및복원</a></li> -->
-<!-- 						     			   	<li class="ico2_4"><a href="#"><img src="../images/ico_lnb_9.png" id="treeImg">자원사용</a></li> -->
-<!-- 					   				  	</ul> -->
-<!-- 				   				  	</li> -->
+				   				  	<li class="t2"><div class="border">
+									<a href="#n"><img src="../images/ico_lnb_5.png" id="treeImg"><div class="tooltip">감사로그<span class="tooltiptext">감사로그</span></div></a>
+									</div>
+					    				<ul class="depth_2">
+						    			    <li class="ico2_3"><a href="#"><img src="../images/ico_lnb_8.png" id="treeImg">암복호화</a></li>
+						     			   	<li class="ico2_4"><a href="#"><img src="../images/ico_lnb_9.png" id="treeImg">관리서버</a></li>
+						     			   	<li class="ico2_4"><a href="#"><img src="../images/ico_lnb_9.png" id="treeImg">암복호화키</a></li>
+						     			   	<li class="ico2_4"><a href="#"><img src="../images/ico_lnb_9.png" id="treeImg">백업및복원</a></li>
+						     			   	<li class="ico2_4"><a href="#"><img src="../images/ico_lnb_9.png" id="treeImg">자원사용</a></li>
+					   				  	</ul>
+				   				  	</li>
 				   					  	
-<!-- 				   				  	<li class="t2"><div class="border"> -->
-<!-- 									<a href="#n"><img src="../images/ico_lnb_5.png" id="treeImg"><div class="tooltip">설정<span class="tooltiptext">설정</span></div></a> -->
-<!-- 									</div> -->
-<!-- 					    				<ul class="depth_2"> -->
-<!-- 						    			    <li class="ico2_3"><a href="#"><img src="../images/ico_lnb_8.png" id="treeImg">보안정책옵션설정</a></li> -->
-<!-- 						     			   	<li class="ico2_4"><a href="#"><img src="../images/ico_lnb_9.png" id="treeImg">인증설정</a></li> -->
-<!-- 						     			   	<li class="ico2_4"><a href="#"><img src="../images/ico_lnb_9.png" id="treeImg">모니터링주기설정</a></li> -->
-<!-- 						     			   	<li class="ico2_4"><a href="#"><img src="../images/ico_lnb_9.png" id="treeImg">서버마스터키 암호설정</a></li> -->
-<!-- 					   				  	</ul> -->
-<!-- 				   				  	</li> -->
-				   					  	
-<!-- 				   				  	<li class="t2"><div class="border"> -->
-<!-- 									<a href="#n"><img src="../images/ico_lnb_5.png" id="treeImg"><div class="tooltip">에이전트<span class="tooltiptext">에이전트</span></div></a> -->
-<!-- 									</div> -->
-<!-- 					    				<ul class="depth_2"> -->
-<!-- 						    			    <li class="ico2_3"><a href="#"><img src="../images/ico_lnb_8.png" id="treeImg">eXperDB-Agent</a></li> -->
-<!-- 						     			   	<li class="ico2_4"><a href="#"><img src="../images/ico_lnb_9.png" id="treeImg">Encrypt-Agent</a></li> -->
-<!-- 					   				  	</ul> -->
-<!-- 				   				  	</li> -->
-<!-- 			   				 	</ul>  -->
-<!-- 			   				</div>  	 		 -->
-<!-- 						</ul> -->
-<!-- 					</div> -->
-<!-- 				</div>				 -->
+				   				  	<li class="t2"><div class="border">
+									<a href="#n"><img src="../images/ico_lnb_5.png" id="treeImg"><div class="tooltip">설정<span class="tooltiptext">설정</span></div></a>
+									</div>
+					    				<ul class="depth_2">
+						    			    <li class="ico2_3"><a href="#"><img src="../images/ico_lnb_8.png" id="treeImg">보안정책옵션설정</a></li>
+						     			   	<li class="ico2_4"><a href="#"><img src="../images/ico_lnb_9.png" id="treeImg">인증설정</a></li>
+						     			   	<li class="ico2_4"><a href="#"><img src="../images/ico_lnb_9.png" id="treeImg">모니터링주기설정</a></li>
+						     			   	<li class="ico2_4"><a href="#"><img src="../images/ico_lnb_9.png" id="treeImg">서버마스터키 암호설정</a></li>
+					   				  	</ul>
+				   				  	</li>
+			   				 	</ul> 
+			   				</div>  	 		
+						</ul>
+					</div>
+				</div>
 
 				<div id="treeTitle"><img src="../images/ico_main_tit_1.png" id="treeImg"><a href="/selectScheduleListView.do"><spring:message code="menu.schedule" /></a></div>	
 				<div id="sidetree1">						

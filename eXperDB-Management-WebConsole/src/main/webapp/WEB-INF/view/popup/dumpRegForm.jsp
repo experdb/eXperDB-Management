@@ -595,7 +595,7 @@ function fn_check() {
 <body>
 <div class="pop_container">
 	<div class="pop_cts">
-		<p class="tit">Dump <spring:message code="dashboard.Register.backup" /></p>
+		<p class="tit">Dump <spring:message code="dashboard.Register_backup" /></p>
 		<div class="pop_cmm">
 			<form name="workRegForm">
 			<input type="hidden" name="db_svr_id" id="db_svr_id" value="${db_svr_id}"/>
