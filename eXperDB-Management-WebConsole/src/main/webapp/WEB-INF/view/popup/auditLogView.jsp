@@ -101,7 +101,7 @@
 		var v_log_line = $("#log_line").val();
 		
 		if(v_endFlag > 0) {
-			alert('<spring:message code="message.msg66" />');
+			alert("<spring:message code='message.msg66' />");
 			$("#endFlag").val("0");
 			return;
 		}
