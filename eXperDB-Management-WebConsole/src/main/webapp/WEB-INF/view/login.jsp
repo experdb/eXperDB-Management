@@ -21,12 +21,12 @@ function fn_login(){
 	 
 	if (strid == "" || strid == "undefind" || strid == null)
 	{
-		alert('<spring:message code="message.msg128" />');
+		alert("<spring:message code='message.msg128' />");
 		document.getElementById('usr_id').focus();
 		return false;
 	}
 	if (strpw == "" || strpw == "undefind" || strpw == null){
-			alert('<spring:message code="message.msg129" />');
+			alert("<spring:message code='message.msg129' />");
 			document.getElementById('usr_id').focus();
 			return false;
 	}
