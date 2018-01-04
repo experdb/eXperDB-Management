@@ -1,18 +1,20 @@
-<%@ page language="java" contentType="text/html; charset=UTF-8"
-	pageEncoding="UTF-8"%>
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<%@ taglib prefix="form" uri="http://www.springframework.org/tags/form"%>
+<%@ taglib prefix="ui" uri="http://egovframework.gov/ctl/ui"%>
+<%@ taglib prefix="spring" uri="http://www.springframework.org/tags"%>
 <%
 	/**
-	* @Class Name : policyList.jsp
-	* @Description : policyList 화면
+	* @Class Name : securityPolicy.jsp
+	* @Description : securityPolicy 화면
 	* @Modification Information
 	*
 	*   수정일         수정자                   수정내용
 	*  ------------    -----------    ---------------------------
-	*  2017.11.20     최초 생성
+	*  2018.01.04     최초 생성
 	*
 	* author 김주영 사원
-	* since 2017.11.20 
+	* since 2018.01.04 
 	*
 	*/
 %>
@@ -65,22 +67,21 @@ var table = null;
 
 	}
 
-	/* 등록 버튼 클릭시*/
-	function fn_insert() {
-		var popUrl = "/popup/policyRegForm.do"; // 서버 url 팝업경로
-		var width = 920;
-		var height = 680;
-		var left = (window.screen.width / 2) - (width / 2);
-		var top = (window.screen.height /2) - (height / 2);
-		var popOption = "width="+width+", height="+height+", top="+top+", left="+left+", resizable=no, scrollbars=yes, status=no, toolbar=no, titlebar=yes, location=no,";
-		window.open(popUrl,"",popOption);
-	}
-
 	/* 수정 버튼 클릭시*/
 	function fn_update() {
-
+		var datas = table.rows('.selected').data();
+		if (datas.length <= 0) {
+			alert('<spring:message code="message.msg35" />');
+			return false;
+		}else if (datas.length >1){
+			alert('<spring:message code="message.msg38" />');
+		}
+		var form = document.modifyForm;
+		form.action = "/securityPolicyModify.do";
+		form.submit();
+		return;
 	}
-
+	
 	/* 삭제 버튼 클릭시*/
 	function fn_delete() {
 
@@ -90,7 +91,7 @@ var table = null;
 <div id="contents">
 	<div class="contents_wrap">
 		<div class="contents_tit">
-			<h4>보안정책관리<a href="#n"><img src="../images/ico_tit.png" class="btn_info" /></a></h4>
+			<h4>정책리스트<a href="#n"><img src="../images/ico_tit.png" class="btn_info" /></a></h4>
 			<div class="infobox">
 				<ul>
 					<li>보안정책관리설명</li>
@@ -98,8 +99,9 @@ var table = null;
 			</div>
 			<div class="location">
 				<ul>
-					<li>보안정책관리</li>
-					<li class="on">보안정책관리</li>
+					<li>데이터암호화</li>
+					<li>보안정책</li>
+					<li class="on">정책리스트</li>
 				</ul>
 			</div>
 		</div>
@@ -107,7 +109,7 @@ var table = null;
 			<div class="cmm_grp">
 				<div class="btn_type_01">
 					<span class="btn" onclick="fn_select();"><button>조회</button></span>
-					<span class="btn" onclick="fn_insert();"><button>등록</button></span>
+					<span class="btn" onclick="fn_insert();"><a href="/securityPolicyInsert.do"><button>등록</button></a></span>
 					<span class="btn" onclick="fn_update();"><button>수정</button></span>
 					<span class="btn" onclick="fn_delete();"><button>삭제</button></span>
 				</div>

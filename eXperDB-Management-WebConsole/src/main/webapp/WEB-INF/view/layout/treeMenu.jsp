@@ -383,8 +383,8 @@ $(window.document).ready(
 									<a href="#n"><img src="../images/ico_lnb_5.png" id="treeImg"><div class="tooltip">보안정책<span class="tooltiptext">보안정책</span></div></a>
 									</div>
 					    				<ul class="depth_2">
-						   				    <li class="ico2_3"><a href="/policyList.do"><img src="../images/ico_lnb_8.png" id="treeImg">정책리스트</a></li>
-						    			   	<li class="ico2_4"><a href="/policyInsert.do"><img src="../images/ico_lnb_9.png" id="treeImg">정책등록</a></li>
+						   				    <li class="ico2_3"><a href="/securityPolicy.do"><img src="../images/ico_lnb_8.png" id="treeImg">정책리스트</a></li>
+						    			   	<li class="ico2_4"><a href="/securityPolicyInsert.do"><img src="../images/ico_lnb_9.png" id="treeImg">정책등록</a></li>
 					   				  	</ul>
 				   				  	</li>
 				   				  	

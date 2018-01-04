@@ -76,4 +76,7 @@
 	<definition name="encript/setting/*" extends="default">
 		<put-attribute name="contents" value="/WEB-INF/view/encript/setting/{1}.jsp" />
 	</definition>
+	<definition name="encript/securityPolicy/*" extends="default">
+		<put-attribute name="contents" value="/WEB-INF/view/encript/securityPolicy/{1}.jsp" />
+	</definition>
 </tiles-definitions>

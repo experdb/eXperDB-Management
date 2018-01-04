@@ -537,7 +537,7 @@ body.bg{background:#fff url(../images/login_bg.png) center center no-repeat;}
 #header #gnb_menu #gnb ul{display:none;}
 #header #gnb_menu .depth_1{min-width:1050px;}
 #header #gnb_menu .depth_1:after{display:block;content:"";clear:both;}
-#header #gnb_menu .depth_1 > li{float:left;width:200px;margin-left:6px;}
+#header #gnb_menu .depth_1 > li{float:left;width:180px;margin-left:6px;}
 #header #gnb_menu .depth_1 > li:first-child{margin-left:0;}
 #header #gnb_menu .depth_1 > li:last-child{float:right;margin-right:40px;}
 #header #gnb_menu .depth_1 > li > a{display:block;height:75px;padding-top:12px;text-align:center;font-size:14px;color:#1e1905;font-family:'Nanum Square Bold';font-weight:700;}
@@ -556,7 +556,7 @@ body.bg{background:#fff url(../images/login_bg.png) center center no-repeat;}
 #header #gnb_menu .depth_1 .depth_2 > li.menu > a:hover,
 #header #gnb_menu .depth_1 .depth_2 > li.menu > a:focus,
 #header #gnb_menu .depth_1 .depth_2 > li.menu.on > a{background:#ffcc66 url(../images/gnb_arw_on.png) right 5px top 50% no-repeat;}
-#header #gnb_menu .depth_1 .depth_2 .depth_3{width:164px;position:absolute;top:0;left:100%;}
+#header #gnb_menu .depth_1 .depth_2 .depth_3{width:170px;position:absolute;top:0;left:100%;}
 #header #gnb_menu .depth_1 .depth_2 .depth_3 > li > a{display:block;height:30px;line-height:30px;padding-left:13px;background:#fff;border-bottom:1px solid #ccc;font-size:12px;color:#636363;}
 #header #gnb_menu .depth_1 .depth_2 .depth_3 > li > a:hover,
 #header #gnb_menu .depth_1 .depth_2 .depth_3 > li > a:focus,
