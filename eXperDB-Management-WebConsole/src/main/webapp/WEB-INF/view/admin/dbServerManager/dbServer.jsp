@@ -91,10 +91,10 @@ $(window.document).ready(function() {
 	     },
 		error : function(xhr, status, error) {
 			if(xhr.status == 401) {
-				alert('<spring:message code="message.msg02" />');
+				alert("<spring:message code='message.msg02' />");
 				 location.href = "/";
 			} else if(xhr.status == 403) {
-				alert('<spring:message code="message.msg03" />');
+				alert("<spring:message code='message.msg03' />");
 	             location.href = "/";
 			} else {
 				alert("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""));
@@ -149,10 +149,10 @@ function fn_search(){
 	     },
 		error : function(xhr, status, error) {
 			if(xhr.status == 401) {
-				alert('<spring:message code="message.msg02" />');
+				alert("<spring:message code='message.msg02' />");
 				 location.href = "/";
 			} else if(xhr.status == 403) {
-				alert('<spring:message code="message.msg03" />');
+				alert("<spring:message code='message.msg03' />");
 	             location.href = "/";
 			} else {
 				alert("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""));
@@ -201,7 +201,7 @@ function fn_regRe_popup(){
 		
 // 		window.open("/popup/dbServerRegReForm.do?db_svr_id="+db_svr_id+"&flag=server","dbServerRegRePop","location=no,menubar=no,resizable=yes,scrollbars=yes,status=no,width=950,height=638,top=0,left=0");
 	} else {
-		alert('<spring:message code="message.msg04" />');
+		alert("<spring:message code='message.msg04' />");
 	}	
 }
 </script>

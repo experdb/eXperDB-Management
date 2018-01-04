@@ -65,10 +65,10 @@ $(window.document).ready(function() {
 		     },
 			error : function(xhr, status, error) {
 				if(xhr.status == 401) {
-					alert('<spring:message code="message.msg02" />');
+					alert("<spring:message code='message.msg02' />");
 					 location.href = "/";
 				} else if(xhr.status == 403) {
-					alert('<spring:message code="message.msg03" />');
+					alert("<spring:message code='message.msg03' />");
 		             location.href = "/";
 				} else {
 					alert("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""));
@@ -93,10 +93,10 @@ $(window.document).ready(function() {
 		     },
 			error : function(xhr, status, error) {
 				if(xhr.status == 401) {
-					alert('<spring:message code="message.msg02" />');
+					alert("<spring:message code='message.msg02' />");
 					 location.href = "/";
 				} else if(xhr.status == 403) {
-					alert('<spring:message code="message.msg03" />');
+					alert("<spring:message code='message.msg03' />");
 		             location.href = "/";
 				} else {
 					alert("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""));
@@ -120,10 +120,10 @@ $(window.document).ready(function() {
     	     },
     		error : function(xhr, status, error) {
     			if(xhr.status == 401) {
-    				alert('<spring:message code="message.msg02" />');
+    				alert("<spring:message code='message.msg02' />");
     				 location.href = "/";
     			} else if(xhr.status == 403) {
-    				alert('<spring:message code="message.msg03" />');
+    				alert("<spring:message code='message.msg03' />");
     	             location.href = "/";
     			} else {
     				alert("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""));
@@ -181,10 +181,10 @@ $(function() {
 	    	     },
 	    		error : function(xhr, status, error) {
 	    			if(xhr.status == 401) {
-	    				alert('<spring:message code="message.msg02" />');
+	    				alert("<spring:message code='message.msg02' />");
 	    				 location.href = "/";
 	    			} else if(xhr.status == 403) {
-	    				alert('<spring:message code="message.msg03" />');;
+	    				alert("<spring:message code='message.msg03' />");
 	    	             location.href = "/";
 	    			} else {
 	    				alert("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""));
@@ -218,7 +218,7 @@ $(function() {
 		$("#read").click(function() { 
 			var datas = userTable.row('.selected').length;
 			 if(datas != 1){
-				 alert('<spring:message code="message.msg165"/>');
+				 alert("<spring:message code='message.msg165'/>");
 				 return false;
 			 }
 			if ($("#read").prop("checked")) {
@@ -233,7 +233,7 @@ $(function() {
 		$("#write").click(function() { 
 			var datas = userTable.row('.selected').length;
 			 if(datas != 1){
-				 alert('<spring:message code="message.msg165"/>');
+				 alert("<spring:message code='message.msg165'/>");
 				 return false;
 			 }
 			if ($("#write").prop("checked")) {
@@ -248,7 +248,7 @@ $(function() {
 			var array = new Array("MN000101","MN000102","MN000103","MN000201","MN000202");
 			var datas = userTable.row('.selected').length;
 			 if(datas != 1){
-				 alert('<spring:message code="message.msg165"/>');
+				 alert("<spring:message code='message.msg165'/>");
 				 return false;
 			 }
 			if ($("#functions").prop("checked")) {
@@ -269,7 +269,7 @@ $(function() {
 			var array = new Array("MN000301","MN000302","MN000303","MN0004","MN000501","MN000502","MN000503","MN000601","MN000701","MN0008","MN0001101","MN0001102","MN0001201","MN0001202","MN0001203","MN0001204","MN0001301","MN0001302");
 			var datas = userTable.row('.selected').length;
 			 if(datas != 1){
-				 alert('<spring:message code="message.msg165"/>');
+				 alert("<spring:message code='message.msg165'/>");
 				 return false;
 			 }
 			if ($("#admin").prop("checked")) {
@@ -290,7 +290,7 @@ $(function() {
 			var array = new Array("MN000101","MN000102","MN000103");
 			var datas = userTable.row('.selected').length;
 			 if(datas != 1){
-				 alert('<spring:message code="message.msg165"/>');
+				 alert("<spring:message code='message.msg165'/>");
 				 return false;
 			 }
 			if ($("#schinfo").prop("checked")) {
@@ -311,7 +311,7 @@ $(function() {
 			var array = new Array("MN000201","MN000202");
 			var datas = userTable.row('.selected').length;
 			 if(datas != 1){
-				 alert('<spring:message code="message.msg165"/>');
+				 alert("<spring:message code='message.msg165'/>");
 				 return false;
 			 }
 			if ($("#transferinfo").prop("checked")) {
@@ -332,7 +332,7 @@ $(function() {
 			var array = new Array("MN000301","MN000302","MN000303");
 			var datas = userTable.row('.selected').length;
 			 if(datas != 1){
-				 alert('<spring:message code="message.msg165"/>');
+				 alert("<spring:message code='message.msg165'/>");
 				 return false;
 			 }
 			if ($("#dbmsinfo").prop("checked")) {
@@ -353,7 +353,7 @@ $(function() {
 			var array = new Array("MN000501","MN000502","MN000503");
 			var datas = userTable.row('.selected').length;
 			 if(datas != 1){
-				 alert('<spring:message code="message.msg165"/>');
+				 alert("<spring:message code='message.msg165'/>");
 				 return false;
 			 }
 			if ($("#authmanage").prop("checked")) {
@@ -373,7 +373,7 @@ $(function() {
 		$(".inp_chk").click(function() { 
 			var datas = userTable.row('.selected').length;
 			 if(datas != 1){
-				 alert('<spring:message code="message.msg165"/>');
+				 alert("<spring:message code='message.msg165'/>");
 				 return false;
 			 }
 		});
@@ -396,7 +396,7 @@ function fn_save(){
 	 var datasArr = new Array();	
 	 var datas = userTable.row('.selected').length;
 	 if(datas != 1){
-		 alert('<spring:message code="message.msg165"/>');
+		 alert("<spring:message code='message.msg165'/>");
 		 return false;
 	 }else{
 	 var usr_id = userTable.row('.selected').data().usr_id;
@@ -436,10 +436,10 @@ function fn_save(){
 			     },
 				error : function(xhr, status, error) {
 					if(xhr.status == 401) {
-						alert('<spring:message code="message.msg02" />');
+						alert("<spring:message code='message.msg02' />");
 						 location.href = "/";
 					} else if(xhr.status == 403) {
-						alert('<spring:message code="message.msg03" />');
+						alert("<spring:message code='message.msg03' />");
 			             location.href = "/";
 					} else {
 						alert("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""));
@@ -470,10 +470,10 @@ function fn_search(){
 	     },
 		error : function(xhr, status, error) {
 			if(xhr.status == 401) {
-				alert('<spring:message code="message.msg02" />');
+				alert("<spring:message code='message.msg02' />");
 				 location.href = "/";
 			} else if(xhr.status == 403) {
-				alert('<spring:message code="message.msg03" />');
+				alert("<spring:message code='message.msg03' />");
 	             location.href = "/";
 			} else {
 				alert("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""));

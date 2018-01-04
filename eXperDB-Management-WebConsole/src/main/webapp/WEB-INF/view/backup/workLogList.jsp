@@ -183,10 +183,10 @@ function fn_get_rman_list(){
 	     },
 		error : function(xhr, status, error) {
 			if(xhr.status == 401) {
-				alert('<spring:message code="message.msg02" />');
+				alert("<spring:message code='message.msg02' />");
 				 location.href = "/";
 			} else if(xhr.status == 403) {
-				alert('<spring:message code="message.msg03" />');
+				alert("<spring:message code='message.msg03' />");
 	             location.href = "/";
 			} else {
 				alert("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""));
@@ -223,10 +223,10 @@ function fn_get_dump_list(){
 	     },
 		error : function(xhr, status, error) {
 			if(xhr.status == 401) {
-				alert('<spring:message code="message.msg02" />');
+				alert("<spring:message code='message.msg02' />");
 				 location.href = "/";
 			} else if(xhr.status == 403) {
-				alert('<spring:message code="message.msg03" />');
+				alert("<spring:message code='message.msg03' />");
 	             location.href = "/";
 			} else {
 				alert("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""));
@@ -248,12 +248,12 @@ $(function() {
 		var wrk_end_dtm = $("#wrk_end_dtm").val();
 
 		if (wrk_strt_dtm != "" && wrk_end_dtm == "") {
-			alert('<spring:message code="message.msg14" />');
+			alert("<spring:message code='message.msg14' />");
 			return false;
 		}
 
 		if (wrk_end_dtm != "" && wrk_strt_dtm == "") {
-			alert('<spring:message code="message.msg15" />');
+			alert("<spring:message code='message.msg15' />");
 			return false;
 		}
 
@@ -419,7 +419,7 @@ function selectTab(intab){
 								<th width="100"><spring:message code="common.database" /></th>
 								<th width="100"><spring:message code="backup_management.size" /></th>
 								<th width="200" class="dt-center"><spring:message code="etc.etc08"/></th>			
-								<th width="200" class="dt-center">백업파일명</th>						
+								<th width="200" class="dt-center"><spring:message code="backup_management.fileName"/></th>						
 								<th width="100"><spring:message code="backup_management.work_start_time" /></th>
 								<th width="100"><spring:message code="backup_management.work_end_time" /></th>
 								<th width="100"><spring:message code="backup_management.elapsed_time" /></th>

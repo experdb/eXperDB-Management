@@ -284,7 +284,6 @@
 						</div>
 						<br><br>
 						<div class="sub_tit"><p><spring:message code="properties.database_info" /></p></div>
-						<div class="overflow_areas" style="height: 365px;">
 							<table class="list3">
 								<caption>데이터베이스 정보</caption>
 								<colgroup>
@@ -337,7 +336,6 @@
 									</c:forEach>
 								</tbody>
 							</table>
-						</div>
 						<br><br>
 						<div class="sub_tit"><p><spring:message code="properties.ha_config" /></p></div>
 						<div class="overflow_areas">

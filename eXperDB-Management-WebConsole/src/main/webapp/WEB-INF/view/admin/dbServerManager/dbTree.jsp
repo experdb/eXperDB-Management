@@ -163,10 +163,10 @@ $(window.document).ready(function() {
 	     },
 		error : function(xhr, status, error) {
 			if(xhr.status == 401) {
-				alert('<spring:message code="message.msg02" />');
+				alert("<spring:message code='message.msg02' />");
 				 location.href = "/";
 			} else if(xhr.status == 403) {
-				alert('<spring:message code="message.msg03" />');
+				alert("<spring:message code='message.msg03' />");
 	             location.href = "/";
 			} else {
 				alert("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""));
@@ -223,10 +223,10 @@ $(function() {
     	     },
     		error : function(xhr, status, error) {
     			if(xhr.status == 401) {
-    				alert('<spring:message code="message.msg02" />');
+    				alert("<spring:message code='message.msg02' />");
     				 location.href = "/";
     			} else if(xhr.status == 403) {
-    				alert('<spring:message code="message.msg03" />');
+    				alert("<spring:message code='message.msg03' />");
     	             location.href = "/";
     			} else {
     				alert("ERROR CODE : "
@@ -242,7 +242,7 @@ $(function() {
     		},
     		success : function(result) {    	
     			if(result.data == null){
-    				alert('<spring:message code="message.msg05" />');
+    				alert("<spring:message code='message.msg05' />");
     			}else{
     				table_db.clear().draw();
 	    			table_db.rows.add(result.data).draw();
@@ -289,7 +289,7 @@ function fn_regRe_popup(){
 		window.open(popUrl,"",popOption);
 // 		window.open("/popup/dbServerRegReForm.do?db_svr_id="+db_svr_id+"&flag=tree","dbServerRegRePop","location=no,menubar=no,resizable=yes,scrollbars=yes,status=no,width=1050,height=638");
 	} else {
-		alert('<spring:message code="message.msg04" />');
+		alert("<spring:message code='message.msg04' />");
 	}	
 }
 
@@ -358,17 +358,17 @@ function fn_insertDB(){
 			     },
 				error : function(xhr, status, error) {
 					if(xhr.status == 401) {
-						alert('<spring:message code="message.msg02" />');
+						alert("<spring:message code='message.msg02' />");
 						 location.href = "/";
 					} else if(xhr.status == 403) {
-						alert('<spring:message code="message.msg03" />');
+						alert("<spring:message code='message.msg03' />");
 			             location.href = "/";
 					} else {
 						alert("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""));
 					}
 				},
 				success : function(result) {
-					alert('<spring:message code="message.msg07" />');
+					alert("<spring:message code='message.msg07' />");
 					location.reload();
 				}
 			});	
@@ -395,10 +395,10 @@ function fn_dataCompareChcek(svrDbList){
 	     },
 		error : function(xhr, status, error) {
 			if(xhr.status == 401) {
-				alert('<spring:message code="message.msg02" />');
+				alert("<spring:message code='message.msg02' />");
 				 location.href = "/";
 			} else if(xhr.status == 403) {
-				alert('<spring:message code="message.msg03" />');
+				alert("<spring:message code='message.msg03' />");
 	             location.href = "/";
 			} else {
 				alert("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""));

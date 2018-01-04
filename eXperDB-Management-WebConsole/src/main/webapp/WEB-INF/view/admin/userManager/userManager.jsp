@@ -92,10 +92,10 @@ $(window.document).ready(function() {
 	     },
 		error : function(xhr, status, error) {
 			if(xhr.status == 401) {
-				alert('<spring:message code="message.msg02" />');
+				alert("<spring:message code='message.msg02' />");
 				 location.href = "/";
 			} else if(xhr.status == 403) {
-				alert('<spring:message code="message.msg03" />');
+				alert("<spring:message code='message.msg03' />");
 	             location.href = "/";
 			} else {
 				alert("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""));
@@ -148,10 +148,10 @@ function fn_select(){
 	     },
 		error : function(xhr, status, error) {
 			if(xhr.status == 401) {
-				alert('<spring:message code="message.msg02" />');
+				alert("<spring:message code='message.msg02' />");
 				 location.href = "/";
 			} else if(xhr.status == 403) {
-				alert('<spring:message code="message.msg03" />');
+				alert("<spring:message code='message.msg03' />");
 	             location.href = "/";
 			} else {
 				alert("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""));
@@ -189,7 +189,7 @@ function fn_update() {
 		var popOption = "width="+width+", height="+height+", top="+top+", left="+left+", resizable=no, scrollbars=yes, status=no, toolbar=no, titlebar=yes, location=no,";			
 		window.open(popUrl,"",popOption);
 	} else {
-		alert('<spring:message code="message.msg04" />');
+		alert("<spring:message code='message.msg04' />");
 		return false;
 	}
 }
@@ -199,17 +199,17 @@ function fn_delete(){
 	var usr_id = "<%=(String)session.getAttribute("usr_id")%>"
 	var datas = table.rows('.selected').data();
 	if (datas.length <= 0) {
-		alert('<spring:message code="message.msg04" />');
+		alert("<spring:message code='message.msg04' />");
 		return false;
 	} else {
 		if (!confirm('<spring:message code="message.msg162"/>'))return false;
 		var rowList = [];
 		for (var i = 0; i < datas.length; i++) {
 			if(datas[i].usr_id=="admin"){
-				alert('<spring:message code="message.msg10" />');
+				alert("<spring:message code='message.msg10' />");
 				return false;
 			}else if(datas[i].usr_id==usr_id){
-				alert('<spring:message code="message.msg11" />');
+				alert("<spring:message code='message.msg11' />");
 				return false;
 			}else{
 				rowList += datas[i].usr_id + ',';	
@@ -227,10 +227,10 @@ function fn_delete(){
 		     },
 			error : function(xhr, status, error) {
 				if(xhr.status == 401) {
-					alert('<spring:message code="message.msg02" />');
+					alert("<spring:message code='message.msg02' />");
 					 location.href = "/";
 				} else if(xhr.status == 403) {
-					alert('<spring:message code="message.msg03" />');
+					alert("<spring:message code='message.msg03' />");
 		             location.href = "/";
 				} else {
 					alert("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""));
@@ -238,10 +238,10 @@ function fn_delete(){
 			},
 			success : function(result) {
 				if (result) {
-					alert('<spring:message code="message.msg37" />');
+					alert("<spring:message code='message.msg37' />");
 					fn_select();
 				}else{
-					alert('<spring:message code="message.msg13" />');
+					alert("<spring:message code='message.msg13' />");
 				}
 			}
 		});

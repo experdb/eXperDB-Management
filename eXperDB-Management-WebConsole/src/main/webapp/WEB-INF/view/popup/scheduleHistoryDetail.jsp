@@ -140,29 +140,39 @@ $(window.document).ready(function() {
 		<div class="pop_cts">
 			<p class="tit"><spring:message code="schedule.scheduleHistoryDetail"/></p>
 			<div class="pop_cmm3">
-				<p class="pop_s_tit"><spring:message code="menu.schedule_information" /></p>
-					<table class="list" style="border:1px solid #b8c3c6;">
-						<thead>
-							<tr>
-								<th scope="col"><spring:message code="schedule.schedule_name" /></th>
-								<th scope="col"><spring:message code="schedule.scheduleExp"/></th>
-								<th scope="col"><spring:message code="schedule.work_start_datetime" /></th>
-								<th scope="col"><spring:message code="schedule.work_end_datetime" /></th>
-								<th scope="col"><spring:message code="schedule.jobTime"/></th>
-							</tr>
-						</thead>
-						<tbody>
-							<c:forEach var="result" items="${result}" varStatus="status">
-								<tr>
-									<td><span onClick='javascript:fn_scdLayer("${result.scd_id}");' class="bold">${result.scd_nm}</span></td>
-									<td>${result.scd_exp}</td>
-									<td>${result.wrk_strt_dtm}</td>
-									<td>${result.wrk_end_dtm}</td>
-									<td>${result.wrk_dtm}</td>
-								</tr>
-							</c:forEach>
-						</tbody>
-					</table>
+				<p class="pop_s_tit"><spring:message code="menu.schedule_information" /></p>		
+				<table class="list" style="border:1px solid #99abb0;">
+					<colgroup>
+							<col style="width:15%;" />
+							<col style="width:85%;" />
+					</colgroup>
+					<tbody>
+					<c:forEach var="result" items="${result}" varStatus="status">
+						<tr>
+							<td><spring:message code="schedule.schedule_name" /></td>
+							<td style="text-align: left"><span onClick='javascript:fn_scdLayer("${result.scd_id}");' class="bold">${result.scd_nm}</span></td>
+						</tr>		
+						<tr>
+							<td><spring:message code="schedule.work_start_datetime" /></td>
+							<td style="text-align: left">${result.wrk_strt_dtm}</td>
+						</tr>	
+						<tr>
+							<td><spring:message code="schedule.work_end_datetime" /></td>
+							<td style="text-align: left">${result.wrk_end_dtm}</td>
+						</tr>
+						<tr>
+							<td><spring:message code="schedule.jobTime"/></td>
+							<td style="text-align: left">${result.wrk_dtm}</td>
+						</tr>	
+						<tr>
+							<td><spring:message code="schedule.scheduleExp"/></td>
+							<td style="text-align: left">${result.scd_exp}</td>
+						</tr>
+					</c:forEach>						
+					</tbody>
+				</table>
+					
+					
 				<br><br>
 				<p class="pop_s_tit"><spring:message code="backup_management.work_info"/></p>
 				<div class="overflow_area" style="height: 300px;">

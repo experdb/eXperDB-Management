@@ -134,7 +134,7 @@ function valid_numeric(objValue)
 function fn_dbServerValidation(){
 	
 	if(table.rows().data().length < 1){
-		alert("등록된 DBMS IP가 존재하지 않습니다.")
+		alert('<spring:message code="message.msg184" />')
 		return false;
 	}
 	

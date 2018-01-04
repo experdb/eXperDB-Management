@@ -92,10 +92,10 @@ $(window.document).ready(function() {
 	     },
 		error : function(xhr, status, error) {
 			if(xhr.status == 401) {
-				alert('<spring:message code="message.msg02" />');
+				alert("<spring:message code='message.msg02' />");
 				 location.href = "/";
 			} else if(xhr.status == 403) {
-				alert('<spring:message code="message.msg03" />');
+				alert("<spring:message code='message.msg03' />");
 	             location.href = "/";
 			} else {
 				alert("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""));
@@ -144,10 +144,10 @@ $(function() {
     	     },
     		error : function(xhr, status, error) {
     			if(xhr.status == 401) {
-    				alert('<spring:message code="message.msg02" />');
+    				alert("<spring:message code='message.msg02' />");
     				 location.href = "/";
     			} else if(xhr.status == 403) {
-    				alert('<spring:message code="message.msg03" />');
+    				alert("<spring:message code='message.msg03' />");
     	             location.href = "/";
     			} else {
     				alert("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""));
@@ -156,7 +156,7 @@ $(function() {
     		success : function(result) {
     			table_db.clear().draw();
     			if(result == null){
-    				alert('<spring:message code="message.msg05" />');
+    				alert("<spring:message code='message.msg05' />");
     			}else{
 	    			table_db.rows.add(result).draw();
 	    			//fn_dataCompareChcek(result);
