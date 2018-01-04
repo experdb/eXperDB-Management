@@ -72,7 +72,7 @@ $(window.document).ready(function() {
 				           <spring:message code="message.msg159" />
 				       </c:when>
 				       <c:when test="${error == 'msg176'}">
-				          서버 HA구성에서 Master 가 중복 됩니다.
+				          <spring:message code="message.msg176" />
 				       </c:when>
 					</c:choose>		
 				</c:if></div>	

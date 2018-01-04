@@ -43,7 +43,7 @@
 						           </c:otherwise> 
 						         </c:choose>
 								</a>
-								<p class="state_txt"><spring:message code="dashboard.Register.schedule" /></p>
+								<p class="state_txt"><spring:message code="dashboard.Register_schedule" /></p>
 							</li>
 							<li>
 								<p class="state">
@@ -173,7 +173,7 @@
 						            </p>
 						           </c:otherwise> 
 						         </c:choose>
-								<p class="state_txt"><spring:message code="dashboard.Register.backup" /></p>
+								<p class="state_txt"><spring:message code="dashboard.Register_backup" /></p>
 							</li>
 							<%-- <li>
 								<p class="state">
