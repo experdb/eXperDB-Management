@@ -87,7 +87,6 @@
 					<a href="#n" class="btn" onclick="window.close();><span>취소</span></a>
 				</div>
 			</div>
-		</div><!-- //pop-container -->
-	
+		</div>
 </body>
 </html>

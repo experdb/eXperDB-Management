@@ -163,7 +163,7 @@
 	function fn_SecurityAdd(){
 		var popUrl = "/popup/securityPolicyRegForm.do"; // 서버 url 팝업경로
 		var width = 1000;
-		var height = 500;
+		var height = 520;
 		var left = (window.screen.width / 2) - (width / 2);
 		var top = (window.screen.height /2) - (height / 2);
 		var popOption = "width="+width+", height="+height+", top="+top+", left="+left+", resizable=no, scrollbars=yes, status=no, toolbar=no, titlebar=yes, location=no,";
