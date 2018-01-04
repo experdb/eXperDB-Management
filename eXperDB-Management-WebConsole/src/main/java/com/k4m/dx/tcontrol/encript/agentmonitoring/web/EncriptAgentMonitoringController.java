@@ -11,8 +11,11 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.k4m.dx.tcontrol.admin.agentmonitoring.service.AgentMonitoringVO;
+import com.k4m.dx.tcontrol.backup.service.WorkVO;
 import com.k4m.dx.tcontrol.cmmn.CmmnUtils;
+import com.k4m.dx.tcontrol.common.service.CmmnCodeVO;
 import com.k4m.dx.tcontrol.common.service.HistoryVO;
+import com.k4m.dx.tcontrol.common.service.PageVO;
 
 /**
  * EncriptAgent 모니터링 컨트롤러 클래스를 정의한다.
@@ -51,7 +54,22 @@ public class EncriptAgentMonitoringController {
 			e.printStackTrace();
 		}
 		return mv;
-
+	}
+	
+	
+	
+	/**
+	 * agentMonitoring modify View
+	 * @param 
+	 * @return ModelAndView
+	 */
+	@SuppressWarnings("null")
+	@RequestMapping(value = "/popup/agentMonitoringModifyForm.do")
+	public ModelAndView rmanRegReForm(HttpServletRequest request)  {
+		ModelAndView mv = new ModelAndView();
+		
+		mv.setViewName("encript/popup/agentMonitoringModifyForm");
+		return mv;	
 	}
 	
 }

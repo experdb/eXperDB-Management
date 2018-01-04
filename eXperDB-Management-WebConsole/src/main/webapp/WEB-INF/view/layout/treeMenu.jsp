@@ -422,7 +422,7 @@ $(window.document).ready(
 									<a href="#n"><img src="../images/ico_lnb_5.png" id="treeImg"><div class="tooltip">설정<span class="tooltiptext">설정</span></div></a>
 									</div>
 					    				<ul class="depth_2">
-						    			    <li class="ico2_3"><a href="#"><img src="../images/ico_lnb_8.png" id="treeImg">보안정책옵션설정</a></li>
+						    			    <li class="ico2_3"><a href="/securityPolicyOptionSet.do"><img src="../images/ico_lnb_8.png" id="treeImg">보안정책옵션설정</a></li>
 						     			   	<li class="ico2_4"><a href="#"><img src="../images/ico_lnb_9.png" id="treeImg">인증설정</a></li>
 						     			   	<li class="ico2_4"><a href="#"><img src="../images/ico_lnb_9.png" id="treeImg">모니터링주기설정</a></li>
 						     			   	<li class="ico2_4"><a href="#"><img src="../images/ico_lnb_9.png" id="treeImg">서버마스터키 암호설정</a></li>

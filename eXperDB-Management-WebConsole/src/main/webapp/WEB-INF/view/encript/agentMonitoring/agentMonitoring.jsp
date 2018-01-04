@@ -21,6 +21,23 @@
 	*
 	*/
 %>
+<script>
+/* ********************************************************
+ * Rman Backup Reregist Window Open
+ ******************************************************** */
+function fn_agentMonitoringModifyForm(){
+	var popUrl = "/popup/agentMonitoringModifyForm.do";
+	var width = 954;
+	var height = 650;
+	var left = (window.screen.width / 2) - (width / 2);
+	var top = (window.screen.height /2) - (height / 2);
+	var popOption = "width="+width+", height="+height+", top="+top+", left="+left+", resizable=no, scrollbars=yes, status=no, toolbar=no, titlebar=yes, location=no,";
+	
+	var winPop = window.open(popUrl,"agentMonitoringModifyForm",popOption);
+	winPop.focus();
+}
+</script>
+
 <form name="agentForm" id="agentForm" method="post">
 	<!-- contents -->
 			<div id="contents">
@@ -44,7 +61,7 @@
 						<div class="cmm_grp">
 							<div class="btn_type_01">
 								<span class="btn"><button>조회</button></span>
-								<span class="btn"><button>수정</button></span>
+								<span class="btn"><button onClick="fn_agentMonitoringModifyForm();">수정</button></span>
 							</div>
 							<div class="sch_form">
 								<table class="write">

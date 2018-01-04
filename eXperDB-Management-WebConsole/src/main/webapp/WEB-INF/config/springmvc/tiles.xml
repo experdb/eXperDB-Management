@@ -73,4 +73,7 @@
 	<definition name="encript/agentMonitoring/*" extends="default">
 		<put-attribute name="contents" value="/WEB-INF/view/encript/agentMonitoring/{1}.jsp" />
 	</definition>
+	<definition name="encript/setting/*" extends="default">
+		<put-attribute name="contents" value="/WEB-INF/view/encript/setting/{1}.jsp" />
+	</definition>
 </tiles-definitions>
