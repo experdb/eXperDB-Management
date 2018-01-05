@@ -66,7 +66,7 @@ function fn_init(){
 		{data : "lst_mdfr_id", className : "dt-center", defaultContent : ""},
 		{data : "lst_mdf_dtm", className : "dt-center", defaultContent : ""},
 		{data : "bck_wrk_id", className : "dt-center", defaultContent : "", visible: false }
-	]
+	],'select': {'style': 'multi'}
 	});
 	
 	
@@ -104,7 +104,7 @@ function fn_init(){
 		{data : "lst_mdfr_id", className : "dt-center", defaultContent : ""},
 		{data : "lst_mdf_dtm", className : "dt-center", defaultContent : ""},
 		{data : "bck_wrk_id", className : "dt-center", defaultContent : "" , visible: false }
-	]
+	],'select': {'style': 'multi'}
 	});
 	
 	tableRman.tables().header().to$().find('th:eq(0)').css('min-width', '10px');
@@ -316,6 +316,7 @@ function getRmanDataList(wrk_nm, bck_opt_cd){
 			}
 		},
 		success : function(data) {
+			tableRman.rows({selected: true}).deselect();
 			tableRman.clear().draw();
 			tableRman.rows.add(data).draw();
 		}
@@ -355,6 +356,7 @@ function getDumpDataList(wrk_nm, db_id){
 			}
 		},
 		success : function(data) {
+			tableDump.rows({selected: true}).deselect();
 			tableDump.clear().draw();
 			tableDump.rows.add(data).draw();
 		}

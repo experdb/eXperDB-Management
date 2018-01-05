@@ -44,7 +44,7 @@
 				className : "dt-center",
 				defaultContent : ""
 			}
-    	]
+    	],'select': {'style': 'multi'}
     	});
     	
     	
@@ -85,7 +85,7 @@
    				}
    			},
    			success : function(result) {
-
+   				table.rows({selected: true}).deselect();
    				table.clear().draw();
    				table.rows.add(result).draw();
    			}

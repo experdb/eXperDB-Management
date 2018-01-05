@@ -417,7 +417,7 @@ public class BackupController {
 				backupService.insertRmanWork(workVO);
 			} catch (Exception e) {
 				e.printStackTrace();
-			}
+			} 
 		}
 		response.getWriter().println(result);
 	}
@@ -801,10 +801,17 @@ public class BackupController {
 	@RequestMapping(value = "/popup/workDelete.do")
 	@ResponseBody
 	public void workDelete(@ModelAttribute("workVO") WorkVO workVO, HttpServletResponse response, HttpServletRequest request, @ModelAttribute("historyVO") HistoryVO historyVO) throws IOException, ParseException{
+
 		// Transaction 
 		DefaultTransactionDefinition def  = new DefaultTransactionDefinition();
 		def.setPropagationBehavior(TransactionDefinition.PROPAGATION_REQUIRED);
 		TransactionStatus status = txManager.getTransaction(def);
+		
+		String bck_wrk_id_Rows = request.getParameter("bck_wrk_id_List").toString().replaceAll("&quot;", "\"");
+		JSONArray bck_wrk_ids = (JSONArray) new JSONParser().parse(bck_wrk_id_Rows);		
+		
+		String wrk_id_Rows = request.getParameter("wrk_id_List").toString().replaceAll("&quot;", "\"");
+		JSONArray wrk_ids = (JSONArray) new JSONParser().parse(wrk_id_Rows);	
 		
 		// 화면접근이력 이력 남기기
 		try {
@@ -815,54 +822,38 @@ public class BackupController {
 		} catch (Exception e2) {
 			e2.printStackTrace();
 		}
-
-		String bck_wrk_id_Rows = request.getParameter("bck_wrk_id_List").toString().replaceAll("&quot;", "\"");
-		JSONArray bck_wrk_ids = (JSONArray) new JSONParser().parse(bck_wrk_id_Rows);		
-		
-		String wrk_id_Rows = request.getParameter("wrk_id_List").toString().replaceAll("&quot;", "\"");
-		JSONArray wrk_ids = (JSONArray) new JSONParser().parse(wrk_id_Rows);	
-		
-			
-		try {
+	
+		try{
+			//WORK 옵션 삭제
 			for(int i=0; i<bck_wrk_ids.size(); i++){
 				int bck_wrk_id = Integer.parseInt(bck_wrk_ids.get(i).toString());
 				backupService.deleteWorkOpt(bck_wrk_id);				
 			}
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-		
-		// work object delete
-		try {
+			
+			//WORK 오브젝트 삭제
 			for(int i=0; i<bck_wrk_ids.size(); i++){
 				int bck_wrk_id = Integer.parseInt(bck_wrk_ids.get(i).toString());
 				backupService.deleteWorkObj(bck_wrk_id);
-			}			
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-		
-		// bckwork delete
-		try {
+			}	
+			
+			//백업작업 삭제
 			for(int i=0; i<bck_wrk_ids.size(); i++){
 				int bck_wrk_id = Integer.parseInt(bck_wrk_ids.get(i).toString());
 				backupService.deleteBckWork(bck_wrk_id);
-			}			
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-				
-		
-		// work delete
-		try {
+			}	
+			
+			
+			//전체 작업 삭제
 			for(int i=0; i<wrk_ids.size(); i++){
 				int wrk_id = Integer.parseInt(wrk_ids.get(i).toString());
 				backupService.deleteWork(wrk_id);
-			}			
-		} catch (Exception e) {
+			}
+		}catch(Exception e){
 			e.printStackTrace();
-		}
-		txManager.commit(status);
+			txManager.rollback(status);
+		}finally{
+			txManager.commit(status);
+		}	
 	}
 	
 	/**

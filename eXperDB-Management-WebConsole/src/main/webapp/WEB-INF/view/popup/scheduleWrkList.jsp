@@ -70,7 +70,7 @@ function fn_init(){
         		return onError;	
         	}
           }
-	]
+	],'select': {'style': 'multi'}
 });
 
     table.on( 'order.dt search.dt', function () {
@@ -111,6 +111,7 @@ $(window.document).ready(function() {
 			}
 		},
 		success : function(result) {	
+			table.rows({selected: true}).deselect();
 			table.clear().draw();
 			table.rows.add(result).draw();
 		}

@@ -72,7 +72,7 @@ function fn_init() {
 		{data : "usr_role_nm", className : "dt-center", defaultContent : "", visible: false},	
 		{data : "lst_mdfr_id", className : "dt-center", defaultContent : "", visible: false},
 		{data : "lst_mdf_dtm", className : "dt-center", defaultContent : "", visible: false}
-		]
+		],'select': {'style': 'multi'}
 	});
 		
 		
@@ -218,6 +218,7 @@ function fn_search(){
 			}
 		},
 		success : function(result) {
+			table.rows({selected: true}).deselect();
 			table.clear().draw();
 			table.rows.add(result).draw();
 		}

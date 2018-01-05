@@ -88,7 +88,7 @@ function fn_rman_init(){
 	 					className : "dt-center",
 	 					defaultContent : ""
 	 				}
- 		        ] 
+ 		        ],'select': {'style': 'multi'} 
 	});
    	
    	tableRman.tables().header().to$().find('th:eq(0)').css('min-width', '40px');
@@ -143,7 +143,7 @@ function fn_dump_init(){
 	 					className : "dt-center",
 	 					defaultContent : ""
 	 				}
- 		        ] 
+ 		        ],'select': {'style': 'multi'} 
 	});
    	
    	tableDump.tables().header().to$().find('th:eq(0)').css('min-width', '40px');
@@ -193,6 +193,7 @@ function fn_get_rman_list(){
 			}
 		},
 		success : function(result) {
+			tableRman.rows({selected: true}).deselect();
 			tableRman.clear().draw();
 			tableRman.rows.add(result).draw();
 		}
@@ -233,6 +234,7 @@ function fn_get_dump_list(){
 			}
 		},
 		success : function(result) {
+			tableDump.rows({selected: true}).deselect();
 			tableDump.clear().draw();
 			tableDump.rows.add(result).draw();
 		}

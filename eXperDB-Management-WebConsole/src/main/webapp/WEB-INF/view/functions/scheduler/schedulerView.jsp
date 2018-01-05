@@ -464,7 +464,7 @@ function fn_init(){
 			},
 			 defaultContent : "" 	
 		},	
-	]
+	],'select': {'style': 'multi'}
 });
 
 	  table.tables().header().to$().find('th:eq(0)').css('min-width', '130px');
