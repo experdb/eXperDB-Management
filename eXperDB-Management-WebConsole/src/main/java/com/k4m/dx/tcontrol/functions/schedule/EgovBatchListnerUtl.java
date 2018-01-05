@@ -157,8 +157,9 @@ public class EgovBatchListnerUtl implements JobListener {
 				hp2.put("nFireTime", context.getScheduledFireTime());	
 				 System.out.println("▶▶▶ 이전 작업 수행시간 업데이트");
 				scheduleService.updatePrevJobTime(hp1);
-				System.out.println("▶▶▶ 다음 작업 수행시간 업데이트");
-				scheduleService.updateNxtJobTime(hp2);
+				//1회수행은 끝나고 이전작업수행시간 업데이트
+				System.out.println("▶▶▶ 이전 작업 수행시간 업데이트");
+				scheduleService.updatePrevJobTime(hp2);
 				scheduleService.updateScheduleStatus(scheduleVO);		
 			}			
 		}

@@ -247,18 +247,19 @@ function fn_insert_object(data){
  * Validation Check
  ******************************************************** */
 function valCheck(){
-	if($( "#db_id option:selected" ).val() == ""){
-		alert('<spring:message code="backup_management.bck_database_choice"/>');
-		return false;
-	}
-	else if($("#wrk_nm").val() == ""){
+	if($("#wrk_nm").val() == ""){
 		alert('<spring:message code="message.msg107" />');
 		$("#wrk_nm").focus();
 		return false;
-	}
-	else if($("#wrk_exp").val() == ""){
+	}else if(wrk_nmChk =="fail"){
+		alert('<spring:message code="backup_management.work_overlap_check"/>');
+		return false;
+	}else if($("#wrk_exp").val() == ""){
 		alert('<spring:message code="message.msg108" />');
 		$("#wrk_exp").focus();
+		return false;
+	}else if($( "#db_id option:selected" ).val() == ""){
+		alert('<spring:message code="backup_management.bck_database_choice"/>');
 		return false;
 	}else if($("#log_file_pth").val() == ""){
 		alert('<spring:message code="message.msg78" />');

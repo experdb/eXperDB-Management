@@ -160,7 +160,8 @@ function result(data){
 	if($.trim(data) == "S"){
 		opener.fn_rman_find_list();	
 		alert('<spring:message code="message.msg106" />');
-		self.close();
+		location.reload();
+		self.close();		
 	}else{
 		alert('<spring:message code="message.msg105" />');
 		$("#wrk_nm").val("");
@@ -175,6 +176,9 @@ function valCheck(){
 	if($("#wrk_nm").val() == ""){
 		alert('<spring:message code="message.msg107" />');
 		$("#wrk_nm").focus();
+		return false;
+	}else if(wrk_nmChk =="fail"){
+		alert('<spring:message code="backup_management.work_overlap_check"/>');
 		return false;
 	}else if($("#wrk_exp").val() == ""){
 		alert('<spring:message code="message.msg108" />');
@@ -199,9 +203,6 @@ function valCheck(){
 	}else if($("#check_path2").val() != "Y"){
 		alert('<spring:message code="backup_management.bckPath_effective_check"/>');		
 		$("#bck_pth").focus();
-		return false;
-	}else if(wrk_nmChk =="fail"){
-		alert('<spring:message code="backup_management.work_overlap_check"/>');
 		return false;
 	}else{
 		return true;

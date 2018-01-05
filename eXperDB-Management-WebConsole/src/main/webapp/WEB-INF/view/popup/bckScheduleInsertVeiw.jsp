@@ -108,55 +108,50 @@ var haCnt = 0;
 	/* ********************************************************
 	 * Validation Check
 	 ******************************************************** */		
-	function fn_validation(){		
+	function fn_validation(){	
 		if($("#scd_nm").val() == ""){
 			alert('<spring:message code="message.msg67" />');
 			$("#scd_nm").focus();
 			return false;
-		}else if($("#check_path1").val() != "Y"){
-			alert('<spring:message code="message.msg71" />');
-			$("#data_pth").focus();
-			return false;
 		}else if(scd_nmChk == "fail"){
 			alert('<spring:message code="message.msg69" />');
 			return false;
-		}else if($("input[name=chk]:checkbox:checked").length == 0){
-			alert('<spring:message code="message.msg70" />');
+		}else if($('#bck').val() == ""){
+			alert('<spring:message code="backup_management.bckOption_choice_please"/>');
 			return false;
-		}
-		
-		if($('#bck').val() == "rman"){
+		}else if($('#bck').val() == "rman"){
 			if($('#bck_opt_cd').val() == ""){
 				alert('<spring:message code="backup_management.bckOption_choice_please"/>');
 				return false;
-				}			
-		}else{
+			}else if($("#check_path1").val() != "Y"){
+				alert('<spring:message code="message.msg71" />');
+				$("#data_pth").focus();
+				return false;
+			}else if($("#check_path2").val() != "Y"){
+				alert('<spring:message code="message.msg72" /> ');		
+				$("#rlog_file_pth").focus();
+				return false;
+			}else if ($("#check_path3").val() != "Y"){
+				alert('<spring:message code="backup_management.bckPath_effective_check"/>');
+				$("#bck_pth").focus();
+				return false;
+			}			
+		}else if($('#bck').val() == "dump"){
 			if($('#db_id').val() == ""){
 				alert('<spring:message code="backup_management.database_choice_please"/>');
 				return false;
-				}			
-		}
-		
-		if($("#check_path1").val() != "Y"){
-			alert('<spring:message code="message.msg71" />');
-			$("#data_pth").focus();
-			return false;
-		}else if($("#check_path2").val() != "Y"){
-			alert('<spring:message code="message.msg72" /> ');		
-			$("#rlog_file_pth").focus();
-			return false;
-		}else if($("#check_path3").val() != "Y"){
-			alert('<spring:message code="backup_management.bckPath_effective_check"/>');
-			$("#bck_pth").focus();
-			return false;
-		}else if($("#check_path4").val() != "Y"){
-			alert('<spring:message code="message.msg72" />');
-			$("#dlog_file_pth").focus();
-			return false;
-		}else if($("#check_path5").val() != "Y"){
-			alert('<spring:message code="backup_management.bckPath_effective_check"/>');
-			$("#save_pth").focus();
-			return false;
+			}else if($("#check_path4").val() != "Y"){
+				alert('<spring:message code="message.msg72" />');
+				$("#dlog_file_pth").focus();
+				return false;
+			}else if($("#check_path5").val() != "Y"){
+				alert('<spring:message code="backup_management.bckPath_effective_check"/>');
+				$("#save_pth").focus();
+				return false;
+			}else if($("input[name=chk]:checkbox:checked").length == 0){
+				alert('<spring:message code="message.msg70" />');
+				return false;
+			}			
 		}else{
 			return true;
 		}

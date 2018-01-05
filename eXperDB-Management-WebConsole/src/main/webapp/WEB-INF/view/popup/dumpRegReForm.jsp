@@ -630,7 +630,7 @@ function checkFolder(keyType){
 		</div>
 		<div class="pop_cmm mt25">
 			<table class="write">
-				<caption><spring:message code="dashboard.Register.backup" /></caption>
+				<caption><spring:message code="dashboard.Register_backup" /></caption>
 				<colgroup>
 					<col style="width:80px;" />
 					<col style="width:178px;" />
