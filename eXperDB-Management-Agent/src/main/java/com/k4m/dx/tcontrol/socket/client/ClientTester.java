@@ -2032,19 +2032,12 @@ public class ClientTester {
 
 			String strFile = "/home/experdb/pg_data/data/postgresql.conf";
 			//strDirectory = "C:\\k4m\\01-1. DX 제폼개발\\04. 시험\\pg_log\\";
-			
-			JSONObject serverObj = new JSONObject();
-			
-			serverObj.put(ClientProtocolID.SERVER_NAME, Ip);
-			serverObj.put(ClientProtocolID.SERVER_IP, Ip);
-			serverObj.put(ClientProtocolID.SERVER_PORT, Integer.toString(port));
+
 			
 			JSONObject jObj = new JSONObject();
 			
-			
-			jObj.put(ClientProtocolID.DX_EX_CODE, ClientTranCodeType.DxT023);
-			jObj.put(ClientProtocolID.SERVER_INFO, serverObj);
-			jObj.put(ClientProtocolID.IS_FILE, strFile);
+
+			jObj.put(ClientProtocolID.FILE_NAME, strFile);
 
 			JSONObject objList;
 			
