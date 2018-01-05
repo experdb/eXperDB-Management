@@ -48,6 +48,11 @@ public class TreeTransferServiceImpl extends EgovAbstractServiceImpl implements 
 	}
 
 	@Override
+	public int statusTransferTarget(String name) throws Exception {
+		return treeTransferDAO.statusTransferTarget(name);
+	}
+	
+	@Override
 	public void deleteTransferTarget(String name) throws Exception {
 		treeTransferDAO.deleteTransferTarget(name);
 	}
@@ -126,5 +131,7 @@ public class TreeTransferServiceImpl extends EgovAbstractServiceImpl implements 
 	public List<DbServerVO> selectDbServerList(DbServerVO dbServerVO) throws Exception {
 		return treeTransferDAO.selectDbServerList(dbServerVO);
 	}
+
+
 
 }

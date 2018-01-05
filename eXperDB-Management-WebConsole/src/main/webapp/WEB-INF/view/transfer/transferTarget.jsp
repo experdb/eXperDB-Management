@@ -238,17 +238,14 @@
 			alert("<spring:message code='message.msg04' />");
 			return false;
 		} else {
-			if (!confirm('<spring:message code="message.msg162"/>'))return false;
 			var rowList = [];
 			for (var i = 0; i < datas.length; i++) {
 				rowList += datas[i].name + ',';
 			}
-			
 			$.ajax({
-				url : "/deleteTransferTarget.do",
+				url : "/statusTransferTarget.do",
 				data : {
-					name : rowList,
-					cnr_id : cnr_id
+					name : rowList
 				},
 				dataType : "json",
 				type : "post",
@@ -267,14 +264,45 @@
 					}
 				},
 				success : function(result) {
-					if (result) {
-						alert("<spring:message code='message.msg60' />");
-						fn_select();
-					} else {
-						alert("<spring:message code='message.msg168'/>");
+					if(result){
+						if (!confirm('<spring:message code="message.msg162"/>'))return false;
+						$.ajax({
+							url : "/deleteTransferTarget.do",
+							data : {
+								name : rowList,
+								cnr_id : cnr_id
+							},
+							dataType : "json",
+							type : "post",
+							beforeSend: function(xhr) {
+						        xhr.setRequestHeader("AJAX", true);
+						     },
+							error : function(xhr, status, error) {
+								if(xhr.status == 401) {
+									alert("<spring:message code='message.msg02' />");
+									 location.href = "/";
+								} else if(xhr.status == 403) {
+									alert("<spring:message code='message.msg03' />");
+						             location.href = "/";
+								} else {
+									alert("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""));
+								}
+							},
+							success : function(result) {
+								if (result) {
+									alert("<spring:message code='message.msg60' />");
+									fn_select();
+								} else {
+									alert("<spring:message code='message.msg168'/>");
+								}
+							}
+						});
+					}else{
+						alert("전송이 활성화된 커넥터는 삭제 할 수 없습니다.")
 					}
 				}
 			});
+			
 		}
 	}
 </script>

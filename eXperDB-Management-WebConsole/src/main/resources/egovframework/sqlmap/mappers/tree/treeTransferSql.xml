@@ -88,6 +88,18 @@
 		AND A.TRF_TRG_CNN_NM=#{trf_trg_cnn_nm}
 	</select>
 	
+	<select id="selectStatusTransferTarget" parameterType="String" resultType="int">
+		/**
+		* Query ID : selectStatusTransferTarget
+		* Description : 전송대상 상태
+		* Author : 김주영
+		**/
+		SELECT BW_PID
+		FROM T_TRFTRGCNG_I
+		WHERE TRF_TRG_CNN_NM =#{trf_trg_cnn_nm}
+		
+	</select>
+	
 	<delete id="deleteTransferTarget" parameterType="String">
 		/**
 		* Query ID : deleteTransferTarget

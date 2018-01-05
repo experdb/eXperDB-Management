@@ -54,7 +54,7 @@ $(window.document).ready(function() {
 				</div>
 				<div class="inp_wrap t2">
 					<label for="member_pwd"><spring:message code="user_management.password" /></label>
-					<input type="password" class="txt" id="pwd" name="pwd" maxlength="" placeholder='<spring:message code="message.msg129" />'/>
+					<input type="password" class="txt" id="pwd" name="pwd" maxlength="20" placeholder='<spring:message code="message.msg129" />'/>
 				</div>
 				<div class="inp_wrap t2" id="errormessage">
 				<c:if test="${not empty error}">

@@ -141,7 +141,7 @@
 				<tbody>
 					<tr>
 						<th scope="row" class="ico_t1"><spring:message code="user_management.nowPw"/></th>
-						<td><input type="password" class="txt" name="nowpwd" id="nowpwd" /></td>
+						<td><input type="password" class="txt" name="nowpwd" id="nowpwd" maxlength="20"/></td>
 					</tr>
 				</tbody>
 			</table>
@@ -155,11 +155,11 @@
 					<tbody>
 						<tr>
 							<th scope="row" class="ico_t1"><spring:message code="user_management.newPw"/></th>
-							<td><input type="password" class="txt" name="newpwd" id="newpwd" /></td>
+							<td><input type="password" class="txt" name="newpwd" id="newpwd" maxlength="20"/></td>
 						</tr>
 						<tr>
 							<th scope="row" class="ico_t1"><spring:message code="user_management.newPwConfirm"/></th>
-							<td><input type="password" class="txt" name="pwd" id="pwd" /></td>
+							<td><input type="password" class="txt" name="pwd" id="pwd" maxlength="20"/></td>
 						</tr>
 					</tbody>
 				</table>

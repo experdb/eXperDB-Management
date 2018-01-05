@@ -236,6 +236,8 @@
 	$(window.document).ready(function() {
 		$.datepicker.setDefaults({
 			dateFormat : 'yy-mm-dd',
+// 			changeMonth: true, 
+			changeYear: true,
 		});
 		$("#datepicker3").datepicker();
 	})
@@ -284,9 +286,9 @@
 					</tr>
 					<tr>
 						<th scope="row" class="ico_t1"><spring:message code="user_management.password" />(*)</th>
-						<td><input type="password" class="txt" name="pwd" id="pwd" value="${pwd}" maxlength="50" /></td>
+						<td><input type="password" class="txt" name="pwd" id="pwd" value="${pwd}" maxlength="20" placeholder="<spring:message code='message.msg109'/>"/></td>
 						<th scope="row" class="ico_t1"><spring:message code="user_management.confirm_password" />(*)</th>
-						<td><input type="password" class="txt" name="pwdCheck" id="pwdCheck" value="${pwd}" maxlength="50" /></td>
+						<td><input type="password" class="txt" name="pwdCheck" id="pwdCheck" value="${pwd}" maxlength="20" placeholder="<spring:message code='message.msg109'/>" /></td>
 					</tr>
 				</tbody>
 			</table>

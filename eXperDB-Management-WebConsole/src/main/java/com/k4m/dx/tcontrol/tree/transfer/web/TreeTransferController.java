@@ -431,7 +431,31 @@ public class TreeTransferController {
 		}
 		return false;
 	}
-
+	
+	/**
+	 * 전송대상 상태를 확인한다.
+	 * 
+	 * @param request
+	 * @return
+	 * @throws Exception
+	 */
+	@RequestMapping(value = "/statusTransferTarget.do")
+	public @ResponseBody boolean statusTransferTarget(HttpServletRequest request) {
+		try {
+			String[] param = request.getParameter("name").toString().split(",");
+			for(int i=0; i<param.length; i++){
+				int bw_pid = treeTransferService.statusTransferTarget(param[i]);
+				if(bw_pid == 1){
+					return false;
+				}
+			}
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return true;
+	}
+	
 	/**
 	 * 전송대상을 삭제한다.
 	 * 
