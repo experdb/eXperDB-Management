@@ -28,50 +28,50 @@
 	function fn_transferValidation(){
  		var kafka_broker_ip = document.getElementById("kafka_broker_ip");
 		if (kafka_broker_ip.value == "") {
-			alert('<spring:message code="message.msg47" />');
+			alert("<spring:message code='message.msg47' />");
 			kafka_broker_ip.focus();
 			return false;
 		}
 
  		var kafka_broker_port = document.getElementById("kafka_broker_port");
 		if (kafka_broker_port.value == "") {
-			alert('<spring:message code="message.msg48" />');
+			alert("<spring:message code='message.msg48' />");
 			kafka_broker_port.focus();
 			return false;
 		}
  		if(!valid_numeric(kafka_broker_port.value))
 	 	{
- 			alert('<spring:message code="message.msg49" />');
+ 			alert("<spring:message code='message.msg49' />");
  			kafka_broker_port.focus();
 		 	return false;
 		}		
  		var schema_registry_ip = document.getElementById("schema_registry_ip");
 		if (schema_registry_ip.value == "") {
-			alert('<spring:message code="message.msg50" />');
+			alert("<spring:message code='message.msg50' />");
 			schema_registry_ip.focus();
 			return false;
 		}	
  		var schema_registry_port = document.getElementById("schema_registry_port");
 		if (schema_registry_port.value == "") {
-			alert('<spring:message code="message.msg51" />');
+			alert("<spring:message code='message.msg51' />");
 			schema_registry_port.focus();
 			return false;
 		}
  		if(!valid_numeric(schema_registry_port.value))
 	 	{
- 			alert('<spring:message code="message.msg49" />');
+ 			alert("<spring:message code='message.msg49' />");
  			srportno.focus();
 		 	return false;
 		}
  		var zookeeper_ip = document.getElementById("zookeeper_ip");
 		if (zookeeper_ip.value == "") {
-			alert('<spring:message code="message.msg52" />');
+			alert("<spring:message code='message.msg52' />");
 			zookeeper_ip.focus();
 			return false;
 		}
  		var zookeeper_port = document.getElementById("zookeeper_port");
 		if (zookeeper_port.value == "") {
-			alert('<spring:message code="message.msg53" />');
+			alert("<spring:message code='message.msg53' />");
 			zookeeper_port.focus();
 			return false;
 		}
@@ -83,25 +83,25 @@
 		}
  		var teng_ip = document.getElementById("teng_ip");
 		if (teng_ip.value == "") {
-			alert('<spring:message code="message.msg54" />');
+			alert("<spring:message code='message.msg54' />");
 			teng_ip.focus();
 			return false;
 		}
  		var teng_port = document.getElementById("teng_port");
 		if (teng_port.value == "") {
-			alert('<spring:message code="message.msg55" />');
+			alert("<spring:message code='message.msg55' />");
 			teng_port.focus();
 			return false;
 		}
  		if(!valid_numeric(teng_port.value))
 	 	{
- 			alert('<spring:message code="message.msg49" />');
+ 			alert("<spring:message code='message.msg49' />");
  			teng_port.focus();
 		 	return false;
 		}
  		var bw_home = document.getElementById("bw_home");
 		if (bw_home.value == "") {
-			alert('<spring:message code="message.msg161"/>');
+			alert("<spring:message code='message.msg161'/>");
 			bw_home.focus();
 			return false;
 		}
@@ -129,7 +129,7 @@
 				
 			},
 			success : function(result) {
-				alert('<spring:message code="message.msg57" />');
+				alert("<spring:message code='message.msg57' />");
 				window.location.reload();
 			},
 			beforeSend: function(xhr) {
@@ -137,10 +137,10 @@
 		     },
 			error : function(xhr, status, error) {
 				if(xhr.status == 401) {
-					alert('<spring:message code="message.msg02" />');
+					alert("<spring:message code='message.msg02' />");
 					 location.href = "/";
 				} else if(xhr.status == 403) {
-					alert('<spring:message code="message.msg03" />');
+					alert("<spring:message code='message.msg03' />");
 		             location.href = "/";
 				} else {
 					alert("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""));
@@ -168,17 +168,17 @@
 				trf_cng_id : $("#trf_cng_id").val()
 			},
 			success : function(result) {
-				alert('<spring:message code="message.msg57" />');
+				alert("<spring:message code='message.msg57' />");
 			},
 			beforeSend: function(xhr) {
 		        xhr.setRequestHeader("AJAX", true);
 		     },
 			error : function(xhr, status, error) {
 				if(xhr.status == 401) {
-					alert('<spring:message code="message.msg02" />');
+					alert("<spring:message code='message.msg02' />");
 					 location.href = "/";
 				} else if(xhr.status == 403) {
-					alert('<spring:message code="message.msg03" />');
+					alert("<spring:message code='message.msg03' />");
 		             location.href = "/";
 				} else {
 					alert("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""));
@@ -198,10 +198,10 @@
 		     },
 			error : function(xhr, status, error) {
 				if(xhr.status == 401) {
-					alert('<spring:message code="message.msg02" />');
+					alert("<spring:message code='message.msg02' />");
 					 location.href = "/";
 				} else if(xhr.status == 403) {
-					alert('<spring:message code="message.msg03" />');
+					alert("<spring:message code='message.msg03' />");
 		             location.href = "/";
 				} else {
 					alert("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""));

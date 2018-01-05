@@ -247,18 +247,19 @@ function fn_insert_object(data){
  * Validation Check
  ******************************************************** */
 function valCheck(){
-	if($( "#db_id option:selected" ).val() == ""){
-		alert('<spring:message code="backup_management.bck_database_choice"/>');
-		return false;
-	}
-	else if($("#wrk_nm").val() == ""){
+	if($("#wrk_nm").val() == ""){
 		alert('<spring:message code="message.msg107" />');
 		$("#wrk_nm").focus();
 		return false;
-	}
-	else if($("#wrk_exp").val() == ""){
+	}else if(wrk_nmChk =="fail"){
+		alert('<spring:message code="backup_management.work_overlap_check"/>');
+		return false;
+	}else if($("#wrk_exp").val() == ""){
 		alert('<spring:message code="message.msg108" />');
 		$("#wrk_exp").focus();
+		return false;
+	}else if($( "#db_id option:selected" ).val() == ""){
+		alert('<spring:message code="backup_management.bck_database_choice"/>');
 		return false;
 	}else if($("#log_file_pth").val() == ""){
 		alert('<spring:message code="message.msg78" />');
@@ -595,14 +596,14 @@ function fn_check() {
 <body>
 <div class="pop_container">
 	<div class="pop_cts">
-		<p class="tit">Dump <spring:message code="dashboard.Register.backup" /></p>
+		<p class="tit">Dump <spring:message code="dashboard.Register_backup" /></p>
 		<div class="pop_cmm">
 			<form name="workRegForm">
 			<input type="hidden" name="db_svr_id" id="db_svr_id" value="${db_svr_id}"/>
 			<input type="hidden" name="check_path1" id="check_path1" value="N"/>
 			<input type="hidden" name="check_path2" id="check_path2" value="N"/>
 			<table class="write">
-				<caption>Dump <spring:message code="dashboard.Register.backup" /></caption>
+				<caption>Dump <spring:message code="dashboard.Register_backup" /></caption>
 				<colgroup>
 					<col style="width:105px;" />
 					<col />
@@ -650,7 +651,7 @@ function fn_check() {
 		</div>
 		<div class="pop_cmm mt25">
 			<table class="write">
-				<caption><spring:message code="dashboard.Register.backup" /></caption>
+				<caption><spring:message code="dashboard.Register_backup" /></caption>
 				<colgroup>
 					<col style="width:105px;" />
 					<col style="width:178px;" />

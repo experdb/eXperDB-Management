@@ -68,6 +68,16 @@ public class TreeTransferDAO extends EgovAbstractMapper {
 	}
 
 	/**
+	 * 전송대상 상태
+	 * 
+	 * @param name
+	 * @throws SQLException
+	 */
+	public int statusTransferTarget(String name) {
+		return (int) getSqlSession().selectOne("treeTransferSql.selectStatusTransferTarget", name);
+	}
+
+	/**
 	 * 전송대상 삭제
 	 * 
 	 * @param name

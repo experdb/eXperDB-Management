@@ -40,7 +40,7 @@
 	function fn_pwValidation(str){
 		 var reg_pwd = /^.*(?=.{6,20})(?=.*[0-9])(?=.*[a-zA-Z]).*$/;
 		 if(!reg_pwd.test(str)){
-		 	alert('<spring:message code="message.msg109" />');
+		 	alert("<spring:message code='message.msg109' />");
 		 	return false;
 		 }
 		 	return true;
@@ -55,17 +55,17 @@
 		var err = 0; 
 		
 		if (id.value == "" || id.value == "undefind" || id.value == null) {
-			alert('<spring:message code="message.msg121" />');
+			alert("<spring:message code='message.msg121' />");
 			id.focus();
 			return false;
 		}
 		if (nm.value == "" || nm.value == "undefind" || nm.value == null) {
-			alert('<spring:message code="message.msg58" />');
+			alert("<spring:message code='message.msg58' />");
 			nm.focus();
 			return false;
 		}
 		if (pwd.value == "" || pwd.value == "undefind" || pwd.value == null) {
-			alert('<spring:message code="message.msg140"/>');
+			alert("<spring:message code='message.msg140'/>");
 			pwd.focus();
 			return false;
 		}
@@ -81,11 +81,11 @@
 		if (!fn_pwValidation(pwdCheck.value))return false;
 		
 		if (pwd.value != pwdCheck.value) {
-			alert('<spring:message code="etc.etc14"/>');
+			alert("<spring:message code='etc.etc14'/>");
 			return false;
 		}
 		if (idCheck != 1) {
-			alert('spring:message code="message.msg142"/>');
+			alert("spring:message code='message.msg142'/>");
 			return false;
 		}
 		return true;
@@ -94,7 +94,7 @@
 	//등록버튼 클릭시
 	function fn_insert() {
 		if (!fn_userManagerValidation())return false;
-		if (!confirm('<spring:message code="message.msg143"/>')) return false;
+		if (!confirm("<spring:message code='message.msg143'/>")) return false;
 		$.ajax({
 			url : '/insertUserManager.do',
 			type : 'post',
@@ -144,14 +144,14 @@
 		var usr_id=$("#usr_id").val();
 		if(usr_id=='admin'){
 			if(session_usr_id!=usr_id){
-				alert('<spring:message code="message.msg120" />');
+				alert("<spring:message code='message.msg120' />");
 				return false;
 			}
 		}
 		
 		idCheck = 1;
 		if (!fn_userManagerValidation())return false;
-		if (!confirm('<spring:message code="message.msg147"/>')) return false;
+		if (!confirm("<spring:message code='message.msg147'/>")) return false;
 		$.ajax({
 			url : '/updateUserManager.do',
 			type : 'post',
@@ -169,7 +169,7 @@
 				use_yn : $("#use_yn").val(),
 			},
 			success : function(result) {
-				alert('<spring:message code="message.msg84" />');
+				alert("<spring:message code='message.msg84' />");
 				window.close();
 				opener.fn_select();
 			},
@@ -178,10 +178,10 @@
 		     },
 			error : function(xhr, status, error) {
 				if(xhr.status == 401) {
-					alert('<spring:message code="message.msg02" />');
+					alert("<spring:message code='message.msg02' />");
 					 location.href = "/";
 				} else if(xhr.status == 403) {
-					alert('<spring:message code="message.msg03" />');
+					alert("<spring:message code='message.msg03' />");
 		             location.href = "/";
 				} else {
 					alert("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""));
@@ -194,7 +194,7 @@
 	function fn_idCheck() {
 		var usr_id = document.getElementById("usr_id");
 		if (usr_id.value == "") {
-			alert('<spring:message code="message.msg121" />');
+			alert("<spring:message code='message.msg121' />");
 			document.getElementById('usr_id').focus();
 			idCheck = 0;
 			return;
@@ -207,11 +207,11 @@
 			},
 			success : function(result) {
 				if (result == "true") {
-					alert('<spring:message code="message.msg122" />');
+					alert("<spring:message code='message.msg122' />");
 					document.getElementById("usr_nm").focus();
 					idCheck = 1;
 				} else {
-					alert('<spring:message code="message.msg123" />');
+					alert("<spring:message code='message.msg123' />");
 					document.getElementById("usr_id").focus();
 					idCheck = 0;
 				}
@@ -221,10 +221,10 @@
 		     },
 			error : function(xhr, status, error) {
 				if(xhr.status == 401) {
-					alert('<spring:message code="message.msg02" />');
+					alert("<spring:message code='message.msg02' />");
 					 location.href = "/";
 				} else if(xhr.status == 403) {
-					alert('<spring:message code="message.msg03" />');
+					alert("<spring:message code='message.msg03' />");
 		             location.href = "/";
 				} else {
 					alert("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""));
@@ -236,6 +236,8 @@
 	$(window.document).ready(function() {
 		$.datepicker.setDefaults({
 			dateFormat : 'yy-mm-dd',
+// 			changeMonth: true, 
+			changeYear: true,
 		});
 		$("#datepicker3").datepicker();
 	})
@@ -284,9 +286,9 @@
 					</tr>
 					<tr>
 						<th scope="row" class="ico_t1"><spring:message code="user_management.password" />(*)</th>
-						<td><input type="password" class="txt" name="pwd" id="pwd" value="${pwd}" maxlength="50" /></td>
+						<td><input type="password" class="txt" name="pwd" id="pwd" value="${pwd}" maxlength="20" placeholder="<spring:message code='message.msg109'/>"/></td>
 						<th scope="row" class="ico_t1"><spring:message code="user_management.confirm_password" />(*)</th>
-						<td><input type="password" class="txt" name="pwdCheck" id="pwdCheck" value="${pwd}" maxlength="50" /></td>
+						<td><input type="password" class="txt" name="pwdCheck" id="pwdCheck" value="${pwd}" maxlength="20" placeholder="<spring:message code='message.msg109'/>" /></td>
 					</tr>
 				</tbody>
 			</table>

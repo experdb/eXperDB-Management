@@ -19,11 +19,21 @@
 	margin-top: 50%;
 }
 </style>
+<script>
+</script>
 <body class="bg">
 	<div id="login_wrap">
 		<div class="inr">
 			<div id="error">
-				<img src="../images/error500.png">
+				<c:set var="data" value="${pageContext.response.locale}" />
+					<c:choose>
+				    <c:when test="${data eq 'en'}">
+				       <img src="../images/en_error500.png">
+				    </c:when>
+				    <c:otherwise>
+				      <img src="../images/error500.png">
+				    </c:otherwise>
+				</c:choose>
 				<div class="btn_wrap">
 					<button onclick="history.go(-1)"><spring:message code="common.back"/></button>
 				</div>

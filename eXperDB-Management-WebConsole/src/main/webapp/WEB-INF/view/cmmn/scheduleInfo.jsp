@@ -20,10 +20,6 @@
 							<td style="text-align: left" id="scd_nm_info" ></td>
 						</tr>	
 						<tr>
-							<td><spring:message code="schedule.scheduleExp"/></td>
-							<td style="text-align: left" id="scd_exp_info" ></td>
-						</tr>	
-						<tr>
 							<td><spring:message code="schedule.exeState"/></td>
 							<td style="text-align: left" id="scd_cndt_info"></td>
 						</tr>	
@@ -34,7 +30,11 @@
 						<tr>
 							<td><spring:message code="schedule.exeDate"/></td>
 							<td style="text-align: left" id="scd_exe_hms"></td>
-						</tr>						
+						</tr>
+						<tr>
+							<td><spring:message code="schedule.scheduleExp"/></td>
+							<td style="text-align: left" id="scd_exp_info" ></td>
+						</tr>							
 					</tbody>
 				</table>		
 		

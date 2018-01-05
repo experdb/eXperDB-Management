@@ -11,14 +11,15 @@ function fn_validation(){
 			   scd_nm.focus();
 			   return false;
 		}
+		if(scd_nmChk == "fail"){
+  			alert('<spring:message code="message.msg42" />');
+  			return false;
+  		}
 		var scd_exp = document.getElementById("scd_exp");
  		if (scd_exp.value == "") {
   			   alert('<spring:message code="message.msg41" />');
   			 scd_exp.focus();
   			   return false;
-  		}if(scd_nmChk == "fail"){
-  			alert('<spring:message code="message.msg42" />');
-  			return false;
   		}
  		return true;
 }

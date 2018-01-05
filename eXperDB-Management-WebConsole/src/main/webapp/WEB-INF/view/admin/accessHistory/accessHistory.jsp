@@ -81,7 +81,7 @@
 		var dataCnt = table.rows.length;
 
 		if (dataCnt ==1) {
-			alert('<spring:message code="message.msg01" />')
+			alert("<spring:message code='message.msg01'/>")
 			return false;
 		} else {
 			var lgi_dtm_start = $("#from").val();

@@ -38,7 +38,8 @@
 		}
 		
 		if (nmCheck != 1) {
-			alert('<spring:message code="message.msg142"/>');
+// 			alert('<spring:message code="message.msg142"/>');
+			alert("커넥터명을 입력 후 중복체크를 해주세요.")
 			return false;
 		}
 		
@@ -47,6 +48,11 @@
 
 	/*저장버튼 클릭시insert*/
 	function fn_insert() {
+		var str = document.getElementById("trf_trg_cnn_nm").value;
+		if( str == '' || str == null ){
+		    alert( '<spring:message code="message.msg116" />' );
+		    return false;
+		}
 		if (!fn_transferTargetValidation()) return false;
 		if (!confirm('<spring:message code="message.msg148"/>')) return false;
 			$.ajax({
@@ -65,7 +71,7 @@
 				},
 				success : function(result) {
 					if(result){
-						alert('<spring:message code="message.msg07" />');
+						alert('<spring:message code="message.msg57" />');
 						window.close();
 						opener.fn_select();
 					}else{

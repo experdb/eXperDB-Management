@@ -21,12 +21,12 @@ function fn_login(){
 	 
 	if (strid == "" || strid == "undefind" || strid == null)
 	{
-		alert('<spring:message code="message.msg128" />');
+		alert("<spring:message code='message.msg128' />");
 		document.getElementById('usr_id').focus();
 		return false;
 	}
 	if (strpw == "" || strpw == "undefind" || strpw == null){
-			alert('<spring:message code="message.msg129" />');
+			alert("<spring:message code='message.msg129' />");
 			document.getElementById('usr_id').focus();
 			return false;
 	}
@@ -54,7 +54,7 @@ $(window.document).ready(function() {
 				</div>
 				<div class="inp_wrap t2">
 					<label for="member_pwd"><spring:message code="user_management.password" /></label>
-					<input type="password" class="txt" id="pwd" name="pwd" maxlength="" placeholder='<spring:message code="message.msg129" />'/>
+					<input type="password" class="txt" id="pwd" name="pwd" maxlength="20" placeholder='<spring:message code="message.msg129" />'/>
 				</div>
 				<div class="inp_wrap t2" id="errormessage">
 				<c:if test="${not empty error}">
@@ -72,7 +72,7 @@ $(window.document).ready(function() {
 				           <spring:message code="message.msg159" />
 				       </c:when>
 				       <c:when test="${error == 'msg176'}">
-				          서버 HA구성에서 Master 가 중복 됩니다.
+				          <spring:message code="message.msg176" />
 				       </c:when>
 					</c:choose>		
 				</c:if></div>	

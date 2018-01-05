@@ -194,10 +194,10 @@ function fn_rman_regreg_popup(){
 		var datas = tableRman.rows('.selected').data();
 		
 		if (datas.length <= 0) {
-			alert('<spring:message code="message.msg35" />');
+			alert("<spring:message code='message.msg35' />");
 			return false;
 		}else if(datas.length > 1){
-			alert('<spring:message code="message.msg04" />');
+			alert("<spring:message code='message.msg04' />");
 			return false;
 		}else{
 			var bck_wrk_id = tableRman.row('.selected').data().bck_wrk_id;
@@ -251,10 +251,10 @@ function fn_dump_regreg_popup(){
 	var datas = tableDump.rows('.selected').data();
 
 	if (datas.length <= 0) {
-		alert('<spring:message code="message.msg35" />');
+		alert("<spring:message code='message.msg35' />");
 		return false;
 	}else if(datas.length > 1){
-		alert('<spring:message code="message.msg04" />');
+		alert("<spring:message code='message.msg04' />");
 		return false;
 	}else{
 		var bck_wrk_id = tableDump.row('.selected').data().bck_wrk_id;
@@ -306,10 +306,10 @@ function getRmanDataList(wrk_nm, bck_opt_cd){
 	     },
 		error : function(xhr, status, error) {
 			if(xhr.status == 401) {
-				alert('<spring:message code="message.msg02" />');
+				alert("<spring:message code='message.msg02' />");
 				 location.href = "/";
 			} else if(xhr.status == 403) {
-				alert('<spring:message code="message.msg03" />');
+				alert("<spring:message code='message.msg03' />");
 	             location.href = "/";
 			} else {
 				alert("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""));
@@ -345,10 +345,10 @@ function getDumpDataList(wrk_nm, db_id){
 	     },
 		error : function(xhr, status, error) {
 			if(xhr.status == 401) {
-				alert('<spring:message code="message.msg02" />');
+				alert("<spring:message code='message.msg02' />");
 				 location.href = "/";
 			} else if(xhr.status == 403) {
-				alert('<spring:message code="message.msg03" />');
+				alert("<spring:message code='message.msg03' />");
 	             location.href = "/";
 			} else {
 				alert("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""));
@@ -418,11 +418,10 @@ function fn_dump_check_all(){
  * Rman Data Delete
  ******************************************************** */
 function fn_rman_work_delete(){
-	var scheduleChk = null;
 	var datas = tableRman.rows('.selected').data();
 	
 	if(datas.length < 1){
-		alert('<spring:message code="message.msg16" /> ');
+		alert("<spring:message code='message.msg16' />");
 		return false;
 	}
 	
@@ -433,7 +432,6 @@ function fn_rman_work_delete(){
     	wrk_id_List.push( tableRman.rows('.selected').data()[i].wrk_id);   
   	}	
 		
-    
     $.ajax({
 		url : "/popup/scheduleCheck.do",
 	  	data : {
@@ -447,68 +445,67 @@ function fn_rman_work_delete(){
 	     },
 		error : function(xhr, status, error) {
 			if(xhr.status == 401) {
-				alert('<spring:message code="message.msg02" />');
+				alert("<spring:message code='message.msg02' />");
 				 location.href = "/";
 			} else if(xhr.status == 403) {
-				alert('<spring:message code="message.msg03" />');
+				alert("<spring:message code='message.msg03' />");
 	             location.href = "/";
 			} else {
 				alert("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""));
 			}
 		},
 		success : function(data) {
-			scheduleChk =data;
+			fn_deleteWork(data);
 		}
 	});	
-    
-		if(scheduleChk != 0 ){
-			alert('<spring:message code="backup_management.reg_schedule_delete_no"/>');
-			return false;
-		}else{   
-			if(confirm('<spring:message code="message.msg17" />')){
-						$.ajax({
-							url : "/popup/workDelete.do",
-						  	data : {
-						  		bck_wrk_id_List : JSON.stringify(bck_wrk_id_List),
-						  		wrk_id_List : JSON.stringify(wrk_id_List)
-						  	},
-							dataType : "json",
-							type : "post",
-							beforeSend: function(xhr) {
-						        xhr.setRequestHeader("AJAX", true);
-						     },
-							error : function(xhr, status, error) {
-								if(xhr.status == 401) {
-									alert('<spring:message code="message.msg02" />');
-									 location.href = "/";
-								} else if(xhr.status == 403) {
-									alert('<spring:message code="message.msg03" />');
-						             location.href = "/";
-								} else {
-									alert("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""));
-								}
-							},
-							success : function(data) {
-							}
-						});			
-				alert('<spring:message code="message.msg18" />');
-				fn_rman_find_list();
-			}
-		}
 }
 
-
+function fn_deleteWork(scheduleChk){
+	if(scheduleChk != 0 ){
+		alert("<spring:message code='backup_management.reg_schedule_delete_no'/>");
+		return false;
+	}else{   
+		if(confirm('<spring:message code="message.msg17" />')){
+					$.ajax({
+						url : "/popup/workDelete.do",
+					  	data : {
+					  		bck_wrk_id_List : JSON.stringify(bck_wrk_id_List),
+					  		wrk_id_List : JSON.stringify(wrk_id_List)
+					  	},
+						dataType : "json",
+						type : "post",
+						beforeSend: function(xhr) {
+					        xhr.setRequestHeader("AJAX", true);
+					     },
+						error : function(xhr, status, error) {
+							if(xhr.status == 401) {
+								alert("<spring:message code='message.msg02' />");
+								 location.href = "/";
+							} else if(xhr.status == 403) {
+								alert("<spring:message code='message.msg03' />");
+					             location.href = "/";
+							} else {
+								alert("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""));
+							}
+						},
+						success : function(data) {
+						}
+					});			
+			alert("<spring:message code='message.msg18' />");
+			fn_rman_find_list();
+		}
+	}
+}
 
 
 /* ********************************************************
  * Dump Data Delete
  ******************************************************** */
-function fn_dump_work_delete(){
-	var scheduleChk = null;
+function fn_dump_work_delete(){	
 	var datas = tableDump.rows('.selected').data();
 	
 	if(datas.length < 1){
-		alert('<spring:message code="message.msg16" />');
+		alert("<spring:message code='message.msg16' />");
 		return false;
 	}
 	
@@ -532,22 +529,24 @@ function fn_dump_work_delete(){
 	     },
 		error : function(xhr, status, error) {
 			if(xhr.status == 401) {
-				alert('<spring:message code="message.msg02" />');
+				alert("<spring:message code='message.msg02' />");
 				 location.href = "/";
 			} else if(xhr.status == 403) {
-				alert('<spring:message code="message.msg03" />');
+				alert("<spring:message code='message.msg03' />");
 	             location.href = "/";
 			} else {
 				alert("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""));
 			}
 		},
 		success : function(data) {
-			scheduleChk =data;
+			fn_deleteWork_dump(data);
 		}
 	});	
-	
+}
+
+function fn_deleteWork_dump(scheduleChk){
     if(scheduleChk != 0 ){
-		alert('<spring:message code="backup_management.reg_schedule_delete_no"/>');
+		alert("<spring:message code='backup_management.reg_schedule_delete_no'/>");
 		return false;
 	}else{   
 		if(confirm('<spring:message code="message.msg17" />')){
@@ -564,10 +563,10 @@ function fn_dump_work_delete(){
 					     },
 						error : function(xhr, status, error) {
 							if(xhr.status == 401) {
-								alert('<spring:message code="message.msg02" />');
+								alert("<spring:message code='message.msg02' />");
 								 location.href = "/";
 							} else if(xhr.status == 403) {
-								alert('<spring:message code="message.msg03" />');
+								alert("<spring:message code='message.msg03' />");
 					             location.href = "/";
 							} else {
 								alert("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""));
@@ -576,7 +575,7 @@ function fn_dump_work_delete(){
 						success : function(data) {
 						}
 					});
-			alert('<spring:message code="message.msg18" />');
+			alert("<spring:message code='message.msg18' />");
 			fn_dump_find_list();
 		}
 	}

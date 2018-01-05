@@ -41,6 +41,14 @@ public interface TreeTransferService {
 	String selectTransfermappid(String name) throws Exception;
 
 	/**
+	 * 전송대상 상태
+	 * 
+	 * @param name
+	 * @throws Exception
+	 */
+	int statusTransferTarget(String name) throws Exception;
+
+	/**
 	 * 전송대상 삭제
 	 * 
 	 * @param name
