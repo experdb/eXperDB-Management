@@ -55,7 +55,7 @@ function fn_init() {
 		{data : "frst_reg_dtm", className : "dt-center", defaultContent : ""},
 		{data : "lst_mdfr_id", className : "dt-center", defaultContent : ""},
 		{data : "lst_mdf_dtm", className : "dt-center", defaultContent : ""}
-		]
+		],'select': {'style': 'multi'}
 	});
 		
 		table.tables().header().to$().find('th:eq(0)').css('min-width', '10px');
@@ -159,6 +159,7 @@ function fn_search(){
 			}
 		},
 		success : function(result) {
+			table.rows({selected: true}).deselect();
 			table.clear().draw();
 			table.rows.add(result).draw();
 		}

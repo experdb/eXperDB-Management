@@ -131,8 +131,7 @@
 }
 .iGraph .gBar {
     display: inline-block;
-    width: 35px;
-    height: 10px;
+    width: 80%;
     margin: 0 5px 0 0;
     border: 1px solid #ccc;
     background: #e9e9e9;
@@ -244,7 +243,6 @@
 				<div id="dbmisinfo">
 					<div class="cmm_bd">
 						<div class="sub_tit"><p><spring:message code="properties.basic_info" /></p></div>
-						<div class="overflow_areas">
 							<table class="list3">
 								<caption>기본 정보</caption>
 								<colgroup>
@@ -281,7 +279,7 @@
 <%-- 									<td>${result.ARCHIVE_PATH}</td> --%>
 <!-- 								</tr> -->
 							</table>
-						</div>
+			
 						<br><br>
 						<div class="sub_tit"><p><spring:message code="properties.database_info" /></p></div>
 							<table class="list3">
@@ -412,7 +410,8 @@
 				<div id="tablespaceinfo">
 					<div class="cmm_bd">
 						<div class="sub_tit"><p><spring:message code="properties.tablespace_info" /></p></div>
-							<table class="list3" >
+						<div class="overflows_areas">
+							<table class="list4" >
 								<caption>테이블스페이스 정보</caption>
 								<colgroup>
 									<col style="width: 10%;">
@@ -473,6 +472,7 @@
 									</c:forEach>	
 								</tbody>
 							</table>
+						</div>	
 						</div>
 					</div>
 				</div>

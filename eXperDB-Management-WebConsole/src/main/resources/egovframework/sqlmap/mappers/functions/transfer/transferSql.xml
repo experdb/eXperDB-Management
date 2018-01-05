@@ -148,6 +148,17 @@
 		FROM T_CNR_I
 		WHERE cnr_id = #{cnr_id}
 	 </select>
+
+	<select id="connectorNameCheck" resultType="int">
+		/**
+		* Query ID : connectorNameCheck
+		* Description : 커넥트명 중복 체크
+		* Author : 김주영
+		**/
+		SELECT COUNT(*)
+		FROM T_CNR_I
+		WHERE CNR_NM=#{cnr_nm}
+	</select>	 	
 	 	
 	<insert id="insertConnectorRegister" parameterType="connectorVO">
 		/**

@@ -826,19 +826,19 @@ public class TreeTransferController {
 
 				/* 전송매핑테이블내역 INSERT */
 				treeTransferService.insertTransferMapping(transferMappingVO);
-
-				if (i != jArr.size() - 1) {
+				
+				if(i>0 && i<jArr.size()){
 					topic += ",";
 				}
-
+				
 				if (table_schema.equals("public")) {
 					topic += trf_trg_cnn_nm + "." + table_name;
 				} else {
 					topic += trf_trg_cnn_nm + "." + table_schema + "." + table_name;
 				}
 
-			}
-
+			}		
+			
 			ConnectorVO connectInfo = (ConnectorVO) transferService.selectDetailConnectorRegister(Integer.parseInt(request.getParameter("cnr_id")));
 
 			TransferVO tengInfo = (TransferVO) transferService.selectTengInfo(usr_id);

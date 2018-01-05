@@ -29,8 +29,12 @@
 <script type="text/javascript" src="../js/common.js"></script>
 </head>
 <script>
+	var nmCheck = 0;
+
 	/* Validation */
 	function fn_connectorValidation() {
+		var filter  = /^(1|2)?\d?\d([.](1|2)?\d?\d){3}$/;
+		
 		var cnr_nm = document.getElementById("cnr_nm");
 		if (cnr_nm.value == "") {
 			alert('<spring:message code="message.msg81" /> ');
@@ -43,13 +47,25 @@
 			cnr_ipadr.focus();
 			return false;
 		}
-		 
+		
+		if (filter.test(cnr_ipadr.value) == false){
+			alert('<spring:message code="message.msg175" /> ');
+			return false;
+		}
+		
 		var cnr_portno = document.getElementById("cnr_portno");
 		if (cnr_portno.value == "") {
 			alert('<spring:message code="message.msg83" />');
 			cnr_portno.focus();
 			return false;
 		}
+		
+		if (nmCheck != 1) {
+// 			alert('<spring:message code="message.msg142"/>');
+			alert("커넥터명을 입력 후 중복체크를 해주세요.")
+			return false;
+		}
+		
 		return true;
 	}
 
@@ -91,6 +107,7 @@
 
 	/* 수정버튼 클릭시 */
 	function fn_update() {
+		nmCheck = 1;
 		if (!fn_connectorValidation()) return false;
 			if (!confirm('<spring:message code="message.msg147"/>')) return false;
 			$.ajax({
@@ -132,6 +149,49 @@
 			event.returnValue = false;
 		}
 	}
+	
+	function fn_nmCheck(){
+		var cnr_nm = document.getElementById("cnr_nm");
+		if (cnr_nm.value == "") {
+			alert('<spring:message code="message.msg81" /> ');
+			cnr_nm.focus();
+			return false;
+		}
+		
+		$.ajax({
+			url : '/connectorNameCheck.do',
+			type : 'post',
+			data : {
+				cnr_nm : $("#cnr_nm").val()
+			},
+			success : function(result) {
+				if (result == "true") {
+					alert('커넥터명을 사용하실 수 있습니다.');
+					document.getElementById("cnr_ipadr").focus();
+					nmCheck = 1;
+				}else {
+					alert('<spring:message code="message.msg119" />');
+					document.getElementById("cnr_nm").focus();
+					nmCheck = 0;
+				}
+			},
+			beforeSend: function(xhr) {
+		        xhr.setRequestHeader("AJAX", true);
+		     },
+			error : function(xhr, status, error) {
+				if(xhr.status == 401) {
+					alert('<spring:message code="message.msg02" />');
+					 location.href = "/";
+				} else if(xhr.status == 403) {
+					alert('<spring:message code="message.msg03" />');
+		             location.href = "/";
+				} else {
+					alert("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""));
+				}
+			}
+		});
+		
+	}
 </script>
 <body>
 	<div class="pop_container">
@@ -147,15 +207,25 @@
 						<c:if test="${act == 'u'}"><spring:message code="etc.etc06"/></c:if>
 					</caption>
 					<colgroup>
-						<col style="width: 140px;" />
+						<col style="width: 150px;" />
 						<col />
 						<col style="width: 80px;" />
 						<col />
 					</colgroup>
 					<tbody>
 						<tr>
-							<th scope="row" class="ico_t1"><spring:message code="etc.etc04"/></th>
-							<td><input type="text" class="txt" name="cnr_nm" id="cnr_nm" value="${cnr_nm}" maxlength="20"/></td>
+							<th scope="row" class="ico_t1"><spring:message code="etc.etc04"/>(*)</th>
+							<td>
+								<c:if test="${act == 'i'}">
+								<input type="text" class="txt" name="cnr_nm" id="cnr_nm" value="${cnr_nm}" maxlength="20" style="width: 180px;"/>
+									<span class="btn btnC_01">
+										<button type="button" class= "btn_type_02" onclick="fn_nmCheck()" style="width: 110px; height: 38px; margin-right: -60px; margin-top: 0;"><spring:message code="common.overlap_check" /></button>
+									</span>
+								</c:if>
+								<c:if test="${act == 'u'}">
+									<input type="text" class="txt" name="cnr_nm" id="cnr_nm" value="${cnr_nm}" maxlength="20" readonly="readonly"/>
+								</c:if>
+							</td>
 							<th scope="row" class="ico_t1"><spring:message code="data_transfer.ip" />(*)</th>
 							<td><input type="text" class="txt" name="cnr_ipadr" id="cnr_ipadr" value="${cnr_ipadr}"/></td>
 						</tr>
