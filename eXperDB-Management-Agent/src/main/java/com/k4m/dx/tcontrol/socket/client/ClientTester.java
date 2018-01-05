@@ -95,6 +95,7 @@ public class ClientTester {
 			//clientTester.dxT019(Ip, port);
 			//clientTester.dxT020(Ip, port);
 			//clientTester.dxT021(Ip, port);
+			clientTester.dxT023(Ip, port);
 			
 			//clientTester.test();
 		} catch(Exception e) {
@@ -2036,7 +2037,7 @@ public class ClientTester {
 			
 			JSONObject jObj = new JSONObject();
 			
-
+			jObj.put(ClientProtocolID.DX_EX_CODE, ClientTranCodeType.DxT023);
 			jObj.put(ClientProtocolID.FILE_NAME, strFile);
 
 			JSONObject objList;
