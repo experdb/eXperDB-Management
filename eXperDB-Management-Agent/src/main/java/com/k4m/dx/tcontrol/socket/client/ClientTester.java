@@ -35,6 +35,10 @@ import org.json.simple.parser.JSONParser;
  * 17. tbl_mapps 등록/삭제/조회
  * 18. kafka_con_config 등록/삭제
  * 19. Hostname 조회
+ * 20. DBMS MASTER/SLAVE 및 연결여부 조회
+ * 21. DBMS 속성조회
+ * 22. RMAN 백업 INIT 실행
+ * 23. 파일 존재유무 체크
  * 
  * @author thpark
  *
@@ -59,7 +63,7 @@ public class ClientTester {
 			//clientTester.dxT002(Ip, port);
 			//clientTester.dxT003(Ip, port);
 			//clientTester.dxT004(Ip, port);
-			clientTester.dxT005(Ip, port);
+			//clientTester.dxT005(Ip, port);
 			//clientTester.dxT006_C(Ip, port);
 //			clientTester.dxT006_R(Ip, port);
 			//clientTester.dxT006_U(Ip, port);
@@ -2017,6 +2021,49 @@ public class ClientTester {
 			String strResultCode = (String)objList.get(ClientProtocolID.RESULT_CODE);
 
 			System.out.println("Result : " + strResultCode);
+		} catch(Exception e) {
+			e.printStackTrace();
+		}
+	}
+	
+	private void dxT023(String Ip, int port) {
+		try {
+			
+
+			String strFile = "/home/experdb/pg_data/data/postgresql.conf";
+			//strDirectory = "C:\\k4m\\01-1. DX 제폼개발\\04. 시험\\pg_log\\";
+			
+			JSONObject serverObj = new JSONObject();
+			
+			serverObj.put(ClientProtocolID.SERVER_NAME, Ip);
+			serverObj.put(ClientProtocolID.SERVER_IP, Ip);
+			serverObj.put(ClientProtocolID.SERVER_PORT, Integer.toString(port));
+			
+			JSONObject jObj = new JSONObject();
+			
+			
+			jObj.put(ClientProtocolID.DX_EX_CODE, ClientTranCodeType.DxT023);
+			jObj.put(ClientProtocolID.SERVER_INFO, serverObj);
+			jObj.put(ClientProtocolID.IS_FILE, strFile);
+
+			JSONObject objList;
+			
+			ClientAdapter CA = new ClientAdapter(Ip, port);
+			CA.open(); 
+
+			objList = CA.dxT016(jObj);
+			
+			HashMap obj = (HashMap)objList.get(ClientProtocolID.RESULT_DATA);
+			
+			String checkFile = (String)obj.get(ClientProtocolID.IS_FILE);
+
+			
+			System.out.println("파일 존재 유무(0:1) : " + checkFile );
+			
+			CA.close();
+			
+				
+			//CA.close();
 		} catch(Exception e) {
 			e.printStackTrace();
 		}
