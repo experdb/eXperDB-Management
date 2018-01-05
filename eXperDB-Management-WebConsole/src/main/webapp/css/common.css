@@ -414,6 +414,15 @@ table.list3 th {background:#e4e9ec;text-align:center;}
 table.list3 .color{background:#e4e9ec;text-align:center;}
 table.list3 .center{text-align: center;}
 
+/*속성 테이블스페이스 정보*/
+.overflows_areas{width:100%;overflow-x:auto;}
+table.list4{width:2000px;table-layout:fixed;border:1px solid #b8c3c6;}
+table.list4 tr th{padding:14px 0;border-right:1px solid #b8c3c6;font-size:14px;font-family:'Nanum Square';font-weight:400;}
+table.list4 tr td{height:33px;padding:5px;border-top:1px solid #b8c3c6;border-right:1px solid #b8c3c6;text-align: left; padding: 4px 16px;}
+table.list4 th {background:#e4e9ec;text-align:center;}
+table.list4 .color{background:#e4e9ec;text-align:center;}
+table.list4 .center{text-align: center;}
+
 table.write{width:100%;table-layout:fixed;}
 table.write tr th,
 table.write tr td{padding:8px 0;}

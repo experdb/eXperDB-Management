@@ -56,7 +56,7 @@
 					// Bind clicks to functions
 					$('.dtMoveUp').click(moveUp);
 					$('.dtMoveDown').click(moveDown);
-				}
+				},'select': {'style': 'multi'}
 		});
 		
 		table.tables().header().to$().find('th:eq(0)').css('min-width', '20px');
@@ -210,6 +210,7 @@
 				}
 			},
 			success : function(result) {
+				table.rows({selected: true}).deselect();
 				table.clear().draw();
 				table.rows.add(result.data).draw();
 			}

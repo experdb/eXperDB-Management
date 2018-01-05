@@ -39,7 +39,11 @@ public class TransferServiceImpl extends EgovAbstractServiceImpl implements Tran
 	public ConnectorVO selectDetailConnectorRegister(int cnr_id) throws Exception {
 		return (ConnectorVO) transferDAO.selectDetailConnectorRegister(cnr_id);
 	}
-
+	
+	public int connectorNameCheck(String cnr_nm) throws Exception {
+		return transferDAO.connectorNameCheck(cnr_nm);
+	}
+	
 	public void insertConnectorRegister(ConnectorVO connectorVO) throws Exception {
 		transferDAO.insertConnectorRegister(connectorVO);
 	}
@@ -76,5 +80,7 @@ public class TransferServiceImpl extends EgovAbstractServiceImpl implements Tran
 	public TransferVO selectTengInfo(String usr_id) throws Exception {
 		return (TransferVO) transferDAO.selectTengInfo(usr_id);
 	}
+
+
 
 }

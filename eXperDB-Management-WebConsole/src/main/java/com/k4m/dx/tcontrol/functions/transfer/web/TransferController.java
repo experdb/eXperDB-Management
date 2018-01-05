@@ -12,6 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
@@ -325,6 +326,28 @@ public class TransferController {
 		return mv;
 	}
 
+	/**
+	 * 커넥트명 중복 체크한다.
+	 * 
+	 * @param cnr_nm
+	 * @return
+	 * @throws Exception
+	 */
+	@RequestMapping(value = "/connectorNameCheck.do")
+	public @ResponseBody String connectorNameCheck(@RequestParam("cnr_nm") String cnr_nm) {
+		try {
+			int resultSet = transferService.connectorNameCheck(cnr_nm);
+			if (resultSet > 0) {
+				// 중복값이 존재함.
+				return "false";
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return "true";
+	}
+
+	
 	/**
 	 * Connector를 등록한다.
 	 * 

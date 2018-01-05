@@ -71,6 +71,17 @@ public class TransferDAO extends EgovAbstractMapper {
 	}
 
 	/**
+	 * Connector 중복체크
+	 * 
+	 * @param connectorVO
+	 * @return 
+	 * @throws SQLException
+	 */
+	public int connectorNameCheck(String cnr_nm) {
+		return (int) selectOne("transferSql.connectorNameCheck", cnr_nm);
+	}
+	
+	/**
 	 * Connector 등록
 	 * 
 	 * @param connectorVO
@@ -156,5 +167,7 @@ public class TransferDAO extends EgovAbstractMapper {
 	public TransferVO selectTengInfo(String usr_id) {
 		return (TransferVO) selectOne("transferSql.selectTengInfo", usr_id);
 	}
+
+
 
 }

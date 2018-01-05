@@ -47,7 +47,7 @@ function fn_init() {
 			defaultContent : ""
 		},
 		{ data : "usr_expr_dt", className : "dt-center", defaultContent : ""}
-		]
+		],'select': {'style': 'multi'}
 	});
 
 	table.tables().header().to$().find('th:eq(0)').css('min-width', '10px');
@@ -74,6 +74,8 @@ function fn_init() {
 			window.open(popUrl,"",popOption);
 		});	
 	}
+	
+	
 }
 $(window.document).ready(function() {
 	fn_buttonAut();
@@ -158,6 +160,7 @@ function fn_select(){
 			}
 		},
 		success : function(result) {
+			table.rows({selected: true}).deselect();
 			table.clear().draw();
 			table.rows.add(result).draw();
 		}

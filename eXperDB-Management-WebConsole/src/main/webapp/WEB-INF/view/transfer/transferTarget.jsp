@@ -46,7 +46,7 @@
 				orderable : false
 			}, 
 			{ data : "", className : "dt-center", orderable : false, defaultContent : "<span class='btn btnC_01 btnF_02'><button id='mappingBtn'><spring:message code='data_transfer.table_mapping' /></button></span>"},
-			]
+			],'select': {'style': 'multi'}
 		});
 		
 		table.tables().header().to$().find('th:eq(0)').css('min-width', '10px');
@@ -191,6 +191,7 @@
 				}
 			},
 			success : function(result) {
+				table.rows({selected: true}).deselect();
 				table.clear().draw();
 				if(result.data != null){
 					table.rows.add(result.data).draw();

@@ -53,6 +53,15 @@ public interface TransferService {
 	ConnectorVO selectDetailConnectorRegister(int cnr_id) throws Exception;
 
 	/**
+	 * Connector 중복체크
+	 * 
+	 * @param cnr_nm
+	 * @return
+	 * @throws Exception
+	 */
+	int connectorNameCheck(String cnr_nm) throws Exception;
+
+	/**
 	 * Connector 등록
 	 * 
 	 * @param connectorVO
