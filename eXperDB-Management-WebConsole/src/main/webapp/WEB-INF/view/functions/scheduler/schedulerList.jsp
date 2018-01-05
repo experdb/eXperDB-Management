@@ -32,8 +32,22 @@ function fn_init(){
 		},
 		{data : "scd_exp", className : "dt-left", defaultContent : ""},
 		{data : "wrk_cnt", className : "dt-center", defaultContent : ""}, //work갯수
-		{data : "prev_exe_dtm", className : "dt-center", defaultContent : ""}, 
-		{data : "nxt_exe_dtm", className : "dt-center", defaultContent : ""}, 
+		{data : "prev_exe_dtm", className : "dt-center", defaultContent : ""
+			,render: function (data, type, full) {
+			if(full.prev_exe_dtm == null){
+				var html = '-';
+				return html;
+			}
+		  return data;
+		}}, 
+		{data : "nxt_exe_dtm", className : "dt-center", defaultContent : ""
+			,render: function (data, type, full) {
+				if(full.nxt_exe_dtm == null){
+					var html = '-';
+					return html;
+				}
+			  return data;
+		}}, 
 		{data : "status", 
 			render: function (data, type, full){
 				if(full.status == "s"){

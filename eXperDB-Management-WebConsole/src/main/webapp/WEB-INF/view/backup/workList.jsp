@@ -455,12 +455,12 @@ function fn_rman_work_delete(){
 			}
 		},
 		success : function(data) {
-			fn_deleteWork(data);
+			fn_deleteWork(data, bck_wrk_id_List, wrk_id_List);
 		}
 	});	
 }
 
-function fn_deleteWork(scheduleChk){
+function fn_deleteWork(scheduleChk, bck_wrk_id_List, wrk_id_List){
 	if(scheduleChk != 0 ){
 		alert("<spring:message code='backup_management.reg_schedule_delete_no'/>");
 		return false;
@@ -489,13 +489,13 @@ function fn_deleteWork(scheduleChk){
 							}
 						},
 						success : function(data) {
+							alert("<spring:message code='message.msg18' />");
+							fn_rman_find_list();
 						}
-					});			
-			alert("<spring:message code='message.msg18' />");
-			fn_rman_find_list();
+					});						
+				}
+			}
 		}
-	}
-}
 
 
 /* ********************************************************
@@ -539,12 +539,12 @@ function fn_dump_work_delete(){
 			}
 		},
 		success : function(data) {
-			fn_deleteWork_dump(data);
+			fn_deleteWork_dump(data, bck_wrk_id_List, wrk_id_List);
 		}
 	});	
 }
 
-function fn_deleteWork_dump(scheduleChk){
+function fn_deleteWork_dump(scheduleChk, bck_wrk_id_List, wrk_id_List){
     if(scheduleChk != 0 ){
 		alert("<spring:message code='backup_management.reg_schedule_delete_no'/>");
 		return false;
@@ -573,10 +573,10 @@ function fn_deleteWork_dump(scheduleChk){
 							}
 						},
 						success : function(data) {
+							alert("<spring:message code='message.msg18' />");
+							fn_dump_find_list();
 						}
-					});
-			alert("<spring:message code='message.msg18' />");
-			fn_dump_find_list();
+					});			
 		}
 	}
 }
