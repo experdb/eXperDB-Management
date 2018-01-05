@@ -38,12 +38,67 @@
 
 		<div class="contents">
 			<div class="cmm_grp">
-				<div class="sch_form p1">
-					<div class="inp_chk chk3">
-						<input type="checkbox" id="" name="">
-						<label for=""><span class="chk_img"><img src="../images/popup/ico_box_1.png" alt="" /></span>기본 접근 허용 (보안정책 생성시 기본값)</label>
-					</div>
+				<div class="sch_form">
+					<table class="write">
+						<colgroup>
+							<col style="width: 120px;" />
+							<col />
+							<col style="width: 100px;" />
+							<col />
+						</colgroup>
+						<tbody>
+							<tr>
+								<th scope="row" class="ico_t1">기본접근허용</th>
+								<td>
+									<div class="inp_rdo">
+										<input name="rdo" id="rdo_2_1" type="radio" checked="checked">
+										<label for="rdo_2_1" style="margin-right: 15%;">예</label> 
+										<input name="rdo" id="rdo_2_2" type="radio"> 
+										<label for="rdo_2_2">아니오</label>
+									</div>
+								</td>
+							</tr>
+							<tr>
+								<th scope="row" class="ico_t1">접근 거부시 처리</th>
+								<td>
+									<select class="select" id="" name="">
+										<option value="ERROR">ERROR</option>
+									</select>
+								</td>
+							</tr>
+							
+							<tr>
+								<th scope="row" class="ico_t1">데이터 타입</th>
+								<td>
+									<select class="select" id="" name="">
+										<option value="STRING">STRING</option>
+									</select>
+								</td>
+							</tr>
+							
+							<tr>
+								<td colspan="2"><div class="inp_chk">
+									<div class="inp_chk">
+										<span style="margin-right: 10%;"> 
+											<input type="checkbox" id="option_1_1" name="" /> 
+											<label for="option_1_1">실패 로그 기록</label>
+										</span> 
+										<span style="margin-right: 10%;"> 
+											<input type="checkbox" id="option_1_2" name="" /> 
+											<label for="option_1_2">로그압축</label>
+										</span> 
+										<span> 
+											<input type="checkbox" id="option_1_3" name="" />
+												<label for="option_1_3">이중 암호화 방지</label>
+										</span>
+									</div>
+								</td>
+							</tr>
+						</tbody>
+					</table>
 				</div>
+
+
 
 
 

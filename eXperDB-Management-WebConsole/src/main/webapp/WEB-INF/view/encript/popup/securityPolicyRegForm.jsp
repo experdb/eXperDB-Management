@@ -84,7 +84,7 @@
 					</form>
 				<div class="btn_type_02">
 					<a href="#n" class="btn"><span>저장</span></a>
-					<a href="#n" class="btn" onclick="window.close();><span>취소</span></a>
+					<a href="#n" class="btn" onclick="window.close();"><span>취소</span></a>
 				</div>
 			</div>
 		</div>
