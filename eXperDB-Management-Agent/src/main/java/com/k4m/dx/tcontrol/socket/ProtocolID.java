@@ -112,6 +112,7 @@ public class ProtocolID {
 	public static final String BCK_FILENM = "BCK_FILENM";
 	
 	public static final String IS_DIRECTORY = "IS_DIRECTORY";
+	public static final String IS_FILE = "IS_FILE";
 	public static final String CAPACITY = "CAPACITY";
 	
 	public static final String SLOT = "SLOT";

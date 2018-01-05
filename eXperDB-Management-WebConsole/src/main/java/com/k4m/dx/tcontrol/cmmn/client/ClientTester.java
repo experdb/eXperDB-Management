@@ -35,6 +35,7 @@ import org.json.simple.parser.JSONParser;
  * 17. tbl_mapps 등록/삭제/조회
  * 18. kafka_con_config 등록/삭제
  * 19. Hostname 조회
+ * 20. DBMS 상태 조회
  * 
  * @author thpark
  *
