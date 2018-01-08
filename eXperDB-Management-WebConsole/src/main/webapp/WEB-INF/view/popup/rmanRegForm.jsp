@@ -368,7 +368,6 @@ function fn_check() {
 								<colgroup>
 									<col style="width:130px;" />
 									<col />
-									<col />
 								</colgroup>
 								<tbody>
 									<tr>
