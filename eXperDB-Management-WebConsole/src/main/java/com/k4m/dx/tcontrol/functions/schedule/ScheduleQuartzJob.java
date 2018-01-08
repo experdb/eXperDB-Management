@@ -150,7 +150,7 @@ public class ScheduleQuartzJob implements Job{
 		
 		try {		
 			//DBMS정보 추출
-			String DBMS = fn_dbmsInfo(resultDbconn, h);
+			String DBMS = fn_dbmsInfo_dump(resultDbconn, h);
 			strCmd += DBMS;
 			
 			//기본옵션 명령어 생성	
@@ -174,8 +174,9 @@ public class ScheduleQuartzJob implements Job{
 	}
 
 
-	private String fn_dbmsInfo(List<Map<String, Object>> resultDbconn, int h) {
+	private String fn_dbmsInfo_rman(List<Map<String, Object>> resultDbconn, int h) {
 		String DBMS = "";
+		
 		//1.1 연결할 데이터베이스의 이름 지정
 		//DBMS += "--dbname="+resultDbconn.get(h).get("dft_db_nm");
 		//1.2 호스트 이름 지정
@@ -191,6 +192,22 @@ public class ScheduleQuartzJob implements Job{
 			//1.3 서버가 연결을 청취하는 TCP포트 설정
 			DBMS += " --standby-port="+resultDbconn.get(h).get("portno");
 		}
+		return DBMS;
+	}
+	
+	private String fn_dbmsInfo_dump(List<Map<String, Object>> resultDbconn, int h) {
+		String DBMS = "";
+		
+		//1.1 연결할 데이터베이스의 이름 지정
+		//DBMS += "--dbname="+resultDbconn.get(h).get("dft_db_nm");
+		//1.2 호스트 이름 지정
+		DBMS += " --host="+resultDbconn.get(h).get("ipadr");
+		//1.3 서버가 연결을 청취하는 TCP포트 설정
+		DBMS += " --port="+resultDbconn.get(h).get("portno");
+		//1.4 연결할 사용자이름
+		DBMS += " --username="+resultDbconn.get(h).get("svr_spr_usr_id");	
+		DBMS += " --no-password";	
+
 		return DBMS;
 	}
 
@@ -297,7 +314,7 @@ public class ScheduleQuartzJob implements Job{
 		String rmanCmd = "pg_rman backup ";
 
 		//DBMS정보 추출
-		String dbmsInfo = fn_dbmsInfo(resultDbconn, h);
+		String dbmsInfo = fn_dbmsInfo_rman(resultDbconn, h);
 		rmanCmd += dbmsInfo;
 		
 		//데이터베이스 클러스터의 절대경로
