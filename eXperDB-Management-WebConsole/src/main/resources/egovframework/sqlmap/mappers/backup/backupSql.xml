@@ -526,12 +526,17 @@
 	 		TWG.RSLT_MSG AS RSLT_MSG,
 	 		to_char(TWG.FRST_REG_DTM,'YYYY-MM-DD HH24:MI') AS FRST_REG_DTM,
 	 		TWG.LST_MDFR_ID AS LST_MDFR_ID,
-	 		to_char(TWG.LST_MDF_DTM,'YYYY-MM-DD HH24:MI') AS LST_MDF_DTM
-	 	FROM T_WRKEXE_G TWG, T_BCK_WRKCNG_I TWI, T_DBSVRIPADR_I B
-	 	WHERE 1=1
+	 		to_char(TWG.LST_MDF_DTM,'YYYY-MM-DD HH24:MI') AS LST_MDF_DTM	 		
+	 	FROM T_WRKEXE_G TWG
+	 	LEFT OUTER JOIN T_BCK_WRKCNG_I TWI
+         ON TWG.WRK_ID = TWI.WRK_ID
+        LEFT OUTER JOIN T_DBSVRIPADR_I B       
+        ON TWG.DB_SVR_IPADR_ID = B.DB_SVR_IPADR_ID
+        AND B.DB_SVR_ID=#{db_svr_id}::numeric 
+<!-- 	 	WHERE 1=1
 	 		AND TWG.WRK_ID = TWI.WRK_ID
             AND B.DB_SVR_ID=#{db_svr_id}::numeric 
-            AND TWG.DB_SVR_IPADR_ID = B.DB_SVR_IPADR_ID
+            AND TWG.DB_SVR_IPADR_ID = B.DB_SVR_IPADR_ID -->
 	 	<if test="wrk_id != null and wrk_id != '' ">
       		<if test='wrk_id != "0"'>
 	      		AND TWG.WRK_ID=#{wrk_id}

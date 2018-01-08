@@ -57,8 +57,8 @@
 				<table class="list" style="border:1px solid #b8c3c6;">
 					<caption><spring:message code="backup_management.backup_file_option" /></caption>
 					<colgroup>
-						<col style="width:50%;" />
-						<col style="width:50%;" />
+						<col style="width:30%;" />
+						<col style="width:70%;" />
 					</colgroup>
 					<tbody>
 						<tr>
@@ -84,8 +84,8 @@
 				<table class="list" style="border:1px solid #b8c3c6;">
 					<caption><spring:message code="backup_management.log_file_option" /></caption>
 					<colgroup>
-						<col style="width:50%;" />
-						<col style="width:50%;" />
+						<col style="width:30%;" />
+						<col style="width:70%;" />
 					</colgroup>
 					<tbody>
 						<tr>
