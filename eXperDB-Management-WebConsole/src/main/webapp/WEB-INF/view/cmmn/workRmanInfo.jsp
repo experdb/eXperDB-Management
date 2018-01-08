@@ -12,8 +12,8 @@
 				<table class="list" style="border:1px solid #b8c3c6;">
 					<caption><spring:message code="backup_management.work_info"/></caption>
 					<colgroup>
-						<col style="width:30%;" />
-						<col style="width:70%;" />
+						<col style="width:35%;" />
+						<col style="width:65%;" />
 					</colgroup>
 							
 					<p><h3 style="height: 20px;"><spring:message code="properties.basic_info" /></h3></p>
@@ -57,8 +57,8 @@
 				<table class="list" style="border:1px solid #b8c3c6;">
 					<caption><spring:message code="backup_management.backup_file_option" /></caption>
 					<colgroup>
-						<col style="width:30%;" />
-						<col style="width:70%;" />
+						<col style="width:35%;" />
+						<col style="width:65%;" />
 					</colgroup>
 					<tbody>
 						<tr>
@@ -84,8 +84,8 @@
 				<table class="list" style="border:1px solid #b8c3c6;">
 					<caption><spring:message code="backup_management.log_file_option" /></caption>
 					<colgroup>
-						<col style="width:30%;" />
-						<col style="width:70%;" />
+						<col style="width:35%;" />
+						<col style="width:65%;" />
 					</colgroup>
 					<tbody>
 						<tr>

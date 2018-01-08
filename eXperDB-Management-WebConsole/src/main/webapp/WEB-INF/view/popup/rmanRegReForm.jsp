@@ -376,7 +376,6 @@ function checkFolder(keyType){
 								<colgroup>
 									<col style="width:130px;" />
 									<col />
-									<col />
 								</colgroup>
 								<tbody>
 									<tr>

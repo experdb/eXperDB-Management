@@ -663,14 +663,14 @@ function fn_check() {
 				<tbody>
 					<tr>
 						<th scope="row" class="ico_t2"><spring:message code="backup_management.backup_log_dir" /></th>
-						<td colspan="5"><input type="text" class="txt t4" name="log_file_pth" id="log_file_pth" style="width:530px" onKeydown="$('#check_path1').val('N')"/>
+						<td colspan="5"><input type="text" class="txt" name="log_file_pth" id="log_file_pth" onKeydown="$('#check_path1').val('N')"/>
 							<span class="btn btnC_01"><button type="button" class= "btn_type_02" onclick="checkFolder(1)" style="width: 60px; margin-right: -60px; margin-top: 0;"><spring:message code="common.dir_check" /></button></span>							
 							<span id="logVolume" style="margin:63px;"></span>	
 						</td>
 					</tr>
 					<tr>
 						<th scope="row" class="ico_t2"><spring:message code="backup_management.backup_dir" /></th>
-						<td colspan="5"><input type="text" class="txt t4" name="save_pth" id="save_pth" style="width:530px" onKeydown="$('#check_path2').val('N')"/>
+						<td colspan="5"><input type="text" class="txt" name="save_pth" id="save_pth" onKeydown="$('#check_path2').val('N')"/>
 							<span class="btn btnC_01"><button type="button" class= "btn_type_02" onclick="checkFolder(2)" style="width: 60px; margin-right: -60px; margin-top: 0;"><spring:message code="common.dir_check" /></button></span>							
 							<span id="backupVolume" style="margin:63px;"></span>	
 						</td>
