@@ -121,6 +121,8 @@
 								fn_select();
 							}else if(result =='transfersetting'){
 								alert("<spring:message code='message.msg127' />");
+							}else if(result == 'BottledwaterPath'){
+								alert("bottlewater 경로가 올바르지 않습니다.");
 							}else{
 								alert("<spring:message code='message.msg25' />");
 							}	

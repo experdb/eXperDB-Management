@@ -184,6 +184,7 @@
 	    				alert('<spring:message code="message.msg27" />');
 	    			}else{
 	    				tableList.clear().draw();	
+	    				connectorTableList.clear().draw();
 	    				<c:forEach items="${result}" var="result">
 		    			for(var i=0; i<result.data.length;i++){
 		    				if("${result.scm_nm}" == result.data[i].table_schema && "${result.tb_engl_nm}"== result.data[i].table_name){

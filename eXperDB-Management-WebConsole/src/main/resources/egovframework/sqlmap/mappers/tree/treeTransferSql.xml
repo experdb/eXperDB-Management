@@ -134,6 +134,7 @@
 		<if test="db_nm != null and db_nm != '' ">
 		AND DB_NM LIKE #{db_nm}
 		</if>
+		ORDER BY TRF_TRG_CNN_NM ASC
 	</select>
 	
 	<select id="selectMappingInfo" parameterType="String" resultType="transferDetailVO">

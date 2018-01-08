@@ -73,7 +73,7 @@ function fn_init() {
 			}
 		},
 		{data : "scd_id", className : "dt-center", defaultContent : "", visible: false }
-		],'select': {'style': 'multi'}
+		]
 	});
     
     workTable.tables().header().to$().find('th:eq(0)').css('min-width', '40px');
@@ -113,7 +113,6 @@ $(window.document).ready(function() {
 			}
 		},
 		success : function(result) {
-			workTable.rows({selected: true}).deselect();
 			workTable.clear().draw();
 			workTable.rows.add(result).draw();
 		}

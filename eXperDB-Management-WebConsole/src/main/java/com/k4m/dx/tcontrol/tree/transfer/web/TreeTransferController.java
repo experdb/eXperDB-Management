@@ -949,6 +949,13 @@ public class TreeTransferController {
 					return "transfersetting";
 				}
 
+				/*Bottlewater HOME 경로가 올바르지 않을 경우*/
+				String strFile=transferInfo.getBw_home();
+				String checkFile = cic.file_path(IP,PORT,strFile);
+				if(checkFile.equals("1")){
+					return "BottledwaterPath";
+				}
+				
 				List<TblKafkaConfigVO> tblKafkaConfigInfo = treeTransferService.selectTblKafkaConfigInfo(trf_trg_id);
 				String trf_trg_cnn_nm = tblKafkaConfigInfo.get(0).getTrf_trg_cnn_nm();
 

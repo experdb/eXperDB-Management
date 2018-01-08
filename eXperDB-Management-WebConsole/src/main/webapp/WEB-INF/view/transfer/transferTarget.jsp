@@ -24,6 +24,7 @@
 			scrollY : "245px",
 			deferRender : true,
 			scrollX: true,
+			"order": [ 2, 'asc' ],
 // 			bSort: false,
 			columns : [
 			{ data : "", defaultContent : "", targets : 0, orderable : false, checkboxes : {'selectRow' : true}}, 

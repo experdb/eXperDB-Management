@@ -1337,4 +1337,32 @@ public class ClientInfoCmmn {
 		}
 		return resultHp;
 	}
+	
+	public String file_path(String IP, int PORT,String strFile) {
+		String checkFile="1";
+		try {
+			JSONObject jObj = new JSONObject();
+			
+			jObj.put(ClientProtocolID.DX_EX_CODE, ClientTranCodeType.DxT023);
+			jObj.put(ClientProtocolID.FILE_NAME, strFile);
+
+			JSONObject objList;
+			
+			ClientAdapter CA = new ClientAdapter(IP, PORT);
+			CA.open(); 
+
+			objList = CA.dxT016(jObj);
+			
+			HashMap obj = (HashMap)objList.get(ClientProtocolID.RESULT_DATA);
+			
+			checkFile = (String)obj.get(ClientProtocolID.IS_FILE);
+			
+			System.out.println("파일 존재 유무(0:1) : " + checkFile );
+			
+			CA.close();
+		} catch(Exception e) {
+			e.printStackTrace();
+		}
+		return checkFile;
+	}
 }
