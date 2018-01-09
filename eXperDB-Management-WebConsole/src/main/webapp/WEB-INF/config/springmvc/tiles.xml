@@ -82,4 +82,7 @@
 	<definition name="encript/keyManage/*" extends="default">
 		<put-attribute name="contents" value="/WEB-INF/view/encript/keyManage/{1}.jsp" />
 	</definition>
+	<definition name="encript/auditLog/*" extends="default">
+		<put-attribute name="contents" value="/WEB-INF/view/encript/auditLog/{1}.jsp" />
+	</definition>
 </tiles-definitions>
