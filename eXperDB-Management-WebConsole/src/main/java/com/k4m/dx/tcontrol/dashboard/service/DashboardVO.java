@@ -2,6 +2,7 @@ package com.k4m.dx.tcontrol.dashboard.service;
 
 public class DashboardVO {
 	
+	private int start_cnt;
 	private int run_cnt;
 	private int stop_cnt;
 	private int today_cnt;
@@ -24,6 +25,13 @@ public class DashboardVO {
 	private int connect_cnt;
 	private int execute_cnt;
 	
+	
+	public int getStart_cnt() {
+		return start_cnt;
+	}
+	public void setStart_cnt(int start_cnt) {
+		this.start_cnt = start_cnt;
+	}
 	public int getConnect_cnt() {
 		return connect_cnt;
 	}

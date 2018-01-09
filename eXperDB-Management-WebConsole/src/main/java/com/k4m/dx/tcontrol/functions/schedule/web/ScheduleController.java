@@ -473,7 +473,7 @@ public class ScheduleController {
 				String scd_id = request.getParameter("scd_id").toString();	
 		
 				scheduleVO.setScd_id(Integer.parseInt(scd_id));
-				scheduleVO.setScd_cndt("TC001802");
+				scheduleVO.setScd_cndt("TC001803");
 				
 				scheduleService.updateScheduleStatus(scheduleVO);
 				
