@@ -38,7 +38,7 @@ public class DxT005 extends SocketCtl{
 	private static Logger socketLogger = LoggerFactory.getLogger("socketLogger");
 	
 	private static String TC001801 = "TC001801"; //대기
-	private static String TC001802 = "TC001801"; //실행중
+	private static String TC001802 = "TC001802"; //실행중
 
 	
 	

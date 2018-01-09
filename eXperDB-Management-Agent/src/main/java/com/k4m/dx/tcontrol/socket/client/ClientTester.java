@@ -63,7 +63,7 @@ public class ClientTester {
 			//clientTester.dxT002(Ip, port);
 			//clientTester.dxT003(Ip, port);
 			//clientTester.dxT004(Ip, port);
-			//clientTester.dxT005(Ip, port);
+			clientTester.dxT005(Ip, port);
 			//clientTester.dxT006_C(Ip, port);
 //			clientTester.dxT006_R(Ip, port);
 			//clientTester.dxT006_U(Ip, port);
@@ -95,7 +95,7 @@ public class ClientTester {
 			//clientTester.dxT019(Ip, port);
 			//clientTester.dxT020(Ip, port);
 			//clientTester.dxT021(Ip, port);
-			clientTester.dxT023(Ip, port);
+			//clientTester.dxT023(Ip, port);
 			
 			//clientTester.test();
 		} catch(Exception e) {
@@ -287,6 +287,7 @@ public class ClientTester {
 					, " pg_rman backup --dbname=experdb --host=222.110.153.251 --port=5433 --username=experdb --no-password --pgdata=/home/experdb/pgdata/data --backup-path=/home/experdb/pgdata/bakup/rman --backup-mode=full -A $PGDATA/pg_xlog/archive_status/ --keep-data-generations=3 --keep-data-days=3 --keep-arclog-files=3 --keep-arclog-days=3 --keep-srvlog-files=3 --keep-srvlog-days=3 >> /home/experdb/pgdata/bakup/logs/rman/171212_계정계rman백업.log 2>&1"
 					, "pg_rman validate -B /home/experdb/pgdata/bakup/rman"
 					, "pg_rman backup  --host=222.110.153.251 --port=5433 --username=experdb --no-password --pgdata=/home/experdb/pgdata/data --backup-path=/home/experdb/pgdata/bakup/rman --backup-mode=full -A $PGDATA/pg_xlog/archive_status/ --keep-data-generations=0 --keep-data-days=0 --keep-arclog-files=0 --keep-arclog-days=0 --keep-srvlog-files=0 --keep-srvlog-days=0"
+					,  "pg_rman backup  --host=222.110.153.251 --port=5433 --username=experdb --no-password --pgdata=/home/experdb/pgdata/data --backup-path=/home/experdb/pgdata/bakup/rman --backup-mode=full -A $PGDATA/pg_xlog/archive_status/ --keep-data-generations=0 --keep-data-days=0 --keep-arclog-files=0 --keep-arclog-days=0 --keep-srvlog-files=0 --keep-srvlog-days=0"
 
 				};
 			
@@ -341,9 +342,24 @@ public class ClientTester {
 			objJob_03.put(ClientProtocolID.BCK_FILENM, "1");
 			objJob_03.put(ClientProtocolID.LOG_YN, "Y");
 			
+			JSONObject objJob_04 = new JSONObject();
+			objJob_04.put(ClientProtocolID.SCD_ID, "1"); //스캐쥴ID
+			objJob_04.put(ClientProtocolID.WORK_ID, "1"); //작업ID
+			objJob_04.put(ClientProtocolID.EXD_ORD, "1"); //실행순서
+			objJob_04.put(ClientProtocolID.NXT_EXD_YN, "1"); //다음실행여부
+			objJob_04.put(ClientProtocolID.REQ_CMD, CMD[4]);
+			objJob_04.put(ClientProtocolID.BCK_OPT_CD, "1");
+			objJob_04.put(ClientProtocolID.BCK_BSN_DSCD, "TC000201");
+			objJob_04.put(ClientProtocolID.DB_SVR_IPADR_ID, "1");
+
+			objJob_04.put(ClientProtocolID.DB_ID, "1");
+			objJob_04.put(ClientProtocolID.BCK_FILE_PTH, "1");
+			objJob_04.put(ClientProtocolID.BCK_FILENM, "1");
+			objJob_04.put(ClientProtocolID.LOG_YN, "Y");
+			
 			//arrCmd.add(0, objJob_01);
 			//arrCmd.add(1, objJob_02);
-			arrCmd.add(0, objJob_03);
+			arrCmd.add(0, objJob_04);
 
 			JSONObject serverObj = new JSONObject();
 			
