@@ -29,7 +29,7 @@ public class ScheduleQuartzJob implements Job{
 	private ConfigurableApplicationContext context;
 	
 	
-	ArrayList<String> BCK_NM = new ArrayList<String>();
+	
 	
 	/**
 	 * 1. 스케줄ID를 가져옴
@@ -93,6 +93,7 @@ public class ScheduleQuartzJob implements Job{
 	        
 	        //마스터,슬레이브 DB갯수만큼 루프
 	        for(int h=0; h<resultDbconn.size(); h++){
+	        	ArrayList<String> BCK_NM = new ArrayList<String>();
 	        	db_svr_ipadr_id = Integer.parseInt(resultDbconn.get(h).get("db_svr_ipadr_id").toString());
 	        	ArrayList<String> CMD = new ArrayList<String>();
 		        //WORK 갯수만큼 루프
@@ -115,6 +116,7 @@ public class ScheduleQuartzJob implements Job{
 						CMD.add(strCmd);
 					// 백업 내용이 RMAN 백업일경우	
 					}else{
+						BCK_NM.add("");
 						String rmanCmd ="";
 						rmanCmd = rmanBackupMakeCmd(resultWork, i, resultDbconn, h);		
 						CMD.add(rmanCmd);
