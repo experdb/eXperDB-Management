@@ -131,7 +131,7 @@
 }
 .iGraph .gBar {
     display: inline-block;
-    width: 80%;
+    width: 70%;
     margin: 0 5px 0 0;
     border: 1px solid #ccc;
     background: #e9e9e9;
