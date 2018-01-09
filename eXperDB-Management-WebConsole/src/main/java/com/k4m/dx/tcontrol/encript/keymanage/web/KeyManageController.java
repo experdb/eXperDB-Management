@@ -26,7 +26,7 @@ import com.k4m.dx.tcontrol.common.service.HistoryVO;
  *      </pre>
  */
 @Controller
-public class keyManageController {
+public class KeyManageController {
 
 	@Autowired
 	private AccessHistoryService accessHistoryService;

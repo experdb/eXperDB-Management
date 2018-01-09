@@ -7,7 +7,6 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
 
-import com.k4m.dx.tcontrol.cmmn.CmmnUtils;
 import com.k4m.dx.tcontrol.common.service.HistoryVO;
 
 @Controller
@@ -66,7 +65,7 @@ public class AuditLogController {
 	 * @return ModelAndView mv
 	 * @throws Exception
 	 */
-	@RequestMapping(value = "/securityPolicy.do")
+	@RequestMapping(value = "/encodeDecodeKeyAuditLog.do")
 	public ModelAndView encodeDecodeKeyAuditLog(@ModelAttribute("historyVO") HistoryVO historyVO, HttpServletRequest request) {
 		ModelAndView mv = new ModelAndView();
 		try {
