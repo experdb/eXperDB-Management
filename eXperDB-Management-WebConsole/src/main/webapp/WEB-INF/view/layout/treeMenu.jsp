@@ -393,7 +393,6 @@ $(window.document).ready(
 									</div>
 					    				<ul class="depth_2">
 						   				    <li class="ico2_3"><a href="#"><img src="../images/ico_lnb_8.png" id="treeImg">암호화키리스트</a></li>
-						   				   	<li class="ico2_4"><a href="#"><img src="../images/ico_lnb_9.png" id="treeImg">암호화키등록</a></li>
 					   				  	</ul>
 				   				  	</li>
 				   				  	

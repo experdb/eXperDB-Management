@@ -672,10 +672,11 @@ $(function(){
 						for(var i=0;i<7;i++){
 							maxcnt = (maxcnt>tmparr[i].length)?maxcnt:tmparr[i].length;							
 						}
-						var height = "150px";	
+
+						var height = "160px";	
 
 						if (result.length > 4)
-							height = String(15 * result.length) + "px"
+							height = String(30 * result.length) + "px"
 
 						for(var i=0;i<7;i++){
 							var showdt = stdt.format("MM/dd");

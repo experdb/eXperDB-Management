@@ -38,7 +38,7 @@
 	
 	/* PW Validation*/
 	function fn_pwValidation(str){
-		 var reg_pwd = /^.*(?=.{6,20})(?=.*[0-9])(?=.*[a-zA-Z]).*$/;
+		 var reg_pwd = /^(?=.*[a-zA-Z])(?=.*[!@#$%^*+=-])(?=.*[0-9]).{6,20}/;
 		 if(!reg_pwd.test(str)){
 		 	alert("<spring:message code='message.msg109' />");
 		 	return false;

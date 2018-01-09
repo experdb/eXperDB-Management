@@ -166,7 +166,7 @@
 			},
 			success : function(result) {
 				if (result == "true") {
-					alert('커넥터명을 사용하실 수 있습니다.');
+					alert('<spring:message code="message.msg118" />');
 					document.getElementById("cnr_ipadr").focus();
 					nmCheck = 1;
 				}else {
