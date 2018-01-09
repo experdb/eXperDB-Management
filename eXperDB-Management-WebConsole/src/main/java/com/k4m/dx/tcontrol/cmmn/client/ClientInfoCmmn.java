@@ -32,13 +32,6 @@ public class ClientInfoCmmn {
 			String strErrMsg = (String) objList.get(ClientProtocolID.ERR_MSG);
 			String strDxExCode = (String) objList.get(ClientProtocolID.DX_EX_CODE);
 
-			System.out.println("strDxExCode : " + " " + strDxExCode);
-			System.out.println("strResultCode : " + " " + strResultCode);
-			System.out.println("strErrCode : " + " " + strErrCode);
-			System.out.println("strErrMsg : " + " " + strErrMsg);
-
-			System.out.println("RESULT_DATA : " + " " + objList.get(ClientProtocolID.RESULT_DATA));
-
 			result.put("result_data", objList.get(ClientProtocolID.RESULT_DATA));
 			result.put("result_code", strResultCode);
 
@@ -70,7 +63,6 @@ public class ClientInfoCmmn {
 
 			selectDBList = (ArrayList<Object>) objList.get(ClientProtocolID.RESULT_DATA);
 
-			System.out.println("strDxExCode : " + " " + strDxExCode);
 			if (selectDBList != null) {
 				for (int i = 0; i < selectDBList.size(); i++) {
 					JSONObject jsonObj = new JSONObject();
@@ -114,9 +106,6 @@ public class ClientInfoCmmn {
 
 			selectList = (ArrayList<Object>) objList.get(ClientProtocolID.RESULT_DATA);
 
-			System.out.println("strDxExCode : " + " " + strDxExCode);
-			System.out.println("resultCode : " + " " + (String) objList.get(ClientProtocolID.RESULT_CODE));
-
 			for (int i = 0; i < selectList.size(); i++) {
 				JSONObject jsonObj = new JSONObject();
 				Object obj = selectList.get(i);
@@ -128,7 +117,6 @@ public class ClientInfoCmmn {
 				jsonObj.put("name", table_name);
 				jsonArray.add(jsonObj);
 
-				System.out.println(i + " " + table_schema + " " + table_name);
 			}
 			result.put("data", jsonArray);
 
@@ -145,7 +133,6 @@ public class ClientInfoCmmn {
 			JSONObject reqJObj = new JSONObject();
 			JSONArray arrCmd = new JSONArray();
 
-			System.out.println("SERVER IP : "+IP);
 			
 			int j = 0;
 			for (int i = 0; i < resultWork.size(); i++) {
@@ -235,9 +222,6 @@ public class ClientInfoCmmn {
 			String strErrCode = (String) objList.get(ClientProtocolID.ERR_CODE);
 			String strDxExCode = (String) objList.get(ClientProtocolID.DX_EX_CODE);
 			String strResultCode = (String) objList.get(ClientProtocolID.RESULT_CODE);
-			System.out.println("RESULT_CODE : " + strResultCode);
-			System.out.println("ERR_CODE : " + strErrCode);
-			System.out.println("ERR_MSG : " + strErrMsg);
 
 			CA.close();
 
@@ -278,10 +262,6 @@ public class ClientInfoCmmn {
 			String strDxExCode = (String) objList.get(ClientProtocolID.DX_EX_CODE);
 			String strResultCode = (String) objList.get(ClientProtocolID.RESULT_CODE);
 
-			System.out.println("RESULT_CODE : " + strResultCode);
-			System.out.println("ERR_CODE : " + strErrCode);
-			System.out.println("ERR_MSG : " + strErrMsg);
-
 			List<Object> selectDBList = (ArrayList<Object>) objList.get(ClientProtocolID.RESULT_DATA);
 
 			if (selectDBList != null) {
@@ -312,9 +292,6 @@ public class ClientInfoCmmn {
 						jsonObj.put("Option", Option);
 
 						jsonArray.add(jsonObj);
-						System.out.println("seq : " + Seq + " Set : " + Set + " Type : " + Type + " Database : "
-								+ Database + " User : " + User + " Ip : " + Ipadr + " Ipmask : " + Ipmask + " Method : " + Method + " Option : "
-								+ Option);
 					}
 
 				}
@@ -361,10 +338,6 @@ public class ClientInfoCmmn {
 			String strDxExCode = (String) objList.get(ClientProtocolID.DX_EX_CODE);
 			String strResultCode = (String) objList.get(ClientProtocolID.RESULT_CODE);
 
-			System.out.println("RESULT_CODE : " + strResultCode);
-			System.out.println("ERR_CODE : " + strErrCode);
-			System.out.println("ERR_MSG : " + strErrMsg);
-
 			List<Object> selectDBList = (ArrayList<Object>) objList.get(ClientProtocolID.RESULT_DATA);
 
 			for (int i = 0; i < selectDBList.size() - 1; i++) {
@@ -394,9 +367,6 @@ public class ClientInfoCmmn {
 
 				jsonArray.add(jsonObj);
 
-				System.out.println("seq : " + Seq + " Set : " + Set + " Type : " + Type + " Database : "
-						+ Database + " User : " + User + " Ip : " + Ipadr + " Ipmask : " + Ipmask + " Method : " + Method + " Option : "
-						+ Option);
 			}
 			result.put("data", jsonArray);
 
@@ -427,9 +397,6 @@ public class ClientInfoCmmn {
 			String strErrCode = (String) objList.get(ClientProtocolID.ERR_CODE);
 			String strDxExCode = (String) objList.get(ClientProtocolID.DX_EX_CODE);
 			String strResultCode = (String) objList.get(ClientProtocolID.RESULT_CODE);
-			System.out.println("RESULT_CODE : " + strResultCode);
-			System.out.println("ERR_CODE : " + strErrCode);
-			System.out.println("ERR_MSG : " + strErrMsg);
 
 			CA.close();
 
@@ -459,10 +426,7 @@ public class ClientInfoCmmn {
 			String strErrCode = (String) objList.get(ClientProtocolID.ERR_CODE);
 			String strDxExCode = (String) objList.get(ClientProtocolID.DX_EX_CODE);
 			String strResultCode = (String) objList.get(ClientProtocolID.RESULT_CODE);
-			System.out.println("RESULT_CODE : " + strResultCode);
-			System.out.println("ERR_CODE : " + strErrCode);
-			System.out.println("ERR_MSG : " + strErrMsg);
-
+			
 			CA.close();
 
 		} catch (Exception e) {
@@ -520,9 +484,6 @@ public class ClientInfoCmmn {
 
 			List<Object> selectList = (ArrayList<Object>) objList.get(ClientProtocolID.RESULT_DATA);
 
-			System.out.println("strDxExCode : " + " " + strDxExCode);
-			System.out.println("strErrMsg : " + " " + strErrMsg);
-
 			for (int i = 0; i < selectList.size(); i++) {
 				JSONObject jsonObj = new JSONObject();
 				Object obj = selectList.get(i);
@@ -531,7 +492,6 @@ public class ClientInfoCmmn {
 
 				jsonObj.put("rolname", (String) hp.get("rolname"));
 				jsonArray.add(jsonObj);
-				System.out.println(i + " " + (String) hp.get("rolname"));
 			}
 			CA.close();
 
@@ -566,12 +526,6 @@ public class ClientInfoCmmn {
 			String strDxExCode = (String) objList.get(ClientProtocolID.DX_EX_CODE);
 			String strResultCode = (String) objList.get(ClientProtocolID.RESULT_CODE);
 
-			System.out.println("RESULT_CODE : " + strResultCode);
-			System.out.println("ERR_CODE : " + strErrCode);
-			System.out.println("ERR_MSG : " + strErrMsg);
-			System.out.println("strDxExCode : " + " " + strDxExCode);
-			System.out.println("resultCode : " + " " + (String) objList.get(ClientProtocolID.RESULT_CODE));
-
 			for (int i = 0; i < selectList.size(); i++) {
 				JSONObject jsonObj = new JSONObject();
 				HashMap hp = (HashMap) selectList.get(i);
@@ -580,7 +534,6 @@ public class ClientInfoCmmn {
 				jsonObj.put("name", (String) hp.get("table_name"));
 				jsonArray.add(jsonObj);
 
-				System.out.println(i + " " + hp.get("table_schema") + " " + hp.get("table_name"));
 			}
 			result.put("data", jsonArray);
 
@@ -607,13 +560,8 @@ public class ClientInfoCmmn {
 			String strErrCode = (String) objList.get(ClientProtocolID.ERR_CODE);
 			String strDxExCode = (String) objList.get(ClientProtocolID.DX_EX_CODE);
 			String strResultCode = (String) objList.get(ClientProtocolID.RESULT_CODE);
-			System.out.println("RESULT_CODE : " + strResultCode);
-			System.out.println("ERR_CODE : " + strErrCode);
-			System.out.println("ERR_MSG : " + strErrMsg);
 
 			List<Object> selectDBList = (ArrayList<Object>) objList.get(ClientProtocolID.RESULT_DATA);
-
-			System.out.println("strDxExCode : " + " " + strDxExCode);
 
 			if (selectDBList != null) {
 				if (selectDBList.size() > 0) {
@@ -623,7 +571,6 @@ public class ClientInfoCmmn {
 						HashMap hp = (HashMap) obj;
 						String table_schema = (String) hp.get("table_schema");
 						String table_name = (String) hp.get("table_name");
-						System.out.println(i + " " + table_schema + " " + table_name);
 						jsonObj.put("table_schema", table_schema);
 						jsonObj.put("table_name", table_name);
 						jsonArray.add(jsonObj);
@@ -658,9 +605,6 @@ public class ClientInfoCmmn {
 			String strErrCode = (String) objList.get(ClientProtocolID.ERR_CODE);
 			String strDxExCode = (String) objList.get(ClientProtocolID.DX_EX_CODE);
 			String strResultCode = (String) objList.get(ClientProtocolID.RESULT_CODE);
-			System.out.println("RESULT_CODE : " + strResultCode);
-			System.out.println("ERR_CODE : " + strErrCode);
-			System.out.println("ERR_MSG : " + strErrMsg);
 
 			CA.close();
 		} catch (Exception e) {
@@ -689,9 +633,6 @@ public class ClientInfoCmmn {
 			String strErrCode = (String) objList.get(ClientProtocolID.ERR_CODE);
 			String strDxExCode = (String) objList.get(ClientProtocolID.DX_EX_CODE);
 			String strResultCode = (String) objList.get(ClientProtocolID.RESULT_CODE);
-			System.out.println("RESULT_CODE : " + strResultCode);
-			System.out.println("ERR_CODE : " + strErrCode);
-			System.out.println("ERR_MSG : " + strErrMsg);
 
 			CA.close();
 		} catch (Exception e) {
@@ -728,13 +669,8 @@ public class ClientInfoCmmn {
 			String strErrCode = (String) objList.get(ClientProtocolID.ERR_CODE);
 			String strDxExCode = (String) objList.get(ClientProtocolID.DX_EX_CODE);
 			String strResultCode = (String) objList.get(ClientProtocolID.RESULT_CODE);
-			System.out.println("RESULT_CODE : " + strResultCode);
-			System.out.println("ERR_CODE : " + strErrCode);
-			System.out.println("ERR_MSG : " + strErrMsg);
 
 			List<Object> selectDBList = (ArrayList<Object>) objList.get(ClientProtocolID.RESULT_DATA);
-
-			System.out.println("strDxExCode : " + " " + strDxExCode);
 
 			if (selectDBList != null) {
 				if (selectDBList.size() > 0) {
@@ -749,10 +685,6 @@ public class ClientInfoCmmn {
 						String tasks_max = (String) hp.get("tasks.max");
 						String flush_size = (String) hp.get("flush.size");
 						String rotate_interval_ms = (String) hp.get("rotate.interval.ms");
-
-						System.out.println(i + " " + hp);
-						System.out.println(i + " name : " + name);
-						System.out.println(i + " hdfs_url : " + hdfs_url);
 
 						jsonObj.put("hp", hp);
 						jsonObj.put("name", name);
@@ -818,9 +750,6 @@ public class ClientInfoCmmn {
 			String strErrCode = (String) objList.get(ClientProtocolID.ERR_CODE);
 			String strDxExCode = (String) objList.get(ClientProtocolID.DX_EX_CODE);
 			String strResultCode = (String) objList.get(ClientProtocolID.RESULT_CODE);
-			System.out.println("RESULT_CODE : " + strResultCode);
-			System.out.println("ERR_CODE : " + strErrCode);
-			System.out.println("ERR_MSG : " + strErrMsg);
 
 			CA.close();
 
@@ -877,9 +806,6 @@ public class ClientInfoCmmn {
 			String strErrCode = (String) objList.get(ClientProtocolID.ERR_CODE);
 			String strDxExCode = (String) objList.get(ClientProtocolID.DX_EX_CODE);
 			String strResultCode = (String) objList.get(ClientProtocolID.RESULT_CODE);
-			System.out.println("RESULT_CODE : " + strResultCode);
-			System.out.println("ERR_CODE : " + strErrCode);
-			System.out.println("ERR_MSG : " + strErrMsg);
 
 			CA.close();
 
@@ -916,9 +842,6 @@ public class ClientInfoCmmn {
 			String strErrCode = (String) objList.get(ClientProtocolID.ERR_CODE);
 			String strDxExCode = (String) objList.get(ClientProtocolID.DX_EX_CODE);
 			String strResultCode = (String) objList.get(ClientProtocolID.RESULT_CODE);
-			System.out.println("RESULT_CODE : " + strResultCode);
-			System.out.println("ERR_CODE : " + strErrCode);
-			System.out.println("ERR_MSG : " + strErrMsg);
 
 			CA.close();
 
@@ -951,11 +874,6 @@ public class ClientInfoCmmn {
 			String strResultCode = (String) objList.get(ClientProtocolID.RESULT_CODE);
 			Object strResultData =  objList.get(ClientProtocolID.RESULT_DATA);
 			
-			System.out.println("SERVERIP : "  +serverObj.get(ClientProtocolID.SERVER_IP));
-			System.out.println("RESULT_CODE : " + strResultCode);
-			System.out.println("ERR_CODE : " + strErrCode);
-			System.out.println("ERR_MSG : " + strErrMsg);
-			System.out.println("RESULT_DATA : " + strResultData);
 			CA.close();
 			
 			HashMap obj = (HashMap)objList.get(ClientProtocolID.RESULT_DATA);			
@@ -998,9 +916,6 @@ public class ClientInfoCmmn {
 			String strErrCode = (String) objList.get(ClientProtocolID.ERR_CODE);
 			String strDxExCode = (String) objList.get(ClientProtocolID.DX_EX_CODE);
 			String strResultCode = (String) objList.get(ClientProtocolID.RESULT_CODE);
-			System.out.println("RESULT_CODE : " + strResultCode);
-			System.out.println("ERR_CODE : " + strErrCode);
-			System.out.println("ERR_MSG : " + strErrMsg);
 
 			CA.close();
 
@@ -1035,9 +950,6 @@ public class ClientInfoCmmn {
 			String strErrCode = (String)objList.get(ClientProtocolID.ERR_CODE);
 			String strDxExCode = (String)objList.get(ClientProtocolID.DX_EX_CODE);
 			String strResultCode = (String)objList.get(ClientProtocolID.RESULT_CODE);
-			System.out.println("RESULT_CODE : " +  strResultCode);
-			System.out.println("ERR_CODE : " +  strErrCode);
-			System.out.println("ERR_MSG : " +  strErrMsg);
 
 			List<Object> selectDBList =(ArrayList<Object>) objList.get(ClientProtocolID.RESULT_DATA);
 			
@@ -1073,9 +985,6 @@ public class ClientInfoCmmn {
 			String strErrCode = (String) objList.get(ClientProtocolID.ERR_CODE);
 			String strDxExCode = (String) objList.get(ClientProtocolID.DX_EX_CODE);
 			String strResultCode = (String) objList.get(ClientProtocolID.RESULT_CODE);
-			System.out.println("RESULT_CODE : " + strResultCode);
-			System.out.println("ERR_CODE : " + strErrCode);
-			System.out.println("ERR_MSG : " + strErrMsg);
 
 			// CA.close();
 		} catch (Exception e) {
@@ -1104,9 +1013,6 @@ public class ClientInfoCmmn {
 			String strErrCode = (String) objList.get(ClientProtocolID.ERR_CODE);
 			String strDxExCode = (String) objList.get(ClientProtocolID.DX_EX_CODE);
 			String strResultCode = (String) objList.get(ClientProtocolID.RESULT_CODE);
-			System.out.println("RESULT_CODE : " + strResultCode);
-			System.out.println("ERR_CODE : " + strErrCode);
-			System.out.println("ERR_MSG : " + strErrMsg);
 
 			CA.close();
 
@@ -1134,14 +1040,10 @@ public class ClientInfoCmmn {
 		String strErrCode = (String)objList.get(ClientProtocolID.ERR_CODE);
 		String strDxExCode = (String)objList.get(ClientProtocolID.DX_EX_CODE);
 		String strResultCode = (String)objList.get(ClientProtocolID.RESULT_CODE);
-		System.out.println("RESULT_CODE : " +  strResultCode);
-		System.out.println("ERR_CODE : " +  strErrCode);
-		System.out.println("ERR_MSG : " +  strErrMsg);
 
 		HashMap resultHp = (HashMap) objList.get(ClientProtocolID.RESULT_DATA);
 
 		String host = resultHp.get("CMD_HOSTNAME").toString();
-		System.out.println("host : " + host);
 		result.put("host", host);
 		
 		
@@ -1194,10 +1096,6 @@ public class ClientInfoCmmn {
 			
 			JSONArray arrResult = (JSONArray) objList.get(ClientProtocolID.RESULT_DATA);
 			
-			System.out.println("RESULT_CODE : " +  strResultCode);
-			System.out.println("ERR_CODE : " +  strErrCode);
-			System.out.println("ERR_MSG : " +  strErrMsg);
-			
 			if(strResultCode.equals("0")) {
 				for(int i=0; i<arrResult.size(); i++) {
 					
@@ -1210,9 +1108,6 @@ public class ClientInfoCmmn {
 					String strMasterGbn = (String) outObj.get(ClientProtocolID.MASTER_GBN); 
 					String strConnectYn = (String) outObj.get(ClientProtocolID.CONNECT_YN); 
 					String strDBHostName = (String) outObj.get(ClientProtocolID.CMD_HOSTNAME); 
-					
-					System.out.println(strServerIP + " " + strServerPort + " " + strDatabaseName + " " 
-							+ strMasterGbn + " " + strConnectYn + " " + strDBHostName);
 					
 					result.put("result_code", strResultCode);
 					result.put("result_data", arrResult);
@@ -1246,12 +1141,6 @@ public class ClientInfoCmmn {
 			String strResultCode = (String)objList.get(ClientProtocolID.RESULT_CODE);
 			
 			resultHp = (HashMap) objList.get(ClientProtocolID.RESULT_DATA);
-			Iterator<String> keys = resultHp.keySet().iterator();
-
-	        while( keys.hasNext() ){
-	            String key = keys.next();
-	            System.out.println( String.format("키 : %s, 값 : %s", key, resultHp.get(key)) );
-	        }
 	
 			CA.close();
 		} catch(Exception e) {
@@ -1267,8 +1156,6 @@ public class ClientInfoCmmn {
 		try {	
 			JSONObject jObj = new JSONObject();
 			
-			System.out.println("Agent아이피 : "+IP);
-			System.out.println("백업경로 : "+bck_pth);
 			String strPath = bck_pth;
 			
 			jObj.put(ClientProtocolID.DX_EX_CODE, ClientTranCodeType.DxT022);
@@ -1288,9 +1175,6 @@ public class ClientInfoCmmn {
 			String strDxExCode = (String)objList.get(ClientProtocolID.DX_EX_CODE);
 			String strResultCode = (String)objList.get(ClientProtocolID.RESULT_CODE);
 
-			System.out.println("ServerIP : " + IP);
-			System.out.println("BackupPath : " + bck_pth);
-			System.out.println("Result : " + strResultCode);
 			result.put("result", strResultCode);
 			
 		} catch(Exception e) {
@@ -1319,9 +1203,6 @@ public class ClientInfoCmmn {
 			String strErrCode = (String)objList.get(ClientProtocolID.ERR_CODE);
 			String strDxExCode = (String)objList.get(ClientProtocolID.DX_EX_CODE);
 			String strResultCode = (String)objList.get(ClientProtocolID.RESULT_CODE);
-			System.out.println("RESULT_CODE : " +  strResultCode);
-			System.out.println("ERR_CODE : " +  strErrCode);
-			System.out.println("ERR_MSG : " +  strErrMsg);
 
 			resultHp = (HashMap) objList.get(ClientProtocolID.RESULT_DATA);
 						
@@ -1356,8 +1237,6 @@ public class ClientInfoCmmn {
 			HashMap obj = (HashMap)objList.get(ClientProtocolID.RESULT_DATA);
 			
 			checkFile = (String)obj.get(ClientProtocolID.IS_FILE);
-			
-			System.out.println("파일 존재 유무(0:1) : " + checkFile );
 			
 			CA.close();
 		} catch(Exception e) {

@@ -191,13 +191,13 @@ function fn_makeToMin(){
 							<th scope="row" class="ico_t1">기간</th>
 							<td colspan="3">
 								<span id="calendar"> 
-									<span class="calendar_area"> <a href="#n" class="calendar_btn">달력열기</a>
+									<span class="calendar_area big"> <a href="#n" class="calendar_btn">달력열기</a>
 										<input type="text" class="calendar" id="from" name="dt" title="스케줄시간설정" />
 									</span>
 								</span>
 								&nbsp&nbsp&nbsp&nbsp&nbsp ~ &nbsp&nbsp&nbsp&nbsp&nbsp 
 								<span id="calendar"> 
-									<span class="calendar_area"> 
+									<span class="calendar_area big"> 
 									<a href="#n" class="calendar_btn">달력열기</a> 
 									<input type="text" class="calendar" id="to" name="dt" title="스케줄시간설정" />
 									</span>
@@ -207,9 +207,9 @@ function fn_makeToMin(){
 						<tr>
 							<th scope="row" class="ico_t1">시간대</th>
 							<td colspan="3">
-								<span id="b_hour"></span><span id="b_min"></span>
-									&nbsp&nbsp&nbsp&nbsp&nbsp ~ &nbsp&nbsp&nbsp&nbsp&nbsp 
-								<span id="a_hour"></span><span id="a_min"></span>
+								<span id="b_hour" style="margin-right: 10px;"></span><span id="b_min"></span>
+									&nbsp&nbsp&nbsp&nbsp&nbsp ~ &nbsp&nbsp&nbsp&nbsp&nbsp
+								<span id="a_hour" style="margin-right: 10px;"></span><span id="a_min"></span>
 							</td>
 						</tr>
 						<tr>

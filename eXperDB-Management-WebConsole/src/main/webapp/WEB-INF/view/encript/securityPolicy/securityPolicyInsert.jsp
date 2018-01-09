@@ -181,7 +181,7 @@
 	function fn_AccessAdd(){
 		var popUrl = "/popup/accessPolicyRegForm.do"; // 서버 url 팝업경로
 		var width = 1000;
-		var height = 700;
+		var height = 715;
 		var left = (window.screen.width / 2) - (width / 2);
 		var top = (window.screen.height /2) - (height / 2);
 		var popOption = "width="+width+", height="+height+", top="+top+", left="+left+", resizable=no, scrollbars=yes, status=no, toolbar=no, titlebar=yes, location=no,";

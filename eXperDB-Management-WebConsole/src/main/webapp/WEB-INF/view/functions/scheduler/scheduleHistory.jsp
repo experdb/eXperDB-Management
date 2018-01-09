@@ -456,7 +456,7 @@
 											<c:when test="${result.exe_rslt_cd eq 'TC001701'}"><img src="../images/ico_state_02.png" style="margin-right:3px;"/>Success</c:when>
 									    	<c:when test="${result.exe_rslt_cd eq 'TC001702'}"><img src="../images/ico_state_01.png" style="margin-right:3px;"/>Fail</c:when>
 									    	<c:otherwise>
-									    		진행중
+									    		<img src="../images/ico_state_03.png" style="margin-right:3px;"/>진행중
 									    	</c:otherwise>
 										</c:choose>
 									</td>

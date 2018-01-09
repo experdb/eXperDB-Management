@@ -81,7 +81,7 @@ function fn_rman_init(){
 	 						} else if(full.exe_rslt_cd == 'TC001702'){
 	 							html += '<span class="btn btnC_01 btnF_02"><button onclick="fn_failLog('+full.exe_sn+')"><img src="../images/ico_state_01.png" style="margin-right:3px;"/>Fail</button></span>';
 	 						} else {
-	 							html +='진행중';
+	 							html +='<span class="btn btnC_01 btnF_02"><img src="../images/ico_state_03.png" style="margin-right:3px;"/>진행중</span>';
 	 						}
 	 						return html;
 	 					},

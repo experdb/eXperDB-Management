@@ -383,8 +383,8 @@ $(window.document).ready(
 									<a href="#n"><img src="../images/ico_lnb_5.png" id="treeImg"><div class="tooltip">보안정책<span class="tooltiptext">보안정책</span></div></a>
 									</div>
 					    				<ul class="depth_2">
-						   				    <li class="ico2_3"><a href="/securityPolicy.do"><img src="../images/ico_lnb_8.png" id="treeImg">정책리스트</a></li>
-						    			   	<li class="ico2_4"><a href="/securityPolicyInsert.do"><img src="../images/ico_lnb_9.png" id="treeImg">정책등록</a></li>
+						   				    <li class="ico2_3"><a href="/securityPolicy.do" onclick="fn_GoLink('/securityPolicy.do')"><img src="../images/ico_lnb_8.png" id="treeImg">정책리스트</a></li>
+						    			   	<li class="ico2_4"><a href="/securityPolicyInsert.do" onclick="fn_GoLink('/securityPolicyInsert.do')"><img src="../images/ico_lnb_9.png" id="treeImg">정책등록</a></li>
 					   				  	</ul>
 				   				  	</li>
 				   				  	
@@ -392,7 +392,7 @@ $(window.document).ready(
 									<a href="#n"><img src="../images/ico_lnb_5.png" id="treeImg"><div class="tooltip">암호화키관리<span class="tooltiptext">암호화키관리</span></div></a>
 									</div>
 					    				<ul class="depth_2">
-						   				    <li class="ico2_3"><a href="/keyManage.do"><img src="../images/ico_lnb_8.png" id="treeImg">암호화키리스트</a></li>
+						   				    <li class="ico2_3"><a href="/keyManage.do" onclick="fn_GoLink('/keyManage.do')"><img src="../images/ico_lnb_8.png" id="treeImg">암호화키리스트</a></li>
 					   				  	</ul>
 				   				  	</li>
 				   				  	
@@ -409,11 +409,11 @@ $(window.document).ready(
 									<a href="#n"><img src="../images/ico_lnb_5.png" id="treeImg"><div class="tooltip">감사로그<span class="tooltiptext">감사로그</span></div></a>
 									</div>
 					    				<ul class="depth_2">
-						    			    <li class="ico2_3"><a href="/encodeDecodeAuditLog.do"><img src="../images/ico_lnb_8.png" id="treeImg">암복호화</a></li>
-						     			   	<li class="ico2_4"><a href="/managementServerAuditLog.do"><img src="../images/ico_lnb_9.png" id="treeImg">관리서버</a></li>
-						     			   	<li class="ico2_4"><a href="/encodeDecodeKeyAuditLog.do"><img src="../images/ico_lnb_9.png" id="treeImg">암복호화키</a></li>
-						     			   	<li class="ico2_4"><a href="/backupRestoreAuditLog.do"><img src="../images/ico_lnb_9.png" id="treeImg">백업및복원</a></li>
-						     			   	<li class="ico2_4"><a href="/resourcesUseAuditLog.do"><img src="../images/ico_lnb_9.png" id="treeImg">자원사용</a></li>
+						    			    <li class="ico2_3"><a href="/encodeDecodeAuditLog.do" onclick="fn_GoLink('/encodeDecodeAuditLog.do')"><img src="../images/ico_lnb_8.png" id="treeImg">암복호화</a></li>
+						     			   	<li class="ico2_4"><a href="/managementServerAuditLog.do" onclick="fn_GoLink('/managementServerAuditLog.do')"><img src="../images/ico_lnb_9.png" id="treeImg">관리서버</a></li>
+						     			   	<li class="ico2_4"><a href="/encodeDecodeKeyAuditLog.do" onclick="fn_GoLink('/encodeDecodeKeyAuditLog.do')"><img src="../images/ico_lnb_9.png" id="treeImg">암복호화키</a></li>
+						     			   	<li class="ico2_4"><a href="/backupRestoreAuditLog.do" onclick="fn_GoLink('/backupRestoreAuditLog.do')"><img src="../images/ico_lnb_9.png" id="treeImg">백업및복원</a></li>
+						     			   	<li class="ico2_4"><a href="/resourcesUseAuditLog.do" onclick="fn_GoLink('/resourcesUseAuditLog.do')"><img src="../images/ico_lnb_9.png" id="treeImg">자원사용</a></li>
 					   				  	</ul>
 				   				  	</li>
 				   					  	
@@ -421,8 +421,8 @@ $(window.document).ready(
 									<a href="#n"><img src="../images/ico_lnb_5.png" id="treeImg"><div class="tooltip">설정<span class="tooltiptext">설정</span></div></a>
 									</div>
 					    				<ul class="depth_2">
-						    			    <li class="ico2_3"><a href="/securityPolicyOptionSet.do"><img src="../images/ico_lnb_8.png" id="treeImg">보안정책옵션설정</a></li>
-						     			   	<li class="ico2_4"><a href="/securitySet.do"><img src="../images/ico_lnb_9.png" id="treeImg">암호화설정</a></li>
+						    			    <li class="ico2_3"><a href="/securityPolicyOptionSet.do" onclick="fn_GoLink('/securityPolicyOptionSet.do')"><img src="../images/ico_lnb_8.png" id="treeImg">보안정책옵션설정</a></li>
+						     			   	<li class="ico2_4"><a href="/securitySet.do" onclick="fn_GoLink('/securitySet.do')"><img src="../images/ico_lnb_9.png" id="treeImg">암호화설정</a></li>
 					   				  	</ul>
 				   				  	</li>
 			   				 	</ul> 

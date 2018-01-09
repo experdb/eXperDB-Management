@@ -54,13 +54,23 @@
 	        </property>  
 	</bean> 
 	
-    <bean id="dataSource" class="org.springframework.jdbc.datasource.SimpleDriverDataSource">
-        <property name="driverClass" value="org.postgresql.Driver"/>
-        <property name="url" value="${database.url}"/>
+<!--     <bean id="dataSource" class="org.springframework.jdbc.datasource.SimpleDriverDataSource"> -->
+<!--         <property name="driverClass" value="org.postgresql.Driver"/> -->
+<!--         <property name="url" value="${database.url}"/> -->
+<!--         <property name="username" value="${database.username}" /> -->
+<!--         <property name="password" value="${database.password}" /> -->
+<!--     </bean> -->
+
+  <bean id="dataSource" class="org.apache.commons.dbcp.BasicDataSource" destroy-method="close">
+        <property name="driverClassName" value="org.postgresql.Driver" />
+        <property name="url" value="${database.url}" />
         <property name="username" value="${database.username}" />
         <property name="password" value="${database.password}" />
+        <property name="maxActive" value="100" />
+        <property name="maxIdle" value="10" />
+        <property name="maxWait" value="1000" />
+        <property name="defaultAutoCommit" value="true" />
     </bean>
-
 
 
 </beans>
