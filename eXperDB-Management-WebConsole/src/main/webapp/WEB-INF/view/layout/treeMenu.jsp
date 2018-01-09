@@ -409,11 +409,11 @@ $(window.document).ready(
 									<a href="#n"><img src="../images/ico_lnb_5.png" id="treeImg"><div class="tooltip">감사로그<span class="tooltiptext">감사로그</span></div></a>
 									</div>
 					    				<ul class="depth_2">
-						    			    <li class="ico2_3"><a href="#"><img src="../images/ico_lnb_8.png" id="treeImg">암복호화</a></li>
-						     			   	<li class="ico2_4"><a href="#"><img src="../images/ico_lnb_9.png" id="treeImg">관리서버</a></li>
-						     			   	<li class="ico2_4"><a href="#"><img src="../images/ico_lnb_9.png" id="treeImg">암복호화키</a></li>
-						     			   	<li class="ico2_4"><a href="#"><img src="../images/ico_lnb_9.png" id="treeImg">백업및복원</a></li>
-						     			   	<li class="ico2_4"><a href="#"><img src="../images/ico_lnb_9.png" id="treeImg">자원사용</a></li>
+						    			    <li class="ico2_3"><a href="/encodeDecodeAuditLog.do"><img src="../images/ico_lnb_8.png" id="treeImg">암복호화</a></li>
+						     			   	<li class="ico2_4"><a href="/managementServerAuditLog.do"><img src="../images/ico_lnb_9.png" id="treeImg">관리서버</a></li>
+						     			   	<li class="ico2_4"><a href="/encodeDecodeKeyAuditLog.do"><img src="../images/ico_lnb_9.png" id="treeImg">암복호화키</a></li>
+						     			   	<li class="ico2_4"><a href="/backupRestoreAuditLog.do"><img src="../images/ico_lnb_9.png" id="treeImg">백업및복원</a></li>
+						     			   	<li class="ico2_4"><a href="/resourcesUseAuditLog.do"><img src="../images/ico_lnb_9.png" id="treeImg">자원사용</a></li>
 					   				  	</ul>
 				   				  	</li>
 				   					  	

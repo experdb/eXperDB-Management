@@ -66,7 +66,7 @@ var renewalhistoryTable = null;
 
 function fn_init(){
 	renewalhistoryTable = $('#renewalhistoryTable').DataTable({
-		scrollY : "130px",
+		scrollY : "80px",
 		searching : false,
 		paging: false,
 		scrollX: true,
