@@ -422,7 +422,7 @@ $(window.document).ready(
 									</div>
 					    				<ul class="depth_2">
 						    			    <li class="ico2_3"><a href="/securityPolicyOptionSet.do"><img src="../images/ico_lnb_8.png" id="treeImg">보안정책옵션설정</a></li>
-						     			   	<li class="ico2_4"><a href="#"><img src="../images/ico_lnb_9.png" id="treeImg">암호화설정</a></li>
+						     			   	<li class="ico2_4"><a href="/securitySet.do"><img src="../images/ico_lnb_9.png" id="treeImg">암호화설정</a></li>
 					   				  	</ul>
 				   				  	</li>
 			   				 	</ul> 

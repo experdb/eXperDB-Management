@@ -45,4 +45,23 @@ public class EncriptSettingController {
 		return mv;
 	}
 	
+	
+	/**
+	 * 암호화 설정
+	 * 
+	 * @param historyVO
+	 * @param request
+	 * @return ModelAndView mv
+	 * @throws Exception
+	 */
+	@RequestMapping(value = "/securitySet.do")
+	public ModelAndView securitySet(HttpServletRequest request, ModelMap model) {
+		ModelAndView mv = new ModelAndView();
+		try {
+			mv.setViewName("encript/setting/securitySet");
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return mv;
+	}
 }
