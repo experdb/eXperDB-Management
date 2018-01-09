@@ -132,4 +132,30 @@ public class SecurityPolicyController {
 		return mv;
 
 	}
+	
+	/**
+	 * 접근제어 정책 등록 팝업을 보여준다.
+	 * 
+	 * @param request
+	 * @return ModelAndView mv
+	 * @throws Exception
+	 */
+	@RequestMapping(value = "/popup/accessPolicyRegForm.do")
+	public ModelAndView accessPolicyRegForm(@ModelAttribute("historyVO") HistoryVO historyVO, HttpServletRequest request) {
+		ModelAndView mv = new ModelAndView();
+		try {
+
+//			// 화면접근이력 이력 남기기
+//			historyVO.setExe_dtl_cd("DX-T0056");
+//			historyVO.setMnu_id(12);
+//			accessHistoryService.insertHistory(historyVO);
+
+			mv.setViewName("encript/popup/accessPolicyRegForm");
+
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return mv;
+
+	}
 }

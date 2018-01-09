@@ -162,124 +162,7 @@
 		}
 
 	}
-	
-	function fn_encryptPolicyAddForm(){
-		toggleLayer($('#pop_layer'), 'on');
-	}
-	
-	function fn_accessControlAddForm(){
-		toggleLayer($('#pop_layer2'), 'on');
-	}
-	
-	/* ********************************************************
-	 * 시간
-	 ******************************************************** */
-	function fn_makeToHour(){
-		var hour = "";
-		var hourHtml ="";
-		
-		hourHtml += '<select class="select t7" name="to_exe_h" id="to_exe_h" style="margin-right: 10px;">';	
-		for(var i=0; i<=23; i++){
-			if(i >= 0 && i<10){
-				hour = "0" + i;
-			}else{
-				hour = i;
-			}
-			hourHtml += '<option value="'+hour+'">'+hour+'</option>';
-		}
-		hourHtml += '</select><spring:message code="schedule.our" />';	
-		$( "#a_hour" ).append(hourHtml);
-	}
 
-
-	/* ********************************************************
-	 * 분
-	 ******************************************************** */
-	function fn_makeToMin(){
-		var min = "";
-		var minHtml ="";
-		
-		minHtml += '<select class="select t7" name="to_exe_m" id="to_exe_m" style="margin-right: 10px; margin-left:10px;" >';	
-		for(var i=0; i<=59; i++){
-			if(i >= 0 && i<10){
-				min = "0" + i;
-			}else{
-				min = i;
-			}
-			minHtml += '<option value="'+min+'">'+min+'</option>';
-		}
-		minHtml += '</select><spring:message code="schedule.minute" />';	
-		$( "#a_min" ).append(minHtml);
-	}
-	
-	/* ********************************************************
-	 * 시간
-	 ******************************************************** */
-	function fn_makeFromHour(){
-		var hour = "";
-		var hourHtml ="";
-		
-		hourHtml += '<select class="select t7" name="from_exe_h" id="from_exe_h" style="margin-right: 10px;">';	
-		for(var i=0; i<=23; i++){
-			if(i >= 0 && i<10){
-				hour = "0" + i;
-			}else{
-				hour = i;
-			}
-			hourHtml += '<option value="'+hour+'">'+hour+'</option>';
-		}
-		hourHtml += '</select> <spring:message code="schedule.our" />';	
-		$( "#b_hour" ).append(hourHtml);
-	}
-
-
-	/* ********************************************************
-	 * 분
-	 ******************************************************** */
-	function fn_makeFromMin(){
-		var min = "";
-		var minHtml ="";
-		
-		minHtml += '<select class="select t7" name="from_exe_m" id="from_exe_m" style="margin-right: 10px; margin-left:10px;">';	
-		for(var i=0; i<=59; i++){
-			if(i >= 0 && i<10){
-				min = "0" + i;
-			}else{
-				min = i;
-			}
-			minHtml += '<option value="'+min+'">'+min+'</option>';
-		}
-		minHtml += '</select> <spring:message code="schedule.minute" />';	
-		$( "#b_min" ).append(minHtml);
-	}	
-	
-	$(function() {
-		var dateFormat = "yyyy-mm-dd", from = $("#from").datepicker({
-			changeMonth : false,
-			changeYear : false,
-			onClose : function(selectedDate) {
-				$("#to").datepicker("option", "minDate", selectedDate);
-			}
-		})
-
-		to = $("#to").datepicker({
-			changeMonth : false,
-			changeYear : false,
-			onClose : function(selectedDate) {
-				$("#from").datepicker("option", "maxDate", selectedDate);
-			}
-		})
-
-		function getDate(element) {
-			var date;
-			try {
-				date = $.datepicker.parseDate(dateFormat, element.value);
-			} catch (error) {
-				date = null;
-			}
-			return date;
-		}
-	});
 </script>
 
 <div id="contents">
@@ -330,7 +213,7 @@
 						<tbody>
 							<tr>
 								<th scope="row" class="ico_t1">보안정책이름</th>
-								<td><input type="text" class="txt" name="policyName" id="policyName" /></td>
+								<td><input type="text" class="txt" name="policyName" id="policyName" readonly="readonly"/></td>
 
 							</tr>
 							<tr>
@@ -487,10 +370,7 @@
 
 			<div class="btn_type_02">
 				<a href="#n" class="btn"><span>저장</span></a> 
-				<a href="#n" class="btn" onclick="toggleLayer($('#pop_layer'), 'off');"><span>취소</span></a>
 			</div>
-
-
 		</div>
 	</div>
 </div>

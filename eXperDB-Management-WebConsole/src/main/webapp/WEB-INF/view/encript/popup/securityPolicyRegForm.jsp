@@ -29,64 +29,64 @@
 <script type="text/javascript" src="../js/common.js"></script>
 </head>
 <body>
-		<div class="pop_container">
-			<div class="pop_cts" >
-				<p class="tit">암복호화 정책 등록</p>
-					<form name="ipadr_form">
-						<table class="write">
-							<caption>암복호화 정책 등록</caption>
-							<colgroup>
-								<col style="width:130px;" />
-								<col />
-							</colgroup>
-							<tbody>
-								<tr>
-									<th scope="row" class="ico_t1">시작위치</th>
-									<td><input type="text" class="txt" name="" id="" /></td>
-								</tr>
-								<tr>
-									<th scope="row" class="ico_t1">길이</th>
-									<td><input type="text" class="txt" name="" id="" /></td>
-								</tr>
-								<tr>
-									<th scope="row" class="ico_t1">암호화 알고리즘</th>
-									<td><select class="select" id="" name="">
-									<option value="SEED-128">SEED-128</option>
-									<option value="ARIA-128">ARIA-128</option>
-									<option value="ARIA-192">ARIA-192</option>
-									<option value="ARIA-256">ARIA-256</option>
-									<option value="AES-128">AES-128</option>
-									<option value="AES-256">AES-256</option>
-									<option value="SHA-256">SHA-256</option>
-									</select></td>
-								</tr>
-								<tr>
-									<th scope="row" class="ico_t1">암호화 키</th>
-									<td><select class="select" id="" name="">
-									<option value="AES-256">AES-256</option></select></td>
-								</tr>
-								<tr>
-									<th scope="row" class="ico_t1">초기 벡터</th>
-									<td><select class="select" id="" name="">
-									<option value="FIXED">FIXED</option>
-									<option value="RANDOM">RANDOM</option>
-									</select></td>
-								</tr>
-								<tr>
-									<th scope="row" class="ico_t1">운영모드</th>
-									<td><select class="select" id="" name="">
-									<option value="CBC">CBC</option>
-									<option value="CTR">CTR</option>
-									</select></td>
-								</tr>
-							</tbody>
-						</table>
-					</form>
-				<div class="btn_type_02">
-					<a href="#n" class="btn"><span>저장</span></a>
-					<a href="#n" class="btn" onclick="window.close();"><span>취소</span></a>
-				</div>
+	<div class="pop_container">
+		<div class="pop_cts">
+			<p class="tit">암복호화 정책 등록</p>
+			<table class="write">
+				<caption>암복호화 정책 등록</caption>
+				<colgroup>
+					<col style="width: 130px;" />
+					<col />
+				</colgroup>
+				<tbody>
+					<tr>
+						<th scope="row" class="ico_t1">시작위치</th>
+						<td><input type="text" class="txt" name="" id="" /></td>
+					</tr>
+					<tr>
+						<th scope="row" class="ico_t1">길이</th>
+						<td><input type="text" class="txt" name="" id="" /></td>
+					</tr>
+					<tr>
+						<th scope="row" class="ico_t1">암호화 알고리즘</th>
+						<td><select class="select" id="" name="">
+								<option value="SEED-128">SEED-128</option>
+								<option value="ARIA-128">ARIA-128</option>
+								<option value="ARIA-192">ARIA-192</option>
+								<option value="ARIA-256">ARIA-256</option>
+								<option value="AES-128">AES-128</option>
+								<option value="AES-256">AES-256</option>
+								<option value="SHA-256">SHA-256</option>
+						</select></td>
+					</tr>
+					<tr>
+						<th scope="row" class="ico_t1">암호화 키</th>
+						<td><select class="select" id="" name="">
+								<option value="AES-256">AES-256</option>
+						</select></td>
+					</tr>
+					<tr>
+						<th scope="row" class="ico_t1">초기 벡터</th>
+						<td><select class="select" id="" name="">
+								<option value="FIXED">FIXED</option>
+								<option value="RANDOM">RANDOM</option>
+						</select></td>
+					</tr>
+					<tr>
+						<th scope="row" class="ico_t1">운영모드</th>
+						<td><select class="select" id="" name="">
+								<option value="CBC">CBC</option>
+								<option value="CTR">CTR</option>
+						</select></td>
+					</tr>
+				</tbody>
+			</table>
+
+			<div class="btn_type_02">
+				<a href="#n" class="btn"><span>저장</span></a> 
+				<a href="#n" class="btn" onclick="window.close();"><span>취소</span></a>
 			</div>
 		</div>
+	</div>
 </body>
 </html>

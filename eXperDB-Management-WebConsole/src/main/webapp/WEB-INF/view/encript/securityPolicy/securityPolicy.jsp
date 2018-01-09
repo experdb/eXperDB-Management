@@ -118,9 +118,8 @@ var table = null;
 						<caption>검색 조회</caption>
 						<colgroup>
 							<col style="width: 100px;" />
-							<col style="width: 200px;" />
+							<col />
 							<col style="width: 100px;" />
-							<col style="width: 200px;" />
 							<col />
 						</colgroup>
 						<tbody>
@@ -131,7 +130,7 @@ var table = null;
 								<td><select class="select t5" id="policyStatus">
 										<option value="Active">Active</option>
 								</select></td>
-							</tr>
+							</tr>						
 						</tbody>
 					</table>
 				</div>

@@ -174,17 +174,24 @@
 	
 	/*암보호화 정책 삭제*/
 	function fn_SecurityDel(){
-		alert("2");
+		alert("암보호화 정책 삭제");
 	}
 	
 	/*접근제어 정책 등록*/
 	function fn_AccessAdd(){
-		alert("3");
+		var popUrl = "/popup/accessPolicyRegForm.do"; // 서버 url 팝업경로
+		var width = 1000;
+		var height = 700;
+		var left = (window.screen.width / 2) - (width / 2);
+		var top = (window.screen.height /2) - (height / 2);
+		var popOption = "width="+width+", height="+height+", top="+top+", left="+left+", resizable=no, scrollbars=yes, status=no, toolbar=no, titlebar=yes, location=no,";
+			
+		window.open(popUrl,"",popOption);	
 	}
 	
 	/*접근제어 정책 삭제*/
 	function fn_AccessDel(){
-		alert("4");
+		alert("접근제어 정책 삭제");
 	}
 	
 </script>
@@ -229,20 +236,20 @@
 				<div class="sch_form">
 					<table class="write">
 						<colgroup>
-							<col style="width: 110px;" />
-							<col />
-							<col style="width: 100px;" />
+							<col style="width:140px;" />
 							<col />
 						</colgroup>
 						<tbody>
 							<tr>
 								<th scope="row" class="ico_t1">보안정책이름</th>
-								<td><input type="text" class="txt" name="policyName" id="policyName" /></td>
-
+									<td>
+									<input type="text" class="txt t2" name="policyName" id="policyName" />
+									<span class="btn btnF_04 btnC_01"><button type="button" class= "btn_type_02" onclick="fn_check()" style="width: 100px; margin-right: -60px; margin-top: 0;"><spring:message code="common.overlap_check" /></button></span>
+								</td>
 							</tr>
 							<tr>
 								<th scope="row" class="ico_t1">보안정책설명</th>
-								<td><input type="text" class="txt" name="policyComment" id="policyComment" /></td>
+								<td><textarea class="tbd1" name="policyComment" id="policyComment"></textarea></td>
 							</tr>
 						</tbody>
 					</table>
@@ -258,8 +265,7 @@
 						</div>
 					</div>
 					<div class="overflow_area">
-						<table id="encryptPolicyTable" class="display" cellspacing="0"
-							width="100%">
+						<table id="encryptPolicyTable" class="display" cellspacing="0" width="100%">
 							<thead>
 								<tr>
 									<th width="10"></th>
@@ -396,12 +402,9 @@
 				</div>
 			</div>
 
-
 			<div class="btn_type_02">
 				<a href="#n" class="btn"><span>저장</span></a> 
-				<a href="#n" class="btn" onclick="toggleLayer($('#pop_layer'), 'off');"><span>취소</span></a>
 			</div>
-
 
 		</div>
 	</div>
