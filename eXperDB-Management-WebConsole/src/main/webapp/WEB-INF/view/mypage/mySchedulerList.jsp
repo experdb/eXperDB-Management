@@ -33,9 +33,12 @@ function fn_init(){
 		{data : "nxt_exe_dtm", className : "dt-center", defaultContent : ""}, 
 		{data : "status", 
 			render: function (data, type, full){
-				if(full.status == "s"){
+				if(full.scd_cndt == "TC001801"){
 					var html = '<img src="../images/ico_agent_1.png" alt="" />';
 						return html;
+				}else if(full.scd_cndt == "TC001802"){
+					var html = '<img src="../images/ico_state_03.png" alt="" />';
+					return html;
 				}else{
 					var html = '<img src="../images/ico_agent_2.png" alt="" />';
 					return html;
@@ -46,11 +49,14 @@ function fn_init(){
 		},
 		{data : "status", 
 			render: function (data, type, full){
-				if(full.status == "s"){
-					var html = '<img src="../images/ico_w_25.png" alt="<spring:message code="dashboard.running" />" id="scheduleStop"/>';
+				if(full.scd_cndt == "TC001801"){
+					var html = '<img src="../images/ico_state_04.png"  id="scheduleStop"/>';
 						return html;
+				}else if(full.scd_cndt == "TC001802"){
+					var html = '<img src="../images/ico_state_03.png" id="scheduleRunning" />';
+					return html;
 				}else{
-					var html = '<img src="../images/ico_w_24.png" alt="중지중" id="scheduleStart" />';
+					var html = '<img src="../images/ico_state_06.png" id="scheduleStart" />';
 					return html;
 				}
 				return data;
@@ -162,6 +168,10 @@ function fn_init(){
 	    } 
 	}); 
  	
+ 	$('#scheduleList tbody').on('click','#scheduleRunning', function () {
+ 	    alert("실행중인 스케줄은 정지할수 없습니다.");
+ 	    return false;
+	}); 
  	
 	//더블 클릭시
 	 $('#scheduleList tbody').on('dblclick','tr',function() {

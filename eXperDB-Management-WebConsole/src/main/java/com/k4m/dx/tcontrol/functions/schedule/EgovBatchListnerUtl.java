@@ -152,7 +152,7 @@ public class EgovBatchListnerUtl implements JobListener {
 			}else{
 				ScheduleVO scheduleVO = new ScheduleVO();
 				scheduleVO.setScd_id(Integer.parseInt(scd_id));
-				scheduleVO.setScd_cndt("TC001802");
+				scheduleVO.setScd_cndt("TC001803");
 				hp1.put("nFireTime", beforeTime);
 				hp2.put("nFireTime", context.getScheduledFireTime());	
 				 System.out.println("▶▶▶ 이전 작업 수행시간 업데이트");

@@ -50,9 +50,12 @@ function fn_init(){
 		}}, 
 		{data : "status", 
 			render: function (data, type, full){
-				if(full.status == "s"){
+				if(full.scd_cndt == "TC001801"){
 					var html = '<img src="../images/ico_agent_1.png" alt="" />';
 						return html;
+				}else if(full.scd_cndt == "TC001802"){
+					var html = '<img src="../images/ico_state_03.png" alt="" />';
+					return html;
 				}else{
 					var html = '<img src="../images/ico_agent_2.png" alt="" />';
 					return html;
@@ -64,13 +67,16 @@ function fn_init(){
 		{data : "status", 
 			render: function (data, type, full){
 				if(full.frst_regr_id == "<%=usr_id%>"){			
-					if(full.status == "s"){
-						var html = '<img src="../images/ico_w_25.png" alt="<spring:message code="dashboard.running" />" id="scheduleStop"/>';
+					if(full.scd_cndt == "TC001801"){
+						var html = '<img src="../images/ico_state_04.png"  id="scheduleStop"/>';
 							return html;
-					}else{
-						var html = '<img src="../images/ico_w_24.png" alt="중지중" id="scheduleStart" />';
+					}else if(full.scd_cndt == "TC001802"){
+						var html = '<img src="../images/ico_state_03.png" id="scheduleRunning" />';
 						return html;
-					}					
+					}else{
+						var html = '<img src="../images/ico_state_06.png" id="scheduleStart" />';
+						return html;
+					}			
 				return data;
 				}
 			},
@@ -164,6 +170,13 @@ function fn_init(){
 	    } 
 	}); 
  	
+ 	
+ 	$('#scheduleList tbody').on('click','#scheduleRunning', function () {
+ 	    alert("실행중인 스케줄은 정지할수 없습니다.");
+ 	    return false;
+	}); 
+ 	
+ 	
 	//더블 클릭시
 	 $('#scheduleList tbody').on('dblclick','tr',function() {
 		var scd_id = table.row(this).data().scd_id;
@@ -239,6 +252,7 @@ $(window.document).ready(function() {
 	var scd_cndt = "${scd_cndt}";
 	$('#scd_cndt').val(scd_cndt);
 	
+	alert(scd_cndt)
 	fn_buttonAut();
 	fn_init();
 	
@@ -580,8 +594,9 @@ function fn_makeToMin(){
 									<td>
 									<select class="select t8" name="scd_cndt" id="scd_cndt">
 										<option value="%"><spring:message code="schedule.total" /></option>
-										<option value="TC001801"><spring:message code="schedule.run" /></option>
-										<option value="TC001802"><spring:message code="schedule.stop" /></option>
+										<option value="TC001801">시작</option>
+										<option value="TC001802"><spring:message code="schedule.run" /></option>
+										<option value="TC001803"><spring:message code="schedule.stop" /></option>
 									</select>	</td>				
 								</tr>				
 								<tr>

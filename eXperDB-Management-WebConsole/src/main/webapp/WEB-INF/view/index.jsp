@@ -44,27 +44,7 @@
 						         </c:choose>
 								</a>
 								<p class="state_txt"><spring:message code="dashboard.Register_schedule" /></p>
-							</li>
-							<li>
-								<p class="state">
-									<img src="../images/ico_state_03.png" alt="Running Schedule" /><span>Running</span>
-								</p>
-								<a href="/selectScheduleListView.do?scd_cndt=TC001801">
-								 <c:choose>
-						           <c:when test="${fn:length(fn:escapeXml(backupInfo.schedule_run_cnt))>2}">
-						           <p class="state_num c3" style="font-size: 40px;">
-						            <c:out value="${backupInfo.schedule_run_cnt}"/>
-						            </p>
-						           </c:when>
-						           <c:otherwise>
-						           <p class="state_num c3">
-						            <c:out value="${backupInfo.schedule_run_cnt}"/>
-						            </p>
-						           </c:otherwise> 
-						         </c:choose>
-								</a>
-								<p class="state_txt"><spring:message code="dashboard.running" /></p>
-							</li>
+							</li>							
 							<%-- <li>
 								<p class="state">
 									<img src="../images/ico_state_03.png" alt="Running" /><span>Running</span>
@@ -74,9 +54,29 @@
 							</li> --%>
 							<li>
 								<p class="state">
-									<img src="../images/ico_state_07.png" alt="Stop" /><span>Stop</span>
+									<img src="../images/ico_state_06.png" alt="Start" /><span>Start</span>
 								</p>
-								<a href="/selectScheduleListView.do?scd_cndt=TC001802">
+								<a href="/selectScheduleListView.do?scd_cndt=TC001801">
+								 <c:choose>
+						           <c:when test="${fn:length(fn:escapeXml(scheduleInfo.start_cnt))>2}">
+						           <p class="state_num c1" style="font-size: 40px;">
+						            <c:out value="${scheduleInfo.start_cnt}"/>
+						            </p>
+						           </c:when>
+						           <c:otherwise>
+						           <p class="state_num c1">
+						            <c:out value="${scheduleInfo.start_cnt}"/>
+						            </p>
+						           </c:otherwise> 
+						         </c:choose>
+								</a>
+								<p class="state_txt">시작</p>
+							</li>
+							<li>
+								<p class="state">
+									<img src="../images/ico_state_04.png" alt="Stop" /><span>Stop</span>
+								</p>
+								<a href="/selectScheduleListView.do?scd_cndt=TC001803">
 								 <c:choose>
 						           <c:when test="${fn:length(fn:escapeXml(scheduleInfo.stop_cnt))>2}">
 						           <p class="state_num c1" style="font-size: 40px;">
@@ -91,6 +91,26 @@
 						         </c:choose>
 								</a>
 								<p class="state_txt"><spring:message code="schedule.stop" /></p>
+							</li>
+							<li>
+								<p class="state">
+									<img src="../images/ico_state_03.png" alt="Running Schedule" /><span>Running</span>
+								</p>
+								<a href="/selectScheduleListView.do?scd_cndt=TC001802">
+								 <c:choose>
+						           <c:when test="${fn:length(fn:escapeXml(scheduleInfo.schedule_run_cnt))>2}">
+						           <p class="state_num c3" style="font-size: 40px;">
+						            <c:out value="${scheduleInfo.schedule_run_cnt}"/>
+						            </p>
+						           </c:when>
+						           <c:otherwise>
+						           <p class="state_num c3">
+						            <c:out value="${scheduleInfo.schedule_run_cnt}"/>
+						            </p>
+						           </c:otherwise> 
+						         </c:choose>
+								</a>
+								<p class="state_txt"><spring:message code="dashboard.running" /></p>
 							</li>
 							<li>
 								<p class="state">
