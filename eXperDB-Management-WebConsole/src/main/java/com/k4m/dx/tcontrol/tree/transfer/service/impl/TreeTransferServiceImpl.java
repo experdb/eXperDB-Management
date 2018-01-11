@@ -51,7 +51,7 @@ public class TreeTransferServiceImpl extends EgovAbstractServiceImpl implements 
 	public int statusTransferTarget(String name) throws Exception {
 		return treeTransferDAO.statusTransferTarget(name);
 	}
-	
+
 	@Override
 	public void deleteTransferTarget(String name) throws Exception {
 		treeTransferDAO.deleteTransferTarget(name);
@@ -132,6 +132,9 @@ public class TreeTransferServiceImpl extends EgovAbstractServiceImpl implements 
 		return treeTransferDAO.selectDbServerList(dbServerVO);
 	}
 
-
+	@Override
+	public int selectCurrentMppid() throws Exception {
+		return treeTransferDAO.selectCurrentMppid();
+	}
 
 }

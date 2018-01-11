@@ -262,4 +262,8 @@ public class TreeTransferDAO extends EgovAbstractMapper {
 		return result;
 	}
 
+	public int selectCurrentMppid() {
+		return (int) getSqlSession().selectOne("treeTransferSql.selectCurrentMppid");
+	}
+
 }

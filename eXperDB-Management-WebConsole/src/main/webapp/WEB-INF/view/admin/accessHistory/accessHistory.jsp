@@ -111,7 +111,8 @@
 	
 	/*조회버튼 클릭시*/
 	function fn_select() {
-		document.selectList.action = "/selectSearchAccessHistory.do";
+		document.selectList.pageIndex.value = 1;
+		document.selectList.action = "/selectAccessHistory.do";
 		document.selectList.submit();
 	}
 

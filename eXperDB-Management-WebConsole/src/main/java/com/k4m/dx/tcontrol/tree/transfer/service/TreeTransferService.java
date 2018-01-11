@@ -188,4 +188,12 @@ public interface TreeTransferService {
 	 */
 	List<DbServerVO> selectDbServerList(DbServerVO dbServerVO) throws Exception;
 
+	/**
+	 * 현재 trf_trg_mpp_id 조회
+	 * 
+	 * @return
+	 * @throws Exception
+	 */
+	int selectCurrentMppid() throws Exception;
+
 }

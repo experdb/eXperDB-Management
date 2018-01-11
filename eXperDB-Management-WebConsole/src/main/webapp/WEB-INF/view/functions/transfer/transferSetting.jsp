@@ -24,12 +24,10 @@
 		else
 		{	return true;	}
 	}
-	
 
 	/* Validation */
 	function fn_transferValidation(){
-		var filter  = /^(1|2)?\d?\d([.](1|2)?\d?\d){3}$/;
-
+		var filter = /^(([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])\.){3}([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])$/;
 		var kafka_broker_ip = document.getElementById("kafka_broker_ip");
 		if (kafka_broker_ip.value == "") {
 			alert('<spring:message code="message.msg47" />');
@@ -40,7 +38,6 @@
 			alert('Kafka Broker <spring:message code="message.msg175" />');
 			return false;
 		}
-
  		var kafka_broker_port = document.getElementById("kafka_broker_port");
 		if (kafka_broker_port.value == "") {
 			alert('<spring:message code="message.msg48" />');
@@ -125,10 +122,8 @@
 			bw_home.focus();
 			return false;
 		}
-		
  		return true;		
 	}
-	
 	
 	/* 저장버튼 클릭시(전송설정 값이 없는 경우) */
 	function fn_insert() {
@@ -146,7 +141,6 @@
 				teng_ip : $("#teng_ip").val(),
 				teng_port : $("#teng_port").val(),
 				bw_home : $("#bw_home").val(),
-				
 			},
 			success : function(result) {
 				alert('<spring:message code="message.msg57" />');
@@ -242,7 +236,6 @@
  				  $("#teng_port").val(data.teng_port);
  				  $("#bw_home").val(data.bw_home); 	
  				  $("#trf_cng_id").val(data.trf_cng_id);
- 	 
  				}
  				fn_buttonAut();
 			}
@@ -253,12 +246,18 @@
 		var btnInsert = document.getElementById("btnInsert"); 
 		if("${wrt_aut_yn}" == "Y"){
 			btnInsert.style.display = '';
-
 		}else{
 			btnInsert.style.display = 'none';
 		}
-			
 	}	
+	
+	function NumObj(obj) {
+		if (event.keyCode >= 48 && event.keyCode <= 57) { //숫자키만 입력
+			return true;
+		} else {
+			event.returnValue = false;
+		}
+	}
 </script>
 <input type="hidden" id="trf_cng_id">
 <div id="contents">
@@ -302,22 +301,22 @@
 						<tr>
 							<td><spring:message code="data_transfer.kafka_broker" /></td>
 							<td><input type="text" class="txt" name="kafka_broker_ip" id="kafka_broker_ip" /></td>
-							<td class="type2"><input type="text" class="txt" name="kafka_broker_port" id="kafka_broker_port" /></td>
+							<td class="type2"><input type="text" class="txt" name="kafka_broker_port" id="kafka_broker_port" onKeyPress="NumObj(this);"/></td>
 						</tr>
 						<tr>
 							<td><spring:message code="data_transfer.schema_registry" /></td>
 							<td><input type="text" class="txt" name="schema_registry_ip" id="schema_registry_ip" /></td>
-							<td class="type2"><input type="text" class="txt" name="schema_registry_port" id="schema_registry_port" /></td>
+							<td class="type2"><input type="text" class="txt" name="schema_registry_port" id="schema_registry_port" onKeyPress="NumObj(this);"/></td>
 						</tr>
 						<tr>
 							<td><spring:message code="data_transfer.zookeeper" /></td>
 							<td><input type="text" class="txt" name="zookeeper_ip" id="zookeeper_ip" /></td>
-							<td class="type2"><input type="text" class="txt" name="zookeeper_port" id="zookeeper_port" /></td>
+							<td class="type2"><input type="text" class="txt" name="zookeeper_port" id="zookeeper_port" onKeyPress="NumObj(this);"/></td>
 						</tr>
 						<tr>
 							<td><spring:message code="data_transfer.experdb_agent" /></td>
 							<td><input type="text" class="txt" name="teng_ip" id="teng_ip" /></td>
-							<td class="type2"><input type="text" class="txt" name="teng_port" id="teng_port" /></td>
+							<td class="type2"><input type="text" class="txt" name="teng_port" id="teng_port" onKeyPress="NumObj(this);"/></td>
 						</tr>
 						<tr>
 							<td><spring:message code="data_transfer.bottledwater_home" /></td>

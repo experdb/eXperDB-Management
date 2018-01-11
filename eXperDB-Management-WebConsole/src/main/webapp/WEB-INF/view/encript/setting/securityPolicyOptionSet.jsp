@@ -1,5 +1,5 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
-    pageEncoding="UTF-8"%>
+	pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form"%>
 <%@ taglib prefix="ui" uri="http://egovframework.gov/ctl/ui"%>
@@ -38,7 +38,7 @@ function fn_makeStartHour(){
 	var hour = "";
 	var hourHtml ="";
 	
-	hourHtml += '<select class="select t5" name="exe_h" id="exe_h" style="width: 75px; height: 25px;">';	
+	hourHtml += '<select class="select t6" name="exe_h" id="exe_h">';	
 	for(var i=0; i<=23; i++){
 		if(i >= 0 && i<10){
 			hour = "0" + i;
@@ -55,7 +55,7 @@ function fn_makeEndHour(){
 	var hour = "";
 	var hourHtml ="";
 	
-	hourHtml += '<select class="select t5" name="exe_h" id="exe_h" style="width: 75px; height: 25px;">';	
+	hourHtml += '<select class="select t6" name="exe_h" id="exe_h">';	
 	for(var i=0; i<=23; i++){
 		if(i >= 0 && i<10){
 			hour = "0" + i;
@@ -69,12 +69,24 @@ function fn_makeEndHour(){
 }
 </script>
 
+<style>
+.cmm_bd .sub_tit>p {
+	padding: 0 8px 0 33px;
+	line-height: 24px;
+	background: url(../images/popup/ico_p_2.png) 8px 48% no-repeat;
+}
+
+.inp_chk >span{
+margin-right: 10px;
+}
+</style>
 
 <div id="contents">
 	<div class="contents_wrap">
 		<div class="contents_tit">
-			<h4>보안정책 옵션설정<a href="#n"><img src="../images/ico_tit.png" class="btn_info"/></a></h4>
-			<div class="infobox"> 
+			<h4>보안정책 옵션설정<a href="#n"><img src="../images/ico_tit.png" class="btn_info" /></a>
+			</h4>
+			<div class="infobox">
 				<ul>
 					<li>보안정책 옵션설정 설명</li>
 				</ul>
@@ -90,173 +102,177 @@ function fn_makeEndHour(){
 
 		<div class="contents">
 			<div class="cmm_grp">
-			
-			<div style="margin-bottom: 10px;"><h2>기본옵션</h2></div>		
-				<div class="sch_form">
-					<table class="write">
-						<colgroup>
-							<col style="width: 120px;" />
-							<col />
-							<col style="width: 100px;" />
-							<col />
-						</colgroup>
-						<tbody>
-							<tr>
-								<td colspan="2"><div class="inp_chk">
-									<div class="inp_chk">
-										<span style="margin-right: 10%;"> 
-											<input type="checkbox" id="option_1_1" name="" /> 
-											<label for="option_1_1">기본 접근 허용 (보안정책 생성시 기본값)</label>
-										</span> 
-									</div>
-									</div>
-								</td>
-							</tr>
-							<tr>
-								<td colspan="2"><div class="inp_chk">
-									<div class="inp_chk">
-										<span style="margin-right: 10%;"> 
-											<input type="checkbox" id="option_1_1" name="" /> 
-											<label for="option_1_1">암복호화 로그 기록 중지 (보안 정책의 설정을 무시하고, 로그를 기록하지 않음)</label>
-										</span> 
-									</div>
-									</div>
-								</td>
-							</tr>
-						</tbody>
-					</table>
+				<div class="cmm_bd">
+					<div class="sub_tit">
+						<p>기본옵션</p>
+					</div>
+					<div class="overflows_areas">
+						<table class="write">
+							<colgroup>
+								<col style="width: 120px;" />
+								<col />
+								<col style="width: 100px;" />
+								<col />
+							</colgroup>
+							<tbody>
+								<tr>
+									<td colspan="2">
+										<div class="inp_chk">
+											<div class="inp_chk">
+												<span style="margin-right: 10%;"> 
+												<input type="checkbox" id="option_1" name="" /> 
+												<label for="option_1">기본 접근 허용 (보안정책 생성시 기본값)</label>
+												</span>
+											</div>
+										</div>
+									</td>
+								</tr>
+								<tr>
+									<td colspan="2">
+										<div class="inp_chk">
+											<div class="inp_chk">
+												<span style="margin-right: 10%;"> 
+												<input type="checkbox" id="option_2" name="" /> 
+												<label for="option_2">암복호화 로그 기록 중지 (보안 정책의 설정을 무시하고, 로그를 기록하지 않음)</label>
+												</span>
+											</div>
+										</div>
+									</td>
+								</tr>
+							</tbody>
+						</table>
+					</div>
 				</div>
 
-			<div style="margin-bottom: 10px;"><h2>로그옵션</h2></div>
-				<div class="sch_form">
-					<table class="write">
-						<colgroup>
-							<col style="width: 120px;" />
-							<col />
-							<col style="width: 100px;" />
-							<col />
-						</colgroup>
-						<tbody>
-							<tr>
-								<td colspan="2">
-									<div class="inp_chk">
-										<span style="margin-right: 10%;"> 
-											<input type="checkbox" id="option_1_1" name="" /> 
-											<label for="option_1_1">부스트</label>
-										</span> 
-									</div>
-								</td>
-							</tr>
-							<tr>
-								<td colspan="2">
-										<span style="margin-right: 10%;"> 
-											<input type="text" name="wrk_nm" id="wrk_nm" class="txt" style="width:100px"/>
-											<label for="option_1_1">암복호화 로그 서버에서 압축시간(초)</label>
-										</span> 
-								</td>
-							</tr>
-							<tr>
-								<td colspan="2">
-										<span style="margin-right: 10%;"> 
-											<input type="text" name="wrk_nm" id="wrk_nm" class="txt" style="width:100px"/>
-											<label for="option_1_1">암복호화 로그 AP에서 최대 압축값</label>
-										</span> 
-								</td>
-							</tr>
-							<tr>
-								<td colspan="2">
-										<span style="margin-right: 10%;"> 
-											<input type="text" name="wrk_nm" id="wrk_nm" class="txt" style="width:100px"/>
-											<label for="option_1_1">암복호화 로그 압축 시작값</label>
-										</span> 
-								</td>
-							</tr>
-							<tr>
-								<td colspan="2">
-										<span style="margin-right: 10%;"> 
-											<input type="text" name="wrk_nm" id="wrk_nm" class="txt" style="width:100px"/>
-											<label for="option_1_1">암복호화 로그 압축 중단 시간(초)</label>
-										</span> 
-								</td>
-							</tr>
-							<tr>
-								<td colspan="2">
-										<span style="margin-right: 10%;"> 
-											<input type="text" name="wrk_nm" id="wrk_nm" class="txt" style="width:100px"/>
-											<label for="option_1_1">암복호화 로그 압축 출력 시간(초)</label>
-										</span> 
-								</td>
-							</tr>
-							<tr>
-								<td colspan="2">
-										<span style="margin-right: 10%;"> 
-											<input type="text" name="wrk_nm" id="wrk_nm" class="txt" style="width:100px"/>
-											<label for="option_1_1">암복호화 로그 전송 대기 시간(초)</label>
-										</span> 
-								</td>
-							</tr>
-						</tbody>
-					</table>
+				<br><br>
+
+				<div class="cmm_bd">
+					<div class="sub_tit">
+						<p>로그옵션</p>
+					</div>
+					<div class="overflows_areas">
+						<table class="write">
+							<colgroup>
+								<col style="width: 70px;" />
+								<col />
+							</colgroup>
+							<tbody>
+								<tr>
+									<td colspan="2">
+										<div class="inp_chk">
+											<span style="margin-right: 10%;"> <input type="checkbox" id="option" name="" /> 
+												<label for="option">부스트</label>
+											</span>
+										</div>
+									</td>
+								</tr>
+								<tr>
+									<td><input type="text" class="txt t6" name="wrk_nm" id="wrk_nm" class="txt" /></td>
+									<td>암복호화 로그 서버에서 압축시간(초)</td>
+								</tr>
+								<tr>
+									<td><input type="text" class="txt t6" name="wrk_nm" id="wrk_nm" class="txt" /></td>
+									<td>암복호화 로그 AP에서 최대 압축값</td>
+								</tr>
+								<tr>
+									<td><input type="text" class="txt t6" name="wrk_nm" id="wrk_nm" class="txt" /></td>
+									<td>암복호화 로그 압축 시작값</td>
+								</tr>
+								<tr>
+									<td><input type="text" class="txt t6" name="wrk_nm" id="wrk_nm" class="txt" /></td>
+									<td>암복호화 로그 압축 중단 시간(초)</td>
+								</tr>
+								<tr>
+									<td><input type="text" class="txt t6" name="wrk_nm" id="wrk_nm" class="txt" /></td>
+									<td>암복호화 로그 압축 출력 시간(초)</td>
+								</tr>
+								<tr>
+									<td><input type="text" class="txt t6" name="wrk_nm" id="wrk_nm" class="txt" /></td>
+									<td>암복호화 로그 전송 대기 시간(초)</td>
+								</tr>
+							</tbody>
+						</table>
+					</div>
 				</div>
-				
-				
-				
-				<div style="margin-bottom: 10px;"><h2>로그 일괄 전송</h2></div>
-				<div class="sch_form">
-					<table class="write">
-						<colgroup>
-							<col style="width: 120px;" />
-							<col />
-							<col style="width: 100px;" />
-							<col />
-						</colgroup>
-						<tbody>
-							<tr>
-								<td colspan="2">
-									<div class="inp_chk">
-										<span style="margin-right: 10%;"> 
-											<input type="checkbox" id="option_1_1" name="" /> 
-											<label for="option_1_1">복호화 로그를 지정된 시간에만 수집</label>
-										</span> 
-									</div>
-								</td>
-							</tr>
-							<tr>
-								<th scope="row" class="ico_t1">로그 전송 요일</th>
-								<td>
-								</td>
-							</tr>
-							<tr>				
-								<td colspan="4">
-									<div class="schedule_wrap">
-										<span id="weekDay"> 									 
-										 <input type="checkbox" id="chk" name="chk" value="0"> <spring:message code="common.mon" />
-										 <input type="checkbox" id="chk" name="chk" value="0"> <spring:message code="common.tue" />
-										 <input type="checkbox" id="chk" name="chk" value="0"> <spring:message code="common.wed" />
-										 <input type="checkbox" id="chk" name="chk" value="0"> <spring:message code="common.thu" />
-									 	 <input type="checkbox" id="chk" name="chk" value="0"> <spring:message code="common.fri" />
-										 <input type="checkbox" id="chk" name="chk" value="0"> <spring:message code="common.sat" />
-										 <input type="checkbox" id="chk"name="chk" value="0"> <spring:message code="common.sun" />
-										</span> 
-									</div>
-								</td>
-							</tr>
-							<tr>	
-								<th><div id="startHour"></div></th>			
-								<td>
-									 전송시작(시)
-								</td>
-							</tr>
-							<tr>	
-								<th><div id="endHour"></div></th>			
-								<td>
-									 전송종료(시)
-								</td>
-							</tr>
-						</tbody>
-					</table>
-				</div>		
+
+				<br><br>
+
+				<div class="cmm_bd">
+					<div class="sub_tit">
+						<p>로그 일괄 전송</p>
+					</div>
+					<div class="overflows_areas">
+						<table class="write">
+							<colgroup>
+								<col style="width: 60px;" />
+								<col />
+							</colgroup>
+							<tbody>
+								<tr>
+									<td colspan="2">
+										<div class="inp_chk">
+											<span style="margin-right: 10%;"> 
+											<input type="checkbox" id="option1" name="" /> 
+												<label for="option1">암복호화 로그를 지정되 시간에만 수집</label>
+											</span>
+										</div>
+									</td>
+								</tr>
+								<tr>
+									<td scope="row" class="ico_t1" colspan="2"><img src="../images/popup/ico_p_2.png" style="padding: 0 0 0 8px; margin-right: 8px;">로그 전송 요일</td>
+								</tr>
+								<tr>
+									<td colspan="2">
+										<div class="inp_chk">
+											<span>
+												<input type="checkbox" id="option_1_1" name="option_1_1" />
+												<label for="option_1_1"><spring:message code="common.mon" /></label>
+											</span>
+											<span>
+												<input type="checkbox" id="option_1_2" name="option_1_2" />
+												<label for="option_1_2"><spring:message code="common.tue" /></label>
+											</span>
+											<span>
+												<input type="checkbox" id="option_1_3" name="option_1_3" />
+												<label for="option_1_3"><spring:message code="common.wed" /></label>
+											</span>
+											<span>
+												<input type="checkbox" id="option_1_4" name="option_1_4" />
+												<label for="option_1_4"><spring:message code="common.thu" /></label>
+											</span>
+											<span>
+												<input type="checkbox" id="option_1_5" name="option_1_5" />
+												<label for="option_1_5"><spring:message code="common.fri" /></label>
+											</span>
+											<span>
+												<input type="checkbox" id="option_1_6" name="option_1_6" />
+												<label for="option_1_6"><spring:message code="common.sat" /></label>
+											</span>
+											<span>
+												<input type="checkbox" id="option_1_7" name="option_1_7" />
+												<label for="option_1_7"><spring:message code="common.sun" /></label>
+											</span>
+										</div>
+									</td>
+								</tr>
+								<tr> 
+									<td><div id="startHour"></div></td> 
+									<td>전송시작(시)</td> 
+								</tr> 
+								<tr>
+									<td><div id="endHour"></div></td> 
+									<td>전송종료(시)</td> 
+								</tr>
+							</tbody>
+						</table>
+					</div>
+				</div>
 			</div>
+			
+			<div class="btn_type_02">
+				<a href="#n" class="btn"><span>저장</span></a> 
+			</div>
+			
 		</div>
 	</div>
 </div>

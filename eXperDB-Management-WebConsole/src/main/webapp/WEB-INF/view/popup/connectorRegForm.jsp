@@ -33,7 +33,7 @@
 
 	/* Validation */
 	function fn_connectorValidation() {
-		var filter  = /^(1|2)?\d?\d([.](1|2)?\d?\d){3}$/;
+		var filter = /^(([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])\.){3}([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])$/;
 		
 		var cnr_nm = document.getElementById("cnr_nm");
 		if (cnr_nm.value == "") {

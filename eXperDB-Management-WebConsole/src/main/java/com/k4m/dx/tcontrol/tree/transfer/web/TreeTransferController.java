@@ -166,23 +166,34 @@ public class TreeTransferController {
 
 			// strName : 공백이면 전체 검색
 			String strName = "";
+			String trf_trg_cnn_nm = request.getParameter("trf_trg_cnn_nm");
+			if(trf_trg_cnn_nm != null){
+				strName= trf_trg_cnn_nm;
+			}
+			
 			JSONObject serverObj = new JSONObject();
 			String strServerIp = connectInfo.getCnr_ipadr();
 			String strServerPort = Integer.toString(connectInfo.getCnr_portno());
 			serverObj.put(ClientProtocolID.SERVER_IP, strServerIp);
 			serverObj.put(ClientProtocolID.SERVER_PORT, strServerPort);
 			result = cic.kafakConnect_select(serverObj, strName, IP, PORT);
-
+			
 			JSONArray data = (JSONArray) result.get("data");
-			for (int i = 0; i < data.size(); i++) {
-				JSONObject jsonObj = (JSONObject) data.get(i);
-				String name = (String) jsonObj.get("name");
-				TransferDetailVO mappingInfo = (TransferDetailVO) treeTransferService.selectMappingInfo(name);
-				if (mappingInfo != null) {
-					jsonObj.put("db_nm", mappingInfo.getDb_nm());
-					jsonObj.put("db_svr_nm", mappingInfo.getDb_svr_nm());
+
+			if(data==null){
+				return result;
+			}else{
+				for (int i = 0; i < data.size(); i++) {
+					JSONObject jsonObj = (JSONObject) data.get(i);
+					String name = (String) jsonObj.get("name");
+					TransferDetailVO mappingInfo = (TransferDetailVO) treeTransferService.selectMappingInfo(name);
+					if (mappingInfo != null) {
+						jsonObj.put("db_nm", mappingInfo.getDb_nm());
+						jsonObj.put("db_svr_nm", mappingInfo.getDb_svr_nm());
+					}
 				}
 			}
+
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -809,13 +820,18 @@ public class TreeTransferController {
 			treeTransferService.deleteTransferMapping(Integer.parseInt(request.getParameter("trf_trg_mpp_id")));
 			/* 전송대상매핑관계 DELETE */
 			treeTransferService.deleteTransferRelation(Integer.parseInt(request.getParameter("trf_trg_mpp_id")));
+			
+			int trf_trg_mpp_id = treeTransferService.selectCurrentMppid();
+			
 			/* 전송대상매핑관계 INSERT */
+			transferRelationVO.setTrf_trg_mpp_id(trf_trg_mpp_id);
 			treeTransferService.insertTransferRelation(transferRelationVO);
 
 			JSONParser jParser = new JSONParser();
 			JSONArray jArr = (JSONArray) jParser.parse(request.getParameter("rowList").toString().replace("&quot;", "\""));
-			String trf_trg_cnn_nm = request.getParameter("trf_trg_cnn_nm");
 			String topic = "";
+			
+			String trf_trg_cnn_nm = request.getParameter("trf_trg_cnn_nm");
 			for (int i = 0; i < jArr.size(); i++) {
 				JSONObject jObj = (JSONObject) jArr.get(i);
 				String table_name = (String) jObj.get("table_name");
@@ -825,6 +841,7 @@ public class TreeTransferController {
 				transferMappingVO.setScm_nm(table_schema);
 
 				/* 전송매핑테이블내역 INSERT */
+				transferMappingVO.setTrf_trg_mpp_id(trf_trg_mpp_id);
 				treeTransferService.insertTransferMapping(transferMappingVO);
 				
 				if(i>0 && i<jArr.size()){

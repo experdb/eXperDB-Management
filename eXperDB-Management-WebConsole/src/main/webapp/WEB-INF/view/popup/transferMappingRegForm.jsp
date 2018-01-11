@@ -27,37 +27,43 @@
 <link rel="stylesheet" type="text/css" href="/css/dt/dataTables.checkboxes.css" />
 <link rel = "stylesheet" type = "text/css" media = "screen" href = "<c:url value='/css/dt/jquery.dataTables.min.css'/>"/>
 <link rel = "stylesheet" type = "text/css" media = "screen" href = "<c:url value='/css/dt/dataTables.jqueryui.min.css'/>"/>
-<script type="text/javascript" src="../js/jquery-1.9.1.min.js"></script>
-<script type="text/javascript" src="../js/common.js"></script>
+
+<script src ="/js/jquery/jquery-1.7.2.min.js" type="text/javascript"></script>
+<script src ="/js/jquery/jquery-ui.js" type="text/javascript"></script>
 <script src="/js/jquery/jquery.dataTables.min.js" type="text/javascript"></script>
-<script src="/js/dt/dataTables.checkboxes.min.js" type="text/javascript"></script>
+<script src="/js/dt/dataTables.select.min.js" type="text/javascript"></script>
+<script src="/js/dt/dataTables.jqueryui.min.js" type="text/javascript"></script>
+<script src="/js/dt/dataTables.colResize.js" type="text/javascript"></script>
+<script src="/js/dt/dataTables.checkboxes.min.js" type="text/javascript"></script>	
+<script src="/js/dt/dataTables.colVis.js" type="text/javascript"></script>	
+<script type="text/javascript" src="/js/common.js"></script>
 <script>
 	var tableList = null;
 	var connectorTableList = null;
 	
 	function fn_init() {
 		tableList = $('#tableList').DataTable({
-			scrollY : "250px",
+			scrollY : "210px",
 			searching : false,
 			paging: false,
 			bSort: false,
 			columns : [
-			{ data : "", defaultContent : "", targets : 0, orderable : false, checkboxes : {'selectRow' : true}}, 
+			{ data : "table_name", defaultContent : "", targets : 0, orderable : false, checkboxes : {'selectRow' : true}}, 
 			{ data : "table_schema", className : "dt-center", defaultContent : ""}, 
 			{ data : "table_name", className : "dt-center", defaultContent : ""}, 
-			 ]
+			 ],'select': {'style': 'multi'}
 		});
 		
 		connectorTableList = $('#connectorTableList').DataTable({
-			scrollY : "250px",
+			scrollY : "210px",
 			searching : false,
 			paging: false,
 			bSort: false,
 			columns : [
-			{ data : "", defaultContent : "", targets : 0, orderable : false, checkboxes : {'selectRow' : true}}, 
+			{ data : "table_name", defaultContent : "", targets : 0, orderable : false, checkboxes : {'selectRow' : true}}, 
 			{ data : "table_schema", className : "dt-center", defaultContent : ""}, 
 			{ data : "table_name", className : "dt-center", defaultContent : ""}, 
-			 ]
+			 ],'select': {'style': 'multi'}
 		});
 	}
 
@@ -114,7 +120,9 @@
 	
 	/*서버선택시*/
 	function fn_serverChange(){
+		tableList.rows({selected: true}).deselect();
 		tableList.clear().draw();
+		connectorTableList.rows({selected: true}).deselect();
 		connectorTableList.clear().draw();
 		fn_dbSelect($("#db_svr_nm").val());
 	}
@@ -155,6 +163,7 @@
 	
 	/*DB선택시 -> 테이블리스트 조회*/
 	function fn_dbChange(){
+		tableList.rows({selected: true}).deselect();
 		tableList.clear().draw();
 		//Connector 테이블 값이 있을 경우
 		if("${result[0].db_id}"==$("#db_nm").val()){
@@ -183,7 +192,9 @@
 	    			if(result.data == null){
 	    				alert('<spring:message code="message.msg27" />');
 	    			}else{
+	    				tableList.rows({selected: true}).deselect();
 	    				tableList.clear().draw();	
+	    				connectorTableList.rows({selected: true}).deselect();
 	    				connectorTableList.clear().draw();
 	    				<c:forEach items="${result}" var="result">
 		    			for(var i=0; i<result.data.length;i++){
@@ -238,6 +249,7 @@
 	    			}else if(result.data == null){
 	    				alert('<spring:message code="message.msg27" />');
 	    			}else{
+	    				tableList.rows({selected: true}).deselect();
 		    			tableList.clear().draw();		
 		    			tableList.rows.add(result.data).draw();
 		    			
@@ -247,6 +259,7 @@
 	    		}
 	    	});	
 		}else if($("#db_nm").val()=="no"){
+			connectorTableList.rows({selected: true}).deselect();
 			connectorTableList.clear().draw();
 		}
 	}
@@ -261,24 +274,27 @@
         	for (var i = 0;i<datas.length;i++) {
 				rows.push(tableList.rows('.selected').data()[i]); 
 			}
+        	
         	connectorTableList.rows.add(rows).draw();
         	tableList.rows('.selected').remove().draw();
-        	$('.selected').removeClass('selected');
-        	$("input[type=checkbox]").prop("checked", false);	
  		}	 		 
 	}
  	
  	/*->> 클릭시*/
  	function fn_allRightMove(){
  		var datas = tableList.rows().data();
- 		var rows = [];
-        for (var i = 0;i<datas.length;i++) {
-			rows.push(tableList.rows().data()[i]); 
-		}
-        connectorTableList.rows.add(rows).draw(); 		
-        tableList.rows().remove().draw();
-        $('.selected').removeClass('selected');
-        $("input[type=checkbox]").prop("checked", false);	
+ 		if(datas.length <1){
+ 			alert('<spring:message code="message.msg01" />');	
+ 		}else{
+ 	 		var rows = [];
+ 	        for (var i = 0;i<datas.length;i++) {
+ 				rows.push(tableList.rows().data()[i]); 
+ 			}
+ 	        connectorTableList.rows.add(rows).draw(); 	
+ 	       	tableList.rows({selected: true}).deselect();
+ 	        tableList.rows().remove().draw();
+ 		}
+
 	}
  	
  	
@@ -293,23 +309,24 @@
 				rows.push(connectorTableList.rows('.selected').data()[i]); 
 			}
         	tableList.rows.add(rows).draw();
-        	connectorTableList.rows('.selected').remove().draw();
-        	$('.selected').removeClass('selected');
-        	$("input[type=checkbox]").prop("checked", false);	
+        	connectorTableList.rows('.selected').remove().draw();	
  		}	 
  	}
 	
  	/*<<- 클릭시*/
  	function fn_allLeftMove(){
  		var datas = connectorTableList.rows().data();
- 		var rows = [];
-        for (var i = 0;i<datas.length;i++) {
-			rows.push(connectorTableList.rows().data()[i]); 
-		}
-        tableList.rows.add(rows).draw(); 		
-        connectorTableList.rows().remove().draw();
-        $('.selected').removeClass('selected');
-        $("input[type=checkbox]").prop("checked", false);	
+ 		if(datas.length <1){
+ 			alert('<spring:message code="message.msg01" />');	
+ 		}else{
+ 	 		var rows = [];
+ 	        for (var i = 0;i<datas.length;i++) {
+ 				rows.push(connectorTableList.rows().data()[i]); 
+ 			}
+ 	        tableList.rows.add(rows).draw(); 
+ 	        connectorTableList.rows({selected: true}).deselect();
+ 	        connectorTableList.rows().remove().draw();
+ 		}
  	}
  		
  	

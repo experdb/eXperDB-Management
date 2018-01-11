@@ -124,9 +124,9 @@
 		AND A.WRK_ID = B.WRK_ID
 		AND C.SCD_ID = A.SCD_ID
 		AND B.DB_SVR_ID = D.DB_SVR_ID
+		ORDER BY WRK_END_DTM DESC
         )A
         WHERE A.EXE_RESULT = 'Fail'
-        ORDER BY WRK_END_DTM DESC
 	</select>
 	
 	

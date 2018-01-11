@@ -15,7 +15,7 @@
 	*
 	*/
 %>
-<script type="text/javascript">
+<script>
 	var cnr_id="${cnr_id}";
 	var table = null;
 	
@@ -24,10 +24,11 @@
 			scrollY : "245px",
 			deferRender : true,
 			scrollX: true,
+			searching : false,
 			"order": [ 2, 'asc' ],
 // 			bSort: false,
 			columns : [
-			{ data : "", defaultContent : "", targets : 0, orderable : false, checkboxes : {'selectRow' : true}}, 
+			{ data : "name", defaultContent : "", targets : 0, orderable : false, checkboxes : {'selectRow' : true}}, 
 			{ data : "", className : "dt-center", defaultContent : "",orderable : false}, 
 			{ data : "name", className : "dt-center", defaultContent : "",orderable : false}, 
 			{ data : "hdfs_url", className : "dt-center", defaultContent : "",orderable : false}, 
@@ -128,15 +129,10 @@
 	
 	$(window.document).ready(function() {
 		fn_init();
-		var table = $('#transferTargetTable').DataTable();
-		$('#select').on( 'keyup', function () {
-			table.columns(2).search( this.value ).draw();
-		});	
-		$('.dataTables_filter').hide();
 		$.ajax({
 			url : "/selectTransferTarget.do",
 			data : {
-				trf_trg_cnn_nm : '%'+$("#trf_trg_cnn_nm").val()+'%',
+				trf_trg_cnn_nm : $("#trf_trg_cnn_nm").val(),
 				cnr_id : cnr_id
 			},
 			dataType : "json",
@@ -172,7 +168,7 @@
 		$.ajax({
 			url : "/selectTransferTarget.do",
 			data : {
-				trf_trg_cnn_nm : '%'+$("#trf_trg_cnn_nm").val()+'%',
+				trf_trg_cnn_nm : $("#trf_trg_cnn_nm").val(),
 				cnr_id : cnr_id
 			},
 			dataType : "json",
@@ -330,6 +326,7 @@
 		<div class="contents">
 			<div class="cmm_grp">
 				<div class="btn_type_01">
+					<span class="btn" onclick="fn_select()"><button><spring:message code="common.search" /></button></span>
 					<span class="btn" onclick="fn_insert();"><button><spring:message code="common.registory" /></button></span> 
 					<span class="btn" onclick="fn_update();"><button><spring:message code="common.modify" /></button></span> 
 					<span class="btn" onclick="fn_delete();"><button><spring:message code="common.delete" /></button></span>
@@ -344,7 +341,7 @@
 						<tbody>
 							<tr>
 								<th scope="row" class="t5"><spring:message code="data_transfer.connect_name" /></th>
-								<td><input type="text" class="txt t2" name="trf_trg_cnn_nm" id="select"/></td>
+								<td><input type="text" class="txt t2" name="trf_trg_cnn_nm" id="trf_trg_cnn_nm"/></td>
 							</tr>
 						</tbody>
 					</table>

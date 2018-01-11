@@ -44,7 +44,7 @@
 				className : "dt-center",
 				defaultContent : ""
 			}
-    	],'select': {'style': 'multi'}
+    	]
     	});
     	
     	

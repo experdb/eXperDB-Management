@@ -233,7 +233,7 @@
 		)
 		VALUES
 		(
-		  nextval('q_trftrgmpp_r_01')
+		  #{trf_trg_mpp_id}
 		, #{trf_trg_id}
 		, #{db_id}
 		, #{cnr_id}
@@ -250,9 +250,6 @@
 	 	* Description : 전송매핑테이블내역 등록
 	 	* Author : 김주영
 	 	**/
-	 	<selectKey resultType="int" keyProperty="trf_trg_mpp_id" order="BEFORE">
-        	SELECT setval('q_trftrgmpp_r_01',nextval('q_trftrgmpp_r_01')-1);    
-   	 	</selectKey>   
 		INSERT INTO T_TRFMPPTB_L
 		(
 		  TRF_TB_ID
@@ -429,4 +426,12 @@
 		AND USEYN ='Y'	
 	 </select>
 
+	<select id="selectCurrentMppid" resultType="int">
+		/**
+	 	*  Query ID : selectCurrentMppid
+	 	* Description : 현재 trf_trg_mpp_id 조회
+	 	* Author : 김주영
+	 	**/		
+	 	SELECT setval('q_trftrgmpp_r_01',nextval('q_trftrgmpp_r_01'))
+	</select>
 </mapper>

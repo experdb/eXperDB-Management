@@ -33,7 +33,7 @@ public interface AccessHistoryService {
 	 * @return
 	 * @throws Exception
 	 */
-	List<UserVO> selectAccessHistory(PagingVO searchVO, Map<String, Object> param) throws Exception;
+	List<Map<String, Object>> selectAccessHistory(PagingVO searchVO, Map<String, Object> param) throws Exception;
 
 	/**
 	 * 화면접근 이력 총 갯수

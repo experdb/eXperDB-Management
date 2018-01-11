@@ -38,7 +38,7 @@ $(window.document).ready(function() {
 	var sec = "";
 	var secHtml ="";
 	
-	secHtml += '<select class="select t7" name="period01" id="period01">';	
+	secHtml += '<select class="select t6" name="period01" id="period01">';	
 	for(var i=10; i<=599; i++){
 		if(i >= 0 && i<10){
 			sec = "0" + i;
@@ -58,7 +58,7 @@ $(window.document).ready(function() {
  	var sec = "";
  	var secHtml ="";
  	
- 	secHtml += '<select class="select t7" name="period02" id="period02">';	
+ 	secHtml += '<select class="select t6" name="period02" id="period02">';	
  	for(var i=5; i<=399; i++){
  		if(i >= 0 && i<10){
  			sec = "0" + i;
@@ -78,7 +78,7 @@ $(window.document).ready(function() {
   	var sec = "";
   	var secHtml ="";
   	
-  	secHtml += '<select class="select t7" name="period03" id="period03">';	
+  	secHtml += '<select class="select t6" name="period03" id="period03">';	
   	for(var i=10; i<=599; i++){
   		if(i >= 0 && i<10){
   			sec = "0" + i;
@@ -92,8 +92,17 @@ $(window.document).ready(function() {
   } 
 
 </script>
+<style>
+.cmm_bd .sub_tit>p {
+	padding: 0 8px 0 33px;
+	line-height: 24px;
+	background: url(../images/popup/ico_p_2.png) 8px 48% no-repeat;
+}
 
-
+select.t6{
+	height: 25px !important;
+}
+</style>
 <div id="contents">
 	<div class="contents_wrap">
 		<div class="contents_tit">
@@ -114,59 +123,57 @@ $(window.document).ready(function() {
 
 		<div class="contents">
 			<div class="cmm_grp">
-			
-			<div style="margin-bottom: 10px;"><h2>암호화 설정</h2></div>		
-				<div class="sch_form">
-					<table class="write">
-						<colgroup>
-							<col style="width: 350px;" />
-							<col style="width: 80px;" />
-						</colgroup>
-						<tbody>
-							<tr>
-								<td colspan="2"><div class="inp_chk">
-									<div class="inp_chk">
-										<span style="margin-right: 10%;"> 
-											<input type="checkbox" id="option_1_1" name="" /> 
-											<label for="option_1_1">정책전송 중지</label>
-										</span> 
-									</div>
-									</div>
-								</td>
-							</tr>
-							<tr>
-								<th scope="row" class="ico_t1">관리서버 모니터링 주기</th>
-								<td><div id="period01"></div></td>
-								<td>초(10 ~ 600초)</td>
-							</tr>
-							<tr>
-								<th scope="row" class="ico_t1">에이전트와 관리서버 통신 주기</th>
-								<td><div id="period02"></div></td>
-								<td>초(5 ~ 86400초)</td>
-							</tr>
-							<tr>
-								<th scope="row" class="ico_t1">암호화키의 유효기간이 다음 날짜 이하로 남으면 경고</th>
-								<td><div id="period03"></div></td>
-								<td>일(10 ~ 600초)</td>
-							</tr>
-							<tr>
-								<td colspan="2"><div class="inp_chk">
-									<div class="inp_chk">
-										<span style="margin-right: 10%;"> 
-											<input type="checkbox" id="option_1_1" name="" /> 
-											<label for="option_1_1">에이전트가 기록하는 로그에 위변조 방지를 적용</label>
-										</span> 
-									</div>
-									</div>
-								</td>
-							</tr>
-						</tbody>
-					</table>
-				</div>	
-				
+				<div class="cmm_bd">
+					<div class="sub_tit">
+						<p>암호화설정</p>
+					</div>
+					<div class="overflows_areas">
+						<table class="write">
+							<colgroup>
+								<col style="width: 300px;" />
+								<col style="width: 55px;" />
+								<col />
+							</colgroup>
+							<tbody>
+								<tr>
+									<td colspan="2">
+										<div class="inp_chk">
+											<span> <input type="checkbox" id="option" name="" /> 
+												<label for="option">정책전송 중지</label>
+											</span>
+										</div>
+									</td>
+								</tr>
+								<tr>
+									<td scope="row">관리서버 모니터링 주기</td>
+									<td><div id="period01"></div></td>
+									<td>초</td>
+								</tr>
+								<tr>
+									<td scope="row">에이전트와 관리서버 통신 주기</td>
+									<td><div id="period02"></div></td>
+									<td>초(5 ~ 86400초)</td>
+								</tr>
+								<tr>
+									<td scope="row">암호화키의 유효기간이 다음 날짜 이하로 남으면 경고</td>
+									<td><div id="period03"></div></td>
+									<td>일(10 ~ 600초)</td>
+								</tr>
+								<tr>
+									<td colspan="2">
+										<div class="inp_chk">
+											<span> <input type="checkbox" id="option1" name="" /> 
+												<label for="option1">에이전트가 기록하는 로그에 위변조 방지를 적용</label>
+											</span>
+										</div>
+									</td>
+								</tr>
+							</tbody>
+						</table>
+					</div>
+				</div>
 				<div class="btn_type_02">
 					<a href="#n" class="btn"><span>저장</span></a> 
-					<a href="#n" class="btn" onclick="toggleLayer($('#pop_layer'), 'off');"><span>취소</span></a>
 				</div>	
 			</div>
 		</div>

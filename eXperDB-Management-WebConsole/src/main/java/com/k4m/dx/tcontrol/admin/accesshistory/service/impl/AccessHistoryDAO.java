@@ -47,8 +47,8 @@ public class AccessHistoryDAO extends EgovAbstractMapper {
 	 * @throws SQLException
 	 */
 	@SuppressWarnings({ "deprecation", "unchecked" })
-	public List<UserVO> selectAccessHistory(PagingVO searchVO, Map<String, Object> param) {
-		List<UserVO> result = null;
+	public List<Map<String, Object>> selectAccessHistory(PagingVO searchVO, Map<String, Object> param) {
+		List<Map<String, Object>> result = null;
 		HashMap<String, Object> params = new HashMap<String, Object>();
 		params.put("lgi_dtm_start", param.get("lgi_dtm_start"));
 		params.put("lgi_dtm_end", param.get("lgi_dtm_end"));
@@ -60,7 +60,7 @@ public class AccessHistoryDAO extends EgovAbstractMapper {
 		params.put("recordCountPerPage", searchVO.getRecordCountPerPage());
 		params.put("firstIndex", searchVO.getFirstIndex());
 
-		result = (List<UserVO>) list("accessHistorySql.selectAccessHistory", params);
+		result = (List<Map<String, Object>>) list("accessHistorySql.selectAccessHistory", params);
 		return result;
 	}
 

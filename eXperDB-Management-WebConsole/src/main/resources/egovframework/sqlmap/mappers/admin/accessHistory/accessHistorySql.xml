@@ -39,7 +39,7 @@
 		AND SYS_CD NOT LIKE '%#_%' ESCAPE '#';
 	</select>
 	
-	<select id="selectAccessHistory" resultType="historyVO" parameterType="hashmap" >
+	<select id="selectAccessHistory" resultType="hashmap" parameterType="hashmap" >
 		/**
 		* Query ID : selectAccessHistory
 		* Description : 접근내역 조회
@@ -88,20 +88,32 @@
 	 	* Query ID : selectAccessHistoryTotCnt
 	 	* Description : selectAccessHistoryTotCnt TotCnt 조회
 	 	* Author : 김주영
-	 	**/
-		SELECT COUNT(*) totcnt
-		FROM T_SYSWRK_G G, T_SYSDTL_C C, T_USR_I I
-		WHERE G.EXE_DTL_CD =C.SYS_CD
-		AND G.USR_ID=I.USR_ID
-		<if test="lgi_dtm_start != null and lgi_dtm_start != '' ">
+	 	**/	
+		SELECT
+		 COUNT(*) totcnt
+		FROM(
+			SELECT 
+				  TO_CHAR(G.EXEDTM,'YYYY-MM-DD')EXEDTM_DATE
+				, TO_CHAR(G.EXEDTM,'HH24:MI')EXEDTM_HOUR
+				, C.SYS_CD_NM
+				, G.USR_ID
+				, I.USR_NM
+				, I.DEPT_NM
+				, I.PST_NM
+				, G.LGI_IPADR
+			FROM T_SYSWRK_G G, T_SYSDTL_C C, T_USR_I I
+			WHERE G.EXE_DTL_CD =C.SYS_CD
+			AND G.USR_ID=I.USR_ID
+			<if test="lgi_dtm_start != null and lgi_dtm_start != '' ">
 				AND to_char(G.EXEDTM,'YYYY-MM-DD') between #{lgi_dtm_start} and #{lgi_dtm_end}
-		</if>
-		<if test="search != null and search != '' ">
+			</if>
+			<if test="search != null and search != '' ">
 				AND I.${type} LIKE #{search}
-		</if>
-		<if test="sys_cd != null and sys_cd != '' ">
+			</if>
+			<if test="sys_cd != null and sys_cd != '' ">
 				AND  C.SYS_CD = #{sys_cd}
-		</if>	
+			</if>	
+			)A	
 	</select>
 	
 	
