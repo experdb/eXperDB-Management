@@ -200,8 +200,8 @@ public class DxT005 extends SocketCtl{
 					endVO.setSCD_ID(Integer.parseInt(strSCD_ID));
 					endVO.setSCD_CNDT(TC001801); //대기중
 					
-					//스케줄 상태변경
-					service.updateSCD_CNDT(endVO);
+					//스케줄 상태변경 - console에서 변경 처리하는 것으로 변경
+					//service.updateSCD_CNDT(endVO);
 					
 					if(strLOG_YN.equals("Y")) {
 						socketLogger.info("[SUCCESS] DxT005 SCD_ID[" + strSCD_ID + "] " + retVal + " " + strResultMessge);
