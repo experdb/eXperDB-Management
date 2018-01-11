@@ -6,6 +6,7 @@
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags"%>
 
+
 <!-- contents -->
 <div id="contents" class="main">
 	<div class="contents_wrap">
@@ -98,14 +99,14 @@
 								</p>
 								<a href="/selectScheduleListView.do?scd_cndt=TC001802">
 								 <c:choose>
-						           <c:when test="${fn:length(fn:escapeXml(scheduleInfo.schedule_run_cnt))>2}">
+						           <c:when test="${fn:length(fn:escapeXml(scheduleInfo.run_cnt))>2}">
 						           <p class="state_num c3" style="font-size: 40px;">
-						            <c:out value="${scheduleInfo.schedule_run_cnt}"/>
+						            <c:out value="${scheduleInfo.run_cnt}"/>
 						            </p>
 						           </c:when>
 						           <c:otherwise>
 						           <p class="state_num c3">
-						            <c:out value="${scheduleInfo.schedule_run_cnt}"/>
+						            <c:out value="${scheduleInfo.run_cnt}"/>
 						            </p>
 						           </c:otherwise> 
 						         </c:choose>

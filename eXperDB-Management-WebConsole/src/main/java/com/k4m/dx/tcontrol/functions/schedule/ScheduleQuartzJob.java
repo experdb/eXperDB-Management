@@ -78,7 +78,7 @@ public class ScheduleQuartzJob implements Job{
 			
 			ScheduleService scheduleService = (ScheduleService) context.getBean("scheduleService");			
 		
-			// 2. scd_id에 대한 (Master,Slave)DB접속 정보 가지고옴
+			// 2. scd_id에 대한 (Master)DB접속 정보 가지고옴
 			resultDbconn= scheduleService.selectDbconn(Integer.parseInt(scd_id));
 						
 			// 3. 해당 스케줄ID에 해당하는 스케줄 상세정보 조회(work 정보)
@@ -91,10 +91,8 @@ public class ScheduleQuartzJob implements Job{
 	        String bck_fileNm ="";
 	        int db_svr_ipadr_id =0;
 	        
-	        //마스터,슬레이브 DB갯수만큼 루프
-	        for(int h=0; h<resultDbconn.size(); h++){
 	        	ArrayList<String> BCK_NM = new ArrayList<String>();
-	        	db_svr_ipadr_id = Integer.parseInt(resultDbconn.get(h).get("db_svr_ipadr_id").toString());
+	        	db_svr_ipadr_id = Integer.parseInt(resultDbconn.get(0).get("db_svr_ipadr_id").toString());
 	        	ArrayList<String> CMD = new ArrayList<String>();
 		        //WORK 갯수만큼 루프
 				for(int i =0; i<resultWork.size(); i++){
@@ -111,20 +109,18 @@ public class ScheduleQuartzJob implements Job{
 					// 백업 내용이 DUMP 백업일경우 
 					if(resultWork.get(i).get("bck_bsn_dscd").equals("TC000202")){
 						String strCmd ="";
-						strCmd = dumpBackupMakeCmd(resultDbconn, resultWork, addOption, addObject, i, bck_fileNm, h);	
+						strCmd = dumpBackupMakeCmd(resultDbconn, resultWork, addOption, addObject, i, bck_fileNm);	
 						BCK_NM.add(bck_fileNm);
 						CMD.add(strCmd);
 					// 백업 내용이 RMAN 백업일경우	
 					}else{
 						BCK_NM.add("");
 						String rmanCmd ="";
-						rmanCmd = rmanBackupMakeCmd(resultWork, i, resultDbconn, h);		
+						rmanCmd = rmanBackupMakeCmd(resultWork, i, resultDbconn);		
 						CMD.add(rmanCmd);
 					}
-				}		
-				System.out.println("명령어="+CMD);
-				agentCall(resultWork, CMD, BCK_NM, resultDbconn, h, db_svr_ipadr_id);
-	        }
+				}						
+				agentCall(resultWork, CMD, BCK_NM, resultDbconn, db_svr_ipadr_id);
 		}catch(Exception e){
 			e.printStackTrace();
 		}
@@ -145,14 +141,14 @@ public class ScheduleQuartzJob implements Job{
 	 * @return
 	 */
 	@SuppressWarnings("unused")
-	private String dumpBackupMakeCmd(List<Map<String, Object>> resultDbconn, List<Map<String, Object>> resultWork, List<Map<String, Object>> addOption, List<Map<String, Object>> addObject, int i, String bck_fileNm, int h) {
+	private String dumpBackupMakeCmd(List<Map<String, Object>> resultDbconn, List<Map<String, Object>> resultWork, List<Map<String, Object>> addOption, List<Map<String, Object>> addObject, int i, String bck_fileNm) {
 
 		String strCmd = "pg_dump ";
 		String strLast = "";
 		
 		try {		
 			//DBMS정보 추출
-			String DBMS = fn_dbmsInfo_dump(resultDbconn, h);
+			String DBMS = fn_dbmsInfo_dump(resultDbconn);
 			strCmd += DBMS;
 			
 			//기본옵션 명령어 생성	
@@ -176,7 +172,7 @@ public class ScheduleQuartzJob implements Job{
 	}
 
 
-	private String fn_dbmsInfo_rman(List<Map<String, Object>> resultDbconn, int h) {
+	private String fn_dbmsInfo_rman(List<Map<String, Object>> resultDbconn) {
 		String DBMS = "";
 		
 		//1.1 연결할 데이터베이스의 이름 지정
@@ -188,26 +184,21 @@ public class ScheduleQuartzJob implements Job{
 		//1.4 연결할 사용자이름
 		DBMS += " --username="+resultDbconn.get(0).get("svr_spr_usr_id");	
 		DBMS += " --no-password";	
-		
-		if(resultDbconn.get(h).get("master_gbn").equals("S")){
-			DBMS += " --standby-host="+resultDbconn.get(h).get("ipadr");
-			//1.3 서버가 연결을 청취하는 TCP포트 설정
-			DBMS += " --standby-port="+resultDbconn.get(h).get("portno");
-		}
+
 		return DBMS;
 	}
 	
-	private String fn_dbmsInfo_dump(List<Map<String, Object>> resultDbconn, int h) {
+	private String fn_dbmsInfo_dump(List<Map<String, Object>> resultDbconn) {
 		String DBMS = "";
 		
 		//1.1 연결할 데이터베이스의 이름 지정
 		//DBMS += "--dbname="+resultDbconn.get(h).get("dft_db_nm");
 		//1.2 호스트 이름 지정
-		DBMS += " --host="+resultDbconn.get(h).get("ipadr");
+		DBMS += " --host="+resultDbconn.get(0).get("ipadr");
 		//1.3 서버가 연결을 청취하는 TCP포트 설정
-		DBMS += " --port="+resultDbconn.get(h).get("portno");
+		DBMS += " --port="+resultDbconn.get(0).get("portno");
 		//1.4 연결할 사용자이름
-		DBMS += " --username="+resultDbconn.get(h).get("svr_spr_usr_id");	
+		DBMS += " --username="+resultDbconn.get(0).get("svr_spr_usr_id");	
 		DBMS += " --no-password";	
 
 		return DBMS;
@@ -312,11 +303,11 @@ public class ScheduleQuartzJob implements Job{
 
 
 
-	private String rmanBackupMakeCmd(List<Map<String, Object>> resultWork, int i, List<Map<String, Object>> resultDbconn, int h) {
+	private String rmanBackupMakeCmd(List<Map<String, Object>> resultWork, int i, List<Map<String, Object>> resultDbconn) {
 		String rmanCmd = "pg_rman backup ";
 
 		//DBMS정보 추출
-		String dbmsInfo = fn_dbmsInfo_rman(resultDbconn, h);
+		String dbmsInfo = fn_dbmsInfo_rman(resultDbconn);
 		rmanCmd += dbmsInfo;
 		
 		//데이터베이스 클러스터의 절대경로
@@ -356,9 +347,9 @@ public class ScheduleQuartzJob implements Job{
 	}
 	
 	
-	public void agentCall(List<Map<String, Object>> resultWork, ArrayList<String> CMD, ArrayList<String> BCKNM, List<Map<String, Object>> resultDbconn, int h, int db_svr_ipadr_id) {
+	public void agentCall(List<Map<String, Object>> resultWork, ArrayList<String> CMD, ArrayList<String> BCKNM, List<Map<String, Object>> resultDbconn, int db_svr_ipadr_id) {
 		try {
-				String IP = (String) resultDbconn.get(h).get("ipadr");
+				String IP = (String) resultDbconn.get(0).get("ipadr");
 				AgentInfoVO vo = new AgentInfoVO();
 				vo.setIPADR(IP);			
 				AgentInfoVO agentInfo =  (AgentInfoVO) cmmnServerInfoService.selectAgentInfo(vo);	

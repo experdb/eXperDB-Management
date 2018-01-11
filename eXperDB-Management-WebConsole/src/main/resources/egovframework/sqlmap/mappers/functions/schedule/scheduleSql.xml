@@ -397,6 +397,7 @@
           AND A.DB_SVR_ID = B.DB_SVR_ID
           AND A.DB_SVR_ID = D.DB_SVR_ID
           AND C.WRK_ID = D.WRK_ID
+          AND B.MASTER_GBN = 'M'
 	      AND C.SCD_ID = #{scd_id}
 	      ORDER BY B.MASTER_GBN
 	</select>

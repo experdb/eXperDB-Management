@@ -71,7 +71,7 @@ function fn_init(){
 						var html = '<img src="../images/ico_state_04.png"  id="scheduleStop"/>';
 							return html;
 					}else if(full.scd_cndt == "TC001802"){
-						var html = '<img src="../images/ico_state_03.png" id="scheduleRunning" />';
+						var html = '<img src="../images/ico_state_03.png" id="scheduleRunning" /> 실행중';
 						return html;
 					}else{
 						var html = '<img src="../images/ico_state_06.png" id="scheduleStart" />';
@@ -252,7 +252,6 @@ $(window.document).ready(function() {
 	var scd_cndt = "${scd_cndt}";
 	$('#scd_cndt').val(scd_cndt);
 	
-	alert(scd_cndt)
 	fn_buttonAut();
 	fn_init();
 	
@@ -620,7 +619,7 @@ function fn_makeToMin(){
 							<th width="130"><spring:message code="schedule.pre_run_time" /></th>
 							<th width="130"><spring:message code="schedule.next_run_time" /></th>
 							<th width="70"><spring:message code="common.run_status" /></th>
-							<th width="130"><spring:message code="schedule.run" /></th>
+							<th width="130">실행/중지</th>
 							<th width="65"><spring:message code="common.register" /></th>
 							<th width="130"><spring:message code="common.regist_datetime" /></th>
 							<th width="65"><spring:message code="common.modifier" /></th>

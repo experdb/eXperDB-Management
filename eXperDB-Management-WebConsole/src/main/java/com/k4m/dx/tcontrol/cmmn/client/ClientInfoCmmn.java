@@ -136,7 +136,9 @@ public class ClientInfoCmmn {
 			
 			int j = 0;
 			for (int i = 0; i < resultWork.size(); i++) {
-				System.out.println("======"+resultWork.get(i).get("bck_bsn_dscd")+"  백업 시작 ======");	
+				System.out.println("================================================");	
+				System.out.println("▶▶▶백업시작");	
+				System.out.println("▶▶▶명령어 = "+CMD.get(i));	
 				JSONObject objJob = new JSONObject();
 				objJob.put(ClientProtocolID.SCD_ID, resultWork.get(i).get("scd_id")); // 스캐쥴ID
 				objJob.put(ClientProtocolID.WORK_ID, resultWork.get(i).get("wrk_id")); // 작업ID
@@ -162,7 +164,7 @@ public class ClientInfoCmmn {
 				// [pg_rman validate -B 백업경로] 명령어 실행해줘여함
 				// [pg_rman validate -B 백업경로] 정합성 체크하는 명령어, 안할실 복구불가능
 				if (resultWork.get(i).get("bck_bsn_dscd").equals("TC000201")) {
-					System.out.println("============== RMAN Validataion 시작 ===============");
+					System.out.println("▶▶▶ RMAN Validataion 시작");
 					j++;
 					JSONObject objJob2 = new JSONObject();
 					objJob2.put(ClientProtocolID.SCD_ID, resultWork.get(i).get("scd_id")); // 스캐쥴ID
@@ -175,7 +177,7 @@ public class ClientInfoCmmn {
 					objJob2.put(ClientProtocolID.BCK_FILENM, ""); // 저장파일명
 					objJob2.put(ClientProtocolID.LOG_YN, "N"); // 로그저장 유무
 					objJob2.put(ClientProtocolID.REQ_CMD, "pg_rman validate -B " + resultWork.get(i).get("bck_pth"));// 명령어
-					System.out.println("Validate 명령어 : "+objJob2.get(ClientProtocolID.REQ_CMD));
+					System.out.println("▶▶▶Validate 명령어 = "+objJob2.get(ClientProtocolID.REQ_CMD));
 					objJob2.put(ClientProtocolID.BCK_BSN_DSCD, resultWork.get(i).get("bck_bsn_dscd"));
 					objJob2.put(ClientProtocolID.DB_SVR_IPADR_ID, db_svr_ipadr_id);
 					arrCmd.add(j, objJob2);
@@ -183,6 +185,7 @@ public class ClientInfoCmmn {
 				j++;
 			}
 
+			
 			JSONObject serverObj = new JSONObject();
 
 			serverObj.put(ClientProtocolID.SERVER_NAME, "");

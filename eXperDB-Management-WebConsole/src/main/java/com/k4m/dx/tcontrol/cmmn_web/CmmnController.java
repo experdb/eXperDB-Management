@@ -99,7 +99,6 @@ public class CmmnController {
 		props.load(new FileInputStream(ResourceUtils.getFile("classpath:egovframework/tcontrolProps/globals.properties")));
 	
 		String lang = props.get("lang").toString();
-		System.out.println(lang);
 		
 		ModelAndView mv = new ModelAndView();
 
