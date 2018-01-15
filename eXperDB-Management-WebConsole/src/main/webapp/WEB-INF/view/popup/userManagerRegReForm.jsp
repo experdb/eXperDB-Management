@@ -6,8 +6,8 @@
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags"%>
 <%
 	/**
-	* @Class Name : userManagerForm.jsp
-	* @Description : UserManagerForm 화면
+	* @Class Name : userManagerRegReForm.jsp
+	* @Description : userManagerRegReForm 화면
 	* @Modification Information
 	*
 	*   수정일         수정자                   수정내용
@@ -23,7 +23,7 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-<title>사용자 정보 등록</title>
+<title>사용자 정보 수정</title>
 <link rel="stylesheet" type="text/css" href="../css/common.css">
 <script type="text/javascript" src="../js/jquery-1.9.1.min.js"></script>
 <script type="text/javascript" src="../js/common.js"></script>
@@ -33,8 +33,6 @@
 <script type="text/javascript" src="/js/calendar.js"></script>
 </head>
 <script>
-	var idCheck = 0;
-	
 	/* PW Validation*/
 	function fn_pwValidation(str){
 		 var reg_pwd = /^(?=.*[a-zA-Z])(?=.*[!@#$%^*+=-])(?=.*[0-9]).{6,20}/;
@@ -46,28 +44,18 @@
 	}
 	
 	/* Validation */
-	function fn_userManagerValidation(formName) {
-		var id = document.getElementById('usr_id');
+	function fn_userManagerValidation() {
 		var nm = document.getElementById('usr_nm');
 		var pwd = document.getElementById('pwd');
-		var pwdCheck = document.getElementById('pwdCheck');
-		
-		if (id.value == "" || id.value == "undefind" || id.value == null) {
-			alert("<spring:message code='message.msg121' />");
-			id.focus();
-			return false;
-		}
-		
-		if (idCheck != 1) {
-			alert("<spring:message code='message.msg142'/>");
-			return false;
-		}
+		var pwdCheck = document.getElementById('pwdCheck'); 
+		var nowpwd ="${pwd}";
+			
 		
 		if (nm.value == "" || nm.value == "undefind" || nm.value == null) {
 			alert("<spring:message code='message.msg58' />");
 			nm.focus();
 			return false;
-		}
+		}		
 		
 		if (pwd.value == "" || pwd.value == "undefind" || pwd.value == null) {
 			alert("<spring:message code='message.msg140'/>");
@@ -75,72 +63,42 @@
 			return false;
 		}
 		
-		if (!fn_pwValidation(pwd.value))return false;
-		
+		if(pwd.value!=nowpwd){
+			if (!fn_pwValidation(pwd.value))return false;
+			if (!fn_pwValidation(pwdCheck.value))return false;
+		}
+					
 		if (pwdCheck.value == "" || pwdCheck.value == "undefind" || pwdCheck.value == null) {
 			alert('<spring:message code="message.msg141"/>');
 			pwd.focus();
 			return false;
 		}
-		
-		if (!fn_pwValidation(pwdCheck.value))return false;
-		
+			
 		if (pwd.value != pwdCheck.value) {
 			alert("<spring:message code='etc.etc14'/>");
 			return false;
 		}
+
 		return true;
 	}
 
-	//아이디 중복체크
-	function fn_idCheck() {
-		var usr_id = document.getElementById("usr_id");
-		if (usr_id.value == "") {
-			alert("<spring:message code='message.msg121' />");
-			document.getElementById('usr_id').focus();
-			idCheck = 0;
-			return;
-		}
-		$.ajax({
-			url : '/UserManagerIdCheck.do',
-			type : 'post',
-			data : {
-				usr_id : $("#usr_id").val()
-			},
-			success : function(result) {
-				if (result == "true") {
-					alert("<spring:message code='message.msg122' />");
-					document.getElementById("usr_nm").focus();
-					idCheck = 1;
-				} else {
-					alert("<spring:message code='message.msg123' />");
-					document.getElementById("usr_id").focus();
-					idCheck = 0;
-				}
-			},
-			beforeSend: function(xhr) {
-		        xhr.setRequestHeader("AJAX", true);
-		     },
-			error : function(xhr, status, error) {
-				if(xhr.status == 401) {
-					alert("<spring:message code='message.msg02' />");
-					 location.href = "/";
-				} else if(xhr.status == 403) {
-					alert("<spring:message code='message.msg03' />");
-		             location.href = "/";
-				} else {
-					alert("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""));
-				}
-			}
-		});
-	}
 	
-	//등록버튼 클릭시
-	function fn_insert() {
+	//수정버튼 클릭시
+	function fn_update() {
+		var session_usr_id = "<%=(String)session.getAttribute("usr_id")%>"
+		var usr_id=$("#usr_id").val();
+		if(usr_id=='admin'){
+			if(session_usr_id!=usr_id){
+				alert("<spring:message code='message.msg120' />");
+				return false;
+			}
+		}
+
 		if (!fn_userManagerValidation())return false;
-		if (!confirm("<spring:message code='message.msg143'/>")) return false;
+		if (!confirm("<spring:message code='message.msg147'/>")) return false;
+		
 		$.ajax({
-			url : '/insertUserManager.do',
+			url : '/updateUserManager.do',
 			type : 'post',
 			data : {
 				usr_id : $("#usr_id").val(),
@@ -156,24 +114,19 @@
 				use_yn : $("#use_yn").val(),
 			},
 			success : function(result) {
-				alert('<spring:message code="message.msg144"/>');
-				if (confirm('<spring:message code="message.msg145"/>')) {
-					window.close();
-					opener.location.href = "/menuAuthority.do?usr_id="+$("#usr_id").val();
-				} else {
-					window.close();
-					opener.fn_select();
-				}
+				alert("<spring:message code='message.msg84' />");
+				window.close();
+				opener.fn_select();
 			},
 			beforeSend: function(xhr) {
 		        xhr.setRequestHeader("AJAX", true);
 		     },
 			error : function(xhr, status, error) {
 				if(xhr.status == 401) {
-					alert('<spring:message code="message.msg02" />');
+					alert("<spring:message code='message.msg02' />");
 					 location.href = "/";
 				} else if(xhr.status == 403) {
-					alert('<spring:message code="message.msg03" />');
+					alert("<spring:message code='message.msg03' />");
 		             location.href = "/";
 				} else {
 					alert("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""));
@@ -204,13 +157,9 @@
 <body>
 	<div class="pop_container">
 		<div class="pop_cts">
-			<p class="tit">
-				<spring:message code="user_management.userReg"/>
-			</p>
+			<p class="tit"><spring:message code="user_management.userMod"/></p>
 			<table class="write">
-				<caption>
-					<spring:message code="user_management.userReg"/>
-				</caption>
+				<caption><spring:message code="user_management.userMod"/></caption>
 				<colgroup>
 					<col style="width: 110px;" />
 					<col />
@@ -221,17 +170,16 @@
 					<tr>
 						<th scope="row" class="ico_t1"><spring:message code="user_management.id" />(*)</th>
 						<td>
-							<input type="text" class="txt" name="usr_id" id="usr_id" maxlength="15" style="width: 205px;" />
-							<span class="btn btnC_01"><button type="button" class="btn_type_02" onclick="fn_idCheck()" style="width: 85px; height: 38px; margin-right: -60px; margin-top: 0;"><spring:message code="common.overlap_check" /></button></span>
+							<input type="text" class="txt" name="usr_id" id="usr_id" value="${get_usr_id}" readonly="readonly" />
 						</td>
 						<th scope="row" class="ico_t1"><spring:message code="user_management.user_name" />(*)</th>
-						<td><input type="text" class="txt" name="usr_nm" id="usr_nm" maxlength="9" /></td>
+						<td><input type="text" class="txt" name="usr_nm" id="usr_nm" value="${get_usr_nm}" maxlength="9" /></td>
 					</tr>
 					<tr>
 						<th scope="row" class="ico_t1"><spring:message code="user_management.password" />(*)</th>
-						<td><input type="password" class="txt" name="pwd" id="pwd" maxlength="20" placeholder="<spring:message code='message.msg109'/>"/></td>
+						<td><input type="password" class="txt" name="pwd" id="pwd" value="${pwd}" maxlength="20" placeholder="<spring:message code='message.msg109'/>"/></td>
 						<th scope="row" class="ico_t1"><spring:message code="user_management.confirm_password" />(*)</th>
-						<td><input type="password" class="txt" name="pwdCheck" id="pwdCheck" maxlength="20" placeholder="<spring:message code='message.msg109'/>" /></td>
+						<td><input type="password" class="txt" name="pwdCheck" id="pwdCheck" value="${pwd}" maxlength="20" placeholder="<spring:message code='message.msg109'/>" /></td>
 					</tr>
 				</tbody>
 			</table>
@@ -247,24 +195,24 @@
 					<tbody>
 						<tr>
 							<th scope="row" class="ico_t1"><spring:message code="user_management.company" /></th>
-							<td><input type="text" class="txt" name="bln_nm" id="bln_nm" maxlength="25" /></td>
+							<td><input type="text" class="txt" name="bln_nm" id="bln_nm" value="${bln_nm}" maxlength="25" /></td>
 							<th scope="row" class="ico_t1"><spring:message code="user_management.department" /></th>
-							<td><input type="text" class="txt" name="dept_nm" id="dept_nm" maxlength="25" /></td>
+							<td><input type="text" class="txt" name="dept_nm" id="dept_nm" value="${dept_nm}" maxlength="25" /></td>
 						</tr>
 						<tr>
 							<th scope="row" class="ico_t1"><spring:message code="user_management.position" /></th>
-							<td><input type="text" class="txt" name="pst_nm" id="pst_nm" maxlength="25" /></td>
+							<td><input type="text" class="txt" name="pst_nm" id="pst_nm" value="${pst_nm}" maxlength="25" /></td>
 							<th scope="row" class="ico_t1"><spring:message code="user_management.Responsibilities" /></th>
-							<td><input type="text" class="txt" name="rsp_bsn_nm" id="rsp_bsn_nm" maxlength="25" /></td>
+							<td><input type="text" class="txt" name="rsp_bsn_nm" id="rsp_bsn_nm" value="${rsp_bsn_nm}" maxlength="25" /></td>
 						</tr>
 						<tr>
 							<th scope="row" class="ico_t1"><spring:message code="user_management.mobile_phone_number" /></th>
-							<td><input type="text" class="txt" name="cpn" id="cpn" maxlength="20"  onKeyPress="NumObj(this);"/></td>
+							<td><input type="text" class="txt" name="cpn" id="cpn" value="${cpn}" maxlength="20"  onKeyPress="NumObj(this);"/></td>
 							<th scope="row" class="ico_t1"><spring:message code="dbms_information.use_yn" /></th>
 							<td>
 								<select class="select" id="use_yn" name="use_yn">
-									<option value="Y"><spring:message code="dbms_information.use" /></option>
-									<option value="N"><spring:message code="dbms_information.unuse" /></option>
+									<option value="Y" ${use_yn == 'Y' ? 'selected="selected"' : ''}><spring:message code="dbms_information.use" /></option>
+									<option value="N" ${use_yn == 'N' ? 'selected="selected"' : ''}><spring:message code="dbms_information.unuse" /></option>
 								</select>
 							</td>
 						</tr>
@@ -272,7 +220,7 @@
 							<th scope="row" class="ico_t1"><spring:message code="user_management.expiration_date" /></th>
 							<td>
 								<div class="calendar_area big">
-									<a href="#n" class="calendar_btn">달력열기</a> <input type="text" class="calendar" id="datepicker3" readonly />
+									<a href="#n" class="calendar_btn">달력열기</a> <input type="text" class="calendar" id="datepicker3" title="사용자 만료일 날짜 검색" value="${usr_expr_dt}" readonly />
 								</div>
 							</td>
 						</tr>
@@ -280,8 +228,8 @@
 				</table>
 			</div>
 			<div class="btn_type_02">
-				<span class="btn btnC_01"> 
-				<button type="button" onclick="fn_insert()"><spring:message code="button.create" /></button>
+				<span class="btn btnC_01">
+				<button type="button" onclick="fn_update()"><spring:message code="button.modify" /></button>
 				</span> <a href="#n" class="btn" onclick="window.close();"><span><spring:message code="common.cancel" /></span></a>			
 			</div>
 		</div>

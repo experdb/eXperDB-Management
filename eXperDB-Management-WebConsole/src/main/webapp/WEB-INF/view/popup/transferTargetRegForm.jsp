@@ -31,28 +31,31 @@
 	
 	/* Validation */
 	function fn_transferTargetValidation(){
+		var str = document.getElementById("trf_trg_cnn_nm").value;
+		if( str == '' || str == null ){
+		    alert( '<spring:message code="message.msg116" />' );
+		    return false;
+		}
+		
+		if (nmCheck != 1) {
+// 			alert('<spring:message code="message.msg142"/>');
+			alert("Connect명 중복체크를 해주세요.")
+			return false;
+		}
+		
 		if (trf_trg_url.value == "" || trf_trg_url.value == "undefind" || trf_trg_url.value == null) {
 			alert('<spring:message code="message.msg149"/>');
 			trf_trg_url.focus();
 			return false;
 		}
 		
-		if (nmCheck != 1) {
-// 			alert('<spring:message code="message.msg142"/>');
-			alert("커넥터명을 입력 후 중복체크를 해주세요.")
-			return false;
-		}
+
 		
 		return true;	
 	}
 
 	/*저장버튼 클릭시insert*/
 	function fn_insert() {
-		var str = document.getElementById("trf_trg_cnn_nm").value;
-		if( str == '' || str == null ){
-		    alert( '<spring:message code="message.msg116" />' );
-		    return false;
-		}
 		if (!fn_transferTargetValidation()) return false;
 		if (!confirm('<spring:message code="message.msg148"/>')) return false;
 			$.ajax({

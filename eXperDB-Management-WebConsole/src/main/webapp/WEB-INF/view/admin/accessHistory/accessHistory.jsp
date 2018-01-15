@@ -112,7 +112,7 @@
 	/*조회버튼 클릭시*/
 	function fn_select() {
 		document.selectList.pageIndex.value = 1;
-		document.selectList.action = "/selectAccessHistory.do";
+		document.selectList.action = "/selectSearchAccessHistory.do";
 		document.selectList.submit();
 	}
 
@@ -163,7 +163,7 @@
 								<caption>검색 조회</caption>
 								<colgroup>
 									<col style="width: 100px;" />
-									<col style="width: 400px;" />
+									<col style="width: 350px;" />
 									<col style="width: 80px;" />
 									<col style="width: 400px;" />
 									<col />
@@ -181,7 +181,7 @@
 										</td>
 										<th scope="row" class="t9"><spring:message code="history_management.user" /></th>
 											<td>
-												<select class="select t5" id="type" name="type">
+												<select class="select t8" id="type" name="type">
 													<option value="usr_nm" ${type == 'usr_nm' ? 'selected="selected"' : ''}><spring:message code="history_management.user_name" /></option>
 													<option value="usr_id" ${type == 'usr_id' ? 'selected="selected"' : ''}><spring:message code="history_management.id" /> </option>
 												</select>
@@ -200,7 +200,7 @@
 										</td>
 										<th scope="row" class="t9"><spring:message code="history_management.sort" /></th>
 										<td>
-											<select class="select t5" id="order_type" name="order_type">
+											<select class="select t8" id="order_type" name="order_type">
 												<option value="exedtm" ${order_type == 'exedtm' ? 'selected="selected"' : ''}><spring:message code="history_management.bydate" /></option>
 												<option value="usr_id" ${order_type == 'usr_id' ? 'selected="selected"' : ''}><spring:message code="history_management.id" /></option>
 											</select>							
@@ -210,12 +210,11 @@
 											</select>
 										</td>
 									</tr>
-
 								</tbody>
 							</table>
 						</div>
 
-						<div class="overflow_area" style="height: 373px;">
+						<div class="overflow_area" style="height: 370px;">
 							<table class="list" id="accessHistoryTable">
 								<caption>사용자 접근내역화면</caption>
 								<colgroup>

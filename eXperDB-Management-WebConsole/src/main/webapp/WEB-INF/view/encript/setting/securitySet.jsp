@@ -145,17 +145,17 @@ select.t6{
 									</td>
 								</tr>
 								<tr>
-									<td scope="row">관리서버 모니터링 주기</td>
+									<th scope="row" class="ico_t2">관리서버 모니터링 주기</th>
 									<td><div id="period01"></div></td>
 									<td>초</td>
 								</tr>
 								<tr>
-									<td scope="row">에이전트와 관리서버 통신 주기</td>
+									<th scope="row" class="ico_t2">에이전트와 관리서버 통신 주기</th>
 									<td><div id="period02"></div></td>
 									<td>초(5 ~ 86400초)</td>
 								</tr>
 								<tr>
-									<td scope="row">암호화키의 유효기간이 다음 날짜 이하로 남으면 경고</td>
+									<th scope="row" class="ico_t2">암호화키의 유효기간이 다음 날짜 이하로 남으면 경고</th>
 									<td><div id="period03"></div></td>
 									<td>일(10 ~ 600초)</td>
 								</tr>

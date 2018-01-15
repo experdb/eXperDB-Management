@@ -1,5 +1,4 @@
-<%@ page language="java" contentType="text/html; charset=UTF-8"
-	pageEncoding="UTF-8"%>
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags"%>
 <%
@@ -22,7 +21,7 @@ var table = null;
 
 	function fn_init() {
 		table = $('#accesscontrolHistoryTable').DataTable({
-			scrollY : "270px",
+			scrollY : "240px",
 			paging: false,
 			searching : false,
 			scrollX: true,
@@ -76,10 +75,15 @@ var table = null;
 					}
 				},
 				success : function(result) {
+					$("#accesscontrolHistory").show();
+					$("#lst_date").html(result[0].lst_mdf_dtm);
+					$("#lst_id").html(result[0].lst_mdfr_id);
 					table.clear().draw();
 					table.rows.add(result).draw();
 				}
 			});
+		}else{
+			$("#accesscontrolHistory").hide();
 		}
 
 	});
@@ -112,6 +116,9 @@ var table = null;
 					}
 				},
 				success : function(result) {
+					$("#accesscontrolHistory").show();
+					$("#lst_date").html(result[0].lst_mdf_dtm);
+					$("#lst_id").html(result[0].lst_mdfr_id);
 					table.clear().draw();
 					table.rows.add(result).draw();
 				}
@@ -170,12 +177,9 @@ var table = null;
 <div id="contents">
 	<div class="contents_wrap">
 		<div class="contents_tit">
-			<h4><spring:message code="menu.policy_changes_history" /><a href="#n"><img src="../images/ico_tit.png" class="btn_info" /></a>
-			</h4>
+			<h4><spring:message code="menu.policy_changes_history" /><a href="#n"><img src="../images/ico_tit.png" class="btn_info" /></a></h4>
 			<div class="infobox">
-				<ul>
-					<li><spring:message code="help.policy_changes_history" /></li>
-				</ul>
+				<ul><li><spring:message code="help.policy_changes_history" /></li></ul>
 			</div>
 			<div class="location">
 				<ul>
@@ -211,9 +215,27 @@ var table = null;
 						</tbody>
 					</table>
 				</div>
+				
 				<div class="overflow_area">
-					<table id="accesscontrolHistoryTable" class="display"
-						cellspacing="0" width="100%">
+				<table class="write" id="accesscontrolHistory">
+					<colgroup>
+						<col style="width: 80px;" />
+						<col style="width: 200px;" />
+						<col style="width: 80px;" />
+						<col style="width: 200px;" />
+						<col />
+					</colgroup>
+							<tbody>
+								<tr>
+									<th scope="row" class="ico_t2">수정일시</th>
+									<td id="lst_date"></td>
+									<th scope="row" class="ico_t2">수정자</th>
+									<td id="lst_id"></td>
+								</tr>
+							</tbody>
+					</table>
+						
+					<table id="accesscontrolHistoryTable" class="display" cellspacing="0" width="100%">
 						<thead>
 							<tr>
 								<th width="20"><spring:message code="common.no" /></th>

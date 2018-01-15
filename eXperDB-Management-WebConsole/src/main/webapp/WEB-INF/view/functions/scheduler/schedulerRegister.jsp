@@ -74,7 +74,7 @@ function fn_init(){
         	}
           },
 	{data : "wrk_id", className : "dt-center", defaultContent : "", visible: false }
-	],
+	],'select': {'style': 'multi'},
  		'drawCallback': function (settings) {
 				// Remove previous binding before adding it
 				$('.dtMoveUp').unbind('click');

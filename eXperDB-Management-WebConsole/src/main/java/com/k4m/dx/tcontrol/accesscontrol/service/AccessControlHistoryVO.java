@@ -17,6 +17,7 @@ public class AccessControlHistoryVO {
 	private String cmd_cnts;//명령어_내용
 	private String lst_mdf_dtm;//최종_수정_일시
 	private int his_grp_id;//이력_그룹_ID
+	private String lst_mdfr_id; //최종_수정자_ID
 	
 	public int getRownum() {
 		return rownum;
@@ -114,8 +115,12 @@ public class AccessControlHistoryVO {
 	public void setHis_grp_id(int his_grp_id) {
 		this.his_grp_id = his_grp_id;
 	}
-
-	
+	public String getLst_mdfr_id() {
+		return lst_mdfr_id;
+	}
+	public void setLst_mdfr_id(String lst_mdfr_id) {
+		this.lst_mdfr_id = lst_mdfr_id;
+	}
 	
 	
 }

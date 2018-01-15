@@ -65,7 +65,7 @@ function fn_init() {
 		$('#userListTable tbody').on('dblclick','tr',function() {
 			var data = table.row(this).data();
 			var usr_id = data.usr_id;				
-			var popUrl = "/popup/userManagerRegForm.do?act=u&usr_id=" + encodeURI(usr_id); // 서버 url 팝업경로
+			var popUrl = "/popup/userManagerRegReForm.do?usr_id=" + encodeURI(usr_id); // 서버 url 팝업경로
 			var width = 1000;
 			var height = 570;
 			var left = (window.screen.width / 2) - (width / 2);
@@ -170,7 +170,7 @@ function fn_select(){
 
 /* 등록버튼 클릭시*/
 function fn_insert() {
-	var popUrl = "/popup/userManagerRegForm.do?act=i"; // 서버 url 팝업경로
+	var popUrl = "/popup/userManagerRegForm.do"; // 서버 url 팝업경로
 	var width = 1000;
 	var height = 570;
 	var left = (window.screen.width / 2) - (width / 2);
@@ -184,7 +184,7 @@ function fn_update() {
 	var rowCnt = table.rows('.selected').data().length;
 	if (rowCnt == 1) {
 		var usr_id = table.row('.selected').data().usr_id;
-		var popUrl = "/popup/userManagerRegForm.do?act=u&usr_id=" +  encodeURI(usr_id); // 서버 url 팝업경로
+		var popUrl = "/popup/userManagerRegReForm.do?usr_id=" +  encodeURI(usr_id); // 서버 url 팝업경로
 		var width = 1000;
 		var height = 570;
 		var left = (window.screen.width / 2) - (width / 2);
