@@ -369,4 +369,65 @@ public class TreeController {
 		}
 		return resultSet;
 	}
+	
+	
+	
+	/**
+	 * 실행중인 커넥터, 스케줄 조회
+	 * 
+	 * @return resultSet
+	 * @throws Exception
+	 */
+	@RequestMapping(value = "/exeCheck.do")
+	@ResponseBody
+	public Map exeCheck(@ModelAttribute("historyVO") HistoryVO historyVO, HttpServletRequest request, HttpServletResponse response) {
+
+		Map result = null;	
+		
+		try {					
+				int db_svr_id = Integer.parseInt(request.getParameter("db_svr_id"));				
+				result = dbServerManagerService.exeCheck(db_svr_id);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return result;
+	}
+	
+	
+	
+	/**
+	 * 서버를 삭제한다.
+	 * 
+	 * @param historyVO
+	 * @param request
+	 * @return 
+	 * @throws Exception
+	 */
+	@RequestMapping(value = "/dbSvrDelete.do")
+	public @ResponseBody boolean dbSvrDelete(@ModelAttribute("historyVO") HistoryVO historyVO, HttpServletResponse response, HttpServletRequest request) {
+		try {	
+			/*CmmnUtils cu = new CmmnUtils();
+			menuAut = cu.selectMenuAut(menuAuthorityService, "MN0004");
+			
+			//쓰기권한이 없는경우
+			if(menuAut.get(0).get("wrt_aut_yn").equals("N")){
+				response.sendRedirect("/autError.do");
+				return false;
+			}*/
+			
+			int db_svr_id = Integer.parseInt(request.getParameter("db_svr_id"));
+			
+			dbServerManagerService.dbSvrDelete(db_svr_id);
+
+			// 화면접근이력 이력 남기기
+			/*CmmnUtils.saveHistory(request, historyVO);
+			historyVO.setExe_dtl_cd("DX-T0033_02");
+			historyVO.setMnu_id(12);
+			accessHistoryService.insertHistory(historyVO);*/
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return false;
+	}	
 }
