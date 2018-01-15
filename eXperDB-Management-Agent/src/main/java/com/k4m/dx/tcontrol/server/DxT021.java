@@ -53,6 +53,7 @@ public class DxT021 extends SocketCtl{
 								, "echo $PGHOME"
 								, "echo $PGRBAK"
 								, "df -P -h"
+								, "echo $PGDBAK"
 							   };
 	
 	public DxT021(Socket socket, BufferedInputStream is, BufferedOutputStream	os) {
@@ -129,6 +130,8 @@ public class DxT021 extends SocketCtl{
 			String CMD_BACKUP_PATH = CommonUtil.getPidExec(arrCmd[6]);
 			resultHP.put(ProtocolID.CMD_BACKUP_PATH, CMD_BACKUP_PATH);
 			
+			String PGDBAK = CommonUtil.getPidExec(arrCmd[8]);
+			resultHP.put(ProtocolID.PGDBAK, PGDBAK);
 
 			outputObj.put(ProtocolID.DX_EX_CODE, strDxExCode);
 			outputObj.put(ProtocolID.RESULT_CODE, strSuccessCode);
