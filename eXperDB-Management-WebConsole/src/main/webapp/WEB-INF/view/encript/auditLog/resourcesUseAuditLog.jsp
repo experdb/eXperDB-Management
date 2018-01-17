@@ -115,9 +115,7 @@
 					<table class="write">
 						<caption>검색 조회</caption>
 						<colgroup>
-							<col style="width: 100px;" />
-							<col style="width: 300px;" />
-							<col style="width: 100px;" />
+							<col style="width: 150px;" />
 							</col>
 						</colgroup>
 						<tbody>
@@ -133,13 +131,7 @@
 								</td>
 							</tr>
 							<tr>
-								<th scope="row" class="t9">접근자</th>
-								<td>
-									<select class="select t5">
-										<option value="">전체</option>
-									</select>
-								</td>
-								<th scope="row" class="t9">성공/실패</th>
+								<th scope="row" class="t9">모니터링 대상</th>
 								<td>
 									<select class="select t5">
 										<option value="">전체</option>

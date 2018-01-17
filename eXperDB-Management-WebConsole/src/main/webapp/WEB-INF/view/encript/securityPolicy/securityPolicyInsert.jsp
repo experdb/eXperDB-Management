@@ -33,6 +33,19 @@
 	line-height:24px;
 	background:url(../images/popup/ico_p_2.png) 8px 48% no-repeat;
 }
+
+.inp_chk > span{
+	margin-right: 10%;
+}
+
+.contents .cmm_tab {
+    position: inherit ;
+}
+.contents .cmm_tab li.atv > a {
+    border-top: 1px solid rgba(0, 0, 0, 0.3);
+    border-left: 1px solid rgba(0, 0, 0, 0.3);
+    border-right: 1px solid rgba(0, 0, 0, 0.3);
+}
 </style>
 <script>
 	var table = null;
@@ -195,7 +208,6 @@
 	}
 	
 </script>
-
 <div id="contents">
 	<div class="contents_wrap">
 		<div class="contents_tit">
@@ -214,6 +226,11 @@
 			</div>
 		</div>
 		<div class="contents">
+			<div class="cmm_grp">
+				<div class="btn_type_01">
+					<a href="#n" class="btn"><span>저장</span></a> 
+				</div>
+			</div>
 			<div class="cmm_tab">
 				<ul id="tab1">
 					<li class="atv"><a href="javascript:selectTab('info')">기본정보</a></li>
@@ -308,7 +325,7 @@
 							<tr>
 								<th scope="row" class="ico_t1">접근 거부시 처리</th>
 								<td>
-									<select class="select" id="" name="">
+									<select class="select t3" id="" name="">
 										<option value="ERROR">ERROR</option>
 									</select>
 								</td>
@@ -317,20 +334,20 @@
 							<tr>
 								<th scope="row" class="ico_t1">데이터 타입</th>
 								<td>
-									<select class="select" id="" name="">
+									<select class="select t3" id="" name="">
 										<option value="STRING">STRING</option>
 									</select>
 								</td>
 							</tr>
 							
 							<tr>
-								<td colspan="2"><div class="inp_chk">
+								<td colspan="2">
 									<div class="inp_chk">
-										<span style="margin-right: 10%;"> 
+										<span> 
 											<input type="checkbox" id="option_1_1" name="" /> 
 											<label for="option_1_1">실패 로그 기록</label>
 										</span> 
-										<span style="margin-right: 10%;"> 
+										<span> 
 											<input type="checkbox" id="option_1_2" name="" /> 
 											<label for="option_1_2">로그압축</label>
 										</span> 
@@ -344,7 +361,7 @@
 							<tr>
 								<td colspan="2">
 									<div class="inp_chk">
-										<span style="margin-right: 10%;"> 
+										<span> 
 											<input type="checkbox" id="option_1_4" name="" /> 
 											<label for="option_1_4">성공 로그 기록</label>
 										</span> 
@@ -401,11 +418,6 @@
 					</div>
 				</div>
 			</div>
-
-			<div class="btn_type_02">
-				<a href="#n" class="btn"><span>저장</span></a> 
-			</div>
-
 		</div>
 	</div>
 </div>

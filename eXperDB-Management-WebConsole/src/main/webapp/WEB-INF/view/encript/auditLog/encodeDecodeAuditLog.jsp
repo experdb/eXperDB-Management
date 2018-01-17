@@ -171,8 +171,10 @@
 								</td>
 								<th scope="row" class="t9">성공/실패</th>
 								<td>
-									<select class="select t5">
+									<select class="select t8">
 										<option value="">전체</option>
+										<option value="">성공</option>
+										<option value="">실패</option>
 									</select>
 								</td>
 							</tr>

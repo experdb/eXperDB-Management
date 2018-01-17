@@ -33,6 +33,19 @@
 	line-height:24px;
 	background:url(../images/popup/ico_p_2.png) 8px 48% no-repeat;
 }
+
+.inp_chk > span{
+	margin-right: 10%;
+}
+
+.contents .cmm_tab {
+    position: inherit ;
+}
+.contents .cmm_tab li.atv > a {
+    border-top: 1px solid rgba(0, 0, 0, 0.3);
+    border-left: 1px solid rgba(0, 0, 0, 0.3);
+    border-right: 1px solid rgba(0, 0, 0, 0.3);
+}
 </style>
 <script>
 	var table = null;
@@ -120,11 +133,7 @@
 	
 	$(window.document).ready(function() {
 		fn_init();
-		fn_makeFromHour();
-		fn_makeFromMin();
-		fn_makeToHour();
-		fn_makeToMin();
-		
+
 		$("#tab1").show();
 		$("#tab2").hide();
 		$("#tab3").hide();
@@ -160,11 +169,44 @@
 			$("#option").hide();
 			$("#accessControl").show();
 		}
-
 	}
-
+	
+	/*암보호화 정책 등록*/
+	function fn_SecurityAdd(){
+		var popUrl = "/popup/securityPolicyRegForm.do"; // 서버 url 팝업경로
+		var width = 1000;
+		var height = 520;
+		var left = (window.screen.width / 2) - (width / 2);
+		var top = (window.screen.height /2) - (height / 2);
+		var popOption = "width="+width+", height="+height+", top="+top+", left="+left+", resizable=no, scrollbars=yes, status=no, toolbar=no, titlebar=yes, location=no,";
+			
+		window.open(popUrl,"",popOption);		
+		
+	}
+	
+	/*암보호화 정책 삭제*/
+	function fn_SecurityDel(){
+		alert("암보호화 정책 삭제");
+	}
+	
+	/*접근제어 정책 등록*/
+	function fn_AccessAdd(){
+		var popUrl = "/popup/accessPolicyRegForm.do"; // 서버 url 팝업경로
+		var width = 1000;
+		var height = 715;
+		var left = (window.screen.width / 2) - (width / 2);
+		var top = (window.screen.height /2) - (height / 2);
+		var popOption = "width="+width+", height="+height+", top="+top+", left="+left+", resizable=no, scrollbars=yes, status=no, toolbar=no, titlebar=yes, location=no,";
+			
+		window.open(popUrl,"",popOption);	
+	}
+	
+	/*접근제어 정책 삭제*/
+	function fn_AccessDel(){
+		alert("접근제어 정책 삭제");
+	}
+	
 </script>
-
 <div id="contents">
 	<div class="contents_wrap">
 		<div class="contents_tit">
@@ -183,6 +225,11 @@
 			</div>
 		</div>
 		<div class="contents">
+			<div class="cmm_grp">
+				<div class="btn_type_01">
+					<a href="#n" class="btn"><span>저장</span></a> 
+				</div>
+			</div>
 			<div class="cmm_tab">
 				<ul id="tab1">
 					<li class="atv"><a href="javascript:selectTab('info')">기본정보</a></li>
@@ -205,20 +252,19 @@
 				<div class="sch_form">
 					<table class="write">
 						<colgroup>
-							<col style="width: 110px;" />
-							<col />
-							<col style="width: 100px;" />
+							<col style="width:140px;" />
 							<col />
 						</colgroup>
 						<tbody>
 							<tr>
 								<th scope="row" class="ico_t1">보안정책이름</th>
-								<td><input type="text" class="txt" name="policyName" id="policyName" readonly="readonly"/></td>
-
+									<td>
+									<input type="text" class="txt t2" name="policyName" id="policyName" readonly="readonly"/>
+								</td>
 							</tr>
 							<tr>
 								<th scope="row" class="ico_t1">보안정책설명</th>
-								<td><input type="text" class="txt" name="policyComment" id="policyComment" /></td>
+								<td><textarea class="tbd1" name="policyComment" id="policyComment"></textarea></td>
 							</tr>
 						</tbody>
 					</table>
@@ -227,15 +273,14 @@
 					<div class="sub_tit">
 						<p>암호화정책</p>
 						<div class="sub_btn">
-							<a href="#n" class="btn btnF_04 btnC_01" onclick="fn_workAdd();">
+							<a href="#n" class="btn btnF_04 btnC_01" onclick="fn_SecurityAdd();">
 							<span id="add_button"><spring:message code="common.add" /></span>
-							</a> <a href="#n" class="btn btnF_04" onclick="fn_workDel();"> 
+							</a> <a href="#n" class="btn btnF_04" onclick="fn_SecurityDel();"> 
 							<span id="del_button"><spring:message code="button.delete" /></span></a>
 						</div>
 					</div>
 					<div class="overflow_area">
-						<table id="encryptPolicyTable" class="display" cellspacing="0"
-							width="100%">
+						<table id="encryptPolicyTable" class="display" cellspacing="0" width="100%">
 							<thead>
 								<tr>
 									<th width="10"></th>
@@ -253,7 +298,6 @@
 				</div>
 			</div>
 
-
 			<div id="option">
 				<div class="sch_form">
 					<table class="write">
@@ -266,36 +310,39 @@
 						<tbody>
 							<tr>
 								<th scope="row" class="ico_t1">기본접근허용</th>
-								<td><div class="inp_rdo">
+								<td>
+									<div class="inp_rdo">
 										<input name="rdo" id="rdo_2_1" type="radio" checked="checked">
-										<label for="rdo_2_1" style="margin-right: 15%;">예</label> <input
-											name="rdo" id="rdo_2_2" type="radio"> <label
-											for="rdo_2_2">아니오</label>
-									</div></td>
-
+										<label for="rdo_2_1" style="margin-right: 15%;">예</label> 
+										<input name="rdo" id="rdo_2_2" type="radio"> 
+										<label for="rdo_2_2">아니오</label>
+									</div>
+								</td>
 							</tr>
 							<tr>
 								<th scope="row" class="ico_t1">접근 거부시 처리</th>
-								<td><select class="select" id="" name="">
+								<td>
+									<select class="select t3" id="" name="">
 										<option value="ERROR">ERROR</option>
-								</select></td>
+									</select>
+								</td>
 							</tr>
-							
 							<tr>
 								<th scope="row" class="ico_t1">데이터 타입</th>
-								<td><select class="select" id="" name="">
+								<td>
+									<select class="select t3" id="" name="">
 										<option value="STRING">STRING</option>
-								</select></td>
+									</select>
+								</td>
 							</tr>
-							
 							<tr>
-								<td colspan="2"><div class="inp_chk">
+								<td colspan="2">
 									<div class="inp_chk">
-										<span style="margin-right: 10%;"> 
+										<span> 
 											<input type="checkbox" id="option_1_1" name="" /> 
 											<label for="option_1_1">실패 로그 기록</label>
 										</span> 
-										<span style="margin-right: 10%;"> 
+										<span> 
 											<input type="checkbox" id="option_1_2" name="" /> 
 											<label for="option_1_2">로그압축</label>
 										</span> 
@@ -309,7 +356,7 @@
 							<tr>
 								<td colspan="2">
 									<div class="inp_chk">
-										<span style="margin-right: 10%;"> 
+										<span> 
 											<input type="checkbox" id="option_1_4" name="" /> 
 											<label for="option_1_4">성공 로그 기록</label>
 										</span> 
@@ -325,15 +372,14 @@
 				</div>
 			</div>
 
-
 			<div id="accessControl">
 				<div class="cmm_bd">
 					<div class="sub_tit">
 						<p>접근제어정책</p>
 						<div class="sub_btn">
-							<a href="#n" class="btn btnF_04 btnC_01" onclick="fn_workAdd();">
-								<span id="add_button"><spring:message code="common.add" /></span>
-							</a> <a href="#n" class="btn btnF_04" onclick="fn_workDel();"> 
+							<a href="#n" class="btn btnF_04 btnC_01" onclick="fn_AccessAdd();">
+							<span id="add_button"><spring:message code="common.add" /></span></a> 
+							<a href="#n" class="btn btnF_04" onclick="fn_AccessDel();"> 
 							<span id="del_button"><spring:message code="button.delete" /></span></a>
 						</div>
 					</div>
@@ -366,16 +412,7 @@
 					</div>
 				</div>
 			</div>
-
-
-			<div class="btn_type_02">
-				<a href="#n" class="btn"><span>저장</span></a> 
-			</div>
 		</div>
 	</div>
 </div>
-
-
-
-
 

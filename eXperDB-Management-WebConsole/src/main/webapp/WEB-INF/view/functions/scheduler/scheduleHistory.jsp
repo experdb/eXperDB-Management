@@ -322,12 +322,11 @@
 					<table class="write">
 						<caption>검색 조회</caption>
 						<colgroup>
-							<col style="width: 80px;" />
-							<col style="width: 210px;" />
-							<col style="width: 70px;" />
-							<col style="width: 150px;" />
-							<col style="width: 60px;" />
-							<col style="width: 150px;" />
+							<col style="width: 50px;" />
+							<col style="width: 200px;" />
+							<col style="width: 50px;" />
+							<col style="width: 300px;" />
+							</col>
 						</colgroup>
 						<tbody>
 								<tr>
@@ -340,7 +339,7 @@
 											<input type="text" class="calendar" id="to" name="lgi_dtm_end" title="기간검색 종료날짜" onChange="fn_dtm();"  />
 										</div>							
 									</td>
-									<td colspan="4">
+									<th colspan="2">
 										<ul class="searchDate">
 											<li>
 												<span class="chkbox2">
@@ -385,31 +384,44 @@
 												</span>
 											</li>
 										</ul>
-
-									</td>
+									</th>
 								</tr>
-								 <tr>
-									<th scope="row" class="t9 line" ><spring:message code="schedule.schedule_name" /> </th>
+								<tr>
+									<th scope="row" class="t9" ><spring:message code="schedule.schedule_name" /> </th>
 									<td>
 										<select class="select t4" name="scd_nm" id="scd_nm" onChange="fn_selectWrkNmList(this);">
 												<option value="%"><spring:message code="schedule.total" /></option>
 										</select>	
 									</td>
-									<th scope="row" class="t9 line"><spring:message code="common.dbms_name" /></th>
+									<th scope="row" class="t9"><spring:message code="common.dbms_name" /></th>
 									<td>
-										<select class="select t4" name="db_svr_nm" id="db_svr_nm" >
+										<select class="select t5" name="db_svr_nm" id="db_svr_nm" >
 												<option value="%"><spring:message code="schedule.total" /></option>
 										</select>	
 									</td>									
-									<th scope="row" class="t9 line"><spring:message code="schedule.result" /></th>
+								</tr>	
+								<tr>
+									<th scope="row" class="t9"><spring:message code="schedule.result" /></th>
 									<td>
-										<select class="select t4" name="exe_result" id="exe_result">
+										<select class="select t5" name="exe_result" id="exe_result">
 												<option value="%"><spring:message code="schedule.total" /></option>
 												<option value="TC001701"><spring:message code="common.success" /></option>
 												<option value="TC001702"><spring:message code="common.failed" /></option>
 										</select>	
 									</td>
-								</tr>		
+									<th scope="row" class="t9"><spring:message code="history_management.sort" /></th>
+										<td>
+											<select class="select t5" id="order_type" name="order_type">
+												<option value="wrk_strt_dtm" ${order_type == 'wrk_strt_dtm' ? 'selected="selected"' : ''}>작업시작일시</option>
+												<option value="wrk_end_dtm" ${order_type == 'wrk_end_dtm' ? 'selected="selected"' : ''}>작업종료일시</option>
+											</select>							
+											<select class="select t5" id="order" name="order">
+												<option value="desc" ${order == 'desc' ? 'selected="selected"' : ''}><spring:message code="history_management.descending_order" /></option>
+												<option value="asc" ${order == 'asc' ? 'selected="selected"' : ''}><spring:message code="history_management.ascending_order" /> </option>		
+											</select>
+										</td>
+								
+								</tr>	
 						</tbody>
 					</table>
 				</div>
@@ -444,10 +456,10 @@
 						<tbody>
 							<c:forEach var="result" items="${result}" varStatus="status">
 								<tr>
-									<td><c:out value="${paginationInfo.totalRecordCount+1 - ((pagingVO.pageIndex-1) * pagingVO.pageSize + status.count)}" /></td>
+									<td><c:out value="${pagingVO.pageSize*(pagingVO.pageIndex-1) + result.rownum}" /></td>
 									<td style="text-align: left;"><span onclick="fn_scdLayer('${result.scd_id}');" class="bold"><c:out value="${result.scd_nm}" /></span></td>
 									<td><c:out value="${result.db_svr_nm}" /></td>		
-									<td><c:out value="${result.ipadr}" /></td>						
+									<td><c:out value="${result.ipadr}" /></td>				
 									<td><c:out value="${result.wrk_strt_dtm}" /></td>
 									<td><c:out value="${result.wrk_end_dtm}" /></td>
 									<td><c:out value="${result.wrk_dtm}" /></td>

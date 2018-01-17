@@ -153,7 +153,9 @@ margin-right: 10px;
 					<div class="overflows_areas">
 						<table class="write">
 							<colgroup>
-								<col style="width: 70px;" />
+								<col style="width: 200px;" />
+								<col />
+								<col style="width: 200px;" />
 								<col />
 							</colgroup>
 							<tbody>
@@ -167,28 +169,22 @@ margin-right: 10px;
 									</td>
 								</tr>
 								<tr>
-									<td><input type="text" class="txt t6" name="wrk_nm" id="wrk_nm" class="txt" /></td>
-									<td>암복호화 로그 서버에서 압축시간(초)</td>
+									<th scope="row" class="ico_t2">암복호화 로그 서버에서 압축시간</th>
+									<td><input type="number" class="txt t6" name="" id="" maxlength="3" min="0" value="0">(초)</td>
+									<th scope="row" class="ico_t2">암복호화 로그 압축 중단 시간</th>
+									<td><input type="number" class="txt t6" name="" id="" maxlength="3" min="0" value="0">(초)</td>
 								</tr>
 								<tr>
-									<td><input type="text" class="txt t6" name="wrk_nm" id="wrk_nm" class="txt" /></td>
-									<td>암복호화 로그 AP에서 최대 압축값</td>
+									<th scope="row" class="ico_t2">암복호화 로그 AP에서 최대 압축값</th>
+									<td><input type="number" class="txt t6" name="" id="" maxlength="3" min="0" value="0"></td>
+									<th scope="row" class="ico_t2">암복호화 로그 압축 출력 시간</th>
+									<td><input type="number" class="txt t6" name="" id="" maxlength="3" min="0" value="0">(초)</td>
 								</tr>
 								<tr>
-									<td><input type="text" class="txt t6" name="wrk_nm" id="wrk_nm" class="txt" /></td>
-									<td>암복호화 로그 압축 시작값</td>
-								</tr>
-								<tr>
-									<td><input type="text" class="txt t6" name="wrk_nm" id="wrk_nm" class="txt" /></td>
-									<td>암복호화 로그 압축 중단 시간(초)</td>
-								</tr>
-								<tr>
-									<td><input type="text" class="txt t6" name="wrk_nm" id="wrk_nm" class="txt" /></td>
-									<td>암복호화 로그 압축 출력 시간(초)</td>
-								</tr>
-								<tr>
-									<td><input type="text" class="txt t6" name="wrk_nm" id="wrk_nm" class="txt" /></td>
-									<td>암복호화 로그 전송 대기 시간(초)</td>
+									<th scope="row" class="ico_t2">암복호화 로그 압축 시작값</th>
+									<td><input type="number" class="txt t6" name="" id="" maxlength="3" min="0" value="0"></td>
+									<th scope="row" class="ico_t2">암복호화 로그 전송 대기 시간</th>
+									<td><input type="number" class="txt t6" name="" id="" maxlength="3" min="0" value="0">(초)</td>
 								</tr>
 							</tbody>
 						</table>
@@ -219,7 +215,7 @@ margin-right: 10px;
 									</td>
 								</tr>
 								<tr>
-									<td scope="row" class="ico_t1" colspan="2"><img src="../images/popup/ico_p_2.png" style="padding: 0 0 0 8px; margin-right: 8px;">로그 전송 요일</td>
+									<th scope="row" class="ico_t2" colspan="2">로그 전송 요일</th>
 								</tr>
 								<tr>
 									<td colspan="2">
