@@ -122,6 +122,7 @@ var haCnt = 0;
 		}else if($('#bck').val() == "rman"){
 			if($('#bck_opt_cd').val() == ""){
 				alert('<spring:message code="backup_management.bckOption_choice_please"/>');
+				alert($("#check_path1").val());
 				return false;
 			}else if($("#check_path1").val() != "Y"){
 				alert('<spring:message code="message.msg71" />');
@@ -134,6 +135,9 @@ var haCnt = 0;
 			}else if ($("#check_path3").val() != "Y"){
 				alert('<spring:message code="backup_management.bckPath_effective_check"/>');
 				$("#bck_pth").focus();
+				return false;
+			}else if($("input[name=chk]:checkbox:checked").length == 0){
+				alert('<spring:message code="message.msg70" />');
 				return false;
 			}			
 		}else if($('#bck').val() == "dump"){
@@ -152,9 +156,8 @@ var haCnt = 0;
 				alert('<spring:message code="message.msg70" />');
 				return false;
 			}			
-		}else{
-			return true;
 		}
+			return true;
 	}
 	
 	/* ********************************************************
@@ -350,18 +353,7 @@ var haCnt = 0;
 	 			success : function(data) {
 	 				if(data.result.ERR_CODE == ""){
 	 					if(data.result.RESULT_DATA.IS_DIRECTORY == 0){
-	 						if(keyType == 1){
-	 							$("#check_path1").val("Y");
-	 						}else if(keyType == 2){
-	 							$("#check_path2").val("Y");
-	 						}else if(keyType == 3){
-	 							$("#check_path3").val("Y");
-	 						}else if(keyType == 4){
-	 							$("#check_path4").val("Y");
-	 						}else{
-	 							$("#check_path5").val("Y");
-	 						}
-	 							var volume = "<spring:message code='common.volume' />: "+data.result.RESULT_DATA.CAPACITY;
+	 						var volume = "<spring:message code='common.volume' />: "+data.result.RESULT_DATA.CAPACITY;
 	 						if(keyType == 1){
 	 							$("#dataVolume").empty();
 	 							$( "#dataVolume" ).append(volume);
@@ -636,6 +628,14 @@ var haCnt = 0;
 	  }
 </script>
 <body>
+<form>
+	<input type="hidden" name="db_svr_id" id="db_svr_id" value="${db_svr_id}" />
+	<input type="hidden" name="check_path1" id="check_path1" value="N" />
+	<input type="hidden" name="check_path2" id="check_path2" value="N" />
+	<input type="hidden" name="check_path3" id="check_path3" value="N" />
+	<input type="hidden" name="check_path4" id="check_path4" value="N" />
+	<input type="hidden" name="check_path5" id="check_path5" value="N" />
+</form>
 <div class="pop_container">
 		<div class="pop_cts">
 			<p class="tit">주별 스케줄등록</p>
@@ -659,13 +659,13 @@ var haCnt = 0;
 							<th scope="row" class="t9 line"><spring:message code="menu.backup_settings" /></th>
 							<td>
 							<select name="bck" id="bck" class="txt t3" style="width: 150px;" onChange="fn_bck();">
-									<option value=""><spring:message code="schedule.total" /></option>
+									<option value=""><spring:message code="common.choice" /></option>
 									<option value="rman">RMAN</option>
 									<option value="dump">DUMP</option>
 							</select> 
 							<span id="rman_bck_opt"> 
 							<select name="bck_opt_cd" id="bck_opt_cd" class="txt t3" style="width: 150px;">
-										<option value=""><spring:message code="schedule.total" /></option>
+										<option value=""><spring:message code="common.choice" /></option>
 										<option value="TC000301">FULL</option>
 										<option value="TC000302">incremental</option>
 										<option value="TC000303">archive</option>
@@ -673,7 +673,7 @@ var haCnt = 0;
 							</span> 
 							<span id="dump_bck_opt"> 
 							<select name="db_id" id="db_id" class="txt t3" style="width: 150px;">
-										<option value=""><spring:message code="schedule.total" /></option>
+										<option value=""><spring:message code="common.choice" /></option>
 										<c:forEach var="result" items="${dbList}" varStatus="status">
 											<option value="<c:out value="${result.db_id}"/>"><c:out
 													value="${result.db_nm}" /></option>
@@ -750,13 +750,6 @@ var haCnt = 0;
 								</div>
 							</td>
 						</tr>
-
-						<input type="hidden" name="db_svr_id" id="db_svr_id" value="${db_svr_id}" />
-						<input type="hidden" name="check_path1" id="check_path1" value="N" />
-						<input type="hidden" name="check_path2" id="check_path2" value="N" />
-						<input type="hidden" name="check_path3" id="check_path3" value="N" />
-						<input type="hidden" name="check_path4" id="check_path4" value="N" />
-						<input type="hidden" name="check_path5" id="check_path5" value="N" />
 					</tbody>
 				</table>
 			</div>

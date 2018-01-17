@@ -567,11 +567,11 @@ function fn_check() {
 				alert('<spring:message code="backup_management.reg_possible_work_nm"/>');
 				document.getElementById("wrk_nm").focus();
 				wrk_nmChk = "success";
-			} /* else {
+			} else {
 				scd_nmChk = "fail";
 				alert("중복된 WORK명이 존재합니다.");
 				document.getElementById("wrk_nm").focus();
-			} */
+			}
 		},
 		beforeSend: function(xhr) {
 	        xhr.setRequestHeader("AJAX", true);

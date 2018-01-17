@@ -374,6 +374,7 @@ function fn_check() {
 										<th scope="row" class="ico_t1"><spring:message code="backup_management.backup_option" /></th>
 										<td><span>
 													<select name="bck_opt_cd" id="bck_opt_cd" class="select">
+														<option value=""><spring:message code="common.choice" /></option>
 														<option value="TC000301"><spring:message code="backup_management.full_backup" /></option>
 														<option value="TC000302"><spring:message code="backup_management.incremental_backup" /></option>
 														<option value="TC000303"><spring:message code="backup_management.change_log_backup" /></option>
@@ -421,7 +422,7 @@ function fn_check() {
 										<li>
 											<div class="inner">
 												<p><spring:message code="backup_management.full_backup_file_maintenance_count" /></p>
-												<span><input type="number" class="txt" name="bck_mtn_ecnt" id="bck_mtn_ecnt" value="0" maxlength="3" min="0"/> <spring:message code="common.day" /></span>
+												<span><input type="number" class="txt" name="bck_mtn_ecnt" id="bck_mtn_ecnt" value="0" maxlength="3" min="0"/> <spring:message code="backup_management.count" /></span>
 											</div>
 										</li>
 										<li>
@@ -433,7 +434,7 @@ function fn_check() {
 										<li>
 											<div class="inner">
 												<p><spring:message code="backup_management.archive_file_maintenance_count" /></p>
-												<span><input type="number" class="txt" name="acv_file_mtncnt" id="acv_file_mtncnt" value="0" maxlength="3" min="0"/> <spring:message code="common.day" /></span>
+												<span><input type="number" class="txt" name="acv_file_mtncnt" id="acv_file_mtncnt" value="0" maxlength="3" min="0"/> <spring:message code="backup_management.count" /></span>
 											</div>
 										</li>
 										<li>
@@ -467,7 +468,7 @@ function fn_check() {
 											<li>
 												<div class="inner">
 													<p><spring:message code="backup_management.server_log_file_maintenance_count" /> </p>
-													<span><input type="number" class="txt" name="log_file_mtn_ecnt" id="log_file_mtn_ecnt" value="0" maxlength="3" min="0"/> <spring:message code="schedule.day" /></span>
+													<span><input type="number" class="txt" name="log_file_mtn_ecnt" id="log_file_mtn_ecnt" value="0" maxlength="3" min="0"/> <spring:message code="backup_management.count" /></span>
 												</div>
 											</li>
 										</ul>
