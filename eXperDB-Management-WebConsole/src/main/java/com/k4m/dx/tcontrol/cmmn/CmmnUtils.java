@@ -27,12 +27,17 @@ public class CmmnUtils {
 	
 	//private ConfigurableApplicationContext context;
 	
-	public static void saveHistory(HttpServletRequest request,@ModelAttribute("historyVO") HistoryVO historyVO) {
+	public static boolean saveHistory(HttpServletRequest request,@ModelAttribute("historyVO") HistoryVO historyVO) {
 		HttpSession session = request.getSession();
-		String usr_id = (String) session.getAttribute("usr_id");
-		String ip = (String) session.getAttribute("ip");
-		historyVO.setUsr_id(usr_id);
-		historyVO.setLgi_ipadr(ip);
+		if(session==null){
+			return false;
+		}else{
+			String usr_id = (String) session.getAttribute("usr_id");
+			String ip = (String) session.getAttribute("ip");
+			historyVO.setUsr_id(usr_id);
+			historyVO.setLgi_ipadr(ip);
+			return true;
+		}
 	}
 	
 	//메뉴권한 조회
