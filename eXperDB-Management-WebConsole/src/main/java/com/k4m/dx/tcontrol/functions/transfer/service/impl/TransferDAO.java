@@ -168,6 +168,20 @@ public class TransferDAO extends EgovAbstractMapper {
 		return (TransferVO) selectOne("transferSql.selectTengInfo", usr_id);
 	}
 
+	/**
+	 * 삭제 할 Connect 정보 조회
+	 * 
+	 * @param db_svr_id
+	 * @return
+	 * @throws Exception
+	 */
+	@SuppressWarnings({ "unchecked", "deprecation" })
+	public List<Map<String, Object>> selectConnectorInfo(int db_svr_id) {
+		 List<Map<String, Object>> result = null;
+		result = (List<Map<String, Object>>) list("transferSql.selectConnectorInfo", db_svr_id);
+		return result;
+	}
+
 
 
 }

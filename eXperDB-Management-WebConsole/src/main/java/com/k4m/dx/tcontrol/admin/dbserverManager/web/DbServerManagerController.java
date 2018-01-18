@@ -22,7 +22,9 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
+import com.k4m.dx.tcontrol.accesscontrol.service.AccessControlHistoryVO;
 import com.k4m.dx.tcontrol.accesscontrol.service.AccessControlService;
+import com.k4m.dx.tcontrol.accesscontrol.service.AccessControlVO;
 import com.k4m.dx.tcontrol.admin.accesshistory.service.AccessHistoryService;
 import com.k4m.dx.tcontrol.admin.dbserverManager.service.DbServerManagerService;
 import com.k4m.dx.tcontrol.admin.dbserverManager.service.DbServerVO;
@@ -215,7 +217,7 @@ public class DbServerManagerController {
 	 * @throws Exception
 	 */
 	@RequestMapping(value = "/insertDbServer.do")
-	public @ResponseBody void insertDbServer(@ModelAttribute("dbServerVO") DbServerVO dbServerVO, @ModelAttribute("ipadrVO") IpadrVO ipadrVO, @ModelAttribute("historyVO") HistoryVO historyVO,HttpServletRequest request) throws Exception {
+	public @ResponseBody void insertDbServer(@ModelAttribute("accessControlHistoryVO") AccessControlHistoryVO accessControlHistoryVO,@ModelAttribute("accessControlVO") AccessControlVO accessControlVO, @ModelAttribute("dbServerVO") DbServerVO dbServerVO, @ModelAttribute("ipadrVO") IpadrVO ipadrVO, @ModelAttribute("historyVO") HistoryVO historyVO,HttpServletRequest request) throws Exception {
 		AES256 aes = new AES256(AES256_KEY.ENC_KEY);
 		
 		// Transaction 
@@ -250,6 +252,81 @@ public class DbServerManagerController {
 			System.out.println("=====================");
 			
 			dbServerManagerService.insertDbServer(dbServerVO);
+			
+			
+			/*접근제어 정보 INSERT*/
+			int db_svr_id = dbServerVO.getDb_svr_id();
+			AES256 dec = new AES256(AES256_KEY.ENC_KEY);
+			
+			/*서버접근제어 전체 삭제*/
+			accessControlService.deleteDbAccessControl(db_svr_id);
+			
+			DbServerVO schDbServerVO = new DbServerVO();
+			schDbServerVO.setDb_svr_id(db_svr_id);
+			dbServerVO = (DbServerVO)  cmmnServerInfoService.selectServerInfo(schDbServerVO);
+			String strIpAdr = dbServerVO.getIpadr();
+			AgentInfoVO vo = new AgentInfoVO();
+			vo.setIPADR(strIpAdr);
+			AgentInfoVO agentInfo =  (AgentInfoVO) cmmnServerInfoService.selectAgentInfo(vo);
+	
+			String IP = dbServerVO.getIpadr();
+			int PORT = agentInfo.getSOCKET_PORT();
+			
+			JSONObject result = new JSONObject();
+			JSONObject serverObj = new JSONObject();				
+			serverObj.put(ClientProtocolID.SERVER_NAME, dbServerVO.getDb_svr_nm());
+			serverObj.put(ClientProtocolID.SERVER_IP, dbServerVO.getIpadr());
+			serverObj.put(ClientProtocolID.SERVER_PORT, dbServerVO.getPortno());
+			serverObj.put(ClientProtocolID.DATABASE_NAME, dbServerVO.getDft_db_nm());
+			serverObj.put(ClientProtocolID.USER_ID, dbServerVO.getSvr_spr_usr_id());
+			serverObj.put(ClientProtocolID.USER_PWD, dec.aesDecode(dbServerVO.getSvr_spr_scm_pwd()));
+				
+			ClientInfoCmmn cic = new ClientInfoCmmn();
+			
+			String strExtName = "pgaudit";
+			List<Object> results = cic.extension_select(serverObj,IP,PORT,strExtName);
+			if(results != null || result.size() != 0) {
+				int current_his_grp= accessControlService.selectCurrenthisrp();
+				accessControlHistoryVO.setHis_grp_id(current_his_grp);
+				
+				result = cic.dbAccess_selectAll(serverObj,IP,PORT);
+				for(int j=0; j<result.size(); j++){
+					 JSONArray data = (JSONArray)result.get("data");
+					for(int m=0; m<data.size(); m++){
+							JSONObject jsonObj = (JSONObject)data.get(m);
+							int svr_acs_cntr_id= accessControlService.selectCurrentCntrid();
+							
+							accessControlVO.setSvr_acs_cntr_id(svr_acs_cntr_id);
+							accessControlVO.setFrst_regr_id(id);
+							accessControlVO.setLst_mdfr_id(id);
+							accessControlVO.setDb_svr_id(db_svr_id);
+							accessControlVO.setDtb((String) jsonObj.get("Database"));
+							accessControlVO.setPrms_ipadr((String)jsonObj.get("Ipadr"));
+							accessControlVO.setPrms_ipmaskadr((String) jsonObj.get("Ipmask"));
+							accessControlVO.setPrms_usr_id((String)jsonObj.get("User"));
+							accessControlVO.setCtf_mth_nm((String)jsonObj.get("Method"));
+							accessControlVO.setCtf_tp_nm((String)jsonObj.get("Type"));
+							accessControlVO.setOpt_nm((String)jsonObj.get("Option"));
+							accessControlVO.setPrms_seq(Integer.parseInt((String) jsonObj.get("Seq")));
+							accessControlVO.setPrms_set((String)jsonObj.get("Set"));
+							accessControlService.insertAccessControl(accessControlVO);
+							
+							accessControlHistoryVO.setLst_mdfr_id(id);
+							accessControlHistoryVO.setDb_svr_id(db_svr_id);
+							accessControlHistoryVO.setSvr_acs_cntr_id(svr_acs_cntr_id);
+							accessControlHistoryVO.setDtb((String) jsonObj.get("Database"));
+							accessControlHistoryVO.setPrms_ipadr((String)jsonObj.get("Ipadr"));
+							accessControlHistoryVO.setPrms_ipmaskadr((String) jsonObj.get("Ipmask"));
+							accessControlHistoryVO.setPrms_usr_id((String)jsonObj.get("User"));
+							accessControlHistoryVO.setPrms_seq(Integer.parseInt((String) jsonObj.get("Seq")));
+							accessControlHistoryVO.setPrms_set((String)jsonObj.get("Set"));
+							accessControlHistoryVO.setCtf_mth_nm((String)jsonObj.get("Method"));
+							accessControlHistoryVO.setCtf_tp_nm((String) jsonObj.get("Type"));
+							accessControlHistoryVO.setOpt_nm((String)jsonObj.get("Option"));
+							accessControlService.insertAccessControlHistory(accessControlHistoryVO);
+						}
+					}	
+				}
 		} catch (Exception e) {
 			e.printStackTrace();
 			insertResult = "F";

@@ -268,4 +268,18 @@
 		SELECT TENG_IP, TENG_PORT FROM T_TRFCNG_I
 		WHERE FRST_REGR_ID =#{usr_id}
 	</select>
+	
+	<select id="selectConnectorInfo" parameterType="int" resultType="HashMap">
+		/**
+		* Query ID : selectConnectorInfo
+		* Description : 삭제 할 Connect 정보 조회
+		* Author : 김주영
+		**/	
+		SELECT T.TRF_TRG_CNN_NM,C.CNR_IPADR,CNR_PORTNO
+		FROM T_DB_I I, T_TRFTRGMPP_R R, T_TRFTRGCNG_I T, T_CNR_I C
+		WHERE R.DB_ID=I.DB_ID 
+		AND R.TRF_TRG_ID = T.TRF_TRG_ID
+		AND T.CNR_ID = C.CNR_ID
+		AND I.DB_SVR_ID = #{db_svr_id}
+	</select>
 </mapper>

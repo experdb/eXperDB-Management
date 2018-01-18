@@ -282,7 +282,7 @@
 	function fn_detail(exe_sn){
 		var popUrl = "/popup/scheduleHistoryDetail.do?exe_sn="+exe_sn; // 서버 url 팝업경로
 		var width = 950;
-		var height = 673;
+		var height = 690;
 		var left = (window.screen.width / 2) - (width / 2);
 		var top = (window.screen.height /2) - (height / 2);
 		var popOption = "width="+width+", height="+height+", top="+top+", left="+left+", resizable=no, scrollbars=yes, status=no, toolbar=no, titlebar=yes, location=no,";
@@ -390,13 +390,13 @@
 									<th scope="row" class="t9" ><spring:message code="schedule.schedule_name" /> </th>
 									<td>
 										<select class="select t4" name="scd_nm" id="scd_nm" onChange="fn_selectWrkNmList(this);">
-												<option value="%"><spring:message code="schedule.total" /></option>
+											<option value="%"><spring:message code="schedule.total" /></option>
 										</select>	
 									</td>
 									<th scope="row" class="t9"><spring:message code="common.dbms_name" /></th>
 									<td>
 										<select class="select t5" name="db_svr_nm" id="db_svr_nm" >
-												<option value="%"><spring:message code="schedule.total" /></option>
+											<option value="%"><spring:message code="schedule.total" /></option>
 										</select>	
 									</td>									
 								</tr>	
@@ -404,23 +404,22 @@
 									<th scope="row" class="t9"><spring:message code="schedule.result" /></th>
 									<td>
 										<select class="select t5" name="exe_result" id="exe_result">
-												<option value="%"><spring:message code="schedule.total" /></option>
-												<option value="TC001701"><spring:message code="common.success" /></option>
-												<option value="TC001702"><spring:message code="common.failed" /></option>
+											<option value="%"><spring:message code="schedule.total" /></option>
+											<option value="TC001701"><spring:message code="common.success" /></option>
+											<option value="TC001702"><spring:message code="common.failed" /></option>
 										</select>	
 									</td>
 									<th scope="row" class="t9"><spring:message code="history_management.sort" /></th>
-										<td>
-											<select class="select t5" id="order_type" name="order_type">
-												<option value="wrk_strt_dtm" ${order_type == 'wrk_strt_dtm' ? 'selected="selected"' : ''}>작업시작일시</option>
-												<option value="wrk_end_dtm" ${order_type == 'wrk_end_dtm' ? 'selected="selected"' : ''}>작업종료일시</option>
-											</select>							
-											<select class="select t5" id="order" name="order">
-												<option value="desc" ${order == 'desc' ? 'selected="selected"' : ''}><spring:message code="history_management.descending_order" /></option>
-												<option value="asc" ${order == 'asc' ? 'selected="selected"' : ''}><spring:message code="history_management.ascending_order" /> </option>		
-											</select>
-										</td>
-								
+									<td>
+										<select class="select t5" id="order_type" name="order_type">
+											<option value="wrk_strt_dtm" ${order_type == 'wrk_strt_dtm' ? 'selected="selected"' : ''}><spring:message code="schedule.work_start_datetime" /></option>
+											<option value="wrk_end_dtm" ${order_type == 'wrk_end_dtm' ? 'selected="selected"' : ''}><spring:message code="schedule.work_end_datetime" /></option>
+										</select>							
+										<select class="select t5" id="order" name="order">
+											<option value="desc" ${order == 'desc' ? 'selected="selected"' : ''}><spring:message code="history_management.descending_order" /></option>
+											<option value="asc" ${order == 'asc' ? 'selected="selected"' : ''}><spring:message code="history_management.ascending_order" /> </option>		
+										</select>
+									</td>
 								</tr>	
 						</tbody>
 					</table>

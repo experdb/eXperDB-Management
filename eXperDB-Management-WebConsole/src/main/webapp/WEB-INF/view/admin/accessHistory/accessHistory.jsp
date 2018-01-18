@@ -244,7 +244,7 @@
 								<tbody>
 									<c:forEach var="result" items="${result}" varStatus="status">
 										<tr>
-											<td><c:out value="${paginationInfo.totalRecordCount+1 - ((pagingVO.pageIndex-1) * pagingVO.pageSize + status.count)}" /></td>
+											<td><c:out value="${pagingVO.pageSize*(pagingVO.pageIndex-1) + result.rownum}" /></td>
 											<td><c:out value="${result.exedtm_date}" /></td>
 											<td><c:out value="${result.exedtm_hour}" /></td>
 											<td><c:out value="${result.sys_cd_nm}" /></td>

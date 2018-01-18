@@ -35,7 +35,7 @@ var table = null;
 			{ data : "prms_ipmaskadr", className : "dt-center", defaultContent : ""}, 
 			{ data : "ctf_mth_nm", className : "dt-center", defaultContent : ""}, 
 			{ data : "opt_nm", className : "dt-center", defaultContent : ""}, 
-			 ]
+				]
 		});
 		
 		table.tables().header().to$().find('th:eq(0)').css('min-width', '20px');
@@ -206,49 +206,51 @@ var table = null;
 						<tbody>
 							<tr>
 								<th scope="row" class="t9"><spring:message code="common.modify_datetime" /></th>
-								<td><select class="select t3" id="lst_mdf_dtm">
+								<td>
+									<select class="select t3" id="lst_mdf_dtm">
 										<c:forEach var="result" items="${lst_mdf_dtm}">
 											<option value="${result.svr_acs_cntr_his_id}">${result.lst_mdf_dtm}</option>
 										</c:forEach>
-								</select></td>
+									</select>
+								</td>
 							</tr>
 						</tbody>
 					</table>
 				</div>
 				
 				<div class="overflow_area">
-				<table class="write" id="accesscontrolHistory">
-					<colgroup>
-						<col style="width: 80px;" />
-						<col style="width: 200px;" />
-						<col style="width: 80px;" />
-						<col style="width: 200px;" />
-						<col />
-					</colgroup>
-							<tbody>
-								<tr>
-									<th scope="row" class="ico_t2">수정일시</th>
-									<td id="lst_date"></td>
-									<th scope="row" class="ico_t2">수정자</th>
-									<td id="lst_id"></td>
-								</tr>
-							</tbody>
-					</table>
+					<table class="write" id="accesscontrolHistory">
+						<colgroup>
+							<col style="width: 80px;" />
+							<col style="width: 200px;" />
+							<col style="width: 80px;" />
+							<col style="width: 200px;" />
+							<col />
+						</colgroup>
+								<tbody>
+									<tr>
+										<th scope="row" class="ico_t2"><spring:message code="common.modify_datetime" /></th>
+										<td id="lst_date"></td>
+										<th scope="row" class="ico_t2"><spring:message code="common.modifier" /></th>
+										<td id="lst_id"></td>
+									</tr>
+								</tbody>
+						</table>
 						
-					<table id="accesscontrolHistoryTable" class="display" cellspacing="0" width="100%">
-						<thead>
-							<tr>
-								<th width="20"><spring:message code="common.no" /></th>
-								<th width="60"><spring:message code="access_control_management.type" /></th>
-								<th width="100"><spring:message code="access_control_management.database" /></th>
-								<th width="100"><spring:message code="access_control_management.user" /></th>
-								<th width="100"><spring:message code="access_control_management.ip_address" /></th>
-								<th width="100"><spring:message code="access_control_management.ip_mask" /></th>
-								<th width="100"><spring:message code="access_control_management.method" /></th>
-								<th width="100"><spring:message code="access_control_management.option" /></th>
-							</tr>
-						</thead>
-					</table>
+						<table id="accesscontrolHistoryTable" class="display" cellspacing="0" width="100%">
+							<thead>
+								<tr>
+									<th width="20"><spring:message code="common.no" /></th>
+									<th width="60"><spring:message code="access_control_management.type" /></th>
+									<th width="100"><spring:message code="access_control_management.database" /></th>
+									<th width="100"><spring:message code="access_control_management.user" /></th>
+									<th width="100"><spring:message code="access_control_management.ip_address" /></th>
+									<th width="100"><spring:message code="access_control_management.ip_mask" /></th>
+									<th width="100"><spring:message code="access_control_management.method" /></th>
+									<th width="100"><spring:message code="access_control_management.option" /></th>
+								</tr>
+							</thead>
+						</table>
 				</div>
 			</div>
 		</div>

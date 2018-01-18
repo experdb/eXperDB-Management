@@ -45,7 +45,7 @@
 			</if>		
 			AND A.EXE_RSLT_CD LIKE #{exe_result}
 			GROUP BY A.EXE_GRP_SN, A.SCD_NM, A.DB_ID,A.SCD_ID,C.IPADR
-			ORDER BY WRK_END_DTM DESC
+			ORDER BY ${order_type} ${order}
 			LIMIT #{recordCountPerPage} OFFSET #{firstIndex}
 		)AA
 	</select>

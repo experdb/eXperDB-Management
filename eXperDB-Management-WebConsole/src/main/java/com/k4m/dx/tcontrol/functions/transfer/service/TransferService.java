@@ -133,4 +133,13 @@ public interface TransferService {
 	 */
 	TransferVO selectTengInfo(String usr_id) throws Exception;
 
+	/**
+	 * 삭제 할 Connect 정보 조회
+	 * 
+	 * @param db_svr_id
+	 * @return
+	 * @throws Exception
+	 */
+	List<Map<String, Object>> selectConnectorInfo(int db_svr_id) throws Exception;
+
 }

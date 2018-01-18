@@ -81,6 +81,11 @@ public class TransferServiceImpl extends EgovAbstractServiceImpl implements Tran
 		return (TransferVO) transferDAO.selectTengInfo(usr_id);
 	}
 
+	@Override
+	public List<Map<String, Object>> selectConnectorInfo(int db_svr_id) throws Exception {
+		return transferDAO.selectConnectorInfo(db_svr_id);
+	}
+
 
 
 }

@@ -564,7 +564,7 @@ function fn_make_object_list(data, workObj){
 			html += "</ul></li>\n";
 		}
 		if(schema != inSchema){
-			var checkStr = "";
+			var checkStr = "disabled";
 			$(workObj).each(function(i,v){
 				if(v.scm_nm == item.schema && v.obj_nm == "") checkStr = " checked";
 			});
@@ -575,7 +575,7 @@ function fn_make_object_list(data, workObj){
 			html += "<ul>\n";
 		}
 		
-		var checkStr = "";
+		var checkStr = "disabled";
 		$(workObj).each(function(i,v){
 			if(v.scm_nm == item.schema && v.obj_nm == item.name) checkStr = " checked";
 		});

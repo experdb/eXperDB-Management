@@ -6,6 +6,7 @@ import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
@@ -35,6 +36,8 @@ import com.k4m.dx.tcontrol.common.service.AgentInfoVO;
 import com.k4m.dx.tcontrol.common.service.CmmnServerInfoService;
 import com.k4m.dx.tcontrol.common.service.CmmnVO;
 import com.k4m.dx.tcontrol.common.service.HistoryVO;
+import com.k4m.dx.tcontrol.functions.transfer.service.TransferService;
+import com.k4m.dx.tcontrol.functions.transfer.service.TransferVO;
 
 /**
  * [DB TREE] 컨트롤러 클래스를 정의한다.
@@ -68,6 +71,9 @@ public class TreeController {
 
 	@Autowired
 	private CmmnServerInfoService cmmnServerInfoService;
+	
+	@Autowired
+	private TransferService transferService;
 
 	private List<Map<String, Object>> menuAut;
 
@@ -414,8 +420,55 @@ public class TreeController {
 				response.sendRedirect("/autError.do");
 				return false;
 			}*/
-			
 			int db_svr_id = Integer.parseInt(request.getParameter("db_svr_id"));
+			
+			/*전송대상 topic 공백으로 업데이트하기! */
+			JSONObject serverObj = new JSONObject();
+			ClientInfoCmmn cic = new ClientInfoCmmn();
+			List<Map<String, Object>> connectInfo = null;
+			JSONObject result = new JSONObject();
+			JSONObject param = new JSONObject();
+			String topic = "";
+			
+			HttpSession session = request.getSession();
+			String usr_id = (String) session.getAttribute("usr_id");
+			TransferVO tengInfo = (TransferVO) transferService.selectTengInfo(usr_id);
+			if(tengInfo!=null){
+				String IP = tengInfo.getTeng_ip();
+				int PORT = tengInfo.getTeng_port();
+				connectInfo= transferService.selectConnectorInfo(db_svr_id);
+				if(connectInfo.size()!=0){
+					for(int i=0; i<connectInfo.size(); i++){
+						String trf_trg_cnn_nm = (String) connectInfo.get(i).get("trf_trg_cnn_nm");
+						String strServerIp = (String) connectInfo.get(i).get("cnr_ipadr");
+						String strServerPort = String.valueOf(connectInfo.get(i).get("cnr_portno"));
+						serverObj.put(ClientProtocolID.SERVER_IP, strServerIp);
+						serverObj.put(ClientProtocolID.SERVER_PORT, strServerPort);
+						result = cic.kafakConnect_select(serverObj, trf_trg_cnn_nm, IP, PORT);
+						for (int j = 0; j < result.size(); j++) {
+							JSONArray data = (JSONArray) result.get("data");
+							for (int m = 0; m < data.size(); m++) {
+								JSONObject jsonObj = (JSONObject) data.get(m);
+								JSONObject hp = (JSONObject) jsonObj.get("hp");
+
+								param.put("strName", (String) hp.get("name"));
+								param.put("strConnector_class", (String) hp.get("connector.class"));
+								param.put("strTasks_max", (String) hp.get("tasks.max"));
+								param.put("strTopics", topic);
+								param.put("strHdfs_url", (String) hp.get("hdfs.url"));
+								param.put("strHadoop_conf_dir", (String) hp.get("hadoop.conf.dir"));
+								param.put("strHadoop_home", (String) hp.get("hadoop.home"));
+								param.put("strFlush_size", (String) hp.get("flush.size"));
+								param.put("strRotate_interval_ms", (String) hp.get("rotate.interval.ms"));
+							}
+						}
+						/* kafakConnect_update topic 업데이트 */
+						cic.kafakConnect_update(serverObj, param, IP, PORT);
+					}
+					
+				}
+				
+			}
 			
 			dbServerManagerService.dbSvrDelete(db_svr_id);
 

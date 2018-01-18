@@ -73,12 +73,14 @@
 					rotate_interval_ms : $("#rotate_interval_ms").val(),
 				},
 				success : function(result) {
-					if(result){
+					if(result=="true"){
 						alert('<spring:message code="message.msg57" />');
 						window.close();
 						opener.fn_select();
-					}else{
+					}else if(result=="msg115"){
 						alert('<spring:message code="message.msg115" />');
+					}else if(result=="msg127"){
+						alert('<spring:message code="message.msg127" />');
 					}
 				},
 				beforeSend: function(xhr) {
@@ -118,14 +120,17 @@
 					flush_size : $("#flush_size").val(),
 					rotate_interval_ms : $("#rotate_interval_ms").val(),
 				},
-				success : function(result) {
-					if(result){
-						alert('<spring:message code="message.msg07" />');
+				success : function(result) {			
+					if(result=="true"){
+						alert('<spring:message code="message.msg84" />');
 						window.close();
 						opener.fn_select();
-					}else{
+					}else if(result=="msg115"){
 						alert('<spring:message code="message.msg115" />');
+					}else if(result=="msg127"){
+						alert('<spring:message code="message.msg127" />');
 					}
+					
 				},
 				beforeSend: function(xhr) {
 			        xhr.setRequestHeader("AJAX", true);
