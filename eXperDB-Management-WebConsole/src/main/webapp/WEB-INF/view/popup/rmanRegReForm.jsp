@@ -380,7 +380,7 @@ function checkFolder(keyType){
 						<tbody>
 							<tr>
 								<th scope="row" class="ico_t1"><spring:message code="common.work_name" /></th>
-								<td><input type="text" class="txt" name="wrk_nm" id="wrk_nm" maxlength=20 value="<c:out value="${workInfo[0].wrk_nm}"/>"/></td>
+								<td><input type="text" class="txt" name="wrk_nm" id="wrk_nm" maxlength=20 value="<c:out value="${workInfo[0].wrk_nm}"/>" readonly="readonly"/></td>
 							</tr>
 							<tr>
 								<th scope="row" class="ico_t1"><spring:message code="common.work_description" /></th>

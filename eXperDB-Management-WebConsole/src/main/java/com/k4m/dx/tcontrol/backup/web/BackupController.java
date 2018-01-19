@@ -75,6 +75,9 @@ public class BackupController {
 	@Autowired
 	private PlatformTransactionManager txManager;
 	
+	
+	
+	
 	/**
 	 * Work List View page
 	 * @param WorkVO
@@ -359,15 +362,17 @@ public class BackupController {
 	@RequestMapping(value = "/popup/workRmanWrite.do")
 	@ResponseBody
 	public String workRmanWrite(@ModelAttribute("historyVO") HistoryVO historyVO, @ModelAttribute("dbServerVO") DbServerVO dbServerVO, @ModelAttribute("workVO") WorkVO workVO, HttpServletResponse response, HttpServletRequest request) throws IOException {
-		Map<String, Object> initResult =new HashMap<String, Object>();
-		AgentInfoVO vo = new AgentInfoVO();
-		List<DbServerVO> ipResult = null;		
-		
-		String bck_pth = request.getParameter("bck_pth");
-		int db_svr_id = Integer.parseInt(request.getParameter("db_svr_id"));
-		
-		
+				
 		try{
+			Map<String, Object> initResult =new HashMap<String, Object>();
+			AgentInfoVO vo = new AgentInfoVO();
+			List<DbServerVO> ipResult = null;		
+			
+			String bck_pth = request.getParameter("bck_pth");
+			int db_svr_id = Integer.parseInt(request.getParameter("db_svr_id"));
+			
+			
+			// 백업 WORK등록시 백업 경로 INIT
 			ipResult = (List<DbServerVO>) cmmnServerInfoService.selectAllIpadrList(db_svr_id);
 			
 			for(int i=0; i<ipResult.size(); i++){
