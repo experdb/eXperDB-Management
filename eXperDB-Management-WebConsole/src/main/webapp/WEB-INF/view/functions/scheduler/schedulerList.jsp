@@ -23,7 +23,9 @@ function fn_init(){
 	deferRender : true,
 	bSort: false,
 	columns : [
+		{ data : "rownum", defaultContent : "", targets : 0, orderable : false, checkboxes : {'selectRow' : true}}, 
 		{data : "rownum", className : "dt-center", defaultContent : ""}, 
+		{data : "ipadr", className : "dt-center", defaultContent : ""},
 		{data : "scd_nm", className : "dt-left", defaultContent : ""
 			,render: function (data, type, full) {
 				  return '<span onClick=javascript:fn_scdLayer("'+full.scd_id+'"); class="bold">' + full.scd_nm + '</span>';
@@ -96,7 +98,7 @@ function fn_init(){
 		{data : "lst_mdfr_id", className : "dt-center", defaultContent : ""},
 		{data : "lst_mdf_dtm", className : "dt-center", defaultContent : ""},
 		{data : "scd_id", className : "dt-center", defaultContent : "", visible: false },
-	]
+	],'select': {'style': 'multi'}
 	});
 	
  	$('#scheduleList tbody').on('click','#scheduleStop', function () {
@@ -220,21 +222,22 @@ function fn_init(){
  			window.open(popUrl,"",popOption);
     	}
 	});	
-	
-	  table.tables().header().to$().find('th:eq(0)').css('min-width', '30px');
-	  table.tables().header().to$().find('th:eq(1)').css('min-width', '200px');
-	  table.tables().header().to$().find('th:eq(2)').css('min-width', '300px');
-	  table.tables().header().to$().find('th:eq(3)').css('min-width', '70px');
-	  table.tables().header().to$().find('th:eq(4)').css('min-width', '130px');
-	  table.tables().header().to$().find('th:eq(5)').css('min-width', '130px');
-	  table.tables().header().to$().find('th:eq(6)').css('min-width', '70px');  
+	  table.tables().header().to$().find('th:eq(0)').css('min-width', '10px');
+	  table.tables().header().to$().find('th:eq(1)').css('min-width', '30px');
+	  table.tables().header().to$().find('th:eq(2)').css('min-width', '100px');
+	  table.tables().header().to$().find('th:eq(3)').css('min-width', '200px');
+	  table.tables().header().to$().find('th:eq(4)').css('min-width', '300px');
+	  table.tables().header().to$().find('th:eq(5)').css('min-width', '70px');
+	  table.tables().header().to$().find('th:eq(6)').css('min-width', '130px');
 	  table.tables().header().to$().find('th:eq(7)').css('min-width', '130px');
-	  table.tables().header().to$().find('th:eq(8)').css('min-width', '100px');
-	  table.tables().header().to$().find('th:eq(9)').css('min-width', '65px');
-	  table.tables().header().to$().find('th:eq(10)').css('min-width', '130px');
-	  table.tables().header().to$().find('th:eq(11)').css('min-width', '65px'); 
-	  table.tables().header().to$().find('th:eq(12)').css('min-width', '130px'); 
-	  table.tables().header().to$().find('th:eq(13)').css('min-width', '0px');
+	  table.tables().header().to$().find('th:eq(8)').css('min-width', '70px');  
+	  table.tables().header().to$().find('th:eq(9)').css('min-width', '130px');
+	  table.tables().header().to$().find('th:eq(10)').css('min-width', '100px');
+	  table.tables().header().to$().find('th:eq(11)').css('min-width', '65px');
+	  table.tables().header().to$().find('th:eq(12)').css('min-width', '130px');
+	  table.tables().header().to$().find('th:eq(13)').css('min-width', '65px'); 
+	  table.tables().header().to$().find('th:eq(14)').css('min-width', '130px'); 
+	  table.tables().header().to$().find('th:eq(15)').css('min-width', '0px');
     $(window).trigger('resize'); 
 }
 
@@ -287,6 +290,7 @@ $(window.document).ready(function() {
   	$.ajax({
 		url : "/selectScheduleList.do",
 		data : {
+			wrk_nm : $("#wrk_nm").val(),
 			scd_cndt : $("#scd_cndt").val(),
 			scd_nm : $("#scd_nm").val(),
 			frst_regr_id : $("#frst_regr_id").val(),
@@ -355,6 +359,7 @@ function fn_selectScheduleList(){
   	$.ajax({
 		url : "/selectScheduleList.do",
 		data : {
+			wrk_nm : $("#wrk_nm").val(),
 			scd_cndt : $("#scd_cndt").val(),
 			scd_nm : $("#scd_nm").val(),
 			frst_regr_id : $("#frst_regr_id").val(),
@@ -556,7 +561,7 @@ function fn_makeToMin(){
 <div id="contents">
 	<div class="contents_wrap">
 		<div class="contents_tit">
-			<h4><spring:message code="menu.schedule_run_stop" /><a href="#n"><img src="../images/ico_tit.png" class="btn_info"/></a></h4>
+			<h4>스케줄관리<a href="#n"><img src="../images/ico_tit.png" class="btn_info"/></a></h4>
 				<div class="infobox"> 
 					<ul>
 						<li><spring:message code="help.schedule_run_stop_01" /></li>
@@ -575,9 +580,9 @@ function fn_makeToMin(){
 			<div class="cmm_grp">
 				<div class="btn_type_01">
 					<span class="btn" id="read_button"><button onClick="fn_selectScheduleList();"><spring:message code="common.search" /></button></span>
-					<!-- <span class="btn" id="int_button"><a href="/insertScheduleView.do"><button>등록</button></a></span>
+					<span class="btn" id="int_button"><a href="/insertScheduleView.do"><button>등록</button></a></span>
 					<span class="btn" id="mdf_button"><button onClick="fn_modifyScheduleListView();">수정</button></span>
-					<span class="btn" id="del_button"><button onClick="fn_deleteScheduleList();">삭제</button></span> -->
+					<span class="btn" id="del_button"><button onClick="fn_deleteScheduleList();">삭제</button></span>
 				</div>
 				<div class="sch_form">
 					<table class="write">
@@ -618,6 +623,10 @@ function fn_makeToMin(){
 									</td>
 								</tr>
 								<tr>
+									<th scope="row" class="t9 line"><spring:message code="common.work_name" /></th>
+									<td ><input type="text" class="txt t2" id="wrk_nm" name="wrk_nm" /></td>
+								</tr>
+								<tr>
 									<th scope="row" class="t9 line" ><spring:message code="common.run_status" /></th>
 									<td>
 									<select class="select t8" name="scd_cndt" id="scd_cndt">
@@ -640,14 +649,16 @@ function fn_makeToMin(){
 				<caption>스케줄 리스트</caption>
 					<thead>
 						<tr>
+							<th width="10"></th>
 							<th width="30"><spring:message code="common.no" /></th>
+							<th width="100" class="dt-center"><spring:message code="data_transfer.ip" /></th>
 							<th width="200" class="dt-center"><spring:message code="schedule.schedule_name" /></th>
 							<th width="300" class="dt-center"><spring:message code="schedule.scheduleExp"/></th>
 							<th width="70"><spring:message code="schedule.work_count" /></th>
 							<th width="130"><spring:message code="schedule.pre_run_time" /></th>
 							<th width="130"><spring:message code="schedule.next_run_time" /></th>
 							<th width="70"><spring:message code="common.run_status" /></th>
-							<th width="130">실행/중지</th>
+							<th width="130">활성/비활성</th>
 							<th width="100"><spring:message code="data_transfer.detail_search" /></th>
 							<th width="65"><spring:message code="common.register" /></th>
 							<th width="130"><spring:message code="common.regist_datetime" /></th>

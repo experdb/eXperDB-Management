@@ -409,7 +409,7 @@ function fn_modifyScheduleListView(){
 							<th width="100"><spring:message code="schedule.pre_run_time" /></th>
 							<th width="100"><spring:message code="schedule.next_run_time" /></th>
 							<th width="70"><spring:message code="common.run_status" /></th>
-							<th width="100">실행/중지</th>
+							<th width="100">활성/비활성</th>
 							<th width="100"><spring:message code="data_transfer.detail_search" /></th>
 							<th width="50"><spring:message code="common.register" /></th>
 							<th width="100"><spring:message code="common.regist_datetime" /></th>

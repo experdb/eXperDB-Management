@@ -219,7 +219,7 @@ function fn_cookie(url) {
 							<li><a href="#n" id="MN0001"><spring:message code="menu.schedule_information" /></a>
 								<ul class="depth_3">
 									<li><a href="/insertScheduleView.do" onClick="fn_cookie(null)" id="MN000101"><spring:message code="menu.schedule_registration" /></a></li>
-									<li><a href="/selectScheduleListView.do" onClick="fn_cookie(null)" id="MN000102"><spring:message code="menu.schedule_run_stop" /></a></li>
+									<li><a href="/selectScheduleListView.do" onClick="fn_cookie(null)" id="MN000102">스케줄관리</a></li>
 									<li><a href="/selectScheduleHistoryView.do" onClick="fn_cookie(null)" id="MN000103"><spring:message code="menu.shedule_execution_history" /></a></li>
 								</ul>
 							</li>

@@ -14,25 +14,8 @@ public class SessionCheckInterceptor extends HandlerInterceptorAdapter{
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
         try {
-        	 //System.out.println("Interceptor{preHandle}............................................ start");
-    		Cookie[] cookies = request.getCookies();
-    		for (int i = 0; i < cookies.length; i++) {			
-    			if(cookies[i].getName().equals("r_login_id")){
-	    			request.getSession().setAttribute("usr_id", cookies[i].getValue());
-	    			cookies[i].setMaxAge(0);                 //쿠키 유지기간을 0으로함
-	    			cookies[i].setPath("/");                    //쿠키 접근 경로 지정
-	    			response.addCookie(cookies[i]);      //쿠키저장
-    			}else if(cookies[i].getName().equals("r_logout_id")){
-    				HttpSession session = request.getSession();
-    				session.invalidate();
-	    			cookies[i].setMaxAge(0);                 //쿠키 유지기간을 0으로함
-	    			cookies[i].setPath("/");                    //쿠키 접근 경로 지정
-	    			response.addCookie(cookies[i]);      //쿠키저장
-    			}
-    		}
-    		
             if(request.getSession().getAttribute("usr_id") == null){
-                    response.sendRedirect("/");
+                    response.sendRedirect("/login.do");
                     return false;
             }
         } catch (Exception e) {

@@ -25,6 +25,16 @@ public class ScheduleVO {
 	private String status;
 	private String nxt_exe_from;
 	private String nxt_exe_to;
+	private String wrk_nm;
+	
+	
+	public String getWrk_nm() {
+		return wrk_nm;
+	}
+
+	public void setWrk_nm(String wrk_nm) {
+		this.wrk_nm = wrk_nm;
+	}
 
 	public int getRownum() {
 		return rownum;
