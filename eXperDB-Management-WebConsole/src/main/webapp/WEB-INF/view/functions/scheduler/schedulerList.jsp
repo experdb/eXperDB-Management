@@ -23,8 +23,7 @@ function fn_init(){
 	deferRender : true,
 	bSort: false,
 	columns : [
-		{data : "rownum", defaultContent : "", targets : 0, orderable : false, checkboxes : {'selectRow' : true}}, 
-		{data : "idx", className : "dt-center", defaultContent : ""}, 
+		{data : "rownum", className : "dt-center", defaultContent : ""}, 
 		{data : "scd_nm", className : "dt-left", defaultContent : ""
 			,render: function (data, type, full) {
 				  return '<span onClick=javascript:fn_scdLayer("'+full.scd_id+'"); class="bold">' + full.scd_nm + '</span>';
@@ -81,13 +80,23 @@ function fn_init(){
 				}
 			},
 			className : "dt-center", defaultContent : "" 	
-		},		
+		},
+		{
+			data : "",
+			render : function(data, type, full, meta) {
+				var html = "<span class='btn btnC_01 btnF_02'><button id='detail'><spring:message code='data_transfer.detail_search' /> </button></span>";
+				return html;
+			},
+			className : "dt-center",
+			defaultContent : "",
+			orderable : false
+		},
 		{data : "frst_regr_id", className : "dt-center", defaultContent : ""},
 		{data : "frst_reg_dtm", className : "dt-center", defaultContent : ""},
 		{data : "lst_mdfr_id", className : "dt-center", defaultContent : ""},
 		{data : "lst_mdf_dtm", className : "dt-center", defaultContent : ""},
 		{data : "scd_id", className : "dt-center", defaultContent : "", visible: false },
-	],'select': {'style': 'multi'}
+	]
 	});
 	
  	$('#scheduleList tbody').on('click','#scheduleStop', function () {
@@ -192,15 +201,35 @@ function fn_init(){
 	});		 
 	
 	
-	  table.tables().header().to$().find('th:eq(0)').css('min-width', '10px');
-	  table.tables().header().to$().find('th:eq(1)').css('min-width', '30px');
-	  table.tables().header().to$().find('th:eq(2)').css('min-width', '200px');
-	  table.tables().header().to$().find('th:eq(3)').css('min-width', '300px');
-	  table.tables().header().to$().find('th:eq(4)').css('min-width', '70px');
+	//상세조회 클릭시
+	$('#scheduleList tbody').on('click','#detail',function() {
+		var $this = $(this);
+    	var $row = $this.parent().parent().parent();
+    	$row.addClass('detail');
+    	var datas = table.rows('.detail').data();
+    	if(datas.length==1) {
+    		var row = datas[0];
+	    	$row.removeClass('detail');
+ 			var scd_id  = row.scd_id;
+ 			var popUrl = "/scheduleWrkListVeiw.do?scd_id="+scd_id; // 서버 url 팝업경로
+ 			var width = 1100;
+ 			var height = 550;
+ 			var left = (window.screen.width / 2) - (width / 2);
+ 			var top = (window.screen.height /2) - (height / 2);
+ 			var popOption = "width="+width+", height="+height+", top="+top+", left="+left+", resizable=no, scrollbars=yes, status=no, toolbar=no, titlebar=yes, location=no,";
+ 			window.open(popUrl,"",popOption);
+    	}
+	});	
+	
+	  table.tables().header().to$().find('th:eq(0)').css('min-width', '30px');
+	  table.tables().header().to$().find('th:eq(1)').css('min-width', '200px');
+	  table.tables().header().to$().find('th:eq(2)').css('min-width', '300px');
+	  table.tables().header().to$().find('th:eq(3)').css('min-width', '70px');
+	  table.tables().header().to$().find('th:eq(4)').css('min-width', '130px');
 	  table.tables().header().to$().find('th:eq(5)').css('min-width', '130px');
-	  table.tables().header().to$().find('th:eq(6)').css('min-width', '130px');
-	  table.tables().header().to$().find('th:eq(7)').css('min-width', '70px');  
-	  table.tables().header().to$().find('th:eq(8)').css('min-width', '130px');
+	  table.tables().header().to$().find('th:eq(6)').css('min-width', '70px');  
+	  table.tables().header().to$().find('th:eq(7)').css('min-width', '130px');
+	  table.tables().header().to$().find('th:eq(8)').css('min-width', '100px');
 	  table.tables().header().to$().find('th:eq(9)').css('min-width', '65px');
 	  table.tables().header().to$().find('th:eq(10)').css('min-width', '130px');
 	  table.tables().header().to$().find('th:eq(11)').css('min-width', '65px'); 
@@ -607,11 +636,10 @@ function fn_makeToMin(){
 				</div>
 				<div class="overflow_area">
 				
-				<table id="scheduleList" class="cell-border display" >
+				<table id="scheduleList" class="cell-border display" cellspacing="0" width="100%">
 				<caption>스케줄 리스트</caption>
 					<thead>
 						<tr>
-							<th width="10"></th>
 							<th width="30"><spring:message code="common.no" /></th>
 							<th width="200" class="dt-center"><spring:message code="schedule.schedule_name" /></th>
 							<th width="300" class="dt-center"><spring:message code="schedule.scheduleExp"/></th>
@@ -620,6 +648,7 @@ function fn_makeToMin(){
 							<th width="130"><spring:message code="schedule.next_run_time" /></th>
 							<th width="70"><spring:message code="common.run_status" /></th>
 							<th width="130">실행/중지</th>
+							<th width="100"><spring:message code="data_transfer.detail_search" /></th>
 							<th width="65"><spring:message code="common.register" /></th>
 							<th width="130"><spring:message code="common.regist_datetime" /></th>
 							<th width="65"><spring:message code="common.modifier" /></th>

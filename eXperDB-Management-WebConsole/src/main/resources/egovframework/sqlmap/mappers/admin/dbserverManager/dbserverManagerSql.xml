@@ -451,4 +451,269 @@
 			, clock_timestamp()	
 		)
 	</insert>    	
+	
+	
+	<select id="connectorExeCheck"  resultType="int">
+		/**
+	 	*  Query ID : connectorExeCheck
+	 	* Description : 커넥터 실행중 체크
+	 	* Author : 변승우
+	 	**/
+		SELECT 
+			COUNT(*)
+		FROM T_DBSVR_I A, T_DB_I B, T_TRFTRGCNG_I C, T_TRFTRGMPP_R D
+		where 1 = 1
+		AND A.DB_SVR_ID = #{db_svr_id}
+		AND A.DB_SVR_ID = B.DB_SVR_ID
+		AND B.DB_ID = D.DB_ID
+		AND C.TRF_TRG_ID=D.TRF_TRG_ID
+		AND C.TRF_TRG_ID=D.TRF_TRG_ID
+		AND C.BW_PID = 1
+	</select>
+	
+	<select id="scheduleExeCheck"  resultType="int">
+		/**
+	 	*  Query ID : connectorExeCheck
+	 	* Description : 스케줄 실행중 체크
+	 	* Author : 변승우
+	 	**/	
+	     SELECT 
+	     		COUNT(*)
+	     FROM T_DBSVR_I A, T_BCK_WRKCNG_I B, T_SCD_M C, T_SCD_D D
+	     WHERE 1 = 1
+	     AND A.DB_SVR_ID = B.DB_SVR_ID
+	     AND B.WRK_ID = D.WRK_ID
+	     AND C.SCD_ID = D.SCD_ID
+	     AND C.SCD_CNDT = 'TC001802'		
+	</select>
+	
+	
+	<delete id="deleteConnMappingTable" parameterType="int">
+		/**
+	 	*  Query ID : deleteConnMappingTable
+	 	* Description : 전송매핑테이블내역 삭제
+	 	* Author : 변승우
+	 	**/	
+	 	DELETE 
+	 				FROM T_TRFMPPTB_L
+		WHERE TRF_TRG_MPP_ID IN (SELECT 
+					                                C.TRF_TB_ID
+					                          FROM T_DB_I A, T_TRFTRGMPP_R B, T_TRFMPPTB_L C
+					                          WHERE A.DB_SVR_ID = #{db_svr_id}
+					                          AND A.DB_ID = B.DB_ID
+					                          AND B.TRF_TRG_MPP_ID = C.TRF_TRG_MPP_ID)	 	
+	</delete>
+	
+	<delete id="deleteConnMappingRelation" parameterType="int">
+		/**
+	 	*  Query ID : deleteConnMappingRelation
+	 	* Description : 전송대상매핑관계 삭제
+	 	* Author : 변승우
+	 	**/		
+	 	DELETE 
+	 				FROM T_TRFTRGMPP_R
+		WHERE TRF_TRG_MPP_ID IN (SELECT 
+					                                B.TRF_TRG_MPP_ID
+					                          FROM T_DB_I A, T_TRFTRGMPP_R B
+					                          WHERE A.DB_SVR_ID = #{db_svr_id}
+					                          AND A.DB_ID = B.DB_ID)
+	</delete>
+
+
+	<delete id="deleteServerAccessControlHistory" parameterType="int">
+		/**
+	 	*  Query ID : deleteServerAccessControlHistory
+	 	* Description : 서버접근제어이력정보 삭제
+	 	* Author : 변승우
+	 	**/	
+	 	DELETE 
+	 				FROM T_SVRACSCNTR_HIS_I
+		WHERE DB_SVR_ID = #{db_svr_id}
+	</delete>
+	
+	
+	<delete id="deleteServerAccessControlInfo" parameterType="int">
+		/**
+	 	*  Query ID : deleteServerAccessControlInfo
+	 	* Description : 서버접근제어정보 삭제
+	 	* Author : 변승우
+	 	**/	
+	 	DELETE 
+	 				FROM T_SVRACSCNTR_I
+		WHERE DB_SVR_ID = #{db_svr_id}
+	</delete>
+	
+	
+     <select id="selectBckWrkId" resultType="HashMap" parameterType="integer">
+		/**
+	 	*  Query ID : selectBckWrkId
+	 	* Description : bck_wrk_id 조회
+	 	* Author : 변승우
+	 	**/ 	
+	 	
+            SELECT
+            		BCK_WRK_ID
+            FROM T_BCK_WRKCNG_I
+            WHERE 1 = 1
+            AND DB_SVR_ID = #{db_svr_id}
+     </select>		
+     
+     
+     <delete id="deleteBckObjHistory" parameterType="int">
+		/**
+	 	*  Query ID : deleteBckObjHistory
+	 	* Description : 백업오브젝트내역 삭제
+	 	* Author : 변승우
+	 	**/	
+	 	DELETE 
+	 				FROM T_BCKOBJ_L
+		WHERE BCK_WRK_ID IN
+      <foreach item="item" index="index" collection="bck_wrk_id" open="(" separator="," close=")"> 
+				 #{item}::numeric
+	   </foreach>
+	</delete>
+	
+	<delete id="deleteBckOptInfo" parameterType="int">
+		/**
+	 	*  Query ID : deleteBckOptInfo
+	 	* Description : 백업옵션정보 삭제
+	 	* Author : 변승우
+	 	**/	
+	 	DELETE 
+	 				FROM T_BCKOPT_I
+		WHERE BCK_WRK_ID IN
+      <foreach item="item" index="index" collection="bck_wrk_id" open="(" separator="," close=")"> 
+				 #{item}::numeric
+	   </foreach>
+	</delete>
+	
+	
+	 <select id="selectScheduleId" resultType="HashMap" parameterType="integer">
+		/**
+	 	*  Query ID : selectScheduleId
+	 	* Description : scd_id 조회
+	 	* Author : 변승우
+	 	**/ 	
+			SELECT DISTINCT
+					SCD_ID
+			FROM T_BCK_WRKCNG_I A, T_SCD_D B
+			WHERE A.DB_SVR_ID = #{db_svr_id}
+			AND A.WRK_ID = B.WRK_ID
+			ORDER BY 1 	
+     </select>	
+
+     
+     <delete id="deleteWrkexe" parameterType="int">
+		/**
+	 	*  Query ID : deleteWrkexe
+	 	* Description : 작업실행로그
+	 	* Author : 변승우
+	 	**/	
+	 	DELETE 
+	 				FROM T_WRKEXE_G
+		WHERE SCD_ID IN
+      <foreach item="item" index="index" collection="scd_id" open="(" separator="," close=")"> 
+				 #{item}::numeric
+	   </foreach>
+	</delete>
+	
+	
+	<delete id="deleteScdD" parameterType="int">
+		/**
+	 	*  Query ID : deleteScdD
+	 	* Description : 스케줄 디테일 삭제
+	 	* Author : 변승우
+	 	**/	
+	 	DELETE 
+	 				FROM T_SCD_D
+		WHERE SCD_ID IN
+      <foreach item="item" index="index" collection="scd_id" open="(" separator="," close=")"> 
+				 #{item}::numeric
+	   </foreach>
+	</delete>
+	
+	
+	<delete id="deleteScdM" parameterType="int">
+		/**
+	 	*  Query ID : deleteScdM
+	 	* Description : 스케줄기본 삭제
+	 	* Author : 변승우
+	 	**/	
+	 	DELETE 
+	 				FROM T_SCD_M
+		WHERE SCD_ID IN
+      <foreach item="item" index="index" collection="scd_id" open="(" separator="," close=")"> 
+				 #{item}::numeric
+	   </foreach>
+	</delete>
+	
+	
+	<delete id="deleteBckWrkcng" parameterType="int">
+		/**
+	 	*  Query ID : deleteBckWrkcng
+	 	* Description : 백업작업설정정보 삭제
+	 	* Author : 변승우
+	 	**/	
+	 	DELETE 
+	 				FROM T_BCK_WRKCNG_I
+		WHERE DB_SVR_ID = #{db_svr_id}
+	</delete>
+	
+
+	<delete id="deleteUsrDbAut" parameterType="int">
+		/**
+	 	*  Query ID : deleteUsrDbAut
+	 	* Description : 사용자DB권한
+	 	* Author : 변승우
+	 	**/	
+	 	DELETE 
+	 				FROM T_USRDBAUT_I
+		WHERE DB_SVR_ID = #{db_svr_id}
+	</delete>
+	
+		<delete id="deleteDbInfo" parameterType="int">
+		/**
+	 	*  Query ID : deleteDbInfo
+	 	* Description : DB정보 삭제
+	 	* Author : 변승우
+	 	**/	
+	 	DELETE 
+	 				FROM T_DB_I
+		WHERE DB_SVR_ID = #{db_svr_id}
+	</delete>
+	
+	
+	<delete id="deleteUsrDbSvrAut" parameterType="int">
+		/**
+	 	*  Query ID : deleteUsrDbSvrAut
+	 	* Description : 사용자DB서버권한정보 삭제
+	 	* Author : 변승우
+	 	**/	
+	 	DELETE 
+	 				FROM T_USRDBSVRAUT_I
+		WHERE DB_SVR_ID = #{db_svr_id}
+	</delete>
+	
+	
+	<delete id="deleteDbSvrIpAdr" parameterType="int">
+		/**
+	 	*  Query ID : deleteDbSvrIpAdr
+	 	* Description : DB아이피주소정보 삭제
+	 	* Author : 변승우
+	 	**/	
+	 	DELETE 
+	 				FROM T_DBSVRIPADR_I
+		WHERE DB_SVR_ID = #{db_svr_id}
+	</delete>
+	
+	<delete id="deleteDbServer" parameterType="int">
+		/**
+	 	*  Query ID : deleteDbServer
+	 	* Description : DB서버 삭제
+	 	* Author : 변승우
+	 	**/	
+	 	DELETE 
+	 				FROM T_DBSVR_IS
+		WHERE DB_SVR_ID = #{db_svr_id}
+	</delete>
 </mapper>

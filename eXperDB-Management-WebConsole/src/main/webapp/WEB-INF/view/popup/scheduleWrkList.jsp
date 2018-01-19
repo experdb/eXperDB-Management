@@ -71,7 +71,7 @@ function fn_init(){
         		return onError;	
         	}
           }
-	],'select': {'style': 'multi'}
+	]
 });
 
     table.on( 'order.dt search.dt', function () {

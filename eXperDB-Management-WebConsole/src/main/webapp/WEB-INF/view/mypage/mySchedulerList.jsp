@@ -62,7 +62,17 @@ function fn_init(){
 				return data;
 			},
 			className : "dt-center", defaultContent : "" 	
-		},		
+		},	
+		{
+			data : "",
+			render : function(data, type, full, meta) {
+				var html = "<span class='btn btnC_01 btnF_02'><button id='detail'><spring:message code='data_transfer.detail_search' /> </button></span>";
+				return html;
+			},
+			className : "dt-center",
+			defaultContent : "",
+			orderable : false
+		},
 		{data : "frst_regr_id", className : "dt-center", defaultContent : ""},
 		{data : "frst_reg_dtm", className : "dt-center", defaultContent : ""},
 		{data : "lst_mdfr_id", className : "dt-center", defaultContent : ""},
@@ -80,11 +90,12 @@ function fn_init(){
 	table.tables().header().to$().find('th:eq(6)').css('min-width', '100px');
 	table.tables().header().to$().find('th:eq(7)').css('min-width', '70px');
 	table.tables().header().to$().find('th:eq(8)').css('min-width', '100px');
-	table.tables().header().to$().find('th:eq(9)').css('min-width', '50px');
-	table.tables().header().to$().find('th:eq(10)').css('min-width', '100px');
-	table.tables().header().to$().find('th:eq(11)').css('min-width', '50px');
-	table.tables().header().to$().find('th:eq(12)').css('min-width', '100px');
-	table.tables().header().to$().find('th:eq(13)').css('min-width', '0px');
+	table.tables().header().to$().find('th:eq(9)').css('min-width', '100px');
+	table.tables().header().to$().find('th:eq(10)').css('min-width', '50px');
+	table.tables().header().to$().find('th:eq(11)').css('min-width', '100px');
+	table.tables().header().to$().find('th:eq(12)').css('min-width', '50px');
+	table.tables().header().to$().find('th:eq(13)').css('min-width', '100px');
+	table.tables().header().to$().find('th:eq(14)').css('min-width', '0px');
     $(window).trigger('resize'); 
     
     
@@ -186,6 +197,26 @@ function fn_init(){
 				
 		window.open(popUrl,"",popOption);
 	});		 
+	
+	//상세조회 클릭시
+	$('#scheduleList tbody').on('click','#detail',function() {
+		var $this = $(this);
+	   	var $row = $this.parent().parent().parent();
+	   	$row.addClass('detail');
+	   	var datas = table.rows('.detail').data();
+	   	if(datas.length==1) {
+	   		var row = datas[0];
+	    	$row.removeClass('detail');
+	 		var scd_id  = row.scd_id;
+	 		var popUrl = "/scheduleWrkListVeiw.do?scd_id="+scd_id; // 서버 url 팝업경로
+	 		var width = 1100;
+	 		var height = 550;
+	 		var left = (window.screen.width / 2) - (width / 2);
+	 		var top = (window.screen.height /2) - (height / 2);
+	 		var popOption = "width="+width+", height="+height+", top="+top+", left="+left+", resizable=no, scrollbars=yes, status=no, toolbar=no, titlebar=yes, location=no,";
+	 		window.open(popUrl,"",popOption);
+	   	}
+	});	
 	
 }
 
@@ -379,6 +410,7 @@ function fn_modifyScheduleListView(){
 							<th width="100"><spring:message code="schedule.next_run_time" /></th>
 							<th width="70"><spring:message code="common.run_status" /></th>
 							<th width="100">실행/중지</th>
+							<th width="100"><spring:message code="data_transfer.detail_search" /></th>
 							<th width="50"><spring:message code="common.register" /></th>
 							<th width="100"><spring:message code="common.regist_datetime" /></th>
 							<th width="50"><spring:message code="common.modifier" /></th>

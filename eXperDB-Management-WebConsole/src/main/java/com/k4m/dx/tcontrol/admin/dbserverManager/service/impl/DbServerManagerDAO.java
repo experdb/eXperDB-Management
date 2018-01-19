@@ -1,6 +1,7 @@
 package com.k4m.dx.tcontrol.admin.dbserverManager.service.impl;
 
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -179,4 +180,147 @@ public class DbServerManagerDAO extends EgovAbstractMapper{
 		insert("dbserverManagerSql.insertIpadr", ipadrVO);		
 	}
 
+
+	public Map exeCheck(int db_svr_id) {
+		Map mp = new HashMap();
+		int connectorExe = (int) getSqlSession().selectOne("dbserverManagerSql.connectorExeCheck", db_svr_id);
+		int scheduleExe = (int) getSqlSession().selectOne("dbserverManagerSql.scheduleExeCheck", db_svr_id);
+		
+		mp.put("connChk", connectorExe);
+		mp.put("scheduleChk", scheduleExe);
+		
+		return mp;
+	}
+
+
+	/*
+	 * DB서버 삭제
+	 * 1. 전송매핑 삭제 ---------------------------------
+	 * 1-1. 전송매핑 테이블 내역 삭제
+	 * 1-2. 전송대상매핑관계 삭제
+	 * ---------------------------------------------------
+	 * 
+	 * 2. 서버접근제어 삭제 ----------------------------
+	 * 2-1. 서버접근제어이력정보 삭제
+	 * 2-2. 서버접근제어정보 삭제
+	 * ---------------------------------------------------
+	 * 
+	 * 3. 백업작업삭제 ----------------------------------
+	 * 3-1 백업작업ID 조회
+	 * 3-2. 백업오브젝트내역 삭제
+	 * 3-3. 백업옵션정보 삭제
+	 * ---------------------------------------------------
+	 * 
+	 * 4. 스케줄 삭제 -----------------------------------
+	 * 4-1 스케줄ID 조회
+	 * 4-2 작업실행로그 삭제
+	 * 4-3 스케줄상세 삭제
+	 * 4-4 스케줄기본 삭제
+	 * ---------------------------------------------------
+	 * 
+	 * 5. 백업작업설정정보 삭제 ------------------------
+	 * 
+	 * 6. 사용자DB권한정보 삭제 -----------------------
+	 * 
+	 * 7. DB정보 삭제 ----------------------------------
+	 * 
+	 * 8. 사용자DB서버권한정보 삭제 ------------------
+	 * 
+	 * 9. DB서버아이피주소정보 삭제 ------------------
+	 * 
+	 * 10. DB서버정보 삭제 ----------------------------
+	 */
+	
+	// 1. 전송매핑 삭제
+	public void dbSvrDelete(int db_svr_id) {
+		// 1-1.전송매핑 테이블 내역삭제
+		delete("dbserverManagerSql.deleteConnMappingTable", db_svr_id);		
+		// 1-2. 전송대상매핑관계 삭제
+		delete("dbserverManagerSql.deleteConnMappingRelation", db_svr_id);		
+	}
+	
+	// 2. 서버접근제어 삭제
+	public void deleteServerAccessControl(int db_svr_id) {
+		// 2-1. 서버접근제어이력정보 삭제		
+		delete("dbserverManagerSql.deleteServerAccessControlHistory", db_svr_id);	
+		// 2-2. 서버접근제어정보 삭제
+		delete("dbserverManagerSql.deleteServerAccessControlInfo", db_svr_id);	
+	}
+
+	// 3. 백업작업삭제
+	public void deleteBckWrk(int db_svr_id) {
+		List<Map<String, Object>>  sl = null;		
+		//3-1 백업작업ID 조회
+		sl = (List<Map<String, Object>>) list("dbserverManagerSql.selectBckWrkId",db_svr_id);
+		
+		List<String> ids = new ArrayList<String>(); 
+		HashMap<String , Object> paramvalue = new HashMap<String, Object>();
+		
+		for(int i=0; i<sl.size(); i++){
+			ids.add(sl.get(i).toString()); 
+		}
+		paramvalue.put("bck_wrk_id", ids);
+		
+		//3-2 백업오브젝트내역 삭제
+		delete("dbserverManagerSql.deleteBckObjHistory", paramvalue);		
+		//3-2 백업옵션정보 삭제
+		delete("dbserverManagerSql.deleteBckOptInfo", paramvalue);		
+	}
+
+	// 4. 스케줄 삭제
+	public void deleteSchedule(int db_svr_id) {
+		List<Map<String, Object>>  sl = null;
+		// 4-1 스케줄ID 조회
+		sl = (List<Map<String, Object>>) list("dbserverManagerSql.selectScheduleId",db_svr_id);
+		
+		List<String> ids = new ArrayList<String>(); 
+		HashMap<String , Object> paramvalue = new HashMap<String, Object>();
+		
+		for(int i=0; i<sl.size(); i++){
+			ids.add(sl.get(i).toString()); 
+		}
+		paramvalue.put("bck_wrk_id", ids);
+		
+		//4-2 작업실행로그 삭제
+		delete("dbserverManagerSql.deleteWrkexe", paramvalue);				
+		//4-3 스케줄상세 삭제
+		delete("dbserverManagerSql.deleteScdD", paramvalue);		
+		//4-4 스케줄기본 삭제
+		delete("dbserverManagerSql.deleteScdM", paramvalue);		
+	}	
+	
+	
+	// 5. 백업작업설정정보 삭제
+	public void deleteBckWrkcng(int db_svr_id) {
+		delete("dbserverManagerSql.deleteBckWrkcng", db_svr_id);			
+	}
+	
+	// 6. 사용자DB권한정보 삭제
+	public void deleteUsrDbAut(int db_svr_id) {
+		delete("dbserverManagerSql.deleteUsrDbAut", db_svr_id);		
+	}
+	
+	// 7. DB정보 삭제
+	public void deleteDbInfo(int db_svr_id) {
+		delete("dbserverManagerSql.deleteDbInfo", db_svr_id);	
+	}
+	
+	// 8. 사용자DB서버권한정보 삭제
+	public void deleteUsrDbSvrAut(int db_svr_id) {
+		delete("dbserverManagerSql.deleteUsrDbSvrAut", db_svr_id);		
+	}	
+	
+	// 9. DB서버아이피주소정보 삭제
+	public void deleteDbSvrIpAdr(int db_svr_id) {
+		delete("dbserverManagerSql.deleteDbSvrIpAdr", db_svr_id);		
+	}	
+	
+	// 10. DB서버정보 삭제
+	public void deleteDbServer(int db_svr_id) {
+		delete("dbserverManagerSql.deleteDbServer", db_svr_id);	
+	}
 }
+
+
+
+

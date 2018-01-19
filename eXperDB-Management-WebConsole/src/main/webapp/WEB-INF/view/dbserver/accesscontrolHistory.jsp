@@ -1,5 +1,4 @@
-<%@ page language="java" contentType="text/html; charset=UTF-8"
-	pageEncoding="UTF-8"%>
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags"%>
 <%
@@ -22,7 +21,7 @@ var table = null;
 
 	function fn_init() {
 		table = $('#accesscontrolHistoryTable').DataTable({
-			scrollY : "270px",
+			scrollY : "240px",
 			paging: false,
 			searching : false,
 			scrollX: true,
@@ -36,7 +35,7 @@ var table = null;
 			{ data : "prms_ipmaskadr", className : "dt-center", defaultContent : ""}, 
 			{ data : "ctf_mth_nm", className : "dt-center", defaultContent : ""}, 
 			{ data : "opt_nm", className : "dt-center", defaultContent : ""}, 
-			 ]
+				]
 		});
 		
 		table.tables().header().to$().find('th:eq(0)').css('min-width', '20px');
@@ -76,10 +75,15 @@ var table = null;
 					}
 				},
 				success : function(result) {
+					$("#accesscontrolHistory").show();
+					$("#lst_date").html(result[0].lst_mdf_dtm);
+					$("#lst_id").html(result[0].lst_mdfr_id);
 					table.clear().draw();
 					table.rows.add(result).draw();
 				}
 			});
+		}else{
+			$("#accesscontrolHistory").hide();
 		}
 
 	});
@@ -112,6 +116,9 @@ var table = null;
 					}
 				},
 				success : function(result) {
+					$("#accesscontrolHistory").show();
+					$("#lst_date").html(result[0].lst_mdf_dtm);
+					$("#lst_id").html(result[0].lst_mdfr_id);
 					table.clear().draw();
 					table.rows.add(result).draw();
 				}
@@ -170,12 +177,9 @@ var table = null;
 <div id="contents">
 	<div class="contents_wrap">
 		<div class="contents_tit">
-			<h4><spring:message code="menu.policy_changes_history" /><a href="#n"><img src="../images/ico_tit.png" class="btn_info" /></a>
-			</h4>
+			<h4><spring:message code="menu.policy_changes_history" /><a href="#n"><img src="../images/ico_tit.png" class="btn_info" /></a></h4>
 			<div class="infobox">
-				<ul>
-					<li><spring:message code="help.policy_changes_history" /></li>
-				</ul>
+				<ul><li><spring:message code="help.policy_changes_history" /></li></ul>
 			</div>
 			<div class="location">
 				<ul>
@@ -202,31 +206,51 @@ var table = null;
 						<tbody>
 							<tr>
 								<th scope="row" class="t9"><spring:message code="common.modify_datetime" /></th>
-								<td><select class="select t3" id="lst_mdf_dtm">
+								<td>
+									<select class="select t3" id="lst_mdf_dtm">
 										<c:forEach var="result" items="${lst_mdf_dtm}">
 											<option value="${result.svr_acs_cntr_his_id}">${result.lst_mdf_dtm}</option>
 										</c:forEach>
-								</select></td>
+									</select>
+								</td>
 							</tr>
 						</tbody>
 					</table>
 				</div>
+				
 				<div class="overflow_area">
-					<table id="accesscontrolHistoryTable" class="display"
-						cellspacing="0" width="100%">
-						<thead>
-							<tr>
-								<th width="20"><spring:message code="common.no" /></th>
-								<th width="60"><spring:message code="access_control_management.type" /></th>
-								<th width="100"><spring:message code="access_control_management.database" /></th>
-								<th width="100"><spring:message code="access_control_management.user" /></th>
-								<th width="100"><spring:message code="access_control_management.ip_address" /></th>
-								<th width="100"><spring:message code="access_control_management.ip_mask" /></th>
-								<th width="100"><spring:message code="access_control_management.method" /></th>
-								<th width="100"><spring:message code="access_control_management.option" /></th>
-							</tr>
-						</thead>
-					</table>
+					<table class="write" id="accesscontrolHistory">
+						<colgroup>
+							<col style="width: 80px;" />
+							<col style="width: 200px;" />
+							<col style="width: 80px;" />
+							<col style="width: 200px;" />
+							<col />
+						</colgroup>
+								<tbody>
+									<tr>
+										<th scope="row" class="ico_t2"><spring:message code="common.modify_datetime" /></th>
+										<td id="lst_date"></td>
+										<th scope="row" class="ico_t2"><spring:message code="common.modifier" /></th>
+										<td id="lst_id"></td>
+									</tr>
+								</tbody>
+						</table>
+						
+						<table id="accesscontrolHistoryTable" class="display" cellspacing="0" width="100%">
+							<thead>
+								<tr>
+									<th width="20"><spring:message code="common.no" /></th>
+									<th width="60"><spring:message code="access_control_management.type" /></th>
+									<th width="100"><spring:message code="access_control_management.database" /></th>
+									<th width="100"><spring:message code="access_control_management.user" /></th>
+									<th width="100"><spring:message code="access_control_management.ip_address" /></th>
+									<th width="100"><spring:message code="access_control_management.ip_mask" /></th>
+									<th width="100"><spring:message code="access_control_management.method" /></th>
+									<th width="100"><spring:message code="access_control_management.option" /></th>
+								</tr>
+							</thead>
+						</table>
 				</div>
 			</div>
 		</div>

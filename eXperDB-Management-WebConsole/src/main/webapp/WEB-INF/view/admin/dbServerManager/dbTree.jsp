@@ -422,7 +422,7 @@ function fn_dataCompareChcek(svrDbList){
 				}
 			}	 
 			
-			
+
 /* 			var list = $("input[name='db_exp']");
 			//var db_svr_id =  table_dbServer.row('.selected').data().db_svr_id
 			if(svrDbList.data.length>0){
@@ -452,6 +452,79 @@ function fn_dataCompareChcek(svrDbList){
 	});	
 }
 
+ 
+	function fn_exeCheck(){
+		var db_svr_id =  table_dbServer.row('.selected').data().db_svr_id;
+		
+		//실행중인 커넥터와 스케줄 확인
+		$.ajax({
+			url : "/exeCheck.do",
+			data : {
+				db_svr_id : db_svr_id,
+			},
+			async:true,
+			//dataType : "json",
+			type : "post",
+			beforeSend: function(xhr) {
+		        xhr.setRequestHeader("AJAX", true);
+		     },
+			error : function(xhr, status, error) {
+				if(xhr.status == 401) {
+					alert("<spring:message code='message.msg02' />");
+					 location.href = "/";
+				} else if(xhr.status == 403) {
+					alert("<spring:message code='message.msg03' />");
+		             location.href = "/";
+				} else {
+					alert("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""));
+				}
+			},
+			success : function(result) {
+				if(result.connChk >0){
+					alert("실행중인 커넥터가 존재 합니다.");
+				}else if(result.scheduleChk){
+					alert("실행중인 스케줄이 존재 합니다.");
+				}else{
+					if (confirm("선택된 DBMS와 관련된 모든 데이터가 삭제됩니다.\n 정말 삭제하시겠습니까?")){
+						return false;
+						fn_delete(db_svr_id);
+					}else{
+						return false;
+					}				
+				}
+			}
+		});
+	}
+	
+	function fn_delete(db_svr_id){
+		
+		$.ajax({
+			url : "/dbSvrDelete.do",
+			data : {
+				db_svr_id : db_svr_id,
+			},
+			async:true,
+			//dataType : "json",
+			type : "post",
+			beforeSend: function(xhr) {
+		        xhr.setRequestHeader("AJAX", true);
+		     },
+			error : function(xhr, status, error) {
+				if(xhr.status == 401) {
+					alert("<spring:message code='message.msg02' />");
+					 location.href = "/";
+				} else if(xhr.status == 403) {
+					alert("<spring:message code='message.msg03' />");
+		             location.href = "/";
+				} else {
+					alert("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""));
+				}
+			},
+			success : function(result) {
+				alert("삭제되었습니다.")
+			}
+		});
+	}
 </script>
 <div id="contents">
 	<div class="contents_wrap">
@@ -478,6 +551,7 @@ function fn_dataCompareChcek(svrDbList){
 					<div id="wrt_button">
 						<span class="btn"><button onclick="fn_reg_popup();"><spring:message code="common.registory" /></button></span>
 						<span class="btn"><button onClick="fn_regRe_popup();"><spring:message code="common.modify" /></button></span>		
+						<span class="btn" onClick="fn_exeCheck()"><button><spring:message code="common.delete" /></button></span>
 					</div>
 					</div>
 					<div class="inner">

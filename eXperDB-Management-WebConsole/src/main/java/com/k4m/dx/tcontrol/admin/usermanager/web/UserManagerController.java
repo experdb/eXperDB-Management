@@ -55,6 +55,7 @@ public class UserManagerController {
 	@Autowired
 	private AccessHistoryService accessHistoryService;
 	
+	
 	private List<Map<String, Object>> menuAut;
 	
 	/**
@@ -135,7 +136,7 @@ public class UserManagerController {
 	}
 	
 	/**
-	 * 사용자 등록/수정 화면을 보여준다.
+	 * 사용자 등록 화면을 보여준다.
 	 * 
 	 * @param request
 	 * @return ModelAndView mv
@@ -150,39 +151,13 @@ public class UserManagerController {
 			if(menuAut.get(0).get("wrt_aut_yn").equals("N")){
 				mv.setViewName("error/autError");
 			}else{
-				String act = request.getParameter("act");
 				CmmnUtils.saveHistory(request, historyVO);
-				
-				if(act.equals("i")){
-					// 화면접근이력 이력 남기기
-					historyVO.setExe_dtl_cd("DX-T0034");
-					historyVO.setMnu_id(12);
-					accessHistoryService.insertHistory(historyVO);			
-				}
 
-				if(act.equals("u")){
-					// 화면접근이력 이력 남기기
-					historyVO.setExe_dtl_cd("DX-T0035");
-					historyVO.setMnu_id(12);
-					accessHistoryService.insertHistory(historyVO);
-								
-					String usr_id = request.getParameter("usr_id");
-					UserVO result= (UserVO)userManagerService.selectDetailUserManager(usr_id);
-					
-					mv.addObject("get_usr_id",result.getUsr_id());
-					mv.addObject("get_usr_nm",result.getUsr_nm());
-					mv.addObject("pwd",result.getPwd());
-					mv.addObject("bln_nm",result.getBln_nm());
-					mv.addObject("dept_nm",result.getDept_nm());
-					mv.addObject("pst_nm",result.getPst_nm());
-					mv.addObject("rsp_bsn_nm",result.getRsp_bsn_nm());
-					mv.addObject("cpn",result.getCpn());
-					mv.addObject("use_yn",result.getUse_yn());	
-					mv.addObject("aut_id",result.getAut_id());
-					mv.addObject("usr_expr_dt",result.getUsr_expr_dt());
-					
-				}
-				mv.addObject("act",act);
+				// 화면접근이력 이력 남기기
+				historyVO.setExe_dtl_cd("DX-T0034");
+				historyVO.setMnu_id(12);
+				accessHistoryService.insertHistory(historyVO);			
+				
 				mv.setViewName("popup/userManagerRegForm");
 			}
 
@@ -192,7 +167,54 @@ public class UserManagerController {
 		return mv;
    
 	}
+	
+	/**
+	 * 사용자 수정 화면을 보여준다.
+	 * 
+	 * @param request
+	 * @return ModelAndView mv
+	 * @throws Exception
+	 */
+	@RequestMapping(value = "/popup/userManagerRegReForm.do")
+	public ModelAndView userManagerRegReForm(@ModelAttribute("historyVO") HistoryVO historyVO, HttpServletRequest request) {
+		ModelAndView mv = new ModelAndView();
+		try {
+			CmmnUtils cu = new CmmnUtils();
+			menuAut = cu.selectMenuAut(menuAuthorityService, "MN0004");
+			if(menuAut.get(0).get("wrt_aut_yn").equals("N")){
+				mv.setViewName("error/autError");
+			}else{
+				CmmnUtils.saveHistory(request, historyVO);
 
+				// 화면접근이력 이력 남기기
+				historyVO.setExe_dtl_cd("DX-T0035");
+				historyVO.setMnu_id(12);
+				accessHistoryService.insertHistory(historyVO);
+								
+				String usr_id = request.getParameter("usr_id");
+				UserVO result= (UserVO)userManagerService.selectDetailUserManager(usr_id);
+					
+				mv.addObject("get_usr_id",result.getUsr_id());
+				mv.addObject("get_usr_nm",result.getUsr_nm());
+				mv.addObject("pwd",result.getPwd());
+				mv.addObject("bln_nm",result.getBln_nm());
+				mv.addObject("dept_nm",result.getDept_nm());
+				mv.addObject("pst_nm",result.getPst_nm());
+				mv.addObject("rsp_bsn_nm",result.getRsp_bsn_nm());
+				mv.addObject("cpn",result.getCpn());
+				mv.addObject("use_yn",result.getUse_yn());	
+				mv.addObject("aut_id",result.getAut_id());
+				mv.addObject("usr_expr_dt",result.getUsr_expr_dt());
+					
+				mv.setViewName("popup/userManagerRegReForm");
+			}
+
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return mv;
+   
+	}
 	
 	/**
 	 * 사용자를 등록한다.
@@ -272,7 +294,7 @@ public class UserManagerController {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-	}
+	}	
 	
 	
 	/**

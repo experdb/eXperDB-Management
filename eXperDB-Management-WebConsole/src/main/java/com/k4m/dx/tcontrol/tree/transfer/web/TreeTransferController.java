@@ -316,7 +316,7 @@ public class TreeTransferController {
 	 * @throws Exception
 	 */
 	@RequestMapping(value = "/insertTransferTarget.do")
-	public @ResponseBody boolean insertTransferTarget(
+	public @ResponseBody String insertTransferTarget(
 			@ModelAttribute("transferTargetVO") TransferTargetVO transferTargetVO, HttpServletRequest request,
 			@ModelAttribute("historyVO") HistoryVO historyVO) {
 		JSONObject serverObj = new JSONObject();
@@ -337,6 +337,11 @@ public class TreeTransferController {
 			int cnr_id = Integer.parseInt(request.getParameter("cnr_id"));
 			ConnectorVO connectInfo = (ConnectorVO) transferService.selectDetailConnectorRegister(cnr_id);
 			TransferVO tengInfo = (TransferVO) transferService.selectTengInfo(usr_id);
+			
+			if(tengInfo==null){
+				return "msg127";
+			}
+			
 			String IP = tengInfo.getTeng_ip();
 			int PORT = tengInfo.getTeng_port();
 
@@ -356,16 +361,16 @@ public class TreeTransferController {
 
 			Map<String, Object> result = cic.kafakConnect_create(serverObj, param, IP, PORT);
 			String strResultCode = (String) result.get("strResultCode");
-			if (strResultCode.equals("0")) {
+			if(strResultCode==null) {
+				return "msg115";
+			}else{
 				treeTransferService.insertTransferTarget(transferTargetVO);
-				return true;
-			} else {
-				return false;
+				return "true";
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		return false;
+		return "true";
 	}
 
 	/**
@@ -378,7 +383,7 @@ public class TreeTransferController {
 	 * @throws Exception
 	 */
 	@RequestMapping(value = "/updateTransferTarget.do")
-	public @ResponseBody boolean updateTransferTarget(
+	public @ResponseBody String updateTransferTarget(
 			@ModelAttribute("transferTargetVO") TransferTargetVO transferTargetVO, HttpServletRequest request,
 			@ModelAttribute("historyVO") HistoryVO historyVO) {
 		ClientInfoCmmn cic = new ClientInfoCmmn();
@@ -400,6 +405,11 @@ public class TreeTransferController {
 
 			ConnectorVO connectInfo = (ConnectorVO) transferService.selectDetailConnectorRegister(cnr_id);
 			TransferVO tengInfo = (TransferVO) transferService.selectTengInfo(usr_id);
+			
+			if(tengInfo==null){
+				return "msg127";
+			}
+			
 			String IP = tengInfo.getTeng_ip();
 			int PORT = tengInfo.getTeng_port();
 
@@ -431,16 +441,16 @@ public class TreeTransferController {
 
 			Map<String, Object> result = cic.kafakConnect_update(serverObj, param, IP, PORT);
 			String strResultCode = (String) result.get("strResultCode");
-			if (strResultCode.equals("0")) {
+			if(strResultCode==null) {
+				return "msg115";
+			}else{
 				treeTransferService.updateTransferTarget(transferTargetVO);
-				return true;
-			} else {
-				return false;
+				return "true";
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		return false;
+		return "true";
 	}
 	
 	/**

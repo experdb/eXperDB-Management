@@ -102,4 +102,57 @@ public class DbServerManagerServiceImpl extends EgovAbstractServiceImpl implemen
 		dbServerManagerDAO.insertIpadr(ipadrVO);
 	}
 
+	@Override
+	public Map exeCheck(int db_svr_id) {
+		return dbServerManagerDAO.exeCheck(db_svr_id);
+	}
+
+
+	/*
+	 * DB서버 삭제
+	 * 1. 전송매핑 삭제 ---------------------------------
+	 * 2. 서버접근제어 삭제 ----------------------------
+	 * 3. 백업작업삭제 ---------------------------------
+	 * 4. 스케줄 삭제 ----------------------------------
+	 * 5. 백업작업설정정보 삭제 -----------------------
+	 * 6. 사용자DB권한정보 삭제 -----------------------
+	 * 7. DB정보 삭제 ----------------------------------
+	 * 8. 사용자DB서버권한정보 삭제 ------------------
+	 * 9. DB서버아이피주소정보 삭제 ------------------
+	 * 10. DB서버정보 삭제 ----------------------------
+	 */
+	@Override
+	public void dbSvrDelete(int db_svr_id) {
+		// 1.전송매핑 테이블 내역삭제
+		dbServerManagerDAO.dbSvrDelete(db_svr_id);
+		
+		// 2.서버접근제어이력정보 삭제
+		dbServerManagerDAO.deleteServerAccessControl(db_svr_id);
+		
+		// 3 백업작업 삭제
+		dbServerManagerDAO.deleteBckWrk(db_svr_id);
+		
+		// 4 스케줄 삭제
+		dbServerManagerDAO.deleteSchedule(db_svr_id);
+		
+		// 5. 백업작업설정정보 삭제
+		dbServerManagerDAO.deleteBckWrkcng(db_svr_id);
+		
+		// 6. 사용자DB권한정보 삭제
+		dbServerManagerDAO.deleteUsrDbAut(db_svr_id);
+		
+		// 7. DB정보 삭제
+		dbServerManagerDAO.deleteDbInfo(db_svr_id);
+		
+		// 8. 사용자DB서버권한정보 삭제
+		dbServerManagerDAO.deleteUsrDbSvrAut(db_svr_id);
+		
+		// 9. DB서버아이피주소정보 삭제
+		dbServerManagerDAO.deleteDbSvrIpAdr(db_svr_id);
+		
+		// 10. DB서버정보 삭제
+		dbServerManagerDAO.deleteDbServer(db_svr_id);
+		
+	}
+
 }

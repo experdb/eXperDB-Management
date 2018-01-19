@@ -149,6 +149,9 @@ public class ScheduleHistoryController {
 				String scd_nm = request.getParameter("scd_nm");
 				String db_svr_nm = request.getParameter("db_svr_nm");
 				String exe_result = request.getParameter("exe_result");
+				String order_type = request.getParameter("order_type");
+				String order = request.getParameter("order");
+				
 				if(scd_nm.equals("") ){
 					scd_nm="%";
 				}
@@ -158,6 +161,8 @@ public class ScheduleHistoryController {
 				param.put("scd_nm", scd_nm);
 				param.put("db_svr_nm", db_svr_nm);
 				param.put("exe_result", exe_result);
+				param.put("order_type", order_type);
+				param.put("order", order);
 	
 				System.out.println("********PARAMETER*******");
 				System.out.println("DB서버 : "+ db_svr_nm);
@@ -183,12 +188,9 @@ public class ScheduleHistoryController {
 			
 				List<Map<String, Object>> result = scheduleHistoryService.selectScheduleHistory(pagingVO,param);
 				
-				for(int i=0; i<result.size(); i++){
-					System.out.println(result.get(i));
-				}
 				int totCnt = scheduleHistoryService.selectScheduleHistoryTotCnt(param);
 				paginationInfo.setTotalRecordCount(totCnt);
-				model.addAttribute("result", result);	
+				model.addAttribute("result", result);
 								
 				model.addAttribute("lgi_dtm_start", lgi_dtm_start);
 				model.addAttribute("lgi_dtm_end", lgi_dtm_end);
@@ -196,6 +198,8 @@ public class ScheduleHistoryController {
 				model.addAttribute("svr_nm", db_svr_nm);
 				model.addAttribute("exe_result", exe_result);
 				model.addAttribute("scd_nm", scd_nm);
+				model.addAttribute("order", order);
+				model.addAttribute("order_type", order_type);
 				
 				mv.addObject("read_aut_yn", menuAut.get(0).get("read_aut_yn"));
 				mv.addObject("wrt_aut_yn", menuAut.get(0).get("wrt_aut_yn"));

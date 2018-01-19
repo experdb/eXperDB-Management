@@ -45,7 +45,7 @@ var workTable = null;
 function fn_init() {
 
     workTable = $('#workTable').DataTable({
-		scrollY : "200px",
+		scrollY : "130px",
 		searching : false,
 		paging: false,
 		scrollX: true,
@@ -178,7 +178,7 @@ $(window.document).ready(function() {
 					
 				<br><br>
 				<p class="pop_s_tit"><spring:message code="backup_management.work_info"/></p>
-				<div class="overflow_area" style="height: 300px;">
+				<div class="overflow_area" style="height: 230px;">
 					<table id="workTable" class="display" cellspacing="0" width="100%">
 						<thead>
 							<tr>

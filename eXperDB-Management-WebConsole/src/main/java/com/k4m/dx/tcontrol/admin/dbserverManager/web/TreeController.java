@@ -6,6 +6,7 @@ import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
@@ -35,6 +36,8 @@ import com.k4m.dx.tcontrol.common.service.AgentInfoVO;
 import com.k4m.dx.tcontrol.common.service.CmmnServerInfoService;
 import com.k4m.dx.tcontrol.common.service.CmmnVO;
 import com.k4m.dx.tcontrol.common.service.HistoryVO;
+import com.k4m.dx.tcontrol.functions.transfer.service.TransferService;
+import com.k4m.dx.tcontrol.functions.transfer.service.TransferVO;
 
 /**
  * [DB TREE] 컨트롤러 클래스를 정의한다.
@@ -68,6 +71,9 @@ public class TreeController {
 
 	@Autowired
 	private CmmnServerInfoService cmmnServerInfoService;
+	
+	@Autowired
+	private TransferService transferService;
 
 	private List<Map<String, Object>> menuAut;
 
@@ -331,78 +337,6 @@ public class TreeController {
 						dbServerManagerService.insertDB(paramvalue);	
 					}
 				}
-				/* 접근제어 정보 INSERT */
-				AES256 dec = new AES256(AES256_KEY.ENC_KEY);
-				//int db_svr_id = dbServerVO.getDb_svr_id();
-
-				/* 서버접근제어 전체 삭제 */
-				accessControlService.deleteDbAccessControl(db_svr_id);
-
-				DbServerVO schDbServerVO = new DbServerVO();
-				schDbServerVO.setDb_svr_id(db_svr_id);
-				dbServerVO = (DbServerVO) cmmnServerInfoService.selectServerInfo(schDbServerVO);
-				String strIpAdr = dbServerVO.getIpadr();
-				AgentInfoVO vo = new AgentInfoVO();
-				vo.setIPADR(strIpAdr);
-				AgentInfoVO agentInfo = (AgentInfoVO) cmmnServerInfoService.selectAgentInfo(vo);
-
-				String IP = dbServerVO.getIpadr();
-				int PORT = agentInfo.getSOCKET_PORT();
-
-				JSONObject result = new JSONObject();
-				JSONObject serverObj = new JSONObject();
-				serverObj.put(ClientProtocolID.SERVER_NAME, dbServerVO.getDb_svr_nm());
-				serverObj.put(ClientProtocolID.SERVER_IP, dbServerVO.getIpadr());
-				serverObj.put(ClientProtocolID.SERVER_PORT, dbServerVO.getPortno());
-				serverObj.put(ClientProtocolID.DATABASE_NAME, dbServerVO.getDft_db_nm());
-				serverObj.put(ClientProtocolID.USER_ID, dbServerVO.getSvr_spr_usr_id());
-				serverObj.put(ClientProtocolID.USER_PWD, dec.aesDecode(dbServerVO.getSvr_spr_scm_pwd()));
-
-				ClientInfoCmmn cic = new ClientInfoCmmn();
-
-				String strExtName = "pgaudit";
-				List<Object> results = cic.extension_select(serverObj, IP, PORT, strExtName);
-				if (results != null || result.size() != 0) {
-					int current_his_grp = accessControlService.selectCurrenthisrp();
-					accessControlHistoryVO.setHis_grp_id(current_his_grp);
-
-					result = cic.dbAccess_selectAll(serverObj, IP, PORT);
-					for (int j = 0; j < result.size(); j++) {
-						JSONArray data = (JSONArray) result.get("data");
-						for (int m = 0; m < data.size(); m++) {
-							JSONObject jsonObj = (JSONObject) data.get(m);
-							int svr_acs_cntr_id= accessControlService.selectCurrentCntrid();
-							
-							accessControlVO.setSvr_acs_cntr_id(svr_acs_cntr_id);
-							accessControlVO.setFrst_regr_id(id);
-							accessControlVO.setLst_mdfr_id(id);
-							accessControlVO.setDb_svr_id(db_svr_id);
-							accessControlVO.setDtb((String) jsonObj.get("Database"));
-							accessControlVO.setPrms_ipadr((String) jsonObj.get("Ipadr"));
-							accessControlVO.setPrms_ipmaskadr((String) jsonObj.get("Ipmask"));
-							accessControlVO.setPrms_usr_id((String) jsonObj.get("User"));
-							accessControlVO.setCtf_mth_nm((String) jsonObj.get("Method"));
-							accessControlVO.setCtf_tp_nm((String) jsonObj.get("Type"));
-							accessControlVO.setOpt_nm((String) jsonObj.get("Option"));
-							accessControlVO.setPrms_seq(Integer.parseInt((String) jsonObj.get("Seq")));
-							accessControlVO.setPrms_set((String) jsonObj.get("Set"));
-							accessControlService.insertAccessControl(accessControlVO);
-
-							accessControlHistoryVO.setDb_svr_id(db_svr_id);
-							accessControlHistoryVO.setSvr_acs_cntr_id(svr_acs_cntr_id);
-							accessControlHistoryVO.setDtb((String) jsonObj.get("Database"));
-							accessControlHistoryVO.setPrms_ipadr((String) jsonObj.get("Ipadr"));
-							accessControlHistoryVO.setPrms_ipmaskadr((String) jsonObj.get("Ipmask"));
-							accessControlHistoryVO.setPrms_usr_id((String) jsonObj.get("User"));
-							accessControlHistoryVO.setPrms_seq(Integer.parseInt((String) jsonObj.get("Seq")));
-							accessControlHistoryVO.setPrms_set((String) jsonObj.get("Set"));
-							accessControlHistoryVO.setCtf_mth_nm((String) jsonObj.get("Method"));
-							accessControlHistoryVO.setCtf_tp_nm((String) jsonObj.get("Type"));
-							accessControlHistoryVO.setOpt_nm((String) jsonObj.get("Option"));
-							accessControlService.insertAccessControlHistory(accessControlHistoryVO);
-						}
-					}
-				}
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -441,4 +375,112 @@ public class TreeController {
 		}
 		return resultSet;
 	}
+	
+	
+	
+	/**
+	 * 실행중인 커넥터, 스케줄 조회
+	 * 
+	 * @return resultSet
+	 * @throws Exception
+	 */
+	@RequestMapping(value = "/exeCheck.do")
+	@ResponseBody
+	public Map exeCheck(@ModelAttribute("historyVO") HistoryVO historyVO, HttpServletRequest request, HttpServletResponse response) {
+
+		Map result = null;	
+		
+		try {					
+				int db_svr_id = Integer.parseInt(request.getParameter("db_svr_id"));				
+				result = dbServerManagerService.exeCheck(db_svr_id);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return result;
+	}
+	
+	
+	
+	/**
+	 * 서버를 삭제한다.
+	 * 
+	 * @param historyVO
+	 * @param request
+	 * @return 
+	 * @throws Exception
+	 */
+	@RequestMapping(value = "/dbSvrDelete.do")
+	public @ResponseBody boolean dbSvrDelete(@ModelAttribute("historyVO") HistoryVO historyVO, HttpServletResponse response, HttpServletRequest request) {
+		try {	
+			/*CmmnUtils cu = new CmmnUtils();
+			menuAut = cu.selectMenuAut(menuAuthorityService, "MN0004");
+			
+			//쓰기권한이 없는경우
+			if(menuAut.get(0).get("wrt_aut_yn").equals("N")){
+				response.sendRedirect("/autError.do");
+				return false;
+			}*/
+			int db_svr_id = Integer.parseInt(request.getParameter("db_svr_id"));
+			
+			/*전송대상 topic 공백으로 업데이트하기! */
+			JSONObject serverObj = new JSONObject();
+			ClientInfoCmmn cic = new ClientInfoCmmn();
+			List<Map<String, Object>> connectInfo = null;
+			JSONObject result = new JSONObject();
+			JSONObject param = new JSONObject();
+			String topic = "";
+			
+			HttpSession session = request.getSession();
+			String usr_id = (String) session.getAttribute("usr_id");
+			TransferVO tengInfo = (TransferVO) transferService.selectTengInfo(usr_id);
+			if(tengInfo!=null){
+				String IP = tengInfo.getTeng_ip();
+				int PORT = tengInfo.getTeng_port();
+				connectInfo= transferService.selectConnectorInfo(db_svr_id);
+				if(connectInfo.size()!=0){
+					for(int i=0; i<connectInfo.size(); i++){
+						String trf_trg_cnn_nm = (String) connectInfo.get(i).get("trf_trg_cnn_nm");
+						String strServerIp = (String) connectInfo.get(i).get("cnr_ipadr");
+						String strServerPort = String.valueOf(connectInfo.get(i).get("cnr_portno"));
+						serverObj.put(ClientProtocolID.SERVER_IP, strServerIp);
+						serverObj.put(ClientProtocolID.SERVER_PORT, strServerPort);
+						result = cic.kafakConnect_select(serverObj, trf_trg_cnn_nm, IP, PORT);
+						for (int j = 0; j < result.size(); j++) {
+							JSONArray data = (JSONArray) result.get("data");
+							for (int m = 0; m < data.size(); m++) {
+								JSONObject jsonObj = (JSONObject) data.get(m);
+								JSONObject hp = (JSONObject) jsonObj.get("hp");
+
+								param.put("strName", (String) hp.get("name"));
+								param.put("strConnector_class", (String) hp.get("connector.class"));
+								param.put("strTasks_max", (String) hp.get("tasks.max"));
+								param.put("strTopics", topic);
+								param.put("strHdfs_url", (String) hp.get("hdfs.url"));
+								param.put("strHadoop_conf_dir", (String) hp.get("hadoop.conf.dir"));
+								param.put("strHadoop_home", (String) hp.get("hadoop.home"));
+								param.put("strFlush_size", (String) hp.get("flush.size"));
+								param.put("strRotate_interval_ms", (String) hp.get("rotate.interval.ms"));
+							}
+						}
+						/* kafakConnect_update topic 업데이트 */
+						cic.kafakConnect_update(serverObj, param, IP, PORT);
+					}
+					
+				}
+				
+			}
+			
+			dbServerManagerService.dbSvrDelete(db_svr_id);
+
+			// 화면접근이력 이력 남기기
+			/*CmmnUtils.saveHistory(request, historyVO);
+			historyVO.setExe_dtl_cd("DX-T0033_02");
+			historyVO.setMnu_id(12);
+			accessHistoryService.insertHistory(historyVO);*/
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return false;
+	}	
 }

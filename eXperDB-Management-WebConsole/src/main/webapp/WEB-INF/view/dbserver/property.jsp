@@ -271,8 +271,12 @@
 									<td>${result.LOG_PATH}</td>
 								</tr>
 								<tr>
-									<td><spring:message code="properties.backup_path" /></td>
+									<td>RMAN <spring:message code="properties.backup_path" /></td>
 									<td>${result.CMD_BACKUP_PATH}</td>
+								</tr>
+								<tr>
+									<td>DUMP <spring:message code="properties.backup_path" /></td>
+									<td>${result.PGDBAK}</td>
 								</tr>
 <!-- 								<tr> -->
 <!-- 									<th >Archive 백업 경로</th> -->

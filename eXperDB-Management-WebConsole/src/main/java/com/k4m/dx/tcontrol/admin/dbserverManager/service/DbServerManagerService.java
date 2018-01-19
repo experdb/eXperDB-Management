@@ -106,5 +106,11 @@ public interface DbServerManagerService {
 
 
 	void insertIpadr(IpadrVO ipadrVO) throws Exception;
+
+
+	Map exeCheck(int db_svr_id);
+
+
+	void dbSvrDelete(int db_svr_id);
 	
 }

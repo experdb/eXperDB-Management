@@ -337,7 +337,8 @@ public class AccessControlController {
 					HttpSession session = request.getSession();
 					String usr_id = (String) session.getAttribute("usr_id");
 					accessControlVO.setFrst_regr_id(usr_id);
-					accessControlVO.setLst_mdfr_id(usr_id);					
+					accessControlVO.setLst_mdfr_id(usr_id);		
+					accessControlHistoryVO.setLst_mdfr_id(usr_id);
 					int current_his_grp = accessControlService.selectCurrenthisrp();	
 					accessControlHistoryVO.setHis_grp_id(current_his_grp);					
 					JSONObject result = cic.dbAccess_selectAll(serverObj, IP, PORT);
@@ -520,6 +521,7 @@ public class AccessControlController {
 					String id = (String) request.getSession().getAttribute("usr_id");
 					accessControlVO.setFrst_regr_id(id);
 					accessControlVO.setLst_mdfr_id(id);
+					accessControlHistoryVO.setLst_mdfr_id(id);
 					int current_his_grp = accessControlService.selectCurrenthisrp();				
 					accessControlHistoryVO.setHis_grp_id(current_his_grp);				
 					JSONObject result = cic.dbAccess_selectAll(serverObj, IP, PORT);
