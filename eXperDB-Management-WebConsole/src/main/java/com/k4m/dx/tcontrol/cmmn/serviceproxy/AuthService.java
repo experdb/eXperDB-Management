@@ -17,6 +17,17 @@ public class AuthService {
 		this.restPort = restPort;
 	}
 	
+	
+	private JSONObject sendAuthService(String serviceName, String serviceCommand, HashMap header, JSONObject parameters) throws Exception {
+		
+		
+		ExperDBRestApiHandler handler = new ExperDBRestApiHandler(restIp, restPort);
+
+		JSONObject resultList = handler.getRestRequest(serviceName, serviceCommand, header, parameters);
+		
+		return resultList;
+	}
+	
 	public static void main(String[] args) throws Exception {
 		
 		String ip = "222.110.153.204";
@@ -65,9 +76,9 @@ public class AuthService {
 		Map<String, Object> resultJsonObjectMap = null;
 		
 
-		ExperDBRestApi api = new ExperDBRestApi(restIp, restPort);
+		ExperDBRestApiHandler api = new ExperDBRestApiHandler(restIp, restPort);
 
-		resultJsonObjectMap = api.restRequest(strService, strCommand, header, parameters);
+		resultJsonObjectMap = api.getRestRequest(strService, strCommand, header, parameters);
 		
 		JSONParser jsonParser = new JSONParser();
 		

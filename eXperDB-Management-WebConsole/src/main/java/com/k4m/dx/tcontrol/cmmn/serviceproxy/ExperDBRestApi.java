@@ -12,7 +12,6 @@ import javax.net.ssl.SSLContext;
 import javax.net.ssl.TrustManager;
 import javax.net.ssl.X509TrustManager;
 
-import org.apache.http.conn.ssl.DefaultHostnameVerifier;
 import org.apache.http.conn.ssl.SSLConnectionSocketFactory;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClients;
@@ -85,8 +84,7 @@ public class ExperDBRestApi {
 	}
 	
 
-
-    public JSONObject  restRequest(String strService, String strCommand, HashMap header, JSONObject parameters) throws Exception {
+    public ResponseEntity<String>  restResponseEntity(String strService, String strCommand, HashMap header, JSONObject parameters) throws Exception {
 
     	JSONObject configJsonObjectMap = null;
     	String jsonString = null;
@@ -127,24 +125,6 @@ public class ExperDBRestApi {
 			
 			responseEntity = restTemplate.exchange(url, HttpMethod.POST, requestEntity, String.class);
 			
-			jsonString = responseEntity.getBody();
-			
-			if (responseEntity != null && responseEntity.getStatusCode().value() == 200) {
-
-				JSONParser jsonParser = new JSONParser();
-
-				configJsonObjectMap = (JSONObject) jsonParser.parse(jsonString);
-
-
-				Iterator<?> iter = configJsonObjectMap.entrySet().iterator();
-				while (iter.hasNext()) {
-					Map.Entry entry = (Map.Entry) iter.next();
-					System.out.println(String.valueOf(entry.getKey()) + " = " + String.valueOf(entry.getValue()));
-				}
-			} else {
-				throw new Exception(url + " REST API 접속에서 예외가 발생했습니다. 응답 코드가 적절하지 않습니다.");
-			}
-
 		} catch (HttpClientErrorException e) {
 			// Globals.logger.info(url+" REST API 접속에서 예외가 발생했습니다.");
 			// Globals.logger.info(e);
@@ -157,16 +137,17 @@ public class ExperDBRestApi {
 			throw e;
 		}
 		
-		return configJsonObjectMap;
+		return responseEntity;
 
     }
-	
+    
+
     
 	public HashMap makeHeaderMap1() {
 		HashMap header = new HashMap();
 		header.put(SystemCode.FieldName.LOGIN_ID, "admin");
 		header.put(SystemCode.FieldName.ENTITY_UID, "00000000-0000-0000-0000-000000000001");
-		header.put(SystemCode.FieldName.PASSWORD, "password");
+		//header.put(SystemCode.FieldName.PASSWORD, "password");
 		header.put(SystemCode.FieldName.TOKEN_VALUE, "kL0hQcOPxh0ND+VXdFjHqzudLe9dZoU+aLBJ5ldqZfo=");
 		header.put(SystemCode.FieldName.ADDRESS, "");
 		return header;
@@ -200,9 +181,18 @@ public class ExperDBRestApi {
 		String strService = "policyService";
 		String strCommand = "selectProfileProtectionVersion";
 		
+		//ip = "127.0.0.1";
+		//port = 8443;
+		strService = "authService";
+		strCommand = "login";
 
 		
+		test_login(ip, port, strService, strCommand);
 		
+	}
+	
+	private void test01(String ip, int port, String strService, String strCommand) throws Exception {
+
 		
 		ExperDBRestApi api = new ExperDBRestApi(ip, port);
 
@@ -213,21 +203,86 @@ public class ExperDBRestApi {
 		HashMap header = new HashMap();
 		header = api.makeHeaderMap1();
 		
-		Map<String, Object> configJsonObjectMap = api.restRequest(strService, strCommand, header, parameters);
-		
-		
-		JSONParser jsonParser = new JSONParser();
+		ResponseEntity<String> responseEntity = api.restResponseEntity(strService, strCommand, header, parameters);
 
-		Map<String, Object> map = (JSONObject) jsonParser.parse(configJsonObjectMap.get("map").toString());
+		//body setting
+		String jsonString = responseEntity.getBody();
+		JSONObject configJsonObjectMap = null;
 		
-		System.out.println("PROFILE_PROTECTION_VERSION : " + map.get("PROFILE_PROTECTION_VERSION"));
-		
-		Iterator<?> iter = configJsonObjectMap.entrySet().iterator();
-		while (iter.hasNext()) {
-			Map.Entry entry = (Map.Entry) iter.next();
+		if (responseEntity != null && responseEntity.getStatusCode().value() == 200) {
 
-			System.out.println(String.valueOf(entry.getKey()) + " = " + String.valueOf(entry.getValue()));
+			JSONParser jsonParser = new JSONParser();
+
+			configJsonObjectMap = (JSONObject) jsonParser.parse(jsonString);
+			
+			String resultCode = (String) configJsonObjectMap.get("resultCode");
+			String resultMessage = (String) configJsonObjectMap.get("resultMessage");
+
+			System.out.println("resultCode : " + resultCode);
+			System.out.println("resultMessage : " + resultMessage);
+
+
+		} else {
+			throw new Exception(" REST API 접속에서 예외가 발생했습니다. 응답 코드가 적절하지 않습니다.");
 		}
+
 		
+	}
+	
+	/** 
+	 * authService/login/
+	 */
+	private static void test_login(String ip, int port, String strService, String strCommand) throws Exception {
+		
+
+		ExperDBRestApi api = new ExperDBRestApi(ip, port);
+		
+		String strUserId = "admin";
+		String strPassword = "password";
+
+		JSONObject parameters = new JSONObject();
+		//parameters.put("name", strName);
+		//parameters.put("config", config)
+		
+		HashMap header = new HashMap();
+		//header = api.makeHeaderMap1();
+		header.put("experdb-loginid", strUserId);
+		header.put("experdb-password", strPassword);
+		
+		//Map<String, Object> configJsonObjectMap = api.restRequest(strService, strCommand, header, parameters);
+		ResponseEntity<String> responseEntity = api.restResponseEntity(strService, strCommand, header, parameters);
+		
+		
+		//header setting 
+		HttpHeaders headers = responseEntity.getHeaders();
+		
+		String ectityUid = headers.getFirst("experdb-entity-uid");
+		String tockenValue = headers.getFirst("experdb-token-value");
+		
+		System.out.println("ectityUid : " + ectityUid + " tockenValue : " + tockenValue);
+
+		//body setting
+		String jsonString = responseEntity.getBody();
+		JSONObject configJsonObjectMap = null;
+		
+		if (responseEntity != null && responseEntity.getStatusCode().value() == 200) {
+
+			JSONParser jsonParser = new JSONParser();
+
+			configJsonObjectMap = (JSONObject) jsonParser.parse(jsonString);
+			
+			String resultCode = (String) configJsonObjectMap.get("resultCode");
+			String resultMessage = (String) configJsonObjectMap.get("resultMessage");
+
+			System.out.println("resultCode : " + resultCode);
+			System.out.println("resultMessage : " + resultMessage);
+
+
+		} else {
+			throw new Exception(" REST API 접속에서 예외가 발생했습니다. 응답 코드가 적절하지 않습니다.");
+		}
+
+		
+
 	}
 }
