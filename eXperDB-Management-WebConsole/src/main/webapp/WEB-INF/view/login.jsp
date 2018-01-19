@@ -30,7 +30,7 @@ function fn_login(){
 			document.getElementById('usr_id').focus();
 			return false;
 	}
-	document.loginForm.action = "<c:url value='/login.do'/>";
+	document.loginForm.action = "<c:url value='/loginAction.do'/>";
    	document.loginForm.submit();
 }
 
