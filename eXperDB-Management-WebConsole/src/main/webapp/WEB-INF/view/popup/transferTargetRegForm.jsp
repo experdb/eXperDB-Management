@@ -49,8 +49,6 @@
 			return false;
 		}
 		
-
-		
 		return true;	
 	}
 
@@ -58,46 +56,75 @@
 	function fn_insert() {
 		if (!fn_transferTargetValidation()) return false;
 		if (!confirm('<spring:message code="message.msg148"/>')) return false;
-			$.ajax({
-				url : '/insertTransferTarget.do',
-				type : 'post',
-				data : {
-					cnr_id : "${cnr_id}",
-					trf_trg_cnn_nm : $("#trf_trg_cnn_nm").val(),
-					trf_trg_url : $("#trf_trg_url").val(),
-					connector_class : $("#connector_class").val(),
-					task_max : $("#task_max").val(),
-					hadoop_conf_dir : $("#hadoop_conf_dir").val(),
-					hadoop_home : $("#hadoop_home").val(),
-					flush_size : $("#flush_size").val(),
-					rotate_interval_ms : $("#rotate_interval_ms").val(),
-				},
-				success : function(result) {
-					if(result=="true"){
-						alert('<spring:message code="message.msg57" />');
-						window.close();
-						opener.fn_select();
-					}else if(result=="msg115"){
-						alert('<spring:message code="message.msg115" />');
-					}else if(result=="msg127"){
-						alert('<spring:message code="message.msg127" />');
-					}
-				},
-				beforeSend: function(xhr) {
-			        xhr.setRequestHeader("AJAX", true);
-			     },
-				error : function(xhr, status, error) {
-					if(xhr.status == 401) {
-						alert('<spring:message code="message.msg02" />');
-						 location.href = "/";
-					} else if(xhr.status == 403) {
-						alert('<spring:message code="message.msg03" />');
-			             location.href = "/";
-					} else {
-						alert("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""));
-					}
+		$.ajax({
+			url : '/transferTargetNameCheck.do',
+			type : 'post',
+			data : {
+				trf_trg_cnn_nm : $("#trf_trg_cnn_nm").val()
+			},
+			success : function(result) {
+				if (result == "true") {
+					$.ajax({
+						url : '/insertTransferTarget.do',
+						type : 'post',
+						data : {
+							cnr_id : "${cnr_id}",
+							trf_trg_cnn_nm : $("#trf_trg_cnn_nm").val(),
+							trf_trg_url : $("#trf_trg_url").val(),
+							connector_class : $("#connector_class").val(),
+							task_max : $("#task_max").val(),
+							hadoop_conf_dir : $("#hadoop_conf_dir").val(),
+							hadoop_home : $("#hadoop_home").val(),
+							flush_size : $("#flush_size").val(),
+							rotate_interval_ms : $("#rotate_interval_ms").val(),
+						},
+						success : function(result) {
+							if(result=="true"){
+								alert('<spring:message code="message.msg57" />');
+								window.close();
+								opener.fn_select();
+							}else if(result=="msg115"){
+								alert('<spring:message code="message.msg115" />');
+							}else if(result=="msg127"){
+								alert('<spring:message code="message.msg127" />');
+							}
+						},
+						beforeSend: function(xhr) {
+					        xhr.setRequestHeader("AJAX", true);
+					     },
+						error : function(xhr, status, error) {
+							if(xhr.status == 401) {
+								alert('<spring:message code="message.msg02" />');
+								 location.href = "/";
+							} else if(xhr.status == 403) {
+								alert('<spring:message code="message.msg03" />');
+					             location.href = "/";
+							} else {
+								alert("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""));
+							}
+						}
+					});
+				}else {
+					alert('<spring:message code="message.msg119" />');
+					document.getElementById("trf_trg_cnn_nm").focus();
+					nmCheck = 0;
 				}
-			});
+			},
+			beforeSend: function(xhr) {
+		        xhr.setRequestHeader("AJAX", true);
+		     },
+			error : function(xhr, status, error) {
+				if(xhr.status == 401) {
+					alert('<spring:message code="message.msg02" />');
+					 location.href = "/";
+				} else if(xhr.status == 403) {
+					alert('<spring:message code="message.msg03" />');
+		             location.href = "/";
+				} else {
+					alert("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""));
+				}
+			}
+		});
 	}
 	
 	/*저장버튼 클릭시update*/

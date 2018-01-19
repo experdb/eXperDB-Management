@@ -473,10 +473,10 @@ public class TreeController {
 			dbServerManagerService.dbSvrDelete(db_svr_id);
 
 			// 화면접근이력 이력 남기기
-			/*CmmnUtils.saveHistory(request, historyVO);
-			historyVO.setExe_dtl_cd("DX-T0033_02");
-			historyVO.setMnu_id(12);
-			accessHistoryService.insertHistory(historyVO);*/
+			CmmnUtils.saveHistory(request, historyVO);
+			historyVO.setExe_dtl_cd("DX-T0005_02");
+			historyVO.setMnu_id(9);
+			accessHistoryService.insertHistory(historyVO);
 			
 		} catch (Exception e) {
 			e.printStackTrace();

@@ -94,19 +94,15 @@ public class LoginController {
 	 */
 	@RequestMapping(value = "/login.do")
 	public ModelAndView login() {
-		System.out.println("login");
 		ModelAndView mv = new ModelAndView();
-		mv.setViewName("login");
+		try {
+			mv.setViewName("login");
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 		return mv;
 	}
 	
-	@RequestMapping(value = "/loginAction.do")
-	public ModelAndView loginAction() {
-		System.out.println("loginAction");
-		ModelAndView mv = new ModelAndView();
-		mv.setViewName("login");
-		return mv;
-	}
 	/**
 	 * 로그인을 처리 한다.
 	 * 
@@ -117,62 +113,59 @@ public class LoginController {
 	 * @return ModelAndView mv
 	 * @throws Exception
 	 */
-//	@RequestMapping(value = "/loginAction.do")
-//	public ModelAndView loginAction(@ModelAttribute("userVo") UserVO userVo, ModelMap model, HttpServletResponse response,
-//			HttpServletRequest request, @ModelAttribute("historyVO") HistoryVO historyVO) {
-//		ModelAndView mv = new ModelAndView();
-//		System.out.println("dddd");
-//		String id = userVo.getUsr_id();
-//		String pw = SHA256.SHA256(userVo.getPwd());
-//		try {
-//			
-//			int masterCheck = loginService.selectMasterCheck();
-//			if(masterCheck>0){
-//				mv.addObject("error", "msg176");
-//				return mv;
-//			}
-//			
-//			List<UserVO> userList = loginService.selectUserList(userVo);
-//			int intLoginCnt = userList.size();
-//			mv.setViewName("login");
-//			if (intLoginCnt == 0) {
-//				mv.addObject("error", "msg156");
-//			} else if (!id.equals(userList.get(0).getUsr_id()) || !pw.equals(userList.get(0).getPwd())) {
-//				mv.addObject("error", "msg157");
-//			} else if (userList.get(0).getUse_yn().equals("N")) {
-//				mv.addObject("error", "msg158");
-//			} else if (userList.get(0).getUsr_expr_dt().equals("N")) {
-//				mv.addObject("error", "msg159");
-//			} else {
-//				System.out.println("222");
-//				// session 설정
-//				HttpSession session = request.getSession();
-//				request.getSession().setAttribute("session", session);
-//				request.getSession().setAttribute("usr_id", userList.get(0).getUsr_id());
-//				request.getSession().setAttribute("usr_nm", userList.get(0).getUsr_nm());
-//
-//				InetAddress local = InetAddress.getLocalHost();
-//				String ip = local.getHostAddress();
-//				request.getSession().setAttribute("ip", ip);
-//
-//				Properties props = new Properties();
-//				props.load(new FileInputStream(ResourceUtils.getFile("classpath:egovframework/tcontrolProps/globals.properties")));
-//			
-//				String lang = props.get("lang").toString();
-//				
-//				// 로그인 이력 남기기
-//				CmmnUtils.saveHistory(request, historyVO);
-//				historyVO.setExe_dtl_cd("DX-T0003");
-//				accessHistoryService.insertHistory(historyVO);
-//
-//				mv.setViewName("redirect:/index.do");
-//			}
-//
-//		} catch (Exception e) {
-//			e.printStackTrace();
-//		}
-//		return mv;
-//	}
+	@RequestMapping(value = "/loginAction.do")
+	public ModelAndView loginAction(@ModelAttribute("userVo") UserVO userVo, ModelMap model, HttpServletResponse response,
+			HttpServletRequest request, @ModelAttribute("historyVO") HistoryVO historyVO) {
+		ModelAndView mv = new ModelAndView();
+		String id = userVo.getUsr_id();
+		String pw = SHA256.SHA256(userVo.getPwd());
+		try {
+			
+			int masterCheck = loginService.selectMasterCheck();
+			if(masterCheck>0){
+				mv.addObject("error", "msg176");
+				return mv;
+			}
+			List<UserVO> userList = loginService.selectUserList(userVo);
+			int intLoginCnt = userList.size();
+			mv.setViewName("login");
+			if (intLoginCnt == 0) {
+				mv.addObject("error", "msg156");
+			} else if (!id.equals(userList.get(0).getUsr_id()) || !pw.equals(userList.get(0).getPwd())) {
+				mv.addObject("error", "msg157");
+			} else if (userList.get(0).getUse_yn().equals("N")) {
+				mv.addObject("error", "msg158");
+			} else if (userList.get(0).getUsr_expr_dt().equals("N")) {
+				mv.addObject("error", "msg159");
+			} else {
+				// session 설정
+				HttpSession session = request.getSession();
+				request.getSession().setAttribute("session", session);
+				request.getSession().setAttribute("usr_id", userList.get(0).getUsr_id());
+				request.getSession().setAttribute("usr_nm", userList.get(0).getUsr_nm());
+
+				InetAddress local = InetAddress.getLocalHost();
+				String ip = local.getHostAddress();
+				request.getSession().setAttribute("ip", ip);
+
+				Properties props = new Properties();
+				props.load(new FileInputStream(ResourceUtils.getFile("classpath:egovframework/tcontrolProps/globals.properties")));
+			
+				String lang = props.get("lang").toString();
+				
+				// 로그인 이력 남기기
+				CmmnUtils.saveHistory(request, historyVO);
+				historyVO.setExe_dtl_cd("DX-T0003");
+				accessHistoryService.insertHistory(historyVO);
+
+				mv.setViewName("redirect:/index.do");
+			}
+
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return mv;
+	}
 
 	/**
 	 * 로그아웃을 한다.

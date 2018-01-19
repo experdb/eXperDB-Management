@@ -89,6 +89,7 @@
 			alert("<spring:message code='etc.etc14'/>");
 			return false;
 		}
+		
 		return true;
 	}
 
@@ -139,30 +140,60 @@
 	function fn_insert() {
 		if (!fn_userManagerValidation())return false;
 		if (!confirm("<spring:message code='message.msg143'/>")) return false;
+		
 		$.ajax({
-			url : '/insertUserManager.do',
+			url : '/UserManagerIdCheck.do',
 			type : 'post',
 			data : {
-				usr_id : $("#usr_id").val(),
-				usr_nm : $("#usr_nm").val(),
-				pwd : $("#pwd").val(),
-				bln_nm : $("#bln_nm").val(),
-				dept_nm : $("#dept_nm").val(),
-				pst_nm : $("#pst_nm").val(),
-				rsp_bsn_nm : $("#rsp_bsn_nm").val(),
-				cpn : $("#cpn").val(),
-				// 				aut_id : $("#aut_id").val(),
-				usr_expr_dt : $("#datepicker3").val(),
-				use_yn : $("#use_yn").val(),
+				usr_id : $("#usr_id").val()
 			},
 			success : function(result) {
-				alert('<spring:message code="message.msg144"/>');
-				if (confirm('<spring:message code="message.msg145"/>')) {
-					window.close();
-					opener.location.href = "/menuAuthority.do?usr_id="+$("#usr_id").val();
+				if (result == "true") {
+					$.ajax({
+						url : '/insertUserManager.do',
+						type : 'post',
+						data : {
+							usr_id : $("#usr_id").val(),
+							usr_nm : $("#usr_nm").val(),
+							pwd : $("#pwd").val(),
+							bln_nm : $("#bln_nm").val(),
+							dept_nm : $("#dept_nm").val(),
+							pst_nm : $("#pst_nm").val(),
+							rsp_bsn_nm : $("#rsp_bsn_nm").val(),
+							cpn : $("#cpn").val(),
+							// 				aut_id : $("#aut_id").val(),
+							usr_expr_dt : $("#datepicker3").val(),
+							use_yn : $("#use_yn").val(),
+						},
+						success : function(result) {
+							alert('<spring:message code="message.msg144"/>');
+							if (confirm('<spring:message code="message.msg145"/>')) {
+								window.close();
+								opener.location.href = "/menuAuthority.do?usr_id="+$("#usr_id").val();
+							} else {
+								window.close();
+								opener.fn_select();
+							}
+						},
+						beforeSend: function(xhr) {
+					        xhr.setRequestHeader("AJAX", true);
+					     },
+						error : function(xhr, status, error) {
+							if(xhr.status == 401) {
+								alert('<spring:message code="message.msg02" />');
+								 location.href = "/";
+							} else if(xhr.status == 403) {
+								alert('<spring:message code="message.msg03" />');
+					             location.href = "/";
+							} else {
+								alert("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""));
+							}
+						}
+					});
 				} else {
-					window.close();
-					opener.fn_select();
+					alert("<spring:message code='message.msg123' />");
+					document.getElementById("usr_id").focus();
+					idCheck = 0;
 				}
 			},
 			beforeSend: function(xhr) {
@@ -170,16 +201,17 @@
 		     },
 			error : function(xhr, status, error) {
 				if(xhr.status == 401) {
-					alert('<spring:message code="message.msg02" />');
+					alert("<spring:message code='message.msg02' />");
 					 location.href = "/";
 				} else if(xhr.status == 403) {
-					alert('<spring:message code="message.msg03" />');
+					alert("<spring:message code='message.msg03' />");
 		             location.href = "/";
 				} else {
 					alert("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""));
 				}
 			}
 		});
+		
 	}
 
 

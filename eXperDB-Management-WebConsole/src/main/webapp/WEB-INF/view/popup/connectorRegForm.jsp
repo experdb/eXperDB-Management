@@ -74,19 +74,49 @@
 	function fn_insert() {
 		if (!fn_connectorValidation()) return false;
 			if (!confirm('<spring:message code="message.msg148"/>')) return false;
+			
 			$.ajax({
-				url : '/insertConnectorRegister.do',
+				url : '/connectorNameCheck.do',
 				type : 'post',
 				data : {
-					cnr_nm : $("#cnr_nm").val(),
-					cnr_ipadr : $("#cnr_ipadr").val(),
-					cnr_portno : $("#cnr_portno").val(),
-					cnr_cnn_tp_cd : $("#cnr_cnn_tp_cd").val()
+					cnr_nm : $("#cnr_nm").val()
 				},
 				success : function(result) {
-					alert('<spring:message code="message.msg57" />');
-					opener.location.reload();
-					window.close();
+					if (result == "true") {
+						$.ajax({
+							url : '/insertConnectorRegister.do',
+							type : 'post',
+							data : {
+								cnr_nm : $("#cnr_nm").val(),
+								cnr_ipadr : $("#cnr_ipadr").val(),
+								cnr_portno : $("#cnr_portno").val(),
+								cnr_cnn_tp_cd : $("#cnr_cnn_tp_cd").val()
+							},
+							success : function(result) {
+								alert('<spring:message code="message.msg57" />');
+								opener.location.reload();
+								window.close();
+							},
+							beforeSend: function(xhr) {
+						        xhr.setRequestHeader("AJAX", true);
+						     },
+							error : function(xhr, status, error) {
+								if(xhr.status == 401) {
+									alert('<spring:message code="message.msg02" />');
+									 location.href = "/";
+								} else if(xhr.status == 403) {
+									alert('<spring:message code="message.msg03" />');
+						             location.href = "/";
+								} else {
+									alert("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""));
+								}
+							}
+						});
+					}else {
+						alert('<spring:message code="message.msg119" />');
+						document.getElementById("cnr_nm").focus();
+						nmCheck = 0;
+					}
 				},
 				beforeSend: function(xhr) {
 			        xhr.setRequestHeader("AJAX", true);
@@ -103,6 +133,7 @@
 					}
 				}
 			});
+			
 	}
 
 	/* 수정버튼 클릭시 */

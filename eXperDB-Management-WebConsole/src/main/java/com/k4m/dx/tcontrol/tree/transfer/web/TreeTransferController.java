@@ -776,7 +776,10 @@ public class TreeTransferController {
 				
 				String strExtname = "bottledwater";
 				List<Object> extensionResult = cic.extension_select(serverObj, IP, PORT, strExtname);
-				if(extensionResult.size()==0){
+				if(extensionResult==null){
+					result.put("database", "database");
+					return result;
+				}else if(extensionResult.size()==0){
 					result.put("bottledwater", "bottledwater");
 					return result;
 				}else{

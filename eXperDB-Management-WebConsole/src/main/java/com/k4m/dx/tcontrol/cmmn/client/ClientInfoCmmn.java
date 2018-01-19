@@ -1126,8 +1126,8 @@ public class ClientInfoCmmn {
 	}
 
 	// DBMS정보
-	public HashMap dbms_inforamtion(String IP, int PORT, JSONObject serverObj) {
-		HashMap resultHp = null;
+	public JSONObject dbms_inforamtion(String IP, int PORT, JSONObject serverObj) {
+		JSONObject resultHp = null;
 		try {
 			JSONObject jObj = new JSONObject();
 			jObj.put(ClientProtocolID.DX_EX_CODE, ClientTranCodeType.DxT021);
@@ -1143,7 +1143,7 @@ public class ClientInfoCmmn {
 			String strDxExCode = (String)objList.get(ClientProtocolID.DX_EX_CODE);
 			String strResultCode = (String)objList.get(ClientProtocolID.RESULT_CODE);
 			
-			resultHp = (HashMap) objList.get(ClientProtocolID.RESULT_DATA);
+			resultHp = (JSONObject) objList.get(ClientProtocolID.RESULT_DATA);
 	
 			CA.close();
 		} catch(Exception e) {
