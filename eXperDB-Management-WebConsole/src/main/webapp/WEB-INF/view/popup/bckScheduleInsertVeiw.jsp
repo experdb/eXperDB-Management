@@ -491,8 +491,10 @@ var haCnt = 0;
 	  * Backup Insert
 	  ******************************************************** */
 	  function fn_insert_bckScheduler(){
-
-		  if (!fn_validation()) return false;
+		
+		  if (!fn_validation()) return false;	  
+		  if (!fn_check()) return false;
+		  
 		  var bck = $('#bck').val();
 
 		  if(bck =="rman"){		  

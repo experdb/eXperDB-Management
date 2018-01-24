@@ -15,7 +15,7 @@
 			, SUM(CASE WHEN scd_cndt = 'TC001802' THEN 1 ELSE 0 END) AS run_cnt
 		    , SUM(CASE WHEN scd_cndt = 'TC001803' THEN 1 ELSE 0 END) AS stop_cnt
 		    , SUM(CASE WHEN (nxt_exe_dtm::date - now()::date) = 0 THEN 1 ELSE 0 END) as today_cnt
-		    , (SELECT COUNT(*) FROM T_WRKEXE_G WHERE exe_rslt_cd = 'TC001702') AS fail_cnt
+		    , (SELECT COUNT(*) FROM T_WRKEXE_G WHERE exe_rslt_cd = 'TC001702' AND FIX_RSLTCD IS NULL) AS fail_cnt
 		FROM
 			T_SCD_M A
     </select>

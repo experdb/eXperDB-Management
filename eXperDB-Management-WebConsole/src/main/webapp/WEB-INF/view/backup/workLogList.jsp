@@ -87,6 +87,22 @@ function fn_rman_init(){
 	 					},
 	 					className : "dt-center",
 	 					defaultContent : ""
+	 				},
+	 				{
+	 					data : "fix_rsltcd",
+	 					render : function(data, type, full, meta) {	 						
+	 						var html = '';
+	 						if (full.fix_rsltcd == 'TC002001') {
+	 							html += '<span class="btn btnC_01 btnF_02" onClick=javascript:fn_fixLog('+full.exe_sn+');><input type="button" value="해결"></span>';
+	 						} else if(full.fix_rsltcd == 'TC002002'){
+	 							html += '<span class="btn btnC_01 btnF_02" onClick=javascript:fn_fixLog('+full.exe_sn+');><input type="button" value="미해결"></span>';
+	 						} else {
+	 							html +='<span class="btn btnC_01 btnF_02" onClick=javascript:fn_fix_rslt_reg('+full.exe_sn+');><input type="button" value="조치입력"></span>';
+	 						}
+	 						return html;
+	 					},
+	 					className : "dt-center",
+	 					defaultContent : ""
 	 				}
  		        ],'select': {'style': 'multi'} 
 	});
@@ -101,6 +117,7 @@ function fn_rman_init(){
    	tableRman.tables().header().to$().find('th:eq(7)').css('min-width', '100px');
    	tableRman.tables().header().to$().find('th:eq(8)').css('min-width', '70px');
    	tableRman.tables().header().to$().find('th:eq(9)').css('min-width', '100px');
+   	tableRman.tables().header().to$().find('th:eq(10)').css('min-width', '100px');
     $(window).trigger('resize'); 
 }
 
@@ -144,10 +161,26 @@ function fn_dump_init(){
 	 					},
 	 					className : "dt-center",
 	 					defaultContent : ""
+	 				},
+	 				{
+	 					data : "fix_rsltcd",
+	 					render : function(data, type, full, meta) {	 						
+	 						var html = '';
+	 						if (full.fix_rsltcd == 'TC002001') {
+	 							html += '<span class="btn btnC_01 btnF_02" onClick=javascript:fn_fixLog('+full.exe_sn+');><input type="button" value="해결"></span>';
+	 						} else if(full.fix_rsltcd == 'TC002002'){
+	 							html += '<span class="btn btnC_01 btnF_02" onClick=javascript:fn_fixLog('+full.exe_sn+');><input type="button" value="미해결"></span>';
+	 						} else {
+	 							html +='<span class="btn btnC_01 btnF_02" onClick=javascript:fn_fix_rslt_reg('+full.exe_sn+');><input type="button" value="조치입력"></span>';
+	 						}
+	 						return html;
+	 					},
+	 					className : "dt-center",
+	 					defaultContent : ""
 	 				}
  		        ],'select': {'style': 'multi'} 
 	});
-   	
+
    	tableDump.tables().header().to$().find('th:eq(0)').css('min-width', '40px');
    	tableDump.tables().header().to$().find('th:eq(1)').css('min-width', '200px');
    	tableDump.tables().header().to$().find('th:eq(2)').css('min-width', '100px');
@@ -160,6 +193,7 @@ function fn_dump_init(){
    	tableDump.tables().header().to$().find('th:eq(9)').css('min-width', '100px');
    	tableDump.tables().header().to$().find('th:eq(10)').css('min-width', '100px');
    	tableDump.tables().header().to$().find('th:eq(11)').css('min-width', '100px');
+	tableDump.tables().header().to$().find('th:eq(12)').css('min-width', '100px');
     $(window).trigger('resize');
 }
 
@@ -297,11 +331,119 @@ function selectTab(intab){
 }
 
 
+function fn_fix_rslt_reg(exe_sn){
+	document.getElementById("exe_sn").value = exe_sn;
+	$('#fix_rslt_msg').val('');
+	toggleLayer($('#pop_layer_fix_rslt_reg'), 'on')
+}
+
+function fn_fix_rslt_msg_reg(){
+	var fix_rsltcd = $(":input:radio[name=rdo]:checked").val();
+	
+	$.ajax({
+			url : "/updateFixRslt.do",
+			data : {
+				exe_sn : $('#exe_sn').val(),
+				fix_rsltcd : fix_rsltcd,
+				fix_rslt_msg : $('#fix_rslt_msg').val()
+			},
+			dataType : "json",
+			type : "post",
+			beforeSend: function(xhr) {
+		        xhr.setRequestHeader("AJAX", true);
+		     },
+			error : function(xhr, status, error) {
+				if(xhr.status == 401) {
+					alert('<spring:message code="message.msg02" />');
+					 location.href = "/";
+				} else if(xhr.status == 403) {
+					alert('<spring:message code="message.msg03" />');
+		             location.href = "/";
+				} else {
+					alert("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""));
+				}
+			},
+			success : function(result) {
+				toggleLayer($('#pop_layer_fix_rslt_reg'), 'off');
+				location.reload();
+			}
+		}); 
+}
+
+
+function fn_fix_rslt_msg_modify(){
+	var fix_rsltcd = $(":input:radio[name=rdo]:checked").val();
+
+	$.ajax({
+			url : "/updateFixRslt.do",
+			data : {
+				exe_sn : $('#exe_sn').val(),
+				fix_rsltcd : fix_rsltcd,
+				fix_rslt_msg : $('#fix_rslt_msg').val()
+			},
+			dataType : "json",
+			type : "post",
+			beforeSend: function(xhr) {
+		        xhr.setRequestHeader("AJAX", true);
+		     },
+			error : function(xhr, status, error) {
+				if(xhr.status == 401) {
+					alert('<spring:message code="message.msg02" />');
+					 location.href = "/";
+				} else if(xhr.status == 403) {
+					alert('<spring:message code="message.msg03" />');
+		             location.href = "/";
+				} else {
+					alert("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""));
+				}
+			},
+			success : function(result) {
+				toggleLayer($('#pop_layer_fix_rslt_msg'), 'off');
+				location.reload();
+			}
+		}); 
+}
+
+
 </script>
 <%@include file="../cmmn/wrkLog.jsp"%>
 <%@include file="../cmmn/workRmanInfo.jsp"%>
 <%@include file="../cmmn/workDumpInfo.jsp"%>
+<%@include file="../cmmn/fixRsltMsg.jsp"%>
 
+	<div id="pop_layer_fix_rslt_reg" class="pop-layer">
+		<div class="pop-container">
+			<div class="pop_cts" style="width: 60%; margin: 0 auto; min-height:0; min-width:0;">
+				<p class="tit" style="margin-bottom: 15px;">조치결과 등록</p>
+				<table class="write" border="0">
+					<caption>조치결과 등록</caption>
+					<tbody>
+						<tr>
+							<td>
+								<div class="inp_rdo">
+									<input name="rdo" id="rdo_2_3" type="radio">
+										<label for="rdo_2_3" style="margin-right: 2%;">해결</label> 
+									<input name="rdo" id="rdo_2_4" type="radio"> 
+										<label for="rdo_2_4">미해결</label>
+								</div>
+							</td>
+						</tr>
+						<tr>
+							<td><textarea name="fix_rslt_msg" id="fix_rslt_msg" style="height: 250px;"> </textarea>
+									<input type="hidden" name="exe_sn" id="exe_sn">
+							</td>
+						</tr>
+					</tbody>
+				</table>
+				<div class="btn_type_02">
+					<a href="#n" class="btn" onclick="fn_fix_rslt_msg_reg();"><span><spring:message code="common.save"/></span></a>
+					<a href="#n" class="btn" onclick="toggleLayer($('#pop_layer_fix_rslt_reg'), 'off');"><span><spring:message code="common.close"/></span></a>
+				</div>
+			</div>
+		</div><!-- //pop-container -->
+	</div>
+	
+	
 <!-- contents -->
 <div id="contents">
 	<div class="contents_wrap">
@@ -407,6 +549,7 @@ function selectTab(intab){
 								<th width="100"><spring:message code="backup_management.work_end_time" /></th>
 								<th width="70"><spring:message code="backup_management.elapsed_time" /></th>
 								<th width="100"><spring:message code="common.status" /></th>
+								<th width="100">조치결과</th>
 							</tr>
 						</thead>
 					</table>
@@ -428,6 +571,7 @@ function selectTab(intab){
 								<th width="100"><spring:message code="backup_management.work_end_time" /></th>
 								<th width="100"><spring:message code="backup_management.elapsed_time" /></th>
 								<th width="100"><spring:message code="common.status" /></th>
+								<th width="100">조치결과</th>
 							</tr>
 						</thead>
 					</table>

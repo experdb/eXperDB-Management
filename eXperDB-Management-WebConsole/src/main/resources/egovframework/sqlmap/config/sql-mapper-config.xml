@@ -39,6 +39,7 @@
 		<typeAlias alias="bottlewaterVO" type="com.k4m.dx.tcontrol.tree.transfer.service.BottlewaterVO" /> 
 		<typeAlias alias="tblKafkaConfigVO" type="com.k4m.dx.tcontrol.tree.transfer.service.TblKafkaConfigVO" /> 
 		<typeAlias alias="ipadrVO" type="com.k4m.dx.tcontrol.admin.dbserverManager.service.IpadrVO" /> 
+		<typeAlias alias="wrkExeVO" type="com.k4m.dx.tcontrol.functions.schedule.service.WrkExeVO" /> 
     </typeAliases>
     
  	<mappers>

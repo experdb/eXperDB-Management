@@ -286,7 +286,16 @@ function fn_buttonAut(){
  * work등록 팝업창 호출
  ******************************************************** */
 function fn_workAdd(){
-	var popUrl = "/popup/scheduleRegForm.do"; 
+	
+	if(table.rows().data().length > 0){
+		var wrk_id_list = [];
+		for (var i = 0; i < table.rows().data().length; i++) {
+			wrk_id_list.push( table.rows().data()[i].wrk_id);   
+	  	}
+		var popUrl = "/popup/scheduleRegForm.do?wrk_id_list="+wrk_id_list; 
+	}else{
+		var popUrl = "/popup/scheduleRegForm.do";
+	}
 	var width = 1220;
 	var height = 680;
 	var left = (window.screen.width / 2) - (width / 2);
@@ -294,7 +303,6 @@ function fn_workAdd(){
 	var popOption = "width="+width+", height="+height+", top="+top+", left="+left+", resizable=no, scrollbars=yes, status=no, toolbar=no, titlebar=yes, location=no,";
 	
 	window.open(popUrl,"",popOption);
-
 }
 
 
@@ -360,8 +368,9 @@ function fn_workAddCallback(rowList){
 				alert("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""));
 			}
 		},
-		success : function(result) {		
-			table.clear().draw();
+		success : function(result) {	
+			table.rows({selected: true}).deselect();
+			//table.clear().draw();
 			table.rows.add(result).draw();
 		}
 	});
@@ -392,6 +401,14 @@ function fn_insertSchedule(){
 	if(datas.length < 1){
 		alert('<spring:message code="message.msg39" />');
 		return false;
+	}else{
+		//다른 서버가 포함되어있는지 확인
+		for (var i = 0; i < datas.length; i++){ 
+			if(table.rows().data()[0].db_svr_nm != table.rows().data()[i].db_svr_nm){
+				alert("2개 이상의 DBMS가 존재합니다.");
+				return false;
+			}
+		}		
 	}
 	
 	var arrmaps = [];
@@ -437,8 +454,13 @@ function fn_insertSchedule(){
 				}
 			},
 			success : function(result) {
-				alert('<spring:message code="message.msg43" />');
-				location.href='/selectScheduleListView.do' ;
+				if(result == "F"){
+					alert("중복된 스케줄명 입니다.");
+					return false;
+				}else{
+					alert('<spring:message code="message.msg43" />');
+					location.href='/selectScheduleListView.do' ;
+				}
 			}
 		}); 	
 	}else{

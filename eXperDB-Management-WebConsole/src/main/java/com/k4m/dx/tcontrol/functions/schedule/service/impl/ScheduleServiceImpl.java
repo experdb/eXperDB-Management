@@ -14,6 +14,7 @@ import com.k4m.dx.tcontrol.backup.service.WorkVO;
 import com.k4m.dx.tcontrol.functions.schedule.service.ScheduleDtlVO;
 import com.k4m.dx.tcontrol.functions.schedule.service.ScheduleService;
 import com.k4m.dx.tcontrol.functions.schedule.service.ScheduleVO;
+import com.k4m.dx.tcontrol.functions.schedule.service.WrkExeVO;
 
 import egovframework.rte.fdl.cmmn.EgovAbstractServiceImpl;
 
@@ -243,5 +244,47 @@ public class ScheduleServiceImpl extends EgovAbstractServiceImpl  implements Sch
 	@Override
 	public List<Map<String, Object>> selectWrkInfo(int wrk_id) throws Exception {
 		return scheduleDAO.selectWrkInfo(wrk_id);
+	}
+
+
+	@Override
+	public List<Map<String, Object>> selectRunScheduleList() throws Exception {
+		return scheduleDAO.selectRunScheduleList();
+	}
+
+
+	@Override
+	public void updateSCD_CNDT(WrkExeVO vo) throws Exception {
+		scheduleDAO.updateSCD_CNDT(vo);
+	}
+
+
+	@Override
+	public void insertT_WRKEXE_G(WrkExeVO vo) throws Exception {
+		scheduleDAO.insertT_WRKEXE_G(vo);
+	}
+
+
+	@Override
+	public int selectQ_WRKEXE_G_01_SEQ() throws Exception {
+		return (int) scheduleDAO.selectQ_WRKEXE_G_01_SEQ();
+	}
+
+
+	@Override
+	public int selectQ_WRKEXE_G_02_SEQ() throws Exception {
+		return (int) scheduleDAO.selectQ_WRKEXE_G_02_SEQ();
+	}
+
+
+	@Override
+	public void updateFixRslt(HashMap<String, Object> paramvalue) throws Exception {
+		scheduleDAO.updateFixRslt(paramvalue);	
+	}
+
+
+	@Override
+	public List<Map<String, Object>> selectFixRsltMsg(int exe_sn) throws Exception {
+		return scheduleDAO.selectFixRsltMsg(exe_sn);
 	}
 }

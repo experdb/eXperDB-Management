@@ -20,6 +20,7 @@ import com.k4m.dx.tcontrol.cmmn.client.ClientInfoCmmn;
 import com.k4m.dx.tcontrol.common.service.AgentInfoVO;
 import com.k4m.dx.tcontrol.common.service.CmmnServerInfoService;
 import com.k4m.dx.tcontrol.functions.schedule.service.ScheduleService;
+import com.k4m.dx.tcontrol.functions.schedule.service.WrkExeVO;
 
 public class ScheduleQuartzJob implements Job{
 
@@ -33,11 +34,12 @@ public class ScheduleQuartzJob implements Job{
 	
 	/**
 	 * 1. 스케줄ID를 가져옴
-	 * 2. DBMS정보 조회(Master, Slave)
-	 * 3. 해당 스케줄ID에 해당하는 스케줄 상세정보 조회(work 정보)
-	 * 4. 디비서버_ID 추출하여 접속정보 조회
-	 * 5. 부가옵션 조회
-	 * 6. 오브젝트 옵션
+	 * 2. 실행중인 스케줄 정보 조회
+	 * 3. DBMS정보 조회(Master, Slave)
+	 * 4. 해당 스케줄ID에 해당하는 스케줄 상세정보 조회(work 정보)
+	 * 5. 디비서버_ID 추출하여 접속정보 조회
+	 * 6. 부가옵션 조회
+	 * 7. 오브젝트 옵션
 	 */
 	@Override
 	public void execute(JobExecutionContext jobContext) throws JobExecutionException {
@@ -51,12 +53,14 @@ public class ScheduleQuartzJob implements Job{
 			
 		try{
 			
+			List<Map<String, Object>> runSchedule = null;
 			List<Map<String, Object>> resultWork = null;		
 			List<Map<String, Object>> resultDbconn = null;
 			List<Map<String, Object>> addOption = null;
 			List<Map<String, Object>> addObject = null;
 			
 			JobDataMap dataMap = jobContext.getJobDetail().getJobDataMap();
+					
 			
 			// 1. 스케줄ID를 가져옴
 			String scd_id= dataMap.getString("scd_id");
@@ -77,11 +81,15 @@ public class ScheduleQuartzJob implements Job{
 					AutowireCapableBeanFactory.AUTOWIRE_BY_TYPE, false);
 			
 			ScheduleService scheduleService = (ScheduleService) context.getBean("scheduleService");			
+			
+			// 2.실행중인 스케줄 정보 조회
+			runSchedule = scheduleService.selectRunScheduleList();
+			
 		
-			// 2. scd_id에 대한 (Master)DB접속 정보 가지고옴
+			// 3. scd_id에 대한 (Master)DB접속 정보 가지고옴
 			resultDbconn= scheduleService.selectDbconn(Integer.parseInt(scd_id));
 						
-			// 3. 해당 스케줄ID에 해당하는 스케줄 상세정보 조회(work 정보)
+			// 4. 해당 스케줄ID에 해당하는 스케줄 상세정보 조회(work 정보)
 			resultWork= scheduleService.selectExeScheduleList(scd_id);
 		
 			Calendar calendar = Calendar.getInstance();				
@@ -114,10 +122,62 @@ public class ScheduleQuartzJob implements Job{
 						CMD.add(strCmd);
 					// 백업 내용이 RMAN 백업일경우	
 					}else{
-						BCK_NM.add("");
-						String rmanCmd ="";
-						rmanCmd = rmanBackupMakeCmd(resultWork, i, resultDbconn);		
-						CMD.add(rmanCmd);
+						//실행중인 리스트와 해당스케줄정보 비교하여 현재 실행중이면서 RMAN 백업으로 디렉토리가 같으면, UPDATA(에러처리)
+						if(runSchedule.size() > 0){
+							 // ArrayList 생성
+							ArrayList arr = new ArrayList();
+
+							System.out.println("▶▶▶ Running중인 동일한 RMAN 체크 . . . ");
+							
+							// 실행중인 RMAN의 백업디렉토리와 현재 실행할  RMAN의 디렉토리가 같으면 1, 다르면 0
+							for(int k=0; k<runSchedule.size(); k++){
+								System.out.println("실행할["+resultWork.get(i).get("bck_pth").toString() +"]==실행중["+ runSchedule.get(k).get("bck_pth").toString()+"]");
+								if(resultWork.get(i).get("bck_pth").toString().equals(runSchedule.get(k).get("bck_pth").toString())){
+									System.out.println("▶▶▶ Running중인 동일한 RMAN 존재!");
+									arr.add(k,"running");
+								}
+							}						
+							// length>0 크면 현재 실행될 RMAN백업의 디렉토리에 기실행중인 백업이 존재함,
+							// 실행결과 및 오류내용 업데이트
+							if(arr.size() > 0){
+							
+								int intSeq = scheduleService.selectQ_WRKEXE_G_01_SEQ();
+								int intGrpSeq = scheduleService.selectQ_WRKEXE_G_02_SEQ();
+								
+								WrkExeVO vo = new WrkExeVO();
+								vo.setExe_sn(intSeq);
+								vo.setScd_id(Integer.parseInt(resultWork.get(i).get("scd_id").toString()));
+								vo.setWrk_id(Integer.parseInt(resultWork.get(i).get("wrk_id").toString()));
+								vo.setExe_rslt_cd("TC001702");
+								vo.setRslt_msg("failed ERROR: could not lock backup catalogDETAIL: Another pg_rman is just running. Skip this backup.");
+								vo.setBck_opt_cd(resultWork.get(i).get("bck_opt_cd").toString());
+								vo.setDb_id(Integer.parseInt(resultWork.get(i).get("db_id").toString()));
+								vo.setBck_file_pth(resultWork.get(i).get("bck_pth").toString());
+								vo.setExe_grp_sn(intGrpSeq);
+								vo.setScd_cndt("TC001802"); //(실행 -> 정지)
+								vo.setDb_svr_ipadr_id(Integer.parseInt(resultWork.get(i).get("db_svr_ipadr_id").toString()));
+								
+								//스케줄 상태변경
+								System.out.println("▶▶▶ 스케줄 상태변경(실행 -> 중지)");
+								scheduleService.updateSCD_CNDT(vo);
+								
+								//스케줄 이력등록
+								System.out.println("▶▶▶ 스케줄이력등록(실패, 동일한 RMAN 작업 실행중)");
+								scheduleService.insertT_WRKEXE_G(vo);
+								
+								return;
+							}else{
+								BCK_NM.add("");
+								String rmanCmd ="";
+								rmanCmd = rmanBackupMakeCmd(resultWork, i, resultDbconn);		
+								CMD.add(rmanCmd);
+							}				
+						}else{
+							BCK_NM.add("");
+							String rmanCmd ="";
+							rmanCmd = rmanBackupMakeCmd(resultWork, i, resultDbconn);		
+							CMD.add(rmanCmd);
+						}
 					}
 				}						
 				agentCall(resultWork, CMD, BCK_NM, resultDbconn, db_svr_ipadr_id);

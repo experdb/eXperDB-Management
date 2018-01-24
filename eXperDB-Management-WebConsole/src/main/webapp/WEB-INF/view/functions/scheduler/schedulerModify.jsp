@@ -583,7 +583,7 @@ function fn_scheduleReStart(){
 									<tbody>
 										<tr>
 											<th scope="row" class="t9 line"><spring:message code="schedule.schedule_name" /></th>
-											<td><input type="text" class="txt t2" id="scd_nm" name="scd_nm" maxlength="20"/></td>
+											<td><input type="text" class="txt t2" id="scd_nm" name="scd_nm" maxlength="20" readonly="readonly"/></td>
 										</tr>
 										<tr>
 											<th scope="row" class="t9 line"><spring:message code="schedule.scheduleExp"/></th>
