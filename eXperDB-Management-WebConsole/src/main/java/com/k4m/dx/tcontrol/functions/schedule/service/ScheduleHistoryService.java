@@ -20,4 +20,6 @@ public interface ScheduleHistoryService {
 	List<Map<String, Object>> selectScheduleHistoryDetail(int exe_sn) throws Exception;
 
 	List<Map<String, Object>> selectScheduleHistoryWorkDetail(int exe_sn) throws Exception;
+
+	List<Map<String, Object>> selectScheduleDBMSList(Map<String, Object> param) throws Exception;
 }

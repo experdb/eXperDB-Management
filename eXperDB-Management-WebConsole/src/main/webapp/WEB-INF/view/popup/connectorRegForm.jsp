@@ -248,7 +248,7 @@
 							<th scope="row" class="ico_t1"><spring:message code="etc.etc04"/>(*)</th>
 							<td>
 								<c:if test="${act == 'i'}">
-								<input type="text" class="txt" name="cnr_nm" id="cnr_nm" value="${cnr_nm}" maxlength="20" style="width: 180px;"/>
+								<input type="text" class="txt" name="cnr_nm" id="cnr_nm" value="${cnr_nm}" maxlength="20" style="width: 180px;" placeholder="20<spring:message code='message.msg188'/>" />
 									<span class="btn btnC_01">
 										<button type="button" class= "btn_type_02" onclick="fn_nmCheck()" style="width: 110px; height: 38px; margin-right: -60px; margin-top: 0;"><spring:message code="common.overlap_check" /></button>
 									</span>

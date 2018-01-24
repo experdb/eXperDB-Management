@@ -6,22 +6,17 @@
 
     <script>
     function fn_validation(){
-    	
-    	 var arySrtDt = $('#from').val(); // ex) 시작일자(2007-10-09)
-    	 var aryEndDt = $('#to').val(); // ex) 종료일자(2007-12-05)
-    	 
-    	 var startDt = new Date(arySrtDt);
-    	 var endDt	= new Date(aryEndDt);
-
+    	var arySrtDt = $('#from').val(); // ex) 시작일자(2007-10-09)
+     	var aryEndDt = $('#to').val(); // ex) 종료일자(2007-12-05)
+    	var startDt = new Date(arySrtDt);
+    	var endDt	= new Date(aryEndDt);
     	resultDt	= Math.round((endDt.valueOf() - startDt.valueOf())/(1000*60*60*24*365/12));
-    	
     	if(resultDt>6){
     		alert("<spring:message code='message.msg34' />");
     		return false; 
     	}
     	return true;
     }
-    
     
 	$(window.document).ready(function() {
 		fn_buttonAut();		
@@ -40,49 +35,13 @@
 		var scd_nm = "${scd_nm}";
 		var wrk_nm = "${wrk_nm}";
 		
-		
 		if(exe_result == "" || exe_result==null){
 			document.getElementById("exe_result").value="%";
 		}else{
 			document.getElementById("exe_result").value=exe_result;
 		}
-	
-		
-		 /* ********************************************************
-		  * 페이지 시작시, Repository DB에 등록되어 있는 디비의 서버명 SelectBox 
-		  ******************************************************** */
-		  	$.ajax({
-				url : "/selectSvrList.do",
-				data : {},
-				dataType : "json",
-				type : "post",
-				beforeSend: function(xhr) {
-			        xhr.setRequestHeader("AJAX", true);
-			     },
-				error : function(xhr, status, error) {
-					if(xhr.status == 401) {
-						alert("<spring:message code='message.msg02' />");
-						 location.href = "/";
-					} else if(xhr.status == 403) {
-						alert("<spring:message code='message.msg03' />");
-			             location.href = "/";
-					} else {
-						alert("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""));
-					}
-				},
-				success : function(result) {		
-					$("#db_svr_nm").children().remove();
-					$("#db_svr_nm").append("<option value='%'><spring:message code='common.total' /></option>");
-					if(result.length > 0){
-						for(var i=0; i<result.length; i++){
-							$("#db_svr_nm").append("<option value='"+result[i].db_svr_nm+"'>"+result[i].db_svr_nm+"</option>");	
-						}									
-					}
-					$("#db_svr_nm").val(svr_nm).attr("selected", "selected");
-				}
-			});	 
-		 
-		 fn_ScheduleNmList(scd_nm);
+		fn_SelectDBMS(svr_nm);
+		fn_ScheduleNmList(scd_nm);
 	
 	});
 	
@@ -117,7 +76,6 @@
 	function fn_buttonAut(){
 		var read_button = document.getElementById("read_button"); 
 		if("${read_aut_yn}" == "Y"){
-
 			read_button.style.display = '';
 		}else{
 			read_button.style.display = 'none';
@@ -127,6 +85,7 @@
 	/*조회버튼 클릭시*/
 	function fn_selectScheduleHistory() {
 		if (!fn_validation()) return false;
+		document.selectScheduleHistory.pageIndex.value = 1;
 		document.selectScheduleHistory.action = "/selectScheduleHistory.do";
 		document.selectScheduleHistory.submit();
 	}
@@ -138,10 +97,46 @@
 		document.selectScheduleHistory.submit();
 	}
 	
+	/* DBMS 조회 [SELECT BOX] */
+	function fn_SelectDBMS(svr_nm){
+	  	$.ajax({
+			url : "/selectScheduleDBMSList.do",
+			data : {
+				wrk_start_dtm : $('#from').val(),
+				wrk_end_dtm : 	$('#to').val()	
+			},
+			dataType : "json",
+			type : "post",
+			beforeSend: function(xhr) {
+		        xhr.setRequestHeader("AJAX", true);
+		     },
+			error : function(xhr, status, error) {
+				if(xhr.status == 401) {
+					alert("<spring:message code='message.msg02' />");
+					 location.href = "/";
+				} else if(xhr.status == 403) {
+					alert("<spring:message code='message.msg03' />");
+		             location.href = "/";
+				} else {
+					alert("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""));
+				}
+			},
+			success : function(result) {		
+				$("#db_svr_nm").children().remove();
+				$("#db_svr_nm").append("<option value='%'><spring:message code='common.total' /></option>");
+				if(result.length > 0){
+					for(var i=0; i<result.length; i++){
+						$("#db_svr_nm").append("<option value='"+result[i].db_svr_nm+"'>"+result[i].db_svr_nm+"</option>");	
+					}									
+				}
+				$("#db_svr_nm").val(svr_nm).attr("selected", "selected");
+			}
+		});	 
+	}
 	
 	function setSearchDate(start){
 		$('input:not(:checked)').parent(".chkbox2").removeClass("on");
-        $('input:checked').parent(".chkbox2").addClass("on");    
+        $('input:checked').parent(".chkbox2").addClass("on");       
         
 		var num = start.substring(0,1);
 		var str = start.substring(1,2);
@@ -173,18 +168,16 @@
 		// 시작일은 종료일 이후 날짜 선택하지 못하도록 비활성화
 		$("#from").datepicker( "option", "maxDate", endDate );
 
+        fn_ScheduleNmList();
+        fn_SelectDBMS();
 	}
 
 	function fn_ScheduleNmList(scd_nm){
-
-	  var lgi_dtm_start = $('#from').val();
-	  var lgi_dtm_end = $('#to').val();
-	  
 	  	$.ajax({
 			url : "/selectScheduleNmList.do",
 			data : {
-				wrk_start_dtm : lgi_dtm_start,
-				wrk_end_dtm : 	lgi_dtm_end				
+				wrk_start_dtm : $('#from').val(),
+				wrk_end_dtm : 	$('#to').val()				
 			},
 			dataType : "json",
 			type : "post",

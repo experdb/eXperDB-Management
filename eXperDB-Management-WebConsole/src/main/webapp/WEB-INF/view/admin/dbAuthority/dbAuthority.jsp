@@ -113,7 +113,7 @@
 			success : function(result) {	
 				svr_server = result;
 				fn_dbAutInfo();
-			}			
+			}
 		});
 		
 
@@ -159,9 +159,18 @@
 			html2+=	'</tr>';
 			html2+='</thead>';
  			$(svr_server).each(function (index, item) {
+				var array = new Array();
+				for(var i = 0; i<result.length; i++){
+					if(item.db_svr_nm == result[i].db_svr_nm){
+						array.push(result[i].db_id);
+					}
+				}
+				
 				html2+='<tbody>';
 				html2+='<tr class="db_tit">';
-				html2+='		<th scope="row" colspan="2">'+item.db_svr_nm+'</th>';
+				html2+='		<th scope="row">'+item.db_svr_nm+'</th>';
+				html2+='		<td><div class="inp_chk"><input type="checkbox" id="'+item.db_svr_id+'" onClick="fn_allCheck(\''+item.db_svr_id+'\', \''+ array+'\');">';
+				html2+='		<label for="'+item.db_svr_id+'"></lavel></div></td>';
 				html2+='	</tr>';
 				
 				for(var i = 0; i<result.length; i++){
@@ -170,7 +179,7 @@
 						html2+='		<th scope="row">'+result[i].db_nm+'</th>';
 						html2+='		<td>';
 						html2+='			<div class="inp_chk">';
-						html2+='				<input type="checkbox" id="'+result[i].db_svr_id+'_'+result[i].db_id+'" name="aut_yn" onClick="fn_userCheck();" />';
+						html2+='				<input type="checkbox" id="'+result[i].db_svr_id+'_'+result[i].db_id+'" value="'+result[i].db_svr_id+'_'+result[i].db_id+'" name="aut_yn" onClick="fn_userCheck();" />';
 						html2+='       		<label for="'+result[i].db_svr_id+'_'+result[i].db_id+'"></label>';
 						html2+='			</div>';
 						html2+='		</td>';
@@ -195,6 +204,21 @@
 			 $("input[type=checkbox]").prop("checked",false);
 			 return false;
 		 }
+	}
+	
+	function fn_allCheck(db_svr_id,db_id){
+		fn_userCheck();
+		var strArray = db_id.split(',');
+		if ($("#"+db_svr_id).prop("checked")) {
+			for(var i=0; i<strArray.length; i++){
+				document.getElementById(db_svr_id+'_'+strArray[i]).checked = true;
+			}
+		}else{
+			for(var i=0; i<strArray.length; i++){
+				document.getElementById(db_svr_id+'_'+strArray[i]).checked = false;
+			}
+		}
+		
 	}
 	
 	$(function() {
@@ -264,23 +288,47 @@
 		 }else{
 			 var usr_id = userTable.row('.selected').data().usr_id;
 
-			 var db_svr_id = $("input[name='db_svr_id']");
-			 var db_id = $("input[name='db_id']");
-			 var aut_yn = $("input[name='aut_yn']");
-		 
-	 		 for(var i = 0; i < aut_yn.length; i++){
-	 			 var datas = new Object();
-				 datas.usr_id = usr_id;
-			     datas.db_svr_id = db_svr_id[i].value;
-			     datas.db_id = db_id[i].value;		  
+			 $('input:checkbox[name=aut_yn]').each(function() {
+		         if($(this).is(':checked')){
+		        	var value=$(this).val();
+	 			    var strArray = value.split('_');
+	 			    var datas = new Object();
+	 			    datas.usr_id = usr_id;
+	 			    datas.db_svr_id = strArray[0];
+	 	 			datas.db_id = strArray[1];
+	 	 			datas.aut_yn = "Y";
+		         }else{
+			        var value=$(this).val();
+		 			var strArray = value.split('_');
+		 			var datas = new Object();
+		 			datas.usr_id = usr_id;
+		 			datas.db_svr_id = strArray[0];
+		 	 		datas.db_id = strArray[1];
+		 	 		datas.aut_yn = "N";
+		         }
+		         datasArr.push(datas);
+		     });
+
+			 
+// 			 var db_svr_id = $("input[name='db_svr_id']");
+// 			 var db_id = $("input[name='db_id']");
+// 			 var aut_yn = $("input[name='aut_yn']");
+// 			 console.log(aut_yn);
+// 	 		 for(var i = 0; i < aut_yn.length; i++){
+// 	 			 var datas = new Object();
+// 				 datas.usr_id = usr_id;
+// 			     datas.db_svr_id = db_svr_id[i].value;
+// 			     datas.db_id = db_id[i].value;		  
 			     
-			     if(aut_yn[i].checked){ //선택되어 있으면 배열에 값을 저장함
-			        	datas.aut_yn = "Y";   
-			        }else{
-			        	datas.aut_yn = "N";
-			        }		     
-			     datasArr.push(datas);
-			 } 
+// 			     if(aut_yn[i].checked){ //선택되어 있으면 배열에 값을 저장함
+// 			        	datas.aut_yn = "Y";   
+// 			        }else{
+// 			        	datas.aut_yn = "N";
+// 			        }		     
+// 			     datasArr.push(datas);
+// 			     console.log(datas);
+// 			 } 
+
 		 }
 			if (confirm('<spring:message code="message.msg167"/>')){
 				$.ajax({
@@ -400,7 +448,7 @@
 									<div class="inner">
 										<p class="tit"><spring:message code="auth_management.db_auth" /></p>
 										<div class="overflow_area">
-												<div id="dbAutList"></div>
+											<div id="dbAutList"></div>
 										</div>
 									</div>
 								</div>

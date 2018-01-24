@@ -253,11 +253,12 @@
 					<tr>
 						<th scope="row" class="ico_t1"><spring:message code="user_management.id" />(*)</th>
 						<td>
-							<input type="text" class="txt" name="usr_id" id="usr_id" maxlength="15" style="width: 205px;" />
-							<span class="btn btnC_01"><button type="button" class="btn_type_02" onclick="fn_idCheck()" style="width: 85px; height: 38px; margin-right: -60px; margin-top: 0;"><spring:message code="common.overlap_check" /></button></span>
+							<input type="text" class="txt" name="usr_id" id="usr_id" maxlength="15" style="width: 205px;" placeholder="15<spring:message code='message.msg188'/>" />
+							<span class="btn btnC_01"><button type="button" class="btn_type_02" onclick="fn_idCheck()" style="width: 85px; height: 38px; margin-right: -60px; margin-top: 0;">
+							<spring:message code="common.overlap_check" /></button></span>
 						</td>
 						<th scope="row" class="ico_t1"><spring:message code="user_management.user_name" />(*)</th>
-						<td><input type="text" class="txt" name="usr_nm" id="usr_nm" maxlength="9" /></td>
+						<td><input type="text" class="txt" name="usr_nm" id="usr_nm" maxlength="9" placeholder="9<spring:message code='message.msg188'/>"/></td>
 					</tr>
 					<tr>
 						<th scope="row" class="ico_t1"><spring:message code="user_management.password" />(*)</th>
@@ -271,27 +272,27 @@
 				<table class="write">
 					<caption><spring:message code="user_management.userReg"/></caption>
 					<colgroup>
-						<col style="width: 145px;" />
-						<col />
 						<col style="width: 110px;" />
+						<col />
+						<col style="width: 140px;" />
 						<col />
 					</colgroup>
 					<tbody>
 						<tr>
 							<th scope="row" class="ico_t1"><spring:message code="user_management.company" /></th>
-							<td><input type="text" class="txt" name="bln_nm" id="bln_nm" maxlength="25" /></td>
+							<td><input type="text" class="txt" name="bln_nm" id="bln_nm" maxlength="25" placeholder="25<spring:message code='message.msg188'/>"/></td>
 							<th scope="row" class="ico_t1"><spring:message code="user_management.department" /></th>
-							<td><input type="text" class="txt" name="dept_nm" id="dept_nm" maxlength="25" /></td>
+							<td><input type="text" class="txt" name="dept_nm" id="dept_nm" maxlength="25" placeholder="25<spring:message code='message.msg188'/>"/></td>
 						</tr>
 						<tr>
 							<th scope="row" class="ico_t1"><spring:message code="user_management.position" /></th>
-							<td><input type="text" class="txt" name="pst_nm" id="pst_nm" maxlength="25" /></td>
+							<td><input type="text" class="txt" name="pst_nm" id="pst_nm" maxlength="25" placeholder="25<spring:message code='message.msg188'/>"/></td>
 							<th scope="row" class="ico_t1"><spring:message code="user_management.Responsibilities" /></th>
-							<td><input type="text" class="txt" name="rsp_bsn_nm" id="rsp_bsn_nm" maxlength="25" /></td>
+							<td><input type="text" class="txt" name="rsp_bsn_nm" id="rsp_bsn_nm" maxlength="25" placeholder="25<spring:message code='message.msg188'/>"/></td>
 						</tr>
 						<tr>
 							<th scope="row" class="ico_t1"><spring:message code="user_management.mobile_phone_number" /></th>
-							<td><input type="text" class="txt" name="cpn" id="cpn" maxlength="20"  onKeyPress="NumObj(this);"/></td>
+							<td><input type="text" class="txt" name="cpn" id="cpn" maxlength="20"  onKeyPress="NumObj(this);" placeholder="20<spring:message code='message.msg188'/>"/></td>
 							<th scope="row" class="ico_t1"><spring:message code="dbms_information.use_yn" /></th>
 							<td>
 								<select class="select" id="use_yn" name="use_yn">

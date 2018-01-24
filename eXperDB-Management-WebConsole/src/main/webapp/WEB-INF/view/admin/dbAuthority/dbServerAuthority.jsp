@@ -131,7 +131,9 @@
 					//var html = "";
  					html1+='<tbody>';
 					html1+='<tr class="db_tit">';
-					html1+='		<th scope="row" colspan="2">'+item.db_svr_nm+'</th>';
+					html1+='		<th scope="row">'+item.db_svr_nm+'</th>';
+					html1+='		<td><div class="inp_chk"><input type="checkbox" id="'+item.db_svr_nm+'" onClick="fn_allCheck(\''+item.db_svr_nm+'\');">';
+					html1+='		<label for="'+item.db_svr_nm+'"></lavel></div></td>';
 					html1+='	</tr>';
 					html1+='	<tr>';
 					html1+='		<th scope="row"><spring:message code="menu.backup_settings" /></th>';
@@ -212,6 +214,19 @@
 			 $("input[type=checkbox]").prop("checked",false);
 			 return false;
 		 }
+	}
+	
+	function fn_allCheck(db_svr_nm){
+		fn_userCheck();
+		var array = new Array("_bck_cng","_bck_hist","_bck_scdr","_acs_cntr","_policy_change_his","_adt_cng","_adt_hist");
+		for(var i=0; i<array.length; i++){
+			if ($("#"+db_svr_nm).prop("checked")) {
+					document.getElementById(db_svr_nm+array[i]).checked = true;
+			}else{
+					document.getElementById(db_svr_nm+array[i]).checked = false;
+			}
+		}
+
 	}
 	
 	$(function() {		
@@ -308,7 +323,7 @@
 		    				document.getElementById(svr_server[0].db_svr_nm+"_bck_hist").checked = false;
 		    				document.getElementById(svr_server[0].db_svr_nm+"_bck_scdr").checked = false;
 		    				document.getElementById(svr_server[0].db_svr_nm+"_acs_cntr").checked = false;
-		    				document.getElementById(svr_server[0].db_svr_nm+"_policy_change_hist").checked = false;
+		    				document.getElementById(svr_server[0].db_svr_nm+"_policy_change_his").checked = false;
 		    				document.getElementById(svr_server[0].db_svr_nm+"_adt_cng").checked = false;
 		    				document.getElementById(svr_server[0].db_svr_nm+"_adt_hist").checked = false;
     					}	
