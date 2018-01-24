@@ -97,14 +97,18 @@ function fn_rman_init(){
 	 						} else if(full.fix_rsltcd == 'TC002002'){
 	 							html += '<span class="btn btnC_01 btnF_02" onClick=javascript:fn_fixLog('+full.exe_sn+');><input type="button" value="미해결"></span>';
 	 						} else {
-	 							html +='<span class="btn btnC_01 btnF_02" onClick=javascript:fn_fix_rslt_reg('+full.exe_sn+');><input type="button" value="조치입력"></span>';
+	 							if(full.exe_rslt_cd == 'TC001701'){
+	 								html += ' - ';
+	 							}else{
+	 								html +='<span class="btn btnC_01 btnF_02" onClick=javascript:fn_fix_rslt_reg('+full.exe_sn+');><input type="button" value="조치입력"></span>';
+	 							}	 
 	 						}
 	 						return html;
 	 					},
 	 					className : "dt-center",
 	 					defaultContent : ""
 	 				}
- 		        ],'select': {'style': 'multi'} 
+ 		        ]
 	});
    	
    	tableRman.tables().header().to$().find('th:eq(0)').css('min-width', '40px');
@@ -171,7 +175,11 @@ function fn_dump_init(){
 	 						} else if(full.fix_rsltcd == 'TC002002'){
 	 							html += '<span class="btn btnC_01 btnF_02" onClick=javascript:fn_fixLog('+full.exe_sn+');><input type="button" value="미해결"></span>';
 	 						} else {
-	 							html +='<span class="btn btnC_01 btnF_02" onClick=javascript:fn_fix_rslt_reg('+full.exe_sn+');><input type="button" value="조치입력"></span>';
+	 							if(full.exe_rslt_cd == 'TC001701'){
+	 								html += ' - ';
+	 							}else{
+	 								html +='<span class="btn btnC_01 btnF_02" onClick=javascript:fn_fix_rslt_reg('+full.exe_sn+');><input type="button" value="조치입력"></span>';
+	 							}
 	 						}
 	 						return html;
 	 					},
@@ -281,6 +289,27 @@ function fn_get_dump_list(){
  * Click Search Button
  ******************************************************** */
 $(function() {
+	
+	$(function() {	
+  		$('#logRmanList tbody').on( 'click', 'tr', function () {
+  			 if ( $(this).hasClass('selected') ) {
+  	     	}else {	        	
+  	     		tableRman.$('tr.selected').removeClass('selected');
+  	         $(this).addClass('selected');	            
+  	     } 
+  		})     
+  	});
+	
+	$(function() {	
+  		$('#logDumpList tbody').on( 'click', 'tr', function () {
+  			 if ( $(this).hasClass('selected') ) {
+  	     	}else {	        	
+  	     	tableDump.$('tr.selected').removeClass('selected');
+  	         $(this).addClass('selected');	            
+  	     } 
+  		})     
+  	});
+	
 	$("#btnSelect").click(function() {
 		var wrk_strt_dtm = $("#wrk_strt_dtm").val();
 		var wrk_end_dtm = $("#wrk_end_dtm").val();
@@ -332,20 +361,22 @@ function selectTab(intab){
 
 
 function fn_fix_rslt_reg(exe_sn){
-	document.getElementById("exe_sn").value = exe_sn;
-	$('#fix_rslt_msg').val('');
+	document.getElementById("exe_sn_r").value = exe_sn;
+	$('#rdo_r_1').removeAttr('checked');
+	$('#rdo_r_2').removeAttr('checked');
+	$('#fix_rslt_msg_r').val('');
 	toggleLayer($('#pop_layer_fix_rslt_reg'), 'on')
 }
 
 function fn_fix_rslt_msg_reg(){
-	var fix_rsltcd = $(":input:radio[name=rdo]:checked").val();
+	var fix_rsltcd = $(":input:radio[name=rdo_r]:checked").val();
 	
 	$.ajax({
 			url : "/updateFixRslt.do",
 			data : {
-				exe_sn : $('#exe_sn').val(),
+				exe_sn : $('#exe_sn_r').val(),
 				fix_rsltcd : fix_rsltcd,
-				fix_rslt_msg : $('#fix_rslt_msg').val()
+				fix_rslt_msg : $('#fix_rslt_msg_r').val()
 			},
 			dataType : "json",
 			type : "post",
@@ -421,16 +452,16 @@ function fn_fix_rslt_msg_modify(){
 						<tr>
 							<td>
 								<div class="inp_rdo">
-									<input name="rdo" id="rdo_2_3" type="radio">
-										<label for="rdo_2_3" style="margin-right: 2%;">해결</label> 
-									<input name="rdo" id="rdo_2_4" type="radio"> 
-										<label for="rdo_2_4">미해결</label>
+									<input name="rdo_r" id="rdo_r_1" type="radio">
+										<label for="rdo_r_1" style="margin-right: 2%;">해결</label> 
+									<input name="rdo_r" id="rdo_r_2" type="radio"> 
+										<label for="rdo_r_2">미해결</label>
 								</div>
 							</td>
-						</tr>
+						</tr>						
 						<tr>
-							<td><textarea name="fix_rslt_msg" id="fix_rslt_msg" style="height: 250px;"> </textarea>
-									<input type="hidden" name="exe_sn" id="exe_sn">
+							<td><textarea name="fix_rslt_msg_r" id="fix_rslt_msg_r" style="height: 250px;"> </textarea>
+									<input type="hidden" name="exe_sn_r" id="exe_sn_r">
 							</td>
 						</tr>
 					</tbody>

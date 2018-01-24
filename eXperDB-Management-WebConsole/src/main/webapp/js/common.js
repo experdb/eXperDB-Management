@@ -628,6 +628,10 @@ function fn_fixLog(exe_sn){
 				document.getElementById("exe_sn").value = result[0].exe_sn;
 				$(":radio[name=input:rdo][value="+result[0].fix_rsltcd+"]").attr("checked", true);
 				$("#fix_rslt_msg").html(result[0].fix_rslt_msg);
+					
+				document.getElementById("lst_mdfr_id").value = result[0].lst_mdfr_id;
+				document.getElementById("lst_mdf_dtm").value = result[0].lst_mdf_dtm;
+				
 				toggleLayer($('#pop_layer_fix_rslt_msg'), 'on');						
 		}
 	});	

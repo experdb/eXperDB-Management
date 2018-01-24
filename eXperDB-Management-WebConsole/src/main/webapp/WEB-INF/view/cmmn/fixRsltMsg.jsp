@@ -22,6 +22,17 @@
 							</td>
 						</tr>
 						<tr>
+							<td>
+								<span>
+									조치자 : <input type="text" name="lst_mdfr_id"  id="lst_mdfr_id">
+								</span>
+	
+								<span>
+									조치일자 : <input type="text" name="lst_mdf_dtm"  id="lst_mdf_dtm"  style="width: 250px;">
+								</span>
+							</td>
+						</tr>
+						<tr>
 							<td><textarea name="fix_rslt_msg" id="fix_rslt_msg" style="height: 250px;"> </textarea>
 									<input type="hidden" name="exe_sn" id="exe_sn">
 							</td>

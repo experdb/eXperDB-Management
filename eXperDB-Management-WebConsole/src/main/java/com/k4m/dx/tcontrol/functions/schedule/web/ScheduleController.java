@@ -972,6 +972,9 @@ public class ScheduleController {
 		try {					
 			HashMap<String , Object> paramvalue = new HashMap<String, Object>();
 			
+			HttpSession session = request.getSession();
+			String usr_id = (String) session.getAttribute("usr_id");
+			
 			   int exe_sn = Integer.parseInt(request.getParameter("exe_sn").toString());
 			   String fix_rsltcd = request.getParameter("fix_rsltcd");
 			   String fix_rslt_msg = request.getParameter("fix_rslt_msg");
@@ -979,6 +982,7 @@ public class ScheduleController {
 			   paramvalue.put("exe_sn", exe_sn);
 			   paramvalue.put("fix_rsltcd", fix_rsltcd);
 			   paramvalue.put("fix_rslt_msg", fix_rslt_msg);
+			   paramvalue.put("lst_mdfr_id", usr_id);
 			   
 				scheduleService.updateFixRslt(paramvalue);
 						

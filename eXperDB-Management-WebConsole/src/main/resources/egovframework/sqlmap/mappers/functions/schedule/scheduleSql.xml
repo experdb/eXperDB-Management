@@ -795,6 +795,8 @@
 		SET
 			FIX_RSLTCD = #{fix_rsltcd}
 			, FIX_RSLT_MSG = #{fix_rslt_msg}
+			, LST_MDFR_ID = #{lst_mdfr_id}
+			, LST_MDF_DTM = now()
 		WHERE
 			EXE_SN = #{exe_sn}				
     </update>
@@ -810,6 +812,8 @@
  					EXE_SN
  					, FIX_RSLTCD
 	                , FIX_RSLT_MSG
+	                , LST_MDFR_ID
+	                , TO_CHAR(LST_MDF_DTM,'YYYY-MM-DD HH24:MI:SS') AS LST_MDF_DTM
 	          FROM T_WRKEXE_G
 	          WHERE 1 = 1
 		      AND EXE_SN = #{exe_sn}		
