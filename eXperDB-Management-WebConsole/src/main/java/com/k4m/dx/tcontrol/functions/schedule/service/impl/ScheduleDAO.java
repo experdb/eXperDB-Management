@@ -10,6 +10,7 @@ import org.springframework.stereotype.Repository;
 import com.k4m.dx.tcontrol.backup.service.WorkVO;
 import com.k4m.dx.tcontrol.functions.schedule.service.ScheduleDtlVO;
 import com.k4m.dx.tcontrol.functions.schedule.service.ScheduleVO;
+import com.k4m.dx.tcontrol.functions.schedule.service.WrkExeVO;
 
 import egovframework.rte.psl.dataaccess.EgovAbstractMapper;
 
@@ -167,6 +168,47 @@ public class ScheduleDAO extends EgovAbstractMapper{
 	public List<Map<String, Object>> selectWrkInfo(int wrk_id) {
 		List<Map<String, Object>> sl = null;
 		sl = (List<Map<String, Object>>) list("scheduleSql.selectWrkInfo", wrk_id);		
+		return sl;
+	}
+
+
+	public List<Map<String, Object>> selectRunScheduleList() {
+		List<Map<String, Object>> sl = null;
+		sl = (List<Map<String, Object>>) list("scheduleSql.selectRunScheduleList", null);		
+		return sl;
+	}
+
+
+	public void updateSCD_CNDT(WrkExeVO vo) {
+		update("scheduleSql.updateSCD_CNDT",vo);	
+	}
+
+
+	public void insertT_WRKEXE_G(WrkExeVO vo) {
+		insert("scheduleSql.insertT_WRKEXE_G",vo);
+	}
+
+
+	public int selectQ_WRKEXE_G_01_SEQ() {
+		int wrkExeSEQ  = getSqlSession().selectOne("scheduleSql.selectQ_WRKEXE_G_01_SEQ");
+		return wrkExeSEQ;		
+	}
+
+
+	public int selectQ_WRKEXE_G_02_SEQ() {
+		int wrkExeSEQ02  = getSqlSession().selectOne("scheduleSql.selectQ_WRKEXE_G_02_SEQ");
+		return wrkExeSEQ02;	
+	}
+
+
+	public void updateFixRslt(HashMap<String, Object> paramvalue) {
+		update("scheduleSql.updateFixRslt",paramvalue);
+	}
+
+
+	public List<Map<String, Object>> selectFixRsltMsg(int exe_sn) {
+		List<Map<String, Object>> sl = null;
+		sl = (List<Map<String, Object>>) list("scheduleSql.selectFixRsltMsg", exe_sn);		
 		return sl;
 	}
 

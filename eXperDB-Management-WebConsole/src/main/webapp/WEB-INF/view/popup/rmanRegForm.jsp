@@ -107,7 +107,7 @@ $(window.document).ready(function() {
 	
 	if( $("#cps_yn").is(":checked")) cps_yn = "Y";
 	if( $("#log_file_bck_yn").is(":checked")) log_file_bck_yn = "Y";
-	
+
 	if(valCheck()){
 		$.ajax({
 			async : false,
@@ -147,7 +147,12 @@ $(window.document).ready(function() {
 				}
 			},
 			success : function(data) {
-				result(data);
+				if(data == "F"){
+					alert("중복된 Work명 입니다.");
+					return false;
+				}else{
+					result(data);
+				}
 			}
 		});
 	}
@@ -198,11 +203,33 @@ function valCheck(){
 		return false;
 	}else if($("#check_path1").val() != "Y"){
 		alert('<spring:message code="message.msg72" />');
-		$("#log_file_pth").focus();
 		return false;
 	}else if($("#check_path2").val() != "Y"){
-		alert('<spring:message code="backup_management.bckPath_effective_check"/>');		
-		$("#bck_pth").focus();
+		alert('<spring:message code="backup_management.bckPath_effective_check"/>');
+		return false;
+	}else if($("#file_stg_dcnt").val() == ""){
+		alert("Full 백업파일보관일을 입력해주세요.");		
+		$("#file_stg_dcnt").focus();
+		return false;
+	}else if($("#bck_mtn_ecnt").val() == ""){
+		alert("Full 백업파일 유지개수를 입력해주세요.");		
+		$("#bck_mtn_ecnt").focus();		
+		return false;
+	}else if($("#acv_file_stgdt").val() == ""){
+		alert("아카이브 파일보관일을 입력해주세요.");		
+		$("#acv_file_stgdt").focus();
+		return false;
+	}else if($("#acv_file_mtncnt").val() == ""){
+		alert("아카이브 파일유지개수를 입력해주세요.");		
+		$("#acv_file_mtncnt").focus();
+		return false;
+	}else if($("#log_file_stg_dcnt").val() == ""){
+		alert("서버로그 파일 보관일수를 입력해주세요.");		
+		$("#log_file_stg_dcnt").focus();
+		return false;
+	}else if($("#log_file_mtn_ecnt").val() == ""){
+		alert("서버로그 파일 유지개수를 입력해주세요.");		
+		$("#log_file_mtn_ecnt").focus();
 		return false;
 	}else{
 		return true;
@@ -302,7 +329,7 @@ function fn_check() {
 			if (result == "true") {
 				alert('<spring:message code="backup_management.reg_possible_work_nm"/>');
 				document.getElementById("wrk_nm").focus();
-				wrk_nmChk = "success";
+				wrk_nmChk = "success";		
 			} else {
 				scd_nmChk = "fail";
 				alert('<spring:message code="backup_management.effective_work_nm"/>');

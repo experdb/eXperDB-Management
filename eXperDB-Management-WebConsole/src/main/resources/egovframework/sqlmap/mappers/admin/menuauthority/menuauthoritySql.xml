@@ -152,5 +152,6 @@
 		WHERE 1 = 1
 		AND A.USR_ID = #{usr_id}
 		AND B.MNU_CD in ('MN000201', 'MN000101', 'MN000102', 'MN000103')
+	    ORDER BY MNU_ID
     </select>
 </mapper>

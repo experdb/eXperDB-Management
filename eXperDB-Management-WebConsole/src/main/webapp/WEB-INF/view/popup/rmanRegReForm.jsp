@@ -194,6 +194,30 @@ function valCheck(){
 		alert('<spring:message code="backup_management.bckPath_effective_check"/>');
 		$("#bck_pth").focus();
 		return false;
+	}else if($("#file_stg_dcnt").val() == ""){
+		alert("Full 백업파일보관일을 입력해주세요.");		
+		$("#file_stg_dcnt").focus();
+		return false;
+	}else if($("#bck_mtn_ecnt").val() == ""){
+		alert("Full 백업파일 유지개수를 입력해주세요.");		
+		$("#bck_mtn_ecnt").focus();
+		return false;
+	}else if($("#acv_file_stgdt").val() == ""){
+		alert("아카이브 파일보관일을 입력해주세요.");		
+		$("#acv_file_stgdt").focus();
+		return false;
+	}else if($("#acv_file_mtncnt").val() == ""){
+		alert("아카이브 파일유지개수를 입력해주세요.");		
+		$("#acv_file_mtncnt").focus();
+		return false;
+	}else if($("#log_file_stg_dcnt").val() == ""){
+		alert("서버로그 파일 보관일수를 입력해주세요.");		
+		$("#log_file_stg_dcnt").focus();
+		return false;
+	}else if($("#log_file_mtn_ecnt").val() == ""){
+		alert("서버로그 파일 유지개수를 입력해주세요.");		
+		$("#log_file_mtn_ecnt").focus();
+		return false;
 	}else{
 		return true;
 	}
@@ -356,7 +380,7 @@ function checkFolder(keyType){
 						<tbody>
 							<tr>
 								<th scope="row" class="ico_t1"><spring:message code="common.work_name" /></th>
-								<td><input type="text" class="txt" name="wrk_nm" id="wrk_nm" maxlength=20 value="<c:out value="${workInfo[0].wrk_nm}"/>"/></td>
+								<td><input type="text" class="txt" name="wrk_nm" id="wrk_nm" maxlength=20 value="<c:out value="${workInfo[0].wrk_nm}"/>" readonly="readonly"/></td>
 							</tr>
 							<tr>
 								<th scope="row" class="ico_t1"><spring:message code="common.work_description" /></th>

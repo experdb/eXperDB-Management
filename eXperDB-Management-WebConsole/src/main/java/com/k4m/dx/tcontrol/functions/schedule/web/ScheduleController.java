@@ -251,7 +251,8 @@ public class ScheduleController {
 	 * 3. 스케줄 상세정보 등록
 	 */
 	@RequestMapping(value = "/insertSchedule.do")
-	public void insertSchedule(@ModelAttribute("historyVO") HistoryVO historyVO, @ModelAttribute("scheduleVO") ScheduleVO scheduleVO,@ModelAttribute("scheduleDtlVO") ScheduleDtlVO scheduleDtlVO, HttpServletResponse response, HttpServletRequest request, @RequestParam Map<String,String> reqJson) throws Exception{
+	@ResponseBody
+	public String insertSchedule(@ModelAttribute("historyVO") HistoryVO historyVO, @ModelAttribute("scheduleVO") ScheduleVO scheduleVO,@ModelAttribute("scheduleDtlVO") ScheduleDtlVO scheduleDtlVO, HttpServletResponse response, HttpServletRequest request, @RequestParam Map<String,String> reqJson) throws Exception{
 		
 		//해당메뉴 권한 조회 (공통메소드호출)
 		CmmnUtils cu = new CmmnUtils();
@@ -267,7 +268,10 @@ public class ScheduleController {
 		
 		String mInsertResult = "S";
 		String dInsertResult = "S";
-								
+			
+		// scd_nm(스케줄명) 중복체크 flag 값
+		String scdNmCk = "S";
+					
 		//쓰기 권한이 없는경우 error페이지 호출 , [추후 Exception 처리예정]
 		if(menuAut.get(0).get("wrt_aut_yn").equals("N")){
 			response.sendRedirect("/autError.do");
@@ -279,56 +283,73 @@ public class ScheduleController {
 			historyVO.setMnu_id(2);
 			accessHistoryService.insertHistory(historyVO);
 			
-			// 1. 스케줄ID 시퀀스 조회
-			try {							
-				int scd_id = scheduleService.selectScd_id();
-				System.out.println("스케줄ID 시퀀스 값 : " + scd_id );
-				scheduleVO.setScd_id(scd_id);
-				scheduleDtlVO.setScd_id(scd_id);
+			//스케줄명 중복체크
+			try {
+				String scd_nm = request.getParameter("scd_nm");
+				int scdNmCheck = scheduleService.scd_nmCheck(scd_nm);
+				if (scdNmCheck > 0) {
+					// 중복값이 존재함.
+					scdNmCk = "F";
+				}
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
-					
-			
-			// 1. 스케쥴 마스터 등록
-			try {			
-				scheduleVO.setFrst_regr_id(usr_id);
-					scheduleService.insertSchedule(scheduleVO);
-			} catch (Exception e) {
-				e.printStackTrace();
-				mInsertResult = "F";
-			}
-							
-			// 3. 스케쥴 상세정보 등록
-			if(mInsertResult.equals("S")){
-				try {
-					String strRows = request.getParameter("sWork").toString().replaceAll("&quot;", "\"");
-					JSONArray rows = (JSONArray) new JSONParser().parse(strRows);
-	
-					for (int i = 0; i < rows.size(); i++) {
-						JSONObject jsrow = (JSONObject) rows.get(i);
-						scheduleDtlVO.setWrk_id(Integer.parseInt(jsrow.get("wrk_id").toString()));  
-						scheduleDtlVO.setExe_ord(Integer.parseInt(jsrow.get("index").toString()));
-						scheduleDtlVO.setNxt_exe_yn(jsrow.get("nxt_exe_yn").toString());
-						scheduleDtlVO.setFrst_regr_id(usr_id);
-						scheduleService.insertScheduleDtl(scheduleDtlVO);			
+						
+			if(scdNmCk == "S"){
+				// 1. 스케줄ID 시퀀스 조회
+				try {							
+					int scd_id = scheduleService.selectScd_id();
+					System.out.println("스케줄ID 시퀀스 값 : " + scd_id );
+					scheduleVO.setScd_id(scd_id);
+					scheduleDtlVO.setScd_id(scd_id);
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+						
+				
+				// 1. 스케쥴 마스터 등록
+				try {			
+					scheduleVO.setFrst_regr_id(usr_id);
+						scheduleService.insertSchedule(scheduleVO);
+				} catch (Exception e) {
+					e.printStackTrace();
+					mInsertResult = "F";
+				}
+								
+				// 3. 스케쥴 상세정보 등록
+				if(mInsertResult.equals("S")){
+					try {
+						String strRows = request.getParameter("sWork").toString().replaceAll("&quot;", "\"");
+						JSONArray rows = (JSONArray) new JSONParser().parse(strRows);
+		
+						for (int i = 0; i < rows.size(); i++) {
+							JSONObject jsrow = (JSONObject) rows.get(i);
+							scheduleDtlVO.setWrk_id(Integer.parseInt(jsrow.get("wrk_id").toString()));  
+							scheduleDtlVO.setExe_ord(Integer.parseInt(jsrow.get("index").toString()));
+							scheduleDtlVO.setNxt_exe_yn(jsrow.get("nxt_exe_yn").toString());
+							scheduleDtlVO.setFrst_regr_id(usr_id);
+							scheduleService.insertScheduleDtl(scheduleDtlVO);			
+						}
+					} catch (Exception e) {
+						e.printStackTrace();
+						dInsertResult = "F";
 					}
-				} catch (Exception e) {
-					e.printStackTrace();
-					dInsertResult = "F";
 				}
-			}
-			txManager.commit(status);
-			
-			if(dInsertResult.equals("S")){
-				try{
-					System.out.println(">>> Sehcdule Controller  - 스케줄 등록");
-					scheduleUtl.insertSchdul(scheduleVO);			
-				} catch (Exception e) {
-					e.printStackTrace();
+				txManager.commit(status);
+				
+				if(dInsertResult.equals("S")){
+					try{
+						System.out.println(">>> Sehcdule Controller  - 스케줄 등록");
+						scheduleUtl.insertSchdul(scheduleVO);			
+					} catch (Exception e) {
+						e.printStackTrace();
+					}
 				}
+			}else{
+				return scdNmCk;
 			}
 		}
+		return scdNmCk;
 	}
 	
 	
@@ -428,6 +449,7 @@ public class ScheduleController {
 					mp.put("lst_mdfr_id", result.get(i).get("lst_mdfr_id"));
 					mp.put("lst_mdf_dtm", result.get(i).get("lst_mdf_dtm"));
 					mp.put("wrk_cnt", result.get(i).get("wrk_cnt"));
+					mp.put("ipadr", result.get(i).get("ipadr"));
 					for(int j=0; j<scheduler.getJobGroupNames().size(); j++){	
 						if(result.get(i).get("scd_id").toString().equals(scheduler.getJobGroupNames().get(j).toString())){	
 							mp.put("status", "s");
@@ -933,4 +955,61 @@ public class ScheduleController {
 			}
 		}
 	}	
+	
+	
+	/**
+	 * 조치결과 업데이트
+	 * 
+	 * @param
+	 * @return 
+	 * @throws Exception
+	 */
+	@RequestMapping(value = "/updateFixRslt.do")
+	@ResponseBody	
+	public void updateFixRslt(@ModelAttribute("historyVO") HistoryVO historyVO, HttpServletRequest request, HttpServletResponse response) {
+		
+		
+		try {					
+			HashMap<String , Object> paramvalue = new HashMap<String, Object>();
+			
+			HttpSession session = request.getSession();
+			String usr_id = (String) session.getAttribute("usr_id");
+			
+			   int exe_sn = Integer.parseInt(request.getParameter("exe_sn").toString());
+			   String fix_rsltcd = request.getParameter("fix_rsltcd");
+			   String fix_rslt_msg = request.getParameter("fix_rslt_msg");
+			   
+			   paramvalue.put("exe_sn", exe_sn);
+			   paramvalue.put("fix_rsltcd", fix_rsltcd);
+			   paramvalue.put("fix_rslt_msg", fix_rslt_msg);
+			   paramvalue.put("lst_mdfr_id", usr_id);
+			   
+				scheduleService.updateFixRslt(paramvalue);
+						
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+	
+	
+	/**
+	 * 조치결과 정보
+	 * @param 
+	 * @return resultSet
+	 * @throws Exception
+	 */
+	@SuppressWarnings("unchecked")
+	@RequestMapping(value = "/selectFixRsltMsg.do")
+	@ResponseBody
+	public List<Map<String, Object>> selectFixRsltMsg(HttpServletRequest request) {
+		List<Map<String, Object>> result = null;
+		
+		try {
+			int exe_sn = Integer.parseInt(request.getParameter("exe_sn"));			
+			result = scheduleService.selectFixRsltMsg(exe_sn);	
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return result;
+	}		
 }

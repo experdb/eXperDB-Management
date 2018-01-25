@@ -176,7 +176,6 @@ public class EgovBatchListnerUtl implements JobListener {
 				scheduleService.updatePrevJobTime(hp2);
 				scheduleService.updateScheduleStatus(scheduleVO);		
 			}			
-			System.out.println("▶▶▶");	
 			System.out.println("================================================");		
 		}
 		catch(Exception e)

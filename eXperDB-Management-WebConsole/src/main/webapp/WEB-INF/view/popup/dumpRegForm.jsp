@@ -132,7 +132,12 @@ function fn_insert_work(){
 				}
 			},
 			success : function(data) {
-				fn_insert_opt(data);
+				if(data == "F"){
+					alert("중복된 Work명 입니다.");
+					return false;
+				}else{
+					fn_insert_opt(data);
+				}
 			}
 		});  
 }

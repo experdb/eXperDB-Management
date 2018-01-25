@@ -75,6 +75,9 @@ public class BackupController {
 	@Autowired
 	private PlatformTransactionManager txManager;
 	
+	
+	
+	
 	/**
 	 * Work List View page
 	 * @param WorkVO
@@ -351,20 +354,25 @@ public class BackupController {
 	/**
 	 * Rman Backup Work Insert
 	 * @param WorkVO
+	 * @return 
 	 * @return String
 	 * @throws IOException 
 	 */
 	@SuppressWarnings("unchecked")
 	@RequestMapping(value = "/popup/workRmanWrite.do")
 	@ResponseBody
-	public void workRmanWrite(@ModelAttribute("historyVO") HistoryVO historyVO, @ModelAttribute("dbServerVO") DbServerVO dbServerVO, @ModelAttribute("workVO") WorkVO workVO, HttpServletResponse response, HttpServletRequest request) throws IOException {
-		Map<String, Object> initResult =new HashMap<String, Object>();
-		AgentInfoVO vo = new AgentInfoVO();
-		List<DbServerVO> ipResult = null;		
-		
-		String bck_pth = request.getParameter("bck_pth");
-		int db_svr_id = Integer.parseInt(request.getParameter("db_svr_id"));
+	public String workRmanWrite(@ModelAttribute("historyVO") HistoryVO historyVO, @ModelAttribute("dbServerVO") DbServerVO dbServerVO, @ModelAttribute("workVO") WorkVO workVO, HttpServletResponse response, HttpServletRequest request) throws IOException {
+				
 		try{
+			Map<String, Object> initResult =new HashMap<String, Object>();
+			AgentInfoVO vo = new AgentInfoVO();
+			List<DbServerVO> ipResult = null;		
+			
+			String bck_pth = request.getParameter("bck_pth");
+			int db_svr_id = Integer.parseInt(request.getParameter("db_svr_id"));
+			
+			
+			// 백업 WORK등록시 백업 경로 INIT
 			ipResult = (List<DbServerVO>) cmmnServerInfoService.selectAllIpadrList(db_svr_id);
 			
 			for(int i=0; i<ipResult.size(); i++){
@@ -384,42 +392,63 @@ public class BackupController {
 		String wrkid_result = "S";
 		WorkVO resultSet = null;
 		
-		try {
-			// 화면접근이력 이력 남기기
-			CmmnUtils.saveHistory(request, historyVO);
-			historyVO.setExe_dtl_cd("DX-T0022_01");
-			historyVO.setMnu_id(25);
-			accessHistoryService.insertHistory(historyVO);
+		// Wrk_nm 중복체크 flag 값
+		String wrkNmCk = "S";
+		
+		try{
+			String wrk_nm = request.getParameter("wrk_nm");
+			int wrkNmCheck = backupService.wrk_nmCheck(wrk_nm);
 			
-			HttpSession session = request.getSession();
-			String usr_id = (String) session.getAttribute("usr_id");
-			workVO.setFrst_regr_id(usr_id);
-			
-			//작업 정보등록
-			backupService.insertWork(workVO);
-		} catch (Exception e) {
-			e.printStackTrace();
-			result = "F";
-		}
-	
-		// Get Last wrk_id
-		if(result.equals("S")){
-			try {
-				resultSet = backupService.lastWorkId();
-				workVO.setWrk_id(resultSet.getWrk_id());		
-			} catch (Exception e) {
-				e.printStackTrace();
+			if (wrkNmCheck > 0) {
+				wrkNmCk = "F";
 			}
+			
+		}catch(Exception e){
+			e.printStackTrace();
 		}
 		
-		if(wrkid_result.equals("S")){
-			try {	
-				backupService.insertRmanWork(workVO);
+		//중복체크 - 사용가능 wrk_nm
+		if(wrkNmCk == "S"){
+			try {					
+				// 화면접근이력 이력 남기기
+				CmmnUtils.saveHistory(request, historyVO);
+				historyVO.setExe_dtl_cd("DX-T0022_01");
+				historyVO.setMnu_id(25);
+				accessHistoryService.insertHistory(historyVO);
+				
+				HttpSession session = request.getSession();
+				String usr_id = (String) session.getAttribute("usr_id");
+				workVO.setFrst_regr_id(usr_id);
+				
+				//작업 정보등록
+				backupService.insertWork(workVO);
 			} catch (Exception e) {
 				e.printStackTrace();
-			} 
+				result = "F";
+			}
+		
+			// Get Last wrk_id
+			if(result.equals("S")){
+				try {
+					resultSet = backupService.lastWorkId();
+					workVO.setWrk_id(resultSet.getWrk_id());		
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			}
+			
+			if(wrkid_result.equals("S")){
+				try {	
+					backupService.insertRmanWork(workVO);
+				} catch (Exception e) {
+					e.printStackTrace();
+				} 
+			}
+		}else{
+			return wrkNmCk;
 		}
-		response.getWriter().println(result);
+
+		return result;
 	}
 
 	/**
@@ -436,52 +465,73 @@ public class BackupController {
 		String wrkid_result = "S";
 		String istDumpWork = "S";
 
-		// Data Insert
-		try {
-			// 화면접근이력 이력 남기기
-			CmmnUtils.saveHistory(request, historyVO);
-			historyVO.setExe_dtl_cd("DX-T0024_01");
-			historyVO.setMnu_id(25);
-			accessHistoryService.insertHistory(historyVO);
+		// Wrk_nm 중복체크 flag 값
+		String wrkNmCk = "S";
+		
+		try{
+			String wrk_nm = request.getParameter("wrk_nm");
+			int wrkNmCheck = backupService.wrk_nmCheck(wrk_nm);
 			
-			HttpSession session = request.getSession();
-			String usr_id = (String) session.getAttribute("usr_id");
-			workVO.setFrst_regr_id(usr_id);
-			//작업 정보등록
-			backupService.insertWork(workVO);			
-		} catch (Exception e) {
-			// TODO Auto-generated catch block
+			if (wrkNmCheck > 0) {
+				wrkNmCk = "F";
+			}
+			
+		}catch(Exception e){
 			e.printStackTrace();
-			result = "F";
 		}
 		
-		// Get Last wrk_id
-		if(result.equals("S")){
+		
+		//중복체크 - 사용가능 wrk_nm
+		if(wrkNmCk == "S"){
+			// Data Insert
 			try {
-				resultSet = backupService.lastWorkId();
-				workVO.setWrk_id(resultSet.getWrk_id());
+				// 화면접근이력 이력 남기기
+				CmmnUtils.saveHistory(request, historyVO);
+				historyVO.setExe_dtl_cd("DX-T0024_01");
+				historyVO.setMnu_id(25);
+				accessHistoryService.insertHistory(historyVO);
+				
+				HttpSession session = request.getSession();
+				String usr_id = (String) session.getAttribute("usr_id");
+				workVO.setFrst_regr_id(usr_id);
+				//작업 정보등록
+				backupService.insertWork(workVO);			
 			} catch (Exception e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
+				result = "F";
 			}
-		}
-		
-		if(wrkid_result.equals("S")){
-			try {	
-				backupService.insertDumpWork(workVO);
-			} catch (Exception e) {
-				istDumpWork = "F";
-				e.printStackTrace();
+			
+			// Get Last wrk_id
+			if(result.equals("S")){
+				try {
+					resultSet = backupService.lastWorkId();
+					workVO.setWrk_id(resultSet.getWrk_id());
+				} catch (Exception e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
 			}
-		}
-		
-		// Get Last bck_wrk_id
-		if(istDumpWork.equals("S")){
-			try {
-				resultSet = backupService.lastBckWorkId();
-			} catch (Exception e) {
-				e.printStackTrace();
+			
+			if(wrkid_result.equals("S")){
+				try {	
+					backupService.insertDumpWork(workVO);
+				} catch (Exception e) {
+					istDumpWork = "F";
+					e.printStackTrace();
+				}
 			}
+			
+			// Get Last bck_wrk_id
+			if(istDumpWork.equals("S")){
+				try {
+					resultSet = backupService.lastBckWorkId();
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			}
+		}else{
+			return wrkNmCk;
 		}
 		return Integer.toString(resultSet.getBck_wrk_id());
 				

@@ -597,3 +597,42 @@ function fn_make_object_list(data, workObj){
 	$(".tNav").html(html);
 	$.getScript( "/js/common.js", function() {});
 }
+
+
+
+
+//조치결과 정보 출력
+function fn_fixLog(exe_sn){
+	$.ajax({
+		url : "/selectFixRsltMsg.do",
+		data : {
+			exe_sn : exe_sn
+		},
+		dataType : "json",
+		type : "post",
+		beforeSend: function(xhr) {
+	        xhr.setRequestHeader("AJAX", true);
+	     },
+		error : function(xhr, status, error) {
+			if(xhr.status == 401) {
+				alert('<spring:message code="message.msg02" />');
+				 location.href = "/";
+			} else if(xhr.status == 403) {
+				alert('<spring:message code="message.msg03" />');
+	             location.href = "/";
+			} else {
+				alert("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""));
+			}
+		},
+		success : function(result) {
+				document.getElementById("exe_sn").value = result[0].exe_sn;
+				$(":radio[name=input:rdo][value="+result[0].fix_rsltcd+"]").attr("checked", true);
+				$("#fix_rslt_msg").html(result[0].fix_rslt_msg);
+					
+				document.getElementById("lst_mdfr_id").value = result[0].lst_mdfr_id;
+				document.getElementById("lst_mdf_dtm").value = result[0].lst_mdf_dtm;
+				
+				toggleLayer($('#pop_layer_fix_rslt_msg'), 'on');						
+		}
+	});	
+}

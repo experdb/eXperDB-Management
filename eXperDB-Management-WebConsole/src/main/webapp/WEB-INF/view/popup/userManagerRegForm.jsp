@@ -89,6 +89,7 @@
 			alert("<spring:message code='etc.etc14'/>");
 			return false;
 		}
+		
 		return true;
 	}
 
@@ -139,30 +140,60 @@
 	function fn_insert() {
 		if (!fn_userManagerValidation())return false;
 		if (!confirm("<spring:message code='message.msg143'/>")) return false;
+		
 		$.ajax({
-			url : '/insertUserManager.do',
+			url : '/UserManagerIdCheck.do',
 			type : 'post',
 			data : {
-				usr_id : $("#usr_id").val(),
-				usr_nm : $("#usr_nm").val(),
-				pwd : $("#pwd").val(),
-				bln_nm : $("#bln_nm").val(),
-				dept_nm : $("#dept_nm").val(),
-				pst_nm : $("#pst_nm").val(),
-				rsp_bsn_nm : $("#rsp_bsn_nm").val(),
-				cpn : $("#cpn").val(),
-				// 				aut_id : $("#aut_id").val(),
-				usr_expr_dt : $("#datepicker3").val(),
-				use_yn : $("#use_yn").val(),
+				usr_id : $("#usr_id").val()
 			},
 			success : function(result) {
-				alert('<spring:message code="message.msg144"/>');
-				if (confirm('<spring:message code="message.msg145"/>')) {
-					window.close();
-					opener.location.href = "/menuAuthority.do?usr_id="+$("#usr_id").val();
+				if (result == "true") {
+					$.ajax({
+						url : '/insertUserManager.do',
+						type : 'post',
+						data : {
+							usr_id : $("#usr_id").val(),
+							usr_nm : $("#usr_nm").val(),
+							pwd : $("#pwd").val(),
+							bln_nm : $("#bln_nm").val(),
+							dept_nm : $("#dept_nm").val(),
+							pst_nm : $("#pst_nm").val(),
+							rsp_bsn_nm : $("#rsp_bsn_nm").val(),
+							cpn : $("#cpn").val(),
+							// 				aut_id : $("#aut_id").val(),
+							usr_expr_dt : $("#datepicker3").val(),
+							use_yn : $("#use_yn").val(),
+						},
+						success : function(result) {
+							alert('<spring:message code="message.msg144"/>');
+							if (confirm('<spring:message code="message.msg145"/>')) {
+								window.close();
+								opener.location.href = "/menuAuthority.do?usr_id="+$("#usr_id").val();
+							} else {
+								window.close();
+								opener.fn_select();
+							}
+						},
+						beforeSend: function(xhr) {
+					        xhr.setRequestHeader("AJAX", true);
+					     },
+						error : function(xhr, status, error) {
+							if(xhr.status == 401) {
+								alert('<spring:message code="message.msg02" />');
+								 location.href = "/";
+							} else if(xhr.status == 403) {
+								alert('<spring:message code="message.msg03" />');
+					             location.href = "/";
+							} else {
+								alert("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""));
+							}
+						}
+					});
 				} else {
-					window.close();
-					opener.fn_select();
+					alert("<spring:message code='message.msg123' />");
+					document.getElementById("usr_id").focus();
+					idCheck = 0;
 				}
 			},
 			beforeSend: function(xhr) {
@@ -170,16 +201,17 @@
 		     },
 			error : function(xhr, status, error) {
 				if(xhr.status == 401) {
-					alert('<spring:message code="message.msg02" />');
+					alert("<spring:message code='message.msg02' />");
 					 location.href = "/";
 				} else if(xhr.status == 403) {
-					alert('<spring:message code="message.msg03" />');
+					alert("<spring:message code='message.msg03' />");
 		             location.href = "/";
 				} else {
 					alert("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""));
 				}
 			}
 		});
+		
 	}
 
 
@@ -221,11 +253,12 @@
 					<tr>
 						<th scope="row" class="ico_t1"><spring:message code="user_management.id" />(*)</th>
 						<td>
-							<input type="text" class="txt" name="usr_id" id="usr_id" maxlength="15" style="width: 205px;" />
-							<span class="btn btnC_01"><button type="button" class="btn_type_02" onclick="fn_idCheck()" style="width: 85px; height: 38px; margin-right: -60px; margin-top: 0;"><spring:message code="common.overlap_check" /></button></span>
+							<input type="text" class="txt" name="usr_id" id="usr_id" maxlength="15" style="width: 205px;" placeholder="15<spring:message code='message.msg188'/>" />
+							<span class="btn btnC_01"><button type="button" class="btn_type_02" onclick="fn_idCheck()" style="width: 85px; height: 38px; margin-right: -60px; margin-top: 0;">
+							<spring:message code="common.overlap_check" /></button></span>
 						</td>
 						<th scope="row" class="ico_t1"><spring:message code="user_management.user_name" />(*)</th>
-						<td><input type="text" class="txt" name="usr_nm" id="usr_nm" maxlength="9" /></td>
+						<td><input type="text" class="txt" name="usr_nm" id="usr_nm" maxlength="9" placeholder="9<spring:message code='message.msg188'/>"/></td>
 					</tr>
 					<tr>
 						<th scope="row" class="ico_t1"><spring:message code="user_management.password" />(*)</th>
@@ -239,27 +272,27 @@
 				<table class="write">
 					<caption><spring:message code="user_management.userReg"/></caption>
 					<colgroup>
-						<col style="width: 145px;" />
-						<col />
 						<col style="width: 110px;" />
+						<col />
+						<col style="width: 140px;" />
 						<col />
 					</colgroup>
 					<tbody>
 						<tr>
 							<th scope="row" class="ico_t1"><spring:message code="user_management.company" /></th>
-							<td><input type="text" class="txt" name="bln_nm" id="bln_nm" maxlength="25" /></td>
+							<td><input type="text" class="txt" name="bln_nm" id="bln_nm" maxlength="25" placeholder="25<spring:message code='message.msg188'/>"/></td>
 							<th scope="row" class="ico_t1"><spring:message code="user_management.department" /></th>
-							<td><input type="text" class="txt" name="dept_nm" id="dept_nm" maxlength="25" /></td>
+							<td><input type="text" class="txt" name="dept_nm" id="dept_nm" maxlength="25" placeholder="25<spring:message code='message.msg188'/>"/></td>
 						</tr>
 						<tr>
 							<th scope="row" class="ico_t1"><spring:message code="user_management.position" /></th>
-							<td><input type="text" class="txt" name="pst_nm" id="pst_nm" maxlength="25" /></td>
+							<td><input type="text" class="txt" name="pst_nm" id="pst_nm" maxlength="25" placeholder="25<spring:message code='message.msg188'/>"/></td>
 							<th scope="row" class="ico_t1"><spring:message code="user_management.Responsibilities" /></th>
-							<td><input type="text" class="txt" name="rsp_bsn_nm" id="rsp_bsn_nm" maxlength="25" /></td>
+							<td><input type="text" class="txt" name="rsp_bsn_nm" id="rsp_bsn_nm" maxlength="25" placeholder="25<spring:message code='message.msg188'/>"/></td>
 						</tr>
 						<tr>
 							<th scope="row" class="ico_t1"><spring:message code="user_management.mobile_phone_number" /></th>
-							<td><input type="text" class="txt" name="cpn" id="cpn" maxlength="20"  onKeyPress="NumObj(this);"/></td>
+							<td><input type="text" class="txt" name="cpn" id="cpn" maxlength="20"  onKeyPress="NumObj(this);" placeholder="20<spring:message code='message.msg188'/>"/></td>
 							<th scope="row" class="ico_t1"><spring:message code="dbms_information.use_yn" /></th>
 							<td>
 								<select class="select" id="use_yn" name="use_yn">

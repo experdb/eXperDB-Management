@@ -32,7 +32,6 @@ function fn_init() {
 		scrollX: true,
 		bSort: false,
 		columns : [
-		{data : "rownum", defaultContent : "", targets : 0, orderable : false, checkboxes : {'selectRow' : true}}, 
 		{data : "idx", className : "dt-center", defaultContent : ""},
 		{data : "db_svr_nm", className : "dt-center", defaultContent : ""},
 		{data : "ipadr", className : "dt-center", defaultContent : ""},
@@ -55,24 +54,27 @@ function fn_init() {
 		{data : "frst_reg_dtm", className : "dt-center", defaultContent : ""},
 		{data : "lst_mdfr_id", className : "dt-center", defaultContent : ""},
 		{data : "lst_mdf_dtm", className : "dt-center", defaultContent : ""}
-		],'select': {'style': 'multi'}
+		]
 	});
 		
-		table.tables().header().to$().find('th:eq(0)').css('min-width', '10px');
-		table.tables().header().to$().find('th:eq(1)').css('min-width', '30px');
-		table.tables().header().to$().find('th:eq(2)').css('min-width', '130px');
-		table.tables().header().to$().find('th:eq(3)').css('min-width', '100px');
-		table.tables().header().to$().find('th:eq(4)').css('min-width', '130px');
+
+		table.tables().header().to$().find('th:eq(0)').css('min-width', '30px');
+		table.tables().header().to$().find('th:eq(1)').css('min-width', '130px');
+		table.tables().header().to$().find('th:eq(2)').css('min-width', '100px');
+		table.tables().header().to$().find('th:eq(3)').css('min-width', '130px');
+		table.tables().header().to$().find('th:eq(4)').css('min-width', '70px');
 		table.tables().header().to$().find('th:eq(5)').css('min-width', '70px');
 		table.tables().header().to$().find('th:eq(6)').css('min-width', '70px');
-		table.tables().header().to$().find('th:eq(7)').css('min-width', '70px');
-		table.tables().header().to$().find('th:eq(8)').css('min-width', '65px');  
-		table.tables().header().to$().find('th:eq(9)').css('min-width', '100px');
-		table.tables().header().to$().find('th:eq(10)').css('min-width', '65px');
-		table.tables().header().to$().find('th:eq(11)').css('min-width', '100px');
+		table.tables().header().to$().find('th:eq(7)').css('min-width', '65px');  
+		table.tables().header().to$().find('th:eq(8)').css('min-width', '100px');
+		table.tables().header().to$().find('th:eq(9)').css('min-width', '65px');
+		table.tables().header().to$().find('th:eq(10)').css('min-width', '100px');
 	    $(window).trigger('resize'); 
 }
 
+
+
+     
 
 /* ********************************************************
  * 페이지 시작시, 서버 리스트 조회
@@ -105,6 +107,17 @@ $(window.document).ready(function() {
 			table.rows.add(result).draw();
 		}
 	}); 
+  	
+  	
+  	$(function() {	
+  		$('#serverList tbody').on( 'click', 'tr', function () {
+  			 if ( $(this).hasClass('selected') ) {
+  	     	}else {	        	
+  	     	table.$('tr.selected').removeClass('selected');
+  	         $(this).addClass('selected');	            
+  	     } 
+  		})     
+  	});
  
 });
 
@@ -274,7 +287,6 @@ function fn_regRe_popup(){
 					<table id="serverList" class="display" cellspacing="0" width="100%">
 						<thead>
 							<tr>
-								<th width="10"></th>
 								<th width="30"><spring:message code="common.no" /></th>
 								<th width="130"><spring:message code="common.dbms_name" /></th>
 								<th width="100"><spring:message code="dbms_information.dbms_ip"/></th>

@@ -213,9 +213,10 @@
 	 	* Description :  스케줄  List 조회
 	 	* Author : 변승우
 	 	**/
-	   SELECT
+	   SELECT 
 	         (ROW_NUMBER() OVER()) AS ROWNUM
 			, (ROW_NUMBER() OVER()) AS IDX
+			, AA.IPADR
 			, AA.SCD_ID
 			, AA.SCD_NM
 			, AA.SCD_CNDT
@@ -233,8 +234,9 @@
 			, AA.LST_MDFR_ID
 			, AA.LST_MDF_DTM
 	   FROM(
-       SELECT 
-			  A.SCD_ID
+       SELECT DISTINCT
+       		D.IPADR 
+			,  A.SCD_ID
 			, A.SCD_NM
 			, A.SCD_CNDT
             , A.SCD_EXP
@@ -250,8 +252,12 @@
 			, TO_CHAR(A.FRST_REG_DTM,'YYYY-MM-DD HH24:MI:SS') AS FRST_REG_DTM
 			, A.LST_MDFR_ID
 			, TO_CHAR(A.LST_MDF_DTM,'YYYY-MM-DD HH24:MI:SS') AS LST_MDF_DTM
-      FROM T_SCD_M A
+      FROM T_SCD_M A, T_SCD_D B, T_BCK_WRKCNG_I C, T_DBSVRIPADR_I D
       WHERE 1=1	
+      AND A.SCD_ID = B.SCD_ID
+      AND B.WRK_ID = C.WRK_ID
+      AND C.DB_SVR_ID = D.DB_SVR_ID
+      AND D.MASTER_GBN = 'M'
       <if test="scd_nm != null and scd_nm != '' ">
       AND A.SCD_NM LIKE  '%' || #{scd_nm} || '%'
 	  </if>
@@ -263,6 +269,9 @@
       </if>
       <if test="frst_regr_id != null and frst_regr_id != '' ">
       	AND A.FRST_REGR_ID LIKE  '%' || #{frst_regr_id} || '%'
+      </if>
+      <if test="wrk_nm != null and wrk_nm != '' ">
+      	AND C.WRK_NM LIKE  '%' || #{wrk_nm} || '%'
       </if>
       ORDER BY LST_MDF_DTM DESC
       )AA
@@ -338,9 +347,12 @@
 				, B.ACV_FILE_MTNCNT
 				, B.BCK_FILENM
 				, B.LOG_FILE_PTH
-		FROM T_SCD_D A, T_BCK_WRKCNG_I B
+				, C.DB_SVR_IPADR_ID
+		FROM T_SCD_D A, T_BCK_WRKCNG_I B, T_DBSVRIPADR_I C
 		WHERE 1 = 1
 		AND A.WRK_ID = B.WRK_ID
+		AND B.DB_SVR_ID = C.DB_SVR_ID
+        AND C.MASTER_GBN = 'M'
 		AND A.SCD_ID = #{scd_id}::numeric
 		ORDER BY A.EXE_ORD
 	 	
@@ -670,4 +682,141 @@
 		AND A.WRK_ID = #{wrk_id}  
 		AND B.DB_ID = C.DB_ID
 	</select>
+	
+	<select id="selectRunScheduleList" resultType="hashMap">
+		/**
+	 	* Query ID : selectRunScheduleList
+	 	* Description :  실행중인 스케줄 정보 조회
+	 	* Author : 변승우
+	 	**/
+		SELECT 
+				A.BCK_PTH
+		FROM T_BCK_WRKCNG_I A, T_SCD_D B, T_SCD_M C
+		WHERE 1 = 1
+		AND A.WRK_ID = B.WRK_ID
+		AND B.SCD_ID = C.SCD_ID
+		AND A.BCK_BSN_DSCD = 'TC000201'
+		AND C.SCD_CNDT = 'TC001802'
+	 </select>
+	 
+	 <update id="updateSCD_CNDT"  parameterType="hashMap">
+   		/**
+	 	* Query ID : updateSCD_CNDT
+	 	* Description : 작업상태변경
+	 	* Author : 변승우
+	 	**/
+		UPDATE T_SCD_M
+		SET
+			SCD_CNDT = 'TC001803'
+			, LST_MDF_DTM = now()
+		WHERE
+			SCD_ID = #{scd_id}				
+    </update>
+    
+    
+    <select id="selectQ_WRKEXE_G_01_SEQ" resultType="int">
+   		/**
+	 	* Query ID : selectQ_WRKEXE_G_01_SEQ
+	 	* Description : 작업실행로그 seq 조회
+	 	* Author : 변승우
+	 	**/
+    	SELECT NEXTVAL('q_wrkexe_g_01')
+    </select>
+    
+    
+      <insert id="insertT_WRKEXE_G"  parameterType="wrkExeVO">
+   		/**
+	 	* Query ID : insertT_WRKEXE_G
+	 	* Description : 작업실행로그 insert
+	 	* Author : 변승우
+	 	**/
+	 	INSERT INTO T_WRKEXE_G
+	 	(
+			EXE_SN
+			, SCD_ID
+			, WRK_ID
+			, WRK_STRT_DTM
+			, WRK_END_DTM
+			, EXE_RSLT_CD
+			, BCK_OPT_CD
+			, TLI
+			, FILE_SZ
+			, DB_ID
+			, BCK_FILE_PTH
+			, RSLT_MSG
+			, FRST_REGR_ID
+			, LST_MDFR_ID
+			, EXE_GRP_SN
+			, SCD_NM
+			, WRK_NM
+			, DB_SVR_IPADR_ID
+	 	)
+	 	VALUES
+	 	(
+			#{exe_sn}
+			, #{scd_id}
+			, #{wrk_id}
+			, now()
+			, now()
+			, #{exe_rslt_cd}
+			, #{bck_opt_cd}
+			, 0
+			, 0
+			, #{db_id}
+			, #{bck_file_pth}
+			, #{rslt_msg}
+			, 'system'
+			, 'system'
+			, #{exe_grp_sn}
+			, (SELECT SCD_NM FROM T_SCD_M WHERE SCD_ID = #{scd_id})
+			, (SELECT WRK_NM FROM T_WRKCNG_I WHERE WRK_ID = #{wrk_id})
+			, #{db_svr_ipadr_id}
+	 	)
+    </insert>
+    
+    
+    <select id="selectQ_WRKEXE_G_02_SEQ" resultType="int">
+   		/**
+	 	* Query ID : selectQ_WRKEXE_G_02_SEQ
+	 	* Description : 작업실행로그 실행그룹 seq 조회
+	 	* Author : 변승우
+	 	**/
+    	SELECT NEXTVAL('Q_WRKEXE_G_02')
+    </select>
+    
+    
+    <update id="updateFixRslt"  parameterType="hashMap">
+   		/**
+	 	* Query ID : updateFixRslt
+	 	* Description : 조치결과 업데이트
+	 	* Author : 변승우
+	 	**/
+		UPDATE T_WRKEXE_G
+		SET
+			FIX_RSLTCD = #{fix_rsltcd}
+			, FIX_RSLT_MSG = #{fix_rslt_msg}
+			, LST_MDFR_ID = #{lst_mdfr_id}
+			, LST_MDF_DTM = now()
+		WHERE
+			EXE_SN = #{exe_sn}				
+    </update>
+    
+    
+    <select id="selectFixRsltMsg" parameterType="int" resultType="hashMap">
+		/**
+	 	* Query ID : selectFixRsltMsg
+	 	* Description : 조치결과정보 
+	 	* Author : 변승우
+	 	**/
+ 			SELECT 
+ 					EXE_SN
+ 					, FIX_RSLTCD
+	                , FIX_RSLT_MSG
+	                , LST_MDFR_ID
+	                , TO_CHAR(LST_MDF_DTM,'YYYY-MM-DD HH24:MI:SS') AS LST_MDF_DTM
+	          FROM T_WRKEXE_G
+	          WHERE 1 = 1
+		      AND EXE_SN = #{exe_sn}		
+    </select>	
+
 </mapper>

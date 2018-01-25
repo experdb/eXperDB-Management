@@ -29,7 +29,25 @@ public class WorkLogVO {
 	private String rslt_msg;
 	private String ipadr;
 	private String db_svr_id;
+	private String fix_rsltcd;
+	private String fix_rslt_msg;
 	
+	
+	public String getFix_rsltcd() {
+		return fix_rsltcd;
+	}
+
+	public void setFix_rsltcd(String fix_rsltcd) {
+		this.fix_rsltcd = fix_rsltcd;
+	}
+
+	public String getFix_rslt_msg() {
+		return fix_rslt_msg;
+	}
+
+	public void setFix_rslt_msg(String fix_rslt_msg) {
+		this.fix_rslt_msg = fix_rslt_msg;
+	}
 
 	public String getDb_svr_id() {
 		return db_svr_id;

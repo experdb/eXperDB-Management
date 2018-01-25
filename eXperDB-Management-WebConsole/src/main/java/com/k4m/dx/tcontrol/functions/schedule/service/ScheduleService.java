@@ -175,4 +175,40 @@ public interface ScheduleService {
 
 	List<Map<String, Object>> selectWrkInfo(int wrk_nm) throws Exception;
 
+
+	/**
+	 * 실행중인 스케줄리스트 조회
+	 * @param 
+	 * @throws Exception
+	 */
+	List<Map<String, Object>> selectRunScheduleList() throws Exception;
+
+
+	/**
+	 * 스케줄 수행상태 업데이트 
+	 * @param 
+	 * @throws Exception
+	 */
+	void updateSCD_CNDT(WrkExeVO vo) throws Exception;
+
+
+	void insertT_WRKEXE_G(WrkExeVO vo) throws Exception;
+
+	
+	/**
+	 * 스케줄수행이력 시퀀스 조회
+	 * @param 
+	 * @throws Exception
+	 */
+	int selectQ_WRKEXE_G_01_SEQ() throws Exception;
+
+
+	int selectQ_WRKEXE_G_02_SEQ() throws Exception;
+
+
+	void updateFixRslt(HashMap<String, Object> paramvalue) throws Exception;
+
+
+	List<Map<String, Object>> selectFixRsltMsg(int exe_sn) throws Exception;
+
 }

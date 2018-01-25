@@ -27,6 +27,7 @@ public class ScheduleHistoryDAO extends EgovAbstractMapper{
 		params.put("firstIndex", pagingVO.getFirstIndex());
 		params.put("order_type", param.get("order_type"));
 		params.put("order", param.get("order"));
+		params.put("usr_id", param.get("usr_id"));
 
 		result = (List<Map<String, Object>>) list("scheduleHistorySql.selectScheduleHistory",params);
 
@@ -72,6 +73,13 @@ public class ScheduleHistoryDAO extends EgovAbstractMapper{
 	public List<Map<String, Object>> selectScheduleHistoryWorkDetail(int exe_sn) {
 		List<Map<String, Object>> sl = null;
 		sl = (List<Map<String, Object>>) list("scheduleHistorySql.selectScheduleHistoryWorkDetail", exe_sn);		
+		return sl;
+	}
+
+
+	public List<Map<String, Object>> selectScheduleDBMSList(Map<String, Object> param) {
+		List<Map<String, Object>> sl = null;
+		sl = (List<Map<String, Object>>) list("scheduleHistorySql.selectScheduleDBMSList", param);		
 		return sl;
 	}
 

@@ -135,13 +135,14 @@
 			<table class="write">
 				<caption><spring:message code="user_management.edit_password" /></caption>
 				<colgroup>
-					<col style="width: 124px;" />
+					<col style="width: 150px;" />
+					<col style="width: 400px;" />
 					<col />
 				</colgroup>
 				<tbody>
 					<tr>
 						<th scope="row" class="ico_t1"><spring:message code="user_management.nowPw"/></th>
-						<td><input type="password" class="txt" name="nowpwd" id="nowpwd" maxlength="20"/></td>
+						<td><input type="password" class="txt t4" name="nowpwd" id="nowpwd" maxlength="20" placeholder="<spring:message code='message.msg109'/>"/></td>
 					</tr>
 				</tbody>
 			</table>
@@ -150,16 +151,17 @@
 					<caption><spring:message code="user_management.edit_password" /></caption>
 					<colgroup>
 						<col style="width: 150px;" />
+						<col style="width: 400px;" />
 						<col />
 					</colgroup>
 					<tbody>
 						<tr>
 							<th scope="row" class="ico_t1"><spring:message code="user_management.newPw"/></th>
-							<td><input type="password" class="txt" name="newpwd" id="newpwd" maxlength="20"/></td>
+							<td><input type="password" class="txt t4" name="newpwd" id="newpwd" maxlength="20" placeholder="<spring:message code='message.msg109'/>"/></td>
 						</tr>
 						<tr>
 							<th scope="row" class="ico_t1"><spring:message code="user_management.newPwConfirm"/></th>
-							<td><input type="password" class="txt" name="pwd" id="pwd" maxlength="20"/></td>
+							<td><input type="password" class="txt t4" name="pwd" id="pwd" maxlength="20" placeholder="<spring:message code='message.msg109'/>"/></td>
 						</tr>
 					</tbody>
 				</table>

@@ -31,7 +31,6 @@
 
 <script>
 var table = null;
-
 function fn_init() {
 		/* ********************************************************
 		 * 서버리스트 (데이터테이블)
@@ -114,6 +113,7 @@ function fn_init() {
  * 페이지 시작시 함수
  ******************************************************** */
 $(window.document).ready(function() {
+	
 	fn_init();
 	
 	 /* ********************************************************
@@ -188,8 +188,6 @@ $(window.document).ready(function() {
  * 조회
  ******************************************************** */
 function fn_search(){
-	var db_svr_nm = $("#db_svr_nm").val();
-	
 	if(db_svr_nm == '%'){
 		alert('<spring:message code="message.msg152"/>');
 		return false;

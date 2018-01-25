@@ -83,7 +83,7 @@ public class LoginController {
 	}
 	
 	/**
-	 * 로그인을 한다.
+	 * 로그인 화면을 보여준다.
 	 * 
 	 * @param userVo
 	 * @param model
@@ -93,7 +93,28 @@ public class LoginController {
 	 * @throws Exception
 	 */
 	@RequestMapping(value = "/login.do")
-	public ModelAndView login(@ModelAttribute("userVo") UserVO userVo, ModelMap model, HttpServletResponse response,
+	public ModelAndView login() {
+		ModelAndView mv = new ModelAndView();
+		try {
+			mv.setViewName("login");
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return mv;
+	}
+	
+	/**
+	 * 로그인을 처리 한다.
+	 * 
+	 * @param userVo
+	 * @param model
+	 * @param request
+	 * @param historyVO
+	 * @return ModelAndView mv
+	 * @throws Exception
+	 */
+	@RequestMapping(value = "/loginAction.do")
+	public ModelAndView loginAction(@ModelAttribute("userVo") UserVO userVo, ModelMap model, HttpServletResponse response,
 			HttpServletRequest request, @ModelAttribute("historyVO") HistoryVO historyVO) {
 		ModelAndView mv = new ModelAndView();
 		String id = userVo.getUsr_id();
@@ -105,10 +126,9 @@ public class LoginController {
 				mv.addObject("error", "msg176");
 				return mv;
 			}
-			
 			List<UserVO> userList = loginService.selectUserList(userVo);
-			mv.setViewName("login");
 			int intLoginCnt = userList.size();
+			mv.setViewName("login");
 			if (intLoginCnt == 0) {
 				mv.addObject("error", "msg156");
 			} else if (!id.equals(userList.get(0).getUsr_id()) || !pw.equals(userList.get(0).getPwd())) {
@@ -118,9 +138,6 @@ public class LoginController {
 			} else if (userList.get(0).getUsr_expr_dt().equals("N")) {
 				mv.addObject("error", "msg159");
 			} else {
-
-
-				
 				// session 설정
 				HttpSession session = request.getSession();
 				request.getSession().setAttribute("session", session);

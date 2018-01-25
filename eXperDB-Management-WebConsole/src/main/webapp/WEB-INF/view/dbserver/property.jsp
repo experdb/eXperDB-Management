@@ -336,6 +336,18 @@
 											</td>
 										</tr>
 									</c:forEach>
+									<c:forEach var="deleteDB" items="${deleteDB}">
+										<tr>
+											<td><img src="../images/ico_state_01.png" style="margin-right: 5px;"/>${deleteDB}</td>
+											<td>-</td>
+											<td>-</td>
+											<td>-</td>
+											<td>-</td>
+											<td>-</td>
+											<td>-</td>
+											<td>-</td>
+										</tr>
+									</c:forEach>	
 								</tbody>
 							</table>
 						<br><br>
@@ -414,71 +426,72 @@
 				<div id="tablespaceinfo">
 					<div class="cmm_bd">
 						<div class="sub_tit"><p><spring:message code="properties.tablespace_info" /></p></div>
-						<div class="overflows_areas">
-							<table class="list4" >
-								<caption>테이블스페이스 정보</caption>
-								<colgroup>
-									<col style="width: 10%;">
-									<col style="width: 7%;">
-									<col style="width: 6%;">
-									<col style="width: 7%;">
-									<col style="width: 8%;">
-									<col style="width: 10%;">
-									
-									<col style="width: 8%;">
-									<col style="width: 8%;">
-									<col style="width: 11%;">
-									<col style="width: 8%;">
-									<col style="width: 7%;">
-									<col style="width: 10%;">
-								</colgroup>
-								<thead>
-									<tr>
-										<th scope="col" colspan="6"><spring:message code="properties.filesystem" /></th>
-										<th scope="col" colspan="6"><spring:message code="properties.tablespace" /></th>
-									</tr>
-								</thead>
-								<tbody>
-									<tr>
-										<td class="color">Filesystem</td>
-										<td class="color">Size</td>
-										<td class="color">Used</td>
-										<td class="color">Avail</td>
-										<td class="color">Use%</td>
-										<td class="color">Mounted on</td>	
-										<td class="color">Name</td>
-										<td class="color">Owner</td>
-										<td class="color">Location</td>
-										<td class="color">Options</td>
-										<td class="color">Size</td>
-										<td class="color">Description</td>
-									</tr>
-									<c:forEach var="tablespaceinfo" items="${result.CMD_TABLESPACE_INFO}">
+							<div class="overflows_areas">
+								<table class="list4" >
+									<caption>테이블스페이스 정보</caption>
+									<colgroup>
+										<col style="width: 10%;">
+										<col style="width: 7%;">
+										<col style="width: 6%;">
+										<col style="width: 7%;">
+										<col style="width: 8%;">
+										<col style="width: 10%;">
+										
+										<col style="width: 8%;">
+										<col style="width: 8%;">
+										<col style="width: 11%;">
+										<col style="width: 8%;">
+										<col style="width: 7%;">
+										<col style="width: 10%;">
+									</colgroup>
+									<thead>
 										<tr>
-											<td>${tablespaceinfo.filesystem}</td>
-											<td>${tablespaceinfo.fsize}</td>
-											<td>${tablespaceinfo.used}</td>
-											<td>${tablespaceinfo.avail}</td>
-											<td>
-											<span class="iGraph">
-												<span class="gBar"><span class="gAction" style="width:${tablespaceinfo.use}"></span></span>
-												<span class="gPercent">${tablespaceinfo.use}</span>
-											</span>	
-											</td>
-											<td>${tablespaceinfo.mounton}</td>
-											<td>${tablespaceinfo.name}</td>
-											<td>${tablespaceinfo.owner}</td>
-											<td>${tablespaceinfo.location}</td>
-											<td>${tablespaceinfo.options}</td>
-											<td>${tablespaceinfo.size}</td>
-											<td>${tablespaceinfo.description}</td>
+											<th scope="col" colspan="6"><spring:message code="properties.filesystem" /></th>
+											<th scope="col" colspan="6"><spring:message code="properties.tablespace" /></th>
 										</tr>
-									</c:forEach>	
-								</tbody>
-							</table>
-						</div>	
+									</thead>
+									<tbody>
+										<tr>
+											<td class="color">Filesystem</td>
+											<td class="color">Size</td>
+											<td class="color">Used</td>
+											<td class="color">Avail</td>
+											<td class="color">Use%</td>
+											<td class="color">Mounted on</td>	
+											<td class="color">Name</td>
+											<td class="color">Owner</td>
+											<td class="color">Location</td>
+											<td class="color">Options</td>
+											<td class="color">Size</td>
+											<td class="color">Description</td>
+										</tr>
+										<c:forEach var="tablespaceinfo" items="${result.CMD_TABLESPACE_INFO}">
+											<tr>
+												<td>${tablespaceinfo.filesystem}</td>
+												<td>${tablespaceinfo.fsize}</td>
+												<td>${tablespaceinfo.used}</td>
+												<td>${tablespaceinfo.avail}</td>
+												<td>
+												<span class="iGraph">
+													<span class="gBar"><span class="gAction" style="width:${tablespaceinfo.use}"></span></span>
+													<span class="gPercent">${tablespaceinfo.use}</span>
+												</span>	
+												</td>
+												<td>${tablespaceinfo.mounton}</td>
+												<td>${tablespaceinfo.name}</td>
+												<td>${tablespaceinfo.owner}</td>
+												<td>${tablespaceinfo.location}</td>
+												<td>${tablespaceinfo.options}</td>
+												<td>${tablespaceinfo.size}</td>
+												<td>${tablespaceinfo.description}</td>
+											</tr>
+										</c:forEach>	
+									</tbody>
+								</table>
+							</div>	
 						</div>
 					</div>
+					
 				</div>
 			</div>
 		</div>

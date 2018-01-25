@@ -1,11 +1,14 @@
 package com.k4m.dx.tcontrol.tree.web;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
+import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -116,17 +119,38 @@ public class TreeInfoController {
 				serverObj.put(ClientProtocolID.USER_ID, dbServerVO.getSvr_spr_usr_id());
 				serverObj.put(ClientProtocolID.USER_PWD, dec.aesDecode(dbServerVO.getSvr_spr_scm_pwd()));
 
-				HashMap result = cic.dbms_inforamtion(IP, PORT, serverObj);
+				JSONObject result = cic.dbms_inforamtion(IP, PORT, serverObj);
 				List<DbServerVO> resultIpadr = cmmnServerInfoService.selectAllIpadrList(db_svr_id);
 				
 				HttpSession session = request.getSession();
 				String usr_id = (String) session.getAttribute("usr_id");
 				dbServerVO.setUsr_id(usr_id);
-				List<DbServerVO> resultRepoDB = cmmnServerInfoService.selectRepoDBList(dbServerVO);
+				List<DbServerVO> resultRepoDB = cmmnServerInfoService.selectRepoDBList(dbServerVO);			
 				
+				ArrayList<String> arrayList = new ArrayList<>();
+				ArrayList<String> deleteDB = new ArrayList<>();
+				JSONArray data = (JSONArray) result.get("CMD_DATABASE_INFO");
+				for (int i = 0; i < data.size(); i++) {
+					JSONObject jsonObj = (JSONObject) data.get(i);	
+					 arrayList.add((String) jsonObj.get("name"));
+				}		 
+			
+				for(int m=0; m<resultRepoDB.size(); m++){
+					int check =0;
+					for(int n=0; n<arrayList.size(); n++){
+						if(resultRepoDB.get(m).getDb_nm().equals(arrayList.get(n))){
+							check=1;
+						}
+					}
+					if(check==0){
+						deleteDB.add(resultRepoDB.get(m).getDb_nm());
+					}
+				}
+
 				mv.addObject("result", result);
 				mv.addObject("resultIpadr", resultIpadr);
 				mv.addObject("resultRepoDB", resultRepoDB);
+				mv.addObject("deleteDB", deleteDB);
 				mv.addObject("db_svr_nm", dbServerVO.getDb_svr_nm());
 				mv.addObject("db_svr_id", db_svr_id);
 			}

@@ -49,6 +49,7 @@
             <mvc:mapping path="/**" />
             	<mvc:exclude-mapping path="/" />
             	<mvc:exclude-mapping path="/login.do" />
+            	<mvc:exclude-mapping path="/loginAction.do" />
             	<mvc:exclude-mapping path="/logout.do" />
             <bean class="com.k4m.dx.tcontrol.cmmn.SessionCheckInterceptor" />
           </mvc:interceptor>

@@ -7,6 +7,7 @@ import java.util.Map;
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -142,6 +143,9 @@ public class ScheduleHistoryController {
 				historyVO.setMnu_id(4);
 				accessHistoryService.insertHistory(historyVO);
 				
+				HttpSession session = request.getSession();
+				String usr_id = (String) session.getAttribute("usr_id");
+				
 				Map<String, Object> param = new HashMap<String, Object>();
 	
 				String lgi_dtm_start = request.getParameter("lgi_dtm_start");
@@ -163,6 +167,7 @@ public class ScheduleHistoryController {
 				param.put("exe_result", exe_result);
 				param.put("order_type", order_type);
 				param.put("order", order);
+				param.put("usr_id", usr_id);
 	
 				System.out.println("********PARAMETER*******");
 				System.out.println("DB서버 : "+ db_svr_nm);
@@ -382,13 +387,14 @@ public class ScheduleHistoryController {
 	 * @return resultSet
 	 * @throws Exception
 	 */
-	@SuppressWarnings("unused")
 	@RequestMapping(value = "/selectScheduleNmList.do")
 	@ResponseBody
 	public List<Map<String, Object>> selectScheduleNmList(HttpServletRequest request) {
-	
 		List<Map<String, Object>> resultSet = null;
 		try {			
+			HttpSession session = request.getSession();
+			String usr_id = (String) session.getAttribute("usr_id");
+			
 			Map<String, Object> param = new HashMap<String, Object>();
 			
 			String wrk_start_dtm = request.getParameter("wrk_start_dtm");
@@ -396,8 +402,40 @@ public class ScheduleHistoryController {
 			
 			param.put("wrk_start_dtm", wrk_start_dtm);
 			param.put("wrk_end_dtm", wrk_end_dtm);
+			param.put("usr_id", usr_id);
 			
 			resultSet = scheduleHistoryService.selectScheduleNmList(param);	
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return resultSet;
+	}
+	
+	
+	/**
+	 * DBMS 조회 [SELECT BOX] 
+	 * 
+	 * @return resultSet
+	 * @throws Exception
+	 */
+	@RequestMapping(value = "/selectScheduleDBMSList.do")
+	@ResponseBody
+	public List<Map<String, Object>> selectScheduleDBMSList(HttpServletRequest request) {
+		List<Map<String, Object>> resultSet = null;
+		try {			
+			HttpSession session = request.getSession();
+			String usr_id = (String) session.getAttribute("usr_id");
+			
+			Map<String, Object> param = new HashMap<String, Object>();
+			
+			String wrk_start_dtm = request.getParameter("wrk_start_dtm");
+			String wrk_end_dtm = request.getParameter("wrk_end_dtm");
+			
+			param.put("wrk_start_dtm", wrk_start_dtm);
+			param.put("wrk_end_dtm", wrk_end_dtm);
+			param.put("usr_id", usr_id);
+			
+			resultSet = scheduleHistoryService.selectScheduleDBMSList(param);	
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -410,7 +448,6 @@ public class ScheduleHistoryController {
 	 * @return resultSet
 	 * @throws Exception
 	 */
-	@SuppressWarnings("unused")
 	@RequestMapping(value = "/selectWrkNmList.do")
 	@ResponseBody
 	public List<Map<String, Object>> selectWrkNmList(HttpServletRequest request) {

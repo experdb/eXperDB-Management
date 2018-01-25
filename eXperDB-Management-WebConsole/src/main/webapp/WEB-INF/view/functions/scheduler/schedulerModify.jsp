@@ -582,13 +582,13 @@ function fn_scheduleReStart(){
 									</colgroup>
 									<tbody>
 										<tr>
-											<th scope="row" class="t9 line"><spring:message code="schedule.schedule_name" /></th>
-											<td><input type="text" class="txt t2" id="scd_nm" name="scd_nm" maxlength="20"/></td>
+											<th scope="row" class="t9 line"><spring:message code="schedule.schedule_name" />(*)</th>
+											<td><input type="text" class="txt t3" id="scd_nm" name="scd_nm" maxlength="20" readonly="readonly"/></td>
 										</tr>
 										<tr>
-											<th scope="row" class="t9 line"><spring:message code="schedule.scheduleExp"/></th>
+											<th scope="row" class="t9 line"><spring:message code="schedule.scheduleExp"/>(*)</th>
 											<td>
-												<textarea class="tbd1" name="scd_exp" id="scd_exp" maxlength="150"></textarea>
+												<textarea class="tbd1" name="scd_exp" id="scd_exp" maxlength="150" placeholder="150<spring:message code='message.msg188'/>"></textarea>
 											</td>
 										</tr>
 									</tbody>
