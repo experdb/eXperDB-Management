@@ -490,7 +490,7 @@ public class ServiceCallTest {
 					StringBuffer bf = new StringBuffer();
 					
 					//접근일시 createDateTime
-					bf.append((i+1) + "접근일시 : " + log.get("createDateTime"));
+					bf.append((i+1) + "작업일시 : " + log.get("createDateTime"));
 					//접근자이름 entityName
 					String strEntityName = (String) log.get("entityName");
 					//strEntityName.getBytes("UTF-8");
