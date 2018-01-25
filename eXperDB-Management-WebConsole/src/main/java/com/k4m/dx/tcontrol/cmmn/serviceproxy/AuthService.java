@@ -18,7 +18,7 @@ public class AuthService {
 	}
 	
 	
-	private JSONObject sendAuthService(String serviceName, String serviceCommand, HashMap header, JSONObject parameters) throws Exception {
+	private JSONObject sendAuthService(String serviceName, String serviceCommand, HashMap header, String parameters) throws Exception {
 		
 		
 		ExperDBRestApiHandler handler = new ExperDBRestApiHandler(restIp, restPort);
@@ -56,7 +56,7 @@ public class AuthService {
 		header.put(SystemCode.FieldName.TOKEN_VALUE, "kL0hQcOPxh0ND+VXdFjHqzudLe9dZoU+aLBJ5ldqZfo=");
 		header.put(SystemCode.FieldName.ADDRESS, "");
 		
-		api.login(strService, strCommand, header, parameters);
+		//api.login(strService, strCommand, header, parameters);
 	}
 	
 	/**
@@ -71,7 +71,7 @@ public class AuthService {
 	 * 
 	 * @throws Exception
 	 */
-	private Map<String, Object> login(String strService, String strCommand, HashMap header, JSONObject parameters) throws Exception {
+	private Map<String, Object> login(String strService, String strCommand, HashMap header, String parameters) throws Exception {
 		
 		Map<String, Object> resultJsonObjectMap = null;
 		

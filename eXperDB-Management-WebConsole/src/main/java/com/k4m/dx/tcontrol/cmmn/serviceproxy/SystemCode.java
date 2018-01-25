@@ -28,9 +28,47 @@ public class SystemCode {
 
 	private SystemCode() {
 	}
+	
+	public static class BitMask {
+
+		public static final int		BACKUP_INCLUDE_CRYPTO_KEY					= 0x1;
+
+		public static final int		BACKUP_INCLUDE_POLICY						= 0x2;
+
+		public static final int		BACKUP_INCLUDE_SERVER						= 0x4;
+
+		public static final int		BACKUP_INCLUDE_ADMIN_USER					= 0x10000;
+
+		public static final int		BACKUP_INCLUDE_CONFIG						= 0x20000;
+
+		public static final int		BACKUP_INCLUDE_SITE_LOG						= 0x100000;
+
+		public static final int		BACKUP_INCLUDE_CORE_LOG						= 0x200000;
+
+		public static final int		BACKUP_INCLUDE_BACKUP_LOG					= 0x400000;
+
+		public static final int		BACKUP_INCLUDE_MONITOR_SYSTEM_USAGE_LOG		= 0x800000;
+
+		public static final int		BACKUP_INCLUDE_MONITOR_SYSTEM_STATUS_LOG	= 0x1000000;
+
+		public static final int		BACKUP_INCLUDE_TABLE_CRYPT_LOG				= 0x2000000;
+
+		public static final int		BACKUP_INCLUDE_ALL_LOG						= 0x7FF00000;
+
+		public static final long	POLICY_OPT_NO_AUDIT_LOG_ON_SUCCESS			= 0x100;
+
+		public static final long	POLICY_OPT_NO_AUDIT_LOG_ON_FAIL				= 0x200;
+
+		public static final long	POLICY_OPT_DISABLE_AUDIT_LOG				= 0x300;
+
+		public static final long	POLICY_OPT_COMPRESS_AUDIT_LOG				= 0x80;
+
+		private BitMask() {
+		}
+	}
 
 	public static final String	SSL_PROTOCOL	= "TLS";
-	
+	public static final String	DATETIME_FORMAT					= "yyyy-MM-dd HH:mm:ss.SSS";
 
 	public class ServiceName {
 		private ServiceName() {
@@ -264,5 +302,455 @@ public class SystemCode {
 
 		public static final String	EXPORT_PARALLEL_DEGREE_KEY		= "experdb-server.export.paralleldegree";
 
+	}
+	
+	public class ResultCode {
+
+		private ResultCode() {
+		}
+
+		public static final String	SUCCESS									= "0000000000";
+
+		public static final String	ITEM_NOT_FOUND_ERROR					= "0000000001";
+
+		public static final String	AUTHENTICATION_ERROR					= "0000000003";
+
+		public static final String	INVALID_FIELD_ERROR						= "0000000007";
+
+		public static final String	CRYPTOGRAPHIC_ERROR						= "0000000010";
+
+		public static final String	ILLEGAL_OPERATION_ERROR					= "0000000011";
+
+		public static final String	PERMISSION_DENIED_ERROR					= "0000000012";
+
+		public static final String	GENERAL_ERROR							= "0000000256";
+
+		public static final String	SERVER_OPERATION_ERROR					= "8000000001";
+
+		public static final String	SERVER_INVALID_LICENSE_ERROR			= "8000000002";
+
+		public static final String	SERVER_KEY_INVALID_ERROR				= "8000000003";
+
+		public static final String	SERVER_INCONSISTENT_SYNC_ERROR			= "8000000004";
+
+		public static final String	SERVER_TO_SERVER_CONNECTION_ERROR		= "8000000005";
+
+		public static final String	SERVER_CORE_LOG_ERROR					= "8100000001";
+
+		public static final String	SERVER_EXTERNAL_KEY_CONNECTION_ERROR	= "8200000001";
+
+		public static final String	SERVER_BUSY_TRY_AGAIN_ERROR				= "8300000001";
+
+		public static final String	ADMIN_PASSWORD_EXPIRED_ERROR			= "8000000010";
+
+		public static final String	ADMIN_TOKEN_EXPIRED_ERROR				= "8000000011";
+
+		public static final String	ADMIN_PASSWORD_COMPLEXITY_ERROR			= "8000000012";
+
+		public static final String	AGENT_INVALID_STATUS_ERROR				= "9000000001";
+
+		public static final String	AGENT_EXPIRED_ERROR						= "9000000002";
+
+		public static final String	AGENT_OPERATION_ERROR					= "9000000003";
+
+		public static final String	AGENT_INVALID_ERROR						= "9000000004";
+
+		public static final String	AGENT_SELF_REGISTRATION_ERROR			= "9000000005";
+
+		public static final String	UNMANAGED_ERROR							= "9999999999";
+	}
+
+	/**
+	 * @brief 엔티티의 상태
+	 * 
+	 *        PREACTIVE 는 활성화되기 이전의 주로 최초 등록된 상태이고, ACTIVE 는 활성화되어 사용이 가능한 상태, INACTIVE 는 관리 목적으로 잠시 사용이 중지된 상태로 다시 활성화될 수 있는 상태, DEACTIVE 는 사용이 중지되고
+	 *        다시 활성화될 수 없는 상태, DESTROYED 는 폐기되어 관련 데이터가 삭제되거나 폐기된 상태를 의미한다.
+	 * @date 2015. 1. 4.
+	 * @author Kim, Sunho
+	 */
+	public class EntityStatusCode {
+		private EntityStatusCode() {
+		}
+
+		public static final String	PREACTIVE	= "ES10";
+
+		public static final String	ACTIVE		= "ES50";
+
+		public static final String	INACTIVE	= "ES55";
+
+		public static final String	DEACTIVE	= "ES70";
+
+		public static final String	DESTROYED	= "ES90";
+
+	}
+
+	/**
+	 * @brief 엔티티의 유형
+	 * 
+	 *        작업의 주체가 되는 엔티티의 종류를 정의한다.
+	 * @date 2015. 1. 4.
+	 * @author Kim, Sunho
+	 */
+	public class EntityTypeCode {
+		private EntityTypeCode() {
+		}
+
+		public static final String	ADMIN_USER	= "ETAD";
+
+		public static final String	AGENT		= "ETAG";
+
+		public static final String	APPLICATION	= "ETAP";
+
+		public static final String	DB_USER		= "ETDU";
+
+		public static final String	SYSTEM		= "ETST";
+	}
+
+	/**
+	 * @brief 엔티티의 컨테이너 유형
+	 * 
+	 *        엔티티의 컨테이너 유형을 정의한다. ELEMENT 는 컨테이너가 아닌 요소이고, GROUP 은 동질한 요소로 이루어진 집합, SET 은 이질적인 요소들로 이루어진 집합을 의미한다.
+	 * @date 2015. 1. 4.
+	 * @author Kim, Sunho
+	 */
+	public class ContainerTypeCode {
+		private ContainerTypeCode() {
+		}
+
+		public static final String	ELEMENT	= "CTEL";
+
+		public static final String	GROUP	= "CTGP";
+
+		public static final String	SET		= "CTST";
+	}
+
+	/**
+	 * @brief 로그 유형
+	 * 
+	 *        로그 유형을 정의한다. IN 은 서비스 요청 전처리에 기록되는 로그, OUT 은 서비스 요청 후처리에 기록되는 로그를 의미한다.
+	 * @date 2015. 1. 4.
+	 * @author Kim, Sunho
+	 */
+	public class AuditTypeCode {
+		private AuditTypeCode() {
+		}
+
+		public static final String	IN	= "ADIN";
+
+		public static final String	OUT	= "ADOU";
+	}
+
+	public class KeyStatusCode {
+
+		private KeyStatusCode() {
+		}
+
+		public static final String	PREACTIVE				= "KS10";
+
+		public static final String	ACTIVE					= "KS50";
+
+		public static final String	DEACTIVE				= "KS70";
+
+		public static final String	COMPROMISED				= "KS80";
+
+		public static final String	DESTROYED				= "KS90";
+
+		public static final String	DESTROYED_COMPROMISED	= "KS99";
+	}
+
+	public class KeyTypeCode {
+		private KeyTypeCode() {
+		}
+
+		public static final String	SYMMETRIC	= "KTSY";
+
+		public static final String	ASYMMETRIC	= "KTAS";
+	}
+
+	public class ResourceStatusCode {
+		private ResourceStatusCode() {
+		}
+
+		public static final String	PREACTIVE	= "RS10";
+
+		public static final String	ACTIVE		= "RS50";
+
+		public static final String	INACTIVE	= "RS55";
+
+		public static final String	DEACTIVE	= "RS70";
+
+		public static final String	DESTROYED	= "RS90";
+	}
+
+	public class ResourceTypeCode {
+		private ResourceTypeCode() {
+		}
+
+		public static final String	MENU			= "RTME";	//Admin Console Menu
+
+		public static final String	API				= "RTPI";	//REST API
+
+		public static final String	DB_OBJECT		= "RTDB";	//DB
+
+		public static final String	SERVER			= "RTSV";	//Server
+
+		public static final String	KEY				= "RTKY";	//Key
+
+		public static final String	EXTERNAL_KEY	= "RTEK";	//External Key
+
+	}
+
+	public class ServerTypeCode {
+		private ServerTypeCode() {
+		}
+
+		public static final String	WAS	= "STWA";
+
+		public static final String	DB	= "STDB";
+	}
+
+	public class SystemStatusCode {
+		private SystemStatusCode() {
+		}
+
+		public static final String	ACTIVE		= "SS50";
+
+		public static final String	INACTIVE	= "SS55";
+	}
+
+	public class NodeStatusCode {
+		private NodeStatusCode() {
+		}
+
+		public static final String	PRE_SYNC	= "NS10";
+
+		public static final String	INCLUDED	= "NS50";
+
+		public static final String	EXCLUDED	= "NS70";
+	}
+
+	public class ValueTypeCode {
+		private ValueTypeCode() {
+		}
+
+		public static final String	INTEGER		= "VTIT";
+
+		public static final String	DECIMAL		= "VTDC";
+
+		public static final String	STRING		= "VTST";
+
+		public static final String	BOOL		= "VTBO";
+
+		public static final String	CODE		= "VTCD";
+
+		public static final String	DATE_TIME	= "VTDT";
+
+		public static final String	EXTERNAL	= "VTEX";
+	}
+
+	public class DbmsProductPrefix {
+
+		private DbmsProductPrefix() {
+		}
+
+		public static final String	ORACLE	= "DPO";
+
+		public static final String	MSSQL	= "DPS";
+
+		public static final String	MARIADB	= "DPR";
+
+		public static final String	MYSQL	= "DPY";
+
+		public static final String	POSTGRESQL= "DPP";
+	}
+
+	public class DbmsTypeCode {
+		private DbmsTypeCode() {
+		}
+
+		public static final String	ORACLE		= "DBOR";
+
+		public static final String	MARIADB		= "DBMA";
+
+		public static final String	MSSQL		= "DBMS";
+
+		public static final String	MYSQL		= "DBMY";
+
+		public static final String	SYBASE		= "DBSY";
+
+		public static final String	INFORMIX	= "DBIF";
+
+		public static final String	POSTGRESQL	= "DBPG";
+
+	}
+
+	public class ProfileTypeCode {
+		private ProfileTypeCode() {
+		}
+
+		public static final String	PROTECTION	= "PTPR";
+
+		public static final String	CONTEXT		= "PTCX";
+
+		public static final String	AUDIT		= "PTAD";
+
+		public static final String	CREDENTIAL	= "PTCR";
+	}
+
+	public class ProfileStatusCode {
+		private ProfileStatusCode() {
+		}
+
+		public static final String	PREACTIVE	= "PS10";
+
+		public static final String	ACTIVE		= "PS50";
+
+		public static final String	INACTIVE	= "PS55";
+
+		public static final String	DEACTIVE	= "PS70";
+
+		public static final String	DESTROYED	= "PS90";
+	}
+
+	public class CipherAlgorithmCode {
+		private CipherAlgorithmCode() {
+		}
+
+		public static final String	ARIA_128	= "CAR1";
+
+		public static final String	ARIA_192	= "CAR2";
+
+		public static final String	ARIA_256	= "CAR3";
+
+		public static final String	AES_128		= "CAA1";
+
+		public static final String	AES_192		= "CAA2";
+
+		public static final String	AES_256		= "CAA3";
+
+		public static final String	SEED_128	= "CAD1";
+
+		public static final String	SEED_256	= "CAD2";
+
+		public static final String	OPE			= "CAOP";
+
+		public static final String	SHA_256		= "CAS2";
+
+		public static final String	TDES		= "CATD";
+
+		public static final String	LPE_NUM		= "CALN";
+
+	}
+
+	public class DenyResultTypeCode
+	{
+		private DenyResultTypeCode() {
+		}
+
+		public static final String	ERROR		= "DRER";
+
+		public static final String	MASKING		= "DRMS";
+
+		public static final String	REPLACE		= "DRRP";
+
+		public static final String	ORIGINAL	= "DROR";
+
+	}
+
+	public class BackupWorkType {
+		private BackupWorkType() {
+
+		}
+
+		public static final String	BACKUP				= "BACKUP";
+
+		public static final String	RESTORE				= "RESTORE";
+
+		public static final String	SCHEDULED_BACKUP	= "SCHEDULED_BACKUP";
+
+	}
+
+	public class BackupType {
+		private BackupType() {
+
+		}
+
+		public static final String	FULL		= "FULL";
+
+		public static final String	INCREMENTAL	= "INCREMENTAL";
+
+		public static final String	PERIOD		= "PERIOD";
+	}
+
+	public class Weekday
+	{
+		private Weekday() {
+		}
+
+		public static final int	NONE		= 0x0;
+
+		public static final int	SUNDAY		= 0x1;
+
+		public static final int	MONDAY		= 0x2;
+
+		public static final int	TUESDAY		= 0x4;
+
+		public static final int	WEDNESDAY	= 0x8;
+
+		public static final int	THURSDAY	= 0x10;
+
+		public static final int	FRIDAY		= 0x20;
+
+		public static final int	SATURDAY	= 0x40;
+	}
+
+	public class ScheduleKey {
+		private ScheduleKey() {
+		}
+
+		public static final String	SERVER_JOB_NAME		= "ServerJob";
+
+		public static final String	SERVER_GROUP_NAME	= "ServerJob";
+
+		public static final String	SERVER_TRIGGER_NAME	= "ServerTrigger";
+	}
+
+	public class IntegrityResult {
+		private IntegrityResult() {
+		}
+
+		public static final String	NO_INTEGRITY_CHECKSUM	= "-";
+
+		public static final String	NORMAL					= "NORMAL";
+
+		public static final String	SITE_INTEGRITY_ERROR	= "SITE INTEGRITY ERROR";
+
+		public static final String	SERVER_INTEGRITY_ERROR	= "SERVER INTEGRITY ERROR";
+
+	}
+
+	public class TableCryptCode {
+		public static final String	STAGE_CTAS			= "CRYPTING";
+
+		public static final String	STAGE_INDEX			= "INDEXING";
+
+		public static final String	STAGE_SUCCESS		= "SUCCESS";
+
+		public static final String	STAGE_FAIL			= "FAIL";
+
+		public static final String	STAGE_STARTING		= "STARTING";
+
+		public static final String	TAG_HEADER			= "--EXPERDB_TAG";
+
+		public static final String	REVERT_TAG_HEADER	= "--EXPERDB_REVERT_TAG";
+	}
+
+	public class AppTypeCode {
+		private AppTypeCode() {
+		}
+
+		public static final String	AGENT	= "ATAG";
+
+		public static final String	SERVER	= "ATSV";
 	}
 }

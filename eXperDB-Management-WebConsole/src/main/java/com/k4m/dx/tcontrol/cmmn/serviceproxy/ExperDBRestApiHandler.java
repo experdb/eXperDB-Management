@@ -38,7 +38,7 @@ public class ExperDBRestApiHandler {
 		this.restPort = restPort;
 	}
 	
-	private ResponseEntity<String> sendRestCmd(String strService, String strCommand, HashMap header, JSONObject parameters) throws Exception {
+	private ResponseEntity<String> sendRestCmd(String strService, String strCommand, HashMap header, String parameters) throws Exception {
 		
 		ExperDBRestApi api = new ExperDBRestApi(restIp, restPort);
 		
@@ -50,7 +50,7 @@ public class ExperDBRestApiHandler {
 	}
 	
 	
-	public JSONObject getRestRequest(String strService, String strCommand, HashMap header, JSONObject parameters) throws Exception {
+	public JSONObject getRestRequest(String strService, String strCommand, HashMap header, String parameters) throws Exception {
 		
 		JSONObject resultJsonObjectMap = null;
 		
@@ -75,7 +75,7 @@ public class ExperDBRestApiHandler {
 
 	}
 	
-	public ResponseEntity<String> getResponseEntity(String strService, String strCommand, HashMap header, JSONObject parameters) throws Exception {
+	public ResponseEntity<String> getResponseEntity(String strService, String strCommand, HashMap header, String parameters) throws Exception {
 		return sendRestCmd(strService, strCommand, header, parameters);
 	}
 }

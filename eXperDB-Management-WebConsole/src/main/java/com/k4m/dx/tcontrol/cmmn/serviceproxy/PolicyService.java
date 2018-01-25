@@ -16,7 +16,7 @@ public class PolicyService {
 		this.restPort = restPort;
 	}
 	
-	private JSONObject sendPolicyService(String serviceName, String serviceCommand, HashMap header, JSONObject parameters) throws Exception {
+	private JSONObject sendPolicyService(String serviceName, String serviceCommand, HashMap header, String parameters) throws Exception {
 		
 		
 		ExperDBRestApiHandler handler = new ExperDBRestApiHandler(restIp, restPort);

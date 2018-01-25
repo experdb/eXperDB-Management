@@ -64,7 +64,7 @@ public class ExperDBRestApi {
 		return "https://" + restIp + ":" + restPort;
 	}
 
-	private HttpEntity<?> apiClientHttpEntity(String appType, String params, Map header) {
+	private HttpEntity<?> apiClientHttpEntity(String appType, Map header, String params) {
 
 		HttpHeaders requestHeaders = new HttpHeaders();
 		requestHeaders.set("Cache-Control", "no-cache");
@@ -84,12 +84,10 @@ public class ExperDBRestApi {
 	}
 	
 
-    public ResponseEntity<String>  restResponseEntity(String strService, String strCommand, HashMap header, JSONObject parameters) throws Exception {
+    public ResponseEntity<String>  restResponseEntity(String strService, String strCommand, HashMap header, String parameters) throws Exception {
 
-    	JSONObject configJsonObjectMap = null;
-    	String jsonString = null;
+
 		String url;
-		HttpsURLConnection conn;
 		SSLContext ctx;
 		
 		try {
@@ -114,7 +112,7 @@ public class ExperDBRestApi {
 		//parameters.put("name", strName);
 		//parameters.put("config", config)
 		
-		HttpEntity<?> requestEntity = apiClientHttpEntity("json", parameters.toString(), header);
+		HttpEntity<?> requestEntity = apiClientHttpEntity("json", header, parameters);
 		
 		ResponseEntity<String> responseEntity =null;
 		
@@ -122,6 +120,8 @@ public class ExperDBRestApi {
 		try {
 
 			RestTemplate restTemplate = new RestTemplate(requestFactory);
+			
+			//responseEntity = restTemplate.exchange(url, HttpMethod.POST, requestEntity, String.class);
 			
 			responseEntity = restTemplate.exchange(url, HttpMethod.POST, requestEntity, String.class);
 			
@@ -196,9 +196,10 @@ public class ExperDBRestApi {
 		
 		ExperDBRestApi api = new ExperDBRestApi(ip, port);
 
-		JSONObject parameters = new JSONObject();
+		//JSONObject parameters = new JSONObject();
 		//parameters.put("name", strName);
 		//parameters.put("config", config)
+		String parameters = "";
 		
 		HashMap header = new HashMap();
 		header = api.makeHeaderMap1();
@@ -240,9 +241,10 @@ public class ExperDBRestApi {
 		String strUserId = "admin";
 		String strPassword = "password";
 
-		JSONObject parameters = new JSONObject();
+		//JSONObject parameters = new JSONObject();
 		//parameters.put("name", strName);
 		//parameters.put("config", config)
+		String parameters = "";
 		
 		HashMap header = new HashMap();
 		//header = api.makeHeaderMap1();

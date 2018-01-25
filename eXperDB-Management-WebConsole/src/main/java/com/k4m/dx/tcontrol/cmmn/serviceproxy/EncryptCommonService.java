@@ -17,7 +17,7 @@ public class EncryptCommonService {
 		this.restPort = restPort;
 	}
 	
-	public JSONObject callService(String serviceName, String serviceCommand, HashMap header, JSONObject parameters) throws Exception {
+	public JSONObject callService(String serviceName, String serviceCommand, HashMap header, String parameters) throws Exception {
 		
 		
 		ExperDBRestApiHandler handler = new ExperDBRestApiHandler(restIp, restPort);
@@ -27,7 +27,7 @@ public class EncryptCommonService {
 		return resultList;
 	}
 	
-	public ResponseEntity<String> callLoginService(String serviceName, String serviceCommand, HashMap header, JSONObject parameters) throws Exception {
+	public ResponseEntity<String> callLoginService(String serviceName, String serviceCommand, HashMap header, String parameters) throws Exception {
 		
 		
 		ExperDBRestApiHandler handler = new ExperDBRestApiHandler(restIp, restPort);
