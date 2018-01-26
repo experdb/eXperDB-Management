@@ -173,5 +173,19 @@ public class ProtocolID {
 	public static final String PGDBAK = "PGDBAK";
 	public static final String PGRLOG = "PGRLOG";
 	public static final String PGDLOG = "PGDLOG";
+	
+	public static final String RMAN_START_DATE = "START_DATE";
+	public static final String RMAN_START_TIME = "START_TIME";
+	public static final String RMAN_END_DATE = "END_DATE";
+	public static final String RMAN_END_TIME = "END_TIME";
+	public static final String RMAN_MODE = "MODE";
+	public static final String RMAN_DATA = "DATA";
+	public static final String RMAN_ARCLOG = "ARCLOG";
+	public static final String RMAN_SRVLOG = "SRVLOG";
+	public static final String RMAN_TOTAL = "TOTAL";
+	public static final String RMAN_COMPRESSED = "COMPRESSED";
+	public static final String RMAN_CURTLI = "CURTLI";
+	public static final String RMAN_PARENTTLI = "PARENTTLI";
+	public static final String RMAN_STATUS = "STATUS";
 
 }

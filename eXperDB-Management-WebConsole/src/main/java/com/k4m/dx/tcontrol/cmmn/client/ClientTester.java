@@ -39,7 +39,8 @@ import org.json.simple.parser.JSONParser;
  * 21. DBMS 속성조회
  * 22. RMAN 백업 INIT 실행
  * 23. 파일 존재유무 체크
- * 
+ * 24. dump 파일 정보 조회
+ * 25. rman 파일셋 정보조 회
  * @author thpark
  *
  */
@@ -95,7 +96,9 @@ public class ClientTester {
 			//clientTester.dxT019(Ip, port);
 			//clientTester.dxT020(Ip, port);
 			//clientTester.dxT021(Ip, port);
-			clientTester.dxT023(Ip, port);
+			//clientTester.dxT023(Ip, port);
+			//clientTester.dxT024(Ip, port);
+			clientTester.dxT025(Ip, port);
 			
 			//clientTester.test();
 		} catch(Exception e) {
@@ -287,6 +290,7 @@ public class ClientTester {
 					, " pg_rman backup --dbname=experdb --host=222.110.153.251 --port=5433 --username=experdb --no-password --pgdata=/home/experdb/pgdata/data --backup-path=/home/experdb/pgdata/bakup/rman --backup-mode=full -A $PGDATA/pg_xlog/archive_status/ --keep-data-generations=3 --keep-data-days=3 --keep-arclog-files=3 --keep-arclog-days=3 --keep-srvlog-files=3 --keep-srvlog-days=3 >> /home/experdb/pgdata/bakup/logs/rman/171212_계정계rman백업.log 2>&1"
 					, "pg_rman validate -B /home/experdb/pgdata/bakup/rman"
 					, "pg_rman backup  --host=222.110.153.251 --port=5433 --username=experdb --no-password --pgdata=/home/experdb/pgdata/data --backup-path=/home/experdb/pgdata/bakup/rman --backup-mode=full -A $PGDATA/pg_xlog/archive_status/ --keep-data-generations=0 --keep-data-days=0 --keep-arclog-files=0 --keep-arclog-days=0 --keep-srvlog-files=0 --keep-srvlog-days=0"
+					,  "pg_rman backup  --host=222.110.153.251 --port=5433 --username=experdb --no-password --pgdata=/home/experdb/pgdata/data --backup-path=/home/experdb/pgdata/bakup/rman --backup-mode=full -A $PGDATA/pg_xlog/archive_status/ --keep-data-generations=0 --keep-data-days=0 --keep-arclog-files=0 --keep-arclog-days=0 --keep-srvlog-files=0 --keep-srvlog-days=0"
 
 				};
 			
@@ -341,9 +345,24 @@ public class ClientTester {
 			objJob_03.put(ClientProtocolID.BCK_FILENM, "1");
 			objJob_03.put(ClientProtocolID.LOG_YN, "Y");
 			
+			JSONObject objJob_04 = new JSONObject();
+			objJob_04.put(ClientProtocolID.SCD_ID, "1"); //스캐쥴ID
+			objJob_04.put(ClientProtocolID.WORK_ID, "1"); //작업ID
+			objJob_04.put(ClientProtocolID.EXD_ORD, "1"); //실행순서
+			objJob_04.put(ClientProtocolID.NXT_EXD_YN, "1"); //다음실행여부
+			objJob_04.put(ClientProtocolID.REQ_CMD, CMD[4]);
+			objJob_04.put(ClientProtocolID.BCK_OPT_CD, "1");
+			objJob_04.put(ClientProtocolID.BCK_BSN_DSCD, "TC000201");
+			objJob_04.put(ClientProtocolID.DB_SVR_IPADR_ID, "1");
+
+			objJob_04.put(ClientProtocolID.DB_ID, "1");
+			objJob_04.put(ClientProtocolID.BCK_FILE_PTH, "1");
+			objJob_04.put(ClientProtocolID.BCK_FILENM, "1");
+			objJob_04.put(ClientProtocolID.LOG_YN, "Y");
+			
 			//arrCmd.add(0, objJob_01);
 			//arrCmd.add(1, objJob_02);
-			arrCmd.add(0, objJob_03);
+			arrCmd.add(0, objJob_04);
 
 			JSONObject serverObj = new JSONObject();
 			
@@ -2045,7 +2064,7 @@ public class ClientTester {
 			ClientAdapter CA = new ClientAdapter(Ip, port);
 			CA.open(); 
 
-			objList = CA.dxT016(jObj);
+			objList = CA.dxT023(jObj);
 			
 			HashMap obj = (HashMap)objList.get(ClientProtocolID.RESULT_DATA);
 			
@@ -2058,6 +2077,139 @@ public class ClientTester {
 			
 				
 			//CA.close();
+		} catch(Exception e) {
+			e.printStackTrace();
+		}
+	}
+	
+	private void dxT024(String Ip, int port) {
+		try {
+
+			String strDirectory = "/home/experdb/pgdata/bakup/dump";
+			
+			//strDirectory = "C:\\k4m\\01-1. DX 제폼개발\\04. 시험\\pg_log\\";
+			
+			JSONObject serverObj = new JSONObject();
+			
+			serverObj.put(ClientProtocolID.SERVER_NAME, Ip);
+			serverObj.put(ClientProtocolID.SERVER_IP, Integer.toString(port));
+			
+			
+			JSONObject jObj = new JSONObject();
+			jObj.put(ClientProtocolID.DX_EX_CODE, ClientTranCodeType.DxT024);
+			jObj.put(ClientProtocolID.SERVER_INFO, serverObj);
+			jObj.put(ClientProtocolID.FILE_DIRECTORY, strDirectory);
+
+			JSONObject objList;
+			
+			ClientAdapter CA = new ClientAdapter(Ip, port);
+			CA.open(); 
+				
+			objList = CA.dxT024(jObj);
+			
+			String strErrMsg = (String)objList.get(ClientProtocolID.ERR_MSG);
+			String strErrCode = (String)objList.get(ClientProtocolID.ERR_CODE);
+			String strDxExCode = (String)objList.get(ClientProtocolID.DX_EX_CODE);
+			String strResultCode = (String)objList.get(ClientProtocolID.RESULT_CODE);
+			System.out.println("RESULT_CODE : " +  strResultCode);
+			System.out.println("ERR_CODE : " +  strErrCode);
+			System.out.println("ERR_MSG : " +  strErrMsg);
+			
+			List<HashMap<String, String>> fileList = (List<HashMap<String, String>>) objList.get(ClientProtocolID.RESULT_DATA);
+			
+			int i = 0;
+			for(HashMap<String, String> hp:fileList) {
+				i++;
+				String strFileName = (String) hp.get(ClientProtocolID.FILE_NAME);
+				String strFileSize = (String) hp.get(ClientProtocolID.FILE_SIZE);
+				String strFileLastModified = (String) hp.get(ClientProtocolID.FILE_LASTMODIFIED);
+				
+				System.out.println(i + "|" + strFileName + "|" + strFileSize + "|" + strFileLastModified);
+			}
+		
+				
+			CA.close();
+		} catch(Exception e) {
+			e.printStackTrace();
+		}
+	}
+	
+	private void dxT025(String Ip, int port) {
+		try {
+
+			String strDirectory = "/home/experdb/pgdata/bakup/rman/";
+			
+			//strDirectory = "C:\\k4m\\01-1. DX 제폼개발\\04. 시험\\pg_log\\";
+			
+			JSONObject serverObj = new JSONObject();
+			
+			serverObj.put(ClientProtocolID.SERVER_NAME, Ip);
+			serverObj.put(ClientProtocolID.SERVER_IP, Integer.toString(port));
+			
+			
+			JSONObject jObj = new JSONObject();
+			jObj.put(ClientProtocolID.DX_EX_CODE, ClientTranCodeType.DxT025);
+			jObj.put(ClientProtocolID.SERVER_INFO, serverObj);
+			jObj.put(ClientProtocolID.FILE_DIRECTORY, strDirectory);
+
+			JSONObject objList;
+			
+			ClientAdapter CA = new ClientAdapter(Ip, port);
+			CA.open(); 
+				
+			objList = CA.dxT025(jObj);
+			
+			String strErrMsg = (String)objList.get(ClientProtocolID.ERR_MSG);
+			String strErrCode = (String)objList.get(ClientProtocolID.ERR_CODE);
+			String strDxExCode = (String)objList.get(ClientProtocolID.DX_EX_CODE);
+			String strResultCode = (String)objList.get(ClientProtocolID.RESULT_CODE);
+			System.out.println("RESULT_CODE : " +  strResultCode);
+			System.out.println("ERR_CODE : " +  strErrCode);
+			System.out.println("ERR_MSG : " +  strErrMsg);
+			
+			List<HashMap<String, String>> list = (List<HashMap<String, String>>) objList.get(ClientProtocolID.RESULT_DATA);
+			
+			int i = 0;
+			for(HashMap<String, String> hp:list) {
+				StringBuffer bf = new StringBuffer();
+				
+				i++;
+				String RMAN_START_DATE = (String) hp.get(ClientProtocolID.RMAN_START_DATE);
+				bf.append(RMAN_START_DATE);
+				bf.append("    ");
+				
+				String RMAN_START_TIME = (String) hp.get(ClientProtocolID.RMAN_START_TIME);
+				bf.append(RMAN_START_TIME);bf.append("    ");
+				
+				String RMAN_END_DATE = (String) hp.get(ClientProtocolID.RMAN_END_DATE);
+				bf.append(RMAN_END_DATE);bf.append("    ");
+				String RMAN_END_TIME = (String) hp.get(ClientProtocolID.RMAN_END_TIME);
+				bf.append(RMAN_END_TIME);bf.append("    ");
+				
+				String RMAN_MODE = (String) hp.get(ClientProtocolID.RMAN_MODE);
+				bf.append(RMAN_MODE);bf.append("    ");
+				String RMAN_DATA = (String) hp.get(ClientProtocolID.RMAN_DATA);
+				bf.append(RMAN_DATA);bf.append("    ");
+				String RMAN_ARCLOG = (String) hp.get(ClientProtocolID.RMAN_ARCLOG);
+				bf.append(RMAN_ARCLOG);bf.append("    ");
+				String RMAN_SRVLOG = (String) hp.get(ClientProtocolID.RMAN_SRVLOG);
+				bf.append(RMAN_SRVLOG);bf.append("    ");
+				String RMAN_TOTAL = (String) hp.get(ClientProtocolID.RMAN_TOTAL);
+				bf.append(RMAN_TOTAL);bf.append("    ");
+				String RMAN_COMPRESSED = (String) hp.get(ClientProtocolID.RMAN_COMPRESSED);
+				bf.append(RMAN_COMPRESSED);bf.append("    ");
+				String RMAN_CURTLI = (String) hp.get(ClientProtocolID.RMAN_CURTLI);
+				bf.append(RMAN_CURTLI);bf.append("    ");
+				String RMAN_PARENTTLI = (String) hp.get(ClientProtocolID.RMAN_PARENTTLI);
+				bf.append(RMAN_PARENTTLI);bf.append("    ");
+				String RMAN_STATUS = (String) hp.get(ClientProtocolID.RMAN_STATUS);
+				bf.append(RMAN_STATUS);bf.append("    ");
+				
+				System.out.println(bf.toString());
+			}
+		
+				
+			CA.close();
 		} catch(Exception e) {
 			e.printStackTrace();
 		}

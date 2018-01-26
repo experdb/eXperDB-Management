@@ -25,6 +25,8 @@ public class TranCodeType {
 	public static final String DxT021 = "DxT021";
 	public static final String DxT022 = "DxT022";
 	public static final String DxT023 = "DxT023";
+	public static final String DxT024 = "DxT024";
+	public static final String DxT025 = "DxT025";
 	
 	public static final String STATUS = "STATUS";
 	public static final String STOP = "STOP";
