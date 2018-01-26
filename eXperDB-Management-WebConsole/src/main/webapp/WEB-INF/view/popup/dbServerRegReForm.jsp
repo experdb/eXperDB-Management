@@ -674,11 +674,11 @@ function checkPghome(){
 					<th scope="row" class="ico_t1"><spring:message code="common.dbms_name" />(*)</th>
 					<td><input type="text" class="txt bg1" name="db_svr_nm" id="db_svr_nm"  readonly="readonly"  /></td>
 					<th scope="row" class="ico_t1">Database(*)</th>
-					<td><input type="text" class="txt" name="dft_db_nm" id="dft_db_nm" /></td>
+					<td><input type="text" class="txt" name="dft_db_nm" id="dft_db_nm" maxlength="30" onkeyup="fn_checkWord(this,30)" placeholder="30<spring:message code='message.msg188'/>"/></td>
 				</tr>
 				<tr>
 					<th scope="row" class="ico_t1"><spring:message code="dbms_information.account" />(*)</th>
-					<td><input type="text" class="txt" name="svr_spr_usr_id" id="svr_spr_usr_id"  /></td>
+					<td><input type="text" class="txt" name="svr_spr_usr_id" id="svr_spr_usr_id" maxlength="30" onkeyup="fn_checkWord(this,30)" placeholder="30<spring:message code='message.msg188'/>" /></td>
 					<th scope="row" class="ico_t1">Password(*)</th>
 					<td><input type="password" class="txt" name="svr_spr_scm_pwd" id="svr_spr_scm_pwd" /></td>
 				</tr>

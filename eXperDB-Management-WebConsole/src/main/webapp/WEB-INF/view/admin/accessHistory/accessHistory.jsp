@@ -185,7 +185,7 @@
 													<option value="usr_nm" ${type == 'usr_nm' ? 'selected="selected"' : ''}><spring:message code="history_management.user_name" /></option>
 													<option value="usr_id" ${type == 'usr_id' ? 'selected="selected"' : ''}><spring:message code="history_management.id" /> </option>
 												</select>
-												<input type="text" class="txt t2" id="search" name="search" value="${search}"/>
+												<input type="text" class="txt t2" id="search" name="search" value="${search}" maxlength="15"/>
 											</td>				
 									</tr>
 									<tr>

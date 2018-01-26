@@ -147,4 +147,12 @@ public interface DbAuthorityService {
 
 	List<Map<String, Object>> selectTreeDBSvrList(String usr_id) throws Exception;
 
+	/**
+	 * 해당 서버에 대한 디비 조회
+	 * @param param 
+	 * @param 
+	 * @throws Exception
+	 */
+	List<Map<String, Object>> selectDatabase(int param) throws Exception;
+
 }

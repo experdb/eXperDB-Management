@@ -297,7 +297,7 @@ function fn_delete(){
 										<option value="usr_id"><spring:message code="user_management.id" /></option>
 									</select>
 								</td>
-								<td><input type="text" class="txt t2" id="search" /></td>
+								<td><input type="text" class="txt t2" id="search" maxlength="15"/></td>
 								<th scope="row" class="t9"><spring:message code="user_management.use_yn" /></th>
 								<td>
 									<select class="select t5" id="use_yn">

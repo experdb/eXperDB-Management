@@ -592,7 +592,7 @@ function fn_makeToMin(){
 						<tbody>
 								<tr>
 									<th scope="row" class="t9 line" style="width:130px;"><spring:message code="schedule.schedule_name" /></th>
-									<td><input type="text" class="txt t2" id="scd_nm" name="scd_nm"/></td>
+									<td><input type="text" class="txt t2" id="scd_nm" name="scd_nm" maxlength="20"/></td>
 								</tr>
 								<tr>
 									<th scope="row" class="t9 line"><spring:message code="schedule.scheduleExp"/></th>
@@ -622,7 +622,7 @@ function fn_makeToMin(){
 								</tr>
 								<tr>
 									<th scope="row" class="t9 line"><spring:message code="common.work_name" /></th>
-									<td ><input type="text" class="txt t2" id="wrk_nm" name="wrk_nm" /></td>
+									<td ><input type="text" class="txt t2" id="wrk_nm" name="wrk_nm" maxlength="20"/></td>
 								</tr>
 								<tr>
 									<th scope="row" class="t9 line" ><spring:message code="common.run_status" /></th>

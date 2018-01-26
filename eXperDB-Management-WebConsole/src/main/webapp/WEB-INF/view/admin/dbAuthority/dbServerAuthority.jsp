@@ -352,55 +352,98 @@
 			 var adt_cng_aut = $("input[name='adt_cng_aut']");
 			 var adt_hist_aut = $("input[name='adt_hist_aut']");
 			 
+			 
 	 		 for(var i = 0; i < svr_server.length; i++){
+	 			var autCheck = 0;
 				 var rows = new Object();
 				 rows.usr_id = usr_id;
 				 rows.db_svr_id = db_svr_id[i].value;
 			    		     
 			     if(bck_cng_aut[i].checked){ //선택되어 있으면 배열에 값을 저장함
 			    	 	rows.bck_cng_aut_yn = "Y";   
+			    	 	autCheck++;
 			        }else{
 			        	rows.bck_cng_aut_yn = "N";
 			        }
 			     
 			     if(bck_hist_aut[i].checked){ //선택되어 있으면 배열에 값을 저장함
-			    		rows.bck_hist_aut_yn = "Y";   
+			    		rows.bck_hist_aut_yn = "Y"; 
+			    		autCheck++;
 			        }else{
 			        	rows.bck_hist_aut_yn = "N";
 			        }
 			     
 			     if(bck_scdr_aut[i].checked){ //선택되어 있으면 배열에 값을 저장함
-			    		rows.bck_scdr_aut_yn = "Y";   
+			    		rows.bck_scdr_aut_yn = "Y"; 
+			    		autCheck++;
 			        }else{
 			        	rows.bck_scdr_aut_yn = "N";
 			        }
 			     
 			     if(acs_cntr_aut[i].checked){ //선택되어 있으면 배열에 값을 저장함
 			    	 	rows.acs_cntr_aut_yn = "Y";   
+			    	 	autCheck++;
 			        }else{
 			        	rows.acs_cntr_aut_yn = "N";
 			        }
 			     
 			     if(policy_change_his_aut[i].checked){ //선택되어 있으면 배열에 값을 저장함
 			    	 	rows.policy_change_his_aut_yn = "Y";   
+			    	 	autCheck++;
 			        }else{
 			        	rows.policy_change_his_aut_yn = "N";
 			        }
 			     
 			     if(adt_cng_aut[i].checked){ //선택되어 있으면 배열에 값을 저장함
 			    	 	rows.adt_cng_aut_yn = "Y";   
+			    	 	autCheck++;
 			        }else{
 			        	rows.adt_cng_aut_yn = "N";
 			        }
 			     
 			     if(adt_hist_aut[i].checked){ //선택되어 있으면 배열에 값을 저장함
 			    	 	rows.adt_hist_aut_yt = "Y";   
+			    	 	autCheck++;
 			        }else{
 			        	rows.adt_hist_aut_yt = "N";
 			        }
 			     datasArr.push(rows);
+			     
+			     
+			     /*DB서버 메뉴권한이 있으면 해당 DB서버 DB권한 가지기*/
+			     if(autCheck > 0){
+			    	 $.ajax({
+							url : "/updateServerDBAutInfo.do",
+							data : {
+								db_svr_id : rows.db_svr_id,
+								usr_id : rows.usr_id
+							},
+							dataType : "json",
+							type : "post",
+							beforeSend: function(xhr) {
+						        xhr.setRequestHeader("AJAX", true);
+						     },
+							error : function(xhr, status, error) {
+								if(xhr.status == 401) {
+									alert("<spring:message code='message.msg02' />");
+									 location.href = "/";
+								} else if(xhr.status == 403) {
+									alert("<spring:message code='message.msg03' />");
+						             location.href = "/";
+								} else {
+									alert("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""));
+								}
+							},
+							success : function(result) {
+							}
+						}); 
+			     }
+			     
+			     
+					
 			 } 
 		 }
+		 
 		 
 			if (confirm('<spring:message code="message.msg166"/>')){
 				$.ajax({

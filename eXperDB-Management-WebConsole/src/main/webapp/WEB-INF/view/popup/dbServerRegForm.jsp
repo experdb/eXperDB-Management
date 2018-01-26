@@ -756,14 +756,14 @@ function fn_ipadrDelForm(){
 				</tr>
 				<tr>
 					<th scope="row" class="ico_t1" ><spring:message code="common.dbms_name" />(*)</th>
-					<td><input type="text" class="txt" name="db_svr_nm" id="db_svr_nm"  style="width:210px" maxlength="20"/>
+					<td><input type="text" class="txt" name="db_svr_nm" id="db_svr_nm"  style="width:210px" maxlength="20" onkeyup="fn_checkWord(this,20)" placeholder="20<spring:message code='message.msg188'/>"/>
 					<span class="btn btnC_01"><button type="button" class= "btn_type_02" onclick="fn_svrnmCheck()" style="width: 85px; margin-right: -60px; margin-top: 0;"><spring:message code="common.overlap_check" /></button></span></td>
 					<th scope="row" class="ico_t1" style="width: 60px; margin-right: -160px; margin-top: 0;">Database(*)</th>
-					<td><input type="text" class="txt" name="dft_db_nm" id="dft_db_nm" maxlength="30"/></td>
+					<td><input type="text" class="txt" name="dft_db_nm" id="dft_db_nm" maxlength="30" onkeyup="fn_checkWord(this,30)" placeholder="30<spring:message code='message.msg188'/>"/></td>
 				</tr>
 				<tr>
 					<th scope="row" class="ico_t1"><spring:message code="dbms_information.account" />(*)</th>
-					<td><input type="text" class="txt" name="svr_spr_usr_id" id="svr_spr_usr_id" maxlength="30"/></td>
+					<td><input type="text" class="txt" name="svr_spr_usr_id" id="svr_spr_usr_id" maxlength="30" onkeyup="fn_checkWord(this,30)" placeholder="30<spring:message code='message.msg188'/>"/></td>
 					<th scope="row" class="ico_t1"><spring:message code="user_management.password" />(*)</th>
 					<td><input type="password" class="txt" name="svr_spr_scm_pwd" id="svr_spr_scm_pwd" /></td>
 				</tr>				

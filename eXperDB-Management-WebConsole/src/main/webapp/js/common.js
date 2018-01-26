@@ -566,10 +566,10 @@ function fn_make_object_list(data, workObj){
 		if(schema != inSchema){
 			var checkStr = "disabled";
 			$(workObj).each(function(i,v){
-				if(v.scm_nm == item.schema && v.obj_nm == "") checkStr = " checked";
+				if(v.scm_nm == item.schema && v.obj_nm == "") checkStr = " checked disabled";
 			});
 			html += "<li class='active'><a href='#'>"+item.schema+"</a>";
-			html += "<div class='inp_chk'>";
+			html += "<div class='inp_chk chk3'>";
 			html += "<input type='checkbox' id='schema"+schemaCnt+"' name='tree' value='"+item.schema+"' otype='schema' schema='"+item.schema+"'"+checkStr+"/><label for='schema"+schemaCnt+"'></label>";
 			html += "</div>";
 			html += "<ul>\n";
@@ -577,10 +577,10 @@ function fn_make_object_list(data, workObj){
 		
 		var checkStr = "disabled";
 		$(workObj).each(function(i,v){
-			if(v.scm_nm == item.schema && v.obj_nm == item.name) checkStr = " checked";
+			if(v.scm_nm == item.schema && v.obj_nm == item.name) checkStr = " checked disabled";
 		});
 		html += "<li><a href='#'>"+item.name+"</a>";
-		html += "<div class='inp_chk'>";
+		html += "<div class='inp_chk chk3'>";
 		html += "<input type='checkbox' id='table"+index+"' name='tree' value='"+item.name+"' otype='table' schema='"+item.schema+"'"+checkStr+"/><label for='table"+index+"'></label>";
 		html += "</div>";
 		html += "</li>\n";
@@ -635,4 +635,15 @@ function fn_fixLog(exe_sn){
 				toggleLayer($('#pop_layer_fix_rslt_msg'), 'on');						
 		}
 	});	
+}
+
+//글자 수 체크
+function fn_checkWord(obj, maxlength) { 
+	var str = obj.value; 
+	var str_length = str.length;     
+	var max_length = maxlength;  
+	if (str_length == max_length) {        
+		alert(max_length + "자리 까지만 입력이 가능합니다.");    
+	}    
+	obj.focus(); 
 }

@@ -583,12 +583,12 @@ function fn_scheduleReStart(){
 									<tbody>
 										<tr>
 											<th scope="row" class="t9 line"><spring:message code="schedule.schedule_name" />(*)</th>
-											<td><input type="text" class="txt t3" id="scd_nm" name="scd_nm" maxlength="20" readonly="readonly"/></td>
+											<td><input type="text" class="txt t2" id="scd_nm" name="scd_nm" maxlength="20" readonly="readonly"/></td>
 										</tr>
 										<tr>
 											<th scope="row" class="t9 line"><spring:message code="schedule.scheduleExp"/>(*)</th>
 											<td>
-												<textarea class="tbd1" name="scd_exp" id="scd_exp" maxlength="150" placeholder="150<spring:message code='message.msg188'/>"></textarea>
+												<textarea class="tbd1" name="scd_exp" id="scd_exp" onkeyup="fn_checkWord(this,150)" maxlength="150" placeholder="150<spring:message code='message.msg188'/>"></textarea>
 											</td>
 										</tr>
 									</tbody>

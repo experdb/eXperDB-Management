@@ -386,11 +386,11 @@ function fn_modifyScheduleListView(){
 						<tbody>
 								<tr>
 									<th scope="row" class="t9 line"><spring:message code="schedule.schedule_name" /></th>
-									<td><input type="text" class="txt t2" id="scd_nm" name="scd_nm"/></td>
+									<td><input type="text" class="txt t2" id="scd_nm" name="scd_nm" maxlength="20"/></td>
 								</tr>
 								<tr>
 									<th scope="row" class="t9 line"><spring:message code="schedule.scheduleExp"/></th>
-									<td><textarea class="tbd1" name="scd_exp" id="scd_exp"></textarea></td>
+									<td><textarea class="tbd1" name="scd_exp" id="scd_exp" maxlength="150"></textarea></td>
 								</tr>
 						</tbody>
 					</table>

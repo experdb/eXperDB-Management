@@ -114,4 +114,11 @@ public class DbAuthorityDAO extends EgovAbstractMapper{
 		return sl;
 	}
 
+	@SuppressWarnings({ "unchecked", "deprecation" })
+	public List<Map<String, Object>> selectDatabase(int param) {
+		List<Map<String, Object>>  sl = null;
+		sl = (List<Map<String, Object>>) list("dbAuthoritySql.selectDatabase", param);
+		return sl;
+	}
+
 }

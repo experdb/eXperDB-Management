@@ -159,4 +159,10 @@ public class DbAuthorityServiceImpl extends EgovAbstractServiceImpl implements D
 		return dbAuthorityDAO.selectTreeDBSvrList(usr_id);
 	}
 
+
+	@Override
+	public List<Map<String, Object>> selectDatabase(int param) throws Exception {
+		return dbAuthorityDAO.selectDatabase(param);
+	}
+
 }

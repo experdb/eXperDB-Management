@@ -131,7 +131,7 @@
 	function fn_update(){
 		nmCheck = 1;
 		if (!fn_transferTargetValidation()) return false;
-		if (!confirm('<spring:message code="message.msg148"/>')) return false;
+		if (!confirm('<spring:message code="message.msg147"/>')) return false;
 			$.ajax({
 				url : '/updateTransferTarget.do',
 				type : 'post',
@@ -265,10 +265,10 @@
 			</colgroup>
 			<tbody>
 				<tr>
-					<th scope="row" class="ico_t1"><spring:message code="data_transfer.connect_name" /></th>
+					<th scope="row" class="ico_t1"><spring:message code="data_transfer.connect_name" />(*)</th>
 					<td>
 						<c:if test="${act == 'i'}">
-							<input type="text" class="txt" name="trf_trg_cnn_nm" id="trf_trg_cnn_nm" value="${trf_trg_cnn_nm}" style="width: 300px;"/>
+							<input type="text" class="txt" name="trf_trg_cnn_nm" id="trf_trg_cnn_nm" value="${trf_trg_cnn_nm}" style="width: 300px;" maxlength="25" onkeyup="fn_checkWord(this,25)" placeholder="25<spring:message code='message.msg188'/>"/>
 							<span class="btn btnC_01">
 								<button type="button" class= "btn_type_02" onclick="fn_nmCheck()" style="width: 100px; height: 38px; margin-right: -60px; margin-top: 0;"><spring:message code="common.overlap_check" /></button>
 							</span>
@@ -279,11 +279,11 @@
 					</td>
 				</tr>
 				<tr>
-					<th scope="row" class="ico_t1">hdfs.url</th>
-					<td><input type="text" class="txt t2" name="trf_trg_url" id="trf_trg_url" value="${trf_trg_url}" placeholder="예시 hdfs://ip:port/HadoopPath" style="width: 500px;""/><span style=""></span></td>
+					<th scope="row" class="ico_t1">hdfs.url(*)</th>
+					<td><input type="text" class="txt t2" name="trf_trg_url" id="trf_trg_url" value="${trf_trg_url}" placeholder="예시 hdfs://ip:port/HadoopPath" style="width: 500px;""/></td>
 				</tr>
 				<tr>
-					<th scope="row" class="ico_t1">connector.class</th>
+					<th scope="row" class="ico_t1">connector.class(*)</th>
 					<td>
 						<select class="select" id="connector_class" name="connector_class" style="width: 500px;">
 							<option value="io.confluent.connect.hdfs.HdfsSinkConnector" ${connector_class == 'io.confluent.connect.hdfs.HdfsSinkConnector' ? 'selected="selected"' : ''}>io.confluent.connect.hdfs.HdfsSinkConnector</option>
@@ -291,7 +291,7 @@
 					</td>
 				</tr>
 				<tr>
-					<th scope="row" class="ico_t1">tasks.max</th>
+					<th scope="row" class="ico_t1">tasks.max(*)</th>
 					<td><input type="number" class="txt t2" name="task_max" id="task_max" value="${task_max}" style="width: 200px;" /></td>
 				</tr>
 				<tr>
@@ -303,11 +303,11 @@
 					<td><input type="text" class="txt t2" name="hadoop_home" id="hadoop_home" value="${hadoop_home}" style="width: 500px;"/></td>
 				</tr>
 				<tr>
-					<th scope="row" class="ico_t1">flush.size</th>
+					<th scope="row" class="ico_t1">flush.size(*)</th>
 					<td><input type="number" class="txt t2" name="flush_size" id="flush_size" value="${flush_size}" style="width: 100px; margin-right: 5px;"/>Byte</td>
 				</tr>
 				<tr>
-					<th scope="row" class="ico_t1">rotate.interval.ms</th>
+					<th scope="row" class="ico_t1">rotate.interval.ms(*)</th>
 					<td><input type="number" class="txt t2" name="rotate_interval_ms" id="rotate_interval_ms" value="${rotate_interval_ms}" style="width: 100px;"/></td>
 				</tr>
 			</tbody>

@@ -48,6 +48,7 @@
 			ORDER BY ${order_type} ${order}
 			LIMIT #{recordCountPerPage} OFFSET #{firstIndex}
 		)AA
+		WHERE AA.DB_SVR_NM LIKE #{db_svr_nm}
 	</select>
 
 
@@ -152,7 +153,7 @@
 		* Description : DBMS명 조회
 		* Author : 김주영
 		**/	
-		SELECT C.DB_SVR_NM
+		SELECT DISTINCT C.DB_SVR_NM
 		FROM T_DBSVR_I C,T_DB_I D
 		WHERE D.DB_ID IN(
 				SELECT B.DB_ID

@@ -253,18 +253,18 @@
 					<tr>
 						<th scope="row" class="ico_t1"><spring:message code="user_management.id" />(*)</th>
 						<td>
-							<input type="text" class="txt" name="usr_id" id="usr_id" maxlength="15" style="width: 205px;" placeholder="15<spring:message code='message.msg188'/>" />
+							<input type="text" class="txt" name="usr_id" id="usr_id" onkeyup="fn_checkWord(this,15)" maxlength="15" style="width: 205px;" placeholder="15<spring:message code='message.msg188'/>" />
 							<span class="btn btnC_01"><button type="button" class="btn_type_02" onclick="fn_idCheck()" style="width: 85px; height: 38px; margin-right: -60px; margin-top: 0;">
 							<spring:message code="common.overlap_check" /></button></span>
 						</td>
 						<th scope="row" class="ico_t1"><spring:message code="user_management.user_name" />(*)</th>
-						<td><input type="text" class="txt" name="usr_nm" id="usr_nm" maxlength="9" placeholder="9<spring:message code='message.msg188'/>"/></td>
+						<td><input type="text" class="txt" name="usr_nm" id="usr_nm" onkeyup="fn_checkWord(this,9)" maxlength="9" placeholder="9<spring:message code='message.msg188'/>"/></td>
 					</tr>
 					<tr>
 						<th scope="row" class="ico_t1"><spring:message code="user_management.password" />(*)</th>
-						<td><input type="password" class="txt" name="pwd" id="pwd" maxlength="20" placeholder="<spring:message code='message.msg109'/>"/></td>
+						<td><input type="password" class="txt" name="pwd" id="pwd" onkeyup="fn_checkWord(this,20)" maxlength="20" placeholder="<spring:message code='message.msg109'/>"/></td>
 						<th scope="row" class="ico_t1"><spring:message code="user_management.confirm_password" />(*)</th>
-						<td><input type="password" class="txt" name="pwdCheck" id="pwdCheck" maxlength="20" placeholder="<spring:message code='message.msg109'/>" /></td>
+						<td><input type="password" class="txt" name="pwdCheck" onkeyup="fn_checkWord(this,20)" id="pwdCheck" maxlength="20" placeholder="<spring:message code='message.msg109'/>" /></td>
 					</tr>
 				</tbody>
 			</table>
@@ -280,19 +280,19 @@
 					<tbody>
 						<tr>
 							<th scope="row" class="ico_t1"><spring:message code="user_management.company" /></th>
-							<td><input type="text" class="txt" name="bln_nm" id="bln_nm" maxlength="25" placeholder="25<spring:message code='message.msg188'/>"/></td>
+							<td><input type="text" class="txt" name="bln_nm" id="bln_nm" onkeyup="fn_checkWord(this,25)" maxlength="25" placeholder="25<spring:message code='message.msg188'/>"/></td>
 							<th scope="row" class="ico_t1"><spring:message code="user_management.department" /></th>
-							<td><input type="text" class="txt" name="dept_nm" id="dept_nm" maxlength="25" placeholder="25<spring:message code='message.msg188'/>"/></td>
+							<td><input type="text" class="txt" name="dept_nm" id="dept_nm" onkeyup="fn_checkWord(this,25)" maxlength="25" placeholder="25<spring:message code='message.msg188'/>"/></td>
 						</tr>
 						<tr>
 							<th scope="row" class="ico_t1"><spring:message code="user_management.position" /></th>
-							<td><input type="text" class="txt" name="pst_nm" id="pst_nm" maxlength="25" placeholder="25<spring:message code='message.msg188'/>"/></td>
+							<td><input type="text" class="txt" name="pst_nm" id="pst_nm" onkeyup="fn_checkWord(this,25)" maxlength="25" placeholder="25<spring:message code='message.msg188'/>"/></td>
 							<th scope="row" class="ico_t1"><spring:message code="user_management.Responsibilities" /></th>
-							<td><input type="text" class="txt" name="rsp_bsn_nm" id="rsp_bsn_nm" maxlength="25" placeholder="25<spring:message code='message.msg188'/>"/></td>
+							<td><input type="text" class="txt" name="rsp_bsn_nm" id="rsp_bsn_nm" onkeyup="fn_checkWord(this,25)" maxlength="25" placeholder="25<spring:message code='message.msg188'/>"/></td>
 						</tr>
 						<tr>
 							<th scope="row" class="ico_t1"><spring:message code="user_management.mobile_phone_number" /></th>
-							<td><input type="text" class="txt" name="cpn" id="cpn" maxlength="20"  onKeyPress="NumObj(this);" placeholder="20<spring:message code='message.msg188'/>"/></td>
+							<td><input type="text" class="txt" name="cpn" id="cpn" onkeyup="fn_checkWord(this,20)" maxlength="20"  onKeyPress="NumObj(this);" placeholder="20<spring:message code='message.msg188'/>"/></td>
 							<th scope="row" class="ico_t1"><spring:message code="dbms_information.use_yn" /></th>
 							<td>
 								<select class="select" id="use_yn" name="use_yn">
