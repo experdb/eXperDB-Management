@@ -5,8 +5,6 @@ import java.util.HashMap;
 import org.json.simple.JSONObject;
 import org.springframework.http.ResponseEntity;
 
-import com.k4m.dx.tcontrol.cmmn.serviceproxy.vo.ProfileVO;
-
 public class EncryptCommonService {
 	
 	protected String restIp = "";

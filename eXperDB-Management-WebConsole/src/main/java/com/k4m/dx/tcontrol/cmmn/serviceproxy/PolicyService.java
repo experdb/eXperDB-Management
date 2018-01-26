@@ -4,7 +4,7 @@ import java.util.HashMap;
 
 import org.json.simple.JSONObject;
 
-import com.k4m.dx.tcontrol.cmmn.serviceproxy.vo.ProfileVO;
+import com.k4m.dx.tcontrol.cmmn.serviceproxy.vo.Profile;
 
 public class PolicyService {
 	
@@ -72,7 +72,7 @@ public class PolicyService {
 		}
 		 */
 		
-		ProfileVO vo1 = new ProfileVO();
+		Profile vo1 = new Profile();
 		vo1.setProfileUid("045c13fb-9915-47b3-936d-c6116d91ed24");
 		
 		

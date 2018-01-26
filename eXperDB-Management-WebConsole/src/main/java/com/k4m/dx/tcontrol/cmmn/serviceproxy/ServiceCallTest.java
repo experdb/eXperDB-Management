@@ -15,7 +15,7 @@ import org.springframework.http.ResponseEntity;
 import com.k4m.dx.tcontrol.cmmn.serviceproxy.vo.AuditLog;
 import com.k4m.dx.tcontrol.cmmn.serviceproxy.vo.AuditLogSite;
 import com.k4m.dx.tcontrol.cmmn.serviceproxy.vo.BackupLog;
-import com.k4m.dx.tcontrol.cmmn.serviceproxy.vo.ProfileVO;
+import com.k4m.dx.tcontrol.cmmn.serviceproxy.vo.Profile;
 
 import net.sf.json.JSONArray;
 
@@ -34,8 +34,7 @@ public class ServiceCallTest {
 		//test.loginTest(restIp, restPort);
 		
 		
-		//policyService
-		//test.selectProfileList(restIp, restPort);
+
 		
 		//test.selectProfileProtectionVersion(restIp, restPort);
 		
@@ -45,15 +44,24 @@ public class ServiceCallTest {
 		//감사로그 > 관리서버 감사로그
 		//test.selectAuditLogList(restIp, restPort);
 		
-		//암호화 키 접근로그
+		//감사로그 > 암호화 키 접근로그
 		//test.selectAuditLogListKey(restIp, restPort);
 		
-		//백업/복원 감사로그
-		test.selectBackupLogList(restIp, restPort);
+		//감사로그 > 백업/복원 감사로그
+		//test.selectBackupLogList(restIp, restPort);
+		
+		//보안정책 > 정책관리
+		test.selectProfileList(restIp, restPort);
 
 		
 	}
 
+	/**
+	 * 보안정책 > 보안정책관리
+	 * @param restIp
+	 * @param restPort
+	 * @throws Exception
+	 */
 	private void selectProfileList(String restIp, int restPort) throws Exception {
 
 		EncryptCommonService api = new EncryptCommonService(restIp, restPort);
@@ -61,19 +69,21 @@ public class ServiceCallTest {
 		String strService = SystemCode.ServiceName.POLICY_SERVICE;
 		String strCommand = SystemCode.ServiceCommand.SELECTPROFILELIST;
 
-		ProfileVO vo = new ProfileVO();
-		vo.setProfileTypeCode("PTPR");
+		Profile profile = new Profile();
+		profile.setProfileTypeCode("PTPR");
 
 		//JSONObject parameters = new JSONObject();
 		//parameters.put("profile", vo);
 		
-		ObjectMapper mapper = new ObjectMapper();
-		String parameters = mapper.writeValueAsString(vo);
+		HashMap body = new HashMap();
+		body.put(TypeUtility.getJustClassName(profile.getClass()), profile.toJSONString());
+
+		String parameters = TypeUtility.makeRequestBody(body);
 
 		HashMap header = new HashMap();
 		header.put(SystemCode.FieldName.LOGIN_ID, "admin");
 		header.put(SystemCode.FieldName.ENTITY_UID, "00000000-0000-0000-0000-000000000001");
-		header.put(SystemCode.FieldName.TOKEN_VALUE, "i/FPZIY3KbFjjCJgaX6ratQqma73FNxNt5S/ekTY7ys=");
+		header.put(SystemCode.FieldName.TOKEN_VALUE, "lhccUgOVbeNdZ1dN50D0VbxFttKZSAHawD1BFnaGphI=");
 
 		JSONObject resultJson = api.callService(strService, strCommand, header, parameters);
 		
@@ -83,9 +93,9 @@ public class ServiceCallTest {
 		
 		if(resultCode.equals(SystemCode.ResultCode.SUCCESS)) {
 			
-			JSONArray data = (JSONArray) resultJson.get("list");
-			for (int j = 0; j < data.size(); j++) {
-				JSONObject jsonObj = (JSONObject) data.get(j);
+			ArrayList list = (ArrayList) resultJson.get("list");
+			for (int j = 0; j < list.size(); j++) {
+				JSONObject jsonObj = (JSONObject) list.get(j);
 
 				String createDateTime = (String) jsonObj.get("createDateTime");
 				String profileTypeName = (String) jsonObj.get("profileTypeName");
@@ -523,6 +533,7 @@ public class ServiceCallTest {
 		}
 		
 	}
+	
 	
 	private void checkChar(String originalStr) throws Exception {
 		//String originalStr = "Å×½ºÆ®"; // 테스트 
