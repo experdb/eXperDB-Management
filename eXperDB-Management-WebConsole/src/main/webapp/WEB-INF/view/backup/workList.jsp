@@ -59,8 +59,12 @@ function fn_init(){
 			}
 		},
 		{data : "data_pth", className : "dt-left", defaultContent : ""},	
-		{data : "bck_pth", className : "dt-left", defaultContent : ""},	
-		{data : "log_file_pth", className : "dt-left", defaultContent : ""},	
+		{data : "bck_pth", className : "dt-left", defaultContent : ""
+			,"render": function (data, type, full) {
+				  return '<span onClick=javascript:fn_rmanShow("'+full.bck_pth+','+full.db_svr_id+'"); class="bold">' + full.bck_pth + '</span>';
+			}
+		 },		
+		//{data : "log_file_pth", className : "dt-left", defaultContent : ""},	
 		{data : "frst_regr_id", className : "dt-center", defaultContent : ""},
 		{data : "frst_reg_dtm", className : "dt-center", defaultContent : ""},
 		{data : "lst_mdfr_id", className : "dt-center", defaultContent : ""},
@@ -114,12 +118,12 @@ function fn_init(){
 	tableRman.tables().header().to$().find('th:eq(4)').css('min-width', '100px');
 	tableRman.tables().header().to$().find('th:eq(5)').css('min-width', '230px');
 	tableRman.tables().header().to$().find('th:eq(6)').css('min-width', '230px');
-	tableRman.tables().header().to$().find('th:eq(7)').css('min-width', '230px');
-	tableRman.tables().header().to$().find('th:eq(8)').css('min-width', '100px');
-	tableRman.tables().header().to$().find('th:eq(9)').css('min-width', '100px');  
+	/* tableRman.tables().header().to$().find('th:eq(7)').css('min-width', '230px'); */
+	tableRman.tables().header().to$().find('th:eq(7)').css('min-width', '100px');
+	tableRman.tables().header().to$().find('th:eq(8)').css('min-width', '100px');  
+	tableRman.tables().header().to$().find('th:eq(9)').css('min-width', '100px');
 	tableRman.tables().header().to$().find('th:eq(10)').css('min-width', '100px');
-	tableRman.tables().header().to$().find('th:eq(11)').css('min-width', '100px');
-	tableRman.tables().header().to$().find('th:eq(12)').css('min-width', '0px');
+	tableRman.tables().header().to$().find('th:eq(11)').css('min-width', '0px');
 
 
 	tableDump.tables().header().to$().find('th:eq(0)').css('min-width', '10px');
@@ -156,6 +160,43 @@ $(window.document).ready(
 		$("#dumpDataTable").hide();
 		$("#dumpDataTable_wrapper").hide();		
 });
+
+
+function fn_rmanShow(bck, db_svr_id){
+	alert(db_svr_id);
+	return false;
+	
+	var cmd = "pg_rman show -B "+bck+" detail"
+	
+	$.ajax({
+		url : "/rmanShow.do", 
+	  	data : {
+	  		cmd : cmd,
+	  	},
+		dataType : "json",
+		type : "post",
+		beforeSend: function(xhr) {
+	        xhr.setRequestHeader("AJAX", true);
+	     },
+		error : function(xhr, status, error) {
+			if(xhr.status == 401) {
+				alert("<spring:message code='message.msg02' />");
+				 location.href = "/";
+			} else if(xhr.status == 403) {
+				alert("<spring:message code='message.msg03' />");
+	             location.href = "/";
+			} else {
+				alert("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""));
+			}
+		},
+		success : function(data) {
+			alert(JSON.stringify(data))
+		}
+	});
+	
+	
+}
+
 
 /* ********************************************************
  * Rman Backup Find Button Click
@@ -726,7 +767,7 @@ function selectTab(tab){
 									<th width="100"><spring:message code="backup_management.backup_option" /></th>
 									<th width="230" class="dt-center"><spring:message code="backup_management.data_dir" /></th>
 									<th width="230" class="dt-center"><spring:message code="backup_management.backup_dir" /></th>
-									<th width="230" class="dt-center"><spring:message code="backup_management.backup_log_dir" /></th>
+									<%-- <th width="230" class="dt-center"><spring:message code="backup_management.backup_log_dir" /></th> --%>
 									<th width="100"><spring:message code="common.register" /> </th>
 									<th width="100"><spring:message code="common.regist_datetime" /></th>
 									<th width="100"><spring:message code="common.modifier" /></th>

@@ -75,6 +75,26 @@ function fn_init() {
 				}
 			}
 		},
+			{
+				data : "fix_rsltcd",
+				render : function(data, type, full, meta) {	 						
+					var html = '';
+					if (full.fix_rsltcd == 'TC002001') {
+						html += '<span class="btn btnC_01 btnF_02" onClick=javascript:fn_fixLog('+full.exe_sn+');><input type="button" value="해결"></span>';
+					} else if(full.fix_rsltcd == 'TC002002'){
+						html += '<span class="btn btnC_01 btnF_02" onClick=javascript:fn_fixLog('+full.exe_sn+');><input type="button" value="미해결"></span>';
+					} else {
+						if(full.exe_rslt_cd == 'TC001701'){
+							html += ' - ';
+						}else{
+							html +='<span class="btn btnC_01 btnF_02" onClick=javascript:fn_fix_rslt_reg('+full.exe_sn+');><input type="button" value="조치입력"></span>';
+						}
+					}
+					return html;
+				},
+				className : "dt-center",
+				defaultContent : ""
+			},
 		{data : "scd_id", className : "dt-center", defaultContent : "", visible: false }
 		]
 	});
@@ -86,7 +106,8 @@ function fn_init() {
     workTable.tables().header().to$().find('th:eq(4)').css('min-width', '150px');
 	workTable.tables().header().to$().find('th:eq(5)').css('min-width', '100px');
 	workTable.tables().header().to$().find('th:eq(6)').css('min-width', '100px');
-	workTable.tables().header().to$().find('th:eq(7)').css('min-width', '0px');
+	workTable.tables().header().to$().find('th:eq(7)').css('min-width', '100px');
+	workTable.tables().header().to$().find('th:eq(8)').css('min-width', '0px');
     $(window).trigger('resize');
     
 }
@@ -121,6 +142,79 @@ $(window.document).ready(function() {
 		}
 	});
 });
+
+function fn_fix_rslt_reg(exe_sn){
+	document.getElementById("exe_sn_r").value = exe_sn;
+	$('#fix_rslt_msg_r').val('');
+	toggleLayer($('#pop_layer_fix_rslt_reg'), 'on')
+}
+
+function fn_fix_rslt_msg_reg(){
+	var fix_rsltcd = $(":input:radio[name=rdo_r]:checked").val();
+	
+	$.ajax({
+			url : "/updateFixRslt.do",
+			data : {
+				exe_sn : $('#exe_sn_r').val(),
+				fix_rsltcd : fix_rsltcd,
+				fix_rslt_msg : $('#fix_rslt_msg_r').val()
+			},
+			dataType : "json",
+			type : "post",
+			beforeSend: function(xhr) {
+		        xhr.setRequestHeader("AJAX", true);
+		     },
+			error : function(xhr, status, error) {
+				if(xhr.status == 401) {
+					alert('<spring:message code="message.msg02" />');
+					 location.href = "/";
+				} else if(xhr.status == 403) {
+					alert('<spring:message code="message.msg03" />');
+		             location.href = "/";
+				} else {
+					alert("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""));
+				}
+			},
+			success : function(result) {
+				toggleLayer($('#pop_layer_fix_rslt_reg'), 'off');
+				location.reload();
+			}
+		}); 
+}
+
+
+function fn_fix_rslt_msg_modify(){
+	var fix_rsltcd = $(":input:radio[name=rdo]:checked").val();
+
+	$.ajax({
+			url : "/updateFixRslt.do",
+			data : {
+				exe_sn : $('#exe_sn').val(),
+				fix_rsltcd : fix_rsltcd,
+				fix_rslt_msg : $('#fix_rslt_msg').val()
+			},
+			dataType : "json",
+			type : "post",
+			beforeSend: function(xhr) {
+		        xhr.setRequestHeader("AJAX", true);
+		     },
+			error : function(xhr, status, error) {
+				if(xhr.status == 401) {
+					alert('<spring:message code="message.msg02" />');
+					 location.href = "/";
+				} else if(xhr.status == 403) {
+					alert('<spring:message code="message.msg03" />');
+		             location.href = "/";
+				} else {
+					alert("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""));
+				}
+			},
+			success : function(result) {
+				toggleLayer($('#pop_layer_fix_rslt_msg'), 'off');
+				location.reload();
+			}
+		}); 
+}
 </script>
 <body>
 <style>
@@ -138,7 +232,41 @@ $(window.document).ready(function() {
 <%@include file="../cmmn/workDumpInfo.jsp"%>
 <%@include file="../cmmn/scheduleInfo.jsp"%>
 <%@include file="../cmmn/wrkLog.jsp"%>
+<%@include file="../cmmn/fixRsltMsg.jsp"%>
+
+	<div id="pop_layer_fix_rslt_reg" class="pop-layer">
+		<div class="pop-container">
+			<div class="pop_cts" style="width: 60%; margin: 0 auto; min-height:0; min-width:0;">
+				<p class="tit" style="margin-bottom: 15px;">조치결과 등록</p>
+				<table class="write" border="0">
+					<caption>조치결과 등록</caption>
+					<tbody>
+						<tr>
+							<td>
+								<div class="inp_rdo">
+									<input name="rdo_r" id="rdo_r_1" type="radio" checked="checked">
+										<label for="rdo_r_1" style="margin-right: 2%;">해결</label> 
+									<input name="rdo_r" id="rdo_r_2" type="radio"> 
+										<label for="rdo_r_2">미해결</label>
+								</div>
+							</td>
+						</tr>						
+						<tr>
+							<td><textarea name="fix_rslt_msg_r" id="fix_rslt_msg_r" style="height: 250px;"> </textarea>
+									<input type="hidden" name="exe_sn_r" id="exe_sn_r">
+							</td>
+						</tr>
+					</tbody>
+				</table>
+				<div class="btn_type_02">
+					<a href="#n" class="btn" onclick="fn_fix_rslt_msg_reg();"><span><spring:message code="common.save"/></span></a>
+					<a href="#n" class="btn" onclick="toggleLayer($('#pop_layer_fix_rslt_reg'), 'off');"><span><spring:message code="common.close"/></span></a>
+				</div>
+			</div>
+		</div><!-- //pop-container -->
+	</div>
 	
+		
 	<div class="pop_container">
 		<div class="pop_cts">
 			<p class="tit"><spring:message code="schedule.scheduleHistoryDetail"/></p>

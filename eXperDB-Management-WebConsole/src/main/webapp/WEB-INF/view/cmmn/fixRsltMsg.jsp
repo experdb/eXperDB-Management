@@ -28,7 +28,7 @@
 								</span>
 	
 								<span>
-									조치일자 : <input type="text" name="lst_mdf_dtm"  id="lst_mdf_dtm"  style="width: 250px;">
+									조치일자 : <input type="text" name="lst_mdf_dtm"  id="lst_mdf_dtm"  style="width: 210px;">
 								</span>
 							</td>
 						</tr>

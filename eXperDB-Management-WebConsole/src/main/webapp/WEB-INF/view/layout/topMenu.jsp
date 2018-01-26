@@ -11,7 +11,7 @@
  * 페이지 시작시 함수
  ******************************************************** */
 $(window.document).ready(function() {
- 	$.ajax({
+	$.ajax({
 		url : "/menuAuthorityList.do",
 		data : {},
 		dataType : "json",
@@ -261,6 +261,8 @@ function fn_cookie(url) {
 					        </li>
 							<li><a href="/extensionList.do" onClick="fn_cookie(null)" id="MN0008"><spring:message code="menu.extension_pack_installation_information"/></a></li>
 						</ul>
+					</li>
+					<li><a href="#n"><span><img src="/images/encrypt.png" alt="ENCRYPT" /></span></a>
 					</li>
 					<li><a href="#n"><span><img src="/images/ico_h_7.png" alt="MY PAGE" /></span></a>
 						<ul class="depth_2">

@@ -1246,4 +1246,17 @@ public class BackupController {
 		}
 		return list;
 	}	
+	
+	/**
+	 * RMAN 정보 호출(pg_rman show)
+	 * 
+	 * @return resultSet
+	 * @throws Exception
+	 */
+	@RequestMapping(value = "/rmanShow.do")
+	@ResponseBody
+	public List<Map<String, Object>> rmanShow (HttpServletRequest request) {
+		return dbSvrAut;
+
+	}
 }

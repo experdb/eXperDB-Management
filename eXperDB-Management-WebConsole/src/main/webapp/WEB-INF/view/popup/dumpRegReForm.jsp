@@ -124,7 +124,7 @@ function fn_update_work(){
 		  	data : {
 		  		bck_wrk_id : $("#bck_wrk_id").val(),
 		  		wrk_id : $("#wrk_id").val(),
-		  		wrk_nm : $("#wrk_nm").val(),
+		  		wrk_nm : $("#wrk_nm").val().trim(),
 		  		wrk_exp : $("#wrk_exp").val(),
 		  		db_id : $("#db_id").val(),
 		  		bck_bsn_dscd : "TC000202",
@@ -275,19 +275,19 @@ function valCheck(){
 		alert('<spring:message code="message.msg108" />');
 		$("#wrk_exp").focus();
 		return false;
-	}else if($("#log_file_pth").val() == ""){
+	}/* else if($("#log_file_pth").val() == ""){
 		alert('<spring:message code="message.msg78" />');
 		$("#log_file_pth").focus();
 		return false;
-	}else if($("#save_pth").val() == ""){
+	} */else if($("#save_pth").val() == ""){
 		alert('<spring:message code="message.msg79" />');
 		$("#save_pth").focus();
 		return false;
-	}else if($("#check_path1").val() != "Y"){
+	}/* else if($("#check_path1").val() != "Y"){
 		alert('<spring:message code="message.msg72" />');
 		$("#log_file_pth").focus();
 		return false;
-	}else if($("#check_path2").val() != "Y"){
+	} */else if($("#check_path2").val() != "Y"){
 		alert('<spring:message code="backup_management.bckPath_effective_check"/>');		
 		$("#save_pth").focus();
 		return false;
@@ -505,15 +505,15 @@ function checkOid(){
 function checkFolder(keyType){
 	var save_path = "";
 	
-	if(keyType == 1){
-		save_path = $("#log_file_pth").val();
-	}else{
+	if(keyType == 2){
+		/* save_path = $("#log_file_pth").val();
+	}else{ */
 		save_path = $("#save_pth").val();
 	}
-	if(save_path == "" && keyType == 1){
+	/* if(save_path == "" && keyType == 1){
 		alert('<spring:message code="message.msg78" />');
 		$("#log_file_pth").focus();
-	}else if(save_path == "" && keyType == 2){
+	}else  */if(save_path == "" && keyType == 2){
 		alert('<spring:message code="backup_management.bckPath_input_please"/>');
 		$("#save_pth").focus();
 	}else{
@@ -542,17 +542,17 @@ function checkFolder(keyType){
 			success : function(data) {
 				if(data.result.ERR_CODE == ""){
 					if(data.result.RESULT_DATA.IS_DIRECTORY == 0){
-						if(keyType == 1){
-							$("#check_path1").val("Y");
-						}else{
+						if(keyType == 2){
+							/* $("#check_path1").val("Y");
+						}else{ */
 							$("#check_path2").val("Y");
 						}
 						alert('<spring:message code="message.msg100" />');
 							var volume = data.result.RESULT_DATA.CAPACITY;
-						if(keyType == 1){
+						/* if(keyType == 1){
 							$("#logVolume").empty();
 							$( "#logVolume" ).append("<spring:message code="common.volume" /> : "+volume);
-						}else if(keyType == 2) {
+						}else */ if(keyType == 2) {
 							$("#backupVolume").empty();
 							$( "#backupVolume" ).append("<spring:message code="common.volume" /> : "+volume);
 						}
@@ -581,7 +581,7 @@ function checkFolder(keyType){
 			<input type="hidden" name="db_svr_id" id="db_svr_id" value="${db_svr_id}"/>
 			<input type="hidden" name="wrk_id" id="wrk_id" value="${wrk_id}"/>
 			<input type="hidden" name="bck_wrk_id" id="bck_wrk_id" value="${bck_wrk_id}"/>
-			<input type="hidden" name="check_path1" id="check_path1" value="N"/>
+			<!-- <input type="hidden" name="check_path1" id="check_path1" value="N"/> -->
 			<input type="hidden" name="check_path2" id="check_path2" value="N"/>
 			<table class="write">
 				<caption><spring:message code="backup_management.dump_bck_mod"/></caption>
@@ -640,13 +640,13 @@ function checkFolder(keyType){
 					<col style="width:150px;" />
 				</colgroup>
 				<tbody>
-					<tr>
+					<%-- <tr>
 						<th scope="row" class="ico_t2"><spring:message code="backup_management.backup_log_dir" /></th>
 						<td colspan="5"><input type="text" class="txt" name="log_file_pth" id="log_file_pth" value="<c:out value="${workInfo[0].log_file_pth}"/>" onKeydown="$('#check_path1').val('N')"/>
 							<span class="btn btnC_01"><button type="button" class= "btn_type_02" onclick="checkFolder(1)" style="width: 60px; margin-right: -60px; margin-top: 0;"><spring:message code="common.dir_check" /></button></span>							
 							<span id="logVolume" style="margin:63px;"></span>
 						</td>
-					</tr>
+					</tr> --%>
 					<tr>
 						<th scope="row" class="ico_t2"><spring:message code="backup_management.backup_dir" /></th>
 						<td colspan="5"><input type="text" class="txt" name="save_pth" id="save_pth" value="<c:out value="${workInfo[0].save_pth}"/>" onKeydown="$('#check_path2').val('N')"/>

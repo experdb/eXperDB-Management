@@ -24,14 +24,14 @@ function fn_init(){
 	bSort: false,
 	columns : [
 		{ data : "rownum", defaultContent : "", targets : 0, orderable : false, checkboxes : {'selectRow' : true}}, 
-		{data : "rownum", className : "dt-center", defaultContent : ""}, 
-		{data : "ipadr", className : "dt-center", defaultContent : ""},
+		{data : "rownum", className : "dt-center", defaultContent : ""}, 		
 		{data : "scd_nm", className : "dt-left", defaultContent : ""
 			,render: function (data, type, full) {
 				  return '<span onClick=javascript:fn_scdLayer("'+full.scd_id+'"); class="bold">' + full.scd_nm + '</span>';
 			}
 		},
 		{data : "scd_exp", className : "dt-left", defaultContent : ""},
+		{data : "db_svr_nm", className : "dt-center", defaultContent : ""},
 		{data : "wrk_cnt", className : "dt-center", defaultContent : ""}, //work갯수
 		{data : "prev_exe_dtm", className : "dt-center", defaultContent : ""
 			,render: function (data, type, full) {
@@ -66,8 +66,7 @@ function fn_init(){
 			className : "dt-center", defaultContent : "" 	
 		},
 		{data : "status", 
-			render: function (data, type, full){
-				if(full.frst_regr_id == "<%=usr_id%>"){			
+			render: function (data, type, full){		
 					if(full.scd_cndt == "TC001801"){
 						var html = '<img src="../images/ico_state_04.png"  id="scheduleStop"/>';
 							return html;
@@ -79,7 +78,6 @@ function fn_init(){
 						return html;
 					}			
 				return data;
-				}
 			},
 			className : "dt-center", defaultContent : "" 	
 		},
@@ -223,10 +221,10 @@ function fn_init(){
     	}
 	});	
 	  table.tables().header().to$().find('th:eq(0)').css('min-width', '10px');
-	  table.tables().header().to$().find('th:eq(1)').css('min-width', '30px');
-	  table.tables().header().to$().find('th:eq(2)').css('min-width', '100px');
-	  table.tables().header().to$().find('th:eq(3)').css('min-width', '200px');
-	  table.tables().header().to$().find('th:eq(4)').css('min-width', '300px');
+	  table.tables().header().to$().find('th:eq(1)').css('min-width', '30px');	  
+	  table.tables().header().to$().find('th:eq(2)').css('min-width', '200px');
+	  table.tables().header().to$().find('th:eq(3)').css('min-width', '300px');
+	  table.tables().header().to$().find('th:eq(4)').css('min-width', '100px');
 	  table.tables().header().to$().find('th:eq(5)').css('min-width', '70px');
 	  table.tables().header().to$().find('th:eq(6)').css('min-width', '130px');
 	  table.tables().header().to$().find('th:eq(7)').css('min-width', '130px');
@@ -650,10 +648,10 @@ function fn_makeToMin(){
 					<thead>
 						<tr>
 							<th width="10"></th>
-							<th width="30"><spring:message code="common.no" /></th>
-							<th width="100" class="dt-center"><spring:message code="data_transfer.ip" /></th>
+							<th width="30"><spring:message code="common.no" /></th>							
 							<th width="200" class="dt-center"><spring:message code="schedule.schedule_name" /></th>
 							<th width="300" class="dt-center"><spring:message code="schedule.scheduleExp"/></th>
+							<th width="100" class="dt-center"><spring:message code="data_transfer.server_name" /></th>
 							<th width="70"><spring:message code="schedule.work_count" /></th>
 							<th width="130"><spring:message code="schedule.pre_run_time" /></th>
 							<th width="130"><spring:message code="schedule.next_run_time" /></th>

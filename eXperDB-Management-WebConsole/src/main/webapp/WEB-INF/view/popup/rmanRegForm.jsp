@@ -36,8 +36,8 @@ var haCnt =0;
 
 
 $(window.document).ready(function() {
-		$("#logVolume").empty();
-		$( "#logVolume" ).append("<spring:message code="common.volume" /> : 0");
+/* 		$("#logVolume").empty();
+		$( "#logVolume" ).append("<spring:message code="common.volume" /> : 0"); */
 		$("#backupVolume").empty();
 		$( "#backupVolume" ).append("<spring:message code="common.volume" /> : 0");
 		
@@ -90,7 +90,7 @@ $(window.document).ready(function() {
 			},
 			success : function(result) {
 				document.getElementById("data_pth").value=result[0].DATA_PATH;
-				document.getElementById("log_file_pth").value=result[1].PGRLOG;
+				//document.getElementById("log_file_pth").value=result[1].PGRLOG;
 				document.getElementById("bck_pth").value=result[1].PGRBAK;
 				
 				//fn_checkFolderVol(1);
@@ -114,7 +114,7 @@ $(window.document).ready(function() {
 			url : "/popup/workRmanWrite.do",
 		  	data : {
 		  		db_svr_id : $("#db_svr_id").val(),
-		  		wrk_nm : $("#wrk_nm").val(),
+		  		wrk_nm : $("#wrk_nm").val().trim(),
 		  		wrk_exp : $("#wrk_exp").val(),
 		  		bck_opt_cd : $("#bck_opt_cd").val(),
 		  		bck_mtn_ecnt : $("#bck_mtn_ecnt").val(),
@@ -193,18 +193,18 @@ function valCheck(){
 		alert('<spring:message code="backup_management.bckOption_choice_please"/>');
 		$("#bck_opt_cd").focus();
 		return false;
-	}else if($("#log_file_pth").val() == ""){
+	}/* else if($("#log_file_pth").val() == ""){
 		alert('<spring:message code="message.msg78" />');
 		$("#log_file_pth").focus();
 		return false;
-	}else if($("#bck_pth").val() == ""){
+	} */else if($("#bck_pth").val() == ""){
 		alert('<spring:message code="message.msg79" />');
 		$("#bck_pth").focus();
 		return false;
-	}else if($("#check_path1").val() != "Y"){
+	}/* else if($("#check_path1").val() != "Y"){
 		alert('<spring:message code="message.msg72" />');
 		return false;
-	}else if($("#check_path2").val() != "Y"){
+	} */else if($("#check_path2").val() != "Y"){
 		alert('<spring:message code="backup_management.bckPath_effective_check"/>');
 		return false;
 	}else if($("#file_stg_dcnt").val() == ""){
@@ -243,16 +243,16 @@ function valCheck(){
 function checkFolder(keyType){
 	var save_path = "";
 	
-	if(keyType == 1){
-		save_path = $("#log_file_pth").val();
-	}else{
+	if(keyType == 2){
+		/* save_path = $("#log_file_pth").val();
+	}else{ */
 		save_path = $("#bck_pth").val();
 	}
 
-	if(save_path == "" && keyType == 1){
+	/* if(save_path == "" && keyType == 1){
 		alert('<spring:message code="message.msg78" />');
 		$("#log_file_pth").focus();
-	}else if(save_path == "" && keyType == 2){
+	}else */ if(save_path == "" && keyType == 2){
 		alert('<spring:message code="message.msg79" />');
 		$("#bck_pth").focus();
 	}else{
@@ -281,17 +281,17 @@ function checkFolder(keyType){
 			success : function(data) {
 				if(data.result.ERR_CODE == ""){
 					if(data.result.RESULT_DATA.IS_DIRECTORY == 0){
-						if(keyType == 1){
-							$("#check_path1").val("Y");
-						}else{
+						if(keyType == 2){
+							/* $("#check_path1").val("Y");
+						}else{ */
 							$("#check_path2").val("Y");
 						}
 						alert('<spring:message code="message.msg100" />');
 							var volume = data.result.RESULT_DATA.CAPACITY;
-						if(keyType == 1){
+						/* if(keyType == 1){
 							$("#logVolume").empty();
 							$( "#logVolume" ).append("<spring:message code="common.volume" /> : "+volume);
-						}else if(keyType == 2) {
+						}else */ if(keyType == 2) {
 							$("#backupVolume").empty();
 							$( "#backupVolume" ).append("<spring:message code="common.volume" /> : "+volume);
 						}
@@ -323,7 +323,7 @@ function fn_check() {
 		url : '/wrk_nmCheck.do',
 		type : 'post',
 		data : {
-			wrk_nm : $("#wrk_nm").val()
+			wrk_nm : $("#wrk_nm").val().trim()
 		},
 		success : function(result) {
 			if (result == "true") {
@@ -357,7 +357,7 @@ function fn_check() {
 <body>
 <form name="workRegForm">
 <input type="hidden" name="db_svr_id" id="db_svr_id" value="${db_svr_id}"/>
-<input type="hidden" name="check_path1" id="check_path1" value="N"/>
+<!-- <input type="hidden" name="check_path1" id="check_path1" value="N"/> -->
 <input type="hidden" name="check_path2" id="check_path2" value="N"/>
 </form>	
 		<div class="pop_container">
@@ -414,13 +414,13 @@ function fn_check() {
 										<td><input type="text" class="txt" name="data_pth" id="data_pth" maxlength=50 style="width:515px" readonly/>											
 										</td>
 									</tr>
-									<tr>
+									<%-- <tr>
 										<th scope="row" class="ico_t1"><spring:message code="backup_management.backup_log_dir" /></th>
 										<td><input type="text" class="txt" name="log_file_pth" id="log_file_pth" maxlength=50 style="width:450px" onKeydown="$('#check_path1').val('N')"/>
 											<span class="btn btnC_01"><button type="button" class= "btn_type_02" onclick="checkFolder(1)" style="width: 60px; margin-right: -60px; margin-top: 0;"><spring:message code="common.dir_check" /></button></span>
 											<span id="logVolume" style="margin:63px;"></span>	
 										</td>
-									</tr>									
+									</tr> --%>									
 									<tr>	
 										<th scope="row" class="ico_t1"><spring:message code="backup_management.backup_dir" /></th>
 										<td><input type="text" class="txt" name="bck_pth" id="bck_pth" maxlength=50 style="width:450px" onKeydown="$('#check_path2').val('N')"/>

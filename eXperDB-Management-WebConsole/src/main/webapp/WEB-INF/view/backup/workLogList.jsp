@@ -362,8 +362,6 @@ function selectTab(intab){
 
 function fn_fix_rslt_reg(exe_sn){
 	document.getElementById("exe_sn_r").value = exe_sn;
-	$('#rdo_r_1').removeAttr('checked');
-	$('#rdo_r_2').removeAttr('checked');
 	$('#fix_rslt_msg_r').val('');
 	toggleLayer($('#pop_layer_fix_rslt_reg'), 'on')
 }
@@ -452,7 +450,7 @@ function fn_fix_rslt_msg_modify(){
 						<tr>
 							<td>
 								<div class="inp_rdo">
-									<input name="rdo_r" id="rdo_r_1" type="radio">
+									<input name="rdo_r" id="rdo_r_1" type="radio" checked="checked">
 										<label for="rdo_r_1" style="margin-right: 2%;">해결</label> 
 									<input name="rdo_r" id="rdo_r_2" type="radio"> 
 										<label for="rdo_r_2">미해결</label>

@@ -106,8 +106,6 @@
 
     function fn_fix_rslt_reg(exe_sn){
     	document.getElementById("exe_sn").value = exe_sn;
-    	$('#rdo_2_3').removeAttr('checked');
-    	$('#rdo_2_4').removeAttr('checked');
     	$('#fix_rslt_msg').val('');
     	toggleLayer($('#pop_layer_fix_rslt_reg'), 'on')
     }
@@ -164,7 +162,7 @@
 						<tr>
 							<td>
 								<div class="inp_rdo">
-									<input name="rdo" id="rdo_2_3" type="radio" value="TC002001" >
+									<input name="rdo" id="rdo_2_3" type="radio" value="TC002001"  checked="checked">
 										<label for="rdo_2_3" style="margin-right: 2%;">해결</label> 
 									<input name="rdo" id="rdo_2_4" type="radio" value="TC002002"> 
 										<label for="rdo_2_4">미해결</label>

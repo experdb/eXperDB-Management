@@ -71,9 +71,9 @@ var haCnt = 0;
 			}); 
 		 
 		$("#r_data_pth").hide();
-		$("#r_log_pth").hide();
+		//$("#r_log_pth").hide();
 		$("#r_bck_pth").hide();
-		$("#d_log_pth").hide();
+		//$("#d_log_pth").hide();
 		$("#d_bck_pth").hide();
 		$("#rman_bck_opt").hide();
 		$("#dump_bck_opt").hide();
@@ -122,17 +122,16 @@ var haCnt = 0;
 		}else if($('#bck').val() == "rman"){
 			if($('#bck_opt_cd').val() == ""){
 				alert('<spring:message code="backup_management.bckOption_choice_please"/>');
-				alert($("#check_path1").val());
 				return false;
 			}else if($("#check_path1").val() != "Y"){
 				alert('<spring:message code="message.msg71" />');
 				$("#data_pth").focus();
 				return false;
-			}else if($("#check_path2").val() != "Y"){
+			}/* else if($("#check_path2").val() != "Y"){
 				alert('<spring:message code="message.msg72" /> ');		
 				$("#rlog_file_pth").focus();
 				return false;
-			}else if ($("#check_path3").val() != "Y"){
+			} */else if ($("#check_path3").val() != "Y"){
 				alert('<spring:message code="backup_management.bckPath_effective_check"/>');
 				$("#bck_pth").focus();
 				return false;
@@ -144,11 +143,11 @@ var haCnt = 0;
 			if($('#db_id').val() == ""){
 				alert('<spring:message code="backup_management.database_choice_please"/>');
 				return false;
-			}else if($("#check_path4").val() != "Y"){
+			}/* else if($("#check_path4").val() != "Y"){
 				alert('<spring:message code="message.msg72" />');
 				$("#dlog_file_pth").focus();
 				return false;
-			}else if($("#check_path5").val() != "Y"){
+			} */else if($("#check_path5").val() != "Y"){
 				alert('<spring:message code="backup_management.bckPath_effective_check"/>');
 				$("#save_pth").focus();
 				return false;
@@ -215,7 +214,7 @@ var haCnt = 0;
 			url : '/scd_nmCheck.do',
 			type : 'post',
 			data : {
-				scd_nm : $("#scd_nm").val()
+				scd_nm : $("#scd_nm").val().trim()
 			},
 			success : function(result) {
 				if (result == "true") {
@@ -270,14 +269,14 @@ var haCnt = 0;
 				},
 				success : function(result) {
 					document.getElementById("data_pth").value=result[0].DATA_PATH;
-					document.getElementById("rlog_file_pth").value=result[1].PGRLOG;		
+					//document.getElementById("rlog_file_pth").value=result[1].PGRLOG;		
 					document.getElementById("bck_pth").value=result[1].PGRBAK;
-					document.getElementById("dlog_file_pth").value=result[1].PGDLOG;
+					//document.getElementById("dlog_file_pth").value=result[1].PGDLOG;
 					document.getElementById("save_pth").value=result[1].PGDBAK; 
 					fn_checkFolderVol(1);
-					fn_checkFolderVol(2);
+					//fn_checkFolderVol(2);
 					fn_checkFolderVol(3);
-					fn_checkFolderVol(4);
+					//fn_checkFolderVol(4);
 					fn_checkFolderVol(5);
 				}
 			}); 
@@ -286,24 +285,24 @@ var haCnt = 0;
 		
 		if(bck == "rman"){
 			$("#rman_bck_opt").show();
-			$("#r_log_pth").show();
+			//$("#r_log_pth").show();
 			$("#r_data_pth").show();
 			$("#r_bck_pth").show();
-			$("#d_log_pth").hide();
+			//$("#d_log_pth").hide();
 			$("#d_bck_pth").hide();
 			$("#dump_bck_opt").hide();
 		}else if(bck == "dump"){
 			$("#d_bck_pth").show();
-			$("#d_log_pth").show();
+			//$("#d_log_pth").show();
 			$("#dump_bck_opt").show();
-			$("#r_log_pth").hide();
+			//$("#r_log_pth").hide();
 			$("#r_data_pth").hide();
 			$("#r_bck_pth").hide();
 			$("#rman_bck_opt").hide();
 		}else{
 			$("#d_bck_pth").hide();
-			$("#d_log_pth").hide();
-			$("#r_log_pth").hide();
+			//$("#d_log_pth").hide();
+			//$("#r_log_pth").hide();
 			$("#r_data_pth").hide();
 			$("#r_bck_pth").hide();
 			$("#rman_bck_opt").hide();
@@ -317,15 +316,15 @@ var haCnt = 0;
 		 var save_path = "";
 		 	
 		 	if(keyType == 1){
-		 		save_path = $("#data_pth").val();
-		 	}else if(keyType == 2){
+		 		save_path = $("#data_pth").val().trim();
+		 	}/* else if(keyType == 2){
 		 		save_path = $("#rlog_file_pth").val();
-		 	}else if(keyType == 3){
-		 		save_path = $("#bck_pth").val();
-		 	}else if(keyType == 4){
+		 	} */else if(keyType == 3){
+		 		save_path = $("#bck_pth").val().trim();
+		 	}/* else if(keyType == 4){
 		 		save_path = $("#dlog_file_pth").val();
-		 	}else{
-		 		save_path = $("#save_pth").val();
+		 	} */else{
+		 		save_path = $("#save_pth").val().trim();
 		 	}
 		 	
 		 	$.ajax({
@@ -357,16 +356,16 @@ var haCnt = 0;
 	 						if(keyType == 1){
 	 							$("#dataVolume").empty();
 	 							$( "#dataVolume" ).append(volume);
-	 						}else if(keyType == 2) {
+	 						}/* else if(keyType == 2) {
 	 							$("#rlogVolume").empty();
 	 							$( "#rlogVolume" ).append(volume);
-	 						}else if(keyType == 3) {
+	 						} */else if(keyType == 3) {
 	 							$("#backupVolume").empty();
 	 							$( "#backupVolume" ).append(volume);
-	 						}else if(keyType == 4) {
+	 						}/* else if(keyType == 4) {
 	 							$("#dlogVolume").empty();
 	 							$( "#dlogVolume" ).append(volume);
-	 						}else if(keyType == 5) {
+	 						} */else if(keyType == 5) {
 	 							$("#saveVolume").empty();
 	 							$( "#saveVolume" ).append(volume);
 	 						}
@@ -392,15 +391,15 @@ var haCnt = 0;
 	 	var save_path = "";
 	 	
 	 	if(keyType == 1){
-	 		save_path = $("#data_pth").val();
-	 	}else if(keyType == 2){
+	 		save_path = $("#data_pth").val().trim();
+	 	}/* else if(keyType == 2){
 	 		save_path = $("#rlog_file_pth").val();
-	 	}else if(keyType == 3){
-	 		save_path = $("#bck_pth").val();
-	 	}else if(keyType == 4){
+	 	} */else if(keyType == 3){
+	 		save_path = $("#bck_pth").val().trim();
+	 	}/* else if(keyType == 4){
 	 		save_path = $("#dlog_file_pth").val();
-	 	}else{
-	 		save_path = $("#save_pth").val();
+	 	} */else{
+	 		save_path = $("#save_pth").val().trim();
 	 	}
 
 	 	if(save_path == "" && keyType == 1){
@@ -447,13 +446,13 @@ var haCnt = 0;
 	 					if(data.result.RESULT_DATA.IS_DIRECTORY == 0){
 	 						if(keyType == 1){
 	 							$("#check_path1").val("Y");
-	 						}else if(keyType == 2){
+	 						}/* else if(keyType == 2){
 	 							$("#check_path2").val("Y");
-	 						}else if(keyType == 3){
+	 						} */else if(keyType == 3){
 	 							$("#check_path3").val("Y");
-	 						}else if(keyType == 4){
+	 						}/* else if(keyType == 4){
 	 							$("#check_path4").val("Y");
-	 						}else{
+	 						} */else{
 	 							$("#check_path5").val("Y");
 	 						}
 	 						alert('<spring:message code="message.msg100" />');
@@ -461,16 +460,16 @@ var haCnt = 0;
 	 						if(keyType == 1){
 	 							$("#dataVolume").empty();
 	 							$( "#dataVolume" ).append(volume);
-	 						}else if(keyType == 2) {
+	 						}/* else if(keyType == 2) {
 	 							$("#rlogVolume").empty();
 	 							$( "#rlogVolume" ).append(volume);
-	 						}else if(keyType == 3) {
+	 						} */else if(keyType == 3) {
 	 							$("#backupVolume").empty();
 	 							$( "#backupVolume" ).append(volume);
-	 						}else if(keyType == 4) {
+	 						}/* else if(keyType == 4) {
 	 							$("#dlogVolume").empty();
 	 							$( "#dlogVolume" ).append(volume);
-	 						}else if(keyType == 5) {
+	 						} */else if(keyType == 5) {
 	 							$("#saveVolume").empty();
 	 							$( "#saveVolume" ).append(volume);
 	 						}
@@ -493,8 +492,41 @@ var haCnt = 0;
 	  function fn_insert_bckScheduler(){
 		
 		  if (!fn_validation()) return false;	  
-		  if (!fn_check()) return false;
 		  
+		  $.ajax({
+				url : '/scd_nmCheck.do',
+				type : 'post',
+				data : {
+					scd_nm : $("#scd_nm").val().trim()
+				},
+				success : function(result) {
+					if (result == "true") {
+						fn_insert_wrk();
+					} else {
+						alert("중복된 스케줄명 입니다.");
+						return false;
+					}
+				},
+				beforeSend: function(xhr) {
+			        xhr.setRequestHeader("AJAX", true);
+			     },
+				error : function(xhr, status, error) {
+					if(xhr.status == 401) {
+						alert('<spring:message code="message.msg02" />');
+						 location.href = "/";
+					} else if(xhr.status == 403) {
+						alert('<spring:message code="message.msg03" />');
+			             location.href = "/";
+					} else {
+						alert("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""));
+					}
+				}
+			});
+	 } 
+	 
+	 
+	 
+	  function fn_insert_wrk(){
 		  var bck = $('#bck').val();
 
 		  if(bck =="rman"){		  
@@ -575,7 +607,7 @@ var haCnt = 0;
 					}
 				});  
 		  }
-	 } 
+	  }
 	 
 	 
 	  function fn_insert_scheduler(){
@@ -594,7 +626,7 @@ var haCnt = 0;
 			$.ajax({
 				url : "/insert_bckSchedule.do",
 				data : {
-					 scd_nm : $("#scd_nm").val(),
+					 scd_nm : $("#scd_nm").val().trim(),
 					 scd_exp : $("#scd_nm").val(),
 					 exe_perd_cd : "TC001602",
 					 exe_dt : exe_dt,
@@ -633,9 +665,9 @@ var haCnt = 0;
 <form>
 	<input type="hidden" name="db_svr_id" id="db_svr_id" value="${db_svr_id}" />
 	<input type="hidden" name="check_path1" id="check_path1" value="N" />
-	<input type="hidden" name="check_path2" id="check_path2" value="N" />
+	<!-- <input type="hidden" name="check_path2" id="check_path2" value="N" /> -->
 	<input type="hidden" name="check_path3" id="check_path3" value="N" />
-	<input type="hidden" name="check_path4" id="check_path4" value="N" />
+	<!-- <input type="hidden" name="check_path4" id="check_path4" value="N" /> -->
 	<input type="hidden" name="check_path5" id="check_path5" value="N" />
 </form>
 <div class="pop_container">
@@ -694,6 +726,8 @@ var haCnt = 0;
 								<span id="dataVolume" style="margin: 70px;"></span>
 							</td>
 						</tr>
+						<%-- 
+						RMAN 로그경로
 						<tr id="r_log_pth">
 							<th scope="row" class="t9 line"><spring:message code="backup_management.backup_log_dir" /></th>
 							<td>
@@ -701,7 +735,7 @@ var haCnt = 0;
 								<span class="btn btnF_04 btnC_01"><button type="button" class="btn_type_02" onclick="checkFolder(2)" style="width: 60px; margin-right: -60px; margin-top: 0;"><spring:message code="common.dir_check" /></button></span>
 								<span id="rlogVolume" style="margin: 70px;"></span>
 							</td>
-						</tr>
+						</tr> --%>
 
 						<tr id="r_bck_pth" rowsapn="2">
 							<th scope="row" class="t9 line"><spring:message code="backup_management.backup_dir" /></th>
@@ -712,6 +746,8 @@ var haCnt = 0;
 							</td>
 						</tr>
 
+						<%-- 
+						DUMP 로그경로
 						<tr id="d_log_pth">
 							<th scope="row" class="t9 line"><spring:message code="backup_management.backup_log_dir" /></th>
 							<td>
@@ -720,7 +756,7 @@ var haCnt = 0;
 								<button type="button" class="btn_type_02" onclick="checkFolder(4)" style="width: 60px; margin-right: -60px; margin-top: 0;"><spring:message code="common.dir_check" /></button></span>
 								<span id="dlogVolume" style="margin: 70px;"></span>
 							</td>
-						</tr>
+						</tr> --%>
 
 						<tr id="d_bck_pth">
 							<th scope="row" class="t9 line"><spring:message code="backup_management.backup_dir" /></th>

@@ -26,8 +26,19 @@ public class ScheduleVO {
 	private String nxt_exe_from;
 	private String nxt_exe_to;
 	private String wrk_nm;
+	private String db_svr_nm;
 	
 	
+	
+	
+	public String getDb_svr_nm() {
+		return db_svr_nm;
+	}
+
+	public void setDb_svr_nm(String db_svr_nm) {
+		this.db_svr_nm = db_svr_nm;
+	}
+
 	public String getWrk_nm() {
 		return wrk_nm;
 	}
