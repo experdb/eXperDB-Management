@@ -1255,8 +1255,116 @@ public class BackupController {
 	 */
 	@RequestMapping(value = "/rmanShow.do")
 	@ResponseBody
-	public List<Map<String, Object>> rmanShow (HttpServletRequest request) {
-		return dbSvrAut;
+	public List<HashMap<String, String>> rmanShow (HttpServletRequest request) {
+		
+		List<HashMap<String, String>> pgRmanInfo = null;
+		
+		try {
+			int db_svr_id = Integer.parseInt(request.getParameter("db_svr_id"));
+			String cmd = request.getParameter("cmd");
+			
+			DbServerVO schDbServerVO = new DbServerVO();
+			schDbServerVO.setDb_svr_id(db_svr_id);
+			DbServerVO dbServerVO = (DbServerVO) cmmnServerInfoService.selectServerInfo(schDbServerVO);
+			String strIpAdr = dbServerVO.getIpadr();
+			AgentInfoVO vo = new AgentInfoVO();
+			vo.setIPADR(strIpAdr);
+			AgentInfoVO agentInfo = (AgentInfoVO) cmmnServerInfoService.selectAgentInfo(vo);
 
+			String IP = dbServerVO.getIpadr();
+			int PORT = agentInfo.getSOCKET_PORT();
+			
+			ClientInfoCmmn cic = new ClientInfoCmmn();
+			
+			pgRmanInfo = cic.rmanShow(IP, PORT, cmd);
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return pgRmanInfo;
 	}
+	
+
+		
+		/**
+		 * rmanShowView page
+		 * @param 
+		 * @return ModelAndView
+		 * @throws Exception
+		 */
+		@RequestMapping(value = "/rmanShowView.do")
+		public ModelAndView rmanShowView(@ModelAttribute("historyVO") HistoryVO historyVO, HttpServletRequest request) {
+		
+			ModelAndView mv = new ModelAndView();
+			
+			int db_svr_id = Integer.parseInt(request.getParameter("db_svr_id"));
+			String bck = request.getParameter("bck");
+			 			
+			mv.addObject("db_svr_id",db_svr_id);
+			mv.addObject("bck",bck);
+			mv.setViewName("popup/rmanShow");
+			
+			return mv;
+		}
+	
+		
+		
+		/**
+		 * dumpShowView page
+		 * @param 
+		 * @return ModelAndView
+		 * @throws Exception
+		 */
+		@RequestMapping(value = "/dumpShowView.do")
+		public ModelAndView dumpShowView(@ModelAttribute("historyVO") HistoryVO historyVO, HttpServletRequest request) {
+		
+			ModelAndView mv = new ModelAndView();
+			
+			int db_svr_id = Integer.parseInt(request.getParameter("db_svr_id"));
+			String bck = request.getParameter("bck");
+			 			
+			mv.addObject("db_svr_id",db_svr_id);
+			mv.addObject("bck",bck);
+			mv.setViewName("popup/dumpShow");
+			
+			return mv;
+		}
+		
+		
+		/**
+		 * DUMP 정보 호출(pg_dump show)
+		 * 
+		 * @return resultSet
+		 * @throws Exception
+		 */
+		@RequestMapping(value = "/dumpShow.do")
+		@ResponseBody
+		public List<HashMap<String, String>> dumpShow (HttpServletRequest request) {
+			
+			List<HashMap<String, String>> pgDumpInfo = null;
+			
+			try {
+				int db_svr_id = Integer.parseInt(request.getParameter("db_svr_id"));
+				String cmd = request.getParameter("cmd");
+				
+				DbServerVO schDbServerVO = new DbServerVO();
+				schDbServerVO.setDb_svr_id(db_svr_id);
+				DbServerVO dbServerVO = (DbServerVO) cmmnServerInfoService.selectServerInfo(schDbServerVO);
+				String strIpAdr = dbServerVO.getIpadr();
+				AgentInfoVO vo = new AgentInfoVO();
+				vo.setIPADR(strIpAdr);
+				AgentInfoVO agentInfo = (AgentInfoVO) cmmnServerInfoService.selectAgentInfo(vo);
+
+				String IP = dbServerVO.getIpadr();
+				int PORT = agentInfo.getSOCKET_PORT();
+				
+				ClientInfoCmmn cic = new ClientInfoCmmn();
+				
+				pgDumpInfo = cic.dumpShow(IP, PORT, cmd);
+				
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+			return pgDumpInfo;
+		}
 }

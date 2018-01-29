@@ -454,6 +454,7 @@ function fn_modifyScheduleListView(){
 		return false;
 	}else if (datas.length >1){
 		alert('<spring:message code="message.msg38" />');
+		return false;
 	}
 	
 	var scd_id = table.row('.selected').data().scd_id;

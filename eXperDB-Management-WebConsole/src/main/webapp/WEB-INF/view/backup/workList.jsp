@@ -61,7 +61,7 @@ function fn_init(){
 		{data : "data_pth", className : "dt-left", defaultContent : ""},	
 		{data : "bck_pth", className : "dt-left", defaultContent : ""
 			,"render": function (data, type, full) {
-				  return '<span onClick=javascript:fn_rmanShow("'+full.bck_pth+','+full.db_svr_id+'"); class="bold">' + full.bck_pth + '</span>';
+				  return '<span onClick=javascript:fn_rmanShow("'+full.bck_pth+'","'+full.db_svr_id+'"); class="bold">' + full.bck_pth + '</span>';
 			}
 		 },		
 		//{data : "log_file_pth", className : "dt-left", defaultContent : ""},	
@@ -96,7 +96,11 @@ function fn_init(){
 		},
 		{data : "wrk_exp", className : "dt-left", defaultContent : ""},
 		{data : "db_nm", className : "dt-center", defaultContent : ""}, 
-		{data : "save_pth", className : "dt-left", defaultContent : ""},
+		{data : "save_pth", className : "dt-left", defaultContent : ""
+			,"render": function (data, type, full) {
+				  return '<span onClick=javascript:fn_dumpShow("'+full.save_pth+'","'+full.db_svr_id+'"); class="bold">' + full.save_pth + '</span>';
+			}
+		 },
 		{data : "file_fmt_cd_nm", className : "dt-center", defaultContent : ""}, 
 		{data : "cprt", className : "dt-center", defaultContent : ""}, 
 		{data : "encd_mth_nm", className : "dt-center", defaultContent : ""}, 
@@ -163,40 +167,32 @@ $(window.document).ready(
 
 
 function fn_rmanShow(bck, db_svr_id){
-	alert(db_svr_id);
-	return false;
 	
-	var cmd = "pg_rman show -B "+bck+" detail"
-	
-	$.ajax({
-		url : "/rmanShow.do", 
-	  	data : {
-	  		cmd : cmd,
-	  	},
-		dataType : "json",
-		type : "post",
-		beforeSend: function(xhr) {
-	        xhr.setRequestHeader("AJAX", true);
-	     },
-		error : function(xhr, status, error) {
-			if(xhr.status == 401) {
-				alert("<spring:message code='message.msg02' />");
-				 location.href = "/";
-			} else if(xhr.status == 403) {
-				alert("<spring:message code='message.msg03' />");
-	             location.href = "/";
-			} else {
-				alert("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""));
-			}
-		},
-		success : function(data) {
-			alert(JSON.stringify(data))
-		}
-	});
-	
-	
+	  var frmPop= document.frmPopup;
+	    var url = '/rmanShowView.do';
+	    window.open('','popupView','width=1000, height=800');  
+	     
+	    frmPop.action = url;
+	    frmPop.target = 'popupView';
+	    frmPop.bck.value = bck;
+	    frmPop.db_svr_id.value = db_svr_id;  
+	    frmPop.submit();   
 }
 
+
+
+function fn_dumpShow(bck, db_svr_id){
+	
+	  var frmPop= document.frmPopupDump;
+	    var url = '/dumpShowView.do';
+	    window.open('','popupView','width=1000, height=800');  
+	     
+	    frmPop.action = url;
+	    frmPop.target = 'popupView';
+	    frmPop.bck.value = bck;
+	    frmPop.db_svr_id.value = db_svr_id;  
+	    frmPop.submit();   
+}
 
 /* ********************************************************
  * Rman Backup Find Button Click
@@ -657,7 +653,17 @@ function selectTab(tab){
 <%@include file="../cmmn/workRmanInfo.jsp"%>
 <%@include file="../cmmn/workDumpInfo.jsp"%>
 
-	
+
+<form name="frmPopup">
+	<input type="hidden" name="bck"  id="bck">
+	<input type="hidden" name="db_svr_id"  id="db_svr_id">
+</form>
+
+<form name="frmPopupDump">
+	<input type="hidden" name="bck"  id="bck">
+	<input type="hidden" name="db_svr_id"  id="db_svr_id">
+</form>
+
 <!-- contents -->
 <div id="contents">
 	<div class="contents_wrap">

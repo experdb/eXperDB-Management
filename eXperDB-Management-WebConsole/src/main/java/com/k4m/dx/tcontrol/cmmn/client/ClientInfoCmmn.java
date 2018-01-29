@@ -1247,4 +1247,86 @@ public class ClientInfoCmmn {
 		}
 		return checkFile;
 	}
+	
+	
+	public List<HashMap<String, String>> rmanShow(String IP, int PORT,String cmd) {
+		
+
+		List<HashMap<String, String>> rmanList = null;
+		
+		try {
+			JSONObject serverObj = new JSONObject();
+			
+			serverObj.put(ClientProtocolID.SERVER_NAME, IP);
+			serverObj.put(ClientProtocolID.SERVER_IP, Integer.toString(PORT));
+			
+			
+			JSONObject jObj = new JSONObject();
+			jObj.put(ClientProtocolID.DX_EX_CODE, ClientTranCodeType.DxT025);
+			jObj.put(ClientProtocolID.SERVER_INFO, serverObj);
+			jObj.put(ClientProtocolID.FILE_DIRECTORY, cmd);
+
+			JSONObject objList;
+			
+			ClientAdapter CA = new ClientAdapter(IP, PORT);
+			CA.open(); 
+				
+			objList = CA.dxT025(jObj);
+			
+			String strErrMsg = (String)objList.get(ClientProtocolID.ERR_MSG);
+			String strErrCode = (String)objList.get(ClientProtocolID.ERR_CODE);
+			String strDxExCode = (String)objList.get(ClientProtocolID.DX_EX_CODE);
+			String strResultCode = (String)objList.get(ClientProtocolID.RESULT_CODE);
+			System.out.println("RESULT_CODE : " +  strResultCode);
+			System.out.println("ERR_CODE : " +  strErrCode);
+			System.out.println("ERR_MSG : " +  strErrMsg);
+			
+			rmanList = (List<HashMap<String, String>>) objList.get(ClientProtocolID.RESULT_DATA);
+			
+		} catch(Exception e) {
+			e.printStackTrace();
+		}
+		return rmanList;
+	}
+	
+	
+public List<HashMap<String, String>> dumpShow(String IP, int PORT,String cmd) {
+		
+
+		List<HashMap<String, String>> dumpList = null;
+		
+		try {
+			JSONObject serverObj = new JSONObject();
+			
+			serverObj.put(ClientProtocolID.SERVER_NAME, IP);
+			serverObj.put(ClientProtocolID.SERVER_IP, Integer.toString(PORT));
+			
+			
+			JSONObject jObj = new JSONObject();
+			jObj.put(ClientProtocolID.DX_EX_CODE, ClientTranCodeType.DxT024);
+			jObj.put(ClientProtocolID.SERVER_INFO, serverObj);
+			jObj.put(ClientProtocolID.FILE_DIRECTORY, cmd);
+
+			JSONObject objList;
+			
+			ClientAdapter CA = new ClientAdapter(IP, PORT);
+			CA.open(); 
+				
+			objList = CA.dxT024(jObj);
+			
+			String strErrMsg = (String)objList.get(ClientProtocolID.ERR_MSG);
+			String strErrCode = (String)objList.get(ClientProtocolID.ERR_CODE);
+			String strDxExCode = (String)objList.get(ClientProtocolID.DX_EX_CODE);
+			String strResultCode = (String)objList.get(ClientProtocolID.RESULT_CODE);
+			System.out.println("RESULT_CODE : " +  strResultCode);
+			System.out.println("ERR_CODE : " +  strErrCode);
+			System.out.println("ERR_MSG : " +  strErrMsg);
+			
+			dumpList = (List<HashMap<String, String>>) objList.get(ClientProtocolID.RESULT_DATA);
+			System.out.println(dumpList);
+		} catch(Exception e) {
+			e.printStackTrace();
+		}
+		return dumpList;
+	}
 }
