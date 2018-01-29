@@ -264,10 +264,6 @@ public class DbAuthorityController {
 				List<Map<String, Object>> resultSet = null;	
 				resultSet = dbAuthorityService.selectDatabase(db_svr_id);
 				
-				System.out.println("**********");
-				System.out.println("DB권한");
-				System.out.println("DBID" + resultSet);
-				
 				for(int i=0; i<resultSet.size(); i++){	
 					Map<String, Object> param = new HashMap<String, Object>();
 					param.put("db_id", resultSet.get(i));

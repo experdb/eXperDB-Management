@@ -67,9 +67,6 @@ public class TreeController {
 	private DbServerManagerService dbServerManagerService;
 
 	@Autowired
-	private AccessControlService accessControlService;
-
-	@Autowired
 	private CmmnServerInfoService cmmnServerInfoService;
 	
 	@Autowired
@@ -280,8 +277,6 @@ public class TreeController {
 
 				String strRows = request.getParameter("rows").toString().replaceAll("&quot;", "\"");
 				JSONArray rows = (JSONArray) new JSONParser().parse(strRows);
-
-				accessControlService.deleteDbAccessControl(dbServerVO.getDb_svr_id());
 
 				HashMap<String, Object> paramvalue = new HashMap<String, Object>();
 				

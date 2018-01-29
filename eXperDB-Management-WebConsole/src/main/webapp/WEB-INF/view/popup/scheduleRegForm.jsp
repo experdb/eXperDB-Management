@@ -45,7 +45,11 @@ function fn_init() {
 		columns : [
 		{data : "rownum", defaultContent : "", targets : 0, orderable : false, checkboxes : {'selectRow' : true}}, 
 		{data : "idx", className : "dt-center", defaultContent : ""},
-		{data : "wrk_nm", className : "dt-left", defaultContent : ""},
+		{data : "wrk_nm", className : "dt-left", defaultContent : ""
+			,"render": function (data, type, full) {
+				  return '<span onClick=javascript:fn_workLayer("'+full.wrk_id+'"); class="bold">' + full.wrk_nm + '</span>';
+			}
+		},
 		{data : "wrk_exp", className : "dt-left", defaultContent : ""},	
 		{data : "bsn_dscd_nm", className : "dt-center", defaultContent : ""},
 		{data : "bck_bsn_dscd_nm", className : "dt-center", defaultContent : ""},
@@ -247,6 +251,9 @@ function fn_workAdd(){
 
 </head>
 <body>
+<%@include file="../cmmn/workRmanInfo.jsp"%>
+<%@include file="../cmmn/workDumpInfo.jsp"%>
+
 <div class="pop_container">
 	<div class="pop_cts">
 		<p class="tit"><spring:message code="schedule.workReg"/></p>

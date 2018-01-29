@@ -262,8 +262,45 @@ function fn_cookie(url) {
 							<li><a href="/extensionList.do" onClick="fn_cookie(null)" id="MN0008"><spring:message code="menu.extension_pack_installation_information"/></a></li>
 						</ul>
 					</li>
+					
 					<li><a href="#n"><span><img src="/images/encrypt.png" alt="ENCRYPT" /></span></a>
+						<ul class="depth_2">
+						    <li><a href="#n">보안정책</a>
+        						<ul class="depth_3">
+									<li><a href="#n">정책리스트</a></li>
+									<li><a href="#n">정책등록</a></li>
+								</ul>
+        					</li>
+							<li><a href="#n">암호화키관리</a>
+        						<ul class="depth_3">
+									<li><a href="#n">암호화키리스트</a></li>
+								</ul>
+        					</li>
+        					<li><a href="#n">백업/복원</a>
+        						<ul class="depth_3">
+									<li><a href="#n">관리데이터백업</a></li>
+									<li><a href="#n">관리데이터복원</a></li>
+								</ul>
+        					</li>
+						    <li><a href="#n">감사로그</a>
+        						<ul class="depth_3">
+									<li><a href="#n">암복호화</a></li>
+									<li><a href="#n">관리서버</a></li>
+									<li><a href="#n">암복호화키</a></li>
+									<li><a href="#n">백업및복원</a></li>
+									<li><a href="#n">자원사용</a></li>
+								</ul>
+        					</li>
+							<li><a href="#n">설정</a>
+        						<ul class="depth_3">
+									<li><a href="#n">보안정책옵션설정</a></li>
+									<li><a href="#n">암호화설정</a></li>
+								</ul>
+        					</li>
+						</ul>
 					</li>
+					
+					
 					<li><a href="#n"><span><img src="/images/ico_h_7.png" alt="MY PAGE" /></span></a>
 						<ul class="depth_2">
 						    <li><a href="#n">Language</a>
