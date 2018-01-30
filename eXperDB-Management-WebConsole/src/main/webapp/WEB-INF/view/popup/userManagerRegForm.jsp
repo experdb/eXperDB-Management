@@ -93,15 +93,18 @@
 		return true;
 	}
 
+	
 	//아이디 중복체크
 	function fn_idCheck() {
 		var usr_id = document.getElementById("usr_id");
+		
 		if (usr_id.value == "") {
 			alert("<spring:message code='message.msg121' />");
 			document.getElementById('usr_id').focus();
 			idCheck = 0;
 			return;
 		}
+
 		$.ajax({
 			url : '/UserManagerIdCheck.do',
 			type : 'post',
@@ -220,6 +223,7 @@
 			dateFormat : 'yy-mm-dd',
 // 			changeMonth: true, 
 			changeYear: true,
+			yearRange: '2018:2099',
 		});
 		$("#datepicker3").datepicker();
 	})
@@ -253,7 +257,7 @@
 					<tr>
 						<th scope="row" class="ico_t1"><spring:message code="user_management.id" />(*)</th>
 						<td>
-							<input type="text" class="txt" name="usr_id" id="usr_id" onkeyup="fn_checkWord(this,15)" maxlength="15" style="width: 205px;" placeholder="15<spring:message code='message.msg188'/>" />
+							<input type="text" class="txt" name="usr_id" id="usr_id" onkeyup="fn_checkWord(this,15)" maxlength="15" style="width: 205px;" placeholder="15<spring:message code='message.msg188'/>" onblur="this.value=this.value.trim()"/>
 							<span class="btn btnC_01"><button type="button" class="btn_type_02" onclick="fn_idCheck()" style="width: 85px; height: 38px; margin-right: -60px; margin-top: 0;">
 							<spring:message code="common.overlap_check" /></button></span>
 						</td>
