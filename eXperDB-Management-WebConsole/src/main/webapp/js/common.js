@@ -647,3 +647,9 @@ function fn_checkWord(obj, maxlength) {
 	}    
 	obj.focus(); 
 }
+
+//trim 체크
+String.prototype.trim = function()
+{
+	return this.replace(/\s/g,'');
+}

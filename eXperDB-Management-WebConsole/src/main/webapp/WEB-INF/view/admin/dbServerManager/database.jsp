@@ -228,13 +228,13 @@ function fn_reg_popup(){
 						</colgroup>
 						<tbody>
 							<tr>
-								<th scope="row" class="t2"><spring:message code="common.dbms_name" /></th>
+								<th scope="row" class="t9"><spring:message code="common.dbms_name" /></th>
 								<td><select id="db_svr_nm" name="db_svr_nm">
 										<option value="%"><spring:message code="common.total" /> </option>
 								</select></td>
-								<th scope="row" class="t3"><spring:message code="dbms_information.dbms_ip" /></th>
+								<th scope="row" class="t9"><spring:message code="dbms_information.dbms_ip" /></th>
 								<td><input type="text" class="txt" name="ipadr" id="ipadr" /></td>
-								<th scope="row" class="t4"><spring:message code="common.database" /></th>
+								<th scope="row" class="t9"><spring:message code="common.database" /></th>
 								<td><input type="text" class="txt" name="dft_db_nm" id="dft_db_nm" /></td>
 							</tr>
 						</tbody>

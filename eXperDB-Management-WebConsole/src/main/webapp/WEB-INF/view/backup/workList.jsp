@@ -716,7 +716,7 @@ function selectTab(tab){
 						</colgroup>
 						<tbody>
 							<tr>
-								<th scope="row" class="t8"><spring:message code="common.work_name" /></th>
+								<th scope="row" class="t9"><spring:message code="common.work_name" /></th>
 								<td><input type="text" name="wrk_nm" id="wrk_nm" class="txt t3" maxlength="25"/></td>
 								<th scope="row" class="t9" ><spring:message code="backup_management.backup_option" /></th>
 								<td><select name="bck_opt_cd" id="bck_opt_cd" class="txt t3" style="width:150px;">
@@ -739,9 +739,9 @@ function selectTab(tab){
 						</colgroup>
 						<tbody>
 							<tr>
-								<th scope="row" class="t8"><spring:message code="common.work_name" /></th>
+								<th scope="row" class="t9"><spring:message code="common.work_name" /></th>
 								<td><input type="text" class="txt t3" name="wrk_nm" id="wrk_nm" maxlength="25"/></td>
-								<th scope="row" class="t4"><spring:message code="common.database" /></th>
+								<th scope="row" class="t9"><spring:message code="common.database" /></th>
 								<td>
 									<select name="db_id" id="db_id" class="txt t3" style="width:150px;">
 										<option value=""><spring:message code="schedule.total" /></option>

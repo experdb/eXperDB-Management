@@ -323,7 +323,7 @@ function fn_check() {
 		url : '/wrk_nmCheck.do',
 		type : 'post',
 		data : {
-			wrk_nm : $("#wrk_nm").val().trim()
+			wrk_nm : $("#wrk_nm").val()
 		},
 		success : function(result) {
 			if (result == "true") {
@@ -373,7 +373,7 @@ function fn_check() {
 						<tbody>
 							<tr>
 								<th scope="row" class="ico_t1"><spring:message code="common.work_name" /></th>
-								<td><input type="text" class="txt" name="wrk_nm" id="wrk_nm" maxlength="20" onkeyup="fn_checkWord(this,20)" placeholder="20<spring:message code='message.msg188'/>"/>
+								<td><input type="text" class="txt" name="wrk_nm" id="wrk_nm" maxlength="20" onkeyup="fn_checkWord(this,20)" placeholder="20<spring:message code='message.msg188'/>" onblur="this.value=this.value.trim()"/>
 								<span class="btn btnC_01"><button type="button" class= "btn_type_02" onclick="fn_check()" style="width: 60px; margin-right: -60px; margin-top: 0;"><spring:message code="common.overlap_check" /></button></span>
 								</td>
 							</tr>
