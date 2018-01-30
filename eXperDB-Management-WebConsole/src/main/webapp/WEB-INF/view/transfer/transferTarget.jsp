@@ -340,7 +340,7 @@
 						</colgroup>
 						<tbody>
 							<tr>
-								<th scope="row" class="t5"><spring:message code="data_transfer.connect_name" /></th>
+								<th scope="row" class="t9"><spring:message code="data_transfer.connect_name" /></th>
 								<td><input type="text" class="txt t3" name="trf_trg_cnn_nm" id="trf_trg_cnn_nm" maxlength="25"/></td>
 							</tr>
 						</tbody>
