@@ -144,7 +144,7 @@ $(window.document).ready(function() {
 			},
 			success : function(result) {		
 				$("#db_svr_nm").children().remove();
-				$("#db_svr_nm").append("<option value='%'><spring:message code='schedule.total' /></option>");
+				$("#db_svr_nm").append("<option value='%'><spring:message code='common.choice' /></option>");
 				if(result.length > 0){
 					for(var i=0; i<result.length; i++){
 						$("#db_svr_nm").append("<option value='"+result[i].db_svr_nm+"'>"+result[i].db_svr_nm+"</option>");	
@@ -192,7 +192,7 @@ $(window.document).ready(function() {
  * 조회
  ******************************************************** */
 function fn_search(){
-	if(db_svr_nm == '%'){
+	if($("#db_svr_nm").val() == "%"){
 		alert('<spring:message code="message.msg152"/>');
 		return false;
 	}
@@ -281,7 +281,7 @@ function fn_workAdd(){
 						<th scope="row" class="ico_t1"><spring:message code="common.division" /></th>
 						<td>
 						<select class="select t8" name="work" id="work">
-								<option value="%"><spring:message code="common.total" /></option>
+								<option value="%"><spring:message code="common.choice" /></option>
 						</select>						
 						</td>									
 						<th scope="row" class="ico_t1" style="magin-left:50px;" ><spring:message code="common.work_name" /></th>

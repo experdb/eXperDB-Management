@@ -358,10 +358,19 @@ public class ScheduleHistoryController {
 		//해당메뉴 권한 조회 (공통메소드호출)
 		CmmnUtils cu = new CmmnUtils();
 		menuAut = cu.selectMenuAut(menuAuthorityService, "MN000103");
-		
+		Map<String, Object> param = new HashMap<String, Object>();	
 		List<Map<String, Object>> result = null;
 		
 		try {					
+			
+			String scd_nm = request.getParameter("scd_nm");
+			String wrk_nm = request.getParameter("wrk_nm");
+			String fix_rsltcd = request.getParameter("fix_rsltcd");
+		
+			param.put("scd_nm", scd_nm);
+			param.put("wrk_nm", wrk_nm);
+			param.put("fix_rsltcd", fix_rsltcd);
+					
 			//이력 남기기
 			CmmnUtils.saveHistory(request, historyVO);
 		//	historyVO.setExe_dtl_cd("DX-T0048_02");
@@ -372,7 +381,7 @@ public class ScheduleHistoryController {
 				response.sendRedirect("/autError.do");
 				return result;
 			}else{		
-				result = scheduleHistoryService.selectScheduleHistoryFail();
+				result = scheduleHistoryService.selectScheduleHistoryFail(param);
 			}
 		} catch (Exception e) {
 			e.printStackTrace();

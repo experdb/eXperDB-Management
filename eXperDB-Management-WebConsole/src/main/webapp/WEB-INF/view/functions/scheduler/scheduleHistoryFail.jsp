@@ -34,8 +34,16 @@
 					data : "fix_rsltcd",
 					render : function(data, type, full, meta) {	 						
 						var html = '';
-							html +='<span class="btn btnC_01 btnF_02" onClick=javascript:fn_fix_rslt_reg('+full.exe_sn+');><input type="button" value="조치입력"></span>';
-						return html;
+ 						if(full.fix_rsltcd == 'TC002002'){
+ 							html += '<span class="btn btnC_01 btnF_02" onClick=javascript:fn_fixLog('+full.exe_sn+');><input type="button" value="미해결"></span>';
+ 						} else {
+ 							if(full.exe_rslt_cd == 'TC001701'){
+ 								html += ' - ';
+ 							}else{
+ 								html +='<span class="btn btnC_01 btnF_02" onClick=javascript:fn_fix_rslt_reg('+full.exe_sn+');><input type="button" value="조치입력"></span>';
+ 							}	 
+ 						}
+ 						return html;
 					},
 					className : "dt-center",
 					defaultContent : ""
@@ -144,6 +152,39 @@
     }
 
     
+   function fn_scheduleFail_list(){
+	   $.ajax({
+  			url : "/selectScheduleFailList.do",
+  			data : {
+  				scd_nm : $('#scd_nm').val(),
+  				wrk_nm : $('#wrk_nm').val(),
+  				fix_rsltcd : $("#fix_rsltcd").val()
+  			},
+  			dataType : "json",
+  			type : "post",
+  			beforeSend: function(xhr) {
+  		        xhr.setRequestHeader("AJAX", true);
+  		     },
+  			error : function(xhr, status, error) {
+  				if(xhr.status == 401) {
+  					alert('<spring:message code="message.msg02" />');
+  					 location.href = "/";
+  				} else if(xhr.status == 403) {
+  					alert('<spring:message code="message.msg03" />');
+  		             location.href = "/";
+  				} else {
+  					alert("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""));
+  				}
+  			},
+  			success : function(result) {
+  				table.rows({selected: true}).deselect();
+  				table.clear().draw();
+  				table.rows.add(result).draw();
+  			}
+  		}); 
+   }
+    
+    
     </script>
 <%@include file="../../cmmn/workRmanInfo.jsp"%>
 <%@include file="../../cmmn/workDumpInfo.jsp"%>
@@ -206,6 +247,38 @@
 		</div>
 		<div class="contents">
 			<div class="cmm_grp">
+				<div class="btn_type_01" id="btnRman">
+						<a class="btn" onClick="fn_scheduleFail_list();"><button><spring:message code="common.search" /></button></a>
+				</div>
+			<div class="sch_form">
+					<table class="write" id="searchRman">
+						<caption>검색 조회</caption>
+						<colgroup>
+							<col style="width:100px;" />
+							<col style="width:230px;" />
+							<col style="width:115px;" />
+							<col style="width:230px;" />
+							<col style="width:115px;" />
+							<col />
+						</colgroup>
+						<tbody>
+							<tr>
+								<th scope="row" class="t9"><spring:message code="schedule.schedule_name" /></th>
+								<td><input type="text" class="txt t3" name="scd_nm" id="scd_nm" maxlength="25"/></td>
+								<th scope="row" class="t9"><spring:message code="common.work_name" /></th>
+								<td><input type="text" name="wrk_nm" id="wrk_nm" class="txt t3" maxlength="25"/></td>
+								<th scope="row" class="t9" >조치결과</th>
+								<td><select name="fix_rsltcd" id="fix_rsltcd" class="txt t3" style="width:150px;">
+										<option value=""><spring:message code="schedule.total" /></option>
+										<option value="TC002003">조치</option>
+										<option value="TC002002">미해결</option>
+									</select>
+								</td>
+							</tr>
+						</tbody>
+					</table>
+				</div>
+				
 				<div class="overflow_area">
 				
 				<table id="scheduleFailList" class="display" cellspacing="0" width="100%">

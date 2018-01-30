@@ -30,8 +30,8 @@ public class ScheduleHistoryServiceImpl extends EgovAbstractServiceImpl implemen
 	}
 
 	@Override
-	public List<Map<String, Object>> selectScheduleHistoryFail() throws Exception {
-		return scheduleHistoryDAO.selectScheduleHistoryFail();
+	public List<Map<String, Object>> selectScheduleHistoryFail(Map<String, Object> param) throws Exception {
+		return scheduleHistoryDAO.selectScheduleHistoryFail(param);
 	}
 
 	@Override
