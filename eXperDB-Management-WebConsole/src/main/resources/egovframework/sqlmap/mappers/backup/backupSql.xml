@@ -475,6 +475,7 @@
 	 	**/
 	 	SELECT
 	 		(ROW_NUMBER() OVER()) AS ROWNUM,
+	 		AA.DB_SVR_ID,
             AA.IPADR,
 	 		AA.EXE_SN,
 	 		AA.SCD_ID,
@@ -504,6 +505,7 @@
 	 		AA.LST_MDF_DTM
         FROM
         (SELECT
+        	B.DB_SVR_ID,
 	 		B.IPADR,
 	 		TWG.EXE_SN AS EXE_SN,
 	 		TWG.SCD_ID AS SCD_ID,

@@ -27,6 +27,7 @@ var tab = "rman";
  * Data initialization
  ******************************************************** */
 $(window.document).ready(function() {
+
 	fn_rman_init();
 	fn_dump_init();
 	
@@ -54,7 +55,7 @@ $(window.document).ready(function() {
  ******************************************************** */
 function fn_rman_init(){
    	tableRman = $('#logRmanList').DataTable({	
-		scrollY: "245px",
+		scrollY: "545px",
 		searching : false,
 		scrollX: true,
 		bSort: false,
@@ -68,7 +69,11 @@ function fn_rman_init(){
 		    		{ data: "ipadr", className: "dt-center", defaultContent: ""},
 		         	{ data: "wrk_exp", className: "dt-left", defaultContent: ""}, 		         	
  		         	{ data: "bck_opt_cd_nm", className: "dt-center", defaultContent: ""}, 
-		         	{ data: "bck_file_pth", className: "dt-left", defaultContent: ""}, 
+ 		         	{data : "bck_file_pth", className : "dt-left", defaultContent : ""
+	 		   			,"render": function (data, type, full) {
+	 		   				  return '<span onClick=javascript:fn_rmanShow("'+full.bck_file_pth+'","'+full.db_svr_id+'"); class="bold">' + full.bck_file_pth + '</span>';
+	 		   			}
+	 		   		 },
  		         	{ data: "wrk_strt_dtm", className: "dt-center", defaultContent: ""}, 
  		         	{ data: "wrk_end_dtm", className: "dt-center", defaultContent: ""}, 
  		         	{ data: "wrk_dtm", className: "dt-center", defaultContent: ""}, 
@@ -145,7 +150,11 @@ function fn_dump_init(){
 		         	{ data: "wrk_exp", className: "dt-left", defaultContent: ""}, 
  		         	{ data: "db_nm", className: "dt-center", defaultContent: ""}, 
  		         	{ data: "file_sz", className: "dt-center", defaultContent: ""},
- 		         	{ data: "bck_file_pth", className: "dt-left", defaultContent: ""},
+ 		         	{data : "bck_file_pth", className : "dt-left", defaultContent : ""
+	 		   			,"render": function (data, type, full) {
+	 		   				  return '<span onClick=javascript:fn_dumpShow("'+full.bck_file_pth+'","'+full.db_svr_id+'"); class="bold">' + full.bck_file_pth + '</span>';
+	 		   			}
+	 		   		 },
  		         	{ data: "bck_filenm", className: "dt-left", defaultContent: ""},
  		         	{ data: "wrk_strt_dtm", className: "dt-center", defaultContent: ""}, 
  		         	{ data: "wrk_end_dtm", className: "dt-center", defaultContent: ""},  		         			         	
@@ -203,6 +212,35 @@ function fn_dump_init(){
    	tableDump.tables().header().to$().find('th:eq(11)').css('min-width', '100px');
 	tableDump.tables().header().to$().find('th:eq(12)').css('min-width', '100px');
     $(window).trigger('resize');
+}
+
+
+function fn_rmanShow(bck, db_svr_id){
+	alert(db_svr_id);
+	  var frmPop= document.frmPopup;
+	    var url = '/rmanShowView.do';
+	    window.open('','popupView','width=1000, height=800');  
+	     
+	    frmPop.action = url;
+	    frmPop.target = 'popupView';
+	    frmPop.bck.value = bck;
+	    frmPop.db_svr_id.value = db_svr_id;  
+	    frmPop.submit();   
+}
+
+
+
+function fn_dumpShow(bck, db_svr_id){
+	
+	  var frmPop= document.frmPopup;
+	    var url = '/dumpShowView.do';
+	    window.open('','popupView','width=1000, height=800');  
+	     
+	    frmPop.action = url;
+	    frmPop.target = 'popupView';
+	    frmPop.bck.value = bck;
+	    frmPop.db_svr_id.value = db_svr_id;  
+	    frmPop.submit();   
 }
 
 
@@ -439,6 +477,11 @@ function fn_fix_rslt_msg_modify(){
 <%@include file="../cmmn/workRmanInfo.jsp"%>
 <%@include file="../cmmn/workDumpInfo.jsp"%>
 <%@include file="../cmmn/fixRsltMsg.jsp"%>
+
+<form name="frmPopup">
+	<input type="hidden" name="bck"  id="bck">
+	<input type="hidden" name="db_svr_id"  id="db_svr_id"  value="${db_svr_id}">
+</form>
 
 	<div id="pop_layer_fix_rslt_reg" class="pop-layer">
 		<div class="pop-container">

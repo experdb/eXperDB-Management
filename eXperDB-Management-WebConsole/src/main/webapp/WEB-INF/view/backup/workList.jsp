@@ -183,7 +183,7 @@ function fn_rmanShow(bck, db_svr_id){
 
 function fn_dumpShow(bck, db_svr_id){
 	
-	  var frmPop= document.frmPopupDump;
+	  var frmPop= document.frmPopup;
 	    var url = '/dumpShowView.do';
 	    window.open('','popupView','width=1000, height=800');  
 	     
@@ -655,11 +655,6 @@ function selectTab(tab){
 
 
 <form name="frmPopup">
-	<input type="hidden" name="bck"  id="bck">
-	<input type="hidden" name="db_svr_id"  id="db_svr_id">
-</form>
-
-<form name="frmPopupDump">
 	<input type="hidden" name="bck"  id="bck">
 	<input type="hidden" name="db_svr_id"  id="db_svr_id">
 </form>
