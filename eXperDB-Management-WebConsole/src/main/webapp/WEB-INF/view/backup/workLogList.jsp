@@ -216,7 +216,6 @@ function fn_dump_init(){
 
 
 function fn_rmanShow(bck, db_svr_id){
-	alert(db_svr_id);
 	  var frmPop= document.frmPopup;
 	    var url = '/rmanShowView.do';
 	    window.open('','popupView','width=1000, height=800');  
@@ -230,8 +229,7 @@ function fn_rmanShow(bck, db_svr_id){
 
 
 
-function fn_dumpShow(bck, db_svr_id){
-	
+function fn_dumpShow(bck, db_svr_id){	
 	  var frmPop= document.frmPopup;
 	    var url = '/dumpShowView.do';
 	    window.open('','popupView','width=1000, height=800');  
@@ -256,7 +254,9 @@ function fn_get_rman_list(){
 	  		bck_opt_cd : $("#bck_opt_cd").val(),
 	  		wrk_strt_dtm : $("#wrk_strt_dtm").val(),
 	  		wrk_end_dtm : $("#wrk_end_dtm").val(),
-	  		exe_rslt_cd : $("#exe_rslt_cd").val()
+	  		exe_rslt_cd : $("#exe_rslt_cd").val(),
+	  		wrk_nm : $('#wrk_nm').val(),
+  			fix_rsltcd : $("#fix_rsltcd").val()
 	  	},
 		dataType : "json",
 		type : "post",
@@ -297,7 +297,9 @@ function fn_get_dump_list(){
 	  		db_id : db_id,
 	  		wrk_strt_dtm : $("#wrk_strt_dtm").val(),
 	  		wrk_end_dtm : $("#wrk_end_dtm").val(),
-	  		exe_rslt_cd : $("#exe_rslt_cd").val()
+	  		exe_rslt_cd : $("#exe_rslt_cd").val(),
+	  		wrk_nm : $('#wrk_nm').val(),
+  			fix_rsltcd : $("#fix_rsltcd").val()
 	  	},
 		dataType : "json",
 		type : "post",
@@ -602,6 +604,18 @@ function fn_fix_rslt_msg_modify(){
 										</c:forEach>
 									</select>	
 								</td>							
+							</tr>
+							<tr>
+								<th scope="row" class="t9"><spring:message code="common.work_name" /></th>
+								<td><input type="text" name="wrk_nm" id="wrk_nm" class="txt t5" maxlength="25"  /></td>
+								<th scope="row" class="t9" >조치결과</th>
+								<td><select name="fix_rsltcd" id="fix_rsltcd" class="select t5" >
+										<option value=""><spring:message code="schedule.total" /></option>
+										<option value="TC002003">조치</option>
+										<option value="TC002001">해결</option>
+										<option value="TC002002">미해결</option>
+									</select>
+								</td>
 							</tr>
 						</tbody>
 					</table>

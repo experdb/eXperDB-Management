@@ -387,6 +387,8 @@ public class DbServerManagerController {
 			menuAut = cu.selectMenuAut(menuAuthorityService, "MN000302");
 		}	
 		try {
+			int db_svr_id = Integer.parseInt(request.getParameter("db_svr_id"));
+			
 			//읽기 권한이 없는경우 error페이지 호출 , [추후 Exception 처리예정]
 			if(menuAut.get(0).get("wrt_aut_yn").equals("N")){
 				mv.setViewName("error/autError");
@@ -399,6 +401,7 @@ public class DbServerManagerController {
 				
 				mv.addObject("read_aut_yn", menuAut.get(0).get("read_aut_yn"));
 				mv.addObject("wrt_aut_yn", menuAut.get(0).get("wrt_aut_yn"));
+				mv.addObject("db_svr_id", db_svr_id);
 				mv.setViewName("popup/dbServerRegReForm");
 			}
 		} catch (Exception e) {

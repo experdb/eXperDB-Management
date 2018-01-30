@@ -48,6 +48,7 @@
 var connCheck = "fail";
 /* var pghomeCheck="fail";
 var pgdataCheck ="fail"; */
+var db_svr_id = ${db_svr_id};
 
 function fn_init() {
 	
@@ -148,12 +149,12 @@ function fn_saveValidation(){
 
 $(window.document).ready(function() {
 	fn_init();
-	var db_svr_id = <%= request.getParameter("db_svr_id") %>
+	
 
     $.ajax({
 		url : "/selectIpadrList.do",
 		data : {
-			db_svr_id : parseInt(db_svr_id)
+			db_svr_id : db_svr_id
 		},
 		dataType : "json",
 		type : "post",

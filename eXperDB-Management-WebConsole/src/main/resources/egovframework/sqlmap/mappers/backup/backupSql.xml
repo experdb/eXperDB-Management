@@ -580,7 +580,22 @@
       	</if>
       	<if test="exe_rslt_cd != null and exe_rslt_cd != '' ">
       		AND TWG.EXE_RSLT_CD=#{exe_rslt_cd}
-      	</if>     	
+      	</if>  
+      	<if test="wrk_nm != null and wrk_nm != '' ">
+      		AND TWI.WRK_NM=#{wrk_nm}
+      	</if>   	
+      	<if test="fix_rsltcd == null and fix_rsltcd == '' ">
+			AND TWG.FIX_RSLTCD LIKE '%'
+		</if>
+		<if test="fix_rsltcd == 'TC002003' ">
+			AND (TWG.FIX_RSLTCD IS NULL  AND TWG.EXE_RSLT_CD = 'TC001702')
+		</if>
+		<if test="fix_rsltcd == 'TC002001' ">
+			AND TWG.FIX_RSLTCD = 'TC002001'
+		</if>
+		<if test="fix_rsltcd == 'TC002002' ">
+			AND TWG.FIX_RSLTCD = 'TC002002'
+		</if>
       		ORDER BY LST_MDF_DTM DESC
       	)AA
     </select>
