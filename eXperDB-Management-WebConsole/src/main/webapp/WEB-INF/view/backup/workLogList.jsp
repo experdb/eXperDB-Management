@@ -541,12 +541,12 @@ function fn_fix_rslt_msg_modify(){
 		<div class="contents">
 			<div class="cmm_tab">
 				<ul id="tab_rman">
-					<li class="atv"><a href="javascript:selectTab('rman');">Rman <spring:message code="menu.backup_history" /></a></li>
+					<li class="atv"><a href="javascript:selectTab('rman');">Online <spring:message code="menu.backup_history" /></a></li>
 					<li><a href="javascript:selectTab('dump');">Dump <spring:message code="menu.backup_history" /></a></li>
 				</ul>
 				<ul id="tab_dump" style="display:none">
-					<li><a href="javascript:selectTab('rman');">Rman <spring:message code="menu.backup_history" /></a></li>
-					<li class="atv"><a href="javascript:selectTab('dump');">Dump <spring:message code="menu.backup_history" /></a></li>
+					<li><a href="javascript:selectTab('rman');">Online <spring:message code="menu.backup_history" /></a></li>
+					<li class="atv"><a href="javascript:selectTab('dump');">Online <spring:message code="menu.backup_history" /></a></li>
 				</ul>
 			</div>
 			<div class="cmm_grp">

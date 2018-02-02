@@ -273,9 +273,9 @@
 						</colgroup>
 						<tbody>
 							<tr>
-								<th scope="row" class="t2"><spring:message code="etc.etc04"/></th>
+								<th scope="row" class="t9"><spring:message code="etc.etc04"/></th>
 								<td><input type="text" class="txt t2" name="cnr_nm" id="cnr_nm" maxlength="20"/></td>
-								<th scope="row" class="t3"><spring:message code="data_transfer.ip" /> </th>
+								<th scope="row" class="t9"><spring:message code="data_transfer.ip" /> </th>
 								<td><input type="text" class="txt t2" name="cnr_ipadr" id="cnr_ipadr" maxlength="20"/></td>
 							</tr>
 						</tbody>

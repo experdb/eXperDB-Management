@@ -202,12 +202,12 @@
 							<table class="list3" id="systemInfo">
 								<caption>시스템 정보</caption>
 								<colgroup>
-									<col style="width: 5%;" />
+									<col style="width: 10%;" />
 									<col style="width: 5%;" />
 									<col style="width: 5%;" />
 									<col style="width: 7%;" />
 									<col style="width: 5%;" />
-									<col style="width: 73%;" />
+									<col style="width: 68%;" />
 									<col /> 
 								</colgroup>
 								<tr>
@@ -271,7 +271,7 @@
 									<td>${result.LOG_PATH}</td>
 								</tr>
 								<tr>
-									<td>RMAN <spring:message code="properties.backup_path" /></td>
+									<td>Online <spring:message code="properties.backup_path" /></td>
 									<td>${result.CMD_BACKUP_PATH}</td>
 								</tr>
 								<tr>

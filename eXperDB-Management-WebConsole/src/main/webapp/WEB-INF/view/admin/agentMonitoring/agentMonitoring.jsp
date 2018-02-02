@@ -67,9 +67,9 @@
 									</colgroup>
 									<tbody>
 										<tr>
-											<th scope="row" class="t2"><spring:message code="common.dbms_name" /></th>
+											<th scope="row" class="t9"><spring:message code="common.dbms_name" /></th>
 											<td><input type="text" id="DB_SVR_NM" name="DB_SVR_NM" class="txt t2" value="${db_svr_nm}" maxlength="20"/></td>
-											<th scope="row" class="t2"><spring:message code="dbms_information.dbms_ip" /> </th>
+											<th scope="row" class="t9"><spring:message code="dbms_information.dbms_ip" /> </th>
 											<td><input type="text" id="IPADR" name="IPADR" class="txt t2" value="${ipadr}" maxlength="20"/></td>
 										</tr>
 										

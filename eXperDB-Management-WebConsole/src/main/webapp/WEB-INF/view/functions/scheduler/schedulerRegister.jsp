@@ -540,7 +540,7 @@ function fn_check() {
 								<table class="write">
 									<caption>검색 조회</caption>
 									<colgroup>
-										<col style="width:140px;" />
+										<col style="width:160px;" />
 										<col />
 									</colgroup>
 									<tbody>

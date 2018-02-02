@@ -369,10 +369,10 @@ function checkFolder(keyType){
 	<div id="pop_layer">
 		<div class="pop_container">
 			<div class="pop_cts">
-				<p class="tit">Rman <spring:message code="backup_management.bck_mod"/></p>
+				<p class="tit">Online <spring:message code="backup_management.bck_mod"/></p>
 				<div class="pop_cmm">
 					<table class="write">
-						<caption>Rman <spring:message code="backup_management.bck_mod"/></caption>
+						<caption>Online <spring:message code="backup_management.bck_mod"/></caption>
 						<colgroup>
 							<col style="width:130px;" />
 							<col />

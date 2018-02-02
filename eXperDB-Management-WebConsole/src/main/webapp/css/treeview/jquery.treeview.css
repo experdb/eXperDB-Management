@@ -117,11 +117,10 @@
 }
 
 .treeview a.selected {
-	/* background-color: #eee; */
-	color: #f58220;
-	
-	/* border: 2px solid #f58220;
-	padding: 3px; */
+	background-color: #f58220;
+	color: white;
+	border: 2px solid #f58220;
+	padding: 3px; 
 }
 
 #treecontrol {
