@@ -62,7 +62,7 @@
 		
 		if (nmCheck != 1) {
 // 			alert('<spring:message code="message.msg142"/>');
-			alert("커넥터명을 입력 후 중복체크를 해주세요.")
+			alert('<spring:message code="message.msg185"/>')
 			return false;
 		}
 		

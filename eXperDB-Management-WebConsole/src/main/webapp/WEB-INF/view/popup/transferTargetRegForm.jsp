@@ -39,7 +39,7 @@
 		
 		if (nmCheck != 1) {
 // 			alert('<spring:message code="message.msg142"/>');
-			alert("Connect명 중복체크를 해주세요.")
+			alert('<spring:message code="message.msg204"/>')
 			return false;
 		}
 		

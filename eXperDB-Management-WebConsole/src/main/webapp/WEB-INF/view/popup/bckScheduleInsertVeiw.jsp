@@ -672,7 +672,7 @@ var haCnt = 0;
 </form>
 <div class="pop_container">
 		<div class="pop_cts">
-			<p class="tit">주별 스케줄등록</p>
+			<p class="tit"><spring:message code="etc.etc12" /></p>
 			<div class="sch_form">
 				<table class="write">
 					<caption>주별 스케줄등록</caption>

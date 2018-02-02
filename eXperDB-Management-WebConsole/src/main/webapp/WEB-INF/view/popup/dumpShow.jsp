@@ -82,7 +82,6 @@ $(window.document).ready(function() {
 			}
 		},
 		success : function(data) {
-			alert(JSON.stringify(data));
 			table.clear().draw();
 			table.rows.add(data).draw();
 		}
@@ -94,15 +93,15 @@ $(window.document).ready(function() {
 <div class="pop_container">
 	<div class="pop_cts" style="height: 800px;">
 		<p class="tit">
-			DUMP 백업 정보
+			DUMP <spring:message code='common.backInfo' /> 
 		</p>
 		<div class="overflow_area" style="height: 600px;">
 			<table id="dumpShowList" class="display" cellspacing="0" width="100%">
 				<thead>
 					<tr>
-						<th scope="col">파일명</th>
-						<th scope="col">파일크기</th>
-						<th scope="col">최종수정일자</th>
+						<th scope="col"><spring:message code='backup_management.fileName' /></th>
+						<th scope="col"><spring:message code='common.volume' /></th>
+						<th scope="col"><spring:message code='common.modify_datetime' /></th>
 
 					</tr>
 				</thead>

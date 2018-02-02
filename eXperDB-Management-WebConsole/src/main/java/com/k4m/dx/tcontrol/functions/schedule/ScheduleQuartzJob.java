@@ -297,7 +297,7 @@ public class ScheduleQuartzJob implements Job{
 				strAdd +=" --section="+addOption.get(j).get("opt_cd_nm").toString().toLowerCase();
 			}
 			// Object형태
-			if(addOption.get(j).get("opt_cd").toString() != null && addOption.get(j).get("opt_cd").toString().equals("TC0007")){
+			if(addOption.get(j).get("grp_cd").toString() != null && addOption.get(j).get("grp_cd").toString().equals("TC0007")){
 				// Object형태(Only data)
 				if(addOption.get(j).get("opt_cd").toString().equals("TC000701")){
 					strAdd +=" --data-only";

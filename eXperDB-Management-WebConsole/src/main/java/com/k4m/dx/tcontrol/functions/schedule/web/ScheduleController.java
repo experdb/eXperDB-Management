@@ -1,6 +1,10 @@
 package com.k4m.dx.tcontrol.functions.schedule.web;
 
+
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -309,6 +313,59 @@ public class ScheduleController {
 				
 				// 1. 스케쥴 마스터 등록
 				try {			
+					SimpleDateFormat transFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");   
+					
+		            String exe_perd_cd =scheduleVO.getExe_perd_cd();
+		            
+		            // 매일
+		            if(exe_perd_cd.equals("TC001601")){
+		            	SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+		                Calendar cal = Calendar.getInstance();
+		                String strToday = sdf.format(cal.getTime());
+	
+		                // 현재날짜 + 수행시간
+		                String nextDay = strToday+" "+scheduleVO.getExe_h()+":"+scheduleVO.getExe_m()+":"+scheduleVO.getExe_s();
+  
+		                Date dt = transFormat.parse(nextDay);		                
+		                cal.setTime(dt);
+		                // 현재날짜+수행시간 + 1일
+		                cal.add(Calendar.DATE, 1);
+	            	
+		            	scheduleVO.setNxt_exe_dtm(cal.getTime());
+		            // 매주
+		            }else if(exe_perd_cd.equals("TC001602")){
+		            	
+			        // 매월
+		            }else if(exe_perd_cd.equals("TC001603")){
+		            	SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM");
+		                Calendar cal = Calendar.getInstance();
+		                String strToday = sdf.format(cal.getTime());
+		                
+		                // 현재날짜 + 수행시간
+		                String nextDay = strToday+"-"+scheduleVO.getExe_day()+" "+scheduleVO.getExe_h()+":"+scheduleVO.getExe_m()+":"+scheduleVO.getExe_s();
+		                
+		                Date dt = transFormat.parse(nextDay);		                
+		                cal.setTime(dt);
+		                // 현재날짜+수행시간 + 1월
+		            	cal.add(Calendar.MONTH, 1); 
+		            	scheduleVO.setNxt_exe_dtm(cal.getTime());
+		            	
+		            // 매년
+		            }else if(exe_perd_cd.equals("TC001604")){
+		            	SimpleDateFormat sdf = new SimpleDateFormat("yyyy");
+		                Calendar cal = Calendar.getInstance();
+		                String strToday = sdf.format(cal.getTime());
+		                
+		                // 현재날짜 + 수행시간
+		                String nextDay = strToday+"-"+scheduleVO.getExe_month()+"-"+scheduleVO.getExe_day()+" "+scheduleVO.getExe_h()+":"+scheduleVO.getExe_m()+":"+scheduleVO.getExe_s();
+		                
+		                Date dt = transFormat.parse(nextDay);		                
+		                cal.setTime(dt);
+		                // 현재날짜+수행시간 + 1년
+		            	 cal.add(Calendar.YEAR, 1); 
+		            	 scheduleVO.setNxt_exe_dtm(cal.getTime());
+		            }
+		            
 					scheduleVO.setFrst_regr_id(usr_id);
 						scheduleService.insertSchedule(scheduleVO);
 				} catch (Exception e) {
@@ -674,7 +731,7 @@ public class ScheduleController {
 	
 	
 	/**
-	 * 스케쥴을 등록한다.
+	 * 스케쥴을 수정한다.
 	 * 
 	 * @return 
 	 * @throws Exception
@@ -714,7 +771,60 @@ public class ScheduleController {
 			accessHistoryService.insertHistory(historyVO);
 			
 			// 1. 스케줄 마스터 업데이트
-			try {			
+			try {		
+				SimpleDateFormat transFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");   
+				
+	            String exe_perd_cd =scheduleVO.getExe_perd_cd();
+	            
+	            // 매일
+	            if(exe_perd_cd.equals("TC001601")){
+	            	SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+	                Calendar cal = Calendar.getInstance();
+	                String strToday = sdf.format(cal.getTime());
+
+	                // 현재날짜 + 수행시간
+	                String nextDay = strToday+" "+scheduleVO.getExe_h()+":"+scheduleVO.getExe_m()+":"+scheduleVO.getExe_s();
+
+	                Date dt = transFormat.parse(nextDay);		                
+	                cal.setTime(dt);
+	                // 현재날짜+수행시간 + 1일
+	                cal.add(Calendar.DATE, 1);
+            	
+	            	scheduleVO.setNxt_exe_dtm(cal.getTime());
+	            // 매주
+	            }else if(exe_perd_cd.equals("TC001602")){
+	            	
+		        // 매월
+	            }else if(exe_perd_cd.equals("TC001603")){
+	            	SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM");
+	                Calendar cal = Calendar.getInstance();
+	                String strToday = sdf.format(cal.getTime());
+	                
+	                // 현재날짜 + 수행시간
+	                String nextDay = strToday+"-"+scheduleVO.getExe_day()+" "+scheduleVO.getExe_h()+":"+scheduleVO.getExe_m()+":"+scheduleVO.getExe_s();
+	                
+	                Date dt = transFormat.parse(nextDay);		                
+	                cal.setTime(dt);
+	                // 현재날짜+수행시간 + 1월
+	            	cal.add(Calendar.MONTH, 1); 
+	            	scheduleVO.setNxt_exe_dtm(cal.getTime());
+	            	
+	            // 매년
+	            }else if(exe_perd_cd.equals("TC001604")){
+	            	SimpleDateFormat sdf = new SimpleDateFormat("yyyy");
+	                Calendar cal = Calendar.getInstance();
+	                String strToday = sdf.format(cal.getTime());
+	                
+	                // 현재날짜 + 수행시간
+	                String nextDay = strToday+"-"+scheduleVO.getExe_month()+"-"+scheduleVO.getExe_day()+" "+scheduleVO.getExe_h()+":"+scheduleVO.getExe_m()+":"+scheduleVO.getExe_s();
+	                
+	                Date dt = transFormat.parse(nextDay);		                
+	                cal.setTime(dt);
+	                // 현재날짜+수행시간 + 1년
+	            	 cal.add(Calendar.YEAR, 1); 
+	            	 scheduleVO.setNxt_exe_dtm(cal.getTime());
+	            }
+								
 				scheduleVO.setFrst_regr_id(usr_id);
 				scheduleService.updateSchedule(scheduleVO);
 			} catch (Exception e) {
@@ -1012,4 +1122,25 @@ public class ScheduleController {
 		}
 		return result;
 	}		
+	
+	public static void main(String[] args) throws Exception {
+	
+		//1. 이번주 요일/일자
+		 final String[] weekOld = { "0", "1", "0", "0", "1", "0", "0" };
+		
+		//2. 금일 요일/일자
+		Calendar oCalendar = Calendar.getInstance( );
+	    final String[] week = { "1", "2", "3", "4", "5", "6", "7" };
+		//3. 입력받은 값 요일/일자
+	    System.out.println( week[oCalendar.get(Calendar.DAY_OF_WEEK) - 1]);
+		
+	    
+	    
+	    //4. next비교
+
+	    
+		//5. prev 비교
+		
+
+	}
 }

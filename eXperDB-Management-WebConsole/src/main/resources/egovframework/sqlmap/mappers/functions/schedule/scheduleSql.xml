@@ -450,6 +450,7 @@
 			 FROM T_BCK_WRKCNG_I A, T_BCKOBJ_L B
 		     WHERE 1 = 1
 		     AND A.BCK_WRK_ID = B.BCK_WRK_ID
+		     AND A.WRK_ID = #{wrk_id}
 	</select>		
 		
 			

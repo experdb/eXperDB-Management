@@ -208,11 +208,11 @@ function valCheck(){
 		alert('<spring:message code="backup_management.bckPath_effective_check"/>');
 		return false;
 	}else if($("#file_stg_dcnt").val() == ""){
-		alert("Full 백업파일보관일을 입력해주세요.");		
+		alert('<spring:message code="message.msg202"/>');		
 		$("#file_stg_dcnt").focus();
 		return false;
 	}else if($("#bck_mtn_ecnt").val() == ""){
-		alert("Full 백업파일 유지개수를 입력해주세요.");		
+		alert('<spring:message code="message.msg197"/>');		
 		$("#bck_mtn_ecnt").focus();		
 		return false;
 	}else if($("#acv_file_stgdt").val() == ""){

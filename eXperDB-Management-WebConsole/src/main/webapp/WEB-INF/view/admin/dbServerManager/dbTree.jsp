@@ -521,7 +521,7 @@ function fn_dataCompareChcek(svrDbList){
 				}
 			},
 			success : function(result) {
-				alert("삭제되었습니다.")
+				alert("<spring:message code='message.msg12' />")
 			}
 		});
 	}

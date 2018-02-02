@@ -574,7 +574,7 @@ function fn_check() {
 				wrk_nmChk = "success";
 			} else {
 				scd_nmChk = "fail";
-				alert("중복된 WORK명이 존재합니다.");
+				alert('<spring:message code="backup_management.effective_work_nm"/>');
 				document.getElementById("wrk_nm").focus();
 			}
 		},
@@ -823,7 +823,7 @@ function fn_check() {
 								</div>
 							</li>
 							<li>
-								<p class="op_tit">기타</p>
+								<p class="op_tit"><spring:message code="common.etc" /></p>
 								<div class="inp_chk third">
 									<span>
 										<input type="checkbox" id="option_5_1" name="opt" value="Y" grp_cd="TC0010" opt_cd="TC001001"/>

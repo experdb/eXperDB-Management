@@ -1,5 +1,7 @@
 package com.k4m.dx.tcontrol.functions.schedule.service;
 
+import java.util.Date;
+
 public class ScheduleVO {
 
 	private int rownum;
@@ -17,7 +19,7 @@ public class ScheduleVO {
 	private String exe_s;
 	private String exe_hms;
 	private String prev_exe_dtm;
-	private String nxt_exe_dtm;
+	private Date nxt_exe_dtm;
 	private String frst_regr_id;
 	private String frst_reg_dtm;
 	private String lst_mdfr_id;
@@ -159,12 +161,12 @@ public class ScheduleVO {
 		this.prev_exe_dtm = prev_exe_dtm;
 	}
 
-	public String getNxt_exe_dtm() {
+	public Date getNxt_exe_dtm() {
 		return nxt_exe_dtm;
 	}
 
-	public void setNxt_exe_dtm(String nxt_exe_dtm) {
-		this.nxt_exe_dtm = nxt_exe_dtm;
+	public void setNxt_exe_dtm(Date date) {
+		this.nxt_exe_dtm = date;
 	}
 
 	public String getFrst_regr_id() {

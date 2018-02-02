@@ -141,8 +141,8 @@
 		<if test="wrk_nm == '' ">
 			AND B.WRK_NM LIKE '%'
 		</if>
-		<if test="fix_rsltcd == null and fix_rsltcd == '' ">
-			(A.FIX_RSLTCD IS NULL OR A.FIX_RSLTCD IN('TC002002'))
+		<if test="fix_rsltcd != 'TC002002' and fix_rsltcd != 'TC002003' ">
+			AND (A.FIX_RSLTCD IS NULL OR A.FIX_RSLTCD IN('TC002002'))
 		</if>
 		<if test="fix_rsltcd == 'TC002003' ">
 			AND A.FIX_RSLTCD IS NULL

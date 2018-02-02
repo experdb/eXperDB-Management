@@ -853,7 +853,7 @@ function checkFolder(keyType){
 								</div>
 							</li>
 							<li>
-								<p class="op_tit">기타</p>
+								<p class="op_tit"><spring:message code="common.etc" /></p>
 								<div class="inp_chk third">
 									<span>
 										<input type="checkbox" id="option_5_1" name="opt" value="Y" grp_cd="TC0010" opt_cd="TC001001"

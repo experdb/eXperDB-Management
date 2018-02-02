@@ -45,8 +45,20 @@ function fn_init(){
 	searching : false,	
 	bSort: false,
 	columns : [
-	{data : "START_TIME", className : "dt-center", defaultContent : ""}, 
-	{data : "END_TIME", className : "dt-center", defaultContent : ""}, 
+	{data : "START_TIME", className : "dt-center", defaultContent : "", 
+		"render": function (data, type, full) {		
+			var html = full.START_DATE+' '+full.START_TIME ;
+				return html;
+				return data;
+		}		
+	}, 
+	{data : "END_TIME", className : "dt-center", defaultContent : "", 
+		"render": function (data, type, full) {		
+			var html = full.END_DATE+' '+full.END_TIME ;
+				return html;
+				return data;
+		}		
+	},
 	{data : "MODE", className : "dt-center", defaultContent : ""}, 
 	{data : "DATA", className : "dt-center", defaultContent : ""}, 
 	{data : "ARCLOG", className : "dt-center", defaultContent : ""}, 
@@ -58,6 +70,20 @@ function fn_init(){
 	{data : "STATUS", className : "dt-center", defaultContent : ""}
 	]
 	});
+	
+	
+	table.tables().header().to$().find('th:eq(0)').css('min-width', '120px');
+	table.tables().header().to$().find('th:eq(1)').css('min-width', '120px');
+	table.tables().header().to$().find('th:eq(2)').css('min-width', '75px');
+	table.tables().header().to$().find('th:eq(3)').css('min-width', '75px');
+	table.tables().header().to$().find('th:eq(4)').css('min-width', '75px');
+	table.tables().header().to$().find('th:eq(5)').css('min-width', '75px');
+	table.tables().header().to$().find('th:eq(6)').css('min-width', '75px');
+	table.tables().header().to$().find('th:eq(7)').css('min-width', '75px');
+	table.tables().header().to$().find('th:eq(8)').css('min-width', '75px');  
+	table.tables().header().to$().find('th:eq(9)').css('min-width', '75px');
+	table.tables().header().to$().find('th:eq(10)').css('min-width', '75px');  
+	$(window).trigger('resize'); 
 }
 
 
@@ -101,23 +127,23 @@ $(window.document).ready(function() {
 <div class="pop_container">
 	<div class="pop_cts" style="height: 800px;">
 		<p class="tit">
-			RMAN 백업 정보
+			RMAN <spring:message code='common.backInfo' />
 		</p>
 		<div class="overflow_area" style="height: 600px;">
 			<table id="rmanShowList" class="display" cellspacing="0" width="100%">
 				<thead>
 					<tr>
-						<th scope="col">StartTime</th>
-						<th scope="col">EndTime</th>
-						<th scope="col">Mode</th>
-						<th scope="col">Data</th>
-						<th scope="col">ArcLog</th>
-						<th scope="col">SrvLog</th>
-						<th scope="col">Total</th>
-						<th scope="col">Compressed</th>
-						<th scope="col">CurTLI</th>
-						<th scope="col">ParentTLI</th>
-						<th scope="col">Status</th>
+						<th scope="col"><spring:message code='etc.etc16' /></th>
+						<th scope="col"><spring:message code='etc.etc17' /></th>
+						<th scope="col"><spring:message code='backup_management.backup_option' /></th>
+						<th scope="col"><spring:message code='etc.etc18' /></th>
+						<th scope="col"><spring:message code='etc.etc19' /></th>
+						<th scope="col"><spring:message code='etc.etc20' /></th>
+						<th scope="col"><spring:message code='etc.etc21' /></th>
+						<th scope="col"><spring:message code='etc.etc22' /></th>
+						<th scope="col"><spring:message code='etc.etc23' /></th>
+						<th scope="col"><spring:message code='etc.etc24' /></th>
+						<th scope="col"><spring:message code='etc.etc25' /></th>
 					</tr>
 				</thead>
 			</table>

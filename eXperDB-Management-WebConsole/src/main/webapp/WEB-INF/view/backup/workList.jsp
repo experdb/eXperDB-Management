@@ -170,7 +170,7 @@ function fn_rmanShow(bck, db_svr_id){
 	
 	  var frmPop= document.frmPopup;
 	    var url = '/rmanShowView.do';
-	    window.open('','popupView','width=1000, height=800');  
+	    window.open('','popupView','width=1500, height=800');  
 	     
 	    frmPop.action = url;
 	    frmPop.target = 'popupView';

@@ -97,8 +97,8 @@ public class ClientTester {
 			//clientTester.dxT020(Ip, port);
 			//clientTester.dxT021(Ip, port);
 			//clientTester.dxT023(Ip, port);
-			clientTester.dxT024(Ip, port);
-			//clientTester.dxT025(Ip, port);
+			//clientTester.dxT024(Ip, port);
+			clientTester.dxT025(Ip, port);
 			
 			//clientTester.test();
 		} catch(Exception e) {
