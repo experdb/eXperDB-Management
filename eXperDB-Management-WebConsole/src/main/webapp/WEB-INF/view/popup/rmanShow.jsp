@@ -127,7 +127,7 @@ $(window.document).ready(function() {
 <div class="pop_container">
 	<div class="pop_cts" style="height: 800px;">
 		<p class="tit">
-			RMAN <spring:message code='common.backInfo' />
+			Online <spring:message code='common.backInfo' />
 		</p>
 		<div class="overflow_area" style="height: 600px;">
 			<table id="rmanShowList" class="display" cellspacing="0" width="100%">
