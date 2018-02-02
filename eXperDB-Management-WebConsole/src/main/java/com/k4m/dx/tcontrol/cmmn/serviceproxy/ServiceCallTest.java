@@ -32,14 +32,11 @@ public class ServiceCallTest {
 		ServiceCallTest test = new ServiceCallTest();
 
 		//test.loginTest(restIp, restPort);
-		
-		
 
-		
 		//test.selectProfileProtectionVersion(restIp, restPort);
 		
 		//감사로그 > 암복호화
-		//test.selectAuditLogSiteList(restIp, restPort);
+		test.selectAuditLogSiteList(restIp, restPort);
 		
 		//감사로그 > 관리서버 감사로그
 		//test.selectAuditLogList(restIp, restPort);
@@ -51,7 +48,7 @@ public class ServiceCallTest {
 		//test.selectBackupLogList(restIp, restPort);
 		
 		//보안정책 > 정책관리
-		test.selectProfileList(restIp, restPort);
+		//test.selectProfileList(restIp, restPort);
 
 		
 	}
@@ -231,7 +228,7 @@ public class ServiceCallTest {
 		HashMap header = new HashMap();
 		header.put(SystemCode.FieldName.LOGIN_ID, "admin");
 		header.put(SystemCode.FieldName.ENTITY_UID, "00000000-0000-0000-0000-000000000001");
-		header.put(SystemCode.FieldName.TOKEN_VALUE, "7b7LmeDY5/6RdkNz1fISReCvP5eK9MV5vHudYoNaMfc=");
+		header.put(SystemCode.FieldName.TOKEN_VALUE, "9NBxE2jzkr4onz8QiLK9fLeKF2JVT1AAnxkj9ymUy1A=");
 
 		JSONObject resultJson = api.callService(strService, strCommand, header, parameters.toString());
 		
@@ -246,7 +243,7 @@ public class ServiceCallTest {
 		String resultCode = (String) resultJson.get("resultCode");
 		String resultMessage = (String) resultJson.get("resultMessage");
 		
-		System.out.println("resultCode : " + resultCode + " resultMessage : " + resultMessage);
+		//System.out.println("resultCode : " + resultCode + " resultMessage : " + resultMessage);
 		
 	}
 	
