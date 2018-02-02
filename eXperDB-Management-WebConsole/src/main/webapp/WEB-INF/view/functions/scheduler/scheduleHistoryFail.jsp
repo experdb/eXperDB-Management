@@ -35,7 +35,7 @@
 					render : function(data, type, full, meta) {	 						
 						var html = '';
  						if(full.fix_rsltcd == 'TC002002'){
- 							html += '<span class="btn btnC_01 btnF_02" onClick=javascript:fn_fixLog('+full.exe_sn+');><input type="button" value="미해결"></span>';
+ 							html += '<span class="btn btnC_01 btnF_02" onClick=javascript:fn_fixLog('+full.exe_sn+');><input type="button" value="<spring:message code="etc.etc30"/>"></span>';
  						} else {
  							if(full.exe_rslt_cd == 'TC001701'){
  								html += ' - ';
@@ -196,17 +196,17 @@
 	<div id="pop_layer_fix_rslt_reg" class="pop-layer">
 		<div class="pop-container">
 			<div class="pop_cts" style="width: 60%; margin: 0 auto; min-height:0; min-width:0;">
-				<p class="tit" style="margin-bottom: 15px;">조치결과 등록</p>
+				<p class="tit" style="margin-bottom: 15px;"><spring:message code="etc.etc33"/></p>
 				<table class="write" border="0">
-					<caption>조치결과 등록</caption>
+					<caption><spring:message code="etc.etc33"/></caption>
 					<tbody>
 						<tr>
 							<td>
 								<div class="inp_rdo">
 									<input name="rdo" id="rdo_2_3" type="radio" value="TC002001"  checked="checked">
-										<label for="rdo_2_3" style="margin-right: 2%;">해결</label> 
+										<label for="rdo_2_3" style="margin-right: 2%;"><spring:message code="etc.etc29"/></label> 
 									<input name="rdo" id="rdo_2_4" type="radio" value="TC002002"> 
-										<label for="rdo_2_4">미해결</label>
+										<label for="rdo_2_4"><spring:message code="etc.etc30"/></label>
 								</div>
 							</td>
 						</tr>
@@ -267,11 +267,11 @@
 								<td><input type="text" class="txt t3" name="scd_nm" id="scd_nm" maxlength="25"/></td>
 								<th scope="row" class="t9"><spring:message code="common.work_name" /></th>
 								<td><input type="text" name="wrk_nm" id="wrk_nm" class="txt t3" maxlength="25"/></td>
-								<th scope="row" class="t9" >조치결과</th>
+								<th scope="row" class="t9" ><spring:message code="etc.etc31"/></th>
 								<td><select name="fix_rsltcd" id="fix_rsltcd" class="txt t3" style="width:150px;">
 										<option value=""><spring:message code="schedule.total" /></option>
-										<option value="TC002003">조치</option>
-										<option value="TC002002">미해결</option>
+										<option value="TC002003"><spring:message code="etc.etc34"/></option>
+										<option value="TC002002"><spring:message code="etc.etc30"/></option>
 									</select>
 								</td>
 							</tr>
@@ -287,7 +287,7 @@
 						<tr>
 							<th width="30"><spring:message code="common.no"/></th>							
 							<th width="100"><spring:message code="schedule.result"/></th>
-							<th width="100">조치결과</th>
+							<th width="100"><spring:message code="etc.etc31"/></th>
 							<th width="200" class="dt-center"><spring:message code="schedule.schedule_name"/></th>
 							<th width="100"><spring:message code="common.dbms_name"/></th>
 							<th width="200"class="dt-center"><spring:message code="common.work_name"/></th>

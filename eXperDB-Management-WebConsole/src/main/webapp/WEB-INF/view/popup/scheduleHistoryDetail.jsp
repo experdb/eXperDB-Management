@@ -70,7 +70,7 @@ function fn_init() {
 					var html = '<span class="btn btnC_01 btnF_02"><button onclick="fn_failLog('+full.exe_sn+')"><img src="../images/ico_state_01.png" style="margin-right:3px;"/>Fail</button></span>';
 					return html;
 				}else{
-					var html = '<span class="btn btnC_01 btnF_02"><img src="../images/ico_state_03.png" style="margin-right:3px;"/>실행중</span>';
+					var html = '<span class="btn btnC_01 btnF_02"><img src="../images/ico_state_03.png" style="margin-right:3px;"/><spring:message code="etc.etc28"/></span>';
 					return html;
 				}
 			}
@@ -80,9 +80,9 @@ function fn_init() {
 				render : function(data, type, full, meta) {	 						
 					var html = '';
 					if (full.fix_rsltcd == 'TC002001') {
-						html += '<span class="btn btnC_01 btnF_02" onClick=javascript:fn_fixLog('+full.exe_sn+');><input type="button" value="해결"></span>';
+						html += '<span class="btn btnC_01 btnF_02" onClick=javascript:fn_fixLog('+full.exe_sn+');><input type="button" value="<spring:message code="etc.etc29"/>"></span>';
 					} else if(full.fix_rsltcd == 'TC002002'){
-						html += '<span class="btn btnC_01 btnF_02" onClick=javascript:fn_fixLog('+full.exe_sn+');><input type="button" value="미해결"></span>';
+						html += '<span class="btn btnC_01 btnF_02" onClick=javascript:fn_fixLog('+full.exe_sn+');><input type="button" value="<spring:message code="etc.etc30"/>"></span>';
 					} else {
 						if(full.exe_rslt_cd == 'TC001701'){
 							html += ' - ';
@@ -237,17 +237,17 @@ function fn_fix_rslt_msg_modify(){
 	<div id="pop_layer_fix_rslt_reg" class="pop-layer">
 		<div class="pop-container">
 			<div class="pop_cts" style="width: 60%; margin: 0 auto; min-height:0; min-width:0;">
-				<p class="tit" style="margin-bottom: 15px;">조치결과 등록</p>
+				<p class="tit" style="margin-bottom: 15px;"><spring:message code="etc.etc33"/></p>
 				<table class="write" border="0">
-					<caption>조치결과 등록</caption>
+					<caption><spring:message code="etc.etc33"/></caption>
 					<tbody>
 						<tr>
 							<td>
 								<div class="inp_rdo">
 									<input name="rdo_r" id="rdo_r_1" type="radio" checked="checked">
-										<label for="rdo_r_1" style="margin-right: 2%;">해결</label> 
+										<label for="rdo_r_1" style="margin-right: 2%;"><spring:message code="etc.etc29"/></label> 
 									<input name="rdo_r" id="rdo_r_2" type="radio"> 
-										<label for="rdo_r_2">미해결</label>
+										<label for="rdo_r_2"><spring:message code="etc.etc30"/></label>
 								</div>
 							</td>
 						</tr>						

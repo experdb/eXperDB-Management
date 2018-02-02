@@ -148,7 +148,7 @@ $(window.document).ready(function() {
 			},
 			success : function(data) {
 				if(data == "F"){
-					alert("중복된 Work명 입니다.");
+					alert('<spring:message code="message.msg191"/>');
 					return false;
 				}else{
 					result(data);
@@ -216,19 +216,19 @@ function valCheck(){
 		$("#bck_mtn_ecnt").focus();		
 		return false;
 	}else if($("#acv_file_stgdt").val() == ""){
-		alert("아카이브 파일보관일을 입력해주세요.");		
+		alert('<spring:message code="message.msg198"/>');		
 		$("#acv_file_stgdt").focus();
 		return false;
 	}else if($("#acv_file_mtncnt").val() == ""){
-		alert("아카이브 파일유지개수를 입력해주세요.");		
+		alert('<spring:message code="message.msg199"/>');		
 		$("#acv_file_mtncnt").focus();
 		return false;
 	}else if($("#log_file_stg_dcnt").val() == ""){
-		alert("서버로그 파일 보관일수를 입력해주세요.");		
+		alert('<spring:message code="message.msg200"/>');		
 		$("#log_file_stg_dcnt").focus();
 		return false;
 	}else if($("#log_file_mtn_ecnt").val() == ""){
-		alert("서버로그 파일 유지개수를 입력해주세요.");		
+		alert('<spring:message code="message.msg201"/>');		
 		$("#log_file_mtn_ecnt").focus();
 		return false;
 	}else{

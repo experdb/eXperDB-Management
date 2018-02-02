@@ -53,7 +53,7 @@ function fn_init(){
 					var html = '<img src="../images/ico_state_04.png"  id="scheduleStop"/>';
 						return html;
 				}else if(full.scd_cndt == "TC001802"){
-					var html = '<img src="../images/ico_state_03.png" id="scheduleRunning" /> 실행중';
+					var html = '<img src="../images/ico_state_03.png" id="scheduleRunning" /> <spring:message code="etc.etc28"/>';
 					return html;
 				}else{
 					var html = '<img src="../images/ico_state_06.png" id="scheduleStart" />';
@@ -180,7 +180,7 @@ function fn_init(){
 	}); 
  	
  	$('#scheduleList tbody').on('click','#scheduleRunning', function () {
- 	    alert("실행중인 스케줄은 정지할수 없습니다.");
+ 	    alert('<spring:message code="message.msg189"/>');
  	    return false;
 	}); 
  	
@@ -409,7 +409,7 @@ function fn_modifyScheduleListView(){
 							<th width="100"><spring:message code="schedule.pre_run_time" /></th>
 							<th width="100"><spring:message code="schedule.next_run_time" /></th>
 							<th width="70"><spring:message code="common.run_status" /></th>
-							<th width="100">활성/비활성</th>
+							<th width="100"><spring:message code="etc.etc26"/></th>
 							<th width="100"><spring:message code="data_transfer.detail_search" /></th>
 							<th width="50"><spring:message code="common.register" /></th>
 							<th width="100"><spring:message code="common.regist_datetime" /></th>

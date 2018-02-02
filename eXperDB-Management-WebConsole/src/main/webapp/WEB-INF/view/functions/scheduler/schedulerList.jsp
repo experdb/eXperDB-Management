@@ -71,7 +71,7 @@ function fn_init(){
 						var html = '<img src="../images/ico_state_04.png"  id="scheduleStop"/>';
 							return html;
 					}else if(full.scd_cndt == "TC001802"){
-						var html = '<img src="../images/ico_state_03.png" id="scheduleRunning" /> 실행중';
+						var html = '<img src="../images/ico_state_03.png" id="scheduleRunning" /> <spring:message code="etc.etc28"/>';
 						return html;
 					}else{
 						var html = '<img src="../images/ico_state_06.png" id="scheduleStart" />';
@@ -181,7 +181,7 @@ function fn_init(){
  	
  	
  	$('#scheduleList tbody').on('click','#scheduleRunning', function () {
- 	    alert("실행중인 스케줄은 정지할수 없습니다.");
+ 	    alert('<spring:message code="message.msg189"/>');
  	    return false;
 	}); 
  	
@@ -560,7 +560,7 @@ function fn_makeToMin(){
 <div id="contents">
 	<div class="contents_wrap">
 		<div class="contents_tit">
-			<h4>스케줄관리<a href="#n"><img src="../images/ico_tit.png" class="btn_info"/></a></h4>
+			<h4><spring:message code="etc.etc27"/><a href="#n"><img src="../images/ico_tit.png" class="btn_info"/></a></h4>
 				<div class="infobox"> 
 					<ul>
 						<li><spring:message code="help.schedule_run_stop_01" /></li>
@@ -630,7 +630,7 @@ function fn_makeToMin(){
 									<td>
 									<select class="select t8" name="scd_cndt" id="scd_cndt">
 										<option value="%"><spring:message code="schedule.total" /></option>
-										<option value="TC001801">시작</option>
+										<option value="TC001801"><spring:message code="etc.etc37"/></option>
 										<option value="TC001802"><spring:message code="schedule.run" /></option>
 										<option value="TC001803"><spring:message code="schedule.stop" /></option>
 									</select>	</td>				
@@ -657,7 +657,7 @@ function fn_makeToMin(){
 							<th width="130"><spring:message code="schedule.pre_run_time" /></th>
 							<th width="130"><spring:message code="schedule.next_run_time" /></th>
 							<th width="70"><spring:message code="common.run_status" /></th>
-							<th width="130">활성/비활성</th>
+							<th width="130"><spring:message code="etc.etc26"/></th>
 							<th width="100"><spring:message code="data_transfer.detail_search" /></th>
 							<th width="65"><spring:message code="common.register" /></th>
 							<th width="130"><spring:message code="common.regist_datetime" /></th>

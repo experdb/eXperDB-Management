@@ -7,28 +7,28 @@
   	<div id="pop_layer_fix_rslt_msg" class="pop-layer">
 		<div class="pop-container">
 			<div class="pop_cts" style="width: 60%; margin: 0 auto; min-height:0; min-width:0;">
-				<p class="tit" style="margin-bottom: 15px;">조치결과 정보</p>
+				<p class="tit" style="margin-bottom: 15px;"><spring:message code="etc.etc32"/></p>
 				<table class="write" border="0">
-					<caption>조치결과 정보</caption>
+					<caption><spring:message code="etc.etc32"/></caption>
 					<tbody>
 						<tr>
 							<td>
 								<div class="inp_rdo">
 									<input name="rdo" id="rdo_2_3" type="radio" value="TC002001" checked="checked">
-										<label for="rdo_2_3" style="margin-right: 2%;">해결</label> 
+										<label for="rdo_2_3" style="margin-right: 2%;"><spring:message code="etc.etc29"/></label> 
 									<input name="rdo" id="rdo_2_4" type="radio" value="TC002002"> 
-										<label for="rdo_2_4">미해결</label>
+										<label for="rdo_2_4"><spring:message code="etc.etc30"/></label>
 								</div>
 							</td>
 						</tr>
 						<tr>
 							<td>
 								<span>
-									조치자 : <input type="text" name="lst_mdfr_id"  id="lst_mdfr_id">
+									<spring:message code="etc.etc35"/> : <input type="text" name="lst_mdfr_id"  id="lst_mdfr_id">
 								</span>
 	
 								<span>
-									조치일자 : <input type="text" name="lst_mdf_dtm"  id="lst_mdf_dtm"  style="width: 210px;">
+									<spring:message code="etc.etc36"/> : <input type="text" name="lst_mdf_dtm"  id="lst_mdf_dtm"  style="width: 210px;">
 								</span>
 							</td>
 						</tr>

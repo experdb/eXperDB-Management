@@ -455,7 +455,7 @@ function fn_insertSchedule(){
 			},
 			success : function(result) {
 				if(result == "F"){
-					alert("중복된 스케줄명 입니다.");
+					alert('<spring:message code="message.msg190"/>');
 					return false;
 				}else{
 					alert('<spring:message code="message.msg43" />');

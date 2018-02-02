@@ -503,7 +503,7 @@ var haCnt = 0;
 					if (result == "true") {
 						fn_insert_wrk();
 					} else {
-						alert("중복된 스케줄명 입니다.");
+						alert('<spring:message code="message.msg190"/>');
 						return false;
 					}
 				},

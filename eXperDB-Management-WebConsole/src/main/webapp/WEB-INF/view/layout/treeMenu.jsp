@@ -280,7 +280,7 @@ $(window.document).ready(
 		          }
 		          
 		         if(aut.length != 0 && aut[i].read_aut_yn == "Y" && aut[i].mnu_cd == "MN000102"){
-		        	 html3 += '         <ul class="depth_1 lnbMenu"><li class="ico2_2"><a href="/selectScheduleListView.do" onClick=javascript:fn_GoLink("/selectScheduleListView.do");><img src="../images/ico_lnb_11.png" id="treeImg">스케줄관리</a></li></ul>';
+		        	 html3 += '         <ul class="depth_1 lnbMenu"><li class="ico2_2"><a href="/selectScheduleListView.do" onClick=javascript:fn_GoLink("/selectScheduleListView.do");><img src="../images/ico_lnb_11.png" id="treeImg"><spring:message code="etc.etc27"/></a></li></ul>';
 		          }
 		         
 		         if(aut.length != 0 && aut[i].read_aut_yn == "Y" && aut[i].mnu_cd == "MN000103"){

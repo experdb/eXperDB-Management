@@ -71,7 +71,7 @@
 						           </c:otherwise> 
 						         </c:choose>
 								</a>
-								<p class="state_txt">시작</p>
+								<p class="state_txt"><spring:message code="etc.etc37"/></p>
 							</li>
 							<li>
 								<p class="state">

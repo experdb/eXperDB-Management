@@ -86,7 +86,7 @@ function fn_rman_init(){
 	 						} else if(full.exe_rslt_cd == 'TC001702'){
 	 							html += '<span class="btn btnC_01 btnF_02"><button onclick="fn_failLog('+full.exe_sn+')"><img src="../images/ico_state_01.png" style="margin-right:3px;"/>Fail</button></span>';
 	 						} else {
-	 							html +='<span class="btn btnC_01 btnF_02"><img src="../images/ico_state_03.png" style="margin-right:3px;"/>실행중</span>';
+	 							html +='<span class="btn btnC_01 btnF_02"><img src="../images/ico_state_03.png" style="margin-right:3px;"/><spring:message code="etc.etc28"/></span>';
 	 						}
 	 						return html;
 	 					},
@@ -98,9 +98,9 @@ function fn_rman_init(){
 	 					render : function(data, type, full, meta) {	 						
 	 						var html = '';
 	 						if (full.fix_rsltcd == 'TC002001') {
-	 							html += '<span class="btn btnC_01 btnF_02" onClick=javascript:fn_fixLog('+full.exe_sn+');><input type="button" value="해결"></span>';
+	 							html += '<span class="btn btnC_01 btnF_02" onClick=javascript:fn_fixLog('+full.exe_sn+');><input type="button" value="<spring:message code="etc.etc29"/>"></span>';
 	 						} else if(full.fix_rsltcd == 'TC002002'){
-	 							html += '<span class="btn btnC_01 btnF_02" onClick=javascript:fn_fixLog('+full.exe_sn+');><input type="button" value="미해결"></span>';
+	 							html += '<span class="btn btnC_01 btnF_02" onClick=javascript:fn_fixLog('+full.exe_sn+');><input type="button" value="<spring:message code="etc.etc30"/>"></span>';
 	 						} else {
 	 							if(full.exe_rslt_cd == 'TC001701'){
 	 								html += ' - ';
@@ -168,7 +168,7 @@ function fn_dump_init(){
 	 						} else if(full.exe_rslt_cd == 'TC001702'){
 	 							html += '<span class="btn btnC_01 btnF_02"><button onclick="fn_failLog('+full.exe_sn+')"><img src="../images/ico_state_01.png" style="margin-right:3px;"/>Fail</button></span>';
 	 						} else {
-	 							html +='<span class="btn btnC_01 btnF_02"><img src="../images/ico_state_03.png" style="margin-right:3px;"/>실행중</span>';
+	 							html +='<span class="btn btnC_01 btnF_02"><img src="../images/ico_state_03.png" style="margin-right:3px;"/><spring:message code="etc.etc28"/></span>';
 	 						}
 	 						return html;
 	 					},
@@ -180,9 +180,9 @@ function fn_dump_init(){
 	 					render : function(data, type, full, meta) {	 						
 	 						var html = '';
 	 						if (full.fix_rsltcd == 'TC002001') {
-	 							html += '<span class="btn btnC_01 btnF_02" onClick=javascript:fn_fixLog('+full.exe_sn+');><input type="button" value="해결"></span>';
+	 							html += '<span class="btn btnC_01 btnF_02" onClick=javascript:fn_fixLog('+full.exe_sn+');><input type="button" value="<spring:message code="etc.etc29"/>"></span>';
 	 						} else if(full.fix_rsltcd == 'TC002002'){
-	 							html += '<span class="btn btnC_01 btnF_02" onClick=javascript:fn_fixLog('+full.exe_sn+');><input type="button" value="미해결"></span>';
+	 							html += '<span class="btn btnC_01 btnF_02" onClick=javascript:fn_fixLog('+full.exe_sn+');><input type="button" value="<spring:message code="etc.etc30"/>"></span>';
 	 						} else {
 	 							if(full.exe_rslt_cd == 'TC001701'){
 	 								html += ' - ';
@@ -488,17 +488,17 @@ function fn_fix_rslt_msg_modify(){
 	<div id="pop_layer_fix_rslt_reg" class="pop-layer">
 		<div class="pop-container">
 			<div class="pop_cts" style="width: 60%; margin: 0 auto; min-height:0; min-width:0;">
-				<p class="tit" style="margin-bottom: 15px;">조치결과 등록</p>
+				<p class="tit" style="margin-bottom: 15px;"><spring:message code="etc.etc33"/></p>
 				<table class="write" border="0">
-					<caption>조치결과 등록</caption>
+					<caption><spring:message code="etc.etc33"/></caption>
 					<tbody>
 						<tr>
 							<td>
 								<div class="inp_rdo">
 									<input name="rdo_r" id="rdo_r_1" type="radio" checked="checked">
-										<label for="rdo_r_1" style="margin-right: 2%;">해결</label> 
+										<label for="rdo_r_1" style="margin-right: 2%;"><spring:message code="etc.etc29"/></label> 
 									<input name="rdo_r" id="rdo_r_2" type="radio"> 
-										<label for="rdo_r_2">미해결</label>
+										<label for="rdo_r_2"><spring:message code="etc.etc30"/></label>
 								</div>
 							</td>
 						</tr>						
@@ -608,12 +608,12 @@ function fn_fix_rslt_msg_modify(){
 							<tr>
 								<th scope="row" class="t9"><spring:message code="common.work_name" /></th>
 								<td><input type="text" name="wrk_nm" id="wrk_nm" class="txt t5" maxlength="25"  /></td>
-								<th scope="row" class="t9" >조치결과</th>
+								<th scope="row" class="t9" ><spring:message code="etc.etc31"/></th>
 								<td><select name="fix_rsltcd" id="fix_rsltcd" class="select t5" >
 										<option value=""><spring:message code="schedule.total" /></option>
-										<option value="TC002003">조치</option>
-										<option value="TC002001">해결</option>
-										<option value="TC002002">미해결</option>
+										<option value="TC002003"><spring:message code="etc.etc34"/></option>
+										<option value="TC002001"><spring:message code="etc.etc29"/></option>
+										<option value="TC002002"><spring:message code="etc.etc30"/></option>
 									</select>
 								</td>
 							</tr>
@@ -635,7 +635,7 @@ function fn_fix_rslt_msg_modify(){
 								<th width="100"><spring:message code="backup_management.work_end_time" /></th>
 								<th width="70"><spring:message code="backup_management.elapsed_time" /></th>
 								<th width="100"><spring:message code="common.status" /></th>
-								<th width="100">조치결과</th>
+								<th width="100"><spring:message code="etc.etc31"/></th>
 							</tr>
 						</thead>
 					</table>
@@ -657,7 +657,7 @@ function fn_fix_rslt_msg_modify(){
 								<th width="100"><spring:message code="backup_management.work_end_time" /></th>
 								<th width="100"><spring:message code="backup_management.elapsed_time" /></th>
 								<th width="100"><spring:message code="common.status" /></th>
-								<th width="100">조치결과</th>
+								<th width="100"><spring:message code="etc.etc31"/></th>
 							</tr>
 						</thead>
 					</table>

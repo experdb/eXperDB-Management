@@ -481,9 +481,9 @@ function fn_dataCompareChcek(svrDbList){
 			},
 			success : function(result) {
 				if(result.connChk >0){
-					alert("실행중인 커넥터가 존재 합니다.");
+					alert('<spring:message code="message.msg193"/>');
 				}else if(result.scheduleChk){
-					alert("실행중인 스케줄이 존재 합니다.");
+					alert('<spring:message code="message.msg194"/>');
 				}else{
 					if (confirm("선택된 DBMS와 관련된 모든 데이터가 삭제됩니다.\n 정말 삭제하시겠습니까?")){
 						return false;
