@@ -753,4 +753,67 @@ public class SystemCode {
 
 		public static final String	SERVER	= "ATSV";
 	}
+	
+	public class Default {
+
+		public static final String	DEFAULT_FILE_UPLOAD_DIR						= "files/upload";
+
+		public static final String	DEFAULT_DATA_BACKUP_FILE_DIR				= "files/databak";
+
+		public static final String	DEFAULT_LOG_BACKUP_FILE_DIR					= "files/logbak";
+
+		public static final String	DEFAULT_QUERY_CONVERSION_FILE_DIR			= "files/queryconversion";
+
+		public static final String	DEFAULT_DATABASE_BACKUP_FILE_DIR			= "files/databasebak";
+
+		public static final String	DEFAULT_CORE_DB_PATH						= "data/experdb.core";
+
+		public static final String	DEFAULT_CORELOG_DB_PATH						= "data/experdb.corelog";
+
+		public static final String	DEFAULT_SITELOG_DB_PATH						= "data/experdb.sitelog";
+
+		public static final String	DEFAULT_BACKUPLOG_DB_PATH					= "data/experdb.backuplog";
+
+		public static final String	DEFAULT_MONITORLOG_DB_PATH					= "data/experdb.monitorlog";
+
+		public static final String	DEFAULT_HASH_ALGORITHM						= "SHA-256";
+
+		public static final String	DEFAULT_DIGEST_ALGORITHM					= "SHA-1";
+
+		public static final String	DEFAULT_RANDOM_BIT_GENERATOR_ALGORITHM		= "SHA1PRNG";
+
+		public static final String	DEFAULT_PSUEDO_RANDOM_FUNCTION				= "HmacSHA256";
+
+		public static final int		DEFAULT_PSUEDO_RANDOM_OUTPUT_BIT_LENGTH		= 256;
+
+		public static final int		DEFAULT_PSUEDO_RANDOM_OUTPUT_BYTE_LENGTH	= DEFAULT_PSUEDO_RANDOM_OUTPUT_BIT_LENGTH
+																						/ Byte.SIZE;
+
+		public static final String	DEFAULT_CHARACTER_SET						= "utf-8";
+
+		public static final String	DEFAULT_KEY_CIPHER_ALGORITHM				= "AESWrap";
+
+		public static final String	DEFAULT_DATA_CIPHER_ALGORITHM				= "AES/CBC/PKCS5PADDING";
+
+		public static final String	DEFAULT_KEY_SPEC_ALGORITHM					= "AES";
+
+		public static final int		DEFAULT_KEY_BIT_LENGTH						= 128;
+
+		public static final int		DEFAULT_IV_BYTE_LENGTH						= 16;
+
+		public static final int		DEFAULT_TOKEN_BIT_LENGTH					= 256;
+
+		public static final int		DEFAULT_TOKEN_USABLE_HOUR					= 168;
+
+		public static final String	DEFAULT_SYSTEM_UUID							= "00000000-0000-0000-0000-000000000000";
+
+		public static final String	DEFAULT_SYSTEM_NAME							= "SYSTEM";
+
+		public static final String	DEFAULT_ADMIN_UUID							= "00000000-0000-0000-0000-000000000001";
+
+		public static final String	DEFAULT_START_DATE_TIME						= "2015-01-01 00:00:00.000";
+
+		private Default() {
+		}
+	}
 }

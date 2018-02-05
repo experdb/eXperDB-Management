@@ -481,6 +481,10 @@
 				NAME
 				, SETTING
 				, SHORT_DESC
+				, UNIT
+				, CATEGORY
+				, MIN_VAL
+				, MAX_VAL
 		    FROM PG_SETTINGS
 
 		]]>
