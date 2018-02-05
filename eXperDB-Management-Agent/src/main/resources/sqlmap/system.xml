@@ -485,7 +485,9 @@
 				, CATEGORY
 				, MIN_VAL
 				, MAX_VAL
+                , row_number() over (partition by CATEGORY order by  NAME ASC) AS RNUM
 		    FROM PG_SETTINGS
+            ORDER BY CATEGORY ASC, RNUM DESC
 
 		]]>
 	</select>
