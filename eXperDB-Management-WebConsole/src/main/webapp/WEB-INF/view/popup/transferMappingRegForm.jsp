@@ -247,7 +247,7 @@
 	    			if(result.bottledwater !=null){
 	    				alert('<spring:message code="message.msg150"/>');
 	    			}else if(result.database !=null){
-	    				alert('<spring:message code="message.msg203"/>'');
+	    				alert('<spring:message code="message.msg203"/>');
 	    			}else if(result.data == null){
 	    				alert('<spring:message code="message.msg27" />');
 	    			}else{

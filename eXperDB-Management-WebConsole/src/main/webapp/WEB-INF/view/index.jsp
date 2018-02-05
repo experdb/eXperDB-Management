@@ -218,7 +218,7 @@
 						<ul>
 							<li>
 								<p class="state">
-									<img src="../images/ico_state_10.png" alt="connet" /><span>Connector</span>
+									<img src="../images/ico_state_10.png" alt="connet" /><span>Channel</span>
 								</p>
 								<c:choose>
 						           <c:when test="${fn:length(fn:escapeXml(transferInfo.connect_cnt))>2}">

@@ -5,7 +5,6 @@
 .tooltip {
     position: relative;
     display: inline-block;
-    border-bottom: 1px dotted black;
 }
 
 .tooltip .tooltiptext {
@@ -386,21 +385,13 @@ $(window.document).ready(
 							<div id="tree3">
 								<ul class="depth_1 lnbMenu">
 									<li class="t2"><div class="border">
-									<a href="#n"><img src="../images/ico_lnb_5.png" id="treeImg"><div class="tooltip">보안정책<span class="tooltiptext">보안정책</span></div></a>
+									<a href="#n"><img src="../images/ico_lnb_5.png" id="treeImg"><div class="tooltip">정책관리/키관리<span class="tooltiptext">정책관리/키관리</span></div></a>
 									</div>
 					    				<ul class="depth_2">
-						   				    <li class="ico2_3"><a href="/securityPolicy.do" onclick="fn_GoLink('/securityPolicy.do')"><img src="../images/ico_lnb_8.png" id="treeImg">정책리스트</a></li>
-						    			   	<li class="ico2_4"><a href="/securityPolicyInsert.do" onclick="fn_GoLink('/securityPolicyInsert.do')"><img src="../images/ico_lnb_9.png" id="treeImg">정책등록</a></li>
+						   				    <li class="ico2_3"><a href="/securityPolicy.do" onclick="fn_GoLink('/securityPolicy.do')"><img src="../images/ico_lnb_8.png" id="treeImg">보안정책관리</a></li>
+						    			   	<li class="ico2_3"><a href="/keyManage.do" onclick="fn_GoLink('/keyManage.do')"><img src="../images/ico_lnb_8.png" id="treeImg">암호화키관리</a></li>
 					   				  	</ul>
-				   				  	</li>
-				   				  	
-				   				  	<li class="t2"><div class="border">
-									<a href="#n"><img src="../images/ico_lnb_5.png" id="treeImg"><div class="tooltip">암호화키관리<span class="tooltiptext">암호화키관리</span></div></a>
-									</div>
-					    				<ul class="depth_2">
-						   				    <li class="ico2_3"><a href="/keyManage.do" onclick="fn_GoLink('/keyManage.do')"><img src="../images/ico_lnb_8.png" id="treeImg">암호화키리스트</a></li>
-					   				  	</ul>
-				   				  	</li>
+				   				  	</li>				   				  	
 				   				  	
 				   				  	<li class="t2"><div class="border">
 									<a href="#n"><img src="../images/ico_lnb_5.png" id="treeImg"><div class="tooltip">백업/복원<span class="tooltiptext">백업/복원</span></div></a>

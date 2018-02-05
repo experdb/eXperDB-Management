@@ -265,15 +265,10 @@ function fn_cookie(url) {
 					
 					<li><a href="#n"><span><img src="/images/encrypt.png" alt="ENCRYPT" /></span></a>
 						<ul class="depth_2">
-						    <li><a href="#n">보안정책</a>
+						    <li><a href="#n">정책관리/키관리</a>
         						<ul class="depth_3">
-									<li><a href="#n">정책리스트</a></li>
-									<li><a href="#n">정책등록</a></li>
-								</ul>
-        					</li>
-							<li><a href="#n">암호화키관리</a>
-        						<ul class="depth_3">
-									<li><a href="#n">암호화키리스트</a></li>
+									<li><a href="/securityPolicy.do">보안정책관리</a></li>
+									<li><a href="/keyManage.do">암호화키관리</a></li>
 								</ul>
         					</li>
         					<li><a href="#n">백업/복원</a>
@@ -284,17 +279,17 @@ function fn_cookie(url) {
         					</li>
 						    <li><a href="#n">감사로그</a>
         						<ul class="depth_3">
-									<li><a href="#n">암복호화</a></li>
-									<li><a href="#n">관리서버</a></li>
-									<li><a href="#n">암복호화키</a></li>
-									<li><a href="#n">백업및복원</a></li>
-									<li><a href="#n">자원사용</a></li>
+									<li><a href="/encodeDecodeAuditLog.do">암복호화</a></li>
+									<li><a href="/managementServerAuditLog.do">관리서버</a></li>
+									<li><a href="/encodeDecodeKeyAuditLog.do">암복호화키</a></li>
+									<li><a href="/backupRestoreAuditLog.do">백업및복원</a></li>
+									<li><a href="/resourcesUseAuditLog.do">자원사용</a></li>
 								</ul>
         					</li>
 							<li><a href="#n">설정</a>
         						<ul class="depth_3">
-									<li><a href="#n">보안정책옵션설정</a></li>
-									<li><a href="#n">암호화설정</a></li>
+									<li><a href="/securityPolicyOptionSet.do">보안정책옵션설정</a></li>
+									<li><a href="/securitySet.do">암호화설정</a></li>
 								</ul>
         					</li>
 						</ul>

@@ -40,7 +40,7 @@
 }
 
 .treeview .border {
-	background: #1e1905;
+/* 	background: #1e1905; */
 	padding: 3px;
 }
 
@@ -129,7 +129,12 @@
 }
 
 .treeview .hover {
-	color: #f58220;
+/* 	color: #f58220; */
+	text-decoration: none;
+	background-color: #f58220;
+    color: white;
+    border: 2px solid #f58220;
+    padding: 3px;
 	cursor: pointer;
 }
 
