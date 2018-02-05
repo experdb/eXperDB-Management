@@ -29,7 +29,7 @@ function fn_init(){
 	 * RMAN 백업설정 리스트
 	 ******************************************************** */
 	tableRman = $('#rmanDataTable').DataTable({
-	scrollY : "245px",
+	scrollY : "330px",
 	scrollX : true,
 	searching : false,	
 	deferRender : true,
@@ -78,7 +78,7 @@ function fn_init(){
 	 * DUMP 백업설정 리스트
 	 ******************************************************** */
 	tableDump = $('#dumpDataTable').DataTable({
-		scrollY : "245px",
+		scrollY : "330px",
 		scrollX: true,	
 		bDestroy: true,
 		paging : true,

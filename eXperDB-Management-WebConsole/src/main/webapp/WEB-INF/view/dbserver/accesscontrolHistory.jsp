@@ -21,7 +21,7 @@ var table = null;
 
 	function fn_init() {
 		table = $('#accesscontrolHistoryTable').DataTable({
-			scrollY : "240px",
+			scrollY : "310px",
 			paging: false,
 			searching : false,
 			scrollX: true,

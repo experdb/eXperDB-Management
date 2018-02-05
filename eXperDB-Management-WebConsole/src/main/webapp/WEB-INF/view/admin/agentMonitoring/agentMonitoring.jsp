@@ -76,7 +76,7 @@
 									</tbody>
 								</table>
 							</div>
-							<div class="overflow_area">
+							<div class="overflow_area" style="height: 365px;">
 								<table class="list">
 									<caption>Agent 모니터링 리스트</caption>
 									<colgroup>

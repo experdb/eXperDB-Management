@@ -418,7 +418,7 @@
 					</table>
 				</div>
 				
-				<div class="overflow_area">
+				<div class="overflow_area" style="height: 365px;">
 					<table class="list" id="scheduleHistoryTable">
 						<caption>MY스케줄 화면</caption>
 						<colgroup>

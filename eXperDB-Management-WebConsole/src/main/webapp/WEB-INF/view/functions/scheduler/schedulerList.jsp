@@ -14,7 +14,7 @@ function fn_init(){
 	 * work리스트
 	 ******************************************************** */
 	table = $('#scheduleList').DataTable({
-	scrollY : "245px",
+	scrollY : "425px",
 	scrollX: true,	
 	bDestroy: true,
 	paging : true,

@@ -55,7 +55,7 @@ $(window.document).ready(function() {
  ******************************************************** */
 function fn_rman_init(){
    	tableRman = $('#logRmanList').DataTable({	
-		scrollY: "545px",
+		scrollY: "405px",
 		searching : false,
 		scrollX: true,
 		bSort: false,
@@ -135,7 +135,7 @@ function fn_rman_init(){
  ******************************************************** */
 function fn_dump_init(){
    	tableDump = $('#logDumpList').DataTable({	
-		scrollY: "245px",	
+		scrollY: "325px",	
 		searching : false,
 		scrollX: true,
 		bSort: false,

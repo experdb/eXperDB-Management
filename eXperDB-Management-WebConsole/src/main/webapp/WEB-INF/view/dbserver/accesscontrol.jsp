@@ -22,7 +22,7 @@
 	
 	function fn_init() {
 		table = $('#accessControlTable').DataTable({
-			scrollY : "270px",
+			scrollY : "350px",
 			bSort: false,
 			paging: false,
 			scrollX: true,

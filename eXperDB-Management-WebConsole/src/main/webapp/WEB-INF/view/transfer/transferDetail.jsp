@@ -22,7 +22,7 @@
 
 	function fn_init() {
 		table = $('#transferDetailTable').DataTable({
-			scrollY : "250px",
+			scrollY : "425px",
 			searching : false,
 			deferRender : true,
 			scrollX: true,

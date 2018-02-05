@@ -355,7 +355,7 @@ input[type="text"]:disabled, input[type="text"].disabled {background:#e4e9ec;col
 
 /* Table
 -------------------------------------------------------------- */
-.overflow_area{height:365px;overflow-y:auto;border:1px solid #b8c3c6;}
+.overflow_area{/*height:365px;*/overflow-y:auto;border:1px solid #b8c3c6;}
 .overflow_area2{position:relative;top:0;left:0;height:365px;overflow-y:auto;border:1px solid #b8c3c6;padding-left:101px;}
 .overflow_area2 .row_th{width:101px;min-height:370px;position:absolute;top:0;left:0;border-right:1px solid #b8c3c6;padding-top:14px;text-align:center;color:#324452;font-size:14px;}
 .overflow_area3{height:700px;overflow-y:auto;border:1px solid #b8c3c6;}
@@ -588,7 +588,7 @@ body.bg{background:#fff url(../images/login_bg.png) center center no-repeat;}
 
 .contents_pop{position:relative;background:#fff;min-height:429px;padding:67px 50px 50px;}
 
-.contents{position:relative;background:#fff;min-height:657px;padding:67px 50px 50px;}
+.contents{position:relative;background:#fff;min-height:725px;padding:67px 50px 50px;}
 .contents .cmm_tab{width:100%;position:absolute;top:0;left:0;}
 .contents .cmm_tab ul:after{display:block;content:"";clear:both;}
 .contents .cmm_tab li{float:left;width:50%;}

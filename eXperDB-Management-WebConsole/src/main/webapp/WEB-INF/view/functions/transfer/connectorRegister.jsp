@@ -20,7 +20,7 @@
 
 	function fn_init() {
 		table = $('#connectorTable').DataTable({
-			scrollY : "245px",
+			scrollY : "310px",
 			searching : false,
 			deferRender : true,
 			scrollX: true,
@@ -47,10 +47,10 @@
 		table.tables().header().to$().find('th:eq(3)').css('min-width', '100px');
 		table.tables().header().to$().find('th:eq(4)').css('min-width', '70px');
 		table.tables().header().to$().find('th:eq(5)').css('min-width', '70px');
-		table.tables().header().to$().find('th:eq(6)').css('min-width', '70px');
-		table.tables().header().to$().find('th:eq(7)').css('min-width', '120px');
-		table.tables().header().to$().find('th:eq(8)').css('min-width', '70px');
-		table.tables().header().to$().find('th:eq(9)').css('min-width', '120px');
+		table.tables().header().to$().find('th:eq(6)').css('min-width', '65px');
+		table.tables().header().to$().find('th:eq(7)').css('min-width', '110px');
+		table.tables().header().to$().find('th:eq(8)').css('min-width', '65px');
+		table.tables().header().to$().find('th:eq(9)').css('min-width', '110px');
 	    $(window).trigger('resize'); 
 	    
 		//더블 클릭시 -> 쓰기 권한이 Y일 경우
@@ -291,10 +291,10 @@
 								<th width="100"><spring:message code="data_transfer.ip" /></th>
 								<th width="70"><spring:message code="data_transfer.port" /> </th>
 								<th width="70"><spring:message code="data_transfer.type" /></th>
-								<th width="70"><spring:message code="common.register" /></th>
-								<th width="120"><spring:message code="common.regist_datetime" /></th>
-								<th width="70"><spring:message code="common.modifier" /></th>
-								<th width="120"><spring:message code="common.modify_datetime" /></th>
+								<th width="65"><spring:message code="common.register" /></th>
+								<th width="110"><spring:message code="common.regist_datetime" /></th>
+								<th width="65"><spring:message code="common.modifier" /></th>
+								<th width="110"><spring:message code="common.modify_datetime" /></th>
 							</tr>
 						</thead>
 					</table>
