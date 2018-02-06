@@ -9,6 +9,7 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head>
+<link rel="shortcut icon" href="<c:url value='/css//images/logo.ico'/>"  type="image/x-icon" />
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <title>eXperDB</title>
 <link rel="stylesheet" type="text/css" href="/css/jquery-ui.css">
@@ -59,15 +60,45 @@ function fn_init(){
 				return data;
 		}		
 	},
-	{data : "MODE", className : "dt-center", defaultContent : ""}, 
+	{data : "MODE", className : "dt-center", defaultContent : "", 
+		"render": function (data, type, full) {		
+			var html = '';
+			if (full.MODE == 'FULL') {
+					html += '<spring:message code="backup_management.full_backup"/>';
+				} else if(full.MODE == 'ARCH'){
+					html += '<spring:message code="backup_management.change_log_backup"/>';
+				} else {
+					html +='<spring:message code="backup_management.incremental_backup"/>';
+				}
+				return html;
+		}
+	}, 
 	{data : "DATA", className : "dt-center", defaultContent : ""}, 
 	{data : "ARCLOG", className : "dt-center", defaultContent : ""}, 
 	{data : "SRVLOG", className : "dt-center", defaultContent : ""}, 
 	{data : "TOTAL", className : "dt-center", defaultContent : ""}, 
-	{data : "COMPRESSED", className : "dt-center", defaultContent : ""}, 
-	{data : "CURTLI", className : "dt-center", defaultContent : ""}, 
-	{data : "PARENTTLI", className : "dt-center", defaultContent : ""}, 
-	{data : "STATUS", className : "dt-center", defaultContent : ""}
+	{data : "COMPRESSED", className : "dt-center", defaultContent : "", 
+		"render": function (data, type, full) {		
+			var html = '';
+			if (full.STATUS == 'true') {
+					html += '<spring:message code="agent_monitoring.yes"/>';
+				} else {
+					html +='<spring:message code="agent_monitoring.no"/>';
+				}
+				return html;
+		}
+	}, 
+	{data : "STATUS", className : "dt-center", defaultContent : "", 
+		"render": function (data, type, full) {		
+			var html = '';
+			if (full.STATUS == 'OK') {
+					html += '<spring:message code="common.success"/>';
+				} else {
+					html +='<spring:message code="common.failed"/>';
+				}
+				return html;
+		}
+	}
 	]
 	});
 	
@@ -81,8 +112,6 @@ function fn_init(){
 	table.tables().header().to$().find('th:eq(6)').css('min-width', '75px');
 	table.tables().header().to$().find('th:eq(7)').css('min-width', '75px');
 	table.tables().header().to$().find('th:eq(8)').css('min-width', '75px');  
-	table.tables().header().to$().find('th:eq(9)').css('min-width', '75px');
-	table.tables().header().to$().find('th:eq(10)').css('min-width', '75px');  
 	$(window).trigger('resize'); 
 }
 
@@ -141,8 +170,6 @@ $(window.document).ready(function() {
 						<th scope="col"><spring:message code='etc.etc20' /></th>
 						<th scope="col"><spring:message code='etc.etc21' /></th>
 						<th scope="col"><spring:message code='etc.etc22' /></th>
-						<th scope="col"><spring:message code='etc.etc23' /></th>
-						<th scope="col"><spring:message code='etc.etc24' /></th>
 						<th scope="col"><spring:message code='etc.etc25' /></th>
 					</tr>
 				</thead>
