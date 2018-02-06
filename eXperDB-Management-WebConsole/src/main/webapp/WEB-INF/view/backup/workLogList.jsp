@@ -317,7 +317,7 @@ function fn_get_dump_list(){
 				alert("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""));
 			}
 		},
-		success : function(result) {
+		success : function(result) {	
 			tableDump.rows({selected: true}).deselect();
 			tableDump.clear().draw();
 			tableDump.rows.add(result).draw();
@@ -474,6 +474,7 @@ function fn_fix_rslt_msg_modify(){
 }
 
 
+
 </script>
 <%@include file="../cmmn/wrkLog.jsp"%>
 <%@include file="../cmmn/workRmanInfo.jsp"%>
@@ -546,7 +547,7 @@ function fn_fix_rslt_msg_modify(){
 				</ul>
 				<ul id="tab_dump" style="display:none">
 					<li><a href="javascript:selectTab('rman');">Online <spring:message code="menu.backup_history" /></a></li>
-					<li class="atv"><a href="javascript:selectTab('dump');">Online <spring:message code="menu.backup_history" /></a></li>
+					<li class="atv"><a href="javascript:selectTab('dump');">Dump <spring:message code="menu.backup_history" /></a></li>
 				</ul>
 			</div>
 			<div class="cmm_grp">

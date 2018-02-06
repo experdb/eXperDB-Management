@@ -1,6 +1,7 @@
 package com.k4m.dx.tcontrol.functions.schedule.web;
 
 
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -333,8 +334,117 @@ public class ScheduleController {
 	            	
 		            	scheduleVO.setNxt_exe_dtm(cal.getTime());
 		            // 매주
+		            /* 1. 요일 정의 week = { "0", "1", "2", "3", "4", "5", "6" } == { "일", "월", "화", "수", "목", "금", "토" }
+		             * 2. 오늘 날짜에 해당하는 그 주 날짜 가져옴
+		             * 3. 오늘의 요일 가져옴
+		             * 4. 오늘 요일로부터 next ---------------> 검색
+		             *    4.1현재 오늘요일 체크(X)일때 날짜검색하여 업데이트
+		             *    4.2 현재 오늘요일 체크(0)일때 날짜검색하여 업데이트
+		             * 5. 오늘 요일로부터 Prev <--------------- 검색
+		             *    5.1 처음부터 오늘요일 이전날짜 까지 검색하여 업데이트
+		             * 6. 현재오늘 요일만 체크되었을경우
+		             */
 		            }else if(exe_perd_cd.equals("TC001602")){
+		            	String detail = scheduleVO.getExe_h()+":"+scheduleVO.getExe_m()+":"+scheduleVO.getExe_s();
 		            	
+		         	    int  intNextCnt = 0; //next match count
+		         	    int  intPrevCnt = 0; //prev match count
+			       	    String strFirstCheck = null;
+			    	    String strChecked = null;	
+			    	    boolean prevCheck = false;
+			    	    boolean finalCheck = false;	  	            	
+		            	
+		            	// 1. 요일 정의 week = { "0", "1", "2", "3", "4", "5", "6" } == { "일", "월", "화", "수", "목", "금", "토" }
+		            	final String[] week =      { "0", "1", "2", "3", "4", "5", "6" };
+		            	
+		        		SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd");
+		                Calendar cal = Calendar.getInstance();
+		                String strToday = sdf.format(cal.getTime());
+		            		
+		                // 2. 오늘 날짜에 해당하는 그 주 날짜 가져옴
+		                final String[] weekDay = fn_weekDay(strToday);
+		            	
+		                // 3. 오늘의 요일 가져옴
+		         	    int toDay = Integer.parseInt(week[cal.get(Calendar.DAY_OF_WEEK) - 1]);
+          	
+		         	    
+		         	    //4. 오늘 요일로부터 next ---------------> 검색
+		        	    for(int i=toDay; i<scheduleVO.getExe_dt().length(); i++){
+		        	    	
+		        	    	//4.1현재 오늘요일 체크(X)일때 날짜검색하여 업데이트
+		        	    	if(String.valueOf(scheduleVO.getExe_dt().charAt(toDay)).equals("0")){
+		        	    		if(strChecked == null) {
+		        	    			if(String.valueOf(scheduleVO.getExe_dt().charAt(i)).equals("1")) {	    			
+		        		    			strChecked = week[i];	
+		        		    			System.out.println("오늘 날짜 체크가 안되있을때 오른쪽으로 = "+strChecked);
+		        		    			String nextDay = weekDay[Integer.parseInt(strChecked)]+" "+detail;
+		        			    		Date dt = transFormat.parse(nextDay);		                
+		        		                cal.setTime(dt);
+		             
+		        		                scheduleVO.setNxt_exe_dtm(cal.getTime());
+		        		    			intNextCnt ++;
+		        		    		}	
+		        	    		}
+		        	    	//4.2 현재 오늘요일 체크(0)일때 날짜검색하여 업데이트
+		        	    	}else{	    		
+		            			if(String.valueOf(scheduleVO.getExe_dt().charAt(i)).equals("1")) {	    
+		            				strFirstCheck  = week[toDay];
+		            	    		if(intNextCnt == 1 && strFirstCheck != null) {
+		            	    			strChecked = week[i]; 	    
+		            	    			
+		            	    			System.out.println("오늘 날짜 체크 되있을때 오른쪽으로 = "+strChecked);
+		            	    			String nextDay = weekDay[Integer.parseInt(strChecked)]+" "+detail;
+		            		    		Date dt = transFormat.parse(nextDay);		                
+		            	                cal.setTime(dt);
+		            	                           
+		            	                scheduleVO.setNxt_exe_dtm(cal.getTime());
+		            	    		}	    			   	    		
+		        	    			intNextCnt ++;
+		        	    		}  	   			
+		        	    	}
+		            	}
+		        	    
+		        	    if(strChecked == null){
+		        			prevCheck = true;
+		        		}
+
+		        	    //5. 오늘 요일로부터 Prev <------------------------ 검색
+		        	    if(prevCheck == true) {
+		        	    	//5.1 처음부터 오늘요일 이전날짜 까지 검색하여 업데이트
+		        	    	for(int i=0; i<toDay ; i++){
+		        	    		if(String.valueOf(scheduleVO.getExe_dt().charAt(i)).equals("1")) {	    			
+		        	    			strChecked = week[i];
+		        	    			intPrevCnt ++;
+		        	    			System.out.println("처음부터검색 ="+strChecked);
+		        	    			String nextDay = weekDay[Integer.parseInt(strChecked)]+" "+detail;
+		        		    		Date dt = transFormat.parse(nextDay);		                
+		        	                cal.setTime(dt);
+		        	                
+		        	                // 현재날짜+수행시간 + 7일
+		        	                cal.add(Calendar.DATE, 7);               
+		        	                scheduleVO.setNxt_exe_dtm(cal.getTime());
+		        	    		}
+		        	    	}	    
+		        	    } 
+		        	    
+		        	    if(strChecked == null){
+		        			finalCheck = true;
+		        		}
+		        	    
+		        	    //6. 현재오늘 요일만 체크되었을경우
+		        	    if(finalCheck == true){
+		        	    	if(intNextCnt==1 && intPrevCnt==0 && strFirstCheck != null) {
+		        	    		strChecked  = week[toDay];
+		        	    		System.out.println("오늘요일만 매주 ="+strChecked);
+		        	    		String nextDay = weekDay[Integer.parseInt(strChecked)]+" "+detail;
+		        	    		Date dt = transFormat.parse(nextDay);		                
+		                        cal.setTime(dt);
+		                        
+		                        // 현재날짜+수행시간 + 7일
+		                        cal.add(Calendar.DATE, 7);               
+		                        scheduleVO.setNxt_exe_dtm(cal.getTime());
+		        	    	} 
+		        	    }
 			        // 매월
 		            }else if(exe_perd_cd.equals("TC001603")){
 		            	SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM");
@@ -791,9 +901,119 @@ public class ScheduleController {
 	                cal.add(Calendar.DATE, 1);
             	
 	            	scheduleVO.setNxt_exe_dtm(cal.getTime());
-	            // 매주
-	            }else if(exe_perd_cd.equals("TC001602")){
 	            	
+            	// 매주
+	            /* 1. 요일 정의 week = { "0", "1", "2", "3", "4", "5", "6" } == { "일", "월", "화", "수", "목", "금", "토" }
+	             * 2. 오늘 날짜에 해당하는 그 주 날짜 가져옴
+	             * 3. 오늘의 요일 가져옴
+	             * 4. 오늘 요일로부터 next ---------------> 검색
+	             *    4.1현재 오늘요일 체크(X)일때 날짜검색하여 업데이트
+	             *    4.2 현재 오늘요일 체크(0)일때 날짜검색하여 업데이트
+	             * 5. 오늘 요일로부터 Prev <--------------- 검색
+	             *    5.1 처음부터 오늘요일 이전날짜 까지 검색하여 업데이트
+	             * 6. 현재오늘 요일만 체크되었을경우
+	             */
+	            }else if(exe_perd_cd.equals("TC001602")){
+	            	String detail = scheduleVO.getExe_h()+":"+scheduleVO.getExe_m()+":"+scheduleVO.getExe_s();
+	            	
+	         	    int  intNextCnt = 0; //next match count
+	         	    int  intPrevCnt = 0; //prev match count
+		       	    String strFirstCheck = null;
+		    	    String strChecked = null;	
+		    	    boolean prevCheck = false;
+		    	    boolean finalCheck = false;	  	            	
+	            	
+	            	// 1. 요일 정의 week = { "0", "1", "2", "3", "4", "5", "6" } == { "일", "월", "화", "수", "목", "금", "토" }
+	            	final String[] week =      { "0", "1", "2", "3", "4", "5", "6" };
+	            	
+	        		SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd");
+	                Calendar cal = Calendar.getInstance();
+	                String strToday = sdf.format(cal.getTime());
+	            		
+	                // 2. 오늘 날짜에 해당하는 그 주 날짜 가져옴
+	                final String[] weekDay = fn_weekDay(strToday);
+	            	
+	                // 3. 오늘의 요일 가져옴
+	         	    int toDay = Integer.parseInt(week[cal.get(Calendar.DAY_OF_WEEK) - 1]);
+      	
+	         	    
+	         	    //4. 오늘 요일로부터 next ---------------> 검색
+	        	    for(int i=toDay; i<scheduleVO.getExe_dt().length(); i++){
+	        	    	
+	        	    	//4.1현재 오늘요일 체크(X)일때 날짜검색하여 업데이트
+	        	    	if(String.valueOf(scheduleVO.getExe_dt().charAt(toDay)).equals("0")){
+	        	    		if(strChecked == null) {
+	        	    			if(String.valueOf(scheduleVO.getExe_dt().charAt(i)).equals("1")) {	    			
+	        		    			strChecked = week[i];	
+	        		    			System.out.println("오늘 날짜 체크가 안되있을때 오른쪽으로 = "+strChecked);
+	        		    			String nextDay = weekDay[Integer.parseInt(strChecked)]+" "+detail;
+	        			    		Date dt = transFormat.parse(nextDay);		                
+	        		                cal.setTime(dt);
+	             
+	        		                scheduleVO.setNxt_exe_dtm(cal.getTime());
+	        		    			intNextCnt ++;
+	        		    		}	
+	        	    		}
+	        	    	//4.2 현재 오늘요일 체크(0)일때 날짜검색하여 업데이트
+	        	    	}else{	    		
+	            			if(String.valueOf(scheduleVO.getExe_dt().charAt(i)).equals("1")) {	    
+	            				strFirstCheck  = week[toDay];
+	            	    		if(intNextCnt == 1 && strFirstCheck != null) {
+	            	    			strChecked = week[i]; 	    
+	            	    			
+	            	    			System.out.println("오늘 날짜 체크 되있을때 오른쪽으로 = "+strChecked);
+	            	    			String nextDay = weekDay[Integer.parseInt(strChecked)]+" "+detail;
+	            		    		Date dt = transFormat.parse(nextDay);		                
+	            	                cal.setTime(dt);
+	            	                           
+	            	                scheduleVO.setNxt_exe_dtm(cal.getTime());
+	            	    		}	    			   	    		
+	        	    			intNextCnt ++;
+	        	    		}  	   			
+	        	    	}
+	            	}
+	        	    
+	        	    if(strChecked == null){
+	        			prevCheck = true;
+	        		}
+
+	        	    //5. 오늘 요일로부터 Prev <------------------------ 검색
+	        	    if(prevCheck == true) {
+	        	    	//5.1 처음부터 오늘요일 이전날짜 까지 검색하여 업데이트
+	        	    	for(int i=0; i<toDay ; i++){
+	        	    		if(String.valueOf(scheduleVO.getExe_dt().charAt(i)).equals("1")) {	    			
+	        	    			strChecked = week[i];
+	        	    			intPrevCnt ++;
+	        	    			System.out.println("처음부터검색 ="+strChecked);
+	        	    			String nextDay = weekDay[Integer.parseInt(strChecked)]+" "+detail;
+	        		    		Date dt = transFormat.parse(nextDay);		                
+	        	                cal.setTime(dt);
+	        	                
+	        	                // 현재날짜+수행시간 + 7일
+	        	                cal.add(Calendar.DATE, 7);               
+	        	                scheduleVO.setNxt_exe_dtm(cal.getTime());
+	        	    		}
+	        	    	}	    
+	        	    } 
+	        	    
+	        	    if(strChecked == null){
+	        			finalCheck = true;
+	        		}
+	        	    
+	        	    //6. 현재오늘 요일만 체크되었을경우
+	        	    if(finalCheck == true){
+	        	    	if(intNextCnt==1 && intPrevCnt==0 && strFirstCheck != null) {
+	        	    		strChecked  = week[toDay];
+	        	    		System.out.println("오늘요일만 매주 ="+strChecked);
+	        	    		String nextDay = weekDay[Integer.parseInt(strChecked)]+" "+detail;
+	        	    		Date dt = transFormat.parse(nextDay);		                
+	                        cal.setTime(dt);
+	                        
+	                        // 현재날짜+수행시간 + 7일
+	                        cal.add(Calendar.DATE, 7);               
+	                        scheduleVO.setNxt_exe_dtm(cal.getTime());
+	        	    	} 
+	        	    }
 		        // 매월
 	            }else if(exe_perd_cd.equals("TC001603")){
 	            	SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM");
@@ -1122,25 +1342,54 @@ public class ScheduleController {
 		}
 		return result;
 	}		
-	
-	public static void main(String[] args) throws Exception {
-	
-		//1. 이번주 요일/일자
-		 final String[] weekOld = { "0", "1", "0", "0", "1", "0", "0" };
-		
-		//2. 금일 요일/일자
-		Calendar oCalendar = Calendar.getInstance( );
-	    final String[] week = { "1", "2", "3", "4", "5", "6", "7" };
-		//3. 입력받은 값 요일/일자
-	    System.out.println( week[oCalendar.get(Calendar.DAY_OF_WEEK) - 1]);
-		
-	    
-	    
-	    //4. next비교
 
-	    
-		//5. prev 비교
-		
+	
+	public static String[] fn_weekDay(String yyyymmdd) {
+		  Calendar cal = Calendar.getInstance();
+		  int toYear = 0;
+		  int toMonth = 0;
+		  int toDay = 0;
+		  if(yyyymmdd == null || yyyymmdd.equals("")){   //파라메타값이 없을경우 오늘날짜
+		   toYear = cal.get(cal.YEAR);  
+		   toMonth = cal.get(cal.MONTH)+1;
+		   toDay = cal.get(cal.DAY_OF_MONTH);
+		   
+		   int yoil = cal.get(cal.DAY_OF_WEEK); //요일나오게하기(숫자로)
 
-	}
+		   if(yoil != 1){   //해당요일이 일요일이 아닌경우
+		    yoil = yoil-2;
+		   }else{           //해당요일이 일요일인경우
+		    yoil = 7;
+		   }
+		   cal.set(toYear, toMonth-1, toDay-yoil);  //해당주월요일로 세팅
+		  }else{
+		   int yy =Integer.parseInt(yyyymmdd.substring(0, 4));
+		   int mm =Integer.parseInt(yyyymmdd.substring(4, 6))-1;
+		   int dd =Integer.parseInt(yyyymmdd.substring(6, 8));
+		   cal.set(yy, mm,dd);
+		  }
+		  String[] arrYMD = new String[7];
+		  
+		  int inYear = cal.get(cal.YEAR);  
+		  int inMonth = cal.get(cal.MONTH);
+		  int inDay = cal.get(cal.DAY_OF_MONTH);
+		  int yoil = cal.get(cal.DAY_OF_WEEK); //요일나오게하기(숫자로)
+		  if(yoil != 1){   //해당요일이 일요일이 아닌경우
+		      yoil = yoil-2;
+		   }else{           //해당요일이 일요일인경우
+		      yoil = 7;
+		   }
+		  inDay = inDay-yoil;
+		  for(int i = 0; i < 7;i++){
+		   cal.set(inYear, inMonth, inDay+i);  //
+		   String y = Integer.toString(cal.get(cal.YEAR));  
+		   String m = Integer.toString(cal.get(cal.MONTH)+1);
+		   String d = Integer.toString(cal.get(cal.DAY_OF_MONTH)-1);
+		   if(m.length() == 1) m = "0" + m; 
+		   if(d.length() == 1) d = "0" + d; 
+		   
+		   arrYMD[i] = y+"-"+m+"-"+d;	   
+		  }		  
+		  return arrYMD;	
+	}	
 }
