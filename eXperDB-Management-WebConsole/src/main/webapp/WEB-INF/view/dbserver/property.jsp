@@ -398,25 +398,68 @@
 							<table class="list3">
 								<caption>주요환경설정 정보</caption>
 								<colgroup>
+									<col style="width: 10%;">
+									<col style="width: 23%;">
 									<col style="width: 15%;">
-									<col style="width: 20%;">
-									<col style="width: 30%;">
+									<col style="width: 6%;">
+									<col style="width: 7%;">
+									<col style="width: 10%;">
+									<col style="width: 29%;">
 								</colgroup>
 								<thead>
 									<tr>
+										<th scope="col">분류</th>
 										<th scope="col"><spring:message code="properties.item" /></th>
-										<th scope="col"><spring:message code="properties.setting_value" /></th>
-										<th scope="col"><spring:message code="properties.explanation" /></th>
-										
+										<th scope="col">설정값</th>
+										<th scope="col">단위</th>
+										<th scope="col">최소값</th>
+										<th scope="col">최대값</th>
+										<th scope="col">설명</th>
 									</tr>
 								</thead>
 								<tbody>
+									<c:set var="i" value="0" />
 									<c:forEach var="dbmsinfo" items="${result.CMD_DBMS_INFO}">
-										<tr>
-											<td>${dbmsinfo.name}</td>
-											<td>${dbmsinfo.setting}</td>
-											<td>${dbmsinfo.short_desc}</td>
-										</tr>
+										 <c:choose>
+									       	<c:when test="${dbmsinfo.rnum == '1' && i=='0'}">
+										        <tr>
+										       		<td>${dbmsinfo.category}</td>
+													<td>${dbmsinfo.name}</td>
+													<td>${dbmsinfo.setting}</td>
+													<td>${dbmsinfo.unit}</td>
+													<td>${dbmsinfo.min_val}</td>
+													<td>${dbmsinfo.max_val}</td>
+													<td>${dbmsinfo.short_desc}</td>
+												</tr>
+									       	</c:when>
+											
+											<c:when test="${dbmsinfo.rnum > '1' && i=='0'}">
+												<tr>
+													<td rowspan="${dbmsinfo.rnum}">${dbmsinfo.category}</td>
+													<td>${dbmsinfo.name}</td>
+													<td>${dbmsinfo.setting}</td>
+													<td>${dbmsinfo.unit}</td>
+													<td>${dbmsinfo.min_val}</td>
+													<td>${dbmsinfo.max_val}</td>
+													<td>${dbmsinfo.short_desc}</td>
+												</tr>
+												<c:set var="i" value="1" />
+											</c:when>
+									       
+									       <c:when test="${dbmsinfo.rnum >= '1' && i!='0'}">
+										       <tr>
+													<td>${dbmsinfo.name}</td>
+													<td>${dbmsinfo.setting}</td>
+													<td>${dbmsinfo.unit}</td>
+													<td>${dbmsinfo.min_val}</td>
+													<td>${dbmsinfo.max_val}</td>
+													<td>${dbmsinfo.short_desc}</td>
+												</tr>
+												<c:if test="${dbmsinfo.rnum == 1}">
+													<c:set var="i" value="0" />
+	 											</c:if>	
+									       </c:when>
+									  	</c:choose>
 									</c:forEach>
 								</tbody>
 							</table>

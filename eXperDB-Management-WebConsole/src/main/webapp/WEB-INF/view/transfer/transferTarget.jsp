@@ -296,7 +296,7 @@
 							}
 						});
 					}else{
-						alert("전송이 활성화된 커넥터는 삭제 할 수 없습니다.")
+						alert("<spring:message code='message.msg187'/>")
 					}
 				}
 			});

@@ -23,7 +23,7 @@
 
 	function fn_init() {
 		table = $('#passwordDecodeTable').DataTable({
-			scrollY : "250px",
+			scrollY : "310px",
 			searching : false,
 			deferRender : true,
 			scrollX: true,
@@ -113,7 +113,9 @@
 				$("#from").datepicker("option", "maxDate", selectedDate);
 			}
 		})
-
+		
+		$('#from').val($.datepicker.formatDate('yy-mm-dd', new Date()));
+		$('#to').val($.datepicker.formatDate('yy-mm-dd', new Date()));
 	});
 
 </script>
@@ -195,8 +197,7 @@
 				</div>
 
 				<div class="overflow_area">
-					<table id="passwordDecodeTable" class="display" cellspacing="0"
-						width="100%">
+					<table id="passwordDecodeTable" class="display" cellspacing="0" width="100%">
 						<thead>
 							<tr>
 								<th width="40">No</th>

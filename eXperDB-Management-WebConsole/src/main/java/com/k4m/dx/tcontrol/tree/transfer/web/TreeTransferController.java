@@ -1003,6 +1003,7 @@ public class TreeTransferController {
 					hps.put(ClientProtocolID.TABLE_NAME, tblKafkaConfigInfo.get(i).getTb_engl_nm());
 					hps.put(ClientProtocolID.TABLE_SCHEMA, tblKafkaConfigInfo.get(i).getScm_nm());
 					arrTableInfos.add(hps);
+					
 					int tblmappsSize = cic.tblmapps_select(IP, PORT, serverObj, arrTableInfos);
 					String topic = "";
 					if (tblKafkaConfigInfo.get(i).getScm_nm().equals("public")) {

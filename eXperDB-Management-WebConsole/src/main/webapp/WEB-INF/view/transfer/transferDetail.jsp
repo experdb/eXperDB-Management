@@ -122,7 +122,7 @@
 							}else if(result =='transfersetting'){
 								alert("<spring:message code='message.msg127' />");
 							}else if(result == 'BottledwaterPath'){
-								alert("bottledwater 경로가 올바르지 않아 전송을 활성화 할 수 없습니다.");
+								alert("<spring:message code='message.msg186' />");
 							}else{
 								alert("<spring:message code='message.msg25' />");
 							}	
