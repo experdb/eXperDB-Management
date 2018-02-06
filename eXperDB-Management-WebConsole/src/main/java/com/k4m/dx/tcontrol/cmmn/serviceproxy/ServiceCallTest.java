@@ -13,6 +13,7 @@ import org.json.simple.parser.JSONParser;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
 
+import com.google.gson.Gson;
 import com.k4m.dx.tcontrol.cmmn.serviceproxy.vo.AdminServerPasswordRequest;
 import com.k4m.dx.tcontrol.cmmn.serviceproxy.vo.AuditLog;
 import com.k4m.dx.tcontrol.cmmn.serviceproxy.vo.AuditLogSite;
@@ -20,6 +21,8 @@ import com.k4m.dx.tcontrol.cmmn.serviceproxy.vo.BackupLog;
 import com.k4m.dx.tcontrol.cmmn.serviceproxy.vo.CryptoKey;
 import com.k4m.dx.tcontrol.cmmn.serviceproxy.vo.CryptoKeySymmetric;
 import com.k4m.dx.tcontrol.cmmn.serviceproxy.vo.Profile;
+import com.k4m.dx.tcontrol.cmmn.serviceproxy.vo.ProfileAclSpec;
+import com.k4m.dx.tcontrol.cmmn.serviceproxy.vo.ProfileCipherSpec;
 import com.k4m.dx.tcontrol.cmmn.serviceproxy.vo.ProfileProtection;
 
 public class ServiceCallTest {
@@ -32,7 +35,7 @@ public class ServiceCallTest {
 		restIp = "127.0.0.1";
 		restPort = 8443;
 		
-		String strTocken = "fNUv+YglEU1BbUB5UJ6V8vm3oIaEX2cATRNCXN+S2RE=";
+		String strTocken = "cQwH34QYYBx+b+Nl/ZuCiERJUo4v1fAnLJlKK/BnaWY=";
 
 		ServiceCallTest test = new ServiceCallTest();
 		
@@ -65,10 +68,10 @@ public class ServiceCallTest {
 		//test.selectProfileList(restIp, restPort, strTocken);
 		
 		//보안정책 > 보안정책 상세
-		//test.selectProfileProtectionContents(restIp, restPort, strTocken);
+		test.selectProfileProtectionContents(restIp, restPort, strTocken);
 		
 		//암호화키 > 암호화키리스트
-		test.selectCryptoKeyList(restIp, restPort, strTocken);
+		//test.selectCryptoKeyList(restIp, restPort, strTocken);
 		
 		//암호화키 > 암호화 키 등록
 		//test.insertCryptoKeySymmetric(restIp, restPort, strTocken);
@@ -90,14 +93,14 @@ public class ServiceCallTest {
 		String strService = SystemCode.ServiceName.POLICY_SERVICE;
 		String strCommand = SystemCode.ServiceCommand.SELECTPROFILELIST;
 
-		Profile profile = new Profile();
-		profile.setProfileTypeCode("PTPR");
+		Profile param = new Profile();
+		param.setProfileTypeCode("PTPR");
 
 		//JSONObject parameters = new JSONObject();
 		//parameters.put("profile", vo);
 		
 		HashMap body = new HashMap();
-		body.put(TypeUtility.getJustClassName(profile.getClass()), profile.toJSONString());
+		body.put(TypeUtility.getJustClassName(param.getClass()), param.toJSONString());
 
 		String parameters = TypeUtility.makeRequestBody(body);
 
@@ -120,17 +123,22 @@ public class ServiceCallTest {
 			ArrayList list = (ArrayList) resultJson.get("list");
 			for (int j = 0; j < list.size(); j++) {
 				JSONObject jsonObj = (JSONObject) list.get(j);
+				
 
-				String createDateTime = (String) jsonObj.get("createDateTime");
-				String profileTypeName = (String) jsonObj.get("profileTypeName");
-				String profileTypeCode = (String) jsonObj.get("profileTypeCode");
-				String profileStatusCode = (String) jsonObj.get("profileStatusCode");
-				String profileNote = (String) jsonObj.get("profileNote");
-				String profileStatusName = (String) jsonObj.get("profileStatusName");
-				String createName = (String) jsonObj.get("createName");
-				String createUid = (String) jsonObj.get("createUid");
-				String profileName = (String) jsonObj.get("profileName");
-				String profileUid = (String) jsonObj.get("profileUid");
+				Gson gson = new Gson();
+				Profile profile = new Profile();
+				profile = gson.fromJson(jsonObj.toJSONString(), profile.getClass());
+
+				String createDateTime = profile.getCreateDateTime();
+				String profileTypeName = profile.getProfileTypeName();
+				String profileTypeCode = profile.getProfileTypeCode();
+				String profileStatusCode = profile.getProfileStatusCode();
+				String profileNote = profile.getProfileNote();
+				String profileStatusName =  profile.getProfileStatusName();
+				String createName = profile.getCreateName();
+				String createUid = profile.getCreateUid();
+				String profileName = profile.getProfileName();
+				String profileUid = profile.getProfileUid();
 				
 				System.out.println("profileName : " + profileName + " profileUid : " + profileUid);
 
@@ -150,14 +158,14 @@ public class ServiceCallTest {
 		String strService = SystemCode.ServiceName.POLICY_SERVICE;
 		String strCommand = SystemCode.ServiceCommand.SELECTPROFILEPROTECTIONCONTENTS;
 
-		ProfileProtection profileProtection = new ProfileProtection();
-		profileProtection.setProfileUid("57a20cfe-6e77-4a08-8e8f-4f328fa8a0e0");
+		ProfileProtection param = new ProfileProtection();
+		param.setProfileUid("57a20cfe-6e77-4a08-8e8f-4f328fa8a0e0");
 
 		//JSONObject parameters = new JSONObject();
 		//parameters.put("profile", vo);
 		
 		HashMap body = new HashMap();
-		body.put(TypeUtility.getJustClassName(profileProtection.getClass()), profileProtection.toJSONString());
+		body.put(TypeUtility.getJustClassName(param.getClass()), param.toJSONString());
 
 		String parameters = TypeUtility.makeRequestBody(body);
 
@@ -180,12 +188,16 @@ public class ServiceCallTest {
 			JSONObject map = (JSONObject) resultJson.get("map");
 			JSONObject jsonProfileProtection = (JSONObject) map.get("ProfileProtection");
 			
-			String createDateTime = (String) jsonProfileProtection.get("createDateTime");
+			Gson gson = new Gson();
+			ProfileProtection profileProtection = new ProfileProtection();
+			profileProtection = gson.fromJson(jsonProfileProtection.toJSONString(), profileProtection.getClass());
+			
+			String createDateTime = profileProtection.getCreateDateTime();
 			System.out.println(createDateTime);
-			System.out.println((boolean) jsonProfileProtection.get("defaultAccessAllowTrueFalse")); //	기본접근허용
+			System.out.println((boolean) profileProtection.getDefaultAccessAllowTrueFalse()); //	기본접근허용
 			
 			long optionBits = 0L;
-			optionBits= (long) jsonProfileProtection.get("optionBits");
+			optionBits= (long) profileProtection.getOptionBits();
 			
 			//optionBits = Long.parseLong(strOptionBit);
 			
@@ -199,19 +211,53 @@ public class ServiceCallTest {
 			System.out.println(blnLoggingSuccess); //성공 로그 기록
 			System.out.println(blnLogCompress); //로그 압축
 			
-			System.out.println((String) jsonProfileProtection.get("nullEncryptYesNo")); //nullEncryptYesNo	NULL 암호화
-			System.out.println((String) jsonProfileProtection.get("preventDoubleYesNo")); //preventDoubleYesNo	이중 암호화 방지
-			System.out.println((String) jsonProfileProtection.get("denyResultTypeCode")); //denyResultTypeCode	접근 거부시 처리
-			System.out.println((String) jsonProfileProtection.get("dataTypeCode")); //dataTypeCode	데이터 타입
+			System.out.println(profileProtection.getNullEncryptYesNo()); //nullEncryptYesNo	NULL 암호화
+			System.out.println(profileProtection.getPreventDoubleYesNo()); //preventDoubleYesNo	이중 암호화 방지
+			System.out.println(profileProtection.getDenyResultTypeCode()); //denyResultTypeCode	접근 거부시 처리
+			System.out.println(profileProtection.getDataTypeCode()); //dataTypeCode	데이터 타입
 
 			
 			
-			JSONArray jsonProfileCipherSpec = (JSONArray) map.get("ProfileCipherSpec");
+			JSONArray arrProfileCipherSpec = (JSONArray) map.get("ProfileCipherSpec");
 			
+			System.out.println(" ################# ProfileCipherSpec ################### ");
 			
+			if(arrProfileCipherSpec.size()>0) {
+				for(int i=0; i<arrProfileCipherSpec.size(); i++) {
+					JSONObject json = (JSONObject) arrProfileCipherSpec.get(i);
+					
+					ProfileCipherSpec profileCipherSpec = new ProfileCipherSpec();
+					Gson gsonProfileCipherSpec = new Gson();
+					profileCipherSpec = gsonProfileCipherSpec.fromJson(json.toJSONString(), profileCipherSpec.getClass());
+					
+					System.out.println(" specIndex : " + profileCipherSpec.getSpecIndex());
+					System.out.println(" profileUid : " + profileCipherSpec.getProfileUid());
+					System.out.println(" CipherAlgorithmCode : " + profileCipherSpec.getCipherAlgorithmCode());
+					System.out.println(" CipherAlgorithmName : " + profileCipherSpec.getCipherAlgorithmName());
+				}
+			}
 			
-			JSONArray jsonProfileAclSpec = (JSONArray) map.get("ProfileAclSpec");
 
+			
+			
+			JSONArray arrProfileAclSpec = (JSONArray) map.get("ProfileAclSpec");
+			
+			System.out.println(" ################# ProfileAclSpec ################### ");
+			
+			if(arrProfileAclSpec.size()>0) {
+				for(int i=0; i<arrProfileAclSpec.size(); i++) {
+					JSONObject json = (JSONObject) arrProfileAclSpec.get(i);
+					
+					ProfileAclSpec profileAclSpec = new ProfileAclSpec();
+					Gson gsonProfileAclSpec = new Gson();
+					profileAclSpec = gsonProfileAclSpec.fromJson(json.toJSONString(), profileAclSpec.getClass());
+
+					System.out.println(" AclSpecSequence : " + profileAclSpec.getAclSpecSequence());
+					System.out.println(" SpecOrder : " + profileAclSpec.getSpecOrder());
+					System.out.println(" SpecName : " + profileAclSpec.getSpecName());
+				}
+			}
+			
 
 		} else {
 			
@@ -314,17 +360,17 @@ public class ServiceCallTest {
 
 		
 		
-		AuditLogSite auditLogSite = new AuditLogSite();
-		auditLogSite.setSearchAgentLogDateTimeFrom("20180123000000"); 
-		auditLogSite.setSearchAgentLogDateTimeTo("20180123240000");
-		auditLogSite.setAgentUid("");
-		auditLogSite.setSuccessTrueFalse(true);
-		auditLogSite.setPageOffset(1);
-		auditLogSite.setPageSize(10);
-		auditLogSite.setTotalCountLimit(10001);
+		AuditLogSite param = new AuditLogSite();
+		param.setSearchAgentLogDateTimeFrom("20180123000000"); 
+		param.setSearchAgentLogDateTimeTo("20180123240000");
+		param.setAgentUid("");
+		param.setSuccessTrueFalse(true);
+		param.setPageOffset(1);
+		param.setPageSize(10);
+		param.setTotalCountLimit(10001);
 		
 		HashMap body = new HashMap();
-		body.put(TypeUtility.getJustClassName(auditLogSite.getClass()), auditLogSite.toJSONString());
+		body.put(TypeUtility.getJustClassName(param.getClass()), param.toJSONString());
 
 		String parameters = TypeUtility.makeRequestBody(body);
 		
@@ -366,18 +412,18 @@ public class ServiceCallTest {
 
 		
 		
-		AuditLog auditLog = new AuditLog();
-		auditLog.setSearchLogDateTimeFrom("2018-01-24 00:00:00.000000"); 
-		auditLog.setSearchLogDateTimeTo("2018-01-24 23:59:59.999999");
-		auditLog.setEntityUid("");
-		auditLog.setResultCode("");
+		AuditLog param = new AuditLog();
+		param.setSearchLogDateTimeFrom("2018-01-24 00:00:00.000000"); 
+		param.setSearchLogDateTimeTo("2018-01-24 23:59:59.999999");
+		param.setEntityUid("");
+		param.setResultCode("");
 
-		auditLog.setPageOffset(1);
-		auditLog.setPageSize(10);
-		auditLog.setTotalCountLimit(10001);
+		param.setPageOffset(1);
+		param.setPageSize(10);
+		param.setTotalCountLimit(10001);
 		
 		HashMap body = new HashMap();
-		body.put(TypeUtility.getJustClassName(auditLog.getClass()), auditLog.toJSONString());
+		body.put(TypeUtility.getJustClassName(param.getClass()), param.toJSONString());
 
 		String parameters = TypeUtility.makeRequestBody(body);
 		
@@ -408,12 +454,16 @@ public class ServiceCallTest {
 			for(int i=0; i<list.size(); i++) {
 				JSONObject log = (JSONObject) list.get(i);
 				
+				Gson gson = new Gson();
+				AuditLog auditLog = new AuditLog();
+				auditLog = gson.fromJson(log.toJSONString(), auditLog.getClass());
+				
 				StringBuffer bf = new StringBuffer();
 				
 				//접근일시 createDateTime
-				bf.append((i+1) + "접근일시 : " + log.get("createDateTime"));
+				bf.append((i+1) + "접근일시 : " + auditLog.getCreateDateTime());
 				//접근자이름 entityName
-				String strEntityName = (String) log.get("entityName");
+				String strEntityName = auditLog.getEntityName();
 				//strEntityName.getBytes("UTF-8");
 				//System.out.println(new String(strEntityName, ));
 				
@@ -425,15 +475,15 @@ public class ServiceCallTest {
 				//checkChar(strEntityName);
 			
 				//접근자주소 remoteAddress
-				bf.append(" 접근자주소 : " + log.get("remoteAddress"));
+				bf.append(" 접근자주소 : " + auditLog.getRemoteAddress());
 				//접근경로  requestPath
-				bf.append(" 접근경로 : " + log.get("requestPath") );
+				bf.append(" 접근경로 : " + auditLog.getRequestPath() );
 				//본문 parameter
-				bf.append(" 본문 : " + log.get("parameter") );
+				bf.append(" 본문 : " + auditLog.getParameter() );
 				//결과코드 resultCode
-				bf.append(" 결과코드 : " + log.get("resultCode") );
+				bf.append(" 결과코드 : " + auditLog.getResultCode() );
 				//결과메시지resultMessage
-				bf.append(" 결과메시지 : " + log.get("resultMessage"));
+				bf.append(" 결과메시지 : " + auditLog.getResultMessage() );
 				
 				System.out.println(bf.toString());
 			
@@ -459,19 +509,19 @@ public class ServiceCallTest {
 
 		
 		
-		AuditLog auditLog = new AuditLog();
-		auditLog.setKeyAccessOnly(true);
-		auditLog.setSearchLogDateTimeFrom("2018-01-24 00:00:00.000000"); 
-		auditLog.setSearchLogDateTimeTo("2018-01-24 23:59:59.999999");
-		auditLog.setEntityUid("");
-		auditLog.setResultCode("");
+		AuditLog param = new AuditLog();
+		param.setKeyAccessOnly(true);
+		param.setSearchLogDateTimeFrom("2018-01-24 00:00:00.000000"); 
+		param.setSearchLogDateTimeTo("2018-01-24 23:59:59.999999");
+		param.setEntityUid("");
+		param.setResultCode("");
 
-		auditLog.setPageOffset(1);
-		auditLog.setPageSize(10);
-		auditLog.setTotalCountLimit(10001);
+		param.setPageOffset(1);
+		param.setPageSize(10);
+		param.setTotalCountLimit(10001);
 		
 		HashMap body = new HashMap();
-		body.put(TypeUtility.getJustClassName(auditLog.getClass()), auditLog.toJSONString());
+		body.put(TypeUtility.getJustClassName(param.getClass()), param.toJSONString());
 
 		String parameters = TypeUtility.makeRequestBody(body);
 		
@@ -494,6 +544,10 @@ public class ServiceCallTest {
 		String resultCode = (String) resultJson.get("resultCode");
 		String resultMessage = (String) resultJson.get("resultMessage");
 		
+		resultMessage = new String(resultMessage.getBytes("iso-8859-1"),"UTF-8"); 
+		
+		System.out.println(resultMessage);
+		
 		if(resultCode.equals("0000000000")) {
 			ArrayList list = (ArrayList) resultJson.get("list");
 			
@@ -502,12 +556,16 @@ public class ServiceCallTest {
 			for(int i=0; i<list.size(); i++) {
 				JSONObject log = (JSONObject) list.get(i);
 				
+				Gson gson = new Gson();
+				AuditLog auditLog = new AuditLog();
+				auditLog = gson.fromJson(log.toJSONString(), auditLog.getClass());
+				
 				StringBuffer bf = new StringBuffer();
 				
 				//접근일시 createDateTime
-				bf.append((i+1) + "접근일시 : " + log.get("createDateTime"));
+				bf.append((i+1) + "접근일시 : " + auditLog.getCreateDateTime());
 				//접근자이름 entityName
-				String strEntityName = (String) log.get("entityName");
+				String strEntityName = auditLog.getEntityName();
 				//strEntityName.getBytes("UTF-8");
 				//System.out.println(new String(strEntityName, ));
 				
@@ -519,18 +577,17 @@ public class ServiceCallTest {
 				//checkChar(strEntityName);
 			
 				//접근자주소 remoteAddress
-				bf.append(" 접근자주소 : " + log.get("remoteAddress"));
+				bf.append(" 접근자주소 : " + auditLog.getRemoteAddress());
 				//접근경로  requestPath
-				bf.append(" 접근경로 : " + log.get("requestPath") );
+				bf.append(" 접근경로 : " + auditLog.getRequestPath() );
 				//본문 parameter
-				bf.append(" 본문 : " + log.get("parameter") );
+				bf.append(" 본문 : " + auditLog.getParameter() );
 				//결과코드 resultCode
-				bf.append(" 결과코드 : " + log.get("resultCode") );
+				bf.append(" 결과코드 : " + auditLog.getResultCode() );
 				//결과메시지resultMessage
-				bf.append(" 결과메시지 : " + log.get("resultMessage"));
+				bf.append(" 결과메시지 : " + auditLog.getResultMessage() );
 				
 				System.out.println(bf.toString());
-			
 				
 			}
 		
@@ -553,19 +610,19 @@ public class ServiceCallTest {
 
 		
 		
-		BackupLog backupLog = new BackupLog();
+		BackupLog param = new BackupLog();
 
-		backupLog.setBackupWorkType("");
-		backupLog.setSearchLogDateTimeFrom("2018-01-24 00:00:00.000000"); 
-		backupLog.setSearchLogDateTimeTo("2018-01-24 23:59:59.999999");
-		backupLog.setEntityUid("");
+		param.setBackupWorkType("");
+		param.setSearchLogDateTimeFrom("2018-01-24 00:00:00.000000"); 
+		param.setSearchLogDateTimeTo("2018-01-24 23:59:59.999999");
+		param.setEntityUid("");
 		
-		backupLog.setPageOffset(1);
-		backupLog.setPageSize(10);
-		backupLog.setTotalCountLimit(10001);
+		param.setPageOffset(1);
+		param.setPageSize(10);
+		param.setTotalCountLimit(10001);
 		
 		HashMap body = new HashMap();
-		body.put(TypeUtility.getJustClassName(backupLog.getClass()), backupLog.toJSONString());
+		body.put(TypeUtility.getJustClassName(param.getClass()), param.toJSONString());
 
 		String parameters = TypeUtility.makeRequestBody(body);
 		
@@ -597,6 +654,12 @@ public class ServiceCallTest {
 			if(totalListCount > 0) {
 				for(int i=0; i<list.size(); i++) {
 					JSONObject log = (JSONObject) list.get(i);
+					
+					Gson gson = new Gson();
+					BackupLog backupLog = new BackupLog();
+					backupLog = gson.fromJson(log.toJSONString(), backupLog.getClass());
+					
+					
 					
 					StringBuffer bf = new StringBuffer();
 					
@@ -789,18 +852,30 @@ public class ServiceCallTest {
 				for(int i=0; i<list.size(); i++) {
 					JSONObject data = (JSONObject) list.get(i);
 					
-					StringBuffer bf = new StringBuffer();
-					bf.append((i+1) + "키 식별자 : " + data.get("keyUid"));
-					bf.append((i+1) + "키 이름 : " + data.get("resourceName"));
-					bf.append((i+1) + "유형 코드 : " + data.get("resourceTypeCode"));
-					bf.append((i+1) + "키 설명 : " + data.get("resourceNote"));
-					bf.append((i+1) + "유형 : " + data.get("resourceTypeName"));
-					bf.append((i+1) + "적용 알고리즘 : " + data.get("cipherAlgorithmName"));
-					bf.append((i+1) + "작성 일시 : " + data.get("createDateTime"));
-					bf.append((i+1) + "작성자 : " + new String(data.get("createName").toString().getBytes("iso-8859-1"),"UTF-8"));
-					bf.append((i+1) + "변경 일시 : " + data.get("updateDateTime"));
-					//bf.append((i+1) + "변경자 : " + new String(data.get("updateName").toString().getBytes("iso-8859-1"),"UTF-8"));
+					Gson gson = new Gson();
+					CryptoKey cryptoKey = new CryptoKey();
+					cryptoKey = gson.fromJson(data.toJSONString(), cryptoKey.getClass());
 
+					StringBuffer bf = new StringBuffer();
+					bf.append((i+1) + "키 식별자 : " + cryptoKey.getKeyUid());
+					bf.append((i+1) + "키 이름 : " + cryptoKey.getResourceName());
+					bf.append((i+1) + "유형 코드 : " + cryptoKey.getResourceTypeCode());
+					bf.append((i+1) + "키 설명 : " + cryptoKey.getResourceNote());
+					bf.append((i+1) + "유형 : " + cryptoKey.getResourceTypeName());
+					bf.append((i+1) + "적용 알고리즘 : " + cryptoKey.getCipherAlgorithmName());
+					bf.append((i+1) + "작성 일시 : " + cryptoKey.getCreateDateTime() );
+					bf.append((i+1) + "작성자 : " + new String(cryptoKey.getCreateName().toString().getBytes("iso-8859-1"),"UTF-8"));
+					bf.append((i+1) + "변경 일시 : " + cryptoKey.getUpdateDateTime());
+					
+					if(cryptoKey.getUpdateName() != null) {
+					bf.append((i+1) + "변경 일시 : " + new String(cryptoKey.getUpdateName().toString().getBytes("iso-8859-1"),"UTF-8")); 
+					}
+					
+					//CryptoKey data2 = (CryptoKey) list.get(i);
+					
+					//System.out.println(data2.getKeyUid());
+					
+					//bf.append((i+1) + "변경자 : " + new String(data.get("updateName").toString().getBytes("iso-8859-1"),"UTF-8"));
 	
 	
 					System.out.println(bf.toString());
@@ -860,7 +935,9 @@ public class ServiceCallTest {
 		
 		
 		String resultCode = (String) resultJson.get("resultCode");
-		String resultMessage = (String) resultJson.get("resultMessage");
+		String resultMessage = new String(resultJson.get("resultMessage").toString().getBytes("iso-8859-1"),"UTF-8");
+		
+		System.out.println(resultMessage);
 		
 	}
 	

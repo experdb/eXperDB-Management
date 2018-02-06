@@ -124,6 +124,7 @@ public class ExperDBRestApi {
 			//responseEntity = restTemplate.exchange(url, HttpMethod.POST, requestEntity, String.class);
 			
 			responseEntity = restTemplate.exchange(url, HttpMethod.POST, requestEntity, String.class);
+			//String strresponseEntity = restTemplate.postForObject(url, requestEntity, String.class);
 			
 		} catch (HttpClientErrorException e) {
 			// Globals.logger.info(url+" REST API 접속에서 예외가 발생했습니다.");
