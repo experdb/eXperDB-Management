@@ -20,10 +20,12 @@ import com.k4m.dx.tcontrol.cmmn.serviceproxy.vo.AuditLogSite;
 import com.k4m.dx.tcontrol.cmmn.serviceproxy.vo.BackupLog;
 import com.k4m.dx.tcontrol.cmmn.serviceproxy.vo.CryptoKey;
 import com.k4m.dx.tcontrol.cmmn.serviceproxy.vo.CryptoKeySymmetric;
+import com.k4m.dx.tcontrol.cmmn.serviceproxy.vo.Entity;
 import com.k4m.dx.tcontrol.cmmn.serviceproxy.vo.Profile;
 import com.k4m.dx.tcontrol.cmmn.serviceproxy.vo.ProfileAclSpec;
 import com.k4m.dx.tcontrol.cmmn.serviceproxy.vo.ProfileCipherSpec;
 import com.k4m.dx.tcontrol.cmmn.serviceproxy.vo.ProfileProtection;
+import com.k4m.dx.tcontrol.cmmn.serviceproxy.vo.SysCode;
 
 public class ServiceCallTest {
 
@@ -35,9 +37,11 @@ public class ServiceCallTest {
 		restIp = "127.0.0.1";
 		restPort = 8443;
 		
-		String strTocken = "cQwH34QYYBx+b+Nl/ZuCiERJUo4v1fAnLJlKK/BnaWY=";
+		String strTocken = "rweQbkFSIluD4V8OkqpY7kBYmFx2eVeinLEaHHg7s58=";
 
 		ServiceCallTest test = new ServiceCallTest();
+	
+		//test.loginTest(restIp, restPort);
 		
 		//마스터키 로드
 		//test.loadServerKey(restIp, restPort, strTocken);
@@ -47,12 +51,20 @@ public class ServiceCallTest {
 		
 		//공통코드 리스트
 		//test.selectSysCodeList(restIp, restPort, strTocken);
+		
+		//적용알고리즘 공통코드
+		//test.selectSysCodeListExper(restIp, restPort, strTocken);
+		
+		//일반공통코드 리스트
+		//test.selectParamSysCodeList(restIp, restPort, strTocken);
+		
+		//접근자리스트
+		test.selectEntityList(restIp, restPort, strTocken);
 
-		//test.loginTest(restIp, restPort);
 
 		//test.selectProfileProtectionVersion(restIp, restPort, strTocken);
 		
-		//감사로그 > 암복호화
+		//감사로그 > 암복호화로그
 		//test.selectAuditLogSiteList(restIp, restPort, strTocken);
 		
 		//감사로그 > 관리서버 감사로그
@@ -68,13 +80,16 @@ public class ServiceCallTest {
 		//test.selectProfileList(restIp, restPort, strTocken);
 		
 		//보안정책 > 보안정책 상세
-		test.selectProfileProtectionContents(restIp, restPort, strTocken);
+		//test.selectProfileProtectionContents(restIp, restPort, strTocken);
 		
 		//암호화키 > 암호화키리스트
 		//test.selectCryptoKeyList(restIp, restPort, strTocken);
 		
 		//암호화키 > 암호화 키 등록
 		//test.insertCryptoKeySymmetric(restIp, restPort, strTocken);
+		
+		//암호화키 > 암호화 키 수정
+		//test.updateCryptoKeySymmetric(restIp, restPort, strTocken);
 		
 
 		
@@ -150,7 +165,13 @@ public class ServiceCallTest {
 
 	}
 	
-	
+	/**
+	 * 보안정책상세
+	 * @param restIp
+	 * @param restPort
+	 * @param strTocken
+	 * @throws Exception
+	 */
 	private void selectProfileProtectionContents(String restIp, int restPort, String strTocken) throws Exception {
 
 		EncryptCommonService api = new EncryptCommonService(restIp, restPort);
@@ -192,8 +213,133 @@ public class ServiceCallTest {
 			ProfileProtection profileProtection = new ProfileProtection();
 			profileProtection = gson.fromJson(jsonProfileProtection.toJSONString(), profileProtection.getClass());
 			
-			String createDateTime = profileProtection.getCreateDateTime();
-			System.out.println(createDateTime);
+			System.out.println("보호 정책 이름 : " + profileProtection.getProfileName());
+			System.out.println("보호 정책 설명 : " + profileProtection.getProfileNote());
+
+			System.out.println(profileProtection.getCreateDateTime());
+			System.out.println((boolean) profileProtection.getDefaultAccessAllowTrueFalse()); //	기본접근허용
+			
+			long optionBits = 0L;
+			optionBits= (long) profileProtection.getOptionBits();
+			
+			//optionBits = Long.parseLong(strOptionBit);
+			
+			boolean blnLoggingFail = !((optionBits & SystemCode.BitMask.POLICY_OPT_NO_AUDIT_LOG_ON_FAIL) == SystemCode.BitMask.POLICY_OPT_NO_AUDIT_LOG_ON_FAIL);
+			
+			boolean blnLoggingSuccess= !((optionBits & SystemCode.BitMask.POLICY_OPT_NO_AUDIT_LOG_ON_SUCCESS) == SystemCode.BitMask.POLICY_OPT_NO_AUDIT_LOG_ON_SUCCESS);
+			
+			boolean blnLogCompress = ((optionBits & SystemCode.BitMask.POLICY_OPT_COMPRESS_AUDIT_LOG) == SystemCode.BitMask.POLICY_OPT_COMPRESS_AUDIT_LOG);
+			
+			System.out.println(blnLoggingFail); //실패 로그 기록
+			System.out.println(blnLoggingSuccess); //성공 로그 기록
+			System.out.println(blnLogCompress); //로그 압축
+			
+			System.out.println(profileProtection.getNullEncryptYesNo()); //nullEncryptYesNo	NULL 암호화
+			System.out.println(profileProtection.getPreventDoubleYesNo()); //preventDoubleYesNo	이중 암호화 방지
+			System.out.println(profileProtection.getDenyResultTypeCode()); //denyResultTypeCode	접근 거부시 처리
+			System.out.println(profileProtection.getDataTypeCode()); //dataTypeCode	데이터 타입
+
+			
+			
+			JSONArray arrProfileCipherSpec = (JSONArray) map.get("ProfileCipherSpec");
+			
+			System.out.println(" ################# ProfileCipherSpec ################### ");
+			
+			if(arrProfileCipherSpec.size()>0) {
+				for(int i=0; i<arrProfileCipherSpec.size(); i++) {
+					JSONObject json = (JSONObject) arrProfileCipherSpec.get(i);
+					
+					ProfileCipherSpec profileCipherSpec = new ProfileCipherSpec();
+					Gson gsonProfileCipherSpec = new Gson();
+					profileCipherSpec = gsonProfileCipherSpec.fromJson(json.toJSONString(), profileCipherSpec.getClass());
+					
+					System.out.println(" specIndex : " + profileCipherSpec.getSpecIndex());
+					System.out.println(" profileUid : " + profileCipherSpec.getProfileUid());
+					System.out.println(" CipherAlgorithmCode : " + profileCipherSpec.getCipherAlgorithmCode());
+					System.out.println(" CipherAlgorithmName : " + profileCipherSpec.getCipherAlgorithmName());
+				}
+			}
+			
+
+			
+			
+			JSONArray arrProfileAclSpec = (JSONArray) map.get("ProfileAclSpec");
+			
+			System.out.println(" ################# ProfileAclSpec ################### ");
+			
+			if(arrProfileAclSpec.size()>0) {
+				for(int i=0; i<arrProfileAclSpec.size(); i++) {
+					JSONObject json = (JSONObject) arrProfileAclSpec.get(i);
+					
+					ProfileAclSpec profileAclSpec = new ProfileAclSpec();
+					Gson gsonProfileAclSpec = new Gson();
+					profileAclSpec = gsonProfileAclSpec.fromJson(json.toJSONString(), profileAclSpec.getClass());
+
+					System.out.println(" AclSpecSequence : " + profileAclSpec.getAclSpecSequence());
+					System.out.println(" SpecOrder : " + profileAclSpec.getSpecOrder());
+					System.out.println(" SpecName : " + profileAclSpec.getSpecName());
+				}
+			}
+			
+
+		} else {
+			
+		}
+
+	}
+	
+	/**
+	 * 보안정책 등록
+	 * @param restIp
+	 * @param restPort
+	 * @param strTocken
+	 * @throws Exception
+	 */
+	private void insertProfileProtection(String restIp, int restPort, String strTocken) throws Exception {
+
+		EncryptCommonService api = new EncryptCommonService(restIp, restPort);
+
+		String strService = SystemCode.ServiceName.POLICY_SERVICE;
+		String strCommand = SystemCode.ServiceCommand.INSERTPROFILEPROTECTION;
+
+		ProfileProtection param1 = new ProfileProtection();
+		param1.setProfileUid("57a20cfe-6e77-4a08-8e8f-4f328fa8a0e0");
+
+		//JSONObject parameters = new JSONObject();
+		//parameters.put("profile", vo);
+		
+		HashMap body = new HashMap();
+		body.put(TypeUtility.getJustClassName(param1.getClass()), param1.toJSONString());
+
+		String parameters = TypeUtility.makeRequestBody(body);
+
+		HashMap header = new HashMap();
+		header.put(SystemCode.FieldName.LOGIN_ID, "admin");
+		header.put(SystemCode.FieldName.ENTITY_UID, "00000000-0000-0000-0000-000000000001");
+		header.put(SystemCode.FieldName.TOKEN_VALUE, strTocken);
+
+		JSONObject resultJson = api.callService(strService, strCommand, header, parameters);
+		
+
+		String resultCode = (String) resultJson.get("resultCode");
+		String resultMessage = (String) resultJson.get("resultMessage");
+		resultMessage = new String(resultMessage.getBytes("iso-8859-1"),"UTF-8"); 
+		
+		System.out.println("resultCode : " + resultCode + " resultMessage : " + resultMessage);
+		
+		if(resultCode.equals(SystemCode.ResultCode.SUCCESS)) {
+
+			JSONObject map = (JSONObject) resultJson.get("map");
+			JSONObject jsonProfileProtection = (JSONObject) map.get("ProfileProtection");
+			
+			Gson gson = new Gson();
+			ProfileProtection profileProtection = new ProfileProtection();
+			profileProtection = gson.fromJson(jsonProfileProtection.toJSONString(), profileProtection.getClass());
+			
+			System.out.println("보호 정책 이름 : " + profileProtection.getProfileName());
+			System.out.println("보호 정책 설명 : " + profileProtection.getProfileNote());
+
+			System.out.println(profileProtection.getCreateDateTime());
 			System.out.println((boolean) profileProtection.getDefaultAccessAllowTrueFalse()); //	기본접근허용
 			
 			long optionBits = 0L;
@@ -859,6 +1005,7 @@ public class ServiceCallTest {
 					StringBuffer bf = new StringBuffer();
 					bf.append((i+1) + "키 식별자 : " + cryptoKey.getKeyUid());
 					bf.append((i+1) + "키 이름 : " + cryptoKey.getResourceName());
+					bf.append((i+1) + "ResourceUid : " + cryptoKey.getResourceUid());
 					bf.append((i+1) + "유형 코드 : " + cryptoKey.getResourceTypeCode());
 					bf.append((i+1) + "키 설명 : " + cryptoKey.getResourceNote());
 					bf.append((i+1) + "유형 : " + cryptoKey.getResourceTypeName());
@@ -911,6 +1058,52 @@ public class ServiceCallTest {
 		param.setCipherAlgorithmCode("CAD1");
 		param.setResourceNote("testNote");
 		param.setKeyStatusCode("KS50");
+		
+
+		HashMap body = new HashMap();
+		body.put(TypeUtility.getJustClassName(param.getClass()), param.toJSONString());
+
+		String parameters = TypeUtility.makeRequestBody(body);
+		
+
+		HashMap header = new HashMap();
+		header.put(SystemCode.FieldName.LOGIN_ID, "admin");
+		header.put(SystemCode.FieldName.ENTITY_UID, "00000000-0000-0000-0000-000000000001");
+		header.put(SystemCode.FieldName.TOKEN_VALUE, strTocken);
+
+		JSONObject resultJson = api.callService(strService, strCommand, header, parameters.toString());
+		
+		Iterator<?> iter = resultJson.entrySet().iterator();
+		while (iter.hasNext()) {
+			Map.Entry entry = (Map.Entry) iter.next();
+
+			System.out.println(String.valueOf(entry.getKey()) + " = " + String.valueOf(entry.getValue()));
+		}
+		
+		
+		String resultCode = (String) resultJson.get("resultCode");
+		String resultMessage = new String(resultJson.get("resultMessage").toString().getBytes("iso-8859-1"),"UTF-8");
+		
+		System.out.println(resultMessage);
+		
+	}
+	
+	private void updateCryptoKeySymmetric(String restIp, int restPort, String strTocken) throws Exception {
+		EncryptCommonService api = new EncryptCommonService(restIp, restPort);
+
+		String strService = SystemCode.ServiceName.KEY_SERVICE;
+		String strCommand = SystemCode.ServiceCommand.UPDATECRYPTOKEYSYMMETRIC;
+
+
+		CryptoKeySymmetric param = new CryptoKeySymmetric();
+		param.setKeyUid("d66ebb08-4f76-4ddb-a193-c615a9ad9fb0");
+		param.setResourceUid("d66ebb08-4f76-4ddb-a193-c615a9ad9fb0");
+		param.setResourceName("ar");
+		param.setCipherAlgorithmCode("CAR3");
+		param.setResourceNote("testNote1");
+		param.setKeyStatusCode("KS50");
+		param.setRenew(false);
+		param.setCopyBin(false);
 		
 
 		HashMap body = new HashMap();
@@ -1014,6 +1207,219 @@ public class ServiceCallTest {
 		}
 		
 	}
+	
+	/**
+	 * 적용알고리즘 공통코드 조회
+	 * @param restIp
+	 * @param restPort
+	 * @param strTocken
+	 * @throws Exception
+	 */
+	private void selectSysCodeListExper(String restIp, int restPort, String strTocken) throws Exception {
+		EncryptCommonService api = new EncryptCommonService(restIp, restPort);
+
+		String strService = SystemCode.ServiceName.SYSTEM_SERVICE;
+		String strCommand = SystemCode.ServiceCommand.SELECTCIPHERSYSCODELIST;
+
+		SysCode param = new SysCode();
+		//param.setCategoryKey(categoryKey);
+
+		HashMap body = new HashMap();
+		//body.put(TypeUtility.getJustClassName(param.getClass()), param.toJSONString());
+
+		String parameters = TypeUtility.makeRequestBody(body);
+		
+
+		HashMap header = new HashMap();
+		header.put(SystemCode.FieldName.LOGIN_ID, "admin");
+		header.put(SystemCode.FieldName.ENTITY_UID, "00000000-0000-0000-0000-000000000001");
+		header.put(SystemCode.FieldName.TOKEN_VALUE, strTocken);
+
+		JSONObject resultJson = api.callService(strService, strCommand, header, parameters.toString());
+		
+		Iterator<?> iter = resultJson.entrySet().iterator();
+		while (iter.hasNext()) {
+			Map.Entry entry = (Map.Entry) iter.next();
+
+			System.out.println(String.valueOf(entry.getKey()) + " = " + String.valueOf(entry.getValue()));
+		}
+		
+		
+		String resultCode = (String) resultJson.get("resultCode");
+		String resultMessage = (String) resultJson.get("resultMessage");
+		long totalListCount = (long) resultJson.get("totalListCount");
+		
+		
+		if(resultCode.equals("0000000000")) {
+			ArrayList list = (ArrayList) resultJson.get("list");
+			
+			//System.out.println("list Size : " + list.size());
+			if(totalListCount > 0) {
+				for(int i=0; i<list.size(); i++) {
+					JSONObject data = (JSONObject) list.get(i);
+					
+					SysCode sysCode = new SysCode();
+					Gson gson = new Gson();
+					sysCode = gson.fromJson(data.toJSONString(), sysCode.getClass());
+					
+					System.out.println("syscode : " + sysCode.getSysCode());
+					System.out.println("SysCodeName : " + sysCode.getSysCodeName());
+					System.out.println("SysCodeValue : " + sysCode.getSysCodeValue());
+					
+				
+					
+				}
+			
+			}
+		}
+		
+	}
+	
+	/**
+	 * 일반 공통코드 리스트
+	 * @param restIp
+	 * @param restPort
+	 * @param strTocken
+	 * @throws Exception
+	 */
+	private void selectParamSysCodeList(String restIp, int restPort, String strTocken) throws Exception {
+		EncryptCommonService api = new EncryptCommonService(restIp, restPort);
+
+		String strService = SystemCode.ServiceName.SYSTEM_SERVICE;
+		String strCommand = SystemCode.ServiceCommand.SELECTPARAMSYSCODELIST;
+
+		String categoryKey = "DATA_TYPE_CD"; //데이터타입
+		categoryKey = "DENY_RESULT_TYPE_CD"; //접근거부시 처리
+		categoryKey = "INITIAL_VECTOR_TYPE"; //초기벡터
+		categoryKey = "OPERATION_MODE"; //운영모드
+		
+		SysCode param = new SysCode();
+//		param.setCategoryKey(categoryKey);
+
+		
+
+		HashMap body = new HashMap();
+		//body.put(TypeUtility.getJustClassName(param.getClass()), param.toJSONString());
+		body.put("categoryKey", categoryKey);
+		
+		String parameters = TypeUtility.makeRequestBody(body);
+		
+		System.out.println(parameters);
+
+		HashMap header = new HashMap();
+		header.put(SystemCode.FieldName.LOGIN_ID, "admin");
+		header.put(SystemCode.FieldName.ENTITY_UID, "00000000-0000-0000-0000-000000000001");
+		header.put(SystemCode.FieldName.TOKEN_VALUE, strTocken);
+
+		JSONObject resultJson = api.callService(strService, strCommand, header, parameters.toString());
+		
+		Iterator<?> iter = resultJson.entrySet().iterator();
+		while (iter.hasNext()) {
+			Map.Entry entry = (Map.Entry) iter.next();
+
+			System.out.println(String.valueOf(entry.getKey()) + " = " + String.valueOf(entry.getValue()));
+		}
+		
+		
+		String resultCode = (String) resultJson.get("resultCode");
+		String resultMessage = (String) resultJson.get("resultMessage");
+		//long totalListCount = (long) resultJson.get("totalListCount");
+		
+		
+		if(resultCode.equals("0000000000")) {
+			ArrayList list = (ArrayList) resultJson.get("list");
+			
+			//System.out.println("list Size : " + list.size());
+			//if(totalListCount > 0) {
+				for(int i=0; i<list.size(); i++) {
+					JSONObject data = (JSONObject) list.get(i);
+					
+					SysCode sysCode = new SysCode();
+					Gson gson = new Gson();
+					sysCode = gson.fromJson(data.toJSONString(), sysCode.getClass());
+					
+					System.out.println("syscode : " + sysCode.getSysCode());
+					System.out.println("SysCodeName : " + sysCode.getSysCodeName());
+					System.out.println("SysCodeValue : " + sysCode.getSysCodeValue());
+					
+				
+					
+				}
+			
+			//}
+		}
+		
+	}
+	
+	/**
+	 * 접근자 리스트
+	 * @param restIp
+	 * @param restPort
+	 * @param strTocken
+	 * @throws Exception
+	 */
+	private void selectEntityList(String restIp, int restPort, String strTocken) throws Exception {
+		EncryptCommonService api = new EncryptCommonService(restIp, restPort);
+
+		String strService = SystemCode.ServiceName.ENTITY_SERVICE;
+		String strCommand = SystemCode.ServiceCommand.SELECTENTITYLIST;
+
+		String monitored = "false"; 
+
+		HashMap body = new HashMap();
+		//body.put(TypeUtility.getJustClassName(param.getClass()), param.toJSONString());
+		body.put("monitored", monitored);
+		
+		String parameters = TypeUtility.makeRequestBody(body);
+		
+		System.out.println(parameters);
+
+		HashMap header = new HashMap();
+		header.put(SystemCode.FieldName.LOGIN_ID, "admin");
+		header.put(SystemCode.FieldName.ENTITY_UID, "00000000-0000-0000-0000-000000000001");
+		header.put(SystemCode.FieldName.TOKEN_VALUE, strTocken);
+
+		JSONObject resultJson = api.callService(strService, strCommand, header, parameters.toString());
+		
+		Iterator<?> iter = resultJson.entrySet().iterator();
+		while (iter.hasNext()) {
+			Map.Entry entry = (Map.Entry) iter.next();
+
+			System.out.println(String.valueOf(entry.getKey()) + " = " + String.valueOf(entry.getValue()));
+		}
+		
+		
+		String resultCode = (String) resultJson.get("resultCode");
+		String resultMessage = (String) resultJson.get("resultMessage");
+		//long totalListCount = (long) resultJson.get("totalListCount");
+		
+		
+		if(resultCode.equals("0000000000")) {
+			ArrayList list = (ArrayList) resultJson.get("list");
+			
+			//System.out.println("list Size : " + list.size());
+			//if(totalListCount > 0) {
+				for(int i=0; i<list.size(); i++) {
+					JSONObject data = (JSONObject) list.get(i);
+					
+					Entity entity = new Entity();
+					Gson gson = new Gson();
+					entity = gson.fromJson(data.toJSONString(), entity.getClass());
+					
+					System.out.println("getEntityUid : " + entity.getEntityUid());
+					System.out.println("getEntityName : " + new String(entity.getEntityName().toString().getBytes("iso-8859-1"),"UTF-8") );
+
+					
+				
+					
+				}
+			
+			//}
+		}
+		
+	}
+	
+	
 	
 	private void checkChar(String originalStr) throws Exception {
 		//String originalStr = "Å×½ºÆ®"; // 테스트 

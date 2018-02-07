@@ -122,6 +122,10 @@ public class SystemCode {
 		public static final String DELETEQUERYCONVERSION =	"deleteQueryConversion";
 		public static final String SELECTQUERYCONVERSIONLIST =	"selectQueryConversionList";
 		public static final String SELECTSYSCODELIST =	"selectSysCodeList";
+		public static final String SELECTCIPHERSYSCODELIST =	"selectCipherSysCodeList";
+		public static final String SELECTPARAMSYSCODELIST =	"selectParamSysCodeList";
+		
+		
 		public static final String SELECTSYSCONFIGLIST =	"selectSysConfigList";
 		public static final String SELECTSERVERVERSION =	"selectServerVersion";
 		public static final String SELECTPERMISSIONPRESETLIST =	"selectPermissionPresetList";
