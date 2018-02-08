@@ -4,6 +4,7 @@ import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
 
 import org.codehaus.jackson.map.ObjectMapper;
@@ -37,7 +38,7 @@ public class ServiceCallTest {
 		restIp = "127.0.0.1";
 		restPort = 8443;
 		
-		String strTocken = "rweQbkFSIluD4V8OkqpY7kBYmFx2eVeinLEaHHg7s58=";
+		String strTocken = "ZN7cQMMQjKIwLMwvgSl6NTSSg0LSxDbTI1EUygMoxok=";
 
 		ServiceCallTest test = new ServiceCallTest();
 	
@@ -59,7 +60,10 @@ public class ServiceCallTest {
 		//test.selectParamSysCodeList(restIp, restPort, strTocken);
 		
 		//접근자리스트
-		test.selectEntityList(restIp, restPort, strTocken);
+		//test.selectEntityList(restIp, restPort, strTocken);
+		
+		// 보호정책상세 > 암호화 키 리스트
+		test.selectCryptoKeySymmetricList(restIp, restPort, strTocken);
 
 
 		//test.selectProfileProtectionVersion(restIp, restPort, strTocken);
@@ -90,6 +94,9 @@ public class ServiceCallTest {
 		
 		//암호화키 > 암호화 키 수정
 		//test.updateCryptoKeySymmetric(restIp, restPort, strTocken);
+		
+		//보안정책 > 보안정책등록
+		//test.insertProfileProtection(restIp, restPort, strTocken);
 		
 
 		
@@ -257,6 +264,13 @@ public class ServiceCallTest {
 					System.out.println(" profileUid : " + profileCipherSpec.getProfileUid());
 					System.out.println(" CipherAlgorithmCode : " + profileCipherSpec.getCipherAlgorithmCode());
 					System.out.println(" CipherAlgorithmName : " + profileCipherSpec.getCipherAlgorithmName());
+					
+					System.out.println(" operationModeCode : " + profileCipherSpec.getOperationModeCode());
+					System.out.println(" paddingMethodCode : " + profileCipherSpec.getPaddingMethodCode());
+					System.out.println(" initialVectorTypeCode : " + profileCipherSpec.getInitialVectorTypeCode());
+					System.out.println(" offset : " + profileCipherSpec.getOffset());
+					System.out.println(" length : " + profileCipherSpec.getLength());
+					System.out.println(" binUid : " + profileCipherSpec.getBinUid());
 				}
 			}
 			
@@ -303,13 +317,103 @@ public class ServiceCallTest {
 		String strCommand = SystemCode.ServiceCommand.INSERTPROFILEPROTECTION;
 
 		ProfileProtection param1 = new ProfileProtection();
-		param1.setProfileUid("57a20cfe-6e77-4a08-8e8f-4f328fa8a0e0");
+		//param1.setProfileUid("57a20cfe-6e77-4a08-8e8f-4f328fa8a0e0");
+		
+		param1.setProfileName("test_profile");
+		param1.setProfileNote("profilenote");
+		param1.setDataTypeCode("DTCH");
+		param1.setBase64YesNo("Y");
+		param1.setPreventDoubleYesNo("Y");
+		param1.setNullEncryptYesNo("N");
+		param1.setDenyResultTypeCode("DRER");
+		param1.setMaskingValue("");
+		
+		long optionBits = 0;
+		
+		//실패 로그기록 체크가 아니면
+		optionBits |= SystemCode.BitMask.POLICY_OPT_NO_AUDIT_LOG_ON_FAIL;
+		
+		//성공로그기록 체크가 아니면 
+		optionBits |= SystemCode.BitMask.POLICY_OPT_NO_AUDIT_LOG_ON_SUCCESS;
+		
+		//로그압축 체크이면
+		//optionBits |= SystemCode.BitMask.POLICY_OPT_COMPRESS_AUDIT_LOG;
+		
+		param1.setOptionBits(optionBits);
+		
+		param1.setDefaultAccessAllowTrueFalse(true);
+		
+		List<ProfileCipherSpec> param2 = new ArrayList<ProfileCipherSpec>();
+		ProfileCipherSpec p = new ProfileCipherSpec();
+		p.setSpecIndex(1);
+		p.setCipherAlgorithmCode("CAD1");
+		p.setOperationModeCode("OMCB");
+		p.setInitialVectorTypeCode("IVFX");
+		p.setOffset(1);
+		p.setLength(null);
+		p.setBinUid("20171027130442382_de351577-5b53-4265-8bee-a60289de88e2");
+		
+		param2.add(p);
+		
+		
+		List<ProfileAclSpec> param3 = new ArrayList<ProfileAclSpec>();
+		
+		ProfileAclSpec r = new ProfileAclSpec();
+		
+		r.setSpecIndex(1); //row
+		r.setSpecOrder(1); //row
+		r.setSpecName("규칙2");
+		r.setServerInstanceId("experdba"); //서버 인스턴스
+		r.setServerLoginId("experdb");
+		r.setAdminLoginId("experdb");				
+		r.setApplicationName("");
+		r.setExtraName("");
+		r.setHostName("");
+		r.setAccessAddress("");
+		r.setAccessAddressMask("");
+		r.setAccessMacAddress("");
+		r.setStartDateTime("2018-02-01 00:00:00");
+		r.setEndDateTime("9997-12-31 00:00:00");
+		r.setStartTime("00:00:00");
+		r.setEndTime("23:59:59");
+		r.setOsLoginId("experdb");
+		r.setMassiveTimeInterval(0);
+		r.setMassiveThreshold(0);
+		
+		r.setWhitelistYesNo("Y");
+
+		int workDay = SystemCode.Weekday.MONDAY
+	    | SystemCode.Weekday.TUESDAY
+	    | SystemCode.Weekday.WEDNESDAY
+	    | SystemCode.Weekday.THURSDAY
+	    | SystemCode.Weekday.FRIDAY
+	    | SystemCode.Weekday.SATURDAY
+	    | SystemCode.Weekday.SUNDAY;
+		
+		r.setWorkDay(workDay);
+		
+		param3.add(r);
+		
 
 		//JSONObject parameters = new JSONObject();
 		//parameters.put("profile", vo);
 		
 		HashMap body = new HashMap();
 		body.put(TypeUtility.getJustClassName(param1.getClass()), param1.toJSONString());
+		
+		if(param2.size() > 0) {
+			for(ProfileCipherSpec s:param2) {
+				
+				body.put("ProfileCipherSpec", s.toJSONString());
+			}
+		}
+		
+		if(param3.size() > 0) {
+			for(ProfileAclSpec s:param3) {
+				
+				body.put("ProfileAclSpec", s.toJSONString());
+			}
+		}
 
 		String parameters = TypeUtility.makeRequestBody(body);
 
@@ -327,87 +431,7 @@ public class ServiceCallTest {
 		
 		System.out.println("resultCode : " + resultCode + " resultMessage : " + resultMessage);
 		
-		if(resultCode.equals(SystemCode.ResultCode.SUCCESS)) {
 
-			JSONObject map = (JSONObject) resultJson.get("map");
-			JSONObject jsonProfileProtection = (JSONObject) map.get("ProfileProtection");
-			
-			Gson gson = new Gson();
-			ProfileProtection profileProtection = new ProfileProtection();
-			profileProtection = gson.fromJson(jsonProfileProtection.toJSONString(), profileProtection.getClass());
-			
-			System.out.println("보호 정책 이름 : " + profileProtection.getProfileName());
-			System.out.println("보호 정책 설명 : " + profileProtection.getProfileNote());
-
-			System.out.println(profileProtection.getCreateDateTime());
-			System.out.println((boolean) profileProtection.getDefaultAccessAllowTrueFalse()); //	기본접근허용
-			
-			long optionBits = 0L;
-			optionBits= (long) profileProtection.getOptionBits();
-			
-			//optionBits = Long.parseLong(strOptionBit);
-			
-			boolean blnLoggingFail = !((optionBits & SystemCode.BitMask.POLICY_OPT_NO_AUDIT_LOG_ON_FAIL) == SystemCode.BitMask.POLICY_OPT_NO_AUDIT_LOG_ON_FAIL);
-			
-			boolean blnLoggingSuccess= !((optionBits & SystemCode.BitMask.POLICY_OPT_NO_AUDIT_LOG_ON_SUCCESS) == SystemCode.BitMask.POLICY_OPT_NO_AUDIT_LOG_ON_SUCCESS);
-			
-			boolean blnLogCompress = ((optionBits & SystemCode.BitMask.POLICY_OPT_COMPRESS_AUDIT_LOG) == SystemCode.BitMask.POLICY_OPT_COMPRESS_AUDIT_LOG);
-			
-			System.out.println(blnLoggingFail); //실패 로그 기록
-			System.out.println(blnLoggingSuccess); //성공 로그 기록
-			System.out.println(blnLogCompress); //로그 압축
-			
-			System.out.println(profileProtection.getNullEncryptYesNo()); //nullEncryptYesNo	NULL 암호화
-			System.out.println(profileProtection.getPreventDoubleYesNo()); //preventDoubleYesNo	이중 암호화 방지
-			System.out.println(profileProtection.getDenyResultTypeCode()); //denyResultTypeCode	접근 거부시 처리
-			System.out.println(profileProtection.getDataTypeCode()); //dataTypeCode	데이터 타입
-
-			
-			
-			JSONArray arrProfileCipherSpec = (JSONArray) map.get("ProfileCipherSpec");
-			
-			System.out.println(" ################# ProfileCipherSpec ################### ");
-			
-			if(arrProfileCipherSpec.size()>0) {
-				for(int i=0; i<arrProfileCipherSpec.size(); i++) {
-					JSONObject json = (JSONObject) arrProfileCipherSpec.get(i);
-					
-					ProfileCipherSpec profileCipherSpec = new ProfileCipherSpec();
-					Gson gsonProfileCipherSpec = new Gson();
-					profileCipherSpec = gsonProfileCipherSpec.fromJson(json.toJSONString(), profileCipherSpec.getClass());
-					
-					System.out.println(" specIndex : " + profileCipherSpec.getSpecIndex());
-					System.out.println(" profileUid : " + profileCipherSpec.getProfileUid());
-					System.out.println(" CipherAlgorithmCode : " + profileCipherSpec.getCipherAlgorithmCode());
-					System.out.println(" CipherAlgorithmName : " + profileCipherSpec.getCipherAlgorithmName());
-				}
-			}
-			
-
-			
-			
-			JSONArray arrProfileAclSpec = (JSONArray) map.get("ProfileAclSpec");
-			
-			System.out.println(" ################# ProfileAclSpec ################### ");
-			
-			if(arrProfileAclSpec.size()>0) {
-				for(int i=0; i<arrProfileAclSpec.size(); i++) {
-					JSONObject json = (JSONObject) arrProfileAclSpec.get(i);
-					
-					ProfileAclSpec profileAclSpec = new ProfileAclSpec();
-					Gson gsonProfileAclSpec = new Gson();
-					profileAclSpec = gsonProfileAclSpec.fromJson(json.toJSONString(), profileAclSpec.getClass());
-
-					System.out.println(" AclSpecSequence : " + profileAclSpec.getAclSpecSequence());
-					System.out.println(" SpecOrder : " + profileAclSpec.getSpecOrder());
-					System.out.println(" SpecName : " + profileAclSpec.getSpecName());
-				}
-			}
-			
-
-		} else {
-			
-		}
 
 	}
 	
@@ -1290,8 +1314,8 @@ public class ServiceCallTest {
 
 		String categoryKey = "DATA_TYPE_CD"; //데이터타입
 		categoryKey = "DENY_RESULT_TYPE_CD"; //접근거부시 처리
-		categoryKey = "INITIAL_VECTOR_TYPE"; //초기벡터
-		categoryKey = "OPERATION_MODE"; //운영모드
+		//categoryKey = "INITIAL_VECTOR_TYPE"; //초기벡터
+		//categoryKey = "OPERATION_MODE"; //운영모드
 		
 		SysCode param = new SysCode();
 //		param.setCategoryKey(categoryKey);
@@ -1419,7 +1443,72 @@ public class ServiceCallTest {
 		
 	}
 	
-	
+	/**
+	 * 보호정책상세 > 암호화 키 리스트
+	 * @param restIp
+	 * @param restPort
+	 * @param strTocken
+	 * @throws Exception
+	 */
+	private void selectCryptoKeySymmetricList(String restIp, int restPort, String strTocken) throws Exception {
+		EncryptCommonService api = new EncryptCommonService(restIp, restPort);
+
+		String strService = SystemCode.ServiceName.KEY_SERVICE;
+		String strCommand = SystemCode.ServiceCommand.SELECTCRYPTOKEYSYMMETRICLIST;
+
+
+		
+		
+		CryptoKeySymmetric param = new CryptoKeySymmetric();
+
+		
+		HashMap body = new HashMap();
+		body.put(TypeUtility.getJustClassName(param.getClass()), param.toJSONString());
+
+		String parameters = TypeUtility.makeRequestBody(body);
+		
+
+		HashMap header = new HashMap();
+		header.put(SystemCode.FieldName.LOGIN_ID, "admin");
+		header.put(SystemCode.FieldName.ENTITY_UID, "00000000-0000-0000-0000-000000000001");
+		header.put(SystemCode.FieldName.TOKEN_VALUE, strTocken);
+
+		JSONObject resultJson = api.callService(strService, strCommand, header, parameters.toString());
+		
+		Iterator<?> iter = resultJson.entrySet().iterator();
+		while (iter.hasNext()) {
+			Map.Entry entry = (Map.Entry) iter.next();
+
+			System.out.println(String.valueOf(entry.getKey()) + " = " + String.valueOf(entry.getValue()));
+		}
+		
+		
+		String resultCode = (String) resultJson.get("resultCode");
+		String resultMessage = (String) resultJson.get("resultMessage");
+		long totalListCount = (long) resultJson.get("totalListCount");
+		
+		
+		if(resultCode.equals("0000000000")) {
+			ArrayList list = (ArrayList) resultJson.get("list");
+			
+			//System.out.println("list Size : " + list.size());
+			if(totalListCount > 0) {
+				for(int i=0; i<list.size(); i++) {
+					JSONObject jsonData = (JSONObject) list.get(i);
+					
+					Gson gson = new Gson();
+					CryptoKeySymmetric cryptoKeySymmetric = new CryptoKeySymmetric();
+					cryptoKeySymmetric = gson.fromJson(jsonData.toJSONString(), cryptoKeySymmetric.getClass());
+					
+					System.out.println("getBinName : " + cryptoKeySymmetric.getBinName());
+					System.out.println("getBinUid : " + cryptoKeySymmetric.getBinUid());
+					
+				}
+			
+			}
+		}
+		
+	}
 	
 	private void checkChar(String originalStr) throws Exception {
 		//String originalStr = "Å×½ºÆ®"; // 테스트 
