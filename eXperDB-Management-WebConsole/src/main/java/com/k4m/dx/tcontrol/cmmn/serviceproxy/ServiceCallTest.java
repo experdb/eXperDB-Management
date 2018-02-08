@@ -27,6 +27,7 @@ import com.k4m.dx.tcontrol.cmmn.serviceproxy.vo.ProfileAclSpec;
 import com.k4m.dx.tcontrol.cmmn.serviceproxy.vo.ProfileCipherSpec;
 import com.k4m.dx.tcontrol.cmmn.serviceproxy.vo.ProfileProtection;
 import com.k4m.dx.tcontrol.cmmn.serviceproxy.vo.SysCode;
+import com.k4m.dx.tcontrol.cmmn.serviceproxy.vo.SystemUsage;
 
 public class ServiceCallTest {
 
@@ -38,7 +39,7 @@ public class ServiceCallTest {
 		restIp = "127.0.0.1";
 		restPort = 8443;
 		
-		String strTocken = "ZN7cQMMQjKIwLMwvgSl6NTSSg0LSxDbTI1EUygMoxok=";
+		String strTocken = "seXpNOfBIPIc5yqFiSab1Rpc7gdQYCcQM6RBtpVjJR4=";
 
 		ServiceCallTest test = new ServiceCallTest();
 	
@@ -63,7 +64,7 @@ public class ServiceCallTest {
 		//test.selectEntityList(restIp, restPort, strTocken);
 		
 		// 보호정책상세 > 암호화 키 리스트
-		test.selectCryptoKeySymmetricList(restIp, restPort, strTocken);
+		//test.selectCryptoKeySymmetricList(restIp, restPort, strTocken);
 
 
 		//test.selectProfileProtectionVersion(restIp, restPort, strTocken);
@@ -79,6 +80,9 @@ public class ServiceCallTest {
 		
 		//감사로그 > 백업/복원 감사로그
 		//test.selectBackupLogList(restIp, restPort, strTocken);
+		
+		//감사로그 > 자원 사용
+		//test.selectSystemUsageLogList(restIp, restPort, strTocken);
 		
 		//보안정책 > 정책관리
 		//test.selectProfileList(restIp, restPort, strTocken);
@@ -869,6 +873,92 @@ public class ServiceCallTest {
 	}
 	
 	/**
+	 * 자원사용로그
+	 * @param restIp
+	 * @param restPort
+	 * @param strTocken
+	 * @throws Exception
+	 */
+	private void selectSystemUsageLogList(String restIp, int restPort, String strTocken) throws Exception {
+		EncryptCommonService api = new EncryptCommonService(restIp, restPort);
+
+		String strService = SystemCode.ServiceName.LOG_SERVICE;
+		String strCommand = SystemCode.ServiceCommand.SELECTSYSTEMUSAGELOGLIST;
+
+
+		
+		SystemUsage param = new SystemUsage();
+
+		param.setSearchDateTimeFrom("2018-01-24 00:00:00.000000"); 
+		param.setSearchDateTimeTo("2018-01-24 23:59:59.999999");
+		param.setMonitoredUid("admin");
+		
+		param.setPageOffset(1);
+		param.setPageSize(10);
+
+		
+		HashMap body = new HashMap();
+		body.put(TypeUtility.getJustClassName(param.getClass()), param.toJSONString());
+
+		String parameters = TypeUtility.makeRequestBody(body);
+		
+
+		HashMap header = new HashMap();
+		header.put(SystemCode.FieldName.LOGIN_ID, "admin");
+		header.put(SystemCode.FieldName.ENTITY_UID, "00000000-0000-0000-0000-000000000001");
+		header.put(SystemCode.FieldName.TOKEN_VALUE, strTocken);
+
+		JSONObject resultJson = api.callService(strService, strCommand, header, parameters.toString());
+		
+		Iterator<?> iter = resultJson.entrySet().iterator();
+		while (iter.hasNext()) {
+			Map.Entry entry = (Map.Entry) iter.next();
+
+			System.out.println(String.valueOf(entry.getKey()) + " = " + String.valueOf(entry.getValue()));
+		}
+		
+		
+		String resultCode = (String) resultJson.get("resultCode");
+		String resultMessage = (String) resultJson.get("resultMessage");
+		long totalListCount = (long) resultJson.get("totalListCount");
+		
+		
+		if(resultCode.equals("0000000000")) {
+			ArrayList list = (ArrayList) resultJson.get("list");
+			
+			//System.out.println("list Size : " + list.size());
+			if(totalListCount > 0) {
+				for(int i=0; i<list.size(); i++) {
+					JSONObject log = (JSONObject) list.get(i);
+					
+					Gson gson = new Gson();
+					SystemUsage systemUsage = new SystemUsage();
+					systemUsage = gson.fromJson(log.toJSONString(), systemUsage.getClass());
+					
+					systemUsage.getSiteLogDateTime();
+					systemUsage.getServerLogDateTime();
+				
+					
+					System.out.println("모니터링 발생 일시 : " + systemUsage.getSiteLogDateTime());
+					System.out.println("모니터링 기록 일시 : " + systemUsage.getServerLogDateTime());
+					System.out.println("모니터링 대상 주소 : " + systemUsage.getMonitoredAddress());
+					System.out.println("모니터링 대상 식별자 : " + systemUsage.getMonitoredUid());
+					System.out.println("모니터링 대상 이름 : " + systemUsage.getMonitoredName());
+					System.out.println("자원 유형 : " + systemUsage.getTargetResourceType());
+					System.out.println("자원 : " + systemUsage.getTargetResource());
+					System.out.println("모니터링 결과 : " + systemUsage.getResultLevel());
+					System.out.println("사용률(%) : " + systemUsage.getUsageRate());
+					System.out.println("모니터링 발생 일시 : " + systemUsage.getLimitRate());
+					System.out.println("임계치(%) : " + systemUsage.getLogMessage());
+					
+				}
+			
+			}
+		}
+		
+	}
+	
+	/**
 	 * 마스터키 로드
 	 * @param restIp
 	 * @param restPort
@@ -1506,6 +1596,82 @@ public class ServiceCallTest {
 				}
 			
 			}
+		}
+		
+	}
+	
+	/**
+	 * 사용자 등록
+	 * @param restIp
+	 * @param restPort
+	 * @param strTocken
+	 * @throws Exception
+	 */
+	private void insertEntityWithPermission(String restIp, int restPort, String strTocken) throws Exception {
+		EncryptCommonService api = new EncryptCommonService(restIp, restPort);
+
+		String strService = SystemCode.ServiceName.ENTITY_SERVICE;
+		String strCommand = SystemCode.ServiceCommand.INSERTENTITYWITHPERMISSION;
+
+		String categoryKey = "DATA_TYPE_CD"; //데이터타입
+		categoryKey = "DENY_RESULT_TYPE_CD"; //접근거부시 처리
+		//categoryKey = "INITIAL_VECTOR_TYPE"; //초기벡터
+		//categoryKey = "OPERATION_MODE"; //운영모드
+		
+		SysCode param = new SysCode();
+//		param.setCategoryKey(categoryKey);
+
+		
+
+		HashMap body = new HashMap();
+		//body.put(TypeUtility.getJustClassName(param.getClass()), param.toJSONString());
+		body.put("categoryKey", categoryKey);
+		
+		String parameters = TypeUtility.makeRequestBody(body);
+		
+		System.out.println(parameters);
+
+		HashMap header = new HashMap();
+		header.put(SystemCode.FieldName.LOGIN_ID, "admin");
+		header.put(SystemCode.FieldName.ENTITY_UID, "00000000-0000-0000-0000-000000000001");
+		header.put(SystemCode.FieldName.TOKEN_VALUE, strTocken);
+
+		JSONObject resultJson = api.callService(strService, strCommand, header, parameters.toString());
+		
+		Iterator<?> iter = resultJson.entrySet().iterator();
+		while (iter.hasNext()) {
+			Map.Entry entry = (Map.Entry) iter.next();
+
+			System.out.println(String.valueOf(entry.getKey()) + " = " + String.valueOf(entry.getValue()));
+		}
+		
+		
+		String resultCode = (String) resultJson.get("resultCode");
+		String resultMessage = (String) resultJson.get("resultMessage");
+		//long totalListCount = (long) resultJson.get("totalListCount");
+		
+		
+		if(resultCode.equals("0000000000")) {
+			ArrayList list = (ArrayList) resultJson.get("list");
+			
+			//System.out.println("list Size : " + list.size());
+			//if(totalListCount > 0) {
+				for(int i=0; i<list.size(); i++) {
+					JSONObject data = (JSONObject) list.get(i);
+					
+					SysCode sysCode = new SysCode();
+					Gson gson = new Gson();
+					sysCode = gson.fromJson(data.toJSONString(), sysCode.getClass());
+					
+					System.out.println("syscode : " + sysCode.getSysCode());
+					System.out.println("SysCodeName : " + sysCode.getSysCodeName());
+					System.out.println("SysCodeValue : " + sysCode.getSysCodeValue());
+					
+				
+					
+				}
+			
+			//}
 		}
 		
 	}
