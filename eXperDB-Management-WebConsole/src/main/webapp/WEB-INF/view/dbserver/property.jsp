@@ -408,13 +408,13 @@
 								</colgroup>
 								<thead>
 									<tr>
-										<th scope="col">분류</th>
+										<th scope="col"><spring:message code="properties.category" /></th>
 										<th scope="col"><spring:message code="properties.item" /></th>
-										<th scope="col">설정값</th>
-										<th scope="col">단위</th>
-										<th scope="col">최소값</th>
-										<th scope="col">최대값</th>
-										<th scope="col">설명</th>
+										<th scope="col"><spring:message code="properties.setting_value" /></th>
+										<th scope="col"><spring:message code="properties.unit" /></th>
+										<th scope="col"><spring:message code="properties.min_value" /></th>
+										<th scope="col"><spring:message code="properties.max_value" /></th>
+										<th scope="col"><spring:message code="properties.short_desc" /></th>
 									</tr>
 								</thead>
 								<tbody>

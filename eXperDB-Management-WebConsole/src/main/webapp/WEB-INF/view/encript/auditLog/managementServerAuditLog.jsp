@@ -23,51 +23,37 @@
 
 	function fn_init() {
 		table = $('#table').DataTable({
-			scrollY : "250px",
+			scrollY : "310px",
 			searching : false,
 			deferRender : true,
 			scrollX: true,
 			columns : [
-				{ data : "", className : "dt-center", defaultContent : ""}, 
-				{ data : "", className : "dt-center", defaultContent : ""}, 
-				{ data : "", className : "dt-center", defaultContent : ""}, 
-				{ data : "", className : "dt-center", defaultContent : ""}, 
-				{ data : "", className : "dt-center", defaultContent : ""}, 
-				{ data : "", className : "dt-center", defaultContent : ""}, 
-				{ data : "", className : "dt-center", defaultContent : ""}, 
-				{ data : "", className : "dt-center", defaultContent : ""}
+				{ data : "rnum", className : "dt-center", defaultContent : ""}, 
+				{ data : "logDateTime", className : "dt-center", defaultContent : ""}, 
+				{ data : "entityName", className : "dt-center", defaultContent : ""}, 
+				{ data : "remoteAddress", className : "dt-center", defaultContent : ""}, 
+				{ data : "requestPath", className : "dt-center", defaultContent : ""}, 
+				{ data : "parameter", className : "dt-center", defaultContent : ""}, 
+				{ data : "resultCode", className : "dt-center", defaultContent : ""}, 
+				{ data : "resultMessage", className : "dt-center", defaultContent : ""}
 	
 			 ]
 		});
 		
-		table.tables().header().to$().find('th:eq(0)').css('min-width', '40px');
-		table.tables().header().to$().find('th:eq(1)').css('min-width', '100px');
+		table.tables().header().to$().find('th:eq(0)').css('min-width', '30px');
+		table.tables().header().to$().find('th:eq(1)').css('min-width', '150px');
 		table.tables().header().to$().find('th:eq(2)').css('min-width', '100px');
 		table.tables().header().to$().find('th:eq(3)').css('min-width', '100px');
-		table.tables().header().to$().find('th:eq(4)').css('min-width', '100px');
-		table.tables().header().to$().find('th:eq(5)').css('min-width', '100px');
+		table.tables().header().to$().find('th:eq(4)').css('min-width', '250px');
+		table.tables().header().to$().find('th:eq(5)').css('min-width', '1000px');
 		table.tables().header().to$().find('th:eq(6)').css('min-width', '100px');
-		table.tables().header().to$().find('th:eq(7)').css('min-width', '100px');
+		table.tables().header().to$().find('th:eq(7)').css('min-width', '300px');
 	
 	    $(window).trigger('resize');
 	    
-		//더블 클릭시
-		$('#table tbody').on('dblclick', 'tr', function() {
-	
-		});
 	}
 	
 	$(window.document).ready(function() {
-		fn_init();
-	});
-	
-
-	/* 조회 버튼 클릭시*/
-	function fn_select() {
-
-	}
-	
-	$(function() {		
 		var dateFormat = "yyyy-mm-dd", from = $("#from").datepicker({
 			changeMonth : false,
 			changeYear : false,
@@ -83,8 +69,81 @@
 				$("#from").datepicker("option", "maxDate", selectedDate);
 			}
 		})
+		
+		$('#from').val($.datepicker.formatDate('yy-mm-dd', new Date()));
+		$('#to').val($.datepicker.formatDate('yy-mm-dd', new Date()));
+		
+		fn_init();
+		$.ajax({
+			url : "/selectManagementServerAuditLog.do",
+			data : {
+				from : $('#from').val(),
+				to : 	$('#to').val(),
+				resultcode : $('#resultcode').val(),
+				entityuid : $('#entityuid').val()
+			},
+			dataType : "json",
+			type : "post",
+			beforeSend: function(xhr) {
+		        xhr.setRequestHeader("AJAX", true);
+		     },
+			error : function(xhr, status, error) {
+				if(xhr.status == 401) {
+					alert("<spring:message code='message.msg02' />");
+					 location.href = "/";
+				} else if(xhr.status == 403) {
+					alert("<spring:message code='message.msg03' />");
+		             location.href = "/";
+				} else {
+					alert("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""));
+				}
+			},
+			success : function(result) {
+				table.clear().draw();
+				if(result.data!=null){
+					table.rows.add(result.data).draw();
+				}
+			}
+		});
 
 	});
+	
+
+	/* 조회 버튼 클릭시*/
+	function fn_select() {
+		$.ajax({
+			url : "/selectManagementServerAuditLog.do",
+			data : {
+				from : $('#from').val(),
+				to : 	$('#to').val(),
+				resultcode : $('#resultcode').val(),
+				entityuid : $('#entityuid').val()
+			},
+			dataType : "json",
+			type : "post",
+			beforeSend: function(xhr) {
+		        xhr.setRequestHeader("AJAX", true);
+		     },
+			error : function(xhr, status, error) {
+				if(xhr.status == 401) {
+					alert("<spring:message code='message.msg02' />");
+					 location.href = "/";
+				} else if(xhr.status == 403) {
+					alert("<spring:message code='message.msg03' />");
+		             location.href = "/";
+				} else {
+					alert("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""));
+				}
+			},
+			success : function(result) {
+				table.clear().draw();
+				if(result.data!=null){
+					table.rows.add(result.data).draw();
+				}
+			}
+		});
+	}
+	
 
 </script>
 <!-- contents -->
@@ -135,16 +194,19 @@
 							<tr>
 								<th scope="row" class="t9">접근자</th>
 								<td>
-									<select class="select t5">
+									<select class="select t5" id="entityuid">
 										<option value="">전체</option>
+											<c:forEach var="entityuid" items="${entityuid}">
+												<option value="${entityuid.getEntityUid}">${entityuid.getEntityName}</option>							
+											</c:forEach>
 									</select>
 								</td>
 								<th scope="row" class="t9">성공/실패</th>
 								<td>
-									<select class="select t8">
+									<select class="select t8" id="resultcode">
 										<option value="">전체</option>
-										<option value="">성공</option>
-										<option value="">실패</option>
+										<option value="0000000000">성공</option>
+										<option value="9999999999">실패</option>
 									</select>
 								</td>
 							</tr>
@@ -156,14 +218,14 @@
 					<table id="table" class="display" cellspacing="0"width="100%">
 						<thead>
 							<tr>
-								<th width="40">No</th>
-								<th width="100">접근일시</th>
+								<th width="30">No</th>
+								<th width="150">접근일시</th>
 								<th width="100">접근자</th>
 								<th width="100">접근주소</th>
-								<th width="100">접근경로</th>
-								<th width="100">본문</th>
+								<th width="250">접근경로</th>
+								<th width="1000">본문</th>
 								<th width="100">결과코드</th>
-								<th width="100">결과메세지</th>
+								<th width="300">결과메세지</th>
 							</tr>
 						</thead>
 					</table>

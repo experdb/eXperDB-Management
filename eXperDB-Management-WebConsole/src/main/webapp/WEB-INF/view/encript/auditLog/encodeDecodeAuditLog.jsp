@@ -28,29 +28,29 @@
 			deferRender : true,
 			scrollX: true,
 			columns : [
-				{ data : "", className : "dt-center", defaultContent : ""},  
-				{ data : "", className : "dt-center", defaultContent : ""}, 
-				{ data : "", className : "dt-center", defaultContent : ""}, 
-				{ data : "", className : "dt-center", defaultContent : ""}, 
-				{ data : "", className : "dt-center", defaultContent : ""}, 
-				{ data : "", className : "dt-center", defaultContent : ""}, 
-				{ data : "", className : "dt-center", defaultContent : ""}, 
-				{ data : "", className : "dt-center", defaultContent : ""}, 
-				{ data : "", className : "dt-center", defaultContent : ""}, 
-				{ data : "", className : "dt-center", defaultContent : ""}, 
-				{ data : "", className : "dt-center", defaultContent : ""}, 
-				{ data : "", className : "dt-center", defaultContent : ""}, 
-				{ data : "", className : "dt-center", defaultContent : ""}, 
-				{ data : "", className : "dt-center", defaultContent : ""}, 
-				{ data : "", className : "dt-center", defaultContent : ""}, 
-				{ data : "", className : "dt-center", defaultContent : ""}, 
-				{ data : "", className : "dt-center", defaultContent : ""}, 
-				{ data : "", className : "dt-center", defaultContent : ""}, 
-				{ data : "", className : "dt-center", defaultContent : ""}, 
-				{ data : "", className : "dt-center", defaultContent : ""}, 
-				{ data : "", className : "dt-center", defaultContent : ""}, 
-				{ data : "", className : "dt-center", defaultContent : ""}, 
-				{ data : "", className : "dt-center", defaultContent : ""}
+				{ data : "", defaultContent : "", targets : 0, orderable : false, checkboxes : {'selectRow' : true}},  
+				{ data : "agentLogDateTime", className : "dt-center", defaultContent : ""}, 
+				{ data : "agentRemoteAddress", className : "dt-center", defaultContent : ""}, 
+				{ data : "profileName", className : "dt-center", defaultContent : ""}, 
+				{ data : "instanceId", className : "dt-center", defaultContent : ""}, 
+				{ data : "siteAccessAddress", className : "dt-center", defaultContent : ""}, 
+				{ data : "macAddr", className : "dt-center", defaultContent : ""}, 
+				{ data : "osLoginId", className : "dt-center", defaultContent : ""}, 
+				{ data : "serverLoginId", className : "dt-center", defaultContent : ""}, 
+				{ data : "adminLoginId", className : "dt-center", defaultContent : ""}, 
+				{ data : "applicationName", className : "dt-center", defaultContent : ""}, 
+				{ data : "extraName", className : "dt-center", defaultContent : ""}, 
+				{ data : "hostName", className : "dt-center", defaultContent : ""}, 
+				{ data : "locationInfo", className : "dt-center", defaultContent : ""}, 
+				{ data : "moduleInfo", className : "dt-center", defaultContent : ""}, 
+				{ data : "weekday", className : "dt-center", defaultContent : ""}, 
+				{ data : "encryptTrueFalse", className : "dt-center", defaultContent : ""}, 
+				{ data : "successTrueFalse", className : "dt-center", defaultContent : ""}, 
+				{ data : "count", className : "dt-center", defaultContent : ""}, 
+				{ data : "siteIntegrityResult", className : "dt-center", defaultContent : ""}, 
+				{ data : "serverIntegrityResult", className : "dt-center", defaultContent : ""}, 
+				{ data : "createDateTime", className : "dt-center", defaultContent : ""}, 
+				{ data : "updateDateTime", className : "dt-center", defaultContent : ""}
 	
 			 ]
 		});
@@ -89,6 +89,32 @@
 	
 	$(window.document).ready(function() {
 		fn_init();
+		$.ajax({
+			url : "/selectEncodeDecodeAuditLog.do",
+			data : {
+			},
+			dataType : "json",
+			type : "post",
+			beforeSend: function(xhr) {
+		        xhr.setRequestHeader("AJAX", true);
+		     },
+			error : function(xhr, status, error) {
+				if(xhr.status == 401) {
+					alert("<spring:message code='message.msg02' />");
+					 location.href = "/";
+				} else if(xhr.status == 403) {
+					alert("<spring:message code='message.msg03' />");
+		             location.href = "/";
+				} else {
+					alert("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""));
+				}
+			},
+			success : function(result) {
+				table.clear().draw();
+				table.rows.add(result.data).draw();
+			}
+		});
+
 	});
 	
 
@@ -96,6 +122,7 @@
 	function fn_select() {
 
 	}
+	
 	
 	$(function() {		
 		var dateFormat = "yyyy-mm-dd", from = $("#from").datepicker({

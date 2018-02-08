@@ -83,12 +83,12 @@ function fn_init(){
 					if(full.scd_cndt == 'TC001801'){
 						html += '<div style="margin-top: 7px;">';
 					    html += '<img src="../images/ico_agent_1.png" alt=""  style="margin-right:10px"  width="10px" height="10px" />';	
-					    html +=	'<span onClick=javascript:fn_popup("'+full.scd_id+'"); class="bold">'+full.scd_nm+'</span>   '+full.exe_hms;
+					    html +=	'<span onClick=javascript:fn_popup("'+full.scd_id+'"); class="bold">'+full.exe_hms+' '+full.scd_nm+'</span>';
 						html += '</div>';
 					}else{
 							html += '<div style="margin-top: 7px;">';
 						    html += '<img src="../images/ico_agent_2.png" alt=""  style="margin-right:10px"  width="10px" height="10px" />';		
-						    html +=	'<span onClick=javascript:fn_popup("'+full.scd_id+'"); class="bold">'+full.scd_nm+'</span>   '+full.exe_hms;
+						    html +=	'<span onClick=javascript:fn_popup("'+full.scd_id+'"); class="bold">'+full.exe_hms+' '+full.scd_nm+'</span>   ';
 							html += '</div>';
 					}	
 						return html;
@@ -144,12 +144,12 @@ function fn_init(){
 						if(full.scd_cndt == 'TC001801'){
 							html += '<div style="margin-top: 7px;">';
 						    html += '<img src="../images/ico_agent_1.png" alt=""  style="margin-right:10px"  width="10px" height="10px" />';	
-						    html +=	'<span onClick=javascript:fn_popup("'+full.scd_id+'"); class="bold">'+full.scd_nm+'</span>   '+full.exe_hms;
+						    html +=	'<span onClick=javascript:fn_popup("'+full.scd_id+'"); class="bold">'+full.exe_hms+' '+full.scd_nm+'</span>   ';
 							html += '</div>';
 						}else{
 								html += '<div style="margin-top: 7px;">';
 							    html += '<img src="../images/ico_agent_2.png" alt=""  style="margin-right:10px"  width="10px" height="10px" />';		
-							    html +=	'<span onClick=javascript:fn_popup("'+full.scd_id+'"); class="bold">'+full.scd_nm+'</span>   '+full.exe_hms;
+							    html +=	'<span onClick=javascript:fn_popup("'+full.scd_id+'"); class="bold">'+full.exe_hms+' '+full.scd_nm+'</span>   ';
 								html += '</div>';
 						}	
 							return html;
@@ -205,12 +205,12 @@ function fn_init(){
 						if(full.scd_cndt == 'TC001801'){
 							html += '<div style="margin-top: 7px;">';
 						    html += '<img src="../images/ico_agent_1.png" alt=""  style="margin-right:10px"  width="10px" height="10px" />';	
-						    html +=	'<span onClick=javascript:fn_popup("'+full.scd_id+'"); class="bold">'+full.scd_nm+'</span>   '+full.exe_hms;	
+						    html +=	'<span onClick=javascript:fn_popup("'+full.scd_id+'"); class="bold">'+full.exe_hms+' '+full.scd_nm+'</span>   ';	
 							html += '</div>';
 						}else{
 								html += '<div style="margin-top: 7px;">';
 							    html += '<img src="../images/ico_agent_2.png" alt=""  style="margin-right:10px"  width="10px" height="10px" />';		
-							    html +=	'<span onClick=javascript:fn_popup("'+full.scd_id+'"); class="bold">'+full.scd_nm+'</span>   '+full.exe_hms;	
+							    html +=	'<span onClick=javascript:fn_popup("'+full.scd_id+'"); class="bold">'+full.exe_hms+' '+full.scd_nm+'</span>   ';	
 								html += '</div>';
 						}	
 							return html;
@@ -266,12 +266,12 @@ function fn_init(){
 						if(full.scd_cndt == 'TC001801'){
 							html += '<div style="margin-top: 7px;">';
 						    html += '<img src="../images/ico_agent_1.png" alt=""  style="margin-right:10px"  width="10px" height="10px" />';	
-						    html +=	'<span onClick=javascript:fn_popup("'+full.scd_id+'"); class="bold">'+full.scd_nm+'</span>   '+full.exe_hms;
+						    html +=	'<span onClick=javascript:fn_popup("'+full.scd_id+'"); class="bold">'+full.exe_hms+' '+full.scd_nm+'</span>   ';
 							html += '</div>';
 						}else{
 								html += '<div style="margin-top: 7px;">';
 							    html += '<img src="../images/ico_agent_2.png" alt=""  style="margin-right:10px"  width="10px" height="10px" />';		
-							    html +=	'<span onClick=javascript:fn_popup("'+full.scd_id+'"); class="bold">'+full.scd_nm+'</span>   '+full.exe_hms;
+							    html +=	'<span onClick=javascript:fn_popup("'+full.scd_id+'"); class="bold">'+full.exe_hms+' '+full.scd_nm+'</span>   ';
 								html += '</div>';
 						}	
 							return html;
@@ -327,12 +327,12 @@ function fn_init(){
 						if(full.scd_cndt == 'TC001801'){
 							html += '<div style="margin-top: 7px;">';
 						    html += '<img src="../images/ico_agent_1.png" alt=""  style="margin-right:10px"  width="10px" height="10px" />';	
-						    html +=	'<span onClick=javascript:fn_popup("'+full.scd_id+'"); class="bold">'+full.scd_nm+'</span>   '+full.exe_hms;
+						    html +=	'<span onClick=javascript:fn_popup("'+full.scd_id+'"); class="bold">'+full.exe_hms+' '+full.scd_nm+'</span>   ';
 							html += '</div>';
 						}else{
 								html += '<div style="margin-top: 7px;">';
 							    html += '<img src="../images/ico_agent_2.png" alt=""  style="margin-right:10px"  width="10px" height="10px" />';		
-							    html +=	'<span onClick=javascript:fn_popup("'+full.scd_id+'"); class="bold">'+full.scd_nm+'</span>   '+full.exe_hms;
+							    html +=	'<span onClick=javascript:fn_popup("'+full.scd_id+'"); class="bold">'+full.exe_hms+' '+full.scd_nm+'</span>   ';
 								html += '</div>';
 						}	
 							return html;
@@ -388,12 +388,12 @@ function fn_init(){
 						if(full.scd_cndt == 'TC001801'){
 							html += '<div style="margin-top: 7px;">';
 						    html += '<img src="../images/ico_agent_1.png" alt=""  style="margin-right:10px"  width="10px" height="10px" />';	
-						    html +=	'<span onClick=javascript:fn_popup("'+full.scd_id+'"); class="bold">'+full.scd_nm+'</span>   '+full.exe_hms;
+						    html +=	'<span onClick=javascript:fn_popup("'+full.scd_id+'"); class="bold">'+full.exe_hms+' '+full.scd_nm+'</span>   ';
 							html += '</div>';
 						}else{
 								html += '<div style="margin-top: 7px;">';
 							    html += '<img src="../images/ico_agent_2.png" alt=""  style="margin-right:10px"  width="10px" height="10px" />';		
-							    html +=	'<span onClick=javascript:fn_popup("'+full.scd_id+'"); class="bold">'+full.scd_nm+'</span>   '+full.exe_hms;
+							    html +=	'<span onClick=javascript:fn_popup("'+full.scd_id+'"); class="bold">'+full.exe_hms+' '+full.scd_nm+'</span>   ';
 								html += '</div>';
 						}	
 							return html;
@@ -448,12 +448,12 @@ function fn_init(){
 						if(full.scd_cndt == 'TC001801'){
 							html += '<div style="margin-top: 7px;">';
 						    html += '<img src="../images/ico_agent_1.png" alt=""  style="margin-right:10px"  width="10px" height="10px" />';	
-						    html +=	'<span onClick=javascript:fn_popup("'+full.scd_id+'"); class="bold">'+full.scd_nm+'</span>   '+full.exe_hms;
+						    html +=	'<span onClick=javascript:fn_popup("'+full.scd_id+'"); class="bold">'+full.exe_hms+' '+full.scd_nm+'</span>   ';
 							html += '</div>';
 						}else{
 								html += '<div style="margin-top: 7px;">';
 							    html += '<img src="../images/ico_agent_2.png" alt=""  style="margin-right:10px"  width="10px" height="10px" />';		
-							    html +=	'<span onClick=javascript:fn_popup("'+full.scd_id+'"); class="bold">'+full.scd_nm+'</span>   '+full.exe_hms;	
+							    html +=	'<span onClick=javascript:fn_popup("'+full.scd_id+'"); class="bold">'+full.exe_hms+' '+full.scd_nm+'</span>   ';	
 								html += '</div>';
 						}	
 							return html;
@@ -676,7 +676,7 @@ $(function(){
 						var height = "160px";	
 
 						if (result.length > 4)
-							height = String(30 * result.length) + "px"
+							height = String(12 * result.length) + "px"
 
 						for(var i=0;i<7;i++){
 							var showdt = stdt.format("MM/dd");
@@ -732,7 +732,7 @@ $(function(){
 					                			imgName = "ico_agent_2.png";
 					                		}
 					                		appendnew += '<img src="../images/' + imgName + '" alt=""  style="margin-right:10px"  width="10px" height="10px" />';
-					                		appendnew += "[<spring:message code="schedule.everyyear" />] <a class='bold' href='#' onclick=javascript:fn_popup(" + scd_id + ");>"+scd_nm+"</a> [" + exe_hms +"]</div>";
+					                		appendnew += "[<spring:message code="schedule.everyyear" />] [" + exe_hms +"] <a class='bold' href='#' onclick=javascript:fn_popup(" + scd_id + ");>"+scd_nm+"</a></div>";
 					                	} 
 				                	}
 				                //매월
@@ -746,7 +746,7 @@ $(function(){
 					                			imgName = "ico_agent_2.png";
 					                		}
 					                		appendnew += '<img src="../images/' + imgName + '" alt=""  style="margin-right:10px"  width="10px" height="10px" />';
-					                		appendnew += "[<spring:message code="schedule.everymonth" />] <a class='bold' href='#' onclick=javascript:fn_popup(" + scd_id + ");>"+scd_nm+"</a> [" + exe_hms +"]</div>";
+					                		appendnew += "[<spring:message code="schedule.everymonth" />] [" + exe_hms +"] <a class='bold' href='#' onclick=javascript:fn_popup(" + scd_id + ");>"+scd_nm+"</a></div>";
 					                	} 
 				                	}
 				                // 매주
@@ -760,7 +760,7 @@ $(function(){
 					                			imgName = "ico_agent_2.png";
 					                		}
 					                		appendnew += '<img src="../images/' + imgName + '" alt=""  style="margin-right:10px"  width="10px" height="10px" />';
-					                		appendnew += "[<spring:message code="schedule.everyweek" />] <a class='bold' href='#' onclick=javascript:fn_popup(" + scd_id + ");>"+scd_nm+"</a> [" + exe_hms +"]</div>";
+					                		appendnew += "[<spring:message code="schedule.everyweek" />] [" + exe_hms +"] <a class='bold' href='#' onclick=javascript:fn_popup(" + scd_id + ");>"+scd_nm+"</a></div>";
 					                	} 
 				           			}
 				                //매일
@@ -773,7 +773,7 @@ $(function(){
 				                			imgName = "ico_agent_2.png";
 				                		}
 				                		appendnew += '<img src="../images/' + imgName + '" alt=""  style="margin-right:10px"  width="10px" height="10px" />';
-				                		appendnew += "[<spring:message code="schedule.everyday" />] <a class='bold' href='#' onclick=javascript:fn_popup(" + scd_id + ");>"+scd_nm+"</a> [" + exe_hms +"]</div>";
+				                		appendnew += "[<spring:message code="schedule.everyday" />] [" + exe_hms +"] <a class='bold' href='#' onclick=javascript:fn_popup(" + scd_id + ");>"+scd_nm+"</a></div>";
 				                	}
 								//1회실행
 				                } else if(exe_perd_cd == 'TC001605') {
@@ -785,7 +785,7 @@ $(function(){
 					                		imgName = "ico_agent_2.png";
 					                	}
 					                	appendnew += '<img src="../images/' + imgName + '" alt=""  style="margin-right:10px"  width="10px" height="10px" />';
-					                	appendnew += "[<spring:message code="schedule.one_time_run" />] <a class='bold' href='#' onclick=javascript:fn_popup(" + scd_id + ");>"+scd_nm+"</a> [" + exe_hms +"]</div>";
+					                	appendnew += "[<spring:message code="schedule.one_time_run" />] [" + exe_hms +"] <a class='bold' href='#' onclick=javascript:fn_popup(" + scd_id + ");>"+scd_nm+"</a></div>";
 					                }
 			                	}
 				                
