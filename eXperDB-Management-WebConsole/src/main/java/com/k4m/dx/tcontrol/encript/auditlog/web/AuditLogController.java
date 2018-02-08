@@ -10,9 +10,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
-import com.k4m.dx.tcontrol.cmmn.serviceproxy.ServiceCallCmmn;
 import com.k4m.dx.tcontrol.cmmn.serviceproxy.vo.AuditLog;
 import com.k4m.dx.tcontrol.common.service.HistoryVO;
+import com.k4m.dx.tcontrol.encript.service.call.AuditLogServiceCall;
 
 
 @Controller
@@ -20,7 +20,7 @@ public class AuditLogController {
 
 	String restIp = "127.0.0.1";
 	int restPort = 8443;
-	String strTocken = "nidia6kXDJp4/wBxqbVosIGycRdSqpZG4Ql4qNPv4Kc=";
+	String strTocken = "burNXW4UXVz1CXoMiGDI8/3PISmBtZvF605GrumOn14=";
 	
 	/**
 	 * 암복호화 감사로그 화면을 보여준다
@@ -54,7 +54,7 @@ public class AuditLogController {
 	 */
 	@RequestMapping(value = "/selectEncodeDecodeAuditLog.do")
 	public @ResponseBody JSONObject selectEncodeDecodeAuditLog(HttpServletRequest request) {
-		ServiceCallCmmn sic = new ServiceCallCmmn();
+		AuditLogServiceCall sic = new AuditLogServiceCall();
 		JSONObject result = new JSONObject();
 		try {
 			result = sic.selectAuditLogSiteList(restIp, restPort, strTocken);
@@ -75,7 +75,7 @@ public class AuditLogController {
 	@RequestMapping(value = "/managementServerAuditLog.do")
 	public ModelAndView managementServerAuditLog(@ModelAttribute("historyVO") HistoryVO historyVO, HttpServletRequest request) {
 		ModelAndView mv = new ModelAndView();
-		ServiceCallCmmn sic = new ServiceCallCmmn();
+		AuditLogServiceCall sic = new AuditLogServiceCall();
 		JSONArray entityuid = new JSONArray();
 		try {
 			// 화면접근이력 이력 남기기
@@ -102,7 +102,7 @@ public class AuditLogController {
 	 */
 	@RequestMapping(value = "/selectManagementServerAuditLog.do")
 	public @ResponseBody JSONObject selectManagementServerAuditLog(HttpServletRequest request) {
-		ServiceCallCmmn sic = new ServiceCallCmmn();
+		AuditLogServiceCall sic = new AuditLogServiceCall();
 		JSONObject result = new JSONObject();
 		try {
 			String DateTimeFrom = request.getParameter("from")+" 00:00:00.000000";
@@ -138,7 +138,7 @@ public class AuditLogController {
 	@RequestMapping(value = "/encodeDecodeKeyAuditLog.do")
 	public ModelAndView encodeDecodeKeyAuditLog(@ModelAttribute("historyVO") HistoryVO historyVO, HttpServletRequest request) {
 		ModelAndView mv = new ModelAndView();
-		ServiceCallCmmn sic = new ServiceCallCmmn();
+		AuditLogServiceCall sic = new AuditLogServiceCall();
 		JSONArray entityuid = new JSONArray();
 		try {
 			// 화면접근이력 이력 남기기
@@ -165,7 +165,7 @@ public class AuditLogController {
 	 */
 	@RequestMapping(value = "/selectEncodeDecodeKeyAuditLog.do")
 	public @ResponseBody JSONObject selectEncodeDecodeKeyAuditLog(HttpServletRequest request) {
-		ServiceCallCmmn sic = new ServiceCallCmmn();
+		AuditLogServiceCall sic = new AuditLogServiceCall();
 		JSONObject result = new JSONObject();
 		try {
 			String DateTimeFrom = request.getParameter("from")+" 00:00:00.000000";

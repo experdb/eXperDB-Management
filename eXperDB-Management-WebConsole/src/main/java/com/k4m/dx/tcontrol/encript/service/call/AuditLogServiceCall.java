@@ -1,4 +1,4 @@
-package com.k4m.dx.tcontrol.cmmn.serviceproxy;
+package com.k4m.dx.tcontrol.encript.service.call;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -9,11 +9,14 @@ import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 
 import com.google.gson.Gson;
+import com.k4m.dx.tcontrol.cmmn.serviceproxy.EncryptCommonService;
+import com.k4m.dx.tcontrol.cmmn.serviceproxy.SystemCode;
+import com.k4m.dx.tcontrol.cmmn.serviceproxy.TypeUtility;
 import com.k4m.dx.tcontrol.cmmn.serviceproxy.vo.AuditLog;
 import com.k4m.dx.tcontrol.cmmn.serviceproxy.vo.AuditLogSite;
 import com.k4m.dx.tcontrol.cmmn.serviceproxy.vo.Entity;
 
-public class ServiceCallCmmn {
+public class AuditLogServiceCall {
 
 	/**
 	 * 암복호화 감사로그
