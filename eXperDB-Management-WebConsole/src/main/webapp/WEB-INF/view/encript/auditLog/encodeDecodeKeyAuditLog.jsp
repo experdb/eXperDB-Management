@@ -140,19 +140,16 @@
 				if(result.data!=null){
 					table.rows.add(result.data).draw();
 				}
-				
 			}
 		});
 	}
 	
-
 </script>
 <!-- contents -->
 <div id="contents">
 	<div class="contents_wrap">
 		<div class="contents_tit">
-			<h4>암복호화키<a href="#n"><img src="../images/ico_tit.png" class="btn_info" /></a>
-			</h4>
+			<h4>암복호화키<a href="#n"><img src="../images/ico_tit.png" class="btn_info" /></a></h4>
 			<div class="infobox">
 				<ul>
 					<li>암복호화키설명</li>

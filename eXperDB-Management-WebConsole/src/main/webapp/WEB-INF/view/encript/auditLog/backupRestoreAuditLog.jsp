@@ -29,6 +29,15 @@
 			scrollX: true,
 			columns : [
 				{ data : "", defaultContent : "", targets : 0, orderable : false, checkboxes : {'selectRow' : true}}, 
+				{ data : "rnum", className : "dt-center", defaultContent : ""}, 
+				{ data : "logDateTime", className : "dt-center", defaultContent : ""}, 
+				{ data : "entityName", className : "dt-center", defaultContent : ""}, 
+				{ data : "remoteAddress", className : "dt-center", defaultContent : ""}, 
+				{ data : "serverAddress", className : "dt-center", defaultContent : ""}, 
+				{ data : "backupWorkType", className : "dt-center", defaultContent : ""}, 
+				{ data : "backupType", className : "dt-center", defaultContent : ""}, 
+				{ data : "logDateTimeFrom", className : "dt-center", defaultContent : ""}, 
+				{ data : "logDateTimeTo", className : "dt-center", defaultContent : ""}, 
 				{ data : "", className : "dt-center", defaultContent : ""}, 
 				{ data : "", className : "dt-center", defaultContent : ""}, 
 				{ data : "", className : "dt-center", defaultContent : ""}, 
@@ -39,23 +48,14 @@
 				{ data : "", className : "dt-center", defaultContent : ""}, 
 				{ data : "", className : "dt-center", defaultContent : ""}, 
 				{ data : "", className : "dt-center", defaultContent : ""}, 
-				{ data : "", className : "dt-center", defaultContent : ""}, 
-				{ data : "", className : "dt-center", defaultContent : ""}, 
-				{ data : "", className : "dt-center", defaultContent : ""}, 
-				{ data : "", className : "dt-center", defaultContent : ""}, 
-				{ data : "", className : "dt-center", defaultContent : ""}, 
-				{ data : "", className : "dt-center", defaultContent : ""}, 
-				{ data : "", className : "dt-center", defaultContent : ""}, 
-				{ data : "", className : "dt-center", defaultContent : ""}, 
-				{ data : "", className : "dt-center", defaultContent : ""}, 
-				{ data : "", className : "dt-center", defaultContent : ""}, 
+				{ data : "", className : "dt-center", defaultContent : ""},
 				{ data : "", className : "dt-center", defaultContent : ""}
 	
-			 ]
+			 ],'select': {'style': 'multi'}
 		});
 		
-		table.tables().header().to$().find('th:eq(0)').css('min-width', '40px');
-		table.tables().header().to$().find('th:eq(1)').css('min-width', '100px');
+		table.tables().header().to$().find('th:eq(0)').css('min-width', '10px');
+		table.tables().header().to$().find('th:eq(1)').css('min-width', '30px');
 		table.tables().header().to$().find('th:eq(2)').css('min-width', '100px');
 		table.tables().header().to$().find('th:eq(3)').css('min-width', '100px');
 		table.tables().header().to$().find('th:eq(4)').css('min-width', '100px');
@@ -77,36 +77,11 @@
 		table.tables().header().to$().find('th:eq(20)').css('min-width', '100px');
 		table.tables().header().to$().find('th:eq(21)').css('min-width', '100px');
 		
-	
 	    $(window).trigger('resize');
 	    
-		//더블 클릭시
-		$('#table tbody').on('dblclick', 'tr', function() {
-	
-		});
 	}
 	
 	$(window.document).ready(function() {
-		fn_init();
-	});
-	
-
-	/* 조회 버튼 클릭시*/
-	function fn_select() {
-
-	}
-	
-	/* 다운로드 버튼 클릭시*/
-	function fn_download() {
-
-	}
-	
-	/* 삭제 버튼 클릭시*/
-	function fn_delete() {
-
-	}
-	
-	$(function() {		
 		var dateFormat = "yyyy-mm-dd", from = $("#from").datepicker({
 			changeMonth : false,
 			changeYear : false,
@@ -122,16 +97,99 @@
 				$("#from").datepicker("option", "maxDate", selectedDate);
 			}
 		})
-
+		
+		$('#from').val($.datepicker.formatDate('yy-mm-dd', new Date()));
+		$('#to').val($.datepicker.formatDate('yy-mm-dd', new Date()));
+		
+		fn_init();
+		
+		$.ajax({
+			url : "/selectBackupRestoreAuditLog.do",
+			data : {
+				from : $('#from').val(),
+				to : 	$('#to').val(),
+				worktype : $('#worktype').val(),
+				entityuid : $('#entityuid').val()
+			},
+			dataType : "json",
+			type : "post",
+			beforeSend: function(xhr) {
+		        xhr.setRequestHeader("AJAX", true);
+		     },
+			error : function(xhr, status, error) {
+				if(xhr.status == 401) {
+					alert("<spring:message code='message.msg02' />");
+					 location.href = "/";
+				} else if(xhr.status == 403) {
+					alert("<spring:message code='message.msg03' />");
+		             location.href = "/";
+				} else {
+					alert("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""));
+				}
+			},
+			success : function(result) {
+				table.clear().draw();
+				if(result.data!=null){
+					table.rows.add(result.data).draw();
+				}
+			}
+		});
 	});
+	
+
+	/* 조회 버튼 클릭시*/
+	function fn_select() {
+		$.ajax({
+			url : "/selectBackupRestoreAuditLog.do",
+			data : {
+				from : $('#from').val(),
+				to : 	$('#to').val(),
+				worktype : $('#worktype').val(),
+				entityuid : $('#entityuid').val()
+			},
+			dataType : "json",
+			type : "post",
+			beforeSend: function(xhr) {
+		        xhr.setRequestHeader("AJAX", true);
+		     },
+			error : function(xhr, status, error) {
+				if(xhr.status == 401) {
+					alert("<spring:message code='message.msg02' />");
+					 location.href = "/";
+				} else if(xhr.status == 403) {
+					alert("<spring:message code='message.msg03' />");
+		             location.href = "/";
+				} else {
+					alert("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""));
+				}
+			},
+			success : function(result) {
+				table.clear().draw();
+				if(result.data!=null){
+					table.rows.add(result.data).draw();
+				}
+			}
+		});
+
+	}
+	
+	/* 다운로드 버튼 클릭시*/
+	function fn_download() {
+
+	}
+	
+	/* 삭제 버튼 클릭시*/
+	function fn_delete() {
+
+	}
+	
 
 </script>
 <!-- contents -->
 <div id="contents">
 	<div class="contents_wrap">
 		<div class="contents_tit">
-			<h4>백업및복원<a href="#n"><img src="../images/ico_tit.png" class="btn_info" /></a>
-			</h4>
+			<h4>백업및복원<a href="#n"><img src="../images/ico_tit.png" class="btn_info" /></a></h4>
 			<div class="infobox">
 				<ul>
 					<li>백업및복원설명</li>
@@ -176,16 +234,17 @@
 							<tr>
 								<th scope="row" class="t9">접근자</th>
 								<td>
-									<select class="select t5">
+									<select class="select t5" id="entityuid">
 										<option value="">전체</option>
+											<c:forEach var="entityuid" items="${entityuid}">
+												<option value="${entityuid.getEntityUid}">${entityuid.getEntityName}</option>							
+											</c:forEach>
 									</select>
 								</td>
-								<th scope="row" class="t9">성공/실패</th>
+								<th scope="row" class="t9">작업구분</th>
 								<td>
-									<select class="select t8">
+									<select class="select t5" id="worktype">
 										<option value="">전체</option>
-										<option value="">성공</option>
-										<option value="">실패</option>
 									</select>
 								</td>
 							</tr>
@@ -194,11 +253,11 @@
 				</div>
 
 				<div class="overflow_area">
-					<table id="table" class="display" cellspacing="0"width="100%">
+					<table id="table" class="display" cellspacing="0" width="100%">
 						<thead>
 							<tr>
-								<th width="40"></th>
-								<th width="100">NO</th>
+								<th width="10"></th>
+								<th width="30">NO</th>
 								<th width="100">작업일시</th>
 								<th width="100">작업자</th>
 								<th width="100">작업자 주소</th>

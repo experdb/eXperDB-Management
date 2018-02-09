@@ -23,19 +23,23 @@
 
 	function fn_init() {
 		table = $('#table').DataTable({
-			scrollY : "250px",
+			scrollY : "310px",
 			searching : false,
 			deferRender : true,
 			scrollX: true,
 			columns : [
-				{ data : "", className : "dt-center", defaultContent : ""},  
-				{ data : "", className : "dt-center", defaultContent : ""}, 
-				{ data : "", className : "dt-center", defaultContent : ""}, 
-				{ data : "", className : "dt-center", defaultContent : ""}, 
-				{ data : "", className : "dt-center", defaultContent : ""}, 
-				{ data : "", className : "dt-center", defaultContent : ""}, 
-				{ data : "", className : "dt-center", defaultContent : ""}, 
-				{ data : "", className : "dt-center", defaultContent : ""}
+				{ data : "rnum", className : "dt-center", defaultContent : ""},  
+				{ data : "siteLogDateTime", className : "dt-center", defaultContent : ""}, 
+				{ data : "serverLogDateTime", className : "dt-center", defaultContent : ""}, 
+				{ data : "monitoredAddress", className : "dt-center", defaultContent : ""}, 
+				{ data : "monitoredUid", className : "dt-center", defaultContent : ""}, 
+				{ data : "monitoredName", className : "dt-center", defaultContent : ""}, 
+				{ data : "targetResourceType", className : "dt-center", defaultContent : ""},
+				{ data : "targetResource", className : "dt-center", defaultContent : ""}, 
+				{ data : "resultLevel", className : "dt-center", defaultContent : ""}, 
+				{ data : "usageRate", className : "dt-center", defaultContent : ""}, 
+				{ data : "limitRate", className : "dt-center", defaultContent : ""}, 
+				{ data : "logMessage", className : "dt-center", defaultContent : ""}
 	
 			 ]
 		});
@@ -48,26 +52,16 @@
 		table.tables().header().to$().find('th:eq(5)').css('min-width', '100px');
 		table.tables().header().to$().find('th:eq(6)').css('min-width', '100px');
 		table.tables().header().to$().find('th:eq(7)').css('min-width', '100px');
+		table.tables().header().to$().find('th:eq(8)').css('min-width', '100px');
+		table.tables().header().to$().find('th:eq(9)').css('min-width', '100px');
+		table.tables().header().to$().find('th:eq(10)').css('min-width', '100px');
+		table.tables().header().to$().find('th:eq(11)').css('min-width', '100px');
 	
 	    $(window).trigger('resize');
 	    
-		//더블 클릭시
-		$('#table tbody').on('dblclick', 'tr', function() {
-	
-		});
 	}
 	
 	$(window.document).ready(function() {
-		fn_init();
-	});
-	
-
-	/* 조회 버튼 클릭시*/
-	function fn_select() {
-
-	}
-	
-	$(function() {		
 		var dateFormat = "yyyy-mm-dd", from = $("#from").datepicker({
 			changeMonth : false,
 			changeYear : false,
@@ -83,16 +77,84 @@
 				$("#from").datepicker("option", "maxDate", selectedDate);
 			}
 		})
-
+		
+		$('#from').val($.datepicker.formatDate('yy-mm-dd', new Date()));
+		$('#to').val($.datepicker.formatDate('yy-mm-dd', new Date()));
+		
+		fn_init();
+		
+		$.ajax({
+			url : "/selectResourcesUseAuditLog.do",
+			data : {
+				from : $('#from').val(),
+				to : 	$('#to').val(),
+			},
+			dataType : "json",
+			type : "post",
+			beforeSend: function(xhr) {
+		        xhr.setRequestHeader("AJAX", true);
+		     },
+			error : function(xhr, status, error) {
+				if(xhr.status == 401) {
+					alert("<spring:message code='message.msg02' />");
+					 location.href = "/";
+				} else if(xhr.status == 403) {
+					alert("<spring:message code='message.msg03' />");
+		             location.href = "/";
+				} else {
+					alert("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""));
+				}
+			},
+			success : function(result) {
+				table.clear().draw();
+				if(result.data!=null){
+					table.rows.add(result.data).draw();
+				}
+			}
+		});
 	});
+	
+
+	/* 조회 버튼 클릭시*/
+	function fn_select() {
+		$.ajax({
+			url : "/selectResourcesUseAuditLog.do",
+			data : {
+				from : $('#from').val(),
+				to : 	$('#to').val(),
+			},
+			dataType : "json",
+			type : "post",
+			beforeSend: function(xhr) {
+		        xhr.setRequestHeader("AJAX", true);
+		     },
+			error : function(xhr, status, error) {
+				if(xhr.status == 401) {
+					alert("<spring:message code='message.msg02' />");
+					 location.href = "/";
+				} else if(xhr.status == 403) {
+					alert("<spring:message code='message.msg03' />");
+		             location.href = "/";
+				} else {
+					alert("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""));
+				}
+			},
+			success : function(result) {
+				table.clear().draw();
+				if(result.data!=null){
+					table.rows.add(result.data).draw();
+				}
+			}
+		});
+	}
+	
 
 </script>
 <!-- contents -->
 <div id="contents">
 	<div class="contents_wrap">
 		<div class="contents_tit">
-			<h4>자원사용<a href="#n"><img src="../images/ico_tit.png" class="btn_info" /></a>
-			</h4>
+			<h4>자원사용<a href="#n"><img src="../images/ico_tit.png" class="btn_info" /></a></h4>
 			<div class="infobox">
 				<ul>
 					<li>자원사용설명</li>
@@ -147,13 +209,17 @@
 						<thead>
 							<tr>
 								<th width="40">No</th>
-								<th width="100">접근일시</th>
-								<th width="100">접근자</th>
-								<th width="100">접근주소</th>
-								<th width="100">접근경로</th>
-								<th width="100">본문</th>
-								<th width="100">결과코드</th>
-								<th width="100">결과메세지</th>
+								<th width="100">모니터링발생일시</th>
+								<th width="100">모니터링기록일시</th>
+								<th width="100">모니터링 대상 주소</th>
+								<th width="100">모니터링 대상 식별자</th>
+								<th width="100">모니터링 대상 이름</th>
+								<th width="100">자원 유형</th>
+								<th width="100">자원</th>
+								<th width="100">모니터링 결과</th>
+								<th width="100">사용률(%)</th>
+								<th width="100">임계치(%)</th>
+								<th width="100">메시지</th>
 							</tr>
 						</thead>
 					</table>
