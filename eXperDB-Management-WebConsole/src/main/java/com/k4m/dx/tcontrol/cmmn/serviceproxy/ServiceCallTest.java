@@ -82,7 +82,7 @@ public class ServiceCallTest {
 		//test.selectBackupLogList(restIp, restPort, strTocken);
 		
 		//감사로그 > 자원 사용
-		//test.selectSystemUsageLogList(restIp, restPort, strTocken);
+		test.selectSystemUsageLogList(restIp, restPort, strTocken);
 		
 		//보안정책 > 정책관리
 		//test.selectProfileList(restIp, restPort, strTocken);
