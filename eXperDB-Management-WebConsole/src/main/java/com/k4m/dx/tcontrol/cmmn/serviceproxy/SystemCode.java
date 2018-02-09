@@ -308,6 +308,20 @@ public class SystemCode {
 
 	}
 	
+	public class ExtendedFieldKey {
+
+		private ExtendedFieldKey() {
+		}
+
+		public static final String	DRIVER_CLASS_NAME	= "driverClassName";
+
+		public static final String	URL_FORMAT			= "urlFormat";
+
+		public static final String	EMAIL				= "email";
+
+		public static final String	PHONE				= "phone";
+	}
+	
 	public class ResultCode {
 
 		private ResultCode() {

@@ -41,7 +41,7 @@ public class ServiceCallTest {
 		restIp = "127.0.0.1";
 		restPort = 8443;
 		
-		String strTocken = "seXpNOfBIPIc5yqFiSab1Rpc7gdQYCcQM6RBtpVjJR4=";
+		String strTocken = "orivae0vYP4ExjG38x+u7BsuWf+CxHdzWZtMnCYl/Ek=";
 
 		ServiceCallTest test = new ServiceCallTest();
 	
@@ -84,7 +84,7 @@ public class ServiceCallTest {
 		//test.selectBackupLogList(restIp, restPort, strTocken);
 		
 		//감사로그 > 자원 사용
-		test.selectSystemUsageLogList(restIp, restPort, strTocken);
+		//test.selectSystemUsageLogList(restIp, restPort, strTocken);
 		
 		//보안정책 > 정책관리
 		//test.selectProfileList(restIp, restPort, strTocken);
@@ -104,7 +104,11 @@ public class ServiceCallTest {
 		//보안정책 > 보안정책등록
 		//test.insertProfileProtection(restIp, restPort, strTocken);
 		
-
+		//사용자 등록
+		test.insertEntityWithPermission(restIp, restPort, strTocken);
+		
+		//사용자 삭제
+		//test.deleteEntity(restIp, restPort, strTocken);
 		
 	}
 
@@ -349,7 +353,7 @@ public class ServiceCallTest {
 		
 		param1.setDefaultAccessAllowTrueFalse(true);
 		
-		List<ProfileCipherSpec> param2 = new ArrayList<ProfileCipherSpec>();
+		List param2 = new ArrayList();
 		ProfileCipherSpec p = new ProfileCipherSpec();
 		p.setSpecIndex(1);
 		p.setCipherAlgorithmCode("CAD1");
@@ -359,10 +363,10 @@ public class ServiceCallTest {
 		p.setLength(null);
 		p.setBinUid("20171027130442382_de351577-5b53-4265-8bee-a60289de88e2");
 		
-		param2.add(p);
+		param2.add(p.toJSONString());
 		
 		
-		List<ProfileAclSpec> param3 = new ArrayList<ProfileAclSpec>();
+		List param3 = new ArrayList();
 		
 		ProfileAclSpec r = new ProfileAclSpec();
 		
@@ -398,7 +402,7 @@ public class ServiceCallTest {
 		
 		r.setWorkDay(workDay);
 		
-		param3.add(r);
+		param3.add(r.toJSONString());
 		
 
 		//JSONObject parameters = new JSONObject();
@@ -406,20 +410,8 @@ public class ServiceCallTest {
 		
 		HashMap body = new HashMap();
 		body.put(TypeUtility.getJustClassName(param1.getClass()), param1.toJSONString());
-		
-		if(param2.size() > 0) {
-			for(ProfileCipherSpec s:param2) {
-				
-				body.put("ProfileCipherSpec", s.toJSONString());
-			}
-		}
-		
-		if(param3.size() > 0) {
-			for(ProfileAclSpec s:param3) {
-				
-				body.put("ProfileAclSpec", s.toJSONString());
-			}
-		}
+		body.put("ProfileCipherSpec", param2);
+        body.put("ProfileAclSpec", param3);
 
 		String parameters = TypeUtility.makeRequestBody(body);
 
@@ -1616,7 +1608,7 @@ public class ServiceCallTest {
 		String strCommand = SystemCode.ServiceCommand.INSERTENTITYWITHPERMISSION;
 
 		String strUserId = "testuser";
-		String password = "";
+		String password = "1234qwer";
 		
 		Entity param1 = new Entity();
 
@@ -1626,7 +1618,13 @@ public class ServiceCallTest {
 		param1.setEntityStatusCode("ES50");
 		param1.setCreateUid("admin");
 		
-		List<EntityPermission> param2 = new ArrayList<EntityPermission>();
+		JSONObject jsonExtended = new JSONObject();
+		jsonExtended.put(SystemCode.ExtendedFieldKey.PHONE, "");
+		jsonExtended.put(SystemCode.ExtendedFieldKey.EMAIL, "");
+		
+		param1.setExtendedField(jsonExtended.toJSONString());
+		
+		List param2 = new ArrayList();
 		
 		for(int i=0; i<6; i++) {
 			EntityPermission p = new EntityPermission();
@@ -1652,7 +1650,8 @@ public class ServiceCallTest {
 			p.setExportPermissionTrueFalse(true);
 			p.setViewPermissionTrueFalse(true);
 			
-			param2.add(p);
+			
+			param2.add(p.toJSONString());
 		}
 		
 		AuthCredentialToken param3 = new AuthCredentialToken();
@@ -1662,10 +1661,9 @@ public class ServiceCallTest {
 		HashMap body = new HashMap();
 		body.put(TypeUtility.getJustClassName(param1.getClass()), param1.toJSONString());
 		
-		for(EntityPermission ep: param2) {
-			body.put(TypeUtility.getJustClassName(ep.getClass()), ep.toJSONString());
-		}
+		Gson param2Gson = new Gson();
 		
+		body.put("EntityPermission", param2);
 		body.put(TypeUtility.getJustClassName(param3.getClass()), param3.toJSONString());
 		
 		String parameters = TypeUtility.makeRequestBody(body);
@@ -1707,7 +1705,7 @@ public class ServiceCallTest {
 		String strService = SystemCode.ServiceName.ENTITY_SERVICE;
 		String strCommand = SystemCode.ServiceCommand.DELETEENTITY;
 
-		String entityUid = "";
+		String entityUid = "6165b677-7289-4df5-a747-88d847628f10";
 		
 		Entity param1 = new Entity();
 
