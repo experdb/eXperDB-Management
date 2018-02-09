@@ -18,10 +18,12 @@ import com.google.gson.Gson;
 import com.k4m.dx.tcontrol.cmmn.serviceproxy.vo.AdminServerPasswordRequest;
 import com.k4m.dx.tcontrol.cmmn.serviceproxy.vo.AuditLog;
 import com.k4m.dx.tcontrol.cmmn.serviceproxy.vo.AuditLogSite;
+import com.k4m.dx.tcontrol.cmmn.serviceproxy.vo.AuthCredentialToken;
 import com.k4m.dx.tcontrol.cmmn.serviceproxy.vo.BackupLog;
 import com.k4m.dx.tcontrol.cmmn.serviceproxy.vo.CryptoKey;
 import com.k4m.dx.tcontrol.cmmn.serviceproxy.vo.CryptoKeySymmetric;
 import com.k4m.dx.tcontrol.cmmn.serviceproxy.vo.Entity;
+import com.k4m.dx.tcontrol.cmmn.serviceproxy.vo.EntityPermission;
 import com.k4m.dx.tcontrol.cmmn.serviceproxy.vo.Profile;
 import com.k4m.dx.tcontrol.cmmn.serviceproxy.vo.ProfileAclSpec;
 import com.k4m.dx.tcontrol.cmmn.serviceproxy.vo.ProfileCipherSpec;
@@ -1163,7 +1165,7 @@ public class ServiceCallTest {
 		String strCommand = SystemCode.ServiceCommand.INSERTCRYPTOKEYSYMMETRIC;
 
 
-		
+		String validEndDateTime = "2020-02-09" + " 23:59:59.999999";
 		
 		CryptoKeySymmetric param = new CryptoKeySymmetric();
 		param.setKeyUid("");
@@ -1172,7 +1174,7 @@ public class ServiceCallTest {
 		param.setCipherAlgorithmCode("CAD1");
 		param.setResourceNote("testNote");
 		param.setKeyStatusCode("KS50");
-		
+		param.setValidEndDateTime(validEndDateTime);
 
 		HashMap body = new HashMap();
 		body.put(TypeUtility.getJustClassName(param.getClass()), param.toJSONString());
@@ -1613,19 +1615,58 @@ public class ServiceCallTest {
 		String strService = SystemCode.ServiceName.ENTITY_SERVICE;
 		String strCommand = SystemCode.ServiceCommand.INSERTENTITYWITHPERMISSION;
 
-		String categoryKey = "DATA_TYPE_CD"; //데이터타입
-		categoryKey = "DENY_RESULT_TYPE_CD"; //접근거부시 처리
-		//categoryKey = "INITIAL_VECTOR_TYPE"; //초기벡터
-		//categoryKey = "OPERATION_MODE"; //운영모드
+		String strUserId = "testuser";
+		String password = "";
 		
-		SysCode param = new SysCode();
-//		param.setCategoryKey(categoryKey);
+		Entity param1 = new Entity();
 
+		param1.setEntityName("이름");
+		param1.setContainerTypeCode(SystemCode.ContainerTypeCode.ELEMENT);
+		param1.setEntityTypeCode(SystemCode.EntityTypeCode.ADMIN_USER);
+		param1.setEntityStatusCode("ES50");
+		param1.setCreateUid("admin");
 		
+		List<EntityPermission> param2 = new ArrayList<EntityPermission>();
+		
+		for(int i=0; i<6; i++) {
+			EntityPermission p = new EntityPermission();
+			
+			String permissionKey = "";
+
+			if(i == 0) {
+				permissionKey = "ADMIN_USER_PERMISSION";
+			} else if(i == 1) {
+				permissionKey = "CRYPTO_KEY_PERMISSION";
+			} else if(i == 2) {
+				permissionKey = "ENVIRONMENT_PERMISSION";
+			} else if(i == 3) {
+				permissionKey = "MONITORING_PERMISSION";
+			} else if(i == 4) {
+				permissionKey = "POLICY_PERMISSION";
+			} else if(i == 5) {
+				permissionKey = "SITE_PERMISSION";
+			}
+			
+			p.setPermissionKey(permissionKey);
+			p.setEditPermissionTrueFalse(true);
+			p.setExportPermissionTrueFalse(true);
+			p.setViewPermissionTrueFalse(true);
+			
+			param2.add(p);
+		}
+		
+		AuthCredentialToken param3 = new AuthCredentialToken();
+		param3.setLoginId(strUserId);
+		param3.setPassword(password);
 
 		HashMap body = new HashMap();
-		//body.put(TypeUtility.getJustClassName(param.getClass()), param.toJSONString());
-		body.put("categoryKey", categoryKey);
+		body.put(TypeUtility.getJustClassName(param1.getClass()), param1.toJSONString());
+		
+		for(EntityPermission ep: param2) {
+			body.put(TypeUtility.getJustClassName(ep.getClass()), ep.toJSONString());
+		}
+		
+		body.put(TypeUtility.getJustClassName(param3.getClass()), param3.toJSONString());
 		
 		String parameters = TypeUtility.makeRequestBody(body);
 		
@@ -1651,30 +1692,64 @@ public class ServiceCallTest {
 		//long totalListCount = (long) resultJson.get("totalListCount");
 		
 		
-		if(resultCode.equals("0000000000")) {
-			ArrayList list = (ArrayList) resultJson.get("list");
-			
-			//System.out.println("list Size : " + list.size());
-			//if(totalListCount > 0) {
-				for(int i=0; i<list.size(); i++) {
-					JSONObject data = (JSONObject) list.get(i);
-					
-					SysCode sysCode = new SysCode();
-					Gson gson = new Gson();
-					sysCode = gson.fromJson(data.toJSONString(), sysCode.getClass());
-					
-					System.out.println("syscode : " + sysCode.getSysCode());
-					System.out.println("SysCodeName : " + sysCode.getSysCodeName());
-					System.out.println("SysCodeValue : " + sysCode.getSysCodeValue());
-					
-				
-					
-				}
-			
-			//}
+	}
+	
+	/**
+	 * 사용자 삭제
+	 * @param restIp
+	 * @param restPort
+	 * @param strTocken
+	 * @throws Exception
+	 */
+	private void deleteEntity(String restIp, int restPort, String strTocken) throws Exception {
+		EncryptCommonService api = new EncryptCommonService(restIp, restPort);
+
+		String strService = SystemCode.ServiceName.ENTITY_SERVICE;
+		String strCommand = SystemCode.ServiceCommand.DELETEENTITY;
+
+		String entityUid = "";
+		
+		Entity param1 = new Entity();
+
+		param1.setEntityUid(entityUid);
+
+		if (entityUid.startsWith("00000000-0000-0000-0000-"))
+		{
+			throw new Exception ("기본 관리자는 삭제할 수 없습니다.");
 		}
 		
+	
+		HashMap body = new HashMap();
+		body.put(TypeUtility.getJustClassName(param1.getClass()), param1.toJSONString());
+		
+	
+		String parameters = TypeUtility.makeRequestBody(body);
+		
+		System.out.println(parameters);
+
+		HashMap header = new HashMap();
+		header.put(SystemCode.FieldName.LOGIN_ID, "admin");
+		header.put(SystemCode.FieldName.ENTITY_UID, "00000000-0000-0000-0000-000000000001");
+		header.put(SystemCode.FieldName.TOKEN_VALUE, strTocken);
+
+		JSONObject resultJson = api.callService(strService, strCommand, header, parameters.toString());
+		
+		Iterator<?> iter = resultJson.entrySet().iterator();
+		while (iter.hasNext()) {
+			Map.Entry entry = (Map.Entry) iter.next();
+
+			System.out.println(String.valueOf(entry.getKey()) + " = " + String.valueOf(entry.getValue()));
+		}
+		
+		
+		String resultCode = (String) resultJson.get("resultCode");
+		String resultMessage = (String) resultJson.get("resultMessage");
+		//long totalListCount = (long) resultJson.get("totalListCount");
+		
+		
 	}
+	
+	
 	
 	private void checkChar(String originalStr) throws Exception {
 		//String originalStr = "Å×½ºÆ®"; // 테스트 
