@@ -13,7 +13,7 @@
 	*  ------------    -----------    ---------------------------
 	*  2018.01.08     최초 생성
 	*
-	* author 김주영 사원
+	* author 변승우 대리
 	* since 2018.01.08
 	*
 	*/
@@ -60,6 +60,9 @@ $(window.document).ready(function() {
 		changeYear: true,
 	});
 	$("#datepicker3").datepicker();
+
+	$("#cipherAlgorithmCode").attr("disabled", "disabled");
+
 });
 
 var renewalhistoryTable = null;
@@ -108,42 +111,38 @@ function fn_init(){
 					<tbody>
 						<tr>
 							<th scope="row" class="ico_t1">암호화 키 이름</th>
-							<td><input type="text" class="txt" name="" id="" readonly="readonly"/></td>
+							<td><input type="text" class="txt" name="resourceName" id="resourceName" readonly="readonly" value="${resourceName}" /></td>
 						</tr>
 						<tr>
 							<th scope="row" class="ico_t1">적용 알고리즘</th>
 							<td>
-								<select class="select t5" id="">
-										<option value="SEED-128">SEED-128</option>
-										<option value="ARIA-128">ARIA-128</option>
-										<option value="ARIA-192">ARIA-192</option>
-										<option value="ARIA-256">ARIA-256</option>
-										<option value="AES-128">AES-128</option>
-										<option value="AES-256">AES-256</option>
-										<option value="SHA-256">SHA-256</option>
+								<select class="select t5" id="cipherAlgorithmCode" name="cipherAlgorithmCode" >
+										<c:forEach var="result" items="${result}" varStatus="status">
+											<option value="<c:out value="${result.sysCode}"/>" <c:if test="${result.sysCode == cipherAlgorithmCode }">selected="selected"</c:if>><c:out value="${result.sysCodeName}"/></option>
+										</c:forEach> 
 								</select>
 							</td>
 						</tr>
 						<tr>
 							<th scope="row" class="ico_t1">암호화 키 설명</th>
-							<td><input type="text" class="txt" name="" id="" /></td>
+							<td><input type="text" class="txt" name="resourceNote" id="resourceNote"  value="${resourceNote}" /></td>
 						</tr>
 						<tr>
 							<th scope="row" class="ico_t1">유효기간 만료일</th>
 							<td>
 								<div class="calendar_area big">
-									<a href="#n" class="calendar_btn">달력열기</a> <input type="text" class="calendar" id="datepicker3"  readonly="readonly">
+									<a href="#n" class="calendar_btn">달력열기</a> <input type="text" class="calendar" id="datepicker3"  readonly="readonly" value="${updateDateTime}">
 								</div>
 							</td>
 						</tr>
 						<tr>
 							<th scope="row" class="ico_t1">바이너리 상태</th>
 							<td>
-								<select class="select t5" id="">
-										<option value="">PREACTIVE</option>
-										<option value="">ACTIVE</option>
-										<option value="">DEACTIVE</option>
-										<option value="">COMPROMISED</option>
+								<select class="select t5" id="" name="">
+										<option value="ES10">PREACTIVE</option>
+										<option value="SS50">ACTIVE</option>
+										<option value="RS70">DEACTIVE</option>
+										<option value="KS80">COMPROMISED</option>
 										<option value="">DESTROVED</option>
 										<option value="">DESTROVED_COMPROMISED</option>
 								</select>

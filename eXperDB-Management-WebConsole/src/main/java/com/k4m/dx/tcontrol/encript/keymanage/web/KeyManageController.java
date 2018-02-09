@@ -2,19 +2,27 @@ package com.k4m.dx.tcontrol.encript.keymanage.web;
 
 import javax.servlet.http.HttpServletRequest;
 
+import org.json.simple.JSONArray;
+import org.json.simple.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.k4m.dx.tcontrol.admin.accesshistory.service.AccessHistoryService;
+import com.k4m.dx.tcontrol.cmmn.serviceproxy.EncryptCommonService;
+import com.k4m.dx.tcontrol.cmmn.serviceproxy.vo.CryptoKey;
+import com.k4m.dx.tcontrol.cmmn.serviceproxy.vo.CryptoKeySymmetric;
 import com.k4m.dx.tcontrol.common.service.HistoryVO;
+import com.k4m.dx.tcontrol.encript.service.call.CommonServiceCall;
+import com.k4m.dx.tcontrol.encript.service.call.KeyManageServiceCall;
 
 /**
  * keyManageController 컨트롤러 클래스를 정의한다.
  *
- * @author 김주영
+ * @author 변승우 대리
  * @see
  * 
  *      <pre>
@@ -22,11 +30,16 @@ import com.k4m.dx.tcontrol.common.service.HistoryVO;
  *
  *   수정일       수정자           수정내용
  *  -------     --------    ---------------------------
- *  2018.01.09   김주영 최초 생성
+ *  2018.01.09   변승우대리  최초 생성
  *      </pre>
  */
 @Controller
 public class KeyManageController {
+	
+	String restIp = "127.0.0.1";
+	int restPort = 8443;
+	String strTocken = "LTC3+GVqA18GnvrMRexgZNv7ZkdhpZAiS6hh6IDBi4g=";
+	
 
 	@Autowired
 	private AccessHistoryService accessHistoryService;
@@ -46,7 +59,6 @@ public class KeyManageController {
 //			CmmnUtils.saveHistory(request, historyVO);
 //			historyVO.setExe_dtl_cd("DX-T0055");
 //			accessHistoryService.insertHistory(historyVO);
-
 			mv.setViewName("encript/keyManage/keyManage");
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -65,15 +77,17 @@ public class KeyManageController {
 	@RequestMapping(value = "/popup/keyManageRegForm.do")
 	public ModelAndView keyManageRegForm(@ModelAttribute("historyVO") HistoryVO historyVO, HttpServletRequest request) {
 		ModelAndView mv = new ModelAndView();
+		CommonServiceCall csc= new CommonServiceCall();
+		JSONArray result = new JSONArray();
 		try {
-
+			result = csc.selectSysCodeListExper(restIp, restPort, strTocken);
 //			// 화면접근이력 이력 남기기
 //			historyVO.setExe_dtl_cd("DX-T0056");
 //			historyVO.setMnu_id(12);
 //			accessHistoryService.insertHistory(historyVO);
 
 			mv.setViewName("encript/popup/keyManageRegForm");
-
+			mv.addObject("result",result);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -91,19 +105,90 @@ public class KeyManageController {
 	@RequestMapping(value = "/popup/keyManageRegReForm.do")
 	public ModelAndView keyManageRegReForm(@ModelAttribute("historyVO") HistoryVO historyVO, HttpServletRequest request) {
 		ModelAndView mv = new ModelAndView();
+		CommonServiceCall csc= new CommonServiceCall();
+		JSONArray result = new JSONArray();
 		try {
-
+			String resourceName = request.getParameter("resourceName");
+			String resourceNote = request.getParameter("resourceNote");
+			String keyUid = request.getParameter("keyUid");
+			String keyStatusCode = request.getParameter("keyStatusCode");
+			String keyStatusName = request.getParameter("keyStatusName");
+			String cipherAlgorithmName = request.getParameter("cipherAlgorithmName");
+			String cipherAlgorithmCode = request.getParameter("cipherAlgorithmCode");
+			String updateDateTime = request.getParameter("updateDateTime") + " 23:59:59.999999";
+		
+			result = csc.selectSysCodeListExper(restIp, restPort, strTocken);
 //			// 화면접근이력 이력 남기기
 //			historyVO.setExe_dtl_cd("DX-T0056");
 //			historyVO.setMnu_id(12);
 //			accessHistoryService.insertHistory(historyVO);
 
 			mv.setViewName("encript/popup/keyManageRegReForm");
-
+			mv.addObject("result",result);
+			mv.addObject("resourceName",resourceName);
+			mv.addObject("resourceNote",resourceNote);
+			mv.addObject("keyUid",keyUid);
+			mv.addObject("keyStatusCode",keyStatusCode);
+			mv.addObject("keyStatusName",keyStatusName);
+			mv.addObject("cipherAlgorithmName",cipherAlgorithmName);
+			mv.addObject("cipherAlgorithmCode",cipherAlgorithmCode);
+			mv.addObject("updateDateTime",updateDateTime);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 		return mv;
+	}
+	
 
+	/**
+	 * 암호화 키를 조회한다.
+	 * 
+	 * @return resultSet
+	 * @throws Exception
+	 */
+	@RequestMapping(value = "/selectCryptoKeyList.do")
+	public @ResponseBody JSONObject selectCryptoKeyList(HttpServletRequest request) {
+			
+		KeyManageServiceCall kmsc= new KeyManageServiceCall();
+		JSONObject result = new JSONObject();
+		try {
+			result = kmsc.selectCryptoKeyList(restIp, restPort, strTocken);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return result;
+	}
+	
+	
+	/**
+	 * 암호화 키를 등록한다.
+	 * 
+	 * @return resultSet
+	 * @throws Exception
+	 */
+	@RequestMapping(value = "/insertCryptoKeySymmetric.do")
+	public @ResponseBody JSONObject insertCryptoKeySymmetric(HttpServletRequest request) {
+		
+		String resourceName = request.getParameter("resourceName");
+		String cipherAlgorithmCode = request.getParameter("cipherAlgorithmCode");
+		String resourceNote = request.getParameter("resourceNote");
+		String validEndDateTime = request.getParameter("validEndDateTime");
+			
+		CryptoKeySymmetric param = new CryptoKeySymmetric();
+		param.setResourceName(resourceName);
+		param.setCipherAlgorithmCode(cipherAlgorithmCode);
+		param.setResourceNote(resourceNote);
+		param.setValidEndDateTime(validEndDateTime);
+		param.setKeyStatusCode("KS50");
+		
+
+		KeyManageServiceCall kmsc= new KeyManageServiceCall();
+		JSONObject result = new JSONObject();
+		try {
+			result = kmsc.insertCryptoKeySymmetric(restIp, restPort, strTocken, param);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return result;
 	}
 }
