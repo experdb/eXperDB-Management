@@ -38,18 +38,18 @@
 				{ data : "backupType", className : "dt-center", defaultContent : ""}, 
 				{ data : "logDateTimeFrom", className : "dt-center", defaultContent : ""}, 
 				{ data : "logDateTimeTo", className : "dt-center", defaultContent : ""}, 
-				{ data : "", className : "dt-center", defaultContent : ""}, 
-				{ data : "", className : "dt-center", defaultContent : ""}, 
-				{ data : "", className : "dt-center", defaultContent : ""}, 
-				{ data : "", className : "dt-center", defaultContent : ""}, 
-				{ data : "", className : "dt-center", defaultContent : ""}, 
-				{ data : "", className : "dt-center", defaultContent : ""}, 
-				{ data : "", className : "dt-center", defaultContent : ""}, 
-				{ data : "", className : "dt-center", defaultContent : ""}, 
-				{ data : "", className : "dt-center", defaultContent : ""}, 
-				{ data : "", className : "dt-center", defaultContent : ""}, 
-				{ data : "", className : "dt-center", defaultContent : ""},
-				{ data : "", className : "dt-center", defaultContent : ""}
+				{ data : "containsCryptoKey", className : "dt-center", defaultContent : ""}, 
+				{ data : "containsPolicy", className : "dt-center", defaultContent : ""}, 
+				{ data : "containsServer", className : "dt-center", defaultContent : ""}, 
+				{ data : "containsAdminUser", className : "dt-center", defaultContent : ""}, 
+				{ data : "containsConfig", className : "dt-center", defaultContent : ""}, 
+				{ data : "containsCoreLog", className : "dt-center", defaultContent : ""}, 
+				{ data : "containsSiteLog", className : "dt-center", defaultContent : ""}, 
+				{ data : "containsBackupLog", className : "dt-center", defaultContent : ""}, 
+				{ data : "containsSystemUsageLog", className : "dt-center", defaultContent : ""}, 
+				{ data : "containsSystemStatusLog", className : "dt-center", defaultContent : ""}, 
+				{ data : "containsTableCryptLog", className : "dt-center", defaultContent : ""},
+				{ data : "filePath", className : "dt-center", defaultContent : ""}
 	
 			 ],'select': {'style': 'multi'}
 		});
@@ -62,8 +62,8 @@
 		table.tables().header().to$().find('th:eq(5)').css('min-width', '100px');
 		table.tables().header().to$().find('th:eq(6)').css('min-width', '100px');
 		table.tables().header().to$().find('th:eq(7)').css('min-width', '100px');
-		table.tables().header().to$().find('th:eq(8)').css('min-width', '100px');
-		table.tables().header().to$().find('th:eq(9)').css('min-width', '100px');
+		table.tables().header().to$().find('th:eq(8)').css('min-width', '150px');
+		table.tables().header().to$().find('th:eq(9)').css('min-width', '150px');
 		table.tables().header().to$().find('th:eq(10)').css('min-width', '100px');
 		table.tables().header().to$().find('th:eq(11)').css('min-width', '100px');
 		table.tables().header().to$().find('th:eq(12)').css('min-width', '100px');
@@ -75,7 +75,7 @@
 		table.tables().header().to$().find('th:eq(18)').css('min-width', '100px');
 		table.tables().header().to$().find('th:eq(19)').css('min-width', '100px');
 		table.tables().header().to$().find('th:eq(20)').css('min-width', '100px');
-		table.tables().header().to$().find('th:eq(21)').css('min-width', '100px');
+		table.tables().header().to$().find('th:eq(21)').css('min-width', '500px');
 		
 	    $(window).trigger('resize');
 	    
@@ -245,6 +245,9 @@
 								<td>
 									<select class="select t5" id="worktype">
 										<option value="">전체</option>
+										<option value="BACKUP">BACKUP</option>
+										<option value="SCHEDULED_BACKUP">SCHEDULED BACKUP</option>
+										<option value="RESTORE">RESTORE</option>
 									</select>
 								</td>
 							</tr>
@@ -264,8 +267,8 @@
 								<th width="100">서버 주소</th>
 								<th width="100">작업구분</th>
 								<th width="100">백업구분</th>
-								<th width="100">로그시작일시</th>
-								<th width="100">로그종료일시</th>
+								<th width="150">로그시작일시</th>
+								<th width="150">로그종료일시</th>
 								<th width="100">암호화 키</th>
 								<th width="100">정책</th>
 								<th width="100">서버</th>
@@ -277,7 +280,7 @@
 								<th width="100">자원 사용 로그</th>
 								<th width="100">상태로그</th>
 								<th width="100">태이블 암호화 로그</th>
-								<th width="100">파일경로</th>
+								<th width="500">파일경로</th>
 							</tr>
 						</thead>
 					</table>

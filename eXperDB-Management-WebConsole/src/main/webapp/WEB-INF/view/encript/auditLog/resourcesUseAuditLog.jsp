@@ -88,6 +88,7 @@
 			data : {
 				from : $('#from').val(),
 				to : 	$('#to').val(),
+				monitoreduid : $('#monitoreduid').val()
 			},
 			dataType : "json",
 			type : "post",
@@ -122,6 +123,7 @@
 			data : {
 				from : $('#from').val(),
 				to : 	$('#to').val(),
+				monitoreduid : $('#monitoreduid').val()
 			},
 			dataType : "json",
 			type : "post",
@@ -195,8 +197,11 @@
 							<tr>
 								<th scope="row" class="t9">모니터링 대상</th>
 								<td>
-									<select class="select t5">
+									<select class="select t5" id="monitoreduid">
 										<option value="">전체</option>
+											<c:forEach var="monitoreduid" items="${monitoreduid}">
+												<option value="${monitoreduid.getEntityUid}">${monitoreduid.getEntityName}</option>							
+											</c:forEach>
 									</select>
 								</td>
 							</tr>

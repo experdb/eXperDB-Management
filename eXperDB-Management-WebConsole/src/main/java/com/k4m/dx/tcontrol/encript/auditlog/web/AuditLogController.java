@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.k4m.dx.tcontrol.cmmn.serviceproxy.vo.AuditLog;
+import com.k4m.dx.tcontrol.cmmn.serviceproxy.vo.AuditLogSite;
 import com.k4m.dx.tcontrol.cmmn.serviceproxy.vo.BackupLog;
 import com.k4m.dx.tcontrol.cmmn.serviceproxy.vo.SystemUsage;
 import com.k4m.dx.tcontrol.common.service.HistoryVO;
@@ -22,7 +23,7 @@ public class AuditLogController {
 
 	String restIp = "127.0.0.1";
 	int restPort = 8443;
-	String strTocken = "2KdAwDBZzGCsX2YBUjwmxrvXwe8xF3qsocpqWmkStQQ=";
+	String strTocken = "viPUUa9Jz/YJrsDwh+ITtkPxJL/U3ji9X+p4Y4BRrRg=";
 	
 	/**
 	 * 암복호화 감사로그 화면을 보여준다
@@ -59,7 +60,20 @@ public class AuditLogController {
 		AuditLogServiceCall sic = new AuditLogServiceCall();
 		JSONObject result = new JSONObject();
 		try {
-			result = sic.selectAuditLogSiteList(restIp, restPort, strTocken);
+			String DateTimeFrom = request.getParameter("from")+" 00:00:00.000000";
+			String DateTimeTo = request.getParameter("to")+" 23:59:59.999999";
+			
+			AuditLogSite param = new AuditLogSite();
+			param.setSearchAgentLogDateTimeFrom(DateTimeFrom); 
+			param.setSearchAgentLogDateTimeTo(DateTimeTo);
+			param.setAgentUid("");
+			param.setSuccessTrueFalse(true);
+			
+			param.setPageOffset(1);
+			param.setPageSize(10001);
+			param.setTotalCountLimit(10001);
+			
+			result = sic.selectAuditLogSiteList(restIp, restPort, strTocken, param);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -266,11 +280,16 @@ public class AuditLogController {
 	@RequestMapping(value = "/resourcesUseAuditLog.do")
 	public ModelAndView resourcesUseAuditLog(@ModelAttribute("historyVO") HistoryVO historyVO, HttpServletRequest request) {
 		ModelAndView mv = new ModelAndView();
+		AuditLogServiceCall sic = new AuditLogServiceCall();
+		JSONArray monitoreduid = new JSONArray();
 		try {
 			// 화면접근이력 이력 남기기
 			/*CmmnUtils.saveHistory(request, historyVO);
 			historyVO.setExe_dtl_cd("DX-T0055");
 			accessHistoryService.insertHistory(historyVO);*/
+			
+			monitoreduid =sic.selectEntityList(restIp, restPort, strTocken);
+			mv.addObject("monitoreduid", monitoreduid);
 
 			mv.setViewName("encript/auditLog/resourcesUseAuditLog");
 		} catch (Exception e) {
@@ -292,12 +311,13 @@ public class AuditLogController {
 		try {
 			String DateTimeFrom = request.getParameter("from")+" 00:00:00.000000";
 			String DateTimeTo = request.getParameter("to")+" 23:59:59.999999";
+			String monitoreduid = request.getParameter("monitoreduid");
 			
 			SystemUsage param = new SystemUsage();
 
 			param.setSearchDateTimeFrom(DateTimeFrom); 
 			param.setSearchDateTimeTo(DateTimeTo);
-			param.setMonitoredUid("admin");
+			param.setMonitoredUid(monitoreduid);
 			
 			param.setPageOffset(1);
 			param.setPageSize(10001);

@@ -23,21 +23,20 @@ var table = null;
 
 	function fn_init() {
 		table = $('#policyTable').DataTable({
-			scrollY : "250px",
+			scrollY : "310px",
 			searching : false,
 			deferRender : true,
 			scrollX: true,
 			columns : [
 				{ data : "", defaultContent : "", targets : 0, orderable : false, checkboxes : {'selectRow' : true}}, 
-				{ data : "", className : "dt-center", defaultContent : ""}, 
-				{ data : "", className : "dt-center", defaultContent : ""}, 
-				{ data : "", className : "dt-center", defaultContent : ""}, 
-				{ data : "", className : "dt-center", defaultContent : ""}, 
-				{ data : "", className : "dt-center", defaultContent : ""}, 
-				{ data : "", className : "dt-center", defaultContent : ""}, 
-				{ data : "", className : "dt-center", defaultContent : ""}, 
-				{ data : "", className : "dt-center", defaultContent : ""}
-	
+				{ data : "rnum", className : "dt-center", defaultContent : ""}, 
+				{ data : "profileName", className : "dt-center", defaultContent : ""}, 
+				{ data : "profileNote", className : "dt-center", defaultContent : ""}, 
+				{ data : "profileStatusName", className : "dt-center", defaultContent : ""}, 
+				{ data : "createDateTime", className : "dt-center", defaultContent : ""}, 
+				{ data : "createName", className : "dt-center", defaultContent : ""}, 
+				{ data : "updateDateTime", className : "dt-center", defaultContent : ""}, 
+				{ data : "updateName", className : "dt-center", defaultContent : ""}
 			 ]
 		});
 		
@@ -60,6 +59,33 @@ var table = null;
 	}
 	$(window.document).ready(function() {
 		fn_init();
+		$.ajax({
+			url : "/selectSecurityPolicy.do",
+			data : {
+			},
+			dataType : "json",
+			type : "post",
+			beforeSend: function(xhr) {
+		        xhr.setRequestHeader("AJAX", true);
+		     },
+			error : function(xhr, status, error) {
+				if(xhr.status == 401) {
+					alert("<spring:message code='message.msg02' />");
+					 location.href = "/";
+				} else if(xhr.status == 403) {
+					alert("<spring:message code='message.msg03' />");
+		             location.href = "/";
+				} else {
+					alert("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""));
+				}
+			},
+			success : function(result) {
+				table.clear().draw();
+				if(result.data!=null){
+					table.rows.add(result.data).draw();
+				}
+			}
+		});
 	});
 
 	/* 조회 버튼 클릭시*/
