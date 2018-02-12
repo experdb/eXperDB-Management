@@ -160,4 +160,118 @@ public class KeyManageServiceCall {
 
 		return result;
 	}
+
+	
+	public JSONObject updateCryptoKeySymmetric(String restIp, int restPort, String strTocken,
+			CryptoKeySymmetric param) throws Exception {
+		
+		JSONArray jsonArray = new JSONArray();
+		JSONObject result = new JSONObject();
+		
+		EncryptCommonService api = new EncryptCommonService(restIp, restPort);
+
+		String strService = SystemCode.ServiceName.KEY_SERVICE;
+		String strCommand = SystemCode.ServiceCommand.UPDATECRYPTOKEYSYMMETRIC;
+
+		HashMap body = new HashMap();
+		body.put(TypeUtility.getJustClassName(param.getClass()), param.toJSONString());
+
+		String parameters = TypeUtility.makeRequestBody(body);
+		
+
+		HashMap header = new HashMap();
+		header.put(SystemCode.FieldName.LOGIN_ID, "admin");
+		header.put(SystemCode.FieldName.ENTITY_UID, "00000000-0000-0000-0000-000000000001");
+		header.put(SystemCode.FieldName.TOKEN_VALUE, strTocken);
+
+		JSONObject resultJson = api.callService(strService, strCommand, header, parameters.toString());
+		
+		Iterator<?> iter = resultJson.entrySet().iterator();
+		while (iter.hasNext()) {
+			Map.Entry entry = (Map.Entry) iter.next();
+
+			System.out.println(String.valueOf(entry.getKey()) + " = " + String.valueOf(entry.getValue()));
+		}
+		
+		
+		String resultCode = (String) resultJson.get("resultCode");
+		String resultMessage = new String(resultJson.get("resultMessage").toString().getBytes("iso-8859-1"),"UTF-8");
+		
+		result.put("resultCode", resultCode);
+		result.put("resultMessage", resultMessage);
+
+		return result;
+	}
+
+	public JSONObject selectCryptoKeySymmetricList(String restIp, int restPort, String strTocken,
+			CryptoKeySymmetric param) throws Exception {
+		
+		JSONArray jsonArray = new JSONArray();
+		JSONObject result = new JSONObject();
+		
+		EncryptCommonService api = new EncryptCommonService(restIp, restPort);
+
+		String strService = SystemCode.ServiceName.KEY_SERVICE;
+		String strCommand = SystemCode.ServiceCommand.SELECTCRYPTOKEYSYMMETRICLIST;
+
+		
+		HashMap body = new HashMap();
+		body.put(TypeUtility.getJustClassName(param.getClass()), param.toJSONString());
+
+		String parameters = TypeUtility.makeRequestBody(body);
+		
+
+		HashMap header = new HashMap();
+		header.put(SystemCode.FieldName.LOGIN_ID, "admin");
+		header.put(SystemCode.FieldName.ENTITY_UID, "00000000-0000-0000-0000-000000000001");
+		header.put(SystemCode.FieldName.TOKEN_VALUE, strTocken);
+
+		JSONObject resultJson = api.callService(strService, strCommand, header, parameters.toString());
+		
+		Iterator<?> iter = resultJson.entrySet().iterator();
+		while (iter.hasNext()) {
+			Map.Entry entry = (Map.Entry) iter.next();
+
+			System.out.println(String.valueOf(entry.getKey()) + " = " + String.valueOf(entry.getValue()));
+		}
+				
+		String resultCode = (String) resultJson.get("resultCode");
+		String resultMessage = (String) resultJson.get("resultMessage");
+		long totalListCount = (long) resultJson.get("totalListCount");
+		
+		
+		if(resultCode.equals("0000000000")) {
+			ArrayList list = (ArrayList) resultJson.get("list");
+			
+			//System.out.println("list Size : " + list.size());
+			if(totalListCount > 0) {
+				for(int i=0; i<list.size(); i++) {
+					JSONObject jsonData = (JSONObject) list.get(i);
+					
+					JSONObject jsonObj = new JSONObject();
+					
+					Gson gson = new Gson();
+					CryptoKeySymmetric cryptoKeySymmetric = new CryptoKeySymmetric();
+					cryptoKeySymmetric = gson.fromJson(jsonData.toJSONString(), cryptoKeySymmetric.getClass());
+					
+					jsonObj.put("no", i);
+					jsonObj.put("version", cryptoKeySymmetric.getBinVersion());
+					jsonObj.put("keyStatusName", cryptoKeySymmetric.getKeyStatusName());
+					jsonObj.put("validEndDateTime", cryptoKeySymmetric.getValidEndDateTime());
+					if(cryptoKeySymmetric.getCreateName() != null) {
+						jsonObj.put("createName", new String(cryptoKeySymmetric.getCreateName().toString().getBytes("iso-8859-1"),"UTF-8"));
+					}
+					jsonObj.put("createDateTime", cryptoKeySymmetric.getCreateDateTime());
+					if(cryptoKeySymmetric.getUpdateName() != null) {
+						jsonObj.put("updateName", new String(cryptoKeySymmetric.getUpdateName().toString().getBytes("iso-8859-1"),"UTF-8"));
+					}
+					jsonObj.put("updateDateTime", cryptoKeySymmetric.getUpdateDateTime());
+
+					jsonArray.add(jsonObj);
+				}
+				result.put("data", jsonArray);
+			}
+		}
+		return result;
+	}
 }

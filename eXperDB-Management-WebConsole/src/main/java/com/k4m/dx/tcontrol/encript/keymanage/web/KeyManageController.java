@@ -18,7 +18,7 @@ import com.k4m.dx.tcontrol.cmmn.serviceproxy.vo.CryptoKeySymmetric;
 import com.k4m.dx.tcontrol.common.service.HistoryVO;
 import com.k4m.dx.tcontrol.encript.service.call.CommonServiceCall;
 import com.k4m.dx.tcontrol.encript.service.call.KeyManageServiceCall;
-
+import com.k4m.dx.tcontrol.cmmn.serviceproxy.vo.CryptoKeySymmetric;
 /**
  * keyManageController 컨트롤러 클래스를 정의한다.
  *
@@ -38,7 +38,7 @@ public class KeyManageController {
 	
 	String restIp = "127.0.0.1";
 	int restPort = 8443;
-	String strTocken = "LTC3+GVqA18GnvrMRexgZNv7ZkdhpZAiS6hh6IDBi4g=";
+	String strTocken = "WJQfqmNCrH7VQTxziy/R29CuSJbY2EW9hgaeIwf6upc=";
 	
 
 	@Autowired
@@ -115,7 +115,17 @@ public class KeyManageController {
 			String keyStatusName = request.getParameter("keyStatusName");
 			String cipherAlgorithmName = request.getParameter("cipherAlgorithmName");
 			String cipherAlgorithmCode = request.getParameter("cipherAlgorithmCode");
-			String updateDateTime = request.getParameter("updateDateTime") + " 23:59:59.999999";
+			String updateDateTime = request.getParameter("updateDateTime");
+			
+			System.out.println("========== PARAM ===========");
+			System.out.println(resourceName);
+			System.out.println(resourceNote);		
+			System.out.println(keyUid);
+			System.out.println(keyStatusCode);
+			System.out.println(keyStatusName);
+			System.out.println(cipherAlgorithmName);
+			System.out.println(cipherAlgorithmCode);
+			System.out.println(updateDateTime);
 		
 			result = csc.selectSysCodeListExper(restIp, restPort, strTocken);
 //			// 화면접근이력 이력 남기기
@@ -172,7 +182,7 @@ public class KeyManageController {
 		String resourceName = request.getParameter("resourceName");
 		String cipherAlgorithmCode = request.getParameter("cipherAlgorithmCode");
 		String resourceNote = request.getParameter("resourceNote");
-		String validEndDateTime = request.getParameter("validEndDateTime");
+		String validEndDateTime = request.getParameter("validEndDateTime") + " 23:59:59.999999";
 			
 		CryptoKeySymmetric param = new CryptoKeySymmetric();
 		param.setResourceName(resourceName);
@@ -186,6 +196,81 @@ public class KeyManageController {
 		JSONObject result = new JSONObject();
 		try {
 			result = kmsc.insertCryptoKeySymmetric(restIp, restPort, strTocken, param);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return result;
+	}
+	
+	
+	/**
+	 * 암호화 키를 업데이트한다.
+	 * 
+	 * @return resultSet
+	 * @throws Exception
+	 */
+	@RequestMapping(value = "/updateCryptoKeySymmetric.do")
+	public @ResponseBody JSONObject updateCryptoKeySymmetric(HttpServletRequest request) {
+		
+		String keyUid = request.getParameter("keyUid");
+		String resourceUid = request.getParameter("resourceUid");
+		String resourceName = request.getParameter("resourceName");
+		String cipherAlgorithmCode = request.getParameter("cipherAlgorithmCode");
+		String resourceNote = request.getParameter("resourceNote");
+		String validEndDateTime = request.getParameter("validEndDateTime") + " 23:59:59.999999";
+		String renew = request.getParameter("renew");
+		String copyBin = request.getParameter("copyBin");
+		
+		CryptoKeySymmetric param = new CryptoKeySymmetric();
+		param.setKeyUid(keyUid);
+		param.setResourceUid(resourceUid);
+		param.setResourceName(resourceName);
+		param.setCipherAlgorithmCode(cipherAlgorithmCode);
+		param.setResourceNote(resourceNote);
+		param.setValidEndDateTime(validEndDateTime);
+		param.setKeyStatusCode("KS50");
+		if(renew == "true"){
+			param.setRenew(true);
+		}else{
+			param.setRenew(false);
+		}
+		
+		if(copyBin == "true"){
+			param.setCopyBin(true);
+		}else{
+			param.setCopyBin(false);
+		}
+
+		KeyManageServiceCall kmsc= new KeyManageServiceCall();
+		JSONObject result = new JSONObject();
+		try {
+			result = kmsc.updateCryptoKeySymmetric(restIp, restPort, strTocken, param);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return result;
+	}
+	
+	
+	/**
+	 * 암호화 키 갱신이력을 조회한다.
+	 * 
+	 * @return resultSet
+	 * @throws Exception
+	 */
+	@RequestMapping(value = "/historyCryptoKeySymmetric.do")
+	public @ResponseBody JSONObject historyCryptoKeySymmetric(HttpServletRequest request) {
+		JSONObject result = new JSONObject();
+		try {
+			
+			String keyUid = request.getParameter("keyUid");
+			
+			CryptoKeySymmetric param = new CryptoKeySymmetric();
+			param.setKeyUid(keyUid);
+			
+			KeyManageServiceCall kmsc= new KeyManageServiceCall();
+
+			result = kmsc.selectCryptoKeySymmetricList(restIp, restPort, strTocken, param);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

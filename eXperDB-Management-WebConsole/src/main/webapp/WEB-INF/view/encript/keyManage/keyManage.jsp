@@ -138,11 +138,13 @@ var table = null;
 			var left = (window.screen.width / 2) - (width / 2);
 			var top = (window.screen.height /2) - (height / 2);
 			var popOption = "width="+width+", height="+height+", top="+top+", left="+left+", resizable=no, scrollbars=yes, status=no, toolbar=no, titlebar=yes, location=no,";
-				
-			window.open(popUrl,"popupView",popOption);	
-			
+						
 			frmPop.action = popUrl;
 		    frmPop.target = 'popupView';
+		    frmPop.method = "post";
+		    
+		    window.open(popUrl,"popupView",popOption);	
+		    
 		    frmPop.resourceName.value = data.resourceName;
 		    frmPop.resourceNote.value = data.resourceNote;  
 		    frmPop.keyUid.value = data.keyUid;
@@ -150,8 +152,8 @@ var table = null;
 		    frmPop.keyStatusName.value = data.keyStatusName;
 		    frmPop.cipherAlgorithmName.value = data.cipherAlgorithmName; 
 		    frmPop.cipherAlgorithmCode.value = data.cipherAlgorithmCode;
-		    frmPop.updateDateTime.value = data.updateDateTime.substring(0,10); 
 		    frmPop.submit();   
+		    
  		}
 	}
 	
@@ -161,7 +163,7 @@ var table = null;
 	}
 </script>
 
-<form name="frmPopup">
+<form name="frmPopup" id="frmPopup">
 	<input type="hidden" name="resourceName"  id="resourceName">
 	<input type="hidden" name="resourceNote"  id="resourceNote">
 	<input type="hidden" name="keyUid"  id="keyUid">
@@ -169,7 +171,6 @@ var table = null;
 	<input type="hidden" name="keyStatusName"  id="keyStatusName">
 	<input type="hidden" name="cipherAlgorithmName"  id="cipherAlgorithmName">
 	<input type="hidden" name="cipherAlgorithmCode"  id="cipherAlgorithmCode">
-	<input type="hidden" name="updateDateTime"  id="updateDateTime">
 </form>
 
 <!-- contents -->

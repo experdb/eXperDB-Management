@@ -75,9 +75,9 @@ public class CommonServiceCall {
 					jsonObj.put("sysCodeName", sysCode.getSysCodeName());
 					jsonObj.put("SysCodeValue", sysCode.getSysCodeValue());
 					
-					System.out.println("syscode : " + sysCode.getSysCode());
-					System.out.println("SysCodeName : " + sysCode.getSysCodeName());
-					System.out.println("SysCodeValue : " + sysCode.getSysCodeValue());	
+					//System.out.println("syscode : " + sysCode.getSysCode());
+					//System.out.println("SysCodeName : " + sysCode.getSysCodeName());
+					//System.out.println("SysCodeValue : " + sysCode.getSysCodeValue());	
 					
 					jsonArray.add(jsonObj);
 				}	

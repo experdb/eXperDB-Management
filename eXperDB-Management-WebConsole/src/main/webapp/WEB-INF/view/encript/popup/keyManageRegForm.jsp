@@ -41,7 +41,6 @@ $(window.document).ready(function() {
 	$("#datepicker3").datepicker();
 });
 
-
 function fu_insertCryptoKeySymmetric(){
 	
 	$.ajax({
@@ -50,7 +49,7 @@ function fu_insertCryptoKeySymmetric(){
 	  		resourceName: $('#ResourceName').val(),
 	  		cipherAlgorithmCode : $('#CipherAlgorithmCode').val(),
 	  		resourceNote : $('#ResourceNote').val(),
-	  		validEndDateTime : $('#datepicker3').val()
+	  		validEndDateTime : $('#datepicker3').val().substring(0,10)
 	  	},
 		dataType : "json",
 		type : "post",
