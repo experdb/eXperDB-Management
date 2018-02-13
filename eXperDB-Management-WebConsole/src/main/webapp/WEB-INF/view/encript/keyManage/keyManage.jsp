@@ -133,7 +133,7 @@ var table = null;
  			var frmPop= document.frmPopup;
  			
 			var popUrl = "/popup/keyManageRegReForm.do"; // 서버 url 팝업경로
-			var width = 1000;
+			var width = 1300;
 			var height = 735;
 			var left = (window.screen.width / 2) - (width / 2);
 			var top = (window.screen.height /2) - (height / 2);

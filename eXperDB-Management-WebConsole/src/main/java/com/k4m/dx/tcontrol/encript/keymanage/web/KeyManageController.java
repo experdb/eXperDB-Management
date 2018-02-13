@@ -38,7 +38,7 @@ public class KeyManageController {
 	
 	String restIp = "127.0.0.1";
 	int restPort = 8443;
-	String strTocken = "WJQfqmNCrH7VQTxziy/R29CuSJbY2EW9hgaeIwf6upc=";
+	String strTocken = "G/u5YzkwMichl5W6REP3Um952z6CqNNfknWiOsxTJlI=";
 	
 
 	@Autowired
@@ -117,16 +117,6 @@ public class KeyManageController {
 			String cipherAlgorithmCode = request.getParameter("cipherAlgorithmCode");
 			String updateDateTime = request.getParameter("updateDateTime");
 			
-			System.out.println("========== PARAM ===========");
-			System.out.println(resourceName);
-			System.out.println(resourceNote);		
-			System.out.println(keyUid);
-			System.out.println(keyStatusCode);
-			System.out.println(keyStatusName);
-			System.out.println(cipherAlgorithmName);
-			System.out.println(cipherAlgorithmCode);
-			System.out.println(updateDateTime);
-		
 			result = csc.selectSysCodeListExper(restIp, restPort, strTocken);
 //			// 화면접근이력 이력 남기기
 //			historyVO.setExe_dtl_cd("DX-T0056");
@@ -221,6 +211,7 @@ public class KeyManageController {
 		String renew = request.getParameter("renew");
 		String copyBin = request.getParameter("copyBin");
 		
+		
 		CryptoKeySymmetric param = new CryptoKeySymmetric();
 		param.setKeyUid(keyUid);
 		param.setResourceUid(resourceUid);
@@ -229,13 +220,14 @@ public class KeyManageController {
 		param.setResourceNote(resourceNote);
 		param.setValidEndDateTime(validEndDateTime);
 		param.setKeyStatusCode("KS50");
-		if(renew == "true"){
+		param.setUpdateUid("00000000-0000-0000-0000-000000000001");
+		if(renew.equals("true")){
 			param.setRenew(true);
 		}else{
 			param.setRenew(false);
 		}
 		
-		if(copyBin == "true"){
+		if(copyBin.equals("true")){
 			param.setCopyBin(true);
 		}else{
 			param.setCopyBin(false);
