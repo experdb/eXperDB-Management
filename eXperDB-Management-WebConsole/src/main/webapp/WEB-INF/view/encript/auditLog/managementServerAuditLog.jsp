@@ -45,7 +45,7 @@
 		table.tables().header().to$().find('th:eq(2)').css('min-width', '100px');
 		table.tables().header().to$().find('th:eq(3)').css('min-width', '100px');
 		table.tables().header().to$().find('th:eq(4)').css('min-width', '250px');
-		table.tables().header().to$().find('th:eq(5)').css('min-width', '1000px');
+		table.tables().header().to$().find('th:eq(5)').css('min-width', '600px');
 		table.tables().header().to$().find('th:eq(6)').css('min-width', '100px');
 		table.tables().header().to$().find('th:eq(7)').css('min-width', '300px');
 	
@@ -150,8 +150,7 @@
 <div id="contents">
 	<div class="contents_wrap">
 		<div class="contents_tit">
-			<h4>관리서버<a href="#n"><img src="../images/ico_tit.png" class="btn_info" /></a>
-			</h4>
+			<h4>관리서버<a href="#n"><img src="../images/ico_tit.png" class="btn_info" /></a></h4>
 			<div class="infobox">
 				<ul>
 					<li>관리서버설명</li>
@@ -223,7 +222,7 @@
 								<th width="100">접근자</th>
 								<th width="100">접근주소</th>
 								<th width="250">접근경로</th>
-								<th width="1000">본문</th>
+								<th width="600">본문</th>
 								<th width="100">결과코드</th>
 								<th width="300">결과메세지</th>
 							</tr>

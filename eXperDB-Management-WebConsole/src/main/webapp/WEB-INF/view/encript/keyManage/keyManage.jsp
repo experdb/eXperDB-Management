@@ -13,7 +13,7 @@
 	*  ------------    -----------    ---------------------------
 	*  2018.01.08     최초 생성
 	*
-	* author 김주영 사원
+	* author 변승우 대리
 	* since 2018.01.09 
 	*
 	*/
@@ -28,15 +28,21 @@ var table = null;
 			deferRender : true,
 			scrollX: true,
 			columns : [
-				{ data : "", defaultContent : "", targets : 0, orderable : false, checkboxes : {'selectRow' : true}}, 
-				{ data : "", className : "dt-center", defaultContent : ""}, 
-				{ data : "", className : "dt-center", defaultContent : ""}, 
-				{ data : "", className : "dt-center", defaultContent : ""}, 
-				{ data : "", className : "dt-center", defaultContent : ""}, 
-				{ data : "", className : "dt-center", defaultContent : ""}, 
-				{ data : "", className : "dt-center", defaultContent : ""}, 
-				{ data : "", className : "dt-center", defaultContent : ""}, 
-				{ data : "", className : "dt-center", defaultContent : ""}
+				{ data : "no", defaultContent : "", targets : 0, orderable : false, checkboxes : {'selectRow' : true}}, 
+				{ data : "no", className : "dt-center", defaultContent : ""}, 
+				{ data : "resourceName", className : "dt-center", defaultContent : ""}, 
+				{ data : "resourceTypeName", className : "dt-center", defaultContent : ""}, 
+				{ data : "cipherAlgorithmName", className : "dt-center", defaultContent : ""}, 
+				{ data : "createName", className : "dt-center", defaultContent : ""}, 
+				{ data : "createDateTime", className : "dt-center", defaultContent : ""}, 
+				{ data : "updateName", className : "dt-center", defaultContent : ""}, 
+				{ data : "updateDateTime", className : "dt-center", defaultContent : ""},
+				
+				{ data : "resourceNote", className : "dt-center", defaultContent : "", visible: false},
+				{ data : "keyUid", className : "dt-center", defaultContent : "", visible: false},
+				{ data : "keyStatusCode", className : "dt-center", defaultContent : "", visible: false},
+				{ data : "keyStatusName", className : "dt-center", defaultContent : "", visible: false},
+				{ data : "cipherAlgorithmCode", className : "dt-center", defaultContent : "", visible: false}
 	
 			 ]
 		});
@@ -51,6 +57,11 @@ var table = null;
 		table.tables().header().to$().find('th:eq(7)').css('min-width', '80px');
 		table.tables().header().to$().find('th:eq(8)').css('min-width', '100px');
 	
+		table.tables().header().to$().find('th:eq(9)').css('min-width', '0px');
+		table.tables().header().to$().find('th:eq(10)').css('min-width', '0px');
+		table.tables().header().to$().find('th:eq(11)').css('min-width', '0px');
+		table.tables().header().to$().find('th:eq(12)').css('min-width', '0px');
+		table.tables().header().to$().find('th:eq(13)').css('min-width', '0px');
 	    $(window).trigger('resize');
 	    
 		//더블 클릭시
@@ -61,11 +72,39 @@ var table = null;
 	
 	$(window.document).ready(function() {
 		fn_init();
+		fn_select();
 	});
 
 	/* 조회 버튼 클릭시*/
 	function fn_select() {
-
+		
+		$.ajax({
+			url : "/selectCryptoKeyList.do", 
+		  	data : {
+		  		resourceName: $('#resourceName').val(),
+		  		cipherAlgorithmName : $('#cipherAlgorithmName').val()
+		  	},
+			dataType : "json",
+			type : "post",
+			beforeSend: function(xhr) {
+		        xhr.setRequestHeader("AJAX", true);
+		     },
+			error : function(xhr, status, error) {
+				if(xhr.status == 401) {
+					alert("<spring:message code='message.msg02' />");
+					 location.href = "/";
+				} else if(xhr.status == 403) {
+					alert("<spring:message code='message.msg03' />");
+		             location.href = "/";
+				} else {
+					alert("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""));
+				}
+			},
+			success : function(data) {				
+				table.clear().draw();
+				table.rows.add(data.data).draw();
+			}
+		});
 	}
 
 	/* 등록 버튼 클릭시*/
@@ -82,22 +121,40 @@ var table = null;
 	
 	/* 수정 버튼 클릭시*/
 	function fn_update() {
-// 		var datas = table.rows('.selected').data();
-// 		if (datas.length <= 0) {
-// 			alert('<spring:message code="message.msg35" />');
-// 			return false;
-// 		}else if (datas.length >1){
-// 			alert('<spring:message code="message.msg38" />');
-// 		}else{
+ 		var datas = table.rows('.selected').data();
+ 		var data =  table.row('.selected').data();
+
+ 		if (datas.length <= 0) {
+ 			alert('<spring:message code="message.msg35" />');
+ 			return false;
+ 		}else if (datas.length >1){
+			alert('<spring:message code="message.msg38" />');
+ 		}else{
+ 			var frmPop= document.frmPopup;
+ 			
 			var popUrl = "/popup/keyManageRegReForm.do"; // 서버 url 팝업경로
 			var width = 1000;
 			var height = 735;
 			var left = (window.screen.width / 2) - (width / 2);
 			var top = (window.screen.height /2) - (height / 2);
 			var popOption = "width="+width+", height="+height+", top="+top+", left="+left+", resizable=no, scrollbars=yes, status=no, toolbar=no, titlebar=yes, location=no,";
-				
-			window.open(popUrl,"",popOption);	
-// 		}
+						
+			frmPop.action = popUrl;
+		    frmPop.target = 'popupView';
+		    frmPop.method = "post";
+		    
+		    window.open(popUrl,"popupView",popOption);	
+		    
+		    frmPop.resourceName.value = data.resourceName;
+		    frmPop.resourceNote.value = data.resourceNote;  
+		    frmPop.keyUid.value = data.keyUid;
+		    frmPop.keyStatusCode.value = data.keyStatusCode; 
+		    frmPop.keyStatusName.value = data.keyStatusName;
+		    frmPop.cipherAlgorithmName.value = data.cipherAlgorithmName; 
+		    frmPop.cipherAlgorithmCode.value = data.cipherAlgorithmCode;
+		    frmPop.submit();   
+		    
+ 		}
 	}
 	
 	/* 삭제 버튼 클릭시*/
@@ -105,6 +162,17 @@ var table = null;
 
 	}
 </script>
+
+<form name="frmPopup" id="frmPopup">
+	<input type="hidden" name="resourceName"  id="resourceName">
+	<input type="hidden" name="resourceNote"  id="resourceNote">
+	<input type="hidden" name="keyUid"  id="keyUid">
+	<input type="hidden" name="keyStatusCode"  id="keyStatusCode">
+	<input type="hidden" name="keyStatusName"  id="keyStatusName">
+	<input type="hidden" name="cipherAlgorithmName"  id="cipherAlgorithmName">
+	<input type="hidden" name="cipherAlgorithmCode"  id="cipherAlgorithmCode">
+</form>
+
 <!-- contents -->
 <div id="contents">
 	<div class="contents_wrap">
@@ -143,10 +211,10 @@ var table = null;
 						<tbody>
 							<tr>
 								<th scope="row" class="t9">키이름</th>
-								<td><input type="text" class="txt t2" id="keyName" /></td>
+								<td><input type="text" class="txt t2" id="resourceName" name="resourceName"/></td>
 								<th scope="row" class="t9">적용알고리즘</th>
 								<td>
-									<select class="select t5" id="">
+									<select class="select t5" id="cipherAlgorithmName" name="cipherAlgorithmName">
 										<option value="SEED-128">SEED-128</option>
 										<option value="ARIA-128">ARIA-128</option>
 										<option value="ARIA-192">ARIA-192</option>
@@ -174,6 +242,11 @@ var table = null;
 								<th width="100">등록일시</th>
 								<th width="80">수정자</th>
 								<th width="100">수정일시</th>
+								<th width="0"></th>
+								<th width="0"></th>
+								<th width="0"></th>
+								<th width="0"></th>
+								<th width="0"></th>								
 							</tr>
 						</thead>
 					</table>

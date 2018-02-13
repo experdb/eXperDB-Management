@@ -13,7 +13,7 @@
 	*  ------------    -----------    ---------------------------
 	*  2018.01.08     최초 생성
 	*
-	* author 김주영 사원
+	* author 변승우 대리
 	* since 2018.01.08
 	*
 	*/
@@ -55,11 +55,45 @@
 $(window.document).ready(function() {
 	fn_init();
 	
+	$("#renewInsert").css("display", "none");
+	 
 	$.datepicker.setDefaults({
 		dateFormat : 'yy-mm-dd',
+		minDate: "+730d",
 		changeYear: true,
 	});
 	$("#datepicker3").datepicker();
+
+	$("#cipherAlgorithmCode").attr("disabled", "disabled");
+	
+	
+	$.ajax({
+		url : "/historyCryptoKeySymmetric.do", 
+	  	data : {
+	  		keyUid : $('#keyUid').val(),
+	  	},
+		dataType : "json",
+		type : "post",
+		beforeSend: function(xhr) {
+	        xhr.setRequestHeader("AJAX", true);
+	     },
+		error : function(xhr, status, error) {
+			if(xhr.status == 401) {
+				alert("<spring:message code='message.msg02' />");
+				 location.href = "/";
+			} else if(xhr.status == 403) {
+				alert("<spring:message code='message.msg03' />");
+	             location.href = "/";
+			} else {
+				alert("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""));
+			}
+		},
+		success : function(data) {
+			renewalhistoryTable.clear().draw();
+			renewalhistoryTable.rows.add(data.data).draw();
+		}
+	});
+
 });
 
 var renewalhistoryTable = null;
@@ -72,14 +106,14 @@ function fn_init(){
 		scrollX: true,
 		bSort: false,
 		columns : [
-		{ data : "rownum", className : "dt-center", defaultContent : ""}, 
-		{ data : "rownum", className : "dt-center", defaultContent : ""},
-		{ data : "rownum", className : "dt-center", defaultContent : ""},
-		{ data : "rownum", className : "dt-center", defaultContent : ""},
-		{ data : "rownum", className : "dt-center", defaultContent : ""},
-		{ data : "rownum", className : "dt-center", defaultContent : ""},
-		{ data : "rownum", className : "dt-center", defaultContent : ""},
-		{ data : "rownum", className : "dt-center", defaultContent : ""}
+		{ data : "no", className : "dt-center", defaultContent : ""}, 
+		{ data : "version", className : "dt-center", defaultContent : ""},
+		{ data : "keyStatusName", className : "dt-center", defaultContent : ""},
+		{ data : "validEndDateTime", className : "dt-center", defaultContent : ""},
+		{ data : "createName", className : "dt-center", defaultContent : ""},
+		{ data : "createDateTime", className : "dt-center", defaultContent : ""},
+		{ data : "updateName", className : "dt-center", defaultContent : ""},
+		{ data : "updateDateTime", className : "dt-center", defaultContent : ""}
 		]
 	});
 	
@@ -93,6 +127,79 @@ function fn_init(){
 	renewalhistoryTable.tables().header().to$().find('th:eq(7)').css('min-width', '80px');
 
     $(window).trigger('resize');
+}
+
+
+$(function() {
+	$("#renew").on('change', function() {
+		  if ($(this).is(':checked')) {
+		    $(this).attr('value', 'true');
+		  } else {
+		    $(this).attr('value', 'false');
+		  }
+		  
+		  var renew = $("#renew").val();
+		  
+		 if(renew == "true"){
+			$("#renewInsert").css("display", "");
+		 }else{
+			 $("#renewInsert").css("display", "none");
+		 }
+	});
+	
+	
+	$("#copyBin").on('change', function() {
+		  if ($(this).is(':checked')) {
+		    $(this).attr('value', 'true');
+		  } else {
+		    $(this).attr('value', 'false');
+		  }	 
+	});
+});
+
+
+function fn_keyManagementModify(){
+	
+ $.ajax({
+		url : "/updateCryptoKeySymmetric.do", 
+	  	data : {
+	  		keyUid : $('#keyUid').val(),
+	  		resourceUid : $('#resourceUid').val(),
+	  		resourceName: $('#resourceName').val(),
+	  		cipherAlgorithmCode : $('#cipherAlgorithmCode').val(),
+	  		resourceNote : $('#resourceNote').val(),
+	  		validEndDateTime : $('#datepicker3').val().substring(0,10),
+	  		renew : $("#copyBin").val(),
+	  		copyBin : $("#renew").val(),
+	  	},
+		dataType : "json",
+		type : "post",
+		beforeSend: function(xhr) {
+	        xhr.setRequestHeader("AJAX", true);
+	     },
+		error : function(xhr, status, error) {
+			if(xhr.status == 401) {
+				alert("<spring:message code='message.msg02' />");
+				 location.href = "/";
+			} else if(xhr.status == 403) {
+				alert("<spring:message code='message.msg03' />");
+	             location.href = "/";
+			} else {
+				alert("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""));
+			}
+		},
+		success : function(data) {
+			if(data.resultCode == 0000000000){
+				alert(data.resultMessage);
+				opener.location.reload();
+				window.close();
+			}else{
+				alert(data.resultMessage);
+				return false;
+			}
+		}
+	});
+	
 }
 </script>
 <body>
@@ -108,52 +215,41 @@ function fn_init(){
 					<tbody>
 						<tr>
 							<th scope="row" class="ico_t1">암호화 키 이름</th>
-							<td><input type="text" class="txt" name="" id="" readonly="readonly"/></td>
+							<td><input type="text" class="txt" name="resourceName" id="resourceName" readonly="readonly" value="${resourceName}" /></td>
 						</tr>
 						<tr>
 							<th scope="row" class="ico_t1">적용 알고리즘</th>
 							<td>
-								<select class="select t5" id="">
-										<option value="SEED-128">SEED-128</option>
-										<option value="ARIA-128">ARIA-128</option>
-										<option value="ARIA-192">ARIA-192</option>
-										<option value="ARIA-256">ARIA-256</option>
-										<option value="AES-128">AES-128</option>
-										<option value="AES-256">AES-256</option>
-										<option value="SHA-256">SHA-256</option>
+								<select class="select t5" id="cipherAlgorithmCode" name="cipherAlgorithmCode" >
+										<c:forEach var="result" items="${result}" varStatus="status">
+											<option value="<c:out value="${result.sysCode}"/>" <c:if test="${result.sysCode == cipherAlgorithmCode }">selected="selected"</c:if>><c:out value="${result.sysCodeName}"/></option>
+										</c:forEach> 
 								</select>
 							</td>
 						</tr>
 						<tr>
 							<th scope="row" class="ico_t1">암호화 키 설명</th>
-							<td><input type="text" class="txt" name="" id="" /></td>
+							<td><input type="text" class="txt" name="resourceNote" id="resourceNote"  value="${resourceNote}" /></td>
 						</tr>
+						
 						<tr>
+							<td></td>
+							<td><div class="inp_chk"><input type="checkbox" id="renew" name="renew" >
+								<label for="renew"></label>갱신 (바이너리를 추가합니다.)</div></td>								
+						</tr>
+						
+						<tr id="renewInsert">
 							<th scope="row" class="ico_t1">유효기간 만료일</th>
 							<td>
 								<div class="calendar_area big">
-									<a href="#n" class="calendar_btn">달력열기</a> <input type="text" class="calendar" id="datepicker3"  readonly="readonly">
+									<a href="#n" class="calendar_btn">달력열기</a> <input type="text" class="calendar" id="datepicker3" >
 								</div>
 							</td>
-						</tr>
-						<tr>
-							<th scope="row" class="ico_t1">바이너리 상태</th>
-							<td>
-								<select class="select t5" id="">
-										<option value="">PREACTIVE</option>
-										<option value="">ACTIVE</option>
-										<option value="">DEACTIVE</option>
-										<option value="">COMPROMISED</option>
-										<option value="">DESTROVED</option>
-										<option value="">DESTROVED_COMPROMISED</option>
-								</select>
-							</td>
-						</tr>
-						<tr>
-							<td></td>
-							<td><div class="inp_chk"><input type="checkbox" id="test" name="test">
-								<label for="test"></label>갱신 (바이너리를 추가합니다.)</div></td>
-						</tr>
+							<td><div class="inp_chk"><input type="checkbox" id="copyBin" name="copyBin">
+								<label for="copyBin"></label>바이너리 복사</div></td>
+						</tr>	
+						<input type="hidden" id="keyUid" name="keyUid" value="${keyUid}">
+						<input type="hidden" id="resourceUid" name="resourceUid" value="${keyUid}">
 					</tbody>
 				</table>
 				<div class="cmm_bd">
@@ -176,7 +272,7 @@ function fn_init(){
 						</table>											
 				</div>	
 				<div class="btn_type_02">
-					<a href="#n" class="btn"><span>저장</span></a>
+					<a href="#n" class="btn" onclick="fn_keyManagementModify();"><span>저장</span></a>
 					<a href="#n" class="btn" onclick="window.close();"><span>취소</span></a>
 				</div>
 		</div>

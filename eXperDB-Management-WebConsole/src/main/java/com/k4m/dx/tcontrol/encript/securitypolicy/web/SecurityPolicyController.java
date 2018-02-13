@@ -2,15 +2,18 @@ package com.k4m.dx.tcontrol.encript.securitypolicy.web;
 
 import javax.servlet.http.HttpServletRequest;
 
+import org.json.simple.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.k4m.dx.tcontrol.admin.accesshistory.service.AccessHistoryService;
 import com.k4m.dx.tcontrol.cmmn.CmmnUtils;
 import com.k4m.dx.tcontrol.common.service.HistoryVO;
+import com.k4m.dx.tcontrol.encript.service.call.SecurityPolicyServiceCall;
 
 /**
  * PolicyController 컨트롤러 클래스를 정의한다.
@@ -32,6 +35,10 @@ public class SecurityPolicyController {
 	@Autowired
 	private AccessHistoryService accessHistoryService;
 
+	String restIp = "127.0.0.1";
+	int restPort = 8443;
+	String strTocken = "viPUUa9Jz/YJrsDwh+ITtkPxJL/U3ji9X+p4Y4BRrRg=";
+	
 	/**
 	 * 보안정책관리 화면을 보여준다.
 	 * 
@@ -55,6 +62,25 @@ public class SecurityPolicyController {
 		return mv;
 	}
 
+	
+	/**
+	 * 보안정책관리 리스트를 조회한다.
+	 * 
+	 * @return resultSet
+	 * @throws Exception
+	 */
+	@RequestMapping(value = "/selectSecurityPolicy.do")
+	public @ResponseBody JSONObject selectSecurityPolicy(HttpServletRequest request) {
+		SecurityPolicyServiceCall sic = new SecurityPolicyServiceCall();
+		JSONObject result = new JSONObject();
+		try {
+			result = sic.selectProfileList(restIp, restPort, strTocken);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return result;
+	}
+	
 	/**
 	 * 보안정책등록 화면을 보여준다.
 	 * 
@@ -78,7 +104,6 @@ public class SecurityPolicyController {
 			e.printStackTrace();
 		}
 		return mv;
-
 	}
 	
 	/**
@@ -104,7 +129,6 @@ public class SecurityPolicyController {
 			e.printStackTrace();
 		}
 		return mv;
-
 	}
 	
 	/**
@@ -130,7 +154,6 @@ public class SecurityPolicyController {
 			e.printStackTrace();
 		}
 		return mv;
-
 	}
 	
 	/**
@@ -156,6 +179,5 @@ public class SecurityPolicyController {
 			e.printStackTrace();
 		}
 		return mv;
-
 	}
 }

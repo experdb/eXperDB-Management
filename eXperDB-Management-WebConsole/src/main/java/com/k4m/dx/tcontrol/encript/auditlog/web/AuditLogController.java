@@ -11,6 +11,9 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.k4m.dx.tcontrol.cmmn.serviceproxy.vo.AuditLog;
+import com.k4m.dx.tcontrol.cmmn.serviceproxy.vo.AuditLogSite;
+import com.k4m.dx.tcontrol.cmmn.serviceproxy.vo.BackupLog;
+import com.k4m.dx.tcontrol.cmmn.serviceproxy.vo.SystemUsage;
 import com.k4m.dx.tcontrol.common.service.HistoryVO;
 import com.k4m.dx.tcontrol.encript.service.call.AuditLogServiceCall;
 
@@ -20,7 +23,7 @@ public class AuditLogController {
 
 	String restIp = "127.0.0.1";
 	int restPort = 8443;
-	String strTocken = "burNXW4UXVz1CXoMiGDI8/3PISmBtZvF605GrumOn14=";
+	String strTocken = "viPUUa9Jz/YJrsDwh+ITtkPxJL/U3ji9X+p4Y4BRrRg=";
 	
 	/**
 	 * 암복호화 감사로그 화면을 보여준다
@@ -57,7 +60,20 @@ public class AuditLogController {
 		AuditLogServiceCall sic = new AuditLogServiceCall();
 		JSONObject result = new JSONObject();
 		try {
-			result = sic.selectAuditLogSiteList(restIp, restPort, strTocken);
+			String DateTimeFrom = request.getParameter("from")+" 00:00:00.000000";
+			String DateTimeTo = request.getParameter("to")+" 23:59:59.999999";
+			
+			AuditLogSite param = new AuditLogSite();
+			param.setSearchAgentLogDateTimeFrom(DateTimeFrom); 
+			param.setSearchAgentLogDateTimeTo(DateTimeTo);
+			param.setAgentUid("");
+			param.setSuccessTrueFalse(true);
+			
+			param.setPageOffset(1);
+			param.setPageSize(10001);
+			param.setTotalCountLimit(10001);
+			
+			result = sic.selectAuditLogSiteList(restIp, restPort, strTocken, param);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -117,7 +133,7 @@ public class AuditLogController {
 			param.setResultCode(resultcode);
 
 			param.setPageOffset(1);
-			param.setPageSize(10);
+			param.setPageSize(10001);
 			param.setTotalCountLimit(10001);
 			
 			result = sic.selectAuditLogList(restIp, restPort, strTocken, param);
@@ -181,7 +197,7 @@ public class AuditLogController {
 			param.setResultCode(resultcode);
 
 			param.setPageOffset(1);
-			param.setPageSize(10);
+			param.setPageSize(10001);
 			param.setTotalCountLimit(10001);
 			
 			result = sic.selectAuditLogListKey(restIp, restPort, strTocken , param);
@@ -202,12 +218,17 @@ public class AuditLogController {
 	@RequestMapping(value = "/backupRestoreAuditLog.do")
 	public ModelAndView backupRestoreAuditLog(@ModelAttribute("historyVO") HistoryVO historyVO, HttpServletRequest request) {
 		ModelAndView mv = new ModelAndView();
+		AuditLogServiceCall sic = new AuditLogServiceCall();
+		JSONArray entityuid = new JSONArray();
 		try {
 			// 화면접근이력 이력 남기기
 			/*CmmnUtils.saveHistory(request, historyVO);
 			historyVO.setExe_dtl_cd("DX-T0055");
 			accessHistoryService.insertHistory(historyVO);*/
 
+			entityuid =sic.selectEntityList(restIp, restPort, strTocken);
+			mv.addObject("entityuid", entityuid);
+			
 			mv.setViewName("encript/auditLog/backupRestoreAuditLog");
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -215,6 +236,39 @@ public class AuditLogController {
 		return mv;
 	}
 	
+	/**
+	 * 백업및복원 감사로그 조회한다.
+	 * 
+	 * @return resultSet
+	 * @throws Exception
+	 */
+	@RequestMapping(value = "/selectBackupRestoreAuditLog.do")
+	public @ResponseBody JSONObject selectBackupRestoreAuditLog(HttpServletRequest request) {
+		AuditLogServiceCall sic = new AuditLogServiceCall();
+		JSONObject result = new JSONObject();
+		try {
+			String DateTimeFrom = request.getParameter("from")+" 00:00:00.000000";
+			String DateTimeTo = request.getParameter("to")+" 23:59:59.999999";
+			String worktype = request.getParameter("worktype");
+			String entityuid = request.getParameter("entityuid");
+			
+			BackupLog param = new BackupLog();
+
+			param.setBackupWorkType(worktype);
+			param.setSearchLogDateTimeFrom(DateTimeFrom); 
+			param.setSearchLogDateTimeTo(DateTimeTo);
+			param.setEntityUid(entityuid);
+			
+			param.setPageOffset(1);
+			param.setPageSize(10001);
+			param.setTotalCountLimit(10001);
+			
+			result = sic.selectBackupLogList(restIp, restPort, strTocken, param);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return result;
+	}
 	
 	/**
 	 * 자원사용 감사로그 화면을 보여준다
@@ -226,16 +280,52 @@ public class AuditLogController {
 	@RequestMapping(value = "/resourcesUseAuditLog.do")
 	public ModelAndView resourcesUseAuditLog(@ModelAttribute("historyVO") HistoryVO historyVO, HttpServletRequest request) {
 		ModelAndView mv = new ModelAndView();
+		AuditLogServiceCall sic = new AuditLogServiceCall();
+		JSONArray monitoreduid = new JSONArray();
 		try {
 			// 화면접근이력 이력 남기기
 			/*CmmnUtils.saveHistory(request, historyVO);
 			historyVO.setExe_dtl_cd("DX-T0055");
 			accessHistoryService.insertHistory(historyVO);*/
+			
+			monitoreduid =sic.selectEntityList(restIp, restPort, strTocken);
+			mv.addObject("monitoreduid", monitoreduid);
 
 			mv.setViewName("encript/auditLog/resourcesUseAuditLog");
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 		return mv;
+	}
+	
+	/**
+	 * 자원사용 감사로그 조회한다.
+	 * 
+	 * @return resultSet
+	 * @throws Exception
+	 */
+	@RequestMapping(value = "/selectResourcesUseAuditLog.do")
+	public @ResponseBody JSONObject selectResourcesUseAuditLog(HttpServletRequest request) {
+		AuditLogServiceCall sic = new AuditLogServiceCall();
+		JSONObject result = new JSONObject();
+		try {
+			String DateTimeFrom = request.getParameter("from")+" 00:00:00.000000";
+			String DateTimeTo = request.getParameter("to")+" 23:59:59.999999";
+			String monitoreduid = request.getParameter("monitoreduid");
+			
+			SystemUsage param = new SystemUsage();
+
+			param.setSearchDateTimeFrom(DateTimeFrom); 
+			param.setSearchDateTimeTo(DateTimeTo);
+			param.setMonitoredUid(monitoreduid);
+			
+			param.setPageOffset(1);
+			param.setPageSize(10001);
+			
+			result = sic.selectSystemUsageLogList(restIp, restPort, strTocken, param);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return result;
 	}
 }

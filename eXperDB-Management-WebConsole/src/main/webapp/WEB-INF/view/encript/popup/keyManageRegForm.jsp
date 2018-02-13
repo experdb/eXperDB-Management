@@ -13,7 +13,7 @@
 	*  ------------    -----------    ---------------------------
 	*  2018.01.08     최초 생성
 	*
-	* author 김주영 사원
+	* author 변승우 대리
 	* since 2018.01.08
 	*
 	*/
@@ -33,12 +33,52 @@
 </head>
 <script>
 $(window.document).ready(function() {
-	$.datepicker.setDefaults({
+	$.datepicker.setDefaults({		
 		dateFormat : 'yy-mm-dd',
+		 minDate: "+730d",
 		changeYear: true,
 	});
 	$("#datepicker3").datepicker();
 });
+
+function fu_insertCryptoKeySymmetric(){
+	
+	$.ajax({
+		url : "/insertCryptoKeySymmetric.do", 
+	  	data : {
+	  		resourceName: $('#ResourceName').val(),
+	  		cipherAlgorithmCode : $('#CipherAlgorithmCode').val(),
+	  		resourceNote : $('#ResourceNote').val(),
+	  		validEndDateTime : $('#datepicker3').val().substring(0,10)
+	  	},
+		dataType : "json",
+		type : "post",
+		beforeSend: function(xhr) {
+	        xhr.setRequestHeader("AJAX", true);
+	     },
+		error : function(xhr, status, error) {
+			if(xhr.status == 401) {
+				alert("<spring:message code='message.msg02' />");
+				 location.href = "/";
+			} else if(xhr.status == 403) {
+				alert("<spring:message code='message.msg03' />");
+	             location.href = "/";
+			} else {
+				alert("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""));
+			}
+		},
+		success : function(data) {
+			if(data.resultCode == 0000000000){
+				alert(data.resultMessage);
+				opener.location.reload();
+				window.close();
+			}else{
+				alert(data.resultMessage);
+				return false;
+			}
+		}
+	});
+}
 
 </script>
 <body>
@@ -54,25 +94,22 @@ $(window.document).ready(function() {
 					<tbody>
 						<tr>
 							<th scope="row" class="ico_t1">암호화 키 이름</th>
-							<td><input type="text" class="txt" name="" id="" /></td>
+							<td><input type="text" class="txt" name="ResourceName" id="ResourceName" /></td>
 						</tr>
 						<tr>
 							<th scope="row" class="ico_t1">적용 알고리즘</th>
 							<td>
-								<select class="select t5" id="">
-										<option value="SEED-128">SEED-128</option>
-										<option value="ARIA-128">ARIA-128</option>
-										<option value="ARIA-192">ARIA-192</option>
-										<option value="ARIA-256">ARIA-256</option>
-										<option value="AES-128">AES-128</option>
-										<option value="AES-256">AES-256</option>
-										<option value="SHA-256">SHA-256</option>
+								<select class="select t5" id="CipherAlgorithmCode" name="CipherAlgorithmCode">
+									<option value="">선택</option>
+										<c:forEach var="result" items="${result}" varStatus="status">
+											<option value="<c:out value="${result.sysCode}"/>"><c:out value="${result.sysCodeName}"/></option>
+										</c:forEach> 
 								</select>
 							</td>
 						</tr>
 						<tr>
 							<th scope="row" class="ico_t1">암호화 키 설명</th>
-							<td><input type="text" class="txt" name="" id="" /></td>
+							<td><input type="text" class="txt" name="ResourceNote" id="ResourceNote" /></td>
 						</tr>
 						<tr>
 							<th scope="row" class="ico_t1">유효기간 만료일</th>
@@ -85,7 +122,7 @@ $(window.document).ready(function() {
 					</tbody>
 				</table>
 			<div class="btn_type_02">
-				<a href="#n" class="btn"><span>저장</span></a> 
+				<a href="#n" class="btn" onclick="fu_insertCryptoKeySymmetric();"><span>저장</span></a> 
 				<a href="#n" class="btn" onclick="window.close();"><span>취소</span></a>
 			</div>
 		</div>

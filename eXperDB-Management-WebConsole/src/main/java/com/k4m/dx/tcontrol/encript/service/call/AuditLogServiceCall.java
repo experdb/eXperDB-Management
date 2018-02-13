@@ -14,7 +14,9 @@ import com.k4m.dx.tcontrol.cmmn.serviceproxy.SystemCode;
 import com.k4m.dx.tcontrol.cmmn.serviceproxy.TypeUtility;
 import com.k4m.dx.tcontrol.cmmn.serviceproxy.vo.AuditLog;
 import com.k4m.dx.tcontrol.cmmn.serviceproxy.vo.AuditLogSite;
+import com.k4m.dx.tcontrol.cmmn.serviceproxy.vo.BackupLog;
 import com.k4m.dx.tcontrol.cmmn.serviceproxy.vo.Entity;
+import com.k4m.dx.tcontrol.cmmn.serviceproxy.vo.SystemUsage;
 
 public class AuditLogServiceCall {
 
@@ -22,30 +24,20 @@ public class AuditLogServiceCall {
 	 * 암복호화 감사로그
 	 * @param restIp
 	 * @param restPort
+	 * @param param 
 	 * @return 
 	 * @throws Exception
 	 */
-	public JSONObject selectAuditLogSiteList(String restIp, int restPort, String strTocken) throws Exception {
+	public JSONObject selectAuditLogSiteList(String restIp, int restPort, String strTocken, AuditLogSite param) throws Exception {
 		EncryptCommonService api = new EncryptCommonService(restIp, restPort);
 
 		String strService = SystemCode.ServiceName.LOG_SERVICE;
 		String strCommand = SystemCode.ServiceCommand.SELECTAUDITLOGSITELIST;
 
-		
-		AuditLogSite param = new AuditLogSite();
-		param.setSearchAgentLogDateTimeFrom("20180123000000"); 
-		param.setSearchAgentLogDateTimeTo("20180208240000");
-		param.setAgentUid("");
-		param.setSuccessTrueFalse(true);
-		param.setPageOffset(1);
-		param.setPageSize(10);
-		param.setTotalCountLimit(10001);
-		
 		HashMap body = new HashMap();
 		body.put(TypeUtility.getJustClassName(param.getClass()), param.toJSONString());
 
 		String parameters = TypeUtility.makeRequestBody(body);
-		
 
 		HashMap header = new HashMap();
 		header.put(SystemCode.FieldName.LOGIN_ID, "admin");
@@ -132,7 +124,6 @@ public class AuditLogServiceCall {
 			}
 			result.put("data", jsonArray);
 			System.out.println(result);
-			return result;
 		}
 		return result;
 	}
@@ -205,12 +196,165 @@ public class AuditLogServiceCall {
 			}
 			result.put("data", jsonArray);
 			System.out.println(result);
-			return result;
 		}
 		return result;
 		
 	}
 	
+	
+	/**
+	 * 백업/복원 감사로그
+	 * @param restIp
+	 * @param restPort
+	 * @param param 
+	 * @return 
+	 * @throws Exception
+	 */
+	public JSONObject selectBackupLogList(String restIp, int restPort, String strTocken, BackupLog param) throws Exception {
+		JSONArray jsonArray = new JSONArray();
+		JSONObject result = new JSONObject();
+		
+		EncryptCommonService api = new EncryptCommonService(restIp, restPort);
+
+		String strService = SystemCode.ServiceName.BACKUP_SERVICE;
+		String strCommand = SystemCode.ServiceCommand.SELECTBACKUPLOGLIST;
+		
+		HashMap body = new HashMap();
+		body.put(TypeUtility.getJustClassName(param.getClass()), param.toJSONString());
+
+		String parameters = TypeUtility.makeRequestBody(body);
+		
+		HashMap header = new HashMap();
+		header.put(SystemCode.FieldName.LOGIN_ID, "admin");
+		header.put(SystemCode.FieldName.ENTITY_UID, "00000000-0000-0000-0000-000000000001");
+		header.put(SystemCode.FieldName.TOKEN_VALUE, strTocken);
+
+		JSONObject resultJson = api.callService(strService, strCommand, header, parameters.toString());
+		
+		String resultCode = (String) resultJson.get("resultCode");
+		String resultMessage = (String) resultJson.get("resultMessage");
+		long totalListCount = (long) resultJson.get("totalListCount");
+		
+		if(resultCode.equals("0000000000")) {
+			ArrayList list = (ArrayList) resultJson.get("list");
+			if(totalListCount > 0) {
+				for(int i=0; i<list.size(); i++) {
+					JSONObject log = (JSONObject) list.get(i);
+					JSONObject jsonObj = new JSONObject();
+					
+					Gson gson = new Gson();
+					BackupLog backupLog = new BackupLog();
+					backupLog = gson.fromJson(log.toJSONString(), backupLog.getClass());
+					
+					//접근자이름 entityName
+					String strEntityName = (String) log.get("entityName");
+					if(strEntityName != null) {
+						strEntityName = new String(strEntityName.getBytes("iso-8859-1"),"UTF-8"); 
+					}
+					
+					jsonObj.put("rnum", i+1);
+					jsonObj.put("logDateTime",log.get("logDateTime"));
+					jsonObj.put("entityName",strEntityName);
+					jsonObj.put("remoteAddress",log.get("remoteAddress"));
+					jsonObj.put("serverAddress",log.get("serverAddress"));
+					jsonObj.put("backupWorkType",log.get("backupWorkType"));
+					jsonObj.put("backupType",log.get("backupType"));
+					jsonObj.put("logDateTimeFrom",log.get("logDateTimeFrom"));
+					jsonObj.put("logDateTimeTo",log.get("logDateTimeTo"));
+					jsonObj.put("containsCryptoKey",log.get("containsCryptoKey"));
+					jsonObj.put("containsPolicy",log.get("containsPolicy"));
+					jsonObj.put("containsServer",log.get("containsServer"));
+					jsonObj.put("containsAdminUser",log.get("containsAdminUser"));
+					jsonObj.put("containsConfig",log.get("containsConfig"));
+					jsonObj.put("containsCoreLog",log.get("containsCoreLog"));
+					jsonObj.put("containsSiteLog",log.get("containsSiteLog"));
+					jsonObj.put("containsBackupLog",log.get("containsBackupLog"));
+					jsonObj.put("containsSystemUsageLog",log.get("containsSystemUsageLog"));
+					jsonObj.put("containsSystemStatusLog",log.get("containsSystemStatusLog"));
+					jsonObj.put("containsTableCryptLog",log.get("containsTableCryptLog"));
+					jsonObj.put("filePath",log.get("filePath"));
+					
+					jsonArray.add(jsonObj);
+				}
+				result.put("data", jsonArray);
+				System.out.println(result);		
+			}
+		}
+		return result;
+		
+	}
+	
+	
+	/**
+	 * 자원사용로그
+	 * @param restIp
+	 * @param restPort
+	 * @param strTocken
+	 * @param param 
+	 * @return 
+	 * @throws Exception
+	 */
+	public JSONObject selectSystemUsageLogList(String restIp, int restPort, String strTocken, SystemUsage param) throws Exception {
+		JSONArray jsonArray = new JSONArray();
+		JSONObject result = new JSONObject();
+		
+		EncryptCommonService api = new EncryptCommonService(restIp, restPort);
+
+		String strService = SystemCode.ServiceName.LOG_SERVICE;
+		String strCommand = SystemCode.ServiceCommand.SELECTSYSTEMUSAGELOGLIST;
+
+		HashMap body = new HashMap();
+		body.put(TypeUtility.getJustClassName(param.getClass()), param.toJSONString());
+
+		String parameters = TypeUtility.makeRequestBody(body);
+
+		HashMap header = new HashMap();
+		header.put(SystemCode.FieldName.LOGIN_ID, "admin");
+		header.put(SystemCode.FieldName.ENTITY_UID, "00000000-0000-0000-0000-000000000001");
+		header.put(SystemCode.FieldName.TOKEN_VALUE, strTocken);
+
+		JSONObject resultJson = api.callService(strService, strCommand, header, parameters.toString());
+		
+		String resultCode = (String) resultJson.get("resultCode");
+		String resultMessage = (String) resultJson.get("resultMessage");
+		long totalListCount = (long) resultJson.get("totalListCount");
+		
+		if(resultCode.equals("0000000000")) {
+			ArrayList list = (ArrayList) resultJson.get("list");
+			if(totalListCount > 0) {
+				for(int i=0; i<list.size(); i++) {
+					JSONObject log = (JSONObject) list.get(i);
+					JSONObject jsonObj = new JSONObject();
+					
+					Gson gson = new Gson();
+					SystemUsage systemUsage = new SystemUsage();
+					systemUsage = gson.fromJson(log.toJSONString(), systemUsage.getClass());
+					
+					systemUsage.getSiteLogDateTime();
+					systemUsage.getServerLogDateTime();				
+					
+					jsonObj.put("siteLogDateTime", systemUsage.getSiteLogDateTime());
+					jsonObj.put("serverLogDateTime", systemUsage.getServerLogDateTime());
+					jsonObj.put("monitoredAddress", systemUsage.getMonitoredAddress());
+					jsonObj.put("monitoredUid", systemUsage.getMonitoredUid());
+					jsonObj.put("monitoredName", systemUsage.getMonitoredName());
+					jsonObj.put("targetResourceType", systemUsage.getTargetResourceType());
+					jsonObj.put("targetResource", systemUsage.getTargetResource());
+					jsonObj.put("resultLevel", systemUsage.getResultLevel());
+					jsonObj.put("usageRate", systemUsage.getUsageRate());
+					jsonObj.put("limitRate", systemUsage.getLimitRate());
+					jsonObj.put("logMessage", systemUsage.getLogMessage());
+					
+					jsonArray.add(jsonObj);
+				}
+				result.put("data", jsonArray);
+				System.out.println(result);			
+			}
+		}
+		return result;
+	}	
+	
+
 	
 	/**
 	 * 접근자 리스트
@@ -259,5 +403,4 @@ public class AuditLogServiceCall {
 		}
 		return jsonArray;
 	}
-		
 }

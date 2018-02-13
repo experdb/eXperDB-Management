@@ -28,7 +28,7 @@
 			deferRender : true,
 			scrollX: true,
 			columns : [
-				{ data : "", defaultContent : "", targets : 0, orderable : false, checkboxes : {'selectRow' : true}},  
+				{ data : "rnum", defaultContent : "", targets : 0, orderable : false, checkboxes : {'selectRow' : true}},  
 				{ data : "agentLogDateTime", className : "dt-center", defaultContent : ""}, 
 				{ data : "agentRemoteAddress", className : "dt-center", defaultContent : ""}, 
 				{ data : "profileName", className : "dt-center", defaultContent : ""}, 
@@ -81,17 +81,35 @@
 	
 	    $(window).trigger('resize');
 	    
-		//더블 클릭시
-		$('#keyManageTable tbody').on('dblclick', 'tr', function() {
-	
-		});
 	}
 	
 	$(window.document).ready(function() {
+		var dateFormat = "yyyy-mm-dd", from = $("#from").datepicker({
+			changeMonth : false,
+			changeYear : false,
+			onClose : function(selectedDate) {
+				$("#to").datepicker("option", "minDate", selectedDate);
+			}
+		})
+
+		to = $("#to").datepicker({
+			changeMonth : false,
+			changeYear : false,
+			onClose : function(selectedDate) {
+				$("#from").datepicker("option", "maxDate", selectedDate);
+			}
+		})
+		
+		$('#from').val($.datepicker.formatDate('yy-mm-dd', new Date()));
+		$('#to').val($.datepicker.formatDate('yy-mm-dd', new Date()));
+		
 		fn_init();
 		$.ajax({
 			url : "/selectEncodeDecodeAuditLog.do",
 			data : {
+				from : $('#from').val(),
+				to : 	$('#to').val(),
+				resultcode : $('#resultcode').val(),
 			},
 			dataType : "json",
 			type : "post",
@@ -111,7 +129,9 @@
 			},
 			success : function(result) {
 				table.clear().draw();
-				table.rows.add(result.data).draw();
+				if(result.data!=null){
+					table.rows.add(result.data).draw();
+				}
 			}
 		});
 
@@ -120,38 +140,46 @@
 
 	/* 조회 버튼 클릭시*/
 	function fn_select() {
-
+		$.ajax({
+			url : "/selectEncodeDecodeAuditLog.do",
+			data : {
+				from : $('#from').val(),
+				to : 	$('#to').val(),
+				resultcode : $('#resultcode').val(),
+			},
+			dataType : "json",
+			type : "post",
+			beforeSend: function(xhr) {
+		        xhr.setRequestHeader("AJAX", true);
+		     },
+			error : function(xhr, status, error) {
+				if(xhr.status == 401) {
+					alert("<spring:message code='message.msg02' />");
+					 location.href = "/";
+				} else if(xhr.status == 403) {
+					alert("<spring:message code='message.msg03' />");
+		             location.href = "/";
+				} else {
+					alert("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""));
+				}
+			},
+			success : function(result) {
+				table.clear().draw();
+				if(result.data!=null){
+					table.rows.add(result.data).draw();
+				}
+			}
+		});
 	}
 	
 	
-	$(function() {		
-		var dateFormat = "yyyy-mm-dd", from = $("#from").datepicker({
-			changeMonth : false,
-			changeYear : false,
-			onClose : function(selectedDate) {
-				$("#to").datepicker("option", "minDate", selectedDate);
-			}
-		})
-
-		to = $("#to").datepicker({
-			changeMonth : false,
-			changeYear : false,
-			onClose : function(selectedDate) {
-				$("#from").datepicker("option", "maxDate", selectedDate);
-			}
-		})
-		
-		$('#from').val($.datepicker.formatDate('yy-mm-dd', new Date()));
-		$('#to').val($.datepicker.formatDate('yy-mm-dd', new Date()));
-	});
 
 </script>
 <!-- contents -->
 <div id="contents">
 	<div class="contents_wrap">
 		<div class="contents_tit">
-			<h4>암복호화<a href="#n"><img src="../images/ico_tit.png" class="btn_info" /></a>
-			</h4>
+			<h4>암복호화<a href="#n"><img src="../images/ico_tit.png" class="btn_info" /></a></h4>
 			<div class="infobox">
 				<ul>
 					<li>암복호화설명</li>
@@ -200,10 +228,10 @@
 								</td>
 								<th scope="row" class="t9">성공/실패</th>
 								<td>
-									<select class="select t8">
+									<select class="select t8" id="resultcode">
 										<option value="">전체</option>
-										<option value="">성공</option>
-										<option value="">실패</option>
+										<option value="0000000000">성공</option>
+										<option value="9999999999">실패</option>
 									</select>
 								</td>
 							</tr>
