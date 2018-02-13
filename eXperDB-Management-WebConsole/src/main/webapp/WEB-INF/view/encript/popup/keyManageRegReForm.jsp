@@ -66,33 +66,7 @@ $(window.document).ready(function() {
 
 	$("#cipherAlgorithmCode").attr("disabled", "disabled");
 	
-	
-	$.ajax({
-		url : "/historyCryptoKeySymmetric.do", 
-	  	data : {
-	  		keyUid : $('#keyUid').val(),
-	  	},
-		dataType : "json",
-		type : "post",
-		beforeSend: function(xhr) {
-	        xhr.setRequestHeader("AJAX", true);
-	     },
-		error : function(xhr, status, error) {
-			if(xhr.status == 401) {
-				alert("<spring:message code='message.msg02' />");
-				 location.href = "/";
-			} else if(xhr.status == 403) {
-				alert("<spring:message code='message.msg03' />");
-	             location.href = "/";
-			} else {
-				alert("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""));
-			}
-		},
-		success : function(data) {
-			renewalhistoryTable.clear().draw();
-			renewalhistoryTable.rows.add(data.data).draw();
-		}
-	});
+	fn_historyCryptoKeySymmetric();
 
 });
 
@@ -117,14 +91,14 @@ function fn_init(){
 		]
 	});
 	
-	renewalhistoryTable.tables().header().to$().find('th:eq(0)').css('min-width', '30px');
-	renewalhistoryTable.tables().header().to$().find('th:eq(1)').css('min-width', '80px');
+	renewalhistoryTable.tables().header().to$().find('th:eq(0)').css('min-width', '25px');
+	renewalhistoryTable.tables().header().to$().find('th:eq(1)').css('min-width', '30px');
 	renewalhistoryTable.tables().header().to$().find('th:eq(2)').css('min-width', '80px');
 	renewalhistoryTable.tables().header().to$().find('th:eq(3)').css('min-width', '200px');
 	renewalhistoryTable.tables().header().to$().find('th:eq(4)').css('min-width', '80px');
-	renewalhistoryTable.tables().header().to$().find('th:eq(5)').css('min-width', '80px');
+	renewalhistoryTable.tables().header().to$().find('th:eq(5)').css('min-width', '130px');
 	renewalhistoryTable.tables().header().to$().find('th:eq(6)').css('min-width', '80px');
-	renewalhistoryTable.tables().header().to$().find('th:eq(7)').css('min-width', '80px');
+	renewalhistoryTable.tables().header().to$().find('th:eq(7)').css('min-width', '130px');
 
     $(window).trigger('resize');
 }
@@ -191,15 +165,42 @@ function fn_keyManagementModify(){
 		success : function(data) {
 			if(data.resultCode == 0000000000){
 				alert(data.resultMessage);
-				opener.location.reload();
-				window.close();
+				fn_historyCryptoKeySymmetric();
 			}else{
 				alert(data.resultMessage);
 				return false;
 			}
 		}
+	});	
+}
+
+function fn_historyCryptoKeySymmetric(){
+	$.ajax({
+		url : "/historyCryptoKeySymmetric.do", 
+	  	data : {
+	  		keyUid : $('#keyUid').val(),
+	  	},
+		dataType : "json",
+		type : "post",
+		beforeSend: function(xhr) {
+	        xhr.setRequestHeader("AJAX", true);
+	     },
+		error : function(xhr, status, error) {
+			if(xhr.status == 401) {
+				alert("<spring:message code='message.msg02' />");
+				 location.href = "/";
+			} else if(xhr.status == 403) {
+				alert("<spring:message code='message.msg03' />");
+	             location.href = "/";
+			} else {
+				alert("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""));
+			}
+		},
+		success : function(data) {
+			renewalhistoryTable.clear().draw();
+			renewalhistoryTable.rows.add(data.data).draw();
+		}
 	});
-	
 }
 </script>
 <body>
@@ -259,14 +260,14 @@ function fn_keyManagementModify(){
 					<table id="renewalhistoryTable" class="display" cellspacing="0" width="100%">
 						<thead>
 							<tr>
-								<th width="30">NO</th>										
-								<th width="80">버전</th>
+								<th width="25">NO</th>										
+								<th width="30">버전</th>
 								<th width="80">상태</th>
 								<th width="200">유효기간 만료일자</th>
 								<th width="80">등록자</th>
-								<th width="80">등록일시</th>
+								<th width="130">등록일시</th>
 								<th width="80">수정자</th>
-								<th width="80">수정일시</th>
+								<th width="130">수정일시</th>
 							</tr>
 							</thead>
 						</table>											
