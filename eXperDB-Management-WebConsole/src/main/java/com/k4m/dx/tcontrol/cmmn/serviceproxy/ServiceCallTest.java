@@ -1,12 +1,19 @@
 package com.k4m.dx.tcontrol.cmmn.serviceproxy;
 
 import java.io.UnsupportedEncodingException;
+import java.security.MessageDigest;
+import java.security.SecureRandom;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
+import javax.crypto.Cipher;
+import javax.crypto.spec.IvParameterSpec;
+import javax.crypto.spec.SecretKeySpec;
+
+import org.apache.commons.codec.binary.Base64;
 import org.codehaus.jackson.map.ObjectMapper;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
@@ -15,6 +22,8 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
 
 import com.google.gson.Gson;
+import com.k4m.dx.tcontrol.cmmn.AES256_encryptor;
+import com.k4m.dx.tcontrol.cmmn.crypto.Rfc2898DeriveBytes;
 import com.k4m.dx.tcontrol.cmmn.serviceproxy.vo.AdminServerPasswordRequest;
 import com.k4m.dx.tcontrol.cmmn.serviceproxy.vo.AuditLog;
 import com.k4m.dx.tcontrol.cmmn.serviceproxy.vo.AuditLogSite;
@@ -31,6 +40,7 @@ import com.k4m.dx.tcontrol.cmmn.serviceproxy.vo.ProfileProtection;
 import com.k4m.dx.tcontrol.cmmn.serviceproxy.vo.SysCode;
 import com.k4m.dx.tcontrol.cmmn.serviceproxy.vo.SystemUsage;
 
+
 public class ServiceCallTest {
 
 	public static void main(String[] args) throws Exception {
@@ -41,7 +51,7 @@ public class ServiceCallTest {
 		restIp = "127.0.0.1";
 		restPort = 8443;
 		
-		String strTocken = "orivae0vYP4ExjG38x+u7BsuWf+CxHdzWZtMnCYl/Ek=";
+		String strTocken = "+nVKppjBPWJlrHUweC30uGVzhWop+LL2J85p9BIAHj8=";
 
 		ServiceCallTest test = new ServiceCallTest();
 	
@@ -105,10 +115,25 @@ public class ServiceCallTest {
 		//test.insertProfileProtection(restIp, restPort, strTocken);
 		
 		//사용자 등록
-		test.insertEntityWithPermission(restIp, restPort, strTocken);
+		//test.insertEntityWithPermission(restIp, restPort, strTocken);
 		
 		//사용자 삭제
 		//test.deleteEntity(restIp, restPort, strTocken);
+		
+		//test.decodeTest();
+		
+		//보호정책 상세 요일 display
+		int workDay = 0;
+		
+		ContainsWeekDay(workDay, SystemCode.Weekday.MONDAY);
+		
+		ContainsWeekDay((int)workDay, SystemCode.Weekday.TUESDAY);
+		ContainsWeekDay((int)workDay, SystemCode.Weekday.WEDNESDAY);
+		ContainsWeekDay((int)workDay, SystemCode.Weekday.THURSDAY);
+		ContainsWeekDay((int)workDay, SystemCode.Weekday.FRIDAY);
+		ContainsWeekDay((int)workDay, SystemCode.Weekday.SATURDAY);
+		ContainsWeekDay((int)workDay, SystemCode.Weekday.SUNDAY);
+		
 		
 	}
 
@@ -137,8 +162,10 @@ public class ServiceCallTest {
 		String parameters = TypeUtility.makeRequestBody(body);
 
 		HashMap header = new HashMap();
-		header.put(SystemCode.FieldName.LOGIN_ID, "admin");
-		header.put(SystemCode.FieldName.ENTITY_UID, "00000000-0000-0000-0000-000000000001");
+		//header.put(SystemCode.FieldName.LOGIN_ID, "admin");
+		//header.put(SystemCode.FieldName.ENTITY_UID, "00000000-0000-0000-0000-000000000001");
+		header.put(SystemCode.FieldName.LOGIN_ID, "testuser");
+		header.put(SystemCode.FieldName.ENTITY_UID, "d06c0acb-ca3a-4324-83ed-71df370acdb3");
 		header.put(SystemCode.FieldName.TOKEN_VALUE, strTocken);
 
 		JSONObject resultJson = api.callService(strService, strCommand, header, parameters);
@@ -483,8 +510,11 @@ public class ServiceCallTest {
 		String parameters = "";
 
 		HashMap header = new HashMap();
-		header.put(SystemCode.FieldName.LOGIN_ID, "admin");
-		header.put(SystemCode.FieldName.PASSWORD, "password");
+		//header.put(SystemCode.FieldName.LOGIN_ID, "admin");
+		//header.put(SystemCode.FieldName.PASSWORD, "password");
+		
+		header.put(SystemCode.FieldName.LOGIN_ID, "testuser");
+		header.put(SystemCode.FieldName.PASSWORD, "1234qwer");
 
 		JSONObject configJsonObjectMap = null;
 		ResponseEntity<String> loginEntity = api.callLoginService(strService, strCommand, header, parameters);
@@ -1400,6 +1430,7 @@ public class ServiceCallTest {
 		categoryKey = "DENY_RESULT_TYPE_CD"; //접근거부시 처리
 		//categoryKey = "INITIAL_VECTOR_TYPE"; //초기벡터
 		//categoryKey = "OPERATION_MODE"; //운영모드
+		//categoryKey = "KEY_STATUS_CD"; //바이너리
 		
 		SysCode param = new SysCode();
 //		param.setCategoryKey(categoryKey);
@@ -1763,4 +1794,65 @@ public class ServiceCallTest {
 		 }
 		}
 	}
+	
+	private void decodeTest() throws Exception {
+		int myIteration = 200000;
+		int AES_KEY_SIZE = 16;
+		int MASTER_KEY_SIZE = 32;
+				
+				
+				
+		String loadStr = "{\"mas\":\"uMbslqhNKDQrvs/RcPluZcenWtOrYLmZ8Wc+6Zs4xk1npKFX50HgPvlKSi9+CPIP\",\"ter\":\"kWlRZF2SkyTRXDL7eqDdIQ==\",\"key\":\"UW0IxVLs9S7e1vFdIWSTcpXwU4EuZvHmegHYZv59dpg=\"}";
+		
+		JSONParser parser = new JSONParser();
+		JSONObject json = (JSONObject) parser.parse(loadStr);
+		
+		//Rfc2898DeriveBytes key = new Rfc2898DeriveBytes("password", Base64.encodeBase64(json.get("key")))
+		
+		String masterStrEnc = json.get("mas").toString();
+		String iv = json.get("ter").toString();
+		String salt = json.get("key").toString();
+		
+		byte[] byteIv = Base64.decodeBase64(iv);
+		//byte[] byMasterStrEnc = Base64.decodeBase64(masterStrEnc);
+		
+		String password = "1234qwer";
+		//String strTxt = "password";
+
+		
+		Rfc2898DeriveBytes key = new Rfc2898DeriveBytes(password, Base64.decodeBase64(salt), myIteration);
+		//key.getBytes(AES_KEY_SIZE);
+
+		byte[] byMasterStrEnc = Base64.decodeBase64(masterStrEnc);
+		//byte[] bySalt = Base64.decodeBase64(salt.getBytes());
+		AESCrypt aes = new AESCrypt(password, key.getBytes(AES_KEY_SIZE));
+		
+		//byte[] strEnc = aes.encrypt(strTxt);
+		//String decryptedText = aes.decrypt(strEnc).toString(); 
+		//System.out.println(strEnc);
+		
+		String decryptedText = aes.decrypt(byMasterStrEnc, byteIv).toString(); 
+		
+		//checkChar(decryptedText);
+		
+		System.out.println(decryptedText);
+		
+
+	}
+	
+	/**
+	 * 보호정책 상세 요일 display
+	 * @param input
+	 * @param weekDay
+	 * @return
+	 */
+	private static boolean ContainsWeekDay(int input, int weekDay)
+	{
+		if ((input & weekDay) == weekDay)
+		{
+			return true;
+		}
+		return false;
+	}
+	
 }
