@@ -95,10 +95,10 @@ public class ClientTester {
 			//clientTester.dxT018_delete(Ip, port);
 			//clientTester.dxT019(Ip, port);
 			//clientTester.dxT020(Ip, port);
-			//clientTester.dxT021(Ip, port);
+			clientTester.dxT021(Ip, port);
 			//clientTester.dxT023(Ip, port);
 			//clientTester.dxT024(Ip, port);
-			clientTester.dxT025(Ip, port);
+			//clientTester.dxT025(Ip, port);
 			
 			//clientTester.test();
 		} catch(Exception e) {
