@@ -62,6 +62,7 @@ public class AESCrypt {
 		return strbuf.toString();
 	}
 
+
 	public static void main(String[] args) throws Exception {
 
 		int myIteration = 200000;

@@ -23,6 +23,7 @@ import org.springframework.http.ResponseEntity;
 
 import com.google.gson.Gson;
 import com.k4m.dx.tcontrol.cmmn.AES256_encryptor;
+import com.k4m.dx.tcontrol.cmmn.crypto.Generator;
 import com.k4m.dx.tcontrol.cmmn.crypto.Rfc2898DeriveBytes;
 import com.k4m.dx.tcontrol.cmmn.serviceproxy.vo.AdminServerPasswordRequest;
 import com.k4m.dx.tcontrol.cmmn.serviceproxy.vo.AuditLog;
@@ -71,6 +72,9 @@ public class ServiceCallTest {
 		
 		//일반공통코드 리스트
 		//test.selectParamSysCodeList(restIp, restPort, strTocken);
+		
+		//에이전트 리스트
+		
 		
 		//접근자리스트
 		//test.selectEntityList(restIp, restPort, strTocken);
@@ -1490,6 +1494,8 @@ public class ServiceCallTest {
 		
 	}
 	
+	
+	
 	/**
 	 * 접근자 리스트
 	 * @param restIp
@@ -1508,6 +1514,78 @@ public class ServiceCallTest {
 		HashMap body = new HashMap();
 		//body.put(TypeUtility.getJustClassName(param.getClass()), param.toJSONString());
 		body.put("monitored", monitored);
+		
+		String parameters = TypeUtility.makeRequestBody(body);
+		
+		System.out.println(parameters);
+
+		HashMap header = new HashMap();
+		header.put(SystemCode.FieldName.LOGIN_ID, "admin");
+		header.put(SystemCode.FieldName.ENTITY_UID, "00000000-0000-0000-0000-000000000001");
+		header.put(SystemCode.FieldName.TOKEN_VALUE, strTocken);
+
+		JSONObject resultJson = api.callService(strService, strCommand, header, parameters.toString());
+		
+		Iterator<?> iter = resultJson.entrySet().iterator();
+		while (iter.hasNext()) {
+			Map.Entry entry = (Map.Entry) iter.next();
+
+			System.out.println(String.valueOf(entry.getKey()) + " = " + String.valueOf(entry.getValue()));
+		}
+		
+		
+		String resultCode = (String) resultJson.get("resultCode");
+		String resultMessage = (String) resultJson.get("resultMessage");
+		//long totalListCount = (long) resultJson.get("totalListCount");
+		
+		
+		if(resultCode.equals("0000000000")) {
+			ArrayList list = (ArrayList) resultJson.get("list");
+			
+			//System.out.println("list Size : " + list.size());
+			//if(totalListCount > 0) {
+				for(int i=0; i<list.size(); i++) {
+					JSONObject data = (JSONObject) list.get(i);
+					
+					Entity entity = new Entity();
+					Gson gson = new Gson();
+					entity = gson.fromJson(data.toJSONString(), entity.getClass());
+					
+					System.out.println("getEntityUid : " + entity.getEntityUid());
+					System.out.println("getEntityName : " + new String(entity.getEntityName().toString().getBytes("iso-8859-1"),"UTF-8") );
+
+					
+				
+					
+				}
+			
+			//}
+		}
+		
+	}
+	
+	/**
+	 * 에이전트 리스트
+	 * @param restIp
+	 * @param restPort
+	 * @param strTocken
+	 * @throws Exception
+	 */
+	private void selectEntityList2(String restIp, int restPort, String strTocken) throws Exception {
+		EncryptCommonService api = new EncryptCommonService(restIp, restPort);
+
+		String strService = SystemCode.ServiceName.ENTITY_SERVICE;
+		String strCommand = SystemCode.ServiceCommand.SELECTENTITYLIST;
+
+		String monitored = "false"; 
+		
+		Entity param = new Entity();
+		param.setEntityTypeCode(SystemCode.EntityTypeCode.AGENT);
+
+		HashMap body = new HashMap();
+		//body.put(TypeUtility.getJustClassName(param.getClass()), param.toJSONString());
+		body.put("monitored", monitored);
+		body.put(TypeUtility.getJustClassName(param.getClass()), param.toJSONString());
 		
 		String parameters = TypeUtility.makeRequestBody(body);
 		
@@ -1838,6 +1916,14 @@ public class ServiceCallTest {
 		System.out.println(decryptedText);
 		
 
+	}
+	
+	private void encTest() throws Exception {
+		int MASTER_KEY_SIZE = 32;
+		
+		byte[] masterStr = new byte[MASTER_KEY_SIZE];
+		masterStr = Generator.generateRandomBits(MASTER_KEY_SIZE);
+		
 	}
 	
 	/**
