@@ -33,6 +33,7 @@ import com.k4m.dx.tcontrol.cmmn.serviceproxy.vo.ProfileAclSpec;
 import com.k4m.dx.tcontrol.cmmn.serviceproxy.vo.ProfileCipherSpec;
 import com.k4m.dx.tcontrol.cmmn.serviceproxy.vo.ProfileProtection;
 import com.k4m.dx.tcontrol.cmmn.serviceproxy.vo.SysCode;
+import com.k4m.dx.tcontrol.cmmn.serviceproxy.vo.SysConfig;
 import com.k4m.dx.tcontrol.cmmn.serviceproxy.vo.SysMultiValueConfig;
 import com.k4m.dx.tcontrol.cmmn.serviceproxy.vo.SystemUsage;
 
@@ -154,6 +155,9 @@ public class ServiceCallTest {
 		
 		//설정 > 보안정책 옵션 설정 조회2
 		//test.selectSysMultiValueConfigListLike(restIp, restPort, strTocken, loginId, entityId);
+		
+		//설정 > 보안정책 옵션 설정 저장
+		//test.sysConfigSave(restIp, restPort, strTocken, loginId, entityId);
 		
 		
 	}
@@ -1299,6 +1303,15 @@ public class ServiceCallTest {
 		
 	}
 	
+	/**
+	 * 암호화키 > 암호화 키 수정
+	 * @param restIp
+	 * @param restPort
+	 * @param strTocken
+	 * @param loginId
+	 * @param entityId
+	 * @throws Exception
+	 */
 	private void updateCryptoKeySymmetric(String restIp, int restPort, String strTocken, String loginId, String entityId) throws Exception {
 		EncryptCommonService api = new EncryptCommonService(restIp, restPort);
 
@@ -2092,7 +2105,189 @@ public class ServiceCallTest {
 
 	}
 	
+	/**
+	 * 보안정책 옵션 설정 저장
+	 * @param restIp
+	 * @param restPort
+	 * @param strTocken
+	 * @param loginId
+	 * @param entityId
+	 * @throws Exception
+	 */
+	private void sysConfigSave(String restIp, int restPort, String strTocken, String loginId, String entityId) throws Exception {
+		updateSysConfigList(restIp, restPort, strTocken, loginId, entityId);
+		
+		updateSysMultiValueConfigList(restIp, restPort, strTocken, loginId, entityId);
+		
+	}
 	
+	/**
+	 * 보안정책 옵션 설정 저장1
+	 * @param restIp
+	 * @param restPort
+	 * @param strTocken
+	 * @param loginId
+	 * @param entityId
+	 * @throws Exception
+	 */
+	private void updateSysConfigList(String restIp, int restPort, String strTocken, String loginId, String entityId) throws Exception {
+		EncryptCommonService api = new EncryptCommonService(restIp, restPort);
+
+		String strService = SystemCode.ServiceName.SYSTEM_SERVICE;
+		String strCommand = SystemCode.ServiceCommand.UPDATESYSCONFIGLIST;
+		
+		//if(암복호화 로그 서버에서 압축 시간 < 암복호화 로그 압축 출력 시간 ) [{0}]값은 [{1}]보다 크거나 같아야 합니다"
+		//if(암복호화 로그 압축 중단 시간 <= 암복호화 로그 압축 출력 시간 ) [{0}]값은 [{1}]보다 커야 합니다
+		
+		List param = new ArrayList();
+		
+		//기본 접근 허용
+		SysConfig defaultAccessAllow = new SysConfig();
+		defaultAccessAllow.setConfigKey(SystemCode.SysConfigKey.GLOBAL_POLICY_DEFAULT_ACCESS_ALLOW_TF);
+		defaultAccessAllow.setConfigValue("0"); //체크면 1
+		param.add(defaultAccessAllow.toJSONString());
+		
+		//암복호화 로그 기록 중지 
+		SysConfig forcedLoggingOff = new SysConfig();
+		forcedLoggingOff.setConfigKey(SystemCode.SysConfigKey.GLOBAL_POLICY_FORCED_LOGGING_OFF_TF);
+		forcedLoggingOff.setConfigValue("0"); //체크면 1
+		param.add(forcedLoggingOff.toJSONString());
+
+		//부스트
+		SysConfig boost = new SysConfig();
+		boost.setConfigKey(SystemCode.SysConfigKey.GLOBAL_POLICY_BOOST_TF);
+		boost.setConfigValue("0"); //체크면 1
+		param.add(boost.toJSONString());
+		
+		//암복호화 로그 서버에서 압축 시간 
+		SysConfig cryptLogCompressFlushTimeout = new SysConfig();
+		cryptLogCompressFlushTimeout.setConfigKey (SystemCode.SysConfigKey.GLOBAL_POLICY_CRYPT_LOG_COMPRESS_FLUSH_TIMEOUT);
+		cryptLogCompressFlushTimeout.setConfigValue ( "");
+		param.add(cryptLogCompressFlushTimeout.toJSONString());
+		
+        //암복호화 로그 압축 시작값
+		SysConfig cryptLogCompressInitial = new SysConfig();
+		boost.setConfigKey(SystemCode.SysConfigKey.GLOBAL_POLICY_CRYPT_LOG_COMPRESS_INITIAL);
+		boost.setConfigValue("0");
+		param.add(cryptLogCompressInitial.toJSONString()); 
+		
+		//암복호화 로그 압축 출력 시간
+		SysConfig cryptLogCompressPrintPeriod = new SysConfig();
+		cryptLogCompressFlushTimeout.setConfigKey (SystemCode.SysConfigKey.GLOBAL_POLICY_CRYPT_LOG_COMPRESS_PRINT_PERIOD);
+		cryptLogCompressFlushTimeout.setConfigValue ( "");
+		param.add(cryptLogCompressPrintPeriod.toJSONString());
+
+		
+
+		HashMap body = new HashMap();
+		body.put("SysConfig", param);
+
+		String parameters = TypeUtility.makeRequestBody(body);
+		
+
+		HashMap header = new HashMap();
+		header.put(SystemCode.FieldName.LOGIN_ID, loginId);
+		header.put(SystemCode.FieldName.ENTITY_UID, entityId);
+		header.put(SystemCode.FieldName.TOKEN_VALUE, strTocken);
+
+		JSONObject resultJson1 = api.callService(strService, strCommand, header, parameters.toString());
+		
+		Iterator<?> iter1 = resultJson1.entrySet().iterator();
+		while (iter1.hasNext()) {
+			Map.Entry entry = (Map.Entry) iter1.next();
+
+			System.out.println(String.valueOf(entry.getKey()) + " = " + String.valueOf(entry.getValue()));
+		}
+
+		String resultCode = (String) resultJson1.get("resultCode");
+		String resultMessage = new String(resultJson1.get("resultMessage").toString().getBytes("iso-8859-1"),"UTF-8");
+		
+		System.out.println(resultMessage);
+		
+	}
+	
+	/**
+	 * 보안정책 옵션 설정 저장2
+	 * @param restIp
+	 * @param restPort
+	 * @param strTocken
+	 * @param loginId
+	 * @param entityId
+	 * @throws Exception
+	 */
+	private void updateSysMultiValueConfigList(String restIp, int restPort, String strTocken, String loginId, String entityId) throws Exception {
+		EncryptCommonService api = new EncryptCommonService(restIp, restPort);
+
+		int[] numWeek = { SystemCode.Weekday.MONDAY,
+				 SystemCode.Weekday.TUESDAY,
+				 SystemCode.Weekday.WEDNESDAY,
+				 SystemCode.Weekday.THURSDAY,
+				 SystemCode.Weekday.FRIDAY,
+				 SystemCode.Weekday.SATURDAY,
+				 SystemCode.Weekday.SUNDAY };
+		
+		String strService = SystemCode.ServiceName.SYSTEM_SERVICE;
+		String strCommand = SystemCode.ServiceCommand.UPDATESYSMULTIVALUECONFIGLIST;
+		
+		//if(암복호화 로그 서버에서 압축 시간 < 암복호화 로그 압축 출력 시간 ) [{0}]값은 [{1}]보다 크거나 같아야 합니다"
+		//if(암복호화 로그 압축 중단 시간 <= 암복호화 로그 압축 출력 시간 ) [{0}]값은 [{1}]보다 커야 합니다
+		
+		List param = new ArrayList();
+		
+		SysMultiValueConfig batchLogConf = new SysMultiValueConfig();
+		batchLogConf.setConfigKey (SystemCode.SysConfigKey.BATCH_LOG_CONF);
+		batchLogConf.setValueTrueFalse ( false); //암복호화 로그를 지정되 시간에만 수집 체크 true/false
+         
+		BigDecimal valueNumber = new BigDecimal(0);
+		BigDecimal valueNumber2 = new BigDecimal(24);
+		
+		batchLogConf.setValueNumber (valueNumber); //전송 시작
+		batchLogConf.setValueNumber2 (valueNumber2); //전송 종료
+		
+		
+		int weekday = 0;
+		for (int i = 0; i < 7; i++)
+		{
+			//if (요일체크박스 체크이면) {
+				//weekday |= numWeek[i];
+		    //}
+		}
+		batchLogConf.setValueString(Integer.toHexString(weekday));
+		param.add(batchLogConf.toJSONString());
+
+		SysMultiValueConfig logUploadDelay = new SysMultiValueConfig();
+		logUploadDelay.setConfigKey(SystemCode.SysConfigKey.BATCH_LOG_UPLOAD_DELAY);
+		logUploadDelay.setValueNumber(new BigDecimal(1)); //암복호화 로그 전송 대기 시간  값
+		param.add(logUploadDelay.toJSONString());
+
+		
+
+		HashMap body = new HashMap();
+		body.put("SysMultiValueConfig", param);
+
+		String parameters = TypeUtility.makeRequestBody(body);
+		
+
+		HashMap header = new HashMap();
+		header.put(SystemCode.FieldName.LOGIN_ID, loginId);
+		header.put(SystemCode.FieldName.ENTITY_UID, entityId);
+		header.put(SystemCode.FieldName.TOKEN_VALUE, strTocken);
+
+		JSONObject resultJson1 = api.callService(strService, strCommand, header, parameters.toString());
+		
+		Iterator<?> iter1 = resultJson1.entrySet().iterator();
+		while (iter1.hasNext()) {
+			Map.Entry entry = (Map.Entry) iter1.next();
+
+			System.out.println(String.valueOf(entry.getKey()) + " = " + String.valueOf(entry.getValue()));
+		}
+
+		String resultCode = (String) resultJson1.get("resultCode");
+		String resultMessage = new String(resultJson1.get("resultMessage").toString().getBytes("iso-8859-1"),"UTF-8");
+		
+		System.out.println(resultMessage);
+		
+	}
 	
 	private void checkChar(String originalStr) throws Exception {
 		//String originalStr = "Å×½ºÆ®"; // 테스트 
