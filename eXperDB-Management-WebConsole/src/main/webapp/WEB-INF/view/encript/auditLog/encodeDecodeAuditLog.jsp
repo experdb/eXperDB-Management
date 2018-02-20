@@ -104,12 +104,18 @@
 		$('#to').val($.datepicker.formatDate('yy-mm-dd', new Date()));
 		
 		fn_init();
+		
 		$.ajax({
 			url : "/selectEncodeDecodeAuditLog.do",
 			data : {
 				from : $('#from').val(),
 				to : 	$('#to').val(),
 				resultcode : $('#resultcode').val(),
+				agentUid : $('#agentUid').val(),
+				successTrueFalse : $('#successTrueFalse').val(),
+				searchFieldName : $('#searchFieldName').val(),
+				searchOperator : $('#searchOperator').val(),
+				searchFieldValueString : $('#searchFieldValueString').val()
 			},
 			dataType : "json",
 			type : "post",
@@ -133,8 +139,7 @@
 					table.rows.add(result.data).draw();
 				}
 			}
-		});
-
+		});		
 	});
 	
 
@@ -146,6 +151,11 @@
 				from : $('#from').val(),
 				to : 	$('#to').val(),
 				resultcode : $('#resultcode').val(),
+				agentUid : $('#agentUid').val(),
+				successTrueFalse : $('#successTrueFalse').val(),
+				searchFieldName : $('#searchFieldName').val(),
+				searchOperator : $('#searchOperator').val(),
+				searchFieldValueString : $('#searchFieldValueString').val()
 			},
 			dataType : "json",
 			type : "post",
@@ -172,8 +182,6 @@
 		});
 	}
 	
-	
-
 </script>
 <!-- contents -->
 <div id="contents">
@@ -222,29 +230,46 @@
 							<tr>
 								<th scope="row" class="t9">에이전트</th>
 								<td>
-									<select class="select t5">
-										<option value="">전체</option>
+									<select class="select t3" id="agentUid" name="agentUid">
+										<c:forEach var="result" items="${result}" varStatus="status">
+										<option value="" ><c:out value="전체"/></option>
+											<option value="<c:out value="${result.entityUid}"/>" ><c:out value="${result.entityName}"/></option>
+										</c:forEach> 
 									</select>
 								</td>
 								<th scope="row" class="t9">성공/실패</th>
 								<td>
-									<select class="select t8" id="resultcode">
+									<select class="select t8" id="successTrueFalse" name="successTrueFalse">
 										<option value="">전체</option>
-										<option value="0000000000">성공</option>
-										<option value="9999999999">실패</option>
+										<option value="true">성공</option>
+										<option value="false">실패</option>
 									</select>
 								</td>
 							</tr>
 							<tr>
 								<th scope="row" class="t9">조회필드</th>
 								<td>
-									<select class="select t5">
-										<option value="">지정안함</option>
+									<select class="select t5" id="searchFieldName" name="searchFieldName">
+										<option value="">전체</option>
+										<option value="PROFILE_NM">정책 이름</option>
+										<option value="SITE_ACCESS_ADDRESS">클라이언트 주소</option>
+										<option value="HOST_NM">호스트 이름</option>
+										<option value="EXTRA_NM">추가 필드</option>
+										<option value="MODULE_INFO">모듈 정보</option>
+										<option value="LOCATION_INFO">DB 컬럼</option>
+										<option value="SERVER_LOGIN_ID">DB 사용자 아이디</option>
+										<option value="ADMIN_LOGIN_ID">eXperDB 사용자 아이디</option>
+										<option value="OS_LOGIN_ID">사용자 아이디</option>
+										<option value="APPLICATION_NM">프로그램 이름</option>
+										<option value="INSTANCE_ID">서버 인스턴스</option>										
 									</select>
-									<select class="select t8">
-										<option value="">Like</option>
+									<select class="select t8" id="searchOperator" name="searchOperator">
+										<option value="%">Like</option>
+										<option value="%">=</option>
+										<option value="<">&lt;</option>
+										<option value=">">&gt;</option>
 									</select>
-									<input type="text" class="txt t3" id="" />
+									<input type="text" class="txt t3" id="searchFieldValueString" name="searchFieldValueString"/>
 								</td>
 							</tr>
 						</tbody>
