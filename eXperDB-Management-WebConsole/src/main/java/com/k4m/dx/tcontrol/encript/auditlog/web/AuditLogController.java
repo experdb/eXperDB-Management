@@ -16,6 +16,7 @@ import com.k4m.dx.tcontrol.cmmn.serviceproxy.vo.BackupLog;
 import com.k4m.dx.tcontrol.cmmn.serviceproxy.vo.SystemUsage;
 import com.k4m.dx.tcontrol.common.service.HistoryVO;
 import com.k4m.dx.tcontrol.encript.service.call.AuditLogServiceCall;
+import com.k4m.dx.tcontrol.encript.service.call.KeyManageServiceCall;
 
 
 @Controller
@@ -23,7 +24,7 @@ public class AuditLogController {
 
 	String restIp = "127.0.0.1";
 	int restPort = 8443;
-	String strTocken = "viPUUa9Jz/YJrsDwh+ITtkPxJL/U3ji9X+p4Y4BRrRg=";
+	String strTocken = "uq1b/dgOIzpzH+EAD9UOl5Iz26soa1H+hdbmD38noqs=";
 	
 	/**
 	 * 암복호화 감사로그 화면을 보여준다
@@ -40,8 +41,13 @@ public class AuditLogController {
 			/*CmmnUtils.saveHistory(request, historyVO);
 			historyVO.setExe_dtl_cd("DX-T0055");
 			accessHistoryService.insertHistory(historyVO);*/
-
+			AuditLogServiceCall sic = new AuditLogServiceCall();
+			JSONArray result = new JSONArray();
+			
+			result = sic.selectEntityAgentList(restIp, restPort, strTocken);
+			
 			mv.setViewName("encript/auditLog/encodeDecodeAuditLog");
+			mv.addObject("result",result);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -63,12 +69,29 @@ public class AuditLogController {
 			String DateTimeFrom = request.getParameter("from")+" 00:00:00.000000";
 			String DateTimeTo = request.getParameter("to")+" 23:59:59.999999";
 			
+			String agentUid = request.getParameter("agentUid");
+			
+			String searchFieldName= request.getParameter("searchFieldName");
+			String searchOperator = request.getParameter("searchOperator");
+			String searchFieldValueString = request.getParameter("searchFieldValueString");
+			String successTrueFalse = request.getParameter("successTrueFalse");
+			
 			AuditLogSite param = new AuditLogSite();
 			param.setSearchAgentLogDateTimeFrom(DateTimeFrom); 
 			param.setSearchAgentLogDateTimeTo(DateTimeTo);
-			param.setAgentUid("");
-			param.setSuccessTrueFalse(true);
+			param.setAgentUid(agentUid);
+			param.setSearchFieldName(searchFieldName);
+			param.setSearchOperator(searchOperator);
+			param.setSearchFieldValueString(searchFieldValueString);
 			
+			System.out.println(successTrueFalse);
+			
+			if(successTrueFalse.equals("true")){
+				param.setSuccessTrueFalse(true);
+			}else if(successTrueFalse.equals("fasle")){
+				param.setSuccessTrueFalse(false);
+			}
+					
 			param.setPageOffset(1);
 			param.setPageSize(10001);
 			param.setTotalCountLimit(10001);
@@ -220,6 +243,7 @@ public class AuditLogController {
 		ModelAndView mv = new ModelAndView();
 		AuditLogServiceCall sic = new AuditLogServiceCall();
 		JSONArray entityuid = new JSONArray();
+		JSONArray result = new JSONArray();
 		try {
 			// 화면접근이력 이력 남기기
 			/*CmmnUtils.saveHistory(request, historyVO);
@@ -227,6 +251,7 @@ public class AuditLogController {
 			accessHistoryService.insertHistory(historyVO);*/
 
 			entityuid =sic.selectEntityList(restIp, restPort, strTocken);
+
 			mv.addObject("entityuid", entityuid);
 			
 			mv.setViewName("encript/auditLog/backupRestoreAuditLog");
@@ -328,4 +353,24 @@ public class AuditLogController {
 		}
 		return result;
 	}
+	
+	
+	/**
+	 * 암호화 agent리스트 조회
+	 * 
+	 * @return resultSet
+	 * @throws Exception
+	 */
+	@RequestMapping(value = "/selectEncryptAgentList.do")
+	public @ResponseBody JSONArray selectEncryptAgentList(HttpServletRequest request) {
+			
+		AuditLogServiceCall alsc= new AuditLogServiceCall();
+		JSONArray result = new JSONArray();
+		try {
+			result = alsc.selectEntityAgentList(restIp, restPort, strTocken);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return result;
+	}	
 }

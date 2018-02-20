@@ -1,12 +1,17 @@
 package com.k4m.dx.tcontrol.encript.service.call;
 
+import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 
+import javax.servlet.http.HttpServletRequest;
+
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.google.gson.Gson;
 import com.k4m.dx.tcontrol.cmmn.serviceproxy.EncryptCommonService;
@@ -403,4 +408,72 @@ public class AuditLogServiceCall {
 		}
 		return jsonArray;
 	}
+
+	public JSONArray selectEntityAgentList(String restIp, int restPort, String strTocken) throws Exception {
+		
+		EncryptCommonService api = new EncryptCommonService(restIp, restPort);
+		
+		JSONArray jsonArray = new JSONArray();
+
+		String strService = SystemCode.ServiceName.ENTITY_SERVICE;
+		String strCommand = SystemCode.ServiceCommand.SELECTENTITYLIST;
+
+		String monitored = "false"; 
+		
+		Entity param = new Entity();
+		param.setEntityTypeCode(SystemCode.EntityTypeCode.AGENT);
+
+		HashMap body = new HashMap();
+		//body.put(TypeUtility.getJustClassName(param.getClass()), param.toJSONString());
+		body.put("monitored", monitored);
+		body.put(TypeUtility.getJustClassName(param.getClass()), param.toJSONString());
+		
+		String parameters = TypeUtility.makeRequestBody(body);
+		
+		System.out.println(parameters);
+
+		HashMap header = new HashMap();
+		header.put(SystemCode.FieldName.LOGIN_ID, "admin");
+		header.put(SystemCode.FieldName.ENTITY_UID, "00000000-0000-0000-0000-000000000001");
+		header.put(SystemCode.FieldName.TOKEN_VALUE, strTocken);
+
+		JSONObject resultJson = api.callService(strService, strCommand, header, parameters.toString());
+		
+		Iterator<?> iter = resultJson.entrySet().iterator();
+		while (iter.hasNext()) {
+			Map.Entry entry = (Map.Entry) iter.next();
+
+			System.out.println(String.valueOf(entry.getKey()) + " = " + String.valueOf(entry.getValue()));
+		}
+		
+		
+		String resultCode = (String) resultJson.get("resultCode");
+		String resultMessage = (String) resultJson.get("resultMessage");
+		//long totalListCount = (long) resultJson.get("totalListCount");
+		
+		
+		if(resultCode.equals("0000000000")) {
+			ArrayList list = (ArrayList) resultJson.get("list");
+			
+				for(int i=0; i<list.size(); i++) {
+					JSONObject data = (JSONObject) list.get(i);
+					
+					Entity entity = new Entity();
+					Gson gson = new Gson();
+					entity = gson.fromJson(data.toJSONString(), entity.getClass());
+					
+					JSONObject jsonObj = new JSONObject();
+
+					jsonObj.put("entityUid", entity.getEntityUid());
+					jsonObj.put("entityName", new String(entity.getEntityName().toString().getBytes("iso-8859-1"),"UTF-8"));
+					
+					jsonArray.add(jsonObj);
+					
+					System.out.println("getEntityUid : " + entity.getEntityUid());
+					System.out.println("getEntityName : " + new String(entity.getEntityName().toString().getBytes("iso-8859-1"),"UTF-8") );
+				}
+		}
+		return jsonArray;
+	}
+		
 }
