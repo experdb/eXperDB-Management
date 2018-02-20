@@ -83,7 +83,7 @@ public class KeyManageServiceCall {
 					jsonObj.put("keyUid", cryptoKey.getKeyUid());
 					jsonObj.put("resourceName", cryptoKey.getResourceName());
 					jsonObj.put("resourceUid", cryptoKey.getResourceUid());
-					jsonObj.put("resourceTypeName", cryptoKey.getResourceTypeCode());
+					jsonObj.put("resourceTypeCode", cryptoKey.getResourceTypeCode());
 					jsonObj.put("resourceNote", cryptoKey.getResourceNote());
 					jsonObj.put("resourceTypeName", cryptoKey.getResourceTypeName());
 					jsonObj.put("cipherAlgorithmName", cryptoKey.getCipherAlgorithmName());
@@ -273,5 +273,45 @@ public class KeyManageServiceCall {
 			}
 		}
 		return result;
+	}
+
+	public JSONObject deleteCryptoKeySymmetric(String restIp, int restPort, String strTocken, CryptoKeySymmetric param) throws Exception{
+		EncryptCommonService api = new EncryptCommonService(restIp, restPort);
+
+		String strService = SystemCode.ServiceName.KEY_SERVICE;
+		String strCommand = SystemCode.ServiceCommand.DELETECRYPTOKEYSYMMETRIC;
+
+
+		HashMap body = new HashMap();
+		body.put(TypeUtility.getJustClassName(param.getClass()), param.toJSONString());
+
+		String parameters = TypeUtility.makeRequestBody(body);
+		
+		HashMap header = new HashMap();
+		header.put(SystemCode.FieldName.LOGIN_ID, "admin");
+		header.put(SystemCode.FieldName.ENTITY_UID, "00000000-0000-0000-0000-000000000001");
+		header.put(SystemCode.FieldName.TOKEN_VALUE, strTocken);
+
+		JSONObject resultJson = api.callService(strService, strCommand, header, parameters.toString());
+		
+		Iterator<?> iter = resultJson.entrySet().iterator();
+		while (iter.hasNext()) {
+			Map.Entry entry = (Map.Entry) iter.next();
+
+			System.out.println(String.valueOf(entry.getKey()) + " = " + String.valueOf(entry.getValue()));
+		}
+		
+		
+		String resultCode = (String) resultJson.get("resultCode");
+		String resultMessage = new String(resultJson.get("resultMessage").toString().getBytes("iso-8859-1"),"UTF-8");
+		
+		JSONObject jsonObj = new JSONObject();
+		
+		jsonObj.put("resultCode", (String) resultJson.get("resultCode"));
+		jsonObj.put("resultMessage", new String(resultJson.get("resultMessage").toString().getBytes("iso-8859-1"),"UTF-8"));
+		
+		System.out.println(resultMessage);
+		
+		return jsonObj;
 	}
 }

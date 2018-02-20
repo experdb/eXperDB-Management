@@ -37,7 +37,7 @@ var table = null;
 				{ data : "createDateTime", className : "dt-center", defaultContent : ""}, 
 				{ data : "updateName", className : "dt-center", defaultContent : ""}, 
 				{ data : "updateDateTime", className : "dt-center", defaultContent : ""},
-				
+				{ data : "resourceTypeCode", className : "dt-center", defaultContent : "", visible: false},
 				{ data : "resourceNote", className : "dt-center", defaultContent : "", visible: false},
 				{ data : "keyUid", className : "dt-center", defaultContent : "", visible: false},
 				{ data : "keyStatusCode", className : "dt-center", defaultContent : "", visible: false},
@@ -62,6 +62,7 @@ var table = null;
 		table.tables().header().to$().find('th:eq(11)').css('min-width', '0px');
 		table.tables().header().to$().find('th:eq(12)').css('min-width', '0px');
 		table.tables().header().to$().find('th:eq(13)').css('min-width', '0px');
+		table.tables().header().to$().find('th:eq(14)').css('min-width', '0px');
 	    $(window).trigger('resize');
 	    
 		//더블 클릭시
@@ -159,7 +160,51 @@ var table = null;
 	
 	/* 삭제 버튼 클릭시*/
 	function fn_delete() {
-
+		var datas = table.rows('.selected').data();
+		var keyUid = table.row('.selected').data().keyUid;
+		var resourceName = table.row('.selected').data().resourceName;
+		var resourceTypeCode = table.row('.selected').data().resourceTypeCode;
+		
+		if (datas.length <= 0) {
+ 			alert('<spring:message code="message.msg35" />');
+ 			return false;
+ 		}else if (datas.length >1){
+			alert('<spring:message code="message.msg38" />');
+ 		}else{
+			$.ajax({
+				url : "/deleteCryptoKeySymmetric.do", 
+			  	data : {
+			  		keyUid: keyUid,
+			  		resourceName:resourceName,
+			  		resourceTypeCode:resourceTypeCode
+			  	},
+				dataType : "json",
+				type : "post",
+				beforeSend: function(xhr) {
+			        xhr.setRequestHeader("AJAX", true);
+			     },
+				error : function(xhr, status, error) {
+					if(xhr.status == 401) {
+						alert("<spring:message code='message.msg02' />");
+						 location.href = "/";
+					} else if(xhr.status == 403) {
+						alert("<spring:message code='message.msg03' />");
+			             location.href = "/";
+					} else {
+						alert("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""));
+					}
+				},
+				success : function(data) {			
+					if(data.resultCode == 0000000000){
+						alert(data.resultMessage);
+						location.reload();
+					}else{
+						alert(data.resultMessage);
+						return false;
+					}
+				}
+			});
+ 		}	
 	}
 </script>
 
@@ -212,16 +257,13 @@ var table = null;
 							<tr>
 								<th scope="row" class="t9">키이름</th>
 								<td><input type="text" class="txt t2" id="resourceName" name="resourceName"/></td>
-								<th scope="row" class="t9">적용알고리즘</th>
+								<th scope="row" class="ico_t1">적용 알고리즘</th>
 								<td>
-									<select class="select t5" id="cipherAlgorithmName" name="cipherAlgorithmName">
-										<option value="SEED-128">SEED-128</option>
-										<option value="ARIA-128">ARIA-128</option>
-										<option value="ARIA-192">ARIA-192</option>
-										<option value="ARIA-256">ARIA-256</option>
-										<option value="AES-128">AES-128</option>
-										<option value="AES-256">AES-256</option>
-										<option value="SHA-256">SHA-256</option>
+									<select class="select t5" id="cipherAlgorithmCode" name="cipherAlgorithmCode" >
+												<option value="<c:out value=""/>" ><c:out value="전체"/></option>
+											<c:forEach var="result" items="${result}" varStatus="status">												
+												<option value="<c:out value="${result.sysCode}"/>" <c:if test="${result.sysCode == cipherAlgorithmCode }">selected="selected"</c:if>><c:out value="${result.sysCodeName}"/></option>
+											</c:forEach> 
 									</select>
 								</td>
 							</tr>
@@ -246,7 +288,8 @@ var table = null;
 								<th width="0"></th>
 								<th width="0"></th>
 								<th width="0"></th>
-								<th width="0"></th>								
+								<th width="0"></th>		
+								<th width="0"></th>							
 							</tr>
 						</thead>
 					</table>
