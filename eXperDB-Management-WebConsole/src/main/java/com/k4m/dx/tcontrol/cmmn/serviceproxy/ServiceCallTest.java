@@ -53,7 +53,7 @@ public class ServiceCallTest {
 		String password = "";
 		
 		//loginId = "admin";
-		password = "password";
+		//password = "password";
 		//entityId = "00000000-0000-0000-0000-000000000001";
 		
 		loginId = "testuser";
@@ -125,7 +125,7 @@ public class ServiceCallTest {
 		//test.updateCryptoKeySymmetric(restIp, restPort, strTocken, loginId, entityId);
 		
 		//암호화키 > 암호화 키 삭제
-		test.deleteCryptoKeySymmetric(restIp, restPort, strTocken, loginId, entityId);
+		//test.deleteCryptoKeySymmetric(restIp, restPort, strTocken, loginId, entityId);
 		
 		//보안정책 > 보안정책등록
 		//test.insertProfileProtection(restIp, restPort, strTocken, loginId, entityId);
@@ -158,6 +158,13 @@ public class ServiceCallTest {
 		
 		//설정 > 보안정책 옵션 설정 저장
 		//test.sysConfigSave(restIp, restPort, strTocken, loginId, entityId);
+		
+		//설정 > 암호화 설정 조회
+		//test.selectSysMultiValueConfigListLike2(restIp, restPort, strTocken, loginId, entityId);
+		
+		//설정 > 암호화 설정 저장
+		//test.updateSysMultiValueConfigList2(restIp, restPort, strTocken, loginId, entityId);
+		
 		
 		
 	}
@@ -2106,6 +2113,93 @@ public class ServiceCallTest {
 	}
 	
 	/**
+	 * 암호화 설정조회
+	 * @param restIp
+	 * @param restPort
+	 * @param strTocken
+	 * @param loginId
+	 * @param entityId
+	 * @throws Exception
+	 */
+	private void selectSysMultiValueConfigListLike2(String restIp, int restPort, String strTocken, String loginId, String entityId) throws Exception {
+		
+		int[] numWeek = { SystemCode.Weekday.MONDAY,
+				 SystemCode.Weekday.TUESDAY,
+				 SystemCode.Weekday.WEDNESDAY,
+				 SystemCode.Weekday.THURSDAY,
+				 SystemCode.Weekday.FRIDAY,
+				 SystemCode.Weekday.SATURDAY,
+				 SystemCode.Weekday.SUNDAY };
+
+		EncryptCommonService api = new EncryptCommonService(restIp, restPort);
+
+		String strService = SystemCode.ServiceName.SYSTEM_SERVICE;
+		String strCommand = SystemCode.ServiceCommand.SELECTSYSMULTIVALUECONFIGLISTLIKE;
+
+		
+		HashMap body = new HashMap();
+		body.put(SystemCode.CustomFormParamKey.sysConfigKeyPrefix, SystemCode.SysConfigKeyPrefix.MONITORING);
+
+		String parameters = TypeUtility.makeRequestBody(body);
+
+		HashMap header = new HashMap();
+		header.put(SystemCode.FieldName.LOGIN_ID, loginId);
+		header.put(SystemCode.FieldName.ENTITY_UID, entityId);
+		header.put(SystemCode.FieldName.TOKEN_VALUE, strTocken);
+
+		JSONObject resultJson = api.callService(strService, strCommand, header, parameters);
+		
+
+		String resultCode = (String) resultJson.get("resultCode");
+		String resultMessage = (String) resultJson.get("resultMessage");
+		resultMessage = new String(resultMessage.getBytes("iso-8859-1"),"UTF-8"); 
+		
+		System.out.println("resultCode : " + resultCode + " resultMessage : " + resultMessage);
+		
+		
+		if(resultCode.equals(SystemCode.ResultCode.SUCCESS)) {
+			
+			ArrayList list = (ArrayList) resultJson.get("list");
+			for (int j = 0; j < list.size(); j++) {
+				JSONObject jsonObj = (JSONObject) list.get(j);
+				
+				SysMultiValueConfig sysMultiValueConfig = new SysMultiValueConfig();
+				Gson gson = new Gson();
+				sysMultiValueConfig = gson.fromJson(jsonObj.toJSONString(), sysMultiValueConfig.getClass());
+				
+				String strConfigKey = (String) sysMultiValueConfig.getConfigKey();
+				boolean blnIsvalueTrueFalse = sysMultiValueConfig.isValueTrueFalse();
+				String strValueString = sysMultiValueConfig.getValueString();
+				
+				BigDecimal bdValueNumber = sysMultiValueConfig.getValueNumber();
+				BigDecimal bdValueNumber2 = sysMultiValueConfig.getValueNumber2();
+				
+				System.out.println("strConfigKey : " + strConfigKey);
+				if(strConfigKey.equals(SystemCode.SysConfigKey.MONITOR_POLLING_SERVER)) {
+					
+					System.out.println("관리서버 모니터링 주기 : " + bdValueNumber);
+				} else if(strConfigKey.equals(SystemCode.SysConfigKey.MONITOR_POLLING_AGENT)) {
+					System.out.println("정책전송 중지 : " + blnIsvalueTrueFalse);
+					System.out.println("에이전트와 관리서버 통신 주기 : " + bdValueNumber);
+				} else if(strConfigKey.equals(SystemCode.SysConfigKey.MONITOR_EXPIRE_CRYPTO_KEY)) {
+
+					System.out.println("암호화 키의 유효기간이 다음 날짜 이하로 남으면 경고 : " + bdValueNumber);
+				} else if(strConfigKey.equals(SystemCode.SysConfigKey.MONITOR_AGENT_AUDIT_LOG_HMAC)) {
+
+					System.out.println("에이전트가 기록하는 로그에 위변조 방지를 적용 : " + blnIsvalueTrueFalse);
+				}
+				
+				
+
+			}
+			
+		} else {
+			
+		}
+
+	}
+	
+	/**
 	 * 보안정책 옵션 설정 저장
 	 * @param restIp
 	 * @param restPort
@@ -2288,6 +2382,107 @@ public class ServiceCallTest {
 		System.out.println(resultMessage);
 		
 	}
+	
+	/**
+	 * 암호화 설정 저장
+	 * @param restIp
+	 * @param restPort
+	 * @param strTocken
+	 * @param loginId
+	 * @param entityId
+	 * @throws Exception
+	 */
+	private void updateSysMultiValueConfigList2(String restIp, int restPort, String strTocken, String loginId, String entityId) throws Exception {
+		EncryptCommonService api = new EncryptCommonService(restIp, restPort);
+
+		int[] numWeek = { SystemCode.Weekday.MONDAY,
+				 SystemCode.Weekday.TUESDAY,
+				 SystemCode.Weekday.WEDNESDAY,
+				 SystemCode.Weekday.THURSDAY,
+				 SystemCode.Weekday.FRIDAY,
+				 SystemCode.Weekday.SATURDAY,
+				 SystemCode.Weekday.SUNDAY };
+		
+		String strService = SystemCode.ServiceName.SYSTEM_SERVICE;
+		String strCommand = SystemCode.ServiceCommand.UPDATESYSMULTIVALUECONFIGLIST;
+		
+		//if(암복호화 로그 서버에서 압축 시간 < 암복호화 로그 압축 출력 시간 ) [{0}]값은 [{1}]보다 크거나 같아야 합니다"
+		//if(암복호화 로그 압축 중단 시간 <= 암복호화 로그 압축 출력 시간 ) [{0}]값은 [{1}]보다 커야 합니다
+		
+		List param = new ArrayList();
+		
+		//관리서버 모니터링 주기
+		//MONITOR_POLLING_SERVER
+		SysMultiValueConfig serverPolling = new SysMultiValueConfig();
+		serverPolling.setConfigKey(SystemCode.SysConfigKey.MONITOR_POLLING_SERVER);
+		serverPolling.setValueTrueFalse(false); //무조건 false
+		serverPolling.setValueNumber(new BigDecimal(600)); //관리서버 모니터링 주기 입력값
+		serverPolling.setValueNumber2(null); //무조건 null
+		serverPolling.setValueString(SystemCode.MonitorResultLevel.WARN);
+
+		param.add(serverPolling.toJSONString());
+		
+		//에이전트와 관리서버 통신주기
+		//MONITOR_POLLING_AGENT
+		SysMultiValueConfig agentPolling = new SysMultiValueConfig();
+		agentPolling.setConfigKey(SystemCode.SysConfigKey.MONITOR_POLLING_AGENT);
+		agentPolling.setValueTrueFalse(false); // 정책전송 중지 체크 값 체크이면 true
+		agentPolling.setValueNumber(new BigDecimal(600)); //에이전트와 관리서버 통신주기 입력값
+		agentPolling.setValueNumber2(null); //무조건 null
+		agentPolling.setValueString(SystemCode.MonitorResultLevel.WARN);
+
+		param.add(agentPolling.toJSONString());
+		
+		//에이전트가 기록하는 로그에 위변조 방지를 적용
+		//MONITOR_AGENT_AUDIT_LOG_HMAC 
+		SysMultiValueConfig agentLogHmac = new SysMultiValueConfig();
+		agentLogHmac.setConfigKey(SystemCode.SysConfigKey.MONITOR_AGENT_AUDIT_LOG_HMAC);
+		agentLogHmac.setValueTrueFalse(false); //에이전트가 기록하는 로그에 위변조 방지를 적용 체크 값 체크면 true
+		agentLogHmac.setValueNumber(new BigDecimal(0)); // 무조건 0
+		agentLogHmac.setValueNumber2(null); //무조건 null
+		agentLogHmac.setValueString(SystemCode.MonitorResultLevel.NORMAL);
+
+		param.add(agentLogHmac.toJSONString());
+		
+		//암호화 키의 유효기간이 다음 날짜 이하로 남으면 경고
+		//MONITOR_EXPIRE_CRYPTO_KEY
+		SysMultiValueConfig keyExpire = new SysMultiValueConfig();
+		keyExpire.setConfigKey(SystemCode.SysConfigKey.MONITOR_EXPIRE_CRYPTO_KEY);
+        keyExpire.setValueTrueFalse(false); //무조건 false
+		keyExpire.setValueNumber(new BigDecimal(30)); //암호화 키의 유효기간이 다음 날짜 이하로 남으면 경고 입력값
+		keyExpire.setValueNumber2(null); //무조건 null
+		keyExpire.setValueString(SystemCode.MonitorResultLevel.WARN);
+
+		param.add(keyExpire.toJSONString());
+
+
+		HashMap body = new HashMap();
+		body.put("SysMultiValueConfig", param);
+
+		String parameters = TypeUtility.makeRequestBody(body);
+		
+
+		HashMap header = new HashMap();
+		header.put(SystemCode.FieldName.LOGIN_ID, loginId);
+		header.put(SystemCode.FieldName.ENTITY_UID, entityId);
+		header.put(SystemCode.FieldName.TOKEN_VALUE, strTocken);
+
+		JSONObject resultJson1 = api.callService(strService, strCommand, header, parameters.toString());
+		
+		Iterator<?> iter1 = resultJson1.entrySet().iterator();
+		while (iter1.hasNext()) {
+			Map.Entry entry = (Map.Entry) iter1.next();
+
+			System.out.println(String.valueOf(entry.getKey()) + " = " + String.valueOf(entry.getValue()));
+		}
+
+		String resultCode = (String) resultJson1.get("resultCode");
+		String resultMessage = new String(resultJson1.get("resultMessage").toString().getBytes("iso-8859-1"),"UTF-8");
+		
+		System.out.println(resultMessage);
+		
+	}
+	
 	
 	private void checkChar(String originalStr) throws Exception {
 		//String originalStr = "Å×½ºÆ®"; // 테스트 

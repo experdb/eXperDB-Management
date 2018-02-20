@@ -50,6 +50,19 @@ public class SystemCode {
 		public static final String MONITORING = "MONITOR_";
 	}
 	
+	public class MonitorResultLevel {
+		private MonitorResultLevel() {
+		}
+
+		public static final String	NORMAL	= "NORMAL";
+
+		public static final String	INFO	= "INFO";
+
+		public static final String	WARN	= "WARN";
+
+		public static final String	ERROR	= "ERROR";
+	}
+	
 	public class SysConfigKey {
 		private SysConfigKey() {
 		}
