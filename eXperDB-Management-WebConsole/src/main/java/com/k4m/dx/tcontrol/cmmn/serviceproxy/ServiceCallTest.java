@@ -123,6 +123,9 @@ public class ServiceCallTest {
 		//암호화키 > 암호화 키 수정
 		//test.updateCryptoKeySymmetric(restIp, restPort, strTocken, loginId, entityId);
 		
+		//암호화키 > 암호화 키 삭제
+		test.deleteCryptoKeySymmetric(restIp, restPort, strTocken, loginId, entityId);
+		
 		//보안정책 > 보안정책등록
 		//test.insertProfileProtection(restIp, restPort, strTocken, loginId, entityId);
 		
@@ -150,7 +153,7 @@ public class ServiceCallTest {
 		//test.selectSysConfigListLike(restIp, restPort, strTocken, loginId, entityId);
 		
 		//설정 > 보안정책 옵션 설정 조회2
-		test.selectSysMultiValueConfigListLike(restIp, restPort, strTocken, loginId, entityId);
+		//test.selectSysMultiValueConfigListLike(restIp, restPort, strTocken, loginId, entityId);
 		
 		
 	}
