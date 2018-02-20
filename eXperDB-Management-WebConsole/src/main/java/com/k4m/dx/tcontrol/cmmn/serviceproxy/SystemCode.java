@@ -29,6 +29,132 @@ public class SystemCode {
 	private SystemCode() {
 	}
 	
+	public class CustomFormParamKey
+	{
+		private CustomFormParamKey() { }
+		public static final String isPolicyConfig = "isPolicyConfig";
+		public static final String isBackupSchedule = "isBackupSchedule";
+		public static final String sysConfigKeyPrefix = "sysConfigKeyPrefix";
+	}
+	
+	public class SysConfigKeyPrefix
+	{
+		private SysConfigKeyPrefix()
+		{
+		}
+
+		public static final String LOG_BACKUP_SCHEDULE = "LOG_BACKUP_SCHEDULE_";
+		public static final String AUTH_ADMIN = "AUTH_ADMIN_";
+		public static final String GLOBAL_POLICY = "GLOBAL_POLICY_";
+		public static final String BATCH_LOG = "BATCH_LOG_";
+		public static final String MONITORING = "MONITOR_";
+	}
+	
+	public class SysConfigKey {
+		private SysConfigKey() {
+		}
+
+		// this is not batch log, but to select from db at once, use prefix BATCH
+		public static final String	BATCH_LOG_UPLOAD_DELAY							= "BATCH_LOG_UPLOAD_DELAY";
+
+		public static final String	BATCH_LOG_CONF									= "BATCH_LOG_CONF";
+
+		public static final String	LOG_BACKUP_SCHEDULE_KEEP_TF						= "LOG_BACKUP_SCHEDULE_KEEP_TF";
+
+		public static final String	LOG_BACKUP_SCHEDULE_KEEP_DAY					= "LOG_BACKUP_SCHEDULE_KEEP_DAY";
+
+		public static final String	LOG_BACKUP_SCHEDULE_DAILY_TF					= "LOG_BACKUP_SCHEDULE_DAILY_TF";
+
+		public static final String	LOG_BACKUP_SCHEDULE_DAILY_HOUR					= "LOG_BACKUP_SCHEDULE_DAILY_HOUR";
+
+		public static final String	LOG_BACKUP_SCHEDULE_DAILY_BACKUP_TYPE			= "LOG_BACKUP_SCHEDULE_DAILY_BACKUP_TYPE";
+
+		public static final String	LOG_BACKUP_SCHEDULE_WEEKLY_TF					= "LOG_BACKUP_SCHEDULE_WEEKLY_TF";
+
+		public static final String	LOG_BACKUP_SCHEDULE_WEEKLY_WEEKDAY				= "LOG_BACKUP_SCHEDULE_WEEKLY_WEEKDAY";
+
+		public static final String	LOG_BACKUP_SCHEDULE_WEEKLY_HOUR					= "LOG_BACKUP_SCHEDULE_WEEKLY_HOUR";
+
+		public static final String	LOG_BACKUP_SCHEDULE_WEEKLY_BACKUP_TYPE			= "LOG_BACKUP_SCHEDULE_WEEKLY_BACKUP_TYPE";
+
+		public static final String	LOG_BACKUP_SCHEDULE_MONTHLY_TF					= "LOG_BACKUP_SCHEDULE_MONTHLY_TF";
+
+		public static final String	LOG_BACKUP_SCHEDULE_MONTHLY_DAY					= "LOG_BACKUP_SCHEDULE_MONTHLY_DAY";
+
+		public static final String	LOG_BACKUP_SCHEDULE_MONTHLY_HOUR				= "LOG_BACKUP_SCHEDULE_MONTHLY_HOUR";
+
+		public static final String	LOG_BACKUP_SCHEDULE_MONTHLY_BACKUP_TYPE			= "LOG_BACKUP_SCHEDULE_MONTHLY_BACKUP_TYPE";
+
+		public static final String	DATABASE_MASTER_KEY								= "DATABASE_MASTER_KEY";
+
+		public static final String	GLOBAL_POLICY_DEFAULT_ACCESS_ALLOW_TF			= "GLOBAL_POLICY_DEFAULT_ACCESS_ALLOW_TF";
+
+		public static final String	GLOBAL_POLICY_FORCED_LOGGING_OFF_TF				= "GLOBAL_POLICY_FORCED_LOGGING_OFF_TF";
+
+		public static final String	ROOT_PERMISSION_KEY								= "ROOT_PERMISSION_KEY";
+
+		public static final String	SERVER_PASSWORD_INTEGRITY						= "SERVER_PASSWORD_INTEGRITY";
+
+		public static final String	AUTH_ADMIN_LOGIN_FAIL_LIMIT						= "AUTH_ADMIN_LOGIN_FAIL_LIMIT";
+
+		public static final String	AUTH_ADMIN_TOKEN_USABLE_MINUTE_LIMIT			= "AUTH_ADMIN_TOKEN_USABLE_MINUTE_LIMIT";
+
+		public static final String	AUTH_ADMIN_PASSWORD_DAY_LIMIT					= "AUTH_ADMIN_PASSWORD_DAY_LIMIT";
+
+		public static final String	AUTH_ADMIN_PASSWORD_EXCLUDE_PHONE_TF			= "AUTH_ADMIN_PASSWORD_EXCLUDE_PHONE_TF";
+
+		public static final String	AUTH_ADMIN_PASSWORD_INCLUDE_ALPHANUMERIC_TF		= "AUTH_ADMIN_PASSWORD_INCLUDE_ALPHANUMERIC_TF";
+
+		public static final String	AUTH_ADMIN_PASSWORD_INCLUDE_SYMBOL_TF			= "AUTH_ADMIN_PASSWORD_INCLUDE_SYMBOL_TF";
+
+		public static final String	AUTH_ADMIN_PASSWORD_INCLUDE_UPPER_LOWER_TF		= "AUTH_ADMIN_PASSWORD_INCLUDE_UPPER_LOWER_TF";
+
+		public static final String	AUTH_ADMIN_PASSWORD_LENGTH						= "AUTH_ADMIN_PASSWORD_LENGTH";
+
+		public static final String	MONITOR_AGENT_POLICY_ACCESS						= "MONITOR_AGENT_POLICY_ACCESS";
+
+		public static final String	MONITOR_AGENT_POLICY_FAIL						= "MONITOR_AGENT_POLICY_FAIL";
+
+		public static final String	MONITOR_AGENT_STATUS							= "MONITOR_AGENT_STATUS";
+
+		public static final String	MONITOR_AGENT_USAGE_CPU							= "MONITOR_AGENT_USAGE_CPU";
+
+		public static final String	MONITOR_AGENT_USAGE_DISK						= "MONITOR_AGENT_USAGE_DISK";
+
+		public static final String	MONITOR_AGENT_USAGE_RAM							= "MONITOR_AGENT_USAGE_RAM";
+
+		public static final String	MONITOR_EXPIRE_CRYPTO_KEY						= "MONITOR_EXPIRE_CRYPTO_KEY";
+
+		public static final String	MONITOR_EXPIRE_LICENSE							= "MONITOR_EXPIRE_LICENSE";
+
+		public static final String	MONITOR_POLLING_AGENT							= "MONITOR_POLLING_AGENT";
+
+		public static final String	MONITOR_POLLING_SERVER							= "MONITOR_POLLING_SERVER";
+
+		public static final String	MONITOR_SERVER_USAGE_CPU						= "MONITOR_SERVER_USAGE_CPU";
+
+		public static final String	MONITOR_SERVER_USAGE_DISK						= "MONITOR_SERVER_USAGE_DISK";
+
+		public static final String	MONITOR_SERVER_USAGE_RAM						= "MONITOR_SERVER_USAGE_RAM";
+
+		public static final String	MONITOR_AGENT_AUDIT_LOG_HMAC					= "MONITOR_AGENT_AUDIT_LOG_HMAC";
+
+		public static final String	EXTERNAL_KEY_SERVER_RESOURCE					= "EXTERNAL_KEY_SERVER_RESOURCE";
+
+		public static final String	GLOBAL_POLICY_BOOST_TF							= "GLOBAL_POLICY_BOOST_TF";
+
+		public static final String	GLOBAL_POLICY_CRYPT_LOG_TM_RESOLUTION			= "GLOBAL_POLICY_CRYPT_LOG_TM_RESOLUTION";
+
+		public static final String	GLOBAL_POLICY_CRYPT_LOG_COMPRESS_LIMIT			= "GLOBAL_POLICY_CRYPT_LOG_COMPRESS_LIMIT";
+
+		public static final String	GLOBAL_POLICY_CRYPT_LOG_COMPRESS_FLUSH_TIMEOUT	= "GLOBAL_POLICY_CRYPT_LOG_COMPRESS_FLUSH_TIMEOUT";
+
+		public static final String	GLOBAL_POLICY_CRYPT_LOG_COMPRESS_INITIAL		= "GLOBAL_POLICY_CRYPT_LOG_COMPRESS_INITIAL";
+
+		public static final String	GLOBAL_POLICY_CRYPT_LOG_COMPRESS_PRINT_PERIOD	= "GLOBAL_POLICY_CRYPT_LOG_COMPRESS_PRINT_PERIOD";
+	}
+
+	
 	public static class BitMask {
 
 		public static final int		BACKUP_INCLUDE_CRYPTO_KEY					= 0x1;

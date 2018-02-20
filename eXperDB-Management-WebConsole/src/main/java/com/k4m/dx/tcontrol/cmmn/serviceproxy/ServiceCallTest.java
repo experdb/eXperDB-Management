@@ -1,17 +1,12 @@
 package com.k4m.dx.tcontrol.cmmn.serviceproxy;
 
 import java.io.UnsupportedEncodingException;
-import java.security.MessageDigest;
-import java.security.SecureRandom;
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
-
-import javax.crypto.Cipher;
-import javax.crypto.spec.IvParameterSpec;
-import javax.crypto.spec.SecretKeySpec;
 
 import org.apache.commons.codec.binary.Base64;
 import org.codehaus.jackson.map.ObjectMapper;
@@ -22,7 +17,6 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
 
 import com.google.gson.Gson;
-import com.k4m.dx.tcontrol.cmmn.AES256_encryptor;
 import com.k4m.dx.tcontrol.cmmn.crypto.Generator;
 import com.k4m.dx.tcontrol.cmmn.crypto.Rfc2898DeriveBytes;
 import com.k4m.dx.tcontrol.cmmn.serviceproxy.vo.AdminServerPasswordRequest;
@@ -39,6 +33,7 @@ import com.k4m.dx.tcontrol.cmmn.serviceproxy.vo.ProfileAclSpec;
 import com.k4m.dx.tcontrol.cmmn.serviceproxy.vo.ProfileCipherSpec;
 import com.k4m.dx.tcontrol.cmmn.serviceproxy.vo.ProfileProtection;
 import com.k4m.dx.tcontrol.cmmn.serviceproxy.vo.SysCode;
+import com.k4m.dx.tcontrol.cmmn.serviceproxy.vo.SysMultiValueConfig;
 import com.k4m.dx.tcontrol.cmmn.serviceproxy.vo.SystemUsage;
 
 
@@ -52,82 +47,95 @@ public class ServiceCallTest {
 		restIp = "127.0.0.1";
 		restPort = 8443;
 		
-		String strTocken = "+nVKppjBPWJlrHUweC30uGVzhWop+LL2J85p9BIAHj8=";
+		String loginId = "";
+		String entityId = "";
+		String password = "";
+		
+		//loginId = "admin";
+		password = "password";
+		//entityId = "00000000-0000-0000-0000-000000000001";
+		
+		loginId = "testuser";
+		password = "1234qwer";
+		entityId = "d06c0acb-ca3a-4324-83ed-71df370acdb3";
+
+		
+		String strTocken = "OLLU6uEr6z0QaqIP21kr7EraReIfpx/haZCiGCLjl2E=";
 
 		ServiceCallTest test = new ServiceCallTest();
 	
-		//test.loginTest(restIp, restPort);
+		//test.loginTest(restIp, restPort, loginId, password);
 		
 		//마스터키 로드
-		//test.loadServerKey(restIp, restPort, strTocken);
+		//test.loadServerKey(restIp, restPort, strTocken, loginId, entityId);
 		
 		//서버상태
-		//test.selectServerStatus(restIp, restPort, strTocken);
+		//test.selectServerStatus(restIp, restPort, strTocken, loginId, entityId);
 		
 		//공통코드 리스트
-		//test.selectSysCodeList(restIp, restPort, strTocken);
+		//test.selectSysCodeList(restIp, restPort, strTocken, loginId, entityId);
 		
 		//적용알고리즘 공통코드
-		//test.selectSysCodeListExper(restIp, restPort, strTocken);
+		//test.selectSysCodeListExper(restIp, restPort, strTocken, loginId, entityId);
 		
 		//일반공통코드 리스트
-		//test.selectParamSysCodeList(restIp, restPort, strTocken);
+		//test.selectParamSysCodeList(restIp, restPort, strTocken, loginId, entityId);
 		
 		//에이전트 리스트
 		
 		
 		//접근자리스트
-		//test.selectEntityList(restIp, restPort, strTocken);
+		//test.selectEntityList(restIp, restPort, strTocken, loginId, entityId);
 		
 		// 보호정책상세 > 암호화 키 리스트
-		//test.selectCryptoKeySymmetricList(restIp, restPort, strTocken);
+		//test.selectCryptoKeySymmetricList(restIp, restPort, strTocken, loginId, entityId);
 
 
-		//test.selectProfileProtectionVersion(restIp, restPort, strTocken);
+		//test.selectProfileProtectionVersion(restIp, restPort, strTocken, loginId, entityId);
 		
 		//감사로그 > 암복호화로그
-		//test.selectAuditLogSiteList(restIp, restPort, strTocken);
+		//test.selectAuditLogSiteList(restIp, restPort, strTocken, loginId, entityId);
 		
 		//감사로그 > 관리서버 감사로그
-		//test.selectAuditLogList(restIp, restPort, strTocken);
+		//test.selectAuditLogList(restIp, restPort, strTocken, loginId, entityId);
 		
 		//감사로그 > 암호화 키 접근로그
-		//test.selectAuditLogListKey(restIp, restPort, strTocken);
+		//test.selectAuditLogListKey(restIp, restPort, strTocken, loginId, entityId);
 		
 		//감사로그 > 백업/복원 감사로그
-		//test.selectBackupLogList(restIp, restPort, strTocken);
+		//test.selectBackupLogList(restIp, restPort, strTocken, loginId, entityId);
 		
 		//감사로그 > 자원 사용
-		//test.selectSystemUsageLogList(restIp, restPort, strTocken);
+		//test.selectSystemUsageLogList(restIp, restPort, strTocken, loginId, entityId);
 		
 		//보안정책 > 정책관리
-		//test.selectProfileList(restIp, restPort, strTocken);
+		//test.selectProfileList(restIp, restPort, strTocken, loginId, entityId);
 		
 		//보안정책 > 보안정책 상세
-		//test.selectProfileProtectionContents(restIp, restPort, strTocken);
+		//test.selectProfileProtectionContents(restIp, restPort, strTocken, loginId, entityId);
 		
 		//암호화키 > 암호화키리스트
-		//test.selectCryptoKeyList(restIp, restPort, strTocken);
+		//test.selectCryptoKeyList(restIp, restPort, strTocken, loginId, entityId);
 		
 		//암호화키 > 암호화 키 등록
-		//test.insertCryptoKeySymmetric(restIp, restPort, strTocken);
+		//test.insertCryptoKeySymmetric(restIp, restPort, strTocken, loginId, entityId);
 		
 		//암호화키 > 암호화 키 수정
-		//test.updateCryptoKeySymmetric(restIp, restPort, strTocken);
+		//test.updateCryptoKeySymmetric(restIp, restPort, strTocken, loginId, entityId);
 		
 		//보안정책 > 보안정책등록
-		//test.insertProfileProtection(restIp, restPort, strTocken);
+		//test.insertProfileProtection(restIp, restPort, strTocken, loginId, entityId);
 		
 		//사용자 등록
-		//test.insertEntityWithPermission(restIp, restPort, strTocken);
+		//test.insertEntityWithPermission(restIp, restPort, strTocken, loginId, entityId);
 		
 		//사용자 삭제
-		//test.deleteEntity(restIp, restPort, strTocken);
+		//test.deleteEntity(restIp, restPort, strTocken, loginId, entityId);
 		
 		//test.decodeTest();
 		
 		//보호정책 상세 요일 display
-		int workDay = 0;
+		/*int workDay = 0;
 		
 		ContainsWeekDay(workDay, SystemCode.Weekday.MONDAY);
 		
@@ -136,7 +144,13 @@ public class ServiceCallTest {
 		ContainsWeekDay((int)workDay, SystemCode.Weekday.THURSDAY);
 		ContainsWeekDay((int)workDay, SystemCode.Weekday.FRIDAY);
 		ContainsWeekDay((int)workDay, SystemCode.Weekday.SATURDAY);
-		ContainsWeekDay((int)workDay, SystemCode.Weekday.SUNDAY);
+		ContainsWeekDay((int)workDay, SystemCode.Weekday.SUNDAY);*/
+		
+		//설정 > 보안정책 옵션 설정 조회1
+		//test.selectSysConfigListLike(restIp, restPort, strTocken, loginId, entityId);
+		
+		//설정 > 보안정책 옵션 설정 조회2
+		test.selectSysMultiValueConfigListLike(restIp, restPort, strTocken, loginId, entityId);
 		
 		
 	}
@@ -147,7 +161,7 @@ public class ServiceCallTest {
 	 * @param restPort
 	 * @throws Exception
 	 */
-	private void selectProfileList(String restIp, int restPort, String strTocken) throws Exception {
+	private void selectProfileList(String restIp, int restPort, String strTocken, String loginId, String entityId) throws Exception {
 
 		EncryptCommonService api = new EncryptCommonService(restIp, restPort);
 
@@ -166,10 +180,10 @@ public class ServiceCallTest {
 		String parameters = TypeUtility.makeRequestBody(body);
 
 		HashMap header = new HashMap();
-		//header.put(SystemCode.FieldName.LOGIN_ID, "admin");
-		//header.put(SystemCode.FieldName.ENTITY_UID, "00000000-0000-0000-0000-000000000001");
-		header.put(SystemCode.FieldName.LOGIN_ID, "testuser");
-		header.put(SystemCode.FieldName.ENTITY_UID, "d06c0acb-ca3a-4324-83ed-71df370acdb3");
+		//header.put(SystemCode.FieldName.LOGIN_ID, loginId);
+		//header.put(SystemCode.FieldName.ENTITY_UID, entityId);
+		header.put(SystemCode.FieldName.LOGIN_ID, loginId);
+		header.put(SystemCode.FieldName.ENTITY_UID, entityId);
 		header.put(SystemCode.FieldName.TOKEN_VALUE, strTocken);
 
 		JSONObject resultJson = api.callService(strService, strCommand, header, parameters);
@@ -220,7 +234,7 @@ public class ServiceCallTest {
 	 * @param strTocken
 	 * @throws Exception
 	 */
-	private void selectProfileProtectionContents(String restIp, int restPort, String strTocken) throws Exception {
+	private void selectProfileProtectionContents(String restIp, int restPort, String strTocken, String loginId, String entityId) throws Exception {
 
 		EncryptCommonService api = new EncryptCommonService(restIp, restPort);
 
@@ -239,8 +253,8 @@ public class ServiceCallTest {
 		String parameters = TypeUtility.makeRequestBody(body);
 
 		HashMap header = new HashMap();
-		header.put(SystemCode.FieldName.LOGIN_ID, "admin");
-		header.put(SystemCode.FieldName.ENTITY_UID, "00000000-0000-0000-0000-000000000001");
+		header.put(SystemCode.FieldName.LOGIN_ID, loginId);
+		header.put(SystemCode.FieldName.ENTITY_UID, entityId);
 		header.put(SystemCode.FieldName.TOKEN_VALUE, strTocken);
 
 		JSONObject resultJson = api.callService(strService, strCommand, header, parameters);
@@ -350,7 +364,7 @@ public class ServiceCallTest {
 	 * @param strTocken
 	 * @throws Exception
 	 */
-	private void insertProfileProtection(String restIp, int restPort, String strTocken) throws Exception {
+	private void insertProfileProtection(String restIp, int restPort, String strTocken, String loginId, String entityId) throws Exception {
 
 		EncryptCommonService api = new EncryptCommonService(restIp, restPort);
 
@@ -447,8 +461,8 @@ public class ServiceCallTest {
 		String parameters = TypeUtility.makeRequestBody(body);
 
 		HashMap header = new HashMap();
-		header.put(SystemCode.FieldName.LOGIN_ID, "admin");
-		header.put(SystemCode.FieldName.ENTITY_UID, "00000000-0000-0000-0000-000000000001");
+		header.put(SystemCode.FieldName.LOGIN_ID, loginId);
+		header.put(SystemCode.FieldName.ENTITY_UID, entityId);
 		header.put(SystemCode.FieldName.TOKEN_VALUE, strTocken);
 
 		JSONObject resultJson = api.callService(strService, strCommand, header, parameters);
@@ -464,7 +478,7 @@ public class ServiceCallTest {
 
 	}
 	
-	private void selectProfileProtectionVersion(String restIp, int restPort, String strTocken) throws Exception {
+	private void selectProfileProtectionVersion(String restIp, int restPort, String strTocken, String loginId, String entityId) throws Exception {
 		EncryptCommonService api = new EncryptCommonService(restIp, restPort);
 
 		String strService = SystemCode.ServiceName.POLICY_SERVICE;
@@ -478,8 +492,8 @@ public class ServiceCallTest {
 
 
 		HashMap header = new HashMap();
-		header.put(SystemCode.FieldName.LOGIN_ID, "admin");
-		header.put(SystemCode.FieldName.ENTITY_UID, "00000000-0000-0000-0000-000000000001");
+		header.put(SystemCode.FieldName.LOGIN_ID, loginId);
+		header.put(SystemCode.FieldName.ENTITY_UID, entityId);
 		header.put(SystemCode.FieldName.TOKEN_VALUE, strTocken);
 
 		JSONObject resultJson = api.callService(strService, strCommand, header, parameters);
@@ -501,7 +515,7 @@ public class ServiceCallTest {
 	 * @param restPort
 	 * @throws Exception
 	 */
-	private void loginTest(String restIp, int restPort) throws Exception {
+	private void loginTest(String restIp, int restPort, String loginId, String password) throws Exception {
 
 		EncryptCommonService api = new EncryptCommonService(restIp, restPort);
 
@@ -514,11 +528,11 @@ public class ServiceCallTest {
 		String parameters = "";
 
 		HashMap header = new HashMap();
-		//header.put(SystemCode.FieldName.LOGIN_ID, "admin");
+		//header.put(SystemCode.FieldName.LOGIN_ID, loginId);
 		//header.put(SystemCode.FieldName.PASSWORD, "password");
 		
-		header.put(SystemCode.FieldName.LOGIN_ID, "testuser");
-		header.put(SystemCode.FieldName.PASSWORD, "1234qwer");
+		header.put(SystemCode.FieldName.LOGIN_ID, loginId);
+		header.put(SystemCode.FieldName.PASSWORD, password);
 
 		JSONObject configJsonObjectMap = null;
 		ResponseEntity<String> loginEntity = api.callLoginService(strService, strCommand, header, parameters);
@@ -553,7 +567,7 @@ public class ServiceCallTest {
 	 * @param restPort
 	 * @throws Exception
 	 */
-	private void selectAuditLogSiteList(String restIp, int restPort, String strTocken) throws Exception {
+	private void selectAuditLogSiteList(String restIp, int restPort, String strTocken, String loginId, String entityId) throws Exception {
 		EncryptCommonService api = new EncryptCommonService(restIp, restPort);
 
 		String strService = SystemCode.ServiceName.LOG_SERVICE;
@@ -578,8 +592,8 @@ public class ServiceCallTest {
 		
 
 		HashMap header = new HashMap();
-		header.put(SystemCode.FieldName.LOGIN_ID, "admin");
-		header.put(SystemCode.FieldName.ENTITY_UID, "00000000-0000-0000-0000-000000000001");
+		header.put(SystemCode.FieldName.LOGIN_ID, loginId);
+		header.put(SystemCode.FieldName.ENTITY_UID, entityId);
 		header.put(SystemCode.FieldName.TOKEN_VALUE, strTocken);
 
 		JSONObject resultJson = api.callService(strService, strCommand, header, parameters.toString());
@@ -605,7 +619,7 @@ public class ServiceCallTest {
 	 * @param restPort
 	 * @throws Exception
 	 */
-	private void selectAuditLogList(String restIp, int restPort, String strTocken) throws Exception {
+	private void selectAuditLogList(String restIp, int restPort, String strTocken, String loginId, String entityId) throws Exception {
 		EncryptCommonService api = new EncryptCommonService(restIp, restPort);
 
 		String strService = SystemCode.ServiceName.LOG_SERVICE;
@@ -631,8 +645,8 @@ public class ServiceCallTest {
 		
 
 		HashMap header = new HashMap();
-		header.put(SystemCode.FieldName.LOGIN_ID, "admin");
-		header.put(SystemCode.FieldName.ENTITY_UID, "00000000-0000-0000-0000-000000000001");
+		header.put(SystemCode.FieldName.LOGIN_ID, loginId);
+		header.put(SystemCode.FieldName.ENTITY_UID, entityId);
 		header.put(SystemCode.FieldName.TOKEN_VALUE, strTocken);
 
 		JSONObject resultJson = api.callService(strService, strCommand, header, parameters.toString());
@@ -702,7 +716,7 @@ public class ServiceCallTest {
 	 * @param restPort
 	 * @throws Exception
 	 */
-	private void selectAuditLogListKey(String restIp, int restPort, String strTocken) throws Exception {
+	private void selectAuditLogListKey(String restIp, int restPort, String strTocken, String loginId, String entityId) throws Exception {
 		EncryptCommonService api = new EncryptCommonService(restIp, restPort);
 
 		String strService = SystemCode.ServiceName.LOG_SERVICE;
@@ -729,8 +743,8 @@ public class ServiceCallTest {
 		
 
 		HashMap header = new HashMap();
-		header.put(SystemCode.FieldName.LOGIN_ID, "admin");
-		header.put(SystemCode.FieldName.ENTITY_UID, "00000000-0000-0000-0000-000000000001");
+		header.put(SystemCode.FieldName.LOGIN_ID, loginId);
+		header.put(SystemCode.FieldName.ENTITY_UID, entityId);
 		header.put(SystemCode.FieldName.TOKEN_VALUE, strTocken);
 
 		JSONObject resultJson = api.callService(strService, strCommand, header, parameters.toString());
@@ -803,7 +817,7 @@ public class ServiceCallTest {
 	 * @param restPort
 	 * @throws Exception
 	 */
-	private void selectBackupLogList(String restIp, int restPort, String strTocken) throws Exception {
+	private void selectBackupLogList(String restIp, int restPort, String strTocken, String loginId, String entityId) throws Exception {
 		EncryptCommonService api = new EncryptCommonService(restIp, restPort);
 
 		String strService = SystemCode.ServiceName.BACKUP_SERVICE;
@@ -830,8 +844,8 @@ public class ServiceCallTest {
 		
 
 		HashMap header = new HashMap();
-		header.put(SystemCode.FieldName.LOGIN_ID, "admin");
-		header.put(SystemCode.FieldName.ENTITY_UID, "00000000-0000-0000-0000-000000000001");
+		header.put(SystemCode.FieldName.LOGIN_ID, loginId);
+		header.put(SystemCode.FieldName.ENTITY_UID, entityId);
 		header.put(SystemCode.FieldName.TOKEN_VALUE, strTocken);
 
 		JSONObject resultJson = api.callService(strService, strCommand, header, parameters.toString());
@@ -907,7 +921,7 @@ public class ServiceCallTest {
 	 * @param strTocken
 	 * @throws Exception
 	 */
-	private void selectSystemUsageLogList(String restIp, int restPort, String strTocken) throws Exception {
+	private void selectSystemUsageLogList(String restIp, int restPort, String strTocken, String loginId, String entityId) throws Exception {
 		EncryptCommonService api = new EncryptCommonService(restIp, restPort);
 
 		String strService = SystemCode.ServiceName.LOG_SERVICE;
@@ -919,7 +933,7 @@ public class ServiceCallTest {
 
 		param.setSearchDateTimeFrom("2018-01-24 00:00:00.000000"); 
 		param.setSearchDateTimeTo("2018-01-24 23:59:59.999999");
-		param.setMonitoredUid("admin");
+		param.setMonitoredUid(loginId);
 		
 		param.setPageOffset(1);
 		param.setPageSize(10);
@@ -932,8 +946,8 @@ public class ServiceCallTest {
 		
 
 		HashMap header = new HashMap();
-		header.put(SystemCode.FieldName.LOGIN_ID, "admin");
-		header.put(SystemCode.FieldName.ENTITY_UID, "00000000-0000-0000-0000-000000000001");
+		header.put(SystemCode.FieldName.LOGIN_ID, loginId);
+		header.put(SystemCode.FieldName.ENTITY_UID, entityId);
 		header.put(SystemCode.FieldName.TOKEN_VALUE, strTocken);
 
 		JSONObject resultJson = api.callService(strService, strCommand, header, parameters.toString());
@@ -992,7 +1006,7 @@ public class ServiceCallTest {
 	 * @param restPort
 	 * @throws Exception
 	 */
-	private void loadServerKey(String restIp, int restPort, String strTocken) throws Exception {
+	private void loadServerKey(String restIp, int restPort, String strTocken, String loginId, String entityId) throws Exception {
 
 		EncryptCommonService api = new EncryptCommonService(restIp, restPort);
 
@@ -1013,9 +1027,12 @@ public class ServiceCallTest {
 		String parameters = TypeUtility.makeRequestBody(body);
 
 		HashMap header = new HashMap();
-		header.put(SystemCode.FieldName.LOGIN_ID, "admin");
-		header.put(SystemCode.FieldName.ENTITY_UID, "00000000-0000-0000-0000-000000000001");
+		//header.put(SystemCode.FieldName.LOGIN_ID, loginId);
+		//header.put(SystemCode.FieldName.ENTITY_UID, entityId);
 		header.put(SystemCode.FieldName.TOKEN_VALUE, strTocken);
+		
+		header.put(SystemCode.FieldName.LOGIN_ID, loginId);
+		header.put(SystemCode.FieldName.ENTITY_UID, entityId);
 
 		JSONObject resultJson = api.callService(strService, strCommand, header, parameters);
 		
@@ -1041,7 +1058,7 @@ public class ServiceCallTest {
 	 * @param restPort
 	 * @throws Exception
 	 */
-	private void selectServerStatus(String restIp, int restPort, String strTocken) throws Exception {
+	private void selectServerStatus(String restIp, int restPort, String strTocken, String loginId, String entityId) throws Exception {
 
 		EncryptCommonService api = new EncryptCommonService(restIp, restPort);
 
@@ -1059,8 +1076,8 @@ public class ServiceCallTest {
 		String parameters = TypeUtility.makeRequestBody(body);
 
 		HashMap header = new HashMap();
-		header.put(SystemCode.FieldName.LOGIN_ID, "admin");
-		header.put(SystemCode.FieldName.ENTITY_UID, "00000000-0000-0000-0000-000000000001");
+		header.put(SystemCode.FieldName.LOGIN_ID, loginId);
+		header.put(SystemCode.FieldName.ENTITY_UID, entityId);
 		header.put(SystemCode.FieldName.TOKEN_VALUE, strTocken);
 
 		JSONObject resultJson = api.callService(strService, strCommand, header, parameters);
@@ -1093,7 +1110,7 @@ public class ServiceCallTest {
 	 * @param strTocken
 	 * @throws Exception
 	 */
-	private void selectCryptoKeyList(String restIp, int restPort, String strTocken) throws Exception {
+	private void selectCryptoKeyList(String restIp, int restPort, String strTocken, String loginId, String entityId) throws Exception {
 		EncryptCommonService api = new EncryptCommonService(restIp, restPort);
 
 		String strService = SystemCode.ServiceName.KEY_SERVICE;
@@ -1113,8 +1130,8 @@ public class ServiceCallTest {
 		
 
 		HashMap header = new HashMap();
-		header.put(SystemCode.FieldName.LOGIN_ID, "admin");
-		header.put(SystemCode.FieldName.ENTITY_UID, "00000000-0000-0000-0000-000000000001");
+		header.put(SystemCode.FieldName.LOGIN_ID, loginId);
+		header.put(SystemCode.FieldName.ENTITY_UID, entityId);
 		header.put(SystemCode.FieldName.TOKEN_VALUE, strTocken);
 
 		JSONObject resultJson = api.callService(strService, strCommand, header, parameters.toString());
@@ -1184,7 +1201,7 @@ public class ServiceCallTest {
 	 * @param strTocken
 	 * @throws Exception
 	 */
-	private void insertCryptoKeySymmetric(String restIp, int restPort, String strTocken) throws Exception {
+	private void insertCryptoKeySymmetric(String restIp, int restPort, String strTocken, String loginId, String entityId) throws Exception {
 		EncryptCommonService api = new EncryptCommonService(restIp, restPort);
 
 		String strService = SystemCode.ServiceName.KEY_SERVICE;
@@ -1209,8 +1226,8 @@ public class ServiceCallTest {
 		
 
 		HashMap header = new HashMap();
-		header.put(SystemCode.FieldName.LOGIN_ID, "admin");
-		header.put(SystemCode.FieldName.ENTITY_UID, "00000000-0000-0000-0000-000000000001");
+		header.put(SystemCode.FieldName.LOGIN_ID, loginId);
+		header.put(SystemCode.FieldName.ENTITY_UID, entityId);
 		header.put(SystemCode.FieldName.TOKEN_VALUE, strTocken);
 
 		JSONObject resultJson = api.callService(strService, strCommand, header, parameters.toString());
@@ -1230,7 +1247,56 @@ public class ServiceCallTest {
 		
 	}
 	
-	private void updateCryptoKeySymmetric(String restIp, int restPort, String strTocken) throws Exception {
+	/**
+	 * 암호화 키 삭제
+	 * @param restIp
+	 * @param restPort
+	 * @param strTocken
+	 * @throws Exception
+	 */
+	private void deleteCryptoKeySymmetric(String restIp, int restPort, String strTocken, String loginId, String entityId) throws Exception {
+		EncryptCommonService api = new EncryptCommonService(restIp, restPort);
+
+		String strService = SystemCode.ServiceName.KEY_SERVICE;
+		String strCommand = SystemCode.ServiceCommand.DELETECRYPTOKEYSYMMETRIC;
+
+
+		String validEndDateTime = "2020-02-09" + " 23:59:59.999999";
+		
+		CryptoKeySymmetric param = new CryptoKeySymmetric();
+		param.setKeyUid("");
+		param.setResourceName("test01");
+		param.setResourceTypeCode("");
+
+		HashMap body = new HashMap();
+		body.put(TypeUtility.getJustClassName(param.getClass()), param.toJSONString());
+
+		String parameters = TypeUtility.makeRequestBody(body);
+		
+
+		HashMap header = new HashMap();
+		header.put(SystemCode.FieldName.LOGIN_ID, loginId);
+		header.put(SystemCode.FieldName.ENTITY_UID, entityId);
+		header.put(SystemCode.FieldName.TOKEN_VALUE, strTocken);
+
+		JSONObject resultJson = api.callService(strService, strCommand, header, parameters.toString());
+		
+		Iterator<?> iter = resultJson.entrySet().iterator();
+		while (iter.hasNext()) {
+			Map.Entry entry = (Map.Entry) iter.next();
+
+			System.out.println(String.valueOf(entry.getKey()) + " = " + String.valueOf(entry.getValue()));
+		}
+		
+		
+		String resultCode = (String) resultJson.get("resultCode");
+		String resultMessage = new String(resultJson.get("resultMessage").toString().getBytes("iso-8859-1"),"UTF-8");
+		
+		System.out.println(resultMessage);
+		
+	}
+	
+	private void updateCryptoKeySymmetric(String restIp, int restPort, String strTocken, String loginId, String entityId) throws Exception {
 		EncryptCommonService api = new EncryptCommonService(restIp, restPort);
 
 		String strService = SystemCode.ServiceName.KEY_SERVICE;
@@ -1255,8 +1321,8 @@ public class ServiceCallTest {
 		
 
 		HashMap header = new HashMap();
-		header.put(SystemCode.FieldName.LOGIN_ID, "admin");
-		header.put(SystemCode.FieldName.ENTITY_UID, "00000000-0000-0000-0000-000000000001");
+		header.put(SystemCode.FieldName.LOGIN_ID, loginId);
+		header.put(SystemCode.FieldName.ENTITY_UID, entityId);
 		header.put(SystemCode.FieldName.TOKEN_VALUE, strTocken);
 
 		JSONObject resultJson = api.callService(strService, strCommand, header, parameters.toString());
@@ -1283,7 +1349,7 @@ public class ServiceCallTest {
 	 * @param strTocken
 	 * @throws Exception
 	 */
-	private void selectSysCodeList(String restIp, int restPort, String strTocken) throws Exception {
+	private void selectSysCodeList(String restIp, int restPort, String strTocken, String loginId, String entityId) throws Exception {
 		EncryptCommonService api = new EncryptCommonService(restIp, restPort);
 
 		String strService = SystemCode.ServiceName.SYSTEM_SERVICE;
@@ -1299,8 +1365,8 @@ public class ServiceCallTest {
 		
 
 		HashMap header = new HashMap();
-		header.put(SystemCode.FieldName.LOGIN_ID, "admin");
-		header.put(SystemCode.FieldName.ENTITY_UID, "00000000-0000-0000-0000-000000000001");
+		header.put(SystemCode.FieldName.LOGIN_ID, loginId);
+		header.put(SystemCode.FieldName.ENTITY_UID, entityId);
 		header.put(SystemCode.FieldName.TOKEN_VALUE, strTocken);
 
 		JSONObject resultJson = api.callService(strService, strCommand, header, parameters.toString());
@@ -1357,7 +1423,7 @@ public class ServiceCallTest {
 	 * @param strTocken
 	 * @throws Exception
 	 */
-	private void selectSysCodeListExper(String restIp, int restPort, String strTocken) throws Exception {
+	private void selectSysCodeListExper(String restIp, int restPort, String strTocken, String loginId, String entityId) throws Exception {
 		EncryptCommonService api = new EncryptCommonService(restIp, restPort);
 
 		String strService = SystemCode.ServiceName.SYSTEM_SERVICE;
@@ -1373,8 +1439,8 @@ public class ServiceCallTest {
 		
 
 		HashMap header = new HashMap();
-		header.put(SystemCode.FieldName.LOGIN_ID, "admin");
-		header.put(SystemCode.FieldName.ENTITY_UID, "00000000-0000-0000-0000-000000000001");
+		header.put(SystemCode.FieldName.LOGIN_ID, loginId);
+		header.put(SystemCode.FieldName.ENTITY_UID, entityId);
 		header.put(SystemCode.FieldName.TOKEN_VALUE, strTocken);
 
 		JSONObject resultJson = api.callService(strService, strCommand, header, parameters.toString());
@@ -1424,7 +1490,7 @@ public class ServiceCallTest {
 	 * @param strTocken
 	 * @throws Exception
 	 */
-	private void selectParamSysCodeList(String restIp, int restPort, String strTocken) throws Exception {
+	private void selectParamSysCodeList(String restIp, int restPort, String strTocken, String loginId, String entityId) throws Exception {
 		EncryptCommonService api = new EncryptCommonService(restIp, restPort);
 
 		String strService = SystemCode.ServiceName.SYSTEM_SERVICE;
@@ -1450,8 +1516,8 @@ public class ServiceCallTest {
 		System.out.println(parameters);
 
 		HashMap header = new HashMap();
-		header.put(SystemCode.FieldName.LOGIN_ID, "admin");
-		header.put(SystemCode.FieldName.ENTITY_UID, "00000000-0000-0000-0000-000000000001");
+		header.put(SystemCode.FieldName.LOGIN_ID, loginId);
+		header.put(SystemCode.FieldName.ENTITY_UID, entityId);
 		header.put(SystemCode.FieldName.TOKEN_VALUE, strTocken);
 
 		JSONObject resultJson = api.callService(strService, strCommand, header, parameters.toString());
@@ -1503,7 +1569,7 @@ public class ServiceCallTest {
 	 * @param strTocken
 	 * @throws Exception
 	 */
-	private void selectEntityList(String restIp, int restPort, String strTocken) throws Exception {
+	private void selectEntityList(String restIp, int restPort, String strTocken, String loginId, String entityId) throws Exception {
 		EncryptCommonService api = new EncryptCommonService(restIp, restPort);
 
 		String strService = SystemCode.ServiceName.ENTITY_SERVICE;
@@ -1520,8 +1586,8 @@ public class ServiceCallTest {
 		System.out.println(parameters);
 
 		HashMap header = new HashMap();
-		header.put(SystemCode.FieldName.LOGIN_ID, "admin");
-		header.put(SystemCode.FieldName.ENTITY_UID, "00000000-0000-0000-0000-000000000001");
+		header.put(SystemCode.FieldName.LOGIN_ID, loginId);
+		header.put(SystemCode.FieldName.ENTITY_UID, entityId);
 		header.put(SystemCode.FieldName.TOKEN_VALUE, strTocken);
 
 		JSONObject resultJson = api.callService(strService, strCommand, header, parameters.toString());
@@ -1571,7 +1637,7 @@ public class ServiceCallTest {
 	 * @param strTocken
 	 * @throws Exception
 	 */
-	private void selectEntityList2(String restIp, int restPort, String strTocken) throws Exception {
+	private void selectEntityList2(String restIp, int restPort, String strTocken, String loginId, String entityId) throws Exception {
 		EncryptCommonService api = new EncryptCommonService(restIp, restPort);
 
 		String strService = SystemCode.ServiceName.ENTITY_SERVICE;
@@ -1592,8 +1658,8 @@ public class ServiceCallTest {
 		System.out.println(parameters);
 
 		HashMap header = new HashMap();
-		header.put(SystemCode.FieldName.LOGIN_ID, "admin");
-		header.put(SystemCode.FieldName.ENTITY_UID, "00000000-0000-0000-0000-000000000001");
+		header.put(SystemCode.FieldName.LOGIN_ID, loginId);
+		header.put(SystemCode.FieldName.ENTITY_UID, entityId);
 		header.put(SystemCode.FieldName.TOKEN_VALUE, strTocken);
 
 		JSONObject resultJson = api.callService(strService, strCommand, header, parameters.toString());
@@ -1643,7 +1709,7 @@ public class ServiceCallTest {
 	 * @param strTocken
 	 * @throws Exception
 	 */
-	private void selectCryptoKeySymmetricList(String restIp, int restPort, String strTocken) throws Exception {
+	private void selectCryptoKeySymmetricList(String restIp, int restPort, String strTocken, String loginId, String entityId) throws Exception {
 		EncryptCommonService api = new EncryptCommonService(restIp, restPort);
 
 		String strService = SystemCode.ServiceName.KEY_SERVICE;
@@ -1662,8 +1728,8 @@ public class ServiceCallTest {
 		
 
 		HashMap header = new HashMap();
-		header.put(SystemCode.FieldName.LOGIN_ID, "admin");
-		header.put(SystemCode.FieldName.ENTITY_UID, "00000000-0000-0000-0000-000000000001");
+		header.put(SystemCode.FieldName.LOGIN_ID, loginId);
+		header.put(SystemCode.FieldName.ENTITY_UID, entityId);
 		header.put(SystemCode.FieldName.TOKEN_VALUE, strTocken);
 
 		JSONObject resultJson = api.callService(strService, strCommand, header, parameters.toString());
@@ -1710,13 +1776,13 @@ public class ServiceCallTest {
 	 * @param strTocken
 	 * @throws Exception
 	 */
-	private void insertEntityWithPermission(String restIp, int restPort, String strTocken) throws Exception {
+	private void insertEntityWithPermission(String restIp, int restPort, String strTocken, String loginId, String entityId) throws Exception {
 		EncryptCommonService api = new EncryptCommonService(restIp, restPort);
 
 		String strService = SystemCode.ServiceName.ENTITY_SERVICE;
 		String strCommand = SystemCode.ServiceCommand.INSERTENTITYWITHPERMISSION;
 
-		String strUserId = "testuser";
+		String strUserId = loginId;
 		String password = "1234qwer";
 		
 		Entity param1 = new Entity();
@@ -1725,7 +1791,7 @@ public class ServiceCallTest {
 		param1.setContainerTypeCode(SystemCode.ContainerTypeCode.ELEMENT);
 		param1.setEntityTypeCode(SystemCode.EntityTypeCode.ADMIN_USER);
 		param1.setEntityStatusCode("ES50");
-		param1.setCreateUid("admin");
+		param1.setCreateUid(loginId);
 		
 		JSONObject jsonExtended = new JSONObject();
 		jsonExtended.put(SystemCode.ExtendedFieldKey.PHONE, "");
@@ -1780,8 +1846,8 @@ public class ServiceCallTest {
 		System.out.println(parameters);
 
 		HashMap header = new HashMap();
-		header.put(SystemCode.FieldName.LOGIN_ID, "admin");
-		header.put(SystemCode.FieldName.ENTITY_UID, "00000000-0000-0000-0000-000000000001");
+		header.put(SystemCode.FieldName.LOGIN_ID, loginId);
+		header.put(SystemCode.FieldName.ENTITY_UID, entityId);
 		header.put(SystemCode.FieldName.TOKEN_VALUE, strTocken);
 
 		JSONObject resultJson = api.callService(strService, strCommand, header, parameters.toString());
@@ -1808,7 +1874,7 @@ public class ServiceCallTest {
 	 * @param strTocken
 	 * @throws Exception
 	 */
-	private void deleteEntity(String restIp, int restPort, String strTocken) throws Exception {
+	private void deleteEntity(String restIp, int restPort, String strTocken, String loginId, String entityId) throws Exception {
 		EncryptCommonService api = new EncryptCommonService(restIp, restPort);
 
 		String strService = SystemCode.ServiceName.ENTITY_SERVICE;
@@ -1835,8 +1901,8 @@ public class ServiceCallTest {
 		System.out.println(parameters);
 
 		HashMap header = new HashMap();
-		header.put(SystemCode.FieldName.LOGIN_ID, "admin");
-		header.put(SystemCode.FieldName.ENTITY_UID, "00000000-0000-0000-0000-000000000001");
+		header.put(SystemCode.FieldName.LOGIN_ID, loginId);
+		header.put(SystemCode.FieldName.ENTITY_UID, entityId);
 		header.put(SystemCode.FieldName.TOKEN_VALUE, strTocken);
 
 		JSONObject resultJson = api.callService(strService, strCommand, header, parameters.toString());
@@ -1854,6 +1920,173 @@ public class ServiceCallTest {
 		//long totalListCount = (long) resultJson.get("totalListCount");
 		
 		
+	}
+	
+	/**
+	 * 설정 > 보안정책 옵션 설정 조회
+	 * @param restIp
+	 * @param restPort
+	 * @param strTocken
+	 * @throws Exception
+	 */
+	private void selectSysConfigListLike(String restIp, int restPort, String strTocken, String loginId, String entityId) throws Exception {
+
+		EncryptCommonService api = new EncryptCommonService(restIp, restPort);
+
+		String strService = SystemCode.ServiceName.SYSTEM_SERVICE;
+		String strCommand = SystemCode.ServiceCommand.SELECTSYSCONFIGLISTLIKE;
+
+		
+		HashMap body = new HashMap();
+		body.put(SystemCode.CustomFormParamKey.sysConfigKeyPrefix, SystemCode.SysConfigKeyPrefix.GLOBAL_POLICY);
+
+		String parameters = TypeUtility.makeRequestBody(body);
+
+		HashMap header = new HashMap();
+		//header.put(SystemCode.FieldName.LOGIN_ID, loginId);
+		//header.put(SystemCode.FieldName.ENTITY_UID, entityId);
+		header.put(SystemCode.FieldName.LOGIN_ID, loginId);
+		header.put(SystemCode.FieldName.ENTITY_UID, entityId);
+		header.put(SystemCode.FieldName.TOKEN_VALUE, strTocken);
+
+		JSONObject resultJson = api.callService(strService, strCommand, header, parameters);
+		
+
+		String resultCode = (String) resultJson.get("resultCode");
+		String resultMessage = (String) resultJson.get("resultMessage");
+		resultMessage = new String(resultMessage.getBytes("iso-8859-1"),"UTF-8"); 
+		
+		System.out.println("resultCode : " + resultCode + " resultMessage : " + resultMessage);
+		
+/*		GLOBAL_POLICY_DEFAULT_ACCESS_ALLOW_TF(기본 접근 허용) : 0, 1
+		GLOBAL_POLICY_FORCED_LOGGING_OFF_TF(암복호화 로그 기록 중지) : 0, 1
+		GLOBAL_POLICY_BOOST_TF(부스트) : True, False
+		GLOBAL_POLICY_CRYPT_LOG_TM_RESOLUTION(암복호화 로그 서버에서 압축 시간 )
+		GLOBAL_POLICY_CRYPT_LOG_COMPRESS_LIMIT(암복호화 로그 AP에서 최대 압축값)
+		GLOBAL_POLICY_CRYPT_LOG_COMPRESS_FLUSH_TIMEOUT(암복호화 로그 압축 중단 시간 )
+		GLOBAL_POLICY_CRYPT_LOG_COMPRESS_INITIAL(암복호화 로그 압축 시작값)
+		GLOBAL_POLICY_CRYPT_LOG_COMPRESS_PRINT_PERIOD(암복호화 로그 압축 출력 시간 )*/
+		
+		if(resultCode.equals(SystemCode.ResultCode.SUCCESS)) {
+			
+			ArrayList list = (ArrayList) resultJson.get("list");
+			for (int j = 0; j < list.size(); j++) {
+				JSONObject jsonObj = (JSONObject) list.get(j);
+				
+				String strConfigKey = (String) jsonObj.get("configKey");
+				String strConfigValue = (String) jsonObj.get("configValue"); 
+				System.out.println("strConfigKey : " + strConfigKey + " - strConfigValue : " + strConfigValue);
+
+			}
+			
+		} else {
+			
+		}
+
+	}
+	
+	/**
+	 * 설정 > 보안정책 옵션 설정 조회2
+	 * @param restIp
+	 * @param restPort
+	 * @param strTocken
+	 * @throws Exception
+	 */
+	private void selectSysMultiValueConfigListLike(String restIp, int restPort, String strTocken, String loginId, String entityId) throws Exception {
+		
+		int[] numWeek = { SystemCode.Weekday.MONDAY,
+				 SystemCode.Weekday.TUESDAY,
+				 SystemCode.Weekday.WEDNESDAY,
+				 SystemCode.Weekday.THURSDAY,
+				 SystemCode.Weekday.FRIDAY,
+				 SystemCode.Weekday.SATURDAY,
+				 SystemCode.Weekday.SUNDAY };
+
+		EncryptCommonService api = new EncryptCommonService(restIp, restPort);
+
+		String strService = SystemCode.ServiceName.SYSTEM_SERVICE;
+		String strCommand = SystemCode.ServiceCommand.SELECTSYSMULTIVALUECONFIGLISTLIKE;
+
+		
+		HashMap body = new HashMap();
+		body.put(SystemCode.CustomFormParamKey.sysConfigKeyPrefix, SystemCode.SysConfigKeyPrefix.BATCH_LOG);
+
+		String parameters = TypeUtility.makeRequestBody(body);
+
+		HashMap header = new HashMap();
+		header.put(SystemCode.FieldName.LOGIN_ID, loginId);
+		header.put(SystemCode.FieldName.ENTITY_UID, entityId);
+		header.put(SystemCode.FieldName.TOKEN_VALUE, strTocken);
+
+		JSONObject resultJson = api.callService(strService, strCommand, header, parameters);
+		
+
+		String resultCode = (String) resultJson.get("resultCode");
+		String resultMessage = (String) resultJson.get("resultMessage");
+		resultMessage = new String(resultMessage.getBytes("iso-8859-1"),"UTF-8"); 
+		
+		System.out.println("resultCode : " + resultCode + " resultMessage : " + resultMessage);
+		
+/*		GLOBAL_POLICY_DEFAULT_ACCESS_ALLOW_TF(기본 접근 허용) : 0, 1
+		GLOBAL_POLICY_FORCED_LOGGING_OFF_TF(암복호화 로그 기록 중지) : 0, 1
+		GLOBAL_POLICY_BOOST_TF(부스트) : True, False
+		GLOBAL_POLICY_CRYPT_LOG_TM_RESOLUTION(암복호화 로그 서버에서 압축 시간 )
+		GLOBAL_POLICY_CRYPT_LOG_COMPRESS_LIMIT(암복호화 로그 AP에서 최대 압축값)
+		GLOBAL_POLICY_CRYPT_LOG_COMPRESS_FLUSH_TIMEOUT(암복호화 로그 압축 중단 시간 )
+		GLOBAL_POLICY_CRYPT_LOG_COMPRESS_INITIAL(암복호화 로그 압축 시작값)
+		GLOBAL_POLICY_CRYPT_LOG_COMPRESS_PRINT_PERIOD(암복호화 로그 압축 출력 시간 )*/
+		
+		if(resultCode.equals(SystemCode.ResultCode.SUCCESS)) {
+			
+			ArrayList list = (ArrayList) resultJson.get("list");
+			for (int j = 0; j < list.size(); j++) {
+				JSONObject jsonObj = (JSONObject) list.get(j);
+				
+				SysMultiValueConfig sysMultiValueConfig = new SysMultiValueConfig();
+				Gson gson = new Gson();
+				sysMultiValueConfig = gson.fromJson(jsonObj.toJSONString(), sysMultiValueConfig.getClass());
+				
+				String strConfigKey = (String) sysMultiValueConfig.getConfigKey();
+				boolean blnIsvalueTrueFalse = sysMultiValueConfig.isValueTrueFalse();
+				String strValueString = sysMultiValueConfig.getValueString();
+				
+				BigDecimal bdValueNumber = sysMultiValueConfig.getValueNumber();
+				BigDecimal bdValueNumber2 = sysMultiValueConfig.getValueNumber2();
+				
+				System.out.println("strConfigKey : " + strConfigKey);
+				if(strConfigKey.equals(SystemCode.SysConfigKey.BATCH_LOG_CONF)) {
+					
+					//1. 암복호화 로그를 지정되 시간에만 수집 체크박스 체크여부 = blnIsvalueTrueFalse
+					System.out.println("blnIsvalueTrueFalse : " + blnIsvalueTrueFalse);
+					
+					int weekday = Integer.parseInt(strValueString, 16);
+					for (int i = 0; i < 7; i++)
+					{
+						System.out.println(i + " " + ContainsWeekDay(weekday, numWeek[i]));
+						if (ContainsWeekDay(weekday, numWeek[i])) {
+							//요일 체크밗스 checked = checked
+						} else {
+							//요일 체크밗스 checked = ""
+						}
+							
+					}
+					
+					//전송 시작 - bdValueNumber
+					//전송 종료 - bdValueNumber2
+					System.out.println("전송 시작 : " + bdValueNumber);
+					System.out.println("전송 종료 : " + bdValueNumber2);
+					
+				} else if(strConfigKey.equals(SystemCode.SysConfigKey.BATCH_LOG_UPLOAD_DELAY)) {
+					//암복호화 로그 전송 대기 시간 
+					System.out.println("암복호화 로그 전송 대기 시간 : " + bdValueNumber);
+				}
+
+			}
+			
+		} else {
+			
+		}
+
 	}
 	
 	
