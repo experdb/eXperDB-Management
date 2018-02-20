@@ -54,12 +54,16 @@ public class KeyManageController {
 	@RequestMapping(value = "/keyManage.do")
 	public ModelAndView keyManage(@ModelAttribute("historyVO") HistoryVO historyVO, HttpServletRequest request) {
 		ModelAndView mv = new ModelAndView();
+		CommonServiceCall csc= new CommonServiceCall();
+		JSONArray result = new JSONArray();
 		try {
 			// 화면접근이력 이력 남기기
 //			CmmnUtils.saveHistory(request, historyVO);
 //			historyVO.setExe_dtl_cd("DX-T0055");
 //			accessHistoryService.insertHistory(historyVO);
+			result = csc.selectSysCodeListExper(restIp, restPort, strTocken);
 			mv.setViewName("encript/keyManage/keyManage");
+			mv.addObject("result",result);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -264,6 +268,35 @@ public class KeyManageController {
 
 			result = kmsc.selectCryptoKeySymmetricList(restIp, restPort, strTocken, param);
 		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return result;
+	}
+	
+	
+	/**CryptoKeySymmetric
+	 * 암호화 키를 삭제한다.
+	 * 
+	 * @return resultSet
+	 * @throws Exception
+	 */
+	@RequestMapping(value = "/deleteCryptoKeySymmetric.do")
+	public @ResponseBody JSONObject deleteCryptoKeySymmetric(HttpServletRequest request) {
+		JSONObject result = new JSONObject();
+		try{
+			String keyUid = request.getParameter("keyUid");
+			String resourceName = request.getParameter("resourceName");
+			String resourceTypeCode = request.getParameter("resourceTypeCode");
+			
+			CryptoKeySymmetric param = new CryptoKeySymmetric();
+			param.setKeyUid(keyUid);
+			param.setResourceName(resourceName);
+			param.setResourceTypeCode(resourceTypeCode);			
+			
+			KeyManageServiceCall kmsc= new KeyManageServiceCall();
+			
+			result= kmsc.deleteCryptoKeySymmetric(restIp, restPort, strTocken, param);
+		}catch(Exception e){
 			e.printStackTrace();
 		}
 		return result;

@@ -100,7 +100,7 @@ function fu_insertCryptoKeySymmetric(){
 							<th scope="row" class="ico_t1">적용 알고리즘</th>
 							<td>
 								<select class="select t5" id="CipherAlgorithmCode" name="CipherAlgorithmCode">
-									<option value="">선택</option>
+										<option value="<c:out value=""/>" ><c:out value="선택"/></option>
 										<c:forEach var="result" items="${result}" varStatus="status">
 											<option value="<c:out value="${result.sysCode}"/>"><c:out value="${result.sysCodeName}"/></option>
 										</c:forEach> 
