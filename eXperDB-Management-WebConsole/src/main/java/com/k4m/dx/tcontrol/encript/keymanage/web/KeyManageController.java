@@ -12,13 +12,10 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.k4m.dx.tcontrol.admin.accesshistory.service.AccessHistoryService;
-import com.k4m.dx.tcontrol.cmmn.serviceproxy.EncryptCommonService;
-import com.k4m.dx.tcontrol.cmmn.serviceproxy.vo.CryptoKey;
 import com.k4m.dx.tcontrol.cmmn.serviceproxy.vo.CryptoKeySymmetric;
 import com.k4m.dx.tcontrol.common.service.HistoryVO;
 import com.k4m.dx.tcontrol.encript.service.call.CommonServiceCall;
 import com.k4m.dx.tcontrol.encript.service.call.KeyManageServiceCall;
-import com.k4m.dx.tcontrol.cmmn.serviceproxy.vo.CryptoKeySymmetric;
 /**
  * keyManageController 컨트롤러 클래스를 정의한다.
  *

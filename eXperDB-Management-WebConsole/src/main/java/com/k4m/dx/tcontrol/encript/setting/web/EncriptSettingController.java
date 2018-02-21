@@ -12,7 +12,6 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.k4m.dx.tcontrol.encript.service.call.EncriptSettingServiceCall;
-import com.k4m.dx.tcontrol.encript.service.call.KeyManageServiceCall;
 
 /**
  * Encript 설정 컨트롤러 클래스를 정의한다.
