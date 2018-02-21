@@ -175,14 +175,77 @@ function fn_securityPolicyOptionSelect02(){
 			if(data[0].day6 == true){
 				$("#sun").attr('checked', true);
 			}
-			
-			alert(data[0].transferStart);
-			alert(data[0].transferStop);
-			
+
 			document.getElementById('start_exe_h').value=data[0].transferStart;
 			document.getElementById('stop_exe_h').value=data[0].transferStop;
-			//$("#start_exe_h").val(data[0].transferStart);
-			//$("#stop_exe_h").val(data[0].transferStop);
+
+		}
+	});	
+}
+
+function fn_save(){
+	var arrmaps01 = [];
+	var tmpmap01 = new Object();
+	
+	var arrmaps02 = [];
+	var tmpmap02 = new Object();
+	
+	 var dayWeek = new Array();
+	 dayWeek.push($(mon).prop("checked"));
+	 dayWeek.push($(tue).prop("checked"));
+	 dayWeek.push($(wed).prop("checked"));
+	 dayWeek.push($(thu).prop("checked"));
+	 dayWeek.push($(fri).prop("checked"));
+	 dayWeek.push($(sat).prop("checked"));
+	 dayWeek.push($(sun).prop("checked"));
+	 
+	tmpmap01["global_policy_default_access_allow_tf"] =$(GLOBAL_POLICY_DEFAULT_ACCESS_ALLOW_TF).prop("checked");
+	tmpmap01["global_policy_forced_logging_off_tf"] = $(GLOBAL_POLICY_FORCED_LOGGING_OFF_TF).prop("checked");
+	tmpmap01["global_policy_boost_tf"] = $(GLOBAL_POLICY_BOOST_TF).prop("checked");
+	tmpmap01["global_policy_crypt_log_tm_resolution"] = $("#GLOBAL_POLICY_CRYPT_LOG_TM_RESOLUTION").val();
+	tmpmap01["global_policy_crypt_log_compress_flush_timeout"] = $("#GLOBAL_POLICY_CRYPT_LOG_COMPRESS_FLUSH_TIMEOUT").val();
+	tmpmap01["global_policy_crypt_log_compress_limit"] = $("#GLOBAL_POLICY_CRYPT_LOG_COMPRESS_LIMIT").val();
+	tmpmap01["global_policy_crypt_log_compress_print_period"] = $("#GLOBAL_POLICY_CRYPT_LOG_COMPRESS_PRINT_PERIOD").val();
+	tmpmap01["global_policy_crypt_log_compress_initial"] = $("#GLOBAL_POLICY_CRYPT_LOG_COMPRESS_INITIAL").val();
+	arrmaps01.push(tmpmap01);	
+	
+	tmpmap02["blnIsvalueTrueFalse"] = $(blnIsvalueTrueFalse).prop("checked");
+	tmpmap02["start_exe_h"] = $("#start_exe_h").val();
+	tmpmap02["stop_exe_h"] = $("#stop_exe_h").val();
+	tmpmap02["logTransferWaitTime"] = $("#logTransferWaitTime").val();
+	arrmaps02.push(tmpmap02);	
+	
+	$.ajax({
+		url : "/sysConfigSave.do", 
+	  	data : {
+	  		arrmaps01 : JSON.stringify(arrmaps01),
+	  		dayWeek : JSON.stringify(dayWeek),
+	  		arrmaps02 : JSON.stringify(arrmaps02)
+	  	},
+		dataType : "json",
+		type : "post",
+		beforeSend: function(xhr) {
+	        xhr.setRequestHeader("AJAX", true);
+	     },
+		error : function(xhr, status, error) {
+			if(xhr.status == 401) {
+				alert("<spring:message code='message.msg02' />");
+				 location.href = "/";
+			} else if(xhr.status == 403) {
+				alert("<spring:message code='message.msg03' />");
+	             location.href = "/";
+			} else {
+				alert("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""));
+			}
+		},
+		success : function(data) {
+			if(data.resultCode == 0000000000){
+				alert(data.resultMessage);
+				location.reload();
+			}else{
+				alert(data.resultMessage);
+				return false;
+			}
 		}
 	});	
 }
@@ -385,7 +448,7 @@ margin-right: 10px;
 			</div>
 			
 			<div class="btn_type_02">
-				<a href="#n" class="btn"><span>저장</span></a> 
+				<a href="#n" class="btn" onClick="fn_save()"><span>저장</span></a> 
 			</div>
 			
 		</div>

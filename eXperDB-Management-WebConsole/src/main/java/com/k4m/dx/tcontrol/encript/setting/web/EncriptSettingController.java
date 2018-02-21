@@ -4,6 +4,7 @@ import javax.servlet.http.HttpServletRequest;
 
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
+import org.json.simple.parser.JSONParser;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -97,6 +98,56 @@ public class EncriptSettingController {
 	
 	
 	/**
+	 * 보안정책 옵션 설정 저장
+	 * 
+	 * @return resultSet
+	 * @throws Exception
+	 */
+	@RequestMapping(value = "/sysConfigSave.do")
+	public @ResponseBody JSONObject sysConfigSave(HttpServletRequest request) {
+		JSONObject result01 = new JSONObject();
+		JSONObject result02 = new JSONObject();
+		
+		try {		
+			JSONObject obj01 = new JSONObject();					
+			JSONObject obj02 = new JSONObject();	
+				
+			EncriptSettingServiceCall essc = new EncriptSettingServiceCall();
+			
+			//옵션설정저장1
+			String strRows01 = request.getParameter("arrmaps01").toString().replaceAll("&quot;", "\"");
+			System.out.println(strRows01);
+			JSONArray rows01 = (JSONArray) new JSONParser().parse(strRows01);
+			for (int i = 0; i < rows01.size(); i++) {
+				obj01 = (JSONObject) rows01.get(i);		
+			}	
+			result01 = essc.updateSysConfigList(restIp, restPort, strTocken, obj01);
+					
+			//옵션설정저장 1 성공!!
+			if(result01.get("resultCode").equals("0000000000")){
+				//옵션설정저장2
+				String strRows02 = request.getParameter("arrmaps02").toString().replaceAll("&quot;", "\"");
+				System.out.println(strRows02);
+				JSONArray rows02 = (JSONArray) new JSONParser().parse(strRows02);
+				for (int i = 0; i < rows02.size(); i++) {
+					obj02 = (JSONObject) rows02.get(i);		
+				}	
+				
+				JSONArray rows03 = (JSONArray) new JSONParser().parse(request.getParameter("dayWeek"));	
+				result02 = essc.updateSysMultiValueConfigList(restIp, restPort, strTocken, obj02, rows03);
+			}else{
+				return result01;
+			}
+			
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return result02;
+	}
+	
+	
+	/**
 	 * 암호화 설정
 	 * 
 	 * @param historyVO
@@ -114,4 +165,54 @@ public class EncriptSettingController {
 		}
 		return mv;
 	}
+	
+	
+	/**
+	 * 암호화설정 조회
+	 * 
+	 * @return resultSet
+	 * @throws Exception
+	 */
+	@RequestMapping(value = "/selectEncriptSet.do")
+	public @ResponseBody JSONArray selectEncriptSet(HttpServletRequest request) {
+			
+		EncriptSettingServiceCall essc = new EncriptSettingServiceCall();
+		JSONArray result = new JSONArray();
+		try {
+			result = essc.selectSysMultiValueConfigListLike2(restIp, restPort, strTocken);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return result;
+	}
+	
+	
+	/**
+	 * 보안정책 옵션 설정 저장
+	 * 
+	 * @return resultSet
+	 * @throws Exception
+	 */
+	@RequestMapping(value = "/saveEncriptSet.do")
+	public @ResponseBody JSONObject saveEncriptSet(HttpServletRequest request) {
+		JSONObject result = new JSONObject();
+
+		try {		
+			JSONObject obj = new JSONObject();					
+				
+			EncriptSettingServiceCall essc = new EncriptSettingServiceCall();
+			
+			String strRows = request.getParameter("arrmaps").toString().replaceAll("&quot;", "\"");
+			System.out.println(strRows);
+			JSONArray rows = (JSONArray) new JSONParser().parse(strRows);
+			for (int i = 0; i < rows.size(); i++) {
+				obj = (JSONObject) rows.get(i);		
+			}	
+			result = essc.updateSysMultiValueConfigList2(restIp, restPort, strTocken, obj);
+						
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return result;
+	}	
 }

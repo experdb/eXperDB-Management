@@ -29,6 +29,8 @@ $(window.document).ready(function() {
 	fn_makeSelect01();
 	fn_makeSelect02();
 	fn_makeSelect03();
+	
+	fn_selectEncriptSet();
 });
 
 /* ********************************************************
@@ -38,10 +40,10 @@ $(window.document).ready(function() {
 	var sec = "";
 	var secHtml ="";
 	
-	secHtml += '<select class="select t6" name="period01" id="period01">';	
+	secHtml += '<select class="select t6" name="MONITOR_POLLING_SERVER" id="MONITOR_POLLING_SERVER">';	
 	for(var i=10; i<=599; i++){
 		if(i >= 0 && i<10){
-			sec = "0" + i;
+			sec = i;
 		}else{
 			sec = i;
 		}
@@ -58,10 +60,10 @@ $(window.document).ready(function() {
  	var sec = "";
  	var secHtml ="";
  	
- 	secHtml += '<select class="select t6" name="period02" id="period02">';	
+ 	secHtml += '<select class="select t6" name="MONITOR_POLLING_AGENT" id="MONITOR_POLLING_AGENT">';	
  	for(var i=5; i<=399; i++){
  		if(i >= 0 && i<10){
- 			sec = "0" + i;
+ 			sec = i;
  		}else{
  			sec = i;
  		}
@@ -78,10 +80,10 @@ $(window.document).ready(function() {
   	var sec = "";
   	var secHtml ="";
   	
-  	secHtml += '<select class="select t6" name="period03" id="period03">';	
+  	secHtml += '<select class="select t6" name="MONITOR_EXPIRE_CRYPTO_KEY" id="MONITOR_EXPIRE_CRYPTO_KEY">';	
   	for(var i=10; i<=599; i++){
   		if(i >= 0 && i<10){
-  			sec = "0" + i;
+  			sec = i;
   		}else{
   			sec = i;
   		}
@@ -91,6 +93,91 @@ $(window.document).ready(function() {
   	$( "#period03" ).append(secHtml);
   } 
 
+  
+  function fn_selectEncriptSet(){
+	  $.ajax({
+			url : "/selectEncriptSet.do", 
+		  	data : {
+		  	},
+			dataType : "json",
+			type : "post",
+			beforeSend: function(xhr) {
+		        xhr.setRequestHeader("AJAX", true);
+		     },
+			error : function(xhr, status, error) {
+				if(xhr.status == 401) {
+					alert("<spring:message code='message.msg02' />");
+					 location.href = "/";
+				} else if(xhr.status == 403) {
+					alert("<spring:message code='message.msg03' />");
+		             location.href = "/";
+				} else {
+					alert("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""));
+				}
+			},
+			success : function(data) {
+				if(data[0].ValueTrueFalse == true){
+					$("#ValueTrueFalse").attr('checked', true);
+				}else{
+					$("#ValueTrueFalse").attr('checked', false);
+				}
+			
+				if(data[0].MONITOR_AGENT_AUDIT_LOG_HMAC == true){
+					$("#MONITOR_AGENT_AUDIT_LOG_HMAC").attr('checked', true);
+				}else{
+					$("#MONITOR_AGENT_AUDIT_LOG_HMAC").attr('checked', false);
+				}
+				
+				$("#MONITOR_POLLING_AGENT").val(data[0].MONITOR_POLLING_AGENT);
+				$("#MONITOR_EXPIRE_CRYPTO_KEY").val(data[0].MONITOR_EXPIRE_CRYPTO_KEY);				
+				$("#MONITOR_POLLING_SERVER").val(data[0].MONITOR_POLLING_SERVER);
+			}
+		});	
+  }
+  
+  function fn_save(){
+	  var arrmaps = [];
+	  var tmpmap = new Object();
+	  
+	  tmpmap["ValueTrueFalse"] =$(ValueTrueFalse).prop("checked");
+	  tmpmap["MONITOR_AGENT_AUDIT_LOG_HMAC"] = $(MONITOR_AGENT_AUDIT_LOG_HMAC).prop("checked");
+	  tmpmap["MONITOR_POLLING_AGENT"] = $("#MONITOR_POLLING_AGENT").val();
+	  tmpmap["MONITOR_EXPIRE_CRYPTO_KEY"] = $("#MONITOR_EXPIRE_CRYPTO_KEY").val();
+	  tmpmap["MONITOR_POLLING_SERVER"] = $("#MONITOR_POLLING_SERVER").val();
+	  arrmaps.push(tmpmap);	
+		
+		$.ajax({
+			url : "/saveEncriptSet.do", 
+		  	data : {
+		  		arrmaps : JSON.stringify(arrmaps),
+		  	},
+			dataType : "json",
+			type : "post",
+			beforeSend: function(xhr) {
+		        xhr.setRequestHeader("AJAX", true);
+		     },
+			error : function(xhr, status, error) {
+				if(xhr.status == 401) {
+					alert("<spring:message code='message.msg02' />");
+					 location.href = "/";
+				} else if(xhr.status == 403) {
+					alert("<spring:message code='message.msg03' />");
+		             location.href = "/";
+				} else {
+					alert("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""));
+				}
+			},
+			success : function(data) {
+				if(data.resultCode == 0000000000){
+					alert(data.resultMessage);
+					location.reload();
+				}else{
+					alert(data.resultMessage);
+					return false;
+				}
+			}
+		});	
+  }
 </script>
 <style>
 .cmm_bd .sub_tit>p {
@@ -138,8 +225,8 @@ select.t6{
 								<tr>
 									<td colspan="2">
 										<div class="inp_chk">
-											<span> <input type="checkbox" id="option" name="" /> 
-												<label for="option">정책전송 중지</label>
+											<span> <input type="checkbox" id="ValueTrueFalse" name="ValueTrueFalse" /> 
+												<label for="ValueTrueFalse">정책전송 중지</label>
 											</span>
 										</div>
 									</td>
@@ -162,8 +249,8 @@ select.t6{
 								<tr>
 									<td colspan="2">
 										<div class="inp_chk">
-											<span> <input type="checkbox" id="option1" name="" /> 
-												<label for="option1">에이전트가 기록하는 로그에 위변조 방지를 적용</label>
+											<span> <input type="checkbox" id="MONITOR_AGENT_AUDIT_LOG_HMAC" name="MONITOR_AGENT_AUDIT_LOG_HMAC" /> 
+												<label for="MONITOR_AGENT_AUDIT_LOG_HMAC">에이전트가 기록하는 로그에 위변조 방지를 적용</label>
 											</span>
 										</div>
 									</td>
@@ -173,7 +260,7 @@ select.t6{
 					</div>
 				</div>
 				<div class="btn_type_02">
-					<a href="#n" class="btn"><span>저장</span></a> 
+					<a href="#n" class="btn" onClick="fn_save()"><span>저장</span></a> 
 				</div>	
 			</div>
 		</div>
