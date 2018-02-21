@@ -2254,10 +2254,16 @@ public class ServiceCallTest {
 		param.add(boost.toJSONString());
 		
 		//암복호화 로그 서버에서 압축 시간 
-		SysConfig cryptLogCompressFlushTimeout = new SysConfig();
-		cryptLogCompressFlushTimeout.setConfigKey (SystemCode.SysConfigKey.GLOBAL_POLICY_CRYPT_LOG_COMPRESS_FLUSH_TIMEOUT);
-		cryptLogCompressFlushTimeout.setConfigValue ( "");
-		param.add(cryptLogCompressFlushTimeout.toJSONString());
+		SysConfig cryptTmResolution = new SysConfig();
+		cryptTmResolution.setConfigKey(SystemCode.SysConfigKey.GLOBAL_POLICY_CRYPT_LOG_TM_RESOLUTION);
+		cryptTmResolution.setConfigValue("");
+		param.add(cryptTmResolution);
+		
+		//암복호화 로그 AP에서 최대 압축값
+		SysConfig cryptLogCompressLimit = new SysConfig();
+		cryptLogCompressLimit.setConfigKey(SystemCode.SysConfigKey.GLOBAL_POLICY_CRYPT_LOG_COMPRESS_LIMIT);
+		cryptLogCompressLimit.setConfigValue("");
+		param.add(cryptLogCompressLimit);
 		
         //암복호화 로그 압축 시작값
 		SysConfig cryptLogCompressInitial = new SysConfig();
@@ -2265,11 +2271,19 @@ public class ServiceCallTest {
 		boost.setConfigValue("0");
 		param.add(cryptLogCompressInitial.toJSONString()); 
 		
+		//암복호화 로그 압축 중단 시간 
+		SysConfig cryptLogCompressFlushTimeout = new SysConfig();
+		cryptLogCompressFlushTimeout.setConfigKey(SystemCode.SysConfigKey.GLOBAL_POLICY_CRYPT_LOG_COMPRESS_FLUSH_TIMEOUT);
+		cryptLogCompressFlushTimeout.setConfigValue("");
+		param.add(cryptLogCompressFlushTimeout);
+		
 		//암복호화 로그 압축 출력 시간
 		SysConfig cryptLogCompressPrintPeriod = new SysConfig();
 		cryptLogCompressFlushTimeout.setConfigKey (SystemCode.SysConfigKey.GLOBAL_POLICY_CRYPT_LOG_COMPRESS_PRINT_PERIOD);
 		cryptLogCompressFlushTimeout.setConfigValue ( "");
 		param.add(cryptLogCompressPrintPeriod.toJSONString());
+		
+		//암복호화 로그 전송 대기 시간 -> 보안정책 옵션 설정 저장2 에서 등록함
 
 		
 

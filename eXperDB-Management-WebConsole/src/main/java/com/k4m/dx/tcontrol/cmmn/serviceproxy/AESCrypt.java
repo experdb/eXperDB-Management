@@ -1,11 +1,13 @@
 package com.k4m.dx.tcontrol.cmmn.serviceproxy;
 
-import java.security.MessageDigest;
-import java.security.SecureRandom;
 import java.security.spec.AlgorithmParameterSpec;
+import java.security.spec.KeySpec;
 
 import javax.crypto.Cipher;
+import javax.crypto.SecretKey;
+import javax.crypto.SecretKeyFactory;
 import javax.crypto.spec.IvParameterSpec;
+import javax.crypto.spec.PBEKeySpec;
 import javax.crypto.spec.SecretKeySpec;
 
 import org.apache.commons.codec.binary.Base64;
@@ -18,6 +20,7 @@ public class AESCrypt {
 	private final Cipher cipher;
 	private final SecretKeySpec key;
 	private String encryptedText, decryptedText;
+	
 
 	public AESCrypt(String password, byte[] keyBytes) throws Exception {
 		// hash password with SHA-256 and crop the output to 128-bit for key
@@ -61,10 +64,38 @@ public class AESCrypt {
 		}
 		return strbuf.toString();
 	}
+	
+	public byte[] generateKey(String password) throws Exception  {
+		//String password = "sOme*ShaREd*SecreT";
+		byte[] salt = new byte[]{-84, -119, 25, 56, -100, 100, -120, -45, 84, 67, 96, 10, 24, 111, 112, -119, 3};
+		SecretKeyFactory factory = SecretKeyFactory.getInstance("PBKDF2WithHmacSHA1");
+		KeySpec spec = new PBEKeySpec(password.toCharArray(), salt, 1024, 128);
+		SecretKey tmp = factory.generateSecret(spec);
+		SecretKeySpec secret = new SecretKeySpec(tmp.getEncoded(), "AES");
+		//System.out.println("Key:" + Base64.encode(key.getEncoded()));
+		
+		return Base64.encodeBase64(secret.getEncoded());
+	}
 
 
 	public static void main(String[] args) throws Exception {
 
+		decodeTest("1234qwer");
+		
+	}
+	
+	private void encodeTest(String password) throws Exception {
+		int AES_KEY_SIZE = 16;
+		
+		byte[] key = generateKey("1234qwer");
+		
+		AESCrypt aes = new AESCrypt(password, key);
+		
+		//aes.encrypt(plainText)
+		
+	}
+	
+	private static void decodeTest(String password) throws Exception {
 		int myIteration = 200000;
 		int AES_KEY_SIZE = 16;
 		int MASTER_KEY_SIZE = 32;
@@ -85,7 +116,7 @@ public class AESCrypt {
 		byte[] byteIv = Base64.decodeBase64(iv);
 		//byte[] byMasterStrEnc = Base64.decodeBase64(masterStrEnc);
 		
-		String password = "1234qwer";
+		//String password = "1234qwer";
 
 		
 		Rfc2898DeriveBytes key = new Rfc2898DeriveBytes(password, Base64.decodeBase64(salt), myIteration);
