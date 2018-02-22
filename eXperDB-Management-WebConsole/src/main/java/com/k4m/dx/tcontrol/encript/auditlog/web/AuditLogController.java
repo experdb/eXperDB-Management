@@ -16,7 +16,6 @@ import com.k4m.dx.tcontrol.cmmn.serviceproxy.vo.BackupLog;
 import com.k4m.dx.tcontrol.cmmn.serviceproxy.vo.SystemUsage;
 import com.k4m.dx.tcontrol.common.service.HistoryVO;
 import com.k4m.dx.tcontrol.encript.service.call.AuditLogServiceCall;
-import com.k4m.dx.tcontrol.encript.service.call.KeyManageServiceCall;
 
 
 @Controller
@@ -24,7 +23,7 @@ public class AuditLogController {
 
 	String restIp = "127.0.0.1";
 	int restPort = 8443;
-	String strTocken = "uq1b/dgOIzpzH+EAD9UOl5Iz26soa1H+hdbmD38noqs=";
+	String strTocken = "KZmd1G6gQalj+i9Vypb+EarAwtlNge2yQ9EcgW4xR/U=";
 	
 	/**
 	 * 암복호화 감사로그 화면을 보여준다

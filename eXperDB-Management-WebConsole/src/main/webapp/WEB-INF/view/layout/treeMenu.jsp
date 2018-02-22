@@ -391,16 +391,7 @@ $(window.document).ready(
 						   				    <li class="ico2_3"><a href="/securityPolicy.do" onclick="fn_GoLink('/securityPolicy.do')"><img src="../images/ico_lnb_8.png" id="treeImg">보안정책관리</a></li>
 						    			   	<li class="ico2_3"><a href="/keyManage.do" onclick="fn_GoLink('/keyManage.do')"><img src="../images/ico_lnb_8.png" id="treeImg">암호화키관리</a></li>
 					   				  	</ul>
-				   				  	</li>				   				  	
-				   				  	
-				   				  	<li class="t2"><div class="border">
-									<a href="#n"><img src="../images/ico_lnb_5.png" id="treeImg"><div class="tooltip">백업/복원<span class="tooltiptext">백업/복원</span></div></a>
-									</div>
-					    				<ul class="depth_2">
-						    			    <li class="ico2_3"><a href="#"><img src="../images/ico_lnb_8.png" id="treeImg">관리데이터백업</a></li>
-						     			   	<li class="ico2_4"><a href="#"><img src="../images/ico_lnb_9.png" id="treeImg">관리데이터복원</a></li>
-					   				  	</ul>
-				   				  	</li>
+				   				  	</li>				   				  					   				 
 				   					  	
 				   				  	<li class="t2"><div class="border">
 									<a href="#n"><img src="../images/ico_lnb_5.png" id="treeImg"><div class="tooltip">감사로그<span class="tooltiptext">감사로그</span></div></a>

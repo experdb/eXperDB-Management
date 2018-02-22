@@ -271,12 +271,6 @@ function fn_cookie(url) {
 									<li><a href="/keyManage.do">암호화키관리</a></li>
 								</ul>
         					</li>
-        					<li><a href="#n">백업/복원</a>
-        						<ul class="depth_3">
-									<li><a href="#n">관리데이터백업</a></li>
-									<li><a href="#n">관리데이터복원</a></li>
-								</ul>
-        					</li>
 						    <li><a href="#n">감사로그</a>
         						<ul class="depth_3">
 									<li><a href="/encodeDecodeAuditLog.do">암복호화</a></li>

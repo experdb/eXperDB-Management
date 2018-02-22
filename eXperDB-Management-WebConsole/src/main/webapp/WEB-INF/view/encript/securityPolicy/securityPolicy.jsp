@@ -33,11 +33,13 @@ var table = null;
 				{ data : "profileName", className : "dt-center", defaultContent : ""}, 
 				{ data : "profileNote", className : "dt-center", defaultContent : ""}, 
 				{ data : "profileStatusName", className : "dt-center", defaultContent : ""}, 
-				{ data : "createDateTime", className : "dt-center", defaultContent : ""}, 
 				{ data : "createName", className : "dt-center", defaultContent : ""}, 
-				{ data : "updateDateTime", className : "dt-center", defaultContent : ""}, 
-				{ data : "updateName", className : "dt-center", defaultContent : ""}
-			 ]
+				{ data : "createDateTime", className : "dt-center", defaultContent : ""}, 
+				{ data : "updateName", className : "dt-center", defaultContent : ""}, 
+				{ data : "updateDateTime", className : "dt-center", defaultContent : ""},
+				{ data : "profileUid",visible: false }
+				
+			 ],'select': {'style': 'multi'}
 		});
 		
 		table.tables().header().to$().find('th:eq(0)').css('min-width', '20px');
@@ -46,9 +48,10 @@ var table = null;
 		table.tables().header().to$().find('th:eq(3)').css('min-width', '100px');
 		table.tables().header().to$().find('th:eq(4)').css('min-width', '100px');
 		table.tables().header().to$().find('th:eq(5)').css('min-width', '100px');
-		table.tables().header().to$().find('th:eq(6)').css('min-width', '100px');
+		table.tables().header().to$().find('th:eq(6)').css('min-width', '150px');
 		table.tables().header().to$().find('th:eq(7)').css('min-width', '80px');
-		table.tables().header().to$().find('th:eq(8)').css('min-width', '100px');
+		table.tables().header().to$().find('th:eq(8)').css('min-width', '150px');
+		table.tables().header().to$().find('th:eq(9)').css('min-width', '0px');
 	
 	    $(window).trigger('resize');
 	    
@@ -98,14 +101,15 @@ var table = null;
 		var datas = table.rows('.selected').data();
 		if (datas.length <= 0) {
 			alert('<spring:message code="message.msg35" />');
-			return false;
 		}else if (datas.length >1){
-			alert('<spring:message code="message.msg38" />');
+			alert('<spring:message code="message.msg38" />');			
+		}else{
+			var profileUid = table.row('.selected').data().profileUid;
+			var form = document.modifyForm;
+			form.action = "/securityPolicyModify.do?profileUid="+profileUid;
+			form.submit();
+			return;
 		}
-		var form = document.modifyForm;
-		form.action = "/securityPolicyModify.do";
-		form.submit();
-		return;
 	}
 	
 	/* 삭제 버튼 클릭시*/
@@ -113,6 +117,8 @@ var table = null;
 
 	}
 </script>
+<form name="modifyForm" method="post">
+</form>
 <!-- contents -->
 <div id="contents">
 	<div class="contents_wrap">
@@ -135,7 +141,7 @@ var table = null;
 			<div class="cmm_grp">
 				<div class="btn_type_01">
 					<span class="btn" onclick="fn_select();"><button>조회</button></span>
-					<span class="btn" onclick="fn_insert();"><a href="/securityPolicyInsert.do"><button>등록</button></a></span>
+					<span class="btn"><a href="/securityPolicyInsert.do"><button>등록</button></a></span>
 					<span class="btn" onclick="fn_update();"><button>수정</button></span>
 					<span class="btn" onclick="fn_delete();"><button>삭제</button></span>
 				</div>
@@ -171,9 +177,10 @@ var table = null;
 								<th width="100">정책설명</th>
 								<th width="100">정책상태</th>
 								<th width="100">등록자</th>
-								<th width="100">등록일시</th>
+								<th width="150">등록일시</th>
 								<th width="80">수정자</th>
-								<th width="100">수정일시</th>
+								<th width="150">수정일시</th>
+								<th width="0"></th>
 							</tr>
 						</thead>
 					</table>
