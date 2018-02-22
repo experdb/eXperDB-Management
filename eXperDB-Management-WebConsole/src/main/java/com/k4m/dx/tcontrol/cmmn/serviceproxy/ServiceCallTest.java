@@ -8,7 +8,6 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
-import org.apache.commons.codec.binary.Base64;
 import org.codehaus.jackson.map.ObjectMapper;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
@@ -17,8 +16,6 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
 
 import com.google.gson.Gson;
-import com.k4m.dx.tcontrol.cmmn.crypto.Generator;
-import com.k4m.dx.tcontrol.cmmn.crypto.Rfc2898DeriveBytes;
 import com.k4m.dx.tcontrol.cmmn.serviceproxy.vo.AdminServerPasswordRequest;
 import com.k4m.dx.tcontrol.cmmn.serviceproxy.vo.AuditLog;
 import com.k4m.dx.tcontrol.cmmn.serviceproxy.vo.AuditLogSite;
@@ -28,6 +25,7 @@ import com.k4m.dx.tcontrol.cmmn.serviceproxy.vo.CryptoKey;
 import com.k4m.dx.tcontrol.cmmn.serviceproxy.vo.CryptoKeySymmetric;
 import com.k4m.dx.tcontrol.cmmn.serviceproxy.vo.Entity;
 import com.k4m.dx.tcontrol.cmmn.serviceproxy.vo.EntityPermission;
+import com.k4m.dx.tcontrol.cmmn.serviceproxy.vo.MasterKeyFile;
 import com.k4m.dx.tcontrol.cmmn.serviceproxy.vo.Profile;
 import com.k4m.dx.tcontrol.cmmn.serviceproxy.vo.ProfileAclSpec;
 import com.k4m.dx.tcontrol.cmmn.serviceproxy.vo.ProfileCipherSpec;
@@ -61,7 +59,7 @@ public class ServiceCallTest {
 		entityId = "d06c0acb-ca3a-4324-83ed-71df370acdb3";
 
 		
-		String strTocken = "OLLU6uEr6z0QaqIP21kr7EraReIfpx/haZCiGCLjl2E=";
+		String strTocken = "2VTwBYK1RG7XSnj1uOvs2s+KMhGUH+T+RjBOAP7XVdQ=";
 
 		ServiceCallTest test = new ServiceCallTest();
 	
@@ -113,7 +111,7 @@ public class ServiceCallTest {
 		//test.selectProfileList(restIp, restPort, strTocken, loginId, entityId);
 		
 		//보안정책 > 보안정책 상세
-		//test.selectProfileProtectionContents(restIp, restPort, strTocken, loginId, entityId);
+		test.selectProfileProtectionContents(restIp, restPort, strTocken, loginId, entityId);
 		
 		//암호화키 > 암호화키리스트
 		//test.selectCryptoKeyList(restIp, restPort, strTocken, loginId, entityId);
@@ -2257,30 +2255,30 @@ public class ServiceCallTest {
 		SysConfig cryptTmResolution = new SysConfig();
 		cryptTmResolution.setConfigKey(SystemCode.SysConfigKey.GLOBAL_POLICY_CRYPT_LOG_TM_RESOLUTION);
 		cryptTmResolution.setConfigValue("");
-		param.add(cryptTmResolution);
+		param.add(cryptTmResolution.toJSONString());
 		
 		//암복호화 로그 AP에서 최대 압축값
 		SysConfig cryptLogCompressLimit = new SysConfig();
 		cryptLogCompressLimit.setConfigKey(SystemCode.SysConfigKey.GLOBAL_POLICY_CRYPT_LOG_COMPRESS_LIMIT);
 		cryptLogCompressLimit.setConfigValue("");
-		param.add(cryptLogCompressLimit);
+		param.add(cryptLogCompressLimit.toJSONString());
 		
         //암복호화 로그 압축 시작값
 		SysConfig cryptLogCompressInitial = new SysConfig();
-		boost.setConfigKey(SystemCode.SysConfigKey.GLOBAL_POLICY_CRYPT_LOG_COMPRESS_INITIAL);
-		boost.setConfigValue("0");
+		cryptLogCompressInitial.setConfigKey(SystemCode.SysConfigKey.GLOBAL_POLICY_CRYPT_LOG_COMPRESS_INITIAL);
+		cryptLogCompressInitial.setConfigValue("0");
 		param.add(cryptLogCompressInitial.toJSONString()); 
 		
 		//암복호화 로그 압축 중단 시간 
 		SysConfig cryptLogCompressFlushTimeout = new SysConfig();
 		cryptLogCompressFlushTimeout.setConfigKey(SystemCode.SysConfigKey.GLOBAL_POLICY_CRYPT_LOG_COMPRESS_FLUSH_TIMEOUT);
 		cryptLogCompressFlushTimeout.setConfigValue("");
-		param.add(cryptLogCompressFlushTimeout);
+		param.add(cryptLogCompressFlushTimeout.toJSONString());
 		
 		//암복호화 로그 압축 출력 시간
 		SysConfig cryptLogCompressPrintPeriod = new SysConfig();
-		cryptLogCompressFlushTimeout.setConfigKey (SystemCode.SysConfigKey.GLOBAL_POLICY_CRYPT_LOG_COMPRESS_PRINT_PERIOD);
-		cryptLogCompressFlushTimeout.setConfigValue ( "");
+		cryptLogCompressPrintPeriod.setConfigKey (SystemCode.SysConfigKey.GLOBAL_POLICY_CRYPT_LOG_COMPRESS_PRINT_PERIOD);
+		cryptLogCompressPrintPeriod.setConfigValue ( "");
 		param.add(cryptLogCompressPrintPeriod.toJSONString());
 		
 		//암복호화 로그 전송 대기 시간 -> 보안정책 옵션 설정 저장2 에서 등록함
@@ -2514,55 +2512,28 @@ public class ServiceCallTest {
 	}
 	
 	private void decodeTest() throws Exception {
-		int myIteration = 200000;
-		int AES_KEY_SIZE = 16;
-		int MASTER_KEY_SIZE = 32;
-				
-				
-				
-		String loadStr = "{\"mas\":\"uMbslqhNKDQrvs/RcPluZcenWtOrYLmZ8Wc+6Zs4xk1npKFX50HgPvlKSi9+CPIP\",\"ter\":\"kWlRZF2SkyTRXDL7eqDdIQ==\",\"key\":\"UW0IxVLs9S7e1vFdIWSTcpXwU4EuZvHmegHYZv59dpg=\"}";
 		
-		JSONParser parser = new JSONParser();
-		JSONObject json = (JSONObject) parser.parse(loadStr);
+		AESCrypt aes = new AESCrypt();
 		
-		//Rfc2898DeriveBytes key = new Rfc2898DeriveBytes("password", Base64.encodeBase64(json.get("key")))
+		//암호화
+		//aes.GenerateMasterStr("1234qwer");
 		
-		String masterStrEnc = json.get("mas").toString();
-		String iv = json.get("ter").toString();
-		String salt = json.get("key").toString();
-		
-		byte[] byteIv = Base64.decodeBase64(iv);
-		//byte[] byMasterStrEnc = Base64.decodeBase64(masterStrEnc);
-		
-		String password = "1234qwer";
-		//String strTxt = "password";
-
-		
-		Rfc2898DeriveBytes key = new Rfc2898DeriveBytes(password, Base64.decodeBase64(salt), myIteration);
-		//key.getBytes(AES_KEY_SIZE);
-
-		byte[] byMasterStrEnc = Base64.decodeBase64(masterStrEnc);
-		//byte[] bySalt = Base64.decodeBase64(salt.getBytes());
-		AESCrypt aes = new AESCrypt(password, key.getBytes(AES_KEY_SIZE));
-		
-		//byte[] strEnc = aes.encrypt(strTxt);
-		//String decryptedText = aes.decrypt(strEnc).toString(); 
-		//System.out.println(strEnc);
-		
-		String decryptedText = aes.decrypt(byMasterStrEnc, byteIv).toString(); 
-		
-		//checkChar(decryptedText);
-		
-		System.out.println(decryptedText);
+		String loadStr = "{\"mas\":\"ScfypwlI+yt1j4XxuMPEKYeLj3BTLoEoBmy5vC3wWGl+M/a0/WK39s/8BudpUXNU\",\"ter\":\"5Os7QRcWTNBCprpra2/Xkg==\",\"key\":\"pQcdT8XmWoOIZQyELMR8A1nZ6jr72Kq/kD93799x1UE=\"}";
+		//복호화
+		String encText = aes.GetMasterStr("1234qwer", loadStr);
+		System.out.println(encText);
 		
 
 	}
 	
 	private void encTest() throws Exception {
-		int MASTER_KEY_SIZE = 32;
+		AESCrypt aes = new AESCrypt();
 		
-		byte[] masterStr = new byte[MASTER_KEY_SIZE];
-		masterStr = Generator.generateRandomBits(MASTER_KEY_SIZE);
+		//암호화
+		MasterKeyFile m = aes.GenerateMasterStr("1234qwer");
+		System.out.println(m.getMas());
+		System.out.println(m.getTer());
+		System.out.println(m.getKey());
 		
 	}
 	

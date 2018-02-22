@@ -11,10 +11,20 @@
  */
 package com.k4m.dx.tcontrol.cmmn.crypto;
 
+import static java.nio.charset.StandardCharsets.UTF_8;
+
 import java.security.NoSuchAlgorithmException;
 import java.security.SecureRandom;
+import java.security.spec.KeySpec;
 import java.util.UUID;
 
+import javax.crypto.Mac;
+import javax.crypto.SecretKey;
+import javax.crypto.SecretKeyFactory;
+import javax.crypto.spec.PBEKeySpec;
+import javax.crypto.spec.SecretKeySpec;
+
+import org.apache.commons.codec.binary.Base64;
 import org.joda.time.DateTime;
 
 import com.k4m.dx.tcontrol.cmmn.serviceproxy.SystemCode;
@@ -124,4 +134,43 @@ public class Generator {
 
 		return l;
 	}
+	
+	public static String generateKey(String password) throws Exception  {
+		//String password = "sOme*ShaREd*SecreT";
+		byte[] salt = new byte[32];
+		
+		SecureRandom random = SecureRandom.getInstance("SHA1PRNG");
+
+		synchronized (random) {
+			random.nextBytes(salt);
+		}
+
+		System.out.println("key : " + Base64.encodeBase64String(salt));
+		
+		Mac _hmacSha1;
+		_hmacSha1 = Mac.getInstance("HmacSHA1");
+		_hmacSha1.init(new SecretKeySpec(password.getBytes(UTF_8), "HmacSHA1"));
+		//SecretKeyFactory factory = SecretKeyFactory.getInstance("PBKDF2WithHmacSHA1");
+		//SecretKeyFactory factory = SecretKeyFactory.getInstance("HmacSHA1");
+		//KeySpec spec = new PBEKeySpec(password.toCharArray(), salt, 1024, 128);
+		//SecretKey key = factory.generateSecret(spec);
+		
+		//SecretKeySpec secret = new SecretKeySpec(key.getEncoded(), "AES");
+
+		//System.out.println("Key:" + Base64.encodeBase64(spec.));
+
+		
+		return toBase64String(_hmacSha1.doFinal(salt));
+	}
+	
+	/**
+     * @description byte 배열을 Base64로 인코딩한다.
+     */
+    public static String toBase64String(byte[] bytes){
+         
+        byte[] byteArray = Base64.encodeBase64(bytes);
+        return new String(byteArray);
+         
+    }
+
 }

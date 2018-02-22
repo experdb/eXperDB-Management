@@ -3,8 +3,12 @@ package com.k4m.dx.tcontrol.cmmn.crypto;
 import java.io.UnsupportedEncodingException;
 import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
+import java.security.SecureRandom;
+
 import javax.crypto.Mac;
 import javax.crypto.spec.SecretKeySpec;
+
+import org.apache.commons.codec.binary.Base64;
 
 import static java.nio.charset.StandardCharsets.UTF_8;
 
@@ -19,9 +23,19 @@ public class Rfc2898DeriveBytes {
     private int _bufferStartIndex = 0;
     private int _bufferEndIndex = 0;
     private int _block = 1;
+    
+    private byte[] salt;
 
 
-    /**
+    public byte[] getSalt() {
+		return salt;
+	}
+
+	public void setSalt(byte[] salt) {
+		this.salt = salt;
+	}
+
+	/**
      * Creates new instance.
      *
      * @param password   The password used to derive the key.
@@ -42,6 +56,35 @@ public class Rfc2898DeriveBytes {
         this._hmacSha1 = Mac.getInstance("HmacSHA1");
         this._hmacSha1.init(new SecretKeySpec(password, "HmacSHA1"));
     }
+    
+    public Rfc2898DeriveBytes(final byte[] password, final int saltSize, final int iterations) throws Exception {
+
+    	this.setSalt(randomSalt(saltSize));
+
+		
+        if (password == null) {
+            throw new InvalidKeyException("Password cannot be null.");
+        }
+        this._salt = this.getSalt();
+        this._iterationCount = iterations;
+        this._hmacSha1 = Mac.getInstance("HmacSHA1");
+        this._hmacSha1.init(new SecretKeySpec(password, "HmacSHA1"));
+    }
+    
+    private byte[] randomSalt(int saltSize) throws Exception {
+		byte[] salt = new byte[saltSize];
+		
+		SecureRandom random = SecureRandom.getInstance("SHA1PRNG");
+
+		synchronized (random) {
+			random.nextBytes(salt);
+		}
+		
+		System.out.println("key : " + Base64.encodeBase64String(salt));
+		
+		return salt;
+    }
+
 
     /**
      * Creates new instance.
@@ -71,7 +114,11 @@ public class Rfc2898DeriveBytes {
     }
 
 
-    /**
+    public Rfc2898DeriveBytes(String password, int mASTER_KEY_SIZE, int myIteration) throws Exception {
+    	this(password.getBytes(UTF_8), mASTER_KEY_SIZE, myIteration);
+	}
+
+	/**
      * Returns a pseudo-random key from a password, salt and iteration count.
      *
      * @param count Number of bytes to return.
