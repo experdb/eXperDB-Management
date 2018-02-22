@@ -115,6 +115,7 @@
     function fn_fix_rslt_reg(exe_sn){
     	document.getElementById("exe_sn").value = exe_sn;
     	$('#fix_rslt_msg').val('');
+    	$("#rdo_r_1").attr('checked', true);
     	toggleLayer($('#pop_layer_fix_rslt_reg'), 'on')
     }
     
@@ -190,7 +191,7 @@
 <%@include file="../../cmmn/workDumpInfo.jsp"%>
 <%@include file="../../cmmn/scheduleInfo.jsp"%>
 <%@include file="../../cmmn/wrkLog.jsp"%>
-
+<%@include file="../../cmmn/fixRsltMsg.jsp"%>
 
 
 	<div id="pop_layer_fix_rslt_reg" class="pop-layer">
@@ -203,10 +204,10 @@
 						<tr>
 							<td>
 								<div class="inp_rdo">
-									<input name="rdo" id="rdo_2_3" type="radio" value="TC002001"  checked="checked">
-										<label for="rdo_2_3" style="margin-right: 2%;"><spring:message code="etc.etc29"/></label> 
-									<input name="rdo" id="rdo_2_4" type="radio" value="TC002002"> 
-										<label for="rdo_2_4"><spring:message code="etc.etc30"/></label>
+									<input name="rdo_r" id="rdo_r_1" type="radio" value="TC002001"  checked="checked">
+										<label for="rdo_r_1" style="margin-right: 2%;"><spring:message code="etc.etc29"/></label> 
+									<input name="rdo_r" id="rdo_r_2" type="radio" value="TC002002"> 
+										<label for="rdo_r_2"><spring:message code="etc.etc30"/></label>
 								</div>
 							</td>
 						</tr>

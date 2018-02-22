@@ -403,6 +403,7 @@ function selectTab(intab){
 function fn_fix_rslt_reg(exe_sn){
 	document.getElementById("exe_sn_r").value = exe_sn;
 	$('#fix_rslt_msg_r').val('');
+	$("#rdo_r_1").attr('checked', true);
 	toggleLayer($('#pop_layer_fix_rslt_reg'), 'on')
 }
 
