@@ -74,7 +74,7 @@ public class LoginController {
 			if(usr_id==null){
 				mv.setViewName("login");
 			}else{
-				mv.setViewName("redirect:/index.do");
+				mv.setViewName("redirect:/experdb.do");
 			}		
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -158,7 +158,7 @@ public class LoginController {
 				historyVO.setExe_dtl_cd("DX-T0003");
 				accessHistoryService.insertHistory(historyVO);
 
-				mv.setViewName("redirect:/index.do");
+				mv.setViewName("redirect:/experdb.do");
 			}
 
 		} catch (Exception e) {

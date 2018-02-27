@@ -6,6 +6,7 @@
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags"%>
 
+<%@include file="cmmn/cs.jsp"%>
 
 <!-- contents -->
 <div id="contents" class="main">

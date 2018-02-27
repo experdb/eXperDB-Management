@@ -9,6 +9,7 @@
 <script type="text/javascript" src="/js/common.js"></script>
 
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+
 <title>eXperDB</title>
 </head>
 <style>

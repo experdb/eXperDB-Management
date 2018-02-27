@@ -4,6 +4,7 @@
 <%@ taglib prefix="ui" uri="http://egovframework.gov/ctl/ui"%>
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags"%>
 
+<%@include file="../../cmmn/cs.jsp"%>
     <script>
     function fn_validation(){
     	var arySrtDt = $('#from').val(); // ex) 시작일자(2007-10-09)

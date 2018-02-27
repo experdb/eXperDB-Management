@@ -25,12 +25,16 @@
    		<!-- default-target-url : 로그인 성송시 이동 주소 -->
    		<!-- authentication-failure-url : 로그인 실패인 경우 호울할 주소 지정 -->
 
-					
+		<headers>
+	        <frame-options policy="SAMEORIGIN"/>
+	    </headers>
 	
 		<custom-filter after="EXCEPTION_TRANSLATION_FILTER" ref="ajaxSessionTimeoutFilter"/>
 		
 		<csrf disabled="true"/>
 	</http>
+	
+
 
  	<beans:bean id="ajaxSessionTimeoutFilter" class="com.k4m.dx.tcontrol.cmmn.AjaxSessionCheckFilter" />
 

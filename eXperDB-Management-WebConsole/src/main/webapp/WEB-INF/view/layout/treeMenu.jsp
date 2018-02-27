@@ -30,6 +30,7 @@
 </style>
 
 <script type="text/javascript">
+var before = null;
 
 $(window.document).ready(   		
 		function() {	
@@ -205,38 +206,38 @@ $(window.document).ready(
  				if(aut.length != 0 && aut[index].bck_cng_aut_yn == "N" && aut[index].bck_hist_aut_yn == "N" && aut[index].bck_scdr_aut_yn == "N" && aut[index].acs_cntr_aut_yn == "N" && aut[index].policy_change_his_aut_yn == "N" && aut[index].adt_cng_aut_yn == "N" && aut[index].adt_hist_aut_yn == "N" ){	
  				}else{
  					html1+='<ul class="depth_1 lnbMenu">';
-					html1+='	<li><div class="border"  ><a href="/property.do?db_svr_id='+item.db_svr_id+'" onClick=javascript:fn_GoLink("#n");><img src="../images/ico_lnb_3.png" id="treeImg"><div class="tooltip">'+item.db_svr_nm+'<span class="tooltiptext">'+item.ipadr+'</span></div></a></div>';
+					html1+='	<li><div class="border"  ><a href="/property.do?db_svr_id='+item.db_svr_id+'" onClick=javascript:fn_GoLink("#n"); target="main"><img src="../images/ico_lnb_3.png" id="treeImg"><div class="tooltip">'+item.db_svr_nm+'<span class="tooltiptext">'+item.ipadr+'</span></div></a></div>';
 					html1+='		<ul class="depth_2">';
 					html1+='			<li class="ico2_1"><a href="#n"><img src="../images/ico_lnb_6.png" id="treeImg"><spring:message code="menu.backup_management"/></a>';
 					html1+='				<ul class="depth_3">';
 					if(aut.length != 0 && aut[index].bck_cng_aut_yn == "Y"){
-						html1+='					<li class="ico3_1"><a href=/backup/workList.do?db_svr_id='+item.db_svr_id+' onClick=javascript:fn_GoLink("/backup/workList.do?db_svr_id='+item.db_svr_id+'");><img src="../images/ico_lnb_10.png" id="treeImg"><spring:message code="menu.backup_settings"/></a></li>';
+						html1+='					<li class="ico3_1"><a href=/backup/workList.do?db_svr_id='+item.db_svr_id+' id="workList'+item.db_svr_id+'" onClick=javascript:fn_GoLink("workList'+item.db_svr_id+'"); target="main"><img src="../images/ico_lnb_10.png" id="treeImg"><spring:message code="menu.backup_settings"/></a></li>';
 					}
 					if(aut.length != 0 && aut[index].bck_hist_aut_yn == "Y"){
-						html1+='					<li class="ico3_2"><a href=/backup/workLogList.do?db_svr_id='+item.db_svr_id+' onClick=javascript:fn_GoLink("/backup/workLogList.do?db_svr_id='+item.db_svr_id+'");><img src="../images/ico_lnb_11.png" id="treeImg"><spring:message code="menu.backup_history"/></a></li>';
+						html1+='					<li class="ico3_2"><a href=/backup/workLogList.do?db_svr_id='+item.db_svr_id+' id="workLogList'+item.db_svr_id+'" onClick=javascript:fn_GoLink("workLogList'+item.db_svr_id+'"); target="main"><img src="../images/ico_lnb_11.png" id="treeImg"><spring:message code="menu.backup_history"/></a></li>';
 					}
 					if(aut.length != 0 && aut[index].bck_scdr_aut_yn == "Y"){
-					html1+='			<li class="ico2_2"><a href=/schedulerView.do?db_svr_id='+item.db_svr_id+' onClick=javascript:fn_GoLink("/schedulerView.do?db_svr_id='+item.db_svr_id+'");><img src="../images/ico_main_tit_1.png" id="treeImg"><spring:message code="menu.backup_scheduler"/></a>';
+					html1+='			<li class="ico2_2"><a href=/schedulerView.do?db_svr_id='+item.db_svr_id+' id="schedulerView'+item.db_svr_id+'" onClick=javascript:fn_GoLink("schedulerView'+item.db_svr_id+'"); target="main"><img src="../images/ico_main_tit_1.png" id="treeImg"><spring:message code="menu.backup_scheduler"/></a>';
 					}
 					html1+='				</ul>';
 					html1+='			</li>';
 					html1+='			<li class="ico2_2"><a href="#n"><img src="../images/ico_lnb_7.png" id="treeImg"><spring:message code="menu.access_control_management"/></a>';
 					html1+='				<ul class="depth_3">';
 					if(aut.length != 0 && aut[index].acs_cntr_aut_yn == "Y"){
-						html1+='					<li class="ico3_3"><a href=/accessControl.do?db_svr_id='+item.db_svr_id+' onClick=javascript:fn_GoLink("/accessControl.do?db_svr_id='+item.db_svr_id+'");><img src="../images/ico_lnb_12.png" id="treeImg"><spring:message code="menu.access_control" /></a></li>';
+						html1+='					<li class="ico3_3"><a href=/accessControl.do?db_svr_id='+item.db_svr_id+' id="accessControl'+item.db_svr_id+'" onClick=javascript:fn_GoLink("accessControl'+item.db_svr_id+'"); target="main"><img src="../images/ico_lnb_12.png" id="treeImg"><spring:message code="menu.access_control" /></a></li>';
 					}
 					if(aut.length != 0 && aut[index].policy_change_his_aut_yn == "Y"){
-					html1+='					<li class="ico3_3"><a href=/accessControlHistory.do?db_svr_id='+item.db_svr_id+' onClick=javascript:fn_GoLink("/accessControlHistory.do?db_svr_id='+item.db_svr_id+'");><img src="../images/ico_lnb_14.png" id="treeImg"><spring:message code="menu.policy_changes_history" /></a></li>';
+					html1+='					<li class="ico3_3"><a href=/accessControlHistory.do?db_svr_id='+item.db_svr_id+' id="accessControlHistory'+item.db_svr_id+'" onClick=javascript:fn_GoLink("accessControlHistory'+item.db_svr_id+'"); target="main"><img src="../images/ico_lnb_14.png" id="treeImg"><spring:message code="menu.policy_changes_history" /></a></li>';
 					}			
 					html1+='				</ul>';
 					html1+='			</li>';
 					html1+='			<li class="ico2_2"><a href="#n"><img src="../images/ico_lnb_7.png" id="treeImg"><spring:message code="menu.audit_management"/></a>';
 					html1+='				<ul class="depth_3">'
 					if(aut.length != 0 && aut[index].adt_cng_aut_yn == "Y"){
-						html1+='					<li class="ico3_4"><a href=/audit/auditManagement.do?db_svr_id='+item.db_svr_id+' onClick=javascript:fn_GoLink("/audit/auditManagement.do?db_svr_id='+item.db_svr_id+'");><img src="../images/ico_lnb_13.png" id="treeImg"><spring:message code="menu.audit_settings" /></a></li>';
+						html1+='					<li class="ico3_4"><a href=/audit/auditManagement.do?db_svr_id='+item.db_svr_id+' id="auditManagement'+item.db_svr_id+'" onClick=javascript:fn_GoLink("auditManagement'+item.db_svr_id+'"); target="main"><img src="../images/ico_lnb_13.png" id="treeImg"><spring:message code="menu.audit_settings" /></a></li>';
 					}
 					if(aut.length != 0 && aut[index].adt_hist_aut_yn == "Y"){
-						html1+='					<li class="ico3_5"><a href=/audit/auditLogList.do?db_svr_id='+item.db_svr_id+' onClick=javascript:fn_GoLink("/audit/auditLogList.do?db_svr_id='+item.db_svr_id+'");><img src="../images/ico_lnb_14.png" id="treeImg"><spring:message code="menu.audit_history" /></a></li>';
+						html1+='					<li class="ico3_5"><a href=/audit/auditLogList.do?db_svr_id='+item.db_svr_id+' id="auditLogList'+item.db_svr_id+'" onClick=javascript:fn_GoLink("auditLogList'+item.db_svr_id+'"); target="main"><img src="../images/ico_lnb_14.png" id="treeImg"><spring:message code="menu.audit_history" /></a></li>';
 					}
 					html1+='				</ul>';
 					html1+='			</li>';
@@ -262,8 +263,8 @@ $(window.document).ready(
 	          $(data).each(function (index, item) {
 	          html += '      <ul class="depth_1 lnbMenu"><li class="t2"><div class="border" ><a href="#n"><img src="../images/ico_lnb_5.png" id="treeImg"><div class="tooltip">'+item.cnr_nm+'<span class="tooltiptext">'+item.cnr_nm+'</span></div></a></div>';
 	          html += '         <ul class="depth_2">';
-	          html += '              <li class="ico2_3"><a href="/transferTarget.do?cnr_id='+item.cnr_id+'&&cnr_nm='+item.cnr_nm+'" onClick=javascript:fn_GoLink("/transferTarget.do?cnr_id='+item.cnr_id+'&&cnr_nm='+item.cnr_nm+'");><img src="../images/ico_lnb_8.png" id="treeImg"><spring:message code="menu.connector_settings" /></a></li>';
-	          html += '            <li class="ico2_4"><a href="/transferDetail.do?cnr_id='+item.cnr_id+'&&cnr_nm='+item.cnr_nm+'" onClick=javascript:fn_GoLink("/transferDetail.do?cnr_id='+item.cnr_id+'&&cnr_nm='+item.cnr_nm+'");><img src="../images/ico_lnb_9.png" id="treeImg"><spring:message code="menu.connector_run_stop" /></a></li>';
+	          html += '              <li class="ico2_3"><a href="/transferTarget.do?cnr_id='+item.cnr_id+'&&cnr_nm='+item.cnr_nm+'" id="transferTarget'+item.cnr_id+'" onClick=javascript:fn_GoLink("transferTarget'+item.cnr_id+'"); target="main"><img src="../images/ico_lnb_8.png" id="treeImg"><spring:message code="menu.connector_settings" /></a></li>';
+	          html += '            <li class="ico2_4"><a href="/transferDetail.do?cnr_id='+item.cnr_id+'&&cnr_nm='+item.cnr_nm+'" id="transferDetail'+item.cnr_id+'" onClick=javascript:fn_GoLink("transferDetail'+item.cnr_id+'"); target="main"><img src="../images/ico_lnb_9.png" id="treeImg"><spring:message code="menu.connector_run_stop" /></a></li>';
 	          html += '         </ul></li></ul>';   
 	          })      
 	          html += '</ul>';
@@ -275,15 +276,15 @@ $(window.document).ready(
 	    	  var html3="";
 	    	  for(var i=0; i<aut.length; i++){ 	  
 		          if(aut.length != 0 && aut[i].read_aut_yn == "Y" && aut[i].mnu_cd == "MN000101"){	      
-	    	  	 html3 += '      <ul class="depth_1 lnbMenu"><li class="ico2_2"><a href="/insertScheduleView.do" onClick=javascript:fn_GoLink("/insertScheduleView.do");><img src="../images/ico_lnb_13.png" id="treeImg"><spring:message code="menu.schedule_registration" /></a></li></ul>';
+	    	  	 html3 += '      <ul class="depth_1 lnbMenu"><li class="ico2_2"><a href="/insertScheduleView.do" id="insertScheduleView" onClick=javascript:fn_GoLink("insertScheduleView"); target="main" ><img src="../images/ico_lnb_13.png" id="treeImg"><spring:message code="menu.schedule_registration" /></a></li></ul>';
 		          }
 		          
 		         if(aut.length != 0 && aut[i].read_aut_yn == "Y" && aut[i].mnu_cd == "MN000102"){
-		        	 html3 += '         <ul class="depth_1 lnbMenu"><li class="ico2_2"><a href="/selectScheduleListView.do" onClick=javascript:fn_GoLink("/selectScheduleListView.do");><img src="../images/ico_lnb_11.png" id="treeImg"><spring:message code="etc.etc27"/></a></li></ul>';
+		        	 html3 += '         <ul class="depth_1 lnbMenu"><li class="ico2_2"><a href="/selectScheduleListView.do" id="selectScheduleListView" onClick=javascript:fn_GoLink("selectScheduleListView"); target="main"><img src="../images/ico_lnb_11.png" id="treeImg"><spring:message code="etc.etc27"/></a></li></ul>';
 		          }
 		         
 		         if(aut.length != 0 && aut[i].read_aut_yn == "Y" && aut[i].mnu_cd == "MN000103"){
-	    	 		 html3 += '         <ul class="depth_1 lnbMenu"><li class="ico2_2"><a href="/selectScheduleHistoryView.do" onClick=javascript:fn_GoLink("/selectScheduleHistoryView.do");><img src="../images/ico_lnb_14.png" id="treeImg"><spring:message code="menu.shedule_execution_history" /></a></li></ul>';
+	    	 		 html3 += '         <ul class="depth_1 lnbMenu"><li class="ico2_2"><a href="/selectScheduleHistoryView.do" id="selectScheduleHistoryView" onClick=javascript:fn_GoLink("selectScheduleHistoryView"); target="main"><img src="../images/ico_lnb_14.png" id="treeImg"><spring:message code="menu.shedule_execution_history" /></a></li></ul>';
 		          }
 		      }
 
@@ -298,7 +299,20 @@ $(window.document).ready(
 	
 	
  	function fn_GoLink(url) {	
- 		$.cookie('menu_url' , url, { path : '/' });
+ 		
+ 		if(before != null){
+ 	 		$("#"+before).css("background-color","");
+ 	 		$("#"+before).css("color","");
+ 	 		$("#"+before).css("padding","");
+ 			$("#"+before).css("border","");	
+ 		}
+		
+ 		before = url;
+ 		
+ 		$("#"+url).css("background-color","#f58220");
+ 		$("#"+url).css("color","white");
+ 		$("#"+url).css("padding","3px");
+		$("#"+url).css("border","2px solid #f58220");
  	}
  	
  	function fn_localeSetting(){
@@ -388,8 +402,8 @@ $(window.document).ready(
 									<a href="#n"><img src="../images/ico_lnb_5.png" id="treeImg"><div class="tooltip">정책관리/키관리<span class="tooltiptext">정책관리/키관리</span></div></a>
 									</div>
 					    				<ul class="depth_2">
-						   				    <li class="ico2_3"><a href="/securityPolicy.do" onclick="fn_GoLink('/securityPolicy.do')"><img src="../images/ico_lnb_8.png" id="treeImg">보안정책관리</a></li>
-						    			   	<li class="ico2_3"><a href="/keyManage.do" onclick="fn_GoLink('/keyManage.do')"><img src="../images/ico_lnb_8.png" id="treeImg">암호화키관리</a></li>
+						   				    <li class="ico2_3"><a href="/securityPolicy.do" id="securityPolicy" onclick="fn_GoLink('securityPolicy')" target="main"><img src="../images/ico_lnb_8.png" id="treeImg">보안정책관리</a></li>
+						    			   	<li class="ico2_3"><a href="/keyManage.do" id="keyManage" onclick="fn_GoLink('keyManage')" target="main"><img src="../images/ico_lnb_8.png" id="treeImg">암호화키관리</a></li>
 					   				  	</ul>
 				   				  	</li>				   				  					   				 
 				   					  	
@@ -397,11 +411,11 @@ $(window.document).ready(
 									<a href="#n"><img src="../images/ico_lnb_5.png" id="treeImg"><div class="tooltip">감사로그<span class="tooltiptext">감사로그</span></div></a>
 									</div>
 					    				<ul class="depth_2">
-						    			    <li class="ico2_3"><a href="/encodeDecodeAuditLog.do" onclick="fn_GoLink('/encodeDecodeAuditLog.do')"><img src="../images/ico_lnb_8.png" id="treeImg">암복호화</a></li>
-						     			   	<li class="ico2_4"><a href="/managementServerAuditLog.do" onclick="fn_GoLink('/managementServerAuditLog.do')"><img src="../images/ico_lnb_9.png" id="treeImg">관리서버</a></li>
-						     			   	<li class="ico2_4"><a href="/encodeDecodeKeyAuditLog.do" onclick="fn_GoLink('/encodeDecodeKeyAuditLog.do')"><img src="../images/ico_lnb_9.png" id="treeImg">암복호화키</a></li>
-						     			   	<li class="ico2_4"><a href="/backupRestoreAuditLog.do" onclick="fn_GoLink('/backupRestoreAuditLog.do')"><img src="../images/ico_lnb_9.png" id="treeImg">백업및복원</a></li>
-						     			   	<li class="ico2_4"><a href="/resourcesUseAuditLog.do" onclick="fn_GoLink('/resourcesUseAuditLog.do')"><img src="../images/ico_lnb_9.png" id="treeImg">자원사용</a></li>
+						    			    <li class="ico2_3"><a href="/encodeDecodeAuditLog.do"  id="encodeDecodeAuditLog" onclick="fn_GoLink('encodeDecodeAuditLog')" target="main"><img src="../images/ico_lnb_8.png" id="treeImg">암복호화</a></li>
+						     			   	<li class="ico2_4"><a href="/managementServerAuditLog.do" id="managementServerAuditLog" onclick="fn_GoLink('managementServerAuditLog')" target="main"><img src="../images/ico_lnb_9.png" id="treeImg">관리서버</a></li>
+						     			   	<li class="ico2_4"><a href="/encodeDecodeKeyAuditLog.do" id="encodeDecodeKeyAuditLog" onclick="fn_GoLink('encodeDecodeKeyAuditLog')" target="main"><img src="../images/ico_lnb_9.png" id="treeImg">암복호화키</a></li>
+						     			   	<li class="ico2_4"><a href="/backupRestoreAuditLog.do" id="backupRestoreAuditLog" onclick="fn_GoLink('backupRestoreAuditLog')" target="main"><img src="../images/ico_lnb_9.png" id="treeImg">백업및복원</a></li>
+						     			   	<li class="ico2_4"><a href="/resourcesUseAuditLog.do" id="resourcesUseAuditLog" onclick="fn_GoLink('resourcesUseAuditLog')" target="main"><img src="../images/ico_lnb_9.png" id="treeImg">자원사용</a></li>
 					   				  	</ul>
 				   				  	</li>
 				   					  	
@@ -409,8 +423,8 @@ $(window.document).ready(
 									<a href="#n"><img src="../images/ico_lnb_5.png" id="treeImg"><div class="tooltip">설정<span class="tooltiptext">설정</span></div></a>
 									</div>
 					    				<ul class="depth_2">
-						    			    <li class="ico2_3"><a href="/securityPolicyOptionSet.do" onclick="fn_GoLink('/securityPolicyOptionSet.do')"><img src="../images/ico_lnb_8.png" id="treeImg">보안정책옵션설정</a></li>
-						     			   	<li class="ico2_4"><a href="/securitySet.do" onclick="fn_GoLink('/securitySet.do')"><img src="../images/ico_lnb_9.png" id="treeImg">암호화설정</a></li>
+						    			    <li class="ico2_3"><a href="/securityPolicyOptionSet.do" id="securityPolicyOptionSet" onclick="fn_GoLink('securityPolicyOptionSet')" target="main"><img src="../images/ico_lnb_8.png" id="treeImg">보안정책옵션설정</a></li>
+						     			   	<li class="ico2_4"><a href="/securitySet.do" id="securitySet" onclick="fn_GoLink('securitySet')" target="main"><img src="../images/ico_lnb_9.png" id="treeImg">암호화설정</a></li>
 					   				  	</ul>
 				   				  	</li>
 			   				 	</ul> 
@@ -419,7 +433,7 @@ $(window.document).ready(
 					</div>
 				</div>
 
-				<div id="treeTitle"><img src="../images/ico_main_tit_1.png" id="treeImg"><a href="/selectScheduleListView.do"><spring:message code="menu.schedule" /></a></div>	
+				<div id="treeTitle"><img src="../images/ico_main_tit_1.png" id="treeImg"><a href="/selectScheduleListView.do" target="main"><spring:message code="menu.schedule" /></a></div>	
 				<div id="sidetree1">						
 						<div class="treeborder">
 						<ul id="tree">

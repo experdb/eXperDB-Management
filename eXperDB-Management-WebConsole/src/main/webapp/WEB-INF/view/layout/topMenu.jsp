@@ -210,7 +210,7 @@ function fn_cookie(url) {
 </script>
 <%@include file="../help/aboutExperdbLayer.jsp"%>
 <div id="header">
-			<h1 class="logo"><a href="/index.do" onClick="fn_cookie(null)"><img src="/images/ico_logo_2.png" alt="eXperDB" /></a></h1>
+			<h1 class="logo"><a href="/experdb.do" onClick="fn_cookie(null)"><img src="/images/ico_logo_2.png" alt="eXperDB" /></a></h1>
 			<div id="gnb_menu">
 				<h2 class="blind"><spring:message code="etc.etc10"/></h2>
 				<ul class="depth_1" id="gnb">
@@ -218,15 +218,15 @@ function fn_cookie(url) {
 						<ul class="depth_2">
 							<li><a href="#n" id="MN0001"><spring:message code="menu.schedule_information" /></a>
 								<ul class="depth_3">
-									<li><a href="/insertScheduleView.do" onClick="fn_cookie(null)" id="MN000101"><spring:message code="menu.schedule_registration" /></a></li>
-									<li><a href="/selectScheduleListView.do" onClick="fn_cookie(null)" id="MN000102"><spring:message code="etc.etc27"/></a></li>
-									<li><a href="/selectScheduleHistoryView.do" onClick="fn_cookie(null)" id="MN000103"><spring:message code="menu.shedule_execution_history" /></a></li>
+									<li><a href="/insertScheduleView.do" onClick="fn_cookie(null)" id="MN000101" target="main"><spring:message code="menu.schedule_registration" /></a></li>
+									<li><a href="/selectScheduleListView.do" onClick="fn_cookie(null)" id="MN000102" target="main"><spring:message code="etc.etc27"/></a></li>
+									<li><a href="/selectScheduleHistoryView.do" onClick="fn_cookie(null)" id="MN000103" target="main"><spring:message code="menu.shedule_execution_history" /></a></li>
 								</ul>
 							</li>
 							<li><a href="#n" id="MN0002"><spring:message code="menu.data_transfer_information" /></a>
 								<ul class="depth_3">
-									<li><a href="/transferSetting.do" onClick="fn_cookie(null)" id="MN000201"><spring:message code="menu.transfer_server_settings" /></a></li>
-									<li><a href="/connectorRegister.do" onClick="fn_cookie(null)" id="MN000202"><spring:message code="menu.connector_management" /></a></li>
+									<li><a href="/transferSetting.do" onClick="fn_cookie(null)" id="MN000201" target="main"><spring:message code="menu.transfer_server_settings" /></a></li>
+									<li><a href="/connectorRegister.do" onClick="fn_cookie(null)" id="MN000202" target="main"><spring:message code="menu.connector_management" /></a></li>
 								</ul>
 							</li>
 						</ul>
@@ -235,31 +235,31 @@ function fn_cookie(url) {
 						<ul class="depth_2">
 							<li><a href="#n" id="MN0003"><spring:message code="menu.dbms_information" /></a>
 								<ul class="depth_3">
-									<li><a href="/dbTree.do" onClick="fn_cookie(null)" id="MN000301"><spring:message code="menu.dbms_registration" /></a></li>
-									<li><a href="/dbServer.do" onClick="fn_cookie(null)" id="MN000302"><spring:message code="menu.dbms_management" /></a></li>
-									<li><a href="/database.do" onClick="fn_cookie(null)" id="MN000303"><spring:message code="menu.database_management" /></a></li>
+									<li><a href="/dbTree.do" onClick="fn_cookie(null)" id="MN000301" target="main"><spring:message code="menu.dbms_registration" /></a></li>
+									<li><a href="/dbServer.do" onClick="fn_cookie(null)" id="MN000302" target="main"><spring:message code="menu.dbms_management" /></a></li>
+									<li><a href="/database.do" onClick="fn_cookie(null)" id="MN000303" target="main"><spring:message code="menu.database_management" /></a></li>
 								</ul>
 							</li>				
-						    <li><a href="/userManager.do" onClick="fn_cookie(null)" id="MN0004"><spring:message code="menu.user_management" /></a></li>
+						    <li><a href="/userManager.do" onClick="fn_cookie(null)" id="MN0004" target="main"><spring:message code="menu.user_management" /></a></li>
 							<li><a href="#n" id="MN0005"><spring:message code="menu.auth_management" /></a>
 					        	<ul class="depth_3">
-									<li><a href="/menuAuthority.do" onClick="fn_cookie(null)" id="MN000501"><spring:message code="menu.menu_auth_management" /></a></li>
-									<li><a href="/dbServerAuthority.do" onClick="fn_cookie(null)" id="MN000502"><spring:message code="menu.server_auth_management" /></a></li>
-									<li><a href="/dbAuthority.do" onClick="fn_cookie(null)" id="MN000503"><spring:message code="menu.database_auth_management" /></a></li>									
+									<li><a href="/menuAuthority.do" onClick="fn_cookie(null)" id="MN000501" target="main"><spring:message code="menu.menu_auth_management" /></a></li>
+									<li><a href="/dbServerAuthority.do" onClick="fn_cookie(null)" id="MN000502" target="main"><spring:message code="menu.server_auth_management" /></a></li>
+									<li><a href="/dbAuthority.do" onClick="fn_cookie(null)" id="MN000503" target="main"><spring:message code="menu.database_auth_management" /></a></li>									
 								</ul>
 					        </li>	        					        
 					        <li><a href="#n" id="MN0006"><spring:message code="menu.history_management" /></a>
 					        	<ul class="depth_3">
-									<li><a href="/accessHistory.do" onClick="fn_cookie(null)" id="MN000601"><spring:message code="menu.screen_access_history" /></a></li>
+									<li><a href="/accessHistory.do" onClick="fn_cookie(null)" id="MN000601" target="main"><spring:message code="menu.screen_access_history" /></a></li>
 								</ul>
 					        </li>
 					        <li><a href="#n" id="MN0007"><spring:message code="menu.monitoring"/></a>
 					        	<ul class="depth_3">
-									<li><a href="/agentMonitoring.do" onClick="fn_cookie(null)" id="MN000701"><spring:message code="menu.agent_monitoring"/></a></li>
-									<li><a href="/encriptAgentMonitoring.do" onClick="fn_cookie(null)" id="MN000702">암호화 에이전트</a></li>
+									<li><a href="/agentMonitoring.do" onClick="fn_cookie(null)" id="MN000701" target="main"><spring:message code="menu.agent_monitoring"/></a></li>
+									<li><a href="/encriptAgentMonitoring.do" onClick="fn_cookie(null)" id="MN000702" target="main">암호화 에이전트</a></li>
 								</ul>
 					        </li>
-							<li><a href="/extensionList.do" onClick="fn_cookie(null)" id="MN0008"><spring:message code="menu.extension_pack_installation_information"/></a></li>
+							<li><a href="/extensionList.do" onClick="fn_cookie(null)" id="MN0008" target="main"><spring:message code="menu.extension_pack_installation_information"/></a></li>
 						</ul>
 					</li>
 					
@@ -267,23 +267,23 @@ function fn_cookie(url) {
 						<ul class="depth_2">
 						    <li><a href="#n">정책관리/키관리</a>
         						<ul class="depth_3">
-									<li><a href="/securityPolicy.do">보안정책관리</a></li>
-									<li><a href="/keyManage.do">암호화키관리</a></li>
+									<li><a href="/securityPolicy.do" target="main">보안정책관리</a></li>
+									<li><a href="/keyManage.do" target="main">암호화키관리</a></li>
 								</ul>
         					</li>
 						    <li><a href="#n">감사로그</a>
         						<ul class="depth_3">
-									<li><a href="/encodeDecodeAuditLog.do">암복호화</a></li>
-									<li><a href="/managementServerAuditLog.do">관리서버</a></li>
-									<li><a href="/encodeDecodeKeyAuditLog.do">암복호화키</a></li>
-									<li><a href="/backupRestoreAuditLog.do">백업및복원</a></li>
-									<li><a href="/resourcesUseAuditLog.do">자원사용</a></li>
+									<li><a href="/encodeDecodeAuditLog.do" target="main">암복호화</a></li>
+									<li><a href="/managementServerAuditLog.do" target="main">관리서버</a></li>
+									<li><a href="/encodeDecodeKeyAuditLog.do" target="main">암복호화키</a></li>
+									<li><a href="/backupRestoreAuditLog.do" target="main">백업및복원</a></li>
+									<li><a href="/resourcesUseAuditLog.do" target="main">자원사용</a></li>
 								</ul>
         					</li>
 							<li><a href="#n">설정</a>
         						<ul class="depth_3">
-									<li><a href="/securityPolicyOptionSet.do">보안정책옵션설정</a></li>
-									<li><a href="/securitySet.do">암호화설정</a></li>
+									<li><a href="/securityPolicyOptionSet.do" target="main">보안정책옵션설정</a></li>
+									<li><a href="/securitySet.do" target="main">암호화설정</a></li>
 								</ul>
         					</li>
 						</ul>
@@ -298,14 +298,14 @@ function fn_cookie(url) {
 									<li><a href="#n" onClick="fn_localeSet('en')">English</a></li>
 								</ul>
         					</li>
-							<li><a href="/myPage.do" onClick="fn_cookie(null)"><spring:message code="menu.user_information_management"/></a></li>
-        					<li><a href="/myScheduleListView.do" onClick="fn_cookie(null)"><spring:message code="menu.my_schedule_management"/></a></li>
+							<li><a href="/myPage.do" onClick="fn_cookie(null)" target="main"><spring:message code="menu.user_information_management"/></a></li>
+        					<li><a href="/myScheduleListView.do" onClick="fn_cookie(null)" target="main"><spring:message code="menu.my_schedule_management"/></a></li>
 						</ul>
 					</li>
 					<li><a href="#n"><span><img src="/images/ico_h_8.png" alt="HELP" /></span></a>
 						<ul class="depth_2">
-							<li><a href="#n" onClick="fn_cookie(null)">Online Help</a></li>
-							<li><a href="#n" onClick="fn_aboutExperdb()">About eXperDB</a></li>
+							<!-- <li><a href="#n" onClick="fn_cookie(null)" target="main">Online Help</a></li> -->
+							<li><a href="#n" onClick="fn_aboutExperdb()" >About eXperDB</a></li>
 						</ul>
 					</li>
 				</ul>

@@ -10,7 +10,11 @@
 		<put-attribute name="contents" value="" />
 	</definition>
 
- 	<definition name="view/*" extends="default">
+	<definition name="experdb/*" extends="default">
+		<put-attribute name="contents" value="/WEB-INF/view/experdb/body.jsp" />
+	</definition>
+	
+ 	<!-- <definition name="view/*" extends="default">
 		<put-attribute name="contents" value="/WEB-INF/view/index.jsp" />
 	</definition> 
 	<definition name="error/*" extends="default">
@@ -84,5 +88,5 @@
 	</definition>
 	<definition name="encript/auditLog/*" extends="default">
 		<put-attribute name="contents" value="/WEB-INF/view/encript/auditLog/{1}.jsp" />
-	</definition>
+	</definition> -->
 </tiles-definitions>

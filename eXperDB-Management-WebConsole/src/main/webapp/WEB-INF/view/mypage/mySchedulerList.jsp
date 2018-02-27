@@ -5,6 +5,9 @@
 <%@ taglib prefix="ui" uri="http://egovframework.gov/ctl/ui"%>
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags"%>
     
+ <%@include file="../cmmn/cs.jsp"%>
+    
+    
 <script>
 var table = null;
 

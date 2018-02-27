@@ -2,6 +2,7 @@
 	pageEncoding="UTF-8"%>
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags"%>
 
+<%@include file="../../cmmn/cs.jsp"%>
 <%
 	/**
 	* @Class Name : dbServer.jsp

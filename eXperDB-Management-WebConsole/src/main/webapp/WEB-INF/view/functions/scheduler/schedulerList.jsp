@@ -3,6 +3,9 @@
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form"%>
 <%@ taglib prefix="ui" uri="http://egovframework.gov/ctl/ui"%>
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags"%>
+
+<%@include file="../../cmmn/cs.jsp"%>
+
 <%
 	String usr_id = (String)session.getAttribute("usr_id");
 %>

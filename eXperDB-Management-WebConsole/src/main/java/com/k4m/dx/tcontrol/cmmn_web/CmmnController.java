@@ -70,12 +70,24 @@ public class CmmnController {
 	@Autowired
 	private ScheduleService scheduleService;
 	
+	
 	/**
 	 * 메인(홈)을 보여준다.
 	 * @return ModelAndView mv
 	 */	
-	@RequestMapping(value = "/index.do")
-	public ModelAndView index(@ModelAttribute("historyVO") HistoryVO historyVO, HttpServletRequest request, ModelMap model) throws Exception {
+	@RequestMapping(value = "/experdb.do")
+	public ModelAndView experdb(@ModelAttribute("historyVO") HistoryVO historyVO, HttpServletRequest request, ModelMap model) throws Exception {
+		ModelAndView mv = new ModelAndView();
+		mv.setViewName("experdb/body");
+		return mv;	
+	}
+	
+	/**
+	 * 데시보드화면을 보여준다.
+	 * @return ModelAndView mv
+	 */	
+	@RequestMapping(value = "/dashboard.do")
+	public ModelAndView dashboard(@ModelAttribute("historyVO") HistoryVO historyVO, HttpServletRequest request, ModelMap model) throws Exception {
 	
 		// 메인 이력 남기기
 		CmmnUtils.saveHistory(request, historyVO);
@@ -107,7 +119,7 @@ public class CmmnController {
 		mv.addObject("serverInfo", serverInfoVO);
 		mv.addObject("transferInfo", transferInfoVO);
 		
-		mv.setViewName("view/index");
+		mv.setViewName("dashboard");
 		return mv;	
 	}
 	
