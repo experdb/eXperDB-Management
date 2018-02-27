@@ -50,13 +50,13 @@ public class ServiceCallTest {
 		String entityId = "";
 		String password = "";
 		
-		//loginId = "admin";
-		//password = "password";
-		//entityId = "00000000-0000-0000-0000-000000000001";
+		loginId = "admin";
+		password = "password";
+		entityId = "00000000-0000-0000-0000-000000000001";
 		
-		loginId = "testuser";
-		password = "1234qwer";
-		entityId = "d06c0acb-ca3a-4324-83ed-71df370acdb3";
+		//loginId = "testuser";
+		//password = "1234qwer";
+		//entityId = "d06c0acb-ca3a-4324-83ed-71df370acdb3";
 
 		
 		String strTocken = "2VTwBYK1RG7XSnj1uOvs2s+KMhGUH+T+RjBOAP7XVdQ=";

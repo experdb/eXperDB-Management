@@ -214,4 +214,24 @@ public class EncriptSettingController {
 		}
 		return result;
 	}	
+	
+	
+	/**
+	 * 서버키설정 화면을 보여준다.
+	 * 
+	 * @param historyVO
+	 * @param request
+	 * @return ModelAndView mv
+	 * @throws Exception
+	 */
+	@RequestMapping(value = "/serverKeySet.do")
+	public ModelAndView serverKeySet(HttpServletRequest request, ModelMap model) {
+		ModelAndView mv = new ModelAndView();
+		try {		
+			mv.setViewName("encript/setting/serverKeySet");
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return mv;
+	}
 }
