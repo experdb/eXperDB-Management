@@ -35,8 +35,8 @@ public class EncryptAgentMonitoringController {
 	 * @return ModelAndView mv
 	 * @throws Exception
 	 */
-	@RequestMapping(value = "/encriptAgentMonitoring.do")
-	public ModelAndView encriptAgentMonitoring(HttpServletRequest request, ModelMap model) {
+	@RequestMapping(value = "/encryptAgentMonitoring.do")
+	public ModelAndView encryptAgentMonitoring(HttpServletRequest request, ModelMap model) {
 		ModelAndView mv = new ModelAndView();
 		try {
 			mv.setViewName("encrypt/agentMonitoring/agentMonitoring");

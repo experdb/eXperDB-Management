@@ -35,7 +35,7 @@ public class KeyManageController {
 	
 	String restIp = "127.0.0.1";
 	int restPort = 8443;
-	String strTocken = "uq1b/dgOIzpzH+EAD9UOl5Iz26soa1H+hdbmD38noqs=";
+	String strTocken = "5gFEpOxJfMkKLmv52/GnlMzNqVbVawchb9ebJMD9rh0=";
 	
 
 	@Autowired

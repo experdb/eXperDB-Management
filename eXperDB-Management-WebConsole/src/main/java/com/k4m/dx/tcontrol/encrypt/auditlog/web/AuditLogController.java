@@ -23,7 +23,7 @@ public class AuditLogController {
 
 	String restIp = "127.0.0.1";
 	int restPort = 8443;
-	String strTocken = "KZmd1G6gQalj+i9Vypb+EarAwtlNge2yQ9EcgW4xR/U=";
+	String strTocken = "5gFEpOxJfMkKLmv52/GnlMzNqVbVawchb9ebJMD9rh0=";
 	
 	/**
 	 * 암복호화 감사로그 화면을 보여준다
