@@ -573,7 +573,7 @@ body.bg{background:#fff url(../images/login_bg.png) center center no-repeat;}
 
 #wrap{}
 #container{position:relative;height:calc(100% - 77px);padding-left:200px;}
-#container:before{content:"";display:block;position:absolute;top:0;left:0;width:235px;height:100%;background:#373737;z-index:-1;}
+#container:before{content:"";display:block;position:absolute;top:0;left:0;width:233px;height:100%;background:#373737;z-index:1;}
 #container:after{content:"";display:block;clear:both;}
 
 #contents{float:left;width:98%;margin-top:77px;margin-left:45px;display:block;min-width:1020px;padding:30px;}
