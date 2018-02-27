@@ -447,6 +447,8 @@ table.write tr td input.txt.t7,
 table.write tr td select.select.t7{width:70px;}
 table.write tr td input.txt.t8,
 table.write tr td select.select.t8{width:90px;}
+table.write tr td input.txt.t9,
+table.write tr td select.select.t9{width:650px;}
 table.write tr td.type2{padding:8px 0 8px 46px;}
 table.write tr:first-child td.type2{padding:0 0 8px 46px;}
 table.write tr td.type2 input.txt{width:247px;}
