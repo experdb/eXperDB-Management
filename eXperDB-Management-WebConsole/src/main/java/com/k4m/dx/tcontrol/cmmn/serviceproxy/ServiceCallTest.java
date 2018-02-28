@@ -2520,10 +2520,23 @@ public class ServiceCallTest {
 		
 		String loadStr = "{\"mas\":\"ScfypwlI+yt1j4XxuMPEKYeLj3BTLoEoBmy5vC3wWGl+M/a0/WK39s/8BudpUXNU\",\"ter\":\"5Os7QRcWTNBCprpra2/Xkg==\",\"key\":\"pQcdT8XmWoOIZQyELMR8A1nZ6jr72Kq/kD93799x1UE=\"}";
 		//복호화
-		String encText = aes.GetMasterStr("1234qwer", loadStr);
+		try {
+		String encText = aes.GetMasterStr("1234qwerdd", loadStr);
 		System.out.println(encText);
+		} catch(Exception e) {
+			//화면에 alert 메시지
+			System.out.println("message : " + "마스터키 파일을 읽을 수 없거나 비밀번호가 틀렸습니다");
+		}
 		
-
+	
+	}
+	
+	/**
+	 * 서버 마스터 키 암호 저장
+	 * @throws Exception
+	 */
+	private void serverMasterKey_save() throws Exception {
+		
 	}
 	
 	private void encTest() throws Exception {
