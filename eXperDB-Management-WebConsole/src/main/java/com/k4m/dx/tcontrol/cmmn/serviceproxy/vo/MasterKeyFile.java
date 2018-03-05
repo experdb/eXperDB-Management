@@ -1,6 +1,6 @@
 package com.k4m.dx.tcontrol.cmmn.serviceproxy.vo;
 
-public class MasterKeyFile {
+public class MasterKeyFile extends AbstractPageModel {
 	private String mas;
 	private String ter;
 	private String key;

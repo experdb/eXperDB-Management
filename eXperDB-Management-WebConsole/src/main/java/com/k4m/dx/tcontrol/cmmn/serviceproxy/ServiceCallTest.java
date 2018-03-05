@@ -59,7 +59,7 @@ public class ServiceCallTest {
 		entityId = "d06c0acb-ca3a-4324-83ed-71df370acdb3";
 
 		
-		String strTocken = "2VTwBYK1RG7XSnj1uOvs2s+KMhGUH+T+RjBOAP7XVdQ=";
+		String strTocken = "uPhC37DZG6ju4b0s9cebC4bgJ3krAtA7YS660wjhLsw=";
 
 		ServiceCallTest test = new ServiceCallTest();
 	
@@ -67,6 +67,8 @@ public class ServiceCallTest {
 		
 		//마스터키 로드
 		//test.loadServerKey(restIp, restPort, strTocken, loginId, entityId);
+		
+		test.encTest();
 		
 		//서버상태
 		//test.selectServerStatus(restIp, restPort, strTocken, loginId, entityId);
@@ -111,7 +113,7 @@ public class ServiceCallTest {
 		//test.selectProfileList(restIp, restPort, strTocken, loginId, entityId);
 		
 		//보안정책 > 보안정책 상세
-		test.selectProfileProtectionContents(restIp, restPort, strTocken, loginId, entityId);
+		//test.selectProfileProtectionContents(restIp, restPort, strTocken, loginId, entityId);
 		
 		//암호화키 > 암호화키리스트
 		//test.selectCryptoKeyList(restIp, restPort, strTocken, loginId, entityId);
@@ -1026,6 +1028,7 @@ public class ServiceCallTest {
 		String strCommand = SystemCode.ServiceCommand.LOADSERVERKEY;
 		
 		String oldPassword = "password";
+		oldPassword = "marm13+irhFlLcINs7nlIQhKacF88OUybxqcXwRAptg=";
 
 		AdminServerPasswordRequest adminServerPasswordRequest = new AdminServerPasswordRequest();
 		adminServerPasswordRequest.setOldPassword(oldPassword);
@@ -2547,6 +2550,10 @@ public class ServiceCallTest {
 		System.out.println(m.getMas());
 		System.out.println(m.getTer());
 		System.out.println(m.getKey());
+		
+		System.out.println(m.toJSONString());
+		
+		
 		
 	}
 	

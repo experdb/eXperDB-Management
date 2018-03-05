@@ -74,7 +74,7 @@ public class AESCrypt {
 		
 		Rfc2898DeriveBytes key = new Rfc2898DeriveBytes(password, MASTER_KEY_SIZE, myIteration);
 		
-		System.out.println("key : " + Base64.encodeBase64String(key.getSalt()));
+		//System.out.println("key : " + Base64.encodeBase64String(key.getSalt()));
 		
 		byte[] btSpecIV = getRandomIvParameterSpec();
 				
@@ -85,7 +85,7 @@ public class AESCrypt {
 		byte[] btEncode = aes.encrypt(password, key, spec);
 				
 
-		System.out.println("masterStr : " + Base64.encodeBase64String(btEncode));
+		//System.out.println("masterStr : " + Base64.encodeBase64String(btEncode));
 	
 
 		// Base64.encode(btEncode);
