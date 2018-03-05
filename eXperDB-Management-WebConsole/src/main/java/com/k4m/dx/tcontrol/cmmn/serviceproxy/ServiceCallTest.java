@@ -70,6 +70,7 @@ public class ServiceCallTest {
 		
 		test.encTest();
 		
+		
 		//서버상태
 		//test.selectServerStatus(restIp, restPort, strTocken, loginId, entityId);
 		
