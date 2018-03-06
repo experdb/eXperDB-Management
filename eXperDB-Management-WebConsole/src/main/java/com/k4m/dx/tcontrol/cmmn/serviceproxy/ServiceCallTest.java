@@ -1069,6 +1069,65 @@ public class ServiceCallTest {
 	}
 	
 	/**
+	 * 마스터키 설정
+	 * @param restIp
+	 * @param restPort
+	 * @param strTocken
+	 * @param loginId
+	 * @param entityId
+	 * @throws Exception
+	 */
+	private void changeServerKey(String restIp, int restPort, String strTocken, String loginId, String entityId) throws Exception {
+
+		EncryptCommonService api = new EncryptCommonService(restIp, restPort);
+
+		String strService = SystemCode.ServiceName.SYSTEM_SERVICE;
+		String strCommand = SystemCode.ServiceCommand.CHANGESERVERKEY;
+		
+		String oldPassword = "1234qwer";
+		oldPassword = "marm13+irhFlLcINs7nlIQhKacF88OUybxqcXwRAptg=";
+		
+		String newPassword = "1234qwer";
+
+		AdminServerPasswordRequest adminServerPasswordRequest = new AdminServerPasswordRequest();
+		adminServerPasswordRequest.setOldPassword(oldPassword);
+		adminServerPasswordRequest.setNewPassword(newPassword);
+
+		//JSONObject parameters = new JSONObject();
+		//parameters.put("profile", vo);
+		
+		HashMap body = new HashMap();
+		body.put(TypeUtility.getJustClassName(adminServerPasswordRequest.getClass()), adminServerPasswordRequest.toJSONString());
+
+		String parameters = TypeUtility.makeRequestBody(body);
+
+		HashMap header = new HashMap();
+		//header.put(SystemCode.FieldName.LOGIN_ID, loginId);
+		//header.put(SystemCode.FieldName.ENTITY_UID, entityId);
+		header.put(SystemCode.FieldName.TOKEN_VALUE, strTocken);
+		
+		header.put(SystemCode.FieldName.LOGIN_ID, loginId);
+		header.put(SystemCode.FieldName.ENTITY_UID, entityId);
+
+		JSONObject resultJson = api.callService(strService, strCommand, header, parameters);
+		
+
+		String resultCode = (String) resultJson.get("resultCode");
+		String resultMessage = (String) resultJson.get("resultMessage");
+		resultMessage = new String(resultMessage.getBytes("iso-8859-1"),"UTF-8"); 
+		
+		System.out.println("resultCode : " + resultCode + " resultMessage : " + resultMessage);
+		
+		if(resultCode.equals(SystemCode.ResultCode.SUCCESS)) {
+
+
+		} else {
+			
+		}
+
+	}
+	
+	/**
 	 * 서버상태
 	 * @param restIp
 	 * @param restPort
