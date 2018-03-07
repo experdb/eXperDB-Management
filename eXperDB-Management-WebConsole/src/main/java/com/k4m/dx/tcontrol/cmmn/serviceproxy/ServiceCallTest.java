@@ -493,6 +493,56 @@ public class ServiceCallTest {
 
 	}
 	
+	/**
+	 * 보안정책 삭제
+	 * @param restIp
+	 * @param restPort
+	 * @param strTocken
+	 * @param loginId
+	 * @param entityId
+	 * @throws Exception
+	 */
+	private void deleteProfileProtection(String restIp, int restPort, String strTocken, String loginId, String entityId) throws Exception {
+		EncryptCommonService api = new EncryptCommonService(restIp, restPort);
+
+		String strService = SystemCode.ServiceName.POLICY_SERVICE;
+		String strCommand = SystemCode.ServiceCommand.DELETEPROFILEPROTECTION;
+
+
+		ProfileProtection param = new ProfileProtection();
+
+		String strProfileUid = "";
+		
+		param.setProfileUid(strProfileUid);
+
+		HashMap body = new HashMap();
+		body.put(TypeUtility.getJustClassName(param.getClass()), param.toJSONString());
+
+		String parameters = TypeUtility.makeRequestBody(body);
+		
+
+		HashMap header = new HashMap();
+		header.put(SystemCode.FieldName.LOGIN_ID, loginId);
+		header.put(SystemCode.FieldName.ENTITY_UID, entityId);
+		header.put(SystemCode.FieldName.TOKEN_VALUE, strTocken);
+
+		JSONObject resultJson = api.callService(strService, strCommand, header, parameters.toString());
+		
+		Iterator<?> iter = resultJson.entrySet().iterator();
+		while (iter.hasNext()) {
+			Map.Entry entry = (Map.Entry) iter.next();
+
+			System.out.println(String.valueOf(entry.getKey()) + " = " + String.valueOf(entry.getValue()));
+		}
+		
+		
+		String resultCode = (String) resultJson.get("resultCode");
+		String resultMessage = new String(resultJson.get("resultMessage").toString().getBytes("iso-8859-1"),"UTF-8");
+		
+		System.out.println(resultMessage);
+		
+	}
+	
 	private void selectProfileProtectionVersion(String restIp, int restPort, String strTocken, String loginId, String entityId) throws Exception {
 		EncryptCommonService api = new EncryptCommonService(restIp, restPort);
 
