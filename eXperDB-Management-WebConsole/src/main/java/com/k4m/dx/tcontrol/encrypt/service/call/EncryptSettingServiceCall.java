@@ -4,16 +4,21 @@ import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
+import org.json.simple.JSONValue;
 
 import com.google.gson.Gson;
+import com.k4m.dx.tcontrol.cmmn.serviceproxy.AESCrypt;
 import com.k4m.dx.tcontrol.cmmn.serviceproxy.EncryptCommonService;
 import com.k4m.dx.tcontrol.cmmn.serviceproxy.SystemCode;
 import com.k4m.dx.tcontrol.cmmn.serviceproxy.TypeUtility;
+import com.k4m.dx.tcontrol.cmmn.serviceproxy.vo.AdminServerPasswordRequest;
+import com.k4m.dx.tcontrol.cmmn.serviceproxy.vo.MasterKeyFile;
 import com.k4m.dx.tcontrol.cmmn.serviceproxy.vo.SysConfig;
 import com.k4m.dx.tcontrol.cmmn.serviceproxy.vo.SysMultiValueConfig;
 
@@ -587,5 +592,78 @@ public class EncryptSettingServiceCall {
 		result.put("resultCode", resultCode);
 		result.put("resultMessage", resultMessage);
 		return result;
+	}
+
+	public String serverMasterKeyDecode(String passwordStr, String loadStr) throws Exception {
+		AESCrypt aes = new AESCrypt();
+		String encKey = null;
+		//복호화
+		try {
+			//String pwd = "1234qwer";
+			encKey = aes.GetMasterStr(passwordStr, loadStr);
+		} catch(Exception e) {
+			//화면에 alert 메시지
+			System.out.println("message : " + "마스터키 파일을 읽을 수 없거나 비밀번호가 틀렸습니다");
+		}
+		return encKey;	
+	}
+
+	public String encMasterkey(String mstKeyRenewPassword) throws Exception {
+		AESCrypt aes = new AESCrypt();		
+		
+		//암호화
+		MasterKeyFile m = aes.GenerateMasterStr(mstKeyRenewPassword);	
+		
+		  Map obj = new LinkedHashMap();		  
+		  obj.put("mas", m.getMas());
+		  obj.put("ter", m.getTer());
+		  obj.put("key", m.getKey());	
+		  String jsonObj = JSONValue.toJSONString(obj);
+
+		  return jsonObj;
+
+	}
+
+	public JSONObject changeServerKey(String restIp, int restPort, String strTocken, String oldPassword,
+			String newPassword) throws Exception {
+
+		EncryptCommonService api = new EncryptCommonService(restIp, restPort);
+
+		String strService = SystemCode.ServiceName.SYSTEM_SERVICE;
+		String strCommand = SystemCode.ServiceCommand.CHANGESERVERKEY;
+
+		AdminServerPasswordRequest adminServerPasswordRequest = new AdminServerPasswordRequest();
+		adminServerPasswordRequest.setOldPassword(oldPassword);
+		adminServerPasswordRequest.setNewPassword(newPassword);
+
+		//JSONObject parameters = new JSONObject();
+		//parameters.put("profile", vo);
+		
+		HashMap body = new HashMap();
+		body.put(TypeUtility.getJustClassName(adminServerPasswordRequest.getClass()), adminServerPasswordRequest.toJSONString());
+
+		String parameters = TypeUtility.makeRequestBody(body);
+
+		HashMap header = new HashMap();
+		header.put(SystemCode.FieldName.LOGIN_ID, "admin");
+		header.put(SystemCode.FieldName.ENTITY_UID, "00000000-0000-0000-0000-000000000001");
+		header.put(SystemCode.FieldName.TOKEN_VALUE, strTocken);
+
+		JSONObject resultJson = api.callService(strService, strCommand, header, parameters);
+		
+
+		String resultCode = (String) resultJson.get("resultCode");
+		String resultMessage = (String) resultJson.get("resultMessage");
+		resultMessage = new String(resultMessage.getBytes("iso-8859-1"),"UTF-8"); 
+		
+		System.out.println("resultCode : " + resultCode + " resultMessage : " + resultMessage);
+		
+		if(resultCode.equals(SystemCode.ResultCode.SUCCESS)) {
+			return resultJson;
+		} else {
+			
+		}
+		return resultJson;
+
 	}
 }

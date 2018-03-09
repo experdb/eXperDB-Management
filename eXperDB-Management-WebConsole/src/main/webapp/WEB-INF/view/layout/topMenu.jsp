@@ -284,6 +284,7 @@ function fn_cookie(url) {
         						<ul class="depth_3">
 									<li><a href="/securityPolicyOptionSet.do" target="main">보안정책옵션설정</a></li>
 									<li><a href="/securitySet.do" target="main">암호화설정</a></li>
+									<li><a href="/securityKeySet.do" target="main">서버 마스터키 암호 설정</a></li>
 								</ul>
         					</li>
 						</ul>

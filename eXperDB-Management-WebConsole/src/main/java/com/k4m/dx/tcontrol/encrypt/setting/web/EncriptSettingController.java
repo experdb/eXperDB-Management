@@ -1,5 +1,10 @@
 package com.k4m.dx.tcontrol.encrypt.setting.web;
 
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+
 import javax.servlet.http.HttpServletRequest;
 
 import org.json.simple.JSONArray;
@@ -9,8 +14,10 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.multipart.MultipartHttpServletRequest;
 import org.springframework.web.servlet.ModelAndView;
 
+import com.k4m.dx.tcontrol.encrypt.service.call.CommonServiceCall;
 import com.k4m.dx.tcontrol.encrypt.service.call.EncryptSettingServiceCall;
 
 /**
@@ -34,7 +41,7 @@ public class EncriptSettingController {
 	
 	String restIp = "127.0.0.1";
 	int restPort = 8443;
-	String strTocken = "5gFEpOxJfMkKLmv52/GnlMzNqVbVawchb9ebJMD9rh0=";
+	String strTocken = "msJQLg2XY2zdDJksz5HZKga/ZW7QVekKiymoPlPnWNg=";
 
 	/**
 	 * Encript 보안정책 옵션 설정 화면을 보여준다.
@@ -214,4 +221,173 @@ public class EncriptSettingController {
 		}
 		return result;
 	}	
+	
+	
+	/**
+	 * 서버 마스터키 암호 설정 화면을 보여준다.
+	 * 
+	 * @param historyVO
+	 * @param request
+	 * @return ModelAndView mv
+	 * @throws Exception
+	 */
+	@RequestMapping(value = "/securityKeySet.do")
+	public ModelAndView securityKeySet(HttpServletRequest request, ModelMap model) {
+		ModelAndView mv = new ModelAndView();
+		JSONObject result = new JSONObject();
+		
+		try {		
+			CommonServiceCall csc = new CommonServiceCall();
+			
+			result = csc.selectServerStatus(restIp, restPort, strTocken);
+			
+			String isServerKeyEmpty = result.get("isServerKeyEmpty").toString();
+			String isServerPasswordEmpty = result.get("isServerPasswordEmpty").toString();
+			
+			mv.addObject("isServerKeyEmpty",isServerKeyEmpty);
+			mv.addObject("isServerPasswordEmpty",isServerPasswordEmpty);
+			mv.setViewName("encrypt/setting/securityKeySet");
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return mv;
+	}
+	
+	
+	/**
+	 * 서버 마스터키 암호 설정 저장
+	 * 화면(pnlOldPasswordView == true && mstKeyUseChk == true)
+	 * 
+	 * @return resultSet
+	 * @throws Exception
+	 */
+	@RequestMapping(value = "/securityMasterKeySave01.do")
+	public @ResponseBody JSONObject securityMasterKeySave01(MultipartHttpServletRequest multiRequest) throws FileNotFoundException {
+		JSONObject result = new JSONObject();
+		String encKey = null;
+		try {		
+			String filePath = multiRequest.getParameter("mstKeyPth");
+			String passwordStr = multiRequest.getParameter("mstKeyPassword");
+
+			System.out.println(filePath);
+			System.out.println(passwordStr);
+			
+			File file = new File(filePath.replaceAll("\\\\", "\\\\\\\\"));
+			
+			FileReader filereader = new FileReader(file);
+			BufferedReader bufReader = new BufferedReader(filereader);
+			String fileRead = "";
+			String loadStr ="";
+			
+			while((fileRead = bufReader.readLine()) != null){		
+				loadStr = fileRead;
+			}
+			bufReader.close();
+								
+			EncryptSettingServiceCall essc = new EncryptSettingServiceCall();
+			CommonServiceCall csc = new CommonServiceCall();
+			
+			System.out.println("loadStr = " + loadStr);
+			
+			encKey = essc.serverMasterKeyDecode(passwordStr, loadStr);
+			result = csc.loadServerKey(restIp, restPort, strTocken, encKey);
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return result;
+	}	
+	
+	
+	/**
+	 * 서버 마스터키 암호 설정 저장
+	 * 화면(pnlOldPasswordView == true && mstKeyUseChk == false)
+	 * 
+	 * @return resultSet
+	 * @throws Exception
+	 */
+	@RequestMapping(value = "/securityMasterKeySave02.do")
+	public @ResponseBody JSONObject securityMasterKeySave02(HttpServletRequest request) throws FileNotFoundException {
+		JSONObject result = new JSONObject();
+		try {		
+			String encKey = request.getParameter("mstKeyPassword");						
+			CommonServiceCall csc = new CommonServiceCall();		
+			csc.loadServerKey(restIp, restPort, strTocken, encKey);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return result;
+	}	
+	
+	/**
+	 * 서버 마스터키 암호 설정 저장
+	 * 화면(pnlOldPasswordView == true &&  mstKeyRenewChk == true && pnlNewPasswordView == true)
+	 * 
+	 * @return resultSet
+	 * @throws Exception
+	 */
+	@RequestMapping(value = "/securityMasterKeySave03.do")
+	public @ResponseBody JSONObject securityMasterKeySave03(HttpServletRequest request) throws FileNotFoundException {
+		String encKey = null;
+		
+		JSONObject result = new JSONObject();
+		try {		
+			String mstKeyPassword = request.getParameter("mstKeyPassword");		
+			String mstKeyRenewPassword = request.getParameter("mstKeyRenewPassword");
+			String chk = request.getParameter("chk");
+			String useYN = request.getParameter("useYN");
+			String filePath = request.getParameter("mstKeyPth");
+			
+			if(chk.equals("true")){
+				System.out.println("체크true");
+				System.out.println(filePath);
+				File file = new File(filePath.replaceAll("\\\\", "\\\\\\\\"));
+				
+				FileReader filereader = new FileReader(file);
+				BufferedReader bufReader = new BufferedReader(filereader);
+				String fileRead = "";
+				String loadStr ="";
+				
+				while((fileRead = bufReader.readLine()) != null){		
+					loadStr = fileRead;
+				}
+				bufReader.close();
+									
+				EncryptSettingServiceCall essc = new EncryptSettingServiceCall();
+				CommonServiceCall csc = new CommonServiceCall();
+				mstKeyPassword = essc.serverMasterKeyDecode(mstKeyPassword, loadStr);	
+			}
+			
+			//암호화 키파일 생성
+			System.out.println("키파일생성");
+			EncryptSettingServiceCall essc = new EncryptSettingServiceCall();
+			String masterKey = essc.encMasterkey(mstKeyRenewPassword);		
+			System.out.println(masterKey);
+			
+			//새로운 마스터키파일 사용
+			if(useYN.equals("y")){
+				System.out.println("새로운 마스터키파일 사용");
+				System.out.println("키 복호화 시작 ");
+				encKey = essc.serverMasterKeyDecode(mstKeyRenewPassword, masterKey);		
+				System.out.println(mstKeyPassword);
+				System.out.println(encKey);
+				result = essc.changeServerKey(restIp, restPort, strTocken,mstKeyPassword,encKey);
+			//마스터키 파일 사용안함
+			}else{
+				System.out.println("마스터키사용안함");
+				System.out.println(mstKeyPassword);
+				System.out.println(encKey);
+				result = essc.changeServerKey(restIp, restPort, strTocken,mstKeyPassword,mstKeyRenewPassword);
+			}
+		
+			System.out.println("결과");
+			System.out.println(result.get("resultCode"));
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return result;
+	}
+
+
 }
