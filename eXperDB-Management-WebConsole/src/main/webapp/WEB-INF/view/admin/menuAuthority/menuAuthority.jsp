@@ -52,7 +52,6 @@ function fn_init() {
 
 
 $(window.document).ready(function() {
-
 	fn_buttonAut();
 	fn_init();
 	var usr_id = "${usr_id}";
@@ -132,7 +131,7 @@ $(window.document).ready(function() {
     		},
     		success : function(result) {
   				for(var i = 0; i<result.length; i++){  
-  					if(result[i].mnu_cd != "MN0001" && result[i].mnu_cd != "MN0002" && result[i].mnu_cd != "MN0003" && result[i].mnu_cd != "MN0005" && result[i].mnu_cd != "MN0006" && result[i].mnu_cd != "MN0007" && result[i].mnu_cd != "MN0009" && result[i].mnu_cd != "MN00010"){
+  					if(result[i].mnu_cd != "MN0001" && result[i].mnu_cd != "MN0002" && result[i].mnu_cd != "MN0003" && result[i].mnu_cd != "MN0005" && result[i].mnu_cd != "MN0006" && result[i].mnu_cd != "MN0007" && result[i].mnu_cd != "MN0009" && result[i].mnu_cd != "MN00010" && result[i].mnu_cd != "MN00011" && result[i].mnu_cd != "MN00012" && result[i].mnu_cd != "MN00013"){
      					//읽기권한
   						if(result[i].read_aut_yn == "Y"){	  									
   							document.getElementById("r_"+result[i].mnu_cd).checked = true;
@@ -150,6 +149,10 @@ $(window.document).ready(function() {
 				}	  			    				
     		}
     	});
+	}
+	
+	if('${encrypt_useyn}'=='N'){
+		$('.encrypt').hide();
 	}
 	
 });
@@ -193,8 +196,8 @@ $(function() {
 	    		},
 	    		success : function(result) {
       				for(var i = 0; i<result.length; i++){  
-      					if(result[i].mnu_cd != "MN0001" && result[i].mnu_cd != "MN0002" && result[i].mnu_cd != "MN0003" && result[i].mnu_cd != "MN0005" && result[i].mnu_cd != "MN0006" && result[i].mnu_cd != "MN0007" && result[i].mnu_cd != "MN0009" && result[i].mnu_cd != "MN00010"){
-	     					//읽기권한
+      					if(result[i].mnu_cd != "MN0001" && result[i].mnu_cd != "MN0002" && result[i].mnu_cd != "MN0003" && result[i].mnu_cd != "MN0005" && result[i].mnu_cd != "MN0006" && result[i].mnu_cd != "MN0007" && result[i].mnu_cd != "MN0009" && result[i].mnu_cd != "MN00010" && result[i].mnu_cd != "MN00011" && result[i].mnu_cd != "MN00012" && result[i].mnu_cd != "MN00013"){
+      						//읽기권한
 	  						if(result[i].read_aut_yn == "Y"){	  									
 	  							document.getElementById("r_"+result[i].mnu_cd).checked = true;
 	  						}else{
@@ -267,7 +270,7 @@ $(function() {
 		
 		//admin 선택 전체 체크박스 
 		$("#admin").click(function() { 
-			var array = new Array("MN000301","MN000302","MN000303","MN0004","MN000501","MN000502","MN000503","MN000601","MN000701","MN0008","MN0001101","MN0001102","MN0001201","MN0001202","MN0001203","MN0001204","MN0001301","MN0001302");
+			var array = new Array("MN000301","MN000302","MN000303","MN0004","MN000501","MN000502","MN000503","MN000601","MN000701","MN0008");
 			var datas = userTable.row('.selected').length;
 			 if(datas != 1){
 				 alert("<spring:message code='message.msg165'/>");
@@ -337,6 +340,91 @@ $(function() {
 				 return false;
 			 }
 			if ($("#dbmsinfo").prop("checked")) {
+				for(var i=0; i<array.length; i++){
+					document.getElementById("r_"+array[i]).checked = true;
+					document.getElementById("w_"+array[i]).checked = true;
+				}
+			} else {
+				for(var i=0; i<array.length; i++){
+					document.getElementById("r_"+array[i]).checked = false;
+					document.getElementById("w_"+array[i]).checked = false;
+				}
+			}
+		});
+		
+		//Encrypt 선택 전체 체크박스
+		$("#encrypt").click(function() { 
+			var array = new Array("MN0001101","MN0001102","MN0001201","MN0001202","MN0001203","MN0001204","MN0001301","MN0001302");
+			var datas = userTable.row('.selected').length;
+			 if(datas != 1){
+				 alert("<spring:message code='message.msg165'/>");
+				 return false;
+			 }
+			if ($("#encrypt").prop("checked")) {
+				for(var i=0; i<array.length; i++){
+					document.getElementById("r_"+array[i]).checked = true;
+					document.getElementById("w_"+array[i]).checked = true;
+				}
+			} else {
+				for(var i=0; i<array.length; i++){
+					document.getElementById("r_"+array[i]).checked = false;
+					document.getElementById("w_"+array[i]).checked = false;
+				}
+			}
+		});
+		
+		//정책관리/키관리 선택 전체 체크박스
+		$("#securitykey").click(function() { 
+			var array = new Array("MN0001101","MN0001102");
+			var datas = userTable.row('.selected').length;
+			 if(datas != 1){
+				 alert("<spring:message code='message.msg165'/>");
+				 return false;
+			 }
+			if ($("#securitykey").prop("checked")) {
+				for(var i=0; i<array.length; i++){
+					document.getElementById("r_"+array[i]).checked = true;
+					document.getElementById("w_"+array[i]).checked = true;
+				}
+			} else {
+				for(var i=0; i<array.length; i++){
+					document.getElementById("r_"+array[i]).checked = false;
+					document.getElementById("w_"+array[i]).checked = false;
+				}
+			}
+		});
+		
+		//감사로그 선택 전체 체크박스
+		$("#auditlog").click(function() { 
+			var array = new Array("MN0001201","MN0001202","MN0001203","MN0001204");
+			var datas = userTable.row('.selected').length;
+			 if(datas != 1){
+				 alert("<spring:message code='message.msg165'/>");
+				 return false;
+			 }
+			if ($("#auditlog").prop("checked")) {
+				for(var i=0; i<array.length; i++){
+					document.getElementById("r_"+array[i]).checked = true;
+					document.getElementById("w_"+array[i]).checked = true;
+				}
+			} else {
+				for(var i=0; i<array.length; i++){
+					document.getElementById("r_"+array[i]).checked = false;
+					document.getElementById("w_"+array[i]).checked = false;
+				}
+			}
+		});
+		
+		
+		//설정 선택 전체 체크박스
+		$("#setting").click(function() { 
+			var array = new Array("MN0001301","MN0001302");
+			var datas = userTable.row('.selected').length;
+			 if(datas != 1){
+				 alert("<spring:message code='message.msg165'/>");
+				 return false;
+			 }
+			if ($("#setting").prop("checked")) {
 				for(var i=0; i<array.length; i++){
 					document.getElementById("r_"+array[i]).checked = true;
 					document.getElementById("w_"+array[i]).checked = true;
@@ -847,8 +935,160 @@ function fn_search(){
 													<input type="hidden"  name="mnu_id" value="20">
 													<input type="hidden"  name="mnu_id" value="21">	
 													
+													<input type="hidden"  name="mnu_id" value="25">	
+													<input type="hidden"  name="mnu_id" value="26">	
+													<input type="hidden"  name="mnu_id" value="28">	
+													<input type="hidden"  name="mnu_id" value="29">	
+													<input type="hidden"  name="mnu_id" value="30">	
+													<input type="hidden"  name="mnu_id" value="31">	
+													<input type="hidden"  name="mnu_id" value="33">	
+													<input type="hidden"  name="mnu_id" value="34">	
+													
 														</td>											
-													</tr>																									
+													</tr>	
+													<tr class="encrypt">
+														<th scope="row" rowspan="8">
+															<div class="inp_chk">
+																<input type="checkbox" id="encrypt" name="encrypt"/>
+																<label for="encrypt">Encrypt</label>
+															</div>
+														</th>
+														<th scope="row" rowspan="2">
+															<div class="inp_chk">
+																<input type="checkbox" id="securitykey" name="securitykey"/>
+																<label for="securitykey">정책관리/키관리</label>
+															</div>
+															</th>
+														<td>보안정책관리</td>
+														<td>
+															<div class="inp_chk">
+																<input type="checkbox" id="r_MN0001101" name="r_mnu_nm" />
+																<label for="r_MN0001101"></label>
+															</div>
+														</td>
+														<td>
+															<div class="inp_chk">
+																<input type="checkbox" id="w_MN0001101" name="w_mnu_nm" />
+																<label for="w_MN0001101"></label>
+															</div>
+														</td>																																				
+													</tr>
+													<tr class="encrypt">
+														<td>암호화키관리</td>
+														<td>
+															<div class="inp_chk">
+																<input type="checkbox" id="r_MN0001102" name="r_mnu_nm" />
+																<label for="r_MN0001102"></label>
+															</div>
+														</td>
+														<td>
+															<div class="inp_chk">
+																<input type="checkbox" id="w_MN0001102" name="w_mnu_nm" />
+																<label for="w_MN0001102"></label>
+															</div>
+														</td>	
+													</tr>
+													<tr class="encrypt">
+														<th scope="row" rowspan="4">
+															<div class="inp_chk">
+																<input type="checkbox" id="auditlog" name="auditlog"/>
+																<label for="auditlog">감사로그</label>
+															</div></th>
+														<td>암복호화</td>
+														<td>
+															<div class="inp_chk">
+																<input type="checkbox" id="r_MN0001201" name="r_mnu_nm" />
+																<label for="r_MN0001201"></label>
+															</div>
+														</td>
+														<td>
+															<div class="inp_chk">
+																<input type="checkbox" id="w_MN0001201" name="w_mnu_nm" />
+																<label for="w_MN0001201"></label>
+															</div>
+														</td>	
+													</tr>
+													<tr class="encrypt">
+														<td>관리서버</td>
+														<td>
+															<div class="inp_chk">
+																<input type="checkbox" id="r_MN0001202" name="r_mnu_nm" />
+																<label for="r_MN0001202"></label>
+															</div>
+														</td>
+														<td>
+															<div class="inp_chk">
+																<input type="checkbox" id="w_MN0001202" name="w_mnu_nm" />
+																<label for="w_MN0001202"></label>
+															</div>
+														</td>	
+													</tr>
+													<tr class="encrypt">
+														<td>암복호화키</td>
+														<td>
+															<div class="inp_chk">
+																<input type="checkbox" id="r_MN0001203" name="r_mnu_nm" />
+																<label for="r_MN0001203"></label>
+															</div>
+														</td>
+														<td>
+															<div class="inp_chk">
+																<input type="checkbox" id="w_MN0001203" name="w_mnu_nm" />
+																<label for="w_MN0001203"></label>
+															</div>
+														</td>	
+													</tr>
+													<tr class="encrypt">
+														<td>자원사용</td>
+														<td>
+															<div class="inp_chk">
+																<input type="checkbox" id="r_MN0001204" name="r_mnu_nm" />
+																<label for="r_MN0001204"></label>
+															</div>
+														</td>
+														<td>
+															<div class="inp_chk">
+																<input type="checkbox" id="w_MN0001204" name="w_mnu_nm" />
+																<label for="w_MN0001204"></label>
+															</div>
+														</td>	
+													</tr>	
+													<tr class="encrypt">
+														<th scope="row" rowspan="2">
+															<div class="inp_chk">
+																<input type="checkbox" id="setting" name="setting"/>
+																<label for="setting">설정</label>
+															</div>
+														</th>
+														<td>보안정책옵션설정</td>
+														<td>
+															<div class="inp_chk">
+																<input type="checkbox" id="r_MN0001301" name="r_mnu_nm" />
+																<label for="r_MN0001301"></label>
+															</div>
+														</td>
+														<td>
+															<div class="inp_chk">
+																<input type="checkbox" id="w_MN0001301" name="w_mnu_nm" />
+																<label for="w_MN0001301"></label>
+															</div>
+														</td>	
+													</tr>
+													<tr class="encrypt">
+														<td>암호화설정</td>
+														<td>
+															<div class="inp_chk">
+																<input type="checkbox" id="r_MN0001302" name="r_mnu_nm" />
+																<label for="r_MN0001302"></label>
+															</div>
+														</td>
+														<td>
+															<div class="inp_chk">
+																<input type="checkbox" id="w_MN0001302" name="w_mnu_nm" />
+																<label for="w_MN0001302"></label>
+															</div>
+														</td>	
+													</tr>									
 												</tbody>
 											</table>
 										</div>

@@ -28,7 +28,7 @@ public class AuditLogServiceCall {
 	 * @return 
 	 * @throws Exception
 	 */
-	public JSONObject selectAuditLogSiteList(String restIp, int restPort, String strTocken, AuditLogSite param) throws Exception {
+	public JSONObject selectAuditLogSiteList(String restIp, int restPort, String strTocken, AuditLogSite param,String loginId, String entityId) throws Exception {
 		EncryptCommonService api = new EncryptCommonService(restIp, restPort);
 
 		String strService = SystemCode.ServiceName.LOG_SERVICE;
@@ -40,8 +40,8 @@ public class AuditLogServiceCall {
 		String parameters = TypeUtility.makeRequestBody(body);
 
 		HashMap header = new HashMap();
-		header.put(SystemCode.FieldName.LOGIN_ID, "admin");
-		header.put(SystemCode.FieldName.ENTITY_UID, "00000000-0000-0000-0000-000000000001");
+		header.put(SystemCode.FieldName.LOGIN_ID, loginId);
+		header.put(SystemCode.FieldName.ENTITY_UID, entityId);
 		header.put(SystemCode.FieldName.TOKEN_VALUE, strTocken);
 
 		JSONObject resultJson = api.callService(strService, strCommand, header, parameters.toString());
@@ -66,7 +66,7 @@ public class AuditLogServiceCall {
 	 * @return 
 	 * @throws Exception
 	 */
-	public JSONObject selectAuditLogList(String restIp, int restPort, String strTocken, AuditLog param) throws Exception {
+	public JSONObject selectAuditLogList(String restIp, int restPort, String strTocken, String loginId, String entityId, AuditLog param) throws Exception {
 		JSONArray jsonArray = new JSONArray();
 		JSONObject result = new JSONObject();
 		
@@ -81,8 +81,8 @@ public class AuditLogServiceCall {
 		String parameters = TypeUtility.makeRequestBody(body);
 		
 		HashMap header = new HashMap();
-		header.put(SystemCode.FieldName.LOGIN_ID, "admin");
-		header.put(SystemCode.FieldName.ENTITY_UID, "00000000-0000-0000-0000-000000000001");
+		header.put(SystemCode.FieldName.LOGIN_ID, loginId);
+		header.put(SystemCode.FieldName.ENTITY_UID, entityId);
 		header.put(SystemCode.FieldName.TOKEN_VALUE, strTocken);
 
 		JSONObject resultJson = api.callService(strService, strCommand, header, parameters.toString());
@@ -137,7 +137,7 @@ public class AuditLogServiceCall {
 	 * @return 
 	 * @throws Exception
 	 */
-	public JSONObject selectAuditLogListKey(String restIp, int restPort, String strTocken, AuditLog param) throws Exception {
+	public JSONObject selectAuditLogListKey(String restIp, int restPort, String strTocken,String loginId, String entityId, AuditLog param) throws Exception {
 		JSONArray jsonArray = new JSONArray();
 		JSONObject result = new JSONObject();
 		
@@ -152,8 +152,8 @@ public class AuditLogServiceCall {
 		String parameters = TypeUtility.makeRequestBody(body);
 
 		HashMap header = new HashMap();
-		header.put(SystemCode.FieldName.LOGIN_ID, "admin");
-		header.put(SystemCode.FieldName.ENTITY_UID, "00000000-0000-0000-0000-000000000001");
+		header.put(SystemCode.FieldName.LOGIN_ID, loginId);
+		header.put(SystemCode.FieldName.ENTITY_UID, entityId);
 		header.put(SystemCode.FieldName.TOKEN_VALUE, strTocken);
 
 		JSONObject resultJson = api.callService(strService, strCommand, header, parameters.toString());				
@@ -210,7 +210,7 @@ public class AuditLogServiceCall {
 	 * @return 
 	 * @throws Exception
 	 */
-	public JSONObject selectBackupLogList(String restIp, int restPort, String strTocken, BackupLog param) throws Exception {
+	public JSONObject selectBackupLogList(String restIp, int restPort, String strTocken,String loginId, String entityId, BackupLog param) throws Exception {
 		JSONArray jsonArray = new JSONArray();
 		JSONObject result = new JSONObject();
 		
@@ -225,8 +225,8 @@ public class AuditLogServiceCall {
 		String parameters = TypeUtility.makeRequestBody(body);
 		
 		HashMap header = new HashMap();
-		header.put(SystemCode.FieldName.LOGIN_ID, "admin");
-		header.put(SystemCode.FieldName.ENTITY_UID, "00000000-0000-0000-0000-000000000001");
+		header.put(SystemCode.FieldName.LOGIN_ID, loginId);
+		header.put(SystemCode.FieldName.ENTITY_UID, entityId);
 		header.put(SystemCode.FieldName.TOKEN_VALUE, strTocken);
 
 		JSONObject resultJson = api.callService(strService, strCommand, header, parameters.toString());
@@ -294,7 +294,7 @@ public class AuditLogServiceCall {
 	 * @return 
 	 * @throws Exception
 	 */
-	public JSONObject selectSystemUsageLogList(String restIp, int restPort, String strTocken, SystemUsage param) throws Exception {
+	public JSONObject selectSystemUsageLogList(String restIp, int restPort, String strTocken,String loginId, String entityId, SystemUsage param) throws Exception {
 		JSONArray jsonArray = new JSONArray();
 		JSONObject result = new JSONObject();
 		
@@ -309,8 +309,8 @@ public class AuditLogServiceCall {
 		String parameters = TypeUtility.makeRequestBody(body);
 
 		HashMap header = new HashMap();
-		header.put(SystemCode.FieldName.LOGIN_ID, "admin");
-		header.put(SystemCode.FieldName.ENTITY_UID, "00000000-0000-0000-0000-000000000001");
+		header.put(SystemCode.FieldName.LOGIN_ID, loginId);
+		header.put(SystemCode.FieldName.ENTITY_UID, entityId);
 		header.put(SystemCode.FieldName.TOKEN_VALUE, strTocken);
 
 		JSONObject resultJson = api.callService(strService, strCommand, header, parameters.toString());
@@ -364,7 +364,7 @@ public class AuditLogServiceCall {
 	 * @return 
 	 * @throws Exception
 	 */
-	public JSONArray selectEntityList(String restIp, int restPort, String strTocken) throws Exception {
+	public JSONArray selectEntityList(String restIp, int restPort, String strTocken, String loginId, String entityId) throws Exception {
 		JSONArray jsonArray = new JSONArray();
 		
 		EncryptCommonService api = new EncryptCommonService(restIp, restPort);
@@ -377,8 +377,8 @@ public class AuditLogServiceCall {
 		body.put("monitored", monitored);
 		String parameters = TypeUtility.makeRequestBody(body);
 		HashMap header = new HashMap();
-		header.put(SystemCode.FieldName.LOGIN_ID, "admin");
-		header.put(SystemCode.FieldName.ENTITY_UID, "00000000-0000-0000-0000-000000000001");
+		header.put(SystemCode.FieldName.LOGIN_ID, loginId);
+		header.put(SystemCode.FieldName.ENTITY_UID, entityId);
 		header.put(SystemCode.FieldName.TOKEN_VALUE, strTocken);
 		JSONObject resultJson = api.callService(strService, strCommand, header, parameters.toString());
 
@@ -404,7 +404,7 @@ public class AuditLogServiceCall {
 		return jsonArray;
 	}
 
-	public JSONArray selectEntityAgentList(String restIp, int restPort, String strTocken) throws Exception {
+	public JSONArray selectEntityAgentList(String restIp, int restPort, String strTocken,String loginId, String entityId) throws Exception {
 		
 		EncryptCommonService api = new EncryptCommonService(restIp, restPort);
 		
@@ -428,8 +428,8 @@ public class AuditLogServiceCall {
 		System.out.println(parameters);
 
 		HashMap header = new HashMap();
-		header.put(SystemCode.FieldName.LOGIN_ID, "admin");
-		header.put(SystemCode.FieldName.ENTITY_UID, "00000000-0000-0000-0000-000000000001");
+		header.put(SystemCode.FieldName.LOGIN_ID, loginId);
+		header.put(SystemCode.FieldName.ENTITY_UID, entityId);
 		header.put(SystemCode.FieldName.TOKEN_VALUE, strTocken);
 
 		JSONObject resultJson = api.callService(strService, strCommand, header, parameters.toString());

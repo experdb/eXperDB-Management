@@ -32,7 +32,7 @@ public class SecurityPolicyServiceCall {
 	 * @return 
 	 * @throws Exception
 	 */
-	public JSONObject selectProfileList(String restIp, int restPort, String strTocken) throws Exception {
+	public JSONObject selectProfileList(String restIp, int restPort, String strTocken,String loginId, String entityId) throws Exception {
 		JSONArray jsonArray = new JSONArray();
 		JSONObject result = new JSONObject();
 
@@ -50,8 +50,8 @@ public class SecurityPolicyServiceCall {
 		String parameters = TypeUtility.makeRequestBody(body);
 
 		HashMap header = new HashMap();
-		header.put(SystemCode.FieldName.LOGIN_ID, "admin");
-		header.put(SystemCode.FieldName.ENTITY_UID, "00000000-0000-0000-0000-000000000001");
+		header.put(SystemCode.FieldName.LOGIN_ID, loginId);
+		header.put(SystemCode.FieldName.ENTITY_UID, entityId);
 		header.put(SystemCode.FieldName.TOKEN_VALUE, strTocken);
 
 		JSONObject resultJson = api.callService(strService, strCommand, header, parameters);
@@ -114,7 +114,7 @@ public class SecurityPolicyServiceCall {
 	 * @return 
 	 * @throws Exception
 	 */
-	public Map<String, Object> insertProfileProtection(String restIp, int restPort, String strTocken, ProfileProtection param1, List param2, List param3) throws Exception {
+	public Map<String, Object> insertProfileProtection(String restIp, int restPort, String strTocken, String loginId, String entityId, ProfileProtection param1, List param2, List param3) throws Exception {
 		Map<String, Object> result = new HashMap<String, Object>();
 		EncryptCommonService api = new EncryptCommonService(restIp, restPort);
 
@@ -136,8 +136,8 @@ public class SecurityPolicyServiceCall {
 		String parameters = TypeUtility.makeRequestBody(body);
 
 		HashMap header = new HashMap();
-		header.put(SystemCode.FieldName.LOGIN_ID, "admin");
-		header.put(SystemCode.FieldName.ENTITY_UID, "00000000-0000-0000-0000-000000000001");
+		header.put(SystemCode.FieldName.LOGIN_ID, loginId);
+		header.put(SystemCode.FieldName.ENTITY_UID, entityId);
 		header.put(SystemCode.FieldName.TOKEN_VALUE, strTocken);
 
 		JSONObject resultJson = api.callService(strService, strCommand, header, parameters);
@@ -162,7 +162,7 @@ public class SecurityPolicyServiceCall {
 	 * @param param3 
 	 * @throws Exception
 	 */
-	public Map<String, Object> updateProfileProtection(String restIp, int restPort, String strTocken, ProfileProtection param1, List param2, List param3) throws Exception {
+	public Map<String, Object> updateProfileProtection(String restIp, int restPort, String strTocken,String loginId, String entityId, ProfileProtection param1, List param2, List param3) throws Exception {
 		Map<String, Object> result = new HashMap<String, Object>();
 		EncryptCommonService api = new EncryptCommonService(restIp, restPort);
 
@@ -184,8 +184,8 @@ public class SecurityPolicyServiceCall {
 		String parameters = TypeUtility.makeRequestBody(body);
 
 		HashMap header = new HashMap();
-		header.put(SystemCode.FieldName.LOGIN_ID, "admin");
-		header.put(SystemCode.FieldName.ENTITY_UID, "00000000-0000-0000-0000-000000000001");
+		header.put(SystemCode.FieldName.LOGIN_ID, loginId);
+		header.put(SystemCode.FieldName.ENTITY_UID, entityId);
 		header.put(SystemCode.FieldName.TOKEN_VALUE, strTocken);
 
 		JSONObject resultJson = api.callService(strService, strCommand, header, parameters);
@@ -521,6 +521,52 @@ public class SecurityPolicyServiceCall {
 		
 	}
 	
+	
+	
+	/**
+	 * 보안정책 삭제
+	 * @param restIp
+	 * @param restPort
+	 * @param strTocken
+	 * @param loginId
+	 * @param entityId
+	 * @throws Exception
+	 */
+	public JSONObject deleteProfileProtection(String restIp, int restPort, String strTocken, String loginId, String entityId, ProfileProtection param) throws Exception {
+		EncryptCommonService api = new EncryptCommonService(restIp, restPort);
+
+		String strService = SystemCode.ServiceName.POLICY_SERVICE;
+		String strCommand = SystemCode.ServiceCommand.DELETEPROFILEPROTECTION;
+
+		HashMap body = new HashMap();
+		body.put(TypeUtility.getJustClassName(param.getClass()), param.toJSONString());
+		String parameters = TypeUtility.makeRequestBody(body);
+		HashMap header = new HashMap();
+		header.put(SystemCode.FieldName.LOGIN_ID, loginId);
+		header.put(SystemCode.FieldName.ENTITY_UID, entityId);
+		header.put(SystemCode.FieldName.TOKEN_VALUE, strTocken);
+		JSONObject resultJson = api.callService(strService, strCommand, header, parameters.toString());
+		Iterator<?> iter = resultJson.entrySet().iterator();
+		while (iter.hasNext()) {
+			Map.Entry entry = (Map.Entry) iter.next();
+
+			System.out.println(String.valueOf(entry.getKey()) + " = " + String.valueOf(entry.getValue()));
+		}
+		String resultCode = (String) resultJson.get("resultCode");
+		String resultMessage = new String(resultJson.get("resultMessage").toString().getBytes("iso-8859-1"),"UTF-8");
+		
+		JSONObject jsonObj = new JSONObject();
+		
+		jsonObj.put("resultCode", (String) resultJson.get("resultCode"));
+		jsonObj.put("resultMessage", new String(resultJson.get("resultMessage").toString().getBytes("iso-8859-1"),"UTF-8"));
+		
+		System.out.println(resultMessage);
+		
+		return jsonObj;
+		
+	}
+	
+	
 	/**
 	 * 일반 공통코드 리스트(데이터타입)
 	 * @param restIp
@@ -528,7 +574,7 @@ public class SecurityPolicyServiceCall {
 	 * @param strTocken
 	 * @throws Exception
 	 */
-	public JSONArray selectParamSysCodeListDatatype(String restIp, int restPort, String strTocken) throws Exception {
+	public JSONArray selectParamSysCodeListDatatype(String restIp, int restPort, String strTocken,String loginId, String entityId) throws Exception {
 		JSONArray jsonArray = new JSONArray();
 		
 		EncryptCommonService api = new EncryptCommonService(restIp, restPort);
@@ -545,8 +591,8 @@ public class SecurityPolicyServiceCall {
 		String parameters = TypeUtility.makeRequestBody(body);
 
 		HashMap header = new HashMap();
-		header.put(SystemCode.FieldName.LOGIN_ID, "admin");
-		header.put(SystemCode.FieldName.ENTITY_UID, "00000000-0000-0000-0000-000000000001");
+		header.put(SystemCode.FieldName.LOGIN_ID, loginId);
+		header.put(SystemCode.FieldName.ENTITY_UID, entityId);
 		header.put(SystemCode.FieldName.TOKEN_VALUE, strTocken);
 
 		JSONObject resultJson = api.callService(strService, strCommand, header, parameters.toString());
@@ -589,7 +635,7 @@ public class SecurityPolicyServiceCall {
 	 * @param strTocken
 	 * @throws Exception
 	 */
-	public JSONArray selectParamSysCodeListDenyresult(String restIp, int restPort, String strTocken) throws Exception {
+	public JSONArray selectParamSysCodeListDenyresult(String restIp, int restPort, String strTocken,String loginId, String entityId) throws Exception {
 		JSONArray jsonArray = new JSONArray();
 		
 		EncryptCommonService api = new EncryptCommonService(restIp, restPort);
@@ -606,8 +652,8 @@ public class SecurityPolicyServiceCall {
 		String parameters = TypeUtility.makeRequestBody(body);
 
 		HashMap header = new HashMap();
-		header.put(SystemCode.FieldName.LOGIN_ID, "admin");
-		header.put(SystemCode.FieldName.ENTITY_UID, "00000000-0000-0000-0000-000000000001");
+		header.put(SystemCode.FieldName.LOGIN_ID, loginId);
+		header.put(SystemCode.FieldName.ENTITY_UID, entityId);
 		header.put(SystemCode.FieldName.TOKEN_VALUE, strTocken);
 
 		JSONObject resultJson = api.callService(strService, strCommand, header, parameters.toString());
@@ -650,7 +696,7 @@ public class SecurityPolicyServiceCall {
 	 * @param strTocken
 	 * @throws Exception
 	 */
-	public JSONArray selectParamSysCodeListVector(String restIp, int restPort, String strTocken) throws Exception {
+	public JSONArray selectParamSysCodeListVector(String restIp, int restPort, String strTocken,String loginId, String entityId) throws Exception {
 		JSONArray jsonArray = new JSONArray();
 		
 		EncryptCommonService api = new EncryptCommonService(restIp, restPort);
@@ -667,8 +713,8 @@ public class SecurityPolicyServiceCall {
 		String parameters = TypeUtility.makeRequestBody(body);
 
 		HashMap header = new HashMap();
-		header.put(SystemCode.FieldName.LOGIN_ID, "admin");
-		header.put(SystemCode.FieldName.ENTITY_UID, "00000000-0000-0000-0000-000000000001");
+		header.put(SystemCode.FieldName.LOGIN_ID, loginId);
+		header.put(SystemCode.FieldName.ENTITY_UID, entityId);
 		header.put(SystemCode.FieldName.TOKEN_VALUE, strTocken);
 
 		JSONObject resultJson = api.callService(strService, strCommand, header, parameters.toString());
@@ -712,7 +758,7 @@ public class SecurityPolicyServiceCall {
 	 * @throws Exception
 	 */
 	
-	public JSONArray selectParamSysCodeListOperation(String restIp, int restPort, String strTocken) throws Exception {
+	public JSONArray selectParamSysCodeListOperation(String restIp, int restPort, String strTocken,String loginId, String entityId) throws Exception {
 		JSONArray jsonArray = new JSONArray();
 		
 		EncryptCommonService api = new EncryptCommonService(restIp, restPort);
@@ -729,8 +775,8 @@ public class SecurityPolicyServiceCall {
 		String parameters = TypeUtility.makeRequestBody(body);
 
 		HashMap header = new HashMap();
-		header.put(SystemCode.FieldName.LOGIN_ID, "admin");
-		header.put(SystemCode.FieldName.ENTITY_UID, "00000000-0000-0000-0000-000000000001");
+		header.put(SystemCode.FieldName.LOGIN_ID, loginId);
+		header.put(SystemCode.FieldName.ENTITY_UID, entityId);
 		header.put(SystemCode.FieldName.TOKEN_VALUE, strTocken);
 
 		JSONObject resultJson = api.callService(strService, strCommand, header, parameters.toString());

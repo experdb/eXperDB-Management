@@ -10,6 +10,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import org.json.simple.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
@@ -22,9 +23,12 @@ import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.support.RequestContextUtils;
 
 import com.k4m.dx.tcontrol.admin.accesshistory.service.AccessHistoryService;
+import com.k4m.dx.tcontrol.cmmn.AES256;
+import com.k4m.dx.tcontrol.cmmn.AES256_KEY;
 import com.k4m.dx.tcontrol.cmmn.CmmnUtils;
 import com.k4m.dx.tcontrol.cmmn.SHA256;
 import com.k4m.dx.tcontrol.common.service.HistoryVO;
+import com.k4m.dx.tcontrol.encrypt.service.call.CommonServiceCall;
 import com.k4m.dx.tcontrol.login.service.LoginService;
 import com.k4m.dx.tcontrol.login.service.UserVO;
 
@@ -117,9 +121,11 @@ public class LoginController {
 	public ModelAndView loginAction(@ModelAttribute("userVo") UserVO userVo, ModelMap model, HttpServletResponse response,
 			HttpServletRequest request, @ModelAttribute("historyVO") HistoryVO historyVO) {
 		ModelAndView mv = new ModelAndView();
-		String id = userVo.getUsr_id();
-		String pw = SHA256.SHA256(userVo.getPwd());
+		CommonServiceCall cic = new CommonServiceCall();
 		try {
+			AES256 aes = new AES256(AES256_KEY.ENC_KEY);
+			String id = userVo.getUsr_id();
+			String pw = aes.aesEncode(userVo.getPwd());
 			
 			int masterCheck = loginService.selectMasterCheck();
 			if(masterCheck>0){
@@ -138,6 +144,7 @@ public class LoginController {
 			} else if (userList.get(0).getUsr_expr_dt().equals("N")) {
 				mv.addObject("error", "msg159");
 			} else {
+				
 				// session 설정
 				HttpSession session = request.getSession();
 				request.getSession().setAttribute("session", session);
@@ -149,9 +156,16 @@ public class LoginController {
 				request.getSession().setAttribute("ip", ip);
 
 				Properties props = new Properties();
-				props.load(new FileInputStream(ResourceUtils.getFile("classpath:egovframework/tcontrolProps/globals.properties")));
-			
-				String lang = props.get("lang").toString();
+				props.load(new FileInputStream(ResourceUtils.getFile("classpath:egovframework/tcontrolProps/globals.properties")));			
+				String restIp = props.get("encrypt.server.url").toString();		
+				int restPort = Integer.parseInt(props.get("encrypt.server.port").toString());
+				String encp_use_yn = props.get("encrypt.useyn").toString();
+				JSONObject result = cic.login(restIp,restPort,id,userVo.getPwd());				
+				request.getSession().setAttribute("restIp", restIp);
+				request.getSession().setAttribute("restPort", restPort);
+				request.getSession().setAttribute("encp_use_yn", encp_use_yn);
+				request.getSession().setAttribute("tockenValue", result.get("tockenValue"));
+				request.getSession().setAttribute("ectityUid", result.get("ectityUid"));				
 				
 				// 로그인 이력 남기기
 				CmmnUtils.saveHistory(request, historyVO);

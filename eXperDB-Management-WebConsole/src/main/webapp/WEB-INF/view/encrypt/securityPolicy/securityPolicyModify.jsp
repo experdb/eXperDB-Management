@@ -60,7 +60,7 @@
 			columns : [
 			{ data : "", defaultContent : "", targets : 0, orderable : false, checkboxes : {'selectRow' : true}}, 
 			{ data : "", className : "dt-center", defaultContent : ""}, 
-			{ data : "specIndex", className : "dt-center", defaultContent : ""}, 
+			{ data : "offset", className : "dt-center", defaultContent : ""}, 
 			{ data : "length", className : "dt-center", defaultContent : ""}, 
 			{ data : "cipherAlgorithmCode", className : "dt-center", defaultContent : ""}, 
 			{ data : "binUid", className : "dt-center", defaultContent : ""}, 
@@ -238,7 +238,7 @@
 		}
 		
 		table.row.add({
-			"specIndex":result.specIndex,
+			"offset":result.offset,
 			"length":result.length,
 			"cipherAlgorithmCode":result.cipherAlgorithmCode,
 			"binUid":result.binUid,
@@ -254,14 +254,14 @@
 		var rowCnt = table.rows('.selected').data().length;
 		if (rowCnt == 1) {
 			var rnum = table.row('.selected').index();
-			var specIndex = table.row('.selected').data().specIndex;
+			var offset = table.row('.selected').data().offset;
 			var length = table.row('.selected').data().length;
 			var cipherAlgorithmCode = table.row('.selected').data().cipherAlgorithmCode;
 			var binUid = table.row('.selected').data().binUid;
 			var initialVectorTypeCode = table.row('.selected').data().initialVectorTypeCode;
 			var operationModeCode = table.row('.selected').data().operationModeCode;
 			
-			var popUrl = "/popup/securityPolicyRegForm.do?act=u&&specIndex="+specIndex+"&&length="+length+"&&cipherAlgorithmCode="+cipherAlgorithmCode+"&&binUid="+binUid+"&&initialVectorTypeCode="+initialVectorTypeCode+"&&operationModeCode="+operationModeCode+"&&rnum="+rnum; // 서버 url 팝업경로
+			var popUrl = "/popup/securityPolicyRegForm.do?act=u&&offset="+offset+"&&length="+length+"&&cipherAlgorithmCode="+cipherAlgorithmCode+"&&binUid="+binUid+"&&initialVectorTypeCode="+initialVectorTypeCode+"&&operationModeCode="+operationModeCode+"&&rnum="+rnum; // 서버 url 팝업경로
 			var width = 1000;
 			var height = 530;
 			var left = (window.screen.width / 2) - (width / 2);
@@ -277,7 +277,7 @@
 	
 	/*암보호화 정책 수정 */
 	function fn_SecurityUpdate(result){
-		table.cell(result.rnum, 2).data(result.specIndex).draw();
+		table.cell(result.rnum, 2).data(result.offset).draw();
 		table.cell(result.rnum, 3).data(result.length).draw();
 		table.cell(result.rnum, 4).data(result.cipherAlgorithmCode).draw();
 		table.cell(result.rnum, 5).data(result.binUid).draw();
@@ -457,7 +457,7 @@
 		var securityPolicy = [];
 		for(var i = 0; i < datas.length; i++){
 			var tmpmap = new Object();
-			tmpmap["specIndex"] = table.rows().data()[i].specIndex;
+			tmpmap["offset"] = table.rows().data()[i].offset;
 			tmpmap["length"] = table.rows().data()[i].length;
 			tmpmap["cipherAlgorithmCode"] = table.rows().data()[i].cipherAlgorithmCode;
 			tmpmap["binUid"] = table.rows().data()[i].binUid;

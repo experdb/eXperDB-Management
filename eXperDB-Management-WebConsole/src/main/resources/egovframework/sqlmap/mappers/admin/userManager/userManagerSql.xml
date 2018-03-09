@@ -23,6 +23,7 @@
 		, CPN
 		, USR_EXPR_DT
 		, USE_YN
+		, ENCP_USE_YN
 		, FRST_REGR_ID
 		, FRST_REG_DTM
 		, LST_MDFR_ID
@@ -41,6 +42,7 @@
 		, #{cpn}
 		, #{usr_expr_dt}
 		, #{use_yn}
+		, #{encp_use_yn}
 		, #{frst_regr_id}
 		, clock_timestamp()
 		, #{lst_mdfr_id}
@@ -68,6 +70,7 @@
 		, A.CPN
 		, A.USR_EXPR_DT
 		, A.USE_YN
+		, A.ENCP_USE_YN
 		, A.FRST_REG_DTM
 		, A.LST_MDF_DTM
 		FROM(
@@ -83,6 +86,7 @@
 			, CPN
 			, TO_CHAR(USR_EXPR_DT::TIMESTAMP,'YYYY-MM-DD') AS USR_EXPR_DT
 			, USE_YN
+			, ENCP_USE_YN
 			, FRST_REG_DTM
 			, LST_MDF_DTM
 			FROM T_USR_I
@@ -93,6 +97,9 @@
 			</if>
 			<if test="use_yn != null and use_yn != '' ">
 				AND use_yn LIKE #{use_yn}
+			</if>
+			<if test="encp_use_yn != null and encp_use_yn != '' ">
+				AND encp_use_yn LIKE #{encp_use_yn}
 			</if>
 		ORDER BY LST_MDF_DTM DESC
 		)A
@@ -137,6 +144,7 @@
 		, CPN
 		, TO_CHAR(USR_EXPR_DT::TIMESTAMP,'YYYY-MM-DD') AS USR_EXPR_DT
 		, USE_YN
+		, ENCP_USE_YN
 		, FRST_REG_DTM
 		, LST_MDF_DTM
 		FROM T_USR_I
@@ -161,6 +169,7 @@
 		, CPN=#{cpn}
 		, USR_EXPR_DT=#{usr_expr_dt}
 		, USE_YN=#{use_yn}
+		, ENCP_USE_YN=#{encp_use_yn}
 		, LST_MDFR_ID=#{lst_mdfr_id}
 		, LST_MDF_DTM= clock_timestamp()
 		WHERE usr_id = #{usr_id}

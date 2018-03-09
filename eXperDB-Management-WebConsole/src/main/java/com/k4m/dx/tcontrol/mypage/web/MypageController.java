@@ -15,8 +15,9 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.k4m.dx.tcontrol.admin.accesshistory.service.AccessHistoryService;
+import com.k4m.dx.tcontrol.cmmn.AES256;
+import com.k4m.dx.tcontrol.cmmn.AES256_KEY;
 import com.k4m.dx.tcontrol.cmmn.CmmnUtils;
-import com.k4m.dx.tcontrol.cmmn.SHA256;
 import com.k4m.dx.tcontrol.common.service.HistoryVO;
 import com.k4m.dx.tcontrol.login.service.UserVO;
 import com.k4m.dx.tcontrol.mypage.service.MyPageService;
@@ -155,7 +156,8 @@ public class MypageController {
 			Map<String, Object> param = new HashMap<String, Object>();
 			HttpSession session = request.getSession();
 			String usr_id = (String) session.getAttribute("usr_id");
-			String nowpwd = SHA256.SHA256(request.getParameter("nowpwd"));
+			AES256 aes = new AES256(AES256_KEY.ENC_KEY);
+			String nowpwd = aes.aesEncode(request.getParameter("nowpwd"));;
 			param.put("usr_id", usr_id);
 			param.put("nowpwd", nowpwd);
 			
@@ -188,7 +190,8 @@ public class MypageController {
 			String usr_id = (String)session.getAttribute("usr_id");
 			userVo.setUsr_id(usr_id);
 			userVo.setLst_mdfr_id(usr_id);
-			userVo.setPwd(SHA256.SHA256(userVo.getPwd()));
+			AES256 aes = new AES256(AES256_KEY.ENC_KEY);
+			userVo.setPwd(aes.aesEncode(userVo.getPwd()));
 			myPageService.updatePwd(userVo);
 			
 			// 화면접근이력 이력 남기기

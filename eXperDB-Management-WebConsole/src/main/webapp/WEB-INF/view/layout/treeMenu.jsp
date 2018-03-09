@@ -276,15 +276,16 @@ $(window.document).ready(
 	    	  var html3="";
 	    	  for(var i=0; i<aut.length; i++){ 	  
 		          if(aut.length != 0 && aut[i].read_aut_yn == "Y" && aut[i].mnu_cd == "MN000101"){	      
-	    	  	 html3 += '      <ul class="depth_1 lnbMenu"><li class="ico2_2"><a href="/insertScheduleView.do" id="insertScheduleView" onClick=javascript:fn_GoLink("insertScheduleView"); target="main" ><img src="../images/ico_lnb_13.png" id="treeImg"><spring:message code="menu.schedule_registration" /></a></li></ul>';
+	    	  	 html3 += '      <ul class="depth_1 lnbMenu"><li class="t2"><div class="border" ><a href="#n"><img src="../images/ico_lnb_14.png" id="treeImg"><div class="tooltip"><spring:message code="menu.schedule_information" /><span class="tooltiptext"><spring:message code="menu.schedule_information" /></span></div></a></div>';
+	    	  	 html3 += '			<ul class="depth_2"><li class="ico2_2"><a href="/insertScheduleView.do" id="insertScheduleView" onClick=javascript:fn_GoLink("insertScheduleView"); target="main" ><img src="../images/ico_lnb_13.png" id="treeImg"><spring:message code="menu.schedule_registration" /></a></li>';
 		          }
 		          
 		         if(aut.length != 0 && aut[i].read_aut_yn == "Y" && aut[i].mnu_cd == "MN000102"){
-		        	 html3 += '         <ul class="depth_1 lnbMenu"><li class="ico2_2"><a href="/selectScheduleListView.do" id="selectScheduleListView" onClick=javascript:fn_GoLink("selectScheduleListView"); target="main"><img src="../images/ico_lnb_11.png" id="treeImg"><spring:message code="etc.etc27"/></a></li></ul>';
+		        	 html3 += '         <li class="ico2_2"><a href="/selectScheduleListView.do" id="selectScheduleListView" onClick=javascript:fn_GoLink("selectScheduleListView"); target="main"><img src="../images/ico_lnb_11.png" id="treeImg"><spring:message code="etc.etc27"/></a></li>';
 		          }
 		         
 		         if(aut.length != 0 && aut[i].read_aut_yn == "Y" && aut[i].mnu_cd == "MN000103"){
-	    	 		 html3 += '         <ul class="depth_1 lnbMenu"><li class="ico2_2"><a href="/selectScheduleHistoryView.do" id="selectScheduleHistoryView" onClick=javascript:fn_GoLink("selectScheduleHistoryView"); target="main"><img src="../images/ico_lnb_14.png" id="treeImg"><spring:message code="menu.shedule_execution_history" /></a></li></ul>';
+	    	 		 html3 += '         <li class="ico2_2"><a href="/selectScheduleHistoryView.do" id="selectScheduleHistoryView" onClick=javascript:fn_GoLink("selectScheduleHistoryView"); target="main"><img src="../images/ico_lnb_14.png" id="treeImg"><spring:message code="menu.shedule_execution_history" /></a></li></ul></li></ul>';
 		          }
 		      }
 
@@ -414,7 +415,7 @@ $(window.document).ready(
 						    			    <li class="ico2_3"><a href="/encodeDecodeAuditLog.do"  id="encodeDecodeAuditLog" onclick="fn_GoLink('encodeDecodeAuditLog')" target="main"><img src="../images/ico_lnb_8.png" id="treeImg">암복호화</a></li>
 						     			   	<li class="ico2_4"><a href="/managementServerAuditLog.do" id="managementServerAuditLog" onclick="fn_GoLink('managementServerAuditLog')" target="main"><img src="../images/ico_lnb_9.png" id="treeImg">관리서버</a></li>
 						     			   	<li class="ico2_4"><a href="/encodeDecodeKeyAuditLog.do" id="encodeDecodeKeyAuditLog" onclick="fn_GoLink('encodeDecodeKeyAuditLog')" target="main"><img src="../images/ico_lnb_9.png" id="treeImg">암복호화키</a></li>
-						     			   	<li class="ico2_4"><a href="/backupRestoreAuditLog.do" id="backupRestoreAuditLog" onclick="fn_GoLink('backupRestoreAuditLog')" target="main"><img src="../images/ico_lnb_9.png" id="treeImg">백업및복원</a></li>
+<!-- 						     			   	<li class="ico2_4"><a href="/backupRestoreAuditLog.do" id="backupRestoreAuditLog" onclick="fn_GoLink('backupRestoreAuditLog')" target="main"><img src="../images/ico_lnb_9.png" id="treeImg">백업및복원</a></li> -->
 						     			   	<li class="ico2_4"><a href="/resourcesUseAuditLog.do" id="resourcesUseAuditLog" onclick="fn_GoLink('resourcesUseAuditLog')" target="main"><img src="../images/ico_lnb_9.png" id="treeImg">자원사용</a></li>
 					   				  	</ul>
 				   				  	</li>

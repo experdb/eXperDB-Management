@@ -1,5 +1,4 @@
-<%@ page language="java" contentType="text/html; charset=UTF-8"
-	pageEncoding="UTF-8"%>
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form"%>
 <%@ taglib prefix="ui" uri="http://egovframework.gov/ctl/ui"%>
@@ -167,6 +166,7 @@
 							// 				aut_id : $("#aut_id").val(),
 							usr_expr_dt : $("#datepicker3").val(),
 							use_yn : $("#use_yn").val(),
+							encp_use_yn : $("#encp_use_yn").val()==null?'N':'Y'
 						},
 						success : function(result) {
 							alert('<spring:message code="message.msg144"/>');
@@ -226,6 +226,7 @@
 			yearRange: '2018:2099',
 		});
 		$("#datepicker3").datepicker();
+		
 	})
 	
 	function NumObj(obj) {
@@ -312,6 +313,15 @@
 									<a href="#n" class="calendar_btn">달력열기</a> <input type="text" class="calendar" id="datepicker3" readonly />
 								</div>
 							</td>
+							<c:if test = "${encp_yn eq 'Y'}">
+								<th scope="row" class="ico_t1">암호화 사용유무</th>
+								<td>
+									<select class="select" id="encp_use_yn" name="encp_use_yn">
+										<option value="Y"><spring:message code="dbms_information.use" /></option>
+										<option value="N"><spring:message code="dbms_information.unuse" /></option>
+									</select>
+								</td>
+							</c:if>
 						</tr>
 					</tbody>
 				</table>

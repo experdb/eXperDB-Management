@@ -54,14 +54,14 @@ function NumObj(obj) {
 
 /*validation 체크*/
 function fn_validation(){
-	var specIndex = document.getElementById('specIndex');
+	var offset = document.getElementById('offset');
 	var length = document.getElementById('length');
 	var cipherAlgorithmCode = document.getElementById('cipherAlgorithmCode');
 	var binUid = document.getElementById('binUid');
 	
-	if (specIndex.value == "" || specIndex.value == "undefind" || specIndex.value == null) {
+	if (offset.value == "" || offset.value == "undefind" || offset.value == null) {
 		alert("시작위치를 입력해주세요.");
-		specIndex.focus();
+		offset.focus();
 		return false;
 	}
 	
@@ -90,7 +90,7 @@ function fn_save(){
 	
 	Result = new Object();
 	
-	Result.specIndex = $("#specIndex").val();
+	Result.offset = $("#offset").val();
 	Result.length = $("#length").val();
 	Result.cipherAlgorithmCode = $("#cipherAlgorithmCode").val();
 	Result.binUid = $("#binUid").val();
@@ -115,7 +115,7 @@ function fn_update(){
 	Result = new Object();
 	
 	Result.rnum = "${rnum}";
-	Result.specIndex = $("#specIndex").val();
+	Result.offset = $("#offset").val();
 	Result.length = $("#length").val();
 	Result.cipherAlgorithmCode = $("#cipherAlgorithmCode").val();
 	Result.binUid = $("#binUid").val();
@@ -164,7 +164,7 @@ function fn_changeBinUid(selectObj){
 				<tbody>
 					<tr>
 						<th scope="row" class="ico_t1">시작위치</th>
-						<td><input type="text" class="txt" name="specIndex" id="specIndex" onKeyPress="NumObj(this);" value="${specIndex}"/></td>
+						<td><input type="text" class="txt" name="offset" id="offset" onKeyPress="NumObj(this);" value="${offset}"/></td>
 					</tr>
 					<tr>
 						<th scope="row" class="ico_t1">길이</th>

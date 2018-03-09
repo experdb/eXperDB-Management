@@ -14,6 +14,7 @@ public class UserVO {
 	private String cpn;//휴대폰번호
 	private String usr_expr_dt;//사용자_만료_일자
 	private String use_yn;//사용_여부
+	private String encp_use_yn;//암호화 사용유무
 	private String frst_regr_id; //최초_등록자_ID
 	private String frst_reg_dtm;//최초_등록_일시
 	private String lst_mdfr_id;//최종_수정자_ID
@@ -108,6 +109,12 @@ public class UserVO {
 	}
 	public void setUse_yn(String use_yn) {
 		this.use_yn = use_yn;
+	}
+	public String getEncp_use_yn() {
+		return encp_use_yn;
+	}
+	public void setEncp_use_yn(String encp_use_yn) {
+		this.encp_use_yn = encp_use_yn;
 	}
 	public String getFrst_regr_id() {
 		return frst_regr_id;

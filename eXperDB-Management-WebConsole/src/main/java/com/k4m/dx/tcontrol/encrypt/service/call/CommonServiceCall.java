@@ -7,6 +7,9 @@ import java.util.Map;
 
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
+import org.json.simple.parser.JSONParser;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.ResponseEntity;
 
 import com.google.gson.Gson;
 import com.k4m.dx.tcontrol.cmmn.serviceproxy.EncryptCommonService;
@@ -24,7 +27,7 @@ public class CommonServiceCall {
 	 * @return 
 	 * @throws Exception
 	 */
-	public JSONArray selectSysCodeListExper(String restIp, int restPort, String strTocken) throws Exception {
+	public JSONArray selectSysCodeListExper(String restIp, int restPort, String strTocken,String loginId, String entityId) throws Exception {
 		EncryptCommonService api = new EncryptCommonService(restIp, restPort);
 		
 		JSONArray jsonArray = new JSONArray();
@@ -42,8 +45,8 @@ public class CommonServiceCall {
 		
 
 		HashMap header = new HashMap();
-		header.put(SystemCode.FieldName.LOGIN_ID, "admin");
-		header.put(SystemCode.FieldName.ENTITY_UID, "00000000-0000-0000-0000-000000000001");
+		header.put(SystemCode.FieldName.LOGIN_ID, loginId);
+		header.put(SystemCode.FieldName.ENTITY_UID, entityId);
 		header.put(SystemCode.FieldName.TOKEN_VALUE, strTocken);
 
 		JSONObject resultJson = api.callService(strService, strCommand, header, parameters.toString());
@@ -85,8 +88,8 @@ public class CommonServiceCall {
 			}
 		}
 		return jsonArray;
-	}
-
+	}	
+	
 	
 	/**
 	 * 서버상태 조회
@@ -147,7 +150,6 @@ public class CommonServiceCall {
 		}
 		return jsonObj;
 	}
-
 	
 	/**
 	 * 마스터키 로드
@@ -197,6 +199,56 @@ public class CommonServiceCall {
 			
 		}
 		return resultJson;
-	}	
+	}
 	
+	/**
+	 * 로그인
+	 * @param restIp
+	 * @param restPort
+	 * @throws Exception
+	 */
+	public JSONObject login(String restIp, int restPort, String loginId, String password) throws Exception {
+		JSONObject jsonObj = new JSONObject();
+		EncryptCommonService api = new EncryptCommonService(restIp, restPort);
+
+		String strService = SystemCode.ServiceName.AUTH_SERVICE;
+		String strCommand = SystemCode.ServiceCommand.LOGIN;
+
+		String parameters = "";
+
+		HashMap header = new HashMap();
+		
+		header.put(SystemCode.FieldName.LOGIN_ID, loginId);
+		header.put(SystemCode.FieldName.PASSWORD, password);
+
+		JSONObject configJsonObjectMap = null;
+		ResponseEntity<String> loginEntity = api.callLoginService(strService, strCommand, header, parameters);
+
+		if (loginEntity != null && loginEntity.getStatusCode().value() == 200) {
+
+			// header setting
+			HttpHeaders headers = loginEntity.getHeaders();
+
+			String ectityUid = headers.getFirst(SystemCode.FieldName.ENTITY_UID);
+			String tockenValue = headers.getFirst(SystemCode.FieldName.TOKEN_VALUE);
+			
+			jsonObj.put("ectityUid", ectityUid);
+			jsonObj.put("tockenValue", tockenValue);
+			
+			System.out.println("ectityUid : " + ectityUid + " tockenValue : " + tockenValue);
+
+			String jsonString = loginEntity.getBody();
+
+			JSONParser jsonParser = new JSONParser();
+
+			configJsonObjectMap = (JSONObject) jsonParser.parse(jsonString);
+
+			String resultCode = (String) configJsonObjectMap.get("resultCode");
+			String resultMessage = (String) configJsonObjectMap.get("resultMessage");
+
+			System.out.println("resultCode : " + resultCode + " resultMessage : " + resultMessage);
+
+		}
+		return jsonObj;
+	}
 }

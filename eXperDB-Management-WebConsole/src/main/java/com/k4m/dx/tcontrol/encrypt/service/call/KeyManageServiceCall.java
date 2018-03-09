@@ -26,7 +26,7 @@ public class KeyManageServiceCall {
 	 * @throws Exception
 	 */
 	@SuppressWarnings("unchecked")
-	public JSONObject selectCryptoKeyList(String restIp, int restPort, String strTocken) throws Exception {
+	public JSONObject selectCryptoKeyList(String restIp, int restPort, String strTocken,String loginId, String entityId) throws Exception {
 		
 		JSONArray jsonArray = new JSONArray();
 		JSONObject result = new JSONObject();
@@ -46,8 +46,8 @@ public class KeyManageServiceCall {
 		
 
 		HashMap header = new HashMap();
-		header.put(SystemCode.FieldName.LOGIN_ID, "admin");
-		header.put(SystemCode.FieldName.ENTITY_UID, "00000000-0000-0000-0000-000000000001");
+		header.put(SystemCode.FieldName.LOGIN_ID, loginId);
+		header.put(SystemCode.FieldName.ENTITY_UID, entityId);
 		header.put(SystemCode.FieldName.TOKEN_VALUE, strTocken);
 
 		JSONObject resultJson = api.callService(strService, strCommand, header, parameters.toString());
@@ -122,7 +122,7 @@ public class KeyManageServiceCall {
 		return result;
 	}
 
-	public JSONObject insertCryptoKeySymmetric(String restIp, int restPort, String strTocken, CryptoKeySymmetric param) throws Exception{
+	public JSONObject insertCryptoKeySymmetric(String restIp, int restPort, String strTocken,String loginId, String entityId, CryptoKeySymmetric param) throws Exception{
 		EncryptCommonService api = new EncryptCommonService(restIp, restPort);
 
 		JSONObject result = new JSONObject();
@@ -138,8 +138,8 @@ public class KeyManageServiceCall {
 		
 
 		HashMap header = new HashMap();
-		header.put(SystemCode.FieldName.LOGIN_ID, "admin");
-		header.put(SystemCode.FieldName.ENTITY_UID, "00000000-0000-0000-0000-000000000001");
+		header.put(SystemCode.FieldName.LOGIN_ID, loginId);
+		header.put(SystemCode.FieldName.ENTITY_UID, entityId);
 		header.put(SystemCode.FieldName.TOKEN_VALUE, strTocken);
 
 		JSONObject resultJson = api.callService(strService, strCommand, header, parameters.toString());
@@ -162,8 +162,7 @@ public class KeyManageServiceCall {
 	}
 
 	
-	public JSONObject updateCryptoKeySymmetric(String restIp, int restPort, String strTocken,
-			CryptoKeySymmetric param) throws Exception {
+	public JSONObject updateCryptoKeySymmetric(String restIp, int restPort, String strTocken,String loginId, String entityId, CryptoKeySymmetric param) throws Exception {
 		
 		JSONArray jsonArray = new JSONArray();
 		JSONObject result = new JSONObject();
@@ -180,8 +179,8 @@ public class KeyManageServiceCall {
 		
 
 		HashMap header = new HashMap();
-		header.put(SystemCode.FieldName.LOGIN_ID, "admin");
-		header.put(SystemCode.FieldName.ENTITY_UID, "00000000-0000-0000-0000-000000000001");
+		header.put(SystemCode.FieldName.LOGIN_ID, loginId);
+		header.put(SystemCode.FieldName.ENTITY_UID, entityId);
 		header.put(SystemCode.FieldName.TOKEN_VALUE, strTocken);
 
 		JSONObject resultJson = api.callService(strService, strCommand, header, parameters.toString());
@@ -203,7 +202,7 @@ public class KeyManageServiceCall {
 		return result;
 	}
 
-	public JSONObject selectCryptoKeySymmetricList(String restIp, int restPort, String strTocken,
+	public JSONObject selectCryptoKeySymmetricList(String restIp, int restPort, String strTocken,String loginId, String entityId,
 			CryptoKeySymmetric param) throws Exception {
 		
 		JSONArray jsonArray = new JSONArray();
@@ -222,8 +221,8 @@ public class KeyManageServiceCall {
 		
 
 		HashMap header = new HashMap();
-		header.put(SystemCode.FieldName.LOGIN_ID, "admin");
-		header.put(SystemCode.FieldName.ENTITY_UID, "00000000-0000-0000-0000-000000000001");
+		header.put(SystemCode.FieldName.LOGIN_ID, loginId);
+		header.put(SystemCode.FieldName.ENTITY_UID, entityId);
 		header.put(SystemCode.FieldName.TOKEN_VALUE, strTocken);
 
 		JSONObject resultJson = api.callService(strService, strCommand, header, parameters.toString());
@@ -275,7 +274,7 @@ public class KeyManageServiceCall {
 		return result;
 	}
 
-	public JSONObject deleteCryptoKeySymmetric(String restIp, int restPort, String strTocken, CryptoKeySymmetric param) throws Exception{
+	public JSONObject deleteCryptoKeySymmetric(String restIp, int restPort, String strTocken,String loginId, String entityId, CryptoKeySymmetric param) throws Exception{
 		EncryptCommonService api = new EncryptCommonService(restIp, restPort);
 
 		String strService = SystemCode.ServiceName.KEY_SERVICE;
@@ -288,8 +287,8 @@ public class KeyManageServiceCall {
 		String parameters = TypeUtility.makeRequestBody(body);
 		
 		HashMap header = new HashMap();
-		header.put(SystemCode.FieldName.LOGIN_ID, "admin");
-		header.put(SystemCode.FieldName.ENTITY_UID, "00000000-0000-0000-0000-000000000001");
+		header.put(SystemCode.FieldName.LOGIN_ID, loginId);
+		header.put(SystemCode.FieldName.ENTITY_UID, entityId);
 		header.put(SystemCode.FieldName.TOKEN_VALUE, strTocken);
 
 		JSONObject resultJson = api.callService(strService, strCommand, header, parameters.toString());

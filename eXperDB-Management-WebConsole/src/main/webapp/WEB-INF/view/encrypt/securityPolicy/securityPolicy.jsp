@@ -152,7 +152,46 @@ var table = null;
 	
 	/* 삭제 버튼 클릭시*/
 	function fn_delete() {
-
+		var datas = table.rows('.selected').data();
+		var profileUid = table.row('.selected').data().profileUid;
+		if (datas.length <= 0) {
+ 			alert('<spring:message code="message.msg35" />');
+ 			return false;
+ 		}else if (datas.length >1){
+			alert('<spring:message code="message.msg38" />');
+ 		}else{
+			$.ajax({
+				url : "/deleteSecurityPolicy.do", 
+			  	data : {
+			  		profileUid: profileUid
+			  	},
+				dataType : "json",
+				type : "post",
+				beforeSend: function(xhr) {
+			        xhr.setRequestHeader("AJAX", true);
+			     },
+				error : function(xhr, status, error) {
+					if(xhr.status == 401) {
+						alert("<spring:message code='message.msg02' />");
+						 location.href = "/";
+					} else if(xhr.status == 403) {
+						alert("<spring:message code='message.msg03' />");
+			             location.href = "/";
+					} else {
+						alert("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""));
+					}
+				},
+				success : function(data) {			
+					if(data.resultCode == 0000000000){
+						alert(data.resultMessage);
+						location.reload();
+					}else{
+						alert(data.resultMessage);
+						return false;
+					}
+				}
+			});
+ 		}	
 	}
 </script>
 <form name="modifyForm" method="post">

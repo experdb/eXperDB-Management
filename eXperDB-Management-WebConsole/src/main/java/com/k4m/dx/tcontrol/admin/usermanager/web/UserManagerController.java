@@ -20,9 +20,11 @@ import com.k4m.dx.tcontrol.admin.accesshistory.service.AccessHistoryService;
 import com.k4m.dx.tcontrol.admin.dbauthority.service.DbAuthorityService;
 import com.k4m.dx.tcontrol.admin.menuauthority.service.MenuAuthorityService;
 import com.k4m.dx.tcontrol.admin.usermanager.service.UserManagerService;
+import com.k4m.dx.tcontrol.cmmn.AES256;
+import com.k4m.dx.tcontrol.cmmn.AES256_KEY;
 import com.k4m.dx.tcontrol.cmmn.CmmnUtils;
-import com.k4m.dx.tcontrol.cmmn.SHA256;
 import com.k4m.dx.tcontrol.common.service.HistoryVO;
+import com.k4m.dx.tcontrol.encrypt.service.call.UserManagerServiceCall;
 import com.k4m.dx.tcontrol.login.service.UserVO;
 
 /**
@@ -108,7 +110,7 @@ public class UserManagerController {
 			menuAut = cu.selectMenuAut(menuAuthorityService, "MN0004");
 			
 			if(menuAut.get(0).get("read_aut_yn").equals("N")){
-				response.sendRedirect("/autError.do.do");
+				response.sendRedirect("/autError.do");
 				return resultSet;
 			}
 			
@@ -121,10 +123,12 @@ public class UserManagerController {
 			String type=request.getParameter("type");
 			String search = request.getParameter("search");
 			String use_yn = request.getParameter("use_yn");
+			String encp_use_yn = request.getParameter("encp_use_yn");
 						
 			param.put("type", type);
 			param.put("search", search);
 			param.put("use_yn", use_yn);
+			param.put("encp_use_yn", encp_use_yn);
 		
 			resultSet = userManagerService.selectUserManager(param);	
 
@@ -158,6 +162,14 @@ public class UserManagerController {
 				historyVO.setMnu_id(12);
 				accessHistoryService.insertHistory(historyVO);			
 				
+				HttpSession session = request.getSession();
+				String strTocken = (String)session.getAttribute("tockenValue");
+				String entityId = (String)session.getAttribute("ectityUid");
+				String encp_use_yn = (String)session.getAttribute("encp_use_yn");
+			
+				if(encp_use_yn.equals("Y") && strTocken != null && entityId !=null){
+					mv.addObject("encp_yn", encp_use_yn);
+				}
 				mv.setViewName("popup/userManagerRegForm");
 			}
 
@@ -202,10 +214,20 @@ public class UserManagerController {
 				mv.addObject("pst_nm",result.getPst_nm());
 				mv.addObject("rsp_bsn_nm",result.getRsp_bsn_nm());
 				mv.addObject("cpn",result.getCpn());
-				mv.addObject("use_yn",result.getUse_yn());	
+				mv.addObject("use_yn",result.getUse_yn());
+				mv.addObject("encp_use_yn",result.getEncp_use_yn());
 				mv.addObject("aut_id",result.getAut_id());
 				mv.addObject("usr_expr_dt",result.getUsr_expr_dt());
-					
+				
+				HttpSession session = request.getSession();
+				String strTocken = (String)session.getAttribute("tockenValue");
+				String entityId = (String)session.getAttribute("ectityUid");
+				String encp_use_yn = (String)session.getAttribute("encp_use_yn");	
+			
+				if(encp_use_yn.equals("Y") && strTocken != null && entityId !=null){
+					mv.addObject("encp_yn", encp_use_yn);
+				}
+				
 				mv.setViewName("popup/userManagerRegReForm");
 			}
 
@@ -227,6 +249,8 @@ public class UserManagerController {
 	@RequestMapping(value = "/insertUserManager.do")
 	public @ResponseBody void insertUserManager(@ModelAttribute("userVo") UserVO userVo,HttpServletRequest request,HttpServletResponse response,@ModelAttribute("historyVO") HistoryVO historyVO) {
 			List<UserVO> result = null;
+			UserManagerServiceCall uic= new UserManagerServiceCall();
+			
 		try {		
 			CmmnUtils cu = new CmmnUtils();
 			menuAut = cu.selectMenuAut(menuAuthorityService, "MN0004");
@@ -242,8 +266,10 @@ public class UserManagerController {
 			historyVO.setMnu_id(12);
 			accessHistoryService.insertHistory(historyVO);
 			
+			String password = userVo.getPwd();
+			AES256 aes = new AES256(AES256_KEY.ENC_KEY);
 			//패스워드 암호화
-			userVo.setPwd(SHA256.SHA256(userVo.getPwd()));
+			userVo.setPwd(aes.aesEncode(password));
 			
 			HttpSession session = request.getSession();
 			String usr_id = (String)session.getAttribute("usr_id");
@@ -291,6 +317,24 @@ public class UserManagerController {
 				dbAuthorityService.insertUsrDbAut(param);
 			}
 			
+			//암호화 사용자 등록
+			String restIp = (String)session.getAttribute("restIp");
+			int restPort = (int)session.getAttribute("restPort");
+			String strTocken = (String)session.getAttribute("tockenValue");
+			String loginId = (String)session.getAttribute("usr_id");
+			String entityId = (String)session.getAttribute("ectityUid");
+			String encp_use_yn = (String)session.getAttribute("encp_use_yn");
+			if(encp_use_yn.equals("Y") && strTocken != null && entityId !=null){
+				String encp_yn = userVo.getEncp_use_yn();
+				if(encp_yn.equals("Y")){
+					String strUserId = userVo.getUsr_id();
+					String entityname =userVo.getUsr_nm();
+					uic.insertEntityWithPermission(restIp, restPort, strTocken, loginId, entityId, strUserId, password, entityname);
+				}
+			}
+			
+			
+			
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -308,8 +352,9 @@ public class UserManagerController {
 	 */
 	@RequestMapping(value = "/updateUserManager.do")
 	public @ResponseBody void updateUserManager(@ModelAttribute("userVo") UserVO userVo,HttpServletResponse response,@ModelAttribute("historyVO") HistoryVO historyVO,HttpServletRequest request) {
+		CmmnUtils cu = new CmmnUtils();
+		UserManagerServiceCall uic= new UserManagerServiceCall();
 		try {
-			CmmnUtils cu = new CmmnUtils();
 			menuAut = cu.selectMenuAut(menuAuthorityService, "MN0004");
 			//쓰기권한이 없는경우
 			if(menuAut.get(0).get("wrt_aut_yn").equals("N")){
@@ -325,15 +370,49 @@ public class UserManagerController {
 			String usr_id = (String)session.getAttribute("usr_id");
 			userVo.setLst_mdfr_id(usr_id);
 			UserVO userInfo= (UserVO)userManagerService.selectDetailUserManager(userVo.getUsr_id());
+			
 			if(userInfo.getPwd().equals(userVo.getPwd())){
 				userVo.setPwd(userVo.getPwd());
 			}else{
 				//패스워드 암호화
-				userVo.setPwd(SHA256.SHA256(userVo.getPwd()));
+				AES256 aes = new AES256(AES256_KEY.ENC_KEY);
+				userVo.setPwd(aes.aesEncode(userVo.getPwd()));
 			}
 			userVo.setUsr_expr_dt(userVo.getUsr_expr_dt().replace("-", ""));
 	
 			userManagerService.updateUserManager(userVo);
+			
+			String restIp = (String)session.getAttribute("restIp");
+			int restPort = (int)session.getAttribute("restPort");
+			String strTocken = (String)session.getAttribute("tockenValue");
+			String loginId = (String)session.getAttribute("usr_id");
+			String entityId = (String)session.getAttribute("ectityUid");	
+			String encp_use_yn = (String)session.getAttribute("encp_use_yn");
+			
+			if(encp_use_yn.equals("Y") && strTocken != null && entityId !=null){
+				String beforeEncrypyn = userInfo.getEncp_use_yn();
+				String nowEncrypt = userVo.getEncp_use_yn();
+				
+				System.out.println(beforeEncrypyn+"이전");
+				System.out.println(nowEncrypt+"현재!");
+				
+				if(!beforeEncrypyn.equals(nowEncrypt)){
+					if(nowEncrypt.equals("Y")){
+						System.out.println("등록!!");
+						String strUserId = userVo.getUsr_id();
+						String entityname =userVo.getUsr_nm();
+						AES256 aes = new AES256(AES256_KEY.ENC_KEY);
+						String password = aes.aesDecode(userVo.getPwd());
+						System.out.println("비번"+password);
+						uic.insertEntityWithPermission(restIp, restPort, strTocken, loginId, entityId, strUserId, password, entityname);
+					}else if(nowEncrypt.equals("N")){
+						System.out.println("삭제!");
+						String entityUid = "6165b677-7289-4df5-a747-88d847628f10";
+						uic.deleteEntity(restIp, restPort, strTocken, loginId, entityId,entityUid);
+					}
+				}
+			}
+
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -373,6 +452,7 @@ public class UserManagerController {
 	 */
 	@RequestMapping(value = "/deleteUserManager.do")
 	public @ResponseBody boolean deleteUserManager(@ModelAttribute("historyVO") HistoryVO historyVO, HttpServletResponse response, HttpServletRequest request) {
+		UserManagerServiceCall uic= new UserManagerServiceCall();
 		try {	
 			CmmnUtils cu = new CmmnUtils();
 			menuAut = cu.selectMenuAut(menuAuthorityService, "MN0004");
@@ -383,6 +463,12 @@ public class UserManagerController {
 				return false;
 			}
 			
+			// 화면접근이력 이력 남기기
+			CmmnUtils.saveHistory(request, historyVO);
+			historyVO.setExe_dtl_cd("DX-T0033_02");
+			historyVO.setMnu_id(12);
+			accessHistoryService.insertHistory(historyVO);
+			
 			String[] param = request.getParameter("usr_id").toString().split(",");
 			for (int i = 0; i < param.length; i++) {
 				menuAuthorityService.deleteMenuAuthority(param[i]);
@@ -390,12 +476,6 @@ public class UserManagerController {
 				dbAuthorityService.deleteDbAuthority(param[i]);
 				userManagerService.deleteUserManager(param[i]);
 			}
-
-			// 화면접근이력 이력 남기기
-			CmmnUtils.saveHistory(request, historyVO);
-			historyVO.setExe_dtl_cd("DX-T0033_02");
-			historyVO.setMnu_id(12);
-			accessHistoryService.insertHistory(historyVO);
 			
 			return true;
 		} catch (Exception e) {

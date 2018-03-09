@@ -1,8 +1,10 @@
 package com.k4m.dx.tcontrol.admin.menuauthority.web;
 
+import java.io.FileInputStream;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Properties;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -12,6 +14,7 @@ import org.json.simple.JSONArray;
 import org.json.simple.parser.JSONParser;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.util.ResourceUtils;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -23,7 +26,6 @@ import com.k4m.dx.tcontrol.admin.menuauthority.service.MenuAuthorityVO;
 import com.k4m.dx.tcontrol.admin.usermanager.service.UserManagerService;
 import com.k4m.dx.tcontrol.cmmn.CmmnUtils;
 import com.k4m.dx.tcontrol.common.service.HistoryVO;
-import com.k4m.dx.tcontrol.functions.schedule.service.ScheduleVO;
 import com.k4m.dx.tcontrol.login.service.UserVO;
 
 /**
@@ -87,7 +89,11 @@ public class MenuAuthorityController {
 					mv.addObject("usr_id", usr_id);
 				}
 				 
-				 
+				Properties props = new Properties();
+				props.load(new FileInputStream(ResourceUtils.getFile("classpath:egovframework/tcontrolProps/globals.properties")));
+				String encrypt_useyn = props.get("encrypt.useyn").toString();		
+				
+				mv.addObject("encrypt_useyn", encrypt_useyn);
 				mv.addObject("read_aut_yn", menuAut.get(0).get("read_aut_yn"));
 				mv.addObject("wrt_aut_yn", menuAut.get(0).get("wrt_aut_yn"));				
 				mv.setViewName("admin/menuAuthority/menuAuthority");

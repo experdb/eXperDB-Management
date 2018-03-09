@@ -168,6 +168,76 @@ $(window.document).ready(function() {
 						 document.getElementById("MN0008").style.display = '';
 					}
 				} 
+				 
+
+				 if((result[24].mnu_cd == "MN0001101" &&  result[24].read_aut_yn == "N") &&  (result[25].mnu_cd == "MN0001102" && result[25].read_aut_yn == "N")){
+	 					document.getElementById("MN00011").style.display = 'none';
+					}else{
+						document.getElementById("MN00011").style.display = '';
+						if(result[i].mnu_cd == "MN0001101"){
+							if(result[i].read_aut_yn == "N"){
+								 document.getElementById("MN0001101").style.display = 'none';
+							}else{
+								 document.getElementById("MN0001101").style.display = '';
+							}
+						}else if(result[i].mnu_cd == "MN0001102"){
+							if(result[i].read_aut_yn == "N"){
+								 document.getElementById("MN0001102").style.display = 'none';
+							}else{
+								 document.getElementById("MN0001102").style.display = '';
+							}
+						}
+					}		 
+				 
+				 if((result[27].mnu_cd == "MN0001201" &&  result[27].read_aut_yn == "N") &&  (result[28].mnu_cd == "MN0001202" && result[28].read_aut_yn == "N") &&  (result[29].mnu_cd == "MN0001203" && result[29].read_aut_yn == "N") &&  (result[30].mnu_cd == "MN0001204" && result[30].read_aut_yn == "N")){
+	 					document.getElementById("MN00012").style.display = 'none';
+					}else{
+						document.getElementById("MN00012").style.display = '';
+						if(result[i].mnu_cd == "MN0001201"){
+							if(result[i].read_aut_yn == "N"){
+								 document.getElementById("MN0001201").style.display = 'none';
+							}else{
+								 document.getElementById("MN0001201").style.display = '';
+							}
+						}else if(result[i].mnu_cd == "MN0001202"){
+							if(result[i].read_aut_yn == "N"){
+								 document.getElementById("MN0001202").style.display = 'none';
+							}else{
+								 document.getElementById("MN0001202").style.display = '';
+							}
+						}else if(result[i].mnu_cd == "MN0001203"){
+							if(result[i].read_aut_yn == "N"){
+								 document.getElementById("MN0001203").style.display = 'none';
+							}else{
+								 document.getElementById("MN0001203").style.display = '';
+							}
+						}else if(result[i].mnu_cd == "MN0001204"){
+							if(result[i].read_aut_yn == "N"){
+								 document.getElementById("MN0001204").style.display = 'none';
+							}else{
+								 document.getElementById("MN0001204").style.display = '';
+							}
+						}
+					}
+				 
+				 if((result[32].mnu_cd == "MN0001301" &&  result[32].read_aut_yn == "N") &&  (result[33].mnu_cd == "MN0001302" && result[33].read_aut_yn == "N")){
+	 					document.getElementById("MN00013").style.display = 'none';
+					}else{
+						document.getElementById("MN00013").style.display = '';
+						if(result[i].mnu_cd == "MN0001301"){
+							if(result[i].read_aut_yn == "N"){
+								 document.getElementById("MN0001301").style.display = 'none';
+							}else{
+								 document.getElementById("MN0001301").style.display = '';
+							}
+						}else if(result[i].mnu_cd == "MN0001302"){
+							if(result[i].read_aut_yn == "N"){
+								 document.getElementById("MN0001302").style.display = 'none';
+							}else{
+								 document.getElementById("MN0001302").style.display = '';
+							}
+						}
+					} 
 			}
 		}
 	});    
@@ -265,25 +335,25 @@ function fn_cookie(url) {
 					
 					<li><a href="#n"><span><img src="/images/encrypt.png" alt="ENCRYPT" /></span></a>
 						<ul class="depth_2">
-						    <li><a href="#n">정책관리/키관리</a>
+						    <li><a href="#n" id="MN00011">정책관리/키관리</a>
         						<ul class="depth_3">
-									<li><a href="/securityPolicy.do" target="main">보안정책관리</a></li>
-									<li><a href="/keyManage.do" target="main">암호화키관리</a></li>
+									<li><a href="/securityPolicy.do" target="main" id="MN0001101">보안정책관리</a></li>
+									<li><a href="/keyManage.do" target="main" id="MN0001102">암호화키관리</a></li>
 								</ul>
         					</li>
-						    <li><a href="#n">감사로그</a>
+						    <li><a href="#n" id="MN00012">감사로그</a>
         						<ul class="depth_3">
-									<li><a href="/encodeDecodeAuditLog.do" target="main">암복호화</a></li>
-									<li><a href="/managementServerAuditLog.do" target="main">관리서버</a></li>
-									<li><a href="/encodeDecodeKeyAuditLog.do" target="main">암복호화키</a></li>
-									<li><a href="/backupRestoreAuditLog.do" target="main">백업및복원</a></li>
-									<li><a href="/resourcesUseAuditLog.do" target="main">자원사용</a></li>
+									<li><a href="/encodeDecodeAuditLog.do" target="main" id="MN0001201">암복호화</a></li>
+									<li><a href="/managementServerAuditLog.do" target="main" id="MN0001202">관리서버</a></li>
+									<li><a href="/encodeDecodeKeyAuditLog.do" target="main" id="MN0001203">암복호화키</a></li>
+<!-- 								<li><a href="/backupRestoreAuditLog.do" target="main">백업및복원</a></li> -->
+									<li><a href="/resourcesUseAuditLog.do" target="main" id="MN0001204">자원사용</a></li>
 								</ul>
         					</li>
-							<li><a href="#n">설정</a>
+							<li><a href="#n" id="MN00013">설정</a>
         						<ul class="depth_3">
-									<li><a href="/securityPolicyOptionSet.do" target="main">보안정책옵션설정</a></li>
-									<li><a href="/securitySet.do" target="main">암호화설정</a></li>
+									<li><a href="/securityPolicyOptionSet.do" target="main" id="MN0001301">보안정책옵션설정</a></li>
+									<li><a href="/securitySet.do" target="main" id="MN0001302">암호화설정</a></li>
 									<li><a href="/securityKeySet.do" target="main">서버 마스터키 암호 설정</a></li>
 								</ul>
         					</li>

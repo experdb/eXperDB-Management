@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
@@ -46,12 +47,6 @@ public class SecurityPolicyController {
 
 	@Autowired
 	private AccessHistoryService accessHistoryService;
-
-	String restIp = "127.0.0.1";
-	int restPort = 8443;
-	String strTocken = "5gFEpOxJfMkKLmv52/GnlMzNqVbVawchb9ebJMD9rh0=";
-	String loginId = "admin";
-	String entityId = "00000000-0000-0000-0000-000000000001";
 	
 	/**
 	 * 보안정책관리 화면을 보여준다.
@@ -88,7 +83,15 @@ public class SecurityPolicyController {
 		SecurityPolicyServiceCall sic = new SecurityPolicyServiceCall();
 		JSONObject result = new JSONObject();
 		try {
-			result = sic.selectProfileList(restIp, restPort, strTocken);
+			
+			HttpSession session = request.getSession();
+			String restIp = (String)session.getAttribute("restIp");
+			int restPort = (int)session.getAttribute("restPort");
+			String strTocken = (String)session.getAttribute("tockenValue");
+			String loginId = (String)session.getAttribute("usr_id");
+			String entityId = (String)session.getAttribute("ectityUid");	
+			
+			result = sic.selectProfileList(restIp,restPort,strTocken,loginId,entityId);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -115,12 +118,19 @@ public class SecurityPolicyController {
 //			historyVO.setExe_dtl_cd("DX-T0056");
 //			historyVO.setMnu_id(12);
 //			accessHistoryService.insertHistory(historyVO);
-
+			
+			HttpSession session = request.getSession();
+			String restIp = (String)session.getAttribute("restIp");
+			int restPort = (int)session.getAttribute("restPort");
+			String strTocken = (String)session.getAttribute("tockenValue");
+			String loginId = (String)session.getAttribute("usr_id");
+			String entityId = (String)session.getAttribute("ectityUid");	
+			
 			/*데이터타입*/
-			dataTypeCode = sic.selectParamSysCodeListDatatype(restIp, restPort, strTocken);
+			dataTypeCode = sic.selectParamSysCodeListDatatype(restIp, restPort, strTocken,loginId,entityId);
 			mv.addObject("dataTypeCode",dataTypeCode);
 			/*접근거부시처리*/
-			denyResultTypeCode = sic.selectParamSysCodeListDenyresult(restIp, restPort, strTocken);
+			denyResultTypeCode = sic.selectParamSysCodeListDenyresult(restIp, restPort, strTocken,loginId,entityId);
 			mv.addObject("denyResultTypeCode",denyResultTypeCode);
 			
 			mv.setViewName("encrypt/securityPolicy/securityPolicyInsert");
@@ -153,11 +163,19 @@ public class SecurityPolicyController {
 //			historyVO.setMnu_id(12);
 //			accessHistoryService.insertHistory(historyVO);
 
+			HttpSession session = request.getSession();
+			String restIp = (String)session.getAttribute("restIp");
+			int restPort = (int)session.getAttribute("restPort");
+			String strTocken = (String)session.getAttribute("tockenValue");
+			String loginId = (String)session.getAttribute("usr_id");
+			String entityId = (String)session.getAttribute("ectityUid");	
+			
+			
 			/*데이터타입*/
-			dataTypeCode = sic.selectParamSysCodeListDatatype(restIp, restPort, strTocken);
+			dataTypeCode = sic.selectParamSysCodeListDatatype(restIp, restPort, strTocken,loginId,entityId);
 			mv.addObject("dataTypeCode",dataTypeCode);
 			/*접근거부시처리*/
-			denyResultTypeCode = sic.selectParamSysCodeListDenyresult(restIp, restPort, strTocken);
+			denyResultTypeCode = sic.selectParamSysCodeListDenyresult(restIp, restPort, strTocken,loginId,entityId);
 			mv.addObject("denyResultTypeCode",denyResultTypeCode);
 	
 			/*키이름*/
@@ -205,22 +223,29 @@ public class SecurityPolicyController {
 //			accessHistoryService.insertHistory(historyVO);
 			String act = request.getParameter("act");
 			
+			HttpSession session = request.getSession();
+			String restIp = (String)session.getAttribute("restIp");
+			int restPort = (int)session.getAttribute("restPort");
+			String strTocken = (String)session.getAttribute("tockenValue");
+			String loginId = (String)session.getAttribute("usr_id");
+			String entityId = (String)session.getAttribute("ectityUid");	
+			
 			/*암호화 키*/
-			binUid = kmsc.selectCryptoKeyList(restIp, restPort, strTocken);
+			binUid = kmsc.selectCryptoKeyList(restIp, restPort, strTocken,loginId,entityId);
 			mv.addObject("binUid",binUid);
 			/*암호화알고리즘*/
-			cipherAlgorithmCode = csc.selectSysCodeListExper(restIp, restPort, strTocken);
+			cipherAlgorithmCode = csc.selectSysCodeListExper(restIp, restPort, strTocken,loginId,entityId);
 			mv.addObject("cipherAlgorithmCode",cipherAlgorithmCode);
 			/*초기벡터*/
-			initialVectorTypeCode = sic.selectParamSysCodeListVector(restIp, restPort, strTocken);
+			initialVectorTypeCode = sic.selectParamSysCodeListVector(restIp, restPort, strTocken,loginId,entityId);
 			mv.addObject("initialVectorTypeCode",initialVectorTypeCode);
 			/*운영모드*/
-			operationModeCode = sic.selectParamSysCodeListOperation(restIp, restPort, strTocken);
+			operationModeCode = sic.selectParamSysCodeListOperation(restIp, restPort, strTocken,loginId,entityId);
 			mv.addObject("operationModeCode",operationModeCode);
 			
 			if (act.equals("u")) {
 				mv.addObject("rnum",request.getParameter("rnum").equals("undefined") ? "" : request.getParameter("rnum"));
-				mv.addObject("specIndex",request.getParameter("specIndex").equals("undefined") ? "" : request.getParameter("specIndex"));
+				mv.addObject("offset",request.getParameter("offset").equals("undefined") ? "" : request.getParameter("offset"));
 				mv.addObject("length",request.getParameter("length").equals("undefined") ? "" : request.getParameter("length"));
 				mv.addObject("cipherAlgorithmCodeValue",request.getParameter("cipherAlgorithmCode").equals("undefined") ? "" : request.getParameter("cipherAlgorithmCode"));
 				mv.addObject("binUidValue",request.getParameter("binUid").equals("undefined") ? "" : request.getParameter("binUid"));
@@ -343,11 +368,10 @@ public class SecurityPolicyController {
 			ProfileCipherSpec p = new ProfileCipherSpec();
 			String strRows = request.getParameter("securityPolicy").toString().replaceAll("&quot;", "\"");
 			JSONArray rows = (JSONArray) new JSONParser().parse(strRows);
+					
 			for (int i = 0; i < rows.size(); i++) {
-				JSONObject jsrow = (JSONObject) rows.get(i);
-				//시작위치
-				p.setSpecIndex(Integer.parseInt(jsrow.get("specIndex").toString()));
-				
+				JSONObject jsrow = (JSONObject) rows.get(i);		
+				p.setSpecIndex(i+1);
 				//암호화 알고리즘 코드
 				String getCipherAlgorithmCode = jsrow.get("cipherAlgorithmCode").toString();
 				String cipherAlgorithmCode="";
@@ -401,19 +425,26 @@ public class SecurityPolicyController {
 				p.setInitialVectorTypeCode(initialVectorTypeCode);
 				
 				//offset
-				p.setOffset(1);	
+				p.setOffset(Integer.parseInt(jsrow.get("offset").toString()));
 				if(jsrow.get("length").toString().equals("끝까지")){
 					p.setLength(null); //길이
 				}else{
 					p.setLength(Integer.parseInt(jsrow.get("length").toString())); //길이
 				}
 				
+				HttpSession session = request.getSession();
+				String restIp = (String)session.getAttribute("restIp");
+				int restPort = (int)session.getAttribute("restPort");
+				String strTocken = (String)session.getAttribute("tockenValue");
+				String loginId = (String)session.getAttribute("usr_id");
+				String entityId = (String)session.getAttribute("ectityUid");
+				
 				cryptoKey = sic.selectCryptoKeySymmetricList(restIp, restPort, strTocken, loginId, entityId);
 				String getbinuid = jsrow.get("binUid").toString(); //키이름
 				String binuid = "";
 				for(int j=0; j<cryptoKey.size(); j++){
-					JSONObject data = (JSONObject) cryptoKey.get(i);
-					if(data.get("resourceName").equals(getbinuid)){
+					JSONObject data = (JSONObject) cryptoKey.get(j);
+					if(getbinuid.equals(data.get("resourceName"))){
 						binuid=(String) data.get("getBinUid");
 					}
 				}
@@ -467,6 +498,7 @@ public class SecurityPolicyController {
 				//시간
 				r.setStartTime(startTime);
 				r.setEndTime(endTime);
+				
 				//OS 사용자
 				r.setOsLoginId(jsrow.get("osLoginId").toString());
 				//초
@@ -492,7 +524,15 @@ public class SecurityPolicyController {
 				r.setWorkDay(workDay);
 				param3.add(r.toJSONString());
 			}
-			result = sic.insertProfileProtection(restIp, restPort, strTocken, param1, param2, param3);
+			
+			HttpSession session = request.getSession();
+			String restIp = (String)session.getAttribute("restIp");
+			int restPort = (int)session.getAttribute("restPort");
+			String strTocken = (String)session.getAttribute("tockenValue");
+			String loginId = (String)session.getAttribute("usr_id");
+			String entityId = (String)session.getAttribute("ectityUid");	
+			
+			result = sic.insertProfileProtection(restIp, restPort, strTocken, loginId, entityId, param1, param2, param3);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -560,9 +600,7 @@ public class SecurityPolicyController {
 			JSONArray rows = (JSONArray) new JSONParser().parse(strRows);
 			for (int i = 0; i < rows.size(); i++) {
 				JSONObject jsrow = (JSONObject) rows.get(i);
-				//시작위치
-				p.setSpecIndex(Integer.parseInt(jsrow.get("specIndex").toString()));
-				
+				p.setSpecIndex(i+1);
 				//암호화 알고리즘 코드
 				String getCipherAlgorithmCode = jsrow.get("cipherAlgorithmCode").toString();
 				String cipherAlgorithmCode="";
@@ -616,19 +654,27 @@ public class SecurityPolicyController {
 				p.setInitialVectorTypeCode(initialVectorTypeCode);
 				
 				//offset
-				p.setOffset(1);	
+				p.setOffset(Integer.parseInt(jsrow.get("offset").toString()));
+				
 				if(jsrow.get("length").toString().equals("끝까지")){
 					p.setLength(null); //길이
 				}else{
 					p.setLength(Integer.parseInt(jsrow.get("length").toString())); //길이
 				}
 				
+				HttpSession session = request.getSession();
+				String restIp = (String)session.getAttribute("restIp");
+				int restPort = (int)session.getAttribute("restPort");
+				String strTocken = (String)session.getAttribute("tockenValue");
+				String loginId = (String)session.getAttribute("usr_id");
+				String entityId = (String)session.getAttribute("ectityUid");
+				
 				cryptoKey = sic.selectCryptoKeySymmetricList(restIp, restPort, strTocken, loginId, entityId);
 				String getbinuid = jsrow.get("binUid").toString(); //키이름
 				String binuid = "";
 				for(int j=0; j<cryptoKey.size(); j++){
-					JSONObject data = (JSONObject) cryptoKey.get(i);
-					if(data.get("resourceName").equals(getbinuid)){
+					JSONObject data = (JSONObject) cryptoKey.get(j);
+					if(getbinuid.equals(data.get("resourceName"))){
 						binuid=(String) data.get("getBinUid");
 					}
 				}
@@ -708,8 +754,44 @@ public class SecurityPolicyController {
 				param3.add(r.toJSONString());
 			}
 			
-			result= sic.updateProfileProtection(restIp, restPort, strTocken, param1, param2, param3);
+			HttpSession session = request.getSession();
+			String restIp = (String)session.getAttribute("restIp");
+			int restPort = (int)session.getAttribute("restPort");
+			String strTocken = (String)session.getAttribute("tockenValue");
+			String loginId = (String)session.getAttribute("usr_id");
+			String entityId = (String)session.getAttribute("ectityUid");
+			
+			result= sic.updateProfileProtection(restIp, restPort, strTocken,loginId, entityId, param1, param2, param3);
 		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return result;
+	}
+	
+	/**
+	 * 보호 정책을 삭제한다.
+	 * 
+	 * @param request
+	 * @return
+	 * @throws Exception
+	 */	
+	@RequestMapping(value = "/deleteSecurityPolicy.do")
+	public @ResponseBody JSONObject deleteSecurityPolicy(HttpServletRequest request) {
+		JSONObject result = new JSONObject();
+		SecurityPolicyServiceCall sic = new SecurityPolicyServiceCall();
+		try{
+			HttpSession session = request.getSession();
+			String restIp = (String)session.getAttribute("restIp");
+			int restPort = (int)session.getAttribute("restPort");
+			String strTocken = (String)session.getAttribute("tockenValue");
+			String loginId = (String)session.getAttribute("usr_id");
+			String entityId = (String)session.getAttribute("ectityUid");	
+			
+			String strProfileUid = request.getParameter("profileUid");
+			ProfileProtection param = new ProfileProtection();
+			param.setProfileUid(strProfileUid);		
+			result= sic.deleteProfileProtection(restIp, restPort, strTocken,loginId,entityId, param);
+		}catch(Exception e){
 			e.printStackTrace();
 		}
 		return result;

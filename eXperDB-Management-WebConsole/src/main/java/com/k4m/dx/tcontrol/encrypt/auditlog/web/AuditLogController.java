@@ -1,6 +1,7 @@
 package com.k4m.dx.tcontrol.encrypt.auditlog.web;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
@@ -21,9 +22,9 @@ import com.k4m.dx.tcontrol.encrypt.service.call.AuditLogServiceCall;
 @Controller
 public class AuditLogController {
 
-	String restIp = "127.0.0.1";
-	int restPort = 8443;
-	String strTocken = "5gFEpOxJfMkKLmv52/GnlMzNqVbVawchb9ebJMD9rh0=";
+//	String restIp = "127.0.0.1";
+//	int restPort = 8443;
+//	String strTocken = "hO/BggRGMbP8kfNKQADdUSasVYO1qhsZjL+p6ZQkTQI=";
 	
 	/**
 	 * 암복호화 감사로그 화면을 보여준다
@@ -43,7 +44,14 @@ public class AuditLogController {
 			AuditLogServiceCall sic = new AuditLogServiceCall();
 			JSONArray result = new JSONArray();
 			
-			result = sic.selectEntityAgentList(restIp, restPort, strTocken);
+			HttpSession session = request.getSession();
+			String restIp = (String)session.getAttribute("restIp");
+			int restPort = (int)session.getAttribute("restPort");
+			String strTocken = (String)session.getAttribute("tockenValue");
+			String loginId = (String)session.getAttribute("usr_id");
+			String entityId = (String)session.getAttribute("ectityUid");	
+			
+			result = sic.selectEntityAgentList(restIp, restPort, strTocken, loginId ,entityId);
 			
 			mv.setViewName("encrypt/auditLog/encodeDecodeAuditLog");
 			mv.addObject("result",result);
@@ -95,7 +103,14 @@ public class AuditLogController {
 			param.setPageSize(10001);
 			param.setTotalCountLimit(10001);
 			
-			result = sic.selectAuditLogSiteList(restIp, restPort, strTocken, param);
+			HttpSession session = request.getSession();
+			String restIp = (String)session.getAttribute("restIp");
+			int restPort = (int)session.getAttribute("restPort");
+			String strTocken = (String)session.getAttribute("tockenValue");
+			String loginId = (String)session.getAttribute("usr_id");
+			String entityId = (String)session.getAttribute("ectityUid");	
+			
+			result = sic.selectAuditLogSiteList(restIp, restPort, strTocken, param, loginId ,entityId);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -120,8 +135,15 @@ public class AuditLogController {
 			/*CmmnUtils.saveHistory(request, historyVO);
 			historyVO.setExe_dtl_cd("DX-T0055");
 			accessHistoryService.insertHistory(historyVO);*/
+			HttpSession session = request.getSession();
+			String restIp = (String)session.getAttribute("restIp");
+			int restPort = (int)session.getAttribute("restPort");
+			String strTocken = (String)session.getAttribute("tockenValue");
+			String loginId = (String)session.getAttribute("usr_id");
+			String entityId = (String)session.getAttribute("ectityUid");	
 			
-			entityuid =sic.selectEntityList(restIp, restPort, strTocken);
+			
+			entityuid =sic.selectEntityList(restIp, restPort, strTocken, loginId ,entityId);
 			mv.addObject("entityuid", entityuid);
 			
 			mv.setViewName("encrypt/auditLog/managementServerAuditLog");
@@ -157,8 +179,15 @@ public class AuditLogController {
 			param.setPageOffset(1);
 			param.setPageSize(10001);
 			param.setTotalCountLimit(10001);
+
+			HttpSession session = request.getSession();
+			String restIp = (String)session.getAttribute("restIp");
+			int restPort = (int)session.getAttribute("restPort");
+			String strTocken = (String)session.getAttribute("tockenValue");
+			String loginId = (String)session.getAttribute("usr_id");
+			String entityId = (String)session.getAttribute("ectityUid");	
 			
-			result = sic.selectAuditLogList(restIp, restPort, strTocken, param);
+			result = sic.selectAuditLogList(restIp, restPort, strTocken, loginId ,entityId, param);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -183,8 +212,14 @@ public class AuditLogController {
 			/*CmmnUtils.saveHistory(request, historyVO);
 			historyVO.setExe_dtl_cd("DX-T0055");
 			accessHistoryService.insertHistory(historyVO);*/
+			HttpSession session = request.getSession();
+			String restIp = (String)session.getAttribute("restIp");
+			int restPort = (int)session.getAttribute("restPort");
+			String strTocken = (String)session.getAttribute("tockenValue");
+			String loginId = (String)session.getAttribute("usr_id");
+			String entityId = (String)session.getAttribute("ectityUid");	
 			
-			entityuid =sic.selectEntityList(restIp, restPort, strTocken);
+			entityuid =sic.selectEntityList(restIp, restPort, strTocken, loginId ,entityId);
 			mv.addObject("entityuid", entityuid);
 			
 			mv.setViewName("encrypt/auditLog/encodeDecodeKeyAuditLog");
@@ -222,7 +257,14 @@ public class AuditLogController {
 			param.setPageSize(10001);
 			param.setTotalCountLimit(10001);
 			
-			result = sic.selectAuditLogListKey(restIp, restPort, strTocken , param);
+			HttpSession session = request.getSession();
+			String restIp = (String)session.getAttribute("restIp");
+			int restPort = (int)session.getAttribute("restPort");
+			String strTocken = (String)session.getAttribute("tockenValue");
+			String loginId = (String)session.getAttribute("usr_id");
+			String entityId = (String)session.getAttribute("ectityUid");	
+			
+			result = sic.selectAuditLogListKey(restIp, restPort, strTocken, loginId, entityId, param);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -248,8 +290,15 @@ public class AuditLogController {
 			/*CmmnUtils.saveHistory(request, historyVO);
 			historyVO.setExe_dtl_cd("DX-T0055");
 			accessHistoryService.insertHistory(historyVO);*/
-
-			entityuid =sic.selectEntityList(restIp, restPort, strTocken);
+			
+			HttpSession session = request.getSession();
+			String restIp = (String)session.getAttribute("restIp");
+			int restPort = (int)session.getAttribute("restPort");
+			String strTocken = (String)session.getAttribute("tockenValue");
+			String loginId = (String)session.getAttribute("usr_id");
+			String entityId = (String)session.getAttribute("ectityUid");	
+			
+			entityuid =sic.selectEntityList(restIp, restPort, strTocken, loginId ,entityId);
 
 			mv.addObject("entityuid", entityuid);
 			
@@ -287,7 +336,14 @@ public class AuditLogController {
 			param.setPageSize(10001);
 			param.setTotalCountLimit(10001);
 			
-			result = sic.selectBackupLogList(restIp, restPort, strTocken, param);
+			HttpSession session = request.getSession();
+			String restIp = (String)session.getAttribute("restIp");
+			int restPort = (int)session.getAttribute("restPort");
+			String strTocken = (String)session.getAttribute("tockenValue");
+			String loginId = (String)session.getAttribute("usr_id");
+			String entityId = (String)session.getAttribute("ectityUid");	
+			
+			result = sic.selectBackupLogList(restIp, restPort, strTocken, loginId ,entityId, param);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -312,7 +368,14 @@ public class AuditLogController {
 			historyVO.setExe_dtl_cd("DX-T0055");
 			accessHistoryService.insertHistory(historyVO);*/
 			
-			monitoreduid =sic.selectEntityList(restIp, restPort, strTocken);
+			HttpSession session = request.getSession();
+			String restIp = (String)session.getAttribute("restIp");
+			int restPort = (int)session.getAttribute("restPort");
+			String strTocken = (String)session.getAttribute("tockenValue");
+			String loginId = (String)session.getAttribute("usr_id");
+			String entityId = (String)session.getAttribute("ectityUid");
+			
+			monitoreduid =sic.selectEntityList(restIp, restPort, strTocken, loginId ,entityId);
 			mv.addObject("monitoreduid", monitoreduid);
 
 			mv.setViewName("encrypt/auditLog/resourcesUseAuditLog");
@@ -346,7 +409,14 @@ public class AuditLogController {
 			param.setPageOffset(1);
 			param.setPageSize(10001);
 			
-			result = sic.selectSystemUsageLogList(restIp, restPort, strTocken, param);
+			HttpSession session = request.getSession();
+			String restIp = (String)session.getAttribute("restIp");
+			int restPort = (int)session.getAttribute("restPort");
+			String strTocken = (String)session.getAttribute("tockenValue");
+			String loginId = (String)session.getAttribute("usr_id");
+			String entityId = (String)session.getAttribute("ectityUid");
+			
+			result = sic.selectSystemUsageLogList(restIp, restPort, strTocken, loginId ,entityId, param);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -366,7 +436,14 @@ public class AuditLogController {
 		AuditLogServiceCall alsc= new AuditLogServiceCall();
 		JSONArray result = new JSONArray();
 		try {
-			result = alsc.selectEntityAgentList(restIp, restPort, strTocken);
+			HttpSession session = request.getSession();
+			String restIp = (String)session.getAttribute("restIp");
+			int restPort = (int)session.getAttribute("restPort");
+			String strTocken = (String)session.getAttribute("tockenValue");
+			String loginId = (String)session.getAttribute("usr_id");
+			String entityId = (String)session.getAttribute("ectityUid");
+			
+			result = alsc.selectEntityAgentList(restIp, restPort, strTocken, loginId ,entityId);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

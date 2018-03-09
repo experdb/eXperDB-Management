@@ -1,6 +1,7 @@
 package com.k4m.dx.tcontrol.encrypt.keymanage.web;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
@@ -33,11 +34,6 @@ import com.k4m.dx.tcontrol.encrypt.service.call.KeyManageServiceCall;
 @Controller
 public class KeyManageController {
 	
-	String restIp = "127.0.0.1";
-	int restPort = 8443;
-	String strTocken = "OxEmAGA5XIiqsowfrpRbMtmU54uvuI/YX0DTvqpZgTo=";
-	
-
 	@Autowired
 	private AccessHistoryService accessHistoryService;
 
@@ -58,7 +54,14 @@ public class KeyManageController {
 //			CmmnUtils.saveHistory(request, historyVO);
 //			historyVO.setExe_dtl_cd("DX-T0055");
 //			accessHistoryService.insertHistory(historyVO);
-			result = csc.selectSysCodeListExper(restIp, restPort, strTocken);
+			HttpSession session = request.getSession();
+			String restIp = (String)session.getAttribute("restIp");
+			int restPort = (int)session.getAttribute("restPort");
+			String strTocken = (String)session.getAttribute("tockenValue");
+			String loginId = (String)session.getAttribute("usr_id");
+			String entityId = (String)session.getAttribute("ectityUid");
+			
+			result = csc.selectSysCodeListExper(restIp, restPort, strTocken,loginId,entityId);
 			mv.setViewName("encrypt/keyManage/keyManage");
 			mv.addObject("result",result);
 		} catch (Exception e) {
@@ -81,7 +84,14 @@ public class KeyManageController {
 		CommonServiceCall csc= new CommonServiceCall();
 		JSONArray result = new JSONArray();
 		try {
-			result = csc.selectSysCodeListExper(restIp, restPort, strTocken);
+			HttpSession session = request.getSession();
+			String restIp = (String)session.getAttribute("restIp");
+			int restPort = (int)session.getAttribute("restPort");
+			String strTocken = (String)session.getAttribute("tockenValue");
+			String loginId = (String)session.getAttribute("usr_id");
+			String entityId = (String)session.getAttribute("ectityUid");	
+			
+			result = csc.selectSysCodeListExper(restIp, restPort, strTocken,loginId,entityId);
 //			// 화면접근이력 이력 남기기
 //			historyVO.setExe_dtl_cd("DX-T0056");
 //			historyVO.setMnu_id(12);
@@ -118,7 +128,14 @@ public class KeyManageController {
 			String cipherAlgorithmCode = request.getParameter("cipherAlgorithmCode");
 			String updateDateTime = request.getParameter("updateDateTime");
 			
-			result = csc.selectSysCodeListExper(restIp, restPort, strTocken);
+			HttpSession session = request.getSession();
+			String restIp = (String)session.getAttribute("restIp");
+			int restPort = (int)session.getAttribute("restPort");
+			String strTocken = (String)session.getAttribute("tockenValue");
+			String loginId = (String)session.getAttribute("usr_id");
+			String entityId = (String)session.getAttribute("ectityUid");	
+			
+			result = csc.selectSysCodeListExper(restIp, restPort, strTocken,loginId,entityId);
 //			// 화면접근이력 이력 남기기
 //			historyVO.setExe_dtl_cd("DX-T0056");
 //			historyVO.setMnu_id(12);
@@ -153,7 +170,14 @@ public class KeyManageController {
 		KeyManageServiceCall kmsc= new KeyManageServiceCall();
 		JSONObject result = new JSONObject();
 		try {
-			result = kmsc.selectCryptoKeyList(restIp, restPort, strTocken);
+			HttpSession session = request.getSession();
+			String restIp = (String)session.getAttribute("restIp");
+			int restPort = (int)session.getAttribute("restPort");
+			String strTocken = (String)session.getAttribute("tockenValue");
+			String loginId = (String)session.getAttribute("usr_id");
+			String entityId = (String)session.getAttribute("ectityUid");	
+			
+			result = kmsc.selectCryptoKeyList(restIp, restPort, strTocken,loginId,entityId);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -186,7 +210,14 @@ public class KeyManageController {
 		KeyManageServiceCall kmsc= new KeyManageServiceCall();
 		JSONObject result = new JSONObject();
 		try {
-			result = kmsc.insertCryptoKeySymmetric(restIp, restPort, strTocken, param);
+			HttpSession session = request.getSession();
+			String restIp = (String)session.getAttribute("restIp");
+			int restPort = (int)session.getAttribute("restPort");
+			String strTocken = (String)session.getAttribute("tockenValue");
+			String loginId = (String)session.getAttribute("usr_id");
+			String entityId = (String)session.getAttribute("ectityUid");	
+			
+			result = kmsc.insertCryptoKeySymmetric(restIp, restPort,loginId,entityId, strTocken, param);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -237,7 +268,14 @@ public class KeyManageController {
 		KeyManageServiceCall kmsc= new KeyManageServiceCall();
 		JSONObject result = new JSONObject();
 		try {
-			result = kmsc.updateCryptoKeySymmetric(restIp, restPort, strTocken, param);
+			HttpSession session = request.getSession();
+			String restIp = (String)session.getAttribute("restIp");
+			int restPort = (int)session.getAttribute("restPort");
+			String strTocken = (String)session.getAttribute("tockenValue");
+			String loginId = (String)session.getAttribute("usr_id");
+			String entityId = (String)session.getAttribute("ectityUid");	
+			
+			result = kmsc.updateCryptoKeySymmetric(restIp, restPort, strTocken,loginId,entityId, param);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -263,7 +301,14 @@ public class KeyManageController {
 			
 			KeyManageServiceCall kmsc= new KeyManageServiceCall();
 
-			result = kmsc.selectCryptoKeySymmetricList(restIp, restPort, strTocken, param);
+			HttpSession session = request.getSession();
+			String restIp = (String)session.getAttribute("restIp");
+			int restPort = (int)session.getAttribute("restPort");
+			String strTocken = (String)session.getAttribute("tockenValue");
+			String loginId = (String)session.getAttribute("usr_id");
+			String entityId = (String)session.getAttribute("ectityUid");	
+			
+			result = kmsc.selectCryptoKeySymmetricList(restIp, restPort, strTocken, loginId, entityId, param);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -292,10 +337,18 @@ public class KeyManageController {
 			
 			KeyManageServiceCall kmsc= new KeyManageServiceCall();
 			
-			result= kmsc.deleteCryptoKeySymmetric(restIp, restPort, strTocken, param);
+			HttpSession session = request.getSession();
+			String restIp = (String)session.getAttribute("restIp");
+			int restPort = (int)session.getAttribute("restPort");
+			String strTocken = (String)session.getAttribute("tockenValue");
+			String loginId = (String)session.getAttribute("usr_id");
+			String entityId = (String)session.getAttribute("ectityUid");
+			
+			result= kmsc.deleteCryptoKeySymmetric(restIp, restPort, strTocken, loginId, entityId, param);
 		}catch(Exception e){
 			e.printStackTrace();
 		}
 		return result;
 	}
 }
+

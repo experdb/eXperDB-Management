@@ -47,6 +47,20 @@ function fn_init() {
 			className : "dt-center",
 			defaultContent : ""
 		},
+		{
+			data : "encp_use_yn",
+			render : function(data, type, full, meta) {
+				var html = "";
+				if (data == "Y") {
+					html += "<spring:message code='dbms_information.use' />";
+				} else {
+					html += "<spring:message code='dbms_information.unuse' />";
+				}
+				return html;
+			},
+			className : "dt-center",
+			defaultContent : ""
+		},
 		{ data : "usr_expr_dt", className : "dt-center", defaultContent : ""}
 		],'select': {'style': 'multi'}
 	});
@@ -58,7 +72,8 @@ function fn_init() {
 	table.tables().header().to$().find('th:eq(4)').css('min-width', '100px');
 	table.tables().header().to$().find('th:eq(5)').css('min-width', '100px');
 	table.tables().header().to$().find('th:eq(6)').css('min-width', '80px');
-	table.tables().header().to$().find('th:eq(7)').css('min-width', '100px');
+	table.tables().header().to$().find('th:eq(7)').css('min-width', '80px');
+	table.tables().header().to$().find('th:eq(8)').css('min-width', '100px');
     $(window).trigger('resize'); 
     
 	//더블 클릭시
@@ -87,6 +102,7 @@ $(window.document).ready(function() {
 			type : $("#type").val(),
 			search : "%" + $("#search").val() + "%",
 			use_yn : $("#use_yn").val(),
+			encp_use_yn : $("#encp_use_yn").val()
 		},
 		dataType : "json",
 		type : "post",
@@ -143,6 +159,7 @@ function fn_select(){
 			type : $("#type").val(),
 			search : "%" + $("#search").val() + "%",
 			use_yn : $("#use_yn").val(),
+			encp_use_yn : $("#encp_use_yn").val(),
 		},
 		dataType : "json",
 		type : "post",
@@ -308,6 +325,17 @@ function fn_delete(){
 									</select>
 								</td>
 							</tr>
+							<tr>
+								<th scope="row" class="t9">암호화 <spring:message code="user_management.use_yn" /></th>
+								<td>
+									<select class="select t5" id="encp_use_yn">
+										<option value="%"><spring:message code="common.total" /></option>
+										<option value="Y"><spring:message code="dbms_information.use" /></option>
+										<option value="N"><spring:message code="dbms_information.unuse" /></option>
+									</select>
+								</td>
+							
+							</tr>
 						</tbody>
 					</table>
 				</div>
@@ -322,6 +350,7 @@ function fn_delete(){
 								<th width="100"><spring:message code="user_management.user_name" /></th>
 								<th width="100"><spring:message code="user_management.contact" /></th>
 								<th width="80"><spring:message code="user_management.use_yn" /></th>
+								<th width="80">암호화 <spring:message code="user_management.use_yn" /></th>
 								<th width="100"><spring:message code="user_management.expiration_date" /></th>
 							</tr>
 						</thead>
