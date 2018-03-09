@@ -187,6 +187,34 @@ function NumObj(obj) {
 /*validation 체크*/
 function fn_validation(){
 	
+	var startDateTime = document.getElementById('startDateTime');
+	if (startDateTime.value == "" || startDateTime.value == "undefind" || startDateTime.value == null) {
+		alert("시작기간을 입력해주세요.");
+		startDateTime.focus();
+		return false;
+	}
+	
+	var endDateTime = document.getElementById('endDateTime');
+	if (endDateTime.value == "" || endDateTime.value == "undefind" || endDateTime.value == null) {
+		alert("종료기간을 입력해주세요.");
+		endDateTime.focus();
+		return false;
+	}
+	
+	var massiveThreshold = document.getElementById('massiveThreshold');
+	if (massiveThreshold.value == "" || massiveThreshold.value == "undefind" || massiveThreshold.value == null) {
+		alert("임계치(대량작업) 건수를 입력해주세요.");
+		massiveThreshold.focus();
+		return false;
+	}
+	
+	var massiveTimeInterval = document.getElementById('massiveTimeInterval');
+	if (massiveTimeInterval.value == "" || massiveTimeInterval.value == "undefind" || massiveTimeInterval.value == null) {
+		alert("임계치(대량작업) 초를 입력해주세요.");
+		massiveTimeInterval.focus();
+		return false;
+	}
+	
 	return true;
 }
 
@@ -260,8 +288,8 @@ function fn_update(){
 	Result.accessMacAddress = $("#accessMacAddress").val();
 	Result.startDateTime = $("#startDateTime").val();
 	Result.endDateTime = $("#endDateTime").val();
-	Result.startTime = $("#from_exe_h").val()+":"+$("#from_exe_m").val()+":00" ;
-	Result.endTime = $("#to_exe_h").val()+":"+$("#to_exe_m").val()+":59" ;
+	Result.startTime = $("#from_exe_h").val()+":"+$("#from_exe_m").val();
+	Result.endTime = $("#to_exe_h").val()+":"+$("#to_exe_m").val();
 	Result.workDay = workDayValue;
 	Result.massiveThreshold = $("#massiveThreshold").val();
 	Result.massiveTimeInterval = $("#massiveTimeInterval").val();
@@ -345,6 +373,9 @@ function fn_update(){
 							<th scope="row" class="ico_t1">요일</th>
 							<td colspan="3">
 								<div class="inp_chk">
+									<input type="checkbox" id="SUNDAY" name="workDay" value="일" />
+									<label for="SUNDAY" style="margin-right: 10px; color: red;">일</label>
+									
 									<input type="checkbox" id="MONDAY" name="workDay" value="월"/>
 									<label for="MONDAY" style="margin-right: 10px;">월</label>		
 									
@@ -361,18 +392,16 @@ function fn_update(){
 									<label for="FRIDAY" style="margin-right: 10px;">금</label>
 									
 									<input type="checkbox" id="SATURDAY" name="workDay" value="토"/>
-									<label for="SATURDAY" style="margin-right: 10px;">토</label>
-									
-									<input type="checkbox" id="SUNDAY" name="workDay" value="일" />
-									<label for="SUNDAY">일</label>
+									<label for="SATURDAY" style="color: blue;">토</label>
+
 								</div>
 							</td>
 						</tr>
 						<tr>
 							<th scope="row" class="ico_t1">임계치(대량작업)</th>
 							<td>
-								<input type="text" class="txt" name="massiveThreshold" id="massiveThreshold" style="width: 50px;" onKeyPress="NumObj(this);"/>&nbsp&nbsp건수/ &nbsp&nbsp 
-								<input type="text" class="txt" name="massiveTimeInterval" id="massiveTimeInterval" style="width: 50px;" onKeyPress="NumObj(this);"/>초
+								<input type="number" class="txt"  name="massiveThreshold" id="massiveThreshold" style="width: 50px;" onKeyPress="NumObj(this);"/>&nbsp&nbsp건수/ &nbsp&nbsp 
+								<input type="number" class="txt" name="massiveTimeInterval" id="massiveTimeInterval" style="width: 50px;" onKeyPress="NumObj(this);"/>초
 							</td>
 						</tr>
 						<tr>
