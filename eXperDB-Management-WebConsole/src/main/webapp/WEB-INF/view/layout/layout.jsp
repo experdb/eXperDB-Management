@@ -26,6 +26,7 @@
 
 <script src ="/js/jquery/jquery-1.7.2.min.js" type="text/javascript"></script>
 <script src ="/js/jquery/jquery-ui.js" type="text/javascript"></script>
+<script src ="/js/jquery/jquery.form.min.js" type="text/javascript"></script>
 <script src="/js/jquery/jquery.dataTables.min.js" type="text/javascript"></script>
 <script src="/js/dt/dataTables.select.min.js" type="text/javascript"></script>
 <script src="/js/dt/dataTables.jqueryui.min.js" type="text/javascript"></script>

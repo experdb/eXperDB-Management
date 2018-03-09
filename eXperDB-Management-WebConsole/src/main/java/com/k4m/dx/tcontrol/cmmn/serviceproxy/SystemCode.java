@@ -263,6 +263,7 @@ public class SystemCode {
 		public static final String SELECTSYSCODELIST =	"selectSysCodeList";
 		public static final String SELECTCIPHERSYSCODELIST =	"selectCipherSysCodeList";
 		public static final String SELECTPARAMSYSCODELIST =	"selectParamSysCodeList";
+		public static final String SELECTENTITYUID =	"selectEntityUid";
 		
 		
 		public static final String SELECTSYSCONFIGLIST =	"selectSysConfigList";

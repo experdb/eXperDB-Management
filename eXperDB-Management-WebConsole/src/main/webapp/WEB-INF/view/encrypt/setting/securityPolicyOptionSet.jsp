@@ -403,8 +403,8 @@ margin-right: 10px;
 									<td colspan="2">
 										<div class="inp_chk">
 											<span>
-												<input type="checkbox" id="mon" name="mon" />
-												<label for="mon"><spring:message code="common.mon" /></label>
+												<input type="checkbox" id="sun" name="sun" />
+												<label for="sun"><spring:message code="common.sun" /></label>
 											</span>
 											<span>
 												<input type="checkbox" id="tue" name="tue" />
@@ -427,9 +427,9 @@ margin-right: 10px;
 												<label for="sat"><spring:message code="common.sat" /></label>
 											</span>
 											<span>
-												<input type="checkbox" id="sun" name="sun" />
-												<label for="sun"><spring:message code="common.sun" /></label>
-											</span>
+												<input type="checkbox" id="mon" name="mon" />
+												<label for="mon"><spring:message code="common.mon" /></label>
+											</span>									
 										</div>
 									</td>
 								</tr>

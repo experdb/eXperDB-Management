@@ -773,13 +773,13 @@ var haCnt = 0;
 							<td>
 								<div class="schedule_wrap">
 									<span id="weekDay"> 
-									<spring:message code="common.sun" /> <input type="checkbox" id="chk"name="chk" value="0"> 
-									<spring:message code="common.mon" /> <input type="checkbox" id="chk" name="chk" value="0"> 
-									<spring:message code="common.tue" /> <input type="checkbox" id="chk" name="chk" value="0"> 
-									<spring:message code="common.wed" /> <input type="checkbox" id="chk" name="chk" value="0"> 
-									<spring:message code="common.thu" /> <input type="checkbox" id="chk" name="chk" value="0"> 
-									<spring:message code="common.fri" /> <input type="checkbox" id="chk" name="chk" value="0"> 
-									<spring:message code="common.sat" /> <input type="checkbox" id="chk" name="chk" value="0">
+									<input type="checkbox" id="chk"name="chk" value="0"> <spring:message code="common.sun" />
+									<input type="checkbox" id="chk" name="chk" value="0"> <spring:message code="common.mon" />
+									<input type="checkbox" id="chk" name="chk" value="0"> <spring:message code="common.tue" />
+									<input type="checkbox" id="chk" name="chk" value="0"> <spring:message code="common.wed" />
+									<input type="checkbox" id="chk" name="chk" value="0"> <spring:message code="common.thu" />
+									<input type="checkbox" id="chk" name="chk" value="0"> <spring:message code="common.fri" />
+									<input type="checkbox" id="chk" name="chk" value="0"> <spring:message code="common.sat" />
 									</span> <span>
 										<div id="hour"></div>
 									</span> <span>
