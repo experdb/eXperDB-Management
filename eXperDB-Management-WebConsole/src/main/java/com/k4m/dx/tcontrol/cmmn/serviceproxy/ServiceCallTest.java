@@ -44,22 +44,22 @@ public class ServiceCallTest {
 		int restPort = 9443;
 		
 		restIp = "127.0.0.1";
-		restPort = 8443;
+		restPort = 9443;
 		
 		String loginId = "";
 		String entityId = "";
 		String password = "";
 		
-		//loginId = "admin";
-		//password = "password";
-		//entityId = "00000000-0000-0000-0000-000000000001";
+		loginId = "admin";
+		password = "experdb12#";
+		entityId = "00000000-0000-0000-0000-000000000001";
 		
-		loginId = "testuser";
-		password = "1234qwer";
-		entityId = "d06c0acb-ca3a-4324-83ed-71df370acdb3";
+		//loginId = "testuser";
+		//password = "1234qwer";
+		//entityId = "d06c0acb-ca3a-4324-83ed-71df370acdb3";
 
 		
-		String strTocken = "uPhC37DZG6ju4b0s9cebC4bgJ3krAtA7YS660wjhLsw=";
+		String strTocken = "EYslbNlRdbrLID9Xvc9fA6R8pdF+11rHhAPNyBNyROk=";
 
 		ServiceCallTest test = new ServiceCallTest();
 	
@@ -68,8 +68,10 @@ public class ServiceCallTest {
 		//마스터키 로드
 		//test.loadServerKey(restIp, restPort, strTocken, loginId, entityId);
 		
-		test.encTest();
+		//test.encTest();
 		
+		String userId = "admin"; //검색할 User Id
+		test.selectEntityUid(restIp, restPort, strTocken, loginId, entityId, userId);
 		
 		//서버상태
 		//test.selectServerStatus(restIp, restPort, strTocken, loginId, entityId);
@@ -552,7 +554,6 @@ public class ServiceCallTest {
 
 		//JSONObject parameters = new JSONObject();
 		
-		ObjectMapper mapper = new ObjectMapper();
 		String parameters = "";
 
 
@@ -1078,8 +1079,8 @@ public class ServiceCallTest {
 		String strService = SystemCode.ServiceName.SYSTEM_SERVICE;
 		String strCommand = SystemCode.ServiceCommand.LOADSERVERKEY;
 		
-		String oldPassword = "password";
-		oldPassword = "marm13+irhFlLcINs7nlIQhKacF88OUybxqcXwRAptg=";
+		String oldPassword = "12345qwer";
+		//oldPassword = "marm13+irhFlLcINs7nlIQhKacF88OUybxqcXwRAptg=";
 
 		AdminServerPasswordRequest adminServerPasswordRequest = new AdminServerPasswordRequest();
 		adminServerPasswordRequest.setOldPassword(oldPassword);
@@ -2608,6 +2609,56 @@ public class ServiceCallTest {
 		
 	}
 	
+	/**
+	 * entity_uid 검색
+	 * @param restIp
+	 * @param restPort
+	 * @param strTocken
+	 * @param loginId
+	 * @param entityId
+	 * @param userId
+	 * @throws Exception
+	 */
+	private void selectEntityUid(String restIp, int restPort, String strTocken, String loginId, String entityId, String userId) throws Exception {
+		EncryptCommonService api = new EncryptCommonService(restIp, restPort);
+
+		String strService = SystemCode.ServiceName.ENTITY_SERVICE;
+		String strCommand = SystemCode.ServiceCommand.SELECTENTITYUID;
+
+
+		
+		AuthCredentialToken param = new AuthCredentialToken();
+		
+		param.setLoginId(userId);
+		
+		HashMap body = new HashMap();
+		body.put(TypeUtility.getJustClassName(param.getClass()), param.toJSONString());
+		
+		
+		String parameters = TypeUtility.makeRequestBody(body);
+		
+
+		HashMap header = new HashMap();
+		header.put(SystemCode.FieldName.LOGIN_ID, loginId);
+		header.put(SystemCode.FieldName.ENTITY_UID, entityId);
+		header.put(SystemCode.FieldName.TOKEN_VALUE, strTocken);
+
+		JSONObject resultJson1 = api.callService(strService, strCommand, header, parameters.toString());
+		
+		Iterator<?> iter1 = resultJson1.entrySet().iterator();
+		while (iter1.hasNext()) {
+			Map.Entry entry = (Map.Entry) iter1.next();
+
+			System.out.println(String.valueOf(entry.getKey()) + " = " + String.valueOf(entry.getValue()));
+		}
+
+		String resultCode = (String) resultJson1.get("resultCode");
+		String resultMessage = new String(resultJson1.get("resultMessage").toString().getBytes("iso-8859-1"),"UTF-8");
+		
+		System.out.println(resultMessage);
+		
+	}
+
 	
 	private void checkChar(String originalStr) throws Exception {
 		//String originalStr = "Å×½ºÆ®"; // 테스트 
