@@ -325,8 +325,7 @@ function fn_cookie(url) {
 					        </li>
 					        <li><a href="#n" id="MN0007"><spring:message code="menu.monitoring"/></a>
 					        	<ul class="depth_3">
-									<li><a href="/agentMonitoring.do" onClick="fn_cookie(null)" id="MN000701" target="main"><spring:message code="menu.agent_monitoring"/></a></li>
-									<li><a href="/encryptAgentMonitoring.do" onClick="fn_cookie(null)" id="MN000702" target="main">암호화 에이전트</a></li>
+									<li><a href="/agentMonitoring.do" onClick="fn_cookie(null)" id="MN000701" target="main"><spring:message code="menu.agent_monitoring"/></a></li>									
 								</ul>
 					        </li>
 							<li><a href="/extensionList.do" onClick="fn_cookie(null)" id="MN0008" target="main"><spring:message code="menu.extension_pack_installation_information"/></a></li>
@@ -354,7 +353,8 @@ function fn_cookie(url) {
         						<ul class="depth_3">
 									<li><a href="/securityPolicyOptionSet.do" target="main" id="MN0001301">보안정책옵션설정</a></li>
 									<li><a href="/securitySet.do" target="main" id="MN0001302">암호화설정</a></li>
-									<li><a href="/securityKeySet.do" target="main">서버 마스터키 암호 설정</a></li>
+									<li><a href="/securityKeySet.do" target="main" id="MN0001303">서버 마스터키 암호 설정</a></li>
+									<li><a href="/encryptAgentMonitoring.do" target="main"  id="MN0001304" >에이전트 설정</a></li>
 								</ul>
         					</li>
 						</ul>
