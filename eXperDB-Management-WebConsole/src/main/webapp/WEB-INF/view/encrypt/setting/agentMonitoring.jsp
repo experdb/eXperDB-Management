@@ -23,6 +23,95 @@
 	*/
 %>
 <script>
+var table = null;
+
+function fn_init() {
+	table = $('#agentMonitoring').DataTable({
+		scrollY : "250px",
+		searching : false,
+		deferRender : true,
+		scrollX: true,
+		columns : [
+			{ data : "no", defaultContent : "", targets : 0, orderable : false, checkboxes : {'selectRow' : true}}, 
+			{ data : "no", className : "dt-center", defaultContent : ""}, 
+			{ data : "entityName", className : "dt-center", defaultContent : ""}, 
+			{ data : "entityStatusName", className : "dt-center", defaultContent : ""}, 
+			{ data : "latestAddress", className : "dt-center", defaultContent : ""}, 
+			{ data : "latestDateTime", className : "dt-center", defaultContent : ""}, 
+			{ data : "receivedPolicyVersion", className : "dt-center", defaultContent : ""}, 
+			{ data : "sentPolicyVersion", className : "dt-center", defaultContent : ""}, 
+			{ data : "createDateTime", className : "dt-center", defaultContent : ""},
+			{ data : "updateDateTime", className : "dt-center", defaultContent : ""},
+			{ data : "updateName", className : "dt-center", defaultContent : ""},
+			
+			{ data : "entityUid", className : "dt-center", defaultContent : "", visible: false},
+			{ data : "resultCode", className : "dt-center", defaultContent : "", visible: false},
+			{ data : "resultMessage", className : "dt-center", defaultContent : "", visible: false},
+			{ data : "entityTypeCode", className : "dt-center", defaultContent : "", visible: false},
+			{ data : "entityStatusCode", className : "dt-center", defaultContent : "", visible: false},
+			{ data : "appVersion", className : "dt-center", defaultContent : "", visible: false}
+		 ]
+	});
+	
+	table.tables().header().to$().find('th:eq(0)').css('min-width', '20px');
+	table.tables().header().to$().find('th:eq(1)').css('min-width', '40px');
+	table.tables().header().to$().find('th:eq(2)').css('min-width', '180px');
+	table.tables().header().to$().find('th:eq(3)').css('min-width', '75px');
+	table.tables().header().to$().find('th:eq(4)').css('min-width', '100px');
+	table.tables().header().to$().find('th:eq(5)').css('min-width', '130px');
+	table.tables().header().to$().find('th:eq(6)').css('min-width', '100px');
+	table.tables().header().to$().find('th:eq(7)').css('min-width', '100px');
+	table.tables().header().to$().find('th:eq(8)').css('min-width', '130px');
+	table.tables().header().to$().find('th:eq(9)').css('min-width', '130px');
+	table.tables().header().to$().find('th:eq(10)').css('min-width', '75px');
+	
+	table.tables().header().to$().find('th:eq(11)').css('min-width', '0px');
+	table.tables().header().to$().find('th:eq(12)').css('min-width', '0px');
+	table.tables().header().to$().find('th:eq(13)').css('min-width', '0px');
+	table.tables().header().to$().find('th:eq(14)').css('min-width', '0px');
+	table.tables().header().to$().find('th:eq(15)').css('min-width', '0px');
+	table.tables().header().to$().find('th:eq(16)').css('min-width', '0px');
+    $(window).trigger('resize');
+    
+}
+
+
+$(window.document).ready(function() {
+	fn_init();
+	fn_select();
+});
+
+
+function fn_select(){
+	$.ajax({
+		url : "/selectAgentMonitoring.do", 
+	  	data : {
+	  		entityName: $('#entityName').val(),
+	  	},
+		dataType : "json",
+		type : "post",
+		beforeSend: function(xhr) {
+	        xhr.setRequestHeader("AJAX", true);
+	     },
+		error : function(xhr, status, error) {
+			if(xhr.status == 401) {
+				alert("<spring:message code='message.msg02' />");
+				 location.href = "/";
+			} else if(xhr.status == 403) {
+				alert("<spring:message code='message.msg03' />");
+	             location.href = "/";
+			} else {
+				alert("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""));
+			}
+		},
+		success : function(data) {			
+			table.clear().draw();
+			table.rows.add(data).draw();
+		}
+	});
+}
+
+
 /*수정버튼 클릭시*/
 function fn_agentMonitoringModifyForm(){
 	var popUrl = "/popup/agentMonitoringModifyForm.do";
@@ -72,61 +161,43 @@ function fn_agentMonitoringModifyForm(){
 						<tbody>
 							<tr>
 								<th scope="row" class="t2">에이전트명</th>
-								<td><input type="text" id="" name="" class="txt t2" /></td>
+								<td><input type="text" id="entityName" name="entityName" class="txt t2" /></td>
 							</tr>
 						</tbody>
 					</table>
 				</div>
 				<div class="overflow_area">
-					<table class="list">
-						<caption>리스트</caption>
-						<colgroup>
-							<col style="width: 5%;"/>
-							<col style="width: 5%;"/>
-							<col style="width: 10%;"/>
-							<col style="width: 10%;"/>
-							<col style="width: 10%;"/>
-							<col style="width: 10%;"/>
-							<col style="width: 15%;"/>
-							<col style="width: 15%;"/>
-							<col style="width: 10%;"/>
-							<col style="width: 10%;"/>
-							<col style="width: 10%;"/>
-						</colgroup>
+					<table id="agentMonitoring" class="display" cellspacing="0" width="100%">
 						<thead>
 							<tr>
-								<th scope="col"><input type="checkbox"></th>
-								<th scope="col">No</th>
-								<th scope="col">에이전트명</th>
-								<th scope="col">상태</th>
-								<th scope="col">최근접속주소</th>
-								<th scope="col">최근접속일시</th>
-								<th scope="col">에이전트 정책 버전</th>
-								<th scope="col">최근 전송 정책 버전</th>
-								<th scope="col">설치일시</th>
-								<th scope="col">변경일시</th>
-								<th scope="col">변경자</th>
+								<th width="20"></th>
+								<th width="40">No</th>
+								<th width="50">에이전트명</th>
+								<th width="100">상태</th>
+								<th width="100">최근접속주소</th>
+								<th width="100">최근접속일시</th>
+								<th width="100">에이전트 정책버전</th>
+								<th width="80">최근전송 정책버전</th>
+								<th width="100">설치일시</th>
+								<th width="100">변경일시</th>
+								<th width="100">변경자</th>
+								<th width="0"></th>
+								<th width="0"></th>
+								<th width="0"></th>
+								<th width="0"></th>
+								<th width="0"></th>		
+								<th width="0"></th>							
 							</tr>
 						</thead>
-						<tbody>
-							<tr>
-								<td></td>
-								<td></td>
-								<td></td>
-								<td></td>
-								<td></td>
-								<td></td>
-								<td></td>
-								<td></td>
-								<td></td>
-								<td></td>
-								<td></td>
-							</tr>
-						</tbody>
 					</table>
 				</div>
 			</div>
 		</div>
 	</div>
+</div>
+
+
+<div id="loading">
+			<img src="/images/spin.gif" alt="" />
 </div>
 <!-- // contents -->

@@ -8,7 +8,6 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
-import org.codehaus.jackson.map.ObjectMapper;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
@@ -44,7 +43,7 @@ public class ServiceCallTest {
 		int restPort = 9443;
 		
 		restIp = "127.0.0.1";
-		restPort = 9443;
+		restPort = 8443;
 		
 		String loginId = "";
 		String entityId = "";
@@ -59,7 +58,7 @@ public class ServiceCallTest {
 		//entityId = "d06c0acb-ca3a-4324-83ed-71df370acdb3";
 
 		
-		String strTocken = "EYslbNlRdbrLID9Xvc9fA6R8pdF+11rHhAPNyBNyROk=";
+		String strTocken = "+xPfyFJeYDibmdqDdTZ9aSCbXyN5vpB/yyNPTgECjgQ=";
 
 		ServiceCallTest test = new ServiceCallTest();
 	
@@ -70,8 +69,8 @@ public class ServiceCallTest {
 		
 		//test.encTest();
 		
-		String userId = "admin"; //검색할 User Id
-		test.selectEntityUid(restIp, restPort, strTocken, loginId, entityId, userId);
+		//String userId = "admin"; //검색할 User Id
+		//test.selectEntityUid(restIp, restPort, strTocken, loginId, entityId, userId);
 		
 		//서버상태
 		//test.selectServerStatus(restIp, restPort, strTocken, loginId, entityId);
@@ -168,7 +167,7 @@ public class ServiceCallTest {
 		//설정 > 암호화 설정 저장
 		//test.updateSysMultiValueConfigList2(restIp, restPort, strTocken, loginId, entityId);
 		
-		
+		test.selectEntityList2(restIp, restPort, strTocken, loginId, entityId);
 		
 	}
 

@@ -543,4 +543,31 @@ public class EncriptSettingController {
 		return mv;	
 	}
 
+	
+	/**
+	 * agentMonitoring조회
+	 * 
+	 * @return resultSet
+	 * @throws Exception
+	 */
+	@RequestMapping(value = "/selectAgentMonitoring.do")
+	public @ResponseBody JSONArray selectAgentMonitoring(HttpServletRequest request) {
+			
+		HttpSession session = request.getSession();
+		String restIp = (String)session.getAttribute("restIp");
+		int restPort = (int)session.getAttribute("restPort");
+		String strTocken = (String)session.getAttribute("tockenValue");
+		String loginId = (String)session.getAttribute("usr_id");
+		String entityId = (String)session.getAttribute("ectityUid");	
+		
+				
+		EncryptSettingServiceCall essc = new EncryptSettingServiceCall();
+		JSONArray result = new JSONArray();
+		try {
+			result = essc.selectAgentMonitoring(restIp, restPort, strTocken, loginId, entityId);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return result;
+	}
 }
