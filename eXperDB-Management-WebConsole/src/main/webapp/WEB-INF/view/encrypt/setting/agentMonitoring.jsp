@@ -42,7 +42,7 @@ function fn_agentMonitoringModifyForm(){
 <div id="contents">
 	<div class="contents_wrap">
 		<div class="contents_tit">
-			<h4>암호화 에이전트<a href="#n"><img src="../images/ico_tit.png" class="btn_info" /></a></h4>
+			<h4>에이전트 설정<a href="#n"><img src="../images/ico_tit.png" class="btn_info" /></a></h4>
 			<div class="infobox">
 				<ul>
 					<li>암호화 에이전트 설명</li>
@@ -50,9 +50,9 @@ function fn_agentMonitoringModifyForm(){
 			</div>
 			<div class="location">
 				<ul>
-					<li>Admin</li>
-					<li>모니터링</li>
-					<li class="on">암화화 에이전트</li>
+					<li>암호화</li>
+					<li>설정</li>
+					<li class="on">에이전트 설정</li>
 				</ul>
 			</div>
 		</div>

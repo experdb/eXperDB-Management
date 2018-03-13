@@ -354,7 +354,7 @@ function fn_cookie(url) {
 									<li><a href="/securityPolicyOptionSet.do" target="main" id="MN0001301">보안정책옵션설정</a></li>
 									<li><a href="/securitySet.do" target="main" id="MN0001302">암호화설정</a></li>
 									<li><a href="/securityKeySet.do" target="main" id="MN0001303">서버 마스터키 암호 설정</a></li>
-									<li><a href="/encryptAgentMonitoring.do" target="main"  id="MN0001304" >에이전트 설정</a></li>
+									<li><a href="/securityAgentMonitoring.do" target="main"  id="MN0001304" >에이전트 설정</a></li>
 								</ul>
         					</li>
 						</ul>

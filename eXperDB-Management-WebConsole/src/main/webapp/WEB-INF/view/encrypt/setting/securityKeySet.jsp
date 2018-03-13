@@ -20,6 +20,16 @@
 	*
 	*/
 %>
+
+<style>
+#ifram_hidden
+{
+width:1px;
+height:1px;
+border:0;
+}
+</style>
+
 <script>
 var isServerKeyEmpty  = "${isServerKeyEmpty}";
 var isServerPasswordEmpty = "${isServerPasswordEmpty}";
@@ -106,7 +116,6 @@ function fn_save(){
 		
 	}else{		
 		if(pnlOldPasswordView == true){
-			//마스터키 파일 없이 서버 로드
 			if(mstKeyUseChk == true){
 				fn_keyFileLoadServerKey();
 			}else{
@@ -121,20 +130,17 @@ function fn_save(){
 	
 
 function fn_keyFileLoadServerKey(){
-	var form = $("#file_form")[0];
-	var formData = new FormData(form); 
+	var formData = new FormData(); 
 
-	formData.append("fileobj", $("#keyfile")[0].files[0]); 
+	formData.append("keyFile", $("input[name=keyFile]")[0].files[0]);
 	formData.append("mstKeyPassword", $("input[name=mstKeyPassword]").val()); 
 
-	alert(formData);
 	$.ajax({
 		url : "/securityMasterKeySave01.do", 
 	  	data : formData,
 	  	processData: false,
         contentType: false,
-		//dataType : "json",
-		dataType: "text",
+		dataType : "json",
 		type : "post",
 		error : function(xhr, status, error) {
 			if(xhr.status == 401) {
@@ -148,7 +154,6 @@ function fn_keyFileLoadServerKey(){
 			}
 		},
 		success : function(data) {
-			alert("A");
 			if(data.resultCode == "0000000000"){
 				alert("서버 마스터키 암호가 입력되었습니다.");
 			}
@@ -188,15 +193,20 @@ function fn_noKeyFileLoadServerKey(keyPassword){
 }
 
 function fn_newMasterKey(useYN,chk){
+	var formData = new FormData(); 
+
+	formData.append("useYN", useYN);
+	formData.append("chk", chk);
+	
+	formData.append("keyFile", $("input[name=keyFile]")[0].files[0])
+	formData.append("mstKeyPassword", $("input[name=mstKeyPassword]").val()); 
+	formData.append("mstKeyRenewPassword", $("input[name=mstKeyRenewPassword]").val()); 
+	
 	$.ajax({
 		url : "/securityMasterKeySave03.do", 
-	  	data : {
-	  		mstKeyPassword : $("#mstKeyPassword").val(),
-	  		mstKeyRenewPassword : $("#mstKeyRenewPassword").val(),
-	  		mstKeyPth : $("#mstKeyPth").val(),
-	  		chk : chk,
-	  		useYN : useYN  		
-	  	},
+	  	data : formData,
+	  	processData: false,
+        contentType: false,
 		dataType : "json",
 		type : "post",
 		beforeSend: function(xhr) {
@@ -215,10 +225,18 @@ function fn_newMasterKey(useYN,chk){
 		},
 		success : function(data) {
 			if(data.resultCode == "0000000000"){
+				document.keyDownload.mstKey.value = data.masterKey;
+				fn_mstKeyDownload();	
 				alert("서버 마스터키 암호가 변경되었습니다.");
 			}
 		}
 	});	
+}
+
+
+function fn_mstKeyDownload(){
+	document.keyDownload.taget="mskKeyForm";
+	document.keyDownload.submit();
 }
 </script>
 
@@ -235,13 +253,13 @@ function fn_newMasterKey(useYN,chk){
 				<ul>
 					<li>암호화</li>
 					<li>설정</li>
-					<li class="on">암서버 마스터키 암호 설정</li>
+					<li class="on">암호화서버 마스터키 암호 설정</li>
 				</ul>
 			</div>
 		</div>
 
 		<div class="contents">
-		<form id="file_form" method="post" enctype="multipart/form-data" action="/securityMasterKeySave01.do">
+		<form id="masterKey" method="post" enctype="multipart/form-data" action="">
 			<div class="cmm_grp">
 			<%-- <form class="securityKeySet" method="post" enctype="multipart/form-data"> --%>
 				<div class="cmm_bd" id="pnlOldPassword">
@@ -266,14 +284,14 @@ function fn_newMasterKey(useYN,chk){
 									<th scope="row" class="ico_t2">마스터키 위치</th>
 									<td>
 										<input type="text" name="mstKeyPth" id="mstKeyPth" class="txt t9" />
-										<span class="btn btnC_01"><button type="button" class= "btn_type_02"  style="width: 60px; margin-right: -60px; margin-top: 0;" onClick="document.getElementById('keyfile').click();">찾아보기</button></span>
-										<input type="file" size="30" id="keyfile" style="display:none;" onchange="document.getElementById('mstKeyPth').value=this.value;" />
+										<span class="btn btnC_01"><button type="button" class= "btn_type_02"  style="width: 60px; margin-right: -60px; margin-top: 0;" onClick="document.getElementById('keyFile').click();">찾아보기</button></span>
+										<input type="file" size="30" id="keyFile" name="keyFile" style="display:none;" onchange="document.getElementById('mstKeyPth').value=this.value;" />
 									</td>
 								</tr>
 								<tr>
 									<th scope="row" class="ico_t2">비밀번호</th>
 									<td>
-										<input type="text" name="mstKeyPassword" id="mstKeyPassword" class="txt t2" />										
+										<input type="password" name="mstKeyPassword" id="mstKeyPassword" class="txt t2" />										
 									</td>
 								</tr>
 							</tbody>
@@ -327,13 +345,13 @@ function fn_newMasterKey(useYN,chk){
 								<tr>
 									<th scope="row" class="ico_t2">비밀번호</th>
 									<td>
-										<input type="text" name="mstKeyRenewPassword" id="mstKeyRenewPassword" class="txt t2" />										
+										<input type="password" name="mstKeyRenewPassword" id="mstKeyRenewPassword" class="txt t2" />										
 									</td>
 								</tr>
 								<tr>
 									<th scope="row" class="ico_t2">비밀번호 확인</th>
 									<td>
-										<input type="text" name="mstKeyRenewPasswordconfirm" id="mstKeyRenewPasswordconfirm" class="txt t2" />										
+										<input type="password" name="mstKeyRenewPasswordconfirm" id="mstKeyRenewPasswordconfirm" class="txt t2" />										
 									</td>
 								</tr>
 							</tbody>
@@ -346,6 +364,15 @@ function fn_newMasterKey(useYN,chk){
 				<%-- </form>	 --%>
 			</div>
 			</form>
+			
+			<iframe id="ifram_hidden" name="mskKeyForm"></iframe>
+			<form name="keyDownload" method="post" target="mskKeyForm" action="/keyDownload.do">
+				<input type="hidden" name="mstKey"  id="mstKey" >
+			</form>
 		</div>
 	</div>
+</div>
+
+<div id="loading">
+			<img src="/images/spin.gif" alt="" />
 </div>
