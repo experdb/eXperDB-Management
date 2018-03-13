@@ -4,6 +4,7 @@
 
 <%
 	String usr_id = (String)session.getAttribute("usr_id");
+
 %>
 <script>
 
@@ -220,7 +221,7 @@ $(window.document).ready(function() {
 						}
 					}
 				 
-				 if((result[32].mnu_cd == "MN0001301" &&  result[32].read_aut_yn == "N") &&  (result[33].mnu_cd == "MN0001302" && result[33].read_aut_yn == "N")){
+				 if((result[32].mnu_cd == "MN0001301" &&  result[32].read_aut_yn == "N") &&  (result[33].mnu_cd == "MN0001302" && result[33].read_aut_yn == "N") &&  (result[34].mnu_cd == "MN0001303" && result[34].read_aut_yn == "N") &&  (result[35].mnu_cd == "MN0001304" && result[35].read_aut_yn == "N")){
 	 					document.getElementById("MN00013").style.display = 'none';
 					}else{
 						document.getElementById("MN00013").style.display = '';
@@ -235,6 +236,18 @@ $(window.document).ready(function() {
 								 document.getElementById("MN0001302").style.display = 'none';
 							}else{
 								 document.getElementById("MN0001302").style.display = '';
+							}
+						}else if(result[i].mnu_cd == "MN0001303"){
+							if(result[i].read_aut_yn == "N"){
+								 document.getElementById("MN0001303").style.display = 'none';
+							}else{
+								 document.getElementById("MN0001303").style.display = '';
+							}
+						}else if(result[i].mnu_cd == "MN0001304"){
+							if(result[i].read_aut_yn == "N"){
+								 document.getElementById("MN0001304").style.display = 'none';
+							}else{
+								 document.getElementById("MN0001304").style.display = '';
 							}
 						}
 					} 

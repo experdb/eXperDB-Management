@@ -43,7 +43,7 @@
 		SELECT 
 				 mnu_id
 		FROM T_MNU_I
-		WHERE mnu_id &lt; 35
+		WHERE mnu_id &lt; 37
     </select>
   
   

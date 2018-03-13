@@ -26,7 +26,6 @@ import com.k4m.dx.tcontrol.admin.accesshistory.service.AccessHistoryService;
 import com.k4m.dx.tcontrol.cmmn.AES256;
 import com.k4m.dx.tcontrol.cmmn.AES256_KEY;
 import com.k4m.dx.tcontrol.cmmn.CmmnUtils;
-import com.k4m.dx.tcontrol.cmmn.SHA256;
 import com.k4m.dx.tcontrol.common.service.HistoryVO;
 import com.k4m.dx.tcontrol.encrypt.service.call.CommonServiceCall;
 import com.k4m.dx.tcontrol.login.service.LoginService;
@@ -160,12 +159,15 @@ public class LoginController {
 				String restIp = props.get("encrypt.server.url").toString();		
 				int restPort = Integer.parseInt(props.get("encrypt.server.port").toString());
 				String encp_use_yn = props.get("encrypt.useyn").toString();
-				JSONObject result = cic.login(restIp,restPort,id,userVo.getPwd());				
-				request.getSession().setAttribute("restIp", restIp);
-				request.getSession().setAttribute("restPort", restPort);
 				request.getSession().setAttribute("encp_use_yn", encp_use_yn);
-				request.getSession().setAttribute("tockenValue", result.get("tockenValue"));
-				request.getSession().setAttribute("ectityUid", result.get("ectityUid"));				
+				
+				if(encp_use_yn.equals("Y")){
+					JSONObject result = cic.login(restIp,restPort,id,userVo.getPwd());				
+					request.getSession().setAttribute("restIp", restIp);
+					request.getSession().setAttribute("restPort", restPort);
+					request.getSession().setAttribute("tockenValue", result.get("tockenValue"));
+					request.getSession().setAttribute("ectityUid", result.get("ectityUid"));
+				}
 				
 				// 로그인 이력 남기기
 				CmmnUtils.saveHistory(request, historyVO);

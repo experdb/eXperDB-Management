@@ -17,6 +17,7 @@ import com.k4m.dx.tcontrol.cmmn.serviceproxy.vo.Entity;
 import com.k4m.dx.tcontrol.cmmn.serviceproxy.vo.EntityPermission;
 
 public class UserManagerServiceCall {
+	
 	/**
 	 * 사용자 등록
 	 * @param restIp
@@ -24,7 +25,7 @@ public class UserManagerServiceCall {
 	 * @param strTocken
 	 * @throws Exception
 	 */
-	public void insertEntityWithPermission(String restIp, int restPort, String strTocken, String loginId, String entityId,String strUserId,String password,String entityname) throws Exception {
+	public JSONObject insertEntityWithPermission(String restIp, int restPort, String strTocken, String loginId, String entityId,String strUserId,String password,String entityname) throws Exception {
 		EncryptCommonService api = new EncryptCommonService(restIp, restPort);
 
 		String strService = SystemCode.ServiceName.ENTITY_SERVICE;
@@ -104,12 +105,62 @@ public class UserManagerServiceCall {
 			System.out.println(String.valueOf(entry.getKey()) + " = " + String.valueOf(entry.getValue()));
 		}
 		
-		
 		String resultCode = (String) resultJson.get("resultCode");
 		String resultMessage = new String(resultJson.get("resultMessage").toString().getBytes("iso-8859-1"),"UTF-8");
 		//long totalListCount = (long) resultJson.get("totalListCount");
 		
+		JSONObject result = new JSONObject();
+		result.put("resultCode", resultCode);
+		result.put("resultMessage", resultMessage);
+		return result;
+	}
+	
+	/**
+	 * entity_uid 검색
+	 * @param restIp
+	 * @param restPort
+	 * @param strTocken
+	 * @param loginId
+	 * @param entityId
+	 * @param userId
+	 * @return 
+	 * @throws Exception
+	 */
+	public JSONObject selectEntityUid(String restIp, int restPort, String strTocken, String loginId, String entityId, String userId) throws Exception {
+		EncryptCommonService api = new EncryptCommonService(restIp, restPort);
+
+		String strService = SystemCode.ServiceName.ENTITY_SERVICE;
+		String strCommand = SystemCode.ServiceCommand.SELECTENTITYUID;
 		
+		AuthCredentialToken param = new AuthCredentialToken();
+		
+		param.setLoginId(userId);
+		
+		HashMap body = new HashMap();
+		body.put(TypeUtility.getJustClassName(param.getClass()), param.toJSONString());
+		
+		String parameters = TypeUtility.makeRequestBody(body);
+
+		HashMap header = new HashMap();
+		header.put(SystemCode.FieldName.LOGIN_ID, loginId);
+		header.put(SystemCode.FieldName.ENTITY_UID, entityId);
+		header.put(SystemCode.FieldName.TOKEN_VALUE, strTocken);
+
+		JSONObject resultJson1 = api.callService(strService, strCommand, header, parameters.toString());
+		
+		Iterator<?> iter1 = resultJson1.entrySet().iterator();
+		while (iter1.hasNext()) {
+			Map.Entry entry = (Map.Entry) iter1.next();
+
+			System.out.println(String.valueOf(entry.getKey()) + " = " + String.valueOf(entry.getValue()));
+		}
+
+		String resultCode = (String) resultJson1.get("resultCode");
+		String resultMessage = new String(resultJson1.get("resultMessage").toString().getBytes("iso-8859-1"),"UTF-8");
+		
+		System.out.println(resultMessage);
+		
+		return resultJson1;
 	}
 	
 	/**
@@ -119,7 +170,7 @@ public class UserManagerServiceCall {
 	 * @param strTocken
 	 * @throws Exception
 	 */
-	public void deleteEntity(String restIp, int restPort, String strTocken, String loginId, String entityId, String entityUid) throws Exception {
+	public JSONObject deleteEntity(String restIp, int restPort, String strTocken, String loginId, String entityId, String entityUid) throws Exception {
 		EncryptCommonService api = new EncryptCommonService(restIp, restPort);
 
 		String strService = SystemCode.ServiceName.ENTITY_SERVICE;
@@ -162,6 +213,9 @@ public class UserManagerServiceCall {
 		String resultMessage = (String) resultJson.get("resultMessage");
 		//long totalListCount = (long) resultJson.get("totalListCount");
 		
-		
+		JSONObject result = new JSONObject();
+		result.put("resultCode", resultCode);
+		result.put("resultMessage", resultMessage);
+		return result;
 	}
 }

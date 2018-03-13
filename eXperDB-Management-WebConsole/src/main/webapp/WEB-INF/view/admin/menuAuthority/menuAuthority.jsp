@@ -354,7 +354,7 @@ $(function() {
 		
 		//Encrypt 선택 전체 체크박스
 		$("#encrypt").click(function() { 
-			var array = new Array("MN0001101","MN0001102","MN0001201","MN0001202","MN0001203","MN0001204","MN0001301","MN0001302");
+			var array = new Array("MN0001101","MN0001102","MN0001201","MN0001202","MN0001203","MN0001204","MN0001301","MN0001302","MN0001303","MN0001304");
 			var datas = userTable.row('.selected').length;
 			 if(datas != 1){
 				 alert("<spring:message code='message.msg165'/>");
@@ -418,7 +418,7 @@ $(function() {
 		
 		//설정 선택 전체 체크박스
 		$("#setting").click(function() { 
-			var array = new Array("MN0001301","MN0001302");
+			var array = new Array("MN0001301","MN0001302","MN0001303","MN0001304");
 			var datas = userTable.row('.selected').length;
 			 if(datas != 1){
 				 alert("<spring:message code='message.msg165'/>");
@@ -943,11 +943,13 @@ function fn_search(){
 													<input type="hidden"  name="mnu_id" value="31">	
 													<input type="hidden"  name="mnu_id" value="33">	
 													<input type="hidden"  name="mnu_id" value="34">	
+													<input type="hidden"  name="mnu_id" value="35">	
+													<input type="hidden"  name="mnu_id" value="36">	
 													
 														</td>											
 													</tr>	
 													<tr class="encrypt">
-														<th scope="row" rowspan="8">
+														<th scope="row" rowspan="10">
 															<div class="inp_chk">
 																<input type="checkbox" id="encrypt" name="encrypt"/>
 																<label for="encrypt">Encrypt</label>
@@ -1054,7 +1056,7 @@ function fn_search(){
 														</td>	
 													</tr>	
 													<tr class="encrypt">
-														<th scope="row" rowspan="2">
+														<th scope="row" rowspan="4">
 															<div class="inp_chk">
 																<input type="checkbox" id="setting" name="setting"/>
 																<label for="setting">설정</label>
@@ -1088,7 +1090,37 @@ function fn_search(){
 																<label for="w_MN0001302"></label>
 															</div>
 														</td>	
-													</tr>									
+													</tr>	
+													<tr class="encrypt">
+														<td>서버마스터키암호설정</td>
+														<td>
+															<div class="inp_chk">
+																<input type="checkbox" id="r_MN0001303" name="r_mnu_nm" />
+																<label for="r_MN0001303"></label>
+															</div>
+														</td>
+														<td>
+															<div class="inp_chk">
+																<input type="checkbox" id="w_MN0001303" name="w_mnu_nm" />
+																<label for="w_MN0001303"></label>
+															</div>
+														</td>	
+													</tr>
+													<tr class="encrypt">
+														<td>에이전트 설정</td>
+														<td>
+															<div class="inp_chk">
+																<input type="checkbox" id="r_MN0001304" name="r_mnu_nm" />
+																<label for="r_MN0001304"></label>
+															</div>
+														</td>
+														<td>
+															<div class="inp_chk">
+																<input type="checkbox" id="w_MN0001304" name="w_mnu_nm" />
+																<label for="w_MN0001304"></label>
+															</div>
+														</td>	
+													</tr>								
 												</tbody>
 											</table>
 										</div>
