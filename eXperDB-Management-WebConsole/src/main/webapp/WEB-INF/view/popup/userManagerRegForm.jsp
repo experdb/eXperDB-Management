@@ -142,7 +142,7 @@
 	function fn_insert() {
 		if (!fn_userManagerValidation())return false;
 		if (!confirm("<spring:message code='message.msg143'/>")) return false;
-		
+
 		$.ajax({
 			url : '/UserManagerIdCheck.do',
 			type : 'post',
@@ -166,16 +166,21 @@
 							// 				aut_id : $("#aut_id").val(),
 							usr_expr_dt : $("#datepicker3").val(),
 							use_yn : $("#use_yn").val(),
-							encp_use_yn : $("#encp_use_yn").val()==null?'N':'Y'
+							encp_use_yn : $("#encp_use_yn").val()
 						},
 						success : function(result) {
-							alert('<spring:message code="message.msg144"/>');
-							if (confirm('<spring:message code="message.msg145"/>')) {
-								window.close();
-								opener.location.href = "/menuAuthority.do?usr_id="+$("#usr_id").val();
-							} else {
-								window.close();
-								opener.fn_select();
+							if(result.resultCode == 0000000000){
+								alert('<spring:message code="message.msg144"/>');
+								if (confirm('<spring:message code="message.msg145"/>')) {
+									window.close();
+									opener.location.href = "/menuAuthority.do?usr_id="+$("#usr_id").val();
+								} else {
+									window.close();
+									opener.fn_select();
+								}
+							}else{
+								alert(result.resultMessage);
+								return false;
 							}
 						},
 						beforeSend: function(xhr) {

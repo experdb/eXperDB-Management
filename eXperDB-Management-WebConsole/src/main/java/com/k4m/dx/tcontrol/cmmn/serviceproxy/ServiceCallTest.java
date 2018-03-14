@@ -8,7 +8,6 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
-import org.codehaus.jackson.map.ObjectMapper;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
@@ -44,9 +43,13 @@ public class ServiceCallTest {
 		int restPort = 9443;
 		
 		restIp = "127.0.0.1";
+<<<<<<< HEAD
 		//restPort = 9443;
 		
 		//restIp = "222.110.153.214";
+=======
+		restPort = 8443;
+>>>>>>> a370256b7afbf006d9fe7966484afcfd9c686901
 		
 		String loginId = "";
 		String entityId = "";
@@ -62,7 +65,11 @@ public class ServiceCallTest {
 		//entityId = "d06c0acb-ca3a-4324-83ed-71df370acdb3";
 
 		
+<<<<<<< HEAD
 		String strTocken = "YaSB1Ls6o+O1eXL3PSiA3WDuwFHOh8J7SNivGpHEVjM=";
+=======
+		String strTocken = "+xPfyFJeYDibmdqDdTZ9aSCbXyN5vpB/yyNPTgECjgQ=";
+>>>>>>> a370256b7afbf006d9fe7966484afcfd9c686901
 
 		ServiceCallTest test = new ServiceCallTest();
 	
@@ -174,7 +181,7 @@ public class ServiceCallTest {
 		//설정 > 암호화 설정 저장
 		//test.updateSysMultiValueConfigList2(restIp, restPort, strTocken, loginId, entityId);
 		
-		
+		test.selectEntityList2(restIp, restPort, strTocken, loginId, entityId);
 		
 	}
 

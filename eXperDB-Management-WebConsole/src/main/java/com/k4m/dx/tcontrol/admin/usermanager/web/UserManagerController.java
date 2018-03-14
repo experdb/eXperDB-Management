@@ -8,6 +8,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import org.json.simple.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -57,8 +58,8 @@ public class UserManagerController {
 	@Autowired
 	private AccessHistoryService accessHistoryService;
 	
-	
 	private List<Map<String, Object>> menuAut;
+	
 	
 	/**
 	 * 사용자관리 화면을 보여준다.
@@ -177,7 +178,6 @@ public class UserManagerController {
 			e.printStackTrace();
 		}
 		return mv;
-   
 	}
 	
 	/**
@@ -227,7 +227,6 @@ public class UserManagerController {
 				if(encp_use_yn.equals("Y") && strTocken != null && entityId !=null){
 					mv.addObject("encp_yn", encp_use_yn);
 				}
-				
 				mv.setViewName("popup/userManagerRegReForm");
 			}
 
@@ -235,7 +234,26 @@ public class UserManagerController {
 			e.printStackTrace();
 		}
 		return mv;
-   
+	}
+	
+	/**
+	 * 중복 아이디를 체크한다.
+	 * 
+	 * @param usr_id
+	 * @return
+	 * @throws Exception
+	 */
+	@RequestMapping(value = "/UserManagerIdCheck.do")
+	public @ResponseBody String UserManagerIdCheck(@RequestParam("usr_id") String usr_id) {
+		try {
+			int resultSet = userManagerService.userManagerIdCheck(usr_id);
+			if (resultSet > 0) {
+				return "false"; // 중복값이 존재함.
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return "true";
 	}
 	
 	/**
@@ -243,13 +261,15 @@ public class UserManagerController {
 	 * 
 	 * @param userVo
 	 * @param request
+	 * @return 
 	 * @return
 	 * @throws Exception
 	 */
 	@RequestMapping(value = "/insertUserManager.do")
-	public @ResponseBody void insertUserManager(@ModelAttribute("userVo") UserVO userVo,HttpServletRequest request,HttpServletResponse response,@ModelAttribute("historyVO") HistoryVO historyVO) {
+	public @ResponseBody JSONObject insertUserManager(@ModelAttribute("userVo") UserVO userVo,HttpServletRequest request,HttpServletResponse response,@ModelAttribute("historyVO") HistoryVO historyVO) {
 			List<UserVO> result = null;
 			UserManagerServiceCall uic= new UserManagerServiceCall();
+			JSONObject results = new JSONObject();
 			
 		try {		
 			CmmnUtils cu = new CmmnUtils();
@@ -267,11 +287,39 @@ public class UserManagerController {
 			accessHistoryService.insertHistory(historyVO);
 			
 			String password = userVo.getPwd();
-			AES256 aes = new AES256(AES256_KEY.ENC_KEY);
-			//패스워드 암호화
-			userVo.setPwd(aes.aesEncode(password));
-			
 			HttpSession session = request.getSession();
+			
+			//암호화 사용자 등록
+			String strTocken = (String)session.getAttribute("tockenValue");
+			String loginId = (String)session.getAttribute("usr_id");
+			String entityId = (String)session.getAttribute("ectityUid");
+			String encp_use_yn = (String)session.getAttribute("encp_use_yn");
+			
+			if(userVo.getEncp_use_yn() == null){
+				userVo.setEncp_use_yn("N");
+			}
+			
+			if(userVo.getEncp_use_yn().equals("Y")){
+				if(encp_use_yn.equals("Y") && strTocken != null && entityId !=null){
+					String encp_yn = userVo.getEncp_use_yn();
+					if(encp_yn.equals("Y")){
+						String strUserId = userVo.getUsr_id();
+						String entityname =userVo.getUsr_nm();
+						String restIp = (String)session.getAttribute("restIp");
+						int restPort = (int)session.getAttribute("restPort");
+						results = uic.insertEntityWithPermission(restIp, restPort, strTocken, loginId, entityId, strUserId, password, entityname);
+						if(!results.get("resultCode").equals("0000000000")){
+							results.put("resultCode", results.get("resultCode"));
+							results.put("resultMessage", results.get("resultMessage"));
+							return results;
+						}
+					}
+				}
+			}
+			
+			AES256 aes = new AES256(AES256_KEY.ENC_KEY);
+			userVo.setPwd(aes.aesEncode(password)); //패스워드 암호화
+			
 			String usr_id = (String)session.getAttribute("usr_id");
 			userVo.setFrst_regr_id(usr_id);
 			userVo.setLst_mdfr_id(usr_id);
@@ -284,15 +332,12 @@ public class UserManagerController {
 			
 			userManagerService.insertUserManager(userVo);
 			
-			
 			// 메뉴 권한 초기등록
 			result = menuAuthorityService.selectMnuIdList();
-			
 			for(int i=0; i<result.size(); i++){
 				userVo.setMnu_id(result.get(i).getMnu_id());
 				menuAuthorityService.insertUsrmnuaut(userVo);
 			}
-			
 			
 			// 유저디비서버 권한 초기등록
 			List<Map<String, Object>>  severList = null;
@@ -317,27 +362,13 @@ public class UserManagerController {
 				dbAuthorityService.insertUsrDbAut(param);
 			}
 			
-			//암호화 사용자 등록
-			String restIp = (String)session.getAttribute("restIp");
-			int restPort = (int)session.getAttribute("restPort");
-			String strTocken = (String)session.getAttribute("tockenValue");
-			String loginId = (String)session.getAttribute("usr_id");
-			String entityId = (String)session.getAttribute("ectityUid");
-			String encp_use_yn = (String)session.getAttribute("encp_use_yn");
-			if(encp_use_yn.equals("Y") && strTocken != null && entityId !=null){
-				String encp_yn = userVo.getEncp_use_yn();
-				if(encp_yn.equals("Y")){
-					String strUserId = userVo.getUsr_id();
-					String entityname =userVo.getUsr_nm();
-					uic.insertEntityWithPermission(restIp, restPort, strTocken, loginId, entityId, strUserId, password, entityname);
-				}
+			if(results.size()==0){
+				results.put("resultCode", "0000000000");
 			}
-			
-			
-			
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
+		return results;
 	}	
 	
 	
@@ -351,9 +382,10 @@ public class UserManagerController {
 	 * @throws Exception
 	 */
 	@RequestMapping(value = "/updateUserManager.do")
-	public @ResponseBody void updateUserManager(@ModelAttribute("userVo") UserVO userVo,HttpServletResponse response,@ModelAttribute("historyVO") HistoryVO historyVO,HttpServletRequest request) {
+	public @ResponseBody JSONObject updateUserManager(@ModelAttribute("userVo") UserVO userVo,HttpServletResponse response,@ModelAttribute("historyVO") HistoryVO historyVO,HttpServletRequest request) {
 		CmmnUtils cu = new CmmnUtils();
 		UserManagerServiceCall uic= new UserManagerServiceCall();
+		JSONObject result = new JSONObject();
 		try {
 			menuAut = cu.selectMenuAut(menuAuthorityService, "MN0004");
 			//쓰기권한이 없는경우
@@ -378,12 +410,8 @@ public class UserManagerController {
 				AES256 aes = new AES256(AES256_KEY.ENC_KEY);
 				userVo.setPwd(aes.aesEncode(userVo.getPwd()));
 			}
-			userVo.setUsr_expr_dt(userVo.getUsr_expr_dt().replace("-", ""));
-	
-			userManagerService.updateUserManager(userVo);
 			
-			String restIp = (String)session.getAttribute("restIp");
-			int restPort = (int)session.getAttribute("restPort");
+
 			String strTocken = (String)session.getAttribute("tockenValue");
 			String loginId = (String)session.getAttribute("usr_id");
 			String entityId = (String)session.getAttribute("ectityUid");	
@@ -391,56 +419,51 @@ public class UserManagerController {
 			
 			if(encp_use_yn.equals("Y") && strTocken != null && entityId !=null){
 				String beforeEncrypyn = userInfo.getEncp_use_yn();
-				String nowEncrypt = userVo.getEncp_use_yn();
-				
-				System.out.println(beforeEncrypyn+"이전");
-				System.out.println(nowEncrypt+"현재!");
+				String nowEncrypt = userVo.getEncp_use_yn();			
+				String restIp = (String)session.getAttribute("restIp");
+				int restPort = (int)session.getAttribute("restPort");
 				
 				if(!beforeEncrypyn.equals(nowEncrypt)){
 					if(nowEncrypt.equals("Y")){
-						System.out.println("등록!!");
 						String strUserId = userVo.getUsr_id();
 						String entityname =userVo.getUsr_nm();
 						AES256 aes = new AES256(AES256_KEY.ENC_KEY);
 						String password = aes.aesDecode(userVo.getPwd());
-						System.out.println("비번"+password);
-						uic.insertEntityWithPermission(restIp, restPort, strTocken, loginId, entityId, strUserId, password, entityname);
-					}else if(nowEncrypt.equals("N")){
-						System.out.println("삭제!");
-						String entityUid = "6165b677-7289-4df5-a747-88d847628f10";
-						uic.deleteEntity(restIp, restPort, strTocken, loginId, entityId,entityUid);
+						result = uic.insertEntityWithPermission(restIp, restPort, strTocken, loginId, entityId, strUserId, password, entityname);
+						if(!result.get("resultCode").equals("0000000000")){
+							result.put("resultCode", result.get("resultCode"));
+							result.put("resultMessage", result.get("resultMessage"));
+							return result;
+						}
+					}else if(nowEncrypt.equals("N")){				
+						JSONObject resultEntity = uic.selectEntityUid(restIp, restPort, strTocken, loginId, entityId, userVo.getUsr_id());
+						if(!resultEntity.get("resultCode").equals("0000000000")){
+							result.put("resultCode", resultEntity.get("resultCode"));
+							result.put("resultMessage", resultEntity.get("resultMessage"));
+							return result;
+						}
+						Map map = (Map) resultEntity.get("map");
+						String entityUid=(String) map.get("entityUid");
+						result = uic.deleteEntity(restIp, restPort, strTocken, loginId, entityId, entityUid);
+						if(!result.get("resultCode").equals("0000000000")){
+							result.put("resultCode", result.get("resultCode"));
+							result.put("resultMessage", result.get("resultMessage"));
+							return result;
+						}
 					}
 				}
 			}
-
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-	}
-	
-	
-	/**
-	 * 중복 아이디를 체크한다.
-	 * 
-	 * @param usr_id
-	 * @return
-	 * @throws Exception
-	 */
-	@RequestMapping(value = "/UserManagerIdCheck.do")
-	public @ResponseBody String UserManagerIdCheck(@RequestParam("usr_id") String usr_id) {
-		try {
-			int resultSet = userManagerService.userManagerIdCheck(usr_id);
-			if (resultSet > 0) {
-				// 중복값이 존재함.
-				return "false";
+			userVo.setUsr_expr_dt(userVo.getUsr_expr_dt().replace("-", ""));
+			userManagerService.updateUserManager(userVo);
+			
+			if(result.size()==0){
+				result.put("resultCode", "0000000000");
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		return "true";
+		return result;
 	}
-
-	
 	
 	/**
 	 * 사용자를 삭제한다.
@@ -451,16 +474,16 @@ public class UserManagerController {
 	 * @throws Exception
 	 */
 	@RequestMapping(value = "/deleteUserManager.do")
-	public @ResponseBody boolean deleteUserManager(@ModelAttribute("historyVO") HistoryVO historyVO, HttpServletResponse response, HttpServletRequest request) {
+	public @ResponseBody JSONObject deleteUserManager(@ModelAttribute("historyVO") HistoryVO historyVO, HttpServletResponse response, HttpServletRequest request) {
 		UserManagerServiceCall uic= new UserManagerServiceCall();
-		try {	
+		JSONObject result = new JSONObject();
+		try {
 			CmmnUtils cu = new CmmnUtils();
 			menuAut = cu.selectMenuAut(menuAuthorityService, "MN0004");
 			
 			//쓰기권한이 없는경우
 			if(menuAut.get(0).get("wrt_aut_yn").equals("N")){
 				response.sendRedirect("/autError.do");
-				return false;
 			}
 			
 			// 화면접근이력 이력 남기기
@@ -469,18 +492,52 @@ public class UserManagerController {
 			historyVO.setMnu_id(12);
 			accessHistoryService.insertHistory(historyVO);
 			
+			HttpSession session = request.getSession();
+			String strTocken = (String)session.getAttribute("tockenValue");
+			String loginId = (String)session.getAttribute("usr_id");
+			String entityId = (String)session.getAttribute("ectityUid");
+			String encp_use_yn = (String)session.getAttribute("encp_use_yn");
+			
 			String[] param = request.getParameter("usr_id").toString().split(",");
 			for (int i = 0; i < param.length; i++) {
+				UserVO userDetail= (UserVO)userManagerService.selectDetailUserManager(param[i]);
+				String getEncpUseyn = userDetail.getEncp_use_yn();
+				if(getEncpUseyn.equals("Y")){
+					if(encp_use_yn.equals("Y") && strTocken != null && entityId !=null){
+						String restIp = (String)session.getAttribute("restIp");
+						int restPort = (int)session.getAttribute("restPort");
+						JSONObject resultEntity = uic.selectEntityUid(restIp, restPort, strTocken, loginId, entityId, param[i]);
+						if(!resultEntity.get("resultCode").equals("0000000000")){
+							result.put("resultCode", resultEntity.get("resultCode"));
+							result.put("resultMessage", resultEntity.get("resultMessage"));
+							return result;
+						}
+						Map map = (Map) resultEntity.get("map");
+						String entityUid=(String) map.get("entityUid");
+						result = uic.deleteEntity(restIp, restPort, strTocken, loginId, entityId, entityUid);
+						if(!result.get("resultCode").equals("0000000000")){
+							result.put("resultCode", result.get("resultCode"));
+							result.put("resultMessage", result.get("resultMessage"));
+							return result;
+						}
+					}else{
+						//로그인 한 유저가 strTocken, entityId 가 없을경우 삭제 막아야 함!
+						result.put("resultCode", "에러");
+						result.put("resultMessage", "에러");
+						return result;
+					}
+				}
 				menuAuthorityService.deleteMenuAuthority(param[i]);
 				dbAuthorityService.deleteDbSvrAuthority(param[i]);
 				dbAuthorityService.deleteDbAuthority(param[i]);
 				userManagerService.deleteUserManager(param[i]);
 			}
-			
-			return true;
+			if(result.size()==0){
+				result.put("resultCode", "0000000000");
+			}
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		return false;
+		return result;
 	}
 }

@@ -1,5 +1,6 @@
 package com.k4m.dx.tcontrol.encrypt.service.call;
 
+import java.io.UnsupportedEncodingException;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -18,13 +19,14 @@ import com.k4m.dx.tcontrol.cmmn.serviceproxy.EncryptCommonService;
 import com.k4m.dx.tcontrol.cmmn.serviceproxy.SystemCode;
 import com.k4m.dx.tcontrol.cmmn.serviceproxy.TypeUtility;
 import com.k4m.dx.tcontrol.cmmn.serviceproxy.vo.AdminServerPasswordRequest;
+import com.k4m.dx.tcontrol.cmmn.serviceproxy.vo.Entity;
 import com.k4m.dx.tcontrol.cmmn.serviceproxy.vo.MasterKeyFile;
 import com.k4m.dx.tcontrol.cmmn.serviceproxy.vo.SysConfig;
 import com.k4m.dx.tcontrol.cmmn.serviceproxy.vo.SysMultiValueConfig;
 
 public class EncryptSettingServiceCall {
 
-	public JSONArray selectSysConfigListLike(String restIp, int restPort, String strTocken) throws Exception {
+	public JSONArray selectSysConfigListLike(String restIp, int restPort, String strTocken, String loginId, String entityId) throws Exception {
 		JSONArray jsonArray = new JSONArray();
 	
 		EncryptCommonService api = new EncryptCommonService(restIp, restPort);
@@ -39,8 +41,8 @@ public class EncryptSettingServiceCall {
 		String parameters = TypeUtility.makeRequestBody(body);
 
 		HashMap header = new HashMap();
-		header.put(SystemCode.FieldName.LOGIN_ID, "admin");
-		header.put(SystemCode.FieldName.ENTITY_UID, "00000000-0000-0000-0000-000000000001");
+		header.put(SystemCode.FieldName.LOGIN_ID, loginId);
+		header.put(SystemCode.FieldName.ENTITY_UID, entityId);
 		header.put(SystemCode.FieldName.TOKEN_VALUE, strTocken);
 		
 	JSONObject resultJson = api.callService(strService, strCommand, header, parameters);
@@ -85,7 +87,7 @@ public class EncryptSettingServiceCall {
 		return jsonArray;
 	}
 
-	public JSONArray selectSysMultiValueConfigListLike(String restIp, int restPort, String strTocken) throws Exception {
+	public JSONArray selectSysMultiValueConfigListLike(String restIp, int restPort, String strTocken, String loginId, String entityId) throws Exception {
 		
 		JSONArray jsonArray = new JSONArray();
 		
@@ -109,8 +111,8 @@ public class EncryptSettingServiceCall {
 		String parameters = TypeUtility.makeRequestBody(body);
 
 		HashMap header = new HashMap();
-		header.put(SystemCode.FieldName.LOGIN_ID, "admin");
-		header.put(SystemCode.FieldName.ENTITY_UID, "00000000-0000-0000-0000-000000000001");
+		header.put(SystemCode.FieldName.LOGIN_ID, loginId);
+		header.put(SystemCode.FieldName.ENTITY_UID, entityId);
 		header.put(SystemCode.FieldName.TOKEN_VALUE, strTocken);
 		
 		JSONObject resultJson = api.callService(strService, strCommand, header, parameters);
@@ -198,7 +200,7 @@ public class EncryptSettingServiceCall {
 		return false;
 	}
 
-	public JSONObject updateSysConfigList(String restIp, int restPort, String strTocken, JSONObject obj01) throws Exception {
+	public JSONObject updateSysConfigList(String restIp, int restPort, String strTocken, JSONObject obj01, String loginId, String entityId) throws Exception {
 		
 		JSONObject result = new JSONObject();
 		
@@ -281,8 +283,8 @@ public class EncryptSettingServiceCall {
 		
 
 		HashMap header = new HashMap();
-		header.put(SystemCode.FieldName.LOGIN_ID, "admin");
-		header.put(SystemCode.FieldName.ENTITY_UID, "00000000-0000-0000-0000-000000000001");
+		header.put(SystemCode.FieldName.LOGIN_ID, loginId);
+		header.put(SystemCode.FieldName.ENTITY_UID, entityId);
 		header.put(SystemCode.FieldName.TOKEN_VALUE, strTocken);
 
 		JSONObject resultJson1 = api.callService(strService, strCommand, header, parameters.toString());
@@ -307,7 +309,7 @@ public class EncryptSettingServiceCall {
 	}
 
 	public JSONObject updateSysMultiValueConfigList(String restIp, int restPort, String strTocken, JSONObject obj02,
-			JSONArray rows03) throws Exception {
+			JSONArray rows03, String loginId, String entityId) throws Exception {
 		
 		JSONObject result = new JSONObject();
 		
@@ -377,8 +379,8 @@ public class EncryptSettingServiceCall {
 		
 
 		HashMap header = new HashMap();
-		header.put(SystemCode.FieldName.LOGIN_ID, "admin");
-		header.put(SystemCode.FieldName.ENTITY_UID, "00000000-0000-0000-0000-000000000001");
+		header.put(SystemCode.FieldName.LOGIN_ID, loginId);
+		header.put(SystemCode.FieldName.ENTITY_UID, entityId);
 		header.put(SystemCode.FieldName.TOKEN_VALUE, strTocken);
 
 		JSONObject resultJson1 = api.callService(strService, strCommand, header, parameters.toString());
@@ -401,7 +403,7 @@ public class EncryptSettingServiceCall {
 		return result;
 	}
 
-	public JSONArray selectSysMultiValueConfigListLike2(String restIp, int restPort, String strTocken) throws Exception {
+	public JSONArray selectSysMultiValueConfigListLike2(String restIp, int restPort, String strTocken, String loginId, String entityId) throws Exception {
 		JSONArray jsonArray = new JSONArray();
 		
 		int[] numWeek = { SystemCode.Weekday.MONDAY,
@@ -424,8 +426,8 @@ public class EncryptSettingServiceCall {
 		String parameters = TypeUtility.makeRequestBody(body);
 
 		HashMap header = new HashMap();
-		header.put(SystemCode.FieldName.LOGIN_ID, "admin");
-		header.put(SystemCode.FieldName.ENTITY_UID, "00000000-0000-0000-0000-000000000001");
+		header.put(SystemCode.FieldName.LOGIN_ID, loginId);
+		header.put(SystemCode.FieldName.ENTITY_UID, entityId);
 		header.put(SystemCode.FieldName.TOKEN_VALUE, strTocken);
 
 		JSONObject resultJson = api.callService(strService, strCommand, header, parameters);
@@ -479,7 +481,7 @@ public class EncryptSettingServiceCall {
 		return jsonArray;
 	}
 
-	public JSONObject updateSysMultiValueConfigList2(String restIp, int restPort, String strTocken, JSONObject obj) throws Exception {
+	public JSONObject updateSysMultiValueConfigList2(String restIp, int restPort, String strTocken, JSONObject obj, String loginId, String entityId) throws Exception {
 		JSONObject result = new JSONObject();
 		
 		EncryptCommonService api = new EncryptCommonService(restIp, restPort);
@@ -571,8 +573,8 @@ public class EncryptSettingServiceCall {
 		
 
 		HashMap header = new HashMap();
-		header.put(SystemCode.FieldName.LOGIN_ID, "admin");
-		header.put(SystemCode.FieldName.ENTITY_UID, "00000000-0000-0000-0000-000000000001");
+		header.put(SystemCode.FieldName.LOGIN_ID, loginId);
+		header.put(SystemCode.FieldName.ENTITY_UID, entityId);
 		header.put(SystemCode.FieldName.TOKEN_VALUE, strTocken);
 
 		JSONObject resultJson1 = api.callService(strService, strCommand, header, parameters.toString());
@@ -594,7 +596,7 @@ public class EncryptSettingServiceCall {
 		return result;
 	}
 
-	public String serverMasterKeyDecode(String passwordStr, String loadStr) throws Exception {
+	public String serverMasterKeyDecode(String passwordStr, String loadStr, String loginId, String entityId) throws Exception {
 		AESCrypt aes = new AESCrypt();
 		String encKey = null;
 		//복호화
@@ -608,7 +610,7 @@ public class EncryptSettingServiceCall {
 		return encKey;	
 	}
 
-	public String encMasterkey(String mstKeyRenewPassword) throws Exception {
+	public String encMasterkey(String mstKeyRenewPassword, String loginId, String entityId) throws Exception {
 		AESCrypt aes = new AESCrypt();		
 		
 		//암호화
@@ -625,7 +627,7 @@ public class EncryptSettingServiceCall {
 	}
 
 	public JSONObject changeServerKey(String restIp, int restPort, String strTocken, String oldPassword,
-			String newPassword) throws Exception {
+			String newPassword, String loginId, String entityId) throws Exception {
 
 		EncryptCommonService api = new EncryptCommonService(restIp, restPort);
 
@@ -645,8 +647,8 @@ public class EncryptSettingServiceCall {
 		String parameters = TypeUtility.makeRequestBody(body);
 
 		HashMap header = new HashMap();
-		header.put(SystemCode.FieldName.LOGIN_ID, "admin");
-		header.put(SystemCode.FieldName.ENTITY_UID, "00000000-0000-0000-0000-000000000001");
+		header.put(SystemCode.FieldName.LOGIN_ID, loginId);
+		header.put(SystemCode.FieldName.ENTITY_UID, entityId);
 		header.put(SystemCode.FieldName.TOKEN_VALUE, strTocken);
 
 		JSONObject resultJson = api.callService(strService, strCommand, header, parameters);
@@ -665,5 +667,87 @@ public class EncryptSettingServiceCall {
 		}
 		return resultJson;
 
+	}
+
+	public JSONArray selectAgentMonitoring(String restIp, int restPort, String strTocken, String loginId,
+			String entityId) throws Exception {
+		
+		JSONArray jsonArray = new JSONArray();
+		
+		EncryptCommonService api = new EncryptCommonService(restIp, restPort);
+
+		String strService = SystemCode.ServiceName.ENTITY_SERVICE;
+		String strCommand = SystemCode.ServiceCommand.SELECTENTITYLIST;
+
+		String monitored = "false"; 
+		
+		Entity param = new Entity();
+		param.setEntityTypeCode(SystemCode.EntityTypeCode.AGENT);
+
+		HashMap body = new HashMap();
+		//body.put(TypeUtility.getJustClassName(param.getClass()), param.toJSONString());
+		body.put("monitored", monitored);
+		body.put(TypeUtility.getJustClassName(param.getClass()), param.toJSONString());
+		
+		String parameters = TypeUtility.makeRequestBody(body);
+		
+		System.out.println(parameters);
+
+		HashMap header = new HashMap();
+		header.put(SystemCode.FieldName.LOGIN_ID, loginId);
+		header.put(SystemCode.FieldName.ENTITY_UID, entityId);
+		header.put(SystemCode.FieldName.TOKEN_VALUE, strTocken);
+
+		JSONObject resultJson = api.callService(strService, strCommand, header, parameters.toString());
+		
+		Iterator<?> iter = resultJson.entrySet().iterator();
+		while (iter.hasNext()) {
+			Map.Entry entry = (Map.Entry) iter.next();
+
+			System.out.println(String.valueOf(entry.getKey()) + " = " + String.valueOf(entry.getValue()));
+		}
+		
+		
+		String resultCode = (String) resultJson.get("resultCode");
+		String resultMessage = (String) resultJson.get("resultMessage");
+		//long totalListCount = (long) resultJson.get("totalListCount");
+		
+		
+		if(resultCode.equals("0000000000")) {
+			ArrayList list = (ArrayList) resultJson.get("list");
+			
+			//System.out.println("list Size : " + list.size());
+			//if(totalListCount > 0) {
+				for(int i=0; i<list.size(); i++) {
+					JSONObject data = (JSONObject) list.get(i);
+					JSONObject jsonObj = new JSONObject();
+					Entity entity = new Entity();
+					Gson gson = new Gson();
+					entity = gson.fromJson(data.toJSONString(), entity.getClass());
+					
+					jsonObj.put("no", i+1);
+					jsonObj.put("createDateTime", entity.getCreateDateTime());
+					jsonObj.put("receivedPolicyVersion", entity.getReceivedPolicyVersion());
+					jsonObj.put("entityUid", entity.getEntityUid());
+					jsonObj.put("entityTypeCode", entity.getEntityTypeCode());
+					jsonObj.put("latestDateTime", entity.getLatestDateTime());
+					jsonObj.put("sentPolicyVersion", entity.getSentPolicyVersion());
+					jsonObj.put("latestAddress", entity.getLatestAddress());
+					jsonObj.put("entityStatusName", entity.getEntityStatusName());
+					jsonObj.put("entityName", new String(entity.getEntityName().toString().getBytes("iso-8859-1"),"UTF-8"));
+					jsonObj.put("updateName", new String(entity.getUpdateName().toString().getBytes("iso-8859-1"),"UTF-8"));
+					jsonObj.put("appVersion", entity.getAppVersion());
+					jsonObj.put("entityStatusCode", entity.getEntityStatusCode());
+					jsonObj.put("updateDateTime", entity.getUpdateDateTime());
+					jsonObj.put("resultMessage", resultCode);
+					jsonObj.put("resultCode", resultMessage);
+
+					jsonArray.add(jsonObj);
+
+					System.out.println("getEntityUid : " + entity.getEntityUid());
+					System.out.println("getEntityName : " + new String(entity.getEntityName().toString().getBytes("iso-8859-1"),"UTF-8") );
+			}
+		}
+		return jsonArray;
 	}
 }

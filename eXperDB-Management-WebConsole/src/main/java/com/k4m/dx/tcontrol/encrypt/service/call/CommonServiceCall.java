@@ -96,10 +96,12 @@ public class CommonServiceCall {
 	 * @param restIp
 	 * @param restPort
 	 * @param strTocken
+	 * @param entityId 
+	 * @param loginId 
 	 * @return 
 	 * @throws Exception
 	 */
-	public JSONObject selectServerStatus(String restIp, int restPort, String strTocken) throws Exception {
+	public JSONObject selectServerStatus(String restIp, int restPort, String strTocken, String loginId, String entityId) throws Exception {
 		
 		EncryptCommonService api = new EncryptCommonService(restIp, restPort);
 
@@ -117,8 +119,8 @@ public class CommonServiceCall {
 		String parameters = TypeUtility.makeRequestBody(body);
 
 		HashMap header = new HashMap();
-		header.put(SystemCode.FieldName.LOGIN_ID, "admin");
-		header.put(SystemCode.FieldName.ENTITY_UID, "00000000-0000-0000-0000-000000000001");
+		header.put(SystemCode.FieldName.LOGIN_ID, loginId);
+		header.put(SystemCode.FieldName.ENTITY_UID, entityId);
 		header.put(SystemCode.FieldName.TOKEN_VALUE, strTocken);
 
 		JSONObject resultJson = api.callService(strService, strCommand, header, parameters);
@@ -157,10 +159,12 @@ public class CommonServiceCall {
 	 * @param strTocken 
 	 * @param restPort 
 	 * @param restIp 
+	 * @param entityId 
+	 * @param loginId 
 	 * @return 
 	 * @throws Exception
 	 */
-	public JSONObject loadServerKey(String restIp, int restPort, String strTocken, String encKey) throws Exception {
+	public JSONObject loadServerKey(String restIp, int restPort, String strTocken, String encKey, String loginId, String entityId) throws Exception {
 		EncryptCommonService api = new EncryptCommonService(restIp, restPort);
 
 		String strService = SystemCode.ServiceName.SYSTEM_SERVICE;
@@ -180,8 +184,8 @@ public class CommonServiceCall {
 		String parameters = TypeUtility.makeRequestBody(body);
 
 		HashMap header = new HashMap();
-		header.put(SystemCode.FieldName.LOGIN_ID, "admin");
-		header.put(SystemCode.FieldName.ENTITY_UID, "00000000-0000-0000-0000-000000000001");
+		header.put(SystemCode.FieldName.LOGIN_ID, loginId);
+		header.put(SystemCode.FieldName.ENTITY_UID, entityId);
 		header.put(SystemCode.FieldName.TOKEN_VALUE, strTocken);
 
 		JSONObject resultJson = api.callService(strService, strCommand, header, parameters);

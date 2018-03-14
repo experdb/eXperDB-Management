@@ -257,13 +257,15 @@ function fn_delete(){
 					alert("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""));
 				}
 			},
-			success : function(result) {
-				if (result) {
+			success : function(result) {		
+				if(result.resultCode == 0000000000){
 					alert("<spring:message code='message.msg37' />");
 					fn_select();
 				}else{
-					alert("<spring:message code='message.msg13' />");
+					alert(result.resultMessage);
+					return false;
 				}
+				
 			}
 		});
 	}

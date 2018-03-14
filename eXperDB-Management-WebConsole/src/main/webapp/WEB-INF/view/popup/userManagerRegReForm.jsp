@@ -114,9 +114,15 @@
 				encp_use_yn : $("#encp_use_yn").val()
 			},
 			success : function(result) {
-				alert("<spring:message code='message.msg84' />");
-				window.close();
-				opener.fn_select();
+				if(result.resultCode == 0000000000){
+					alert("<spring:message code='message.msg84' />");
+					window.close();
+					opener.fn_select();
+				}else{
+					alert(result.resultMessage);
+					return false;
+				}
+				
 			},
 			beforeSend: function(xhr) {
 		        xhr.setRequestHeader("AJAX", true);
