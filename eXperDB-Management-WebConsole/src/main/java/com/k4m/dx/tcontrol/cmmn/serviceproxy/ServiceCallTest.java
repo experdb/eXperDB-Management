@@ -62,7 +62,7 @@ public class ServiceCallTest {
 		//entityId = "d06c0acb-ca3a-4324-83ed-71df370acdb3";
 
 		
-		String strTocken = "++XxENOg3W28uaJn3iEbcKqIIW4N2JWY26GDewz99KM=";
+		String strTocken = "YaSB1Ls6o+O1eXL3PSiA3WDuwFHOh8J7SNivGpHEVjM=";
 
 		ServiceCallTest test = new ServiceCallTest();
 	
@@ -1692,9 +1692,12 @@ public class ServiceCallTest {
 					Gson gson = new Gson();
 					sysCode = gson.fromJson(data.toJSONString(), sysCode.getClass());
 					
+					if(sysCode.getSysStatusCode().equals("SS50")) {
+					System.out.println("getSysStatusCode : " + sysCode.getSysStatusCode());
 					System.out.println("syscode : " + sysCode.getSysCode());
 					System.out.println("SysCodeName : " + sysCode.getSysCodeName());
 					System.out.println("SysCodeValue : " + sysCode.getSysCodeValue());
+					}
 					
 				
 					
