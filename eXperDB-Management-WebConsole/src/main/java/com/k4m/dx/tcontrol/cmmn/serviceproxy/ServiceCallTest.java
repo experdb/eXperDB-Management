@@ -44,7 +44,9 @@ public class ServiceCallTest {
 		int restPort = 9443;
 		
 		restIp = "127.0.0.1";
-		restPort = 9443;
+		//restPort = 9443;
+		
+		//restIp = "222.110.153.214";
 		
 		String loginId = "";
 		String entityId = "";
@@ -52,6 +54,7 @@ public class ServiceCallTest {
 		
 		loginId = "admin";
 		password = "experdb12#";
+		//password = "password";
 		entityId = "00000000-0000-0000-0000-000000000001";
 		
 		//loginId = "testuser";
@@ -59,7 +62,7 @@ public class ServiceCallTest {
 		//entityId = "d06c0acb-ca3a-4324-83ed-71df370acdb3";
 
 		
-		String strTocken = "EYslbNlRdbrLID9Xvc9fA6R8pdF+11rHhAPNyBNyROk=";
+		String strTocken = "++XxENOg3W28uaJn3iEbcKqIIW4N2JWY26GDewz99KM=";
 
 		ServiceCallTest test = new ServiceCallTest();
 	
@@ -70,8 +73,8 @@ public class ServiceCallTest {
 		
 		//test.encTest();
 		
-		String userId = "admin"; //검색할 User Id
-		test.selectEntityUid(restIp, restPort, strTocken, loginId, entityId, userId);
+		//String userId = "admin"; //검색할 User Id
+		//test.selectEntityUid(restIp, restPort, strTocken, loginId, entityId, userId);
 		
 		//서버상태
 		//test.selectServerStatus(restIp, restPort, strTocken, loginId, entityId);
@@ -83,13 +86,16 @@ public class ServiceCallTest {
 		//test.selectSysCodeListExper(restIp, restPort, strTocken, loginId, entityId);
 		
 		//일반공통코드 리스트
-		//test.selectParamSysCodeList(restIp, restPort, strTocken, loginId, entityId);
+		test.selectParamSysCodeList(restIp, restPort, strTocken, loginId, entityId);
 		
 		//에이전트 리스트
 		
 		
 		//접근자리스트
 		//test.selectEntityList(restIp, restPort, strTocken, loginId, entityId);
+		
+		//에이전트 정보
+		//test.selectEntityList2(restIp, restPort, strTocken, loginId, entityId);
 		
 		// 보호정책상세 > 암호화 키 리스트
 		//test.selectCryptoKeySymmetricList(restIp, restPort, strTocken, loginId, entityId);
@@ -1079,7 +1085,7 @@ public class ServiceCallTest {
 		String strService = SystemCode.ServiceName.SYSTEM_SERVICE;
 		String strCommand = SystemCode.ServiceCommand.LOADSERVERKEY;
 		
-		String oldPassword = "12345qwer";
+		String oldPassword = "1234qwer";
 		//oldPassword = "marm13+irhFlLcINs7nlIQhKacF88OUybxqcXwRAptg=";
 
 		AdminServerPasswordRequest adminServerPasswordRequest = new AdminServerPasswordRequest();
@@ -1632,10 +1638,12 @@ public class ServiceCallTest {
 		String strCommand = SystemCode.ServiceCommand.SELECTPARAMSYSCODELIST;
 
 		String categoryKey = "DATA_TYPE_CD"; //데이터타입
-		categoryKey = "DENY_RESULT_TYPE_CD"; //접근거부시 처리
+		//categoryKey = "DENY_RESULT_TYPE_CD"; //접근거부시 처리
 		//categoryKey = "INITIAL_VECTOR_TYPE"; //초기벡터
 		//categoryKey = "OPERATION_MODE"; //운영모드
 		//categoryKey = "KEY_STATUS_CD"; //바이너리
+		
+		categoryKey = "ENTITY_STATUS_CD"; //
 		
 		SysCode param = new SysCode();
 //		param.setCategoryKey(categoryKey);
@@ -1667,7 +1675,9 @@ public class ServiceCallTest {
 		
 		String resultCode = (String) resultJson.get("resultCode");
 		String resultMessage = (String) resultJson.get("resultMessage");
-		//long totalListCount = (long) resultJson.get("totalListCount");
+		resultMessage = new String(resultMessage.getBytes("iso-8859-1"),"UTF-8"); 
+		
+		System.out.println("resultCode : " + resultCode + " resultMessage : " + resultMessage);
 		
 		
 		if(resultCode.equals("0000000000")) {
@@ -1809,14 +1819,14 @@ public class ServiceCallTest {
 		
 		String resultCode = (String) resultJson.get("resultCode");
 		String resultMessage = (String) resultJson.get("resultMessage");
-		//long totalListCount = (long) resultJson.get("totalListCount");
+		long totalListCount = (long) resultJson.get("totalListCount");
 		
 		
 		if(resultCode.equals("0000000000")) {
 			ArrayList list = (ArrayList) resultJson.get("list");
 			
 			//System.out.println("list Size : " + list.size());
-			//if(totalListCount > 0) {
+			if(totalListCount > 0) {
 				for(int i=0; i<list.size(); i++) {
 					JSONObject data = (JSONObject) list.get(i);
 					
@@ -1832,7 +1842,7 @@ public class ServiceCallTest {
 					
 				}
 			
-			//}
+			}
 		}
 		
 	}
@@ -2654,6 +2664,57 @@ public class ServiceCallTest {
 
 		String resultCode = (String) resultJson1.get("resultCode");
 		String resultMessage = new String(resultJson1.get("resultMessage").toString().getBytes("iso-8859-1"),"UTF-8");
+		
+		System.out.println(resultMessage);
+		
+	}
+	
+	/**
+	 * 에이전트 상태 저장
+	 * @param restIp
+	 * @param restPort
+	 * @param strTocken
+	 * @param loginId
+	 * @param entityId
+	 * @throws Exception
+	 */
+	private void updateEntity(String restIp, int restPort, String strTocken, String loginId, String entityId) throws Exception {
+		EncryptCommonService api = new EncryptCommonService(restIp, restPort);
+
+		String strService = SystemCode.ServiceName.ENTITY_SERVICE;
+		String strCommand = SystemCode.ServiceCommand.UPDATEENTITY;
+
+
+		Entity param = new Entity();
+		param.setEntityUid("");
+		param.setEntityName("");
+		param.setEntityStatusCode("");
+		param.setCreateUid("");
+		
+
+		HashMap body = new HashMap();
+		body.put(TypeUtility.getJustClassName(param.getClass()), param.toJSONString());
+
+		String parameters = TypeUtility.makeRequestBody(body);
+		
+
+		HashMap header = new HashMap();
+		header.put(SystemCode.FieldName.LOGIN_ID, loginId);
+		header.put(SystemCode.FieldName.ENTITY_UID, entityId);
+		header.put(SystemCode.FieldName.TOKEN_VALUE, strTocken);
+
+		JSONObject resultJson = api.callService(strService, strCommand, header, parameters.toString());
+		
+		Iterator<?> iter = resultJson.entrySet().iterator();
+		while (iter.hasNext()) {
+			Map.Entry entry = (Map.Entry) iter.next();
+
+			System.out.println(String.valueOf(entry.getKey()) + " = " + String.valueOf(entry.getValue()));
+		}
+		
+		
+		String resultCode = (String) resultJson.get("resultCode");
+		String resultMessage = new String(resultJson.get("resultMessage").toString().getBytes("iso-8859-1"),"UTF-8");
 		
 		System.out.println(resultMessage);
 		
