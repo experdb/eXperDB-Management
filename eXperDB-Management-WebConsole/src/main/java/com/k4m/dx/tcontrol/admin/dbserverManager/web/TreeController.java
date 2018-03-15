@@ -86,6 +86,8 @@ public class TreeController {
 	public ModelAndView dbTree(@ModelAttribute("historyVO") HistoryVO historyVO,
 			@ModelAttribute("cmmnVO") CmmnVO cmmnVO, HttpServletRequest request) {
 
+		HttpSession session = request.getSession();
+		
 		// 해당메뉴 권한 조회 (공통메소드호출),
 		CmmnUtils cu = new CmmnUtils();
 		menuAut = cu.selectMenuAut(menuAuthorityService, "MN000301");
@@ -104,6 +106,7 @@ public class TreeController {
 
 				mv.addObject("read_aut_yn", menuAut.get(0).get("read_aut_yn"));
 				mv.addObject("wrt_aut_yn", menuAut.get(0).get("wrt_aut_yn"));
+				mv.addObject("encpUse", session.getAttribute("encp_use_yn"));
 				mv.setViewName("admin/dbServerManager/dbTree");
 			}
 		} catch (Exception e) {

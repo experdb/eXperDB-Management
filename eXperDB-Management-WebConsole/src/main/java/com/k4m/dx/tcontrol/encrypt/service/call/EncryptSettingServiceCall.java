@@ -21,6 +21,7 @@ import com.k4m.dx.tcontrol.cmmn.serviceproxy.TypeUtility;
 import com.k4m.dx.tcontrol.cmmn.serviceproxy.vo.AdminServerPasswordRequest;
 import com.k4m.dx.tcontrol.cmmn.serviceproxy.vo.Entity;
 import com.k4m.dx.tcontrol.cmmn.serviceproxy.vo.MasterKeyFile;
+import com.k4m.dx.tcontrol.cmmn.serviceproxy.vo.SysCode;
 import com.k4m.dx.tcontrol.cmmn.serviceproxy.vo.SysConfig;
 import com.k4m.dx.tcontrol.cmmn.serviceproxy.vo.SysMultiValueConfig;
 
@@ -734,8 +735,14 @@ public class EncryptSettingServiceCall {
 					jsonObj.put("sentPolicyVersion", entity.getSentPolicyVersion());
 					jsonObj.put("latestAddress", entity.getLatestAddress());
 					jsonObj.put("entityStatusName", entity.getEntityStatusName());
-					jsonObj.put("entityName", new String(entity.getEntityName().toString().getBytes("iso-8859-1"),"UTF-8"));
-					jsonObj.put("updateName", new String(entity.getUpdateName().toString().getBytes("iso-8859-1"),"UTF-8"));
+					if(entity.getEntityName() != null) {
+						jsonObj.put("entityName", new String(entity.getEntityName().toString().getBytes("iso-8859-1"),"UTF-8"));
+					}
+					if(entity.getUpdateName() != null) {
+						jsonObj.put("updateName", new String(entity.getUpdateName().toString().getBytes("iso-8859-1"),"UTF-8"));
+					}
+
+					jsonObj.put("extendedField", entity.getExtendedField());
 					jsonObj.put("appVersion", entity.getAppVersion());
 					jsonObj.put("entityStatusCode", entity.getEntityStatusCode());
 					jsonObj.put("updateDateTime", entity.getUpdateDateTime());
@@ -748,6 +755,133 @@ public class EncryptSettingServiceCall {
 					System.out.println("getEntityName : " + new String(entity.getEntityName().toString().getBytes("iso-8859-1"),"UTF-8") );
 			}
 		}
+		return jsonArray;
+	}
+
+	public JSONArray selectParamSysCodeList(String restIp, int restPort, String strTocken, String loginId, String entityId) throws Exception {
+		
+		JSONArray jsonArray = new JSONArray();
+		
+		EncryptCommonService api = new EncryptCommonService(restIp, restPort);
+
+		String strService = SystemCode.ServiceName.SYSTEM_SERVICE;
+		String strCommand = SystemCode.ServiceCommand.SELECTPARAMSYSCODELIST;
+
+		String categoryKey = "DATA_TYPE_CD"; //데이터타입
+		//categoryKey = "DENY_RESULT_TYPE_CD"; //접근거부시 처리
+		//categoryKey = "INITIAL_VECTOR_TYPE"; //초기벡터
+		//categoryKey = "OPERATION_MODE"; //운영모드
+		//categoryKey = "KEY_STATUS_CD"; //바이너리
+		
+		categoryKey = "ENTITY_STATUS_CD"; //
+		
+		SysCode param = new SysCode();
+//		param.setCategoryKey(categoryKey);
+
+		HashMap body = new HashMap();
+		//body.put(TypeUtility.getJustClassName(param.getClass()), param.toJSONString());
+		body.put("categoryKey", categoryKey);
+		
+		String parameters = TypeUtility.makeRequestBody(body);
+		
+		System.out.println(parameters);
+
+		HashMap header = new HashMap();
+		header.put(SystemCode.FieldName.LOGIN_ID, loginId);
+		header.put(SystemCode.FieldName.ENTITY_UID, entityId);
+		header.put(SystemCode.FieldName.TOKEN_VALUE, strTocken);
+
+		JSONObject resultJson = api.callService(strService, strCommand, header, parameters.toString());
+		
+		Iterator<?> iter = resultJson.entrySet().iterator();
+		while (iter.hasNext()) {
+			Map.Entry entry = (Map.Entry) iter.next();
+
+			System.out.println(String.valueOf(entry.getKey()) + " = " + String.valueOf(entry.getValue()));
+		}
+			
+		String resultCode = (String) resultJson.get("resultCode");
+		String resultMessage = (String) resultJson.get("resultMessage");
+		resultMessage = new String(resultMessage.getBytes("iso-8859-1"),"UTF-8"); 
+		
+		System.out.println("resultCode : " + resultCode + " resultMessage : " + resultMessage);
+		
+		
+		if(resultCode.equals("0000000000")) {
+			ArrayList list = (ArrayList) resultJson.get("list");
+			
+			//System.out.println("list Size : " + list.size());
+			//if(totalListCount > 0) {
+				for(int i=0; i<list.size(); i++) {
+					JSONObject data = (JSONObject) list.get(i);
+					
+					SysCode sysCode = new SysCode();
+					Gson gson = new Gson();
+					sysCode = gson.fromJson(data.toJSONString(), sysCode.getClass());
+					
+					JSONObject jsonObj = new JSONObject();
+					
+					if(sysCode.getSysStatusCode().equals("SS50")) {
+						jsonObj.put("sysStatusCode", sysCode.getSysStatusCode());
+						jsonObj.put("sysCode", sysCode.getSysCode());
+						jsonObj.put("sysCodeName", sysCode.getSysCodeName());
+						jsonObj.put("sysCodeValue", sysCode.getSysCodeValue());
+						
+						jsonArray.add(jsonObj);
+						
+					}
+			}
+		}
+		return jsonArray;
+	}
+
+	public JSONArray updateEntity(String restIp, int restPort, String strTocken, String loginId, String entityId, String entityName, String entityUid, String entityStatusCode) throws Exception {
+		JSONArray jsonArray = new JSONArray();
+		
+		EncryptCommonService api = new EncryptCommonService(restIp, restPort);
+
+		String strService = SystemCode.ServiceName.ENTITY_SERVICE;
+		String strCommand = SystemCode.ServiceCommand.UPDATEENTITY;
+
+
+		Entity param = new Entity();
+		param.setEntityUid(entityUid);
+		param.setEntityName(entityName);
+		param.setEntityStatusCode(entityStatusCode);
+		param.setCreateUid(entityId);
+		
+
+		HashMap body = new HashMap();
+		body.put(TypeUtility.getJustClassName(param.getClass()), param.toJSONString());
+
+		String parameters = TypeUtility.makeRequestBody(body);
+		
+
+		HashMap header = new HashMap();
+		header.put(SystemCode.FieldName.LOGIN_ID, loginId);
+		header.put(SystemCode.FieldName.ENTITY_UID, entityId);
+		header.put(SystemCode.FieldName.TOKEN_VALUE, strTocken);
+
+		JSONObject resultJson = api.callService(strService, strCommand, header, parameters.toString());
+		
+		Iterator<?> iter = resultJson.entrySet().iterator();
+		while (iter.hasNext()) {
+			Map.Entry entry = (Map.Entry) iter.next();
+
+			System.out.println(String.valueOf(entry.getKey()) + " = " + String.valueOf(entry.getValue()));
+		}
+		
+		
+		String resultCode = (String) resultJson.get("resultCode");
+		String resultMessage = new String(resultJson.get("resultMessage").toString().getBytes("iso-8859-1"),"UTF-8");
+		
+		JSONObject jsonObj = new JSONObject();
+		
+		jsonObj.put("resultCode", (String) resultJson.get("resultCode"));
+		jsonObj.put("resultMessage", new String(resultJson.get("resultMessage").toString().getBytes("iso-8859-1"),"UTF-8"));
+		
+		jsonArray.add(jsonObj);
+		
 		return jsonArray;
 	}
 }

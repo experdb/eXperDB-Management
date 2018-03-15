@@ -43,7 +43,8 @@ function fn_init() {
 			{ data : "createDateTime", className : "dt-center", defaultContent : ""},
 			{ data : "updateDateTime", className : "dt-center", defaultContent : ""},
 			{ data : "updateName", className : "dt-center", defaultContent : ""},
-			
+
+			{ data : "extendedField", className : "dt-center", defaultContent : "", visible: false},
 			{ data : "entityUid", className : "dt-center", defaultContent : "", visible: false},
 			{ data : "resultCode", className : "dt-center", defaultContent : "", visible: false},
 			{ data : "resultMessage", className : "dt-center", defaultContent : "", visible: false},
@@ -71,6 +72,7 @@ function fn_init() {
 	table.tables().header().to$().find('th:eq(14)').css('min-width', '0px');
 	table.tables().header().to$().find('th:eq(15)').css('min-width', '0px');
 	table.tables().header().to$().find('th:eq(16)').css('min-width', '0px');
+	table.tables().header().to$().find('th:eq(17)').css('min-width', '0px');
     $(window).trigger('resize');
     
 }
@@ -104,7 +106,7 @@ function fn_select(){
 				alert("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""));
 			}
 		},
-		success : function(data) {			
+		success : function(data) {		
 			table.clear().draw();
 			table.rows.add(data).draw();
 		}
@@ -114,18 +116,52 @@ function fn_select(){
 
 /*수정버튼 클릭시*/
 function fn_agentMonitoringModifyForm(){
-	var popUrl = "/popup/agentMonitoringModifyForm.do";
-	var width = 954;
-	var height = 670;
-	var left = (window.screen.width / 2) - (width / 2);
-	var top = (window.screen.height /2) - (height / 2);
-	var popOption = "width="+width+", height="+height+", top="+top+", left="+left+", resizable=no, scrollbars=yes, status=no, toolbar=no, titlebar=yes, location=no,";
+	//var datasArr = new Array();	
 	
-	var winPop = window.open(popUrl,"agentMonitoringModifyForm",popOption);
-	winPop.focus();
+	var data =  table.row('.selected').data();
+	
+	var entityName =  data.entityName;
+	var entityStatusCode=  data.entityStatusCode;
+	var latestAddress =  data.latestAddress;
+	var latestDateTime = data.latestDateTime;
+	var extendedField = data.extendedField;
+	var entityUid = data.entityUid;
+
+	//var rows = JSON.parse(extendedField);
+
+	//datasArr.push(rows);
+
+	 var frmPop= document.frmPopup;
+	    var url = '/popup/agentMonitoringModifyForm.do';
+	    var width = 954;
+		var height = 670;
+		var left = (window.screen.width / 2) - (width / 2);
+		var top = (window.screen.height /2) - (height / 2);
+		var popOption = "width="+width+", height="+height+", top="+top+", left="+left+", resizable=no, scrollbars=yes, status=no, toolbar=no, titlebar=yes, location=no,";
+	    window.open('','popupView',popOption);  
+	     
+	    frmPop.action = url;
+	    frmPop.target = 'popupView';
+	    
+	    frmPop.entityName.value = entityName;
+	    frmPop.entityUid.value = entityUid;
+	    frmPop.entityStatusCode.value = entityStatusCode;  
+	    frmPop.latestAddress.value = latestAddress;
+	    frmPop.latestDateTime.value = latestDateTime; 
+	    frmPop.extendedField.value = extendedField;
+	    
+	    frmPop.submit();   
 }
 </script>
 
+<form name="frmPopup" id="frmPopup">
+	<input type="hidden" name="entityName"  id="entityName">
+	<input type="hidden" name="entityUid"  id="entityUid">
+	<input type="hidden" name="entityStatusCode"  id="entityStatusCode">
+	<input type="hidden" name="latestAddress"  id="latestAddress">
+	<input type="hidden" name="latestDateTime"  id="latestDateTime">
+	<input type="hidden" name="extendedField"  id="extendedField">
+</form>
 
 <!-- contents -->
 <div id="contents">
@@ -148,7 +184,7 @@ function fn_agentMonitoringModifyForm(){
 		<div class="contents">
 			<div class="cmm_grp">
 				<div class="btn_type_01">
-					<span class="btn"><button>조회</button></span> 
+					<span class="btn"><button onClick="fn_select();">조회</button></span> 
 					<span class="btn"><button onClick="fn_agentMonitoringModifyForm();">수정</button></span>
 				</div>
 				<div class="sch_form">
@@ -186,7 +222,8 @@ function fn_agentMonitoringModifyForm(){
 								<th width="0"></th>
 								<th width="0"></th>
 								<th width="0"></th>		
-								<th width="0"></th>							
+								<th width="0"></th>		
+								<th width="0"></th>						
 							</tr>
 						</thead>
 					</table>

@@ -35,6 +35,68 @@
 	background: url(../images/popup/ico_p_2.png) 8px 48% no-repeat;
 }
 </style>
+
+<script>
+var table = null;
+
+//var key = "${resultKey}";
+//var keyValue = "${resultValue}";
+var extendedField = ${extendedField};
+
+	$(window.document).ready(function() {		
+		var html = ""; 
+	
+		for(key in extendedField) {		
+			html += ' <tr>';
+			html += ' <td>';
+			html +=	key;
+			html += ' </td>';
+			html += ' <td>';
+			html +=	extendedField[key];
+			html += ' </td>';
+			html += ' </tr>';
+		}
+		$( "#extendedField" ).append(html);
+	});
+	
+	
+	
+	function fn_agentStatusSave(){
+		$.ajax({
+			url : "/agentStatusSave.do", 
+		  	data : {		  		
+		  		entityName : $('#entityName').val(),
+		  		entityUid : $('#entityUid').val(),
+		  		entityStatusCode : $('#entityStatusCode').val(),
+		  	},
+			dataType : "json",
+			type : "post",
+			beforeSend: function(xhr) {
+		        xhr.setRequestHeader("AJAX", true);
+		     },
+			error : function(xhr, status, error) {
+				if(xhr.status == 401) {
+					alert("<spring:message code='message.msg02' />");
+					 location.href = "/";
+				} else if(xhr.status == 403) {
+					alert("<spring:message code='message.msg03' />");
+		             location.href = "/";
+				} else {
+					alert("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""));
+				}
+			},
+			success : function(data) {		
+				alert(JSON.stringify(data));
+				if(data[0].resultCode == "0000000000"){
+					alert("에이전트 상태를 변경하였습니다.");
+					opener.location.reload();
+					window.close();
+				}
+			}
+		});
+	}
+</script>
+
 <body>
 	<div class="pop_container">
 		<div class="pop_cts">
@@ -53,12 +115,19 @@
 						<tbody>
 							<tr>
 								<th scope="row" class="ico_t2">Agent 이름</th>
-								<td><input type="text" class="txt" name="" id=""></td>
+								<td><input type="text" class="txt" name="entityName" id="entityName" value="${entityName}"  readonly="readonly" >
+										<input type="hidden" name="entityUid" id="entityUid" value="${entityUid}" >
+								</td>
 							</tr>
 							<tr>
 								<th scope="row" class="ico_t2">Agent 상태</th>
-								<td><input type="text" class="txt" name="" id=""></td>
-
+								<td>
+									<select class="select t5" id="entityStatusCode" name="entityStatusCode" >
+											<c:forEach var="result" items="${result}" varStatus="status">
+												<option value="<c:out value="${result.sysCode}"/>" <c:if test="${result.sysCode == entityStatusCode}">selected="selected"</c:if>><c:out value="${result.sysCodeName}"/></option>
+											</c:forEach> 
+									</select>
+								</td>
 							</tr>
 						</tbody>
 					</table>
@@ -80,11 +149,11 @@
 						<tbody>
 							<tr>
 								<th scope="row" class="ico_t2">최근접속 주소</th>
-								<td><input type="text" class="txt" name="" id=""></td>
+								<td><input type="text" class="txt" name="latestAddress" id="latestAddress" value="${latestAddress}" ></td>
 							</tr>
 							<tr>
 								<th scope="row" class="ico_t2">최근접속일시</th>
-								<td><input type="text" class="txt" name="" id=""></td>
+								<td><input type="text" class="txt" name="latestDateTime" id="latestDateTime" value="${latestDateTime}" ></td>
 
 							</tr>
 						</tbody>
@@ -98,29 +167,23 @@
 				<table class="list">
 					<caption>리스트</caption>
 					<colgroup>
-						<col style="width: 10%;" />
-						<col style="width: 35%;" />
 						<col style="width: 15%;" />
+						<col style="width: 35%;" />
 					</colgroup>
 					<thead>
 						<tr>
-							<th scope="col">No</th>
 							<th scope="col">시스템 속성 키</th>
 							<th scope="col">시스템 속성 값</th>
 						</tr>
 					</thead>
-					<tbody>
-						<tr>
-							<td></td>
-							<td></td>
-							<td></td>
-						</tr>
+					<tbody id="extendedField">		
+
 					</tbody>
 				</table>
 			</div>
 			
 			<div class="btn_type_02">
-				<span class="btn btnC_01" onClick=""><button>저장</button></span> 
+				<span class="btn btnC_01" onClick="fn_agentStatusSave();"><button>저장</button></span> 
 				<span class="btn" onclick="window.close();"><button>닫기</button></span>
 			</div>
 		</div>

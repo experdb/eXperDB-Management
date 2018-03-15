@@ -16,6 +16,7 @@ import com.k4m.dx.tcontrol.cmmn.serviceproxy.EncryptCommonService;
 import com.k4m.dx.tcontrol.cmmn.serviceproxy.SystemCode;
 import com.k4m.dx.tcontrol.cmmn.serviceproxy.TypeUtility;
 import com.k4m.dx.tcontrol.cmmn.serviceproxy.vo.AdminServerPasswordRequest;
+import com.k4m.dx.tcontrol.cmmn.serviceproxy.vo.AuthCredentialToken;
 import com.k4m.dx.tcontrol.cmmn.serviceproxy.vo.SysCode;
 
 public class CommonServiceCall {
@@ -255,4 +256,5 @@ public class CommonServiceCall {
 		}
 		return jsonObj;
 	}
+
 }

@@ -9,8 +9,13 @@ import java.io.InputStream;
 import java.io.StringWriter;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -533,10 +538,64 @@ public class EncriptSettingController {
 	 * @return ModelAndView
 	 */
 	@RequestMapping(value = "/popup/agentMonitoringModifyForm.do")
-	public ModelAndView rmanRegReForm(HttpServletRequest request)  {
+	public ModelAndView agentMonitoringModifyForm(HttpServletRequest request)  {
 		ModelAndView mv = new ModelAndView();
+		
+
+		JSONArray result = new JSONArray();
+		JSONObject resultJson= new JSONObject();
+
+		Map hp = new HashMap();
+		List<String> key = new ArrayList<String>();
+		List<String> value = new ArrayList<String>();
 		try {
+			String entityName = request.getParameter("entityName");
+			String entityStatusCode = request.getParameter("entityStatusCode");
+			String latestAddress = request.getParameter("latestAddress");
+			String latestDateTime = request.getParameter("latestDateTime");
+			String extendedField = request.getParameter("extendedField").toString().replaceAll("&quot;", "\"");
+			String entityUid = request.getParameter("entityUid");
+			System.out.println("확장팩 ="+ extendedField);
+			
+			//JSONArray rows = (JSONArray) new JSONParser().parse(extendedField);
+			
+			//System.out.println(rows);
+			
+			/*for (int i = 0; i < rows.size(); i++) {
+				resultJson = (JSONObject) rows.get(i);
+			}
+
+			Iterator<?> iter = resultJson.entrySet().iterator();
+			while (iter.hasNext()) {
+				Map.Entry entry = (Map.Entry) iter.next();
+				
+				key.add(String.valueOf(entry.getKey()));
+				value.add(String.valueOf(entry.getValue()));
+				System.out.println(String.valueOf(entry.getKey()) + " = " + String.valueOf(entry.getValue()));
+			}*/
+								
+			System.out.println(key.size());
+			HttpSession session = request.getSession();
+			String restIp = (String)session.getAttribute("restIp");
+			int restPort = (int)session.getAttribute("restPort");
+			String strTocken = (String)session.getAttribute("tockenValue");
+			String loginId = (String)session.getAttribute("usr_id");
+			String entityId = (String)session.getAttribute("ectityUid");	
+			
+			EncryptSettingServiceCall essc = new EncryptSettingServiceCall();
+			result = essc.selectParamSysCodeList( restIp, restPort, strTocken, loginId, entityId);
+			
 			mv.setViewName("encrypt/popup/agentMonitoringModifyForm");
+			
+			mv.addObject("result",result);
+			mv.addObject("entityUid",entityUid);
+			mv.addObject("entityName",entityName);
+			mv.addObject("entityStatusCode",entityStatusCode);
+			mv.addObject("latestAddress",latestAddress);
+			mv.addObject("latestDateTime",latestDateTime);
+			//mv.addObject("resultKey",key);
+			//mv.addObject("resultValue",value);
+			mv.addObject("extendedField",extendedField);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -566,6 +625,39 @@ public class EncriptSettingController {
 		try {
 			result = essc.selectAgentMonitoring(restIp, restPort, strTocken, loginId, entityId);
 		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return result;
+	}
+	
+	
+	
+	/**
+	 * agentMonitoring 상태 저장
+	 * 
+	 * @return resultSet
+	 * @throws Exception
+	 */
+	@RequestMapping(value = "/agentStatusSave.do")
+	public @ResponseBody JSONArray agentStatusSave(HttpServletResponse response, HttpServletRequest request) {
+
+		JSONArray result = new JSONArray();
+		
+		String entityName = request.getParameter("entityName");
+		String entityUid = request.getParameter("entityUid");
+		String entityStatusCode = request.getParameter("entityStatusCode");
+		
+		HttpSession session = request.getSession();
+		String restIp = (String)session.getAttribute("restIp");
+		int restPort = (int)session.getAttribute("restPort");
+		String strTocken = (String)session.getAttribute("tockenValue");
+		String loginId = (String)session.getAttribute("usr_id");
+		String entityId = (String)session.getAttribute("ectityUid");	
+		
+		try {	
+			EncryptSettingServiceCall essc = new EncryptSettingServiceCall();
+			result = essc.updateEntity(restIp, restPort, strTocken, loginId, entityId, entityName, entityUid, entityStatusCode);
+		}catch (Exception e) {
 			e.printStackTrace();
 		}
 		return result;

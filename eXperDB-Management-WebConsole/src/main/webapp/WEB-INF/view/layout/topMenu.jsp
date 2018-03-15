@@ -4,14 +4,20 @@
 
 <%
 	String usr_id = (String)session.getAttribute("usr_id");
-
 %>
 <script>
-
 /* ********************************************************
  * 페이지 시작시 함수
  ******************************************************** */
 $(window.document).ready(function() {
+	var encryptMenu = document.getElementById("encryptMenu");
+			
+/* 	if("${encpUse}" == "Y"){
+		encryptMenu.style.display = '';
+	}else{
+		encryptMenu.style.display = 'none';
+	} */
+	
 	$.ajax({
 		url : "/menuAuthorityList.do",
 		data : {},
@@ -345,7 +351,7 @@ function fn_cookie(url) {
 						</ul>
 					</li>
 					
-					<li><a href="#n"><span><img src="/images/encrypt.png" alt="ENCRYPT" /></span></a>
+					<li id="encryptMenu"><a href="#n"><span><img src="/images/encrypt.png" alt="ENCRYPT" /></span></a>
 						<ul class="depth_2">
 						    <li><a href="#n" id="MN00011">정책관리/키관리</a>
         						<ul class="depth_3">
@@ -372,7 +378,7 @@ function fn_cookie(url) {
         					</li>
 						</ul>
 					</li>
-					
+
 					
 					<li><a href="#n"><span><img src="/images/ico_h_7.png" alt="MY PAGE" /></span></a>
 						<ul class="depth_2">
