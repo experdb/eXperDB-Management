@@ -240,37 +240,37 @@ var table = null;
 		<div class="contents">
 			<div class="cmm_grp">
 				<div class="btn_type_01">
-					<span class="btn" onclick="fn_select();"><button>조회</button></span>
+<!-- 					<span class="btn" onclick="fn_select();"><button>조회</button></span> -->
 					<span class="btn" onclick="fn_insert();"><button>등록</button></span>
 					<span class="btn" onclick="fn_update();"><button>수정</button></span>
 					<span class="btn" onclick="fn_delete();"><button>삭제</button></span>
 				</div>
-				<div class="sch_form">
-					<table class="write">
-						<caption>검색 조회</caption>
-						<colgroup>
-							<col style="width: 100px;" />
-							<col />
-							<col style="width: 100px;" />
-							<col />
-						</colgroup>
-						<tbody>
-							<tr>
-								<th scope="row" class="t9">키이름</th>
-								<td><input type="text" class="txt t2" id="resourceName" name="resourceName"/></td>
-								<th scope="row" class="ico_t1">적용 알고리즘</th>
-								<td>
-									<select class="select t5" id="cipherAlgorithmCode" name="cipherAlgorithmCode" >
-												<option value="<c:out value=""/>" ><c:out value="전체"/></option>
-											<c:forEach var="result" items="${result}" varStatus="status">												
-												<option value="<c:out value="${result.sysCode}"/>" <c:if test="${result.sysCode == cipherAlgorithmCode }">selected="selected"</c:if>><c:out value="${result.sysCodeName}"/></option>
-											</c:forEach> 
-									</select>
-								</td>
-							</tr>
-						</tbody>
-					</table>
-				</div>
+<!-- 				<div class="sch_form"> -->
+<!-- 					<table class="write"> -->
+<%-- 						<caption>검색 조회</caption> --%>
+<%-- 						<colgroup> --%>
+<%-- 							<col style="width: 100px;" /> --%>
+<%-- 							<col /> --%>
+<%-- 							<col style="width: 100px;" /> --%>
+<%-- 							<col /> --%>
+<%-- 						</colgroup> --%>
+<!-- 						<tbody> -->
+<!-- 							<tr> -->
+<!-- 								<th scope="row" class="t9">키이름</th> -->
+<!-- 								<td><input type="text" class="txt t2" id="resourceName" name="resourceName"/></td> -->
+<!-- 								<th scope="row" class="ico_t1">적용 알고리즘</th> -->
+<!-- 								<td> -->
+<!-- 									<select class="select t5" id="cipherAlgorithmCode" name="cipherAlgorithmCode" > -->
+<%-- 												<option value="<c:out value=""/>" ><c:out value="전체"/></option> --%>
+<%-- 											<c:forEach var="result" items="${result}" varStatus="status">												 --%>
+<%-- 												<option value="<c:out value="${result.sysCode}"/>" <c:if test="${result.sysCode == cipherAlgorithmCode }">selected="selected"</c:if>><c:out value="${result.sysCodeName}"/></option> --%>
+<%-- 											</c:forEach>  --%>
+<!-- 									</select> -->
+<!-- 								</td> -->
+<!-- 							</tr> -->
+<!-- 						</tbody> -->
+<!-- 					</table> -->
+<!-- 				</div> -->
 
 				<div class="overflow_area">
 					<table id="keyManageTable" class="display" cellspacing="0" width="100%">

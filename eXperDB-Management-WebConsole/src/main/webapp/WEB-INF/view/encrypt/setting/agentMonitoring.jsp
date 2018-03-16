@@ -51,7 +51,7 @@ function fn_init() {
 			{ data : "entityTypeCode", className : "dt-center", defaultContent : "", visible: false},
 			{ data : "entityStatusCode", className : "dt-center", defaultContent : "", visible: false},
 			{ data : "appVersion", className : "dt-center", defaultContent : "", visible: false}
-		 ]
+		 ],'select': {'style': 'multi'}
 	});
 	
 	table.tables().header().to$().find('th:eq(0)').css('min-width', '20px');
