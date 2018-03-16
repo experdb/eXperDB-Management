@@ -118,39 +118,50 @@ function fn_select(){
 function fn_agentMonitoringModifyForm(){
 	//var datasArr = new Array();	
 	
-	var data =  table.row('.selected').data();
+	var datas = table.rows('.selected').data();
 	
-	var entityName =  data.entityName;
-	var entityStatusCode=  data.entityStatusCode;
-	var latestAddress =  data.latestAddress;
-	var latestDateTime = data.latestDateTime;
-	var extendedField = data.extendedField;
-	var entityUid = data.entityUid;
-
-	//var rows = JSON.parse(extendedField);
-
-	//datasArr.push(rows);
-
-	 var frmPop= document.frmPopup;
-	    var url = '/popup/agentMonitoringModifyForm.do';
-	    var width = 954;
-		var height = 670;
-		var left = (window.screen.width / 2) - (width / 2);
-		var top = (window.screen.height /2) - (height / 2);
-		var popOption = "width="+width+", height="+height+", top="+top+", left="+left+", resizable=no, scrollbars=yes, status=no, toolbar=no, titlebar=yes, location=no,";
-	    window.open('','popupView',popOption);  
-	     
-	    frmPop.action = url;
-	    frmPop.target = 'popupView';
-	    
-	    frmPop.entityName.value = entityName;
-	    frmPop.entityUid.value = entityUid;
-	    frmPop.entityStatusCode.value = entityStatusCode;  
-	    frmPop.latestAddress.value = latestAddress;
-	    frmPop.latestDateTime.value = latestDateTime; 
-	    frmPop.extendedField.value = extendedField;
-	    
-	    frmPop.submit();   
+	if (datas.length <= 0) {
+		alert("<spring:message code='message.msg35' />");
+		return false;
+	}else if(datas.length > 1){
+		alert("<spring:message code='message.msg04' />");
+		return false;
+	}else{
+	
+		var data =  table.row('.selected').data();
+		
+		var entityName =  data.entityName;
+		var entityStatusCode=  data.entityStatusCode;
+		var latestAddress =  data.latestAddress;
+		var latestDateTime = data.latestDateTime;
+		var extendedField = data.extendedField;
+		var entityUid = data.entityUid;
+	
+		//var rows = JSON.parse(extendedField);
+	
+		//datasArr.push(rows);
+	
+		 var frmPop= document.frmPopup;
+		    var url = '/popup/agentMonitoringModifyForm.do';
+		    var width = 954;
+			var height = 670;
+			var left = (window.screen.width / 2) - (width / 2);
+			var top = (window.screen.height /2) - (height / 2);
+			var popOption = "width="+width+", height="+height+", top="+top+", left="+left+", resizable=no, scrollbars=yes, status=no, toolbar=no, titlebar=yes, location=no,";
+		    window.open('','popupView',popOption);  
+		     
+		    frmPop.action = url;
+		    frmPop.target = 'popupView';
+		    
+		    frmPop.entityName.value = entityName;
+		    frmPop.entityUid.value = entityUid;
+		    frmPop.entityStatusCode.value = entityStatusCode;  
+		    frmPop.latestAddress.value = latestAddress;
+		    frmPop.latestDateTime.value = latestDateTime; 
+		    frmPop.extendedField.value = extendedField;
+		    
+		    frmPop.submit();   
+	}
 }
 </script>
 
@@ -184,10 +195,10 @@ function fn_agentMonitoringModifyForm(){
 		<div class="contents">
 			<div class="cmm_grp">
 				<div class="btn_type_01">
-					<span class="btn"><button onClick="fn_select();">조회</button></span> 
+					<!-- <span class="btn"><button onClick="fn_select();">조회</button></span>  -->
 					<span class="btn"><button onClick="fn_agentMonitoringModifyForm();">수정</button></span>
 				</div>
-				<div class="sch_form">
+				<%-- <div class="sch_form">
 					<table class="write">
 						<caption>검색 조회</caption>
 						<colgroup>
@@ -201,7 +212,7 @@ function fn_agentMonitoringModifyForm(){
 							</tr>
 						</tbody>
 					</table>
-				</div>
+				</div> --%>
 				<div class="overflow_area">
 					<table id="agentMonitoring" class="display" cellspacing="0" width="100%">
 						<thead>
