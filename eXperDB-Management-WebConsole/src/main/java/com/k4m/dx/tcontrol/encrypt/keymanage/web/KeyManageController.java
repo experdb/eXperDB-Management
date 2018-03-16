@@ -217,7 +217,7 @@ public class KeyManageController {
 			String loginId = (String)session.getAttribute("usr_id");
 			String entityId = (String)session.getAttribute("ectityUid");	
 			
-			result = kmsc.insertCryptoKeySymmetric(restIp, restPort,loginId,entityId, strTocken, param);
+			result = kmsc.insertCryptoKeySymmetric(restIp, restPort, strTocken, loginId, entityId, param);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

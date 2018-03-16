@@ -150,17 +150,17 @@
 <div id="contents">
 	<div class="contents_wrap">
 		<div class="contents_tit">
-			<h4>암복호화키<a href="#n"><img src="../images/ico_tit.png" class="btn_info" /></a></h4>
+			<h4>암호화 키<a href="#n"><img src="../images/ico_tit.png" class="btn_info" /></a></h4>
 			<div class="infobox">
 				<ul>
-					<li>암복호화키설명</li>
+					<li>암호화 키 설명</li>
 				</ul>
 			</div>
 			<div class="location">
 				<ul>
 					<li>데이터암호화</li>
 					<li>감사로그</li>
-					<li class="on">암복호화키</li>
+					<li class="on">암호화 키</li>
 				</ul>
 			</div>
 		</div>

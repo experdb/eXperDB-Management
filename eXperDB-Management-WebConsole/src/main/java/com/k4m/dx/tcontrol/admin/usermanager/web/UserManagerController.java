@@ -410,7 +410,6 @@ public class UserManagerController {
 				AES256 aes = new AES256(AES256_KEY.ENC_KEY);
 				userVo.setPwd(aes.aesEncode(userVo.getPwd()));
 			}
-			
 
 			String strTocken = (String)session.getAttribute("tockenValue");
 			String loginId = (String)session.getAttribute("usr_id");
@@ -435,7 +434,7 @@ public class UserManagerController {
 							result.put("resultMessage", result.get("resultMessage"));
 							return result;
 						}
-					}else if(nowEncrypt.equals("N")){				
+					}else if(nowEncrypt.equals("N")){
 						JSONObject resultEntity = uic.selectEntityUid(restIp, restPort, strTocken, loginId, entityId, userVo.getUsr_id());
 						if(!resultEntity.get("resultCode").equals("0000000000")){
 							result.put("resultCode", resultEntity.get("resultCode"));
@@ -521,7 +520,7 @@ public class UserManagerController {
 							return result;
 						}
 					}else{
-						//로그인 한 유저가 strTocken, entityId 가 없을경우 삭제 막아야 함!
+						//로그인 한 유저가 strTocken, entityId 가 없을 경우 삭제 막아야 함!
 						result.put("resultCode", "에러");
 						result.put("resultMessage", "에러");
 						return result;

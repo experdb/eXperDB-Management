@@ -1,9 +1,8 @@
 package com.k4m.dx.tcontrol.tree.web;
 
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
@@ -75,6 +74,24 @@ public class TreeInfoController {
 		return resultSet;
 	}
 
+	/**
+	 * 트리 암호화 권한을 조회한다.
+	 * 
+	 * @return resultSet
+	 * @throws Exception
+	 */
+	@RequestMapping(value = "/selectTreeEncrypt.do")
+	public @ResponseBody List<Map<String, Object>> selectTreeEncrypt(HttpServletRequest request) {
+		List<Map<String, Object>> resultSet = null;
+		try {
+			HttpSession session = request.getSession();
+			String usr_id = (String) session.getAttribute("usr_id");
+			resultSet = treeInfoService.selectTreeEncrypt(usr_id);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return resultSet;
+	}
 	/**
 	 * 속성 화면을 보여준다.
 	 * 

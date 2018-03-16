@@ -89,7 +89,10 @@ public class KeyManageServiceCall {
 					jsonObj.put("cipherAlgorithmName", cryptoKey.getCipherAlgorithmName());
 					jsonObj.put("cipherAlgorithmCode", cryptoKey.getCipherAlgorithmCode());
 					jsonObj.put("createDateTime", cryptoKey.getCreateDateTime());
-					jsonObj.put("createName", new String(cryptoKey.getCreateName().toString().getBytes("iso-8859-1"),"UTF-8"));
+					
+					if(cryptoKey.getCreateName() != null) {
+						jsonObj.put("createName", new String(cryptoKey.getCreateName().toString().getBytes("iso-8859-1"),"UTF-8"));
+					}
 					jsonObj.put("updateDateTime", cryptoKey.getUpdateDateTime());					
 					jsonObj.put("keyStatusCode", cryptoKey.getKeyStatusCode());
 					jsonObj.put("keyStatusName", cryptoKey.getKeyStatusName());
@@ -108,7 +111,10 @@ public class KeyManageServiceCall {
 					bf.append((i+1) + "유형 : " + cryptoKey.getResourceTypeName());
 					bf.append((i+1) + "적용 알고리즘 : " + cryptoKey.getCipherAlgorithmName());
 					bf.append((i+1) + "작성 일시 : " + cryptoKey.getCreateDateTime() );
+					
+					if(cryptoKey.getCreateName() != null){
 					bf.append((i+1) + "작성자 : " + new String(cryptoKey.getCreateName().toString().getBytes("iso-8859-1"),"UTF-8"));
+					}
 					bf.append((i+1) + "변경 일시 : " + cryptoKey.getUpdateDateTime());
 					
 					if(cryptoKey.getUpdateName() != null) {

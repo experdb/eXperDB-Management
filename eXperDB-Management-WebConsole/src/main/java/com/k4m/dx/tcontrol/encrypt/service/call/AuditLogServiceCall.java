@@ -449,7 +449,7 @@ public class AuditLogServiceCall {
 		
 		if(resultCode.equals("0000000000")) {
 			ArrayList list = (ArrayList) resultJson.get("list");
-			
+			if(list!=null) {
 				for(int i=0; i<list.size(); i++) {
 					JSONObject data = (JSONObject) list.get(i);
 					
@@ -467,6 +467,8 @@ public class AuditLogServiceCall {
 					System.out.println("getEntityUid : " + entity.getEntityUid());
 					System.out.println("getEntityName : " + new String(entity.getEntityName().toString().getBytes("iso-8859-1"),"UTF-8") );
 				}
+			}
+				
 		}
 		return jsonArray;
 	}

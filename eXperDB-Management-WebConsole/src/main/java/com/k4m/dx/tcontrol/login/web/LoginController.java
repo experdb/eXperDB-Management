@@ -143,20 +143,23 @@ public class LoginController {
 			} else if (userList.get(0).getUsr_expr_dt().equals("N")) {
 				mv.addObject("error", "msg159");
 			} else {
+				/*중복로그인방지*/
+//				EgovHttpSessionBindingListener listener = new EgovHttpSessionBindingListener();
+//				request.getSession().setAttribute(userList.get(0).getUsr_id(), listener);
 				
 				// session 설정
 				HttpSession session = request.getSession();
 				request.getSession().setAttribute("session", session);
 				request.getSession().setAttribute("usr_id", userList.get(0).getUsr_id());
 				request.getSession().setAttribute("usr_nm", userList.get(0).getUsr_nm());
-
+			
 				InetAddress local = InetAddress.getLocalHost();
 				String ip = local.getHostAddress();
 				request.getSession().setAttribute("ip", ip);
 
 				Properties props = new Properties();
 				props.load(new FileInputStream(ResourceUtils.getFile("classpath:egovframework/tcontrolProps/globals.properties")));			
-				String restIp = props.get("encrypt.server.url").toString();		
+				String restIp = props.get("encrypt.server.url").toString();
 				int restPort = Integer.parseInt(props.get("encrypt.server.port").toString());
 				String encp_use_yn = props.get("encrypt.useyn").toString();
 				request.getSession().setAttribute("encp_use_yn", encp_use_yn);
@@ -196,12 +199,16 @@ public class LoginController {
 	public String loginout(@ModelAttribute("userVo") UserVO userVo, @ModelAttribute("historyVO") HistoryVO historyVO,
 			HttpServletRequest request, HttpServletResponse response) {
 		try {
-			// 로그아웃 이력 남기기
-			CmmnUtils.saveHistory(request, historyVO);
-			historyVO.setExe_dtl_cd("DX-T0003_01");
-			accessHistoryService.insertHistory(historyVO);
-
 			HttpSession session = request.getSession();
+			String usr_id = (String)session.getAttribute("usr_id");
+			
+			if(usr_id !=null){
+				// 로그아웃 이력 남기기
+				CmmnUtils.saveHistory(request, historyVO);
+				historyVO.setExe_dtl_cd("DX-T0003_01");
+				accessHistoryService.insertHistory(historyVO);
+			}
+
 			session.invalidate();
 			return "redirect:/";
 		} catch (Exception e) {

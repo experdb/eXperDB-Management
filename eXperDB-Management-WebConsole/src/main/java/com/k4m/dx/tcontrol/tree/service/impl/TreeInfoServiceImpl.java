@@ -1,6 +1,7 @@
 package com.k4m.dx.tcontrol.tree.service.impl;
 
 import java.util.List;
+import java.util.Map;
 
 import javax.annotation.Resource;
 
@@ -20,5 +21,12 @@ public class TreeInfoServiceImpl extends EgovAbstractServiceImpl implements Tree
 	public List<ConnectorVO> selectConnectorRegister(String usr_id) throws Exception {
 		return treeInfoDAO.selectConnectorRegister(usr_id);
 	}
+
+	@Override
+	public List<Map<String, Object>> selectTreeEncrypt(String usr_id) throws Exception {
+		return treeInfoDAO.selectTreeEncrypt(usr_id);
+	}
+
+
 
 }

@@ -60,47 +60,50 @@ public class SecurityPolicyServiceCall {
 		String resultMessage = (String) resultJson.get("resultMessage");
 		resultMessage = new String(resultMessage.getBytes("iso-8859-1"),"UTF-8"); 
 		
+		System.out.println("resultCode : " + resultCode + " resultMessage : " + resultMessage);
+		
 		if(resultCode.equals(SystemCode.ResultCode.SUCCESS)) {
 			
 			ArrayList list = (ArrayList) resultJson.get("list");
-			for (int j = 0; j < list.size(); j++) {
-				JSONObject jsonObj = (JSONObject) list.get(j);
+			if(list!=null) {
+				for (int j = 0; j < list.size(); j++) {
+					JSONObject jsonObj = (JSONObject) list.get(j);
 
-				Gson gson = new Gson();
-				Profile profile = new Profile();
-				profile = gson.fromJson(jsonObj.toJSONString(), profile.getClass());
+					Gson gson = new Gson();
+					Profile profile = new Profile();
+					profile = gson.fromJson(jsonObj.toJSONString(), profile.getClass());
 
-				String createDateTime = profile.getCreateDateTime();
-				String profileTypeName = profile.getProfileTypeName();
-				String profileTypeCode = profile.getProfileTypeCode();
-				String profileStatusCode = profile.getProfileStatusCode();
-				String profileNote = profile.getProfileNote();
-				String profileStatusName =  profile.getProfileStatusName();
-				String createName = profile.getCreateName();
-				String createUid = profile.getCreateUid();
-				String profileName = profile.getProfileName();
-				String profileUid = profile.getProfileUid();
-				String updateDateTime = profile.getUpdateDateTime();
-				String updateName = profile.getUpdateName();
-				
-				jsonObj.put("rnum", j+1);
-				jsonObj.put("profileName", profileName);
-				jsonObj.put("profileNote", profileNote);
-				jsonObj.put("profileStatusName", profileStatusName);
-				jsonObj.put("createDateTime", createDateTime);
-				jsonObj.put("createName", new String(createName.getBytes("iso-8859-1"),"UTF-8"));
-				jsonObj.put("updateDateTime", updateDateTime);
-				if(updateName != null){
-					jsonObj.put("updateName", new String(updateName.getBytes("iso-8859-1"),"UTF-8"));
+					String createDateTime = profile.getCreateDateTime();
+					String profileTypeName = profile.getProfileTypeName();
+					String profileTypeCode = profile.getProfileTypeCode();
+					String profileStatusCode = profile.getProfileStatusCode();
+					String profileNote = profile.getProfileNote();
+					String profileStatusName =  profile.getProfileStatusName();
+					String createName = profile.getCreateName();
+					String createUid = profile.getCreateUid();
+					String profileName = profile.getProfileName();
+					String profileUid = profile.getProfileUid();
+					String updateDateTime = profile.getUpdateDateTime();
+					String updateName = profile.getUpdateName();
+					
+					jsonObj.put("rnum", j+1);
+					jsonObj.put("profileName", profileName);
+					jsonObj.put("profileNote", profileNote);
+					jsonObj.put("profileStatusName", profileStatusName);
+					jsonObj.put("createDateTime", createDateTime);
+					if(createName != null){
+						jsonObj.put("createName", new String(createName.getBytes("iso-8859-1"),"UTF-8"));
+					}
+					jsonObj.put("updateDateTime", updateDateTime);
+					if(updateName != null){
+						jsonObj.put("updateName", new String(updateName.getBytes("iso-8859-1"),"UTF-8"));
+					}
+					
+					jsonArray.add(jsonObj);
 				}
-				
-				jsonArray.add(jsonObj);
+				result.put("data", jsonArray);
 			}
-			result.put("data", jsonArray);
-			System.out.println(result);
-		} else {
-			
-		}
+		} 
 		return result;
 	}
 

@@ -22,10 +22,7 @@ import com.k4m.dx.tcontrol.encrypt.service.call.AuditLogServiceCall;
 @Controller
 public class AuditLogController {
 
-//	String restIp = "127.0.0.1";
-//	int restPort = 8443;
-//	String strTocken = "hO/BggRGMbP8kfNKQADdUSasVYO1qhsZjL+p6ZQkTQI=";
-	
+
 	/**
 	 * 암복호화 감사로그 화면을 보여준다
 	 * 
@@ -375,7 +372,7 @@ public class AuditLogController {
 			String loginId = (String)session.getAttribute("usr_id");
 			String entityId = (String)session.getAttribute("ectityUid");
 			
-			monitoreduid =sic.selectEntityList(restIp, restPort, strTocken, loginId ,entityId);
+			monitoreduid =sic.selectEntityAgentList(restIp, restPort, strTocken, loginId ,entityId);
 			mv.addObject("monitoreduid", monitoreduid);
 
 			mv.setViewName("encrypt/auditLog/resourcesUseAuditLog");

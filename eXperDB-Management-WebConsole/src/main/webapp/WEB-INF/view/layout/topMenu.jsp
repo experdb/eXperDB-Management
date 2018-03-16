@@ -363,7 +363,7 @@ function fn_cookie(url) {
         						<ul class="depth_3">
 									<li><a href="/encodeDecodeAuditLog.do" target="main" id="MN0001201">암복호화</a></li>
 									<li><a href="/managementServerAuditLog.do" target="main" id="MN0001202">관리서버</a></li>
-									<li><a href="/encodeDecodeKeyAuditLog.do" target="main" id="MN0001203">암복호화키</a></li>
+									<li><a href="/encodeDecodeKeyAuditLog.do" target="main" id="MN0001203">암호화 키</a></li>
 <!-- 								<li><a href="/backupRestoreAuditLog.do" target="main">백업및복원</a></li> -->
 									<li><a href="/resourcesUseAuditLog.do" target="main" id="MN0001204">자원사용</a></li>
 								</ul>

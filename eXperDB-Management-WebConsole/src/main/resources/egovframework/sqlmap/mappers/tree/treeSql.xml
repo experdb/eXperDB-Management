@@ -39,4 +39,34 @@
 		)A
 	</select>
 
+	<select id="selectTreeEncrypt" resultType="HashMap">
+		/**
+		* Query ID : selectTreeEncrypt
+		* Description : 트리 암호화 권한 조회
+		* Author : 김주영
+		**/
+		
+		SELECT 
+				 A.usr_mnu_aut_id
+				 ,A.mnu_id
+			     ,A.usr_id
+			     ,A.read_aut_yn
+			     ,A.wrt_aut_yn
+			     ,B.mnu_nm
+			     ,B.mnu_cd
+			     ,A.frst_regr_id
+			     ,A.frst_reg_dtm
+			     ,A.lst_mdfr_id
+			     ,A.lst_mdf_dtm
+		FROM
+		  		T_USRMNUAUT_I A
+		RIGHT OUTER JOIN
+		  		T_MNU_I B
+		ON 
+		A.MNU_ID = B.MNU_ID 
+		WHERE 1 = 1
+		AND A.USR_ID = #{usr_id}
+		AND B.MNU_CD in ('MN0001101', 'MN0001102', 'MN0001201', 'MN0001202','MN0001203','MN0001204','MN0001301','MN0001302','MN0001303','MN0001304')
+	    ORDER BY MNU_ID
+	</select>
 </mapper>

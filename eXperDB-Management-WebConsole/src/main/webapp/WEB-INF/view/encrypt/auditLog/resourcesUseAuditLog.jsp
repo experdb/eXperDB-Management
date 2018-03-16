@@ -201,7 +201,7 @@
 									<select class="select t5" id="monitoreduid">
 										<option value="">전체</option>
 											<c:forEach var="monitoreduid" items="${monitoreduid}">
-												<option value="${monitoreduid.getEntityUid}">${monitoreduid.getEntityName}</option>							
+												<option value="${monitoreduid.entityUid}">${monitoreduid.entityName}</option>							
 											</c:forEach>
 									</select>
 								</td>

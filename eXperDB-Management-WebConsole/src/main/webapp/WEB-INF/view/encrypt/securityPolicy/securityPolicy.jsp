@@ -30,13 +30,13 @@ var table = null;
 			scrollX: true,
 			columns : [
 				{ data : "", defaultContent : "", targets : 0, orderable : false, checkboxes : {'selectRow' : true}}, 
-				{ data : "rnum", className : "dt-center", defaultContent : ""}, 
-				{ data : "profileName", className : "dt-center", defaultContent : ""}, 
-				{ data : "profileNote", className : "dt-center", defaultContent : ""}, 
-				{ data : "profileStatusName", className : "dt-center", defaultContent : ""}, 
-				{ data : "createName", className : "dt-center", defaultContent : ""}, 
-				{ data : "createDateTime", className : "dt-center", defaultContent : ""}, 
-				{ data : "updateName", className : "dt-center", defaultContent : ""}, 
+				{ data : "rnum", className : "dt-center", defaultContent : ""},
+				{ data : "profileName", className : "dt-center", defaultContent : ""},
+				{ data : "profileNote", className : "dt-center", defaultContent : ""},
+				{ data : "profileStatusName", className : "dt-center", defaultContent : ""},
+				{ data : "createName", className : "dt-center", defaultContent : ""},
+				{ data : "createDateTime", className : "dt-center", defaultContent : ""},
+				{ data : "updateName", className : "dt-center", defaultContent : ""},
 				{ data : "updateDateTime", className : "dt-center", defaultContent : ""},
 				{ data : "profileUid",visible: false }
 				
@@ -217,32 +217,32 @@ var table = null;
 		<div class="contents">
 			<div class="cmm_grp">
 				<div class="btn_type_01">
-					<span class="btn" onclick="fn_select();"><button>조회</button></span>
+<!-- 					<span class="btn" onclick="fn_select();"><button>조회</button></span> -->
 					<span class="btn"><a href="/securityPolicyInsert.do"><button>등록</button></a></span>
 					<span class="btn" onclick="fn_update();"><button>수정</button></span>
 					<span class="btn" onclick="fn_delete();"><button>삭제</button></span>
 				</div>
-				<div class="sch_form">
-					<table class="write">
-						<caption>검색 조회</caption>
-						<colgroup>
-							<col style="width: 100px;" />
-							<col />
-							<col style="width: 100px;" />
-							<col />
-						</colgroup>
-						<tbody>
-							<tr>
-								<th scope="row" class="t9">정책이름</th>
-								<td><input type="text" class="txt t2" id="policyName" /></td>
-								<th scope="row" class="t9">정책상태</th>
-								<td><select class="select t5" id="policyStatus">
-										<option value="Active">Active</option>
-								</select></td>
-							</tr>						
-						</tbody>
-					</table>
-				</div>
+<!-- 				<div class="sch_form"> -->
+<!-- 					<table class="write"> -->
+<%-- 						<caption>검색 조회</caption> --%>
+<%-- 						<colgroup> --%>
+<%-- 							<col style="width: 100px;" /> --%>
+<%-- 							<col /> --%>
+<%-- 							<col style="width: 100px;" /> --%>
+<%-- 							<col /> --%>
+<%-- 						</colgroup> --%>
+<!-- 						<tbody> -->
+<!-- 							<tr> -->
+<!-- 								<th scope="row" class="t9">정책이름</th> -->
+<!-- 								<td><input type="text" class="txt t2" id="policyName" /></td> -->
+<!-- 								<th scope="row" class="t9">정책상태</th> -->
+<!-- 								<td><select class="select t5" id="policyStatus"> -->
+<!-- 										<option value="Active">Active</option> -->
+<!-- 								</select></td> -->
+<!-- 							</tr>						 -->
+<!-- 						</tbody> -->
+<!-- 					</table> -->
+<!-- 				</div> -->
 
 				<div class="overflow_area">
 					<table id="policyTable" class="display" cellspacing="0" width="100%">
