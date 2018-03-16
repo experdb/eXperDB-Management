@@ -87,8 +87,8 @@ public class SecurityPolicyServiceCall {
 					String updateName = profile.getUpdateName();
 					
 					jsonObj.put("rnum", j+1);
-					jsonObj.put("profileName", profileName);
-					jsonObj.put("profileNote", profileNote);
+					jsonObj.put("profileName", new String(profileName.getBytes("iso-8859-1"),"UTF-8"));
+					jsonObj.put("profileNote", new String(profileNote.getBytes("iso-8859-1"),"UTF-8"));
 					jsonObj.put("profileStatusName", profileStatusName);
 					jsonObj.put("createDateTime", createDateTime);
 					if(createName != null){
@@ -255,8 +255,8 @@ public class SecurityPolicyServiceCall {
 			profileProtection = gson.fromJson(jsonProfileProtection.toJSONString(), profileProtection.getClass());
 			
 			System.out.println("보호 정책 이름 : " + profileProtection.getProfileName()+"보호 정책 설명 : " + profileProtection.getProfileNote());
-			result.put("profileName", profileProtection.getProfileName());
-			result.put("profileNote", profileProtection.getProfileNote());
+			result.put("profileName", new String(profileProtection.getProfileName().getBytes("iso-8859-1"),"UTF-8"));
+			result.put("profileNote", new String(profileProtection.getProfileNote().getBytes("iso-8859-1"),"UTF-8"));
 			
 			System.out.println((boolean) profileProtection.getDefaultAccessAllowTrueFalse()); //	기본접근허용
 			result.put("defaultAccessAllowTrueFalse", (boolean) profileProtection.getDefaultAccessAllowTrueFalse());

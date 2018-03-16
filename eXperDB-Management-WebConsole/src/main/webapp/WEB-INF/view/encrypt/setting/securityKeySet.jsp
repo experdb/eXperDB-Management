@@ -266,8 +266,8 @@ function fn_mstKeyDownload(){
 					<div class="overflows_areas">
 						<table class="write">
 							<colgroup>
-								<col style="width: 5px;" />
-								<col style="width: 55px;" />
+								<col style="width: 15%" />
+								<col style="width: 85%" />
 								<col />
 							</colgroup>
 							<tbody>
@@ -304,8 +304,7 @@ function fn_mstKeyDownload(){
 					<div class="overflows_areas">
 						<table class="write">
 							<colgroup>
-								<col style="width: 115px;" />
-								<col style="width: 55px;" />
+								<col style="width: 100%;" />
 								<col />
 							</colgroup>
 							<tbody>
@@ -328,8 +327,8 @@ function fn_mstKeyDownload(){
 					<div class="overflows_areas">
 						<table class="write">
 							<colgroup>
-								<col style="width: 115px;" />
-								<col style="width: 55px;" />
+								<col style="width: 15%" />
+								<col style="width: 85%;" />
 								<col />
 							</colgroup>
 							<tbody>

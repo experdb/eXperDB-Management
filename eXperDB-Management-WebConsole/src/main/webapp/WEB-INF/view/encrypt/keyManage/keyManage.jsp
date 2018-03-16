@@ -45,18 +45,18 @@ var table = null;
 				{ data : "keyStatusName", className : "dt-center", defaultContent : "", visible: false},
 				{ data : "cipherAlgorithmCode", className : "dt-center", defaultContent : "", visible: false}
 	
-			 ]
+			 ],'select': {'style': 'multi'}
 		});
 		
 		table.tables().header().to$().find('th:eq(0)').css('min-width', '20px');
 		table.tables().header().to$().find('th:eq(1)').css('min-width', '40px');
-		table.tables().header().to$().find('th:eq(2)').css('min-width', '50px');
-		table.tables().header().to$().find('th:eq(3)').css('min-width', '100px');
+		table.tables().header().to$().find('th:eq(2)').css('min-width', '200px');
+		table.tables().header().to$().find('th:eq(3)').css('min-width', '80px');
 		table.tables().header().to$().find('th:eq(4)').css('min-width', '100px');
-		table.tables().header().to$().find('th:eq(5)').css('min-width', '100px');
-		table.tables().header().to$().find('th:eq(6)').css('min-width', '100px');
+		table.tables().header().to$().find('th:eq(5)').css('min-width', '80px');
+		table.tables().header().to$().find('th:eq(6)').css('min-width', '150px');
 		table.tables().header().to$().find('th:eq(7)').css('min-width', '80px');
-		table.tables().header().to$().find('th:eq(8)').css('min-width', '100px');
+		table.tables().header().to$().find('th:eq(8)').css('min-width', '150px');
 	
 		table.tables().header().to$().find('th:eq(9)').css('min-width', '0px');
 		table.tables().header().to$().find('th:eq(10)').css('min-width', '0px');
@@ -278,13 +278,13 @@ var table = null;
 							<tr>
 								<th width="20"></th>
 								<th width="40">No</th>
-								<th width="50">키이름</th>
-								<th width="100">키 유형</th>
+								<th width="200">키이름</th>
+								<th width="80">키 유형</th>
 								<th width="100">적용 알고리즘</th>
-								<th width="100">등록자</th>
-								<th width="100">등록일시</th>
+								<th width="80">등록자</th>
+								<th width="150">등록일시</th>
 								<th width="80">수정자</th>
-								<th width="100">수정일시</th>
+								<th width="150">수정일시</th>
 								<th width="0"></th>
 								<th width="0"></th>
 								<th width="0"></th>
