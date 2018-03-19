@@ -1,35 +1,46 @@
 <html>
   <head>
-<!--     <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script> -->
-    <script src="js/chart/loader.js" type="text/javascript"></script>
-    <script type="text/javascript">
-      google.charts.load('current', {'packages':['corechart']});
+    <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+    <script type='text/javascript'>
+      google.charts.load('current', {'packages':['annotationchart']});
       google.charts.setOnLoadCallback(drawChart);
+
       function drawChart() {
-        var data = google.visualization.arrayToDataTable([
-          ['Mon', 28, 28, 38, 38],
-          ['Tue', 38, 38, 55, 55],
-          ['Wed', 55, 55, 77, 77],
-          ['Thu', 77, 77, 66, 66],
-          ['Fri', 66, 66, 22, 22]
-          // Treat the first row as data.
-        ], true);
+        var data = new google.visualization.DataTable();
+        data.addColumn('date', 'Date');
+        data.addColumn('number', 'Kepler-22b mission');
+        data.addColumn('string', 'Kepler title');
+        data.addColumn('string', 'Kepler text');
+        data.addColumn('number', 'Gliese 163 mission');
+        data.addColumn('string', 'Gliese title');
+        data.addColumn('string', 'Gliese text');
+        data.addRows([
+          [new Date(2314, 2, 15), 12400, undefined, undefined,
+                                  10645, undefined, undefined],
+          [new Date(2314, 2, 16), 24045, 'Lalibertines', 'First encounter',
+                                  12374, undefined, undefined],
+          [new Date(2314, 2, 17), 35022, 'Lalibertines', 'They are very tall',
+                                  15766, 'Gallantors', 'First Encounter'],
+          [new Date(2314, 2, 18), 12284, 'Lalibertines', 'Attack on our crew!',
+                                  34334, 'Gallantors', 'Statement of shared principles'],
+          [new Date(2314, 2, 19), 8476, 'Lalibertines', 'Heavy casualties',
+                                  66467, 'Gallantors', 'Mysteries revealed'],
+          [new Date(2314, 2, 20), 0, 'Lalibertines', 'All crew lost',
+                                  79463, 'Gallantors', 'Omniscience achieved']
+        ]);
+
+        var chart = new google.visualization.AnnotationChart(document.getElementById('chart_div'));
 
         var options = {
-          legend: 'none',
-          bar: { groupWidth: '100%' }, // Remove space between bars.
-          candlestick: {
-            fallingColor: { strokeWidth: 0, fill: '#a52714' }, // red
-            risingColor: { strokeWidth: 0, fill: '#0f9d58' }   // green
-          }
+          displayAnnotations: true
         };
 
-        var chart = new google.visualization.CandlestickChart(document.getElementById('chart_div'));
         chart.draw(data, options);
       }
     </script>
   </head>
+
   <body>
-    <div id="chart_div" style="width: 900px; height: 500px;"></div>
+    <div id='chart_div' style='width: 900px; height: 500px;'></div>
   </body>
 </html>
