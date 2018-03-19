@@ -413,15 +413,31 @@ public class SecurityPolicyServiceCall {
 							workDay+= "일";	
 					}
 					
-					jsonObj.put("specName", profileAclSpec.getSpecName());
-					jsonObj.put("serverInstanceId", profileAclSpec.getServerInstanceId());
-					jsonObj.put("serverLoginId", profileAclSpec.getServerLoginId());
-					jsonObj.put("adminLoginId", profileAclSpec.getAdminLoginId());
-					jsonObj.put("osLoginId", profileAclSpec.getOsLoginId());
-					jsonObj.put("applicationName", profileAclSpec.getApplicationName());
-					jsonObj.put("accessAddress", profileAclSpec.getAccessAddress());
-					jsonObj.put("accessAddressMask", profileAclSpec.getAccessAddressMask());
-					jsonObj.put("accessMacAddress", profileAclSpec.getAccessMacAddress());
+					jsonObj.put("specName", new String(profileAclSpec.getSpecName().getBytes("iso-8859-1"),"UTF-8"));  
+					if(profileAclSpec.getServerInstanceId() != null){
+						jsonObj.put("serverInstanceId", new String(profileAclSpec.getServerInstanceId().getBytes("iso-8859-1"),"UTF-8"));
+					}
+					if(profileAclSpec.getServerLoginId() != null){
+						jsonObj.put("serverLoginId", new String(profileAclSpec.getServerLoginId().getBytes("iso-8859-1"),"UTF-8"));
+					}
+					if(profileAclSpec.getAdminLoginId() != null){
+						jsonObj.put("adminLoginId", new String(profileAclSpec.getAdminLoginId().getBytes("iso-8859-1"),"UTF-8"));
+					}
+					if(profileAclSpec.getOsLoginId() != null){
+						jsonObj.put("osLoginId", new String(profileAclSpec.getOsLoginId().getBytes("iso-8859-1"),"UTF-8"));
+					}
+					if(profileAclSpec.getApplicationName() != null){
+						jsonObj.put("applicationName", new String(profileAclSpec.getApplicationName().getBytes("iso-8859-1"),"UTF-8"));
+					}
+					if(profileAclSpec.getAccessAddress() != null){
+						jsonObj.put("accessAddress", new String(profileAclSpec.getAccessAddress().getBytes("iso-8859-1"),"UTF-8"));
+					}
+					if(profileAclSpec.getAccessAddressMask() != null){
+						jsonObj.put("accessAddressMask", new String(profileAclSpec.getAccessAddressMask().getBytes("iso-8859-1"),"UTF-8"));
+					}
+					if(profileAclSpec.getAccessMacAddress() != null){
+						jsonObj.put("accessMacAddress", new String(profileAclSpec.getAccessMacAddress().getBytes("iso-8859-1"),"UTF-8"));
+					}
 					jsonObj.put("startDateTime", startDateTime);
 					jsonObj.put("endDateTime", endDateTime);
 					jsonObj.put("startTime", startTime);
@@ -429,8 +445,12 @@ public class SecurityPolicyServiceCall {
 					jsonObj.put("workDay", workDay);
 					jsonObj.put("massiveThreshold", profileAclSpec.getMassiveThreshold());
 					jsonObj.put("massiveTimeInterval", profileAclSpec.getMassiveTimeInterval());
-					jsonObj.put("extraName", profileAclSpec.getExtraName());
-					jsonObj.put("hostName", profileAclSpec.getHostName());
+					if(profileAclSpec.getExtraName() != null){
+						jsonObj.put("extraName", new String(profileAclSpec.getExtraName().getBytes("iso-8859-1"),"UTF-8"));
+					}
+					if(profileAclSpec.getHostName() != null){
+						jsonObj.put("hostName", new String(profileAclSpec.getHostName().getBytes("iso-8859-1"),"UTF-8"));
+					}
 					jsonObj.put("whitelistYesNo", profileAclSpec.getWhitelistYesNo());
 					jsonArray2.add(jsonObj);
 				}

@@ -96,6 +96,11 @@ $(window.document).ready(function() {
 		}else{
 			$("#whitelistNo:radio[value='N']").attr("checked", true);
 		}
+	}else{
+		$("#to_exe_h").val(23);
+		$("#to_exe_m").val(59);
+		$('#startDateTime').val($.datepicker.formatDate('yy-mm-dd', new Date()));
+		$('#endDateTime').val('9997-12-31');
 	}
 });
 	
@@ -400,8 +405,8 @@ function fn_update(){
 						<tr>
 							<th scope="row" class="ico_t1">임계치(대량작업)</th>
 							<td>
-								<input type="number" class="txt"  name="massiveThreshold" id="massiveThreshold" style="width: 50px;" onKeyPress="NumObj(this);"/>&nbsp&nbsp건수/ &nbsp&nbsp 
-								<input type="number" class="txt" name="massiveTimeInterval" id="massiveTimeInterval" style="width: 50px;" onKeyPress="NumObj(this);"/>초
+								<input type="number" class="txt"  min="0" name="massiveThreshold" id="massiveThreshold" style="width: 50px;" onKeyPress="NumObj(this);"/>&nbsp&nbsp건수/ &nbsp&nbsp 
+								<input type="number" class="txt" min="0" name="massiveTimeInterval" id="massiveTimeInterval" style="width: 50px;" onKeyPress="NumObj(this);"/>초
 							</td>
 						</tr>
 						<tr>
@@ -424,7 +429,7 @@ function fn_update(){
 					</tbody>
 				</table>
 			<div class="btn_type_02">
-					<c:if test="${act == 'i'}">
+				<c:if test="${act == 'i'}">
 					<a href="#n" class="btn"><span onclick="fn_save()">저장</span></a> 
 				</c:if>
 				<c:if test="${act == 'u'}">

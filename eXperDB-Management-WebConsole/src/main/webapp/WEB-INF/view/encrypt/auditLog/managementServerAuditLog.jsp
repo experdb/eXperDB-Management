@@ -226,6 +226,7 @@
 								<th width="600">본문</th>
 								<th width="100">결과코드</th>
 								<th width="300">결과메세지</th>
+								<th width="100">상세보기</th>
 							</tr>
 						</thead>
 					</table>

@@ -89,6 +89,9 @@ public class AuditLogServiceCall {
 			
 		String resultCode = (String) resultJson.get("resultCode");
 		String resultMessage = (String) resultJson.get("resultMessage");
+		
+		System.out.println(new String(resultMessage.getBytes("iso-8859-1"),"UTF-8"));
+		
 		long totalListCount = (long) resultJson.get("totalListCount");
 		
 		if(resultCode.equals("0000000000") &&  totalListCount > 0 ) {

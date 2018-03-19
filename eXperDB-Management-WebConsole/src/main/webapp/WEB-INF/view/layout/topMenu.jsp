@@ -11,12 +11,11 @@
  ******************************************************** */
 $(window.document).ready(function() {
 	var encryptMenu = document.getElementById("encryptMenu");
-			
-/* 	if("${encpUse}" == "Y"){
+ 	if("${sessionScope.encp_use_yn}" == "Y"){
 		encryptMenu.style.display = '';
 	}else{
 		encryptMenu.style.display = 'none';
-	} */
+	} 
 	
 	$.ajax({
 		url : "/menuAuthorityList.do",

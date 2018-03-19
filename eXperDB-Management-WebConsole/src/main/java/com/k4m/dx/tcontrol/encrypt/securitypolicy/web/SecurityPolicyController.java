@@ -485,7 +485,7 @@ public class SecurityPolicyController {
 				
 				String startDateTime = jsrow.get("startDateTime").toString()+"000000";
 				startDateTime =  startDateTime.replace("-","");
-				String endDateTime = jsrow.get("endDateTime").toString()+"000000";
+				String endDateTime = jsrow.get("endDateTime").toString()+"235959";
 				endDateTime =  endDateTime.replace("-","");
 				// 기간
 				r.setStartDateTime(startDateTime);
@@ -493,7 +493,7 @@ public class SecurityPolicyController {
 				
 				String startTime = jsrow.get("startTime").toString()+"00";
 				startTime =  startTime.replace(":","");
-				String endTime = jsrow.get("endTime").toString()+"00";
+				String endTime = jsrow.get("endTime").toString()+"59";
 				endTime =  endTime.replace(":","");
 				//시간
 				r.setStartTime(startTime);
@@ -715,7 +715,7 @@ public class SecurityPolicyController {
 				
 				String startDateTime = jsrow.get("startDateTime").toString()+"000000";
 				startDateTime =  startDateTime.replace("-","");
-				String endDateTime = jsrow.get("endDateTime").toString()+"000000";
+				String endDateTime = jsrow.get("endDateTime").toString()+"235959";
 				endDateTime =  endDateTime.replace("-","");
 				// 기간
 				r.setStartDateTime(startDateTime);
@@ -723,7 +723,7 @@ public class SecurityPolicyController {
 				
 				String startTime = jsrow.get("startTime").toString()+"00";
 				startTime =  startTime.replace(":","");
-				String endTime = jsrow.get("endTime").toString()+"00";
+				String endTime = jsrow.get("endTime").toString()+"59";
 				endTime =  endTime.replace(":","");
 				//시간
 				r.setStartTime(startTime);
