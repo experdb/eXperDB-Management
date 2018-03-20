@@ -61,12 +61,12 @@ public class CommonServiceCall {
 			
 		String resultCode = (String) resultJson.get("resultCode");
 		String resultMessage = (String) resultJson.get("resultMessage");
-		long totalListCount = (long) resultJson.get("totalListCount");
+		//long totalListCount = (long) resultJson.get("totalListCount");
 			
 		if(resultCode.equals("0000000000")) {
 			ArrayList list = (ArrayList) resultJson.get("list");
 			
-			if(totalListCount > 0) {
+			//if(totalListCount > 0) {
 				for(int i=0; i<list.size(); i++) {
 					JSONObject data = (JSONObject) list.get(i);
 					
@@ -86,7 +86,12 @@ public class CommonServiceCall {
 					
 					jsonArray.add(jsonObj);
 				}	
-			}
+			//}
+		}else{
+			JSONObject jsonObj = new JSONObject();
+			jsonObj.put("resultCode", resultCode);
+			jsonObj.put("resultMessage", resultMessage);
+			jsonArray.add(jsonObj);
 		}
 		return jsonArray;
 	}	
@@ -149,7 +154,9 @@ public class CommonServiceCall {
 		if(resultCode.equals(SystemCode.ResultCode.SUCCESS)) {
 
 		} else {
-			
+			if(resultCode.equals("8000000003")){
+				
+			}	
 		}
 		return jsonObj;
 	}

@@ -85,13 +85,11 @@ public class EncryptSettingServiceCall {
 				System.out.println("strConfigKey : " + strConfigKey + " - strConfigValue : " + strConfigValue);
 
 				result.put("list", jsonArray);
-				result.put("resultCode", resultCode);
-				result.put("resultMessage", resultMessage);
 			}
-		} else {
+		} 
 			result.put("resultCode", resultCode);
 			result.put("resultMessage", resultMessage);
-		}
+	
 		return result;
 	}
 
@@ -189,13 +187,11 @@ public class EncryptSettingServiceCall {
 				}
 				jsonArray.add(jObj);
 				result.put("list", jsonArray);
-				result.put("resultCode", resultCode);
-				result.put("resultMessage", resultMessage);
 			}
-		} else {
+		}
 			result.put("resultCode", resultCode);
 			result.put("resultMessage", resultMessage);
-		}
+	
 		return result;
 	}
 
@@ -492,13 +488,10 @@ public class EncryptSettingServiceCall {
 				}
 				jsonArray.add(jObj);
 				result.put("list", jsonArray);
-				result.put("resultCode", resultCode);
-				result.put("resultMessage", resultMessage);
 			}	
-		} else {			
+		} 		
 			result.put("resultCode", resultCode);
 			result.put("resultMessage", resultMessage);
-		}
 		return result;
 	}
 
@@ -780,10 +773,10 @@ public class EncryptSettingServiceCall {
 					System.out.println("getEntityUid : " + entity.getEntityUid());
 					System.out.println("getEntityName : " + new String(entity.getEntityName().toString().getBytes("iso-8859-1"),"UTF-8") );
 			}
-		}else{
+		}
 			result.put("resultCode", resultCode);
 			result.put("resultMessage", resultMessage);
-		}
+		
 		return result;
 	}
 

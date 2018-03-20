@@ -62,14 +62,13 @@ public class KeyManageServiceCall {
 		
 		String resultCode = (String) resultJson.get("resultCode");
 		String resultMessage =new String(resultJson.get("resultMessage").toString().getBytes("iso-8859-1"),"UTF-8");
-		//long totalListCount = (long) resultJson.get("totalListCount");
-		
+		long totalListCount = (long) resultJson.get("totalListCount");
 		
 		if(resultCode.equals("0000000000")) {
+			
 			ArrayList list = (ArrayList) resultJson.get("list");
 			
-			//System.out.println("list Size : " + list.size());
-			//if(totalListCount > 0) {
+			if(totalListCount > 0) {
 				for(int i=0; i<list.size(); i++) {
 					JSONObject data = (JSONObject) list.get(i);
 					
@@ -121,15 +120,13 @@ public class KeyManageServiceCall {
 					bf.append((i+1) + "변경 일시 : " + new String(cryptoKey.getUpdateName().toString().getBytes("iso-8859-1"),"UTF-8")); 
 					}
 					System.out.println(bf.toString());
-				//}
-				result.put("resultCode", resultCode);
-				result.put("resultMessage", resultMessage);
+				}
 				result.put("list", jsonArray);
 			}
-		}else{
+		}
 			result.put("resultCode", resultCode);
 			result.put("resultMessage", resultMessage);
-		}
+		
 		return result;
 	}
 
@@ -264,7 +261,7 @@ public class KeyManageServiceCall {
 					CryptoKeySymmetric cryptoKeySymmetric = new CryptoKeySymmetric();
 					cryptoKeySymmetric = gson.fromJson(jsonData.toJSONString(), cryptoKeySymmetric.getClass());
 					
-					jsonObj.put("no", i);
+					jsonObj.put("no", i+1);
 					jsonObj.put("version", cryptoKeySymmetric.getBinVersion());
 					jsonObj.put("keyStatusName", cryptoKeySymmetric.getKeyStatusName());
 					jsonObj.put("validEndDateTime", cryptoKeySymmetric.getValidEndDateTime());
@@ -280,13 +277,11 @@ public class KeyManageServiceCall {
 					jsonArray.add(jsonObj);
 				}
 				result.put("list", jsonArray);
-				result.put("resultCode", resultCode);
-				result.put("resultMessage", resultMessage);
 			}
-		}else{
+		}
 			result.put("resultCode", resultCode);
 			result.put("resultMessage", resultMessage);
-		}
+
 		return result;
 	}
 
