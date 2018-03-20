@@ -34,10 +34,19 @@
 				{ data : "entityName", className : "dt-center", defaultContent : ""}, 
 				{ data : "remoteAddress", className : "dt-center", defaultContent : ""}, 
 				{ data : "requestPath", className : "dt-center", defaultContent : ""}, 
-				{ data : "parameter", className : "dt-center", defaultContent : ""}, 
 				{ data : "resultCode", className : "dt-center", defaultContent : ""}, 
-				{ data : "resultMessage", className : "dt-center", defaultContent : ""}
-	
+				{
+					data : "",
+					render : function(data, type, full, meta) {
+						var html = "<span class='btn btnC_01 btnF_02'><button id='detail'>상세보기</button></span>";
+						return html;
+					},
+					className : "dt-center",
+					defaultContent : "",
+					orderable : false
+				},
+				{data : "parameter", className : "dt-center", defaultContent : "", visible: false },
+				{data : "resultMessage", className : "dt-center", defaultContent : "", visible: false }
 			 ]
 		});
 		
@@ -46,12 +55,42 @@
 		table.tables().header().to$().find('th:eq(2)').css('min-width', '100px');
 		table.tables().header().to$().find('th:eq(3)').css('min-width', '100px');
 		table.tables().header().to$().find('th:eq(4)').css('min-width', '250px');
-		table.tables().header().to$().find('th:eq(5)').css('min-width', '600px');
+		table.tables().header().to$().find('th:eq(5)').css('min-width', '100px');
 		table.tables().header().to$().find('th:eq(6)').css('min-width', '100px');
-		table.tables().header().to$().find('th:eq(7)').css('min-width', '300px');
-	
+		table.tables().header().to$().find('th:eq(7)').css('min-width', '0px');
+		table.tables().header().to$().find('th:eq(8)').css('min-width', '0px');
 	    $(window).trigger('resize');
 	    
+		//상세보기 클릭시
+		$('table tbody').on('click','#detail',function() {
+		 	var $this = $(this);
+		    var $row = $this.parent().parent().parent();
+		    $row.addClass('detail');
+		    var datas = table.rows('.detail').data();
+		    if(datas.length==1) {
+		    	var row = datas[0];
+			    $row.removeClass('detail');
+		 		var logDateTime  = row.logDateTime;
+		 		var entityName  = row.entityName;
+		 		var remoteAddress  = row.remoteAddress;
+		 		var requestPath  = row.requestPath;
+		 		var resultCode  = row.resultCode;
+		 		var parameter  = row.parameter;
+		 		var resultMessage  = row.resultMessage;
+		 		var popUrl = "/popup/managementServerAuditLogDetail.do?entityName="+entityName
+		 				+"&&logDateTime="+logDateTime +"&&remoteAddress="+remoteAddress
+		 				+"&&requestPath="+requestPath +"&&resultCode="+resultCode
+		 				+"&&parameter="+encodeURI(parameter) +"&&resultMessage="+encodeURI(resultMessage)// 서버 url 팝업경로
+		 		var width = 930;
+		 		var height = 500;
+		 		var left = (window.screen.width / 2) - (width / 2);
+		 		var top = (window.screen.height /2) - (height / 2);
+		 		var popOption = "width="+width+", height="+height+", top="+top+", left="+left+", resizable=no, scrollbars=yes, status=no, toolbar=no, titlebar=yes, location=no,";
+		 			
+		 		window.open(popUrl,"",popOption);
+		 			
+		    }
+		});	
 	}
 	
 	$(window.document).ready(function() {
@@ -223,9 +262,7 @@
 								<th width="100">접근자</th>
 								<th width="100">접근주소</th>
 								<th width="250">접근경로</th>
-								<th width="600">본문</th>
 								<th width="100">결과코드</th>
-								<th width="300">결과메세지</th>
 								<th width="100">상세보기</th>
 							</tr>
 						</thead>

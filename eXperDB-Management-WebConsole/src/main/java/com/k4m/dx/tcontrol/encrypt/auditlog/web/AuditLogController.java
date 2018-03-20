@@ -5,12 +5,15 @@ import javax.servlet.http.HttpSession;
 
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
+import com.k4m.dx.tcontrol.admin.accesshistory.service.AccessHistoryService;
+import com.k4m.dx.tcontrol.cmmn.CmmnUtils;
 import com.k4m.dx.tcontrol.cmmn.serviceproxy.vo.AuditLog;
 import com.k4m.dx.tcontrol.cmmn.serviceproxy.vo.AuditLogSite;
 import com.k4m.dx.tcontrol.cmmn.serviceproxy.vo.BackupLog;
@@ -22,6 +25,9 @@ import com.k4m.dx.tcontrol.encrypt.service.call.AuditLogServiceCall;
 @Controller
 public class AuditLogController {
 
+	@Autowired
+	private AccessHistoryService accessHistoryService;
+	
 
 	/**
 	 * 암복호화 감사로그 화면을 보여준다
@@ -35,9 +41,11 @@ public class AuditLogController {
 		ModelAndView mv = new ModelAndView();
 		try {
 			// 화면접근이력 이력 남기기
-			/*CmmnUtils.saveHistory(request, historyVO);
-			historyVO.setExe_dtl_cd("DX-T0055");
-			accessHistoryService.insertHistory(historyVO);*/
+			CmmnUtils.saveHistory(request, historyVO);
+			historyVO.setExe_dtl_cd("DX-T0110");
+			historyVO.setMnu_id(28);
+			accessHistoryService.insertHistory(historyVO);
+			
 			AuditLogServiceCall sic = new AuditLogServiceCall();
 			JSONArray result = new JSONArray();
 			
@@ -66,10 +74,16 @@ public class AuditLogController {
 	 * @throws Exception
 	 */
 	@RequestMapping(value = "/selectEncodeDecodeAuditLog.do")
-	public @ResponseBody JSONObject selectEncodeDecodeAuditLog(HttpServletRequest request) {
+	public @ResponseBody JSONObject selectEncodeDecodeAuditLog(HttpServletRequest request,@ModelAttribute("historyVO") HistoryVO historyVO) {
 		AuditLogServiceCall sic = new AuditLogServiceCall();
 		JSONObject result = new JSONObject();
 		try {
+			// 화면접근이력 이력 남기기
+			CmmnUtils.saveHistory(request, historyVO);
+			historyVO.setExe_dtl_cd("DX-T0110_01");
+			historyVO.setMnu_id(28);
+			accessHistoryService.insertHistory(historyVO);
+			
 			String DateTimeFrom = request.getParameter("from")+" 00:00:00.000000";
 			String DateTimeTo = request.getParameter("to")+" 23:59:59.999999";
 			
@@ -105,7 +119,7 @@ public class AuditLogController {
 			int restPort = (int)session.getAttribute("restPort");
 			String strTocken = (String)session.getAttribute("tockenValue");
 			String loginId = (String)session.getAttribute("usr_id");
-			String entityId = (String)session.getAttribute("ectityUid");	
+			String entityId = (String)session.getAttribute("ectityUid");
 			
 			result = sic.selectAuditLogSiteList(restIp, restPort, strTocken, param, loginId ,entityId);
 		} catch (Exception e) {
@@ -129,9 +143,11 @@ public class AuditLogController {
 		JSONArray entityuid = new JSONArray();
 		try {
 			// 화면접근이력 이력 남기기
-			/*CmmnUtils.saveHistory(request, historyVO);
-			historyVO.setExe_dtl_cd("DX-T0055");
-			accessHistoryService.insertHistory(historyVO);*/
+			CmmnUtils.saveHistory(request, historyVO);
+			historyVO.setExe_dtl_cd("DX-T0111");
+			historyVO.setMnu_id(29);
+			accessHistoryService.insertHistory(historyVO);
+			
 			HttpSession session = request.getSession();
 			String restIp = (String)session.getAttribute("restIp");
 			int restPort = (int)session.getAttribute("restPort");
@@ -158,17 +174,23 @@ public class AuditLogController {
 	 * @throws Exception
 	 */
 	@RequestMapping(value = "/selectManagementServerAuditLog.do")
-	public @ResponseBody JSONObject selectManagementServerAuditLog(HttpServletRequest request) {
+	public @ResponseBody JSONObject selectManagementServerAuditLog(HttpServletRequest request,@ModelAttribute("historyVO") HistoryVO historyVO) {
 		AuditLogServiceCall sic = new AuditLogServiceCall();
 		JSONObject result = new JSONObject();
 		try {
+			// 화면접근이력 이력 남기기
+			CmmnUtils.saveHistory(request, historyVO);
+			historyVO.setExe_dtl_cd("DX-T0111_01");
+			historyVO.setMnu_id(29);
+			accessHistoryService.insertHistory(historyVO);
+			
 			String DateTimeFrom = request.getParameter("from")+" 00:00:00.000000";
 			String DateTimeTo = request.getParameter("to")+" 23:59:59.999999";
 			String resultcode = request.getParameter("resultcode");
 			String entityuid = request.getParameter("entityuid");
 			
 			AuditLog param = new AuditLog();
-			param.setSearchLogDateTimeFrom(DateTimeFrom); 
+			param.setSearchLogDateTimeFrom(DateTimeFrom);
 			param.setSearchLogDateTimeTo(DateTimeTo);
 			param.setEntityUid(entityuid);
 			param.setResultCode(resultcode);
@@ -182,7 +204,7 @@ public class AuditLogController {
 			int restPort = (int)session.getAttribute("restPort");
 			String strTocken = (String)session.getAttribute("tockenValue");
 			String loginId = (String)session.getAttribute("usr_id");
-			String entityId = (String)session.getAttribute("ectityUid");	
+			String entityId = (String)session.getAttribute("ectityUid");
 			
 			result = sic.selectAuditLogList(restIp, restPort, strTocken, loginId ,entityId, param);
 		} catch (Exception e) {
@@ -191,9 +213,46 @@ public class AuditLogController {
 		return result;
 	}
 	
+	/**
+	 * 관리서버 상세보기 화면을 보여준다
+	 * 
+	 * @param
+	 * @return ModelAndView mv
+	 * @throws Exception
+	 */
+	@RequestMapping(value = "/popup/managementServerAuditLogDetail.do")
+	public ModelAndView managementServerAuditLogDetail(@ModelAttribute("historyVO") HistoryVO historyVO, HttpServletRequest request) {
+		ModelAndView mv = new ModelAndView();
+		try {
+			// 화면접근이력 이력 남기기
+			/*CmmnUtils.saveHistory(request, historyVO);
+			historyVO.setExe_dtl_cd("DX-T0055");
+			accessHistoryService.insertHistory(historyVO);*/
+
+			String entityName = request.getParameter("entityName").equals("undefined")?"":request.getParameter("entityName");
+			String logDateTime = request.getParameter("logDateTime").equals("undefined")?"":request.getParameter("logDateTime");
+			String remoteAddress = request.getParameter("remoteAddress").equals("undefined")?"":request.getParameter("remoteAddress");
+			String requestPath = request.getParameter("requestPath").equals("undefined")?"":request.getParameter("requestPath");
+			String resultCode = request.getParameter("resultCode").equals("undefined")?"":request.getParameter("resultCode");
+			String parameter = request.getParameter("parameter").equals("undefined")?"":request.getParameter("parameter");
+			String resultMessage = request.getParameter("resultMessage").equals("undefined")?"":request.getParameter("resultMessage");
+
+			mv.addObject("entityName", entityName);
+			mv.addObject("logDateTime", logDateTime);
+			mv.addObject("remoteAddress", remoteAddress);
+			mv.addObject("requestPath", requestPath);
+			mv.addObject("resultCode", resultCode);
+			mv.addObject("parameter", parameter);
+			mv.addObject("resultMessage", resultMessage);
+			mv.setViewName("encrypt/popup/managementServerAuditLogDetail");
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return mv;
+	}
 	
 	/**
-	 * 암복호화키 감사로그 화면을 보여준다
+	 * 암호화 키 감사로그 화면을 보여준다
 	 * 
 	 * @param
 	 * @return ModelAndView mv
@@ -206,9 +265,11 @@ public class AuditLogController {
 		JSONArray entityuid = new JSONArray();
 		try {
 			// 화면접근이력 이력 남기기
-			/*CmmnUtils.saveHistory(request, historyVO);
-			historyVO.setExe_dtl_cd("DX-T0055");
-			accessHistoryService.insertHistory(historyVO);*/
+			CmmnUtils.saveHistory(request, historyVO);
+			historyVO.setExe_dtl_cd("DX-T0112");
+			historyVO.setMnu_id(30);
+			accessHistoryService.insertHistory(historyVO);
+			
 			HttpSession session = request.getSession();
 			String restIp = (String)session.getAttribute("restIp");
 			int restPort = (int)session.getAttribute("restPort");
@@ -228,16 +289,22 @@ public class AuditLogController {
 	
 	
 	/**
-	 * 암복호화키 감사로그 조회한다.
+	 * 암호화 키 감사로그 조회한다.
 	 * 
 	 * @return resultSet
 	 * @throws Exception
 	 */
 	@RequestMapping(value = "/selectEncodeDecodeKeyAuditLog.do")
-	public @ResponseBody JSONObject selectEncodeDecodeKeyAuditLog(HttpServletRequest request) {
+	public @ResponseBody JSONObject selectEncodeDecodeKeyAuditLog(HttpServletRequest request,@ModelAttribute("historyVO") HistoryVO historyVO) {
 		AuditLogServiceCall sic = new AuditLogServiceCall();
 		JSONObject result = new JSONObject();
 		try {
+			// 화면접근이력 이력 남기기
+			CmmnUtils.saveHistory(request, historyVO);
+			historyVO.setExe_dtl_cd("DX-T0112_01");
+			historyVO.setMnu_id(30);
+			accessHistoryService.insertHistory(historyVO);
+			
 			String DateTimeFrom = request.getParameter("from")+" 00:00:00.000000";
 			String DateTimeTo = request.getParameter("to")+" 23:59:59.999999";
 			String resultcode = request.getParameter("resultcode");
@@ -259,7 +326,7 @@ public class AuditLogController {
 			int restPort = (int)session.getAttribute("restPort");
 			String strTocken = (String)session.getAttribute("tockenValue");
 			String loginId = (String)session.getAttribute("usr_id");
-			String entityId = (String)session.getAttribute("ectityUid");	
+			String entityId = (String)session.getAttribute("ectityUid");
 			
 			result = sic.selectAuditLogListKey(restIp, restPort, strTocken, loginId, entityId, param);
 		} catch (Exception e) {
@@ -268,7 +335,43 @@ public class AuditLogController {
 		return result;
 	}
 	
-	
+	/**
+	 * 암호화 키 상세보기 화면을 보여준다
+	 * 
+	 * @param
+	 * @return ModelAndView mv
+	 * @throws Exception
+	 */
+	@RequestMapping(value = "/popup/encodeDecodeKeyAuditLogDetail.do")
+	public ModelAndView encodeDecodeKeyAuditLogDetail(@ModelAttribute("historyVO") HistoryVO historyVO, HttpServletRequest request) {
+		ModelAndView mv = new ModelAndView();
+		try {
+			// 화면접근이력 이력 남기기
+			/*CmmnUtils.saveHistory(request, historyVO);
+			historyVO.setExe_dtl_cd("DX-T0055");
+			accessHistoryService.insertHistory(historyVO);*/
+
+			String entityName = request.getParameter("entityName").equals("undefined")?"":request.getParameter("entityName");
+			String logDateTime = request.getParameter("logDateTime").equals("undefined")?"":request.getParameter("logDateTime");
+			String remoteAddress = request.getParameter("remoteAddress").equals("undefined")?"":request.getParameter("remoteAddress");
+			String requestPath = request.getParameter("requestPath").equals("undefined")?"":request.getParameter("requestPath");
+			String resultCode = request.getParameter("resultCode").equals("undefined")?"":request.getParameter("resultCode");
+			String parameter = request.getParameter("parameter").equals("undefined")?"":request.getParameter("parameter");
+			String resultMessage = request.getParameter("resultMessage").equals("undefined")?"":request.getParameter("resultMessage");
+
+			mv.addObject("entityName", entityName);
+			mv.addObject("logDateTime", logDateTime);
+			mv.addObject("remoteAddress", remoteAddress);
+			mv.addObject("requestPath", requestPath);
+			mv.addObject("resultCode", resultCode);
+			mv.addObject("parameter", parameter);
+			mv.addObject("resultMessage", resultMessage);
+			mv.setViewName("encrypt/popup/encodeDecodeKeyAuditLogDetail");
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return mv;
+	}
 	/**
 	 * 백업및복원 감사로그 화면을 보여준다
 	 * 
@@ -338,7 +441,7 @@ public class AuditLogController {
 			int restPort = (int)session.getAttribute("restPort");
 			String strTocken = (String)session.getAttribute("tockenValue");
 			String loginId = (String)session.getAttribute("usr_id");
-			String entityId = (String)session.getAttribute("ectityUid");	
+			String entityId = (String)session.getAttribute("ectityUid");
 			
 			result = sic.selectBackupLogList(restIp, restPort, strTocken, loginId ,entityId, param);
 		} catch (Exception e) {

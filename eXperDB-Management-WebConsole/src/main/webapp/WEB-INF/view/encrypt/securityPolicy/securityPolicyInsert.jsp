@@ -250,7 +250,7 @@
 			var initialVectorTypeCode = table.row('.selected').data().initialVectorTypeCode;
 			var operationModeCode = table.row('.selected').data().operationModeCode;
 			
-			var popUrl = "/popup/securityPolicyRegForm.do?act=u&&offset="+offset+"&&length="+length+"&&cipherAlgorithmCode="+cipherAlgorithmCode+"&&binUid="+binUid+"&&initialVectorTypeCode="+initialVectorTypeCode+"&&operationModeCode="+operationModeCode+"&&rnum="+rnum; // 서버 url 팝업경로
+			var popUrl = "/popup/securityPolicyRegForm.do?act=u&&offset="+offset+"&&length="+encodeURI(length)+"&&cipherAlgorithmCode="+cipherAlgorithmCode+"&&binUid="+binUid+"&&initialVectorTypeCode="+initialVectorTypeCode+"&&operationModeCode="+operationModeCode+"&&rnum="+rnum; // 서버 url 팝업경로
 			var width = 1000;
 			var height = 530;
 			var left = (window.screen.width / 2) - (width / 2);

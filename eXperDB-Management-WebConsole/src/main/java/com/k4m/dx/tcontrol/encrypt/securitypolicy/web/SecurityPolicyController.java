@@ -61,7 +61,8 @@ public class SecurityPolicyController {
 		try {
 			// 화면접근이력 이력 남기기
 			CmmnUtils.saveHistory(request, historyVO);
-			historyVO.setExe_dtl_cd("DX-T0055");
+			historyVO.setExe_dtl_cd("DX-T0101");
+			historyVO.setMnu_id(25);
 			accessHistoryService.insertHistory(historyVO);
 
 			mv.setViewName("encrypt/securityPolicy/securityPolicy");
@@ -79,10 +80,15 @@ public class SecurityPolicyController {
 	 * @throws Exception
 	 */
 	@RequestMapping(value = "/selectSecurityPolicy.do")
-	public @ResponseBody JSONObject selectSecurityPolicy(HttpServletRequest request) {
+	public @ResponseBody JSONObject selectSecurityPolicy(@ModelAttribute("historyVO") HistoryVO historyVO, HttpServletRequest request) {
 		SecurityPolicyServiceCall sic = new SecurityPolicyServiceCall();
 		JSONObject result = new JSONObject();
 		try {
+			// 화면접근이력 이력 남기기
+			CmmnUtils.saveHistory(request, historyVO);
+			historyVO.setExe_dtl_cd("DX-T0101_01");
+			historyVO.setMnu_id(25);
+			accessHistoryService.insertHistory(historyVO);
 			
 			HttpSession session = request.getSession();
 			String restIp = (String)session.getAttribute("restIp");
@@ -111,13 +117,12 @@ public class SecurityPolicyController {
 		SecurityPolicyServiceCall sic = new SecurityPolicyServiceCall();
 		JSONArray dataTypeCode = new JSONArray();
 		JSONArray denyResultTypeCode = new JSONArray();
-		
 		try {
-
-//			// 화면접근이력 이력 남기기
-//			historyVO.setExe_dtl_cd("DX-T0056");
-//			historyVO.setMnu_id(12);
-//			accessHistoryService.insertHistory(historyVO);
+			// 화면접근이력 이력 남기기
+			CmmnUtils.saveHistory(request, historyVO);
+			historyVO.setExe_dtl_cd("DX-T0102");
+			historyVO.setMnu_id(25);
+			accessHistoryService.insertHistory(historyVO);
 			
 			HttpSession session = request.getSession();
 			String restIp = (String)session.getAttribute("restIp");
@@ -157,11 +162,11 @@ public class SecurityPolicyController {
 		JSONObject result = new JSONObject();
 		JSONArray cryptoKey = new JSONArray();
 		try {
-
-//			// 화면접근이력 이력 남기기
-//			historyVO.setExe_dtl_cd("DX-T0056");
-//			historyVO.setMnu_id(12);
-//			accessHistoryService.insertHistory(historyVO);
+			// 화면접근이력 이력 남기기
+			CmmnUtils.saveHistory(request, historyVO);
+			historyVO.setExe_dtl_cd("DX-T0105");
+			historyVO.setMnu_id(25);
+			accessHistoryService.insertHistory(historyVO);
 
 			HttpSession session = request.getSession();
 			String restIp = (String)session.getAttribute("restIp");
@@ -216,11 +221,12 @@ public class SecurityPolicyController {
 		JSONArray operationModeCode = new JSONArray();
 		JSONObject binUid = new JSONObject();
 		try {
-
-//			// 화면접근이력 이력 남기기
-//			historyVO.setExe_dtl_cd("DX-T0056");
-//			historyVO.setMnu_id(12);
-//			accessHistoryService.insertHistory(historyVO);
+			// 화면접근이력 이력 남기기
+			CmmnUtils.saveHistory(request, historyVO);
+			historyVO.setExe_dtl_cd("DX-T0103");
+			historyVO.setMnu_id(25);
+			accessHistoryService.insertHistory(historyVO);
+			
 			String act = request.getParameter("act");
 			
 			HttpSession session = request.getSession();
@@ -271,11 +277,12 @@ public class SecurityPolicyController {
 	public ModelAndView accessPolicyRegForm(@ModelAttribute("historyVO") HistoryVO historyVO, HttpServletRequest request) {
 		ModelAndView mv = new ModelAndView();
 		try {
-
-//			// 화면접근이력 이력 남기기
-//			historyVO.setExe_dtl_cd("DX-T0056");
-//			historyVO.setMnu_id(12);
-//			accessHistoryService.insertHistory(historyVO);
+			// 화면접근이력 이력 남기기
+			CmmnUtils.saveHistory(request, historyVO);
+			historyVO.setExe_dtl_cd("DX-T0104");
+			historyVO.setMnu_id(25);
+			accessHistoryService.insertHistory(historyVO);
+			
 			String act = request.getParameter("act");
 			
 			if (act.equals("u")) {
@@ -319,11 +326,17 @@ public class SecurityPolicyController {
 	 * @throws Exception
 	 */
 	@RequestMapping(value = "/insertSecurityPolicy.do")
-	public @ResponseBody Map<String, Object> insertSecurityPolicy(HttpServletRequest request) {
+	public @ResponseBody Map<String, Object> insertSecurityPolicy(@ModelAttribute("historyVO") HistoryVO historyVO,HttpServletRequest request) {
 		SecurityPolicyServiceCall sic = new SecurityPolicyServiceCall();
 		JSONArray cryptoKey = new JSONArray();
 		Map<String, Object> result = null;
 		try {		
+			// 화면접근이력 이력 남기기
+			CmmnUtils.saveHistory(request, historyVO);
+			historyVO.setExe_dtl_cd("DX-T0102_01");
+			historyVO.setMnu_id(25);
+			accessHistoryService.insertHistory(historyVO);
+			
 			ProfileProtection param1 = new ProfileProtection();
 			//보호정책 이름
 			param1.setProfileName(request.getParameter("profileName")); 
@@ -548,11 +561,17 @@ public class SecurityPolicyController {
 	 * @throws Exception
 	 */
 	@RequestMapping(value = "/updateSecurityPolicy.do")
-	public @ResponseBody Map<String, Object> updateSecurityPolicy(HttpServletRequest request) {
+	public @ResponseBody Map<String, Object> updateSecurityPolicy(@ModelAttribute("historyVO") HistoryVO historyVO,HttpServletRequest request) {
 		SecurityPolicyServiceCall sic = new SecurityPolicyServiceCall();
 		JSONArray cryptoKey = new JSONArray();
 		Map<String, Object> result = null;
 		try {		
+			// 화면접근이력 이력 남기기
+			CmmnUtils.saveHistory(request, historyVO);
+			historyVO.setExe_dtl_cd("DX-T0105_01");
+			historyVO.setMnu_id(25);
+			accessHistoryService.insertHistory(historyVO);
+			
 			ProfileProtection param1 = new ProfileProtection();
 			param1.setProfileUid(request.getParameter("profileUid"));
 			//보호정책 이름
@@ -776,16 +795,22 @@ public class SecurityPolicyController {
 	 * @throws Exception
 	 */	
 	@RequestMapping(value = "/deleteSecurityPolicy.do")
-	public @ResponseBody JSONObject deleteSecurityPolicy(HttpServletRequest request) {
+	public @ResponseBody JSONObject deleteSecurityPolicy(@ModelAttribute("historyVO") HistoryVO historyVO,HttpServletRequest request) {
 		JSONObject result = new JSONObject();
 		SecurityPolicyServiceCall sic = new SecurityPolicyServiceCall();
 		try{
+			// 화면접근이력 이력 남기기
+			CmmnUtils.saveHistory(request, historyVO);
+			historyVO.setExe_dtl_cd("DX-T0101_02");
+			historyVO.setMnu_id(25);
+			accessHistoryService.insertHistory(historyVO);
+			
 			HttpSession session = request.getSession();
 			String restIp = (String)session.getAttribute("restIp");
 			int restPort = (int)session.getAttribute("restPort");
 			String strTocken = (String)session.getAttribute("tockenValue");
 			String loginId = (String)session.getAttribute("usr_id");
-			String entityId = (String)session.getAttribute("ectityUid");	
+			String entityId = (String)session.getAttribute("ectityUid");
 			
 			String strProfileUid = request.getParameter("profileUid");
 			ProfileProtection param = new ProfileProtection();

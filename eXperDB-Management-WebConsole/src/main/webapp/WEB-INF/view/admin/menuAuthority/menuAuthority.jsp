@@ -354,7 +354,7 @@ $(function() {
 		
 		//Encrypt 선택 전체 체크박스
 		$("#encrypt").click(function() { 
-			var array = new Array("MN0001101","MN0001102","MN0001201","MN0001202","MN0001203","MN0001204","MN0001301","MN0001302","MN0001303","MN0001304");
+			var array = new Array("MN0001101","MN0001102","MN0001201","MN0001202","MN0001203","MN0001301","MN0001302","MN0001303","MN0001304");
 			var datas = userTable.row('.selected').length;
 			 if(datas != 1){
 				 alert("<spring:message code='message.msg165'/>");
@@ -396,7 +396,7 @@ $(function() {
 		
 		//감사로그 선택 전체 체크박스
 		$("#auditlog").click(function() { 
-			var array = new Array("MN0001201","MN0001202","MN0001203","MN0001204");
+			var array = new Array("MN0001201","MN0001202","MN0001203");
 			var datas = userTable.row('.selected').length;
 			 if(datas != 1){
 				 alert("<spring:message code='message.msg165'/>");
@@ -949,7 +949,7 @@ function fn_search(){
 														</td>											
 													</tr>	
 													<tr class="encrypt">
-														<th scope="row" rowspan="10">
+														<th scope="row" rowspan="9">
 															<div class="inp_chk">
 																<input type="checkbox" id="encrypt" name="encrypt"/>
 																<label for="encrypt">Encrypt</label>
@@ -991,7 +991,7 @@ function fn_search(){
 														</td>	
 													</tr>
 													<tr class="encrypt">
-														<th scope="row" rowspan="4">
+														<th scope="row" rowspan="3">
 															<div class="inp_chk">
 																<input type="checkbox" id="auditlog" name="auditlog"/>
 																<label for="auditlog">감사로그</label>
@@ -1040,7 +1040,7 @@ function fn_search(){
 															</div>
 														</td>	
 													</tr>
-													<tr class="encrypt">
+													<tr class="encrypt" style="display: none;">
 														<td>자원사용</td>
 														<td>
 															<div class="inp_chk">
