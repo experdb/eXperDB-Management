@@ -75,6 +75,39 @@ function fn_init() {
 	table.tables().header().to$().find('th:eq(17)').css('min-width', '0px');
     $(window).trigger('resize');
     
+    $('#agentMonitoring tbody').on('dblclick', 'tr', function() {
+    	var data = table.row(this).data();
+    	
+    	var entityName =  data.entityName;
+    	var entityStatusCode=  data.entityStatusCode;
+    	var latestAddress =  data.latestAddress;
+    	var latestDateTime = data.latestDateTime;
+    	var extendedField = data.extendedField;
+    	var entityUid = data.entityUid;
+
+    	 var frmPop= document.frmPopup;
+    	 var url = '/popup/agentMonitoringModifyForm.do';
+    	 var width = 954;
+    	 var height = 670;
+    	 var left = (window.screen.width / 2) - (width / 2);
+    	 var top = (window.screen.height /2) - (height / 2);
+    	 var popOption = "width="+width+", height="+height+", top="+top+", left="+left+", resizable=no, scrollbars=yes, status=no, toolbar=no, titlebar=yes, location=no,";
+    	 window.open('','popupView',popOption);  
+    	  
+    	 frmPop.action = url;
+    	 frmPop.target = 'popupView';
+    	 
+    	 frmPop.entityName.value = entityName;
+    	 frmPop.entityUid.value = entityUid;
+    	 frmPop.entityStatusCode.value = entityStatusCode;  
+    	 frmPop.latestAddress.value = latestAddress;
+    	 frmPop.latestDateTime.value = latestDateTime; 
+    	 frmPop.extendedField.value = extendedField;
+    	 
+    	 frmPop.submit();   
+    });
+	
+	    
 }
 
 
@@ -251,8 +284,4 @@ function fn_agentMonitoringModifyForm(){
 	</div>
 </div>
 
-
-<div id="loading">
-			<img src="/images/spin.gif" alt="" />
-</div>
-<!-- // contents -->
+<div id="loading"><img src="/images/spin.gif" alt="" /></div>

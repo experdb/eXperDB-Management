@@ -63,7 +63,6 @@ public class SecurityPolicyServiceCall {
 		System.out.println("resultCode : " + resultCode + " resultMessage : " + resultMessage);
 		
 		if(resultCode.equals(SystemCode.ResultCode.SUCCESS)) {
-			
 			ArrayList list = (ArrayList) resultJson.get("list");
 			if(list!=null) {
 				for (int j = 0; j < list.size(); j++) {
@@ -102,14 +101,11 @@ public class SecurityPolicyServiceCall {
 					jsonArray.add(jsonObj);
 				}
 				
-				result.put("resultCode", resultCode);
-				result.put("resultMessage", resultMessage);
 				result.put("list", jsonArray);
 			}
-		}else{
-			result.put("resultCode", resultCode);
-			result.put("resultMessage", resultMessage);
-		} 
+		}
+		result.put("resultCode", resultCode);
+		result.put("resultMessage", resultMessage);
 		return result;
 	}
 

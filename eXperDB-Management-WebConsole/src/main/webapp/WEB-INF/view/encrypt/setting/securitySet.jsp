@@ -221,6 +221,9 @@ select.t6{
 
 		<div class="contents">
 			<div class="cmm_grp">
+				<div class="btn_type_01">
+					<a href="#n" class="btn" onClick="fn_save()"><span>저장</span></a> 
+				</div>
 				<div class="cmm_bd">
 					<div class="sub_tit">
 						<p>암호화설정</p>
@@ -270,10 +273,9 @@ select.t6{
 						</table>
 					</div>
 				</div>
-				<div class="btn_type_02">
-					<a href="#n" class="btn" onClick="fn_save()"><span>저장</span></a> 
-				</div>	
 			</div>
 		</div>
 	</div>
 </div>
+
+<div id="loading"><img src="/images/spin.gif" alt="" /></div>

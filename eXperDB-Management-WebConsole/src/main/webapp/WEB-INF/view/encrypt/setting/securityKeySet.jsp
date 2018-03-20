@@ -263,6 +263,9 @@ function fn_mstKeyDownload(){
 		<div class="contents">
 		<form id="masterKey" method="post" enctype="multipart/form-data" action="">
 			<div class="cmm_grp">
+				<div class="btn_type_01">
+					<a href="#n" class="btn" onClick="fn_save()"><span>저장</span></a> 
+				</div>
 			<%-- <form class="securityKeySet" method="post" enctype="multipart/form-data"> --%>
 				<div class="cmm_bd" id="pnlOldPassword">
 					<div class="overflows_areas">
@@ -359,9 +362,6 @@ function fn_mstKeyDownload(){
 						</table>
 					</div>
 				</div>
-				<div class="btn_type_02">
-					<a href="#n" class="btn" onClick="fn_save()"><span>저장</span></a> 
-				</div>
 				<%-- </form>	 --%>
 			</div>
 			</form>
@@ -374,6 +374,4 @@ function fn_mstKeyDownload(){
 	</div>
 </div>
 
-<div id="loading">
-			<img src="/images/spin.gif" alt="" />
-</div>
+<div id="loading"><img src="/images/spin.gif" alt="" /></div>

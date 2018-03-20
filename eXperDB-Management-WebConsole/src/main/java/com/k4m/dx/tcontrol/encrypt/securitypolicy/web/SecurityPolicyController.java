@@ -811,11 +811,14 @@ public class SecurityPolicyController {
 			String strTocken = (String)session.getAttribute("tockenValue");
 			String loginId = (String)session.getAttribute("usr_id");
 			String entityId = (String)session.getAttribute("ectityUid");
-			
-			String strProfileUid = request.getParameter("profileUid");
+
 			ProfileProtection param = new ProfileProtection();
-			param.setProfileUid(strProfileUid);		
-			result= sic.deleteProfileProtection(restIp, restPort, strTocken,loginId,entityId, param);
+			
+			String[] params = request.getParameter("profileUid").toString().split(",");
+			for (int i = 0; i < params.length; i++) {
+				param.setProfileUid(params[i]);	
+				result= sic.deleteProfileProtection(restIp, restPort, strTocken,loginId,entityId, param);
+			}
 		}catch(Exception e){
 			e.printStackTrace();
 		}

@@ -77,9 +77,9 @@
 		 		var resultCode  = row.resultCode;
 		 		var parameter  = row.parameter;
 		 		var resultMessage  = row.resultMessage;
-		 		var popUrl = "/popup/managementServerAuditLogDetail.do?entityName="+entityName
-		 				+"&&logDateTime="+logDateTime +"&&remoteAddress="+remoteAddress
-		 				+"&&requestPath="+requestPath +"&&resultCode="+resultCode
+		 		var popUrl = "/popup/managementServerAuditLogDetail.do?entityName="+encodeURI(entityName)
+		 				+"&&logDateTime="+encodeURI(logDateTime) +"&&remoteAddress="+encodeURI(remoteAddress)
+		 				+"&&requestPath="+encodeURI(requestPath) +"&&resultCode="+encodeURI(resultCode)
 		 				+"&&parameter="+encodeURI(parameter) +"&&resultMessage="+encodeURI(resultMessage)// 서버 url 팝업경로
 		 		var width = 930;
 		 		var height = 500;

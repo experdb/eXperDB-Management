@@ -297,6 +297,10 @@ margin-right: 10px;
 
 		<div class="contents">
 			<div class="cmm_grp">
+				<div class="btn_type_01">
+					<a href="#n" class="btn" onClick="fn_save()"><span>저장</span></a> 
+				</div>
+						
 				<div class="cmm_bd">
 					<div class="sub_tit">
 						<p>기본옵션</p>
@@ -343,7 +347,7 @@ margin-right: 10px;
 
 				<div class="cmm_bd">
 					<div class="sub_tit">
-						<p>로그옵션</p>
+						<p>로그압축</p>
 					</div>
 					<div class="overflows_areas">
 						<table class="write">
@@ -417,7 +421,11 @@ margin-right: 10px;
 										<div class="inp_chk">
 											<span>
 												<input type="checkbox" id="sun" name="sun" />
-												<label for="sun"><spring:message code="common.sun" /></label>
+												<label for="sun" style="color: red;"><spring:message code="common.sun" /></label>
+											</span>
+											<span>
+												<input type="checkbox" id="mon" name="mon" />
+												<label for="mon"><spring:message code="common.mon" /></label>
 											</span>
 											<span>
 												<input type="checkbox" id="tue" name="tue" />
@@ -437,12 +445,8 @@ margin-right: 10px;
 											</span>
 											<span>
 												<input type="checkbox" id="sat" name="sat" />
-												<label for="sat"><spring:message code="common.sat" /></label>
+												<label for="sat" style="color: blue;"><spring:message code="common.sat" /></label>
 											</span>
-											<span>
-												<input type="checkbox" id="mon" name="mon" />
-												<label for="mon"><spring:message code="common.mon" /></label>
-											</span>									
 										</div>
 									</td>
 								</tr>
@@ -459,11 +463,6 @@ margin-right: 10px;
 					</div>
 				</div>
 			</div>
-			
-			<div class="btn_type_02">
-				<a href="#n" class="btn" onClick="fn_save()"><span>저장</span></a> 
-			</div>
-			
 		</div>
 	</div>
 </div>

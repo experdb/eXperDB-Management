@@ -94,7 +94,7 @@ var table = null;
 					alert("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""));
 				}
 			},
-			success : function(data) {		
+			success : function(data) {	
 				if(data.resultCode == "0000000000"){
 					table.clear().draw();
 					table.rows.add(data.list).draw();
@@ -167,13 +167,16 @@ var table = null;
 		if (datas.length <= 0) {
  			alert('<spring:message code="message.msg35" />');
  			return false;
- 		}else if (datas.length >1){
-			alert('<spring:message code="message.msg38" />');
  		}else{
+ 			var rowList = [];
+ 			for (var i = 0; i < datas.length; i++) {
+ 				rowList += datas[i].profileUid + ',';				
+ 			}
+		
 			$.ajax({
 				url : "/deleteSecurityPolicy.do", 
 			  	data : {
-			  		profileUid: profileUid
+			  		profileUid: rowList
 			  	},
 				dataType : "json",
 				type : "post",

@@ -68,7 +68,31 @@ var table = null;
 	    
 		//더블 클릭시
 		$('#keyManageTable tbody').on('dblclick', 'tr', function() {
-	
+			var data = table.row(this).data();
+			
+ 			var frmPop= document.frmPopup;
+ 			
+			var popUrl = "/popup/keyManageRegReForm.do"; // 서버 url 팝업경로
+			var width = 1300;
+			var height = 735;
+			var left = (window.screen.width / 2) - (width / 2);
+			var top = (window.screen.height /2) - (height / 2);
+			var popOption = "width="+width+", height="+height+", top="+top+", left="+left+", resizable=no, scrollbars=yes, status=no, toolbar=no, titlebar=yes, location=no,";
+						
+			frmPop.action = popUrl;
+		    frmPop.target = 'popupView';
+		    frmPop.method = "post";
+		    
+		    window.open(popUrl,"popupView",popOption);	
+		    
+		    frmPop.resourceName.value = data.resourceName;
+		    frmPop.resourceNote.value = data.resourceNote;  
+		    frmPop.keyUid.value = data.keyUid;
+		    frmPop.keyStatusCode.value = data.keyStatusCode; 
+		    frmPop.keyStatusName.value = data.keyStatusName;
+		    frmPop.cipherAlgorithmName.value = data.cipherAlgorithmName; 
+		    frmPop.cipherAlgorithmCode.value = data.cipherAlgorithmCode;
+		    frmPop.submit();   
 		});
 	}
 	

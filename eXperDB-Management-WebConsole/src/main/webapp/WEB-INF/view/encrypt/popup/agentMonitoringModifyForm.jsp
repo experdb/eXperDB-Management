@@ -107,7 +107,6 @@ var extendedField = ${extendedField};
 			<p class="tit">암호화 에이전트 모니터링 수정</p>
 				<div class="btn_type_01">
 					<span class="btn btnC_01" onClick="fn_agentStatusSave();"><button>저장</button></span> 
-					<span class="btn" onclick="window.close();"><button>닫기</button></span>
 				</div>
 			<div class="cmm_bd">
 				<div class="sub_tit">
