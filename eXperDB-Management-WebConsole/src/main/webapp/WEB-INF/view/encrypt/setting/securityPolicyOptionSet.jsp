@@ -103,6 +103,13 @@ function fn_securityPolicyOptionSelect01(){
 		success : function(data) {
 			if(data.resultCode == "0000000000"){
 				for(var i=0; i<data.list.length; i++){
+					alert(data.list[i].configValue);
+					alert(data.list[i].configValue);
+					alert(data.list[i].configValue);
+					alert(data.list[i].configValue);
+					alert(data.list[i].configValue);
+					
+					
 					if(data.list[i].configKey == "GLOBAL_POLICY_DEFAULT_ACCESS_ALLOW_TF" && data.list[i].configValue== "1"){
 						$("#GLOBAL_POLICY_DEFAULT_ACCESS_ALLOW_TF").attr('checked', true);
 					}if(data.list[i].configKey == "GLOBAL_POLICY_FORCED_LOGGING_OFF_TF" && data.list[i].configValue== "1"){
@@ -110,15 +117,35 @@ function fn_securityPolicyOptionSelect01(){
 					}if(data.list[i].configKey == "GLOBAL_POLICY_BOOST_TF" && data.list[i].configValue== "true"){
 						$("#GLOBAL_POLICY_BOOST_TF").attr('checked', true);
 					}if(data.list[i].configKey == "GLOBAL_POLICY_CRYPT_LOG_TM_RESOLUTION"){
-						$("#GLOBAL_POLICY_CRYPT_LOG_TM_RESOLUTION").val(data.list[i].configValue);
+						if(data.list[i].configValue == null || data.list[i].configValue == "" || data.list[i].configValue == "null" || data.list[i].configValue == "0"){
+							$("#GLOBAL_POLICY_CRYPT_LOG_TM_RESOLUTION").val("1");
+						}else{
+							$("#GLOBAL_POLICY_CRYPT_LOG_TM_RESOLUTION").val(data.list[i].configValue);
+						}
 					}if(data.list[i].configKey == "GLOBAL_POLICY_CRYPT_LOG_COMPRESS_LIMIT"){
-						$("#GLOBAL_POLICY_CRYPT_LOG_COMPRESS_LIMIT").val(data.list.list[i].configValue);
+						if(data.list[i].configValue == null || data.list[i].configValue == "" || data.list[i].configValue == "null" || data.list[i].configValue == "0"){
+							$("#GLOBAL_POLICY_CRYPT_LOG_COMPRESS_LIMIT").val("1");
+						}else{
+							$("#GLOBAL_POLICY_CRYPT_LOG_COMPRESS_LIMIT").val(data.list[i].configValue);
+						}
 					}if(data.list[i].configKey == "GLOBAL_POLICY_CRYPT_LOG_COMPRESS_FLUSH_TIMEOUT"){
-						$("#GLOBAL_POLICY_CRYPT_LOG_COMPRESS_FLUSH_TIMEOUT").val(data.list[i].configValue);
+						if(data.list[i].configValue == null || data.list[i].configValue == "" || data.list[i].configValue == "null" || data.list[i].configValue == "0"){
+							$("#GLOBAL_POLICY_CRYPT_LOG_COMPRESS_FLUSH_TIMEOUT").val("1");
+						}else{
+							$("#GLOBAL_POLICY_CRYPT_LOG_COMPRESS_FLUSH_TIMEOUT").val(data.list[i].configValue);
+						}
 					}if(data.list[i].configKey == "GLOBAL_POLICY_CRYPT_LOG_COMPRESS_INITIAL"){
-						$("#GLOBAL_POLICY_CRYPT_LOG_COMPRESS_INITIAL").val(data.list[i].configValue);
+						if(data.list[i].configValue == null || data.list[i].configValue == "" || data.list[i].configValue == "null" || data.list[i].configValue == "0"){
+							$("#GLOBAL_POLICY_CRYPT_LOG_COMPRESS_INITIAL").val("1");
+						}else{
+							$("#GLOBAL_POLICY_CRYPT_LOG_COMPRESS_INITIAL").val(data.list[i].configValue);
+						}
 					}if(data.list[i].configKey == "GLOBAL_POLICY_CRYPT_LOG_COMPRESS_PRINT_PERIOD"){
-						$("#GLOBAL_POLICY_CRYPT_LOG_COMPRESS_PRINT_PERIOD").val(data.list[i].configValue);
+						if(data.list[i].configValue == null || data.list[i].configValue == "" || data.list[i].configValue == "null" || data.list[i].configValue == "0"){
+							$("#GLOBAL_POLICY_CRYPT_LOG_COMPRESS_PRINT_PERIOD").val("1");
+						}else{
+							$("#GLOBAL_POLICY_CRYPT_LOG_COMPRESS_PRINT_PERIOD").val(data.list[i].configValue);
+						}						
 					}
 				}
 			}else if(data.resultCode == "8000000003"){
@@ -155,7 +182,11 @@ function fn_securityPolicyOptionSelect02(){
 		},
 		success : function(data) {
 			if(data.resultCode == "0000000000"){
-				$("#logTransferWaitTime").val(data.list[1].logTransferWaitTime);
+				if(data.list[1].logTransferWaitTime == null || data.list[1].logTransferWaitTime == "" || data.list[1].logTransferWaitTime == "null" || data.list[1].logTransferWaitTime == "0"){
+					$("#logTransferWaitTime").val("1");
+				}else{
+					$("#logTransferWaitTime").val(data.list[1].logTransferWaitTime);
+				}
 				
 				if(data.list[0].blnIsvalueTrueFalse == true){
 					$("#blnIsvalueTrueFalse").attr('checked', true);
