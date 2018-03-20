@@ -3,6 +3,10 @@
 })(jQuery);
 
 $(window).ready(function(){
+	var html = '<div id="loading"><img src="/images/spin.gif" alt="" /></div>';
+	$("#contents").append(html);
+	$("#pop_container").append(html);
+	
 	$('.infobox').hide();
 	
 	$(".btn_info").toggle(			

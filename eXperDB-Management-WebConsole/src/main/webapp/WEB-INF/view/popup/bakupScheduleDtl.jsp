@@ -500,9 +500,5 @@ function fn_bckModifyPopup(){
 			</div>
 		</div>
 	</div>
-
-	<div id="loading">
-		<img src="/images/spin.gif" alt="" />
-	</div>
 </body>
 </html>

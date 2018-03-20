@@ -518,7 +518,6 @@ public class SecurityPolicyServiceCall {
 		String resultMessage = (String) resultJson.get("resultMessage");
 		long totalListCount = (long) resultJson.get("totalListCount");
 		
-		
 		if(resultCode.equals("0000000000")) {
 			ArrayList list = (ArrayList) resultJson.get("list");
 			
@@ -538,7 +537,6 @@ public class SecurityPolicyServiceCall {
 					jsonObj.put("resourceName", cryptoKeySymmetric.getResourceName());
 					jsonObj.put("getBinUid", cryptoKeySymmetric.getBinUid());
 					jsonArray.add(jsonObj);
-					
 				}
 			
 			}
@@ -546,8 +544,6 @@ public class SecurityPolicyServiceCall {
 		return jsonArray;
 		
 	}
-	
-	
 	
 	/**
 	 * 보안정책 삭제
@@ -837,8 +833,5 @@ public class SecurityPolicyServiceCall {
 		}
 		return jsonArray;
 	}
-	
-
-	
 	
 }
