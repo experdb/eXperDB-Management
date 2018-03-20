@@ -157,7 +157,7 @@ function fn_keyFileLoadServerKey(){
 			if(data.resultCode == "0000000000"){
 				alert("서버 마스터키 암호가 입력되었습니다.");
 			}else{
-				alert("resultCode : " + resultCode + " resultMessage : " + resultMessage);			
+				alert("resultCode : " + data.resultCode + " resultMessage : " + data.resultMessage);			
 			}
 		}
 	});
