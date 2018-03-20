@@ -142,7 +142,7 @@ function fn_lastCheck(){
 function fn_changeBinUid(selectObj){
 	$("#binUid").empty();
 	var html = "";
-	<c:forEach var="binUid" items="${binUid.data}">
+	<c:forEach var="binUid" items="${binUid.list}">
 	if(selectObj.value == "${binUid.cipherAlgorithmName}"){
 		html += "<option value=${binUid.resourceName}>${binUid.resourceName}</option>"
 	}

@@ -94,10 +94,15 @@ var table = null;
 					alert("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""));
 				}
 			},
-			success : function(result) {
-				table.clear().draw();
-				if(result.data!=null){
-					table.rows.add(result.data).draw();
+			success : function(data) {		
+				if(data.resultCode == "0000000000"){
+					table.clear().draw();
+					table.rows.add(data.list).draw();
+				}else if(data.resultCode == "8000000003"){
+					alert(data.resultMessage);
+					location.href="/securityKeySet.do";
+				}else{
+					alert("resultCode : " + data.resultCode + " resultMessage : " + data.resultMessage);			
 				}
 			}
 		});
@@ -125,10 +130,15 @@ var table = null;
 					alert("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""));
 				}
 			},
-			success : function(result) {
-				table.clear().draw();
-				if(result.data!=null){
-					table.rows.add(result.data).draw();
+			success : function(data) {		
+				if(data.resultCode == "0000000000"){
+					table.clear().draw();
+					table.rows.add(data.list).draw();
+				}else if(data.resultCode == "8000000003"){
+					alert(data.resultMessage);
+					location.href="/securityKeySet.do";
+				}else{
+					alert("resultCode : " + data.resultCode + " resultMessage : " + data.resultMessage);			
 				}
 			}
 		});
@@ -181,13 +191,15 @@ var table = null;
 						alert("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""));
 					}
 				},
-				success : function(data) {			
-					if(data.resultCode == 0000000000){
+				success : function(data) {		
+					if(data.resultCode == "0000000000"){
 						alert(data.resultMessage);
 						location.reload();
-					}else{
+					}else if(data.resultCode == "8000000003"){
 						alert(data.resultMessage);
-						return false;
+						location.href="/securityKeySet.do";
+					}else{
+						alert("resultCode : " + data.resultCode + " resultMessage : " + data.resultMessage);			
 					}
 				}
 			});
@@ -200,7 +212,7 @@ var table = null;
 <div id="contents">
 	<div class="contents_wrap">
 		<div class="contents_tit">
-			<h4>정책리스트<a href="#n"><img src="../images/ico_tit.png" class="btn_info" /></a></h4>
+			<h4>보안정책관리<a href="#n"><img src="../images/ico_tit.png" class="btn_info" /></a></h4>
 			<div class="infobox">
 				<ul>
 					<li>보안정책관리설명</li>
@@ -208,9 +220,9 @@ var table = null;
 			</div>
 			<div class="location">
 				<ul>
-					<li>데이터암호화</li>
-					<li>보안정책</li>
-					<li class="on">정책리스트</li>
+					<li>Encrypt</li>
+					<li>정책관리/키관리</li>
+					<li class="on">보안정책관리</li>
 				</ul>
 			</div>
 		</div>

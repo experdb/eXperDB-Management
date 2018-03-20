@@ -233,17 +233,17 @@ var table = null;
 <div id="contents">
 	<div class="contents_wrap">
 		<div class="contents_tit">
-			<h4>암호화키리스트<a href="#n"><img src="../images/ico_tit.png" class="btn_info" /></a></h4>
+			<h4>암호화키관리<a href="#n"><img src="../images/ico_tit.png" class="btn_info" /></a></h4>
 			<div class="infobox">
 				<ul>
-					<li>암호화키리스트설명</li>
+					<li>설명</li>
 				</ul>
 			</div>
 			<div class="location">
 				<ul>
-					<li>데이터암호화</li>
-					<li>암호화키관리</li>
-					<li class="on">암호화키리스트</li>
+					<li>Encrypt</li>
+					<li>정책관리/키관리</li>
+					<li class="on">암호화키관리</li>
 				</ul>
 			</div>
 		</div>

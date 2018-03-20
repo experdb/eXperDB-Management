@@ -304,7 +304,7 @@
 	function fn_AccessRegForm(){
 		var popUrl = "/popup/accessPolicyRegForm.do?act=i"; // 서버 url 팝업경로
 		var width = 1000;
-		var height = 715;
+		var height = 755;
 		var left = (window.screen.width / 2) - (width / 2);
 		var top = (window.screen.height /2) - (height / 2);
 		var popOption = "width="+width+", height="+height+", top="+top+", left="+left+", resizable=no, scrollbars=yes, status=no, toolbar=no, titlebar=yes, location=no,";
@@ -371,7 +371,7 @@
 					+"&&workDay="+workDay+"&&massiveThreshold="+massiveThreshold+"&&massiveTimeInterval="+massiveTimeInterval
 					+"&&extraName="+extraName+"&&hostName="+hostName+"&&whitelistYesNo="+whitelistYesNo+"&&rnum="+rnum; // 서버 url 팝업경로
 			var width = 1000;
-			var height = 715;
+			var height = 755;
 			var left = (window.screen.width / 2) - (width / 2);
 			var top = (window.screen.height /2) - (height / 2);
 			var popOption = "width="+width+", height="+height+", top="+top+", left="+left+", resizable=no, scrollbars=yes, status=no, toolbar=no, titlebar=yes, location=no,";
@@ -529,14 +529,15 @@
 				accessPolicy : JSON.stringify(accessPolicy),
 				
 			},
-			success : function(result) {
-				if(result.resultCode == "0000000000"){
+			success : function(data) {		
+				if(data.resultCode == "0000000000"){
 					alert("수정되었습니다.");
 					location.href='/securityPolicy.do' ;
-				}else if(result.resultCode =="0000000007"){
-					alert("중복된 보안정책이름입니다.")
+				}else if(data.resultCode == "8000000003"){
+					alert(data.resultMessage);
+					location.href="/securityKeySet.do";
 				}else{
-					alert("에러");
+					alert("resultCode : " + data.resultCode + " resultMessage : " + data.resultMessage);			
 				}
 			},
 			beforeSend: function(xhr) {
@@ -568,9 +569,10 @@
 			</div>
 			<div class="location">
 				<ul>
-					<li>데이터암호화</li>
-					<li>보안정책</li>
-					<li class="on">정책수정</li>
+					<li>Encrypt</li>
+					<li>정책관리/키관리</li>
+					<li>보안정책관리</li>
+					<li class="on">보안정책수정</li>
 				</ul>
 			</div>
 		</div>

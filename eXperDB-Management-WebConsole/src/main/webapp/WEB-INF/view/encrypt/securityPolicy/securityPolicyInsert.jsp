@@ -293,7 +293,7 @@
 	function fn_AccessRegForm(){
 		var popUrl = "/popup/accessPolicyRegForm.do?act=i"; // 서버 url 팝업경로
 		var width = 1000;
-		var height = 715;
+		var height = 755;
 		var left = (window.screen.width / 2) - (width / 2);
 		var top = (window.screen.height /2) - (height / 2);
 		var popOption = "width="+width+", height="+height+", top="+top+", left="+left+", resizable=no, scrollbars=yes, status=no, toolbar=no, titlebar=yes, location=no,";
@@ -360,7 +360,7 @@
 					+"&&workDay="+workDay+"&&massiveThreshold="+massiveThreshold+"&&massiveTimeInterval="+massiveTimeInterval
 					+"&&extraName="+extraName+"&&hostName="+hostName+"&&whitelistYesNo="+whitelistYesNo+"&&rnum="+rnum; // 서버 url 팝업경로
 			var width = 1000;
-			var height = 715;
+			var height = 755;
 			var left = (window.screen.width / 2) - (width / 2);
 			var top = (window.screen.height /2) - (height / 2);
 			var popOption = "width="+width+", height="+height+", top="+top+", left="+left+", resizable=no, scrollbars=yes, status=no, toolbar=no, titlebar=yes, location=no,";
@@ -517,14 +517,15 @@
 				accessPolicy : JSON.stringify(accessPolicy),
 				
 			},
-			success : function(result) {
-				if(result.resultCode == "0000000000"){
+			success : function(data) {		
+				if(data.resultCode == "0000000000"){
 					alert("저장되었습니다.");
 					location.href='/securityPolicy.do' ;
-				}else if(result.resultCode =="0000000007"){
-					alert("중복된 보안정책이름입니다.");
+				}else if(data.resultCode == "8000000003"){
+					alert(data.resultMessage);
+					location.href="/securityKeySet.do";
 				}else{
-					alert("에러");
+					alert("resultCode : " + data.resultCode + " resultMessage : " + data.resultMessage);			
 				}
 			},
 			beforeSend: function(xhr) {
@@ -548,7 +549,7 @@
 <div id="contents">
 	<div class="contents_wrap">
 		<div class="contents_tit">
-			<h4>정책등록<a href="#n"><img src="/images/ico_tit.png" class="btn_info" /></a></h4>
+			<h4>보안정책등록<a href="#n"><img src="/images/ico_tit.png" class="btn_info" /></a></h4>
 			<div class="infobox">
 				<ul>
 					<li>설명</li>
@@ -556,9 +557,10 @@
 			</div>
 			<div class="location">
 				<ul>
-					<li>데이터암호화</li>
-					<li>보안정책</li>
-					<li class="on">정책등록</li>
+					<li>Encrypt</li>
+					<li>정책관리/키관리</li>
+					<li>보안정책관리</li>
+					<li class="on">보안정책등록</li>
 				</ul>
 			</div>
 		</div>
@@ -696,7 +698,7 @@
 											<label for="compress_audit_log">로그압축</label>
 										</span> 
 										<span> 
-											<input type="checkbox" id="preventDoubleYesNo" name="preventDoubleYesNo" value="Y" checked="checked"/>
+											<input type="checkbox" id="preventDoubleYesNo" name="preventDoubleYesNo" value="Y"/>
 												<label for="preventDoubleYesNo">이중 암호화 방지</label>
 										</span>
 									</div>

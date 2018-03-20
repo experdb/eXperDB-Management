@@ -288,7 +288,7 @@ margin-right: 10px;
 			</div>
 			<div class="location">
 				<ul>
-					<li>암호화</li>
+					<li>Encrypt</li>
 					<li>설정</li>
 					<li class="on">보안정책 옵션설정</li>
 				</ul>

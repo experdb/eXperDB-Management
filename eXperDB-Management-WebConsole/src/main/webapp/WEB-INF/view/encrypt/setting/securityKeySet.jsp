@@ -245,17 +245,17 @@ function fn_mstKeyDownload(){
 <div id="contents">
 	<div class="contents_wrap">
 		<div class="contents_tit">
-			<h4>서버 마스터키 암호 입력<a href="#n"><img src="../images/ico_tit.png" class="btn_info"/></a></h4>
+			<h4>서버 마스터키 암호 설정<a href="#n"><img src="../images/ico_tit.png" class="btn_info"/></a></h4>
 			<div class="infobox"> 
 				<ul>
-					<li>서버 마스터키 암호 입력</li>
+					<li>설명</li>
 				</ul>
 			</div>
 			<div class="location">
 				<ul>
-					<li>암호화</li>
+					<li>Encrypt</li>
 					<li>설정</li>
-					<li class="on">암호화서버 마스터키 암호 설정</li>
+					<li class="on">서버 마스터키 암호 설정</li>
 				</ul>
 			</div>
 		</div>

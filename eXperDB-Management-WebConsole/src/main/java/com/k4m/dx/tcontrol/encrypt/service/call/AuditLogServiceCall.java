@@ -29,6 +29,8 @@ public class AuditLogServiceCall {
 	 * @throws Exception
 	 */
 	public JSONObject selectAuditLogSiteList(String restIp, int restPort, String strTocken, AuditLogSite param,String loginId, String entityId) throws Exception {
+		JSONObject result = new JSONObject();
+		
 		EncryptCommonService api = new EncryptCommonService(restIp, restPort);
 
 		String strService = SystemCode.ServiceName.LOG_SERVICE;
@@ -53,9 +55,15 @@ public class AuditLogServiceCall {
 			System.out.println(String.valueOf(entry.getKey()) + " = " + String.valueOf(entry.getValue()));
 		}
 		String resultCode = (String) resultJson.get("resultCode");
-		String resultMessage = (String) resultJson.get("resultMessage");
+		String resultMessage = new String(((String) resultJson.get("resultMessage")).getBytes("iso-8859-1"));
 		
-		return resultJson;
+		if(resultCode.equals(SystemCode.ResultCode.SUCCESS)) {
+			result.put("list", resultJson);
+		}
+		result.put("resultCode", resultCode);
+		result.put("resultMessage", resultMessage);
+		
+		return result;
 	}
 	
 	/**
@@ -89,12 +97,8 @@ public class AuditLogServiceCall {
 			
 		String resultCode = (String) resultJson.get("resultCode");
 		String resultMessage = (String) resultJson.get("resultMessage");
-		
-		System.out.println(new String(resultMessage.getBytes("iso-8859-1"),"UTF-8"));
-		
-		long totalListCount = (long) resultJson.get("totalListCount");
-		
-		if(resultCode.equals("0000000000") &&  totalListCount > 0 ) {
+			
+		if(resultCode.equals(SystemCode.ResultCode.SUCCESS)) {
 			ArrayList list = (ArrayList) resultJson.get("list");		
 			
 			for(int i=0; i<list.size(); i++) {
@@ -125,8 +129,12 @@ public class AuditLogServiceCall {
 				jsonObj.put("resultMessage", strResultMessage);
 				jsonArray.add(jsonObj);
 			}
-			result.put("data", jsonArray);
-			System.out.println(result);
+			result.put("resultCode", resultCode);
+			result.put("resultMessage", resultMessage);
+			result.put("list", jsonArray);
+		}else{
+			result.put("resultCode", resultCode);
+			result.put("resultMessage", resultMessage);
 		}
 		return result;
 	}
@@ -163,11 +171,9 @@ public class AuditLogServiceCall {
 		
 		String resultCode = (String) resultJson.get("resultCode");
 		String resultMessage = (String) resultJson.get("resultMessage");
-		long totalListCount = (long) resultJson.get("totalListCount");
-		
 		resultMessage = new String(resultMessage.getBytes("iso-8859-1"),"UTF-8"); 
 		
-		if(resultCode.equals("0000000000") &&  totalListCount > 0) {
+		if(resultCode.equals("0000000000")) {
 			ArrayList list = (ArrayList) resultJson.get("list");
 			for(int i=0; i<list.size(); i++) {
 				JSONObject log = (JSONObject) list.get(i);
@@ -197,8 +203,12 @@ public class AuditLogServiceCall {
 				jsonObj.put("resultMessage", strResultMessage);
 				jsonArray.add(jsonObj);
 			}
-			result.put("data", jsonArray);
-			System.out.println(result);
+			result.put("resultCode", resultCode);
+			result.put("resultMessage", resultMessage);
+			result.put("list", jsonArray);
+		}else{
+			result.put("resultCode", resultCode);
+			result.put("resultMessage", resultMessage);
 		}
 		return result;
 		

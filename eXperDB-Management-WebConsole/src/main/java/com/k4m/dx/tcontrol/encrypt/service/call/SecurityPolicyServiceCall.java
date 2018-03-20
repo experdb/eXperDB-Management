@@ -101,8 +101,14 @@ public class SecurityPolicyServiceCall {
 					
 					jsonArray.add(jsonObj);
 				}
-				result.put("data", jsonArray);
+				
+				result.put("resultCode", resultCode);
+				result.put("resultMessage", resultMessage);
+				result.put("list", jsonArray);
 			}
+		}else{
+			result.put("resultCode", resultCode);
+			result.put("resultMessage", resultMessage);
 		} 
 		return result;
 	}
@@ -117,8 +123,9 @@ public class SecurityPolicyServiceCall {
 	 * @return 
 	 * @throws Exception
 	 */
-	public Map<String, Object> insertProfileProtection(String restIp, int restPort, String strTocken, String loginId, String entityId, ProfileProtection param1, List param2, List param3) throws Exception {
-		Map<String, Object> result = new HashMap<String, Object>();
+	public JSONObject insertProfileProtection(String restIp, int restPort, String strTocken, String loginId, String entityId, ProfileProtection param1, List param2, List param3) throws Exception {
+		JSONObject result = new JSONObject();
+		
 		EncryptCommonService api = new EncryptCommonService(restIp, restPort);
 
 		String strService = SystemCode.ServiceName.POLICY_SERVICE;
@@ -165,8 +172,8 @@ public class SecurityPolicyServiceCall {
 	 * @param param3 
 	 * @throws Exception
 	 */
-	public Map<String, Object> updateProfileProtection(String restIp, int restPort, String strTocken,String loginId, String entityId, ProfileProtection param1, List param2, List param3) throws Exception {
-		Map<String, Object> result = new HashMap<String, Object>();
+	public JSONObject updateProfileProtection(String restIp, int restPort, String strTocken,String loginId, String entityId, ProfileProtection param1, List param2, List param3) throws Exception {
+		JSONObject result = new JSONObject();
 		EncryptCommonService api = new EncryptCommonService(restIp, restPort);
 
 		String strService = SystemCode.ServiceName.POLICY_SERVICE;
@@ -556,6 +563,8 @@ public class SecurityPolicyServiceCall {
 	 * @throws Exception
 	 */
 	public JSONObject deleteProfileProtection(String restIp, int restPort, String strTocken, String loginId, String entityId, ProfileProtection param) throws Exception {
+		JSONObject result = new JSONObject();
+		
 		EncryptCommonService api = new EncryptCommonService(restIp, restPort);
 
 		String strService = SystemCode.ServiceName.POLICY_SERVICE;
@@ -577,15 +586,13 @@ public class SecurityPolicyServiceCall {
 		}
 		String resultCode = (String) resultJson.get("resultCode");
 		String resultMessage = new String(resultJson.get("resultMessage").toString().getBytes("iso-8859-1"),"UTF-8");
+
+		result.put("resultCode", resultCode);
+		result.put("resultMessage", resultMessage);
 		
-		JSONObject jsonObj = new JSONObject();
+		System.out.println("resultCode : " + resultCode + " resultMessage : " + resultMessage);
 		
-		jsonObj.put("resultCode", (String) resultJson.get("resultCode"));
-		jsonObj.put("resultMessage", new String(resultJson.get("resultMessage").toString().getBytes("iso-8859-1"),"UTF-8"));
-		
-		System.out.println(resultMessage);
-		
-		return jsonObj;
+		return result;
 		
 	}
 	

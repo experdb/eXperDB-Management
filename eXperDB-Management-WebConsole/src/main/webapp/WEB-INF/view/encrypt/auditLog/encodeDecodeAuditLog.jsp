@@ -134,10 +134,15 @@
 					alert("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""));
 				}
 			},
-			success : function(result) {
-				table.clear().draw();
-				if(result.data!=null){
-					table.rows.add(result.data).draw();
+			success : function(data) {		
+				if(data.resultCode == "0000000000"){
+					table.clear().draw();
+					table.rows.add(data.list).draw();
+				}else if(data.resultCode == "8000000003"){
+					alert(data.resultMessage);
+					location.href="/securityKeySet.do";
+				}else{
+					alert("resultCode : " + data.resultCode + " resultMessage : " + data.resultMessage);			
 				}
 			}
 		});		
@@ -196,7 +201,7 @@
 			</div>
 			<div class="location">
 				<ul>
-					<li>데이터암호화</li>
+					<li>Encrypt</li>
 					<li>감사로그</li>
 					<li class="on">암복호화</li>
 				</ul>

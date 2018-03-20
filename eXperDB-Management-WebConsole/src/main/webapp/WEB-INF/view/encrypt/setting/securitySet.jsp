@@ -212,7 +212,7 @@ select.t6{
 			</div>
 			<div class="location">
 				<ul>
-					<li>암호화</li>
+					<li>Encrypt</li>
 					<li>설정</li>
 					<li class="on">암호화 설정</li>
 				</ul>
