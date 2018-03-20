@@ -103,13 +103,6 @@ function fn_securityPolicyOptionSelect01(){
 		success : function(data) {
 			if(data.resultCode == "0000000000"){
 				for(var i=0; i<data.list.length; i++){
-					alert(data.list[i].configValue);
-					alert(data.list[i].configValue);
-					alert(data.list[i].configValue);
-					alert(data.list[i].configValue);
-					alert(data.list[i].configValue);
-					
-					
 					if(data.list[i].configKey == "GLOBAL_POLICY_DEFAULT_ACCESS_ALLOW_TF" && data.list[i].configValue== "1"){
 						$("#GLOBAL_POLICY_DEFAULT_ACCESS_ALLOW_TF").attr('checked', true);
 					}if(data.list[i].configKey == "GLOBAL_POLICY_FORCED_LOGGING_OFF_TF" && data.list[i].configValue== "1"){
