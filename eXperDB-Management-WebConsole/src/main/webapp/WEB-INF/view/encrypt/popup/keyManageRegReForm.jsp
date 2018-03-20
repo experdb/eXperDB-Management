@@ -163,13 +163,15 @@ function fn_keyManagementModify(){
 			}
 		},
 		success : function(data) {
-			if(data.resultCode == 0000000000){
-				alert(data.resultMessage);
+			if(data.resultCode == "0000000000"){
+				alert("수정되었습니다.")
 				fn_historyCryptoKeySymmetric();
-			}else{
+			}else if(data.resultCode == "8000000003"){
 				alert(data.resultMessage);
-				return false;
-			}
+				location.href = "/securityKeySet.do";
+			}else{
+				alert("resultCode : " + data.resultCode + " resultMessage : " + data.resultMessage);			
+			}	
 		}
 	});	
 }
@@ -197,8 +199,15 @@ function fn_historyCryptoKeySymmetric(){
 			}
 		},
 		success : function(data) {
-			renewalhistoryTable.clear().draw();
-			renewalhistoryTable.rows.add(data.data).draw();
+			if(data.resultCode == "0000000000"){
+				renewalhistoryTable.clear().draw();
+				renewalhistoryTable.rows.add(data.list).draw();
+			}else if(data.resultCode == "8000000003"){
+				alert(data.resultMessage);
+				location.href = "/securityKeySet.do";
+			}else{
+				alert("resultCode : " + data.resultCode + " resultMessage : " + data.resultMessage);			
+			}				
 		}
 	});
 }

@@ -42,15 +42,15 @@ var mstKeyRenewChk ="";
  * 페이지 시작시 함수
  ******************************************************** */
 $(window.document).ready(function() {
-
-	if(isServerPasswordEmpty == true) {
+	
+	if(isServerPasswordEmpty == "true") {
 			$("#pnlOldPassword").hide();
 			$("#pnlChangePassword").hide();
 			$("#pnlNewPassword").show();
 			
 			pnlNewPasswordView = true;
 			pnlOldPasswordView = false;
-		}else if(isServerPasswordEmpty == false && isServerKeyEmpty == true) {
+		}else if(isServerPasswordEmpty == "false" && isServerKeyEmpty == "true") {
 			$("#pnlOldPassword").show();
 			$("#pnlChangePassword").hide();
 			$("#pnlNewPassword").hide();
@@ -156,6 +156,8 @@ function fn_keyFileLoadServerKey(){
 		success : function(data) {
 			if(data.resultCode == "0000000000"){
 				alert("서버 마스터키 암호가 입력되었습니다.");
+			}else{
+				alert("resultCode : " + resultCode + " resultMessage : " + resultMessage);			
 			}
 		}
 	});

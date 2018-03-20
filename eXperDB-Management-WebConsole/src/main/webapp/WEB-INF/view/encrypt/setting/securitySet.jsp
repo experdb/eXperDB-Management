@@ -116,21 +116,28 @@ $(window.document).ready(function() {
 				}
 			},
 			success : function(data) {
-				if(data[0].ValueTrueFalse == true){
-					$("#ValueTrueFalse").attr('checked', true);
-				}else{
-					$("#ValueTrueFalse").attr('checked', false);
-				}
-			
-				if(data[0].MONITOR_AGENT_AUDIT_LOG_HMAC == true){
-					$("#MONITOR_AGENT_AUDIT_LOG_HMAC").attr('checked', true);
-				}else{
-					$("#MONITOR_AGENT_AUDIT_LOG_HMAC").attr('checked', false);
-				}
+				if(data.resultCode == "0000000000"){
+					if(data.list[0].ValueTrueFalse == true){
+						$("#ValueTrueFalse").attr('checked', true);
+					}else{
+						$("#ValueTrueFalse").attr('checked', false);
+					}
 				
-				$("#MONITOR_POLLING_AGENT").val(data[0].MONITOR_POLLING_AGENT);
-				$("#MONITOR_EXPIRE_CRYPTO_KEY").val(data[0].MONITOR_EXPIRE_CRYPTO_KEY);				
-				$("#MONITOR_POLLING_SERVER").val(data[0].MONITOR_POLLING_SERVER);
+					if(data.list[0].MONITOR_AGENT_AUDIT_LOG_HMAC == true){
+						$("#MONITOR_AGENT_AUDIT_LOG_HMAC").attr('checked', true);
+					}else{
+						$("#MONITOR_AGENT_AUDIT_LOG_HMAC").attr('checked', false);
+					}
+					
+					$("#MONITOR_POLLING_AGENT").val(data.list[0].MONITOR_POLLING_AGENT);
+					$("#MONITOR_EXPIRE_CRYPTO_KEY").val(data.list[0].MONITOR_EXPIRE_CRYPTO_KEY);				
+					$("#MONITOR_POLLING_SERVER").val(data.list[0].MONITOR_POLLING_SERVER);
+				}else if(data.resultCode == "8000000003"){
+					alert(data.resultMessage);
+					location.href = "/securityKeySet.do";
+				}else{
+					alert("resultCode : " + data.resultCode + " resultMessage : " + data.resultMessage);			
+				}	
 			}
 		});	
   }
@@ -168,13 +175,15 @@ $(window.document).ready(function() {
 				}
 			},
 			success : function(data) {
-				if(data.resultCode == 0000000000){
-					alert(data.resultMessage);
+				if(data.resultCode == "0000000000"){
+					alert("등록되었습니다.")
 					location.reload();
-				}else{
+				}else if(data.resultCode == "8000000003"){
 					alert(data.resultMessage);
-					return false;
-				}
+					location.href = "/securityKeySet.do";
+				}else{
+					alert("resultCode : " + data.resultCode + " resultMessage : " + data.resultMessage);			
+				}	
 			}
 		});	
   }
@@ -190,6 +199,8 @@ select.t6{
 	height: 25px !important;
 }
 </style>
+
+
 <div id="contents">
 	<div class="contents_wrap">
 		<div class="contents_tit">

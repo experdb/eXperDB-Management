@@ -44,9 +44,9 @@ public class ServiceCallTest {
 		
 		restIp = "127.0.0.1";
 
-		//restPort = 9443;
+		restPort = 9443;
 		
-		//restIp = "222.110.153.214";
+		restIp = "222.110.153.214";
 
 		
 		String loginId = "";
@@ -63,12 +63,12 @@ public class ServiceCallTest {
 		//entityId = "d06c0acb-ca3a-4324-83ed-71df370acdb3";
 
 
-		String strTocken = "YaSB1Ls6o+O1eXL3PSiA3WDuwFHOh8J7SNivGpHEVjM=";
+		String strTocken = "7RfBBJ6IQN7yxvdTo9gKT9aIgBvsEXT8j5BFIAQJllA=";
 
 
 		ServiceCallTest test = new ServiceCallTest();
 	
-		//test.loginTest(restIp, restPort, loginId, password);
+		test.loginTest(restIp, restPort, loginId, password);
 		
 		//마스터키 로드
 		//test.loadServerKey(restIp, restPort, strTocken, loginId, entityId);
@@ -88,7 +88,7 @@ public class ServiceCallTest {
 		//test.selectSysCodeListExper(restIp, restPort, strTocken, loginId, entityId);
 		
 		//일반공통코드 리스트
-		test.selectParamSysCodeList(restIp, restPort, strTocken, loginId, entityId);
+		//test.selectParamSysCodeList(restIp, restPort, strTocken, loginId, entityId);
 		
 		//에이전트 리스트
 		
@@ -176,8 +176,9 @@ public class ServiceCallTest {
 		//설정 > 암호화 설정 저장
 		//test.updateSysMultiValueConfigList2(restIp, restPort, strTocken, loginId, entityId);
 		
-		test.selectEntityList2(restIp, restPort, strTocken, loginId, entityId);
+		//test.selectEntityList2(restIp, restPort, strTocken, loginId, entityId);
 		
+		test.selectEntityUid(restIp, restPort, strTocken, loginId, entityId, loginId);
 	}
 
 	/**
@@ -2669,7 +2670,8 @@ public class ServiceCallTest {
 
 		String resultCode = (String) resultJson1.get("resultCode");
 		String resultMessage = new String(resultJson1.get("resultMessage").toString().getBytes("iso-8859-1"),"UTF-8");
-		
+
+	
 		System.out.println(resultMessage);
 		
 	}
@@ -2720,7 +2722,7 @@ public class ServiceCallTest {
 		
 		String resultCode = (String) resultJson.get("resultCode");
 		String resultMessage = new String(resultJson.get("resultMessage").toString().getBytes("iso-8859-1"),"UTF-8");
-		
+
 		System.out.println(resultMessage);
 		
 	}

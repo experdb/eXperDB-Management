@@ -25,14 +25,19 @@ import org.apache.commons.io.IOUtils;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
 import org.springframework.web.servlet.ModelAndView;
 
+import com.k4m.dx.tcontrol.admin.accesshistory.service.AccessHistoryService;
+import com.k4m.dx.tcontrol.cmmn.CmmnUtils;
+import com.k4m.dx.tcontrol.common.service.HistoryVO;
 import com.k4m.dx.tcontrol.encrypt.service.call.CommonServiceCall;
 import com.k4m.dx.tcontrol.encrypt.service.call.EncryptSettingServiceCall;
 
@@ -55,6 +60,9 @@ import com.k4m.dx.tcontrol.encrypt.service.call.EncryptSettingServiceCall;
 @Controller
 public class EncriptSettingController {
 	
+	@Autowired
+	private AccessHistoryService accessHistoryService;
+	
 /*	String restIp = "127.0.0.1";
 	int restPort = 8443;
 	String strTocken = "DjdePr5TQmCsKVLqDJVbjbDgSRJLJ3BKykSgBIokDNY=";*/
@@ -68,9 +76,16 @@ public class EncriptSettingController {
 	 * @throws Exception
 	 */
 	@RequestMapping(value = "/securityPolicyOptionSet.do")
-	public ModelAndView encriptAgentMonitoring(HttpServletRequest request, ModelMap model) {
+	public ModelAndView encriptAgentMonitoring(@ModelAttribute("historyVO") HistoryVO historyVO, HttpServletRequest request, ModelMap model) {
 		ModelAndView mv = new ModelAndView();
 		try {		
+			
+			// 화면접근이력 이력 남기기
+			CmmnUtils.saveHistory(request, historyVO);
+			historyVO.setExe_dtl_cd("DX-T0115");
+			historyVO.setMnu_id(33);
+			accessHistoryService.insertHistory(historyVO);
+			
 			mv.setViewName("encrypt/setting/securityPolicyOptionSet");
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -86,7 +101,9 @@ public class EncriptSettingController {
 	 * @throws Exception
 	 */
 	@RequestMapping(value = "/selectSysConfigListLike.do")
-	public @ResponseBody JSONArray selectCryptoKeyList(HttpServletRequest request) {
+	public @ResponseBody JSONObject selectCryptoKeyList(@ModelAttribute("historyVO") HistoryVO historyVO, HttpServletRequest request) {
+		
+		JSONObject result = new JSONObject();
 		
 		HttpSession session = request.getSession();
 		String restIp = (String)session.getAttribute("restIp");
@@ -94,11 +111,10 @@ public class EncriptSettingController {
 		String strTocken = (String)session.getAttribute("tockenValue");
 		String loginId = (String)session.getAttribute("usr_id");
 		String entityId = (String)session.getAttribute("ectityUid");	
-		
-			
+				
 		EncryptSettingServiceCall essc = new EncryptSettingServiceCall();
-		JSONArray result = new JSONArray();
-		try {
+		
+		try {						
 			result = essc.selectSysConfigListLike(restIp, restPort, strTocken, loginId, entityId);
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -114,8 +130,10 @@ public class EncriptSettingController {
 	 * @throws Exception
 	 */
 	@RequestMapping(value = "/selectSysMultiValueConfigListLike.do")
-	public @ResponseBody JSONArray selectSysMultiValueConfigListLike(HttpServletRequest request) {
+	public @ResponseBody JSONObject selectSysMultiValueConfigListLike(@ModelAttribute("historyVO") HistoryVO historyVO, HttpServletRequest request) {
 			
+		JSONObject result = new JSONObject();
+		
 		HttpSession session = request.getSession();
 		String restIp = (String)session.getAttribute("restIp");
 		int restPort = (int)session.getAttribute("restPort");
@@ -124,7 +142,7 @@ public class EncriptSettingController {
 		String entityId = (String)session.getAttribute("ectityUid");	
 		
 		EncryptSettingServiceCall essc = new EncryptSettingServiceCall();
-		JSONArray result = new JSONArray();
+		
 		try {
 			result = essc.selectSysMultiValueConfigListLike(restIp, restPort, strTocken, loginId, entityId);
 		} catch (Exception e) {
@@ -141,7 +159,7 @@ public class EncriptSettingController {
 	 * @throws Exception
 	 */
 	@RequestMapping(value = "/sysConfigSave.do")
-	public @ResponseBody JSONObject sysConfigSave(HttpServletRequest request) {
+	public @ResponseBody JSONObject sysConfigSave(@ModelAttribute("historyVO") HistoryVO historyVO, HttpServletRequest request) {
 		
 		HttpSession session = request.getSession();
 		String restIp = (String)session.getAttribute("restIp");
@@ -154,6 +172,13 @@ public class EncriptSettingController {
 		JSONObject result02 = new JSONObject();
 		
 		try {		
+			
+			// 화면접근이력 이력 남기기
+			CmmnUtils.saveHistory(request, historyVO);
+			historyVO.setExe_dtl_cd("DX-T0115_01");
+			historyVO.setMnu_id(33);
+			accessHistoryService.insertHistory(historyVO);
+						
 			JSONObject obj01 = new JSONObject();					
 			JSONObject obj02 = new JSONObject();	
 				
@@ -201,10 +226,16 @@ public class EncriptSettingController {
 	 * @throws Exception
 	 */
 	@RequestMapping(value = "/securitySet.do")
-	public ModelAndView securitySet(HttpServletRequest request, ModelMap model) {
+	public ModelAndView securitySet(@ModelAttribute("historyVO") HistoryVO historyVO, HttpServletRequest request, ModelMap model) {
 	
 		ModelAndView mv = new ModelAndView();
 		try {
+			// 화면접근이력 이력 남기기
+			CmmnUtils.saveHistory(request, historyVO);
+			historyVO.setExe_dtl_cd("DX-T0117");
+			historyVO.setMnu_id(34);
+			accessHistoryService.insertHistory(historyVO);
+						
 			mv.setViewName("encrypt/setting/securitySet");
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -220,7 +251,9 @@ public class EncriptSettingController {
 	 * @throws Exception
 	 */
 	@RequestMapping(value = "/selectEncryptSet.do")
-	public @ResponseBody JSONArray selectEncryptSet(HttpServletRequest request) {
+	public @ResponseBody JSONObject selectEncryptSet(@ModelAttribute("historyVO") HistoryVO historyVO, HttpServletRequest request) {
+		
+		JSONObject result = new JSONObject();
 		
 		HttpSession session = request.getSession();
 		String restIp = (String)session.getAttribute("restIp");
@@ -230,7 +263,7 @@ public class EncriptSettingController {
 		String entityId = (String)session.getAttribute("ectityUid");	
 			
 		EncryptSettingServiceCall essc = new EncryptSettingServiceCall();
-		JSONArray result = new JSONArray();
+
 		try {
 			result = essc.selectSysMultiValueConfigListLike2(restIp, restPort, strTocken, loginId, entityId);
 		} catch (Exception e) {
@@ -247,7 +280,7 @@ public class EncriptSettingController {
 	 * @throws Exception
 	 */
 	@RequestMapping(value = "/saveEncryptSet.do")
-	public @ResponseBody JSONObject saveEncryptSet(HttpServletRequest request) {
+	public @ResponseBody JSONObject saveEncryptSet(@ModelAttribute("historyVO") HistoryVO historyVO, HttpServletRequest request) {
 		JSONObject result = new JSONObject();
 		
 		HttpSession session = request.getSession();
@@ -259,6 +292,12 @@ public class EncriptSettingController {
 		
 
 		try {		
+			// 화면접근이력 이력 남기기
+			CmmnUtils.saveHistory(request, historyVO);
+			historyVO.setExe_dtl_cd("DX-T0117_01");
+			historyVO.setMnu_id(34);
+			accessHistoryService.insertHistory(historyVO);
+						
 			JSONObject obj = new JSONObject();					
 				
 			EncryptSettingServiceCall essc = new EncryptSettingServiceCall();
@@ -287,7 +326,7 @@ public class EncriptSettingController {
 	 * @throws Exception
 	 */
 	@RequestMapping(value = "/securityKeySet.do")
-	public ModelAndView securityKeySet(HttpServletRequest request, ModelMap model) {
+	public ModelAndView securityKeySet(@ModelAttribute("historyVO") HistoryVO historyVO, HttpServletRequest request, ModelMap model) {
 		ModelAndView mv = new ModelAndView();
 		JSONObject result = new JSONObject();
 		
@@ -299,6 +338,12 @@ public class EncriptSettingController {
 		String entityId = (String)session.getAttribute("ectityUid");	
 		
 		try {		
+			// 화면접근이력 이력 남기기
+			CmmnUtils.saveHistory(request, historyVO);
+			historyVO.setExe_dtl_cd("DX-T0121");
+			historyVO.setMnu_id(35);
+			accessHistoryService.insertHistory(historyVO);
+						
 			CommonServiceCall csc = new CommonServiceCall();
 				
 			result = csc.selectServerStatus(restIp, restPort, strTocken, loginId, entityId);
@@ -325,7 +370,7 @@ public class EncriptSettingController {
 	 * @throws Exception
 	 */
 	@RequestMapping(value = "/securityMasterKeySave01.do")
-	public @ResponseBody JSONObject securityMasterKeySave01(MultipartHttpServletRequest multiRequest, HttpServletResponse response, HttpServletRequest request) throws FileNotFoundException {
+	public @ResponseBody JSONObject securityMasterKeySave01(@ModelAttribute("historyVO") HistoryVO historyVO, MultipartHttpServletRequest multiRequest, HttpServletResponse response, HttpServletRequest request) throws FileNotFoundException {
 	
 		HttpSession session = request.getSession();
 		String restIp = (String)session.getAttribute("restIp");
@@ -338,6 +383,12 @@ public class EncriptSettingController {
 		String encKey = null;
 		try {		
 			
+			// 화면접근이력 이력 남기기
+			CmmnUtils.saveHistory(request, historyVO);
+			historyVO.setExe_dtl_cd("DX-T0121_01");
+			historyVO.setMnu_id(35);
+			accessHistoryService.insertHistory(historyVO);
+						
 			MultipartFile keyFile = multiRequest.getFile("keyFile");		
 			//String keyFile = multiRequest.getParameter("keyFile");
 			String passwordStr = multiRequest.getParameter("mstKeyPassword");
@@ -418,7 +469,7 @@ public class EncriptSettingController {
 	 * @throws Exception
 	 */
 	@RequestMapping(value = "/securityMasterKeySave02.do")
-	public @ResponseBody JSONObject securityMasterKeySave02(HttpServletRequest request) throws FileNotFoundException {
+	public @ResponseBody JSONObject securityMasterKeySave02(@ModelAttribute("historyVO") HistoryVO historyVO, HttpServletRequest request) throws FileNotFoundException {
 		
 		HttpSession session = request.getSession();
 		String restIp = (String)session.getAttribute("restIp");
@@ -429,6 +480,12 @@ public class EncriptSettingController {
 		
 		JSONObject result = new JSONObject();
 		try {		
+			// 화면접근이력 이력 남기기
+			CmmnUtils.saveHistory(request, historyVO);
+			historyVO.setExe_dtl_cd("DX-T0121_01");
+			historyVO.setMnu_id(35);
+			accessHistoryService.insertHistory(historyVO);
+						
 			String encKey = request.getParameter("mstKeyPassword");						
 			CommonServiceCall csc = new CommonServiceCall();		
 			csc.loadServerKey(restIp, restPort, strTocken, encKey, loginId, entityId);
@@ -446,7 +503,7 @@ public class EncriptSettingController {
 	 * @throws Exception
 	 */
 	@RequestMapping(value = "/securityMasterKeySave03.do")
-	public @ResponseBody JSONObject securityMasterKeySave03(MultipartHttpServletRequest multiRequest, HttpServletRequest request) throws FileNotFoundException {
+	public @ResponseBody JSONObject securityMasterKeySave03(@ModelAttribute("historyVO") HistoryVO historyVO, MultipartHttpServletRequest multiRequest, HttpServletRequest request) throws FileNotFoundException {
 		
 		HttpSession session = request.getSession();
 		String restIp = (String)session.getAttribute("restIp");
@@ -459,6 +516,13 @@ public class EncriptSettingController {
 		
 		JSONObject result = new JSONObject();
 		try {		
+			
+			// 화면접근이력 이력 남기기
+			CmmnUtils.saveHistory(request, historyVO);
+			historyVO.setExe_dtl_cd("DX-T0121_01");
+			historyVO.setMnu_id(35);
+			accessHistoryService.insertHistory(historyVO);
+												
 			String mstKeyPassword = multiRequest.getParameter("mstKeyPassword");		
 			String mstKeyRenewPassword = multiRequest.getParameter("mstKeyRenewPassword");
 			String chk = multiRequest.getParameter("chk");
@@ -518,9 +582,16 @@ public class EncriptSettingController {
 	 * @throws Exception
 	 */
 	@RequestMapping(value = "/securityAgentMonitoring.do")
-	public ModelAndView securityAgentMonitoring(HttpServletRequest request) {
+	public ModelAndView securityAgentMonitoring(@ModelAttribute("historyVO") HistoryVO historyVO, HttpServletRequest request) {
 		ModelAndView mv = new ModelAndView();
 		try {
+			
+			// 화면접근이력 이력 남기기
+			CmmnUtils.saveHistory(request, historyVO);
+			historyVO.setExe_dtl_cd("DX-T0118");
+			historyVO.setMnu_id(36);
+			accessHistoryService.insertHistory(historyVO);
+											
 			mv.setViewName("encrypt/setting/agentMonitoring");
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -538,17 +609,21 @@ public class EncriptSettingController {
 	 * @return ModelAndView
 	 */
 	@RequestMapping(value = "/popup/agentMonitoringModifyForm.do")
-	public ModelAndView agentMonitoringModifyForm(HttpServletRequest request)  {
+	public ModelAndView agentMonitoringModifyForm(@ModelAttribute("historyVO") HistoryVO historyVO, HttpServletRequest request)  {
 		ModelAndView mv = new ModelAndView();
 		
-
 		JSONArray result = new JSONArray();
-		JSONObject resultJson= new JSONObject();
 
 		Map hp = new HashMap();
 		List<String> key = new ArrayList<String>();
 		List<String> value = new ArrayList<String>();
 		try {
+			// 화면접근이력 이력 남기기
+			CmmnUtils.saveHistory(request, historyVO);
+			historyVO.setExe_dtl_cd("DX-T0119");
+			historyVO.setMnu_id(36);
+			accessHistoryService.insertHistory(historyVO);
+						
 			String entityName = request.getParameter("entityName");
 			String entityStatusCode = request.getParameter("entityStatusCode");
 			String latestAddress = request.getParameter("latestAddress");
@@ -610,18 +685,18 @@ public class EncriptSettingController {
 	 * @throws Exception
 	 */
 	@RequestMapping(value = "/selectAgentMonitoring.do")
-	public @ResponseBody JSONArray selectAgentMonitoring(HttpServletRequest request) {
-			
+	public @ResponseBody JSONObject selectAgentMonitoring(@ModelAttribute("historyVO") HistoryVO historyVO, HttpServletRequest request) {
+		JSONObject result = new JSONObject();
+		
 		HttpSession session = request.getSession();
 		String restIp = (String)session.getAttribute("restIp");
 		int restPort = (int)session.getAttribute("restPort");
 		String strTocken = (String)session.getAttribute("tockenValue");
 		String loginId = (String)session.getAttribute("usr_id");
 		String entityId = (String)session.getAttribute("ectityUid");	
-		
-				
+					
 		EncryptSettingServiceCall essc = new EncryptSettingServiceCall();
-		JSONArray result = new JSONArray();
+
 		try {
 			result = essc.selectAgentMonitoring(restIp, restPort, strTocken, loginId, entityId);
 		} catch (Exception e) {
@@ -639,9 +714,9 @@ public class EncriptSettingController {
 	 * @throws Exception
 	 */
 	@RequestMapping(value = "/agentStatusSave.do")
-	public @ResponseBody JSONArray agentStatusSave(HttpServletResponse response, HttpServletRequest request) {
+	public @ResponseBody JSONObject agentStatusSave(@ModelAttribute("historyVO") HistoryVO historyVO, HttpServletResponse response, HttpServletRequest request) {
 
-		JSONArray result = new JSONArray();
+		JSONObject result = new JSONObject();
 		
 		String entityName = request.getParameter("entityName");
 		String entityUid = request.getParameter("entityUid");
@@ -655,6 +730,12 @@ public class EncriptSettingController {
 		String entityId = (String)session.getAttribute("ectityUid");	
 		
 		try {	
+			// 화면접근이력 이력 남기기
+			CmmnUtils.saveHistory(request, historyVO);
+			historyVO.setExe_dtl_cd("DX-T0119_01");
+			historyVO.setMnu_id(36);
+			accessHistoryService.insertHistory(historyVO);
+						
 			EncryptSettingServiceCall essc = new EncryptSettingServiceCall();
 			result = essc.updateEntity(restIp, restPort, strTocken, loginId, entityId, entityName, entityUid, entityStatusCode);
 		}catch (Exception e) {

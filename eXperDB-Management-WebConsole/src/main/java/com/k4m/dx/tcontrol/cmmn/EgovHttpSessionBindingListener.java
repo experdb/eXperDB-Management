@@ -26,6 +26,9 @@ public class EgovHttpSessionBindingListener implements HttpSessionBindingListene
 		if (EgovMultiLoginPreventor.findByLoginId(event.getName())) {
 			EgovMultiLoginPreventor.invalidateByLoginId(event.getName());
 		}
+		System.out.println("로그인");
+		System.out.println("event getName: " +event.getName());
+		System.out.println("event getSession: " +event.getSession());
 		EgovMultiLoginPreventor.loginUsers.put(event.getName(), event.getSession());
 	}
 
@@ -37,6 +40,8 @@ public class EgovHttpSessionBindingListener implements HttpSessionBindingListene
 	 * */
 	@Override
 	public void valueUnbound(HttpSessionBindingEvent event) {
+		System.out.println("event getName: " +event.getName());
+		System.out.println("event getSession: " +event.getSession());
 		EgovMultiLoginPreventor.loginUsers.remove(event.getName(), event.getSession());
 	}
 }

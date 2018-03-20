@@ -26,6 +26,7 @@ import com.k4m.dx.tcontrol.admin.accesshistory.service.AccessHistoryService;
 import com.k4m.dx.tcontrol.cmmn.AES256;
 import com.k4m.dx.tcontrol.cmmn.AES256_KEY;
 import com.k4m.dx.tcontrol.cmmn.CmmnUtils;
+import com.k4m.dx.tcontrol.cmmn.EgovHttpSessionBindingListener;
 import com.k4m.dx.tcontrol.common.service.HistoryVO;
 import com.k4m.dx.tcontrol.encrypt.service.call.CommonServiceCall;
 import com.k4m.dx.tcontrol.login.service.LoginService;
@@ -84,6 +85,30 @@ public class LoginController {
 		}
 		return mv;
 	}
+	
+	
+	/**
+	 * 세션아웃 화면을 보여준다.
+	 * 
+	 * @param userVo
+	 * @param model
+	 * @param request
+	 * @param historyVO
+	 * @return ModelAndView mv
+	 * @throws Exception
+	 */
+	@RequestMapping(value = "/sessionOut.do")
+	public ModelAndView sessionOut() {
+		System.out.println("세션아웃 로그아웃 페이지 이동");
+		ModelAndView mv = new ModelAndView();
+		try {
+			mv.setViewName("logout");
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return mv;
+	}
+	
 	
 	/**
 	 * 로그인 화면을 보여준다.
@@ -144,8 +169,8 @@ public class LoginController {
 				mv.addObject("error", "msg159");
 			} else {
 				/*중복로그인방지*/
-//				EgovHttpSessionBindingListener listener = new EgovHttpSessionBindingListener();
-//				request.getSession().setAttribute(userList.get(0).getUsr_id(), listener);
+				EgovHttpSessionBindingListener listener = new EgovHttpSessionBindingListener();
+				request.getSession().setAttribute(userList.get(0).getUsr_id(), listener);
 				
 				// session 설정
 				HttpSession session = request.getSession();
@@ -206,10 +231,9 @@ public class LoginController {
 				// 로그아웃 이력 남기기
 				CmmnUtils.saveHistory(request, historyVO);
 				historyVO.setExe_dtl_cd("DX-T0003_01");
-				accessHistoryService.insertHistory(historyVO);
-			}
-
-			session.invalidate();
+				accessHistoryService.insertHistory(historyVO);			
+			}						
+			request.getSession().invalidate();			
 			return "redirect:/";
 		} catch (Exception e) {
 			e.printStackTrace();

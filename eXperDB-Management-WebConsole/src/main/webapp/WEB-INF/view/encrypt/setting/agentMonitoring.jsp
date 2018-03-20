@@ -106,9 +106,16 @@ function fn_select(){
 				alert("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""));
 			}
 		},
-		success : function(data) {		
-			table.clear().draw();
-			table.rows.add(data).draw();
+		success : function(data) {
+			if(data.resultCode == "0000000000"){
+				table.clear().draw();
+				table.rows.add(data.list).draw();
+			}else if(data.resultCode == "8000000003"){
+				alert(data.resultMessage);
+				location.href = "/securityKeySet.do";
+			}else{
+				alert("resultCode : " + data.resultCode + " resultMessage : " + data.resultMessage);			
+			}
 		}
 	});
 }
@@ -178,7 +185,7 @@ function fn_agentMonitoringModifyForm(){
 <div id="contents">
 	<div class="contents_wrap">
 		<div class="contents_tit">
-			<h4>에이전트 설정<a href="#n"><img src="../images/ico_tit.png" class="btn_info" /></a></h4>
+			<h4>암호화 에이전트 설정<a href="#n"><img src="../images/ico_tit.png" class="btn_info" /></a></h4>
 			<div class="infobox">
 				<ul>
 					<li>암호화 에이전트 설명</li>
@@ -188,7 +195,7 @@ function fn_agentMonitoringModifyForm(){
 				<ul>
 					<li>암호화</li>
 					<li>설정</li>
-					<li class="on">에이전트 설정</li>
+					<li class="on">암호화 에이전트 설정</li>
 				</ul>
 			</div>
 		</div>

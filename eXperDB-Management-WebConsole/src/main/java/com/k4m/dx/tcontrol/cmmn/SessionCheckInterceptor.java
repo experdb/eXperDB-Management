@@ -13,7 +13,8 @@ public class SessionCheckInterceptor extends HandlerInterceptorAdapter{
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
         try {
             if(request.getSession().getAttribute("usr_id") == null){
-                    response.sendRedirect("/");
+            		System.out.println("여기/////");
+                    response.sendRedirect("/sessionOut.do");
                     return false;
             }
         } catch (Exception e) {

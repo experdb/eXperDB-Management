@@ -68,14 +68,16 @@ function fu_insertCryptoKeySymmetric(){
 			}
 		},
 		success : function(data) {
-			if(data.resultCode == 0000000000){
-				alert(data.resultMessage);
+			if(data.resultCode == "0000000000"){
+				alert("등록되었습니다.")
 				opener.location.reload();
 				window.close();
-			}else{
+			}else if(data.resultCode == "8000000003"){
 				alert(data.resultMessage);
-				return false;
-			}
+				location.href = "/securityKeySet.do";
+			}else{
+				alert("resultCode : " + data.resultCode + " resultMessage : " + data.resultMessage);			
+			}			
 		}
 	});
 }

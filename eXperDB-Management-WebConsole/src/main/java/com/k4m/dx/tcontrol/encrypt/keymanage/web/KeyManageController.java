@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.k4m.dx.tcontrol.admin.accesshistory.service.AccessHistoryService;
+import com.k4m.dx.tcontrol.cmmn.CmmnUtils;
 import com.k4m.dx.tcontrol.cmmn.serviceproxy.vo.CryptoKeySymmetric;
 import com.k4m.dx.tcontrol.common.service.HistoryVO;
 import com.k4m.dx.tcontrol.encrypt.service.call.CommonServiceCall;
@@ -51,10 +52,13 @@ public class KeyManageController {
 		CommonServiceCall csc= new CommonServiceCall();
 		JSONArray result = new JSONArray();
 		try {
+			
 			// 화면접근이력 이력 남기기
-//			CmmnUtils.saveHistory(request, historyVO);
-//			historyVO.setExe_dtl_cd("DX-T0055");
-//			accessHistoryService.insertHistory(historyVO);
+			CmmnUtils.saveHistory(request, historyVO);
+			historyVO.setExe_dtl_cd("DX-T0106");
+			historyVO.setMnu_id(26);
+			accessHistoryService.insertHistory(historyVO);
+			
 			HttpSession session = request.getSession();
 			String restIp = (String)session.getAttribute("restIp");
 			int restPort = (int)session.getAttribute("restPort");
@@ -93,10 +97,12 @@ public class KeyManageController {
 			String entityId = (String)session.getAttribute("ectityUid");	
 			
 			result = csc.selectSysCodeListExper(restIp, restPort, strTocken,loginId,entityId);
-//			// 화면접근이력 이력 남기기
-//			historyVO.setExe_dtl_cd("DX-T0056");
-//			historyVO.setMnu_id(12);
-//			accessHistoryService.insertHistory(historyVO);
+			
+			// 화면접근이력 이력 남기기
+			CmmnUtils.saveHistory(request, historyVO);
+			historyVO.setExe_dtl_cd("DX-T0107");
+			historyVO.setMnu_id(26);
+			accessHistoryService.insertHistory(historyVO);
 
 			mv.setViewName("encrypt/popup/keyManageRegForm");
 			mv.addObject("result",result);
@@ -137,10 +143,12 @@ public class KeyManageController {
 			String entityId = (String)session.getAttribute("ectityUid");	
 			
 			result = csc.selectSysCodeListExper(restIp, restPort, strTocken,loginId,entityId);
-//			// 화면접근이력 이력 남기기
-//			historyVO.setExe_dtl_cd("DX-T0056");
-//			historyVO.setMnu_id(12);
-//			accessHistoryService.insertHistory(historyVO);
+			
+			// 화면접근이력 이력 남기기
+			CmmnUtils.saveHistory(request, historyVO);
+			historyVO.setExe_dtl_cd("DX-T0108");
+			historyVO.setMnu_id(26);
+			accessHistoryService.insertHistory(historyVO);
 
 			mv.setViewName("encrypt/popup/keyManageRegReForm");
 			mv.addObject("result",result);
@@ -166,11 +174,18 @@ public class KeyManageController {
 	 * @throws Exception
 	 */
 	@RequestMapping(value = "/selectCryptoKeyList.do")
-	public @ResponseBody JSONObject selectCryptoKeyList(HttpServletRequest request, HttpServletResponse response) {
+	public @ResponseBody JSONObject selectCryptoKeyList(@ModelAttribute("historyVO") HistoryVO historyVO, HttpServletRequest request, HttpServletResponse response) {
 			
 		KeyManageServiceCall kmsc= new KeyManageServiceCall();
 		JSONObject result = new JSONObject();
 		try {
+			
+			// 화면접근이력 이력 남기기
+			CmmnUtils.saveHistory(request, historyVO);
+			historyVO.setExe_dtl_cd("DX-T0106_01");
+			historyVO.setMnu_id(26);
+			accessHistoryService.insertHistory(historyVO);
+						
 			HttpSession session = request.getSession();
 			String restIp = (String)session.getAttribute("restIp");
 			int restPort = (int)session.getAttribute("restPort");
@@ -194,7 +209,7 @@ public class KeyManageController {
 	 * @throws Exception
 	 */
 	@RequestMapping(value = "/insertCryptoKeySymmetric.do")
-	public @ResponseBody JSONObject insertCryptoKeySymmetric(HttpServletRequest request) {
+	public @ResponseBody JSONObject insertCryptoKeySymmetric(@ModelAttribute("historyVO") HistoryVO historyVO, HttpServletRequest request) {
 		
 		String resourceName = request.getParameter("resourceName");
 		String cipherAlgorithmCode = request.getParameter("cipherAlgorithmCode");
@@ -212,6 +227,13 @@ public class KeyManageController {
 		KeyManageServiceCall kmsc= new KeyManageServiceCall();
 		JSONObject result = new JSONObject();
 		try {
+			
+			// 화면접근이력 이력 남기기
+			CmmnUtils.saveHistory(request, historyVO);
+			historyVO.setExe_dtl_cd("DX-T0107_01");
+			historyVO.setMnu_id(26);
+			accessHistoryService.insertHistory(historyVO);
+						
 			HttpSession session = request.getSession();
 			String restIp = (String)session.getAttribute("restIp");
 			int restPort = (int)session.getAttribute("restPort");
@@ -234,7 +256,7 @@ public class KeyManageController {
 	 * @throws Exception
 	 */
 	@RequestMapping(value = "/updateCryptoKeySymmetric.do")
-	public @ResponseBody JSONObject updateCryptoKeySymmetric(HttpServletRequest request) {
+	public @ResponseBody JSONObject updateCryptoKeySymmetric(@ModelAttribute("historyVO") HistoryVO historyVO, HttpServletRequest request) {
 		
 		String keyUid = request.getParameter("keyUid");
 		String resourceUid = request.getParameter("resourceUid");
@@ -270,6 +292,12 @@ public class KeyManageController {
 		KeyManageServiceCall kmsc= new KeyManageServiceCall();
 		JSONObject result = new JSONObject();
 		try {
+			// 화면접근이력 이력 남기기
+			CmmnUtils.saveHistory(request, historyVO);
+			historyVO.setExe_dtl_cd("DX-T0108_01");
+			historyVO.setMnu_id(26);
+			accessHistoryService.insertHistory(historyVO);
+						
 			HttpSession session = request.getSession();
 			String restIp = (String)session.getAttribute("restIp");
 			int restPort = (int)session.getAttribute("restPort");
@@ -292,7 +320,7 @@ public class KeyManageController {
 	 * @throws Exception
 	 */
 	@RequestMapping(value = "/historyCryptoKeySymmetric.do")
-	public @ResponseBody JSONObject historyCryptoKeySymmetric(HttpServletRequest request) {
+	public @ResponseBody JSONObject historyCryptoKeySymmetric(@ModelAttribute("historyVO") HistoryVO historyVO, HttpServletRequest request) {
 		JSONObject result = new JSONObject();
 		try {
 			
@@ -325,9 +353,16 @@ public class KeyManageController {
 	 * @throws Exception
 	 */
 	@RequestMapping(value = "/deleteCryptoKeySymmetric.do")
-	public @ResponseBody JSONObject deleteCryptoKeySymmetric(HttpServletRequest request, HttpServletResponse response) {
+	public @ResponseBody JSONObject deleteCryptoKeySymmetric(@ModelAttribute("historyVO") HistoryVO historyVO, HttpServletRequest request, HttpServletResponse response) {
 		JSONObject result = new JSONObject();
 		try{
+
+			// 화면접근이력 이력 남기기
+			CmmnUtils.saveHistory(request, historyVO);
+			historyVO.setExe_dtl_cd("DX-T0106_02");
+			historyVO.setMnu_id(26);
+			accessHistoryService.insertHistory(historyVO);
+						
 			String keyUid = request.getParameter("keyUid");
 			String resourceName = request.getParameter("resourceName");
 			String resourceTypeCode = request.getParameter("resourceTypeCode");

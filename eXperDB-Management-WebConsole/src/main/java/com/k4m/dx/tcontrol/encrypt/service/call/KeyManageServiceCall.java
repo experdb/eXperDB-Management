@@ -279,8 +279,13 @@ public class KeyManageServiceCall {
 
 					jsonArray.add(jsonObj);
 				}
-				result.put("data", jsonArray);
+				result.put("list", jsonArray);
+				result.put("resultCode", resultCode);
+				result.put("resultMessage", resultMessage);
 			}
+		}else{
+			result.put("resultCode", resultCode);
+			result.put("resultMessage", resultMessage);
 		}
 		return result;
 	}

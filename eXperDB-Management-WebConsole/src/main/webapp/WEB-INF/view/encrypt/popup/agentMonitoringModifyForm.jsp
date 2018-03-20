@@ -86,11 +86,15 @@ var extendedField = ${extendedField};
 				}
 			},
 			success : function(data) {		
-				alert(JSON.stringify(data));
-				if(data[0].resultCode == "0000000000"){
+				if(data.resultCode == "0000000000"){
 					alert("에이전트 상태를 변경하였습니다.");
 					opener.location.reload();
 					window.close();
+				}else if(data.resultCode == "8000000003"){
+					alert(data.resultMessage);
+					location.href = "/securityKeySet.do";
+				}else{
+					alert("resultCode : " + data.resultCode + " resultMessage : " + data.resultMessage);			
 				}
 			}
 		});
@@ -101,7 +105,10 @@ var extendedField = ${extendedField};
 	<div class="pop_container">
 		<div class="pop_cts">
 			<p class="tit">암호화 에이전트 모니터링 수정</p>
-
+				<div class="btn_type_01">
+					<span class="btn btnC_01" onClick="fn_agentStatusSave();"><button>저장</button></span> 
+					<span class="btn" onclick="window.close();"><button>닫기</button></span>
+				</div>
 			<div class="cmm_bd">
 				<div class="sub_tit">
 					<p>기본</p>
@@ -149,11 +156,11 @@ var extendedField = ${extendedField};
 						<tbody>
 							<tr>
 								<th scope="row" class="ico_t2">최근접속 주소</th>
-								<td><input type="text" class="txt" name="latestAddress" id="latestAddress" value="${latestAddress}" ></td>
+								<td><input type="text" class="txt" name="latestAddress" id="latestAddress" value="${latestAddress}"  readonly="readonly" ></td>
 							</tr>
 							<tr>
 								<th scope="row" class="ico_t2">최근접속일시</th>
-								<td><input type="text" class="txt" name="latestDateTime" id="latestDateTime" value="${latestDateTime}" ></td>
+								<td><input type="text" class="txt" name="latestDateTime" id="latestDateTime" value="${latestDateTime}"  readonly="readonly" ></td>
 
 							</tr>
 						</tbody>
@@ -180,11 +187,6 @@ var extendedField = ${extendedField};
 
 					</tbody>
 				</table>
-			</div>
-			
-			<div class="btn_type_02">
-				<span class="btn btnC_01" onClick="fn_agentStatusSave();"><button>저장</button></span> 
-				<span class="btn" onclick="window.close();"><button>닫기</button></span>
 			</div>
 		</div>
 		<!-- //pop-container -->

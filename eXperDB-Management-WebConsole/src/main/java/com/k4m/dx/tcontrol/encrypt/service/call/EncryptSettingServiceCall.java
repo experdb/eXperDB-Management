@@ -1,6 +1,5 @@
 package com.k4m.dx.tcontrol.encrypt.service.call;
 
-import java.io.UnsupportedEncodingException;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -27,7 +26,9 @@ import com.k4m.dx.tcontrol.cmmn.serviceproxy.vo.SysMultiValueConfig;
 
 public class EncryptSettingServiceCall {
 
-	public JSONArray selectSysConfigListLike(String restIp, int restPort, String strTocken, String loginId, String entityId) throws Exception {
+	public JSONObject selectSysConfigListLike(String restIp, int restPort, String strTocken, String loginId, String entityId) throws Exception {
+		
+		JSONObject result = new JSONObject();
 		JSONArray jsonArray = new JSONArray();
 	
 		EncryptCommonService api = new EncryptCommonService(restIp, restPort);
@@ -74,6 +75,8 @@ public class EncryptSettingServiceCall {
 				
 				jObj.put("configKey", (String) jsonObj.get("configKey"));
 				jObj.put("configValue", (String) jsonObj.get("configValue"));
+				jObj.put("resultCode", resultCode);
+				jObj.put("resultMessage", resultMessage);
 				
 				jsonArray.add(jObj);
 				
@@ -81,15 +84,20 @@ public class EncryptSettingServiceCall {
 				String strConfigValue = (String) jsonObj.get("configValue"); 
 				System.out.println("strConfigKey : " + strConfigKey + " - strConfigValue : " + strConfigValue);
 
+				result.put("list", jsonArray);
+				result.put("resultCode", resultCode);
+				result.put("resultMessage", resultMessage);
 			}
 		} else {
-			
+			result.put("resultCode", resultCode);
+			result.put("resultMessage", resultMessage);
 		}
-		return jsonArray;
+		return result;
 	}
 
-	public JSONArray selectSysMultiValueConfigListLike(String restIp, int restPort, String strTocken, String loginId, String entityId) throws Exception {
+	public JSONObject selectSysMultiValueConfigListLike(String restIp, int restPort, String strTocken, String loginId, String entityId) throws Exception {
 		
+		JSONObject result = new JSONObject();
 		JSONArray jsonArray = new JSONArray();
 		
 		int[] numWeek = { SystemCode.Weekday.MONDAY,
@@ -171,6 +179,8 @@ public class EncryptSettingServiceCall {
 					System.out.println("전송 종료 : " + bdValueNumber2);
 					jObj.put("transferStart", bdValueNumber);
 					jObj.put("transferStop", bdValueNumber2);
+					jObj.put("resultCode", resultCode);
+					jObj.put("resultMessage", resultMessage);		
 					
 				} else if(strConfigKey.equals(SystemCode.SysConfigKey.BATCH_LOG_UPLOAD_DELAY)) {
 					//암복호화 로그 전송 대기 시간 
@@ -178,11 +188,15 @@ public class EncryptSettingServiceCall {
 					jObj.put("logTransferWaitTime", bdValueNumber);
 				}
 				jsonArray.add(jObj);
+				result.put("list", jsonArray);
+				result.put("resultCode", resultCode);
+				result.put("resultMessage", resultMessage);
 			}
 		} else {
-			
+			result.put("resultCode", resultCode);
+			result.put("resultMessage", resultMessage);
 		}
-		return jsonArray;
+		return result;
 	}
 
 	
@@ -404,7 +418,8 @@ public class EncryptSettingServiceCall {
 		return result;
 	}
 
-	public JSONArray selectSysMultiValueConfigListLike2(String restIp, int restPort, String strTocken, String loginId, String entityId) throws Exception {
+	public JSONObject selectSysMultiValueConfigListLike2(String restIp, int restPort, String strTocken, String loginId, String entityId) throws Exception {
+		JSONObject result = new JSONObject();
 		JSONArray jsonArray = new JSONArray();
 		
 		int[] numWeek = { SystemCode.Weekday.MONDAY,
@@ -476,10 +491,15 @@ public class EncryptSettingServiceCall {
 					jObj.put("MONITOR_AGENT_AUDIT_LOG_HMAC", blnIsvalueTrueFalse);
 				}
 				jsonArray.add(jObj);
+				result.put("list", jsonArray);
+				result.put("resultCode", resultCode);
+				result.put("resultMessage", resultMessage);
 			}	
 		} else {			
+			result.put("resultCode", resultCode);
+			result.put("resultMessage", resultMessage);
 		}
-		return jsonArray;
+		return result;
 	}
 
 	public JSONObject updateSysMultiValueConfigList2(String restIp, int restPort, String strTocken, JSONObject obj, String loginId, String entityId) throws Exception {
@@ -670,8 +690,10 @@ public class EncryptSettingServiceCall {
 
 	}
 
-	public JSONArray selectAgentMonitoring(String restIp, int restPort, String strTocken, String loginId,
+	public JSONObject selectAgentMonitoring(String restIp, int restPort, String strTocken, String loginId,
 			String entityId) throws Exception {
+		
+		JSONObject result = new JSONObject();
 		
 		JSONArray jsonArray = new JSONArray();
 		
@@ -711,6 +733,7 @@ public class EncryptSettingServiceCall {
 		
 		String resultCode = (String) resultJson.get("resultCode");
 		String resultMessage = (String) resultJson.get("resultMessage");
+		resultMessage = new String(resultMessage.getBytes("iso-8859-1"),"UTF-8"); 
 		//long totalListCount = (long) resultJson.get("totalListCount");
 		
 		
@@ -750,12 +773,18 @@ public class EncryptSettingServiceCall {
 					jsonObj.put("resultCode", resultMessage);
 
 					jsonArray.add(jsonObj);
-
+					
+					result.put("list", jsonArray);
+					result.put("resultCode", resultCode);
+					result.put("resultMessage", resultMessage);
 					System.out.println("getEntityUid : " + entity.getEntityUid());
 					System.out.println("getEntityName : " + new String(entity.getEntityName().toString().getBytes("iso-8859-1"),"UTF-8") );
 			}
+		}else{
+			result.put("resultCode", resultCode);
+			result.put("resultMessage", resultMessage);
 		}
-		return jsonArray;
+		return result;
 	}
 
 	public JSONArray selectParamSysCodeList(String restIp, int restPort, String strTocken, String loginId, String entityId) throws Exception {
@@ -825,18 +854,26 @@ public class EncryptSettingServiceCall {
 						jsonObj.put("sysStatusCode", sysCode.getSysStatusCode());
 						jsonObj.put("sysCode", sysCode.getSysCode());
 						jsonObj.put("sysCodeName", sysCode.getSysCodeName());
-						jsonObj.put("sysCodeValue", sysCode.getSysCodeValue());
+						jsonObj.put("sysCodeValue", sysCode.getSysCodeValue());	
+						jsonObj.put("resultMessage", resultCode);
+						jsonObj.put("resultCode", resultMessage);
 						
 						jsonArray.add(jsonObj);
 						
 					}
 			}
+		}else{
+			JSONObject jsonObj = new JSONObject();
+			jsonObj.put("resultMessage", resultCode);
+			jsonObj.put("resultCode", resultMessage);
+			jsonArray.add(jsonObj);		
 		}
 		return jsonArray;
 	}
 
-	public JSONArray updateEntity(String restIp, int restPort, String strTocken, String loginId, String entityId, String entityName, String entityUid, String entityStatusCode) throws Exception {
-		JSONArray jsonArray = new JSONArray();
+	public JSONObject updateEntity(String restIp, int restPort, String strTocken, String loginId, String entityId, String entityName, String entityUid, String entityStatusCode) throws Exception {
+	
+		JSONObject result = new JSONObject();
 		
 		EncryptCommonService api = new EncryptCommonService(restIp, restPort);
 
@@ -875,13 +912,10 @@ public class EncryptSettingServiceCall {
 		String resultCode = (String) resultJson.get("resultCode");
 		String resultMessage = new String(resultJson.get("resultMessage").toString().getBytes("iso-8859-1"),"UTF-8");
 		
-		JSONObject jsonObj = new JSONObject();
 		
-		jsonObj.put("resultCode", (String) resultJson.get("resultCode"));
-		jsonObj.put("resultMessage", new String(resultJson.get("resultMessage").toString().getBytes("iso-8859-1"),"UTF-8"));
-		
-		jsonArray.add(jsonObj);
-		
-		return jsonArray;
+		result.put("resultCode", resultCode);
+		result.put("resultMessage", resultMessage);
+				
+		return result;
 	}
 }

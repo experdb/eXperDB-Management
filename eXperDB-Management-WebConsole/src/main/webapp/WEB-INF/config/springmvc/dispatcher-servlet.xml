@@ -48,6 +48,7 @@
         <mvc:interceptor>
             <mvc:mapping path="/**" />
             	<mvc:exclude-mapping path="/" />
+            	<mvc:exclude-mapping path="/sessionOut.do" />
             	<mvc:exclude-mapping path="/login.do" />
             	<mvc:exclude-mapping path="/loginAction.do" />
             	<mvc:exclude-mapping path="/logout.do" />

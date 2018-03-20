@@ -101,26 +101,32 @@ function fn_securityPolicyOptionSelect01(){
 			}
 		},
 		success : function(data) {
-			for(var i=0; i<data.length; i++){
-				if(data[i].configKey == "GLOBAL_POLICY_DEFAULT_ACCESS_ALLOW_TF" && data[i].configValue== "1"){
-					$("#GLOBAL_POLICY_DEFAULT_ACCESS_ALLOW_TF").attr('checked', true);
-				}if(data[i].configKey == "GLOBAL_POLICY_FORCED_LOGGING_OFF_TF" && data[i].configValue== "1"){
-					$("#GLOBAL_POLICY_FORCED_LOGGING_OFF_TF").attr('checked', true);
-				}if(data[i].configKey == "GLOBAL_POLICY_BOOST_TF" && data[i].configValue== "true"){
-					$("#GLOBAL_POLICY_BOOST_TF").attr('checked', true);
-				}if(data[i].configKey == "GLOBAL_POLICY_CRYPT_LOG_TM_RESOLUTION"){
-					$("#GLOBAL_POLICY_CRYPT_LOG_TM_RESOLUTION").val(data[i].configValue);
-				}if(data[i].configKey == "GLOBAL_POLICY_CRYPT_LOG_COMPRESS_LIMIT"){
-					$("#GLOBAL_POLICY_CRYPT_LOG_COMPRESS_LIMIT").val(data[i].configValue);
-				}if(data[i].configKey == "GLOBAL_POLICY_CRYPT_LOG_COMPRESS_FLUSH_TIMEOUT"){
-					$("#GLOBAL_POLICY_CRYPT_LOG_COMPRESS_FLUSH_TIMEOUT").val(data[i].configValue);
-				}if(data[i].configKey == "GLOBAL_POLICY_CRYPT_LOG_COMPRESS_INITIAL"){
-					$("#GLOBAL_POLICY_CRYPT_LOG_COMPRESS_INITIAL").val(data[i].configValue);
-				}if(data[i].configKey == "GLOBAL_POLICY_CRYPT_LOG_COMPRESS_PRINT_PERIOD"){
-					$("#GLOBAL_POLICY_CRYPT_LOG_COMPRESS_PRINT_PERIOD").val(data[i].configValue);
+			if(data.resultCode == "0000000000"){
+				for(var i=0; i<data.list.length; i++){
+					if(data.list[i].configKey == "GLOBAL_POLICY_DEFAULT_ACCESS_ALLOW_TF" && data.list[i].configValue== "1"){
+						$("#GLOBAL_POLICY_DEFAULT_ACCESS_ALLOW_TF").attr('checked', true);
+					}if(data.list[i].configKey == "GLOBAL_POLICY_FORCED_LOGGING_OFF_TF" && data.list[i].configValue== "1"){
+						$("#GLOBAL_POLICY_FORCED_LOGGING_OFF_TF").attr('checked', true);
+					}if(data.list[i].configKey == "GLOBAL_POLICY_BOOST_TF" && data.list[i].configValue== "true"){
+						$("#GLOBAL_POLICY_BOOST_TF").attr('checked', true);
+					}if(data.list[i].configKey == "GLOBAL_POLICY_CRYPT_LOG_TM_RESOLUTION"){
+						$("#GLOBAL_POLICY_CRYPT_LOG_TM_RESOLUTION").val(data.list[i].configValue);
+					}if(data.list[i].configKey == "GLOBAL_POLICY_CRYPT_LOG_COMPRESS_LIMIT"){
+						$("#GLOBAL_POLICY_CRYPT_LOG_COMPRESS_LIMIT").val(data.list.list[i].configValue);
+					}if(data.list[i].configKey == "GLOBAL_POLICY_CRYPT_LOG_COMPRESS_FLUSH_TIMEOUT"){
+						$("#GLOBAL_POLICY_CRYPT_LOG_COMPRESS_FLUSH_TIMEOUT").val(data.list[i].configValue);
+					}if(data.list[i].configKey == "GLOBAL_POLICY_CRYPT_LOG_COMPRESS_INITIAL"){
+						$("#GLOBAL_POLICY_CRYPT_LOG_COMPRESS_INITIAL").val(data.list[i].configValue);
+					}if(data.list[i].configKey == "GLOBAL_POLICY_CRYPT_LOG_COMPRESS_PRINT_PERIOD"){
+						$("#GLOBAL_POLICY_CRYPT_LOG_COMPRESS_PRINT_PERIOD").val(data.list[i].configValue);
+					}
 				}
+			}else if(data.resultCode == "8000000003"){
+				alert(data.resultMessage);
+				location.href = "/securityKeySet.do";
+			}else{
+				alert("resultCode : " + data.resultCode + " resultMessage : " + data.resultMessage);			
 			}
-
 		}
 	});	
 }
@@ -148,37 +154,39 @@ function fn_securityPolicyOptionSelect02(){
 			}
 		},
 		success : function(data) {
-			$("#logTransferWaitTime").val(data[1].logTransferWaitTime);
+			if(data.resultCode == "0000000000"){
+				$("#logTransferWaitTime").val(data.list[1].logTransferWaitTime);
+				
+				if(data.list[0].blnIsvalueTrueFalse == true){
+					$("#blnIsvalueTrueFalse").attr('checked', true);
+				}
 			
-			if(data[0].blnIsvalueTrueFalse == true){
-				$("#blnIsvalueTrueFalse").attr('checked', true);
-			}
-		
-			if(data[0].day0 == true){
-				$("#mon").attr('checked', true);
-			}			
-			if(data[0].day1 == true){
-				$("#tue").attr('checked', true);
-			}						
-			if(data[0].day2 == true){
-				$("#wed").attr('checked', true);
-			}		
-			if(data[0].day3 == true){
-				$("#thu").attr('checked', true);
-			}		
-			if(data[0].day4 == true){
-				$("#fri").attr('checked', true);
-			}
-			if(data[0].day5 == true){
-				$("#sat").attr('checked', true);
-			}
-			if(data[0].day6 == true){
-				$("#sun").attr('checked', true);
-			}
+				if(data.list[0].day0 == true){
+					$("#mon").attr('checked', true);
+				}			
+				if(data.list[0].day1 == true){
+					$("#tue").attr('checked', true);
+				}						
+				if(data.list[0].day2 == true){
+					$("#wed").attr('checked', true);
+				}		
+				if(data.list[0].day3 == true){
+					$("#thu").attr('checked', true);
+				}		
+				if(data.list[0].day4 == true){
+					$("#fri").attr('checked', true);
+				}
+				if(data.list[0].day5 == true){
+					$("#sat").attr('checked', true);
+				}
+				if(data.list[0].day6 == true){
+					$("#sun").attr('checked', true);
+				}
 
-			document.getElementById('start_exe_h').value=data[0].transferStart;
-			document.getElementById('stop_exe_h').value=data[0].transferStop;
-
+				document.getElementById('start_exe_h').value=data.list[0].transferStart;
+				document.getElementById('stop_exe_h').value=data.list[0].transferStop;
+				
+			}	
 		}
 	});	
 }
@@ -239,13 +247,15 @@ function fn_save(){
 			}
 		},
 		success : function(data) {
-			if(data.resultCode == 0000000000){
-				alert(data.resultMessage);
+			if(data.resultCode == "0000000000"){
+				alert("등록되었습니다.")
 				location.reload();
-			}else{
+			}else if(data.resultCode == "8000000003"){
 				alert(data.resultMessage);
-				return false;
-			}
+				location.href = "/securityKeySet.do";
+			}else{
+				alert("resultCode : " + data.resultCode + " resultMessage : " + data.resultMessage);			
+			}	
 		}
 	});	
 }
@@ -262,6 +272,9 @@ function fn_save(){
 margin-right: 10px;
 }
 </style>
+
+<form name='isServerKeyEmpty' method='post' target='main' action='/securityKeySet.do'></form>
+
 
 <div id="contents">
 	<div class="contents_wrap">

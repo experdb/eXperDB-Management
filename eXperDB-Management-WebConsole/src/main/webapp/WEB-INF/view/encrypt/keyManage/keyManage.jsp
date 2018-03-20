@@ -107,10 +107,10 @@ var table = null;
 					table.clear().draw();
 					table.rows.add(data.list).draw();
 				}else if(data.resultCode == "8000000003"){
-					var frm = document.isServerKeyEmpty;
-					frm.submit();	
+					alert( data.resultMessage);
+					location.href = "/securityKeySet.do";
 				}else{
-					alert("resultCode : " + resultCode + " resultMessage : " + resultMessage);			
+					alert("resultCode : " + data.resultCode + " resultMessage : " + data.resultMessage);			
 				}
 			}
 		});
@@ -202,14 +202,16 @@ var table = null;
 						alert("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""));
 					}
 				},
-				success : function(data) {			
-					if(data.resultCode == 0000000000){
-						alert(data.resultMessage);
+				success : function(data) {
+					if(data.resultCode == "0000000000"){
+						alert("삭제되었습니다.")
 						location.reload();
-					}else{
+					}else if(data.resultCode == "8000000003"){
 						alert(data.resultMessage);
-						return false;
-					}
+						location.href = "/securityKeySet.do";
+					}else{
+						alert("resultCode : " + data.resultCode + " resultMessage : " + data.resultMessage);			
+					}				
 				}
 			});
  		}	
@@ -226,7 +228,6 @@ var table = null;
 	<input type="hidden" name="cipherAlgorithmCode"  id="cipherAlgorithmCode">
 </form>
 
-<form name='isServerKeyEmpty' method='post' target='main' action='/securityKeySet.do'></form>
 
 <!-- contents -->
 <div id="contents">
