@@ -102,9 +102,16 @@ var table = null;
 					alert("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""));
 				}
 			},
-			success : function(data) {				
-				table.clear().draw();
-				table.rows.add(data.data).draw();
+			success : function(data) {		
+				if(data.resultCode == "0000000000"){
+					table.clear().draw();
+					table.rows.add(data.list).draw();
+				}else if(data.resultCode == "8000000003"){
+					var frm = document.isServerKeyEmpty;
+					frm.submit();	
+				}else{
+					alert("resultCode : " + resultCode + " resultMessage : " + resultMessage);			
+				}
 			}
 		});
 	}
@@ -218,6 +225,8 @@ var table = null;
 	<input type="hidden" name="cipherAlgorithmName"  id="cipherAlgorithmName">
 	<input type="hidden" name="cipherAlgorithmCode"  id="cipherAlgorithmCode">
 </form>
+
+<form name='isServerKeyEmpty' method='post' target='main' action='/securityKeySet.do'></form>
 
 <!-- contents -->
 <div id="contents">

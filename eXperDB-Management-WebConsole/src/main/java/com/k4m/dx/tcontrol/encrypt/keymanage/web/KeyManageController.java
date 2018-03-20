@@ -1,6 +1,7 @@
 package com.k4m.dx.tcontrol.encrypt.keymanage.web;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import org.json.simple.JSONArray;
@@ -165,7 +166,7 @@ public class KeyManageController {
 	 * @throws Exception
 	 */
 	@RequestMapping(value = "/selectCryptoKeyList.do")
-	public @ResponseBody JSONObject selectCryptoKeyList(HttpServletRequest request) {
+	public @ResponseBody JSONObject selectCryptoKeyList(HttpServletRequest request, HttpServletResponse response) {
 			
 		KeyManageServiceCall kmsc= new KeyManageServiceCall();
 		JSONObject result = new JSONObject();
@@ -178,6 +179,7 @@ public class KeyManageController {
 			String entityId = (String)session.getAttribute("ectityUid");	
 			
 			result = kmsc.selectCryptoKeyList(restIp, restPort, strTocken,loginId,entityId);
+			
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -323,7 +325,7 @@ public class KeyManageController {
 	 * @throws Exception
 	 */
 	@RequestMapping(value = "/deleteCryptoKeySymmetric.do")
-	public @ResponseBody JSONObject deleteCryptoKeySymmetric(HttpServletRequest request) {
+	public @ResponseBody JSONObject deleteCryptoKeySymmetric(HttpServletRequest request, HttpServletResponse response) {
 		JSONObject result = new JSONObject();
 		try{
 			String keyUid = request.getParameter("keyUid");

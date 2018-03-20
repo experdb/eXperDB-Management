@@ -61,15 +61,15 @@ public class KeyManageServiceCall {
 		
 		
 		String resultCode = (String) resultJson.get("resultCode");
-		String resultMessage = (String) resultJson.get("resultMessage");
-		long totalListCount = (long) resultJson.get("totalListCount");
+		String resultMessage =new String(resultJson.get("resultMessage").toString().getBytes("iso-8859-1"),"UTF-8");
+		//long totalListCount = (long) resultJson.get("totalListCount");
 		
 		
 		if(resultCode.equals("0000000000")) {
 			ArrayList list = (ArrayList) resultJson.get("list");
 			
 			//System.out.println("list Size : " + list.size());
-			if(totalListCount > 0) {
+			//if(totalListCount > 0) {
 				for(int i=0; i<list.size(); i++) {
 					JSONObject data = (JSONObject) list.get(i);
 					
@@ -121,9 +121,14 @@ public class KeyManageServiceCall {
 					bf.append((i+1) + "변경 일시 : " + new String(cryptoKey.getUpdateName().toString().getBytes("iso-8859-1"),"UTF-8")); 
 					}
 					System.out.println(bf.toString());
-				}
-				result.put("data", jsonArray);
+				//}
+				result.put("resultCode", resultCode);
+				result.put("resultMessage", resultMessage);
+				result.put("list", jsonArray);
 			}
+		}else{
+			result.put("resultCode", resultCode);
+			result.put("resultMessage", resultMessage);
 		}
 		return result;
 	}
@@ -241,7 +246,7 @@ public class KeyManageServiceCall {
 		}
 				
 		String resultCode = (String) resultJson.get("resultCode");
-		String resultMessage = (String) resultJson.get("resultMessage");
+		String resultMessage = new String(resultJson.get("resultMessage").toString().getBytes("iso-8859-1"),"UTF-8");
 		long totalListCount = (long) resultJson.get("totalListCount");
 		
 		
