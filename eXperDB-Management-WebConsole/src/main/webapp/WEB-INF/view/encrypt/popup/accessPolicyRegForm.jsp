@@ -185,7 +185,7 @@ function NumObj(obj) {
 	if (event.keyCode >= 48 && event.keyCode <= 57) {
 		return true;
 	} else {
-		event.returnValue = false;
+		(event.preventDefault) ? event.preventDefault() : event.returnValue = false;
 	}
 }
 

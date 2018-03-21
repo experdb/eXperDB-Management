@@ -95,7 +95,7 @@ public class SecurityPolicyController {
 			int restPort = (int)session.getAttribute("restPort");
 			String strTocken = (String)session.getAttribute("tockenValue");
 			String loginId = (String)session.getAttribute("usr_id");
-			String entityId = (String)session.getAttribute("ectityUid");	
+			String entityId = (String)session.getAttribute("ectityUid");
 			
 			result = sic.selectProfileList(restIp,restPort,strTocken,loginId,entityId);
 		} catch (Exception e) {

@@ -86,9 +86,9 @@ function fu_insertCryptoKeySymmetric(){
 <body>
 	<div class="pop_container">
 		<div class="pop_cts">
-			<p class="tit">암복호화 키 등록</p>
+			<p class="tit">암호화 키 등록</p>
 				<table class="write">
-					<caption>암복호화 키 등록</caption>
+					<caption>암호화 키 등록</caption>
 					<colgroup>
 						<col style="width: 130px;" />
 						<col />

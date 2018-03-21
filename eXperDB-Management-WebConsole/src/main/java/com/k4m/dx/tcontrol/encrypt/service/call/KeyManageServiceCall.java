@@ -62,18 +62,18 @@ public class KeyManageServiceCall {
 		
 		String resultCode = (String) resultJson.get("resultCode");
 		String resultMessage =new String(resultJson.get("resultMessage").toString().getBytes("iso-8859-1"),"UTF-8");
-		long totalListCount = (long) resultJson.get("totalListCount");
+//		long totalListCount = (long) resultJson.get("totalListCount");
 		
 		if(resultCode.equals("0000000000")) {
 			
 			ArrayList list = (ArrayList) resultJson.get("list");
 			
-			if(totalListCount > 0) {
+			if(list != null) {
 				for(int i=0; i<list.size(); i++) {
 					JSONObject data = (JSONObject) list.get(i);
 					
 					JSONObject jsonObj = new JSONObject();
-					
+					                          
 					Gson gson = new Gson();
 					CryptoKey cryptoKey = new CryptoKey();
 					cryptoKey = gson.fromJson(data.toJSONString(), cryptoKey.getClass());

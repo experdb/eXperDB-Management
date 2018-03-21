@@ -238,7 +238,7 @@
 		if (event.keyCode >= 48 && event.keyCode <= 57) { //숫자키만 입력
 			return true;
 		} else {
-			event.returnValue = false;
+			(event.preventDefault) ? event.preventDefault() : event.returnValue = false;
 		}
 	}
 

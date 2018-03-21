@@ -215,9 +215,9 @@ function fn_historyCryptoKeySymmetric(){
 <body>
 	<div class="pop_container">
 		<div class="pop_cts">
-			<p class="tit">암복호화 키 수정</p>
+			<p class="tit">암호화 키 수정</p>
 				<table class="write">
-					<caption>암복호화 키 수정</caption>
+					<caption>암호화 키 수정</caption>
 					<colgroup>
 						<col style="width: 130px;" />
 						<col />

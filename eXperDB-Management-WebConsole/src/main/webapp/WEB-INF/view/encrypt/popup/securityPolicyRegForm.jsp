@@ -48,7 +48,7 @@ function NumObj(obj) {
 	if (event.keyCode >= 48 && event.keyCode <= 57) {
 		return true;
 	} else {
-		event.returnValue = false;
+		(event.preventDefault) ? event.preventDefault() : event.returnValue = false;
 	}
 }
 
@@ -102,7 +102,7 @@ function fn_save(){
 		window.close();
 	}else{
 		$('#length').val('');
-		$("#last").prop('checked', false) ;
+		$("#last").prop('checked', false);
 		$('#length').attr('disabled', false);
 		alert("길이가 [끝까지]인 경우는 하나의 시작위치에만 지정할 수 있습니다.");
 	}
@@ -164,12 +164,12 @@ function fn_changeBinUid(selectObj){
 				<tbody>
 					<tr>
 						<th scope="row" class="ico_t1">시작위치</th>
-						<td><input type="text" class="txt" name="offset" id="offset" onKeyPress="NumObj(this);" value="${offset}"/></td>
+						<td><input type="text" class="txt" name="offset" id="offset" maxlength="3" onKeyPress="NumObj(this);" value="${offset}"/></td>
 					</tr>
 					<tr>
 						<th scope="row" class="ico_t1">길이</th>
 						<td>
-							<input type="text" class="txt" name="length" id="length" onKeyPress="NumObj(this);"/> 
+							<input type="text" class="txt" name="length" id="length" maxlength="4" onKeyPress="NumObj(this);"/> 
 							<div class="inp_chk">
 								<input type="checkbox" id="last" name="last" onchange="fn_lastCheck()"/>
 								<label for="last">끝까지</label>	
