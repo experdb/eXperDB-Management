@@ -191,6 +191,12 @@ function NumObj(obj) {
 
 /*validation 체크*/
 function fn_validation(){
+	var specName = document.getElementById('specName');
+	if (specName.value == "" || specName.value == "undefind" || specName.value == null) {
+		alert("규칙이름을 입력해주세요.");
+		specName.focus();
+		return false;
+	}
 	
 	var startDateTime = document.getElementById('startDateTime');
 	if (startDateTime.value == "" || startDateTime.value == "undefind" || startDateTime.value == null) {
