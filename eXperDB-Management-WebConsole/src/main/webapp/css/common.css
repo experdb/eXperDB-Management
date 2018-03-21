@@ -611,7 +611,7 @@ body.bg{background:#fff url(../images/login_bg.png) center center no-repeat;}
 -------------------------------------------------------------- */
 #lnb_menu{position:fixed;left:0;top:77px;width:240px;height:100%;z-index:10;}
 #lnb_menu .logout{padding:20px 0 19px;text-align:center;}
-#lnb_menu .logout button{width:78px;height:22px;line-height:18px;background:#1e1905;border:1px solid #636363;color:#fff;font-size:10px;cursor:pointer;}
+#lnb_menu .logout button{width:78px;height:23px;line-height:18px;background:#1e1905;border:1px solid #636363;color:#fff;font-size:13px;cursor:pointer;}
 #lnb_menu .all_btn{position:absolute;top:50%;right:0;margin-top:-7.5px;}
 #lnb_menu .all_btn a{display:inline-block;width:16px;height:13px;text-indent:-9999em;}
 #lnb_menu .all_btn .all_close{background:url(../images/ico_lnb_close.png) 0 0 no-repeat;}
