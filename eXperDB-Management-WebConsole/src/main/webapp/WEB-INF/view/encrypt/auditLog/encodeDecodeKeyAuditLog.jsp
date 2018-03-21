@@ -149,7 +149,7 @@
 					alert(data.resultMessage);
 					location.href="/securityKeySet.do";
 				}else{
-					alert("resultCode : " + data.resultCode + " resultMessage : " + data.resultMessage);			
+					alert(data.resultMessage +"("+data.resultCode+")");		
 				}
 			}
 			
@@ -191,7 +191,7 @@
 					alert(data.resultMessage);
 					location.href="/securityKeySet.do";
 				}else{
-					alert("resultCode : " + data.resultCode + " resultMessage : " + data.resultMessage);			
+					alert(data.resultMessage +"("+data.resultCode+")");	
 				}
 			}
 			

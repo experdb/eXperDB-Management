@@ -145,7 +145,7 @@ function fn_securityPolicyOptionSelect01(){
 				alert(data.resultMessage);
 				location.href = "/securityKeySet.do";
 			}else{
-				alert("resultCode : " + data.resultCode + " resultMessage : " + data.resultMessage);			
+				alert(data.resultMessage +"("+data.resultCode+")");
 			}
 		}
 	});	
@@ -278,7 +278,7 @@ function fn_save(){
 				alert(data.resultMessage);
 				location.href = "/securityKeySet.do";
 			}else{
-				alert("resultCode : " + data.resultCode + " resultMessage : " + data.resultMessage);			
+				alert(data.resultMessage +"("+data.resultCode+")");
 			}	
 		}
 	});	

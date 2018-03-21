@@ -90,7 +90,18 @@ function fn_mstKeyRenew(){
 	}	
 }
 
+function fn_validation(){
+	var db_svr_nm = document.getElementById("db_svr_nm");
+	if (db_svr_nm.value == "") {
+		   alert('<spring:message code="message.msg85" />');
+		   db_svr_nm.focus();
+		   return false;
+	}
+}
+
 function fn_save(){	
+	
+	
 	mstKeyRenewChk =  $("#mstKeyRenew").prop("checked");
 	mstKeyUseChk = $("#mstKeyUse").prop("checked");
 
@@ -157,7 +168,7 @@ function fn_keyFileLoadServerKey(){
 			if(data.resultCode == "0000000000"){
 				alert("서버 마스터키 암호가 입력되었습니다.");
 			}else{
-				alert("resultCode : " + data.resultCode + " resultMessage : " + data.resultMessage);			
+				alert(data.resultMessage +"("+data.resultCode+")");
 			}
 		}
 	});

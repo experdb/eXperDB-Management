@@ -102,7 +102,7 @@ var table = null;
 					alert(data.resultMessage);
 					location.href="/securityKeySet.do";
 				}else{
-					alert("resultCode : " + data.resultCode + " resultMessage : " + data.resultMessage);			
+					alert(data.resultMessage +"("+data.resultCode+")");
 				}
 			}
 		});
@@ -138,7 +138,7 @@ var table = null;
 					alert(data.resultMessage);
 					location.href="/securityKeySet.do";
 				}else{
-					alert("resultCode : " + data.resultCode + " resultMessage : " + data.resultMessage);			
+					alert(data.resultMessage +"("+data.resultCode+")");	
 				}
 			}
 		});
@@ -202,7 +202,7 @@ var table = null;
 						alert(data.resultMessage);
 						location.href="/securityKeySet.do";
 					}else{
-						alert("resultCode : " + data.resultCode + " resultMessage : " + data.resultMessage);			
+						alert(data.resultMessage +"("+data.resultCode+")");	
 					}
 				}
 			});
