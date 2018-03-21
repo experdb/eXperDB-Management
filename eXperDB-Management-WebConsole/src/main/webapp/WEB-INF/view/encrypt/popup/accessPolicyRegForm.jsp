@@ -323,31 +323,31 @@ function fn_update(){
 					<tbody>
 						<tr>
 							<th scope="row" class="ico_t1">규칙이름</th>
-							<td><input type="text" class="txt" name="specName" id="specName" /></td>
+							<td><input type="text" class="txt" name="specName" id="specName" maxlength="40" onkeyup="fn_checkWord(this,40)" placeholder="40<spring:message code='message.msg188'/>"/></td>
 							<th scope="row" class="ico_t1">서버인스턴스</th>
-							<td><input type="text" class="txt" name="serverInstanceId" id="serverInstanceId" /></td>
+							<td><input type="text" class="txt" name="serverInstanceId" id="serverInstanceId" maxlength="40" onkeyup="fn_checkWord(this,40)" placeholder="40<spring:message code='message.msg188'/>"/></td>
 						</tr>
 						<tr>
 							<th scope="row" class="ico_t1">DB 사용자</th>
-							<td><input type="text" class="txt" name="serverLoginId" id="serverLoginId" /></td>
+							<td><input type="text" class="txt" name="serverLoginId" id="serverLoginId" maxlength="40" onkeyup="fn_checkWord(this,40)" placeholder="40<spring:message code='message.msg188'/>"/></td>
 							<th scope="row" class="ico_t1">experDB사용자</th>
-							<td><input type="text" class="txt" name="adminLoginId" id="adminLoginId" /></td>
+							<td><input type="text" class="txt" name="adminLoginId" id="adminLoginId" maxlength="40" onkeyup="fn_checkWord(this,40)" placeholder="40<spring:message code='message.msg188'/>"/></td>
 						</tr>
 						<tr>
 							<th scope="row" class="ico_t1">OS 사용자</th>
-							<td><input type="text" class="txt" name="osLoginId" id="osLoginId" /></td>
+							<td><input type="text" class="txt" name="osLoginId" id="osLoginId" maxlength="40" onkeyup="fn_checkWord(this,40)" placeholder="40<spring:message code='message.msg188'/>"/></td>
 							<th scope="row" class="ico_t1">프로그램이름</th>
-							<td><input type="text" class="txt" name="applicationName" id="applicationName" /></td>
+							<td><input type="text" class="txt" name="applicationName" id="applicationName" maxlength="40" onkeyup="fn_checkWord(this,40)" placeholder="40<spring:message code='message.msg188'/>"/></td>
 						</tr>
 						<tr>
 							<th scope="row" class="ico_t1">접근IP주소</th>
-							<td><input type="text" class="txt" name="accessAddress" id="accessAddress" /></td>
+							<td><input type="text" class="txt" name="accessAddress" id="accessAddress" maxlength="20" onkeyup="fn_checkWord(this,20)" placeholder="20<spring:message code='message.msg188'/>"/></td>
 							<th scope="row" class="ico_t1">IP 주소 마스크</th>
-							<td><input type="text" class="txt" name="accessAddressMask" id="accessAddressMask" /></td>
+							<td><input type="text" class="txt" name="accessAddressMask" id="accessAddressMask" maxlength="20" onkeyup="fn_checkWord(this,20)" placeholder="20<spring:message code='message.msg188'/>"/></td>
 						</tr>
 						<tr>
 							<th scope="row" class="ico_t1">접근 MAC 주소</th>
-							<td><input type="text" class="txt" name="accessMacAddress" id="accessMacAddress" /></td>
+							<td><input type="text" class="txt" name="accessMacAddress" id="accessMacAddress" maxlength="20" onkeyup="fn_checkWord(this,20)" placeholder="20<spring:message code='message.msg188'/>"/></td>
 						</tr>
 						<tr>
 							<th scope="row" class="ico_t1">기간</th>
@@ -360,8 +360,8 @@ function fn_update(){
 								&nbsp&nbsp&nbsp&nbsp&nbsp ~ &nbsp&nbsp&nbsp&nbsp&nbsp 
 								<span id="calendar"> 
 									<span class="calendar_area big"> 
-									<a href="#n" class="calendar_btn">달력열기</a> 
-									<input type="text" class="calendar" id="endDateTime" name="dt" title="스케줄시간설정" />
+										<a href="#n" class="calendar_btn">달력열기</a> 
+										<input type="text" class="calendar" id="endDateTime" name="dt" title="스케줄시간설정" />
 									</span>
 								</span>
 							</td>
@@ -398,7 +398,6 @@ function fn_update(){
 									
 									<input type="checkbox" id="SATURDAY" name="workDay" value="토"/>
 									<label for="SATURDAY" style="color: blue;">토</label>
-
 								</div>
 							</td>
 						</tr>
@@ -411,9 +410,9 @@ function fn_update(){
 						</tr>
 						<tr>
 							<th scope="row" class="ico_t1">추가필드</th>
-							<td><input type="text" class="txt" name="extraName" id="extraName" /></td>
+							<td><input type="text" class="txt" name="extraName" id="extraName" maxlength="40" onkeyup="fn_checkWord(this,40)" placeholder="40<spring:message code='message.msg188'/>"/></td>
 							<th scope="row" class="ico_t1">호스트이름</th>
-							<td><input type="text" class="txt" name="hostName" id="hostName" /></td>
+							<td><input type="text" class="txt" name="hostName" id="hostName" maxlength="40" onkeyup="fn_checkWord(this,40)" placeholder="40<spring:message code='message.msg188'/>"/></td>
 						</tr>
 						<tr>
 							<th scope="row" class="ico_t1">규칙 만족할 때</th>

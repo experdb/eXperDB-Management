@@ -41,8 +41,31 @@ $(window.document).ready(function() {
 	$("#datepicker3").datepicker();
 });
 
-function fu_insertCryptoKeySymmetric(){
+/*validation 체크*/
+function fn_validation(){
+	var resourcename = document.getElementById('ResourceName');
+	var CipherAlgorithmCode = document.getElementById('CipherAlgorithmCode');
+	var datepicker3 = document.getElementById('datepicker3');
 	
+	if (resourcename.value == "" || resourcename.value == "undefind" || resourcename.value == null) {
+		alert("암호화 키 이름을 입력해주세요.");
+		resourcename.focus();
+		return false;
+	}
+	if (CipherAlgorithmCode.value == "" || CipherAlgorithmCode.value == "undefind" || CipherAlgorithmCode.value == null) {
+		alert("적용 알고리즘을 선택해주세요.");
+		return false;
+	}
+	if (datepicker3.value == "" || datepicker3.value == "undefind" || datepicker3.value == null) {
+		alert("유효기간 만료일을 입력해주세요.");
+		return false;
+	}
+	return true;
+}
+
+
+function fu_insertCryptoKeySymmetric(){
+	if (!fn_validation()) return false;
 	$.ajax({
 		url : "/insertCryptoKeySymmetric.do", 
 	  	data : {
@@ -96,7 +119,7 @@ function fu_insertCryptoKeySymmetric(){
 					<tbody>
 						<tr>
 							<th scope="row" class="ico_t1">암호화 키 이름</th>
-							<td><input type="text" class="txt" name="ResourceName" id="ResourceName" /></td>
+							<td><input type="text" class="txt" name="ResourceName" id="ResourceName" maxlength="20" onkeyup="fn_checkWord(this,20)" placeholder="20<spring:message code='message.msg188'/>"/></td>
 						</tr>
 						<tr>
 							<th scope="row" class="ico_t1">적용 알고리즘</th>
@@ -111,7 +134,7 @@ function fu_insertCryptoKeySymmetric(){
 						</tr>
 						<tr>
 							<th scope="row" class="ico_t1">암호화 키 설명</th>
-							<td><input type="text" class="txt" name="ResourceNote" id="ResourceNote" /></td>
+							<td><input type="text" class="txt" name="ResourceNote" id="ResourceNote" maxlength="100" onkeyup="fn_checkWord(this,100)" placeholder="100<spring:message code='message.msg188'/>"/></td>
 						</tr>
 						<tr>
 							<th scope="row" class="ico_t1">유효기간 만료일</th>

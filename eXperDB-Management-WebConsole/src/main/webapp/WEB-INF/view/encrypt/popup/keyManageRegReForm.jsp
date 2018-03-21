@@ -80,7 +80,7 @@ function fn_init(){
 		scrollX: true,
 		bSort: false,
 		columns : [
-		{ data : "no", className : "dt-center", defaultContent : ""}, 
+		{ data : "no", className : "dt-center", defaultContent : ""},
 		{ data : "version", className : "dt-center", defaultContent : ""},
 		{ data : "keyStatusName", className : "dt-center", defaultContent : ""},
 		{ data : "validEndDateTime", className : "dt-center", defaultContent : ""},
@@ -239,7 +239,7 @@ function fn_historyCryptoKeySymmetric(){
 						</tr>
 						<tr>
 							<th scope="row" class="ico_t1">암호화 키 설명</th>
-							<td><input type="text" class="txt" name="resourceNote" id="resourceNote"  value="${resourceNote}" /></td>
+							<td><input type="text" class="txt" name="resourceNote" id="resourceNote"  value="${resourceNote}" maxlength="100" onkeyup="fn_checkWord(this,100)" placeholder="100<spring:message code='message.msg188'/>"/></td>
 						</tr>
 						
 						<tr>
@@ -278,8 +278,8 @@ function fn_historyCryptoKeySymmetric(){
 								<th width="80">수정자</th>
 								<th width="130">수정일시</th>
 							</tr>
-							</thead>
-						</table>											
+						</thead>
+					</table>											
 				</div>	
 				<div class="btn_type_02">
 					<a href="#n" class="btn" onclick="fn_keyManagementModify();"><span>저장</span></a>

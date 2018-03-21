@@ -598,11 +598,11 @@
 						<tbody>
 							<tr>
 								<th scope="row" class="ico_t1">보안정책이름(*)</th>
-								<td><input type="text" class="txt t2" name="profileName" id="profileName" /></td>
+								<td><input type="text" class="txt t2" name="profileName" id="profileName" maxlength="20" onkeyup="fn_checkWord(this,20)" placeholder="20<spring:message code='message.msg188'/>"/></td>
 							</tr>
 							<tr>
 								<th scope="row" class="ico_t1">보안정책설명</th>
-								<td><textarea class="tbd1" name="profileNote" id="profileNote"></textarea></td>
+								<td><textarea class="tbd1" name="profileNote" id="profileNote" maxlength="100" onkeyup="fn_checkWord(this,100)" placeholder="100<spring:message code='message.msg188'/>"></textarea></td>
 							</tr>
 						</tbody>
 					</table>

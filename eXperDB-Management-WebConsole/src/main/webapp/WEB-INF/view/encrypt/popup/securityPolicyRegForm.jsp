@@ -64,17 +64,14 @@ function fn_validation(){
 		offset.focus();
 		return false;
 	}
-	
 	if($("input:checkbox[id='last']").is(":checked")){
 		$('#length').val('끝까지');
 	}
-	
 	if (length.value == "" || length.value == "undefind" || length.value == null) {
 		alert("길이를 입력해주세요.");
 		length.focus();
 		return false;
 	}
-	
 	if (binUid.value == "" || binUid.value == "undefind" || binUid.value == null) {
 		alert("암호화키를 먼저 등록해주세요.");
 		return false;
@@ -164,7 +161,7 @@ function fn_changeBinUid(selectObj){
 				<tbody>
 					<tr>
 						<th scope="row" class="ico_t1">시작위치</th>
-						<td><input type="text" class="txt" name="offset" id="offset" maxlength="3" onKeyPress="NumObj(this);" value="${offset}"/></td>
+						<td><input type="text" class="txt" name="offset" id="offset" maxlength="4" onKeyPress="NumObj(this);" value="${offset}"/></td>
 					</tr>
 					<tr>
 						<th scope="row" class="ico_t1">길이</th>
@@ -214,7 +211,6 @@ function fn_changeBinUid(selectObj){
 					</tr>
 				</tbody>
 			</table>
-
 			<div class="btn_type_02">
 				<c:if test="${act == 'i'}">
 					<a href="#n" class="btn"><span onclick="fn_save()">저장</span></a> 
