@@ -91,16 +91,65 @@ function fn_mstKeyRenew(){
 }
 
 function fn_validation(){
-	var db_svr_nm = document.getElementById("db_svr_nm");
-	if (db_svr_nm.value == "") {
-		   alert('<spring:message code="message.msg85" />');
-		   db_svr_nm.focus();
-		   return false;
+	mstKeyUseChk = $("#mstKeyUse").prop("checked");
+	
+	if(pnlOldPasswordView == true){
+		//마스터키 파일 사용시
+		if(mstKeyUseChk == true){
+			var mstKeyPth = document.getElementById("mstKeyPth");
+			if (mstKeyPth.value == "") {
+				   alert('마스터키 파일을 선택해주세요.');
+				   mstKeyPth.focus();
+				   return false;
+			}			
+		}		
+			var mstKeyPassword = document.getElementById("mstKeyPassword");
+			if (mstKeyPassword.value == "") {
+				   alert('<spring:message code="message.msg129" />');
+				   mstKeyPassword.focus();
+				   return false;
+			}			
+			if (mstKeyPassword.value.length < 8 ) {
+				   alert('비밀번호 8자리 이상 입력해주세요.');
+				   mstKeyPassword.focus();
+				   return false;
+			}
+			
 	}
+	
+
+	if(pnlNewPasswordView == true){
+		var mstKeyRenewPassword = document.getElementById("mstKeyRenewPassword");
+		if (mstKeyRenewPassword.value == "") {
+			   alert('<spring:message code="message.msg111" />');
+			   mstKeyRenewPassword.focus();
+			   return false;
+		}
+		var mstKeyRenewPasswordconfirm = document.getElementById("mstKeyRenewPasswordconfirm");
+		if (mstKeyRenewPasswordconfirm.value == "") {
+			   alert('<spring:message code="message.msg111" />');
+			   mstKeyRenewPasswordconfirm.focus();
+			   return false;
+		}
+		
+		if (mstKeyRenewPassword.value.length < 8 ) {
+			   alert('비밀번호 8자리 이상 입력해주세요.');
+			   mstKeyRenewPassword.focus();
+			   return false;
+		}
+		
+		if($("#mstKeyRenewPassword").val() != $("#mstKeyRenewPasswordconfirm").val()){
+			alert('<spring:message code="message.msg112" />');
+			return false;
+		}
+		
+	}
+
 }
 
 function fn_save(){	
 	
+	if (!fn_validation()) return false;
 	
 	mstKeyRenewChk =  $("#mstKeyRenew").prop("checked");
 	mstKeyUseChk = $("#mstKeyUse").prop("checked");
@@ -112,10 +161,6 @@ function fn_save(){
 			var chk = false;
 		}
 		
-		if($("#mstKeyRenewPassword").val() != $("#mstKeyRenewPasswordconfirm").val()){
-			alert("비밀번호가 일치하지 않습니다.");
-			return false;
-		}else{
 			//새로운 마스터키 파일 생성
 			if($("#mstKeyMode").val() == "0000"){
 				fn_newMasterKey("y",chk);
@@ -123,8 +168,7 @@ function fn_save(){
 			}else{
 				fn_newMasterKey("n",chk);
 			}
-		}
-		
+				
 	}else{		
 		if(pnlOldPasswordView == true){
 			if(mstKeyUseChk == true){
@@ -307,7 +351,7 @@ function fn_mstKeyDownload(){
 								<tr>
 									<th scope="row" class="ico_t2">비밀번호</th>
 									<td>
-										<input type="password" name="mstKeyPassword" id="mstKeyPassword" class="txt t2" />										
+										<input type="password" name="mstKeyPassword" id="mstKeyPassword" class="txt t2"  onkeyup="fn_checkWord(this,8)" placeholder="8자리 이상 입력해 주세요"/>										
 									</td>
 								</tr>
 							</tbody>
@@ -360,13 +404,13 @@ function fn_mstKeyDownload(){
 								<tr>
 									<th scope="row" class="ico_t2">비밀번호</th>
 									<td>
-										<input type="password" name="mstKeyRenewPassword" id="mstKeyRenewPassword" class="txt t2" />										
+										<input type="password" name="mstKeyRenewPassword" id="mstKeyRenewPassword" class="txt t2" onkeyup="fn_checkWord(this,8)" placeholder="8자리 이상 입력해 주세요"/>										
 									</td>
 								</tr>
 								<tr>
 									<th scope="row" class="ico_t2">비밀번호 확인</th>
 									<td>
-										<input type="password" name="mstKeyRenewPasswordconfirm" id="mstKeyRenewPasswordconfirm" class="txt t2" />										
+										<input type="password" name="mstKeyRenewPasswordconfirm" id="mstKeyRenewPasswordconfirm" class="txt t2" onkeyup="fn_checkWord(this,8)" placeholder="8자리 이상 입력해 주세요"/>										
 									</td>
 								</tr>
 							</tbody>
