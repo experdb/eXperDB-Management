@@ -84,8 +84,10 @@ function fn_mstKeyRenew(){
 	mstKeyRenewChk =  $("#mstKeyRenew").prop("checked");
 
 	if(mstKeyRenewChk == true){
+		pnlNewPasswordView = true;
 		$("#pnlNewPassword").show();
 	}else{
+		pnlNewPasswordView = false;
 		$("#pnlNewPassword").hide();
 	}	
 }
@@ -144,7 +146,7 @@ function fn_validation(){
 		}
 		
 	}
-
+	return true;
 }
 
 function fn_save(){	

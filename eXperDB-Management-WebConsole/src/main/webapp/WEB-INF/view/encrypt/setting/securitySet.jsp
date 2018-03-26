@@ -176,8 +176,8 @@ $(window.document).ready(function() {
 			},
 			success : function(data) {
 				if(data.resultCode == "0000000000"){
-					alert('<spring:message code="message.msg07" />')
-					location.reload();
+					alert('<spring:message code="message.msg07" />');
+					//location.reload();
 				}else if(data.resultCode == "8000000003"){
 					alert(data.resultMessage);
 					location.href = "/securityKeySet.do";

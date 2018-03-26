@@ -450,7 +450,7 @@ $(window.document).ready(function() {
 				</div>
 			</form>
 			
-			<div id="treeTitle"><img src="../images/ico_lnb_1.png" id="treeImg"><a href="/dbTree.do">DB <spring:message code="dashboard.server" /></a>
+			<div id="treeTitle"><img src="../images/ico_lnb_1.png" id="treeImg"><a href="/dbTree.do" target="main" onclick="fn_GoLink();">DB <spring:message code="dashboard.server" /></a>
 				<div id="sidetreecontrol" style="float: right;">
 					<a href="?#"><img src="../images/ico_lnb_close.png"></a>
 					<a href="?#"><img src="../images/ico_lnb_open.png"></a>
