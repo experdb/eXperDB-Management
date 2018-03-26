@@ -106,7 +106,7 @@ var extendedField = ${extendedField};
 		<div class="pop_cts">
 			<p class="tit">암호화 에이전트 모니터링 수정</p>
 				<div class="btn_type_01">
-					<span class="btn btnC_01" onClick="fn_agentStatusSave();"><button>저장</button></span> 
+					<span class="btn btnC_01" onClick="fn_agentStatusSave();"><button><spring:message code="common.save"/></button></span> 
 				</div>
 			<div class="cmm_bd">
 				<div class="sub_tit">
@@ -126,7 +126,7 @@ var extendedField = ${extendedField};
 								</td>
 							</tr>
 							<tr>
-								<th scope="row" class="ico_t2">Agent 상태</th>
+								<th scope="row" class="ico_t2"><spring:message code="dbms_information.agent_status" /></th>
 								<td>
 									<select class="select t5" id="entityStatusCode" name="entityStatusCode" >
 											<c:forEach var="result" items="${result}" varStatus="status">
@@ -149,16 +149,16 @@ var extendedField = ${extendedField};
 				<div class="overflows_areas">
 					<table class="write">
 						<colgroup>
-							<col style="width: 100px;" />
+							<col style="width: 170px;" />
 							<col />
 						</colgroup>
 						<tbody>
 							<tr>
-								<th scope="row" class="ico_t2">최근접속 주소</th>
+								<th scope="row" class="ico_t2"><spring:message code="encrypt_agent.Recently_accessed_address"/></th>
 								<td><input type="text" class="txt" name="latestAddress" id="latestAddress" value="${latestAddress}"  readonly="readonly" ></td>
 							</tr>
 							<tr>
-								<th scope="row" class="ico_t2">최근접속일시</th>
+								<th scope="row" class="ico_t2"><spring:message code="encrypt_agent.Recently_Accessed_Time"/></th>
 								<td><input type="text" class="txt" name="latestDateTime" id="latestDateTime" value="${latestDateTime}"  readonly="readonly" ></td>
 
 							</tr>

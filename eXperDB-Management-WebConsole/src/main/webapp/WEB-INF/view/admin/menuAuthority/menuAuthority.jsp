@@ -958,10 +958,10 @@ function fn_search(){
 														<th scope="row" rowspan="2">
 															<div class="inp_chk">
 																<input type="checkbox" id="securitykey" name="securitykey"/>
-																<label for="securitykey">정책관리/키관리</label>
+																<label for="securitykey"><spring:message code="encrypt_policy_management.Policy_Key_Management"/></label>
 															</div>
 															</th>
-														<td>보안정책관리</td>
+														<td><spring:message code="encrypt_policy_management.Security_Policy_Management"/></td>
 														<td>
 															<div class="inp_chk">
 																<input type="checkbox" id="r_MN0001101" name="r_mnu_nm" />
@@ -976,7 +976,7 @@ function fn_search(){
 														</td>																																				
 													</tr>
 													<tr class="encrypt">
-														<td>암호화키관리</td>
+														<td><spring:message code="encrypt_key_management.Encryption_Key_Management"/></td>
 														<td>
 															<div class="inp_chk">
 																<input type="checkbox" id="r_MN0001102" name="r_mnu_nm" />
@@ -994,9 +994,9 @@ function fn_search(){
 														<th scope="row" rowspan="3">
 															<div class="inp_chk">
 																<input type="checkbox" id="auditlog" name="auditlog"/>
-																<label for="auditlog">감사로그</label>
+																<label for="auditlog"><spring:message code="encrypt_log.Audit_Log"/></label>
 															</div></th>
-														<td>암복호화</td>
+														<td><spring:message code="encrypt_log_decode.Encryption_Decryption"/></td>
 														<td>
 															<div class="inp_chk">
 																<input type="checkbox" id="r_MN0001201" name="r_mnu_nm" />
@@ -1011,7 +1011,7 @@ function fn_search(){
 														</td>	
 													</tr>
 													<tr class="encrypt">
-														<td>관리서버</td>
+														<td><spring:message code="encrypt_log_sever.Management_Server"/></td>
 														<td>
 															<div class="inp_chk">
 																<input type="checkbox" id="r_MN0001202" name="r_mnu_nm" />
@@ -1026,7 +1026,7 @@ function fn_search(){
 														</td>	
 													</tr>
 													<tr class="encrypt">
-														<td>암복호화키</td>
+														<td><spring:message code="encrypt_policy_management.Encryption_Key"/></td>
 														<td>
 															<div class="inp_chk">
 																<input type="checkbox" id="r_MN0001203" name="r_mnu_nm" />
@@ -1059,10 +1059,10 @@ function fn_search(){
 														<th scope="row" rowspan="4">
 															<div class="inp_chk">
 																<input type="checkbox" id="setting" name="setting"/>
-																<label for="setting">설정</label>
+																<label for="setting"><spring:message code="encrypt_policyOption.Settings"/></label>
 															</div>
 														</th>
-														<td>보안정책옵션설정</td>
+														<td><spring:message code="encrypt_policyOption.Security_Policy_Option_Setting"/></td>
 														<td>
 															<div class="inp_chk">
 																<input type="checkbox" id="r_MN0001301" name="r_mnu_nm" />
@@ -1077,7 +1077,7 @@ function fn_search(){
 														</td>	
 													</tr>
 													<tr class="encrypt">
-														<td>암호화설정</td>
+														<td><spring:message code="encrypt_encryptSet.Encryption_Settings"/></td>
 														<td>
 															<div class="inp_chk">
 																<input type="checkbox" id="r_MN0001302" name="r_mnu_nm" />
@@ -1092,7 +1092,7 @@ function fn_search(){
 														</td>	
 													</tr>	
 													<tr class="encrypt">
-														<td>서버마스터키암호설정</td>
+														<td><spring:message code="encrypt_serverMasterKey.Setting_the_server_master_key_password"/></td>
 														<td>
 															<div class="inp_chk">
 																<input type="checkbox" id="r_MN0001303" name="r_mnu_nm" />
@@ -1107,7 +1107,7 @@ function fn_search(){
 														</td>	
 													</tr>
 													<tr class="encrypt">
-														<td>에이전트 설정</td>
+														<td><spring:message code="encrypt_agent.Encryption_agent_setting"/></td>
 														<td>
 															<div class="inp_chk">
 																<input type="checkbox" id="r_MN0001304" name="r_mnu_nm" />

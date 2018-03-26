@@ -45,7 +45,7 @@ var table = null;
 		
 		table.tables().header().to$().find('th:eq(0)').css('min-width', '20px');
 		table.tables().header().to$().find('th:eq(1)').css('min-width', '40px');
-		table.tables().header().to$().find('th:eq(2)').css('min-width', '50px');
+		table.tables().header().to$().find('th:eq(2)').css('min-width', '100px');
 		table.tables().header().to$().find('th:eq(3)').css('min-width', '100px');
 		table.tables().header().to$().find('th:eq(4)').css('min-width', '100px');
 		table.tables().header().to$().find('th:eq(5)').css('min-width', '100px');
@@ -215,17 +215,17 @@ var table = null;
 <div id="contents">
 	<div class="contents_wrap">
 		<div class="contents_tit">
-			<h4>보안정책관리<a href="#n"><img src="../images/ico_tit.png" class="btn_info" /></a></h4>
+			<h4><spring:message code="encrypt_policy_management.Security_Policy_Management"/><a href="#n"><img src="../images/ico_tit.png" class="btn_info" /></a></h4>
 			<div class="infobox">
 				<ul>
-					<li>보안정책관리설명</li>
+					<li><spring:message code="encrypt_help.Security_Policy_Management" /></li>
 				</ul>
 			</div>
 			<div class="location">
 				<ul>
 					<li>Encrypt</li>
-					<li>정책관리/키관리</li>
-					<li class="on">보안정책관리</li>
+					<li><spring:message code="encrypt_policy_management.Policy_Key_Management"/></li>
+					<li class="on"><spring:message code="encrypt_policy_management.Security_Policy_Management"/></li>
 				</ul>
 			</div>
 		</div>
@@ -233,9 +233,9 @@ var table = null;
 			<div class="cmm_grp">
 				<div class="btn_type_01">
 <!-- 					<span class="btn" onclick="fn_select();"><button>조회</button></span> -->
-					<span class="btn"><a href="/securityPolicyInsert.do"><button>등록</button></a></span>
-					<span class="btn" onclick="fn_update();"><button>수정</button></span>
-					<span class="btn" onclick="fn_delete();"><button>삭제</button></span>
+					<span class="btn"><a href="/securityPolicyInsert.do"><button><spring:message code="common.registory" /></button></a></span>
+					<span class="btn" onclick="fn_update();"><button><spring:message code="common.modify" /></button></span>
+					<span class="btn" onclick="fn_delete();"><button><spring:message code="common.delete" /></button></span>
 				</div>
 <!-- 				<div class="sch_form"> -->
 <!-- 					<table class="write"> -->
@@ -264,14 +264,14 @@ var table = null;
 						<thead>
 							<tr>
 								<th width="20"></th>
-								<th width="40">No</th>
-								<th width="50">정책이름</th>
-								<th width="100">정책설명</th>
-								<th width="100">정책상태</th>
-								<th width="100">등록자</th>
-								<th width="150">등록일시</th>
-								<th width="80">수정자</th>
-								<th width="150">수정일시</th>
+								<th width="40"><spring:message code="common.no" /></th>
+								<th width="100"><spring:message code="encrypt_policy_management.Policy_Name"/></th>
+								<th width="100"><spring:message code="encrypt_policy_management.Description"/></th>
+								<th width="100"><spring:message code="encrypt_policy_management.Status"/></th>
+								<th width="100"><spring:message code="common.register" /></th>
+								<th width="150"><spring:message code="common.regist_datetime" /></th>
+								<th width="80"><spring:message code="common.modifier" /></th>
+								<th width="150"><spring:message code="common.modify_datetime" /></th>
 								<th width="0"></th>
 							</tr>
 						</thead>

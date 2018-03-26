@@ -33,9 +33,9 @@
 <body>
 	<div class="pop_container">
 		<div class="pop_cts">
-			<p class="tit">관리서버 상세보기</p>
+			<p class="tit"><spring:message code="encrypt_log_sever.Management_Server_Detail"/> </p>
 			<div class="pop_cmm3">
-				<p class="pop_s_tit">관리서버 상세보기</p>
+				<p class="pop_s_tit"><spring:message code="encrypt_log_sever.Management_Server_Detail"/> </p>
 				<table class="list" style="border: 1px solid #99abb0;">
 					<colgroup>
 						<col style="width: 15%;" />
@@ -43,31 +43,31 @@
 					</colgroup>
 					<tbody>
 							<tr>
-								<td>접근일시</td>
+								<td><spring:message code="encrypt_log_key.Access_Date"/> </td>
 								<td style="text-align: left">${logDateTime}</td>
 							</tr>
 							<tr>
-								<td>접근자</td>
+								<td><spring:message code="encrypt_log_key.Access_User"/></td>
 								<td style="text-align: left">${entityName}</td>
 							</tr>
 							<tr>
-								<td>접근주소</td>
+								<td><spring:message code="encrypt_log_key.Access_Address"/></td>
 								<td style="text-align: left">${remoteAddress}</td>
 							</tr>
 							<tr>
-								<td>접근경로</td>
+								<td><spring:message code="encrypt_log_key.Access_Path"/></td>
 								<td style="text-align: left">${requestPath}</td>
 							</tr>
 							<tr>
-								<td>본문</td>
+								<td><spring:message code="encrypt_log_key.Main_Text"/></td>
 								<td style="text-align: left; height: 60px;">${parameter}</td>
 							</tr>
 							<tr>
-								<td>결과코드</td>
+								<td><spring:message code="encrypt_log_key.Result_Code"/></td>
 								<td style="text-align: left">${resultCode}</td>
 							</tr>
 							<tr>
-								<td>결과메세지</td>
+								<td><spring:message code="encrypt_log_key.Result_Message"/></td>
 								<td style="text-align: left">${resultMessage}</td>
 							</tr>
 					</tbody>

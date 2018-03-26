@@ -352,27 +352,27 @@ function fn_cookie(url) {
 					
 					<li id="encryptMenu"><a href="#n"><span><img src="/images/encrypt.png" alt="ENCRYPT" /></span></a>
 						<ul class="depth_2">
-						    <li><a href="#n" id="MN00011">정책관리/키관리</a>
+						    <li><a href="#n" id="MN00011"><spring:message code="encrypt_policy_management.Policy_Key_Management"/></a>
         						<ul class="depth_3">
-									<li><a href="/securityPolicy.do" target="main" id="MN0001101">보안정책관리</a></li>
-									<li><a href="/keyManage.do" target="main" id="MN0001102">암호화키관리</a></li>
+									<li><a href="/securityPolicy.do" target="main" id="MN0001101"><spring:message code="encrypt_policy_management.Security_Policy_Management"/></a></li>
+									<li><a href="/keyManage.do" target="main" id="MN0001102"><spring:message code="encrypt_key_management.Encryption_Key_Management"/></a></li>
 								</ul>
         					</li>
-						    <li><a href="#n" id="MN00012">감사로그</a>
+						    <li><a href="#n" id="MN00012"><spring:message code="encrypt_log.Audit_Log"/></a>
         						<ul class="depth_3">
-									<li><a href="/encodeDecodeAuditLog.do" target="main" id="MN0001201">암복호화</a></li>
-									<li><a href="/managementServerAuditLog.do" target="main" id="MN0001202">관리서버</a></li>
-									<li><a href="/encodeDecodeKeyAuditLog.do" target="main" id="MN0001203">암호화 키</a></li>
+									<li><a href="/encodeDecodeAuditLog.do" target="main" id="MN0001201"><spring:message code="encrypt_log_decode.Encryption_Decryption"/></a></li>
+									<li><a href="/managementServerAuditLog.do" target="main" id="MN0001202"><spring:message code="encrypt_log_sever.Management_Server"/></a></li>
+									<li><a href="/encodeDecodeKeyAuditLog.do" target="main" id="MN0001203"><spring:message code="encrypt_policy_management.Encryption_Key"/></a></li>
 <!-- 								<li><a href="/backupRestoreAuditLog.do" target="main">백업및복원</a></li> -->
 									<li><a href="/resourcesUseAuditLog.do" target="main" id="MN0001204">자원사용</a></li>
 								</ul>
         					</li>
-							<li><a href="#n" id="MN00013">설정</a>
+							<li><a href="#n" id="MN00013"><spring:message code="encrypt_policyOption.Settings"/></a>
         						<ul class="depth_3">
-									<li><a href="/securityPolicyOptionSet.do" target="main" id="MN0001301">보안정책옵션설정</a></li>
-									<li><a href="/securitySet.do" target="main" id="MN0001302">암호화설정</a></li>
-									<li><a href="/securityKeySet.do" target="main" id="MN0001303">서버 마스터키 암호 설정</a></li>
-									<li><a href="/securityAgentMonitoring.do" target="main"  id="MN0001304" >암호화 에이전트 설정</a></li>
+									<li><a href="/securityPolicyOptionSet.do" target="main" id="MN0001301"><spring:message code="encrypt_policyOption.Security_Policy_Option_Setting"/></a></li>
+									<li><a href="/securitySet.do" target="main" id="MN0001302"><spring:message code="encrypt_encryptSet.Encryption_Settings"/></a></li>
+									<li><a href="/securityKeySet.do" target="main" id="MN0001303"><spring:message code="encrypt_serverMasterKey.Setting_the_server_master_key_password"/></a></li>
+									<li><a href="/securityAgentMonitoring.do" target="main"  id="MN0001304"><spring:message code="encrypt_agent.Encryption_agent_setting"/></a></li>
 								</ul>
         					</li>
 						</ul>

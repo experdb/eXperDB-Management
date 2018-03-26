@@ -193,35 +193,35 @@ function NumObj(obj) {
 function fn_validation(){
 	var specName = document.getElementById('specName');
 	if (specName.value == "" || specName.value == "undefind" || specName.value == null) {
-		alert("규칙이름을 입력해주세요.");
+		alert('<spring:message code="encrypt_msg.msg18"/>');
 		specName.focus();
 		return false;
 	}
 	
 	var startDateTime = document.getElementById('startDateTime');
 	if (startDateTime.value == "" || startDateTime.value == "undefind" || startDateTime.value == null) {
-		alert("시작기간을 입력해주세요.");
+		alert('<spring:message code="encrypt_msg.msg13"/>');
 		startDateTime.focus();
 		return false;
 	}
 	
 	var endDateTime = document.getElementById('endDateTime');
 	if (endDateTime.value == "" || endDateTime.value == "undefind" || endDateTime.value == null) {
-		alert("종료기간을 입력해주세요.");
+		alert('<spring:message code="encrypt_msg.msg14"/>');
 		endDateTime.focus();
 		return false;
 	}
 	
 	var massiveThreshold = document.getElementById('massiveThreshold');
 	if (massiveThreshold.value == "" || massiveThreshold.value == "undefind" || massiveThreshold.value == null) {
-		alert("임계치(대량작업) 건수를 입력해주세요.");
+		alert('<spring:message code="encrypt_msg.msg15"/>');
 		massiveThreshold.focus();
 		return false;
 	}
 	
 	var massiveTimeInterval = document.getElementById('massiveTimeInterval');
 	if (massiveTimeInterval.value == "" || massiveTimeInterval.value == "undefind" || massiveTimeInterval.value == null) {
-		alert("임계치(대량작업) 초를 입력해주세요.");
+		alert('<spring:message code="encrypt_msg.msg16"/>');
 		massiveTimeInterval.focus();
 		return false;
 	}
@@ -328,35 +328,35 @@ function fn_update(){
 					</colgroup>
 					<tbody>
 						<tr>
-							<th scope="row" class="ico_t1">규칙이름</th>
+							<th scope="row" class="ico_t1"><spring:message code="encrypt_policy_management.Policy_Name"/></th>
 							<td><input type="text" class="txt" name="specName" id="specName" maxlength="40" onkeyup="fn_checkWord(this,40)" placeholder="40<spring:message code='message.msg188'/>"/></td>
-							<th scope="row" class="ico_t1">서버인스턴스</th>
+							<th scope="row" class="ico_t1"><spring:message code="encrypt_policy_management.Server_Instance"/></th>
 							<td><input type="text" class="txt" name="serverInstanceId" id="serverInstanceId" maxlength="40" onkeyup="fn_checkWord(this,40)" placeholder="40<spring:message code='message.msg188'/>"/></td>
 						</tr>
 						<tr>
-							<th scope="row" class="ico_t1">DB 사용자</th>
+							<th scope="row" class="ico_t1"><spring:message code="encrypt_policy_management.Database_User"/></th>
 							<td><input type="text" class="txt" name="serverLoginId" id="serverLoginId" maxlength="40" onkeyup="fn_checkWord(this,40)" placeholder="40<spring:message code='message.msg188'/>"/></td>
-							<th scope="row" class="ico_t1">experDB사용자</th>
+							<th scope="row" class="ico_t1"><spring:message code="encrypt_policy_management.eXperDB_User"/></th>
 							<td><input type="text" class="txt" name="adminLoginId" id="adminLoginId" maxlength="40" onkeyup="fn_checkWord(this,40)" placeholder="40<spring:message code='message.msg188'/>"/></td>
 						</tr>
 						<tr>
-							<th scope="row" class="ico_t1">OS 사용자</th>
+							<th scope="row" class="ico_t1"><spring:message code="encrypt_policy_management.OS_User"/></th>
 							<td><input type="text" class="txt" name="osLoginId" id="osLoginId" maxlength="40" onkeyup="fn_checkWord(this,40)" placeholder="40<spring:message code='message.msg188'/>"/></td>
-							<th scope="row" class="ico_t1">프로그램이름</th>
+							<th scope="row" class="ico_t1"><spring:message code="encrypt_policy_management.Application_Name"/></th>
 							<td><input type="text" class="txt" name="applicationName" id="applicationName" maxlength="40" onkeyup="fn_checkWord(this,40)" placeholder="40<spring:message code='message.msg188'/>"/></td>
 						</tr>
 						<tr>
-							<th scope="row" class="ico_t1">접근IP주소</th>
+							<th scope="row" class="ico_t1"><spring:message code="encrypt_policy_management.IP_Address"/> </th>
 							<td><input type="text" class="txt" name="accessAddress" id="accessAddress" maxlength="20" onkeyup="fn_checkWord(this,20)" placeholder="20<spring:message code='message.msg188'/>"/></td>
-							<th scope="row" class="ico_t1">IP 주소 마스크</th>
+							<th scope="row" class="ico_t1"><spring:message code="encrypt_policy_management.IP_Mask"/></th>
 							<td><input type="text" class="txt" name="accessAddressMask" id="accessAddressMask" maxlength="20" onkeyup="fn_checkWord(this,20)" placeholder="20<spring:message code='message.msg188'/>"/></td>
 						</tr>
 						<tr>
-							<th scope="row" class="ico_t1">접근 MAC 주소</th>
+							<th scope="row" class="ico_t1"><spring:message code="encrypt_policy_management.MAC_Address"/></th>
 							<td><input type="text" class="txt" name="accessMacAddress" id="accessMacAddress" maxlength="20" onkeyup="fn_checkWord(this,20)" placeholder="20<spring:message code='message.msg188'/>"/></td>
 						</tr>
 						<tr>
-							<th scope="row" class="ico_t1">기간</th>
+							<th scope="row" class="ico_t1"><spring:message code="encrypt_policy_management.Policy_Period"/></th>
 							<td colspan="3">
 								<span id="calendar"> 
 									<span class="calendar_area big"> <a href="#n" class="calendar_btn">달력열기</a>
@@ -373,7 +373,7 @@ function fn_update(){
 							</td>
 						</tr>
 						<tr>
-							<th scope="row" class="ico_t1">시간대</th>
+							<th scope="row" class="ico_t1"><spring:message code="encrypt_policy_management.Policy_Time"/></th>
 							<td colspan="3">
 								<span id="b_hour" style="margin-right: 10px;"></span><span id="b_min"></span>
 									&nbsp&nbsp&nbsp&nbsp&nbsp ~ &nbsp&nbsp&nbsp&nbsp&nbsp
@@ -381,29 +381,29 @@ function fn_update(){
 							</td>
 						</tr>
 						<tr>
-							<th scope="row" class="ico_t1">요일</th>
+							<th scope="row" class="ico_t1"><spring:message code="encrypt_policy_management.Day_of_Week"/></th>
 							<td colspan="3">
 								<div class="inp_chk">
 									<input type="checkbox" id="SUNDAY" name="workDay" value="일" />
-									<label for="SUNDAY" style="margin-right: 10px; color: red;">일</label>
+									<label for="SUNDAY" style="margin-right: 10px; color: red;"><spring:message code="common.sun" /></label>
 									
 									<input type="checkbox" id="MONDAY" name="workDay" value="월"/>
-									<label for="MONDAY" style="margin-right: 10px;">월</label>		
+									<label for="MONDAY" style="margin-right: 10px;"><spring:message code="common.mon" /></label>		
 									
 									<input type="checkbox" id="TUESDAY" name="workDay" value="화"/>
-									<label for="TUESDAY" style="margin-right: 10px;">화</label>
+									<label for="TUESDAY" style="margin-right: 10px;"><spring:message code="common.tue" /></label>
 									
 									<input type="checkbox" id="WEDNESDAY" name="workDay" value="수"/>
-									<label for="WEDNESDAY" style="margin-right: 10px;">수</label>
+									<label for="WEDNESDAY" style="margin-right: 10px;"><spring:message code="common.wed" /></label>
 									
 									<input type="checkbox" id="THURSDAY" name="workDay" value="목"/>
-									<label for="THURSDAY" style="margin-right: 10px;">목</label>
+									<label for="THURSDAY" style="margin-right: 10px;"><spring:message code="common.thu" /></label>
 									
 									<input type="checkbox" id="FRIDAY" name="workDay" value="금"/>
-									<label for="FRIDAY" style="margin-right: 10px;">금</label>
+									<label for="FRIDAY" style="margin-right: 10px;"><spring:message code="common.fri" /></label>
 									
 									<input type="checkbox" id="SATURDAY" name="workDay" value="토"/>
-									<label for="SATURDAY" style="color: blue;">토</label>
+									<label for="SATURDAY" style="color: blue;"><spring:message code="common.sat" /></label>
 								</div>
 							</td>
 						</tr>
@@ -415,9 +415,9 @@ function fn_update(){
 							</td>
 						</tr>
 						<tr>
-							<th scope="row" class="ico_t1">추가필드</th>
+							<th scope="row" class="ico_t1"><spring:message code="encrypt_policy_management.Additional_Fields"/></th>
 							<td><input type="text" class="txt" name="extraName" id="extraName" maxlength="40" onkeyup="fn_checkWord(this,40)" placeholder="40<spring:message code='message.msg188'/>"/></td>
-							<th scope="row" class="ico_t1">호스트이름</th>
+							<th scope="row" class="ico_t1"><spring:message code="encrypt_policy_management.Host_Name"/></th>
 							<td><input type="text" class="txt" name="hostName" id="hostName" maxlength="40" onkeyup="fn_checkWord(this,40)" placeholder="40<spring:message code='message.msg188'/>"/></td>
 						</tr>
 						<tr>
@@ -435,12 +435,12 @@ function fn_update(){
 				</table>
 			<div class="btn_type_02">
 				<c:if test="${act == 'i'}">
-					<a href="#n" class="btn"><span onclick="fn_save()">저장</span></a> 
+					<a href="#n" class="btn"><span onclick="fn_save()"><spring:message code="common.save"/></span></a> 
 				</c:if>
 				<c:if test="${act == 'u'}">
-					<a href="#n" class="btn"><span onclick="fn_update()">수정</span></a> 
+					<a href="#n" class="btn"><span onclick="fn_update()"><spring:message code="common.modify" /></span></a> 
 				</c:if>
-				<a href="#n" class="btn" onclick="window.close();"><span>취소</span></a>
+				<a href="#n" class="btn" onclick="window.close();"><span><spring:message code="common.cancel" /></span></a>
 			</div>
 		</div>
 	</div>

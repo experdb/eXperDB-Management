@@ -424,14 +424,14 @@
 	function fn_validation(){
 		var profileName = document.getElementById("profileName");
 		if (profileName.value == "") {
-			alert('보안정책이름을 입력해주세요.');
+			alert('<spring:message code="encrypt_msg.msg06"/>');
 			profileName.focus();
 			return false;
 		}
 		
 		var datas = table.rows().data();
 		if(datas.length<=0){
-			alert("암호화 정책을 등록해주세요.");
+			alert('<spring:message code="encrypt_msg.msg07"/>');
 			return false;
 		}
 		
@@ -439,7 +439,7 @@
 		if(denyResultTypeCode == "DRMS" || denyResultTypeCode == "DRRP"){
 			var maskingValue = $("#maskingValue").val();
 			if(maskingValue==""){
-				alert("대체 문자열을 입력해주세요.");
+				alert('<spring:message code="encrypt_msg.msg08"/>');
 				return false;
 			}
 		}
@@ -561,42 +561,42 @@
 <div id="contents">
 	<div class="contents_wrap">
 		<div class="contents_tit">
-			<h4>정책수정<a href="#n"><img src="/images/ico_tit.png" class="btn_info" /></a></h4>
+			<h4><spring:message code="encrypt_policy_management.Security_Policy_Modify"/><a href="#n"><img src="/images/ico_tit.png" class="btn_info" /></a></h4>
 			<div class="infobox">
 				<ul>
-					<li>설명</li>
+					<li><spring:message code="encrypt_help.Security_Policy_Update"/></li>
 				</ul>
 			</div>
 			<div class="location">
 				<ul>
 					<li>Encrypt</li>
-					<li>정책관리/키관리</li>
-					<li>보안정책관리</li>
-					<li class="on">보안정책수정</li>
+					<li><spring:message code="encrypt_policy_management.Policy_Key_Management"/></li>
+					<li><spring:message code="encrypt_policy_management.Security_Policy_Management"/></li>
+					<li class="on"><spring:message code="encrypt_policy_management.Security_Policy_Modify"/></li>
 				</ul>
 			</div>
 		</div>
 		<div class="contents">
 			<div class="cmm_grp">
 				<div class="btn_type_01">
-					<a href="#n" class="btn"><span onclick="fn_save()">저장</span></a> 
+					<a href="#n" class="btn"><span onclick="fn_save()"><spring:message code="common.save"/></span></a> 
 				</div>
 			</div>
 			<div class="cmm_tab">
 				<ul id="tab1">
-					<li class="atv"><a href="javascript:selectTab('info')">기본정보</a></li>
-					<li><a href="javascript:selectTab('option')">옵션</a></li>
-					<li><a href="javascript:selectTab('accessControl')">접근제어정책</a></li>
+					<li class="atv"><a href="javascript:selectTab('info')"><spring:message code="encrypt_policy_management.General_Information"/></a></li>
+					<li><a href="javascript:selectTab('option')"><spring:message code="encrypt_policy_management.Option"/></a></li>
+					<li><a href="javascript:selectTab('accessControl')"><spring:message code="encrypt_policy_management.Access_Control_Policy"/></a></li>
 				</ul>
 				<ul id="tab2" style="display: none;">
-					<li><a href="javascript:selectTab('info')">기본정보</a></li>
-					<li class="atv"><a href="javascript:selectTab('option')">옵션</a></li>
-					<li><a href="javascript:selectTab('accessControl')">접근제어정책</a></li>
+					<li><a href="javascript:selectTab('info')"><spring:message code="encrypt_policy_management.General_Information"/></a></li>
+					<li class="atv"><a href="javascript:selectTab('option')"><spring:message code="encrypt_policy_management.Option"/></a></li>
+					<li><a href="javascript:selectTab('accessControl')"><spring:message code="encrypt_policy_management.Access_Control_Policy"/></a></li>
 				</ul>
 				<ul id="tab3" style="display: none;">
-					<li><a href="javascript:selectTab('info')">기본정보</a></li>
-					<li><a href="javascript:selectTab('option')">옵션</a></li>
-					<li class="atv"><a href="javascript:selectTab('accessControl')">접근제어정책</a></li>
+					<li><a href="javascript:selectTab('info')"><spring:message code="encrypt_policy_management.General_Information"/></a></li>
+					<li><a href="javascript:selectTab('option')"><spring:message code="encrypt_policy_management.Option"/></a></li>
+					<li class="atv"><a href="javascript:selectTab('accessControl')"><spring:message code="encrypt_policy_management.Access_Control_Policy"/></a></li>
 				</ul>
 			</div>
 
@@ -609,13 +609,13 @@
 						</colgroup>
 						<tbody>
 							<tr>
-								<th scope="row" class="ico_t1">보안정책이름(*)</th>
+								<th scope="row" class="ico_t1"><spring:message code="encrypt_policy_management.Security_Policy_Name"/>(*)</th>
 								<td>
 									<input type="text" class="txt t2" name="profileName" id="profileName" value="${result.profileName}" maxlength="20" onkeyup="fn_checkWord(this,20)" placeholder="20<spring:message code='message.msg188'/>"/>
 								</td>
 							</tr>
 							<tr>
-								<th scope="row" class="ico_t1">보안정책설명</th>
+								<th scope="row" class="ico_t1"><spring:message code="encrypt_policy_management.Description"/></th>
 								<td><textarea class="tbd1" name="profileNote" id="profileNote" maxlength="100" onkeyup="fn_checkWord(this,100)" placeholder="100<spring:message code='message.msg188'/>">${result.profileNote}</textarea></td>
 							</tr>
 						</tbody>
@@ -628,7 +628,7 @@
 							<a href="#n" class="btn btnF_04 btnC_01" onclick="fn_SecurityRegForm();">
 							<span id="add_button"><spring:message code="common.add" /></span></a> 
 							<a href="#n" class="btn btnF_04 btnC_01" onclick="fn_SecurityRegReForm()">
-							<span id="add_button">수정</span></a> 
+							<span id="add_button"><spring:message code="common.modify" /></span></a> 
 							<a href="#n" class="btn btnF_04" onclick="fn_SecurityDel();"> 
 							<span id="del_button"><spring:message code="button.delete" /></span></a>
 						</div>
@@ -638,13 +638,13 @@
 							<thead>
 								<tr>
 									<th width="10"></th>
-									<th width="20">No</th>
-									<th width="120">시작위치</th>
-									<th width="100">길이</th>
-									<th width="100">암호화알고리즘</th>
-									<th width="100">암호화키</th>
-									<th width="80">초기벡터</th>
-									<th width="100">운영모드</th>
+									<th width="20"><spring:message code="common.no" /></th>
+									<th width="120"><spring:message code="encrypt_policy_management.Starting_Position"/></th>
+									<th width="100"><spring:message code="encrypt_policy_management.Length"/></th>
+									<th width="100"><spring:message code="encrypt_policy_management.Encryption_Algorithm"/></th>
+									<th width="100"><spring:message code="encrypt_policy_management.Encryption_Key"/></th>
+									<th width="80"><spring:message code="encrypt_policy_management.Initial_Vector"/></th>
+									<th width="100"><spring:message code="encrypt_policy_management.Modes"/></th>
 								</tr>
 							</thead>
 							<tbody>
@@ -693,18 +693,18 @@
 						</colgroup>
 						<tbody>
 							<tr>
-								<th scope="row" class="ico_t1">기본접근허용</th>
+								<th scope="row" class="ico_t1"><spring:message code="encrypt_policy_management.Grant_Access"/></th>
 								<td>
 									<div class="inp_rdo">
 										<input name="defaultAccessAllowTrueFalse" id="rdo_2_1" type="radio" value="Y" ${result.defaultAccessAllowTrueFalse == 'true' ? 'checked="checked"' : ''} >
-										<label for="rdo_2_1" style="margin-right: 15%;">예</label> 
+										<label for="rdo_2_1" style="margin-right: 15%;"><spring:message code="agent_monitoring.yes" /></label> 
 										<input name="defaultAccessAllowTrueFalse" id="rdo_2_2" type="radio" value="N" ${result.defaultAccessAllowTrueFalse == 'false' ? 'checked="checked"' : ''}> 
-										<label for="rdo_2_2">아니오</label>
+										<label for="rdo_2_2"><spring:message code="agent_monitoring.no" /></label>
 									</div>
 								</td>
 							</tr>
 							<tr>
-								<th scope="row" class="ico_t1">접근 거부시 처리</th>
+								<th scope="row" class="ico_t1"><spring:message code="encrypt_policy_management.Action_when_Access_Denied"/></th>
 								<td>
 									<select class="select t3" id="denyResultTypeCode" name="denyResultTypeCode" onchange="fn_changeDenyResult()">
 										<c:forEach var="denyResultTypeCode" items="${denyResultTypeCode}">
@@ -718,7 +718,7 @@
 								</td>
 							</tr>
 							<tr>
-								<th scope="row" class="ico_t1">데이터 타입</th>
+								<th scope="row" class="ico_t1"><spring:message code="encrypt_policy_management.Data_Type"/></th>
 								<td>
 									<select class="select t3" id="dataTypeCode" name="dataTypeCode">
 										<c:forEach var="dataTypeCode" items="${dataTypeCode}">
@@ -732,15 +732,15 @@
 									<div class="inp_chk">
 										<span> 
 											<input type="checkbox" id="log_on_fail" name="log_on_fail" value="Y" ${result.log_on_fail == 'true' ? 'checked="checked"' : ''}/> 
-											<label for="log_on_fail">실패 로그 기록</label>
+											<label for="log_on_fail"><spring:message code="encrypt_policy_management.Failure_Logging"/></label>
 										</span> 
 										<span>
 											<input type="checkbox" id="compress_audit_log" name="compress_audit_log" value="Y" ${result.compress_audit_log == 'true' ? 'checked="checked"' : ''}/> 
-											<label for="compress_audit_log">로그압축</label>
+											<label for="compress_audit_log"><spring:message code="encrypt_policy_management.Log_Compression"/></label>
 										</span> 
 										<span> 
 											<input type="checkbox" id="preventDoubleYesNo" name="preventDoubleYesNo" value="Y" ${result.preventDoubleYesNo == 'Y' ? 'checked="checked"' : ''}/>
-											<label for="preventDoubleYesNo">이중 암호화 방지</label>
+											<label for="preventDoubleYesNo"><spring:message code="encrypt_policy_management.Prevent_Double_Encryption"/></label>
 										</span>
 									</div>
 								</td>
@@ -750,11 +750,11 @@
 									<div class="inp_chk">
 										<span> 
 											<input type="checkbox" id="log_on_success" name="log_on_success" value="Y" ${result.log_on_success == 'true' ? 'checked="checked"' : ''}/> 
-											<label for="log_on_success">성공 로그 기록</label>
+											<label for="log_on_success"><spring:message code="encrypt_policy_management.Success_Logging"/></label>
 										</span> 
 										<span> 
 											<input type="checkbox" id="nullEncryptYesNo" name="nullEncryptYesNo" value="Y" ${result.nullEncryptYesNo == 'Y' ? 'checked="checked"' : ''}/>
-											<label for="nullEncryptYesNo">NULL 암호화</label>
+											<label for="nullEncryptYesNo"><spring:message code="encrypt_policy_management.NULL_Encryption"/></label>
 										</span>
 									</div>
 								</td>
@@ -767,12 +767,12 @@
 			<div id="accessControl">
 				<div class="cmm_bd">
 					<div class="sub_tit">
-						<p>접근제어정책</p>
+						<p><spring:message code="encrypt_policy_management.Access_Control_Policy"/></p>
 						<div class="sub_btn">
 							<a href="#n" class="btn btnF_04 btnC_01" onclick="fn_AccessRegForm();">
 							<span id="add_button"><spring:message code="common.add" /></span></a> 
 							<a href="#n" class="btn btnF_04 btnC_01" onclick="fn_AccessRegReForm()">
-							<span id="add_button">수정</span></a> 
+							<span id="add_button"><spring:message code="common.modify" /></span></a> 
 							<a href="#n" class="btn btnF_04" onclick="fn_AccessDel();"> 
 							<span id="del_button"><spring:message code="button.delete" /></span></a>
 						</div>
@@ -782,26 +782,26 @@
 							<thead>
 								<tr>
 									<th width="10"></th>
-									<th width="20">No</th>
-									<th width="100">규칙이름</th>
-									<th width="100">서버인스턴스</th>
-									<th width="100">db사용자</th>
-									<th width="100">eXperDB사용자</th>
-									<th width="100">OS사용자</th>
-									<th width="100">프로그램이름</th>
-									<th width="100">접근 ip 주소</th>
-									<th width="100">IP 주소 마스크</th>
-									<th width="100">접근mac 주소</th>
-									<th width="100">기간 FROM</th>
-									<th width="100">기간 TO</th>
-									<th width="100">시간대 FROM</th>
-									<th width="100">시간대 TO</th>
-									<th width="100">요일</th>
-									<th width="100">대량작업 임계건수</th>
-									<th width="100">초</th>
-									<th width="100">추가필드</th>
-									<th width="100">호스트이름</th>
-									<th width="100">접근허용여부</th>
+									<th width="20"><spring:message code="common.no" /></th>
+									<th width="100"><spring:message code="encrypt_policy_management.Policy_Name"/></th>
+									<th width="100"><spring:message code="encrypt_policy_management.Server_Instance"/></th>
+									<th width="100"><spring:message code="encrypt_policy_management.Database_User"/></th>
+									<th width="100"><spring:message code="encrypt_policy_management.eXperDB_User"/></th>
+									<th width="100"><spring:message code="encrypt_policy_management.OS_User"/></th>
+									<th width="100"><spring:message code="encrypt_policy_management.Application_Name"/> </th>
+									<th width="100"><spring:message code="encrypt_policy_management.IP_Address"/> </th>
+									<th width="100"><spring:message code="encrypt_policy_management.IP_Mask"/></th>
+									<th width="100"><spring:message code="encrypt_policy_management.MAC_Address"/></th>
+									<th width="100"><spring:message code="encrypt_log_decode.Policy_Period"/> FROM</th>
+									<th width="100"><spring:message code="encrypt_log_decode.Policy_Period"/> TO</th>
+									<th width="100"><spring:message code="encrypt_log_decode.Policy_Time"/> FROM</th>
+									<th width="100"><spring:message code="encrypt_log_decode.Policy_Time"/> TO</th>
+									<th width="100"><spring:message code="encrypt_policy_management.Day_of_Week"/></th>
+									<th width="100"><spring:message code="encrypt_policy_management.Threshold"/></th>
+									<th width="100"><spring:message code="encrypt_policy_management.sec"/> </th>
+									<th width="100"><spring:message code="encrypt_policy_management.Additional_Fields"/></th>
+									<th width="100"><spring:message code="encrypt_policy_management.Host_Name"/></th>
+									<th width="100"><spring:message code="encrypt_policy_management.Whether_Allowing_Access"/></th>
 								</tr>
 							</thead>
 							<tbody>
@@ -829,7 +829,7 @@
 										<td>${arrProfileAclSpec.hostName}</td>
 										<td>${arrProfileAclSpec.whitelistYesNo}</td>
 									</tr>
-								</c:forEach>	
+								</c:forEach>
 							</tbody>
 						</table>
 					</div>

@@ -56,15 +56,15 @@ function fn_init() {
 	
 	table.tables().header().to$().find('th:eq(0)').css('min-width', '20px');
 	table.tables().header().to$().find('th:eq(1)').css('min-width', '40px');
-	table.tables().header().to$().find('th:eq(2)').css('min-width', '180px');
-	table.tables().header().to$().find('th:eq(3)').css('min-width', '75px');
-	table.tables().header().to$().find('th:eq(4)').css('min-width', '100px');
-	table.tables().header().to$().find('th:eq(5)').css('min-width', '130px');
-	table.tables().header().to$().find('th:eq(6)').css('min-width', '100px');
-	table.tables().header().to$().find('th:eq(7)').css('min-width', '100px');
-	table.tables().header().to$().find('th:eq(8)').css('min-width', '130px');
-	table.tables().header().to$().find('th:eq(9)').css('min-width', '130px');
-	table.tables().header().to$().find('th:eq(10)').css('min-width', '75px');
+	table.tables().header().to$().find('th:eq(2)').css('min-width', '200px');
+	table.tables().header().to$().find('th:eq(3)').css('min-width', '100px');
+	table.tables().header().to$().find('th:eq(4)').css('min-width', '150px');
+	table.tables().header().to$().find('th:eq(5)').css('min-width', '150px');
+	table.tables().header().to$().find('th:eq(6)').css('min-width', '130px');
+	table.tables().header().to$().find('th:eq(7)').css('min-width', '180px');
+	table.tables().header().to$().find('th:eq(8)').css('min-width', '150px');
+	table.tables().header().to$().find('th:eq(9)').css('min-width', '150px');
+	table.tables().header().to$().find('th:eq(10)').css('min-width', '100px');
 	
 	table.tables().header().to$().find('th:eq(11)').css('min-width', '0px');
 	table.tables().header().to$().find('th:eq(12)').css('min-width', '0px');
@@ -218,17 +218,18 @@ function fn_agentMonitoringModifyForm(){
 <div id="contents">
 	<div class="contents_wrap">
 		<div class="contents_tit">
-			<h4>암호화 에이전트 설정<a href="#n"><img src="../images/ico_tit.png" class="btn_info" /></a></h4>
+			<h4><spring:message code="encrypt_agent.Encryption_agent_setting"/><a href="#n"><img src="../images/ico_tit.png" class="btn_info" /></a></h4>
 			<div class="infobox">
 				<ul>
-					<li>암호화 에이전트 설명</li>
+					<li><spring:message code="encrypt_help.Encryption_agent_setting_01"/></li>
+					<li><spring:message code="encrypt_help.Encryption_agent_setting_02"/></li>
 				</ul>
 			</div>
 			<div class="location">
 				<ul>
 					<li>Encrypt</li>
-					<li>설정</li>
-					<li class="on">암호화 에이전트 설정</li>
+					<li><spring:message code="encrypt_policyOption.Settings"/></li>
+					<li class="on"><spring:message code="encrypt_agent.Encryption_agent_setting"/></li>
 				</ul>
 			</div>
 		</div>
@@ -236,7 +237,7 @@ function fn_agentMonitoringModifyForm(){
 			<div class="cmm_grp">
 				<div class="btn_type_01">
 					<!-- <span class="btn"><button onClick="fn_select();">조회</button></span>  -->
-					<span class="btn"><button onClick="fn_agentMonitoringModifyForm();">수정</button></span>
+					<span class="btn"><button onClick="fn_agentMonitoringModifyForm();"><spring:message code="common.modify" /></button></span>
 				</div>
 				<%-- <div class="sch_form">
 					<table class="write">
@@ -258,16 +259,16 @@ function fn_agentMonitoringModifyForm(){
 						<thead>
 							<tr>
 								<th width="20"></th>
-								<th width="40">No</th>
-								<th width="50">에이전트명</th>
-								<th width="100">상태</th>
-								<th width="100">최근접속주소</th>
-								<th width="100">최근접속일시</th>
-								<th width="100">에이전트 정책버전</th>
-								<th width="80">최근전송 정책버전</th>
-								<th width="100">설치일시</th>
-								<th width="100">변경일시</th>
-								<th width="100">변경자</th>
+								<th width="40"><spring:message code="common.no" /></th>
+								<th width="200"><spring:message code="encrypt_agent.Agent_Name"/></th>
+								<th width="100"><spring:message code="properties.status" /></th>
+								<th width="150"><spring:message code="encrypt_agent.Recently_accessed_address"/></th>
+								<th width="150"><spring:message code="encrypt_agent.Recently_Accessed_Time"/></th>
+								<th width="130"><spring:message code="encrypt_agent.Agent_Policy_Version"/></th>
+								<th width="180"><spring:message code="encrypt_agent.Recently_Transfer_Policy_Version"/></th>
+								<th width="150"><spring:message code="encrypt_agent.Installation_Date"/></th>
+								<th width="150"><spring:message code="encrypt_agent.Change_Date"/></th>
+								<th width="100"><spring:message code="encrypt_agent.Modifier"/></th>
 								<th width="0"></th>
 								<th width="0"></th>
 								<th width="0"></th>

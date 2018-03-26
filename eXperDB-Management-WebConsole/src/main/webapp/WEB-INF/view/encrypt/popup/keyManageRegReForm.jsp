@@ -92,7 +92,7 @@ function fn_init(){
 	});
 	
 	renewalhistoryTable.tables().header().to$().find('th:eq(0)').css('min-width', '25px');
-	renewalhistoryTable.tables().header().to$().find('th:eq(1)').css('min-width', '30px');
+	renewalhistoryTable.tables().header().to$().find('th:eq(1)').css('min-width', '50px');
 	renewalhistoryTable.tables().header().to$().find('th:eq(2)').css('min-width', '80px');
 	renewalhistoryTable.tables().header().to$().find('th:eq(3)').css('min-width', '200px');
 	renewalhistoryTable.tables().header().to$().find('th:eq(4)').css('min-width', '80px');
@@ -164,7 +164,7 @@ function fn_keyManagementModify(){
 		},
 		success : function(data) {
 			if(data.resultCode == "0000000000"){
-				alert("수정되었습니다.")
+				alert('<spring:message code="message.msg84" />')
 				fn_historyCryptoKeySymmetric();
 			}else if(data.resultCode == "8000000003"){
 				alert(data.resultMessage);
@@ -215,20 +215,20 @@ function fn_historyCryptoKeySymmetric(){
 <body>
 	<div class="pop_container">
 		<div class="pop_cts">
-			<p class="tit">암호화 키 수정</p>
+			<p class="tit"><spring:message code="encrypt_key_management.Encryption_Key_Modify"/></p>
 				<table class="write">
-					<caption>암호화 키 수정</caption>
+					<caption><spring:message code="encrypt_key_management.Encryption_Key_Modify"/></caption>
 					<colgroup>
-						<col style="width: 130px;" />
+						<col style="width: 150px;" />
 						<col />
 					</colgroup>
 					<tbody>
 						<tr>
-							<th scope="row" class="ico_t1">암호화 키 이름</th>
+							<th scope="row" class="ico_t1"><spring:message code="encrypt_key_management.Key_Name"/></th>
 							<td><input type="text" class="txt" name="resourceName" id="resourceName" readonly="readonly" value="${resourceName}" /></td>
 						</tr>
 						<tr>
-							<th scope="row" class="ico_t1">적용 알고리즘</th>
+							<th scope="row" class="ico_t1"><spring:message code="encrypt_key_management.Encryption_Algorithm"/></th>
 							<td>
 								<select class="select t5" id="cipherAlgorithmCode" name="cipherAlgorithmCode" >
 										<c:forEach var="result" items="${result}" varStatus="status">
@@ -238,18 +238,18 @@ function fn_historyCryptoKeySymmetric(){
 							</td>
 						</tr>
 						<tr>
-							<th scope="row" class="ico_t1">암호화 키 설명</th>
+							<th scope="row" class="ico_t1"><spring:message code="encrypt_key_management.Description"/></th>
 							<td><input type="text" class="txt" name="resourceNote" id="resourceNote"  value="${resourceNote}" maxlength="100" onkeyup="fn_checkWord(this,100)" placeholder="100<spring:message code='message.msg188'/>"/></td>
 						</tr>
 						
 						<tr>
 							<td></td>
 							<td><div class="inp_chk"><input type="checkbox" id="renew" name="renew" >
-								<label for="renew"></label>갱신 (바이너리를 추가합니다.)</div></td>								
+								<label for="renew"></label><spring:message code="encrypt_key_management.Update_Add_Binaries"/></div></td>								
 						</tr>
 						
 						<tr id="renewInsert">
-							<th scope="row" class="ico_t1">유효기간 만료일</th>
+							<th scope="row" class="ico_t1"><spring:message code="encrypt_key_management.Expiration_Date"/></th>
 							<td>
 								<div class="calendar_area big">
 									<a href="#n" class="calendar_btn">달력열기</a> <input type="text" class="calendar" id="datepicker3" >
@@ -264,26 +264,26 @@ function fn_historyCryptoKeySymmetric(){
 				</table>
 				<div class="cmm_bd">
 					<div class="sub_tit">
-						<p>갱신이력</p>
+						<p><spring:message code="encrypt_key_management.Update_History"/></p>
 					</div>
 					<table id="renewalhistoryTable" class="display" cellspacing="0" width="100%">
 						<thead>
 							<tr>
-								<th width="25">NO</th>										
-								<th width="30">버전</th>
-								<th width="80">상태</th>
-								<th width="200">유효기간 만료일자</th>
-								<th width="80">등록자</th>
-								<th width="130">등록일시</th>
-								<th width="80">수정자</th>
-								<th width="130">수정일시</th>
+								<th width="25"><spring:message code="common.no" /></th>										
+								<th width="50"><spring:message code="encrypt_key_management.Version"/></th>
+								<th width="80"><spring:message code="encrypt_key_management.Status"/></th>
+								<th width="200"><spring:message code="encrypt_key_management.Expiration_Date"/></th>
+								<th width="80"><spring:message code="common.register" /></th>
+								<th width="130"><spring:message code="common.regist_datetime" /></th>
+								<th width="80"><spring:message code="common.modifier" /></th>
+								<th width="130"><spring:message code="common.modify_datetime" /></th>
 							</tr>
 						</thead>
 					</table>											
 				</div>	
 				<div class="btn_type_02">
-					<a href="#n" class="btn" onclick="fn_keyManagementModify();"><span>저장</span></a>
-					<a href="#n" class="btn" onclick="window.close();"><span>취소</span></a>
+					<a href="#n" class="btn" onclick="fn_keyManagementModify();"><span><spring:message code="common.save"/></span></a>
+					<a href="#n" class="btn" onclick="window.close();"><span><spring:message code="common.cancel" /></span></a>
 				</div>
 		</div>
 	</div>

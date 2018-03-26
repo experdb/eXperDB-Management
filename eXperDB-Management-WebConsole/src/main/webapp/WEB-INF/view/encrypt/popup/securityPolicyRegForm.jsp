@@ -60,7 +60,7 @@ function fn_validation(){
 	var binUid = document.getElementById('binUid');
 	
 	if (offset.value == "" || offset.value == "undefind" || offset.value == null) {
-		alert("시작위치를 입력해주세요.");
+		alert('<spring:message code="encrypt_msg.msg09"/>');
 		offset.focus();
 		return false;
 	}
@@ -68,12 +68,12 @@ function fn_validation(){
 		$('#length').val('끝까지');
 	}
 	if (length.value == "" || length.value == "undefind" || length.value == null) {
-		alert("길이를 입력해주세요.");
+		alert('<spring:message code="encrypt_msg.msg10"/>');
 		length.focus();
 		return false;
 	}
 	if (binUid.value == "" || binUid.value == "undefind" || binUid.value == null) {
-		alert("암호화키를 먼저 등록해주세요.");
+		alert('<spring:message code="encrypt_msg.msg11"/>');
 		return false;
 	}
 	
@@ -101,7 +101,7 @@ function fn_save(){
 		$('#length').val('');
 		$("#last").prop('checked', false);
 		$('#length').attr('disabled', false);
-		alert("길이가 [끝까지]인 경우는 하나의 시작위치에만 지정할 수 있습니다.");
+		alert('<spring:message code="encrypt_msg.msg12"/>');
 	}
 }
 
@@ -160,11 +160,11 @@ function fn_changeBinUid(selectObj){
 				</colgroup>
 				<tbody>
 					<tr>
-						<th scope="row" class="ico_t1">시작위치</th>
+						<th scope="row" class="ico_t1"><spring:message code="encrypt_policy_management.Starting_Position"/></th>
 						<td><input type="text" class="txt" name="offset" id="offset" maxlength="4" onKeyPress="NumObj(this);" value="${offset}"/></td>
 					</tr>
 					<tr>
-						<th scope="row" class="ico_t1">길이</th>
+						<th scope="row" class="ico_t1"><spring:message code="encrypt_policy_management.Length"/></th>
 						<td>
 							<input type="text" class="txt" name="length" id="length" maxlength="4" onKeyPress="NumObj(this);"/> 
 							<div class="inp_chk">
@@ -174,7 +174,7 @@ function fn_changeBinUid(selectObj){
 						</td>
 					</tr>
 					<tr>
-						<th scope="row" class="ico_t1">암호화 알고리즘</th>
+						<th scope="row" class="ico_t1"><spring:message code="encrypt_policy_management.Encryption_Algorithm"/></th>
 						<td>
 							<select class="select" id="cipherAlgorithmCode" name="cipherAlgorithmCode" onChange="fn_changeBinUid(this)">
 								<c:forEach var="cipherAlgorithmCode" items="${cipherAlgorithmCode}" varStatus="status">
@@ -184,13 +184,13 @@ function fn_changeBinUid(selectObj){
 						</td>
 					</tr>
 					<tr>
-						<th scope="row" class="ico_t1">암호화 키</th>
+						<th scope="row" class="ico_t1"><spring:message code="encrypt_policy_management.Encryption_Key"/></th>
 						<td>
 							<select class="select" id="binUid" name="binUid"></select>
 						</td>
 					</tr>
 					<tr>
-						<th scope="row" class="ico_t1">초기 벡터</th>
+						<th scope="row" class="ico_t1"><spring:message code="encrypt_policy_management.Initial_Vector"/></th>
 						<td>
 							<select class="select" id="initialVectorTypeCode" name="initialVectorTypeCode">
 								<c:forEach var="initialVectorTypeCode" items="${initialVectorTypeCode}">
@@ -200,7 +200,7 @@ function fn_changeBinUid(selectObj){
 						</td>
 					</tr>
 					<tr>
-						<th scope="row" class="ico_t1">운영모드</th>
+						<th scope="row" class="ico_t1"><spring:message code="encrypt_policy_management.Modes"/></th>
 						<td>
 							<select class="select" id="operationModeCode" name="operationModeCode">
 								<c:forEach var="operationModeCode" items="${operationModeCode}">
@@ -213,12 +213,12 @@ function fn_changeBinUid(selectObj){
 			</table>
 			<div class="btn_type_02">
 				<c:if test="${act == 'i'}">
-					<a href="#n" class="btn"><span onclick="fn_save()">저장</span></a> 
+					<a href="#n" class="btn"><span onclick="fn_save()"><spring:message code="common.save"/></span></a> 
 				</c:if>
 				<c:if test="${act == 'u'}">
-					<a href="#n" class="btn"><span onclick="fn_update()">수정</span></a> 
+					<a href="#n" class="btn"><span onclick="fn_update()"><spring:message code="common.modify" /></span></a> 
 				</c:if>
-				<a href="#n" class="btn" onclick="window.close();"><span>취소</span></a>
+				<a href="#n" class="btn" onclick="window.close();"><span><spring:message code="common.cancel" /></span></a>
 			</div>
 		</div>
 	</div>

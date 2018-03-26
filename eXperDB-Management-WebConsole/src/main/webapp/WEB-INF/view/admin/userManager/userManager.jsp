@@ -328,7 +328,7 @@ function fn_delete(){
 								</td>
 							</tr>
 							<tr>
-								<th scope="row" class="t9">암호화 <spring:message code="user_management.use_yn" /></th>
+								<th scope="row" class="t9">Encrypt <spring:message code="user_management.use_yn" /></th>
 								<td>
 									<select class="select t5" id="encp_use_yn">
 										<option value="%"><spring:message code="common.total" /></option>

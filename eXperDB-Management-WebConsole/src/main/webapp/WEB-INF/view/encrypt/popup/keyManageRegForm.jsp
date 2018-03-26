@@ -41,6 +41,18 @@ $(window.document).ready(function() {
 	$("#datepicker3").datepicker();
 });
 
+//한글 입력 방지
+function fn_checkResourceName(event) {
+    event = event || window.event;
+    var keyID = (event.which) ? event.which : event.keyCode;
+    if (keyID == 8 || keyID == 46 || keyID == 37 || keyID == 39){
+    	 return;
+    }
+    else{
+    	event.target.value = event.target.value.replace(/[^a-z0-9]/g, "");
+    }
+}
+
 /*validation 체크*/
 function fn_validation(){
 	var resourcename = document.getElementById('ResourceName');
@@ -92,7 +104,7 @@ function fu_insertCryptoKeySymmetric(){
 		},
 		success : function(data) {
 			if(data.resultCode == "0000000000"){
-				alert("등록되었습니다.")
+				alert('<spring:message code="message.msg07" />')
 				opener.location.reload();
 				window.close();
 			}else if(data.resultCode == "8000000003"){
@@ -109,23 +121,23 @@ function fu_insertCryptoKeySymmetric(){
 <body>
 	<div class="pop_container">
 		<div class="pop_cts">
-			<p class="tit">암호화 키 등록</p>
+			<p class="tit"><spring:message code="encrypt_policy_management.Encryption_Key"/> <spring:message code="common.registory" /></p>
 				<table class="write">
-					<caption>암호화 키 등록</caption>
+					<caption><spring:message code="encrypt_policy_management.Encryption_Key"/> <spring:message code="common.registory" /></caption>
 					<colgroup>
-						<col style="width: 130px;" />
+						<col style="width: 150px;" />
 						<col />
 					</colgroup>
 					<tbody>
 						<tr>
-							<th scope="row" class="ico_t1">암호화 키 이름</th>
-							<td><input type="text" class="txt" name="ResourceName" id="ResourceName" maxlength="20" onkeyup="fn_checkWord(this,20)" placeholder="20<spring:message code='message.msg188'/>"/></td>
+							<th scope="row" class="ico_t1"><spring:message code="encrypt_key_management.Key_Name"/></th>
+							<td><input type="text" class="txt" name="ResourceName" id="ResourceName" maxlength="20" onkeyup='fn_checkResourceName(event)' style='ime-mode:disabled;' onkeyup="fn_checkWord(this,20)" placeholder="20<spring:message code='message.msg188'/>"/></td>
 						</tr>
 						<tr>
-							<th scope="row" class="ico_t1">적용 알고리즘</th>
+							<th scope="row" class="ico_t1"><spring:message code="encrypt_key_management.Encryption_Algorithm"/></th>
 							<td>
 								<select class="select t5" id="CipherAlgorithmCode" name="CipherAlgorithmCode">
-										<option value="<c:out value=""/>" ><c:out value="선택"/></option>
+										<option value="<c:out value=""/>" ><spring:message code="common.choice" /></option>
 										<c:forEach var="result" items="${result}" varStatus="status">
 											<option value="<c:out value="${result.sysCode}"/>"><c:out value="${result.sysCodeName}"/></option>
 										</c:forEach> 
@@ -133,11 +145,11 @@ function fu_insertCryptoKeySymmetric(){
 							</td>
 						</tr>
 						<tr>
-							<th scope="row" class="ico_t1">암호화 키 설명</th>
+							<th scope="row" class="ico_t1"><spring:message code="encrypt_key_management.Description"/></th>
 							<td><input type="text" class="txt" name="ResourceNote" id="ResourceNote" maxlength="100" onkeyup="fn_checkWord(this,100)" placeholder="100<spring:message code='message.msg188'/>"/></td>
 						</tr>
 						<tr>
-							<th scope="row" class="ico_t1">유효기간 만료일</th>
+							<th scope="row" class="ico_t1"><spring:message code="encrypt_key_management.Expiration_Date"/></th>
 							<td>
 								<div class="calendar_area big">
 									<a href="#n" class="calendar_btn">달력열기</a> <input type="text" class="calendar" id="datepicker3"  readonly="readonly">
@@ -147,8 +159,8 @@ function fu_insertCryptoKeySymmetric(){
 					</tbody>
 				</table>
 			<div class="btn_type_02">
-				<a href="#n" class="btn" onclick="fu_insertCryptoKeySymmetric();"><span>저장</span></a> 
-				<a href="#n" class="btn" onclick="window.close();"><span>취소</span></a>
+				<a href="#n" class="btn" onclick="fu_insertCryptoKeySymmetric();"><span><spring:message code="common.save"/></span></a> 
+				<a href="#n" class="btn" onclick="window.close();"><span><spring:message code="common.cancel" /></span></a>
 			</div>
 		</div>
 	</div>

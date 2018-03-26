@@ -231,7 +231,7 @@
 								</div>
 							</td>
 							<c:if test = "${encp_yn eq 'Y'}">
-								<th scope="row" class="ico_t1">암호화 사용유무</th>
+								<th scope="row" class="ico_t1">Encrypt <spring:message code="user_management.use_yn" /></th>
 								<td>
 									<select class="select" id="encp_use_yn" name="encp_use_yn">
 										<option value="Y" ${encp_use_yn == 'Y' ? 'selected="selected"' : ''}><spring:message code="dbms_information.use" /></option>
@@ -240,7 +240,7 @@
 								</td>
 							</c:if>
 							<c:if test = "${empty encp_yn}">
-								<th scope="row" class="ico_t1">암호화 사용유무</th>
+								<th scope="row" class="ico_t1">Encrypt <spring:message code="user_management.use_yn" /></th>
 								<td>
 									<select class="select" id="encp_use_yn" name="encp_use_yn" disabled="disabled">
 										<option value="Y" ${encp_use_yn == 'Y' ? 'selected="selected"' : ''}><spring:message code="dbms_information.use" /></option>

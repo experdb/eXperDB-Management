@@ -28,7 +28,8 @@ public class AuditLogServiceCall {
 	 * @return 
 	 * @throws Exception
 	 */
-	public JSONObject selectAuditLogSiteList(String restIp, int restPort, String strTocken, AuditLogSite param,String loginId, String entityId) throws Exception {
+	public JSONObject selectAuditLogSiteList(String restIp, int restPort, String strTocken, AuditLogSite param, String loginId, String entityId) throws Exception {
+		JSONArray jsonArray = new JSONArray();
 		JSONObject result = new JSONObject();
 		
 		EncryptCommonService api = new EncryptCommonService(restIp, restPort);
@@ -48,17 +49,52 @@ public class AuditLogServiceCall {
 
 		JSONObject resultJson = api.callService(strService, strCommand, header, parameters.toString());
 		
-		Iterator<?> iter = resultJson.entrySet().iterator();
-		while (iter.hasNext()) {
-			Map.Entry entry = (Map.Entry) iter.next();
-
-			System.out.println(String.valueOf(entry.getKey()) + " = " + String.valueOf(entry.getValue()));
-		}
 		String resultCode = (String) resultJson.get("resultCode");
 		String resultMessage = new String(((String) resultJson.get("resultMessage")).getBytes("iso-8859-1"));
 		
 		if(resultCode.equals(SystemCode.ResultCode.SUCCESS)) {
-			result.put("list", resultJson);
+			ArrayList list = (ArrayList) resultJson.get("list");		
+			if(list != null){
+				for(int i=0; i<list.size(); i++) {
+					JSONObject log = (JSONObject) list.get(i);
+					Gson gson = new Gson();
+					AuditLogSite auditLogSite = new AuditLogSite();
+					auditLogSite = gson.fromJson(log.toJSONString(), auditLogSite.getClass());
+					
+					JSONObject jsonObj = new JSONObject();
+					jsonObj.put("rnum", i+1);
+					jsonObj.put("createDateTime", auditLogSite.getCreateDateTime());
+					jsonObj.put("count", auditLogSite.getCount());
+					jsonObj.put("extraName", auditLogSite.getExtraName());
+					jsonObj.put("serverIntegrityResult", auditLogSite.getServerIntegrityResult());
+					jsonObj.put("siteResultCode", auditLogSite.getSiteResultCode());
+					jsonObj.put("adminLoginId", auditLogSite.getAdminLoginId());
+					jsonObj.put("agentRemoteAddress", auditLogSite.getAgentRemoteAddress());
+					jsonObj.put("siteAccessAddress", auditLogSite.getSiteAccessAddress());
+					jsonObj.put("siteIntegrityResult", auditLogSite.getSiteIntegrityResult());
+					jsonObj.put("weekday", auditLogSite.getWeekday());
+					jsonObj.put("integrityValue", auditLogSite.getIntegrityValue());
+					jsonObj.put("hostName", auditLogSite.getHostName());
+					jsonObj.put("pageOffset", auditLogSite.getPageOffset());
+					jsonObj.put("updateDateTime", auditLogSite.getUpdateDateTime());
+					jsonObj.put("encryptTrueFalse", auditLogSite.getEncryptTrueFalse());
+					jsonObj.put("totalCountLimit", auditLogSite.getTotalCountLimit());
+					jsonObj.put("applicationName", auditLogSite.getApplicationName());
+					jsonObj.put("moduleInfo", auditLogSite.getModuleInfo());
+					jsonObj.put("agentLogDateTime", auditLogSite.getAgentLogDateTime());
+					jsonObj.put("pageSize", auditLogSite.getPageSize());
+					jsonObj.put("instanceId", auditLogSite.getInstanceId());
+					jsonObj.put("locationInfo", auditLogSite.getLocationInfo());
+					jsonObj.put("osLoginId", auditLogSite.getOsLoginId());
+					jsonObj.put("successTrueFalse", auditLogSite.getSuccessTrueFalse());
+					jsonObj.put("agentUid", auditLogSite.getAgentUid());
+					jsonObj.put("macAddr", auditLogSite.getMacAddr());
+					jsonObj.put("serverLoginId", auditLogSite.getServerLoginId());
+					jsonObj.put("profileName", new String(auditLogSite.getProfileName().getBytes("iso-8859-1"),"UTF-8"));
+					jsonArray.add(jsonObj);
+				}
+				result.put("list", jsonArray);
+			}
 		}
 		result.put("resultCode", resultCode);
 		result.put("resultMessage", resultMessage);
@@ -100,42 +136,40 @@ public class AuditLogServiceCall {
 			
 		if(resultCode.equals(SystemCode.ResultCode.SUCCESS)) {
 			ArrayList list = (ArrayList) resultJson.get("list");		
-			
-			for(int i=0; i<list.size(); i++) {
-				JSONObject log = (JSONObject) list.get(i);
-				JSONObject jsonObj = new JSONObject();
-				
-				Gson gson = new Gson();
-				AuditLog auditLog = new AuditLog();
-				auditLog = gson.fromJson(log.toJSONString(), auditLog.getClass());
-				
-				//접근자이름 entityName
-				String strEntityName = auditLog.getEntityName();
-				if(strEntityName != null) {
-					strEntityName = new String(strEntityName.getBytes("iso-8859-1"),"UTF-8"); 
+			if(list != null){
+				for(int i=0; i<list.size(); i++) {
+					JSONObject log = (JSONObject) list.get(i);
+					JSONObject jsonObj = new JSONObject();
+					
+					Gson gson = new Gson();
+					AuditLog auditLog = new AuditLog();
+					auditLog = gson.fromJson(log.toJSONString(), auditLog.getClass());
+					
+					//접근자이름 entityName
+					String strEntityName = auditLog.getEntityName();
+					if(strEntityName != null) {
+						strEntityName = new String(strEntityName.getBytes("iso-8859-1"),"UTF-8"); 
+					}
+					//결과메시지resultMessage
+					String strResultMessage = auditLog.getResultMessage();
+					if(strResultMessage != null) {
+						strResultMessage = new String(strResultMessage.getBytes("iso-8859-1"),"UTF-8"); 
+					}
+					jsonObj.put("rnum", i+1);
+					jsonObj.put("logDateTime", auditLog.getCreateDateTime());
+					jsonObj.put("entityName", strEntityName);
+					jsonObj.put("remoteAddress", auditLog.getRemoteAddress());
+					jsonObj.put("requestPath", auditLog.getRequestPath());
+					jsonObj.put("parameter", auditLog.getParameter());
+					jsonObj.put("resultCode", auditLog.getResultCode());
+					jsonObj.put("resultMessage", strResultMessage);
+					jsonArray.add(jsonObj);
 				}
-				//결과메시지resultMessage
-				String strResultMessage = auditLog.getResultMessage();
-				if(strResultMessage != null) {
-					strResultMessage = new String(strResultMessage.getBytes("iso-8859-1"),"UTF-8"); 
-				}
-				jsonObj.put("rnum", i+1);
-				jsonObj.put("logDateTime", auditLog.getCreateDateTime());
-				jsonObj.put("entityName", strEntityName);
-				jsonObj.put("remoteAddress", auditLog.getRemoteAddress());
-				jsonObj.put("requestPath", auditLog.getRequestPath());
-				jsonObj.put("parameter", auditLog.getParameter());
-				jsonObj.put("resultCode", auditLog.getResultCode());
-				jsonObj.put("resultMessage", strResultMessage);
-				jsonArray.add(jsonObj);
+				result.put("list", jsonArray);
 			}
-			result.put("resultCode", resultCode);
-			result.put("resultMessage", resultMessage);
-			result.put("list", jsonArray);
-		}else{
-			result.put("resultCode", resultCode);
-			result.put("resultMessage", resultMessage);
 		}
+			result.put("resultCode", resultCode);
+			result.put("resultMessage", resultMessage);
 		return result;
 	}
 	
@@ -175,41 +209,41 @@ public class AuditLogServiceCall {
 		
 		if(resultCode.equals("0000000000")) {
 			ArrayList list = (ArrayList) resultJson.get("list");
-			for(int i=0; i<list.size(); i++) {
-				JSONObject log = (JSONObject) list.get(i);
-				JSONObject jsonObj = new JSONObject();
-				
-				Gson gson = new Gson();
-				AuditLog auditLog = new AuditLog();
-				auditLog = gson.fromJson(log.toJSONString(), auditLog.getClass());
-
-				//접근자이름 entityName
-				String strEntityName = auditLog.getEntityName();
-				if(strEntityName != null) {
-					strEntityName = new String(strEntityName.getBytes("iso-8859-1"),"UTF-8"); 
+			if(list!=null){
+				for(int i=0; i<list.size(); i++) {
+					JSONObject log = (JSONObject) list.get(i);
+					JSONObject jsonObj = new JSONObject();
+					
+					Gson gson = new Gson();
+					AuditLog auditLog = new AuditLog();
+					auditLog = gson.fromJson(log.toJSONString(), auditLog.getClass());
+	
+					//접근자이름 entityName
+					String strEntityName = auditLog.getEntityName();
+					if(strEntityName != null) {
+						strEntityName = new String(strEntityName.getBytes("iso-8859-1"),"UTF-8"); 
+					}
+					//결과메시지resultMessage
+					String strResultMessage = auditLog.getResultMessage();
+					if(strResultMessage != null) {
+						strResultMessage = new String(strResultMessage.getBytes("iso-8859-1"),"UTF-8"); 
+					}
+					jsonObj.put("rnum", i+1);
+					jsonObj.put("logDateTime", auditLog.getCreateDateTime());
+					jsonObj.put("entityName", strEntityName);
+					jsonObj.put("remoteAddress", auditLog.getRemoteAddress());
+					jsonObj.put("requestPath", auditLog.getRequestPath());
+					jsonObj.put("parameter", auditLog.getParameter());
+					jsonObj.put("resultCode", auditLog.getResultCode());
+					jsonObj.put("resultMessage", strResultMessage);
+					jsonArray.add(jsonObj);
 				}
-				//결과메시지resultMessage
-				String strResultMessage = auditLog.getResultMessage();
-				if(strResultMessage != null) {
-					strResultMessage = new String(strResultMessage.getBytes("iso-8859-1"),"UTF-8"); 
-				}
-				jsonObj.put("rnum", i+1);
-				jsonObj.put("logDateTime", auditLog.getCreateDateTime());
-				jsonObj.put("entityName", strEntityName);
-				jsonObj.put("remoteAddress", auditLog.getRemoteAddress());
-				jsonObj.put("requestPath", auditLog.getRequestPath());
-				jsonObj.put("parameter", auditLog.getParameter());
-				jsonObj.put("resultCode", auditLog.getResultCode());
-				jsonObj.put("resultMessage", strResultMessage);
-				jsonArray.add(jsonObj);
+				result.put("list", jsonArray);
 			}
-			result.put("resultCode", resultCode);
-			result.put("resultMessage", resultMessage);
-			result.put("list", jsonArray);
-		}else{
-			result.put("resultCode", resultCode);
-			result.put("resultMessage", resultMessage);
 		}
+			result.put("resultCode", resultCode);
+			result.put("resultMessage", resultMessage);
+		
 		return result;
 		
 	}

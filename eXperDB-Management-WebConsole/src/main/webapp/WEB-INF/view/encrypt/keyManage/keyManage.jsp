@@ -52,7 +52,7 @@ var table = null;
 		table.tables().header().to$().find('th:eq(1)').css('min-width', '40px');
 		table.tables().header().to$().find('th:eq(2)').css('min-width', '200px');
 		table.tables().header().to$().find('th:eq(3)').css('min-width', '80px');
-		table.tables().header().to$().find('th:eq(4)').css('min-width', '100px');
+		table.tables().header().to$().find('th:eq(4)').css('min-width', '130px');
 		table.tables().header().to$().find('th:eq(5)').css('min-width', '80px');
 		table.tables().header().to$().find('th:eq(6)').css('min-width', '150px');
 		table.tables().header().to$().find('th:eq(7)').css('min-width', '80px');
@@ -257,17 +257,18 @@ var table = null;
 <div id="contents">
 	<div class="contents_wrap">
 		<div class="contents_tit">
-			<h4>암호화키관리<a href="#n"><img src="../images/ico_tit.png" class="btn_info" /></a></h4>
+			<h4><spring:message code="encrypt_key_management.Encryption_Key_Management"/><a href="#n"><img src="../images/ico_tit.png" class="btn_info" /></a></h4>
 			<div class="infobox">
 				<ul>
-					<li>설명</li>
+					<li><spring:message code="encrypt_help.Encryption_Key_Management_01"/></li>
+					<li><spring:message code="encrypt_help.Encryption_Key_Management_02"/></li>
 				</ul>
 			</div>
 			<div class="location">
 				<ul>
 					<li>Encrypt</li>
-					<li>정책관리/키관리</li>
-					<li class="on">암호화키관리</li>
+					<li><spring:message code="encrypt_policy_management.Policy_Key_Management"/></li>
+					<li class="on"><spring:message code="encrypt_key_management.Encryption_Key_Management"/></li>
 				</ul>
 			</div>
 		</div>
@@ -275,9 +276,9 @@ var table = null;
 			<div class="cmm_grp">
 				<div class="btn_type_01">
 <!-- 					<span class="btn" onclick="fn_select();"><button>조회</button></span> -->
-					<span class="btn" onclick="fn_insert();"><button>등록</button></span>
-					<span class="btn" onclick="fn_update();"><button>수정</button></span>
-					<span class="btn" onclick="fn_delete();"><button>삭제</button></span>
+					<span class="btn" onclick="fn_insert();"><button><spring:message code="common.registory" /></button></span>
+					<span class="btn" onclick="fn_update();"><button><spring:message code="common.modify" /></button></span>
+					<span class="btn" onclick="fn_delete();"><button><spring:message code="common.delete" /></button></span>
 				</div>
 <!-- 				<div class="sch_form"> -->
 <!-- 					<table class="write"> -->
@@ -311,14 +312,14 @@ var table = null;
 						<thead>
 							<tr>
 								<th width="20"></th>
-								<th width="40">No</th>
-								<th width="200">키이름</th>
-								<th width="80">키 유형</th>
-								<th width="100">적용 알고리즘</th>
-								<th width="80">등록자</th>
-								<th width="150">등록일시</th>
-								<th width="80">수정자</th>
-								<th width="150">수정일시</th>
+								<th width="40"><spring:message code="common.no" /></th>
+								<th width="200"><spring:message code="encrypt_key_management.Key_Name"/></th>
+								<th width="80"><spring:message code="encrypt_key_management.Key_Type"/></th>
+								<th width="130"><spring:message code="encrypt_key_management.Encryption_Algorithm"/></th>
+								<th width="80"><spring:message code="common.register" /></th>
+								<th width="150"><spring:message code="common.regist_datetime" /></th>
+								<th width="80"><spring:message code="common.modifier" /></th>
+								<th width="150"><spring:message code="common.modify_datetime" /></th>
 								<th width="0"></th>
 								<th width="0"></th>
 								<th width="0"></th>

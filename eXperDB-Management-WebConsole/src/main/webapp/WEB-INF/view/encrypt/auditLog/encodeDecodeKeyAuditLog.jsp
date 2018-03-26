@@ -38,7 +38,7 @@
 				{
 					data : "",
 					render : function(data, type, full, meta) {
-						var html = "<span class='btn btnC_01 btnF_02'><button id='detail'>상세보기</button></span>";
+						var html = "<span class='btn btnC_01 btnF_02'><button id='detail'><spring:message code='schedule.detail_view' /></button></span>";
 						return html;
 					},
 					className : "dt-center",
@@ -144,7 +144,9 @@
 			success : function(data) {		
 				if(data.resultCode == "0000000000"){
 					table.clear().draw();
-					table.rows.add(data.list).draw();
+					if(data.list != null){
+						table.rows.add(data.list).draw();
+					}
 				}else if(data.resultCode == "8000000003"){
 					alert(data.resultMessage);
 					location.href="/securityKeySet.do";
@@ -186,7 +188,9 @@
 			success : function(data) {		
 				if(data.resultCode == "0000000000"){
 					table.clear().draw();
-					table.rows.add(data.list).draw();
+					if(data.list != null){
+						table.rows.add(data.list).draw();
+					}
 				}else if(data.resultCode == "8000000003"){
 					alert(data.resultMessage);
 					location.href="/securityKeySet.do";
@@ -203,24 +207,24 @@
 <div id="contents">
 	<div class="contents_wrap">
 		<div class="contents_tit">
-			<h4>암호화 키<a href="#n"><img src="../images/ico_tit.png" class="btn_info" /></a></h4>
+			<h4><spring:message code="encrypt_policy_management.Encryption_Key"/><a href="#n"><img src="../images/ico_tit.png" class="btn_info" /></a></h4>
 			<div class="infobox">
 				<ul>
-					<li>암호화 키 설명</li>
+					<li><spring:message code="encrypt_help.Encryption_Key"/></li>
 				</ul>
 			</div>
 			<div class="location">
 				<ul>
 					<li>Encrypt</li>
-					<li>감사로그</li>
-					<li class="on">암호화 키</li>
+					<li><spring:message code="encrypt_log.Audit_Log"/></li>
+					<li class="on"><spring:message code="encrypt_policy_management.Encryption_Key"/></li>
 				</ul>
 			</div>
 		</div>
 		<div class="contents">
 			<div class="cmm_grp">
 				<div class="btn_type_01">
-					<span class="btn" onclick="fn_select();"><button>조회</button></span>
+					<span class="btn" onclick="fn_select();"><button><spring:message code="common.search" /></button></span>
 				</div>
 				<div class="sch_form">
 					<table class="write">
@@ -228,12 +232,12 @@
 						<colgroup>
 							<col style="width: 100px;" />
 							<col style="width: 300px;" />
-							<col style="width: 100px;" />
+							<col style="width: 120px;" />
 							</col>
 						</colgroup>
 						<tbody>
 							<tr>
-								<th scope="row" class="t10">로그기간</th>
+								<th scope="row" class="t10"><spring:message code="encrypt_log_decode.Log_Period"/></th>
 								<td>
 									<div class="calendar_area">
 										<a href="#n" class="calendar_btn">달력열기</a> 
@@ -244,21 +248,21 @@
 								</td>
 							</tr>
 							<tr>
-								<th scope="row" class="t9">접근자</th>
+								<th scope="row" class="t9"><spring:message code="encrypt_log_key.Access_User"/></th>
 								<td>
 									<select class="select t5" id="entityuid">
-										<option value="">전체</option>
+										<option value=""><spring:message code="common.total" /></option>
 											<c:forEach var="entityuid" items="${entityuid}">
 												<option value="${entityuid.getEntityUid}">${entityuid.getEntityName}</option>							
 											</c:forEach>
 									</select>
 								</td>
-								<th scope="row" class="t9">성공/실패</th>
+								<th scope="row" class="t9"><spring:message code="encrypt_log_decode.Success_Failure"/></th>
 								<td>
 									<select class="select t8" id="resultcode">
-										<option value="">전체</option>
-										<option value="0000000000">성공</option>
-										<option value="9999999999">실패</option>
+										<option value=""><spring:message code="common.total" /></option>
+										<option value="0000000000"><spring:message code="common.success" /></option>
+										<option value="9999999999"><spring:message code="common.failed" /> </option>
 									</select>
 								</td>
 							</tr>
@@ -270,13 +274,13 @@
 					<table id="table" class="display" cellspacing="0" width="100%">
 						<thead>
 							<tr>
-								<th width="30">No</th>
-								<th width="150">접근일시</th>
-								<th width="100">접근자</th>
-								<th width="100">접근주소</th>
-								<th width="250">접근경로</th>
-								<th width="100">결과코드</th>
-								<th width="100">상세보기</th>
+								<th width="30"><spring:message code="common.no" /></th>
+								<th width="150"><spring:message code="encrypt_log_key.Access_Date"/></th>
+								<th width="100"><spring:message code="encrypt_log_key.Access_User"/></th>
+								<th width="100"><spring:message code="encrypt_log_key.Access_Address"/></th>
+								<th width="250"><spring:message code="encrypt_log_key.Access_Path"/></th>
+								<th width="100"><spring:message code="encrypt_log_key.Result_Code"/></th>
+								<th width="100"><spring:message code="schedule.detail_view" /></th>
 							</tr>
 						</thead>
 					</table>

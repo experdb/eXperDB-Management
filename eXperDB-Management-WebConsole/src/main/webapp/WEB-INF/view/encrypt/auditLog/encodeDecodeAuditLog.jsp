@@ -23,7 +23,7 @@
 	var table = null;
 
 	function fn_init() {
-		table = $('#passwordDecodeTable').DataTable({
+		table = $('#encodeDecodeTable').DataTable({
 			scrollY : "310px",
 			searching : false,
 			deferRender : true,
@@ -44,9 +44,65 @@
 				{ data : "hostName", className : "dt-center", defaultContent : ""}, 
 				{ data : "locationInfo", className : "dt-center", defaultContent : ""}, 
 				{ data : "moduleInfo", className : "dt-center", defaultContent : ""}, 
-				{ data : "weekday", className : "dt-center", defaultContent : ""}, 
-				{ data : "encryptTrueFalse", className : "dt-center", defaultContent : ""}, 
-				{ data : "successTrueFalse", className : "dt-center", defaultContent : ""}, 
+// 				{ data : "weekday", className : "dt-center", defaultContent : ""}, 
+				{
+					data : "weekday",
+					render : function(data, type, full, meta) {
+						var html = "";
+						if (data == "0") {
+							html += '<spring:message code="common.sun" />';
+						} 
+						if (data == "1") {
+							html += '<spring:message code="common.mon" />';
+						} 
+						if (data == "2") {
+							html += '<spring:message code="common.tue" />';
+						} 
+						if (data == "3") {
+							html += '<spring:message code="common.wed" />';
+						} 
+						if (data == "4") {
+							html += '<spring:message code="common.thu" />';
+						} 
+						if (data == "5") {
+							html += '<spring:message code="common.fri" />';
+						} 
+						if (data == "6") {
+							html += '<spring:message code="common.sat" />';
+						} 
+						return html;
+					},
+					className : "dt-center",
+					defaultContent : ""
+				},
+				{
+					data : "encryptTrueFalse",
+					render : function(data, type, full, meta) {
+						var html = "";
+						if (data == true) {
+							html += "암호화";
+						} else {
+							html += "복호화";
+						}
+						return html;
+					},
+					className : "dt-center",
+					defaultContent : ""
+				},
+				{
+					data : "successTrueFalse",
+					render : function(data, type, full, meta) {
+						var html = "";
+						if (data == true) {
+							html += '<spring:message code="common.success" />';
+						} else {
+							html += '<spring:message code="common.failed" />';
+						}
+						return html;
+					},
+					className : "dt-center",
+					defaultContent : ""
+				},
 				{ data : "count", className : "dt-center", defaultContent : ""}, 
 				{ data : "siteIntegrityResult", className : "dt-center", defaultContent : ""}, 
 				{ data : "serverIntegrityResult", className : "dt-center", defaultContent : ""}, 
@@ -76,7 +132,7 @@
 		table.tables().header().to$().find('th:eq(17)').css('min-width', '100px');
 		table.tables().header().to$().find('th:eq(18)').css('min-width', '100px');
 		table.tables().header().to$().find('th:eq(19)').css('min-width', '100px');
-		table.tables().header().to$().find('th:eq(20)').css('min-width', '100px');
+		table.tables().header().to$().find('th:eq(20)').css('min-width', '120px');
 		table.tables().header().to$().find('th:eq(21)').css('min-width', '150px');
 		table.tables().header().to$().find('th:eq(22)').css('min-width', '150px');
 	
@@ -137,7 +193,9 @@
 			success : function(data) {		
 				if(data.resultCode == "0000000000"){
 					table.clear().draw();
-					table.rows.add(data.list).draw();
+					if(data.list!=null){
+						table.rows.add(data.list).draw();
+					}
 				}else if(data.resultCode == "8000000003"){
 					alert(data.resultMessage);
 					location.href="/securityKeySet.do";
@@ -179,10 +237,17 @@
 					alert("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""));
 				}
 			},
-			success : function(result) {
-				table.clear().draw();
-				if(result.data!=null){
-					table.rows.add(result.data).draw();
+			success : function(data) {
+				if(data.resultCode == "0000000000"){
+					table.clear().draw();
+					if(data.list!=null){
+						table.rows.add(data.list).draw();
+					}
+				}else if(data.resultCode == "8000000003"){
+					alert(data.resultMessage);
+					location.href="/securityKeySet.do";
+				}else{
+					alert(data.resultMessage +"("+data.resultCode+")");	
 				}
 			}
 		});
@@ -193,37 +258,37 @@
 <div id="contents">
 	<div class="contents_wrap">
 		<div class="contents_tit">
-			<h4>암복호화<a href="#n"><img src="../images/ico_tit.png" class="btn_info" /></a></h4>
+			<h4><spring:message code="encrypt_log_decode.Encryption_Decryption"/><a href="#n"><img src="../images/ico_tit.png" class="btn_info" /></a></h4>
 			<div class="infobox">
 				<ul>
-					<li>암복호화설명</li>
+					<li><spring:message code="encrypt_help.Encryption_Decryption"/></li>
 				</ul>
 			</div>
 			<div class="location">
 				<ul>
 					<li>Encrypt</li>
-					<li>감사로그</li>
-					<li class="on">암복호화</li>
+					<li><spring:message code="encrypt_log.Audit_Log"/></li>
+					<li class="on"><spring:message code="encrypt_log_decode.Encryption_Decryption"/></li>
 				</ul>
 			</div>
 		</div>
 		<div class="contents">
 			<div class="cmm_grp">
 				<div class="btn_type_01">
-					<span class="btn" onclick="fn_select();"><button>조회</button></span>
+					<span class="btn" onclick="fn_select();"><button><spring:message code="common.search" /></button></span>
 				</div>
 				<div class="sch_form">
 					<table class="write">
 						<caption>검색 조회</caption>
 						<colgroup>
-							<col style="width: 100px;" />
+							<col style="width: 170px;" />
 							<col style="width: 500px;" />
-							<col style="width: 100px;" />
+							<col style="width: 120px;" />
 							</col>
 						</colgroup>
 						<tbody>
 							<tr>
-								<th scope="row" class="t10">로그기간</th>
+								<th scope="row" class="t10"><spring:message code="encrypt_log_decode.Log_Period"/></th>
 								<td>
 									<div class="calendar_area">
 										<a href="#n" class="calendar_btn">달력열기</a> 
@@ -234,44 +299,44 @@
 								</td>
 							</tr>
 							<tr>
-								<th scope="row" class="t9">에이전트</th>
+								<th scope="row" class="t9"><spring:message code="encrypt_log_decode.Agent"/></th>
 								<td>
 									<select class="select t3" id="agentUid" name="agentUid">
+										<option value="" ><spring:message code="common.total" /> </option>
 										<c:forEach var="result" items="${result}" varStatus="status">
-										<option value="" ><c:out value="전체"/></option>
 											<option value="<c:out value="${result.entityUid}"/>" ><c:out value="${result.entityName}"/></option>
 										</c:forEach> 
 									</select>
 								</td>
-								<th scope="row" class="t9">성공/실패</th>
+								<th scope="row" class="t9"><spring:message code="encrypt_log_decode.Success_Failure"/></th>
 								<td>
 									<select class="select t8" id="successTrueFalse" name="successTrueFalse">
-										<option value="">전체</option>
-										<option value="true">성공</option>
-										<option value="false">실패</option>
+										<option value=""><spring:message code="common.total" /> </option>
+										<option value="true"><spring:message code="common.success" /></option>
+										<option value="false"><spring:message code="common.failed" /></option>
 									</select>
 								</td>
 							</tr>
 							<tr>
-								<th scope="row" class="t9">조회필드</th>
+								<th scope="row" class="t9"><spring:message code="encrypt_log_decode.Additional_Search_Condition"/></th>
 								<td>
 									<select class="select t5" id="searchFieldName" name="searchFieldName">
-										<option value="">전체</option>
-										<option value="PROFILE_NM">정책 이름</option>
-										<option value="SITE_ACCESS_ADDRESS">클라이언트 주소</option>
-										<option value="HOST_NM">호스트 이름</option>
-										<option value="EXTRA_NM">추가 필드</option>
-										<option value="MODULE_INFO">모듈 정보</option>
-										<option value="LOCATION_INFO">DB 컬럼</option>
-										<option value="SERVER_LOGIN_ID">DB 사용자 아이디</option>
-										<option value="ADMIN_LOGIN_ID">eXperDB 사용자 아이디</option>
-										<option value="OS_LOGIN_ID">사용자 아이디</option>
-										<option value="APPLICATION_NM">프로그램 이름</option>
-										<option value="INSTANCE_ID">서버 인스턴스</option>										
+										<option value="">조회안함</option>
+										<option value="PROFILE_NM"><spring:message code="encrypt_policy_management.Policy_Name"/></option>
+										<option value="SITE_ACCESS_ADDRESS"><spring:message code="encrypt_log_decode.Client_Address"/></option>
+										<option value="HOST_NM"><spring:message code="encrypt_policy_management.Host_Name"/></option>
+										<option value="EXTRA_NM"><spring:message code="encrypt_policy_management.Additional_Fields"/></option>
+										<option value="MODULE_INFO"><spring:message code="encrypt_log_decode.Module_Information"/></option>
+										<option value="LOCATION_INFO"><spring:message code="encrypt_log_decode.Column_Name"/></option>
+										<option value="SERVER_LOGIN_ID"><spring:message code="encrypt_policy_management.Database_User"/></option>
+										<option value="ADMIN_LOGIN_ID"><spring:message code="encrypt_policy_management.eXperDB_User"/></option>
+										<option value="OS_LOGIN_ID"><spring:message code="user_management.user_id" /></option>
+										<option value="APPLICATION_NM"><spring:message code="encrypt_policy_management.Application_Name"/></option>
+										<option value="INSTANCE_ID"><spring:message code="encrypt_policy_management.Server_Instance"/></option>										
 									</select>
 									<select class="select t8" id="searchOperator" name="searchOperator">
-										<option value="%">Like</option>
-										<option value="%">=</option>
+										<option value="LIKE">Like</option>
+										<option value="=">=</option>
 										<option value="<">&lt;</option>
 										<option value=">">&gt;</option>
 									</select>
@@ -283,32 +348,32 @@
 				</div>
 
 				<div class="overflow_area">
-					<table id="passwordDecodeTable" class="display" cellspacing="0" width="100%">
+					<table id="encodeDecodeTable" class="display" cellspacing="0" width="100%">
 						<thead>
 							<tr>
-								<th width="40">No</th>
-								<th width="100">에이전트 로그일시</th>
-								<th width="100">에이전트 주소</th>
-								<th width="100">보안정책</th>
-								<th width="100">서버 인스턴스</th>
-								<th width="100">클라이언트 주소</th>
-								<th width="100">Mac주소</th>
-								<th width="100">OS사용자</th>
-								<th width="100">DB사용자</th>
-								<th width="100">eXperDB 사용자</th>
-								<th width="100">프로그램</th>
+								<th width="40"><spring:message code="common.no" /></th>
+								<th width="100"><spring:message code="encrypt_log_decode.Agent_Log_Date"/></th>
+								<th width="100"><spring:message code="encrypt_log_decode.Agent_Address"/></th>
+								<th width="100"><spring:message code="encrypt_log_decode.Securiy_Policy"/></th>
+								<th width="100"><spring:message code="encrypt_policy_management.Server_Instance"/></th>
+								<th width="100"><spring:message code="encrypt_log_decode.Client_Address"/> </th>
+								<th width="100"><spring:message code="encrypt_log_decode.MAC_Address"/></th>
+								<th width="100"><spring:message code="encrypt_policy_management.OS_User"/></th>
+								<th width="100"><spring:message code="encrypt_policy_management.Database_User"/></th>
+								<th width="100"><spring:message code="encrypt_policy_management.eXperDB_User"/></th>
+								<th width="100"><spring:message code="encrypt_policy_management.Application_Name"/></th>
 								<th width="100">Extra Name</th>
-								<th width="100">Host 이름</th>
-								<th width="100">DB컬럼</th>
-								<th width="100">모듈정보</th>
-								<th width="100">요일</th>
-								<th width="100">동작</th>
-								<th width="100">결과</th>
-								<th width="100">횟수</th>
-								<th width="100">사이트 무결성</th>
-								<th width="100">서버 무결성</th>
-								<th width="150">관리서버 로그 생성일시</th>
-								<th width="150">관리서버 로그 갱신일시</th>
+								<th width="100"><spring:message code="encrypt_policy_management.Host_Name"/></th>
+								<th width="100"><spring:message code="encrypt_log_decode.Column_Name"/></th>
+								<th width="100"><spring:message code="encrypt_log_decode.Module_Information"/></th>
+								<th width="100"><spring:message code="encrypt_policy_management.Day_of_Week"/></th>
+								<th width="100"><spring:message code="encrypt_log_decode.Action"/></th>
+								<th width="100"><spring:message code="encrypt_log_decode.Result"/></th>
+								<th width="100"><spring:message code="encrypt_log_decode.Count"/></th>
+								<th width="100"><spring:message code="encrypt_log_decode.Site_Integrity"/></th>
+								<th width="120"><spring:message code="encrypt_log_decode.ServerIntegrity"/></th>
+								<th width="150"><spring:message code="encrypt_log_decode.Log_Create_Time"/></th>
+								<th width="150"><spring:message code="encrypt_log_sever.Log_Update_Time"/></th>
 							</tr>
 						</thead>
 					</table>

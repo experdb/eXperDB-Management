@@ -84,15 +84,16 @@ public class AuditLogController {
 			historyVO.setMnu_id(28);
 			accessHistoryService.insertHistory(historyVO);
 			
-			String DateTimeFrom = request.getParameter("from")+" 00:00:00.000000";
-			String DateTimeTo = request.getParameter("to")+" 23:59:59.999999";
+			String from = request.getParameter("from").replace("-", "");
+			String to = request.getParameter("to").replace("-", "");
 			
+			String DateTimeFrom = from+"000000";
+			String DateTimeTo = to+"240000";
 			String agentUid = request.getParameter("agentUid");
-			
 			String searchFieldName= request.getParameter("searchFieldName");
 			String searchOperator = request.getParameter("searchOperator");
 			String searchFieldValueString = request.getParameter("searchFieldValueString");
-			String successTrueFalse = request.getParameter("successTrueFalse");
+			String successTrueFalse = request.getParameter("successTrueFalse");	
 			
 			AuditLogSite param = new AuditLogSite();
 			param.setSearchAgentLogDateTimeFrom(DateTimeFrom); 
@@ -101,15 +102,12 @@ public class AuditLogController {
 			param.setSearchFieldName(searchFieldName);
 			param.setSearchOperator(searchOperator);
 			param.setSearchFieldValueString(searchFieldValueString);
-			
-			System.out.println(successTrueFalse);
-			
 			if(successTrueFalse.equals("true")){
 				param.setSuccessTrueFalse(true);
-			}else if(successTrueFalse.equals("fasle")){
+			}else if(successTrueFalse.equals("false")){
 				param.setSuccessTrueFalse(false);
 			}
-					
+			
 			param.setPageOffset(1);
 			param.setPageSize(10001);
 			param.setTotalCountLimit(10001);

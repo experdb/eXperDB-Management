@@ -98,7 +98,7 @@ function fn_validation(){
 		if(mstKeyUseChk == true){
 			var mstKeyPth = document.getElementById("mstKeyPth");
 			if (mstKeyPth.value == "") {
-				   alert('마스터키 파일을 선택해주세요.');
+				   alert('<spring:message code="encrypt_msg.msg04"/>');
 				   mstKeyPth.focus();
 				   return false;
 			}			
@@ -110,7 +110,7 @@ function fn_validation(){
 				   return false;
 			}			
 			if (mstKeyPassword.value.length < 8 ) {
-				   alert('비밀번호 8자리 이상 입력해주세요.');
+				   alert('<spring:message code="encrypt_msg.msg05" />');
 				   mstKeyPassword.focus();
 				   return false;
 			}
@@ -133,7 +133,7 @@ function fn_validation(){
 		}
 		
 		if (mstKeyRenewPassword.value.length < 8 ) {
-			   alert('비밀번호 8자리 이상 입력해주세요.');
+			   alert('<spring:message code="encrypt_msg.msg05" />');
 			   mstKeyRenewPassword.focus();
 			   return false;
 		}
@@ -210,7 +210,7 @@ function fn_keyFileLoadServerKey(){
 		},
 		success : function(data) {
 			if(data.resultCode == "0000000000"){
-				alert("서버 마스터키 암호가 입력되었습니다.");
+				alert('<spring:message code="encrypt_msg.msg01"/>');
 			}else{
 				alert(data.resultMessage +"("+data.resultCode+")");
 			}
@@ -243,7 +243,7 @@ function fn_noKeyFileLoadServerKey(keyPassword){
 		},
 		success : function(data) {
 			if(data.resultCode == "0000000000"){
-				alert("서버 마스터키 암호가 입력되었습니다.");
+				alert('<spring:message code="encrypt_msg.msg01"/>');
 			}
 		}
 	});
@@ -284,7 +284,7 @@ function fn_newMasterKey(useYN,chk){
 			if(data.resultCode == "0000000000"){
 				document.keyDownload.mstKey.value = data.masterKey;
 				fn_mstKeyDownload();	
-				alert("서버 마스터키 암호가 변경되었습니다.");
+				alert('<spring:message code="encrypt_msg.msg02"/>');
 			}
 		}
 	});	
@@ -300,17 +300,17 @@ function fn_mstKeyDownload(){
 <div id="contents">
 	<div class="contents_wrap">
 		<div class="contents_tit">
-			<h4>서버 마스터키 암호 설정<a href="#n"><img src="../images/ico_tit.png" class="btn_info"/></a></h4>
+			<h4><spring:message code="encrypt_serverMasterKey.Setting_the_server_master_key_password"/><a href="#n"><img src="../images/ico_tit.png" class="btn_info"/></a></h4>
 			<div class="infobox"> 
 				<ul>
-					<li>설명</li>
+					<li><spring:message code="encrypt_help.Setting_the_server_master_key_password"/></li>
 				</ul>
 			</div>
 			<div class="location">
 				<ul>
 					<li>Encrypt</li>
-					<li>설정</li>
-					<li class="on">서버 마스터키 암호 설정</li>
+					<li><spring:message code="encrypt_policyOption.Settings"/></li>
+					<li class="on"><spring:message code="encrypt_serverMasterKey.Setting_the_server_master_key_password"/></li>
 				</ul>
 			</div>
 		</div>
@@ -319,7 +319,7 @@ function fn_mstKeyDownload(){
 		<form id="masterKey" method="post" enctype="multipart/form-data" action="">
 			<div class="cmm_grp">
 				<div class="btn_type_01">
-					<a href="#n" class="btn" onClick="fn_save()"><span>저장</span></a> 
+					<a href="#n" class="btn" onClick="fn_save()"><span><spring:message code="common.save"/></span></a> 
 				</div>
 			<%-- <form class="securityKeySet" method="post" enctype="multipart/form-data"> --%>
 				<div class="cmm_bd" id="pnlOldPassword">
@@ -335,23 +335,23 @@ function fn_mstKeyDownload(){
 									<td colspan="2">
 										<div class="inp_chk">
 											<span> <input type="checkbox" id="mstKeyUse" name="mstKeyUse" onClick="fn_mstKeyUse();"/> 
-												<label for="mstKeyUse">마스터키 파일 사용</label>
+												<label for="mstKeyUse"><spring:message code="encrypt_serverMasterKey.Using_the_Master_Key_File"/></label>
 											</span>
 										</div>
 									</td>
 								</tr>
 								<tr>
-									<th scope="row" class="ico_t2">마스터키 위치</th>
+									<th scope="row" class="ico_t2"><spring:message code="encrypt_serverMasterKey.Master_Key_Path"/></th>
 									<td>
 										<input type="text" name="mstKeyPth" id="mstKeyPth" class="txt t9" />
-										<span class="btn btnC_01"><button type="button" class= "btn_type_02"  style="width: 60px; margin-right: -60px; margin-top: 0;" onClick="document.getElementById('keyFile').click();">찾아보기</button></span>
+										<span class="btn btnC_01"><button type="button" class= "btn_type_02"  style="width: 60px; margin-right: -60px; margin-top: 0;" onClick="document.getElementById('keyFile').click();"><spring:message code="encrypt_serverMasterKey.Browse"/></button></span>
 										<input type="file" size="30" id="keyFile" name="keyFile" style="display:none;" onchange="document.getElementById('mstKeyPth').value=this.value;" />
 									</td>
 								</tr>
 								<tr>
 									<th scope="row" class="ico_t2">비밀번호</th>
 									<td>
-										<input type="password" name="mstKeyPassword" id="mstKeyPassword" class="txt t2"  onkeyup="fn_checkWord(this,8)" placeholder="8자리 이상 입력해 주세요"/>										
+										<input type="password" name="mstKeyPassword" id="mstKeyPassword" class="txt t2"  placeholder="<spring:message code="encrypt_msg.msg05"/>"/>										
 									</td>
 								</tr>
 							</tbody>
@@ -372,7 +372,7 @@ function fn_mstKeyDownload(){
 									<td colspan="2">
 										<div class="inp_chk">
 											<span> <input type="checkbox" id="mstKeyRenew" name="mstKeyRenew"  onClick="fn_mstKeyRenew();"/> 
-												<label for="mstKeyRenew">서버 마스터키 갱신</label>
+												<label for="mstKeyRenew"><spring:message code="encrypt_serverMasterKey.Server_master_key_update"/></label>
 											</span>
 										</div>
 									</td>
@@ -393,24 +393,24 @@ function fn_mstKeyDownload(){
 							</colgroup>
 							<tbody>
 								<tr>
-									<th scope="row" class="ico_t2">마스터키 모드</th>
+									<th scope="row" class="ico_t2"><spring:message code="encrypt_serverMasterKey.Master_key_file_mode"/></th>
 									<td>
 										<select name="mstKeyMode" id="mstKeyMode"  class="select t5">
-											<option value="0000">새로운 마스터키 파일</option>
-											<option value="1111">마스터키 파일 사용안함</option>
+											<option value="0000"><spring:message code="encrypt_serverMasterKey.New_master_key_file"/> </option>
+											<option value="1111"><spring:message code="encrypt_serverMasterKey.Not_using_the_master_key_file"/> </option>
 										</select>
 									</td>
 								</tr>
 								<tr>
 									<th scope="row" class="ico_t2">비밀번호</th>
 									<td>
-										<input type="password" name="mstKeyRenewPassword" id="mstKeyRenewPassword" class="txt t2" onkeyup="fn_checkWord(this,8)" placeholder="8자리 이상 입력해 주세요"/>										
+										<input type="password" name="mstKeyRenewPassword" id="mstKeyRenewPassword" class="txt t2" placeholder="<spring:message code="encrypt_msg.msg05"/>"/>										
 									</td>
 								</tr>
 								<tr>
 									<th scope="row" class="ico_t2">비밀번호 확인</th>
 									<td>
-										<input type="password" name="mstKeyRenewPasswordconfirm" id="mstKeyRenewPasswordconfirm" class="txt t2" onkeyup="fn_checkWord(this,8)" placeholder="8자리 이상 입력해 주세요"/>										
+										<input type="password" name="mstKeyRenewPasswordconfirm" id="mstKeyRenewPasswordconfirm" class="txt t2"  placeholder="<spring:message code="encrypt_msg.msg05"/>"/>										
 									</td>
 								</tr>
 							</tbody>

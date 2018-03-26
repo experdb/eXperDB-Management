@@ -176,7 +176,7 @@ $(window.document).ready(function() {
 			},
 			success : function(data) {
 				if(data.resultCode == "0000000000"){
-					alert("등록되었습니다.")
+					alert('<spring:message code="message.msg07" />')
 					location.reload();
 				}else if(data.resultCode == "8000000003"){
 					alert(data.resultMessage);
@@ -204,17 +204,17 @@ select.t6{
 <div id="contents">
 	<div class="contents_wrap">
 		<div class="contents_tit">
-			<h4>암호화 설정<a href="#n"><img src="../images/ico_tit.png" class="btn_info"/></a></h4>
+			<h4><spring:message code="encrypt_encryptSet.Encryption_Settings"/><a href="#n"><img src="../images/ico_tit.png" class="btn_info"/></a></h4>
 			<div class="infobox"> 
 				<ul>
-					<li>암호화 설정</li>
+					<li><spring:message code="encrypt_help.Encryption_Settings"/> </li>
 				</ul>
 			</div>
 			<div class="location">
 				<ul>
 					<li>Encrypt</li>
-					<li>설정</li>
-					<li class="on">암호화 설정</li>
+					<li><spring:message code="encrypt_policyOption.Settings"/></li>
+					<li class="on"><spring:message code="encrypt_encryptSet.Encryption_Settings"/></li>
 				</ul>
 			</div>
 		</div>
@@ -222,16 +222,16 @@ select.t6{
 		<div class="contents">
 			<div class="cmm_grp">
 				<div class="btn_type_01">
-					<a href="#n" class="btn" onClick="fn_save()"><span>저장</span></a> 
+					<a href="#n" class="btn" onClick="fn_save()"><span><spring:message code="common.save"/></span></a> 
 				</div>
 				<div class="cmm_bd">
 					<div class="sub_tit">
-						<p>암호화설정</p>
+						<p><spring:message code="encrypt_encryptSet.Encryption_Settings"/></p>
 					</div>
 					<div class="overflows_areas">
 						<table class="write">
 							<colgroup>
-								<col style="width: 300px;" />
+								<col style="width: 350px;" />
 								<col style="width: 55px;" />
 								<col />
 							</colgroup>
@@ -240,31 +240,31 @@ select.t6{
 									<td colspan="2">
 										<div class="inp_chk">
 											<span> <input type="checkbox" id="ValueTrueFalse" name="ValueTrueFalse" /> 
-												<label for="ValueTrueFalse">정책전송 중지</label>
+												<label for="ValueTrueFalse"><spring:message code="encrypt_encryptSet.Stop_Transfer_Policy"/></label>
 											</span>
 										</div>
 									</td>
 								</tr>
 								<tr>
-									<th scope="row" class="ico_t2">관리서버 모니터링 주기</th>
+									<th scope="row" class="ico_t2"><spring:message code="encrypt_encryptSet.Monitoring_Period"/></th>
 									<td><div id="period01"></div></td>
-									<td>초</td>
+									<td><spring:message code="schedule.second" /></td>
 								</tr>
 								<tr>
-									<th scope="row" class="ico_t2">에이전트와 관리서버 통신 주기</th>
+									<th scope="row" class="ico_t2"><spring:message code="encrypt_encryptSet.Communication_period_between_agent_and_management_server"/></th>
 									<td><div id="period02"></div></td>
-									<td>초(5 ~ 86400초)</td>
+									<td><spring:message code="schedule.second" />(5 ~ 86400<spring:message code="schedule.second" />)</td>
 								</tr>
 								<tr>
-									<th scope="row" class="ico_t2">암호화키의 유효기간이 다음 날짜 이하로 남으면 경고</th>
+									<th scope="row" class="ico_t2"><spring:message code="encrypt_encryptSet.Warning_when_the_encryption_key_is_valid_for_less_than"/></th>
 									<td><div id="period03"></div></td>
-									<td>일(10 ~ 600초)</td>
+									<td><spring:message code="schedule.day" />(10 ~ 600<spring:message code="schedule.second" />)</td>
 								</tr>
 								<tr>
 									<td colspan="2">
 										<div class="inp_chk">
 											<span> <input type="checkbox" id="MONITOR_AGENT_AUDIT_LOG_HMAC" name="MONITOR_AGENT_AUDIT_LOG_HMAC" /> 
-												<label for="MONITOR_AGENT_AUDIT_LOG_HMAC">에이전트가 기록하는 로그에 위변조 방지를 적용</label>
+												<label for="MONITOR_AGENT_AUDIT_LOG_HMAC"><spring:message code="encrypt_encryptSet.Apply_forgery_prevention_to_logs"/></label>
 											</span>
 										</div>
 									</td>

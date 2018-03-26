@@ -326,30 +326,30 @@ $(window.document).ready(function() {
 			var html4 = "";
 			html4 += '<ul class="depth_1 lnbMenu">';
 			html4 += '<li class="t2"><div class="border">';
-			html4 += '<a href="#n"><img src="../images/ico_lnb_5.png" id="treeImg"><div class="tooltip">정책관리/키관리<span class="tooltiptext">정책관리/키관리</span></div></a>';
+			html4 += '<a href="#n"><img src="../images/ico_lnb_5.png" id="treeImg"><div class="tooltip"><spring:message code="encrypt_policy_management.Policy_Key_Management"/><span class="tooltiptext"><spring:message code="encrypt_policy_management.Policy_Key_Management"/></span></div></a>';
 			html4 += '</div>';
 			html4 += '<ul class="depth_2">';
 			if(result.length != 0 && result[0].read_aut_yn == "Y" && result[0].mnu_cd == "MN0001101"){
-				html4 += '<li class="ico2_3"><a href="/securityPolicy.do" id="securityPolicy" onclick=fn_GoLink("securityPolicy"); target="main"><img src="../images/ico_lnb_8.png" id="treeImg">보안정책관리</a></li>';
+				html4 += '<li class="ico2_3"><a href="/securityPolicy.do" id="securityPolicy" onclick=fn_GoLink("securityPolicy"); target="main"><img src="../images/ico_lnb_8.png" id="treeImg"><spring:message code="encrypt_policy_management.Security_Policy_Management"/></a></li>';
 			}
 			if(result.length != 0 && result[1].read_aut_yn == "Y" && result[1].mnu_cd == "MN0001102"){
-				html4 += '<li class="ico2_3"><a href="/keyManage.do" id="keyManage" onclick=fn_GoLink("keyManage"); target="main"><img src="../images/ico_lnb_8.png" id="treeImg">암호화키관리</a></li>';
+				html4 += '<li class="ico2_3"><a href="/keyManage.do" id="keyManage" onclick=fn_GoLink("keyManage"); target="main"><img src="../images/ico_lnb_8.png" id="treeImg"><spring:message code="encrypt_key_management.Encryption_Key_Management"/></a></li>';
 			}
 			html4 += '</ul>';
 			html4 += '</li>';
 			
 			html4 += '<li class="t2"><div class="border">';
-			html4 += '<a href="#n"><img src="../images/ico_lnb_5.png" id="treeImg"><div class="tooltip">감사로그<span class="tooltiptext">감사로그</span></div></a>';
+			html4 += '<a href="#n"><img src="../images/ico_lnb_5.png" id="treeImg"><div class="tooltip"><spring:message code="encrypt_log.Audit_Log"/><span class="tooltiptext"><spring:message code="encrypt_log.Audit_Log"/></span></div></a>';
 			html4 += '</div>';
 			html4 += '<ul class="depth_2">';
 			if(result.length != 0 && result[2].read_aut_yn == "Y" && result[2].mnu_cd == "MN0001201"){
-				html4 += '<li class="ico2_4"><a href="/encodeDecodeAuditLog.do"  id="encodeDecodeAuditLog" onclick=fn_GoLink("encodeDecodeAuditLog"); target="main"><img src="../images/ico_lnb_9.png" id="treeImg">암복호화</a></li>';
+				html4 += '<li class="ico2_4"><a href="/encodeDecodeAuditLog.do"  id="encodeDecodeAuditLog" onclick=fn_GoLink("encodeDecodeAuditLog"); target="main"><img src="../images/ico_lnb_9.png" id="treeImg"><spring:message code="encrypt_log_decode.Encryption_Decryption"/></a></li>';
 			}
 			if(result.length != 0 && result[3].read_aut_yn == "Y" && result[3].mnu_cd == "MN0001202"){
-				html4 += '<li class="ico2_4"><a href="/managementServerAuditLog.do" id="managementServerAuditLog" onclick=fn_GoLink("managementServerAuditLog"); target="main"><img src="../images/ico_lnb_9.png" id="treeImg">관리서버</a></li>';
+				html4 += '<li class="ico2_4"><a href="/managementServerAuditLog.do" id="managementServerAuditLog" onclick=fn_GoLink("managementServerAuditLog"); target="main"><img src="../images/ico_lnb_9.png" id="treeImg"><spring:message code="encrypt_log_sever.Management_Server"/></a></li>';
 			}
 			if(result.length != 0 && result[4].read_aut_yn == "Y" && result[4].mnu_cd == "MN0001203"){
-				html4 += '<li class="ico2_4"><a href="/encodeDecodeKeyAuditLog.do" id="encodeDecodeKeyAuditLog" onclick=fn_GoLink("encodeDecodeKeyAuditLog"); target="main"><img src="../images/ico_lnb_9.png" id="treeImg">암호화 키</a></li>';
+				html4 += '<li class="ico2_4"><a href="/encodeDecodeKeyAuditLog.do" id="encodeDecodeKeyAuditLog" onclick=fn_GoLink("encodeDecodeKeyAuditLog"); target="main"><img src="../images/ico_lnb_9.png" id="treeImg"><spring:message code="encrypt_policy_management.Encryption_Key"/></a></li>';
 			}
 			if(result.length != 0 && result[5].read_aut_yn == "Y" && result[5].mnu_cd == "MN0001204"){
 				html4 += '<li class="ico2_4"><a href="/resourcesUseAuditLog.do" id="resourcesUseAuditLog" onclick=fn_GoLink("resourcesUseAuditLog"); target="main"><img src="../images/ico_lnb_9.png" id="treeImg">자원사용</a></li>';
@@ -359,20 +359,20 @@ $(window.document).ready(function() {
 			
 			
 			html4 += '<li class="t2"><div class="border">';
-			html4 += '<a href="#n"><img src="../images/ico_lnb_5.png" id="treeImg"><div class="tooltip">설정<span class="tooltiptext">설정</span></div></a>';
+			html4 += '<a href="#n"><img src="../images/ico_lnb_5.png" id="treeImg"><div class="tooltip"><spring:message code="encrypt_policyOption.Settings"/><span class="tooltiptext"><spring:message code="encrypt_policyOption.Settings"/></span></div></a>';
 			html4 += '</div>';
 			html4 += '<ul class="depth_2">';
 			if(result.length != 0 && result[6].read_aut_yn == "Y" && result[6].mnu_cd == "MN0001301"){
-				  html4 +='<li class="ico2_4"><a href="/securityPolicyOptionSet.do" id="securityPolicyOptionSet" onclick=fn_GoLink("securityPolicyOptionSet"); target="main"><img src="../images/ico_lnb_9.png" id="treeImg">보안정책옵션설정</a></li>';
+				  html4 +='<li class="ico2_4"><a href="/securityPolicyOptionSet.do" id="securityPolicyOptionSet" onclick=fn_GoLink("securityPolicyOptionSet"); target="main"><img src="../images/ico_lnb_9.png" id="treeImg"><spring:message code="encrypt_policyOption.Security_Policy_Option_Setting"/></a></li>';
 			}
 			if(result.length != 0 && result[7].read_aut_yn == "Y" && result[7].mnu_cd == "MN0001302"){
-				html4 +='<li class="ico2_4"><a href="/securitySet.do" id="securitySet" onclick=fn_GoLink("securitySet"); target="main"><img src="../images/ico_lnb_9.png" id="treeImg">암호화설정</a></li>';
+				html4 +='<li class="ico2_4"><a href="/securitySet.do" id="securitySet" onclick=fn_GoLink("securitySet"); target="main"><img src="../images/ico_lnb_9.png" id="treeImg"><spring:message code="encrypt_encryptSet.Encryption_Settings"/></a></li>';
 			}
 			if(result.length != 0 && result[8].read_aut_yn == "Y" && result[8].mnu_cd == "MN0001303"){
-				html4 +='<li class="ico2_4"><a href="/securityKeySet.do" id="securityKeySet" onclick=fn_GoLink("securityKeySet"); target="main"><img src="../images/ico_lnb_9.png" id="treeImg">서버마스터키암호설정</a></li>';
+				html4 +='<li class="ico2_4"><a href="/securityKeySet.do" id="securityKeySet" onclick=fn_GoLink("securityKeySet"); target="main"><img src="../images/ico_lnb_9.png" id="treeImg"><spring:message code="encrypt_serverMasterKey.Setting_the_server_master_key_password"/></a></li>';
 			}
 			if(result.length != 0 && result[9].read_aut_yn == "Y" && result[9].mnu_cd == "MN0001304"){
-				html4 +='<li class="ico2_4"><a href="/securityAgentMonitoring.do" id="securityAgentMonitoring" onclick=fn_GoLink("securityAgentMonitoring"); target="main"><img src="../images/ico_lnb_9.png" id="treeImg">에이전트설정</a></li>';
+				html4 +='<li class="ico2_4"><a href="/securityAgentMonitoring.do" id="securityAgentMonitoring" onclick=fn_GoLink("securityAgentMonitoring"); target="main"><img src="../images/ico_lnb_9.png" id="treeImg"><spring:message code="encrypt_agent.Encryption_agent_setting"/> </a></li>';
 			}
 			html4 += '</ul>';
 			html4 += '</li>';

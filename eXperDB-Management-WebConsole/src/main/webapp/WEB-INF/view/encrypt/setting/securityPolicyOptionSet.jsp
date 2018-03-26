@@ -31,6 +31,7 @@ $(window.document).ready(function() {
 	
 	fn_securityPolicyOptionSelect01();
 	fn_securityPolicyOptionSelect02();
+	
 });
 
 
@@ -211,11 +212,34 @@ function fn_securityPolicyOptionSelect02(){
 				document.getElementById('stop_exe_h').value=data.list[0].transferStop;
 				
 			}	
+			fn_change();
 		}
 	});	
 }
 
+/*정책저장 Validation*/
+function fn_validation(){
+	//암복호화 로그 서버에서 압축시간
+	var GLOBAL_POLICY_CRYPT_LOG_TM_RESOLUTION = document.getElementById("GLOBAL_POLICY_CRYPT_LOG_TM_RESOLUTION");
+	//암복호화 로그 압축 출력 시간
+	var GLOBAL_POLICY_CRYPT_LOG_COMPRESS_PRINT_PERIOD = document.getElementById("GLOBAL_POLICY_CRYPT_LOG_COMPRESS_PRINT_PERIOD");
+	//암복호화 로그 압축 중단 시간
+	var GLOBAL_POLICY_CRYPT_LOG_COMPRESS_FLUSH_TIMEOUT = document.getElementById("GLOBAL_POLICY_CRYPT_LOG_COMPRESS_FLUSH_TIMEOUT");
+	
+	if (GLOBAL_POLICY_CRYPT_LOG_TM_RESOLUTION.value < GLOBAL_POLICY_CRYPT_LOG_COMPRESS_PRINT_PERIOD.value) {
+		alert('[암복호화 로그 서버에서 압축 시간 단위(초)]값은 [암복호화 로그 압축 출력 시간 단위(초)]보다 크거나 같아야 합니다.');
+		return false;
+	}
+	if (GLOBAL_POLICY_CRYPT_LOG_COMPRESS_FLUSH_TIMEOUT.value <= GLOBAL_POLICY_CRYPT_LOG_COMPRESS_PRINT_PERIOD.value) {
+		alert('[암복호화 로그 압축 중단 시간(초)]값은 [암복호화 로그 압축 출력 시간 단위(초)]보다 커야 합니다.');
+		return false;
+	}
+	return true;
+}
+
 function fn_save(){
+	if (!fn_validation()) return false;
+	
 	var arrmaps01 = [];
 	var tmpmap01 = new Object();
 	
@@ -283,6 +307,31 @@ function fn_save(){
 		}
 	});	
 }
+
+function fn_change(){
+	if($("input:checkbox[id='blnIsvalueTrueFalse']").is(":checked")){
+		$("#mon").attr("onclick", "");
+		$("#tue").attr("onclick", "");
+		$("#wed").attr("onclick", "");
+		$("#thu").attr("onclick", "");
+		$("#fri").attr("onclick", "");
+		$("#sat").attr("onclick", "");
+		$("#sun").attr("onclick", "");
+		$("#start_exe_h").attr("disabled", false);
+		$("#stop_exe_h").attr("disabled", false);
+	}else{
+		$("#mon").attr("onclick", "return false;");
+		$("#tue").attr("onclick", "return false;");
+		$("#wed").attr("onclick", "return false;");
+		$("#thu").attr("onclick", "return false;");
+		$("#fri").attr("onclick", "return false;");
+		$("#sat").attr("onclick", "return false;");
+		$("#sun").attr("onclick", "return false;");
+		$("#start_exe_h").attr("disabled", true);
+		$("#stop_exe_h").attr("disabled", true);
+
+	}
+}
 </script>
 
 <style>
@@ -303,18 +352,18 @@ margin-right: 10px;
 <div id="contents">
 	<div class="contents_wrap">
 		<div class="contents_tit">
-			<h4>보안정책 옵션설정<a href="#n"><img src="../images/ico_tit.png" class="btn_info" /></a>
+			<h4><spring:message code="encrypt_policyOption.Security_Policy_Option_Setting"/><a href="#n"><img src="../images/ico_tit.png" class="btn_info" /></a>
 			</h4>
 			<div class="infobox">
 				<ul>
-					<li>보안정책 옵션설정 설명</li>
+					<li><spring:message code="encrypt_help.Security_Policy_Option_Setting"/></li>
 				</ul>
 			</div>
 			<div class="location">
 				<ul>
 					<li>Encrypt</li>
-					<li>설정</li>
-					<li class="on">보안정책 옵션설정</li>
+					<li><spring:message code="encrypt_policyOption.Settings"/></li>
+					<li class="on"><spring:message code="encrypt_policyOption.Security_Policy_Option_Setting"/></li>
 				</ul>
 			</div>
 		</div>
@@ -322,12 +371,12 @@ margin-right: 10px;
 		<div class="contents">
 			<div class="cmm_grp">
 				<div class="btn_type_01">
-					<a href="#n" class="btn" onClick="fn_save()"><span>저장</span></a> 
+					<a href="#n" class="btn" onClick="fn_save()"><span><spring:message code="common.save"/></span></a> 
 				</div>
 						
 				<div class="cmm_bd">
 					<div class="sub_tit">
-						<p>기본옵션</p>
+						<p><spring:message code="encrypt_policyOption.Default_Option"/></p>
 					</div>
 					<div class="overflows_areas">
 						<table class="write">
@@ -344,7 +393,7 @@ margin-right: 10px;
 											<div class="inp_chk">
 												<span style="margin-right: 10%;"> 
 												<input type="checkbox" id="GLOBAL_POLICY_DEFAULT_ACCESS_ALLOW_TF" name="GLOBAL_POLICY_DEFAULT_ACCESS_ALLOW_TF" /> 
-												<label for="GLOBAL_POLICY_DEFAULT_ACCESS_ALLOW_TF">기본 접근 허용 (보안정책 생성시 기본값)</label>
+												<label for="GLOBAL_POLICY_DEFAULT_ACCESS_ALLOW_TF"><spring:message code="encrypt_policyOption.Grant_Access"/></label>
 												</span>
 											</div>
 										</div>
@@ -356,7 +405,7 @@ margin-right: 10px;
 											<div class="inp_chk">
 												<span style="margin-right: 10%;"> 
 												<input type="checkbox" id="GLOBAL_POLICY_FORCED_LOGGING_OFF_TF" name="GLOBAL_POLICY_FORCED_LOGGING_OFF_TF" /> 
-												<label for="GLOBAL_POLICY_FORCED_LOGGING_OFF_TF">암복호화 로그 기록 중지 (보안 정책의 설정을 무시하고, 로그를 기록하지 않음)</label>
+												<label for="GLOBAL_POLICY_FORCED_LOGGING_OFF_TF"><spring:message code="encrypt_policyOption.Stop_Logging"/></label>
 												</span>
 											</div>
 										</div>
@@ -376,9 +425,9 @@ margin-right: 10px;
 					<div class="overflows_areas">
 						<table class="write">
 							<colgroup>
-								<col style="width: 200px;" />
+								<col style="width: 370px;" />
 								<col />
-								<col style="width: 200px;" />
+								<col style="width: 320px;" />
 								<col />
 							</colgroup>
 							<tbody>
@@ -386,28 +435,28 @@ margin-right: 10px;
 									<td colspan="2">
 										<div class="inp_chk">
 											<span style="margin-right: 10%;"> <input type="checkbox" id="GLOBAL_POLICY_BOOST_TF" name="GLOBAL_POLICY_BOOST_TF" /> 
-												<label for="GLOBAL_POLICY_BOOST_TF">부스트</label>
+												<label for="GLOBAL_POLICY_BOOST_TF"><spring:message code="encrypt_policyOption.Boost"/></label>
 											</span>
 										</div>
 									</td>
 								</tr>
 								<tr>
-									<th scope="row" class="ico_t2">암복호화 로그 서버에서 압축시간</th>
-									<td><input type="number" class="txt t6" name="GLOBAL_POLICY_CRYPT_LOG_TM_RESOLUTION" id="GLOBAL_POLICY_CRYPT_LOG_TM_RESOLUTION" maxlength="3" min="0" value="0">(초)</td>
-									<th scope="row" class="ico_t2">암복호화 로그 압축 중단 시간</th>
-									<td><input type="number" class="txt t6" name="GLOBAL_POLICY_CRYPT_LOG_COMPRESS_FLUSH_TIMEOUT" id="GLOBAL_POLICY_CRYPT_LOG_COMPRESS_FLUSH_TIMEOUT" maxlength="3" min="0" value="0">(초)</td>
+									<th scope="row" class="ico_t2"><spring:message code="encrypt_policyOption.Compression_time_in_the_log_server"/></th>
+									<td><input type="number" class="txt t6" name="GLOBAL_POLICY_CRYPT_LOG_TM_RESOLUTION" id="GLOBAL_POLICY_CRYPT_LOG_TM_RESOLUTION" maxlength="3" min="0" value="0">(<spring:message code="schedule.second" />)</td>
+									<th scope="row" class="ico_t2"><spring:message code="encrypt_policyOption.Stop_time_of_log_compression"/></th>
+									<td><input type="number" class="txt t6" name="GLOBAL_POLICY_CRYPT_LOG_COMPRESS_FLUSH_TIMEOUT" id="GLOBAL_POLICY_CRYPT_LOG_COMPRESS_FLUSH_TIMEOUT" maxlength="3" min="0" value="0">(<spring:message code="schedule.second" />)</td>
 								</tr>
 								<tr>
-									<th scope="row" class="ico_t2">암복호화 로그 AP에서 최대 압축값</th>
+									<th scope="row" class="ico_t2"><spring:message code="encrypt_policyOption.Maximum_Compression_value_in_the_log_AP"/></th>
 									<td><input type="number" class="txt t6" name="GLOBAL_POLICY_CRYPT_LOG_COMPRESS_LIMIT" id="GLOBAL_POLICY_CRYPT_LOG_COMPRESS_LIMIT" maxlength="3" min="0" value="0"></td>
-									<th scope="row" class="ico_t2">암복호화 로그 압축 출력 시간</th>
-									<td><input type="number" class="txt t6" name="GLOBAL_POLICY_CRYPT_LOG_COMPRESS_PRINT_PERIOD" id="GLOBAL_POLICY_CRYPT_LOG_COMPRESS_PRINT_PERIOD" maxlength="3" min="0" value="0">(초)</td>
+									<th scope="row" class="ico_t2"><spring:message code="encrypt_policyOption.Display_time_of_log_compression"/></th>
+									<td><input type="number" class="txt t6" name="GLOBAL_POLICY_CRYPT_LOG_COMPRESS_PRINT_PERIOD" id="GLOBAL_POLICY_CRYPT_LOG_COMPRESS_PRINT_PERIOD" maxlength="3" min="0" value="0">(<spring:message code="schedule.second" />)</td>
 								</tr>
 								<tr>
-									<th scope="row" class="ico_t2">암복호화 로그 압축 시작값</th>
+									<th scope="row" class="ico_t2"><spring:message code="encrypt_policyOption.Start_value_of_log_compression"/></th>
 									<td><input type="number" class="txt t6" name="GLOBAL_POLICY_CRYPT_LOG_COMPRESS_INITIAL" id="GLOBAL_POLICY_CRYPT_LOG_COMPRESS_INITIAL" maxlength="3" min="0" value="0"></td>
-									<th scope="row" class="ico_t2">암복호화 로그 전송 대기 시간</th>
-									<td><input type="number" class="txt t6" name="logTransferWaitTime" id="logTransferWaitTime" maxlength="3" min="0" value="0">(초)</td>
+									<th scope="row" class="ico_t2"><spring:message code="encrypt_policyOption.Wait_time_of_log_transmission"/></th>
+									<td><input type="number" class="txt t6" name="logTransferWaitTime" id="logTransferWaitTime" maxlength="3" min="0" value="0">(<spring:message code="schedule.second" />)</td>
 								</tr>
 							</tbody>
 						</table>
@@ -418,7 +467,7 @@ margin-right: 10px;
 
 				<div class="cmm_bd">
 					<div class="sub_tit">
-						<p>로그 일괄 전송</p>
+						<p><spring:message code="encrypt_policyOption.Log_Batch_Transmission"/></p>
 					</div>
 					<div class="overflows_areas">
 						<table class="write">
@@ -431,14 +480,14 @@ margin-right: 10px;
 									<td colspan="2">
 										<div class="inp_chk">
 											<span style="margin-right: 10%;"> 
-											<input type="checkbox" id="blnIsvalueTrueFalse" name="blnIsvalueTrueFalse" /> 
-												<label for="blnIsvalueTrueFalse">암복호화 로그를 지정되 시간에만 수집</label>
+											<input type="checkbox" id="blnIsvalueTrueFalse" name="blnIsvalueTrueFalse" onchange="fn_change()"/> 
+												<label for="blnIsvalueTrueFalse"><spring:message code="encrypt_policyOption.Collect_logs_only_at_specified_times"/></label>
 											</span>
 										</div>
 									</td>
 								</tr>
 								<tr>
-									<th scope="row" class="ico_t2" colspan="2">로그 전송 요일</th>
+									<th scope="row" class="ico_t2" colspan="2"><spring:message code="encrypt_policyOption.Transfer_Day"/></th>
 								</tr>
 								<tr>
 									<td colspan="2">
@@ -476,11 +525,11 @@ margin-right: 10px;
 								</tr>
 								<tr> 
 									<td><div id="startHour"></div></td> 
-									<td>전송시작(시)</td> 
+									<td><spring:message code="encrypt_policyOption.Start_Transfer"/></td> 
 								</tr> 
 								<tr>
 									<td><div id="endHour"></div></td> 
-									<td>전송종료(시)</td> 
+									<td><spring:message code="encrypt_policyOption.End_Transfer"/></td> 
 								</tr>
 							</tbody>
 						</table>
