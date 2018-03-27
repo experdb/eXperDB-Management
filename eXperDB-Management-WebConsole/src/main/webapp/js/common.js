@@ -599,7 +599,9 @@ function fn_make_object_list(data, workObj){
 
 	$(".tNav").html("");
 	$(".tNav").html(html);
-	$.getScript( "/js/common.js", function() {});
+	//$.getScript( "/js/common.js", function() {});
+	
+	$('#loading').hide();
 }
 
 
