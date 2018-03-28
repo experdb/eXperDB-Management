@@ -8,6 +8,7 @@ import java.io.FileOutputStream;
 import java.io.FileReader;
 import java.io.IOException;
 import java.io.RandomAccessFile;
+import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -53,40 +54,37 @@ public class FileUtil {
 
 		return strView;
 	}
-	
-	public static HashMap getRandomAccessFileView(File file, int intReadLine, int intSeekPoint, int intLastLine) throws Exception {
+
+	public static HashMap getRandomAccessFileView(File file, int intReadLine, int intSeekPoint, int intLastLine)
+			throws Exception {
 		String strView = "";
 
 		HashMap hp = new HashMap();
 		RandomAccessFile rdma = null;
 		String strEndFlag = "0";
 		try {
-			rdma = new RandomAccessFile(file,"r");
-			
-			//int intStartLine = intReadLine * intDwlenCount;
-			
+			rdma = new RandomAccessFile(file, "r");
+
+			// int intStartLine = intReadLine * intDwlenCount;
+
 			rdma.seek(intSeekPoint);
-			String temp; 
-			 int recnum = 1;
-	        while((temp = rdma.readLine()) != null)  
-	        {  
+			String temp;
+			int recnum = 1;
+			while ((temp = rdma.readLine()) != null) {
 
-	            
-	            strView +=  (intLastLine + recnum) + " " + new String(temp.getBytes("ISO-8859-1"), "UTF-8") + "<br>";
+				strView += (intLastLine + recnum) + " " + new String(temp.getBytes("ISO-8859-1"), "UTF-8") + "<br>";
 
+				if (((++recnum) % (intReadLine + 1)) == 0) {
+					break;
+				}
+			}
 
-	            if(((++recnum)%(intReadLine+1)) == 0)  
-	            {  
-	                break;  
-	            }  
-	        }  
-	        
-	        if(recnum != (intReadLine+1)) strEndFlag = "1";
-	        
-	       // System.out.println("recnum : " + recnum);
-	       // System.out.println("intReadLine : " + intReadLine);
-	        
-	        
+			if (recnum != (intReadLine + 1))
+				strEndFlag = "1";
+
+			// System.out.println("recnum : " + recnum);
+			// System.out.println("intReadLine : " + intReadLine);
+
 			hp.put("file_desc", strView);
 			hp.put("file_size", strView.length());
 			hp.put("seek", rdma.getFilePointer());
@@ -104,24 +102,19 @@ public class FileUtil {
 
 		return hp;
 	}
-	
-	
-    private static long readLines(RandomAccessFile rf, int intReadline) throws IOException {  
-        long recnum = 1;  
-        String temp;  
-        while((temp = rf.readLine()) != null)  
-        {  
-            System.out.println("Line " + recnum + " : " + temp);  
-            if(((++recnum)%intReadline) == 0)  
-            {  
-                break;  
-            }  
-        }  
-        return rf.getFilePointer();  
-    }  
-      
 
-	
+	private static long readLines(RandomAccessFile rf, int intReadline) throws IOException {
+		long recnum = 1;
+		String temp;
+		while ((temp = rf.readLine()) != null) {
+			System.out.println("Line " + recnum + " : " + temp);
+			if (((++recnum) % intReadline) == 0) {
+				break;
+			}
+		}
+		return rf.getFilePointer();
+	}
+
 	public static HashMap getFileView(File file, int intStartLength, int intDwlenCount) throws Exception {
 		String strView = "";
 		BufferedReader br = null;
@@ -130,33 +123,34 @@ public class FileUtil {
 			br = new BufferedReader(new FileReader(file));
 			char[] c = new char[(int) file.length()];
 			br.read(c);
-			
+
 			int intBufLength = c.length;
-			
+
 			int intLastLength = intStartLength;
 			int intFirstLength = 0;
-			if(intBufLength < intStartLength) {
+			if (intBufLength < intStartLength) {
 				intLastLength = intBufLength;
 			} else {
 				int intFirstDwlen = 0;
-				if(intDwlenCount > 1 ) intFirstDwlen = intDwlenCount -1;
-				
+				if (intDwlenCount > 1)
+					intFirstDwlen = intDwlenCount - 1;
+
 				intFirstLength = intLastLength * intFirstDwlen;
 				intLastLength = intLastLength * intDwlenCount;
 			}
-			
+
 			String strEndFlag = "0";
 
-			if(intBufLength <= intLastLength) {
-				//intFirstLength = buffer.length;
-				intLastLength = intBufLength ;
+			if (intBufLength <= intLastLength) {
+				// intFirstLength = buffer.length;
+				intLastLength = intBufLength;
 				strEndFlag = "1";
 			} else {
 				intDwlenCount = intDwlenCount + 1;
 			}
-			
+
 			strView = new String(c, intFirstLength, intLastLength - intFirstLength);
-			
+
 			hp.put("file_desc", strView);
 			hp.put("file_size", c.length);
 			hp.put("dw_len", intDwlenCount);
@@ -329,13 +323,14 @@ public class FileUtil {
 		file.delete();
 	}
 
-
 	/**
 	 * 파일크기 추출
+	 * 
 	 * @param filesize
 	 * @param type
 	 * @return
 	 */
+	/**
 	public static String getFileSize(long filesize, int Cutlength) {
 		String size = "";
 
@@ -352,82 +347,120 @@ public class FileUtil {
 		}
 		return size;
 	}
-	
+	**/
+
+	public static String getFileSize(long size, int Cutlength) {
+		String CalcuSize = null;
+		int i = 0;
+
+		double calcu = (double) size;
+		while (calcu >= 1024 && i < 5) { // 단위 숫자로 나누고 한번 나눌 때마다 i 증가
+			calcu = calcu / 1024;
+			i++;
+		}
+		DecimalFormat df = new DecimalFormat("##0.0");
+		switch (i) {
+		case 0:
+			CalcuSize = df.format(calcu) + "Byte";
+			break;
+		case 1:
+			CalcuSize = df.format(calcu) + "KB";
+			break;
+		case 2:
+			CalcuSize = df.format(calcu) + "MB";
+			break;
+		case 3:
+			CalcuSize = df.format(calcu) + "GB";
+			break;
+		case 4:
+			CalcuSize = df.format(calcu) + "TB";
+			break;
+		default:
+			CalcuSize = "ZZ"; // 용량표시 불가
+
+		}
+		return CalcuSize;
+	}
+
 	/**
 	 * 파일 최종 수정일시 조회
+	 * 
 	 * @param fileLastModified
 	 * @return
 	 * @throws Exception
 	 */
 	public static String getFileLastModifiedDate(long fileLastModified) throws Exception {
 		String strLastModified = "";
-		
+
 		SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.KOREA);
 
 		Date date = new Date(fileLastModified);
 
 		strLastModified = formatter.format(date);
 
-		
 		return strLastModified;
 	}
-	
+
 	/**
 	 * 디렉터리 존재 유무 검색
+	 * 
 	 * @param strDirectory
 	 * @return
 	 * @throws Exception
 	 */
 	public static boolean isDirectory(String strDirectory) throws Exception {
 		boolean blnReturn = false;
-		
+
 		File file = new File(strDirectory);
-		
-		if(file.isDirectory()) {
+
+		if (file.isDirectory()) {
 			blnReturn = true;
 		}
-		
+
 		return blnReturn;
 	}
-	
+
 	/**
 	 * 파일 존재유무 검색
+	 * 
 	 * @param strFile
 	 * @return
 	 * @throws Exception
 	 */
 	public static boolean isFile(String strFile) throws Exception {
 		boolean blnReturn = false;
-	    File f = new File(strFile);
+		File f = new File(strFile);
 
-	    // 파일 존재 여부 판단
-	    if (f.isFile()) {
-	    	blnReturn = true;
-	    }
-	    
-	    return blnReturn;
+		// 파일 존재 여부 판단
+		if (f.isFile()) {
+			blnReturn = true;
+		}
+
+		return blnReturn;
 	}
-	
+
 	/**
 	 * 파일 size 조회
+	 * 
 	 * @param strFile
 	 * @return
 	 * @throws Exception
 	 */
 	public static long getFileSize(String strFile) throws Exception {
-		long lFileSize = 0 ;
-		
+		long lFileSize = 0;
+
 		File file = new File(strFile);
-		
-		if(file.isDirectory()) {
+
+		if (file.isDirectory()) {
 			lFileSize = file.length();
 		}
-		
+
 		return lFileSize;
 	}
-	
+
 	/**
 	 * file to byte
+	 * 
 	 * @param file
 	 * @return
 	 * @throws Exception
@@ -436,12 +469,12 @@ public class FileUtil {
 		byte[] bytesArray = new byte[(int) file.length()];
 
 		FileInputStream fis = new FileInputStream(file);
-		fis.read(bytesArray); //read file into bytes[]
+		fis.read(bytesArray); // read file into bytes[]
 		fis.close();
 
 		return bytesArray;
 	}
-	
+
 	public static void main(String args[]) {
 
 		try {
@@ -454,88 +487,85 @@ public class FileUtil {
 			 * System.out.println(fileExtenderSubString(strExtFileName)); }
 			 * 
 			 **/
-			
-			//String strFilePath = "C:\\k4m\\01-1. DX 제폼개발\\04. 시험\\pg_log1\\";
-			
-			//boolean blnReturn = isDirectory(strFilePath);
-			
-			//System.out.println(blnReturn);
+
+			// String strFilePath = "C:\\k4m\\01-1. DX 제폼개발\\04. 시험\\pg_log1\\";
+
+			// boolean blnReturn = isDirectory(strFilePath);
+
+			// System.out.println(blnReturn);
 
 			// 파일읽기
-			
+
 			String strFilePath = "C:\\k4m\\DxTcontrolWorkspace\\DX-TControl\\DX-TControlAgent\\build\\install\\";
 			String strFileName = "test.out";
 
-			//File inFile = new File(strFilePath, strFileName);
+			// File inFile = new File(strFilePath, strFileName);
 
-			 BufferedReader in = new BufferedReader(new FileReader(strFilePath+ strFileName));
-		      String s;
-		      
-		      ArrayList<HashMap<String, String>> list = new ArrayList<HashMap<String, String>>();
-		      
-		      int j = 0;
-		      while ((s = in.readLine()) != null) {
-		        //System.out.println(s.replace(" ", ""));
-		    	  
-		    	  if(j > 0) {
-		    		  HashMap hp = new HashMap();
-			    	  String[] arrStr = s.split(" ");
-			    	  int lineT = 0;
-			    	  for(int i=0; i<arrStr.length; i++) {
-			    		  System.out.println(arrStr[i].toString());
-			    		  
-			    		  if(!arrStr[i].toString().trim().equals("")) {
-				    		  if(lineT == 0) {
-				    			  hp.put("filesystem", arrStr[i].toString());
-				    		  } else if(lineT == 1) {
-				    			  hp.put("size", arrStr[i].toString());
-				    		  } else if(lineT == 2) {
-				    			  hp.put("used", arrStr[i].toString());
-				    		  } else if(lineT == 3) {
-				    			  hp.put("avail", arrStr[i].toString());
-				    		  } else if(lineT == 4) {
-				    			  hp.put("use", arrStr[i].toString());
-				    		  } else if(lineT == 5) {
-				    			  hp.put("mounton", arrStr[i].toString());
-				    		  }
-				    		  
-				    		  lineT++;
-			    		  }
-			    	  }
-			    	  list.add(hp);
-		    	  }
-		    	  
-		    	  j++;
-		      }
-		      in.close();
-		      
-		      for(HashMap hp2: list) {
-					Iterator<String> keys = hp2.keySet().iterator();
+			BufferedReader in = new BufferedReader(new FileReader(strFilePath + strFileName));
+			String s;
 
-			        while( keys.hasNext() ){
-			            String key = keys.next();
-			            System.out.print( String.format("키 : %s, 값 : %s", key, hp2.get(key)) );
-			        }
-			        System.out.println("");
-		      }
-		      
-			//String strFileTxt = FileUtil.getFileView(inFile);
+			ArrayList<HashMap<String, String>> list = new ArrayList<HashMap<String, String>>();
 
-			//System.out.println(strFileTxt);
-			
-			
-			//file LastModified
-			//String strLastModified = FileUtil.getFileLastModifiedDate(inFile.lastModified());
-			//System.out.println(strLastModified);
+			int j = 0;
+			while ((s = in.readLine()) != null) {
+				// System.out.println(s.replace(" ", ""));
 
-			
-			//Date date = new Date("2017-07-26");
+				if (j > 0) {
+					HashMap hp = new HashMap();
+					String[] arrStr = s.split(" ");
+					int lineT = 0;
+					for (int i = 0; i < arrStr.length; i++) {
+						System.out.println(arrStr[i].toString());
+
+						if (!arrStr[i].toString().trim().equals("")) {
+							if (lineT == 0) {
+								hp.put("filesystem", arrStr[i].toString());
+							} else if (lineT == 1) {
+								hp.put("size", arrStr[i].toString());
+							} else if (lineT == 2) {
+								hp.put("used", arrStr[i].toString());
+							} else if (lineT == 3) {
+								hp.put("avail", arrStr[i].toString());
+							} else if (lineT == 4) {
+								hp.put("use", arrStr[i].toString());
+							} else if (lineT == 5) {
+								hp.put("mounton", arrStr[i].toString());
+							}
+
+							lineT++;
+						}
+					}
+					list.add(hp);
+				}
+
+				j++;
+			}
+			in.close();
+
+			for (HashMap hp2 : list) {
+				Iterator<String> keys = hp2.keySet().iterator();
+
+				while (keys.hasNext()) {
+					String key = keys.next();
+					System.out.print(String.format("키 : %s, 값 : %s", key, hp2.get(key)));
+				}
+				System.out.println("");
+			}
+
+			// String strFileTxt = FileUtil.getFileView(inFile);
+
+			// System.out.println(strFileTxt);
+
+			// file LastModified
+			// String strLastModified =
+			// FileUtil.getFileLastModifiedDate(inFile.lastModified());
+			// System.out.println(strLastModified);
+
+			// Date date = new Date("2017-07-26");
 
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 	}
-	
-	
 
 }
