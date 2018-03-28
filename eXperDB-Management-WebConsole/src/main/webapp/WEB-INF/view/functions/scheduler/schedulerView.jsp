@@ -498,6 +498,7 @@ function fn_popup(scd_id){
 $(window.document).ready(function() {
 	fn_init();
 	fn_selectBckSchedule();
+		
 	//fn_selectMonthBckSchedule();
 	$("#week_scheduleList").show();
 	$("#week_scheduleList_wrapper").show();
@@ -911,6 +912,13 @@ var DateDiff =  {
 								<li><spring:message code="help.backup_scheduler_02" /> </li>
 							</ul>
 						</div>
+						<div class="location">
+							<ul>
+								<li class="bold">${db_svr_nm}</li>
+								<li><spring:message code="menu.backup_management" /></li>
+								<li class="on"><spring:message code="menu.backup_scheduler" /></li>
+							</ul>
+						</div>												
 					</div>
 					<div class="contents">
 						<div class="cmm_tab">

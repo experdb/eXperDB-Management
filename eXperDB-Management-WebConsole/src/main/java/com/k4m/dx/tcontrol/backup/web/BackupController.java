@@ -973,6 +973,9 @@ public class BackupController {
 	@RequestMapping(value = "/schedulerView.do")
 	public ModelAndView schedulerView(@ModelAttribute("workVO") WorkVO workVO, @ModelAttribute("historyVO") HistoryVO historyVO, HttpServletRequest request) {
 		int db_svr_id = Integer.parseInt(request.getParameter("db_svr_id"));
+		String db_svr_nm = request.getParameter("db_svr_nm");
+		
+		System.out.println(db_svr_nm);
 		//해당메뉴 권한 조회 (공통메소드호출)
 		CmmnUtils cu = new CmmnUtils();
 		dbSvrAut = cu.selectUserDBSvrAutList(dbAuthorityService,db_svr_id);
@@ -1004,6 +1007,7 @@ public class BackupController {
 				
 				mv.addObject("dbList",resultSet);		
 				mv.addObject("db_svr_id",db_svr_id);
+				mv.addObject("db_svr_nm",db_svr_nm);
 				mv.setViewName("functions/scheduler/schedulerView");
 			 }
 		} catch (Exception e) {

@@ -74,6 +74,7 @@
       <url-pattern>*.woff</url-pattern>
       <url-pattern>*.woff2</url-pattern>
       <url-pattern>*.map</url-pattern>
+      <url-pattern>*.ico</url-pattern>
 	</servlet-mapping>
 
     <servlet-mapping>

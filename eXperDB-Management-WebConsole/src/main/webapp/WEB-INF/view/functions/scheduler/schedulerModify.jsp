@@ -43,21 +43,19 @@ function fn_init(){
 		className: "dt-center",
       	defaultContent: "",
         	render: function (data, type, full){
-        		
         		var onError ='<select  id="nxt_exe_yn" name="nxt_exe_yn">';
-        		if(data.NXT_EXE_YN  == 'Y') {
-        			onError +='<option value="y" selected>Y</option>';
-        			onError +='<option value="n">N</option>';
+        		if(full.nxt_exe_yn  == 'Y') {
+        			onError +='<option value="Y" selected>Y</option>';
+        			onError +='<option value="N">N</option>';
         		} else {
-        			onError +='<option value="y">Y</option>';
-        			onError +='<option value="n" selected>N</option>';
+        			onError +='<option value="Y">Y</option>';
+        			onError +='<option value="N" selected>N</option>';
         		}
-
         		onError +='</select>';
         		return onError;	
         	}
           }
-	],
+	],'select': {'style': 'multi'},
  		'drawCallback': function (settings) {
 				// Remove previous binding before adding it
 				$('.dtMoveUp').unbind('click');
@@ -265,7 +263,7 @@ $(window.document).ready(function() {
 				alert("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""));
 			}
 		},
-		success : function(result) {	
+		success : function(result) {
 			document.getElementById('scd_nm').value= result[0].scd_nm;
 			document.getElementById('scd_exp').value= result[0].scd_exp;				
 			document.getElementById('exe_perd_cd').value= result[0].exe_perd_cd;
@@ -275,12 +273,16 @@ $(window.document).ready(function() {
  			document.getElementById('exe_h').value= result[0].exe_hms.substring(4, 6);
 			document.getElementById('exe_m').value= result[0].exe_hms.substring(2, 4);
 			document.getElementById('exe_s').value= result[0].exe_hms.substring(0, 2);
-			var rowList = [];
+			
+			table.clear().draw();
+			table.rows.add(result).draw();
+			
+			/* var rowList = [];
 		    for (var i = 0; i <result.length; i++) {
 		        rowList.push(result[i].wrk_id);   
 		  	}		
 		    fn_exe_pred(result[0].exe_dt, result[0].exe_month, result[0].exe_day); 
-		    fn_workAddCallback(JSON.stringify(rowList));
+		    fn_workAddCallback(JSON.stringify(rowList)); */
 		}
 	}); 
 	
@@ -291,6 +293,17 @@ $(window.document).ready(function() {
  * work등록 팝업창 호출
  ******************************************************** */
 function fn_workAdd(){
+	
+	if(table.rows().data().length > 0){
+		var wrk_id_list = [];
+		for (var i = 0; i < table.rows().data().length; i++) {
+			wrk_id_list.push( table.rows().data()[i].wrk_id);   
+	  	}
+		var popUrl = "/popup/scheduleRegForm.do?wrk_id_list="+wrk_id_list; 
+	}else{
+		var popUrl = "/popup/scheduleRegForm.do";
+	}
+	
 	var popUrl = "/popup/scheduleRegForm.do"; 
 	var width = 1220;
 	var height = 800;
@@ -382,7 +395,8 @@ function fn_workAddCallback(rowList){
 			}
 		},
 		success : function(result) {		
-			table.clear().draw();
+			table.rows({selected: true}).deselect();
+			//table.clear().draw();
 			table.rows.add(result).draw();
 		}
 	});

@@ -1,5 +1,6 @@
 package com.k4m.dx.tcontrol.cmmn;
 
+import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSessionBindingEvent;
 import javax.servlet.http.HttpSessionBindingListener;
 
@@ -24,11 +25,9 @@ public class EgovHttpSessionBindingListener implements HttpSessionBindingListene
 	@Override
 	public void valueBound(HttpSessionBindingEvent event) {
 		if (EgovMultiLoginPreventor.findByLoginId(event.getName())) {
+			System.out.println("사용자 세션이 이미 존재");
 			EgovMultiLoginPreventor.invalidateByLoginId(event.getName());
 		}
-		System.out.println("로그인");
-		System.out.println("event getName: " +event.getName());
-		System.out.println("event getSession: " +event.getSession());
 		EgovMultiLoginPreventor.loginUsers.put(event.getName(), event.getSession());
 	}
 
@@ -40,8 +39,6 @@ public class EgovHttpSessionBindingListener implements HttpSessionBindingListene
 	 * */
 	@Override
 	public void valueUnbound(HttpSessionBindingEvent event) {
-		System.out.println("event getName: " +event.getName());
-		System.out.println("event getSession: " +event.getSession());
 		EgovMultiLoginPreventor.loginUsers.remove(event.getName(), event.getSession());
 	}
 }

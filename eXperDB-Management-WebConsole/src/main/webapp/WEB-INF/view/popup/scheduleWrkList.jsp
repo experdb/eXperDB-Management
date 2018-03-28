@@ -59,12 +59,12 @@ function fn_init(){
         	render: function (data, type, full){
         		
         		var onError ='<select  id="nxt_exe_yn" name="nxt_exe_yn">';
-        		if(data.NXT_EXE_YN  == 'Y') {
-        			onError +='<option value="y" selected>Y</option>';
-        			onError +='<option value="n">N</option>';
+        		if(full.nxt_exe_yn  == 'Y') {
+        			onError +='<option value="Y" selected>Y</option>';
+        			onError +='<option value="N">N</option>';
         		} else {
-        			onError +='<option value="y">Y</option>';
-        			onError +='<option value="n" selected>N</option>';
+        			onError +='<option value="Y">Y</option>';
+        			onError +='<option value="N" selected>N</option>';
         		}
 
         		onError +='</select>';

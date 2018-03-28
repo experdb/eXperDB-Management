@@ -99,7 +99,6 @@ public class LoginController {
 	 */
 	@RequestMapping(value = "/sessionOut.do")
 	public ModelAndView sessionOut() {
-		System.out.println("세션아웃 로그아웃 페이지 이동");
 		ModelAndView mv = new ModelAndView();
 		try {
 			mv.setViewName("logout");

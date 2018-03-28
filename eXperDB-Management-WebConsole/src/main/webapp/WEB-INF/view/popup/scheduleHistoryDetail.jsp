@@ -318,7 +318,7 @@ function fn_fix_rslt_msg_modify(){
 								<th width="150"><spring:message code="schedule.work_end_datetime"/></th>
 								<th width="100"><spring:message code="schedule.jobTime"/></th>
 								<th width="100"><spring:message code="schedule.result"/></th>
-								<th width="0"></th>
+								<th width="0"><spring:message code="etc.etc31"/></th>
 							</tr>
 						</thead>
 					</table>

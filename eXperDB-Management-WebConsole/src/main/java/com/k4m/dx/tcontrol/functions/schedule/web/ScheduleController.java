@@ -828,8 +828,9 @@ public class ScheduleController {
 			//읽기 권한이 없는경우 error페이지 호출 , [추후 Exception 처리예정]
 			if(menuAut.get(0).get("read_aut_yn").equals("N")){	
 				response.sendRedirect("/autError.do");
-			}else{
+			}else{				
 				int scd_id  = Integer.parseInt(request.getParameter("scd_id").toString());
+				System.out.println(scd_id);
 				result = scheduleService.selectModifyScheduleList(scd_id);
 			}
 
@@ -1060,7 +1061,7 @@ public class ScheduleController {
 	
 					scheduleService.deleteScheduleDtl(scheduleDtlVO);	
 					
-					for (int i = 0; i < rows.size(); i++) {
+					for (int i = 0; i < rows.size(); i++) {						
 						JSONObject jsrow = (JSONObject) rows.get(i);
 						scheduleDtlVO.setWrk_id(Integer.parseInt(jsrow.get("wrk_id").toString()));  
 						scheduleDtlVO.setExe_ord(Integer.parseInt(jsrow.get("index").toString()));

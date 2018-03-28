@@ -485,28 +485,40 @@
 	 	* Author : 변승우
 	 	**/
 	 	SELECT 
-      		(ROW_NUMBER() OVER()) AS ROWNUM
+	 	      (ROW_NUMBER() OVER()) AS ROWNUM
 			, (ROW_NUMBER() OVER()) AS IDX
-      		, A.SCD_ID
-			, A.SCD_NM
-            , A.SCD_EXP
-			, A.EXE_PERD_CD
-			, A.EXE_MONTH
-			, A.EXE_DAY
-			, A.EXE_DT
-			, A.EXE_HMS      
-			, TO_CHAR(A.PREV_EXE_DTM,'YYYY-MM-DD HH24:MI:SS') AS PREV_EXE_DTM
-			, TO_CHAR(A.NXT_EXE_DTM,'YYYY-MM-DD HH24:MI:SS') AS NXT_EXE_DTM
-			, B.WRK_ID
-            , C.BCK_WRK_ID
-            , C.BCK_BSN_DSCD
-            , C.DB_SVR_ID
-      FROM T_SCD_M A, T_SCD_D B, T_BCK_WRKCNG_I C
-      WHERE 1=1	
-      AND B.WRK_ID = C.WRK_ID
-      AND A.SCD_ID = B.SCD_ID
-      AND A.SCD_ID = #{scd_id}
-      ORDER BY EXE_ORD
+			, A.*
+		FROM(	
+				 	SELECT 
+			      		(ROW_NUMBER() OVER()) AS ROWNUM
+						, (ROW_NUMBER() OVER()) AS IDX
+			      		, A.SCD_ID
+						, A.SCD_NM
+			            , A.SCD_EXP
+						, A.EXE_PERD_CD
+						, A.EXE_MONTH
+						, A.EXE_DAY
+						, A.EXE_DT
+						, A.EXE_HMS      
+						, (SELECT DB_SVR_NM FROM T_DBSVR_I WHERE C.DB_SVR_ID = DB_SVR_ID ) AS DB_SVR_NM
+						, (SELECT SYS_CD_NM FROM T_SYSDTL_C WHERE C.BCK_BSN_DSCD = SYS_CD ) AS BCK_BSN_DSCD_NM
+						, TO_CHAR(A.PREV_EXE_DTM,'YYYY-MM-DD HH24:MI:SS') AS PREV_EXE_DTM
+						, TO_CHAR(A.NXT_EXE_DTM,'YYYY-MM-DD HH24:MI:SS') AS NXT_EXE_DTM
+						, B.WRK_ID
+						, B.NXT_EXE_YN
+						, B.EXE_ORD
+			            , C.BCK_WRK_ID
+			            , C.BCK_BSN_DSCD
+			            , C.DB_SVR_ID
+			            , C.WRK_NM
+			            , C.WRK_EXP
+			      FROM T_SCD_M A, T_SCD_D B, T_BCK_WRKCNG_I C
+			      WHERE 1=1	
+			      AND B.WRK_ID = C.WRK_ID
+			      AND A.SCD_ID = B.SCD_ID
+			      AND A.SCD_ID = #{scd_id}
+			      ORDER BY EXE_ORD
+			      )A
 	 </select>	
 	 
 	 
@@ -577,25 +589,30 @@
 	 	* Query ID : selectWrkScheduleList
 	 	* Description :  work List 조회
 	 	* Author : 변승우
-	 	**/
+	 	**/	 	
 	 	SELECT 
       		(ROW_NUMBER() OVER()) AS ROWNUM
       		,(ROW_NUMBER() OVER()) AS IDX
-      		, A.WRK_ID
-			, A.DB_SVR_ID
-            , B.SCD_ID
-            , (SELECT DB_SVR_NM FROM T_DBSVR_I WHERE A.DB_SVR_ID = DB_SVR_ID ) AS DB_SVR_NM
-			, A.DB_ID
-			, (CASE WHEN DB_ID>0 THEN (SELECT DB_NM FROM T_DB_I WHERE A.DB_ID=DB_ID AND USEYN = 'Y') ELSE '' END) AS DB_NM
-			, A.BCK_BSN_DSCD
-			, (SELECT SYS_CD_NM FROM T_SYSDTL_C WHERE A.BCK_BSN_DSCD = SYS_CD ) AS BCK_BSN_DSCD_NM
-			, A.WRK_NM
-			, A.WRK_EXP
-			, 'N' AS NXT_EXE_YN
-      FROM T_BCK_WRKCNG_I A, T_SCD_D B
-      WHERE 1=1
-      AND A.WRK_ID = B.WRK_ID
-      AND B.SCD_ID = #{scd_id}
+      		,A.*
+      	FROM(
+				 	SELECT 
+			      		A.WRK_ID
+						, A.DB_SVR_ID
+			            , B.SCD_ID
+			            , (SELECT DB_SVR_NM FROM T_DBSVR_I WHERE A.DB_SVR_ID = DB_SVR_ID ) AS DB_SVR_NM
+						, A.DB_ID
+						, (CASE WHEN DB_ID>0 THEN (SELECT DB_NM FROM T_DB_I WHERE A.DB_ID=DB_ID AND USEYN = 'Y') ELSE '' END) AS DB_NM
+						, A.BCK_BSN_DSCD
+						, (SELECT SYS_CD_NM FROM T_SYSDTL_C WHERE A.BCK_BSN_DSCD = SYS_CD ) AS BCK_BSN_DSCD_NM
+						, A.WRK_NM
+						, A.WRK_EXP
+						, B.NXT_EXE_YN
+			      FROM T_BCK_WRKCNG_I A, T_SCD_D B
+			      WHERE 1=1
+			      AND A.WRK_ID = B.WRK_ID
+			      AND B.SCD_ID = #{scd_id}
+			      ORDER BY B.EXE_ORD
+			      )A
 	 	</select>
 	 	
 	 	

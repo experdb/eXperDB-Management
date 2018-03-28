@@ -246,7 +246,7 @@ $(window.document).ready(function() {
 						html1+='					<li class="ico3_2"><a href=/backup/workLogList.do?db_svr_id='+item.db_svr_id+' id="workLogList'+item.db_svr_id+'" onClick=javascript:fn_GoLink("workLogList'+item.db_svr_id+'"); target="main"><img src="../images/ico_lnb_11.png" id="treeImg"><spring:message code="menu.backup_history"/></a></li>';
 					}
 					if(aut.length != 0 && aut[index].bck_scdr_aut_yn == "Y"){
-					html1+='			<li class="ico2_2"><a href=/schedulerView.do?db_svr_id='+item.db_svr_id+' id="schedulerView'+item.db_svr_id+'" onClick=javascript:fn_GoLink("schedulerView'+item.db_svr_id+'"); target="main"><img src="../images/ico_main_tit_1.png" id="treeImg"><spring:message code="menu.backup_scheduler"/></a>';
+					html1+='			<li class="ico2_2"><a href=/schedulerView.do?db_svr_id='+item.db_svr_id+'&db_svr_nm='+item.db_svr_nm+' id="schedulerView'+item.db_svr_id+'" onClick=javascript:fn_GoLink("schedulerView'+item.db_svr_id+'"); target="main"><img src="../images/ico_main_tit_1.png" id="treeImg"><spring:message code="menu.backup_scheduler"/></a>';
 					}
 					html1+='				</ul>';
 					html1+='			</li>';
