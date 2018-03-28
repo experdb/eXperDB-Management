@@ -42,15 +42,15 @@ $(window.document).ready(function() {
 });
 
 //한글 입력 방지
-function fn_checkResourceName(event) {
-    event = event || window.event;
-    var keyID = (event.which) ? event.which : event.keyCode;
-    if (keyID == 8 || keyID == 46 || keyID == 37 || keyID == 39){
-    	 return;
-    }
-    else{
-    	event.target.value = event.target.value.replace(/[^a-z0-9]/g, "");
-    }
+function fn_checkResourceName(e) {
+	var objTarget = e.srcElement || e.target;
+	if(objTarget.type == 'text') {
+	var value = objTarget.value;
+		if(/[ㄱ-ㅎㅏ-ㅡ가-핳]/.test(value)) {
+			alert("한글은 입력하실 수 없습니다.");
+	   		objTarget.value = objTarget.value.replace(/[ㄱ-ㅎㅏ-ㅡ가-핳]/g,'');
+	  	}
+	 }
 }
 
 /*validation 체크*/
@@ -140,7 +140,7 @@ function fu_insertCryptoKeySymmetric(){
 										<option value="<c:out value=""/>" ><spring:message code="common.choice" /></option>
 										<c:forEach var="result" items="${result}" varStatus="status">
 											<option value="<c:out value="${result.sysCode}"/>"><c:out value="${result.sysCodeName}"/></option>
-										</c:forEach> 
+										</c:forEach>
 								</select>
 							</td>
 						</tr>

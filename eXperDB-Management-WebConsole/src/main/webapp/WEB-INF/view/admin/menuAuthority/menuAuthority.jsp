@@ -260,11 +260,15 @@ $(function() {
 					document.getElementById("r_"+array[i]).checked = true;
 					document.getElementById("w_"+array[i]).checked = true;
 				}
+				document.getElementById("schinfo").checked = true;
+				document.getElementById("transferinfo").checked = true;
 			} else {
 				for(var i=0; i<array.length; i++){
 					document.getElementById("r_"+array[i]).checked = false;
 					document.getElementById("w_"+array[i]).checked = false;
 				}
+				document.getElementById("schinfo").checked = false;
+				document.getElementById("transferinfo").checked = false;
 			}
 		});
 		
@@ -281,11 +285,15 @@ $(function() {
 					document.getElementById("r_"+array[i]).checked = true;
 					document.getElementById("w_"+array[i]).checked = true;
 				}
+				document.getElementById("dbmsinfo").checked = true;
+				document.getElementById("authmanage").checked = true;
 			} else {
 				for(var i=0; i<array.length; i++){
 					document.getElementById("r_"+array[i]).checked = false;
 					document.getElementById("w_"+array[i]).checked = false;
 				}
+				document.getElementById("dbmsinfo").checked = false;
+				document.getElementById("authmanage").checked = false;
 			}
 		});
 		
@@ -365,11 +373,17 @@ $(function() {
 					document.getElementById("r_"+array[i]).checked = true;
 					document.getElementById("w_"+array[i]).checked = true;
 				}
+				document.getElementById("securitykey").checked = true;
+				document.getElementById("auditlog").checked = true;
+				document.getElementById("setting").checked = true;
 			} else {
 				for(var i=0; i<array.length; i++){
 					document.getElementById("r_"+array[i]).checked = false;
 					document.getElementById("w_"+array[i]).checked = false;
 				}
+				document.getElementById("securitykey").checked = false;
+				document.getElementById("auditlog").checked = false;
+				document.getElementById("setting").checked = false;
 			}
 		});
 		

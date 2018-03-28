@@ -356,7 +356,7 @@ function fn_update(){
 							<td><input type="text" class="txt" name="accessMacAddress" id="accessMacAddress" maxlength="20" onkeyup="fn_checkWord(this,20)" placeholder="20<spring:message code='message.msg188'/>"/></td>
 						</tr>
 						<tr>
-							<th scope="row" class="ico_t1"><spring:message code="encrypt_policy_management.Policy_Period"/></th>
+							<th scope="row" class="ico_t1"><spring:message code="encrypt_log_decode.Policy_Period"/></th>
 							<td colspan="3">
 								<span id="calendar"> 
 									<span class="calendar_area big"> <a href="#n" class="calendar_btn">달력열기</a>
@@ -373,7 +373,7 @@ function fn_update(){
 							</td>
 						</tr>
 						<tr>
-							<th scope="row" class="ico_t1"><spring:message code="encrypt_policy_management.Policy_Time"/></th>
+							<th scope="row" class="ico_t1"><spring:message code="encrypt_log_decode.Policy_Time"/></th>
 							<td colspan="3">
 								<span id="b_hour" style="margin-right: 10px;"></span><span id="b_min"></span>
 									&nbsp&nbsp&nbsp&nbsp&nbsp ~ &nbsp&nbsp&nbsp&nbsp&nbsp

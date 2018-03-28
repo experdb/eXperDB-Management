@@ -465,7 +465,7 @@ $(window.document).ready(function() {
 				</div>
 			</div>
 				
-			<div id="treeTitle"><img src="../images/ico_lnb_2.png" id="treeImg"><a href="/connectorRegister.do"><spring:message code="menu.data_transfer" /></a>
+			<div id="treeTitle"><img src="../images/ico_lnb_2.png" id="treeImg"><a href="/connectorRegister.do" target="main" onclick="fn_GoLink();"><spring:message code="menu.data_transfer" /></a>
 					<div id="sidetreecontrol2" style="float: right;">							
 						<a href="?#"><img src="../images/ico_lnb_close.png"></a>
 						<a href="?#"><img src="../images/ico_lnb_open.png"></a>
@@ -480,7 +480,7 @@ $(window.document).ready(function() {
 					</div>
 			</div>
 
-			<div id="treeTitle" class="encrypt"><img src="../images/ico_lnb_2.png" id="treeImg"><a href="#">데이터 암호화</a>
+			<div id="treeTitle" class="encrypt"><img src="../images/ico_lnb_2.png" id="treeImg"><a href="/securityPolicy.do" target="main" onclick="fn_GoLink();">데이터 암호화</a>
 					<div id="sidetreecontrol3" style="float: right;">							
 						<a href="?#"><img src="../images/ico_lnb_close.png"></a>
 						<a href="?#"><img src="../images/ico_lnb_open.png"></a>

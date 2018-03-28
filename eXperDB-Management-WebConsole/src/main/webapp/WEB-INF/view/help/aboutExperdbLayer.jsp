@@ -24,7 +24,7 @@
 					</tr>
 					<tr>
 						<th scope="row" class="t1">Copyright</th>
-						<td>2017, The eXperDB-Management Development Team</td>
+						<td>2018, The eXperDB-Management Development Team</td>
 					</tr>
 				</tbody>
 			</table>
