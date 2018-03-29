@@ -150,11 +150,11 @@ public class AgentSetting {
 		strDatabaseUrl = "jdbc:postgresql://" + strDatabaseIp + ":" + strDatabasePort + "/" + strDatabaseName;
 		
 		System.out.println("#####################################################");
+		System.out.println("agent ip :" + strAgentIp);
+		System.out.println("agent port :" + strAgentPort);
 		System.out.println("database 접속정보 :" + strDatabaseUrl);
 		System.out.println("database.username :" + strDatabaseUsername);
 		System.out.println("database.password :" + strDatabasePassword);
-		System.out.println("agent ip :" + strAgentIp);
-		System.out.println("agent port :" + strAgentPort);
 		System.out.println("#####################################################");
 		
 		System.out.println("입력한 내용으로 적용하시겠습니까? (y, n)");
