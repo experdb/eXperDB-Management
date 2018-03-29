@@ -95,25 +95,46 @@ public class NetworkUtil {
 		return strMacAddress;
 	}
 	
-	public static String getLocalServerIp()
-	{
-		try
-		{
-		    for (Enumeration<NetworkInterface> en = NetworkInterface.getNetworkInterfaces(); en.hasMoreElements();)
-		    {
-		        NetworkInterface intf = en.nextElement();
-		        for (Enumeration<InetAddress> enumIpAddr = intf.getInetAddresses(); enumIpAddr.hasMoreElements();)
-		        {
-		            InetAddress inetAddress = enumIpAddr.nextElement();
-		            if (!inetAddress.isLoopbackAddress() && !inetAddress.isLinkLocalAddress() && inetAddress.isSiteLocalAddress())
-		            {
-		            	return inetAddress.getHostAddress().toString();
-		            }
-		        }
-		    }
+	public static String getLocalServerIp()  throws Exception {
+
+		String ip =	"";
+
+		try{
+
+			Enumeration en	=		NetworkInterface.getNetworkInterfaces();
+
+			while(en.hasMoreElements()){
+
+				NetworkInterface ni	=	(NetworkInterface)en.nextElement();
+
+				Enumeration inetAddresses	=	ni.getInetAddresses();
+
+					while(inetAddresses.hasMoreElements()){
+
+						InetAddress ia	=	(InetAddress)inetAddresses.nextElement();
+
+						if(ia.getHostAddress() != null && ia.getHostAddress().indexOf(".") != -1){
+
+							byte[] address	=	ia.getAddress();
+							if(address[0] == 127) continue;
+							ip	=	ia.getHostAddress();
+							break;				
+
+						}
+
+					}
+
+					if(ip.length()>0){
+						break;
+					}
+			}
+
+		}catch(Exception e){
+			e.printStackTrace();
 		}
-		catch (SocketException ex) {}
-		return null;
+
+		return ip;
 	}
+
 
 }
