@@ -150,7 +150,21 @@ function fn_dump_init(){
 		    		{ data: "ipadr", className: "dt-center", defaultContent: ""},
 		         	{ data: "wrk_exp", className: "dt-left", defaultContent: ""}, 
  		         	{ data: "db_nm", className: "dt-center", defaultContent: ""}, 
- 		         	{ data: "file_sz", className: "dt-center", defaultContent: ""},
+ 		         	//{ data: "file_sz", className: "dt-center", defaultContent: ""},
+ 		         	
+ 		         	 {data : "file_sz", className : "dt-center", defaultContent : ""
+	 		   			,"render": function (data, type, full) {
+	 		   				if(full.file_sz != 0){
+				 		   		  var s = ['bytes', 'kB', 'MB', 'GB', 'TB', 'PB'];
+				 		   		  var e = Math.floor(Math.log(full.file_sz) / Math.log(1024));
+				 		   		  return (full.file_sz / Math.pow(1024, e)).toFixed(2) + " " + s[e];
+	 		   				}else{
+	 		   					return full.file_sz;
+	 		   				}
+	 		   			}
+	 		   		 },
+	 		   		  
+ 		         	
  		         	{data : "bck_file_pth", className : "dt-left", defaultContent : ""
 	 		   			,"render": function (data, type, full) {
 	 		   				  return '<span onClick=javascript:fn_dumpShow("'+full.bck_file_pth+'","'+full.db_svr_id+'"); class="bold">' + full.bck_file_pth + '</span>';
