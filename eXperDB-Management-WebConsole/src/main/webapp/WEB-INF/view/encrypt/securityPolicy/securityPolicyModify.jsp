@@ -447,6 +447,18 @@
 		return true;
 	}
 	
+	//한글 입력 방지
+    function fn_checkProfileName(e) {
+    	var objTarget = e.srcElement || e.target;
+    	if(objTarget.type == 'text') {
+    	var value = objTarget.value;
+		if(/[ㄱ-ㅎ|ㅏ-ㅣ|가-힣]/.test(value)) {
+			alert("한글은 입력하실 수 없습니다.");
+	   		objTarget.value = objTarget.value.replace(/[ㄱ-ㅎ|ㅏ-ㅣ|가-힣]/g, '');
+	  	}
+    	 }
+    }
+	
 	/*정책저장*/
 	function fn_save(){
 		
@@ -531,7 +543,7 @@
 			},
 			success : function(data) {		
 				if(data.resultCode == "0000000000"){
-					alert("수정되었습니다.");
+					alert("<spring:message code='message.msg84' />");
 					location.href='/securityPolicy.do' ;
 				}else if(data.resultCode == "8000000003"){
 					alert(data.resultMessage);
@@ -611,7 +623,7 @@
 							<tr>
 								<th scope="row" class="ico_t1"><spring:message code="encrypt_policy_management.Security_Policy_Name"/>(*)</th>
 								<td>
-									<input type="text" class="txt t2" name="profileName" id="profileName" value="${result.profileName}" maxlength="20" onkeyup="fn_checkWord(this,20)" placeholder="20<spring:message code='message.msg188'/>"/>
+									<input type="text" class="txt t2" name="profileName" id="profileName" value="${result.profileName}" maxlength="20" onkeyup='fn_checkProfileName(event)' placeholder="20<spring:message code='message.msg188'/>"/>
 								</td>
 							</tr>
 							<tr>

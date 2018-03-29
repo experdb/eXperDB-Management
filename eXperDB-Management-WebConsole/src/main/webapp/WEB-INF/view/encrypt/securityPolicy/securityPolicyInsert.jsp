@@ -98,14 +98,14 @@
 			{ data : "accessAddressMask", className : "dt-center", defaultContent : ""}, 
 			{ data : "accessMacAddress", className : "dt-center", defaultContent : ""}, 
 			{ data : "startDateTime", className : "dt-center", defaultContent : ""}, 
-			{ data : "endDateTime", className : "dt-center", defaultContent : ""}, 
+			{ data : "endDateTime", className : "dt-center", defaultContent : ""},
 			{ data : "startTime", className : "dt-center", defaultContent : ""}, 
-			{ data : "endTime", className : "dt-center", defaultContent : ""}, 
-			{ data : "workDay", className : "dt-center", defaultContent : ""}, 
+			{ data : "endTime", className : "dt-center", defaultContent : ""},
+			{ data : "workDay", className : "dt-center", defaultContent : ""},
 			{ data : "massiveThreshold", className : "dt-center", defaultContent : ""}, 
 			{ data : "massiveTimeInterval", className : "dt-center", defaultContent : ""}, 
-			{ data : "extraName", className : "dt-center", defaultContent : ""}, 
-			{ data : "hostName", className : "dt-center", defaultContent : ""}, 
+			{ data : "extraName", className : "dt-center", defaultContent : ""},
+			{ data : "hostName", className : "dt-center", defaultContent : ""},
 			{ data : "whitelistYesNo", className : "dt-center", defaultContent : ""}
 			],'select': {'style': 'multi'}
 		});
@@ -411,15 +411,15 @@
 
 	
 	//한글 입력 방지
-    function fn_checkProfileName(event) {
-        event = event || window.event;
-        var keyID = (event.which) ? event.which : event.keyCode;
-        if (keyID == 8 || keyID == 46 || keyID == 37 || keyID == 39){
-        	 return;
-        }
-        else{
-        	event.target.value = event.target.value.replace(/[^a-z0-9]/g, "");
-        }
+    function fn_checkProfileName(e) {
+    	var objTarget = e.srcElement || e.target;
+    	if(objTarget.type == 'text') {
+    	var value = objTarget.value;
+    		if(/[ㄱ-ㅎ|ㅏ-ㅣ|가-힣]/.test(value)) {
+    			alert("한글은 입력하실 수 없습니다.");
+    	   		objTarget.value = objTarget.value.replace(/[ㄱ-ㅎ|ㅏ-ㅣ|가-힣]/g, '');
+    	  	}
+    	 }
     }
 	
 	/*정책저장 Validation*/
@@ -610,7 +610,7 @@
 						<tbody>
 							<tr>
 								<th scope="row" class="ico_t1"><spring:message code="encrypt_policy_management.Security_Policy_Name"/>(*)</th>
-								<td><input type="text" class="txt t2" name="profileName" id="profileName" maxlength="20" onkeyup='fn_checkProfileName(event)' style='ime-mode:disabled;'  onkeyup="fn_checkWord(this,20)" placeholder="20<spring:message code='message.msg188'/>"/></td>
+								<td><input type="text" class="txt t2" name="profileName" id="profileName" maxlength="20" onkeyup='fn_checkProfileName(event)' style='ime-mode:disabled;' placeholder="20<spring:message code='message.msg188'/>"/></td>
 							</tr>
 							<tr>
 								<th scope="row" class="ico_t1"><spring:message code="encrypt_policy_management.Description"/> </th>
@@ -710,7 +710,7 @@
 										</span> 
 										<span> 
 											<input type="checkbox" id="preventDoubleYesNo" name="preventDoubleYesNo" value="Y"/>
-												<label for="preventDoubleYesNo"><spring:message code="encrypt_policy_management.Prevent_Double_Encryption"/></label>
+											<label for="preventDoubleYesNo"><spring:message code="encrypt_policy_management.Prevent_Double_Encryption"/></label>
 										</span>
 									</div>
 								</td>
@@ -768,7 +768,7 @@
 									<th width="100"><spring:message code="encrypt_log_decode.Policy_Time"/> TO</th>
 									<th width="100"><spring:message code="encrypt_policy_management.Day_of_Week"/></th>
 									<th width="100"><spring:message code="encrypt_policy_management.Threshold"/></th>
-									<th width="100"><spring:message code="encrypt_policy_management.sec"/> </th>
+									<th width="100"><spring:message code="encrypt_policy_management.sec"/></th>
 									<th width="100"><spring:message code="encrypt_policy_management.Additional_Fields"/></th>
 									<th width="100"><spring:message code="encrypt_policy_management.Host_Name"/></th>
 									<th width="100"><spring:message code="encrypt_policy_management.Whether_Allowing_Access"/></th>
