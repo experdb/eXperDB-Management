@@ -14,6 +14,7 @@ import org.json.simple.JSONObject;
 
 import com.k4m.dx.tcontrol.socket.ProtocolID;
 import com.k4m.dx.tcontrol.socket.TranCodeType;
+import com.k4m.dx.tcontrol.util.NetworkUtil;
 
 public class AgentSetting {
 	
@@ -40,33 +41,111 @@ public class AgentSetting {
 		
 		Scanner scan = new Scanner(System.in);
 		
+		String localIp = NetworkUtil.getLocalServerIp();
+		
+		System.out.println("agent ip : " + localIp);
+		
+		//strAgentIp = scan.nextLine();
+		strAgentIp = localIp;
+		
+		System.out.println("agent port :");
+		
+		strAgentPort = scan.nextLine();
+		
+		while (true) {
+			if(strAgentPort.equals("")) {
+				System.out.println("Please enter the port. ");
+				
+				System.out.println("agent port :");
+				
+				strAgentPort = scan.nextLine();
+			} else {
+				break;
+			}
+		}
+		
 		System.out.println("Repository database IP :");
 		
 		strDatabaseIp = scan.nextLine();
+		
+		while (true) {
+			if(strDatabaseIp.equals("")) {
+				System.out.println("Please enter Repository database IP. ");
+				
+				System.out.println("Repository database IP :");
+				
+				strDatabaseIp = scan.nextLine();
+			} else {
+				break;
+			}
+		}
+		
 		
 		System.out.println("Repository database Port :");
 		
 		strDatabasePort = scan.nextLine();
 		
+		while (true) {
+			if(strDatabasePort.equals("")) {
+				System.out.println("Please enter Repository database Port. ");
+				
+				System.out.println("Repository database Port :");
+				
+				strDatabasePort = scan.nextLine();
+			} else {
+				break;
+			}
+		}
+		
 		System.out.println("Repository database Name :");
 		
 		strDatabaseName = scan.nextLine();
+		
+		while (true) {
+			if(strDatabaseName.equals("")) {
+				System.out.println("Please enter Repository database Name. ");
+				
+				System.out.println("Repository database Name :");
+				
+				strDatabaseName = scan.nextLine();
+			} else {
+				break;
+			}
+		}
+		
 		
 		System.out.println("Repository database.username :");
 		
 		strDatabaseUsername = scan.nextLine();
 		
+		while (true) {
+			if(strDatabaseName.equals("")) {
+				System.out.println("Please enter Repository database.username. ");
+				
+				System.out.println("Repository database.username :");
+				
+				strDatabaseUsername = scan.nextLine();
+			} else {
+				break;
+			}
+		}
+		
+		
 		System.out.println("Repository database.password :");
 		
 		strDatabasePassword = scan.nextLine();
-		
-		System.out.println("agent ip :");
-		
-		strAgentIp = scan.nextLine();
-		
-		System.out.println("agent port :");
-		
-		strAgentPort = scan.nextLine();
+
+		while (true) {
+			if(strDatabaseName.equals("")) {
+				System.out.println("Please enter Repository database.password. ");
+				
+				System.out.println("Repository database.password :");
+				
+				strDatabasePassword = scan.nextLine();
+			} else {
+				break;
+			}
+		}
 		
 		strDatabaseUrl = "jdbc:postgresql://" + strDatabaseIp + ":" + strDatabasePort + "/" + strDatabaseName;
 		
