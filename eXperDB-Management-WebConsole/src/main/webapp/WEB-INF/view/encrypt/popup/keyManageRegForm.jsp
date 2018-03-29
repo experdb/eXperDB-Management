@@ -46,10 +46,10 @@ function fn_checkResourceName(e) {
 	var objTarget = e.srcElement || e.target;
 	if(objTarget.type == 'text') {
 	var value = objTarget.value;
-		if(/[ㄱ-ㅎㅏ-ㅡ가-핳]/.test(value)) {
-			alert("한글은 입력하실 수 없습니다.");
-	   		objTarget.value = objTarget.value.replace(/[ㄱ-ㅎㅏ-ㅡ가-핳]/g,'');
-	  	}
+	if(/[ㄱ-ㅎ|ㅏ-ㅣ|가-힣]/.test(value)) {
+		alert("한글은 입력하실 수 없습니다.");
+   		objTarget.value = objTarget.value.replace(/[ㄱ-ㅎ|ㅏ-ㅣ|가-힣]/g, '');
+  		}
 	 }
 }
 
