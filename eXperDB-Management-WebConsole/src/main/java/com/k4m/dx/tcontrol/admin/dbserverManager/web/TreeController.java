@@ -1,5 +1,6 @@
 package com.k4m.dx.tcontrol.admin.dbserverManager.web;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -481,4 +482,70 @@ public class TreeController {
 		}
 		return false;
 	}	
-}
+	
+	
+	/**
+	 * [DB TREE] Reposytory DB서버 리스트를 조회한다. [USE_YN = Y  데이터베이스 동기]
+	 * 
+	 * @return resultSet
+	 * @throws Exception
+	 */
+	@SuppressWarnings("unused")
+	@RequestMapping(value = "/selectDBSync.do")
+	@ResponseBody
+	public List<DbVO> selectDBSync(@ModelAttribute("dbVO") DbVO dbVO, HttpServletResponse response,
+			HttpServletRequest request) {
+
+		// 해당메뉴 권한 조회 (공통메소드호출)
+		CmmnUtils cu = new CmmnUtils();
+		menuAut = cu.selectMenuAut(menuAuthorityService, "MN000301");
+
+		List<DbVO> resultSet = null;
+		try {
+			// 읽기 권한이 없는경우 error페이지 호출 , [추후 Exception 처리예정]
+			if (menuAut.get(0).get("read_aut_yn").equals("N")) {
+				response.sendRedirect("/autError.do");
+				return resultSet;
+			} else {
+				int db_svr_id = Integer.parseInt(request.getParameter("db_svr_id"));
+				resultSet = dbServerManagerService.selectDBSync(db_svr_id);
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return resultSet;
+	}
+	
+	
+	
+	/**
+	 * 데이터베이스를 동기화한다.
+	 * 
+	 * @param historyVO
+	 * @param request
+	 * @return 
+	 * @throws Exception
+	 */
+	@RequestMapping(value = "/syncUpdate.do")
+	public @ResponseBody void syncUpdate(@ModelAttribute("historyVO") HistoryVO historyVO, HttpServletResponse response, HttpServletRequest request) {
+			try {	
+				String strRows = request.getParameter("db_id").toString().replaceAll("&quot;", "\"");
+				JSONArray rows = (JSONArray) new JSONParser().parse(strRows);
+	
+				List<String> ids = new ArrayList<String>(); 
+				HashMap<String , Object> paramvalue = new HashMap<String, Object>();
+				
+				for(int i=0; i<rows.size(); i++){
+					ids.add(rows.get(i).toString()); 
+				}
+				paramvalue.put("db_id", ids);
+				
+				System.out.println(paramvalue.get("db_id"));
+				
+				dbServerManagerService.syncUpdate(paramvalue);
+					
+			} catch (Exception e) {
+				e.printStackTrace();
+			}		
+		}	
+	}

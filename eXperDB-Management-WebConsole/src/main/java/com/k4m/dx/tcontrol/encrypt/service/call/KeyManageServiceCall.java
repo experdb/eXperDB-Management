@@ -80,10 +80,10 @@ public class KeyManageServiceCall {
 
 					jsonObj.put("no", i+1);
 					jsonObj.put("keyUid", cryptoKey.getKeyUid());
-					jsonObj.put("resourceName", cryptoKey.getResourceName());
+					jsonObj.put("resourceName", new String(cryptoKey.getResourceName().toString().getBytes("iso-8859-1"),"UTF-8"));
 					jsonObj.put("resourceUid", cryptoKey.getResourceUid());
 					jsonObj.put("resourceTypeCode", cryptoKey.getResourceTypeCode());
-					jsonObj.put("resourceNote", cryptoKey.getResourceNote());
+					jsonObj.put("resourceNote", new String(cryptoKey.getResourceNote().toString().getBytes("iso-8859-1"),"UTF-8"));
 					jsonObj.put("resourceTypeName", cryptoKey.getResourceTypeName());
 					jsonObj.put("cipherAlgorithmName", cryptoKey.getCipherAlgorithmName());
 					jsonObj.put("cipherAlgorithmCode", cryptoKey.getCipherAlgorithmCode());
@@ -103,10 +103,10 @@ public class KeyManageServiceCall {
 					
 					StringBuffer bf = new StringBuffer();
 					bf.append((i+1) + "키 식별자 : " + cryptoKey.getKeyUid());
-					bf.append((i+1) + "키 이름 : " + cryptoKey.getResourceName());
+					bf.append((i+1) + "키 이름 : " + new String(cryptoKey.getResourceName().toString().getBytes("iso-8859-1"),"UTF-8"));
 					bf.append((i+1) + "ResourceUid : " + cryptoKey.getResourceUid());
 					bf.append((i+1) + "유형 코드 : " + cryptoKey.getResourceTypeCode());
-					bf.append((i+1) + "키 설명 : " + cryptoKey.getResourceNote());
+					bf.append((i+1) + "키 설명 : " + new String(cryptoKey.getResourceNote().toString().getBytes("iso-8859-1"),"UTF-8"));
 					bf.append((i+1) + "유형 : " + cryptoKey.getResourceTypeName());
 					bf.append((i+1) + "적용 알고리즘 : " + cryptoKey.getCipherAlgorithmName());
 					bf.append((i+1) + "작성 일시 : " + cryptoKey.getCreateDateTime() );

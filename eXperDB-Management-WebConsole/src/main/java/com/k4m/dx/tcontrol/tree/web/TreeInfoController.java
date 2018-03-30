@@ -126,50 +126,52 @@ public class TreeInfoController {
 			} else if (agentInfo.getAGT_CNDT_CD().equals("TC001102")) {
 				mv.addObject("extName", "agentfail");
 			} else {
-				String IP = dbServerVO.getIpadr();
-				int PORT = agentInfo.getSOCKET_PORT();
+				try{
+					String IP = dbServerVO.getIpadr();
+					int PORT = agentInfo.getSOCKET_PORT();
 
-				serverObj.put(ClientProtocolID.SERVER_NAME, dbServerVO.getDb_svr_nm());
-				serverObj.put(ClientProtocolID.SERVER_IP, dbServerVO.getIpadr());
-				serverObj.put(ClientProtocolID.SERVER_PORT, dbServerVO.getPortno());
-				serverObj.put(ClientProtocolID.DATABASE_NAME, dbServerVO.getDft_db_nm());
-				serverObj.put(ClientProtocolID.USER_ID, dbServerVO.getSvr_spr_usr_id());
-				serverObj.put(ClientProtocolID.USER_PWD, dec.aesDecode(dbServerVO.getSvr_spr_scm_pwd()));
+					serverObj.put(ClientProtocolID.SERVER_NAME, dbServerVO.getDb_svr_nm());
+					serverObj.put(ClientProtocolID.SERVER_IP, dbServerVO.getIpadr());
+					serverObj.put(ClientProtocolID.SERVER_PORT, dbServerVO.getPortno());
+					serverObj.put(ClientProtocolID.DATABASE_NAME, dbServerVO.getDft_db_nm());
+					serverObj.put(ClientProtocolID.USER_ID, dbServerVO.getSvr_spr_usr_id());
+					serverObj.put(ClientProtocolID.USER_PWD, dec.aesDecode(dbServerVO.getSvr_spr_scm_pwd()));
 
-				JSONObject result = cic.dbms_inforamtion(IP, PORT, serverObj);
-				List<DbServerVO> resultIpadr = cmmnServerInfoService.selectAllIpadrList(db_svr_id);
-				
-				HttpSession session = request.getSession();
-				String usr_id = (String) session.getAttribute("usr_id");
-				dbServerVO.setUsr_id(usr_id);
-				List<DbServerVO> resultRepoDB = cmmnServerInfoService.selectRepoDBList(dbServerVO);			
-				
-				ArrayList<String> arrayList = new ArrayList<>();
-				ArrayList<String> deleteDB = new ArrayList<>();
-				JSONArray data = (JSONArray) result.get("CMD_DATABASE_INFO");
-				for (int i = 0; i < data.size(); i++) {
-					JSONObject jsonObj = (JSONObject) data.get(i);	
-					 arrayList.add((String) jsonObj.get("name"));
-				}		 
-			
-				for(int m=0; m<resultRepoDB.size(); m++){
-					int check =0;
-					for(int n=0; n<arrayList.size(); n++){
-						if(resultRepoDB.get(m).getDb_nm().equals(arrayList.get(n))){
-							check=1;
+					JSONObject result = cic.dbms_inforamtion(IP, PORT, serverObj);
+					List<DbServerVO> resultIpadr = cmmnServerInfoService.selectAllIpadrList(db_svr_id);
+					
+					HttpSession session = request.getSession();
+					String usr_id = (String) session.getAttribute("usr_id");
+					dbServerVO.setUsr_id(usr_id);
+					List<DbServerVO> resultRepoDB = cmmnServerInfoService.selectRepoDBList(dbServerVO);			
+					
+					ArrayList<String> arrayList = new ArrayList<>();
+					ArrayList<String> deleteDB = new ArrayList<>();
+					JSONArray data = (JSONArray) result.get("CMD_DATABASE_INFO");
+					for (int i = 0; i < data.size(); i++) {
+						JSONObject jsonObj = (JSONObject) data.get(i);	
+						 arrayList.add((String) jsonObj.get("name"));
+					}		 			
+					for(int m=0; m<resultRepoDB.size(); m++){
+						int check =0;
+						for(int n=0; n<arrayList.size(); n++){
+							if(resultRepoDB.get(m).getDb_nm().equals(arrayList.get(n))){
+								check=1;
+							}
+						}
+						if(check==0){
+							deleteDB.add(resultRepoDB.get(m).getDb_nm());
 						}
 					}
-					if(check==0){
-						deleteDB.add(resultRepoDB.get(m).getDb_nm());
-					}
+					mv.addObject("result", result);
+					mv.addObject("resultIpadr", resultIpadr);
+					mv.addObject("resultRepoDB", resultRepoDB);
+					mv.addObject("deleteDB", deleteDB);
+					mv.addObject("db_svr_nm", dbServerVO.getDb_svr_nm());
+					mv.addObject("db_svr_id", db_svr_id);			
+				}catch(Exception e){
+					mv.addObject("extName", "agentfail");
 				}
-
-				mv.addObject("result", result);
-				mv.addObject("resultIpadr", resultIpadr);
-				mv.addObject("resultRepoDB", resultRepoDB);
-				mv.addObject("deleteDB", deleteDB);
-				mv.addObject("db_svr_nm", dbServerVO.getDb_svr_nm());
-				mv.addObject("db_svr_id", db_svr_id);
 			}
 			mv.setViewName("dbserver/property");
 		} catch (Exception e) {

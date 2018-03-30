@@ -319,6 +319,18 @@ public class DbServerManagerDAO extends EgovAbstractMapper{
 	public void deleteDbServer(int db_svr_id) {
 		delete("dbserverManagerSql.deleteDbServer", db_svr_id);	
 	}
+
+
+	public List<DbVO> selectDBSync(int db_svr_id) {
+		List<DbVO> sl = null;
+		sl = (List<DbVO>) list("dbserverManagerSql.selectDBSync", db_svr_id);
+		return sl;
+	}
+
+
+	public void syncUpdate(HashMap<String, Object> paramvalue) {
+		update("dbserverManagerSql.syncUpdate", paramvalue);		
+	}
 }
 
 

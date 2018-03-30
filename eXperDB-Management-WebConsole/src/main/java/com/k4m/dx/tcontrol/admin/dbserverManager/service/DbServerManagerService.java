@@ -112,5 +112,11 @@ public interface DbServerManagerService {
 
 
 	void dbSvrDelete(int db_svr_id);
+
+
+	List<DbVO> selectDBSync(int db_svr_id) throws Exception;
+
+
+	void syncUpdate(HashMap<String, Object> paramvalue) throws Exception;
 	
 }

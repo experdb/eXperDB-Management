@@ -155,4 +155,14 @@ public class DbServerManagerServiceImpl extends EgovAbstractServiceImpl implemen
 		
 	}
 
+	@Override
+	public List<DbVO> selectDBSync(int db_svr_id) throws Exception {
+		return dbServerManagerDAO.selectDBSync(db_svr_id);
+	}
+
+	@Override
+	public void syncUpdate(HashMap<String, Object> paramvalue) throws Exception {
+		dbServerManagerDAO.syncUpdate(paramvalue);
+	}
+
 }

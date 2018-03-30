@@ -25,6 +25,7 @@ var connCheck = "fail";
 
 var table_dbServer = null;
 var table_db = null;
+var severdb = null;
 
 function fn_init() {
 	
@@ -246,6 +247,7 @@ $(function() {
     			if(result.data == null){
     				alert("<spring:message code='message.msg05' />");
     			}else{
+    				severdb = result;
     				table_db.clear().draw();
 	    			table_db.rows.add(result.data).draw();
 	    			fn_dataCompareChcek(result);
@@ -522,8 +524,7 @@ function fn_dataCompareChcek(svrDbList){
 		});
 	}
 	
-	function fn_delete(db_svr_id){
-		
+	function fn_delete(db_svr_id){	
 		$.ajax({
 			url : "/dbSvrDelete.do",
 			data : {
@@ -551,6 +552,87 @@ function fn_dataCompareChcek(svrDbList){
 			}
 		});
 	}
+	
+function fn_dbSync(){	
+	var datas = table_dbServer.rows('.selected').data().length;
+	var db_svr_id =  table_dbServer.row('.selected').data().db_svr_id;
+
+	if(datas == 0){
+		alert("동기화 서버를 선택해주세요.")
+		return false;
+	}else{
+		if (confirm('데이터베이스 정보를 동기화 하시겠습니까?')){
+			$.ajax({
+				url : "/selectDBSync.do",
+				data : {db_svr_id : db_svr_id},
+				async:true,
+				//dataType : "json",
+				type : "post",
+				beforeSend: function(xhr) {
+			        xhr.setRequestHeader("AJAX", true);
+			     },
+				error : function(xhr, status, error) {
+					if(xhr.status == 401) {
+						alert("<spring:message code='message.msg02' />");
+						 location.href = "/";
+					} else if(xhr.status == 403) {
+						alert("<spring:message code='message.msg03' />");
+			             location.href = "/";
+					} else {
+						alert("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""));
+					}
+				},
+				success : function(result) {
+					var arr = [];										
+						for(var i = 0; i<result.length; i++){			
+							var chk = 0;
+							for(var j = 0; j<severdb.data.length; j++){	
+								if(result[i].db_nm == severdb.data[j].dft_db_nm){									
+									chk += 1;
+								}							
+							}
+							if(chk == 0){
+								arr.push(result[i].db_id);
+							}	
+					}					
+					fn_syncUpdate(JSON.stringify(arr));
+				}
+			})
+		}else{
+			return false;
+		}
+	}
+}	
+
+
+function fn_syncUpdate(db_id){
+	$.ajax({
+		url : "/syncUpdate.do",
+		data : {
+			db_id : db_id,
+		},
+		async:true,
+		//dataType : "json",
+		type : "post",
+		beforeSend: function(xhr) {
+	        xhr.setRequestHeader("AJAX", true);
+	     },
+		error : function(xhr, status, error) {
+			if(xhr.status == 401) {
+				alert("<spring:message code='message.msg02' />");
+				 location.href = "/";
+			} else if(xhr.status == 403) {
+				alert("<spring:message code='message.msg03' />");
+	             location.href = "/";
+			} else {
+				alert("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""));
+			}
+		},
+		success : function(result) {
+			alert("데이터베이스 정보를 동기화 하였습니다.");
+		}
+	});
+}
 </script>
 <div id="contents">
 	<div class="contents_wrap">
@@ -610,6 +692,7 @@ function fn_dataCompareChcek(svrDbList){
 					<div class="btn_type_01">
 						<div id="save_button">
 						<span class="btn"><button onClick="fn_insertDB()"><spring:message code="common.save"/></button></span>
+						<span class="btn"><button onClick="fn_dbSync()">동기화</button></span>
 						</div>
 					</div>
 					<div class="inner">

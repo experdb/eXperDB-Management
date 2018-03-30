@@ -716,4 +716,45 @@
 	 				FROM T_DBSVR_IS
 		WHERE DB_SVR_ID = #{db_svr_id}
 	</delete>
+	
+	
+	<select id="selectDBSync" resultType="dbVO" parameterType="int">
+		/**
+	 	*  Query ID : selectDBSync
+	 	* Description : DB서버 리스트 조회[USE_YN = Y]
+	 	* Author : 변승우
+	 	**/    
+          SELECT 
+                  (ROW_NUMBER() OVER()) AS ROWNUM
+				, (ROW_NUMBER() OVER()) AS IDX
+				, DB_SVR_ID
+                , DB_ID
+                , DB_NM
+                , DB_USR_ID
+                , DB_EXP
+                , USEYN
+				, FRST_REGR_ID
+				, TO_CHAR(FRST_REG_DTM,'YYYY-MM-DD HH24:MI:SS') AS FRST_REG_DTM
+				, LST_MDFR_ID
+				, TO_CHAR(LST_MDF_DTM,'YYYY-MM-DD HH24:MI:SS') AS LST_MDF_DTM
+          FROM T_DB_I
+          WHERE DB_SVR_ID = #{db_svr_id}
+          AND USEYN = 'Y'
+	</select>
+	
+	
+	  <update id="syncUpdate" >
+		/**
+		* Query ID : syncUpdate
+		* Description : 데이터베이스 동기화
+		* Author : 변승우
+		**/
+		UPDATE T_DB_I
+		SET 
+	  	 	   USEYN= 'N'
+		WHERE DB_ID IN
+      <foreach item="item" index="index" collection="db_id" open="(" separator="," close=")"> 
+				 #{item}::numeric
+	   </foreach>
+  	</update>
 </mapper>
