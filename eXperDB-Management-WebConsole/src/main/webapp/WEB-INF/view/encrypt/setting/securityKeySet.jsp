@@ -42,7 +42,7 @@ var mstKeyRenewChk ="";
  * 페이지 시작시 함수
  ******************************************************** */
 $(window.document).ready(function() {
-	
+	fn_buttonAut();
 	if(isServerPasswordEmpty == "true") {
 			$("#pnlOldPassword").hide();
 			$("#pnlChangePassword").hide();
@@ -69,6 +69,16 @@ $(window.document).ready(function() {
 	$("#mstKeyRenew").attr('checked', true);
 	
 });
+
+function fn_buttonAut(){
+	var btnSave = document.getElementById("btnSave"); 
+	
+	if("${wrt_aut_yn}" == "Y"){
+		btnSave.style.display = '';
+	}else{
+		btnSave.style.display = 'none';
+	}
+}
 
 function fn_mstKeyUse(){
 	mstKeyUseChk = $("#mstKeyUse").prop("checked");
@@ -321,7 +331,7 @@ function fn_mstKeyDownload(){
 		<form id="masterKey" method="post" enctype="multipart/form-data" action="">
 			<div class="cmm_grp">
 				<div class="btn_type_01">
-					<a href="#n" class="btn" onClick="fn_save()"><span><spring:message code="common.save"/></span></a> 
+					<a href="#n" class="btn" onClick="fn_save()"><button id="btnSave"><spring:message code="common.save"/></button></a> 
 				</div>
 			<%-- <form class="securityKeySet" method="post" enctype="multipart/form-data"> --%>
 				<div class="cmm_bd" id="pnlOldPassword">

@@ -36,6 +36,7 @@ import org.springframework.web.multipart.MultipartHttpServletRequest;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.k4m.dx.tcontrol.admin.accesshistory.service.AccessHistoryService;
+import com.k4m.dx.tcontrol.admin.menuauthority.service.MenuAuthorityService;
 import com.k4m.dx.tcontrol.cmmn.CmmnUtils;
 import com.k4m.dx.tcontrol.common.service.HistoryVO;
 import com.k4m.dx.tcontrol.encrypt.service.call.CommonServiceCall;
@@ -63,9 +64,10 @@ public class EncriptSettingController {
 	@Autowired
 	private AccessHistoryService accessHistoryService;
 	
-/*	String restIp = "127.0.0.1";
-	int restPort = 8443;
-	String strTocken = "DjdePr5TQmCsKVLqDJVbjbDgSRJLJ3BKykSgBIokDNY=";*/
+	@Autowired
+	private MenuAuthorityService menuAuthorityService;
+	
+	private List<Map<String, Object>> menuAut;
 
 	/**
 	 * Encript 보안정책 옵션 설정 화면을 보여준다.
@@ -78,15 +80,23 @@ public class EncriptSettingController {
 	@RequestMapping(value = "/securityPolicyOptionSet.do")
 	public ModelAndView encriptAgentMonitoring(@ModelAttribute("historyVO") HistoryVO historyVO, HttpServletRequest request, ModelMap model) {
 		ModelAndView mv = new ModelAndView();
-		try {		
-			
-			// 화면접근이력 이력 남기기
-			CmmnUtils.saveHistory(request, historyVO);
-			historyVO.setExe_dtl_cd("DX-T0115");
-			historyVO.setMnu_id(33);
-			accessHistoryService.insertHistory(historyVO);
-			
-			mv.setViewName("encrypt/setting/securityPolicyOptionSet");
+		try {
+			CmmnUtils cu = new CmmnUtils();
+			menuAut = cu.selectMenuAut(menuAuthorityService, "MN0001301");	
+			if(menuAut.get(0).get("read_aut_yn").equals("N")){
+				mv.setViewName("error/autError");
+			}else{
+				mv.addObject("read_aut_yn", menuAut.get(0).get("read_aut_yn"));
+				mv.addObject("wrt_aut_yn", menuAut.get(0).get("wrt_aut_yn"));
+				
+				// 화면접근이력 이력 남기기
+				CmmnUtils.saveHistory(request, historyVO);
+				historyVO.setExe_dtl_cd("DX-T0115");
+				historyVO.setMnu_id(33);
+				accessHistoryService.insertHistory(historyVO);
+				
+				mv.setViewName("encrypt/setting/securityPolicyOptionSet");
+			}
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -230,13 +240,22 @@ public class EncriptSettingController {
 	
 		ModelAndView mv = new ModelAndView();
 		try {
-			// 화면접근이력 이력 남기기
-			CmmnUtils.saveHistory(request, historyVO);
-			historyVO.setExe_dtl_cd("DX-T0117");
-			historyVO.setMnu_id(34);
-			accessHistoryService.insertHistory(historyVO);
-						
-			mv.setViewName("encrypt/setting/securitySet");
+			CmmnUtils cu = new CmmnUtils();
+			menuAut = cu.selectMenuAut(menuAuthorityService, "MN0001302");	
+			if(menuAut.get(0).get("read_aut_yn").equals("N")){
+				mv.setViewName("error/autError");
+			}else{
+				mv.addObject("read_aut_yn", menuAut.get(0).get("read_aut_yn"));
+				mv.addObject("wrt_aut_yn", menuAut.get(0).get("wrt_aut_yn"));
+				
+				// 화면접근이력 이력 남기기
+				CmmnUtils.saveHistory(request, historyVO);
+				historyVO.setExe_dtl_cd("DX-T0117");
+				historyVO.setMnu_id(34);
+				accessHistoryService.insertHistory(historyVO);
+							
+				mv.setViewName("encrypt/setting/securitySet");
+			}
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -338,23 +357,31 @@ public class EncriptSettingController {
 		String entityId = (String)session.getAttribute("ectityUid");	
 		
 		try {		
-			// 화면접근이력 이력 남기기
-			CmmnUtils.saveHistory(request, historyVO);
-			historyVO.setExe_dtl_cd("DX-T0121");
-			historyVO.setMnu_id(35);
-			accessHistoryService.insertHistory(historyVO);
-						
-			CommonServiceCall csc = new CommonServiceCall();
+			CmmnUtils cu = new CmmnUtils();
+			menuAut = cu.selectMenuAut(menuAuthorityService, "MN0001303");	
+			if(menuAut.get(0).get("read_aut_yn").equals("N")){
+				mv.setViewName("error/autError");
+			}else{
+				mv.addObject("read_aut_yn", menuAut.get(0).get("read_aut_yn"));
+				mv.addObject("wrt_aut_yn", menuAut.get(0).get("wrt_aut_yn"));
 				
-			result = csc.selectServerStatus(restIp, restPort, strTocken, loginId, entityId);
-			
-			String isServerKeyEmpty = result.get("isServerKeyEmpty").toString();
-			String isServerPasswordEmpty = result.get("isServerPasswordEmpty").toString();
-			
-			mv.addObject("isServerKeyEmpty",isServerKeyEmpty);
-			mv.addObject("isServerPasswordEmpty",isServerPasswordEmpty);
-			mv.setViewName("encrypt/setting/securityKeySet");
-			
+				// 화면접근이력 이력 남기기
+				CmmnUtils.saveHistory(request, historyVO);
+				historyVO.setExe_dtl_cd("DX-T0121");
+				historyVO.setMnu_id(35);
+				accessHistoryService.insertHistory(historyVO);
+							
+				CommonServiceCall csc = new CommonServiceCall();
+					
+				result = csc.selectServerStatus(restIp, restPort, strTocken, loginId, entityId);
+				
+				String isServerKeyEmpty = result.get("isServerKeyEmpty").toString();
+				String isServerPasswordEmpty = result.get("isServerPasswordEmpty").toString();
+				
+				mv.addObject("isServerKeyEmpty",isServerKeyEmpty);
+				mv.addObject("isServerPasswordEmpty",isServerPasswordEmpty);
+				mv.setViewName("encrypt/setting/securityKeySet");
+			}
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -585,7 +612,6 @@ public class EncriptSettingController {
 	public ModelAndView securityAgentMonitoring(@ModelAttribute("historyVO") HistoryVO historyVO, HttpServletRequest request) {
 		ModelAndView mv = new ModelAndView();
 		try {
-			
 			// 화면접근이력 이력 남기기
 			CmmnUtils.saveHistory(request, historyVO);
 			historyVO.setExe_dtl_cd("DX-T0118");
@@ -618,59 +644,69 @@ public class EncriptSettingController {
 		List<String> key = new ArrayList<String>();
 		List<String> value = new ArrayList<String>();
 		try {
-			// 화면접근이력 이력 남기기
-			CmmnUtils.saveHistory(request, historyVO);
-			historyVO.setExe_dtl_cd("DX-T0119");
-			historyVO.setMnu_id(36);
-			accessHistoryService.insertHistory(historyVO);
-						
-			String entityName = request.getParameter("entityName");
-			String entityStatusCode = request.getParameter("entityStatusCode");
-			String latestAddress = request.getParameter("latestAddress");
-			String latestDateTime = request.getParameter("latestDateTime");
-			String extendedField = request.getParameter("extendedField").toString().replaceAll("&quot;", "\"");
-			String entityUid = request.getParameter("entityUid");
-			System.out.println("확장팩 ="+ extendedField);
-			
-			//JSONArray rows = (JSONArray) new JSONParser().parse(extendedField);
-			
-			//System.out.println(rows);
-			
-			/*for (int i = 0; i < rows.size(); i++) {
-				resultJson = (JSONObject) rows.get(i);
-			}
-
-			Iterator<?> iter = resultJson.entrySet().iterator();
-			while (iter.hasNext()) {
-				Map.Entry entry = (Map.Entry) iter.next();
+			CmmnUtils cu = new CmmnUtils();
+			menuAut = cu.selectMenuAut(menuAuthorityService, "MN0001304");	
+			if(menuAut.get(0).get("read_aut_yn").equals("N")){
+				mv.setViewName("error/autError");
+			}else{
+				mv.addObject("read_aut_yn", menuAut.get(0).get("read_aut_yn"));
+				mv.addObject("wrt_aut_yn", menuAut.get(0).get("wrt_aut_yn"));
 				
-				key.add(String.valueOf(entry.getKey()));
-				value.add(String.valueOf(entry.getValue()));
-				System.out.println(String.valueOf(entry.getKey()) + " = " + String.valueOf(entry.getValue()));
-			}*/
-								
-			System.out.println(key.size());
-			HttpSession session = request.getSession();
-			String restIp = (String)session.getAttribute("restIp");
-			int restPort = (int)session.getAttribute("restPort");
-			String strTocken = (String)session.getAttribute("tockenValue");
-			String loginId = (String)session.getAttribute("usr_id");
-			String entityId = (String)session.getAttribute("ectityUid");	
+				// 화면접근이력 이력 남기기
+				CmmnUtils.saveHistory(request, historyVO);
+				historyVO.setExe_dtl_cd("DX-T0119");
+				historyVO.setMnu_id(36);
+				accessHistoryService.insertHistory(historyVO);
+							
+				String entityName = request.getParameter("entityName");
+				String entityStatusCode = request.getParameter("entityStatusCode");
+				String latestAddress = request.getParameter("latestAddress");
+				String latestDateTime = request.getParameter("latestDateTime");
+				String extendedField = request.getParameter("extendedField").toString().replaceAll("&quot;", "\"");
+				String entityUid = request.getParameter("entityUid");
+				System.out.println("확장팩 ="+ extendedField);
+				
+				//JSONArray rows = (JSONArray) new JSONParser().parse(extendedField);
+				
+				//System.out.println(rows);
+				
+				/*for (int i = 0; i < rows.size(); i++) {
+					resultJson = (JSONObject) rows.get(i);
+				}
+
+				Iterator<?> iter = resultJson.entrySet().iterator();
+				while (iter.hasNext()) {
+					Map.Entry entry = (Map.Entry) iter.next();
+					
+					key.add(String.valueOf(entry.getKey()));
+					value.add(String.valueOf(entry.getValue()));
+					System.out.println(String.valueOf(entry.getKey()) + " = " + String.valueOf(entry.getValue()));
+				}*/
+									
+				System.out.println(key.size());
+				HttpSession session = request.getSession();
+				String restIp = (String)session.getAttribute("restIp");
+				int restPort = (int)session.getAttribute("restPort");
+				String strTocken = (String)session.getAttribute("tockenValue");
+				String loginId = (String)session.getAttribute("usr_id");
+				String entityId = (String)session.getAttribute("ectityUid");	
+				
+				EncryptSettingServiceCall essc = new EncryptSettingServiceCall();
+				result = essc.selectParamSysCodeList( restIp, restPort, strTocken, loginId, entityId);
+				
+				mv.setViewName("encrypt/popup/agentMonitoringModifyForm");
+				
+				mv.addObject("result",result);
+				mv.addObject("entityUid",entityUid);
+				mv.addObject("entityName",entityName);
+				mv.addObject("entityStatusCode",entityStatusCode);
+				mv.addObject("latestAddress",latestAddress);
+				mv.addObject("latestDateTime",latestDateTime);
+				//mv.addObject("resultKey",key);
+				//mv.addObject("resultValue",value);
+				mv.addObject("extendedField",extendedField);
+			}
 			
-			EncryptSettingServiceCall essc = new EncryptSettingServiceCall();
-			result = essc.selectParamSysCodeList( restIp, restPort, strTocken, loginId, entityId);
-			
-			mv.setViewName("encrypt/popup/agentMonitoringModifyForm");
-			
-			mv.addObject("result",result);
-			mv.addObject("entityUid",entityUid);
-			mv.addObject("entityName",entityName);
-			mv.addObject("entityStatusCode",entityStatusCode);
-			mv.addObject("latestAddress",latestAddress);
-			mv.addObject("latestDateTime",latestDateTime);
-			//mv.addObject("resultKey",key);
-			//mv.addObject("resultValue",value);
-			mv.addObject("extendedField",extendedField);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

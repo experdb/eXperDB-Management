@@ -455,8 +455,8 @@
 		if(/[ㄱ-ㅎ|ㅏ-ㅣ|가-힣]/.test(value)) {
 			alert("한글은 입력하실 수 없습니다.");
 	   		objTarget.value = objTarget.value.replace(/[ㄱ-ㅎ|ㅏ-ㅣ|가-힣]/g, '');
-	  	}
-    	 }
+	  		}
+    	}
     }
 	
 	/*정책저장*/
@@ -464,7 +464,7 @@
 		
 		if (!fn_validation()) return false;
 		
-		/*암호화정책*/
+		/*보안정책*/
 		var datas = table.rows().data();
 		var securityPolicy = [];
 		for(var i = 0; i < datas.length; i++){
@@ -523,7 +523,7 @@
 				profileName : $("#profileName").val(),
 				profilenote : $("#profileNote").val(),
 				
-				/*암호화정책*/
+				/*보안정책*/
 				securityPolicy : JSON.stringify(securityPolicy),
 				
 				/*옵션*/
@@ -635,7 +635,7 @@
 				</div>
 				<div class="cmm_bd">
 					<div class="sub_tit">
-						<p>암호화정책</p>
+						<p>보안정책</p>
 						<div class="sub_btn">
 							<a href="#n" class="btn btnF_04 btnC_01" onclick="fn_SecurityRegForm();">
 							<span id="add_button"><spring:message code="common.add" /></span></a> 

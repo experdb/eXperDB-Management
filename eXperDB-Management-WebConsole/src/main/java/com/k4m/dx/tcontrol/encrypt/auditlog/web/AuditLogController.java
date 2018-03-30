@@ -1,5 +1,8 @@
 package com.k4m.dx.tcontrol.encrypt.auditlog.web;
 
+import java.util.List;
+import java.util.Map;
+
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
@@ -13,6 +16,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.k4m.dx.tcontrol.admin.accesshistory.service.AccessHistoryService;
+import com.k4m.dx.tcontrol.admin.menuauthority.service.MenuAuthorityService;
 import com.k4m.dx.tcontrol.cmmn.CmmnUtils;
 import com.k4m.dx.tcontrol.cmmn.serviceproxy.vo.AuditLog;
 import com.k4m.dx.tcontrol.cmmn.serviceproxy.vo.AuditLogSite;
@@ -28,6 +32,10 @@ public class AuditLogController {
 	@Autowired
 	private AccessHistoryService accessHistoryService;
 	
+	@Autowired
+	private MenuAuthorityService menuAuthorityService;
+	
+	private List<Map<String, Object>> menuAut;
 
 	/**
 	 * 암복호화 감사로그 화면을 보여준다
@@ -40,26 +48,35 @@ public class AuditLogController {
 	public ModelAndView encodeDecodeAuditLog(@ModelAttribute("historyVO") HistoryVO historyVO, HttpServletRequest request) {
 		ModelAndView mv = new ModelAndView();
 		try {
-			// 화면접근이력 이력 남기기
-			CmmnUtils.saveHistory(request, historyVO);
-			historyVO.setExe_dtl_cd("DX-T0110");
-			historyVO.setMnu_id(28);
-			accessHistoryService.insertHistory(historyVO);
-			
-			AuditLogServiceCall sic = new AuditLogServiceCall();
-			JSONArray result = new JSONArray();
-			
-			HttpSession session = request.getSession();
-			String restIp = (String)session.getAttribute("restIp");
-			int restPort = (int)session.getAttribute("restPort");
-			String strTocken = (String)session.getAttribute("tockenValue");
-			String loginId = (String)session.getAttribute("usr_id");
-			String entityId = (String)session.getAttribute("ectityUid");	
-			
-			result = sic.selectEntityAgentList(restIp, restPort, strTocken, loginId ,entityId);
-			
-			mv.setViewName("encrypt/auditLog/encodeDecodeAuditLog");
-			mv.addObject("result",result);
+			CmmnUtils cu = new CmmnUtils();
+			menuAut = cu.selectMenuAut(menuAuthorityService, "MN0001201");	
+			if(menuAut.get(0).get("read_aut_yn").equals("N")){
+				mv.setViewName("error/autError");
+			}else{
+				mv.addObject("read_aut_yn", menuAut.get(0).get("read_aut_yn"));
+				mv.addObject("wrt_aut_yn", menuAut.get(0).get("wrt_aut_yn"));
+				
+				// 화면접근이력 이력 남기기
+				CmmnUtils.saveHistory(request, historyVO);
+				historyVO.setExe_dtl_cd("DX-T0110");
+				historyVO.setMnu_id(28);
+				accessHistoryService.insertHistory(historyVO);
+				
+				AuditLogServiceCall sic = new AuditLogServiceCall();
+				JSONArray result = new JSONArray();
+				
+				HttpSession session = request.getSession();
+				String restIp = (String)session.getAttribute("restIp");
+				int restPort = (int)session.getAttribute("restPort");
+				String strTocken = (String)session.getAttribute("tockenValue");
+				String loginId = (String)session.getAttribute("usr_id");
+				String entityId = (String)session.getAttribute("ectityUid");	
+				
+				result = sic.selectEntityAgentList(restIp, restPort, strTocken, loginId ,entityId);
+				
+				mv.setViewName("encrypt/auditLog/encodeDecodeAuditLog");
+				mv.addObject("result",result);
+			}
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -140,24 +157,33 @@ public class AuditLogController {
 		AuditLogServiceCall sic = new AuditLogServiceCall();
 		JSONArray entityuid = new JSONArray();
 		try {
-			// 화면접근이력 이력 남기기
-			CmmnUtils.saveHistory(request, historyVO);
-			historyVO.setExe_dtl_cd("DX-T0111");
-			historyVO.setMnu_id(29);
-			accessHistoryService.insertHistory(historyVO);
-			
-			HttpSession session = request.getSession();
-			String restIp = (String)session.getAttribute("restIp");
-			int restPort = (int)session.getAttribute("restPort");
-			String strTocken = (String)session.getAttribute("tockenValue");
-			String loginId = (String)session.getAttribute("usr_id");
-			String entityId = (String)session.getAttribute("ectityUid");	
-			
-			
-			entityuid =sic.selectEntityList(restIp, restPort, strTocken, loginId ,entityId);
-			mv.addObject("entityuid", entityuid);
-			
-			mv.setViewName("encrypt/auditLog/managementServerAuditLog");
+			CmmnUtils cu = new CmmnUtils();
+			menuAut = cu.selectMenuAut(menuAuthorityService, "MN0001202");	
+			if(menuAut.get(0).get("read_aut_yn").equals("N")){
+				mv.setViewName("error/autError");
+			}else{
+				mv.addObject("read_aut_yn", menuAut.get(0).get("read_aut_yn"));
+				mv.addObject("wrt_aut_yn", menuAut.get(0).get("wrt_aut_yn"));
+				
+				// 화면접근이력 이력 남기기
+				CmmnUtils.saveHistory(request, historyVO);
+				historyVO.setExe_dtl_cd("DX-T0111");
+				historyVO.setMnu_id(29);
+				accessHistoryService.insertHistory(historyVO);
+				
+				HttpSession session = request.getSession();
+				String restIp = (String)session.getAttribute("restIp");
+				int restPort = (int)session.getAttribute("restPort");
+				String strTocken = (String)session.getAttribute("tockenValue");
+				String loginId = (String)session.getAttribute("usr_id");
+				String entityId = (String)session.getAttribute("ectityUid");	
+				
+				
+				entityuid =sic.selectEntityList(restIp, restPort, strTocken, loginId ,entityId);
+				mv.addObject("entityuid", entityuid);
+				
+				mv.setViewName("encrypt/auditLog/managementServerAuditLog");
+			}	
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -223,9 +249,9 @@ public class AuditLogController {
 		ModelAndView mv = new ModelAndView();
 		try {
 			// 화면접근이력 이력 남기기
-			/*CmmnUtils.saveHistory(request, historyVO);
-			historyVO.setExe_dtl_cd("DX-T0055");
-			accessHistoryService.insertHistory(historyVO);*/
+			CmmnUtils.saveHistory(request, historyVO);
+			historyVO.setExe_dtl_cd("DX-T0112");
+			accessHistoryService.insertHistory(historyVO);
 
 			String entityName = request.getParameter("entityName").equals("undefined")?"":request.getParameter("entityName");
 			String logDateTime = request.getParameter("logDateTime").equals("undefined")?"":request.getParameter("logDateTime");
@@ -262,23 +288,32 @@ public class AuditLogController {
 		AuditLogServiceCall sic = new AuditLogServiceCall();
 		JSONArray entityuid = new JSONArray();
 		try {
-			// 화면접근이력 이력 남기기
-			CmmnUtils.saveHistory(request, historyVO);
-			historyVO.setExe_dtl_cd("DX-T0112");
-			historyVO.setMnu_id(30);
-			accessHistoryService.insertHistory(historyVO);
-			
-			HttpSession session = request.getSession();
-			String restIp = (String)session.getAttribute("restIp");
-			int restPort = (int)session.getAttribute("restPort");
-			String strTocken = (String)session.getAttribute("tockenValue");
-			String loginId = (String)session.getAttribute("usr_id");
-			String entityId = (String)session.getAttribute("ectityUid");	
-			
-			entityuid =sic.selectEntityList(restIp, restPort, strTocken, loginId ,entityId);
-			mv.addObject("entityuid", entityuid);
-			
-			mv.setViewName("encrypt/auditLog/encodeDecodeKeyAuditLog");
+			CmmnUtils cu = new CmmnUtils();
+			menuAut = cu.selectMenuAut(menuAuthorityService, "MN0001203");	
+			if(menuAut.get(0).get("read_aut_yn").equals("N")){
+				mv.setViewName("error/autError");
+			}else{
+				mv.addObject("read_aut_yn", menuAut.get(0).get("read_aut_yn"));
+				mv.addObject("wrt_aut_yn", menuAut.get(0).get("wrt_aut_yn"));
+				
+				// 화면접근이력 이력 남기기
+				CmmnUtils.saveHistory(request, historyVO);
+				historyVO.setExe_dtl_cd("DX-T0112");
+				historyVO.setMnu_id(30);
+				accessHistoryService.insertHistory(historyVO);
+				
+				HttpSession session = request.getSession();
+				String restIp = (String)session.getAttribute("restIp");
+				int restPort = (int)session.getAttribute("restPort");
+				String strTocken = (String)session.getAttribute("tockenValue");
+				String loginId = (String)session.getAttribute("usr_id");
+				String entityId = (String)session.getAttribute("ectityUid");	
+				
+				entityuid =sic.selectEntityList(restIp, restPort, strTocken, loginId ,entityId);
+				mv.addObject("entityuid", entityuid);
+				
+				mv.setViewName("encrypt/auditLog/encodeDecodeKeyAuditLog");
+			}
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -345,9 +380,9 @@ public class AuditLogController {
 		ModelAndView mv = new ModelAndView();
 		try {
 			// 화면접근이력 이력 남기기
-			/*CmmnUtils.saveHistory(request, historyVO);
-			historyVO.setExe_dtl_cd("DX-T0055");
-			accessHistoryService.insertHistory(historyVO);*/
+			CmmnUtils.saveHistory(request, historyVO);
+			historyVO.setExe_dtl_cd("DX-T0114");
+			accessHistoryService.insertHistory(historyVO);
 
 			String entityName = request.getParameter("entityName").equals("undefined")?"":request.getParameter("entityName");
 			String logDateTime = request.getParameter("logDateTime").equals("undefined")?"":request.getParameter("logDateTime");
@@ -394,7 +429,7 @@ public class AuditLogController {
 			int restPort = (int)session.getAttribute("restPort");
 			String strTocken = (String)session.getAttribute("tockenValue");
 			String loginId = (String)session.getAttribute("usr_id");
-			String entityId = (String)session.getAttribute("ectityUid");	
+			String entityId = (String)session.getAttribute("ectityUid");
 			
 			entityuid =sic.selectEntityList(restIp, restPort, strTocken, loginId ,entityId);
 

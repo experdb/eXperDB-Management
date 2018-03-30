@@ -43,7 +43,8 @@ var table = null;
 //var keyValue = "${resultValue}";
 var extendedField = ${extendedField};
 
-	$(window.document).ready(function() {		
+	$(window.document).ready(function() {	
+		fn_buttonAut();
 		var html = ""; 
 	
 		for(key in extendedField) {		
@@ -59,7 +60,15 @@ var extendedField = ${extendedField};
 		$( "#extendedField" ).append(html);
 	});
 	
-	
+	function fn_buttonAut(){
+		var btnSave = document.getElementById("btnSave"); 
+		
+		if("${wrt_aut_yn}" == "Y"){
+			btnSave.style.display = '';
+		}else{
+			btnSave.style.display = 'none';
+		}
+	}
 	
 	function fn_agentStatusSave(){
 		$.ajax({
@@ -106,7 +115,7 @@ var extendedField = ${extendedField};
 		<div class="pop_cts">
 			<p class="tit">암호화 에이전트 모니터링 수정</p>
 				<div class="btn_type_01">
-					<span class="btn btnC_01" onClick="fn_agentStatusSave();"><button><spring:message code="common.save"/></button></span> 
+					<span class="btn btnC_01" onClick="fn_agentStatusSave();"><button id="btnSave"><spring:message code="common.save"/></button></span> 
 				</div>
 			<div class="cmm_bd">
 				<div class="sub_tit">

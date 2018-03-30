@@ -1,5 +1,8 @@
 package com.k4m.dx.tcontrol.encrypt.keymanage.web;
 
+import java.util.List;
+import java.util.Map;
+
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
@@ -14,6 +17,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.k4m.dx.tcontrol.admin.accesshistory.service.AccessHistoryService;
+import com.k4m.dx.tcontrol.admin.menuauthority.service.MenuAuthorityService;
 import com.k4m.dx.tcontrol.cmmn.CmmnUtils;
 import com.k4m.dx.tcontrol.cmmn.serviceproxy.vo.CryptoKeySymmetric;
 import com.k4m.dx.tcontrol.common.service.HistoryVO;
@@ -39,6 +43,11 @@ public class KeyManageController {
 	@Autowired
 	private AccessHistoryService accessHistoryService;
 
+	private List<Map<String, Object>> menuAut;
+	
+	@Autowired
+	private MenuAuthorityService menuAuthorityService;
+	
 	/**
 	 * 암호화 키 리스트 화면을 보여준다.
 	 * 
@@ -52,23 +61,31 @@ public class KeyManageController {
 		CommonServiceCall csc= new CommonServiceCall();
 		JSONArray result = new JSONArray();
 		try {
-			
-			// 화면접근이력 이력 남기기
-			CmmnUtils.saveHistory(request, historyVO);
-			historyVO.setExe_dtl_cd("DX-T0106");
-			historyVO.setMnu_id(26);
-			accessHistoryService.insertHistory(historyVO);
-			
-			HttpSession session = request.getSession();
-			String restIp = (String)session.getAttribute("restIp");
-			int restPort = (int)session.getAttribute("restPort");
-			String strTocken = (String)session.getAttribute("tockenValue");
-			String loginId = (String)session.getAttribute("usr_id");
-			String entityId = (String)session.getAttribute("ectityUid");
-			
-			result = csc.selectSysCodeListExper(restIp, restPort, strTocken,loginId,entityId);
-			mv.setViewName("encrypt/keyManage/keyManage");
-			mv.addObject("result",result);
+			CmmnUtils cu = new CmmnUtils();
+			menuAut = cu.selectMenuAut(menuAuthorityService, "MN0001102");	
+			if(menuAut.get(0).get("read_aut_yn").equals("N")){
+				mv.setViewName("error/autError");
+			}else{
+				mv.addObject("read_aut_yn", menuAut.get(0).get("read_aut_yn"));
+				mv.addObject("wrt_aut_yn", menuAut.get(0).get("wrt_aut_yn"));
+				
+				// 화면접근이력 이력 남기기
+				CmmnUtils.saveHistory(request, historyVO);
+				historyVO.setExe_dtl_cd("DX-T0106");
+				historyVO.setMnu_id(26);
+				accessHistoryService.insertHistory(historyVO);
+				
+				HttpSession session = request.getSession();
+				String restIp = (String)session.getAttribute("restIp");
+				int restPort = (int)session.getAttribute("restPort");
+				String strTocken = (String)session.getAttribute("tockenValue");
+				String loginId = (String)session.getAttribute("usr_id");
+				String entityId = (String)session.getAttribute("ectityUid");
+				
+				result = csc.selectSysCodeListExper(restIp, restPort, strTocken,loginId,entityId);
+				mv.setViewName("encrypt/keyManage/keyManage");
+				mv.addObject("result",result);
+			}
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

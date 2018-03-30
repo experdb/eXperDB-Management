@@ -192,8 +192,8 @@ public class LoginController {
 					JSONObject result = cic.login(restIp,restPort,id,userVo.getPwd());				
 					request.getSession().setAttribute("restIp", restIp);
 					request.getSession().setAttribute("restPort", restPort);
-					request.getSession().setAttribute("tockenValue", result.get("tockenValue"));
-					request.getSession().setAttribute("ectityUid", result.get("ectityUid"));
+					request.getSession().setAttribute("tockenValue", result.get("tockenValue")==null?"":result.get("tockenValue"));
+					request.getSession().setAttribute("ectityUid", result.get("ectityUid")==null?"":result.get("ectityUid"));
 				}
 				
 				// 로그인 이력 남기기

@@ -97,10 +97,27 @@ var table = null;
 	}
 	
 	$(window.document).ready(function() {
+		fn_buttonAut();
 		fn_init();
 		fn_select();
 	});
 
+	function fn_buttonAut(){
+		var btnInsert = document.getElementById("btnInsert"); 
+		var btnUpdate = document.getElementById("btnUpdate"); 
+		var btnDelete = document.getElementById("btnDelete"); 
+		
+		if("${wrt_aut_yn}" == "Y"){
+			btnInsert.style.display = '';
+			btnUpdate.style.display = '';
+			btnDelete.style.display = '';
+		}else{
+			btnInsert.style.display = 'none';
+			btnUpdate.style.display = 'none';
+			btnDelete.style.display = 'none';
+		}
+	}
+	
 	/* 조회 버튼 클릭시*/
 	function fn_select() {
 		
@@ -228,7 +245,7 @@ var table = null;
 				},
 				success : function(data) {
 					if(data.resultCode == "0000000000"){
-						alert("삭제되었습니다.")
+						alert("<spring:message code='message.msg37' />");
 						location.reload();
 					}else if(data.resultCode == "8000000003"){
 						alert(data.resultMessage);
@@ -276,9 +293,9 @@ var table = null;
 			<div class="cmm_grp">
 				<div class="btn_type_01">
 <!-- 					<span class="btn" onclick="fn_select();"><button>조회</button></span> -->
-					<span class="btn" onclick="fn_insert();"><button><spring:message code="common.registory" /></button></span>
-					<span class="btn" onclick="fn_update();"><button><spring:message code="common.modify" /></button></span>
-					<span class="btn" onclick="fn_delete();"><button><spring:message code="common.delete" /></button></span>
+					<span class="btn" onclick="fn_insert();"><button id="btnInsert"><spring:message code="common.registory" /></button></span>
+					<span class="btn" onclick="fn_update();"><button id="btnUpdate"><spring:message code="common.modify" /></button></span>
+					<span class="btn" onclick="fn_delete();"><button id="btnDelete"><spring:message code="common.delete" /></button></span>
 				</div>
 <!-- 				<div class="sch_form"> -->
 <!-- 					<table class="write"> -->

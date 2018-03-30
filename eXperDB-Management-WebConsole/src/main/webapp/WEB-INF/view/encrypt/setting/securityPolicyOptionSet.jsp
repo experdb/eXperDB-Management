@@ -26,6 +26,7 @@
  * 페이지 시작시 함수
  ******************************************************** */
 $(window.document).ready(function() {
+	fn_buttonAut();
 	fn_makeStartHour();
 	fn_makeEndHour();
 	
@@ -34,6 +35,16 @@ $(window.document).ready(function() {
 	
 });
 
+
+function fn_buttonAut(){
+	var btnSave = document.getElementById("btnSave"); 
+	
+	if("${wrt_aut_yn}" == "Y"){
+		btnSave.style.display = '';
+	}else{
+		btnSave.style.display = 'none';
+	}
+}
 
 /* ********************************************************
  * 시간
@@ -371,7 +382,7 @@ margin-right: 10px;
 		<div class="contents">
 			<div class="cmm_grp">
 				<div class="btn_type_01">
-					<a href="#n" class="btn" onClick="fn_save()"><span><spring:message code="common.save"/></span></a> 
+					<a href="#n" class="btn" onClick="fn_save()"><button id="btnSave"><spring:message code="common.save"/></button></a> 
 				</div>
 						
 				<div class="cmm_bd">

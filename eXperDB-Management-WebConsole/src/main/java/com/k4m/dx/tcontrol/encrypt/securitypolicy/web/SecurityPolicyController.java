@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.k4m.dx.tcontrol.admin.accesshistory.service.AccessHistoryService;
+import com.k4m.dx.tcontrol.admin.menuauthority.service.MenuAuthorityService;
 import com.k4m.dx.tcontrol.cmmn.CmmnUtils;
 import com.k4m.dx.tcontrol.cmmn.serviceproxy.SystemCode;
 import com.k4m.dx.tcontrol.cmmn.serviceproxy.vo.ProfileAclSpec;
@@ -48,6 +49,11 @@ public class SecurityPolicyController {
 	@Autowired
 	private AccessHistoryService accessHistoryService;
 	
+	private List<Map<String, Object>> menuAut;
+	
+	@Autowired
+	private MenuAuthorityService menuAuthorityService;
+	
 	/**
 	 * 보안정책관리 화면을 보여준다.
 	 * 
@@ -59,13 +65,22 @@ public class SecurityPolicyController {
 	public ModelAndView securityPolicy(@ModelAttribute("historyVO") HistoryVO historyVO, HttpServletRequest request) {
 		ModelAndView mv = new ModelAndView();
 		try {
-			// 화면접근이력 이력 남기기
-			CmmnUtils.saveHistory(request, historyVO);
-			historyVO.setExe_dtl_cd("DX-T0101");
-			historyVO.setMnu_id(25);
-			accessHistoryService.insertHistory(historyVO);
-
-			mv.setViewName("encrypt/securityPolicy/securityPolicy");
+			CmmnUtils cu = new CmmnUtils();
+			menuAut = cu.selectMenuAut(menuAuthorityService, "MN0001101");	
+			if(menuAut.get(0).get("read_aut_yn").equals("N")){
+				mv.setViewName("error/autError");
+			}else{
+				mv.addObject("read_aut_yn", menuAut.get(0).get("read_aut_yn"));
+				mv.addObject("wrt_aut_yn", menuAut.get(0).get("wrt_aut_yn"));
+				
+				// 화면접근이력 이력 남기기
+				CmmnUtils.saveHistory(request, historyVO);
+				historyVO.setExe_dtl_cd("DX-T0101");
+				historyVO.setMnu_id(25);
+				accessHistoryService.insertHistory(historyVO);
+				
+				mv.setViewName("encrypt/securityPolicy/securityPolicy");
+			}
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

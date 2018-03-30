@@ -73,6 +73,7 @@ var table = null;
 		});
 	}
 	$(window.document).ready(function() {
+		fn_buttonAut();
 		fn_init();
 		$.ajax({
 			url : "/selectSecurityPolicy.do",
@@ -108,6 +109,22 @@ var table = null;
 		});
 	});
 
+	function fn_buttonAut(){
+		var btnInsert = document.getElementById("btnInsert"); 
+		var btnUpdate = document.getElementById("btnUpdate"); 
+		var btnDelete = document.getElementById("btnDelete"); 
+		
+		if("${wrt_aut_yn}" == "Y"){
+			btnInsert.style.display = '';
+			btnUpdate.style.display = '';
+			btnDelete.style.display = '';
+		}else{
+			btnInsert.style.display = 'none';
+			btnUpdate.style.display = 'none';
+			btnDelete.style.display = 'none';
+		}
+	}	
+	
 	/* 조회 버튼 클릭시*/
 	function fn_select() {
 		$.ajax({
@@ -130,7 +147,7 @@ var table = null;
 					alert("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""));
 				}
 			},
-			success : function(data) {		
+			success : function(data) {
 				if(data.resultCode == "0000000000"){
 					table.clear().draw();
 					table.rows.add(data.list).draw();
@@ -168,6 +185,8 @@ var table = null;
  			alert('<spring:message code="message.msg35" />');
  			return false;
  		}else{
+ 			if (!confirm('<spring:message code="message.msg162"/>'))return false;
+ 			
  			var rowList = [];
  			for (var i = 0; i < datas.length; i++) {
  				rowList += datas[i].profileUid + ',';				
@@ -196,7 +215,7 @@ var table = null;
 				},
 				success : function(data) {		
 					if(data.resultCode == "0000000000"){
-						alert(data.resultMessage);
+						alert("<spring:message code='message.msg37' />");
 						location.reload();
 					}else if(data.resultCode == "8000000003"){
 						alert(data.resultMessage);
@@ -233,9 +252,9 @@ var table = null;
 			<div class="cmm_grp">
 				<div class="btn_type_01">
 <!-- 					<span class="btn" onclick="fn_select();"><button>조회</button></span> -->
-					<span class="btn"><a href="/securityPolicyInsert.do"><button><spring:message code="common.registory" /></button></a></span>
-					<span class="btn" onclick="fn_update();"><button><spring:message code="common.modify" /></button></span>
-					<span class="btn" onclick="fn_delete();"><button><spring:message code="common.delete" /></button></span>
+					<span class="btn"><a href="/securityPolicyInsert.do"><button id="btnInsert"><spring:message code="common.registory" /></button></a></span>
+					<span class="btn" onclick="fn_update();"><button id="btnUpdate"><spring:message code="common.modify" /></button></span>
+					<span class="btn" onclick="fn_delete();"><button id="btnDelete"><spring:message code="common.delete" /></button></span>
 				</div>
 <!-- 				<div class="sch_form"> -->
 <!-- 					<table class="write"> -->
