@@ -70,7 +70,7 @@ public class AgentSetting {
 		
 		while (true) {
 			if(strDatabaseIp.equals("")) {
-				System.out.println("Please enter Repository database IP. ");
+				System.out.println("Please enter the Repository database IP address. ");
 				
 				System.out.println("Repository database IP :");
 				
@@ -87,9 +87,9 @@ public class AgentSetting {
 		
 		while (true) {
 			if(strDatabasePort.equals("")) {
-				System.out.println("Please enter Repository database Port. ");
+				System.out.println("Please enter a Repository database Port. ");
 				
-				System.out.println("Repository database Port :");
+				System.out.println("Repository the database Port :");
 				
 				strDatabasePort = scan.nextLine();
 			} else {
@@ -103,7 +103,7 @@ public class AgentSetting {
 		
 		while (true) {
 			if(strDatabaseName.equals("")) {
-				System.out.println("Please enter Repository database Name. ");
+				System.out.println("Please enter a Repository database Name. ");
 				
 				System.out.println("Repository database Name :");
 				
@@ -120,7 +120,7 @@ public class AgentSetting {
 		
 		while (true) {
 			if(strDatabaseName.equals("")) {
-				System.out.println("Please enter Repository database.username. ");
+				System.out.println("Please enter your Repository database username. ");
 				
 				System.out.println("Repository database.username :");
 				
@@ -137,7 +137,7 @@ public class AgentSetting {
 
 		while (true) {
 			if(strDatabaseName.equals("")) {
-				System.out.println("Please enter Repository database.password. ");
+				System.out.println("Please enter your Repository database password. ");
 				
 				System.out.println("Repository database.password :");
 				
