@@ -110,6 +110,8 @@ public class ClientProtocolID {
 	public static final String BCK_FILE_PTH = "BCK_FILE_PTH";
 	public static final String LOG_YN = "LOG_YN";
 	public static final String BCK_FILENM = "BCK_FILENM";
+	public static final String BCK_MTN_ECNT = "BCK_MTN_ECNT";
+	public static final String FILE_STG_DCNT = "FILE_STG_DCNT";
 	
 	public static final String IS_DIRECTORY = "IS_DIRECTORY";
 	public static final String IS_FILE = "IS_FILE";
