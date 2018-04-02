@@ -11,6 +11,7 @@ import java.io.RandomAccessFile;
 import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -475,6 +476,62 @@ public class FileUtil {
 		return bytesArray;
 	}
 
+	  /**
+     * String으로 내림차순(Desc) 정렬
+     * @author Administrator
+     *
+     */
+    static class CompareNameDesc implements Comparator<FileEntry>{
+ 
+        @Override
+        public int compare(FileEntry o1, FileEntry o2) {
+            // TODO Auto-generated method stub
+            return o2.getFileName().compareTo(o1.getFileName());
+        }        
+    }
+    
+    /**
+     * String으로 오름차순(Asc) 정렬
+     * @author Administrator
+     *
+     */
+    static class CompareNameAsc implements Comparator<FileEntry>{
+ 
+        @Override
+        public int compare(FileEntry o1, FileEntry o2) {
+            // TODO Auto-generated method stub
+            return o1.getFileName().compareTo(o2.getFileName());
+        }        
+    }
+    
+    /**
+     * int로 내림차순(Desc) 정렬
+     * @author Administrator
+     *
+     */
+    static class CompareSeqDesc implements Comparator<FileEntry>{
+ 
+        @Override
+        public int compare(FileEntry o1, FileEntry o2) {
+            // TODO Auto-generated method stub
+            return o1.getLastModified() > o2.getLastModified() ? -1 : o1.getLastModified() < o2.getLastModified() ? 1:0;
+        }        
+    }
+    
+    /**
+     * int로 오름차순(Asc) 정렬
+     * @author Administrator
+     *
+     */
+    static class CompareSeqAsc implements Comparator<FileEntry>{
+ 
+        @Override
+        public int compare(FileEntry o1, FileEntry o2) {
+            // TODO Auto-generated method stub
+            return o1.getLastModified() < o2.getLastModified() ? -1 : o1.getLastModified() > o2.getLastModified() ? 1:0;
+        }        
+    }
+    
 	public static void main(String args[]) {
 
 		try {
