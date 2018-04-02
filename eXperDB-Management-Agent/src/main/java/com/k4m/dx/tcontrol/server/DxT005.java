@@ -185,7 +185,7 @@ public class DxT005 extends SocketCtl {
 							strFileSize = "0";
 						
 						//백업파일관리
-						dumpFIleManagement(strBCK_FILE_PTH, strFileName, intBCK_MTN_ECNT, intFILE_STG_DCNT, strSlush);
+						dumpFileManagement(strBCK_FILE_PTH, strFileName, intBCK_MTN_ECNT, intFILE_STG_DCNT, strSlush);
 
 						if (strFileSize == null || strFileSize.equals("0")) {
 
@@ -300,7 +300,7 @@ public class DxT005 extends SocketCtl {
 	 *            (파일보관일수)
 	 * @throws Exception
 	 */
-	private void dumpFIleManagement(String filePath, String fileName, int BCK_MTN_ECNT, int FILE_STG_DCNT, String strSlush)
+	private void dumpFileManagement(String filePath, String fileName, int BCK_MTN_ECNT, int FILE_STG_DCNT, String strSlush)
 			throws Exception {
 		FileListSearcher fs = new FileListSearcher(filePath);
 
@@ -327,15 +327,8 @@ public class DxT005 extends SocketCtl {
 				
 				String strBachupFile = filePath + strSlush +  strDumpFileName;
 				
-				//1. 백업유지 개수 많큼 파일을 유지한다.
-				if (intCount > BCK_MTN_ECNT) {
-					if(FileUtil.isFile(strBachupFile)) {
-						FileUtil.fileDelete(strBachupFile);
-					}
-				}
-				intCount++;
 
-				//2. 파일보관일수 많큼 파일을 보관한다.
+				//1. 파일보관일수 많큼 파일을 보관한다.
 				fileDate = new Date(strLastModified);
 				// 현재시간과 파일 수정시간 시간차 계산(단위 : 밀리 세컨드)
 				fileCal.setTime(fileDate);
@@ -349,6 +342,14 @@ public class DxT005 extends SocketCtl {
 						FileUtil.fileDelete(strBachupFile);
 					}
 				}
+				
+				//2. 백업유지 개수 많큼 파일을 유지한다.
+				if (intCount > BCK_MTN_ECNT) {
+					if(FileUtil.isFile(strBachupFile)) {
+						FileUtil.fileDelete(strBachupFile);
+					}
+				}
+				intCount++;
 
 			}
 
@@ -363,7 +364,7 @@ public class DxT005 extends SocketCtl {
 		
 		 DxT005 test = new DxT005();
 		 try {
-			test.dumpFIleManagement(filePath, fileName, 1, 1, "/");
+			test.dumpFileManagement(filePath, fileName, 0, 0, "/");
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
