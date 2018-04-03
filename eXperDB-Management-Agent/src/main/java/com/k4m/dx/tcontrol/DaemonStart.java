@@ -17,7 +17,7 @@ import com.k4m.dx.tcontrol.socket.DXTcontrolAgentSocket;
 import com.k4m.dx.tcontrol.socket.listener.ServerCheckListener;
 import com.k4m.dx.tcontrol.util.FileUtil;
 
-public class DaemonStart implements DxDaemon{
+public class DaemonStart implements DxDaemon{ 
 	
 	private static Logger daemonStartLogger = LoggerFactory.getLogger("DaemonStartLogger");
 	private static Logger errLogger = LoggerFactory.getLogger("errorToFile");
