@@ -1457,9 +1457,22 @@ public class ServiceCallTest {
 		param.setRenew(false);
 		param.setCopyBin(false);
 		
+		
+		ArrayList param2 = new ArrayList();
+		
+		for(int i=0; i< 3; i++) {
+			CryptoKeySymmetric key = new CryptoKeySymmetric();
+			key.setBinUid("");
+			key.setBinStatusCode("");
+			key.setValidEndDateTime("");
+			
+			param2.add(key.toJSONString());
+		}
+		
 
 		HashMap body = new HashMap();
 		body.put(TypeUtility.getJustClassName(param.getClass()), param.toJSONString());
+		body.put("CryptoKeySymmetricList", param2);
 
 		String parameters = TypeUtility.makeRequestBody(body);
 		
