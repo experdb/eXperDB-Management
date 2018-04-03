@@ -19,7 +19,7 @@ import org.springframework.context.support.ClassPathXmlApplicationContext;
 
 import com.k4m.dx.tcontrol.db.repository.service.SystemServiceImpl;
 import com.k4m.dx.tcontrol.db.repository.vo.WrkExeVO;
-import com.k4m.dx.tcontrol.server.DxT015.CompareSeqAsc;
+import com.k4m.dx.tcontrol.server.DxT015.CompareSeqDesc;
 import com.k4m.dx.tcontrol.socket.ProtocolID;
 import com.k4m.dx.tcontrol.socket.SocketCtl;
 import com.k4m.dx.tcontrol.socket.TranCodeType;
@@ -308,7 +308,7 @@ public class DxT005 extends SocketCtl {
 
 		List<FileEntry> fileList = fs.getSearchFiles();
 
-		Collections.sort(fileList, new CompareSeqAsc());
+		Collections.sort(fileList, new CompareSeqDesc());
 
 		Calendar cal = Calendar.getInstance();
 		long todayMil = cal.getTimeInMillis(); // 현재 시간(밀리 세컨드)
