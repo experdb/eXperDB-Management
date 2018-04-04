@@ -105,7 +105,21 @@ public class ScheduleQuartzJob implements Job{
 		        //WORK 갯수만큼 루프
 				for(int i =0; i<resultWork.size(); i++){
 			        
-			        bck_fileNm = "eXperDB_"+resultWork.get(i).get("wrk_id")+"_"+today+".dump";			
+					
+					if(resultWork.get(i).get("file_fmt_cd_nm") != null && resultWork.get(i).get("file_fmt_cd_nm") != ""){
+						System.out.println("@@@@@@@@@@@@@@@@@@@@@");
+						System.out.println(resultWork.get(i).get("file_fmt_cd_nm"));
+						System.out.println("@@@@@@@@@@@@@@@@@@@@@");
+						//파일포멧이 tar일경우 압축률 명령어 생성
+						if(resultWork.get(i).get("file_fmt_cd_nm").equals("tar")){
+							bck_fileNm = "eXperDB_"+resultWork.get(i).get("wrk_id")+"_"+today+".tar";	
+						}else if(resultWork.get(i).get("file_fmt_cd_nm").equals("plain")){
+							bck_fileNm = "eXperDB_"+resultWork.get(i).get("wrk_id")+"_"+today+".dump";	
+						}else{
+							bck_fileNm = "eXperDB_"+resultWork.get(i).get("wrk_id")+"_"+today;	
+						}
+					}
+								
 					int wrk_id = Integer.parseInt(resultWork.get(i).get("wrk_id").toString());
 												
 					//부가옵션 조회
@@ -224,7 +238,7 @@ public class ScheduleQuartzJob implements Job{
 				String objCmd = fn_objOption(addObject);	
 				strCmd += objCmd;
 			}					
-			strCmd += " "+resultWork.get(i).get("db_nm")+"  > "+resultWork.get(i).get("save_pth")+"/"+bck_fileNm;
+			strCmd += " "+resultWork.get(i).get("db_nm")+"  -f "+resultWork.get(i).get("save_pth")+"/"+bck_fileNm;
 		} catch (Exception e) {			
 			e.printStackTrace();
 		}		
@@ -266,7 +280,7 @@ public class ScheduleQuartzJob implements Job{
 
 	private String fn_basicOption(List<Map<String, Object>> resultWork, int i, String bck_fileNm) {
 		String strBasic = "";
-
+        
 		if(resultWork.get(i).get("file_fmt_cd_nm") != null && resultWork.get(i).get("file_fmt_cd_nm") != ""){
 			//파일포멧에 따른 명령어 생성
 			strBasic += " --format="+resultWork.get(i).get("file_fmt_cd_nm").toString().toLowerCase();

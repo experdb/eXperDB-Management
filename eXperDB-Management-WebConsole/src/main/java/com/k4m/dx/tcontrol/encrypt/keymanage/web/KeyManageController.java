@@ -1,5 +1,6 @@
 package com.k4m.dx.tcontrol.encrypt.keymanage.web;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -9,6 +10,7 @@ import javax.servlet.http.HttpSession;
 
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
+import org.json.simple.parser.JSONParser;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -231,7 +233,7 @@ public class KeyManageController {
 		String resourceName = request.getParameter("resourceName");
 		String cipherAlgorithmCode = request.getParameter("cipherAlgorithmCode");
 		String resourceNote = request.getParameter("resourceNote");
-		String validEndDateTime = request.getParameter("validEndDateTime") + " 23:59:59.999999";
+		String validEndDateTime = request.getParameter("validEndDateTime") + " 23:59:59.999";
 			
 		CryptoKeySymmetric param = new CryptoKeySymmetric();
 		param.setResourceName(resourceName);
@@ -280,7 +282,7 @@ public class KeyManageController {
 		String resourceName = request.getParameter("resourceName");
 		String cipherAlgorithmCode = request.getParameter("cipherAlgorithmCode");
 		String resourceNote = request.getParameter("resourceNote");
-		String validEndDateTime = request.getParameter("validEndDateTime") + " 23:59:59.999999";
+		String validEndDateTime = request.getParameter("validEndDateTime") + " 23:59:59.999";
 		String renew = request.getParameter("renew");
 		String copyBin = request.getParameter("copyBin");
 		
@@ -293,7 +295,7 @@ public class KeyManageController {
 		param.setResourceNote(resourceNote);
 		param.setValidEndDateTime(validEndDateTime);
 		param.setKeyStatusCode("KS50");
-		param.setUpdateUid("00000000-0000-0000-0000-000000000001");
+		//param.setUpdateUid("00000000-0000-0000-0000-000000000001");
 		if(renew.equals("true")){
 			param.setRenew(true);
 		}else{
@@ -322,7 +324,24 @@ public class KeyManageController {
 			String loginId = (String)session.getAttribute("usr_id");
 			String entityId = (String)session.getAttribute("ectityUid");	
 			
-			result = kmsc.updateCryptoKeySymmetric(restIp, restPort, strTocken,loginId,entityId, param);
+			param.setUpdateUid((String)session.getAttribute("ectityUid"));
+			
+			ArrayList param2 = new ArrayList();
+			
+			String strRows01 = request.getParameter("historyCryptoKeySymmetric").toString().replaceAll("&quot;", "\"");
+			System.out.println(strRows01);
+			JSONArray rows01 = (JSONArray) new JSONParser().parse(strRows01);
+			
+			for (int i = 0; i < rows01.size(); i++) {
+				CryptoKeySymmetric key = new CryptoKeySymmetric();
+				JSONObject jsrow = (JSONObject) rows01.get(i);
+				key.setBinUid(jsrow.get("binuid").toString());
+				key.setBinStatusCode(jsrow.get("binstatuscode").toString());
+				key.setValidEndDateTime(jsrow.get("validEndDateTime").toString());				
+				param2.add(key.toJSONString());
+			}	
+						
+			result = kmsc.updateCryptoKeySymmetric(restIp, restPort, strTocken,loginId,entityId, param, param2);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

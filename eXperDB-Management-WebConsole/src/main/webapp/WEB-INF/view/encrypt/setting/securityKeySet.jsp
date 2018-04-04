@@ -197,6 +197,7 @@ function fn_save(){
 	
 
 function fn_keyFileLoadServerKey(){
+	alert("마스터키등록");
 	var formData = new FormData(); 
 
 	formData.append("keyFile", $("input[name=keyFile]")[0].files[0]);
@@ -210,6 +211,9 @@ function fn_keyFileLoadServerKey(){
 		dataType : "json",
 		type : "post",
 		error : function(xhr, status, error) {
+			alert(xhr);
+			alert(status);
+			alert(error);
 			if(xhr.status == 401) {
 				alert("<spring:message code='message.msg02' />");
 				 location.href = "/";
@@ -221,6 +225,7 @@ function fn_keyFileLoadServerKey(){
 			}
 		},
 		success : function(data) {
+			alert(JSON.stringify(data));
 			if(data.resultCode == "0000000000"){
 				alert('<spring:message code="encrypt_msg.msg01"/>');
 			}else{

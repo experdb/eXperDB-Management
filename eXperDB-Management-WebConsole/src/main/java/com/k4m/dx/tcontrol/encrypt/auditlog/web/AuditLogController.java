@@ -209,7 +209,7 @@ public class AuditLogController {
 			accessHistoryService.insertHistory(historyVO);
 			
 			String DateTimeFrom = request.getParameter("from")+" 00:00:00.000000";
-			String DateTimeTo = request.getParameter("to")+" 23:59:59.999999";
+			String DateTimeTo = request.getParameter("to")+" 23:59:59.999";
 			String resultcode = request.getParameter("resultcode");
 			String entityuid = request.getParameter("entityuid");
 			
@@ -339,7 +339,7 @@ public class AuditLogController {
 			accessHistoryService.insertHistory(historyVO);
 			
 			String DateTimeFrom = request.getParameter("from")+" 00:00:00.000000";
-			String DateTimeTo = request.getParameter("to")+" 23:59:59.999999";
+			String DateTimeTo = request.getParameter("to")+" 23:59:59.999";
 			String resultcode = request.getParameter("resultcode");
 			String entityuid = request.getParameter("entityuid");
 			
@@ -454,7 +454,7 @@ public class AuditLogController {
 		JSONObject result = new JSONObject();
 		try {
 			String DateTimeFrom = request.getParameter("from")+" 00:00:00.000000";
-			String DateTimeTo = request.getParameter("to")+" 23:59:59.999999";
+			String DateTimeTo = request.getParameter("to")+" 23:59:59.999";
 			String worktype = request.getParameter("worktype");
 			String entityuid = request.getParameter("entityuid");
 			
@@ -530,7 +530,7 @@ public class AuditLogController {
 		JSONObject result = new JSONObject();
 		try {
 			String DateTimeFrom = request.getParameter("from")+" 00:00:00.000000";
-			String DateTimeTo = request.getParameter("to")+" 23:59:59.999999";
+			String DateTimeTo = request.getParameter("to")+" 23:59:59.999";
 			String monitoreduid = request.getParameter("monitoreduid");
 			
 			SystemUsage param = new SystemUsage();

@@ -170,7 +170,7 @@ public class KeyManageServiceCall {
 	}
 
 	
-	public JSONObject updateCryptoKeySymmetric(String restIp, int restPort, String strTocken,String loginId, String entityId, CryptoKeySymmetric param) throws Exception {
+	public JSONObject updateCryptoKeySymmetric(String restIp, int restPort, String strTocken,String loginId, String entityId, CryptoKeySymmetric param, ArrayList param2) throws Exception {
 		
 		JSONArray jsonArray = new JSONArray();
 		JSONObject result = new JSONObject();
@@ -182,10 +182,10 @@ public class KeyManageServiceCall {
 
 		HashMap body = new HashMap();
 		body.put(TypeUtility.getJustClassName(param.getClass()), param.toJSONString());
+		body.put("CryptoKeySymmetricList", param2);
 
 		String parameters = TypeUtility.makeRequestBody(body);
 		
-
 		HashMap header = new HashMap();
 		header.put(SystemCode.FieldName.LOGIN_ID, loginId);
 		header.put(SystemCode.FieldName.ENTITY_UID, entityId);
@@ -262,6 +262,9 @@ public class KeyManageServiceCall {
 					cryptoKeySymmetric = gson.fromJson(jsonData.toJSONString(), cryptoKeySymmetric.getClass());
 					
 					jsonObj.put("no", i+1);
+					
+					jsonObj.put("binuid", cryptoKeySymmetric.getBinUid());
+					jsonObj.put("binstatuscode", cryptoKeySymmetric.getBinStatusCode());				
 					jsonObj.put("version", cryptoKeySymmetric.getBinVersion());
 					jsonObj.put("keyStatusName", cryptoKeySymmetric.getKeyStatusName());
 					jsonObj.put("validEndDateTime", cryptoKeySymmetric.getValidEndDateTime());

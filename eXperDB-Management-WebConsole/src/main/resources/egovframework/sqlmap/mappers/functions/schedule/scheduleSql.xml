@@ -690,7 +690,7 @@
                 , B.FILE_FMT_CD
                 , (SELECT SYS_CD_NM FROM T_SYSDTL_C WHERE B.FILE_FMT_CD = SYS_CD ) AS FILE_FMT_CD_NM
                 , B.CPRT
-                , B.ENCD_MTH_NM
+                ,(SELECT SYS_CD_NM FROM T_SYSDTL_C WHERE B.ENCD_MTH_NM = SYS_CD ) AS  ENCD_MTH_NM
                 , B.USR_ROLE_NM
                 , C.DB_SVR_ID
                 , C.DB_NM

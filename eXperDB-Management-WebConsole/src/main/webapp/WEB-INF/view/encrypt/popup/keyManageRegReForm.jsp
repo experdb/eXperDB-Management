@@ -55,6 +55,9 @@
 $(window.document).ready(function() {
 	fn_init();
 	
+	$("#copyBin").attr('value', 'false');
+	$("#renew").attr('value', 'false');
+	
 	$("#renewInsert").css("display", "none");
 	 
 	$.datepicker.setDefaults({
@@ -87,7 +90,9 @@ function fn_init(){
 		{ data : "createName", className : "dt-center", defaultContent : ""},
 		{ data : "createDateTime", className : "dt-center", defaultContent : ""},
 		{ data : "updateName", className : "dt-center", defaultContent : ""},
-		{ data : "updateDateTime", className : "dt-center", defaultContent : ""}
+		{ data : "updateDateTime", className : "dt-center", defaultContent : ""},
+		{ data : "binuid", className : "dt-center", defaultContent : "", visible: false },
+		{ data : "binstatuscode", className : "dt-center", defaultContent : "", visible: false }
 		]
 	});
 	
@@ -99,7 +104,8 @@ function fn_init(){
 	renewalhistoryTable.tables().header().to$().find('th:eq(5)').css('min-width', '130px');
 	renewalhistoryTable.tables().header().to$().find('th:eq(6)').css('min-width', '80px');
 	renewalhistoryTable.tables().header().to$().find('th:eq(7)').css('min-width', '130px');
-
+	renewalhistoryTable.tables().header().to$().find('th:eq(8)').css('min-width', '0px');
+	renewalhistoryTable.tables().header().to$().find('th:eq(9)').css('min-width', '0px');
     $(window).trigger('resize');
 }
 
@@ -134,6 +140,18 @@ $(function() {
 
 function fn_keyManagementModify(){
 	
+	var datas = renewalhistoryTable.rows().data();
+	
+	var datasArr = new Array();	
+	for(var i=0; i<datas.length; i++){
+		var rows = new Object();
+		rows["binuid"] = renewalhistoryTable.rows().data()[i].binuid;	
+		rows["binstatuscode"] = renewalhistoryTable.rows().data()[i].binstatuscode;	
+		rows["validEndDateTime"] = renewalhistoryTable.rows().data()[i].validEndDateTime;	
+		datasArr.push(rows);
+	}
+
+	
  $.ajax({
 		url : "/updateCryptoKeySymmetric.do", 
 	  	data : {
@@ -143,8 +161,9 @@ function fn_keyManagementModify(){
 	  		cipherAlgorithmCode : $('#cipherAlgorithmCode').val(),
 	  		resourceNote : $('#resourceNote').val(),
 	  		validEndDateTime : $('#datepicker3').val().substring(0,10),
-	  		renew : $("#copyBin").val(),
-	  		copyBin : $("#renew").val(),
+	  		renew : $("#renew").val(),
+	  		copyBin : $("#copyBin").val(),
+	  		historyCryptoKeySymmetric : JSON.stringify(datasArr),
 	  	},
 		dataType : "json",
 		type : "post",
@@ -277,6 +296,8 @@ function fn_historyCryptoKeySymmetric(){
 								<th width="130"><spring:message code="common.regist_datetime" /></th>
 								<th width="80"><spring:message code="common.modifier" /></th>
 								<th width="130"><spring:message code="common.modify_datetime" /></th>
+								<th width="0"></th>
+								<th width="0"></th>
 							</tr>
 						</thead>
 					</table>											

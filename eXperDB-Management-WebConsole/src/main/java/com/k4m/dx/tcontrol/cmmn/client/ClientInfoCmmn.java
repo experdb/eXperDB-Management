@@ -155,6 +155,8 @@ public class ClientInfoCmmn {
 					objJob.put(ClientProtocolID.BCK_FILENM, BCKNM.get(i)); // 저장파일명					
 					objJob.put(ClientProtocolID.BCK_MTN_ECNT, resultWork.get(i).get("bck_mtn_ecnt"));//백업유지개수
 					objJob.put(ClientProtocolID.FILE_STG_DCNT, resultWork.get(i).get("file_stg_dcnt")); // 파일보관일수
+					System.out.println("백업유지개수="+resultWork.get(i).get("bck_mtn_ecnt"));
+					System.out.println("파일보관일수="+resultWork.get(i).get("file_stg_dcnt"));
 				}
 				objJob.put(ClientProtocolID.BCK_BSN_DSCD, resultWork.get(i).get("bck_bsn_dscd")); //백업종류(RMAN or DUMP)
 				objJob.put(ClientProtocolID.LOG_YN, "Y"); // 로그저장 유무

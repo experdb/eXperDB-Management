@@ -63,7 +63,7 @@
     </bean>
 
     <bean class="org.springframework.web.servlet.handler.SimpleMappingExceptionResolver">
-        <property name="defaultErrorView" value="WEB-INF/view/error/500Error"/>
+        <property name="defaultErrorView" value="error/500Error"/>
         <property name="exceptionMappings">
             <props>
                 <prop key="org.springframework.dao.DataAccessException">view/error/500Error</prop>
