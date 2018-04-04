@@ -669,7 +669,7 @@ function checkFolder(keyType){
 							<select name="encd_mth_nm" id="encd_mth_nm" class="select t5">
 								<option value=""><spring:message code="schedule.total" /></option>
 								<c:forEach var="result" items="${incodeList}" varStatus="status">
-									<option value="<c:out value="${result.sys_cd}"/>"<c:if test="${workInfo[0].encd_mth_nm eq result.sys_cd }"> selected</c:if>><c:out value="${result.sys_cd_nm}"/></option>
+									<option value="<c:out value="${result.sys_cd}"/>"<c:if test="${workInfo[0].encd_mth_cd eq result.sys_cd }"> selected</c:if>><c:out value="${result.sys_cd_nm}"/></option>
 								</c:forEach>
 							</select>
 						</td>
@@ -678,7 +678,7 @@ function checkFolder(keyType){
 							<select name="usr_role_nm" id="usr_role_nm" class="select t4">
 								<option value=""><spring:message code="schedule.total" /></option>
 								<c:forEach var="result" items="${roleList.data}" varStatus="status">
-								<option value="<c:out value="${result.rolname}"/>"<c:if test="${workInfo[0].usr_role_nm eq result.rolname }"> selected</c:if>><c:out value="${result.rolname}"/></option>
+								<option value="<c:out value="${result.rolname}"/>"<c:if test="${workInfo[0].usr_role_nm eq result.rolname}"> selected</c:if>><c:out value="${result.rolname}"/></option>
 								</c:forEach>
 							</select>
 						</td>

@@ -20,6 +20,7 @@ public class WorkVO {
 	private String file_fmt_cd_nm;
 	private int file_stg_dcnt;
 	private String encd_mth_nm;
+	private String encd_mth_cd;
 	private String usr_role_nm;
 	private String frst_regr_id;
 	private String frst_reg_dtm;
@@ -40,6 +41,14 @@ public class WorkVO {
 	private String bsn_dscd;
 	private String bsn_dscd_nm;
 	private String log_file_pth;
+	
+	public String getEncd_mth_cd() {
+		return encd_mth_cd;
+	}
+
+	public void setEncd_mth_cd(String encd_mth_cd) {
+		this.encd_mth_cd = encd_mth_cd;
+	}
 
 	public String getLog_file_pth() {
 		return log_file_pth;

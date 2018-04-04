@@ -103,14 +103,8 @@ public class ScheduleQuartzJob implements Job{
 	        	db_svr_ipadr_id = Integer.parseInt(resultDbconn.get(0).get("db_svr_ipadr_id").toString());
 	        	ArrayList<String> CMD = new ArrayList<String>();
 		        //WORK 갯수만큼 루프
-				for(int i =0; i<resultWork.size(); i++){
-			        
-					
+				for(int i =0; i<resultWork.size(); i++){			        
 					if(resultWork.get(i).get("file_fmt_cd_nm") != null && resultWork.get(i).get("file_fmt_cd_nm") != ""){
-						System.out.println("@@@@@@@@@@@@@@@@@@@@@");
-						System.out.println(resultWork.get(i).get("file_fmt_cd_nm"));
-						System.out.println("@@@@@@@@@@@@@@@@@@@@@");
-						//파일포멧이 tar일경우 압축률 명령어 생성
 						if(resultWork.get(i).get("file_fmt_cd_nm").equals("tar")){
 							bck_fileNm = "eXperDB_"+resultWork.get(i).get("wrk_id")+"_"+today+".tar";	
 						}else if(resultWork.get(i).get("file_fmt_cd_nm").equals("plain")){
