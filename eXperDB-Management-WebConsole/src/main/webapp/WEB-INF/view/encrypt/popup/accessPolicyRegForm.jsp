@@ -35,7 +35,7 @@
 $(function() {
 	var dateFormat = "yyyy-mm-dd", from = $("#startDateTime").datepicker({
 		changeMonth : false,
-		changeYear : false,
+		changeYear : true,
 		onClose : function(selectedDate) {
 			$("#endDateTime").datepicker("option", "minDate", selectedDate);
 		}
@@ -43,7 +43,7 @@ $(function() {
 
 	to = $("#endDateTime").datepicker({
 		changeMonth : false,
-		changeYear : false,
+		changeYear : true,
 		onClose : function(selectedDate) {
 			$("#startDateTime").datepicker("option", "maxDate", selectedDate);
 		}
@@ -232,7 +232,7 @@ function fn_validation(){
 /*저장버튼 클릭시*/
 function fn_save(){
 	if (!fn_validation()) return false;
- 
+ 	
 	var total = $('input[name=workDay]:checked').length;
 	var workDayValue = "";
 	$("input[name=workDay]:checked").each(function(index) {
@@ -240,9 +240,8 @@ function fn_save(){
 		  if (total != index+1) {
 			  workDayValue += ",";
 		  }    
-		});
+	});
 
-	
 	Result = new Object();
 	
 	Result.specName = $("#specName").val();
@@ -282,7 +281,7 @@ function fn_update(){
 		  if (total != index+1) {
 			  workDayValue += ",";
 		  }    
-		});
+	});
 
 	
 	Result = new Object();
@@ -356,7 +355,7 @@ function fn_update(){
 							<td><input type="text" class="txt" name="accessMacAddress" id="accessMacAddress" maxlength="20" onkeyup="fn_checkWord(this,20)" placeholder="20<spring:message code='message.msg188'/>"/></td>
 						</tr>
 						<tr>
-							<th scope="row" class="ico_t1"><spring:message code="encrypt_log_decode.Policy_Period"/></th>
+							<th scope="row" class="ico_t1"><spring:message code="encrypt_policy_management.Policy_Period"/></th>
 							<td colspan="3">
 								<span id="calendar"> 
 									<span class="calendar_area big"> <a href="#n" class="calendar_btn">달력열기</a>
@@ -373,7 +372,7 @@ function fn_update(){
 							</td>
 						</tr>
 						<tr>
-							<th scope="row" class="ico_t1"><spring:message code="encrypt_log_decode.Policy_Time"/></th>
+							<th scope="row" class="ico_t1"><spring:message code="encrypt_policy_management.Policy_Time"/></th>
 							<td colspan="3">
 								<span id="b_hour" style="margin-right: 10px;"></span><span id="b_min"></span>
 									&nbsp&nbsp&nbsp&nbsp&nbsp ~ &nbsp&nbsp&nbsp&nbsp&nbsp
@@ -384,25 +383,25 @@ function fn_update(){
 							<th scope="row" class="ico_t1"><spring:message code="encrypt_policy_management.Day_of_Week"/></th>
 							<td colspan="3">
 								<div class="inp_chk">
-									<input type="checkbox" id="SUNDAY" name="workDay" value="일" />
+									<input type="checkbox" id="SUNDAY" name="workDay" value="<spring:message code="common.sun" />" />
 									<label for="SUNDAY" style="margin-right: 10px; color: red;"><spring:message code="common.sun" /></label>
 									
-									<input type="checkbox" id="MONDAY" name="workDay" value="월"/>
+									<input type="checkbox" id="MONDAY" name="workDay" value="<spring:message code="common.mon" />"/>
 									<label for="MONDAY" style="margin-right: 10px;"><spring:message code="common.mon" /></label>		
 									
-									<input type="checkbox" id="TUESDAY" name="workDay" value="화"/>
+									<input type="checkbox" id="TUESDAY" name="workDay" value="<spring:message code="common.tue" />"/>
 									<label for="TUESDAY" style="margin-right: 10px;"><spring:message code="common.tue" /></label>
 									
-									<input type="checkbox" id="WEDNESDAY" name="workDay" value="수"/>
+									<input type="checkbox" id="WEDNESDAY" name="workDay" value="<spring:message code="common.wed" />"/>
 									<label for="WEDNESDAY" style="margin-right: 10px;"><spring:message code="common.wed" /></label>
 									
-									<input type="checkbox" id="THURSDAY" name="workDay" value="목"/>
+									<input type="checkbox" id="THURSDAY" name="workDay" value="<spring:message code="common.thu" />"/>
 									<label for="THURSDAY" style="margin-right: 10px;"><spring:message code="common.thu" /></label>
 									
-									<input type="checkbox" id="FRIDAY" name="workDay" value="금"/>
+									<input type="checkbox" id="FRIDAY" name="workDay" value="<spring:message code="common.fri" />"/>
 									<label for="FRIDAY" style="margin-right: 10px;"><spring:message code="common.fri" /></label>
 									
-									<input type="checkbox" id="SATURDAY" name="workDay" value="토"/>
+									<input type="checkbox" id="SATURDAY" name="workDay" value="<spring:message code="common.sat" />"/>
 									<label for="SATURDAY" style="color: blue;"><spring:message code="common.sat" /></label>
 								</div>
 							</td>
@@ -411,7 +410,7 @@ function fn_update(){
 							<th scope="row" class="ico_t1">임계치(대량작업)</th>
 							<td>
 								<input type="number" class="txt"  min="0" name="massiveThreshold" id="massiveThreshold" style="width: 50px;" onKeyPress="NumObj(this);"/>&nbsp&nbsp건수/ &nbsp&nbsp 
-								<input type="number" class="txt" min="0" name="massiveTimeInterval" id="massiveTimeInterval" style="width: 50px;" onKeyPress="NumObj(this);"/>초
+								<input type="number" class="txt" min="0" name="massiveTimeInterval" id="massiveTimeInterval" style="width: 50px;" onKeyPress="NumObj(this);"/><spring:message code='encrypt_policy_management.sec'/>
 							</td>
 						</tr>
 						<tr>

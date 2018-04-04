@@ -541,13 +541,13 @@ public class SecurityPolicyController {
 				String data[] = workday.split(",");
 		        for(int j=0 ; j<data.length ; j++)
 		        {
-		            workDay += data[j].equals("월")?SystemCode.Weekday.MONDAY : 0;
-		            workDay += data[j].equals("화")?SystemCode.Weekday.TUESDAY : 0;
-		            workDay += data[j].equals("수")?SystemCode.Weekday.WEDNESDAY : 0;
-		            workDay += data[j].equals("목")?SystemCode.Weekday.THURSDAY : 0;
-		            workDay += data[j].equals("금")?SystemCode.Weekday.FRIDAY : 0;
-		            workDay += data[j].equals("토")?SystemCode.Weekday.SATURDAY : 0;
-		            workDay += data[j].equals("일")?SystemCode.Weekday.SUNDAY : 0;
+		            workDay += data[j].equals("월")||data[j].equals("MON")?SystemCode.Weekday.MONDAY : 0;
+		            workDay += data[j].equals("화")||data[j].equals("TUE")?SystemCode.Weekday.TUESDAY : 0;
+		            workDay += data[j].equals("수")||data[j].equals("WED")?SystemCode.Weekday.WEDNESDAY : 0;
+		            workDay += data[j].equals("목")||data[j].equals("THU")?SystemCode.Weekday.THURSDAY : 0;
+		            workDay += data[j].equals("금")||data[j].equals("FRI")?SystemCode.Weekday.FRIDAY : 0;
+		            workDay += data[j].equals("토")||data[j].equals("SAT")?SystemCode.Weekday.SATURDAY : 0;
+		            workDay += data[j].equals("일")||data[j].equals("SUN")?SystemCode.Weekday.SUNDAY : 0;
 		        }
 				r.setWorkDay(workDay);
 				param3.add(r.toJSONString());
@@ -776,13 +776,13 @@ public class SecurityPolicyController {
 				String data[] = workday.split(",");
 		        for(int j=0 ; j<data.length ; j++)
 		        {
-		            workDay += data[j].equals("월")?SystemCode.Weekday.MONDAY : 0;
-		            workDay += data[j].equals("화")?SystemCode.Weekday.TUESDAY : 0;
-		            workDay += data[j].equals("수")?SystemCode.Weekday.WEDNESDAY : 0;
-		            workDay += data[j].equals("목")?SystemCode.Weekday.THURSDAY : 0;
-		            workDay += data[j].equals("금")?SystemCode.Weekday.FRIDAY : 0;
-		            workDay += data[j].equals("토")?SystemCode.Weekday.SATURDAY : 0;
-		            workDay += data[j].equals("일")?SystemCode.Weekday.SUNDAY : 0;
+		            workDay += data[j].equals("월")||data[j].equals("MON")?SystemCode.Weekday.MONDAY : 0;
+		            workDay += data[j].equals("화")||data[j].equals("TUE")?SystemCode.Weekday.TUESDAY : 0;
+		            workDay += data[j].equals("수")||data[j].equals("WED")?SystemCode.Weekday.WEDNESDAY : 0;
+		            workDay += data[j].equals("목")||data[j].equals("THU")?SystemCode.Weekday.THURSDAY : 0;
+		            workDay += data[j].equals("금")||data[j].equals("FRI")?SystemCode.Weekday.FRIDAY : 0;
+		            workDay += data[j].equals("토")||data[j].equals("SAT")?SystemCode.Weekday.SATURDAY : 0;
+		            workDay += data[j].equals("일")||data[j].equals("SUN")?SystemCode.Weekday.SUNDAY : 0;
 		        }
 				r.setWorkDay(workDay);
 				param3.add(r.toJSONString());

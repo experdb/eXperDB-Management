@@ -529,7 +529,7 @@
 				accessPolicy : JSON.stringify(accessPolicy),
 				
 			},
-			success : function(data) {		
+			success : function(data) {
 				if(data.resultCode == "0000000000"){
 					alert('<spring:message code="message.msg07" />');
 					location.href='/securityPolicy.do' ;
@@ -621,7 +621,7 @@
 				</div>
 				<div class="cmm_bd">
 					<div class="sub_tit">
-						<p>보안정책</p>
+						<p><spring:message code="encrypt_log_decode.Securiy_Policy"/></p>
 						<div class="sub_btn">
 							<a href="#n" class="btn btnF_04 btnC_01" onclick="fn_SecurityRegForm();">
 							<span id="add_button"><spring:message code="common.add" /></span></a> 
@@ -700,15 +700,15 @@
 							<tr>
 								<td colspan="2">
 									<div class="inp_chk">
-										<span> 
+										<span>
 											<input type="checkbox" id="log_on_fail" name="log_on_fail" value="Y"/> 
 											<label for="log_on_fail"><spring:message code="encrypt_policy_management.Failure_Logging"/></label>
-										</span> 
+										</span>
 										<span>
 											<input type="checkbox" id="compress_audit_log" name="compress_audit_log" value="Y"/> 
 											<label for="compress_audit_log"><spring:message code="encrypt_policy_management.Log_Compression"/></label>
-										</span> 
-										<span> 
+										</span>
+										<span>
 											<input type="checkbox" id="preventDoubleYesNo" name="preventDoubleYesNo" value="Y"/>
 											<label for="preventDoubleYesNo"><spring:message code="encrypt_policy_management.Prevent_Double_Encryption"/></label>
 										</span>
@@ -721,8 +721,8 @@
 										<span> 
 											<input type="checkbox" id="log_on_success" name="log_on_success" value="Y"/> 
 											<label for="log_on_success"><spring:message code="encrypt_policy_management.Success_Logging"/></label>
-										</span> 
-										<span> 
+										</span>
+										<span>
 											<input type="checkbox" id="nullEncryptYesNo" name="nullEncryptYesNo" value="Y"/>
 											<label for="nullEncryptYesNo"><spring:message code="encrypt_policy_management.NULL_Encryption"/></label>
 										</span>
@@ -758,14 +758,14 @@
 									<th width="100"><spring:message code="encrypt_policy_management.Database_User"/></th>
 									<th width="100"><spring:message code="encrypt_policy_management.eXperDB_User"/></th>
 									<th width="100"><spring:message code="encrypt_policy_management.OS_User"/></th>
-									<th width="100"><spring:message code="encrypt_policy_management.Application_Name"/> </th>
-									<th width="100"><spring:message code="encrypt_policy_management.IP_Address"/> </th>
+									<th width="100"><spring:message code="encrypt_policy_management.Application_Name"/></th>
+									<th width="100"><spring:message code="encrypt_policy_management.IP_Address"/></th>
 									<th width="100"><spring:message code="encrypt_policy_management.IP_Mask"/></th>
 									<th width="100"><spring:message code="encrypt_policy_management.MAC_Address"/></th>
-									<th width="100"><spring:message code="encrypt_log_decode.Policy_Period"/> FROM</th>
-									<th width="100"><spring:message code="encrypt_log_decode.Policy_Period"/> TO</th>
-									<th width="100"><spring:message code="encrypt_log_decode.Policy_Time"/> FROM</th>
-									<th width="100"><spring:message code="encrypt_log_decode.Policy_Time"/> TO</th>
+									<th width="100"><spring:message code="encrypt_policy_management.Policy_Period"/> FROM</th>
+									<th width="100"><spring:message code="encrypt_policy_management.Policy_Period"/> TO</th>
+									<th width="100"><spring:message code="encrypt_policy_management.Policy_Time"/> FROM</th>
+									<th width="100"><spring:message code="encrypt_policy_management.Policy_Time"/> TO</th>
 									<th width="100"><spring:message code="encrypt_policy_management.Day_of_Week"/></th>
 									<th width="100"><spring:message code="encrypt_policy_management.Threshold"/></th>
 									<th width="100"><spring:message code="encrypt_policy_management.sec"/></th>

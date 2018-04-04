@@ -210,16 +210,18 @@ var table = null;
 	/* 삭제 버튼 클릭시*/
 	function fn_delete() {
 		var datas = table.rows('.selected').data();
-		var keyUid = table.row('.selected').data().keyUid;
-		var resourceName = table.row('.selected').data().resourceName;
-		var resourceTypeCode = table.row('.selected').data().resourceTypeCode;
-		
 		if (datas.length <= 0) {
  			alert('<spring:message code="message.msg35" />');
  			return false;
  		}else if (datas.length >1){
 			alert('<spring:message code="message.msg38" />');
  		}else{
+ 			if (!confirm('<spring:message code="message.msg162"/>'))return false;
+ 			
+ 			var keyUid = table.row('.selected').data().keyUid;
+ 			var resourceName = table.row('.selected').data().resourceName;
+ 			var resourceTypeCode = table.row('.selected').data().resourceTypeCode;
+ 			
 			$.ajax({
 				url : "/deleteCryptoKeySymmetric.do", 
 			  	data : {

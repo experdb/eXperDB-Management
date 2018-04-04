@@ -582,9 +582,9 @@ function fn_makeToMin(){
 			<div class="cmm_grp">
 				<div class="btn_type_01">
 					<span class="btn" id="read_button"><button onClick="fn_selectScheduleList();"><spring:message code="common.search" /></button></span>
-					<span class="btn" id="int_button"><a href="/insertScheduleView.do"><button>등록</button></a></span>
-					<span class="btn" id="mdf_button"><button onClick="fn_modifyScheduleListView();">수정</button></span>
-					<span class="btn" id="del_button"><button onClick="fn_deleteScheduleList();">삭제</button></span>
+					<span class="btn" id="int_button"><a href="/insertScheduleView.do"><button><spring:message code="common.registory" /></button></a></span>
+					<span class="btn" id="mdf_button"><button onClick="fn_modifyScheduleListView();"><spring:message code="common.modify" /></button></span>
+					<span class="btn" id="del_button"><button onClick="fn_deleteScheduleList();"><spring:message code="common.delete" /></button></span>
 				</div>
 				<div class="sch_form">
 					<table class="write">

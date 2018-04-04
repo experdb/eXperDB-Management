@@ -1149,7 +1149,6 @@ public class ClientInfoCmmn {
 			
 			resultHp = (JSONObject) objList.get(ClientProtocolID.RESULT_DATA);
 	
-			CA.close();
 		} catch(Exception e) {
 			e.printStackTrace();
 		}

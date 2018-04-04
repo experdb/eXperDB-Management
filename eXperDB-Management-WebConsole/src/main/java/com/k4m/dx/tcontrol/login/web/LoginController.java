@@ -232,7 +232,7 @@ public class LoginController {
 				historyVO.setExe_dtl_cd("DX-T0003_01");
 				accessHistoryService.insertHistory(historyVO);			
 			}						
-			request.getSession().invalidate();			
+			request.getSession().invalidate();
 			return "redirect:/";
 		} catch (Exception e) {
 			e.printStackTrace();

@@ -297,6 +297,7 @@ function fn_cookie(url) {
  	}
 </script>
 <%@include file="../help/aboutExperdbLayer.jsp"%>
+<%@include file="../help/openSourceLayer.jsp"%>
 <div id="header">
 			<h1 class="logo"><a href="/experdb.do" onClick="fn_cookie(null)"><img src="/images/ico_logo_2.png" alt="eXperDB" /></a></h1>
 			<div id="gnb_menu">
@@ -395,6 +396,7 @@ function fn_cookie(url) {
 						<ul class="depth_2">
 							<!-- <li><a href="#n" onClick="fn_cookie(null)" target="main">Online Help</a></li> -->
 							<li><a href="#n" onClick="fn_aboutExperdb()" >About eXperDB</a></li>
+							<li><a href="#n" onClick="fn_openSource()" >Open Source License</a></li>
 						</ul>
 					</li>
 				</ul>

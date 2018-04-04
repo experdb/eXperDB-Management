@@ -1,6 +1,8 @@
 package com.k4m.dx.tcontrol.encrypt.service.call;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
@@ -133,7 +135,8 @@ public class AuditLogServiceCall {
 			
 		String resultCode = (String) resultJson.get("resultCode");
 		String resultMessage = (String) resultJson.get("resultMessage");
-			
+		SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-mm-dd HH:mm:ss");
+		
 		if(resultCode.equals(SystemCode.ResultCode.SUCCESS)) {
 			ArrayList list = (ArrayList) resultJson.get("list");		
 			if(list != null){
@@ -155,8 +158,12 @@ public class AuditLogServiceCall {
 					if(strResultMessage != null) {
 						strResultMessage = new String(strResultMessage.getBytes("iso-8859-1"),"UTF-8"); 
 					}
+					//접근일시 logDateTime
+					String logDateTime = auditLog.getCreateDateTime();
+					Date logDateTimeDate = dateFormat.parse(logDateTime);
+					
 					jsonObj.put("rnum", i+1);
-					jsonObj.put("logDateTime", auditLog.getCreateDateTime());
+					jsonObj.put("logDateTime", dateFormat.format(logDateTimeDate));
 					jsonObj.put("entityName", strEntityName);
 					jsonObj.put("remoteAddress", auditLog.getRemoteAddress());
 					jsonObj.put("requestPath", auditLog.getRequestPath());
@@ -206,6 +213,7 @@ public class AuditLogServiceCall {
 		String resultCode = (String) resultJson.get("resultCode");
 		String resultMessage = (String) resultJson.get("resultMessage");
 		resultMessage = new String(resultMessage.getBytes("iso-8859-1"),"UTF-8"); 
+		SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-mm-dd HH:mm:ss");
 		
 		if(resultCode.equals("0000000000")) {
 			ArrayList list = (ArrayList) resultJson.get("list");
@@ -228,8 +236,12 @@ public class AuditLogServiceCall {
 					if(strResultMessage != null) {
 						strResultMessage = new String(strResultMessage.getBytes("iso-8859-1"),"UTF-8"); 
 					}
+					//접근일시 logDateTime
+					String logDateTime = auditLog.getCreateDateTime();
+					Date logDateTimeDate = dateFormat.parse(logDateTime);
+					
 					jsonObj.put("rnum", i+1);
-					jsonObj.put("logDateTime", auditLog.getCreateDateTime());
+					jsonObj.put("logDateTime", dateFormat.format(logDateTimeDate));
 					jsonObj.put("entityName", strEntityName);
 					jsonObj.put("remoteAddress", auditLog.getRemoteAddress());
 					jsonObj.put("requestPath", auditLog.getRequestPath());

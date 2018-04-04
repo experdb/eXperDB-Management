@@ -251,6 +251,11 @@ function fn_aboutExperdb(){
 	toggleLayer($('#pop_layer_aboutExperdb'), 'on');
 }
 
+//Open Source
+function fn_openSource(){
+	toggleLayer($('#pop_layer_openSource'), 'on');
+}
+
 // 스케줄정보
 function fn_scdLayer(scd_id){
 	$.ajax({
@@ -280,33 +285,33 @@ function fn_scdLayer(scd_id){
 			}else{
 				var hms = "";
 				
-				hms += result[0].exe_hms.substring(4,6)+"시 ";	
-				hms += result[0].exe_hms.substring(2,4)+"분 ";	
-				hms += result[0].exe_hms.substring(0,2)+"초";		
+				hms += result[0].exe_hms.substring(4,6)+"<spring:message code='schedule.our' /> ";	
+				hms += result[0].exe_hms.substring(2,4)+"<spring:message code='schedule.minute' /> ";	
+				hms += result[0].exe_hms.substring(0,2)+"<spring:message code='schedule.second' />";		
 				
 				var day = "";
 				if(result[0].exe_perd_cd == "TC001602"){
 					day += "(";
 					if(result[0].exe_dt.substring(0,1)=="1"){
-						day += "일, ";
+						day += "<spring:message code='schedule.sunday' />, ";
 					}
 					if(result[0].exe_dt.substring(1,2)=="1"){
-						day += "월, ";
+						day += "<spring:message code='schedule.monday' />, ";
 					}
 					if(result[0].exe_dt.substring(2,3)=="1"){
-						day += "화, ";
+						day += "<spring:message code='schedule.thuesday' />, ";
 					}
 					if(result[0].exe_dt.substring(3,4)=="1"){
-						day += "수, ";
+						day += "<spring:message code='schedule.wednesday' />, ";
 					}
 					if(result[0].exe_dt.substring(4,5)=="1"){
-						day += "목, ";
+						day += "<spring:message code='schedule.thursday' />, ";
 					}
 					if(result[0].exe_dt.substring(5,6)=="1"){
-						day += "금, ";
+						day += "<spring:message code='schedule.friday' />, ";
 					}
 					if(result[0].exe_dt.substring(6,7)=="1"){
-						day += "토";
+						day += "<spring:message code='schedule.saturday' />";
 					}
 					day += ")";
 				}		

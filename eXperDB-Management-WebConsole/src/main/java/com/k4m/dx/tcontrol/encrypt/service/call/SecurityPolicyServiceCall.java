@@ -62,6 +62,8 @@ public class SecurityPolicyServiceCall {
 		
 		System.out.println("resultCode : " + resultCode + " resultMessage : " + resultMessage);
 		
+		SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-mm-dd HH:mm:ss");
+		
 		if(resultCode.equals(SystemCode.ResultCode.SUCCESS)) {
 			ArrayList list = (ArrayList) resultJson.get("list");
 			if(list!=null) {
@@ -71,8 +73,9 @@ public class SecurityPolicyServiceCall {
 					Gson gson = new Gson();
 					Profile profile = new Profile();
 					profile = gson.fromJson(jsonObj.toJSONString(), profile.getClass());
-
+					
 					String createDateTime = profile.getCreateDateTime();
+					Date createDateTimeDate = dateFormat.parse(createDateTime);
 					String profileTypeName = profile.getProfileTypeName();
 					String profileTypeCode = profile.getProfileTypeCode();
 					String profileStatusCode = profile.getProfileStatusCode();
@@ -81,19 +84,22 @@ public class SecurityPolicyServiceCall {
 					String createName = profile.getCreateName();
 					String createUid = profile.getCreateUid();
 					String profileName = profile.getProfileName();
-					String profileUid = profile.getProfileUid();
-					String updateDateTime = profile.getUpdateDateTime();
+					String profileUid = profile.getProfileUid();	
+					String updateDateTime = profile.getUpdateDateTime();			
 					String updateName = profile.getUpdateName();
 					
 					jsonObj.put("rnum", j+1);
 					jsonObj.put("profileName", new String(profileName.getBytes("iso-8859-1"),"UTF-8"));
 					jsonObj.put("profileNote", new String(profileNote.getBytes("iso-8859-1"),"UTF-8"));
 					jsonObj.put("profileStatusName", profileStatusName);
-					jsonObj.put("createDateTime", createDateTime);
+					jsonObj.put("createDateTime", dateFormat.format(createDateTimeDate));
 					if(createName != null){
 						jsonObj.put("createName", new String(createName.getBytes("iso-8859-1"),"UTF-8"));
 					}
-					jsonObj.put("updateDateTime", updateDateTime);
+					if(updateDateTime!=null){
+						Date updateDateTimeDate = dateFormat.parse(updateDateTime);
+						jsonObj.put("updateDateTime", dateFormat.format(updateDateTimeDate));
+					}
 					if(updateName != null){
 						jsonObj.put("updateName", new String(updateName.getBytes("iso-8859-1"),"UTF-8"));
 					}
@@ -376,6 +382,7 @@ public class SecurityPolicyServiceCall {
 					boolean saturday =ContainsWeekDay(profileAclSpec.getWorkDay(), SystemCode.Weekday.SATURDAY);
 					boolean sunday =ContainsWeekDay(profileAclSpec.getWorkDay(), SystemCode.Weekday.SUNDAY);
 					
+						
 					if(monday){
 						workDay+= "월";	
 					}
