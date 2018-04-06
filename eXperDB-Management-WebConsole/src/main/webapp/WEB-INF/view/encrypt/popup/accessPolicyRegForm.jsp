@@ -316,11 +316,11 @@ function fn_update(){
 <body>
 	<div class="pop_container">
 		<div class="pop_cts">
-			<p class="tit">접근제어 정책 등록</p>
+			<p class="tit"><spring:message code="encrypt_policy_management.Register_Policy"/></p>
 				<table class="write">
 					<caption>접근제어 정책 등록</caption>
 					<colgroup>
-						<col style="width: 130px;" />
+						<col style="width: 170px;" />
 						<col />
 						<col style="width: 130px;" />
 						<col />
@@ -407,7 +407,7 @@ function fn_update(){
 							</td>
 						</tr>
 						<tr>
-							<th scope="row" class="ico_t1">임계치(대량작업)</th>
+							<th scope="row" class="ico_t1"><spring:message code="encrypt_policy_management.Threshold_Operations)"/></th>
 							<td>
 								<input type="number" class="txt"  min="0" name="massiveThreshold" id="massiveThreshold" style="width: 50px;" onKeyPress="NumObj(this);"/>&nbsp&nbsp건수/ &nbsp&nbsp 
 								<input type="number" class="txt" min="0" name="massiveTimeInterval" id="massiveTimeInterval" style="width: 50px;" onKeyPress="NumObj(this);"/><spring:message code='encrypt_policy_management.sec'/>
@@ -420,13 +420,13 @@ function fn_update(){
 							<td><input type="text" class="txt" name="hostName" id="hostName" maxlength="40" onkeyup="fn_checkWord(this,40)" placeholder="40<spring:message code='message.msg188'/>"/></td>
 						</tr>
 						<tr>
-							<th scope="row" class="ico_t1">규칙 만족할 때</th>
+							<th scope="row" class="ico_t1"><spring:message code="encrypt_policy_management.Rules"/></th>
 							<td>
 								<div class="inp_rdo">
 									<input name="whitelistYesNo" id="whitelistYes" type="radio" checked="checked" value="Y">
-									<label for="whitelistYes" style="margin-right: 15%;">접근허용</label> 
+									<label for="whitelistYes" style="margin-right: 15%;"><spring:message code="encrypt_policy_management.Access_Allow"/></label> 
 									<input name="whitelistYesNo" id="whitelistNo" type="radio" value="N"> 
-									<label for="whitelistNo">접근거부</label>
+									<label for="whitelistNo"><spring:message code="encrypt_policy_management.Access_Deny"/></label>
 								</div>
 							</td>
 						</tr>

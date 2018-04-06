@@ -217,12 +217,12 @@
 		var data = table.rows().data();
 		for(var i=0; i<data.length; i++){
 			var length = data[i].length;
-			if(length=="끝까지"){
+			if(length=='<spring:message code="encrypt_policy_management.End"/>'){
 				stop = 1;
 			}
 		}
 		
-		if(result.length =="끝까지" && stop == 1){
+		if(result.length =='<spring:message code="encrypt_policy_management.End"/>' && stop == 1){
 			return false;
 		}
 		
@@ -416,7 +416,7 @@
     	if(objTarget.type == 'text') {
     	var value = objTarget.value;
     		if(/[ㄱ-ㅎ|ㅏ-ㅣ|가-힣]/.test(value)) {
-    			alert("한글은 입력하실 수 없습니다.");
+    			alert('<spring:message code="encrypt_msg.msg22"/>');
     	   		objTarget.value = objTarget.value.replace(/[ㄱ-ㅎ|ㅏ-ㅣ|가-힣]/g, '');
     	  	}
     	 }
@@ -682,7 +682,7 @@
 										</c:forEach> 
 									</select>
 								</td>
-								<th scope="row" class="ico_t1" id="masking" style="display: none;">대체 문자열</th>
+								<th scope="row" class="ico_t1" id="masking" style="display: none;"><spring:message code="encrypt_policy_management.Replace_String"/></th>
 								<td>
 									<input type="text" class="txt t2" name="maskingValue" id="maskingValue" style="display: none;"/>
 								</td>

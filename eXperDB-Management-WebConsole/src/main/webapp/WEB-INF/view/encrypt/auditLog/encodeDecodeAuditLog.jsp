@@ -80,9 +80,9 @@
 					render : function(data, type, full, meta) {
 						var html = "";
 						if (data == true) {
-							html += "암호화";
+							html += '<spring:message code="encrypt_log_decode.Encryption"/>';
 						} else {
-							html += "복호화";
+							html += '<spring:message code="encrypt_log_decode.Decryption"/>';
 						}
 						return html;
 					},
@@ -321,7 +321,7 @@
 								<th scope="row" class="t9"><spring:message code="encrypt_log_decode.Additional_Search_Condition"/></th>
 								<td>
 									<select class="select t5" id="searchFieldName" name="searchFieldName">
-										<option value="">조회안함</option>
+										<option value=""><spring:message code="encrypt_log_decode.Not_Select"/></option>
 										<option value="PROFILE_NM"><spring:message code="encrypt_policy_management.Policy_Name"/></option>
 										<option value="SITE_ACCESS_ADDRESS"><spring:message code="encrypt_log_decode.Client_Address"/></option>
 										<option value="HOST_NM"><spring:message code="encrypt_policy_management.Host_Name"/></option>

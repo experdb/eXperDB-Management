@@ -228,12 +228,12 @@
 		var data = table.rows().data();
 		for(var i=0; i<data.length; i++){
 			var length = data[i].length;
-			if(length=="끝까지"){
+			if(length=='<spring:message code="encrypt_policy_management.End"/>'){
 				stop = 1;
 			}
 		}
 		
-		if(result.length =="끝까지" && stop == 1){
+		if(result.length =='<spring:message code="encrypt_policy_management.End"/>' && stop == 1){
 			return false;
 		}
 		
@@ -453,7 +453,7 @@
     	if(objTarget.type == 'text') {
     	var value = objTarget.value;
 		if(/[ㄱ-ㅎ|ㅏ-ㅣ|가-힣]/.test(value)) {
-			alert("한글은 입력하실 수 없습니다.");
+			alert('<spring:message code="encrypt_msg.msg22"/>');
 	   		objTarget.value = objTarget.value.replace(/[ㄱ-ㅎ|ㅏ-ㅣ|가-힣]/g, '');
 	  		}
     	}
@@ -616,7 +616,7 @@
 				<div class="sch_form">
 					<table class="write">
 						<colgroup>
-							<col style="width:140px;" />
+							<col style="width:160px;" />
 							<col />
 						</colgroup>
 						<tbody>
@@ -666,7 +666,7 @@
 										<td></td>
 										<td>${ProfileCipherSpecData.offset}</td>
 										<td>
-											<c:if test="${ProfileCipherSpecData.length eq null}">끝까지</c:if>
+											<c:if test="${ProfileCipherSpecData.length eq null}"><spring:message code="encrypt_policy_management.End"/></c:if>
 											<c:if test="${ProfileCipherSpecData.length != '' || ProfileCipherSpecData.length ne null}">${ProfileCipherSpecData.length}</c:if>
 										</td>
 										<td>${ProfileCipherSpecData.CipherAlgorithmName}</td>
@@ -696,7 +696,7 @@
 				<div class="sch_form">
 					<table class="write">
 						<colgroup>
-							<col style="width: 120px;" />
+							<col style="width: 180px;" />
 							<col />
 							<col style="width: 100px;" />
 							<col />
@@ -724,7 +724,7 @@
 										</c:forEach> 
 									</select>
 								</td>
-								<th scope="row" class="ico_t1" id="masking" style="display: none;">대체 문자열</th>
+								<th scope="row" class="ico_t1" id="masking" style="display: none;"><spring:message code="encrypt_policy_management.Replace_String"/></th>
 								<td>
 									<input type="text" class="txt t2" name="maskingValue" id="maskingValue" value="${result.maskingValue}" style="display: none;"/>
 								</td>

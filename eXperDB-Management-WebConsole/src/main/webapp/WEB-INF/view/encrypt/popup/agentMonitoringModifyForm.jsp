@@ -96,7 +96,7 @@ var extendedField = ${extendedField};
 			},
 			success : function(data) {		
 				if(data.resultCode == "0000000000"){
-					alert("에이전트 상태를 변경하였습니다.");
+					alert('<spring:message code="encrypt_msg.msg21"/>');
 					opener.location.reload();
 					window.close();
 				}else if(data.resultCode == "8000000003"){
@@ -119,7 +119,7 @@ var extendedField = ${extendedField};
 				</div>
 			<div class="cmm_bd">
 				<div class="sub_tit">
-					<p>기본</p>
+					<p><spring:message code="encrypt_agent.Default_Default"/></p>
 				</div>
 				<div class="overflows_areas">
 					<table class="write">
@@ -129,7 +129,7 @@ var extendedField = ${extendedField};
 						</colgroup>
 						<tbody>
 							<tr>
-								<th scope="row" class="ico_t2">Agent 이름</th>
+								<th scope="row" class="ico_t2"><spring:message code="encrypt_agent.Agent_Name"/></th>
 								<td><input type="text" class="txt" name="entityName" id="entityName" value="${entityName}"  readonly="readonly" >
 										<input type="hidden" name="entityUid" id="entityUid" value="${entityUid}" >
 								</td>
@@ -153,7 +153,7 @@ var extendedField = ${extendedField};
 			
 			<div class="cmm_bd">
 				<div class="sub_tit">
-					<p>부가정보</p>
+					<p><spring:message code="encrypt_agent.Additional_Information"/></p>
 				</div>
 				<div class="overflows_areas">
 					<table class="write">
@@ -187,8 +187,8 @@ var extendedField = ${extendedField};
 					</colgroup>
 					<thead>
 						<tr>
-							<th scope="col">시스템 속성 키</th>
-							<th scope="col">시스템 속성 값</th>
+							<th scope="col"><spring:message code="encrypt_agent.System_Key"/></th>
+							<th scope="col"><spring:message code="encrypt_agent.System_Value"/></th>
 						</tr>
 					</thead>
 					<tbody id="extendedField">		

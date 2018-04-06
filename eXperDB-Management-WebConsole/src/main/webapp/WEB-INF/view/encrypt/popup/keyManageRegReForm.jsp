@@ -275,7 +275,7 @@ function fn_historyCryptoKeySymmetric(){
 								</div>
 							</td>
 							<td><div class="inp_chk"><input type="checkbox" id="copyBin" name="copyBin">
-								<label for="copyBin"></label>바이너리 복사</div></td>
+								<label for="copyBin"></label><spring:message code="encrypt_key_management.Copy_Binary"/></div></td>
 						</tr>	
 						<input type="hidden" id="keyUid" name="keyUid" value="${keyUid}">
 						<input type="hidden" id="resourceUid" name="resourceUid" value="${keyUid}">

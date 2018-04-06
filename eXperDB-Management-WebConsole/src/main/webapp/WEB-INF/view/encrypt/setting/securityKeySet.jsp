@@ -361,7 +361,7 @@ function fn_mstKeyDownload(){
 									</td>
 								</tr>
 								<tr>
-									<th scope="row" class="ico_t2">비밀번호</th>
+									<th scope="row" class="ico_t2"><spring:message code="encrypt_serverMasterKey.Password"/></th>
 									<td>
 										<input type="password" name="mstKeyPassword" id="mstKeyPassword" class="txt t2"  placeholder="<spring:message code="encrypt_msg.msg05"/>"/>										
 									</td>
@@ -414,13 +414,13 @@ function fn_mstKeyDownload(){
 									</td>
 								</tr>
 								<tr>
-									<th scope="row" class="ico_t2">비밀번호</th>
+									<th scope="row" class="ico_t2"><spring:message code="encrypt_serverMasterKey.Password"/></th>
 									<td>
 										<input type="password" name="mstKeyRenewPassword" id="mstKeyRenewPassword" class="txt t2" placeholder="<spring:message code="encrypt_msg.msg05"/>"/>										
 									</td>
 								</tr>
 								<tr>
-									<th scope="row" class="ico_t2">비밀번호 확인</th>
+									<th scope="row" class="ico_t2"><spring:message code="encrypt_serverMasterKey.Confirm_Password"/></th>
 									<td>
 										<input type="password" name="mstKeyRenewPasswordconfirm" id="mstKeyRenewPasswordconfirm" class="txt t2"  placeholder="<spring:message code="encrypt_msg.msg05"/>"/>										
 									</td>

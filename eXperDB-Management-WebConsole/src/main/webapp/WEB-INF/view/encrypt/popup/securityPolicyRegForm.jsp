@@ -34,7 +34,7 @@ $(window.document).ready(function() {
 	fn_changeBinUid(cipherAlgorithmCode);
 	
 	if("${act}" =='u'){
-		if("${length}" == '끝까지'){
+		if("${length}" == '<spring:message code="encrypt_policy_management.End"/>'){
 			$("#last").prop('checked', true) ;
 			$('#length').attr('disabled', true);
 		}else{
@@ -65,7 +65,7 @@ function fn_validation(){
 		return false;
 	}
 	if($("input:checkbox[id='last']").is(":checked")){
-		$('#length').val('끝까지');
+		$('#length').val('<spring:message code="encrypt_policy_management.End"/>');
 	}
 	if (length.value == "" || length.value == "undefind" || length.value == null) {
 		alert('<spring:message code="encrypt_msg.msg10"/>');
@@ -151,11 +151,11 @@ function fn_changeBinUid(selectObj){
 <body>
 	<div class="pop_container">
 		<div class="pop_cts">
-			<p class="tit">암복호화 정책 등록</p>
+			<p class="tit"><spring:message code="encrypt_policy_management.Register_Policy"/></p>
 			<table class="write">
 				<caption>암복호화 정책 등록</caption>
 				<colgroup>
-					<col style="width: 130px;" />
+					<col style="width: 140px;" />
 					<col />
 				</colgroup>
 				<tbody>
@@ -169,7 +169,7 @@ function fn_changeBinUid(selectObj){
 							<input type="text" class="txt" name="length" id="length" maxlength="4" onKeyPress="NumObj(this);"/> 
 							<div class="inp_chk">
 								<input type="checkbox" id="last" name="last" onchange="fn_lastCheck()"/>
-								<label for="last">끝까지</label>	
+								<label for="last"><spring:message code="encrypt_policy_management.End"/></label>	
 							</div>
 						</td>
 					</tr>

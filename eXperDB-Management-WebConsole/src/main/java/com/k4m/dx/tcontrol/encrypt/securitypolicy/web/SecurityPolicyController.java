@@ -454,7 +454,7 @@ public class SecurityPolicyController {
 				
 				//offset
 				p.setOffset(Integer.parseInt(jsrow.get("offset").toString()));
-				if(jsrow.get("length").toString().equals("끝까지")){
+				if(jsrow.get("length").toString().equals("끝까지") || jsrow.get("length").toString().equals("To the End")){
 					p.setLength(null); //길이
 				}else{
 					p.setLength(Integer.parseInt(jsrow.get("length").toString())); //길이
@@ -690,7 +690,7 @@ public class SecurityPolicyController {
 				//offset
 				p.setOffset(Integer.parseInt(jsrow.get("offset").toString()));
 				
-				if(jsrow.get("length").toString().equals("끝까지")){
+				if(jsrow.get("length").toString().equals("끝까지") || jsrow.get("length").toString().equals("To the End")){
 					p.setLength(null); //길이
 				}else{
 					p.setLength(Integer.parseInt(jsrow.get("length").toString())); //길이

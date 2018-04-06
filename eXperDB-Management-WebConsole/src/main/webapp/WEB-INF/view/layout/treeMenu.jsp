@@ -484,7 +484,7 @@ $(window.document).ready(function() {
 					</div>
 			</div>
 
-			<div id="treeTitle" class="encrypt"><img src="../images/ico_lnb_2.png" id="treeImg"><a href="/securityPolicy.do" target="main" onclick="fn_GoLink();">데이터 암호화</a>
+			<div id="treeTitle" class="encrypt"><img src="../images/ico_lnb_2.png" id="treeImg"><a href="/securityPolicy.do" target="main" onclick="fn_GoLink();"><spring:message code="encrypt_tree.Data_Encryption"/></a>
 					<div id="sidetreecontrol3" style="float: right;">							
 						<a href="?#"><img src="../images/ico_lnb_close.png"></a>
 						<a href="?#"><img src="../images/ico_lnb_open.png"></a>

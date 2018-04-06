@@ -352,7 +352,7 @@ function fn_delete(){
 								<th width="100"><spring:message code="user_management.user_name" /></th>
 								<th width="100"><spring:message code="user_management.contact" /></th>
 								<th width="80"><spring:message code="user_management.use_yn" /></th>
-								<th width="80">암호화 <spring:message code="user_management.use_yn" /></th>
+								<th width="80"><spring:message code="encrypt_log_decode.Encryption"/> <spring:message code="user_management.use_yn" /></th>
 								<th width="100"><spring:message code="user_management.expiration_date" /></th>
 							</tr>
 						</thead>

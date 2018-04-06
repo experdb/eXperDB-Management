@@ -47,7 +47,7 @@ function fn_checkResourceName(e) {
 	if(objTarget.type == 'text') {
 	var value = objTarget.value;
 	if(/[ㄱ-ㅎ|ㅏ-ㅣ|가-힣]/.test(value)) {
-		alert("한글은 입력하실 수 없습니다.");
+		alert('<spring:message code="encrypt_msg.msg22"/>');
    		objTarget.value = objTarget.value.replace(/[ㄱ-ㅎ|ㅏ-ㅣ|가-힣]/g, '');
   		}
 	 }
@@ -60,16 +60,16 @@ function fn_validation(){
 	var datepicker3 = document.getElementById('datepicker3');
 	
 	if (resourcename.value == "" || resourcename.value == "undefind" || resourcename.value == null) {
-		alert("암호화 키 이름을 입력해주세요.");
+		alert('<spring:message code="encrypt_msg.msg17"/>');
 		resourcename.focus();
 		return false;
 	}
 	if (CipherAlgorithmCode.value == "" || CipherAlgorithmCode.value == "undefind" || CipherAlgorithmCode.value == null) {
-		alert("적용 알고리즘을 선택해주세요.");
+		alert('<spring:message code="encrypt_msg.msg23"/>');
 		return false;
 	}
 	if (datepicker3.value == "" || datepicker3.value == "undefind" || datepicker3.value == null) {
-		alert("유효기간 만료일을 입력해주세요.");
+		alert('<spring:message code="encrypt_msg.msg24"/>');
 		return false;
 	}
 	return true;

@@ -1,5 +1,7 @@
 package com.k4m.dx.tcontrol.encrypt.service.call;
 
+import java.util.Date;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -64,6 +66,8 @@ public class KeyManageServiceCall {
 		String resultMessage =new String(resultJson.get("resultMessage").toString().getBytes("iso-8859-1"),"UTF-8");
 //		long totalListCount = (long) resultJson.get("totalListCount");
 		
+		SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-mm-dd HH:mm:ss");
+		
 		if(resultCode.equals("0000000000")) {
 			
 			ArrayList list = (ArrayList) resultJson.get("list");
@@ -87,12 +91,19 @@ public class KeyManageServiceCall {
 					jsonObj.put("resourceTypeName", cryptoKey.getResourceTypeName());
 					jsonObj.put("cipherAlgorithmName", cryptoKey.getCipherAlgorithmName());
 					jsonObj.put("cipherAlgorithmCode", cryptoKey.getCipherAlgorithmCode());
-					jsonObj.put("createDateTime", cryptoKey.getCreateDateTime());
+					
+					Date createDateTime = (Date) dateFormat.parse(cryptoKey.getCreateDateTime());
+					jsonObj.put("createDateTime", dateFormat.format(createDateTime));
 					
 					if(cryptoKey.getCreateName() != null) {
 						jsonObj.put("createName", new String(cryptoKey.getCreateName().toString().getBytes("iso-8859-1"),"UTF-8"));
 					}
-					jsonObj.put("updateDateTime", cryptoKey.getUpdateDateTime());					
+					
+					if(cryptoKey.getUpdateDateTime() != null){
+						Date updateDateTime = (Date) dateFormat.parse(cryptoKey.getUpdateDateTime());
+						jsonObj.put("updateDateTime", dateFormat.format(updateDateTime));		
+					}
+								
 					jsonObj.put("keyStatusCode", cryptoKey.getKeyStatusCode());
 					jsonObj.put("keyStatusName", cryptoKey.getKeyStatusName());
 

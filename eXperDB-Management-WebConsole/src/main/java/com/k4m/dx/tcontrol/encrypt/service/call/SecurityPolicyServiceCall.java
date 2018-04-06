@@ -75,7 +75,7 @@ public class SecurityPolicyServiceCall {
 					profile = gson.fromJson(jsonObj.toJSONString(), profile.getClass());
 					
 					String createDateTime = profile.getCreateDateTime();
-					Date createDateTimeDate = dateFormat.parse(createDateTime);
+					Date createDateTimeDate = dateFormat.parse(profile.getCreateDateTime());
 					String profileTypeName = profile.getProfileTypeName();
 					String profileTypeCode = profile.getProfileTypeCode();
 					String profileStatusCode = profile.getProfileStatusCode();
