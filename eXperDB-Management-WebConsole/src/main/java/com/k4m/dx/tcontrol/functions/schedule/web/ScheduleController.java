@@ -617,6 +617,7 @@ public class ScheduleController {
 					mp.put("lst_mdf_dtm", result.get(i).get("lst_mdf_dtm"));
 					mp.put("wrk_cnt", result.get(i).get("wrk_cnt"));
 					mp.put("db_svr_nm", result.get(i).get("db_svr_nm"));
+					mp.put("exe_dt", result.get(i).get("exe_dt"));
 					for(int j=0; j<scheduler.getJobGroupNames().size(); j++){	
 						if(result.get(i).get("scd_id").toString().equals(scheduler.getJobGroupNames().get(j).toString())){	
 							mp.put("status", "s");
@@ -1299,7 +1300,11 @@ public class ScheduleController {
 	@ResponseBody	
 	public void updateFixRslt(@ModelAttribute("historyVO") HistoryVO historyVO, HttpServletRequest request, HttpServletResponse response) {
 		
-		
+		// Transaction 
+		DefaultTransactionDefinition def  = new DefaultTransactionDefinition();
+		def.setPropagationBehavior(TransactionDefinition.PROPAGATION_REQUIRED);
+		TransactionStatus status = txManager.getTransaction(def);
+				
 		try {					
 			HashMap<String , Object> paramvalue = new HashMap<String, Object>();
 			
@@ -1317,8 +1322,11 @@ public class ScheduleController {
 			   
 				scheduleService.updateFixRslt(paramvalue);
 						
-		} catch (Exception e) {
+		}catch(Exception e){
 			e.printStackTrace();
+			txManager.rollback(status);
+		}finally{
+			txManager.commit(status);
 		}
 	}
 	

@@ -383,27 +383,31 @@ $(window.document).ready(function() {
 	      
 		
 	function fn_logout(){
+		
+		sessionStorage.removeItem('cssId');
+		
 		var frm = document.treeView;
 		frm.action = "/logout.do";
 		frm.submit();	
 	}	
 	
 	
- 	function fn_GoLink(url) {	
+ 	function fn_GoLink(url) {
+ 		var cssID = sessionStorage.getItem('cssId');
 
- 		if(before != null){
- 	 		$("#"+before).css("background-color","");
- 	 		$("#"+before).css("color","");
- 	 		$("#"+before).css("padding","");
- 			$("#"+before).css("border","");	
- 		}
-		
- 		before = url;
+ 		$("#"+cssID).css("background-color","");
+ 		$("#"+cssID).css("color","");
+ 		$("#"+cssID).css("padding","");
+ 		$("#"+cssID).css("border","");	
  		
- 		$("#"+url).css("background-color","#f58220");
- 		$("#"+url).css("color","white");
- 		$("#"+url).css("padding","3px");
-		$("#"+url).css("border","2px solid #f58220");
+ 		if(url != null){
+ 			$("#"+url).css("background-color","#f58220");
+ 			$("#"+url).css("color","white");
+ 			$("#"+url).css("padding","3px");
+ 			$("#"+url).css("border","2px solid #f58220");	
+ 		}
+ 		
+ 		sessionStorage.setItem('cssId',url);
  	}
  	
  	function fn_localeSetting(){

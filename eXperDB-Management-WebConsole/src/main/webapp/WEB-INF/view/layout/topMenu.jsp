@@ -263,7 +263,21 @@ $(window.document).ready(function() {
 
 
 function fn_cookie(url) {
-	$.cookie('menu_url' , url, { path : '/' });
+	var cssID = sessionStorage.getItem('cssId');
+
+	$("#"+cssID).css("background-color","");
+	$("#"+cssID).css("color","");
+	$("#"+cssID).css("padding","");
+	$("#"+cssID).css("border","");	
+	
+	if(url != null){
+		$("#"+url).css("background-color","#f58220");
+		$("#"+url).css("color","white");
+		$("#"+url).css("padding","3px");
+		$("#"+url).css("border","2px solid #f58220");	
+	}
+	
+	sessionStorage.setItem('cssId',url);
 }
 
 
@@ -307,9 +321,9 @@ function fn_cookie(url) {
 						<ul class="depth_2">
 							<li><a href="#n" id="MN0001"><spring:message code="menu.schedule_information" /></a>
 								<ul class="depth_3">
-									<li><a href="/insertScheduleView.do" onClick="fn_cookie(null)" id="MN000101" target="main"><spring:message code="menu.schedule_registration" /></a></li>
-									<li><a href="/selectScheduleListView.do" onClick="fn_cookie(null)" id="MN000102" target="main"><spring:message code="etc.etc27"/></a></li>
-									<li><a href="/selectScheduleHistoryView.do" onClick="fn_cookie(null)" id="MN000103" target="main"><spring:message code="menu.shedule_execution_history" /></a></li>
+									<li><a href="/insertScheduleView.do" onClick="fn_cookie('insertScheduleView')" id="MN000101" target="main"><spring:message code="menu.schedule_registration" /></a></li>
+									<li><a href="/selectScheduleListView.do" onClick="fn_cookie('selectScheduleListView')" id="MN000102" target="main"><spring:message code="etc.etc27"/></a></li>
+									<li><a href="/selectScheduleHistoryView.do" onClick="fn_cookie('selectScheduleHistoryView')" id="MN000103" target="main"><spring:message code="menu.shedule_execution_history" /></a></li>
 								</ul>
 							</li>
 							<li><a href="#n" id="MN0002"><spring:message code="menu.data_transfer_information" /></a>
@@ -351,29 +365,29 @@ function fn_cookie(url) {
 						</ul>
 					</li>
 					
-					<li id="encryptMenu"><a href="#n"><span><img src="/images/encrypt.png" alt="ENCRYPT" /></span></a>
+					<li id="encryptMenu"><a href="#n" onClick="fn_cookie(null)"><span><img src="/images/encrypt.png" alt="ENCRYPT" /></span></a>
 						<ul class="depth_2">
-						    <li><a href="#n" id="MN00011"><spring:message code="encrypt_policy_management.Policy_Key_Management"/></a>
+						    <li><a href="#n" id="MN00011" onClick="fn_cookie(null)"><spring:message code="encrypt_policy_management.Policy_Key_Management"/></a>
         						<ul class="depth_3">
-									<li><a href="/securityPolicy.do" target="main" id="MN0001101"><spring:message code="encrypt_policy_management.Security_Policy_Management"/></a></li>
-									<li><a href="/keyManage.do" target="main" id="MN0001102"><spring:message code="encrypt_key_management.Encryption_Key_Management"/></a></li>
+									<li><a href="/securityPolicy.do" target="main" id="MN0001101" onClick="fn_cookie('securityPolicy')"><spring:message code="encrypt_policy_management.Security_Policy_Management"/></a></li>
+									<li><a href="/keyManage.do" target="main" id="MN0001102" onClick="fn_cookie('keyManage')"><spring:message code="encrypt_key_management.Encryption_Key_Management"/></a></li>
 								</ul>
         					</li>
-						    <li><a href="#n" id="MN00012"><spring:message code="encrypt_log.Audit_Log"/></a>
+						    <li><a href="#n" id="MN00012" onClick="fn_cookie(null)"><spring:message code="encrypt_log.Audit_Log"/></a>
         						<ul class="depth_3">
-									<li><a href="/encodeDecodeAuditLog.do" target="main" id="MN0001201"><spring:message code="encrypt_log_decode.Encryption_Decryption"/></a></li>
-									<li><a href="/managementServerAuditLog.do" target="main" id="MN0001202"><spring:message code="encrypt_log_sever.Management_Server"/></a></li>
-									<li><a href="/encodeDecodeKeyAuditLog.do" target="main" id="MN0001203"><spring:message code="encrypt_policy_management.Encryption_Key"/></a></li>
+									<li><a href="/encodeDecodeAuditLog.do" target="main" id="MN0001201" onClick="fn_cookie('encodeDecodeAuditLog')"><spring:message code="encrypt_log_decode.Encryption_Decryption"/></a></li>
+									<li><a href="/managementServerAuditLog.do" target="main" id="MN0001202" onClick="fn_cookie('managementServerAuditLog')"><spring:message code="encrypt_log_sever.Management_Server"/></a></li>
+									<li><a href="/encodeDecodeKeyAuditLog.do" target="main" id="MN0001203" onClick="fn_cookie('encodeDecodeKeyAuditLog')"><spring:message code="encrypt_policy_management.Encryption_Key"/></a></li>
 <!-- 								<li><a href="/backupRestoreAuditLog.do" target="main">백업및복원</a></li> -->
-									<li><a href="/resourcesUseAuditLog.do" target="main" id="MN0001204">자원사용</a></li>
+									<li><a href="/resourcesUseAuditLog.do" target="main" id="MN0001204"  onClick="fn_cookie('resourcesUseAuditLog')">자원사용</a></li>
 								</ul>
         					</li>
-							<li><a href="#n" id="MN00013"><spring:message code="encrypt_policyOption.Settings"/></a>
+							<li><a href="#n" id="MN00013" onClick="fn_cookie(null)"><spring:message code="encrypt_policyOption.Settings" /></a>
         						<ul class="depth_3">
-									<li><a href="/securityPolicyOptionSet.do" target="main" id="MN0001301"><spring:message code="encrypt_policyOption.Security_Policy_Option_Setting"/></a></li>
-									<li><a href="/securitySet.do" target="main" id="MN0001302"><spring:message code="encrypt_encryptSet.Encryption_Settings"/></a></li>
-									<li><a href="/securityKeySet.do" target="main" id="MN0001303"><spring:message code="encrypt_serverMasterKey.Setting_the_server_master_key_password"/></a></li>
-									<li><a href="/securityAgentMonitoring.do" target="main"  id="MN0001304"><spring:message code="encrypt_agent.Encryption_agent_setting"/></a></li>
+									<li><a href="/securityPolicyOptionSet.do" target="main" id="MN0001301" onClick="fn_cookie('securityPolicyOptionSet')"><spring:message code="encrypt_policyOption.Security_Policy_Option_Setting"/></a></li>
+									<li><a href="/securitySet.do" target="main" id="MN0001302" onClick="fn_cookie('securitySet')"><spring:message code="encrypt_encryptSet.Encryption_Settings"/></a></li>
+									<li><a href="/securityKeySet.do" target="main" id="MN0001303" onClick="fn_cookie('securityKeySet')"><spring:message code="encrypt_serverMasterKey.Setting_the_server_master_key_password"/></a></li>
+									<li><a href="/securityAgentMonitoring.do" target="main"  id="MN0001304" onClick="fn_cookie('securityAgentMonitoring')"><spring:message code="encrypt_agent.Encryption_agent_setting"/></a></li>
 								</ul>
         					</li>
 						</ul>

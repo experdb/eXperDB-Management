@@ -99,6 +99,7 @@ function fn_init(){
 		{data : "lst_mdfr_id", className : "dt-center", defaultContent : ""},
 		{data : "lst_mdf_dtm", className : "dt-center", defaultContent : ""},
 		{data : "scd_id", className : "dt-center", defaultContent : "", visible: false },
+		{data : "exe_dt", className : "dt-center", defaultContent : "", visible: false },
 	],'select': {'style': 'multi'}
 	});
 	
@@ -147,7 +148,11 @@ function fn_init(){
 	    var $row = $this.parent().parent();
 	    $row.addClass('select-detail');
 	    var datas = table.rows('.select-detail').data();
-
+	    
+	     if(datas[0].exe_perd_cd == "TC001605"){
+	    	 if (!fn_dateValidation(datas[0].exe_dt)) return false;
+		}	 
+	    
 	    if(datas.length==1) {
 	       var row = datas[0];
 	       $row.removeClass('select-detail');
@@ -239,6 +244,7 @@ function fn_init(){
 	  table.tables().header().to$().find('th:eq(13)').css('min-width', '65px'); 
 	  table.tables().header().to$().find('th:eq(14)').css('min-width', '130px'); 
 	  table.tables().header().to$().find('th:eq(15)').css('min-width', '0px');
+	  table.tables().header().to$().find('th:eq(16)').css('min-width', '0px');
     $(window).trigger('resize'); 
 }
 
@@ -552,6 +558,30 @@ function fn_makeToMin(){
 	minHtml += '</select> <spring:message code="schedule.minute" />';	
 	$( "#a_min" ).append(minHtml);
 }
+
+
+//스케줄 재실행  현재 날짜 이전의 날짜를 실행할수 없도록 하는 함수
+function fn_dateValidation(exe_dt){
+	var day = new Date();
+	var dd = day.getDate();
+	var mm = day.getMonth()+1; //January is 0!
+	var yyyy = day.getFullYear();
+	
+	if((mm+"").length < 2) {  // 월이 한자리 수인 경우 (예: 1, 3, 5) 앞에 0을 붙여주기 위해, 즉 01, 03, 05
+		mm = "0" + mm;
+	}
+	
+	if((dd+"").length < 2) {       // 일이 한자리 수인 경우 앞에 0을 붙여주기 위해
+		dd = "0" + dd;
+	}
+	var today = yyyy +"" + mm + "" + dd;
+	
+	 if(today > exe_dt){
+		alert("현재날짜 이후 날짜를 선택하여야 합니다.");
+		return false;
+	} 
+	 return true;
+} 
 </script>
 
 <%@include file="../../cmmn/scheduleInfo.jsp"%>
@@ -666,6 +696,7 @@ function fn_makeToMin(){
 							<th width="130"><spring:message code="common.regist_datetime" /></th>
 							<th width="65"><spring:message code="common.modifier" /></th>
 							<th width="130"><spring:message code="common.modify_datetime" /></th>
+							<th width="0"></th>
 							<th width="0"></th>
 						</tr>
 					</thead>

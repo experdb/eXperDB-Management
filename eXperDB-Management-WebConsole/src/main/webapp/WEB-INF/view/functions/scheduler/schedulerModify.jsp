@@ -264,6 +264,18 @@ $(window.document).ready(function() {
 			}
 		},
 		success : function(result) {
+
+			if(result[0].exe_perd_cd == "TC001602"){
+				$("#weekDay").show();
+			}else if(result[0].exe_perd_cd == "TC001603"){
+				$("#day").show();
+			}else if(result[0].exe_perd_cd == "TC001604"){
+				$("#day").show();
+				$("#month").show();
+			}else if(result[0].exe_perd_cd == "TC001605"){
+				$("#calendar").show();
+			}
+			
 			document.getElementById('scd_nm').value= result[0].scd_nm;
 			document.getElementById('scd_exp').value= result[0].scd_exp;				
 			document.getElementById('exe_perd_cd').value= result[0].exe_perd_cd;
@@ -327,46 +339,35 @@ function fn_workDel(){
 /* ********************************************************
  * 실행주기 변경시 이벤트 호출
  ******************************************************** */
-function fn_exe_pred(week, month, day){
-	var exe_perd_cd = $("#exe_perd_cd").val();
-	
-	if(exe_perd_cd == "TC001602"){
-		$("#weekDay").show();
-
-	     var list = $("input:input:checkbox[name='chk']");
-	    for(var i = 0; i < list.length; i++){	    
-	    	if(week.charAt(i)==1){
-	    		list[i].checked = true;
-	    	}   	
-	    } 
-	}else{
-		$("#weekDay").hide();
-	}	
-	
-	if(exe_perd_cd == "TC001603"){
-		document.getElementById('exe_day').value= day;
-		$("#day").show();
-	}else{
-		$("#day").hide();
-	}
-	
-	if(exe_perd_cd == "TC001604"){
-		document.getElementById('exe_month').value= month;
-		document.getElementById('exe_day').value= day;
-		$("#day").show();
-		$("#month").show();
-	}else{
-		$("#month").hide();
-	}
-	
-	
-	if(exe_perd_cd == "TC001605"){
+ function fn_exe_pred(){
+		var exe_perd_cd = $("#exe_perd_cd").val();
 		
-		$("#calendar").show();
-	}else{
-		$("#calendar").hide();
+		if(exe_perd_cd == "TC001602"){
+			$("#weekDay").show();
+		}else{
+			$("#weekDay").hide();
+		}	
+
+		if(exe_perd_cd == "TC001603"){
+			$("#day").show();
+		}else{
+			$("#day").hide();
+		}
+		
+		if(exe_perd_cd == "TC001604"){
+			$("#day").show();
+			$("#month").show();
+		}else{
+			$("#month").hide();
+		}
+		
+		if(exe_perd_cd == "TC001605"){
+			$("#calendar").show();
+		}else{
+			$("#calendar").hide();
+		}
 	}
-}
+
 
 
 /* ********************************************************
@@ -450,7 +451,9 @@ function fn_updateSchedule(){
 	    }	    
 		var exe_dt = dayWeek.toString().replace(/,/gi,'').trim();
 	}else if(exe_perd_cd == "TC001605"){
+		//현재날짜와 비교하여 이전이면 등록 불가
 		var exe_dt = $("#datepicker1").val().replace(/-/gi,'').trim();
+		if (!fn_dateValidation(exe_dt)) return false;
 	}	
 	
 	var datas = table.rows().data();
@@ -566,6 +569,28 @@ function fn_scheduleReStart(){
 	});    
 }
 
+// 스케줄 등록시  현재 날짜 이전의 날짜를 등록할수 없도록 하는 함수
+function fn_dateValidation(exe_dt){
+	var day = new Date();
+	var dd = day.getDate();
+	var mm = day.getMonth()+1; //January is 0!
+	var yyyy = day.getFullYear();
+	
+	if((mm+"").length < 2) {  // 월이 한자리 수인 경우 (예: 1, 3, 5) 앞에 0을 붙여주기 위해, 즉 01, 03, 05
+		mm = "0" + mm;
+	}
+	
+	if((dd+"").length < 2) {       // 일이 한자리 수인 경우 앞에 0을 붙여주기 위해
+		dd = "0" + dd;
+	}
+	var today = yyyy +"" + mm + "" + dd;
+	
+	 if(today > exe_dt){
+		alert("현재날짜 이후 날짜를 선택하여야 합니다.");
+		return false;
+	} 
+	 return true;
+} 
 </script>
 
 			<div id="contents">
