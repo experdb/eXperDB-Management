@@ -66,7 +66,7 @@ public class KeyManageServiceCall {
 		String resultMessage =new String(resultJson.get("resultMessage").toString().getBytes("iso-8859-1"),"UTF-8");
 //		long totalListCount = (long) resultJson.get("totalListCount");
 		
-		SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-mm-dd HH:mm:ss");
+		SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 		
 		if(resultCode.equals("0000000000")) {
 			
@@ -256,7 +256,7 @@ public class KeyManageServiceCall {
 		String resultCode = (String) resultJson.get("resultCode");
 		String resultMessage = new String(resultJson.get("resultMessage").toString().getBytes("iso-8859-1"),"UTF-8");
 		long totalListCount = (long) resultJson.get("totalListCount");
-		
+		SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 		
 		if(resultCode.equals("0000000000")) {
 			ArrayList list = (ArrayList) resultJson.get("list");
@@ -278,15 +278,27 @@ public class KeyManageServiceCall {
 					jsonObj.put("binstatuscode", cryptoKeySymmetric.getBinStatusCode());				
 					jsonObj.put("version", cryptoKeySymmetric.getBinVersion());
 					jsonObj.put("keyStatusName", cryptoKeySymmetric.getKeyStatusName());
-					jsonObj.put("validEndDateTime", cryptoKeySymmetric.getValidEndDateTime());
+					
+					if(cryptoKeySymmetric.getValidEndDateTime() != null) {
+						Date validEndDateTimeDate = dateFormat.parse(cryptoKeySymmetric.getValidEndDateTime());
+						jsonObj.put("validEndDateTime", dateFormat.format(validEndDateTimeDate));
+					}
+					
 					if(cryptoKeySymmetric.getCreateName() != null) {
 						jsonObj.put("createName", new String(cryptoKeySymmetric.getCreateName().toString().getBytes("iso-8859-1"),"UTF-8"));
 					}
-					jsonObj.put("createDateTime", cryptoKeySymmetric.getCreateDateTime());
+					
+					Date createDateTimeDate = dateFormat.parse(cryptoKeySymmetric.getCreateDateTime());
+					jsonObj.put("createDateTime", dateFormat.format(createDateTimeDate));
+					
 					if(cryptoKeySymmetric.getUpdateName() != null) {
 						jsonObj.put("updateName", new String(cryptoKeySymmetric.getUpdateName().toString().getBytes("iso-8859-1"),"UTF-8"));
 					}
-					jsonObj.put("updateDateTime", cryptoKeySymmetric.getUpdateDateTime());
+					
+					if(cryptoKeySymmetric.getUpdateDateTime() != null) {
+						Date updateDateTimeDate = dateFormat.parse(cryptoKeySymmetric.getUpdateDateTime());
+						jsonObj.put("updateDateTime", dateFormat.format(updateDateTimeDate));
+					}
 
 					jsonArray.add(jsonObj);
 				}

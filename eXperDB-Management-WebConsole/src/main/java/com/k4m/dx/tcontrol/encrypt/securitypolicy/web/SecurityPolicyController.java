@@ -2,6 +2,7 @@ package com.k4m.dx.tcontrol.encrypt.securitypolicy.web;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
@@ -14,8 +15,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.servlet.LocaleResolver;
 import org.springframework.web.servlet.ModelAndView;
+import org.springframework.web.servlet.i18n.SessionLocaleResolver;
+import org.springframework.web.servlet.support.RequestContextUtils;
 
 import com.k4m.dx.tcontrol.admin.accesshistory.service.AccessHistoryService;
 import com.k4m.dx.tcontrol.admin.menuauthority.service.MenuAuthorityService;
@@ -169,7 +174,7 @@ public class SecurityPolicyController {
 	 * @throws Exception
 	 */
 	@RequestMapping(value = "/securityPolicyModify.do")
-	public ModelAndView securityPolicyModify(@ModelAttribute("historyVO") HistoryVO historyVO, HttpServletRequest request) {
+	public ModelAndView securityPolicyModify(Locale locale,@ModelAttribute("historyVO") HistoryVO historyVO, HttpServletRequest request) {
 		ModelAndView mv = new ModelAndView();
 		SecurityPolicyServiceCall sic = new SecurityPolicyServiceCall();
 		JSONArray dataTypeCode = new JSONArray();
@@ -203,7 +208,8 @@ public class SecurityPolicyController {
 			mv.addObject("cryptoKey",cryptoKey);
 			
 			String profileUid = request.getParameter("profileUid");
-			result = sic.selectProfileProtectionContents(restIp, restPort, strTocken, loginId, entityId, profileUid);
+			String lang = locale.toString();
+			result = sic.selectProfileProtectionContents(lang, restIp, restPort, strTocken, loginId, entityId, profileUid);
 			
 			System.out.println(result);
 			

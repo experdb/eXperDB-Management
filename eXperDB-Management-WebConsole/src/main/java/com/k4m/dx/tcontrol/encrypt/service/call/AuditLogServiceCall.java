@@ -135,7 +135,7 @@ public class AuditLogServiceCall {
 			
 		String resultCode = (String) resultJson.get("resultCode");
 		String resultMessage = (String) resultJson.get("resultMessage");
-		SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-mm-dd HH:mm:ss");
+		SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 		
 		if(resultCode.equals(SystemCode.ResultCode.SUCCESS)) {
 			ArrayList list = (ArrayList) resultJson.get("list");		
@@ -213,7 +213,7 @@ public class AuditLogServiceCall {
 		String resultCode = (String) resultJson.get("resultCode");
 		String resultMessage = (String) resultJson.get("resultMessage");
 		resultMessage = new String(resultMessage.getBytes("iso-8859-1"),"UTF-8"); 
-		SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-mm-dd HH:mm:ss");
+		SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 		
 		if(resultCode.equals("0000000000")) {
 			ArrayList list = (ArrayList) resultJson.get("list");

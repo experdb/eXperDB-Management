@@ -10,6 +10,7 @@ import java.util.Map;
 
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import com.google.gson.Gson;
 import com.k4m.dx.tcontrol.cmmn.serviceproxy.EncryptCommonService;
@@ -62,7 +63,7 @@ public class SecurityPolicyServiceCall {
 		
 		System.out.println("resultCode : " + resultCode + " resultMessage : " + resultMessage);
 		
-		SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-mm-dd HH:mm:ss");
+		SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 		
 		if(resultCode.equals(SystemCode.ResultCode.SUCCESS)) {
 			ArrayList list = (ArrayList) resultJson.get("list");
@@ -221,7 +222,7 @@ public class SecurityPolicyServiceCall {
 	 * @return 
 	 * @throws Exception
 	 */
-	public JSONObject selectProfileProtectionContents(String restIp, int restPort, String strTocken, String loginId, String entityId, String profileUid) throws Exception {
+	public JSONObject selectProfileProtectionContents(String lang, String restIp, int restPort, String strTocken, String loginId, String entityId, String profileUid) throws Exception {
 		JSONArray jsonArray = new JSONArray();
 		JSONArray jsonArray2 = new JSONArray();
 		JSONObject result = new JSONObject();
@@ -381,46 +382,89 @@ public class SecurityPolicyServiceCall {
 					boolean friday =ContainsWeekDay(profileAclSpec.getWorkDay(), SystemCode.Weekday.FRIDAY);
 					boolean saturday =ContainsWeekDay(profileAclSpec.getWorkDay(), SystemCode.Weekday.SATURDAY);
 					boolean sunday =ContainsWeekDay(profileAclSpec.getWorkDay(), SystemCode.Weekday.SUNDAY);
+
+					if(lang.equals("ko")){
+						if(monday){
+							workDay+= "월";	
+						}
+						if(tuesday){
+							if(workDay.length()!=0){
+								workDay+=",";
+							}
+								workDay+= "화";	
+						}
+						if(wednesday){
+							if(workDay.length()!=0){
+								workDay+=",";
+							}
+								workDay+= "수";	
+						}
+						if(thursday){
+							if(workDay.length()!=0){
+								workDay+=",";
+							}
+								workDay+= "목";	
+						}
+						if(friday){
+							if(workDay.length()!=0){
+								workDay+=",";
+							}
+								workDay+= "금";	
+						}
+						if(saturday){
+							if(workDay.length()!=0){
+								workDay+=",";
+							}
+								workDay+= "토";	
+						}
+						if(sunday){
+							if(workDay.length()!=0){
+								workDay+=",";
+							}
+								workDay+= "일";	
+						}
+					}
 					
-						
-					if(monday){
-						workDay+= "월";	
-					}
-					if(tuesday){
-						if(workDay.length()!=0){
-							workDay+=",";
+					if(lang.equals("en")){
+						if(monday){
+							workDay+= "MON";	
 						}
-							workDay+= "화";	
-					}
-					if(wednesday){
-						if(workDay.length()!=0){
-							workDay+=",";
+						if(tuesday){
+							if(workDay.length()!=0){
+								workDay+=",";
+							}
+								workDay+= "TUE";	
 						}
-							workDay+= "수";	
-					}
-					if(thursday){
-						if(workDay.length()!=0){
-							workDay+=",";
+						if(wednesday){
+							if(workDay.length()!=0){
+								workDay+=",";
+							}
+								workDay+= "WED";	
 						}
-							workDay+= "목";	
-					}
-					if(friday){
-						if(workDay.length()!=0){
-							workDay+=",";
+						if(thursday){
+							if(workDay.length()!=0){
+								workDay+=",";
+							}
+								workDay+= "THU";	
 						}
-							workDay+= "금";	
-					}
-					if(saturday){
-						if(workDay.length()!=0){
-							workDay+=",";
+						if(friday){
+							if(workDay.length()!=0){
+								workDay+=",";
+							}
+								workDay+= "FRI";	
 						}
-							workDay+= "토";	
-					}
-					if(sunday){
-						if(workDay.length()!=0){
-							workDay+=",";
+						if(saturday){
+							if(workDay.length()!=0){
+								workDay+=",";
+							}
+								workDay+= "SAT";	
 						}
-							workDay+= "일";	
+						if(sunday){
+							if(workDay.length()!=0){
+								workDay+=",";
+							}
+								workDay+= "SUN";	
+						}
 					}
 					
 					jsonObj.put("specName", new String(profileAclSpec.getSpecName().getBytes("iso-8859-1"),"UTF-8"));  
