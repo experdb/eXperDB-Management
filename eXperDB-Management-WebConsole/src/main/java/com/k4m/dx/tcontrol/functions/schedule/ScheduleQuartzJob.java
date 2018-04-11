@@ -246,7 +246,7 @@ public class ScheduleQuartzJob implements Job{
 		//1.1 연결할 데이터베이스의 이름 지정
 		//DBMS += "--dbname="+resultDbconn.get(h).get("dft_db_nm");
 		//1.2 호스트 이름 지정
-		DBMS += " --host="+resultDbconn.get(0).get("ipadr");
+		//DBMS += " --host="+resultDbconn.get(0).get("ipadr");
 		//1.3 서버가 연결을 청취하는 TCP포트 설정
 		DBMS += " --port="+resultDbconn.get(0).get("portno");
 		//1.4 연결할 사용자이름
@@ -258,11 +258,9 @@ public class ScheduleQuartzJob implements Job{
 	
 	private String fn_dbmsInfo_dump(List<Map<String, Object>> resultDbconn) {
 		String DBMS = "";
-		
 		//1.1 연결할 데이터베이스의 이름 지정
 		//DBMS += "--dbname="+resultDbconn.get(h).get("dft_db_nm");
 		//1.2 호스트 이름 지정
-		DBMS += " --host="+resultDbconn.get(0).get("ipadr");
 		//1.3 서버가 연결을 청취하는 TCP포트 설정
 		DBMS += " --port="+resultDbconn.get(0).get("portno");
 		//1.4 연결할 사용자이름
