@@ -13,7 +13,7 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-<title>eXperDB for PostgreSQL</title>
+<title>eXperDB for Management</title>
 <link rel="shortcut icon" type="image/x-icon" href="../images/logo.ico" />
 <link rel="stylesheet" type="text/css" href="/css/jquery-ui.css">
 <link rel="stylesheet" type="text/css" href="/css/common.css">

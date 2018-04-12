@@ -364,12 +364,12 @@
 			var whitelistYesNo = table2.row('.selected').data().whitelistYesNo;
 			
 			var popUrl = "/popup/accessPolicyRegForm.do?act=u&&specName="+specName
-					+"&&serverInstanceId="+serverInstanceId+"&&serverLoginId="+serverLoginId+"&&adminLoginId="+adminLoginId
-					+"&&osLoginId="+osLoginId+"&&applicationName="+applicationName+"&&accessAddress="+accessAddress
+					+"&&serverInstanceId="+serverInstanceId+"&&serverLoginId="+encodeURI(serverLoginId)+"&&adminLoginId="+encodeURI(adminLoginId)
+					+"&&osLoginId="+encodeURI(osLoginId)+"&&applicationName="+encodeURI(applicationName)+"&&accessAddress="+accessAddress
 					+"&&accessAddressMask="+accessAddressMask+"&&accessMacAddress="+accessMacAddress+"&&startDateTime="+startDateTime
 					+"&&endDateTime="+endDateTime+"&&startTime="+startTime+"&&endTime="+endTime
-					+"&&workDay="+workDay+"&&massiveThreshold="+massiveThreshold+"&&massiveTimeInterval="+massiveTimeInterval
-					+"&&extraName="+extraName+"&&hostName="+hostName+"&&whitelistYesNo="+whitelistYesNo+"&&rnum="+rnum; // 서버 url 팝업경로
+					+"&&workDay="+encodeURI(workDay)+"&&massiveThreshold="+massiveThreshold+"&&massiveTimeInterval="+massiveTimeInterval
+					+"&&extraName="+encodeURI(extraName)+"&&hostName="+encodeURI(hostName)+"&&whitelistYesNo="+whitelistYesNo+"&&rnum="+rnum; // 서버 url 팝업경로
 			var width = 1000;
 			var height = 755;
 			var left = (window.screen.width / 2) - (width / 2);

@@ -14,7 +14,7 @@
 <script type="text/javascript" src="../js/common.js"></script>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 
-<title>eXperDB for PostgreSQL</title>
+<title>eXperDB for Management</title>
 
 <script>
 function fn_logout(){
