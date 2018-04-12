@@ -83,7 +83,7 @@
 						      WHERE DB_SVR_NM = #{db_svr_nm}) 
 	  </if>
       <if test="wrk_nm != null and wrk_nm != '' ">
-      	AND WRK_NM LIKE CONCAT('%',#{wrk_nm},'%')
+      	AND A.WRK_NM LIKE CONCAT('%',#{wrk_nm},'%')
       </if>
       ORDER BY A.LST_MDF_DTM DESC
       )AA

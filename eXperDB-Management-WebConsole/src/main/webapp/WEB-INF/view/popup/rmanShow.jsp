@@ -80,7 +80,7 @@ function fn_init(){
 	{data : "COMPRESSED", className : "dt-center", defaultContent : "", 
 		"render": function (data, type, full) {		
 			var html = '';
-			if (full.STATUS == 'true') {
+			if (full.COMPRESSED == 'true') {
 					html += '<spring:message code="agent_monitoring.yes"/>';
 				} else {
 					html +='<spring:message code="agent_monitoring.no"/>';
