@@ -112,16 +112,7 @@ public class DaemonStart implements DxDaemon{
 			
 			daemonStartLogger.info("{}", "eXperDB Managemen Deamon Start..");
 			daemonStartLogger.info("{} {}", "eXperDB Managemen Deamon Start..", new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date()));
-	
 
-			String strIpadr = FileUtil.getPropertyValue("context.properties", "agent.install.ip");
-			
-			DbServerInfoVO vo = new DbServerInfoVO();
-			vo.setIPADR(strIpadr);
-				
-			DbServerInfoVO dbServerInfoVO = service.selectDatabaseConnInfo(vo);
-			
-			String IPADR = dbServerInfoVO.getIPADR();
 			
 			service = null;
 			
