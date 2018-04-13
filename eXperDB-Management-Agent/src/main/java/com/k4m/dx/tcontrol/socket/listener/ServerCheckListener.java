@@ -35,7 +35,7 @@ public class ServerCheckListener extends Thread {
 	public void run() {
 		int i = 0;
 
-		while (true) {
+		while (!Thread.interrupted()) {
 
 			SystemServiceImpl service = (SystemServiceImpl) context.getBean("SystemService");
 
