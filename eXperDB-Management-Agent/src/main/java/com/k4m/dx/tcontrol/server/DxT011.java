@@ -36,8 +36,8 @@ import com.k4m.dx.tcontrol.socket.TranCodeType;
 
 public class DxT011 extends SocketCtl{
 	
-	private static Logger errLogger = LoggerFactory.getLogger("errorToFile");
-	private static Logger socketLogger = LoggerFactory.getLogger("socketLogger");
+	private Logger errLogger = LoggerFactory.getLogger("errorToFile");
+	private Logger socketLogger = LoggerFactory.getLogger("socketLogger");
 	
 	public DxT011(Socket socket, BufferedInputStream is, BufferedOutputStream	os) {
 		this.client = socket;
@@ -55,9 +55,9 @@ public class DxT011 extends SocketCtl{
 		sqlSessionFactory = SqlSessionManager.getInstance();
 		
 		String poolName = "" + dbInfoObj.get(ProtocolID.SERVER_IP) + "_" + dbInfoObj.get(ProtocolID.DATABASE_NAME) + "_" 
-				+ "_" + dbInfoObj.get(ProtocolID.SERVER_PORT)
-				+ "_" + (String)dbInfoObj.get(ProtocolID.USER_ID)
-				+ "_" + (String)dbInfoObj.get(ProtocolID.USER_PWD);
+				+ "_" + dbInfoObj.get(ProtocolID.SERVER_PORT);
+				//+ "_" + (String)dbInfoObj.get(ProtocolID.USER_ID)
+				//+ "_" + (String)dbInfoObj.get(ProtocolID.USER_PWD);
 		
 		Connection connDB = null;
 		SqlSession sessDB = null;
@@ -94,6 +94,7 @@ public class DxT011 extends SocketCtl{
 			send(4, sendBuff);
 		} finally {
 			sessDB.close();
+			connDB.close();
 		}	        
 
 

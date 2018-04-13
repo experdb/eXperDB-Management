@@ -37,8 +37,8 @@ import com.k4m.dx.tcontrol.socket.TranCodeType;
 
 public class DxT010 extends SocketCtl{
 	
-	private static Logger errLogger = LoggerFactory.getLogger("errorToFile");
-	private static Logger socketLogger = LoggerFactory.getLogger("socketLogger");
+	private Logger errLogger = LoggerFactory.getLogger("errorToFile");
+	private Logger socketLogger = LoggerFactory.getLogger("socketLogger");
 	
 	public DxT010(Socket socket, BufferedInputStream is, BufferedOutputStream	os) {
 		this.client = socket;
@@ -49,7 +49,6 @@ public class DxT010 extends SocketCtl{
 	public void execute(String strDxExCode, JSONObject dbInfoObj) throws Exception {
 		socketLogger.info("DxT010.execute : " + strDxExCode);
 		
-		byte[] sendBuff = null;
 		
 		SqlSessionFactory sqlSessionFactory = null;
 		
@@ -60,7 +59,6 @@ public class DxT010 extends SocketCtl{
 		
 		Connection connDB = null;
 		SqlSession sessDB = null;
-		List<Object> selectExtensionList = new ArrayList<Object>();
 		
 		JSONObject outputObj = new JSONObject();
 		
@@ -75,14 +73,19 @@ public class DxT010 extends SocketCtl{
 			HashMap hp = new HashMap();
 			hp.put("extname", dbInfoObj.get(ProtocolID.EXTNAME));
 
-			selectExtensionList = sessDB.selectList("app.selectPgExtensionList", hp);
+			List<Object> selectExtensionList = sessDB.selectList("app.selectPgExtensionList", hp);
 			
 			
 	        outputObj = ResultJSON(selectExtensionList, strDxExCode, "0", "", "");
 	        
-	        sendBuff = outputObj.toString().getBytes();
+	        byte[] sendBuff = outputObj.toString().getBytes();
 	        send(4, sendBuff);
-
+	        
+	        selectExtensionList = null;
+	        hp = null;
+	        sendBuff = null;
+	        outputObj = null;
+	        
 			
 		} catch (Exception e) {
 			errLogger.error("DxT010 {} ", e.toString());
@@ -92,10 +95,15 @@ public class DxT010 extends SocketCtl{
 			outputObj.put(ProtocolID.ERR_CODE, TranCodeType.DxT010);
 			outputObj.put(ProtocolID.ERR_MSG, "DxT010 Error [" + e.toString() + "]");
 			
-			sendBuff = outputObj.toString().getBytes();
+			byte[] sendBuff  = outputObj.toString().getBytes();
 			send(4, sendBuff);
+			
+			outputObj = null;
+			sendBuff= null;
+
 		} finally {
 			sessDB.close();
+			connDB.close();
 		}	        
 
 

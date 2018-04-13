@@ -12,11 +12,8 @@ import org.apache.ibatis.session.SqlSessionFactory;
 import org.json.simple.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.context.ApplicationContext;
-import org.springframework.context.support.ClassPathXmlApplicationContext;
 
 import com.k4m.dx.tcontrol.db.SqlSessionManager;
-import com.k4m.dx.tcontrol.db.repository.service.SystemServiceImpl;
 import com.k4m.dx.tcontrol.socket.ErrCodeMng;
 import com.k4m.dx.tcontrol.socket.ProtocolID;
 import com.k4m.dx.tcontrol.socket.SocketCtl;
@@ -38,8 +35,8 @@ import com.k4m.dx.tcontrol.util.CommonUtil;
 
 public class DxT013 extends SocketCtl{
 	
-	private static Logger errLogger = LoggerFactory.getLogger("errorToFile");
-	private static Logger socketLogger = LoggerFactory.getLogger("socketLogger");
+	private Logger errLogger = LoggerFactory.getLogger("errorToFile");
+	private Logger socketLogger = LoggerFactory.getLogger("socketLogger");
 	
 	public DxT013(Socket socket, BufferedInputStream is, BufferedOutputStream	os) {
 		this.client = socket;
@@ -60,11 +57,6 @@ public class DxT013 extends SocketCtl{
 		String commandCode = (String) jObj.get(ProtocolID.COMMAND_CODE);
 		String trfTrgId = (String) jObj.get(ProtocolID.TRF_TRG_ID);
 		
-		ApplicationContext context;
-
-		context = new ClassPathXmlApplicationContext(new String[] {"context-tcontrol.xml"});
-		SystemServiceImpl service = (SystemServiceImpl) context.getBean("SystemService");
-		
 	
 		
 		JSONObject outputObj = new JSONObject();
@@ -77,7 +69,11 @@ public class DxT013 extends SocketCtl{
 				
 			} else if(commandCode.equals(ProtocolID.STOP)) {
 				String strCmd = "ps -ef| grep bottledwater |grep " + execTxt + " | awk '{print $2}'";
-				String strPid = CommonUtil.getPidExec(strCmd);
+				
+				CommonUtil util = new CommonUtil();
+				
+				String strPid = util.getPidExec(strCmd);
+				
 				
 				String strStopCmd = "kill -9 " + strPid ;
 				shellCmd(strStopCmd);
@@ -90,11 +86,15 @@ public class DxT013 extends SocketCtl{
 				
 				int i=0;
 				while(true) {
-					String strPid2 = CommonUtil.getPidExec(strCmd);
+					
+					String strPid2 = util.getPidExec(strCmd);
+					
 					socketLogger.info(i + " pid1 : " + strPid + " pid2 : " + strPid2);
 					if(!strPid2.equals(strPid)) break;
 					i++;
 				}
+				
+				util = null;
 				socketLogger.info(" deleteSlot Start2 ");
 				
 				deleteSlot(strDxExCode, jObj, execTxt);
@@ -204,6 +204,7 @@ public class DxT013 extends SocketCtl{
 				
 			} finally {
 				sessDB.close();
+				connDB.close();
 			}	        
 
 

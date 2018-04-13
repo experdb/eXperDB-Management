@@ -14,8 +14,8 @@ public class AgentInfoVO {
 	private String LST_MDFR_ID;
 	private String LST_MDF_DTM;
 	
-	public static String TC001101 = "TC001101"; //실행
-	public static String TC001102 = "TC001102"; //중지
+	public String TC001101 = "TC001101"; //실행
+	public String TC001102 = "TC001102"; //중지
 	
 
 

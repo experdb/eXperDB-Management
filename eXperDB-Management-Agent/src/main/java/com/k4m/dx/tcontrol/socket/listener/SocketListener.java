@@ -16,8 +16,8 @@ import com.k4m.dx.tcontrol.util.CommonUtil;
  */
 public class SocketListener implements Runnable {
 	
-	private static Logger socketLogger = LoggerFactory.getLogger("socketLogger");
-	private static Logger errLogger = LoggerFactory.getLogger("errorToFile");
+	private Logger socketLogger = LoggerFactory.getLogger("socketLogger");
+	private Logger errLogger = LoggerFactory.getLogger("errorToFile");
 	
 	private String			listenerName = "";
 	private int				listenPort = -1;
@@ -40,7 +40,7 @@ public class SocketListener implements Runnable {
 	private void createServerSocket() throws Exception {
 		try {
 			this.serverSocket	= new ServerSocket(listenPort);
-			this.serverSocket.setSoTimeout(1000);
+			//this.serverSocket.setSoTimeout(1000);
 		} catch(Exception e) {
 			socketLogger.info("서버소켓을 생성하지 못했습니다. [" + e + "]");
 			
@@ -73,11 +73,9 @@ public class SocketListener implements Runnable {
 		
 		try {			
 			//this.serverSocket.close();
-			mainThread.join();
+			//mainThread.join();
+			mainThread.interrupt();
 			
-			while(this.isRunning == true){
-				Thread.sleep(100);
-			}
 		} catch(Exception e) {
 			e.printStackTrace();
 			throw new Exception("A listener could not be shutdown. Exception [" + e + "]");
@@ -88,47 +86,57 @@ public class SocketListener implements Runnable {
 	
 	public void run() {
 		isRunning = true;
+		try {
+		//ServerSocket	serverSocket = new ServerSocket(listenPort);
+		//serverSocket.setSoTimeout(1000);
+		
 		while ( !toBeShutdown) {
 			try {
-				Socket	client = null;
 				
-				try {
-					if (serverSocket.isClosed()) break;
-					client = serverSocket.accept();
-					// 접속 가능한 아이피인지 체크
-					// 우선 _SYSTEM 일때만 체크한다.
-					//boolean		accept = true;
-					//String		clientIP = client.getInetAddress().getHostAddress();			
-				} catch (InterruptedIOException iioe) {
-					continue;
-				} catch (java.net.SocketException se){
-					if (se.getMessage().equals("Socket operation on nonsocket: configureBlocking")){
-						continue;
-					}
-					throw se;
-				}
+
+				Socket client = serverSocket.accept();
 
 					
 				if ( toBeShutdown ) break;
 				
 				if (client != null && !client.isClosed()){
-					new Thread(new DXTcontrolSocketExecute(client)).start();
-				};
-					//new Thread(new SocketExecutorForDXMAManager(client)).start();
-					//clientSocketQueue.put(client);
+					Thread thread = new Thread(new DXTcontrolSocketExecute(client));
+					
+					thread.start();
+					socketLogger.info("Thread가 종료될때까지 기다립니다.");
+		            try {
+		                // 해당 쓰레드가 멈출때까지 멈춤
+		                thread.join();
+		            } catch (InterruptedException e) {
+		                e.printStackTrace();
+		            }
+		            socketLogger.info("Thread가 종료되었습니다."); 
+		            //if(client != null) client.close();
+				}
+				
+				
+				if(client != null) {
+					client.close();
+					client = null;
+				}
+				
+				//System.out.println(client);
+					
 			} catch(Exception e) {
-				errLogger.error("Fail to processing client request. Exception [" + CommonUtil.getStackTrace(e) + "]");
+				errLogger.error("Fail to processing client request. Exception [" + e.toString() + "]");
 			}
 		}
 		
-		try {			
-			this.serverSocket.close();
-		} catch(Exception e) {			
-			errLogger.error("Fail to Closing Socket [" + CommonUtil.getStackTrace(e) + "]");
-		}
-		
+		this.serverSocket.close();
 		socketLogger.info("Please wait for Shutdown a listener...");	
 		socketLogger.info("Closing ServerSocket.");	
+		
 		isRunning = false;
+		} catch (Exception e) {
+			errLogger.error("Fail to Closing Socket [" + e.toString() + "]");
+		} finally {
+			
+		}
 	}
+
 }

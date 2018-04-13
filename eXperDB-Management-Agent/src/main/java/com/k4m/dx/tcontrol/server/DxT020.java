@@ -38,8 +38,8 @@ import com.k4m.dx.tcontrol.util.CommonUtil;
 
 public class DxT020 extends SocketCtl{
 	
-	private static Logger errLogger = LoggerFactory.getLogger("errorToFile");
-	private static Logger socketLogger = LoggerFactory.getLogger("socketLogger");
+	private Logger errLogger = LoggerFactory.getLogger("errorToFile");
+	private Logger socketLogger = LoggerFactory.getLogger("socketLogger");
 	
 	public DxT020(Socket socket, BufferedInputStream is, BufferedOutputStream	os) {
 		this.client = socket;
@@ -75,7 +75,11 @@ public class DxT020 extends SocketCtl{
 				try {
 					String strMasterGbn = selectConnectInfo(objJob);
 					
-					String CMD_HOSTNAME = CommonUtil.getPidExec("echo $HOSTNAME");
+					CommonUtil util = new CommonUtil();
+					
+					String CMD_HOSTNAME = util.getPidExec("echo $HOSTNAME");
+					
+					util = null;
 					
 					JSONObject objReturn = new JSONObject();
 					objReturn.put(ProtocolID.SERVER_IP, strServerIP);
@@ -133,9 +137,9 @@ public class DxT020 extends SocketCtl{
 		sqlSessionFactory = SqlSessionManager.getInstance();
 		
 		String poolName = "" + serverInfoObj.get(ProtocolID.SERVER_IP) + "_" + serverInfoObj.get(ProtocolID.DATABASE_NAME) 
-		+ "_" + serverInfoObj.get(ProtocolID.SERVER_PORT)
-		+ "_" + (String)serverInfoObj.get(ProtocolID.USER_ID)
-		+ "_" + (String)serverInfoObj.get(ProtocolID.USER_PWD);
+		+ "_" + serverInfoObj.get(ProtocolID.SERVER_PORT);
+		//+ "_" + (String)serverInfoObj.get(ProtocolID.USER_ID)
+		//+ "_" + (String)serverInfoObj.get(ProtocolID.USER_PWD);
 		
 		socketLogger.info("@@@@ poolName : " + poolName);
 		

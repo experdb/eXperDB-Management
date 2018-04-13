@@ -37,8 +37,8 @@ import com.k4m.dx.tcontrol.util.CommonUtil;
 
 public class DxT019 extends SocketCtl{
 	
-	private static Logger errLogger = LoggerFactory.getLogger("errorToFile");
-	private static Logger socketLogger = LoggerFactory.getLogger("socketLogger");
+	private Logger errLogger = LoggerFactory.getLogger("errorToFile");
+	private Logger socketLogger = LoggerFactory.getLogger("socketLogger");
 	
 	public DxT019(Socket socket, BufferedInputStream is, BufferedOutputStream	os) {
 		this.client = socket;
@@ -66,12 +66,16 @@ public class DxT019 extends SocketCtl{
 								, "echo $PGDLOG"
 			};
 			
-			String CMD_HOSTNAME = CommonUtil.getPidExec(arrCmd[0]);
-			String PGHOME = CommonUtil.getPidExec(arrCmd[1]);
-			String PGRBAK = CommonUtil.getPidExec(arrCmd[2]);
-			String PGDBAK = CommonUtil.getPidExec(arrCmd[3]);
-			String PGRLOG = CommonUtil.getPidExec(arrCmd[4]);
-			String PGDLOG = CommonUtil.getPidExec(arrCmd[5]);
+			CommonUtil util = new CommonUtil();
+			
+			String CMD_HOSTNAME = util.getPidExec(arrCmd[0]);
+			String PGHOME = util.getPidExec(arrCmd[1]);
+			String PGRBAK = util.getPidExec(arrCmd[2]);
+			String PGDBAK = util.getPidExec(arrCmd[3]);
+			String PGRLOG = util.getPidExec(arrCmd[4]);
+			String PGDLOG = util.getPidExec(arrCmd[5]);
+			
+			util = null;
 			
 			HashMap hp = new HashMap();
 			hp.put(ProtocolID.CMD_HOSTNAME, CMD_HOSTNAME);

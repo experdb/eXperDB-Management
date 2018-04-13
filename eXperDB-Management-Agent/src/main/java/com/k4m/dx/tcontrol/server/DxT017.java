@@ -46,8 +46,8 @@ import com.k4m.dx.tcontrol.util.PgHbaConfigLine;
 
 public class DxT017 extends SocketCtl{
 	
-	private static Logger errLogger = LoggerFactory.getLogger("errorToFile");
-	private static Logger socketLogger = LoggerFactory.getLogger("socketLogger");
+	private Logger errLogger = LoggerFactory.getLogger("errorToFile");
+	private Logger socketLogger = LoggerFactory.getLogger("socketLogger");
 	
 	public DxT017(Socket socket, BufferedInputStream is, BufferedOutputStream	os) {
 		this.client = socket;
@@ -135,9 +135,9 @@ public class DxT017 extends SocketCtl{
 		
 		sqlSessionFactory = SqlSessionManager.getInstance();
 		
-		String poolName = "" + serverInfoObj.get(ProtocolID.SERVER_IP) + "_" + serverInfoObj.get(ProtocolID.DATABASE_NAME) + "_" + serverInfoObj.get(ProtocolID.SERVER_PORT)
-		+ "_" + (String)serverInfoObj.get(ProtocolID.USER_ID)
-		+ "_" + (String)serverInfoObj.get(ProtocolID.USER_PWD);
+		String poolName = "" + serverInfoObj.get(ProtocolID.SERVER_IP) + "_" + serverInfoObj.get(ProtocolID.DATABASE_NAME) + "_" + serverInfoObj.get(ProtocolID.SERVER_PORT);
+		//+ "_" + (String)serverInfoObj.get(ProtocolID.USER_ID)
+		//+ "_" + (String)serverInfoObj.get(ProtocolID.USER_PWD);
 		
 		Connection connDB = null;
 		SqlSession sessDB = null;
@@ -191,9 +191,9 @@ public class DxT017 extends SocketCtl{
 		
 		sqlSessionFactory = SqlSessionManager.getInstance();
 		
-		String poolName = "" + serverInfoObj.get(ProtocolID.SERVER_IP) + "_" + serverInfoObj.get(ProtocolID.DATABASE_NAME)+ "_" + serverInfoObj.get(ProtocolID.SERVER_PORT)
-		+ "_" + (String)serverInfoObj.get(ProtocolID.USER_ID)
-		+ "_" + (String)serverInfoObj.get(ProtocolID.USER_PWD);
+		String poolName = "" + serverInfoObj.get(ProtocolID.SERVER_IP) + "_" + serverInfoObj.get(ProtocolID.DATABASE_NAME)+ "_" + serverInfoObj.get(ProtocolID.SERVER_PORT);
+		//+ "_" + (String)serverInfoObj.get(ProtocolID.USER_ID)
+		//+ "_" + (String)serverInfoObj.get(ProtocolID.USER_PWD);
 		
 		Connection connDB = null;
 		SqlSession sessDB = null;
@@ -253,9 +253,9 @@ public class DxT017 extends SocketCtl{
 		
 		sqlSessionFactory = SqlSessionManager.getInstance();
 		
-		String poolName = "" + serverInfoObj.get(ProtocolID.SERVER_IP) + "_" + serverInfoObj.get(ProtocolID.DATABASE_NAME)+ "_" + serverInfoObj.get(ProtocolID.SERVER_PORT)
-		+ "_" + (String)serverInfoObj.get(ProtocolID.USER_ID)
-		+ "_" + (String)serverInfoObj.get(ProtocolID.USER_PWD);
+		String poolName = "" + serverInfoObj.get(ProtocolID.SERVER_IP) + "_" + serverInfoObj.get(ProtocolID.DATABASE_NAME)+ "_" + serverInfoObj.get(ProtocolID.SERVER_PORT);
+		//+ "_" + (String)serverInfoObj.get(ProtocolID.USER_ID)
+		//+ "_" + (String)serverInfoObj.get(ProtocolID.USER_PWD);
 		
 		Connection connDB = null;
 		SqlSession sessDB = null;

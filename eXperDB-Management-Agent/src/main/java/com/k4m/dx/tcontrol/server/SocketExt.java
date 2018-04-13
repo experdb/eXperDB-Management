@@ -44,7 +44,9 @@ public class SocketExt {
 		
 		if(!isPool)
 		{
-			DBCPPoolManager.setupDriver(
+			DBCPPoolManager dBCPPoolManager = new DBCPPoolManager();
+			
+			dBCPPoolManager.setupDriver(
 					"org.postgresql.Driver",
 					"jdbc:postgresql://"+ serverInfoObj.get(ProtocolID.SERVER_IP) +":"+ serverInfoObj.get(ProtocolID.SERVER_PORT) +"/"+ serverInfoObj.get(ProtocolID.DATABASE_NAME),
 					(String)serverInfoObj.get(ProtocolID.USER_ID),

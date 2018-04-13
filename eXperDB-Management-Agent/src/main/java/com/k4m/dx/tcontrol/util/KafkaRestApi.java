@@ -31,8 +31,8 @@ public class KafkaRestApi {
 	}
 
 	private Logger logger = LoggerFactory.getLogger(KafkaRestApi.class);
-	private static Logger socketLogger = LoggerFactory.getLogger("socketLogger");
-	private static Logger errLogger = LoggerFactory.getLogger("errorToFile");
+	private Logger socketLogger = LoggerFactory.getLogger("socketLogger");
+	private Logger errLogger = LoggerFactory.getLogger("errorToFile");
 
 	private String getApiServerUrl() {
 		return "http://" + restUrl + ":" + restPort;

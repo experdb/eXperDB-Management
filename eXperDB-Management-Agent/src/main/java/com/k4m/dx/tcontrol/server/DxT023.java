@@ -40,8 +40,8 @@ import com.k4m.dx.tcontrol.util.FileUtil;
 
 public class DxT023 extends SocketCtl{
 	
-	private static Logger errLogger = LoggerFactory.getLogger("errorToFile");
-	private static Logger socketLogger = LoggerFactory.getLogger("socketLogger");
+	private Logger errLogger = LoggerFactory.getLogger("errorToFile");
+	private Logger socketLogger = LoggerFactory.getLogger("socketLogger");
 	
 	public DxT023(Socket socket, BufferedInputStream is, BufferedOutputStream	os) {
 		this.client = socket;

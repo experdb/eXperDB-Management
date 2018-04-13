@@ -41,8 +41,8 @@ public class DXTcontrolSocketExecute extends SocketCtl implements Runnable {
 	
 	private int			localport = 0;
 	
-	private static Logger socketLogger = LoggerFactory.getLogger("socketLogger");
-	private static Logger errLogger = LoggerFactory.getLogger("errorToFile");
+	private Logger socketLogger = LoggerFactory.getLogger("socketLogger");
+	private Logger errLogger = LoggerFactory.getLogger("errorToFile");
 	
 	public DXTcontrolSocketExecute(Socket socket) {
 		client = socket;
@@ -60,12 +60,14 @@ public class DXTcontrolSocketExecute extends SocketCtl implements Runnable {
 				JSONParser parser=new JSONParser();
 				Object obj=parser.parse(new String(recvBuff));
 				
+				recvBuff = null;
+				
 				JSONObject jObj = (JSONObject) obj;
 				//JSONArray jArray=(JSONArray) jObj.get(ProtocolID._tran_req_data);
 					
 				String strDX_EX_CODE = (String) jObj.get(ProtocolID.DX_EX_CODE);
 				
-				JSONObject objSERVER_INFO = null; 
+				JSONObject objSERVER_INFO = new JSONObject(); 
 
 				switch(strDX_EX_CODE) {
 				//Database List
@@ -259,6 +261,8 @@ public class DXTcontrolSocketExecute extends SocketCtl implements Runnable {
 
 					break;
 				}
+				
+				objSERVER_INFO = null;
 
 			//}
 			

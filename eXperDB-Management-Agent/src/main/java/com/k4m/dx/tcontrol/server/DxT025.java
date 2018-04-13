@@ -41,8 +41,8 @@ import com.k4m.dx.tcontrol.util.NetworkUtil;
 
 public class DxT025 extends SocketCtl{
 	
-	private static Logger errLogger = LoggerFactory.getLogger("errorToFile");
-	private static Logger socketLogger = LoggerFactory.getLogger("socketLogger");
+	private Logger errLogger = LoggerFactory.getLogger("errorToFile");
+	private Logger socketLogger = LoggerFactory.getLogger("socketLogger");
 	
 	private String[] arrCmd = {
 				                "pg_rman show -B" 
@@ -72,8 +72,11 @@ public class DxT025 extends SocketCtl{
 		JSONArray arrOut = new JSONArray();
 
 		try {
+			CommonUtil util = new CommonUtil();
+			String strRmanSHow = util.getCmdExec(arrCmd[0] + strSpace + strBackupDir + strSpace + strCmdDetail);
 			
-			String strRmanSHow = CommonUtil.getCmdExec(arrCmd[0] + strSpace + strBackupDir + strSpace + strCmdDetail);
+			util = null;
+			
 			ArrayList<HashMap<String, String>> flist = rmanSHowList(strRmanSHow);
 
 			outputObj.put(ProtocolID.DX_EX_CODE, strDxExCode);

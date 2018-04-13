@@ -9,6 +9,7 @@ import org.apache.ibatis.session.SqlSessionFactory;
 import org.json.simple.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.context.ApplicationContext;
 
 import com.k4m.dx.tcontrol.db.SqlSessionManager;
 import com.k4m.dx.tcontrol.db.repository.service.SystemServiceImpl;
@@ -19,14 +20,15 @@ import com.k4m.dx.tcontrol.util.AES256;
 import com.k4m.dx.tcontrol.util.AES256_KEY;
 import com.k4m.dx.tcontrol.util.FileUtil;
 
-public class ServerCheckListener implements Runnable {
+public class ServerCheckListener extends Thread {
 	
-	private SystemServiceImpl service;
-	private static Logger socketLogger = LoggerFactory.getLogger("socketLogger");
-	private static Logger errLogger = LoggerFactory.getLogger("errorToFile");
+	//private SystemServiceImpl service;
+	ApplicationContext context = null;
+	private Logger socketLogger = LoggerFactory.getLogger("socketLogger");
+	private Logger errLogger = LoggerFactory.getLogger("errorToFile");
 
-	public ServerCheckListener(SystemServiceImpl service)  throws Exception {
-		this.service = service;
+	public ServerCheckListener(ApplicationContext context)  throws Exception {
+		this.context = context;
 	}
 	
 	@Override
@@ -34,6 +36,8 @@ public class ServerCheckListener implements Runnable {
 		int i=0;
 		
 		while(true) {
+			
+			SystemServiceImpl service = (SystemServiceImpl) context.getBean("SystemService");
 			
 			try {
 				
@@ -104,14 +108,17 @@ public class ServerCheckListener implements Runnable {
 					service.updateDB_CNDT(dbServerInfoVO);
 				}
 				
+				serverObj = null;
+				aes = null;
+				
 				i++;
 
 				Thread.sleep(3000);
 				
 			} catch(Exception e) {
-				
+				e.printStackTrace();
 			} finally {
-				
+				service = null;
 			}
 		}
 

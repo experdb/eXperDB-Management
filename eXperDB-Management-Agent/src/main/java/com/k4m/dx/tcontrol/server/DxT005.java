@@ -46,8 +46,8 @@ import com.k4m.dx.tcontrol.util.RunCommandExec;
 
 public class DxT005 extends SocketCtl {
 
-	private static Logger errLogger = LoggerFactory.getLogger("errorToFile");
-	private static Logger socketLogger = LoggerFactory.getLogger("socketLogger");
+	private Logger errLogger = LoggerFactory.getLogger("errorToFile");
+	private Logger socketLogger = LoggerFactory.getLogger("socketLogger");
 
 	private static String TC001801 = "TC001801"; // 대기
 	private static String TC001802 = "TC001802"; // 실행중
@@ -72,7 +72,6 @@ public class DxT005 extends SocketCtl {
 		String strErrMsg = "";
 		String strSuccessCode = "0";
 
-		JSONArray outputArray = new JSONArray();
 		JSONObject outputObj = new JSONObject();
 
 		context = new ClassPathXmlApplicationContext(new String[] { "context-tcontrol.xml" });
@@ -172,7 +171,12 @@ public class DxT005 extends SocketCtl {
 						}
 
 						String strCmd = "ls -al " + strBCK_FILE_PTH + strSlush + strFileName + " | awk '{print $5}'";
-						strFileSize = CommonUtil.getPidExec(strCmd);
+						
+						CommonUtil util = new CommonUtil();
+						
+						strFileSize = util.getPidExec(strCmd);
+						
+						util = null;
 
 						socketLogger.info("[File COMMAND] " + strCmd);
 
@@ -272,7 +276,8 @@ public class DxT005 extends SocketCtl {
 			sendBuff = outputObj.toString().getBytes();
 
 			send(TotalLengthBit, sendBuff);
-
+			
+			sendBuff = null;
 			// socketLogger.info("send end");
 
 		} catch (Exception e) {
@@ -285,7 +290,7 @@ public class DxT005 extends SocketCtl {
 			sendBuff = outputObj.toString().getBytes();
 			send(4, sendBuff);
 		} finally {
-
+			outputObj = null;
 		}
 	}
 

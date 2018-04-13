@@ -1,7 +1,7 @@
 #!/bin/sh
 echo "experDB-Management-Agent start run .. "
 
-JAVA_HOME=/home/experdb/experDB-Management-Agent/java/jre1.7.0_80
+JAVA_HOME=/home/experdb/experDB-Management-Agent/java/jdk1.7.0_80
 
 
 PROJECT_HOME=/home/experdb
@@ -20,6 +20,6 @@ LIB=$CURRENT_DIR/lib/*
 JAVA_CLASSPATH=$APP_HOME:$LIB
 
 
-#$JAVA_HOME/bin/java -Du=experDB-Management-Agent -Dlog.base=$LOG_DIR -classpath $JAVA_CLASSPATH $MAIN_CLASS
+#$JAVA_HOME/bin/java -Xms1024m -Xmx1024m -Du=experDB-Management-Agent -Dlog.base=$LOG_DIR -classpath $JAVA_CLASSPATH $MAIN_CLASS
 
-nohup $JAVA_HOME/bin/java -Du=experDB-Management-Agent -Dlog.base=$LOG_DIR -classpath $JAVA_CLASSPATH $MAIN_CLASS 1> /dev/null 2>&1 &
+nohup $JAVA_HOME/bin/java -Xms256m -Xmx256m -Du=experDB-Management-Agent -Dlog.base=$LOG_DIR -classpath $JAVA_CLASSPATH $MAIN_CLASS 1> /dev/null 2>&1 &

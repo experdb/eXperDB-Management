@@ -41,8 +41,8 @@ import com.k4m.dx.tcontrol.socket.TranCodeType;
 
 public class DxT002 extends SocketCtl{
 	
-	private static Logger errLogger = LoggerFactory.getLogger("errorToFile");
-	private static Logger socketLogger = LoggerFactory.getLogger("socketLogger");
+	private Logger errLogger = LoggerFactory.getLogger("errorToFile");
+	private Logger socketLogger = LoggerFactory.getLogger("socketLogger");
 	
 	public DxT002(Socket socket, BufferedInputStream is, BufferedOutputStream	os) {
 		this.client = socket;
@@ -112,6 +112,7 @@ public class DxT002 extends SocketCtl{
 			
 		} finally {
 			sessDB.close();
+			connDB.close();
 		}	        
 
 

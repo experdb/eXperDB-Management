@@ -10,8 +10,8 @@ import org.slf4j.LoggerFactory;
  * DxDaemon을 구동해준다.
  */
 public class DxDaemonManager {
-	
-	private static Logger invokeLogger = LoggerFactory.getLogger(DxDaemonManager.class.getName());
+	private Logger invokeLogger = LoggerFactory.getLogger("DaemonStartLogger");
+	//private Logger invokeLogger = LoggerFactory.getLogger(DxDaemonManager.class.getName());
 
 	/** 종료 표시자 파일의 존재 여부를 검사하는 주기 */
 	private static int DEFAULT_FILE_POLLING_INTERVAL = 2;
@@ -120,7 +120,7 @@ public class DxDaemonManager {
 		initialize();
 
 		//프로젝트 디렉터리 체크
-		dxDaemon.chkDir();
+		//dxDaemon.chkDir();
 		
 		// 데몬을 실제로 실행한다.
 		dxDaemon.startDaemon();
@@ -137,7 +137,7 @@ public class DxDaemonManager {
 	protected synchronized void initialize() throws LockFileExistException,
 			IOException, IllegalDxDaemonClassException {
 		if (initialized) {
-			invokeLogger.debug("이미 initialize() 메소드를 호출 했었습니다.");
+			invokeLogger.info("이미 initialize() 메소드를 호출 했었습니다.");
 			return;
 		}
 
@@ -159,21 +159,21 @@ public class DxDaemonManager {
 		}
 
 		// 락 파일 생성
-		invokeLogger.debug(lockFile.getAbsolutePath() + " 락 파일을 생성합니다.");
+		invokeLogger.info(lockFile.getAbsolutePath() + " 락 파일을 생성합니다.");
 
 		if (!lockFile.createNewFile()) {
 			String err = lockFile.getAbsolutePath() + " 락 파일 생성에 실패했습니다.";
-			invokeLogger.debug(err);
+			invokeLogger.info(err);
 			throw new IOException(err);
 		}
 
 		File exitFlagFile = getExitFlagFile();
 		if (exitFlagFile.exists()) {
-			invokeLogger.debug(exitFlagFile.getAbsolutePath() + " 종료 표시자 파일이 존재합니다. 삭제합니다.");
+			invokeLogger.info(exitFlagFile.getAbsolutePath() + " 종료 표시자 파일이 존재합니다. 삭제합니다.");
 
 			if (!exitFlagFile.delete()) {
 				String err = exitFlagFile.getAbsolutePath() + " 종료 표시자 파일 삭제에 실패했습니다.";
-				invokeLogger.debug(err);
+				invokeLogger.info(err);
 				throw new IOException(err);
 			}
 		}
@@ -259,37 +259,37 @@ public class DxDaemonManager {
 		public void run() {
 			DxLogger log = DxLogger.getLogger();
 
-			invokeLogger.debug("데몬의 shutdown() 메소드 호출합니다.");
+			invokeLogger.info("데몬의 shutdown() 메소드 호출합니다.");
 			dxDaemon.shutdown();
 
 			File lockFile = getLockFile();
-			invokeLogger.debug(lockFile.getAbsolutePath() + " 락 파일 삭제를 시도합니다.");
+			invokeLogger.info(lockFile.getAbsolutePath() + " 락 파일 삭제를 시도합니다.");
 
 			if (lockFile.exists()) {
 				if (lockFile.delete()) {
-					invokeLogger.debug(lockFile.getAbsolutePath() + " 락 파일을 삭제했습니다.");
+					invokeLogger.info(lockFile.getAbsolutePath() + " 락 파일을 삭제했습니다.");
 				} else {
-					invokeLogger.debug(lockFile.getAbsolutePath() + " 락 파일 삭제에 실패했습니다.");
+					invokeLogger.info(lockFile.getAbsolutePath() + " 락 파일 삭제에 실패했습니다.");
 				}
 
 			} else {
-				invokeLogger.debug(lockFile.getAbsolutePath() + " 락 파일이 존재하지 않습니다.");
+				invokeLogger.info(lockFile.getAbsolutePath() + " 락 파일이 존재하지 않습니다.");
 			}
 			
 			File exitFlagFile = getExitFlagFile();
-			invokeLogger.debug(exitFlagFile.getAbsolutePath() + " 종료 표시자 파일의 삭제를 시도합니다.");
+			invokeLogger.info(exitFlagFile.getAbsolutePath() + " 종료 표시자 파일의 삭제를 시도합니다.");
 			
 			if (exitFlagFile.exists()) {
 				if (exitFlagFile.delete()) {
-					invokeLogger.debug(exitFlagFile.getAbsolutePath()
+					invokeLogger.info(exitFlagFile.getAbsolutePath()
 							+ " 종료 표시자 파일을 삭제했습니다.");
 				} else {
-					invokeLogger.debug(exitFlagFile.getAbsolutePath()
+					invokeLogger.info(exitFlagFile.getAbsolutePath()
 							+ " 종료 표시자 파일 삭제에 실패했습니다.");
 				}
 			}
 
-			invokeLogger.debug("데몬의 종료가 완료되었습니다.");
+			invokeLogger.info("데몬의 종료가 완료되었습니다.");
 		}
 	}
 
@@ -314,13 +314,13 @@ public class DxDaemonManager {
 		 * 종료 표시자 파일의 존재를 기다린다.
 		 */
 		public void run() {
-			invokeLogger.debug("데몬 종료 표시자 파일 감시 쓰레드를 시작했습니다.");
+			invokeLogger.info("데몬 종료 표시자 파일 감시 쓰레드를 시작했습니다.");
 			
 			while (true) {
 				File exitFlagFile = getExitFlagFile();
 
 				if (exitFlagFile.exists()) {
-					invokeLogger.debug(getExitFlagFileName() + " 가 생성되었습니다. " + 
+					invokeLogger.info(getExitFlagFileName() + " 가 생성되었습니다. " + 
 							"시스템을 종료를 시작합니다 .");
 
 					// 정말로 종료해버린다!
@@ -348,7 +348,7 @@ public class DxDaemonManager {
 			File exitFlagFile = getExitFlagFile();
 			
 			if (exitFlagFile.exists()) {
-				invokeLogger.debug(exitFlagFile.getAbsolutePath() + "가 이미 존재합니다.");
+				invokeLogger.info(exitFlagFile.getAbsolutePath() + "가 이미 존재합니다.");
 				return;
 			}
 			
@@ -356,12 +356,12 @@ public class DxDaemonManager {
 				exitFlagFile.createNewFile();
 			} catch (IOException ex) {
 				String err = exitFlagFile.getAbsolutePath() + " 생성에 실패했습니다.";
-				invokeLogger.debug(err);
+				invokeLogger.info(err);
 				
 				throw new IOException(err);
 			}
 			
-			invokeLogger.debug(exitFlagFile.getAbsolutePath() + " 를 생성했습니다. " + " 데몬이 곧 종료될 것입니다.");
+			invokeLogger.info(exitFlagFile.getAbsolutePath() + " 를 생성했습니다. " + " 데몬이 곧 종료될 것입니다.");
 
 	}
 

@@ -8,8 +8,8 @@ import com.k4m.dx.tcontrol.util.FileUtil;
 
 public class DXTcontrolAgentSocket implements DXTcontrolAgentSocketService{
 	private static SocketListener sc ;
-	private static Logger daemonStartLogger = LoggerFactory.getLogger("DaemonStartLogger");
-	private static Logger errLogger = LoggerFactory.getLogger("errorToFile");
+	private Logger daemonStartLogger = LoggerFactory.getLogger("DaemonStartLogger");
+	private Logger errLogger = LoggerFactory.getLogger("errorToFile");
 	
 	public DXTcontrolAgentSocket() {
 		

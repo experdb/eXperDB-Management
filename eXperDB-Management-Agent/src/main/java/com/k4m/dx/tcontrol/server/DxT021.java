@@ -2,7 +2,7 @@ package com.k4m.dx.tcontrol.server;
 
 import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
-import java.net.InetAddress;
+import java.lang.ref.WeakReference;
 import java.net.Socket;
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -12,14 +12,12 @@ import java.util.List;
 
 import org.apache.ibatis.session.SqlSession;
 import org.apache.ibatis.session.SqlSessionFactory;
-import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.k4m.dx.tcontrol.db.SqlSessionManager;
 import com.k4m.dx.tcontrol.db.repository.vo.ServerInfoVO;
-import com.k4m.dx.tcontrol.db.repository.vo.TablespaceVO;
 import com.k4m.dx.tcontrol.socket.ProtocolID;
 import com.k4m.dx.tcontrol.socket.SocketCtl;
 import com.k4m.dx.tcontrol.socket.TranCodeType;
@@ -41,8 +39,8 @@ import com.k4m.dx.tcontrol.util.NetworkUtil;
 
 public class DxT021 extends SocketCtl{
 	
-	private static Logger errLogger = LoggerFactory.getLogger("errorToFile");
-	private static Logger socketLogger = LoggerFactory.getLogger("socketLogger");
+	private Logger errLogger = LoggerFactory.getLogger("errorToFile");
+	private Logger socketLogger = LoggerFactory.getLogger("socketLogger");
 	
 	private String[] arrCmd = {
 				                "echo $HOSTNAME" //호스트명
@@ -61,8 +59,159 @@ public class DxT021 extends SocketCtl{
 		this.is = is;
 		this.os = os;
 	}
-
+	
+	
 	public void execute(String strDxExCode, JSONObject jObj) throws Exception {
+		
+		
+		JSONObject serverInfoObj = (JSONObject) jObj.get(ProtocolID.SERVER_INFO);
+		
+		socketLogger.info("execute : " + strDxExCode);
+		//byte[] sendBuff;
+		String strErrCode = "";
+		String strErrMsg = "";
+		String strSuccessCode = "0";
+	
+		//JSONObject outputObj = new JSONObject();
+		
+		String CMD_HOSTNAME = "";
+		String CMD_OS_VERSION = "";
+		String CMD_OS_KERNUL =  "";
+		String CMD_CPU = "";
+		String CMD_MEMORY = "";
+		//ArrayList<HashMap<String, String>> ipList = new ArrayList<HashMap<String, String>>();
+		//List<ServerInfoVO> serverInfoList = new ArrayList<ServerInfoVO>();
+		String CMD_DBMS_PATH = "";
+		String CMD_BACKUP_PATH = "";
+		String PGDBAK = "";
+		
+		
+				
+		try {
+			HashMap resultHP = new HashMap();
+			
+			//test(resultHP);
+			
+			CommonUtil util = new CommonUtil();
+
+		//호스트명
+			CMD_HOSTNAME = util.getPidExec(arrCmd[0]);
+			resultHP.put(ProtocolID.CMD_HOSTNAME, CMD_HOSTNAME);
+			
+			//OS 정보
+			//String CMD_OS_VERSION = System.getProperty("os.name") + System.getProperty("os.version");
+			CMD_OS_VERSION = util.getPidExec(arrCmd[1]);
+			resultHP.put(ProtocolID.CMD_OS_VERSION, CMD_OS_VERSION);
+			
+			//커널
+			CMD_OS_KERNUL = util.getPidExec(arrCmd[2]);
+			resultHP.put(ProtocolID.CMD_OS_KERNUL, CMD_OS_KERNUL);
+			
+			//CPU
+			CMD_CPU =  util.getPidExec(arrCmd[3]);
+			resultHP.put(ProtocolID.CMD_CPU, CMD_CPU);
+			
+			//메모리
+			CMD_MEMORY =  util.getPidExec(arrCmd[4]);
+			resultHP.put(ProtocolID.CMD_MEMORY, CMD_MEMORY);
+			
+			
+			//network정보
+			ArrayList<HashMap<String, String>> ipList = NetworkUtil.getNetworkInfo();
+			resultHP.put(ProtocolID.CMD_NETWORK, ipList);
+			
+			//printGetMemory(1) ;
+			//PostgreSQL 버젼, DATA 경로, LOG 경로, ARCHIVE 경로
+			List<ServerInfoVO> serverInfoList = selectPostgreSqlServerInfo(serverInfoObj);
+			
+			//printGetMemory(2) ;
+			
+			for(ServerInfoVO vo:serverInfoList) {
+				resultHP.put(vo.getSKEY(), vo.getSDATA());
+			}
+			
+			serverInfoList = null;
+
+			//printGetMemory(3) ;
+			
+			setShowData(serverInfoObj, resultHP);
+
+			//printGetMemory(4) ;
+			//tablespace
+			//ArrayList list = (ArrayList)selectTablespaceInfo(serverInfoObj);
+			//resultHP.put(ProtocolID.CMD_TABLESPACE_INFO, list);
+			
+
+			//DBMS 경로
+			CMD_DBMS_PATH = util.getPidExec(arrCmd[5]);
+			resultHP.put(ProtocolID.CMD_DBMS_PATH, CMD_DBMS_PATH);
+			
+			//백업경로 
+			CMD_BACKUP_PATH = util.getPidExec(arrCmd[6]);
+			resultHP.put(ProtocolID.CMD_BACKUP_PATH, CMD_BACKUP_PATH);
+			
+			PGDBAK = util.getPidExec(arrCmd[8]);
+			resultHP.put(ProtocolID.PGDBAK, PGDBAK);
+
+			JSONObject outputObj = new JSONObject();
+			
+			outputObj.put(ProtocolID.DX_EX_CODE, strDxExCode);
+			outputObj.put(ProtocolID.RESULT_CODE, strSuccessCode);
+			outputObj.put(ProtocolID.ERR_CODE, strErrCode);
+			outputObj.put(ProtocolID.ERR_MSG, strErrMsg);
+			
+			outputObj.put(ProtocolID.RESULT_DATA, resultHP);
+
+			//printGetMemory(5) ;
+			
+			byte[] sendBuff = outputObj.toString().getBytes();
+			
+			//WeakReference<byte[]> bRef = new WeakReference<byte[]>(sendBuff);
+			
+			send(4, sendBuff);
+
+			//printGetMemory(6) ;
+			
+			resultHP = null;
+			outputObj = null;
+			sendBuff = null;
+			util = null;
+			serverInfoObj = null;
+			
+			//printGetMemory(7) ;
+			
+			//System.gc();
+
+			//printGetMemory(8) ;
+
+			
+		} catch (Exception e) {
+			errLogger.error("DxT021 {} ", e.toString());
+			
+			JSONObject outputObj = new JSONObject();
+			
+			outputObj.put(ProtocolID.DX_EX_CODE, TranCodeType.DxT021);
+			outputObj.put(ProtocolID.RESULT_CODE, "1");
+			outputObj.put(ProtocolID.ERR_CODE, TranCodeType.DxT021);
+			outputObj.put(ProtocolID.ERR_MSG, "DxT021 Error [" + e.toString() + "]");
+			outputObj.put(ProtocolID.RESULT_DATA, "failed");
+			
+			byte[] sendBuff = outputObj.toString().getBytes();
+			send(4, sendBuff);
+
+		} finally {
+			//printGetMemory(9) ;
+		}	    
+	}
+	
+	private void printGetMemory(int no) throws Exception {
+		long totalMemory = Runtime.getRuntime().totalMemory();
+		long memory = Runtime.getRuntime().totalMemory() - Runtime.getRuntime().freeMemory();
+		socketLogger.info(no + " totalMemory : " + totalMemory + " memory : " + memory);
+	}
+	
+
+/*	public void execute(String strDxExCode, JSONObject jObj) throws Exception {
 		
 		
 		JSONObject serverInfoObj = (JSONObject) jObj.get(ProtocolID.SERVER_INFO);
@@ -75,41 +224,56 @@ public class DxT021 extends SocketCtl{
 	
 		JSONObject outputObj = new JSONObject();
 		JSONArray arrOut = new JSONArray();
-
+		
+		String CMD_HOSTNAME = "";
+		String CMD_OS_VERSION = "";
+		String CMD_OS_KERNUL =  "";
+		String CMD_CPU = "";
+		String CMD_MEMORY = "";
+		ArrayList<HashMap<String, String>> ipList = null;
+		List<ServerInfoVO> serverInfoList = null;
+		String CMD_DBMS_PATH = "";
+		String CMD_BACKUP_PATH = "";
+		String PGDBAK = "";
+		
+		
+				
 		try {
 			HashMap resultHP = new HashMap();
 			
+			test(resultHP);
+			
 		//호스트명
-			String CMD_HOSTNAME = CommonUtil.getPidExec(arrCmd[0]);
+			CMD_HOSTNAME = CommonUtil.getPidExec(arrCmd[0]);
 			resultHP.put(ProtocolID.CMD_HOSTNAME, CMD_HOSTNAME);
 			
 			//OS 정보
 			//String CMD_OS_VERSION = System.getProperty("os.name") + System.getProperty("os.version");
-			String CMD_OS_VERSION = CommonUtil.getPidExec(arrCmd[1]);
+			CMD_OS_VERSION = CommonUtil.getPidExec(arrCmd[1]);
 			resultHP.put(ProtocolID.CMD_OS_VERSION, CMD_OS_VERSION);
 			
 			//커널
-			String CMD_OS_KERNUL = CommonUtil.getPidExec(arrCmd[2]);
+			CMD_OS_KERNUL = CommonUtil.getPidExec(arrCmd[2]);
 			resultHP.put(ProtocolID.CMD_OS_KERNUL, CMD_OS_KERNUL);
 			
 			//CPU
-			String CMD_CPU =  CommonUtil.getPidExec(arrCmd[3]);
+			CMD_CPU =  CommonUtil.getPidExec(arrCmd[3]);
 			resultHP.put(ProtocolID.CMD_CPU, CMD_CPU);
 			
 			//메모리
-			String CMD_MEMORY =  CommonUtil.getPidExec(arrCmd[4]);
+			CMD_MEMORY =  CommonUtil.getPidExec(arrCmd[4]);
 			resultHP.put(ProtocolID.CMD_MEMORY, CMD_MEMORY);
 			
 			
 			//network정보
-			ArrayList<HashMap<String, String>> ipList = NetworkUtil.getNetworkInfo();
+			ipList = NetworkUtil.getNetworkInfo();
 
 
 			resultHP.put(ProtocolID.CMD_NETWORK, ipList);
 			
-			
+	
 			//PostgreSQL 버젼, DATA 경로, LOG 경로, ARCHIVE 경로
-			List<ServerInfoVO> serverInfoList = selectPostgreSqlServerInfo(serverInfoObj);
+			serverInfoList = selectPostgreSqlServerInfo(serverInfoObj);
 			
 			for(ServerInfoVO vo:serverInfoList) {
 				resultHP.put(vo.getSKEY(), vo.getSDATA());
@@ -123,14 +287,14 @@ public class DxT021 extends SocketCtl{
 			
 
 			//DBMS 경로
-			String CMD_DBMS_PATH = CommonUtil.getPidExec(arrCmd[5]);
+			CMD_DBMS_PATH = CommonUtil.getPidExec(arrCmd[5]);
 			resultHP.put(ProtocolID.CMD_DBMS_PATH, CMD_DBMS_PATH);
 			
 			//백업경로 
-			String CMD_BACKUP_PATH = CommonUtil.getPidExec(arrCmd[6]);
+			CMD_BACKUP_PATH = CommonUtil.getPidExec(arrCmd[6]);
 			resultHP.put(ProtocolID.CMD_BACKUP_PATH, CMD_BACKUP_PATH);
 			
-			String PGDBAK = CommonUtil.getPidExec(arrCmd[8]);
+			PGDBAK = CommonUtil.getPidExec(arrCmd[8]);
 			resultHP.put(ProtocolID.PGDBAK, PGDBAK);
 
 			outputObj.put(ProtocolID.DX_EX_CODE, strDxExCode);
@@ -142,6 +306,9 @@ public class DxT021 extends SocketCtl{
 
 			sendBuff = outputObj.toString().getBytes();
 			send(4, sendBuff);
+			
+			resultHP = null;
+			outputObj = null;
 			
 		} catch (Exception e) {
 			errLogger.error("DxT021 {} ", e.toString());
@@ -159,6 +326,90 @@ public class DxT021 extends SocketCtl{
 
 		}	    
 	}
+	*/
+	private void test(HashMap resultHP) throws Exception {
+
+
+		resultHP.put(ProtocolID.CMD_LISTEN_ADDRESSES, "");
+
+		resultHP.put(ProtocolID.CMD_PORT, "");
+
+		resultHP.put(ProtocolID.CMD_MAX_CONNECTIONS,  "");
+
+		resultHP.put(ProtocolID.CMD_SHARED_BUFFERS,  "");
+
+		resultHP.put(ProtocolID.CMD_EFFECTIVE_CACHE_SIZE,  "");
+
+		resultHP.put(ProtocolID.CMD_WORK_MEM,  "");
+
+		resultHP.put(ProtocolID.CMD_MAINTENANCE_WORK_MEM,  "");
+
+		resultHP.put(ProtocolID.CMD_MIN_WAL_SIZE,  "");
+;
+		resultHP.put(ProtocolID.CMD_MAX_WAL_SIZE,  "");
+
+		resultHP.put(ProtocolID.CMD_WAL_LEVEL,  "");
+
+		resultHP.put(ProtocolID.CMD_WAL_BUFFERS,  "");
+
+		resultHP.put(ProtocolID.CMD_WAL_KEEP_SEGMENTS,  "");
+
+		resultHP.put(ProtocolID.CMD_ARCHIVE_MODE,  "");
+
+		resultHP.put(ProtocolID.CMD_ARCHIVE_COMMAND,  "");
+
+		resultHP.put(ProtocolID.CMD_CONFIG_FILE,  "");
+
+		resultHP.put(ProtocolID.CMD_DATA_DIRECTORY,  "");
+
+		resultHP.put(ProtocolID.CMD_HOT_STANDBY,  "");
+
+		resultHP.put(ProtocolID.CMD_TIMEZONE,  "");
+
+		resultHP.put(ProtocolID.CMD_SHARED_PRELOAD_LIBRARIES, "");
+
+		resultHP.put(ProtocolID.CMD_DATABASE_INFO, null);
+
+		
+
+		resultHP.put(ProtocolID.CMD_DBMS_INFO, null);
+
+		resultHP.put(ProtocolID.CMD_TABLESPACE_INFO, null);
+
+		resultHP.put(ProtocolID.CMD_HOSTNAME, "");
+		
+		//OS 정보
+
+		resultHP.put(ProtocolID.CMD_OS_VERSION, "");
+		
+		//커널
+
+		resultHP.put(ProtocolID.CMD_OS_KERNUL, "");
+		
+		//CPU
+
+		resultHP.put(ProtocolID.CMD_CPU, "");
+		
+		//메모리
+
+		resultHP.put(ProtocolID.CMD_MEMORY, "");
+		
+		
+		//network정보
+
+		resultHP.put(ProtocolID.CMD_NETWORK, null);
+
+		//DBMS 경로
+
+		resultHP.put(ProtocolID.CMD_DBMS_PATH, "");
+		
+		//백업경로 
+
+		resultHP.put(ProtocolID.CMD_BACKUP_PATH, "");
+		
+
+		resultHP.put(ProtocolID.PGDBAK, "");
+	}
 	
 	private ArrayList fileSystemList(String strFileSystem) throws Exception {
 		ArrayList<HashMap<String, String>> list = new ArrayList<HashMap<String, String>>();
@@ -169,7 +420,7 @@ public class DxT021 extends SocketCtl{
 			String[] arrFileSystem = strFileSystem.split("\n");
 			int intFileI = 0;
 			for(String st: arrFileSystem) {
-				System.out.println("### intFileI : " + intFileI);
+				//System.out.println("### intFileI : " + intFileI);
 				if(intFileI > 0) {
 					HashMap hp = new HashMap();
 			    	  String[] arrStr = st.split(" ");
@@ -178,7 +429,7 @@ public class DxT021 extends SocketCtl{
 			    		  //System.out.println(arrStr[i].toString());
 			    		  
 			    		  if(!arrStr[i].toString().trim().equals("")) {
-			    			  System.out.println(lineT + " :: " + arrStr[i].toString());
+			    			  //System.out.println(lineT + " :: " + arrStr[i].toString());
 				    		  if(lineT == 0) {
 				    			  hp.put("filesystem", arrStr[i].toString());
 				    		  } else if(lineT == 1) {
@@ -195,7 +446,7 @@ public class DxT021 extends SocketCtl{
 				    		  
 				    		  lineT = lineT + 1;
 				    		  
-				    		  System.out.println("lineT : " + lineT);
+				    		 // System.out.println("lineT : " + lineT);
 			    		  }
 			    	  }
 			    	  list.add(hp);
@@ -215,9 +466,9 @@ public class DxT021 extends SocketCtl{
 		
 		sqlSessionFactory = SqlSessionManager.getInstance();
 		
-		String poolName = "" + serverInfoObj.get(ProtocolID.SERVER_IP) + "_" + serverInfoObj.get(ProtocolID.DATABASE_NAME) + "_" + serverInfoObj.get(ProtocolID.SERVER_PORT)
-		+ "_" + (String)serverInfoObj.get(ProtocolID.USER_ID)
-		+ "_" + (String)serverInfoObj.get(ProtocolID.USER_PWD);
+		String poolName = "" + serverInfoObj.get(ProtocolID.SERVER_IP) + "_" + serverInfoObj.get(ProtocolID.DATABASE_NAME) + "_" + serverInfoObj.get(ProtocolID.SERVER_PORT);
+		//+ "_" + (String)serverInfoObj.get(ProtocolID.USER_ID)
+		//+ "_" + (String)serverInfoObj.get(ProtocolID.USER_PWD);
 		
 		Connection connDB = null;
 		SqlSession sessDB = null;
@@ -251,31 +502,38 @@ public class DxT021 extends SocketCtl{
 	
 	private List<ServerInfoVO> selectPostgreSqlServerInfo(JSONObject serverInfoObj) throws Exception {
 		
-		
+		//printGetMemory(11) ;
 		SqlSessionFactory sqlSessionFactory = null;
 		
 		sqlSessionFactory = SqlSessionManager.getInstance();
 		
-		String poolName = "" + serverInfoObj.get(ProtocolID.SERVER_IP) + "_" + serverInfoObj.get(ProtocolID.DATABASE_NAME) + "_" + serverInfoObj.get(ProtocolID.SERVER_PORT)
-		+ "_" + (String)serverInfoObj.get(ProtocolID.USER_ID)
-		+ "_" + (String)serverInfoObj.get(ProtocolID.USER_PWD);
+		String poolName = "" + serverInfoObj.get(ProtocolID.SERVER_IP) + "_" + serverInfoObj.get(ProtocolID.DATABASE_NAME) + "_" + serverInfoObj.get(ProtocolID.SERVER_PORT);
+		//+ "_" + (String)serverInfoObj.get(ProtocolID.USER_ID)
+		//+ "_" + (String)serverInfoObj.get(ProtocolID.USER_PWD);
 		
 		Connection connDB = null;
 		SqlSession sessDB = null;
 		
-		List<ServerInfoVO> list = null;
+		ArrayList list = new ArrayList<ServerInfoVO>();
+		
+		//printGetMemory(12) ;
 		
 		try {
 			
 			SocketExt.setupDriverPool(serverInfoObj, poolName);
-
+			
+			//printGetMemory(13) ;
+			
 			//DB 컨넥션을 가져온다.
 			connDB = DriverManager.getConnection("jdbc:apache:commons:dbcp:" + poolName);
-
+			//printGetMemory(14) ;
 			sessDB = sqlSessionFactory.openSession(connDB);
 			
-			list =  sessDB.selectList("system.selectPostgreSqlServerInfo");
-				
+			//printGetMemory(15) ;
+			
+			list =  (ArrayList) sessDB.selectList("system.selectPostgreSqlServerInfo");
+			
+			//printGetMemory(16) ;
 
 		} catch(Exception e) {
 			errLogger.error("selectDatabaseInfo {} ", e.toString());
@@ -284,21 +542,22 @@ public class DxT021 extends SocketCtl{
 			sessDB.close();
 			connDB.close();
 		}	
-		
+		//printGetMemory(17) ;
 		return list;
 		
 	}
 	
-	private void setShowData(JSONObject serverInfoObj, HashMap resultHP) throws Exception {
+	private HashMap  setShowData(JSONObject serverInfoObj, HashMap resultHP) throws Exception {
+		//HashMap resultHP = new HashMap();
 		
-		
+		//printGetMemory(33) ;
 		SqlSessionFactory sqlSessionFactory = null;
 		
 		sqlSessionFactory = SqlSessionManager.getInstance();
 		
-		String poolName = "" + serverInfoObj.get(ProtocolID.SERVER_IP) + "_" + serverInfoObj.get(ProtocolID.DATABASE_NAME) + "_" + serverInfoObj.get(ProtocolID.SERVER_PORT)
-		+ "_" + (String)serverInfoObj.get(ProtocolID.USER_ID)
-		+ "_" + (String)serverInfoObj.get(ProtocolID.USER_PWD);
+		String poolName = "" + serverInfoObj.get(ProtocolID.SERVER_IP) + "_" + serverInfoObj.get(ProtocolID.DATABASE_NAME) + "_" + serverInfoObj.get(ProtocolID.SERVER_PORT);
+		//+ "_" + (String)serverInfoObj.get(ProtocolID.USER_ID)
+		//+ "_" + (String)serverInfoObj.get(ProtocolID.USER_PWD);
 		
 		Connection connDB = null;
 		SqlSession sessDB = null;
@@ -308,6 +567,8 @@ public class DxT021 extends SocketCtl{
 		try {
 			
 			SocketExt.setupDriverPool(serverInfoObj, poolName);
+			
+			//printGetMemory(34) ;
 
 			//DB 컨넥션을 가져온다.
 			connDB = DriverManager.getConnection("jdbc:apache:commons:dbcp:" + poolName);
@@ -332,6 +593,9 @@ public class DxT021 extends SocketCtl{
 			String min_wal_size = sessDB.selectOne("system.selectMin_wal_size");
 			resultHP.put(ProtocolID.CMD_MIN_WAL_SIZE, min_wal_size);
 			String max_wal_size = sessDB.selectOne("system.selectMax_wal_size");
+			
+			//printGetMemory(35) ;
+			
 			resultHP.put(ProtocolID.CMD_MAX_WAL_SIZE, max_wal_size);
 			String wal_level = sessDB.selectOne("system.selectWal_level");
 			resultHP.put(ProtocolID.CMD_WAL_LEVEL, wal_level);
@@ -354,34 +618,54 @@ public class DxT021 extends SocketCtl{
 			String shared_preload_libraries = sessDB.selectOne("system.selectShared_preload_libraries");
 			resultHP.put(ProtocolID.CMD_SHARED_PRELOAD_LIBRARIES, shared_preload_libraries);
 			
+			//printGetMemory(36) ;
 			
 			ArrayList databaseInfoList = (ArrayList)sessDB.selectList("system.selectDatabaseInfo");
 			resultHP.put(ProtocolID.CMD_DATABASE_INFO, databaseInfoList);
 			
+			//printGetMemory(37) ;
 			
 			//TableSpace 정보
 			ArrayList<HashMap<String, String>> listTableSpaceInfo = (ArrayList)sessDB.selectList("system.selectTablespaceInfo");
 			//resultHP.put(ProtocolID.CMD_TABLESPACE_INFO, listTableSpaceInfo);
 			
-			ArrayList<HashMap<String, String>> dbmsInfo = (ArrayList)sessDB.selectList("system.selectDbmsInfo");
-			resultHP.put(ProtocolID.CMD_DBMS_INFO, dbmsInfo);
+			//printGetMemory(38) ;
 			
+			ArrayList<HashMap<String, String>> dbmsInfo = (ArrayList)sessDB.selectList("system.selectDbmsInfo");
+			
+			ArrayList<HashMap<String, String>> dbmsInfo2 = dbmsInfo;
+			
+			resultHP.put(ProtocolID.CMD_DBMS_INFO, dbmsInfo2);
+
+			
+			//printGetMemory(39) ;
 			//파일시스템정보
-			String strFileSystem = CommonUtil.getCmdExec(arrCmd[7]);
+			CommonUtil util = new CommonUtil();
+			String strFileSystem = util.getCmdExec(arrCmd[7]);
+			util = null;
+			
 			ArrayList<HashMap<String, String>> flist = fileSystemList(strFileSystem);
 			
 			ArrayList<HashMap<String, String>> mappingList = mappingSystem(flist, listTableSpaceInfo, data_directory);
 			
 			resultHP.put(ProtocolID.CMD_TABLESPACE_INFO, mappingList);
 			
+			flist = null;
+			mappingList = null;
 			
+			
+			//printGetMemory(40) ;
 		} catch(Exception e) {
 			errLogger.error("selectDatabaseInfo {} ", e.toString());
 			throw e;
 		} finally {
 			sessDB.close();
 			connDB.close();
+			
+			//printGetMemory(41) ;
 		}	
+		
+		return resultHP;
 		
 	}
 	
@@ -409,7 +693,7 @@ public class DxT021 extends SocketCtl{
 		String default_filesystem = "";
 		String default_fsize = "";
 		
-		socketLogger.info("##################### system mapping start ");
+		//socketLogger.info("##################### system mapping start ");
 		
 		for(HashMap hp:flist) {
 			
@@ -558,7 +842,7 @@ public class DxT021 extends SocketCtl{
 			
 		}
 		
-		socketLogger.info("################### system mapping end ");
+		//socketLogger.info("################### system mapping end ");
 		
 		return arrMapping;
 	}

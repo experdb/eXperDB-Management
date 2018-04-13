@@ -64,7 +64,7 @@ public class SystemServiceImpl implements SystemService{
 			vo.setIPADR(strSocketIp);
 			vo.setSOCKET_PORT(Integer.parseInt(strSocketPort));
 			vo.setAGT_VERSION(strVersion);
-			vo.setAGT_CNDT_CD(AgentInfoVO.TC001101); //실행
+			vo.setAGT_CNDT_CD(vo.TC001101); //실행
 			vo.setISTCNF_YN("Y");
 			vo.setFRST_REGR_ID("system");
 			vo.setLST_MDFR_ID("system");
@@ -84,7 +84,7 @@ public class SystemServiceImpl implements SystemService{
 		
 		vo.setIPADR(strSocketIp);
 		vo.setSOCKET_PORT(Integer.parseInt(strSocketPort));
-		vo.setAGT_CNDT_CD(AgentInfoVO.TC001102); //종료
+		vo.setAGT_CNDT_CD(vo.TC001102); //종료
 		vo.setISTCNF_YN("Y");
 		vo.setLST_MDFR_ID("system");
 		

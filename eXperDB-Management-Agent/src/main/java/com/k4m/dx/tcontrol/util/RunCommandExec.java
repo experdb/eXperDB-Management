@@ -12,8 +12,8 @@ import org.slf4j.LoggerFactory;
 
 public class RunCommandExec extends Thread {
 
-	private static Logger errLogger = LoggerFactory.getLogger("errorToFile");
-	private static Logger socketLogger = LoggerFactory.getLogger("socketLogger");
+	private Logger errLogger = LoggerFactory.getLogger("errorToFile");
+	private Logger socketLogger = LoggerFactory.getLogger("socketLogger");
 	
 	public String CMD = null;
 	public String retVal = null;

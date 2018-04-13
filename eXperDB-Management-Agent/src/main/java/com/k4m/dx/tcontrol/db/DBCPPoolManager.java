@@ -16,18 +16,18 @@ import org.apache.log4j.Logger;
 import com.k4m.dx.tcontrol.db.datastructure.ConfigInfo;
 
 public class DBCPPoolManager {
-	private static Logger log = Logger.getLogger(DBCPPoolManager.class);
+	private Logger log = Logger.getLogger(DBCPPoolManager.class);
 	
-	public static ConcurrentHashMap<String, ConfigInfo> ConnInfoList = new ConcurrentHashMap<String, ConfigInfo>();
+	public ConcurrentHashMap<String, ConfigInfo> ConnInfoList = new ConcurrentHashMap<String, ConfigInfo>();
 	
-	public static void setupDriver(String driver, String url, String user, String password, String poolName, int maxActive) throws Exception {
+	public void setupDriver(String driver, String url, String user, String password, String poolName, int maxActive) throws Exception {
 		log.info("************************************************************");
 		log.info("DBCPPool을 생성합니다. ["+poolName+"]");		
 		
 		// JDBC 클래스 로딩
 		try {
 			//log.info("driver 11111111111" + driver);
-			Class.forName(driver);
+			//Class.forName(driver);
 			//log.info("driver 2222222222");
 			//DB 연결대기 시간
 			DriverManager.setLoginTimeout(5);
@@ -88,7 +88,7 @@ public class DBCPPoolManager {
 		driver.closePool(poolName);
 	}
 	
-    public static void printDriverStats(String poolName) throws Exception {
+    public  void printDriverStats(String poolName) throws Exception {
         PoolingDriver driver = (PoolingDriver) DriverManager.getDriver("jdbc:apache:commons:dbcp:");
         ObjectPool connectionPool = driver.getConnectionPool(poolName);
         
@@ -98,7 +98,7 @@ public class DBCPPoolManager {
     /*
 	 * connection get
 	 */
-    public static Connection getConnection(String poolName) throws Exception {
+    public Connection getConnection(String poolName) throws Exception {
     	Connection conn = DriverManager.getConnection("jdbc:apache:commons:dbcp:" + poolName);
     	/*
     	switch (getConfigInfo(poolName).DB_TYPE){
@@ -106,7 +106,7 @@ public class DBCPPoolManager {
     			conn.setTransactionIsolation(Connection.TRANSACTION_READ_UNCOMMITTED);
     	}
     	*/
-    	conn.setAutoCommit(false);
+    	conn.setAutoCommit(true);
     	
     	return conn;
     }
@@ -114,7 +114,7 @@ public class DBCPPoolManager {
     /*
      * 풀에 해당하는 DB정보 (ConfigInfo) 추출
      */
-    public static ConfigInfo getConfigInfo(String poolName) throws Exception {
+    public ConfigInfo getConfigInfo(String poolName) throws Exception {
     	if (ConnInfoList.containsKey(poolName)){
     		return ConnInfoList.get(poolName);
     	}else{
@@ -125,7 +125,7 @@ public class DBCPPoolManager {
     /*
      * 풀에 해당하는 ConnectionString
      */
-    public static String getConnectionString(String poolName) throws Exception {
+    public String getConnectionString(String poolName) throws Exception {
     	if (ConnInfoList.containsKey(poolName)){
     		ConfigInfo configInfo = ConnInfoList.get(poolName);
     		String connectURI = "jdbc:sqlserver://"+configInfo.SERVERIP+":"+configInfo.PORT+";databaseName="+configInfo.DBNAME+";user=" + configInfo.USERID + ";password=" + configInfo.DB_PW;
@@ -138,7 +138,7 @@ public class DBCPPoolManager {
     /*
      * 풀이 존재하는지 확인
      */
-    public static boolean ContaintPool(String poolName) throws Exception {
+    public boolean ContaintPool(String poolName) throws Exception {
     	if (ConnInfoList.containsKey(poolName)){
     		return true;    		
     	}else{
@@ -146,52 +146,16 @@ public class DBCPPoolManager {
     	}
     }
     
-    public static String[] GetPoolNameList() throws Exception {
+    public String[] GetPoolNameList() throws Exception {
     	PoolingDriver driver = (PoolingDriver) DriverManager.getDriver("jdbc:apache:commons:dbcp:");
     	return driver.getPoolNames();
     }
     
-    public static int getPoolCount() {
+    public int getPoolCount() {
     	return ConnInfoList.size(); 
     }
     
     public static void main(String args[]) {
-    	try {
-    		ConfigInfo config = new ConfigInfo();
-    		config.SERVERIP = "222.110.153.162";
-    		config.DBNAME = "ibizspt";
-    		config.DB_TYPE = Constant.DB_TYPE.POG;
-    		config.SCHEMA_NAME = "ibizspt";
-    		config.USERID = "ibizspt";
-    		config.SERVER_NAME = "ibizspt";
-    		config.PORT = "5432";
-    		config.DB_PW = "ibizspt";
-    		
-    		//DBCPPoolManager.setupDriver(config, "TEST", 2);
-
-    		/*
-    		Connection conn = DBCPPoolManager.getConnection("TEST");
-    		java.sql.PreparedStatement ps = conn.prepareStatement("select db_name()");
-    		java.sql.ResultSet rs = ps.executeQuery();
-
-    		if (rs.next()){
-        		String dbname = rs.getString(1);
-        		System.out.println("DBNAME = " + dbname);
-    		}
-    		
-    		com.dxmig.db.datastructure.DataTable dt = WebDbCtl.GetCommonData("TEST", WebSqlID.GetTblOwner, null);
-    		
-    		if (dt.getRows().size() > 0) {
-    			for(java.util.Map map : dt.getRows()){
-        			String sc = (String)map.get("GRANTED_SCHEMA_NM");
-        			System.out.println("SCHEMA : " + sc);
-    			}
-
-    		}
-    		*/
-    		System.out.println("end!!!");
-    	}catch(Exception e) {
-    		e.printStackTrace();
-    	}
+    	
     }
 }

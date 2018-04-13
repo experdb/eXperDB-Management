@@ -27,41 +27,41 @@ import com.k4m.dx.tcontrol.util.FileUtil;
 import com.k4m.dx.tcontrol.util.NetworkUtil;
 
 /**
- * 26.	database server 정보 조회
+ * 26. database server 정보 조회
  *
  * @author 박태혁
- * @see <pre>
+ * @see
+ * 
+ *      <pre>
  * == 개정이력(Modification Information) ==
  *
  *   수정일       수정자           수정내용
  *  -------     --------    ---------------------------
  *  2017.05.22   박태혁 최초 생성
- * </pre>
+ *      </pre>
  */
 
-public class DxT022 extends SocketCtl{
-	
-	private static Logger errLogger = LoggerFactory.getLogger("errorToFile");
-	private static Logger socketLogger = LoggerFactory.getLogger("socketLogger");
-	
-	
-	public DxT022(Socket socket, BufferedInputStream is, BufferedOutputStream	os) {
+public class DxT022 extends SocketCtl {
+
+	private Logger errLogger = LoggerFactory.getLogger("errorToFile");
+	private Logger socketLogger = LoggerFactory.getLogger("socketLogger");
+
+	public DxT022(Socket socket, BufferedInputStream is, BufferedOutputStream os) {
 		this.client = socket;
 		this.is = is;
 		this.os = os;
 	}
 
 	public void execute(String strDxExCode, JSONObject jObj) throws Exception {
-		
-		
+
 		JSONObject serverInfoObj = (JSONObject) jObj.get(ProtocolID.SERVER_INFO);
-		
+
 		socketLogger.info("execute : " + strDxExCode);
 		byte[] sendBuff = null;
 		String strErrCode = "";
 		String strErrMsg = "";
 		String strSuccessCode = "0";
-	
+
 		JSONObject outputObj = new JSONObject();
 		JSONArray arrOut = new JSONArray();
 
@@ -69,156 +69,152 @@ public class DxT022 extends SocketCtl{
 			String strFileName = "pg_rman.ini";
 			String strBackupPath = (String) jObj.get(ProtocolID.CMD_BACKUP_PATH);
 			String strCmd = "pg_rman init -B " + strBackupPath + " -D $PGDATA";
-			
+
 			boolean blnIsDirectory = FileUtil.isDirectory(strBackupPath);
-			if(!blnIsDirectory) {
+			if (!blnIsDirectory) {
 				throw new Exception("디렉터리가 존재하지 않습니다.");
 			}
-			
+
 			boolean blnIsFile = FileUtil.isFile(strBackupPath + System.getProperty("file.separator") + strFileName);
-			
-			if(!blnIsFile) {
-				 CommonUtil.getPidExec(strCmd);
+
+			if (!blnIsFile) {
+				CommonUtil util = new CommonUtil();
+
+				util.getPidExec(strCmd);
+
+				util = null;
 			}
-
-
 
 			outputObj.put(ProtocolID.DX_EX_CODE, strDxExCode);
 			outputObj.put(ProtocolID.RESULT_CODE, strSuccessCode);
 			outputObj.put(ProtocolID.ERR_CODE, strErrCode);
 			outputObj.put(ProtocolID.ERR_MSG, strErrMsg);
-			
 
 			sendBuff = outputObj.toString().getBytes();
 			send(4, sendBuff);
-			
+
 		} catch (Exception e) {
 			errLogger.error("DxT022 {} ", e.toString());
-			
+
 			outputObj.put(ProtocolID.DX_EX_CODE, TranCodeType.DxT022);
 			outputObj.put(ProtocolID.RESULT_CODE, "1");
 			outputObj.put(ProtocolID.ERR_CODE, TranCodeType.DxT022);
 			outputObj.put(ProtocolID.ERR_MSG, "DxT022 Error [" + e.toString() + "]");
 
-			
 			sendBuff = outputObj.toString().getBytes();
 			send(4, sendBuff);
 
 		} finally {
 
-		}	    
+		}
 	}
-	
+
 	private ArrayList selectTablespaceInfo(JSONObject serverInfoObj) throws Exception {
-		
-		
+
 		SqlSessionFactory sqlSessionFactory = null;
-		
+
 		sqlSessionFactory = SqlSessionManager.getInstance();
-		
-		String poolName = "" + serverInfoObj.get(ProtocolID.SERVER_IP) + "_" + serverInfoObj.get(ProtocolID.DATABASE_NAME) + "_" + serverInfoObj.get(ProtocolID.SERVER_PORT)
-		+ "_" + (String)serverInfoObj.get(ProtocolID.USER_ID)
-		+ "_" + (String)serverInfoObj.get(ProtocolID.USER_PWD);
-		
+
+		String poolName = "" + serverInfoObj.get(ProtocolID.SERVER_IP) + "_"
+				+ serverInfoObj.get(ProtocolID.DATABASE_NAME) + "_" + serverInfoObj.get(ProtocolID.SERVER_PORT);
+		// + "_" + (String)serverInfoObj.get(ProtocolID.USER_ID)
+		// + "_" + (String)serverInfoObj.get(ProtocolID.USER_PWD);
+
 		Connection connDB = null;
 		SqlSession sessDB = null;
-		
+
 		ArrayList list = null;
-		
+
 		try {
-			
+
 			SocketExt.setupDriverPool(serverInfoObj, poolName);
 
-			//DB 컨넥션을 가져온다.
+			// DB 컨넥션을 가져온다.
 			connDB = DriverManager.getConnection("jdbc:apache:commons:dbcp:" + poolName);
 
 			sessDB = sqlSessionFactory.openSession(connDB);
-			
-			list =  (ArrayList) sessDB.selectList("system.selectTablespaceInfo");
-				
 
-		} catch(Exception e) {
+			list = (ArrayList) sessDB.selectList("system.selectTablespaceInfo");
+
+		} catch (Exception e) {
 			errLogger.error("selectDatabaseInfo {} ", e.toString());
 			throw e;
 		} finally {
 			sessDB.close();
 			connDB.close();
-		}	
-		
+		}
+
 		return list;
-		
+
 	}
-	
-	
+
 	private List<ServerInfoVO> selectPostgreSqlServerInfo(JSONObject serverInfoObj) throws Exception {
-		
-		
+
 		SqlSessionFactory sqlSessionFactory = null;
-		
+
 		sqlSessionFactory = SqlSessionManager.getInstance();
-		
-		String poolName = "" + serverInfoObj.get(ProtocolID.SERVER_IP) + "_" + serverInfoObj.get(ProtocolID.DATABASE_NAME) + "_" + serverInfoObj.get(ProtocolID.SERVER_PORT)
-		+ "_" + (String)serverInfoObj.get(ProtocolID.USER_ID)
-		+ "_" + (String)serverInfoObj.get(ProtocolID.USER_PWD);
-		
+
+		String poolName = "" + serverInfoObj.get(ProtocolID.SERVER_IP) + "_"
+				+ serverInfoObj.get(ProtocolID.DATABASE_NAME) + "_" + serverInfoObj.get(ProtocolID.SERVER_PORT) + "_"
+				+ (String) serverInfoObj.get(ProtocolID.USER_ID) + "_"
+				+ (String) serverInfoObj.get(ProtocolID.USER_PWD);
+
 		Connection connDB = null;
 		SqlSession sessDB = null;
-		
+
 		List<ServerInfoVO> list = null;
-		
+
 		try {
-			
+
 			SocketExt.setupDriverPool(serverInfoObj, poolName);
 
-			//DB 컨넥션을 가져온다.
+			// DB 컨넥션을 가져온다.
 			connDB = DriverManager.getConnection("jdbc:apache:commons:dbcp:" + poolName);
 
 			sessDB = sqlSessionFactory.openSession(connDB);
-			
-			list =  sessDB.selectList("system.selectPostgreSqlServerInfo");
-				
 
-		} catch(Exception e) {
+			list = sessDB.selectList("system.selectPostgreSqlServerInfo");
+
+		} catch (Exception e) {
 			errLogger.error("selectDatabaseInfo {} ", e.toString());
 			throw e;
 		} finally {
 			sessDB.close();
 			connDB.close();
-		}	
-		
+		}
+
 		return list;
-		
+
 	}
-	
+
 	private void setShowData(JSONObject serverInfoObj, HashMap resultHP) throws Exception {
-		
-		
+
 		SqlSessionFactory sqlSessionFactory = null;
-		
+
 		sqlSessionFactory = SqlSessionManager.getInstance();
-		
-		String poolName = "" + serverInfoObj.get(ProtocolID.SERVER_IP) + "_" + serverInfoObj.get(ProtocolID.DATABASE_NAME) + "_" + serverInfoObj.get(ProtocolID.SERVER_PORT)
-		+ "_" + (String)serverInfoObj.get(ProtocolID.USER_ID)
-		+ "_" + (String)serverInfoObj.get(ProtocolID.USER_PWD);
-		
+
+		String poolName = "" + serverInfoObj.get(ProtocolID.SERVER_IP) + "_"
+				+ serverInfoObj.get(ProtocolID.DATABASE_NAME) + "_" + serverInfoObj.get(ProtocolID.SERVER_PORT) + "_"
+				+ (String) serverInfoObj.get(ProtocolID.USER_ID) + "_"
+				+ (String) serverInfoObj.get(ProtocolID.USER_PWD);
+
 		Connection connDB = null;
 		SqlSession sessDB = null;
-		
+
 		String strResult = "";
-		
+
 		try {
-			
+
 			SocketExt.setupDriverPool(serverInfoObj, poolName);
 
-			//DB 컨넥션을 가져온다.
+			// DB 컨넥션을 가져온다.
 			connDB = DriverManager.getConnection("jdbc:apache:commons:dbcp:" + poolName);
 
 			sessDB = sqlSessionFactory.openSession(connDB);
-			
-			
+
 			String listen_addresses = sessDB.selectOne("system.selectListen_addresses");
 			resultHP.put(ProtocolID.CMD_LISTEN_ADDRESSES, listen_addresses);
-			String port =  sessDB.selectOne("system.selectPort");
+			String port = sessDB.selectOne("system.selectPort");
 			resultHP.put(ProtocolID.CMD_PORT, port);
 			String max_connections = sessDB.selectOne("system.selectMax_connections");
 			resultHP.put(ProtocolID.CMD_MAX_CONNECTIONS, max_connections);
@@ -254,20 +250,18 @@ public class DxT022 extends SocketCtl{
 			resultHP.put(ProtocolID.CMD_TIMEZONE, timezone);
 			String shared_preload_libraries = sessDB.selectOne("system.selectShared_preload_libraries");
 			resultHP.put(ProtocolID.CMD_SHARED_PRELOAD_LIBRARIES, shared_preload_libraries);
-			
-			ArrayList list = (ArrayList)sessDB.selectList("system.selectTablespaceInfo");
+
+			ArrayList list = (ArrayList) sessDB.selectList("system.selectTablespaceInfo");
 			resultHP.put(ProtocolID.CMD_TABLESPACE_INFO, list);
-			
-		} catch(Exception e) {
+
+		} catch (Exception e) {
 			errLogger.error("selectDatabaseInfo {} ", e.toString());
 			throw e;
 		} finally {
 			sessDB.close();
 			connDB.close();
-		}	
-		
+		}
+
 	}
 
 }
-
-

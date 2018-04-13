@@ -28,8 +28,8 @@ import com.k4m.dx.tcontrol.util.CommonUtil;
 
 public class SocketCtl {
 	
-	private static Logger errLogger = LoggerFactory.getLogger("errorToFile");
-	private static Logger socketLogger = LoggerFactory.getLogger("socketLogger");
+	private Logger errLogger = LoggerFactory.getLogger("errorToFile");
+	private Logger socketLogger = LoggerFactory.getLogger("socketLogger");
 	
 	public static final int TotalLengthBit = 4;
 	private static int		DEFAULT_TIMEOUT = 30;
@@ -102,13 +102,20 @@ public class SocketCtl {
 		if (client == null) {
 			throw new Exception("TRConnector : Socket이 생성되지 않았습니다.");
 		}
+		CommonUtil util = new CommonUtil();
+		byte[] intb = util.intToByteArray(lengthFieldSize+buff.length);
+		util = null;
 		
-		byte[] intb = CommonUtil.intToByteArray(lengthFieldSize+buff.length);
 		byte[] temp = new byte[lengthFieldSize + buff.length];
 		System.arraycopy(intb, 0, temp, 0, lengthFieldSize);
 		System.arraycopy(buff, 0, temp, 4, buff.length);
 		os.write(temp);
 		os.flush();
+		os.close();
+		
+		intb = null;
+		buff = null;
+		temp = null;
 	}
 	
 	public void send(byte[] buff, int index, int length) throws Exception {
@@ -118,6 +125,7 @@ public class SocketCtl {
 	
 		os.write(buff, index, length);
 		os.flush();
+		os.close();
 	}
 	
 	public void send(Object obj) throws Exception{
@@ -229,6 +237,7 @@ public class SocketCtl {
 			totalLength		= totalLength + lengthFieldSize;
 		}
 		
+		lenBuff = null;
 		byte[]	dataBuff = recv(totalLength);
 		
 		return dataBuff;

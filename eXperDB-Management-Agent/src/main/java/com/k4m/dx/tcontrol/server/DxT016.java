@@ -40,8 +40,8 @@ import com.k4m.dx.tcontrol.util.FileUtil;
 
 public class DxT016 extends SocketCtl{
 	
-	private static Logger errLogger = LoggerFactory.getLogger("errorToFile");
-	private static Logger socketLogger = LoggerFactory.getLogger("socketLogger");
+	private Logger errLogger = LoggerFactory.getLogger("errorToFile");
+	private Logger socketLogger = LoggerFactory.getLogger("socketLogger");
 	
 	public DxT016(Socket socket, BufferedInputStream is, BufferedOutputStream	os) {
 		this.client = socket;
@@ -70,7 +70,12 @@ public class DxT016 extends SocketCtl{
 			if(blnIsDirectory) {
 				String strCmd = "du -sh " + strLogFileDir + " | awk '{print $1}'";
 				strDirectory = "0";
-				strDirectorySize = CommonUtil.getPidExec(strCmd);
+				
+				CommonUtil util = new CommonUtil();
+				
+				strDirectorySize = util.getPidExec(strCmd);
+				
+				util = null;
 			}
 			
 			outputObj.put(ProtocolID.DX_EX_CODE, strDxExCode);

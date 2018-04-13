@@ -1,7 +1,7 @@
 #!/bin/sh
 echo "experDB-Management-Agent stop run .. "
 
-JAVA_HOME=/home/experdb/experDB-Management-Agent/java/jre1.7.0_80
+JAVA_HOME=/home/experdb/experDB-Management-Agent/java/jdk1.7.0_80
 
 
 PROJECT_HOME=/home/experdb
