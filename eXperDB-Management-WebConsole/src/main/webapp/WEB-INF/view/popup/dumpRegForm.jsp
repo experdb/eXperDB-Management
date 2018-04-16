@@ -688,6 +688,7 @@ function fn_check() {
 								<option value="TC000401">tar</option>
 								<option value="TC000402">plain</option>
 								<option value="TC000403">directory</option>
+								<option value="TC000404">custom</option>
 							</select>
 						</td>
 						<th scope="row" class="ico_t2"><spring:message code="backup_management.incording_method" /></th>

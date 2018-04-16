@@ -107,10 +107,10 @@ public class ScheduleQuartzJob implements Job{
 					if(resultWork.get(i).get("file_fmt_cd_nm") != null && resultWork.get(i).get("file_fmt_cd_nm") != ""){
 						if(resultWork.get(i).get("file_fmt_cd_nm").equals("tar")){
 							bck_fileNm = "eXperDB_"+resultWork.get(i).get("wrk_id")+"_"+today+".tar";	
-						}else if(resultWork.get(i).get("file_fmt_cd_nm").equals("plain")){
-							bck_fileNm = "eXperDB_"+resultWork.get(i).get("wrk_id")+"_"+today+".dump";	
-						}else{
-							bck_fileNm = "eXperDB_"+resultWork.get(i).get("wrk_id")+"_"+today;	
+						}else if(resultWork.get(i).get("file_fmt_cd_nm").equals("diretocry")){
+							bck_fileNm = "eXperDB_"+resultWork.get(i).get("wrk_id")+"_"+today;
+						}else{						
+							bck_fileNm = "eXperDB_"+resultWork.get(i).get("wrk_id")+"_"+today+".dump";									
 						}
 					}
 								
