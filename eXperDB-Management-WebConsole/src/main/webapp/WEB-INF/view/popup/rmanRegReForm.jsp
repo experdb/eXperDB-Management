@@ -195,27 +195,27 @@ function valCheck(){
 		$("#bck_pth").focus();
 		return false;
 	}else if($("#file_stg_dcnt").val() == ""){
-		alert("Full 백업파일보관일을 입력해주세요.");		
+		alert('<spring:message code="message.msg202"/>');		
 		$("#file_stg_dcnt").focus();
 		return false;
 	}else if($("#bck_mtn_ecnt").val() == ""){
-		alert("Full 백업파일 유지개수를 입력해주세요.");		
+		alert('<spring:message code="message.msg197"/>');		
 		$("#bck_mtn_ecnt").focus();
 		return false;
 	}else if($("#acv_file_stgdt").val() == ""){
-		alert("아카이브 파일보관일을 입력해주세요.");		
+		alert('<spring:message code="message.msg198"/>');		
 		$("#acv_file_stgdt").focus();
 		return false;
 	}else if($("#acv_file_mtncnt").val() == ""){
-		alert("아카이브 파일유지개수를 입력해주세요.");		
+		alert('<spring:message code="message.msg199"/>');		
 		$("#acv_file_mtncnt").focus();
 		return false;
 	}else if($("#log_file_stg_dcnt").val() == ""){
-		alert("서버로그 파일 보관일수를 입력해주세요.");		
+		alert('<spring:message code="message.msg200"/>');
 		$("#log_file_stg_dcnt").focus();
 		return false;
 	}else if($("#log_file_mtn_ecnt").val() == ""){
-		alert("서버로그 파일 유지개수를 입력해주세요.");		
+		alert('<spring:message code="message.msg201"/>');		
 		$("#log_file_mtn_ecnt").focus();
 		return false;
 	}else{
@@ -452,7 +452,7 @@ function checkFolder(keyType){
 										<li>
 											<div class="inner">
 												<p><spring:message code="backup_management.full_backup_file_maintenance_count" /></p>
-												<span><input type="number" class="txt" name="bck_mtn_ecnt" id="bck_mtn_ecnt" value="<c:out value="${workInfo[0].bck_mtn_ecnt}"/>" maxlength="3" min="0"/> <spring:message code="common.day" /></span>
+												<span><input type="number" class="txt" name="bck_mtn_ecnt" id="bck_mtn_ecnt" value="<c:out value="${workInfo[0].bck_mtn_ecnt}"/>" maxlength="3" min="0"/> <spring:message code="backup_management.count" /></span>
 											</div>
 										</li>
 										<li>
@@ -464,7 +464,7 @@ function checkFolder(keyType){
 										<li>
 											<div class="inner">
 												<p><spring:message code="backup_management.archive_file_maintenance_count" /></p>
-												<span><input type="number" class="txt" name="acv_file_mtncnt" id="acv_file_mtncnt" value="<c:out value="${workInfo[0].acv_file_mtncnt}"/>" maxlength="3" min="0"/> <spring:message code="common.day" /></span>
+												<span><input type="number" class="txt" name="acv_file_mtncnt" id="acv_file_mtncnt" value="<c:out value="${workInfo[0].acv_file_mtncnt}"/>" maxlength="3" min="0"/> <spring:message code="backup_management.count" /></span>
 											</div>
 										</li>
 										<li>
@@ -498,7 +498,7 @@ function checkFolder(keyType){
 											<li>
 												<div class="inner">
 													<p><spring:message code="backup_management.server_log_file_maintenance_count" /></p>
-													<span><input type="number" class="txt" name="log_file_mtn_ecnt" id="log_file_mtn_ecnt" value="<c:out value="${workInfo[0].log_file_mtn_ecnt}"/>" maxlength="3" min="0"/> <spring:message code="common.day" /></span>
+													<span><input type="number" class="txt" name="log_file_mtn_ecnt" id="log_file_mtn_ecnt" value="<c:out value="${workInfo[0].log_file_mtn_ecnt}"/>" maxlength="3" min="0"/> <spring:message code="backup_management.count" /></span>
 												</div>
 											</li>
 										</ul>
