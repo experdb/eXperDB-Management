@@ -103,7 +103,8 @@ public class DxT018 extends SocketCtl{
 			send(4, sendBuff);
 
 		} finally {
-
+			outputObj = null;
+			sendBuff = null;
 		}	    
 	}
 	
@@ -149,6 +150,8 @@ public class DxT018 extends SocketCtl{
 				hp.put(ProtocolID.TABLE_SCHEMA, strTableSchema);
 				
 				selectDataList = sessDB.selectList("app.selectTblMapps", hp);
+				
+				hp = null;
 						
 			}
 
@@ -214,6 +217,8 @@ public class DxT018 extends SocketCtl{
 					hp.put(ProtocolID.USER_ID, strUserID);
 					
 					sessDB.insert("app.insertKafkaConConfig", hp);
+					
+					hp = null;
 			}
 
 		} catch(Exception e) {
@@ -264,6 +269,8 @@ public class DxT018 extends SocketCtl{
 				hp.put(ProtocolID.CONNECT_NAME, strConnectName);
 
 				sessDB.delete("app.deleteKafkaConConfig", hp);
+				
+				hp = null;
 			}
 			
 

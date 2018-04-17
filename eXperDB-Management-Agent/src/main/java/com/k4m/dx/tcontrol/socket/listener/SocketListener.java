@@ -116,6 +116,7 @@ public class SocketListener implements Runnable {
 				
 				
 				if(client != null) {
+					socketLogger.info("client socket 종료."); 
 					client.close();
 					client = null;
 				}

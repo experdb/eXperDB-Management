@@ -34,6 +34,7 @@ public class SocketExt {
 		PoolingDriver driver = (PoolingDriver) DriverManager.getDriver("jdbc:apache:commons:dbcp:");
 		String[] poolNames = driver.getPoolNames();
 		
+		
 		boolean isPool = false;
 		for (int i = 0; i < poolNames.length; i++){
 			if(poolNames[i].equals(poolName)){

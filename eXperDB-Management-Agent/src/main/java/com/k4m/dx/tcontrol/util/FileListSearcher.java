@@ -32,6 +32,7 @@ public class FileListSearcher {
 					}
 				}
 			}
+			files = null;
 		}
 		return fileList;
 	}

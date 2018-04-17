@@ -110,12 +110,12 @@ public class SocketCtl {
 		System.arraycopy(intb, 0, temp, 0, lengthFieldSize);
 		System.arraycopy(buff, 0, temp, 4, buff.length);
 		os.write(temp);
-		os.flush();
-		os.close();
-		
 		intb = null;
 		buff = null;
 		temp = null;
+		os.flush();
+		os.close();
+	
 	}
 	
 	public void send(byte[] buff, int index, int length) throws Exception {
@@ -136,6 +136,10 @@ public class SocketCtl {
 		ObjectOutputStream oos = new ObjectOutputStream(os);
 		oos.writeObject(obj);
 		oos.flush();
+		
+		obj = null;
+		oos.close();
+		oos = null;
 	}
 	
 	public void send(File file) throws Exception{

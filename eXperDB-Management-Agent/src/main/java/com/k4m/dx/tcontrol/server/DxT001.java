@@ -96,6 +96,9 @@ public class DxT001 extends SocketCtl{
 		} finally {
 			sessDB.close();
 			connDB.close();
+			
+			outputObj = null;
+			sendBuff = null;
 		}	        
 
 

@@ -123,6 +123,9 @@ public class DxT013 extends SocketCtl{
 			send(4, sendBuff);
 			
 		} finally {
+			
+			outputObj = null;
+			sendBuff = null;
 		}	
 
 	}
@@ -188,6 +191,8 @@ public class DxT013 extends SocketCtl{
 				hp.put("SLOT_NAME", strSlotName);
 				
 				sessDB.selectList("app.selectDelSlot", hp);
+				
+				hp = null;
 
 
 				
@@ -205,6 +210,9 @@ public class DxT013 extends SocketCtl{
 			} finally {
 				sessDB.close();
 				connDB.close();
+				
+				outputObj = null;
+				sendBuff = null;
 			}	        
 
 
