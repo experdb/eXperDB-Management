@@ -243,7 +243,7 @@ $(window.document).ready(function() {
 						html1+='					<li class="ico3_1"><a href=/backup/workList.do?db_svr_id='+item.db_svr_id+' id="workList'+item.db_svr_id+'" onClick=javascript:fn_GoLink("workList'+item.db_svr_id+'"); target="main"><img src="../images/ico_lnb_10.png" id="treeImg"><spring:message code="menu.backup_settings"/></a></li>';
 					}
 					if(aut.length != 0 && aut[index].bck_hist_aut_yn == "Y"){
-						html1+='					<li class="ico3_2"><a href=/backup/workLogList.do?db_svr_id='+item.db_svr_id+' id="workLogList'+item.db_svr_id+'" onClick=javascript:fn_GoLink("workLogList'+item.db_svr_id+'"); target="main"><img src="../images/ico_lnb_11.png" id="treeImg"><spring:message code="menu.backup_history"/></a></li>';
+						html1+='					<li class="ico3_2"><a href=/backup/workLogList.do?db_svr_id='+item.db_svr_id+' id="workLogList'+item.db_svr_id+'" onClick=javascript:fn_GoLink("workLogList'+item.db_svr_id+'"); target="main"><img src="../images/ico_lnb_14.png" id="treeImg"><spring:message code="menu.backup_history"/></a></li>';
 					}
 					if(aut.length != 0 && aut[index].bck_scdr_aut_yn == "Y"){
 					html1+='			<li class="ico2_2"><a href=/schedulerView.do?db_svr_id='+item.db_svr_id+'&db_svr_nm='+item.db_svr_nm+' id="schedulerView'+item.db_svr_id+'" onClick=javascript:fn_GoLink("schedulerView'+item.db_svr_id+'"); target="main"><img src="../images/ico_main_tit_1.png" id="treeImg"><spring:message code="menu.backup_scheduler"/></a>';
@@ -263,7 +263,7 @@ $(window.document).ready(function() {
 					html1+='			<li class="ico2_2"><a href="#n"><img src="../images/ico_lnb_7.png" id="treeImg"><spring:message code="menu.audit_management"/></a>';
 					html1+='				<ul class="depth_3">'
 					if(aut.length != 0 && aut[index].adt_cng_aut_yn == "Y"){
-						html1+='					<li class="ico3_4"><a href=/audit/auditManagement.do?db_svr_id='+item.db_svr_id+' id="auditManagement'+item.db_svr_id+'" onClick=javascript:fn_GoLink("auditManagement'+item.db_svr_id+'"); target="main"><img src="../images/ico_lnb_13.png" id="treeImg"><spring:message code="menu.audit_settings" /></a></li>';
+						html1+='					<li class="ico3_4"><a href=/audit/auditManagement.do?db_svr_id='+item.db_svr_id+' id="auditManagement'+item.db_svr_id+'" onClick=javascript:fn_GoLink("auditManagement'+item.db_svr_id+'"); target="main"><img src="../images/ico_lnb_10.png" id="treeImg"><spring:message code="menu.audit_settings" /></a></li>';
 					}
 					if(aut.length != 0 && aut[index].adt_hist_aut_yn == "Y"){
 						html1+='					<li class="ico3_5"><a href=/audit/auditLogList.do?db_svr_id='+item.db_svr_id+' id="auditLogList'+item.db_svr_id+'" onClick=javascript:fn_GoLink("auditLogList'+item.db_svr_id+'"); target="main"><img src="../images/ico_lnb_14.png" id="treeImg"><spring:message code="menu.audit_history" /></a></li>';
@@ -290,9 +290,9 @@ $(window.document).ready(function() {
 // 		          }
 // 	          }
 	          $(data).each(function (index, item) {
-	          html += '      <ul class="depth_1 lnbMenu"><li class="t2"><div class="border" ><a href="#n"><img src="../images/ico_lnb_5.png" id="treeImg"><div class="tooltip">'+item.cnr_nm+'<span class="tooltiptext">'+item.cnr_nm+'</span></div></a></div>';
+	          html += '      <ul class="depth_1 lnbMenu"><li class="t2"><div class="border" ><a href="#n"><img src="../images/ico_lnb_3.png" id="treeImg"><div class="tooltip">'+item.cnr_nm+'<span class="tooltiptext">'+item.cnr_nm+'</span></div></a></div>';
 	          html += '         <ul class="depth_2">';
-	          html += '              <li class="ico2_3"><a href="/transferTarget.do?cnr_id='+item.cnr_id+'&&cnr_nm='+item.cnr_nm+'" id="transferTarget'+item.cnr_id+'" onClick=javascript:fn_GoLink("transferTarget'+item.cnr_id+'"); target="main"><img src="../images/ico_lnb_8.png" id="treeImg"><spring:message code="menu.connector_settings" /></a></li>';
+	          html += '              <li class="ico2_3"><a href="/transferTarget.do?cnr_id='+item.cnr_id+'&&cnr_nm='+item.cnr_nm+'" id="transferTarget'+item.cnr_id+'" onClick=javascript:fn_GoLink("transferTarget'+item.cnr_id+'"); target="main"><img src="../images/ico_lnb_10.png" id="treeImg"><spring:message code="menu.connector_settings" /></a></li>';
 	          html += '            <li class="ico2_4"><a href="/transferDetail.do?cnr_id='+item.cnr_id+'&&cnr_nm='+item.cnr_nm+'" id="transferDetail'+item.cnr_id+'" onClick=javascript:fn_GoLink("transferDetail'+item.cnr_id+'"); target="main"><img src="../images/ico_lnb_9.png" id="treeImg"><spring:message code="menu.connector_run_stop" /></a></li>';
 	          html += '         </ul></li></ul>';   
 	          })      
@@ -326,30 +326,30 @@ $(window.document).ready(function() {
 			var html4 = "";
 			html4 += '<ul class="depth_1 lnbMenu">';
 			html4 += '<li class="t2"><div class="border">';
-			html4 += '<a href="#n"><img src="../images/ico_lnb_5.png" id="treeImg"><div class="tooltip"><spring:message code="encrypt_policy_management.Policy_Key_Management"/><span class="tooltiptext"><spring:message code="encrypt_policy_management.Policy_Key_Management"/></span></div></a>';
+			html4 += '<a href="#n"><img src="../images/ico_lnb_3.png" id="treeImg"><div class="tooltip"><spring:message code="encrypt_policy_management.Policy_Key_Management"/><span class="tooltiptext"><spring:message code="encrypt_policy_management.Policy_Key_Management"/></span></div></a>';
 			html4 += '</div>';
 			html4 += '<ul class="depth_2">';
 			if(result.length != 0 && result[0].read_aut_yn == "Y" && result[0].mnu_cd == "MN0001101"){
-				html4 += '<li class="ico2_3"><a href="/securityPolicy.do" id="securityPolicy" onclick=fn_GoLink("securityPolicy"); target="main"><img src="../images/ico_lnb_8.png" id="treeImg"><spring:message code="encrypt_policy_management.Security_Policy_Management"/></a></li>';
+				html4 += '<li class="ico2_3"><a href="/securityPolicy.do" id="securityPolicy" onclick=fn_GoLink("securityPolicy"); target="main"><img src="../images/ico_lnb_10.png" id="treeImg"><spring:message code="encrypt_policy_management.Security_Policy_Management"/></a></li>';
 			}
 			if(result.length != 0 && result[1].read_aut_yn == "Y" && result[1].mnu_cd == "MN0001102"){
-				html4 += '<li class="ico2_3"><a href="/keyManage.do" id="keyManage" onclick=fn_GoLink("keyManage"); target="main"><img src="../images/ico_lnb_8.png" id="treeImg"><spring:message code="encrypt_key_management.Encryption_Key_Management"/></a></li>';
+				html4 += '<li class="ico2_3"><a href="/keyManage.do" id="keyManage" onclick=fn_GoLink("keyManage"); target="main"><img src="../images/ico_lnb_10.png" id="treeImg"><spring:message code="encrypt_key_management.Encryption_Key_Management"/></a></li>';
 			}
 			html4 += '</ul>';
 			html4 += '</li>';
 			
 			html4 += '<li class="t2"><div class="border">';
-			html4 += '<a href="#n"><img src="../images/ico_lnb_5.png" id="treeImg"><div class="tooltip"><spring:message code="encrypt_log.Audit_Log"/><span class="tooltiptext"><spring:message code="encrypt_log.Audit_Log"/></span></div></a>';
+			html4 += '<a href="#n"><img src="../images/ico_lnb_3.png" id="treeImg"><div class="tooltip"><spring:message code="encrypt_log.Audit_Log"/><span class="tooltiptext"><spring:message code="encrypt_log.Audit_Log"/></span></div></a>';
 			html4 += '</div>';
 			html4 += '<ul class="depth_2">';
 			if(result.length != 0 && result[2].read_aut_yn == "Y" && result[2].mnu_cd == "MN0001201"){
-				html4 += '<li class="ico2_4"><a href="/encodeDecodeAuditLog.do"  id="encodeDecodeAuditLog" onclick=fn_GoLink("encodeDecodeAuditLog"); target="main"><img src="../images/ico_lnb_9.png" id="treeImg"><spring:message code="encrypt_log_decode.Encryption_Decryption"/></a></li>';
+				html4 += '<li class="ico2_4"><a href="/encodeDecodeAuditLog.do"  id="encodeDecodeAuditLog" onclick=fn_GoLink("encodeDecodeAuditLog"); target="main"><img src="../images/ico_lnb_14.png" id="treeImg"><spring:message code="encrypt_log_decode.Encryption_Decryption"/></a></li>';
 			}
 			if(result.length != 0 && result[3].read_aut_yn == "Y" && result[3].mnu_cd == "MN0001202"){
-				html4 += '<li class="ico2_4"><a href="/managementServerAuditLog.do" id="managementServerAuditLog" onclick=fn_GoLink("managementServerAuditLog"); target="main"><img src="../images/ico_lnb_9.png" id="treeImg"><spring:message code="encrypt_log_sever.Management_Server"/></a></li>';
+				html4 += '<li class="ico2_4"><a href="/managementServerAuditLog.do" id="managementServerAuditLog" onclick=fn_GoLink("managementServerAuditLog"); target="main"><img src="../images/ico_lnb_14.png" id="treeImg"><spring:message code="encrypt_log_sever.Management_Server"/></a></li>';
 			}
 			if(result.length != 0 && result[4].read_aut_yn == "Y" && result[4].mnu_cd == "MN0001203"){
-				html4 += '<li class="ico2_4"><a href="/encodeDecodeKeyAuditLog.do" id="encodeDecodeKeyAuditLog" onclick=fn_GoLink("encodeDecodeKeyAuditLog"); target="main"><img src="../images/ico_lnb_9.png" id="treeImg"><spring:message code="encrypt_policy_management.Encryption_Key"/></a></li>';
+				html4 += '<li class="ico2_4"><a href="/encodeDecodeKeyAuditLog.do" id="encodeDecodeKeyAuditLog" onclick=fn_GoLink("encodeDecodeKeyAuditLog"); target="main"><img src="../images/ico_lnb_14.png" id="treeImg"><spring:message code="encrypt_policy_management.Encryption_Key"/></a></li>';
 			}
 			if(result.length != 0 && result[5].read_aut_yn == "Y" && result[5].mnu_cd == "MN0001204"){
 				html4 += '<li class="ico2_4"><a href="/resourcesUseAuditLog.do" id="resourcesUseAuditLog" onclick=fn_GoLink("resourcesUseAuditLog"); target="main"><img src="../images/ico_lnb_9.png" id="treeImg">자원사용</a></li>';
@@ -359,20 +359,20 @@ $(window.document).ready(function() {
 			
 			
 			html4 += '<li class="t2"><div class="border">';
-			html4 += '<a href="#n"><img src="../images/ico_lnb_5.png" id="treeImg"><div class="tooltip"><spring:message code="encrypt_policyOption.Settings"/><span class="tooltiptext"><spring:message code="encrypt_policyOption.Settings"/></span></div></a>';
+			html4 += '<a href="#n"><img src="../images/ico_lnb_3.png" id="treeImg"><div class="tooltip"><spring:message code="encrypt_policyOption.Settings"/><span class="tooltiptext"><spring:message code="encrypt_policyOption.Settings"/></span></div></a>';
 			html4 += '</div>';
 			html4 += '<ul class="depth_2">';
 			if(result.length != 0 && result[6].read_aut_yn == "Y" && result[6].mnu_cd == "MN0001301"){
-				  html4 +='<li class="ico2_4"><a href="/securityPolicyOptionSet.do" id="securityPolicyOptionSet" onclick=fn_GoLink("securityPolicyOptionSet"); target="main"><img src="../images/ico_lnb_9.png" id="treeImg"><spring:message code="encrypt_policyOption.Security_Policy_Option_Setting"/></a></li>';
+				  html4 +='<li class="ico2_4"><a href="/securityPolicyOptionSet.do" id="securityPolicyOptionSet" onclick=fn_GoLink("securityPolicyOptionSet"); target="main"><img src="../images/ico_lnb_10.png" id="treeImg"><spring:message code="encrypt_policyOption.Security_Policy_Option_Setting"/></a></li>';
 			}
 			if(result.length != 0 && result[7].read_aut_yn == "Y" && result[7].mnu_cd == "MN0001302"){
-				html4 +='<li class="ico2_4"><a href="/securitySet.do" id="securitySet" onclick=fn_GoLink("securitySet"); target="main"><img src="../images/ico_lnb_9.png" id="treeImg"><spring:message code="encrypt_encryptSet.Encryption_Settings"/></a></li>';
+				html4 +='<li class="ico2_4"><a href="/securitySet.do" id="securitySet" onclick=fn_GoLink("securitySet"); target="main"><img src="../images/ico_lnb_10.png" id="treeImg"><spring:message code="encrypt_encryptSet.Encryption_Settings"/></a></li>';
 			}
 			if(result.length != 0 && result[8].read_aut_yn == "Y" && result[8].mnu_cd == "MN0001303"){
-				html4 +='<li class="ico2_4"><a href="/securityKeySet.do" id="securityKeySet" onclick=fn_GoLink("securityKeySet"); target="main"><img src="../images/ico_lnb_9.png" id="treeImg"><spring:message code="encrypt_serverMasterKey.Setting_the_server_master_key_password"/></a></li>';
+				html4 +='<li class="ico2_4"><a href="/securityKeySet.do" id="securityKeySet" onclick=fn_GoLink("securityKeySet"); target="main"><img src="../images/ico_lnb_10.png" id="treeImg"><spring:message code="encrypt_serverMasterKey.Setting_the_server_master_key_password"/></a></li>';
 			}
 			if(result.length != 0 && result[9].read_aut_yn == "Y" && result[9].mnu_cd == "MN0001304"){
-				html4 +='<li class="ico2_4"><a href="/securityAgentMonitoring.do" id="securityAgentMonitoring" onclick=fn_GoLink("securityAgentMonitoring"); target="main"><img src="../images/ico_lnb_9.png" id="treeImg"><spring:message code="encrypt_agent.Encryption_agent_setting"/> </a></li>';
+				html4 +='<li class="ico2_4"><a href="/securityAgentMonitoring.do" id="securityAgentMonitoring" onclick=fn_GoLink("securityAgentMonitoring"); target="main"><img src="../images/ico_lnb_10.png" id="treeImg"><spring:message code="encrypt_agent.Encryption_agent_setting"/> </a></li>';
 			}
 			html4 += '</ul>';
 			html4 += '</li>';

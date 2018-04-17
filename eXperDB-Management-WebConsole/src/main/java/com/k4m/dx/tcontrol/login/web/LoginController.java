@@ -144,7 +144,6 @@ public class LoginController {
 	public ModelAndView loginAction(@ModelAttribute("userVo") UserVO userVo, ModelMap model, HttpServletResponse response,
 			HttpServletRequest request, @ModelAttribute("historyVO") HistoryVO historyVO) {
 		ModelAndView mv = new ModelAndView();
-		CommonServiceCall cic = new CommonServiceCall();
 		try {
 			AES256 aes = new AES256(AES256_KEY.ENC_KEY);
 			String id = userVo.getUsr_id();
@@ -189,11 +188,19 @@ public class LoginController {
 				request.getSession().setAttribute("encp_use_yn", encp_use_yn);
 				
 				if(encp_use_yn.equals("Y")){
-					JSONObject result = cic.login(restIp,restPort,id,userVo.getPwd());				
-					request.getSession().setAttribute("restIp", restIp);
-					request.getSession().setAttribute("restPort", restPort);
-					request.getSession().setAttribute("tockenValue", result.get("tockenValue")==null?"":result.get("tockenValue"));
-					request.getSession().setAttribute("ectityUid", result.get("ectityUid")==null?"":result.get("ectityUid"));
+					try{
+						CommonServiceCall cic = new CommonServiceCall();
+						JSONObject result = cic.login(restIp,restPort,id,userVo.getPwd());
+						request.getSession().setAttribute("restIp", restIp);
+						request.getSession().setAttribute("restPort", restPort);
+						request.getSession().setAttribute("tockenValue", result.get("tockenValue")==null?"":result.get("tockenValue"));
+						request.getSession().setAttribute("ectityUid", result.get("ectityUid")==null?"":result.get("ectityUid"));
+					}catch(Exception e){
+						request.getSession().setAttribute("restIp", restIp);
+						request.getSession().setAttribute("restPort", restPort);
+						request.getSession().setAttribute("tockenValue", "");
+						request.getSession().setAttribute("ectityUid", "");
+					}
 				}
 				
 				// 로그인 이력 남기기
