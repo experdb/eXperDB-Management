@@ -21,7 +21,7 @@ public class DBCPPoolManager {
 	public ConcurrentHashMap<String, ConfigInfo> ConnInfoList = new ConcurrentHashMap<String, ConfigInfo>();
 	
 	public void setupDriver(String driver, String url, String user, String password, String poolName, int maxActive) throws Exception {
-		log.info("************************************************************");
+
 		log.info("DBCPPool을 생성합니다. ["+poolName+"]");		
 		
 		// JDBC 클래스 로딩
@@ -60,27 +60,21 @@ public class DBCPPoolManager {
 	        // ConnectionFactory의 래퍼 클래스인 PoolableConnectionFactory를 생성
             PoolableConnectionFactory poolableConnectionFactory =
                     new PoolableConnectionFactory(connectionFactory, connectionPool, null, null, false, true);	    
-            
-            //log.info("11111111111");	
-	        
+
             //PoolingDriver 자신을 로딩
             Class.forName("org.apache.commons.dbcp.PoolingDriver");
             PoolingDriver pDriver = (PoolingDriver) DriverManager.getDriver("jdbc:apache:commons:dbcp:");
-            
-           // log.info("222222222222222");
-            
+
             //Pool 등록
             pDriver.registerPool(poolName, connectionPool);
-            
-            //log.info("3333333333333333");
+
             
 		} catch (Exception e) {
-			//log.info("4444444444444444"  + e.toString());
 			throw e;
 		}
 		
 		log.info("DBCPPool 생성 완료 하였습니다. ["+poolName+"]");
-		log.info("************************************************************");		
+		
 	}
 	
 	public static void shutdownDriver(String poolName) throws Exception {
