@@ -20,6 +20,7 @@ LIB=$CURRENT_DIR/lib/*
 JAVA_CLASSPATH=$APP_HOME:$LIB
 
 
-#$JAVA_HOME/bin/java -Xms1024m -Xmx1024m -Du=experDB-Management-Agent -Dlog.base=$LOG_DIR -classpath $JAVA_CLASSPATH $MAIN_CLASS
+#$JAVA_HOME/bin/java  -Xms256m -Xmx256m -XX:NewRatio=2 -XX:SurvivorRatio=6 -Xloggc:$LOG_DIR/eXperManagementAgentGC.log -XX:+PrintGCDetails -XX:+PrintGCDateStamps -Du=experDB-Management-Agent -Dlog.base=$LOG_DIR -classpath $JAVA_CLASSPATH $MAIN_CLASS
 
-nohup $JAVA_HOME/bin/java -Xms256m -Xmx256m -Du=experDB-Management-Agent -Dlog.base=$LOG_DIR -classpath $JAVA_CLASSPATH $MAIN_CLASS 1> /dev/null 2>&1 &
+nohup $JAVA_HOME/bin/java -Xms256m -Xmx256m -XX:NewRatio=2 -XX:SurvivorRatio=6 -Xloggc:$LOG_DIR/eXperManagementAgentGC.log -XX:+PrintGCDetails -XX:+PrintGCDateStamps -Du=experDB-Management-Agent -Dlog.base=$LOG_DIR -classpath $JAVA_CLASSPATH $MAIN_CLASS 1> /dev/null 2>&1 &
+
