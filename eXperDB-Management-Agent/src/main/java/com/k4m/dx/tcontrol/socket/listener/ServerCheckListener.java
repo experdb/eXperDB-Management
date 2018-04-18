@@ -88,8 +88,7 @@ public class ServerCheckListener extends Thread {
 						service.updateDB_CNDT(dbServerInfoVO);
 					}
 
-					// socketLogger.info("@@@@@@ before : " + strMasterGbn + "
-					// @@@@ after : " + strMasterGbn);
+					 //socketLogger.info("@@@@@@ before : " + strMasterGbn + " @@@@ after : " + strMasterGbn);
 
 					if (!strIsMasterGbn.equals(strMasterGbn)) {
 						if (strMasterGbn.equals("M")) {
@@ -137,8 +136,7 @@ public class ServerCheckListener extends Thread {
 
 		sqlSessionFactory = SqlSessionManager.getInstance();
 
-		String poolName = "" + serverInfoObj.get(ProtocolID.SERVER_IP) + "_"
-				+ serverInfoObj.get(ProtocolID.DATABASE_NAME) + "_" + serverInfoObj.get(ProtocolID.SERVER_PORT);
+		String poolName = "" + serverInfoObj.get(ProtocolID.SERVER_IP) + "_" + serverInfoObj.get(ProtocolID.DATABASE_NAME) + "_" + serverInfoObj.get(ProtocolID.SERVER_PORT);
 
 		Connection connDB = null;
 		SqlSession sessDB = null;

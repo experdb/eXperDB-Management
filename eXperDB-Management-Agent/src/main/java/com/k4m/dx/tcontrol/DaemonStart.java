@@ -9,8 +9,8 @@ import org.slf4j.LoggerFactory;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 
+import com.k4m.dx.tcontrol.db.DBCPPoolManager;
 import com.k4m.dx.tcontrol.db.repository.service.SystemServiceImpl;
-import com.k4m.dx.tcontrol.db.repository.vo.DbServerInfoVO;
 import com.k4m.dx.tcontrol.deamon.DxDaemon;
 import com.k4m.dx.tcontrol.deamon.DxDaemonManager;
 import com.k4m.dx.tcontrol.deamon.IllegalDxDaemonClassException;
@@ -110,7 +110,7 @@ public class DaemonStart implements DxDaemon{
 			System.out.println("## eXperDB Managemen Dammon Process is started...");
 			System.out.println("######################################################################");
 			
-			daemonStartLogger.info("{}", "eXperDB Managemen Deamon Start..");
+			daemonStartLogger.info("{}", "");
 			daemonStartLogger.info("{} {}", "eXperDB Managemen Deamon Start..", new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date()));
 
 			
@@ -141,6 +141,8 @@ public class DaemonStart implements DxDaemon{
 			serverCheckListener.interrupt();
 			socketService.stop();
 			
+			this.shutdownPool();
+			
 			String strIpadr = FileUtil.getPropertyValue("context.properties", "agent.install.ip");
 			String strPort = FileUtil.getPropertyValue("context.properties", "socket.server.port");
 
@@ -154,6 +156,19 @@ public class DaemonStart implements DxDaemon{
 			
 		}
 		
+	}
+	
+	private void shutdownPool() throws Exception {
+		DBCPPoolManager dBCPPoolManager = new DBCPPoolManager();
+		
+		daemonStartLogger.info("{}", "DBCP Pool Shutdown Start ");
+		
+		for(String poolName : dBCPPoolManager.GetPoolNameList()){
+			dBCPPoolManager.shutdownDriver(poolName);
+			daemonStartLogger.info("{} {}", poolName, " Shutdown .. ");
+		}
+		
+		daemonStartLogger.info("{}", "DBCP Pool Shutdown End ");
 	}
 	
 	public void chkDir() {

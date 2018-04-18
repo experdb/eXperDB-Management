@@ -166,7 +166,8 @@ public class DxT014 extends SocketCtl{
 			send(4, sendBuff);
 
 		} finally {
-
+			outputObj = null;
+			sendBuff = null;
 		}	    
 		
 

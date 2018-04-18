@@ -68,7 +68,7 @@ public class DxT015 extends SocketCtl{
 		JSONObject outputObj = new JSONObject();
 		
 		//strLogFileDir = "/home/devel/experdb/data/pg_log"
-		socketLogger.info("File Dir : " + strLogFileDir);
+		//socketLogger.info("File Dir : " + strLogFileDir);
 		
 		try {
 
@@ -107,9 +107,16 @@ public class DxT015 extends SocketCtl{
 							hp.put(ProtocolID.FILE_SIZE, strFileSize);
 							hp.put(ProtocolID.FILE_LASTMODIFIED, strLastModified);
 							
+							//socketLogger.info("File Name : " + strFileName);
+							
 							resultFileList.add(hp);
 						}
 					}
+					
+					hp = null;
+					
+					//socketLogger.info("File Name after : " + resultFileList.get(0).get(ProtocolID.FILE_NAME));
+					
 				}
 				
 				
@@ -122,6 +129,9 @@ public class DxT015 extends SocketCtl{
 				
 				sendBuff = outputObj.toString().getBytes();
 				send(4, sendBuff);
+				
+				resultFileList = null;
+				
 				
 			} else if(strCommandCode.equals(ProtocolID.COMMAND_CODE_V)) {
 				
@@ -154,6 +164,9 @@ public class DxT015 extends SocketCtl{
 				outputObj.put(ProtocolID.DW_LEN, intLastLine + Integer.parseInt(strReadLine));
 				outputObj.put(ProtocolID.END_FLAG, hp.get("end_flag"));
 				
+				hp = null;
+				inFile = null;
+				
 				send(outputObj);
 			} else if(strCommandCode.equals(ProtocolID.COMMAND_CODE_DL)) {
 				String strFileName = (String) jObj.get(ProtocolID.FILE_NAME);
@@ -185,7 +198,8 @@ public class DxT015 extends SocketCtl{
 			send(4, sendBuff);
 
 		} finally {
-
+			outputObj = null;
+			sendBuff = null;
 		}	    
 	}
 	

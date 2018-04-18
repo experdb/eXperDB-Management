@@ -290,6 +290,7 @@ public class DxDaemonManager {
 			}
 
 			invokeLogger.info("데몬의 종료가 완료되었습니다.");
+			invokeLogger.info("");
 		}
 	}
 

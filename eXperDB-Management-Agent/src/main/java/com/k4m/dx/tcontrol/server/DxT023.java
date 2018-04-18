@@ -81,6 +81,8 @@ public class DxT023 extends SocketCtl{
 			
 			outputObj.put(ProtocolID.RESULT_DATA, hp);
 			
+			hp = null;
+			
 			sendBuff = outputObj.toString().getBytes();
 			send(4, sendBuff);
 			
@@ -96,7 +98,8 @@ public class DxT023 extends SocketCtl{
 			send(4, sendBuff);
 
 		} finally {
-
+			outputObj = null;
+			sendBuff = null;
 		}	    
 	}
 	

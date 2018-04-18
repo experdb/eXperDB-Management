@@ -90,6 +90,8 @@ public class DxT020 extends SocketCtl{
 					objReturn.put(ProtocolID.CONNECT_YN, "Y");
 					
 					arrOut.add(objReturn);
+					
+					objReturn = null;
 				} catch(Exception e) {
 					JSONObject objReturn = new JSONObject();
 					objReturn.put(ProtocolID.SERVER_IP, strServerIP);
@@ -99,6 +101,8 @@ public class DxT020 extends SocketCtl{
 					objReturn.put(ProtocolID.CONNECT_YN, "N");
 					
 					arrOut.add(objReturn);
+					
+					objReturn = null;
 				}
 
 			}
@@ -125,7 +129,8 @@ public class DxT020 extends SocketCtl{
 			send(4, sendBuff);
 
 		} finally {
-
+			outputObj = null;
+			sendBuff = null;
 		}	    
 	}
 	
@@ -161,7 +166,7 @@ public class DxT020 extends SocketCtl{
 				
 			strMasterGbn = (String) hp.get("master_gbn");
 						
-
+			hp = null;
 
 		} catch(Exception e) {
 			errLogger.error("selectConnectInfo {} ", e.toString());

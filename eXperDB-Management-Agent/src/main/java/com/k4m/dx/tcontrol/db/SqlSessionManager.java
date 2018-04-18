@@ -19,8 +19,7 @@ public class SqlSessionManager {
 			log.info("SqlSessionManager가 이미 초기화되었습니다.");
 			return;
 		}
-		
-		log.info("************************************************************");
+
 		log.info("SqlSessionManager를 초기화합니다.");
 		
 		String resource = "sql-mapper-config.xml";
@@ -28,9 +27,8 @@ public class SqlSessionManager {
 		
 		sqlSession = new SqlSessionFactoryBuilder().build(inputStream);
 
-
 		log.info("SqlSessionManager를 초기화하였습니다.");
-		log.info("************************************************************");
+
 	}
 	
 	public static SqlSessionFactory getInstance() {

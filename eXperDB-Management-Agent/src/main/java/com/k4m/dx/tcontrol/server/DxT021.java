@@ -72,7 +72,7 @@ public class DxT021 extends SocketCtl{
 		String strErrMsg = "";
 		String strSuccessCode = "0";
 	
-		//JSONObject outputObj = new JSONObject();
+		JSONObject outputObj = null;
 		
 		String CMD_HOSTNAME = "";
 		String CMD_OS_VERSION = "";
@@ -84,7 +84,7 @@ public class DxT021 extends SocketCtl{
 		String CMD_DBMS_PATH = "";
 		String CMD_BACKUP_PATH = "";
 		String PGDBAK = "";
-		
+		byte[] sendBuff = null;
 		
 				
 		try {
@@ -135,12 +135,8 @@ public class DxT021 extends SocketCtl{
 			//printGetMemory(3) ;
 			
 			setShowData(serverInfoObj, resultHP);
-
-			//printGetMemory(4) ;
-			//tablespace
-			//ArrayList list = (ArrayList)selectTablespaceInfo(serverInfoObj);
-			//resultHP.put(ProtocolID.CMD_TABLESPACE_INFO, list);
 			
+			//test(resultHP);
 
 			//DBMS 경로
 			CMD_DBMS_PATH = util.getPidExec(arrCmd[5]);
@@ -153,7 +149,7 @@ public class DxT021 extends SocketCtl{
 			PGDBAK = util.getPidExec(arrCmd[8]);
 			resultHP.put(ProtocolID.PGDBAK, PGDBAK);
 
-			JSONObject outputObj = new JSONObject();
+			outputObj = new JSONObject();
 			
 			outputObj.put(ProtocolID.DX_EX_CODE, strDxExCode);
 			outputObj.put(ProtocolID.RESULT_CODE, strSuccessCode);
@@ -164,19 +160,18 @@ public class DxT021 extends SocketCtl{
 
 			//printGetMemory(5) ;
 			
-			byte[] sendBuff = outputObj.toString().getBytes();
+			sendBuff = outputObj.toString().getBytes();
 			
 			//WeakReference<byte[]> bRef = new WeakReference<byte[]>(sendBuff);
+			
+			resultHP = null;
+			util = null;
+			serverInfoObj = null;
 			
 			send(4, sendBuff);
 
 			//printGetMemory(6) ;
-			
-			resultHP = null;
-			outputObj = null;
-			sendBuff = null;
-			util = null;
-			serverInfoObj = null;
+		
 			
 			//printGetMemory(7) ;
 			
@@ -188,7 +183,7 @@ public class DxT021 extends SocketCtl{
 		} catch (Exception e) {
 			errLogger.error("DxT021 {} ", e.toString());
 			
-			JSONObject outputObj = new JSONObject();
+			outputObj = new JSONObject();
 			
 			outputObj.put(ProtocolID.DX_EX_CODE, TranCodeType.DxT021);
 			outputObj.put(ProtocolID.RESULT_CODE, "1");
@@ -196,11 +191,13 @@ public class DxT021 extends SocketCtl{
 			outputObj.put(ProtocolID.ERR_MSG, "DxT021 Error [" + e.toString() + "]");
 			outputObj.put(ProtocolID.RESULT_DATA, "failed");
 			
-			byte[] sendBuff = outputObj.toString().getBytes();
+			sendBuff = outputObj.toString().getBytes();
 			send(4, sendBuff);
 
 		} finally {
-			//printGetMemory(9) ;
+			//socketLogger.info("outputObj finally call");
+			outputObj = null;
+			sendBuff = null;
 		}	    
 	}
 	
@@ -838,6 +835,8 @@ public class DxT021 extends SocketCtl{
 				hpMapping.put("description", Description);
 				
 				arrMapping.add(hpMapping);
+
+				hpMapping = null;
 			}
 			
 		}

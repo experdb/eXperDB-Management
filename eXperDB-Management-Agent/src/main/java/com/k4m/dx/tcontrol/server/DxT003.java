@@ -83,6 +83,8 @@ public class DxT003 extends SocketCtl{
 			send(4, sendBuff);
 		} finally {
 			if(conn != null) conn.close();
+			outputObj = null;
+			sendBuff = null;
 		}	    
 
 	}

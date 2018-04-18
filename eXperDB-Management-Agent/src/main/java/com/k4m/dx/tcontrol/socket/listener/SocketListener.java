@@ -49,8 +49,7 @@ public class SocketListener implements Runnable {
 	}
 	
 	public void startup() throws Exception {
-		socketLogger.info("");
-		socketLogger.info("**************************************************");
+
 		socketLogger.info("SocketListener[" + listenerName + "]를 기동합니다.");
 		socketLogger.info("ListenerPort : [" + listenPort + "]");
 		socketLogger.info("Timeout : [" + timeout + "]");
@@ -62,8 +61,7 @@ public class SocketListener implements Runnable {
 		mainThread = new Thread(this);
 		mainThread.start();
 		socketLogger.info("SocketListener[" + listenerName + "]가 메시지 수신을 대기하고 있습니다.");
-		socketLogger.info("**************************************************");
-		socketLogger.info("");
+
 	}
 	
 	public void shutdown() throws Exception {
@@ -116,6 +114,7 @@ public class SocketListener implements Runnable {
 				
 				
 				if(client != null) {
+					socketLogger.info("client socket 종료."); 
 					client.close();
 					client = null;
 				}

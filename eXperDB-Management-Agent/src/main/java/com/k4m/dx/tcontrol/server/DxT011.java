@@ -54,8 +54,7 @@ public class DxT011 extends SocketCtl{
 		
 		sqlSessionFactory = SqlSessionManager.getInstance();
 		
-		String poolName = "" + dbInfoObj.get(ProtocolID.SERVER_IP) + "_" + dbInfoObj.get(ProtocolID.DATABASE_NAME) + "_" 
-				+ "_" + dbInfoObj.get(ProtocolID.SERVER_PORT);
+		String poolName = "" + dbInfoObj.get(ProtocolID.SERVER_IP) + "_" + dbInfoObj.get(ProtocolID.DATABASE_NAME) + "_" + dbInfoObj.get(ProtocolID.SERVER_PORT);
 				//+ "_" + (String)dbInfoObj.get(ProtocolID.USER_ID)
 				//+ "_" + (String)dbInfoObj.get(ProtocolID.USER_PWD);
 		
@@ -95,6 +94,9 @@ public class DxT011 extends SocketCtl{
 		} finally {
 			sessDB.close();
 			connDB.close();
+			
+			outputObj = null;
+			sendBuff = null;
 		}	        
 
 

@@ -87,6 +87,8 @@ public class DxT004 extends SocketCtl{
 			if (poolName != null){
 				DBCPPoolManager.shutdownDriver(poolName);
 			}
+			outputObj = null;
+			sendBuff = null;
 		}	    
 		
 

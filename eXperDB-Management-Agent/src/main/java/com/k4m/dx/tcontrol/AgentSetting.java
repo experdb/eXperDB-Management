@@ -43,10 +43,10 @@ public class AgentSetting {
 		
 		String localIp = NetworkUtil.getLocalServerIp();
 		
-		System.out.println("agent ip : " + localIp);
-		
-		//strAgentIp = scan.nextLine();
-		strAgentIp = localIp;
+		//System.out.println("agent ip : " + localIp);
+		System.out.println("agent ip : ");
+		strAgentIp = scan.nextLine();
+		//strAgentIp = localIp;
 		
 		System.out.println("agent port :");
 		
