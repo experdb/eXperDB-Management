@@ -147,6 +147,9 @@
 					if(data.list != null){
 						table.rows.add(data.list).draw();
 					}
+				}else if(data.resultCode == "8000000002"){
+					alert("<spring:message code='message.msg05' />");
+					location.href="/";
 				}else if(data.resultCode == "8000000003"){
 					alert(data.resultMessage);
 					location.href="/securityKeySet.do";
@@ -191,6 +194,9 @@
 					if(data.list != null){
 						table.rows.add(data.list).draw();
 					}
+				}else if(data.resultCode == "8000000002"){
+					alert("<spring:message code='message.msg05' />");
+					location.href="/";
 				}else if(data.resultCode == "8000000003"){
 					alert(data.resultMessage);
 					location.href="/securityKeySet.do";

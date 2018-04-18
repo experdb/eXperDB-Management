@@ -136,7 +136,11 @@ public class AuditLogController {
 			String loginId = (String)session.getAttribute("usr_id");
 			String entityId = (String)session.getAttribute("ectityUid");
 			
-			result = sic.selectAuditLogSiteList(restIp, restPort, strTocken, param, loginId ,entityId);
+			try{
+				result = sic.selectAuditLogSiteList(restIp, restPort, strTocken, param, loginId ,entityId);
+			}catch(Exception e){
+				result.put("resultCode", "8000000002");
+			}
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -229,8 +233,12 @@ public class AuditLogController {
 			String strTocken = (String)session.getAttribute("tockenValue");
 			String loginId = (String)session.getAttribute("usr_id");
 			String entityId = (String)session.getAttribute("ectityUid");
-			
-			result = sic.selectAuditLogList(restIp, restPort, strTocken, loginId ,entityId, param);
+		
+			try{
+				result = sic.selectAuditLogList(restIp, restPort, strTocken, loginId ,entityId, param);
+			}catch(Exception e){
+				result.put("resultCode", "8000000002");
+			}
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -361,7 +369,11 @@ public class AuditLogController {
 			String loginId = (String)session.getAttribute("usr_id");
 			String entityId = (String)session.getAttribute("ectityUid");
 			
-			result = sic.selectAuditLogListKey(restIp, restPort, strTocken, loginId, entityId, param);
+			try{
+				result = sic.selectAuditLogListKey(restIp, restPort, strTocken, loginId, entityId, param);
+			}catch(Exception e){
+				result.put("resultCode", "8000000002");
+			}
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
