@@ -113,7 +113,12 @@ public class SecurityPolicyController {
 			String loginId = (String)session.getAttribute("usr_id");
 			String entityId = (String)session.getAttribute("ectityUid");
 			
-			result = sic.selectProfileList(restIp,restPort,strTocken,loginId,entityId);
+			try{
+				result = sic.selectProfileList(restIp,restPort,strTocken,loginId,entityId);
+			}catch(Exception e){
+				result.put("resultCode", "8000000002");
+			}
+			
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
