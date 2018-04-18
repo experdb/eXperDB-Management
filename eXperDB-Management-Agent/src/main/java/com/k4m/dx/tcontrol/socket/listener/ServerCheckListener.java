@@ -155,12 +155,16 @@ public class ServerCheckListener extends Thread {
 			HashMap hp = (HashMap) sessDB.selectOne("app.selectMasterGbm");
 
 			strMasterGbn = (String) hp.get("master_gbn");
+			
+			sessDB.close();
+			connDB.close();
 
 		} catch (Exception e) {
 			throw e;
 		} finally {
-			sessDB.close();
-			connDB.close();
+
+			if(sessDB !=null) sessDB.close();
+			if(connDB !=null) connDB.close();
 		}
 
 		return strMasterGbn;

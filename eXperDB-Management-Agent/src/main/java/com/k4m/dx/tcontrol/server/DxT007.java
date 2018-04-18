@@ -137,12 +137,16 @@ public class DxT007 extends SocketCtl{
 			
 			pgAuditSettingVO = sessDB.selectOne("app.selectPgAuditLogSetting");
 			
+			sessDB.close();
+			connDB.close();
+			
 		} catch(Exception e) {
 			errLogger.error("createAuditLog {} ", e.toString());
 			throw e;
 		} finally {
-			sessDB.close();
-			connDB.close();
+
+			if(sessDB !=null) sessDB.close();
+			if(connDB !=null) connDB.close();
 		}	
 		
 		return pgAuditSettingVO;
@@ -184,12 +188,16 @@ public class DxT007 extends SocketCtl{
 			
 			list = sessDB.selectList("app.selectPgAuditLogList", vo);
 			
+			sessDB.close();
+			connDB.close();
+			
 		} catch(Exception e) {
 			errLogger.error("createAuditLog {} ", e.toString());
 			throw e;
 		} finally {
-			sessDB.close();
-			connDB.close();
+
+			if(sessDB !=null) sessDB.close();
+			if(connDB !=null) connDB.close();
 		}	
 		
 		return list;
@@ -270,13 +278,16 @@ public class DxT007 extends SocketCtl{
 			//8. conf file reloadOne
 			sessDB.selectOne("app.selectPgConfReload");
 			
+			sessDB.close();
+			connDB.close();
 
 		} catch(Exception e) {
 			errLogger.error("createAuditLog {} ", e.toString());
 			throw e;
 		} finally {
-			sessDB.close();
-			connDB.close();
+
+			if(sessDB !=null) sessDB.close();
+			if(connDB !=null) connDB.close();
 		}	
 		
 	}

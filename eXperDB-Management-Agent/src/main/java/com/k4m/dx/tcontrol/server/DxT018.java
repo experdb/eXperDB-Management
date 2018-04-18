@@ -154,13 +154,17 @@ public class DxT018 extends SocketCtl{
 				hp = null;
 						
 			}
+			
+			sessDB.close();
+			connDB.close();
 
 		} catch(Exception e) {
 			errLogger.error("selectTblMapps {} ", e.toString());
 			throw e;
 		} finally {
-			sessDB.close();
-			connDB.close();
+
+			if(sessDB !=null) sessDB.close();
+			if(connDB !=null) connDB.close();
 		}	
 		
 		return selectDataList;
@@ -220,13 +224,17 @@ public class DxT018 extends SocketCtl{
 					
 					hp = null;
 			}
+			
+			sessDB.close();
+			connDB.close();
 
 		} catch(Exception e) {
 			errLogger.error("insertKafkaConConfig {} ", e.toString());
 			throw e;
 		} finally {
-			sessDB.close();
-			connDB.close();
+
+			if(sessDB !=null) sessDB.close();
+			if(connDB !=null) connDB.close();
 		}	
 		
 	}
@@ -273,14 +281,16 @@ public class DxT018 extends SocketCtl{
 				hp = null;
 			}
 			
-
+			sessDB.close();
+			connDB.close();
 
 		} catch(Exception e) {
 			errLogger.error("createAuthentication {} ", e.toString());
 			throw e;
 		} finally {
-			sessDB.close();
-			connDB.close();
+
+			if(sessDB !=null) sessDB.close();
+			if(connDB !=null) connDB.close();
 		}	
 		
 	}

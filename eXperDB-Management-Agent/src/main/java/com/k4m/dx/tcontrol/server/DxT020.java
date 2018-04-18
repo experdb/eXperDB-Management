@@ -167,13 +167,16 @@ public class DxT020 extends SocketCtl{
 			strMasterGbn = (String) hp.get("master_gbn");
 						
 			hp = null;
+			sessDB.close();
+			connDB.close();
 
 		} catch(Exception e) {
 			errLogger.error("selectConnectInfo {} ", e.toString());
 			throw e;
 		} finally {
-			sessDB.close();
-			connDB.close();
+
+			if(sessDB !=null) sessDB.close();
+			if(connDB !=null) connDB.close();
 		}	
 		
 		return strMasterGbn;

@@ -483,13 +483,15 @@ public class DxT021 extends SocketCtl{
 			
 			list =  (ArrayList) sessDB.selectList("system.selectTablespaceInfo");
 				
-
+			sessDB.close();
+			connDB.close();
+			
 		} catch(Exception e) {
 			errLogger.error("selectDatabaseInfo {} ", e.toString());
 			throw e;
 		} finally {
-			sessDB.close();
-			connDB.close();
+			if(sessDB !=null) sessDB.close();
+			if(connDB !=null) connDB.close();
 		}	
 		
 		return list;
@@ -531,13 +533,16 @@ public class DxT021 extends SocketCtl{
 			list =  (ArrayList) sessDB.selectList("system.selectPostgreSqlServerInfo");
 			
 			//printGetMemory(16) ;
+			sessDB.close();
+			connDB.close();
 
 		} catch(Exception e) {
 			errLogger.error("selectDatabaseInfo {} ", e.toString());
 			throw e;
 		} finally {
-			sessDB.close();
-			connDB.close();
+
+			if(sessDB !=null) sessDB.close();
+			if(connDB !=null) connDB.close();
 		}	
 		//printGetMemory(17) ;
 		return list;
@@ -647,6 +652,9 @@ public class DxT021 extends SocketCtl{
 			
 			resultHP.put(ProtocolID.CMD_TABLESPACE_INFO, mappingList);
 			
+			
+			sessDB.close();
+			connDB.close();
 			flist = null;
 			mappingList = null;
 			
@@ -656,9 +664,9 @@ public class DxT021 extends SocketCtl{
 			errLogger.error("selectDatabaseInfo {} ", e.toString());
 			throw e;
 		} finally {
-			sessDB.close();
-			connDB.close();
-			
+
+			if(sessDB !=null) sessDB.close();
+			if(connDB !=null) connDB.close();
 			//printGetMemory(41) ;
 		}	
 		

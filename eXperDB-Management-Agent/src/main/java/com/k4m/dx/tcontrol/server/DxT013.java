@@ -192,6 +192,9 @@ public class DxT013 extends SocketCtl{
 				
 				sessDB.selectList("app.selectDelSlot", hp);
 				
+				sessDB.close();
+				connDB.close();
+				
 				hp = null;
 
 
@@ -208,8 +211,8 @@ public class DxT013 extends SocketCtl{
 				send(4, sendBuff);
 				
 			} finally {
-				sessDB.close();
-				connDB.close();
+				if(sessDB !=null) sessDB.close();
+				if(connDB !=null) connDB.close();
 				
 				outputObj = null;
 				sendBuff = null;

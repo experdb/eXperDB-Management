@@ -74,6 +74,8 @@ public class DxT011 extends SocketCtl{
 
 			selectDBList = sessDB.selectList("app.selectRoleName");
 			
+			sessDB.close();
+			connDB.close();
 			
 	        outputObj = ResultJSON(selectDBList, strDxExCode, "0", "", "");
 	        
@@ -92,8 +94,9 @@ public class DxT011 extends SocketCtl{
 			sendBuff = outputObj.toString().getBytes();
 			send(4, sendBuff);
 		} finally {
-			sessDB.close();
-			connDB.close();
+
+			if(sessDB !=null) sessDB.close();
+			if(connDB !=null) connDB.close();
 			
 			outputObj = null;
 			sendBuff = null;

@@ -169,13 +169,17 @@ public class DxT017 extends SocketCtl{
 				selectDataList = sessDB.selectList("app.selectTblMapps", hp);
 						
 			}
+			
+			sessDB.close();
+			connDB.close();
 
 		} catch(Exception e) {
 			errLogger.error("selectTblMapps {} ", e.toString());
 			throw e;
 		} finally {
-			sessDB.close();
-			connDB.close();
+
+			if(sessDB !=null) sessDB.close();
+			if(connDB !=null) connDB.close();
 		}	
 		
 		return selectDataList;
@@ -232,13 +236,16 @@ public class DxT017 extends SocketCtl{
 				}
 
 			}
+			
+			sessDB.close();
+			connDB.close();
 
 		} catch(Exception e) {
 			errLogger.error("insertTblMapps {} ", e.toString());
 			throw e;
 		} finally {
-			sessDB.close();
-			connDB.close();
+			if(sessDB !=null) sessDB.close();
+			if(connDB !=null) connDB.close();
 		}	
 		
 	}
@@ -296,13 +303,17 @@ public class DxT017 extends SocketCtl{
 				}
 
 			}
+			
+			sessDB.close();
+			connDB.close();
 
 		} catch(Exception e) {
 			errLogger.error("createAuthentication {} ", e.toString());
 			throw e;
 		} finally {
-			sessDB.close();
-			connDB.close();
+
+			if(sessDB !=null) sessDB.close();
+			if(connDB !=null) connDB.close();
 		}	
 		
 	}

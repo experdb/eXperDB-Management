@@ -76,15 +76,22 @@ public class DxT010 extends SocketCtl{
 			List<Object> selectExtensionList = sessDB.selectList("app.selectPgExtensionList", hp);
 			
 			
+			sessDB.close();
+			connDB.close();
+			
 	        outputObj = ResultJSON(selectExtensionList, strDxExCode, "0", "", "");
+	        
+	        selectExtensionList = null;
+	        hp = null;
+	        
+	        outputObj = null;
 	        
 	        byte[] sendBuff = outputObj.toString().getBytes();
 	        send(4, sendBuff);
 	        
-	        selectExtensionList = null;
-	        hp = null;
 	        sendBuff = null;
-	        outputObj = null;
+	        
+
 	        
 			
 		} catch (Exception e) {
@@ -102,8 +109,8 @@ public class DxT010 extends SocketCtl{
 			sendBuff= null;
 
 		} finally {
-			sessDB.close();
-			connDB.close();
+			if(sessDB !=null) sessDB.close();
+			if(connDB !=null) connDB.close();
 		}	        
 
 

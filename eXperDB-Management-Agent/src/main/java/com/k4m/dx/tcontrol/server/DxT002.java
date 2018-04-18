@@ -92,6 +92,8 @@ public class DxT002 extends SocketCtl{
 			
 			selectTableList = sessDB.selectList("app.selectTableList", hp);
 			
+			sessDB.close();
+			connDB.close();
 			
 			outputObj = ResultJSON(selectTableList, strDxExCode, strSuccessCode, strErrCode, strErrMsg);
 	        
@@ -111,9 +113,9 @@ public class DxT002 extends SocketCtl{
 			send(4, sendBuff);
 			
 		} finally {
-			sessDB.close();
-			connDB.close();
-			
+
+			if(sessDB !=null) sessDB.close();
+			if(connDB !=null) connDB.close();		
 			outputObj = null;
 			sendBuff = null;
 		}	        

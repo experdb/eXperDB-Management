@@ -166,11 +166,13 @@ public class DxT006 extends SocketCtl{
 
 			//DB 컨넥션을 가져온다.
 			connDB = DriverManager.getConnection("jdbc:apache:commons:dbcp:" + poolName);
-			connDB.setAutoCommit(false);
 			
 			sessDB = sqlSessionFactory.openSession(connDB);
 
 			selectList = sessDB.selectList("app.selectAuthentication");
+			
+			sessDB.close();
+			connDB.close();
 			
 			String[] arrData = null;
 			
@@ -206,8 +208,9 @@ public class DxT006 extends SocketCtl{
 			errLogger.error("selectAuthentication {} ", e.toString());
 			throw e;
 		} finally {
-			sessDB.close();
-			connDB.close();
+
+			if(sessDB !=null) sessDB.close();
+			if(connDB !=null) connDB.close();
 		}	
 		
 		return arrResult;
@@ -317,15 +320,16 @@ public class DxT006 extends SocketCtl{
 			sessDB.selectList("app.selectPgConfRename");
 			sessDB.selectList("app.selectPgConfReload");
 			
-			//sessDB.commit();
-			//connDB.commit();
+			sessDB.close();
+			connDB.close();
 			
 		} catch(Exception e) {
 			errLogger.error("createAuthentication {} ", e.toString());
 			throw e;
 		} finally {
-			sessDB.close();
-			connDB.close();
+
+			if(sessDB !=null) sessDB.close();
+			if(connDB !=null) connDB.close();
 		}	
 		
 	}
@@ -432,15 +436,16 @@ public class DxT006 extends SocketCtl{
 			sessDB.selectList("app.selectPgConfRename");
 			sessDB.selectList("app.selectPgConfReload");
 			
-			//sessDB.commit();
-			//connDB.commit();
+			sessDB.close();
+			connDB.close();
 			
 		} catch(Exception e) {
 			errLogger.error("updateAuthentication {} ", e.toString());
 			throw e;
 		} finally {
-			sessDB.close();
-			connDB.close();
+
+			if(sessDB !=null) sessDB.close();
+			if(connDB !=null) connDB.close();
 		}	
 		
 	}
@@ -544,12 +549,14 @@ public class DxT006 extends SocketCtl{
 			sessDB.selectList("app.selectPgConfRename");
 			sessDB.selectList("app.selectPgConfReload");
 			
-			
+			sessDB.close();
+			connDB.close();
 		} catch(Exception e) {
 			errLogger.error("deleteAuthentication {} ", e.toString());
 		} finally {
-			sessDB.close();
-			connDB.close();
+
+			if(sessDB !=null) sessDB.close();
+			if(connDB !=null) connDB.close();
 		}	
 		
 	}
@@ -625,12 +632,15 @@ public class DxT006 extends SocketCtl{
 			sessDB.selectList("app.selectPgConfRename");
 			sessDB.selectList("app.selectPgConfReload");
 			
+			sessDB.close();
+			connDB.close();
 			
 		} catch(Exception e) {
 			errLogger.error("deleteAuthentication {} ", e.toString());
 		} finally {
-			sessDB.close();
-			connDB.close();
+
+			if(sessDB !=null) sessDB.close();
+			if(connDB !=null) connDB.close();
 		}	
 		
 	}

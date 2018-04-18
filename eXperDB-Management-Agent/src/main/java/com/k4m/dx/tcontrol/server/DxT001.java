@@ -75,6 +75,8 @@ public class DxT001 extends SocketCtl{
 
 			selectDBList = sessDB.selectList("app.selectDatabaseList");
 			
+			sessDB.close();
+			connDB.close();
 			
 	        outputObj = ResultJSON(selectDBList, strDxExCode, "0", "", "");
 	        
@@ -94,8 +96,9 @@ public class DxT001 extends SocketCtl{
 			send(4, sendBuff);
 			
 		} finally {
-			sessDB.close();
-			connDB.close();
+
+			if(sessDB !=null) sessDB.close();
+			if(connDB !=null) connDB.close();
 			
 			outputObj = null;
 			sendBuff = null;
