@@ -24,7 +24,7 @@ var table = null;
 
 	function fn_init() {
 		table = $('#keyManageTable').DataTable({
-			scrollY : "250px",
+			scrollY : "420px",
 			searching : false,
 			deferRender : true,
 			scrollX: true,

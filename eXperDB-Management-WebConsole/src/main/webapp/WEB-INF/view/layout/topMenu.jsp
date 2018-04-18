@@ -266,19 +266,19 @@ function fn_cookie(url) {
 	var cssID = sessionStorage.getItem('cssId');
 
 	$("#"+cssID).css("background-color","");
-	$("#"+cssID).css("color","");
-	$("#"+cssID).css("padding","");
-	$("#"+cssID).css("border","");	
-	
-	if(url != null){
-		$("#"+url).css("background-color","#f58220");
-		$("#"+url).css("color","white");
-		$("#"+url).css("padding","3px");
-		$("#"+url).css("border","2px solid #f58220");	
-	}
+		$("#"+cssID+"c").css("color","");
+		$("#"+cssID).css("border","");	
+		
+		if(url != null){
+			$("#"+url).css("background-color","#f58220");
+			$("#"+url+"c").css("color","white");
+			$("#"+url).css("border","2px solid #f58220");	
+		}
 	
 	sessionStorage.setItem('cssId',url);
 }
+
+
 
 
 	function fn_localeSet(locale){

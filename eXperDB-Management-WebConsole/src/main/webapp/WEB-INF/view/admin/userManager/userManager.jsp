@@ -21,7 +21,7 @@ var table = null;
 
 function fn_init() {
 	table = $('#userListTable').DataTable({
-		scrollY : "310px",
+		scrollY : "400px",
 		searching : false,
 		deferRender : true,
 		scrollX: true,

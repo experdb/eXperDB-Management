@@ -24,7 +24,7 @@
 
 	function fn_init() {
 		table = $('#encodeDecodeTable').DataTable({
-			scrollY : "310px",
+			scrollY : "420px",
 			searching : false,
 			deferRender : true,
 			scrollX: true,

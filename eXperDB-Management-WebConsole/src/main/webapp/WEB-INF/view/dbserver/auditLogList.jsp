@@ -28,7 +28,7 @@ var table = null;
 
 function fn_init() {
 	table = $('#auditLogTable').DataTable({
-		scrollY : "310px",
+		scrollY : "400px",
 		bSort: false,
 		paging: false,
 		scrollX: true,

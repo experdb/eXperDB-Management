@@ -24,7 +24,7 @@
 
 	function fn_init() {
 		table = $('#table').DataTable({
-			scrollY : "310px",
+			scrollY : "410px",
 			searching : false,
 			deferRender : true,
 			scrollX: true,

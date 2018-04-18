@@ -23,7 +23,7 @@
 
 	function fn_init() {
 		table = $('#connectorTable').DataTable({
-			scrollY : "310px",
+			scrollY : "400px",
 			searching : false,
 			deferRender : true,
 			scrollX: true,

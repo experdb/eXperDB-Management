@@ -130,11 +130,11 @@
 
 .treeview .hover {
 /* 	color: #f58220; */
-	text-decoration: none;
-	background-color: #f58220;
-    color: white;
-    border: 2px solid #f58220;
-    padding: 3px;
+/* 	text-decoration: none; */
+/* 	background-color: #f58220; */
+/*     color: white; */
+/*     border: 2px solid #f58220; */
+/*     padding: 3px; */
 	cursor: pointer;
 }
 

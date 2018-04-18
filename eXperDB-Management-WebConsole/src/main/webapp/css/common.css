@@ -849,3 +849,8 @@ box-shadow: 1px 1px 2px 0px rgba(0,0,0,0.5);}
 		overflow:hidden;
 		white-space:nowrap;
 	} 
+	
+/*데이터테이블 높이 고정*/
+table.display tr{
+	height: 40px;
+}
