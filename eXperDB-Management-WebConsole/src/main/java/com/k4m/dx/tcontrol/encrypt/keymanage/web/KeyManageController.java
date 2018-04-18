@@ -212,8 +212,12 @@ public class KeyManageController {
 			String loginId = (String)session.getAttribute("usr_id");
 			String entityId = (String)session.getAttribute("ectityUid");	
 			
-			result = kmsc.selectCryptoKeyList(restIp, restPort, strTocken,loginId,entityId);
-			
+			try{
+				result = kmsc.selectCryptoKeyList(restIp, restPort, strTocken,loginId,entityId);
+			}catch(Exception e){
+				result.put("resultCode", "8000000002");
+			}
+		
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -259,8 +263,11 @@ public class KeyManageController {
 			String strTocken = (String)session.getAttribute("tockenValue");
 			String loginId = (String)session.getAttribute("usr_id");
 			String entityId = (String)session.getAttribute("ectityUid");	
-			
-			result = kmsc.insertCryptoKeySymmetric(restIp, restPort, strTocken, loginId, entityId, param);
+			try{
+				result = kmsc.insertCryptoKeySymmetric(restIp, restPort, strTocken, loginId, entityId, param);
+			}catch(Exception e){
+			result.put("resultCode", "8000000002");
+			}
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -340,8 +347,11 @@ public class KeyManageController {
 				key.setValidEndDateTime(jsrow.get("validEndDateTime").toString());				
 				param2.add(key.toJSONString());
 			}	
-						
-			result = kmsc.updateCryptoKeySymmetric(restIp, restPort, strTocken,loginId,entityId, param, param2);
+			try{
+				result = kmsc.updateCryptoKeySymmetric(restIp, restPort, strTocken,loginId,entityId, param, param2);
+			}catch(Exception e){
+				result.put("resultCode", "8000000002");
+			}
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -373,8 +383,11 @@ public class KeyManageController {
 			String strTocken = (String)session.getAttribute("tockenValue");
 			String loginId = (String)session.getAttribute("usr_id");
 			String entityId = (String)session.getAttribute("ectityUid");	
-			
-			result = kmsc.selectCryptoKeySymmetricList(restIp, restPort, strTocken, loginId, entityId, param);
+			try{
+				result = kmsc.selectCryptoKeySymmetricList(restIp, restPort, strTocken, loginId, entityId, param);
+			}catch(Exception e){
+				result.put("resultCode", "8000000002");
+			}
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -417,7 +430,11 @@ public class KeyManageController {
 			String loginId = (String)session.getAttribute("usr_id");
 			String entityId = (String)session.getAttribute("ectityUid");
 			
-			result= kmsc.deleteCryptoKeySymmetric(restIp, restPort, strTocken, loginId, entityId, param);
+			try{
+				result= kmsc.deleteCryptoKeySymmetric(restIp, restPort, strTocken, loginId, entityId, param);
+			}catch(Exception e){
+			result.put("resultCode", "8000000002");
+			}
 		}catch(Exception e){
 			e.printStackTrace();
 		}
