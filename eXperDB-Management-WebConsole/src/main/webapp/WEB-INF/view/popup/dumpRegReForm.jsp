@@ -61,10 +61,10 @@ $(window.document).ready(
 				error : function(xhr, status, error) {
 					if(xhr.status == 401) {
 						alert('<spring:message code="message.msg02" />');
-						 location.href = "/";
+						top.location.href = "/";
 					} else if(xhr.status == 403) {
 						alert('<spring:message code="message.msg03" />');
-			             location.href = "/";
+						top.location.href = "/";
 					} else {
 						alert("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""));
 					}
@@ -97,10 +97,10 @@ $(window.document).ready(
 			error : function(xhr, status, error) {
 				if(xhr.status == 401) {
 					alert("인증에 실패 했습니다. 로그인 페이지로 이동합니다.");
-					 location.href = "/";
+					top.location.href = "/";
 				} else if(xhr.status == 403) {
 					alert("세션이 만료가 되었습니다. 로그인 페이지로 이동합니다.");
-		             location.href = "/";
+					top.location.href = "/";
 				} else {
 					alert("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""));
 				}
@@ -145,10 +145,10 @@ function fn_update_work(){
 			error : function(xhr, status, error) {
 				if(xhr.status == 401) {
 					alert('<spring:message code="message.msg02" />');
-					 location.href = "/";
+					top.location.href = "/";
 				} else if(xhr.status == 403) {
 					alert('<spring:message code="message.msg03" />');
-		             location.href = "/";
+					top.location.href = "/";
 				} else {
 					alert("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""));
 				}
@@ -197,10 +197,10 @@ function fn_insert_opt_val(bck_wrk_id, wrk_id, opt_sn, grp_cd, opt_cd, bck_opt_v
 		error : function(xhr, status, error) {
 			if(xhr.status == 401) {
 				alert('<spring:message code="message.msg02" />');
-				 location.href = "/";
+				top.location.href = "/";
 			} else if(xhr.status == 403) {
 				alert('<spring:message code="message.msg03" />');
-	             location.href = "/";
+				top.location.href = "/";
 			} else {
 				alert("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""));
 			}
@@ -248,10 +248,10 @@ function fn_insert_object_val(bck_wrk_id, wrk_id,otype,scm_nm,obj_nm){
 		error : function(xhr, status, error) {
 			if(xhr.status == 401) {
 				alert('<spring:message code="message.msg02" />');
-				 location.href = "/";
+				top.location.href = "/";
 			} else if(xhr.status == 403) {
 				alert('<spring:message code="message.msg03" />');
-	             location.href = "/";
+				top.location.href = "/";
 			} else {
 				alert("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""));
 			}
@@ -323,10 +323,10 @@ function fn_get_object_list(in_db_id,in_db_nm){
 			error : function(xhr, status, error) {
 				if(xhr.status == 401) {
 					alert('<spring:message code="message.msg02" />');
-					 location.href = "/";
+					top.location.href = "/";
 				} else if(xhr.status == 403) {
 					alert('<spring:message code="message.msg03" />');
-		             location.href = "/";
+					top.location.href = "/";
 				} else {
 					alert("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""));
 				}
@@ -531,10 +531,10 @@ function checkFolder(keyType){
 			error : function(xhr, status, error) {
 				if(xhr.status == 401) {
 					alert('<spring:message code="message.msg02" />');
-					 location.href = "/";
+					top.location.href = "/";
 				} else if(xhr.status == 403) {
 					alert('<spring:message code="message.msg03" />');
-		             location.href = "/";
+					top.location.href = "/";
 				} else {
 					alert("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""));
 				}

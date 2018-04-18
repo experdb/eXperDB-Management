@@ -355,7 +355,7 @@ function fn_mstKeyDownload(){
 								<tr>
 									<th scope="row" class="ico_t2"><spring:message code="encrypt_serverMasterKey.Master_Key_Path"/></th>
 									<td>
-										<input type="text" name="mstKeyPth" id="mstKeyPth" class="txt t4" />
+										<input type="text" name="mstKeyPth" id="mstKeyPth" class="txt t9" />
 										<span class="btn btnC_01"><button type="button" class= "btn_type_02"  style="width: 60px; margin-right: -60px; margin-top: 0;" onClick="document.getElementById('keyFile').click();"><spring:message code="encrypt_serverMasterKey.Browse"/></button></span>
 										<input type="file" size="30" id="keyFile" name="keyFile" style="display:none;" onchange="document.getElementById('mstKeyPth').value=this.value;" />
 									</td>
