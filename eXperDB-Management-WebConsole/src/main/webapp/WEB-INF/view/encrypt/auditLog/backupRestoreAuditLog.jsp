@@ -120,10 +120,10 @@
 			error : function(xhr, status, error) {
 				if(xhr.status == 401) {
 					alert("<spring:message code='message.msg02' />");
-					 location.href = "/";
+					top.location.href = "/";
 				} else if(xhr.status == 403) {
 					alert("<spring:message code='message.msg03' />");
-		             location.href = "/";
+					top.location.href = "/";
 				} else {
 					alert("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""));
 				}
@@ -156,10 +156,10 @@
 			error : function(xhr, status, error) {
 				if(xhr.status == 401) {
 					alert("<spring:message code='message.msg02' />");
-					 location.href = "/";
+					top.location.href = "/";
 				} else if(xhr.status == 403) {
 					alert("<spring:message code='message.msg03' />");
-		             location.href = "/";
+					top.location.href = "/";
 				} else {
 					alert("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""));
 				}

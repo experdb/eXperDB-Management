@@ -87,10 +87,10 @@ var table = null;
 			error : function(xhr, status, error) {
 				if(xhr.status == 401) {
 					alert("<spring:message code='message.msg02' />");
-					 location.href = "/";
+					top.location.href = "/";
 				} else if(xhr.status == 403) {
 					alert("<spring:message code='message.msg03' />");
-		             location.href = "/";
+					top.location.href = "/";
 				} else {
 					alert("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""));
 				}
@@ -142,10 +142,10 @@ var table = null;
 			error : function(xhr, status, error) {
 				if(xhr.status == 401) {
 					alert("<spring:message code='message.msg02' />");
-					 location.href = "/";
+					top.location.href = "/";
 				} else if(xhr.status == 403) {
 					alert("<spring:message code='message.msg03' />");
-		             location.href = "/";
+					top.location.href = "/";
 				} else {
 					alert("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""));
 				}
@@ -154,6 +154,9 @@ var table = null;
 				if(data.resultCode == "0000000000"){
 					table.clear().draw();
 					table.rows.add(data.list).draw();
+				}else if(data.resultCode == "8000000002"){
+					alert("<spring:message code='message.msg05' />");
+					top.location.href = "/";
 				}else if(data.resultCode == "8000000003"){
 					alert(data.resultMessage);
 					location.href="/securityKeySet.do";
@@ -208,10 +211,10 @@ var table = null;
 				error : function(xhr, status, error) {
 					if(xhr.status == 401) {
 						alert("<spring:message code='message.msg02' />");
-						 location.href = "/";
+						top.location.href = "/";
 					} else if(xhr.status == 403) {
 						alert("<spring:message code='message.msg03' />");
-			             location.href = "/";
+						top.location.href = "/";
 					} else {
 						alert("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""));
 					}
@@ -220,6 +223,9 @@ var table = null;
 					if(data.resultCode == "0000000000"){
 						alert("<spring:message code='message.msg37' />");
 						location.reload();
+					}else if(data.resultCode == "8000000002"){
+						alert("<spring:message code='message.msg05' />");
+						top.location.href = "/";
 					}else if(data.resultCode == "8000000003"){
 						alert(data.resultMessage);
 						location.href="/securityKeySet.do";

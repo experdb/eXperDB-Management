@@ -326,8 +326,13 @@ public class EncriptSettingController {
 			JSONArray rows = (JSONArray) new JSONParser().parse(strRows);
 			for (int i = 0; i < rows.size(); i++) {
 				obj = (JSONObject) rows.get(i);		
-			}	
-			result = essc.updateSysMultiValueConfigList2(restIp, restPort, strTocken, obj, loginId, entityId);
+			}
+			
+			try{
+				result = essc.updateSysMultiValueConfigList2(restIp, restPort, strTocken, obj, loginId, entityId);
+			}catch(Exception e){
+				result.put("resultCode", "8000000002");
+			}
 						
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -773,7 +778,11 @@ public class EncriptSettingController {
 			accessHistoryService.insertHistory(historyVO);
 						
 			EncryptSettingServiceCall essc = new EncryptSettingServiceCall();
-			result = essc.updateEntity(restIp, restPort, strTocken, loginId, entityId, entityName, entityUid, entityStatusCode);
+			try{
+				result = essc.updateEntity(restIp, restPort, strTocken, loginId, entityId, entityName, entityUid, entityStatusCode);
+			}catch(Exception e){
+			result.put("resultCode", "8000000002");
+			}
 		}catch (Exception e) {
 			e.printStackTrace();
 		}

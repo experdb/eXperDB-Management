@@ -567,7 +567,11 @@ public class SecurityPolicyController {
 			String loginId = (String)session.getAttribute("usr_id");
 			String entityId = (String)session.getAttribute("ectityUid");	
 			
-			result = sic.insertProfileProtection(restIp, restPort, strTocken, loginId, entityId, param1, param2, param3);
+			try{
+				result = sic.insertProfileProtection(restIp, restPort, strTocken, loginId, entityId, param1, param2, param3);
+			}catch(Exception e){
+				result.put("resultCode", "8000000002");
+			}
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -802,7 +806,12 @@ public class SecurityPolicyController {
 			String loginId = (String)session.getAttribute("usr_id");
 			String entityId = (String)session.getAttribute("ectityUid");
 			
-			result= sic.updateProfileProtection(restIp, restPort, strTocken,loginId, entityId, param1, param2, param3);
+			try{
+				result= sic.updateProfileProtection(restIp, restPort, strTocken,loginId, entityId, param1, param2, param3);
+			}catch(Exception e){
+				result.put("resultCode", "8000000002");
+			}
+		
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -839,7 +848,11 @@ public class SecurityPolicyController {
 			String[] params = request.getParameter("profileUid").toString().split(",");
 			for (int i = 0; i < params.length; i++) {
 				param.setProfileUid(params[i]);	
-				result= sic.deleteProfileProtection(restIp, restPort, strTocken,loginId,entityId, param);
+				try{
+					result= sic.deleteProfileProtection(restIp, restPort, strTocken,loginId,entityId, param);
+				}catch(Exception e){
+					result.put("resultCode", "8000000002");
+				}
 			}
 		}catch(Exception e){
 			e.printStackTrace();
