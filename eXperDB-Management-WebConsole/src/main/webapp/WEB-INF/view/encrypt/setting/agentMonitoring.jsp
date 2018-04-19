@@ -264,7 +264,7 @@ function fn_agentMonitoringModifyForm(){
 								<th width="20"></th>
 								<th width="40"><spring:message code="common.no" /></th>
 								<th width="200"><spring:message code="encrypt_agent.Agent_Name"/></th>
-								<th width="100"><spring:message code="properties.status" /></th>
+								<th width="100"><spring:message code="access_control_management.activation" /></th>
 								<th width="150"><spring:message code="encrypt_agent.Recently_accessed_address"/></th>
 								<th width="150"><spring:message code="encrypt_agent.Recently_Accessed_Time"/></th>
 								<th width="130"><spring:message code="encrypt_agent.Agent_Policy_Version"/></th>
