@@ -31,10 +31,18 @@
 			columns : [
 				{ data : "rnum", className : "dt-center", defaultContent : ""},  
 				{ data : "logDateTime", className : "dt-center", defaultContent : ""}, 
-				{ data : "entityName", className : "dt-center", defaultContent : ""}, 
-				{ data : "remoteAddress", className : "dt-center", defaultContent : ""}, 
-				{ data : "requestPath", className : "dt-center", defaultContent : ""}, 
-				{ data : "resultCode", className : "dt-center", defaultContent : ""}, 
+				{ data : "remoteAddress",  defaultContent : ""}, 
+				{ data : "requestPath",
+ 					render : function(data, type, full, meta) {	 	
+ 						var html = '';					
+ 						html += '<span title="'+full.requestPath+'">' + full.requestPath + '</span>';
+ 						return html;
+ 					},
+ 					className : "dt-center",
+ 					defaultContent : ""
+ 				},
+				/* { data : "requestPath", className : "dt-center", defaultContent : ""},  */
+				{ data : "resultCode",  defaultContent : ""}, 
 				{
 					data : "",
 					render : function(data, type, full, meta) {
@@ -55,7 +63,7 @@
 		table.tables().header().to$().find('th:eq(1)').css('min-width', '150px');
 		table.tables().header().to$().find('th:eq(2)').css('min-width', '100px');
 		table.tables().header().to$().find('th:eq(3)').css('min-width', '100px');
-		table.tables().header().to$().find('th:eq(4)').css('min-width', '250px');
+		table.tables().header().to$().find('th:eq(4)').css('min-width', '100px');
 		table.tables().header().to$().find('th:eq(5)').css('min-width', '100px');
 		table.tables().header().to$().find('th:eq(6)').css('min-width', '100px');
 		table.tables().header().to$().find('th:eq(7)').css('min-width', '0px');
@@ -284,7 +292,7 @@
 								<th width="150"><spring:message code="encrypt_log_key.Access_Date"/></th>
 								<th width="100"><spring:message code="encrypt_log_key.Access_User"/></th>
 								<th width="100"><spring:message code="encrypt_log_key.Access_Address"/></th>
-								<th width="250"><spring:message code="encrypt_log_key.Access_Path"/></th>
+								<th width="100"><spring:message code="encrypt_log_key.Access_Path"/></th>
 								<th width="100"><spring:message code="encrypt_log_key.Result_Code"/></th>
 								<th width="100"><spring:message code="schedule.detail_view" /></th>
 							</tr>
