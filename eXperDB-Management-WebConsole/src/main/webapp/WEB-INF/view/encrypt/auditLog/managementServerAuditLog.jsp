@@ -29,7 +29,7 @@
 			deferRender : true,
 			scrollX: true,
 			columns : [
-				{ data : "rnum", defaultContent : ""}, 
+				{ data : "rnum", className : "dt-center", defaultContent : ""}, 
 				{ data : "logDateTime", defaultContent : ""}, 
 				{ data : "entityName", defaultContent : ""}, 
 				{ data : "remoteAddress", defaultContent : ""}, 

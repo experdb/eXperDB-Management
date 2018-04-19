@@ -87,7 +87,7 @@
 			scrollX: true,
 			columns : [
 			{ data : "", defaultContent : "", targets : 0, orderable : false, checkboxes : {'selectRow' : true}}, 
-			{ data : "", defaultContent : ""}, 
+			{ data : "", className : "dt-center", defaultContent : ""}, 
 			{ data : "specName", defaultContent : ""}, 
 			{ data : "serverInstanceId", defaultContent : ""}, 
 			{ data : "serverLoginId", defaultContent : ""}, 

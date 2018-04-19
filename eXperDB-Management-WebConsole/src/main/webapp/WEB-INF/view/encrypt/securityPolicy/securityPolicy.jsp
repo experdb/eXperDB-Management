@@ -30,9 +30,16 @@ var table = null;
 			scrollX: true,
 			columns : [
 				{ data : "", defaultContent : "", targets : 0, orderable : false, checkboxes : {'selectRow' : true}}, 
-				{ data : "rnum", defaultContent : ""},
+				{ data : "rnum", className : "dt-center", defaultContent : ""},
 				{ data : "profileName", defaultContent : ""},
-				{ data : "profileNote", defaultContent : ""},
+				{ data : "profileNote",
+ 					render : function(data, type, full, meta) {	 	
+ 						var html = '';					
+ 						html += '<span title="'+full.profileNote+'">' + full.profileNote + '</span>';
+ 						return html;
+ 					},
+ 					defaultContent : ""
+ 				},
 				{ data : "profileStatusName", defaultContent : ""},
 				{ data : "createName", defaultContent : ""},
 				{ data : "createDateTime", defaultContent : ""},

@@ -30,7 +30,7 @@ var table = null;
 			scrollX: true,
 			columns : [
 				{ data : "no", defaultContent : "", targets : 0, orderable : false, checkboxes : {'selectRow' : true}}, 
-				{ data : "no", defaultContent : ""}, 
+				{ data : "no", className : "dt-center", defaultContent : ""}, 
 				{ data : "resourceName", defaultContent : ""}, 
 				{ data : "resourceTypeName", defaultContent : ""}, 
 				{ data : "cipherAlgorithmName", defaultContent : ""}, 

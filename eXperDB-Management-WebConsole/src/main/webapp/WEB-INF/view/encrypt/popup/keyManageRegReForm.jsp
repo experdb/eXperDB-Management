@@ -77,14 +77,14 @@ var renewalhistoryTable = null;
 
 function fn_init(){
 	renewalhistoryTable = $('#renewalhistoryTable').DataTable({
-		scrollY : "80px",
+		scrollY : "85px",
 		searching : false,
 		paging: false,
 		scrollX: true,
 		bSort: false,
 		columns : [
-		{ data : "no", defaultContent : ""},
-		{ data : "version", defaultContent : ""},
+		{ data : "no", className : "dt-center", defaultContent : ""},
+		{ data : "version", className : "dt-right", defaultContent : ""},
 		{ data : "keyStatusName", defaultContent : ""},
 		{ data : "validEndDateTime", defaultContent : ""},
 		{ data : "createName", defaultContent : ""},
@@ -99,7 +99,7 @@ function fn_init(){
 	renewalhistoryTable.tables().header().to$().find('th:eq(0)').css('min-width', '25px');
 	renewalhistoryTable.tables().header().to$().find('th:eq(1)').css('min-width', '50px');
 	renewalhistoryTable.tables().header().to$().find('th:eq(2)').css('min-width', '80px');
-	renewalhistoryTable.tables().header().to$().find('th:eq(3)').css('min-width', '200px');
+	renewalhistoryTable.tables().header().to$().find('th:eq(3)').css('min-width', '130px');
 	renewalhistoryTable.tables().header().to$().find('th:eq(4)').css('min-width', '80px');
 	renewalhistoryTable.tables().header().to$().find('th:eq(5)').css('min-width', '130px');
 	renewalhistoryTable.tables().header().to$().find('th:eq(6)').css('min-width', '80px');
@@ -297,7 +297,7 @@ function fn_historyCryptoKeySymmetric(){
 								<th width="25"><spring:message code="common.no" /></th>										
 								<th width="50"><spring:message code="encrypt_key_management.Version"/></th>
 								<th width="80"><spring:message code="encrypt_key_management.Status"/></th>
-								<th width="200"><spring:message code="encrypt_key_management.Expiration_Date"/></th>
+								<th width="130"><spring:message code="encrypt_key_management.Expiration_Date"/></th>
 								<th width="80"><spring:message code="common.register" /></th>
 								<th width="130"><spring:message code="common.regist_datetime" /></th>
 								<th width="80"><spring:message code="common.modifier" /></th>

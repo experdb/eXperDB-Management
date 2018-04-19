@@ -27,15 +27,22 @@ function fn_init(){
 	bSort: false,
 	columns : [
 		{ data : "rownum", defaultContent : "", targets : 0, orderable : false, checkboxes : {'selectRow' : true}}, 
-		{data : "rownum",  defaultContent : ""}, 		
+		{data : "rownum",  className : "dt-center", defaultContent : ""}, 		
 		{data : "scd_nm", className : "dt-left", defaultContent : ""
 			,render: function (data, type, full) {
 				  return '<span onClick=javascript:fn_scdLayer("'+full.scd_id+'"); class="bold">' + full.scd_nm + '</span>';
 			}
 		},
-		{data : "scd_exp", className : "dt-left", defaultContent : ""},
+		{ data : "scd_exp",
+				render : function(data, type, full, meta) {	 	
+					var html = '';					
+					html += '<span title="'+full.scd_exp+'">' + full.scd_exp + '</span>';
+					return html;
+				},
+				defaultContent : ""
+			},
 		{data : "db_svr_nm",  defaultContent : ""},
-		{data : "wrk_cnt",  defaultContent : ""}, //work갯수
+		{data : "wrk_cnt",  className : "dt-right", defaultContent : ""}, //work갯수
 		{data : "prev_exe_dtm",  defaultContent : ""
 			,render: function (data, type, full) {
 			if(full.prev_exe_dtm == null){
@@ -66,6 +73,7 @@ function fn_init(){
 				}
 				return data;
 			},
+			className : "dt-center",
 			 defaultContent : "" 	
 		},
 		{data : "status", 
@@ -82,6 +90,7 @@ function fn_init(){
 					}			
 				return data;
 			},
+			className : "dt-center",
 			 defaultContent : "" 	
 		},
 		{
@@ -90,7 +99,7 @@ function fn_init(){
 				var html = "<span class='btn btnC_01 btnF_02'><button id='detail'><spring:message code='data_transfer.detail_search' /> </button></span>";
 				return html;
 			},
-			
+			className : "dt-center",
 			defaultContent : "",
 			orderable : false
 		},

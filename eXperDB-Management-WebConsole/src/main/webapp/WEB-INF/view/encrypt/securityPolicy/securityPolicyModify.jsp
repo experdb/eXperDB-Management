@@ -59,7 +59,7 @@
 			scrollX: true,
 			columns : [
 			{ data : "", defaultContent : "", targets : 0, orderable : false, checkboxes : {'selectRow' : true}}, 
-			{ data : "", defaultContent : ""}, 
+			{ data : "", className : "dt-center", defaultContent : ""}, 
 			{ data : "offset", defaultContent : ""}, 
 			{ data : "length", defaultContent : ""}, 
 			{ data : "cipherAlgorithmCode", defaultContent : ""}, 

@@ -44,13 +44,20 @@ function fn_init() {
 		paging : true,	
 		columns : [
 		{data : "rownum", defaultContent : "", targets : 0, orderable : false, checkboxes : {'selectRow' : true}}, 
-		{data : "idx",  defaultContent : ""},
+		{data : "idx", className : "dt-center", defaultContent : ""},
 		{data : "wrk_nm", className : "dt-left", defaultContent : ""
 			,"render": function (data, type, full) {
 				  return '<span onClick=javascript:fn_workLayer("'+full.wrk_id+'"); class="bold">' + full.wrk_nm + '</span>';
 			}
 		},
-		{data : "wrk_exp", className : "dt-left", defaultContent : ""},	
+		{ data : "wrk_exp",
+				render : function(data, type, full, meta) {	 	
+					var html = '';					
+					html += '<span title="'+full.wrk_exp+'">' + full.wrk_exp + '</span>';
+					return html;
+				},
+				defaultContent : ""
+		},
 		{data : "bsn_dscd_nm",  defaultContent : ""},
 		{data : "bck_bsn_dscd_nm",  defaultContent : ""},
 		{data : "db_svr_nm",  defaultContent : ""},		
@@ -85,10 +92,10 @@ function fn_init() {
 		table.tables().header().to$().find('th:eq(2)').css('min-width', '200px');
 		table.tables().header().to$().find('th:eq(3)').css('min-width', '300px');
 		table.tables().header().to$().find('th:eq(4)').css('min-width', '70px');
-		table.tables().header().to$().find('th:eq(5)').css('min-width', '100px');
+		table.tables().header().to$().find('th:eq(5)').css('min-width', '130px');
 		table.tables().header().to$().find('th:eq(6)').css('min-width', '150px');
 		table.tables().header().to$().find('th:eq(7)').css('min-width', '100px');  
-		table.tables().header().to$().find('th:eq(8)').css('min-width', '100px');
+		table.tables().header().to$().find('th:eq(8)').css('min-width', '130px');
 		table.tables().header().to$().find('th:eq(9)').css('min-width', '0px');
 		table.tables().header().to$().find('th:eq(10)').css('min-width', '0px');  
 		table.tables().header().to$().find('th:eq(11)').css('min-width', '0px');

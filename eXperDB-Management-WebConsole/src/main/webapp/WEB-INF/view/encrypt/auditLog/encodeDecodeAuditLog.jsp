@@ -29,7 +29,7 @@
 			deferRender : true,
 			scrollX: true,
 			columns : [
-				{ data : "rnum", defaultContent : ""},  
+				{ data : "rnum", className : "dt-center",  defaultContent : ""},  
 				{ data : "agentLogDateTime", defaultContent : ""}, 
 				{ data : "agentRemoteAddress", defaultContent : ""},
 				{ data : "profileName", defaultContent : ""},
@@ -100,7 +100,7 @@
 					},
 					defaultContent : ""
 				},
-				{ data : "count", defaultContent : ""},
+				{ data : "count", className : "dt-right", defaultContent : ""},
 				{ data : "siteIntegrityResult", defaultContent : ""},
 				{ data : "serverIntegrityResult", defaultContent : ""},
 				{ data : "createDateTime", defaultContent : ""},

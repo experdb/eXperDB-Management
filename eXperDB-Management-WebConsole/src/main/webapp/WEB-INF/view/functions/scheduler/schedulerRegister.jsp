@@ -46,7 +46,14 @@ function fn_init(){
 	{data : "db_svr_nm",  defaultContent : ""}, //서버명
 	{data : "bck_bsn_dscd_nm",  defaultContent : ""}, //구분
 	{data : "wrk_nm", className : "dt-left", defaultContent : ""}, //work명
-	{data : "wrk_exp", className : "dt-left", defaultContent : ""}, //work설명
+	{ data : "wrk_exp",
+			render : function(data, type, full, meta) {	 	
+				var html = '';					
+				html += '<span title="'+full.wrk_exp+'">' + full.wrk_exp + '</span>';
+				return html;
+			},
+			defaultContent : ""
+		},
 	{data : "exe_ord",	
 			className: "dt-center",							
 			defaultContent : "",
@@ -300,7 +307,7 @@ function fn_workAdd(){
 		var popUrl = "/popup/scheduleRegForm.do";
 	}
 	var width = 1220;
-	var height = 680;
+	var height = 765;
 	var left = (window.screen.width / 2) - (width / 2);
 	var top = (window.screen.height /2) - (height / 2);
 	var popOption = "width="+width+", height="+height+", top="+top+", left="+left+", resizable=no, scrollbars=yes, status=no, toolbar=no, titlebar=yes, location=no,";
