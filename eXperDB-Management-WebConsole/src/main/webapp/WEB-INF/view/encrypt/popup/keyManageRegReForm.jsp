@@ -83,16 +83,16 @@ function fn_init(){
 		scrollX: true,
 		bSort: false,
 		columns : [
-		{ data : "no", className : "dt-center", defaultContent : ""},
-		{ data : "version", className : "dt-center", defaultContent : ""},
-		{ data : "keyStatusName", className : "dt-center", defaultContent : ""},
-		{ data : "validEndDateTime", className : "dt-center", defaultContent : ""},
-		{ data : "createName", className : "dt-center", defaultContent : ""},
-		{ data : "createDateTime", className : "dt-center", defaultContent : ""},
-		{ data : "updateName", className : "dt-center", defaultContent : ""},
-		{ data : "updateDateTime", className : "dt-center", defaultContent : ""},
-		{ data : "binuid", className : "dt-center", defaultContent : "", visible: false },
-		{ data : "binstatuscode", className : "dt-center", defaultContent : "", visible: false }
+		{ data : "no", defaultContent : ""},
+		{ data : "version", defaultContent : ""},
+		{ data : "keyStatusName", defaultContent : ""},
+		{ data : "validEndDateTime", defaultContent : ""},
+		{ data : "createName", defaultContent : ""},
+		{ data : "createDateTime", defaultContent : ""},
+		{ data : "updateName", defaultContent : ""},
+		{ data : "updateDateTime", defaultContent : ""},
+		{ data : "binuid", defaultContent : "", visible: false },
+		{ data : "binstatuscode", defaultContent : "", visible: false }
 		]
 	});
 	

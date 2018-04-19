@@ -29,21 +29,21 @@
 			deferRender : true,
 			scrollX: true,
 			columns : [
-				{ data : "rnum", className : "dt-center", defaultContent : ""},  
-				{ data : "agentLogDateTime", className : "dt-center", defaultContent : ""}, 
-				{ data : "agentRemoteAddress", className : "dt-center", defaultContent : ""},
-				{ data : "profileName", className : "dt-center", defaultContent : ""},
-				{ data : "instanceId", className : "dt-center", defaultContent : ""},
-				{ data : "siteAccessAddress", className : "dt-center", defaultContent : ""},
-				{ data : "macAddr", className : "dt-center", defaultContent : ""},
-				{ data : "osLoginId", className : "dt-center", defaultContent : ""},
-				{ data : "serverLoginId", className : "dt-center", defaultContent : ""},
-				{ data : "adminLoginId", className : "dt-center", defaultContent : ""},
-				{ data : "applicationName", className : "dt-center", defaultContent : ""},
-				{ data : "extraName", className : "dt-center", defaultContent : ""},
-				{ data : "hostName", className : "dt-center", defaultContent : ""},
-				{ data : "locationInfo", className : "dt-center", defaultContent : ""},
-				{ data : "moduleInfo", className : "dt-center", defaultContent : ""},
+				{ data : "rnum", defaultContent : ""},  
+				{ data : "agentLogDateTime", defaultContent : ""}, 
+				{ data : "agentRemoteAddress", defaultContent : ""},
+				{ data : "profileName", defaultContent : ""},
+				{ data : "instanceId", defaultContent : ""},
+				{ data : "siteAccessAddress", defaultContent : ""},
+				{ data : "macAddr", defaultContent : ""},
+				{ data : "osLoginId", defaultContent : ""},
+				{ data : "serverLoginId", defaultContent : ""},
+				{ data : "adminLoginId", defaultContent : ""},
+				{ data : "applicationName", defaultContent : ""},
+				{ data : "extraName", defaultContent : ""},
+				{ data : "hostName", defaultContent : ""},
+				{ data : "locationInfo", defaultContent : ""},
+				{ data : "moduleInfo", defaultContent : ""},
 // 				{ data : "weekday", className : "dt-center", defaultContent : ""}, 
 				{
 					data : "weekday",
@@ -72,7 +72,6 @@
 						} 
 						return html;
 					},
-					className : "dt-center",
 					defaultContent : ""
 				},
 				{
@@ -86,7 +85,6 @@
 						}
 						return html;
 					},
-					className : "dt-center",
 					defaultContent : ""
 				},
 				{
@@ -100,14 +98,13 @@
 						}
 						return html;
 					},
-					className : "dt-center",
 					defaultContent : ""
 				},
-				{ data : "count", className : "dt-center", defaultContent : ""},
-				{ data : "siteIntegrityResult", className : "dt-center", defaultContent : ""},
-				{ data : "serverIntegrityResult", className : "dt-center", defaultContent : ""},
-				{ data : "createDateTime", className : "dt-center", defaultContent : ""},
-				{ data : "updateDateTime", className : "dt-center", defaultContent : ""}
+				{ data : "count", defaultContent : ""},
+				{ data : "siteIntegrityResult", defaultContent : ""},
+				{ data : "serverIntegrityResult", defaultContent : ""},
+				{ data : "createDateTime", defaultContent : ""},
+				{ data : "updateDateTime", defaultContent : ""}
 	
 			 ]
 		});

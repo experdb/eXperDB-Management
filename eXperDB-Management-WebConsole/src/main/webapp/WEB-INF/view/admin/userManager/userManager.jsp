@@ -28,11 +28,11 @@ function fn_init() {
 		bSort: false,
 		columns : [
 		{ data : "rownum", defaultContent : "", targets : 0, orderable : false, checkboxes : {'selectRow' : true}}, 
-		{ data : "idx", className : "dt-center", defaultContent : ""}, 
-		{ data : "usr_id", className : "dt-center", defaultContent : ""}, 
-		{ data : "bln_nm", className : "dt-center", defaultContent : ""}, 
-		{ data : "usr_nm", className : "dt-center", defaultContent : ""}, 
-		{ data : "cpn", className : "dt-center", defaultContent : ""}, 
+		{ data : "idx", defaultContent : ""}, 
+		{ data : "usr_id", defaultContent : ""}, 
+		{ data : "bln_nm", defaultContent : ""}, 
+		{ data : "usr_nm", defaultContent : ""}, 
+		{ data : "cpn", defaultContent : ""}, 
 		{
 			data : "use_yn",
 			render : function(data, type, full, meta) {
@@ -44,7 +44,6 @@ function fn_init() {
 				}
 				return html;
 			},
-			className : "dt-center",
 			defaultContent : ""
 		},
 		{
@@ -58,10 +57,9 @@ function fn_init() {
 				}
 				return html;
 			},
-			className : "dt-center",
 			defaultContent : ""
 		},
-		{ data : "usr_expr_dt", className : "dt-center", defaultContent : ""}
+		{ data : "usr_expr_dt", defaultContent : ""}
 		],'select': {'style': 'multi'}
 	});
 

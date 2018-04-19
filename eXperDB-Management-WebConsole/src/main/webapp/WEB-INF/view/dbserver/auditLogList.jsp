@@ -33,14 +33,14 @@ function fn_init() {
 		paging: false,
 		scrollX: true,
 		columns : [
-		{ data : "", className : "dt-center", defaultContent : ""}, 
-		{data : "file_name", className : "dt-center", defaultContent : ""
+		{ data : "", defaultContent : ""}, 
+		{data : "file_name", defaultContent : ""
 			,"render": function (data, type, full) {				
 				  return "<a href='#' class='bold' id='openLogView'>"+data+"</a>";
 			}
 		}, 
-		{ data : "file_size", className : "dt-center", defaultContent : ""}, 
-		{ data : "file_lastmodified", className : "dt-center", defaultContent : ""}
+		{ data : "file_size", defaultContent : ""}, 
+		{ data : "file_lastmodified", defaultContent : ""}
 		 ]
 	});
 	

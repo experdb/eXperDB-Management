@@ -37,14 +37,14 @@ function fn_init(){
 	bSort: false,
 	columns : [
 		{data : "rownum", defaultContent : "", targets : 0, orderable : false, checkboxes : {'selectRow' : true}}, 
-		{data : "idx", className : "dt-center", defaultContent : ""}, 
+		{data : "idx", defaultContent : ""}, 
 		{data : "wrk_nm", className : "dt-left", defaultContent : ""
 			,"render": function (data, type, full) {
 				  return '<span onClick=javascript:fn_workLayer("'+full.wrk_id+'"); class="bold">' + full.wrk_nm + '</span>';
 			}
 		}, //work명
 		{data : "wrk_exp", className : "dt-nowrap", defaultContent : ""},	
-		{data : "bck_opt_cd_nm", className : "dt-center", defaultContent : ""
+		{data : "bck_opt_cd_nm", defaultContent : ""
 			,"render": function (data, type, full) {
 				if(full.bck_opt_cd=="TC000301"){
 					var html = '<spring:message code="backup_management.full_backup" />';
@@ -66,11 +66,11 @@ function fn_init(){
 			}
 		 },		
 		//{data : "log_file_pth", className : "dt-left", defaultContent : ""},	
-		{data : "frst_regr_id", className : "dt-center", defaultContent : ""},
-		{data : "frst_reg_dtm", className : "dt-center", defaultContent : ""},
-		{data : "lst_mdfr_id", className : "dt-center", defaultContent : ""},
-		{data : "lst_mdf_dtm", className : "dt-center", defaultContent : ""},
-		{data : "bck_wrk_id", className : "dt-center", defaultContent : "", visible: false }
+		{data : "frst_regr_id", defaultContent : ""},
+		{data : "frst_reg_dtm", defaultContent : ""},
+		{data : "lst_mdfr_id", defaultContent : ""},
+		{data : "lst_mdf_dtm", defaultContent : ""},
+		{data : "bck_wrk_id", defaultContent : "", visible: false }
 	],'select': {'style': 'multi'}
 	});
 	
@@ -89,30 +89,30 @@ function fn_init(){
 		bSort: false,
 	columns : [
 		{data : "rownum", defaultContent : "", targets : 0, orderable : false, checkboxes : {'selectRow' : true}}, 
-		{data : "idx", className : "dt-center", defaultContent : ""}, 
+		{data : "idx", defaultContent : ""}, 
 		{data : "wrk_nm", className : "dt-left", defaultContent : ""
 			,"render": function (data, type, full) {				
 				  return '<span onClick=javascript:fn_workLayer("'+full.wrk_id+'"); class="bold">' + full.wrk_nm + '</span>';
 			}
 		},
 		{data : "wrk_exp", className : "dt-left", defaultContent : ""},
-		{data : "db_nm", className : "dt-center", defaultContent : ""}, 
+		{data : "db_nm", defaultContent : ""}, 
 		{data : "save_pth", className : "dt-left", defaultContent : ""
 			,"render": function (data, type, full) {
 				  return '<span onClick=javascript:fn_dumpShow("'+full.save_pth+'","'+full.db_svr_id+'"); class="bold">' + full.save_pth + '</span>';
 			}
 		 },
-		{data : "file_fmt_cd_nm", className : "dt-center", defaultContent : ""}, 
-		{data : "cprt", className : "dt-center", defaultContent : ""}, 
-		{data : "encd_mth_nm", className : "dt-center", defaultContent : ""}, 
-		{data : "usr_role_nm", className : "dt-center", defaultContent : ""}, 
-		{data : "file_stg_dcnt", className : "dt-center", defaultContent : ""}, 	
-		{data : "bck_mtn_ecnt", className : "dt-center", defaultContent : ""}, 		
-		{data : "frst_regr_id", className : "dt-center", defaultContent : ""},
-		{data : "frst_reg_dtm", className : "dt-center", defaultContent : ""},
-		{data : "lst_mdfr_id", className : "dt-center", defaultContent : ""},
-		{data : "lst_mdf_dtm", className : "dt-center", defaultContent : ""},
-		{data : "bck_wrk_id", className : "dt-center", defaultContent : "" , visible: false }
+		{data : "file_fmt_cd_nm", defaultContent : ""}, 
+		{data : "cprt", defaultContent : ""}, 
+		{data : "encd_mth_nm", defaultContent : ""}, 
+		{data : "usr_role_nm", defaultContent : ""}, 
+		{data : "file_stg_dcnt", defaultContent : ""}, 	
+		{data : "bck_mtn_ecnt", defaultContent : ""}, 		
+		{data : "frst_regr_id", defaultContent : ""},
+		{data : "frst_reg_dtm", defaultContent : ""},
+		{data : "lst_mdfr_id", defaultContent : ""},
+		{data : "lst_mdf_dtm", defaultContent : ""},
+		{data : "bck_wrk_id", defaultContent : "" , visible: false }
 	],'select': {'style': 'multi'}
 	});
 	

@@ -30,20 +30,20 @@ var table = null;
 			scrollX: true,
 			columns : [
 				{ data : "no", defaultContent : "", targets : 0, orderable : false, checkboxes : {'selectRow' : true}}, 
-				{ data : "no", className : "dt-center", defaultContent : ""}, 
-				{ data : "resourceName", className : "dt-center", defaultContent : ""}, 
-				{ data : "resourceTypeName", className : "dt-center", defaultContent : ""}, 
-				{ data : "cipherAlgorithmName", className : "dt-center", defaultContent : ""}, 
-				{ data : "createName", className : "dt-center", defaultContent : ""}, 
-				{ data : "createDateTime", className : "dt-center", defaultContent : ""}, 
-				{ data : "updateName", className : "dt-center", defaultContent : ""}, 
-				{ data : "updateDateTime", className : "dt-center", defaultContent : ""},
-				{ data : "resourceTypeCode", className : "dt-center", defaultContent : "", visible: false},
-				{ data : "resourceNote", className : "dt-center", defaultContent : "", visible: false},
-				{ data : "keyUid", className : "dt-center", defaultContent : "", visible: false},
-				{ data : "keyStatusCode", className : "dt-center", defaultContent : "", visible: false},
-				{ data : "keyStatusName", className : "dt-center", defaultContent : "", visible: false},
-				{ data : "cipherAlgorithmCode", className : "dt-center", defaultContent : "", visible: false}
+				{ data : "no", defaultContent : ""}, 
+				{ data : "resourceName", defaultContent : ""}, 
+				{ data : "resourceTypeName", defaultContent : ""}, 
+				{ data : "cipherAlgorithmName", defaultContent : ""}, 
+				{ data : "createName", defaultContent : ""}, 
+				{ data : "createDateTime", defaultContent : ""}, 
+				{ data : "updateName", defaultContent : ""}, 
+				{ data : "updateDateTime", defaultContent : ""},
+				{ data : "resourceTypeCode", defaultContent : "", visible: false},
+				{ data : "resourceNote", defaultContent : "", visible: false},
+				{ data : "keyUid", defaultContent : "", visible: false},
+				{ data : "keyStatusCode", defaultContent : "", visible: false},
+				{ data : "keyStatusName", defaultContent : "", visible: false},
+				{ data : "cipherAlgorithmCode", defaultContent : "", visible: false}
 	
 			 ],'select': {'style': 'multi'}
 		});

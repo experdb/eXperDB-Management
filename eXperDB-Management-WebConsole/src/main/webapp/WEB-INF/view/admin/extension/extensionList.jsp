@@ -35,7 +35,7 @@ function fn_init() {
 		paging : false,
 		bSort: false,
 		columns : [
-		{data : "rownum", defaultContent : "", className : "dt-center", 
+		{data : "rownum", defaultContent : "", 
 			targets: 0,
 	        searchable: false,
 	        orderable: false,
@@ -45,17 +45,17 @@ function fn_init() {
 	           }
 	           return data;
 	        }}, 
-		{data : "idx", className : "dt-center", defaultContent : "" ,visible: false},
-		{data : "db_svr_id", className : "dt-center", defaultContent : "", visible: false},
-		{data : "db_svr_nm", className : "dt-center", defaultContent : ""},
-		{data : "ipadr", className : "dt-center", defaultContent : ""},
-		{data : "dft_db_nm", className : "dt-center", defaultContent : "", visible: false},
-		{data : "portno", className : "dt-center", defaultContent : "", visible: false},
-		{data : "svr_spr_usr_id", className : "dt-center", defaultContent : "", visible: false},
-		{data : "frst_regr_id", className : "dt-center", defaultContent : "", visible: false},
-		{data : "frst_reg_dtm", className : "dt-center", defaultContent : "", visible: false},
-		{data : "lst_mdfr_id", className : "dt-center", defaultContent : "", visible: false},
-		{data : "lst_mdf_dtm", className : "dt-center", defaultContent : "", visible: false}			
+		{data : "idx", defaultContent : "" ,visible: false},
+		{data : "db_svr_id", defaultContent : "", visible: false},
+		{data : "db_svr_nm", defaultContent : ""},
+		{data : "ipadr", defaultContent : ""},
+		{data : "dft_db_nm", defaultContent : "", visible: false},
+		{data : "portno", defaultContent : "", visible: false},
+		{data : "svr_spr_usr_id", defaultContent : "", visible: false},
+		{data : "frst_regr_id", defaultContent : "", visible: false},
+		{data : "frst_reg_dtm", defaultContent : "", visible: false},
+		{data : "lst_mdfr_id", defaultContent : "", visible: false},
+		{data : "lst_mdf_dtm", defaultContent : "", visible: false}			
 		]
 	});
 
@@ -68,9 +68,9 @@ function fn_init() {
 		paging : false,
 		bSort: false,
 		columns : [
-		{data : "extname", className : "dt-center", defaultContent : ""}, 
-		{data : "extversion", className : "dt-center", defaultContent : ""},
-		{data : "installYn", className : "dt-center", defaultContent : "설치"}, 		
+		{data : "extname", defaultContent : ""}, 
+		{data : "extversion", defaultContent : ""},
+		{data : "installYn", defaultContent : "설치"}, 		
 		]
 	});
 	

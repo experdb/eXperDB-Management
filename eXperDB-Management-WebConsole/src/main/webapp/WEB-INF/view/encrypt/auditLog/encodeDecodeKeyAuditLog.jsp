@@ -29,8 +29,8 @@
 			deferRender : true,
 			scrollX: true,
 			columns : [
-				{ data : "rnum", className : "dt-center", defaultContent : ""},  
-				{ data : "logDateTime", className : "dt-center", defaultContent : ""}, 
+				{ data : "rnum", defaultContent : ""},  
+				{ data : "logDateTime", defaultContent : ""}, 
 				{ data : "remoteAddress",  defaultContent : ""}, 
 				{ data : "requestPath",
  					render : function(data, type, full, meta) {	 	
@@ -38,7 +38,6 @@
  						html += '<span title="'+full.requestPath+'">' + full.requestPath + '</span>';
  						return html;
  					},
- 					className : "dt-center",
  					defaultContent : ""
  				},
 				/* { data : "requestPath", className : "dt-center", defaultContent : ""},  */
@@ -49,12 +48,11 @@
 						var html = "<span class='btn btnC_01 btnF_02'><button id='detail'><spring:message code='schedule.detail_view' /></button></span>";
 						return html;
 					},
-					className : "dt-center",
 					defaultContent : "",
 					orderable : false
 				},
-				{data : "parameter", className : "dt-center", defaultContent : "", visible: false },
-				{data : "resultMessage", className : "dt-center", defaultContent : "", visible: false }
+				{data : "parameter", defaultContent : "", visible: false },
+				{data : "resultMessage", defaultContent : "", visible: false }
 	
 			 ]
 		});

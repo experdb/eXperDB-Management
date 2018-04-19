@@ -30,14 +30,14 @@ var table = null;
 			scrollX: true,
 			columns : [
 				{ data : "", defaultContent : "", targets : 0, orderable : false, checkboxes : {'selectRow' : true}}, 
-				{ data : "rnum", className : "dt-center", defaultContent : ""},
-				{ data : "profileName", className : "dt-center", defaultContent : ""},
-				{ data : "profileNote", className : "dt-center", defaultContent : ""},
-				{ data : "profileStatusName", className : "dt-center", defaultContent : ""},
-				{ data : "createName", className : "dt-center", defaultContent : ""},
-				{ data : "createDateTime", className : "dt-center", defaultContent : ""},
-				{ data : "updateName", className : "dt-center", defaultContent : ""},
-				{ data : "updateDateTime", className : "dt-center", defaultContent : ""},
+				{ data : "rnum", defaultContent : ""},
+				{ data : "profileName", defaultContent : ""},
+				{ data : "profileNote", defaultContent : ""},
+				{ data : "profileStatusName", defaultContent : ""},
+				{ data : "createName", defaultContent : ""},
+				{ data : "createDateTime", defaultContent : ""},
+				{ data : "updateName", defaultContent : ""},
+				{ data : "updateDateTime", defaultContent : ""},
 				{ data : "profileUid",visible: false }
 				
 			 ],'select': {'style': 'multi'}

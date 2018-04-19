@@ -91,7 +91,6 @@ function fn_rman_init(){
 	 						}
 	 						return html;
 	 					},
-	 					className : "dt-center",
 	 					defaultContent : ""
 	 				},
 	 				{
@@ -111,7 +110,6 @@ function fn_rman_init(){
 	 						}
 	 						return html;
 	 					},
-	 					className : "dt-center",
 	 					defaultContent : ""
 	 				}
  		        ]
@@ -152,7 +150,7 @@ function fn_dump_init(){
  		         	{ data: "db_nm", className: "dt-center", defaultContent: ""}, 
  		         	//{ data: "file_sz", className: "dt-center", defaultContent: ""},
  		         	
- 		         	 {data : "file_sz", className : "dt-center", defaultContent : ""
+ 		         	 {data : "file_sz", defaultContent : ""
 	 		   			,"render": function (data, type, full) {
 	 		   				if(full.file_sz != 0){
 				 		   		  var s = ['bytes', 'kB', 'MB', 'GB', 'TB', 'PB'];
@@ -187,7 +185,6 @@ function fn_dump_init(){
 	 						}
 	 						return html;
 	 					},
-	 					className : "dt-center",
 	 					defaultContent : ""
 	 				},
 	 				{
@@ -207,7 +204,6 @@ function fn_dump_init(){
 	 						}
 	 						return html;
 	 					},
-	 					className : "dt-center",
 	 					defaultContent : ""
 	 				}
  		        ],'select': {'style': 'multi'} 
