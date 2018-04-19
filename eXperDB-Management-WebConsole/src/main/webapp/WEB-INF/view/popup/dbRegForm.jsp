@@ -44,8 +44,8 @@ function fn_init(){
 		paging :false,
 		bSort: false,
 		columns : [
-		{data : "dft_db_nm", className : "dt-center", defaultContent : ""}, 
-		{data : "db_exp", defaultContent : "", className : "dt-center", 
+		{data : "dft_db_nm",  defaultContent : ""}, 
+		{data : "db_exp", defaultContent : "",  
 			targets: 0,
 	        searchable: false,
 	        orderable: false,

@@ -42,9 +42,9 @@ function fn_init(){
 	bSort: false,
 	columns : [
 	{data : "rownum", defaultContent : "", targets : 0, orderable : false, checkboxes : {'selectRow' : true}}, 
-	{data : "idx", columnDefs: [ { searchable: false, orderable: false, targets: 0} ], order: [[ 1, 'asc' ]], className : "dt-center", defaultContent : ""},
-	{data : "db_svr_nm", className : "dt-center", defaultContent : ""}, //서버명
-	{data : "bck_bsn_dscd_nm", className : "dt-center", defaultContent : ""}, //구분
+	{data : "idx", columnDefs: [ { searchable: false, orderable: false, targets: 0} ], order: [[ 1, 'asc' ]],  defaultContent : ""},
+	{data : "db_svr_nm",  defaultContent : ""}, //서버명
+	{data : "bck_bsn_dscd_nm",  defaultContent : ""}, //구분
 	{data : "wrk_nm", className : "dt-left", defaultContent : ""}, //work명
 	{data : "wrk_exp", className : "dt-left", defaultContent : ""}, //work설명
 	{data : "exe_ord",	
@@ -76,7 +76,7 @@ function fn_init(){
         		return onError;	
         	}
           },
-	{data : "wrk_id", className : "dt-center", defaultContent : "", visible: false }
+	{data : "wrk_id",  defaultContent : "", visible: false }
 	],'select': {'style': 'multi'},
  		'drawCallback': function (settings) {
 				// Remove previous binding before adding it

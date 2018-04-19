@@ -46,21 +46,21 @@ function fn_init(){
 	searching : false,	
 	bSort: false,
 	columns : [
-	{data : "START_TIME", className : "dt-center", defaultContent : "", 
+	{data : "START_TIME",  defaultContent : "", 
 		"render": function (data, type, full) {		
 			var html = full.START_DATE+' '+full.START_TIME ;
 				return html;
 				return data;
 		}		
 	}, 
-	{data : "END_TIME", className : "dt-center", defaultContent : "", 
+	{data : "END_TIME",  defaultContent : "", 
 		"render": function (data, type, full) {		
 			var html = full.END_DATE+' '+full.END_TIME ;
 				return html;
 				return data;
 		}		
 	},
-	{data : "MODE", className : "dt-center", defaultContent : "", 
+	{data : "MODE",  defaultContent : "", 
 		"render": function (data, type, full) {		
 			var html = '';
 			if (full.MODE == 'FULL') {
@@ -73,11 +73,11 @@ function fn_init(){
 				return html;
 		}
 	}, 
-	{data : "DATA", className : "dt-center", defaultContent : ""}, 
-	{data : "ARCLOG", className : "dt-center", defaultContent : ""}, 
-	{data : "SRVLOG", className : "dt-center", defaultContent : ""}, 
-	{data : "TOTAL", className : "dt-center", defaultContent : ""}, 
-	{data : "COMPRESSED", className : "dt-center", defaultContent : "", 
+	{data : "DATA",  defaultContent : ""}, 
+	{data : "ARCLOG",  defaultContent : ""}, 
+	{data : "SRVLOG",  defaultContent : ""}, 
+	{data : "TOTAL",  defaultContent : ""}, 
+	{data : "COMPRESSED",  defaultContent : "", 
 		"render": function (data, type, full) {		
 			var html = '';
 			if (full.COMPRESSED == 'true') {
@@ -88,7 +88,7 @@ function fn_init(){
 				return html;
 		}
 	}, 
-	{data : "STATUS", className : "dt-center", defaultContent : "", 
+	{data : "STATUS",  defaultContent : "", 
 		"render": function (data, type, full) {		
 			var html = '';
 			if (full.STATUS == 'OK') {

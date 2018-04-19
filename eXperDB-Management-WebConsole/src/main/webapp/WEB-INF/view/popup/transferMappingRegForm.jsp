@@ -49,8 +49,8 @@
 			bSort: false,
 			columns : [
 			{ data : "table_name", defaultContent : "", targets : 0, orderable : false, checkboxes : {'selectRow' : true}}, 
-			{ data : "table_schema", className : "dt-center", defaultContent : ""}, 
-			{ data : "table_name", className : "dt-center", defaultContent : ""}, 
+			{ data : "table_schema",  defaultContent : ""}, 
+			{ data : "table_name",  defaultContent : ""}, 
 			 ],'select': {'style': 'multi'}
 		});
 		
@@ -61,8 +61,8 @@
 			bSort: false,
 			columns : [
 			{ data : "table_name", defaultContent : "", targets : 0, orderable : false, checkboxes : {'selectRow' : true}}, 
-			{ data : "table_schema", className : "dt-center", defaultContent : ""}, 
-			{ data : "table_name", className : "dt-center", defaultContent : ""}, 
+			{ data : "table_schema",  defaultContent : ""}, 
+			{ data : "table_name",  defaultContent : ""}, 
 			 ],'select': {'style': 'multi'}
 		});
 	}

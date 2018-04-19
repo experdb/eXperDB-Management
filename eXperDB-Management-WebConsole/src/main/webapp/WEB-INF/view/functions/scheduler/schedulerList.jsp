@@ -27,16 +27,16 @@ function fn_init(){
 	bSort: false,
 	columns : [
 		{ data : "rownum", defaultContent : "", targets : 0, orderable : false, checkboxes : {'selectRow' : true}}, 
-		{data : "rownum", className : "dt-center", defaultContent : ""}, 		
+		{data : "rownum",  defaultContent : ""}, 		
 		{data : "scd_nm", className : "dt-left", defaultContent : ""
 			,render: function (data, type, full) {
 				  return '<span onClick=javascript:fn_scdLayer("'+full.scd_id+'"); class="bold">' + full.scd_nm + '</span>';
 			}
 		},
 		{data : "scd_exp", className : "dt-left", defaultContent : ""},
-		{data : "db_svr_nm", className : "dt-center", defaultContent : ""},
-		{data : "wrk_cnt", className : "dt-center", defaultContent : ""}, //work갯수
-		{data : "prev_exe_dtm", className : "dt-center", defaultContent : ""
+		{data : "db_svr_nm",  defaultContent : ""},
+		{data : "wrk_cnt",  defaultContent : ""}, //work갯수
+		{data : "prev_exe_dtm",  defaultContent : ""
 			,render: function (data, type, full) {
 			if(full.prev_exe_dtm == null){
 				var html = '-';
@@ -44,7 +44,7 @@ function fn_init(){
 			}
 		  return data;
 		}}, 
-		{data : "nxt_exe_dtm", className : "dt-center", defaultContent : ""
+		{data : "nxt_exe_dtm",  defaultContent : ""
 			,render: function (data, type, full) {
 				if(full.nxt_exe_dtm == null){
 					var html = '-';
@@ -66,7 +66,7 @@ function fn_init(){
 				}
 				return data;
 			},
-			className : "dt-center", defaultContent : "" 	
+			 defaultContent : "" 	
 		},
 		{data : "status", 
 			render: function (data, type, full){		
@@ -82,7 +82,7 @@ function fn_init(){
 					}			
 				return data;
 			},
-			className : "dt-center", defaultContent : "" 	
+			 defaultContent : "" 	
 		},
 		{
 			data : "",
@@ -90,16 +90,16 @@ function fn_init(){
 				var html = "<span class='btn btnC_01 btnF_02'><button id='detail'><spring:message code='data_transfer.detail_search' /> </button></span>";
 				return html;
 			},
-			className : "dt-center",
+			
 			defaultContent : "",
 			orderable : false
 		},
-		{data : "frst_regr_id", className : "dt-center", defaultContent : ""},
-		{data : "frst_reg_dtm", className : "dt-center", defaultContent : ""},
-		{data : "lst_mdfr_id", className : "dt-center", defaultContent : ""},
-		{data : "lst_mdf_dtm", className : "dt-center", defaultContent : ""},
-		{data : "scd_id", className : "dt-center", defaultContent : "", visible: false },
-		{data : "exe_dt", className : "dt-center", defaultContent : "", visible: false },
+		{data : "frst_regr_id",  defaultContent : ""},
+		{data : "frst_reg_dtm",  defaultContent : ""},
+		{data : "lst_mdfr_id",  defaultContent : ""},
+		{data : "lst_mdf_dtm",  defaultContent : ""},
+		{data : "scd_id",  defaultContent : "", visible: false },
+		{data : "exe_dt",  defaultContent : "", visible: false },
 	],'select': {'style': 'multi'}
 	});
 	

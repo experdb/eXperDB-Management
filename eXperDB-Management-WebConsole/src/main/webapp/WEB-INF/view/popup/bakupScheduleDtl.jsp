@@ -45,19 +45,19 @@ function fn_init(){
 	bSort: false,
 	columns : [
 	{data : "rownum", defaultContent : "", targets : 0, orderable : false, checkboxes : {'selectRow' : true}}, 
-	{data : "idx", columnDefs: [ { searchable: false, orderable: false, targets: 0} ], order: [[ 1, 'asc' ]], className : "dt-center", defaultContent : ""},
-	{data : "wrk_id", className : "dt-center", defaultContent : "", visible: false },
-	{data : "db_svr_nm", className : "dt-center", defaultContent : ""}, //서버명
-	{data : "bck_bsn_dscd_nm", className : "dt-center", defaultContent : ""}, //구분
-	{data : "wrk_nm", className : "dt-center", defaultContent : ""
+	{data : "idx", columnDefs: [ { searchable: false, orderable: false, targets: 0} ], order: [[ 1, 'asc' ]],  defaultContent : ""},
+	{data : "wrk_id",  defaultContent : "", visible: false },
+	{data : "db_svr_nm",  defaultContent : ""}, //서버명
+	{data : "bck_bsn_dscd_nm",  defaultContent : ""}, //구분
+	{data : "wrk_nm",  defaultContent : ""
 		,"render": function (data, type, full) {
 			  return '<span onClick=javascript:fn_workLayer("'+full.wrk_id+'"); class="bold">' + full.wrk_nm + '</span>';
 		}
 	}, //work명
-	{data : "wrk_exp", className : "dt-center", defaultContent : ""}, //work설명
-	{data : "bck_wrk_id", className : "dt-center", defaultContent : "", visible: false },
-	{data : "bck_bsn_dscd", className : "dt-center", defaultContent : "", visible: false },
-	{data : "db_svr_id", className : "dt-center", defaultContent : "", visible: false }
+	{data : "wrk_exp",  defaultContent : ""}, //work설명
+	{data : "bck_wrk_id",  defaultContent : "", visible: false },
+	{data : "bck_bsn_dscd",  defaultContent : "", visible: false },
+	{data : "db_svr_id",  defaultContent : "", visible: false }
 	],
 });
 

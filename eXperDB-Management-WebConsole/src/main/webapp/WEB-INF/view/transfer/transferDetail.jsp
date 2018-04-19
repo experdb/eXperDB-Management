@@ -31,9 +31,9 @@
 			scrollX: true,
 			bSort: false,
 			columns : [
-			{ data : "trf_trg_cnn_nm", className : "dt-center", defaultContent : ""}, 
-			{ data : "db_svr_nm", className : "dt-center", defaultContent : ""}, 
-			{ data : "db_nm", className : "dt-center", defaultContent : ""}, 
+			{ data : "trf_trg_cnn_nm",  defaultContent : ""}, 
+			{ data : "db_svr_nm",  defaultContent : ""}, 
+			{ data : "db_nm",  defaultContent : ""}, 
 			{
 				data : "bw_pid",
 				render : function(data, type, full, meta) {
@@ -47,7 +47,7 @@
 					}
 					return html;
 				},
-				className : "dt-center",
+				
 				defaultContent : ""
 			}, 
 			{
@@ -63,7 +63,7 @@
 					}
 					return html;
 				},
-				className : "dt-center",
+				
 				defaultContent : ""
 			}, 
 			{ data : "trf_trg_id", visible: false}, 
