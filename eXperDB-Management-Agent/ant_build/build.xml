@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project name="experDB-Management-Agent"  basedir="../." default="deploy" >
+<project name="eXperDB-Management-Agent"  basedir="../." default="deploy" >
 	<description>Build script</description>
 
 	<!-- 
@@ -17,7 +17,7 @@
 	Target Build Property Setting 
 	===========================================================	
 	-->
-	<property name="module.name" value="experDB-Management-Agent" />	
+	<property name="module.name" value="eXperDB-Management-Agent" />	
 	<property name="root.dir" value="../" />
 	<property name="src.dir" value="src/main/java" />
 	<property name="resources.dir" value="src/main/resources" />

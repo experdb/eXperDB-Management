@@ -1,11 +1,11 @@
 #!/bin/sh
 
 
-PGM_NAME=experDB-Management-Agent
+PGM_NAME=eXperDB-Management-Agent
 DATE=`date +%Y%m%d-%H%M%S`
  
-Cnt=`ps -ef|grep $PGM_NAME|grep -v grep|grep -v vi|wc -l`
-PROCESS=`ps -ef|grep $PGM_NAME|grep -v grep|grep -v vi|awk '{print $2}'`
+Cnt=`ps -ef|grep $PGM_NAME|grep -v grep|wc -l`
+PROCESS=`ps -ef|grep $PGM_NAME|grep -v grep|awk '{print $2}'`
  
 
 echo "################################################################################### "

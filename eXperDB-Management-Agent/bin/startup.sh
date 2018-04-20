@@ -1,26 +1,17 @@
 #!/bin/sh
-echo "experDB-Management-Agent start run .. "
+echo "eXperDB-Management-Agent start run .. "
 
-JAVA_HOME=/home/experdb/experDB-Management-Agent/java/jdk1.7.0_80
-
-
-PROJECT_HOME=/home/experdb
-CURRENT_DIR=$PROJECT_HOME/experDB-Management-Agent
-
-LOG_DIR=$CURRENT_DIR/logs
-
+SCRIPTPATH=$(cd "$(dirname "$0")" && pwd)
+PROJECT_HOME=${SCRIPTPATH%/*}
+JAVA_HOME=$PROJECT_HOME/java/jdk1.7.0_80
+LOG_DIR=$PROJECT_HOME/logs
+APP_HOME=$PROJECT_HOME/classes
+APP_HOME=$PROJECT_HOME/classes/*:$APP_HOME
+LIB=$PROJECT_HOME/lib/*
+JAVA_CLASSPATH=$APP_HOME:$LIB
 MAIN_CLASS=com.k4m.dx.tcontrol.DaemonStart
 
-APP_HOME=$CURRENT_DIR/classes
-APP_HOME=$CURRENT_DIR/classes/*:$APP_HOME
-LIB=$CURRENT_DIR/lib/*
+#$JAVA_HOME/bin/java -Du=experDB-Management-Agent -Xms256m -Xmx256m -XX:NewRatio=2 -XX:SurvivorRatio=6 -Xloggc:$LOG_DIR/eXperManagementAgentGC.log -XX:+PrintGCDetails -XX:+PrintGCDateStamps -Dlog.base=$LOG_DIR -classpath $JAVA_CLASSPATH $MAIN_CLASS
 
-
-
-JAVA_CLASSPATH=$APP_HOME:$LIB
-
-
-#$JAVA_HOME/bin/java  -Xms256m -Xmx256m -XX:NewRatio=2 -XX:SurvivorRatio=6 -Xloggc:$LOG_DIR/eXperManagementAgentGC.log -XX:+PrintGCDetails -XX:+PrintGCDateStamps -Du=experDB-Management-Agent -Dlog.base=$LOG_DIR -classpath $JAVA_CLASSPATH $MAIN_CLASS
-
-nohup $JAVA_HOME/bin/java -Xms256m -Xmx256m -XX:NewRatio=2 -XX:SurvivorRatio=6 -Xloggc:$LOG_DIR/eXperManagementAgentGC.log -XX:+PrintGCDetails -XX:+PrintGCDateStamps -Du=experDB-Management-Agent -Dlog.base=$LOG_DIR -classpath $JAVA_CLASSPATH $MAIN_CLASS 1> /dev/null 2>&1 &
+nohup $JAVA_HOME/bin/java -Du=eXperDB-Management-Agent -Xms256m -Xmx256m -XX:NewRatio=2 -XX:SurvivorRatio=6 -Dlog.base=$LOG_DIR -classpath $JAVA_CLASSPATH $MAIN_CLASS 1> /dev/null 2>&1 &
 
