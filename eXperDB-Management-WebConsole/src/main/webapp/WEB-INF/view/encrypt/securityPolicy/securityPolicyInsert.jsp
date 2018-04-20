@@ -59,13 +59,13 @@
 			scrollX: true,
 			columns : [
 			{ data : "", defaultContent : "", targets : 0, orderable : false, checkboxes : {'selectRow' : true}}, 
-			{ data : "", className : "dt-center", defaultContent : ""}, 
-			{ data : "offset", className : "dt-center", defaultContent : ""}, 
-			{ data : "length", className : "dt-center", defaultContent : ""}, 
-			{ data : "cipherAlgorithmCode", className : "dt-center", defaultContent : ""}, 
-			{ data : "binUid", className : "dt-center", defaultContent : ""}, 
-			{ data : "initialVectorTypeCode", className : "dt-center", defaultContent : ""}, 
-			{ data : "operationModeCode", className : "dt-center", defaultContent : ""}
+			{ data : "", defaultContent : ""}, 
+			{ data : "offset", defaultContent : ""}, 
+			{ data : "length", defaultContent : ""}, 
+			{ data : "cipherAlgorithmCode", defaultContent : ""}, 
+			{ data : "binUid", defaultContent : ""}, 
+			{ data : "initialVectorTypeCode", defaultContent : ""}, 
+			{ data : "operationModeCode", defaultContent : ""}
 			],'select': {'style': 'multi'}
 		});
 
@@ -88,25 +88,25 @@
 			columns : [
 			{ data : "", defaultContent : "", targets : 0, orderable : false, checkboxes : {'selectRow' : true}}, 
 			{ data : "", className : "dt-center", defaultContent : ""}, 
-			{ data : "specName", className : "dt-center", defaultContent : ""}, 
-			{ data : "serverInstanceId", className : "dt-center", defaultContent : ""}, 
-			{ data : "serverLoginId", className : "dt-center", defaultContent : ""}, 
-			{ data : "adminLoginId", className : "dt-center", defaultContent : ""}, 
-			{ data : "osLoginId", className : "dt-center", defaultContent : ""}, 
-			{ data : "applicationName", className : "dt-center", defaultContent : ""}, 
-			{ data : "accessAddress", className : "dt-center", defaultContent : ""}, 
-			{ data : "accessAddressMask", className : "dt-center", defaultContent : ""}, 
-			{ data : "accessMacAddress", className : "dt-center", defaultContent : ""}, 
-			{ data : "startDateTime", className : "dt-center", defaultContent : ""}, 
-			{ data : "endDateTime", className : "dt-center", defaultContent : ""},
-			{ data : "startTime", className : "dt-center", defaultContent : ""}, 
-			{ data : "endTime", className : "dt-center", defaultContent : ""},
-			{ data : "workDay", className : "dt-center", defaultContent : ""},
-			{ data : "massiveThreshold", className : "dt-center", defaultContent : ""}, 
-			{ data : "massiveTimeInterval", className : "dt-center", defaultContent : ""}, 
-			{ data : "extraName", className : "dt-center", defaultContent : ""},
-			{ data : "hostName", className : "dt-center", defaultContent : ""},
-			{ data : "whitelistYesNo", className : "dt-center", defaultContent : ""}
+			{ data : "specName", defaultContent : ""}, 
+			{ data : "serverInstanceId", defaultContent : ""}, 
+			{ data : "serverLoginId", defaultContent : ""}, 
+			{ data : "adminLoginId", defaultContent : ""}, 
+			{ data : "osLoginId", defaultContent : ""}, 
+			{ data : "applicationName", defaultContent : ""}, 
+			{ data : "accessAddress", defaultContent : ""}, 
+			{ data : "accessAddressMask", defaultContent : ""}, 
+			{ data : "accessMacAddress", defaultContent : ""}, 
+			{ data : "startDateTime", defaultContent : ""}, 
+			{ data : "endDateTime", defaultContent : ""},
+			{ data : "startTime", defaultContent : ""}, 
+			{ data : "endTime", defaultContent : ""},
+			{ data : "workDay", defaultContent : ""},
+			{ data : "massiveThreshold", defaultContent : ""}, 
+			{ data : "massiveTimeInterval", defaultContent : ""}, 
+			{ data : "extraName", defaultContent : ""},
+			{ data : "hostName", defaultContent : ""},
+			{ data : "whitelistYesNo", defaultContent : ""}
 			],'select': {'style': 'multi'}
 		});
 

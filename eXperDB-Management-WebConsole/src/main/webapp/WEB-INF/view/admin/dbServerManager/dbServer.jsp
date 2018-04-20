@@ -33,13 +33,13 @@ function fn_init() {
 		scrollX: true,
 		bSort: false,
 		columns : [
-		{data : "idx", className : "dt-center", defaultContent : ""},
-		{data : "db_svr_nm", className : "dt-center", defaultContent : ""},
-		{data : "ipadr", className : "dt-center", defaultContent : ""},
-		{data : "dft_db_nm", className : "dt-center", defaultContent : ""},
-		{data : "portno", className : "dt-center", defaultContent : ""},
-		{data : "svr_spr_usr_id", className : "dt-center", defaultContent : ""},
-        {data : "useyn", defaultContent : "", className : "dt-center", 
+		{data : "idx", defaultContent : ""},
+		{data : "db_svr_nm", defaultContent : ""},
+		{data : "ipadr", defaultContent : ""},
+		{data : "dft_db_nm", defaultContent : ""},
+		{data : "portno", defaultContent : ""},
+		{data : "svr_spr_usr_id", defaultContent : ""},
+        {data : "useyn", defaultContent : "", 
 			targets: 0,
 	        searchable: false,
 	        orderable: false,
@@ -51,10 +51,10 @@ function fn_init() {
 	           }
 	           return data;
 	        }},
-		{data : "frst_regr_id", className : "dt-center", defaultContent : ""},
-		{data : "frst_reg_dtm", className : "dt-center", defaultContent : ""},
-		{data : "lst_mdfr_id", className : "dt-center", defaultContent : ""},
-		{data : "lst_mdf_dtm", className : "dt-center", defaultContent : ""}
+		{data : "frst_regr_id", defaultContent : ""},
+		{data : "frst_reg_dtm", defaultContent : ""},
+		{data : "lst_mdfr_id", defaultContent : ""},
+		{data : "lst_mdf_dtm", defaultContent : ""}
 		]
 	});
 		

@@ -28,14 +28,14 @@ var table = null;
 			scrollX: true,
 			bSort: false,
 			columns : [
-			{ data : "rownum", className : "dt-center", defaultContent : ""}, 
-			{ data : "ctf_tp_nm", className : "dt-center", defaultContent : ""}, 
-			{ data : "dtb", className : "dt-center", defaultContent : ""}, 
-			{ data : "prms_usr_id", className : "dt-center", defaultContent : ""}, 
-			{ data : "prms_ipadr", className : "dt-center", defaultContent : ""},
-			{ data : "prms_ipmaskadr", className : "dt-center", defaultContent : ""}, 
-			{ data : "ctf_mth_nm", className : "dt-center", defaultContent : ""}, 
-			{ data : "opt_nm", className : "dt-center", defaultContent : ""}, 
+			{ data : "rownum", defaultContent : ""}, 
+			{ data : "ctf_tp_nm", defaultContent : ""}, 
+			{ data : "dtb", defaultContent : ""}, 
+			{ data : "prms_usr_id", defaultContent : ""}, 
+			{ data : "prms_ipadr", defaultContent : ""},
+			{ data : "prms_ipmaskadr", defaultContent : ""}, 
+			{ data : "ctf_mth_nm", defaultContent : ""}, 
+			{ data : "opt_nm", defaultContent : ""}, 
 				]
 		});
 		

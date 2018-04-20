@@ -36,16 +36,16 @@ function fn_init() {
 		scrollX: true,
 		bSort: false,
 		columns : [
-		{data : "idx", className : "dt-center", defaultContent : ""},		
-		{data : "db_svr_nm", className : "dt-center", defaultContent : ""},
-		{data : "ipadr", className : "dt-center", defaultContent : ""},
-		{data : "portno", className : "dt-center", defaultContent : ""},
-		{data : "db_nm", className : "dt-center", defaultContent : ""},
-		{data : "frst_regr_id", className : "dt-center", defaultContent : ""},
-		{data : "frst_reg_dtm", className : "dt-center", defaultContent : ""},
-		{data : "lst_mdfr_id", className : "dt-center", defaultContent : ""},
-		{data : "lst_mdf_dtm", className : "dt-center", defaultContent : ""},
-		{data : "db_id", className : "dt-center", defaultContent : "", visible: false}
+		{data : "idx", defaultContent : ""},		
+		{data : "db_svr_nm", defaultContent : ""},
+		{data : "ipadr", defaultContent : ""},
+		{data : "portno", defaultContent : ""},
+		{data : "db_nm", defaultContent : ""},
+		{data : "frst_regr_id", defaultContent : ""},
+		{data : "frst_reg_dtm", defaultContent : ""},
+		{data : "lst_mdfr_id", defaultContent : ""},
+		{data : "lst_mdf_dtm", defaultContent : ""},
+		{data : "db_id", defaultContent : "", visible: false}
 		]
 	});
 		

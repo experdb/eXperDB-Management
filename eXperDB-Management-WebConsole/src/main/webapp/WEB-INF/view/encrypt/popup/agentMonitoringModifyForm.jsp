@@ -94,7 +94,7 @@ var extendedField = ${extendedField};
 					alert("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""));
 				}
 			},
-			success : function(data) {		
+			success : function(data) {
 				if(data.resultCode == "0000000000"){
 					alert('<spring:message code="encrypt_msg.msg21"/>');
 					opener.location.reload();
@@ -138,7 +138,7 @@ var extendedField = ${extendedField};
 								</td>
 							</tr>
 							<tr>
-								<th scope="row" class="ico_t2"><spring:message code="dbms_information.agent_status" /></th>
+								<th scope="row" class="ico_t2">Agent <spring:message code="access_control_management.activation" /></th>
 								<td>
 									<select class="select t5" id="entityStatusCode" name="entityStatusCode" >
 											<c:forEach var="result" items="${result}" varStatus="status">

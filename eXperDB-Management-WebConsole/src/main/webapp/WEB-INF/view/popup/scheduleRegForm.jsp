@@ -50,32 +50,39 @@ function fn_init() {
 				  return '<span onClick=javascript:fn_workLayer("'+full.wrk_id+'"); class="bold">' + full.wrk_nm + '</span>';
 			}
 		},
-		{data : "wrk_exp", className : "dt-left", defaultContent : ""},	
-		{data : "bsn_dscd_nm", className : "dt-center", defaultContent : ""},
-		{data : "bck_bsn_dscd_nm", className : "dt-center", defaultContent : ""},
-		{data : "db_svr_nm", className : "dt-center", defaultContent : ""},		
-		{data : "frst_regr_id", className : "dt-center", defaultContent : ""},
-		{data : "frst_reg_dtm", className : "dt-center", defaultContent : ""},		
-		{data : "wrk_id", className : "dt-center", defaultContent : "", visible: false },
-		{data : "db_svr_id", className : "dt-center", defaultContent : "", visible: false},		
-		{data : "db_id", className : "dt-center", defaultContent : "", visible: false},
-		{data : "db_nm", className : "dt-center", defaultContent : "", visible: false},
-		{data : "bsn_dscd", className : "dt-center", defaultContent : "", visible: false},		
-		{data : "bck_bsn_dscd", className : "dt-center", defaultContent : "", visible: false},	
-		{data : "bck_opt_cd", className : "dt-center", defaultContent : "", visible: false},
-		{data : "bck_opt_cd_nm", className : "dt-center", defaultContent : "", visible: false},
-		{data : "bck_mtn_ecnt", className : "dt-center", defaultContent : "", visible: false},
-		{data : "log_file_bck_yn", className : "dt-center", defaultContent : "", visible: false},
-		{data : "log_file_stg_dcnt", className : "dt-center", defaultContent : "", visible: false},
-		{data : "log_file_mtn_ecnt", className : "dt-center", defaultContent : "", visible: false},
-		{data : "cprt", className : "dt-center", defaultContent : "", visible: false},
-		{data : "save_pth", className : "dt-center", defaultContent : "", visible: false},
-		{data : "file_fmt_cd", className : "dt-center", defaultContent : "", visible: false},
-		{data : "file_stg_dcnt", className : "dt-center", defaultContent : "", visible: false},
-		{data : "encd_mth_nm", className : "dt-center", defaultContent : "", visible: false},
-		{data : "usr_role_nm", className : "dt-center", defaultContent : "", visible: false},	
-		{data : "lst_mdfr_id", className : "dt-center", defaultContent : "", visible: false},
-		{data : "lst_mdf_dtm", className : "dt-center", defaultContent : "", visible: false}
+		{ data : "wrk_exp",
+				render : function(data, type, full, meta) {	 	
+					var html = '';					
+					html += '<span title="'+full.wrk_exp+'">' + full.wrk_exp + '</span>';
+					return html;
+				},
+				defaultContent : ""
+		},
+		{data : "bsn_dscd_nm",  defaultContent : ""},
+		{data : "bck_bsn_dscd_nm",  defaultContent : ""},
+		{data : "db_svr_nm",  defaultContent : ""},		
+		{data : "frst_regr_id",  defaultContent : ""},
+		{data : "frst_reg_dtm",  defaultContent : ""},		
+		{data : "wrk_id",  defaultContent : "", visible: false },
+		{data : "db_svr_id",  defaultContent : "", visible: false},		
+		{data : "db_id",  defaultContent : "", visible: false},
+		{data : "db_nm",  defaultContent : "", visible: false},
+		{data : "bsn_dscd",  defaultContent : "", visible: false},		
+		{data : "bck_bsn_dscd",  defaultContent : "", visible: false},	
+		{data : "bck_opt_cd",  defaultContent : "", visible: false},
+		{data : "bck_opt_cd_nm",  defaultContent : "", visible: false},
+		{data : "bck_mtn_ecnt",  defaultContent : "", visible: false},
+		{data : "log_file_bck_yn",  defaultContent : "", visible: false},
+		{data : "log_file_stg_dcnt",  defaultContent : "", visible: false},
+		{data : "log_file_mtn_ecnt",  defaultContent : "", visible: false},
+		{data : "cprt",  defaultContent : "", visible: false},
+		{data : "save_pth",  defaultContent : "", visible: false},
+		{data : "file_fmt_cd",  defaultContent : "", visible: false},
+		{data : "file_stg_dcnt",  defaultContent : "", visible: false},
+		{data : "encd_mth_nm",  defaultContent : "", visible: false},
+		{data : "usr_role_nm",  defaultContent : "", visible: false},	
+		{data : "lst_mdfr_id",  defaultContent : "", visible: false},
+		{data : "lst_mdf_dtm",  defaultContent : "", visible: false}
 		],'select': {'style': 'multi'}
 	});
 		
@@ -85,10 +92,10 @@ function fn_init() {
 		table.tables().header().to$().find('th:eq(2)').css('min-width', '200px');
 		table.tables().header().to$().find('th:eq(3)').css('min-width', '300px');
 		table.tables().header().to$().find('th:eq(4)').css('min-width', '70px');
-		table.tables().header().to$().find('th:eq(5)').css('min-width', '100px');
+		table.tables().header().to$().find('th:eq(5)').css('min-width', '130px');
 		table.tables().header().to$().find('th:eq(6)').css('min-width', '150px');
 		table.tables().header().to$().find('th:eq(7)').css('min-width', '100px');  
-		table.tables().header().to$().find('th:eq(8)').css('min-width', '100px');
+		table.tables().header().to$().find('th:eq(8)').css('min-width', '130px');
 		table.tables().header().to$().find('th:eq(9)').css('min-width', '0px');
 		table.tables().header().to$().find('th:eq(10)').css('min-width', '0px');  
 		table.tables().header().to$().find('th:eq(11)').css('min-width', '0px');

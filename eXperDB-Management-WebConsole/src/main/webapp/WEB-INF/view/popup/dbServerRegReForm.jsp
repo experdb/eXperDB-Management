@@ -63,7 +63,7 @@ function fn_init() {
 		paging : false,
 		deferRender : true,
 		columns : [
-		{data : "rownum", defaultContent : "", className : "dt-center", 
+		{data : "rownum", defaultContent : "",  
 			targets: 0,
 	        searchable: false,
 	        orderable: false,
@@ -73,11 +73,11 @@ function fn_init() {
 	           }
 	           return data;
 	        }}, 
-		{data : "ipadr", className : "dt-center", defaultContent : ""},
-		{data : "portno", className : "dt-center", defaultContent : ""},
-		{data : "master_gbn", className : "dt-center", defaultContent : ""},
-		{data : "connYn", className : "dt-center", defaultContent : ""},
-		{data : "svr_host_nm", className : "dt-center", defaultContent : "", visible: false}
+		{data : "ipadr",  defaultContent : ""},
+		{data : "portno",  defaultContent : ""},
+		{data : "master_gbn",  defaultContent : ""},
+		{data : "connYn",  defaultContent : ""},
+		{data : "svr_host_nm",  defaultContent : "", visible: false}
 		]
 	});
 	

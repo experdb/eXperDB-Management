@@ -32,9 +32,9 @@
 			deferRender : true,
 			bSort: false,
 			columns : [ 
-			            {data : "rownum",className : "dt-center",defaultContent : ""}, 
-			            {data : "usr_id",className : "dt-center",defaultContent : ""}, 
-			            {data : "usr_nm",className : "dt-center",defaultContent : ""} 
+			            {data : "rownum", defaultContent : ""}, 
+			            {data : "usr_id", defaultContent : ""}, 
+			            {data : "usr_nm", defaultContent : ""} 
 			          ]
 		});
 		
@@ -43,8 +43,8 @@
 			paging : false,
 			bSort: false,
 			columns : [ 
-			            {data : "",className : "dt-center",defaultContent : ""}, 
-			            {data : "",className : "dt-center",defaultContent : ""} 
+			            {data : "", defaultContent : ""}, 
+			            {data : "", defaultContent : ""} 
 			          ]
 		});	
 		

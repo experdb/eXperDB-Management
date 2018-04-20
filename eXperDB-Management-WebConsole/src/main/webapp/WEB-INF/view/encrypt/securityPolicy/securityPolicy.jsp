@@ -31,13 +31,20 @@ var table = null;
 			columns : [
 				{ data : "", defaultContent : "", targets : 0, orderable : false, checkboxes : {'selectRow' : true}}, 
 				{ data : "rnum", className : "dt-center", defaultContent : ""},
-				{ data : "profileName", className : "dt-center", defaultContent : ""},
-				{ data : "profileNote", className : "dt-center", defaultContent : ""},
-				{ data : "profileStatusName", className : "dt-center", defaultContent : ""},
-				{ data : "createName", className : "dt-center", defaultContent : ""},
-				{ data : "createDateTime", className : "dt-center", defaultContent : ""},
-				{ data : "updateName", className : "dt-center", defaultContent : ""},
-				{ data : "updateDateTime", className : "dt-center", defaultContent : ""},
+				{ data : "profileName", defaultContent : ""},
+				{ data : "profileNote",
+ 					render : function(data, type, full, meta) {	 	
+ 						var html = '';					
+ 						html += '<span title="'+full.profileNote+'">' + full.profileNote + '</span>';
+ 						return html;
+ 					},
+ 					defaultContent : ""
+ 				},
+				{ data : "profileStatusName", defaultContent : ""},
+				{ data : "createName", defaultContent : ""},
+				{ data : "createDateTime", defaultContent : ""},
+				{ data : "updateName", defaultContent : ""},
+				{ data : "updateDateTime", defaultContent : ""},
 				{ data : "profileUid",visible: false }
 				
 			 ],'select': {'style': 'multi'}

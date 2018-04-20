@@ -20,7 +20,7 @@
     	searching : false,	
     	bSort: false,
     	columns : [
-    		{data : "rownum", className : "dt-center", defaultContent : ""}, 
+    		{data : "rownum",  defaultContent : ""}, 
     		{
 				data : "exe_result",
 				render : function(data, type, full, meta) {
@@ -28,7 +28,7 @@
 					html += '<span class="btn btnC_01 btnF_02"><button onclick="fn_failLog('+full.exe_sn+')"><img src="../images/ico_state_01.png" style="margin-right:3px;"/>Fail</button></span>';
 					return html;
 				},
-				className : "dt-center",
+				
 				defaultContent : ""
 			},
 			{
@@ -46,7 +46,7 @@
  						}
  						return html;
 					},
-					className : "dt-center",
+					
 					defaultContent : ""
 				},
     		{data : "scd_nm", className : "dt-left", defaultContent : ""
@@ -54,15 +54,15 @@
     				  return '<span onClick=javascript:fn_scdLayer("'+full.scd_id+'"); class="bold">' + full.scd_nm + '</span>';
     			}
     		}, 
-    		{data : "db_svr_nm", className : "dt-center", defaultContent : ""},
+    		{data : "db_svr_nm",  defaultContent : ""},
     		{data : "wrk_nm", className : "dt-left", defaultContent : ""
     			,"render": function (data, type, full) {				
     				  return '<span onClick=javascript:fn_workLayer("'+full.wrk_id+'"); class="bold">' + full.wrk_nm + '</span>';
     			}
     		}, 
-    		{data : "wrk_strt_dtm", className : "dt-center", defaultContent : ""}, 
-    		{data : "wrk_end_dtm", className : "dt-center", defaultContent : ""}
-    		//{data : "exe_result", className : "dt-center", defaultContent : ""},	   		
+    		{data : "wrk_strt_dtm",  defaultContent : ""}, 
+    		{data : "wrk_end_dtm",  defaultContent : ""}
+    		//{data : "exe_result",  defaultContent : ""},	   		
     	]
     	});
     	

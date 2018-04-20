@@ -30,15 +30,15 @@
 			bSort: false,
 			columns : [ 
 						{ data : "rownum", defaultContent : "", targets : 0, orderable : false, checkboxes : {'selectRow' : true}},
-			            { data : "idx", className : "dt-center", defaultContent : ""}, 
-			            { data : "cnr_nm", className : "dt-center", defaultContent : ""}, 
-			            { data : "cnr_ipadr", className : "dt-center", defaultContent : ""},
-			            { data : "cnr_portno", className : "dt-center", defaultContent : ""}, 
-			            { data : "cnr_cnn_tp_cd", className : "dt-center", defaultContent : ""}, 
-			            { data : "frst_regr_id", className : "dt-center", defaultContent : ""}, 
-			            { data : "frst_reg_dtm", className : "dt-center", defaultContent : ""}, 
-			            { data : "lst_mdfr_id", className : "dt-center", defaultContent : ""}, 
-			            { data : "lst_mdf_dtm", className : "dt-center", defaultContent : ""},
+			            { data : "idx",  defaultContent : ""}, 
+			            { data : "cnr_nm",  defaultContent : ""}, 
+			            { data : "cnr_ipadr",  defaultContent : ""},
+			            { data : "cnr_portno",  defaultContent : ""}, 
+			            { data : "cnr_cnn_tp_cd",  defaultContent : ""}, 
+			            { data : "frst_regr_id",  defaultContent : ""}, 
+			            { data : "frst_reg_dtm",  defaultContent : ""}, 
+			            { data : "lst_mdfr_id",  defaultContent : ""}, 
+			            { data : "lst_mdf_dtm",  defaultContent : ""},
 			         	//cnr_id
 						{ data: "cnr_id" , visible: false}
 			         ],'select': {'style': 'multi'}

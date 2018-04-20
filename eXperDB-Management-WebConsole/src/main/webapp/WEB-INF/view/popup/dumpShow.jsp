@@ -45,9 +45,9 @@ function fn_init(){
 	searching : false,	
 	bSort: false,
 	columns : [
-	{data : "file_name", className : "dt-center", defaultContent : ""}, 
-	{data : "file_size", className : "dt-center", defaultContent : ""}, 
-	{data : "file_lastmodified", className : "dt-center", defaultContent : ""}
+	{data : "file_name",  defaultContent : ""}, 
+	{data : "file_size",  defaultContent : ""}, 
+	{data : "file_lastmodified",  defaultContent : ""}
 	]
 	});
 }

@@ -30,18 +30,17 @@
 			scrollX: true,
 			columns : [
 				{ data : "rnum", className : "dt-center", defaultContent : ""}, 
-				{ data : "logDateTime", className : "dt-center", defaultContent : ""}, 
-				{ data : "entityName", className : "dt-center", defaultContent : ""}, 
-				{ data : "remoteAddress", className : "dt-center", defaultContent : ""}, 
-				{ data : "requestPath", className : "dt-center", defaultContent : ""}, 
-				{ data : "resultCode", className : "dt-center", defaultContent : ""}, 
+				{ data : "logDateTime", defaultContent : ""}, 
+				{ data : "entityName", defaultContent : ""}, 
+				{ data : "remoteAddress", defaultContent : ""}, 
+				{ data : "requestPath", defaultContent : ""}, 
+				{ data : "resultCode", defaultContent : ""}, 
 				{
 					data : "",
 					render : function(data, type, full, meta) {
 						var html = "<span class='btn btnC_01 btnF_02'><button id='detail'><spring:message code='schedule.detail_view' /></button></span>";
 						return html;
 					},
-					className : "dt-center",
 					defaultContent : "",
 					orderable : false
 				},

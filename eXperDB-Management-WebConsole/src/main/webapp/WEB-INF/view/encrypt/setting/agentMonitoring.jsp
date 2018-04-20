@@ -34,23 +34,23 @@ function fn_init() {
 		columns : [
 			{ data : "no", defaultContent : "", targets : 0, orderable : false, checkboxes : {'selectRow' : true}}, 
 			{ data : "no", className : "dt-center", defaultContent : ""}, 
-			{ data : "entityName", className : "dt-center", defaultContent : ""}, 
-			{ data : "entityStatusName", className : "dt-center", defaultContent : ""}, 
-			{ data : "latestAddress", className : "dt-center", defaultContent : ""}, 
-			{ data : "latestDateTime", className : "dt-center", defaultContent : ""}, 
-			{ data : "receivedPolicyVersion", className : "dt-center", defaultContent : ""}, 
-			{ data : "sentPolicyVersion", className : "dt-center", defaultContent : ""}, 
-			{ data : "createDateTime", className : "dt-center", defaultContent : ""},
-			{ data : "updateDateTime", className : "dt-center", defaultContent : ""},
-			{ data : "updateName", className : "dt-center", defaultContent : ""},
+			{ data : "entityName", defaultContent : ""}, 
+			{ data : "entityStatusName", defaultContent : ""}, 
+			{ data : "latestAddress", defaultContent : ""}, 
+			{ data : "latestDateTime", defaultContent : ""}, 
+			{ data : "receivedPolicyVersion", className : "dt-right", defaultContent : ""}, 
+			{ data : "sentPolicyVersion", className : "dt-right", defaultContent : ""}, 
+			{ data : "createDateTime", defaultContent : ""},
+			{ data : "updateDateTime", defaultContent : ""},
+			{ data : "updateName", defaultContent : ""},
 
-			{ data : "extendedField", className : "dt-center", defaultContent : "", visible: false},
-			{ data : "entityUid", className : "dt-center", defaultContent : "", visible: false},
-			{ data : "resultCode", className : "dt-center", defaultContent : "", visible: false},
-			{ data : "resultMessage", className : "dt-center", defaultContent : "", visible: false},
-			{ data : "entityTypeCode", className : "dt-center", defaultContent : "", visible: false},
-			{ data : "entityStatusCode", className : "dt-center", defaultContent : "", visible: false},
-			{ data : "appVersion", className : "dt-center", defaultContent : "", visible: false}
+			{ data : "extendedField", defaultContent : "", visible: false},
+			{ data : "entityUid", defaultContent : "", visible: false},
+			{ data : "resultCode", defaultContent : "", visible: false},
+			{ data : "resultMessage", defaultContent : "", visible: false},
+			{ data : "entityTypeCode", defaultContent : "", visible: false},
+			{ data : "entityStatusCode", defaultContent : "", visible: false},
+			{ data : "appVersion", defaultContent : "", visible: false}
 		 ],'select': {'style': 'multi'}
 	});
 	
@@ -264,7 +264,7 @@ function fn_agentMonitoringModifyForm(){
 								<th width="20"></th>
 								<th width="40"><spring:message code="common.no" /></th>
 								<th width="200"><spring:message code="encrypt_agent.Agent_Name"/></th>
-								<th width="100"><spring:message code="properties.status" /></th>
+								<th width="100"><spring:message code="access_control_management.activation" /></th>
 								<th width="150"><spring:message code="encrypt_agent.Recently_accessed_address"/></th>
 								<th width="150"><spring:message code="encrypt_agent.Recently_Accessed_Time"/></th>
 								<th width="130"><spring:message code="encrypt_agent.Agent_Policy_Version"/></th>

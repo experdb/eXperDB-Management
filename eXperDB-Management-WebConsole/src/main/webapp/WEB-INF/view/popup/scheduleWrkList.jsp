@@ -43,10 +43,10 @@ function fn_init(){
 	searching : false,	
 	bSort: false,
 	columns : [
-	{data : "idx", columnDefs: [ { searchable: false, orderable: false, targets: 0} ], order: [[ 1, 'asc' ]], className : "dt-center", defaultContent : ""},
-	{data : "wrk_id", className : "dt-center", defaultContent : "", visible: false },
-	{data : "db_svr_nm", className : "dt-center", defaultContent : ""}, //서버명
-	{data : "bck_bsn_dscd_nm", className : "dt-center", defaultContent : ""}, //구분
+	{data : "idx", columnDefs: [ { searchable: false, orderable: false, targets: 0} ], order: [[ 1, 'asc' ]],  defaultContent : ""},
+	{data : "wrk_id",  defaultContent : "", visible: false },
+	{data : "db_svr_nm",  defaultContent : ""}, //서버명
+	{data : "bck_bsn_dscd_nm",  defaultContent : ""}, //구분
 	{data : "wrk_nm", className : "dt-left", defaultContent : ""
 		,"render": function (data, type, full) {
 			  return '<span onClick=javascript:fn_workLayer("'+full.wrk_id+'"); class="bold">' + full.wrk_nm + '</span>';

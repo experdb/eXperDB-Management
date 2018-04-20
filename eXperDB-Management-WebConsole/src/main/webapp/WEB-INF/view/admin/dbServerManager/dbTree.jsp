@@ -39,7 +39,7 @@ function fn_init() {
 		paging : false,
 		deferRender : true,
 		columns : [
-		{data : "rownum", defaultContent : "", className : "dt-center", 
+		{data : "rownum", defaultContent : "", 
 			targets: 0,
 	        searchable: false,
 	        orderable: false,
@@ -49,9 +49,9 @@ function fn_init() {
 	           }
 	           return data;
 	        }}, 
-		{data : "ipadr", className : "dt-center", defaultContent : ""},
-		{data : "db_svr_nm", className : "dt-center", defaultContent : ""},		
-		{data : "agt_cndt_cd", defaultContent : "", className : "dt-center", 
+		{data : "ipadr", defaultContent : ""},
+		{data : "db_svr_nm",  defaultContent : ""},		
+		{data : "agt_cndt_cd", defaultContent : "", 
 			targets: 0,
 	        searchable: false,
 	        orderable: false,
@@ -63,7 +63,7 @@ function fn_init() {
 	           }
 	           return data;
 	        }}, 
-        {data : "useyn", defaultContent : "", className : "dt-center", 
+        {data : "useyn", defaultContent : "", 
 			targets: 0,
 	        searchable: false,
 	        orderable: false,
@@ -97,8 +97,8 @@ function fn_init() {
 		paging : false,		
 		deferRender : true,
 		columns : [
-		{data : "dft_db_nm", className : "dt-center", defaultContent : ""}, 
-		{data : "db_exp", defaultContent : "", className : "dt-center", 
+		{data : "dft_db_nm", defaultContent : ""}, 
+		{data : "db_exp", defaultContent : "", 
 			targets: 0,
 	        searchable: false,
 	        orderable: false,
@@ -109,7 +109,7 @@ function fn_init() {
 	           
 	           return data;
 	        }}, 
-		{data : "dft_db_nm", defaultContent : "", targets : 0, orderable : false, className : "dt-center", 
+		{data : "dft_db_nm", defaultContent : "", targets : 0, orderable : false, 
 	    render: function (data, type, full, meta){
 		             return '<input type="checkbox" name="chk" onClick=checkedDisable()  value="' 
 		                + $('<div/>').text(data).html() + '">';		         

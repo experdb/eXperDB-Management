@@ -267,11 +267,11 @@ function fn_scdLayer(scd_id){
 		type : "post",
 		error : function(xhr, status, error) {
 			if(xhr.status == 401) {
-				alert('<spring:message code="message.msg02" />');
-				 location.href = "/";
+				alert(message_msg02);
+				top.location.href = "/";
 			} else if(xhr.status == 403) {
-				alert('<spring:message code="message.msg03" />');
-	             location.href = "/";
+				alert(message_msg03);
+				top.location.href = "/";
 			} else {
 				alert("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""));
 			}
@@ -285,37 +285,37 @@ function fn_scdLayer(scd_id){
 			}else{
 				var hms = "";
 				
-				hms += result[0].exe_hms.substring(4,6)+"<spring:message code='schedule.our' /> ";	
-				hms += result[0].exe_hms.substring(2,4)+"<spring:message code='schedule.minute' /> ";	
-				hms += result[0].exe_hms.substring(0,2)+"<spring:message code='schedule.second' />";		
+				hms += result[0].exe_hms.substring(4,6)+schedule_our;	
+				hms += result[0].exe_hms.substring(2,4)+schedule_minute;	
+				hms += result[0].exe_hms.substring(0,2)+schedule_second;		
 				
 				var day = "";
 				if(result[0].exe_perd_cd == "TC001602"){
 					day += "(";
 					if(result[0].exe_dt.substring(0,1)=="1"){
-						day += "<spring:message code='schedule.sunday' />, ";
+						day += schedule_sunday+", ";
 					}
 					if(result[0].exe_dt.substring(1,2)=="1"){
-						day += "<spring:message code='schedule.monday' />, ";
+						day += schedule_monday+", ";
 					}
 					if(result[0].exe_dt.substring(2,3)=="1"){
-						day += "<spring:message code='schedule.thuesday' />, ";
+						day += schedule_thuesday+", ";
 					}
 					if(result[0].exe_dt.substring(3,4)=="1"){
-						day += "<spring:message code='schedule.wednesday' />, ";
+						day += schedule_wednesday+", ";
 					}
 					if(result[0].exe_dt.substring(4,5)=="1"){
-						day += "<spring:message code='schedule.thursday' />, ";
+						day += schedule_thursday+", ";
 					}
 					if(result[0].exe_dt.substring(5,6)=="1"){
-						day += "<spring:message code='schedule.friday' />, ";
+						day += schedule_friday+", ";
 					}
 					if(result[0].exe_dt.substring(6,7)=="1"){
-						day += "<spring:message code='schedule.saturday' />";
+						day += schedule_saturday;
 					}
 					day += ")";
 				}		
-				
+
 				$("#scd_nm_info").html(result[0].scd_nm);
 				$("#scd_exp_info").html(result[0].scd_exp);
 				$("#scd_cndt_info").html(result[0].scd_cndt_nm);
@@ -345,11 +345,11 @@ function fn_failLog(exe_sn){
 	     },
 		error : function(xhr, status, error) {
 			if(xhr.status == 401) {
-				alert('<spring:message code="message.msg02" />');
-				 location.href = "/";
+				alert(message_msg02);
+				top.location.href = "/";
 			} else if(xhr.status == 403) {
-				alert('<spring:message code="message.msg03" />');
-	             location.href = "/";
+				alert(message_msg03);
+				top.location.href = "/";
 			} else {
 				alert("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""));
 			}
@@ -377,11 +377,11 @@ function fn_workLayer(wrk_id){
 	     },
 	     error : function(xhr, status, error) {
 				if(xhr.status == 401) {
-					alert('<spring:message code="message.msg02" />');
-					 location.href = "/";
+					alert(message_msg02);
+					top.location.href = "/";
 				} else if(xhr.status == 403) {
-					alert('<spring:message code="message.msg03" />');
-		             location.href = "/";
+					alert(message_msg03);
+					top.location.href = "/";
 				} else {
 					alert("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""));
 				}
@@ -397,9 +397,9 @@ function fn_workLayer(wrk_id){
 					$("#r_wrk_nm").html(result[0].wrk_nm);
 					$("#r_wrk_exp").html(result[0].wrk_exp);
 					if(result[0].cps_yn == "N"){
-						$("#cps_yn").html("아니오");
+						$("#cps_yn").html(agent_monitoring_no);
 					}else{
-						$("#cps_yn").html("예");
+						$("#cps_yn").html(agent_monitoring_yes);
 					}
 					//$("#cps_yn").html(result[0].cps_yn);
 					$("#log_file_pth").html(result[0].log_file_pth);
@@ -410,9 +410,9 @@ function fn_workLayer(wrk_id){
 					$("#acv_file_stgdt").html(result[0].acv_file_stgdt);
 					$("#acv_file_mtncnt").html(result[0].acv_file_mtncnt);
 					if(result[0].log_file_bck_yn == "N"){
-						$("#log_file_bck_yn").html("아니오");
+						$("#log_file_bck_yn").html(agent_monitoring_no);
 					}else{
-						$("#log_file_bck_yn").html("예");
+						$("#log_file_bck_yn").html(agent_monitoring_yes);
 					}
 					//$("#log_file_bck_yn").html(result[0].log_file_bck_yn);
 					$("#r_log_file_stg_dcnt").html(result[0].log_file_stg_dcnt);
@@ -457,11 +457,11 @@ function fn_workOptionLayer(bck_wrk_id, db_svr_id, db_nm){
 	     },
 	     error : function(xhr, status, error) {
 				if(xhr.status == 401) {
-					alert('<spring:message code="message.msg02" />');
-					 location.href = "/";
+					alert(message_msg02);
+					top.location.href = "/";
 				} else if(xhr.status == 403) {
-					alert('<spring:message code="message.msg03" />');
-		             location.href = "/";
+					alert(message_msg03);
+					top.location.href = "/";
 				} else {
 					alert("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""));
 				}
@@ -512,11 +512,11 @@ function fn_workObjectListTreeLayer(bck_wrk_id, db_svr_id, db_nm){
 	     },
 	     error : function(xhr, status, error) {
 				if(xhr.status == 401) {
-					alert('<spring:message code="message.msg02" />');
-					 location.href = "/";
+					alert(message_msg02);
+					top.location.href = "/";
 				} else if(xhr.status == 403) {
-					alert('<spring:message code="message.msg03" />');
-		             location.href = "/";
+					alert(message_msg03);
+					top.location.href = "/";
 				} else {
 					alert("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""));
 				}
@@ -543,11 +543,11 @@ function fn_workObjectTreeLayer(db_svr_id, db_nm, workObj){
 	     },
 		error : function(xhr, status, error) {
 			if(xhr.status == 401) {
-				alert('<spring:message code="message.msg02" />');
-				 location.href = "/";
+				alert(message_msg02);
+				top.location.href = "/";
 			} else if(xhr.status == 403) {
-				alert('<spring:message code="message.msg03" />');
-	             location.href = "/";
+				alert(message_msg03);
+				top.location.href = "/";
 			} else {
 				alert("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""));
 			}
@@ -626,11 +626,11 @@ function fn_fixLog(exe_sn){
 	     },
 		error : function(xhr, status, error) {
 			if(xhr.status == 401) {
-				alert('<spring:message code="message.msg02" />');
-				 location.href = "/";
+				alert(message_msg02);
+				top.location.href = "/";
 			} else if(xhr.status == 403) {
-				alert('<spring:message code="message.msg03" />');
-	             location.href = "/";
+				alert(message_msg03);
+				top.location.href = "/";
 			} else {
 				alert("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""));
 			}

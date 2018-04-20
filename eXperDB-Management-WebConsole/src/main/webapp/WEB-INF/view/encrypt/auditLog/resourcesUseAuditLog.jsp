@@ -29,18 +29,18 @@
 			deferRender : true,
 			scrollX: true,
 			columns : [
-				{ data : "rnum", className : "dt-center", defaultContent : ""},  
-				{ data : "siteLogDateTime", className : "dt-center", defaultContent : ""}, 
-				{ data : "serverLogDateTime", className : "dt-center", defaultContent : ""}, 
-				{ data : "monitoredAddress", className : "dt-center", defaultContent : ""}, 
-				{ data : "monitoredUid", className : "dt-center", defaultContent : ""}, 
-				{ data : "monitoredName", className : "dt-center", defaultContent : ""}, 
-				{ data : "targetResourceType", className : "dt-center", defaultContent : ""},
-				{ data : "targetResource", className : "dt-center", defaultContent : ""}, 
-				{ data : "resultLevel", className : "dt-center", defaultContent : ""}, 
-				{ data : "usageRate", className : "dt-center", defaultContent : ""}, 
-				{ data : "limitRate", className : "dt-center", defaultContent : ""}, 
-				{ data : "logMessage", className : "dt-center", defaultContent : ""}
+				{ data : "rnum", defaultContent : ""},  
+				{ data : "siteLogDateTime", defaultContent : ""}, 
+				{ data : "serverLogDateTime", defaultContent : ""}, 
+				{ data : "monitoredAddress", defaultContent : ""}, 
+				{ data : "monitoredUid", defaultContent : ""}, 
+				{ data : "monitoredName", defaultContent : ""}, 
+				{ data : "targetResourceType", defaultContent : ""},
+				{ data : "targetResource", defaultContent : ""}, 
+				{ data : "resultLevel", defaultContent : ""}, 
+				{ data : "usageRate", defaultContent : ""}, 
+				{ data : "limitRate", defaultContent : ""}, 
+				{ data : "logMessage", defaultContent : ""}
 	
 			 ]
 		});

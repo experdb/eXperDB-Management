@@ -28,9 +28,9 @@ function fn_init() {
 		paging: false,
 		bSort: false,
 		columns : [
-		{data : "rownum", className : "dt-center", defaultContent : ""}, 
-		{data : "usr_id", className : "dt-center", defaultContent : ""}, 
-		{data : "usr_nm", className : "dt-center", defaultContent : ""}
+		{data : "rownum", defaultContent : ""}, 
+		{data : "usr_id", defaultContent : ""}, 
+		{data : "usr_nm", defaultContent : ""}
 		 ]
 	});
 	
@@ -42,9 +42,9 @@ function fn_init() {
 		paging: false,
 		bSort: false,
 		columns : [
-		{data : "mnu_id", className : "dt-center", defaultContent : ""}, 
-		{data : "mnu_cd", className : "dt-center", defaultContent : ""}, 
-		{data : "mnu_nm", className : "dt-center", defaultContent : ""}
+		{data : "mnu_id", defaultContent : ""}, 
+		{data : "mnu_cd", defaultContent : ""}, 
+		{data : "mnu_nm", defaultContent : ""}
 		 ]
 	});
 }
