@@ -51,7 +51,7 @@ function fn_init() {
 		scrollX: true,
 		bSort: false,
 		columns : [
-		{ data : "rownum",  defaultContent : ""}, 
+		{ data : "rownum", className : "dt-center",  defaultContent : ""}, 
 		{data : "wrk_nm", className : "dt-left", defaultContent : ""
 			,"render": function (data, type, full) {
 				  return '<span onClick=javascript:fn_workLayer("'+full.wrk_id+'"); class="bold">' + full.wrk_nm + '</span>';
@@ -221,14 +221,17 @@ function fn_fix_rslt_msg_modify(){
 <style>
 #scdinfo{
 	width: 35% !important;
+	margin-top: 0px !important;
 }
 
 #workinfo{
 	width: 60% !important;
 	height: 610px !important;
+	margin-top: 0px !important;
 }
 
 </style>
+<%@include file="../cmmn/commonLocale.jsp"%>  
 <%@include file="../cmmn/workRmanInfo.jsp"%>
 <%@include file="../cmmn/workDumpInfo.jsp"%>
 <%@include file="../cmmn/scheduleInfo.jsp"%>

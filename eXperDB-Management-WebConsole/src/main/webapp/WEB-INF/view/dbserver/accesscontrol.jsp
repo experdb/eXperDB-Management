@@ -29,10 +29,24 @@
 			scrollX: true,
 			columns : [
 				{ data : "Seq", defaultContent : "", targets : 0, orderable : false, checkboxes : {'selectRow' : true}}, 
-				{ data : "", defaultContent : ""}, 
+				{ data : "", className : "dt-center", defaultContent : ""}, 
 				{ data : "Type", defaultContent : ""},
-				{ data : "Database", defaultContent : ""}, 
-				{ data : "User", defaultContent : ""}, 
+				{ data : "Database",
+ 					render : function(data, type, full, meta) {	 	
+ 						var html = '';					
+ 						html += '<span title="'+full.Database+'">' + full.Database + '</span>';
+ 						return html;
+ 					},
+ 					defaultContent : ""
+ 				},
+ 				{ data : "User",
+ 					render : function(data, type, full, meta) {	 	
+ 						var html = '';					
+ 						html += '<span title="'+full.User+'">' + full.User + '</span>';
+ 						return html;
+ 					},
+ 					defaultContent : ""
+ 				}, 
 				{ data : "Ipadr", defaultContent : ""}, 
 				{ data : "Ipmask", defaultContent : ""}, 
 				{ data : "Method", defaultContent : ""}, 
@@ -62,14 +76,14 @@
 		
 		table.tables().header().to$().find('th:eq(0)').css('min-width', '20px');
 		table.tables().header().to$().find('th:eq(1)').css('min-width', '40px');
-		table.tables().header().to$().find('th:eq(2)').css('min-width', '50px');
+		table.tables().header().to$().find('th:eq(2)').css('min-width', '40px');
 		table.tables().header().to$().find('th:eq(3)').css('min-width', '100px');
 		table.tables().header().to$().find('th:eq(4)').css('min-width', '100px');
 		table.tables().header().to$().find('th:eq(5)').css('min-width', '100px');
 		table.tables().header().to$().find('th:eq(6)').css('min-width', '100px');
 		table.tables().header().to$().find('th:eq(7)').css('min-width', '80px');
 		table.tables().header().to$().find('th:eq(8)').css('min-width', '100px');
-		table.tables().header().to$().find('th:eq(9)').css('min-width', '100px');
+		table.tables().header().to$().find('th:eq(9)').css('min-width', '60px');
 	    $(window).trigger('resize');
 	    
 	    
@@ -144,13 +158,13 @@
 		var extName = "${extName}";
 		if(extName == "agent") {
 			alert("<spring:message code='message.msg25' />");
-			history.go(-1);
+			top.location.href = "/";
 		}else if(extName == "pgaudit"){
 			alert("<spring:message code='message.msg26' />");
-			history.go(-1);
+			top.location.href = "/";
 		}else if(extName == "agentfail"){
 			alert("<spring:message code='message.msg27' />");
-			history.go(-1);
+			top.location.href = "/";
 		}else{
 			fn_init();
 			var table = $('#accessControlTable').DataTable();
@@ -398,14 +412,14 @@
 							<tr>
 								<th width="20"></th>
 								<th width="40"><spring:message code="common.no" /></th>
-								<th width="50"><spring:message code="access_control_management.type" /></th>
+								<th width="40"><spring:message code="access_control_management.type" /></th>
 								<th width="100"><spring:message code="access_control_management.database" /></th>
 								<th width="100"><spring:message code="access_control_management.user" /></th>
 								<th width="100"><spring:message code="access_control_management.ip_address" /></th>
 								<th width="100"><spring:message code="access_control_management.ip_mask" /></th>
 								<th width="80"><spring:message code="access_control_management.method" /></th>
 								<th width="100"><spring:message code="access_control_management.option" /></th>
-								<th width="100"><spring:message code="access_control_management.order" /></th>
+								<th width="60"><spring:message code="access_control_management.order" /></th>
 							</tr>
 						</thead>
 					</table>

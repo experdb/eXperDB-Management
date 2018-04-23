@@ -246,14 +246,14 @@
 									<c:forEach var="result" items="${result}" varStatus="status">
 										<tr>
 											<td><c:out value="${pagingVO.pageSize*(pagingVO.pageIndex-1) + result.rownum}" /></td>
-											<td><c:out value="${result.exedtm_date}" /></td>
-											<td><c:out value="${result.exedtm_hour}" /></td>
-											<td><c:out value="${result.sys_cd_nm}" /></td>
-											<td><c:out value="${result.usr_id}" /></td>
-											<td><c:out value="${result.usr_nm}" /></td>
-											<td><c:out value="${result.dept_nm}" /></td>
-											<td><c:out value="${result.pst_nm}" /></td>
-											<td><c:out value="${result.lgi_ipadr}" /></td>
+											<td style="text-align: left;"><c:out value="${result.exedtm_date}" /></td>
+											<td style="text-align: left;"><c:out value="${result.exedtm_hour}" /></td>
+											<td style="text-align: left;"><c:out value="${result.sys_cd_nm}" /></td>
+											<td style="text-align: left;"><c:out value="${result.usr_id}" /></td>
+											<td style="text-align: left;"><c:out value="${result.usr_nm}" /></td>
+											<td style="text-align: left;"><c:out value="${result.dept_nm}" /></td>
+											<td style="text-align: left;"><c:out value="${result.pst_nm}" /></td>
+											<td style="text-align: left;"><c:out value="${result.lgi_ipadr}" /></td>
 										</tr>
 									</c:forEach>
 								</tbody>

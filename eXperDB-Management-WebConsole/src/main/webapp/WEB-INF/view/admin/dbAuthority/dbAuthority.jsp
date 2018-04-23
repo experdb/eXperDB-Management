@@ -33,7 +33,7 @@
 			paging : false,
 			deferRender : true,
 			columns : [ 
-			            {data : "rownum", defaultContent : ""}, 
+			            {data : "rownum", className : "dt-center", defaultContent : ""}, 
 			            {data : "usr_id", defaultContent : ""}, 
 			            {data : "usr_nm", defaultContent : ""} 
 			          ]

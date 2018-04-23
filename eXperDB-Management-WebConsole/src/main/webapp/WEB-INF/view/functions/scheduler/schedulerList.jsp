@@ -692,9 +692,9 @@ function fn_dateValidation(exe_dt){
 						<tr>
 							<th width="10"></th>
 							<th width="30"><spring:message code="common.no" /></th>							
-							<th width="200" class="dt-center"><spring:message code="schedule.schedule_name" /></th>
-							<th width="300" class="dt-center"><spring:message code="schedule.scheduleExp"/></th>
-							<th width="100" class="dt-center"><spring:message code="data_transfer.server_name" /></th>
+							<th width="200"><spring:message code="schedule.schedule_name" /></th>
+							<th width="300"><spring:message code="schedule.scheduleExp"/></th>
+							<th width="100"><spring:message code="data_transfer.server_name" /></th>
 							<th width="70"><spring:message code="schedule.work_count" /></th>
 							<th width="130"><spring:message code="schedule.pre_run_time" /></th>
 							<th width="130"><spring:message code="schedule.next_run_time" /></th>

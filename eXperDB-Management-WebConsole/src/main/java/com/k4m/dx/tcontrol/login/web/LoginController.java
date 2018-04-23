@@ -60,18 +60,7 @@ public class LoginController {
 	@RequestMapping(value = "/")
 	public ModelAndView loginCheck(HttpServletRequest request, HttpServletResponse response) {
 		ModelAndView mv = new ModelAndView();
-		try {
-			
-			Properties props = new Properties();
-			props.load(new FileInputStream(ResourceUtils.getFile("classpath:egovframework/tcontrolProps/globals.properties")));
-		
-			String lang = props.get("lang").toString();
-			
-		    Locale locale = new Locale(lang);
-		    LocaleResolver localeResolver = RequestContextUtils.getLocaleResolver(request);
-		    localeResolver.setLocale(request, response, locale);
-
-		        
+		try {       
 			HttpSession session = request.getSession();
 			String usr_id = (String) session.getAttribute("usr_id");
 			
@@ -182,6 +171,12 @@ public class LoginController {
 
 				Properties props = new Properties();
 				props.load(new FileInputStream(ResourceUtils.getFile("classpath:egovframework/tcontrolProps/globals.properties")));			
+				
+				String lang = props.get("lang").toString();				
+			    Locale locale = new Locale(lang);
+			    LocaleResolver localeResolver = RequestContextUtils.getLocaleResolver(request);
+			    localeResolver.setLocale(request, response, locale);
+				
 				String restIp = props.get("encrypt.server.url").toString();
 				int restPort = Integer.parseInt(props.get("encrypt.server.port").toString());
 				String encp_use_yn = props.get("encrypt.useyn").toString();

@@ -59,9 +59,9 @@
 			scrollX: true,
 			columns : [
 			{ data : "", defaultContent : "", targets : 0, orderable : false, checkboxes : {'selectRow' : true}}, 
-			{ data : "", defaultContent : ""}, 
-			{ data : "offset", defaultContent : ""}, 
-			{ data : "length", defaultContent : ""}, 
+			{ data : "", className : "dt-center", defaultContent : ""}, 
+			{ data : "offset", className : "dt-right", defaultContent : ""}, 
+			{ data : "length", className : "dt-right", defaultContent : ""}, 
 			{ data : "cipherAlgorithmCode", defaultContent : ""}, 
 			{ data : "binUid", defaultContent : ""}, 
 			{ data : "initialVectorTypeCode", defaultContent : ""}, 
@@ -69,11 +69,11 @@
 			],'select': {'style': 'multi'}
 		});
 
-		table.tables().header().to$().find('th:eq(0)').css('min-width', '10px');
-		table.tables().header().to$().find('th:eq(1)').css('min-width', '20px');
+		table.tables().header().to$().find('th:eq(0)').css('min-width', '40px');
+		table.tables().header().to$().find('th:eq(1)').css('min-width', '60px');
 		table.tables().header().to$().find('th:eq(2)').css('min-width', '120px');
 		table.tables().header().to$().find('th:eq(3)').css('min-width', '100px');
-		table.tables().header().to$().find('th:eq(4)').css('min-width', '100px');
+		table.tables().header().to$().find('th:eq(4)').css('min-width', '200px');
 		table.tables().header().to$().find('th:eq(5)').css('min-width', '100px');
 		table.tables().header().to$().find('th:eq(6)').css('min-width', '80px');
 		table.tables().header().to$().find('th:eq(7)').css('min-width', '100px');
@@ -102,8 +102,8 @@
 			{ data : "startTime", defaultContent : ""}, 
 			{ data : "endTime", defaultContent : ""},
 			{ data : "workDay", defaultContent : ""},
-			{ data : "massiveThreshold", defaultContent : ""}, 
-			{ data : "massiveTimeInterval", defaultContent : ""}, 
+			{ data : "massiveThreshold", className : "dt-right", defaultContent : ""}, 
+			{ data : "massiveTimeInterval", className : "dt-right", defaultContent : ""}, 
 			{ data : "extraName", defaultContent : ""},
 			{ data : "hostName", defaultContent : ""},
 			{ data : "whitelistYesNo", defaultContent : ""}
@@ -638,11 +638,11 @@
 						<table id="encryptPolicyTable" class="display" cellspacing="0" width="100%">
 							<thead>
 								<tr>
-									<th width="10"></th>
-									<th width="20"><spring:message code="common.no" /></th>
+									<th width="40"></th>
+									<th width="60"><spring:message code="common.no" /></th>
 									<th width="120"><spring:message code="encrypt_policy_management.Starting_Position"/></th>
 									<th width="100"><spring:message code="encrypt_policy_management.Length"/></th>
-									<th width="100"><spring:message code="encrypt_policy_management.Encryption_Algorithm"/></th>
+									<th width="200"><spring:message code="encrypt_policy_management.Encryption_Algorithm"/></th>
 									<th width="100"><spring:message code="encrypt_policy_management.Encryption_Key"/></th>
 									<th width="80"><spring:message code="encrypt_policy_management.Initial_Vector"/></th>
 									<th width="100"><spring:message code="encrypt_policy_management.Modes"/></th>

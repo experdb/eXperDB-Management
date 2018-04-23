@@ -41,7 +41,7 @@ function fn_init(){
 	deferRender : true,
 	bSort: false,
 	columns : [
-	{data : "rownum", defaultContent : "", targets : 0, orderable : false, checkboxes : {'selectRow' : true}}, 
+	{data : "rownum", className : "dt-center", defaultContent : "", targets : 0, orderable : false, checkboxes : {'selectRow' : true}}, 
 	{data : "idx", columnDefs: [ { searchable: false, orderable: false, targets: 0} ], order: [[ 1, 'asc' ]],  defaultContent : ""},
 	{data : "db_svr_nm",  defaultContent : ""}, //서버명
 	{data : "bck_bsn_dscd_nm",  defaultContent : ""}, //구분

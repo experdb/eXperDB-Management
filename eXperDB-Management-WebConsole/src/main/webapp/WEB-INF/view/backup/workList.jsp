@@ -37,7 +37,7 @@ function fn_init(){
 	bSort: false,
 	columns : [
 		{data : "rownum", defaultContent : "", targets : 0, orderable : false, checkboxes : {'selectRow' : true}}, 
-		{data : "idx", defaultContent : ""}, 
+		{data : "idx", className : "dt-center", defaultContent : ""}, 
 		{data : "wrk_nm", className : "dt-left", defaultContent : ""
 			,"render": function (data, type, full) {
 				  return '<span onClick=javascript:fn_workLayer("'+full.wrk_id+'"); class="bold">' + full.wrk_nm + '</span>';

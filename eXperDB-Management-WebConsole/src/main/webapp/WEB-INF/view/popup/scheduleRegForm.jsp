@@ -258,6 +258,7 @@ function fn_workAdd(){
 
 </head>
 <body>
+<%@include file="../cmmn/commonLocale.jsp"%>  
 <%@include file="../cmmn/workRmanInfo.jsp"%>
 <%@include file="../cmmn/workDumpInfo.jsp"%>
 

@@ -113,14 +113,14 @@
 									<c:forEach var="data" items="${list}" varStatus="status">
 										<tr>
 											<td>${status.count}</td>
-											<td>${data.DB_SVR_NM}</td>
-											<td>${data.IPADR}</td>		
-											<td>
+											<td style="text-align: left;">${data.DB_SVR_NM}</td>
+											<td style="text-align: left;">${data.IPADR}</td>		
+											<td style="text-align: left;">
 												<c:if test="${data.MASTER_GBN == 'M'}">master</c:if>
 												<c:if test="${data.MASTER_GBN == 'S'}">slave</c:if>
 											</td>											
-											<td>${data.STRT_DTM}</td>
-											<td>
+											<td style="text-align: left;">${data.STRT_DTM}</td>
+											<td style="text-align: left;">
 											<c:if test="${data.SET_YN == 'Y'}">
 											<spring:message code="agent_monitoring.yes" />
 											</c:if>
@@ -128,7 +128,7 @@
 											<font color="red"><spring:message code="agent_monitoring.no" /></font>
 											</c:if>
 											</td>
-											<td>
+											<td style="text-align: right;">
 												${data.AGT_VERSION}
 											</td>
 											<td>

@@ -29,8 +29,9 @@
 			deferRender : true,
 			scrollX: true,
 			columns : [
-				{ data : "rnum", defaultContent : ""},  
+				{ data : "rnum", className : "dt-center", defaultContent : ""},  
 				{ data : "logDateTime", defaultContent : ""}, 
+				{ data : "entityName", defaultContent : ""}, 
 				{ data : "remoteAddress",  defaultContent : ""}, 
 				{ data : "requestPath",
  					render : function(data, type, full, meta) {	 	
@@ -49,6 +50,7 @@
 						return html;
 					},
 					defaultContent : "",
+					className : "dt-center",
 					orderable : false
 				},
 				{data : "parameter", defaultContent : "", visible: false },

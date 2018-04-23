@@ -19,7 +19,7 @@ function fn_init(){
 	bSort: false,
 	scrollX: true,
 	columns : [
-	{data : "rownum", defaultContent : "", targets : 0, orderable : false, checkboxes : {'selectRow' : true}}, 
+	{data : "rownum", className : "dt-center", defaultContent : "", targets : 0, orderable : false, checkboxes : {'selectRow' : true}}, 
 	{data : "idx", columnDefs: [ { searchable: false, orderable: false, targets: 0} ], order: [[ 1, 'asc' ]],  className : "dt-center", defaultContent : ""},
 	{data : "wrk_id",  defaultContent : "", visible: false },
 	{data : "db_svr_nm",  defaultContent : ""}, //서버명
