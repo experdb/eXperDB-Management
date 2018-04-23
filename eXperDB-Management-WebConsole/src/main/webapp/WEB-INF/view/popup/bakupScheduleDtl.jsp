@@ -392,6 +392,7 @@ function fn_bckModifyPopup(){
 <title>Insert title here</title>
 </head>
 <body>
+	<%@include file="../cmmn/commonLocale.jsp"%>  
 	<%@include file="../cmmn/workRmanInfo.jsp"%>
 	<%@include file="../cmmn/workDumpInfo.jsp"%>
 

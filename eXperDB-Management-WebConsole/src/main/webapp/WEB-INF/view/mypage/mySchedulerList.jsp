@@ -24,14 +24,14 @@ function fn_init(){
 	bSort: false,
 	columns : [
 		{data : "rownum", defaultContent : "", targets : 0, orderable : false, checkboxes : {'selectRow' : true}}, 
-		{data : "idx",  defaultContent : ""}, 
+		{data : "idx",  className : "dt-center", defaultContent : ""}, 
 		{data : "scd_nm", className : "dt-left", defaultContent : ""
 			,render: function (data, type, full) {
 				  return '<span onClick=javascript:fn_scdLayer("'+full.scd_id+'"); class="bold">' + full.scd_nm + '</span>';
 			}
 		},
 		{data : "scd_exp", className : "dt-left", defaultContent : ""}, 
-		{data : "wrk_cnt",  defaultContent : ""}, 
+		{data : "wrk_cnt",  className : "dt-right", defaultContent : ""}, 
 		{data : "prev_exe_dtm",  defaultContent : ""}, 
 		{data : "nxt_exe_dtm",  defaultContent : ""}, 
 		{data : "status", 
@@ -48,6 +48,7 @@ function fn_init(){
 				}
 				return data;
 			},
+			 className : "dt-center",
 			 defaultContent : "" 	
 		},
 		{data : "status", 
@@ -64,6 +65,7 @@ function fn_init(){
 				}
 				return data;
 			},
+			 className : "dt-center",
 			 defaultContent : "" 	
 		},	
 		{
@@ -408,7 +410,7 @@ function fn_modifyScheduleListView(){
 							<th width="30"><spring:message code="common.no" /></th>
 							<th width="200" class="dt-center"><spring:message code="schedule.schedule_name" /></th>
 							<th width="300" class="dt-center"><spring:message code="schedule.scheduleExp"/></th>
-							<th width="70"><spring:message code="schedule.work_count" /></th>
+							<th width="70" class="dt-center"><spring:message code="schedule.work_count" /></th>
 							<th width="100"><spring:message code="schedule.pre_run_time" /></th>
 							<th width="100"><spring:message code="schedule.next_run_time" /></th>
 							<th width="70"><spring:message code="common.run_status" /></th>

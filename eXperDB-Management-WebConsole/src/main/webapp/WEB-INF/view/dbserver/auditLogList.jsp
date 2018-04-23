@@ -33,7 +33,7 @@ function fn_init() {
 		paging: false,
 		scrollX: true,
 		columns : [
-		{ data : "", defaultContent : ""}, 
+		{ data : "", className : "dt-center", defaultContent : ""}, 
 		{data : "file_name", defaultContent : ""
 			,"render": function (data, type, full) {				
 				  return "<a href='#' class='bold' id='openLogView'>"+data+"</a>";
@@ -299,7 +299,7 @@ $(function() {
 					<table class="write">
 						<caption>검색 조회</caption>
 						<colgroup>
-							<col style="width: 80px;" />
+							<col style="width: 100px;" />
 							<col style="width: 200px;" />
 							<col style="width: 80px;" />
 							<col style="width: 200px;" />

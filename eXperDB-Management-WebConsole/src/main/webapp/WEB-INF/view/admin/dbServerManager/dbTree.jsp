@@ -43,6 +43,7 @@ function fn_init() {
 			targets: 0,
 	        searchable: false,
 	        orderable: false,
+	        className : "dt-center",
 	        render: function(data, type, full, meta){
 	           if(type === 'display'){
 	              data = '<input type="radio" name="radio" value="' + data + '">';      
@@ -55,6 +56,7 @@ function fn_init() {
 			targets: 0,
 	        searchable: false,
 	        orderable: false,
+	        className : "dt-center",
 	        render: function(data, type, full, meta){
 	           if(full.agt_cndt_cd == 'TC001101'){
 	              data = '<img src="../images/ico_agent_1.png" alt="" />';      
@@ -668,7 +670,7 @@ function fn_syncUpdate(db_id){
 							<table id="dbServerList" class="cell-border display" cellspacing="0" align="left">
 								<thead>
 									<tr>
-										<th width="10"><spring:message code="schedule.total" /></th>									
+										<th width="10"><spring:message code="common.choice" /></th>									
 										<th width="200"><spring:message code="dbms_information.dbms_ip" /></th>
 										<th width="130"><spring:message code="common.dbms_name" /></th>
 										<th width="50"><spring:message code="dbms_information.agent_status" /></th>

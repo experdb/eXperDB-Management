@@ -339,7 +339,7 @@ function fn_mstKeyDownload(){
 						<table class="write">
 							<colgroup>
 								<col style="width: 15%" />
-								<col style="width: 50%" />
+								<col style="width: 60%" />
 								<col />
 							</colgroup>
 							<tbody>

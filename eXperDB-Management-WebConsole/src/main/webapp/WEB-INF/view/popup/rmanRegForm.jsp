@@ -424,7 +424,7 @@ function fn_check() {
 									<tr>	
 										<th scope="row" class="ico_t1"><spring:message code="backup_management.backup_dir" /></th>
 										<td><input type="text" class="txt" name="bck_pth" id="bck_pth" maxlength=50 style="width:450px" onKeydown="$('#check_path2').val('N')"/>
-											<span class="btn btnC_01"><button type="button" class= "btn_type_02" onclick="checkFolder(2)" style="width: 60px; margin-right: -60px; margin-top: 0;"><spring:message code="common.dir_check" /></button></span>
+											<span class="btn btnC_01"><button type="button" class= "btn_type_02" onclick="checkFolder(2)" style="width: 100px; margin-right: -60px; margin-top: 0;"><spring:message code="common.dir_check" /></button></span>
 											<span id="backupVolume" style="margin:63px;"></span>											
 										</td>										
 									</tr>

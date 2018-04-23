@@ -74,6 +74,7 @@ function fn_init() {
 			targets: 0,
 	        searchable: false,
 	        orderable: false,
+	        className : "dt-center",
 	        render: function(data, type, full, meta){
 	           if(type === 'display'){
 	              data = '<input type="radio" name="radio" value="' + data + '">';      

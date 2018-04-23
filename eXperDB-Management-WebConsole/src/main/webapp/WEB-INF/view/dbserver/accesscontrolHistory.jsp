@@ -28,10 +28,24 @@ var table = null;
 			scrollX: true,
 			bSort: false,
 			columns : [
-			{ data : "rownum", defaultContent : ""}, 
+			{ data : "rownum", className : "dt-center", defaultContent : ""}, 
 			{ data : "ctf_tp_nm", defaultContent : ""}, 
-			{ data : "dtb", defaultContent : ""}, 
-			{ data : "prms_usr_id", defaultContent : ""}, 
+			{ data : "dtb",
+					render : function(data, type, full, meta) {	 	
+						var html = '';					
+						html += '<span title="'+full.dtb+'">' + full.dtb + '</span>';
+						return html;
+					},
+				defaultContent : ""
+			}, 
+			{ data : "prms_usr_id",
+					render : function(data, type, full, meta) {	 	
+						var html = '';					
+						html += '<span title="'+full.prms_usr_id+'">' + full.prms_usr_id + '</span>';
+						return html;
+					},
+				defaultContent : ""
+			},
 			{ data : "prms_ipadr", defaultContent : ""},
 			{ data : "prms_ipmaskadr", defaultContent : ""}, 
 			{ data : "ctf_mth_nm", defaultContent : ""}, 
@@ -40,13 +54,13 @@ var table = null;
 		});
 		
 		table.tables().header().to$().find('th:eq(0)').css('min-width', '20px');
-		table.tables().header().to$().find('th:eq(1)').css('min-width', '60px');
+		table.tables().header().to$().find('th:eq(1)').css('min-width', '40px');
 		table.tables().header().to$().find('th:eq(2)').css('min-width', '100px');
 		table.tables().header().to$().find('th:eq(3)').css('min-width', '100px');
 		table.tables().header().to$().find('th:eq(4)').css('min-width', '100px');
 		table.tables().header().to$().find('th:eq(5)').css('min-width', '100px');
-		table.tables().header().to$().find('th:eq(6)').css('min-width', '100px');
-		table.tables().header().to$().find('th:eq(7)').css('min-width', '100px');
+		table.tables().header().to$().find('th:eq(6)').css('min-width', '80px');
+		table.tables().header().to$().find('th:eq(7)').css('min-width', '90px');
 
 	    $(window).trigger('resize');
 	}
@@ -222,7 +236,7 @@ var table = null;
 				<div class="overflow_area">
 					<table class="write" id="accesscontrolHistory">
 						<colgroup>
-							<col style="width: 80px;" />
+							<col style="width: 120px;" />
 							<col style="width: 200px;" />
 							<col style="width: 80px;" />
 							<col style="width: 200px;" />
@@ -242,13 +256,13 @@ var table = null;
 							<thead>
 								<tr>
 									<th width="20"><spring:message code="common.no" /></th>
-									<th width="60"><spring:message code="access_control_management.type" /></th>
+									<th width="40"><spring:message code="access_control_management.type" /></th>
 									<th width="100"><spring:message code="access_control_management.database" /></th>
 									<th width="100"><spring:message code="access_control_management.user" /></th>
 									<th width="100"><spring:message code="access_control_management.ip_address" /></th>
 									<th width="100"><spring:message code="access_control_management.ip_mask" /></th>
-									<th width="100"><spring:message code="access_control_management.method" /></th>
-									<th width="100"><spring:message code="access_control_management.option" /></th>
+									<th width="80"><spring:message code="access_control_management.method" /></th>
+									<th width="90"><spring:message code="access_control_management.option" /></th>
 								</tr>
 							</thead>
 						</table>

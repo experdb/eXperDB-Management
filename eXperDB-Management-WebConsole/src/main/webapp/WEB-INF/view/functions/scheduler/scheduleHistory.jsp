@@ -451,11 +451,11 @@
 								<tr>
 									<td><c:out value="${pagingVO.pageSize*(pagingVO.pageIndex-1) + result.rownum}" /></td>
 									<td style="text-align: left;"><span onclick="fn_scdLayer('${result.scd_id}');" class="bold"><c:out value="${result.scd_nm}" /></span></td>
-									<td><c:out value="${result.db_svr_nm}" /></td>		
-									<td><c:out value="${result.ipadr}" /></td>				
-									<td><c:out value="${result.wrk_strt_dtm}" /></td>
-									<td><c:out value="${result.wrk_end_dtm}" /></td>
-									<td><c:out value="${result.wrk_dtm}" /></td>
+									<td style="text-align: left;"><c:out value="${result.db_svr_nm}" /></td>		
+									<td style="text-align: left;"><c:out value="${result.ipadr}" /></td>				
+									<td style="text-align: left;"><c:out value="${result.wrk_strt_dtm}" /></td>
+									<td style="text-align: left;"><c:out value="${result.wrk_end_dtm}" /></td>
+									<td style="text-align: left;"><c:out value="${result.wrk_dtm}" /></td>
 									<td>
 										<c:choose>
 											<c:when test="${result.exe_rslt_cd eq 'TC001701'}"><img src="../images/ico_state_02.png" style="margin-right:3px;"/>Success</c:when>
