@@ -96,4 +96,5 @@ All rights reserved.
 
 ## Community
 * https://www.facebook.com/experdb
+* http://cafe.naver.com/psqlmaster
 
