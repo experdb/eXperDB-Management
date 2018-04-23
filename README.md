@@ -28,7 +28,7 @@ eXperDB-Management is a PostgreSQL integrated operations management tool. Use ba
 ### Components
 * eXperDB-Management-Agent
 * eXperDB-Management-WebConsole
-* eXperDB-Management-Repository
+* eXperDB-Management Repository Database
 
 ### 1. Installing eXperDB-Management-Agent
 
