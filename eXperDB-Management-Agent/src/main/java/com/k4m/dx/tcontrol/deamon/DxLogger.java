@@ -1,6 +1,20 @@
 package com.k4m.dx.tcontrol.deamon;
 
 
+/**
+ * DxDaemon을 구동해준다.
+* @author 박태혁
+* @see
+* 
+*      <pre>
+* == 개정이력(Modification Information) ==
+*
+*   수정일       수정자           수정내용
+*  -------     --------    ---------------------------
+*  2018.04.23   박태혁 최초 생성
+*      </pre>
+*/
+
 public class DxLogger {
 	/** 로그 출력 여부를 결정하는 시스템 프라퍼티 */
 	private static String DXLOGGER_PROPERTY = "net.kldp.jsd.log";
