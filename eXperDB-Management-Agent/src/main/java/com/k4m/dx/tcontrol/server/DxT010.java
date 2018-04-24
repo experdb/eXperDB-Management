@@ -83,12 +83,15 @@ public class DxT010 extends SocketCtl{
 	        
 	        
 	        byte[] sendBuff = outputObj.toString().getBytes();
-	        send(4, sendBuff);
 	        
-	        sendBuff = null;
 	        selectExtensionList = null;
 	        hp = null;
 	        outputObj = null;
+	        
+	        send(4, sendBuff);
+	        
+	        sendBuff = null;
+
 	        
 
 	        
