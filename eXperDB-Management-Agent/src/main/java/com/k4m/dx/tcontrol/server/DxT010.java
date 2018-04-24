@@ -81,15 +81,14 @@ public class DxT010 extends SocketCtl{
 			
 	        outputObj = ResultJSON(selectExtensionList, strDxExCode, "0", "", "");
 	        
-	        selectExtensionList = null;
-	        hp = null;
-	        
-	        outputObj = null;
 	        
 	        byte[] sendBuff = outputObj.toString().getBytes();
 	        send(4, sendBuff);
 	        
 	        sendBuff = null;
+	        selectExtensionList = null;
+	        hp = null;
+	        outputObj = null;
 	        
 
 	        
