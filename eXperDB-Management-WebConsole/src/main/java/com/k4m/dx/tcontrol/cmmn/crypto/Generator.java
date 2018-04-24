@@ -32,12 +32,18 @@ import com.k4m.dx.tcontrol.cmmn.serviceproxy.SystemCode.Default;
 
 
 /**
- * @brief 난수 생성
- * 
- *        난수 및 난수 기반의 값을 생성하는 기능을 담당한다.
- * @date 2014. 11. 28.
- * @author Kim, Sunho
- */
+ * 난수 및 난수 기반의 값을 생성하는 기능을 담당한다.
+* @author 박태혁
+* @see
+* 
+*      <pre>
+* == 개정이력(Modification Information) ==
+*
+*   수정일       수정자           수정내용
+*  -------     --------    ---------------------------
+*  2018.04.23   박태혁 최초 생성
+*      </pre>
+*/
 
 public class Generator {
 

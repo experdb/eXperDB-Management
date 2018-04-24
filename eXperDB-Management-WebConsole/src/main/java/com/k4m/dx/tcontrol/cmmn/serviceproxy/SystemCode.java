@@ -1,29 +1,22 @@
-/**
- * <pre>
- * Copyright (c) 2014 K4M, Inc.
- * All right reserved.
- *
- * This software is the confidential and proprietary information of K4M, Inc. 
- * You shall not disclose such confidential information and
- * shall use it only in accordance with the terms of the license agreement
- * you entered into with K4M.
- * </pre>
- */
+
 package com.k4m.dx.tcontrol.cmmn.serviceproxy;
 
-/**
- * TODO add description
- * @date 2014. 12. 15.
- * @author Kim, Sunho
- */
 
 /**
- * @brief 전역 코드와 상수 정의
+ * 전역 코드와 상수 정의
  * 
- *        시스템 전역에서 사용하는 코드와 기본값 등의 상수에 대한 정의를 포함한다. 서버 시스템의 SystemCode와 필요한 상수들에 대해 함께 관리되어야 한다.
- * @date 2015. 1. 4.
- * @author Kim, Sunho
- */
+* @author 박태혁
+* @see
+* 
+*      <pre>
+* == 개정이력(Modification Information) ==
+*
+*   수정일       수정자           수정내용
+*  -------     --------    ---------------------------
+*  2018.04.23   박태혁 최초 생성
+*      </pre>
+*/
+
 public class SystemCode {
 
 	private SystemCode() {

@@ -11,9 +11,17 @@ import org.springframework.web.client.RestTemplate;
 
 /**
  * REST API URL 생성 및 REST API를 호출 및 호출 결과를 반환한다.
- * @author manimany
- *
- */
+* @author 박태혁
+* @see
+* 
+*      <pre>
+* == 개정이력(Modification Information) ==
+*
+*   수정일       수정자           수정내용
+*  -------     --------    ---------------------------
+*  2018.04.23   박태혁 최초 생성
+*      </pre>
+*/
 public class RequestRestApi {
 	
 	/**

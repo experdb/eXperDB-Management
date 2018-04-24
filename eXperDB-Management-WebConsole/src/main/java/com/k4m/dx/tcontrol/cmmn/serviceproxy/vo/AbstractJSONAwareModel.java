@@ -1,14 +1,3 @@
-/**
- * <pre>
- * Copyright (c) 2014 K4M, Inc.
- * All right reserved.
- *
- * This software is the confidential and proprietary information of K4M, Inc. 
- * You shall not disclose such confidential information and
- * shall use it only in accordance with the terms of the license agreement
- * you entered into with K4M.
- * </pre>
- */
 package com.k4m.dx.tcontrol.cmmn.serviceproxy.vo;
 
 import org.apache.commons.lang3.builder.ReflectionToStringBuilder;
@@ -20,13 +9,19 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
 /**
- * @brief JSON 문자열로 변환이 필요한 객체들의 상위 클래스
+ * JSON 문자열로 변환이 필요한 객체들의 상위 클래스
+ *
+ * @author 박태혁
+ * @see
  * 
- *        JSON 문자열로 변환이 필요한 객체들을 위한 메소드를 포함한다.
- * @date 2014. 11. 28.
- * @author Kim, Sunho
+ *      <pre>
+ * == 개정이력(Modification Information) ==
+ *
+ *   수정일       수정자           수정내용
+ *  -------     --------    ---------------------------
+ *  2018.04.23   박태혁 최초 생성
+ *      </pre>
  */
-
 public abstract class AbstractJSONAwareModel implements JSONAware {
 
 	protected static Logger		logger					= LoggerFactory.getLogger(AbstractJSONAwareModel.class);

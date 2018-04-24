@@ -21,12 +21,19 @@ import java.util.Map;
 import java.util.Map.Entry;
 
 /**
- * @brief 데이터 형과 관련된 Utility 기능 담당
+ * 데이터 형과 관련된 Utility 기능 담당
  * 
- *        데이터 형과 관련된 Utility 기능을 담당한다.
- * @date 2014. 12. 29.
- * @author Kim, Sunho
- */
+* @author 박태혁
+* @see
+* 
+*      <pre>
+* == 개정이력(Modification Information) ==
+*
+*   수정일       수정자           수정내용
+*  -------     --------    ---------------------------
+*  2018.04.23   박태혁 최초 생성
+*      </pre>
+*/
 
 public class TypeUtility {
 	

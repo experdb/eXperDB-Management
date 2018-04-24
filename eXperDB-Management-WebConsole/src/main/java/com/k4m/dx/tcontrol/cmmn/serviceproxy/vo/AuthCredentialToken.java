@@ -1,26 +1,25 @@
-/**
- * <pre>
- * Copyright (c) 2014 K4M, Inc.
- * All right reserved.
- *
- * This software is the confidential and proprietary information of K4M, Inc. 
- * You shall not disclose such confidential information and
- * shall use it only in accordance with the terms of the license agreement
- * you entered into with K4M.
- * </pre>
- */
 package com.k4m.dx.tcontrol.cmmn.serviceproxy.vo;
 
 import com.google.gson.GsonBuilder;
 import com.google.gson.annotations.Expose;
 
 /**
- * @brief 인증에 필요한 필드를 포함하는 모델
- * 
- *        인증에 필요한 필드와 getter/setter 를 포함하는 모델로 outbound로는 사용되지 않고, inbound로만 사용된다.
- * @date 2014. 11. 28.
- * @author Kim, Sunho
- */
+* AuthCredentialToken
+* 
+* 인증에 필요한 필드를 포함하는 모델
+*  인증에 필요한 필드와 getter/setter 를 포함하는 모델로 outbound로는 사용되지 않고, inbound로만 사용된다.
+* 
+* @author 박태혁
+* @see
+* 
+*      <pre>
+* == 개정이력(Modification Information) ==
+*
+*   수정일       수정자           수정내용
+*  -------     --------    ---------------------------
+*  2018.04.23   박태혁 최초 생성
+*      </pre>
+*/
 
 public class AuthCredentialToken extends AbstractManagedModel {
 

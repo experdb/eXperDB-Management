@@ -1,14 +1,3 @@
-/**
- * <pre>
- * Copyright (c) 2015 K4M, Inc.
- * All right reserved.
- *
- * This software is the confidential and proprietary information of K4M, Inc. 
- * You shall not disclose such confidential information and
- * shall use it only in accordance with the terms of the license agreement
- * you entered into with K4M.
- * </pre>
- */
 package com.k4m.dx.tcontrol.cmmn.serviceproxy.vo;
 
 import java.io.IOException;
@@ -18,13 +7,19 @@ import java.sql.SQLException;
 import org.apache.commons.csv.CSVPrinter;
 
 /**
- * @brief
  * 
- *        TODO add description
- * @date 2015. 10. 5.
- * @author Kim, Sunho
+ *
+ * @author 박태혁
+ * @see
+ * 
+ *      <pre>
+ * == 개정이력(Modification Information) ==
+ *
+ *   수정일       수정자           수정내용
+ *  -------     --------    ---------------------------
+ *  2018.04.23   박태혁 최초 생성
+ *      </pre>
  */
-
 public abstract class AbstractLogModel extends AbstractPageModel {
 
 	public abstract Object[] getExportHeader();

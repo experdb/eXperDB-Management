@@ -12,7 +12,18 @@ import org.apache.commons.codec.binary.Base64;
 
 import static java.nio.charset.StandardCharsets.UTF_8;
 
-
+/**
+* @author 박태혁
+* @see
+* 
+*      <pre>
+* == 개정이력(Modification Information) ==
+*
+*   수정일       수정자           수정내용
+*  -------     --------    ---------------------------
+*  2018.04.23   박태혁 최초 생성
+*      </pre>
+*/
 public class Rfc2898DeriveBytes {
 
     private final Mac _hmacSha1;

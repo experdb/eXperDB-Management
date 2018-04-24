@@ -1,14 +1,3 @@
-/**
- * <pre>
- * Copyright (c) 2014 K4M, Inc.
- * All right reserved.
- *
- * This software is the confidential and proprietary information of K4M, Inc. 
- * You shall not disclose such confidential information and
- * shall use it only in accordance with the terms of the license agreement
- * you entered into with K4M.
- * </pre>
- */
 package com.k4m.dx.tcontrol.cmmn.serviceproxy.vo;
 
 import com.google.gson.annotations.Expose;
@@ -17,17 +6,21 @@ import com.k4m.dx.tcontrol.cmmn.serviceproxy.TypeUtility;
 import net.sf.json.JSONObject;
 import net.sf.json.JSONSerializer;
 
-
-//import org.json.simple.JSONObject;
-
 /**
- * @brief 엔티티에 대한 정보를 포함하는 모델
- * 
- *        T_ENTITY 테이블에 대응하는 필드와 이에 대한 getter/setter 를 포함한다. 필드 추가 시 JSON 문자열 출력을 위해서는 필드에 @Expose annotation을 추가한다.
- * @date 2014. 11. 26.
- * @author Kim, Sunho
- */
-
+* Entity
+* 
+* 
+* @author 박태혁
+* @see
+* 
+*      <pre>
+* == 개정이력(Modification Information) ==
+*
+*   수정일       수정자           수정내용
+*  -------     --------    ---------------------------
+*  2018.04.23   박태혁 최초 생성
+*      </pre>
+*/
 public class Entity extends AbstractManagedModel {
 	@Expose
 	private String		entityUid;

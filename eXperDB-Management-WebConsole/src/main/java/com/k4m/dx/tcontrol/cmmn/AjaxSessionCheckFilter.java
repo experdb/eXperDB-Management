@@ -15,15 +15,18 @@ import javax.servlet.http.HttpServletResponse;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.core.AuthenticationException;
 
-
-	/**
-	 * AJAX 요청시 권한 관련 오류가 생기면 redirect 시키는데,
-	 * AJAX는 HTTP 상태 코드를 이용해서 에러를 확인해야 하므로,
-	 * redirect 되기전에 상태 코드를 전송하게함.
-	 * 
-	 * @author Miracle
-	 *
-	 */
+/**
+* @author 박태혁
+* @see
+* 
+*      <pre>
+* == 개정이력(Modification Information) ==
+*
+*   수정일       수정자           수정내용
+*  -------     --------    ---------------------------
+*  2018.04.23   박태혁 최초 생성
+*      </pre>
+*/
 	public class AjaxSessionCheckFilter implements Filter{
 		
 		/**

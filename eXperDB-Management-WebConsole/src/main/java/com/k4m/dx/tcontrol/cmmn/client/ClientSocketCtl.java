@@ -26,6 +26,21 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.json.simple.JSONObject;
 
+
+/**
+ * 전문에서 사용되는 코드값
+* @author 박태혁
+* @see
+* 
+*      <pre>
+* == 개정이력(Modification Information) ==
+*
+*   수정일       수정자           수정내용
+*  -------     --------    ---------------------------
+*  2018.04.23   박태혁 최초 생성
+*      </pre>
+*/
+
 public class ClientSocketCtl {
 	public static final int TotalLengthBit = 4;
 	private static int DEFAULT_TIMEOUT = 600;

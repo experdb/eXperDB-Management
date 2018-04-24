@@ -1,13 +1,24 @@
 package com.k4m.dx.tcontrol.cmmn.serviceproxy.vo;
 
-import java.sql.PreparedStatement;
-import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.List;
-
 import com.google.gson.annotations.Expose;
 import com.k4m.dx.tcontrol.cmmn.serviceproxy.SystemCode;
 import com.k4m.dx.tcontrol.cmmn.serviceproxy.TypeUtility;
+
+
+/**
+* AuditLogSite
+* 
+* @author 박태혁
+* @see
+* 
+*      <pre>
+* == 개정이력(Modification Information) ==
+*
+*   수정일       수정자           수정내용
+*  -------     --------    ---------------------------
+*  2018.04.23   박태혁 최초 생성
+*      </pre>
+*/
 
 public class AuditLogSite extends AbstractPageModel {
 	

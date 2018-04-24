@@ -17,13 +17,20 @@ import org.apache.commons.codec.DecoderException;
 import org.apache.commons.codec.binary.Base64;
 import org.apache.commons.codec.binary.Hex;
 
+
 /**
- * @brief 포맷 변환
- * 
- *        포맷 간의 변환을 담당한다.
- * @date 2014. 11. 28.
- * @author Kim, Sunho
- */
+ * 포맷 간의 변환을 담당한다.
+* @author 박태혁
+* @see
+* 
+*      <pre>
+* == 개정이력(Modification Information) ==
+*
+*   수정일       수정자           수정내용
+*  -------     --------    ---------------------------
+*  2018.04.23   박태혁 최초 생성
+*      </pre>
+*/
 public class Converter {
 
 	//private static final char[]	hexArray	= { '0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'A', 'B', 'C', 'D', 'E', 'F' };
