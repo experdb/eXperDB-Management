@@ -11,7 +11,7 @@ LIB=$PROJECT_HOME/lib/*
 JAVA_CLASSPATH=$APP_HOME:$LIB
 MAIN_CLASS=com.k4m.dx.tcontrol.DaemonStart
 
-#$JAVA_HOME/bin/java -Du=experDB-Management-Agent -Xms256m -Xmx256m -XX:NewRatio=2 -XX:SurvivorRatio=6 -Xloggc:$LOG_DIR/eXperManagementAgentGC.log -XX:+PrintGCDetails -XX:+PrintGCDateStamps -Dlog.base=$LOG_DIR -classpath $JAVA_CLASSPATH $MAIN_CLASS
+#$JAVA_HOME/bin/java -Du=experDB-Management-Agent -Xms38m -Xmx38m -XX:NewRatio=2 -XX:SurvivorRatio=6 -Xloggc:$LOG_DIR/eXperManagementAgentGC.log -XX:+PrintGCDetails -XX:+PrintGCDateStamps -Dlog.base=$LOG_DIR -classpath $JAVA_CLASSPATH $MAIN_CLASS
 
-nohup $JAVA_HOME/bin/java -Du=eXperDB-Management-Agent -Xms256m -Xmx256m -XX:NewRatio=2 -XX:SurvivorRatio=6 -Dlog.base=$LOG_DIR -classpath $JAVA_CLASSPATH $MAIN_CLASS 1> /dev/null 2>&1 &
+nohup $JAVA_HOME/bin/java -Du=eXperDB-Management-Agent -Xms38m -Xmx38m -XX:NewRatio=2 -XX:SurvivorRatio=6 -Dlog.base=$LOG_DIR -classpath $JAVA_CLASSPATH $MAIN_CLASS 1> /dev/null 2>&1 &
 
