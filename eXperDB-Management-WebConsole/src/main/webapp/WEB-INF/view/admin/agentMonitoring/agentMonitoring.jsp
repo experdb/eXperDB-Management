@@ -36,7 +36,7 @@
 			<div id="contents">
 				<div class="contents_wrap">
 					<div class="contents_tit">
-						<h4><spring:message code="menu.agent_monitoring" /><a href="#n"><img src="../images/ico_tit.png" class="btn_info"/></a></h4>
+						<h4>Management <spring:message code="menu.agent_monitoring" /><a href="#n"><img src="../images/ico_tit.png" class="btn_info"/></a></h4>
 						<div class="infobox"> 
 							<ul>
 								<li><spring:message code="help.agent_monitoring_01" /> </li>
@@ -46,8 +46,8 @@
 						<div class="location">
 							<ul>
 								<li>Admin</li>
-								<li><spring:message code="menu.monitoring" /></li>
-								<li class="on"><spring:message code="menu.agent_monitoring" /></li>
+								<li><spring:message code="menu.agent_monitoring" /></li>
+								<li class="on">관리 에이전트</li>
 							</ul>
 						</div>
 					</div>

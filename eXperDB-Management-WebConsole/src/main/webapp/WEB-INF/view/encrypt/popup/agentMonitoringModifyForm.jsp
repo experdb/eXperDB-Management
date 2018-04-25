@@ -116,7 +116,7 @@ var extendedField = ${extendedField};
 <body>
 	<div class="pop_container">
 		<div class="pop_cts">
-			<p class="tit">암호화 에이전트 모니터링 수정</p>
+			<p class="tit"><spring:message code="encrypt_agent.Modify_Agent_Monitoring"/></p>
 				<div class="btn_type_01">
 					<span class="btn btnC_01" onClick="fn_agentStatusSave();"><button id="btnSave"><spring:message code="common.save"/></button></span> 
 				</div>

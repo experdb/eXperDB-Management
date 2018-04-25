@@ -61,7 +61,7 @@ function fn_init() {
 		{ data : "wrk_strt_dtm",  defaultContent : ""},  
 		{ data : "wrk_end_dtm",  defaultContent : ""},
 		{ data : "wrk_dtm",  defaultContent : ""},
-		{data : "exe_rslt_cd",  defaultContent : ""
+		{data : "exe_rslt_cd",  defaultContent : "",className : "dt-center"
 			,"render": function (data, type, full) {
 				if(full.exe_rslt_cd=="TC001701"){
 					var html = '<span class="btn btnC_01 btnF_02"><img src="../images/ico_state_02.png" style="margin-right:3px;"/>Success</span>';
@@ -92,7 +92,7 @@ function fn_init() {
 					}
 					return html;
 				},
-				
+				className : "dt-center",
 				defaultContent : ""
 			},
 		{data : "scd_id",  defaultContent : "", visible: false }

@@ -41,8 +41,8 @@ function fn_init(){
 	deferRender : true,
 	bSort: false,
 	columns : [
-	{data : "rownum", className : "dt-center", defaultContent : "", targets : 0, orderable : false, checkboxes : {'selectRow' : true}}, 
-	{data : "idx", columnDefs: [ { searchable: false, orderable: false, targets: 0} ], order: [[ 1, 'asc' ]],  defaultContent : ""},
+	{data : "rownum", defaultContent : "", targets : 0, orderable : false, checkboxes : {'selectRow' : true}}, 
+	{data : "idx", className : "dt-center", columnDefs: [ { searchable: false, orderable: false, targets: 0} ], order: [[ 1, 'asc' ]],  defaultContent : ""},
 	{data : "db_svr_nm",  defaultContent : ""}, //서버명
 	{data : "bck_bsn_dscd_nm",  defaultContent : ""}, //구분
 	{data : "wrk_nm", className : "dt-left", defaultContent : ""}, //work명
@@ -415,7 +415,7 @@ function fn_insertSchedule(){
 		//다른 서버가 포함되어있는지 확인
 		for (var i = 0; i < datas.length; i++){ 
 			if(table.rows().data()[0].db_svr_nm != table.rows().data()[i].db_svr_nm){
-				alert("2개 이상의 DBMS가 존재합니다.");
+				alert('<spring:message code="message.msg205"/>');
 				return false;
 			}
 		}		

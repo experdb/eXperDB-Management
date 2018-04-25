@@ -25,7 +25,7 @@
 
 	function fn_init() {
 		userTable = $('#user').DataTable({
-			scrollY : "378px",
+			scrollY : "370px",
 			scrollX: true,	
 			searching : false,
 			paging : false,
@@ -49,9 +49,9 @@
 		});	
 		
 		
-		userTable.tables().header().to$().find('th:eq(0)').css('min-width', '30px');
-		userTable.tables().header().to$().find('th:eq(1)').css('min-width', '100px');
-		userTable.tables().header().to$().find('th:eq(2)').css('min-width', '100px');
+		userTable.tables().header().to$().find('th:eq(0)').css('min-width', '20px');
+		userTable.tables().header().to$().find('th:eq(1)').css('min-width', '90px');
+		userTable.tables().header().to$().find('th:eq(2)').css('min-width', '90px');
 
 	    $(window).trigger('resize'); 		
 		
@@ -548,9 +548,9 @@
 											<table id="user" class="display" cellspacing="0" width="100%">
 												<thead>
 													<tr>
-														<th width="30"><spring:message code="common.no"/></th>
-														<th width="100"><spring:message code="user_management.id" /></th>
-														<th width="100"><spring:message code="user_management.user_name" /></th>
+														<th width="20"><spring:message code="common.no"/></th>
+														<th width="90"><spring:message code="user_management.id" /></th>
+														<th width="90"><spring:message code="user_management.user_name" /></th>
 													</tr>
 												</thead>
 											</table>

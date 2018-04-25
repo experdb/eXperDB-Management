@@ -41,6 +41,7 @@
 						var html = "<span class='btn btnC_01 btnF_02'><button id='detail'><spring:message code='schedule.detail_view' /></button></span>";
 						return html;
 					},
+					className : "dt-center",
 					defaultContent : "",
 					orderable : false
 				},

@@ -63,8 +63,8 @@ function fn_init() {
 		],'select': {'style': 'multi'}
 	});
 
-	table.tables().header().to$().find('th:eq(0)').css('min-width', '10px');
-	table.tables().header().to$().find('th:eq(1)').css('min-width', '20px');
+	table.tables().header().to$().find('th:eq(0)').css('min-width', '30px');
+	table.tables().header().to$().find('th:eq(1)').css('min-width', '40px');
 	table.tables().header().to$().find('th:eq(2)').css('min-width', '120px');
 	table.tables().header().to$().find('th:eq(3)').css('min-width', '100px');
 	table.tables().header().to$().find('th:eq(4)').css('min-width', '100px');
@@ -343,8 +343,8 @@ function fn_delete(){
 					<table id="userListTable" class="display" cellspacing="0" width="100%">
 						<thead>
 							<tr>
-								<th width="10"></th>
-								<th width="20"><spring:message code="common.no" /></th>
+								<th width="30"></th>
+								<th width="40"><spring:message code="common.no" /></th>
 								<th width="120"><spring:message code="user_management.id" /></th>
 								<th width="100"><spring:message code="user_management.company" /></th>
 								<th width="100"><spring:message code="user_management.user_name" /></th>

@@ -25,8 +25,8 @@
 <title>eXperDB</title>
 <link rel="stylesheet" type="text/css" href="/css/jquery-ui.css">
 <link rel="stylesheet" type="text/css" href="/css/common.css">
-<link rel = "stylesheet" type = "text/css" media = "screen" href = "<c:url value='/css/dt/jquery.dataTables.min.css'/>"/>
-<link rel = "stylesheet" type = "text/css" media = "screen" href = "<c:url value='/css/dt/dataTables.jqueryui.min.css'/>"/> 
+<link rel = "stylesheet" type="text/css" media="screen" href="/css/dt/jquery.dataTables.min.css"/>
+<link rel = "stylesheet" type="text/css" media="screen" href="/css/dt/dataTables.jqueryui.min.css"/>
 <link rel="stylesheet" type="text/css" href="<c:url value='/css/dt/dataTables.colVis.css'/>"/>
 <link rel="stylesheet" type="text/css" href="<c:url value='/css/dt/dataTables.checkboxes.css'/>"/>
 
@@ -82,7 +82,7 @@ function fn_init() {
 	           return data;
 	        }}, 
 		{data : "ipadr",  defaultContent : ""},
-		{data : "portno",  defaultContent : ""},
+		{data : "portno", className : "dt-right",  defaultContent : ""},
 		{data : "master_gbn",  defaultContent : ""},
 		{data : "connYn",  defaultContent : ""},	
 		{data : "svr_host_nm",  defaultContent : "", visible: false}

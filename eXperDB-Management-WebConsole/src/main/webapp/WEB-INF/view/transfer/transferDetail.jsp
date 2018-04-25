@@ -47,7 +47,7 @@
 					}
 					return html;
 				},
-				
+				className : "dt-center",
 				defaultContent : ""
 			}, 
 			{
@@ -63,7 +63,7 @@
 					}
 					return html;
 				},
-				
+				className : "dt-center",
 				defaultContent : ""
 			}, 
 			{ data : "trf_trg_id", visible: false}, 

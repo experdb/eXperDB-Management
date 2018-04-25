@@ -247,7 +247,8 @@ function toggleLayer( obj, s ) {
 }
 
 //About eXperDB
-function fn_aboutExperdb(){
+function fn_aboutExperdb(version){
+	$("#version").html(version);
 	toggleLayer($('#pop_layer_aboutExperdb'), 'on');
 }
 
@@ -654,7 +655,7 @@ function fn_checkWord(obj, maxlength) {
 	var str_length = str.length;     
 	var max_length = maxlength;  
 	if (str_length == max_length) {        
-		alert(max_length + "자리 까지만 입력이 가능합니다.");    
+		alert(max_length+message_msg211);
 	}    
 	obj.focus(); 
 }

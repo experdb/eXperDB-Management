@@ -48,9 +48,10 @@
 				},
 				
 				defaultContent : "",
+				className : "dt-center",
 				orderable : false
 			}, 
-			{ data : "",  orderable : false, defaultContent : "<span class='btn btnC_01 btnF_02'><button id='mappingBtn'><spring:message code='data_transfer.table_mapping' /></button></span>"},
+			{ data : "",  orderable : false, className : "dt-center", defaultContent : "<span class='btn btnC_01 btnF_02'><button id='mappingBtn'><spring:message code='data_transfer.table_mapping' /></button></span>"},
 			],'select': {'style': 'multi'}
 		});
 		

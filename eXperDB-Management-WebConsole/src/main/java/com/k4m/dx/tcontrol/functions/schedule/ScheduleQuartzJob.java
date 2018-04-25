@@ -393,11 +393,11 @@ public class ScheduleQuartzJob implements Job{
 		
 		rmanCmd += " -A $PGDATA/pg_xlog/archive_status/";
 		
-		if(resultWork.get(i).get("cps_yn").toString().equals("Y")){
+		if(resultWork.get(i).get("log_file_bck_yn").toString().equals("Y")){
 			rmanCmd += " --with-serverlog";
 		}
 		
-		if(resultWork.get(i).get("log_file_bck_yn").toString().equals("Y")){
+		if(resultWork.get(i).get("cps_yn").toString().equals("Y")){
 			rmanCmd += " --compress-data";
 		}
 				

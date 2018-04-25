@@ -6,6 +6,8 @@
 	String usr_id = (String)session.getAttribute("usr_id");
 %>
 <script>
+var version = "${sessionScope.version}";
+
 /* ********************************************************
  * 페이지 시작시 함수
  ******************************************************** */
@@ -356,9 +358,10 @@ function fn_cookie(url) {
 									<li><a href="/accessHistory.do" onClick="fn_cookie(null)" id="MN000601" target="main"><spring:message code="menu.screen_access_history" /></a></li>
 								</ul>
 					        </li>
-					        <li><a href="#n" id="MN0007"><spring:message code="menu.monitoring"/></a>
+					        <li><a href="#n" id="MN0007"><spring:message code="menu.agent_monitoring"/></a>
 					        	<ul class="depth_3">
-									<li><a href="/agentMonitoring.do" onClick="fn_cookie(null)" id="MN000701" target="main"><spring:message code="menu.agent_monitoring"/></a></li>									
+									<li><a href="/agentMonitoring.do" onClick="fn_cookie(null)" id="MN000701" target="main">Management Agent</a></li>	
+									<li><a href="/encryptAgentMonitoring.do" onClick="fn_cookie(null)" id="MN000702" target="main">Encrypt Agent</a></li>								
 								</ul>
 					        </li>
 							<li><a href="/extensionList.do" onClick="fn_cookie(null)" id="MN0008" target="main"><spring:message code="menu.extension_pack_installation_information"/></a></li>
@@ -390,6 +393,11 @@ function fn_cookie(url) {
 									<li><a href="/securityAgentMonitoring.do" target="main"  id="MN0001304" onClick="fn_cookie('securityAgentMonitoring')"><spring:message code="encrypt_agent.Encryption_agent_setting"/></a></li>
 								</ul>
         					</li>
+        					<li><a href="#n" id="MN00014" onClick="fn_cookie(null)">통계</a>
+        						<ul class="depth_3">
+        							<li><a href="/securityStatistics.do" target="main" id="MN0001401" onClick="fn_cookie('securityStatistics')">암호화통계</a></li>
+        						</ul>
+        					</li>
 						</ul>
 					</li>
 
@@ -409,7 +417,7 @@ function fn_cookie(url) {
 					<li><a href="#n"><span><img src="/images/ico_h_8.png" alt="HELP" /></span></a>
 						<ul class="depth_2">
 							<!-- <li><a href="#n" onClick="fn_cookie(null)" target="main">Online Help</a></li> -->
-							<li><a href="#n" onClick="fn_aboutExperdb()" >About eXperDB</a></li>
+							<li><a href="#n" onClick="fn_aboutExperdb('${sessionScope.version}')" >About eXperDB</a></li>
 							<li><a href="#n" onClick="fn_openSource()" >Open Source License</a></li>
 						</ul>
 					</li>

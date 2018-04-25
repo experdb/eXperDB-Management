@@ -177,12 +177,15 @@ public class LoginController {
 			    LocaleResolver localeResolver = RequestContextUtils.getLocaleResolver(request);
 			    localeResolver.setLocale(request, response, locale);
 				
-				String restIp = props.get("encrypt.server.url").toString();
-				int restPort = Integer.parseInt(props.get("encrypt.server.port").toString());
 				String encp_use_yn = props.get("encrypt.useyn").toString();
 				request.getSession().setAttribute("encp_use_yn", encp_use_yn);
 				
+				String version = props.get("version").toString();
+				request.getSession().setAttribute("version", version);
+				
 				if(encp_use_yn.equals("Y")){
+					String restIp = props.get("encrypt.server.url").toString();
+					int restPort = Integer.parseInt(props.get("encrypt.server.port").toString());
 					try{
 						CommonServiceCall cic = new CommonServiceCall();
 						JSONObject result = cic.login(restIp,restPort,id,userVo.getPwd());

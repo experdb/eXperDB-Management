@@ -20,7 +20,7 @@
 				<tbody>
 					<tr>
 						<th scope="row" class="t1">Version</th>
-						<td>1.1</td>
+						<td id="version"></td>
 					</tr>
 					<tr>
 						<th scope="row" class="t1">Copyright</th>

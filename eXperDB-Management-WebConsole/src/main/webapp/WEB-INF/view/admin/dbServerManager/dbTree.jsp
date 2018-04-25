@@ -33,7 +33,7 @@ function fn_init() {
 	 * 서버 (데이터테이블)
 	 ******************************************************** */
 	table_dbServer = $('#dbServerList').DataTable({
-		scrollY : "279px",
+		scrollY : "270px",
 		scrollX: true,	
 		searching : false,
 		paging : false,
@@ -93,7 +93,7 @@ function fn_init() {
 	 * 디비 (데이터테이블)
 	 ******************************************************** */
 	table_db = $('#dbList').DataTable({
-		scrollY : "278px",
+		scrollY : "270px",
 		scrollX: true,	
 		searching : false,
 		paging : false,		
@@ -515,7 +515,7 @@ function fn_dataCompareChcek(svrDbList){
 				}else if(result.scheduleChk){
 					alert('<spring:message code="message.msg194"/>');
 				}else{
-					if (confirm("선택된 DBMS와 관련된 모든 데이터가 삭제됩니다.\n 정말 삭제하시겠습니까?")){
+					if (confirm('<spring:message code="message.msg206"/>')){
 						return false;
 						fn_delete(db_svr_id);
 					}else{
@@ -560,10 +560,10 @@ function fn_dbSync(){
 	var db_svr_id =  table_dbServer.row('.selected').data().db_svr_id;
 
 	if(datas == 0){
-		alert("동기화 서버를 선택해주세요.")
+		alert('<spring:message code="message.msg207"/>')
 		return false;
 	}else{
-		if (confirm('데이터베이스 정보를 동기화 하시겠습니까?')){
+		if (confirm('<spring:message code="message.msg208"/>')){
 			$.ajax({
 				url : "/selectDBSync.do",
 				data : {db_svr_id : db_svr_id},
@@ -694,7 +694,7 @@ function fn_syncUpdate(db_id){
 					<div class="btn_type_01">
 						<div id="save_button">
 						<span class="btn"><button onClick="fn_insertDB()"><spring:message code="common.save"/></button></span>
-						<span class="btn"><button onClick="fn_dbSync()">동기화</button></span>
+						<span class="btn"><button onClick="fn_dbSync()"><spring:message code="dbms_information.Synchronization"/></button></span>
 						</div>
 					</div>
 					<div class="inner">

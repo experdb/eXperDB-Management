@@ -43,7 +43,14 @@ function fn_init(){
 				  return '<span onClick=javascript:fn_workLayer("'+full.wrk_id+'"); class="bold">' + full.wrk_nm + '</span>';
 			}
 		}, //work명
-		{data : "wrk_exp", className : "dt-nowrap", defaultContent : ""},	
+		{ data : "wrk_exp",
+				render : function(data, type, full, meta) {	 	
+					var html = '';					
+					html += '<span title="'+full.wrk_exp+'">' + full.wrk_exp + '</span>';
+					return html;
+				},
+				defaultContent : ""
+		},
 		{data : "bck_opt_cd_nm", defaultContent : ""
 			,"render": function (data, type, full) {
 				if(full.bck_opt_cd=="TC000301"){
@@ -89,25 +96,32 @@ function fn_init(){
 		bSort: false,
 	columns : [
 		{data : "rownum", defaultContent : "", targets : 0, orderable : false, checkboxes : {'selectRow' : true}}, 
-		{data : "idx", defaultContent : ""}, 
+		{data : "idx", className : "dt-center", defaultContent : ""}, 
 		{data : "wrk_nm", className : "dt-left", defaultContent : ""
 			,"render": function (data, type, full) {				
 				  return '<span onClick=javascript:fn_workLayer("'+full.wrk_id+'"); class="bold">' + full.wrk_nm + '</span>';
 			}
 		},
-		{data : "wrk_exp", className : "dt-left", defaultContent : ""},
+		{ data : "wrk_exp",
+			render : function(data, type, full, meta) {	 	
+				var html = '';					
+				html += '<span title="'+full.wrk_exp+'">' + full.wrk_exp + '</span>';
+				return html;
+			},
+			defaultContent : ""
+		},
 		{data : "db_nm", defaultContent : ""}, 
-		{data : "save_pth", className : "dt-left", defaultContent : ""
+		{data : "save_pth", defaultContent : ""
 			,"render": function (data, type, full) {
 				  return '<span onClick=javascript:fn_dumpShow("'+full.save_pth+'","'+full.db_svr_id+'"); class="bold">' + full.save_pth + '</span>';
 			}
 		 },
 		{data : "file_fmt_cd_nm", defaultContent : ""}, 
-		{data : "cprt", defaultContent : ""}, 
+		{data : "cprt", className : "dt-right", defaultContent : ""}, 
 		{data : "encd_mth_nm", defaultContent : ""}, 
 		{data : "usr_role_nm", defaultContent : ""}, 
-		{data : "file_stg_dcnt", defaultContent : ""}, 	
-		{data : "bck_mtn_ecnt", defaultContent : ""}, 		
+		{data : "file_stg_dcnt", className : "dt-right", defaultContent : ""}, 	
+		{data : "bck_mtn_ecnt", className : "dt-right", defaultContent : ""}, 		
 		{data : "frst_regr_id", defaultContent : ""},
 		{data : "frst_reg_dtm", defaultContent : ""},
 		{data : "lst_mdfr_id", defaultContent : ""},
@@ -787,10 +801,10 @@ function selectTab(tab){
 								<tr>
 									<th width="10"></th>
 									<th width="30"><spring:message code="common.no" /></th>
-									<th width="200" class="dt-center"><spring:message code="common.work_name" /></th>
-									<th width="200" class="dt-center" ><spring:message code="common.work_description" /></th>
+									<th width="200"><spring:message code="common.work_name" /></th>
+									<th width="200"><spring:message code="common.work_description" /></th>
 									<th width="130"><spring:message code="common.database" /></th>
-									<th width="250" class="dt-center"><spring:message code="backup_management.backup_dir" /></th>
+									<th width="250"><spring:message code="backup_management.backup_dir" /></th>
 									<th width="60"><spring:message code="backup_management.file_format" /></th>
 									<th width="100"><spring:message code="backup_management.compressibility" /></th>
 									<th width="100"><spring:message code="backup_management.incording_method" /></th>
