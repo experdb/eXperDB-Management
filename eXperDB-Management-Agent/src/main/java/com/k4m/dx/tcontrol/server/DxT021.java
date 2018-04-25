@@ -119,12 +119,10 @@ public class DxT021 extends SocketCtl{
 			//network정보
 			ArrayList<HashMap<String, String>> ipList = NetworkUtil.getNetworkInfo();
 			resultHP.put(ProtocolID.CMD_NETWORK, ipList);
-			
-			//printGetMemory(1) ;
+
 			//PostgreSQL 버젼, DATA 경로, LOG 경로, ARCHIVE 경로
 			List<ServerInfoVO> serverInfoList = selectPostgreSqlServerInfo(serverInfoObj);
-			
-			//printGetMemory(2) ;
+
 			
 			for(ServerInfoVO vo:serverInfoList) {
 				resultHP.put(vo.getSKEY(), vo.getSDATA());
@@ -132,7 +130,6 @@ public class DxT021 extends SocketCtl{
 			
 			serverInfoList = null;
 
-			//printGetMemory(3) ;
 			
 			setShowData(serverInfoObj, resultHP);
 			
@@ -158,7 +155,7 @@ public class DxT021 extends SocketCtl{
 			
 			outputObj.put(ProtocolID.RESULT_DATA, resultHP);
 
-			//printGetMemory(5) ;
+
 			
 			sendBuff = outputObj.toString().getBytes();
 			
@@ -167,17 +164,12 @@ public class DxT021 extends SocketCtl{
 			resultHP = null;
 			util = null;
 			serverInfoObj = null;
+			outputObj = null;
+			
 			
 			send(4, sendBuff);
-
-			//printGetMemory(6) ;
-		
 			
-			//printGetMemory(7) ;
-			
-			//System.gc();
-
-			//printGetMemory(8) ;
+			sendBuff = null;
 
 			
 		} catch (Exception e) {
@@ -196,8 +188,6 @@ public class DxT021 extends SocketCtl{
 
 		} finally {
 			//socketLogger.info("outputObj finally call");
-			outputObj = null;
-			sendBuff = null;
 		}	    
 	}
 	
