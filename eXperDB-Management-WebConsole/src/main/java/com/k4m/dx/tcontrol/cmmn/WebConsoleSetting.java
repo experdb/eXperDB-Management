@@ -38,15 +38,15 @@ public class WebConsoleSetting {
 		
 		Scanner scan = new Scanner(System.in);
 		
-		System.out.println("Installer language(ko(한글), en(영문)) :");
+		System.out.println("eXperDB-Management-WebConsole language(ko(한글), en(영문)) :");
 		
 		strLanguage = scan.nextLine();
 
 		while (true) {
 			if(strLanguage.equals("")) {
-				System.out.println("Please enter your Installer language. ");
+				System.out.println("Please enter your eXperDB-Management-WebConsole language. ");
 				
-				System.out.println("Installer language :");
+				System.out.println("eXperDB-Management-WebConsole language :");
 				
 				strLanguage = scan.nextLine();
 			} else {
@@ -125,13 +125,13 @@ public class WebConsoleSetting {
 		
 		
 		/* eXperDB-Encrypt 설치 */
-		System.out.println("eXperDB-Encrypt 설치를 진행하시겠습니까? (y, n)");
-		
-		strEncryptYN = "Y";
-		
+		System.out.println("eXperDB-Encrypt 사용여부? (y, n)");
+	
 		String strEnctyptYn = scan.nextLine();
-
-		if(strEnctyptYn.equals("y")) {
+		
+		strEnctyptYn = strEnctyptYn.toUpperCase();
+		
+		if(strEnctyptYn.equals("Y")) {
 		
 			System.out.println("eXperDB-Encrypt server.url :");
 			
@@ -180,7 +180,6 @@ public class WebConsoleSetting {
 			System.out.println("eXperDB-Encrypt server.port :" + strEncryptServerPort);		
 			System.out.println("##################################################");	
 		}else{
-			strEncryptYN = "N";
 			
 			strDatabaseUrl = "jdbc:postgresql://" + strDatabaseIp + ":" + strDatabasePort + "/" + strDatabaseUsername;
 			
@@ -267,11 +266,11 @@ public class WebConsoleSetting {
 		    
 
 		    if(strEncryptYN.equals("y")){
-		    	prop.setProperty("encrypt.useyn", "Y");
+		    	prop.setProperty("encrypt.useyn", strEnctyptYn);
 		    	prop.setProperty("encrypt.server.url", strEncryptServerUrl);
 			    prop.setProperty("encrypt.server.port", strEncryptServerPort);
 		    }else{
-		    	prop.setProperty("encrypt.useyn", "N");
+		    	prop.setProperty("encrypt.useyn", strEnctyptYn);
 		    }
 
 		    try {
