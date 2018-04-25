@@ -376,23 +376,23 @@ public class AuditController {
 					return mv;
 				}
 				
-				CA.open(); 
-				JSONObject objList = CA.dxT015(jObj);
-				CA.close();
+//				CA.open(); 
+//				JSONObject objList = CA.dxT015(jObj);
+//				CA.close();
 				
-				String strErrMsg = (String)objList.get(ClientProtocolID.ERR_MSG);
-				String strErrCode = (String)objList.get(ClientProtocolID.ERR_CODE);
-				String strDxExCode = (String)objList.get(ClientProtocolID.DX_EX_CODE);
-				String strResultCode = (String)objList.get(ClientProtocolID.RESULT_CODE);
-				System.out.println("RESULT_CODE : " +  strResultCode);
-				System.out.println("ERR_CODE : " +  strErrCode);
-				System.out.println("ERR_MSG : " +  strErrMsg);
+//				String strErrMsg = (String)objList.get(ClientProtocolID.ERR_MSG);
+//				String strErrCode = (String)objList.get(ClientProtocolID.ERR_CODE);
+//				String strDxExCode = (String)objList.get(ClientProtocolID.DX_EX_CODE);
+//				String strResultCode = (String)objList.get(ClientProtocolID.RESULT_CODE);
+//				System.out.println("RESULT_CODE : " +  strResultCode);
+//				System.out.println("ERR_CODE : " +  strErrCode);
+//				System.out.println("ERR_MSG : " +  strErrMsg);
 				
-				List<HashMap<String, String>> fileList = (List<HashMap<String, String>>) objList.get(ClientProtocolID.RESULT_DATA);
+//				List<HashMap<String, String>> fileList = (List<HashMap<String, String>>) objList.get(ClientProtocolID.RESULT_DATA);
 				
 				mv.addObject("serverName", dbServerVO.getDb_svr_nm());
 				mv.addObject("db_svr_id", db_svr_id);
-				mv.addObject("logFileList", fileList);
+//				mv.addObject("logFileList", fileList);
 				mv.addObject("extName", strExtName);
 				mv.addObject("start_date", strStartDate);
 				mv.addObject("end_date", strEndDate);
@@ -468,9 +468,6 @@ public class AuditController {
 			String strErrCode = (String)objList.get(ClientProtocolID.ERR_CODE);
 			String strDxExCode = (String)objList.get(ClientProtocolID.DX_EX_CODE);
 			String strResultCode = (String)objList.get(ClientProtocolID.RESULT_CODE);
-			System.out.println("RESULT_CODE : " +  strResultCode);
-			System.out.println("ERR_CODE : " +  strErrCode);
-			System.out.println("ERR_MSG : " +  strErrMsg);
 			
 			fileList = (List<HashMap<String, String>>) objList.get(ClientProtocolID.RESULT_DATA);
 		

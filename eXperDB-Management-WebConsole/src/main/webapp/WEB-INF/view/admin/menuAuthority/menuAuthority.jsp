@@ -22,7 +22,7 @@ var menuTable = null;
 
 function fn_init() {
 	userTable = $('#user').DataTable({
-		scrollY : "405px",
+		scrollY : "395px",
 		processing : true,
 		searching : false,
 		paging: false,

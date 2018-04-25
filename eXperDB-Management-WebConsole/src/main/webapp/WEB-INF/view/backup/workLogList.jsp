@@ -91,6 +91,7 @@ function fn_rman_init(){
 	 						}
 	 						return html;
 	 					},
+	 					className : "dt-center",
 	 					defaultContent : ""
 	 				},
 	 				{
@@ -140,14 +141,14 @@ function fn_dump_init(){
 		bSort: false,
 	    columns : [
 		         	{ data: "rownum", className: "dt-center", defaultContent: ""}, 
-		         	{data : "wrk_nm", className : "dt-left", defaultContent : ""
+		         	{data : "wrk_nm", defaultContent : ""
 		    			,"render": function (data, type, full) {				
 		    				  return '<span onClick=javascript:fn_workLayer("'+full.wrk_id+'"); class="bold">' + full.wrk_nm + '</span>';
 		    			}
 		    		}, 
 		    		{ data: "ipadr", className: "dt-center", defaultContent: ""},
-		         	{ data: "wrk_exp", className: "dt-left", defaultContent: ""}, 
- 		         	{ data: "db_nm", className: "dt-center", defaultContent: ""}, 
+		         	{ data: "wrk_exp", defaultContent: ""}, 
+ 		         	{ data: "db_nm", defaultContent: ""}, 
  		         	//{ data: "file_sz", className: "dt-center", defaultContent: ""},
  		         	
  		         	 {data : "file_sz", defaultContent : ""
@@ -163,15 +164,15 @@ function fn_dump_init(){
 	 		   		 },
 	 		   		  
  		         	
- 		         	{data : "bck_file_pth", className : "dt-left", defaultContent : ""
+ 		         	{data : "bck_file_pth", defaultContent : ""
 	 		   			,"render": function (data, type, full) {
 	 		   				  return '<span onClick=javascript:fn_dumpShow("'+full.bck_file_pth+'","'+full.db_svr_id+'"); class="bold">' + full.bck_file_pth + '</span>';
 	 		   			}
 	 		   		 },
- 		         	{ data: "bck_filenm", className: "dt-left", defaultContent: ""},
- 		         	{ data: "wrk_strt_dtm", className: "dt-center", defaultContent: ""}, 
- 		         	{ data: "wrk_end_dtm", className: "dt-center", defaultContent: ""},  		         			         	
- 		         	{ data: "wrk_dtm", className: "dt-center", defaultContent: ""},
+ 		         	{ data: "bck_filenm", defaultContent: ""},
+ 		         	{ data: "wrk_strt_dtm", defaultContent: ""}, 
+ 		         	{ data: "wrk_end_dtm", defaultContent: ""},  		         			         	
+ 		         	{ data: "wrk_dtm", defaultContent: ""},
 	 		   		{
 	 					data : "exe_rslt_cd",
 	 					render : function(data, type, full, meta) {
@@ -185,6 +186,7 @@ function fn_dump_init(){
 	 						}
 	 						return html;
 	 					},
+	 					className : "dt-center",
 	 					defaultContent : ""
 	 				},
 	 				{
@@ -209,14 +211,14 @@ function fn_dump_init(){
  		        ],'select': {'style': 'multi'} 
 	});
 
-   	tableDump.tables().header().to$().find('th:eq(0)').css('min-width', '40px');
-   	tableDump.tables().header().to$().find('th:eq(1)').css('min-width', '200px');
+   	tableDump.tables().header().to$().find('th:eq(0)').css('min-width', '100px');
+   	tableDump.tables().header().to$().find('th:eq(1)').css('min-width', '100px');
    	tableDump.tables().header().to$().find('th:eq(2)').css('min-width', '100px');
-   	tableDump.tables().header().to$().find('th:eq(3)').css('min-width', '200px');
+   	tableDump.tables().header().to$().find('th:eq(3)').css('min-width', '100px');
    	tableDump.tables().header().to$().find('th:eq(4)').css('min-width', '100px');
    	tableDump.tables().header().to$().find('th:eq(5)').css('min-width', '100px');
-   	tableDump.tables().header().to$().find('th:eq(6)').css('min-width', '200px');
-   	tableDump.tables().header().to$().find('th:eq(7)').css('min-width', '200px');
+   	tableDump.tables().header().to$().find('th:eq(6)').css('min-width', '100px');
+   	tableDump.tables().header().to$().find('th:eq(7)').css('min-width', '100px');
    	tableDump.tables().header().to$().find('th:eq(8)').css('min-width', '100px');
    	tableDump.tables().header().to$().find('th:eq(9)').css('min-width', '100px');
    	tableDump.tables().header().to$().find('th:eq(10)').css('min-width', '100px');
@@ -639,11 +641,11 @@ function fn_fix_rslt_msg_modify(){
 						<thead>
 							<tr>
 								<th width="40"><spring:message code="common.no" /></th>
-								<th width="150" class="dt-center"><spring:message code="common.work_name" /></th>
+								<th width="150"><spring:message code="common.work_name" /></th>
 								<th width="100"><spring:message code="dbms_information.dbms_ip" /></th>
-								<th width="150" class="dt-center"><spring:message code="common.work_description" /></th>
+								<th width="150"><spring:message code="common.work_description" /></th>
 								<th width="90"><spring:message code="backup_management.backup_option" /></th>
-								<th width="230" class="dt-center"><spring:message code="etc.etc08"/></th>
+								<th width="230"><spring:message code="etc.etc08"/></th>
 								<th width="100"><spring:message code="backup_management.work_start_time" /> </th>
 								<th width="100"><spring:message code="backup_management.work_end_time" /></th>
 								<th width="70"><spring:message code="backup_management.elapsed_time" /></th>
@@ -658,14 +660,14 @@ function fn_fix_rslt_msg_modify(){
 						<caption>Dump 백업관리 이력화면 리스트</caption>
 						<thead>
 							<tr>
-								<th width="40"><spring:message code="common.no" /></th>
-								<th width="200" class="dt-center"><spring:message code="common.work_name" /></th>
+								<th width="100"><spring:message code="common.no" /></th>
+								<th width="100"><spring:message code="common.work_name" /></th>
 								<th width="100"><spring:message code="dbms_information.dbms_ip" /></th>
-								<th width="200" class="dt-center"><spring:message code="common.work_description" /></th>
+								<th width="100"><spring:message code="common.work_description" /></th>
 								<th width="100"><spring:message code="common.database" /></th>
 								<th width="100"><spring:message code="backup_management.size" /></th>
-								<th width="200" class="dt-center"><spring:message code="etc.etc08"/></th>			
-								<th width="200" class="dt-center"><spring:message code="backup_management.fileName"/></th>						
+								<th width="100"><spring:message code="etc.etc08"/></th>			
+								<th width="100"><spring:message code="backup_management.fileName"/></th>						
 								<th width="100"><spring:message code="backup_management.work_start_time" /></th>
 								<th width="100"><spring:message code="backup_management.work_end_time" /></th>
 								<th width="100"><spring:message code="backup_management.elapsed_time" /></th>

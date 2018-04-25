@@ -39,7 +39,7 @@ function fn_init(){
 	 * work리스트
 	 ******************************************************** */
 	table = $('#rmanShowList').DataTable({
-	scrollY : "480px",
+	scrollY : "450px",
 	scrollX : true,
 	bDestroy: true,
 	processing : true,
@@ -73,10 +73,10 @@ function fn_init(){
 				return html;
 		}
 	}, 
-	{data : "DATA",  defaultContent : ""}, 
-	{data : "ARCLOG",  defaultContent : ""}, 
-	{data : "SRVLOG",  defaultContent : ""}, 
-	{data : "TOTAL",  defaultContent : ""}, 
+	{data : "DATA", className : "dt-right",  defaultContent : ""}, 
+	{data : "ARCLOG", className : "dt-right",  defaultContent : ""}, 
+	{data : "SRVLOG",className : "dt-right" ,  defaultContent : ""}, 
+	{data : "TOTAL", className : "dt-right",  defaultContent : ""}, 
 	{data : "COMPRESSED",  defaultContent : "", 
 		"render": function (data, type, full) {		
 			var html = '';

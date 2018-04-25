@@ -38,7 +38,7 @@ function fn_init(){
 	 * work리스트
 	 ******************************************************** */
 	table = $('#dumpShowList').DataTable({
-	scrollY : "480px",
+	scrollY : "475px",
 	scrollX : true,
 	bDestroy: true,
 	processing : true,
@@ -46,7 +46,7 @@ function fn_init(){
 	bSort: false,
 	columns : [
 	{data : "file_name",  defaultContent : ""}, 
-	{data : "file_size",  defaultContent : ""}, 
+	{data : "file_size", className : "dt-right",  defaultContent : ""}, 
 	{data : "file_lastmodified",  defaultContent : ""}
 	]
 	});

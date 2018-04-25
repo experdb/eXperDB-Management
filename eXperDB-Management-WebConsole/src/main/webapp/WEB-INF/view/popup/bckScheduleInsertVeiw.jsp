@@ -694,8 +694,8 @@ var haCnt = 0;
 							<td>
 							<select name="bck" id="bck" class="txt t3" style="width: 150px;" onChange="fn_bck();">
 									<option value=""><spring:message code="common.choice" /></option>
-									<option value="rman">RMAN</option>
-									<option value="dump">DUMP</option>
+									<option value="rman">Online</option>
+									<option value="dump">Dump</option>
 							</select> 
 							<span id="rman_bck_opt"> 
 							<select name="bck_opt_cd" id="bck_opt_cd" class="txt t3" style="width: 150px;">

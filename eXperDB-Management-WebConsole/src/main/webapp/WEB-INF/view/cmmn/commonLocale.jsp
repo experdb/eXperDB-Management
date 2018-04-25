@@ -21,6 +21,7 @@ var	schedule_friday="<spring:message code='schedule.friday' />";
 var schedule_saturday="<spring:message code='schedule.saturday' />";
 var agent_monitoring_yes="<spring:message code='agent_monitoring.yes' />";
 var agent_monitoring_no="<spring:message code='agent_monitoring.no' />";
+var message_msg211="<spring:message code='message.msg211'/>";
 </script>
 <body>
 

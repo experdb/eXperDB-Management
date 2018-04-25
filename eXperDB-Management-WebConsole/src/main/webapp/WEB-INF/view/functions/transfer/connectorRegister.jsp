@@ -33,7 +33,7 @@
 			            { data : "idx",  className : "dt-center", defaultContent : ""}, 
 			            { data : "cnr_nm",  defaultContent : ""}, 
 			            { data : "cnr_ipadr",  defaultContent : ""},
-			            { data : "cnr_portno",  defaultContent : ""}, 
+			            { data : "cnr_portno",  className : "dt-right", defaultContent : ""}, 
 			            { data : "cnr_cnn_tp_cd",  defaultContent : ""}, 
 			            { data : "frst_regr_id",  defaultContent : ""}, 
 			            { data : "frst_reg_dtm",  defaultContent : ""}, 

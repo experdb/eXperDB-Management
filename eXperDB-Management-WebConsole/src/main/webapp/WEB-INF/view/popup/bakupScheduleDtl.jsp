@@ -38,6 +38,7 @@ function fn_init(){
 	 ******************************************************** */
 	table = $('#workList').DataTable({
 	scrollY : "195px",
+	scrollX : true,
 	bDestroy: true,
 	processing : true,
 	searching : false,	
@@ -45,8 +46,7 @@ function fn_init(){
 	bSort: false,
 	columns : [
 	{data : "rownum", defaultContent : "", targets : 0, orderable : false, checkboxes : {'selectRow' : true}}, 
-	{data : "idx", columnDefs: [ { searchable: false, orderable: false, targets: 0} ], order: [[ 1, 'asc' ]],  defaultContent : ""},
-	{data : "wrk_id",  defaultContent : "", visible: false },
+	{data : "idx", className : "dt-center", defaultContent : ""},
 	{data : "db_svr_nm",  defaultContent : ""}, //서버명
 	{data : "bck_bsn_dscd_nm",  defaultContent : ""}, //구분
 	{data : "wrk_nm",  defaultContent : ""
@@ -55,6 +55,7 @@ function fn_init(){
 		}
 	}, //work명
 	{data : "wrk_exp",  defaultContent : ""}, //work설명
+	{data : "wrk_id",  defaultContent : "", visible: false },
 	{data : "bck_wrk_id",  defaultContent : "", visible: false },
 	{data : "bck_bsn_dscd",  defaultContent : "", visible: false },
 	{data : "db_svr_id",  defaultContent : "", visible: false }
@@ -64,10 +65,21 @@ function fn_init(){
     table.on( 'order.dt search.dt', function () {
     	table.column(1, {search:'applied', order:'applied'}).nodes().each( function (cell, i) {
             cell.innerHTML = i+1;
-        } );
-    } ).draw();
+        });
+    }).draw();
     
- 
+      table.tables().header().to$().find('th:eq(0)').css('min-width', '50px');
+	  table.tables().header().to$().find('th:eq(1)').css('min-width', '100px');	  
+	  table.tables().header().to$().find('th:eq(2)').css('min-width', '200px');
+	  table.tables().header().to$().find('th:eq(3)').css('min-width', '200px');
+	  table.tables().header().to$().find('th:eq(4)').css('min-width', '200px');
+	  table.tables().header().to$().find('th:eq(5)').css('min-width', '300px');
+	  table.tables().header().to$().find('th:eq(6)').css('min-width', '0px');
+	  table.tables().header().to$().find('th:eq(7)').css('min-width', '0px');
+	  table.tables().header().to$().find('th:eq(8)').css('min-width', '0px');  
+	  table.tables().header().to$().find('th:eq(9)').css('min-width', '0px');
+
+  $(window).trigger('resize'); 
  
 }
 
@@ -391,6 +403,12 @@ function fn_bckModifyPopup(){
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <title>Insert title here</title>
 </head>
+<style>
+#workinfo{
+	margin-top: 0px !important;
+}
+
+</style>
 <body>
 	<%@include file="../cmmn/commonLocale.jsp"%>  
 	<%@include file="../cmmn/workRmanInfo.jsp"%>
@@ -487,13 +505,16 @@ function fn_bckModifyPopup(){
 					<table id="workList" class="display" cellspacing="0" width="100%">
 						<thead>
 							<tr>
-								<th></th>
-								<th><spring:message code="common.no" /></th>
-								<th></th>
-								<th><spring:message code="data_transfer.server_name" /></th>
-								<th><spring:message code="common.division" /></th>
-								<th><spring:message code="common.work_name" /></th>
-								<th><spring:message code="common.work_description" /></th>
+								<th width="50"></th>
+								<th width="100"><spring:message code="common.no" /></th>
+								<th width="200"><spring:message code="data_transfer.server_name" /></th>
+								<th width="200"><spring:message code="common.division" /></th>
+								<th width="200"><spring:message code="common.work_name" /></th>
+								<th width="300"><spring:message code="common.work_description" /></th>
+								<th width="0"></th>
+								<th width="0"></th>
+								<th width="0"></th>
+								<th width="0"></th>
 							</tr>
 						</thead>
 					</table>

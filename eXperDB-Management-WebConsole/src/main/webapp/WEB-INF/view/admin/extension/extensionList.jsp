@@ -30,7 +30,7 @@ function fn_init() {
 	 * 서버 (데이터테이블)
 	 ******************************************************** */
 	table_dbServer = $('#dbServerList').DataTable({
-		scrollY : "275px",
+		scrollY : "270px",
 		searching : false,
 		paging : false,
 		bSort: false,
@@ -64,7 +64,7 @@ function fn_init() {
 	 * 디비 (데이터테이블)
 	 ******************************************************** */
 	table_db = $('#dbList').DataTable({
-		scrollY : "275px",
+		scrollY : "255px",
 		searching : false,
 		paging : false,
 		bSort: false,
