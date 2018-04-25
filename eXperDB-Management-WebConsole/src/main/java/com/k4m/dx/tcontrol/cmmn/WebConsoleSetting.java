@@ -36,9 +36,12 @@ public class WebConsoleSetting {
 		String strEncryptServerUrl = "";
 		String strEncryptServerPort = "";
 		
+		String strPropertiesPath ="egovframework" + File.separator + "tcontrolProps" + File.separator +"globals.properties";
+		String strPropertiesNm ="globals.properties";
+		
 		Scanner scan = new Scanner(System.in);
 		
-		System.out.println("eXperDB-Management-WebConsole language(ko(한글), en(영문)) :");
+		System.out.println("Language(ko(한글), en(영문)) :");
 		
 		strLanguage = scan.nextLine();
 
@@ -213,14 +216,14 @@ public class WebConsoleSetting {
 		    StandardPBEStringEncryptor pbeEnc = new StandardPBEStringEncryptor();
 		    pbeEnc.setPassword("k4mda"); // PBE 값(XML PASSWORD설정)
 			
-		    String url = pbeEnc.encrypt(strDatabaseIp);
+		    String url = pbeEnc.encrypt(strDatabaseUrl);
 		    String username = pbeEnc.encrypt(strDatabaseUsername);
 		    String password = pbeEnc.encrypt(strDatabasePassword);
 		    
 		    Properties prop = new Properties();
 		    
 		    ClassLoader loader = Thread.currentThread().getContextClassLoader();
-		    File file = new File(loader.getResource("egovframework\\tcontrolProps\\globals.properties").getFile());
+		    File file = new File(loader.getResource(strPropertiesPath).getFile());
 		    
 		    String path = file.getParent() + File.separator;
 		    
@@ -249,7 +252,8 @@ public class WebConsoleSetting {
 		    
 
 		    try {
-		    	prop.load(new FileInputStream(path + "egovframework\\tcontrolProps\\globals.properties"));
+		    	System.out.println(path + strPropertiesNm);
+		    	prop.load(new FileInputStream(path + strPropertiesNm));
 		    } catch(FileNotFoundException e) {
 		    	System.out.println("Exit(0) File Not Found ");
 		    	System.exit(0);
@@ -265,7 +269,7 @@ public class WebConsoleSetting {
 		    prop.setProperty("version", strVersion);
 		    
 
-		    if(strEncryptYN.equals("y")){
+		    if(strEnctyptYn.equals("Y")){
 		    	prop.setProperty("encrypt.useyn", strEnctyptYn);
 		    	prop.setProperty("encrypt.server.url", strEncryptServerUrl);
 			    prop.setProperty("encrypt.server.port", strEncryptServerPort);
@@ -273,8 +277,8 @@ public class WebConsoleSetting {
 		    	prop.setProperty("encrypt.useyn", strEnctyptYn);
 		    }
 
-		    try {
-		    	prop.store(new FileOutputStream(path + "egovframework\\tcontrolProps\\globals.properties"), "");
+		    try {	    	
+		    	prop.store(new FileOutputStream(path + strPropertiesNm), "");		    	
 		    } catch(FileNotFoundException e) {
 		    	System.out.println("Exit(0) Error : File Not Found ");
 		    	System.exit(0);
