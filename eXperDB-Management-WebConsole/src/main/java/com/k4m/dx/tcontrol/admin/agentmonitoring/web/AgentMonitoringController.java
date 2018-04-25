@@ -42,7 +42,7 @@ public class AgentMonitoringController {
 	private AgentMonitoringService agentMonitoringService;
 
 	/**
-	 * Agent 모니터링 화면을 보여준다.
+	 * Management Agent 모니터링 화면을 보여준다.
 	 * 
 	 * @param historyVO
 	 * @param request
@@ -86,6 +86,27 @@ public class AgentMonitoringController {
 			model.addAttribute("ipadr",strIPADR);
 			
 			mv.setViewName("admin/agentMonitoring/agentMonitoring");
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return mv;
+
+	}
+	
+	
+	/**
+	 * Encrypt Agent 모니터링 화면을 보여준다.
+	 * 
+	 * @param historyVO
+	 * @param request
+	 * @return ModelAndView mv
+	 * @throws Exception
+	 */
+	@RequestMapping(value = "/encryptAgentMonitoring.do")
+	public ModelAndView encryptAgentMonitoring(@ModelAttribute("historyVO") HistoryVO historyVO, HttpServletRequest request, ModelMap model) {
+		ModelAndView mv = new ModelAndView();
+		try {
+			mv.setViewName("admin/agentMonitoring/encryptAgentMonitoring");
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

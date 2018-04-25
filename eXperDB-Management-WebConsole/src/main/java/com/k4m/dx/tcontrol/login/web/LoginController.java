@@ -182,6 +182,9 @@ public class LoginController {
 				String encp_use_yn = props.get("encrypt.useyn").toString();
 				request.getSession().setAttribute("encp_use_yn", encp_use_yn);
 				
+				String version = props.get("version").toString();
+				request.getSession().setAttribute("version", version);
+				
 				if(encp_use_yn.equals("Y")){
 					try{
 						CommonServiceCall cic = new CommonServiceCall();

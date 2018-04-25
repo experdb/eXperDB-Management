@@ -291,7 +291,7 @@
 						</div>
 						
 					-->
-						<table class="list">
+						<table class="list" border="1">
 							<caption><spring:message code="dashboard.dbms_info" /></caption>
 							<colgroup>
 								<col style="width: 10%;" />
@@ -360,6 +360,67 @@
 						</table>
 					</div>
 				</div>
+				
+				
+				<!-- eXperDB Encrypt Server 상태 -->
+				<div class="main_server_info">
+					<p class="tit">eXperDB Encrypt Server 상태</p>
+					<div class="inner">
+						<table class="list" style="width: 320px;">
+							<caption>eXperDB Encrypt Server 상태</caption>
+							<colgroup>
+							</colgroup>
+							<tr>
+								<th>구동상태</th>						
+								<th></th>
+							</tr>		
+						</table>
+					
+					</div>
+				</div>
+					
+				
+				
+				<!-- eXperDB Encrypt Agent 상태 -->
+				<div class="main_server_info">
+					<p class="tit">eXperDB Encrypt Agent 상태</p>
+					<div class="inner">
+							<div align="right">● 2018-04-23 </div>
+							<table class="list" border="1">
+							<caption><spring:message code="dashboard.dbms_info" /></caption>
+							<colgroup>
+								<col style="width: 13.5%;" />
+
+								<col style="width: 6%;" />
+								<col style="width: 6%;" />
+								<col style="width: 6%;" />								
+								<col style="width: 6%;" />
+								
+								<col style="width: 10%;" />
+								<col style="width: 10%;" />
+							</colgroup>
+							<thead>
+								<tr>
+									<th scope="col" rowspan="2">Encrypt Agent IP</th>						
+									<th scope="col" colspan="2">암호화</th>
+									<th scope="col" colspan="2">복호화</th>
+									<th scope="col" rowspan="2">합계  </th>
+									<th scope="col" rowspan="2">구동상태</th>								
+								</tr>
+								<tr>
+									<th scope="col">성공</th>
+									<th scope="col">실패</th>
+									<th scope="col">성공</th>
+									<th scope="col">실패</th>
+								</tr>
+							</thead>
+							<tbody>
+						
+							</tbody>
+						</table>
+					</div>
+				</div>
+				
 			</div>
 		</div>
 	</div>

@@ -247,7 +247,8 @@ function toggleLayer( obj, s ) {
 }
 
 //About eXperDB
-function fn_aboutExperdb(){
+function fn_aboutExperdb(version){
+	$("#version").html(version);
 	toggleLayer($('#pop_layer_aboutExperdb'), 'on');
 }
 
