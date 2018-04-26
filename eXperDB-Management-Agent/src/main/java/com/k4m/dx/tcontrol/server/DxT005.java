@@ -188,8 +188,11 @@ public class DxT005 extends SocketCtl {
 						if (strFileSize == null)
 							strFileSize = "0";
 						
+						String[] sarrFileName = strFileName.split("_");
+						String fileName = sarrFileName[0] + "_" + sarrFileName[1];
+						
 						//백업파일관리
-						dumpFileManagement(strBCK_FILE_PTH, strFileName, intBCK_MTN_ECNT, intFILE_STG_DCNT, strSlush);
+						dumpFileManagement(strBCK_FILE_PTH, fileName, intBCK_MTN_ECNT, intFILE_STG_DCNT, strSlush);
 
 						if (strFileSize == null || strFileSize.equals("0")) {
 
