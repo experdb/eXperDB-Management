@@ -662,6 +662,7 @@ function checkFolder(keyType){
 								<option value="TC000401"<c:if test="${workInfo[0].file_fmt_cd eq 'TC000401' }"> selected</c:if>>tar</option>
 								<option value="TC000402"<c:if test="${workInfo[0].file_fmt_cd eq 'TC000402' }"> selected</c:if>>plain</option>
 								<option value="TC000403"<c:if test="${workInfo[0].file_fmt_cd eq 'TC000403' }"> selected</c:if>>directory</option>
+								<option value="TC000404"<c:if test="${workInfo[0].file_fmt_cd eq 'TC000404' }"> selected</c:if>>custom</option>
 							</select>
 						</td>
 						<th scope="row" class="ico_t2"><spring:message code="backup_management.incording_method" /></th>
