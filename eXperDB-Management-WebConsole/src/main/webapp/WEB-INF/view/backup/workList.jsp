@@ -66,10 +66,17 @@ function fn_init(){
 				return data;
 			}
 		},
-		{data : "data_pth", className : "dt-left", defaultContent : ""},	
+		{ data : "data_pth",
+			render : function(data, type, full, meta) {	 	
+				var html = '';					
+				html += '<span title="'+full.data_pth+'">' + full.data_pth + '</span>';
+				return html;
+			},
+			defaultContent : ""
+	},
 		{data : "bck_pth", className : "dt-left", defaultContent : ""
 			,"render": function (data, type, full) {
-				  return '<span onClick=javascript:fn_rmanShow("'+full.bck_pth+'","'+full.db_svr_id+'"); class="bold">' + full.bck_pth + '</span>';
+				  return '<span onClick=javascript:fn_rmanShow("'+full.bck_pth+'","'+full.db_svr_id+'"); title="'+full.bck_pth+'" class="bold">' + full.bck_pth + '</span>';
 			}
 		 },		
 		//{data : "log_file_pth", className : "dt-left", defaultContent : ""},	
@@ -113,7 +120,7 @@ function fn_init(){
 		{data : "db_nm", defaultContent : ""}, 
 		{data : "save_pth", defaultContent : ""
 			,"render": function (data, type, full) {
-				  return '<span onClick=javascript:fn_dumpShow("'+full.save_pth+'","'+full.db_svr_id+'"); class="bold">' + full.save_pth + '</span>';
+				  return '<span onClick=javascript:fn_dumpShow("'+full.save_pth+'","'+full.db_svr_id+'"); title="'+full.save_pth+'" class="bold">' + full.save_pth + '</span>';
 			}
 		 },
 		{data : "file_fmt_cd_nm", defaultContent : ""}, 

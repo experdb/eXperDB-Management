@@ -22,6 +22,11 @@
 	*
 	*/
 %>
+<script>
+function fn_refresh(){
+	
+}
+</script>
 
 	<div id="contents">
 				<div class="contents_wrap">
@@ -43,7 +48,7 @@
 					<div class="contents">
 						<div class="cmm_grp">
 							<div class="btn_type_01">
-								<span class="btn"><button>새로고침</button></span>
+								<span class="btn"><button onclick="fn_refresh()">새로고침</button></span>
 							</div>
 
 							<div class="overflow_area" style="height: 365px;">
@@ -62,7 +67,11 @@
 										</tr>
 									</thead>
 									<tbody>
-
+										<tr>
+											<td></td>
+											<td></td>
+											<td><img src="../images/ico_agent_1.png" alt="" /><img src="../images/ico_agent_2.png" alt="" /></td>
+										</tr>
 									</tbody>
 								</table>
 							</div>
