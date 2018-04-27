@@ -360,8 +360,8 @@ function fn_cookie(url) {
 					        </li>
 					        <li><a href="#n" id="MN0007"><spring:message code="menu.agent_monitoring"/></a>
 					        	<ul class="depth_3">
-									<li><a href="/agentMonitoring.do" onClick="fn_cookie(null)" id="MN000701" target="main">Management Agent</a></li>	
-									<li><a href="/encryptAgentMonitoring.do" onClick="fn_cookie(null)" id="MN000702" target="main">Encrypt Agent</a></li>								
+									<li><a href="/agentMonitoring.do" onClick="fn_cookie(null)" id="MN000701" target="main">관리 에이전트</a></li>	
+									<li><a href="/encryptAgentMonitoring.do" onClick="fn_cookie(null)" id="MN000702" target="main">암호화 에이전트</a></li>								
 								</ul>
 					        </li>
 							<li><a href="/extensionList.do" onClick="fn_cookie(null)" id="MN0008" target="main"><spring:message code="menu.extension_pack_installation_information"/></a></li>

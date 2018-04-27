@@ -68,11 +68,18 @@ function fn_rman_init(){
 		    			}
 		    		},
 		    		{ data: "ipadr", className: "dt-center", defaultContent: ""},
-		         	{ data: "wrk_exp", className: "dt-left", defaultContent: ""}, 		         	
+		    		{ data : "wrk_exp",
+		    			render : function(data, type, full, meta) {	 	
+		    				var html = '';					
+		    				html += '<span title="'+full.wrk_exp+'">' + full.wrk_exp + '</span>';
+		    				return html;
+		    			},
+		    			defaultContent : ""
+		    		}, 		         	
  		         	{ data: "bck_opt_cd_nm", className: "dt-center", defaultContent: ""}, 
  		         	{data : "bck_file_pth", className : "dt-left", defaultContent : ""
 	 		   			,"render": function (data, type, full) {
-	 		   				  return '<span onClick=javascript:fn_rmanShow("'+full.bck_file_pth+'","'+full.db_svr_id+'"); class="bold">' + full.bck_file_pth + '</span>';
+	 		   				  return '<span onClick=javascript:fn_rmanShow("'+full.bck_file_pth+'","'+full.db_svr_id+'"); title="'+full.bck_file_pth+'" class="bold">' + full.bck_file_pth + '</span>';
 	 		   			}
 	 		   		 },
  		         	{ data: "wrk_strt_dtm", className: "dt-center", defaultContent: ""}, 

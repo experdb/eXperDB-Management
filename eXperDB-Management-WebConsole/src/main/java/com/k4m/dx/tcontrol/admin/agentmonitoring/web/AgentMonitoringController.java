@@ -106,6 +106,12 @@ public class AgentMonitoringController {
 	public ModelAndView encryptAgentMonitoring(@ModelAttribute("historyVO") HistoryVO historyVO, HttpServletRequest request, ModelMap model) {
 		ModelAndView mv = new ModelAndView();
 		try {
+			// 화면접근이력 이력 남기기
+			CmmnUtils.saveHistory(request, historyVO);
+			historyVO.setExe_dtl_cd("DX-T0123");
+			historyVO.setMnu_id(20);
+			accessHistoryService.insertHistory(historyVO);
+			
 			mv.setViewName("admin/agentMonitoring/encryptAgentMonitoring");
 		} catch (Exception e) {
 			e.printStackTrace();
