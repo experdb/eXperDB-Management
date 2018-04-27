@@ -18,6 +18,7 @@ import com.google.gson.Gson;
 import com.k4m.dx.tcontrol.cmmn.serviceproxy.vo.AdminServerPasswordRequest;
 import com.k4m.dx.tcontrol.cmmn.serviceproxy.vo.AuditLog;
 import com.k4m.dx.tcontrol.cmmn.serviceproxy.vo.AuditLogSite;
+import com.k4m.dx.tcontrol.cmmn.serviceproxy.vo.AuditLogSiteStatCondition;
 import com.k4m.dx.tcontrol.cmmn.serviceproxy.vo.AuthCredentialToken;
 import com.k4m.dx.tcontrol.cmmn.serviceproxy.vo.BackupLog;
 import com.k4m.dx.tcontrol.cmmn.serviceproxy.vo.CryptoKey;
@@ -76,12 +77,12 @@ public class ServiceCallTest {
 		//entityId = "d06c0acb-ca3a-4324-83ed-71df370acdb3";
 
 
-		String strTocken = "7RfBBJ6IQN7yxvdTo9gKT9aIgBvsEXT8j5BFIAQJllA=";
+		String strTocken = "r5DWdylMR8XzbUfmHD9PtHdZWXwVIlt9ODZcRnJ1JYg=";
 
 
 		ServiceCallTest test = new ServiceCallTest();
 	
-		test.loginTest(restIp, restPort, loginId, password);
+		//test.loginTest(restIp, restPort, loginId, password);
 		
 		//마스터키 로드
 		//test.loadServerKey(restIp, restPort, strTocken, loginId, entityId);
@@ -191,7 +192,11 @@ public class ServiceCallTest {
 		
 		//test.selectEntityList2(restIp, restPort, strTocken, loginId, entityId);
 		
-		test.selectEntityUid(restIp, restPort, strTocken, loginId, entityId, loginId);
+		//test.selectEntityUid(restIp, restPort, strTocken, loginId, entityId, loginId);
+		
+		//암호화 통계
+		test.selectAuditLogSiteHourForStat(restIp, restPort, strTocken, loginId, entityId);
+		
 	}
 
 	/**
@@ -1102,7 +1107,7 @@ public class ServiceCallTest {
 		String strCommand = SystemCode.ServiceCommand.LOADSERVERKEY;
 		
 		String oldPassword = "1234qwer";
-		//oldPassword = "marm13+irhFlLcINs7nlIQhKacF88OUybxqcXwRAptg=";
+		oldPassword = "G/ZxwqSxwaItGGyG+oUOUgDaq8pakhb/vj7TK7OriPA=";
 
 		AdminServerPasswordRequest adminServerPasswordRequest = new AdminServerPasswordRequest();
 		adminServerPasswordRequest.setOldPassword(oldPassword);
@@ -2753,7 +2758,85 @@ public class ServiceCallTest {
 		
 	}
 
+	//암호화 통계
+	private void selectAuditLogSiteHourForStat(String restIp, int restPort, String strTocken, String loginId, String entityId) throws Exception {
+
+		EncryptCommonService api = new EncryptCommonService(restIp, restPort);
+
+		String strService = SystemCode.ServiceName.LOG_SERVICE;
+		String strCommand = SystemCode.ServiceCommand.SELECTAUDITLOGSITEHOURFORSTAT;
+
+		AuditLogSiteStatCondition param = new AuditLogSiteStatCondition();
+
+		
+		/** setCategoryColumn
+		 * PROFILE_NM / 정책 이름
+			SITE_ACCESS_ADDRESS / 라이언트 주소
+			HOST_NM /  호스트 이름
+			EXTRA_NM / 추가 필드
+			MODULE_INFO / 모듈 정보
+			LOCATION_INFO / DB 컬럼
+			SERVER_LOGIN_ID / DB 사용자 아이디
+
+		 */
+		param.setSearchAgentLogDateTimeFrom("2018042700");
+		param.setSearchAgentLogDateTimeTo("2018042724");
+		param.setCategoryColumn("SITE_ACCESS_ADDRESS");
+		param.setSeriesDefinition(AuditLogSiteStatCondition.SERIES_HOURLY);
+
+		//JSONObject parameters = new JSONObject();
+		//parameters.put("profile", vo);
+		
+		HashMap body = new HashMap();
+		body.put(TypeUtility.getJustClassName(param.getClass()), param.toJSONString());
+
+		String parameters = TypeUtility.makeRequestBody(body);
+
+		HashMap header = new HashMap();
+		//header.put(SystemCode.FieldName.LOGIN_ID, loginId);
+		//header.put(SystemCode.FieldName.ENTITY_UID, entityId);
+		header.put(SystemCode.FieldName.LOGIN_ID, loginId);
+		header.put(SystemCode.FieldName.ENTITY_UID, entityId);
+		header.put(SystemCode.FieldName.TOKEN_VALUE, strTocken);
+
+		JSONObject resultJson = api.callService(strService, strCommand, header, parameters);
+		
+
+		String resultCode = (String) resultJson.get("resultCode");
+		String resultMessage = (String) resultJson.get("resultMessage");
+		resultMessage = new String(resultMessage.getBytes("iso-8859-1"),"UTF-8"); 
+		
+		System.out.println("resultCode : " + resultCode + " resultMessage : " + resultMessage);
+		
+		if(resultCode.equals(SystemCode.ResultCode.SUCCESS)) {
+			
+			ArrayList list = (ArrayList) resultJson.get("list");
+			if(list != null) {
+				for (int j = 0; j < list.size(); j++) {
+					JSONObject jsonObj = (JSONObject) list.get(j);
+					
 	
+		
+	
+					String encryptSuccessCount = jsonObj.get("encryptsuccesscount").toString();
+					String encryptFailCount = jsonObj.get("encryptfailcount").toString();
+					String decryptSuccessCount = jsonObj.get("decryptsuccesscount").toString();
+					String decryptFailCount = jsonObj.get("decryptfailcount").toString();
+					String sumCount = jsonObj.get("sumcount").toString();
+
+					
+					System.out.println("encryptSuccessCount : " + encryptSuccessCount + " encryptFailCount : " + encryptFailCount);
+					System.out.println("decryptSuccessCount : " + decryptSuccessCount + " decryptFailCount : " + decryptFailCount);
+					System.out.println("sumCount : " + sumCount );
+	
+				}
+			}
+			
+		} else {
+			
+		}
+
+	}
 	private void checkChar(String originalStr) throws Exception {
 		//String originalStr = "Å×½ºÆ®"; // 테스트 
 		String [] charSet = {"utf-8","euc-kr","ksc5601","iso-8859-1","x-windows-949"};
