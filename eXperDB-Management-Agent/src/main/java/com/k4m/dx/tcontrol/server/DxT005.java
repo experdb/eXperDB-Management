@@ -353,7 +353,7 @@ public class DxT005 extends SocketCtl {
 				}
 				
 				//2. 백업유지 개수 많큼 파일을 유지한다.
-				if (intCount > BCK_MTN_ECNT) {
+				if (intCount >= BCK_MTN_ECNT) {
 					if(FileUtil.isFile(strBachupFile)) {
 						FileUtil.fileDelete(strBachupFile);
 					}
