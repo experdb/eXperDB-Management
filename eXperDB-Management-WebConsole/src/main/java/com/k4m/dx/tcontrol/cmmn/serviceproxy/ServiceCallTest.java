@@ -2817,7 +2817,7 @@ public class ServiceCallTest {
 					
 	
 		
-	
+					String categoryColumn = jsonObj.get("categorycolumn").toString();
 					String encryptSuccessCount = jsonObj.get("encryptsuccesscount").toString();
 					String encryptFailCount = jsonObj.get("encryptfailcount").toString();
 					String decryptSuccessCount = jsonObj.get("decryptsuccesscount").toString();
