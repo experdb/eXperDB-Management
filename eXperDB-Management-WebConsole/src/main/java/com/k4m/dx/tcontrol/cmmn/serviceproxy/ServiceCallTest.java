@@ -2847,7 +2847,7 @@ public class ServiceCallTest {
 
 		EncryptCommonService api = new EncryptCommonService(restIp, restPort);
 
-		String strService = SystemCode.ServiceName.ENTITY_SERVICE;
+		String strService = SystemCode.ServiceName.MONITOR_SERVICE;
 		String strCommand = SystemCode.ServiceCommand.SELECTSYSTEMSTATUS;
 
 		SystemStatus param = new SystemStatus();
