@@ -32,12 +32,12 @@
 // 			bSort: false,
 			columns : [
 			{ data : "name", defaultContent : "", targets : 0, orderable : false, checkboxes : {'selectRow' : true}}, 
-			{ data : "",  defaultContent : "",orderable : false}, 
+			{ data : "",  defaultContent : "",className : "dt-center", orderable : false}, 
 			{ data : "name",  defaultContent : "",orderable : false}, 
 			{ data : "hdfs_url",  defaultContent : "",orderable : false}, 
-			{ data : "tasks_max",  defaultContent : "",orderable : false}, 
-			{ data : "flush_size",  defaultContent : "",orderable : false}, 
-			{ data : "rotate_interval_ms",  defaultContent : "",orderable : false}, 
+			{ data : "tasks_max",  defaultContent : "",className : "dt-right", orderable : false}, 
+			{ data : "flush_size",  defaultContent : "",className : "dt-right", orderable : false}, 
+			{ data : "rotate_interval_ms", className : "dt-right",defaultContent : "",orderable : false}, 
 			{ data : "db_svr_nm",  defaultContent : "",orderable : false}, 
 			{ data : "db_nm",  defaultContent : "",orderable : false}, 
 			{

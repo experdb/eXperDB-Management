@@ -529,7 +529,7 @@
 				/*옵션*/
 				defaultAccessAllowTrueFalse : $(":radio[name='defaultAccessAllowTrueFalse']:checked").val(),
 				denyResultTypeCode : $("#denyResultTypeCode").val(),
-				dataTypeCode : $("#dataTypeCode").val(),
+				dataTypeCode : "DTCH",
 				log_on_fail : $(":checkbox[name='log_on_fail']:checked").val(),
 				compress_audit_log : $(":checkbox[name='compress_audit_log']:checked").val(),
 				preventDoubleYesNo : $(":checkbox[name='preventDoubleYesNo']:checked").val(),
@@ -732,7 +732,7 @@
 									<input type="text" class="txt t2" name="maskingValue" id="maskingValue" value="${result.maskingValue}" style="display: none;"/>
 								</td>
 							</tr>
-							<tr>
+							<tr style="display: none;">
 								<th scope="row" class="ico_t1"><spring:message code="encrypt_policy_management.Data_Type"/></th>
 								<td>
 									<select class="select t3" id="dataTypeCode" name="dataTypeCode">

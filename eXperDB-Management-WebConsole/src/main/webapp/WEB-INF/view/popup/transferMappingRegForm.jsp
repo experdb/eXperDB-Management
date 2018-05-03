@@ -43,7 +43,7 @@
 	
 	function fn_init() {
 		tableList = $('#tableList').DataTable({
-			scrollY : "210px",
+			scrollY : "200px",
 			searching : false,
 			paging: false,
 			bSort: false,
@@ -55,7 +55,7 @@
 		});
 		
 		connectorTableList = $('#connectorTableList').DataTable({
-			scrollY : "210px",
+			scrollY : "200px",
 			searching : false,
 			paging: false,
 			bSort: false,
