@@ -23,11 +23,86 @@
 	*/
 %>
 <script>
-function fn_refresh(){
+var table = null;
+
+function fn_init(){
+	table = $('#monitoring').DataTable({
+		scrollY : "420px",
+		searching : false,
+		deferRender : true,
+		scrollX: true,
+		columns : [
+			{data : "idx", columnDefs: [ { searchable: false, orderable: false, targets: 0} ], order: [[ 1, 'asc' ]],  className : "dt-center", defaultContent : ""},
+			{ data : "monitoredName", defaultContent : ""}, 
+			{ data : "status", defaultContent : "", render: function (data, type, full){
+				if(full.status == "start"){
+					var html = '<img src="../images/ico_agent_1.png" alt="" />';
+						return html;
+				}else{
+					var html = '<img src="../images/ico_agent_2.png" alt="" />';
+					return html;
+				}
+				return data;
+			},},
+			{ data : "targetType", defaultContent : "", visible: false},
+			{ data : "targetUid", defaultContent : "", visible: false},
+			{ data : "targetName", defaultContent : "", visible: false},
+			{ data : "monitorType", defaultContent : "", visible: false},
+			{ data : "resultLevel", defaultContent : "", visible: false},
+			{ data : "logMessage", defaultContent : "", visible: false},
+		 ]
+	});
 	
+	table.on( 'order.dt search.dt', function () {
+    	table.column(0, {search:'applied', order:'applied'}).nodes().each( function (cell, i) {
+            cell.innerHTML = i+1;
+        } );
+    } ).draw();
+}
+
+$(window.document).ready(function() {
+	fn_init();
+	fn_refresh();
+});
+
+
+function fn_refresh(){
+	$.ajax({
+		url : "/selectEncryptAgentMonitoring.do", 
+	  	data : {},
+		dataType : "json",
+		type : "post",
+		beforeSend: function(xhr) {
+	        xhr.setRequestHeader("AJAX", true);
+	     },
+		error : function(xhr, status, error) {
+			if(xhr.status == 401) {
+				alert("<spring:message code='message.msg02' />");
+				top.location.href = "/";
+			} else if(xhr.status == 403) {
+				alert("<spring:message code='message.msg03' />");
+				top.location.href = "/";
+			} else {
+				alert("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""));
+			}
+		},
+		success : function(data) {
+			if(data.resultCode == "0000000000"){
+				table.clear().draw();
+				table.rows.add(data.list).draw();
+			}else if(data.resultCode == "8000000002"){
+				alert("<spring:message code='message.msg05' />");
+				top.location.href = "/";
+			}else if(data.resultCode == "8000000003"){
+				alert(data.resultMessage);
+				location.href = "/securityKeySet.do";
+			}else{
+				alert(data.resultMessage +"("+data.resultCode+")");
+			}
+		}
+	});	
 }
 </script>
-
 	<div id="contents">
 				<div class="contents_wrap">
 					<div class="contents_tit">
@@ -51,11 +126,11 @@ function fn_refresh(){
 								<span class="btn"><button onclick="fn_refresh()">새로고침</button></span>
 							</div>
 
-							<div class="overflow_area" style="height: 365px;">
-								<table class="list" border="1">
+							<div class="overflow_area">
+								<table class="list"  id="monitoring" cellspacing="0" width="100%">
 									<caption>Encrypt Agent 모니터링 리스트</caption>
 									<colgroup>
-										<col style="width:10%;" />
+										<col style="width:5%;" />
 										<col style="width:35%;" />
 										<col style="width:15%;" />
 									</colgroup>
@@ -66,13 +141,6 @@ function fn_refresh(){
 											<th scope="col">Agent 상태 </th>
 										</tr>
 									</thead>
-									<tbody>
-										<tr>
-											<td></td>
-											<td></td>
-											<td><img src="../images/ico_agent_1.png" alt="" /><img src="../images/ico_agent_2.png" alt="" /></td>
-										</tr>
-									</tbody>
 								</table>
 							</div>
 						</div>

@@ -5,7 +5,9 @@ import java.util.List;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 
+import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -35,6 +37,9 @@ import com.k4m.dx.tcontrol.common.service.CmmnVO;
 import com.k4m.dx.tcontrol.common.service.HistoryVO;
 import com.k4m.dx.tcontrol.dashboard.service.DashboardService;
 import com.k4m.dx.tcontrol.dashboard.service.DashboardVO;
+import com.k4m.dx.tcontrol.encrypt.service.call.AgentMonitoringServiceCall;
+import com.k4m.dx.tcontrol.encrypt.service.call.CommonServiceCall;
+import com.k4m.dx.tcontrol.encrypt.service.call.StatisticsServiceCall;
 import com.k4m.dx.tcontrol.functions.schedule.service.ScheduleService;
 
 /**
@@ -480,4 +485,185 @@ public class CmmnController {
 		}
 		return result;
 	}		
+	
+		
+	/**
+	 * 데시보드 암호화통계
+	 * @param 
+	 * @return resultSet
+	 * @throws Exception
+	 */
+	@SuppressWarnings("unchecked")
+	@RequestMapping(value = "/selectDashSecurityStatistics.do")	
+	public @ResponseBody JSONObject selectDashSecurityStatistics(HttpServletRequest request) {
+		
+		JSONArray agentStatusList = new JSONArray();		
+		JSONArray tResult = new JSONArray();		
+		JSONObject result = new JSONObject();
+		
+		List<Map<String, Object>> agentList = null;
+		List<Map<String, Object>> agentStatusListResult = null;
+		
+		//통계결과
+		JSONObject statisticsResult = new JSONObject();
+		List<Map<String, Object>> statisticsListResult = null;
+		
+		HttpSession session = request.getSession();
+		String restIp = (String)session.getAttribute("restIp");
+		int restPort = (int)session.getAttribute("restPort");
+		String strTocken = (String)session.getAttribute("tockenValue");
+		String loginId = (String)session.getAttribute("usr_id");
+		String entityId = (String)session.getAttribute("ectityUid");	
+
+		try {								
+			
+			String from = request.getParameter("from");
+			String to = request.getParameter("to");
+			String categoryColumn = request.getParameter("categoryColumn");
+			
+			CommonServiceCall csc = new CommonServiceCall();			
+			AgentMonitoringServiceCall amsc = new AgentMonitoringServiceCall();		
+			
+			agentList = csc.selectEntityList2(restIp, restPort, strTocken, loginId, entityId);			
+			agentStatusList = amsc.selectSystemStatus(restIp, restPort, strTocken, loginId, entityId);
+				
+			agentStatusListResult = (List<Map<String, Object>>) agentStatusList;
+		
+			//암호화통계 결과
+			StatisticsServiceCall ssc = new StatisticsServiceCall();
+			statisticsResult = ssc.selectAuditLogSiteHourForStat(restIp, restPort, strTocken, loginId, entityId, from, to, categoryColumn);
+			statisticsListResult= (List<Map<String, Object>>) statisticsResult.get("list");
+			
+			for(int i=0; i<agentStatusListResult.size(); i++){	
+				agentStatusListResult.get(i).put("encryptSuccessCount", "0");
+				agentStatusListResult.get(i).put("encryptFailCount", "0");
+				agentStatusListResult.get(i).put("decryptSuccessCount", "0");
+				agentStatusListResult.get(i).put("decryptFailCount", "0");
+				agentStatusListResult.get(i).put("sumCount", "0");
+			
+				tResult.add(agentStatusListResult.get(i));
+			}
+		
+			
+			if(statisticsListResult.get(0).get("categoryColumn").equals("-")){	
+				for(int k=0; k<agentList.size(); k++){
+					result.put("resultCode", agentList.get(0).get("resultCode"));
+					result.put("resultMessage", agentList.get(0).get("resultMessage"));
+					
+					agentList.get(k).put("encryptSuccessCount", "0");
+					agentList.get(k).put("encryptFailCount", "0");
+					agentList.get(k).put("decryptSuccessCount", "0");
+					agentList.get(k).put("decryptFailCount", "0");
+					agentList.get(k).put("sumCount", "0");
+					
+					int temp =0;
+					for(int i=0; i<agentStatusListResult.size(); i++){					
+						if(agentList.get(k).get("createName").equals(agentStatusListResult.get(i).get("monitoredName"))){
+							temp ++;
+						}
+					}
+					if(temp == 0){
+						JSONObject addList = new JSONObject();
+						addList.put("monitoredName", agentList.get(k).get("createName"));
+						addList.put("encryptSuccessCount", agentList.get(k).get("encryptSuccessCount"));
+						addList.put("encryptFailCount", agentList.get(k).get("encryptFailCount"));
+						addList.put("decryptSuccessCount", agentList.get(k).get("decryptSuccessCount"));
+						addList.put("decryptFailCount", agentList.get(k).get("decryptFailCount"));
+						addList.put("sumCount", agentList.get(k).get("sumCount"));
+						addList.put("status", "start");
+						tResult.add(addList);
+					}
+				}				
+			}else{
+				for(int k=0; k<agentList.size(); k++){
+					int temp =0;
+					result.put("resultCode", agentList.get(0).get("resultCode"));
+					result.put("resultMessage", agentList.get(0).get("resultMessage"));
+					for(int i =0; i<statisticsListResult.size(); i++){
+						if(agentList.get(k).get("createName").toString().contains(statisticsListResult.get(i).get("categoryColumn").toString())){
+							agentList.get(k).put("encryptSuccessCount", statisticsListResult.get(i).get("encryptSuccessCount"));
+							agentList.get(k).put("encryptFailCount", statisticsListResult.get(i).get("encryptFailCount"));
+							agentList.get(k).put("decryptSuccessCount", statisticsListResult.get(i).get("decryptSuccessCount"));
+							agentList.get(k).put("decryptFailCount", statisticsListResult.get(i).get("decryptFailCount"));
+							agentList.get(k).put("sumCount", statisticsListResult.get(i).get("sumCount"));
+						}
+					}						
+					for(int i=0; i<agentStatusListResult.size(); i++){
+						result.put("resultCode", agentStatusListResult.get(0).get("resultCode"));
+						result.put("resultMessage", agentStatusListResult.get(0).get("resultMessage"));
+						if(agentList.get(k).get("createName").equals(agentStatusListResult.get(i).get("monitoredName"))){
+							temp ++;
+						}
+					}
+					if(temp == 0){
+						JSONObject addList = new JSONObject();
+						addList.put("monitoredName", agentList.get(k).get("createName"));
+						addList.put("encryptSuccessCount", agentList.get(k).get("encryptSuccessCount"));
+						addList.put("encryptFailCount", agentList.get(k).get("encryptFailCount"));
+						addList.put("decryptSuccessCount", agentList.get(k).get("decryptSuccessCount"));
+						addList.put("decryptFailCount", agentList.get(k).get("decryptFailCount"));
+						addList.put("sumCount", agentList.get(k).get("sumCount"));
+						addList.put("status", "start");
+						tResult.add(addList);
+					}
+				}
+
+			}
+			
+			
+			/*for(int k=0; k<agentList.size(); k++){
+				int temp =0;
+				for(int i=0; i<agentStatusListResult.size(); i++){
+					result.put("resultCode", agentStatusListResult.get(0).get("resultCode"));
+					result.put("resultMessage", agentStatusListResult.get(0).get("resultMessage"));
+					if(agentList.get(k).get("createName").equals(agentStatusListResult.get(i).get("monitoredName"))){
+						temp ++;
+					}
+				}
+				if(temp == 0){
+					JSONObject addList = new JSONObject();
+					addList.put("monitoredName", agentList.get(k).get("createName"));
+					addList.put("status", "start");
+					tResult.add(addList);
+				}
+			}*/
+			
+			result.put("list", tResult);
+			System.out.println("결과="+ result);
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return result;
+	}		
+	
+	
+	
+	/**
+	 * 데시보드 서버상태
+	 * @param 
+	 * @return resultSet
+	 * @throws Exception
+	 */
+	@SuppressWarnings("unchecked")
+	@RequestMapping(value = "/serverStatus.do")	
+	public @ResponseBody JSONObject serverStatus(HttpServletRequest request) {
+	
+				JSONObject result = new JSONObject();
+
+				HttpSession session = request.getSession();
+				String restIp = (String)session.getAttribute("restIp");
+				int restPort = (int)session.getAttribute("restPort");
+				String strTocken = (String)session.getAttribute("tockenValue");
+				String loginId = (String)session.getAttribute("usr_id");
+				String entityId = (String)session.getAttribute("ectityUid");	
+
+				try{
+					CommonServiceCall csc = new CommonServiceCall();					
+					result = csc.selectServerStatus(restIp, restPort, strTocken, loginId, entityId);
+				}catch(Exception e){
+					result.put("resultCode", "8000000002");
+				}
+		return result;
+	}
 }

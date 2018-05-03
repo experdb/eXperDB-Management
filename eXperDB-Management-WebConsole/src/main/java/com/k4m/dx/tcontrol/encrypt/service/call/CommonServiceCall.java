@@ -17,6 +17,7 @@ import com.k4m.dx.tcontrol.cmmn.serviceproxy.SystemCode;
 import com.k4m.dx.tcontrol.cmmn.serviceproxy.TypeUtility;
 import com.k4m.dx.tcontrol.cmmn.serviceproxy.vo.AdminServerPasswordRequest;
 import com.k4m.dx.tcontrol.cmmn.serviceproxy.vo.AuthCredentialToken;
+import com.k4m.dx.tcontrol.cmmn.serviceproxy.vo.Entity;
 import com.k4m.dx.tcontrol.cmmn.serviceproxy.vo.SysCode;
 
 public class CommonServiceCall {
@@ -152,7 +153,8 @@ public class CommonServiceCall {
 		System.out.println("isServerKeyEmpty : " + isServerKeyEmpty + " isServerPasswordEmpty : " + isServerPasswordEmpty);
 		
 		if(resultCode.equals(SystemCode.ResultCode.SUCCESS)) {
-
+			jsonObj.put("resultCode", resultCode);
+			jsonObj.put("resultMessage", resultMessage);
 		} else {
 			if(resultCode.equals("8000000003")){
 				
@@ -264,4 +266,85 @@ public class CommonServiceCall {
 		return jsonObj;
 	}
 
+	
+	
+	/**
+	 * 에이전트 리스트
+	 * @param restIp
+	 * @param restPort
+	 * @param strTocken
+	 * @return 
+	 * @throws Exception
+	 */
+	public JSONArray selectEntityList2(String restIp, int restPort, String strTocken, String loginId, String entityId) throws Exception {
+		EncryptCommonService api = new EncryptCommonService(restIp, restPort);
+
+		JSONArray jsonArray = new JSONArray();
+		
+		String strService = SystemCode.ServiceName.ENTITY_SERVICE;
+		String strCommand = SystemCode.ServiceCommand.SELECTENTITYLIST;
+
+		String monitored = "false"; 
+		
+		Entity param = new Entity();
+		param.setEntityTypeCode(SystemCode.EntityTypeCode.AGENT);
+
+		HashMap body = new HashMap();
+		//body.put(TypeUtility.getJustClassName(param.getClass()), param.toJSONString());
+		body.put("monitored", monitored);
+		body.put(TypeUtility.getJustClassName(param.getClass()), param.toJSONString());
+		
+		String parameters = TypeUtility.makeRequestBody(body);
+		
+		System.out.println(parameters);
+
+		HashMap header = new HashMap();
+		header.put(SystemCode.FieldName.LOGIN_ID, loginId);
+		header.put(SystemCode.FieldName.ENTITY_UID, entityId);
+		header.put(SystemCode.FieldName.TOKEN_VALUE, strTocken);
+
+		JSONObject resultJson = api.callService(strService, strCommand, header, parameters.toString());
+		
+		Iterator<?> iter = resultJson.entrySet().iterator();
+		while (iter.hasNext()) {
+			Map.Entry entry = (Map.Entry) iter.next();
+
+			System.out.println(String.valueOf(entry.getKey()) + " = " + String.valueOf(entry.getValue()));
+		}
+		
+		
+		String resultCode = (String) resultJson.get("resultCode");
+		String resultMessage = (String) resultJson.get("resultMessage");
+		resultMessage = new String(resultMessage.getBytes("iso-8859-1"),"UTF-8"); 
+		long totalListCount = (long) resultJson.get("totalListCount");
+		
+		
+		if(resultCode.equals("0000000000")) {
+			ArrayList list = (ArrayList) resultJson.get("list");
+			
+			//System.out.println("list Size : " + list.size());
+			if(totalListCount > 0) {
+				for(int i=0; i<list.size(); i++) {
+					JSONObject data = (JSONObject) list.get(i);
+					
+					JSONObject jObj = new JSONObject();
+					
+					Entity entity = new Entity();
+					Gson gson = new Gson();
+					entity = gson.fromJson(data.toJSONString(), entity.getClass());
+					
+					jObj.put("latestAddress", entity.getLatestAddress());
+					jObj.put("createName", entity.getCreateName());	
+					jObj.put("resultCode", resultCode);
+					jObj.put("resultMessage", resultMessage);
+					
+					System.out.println("getEntityUid : " + entity.getEntityUid());
+					System.out.println("getEntityName : " + new String(entity.getEntityName().toString().getBytes("iso-8859-1"),"UTF-8") );
+					
+					jsonArray.add(jObj);					
+				}			
+			}
+		}		
+		return jsonArray;
+	}	
 }

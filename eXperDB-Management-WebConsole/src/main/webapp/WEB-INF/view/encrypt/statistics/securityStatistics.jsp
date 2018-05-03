@@ -19,7 +19,11 @@
 	*
 	*/
 %>
-<<script type="text/javascript">
+<script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+<script type="text/javascript">
+google.charts.load('current', {packages: ['corechart', 'bar']});
+google.charts.setOnLoadCallback(drawMultSeries);
+
 $(window.document).ready(function() {
 	var dateFormat = "yyyy-mm-dd", from = $("#from").datepicker({
 		changeMonth : false,
@@ -39,8 +43,119 @@ $(window.document).ready(function() {
 	
 	$('#from').val($.datepicker.formatDate('yy-mm-dd', new Date()));
 	$('#to').val($.datepicker.formatDate('yy-mm-dd', new Date()));
+	
+	fn_selectSecurityStatistics();
 
 });
+
+	function fn_selectSecurityStatistics(){
+		var from = $('#from').val().replace(/-/gi, "")+"00";
+		var to = $('#from').val().replace(/-/gi, "")+"24";
+	
+		$.ajax({
+			url : "/selectSecurityStatistics.do",
+			data : {
+				from : from,
+				to : 	to,
+				categoryColumn : $('#categoryColumn').val(),
+			},
+			dataType : "json",
+			type : "post",
+			beforeSend: function(xhr) {
+		        xhr.setRequestHeader("AJAX", true);
+		     },
+			error : function(xhr, status, error) {
+				if(xhr.status == 401) {
+					alert("<spring:message code='message.msg02' />");
+					top.location.href = "/";
+				} else if(xhr.status == 403) {
+					alert("<spring:message code='message.msg03' />");
+					top.location.href = "/";
+				} else {
+					alert("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""));
+				}
+			},
+			success : function(data) {		
+				if(data.resultCode == "0000000000"){
+				 	var html ="";
+					for(var i=0; i<data.list.length; i++){
+	
+						html += '<tr>';
+						html += '<td>'+data.list[i].categoryColumn+'</td>';
+						html += '<td>'+data.list[i].encryptSuccessCount+'</td>';
+						html += '<td>'+data.list[i].encryptFailCount+'</td>';
+						html += '<td>'+data.list[i].decryptSuccessCount+'</td>';
+						html += '<td>'+data.list[i].decryptFailCount+'</td>';
+						html += '<td>'+data.list[i].sumCount+'</td>';
+						html += '</tr>';
+						$( "#col" ).html(html);			
+					} 
+					drawMultSeries(data);
+				}else if(data.resultCode == "8000000002"){
+					alert("<spring:message code='message.msg05' />");
+					location.href="/";
+				}else if(data.resultCode == "8000000003"){
+					alert(data.resultMessage);
+					location.href="/securityKeySet.do";
+				}else{
+					alert(data.resultMessage +"("+data.resultCode+")");
+				}
+			}
+		});		
+	}
+	
+	
+	function fn_select(){
+		fn_selectSecurityStatistics();
+	}
+	
+
+	
+	function drawMultSeries(data) {
+			var arrData = [];
+			var arr = ["구분", "성공", "실패"]; 
+			
+			var encSuccessCount = 0;
+			var encFailCount = 0;
+			var decSuccessCount = 0;
+			var decFailCount = 0;
+			
+			arrData.push(arr);
+		
+			for(var i=0; i<data.list.length; i++){
+				
+				encSuccessCount += Number(data.list[i].encryptSuccessCount);
+				encFailCount += Number(data.list[i].encryptFailCount);
+				decSuccessCount += Number(data.list[i].decryptSuccessCount);
+				decFailCount += Number(data.list[i].decryptFailCount);
+			}	
+			var encArr = ["암호화", encSuccessCount, encFailCount]; 
+			var decArr = ["복호화", decSuccessCount, decFailCount]; 
+	
+			arrData.push(encArr);
+			arrData.push(decArr);
+			
+		   /* var arrData = [
+			        ['구분', '성공', '실패'],
+			        ['암호화', 3, 0],
+			        ['복호화', 3, 0],
+			      ];   */
+		
+     
+	      var data = google.visualization.arrayToDataTable(arrData);
+
+	      var options = {
+	        chartArea: {width: '85%'},
+	        hAxis: {
+	          title: 'Total Encrypt / Decrypt Count',
+	          minValue: 0
+	        },
+	      };
+
+	      var chart = new google.visualization.BarChart(document.getElementById('chart_div'));
+	      chart.draw(data, options);
+	    }
+	
 </script>
 
 <!-- contents -->
@@ -62,7 +177,7 @@ $(window.document).ready(function() {
 			</div>
 		</div>
 		<div class="contents">
-			<div class="cmm_grp">
+			<div class="cmm_grp" style="margin-bottom: 100px;">
 				<div class="btn_type_01">
 					<span class="btn" onclick="fn_select();"><button><spring:message code="common.search" /></button></span>
 				</div>
@@ -87,16 +202,22 @@ $(window.document).ready(function() {
 							<tr>
 								<th scope="row" class="t9">조회조건</th>
 								<td>
-									조회조건
+									<select class="select t5" id="categoryColumn">
+										<option value="SITE_ACCESS_ADDRESS">클라이언트 주소</option>
+										<option value="PROFILE_NM">정책 이름</option>										
+										<option value="HOST_NM">호스트 이름</option>
+										<option value="EXTRA_NM">추가 필드</option>
+										<option value="MODULE_INFO">모듈 정보</option>
+										<option value="LOCATION_INFO">DB 컬럼</option>
+										<option value="SERVER_LOGIN_ID">DB 사용자 아이디</option>
+									</select>
 								</td>
 							</tr>
 						</tbody>
 					</table>
 				</div>
 				
-				
 
-				<div class="inner">
 					<table class="list" border="1">
 							<caption><spring:message code="dashboard.dbms_info" /></caption>
 							<colgroup>
@@ -123,14 +244,11 @@ $(window.document).ready(function() {
 									<th scope="col">실패</th>
 								</tr>
 							</thead>
-							<tbody>
-						
+							<tbody id="col">
 							</tbody>
-						</table>
-					</div>
-
-					
+						</table>						
 			</div>
+				<div id="chart_div" ></div>		
 		</div>
 	</div>
 </div>

@@ -8,6 +8,116 @@
 
 <%@include file="cmmn/cs.jsp"%>
 
+<script type="text/javascript">
+var today = "";
+
+$(window.document).ready(function() {
+
+	today = new Date();
+	$("#today").text("●"+today.toJSON().slice(0,10).replace(/-/g,'-'));
+	today.toJSON().slice(0,10).replace(/-/g,'');
+	fn_serverStatus();
+
+});
+
+
+function fn_serverStatus(){
+	$.ajax({
+		url : "/serverStatus.do",
+		data : {},
+		dataType : "json",
+		type : "post",
+		beforeSend: function(xhr) {
+	        xhr.setRequestHeader("AJAX", true);
+	     },
+		error : function(xhr, status, error) {
+			if(xhr.status == 401) {
+				alert("<spring:message code='message.msg02' />");
+				top.location.href = "/";
+			} else if(xhr.status == 403) {
+				alert("<spring:message code='message.msg03' />");
+				top.location.href = "/";
+			} else {
+				alert("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""));
+			}
+		},
+		success : function(data) {
+			if(data.resultCode == "0000000000"){
+				var html ='<img src="../images/ico_agent_1.png" alt="" />';
+				$("#encryptServer").html(html);
+				fn_selectSecurityStatistics(today);
+			}else if(data.resultCode == "8000000002"){
+				alert("<spring:message code='message.msg05' />");	
+				var html ='<img src="../images/ico_agent_2.png" alt="" />';
+				$("#encryptServer").html(html);
+			}
+		}
+	});			
+}
+
+
+function fn_selectSecurityStatistics(today){
+	$.ajax({
+		url : "/selectDashSecurityStatistics.do",
+		data : {
+			from : today+"00",
+			to : 	today+"24",
+			categoryColumn : "SITE_ACCESS_ADDRESS"
+		},
+		dataType : "json",
+		type : "post",
+		beforeSend: function(xhr) {
+	        xhr.setRequestHeader("AJAX", true);
+	     },
+		error : function(xhr, status, error) {
+			if(xhr.status == 401) {
+				alert("<spring:message code='message.msg02' />");
+				top.location.href = "/";
+			} else if(xhr.status == 403) {
+				alert("<spring:message code='message.msg03' />");
+				top.location.href = "/";
+			} else {
+				alert("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""));
+			}
+		},
+		success : function(data) {		
+
+			if(data.resultCode == "0000000000"){
+			 	var html ="";
+				for(var i=0; i<data.list.length; i++){
+					html += '<tr>';
+					html += '<td>'+data.list[i].monitoredName+'</td>';
+					html += '<td>'+data.list[i].encryptSuccessCount+'</td>';
+					html += '<td>'+data.list[i].encryptFailCount+'</td>';
+					html += '<td>'+data.list[i].decryptSuccessCount+'</td>';
+					html += '<td>'+data.list[i].decryptFailCount+'</td>';
+					html += '<td>'+data.list[i].sumCount+'</td>';
+					if(data.list[i].status == "start"){
+						html += '<td><img src="../images/ico_agent_1.png" alt="" /></td>';
+					}else{
+						html += '<td><img src="../images/ico_agent_2.png" alt="" /></td>';
+					}
+					html += '</tr>';
+
+					$( "#col" ).html(html);
+				} 
+			}else if(data.resultCode == "8000000002"){
+				alert("<spring:message code='message.msg05' />");
+				location.href="/";
+			}else if(data.resultCode == "8000000003"){
+				alert(data.resultMessage);
+				location.href="/securityKeySet.do";
+			}else{
+				alert(data.resultMessage +"("+data.resultCode+")");
+			}
+		}
+	});		
+}
+
+</script>
+
+
+
 <!-- contents -->
 <div id="contents" class="main">
 	<div class="contents_wrap">
@@ -372,7 +482,7 @@
 							</colgroup>
 							<tr>
 								<th>구동상태</th>						
-								<th></th>
+								<th id="encryptServer"></th>
 							</tr>		
 						</table>
 					
@@ -385,7 +495,7 @@
 				<div class="main_server_info">
 					<p class="tit">eXperDB Encrypt Agent 상태</p>
 					<div class="inner">
-							<div align="right">● 2018-04-23 </div>
+							<div align="right" id="today"></div>
 							<table class="list" border="1">
 							<caption><spring:message code="dashboard.dbms_info" /></caption>
 							<colgroup>
@@ -414,7 +524,7 @@
 									<th scope="col">실패</th>
 								</tr>
 							</thead>
-							<tbody>
+							<tbody id="col">
 						
 							</tbody>
 						</table>
