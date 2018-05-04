@@ -19,10 +19,10 @@
 	*
 	*/
 %>
-<script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+<!-- <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script> -->
 <script type="text/javascript">
-google.charts.load('current', {packages: ['corechart', 'bar']});
-google.charts.setOnLoadCallback(drawMultSeries);
+/* google.charts.load('current', {packages: ['corechart', 'bar']});
+google.charts.setOnLoadCallback(drawMultSeries); */
 
 $(window.document).ready(function() {
 	var dateFormat = "yyyy-mm-dd", from = $("#from").datepicker({
@@ -90,7 +90,6 @@ $(window.document).ready(function() {
 						html += '</tr>';
 						$( "#col" ).html(html);			
 					} 
-					drawMultSeries(data);
 				}else if(data.resultCode == "8000000002"){
 					alert("<spring:message code='message.msg05' />");
 					location.href="/";
@@ -111,7 +110,7 @@ $(window.document).ready(function() {
 	
 
 	
-	function drawMultSeries(data) {
+/* 	function drawMultSeries(data) {
 			var arrData = [];
 			var arr = ["구분", "성공", "실패"]; 
 			
@@ -134,12 +133,7 @@ $(window.document).ready(function() {
 	
 			arrData.push(encArr);
 			arrData.push(decArr);
-			
-		   /* var arrData = [
-			        ['구분', '성공', '실패'],
-			        ['암호화', 3, 0],
-			        ['복호화', 3, 0],
-			      ];   */
+
 		
      
 	      var data = google.visualization.arrayToDataTable(arrData);
@@ -154,7 +148,7 @@ $(window.document).ready(function() {
 
 	      var chart = new google.visualization.BarChart(document.getElementById('chart_div'));
 	      chart.draw(data, options);
-	    }
+	    } */
 	
 </script>
 
@@ -177,7 +171,7 @@ $(window.document).ready(function() {
 			</div>
 		</div>
 		<div class="contents">
-			<div class="cmm_grp" style="margin-bottom: 100px;">
+			<div class="cmm_grp">
 				<div class="btn_type_01">
 					<span class="btn" onclick="fn_select();"><button><spring:message code="common.search" /></button></span>
 				</div>
@@ -248,7 +242,7 @@ $(window.document).ready(function() {
 							</tbody>
 						</table>						
 			</div>
-				<div id="chart_div" ></div>		
+				<!-- <div id="chart_div" ></div> -->		
 		</div>
 	</div>
 </div>
