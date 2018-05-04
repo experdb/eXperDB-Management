@@ -28,6 +28,8 @@ public class WebConsoleSetting {
 		String strDatabasePassword = "";
 		String strDatabaseUrl = "";
 		
+		String strTransferYN ="";
+		
 		String strLanguage ="";
 		String strVersion ="eXperDB-Management-WebConsole-9.6.1.0";
 		
@@ -124,6 +126,24 @@ public class WebConsoleSetting {
 			}
 		}	
 		
+		/* 전송설정 사용여부 */
+		System.out.println("데이터 전송 사용여부? (y, n)");
+		
+		strTransferYN = scan.nextLine();
+		strTransferYN = strTransferYN.toUpperCase();
+		
+		while (true) {
+			if(strTransferYN.equals("")) {
+				System.out.println("Please enter your transfer setting yn. ");
+				
+				System.out.println("데이터 전송 사용여부? (y, n) :");
+				
+				strTransferYN = scan.nextLine();
+				strTransferYN = strTransferYN.toUpperCase();
+			} else {
+				break;
+			}
+		}	
 		
 		
 		
@@ -177,6 +197,7 @@ public class WebConsoleSetting {
 			System.out.println("Repository database username :" + strDatabaseUsername);
 			System.out.println("Repository database password :" + strDatabasePassword);
 			System.out.println("Repository database 접속정보 :" + strDatabaseUrl);
+			System.out.println("데이터 전송 사용 여부 : " + strTransferYN);
 			System.out.println("#################################################");
 			System.out.println("###################eXperDB-Encrypt##################");
 			System.out.println("eXperDB-Encrypt server.url :" + strEncryptServerUrl);
@@ -192,6 +213,7 @@ public class WebConsoleSetting {
 			System.out.println("Repository database username :" + strDatabaseUsername);
 			System.out.println("Repository database password :" + strDatabasePassword);
 			System.out.println("Repository database 접속정보 :" + strDatabaseUrl);
+			System.out.println("데이터 전송 사용 여부 : " + strTransferYN);
 			System.out.println("#################################################");
 		}
 		
@@ -267,7 +289,7 @@ public class WebConsoleSetting {
 		    prop.setProperty("database.password", "ENC(" + password + ")");
 		    prop.setProperty("lang", strLanguage);
 		    prop.setProperty("version", strVersion);
-		    
+		    prop.setProperty("transfer", strTransferYN);
 
 		    if(strEnctyptYn.equals("Y")){
 		    	prop.setProperty("encrypt.useyn", strEnctyptYn);
