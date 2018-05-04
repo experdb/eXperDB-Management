@@ -183,6 +183,9 @@ public class LoginController {
 				String version = props.get("version").toString();
 				request.getSession().setAttribute("version", version);
 				
+				String transfer = props.get("transfer").toString();
+				request.getSession().setAttribute("transfer", transfer);
+				
 				if(encp_use_yn.equals("Y")){
 					String restIp = props.get("encrypt.server.url").toString();
 					int restPort = Integer.parseInt(props.get("encrypt.server.port").toString());

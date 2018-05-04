@@ -18,7 +18,16 @@ $(window.document).ready(function() {
 	}else{
 		encryptMenu.style.display = 'none';
 	} 
-	
+ 	
+ 	
+	var trnasferMenu = document.getElementById("trnasferMenu");
+ 	if("${sessionScope.transfer}" == "Y"){
+ 		trnasferMenu.style.display = '';
+	}else{
+		trnasferMenu.style.display = 'none';
+	}
+ 	
+ 	
 	$.ajax({
 		url : "/menuAuthorityList.do",
 		data : {},
@@ -328,7 +337,7 @@ function fn_cookie(url) {
 									<li><a href="/selectScheduleHistoryView.do" onClick="fn_cookie('selectScheduleHistoryView')" id="MN000103" target="main"><spring:message code="menu.shedule_execution_history" /></a></li>
 								</ul>
 							</li>
-							<li><a href="#n" id="MN0002"><spring:message code="menu.data_transfer_information" /></a>
+							<li id="trnasferMenu"><a href="#n" id="MN0002"><spring:message code="menu.data_transfer_information" /></a>
 								<ul class="depth_3">
 									<li><a href="/transferSetting.do" onClick="fn_cookie(null)" id="MN000201" target="main"><spring:message code="menu.transfer_server_settings" /></a></li>
 									<li><a href="/connectorRegister.do" onClick="fn_cookie(null)" id="MN000202" target="main"><spring:message code="menu.connector_management" /></a></li>

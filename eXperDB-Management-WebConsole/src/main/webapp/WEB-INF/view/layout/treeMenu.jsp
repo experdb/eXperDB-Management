@@ -59,31 +59,36 @@ $(window.document).ready(function() {
 	});   
    
    	/*Tree Connector 조회*/
-   	$.ajax({
-		async : false,
-		url : "/selectTreeConnectorRegister.do",
-	  	data : {},
-		dataType : "json",
-		type : "post",
-		beforeSend: function(xhr) {
-	        xhr.setRequestHeader("AJAX", true);
-	     },
-		error : function(xhr, status, error) {
-			if(xhr.status == 401) {
-				alert('<spring:message code="message.msg02" />');
-				top.location.href = "/";
-			} else if(xhr.status == 403) {
-				alert('<spring:message code="message.msg03" />');
-				top.location.href = "/";
-			} else {
-				alert("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""));
-			}
-		},
-		success : function(result) {
-			fn_usrMenuAut(result);
-		}
-	});  
-   
+   	if('${sessionScope.transfer}' == 'Y'){
+   	   	$.ajax({
+   			async : false,
+   			url : "/selectTreeConnectorRegister.do",
+   		  	data : {},
+   			dataType : "json",
+   			type : "post",
+   			beforeSend: function(xhr) {
+   		        xhr.setRequestHeader("AJAX", true);
+   		     },
+   			error : function(xhr, status, error) {
+   				if(xhr.status == 401) {
+   					alert('<spring:message code="message.msg02" />');
+   					top.location.href = "/";
+   				} else if(xhr.status == 403) {
+   					alert('<spring:message code="message.msg03" />');
+   					top.location.href = "/";
+   				} else {
+   					alert("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""));
+   				}
+   			},
+   			success : function(result) {
+   				fn_usrMenuAut(result);
+   			}
+   		});  
+   	   
+   	}else{
+   		$('.transferMenu').hide();
+   	}
+
    	/*암호화 조회*/
    	if('${sessionScope.encp_use_yn}' == 'Y'){
    		$.ajax({
@@ -477,7 +482,7 @@ $(window.document).ready(function() {
 				</div>
 			</div>
 				
-			<div id="treeTitle"><img src="../images/ico_lnb_2.png" id="treeImg"><a href="/connectorRegister.do" target="main" onclick="fn_GoLink();"><spring:message code="menu.data_transfer" /></a>
+			<div id="treeTitle" class="transferMenu"><img src="../images/ico_lnb_2.png" id="treeImg"><a href="/connectorRegister.do" target="main" onclick="fn_GoLink();"><spring:message code="menu.data_transfer" /></a>
 					<div id="sidetreecontrol2" style="float: right;">							
 						<a href="?#"><img src="../images/ico_lnb_close.png"></a>
 						<a href="?#"><img src="../images/ico_lnb_open.png"></a>
