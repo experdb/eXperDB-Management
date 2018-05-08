@@ -21,15 +21,15 @@ $(window.document).ready(function() {
 	
 	today.toJSON().slice(0,10).replace(/-/g,'');
 	
-	var encryptServer = document.getElementById("encryptServer");
-	var encryptAgent = document.getElementById("encryptAgent");
+	var encryptDashbaordServer = document.getElementById("encryptDashbaordServer");
+	var encryptDashbaordAgent = document.getElementById("encryptDashbaordAgent");
 	if("${sessionScope.encp_use_yn}" == "Y"){
+		encryptDashbaordServer.style.display = '';
+		encryptDashbaordAgent.style.display = '';
 		fn_serverStatus();
-		encryptServer.style.display = '';
-		encryptAgent.style.display = '';
 	}else{
-		encryptServer.style.display = 'none';
-		encryptAgent.style.display = 'none';
+		encryptDashbaordServer.style.display = 'none';
+		encryptDashbaordAgent.style.display = 'none';
 	} 
 
 });
@@ -490,7 +490,7 @@ function fn_selectSecurityStatistics(today){
 				
 				
 				<!-- eXperDB Encrypt Server 상태 -->
-				<div class="main_server_info" id="encryptServer">
+				<div class="main_server_info" id="encryptDashbaordServer">
 					<p class="tit">eXperDB Encrypt Server <spring:message code="properties.status" /> </p>
 					<div class="inner">
 						<table class="list" style="width: 320px;">
@@ -509,7 +509,7 @@ function fn_selectSecurityStatistics(today){
 				
 				
 				<!-- eXperDB Encrypt Agent 상태 -->
-				<div class="main_server_info" id="encryptAgent">
+				<div class="main_server_info" id="encryptDashbaordAgent">
 					<p class="tit">eXperDB Encrypt Agent <spring:message code="properties.status" /> </p>
 					<div class="inner">
 							<div align="right" id="today"></div>
