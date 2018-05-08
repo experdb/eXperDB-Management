@@ -534,82 +534,86 @@ public class CmmnController {
 			statisticsResult = ssc.selectAuditLogSiteHourForStat(restIp, restPort, strTocken, loginId, entityId, from, to, categoryColumn);
 			statisticsListResult= (List<Map<String, Object>>) statisticsResult.get("list");
 			
-			for(int i=0; i<agentStatusListResult.size(); i++){	
-				agentStatusListResult.get(i).put("encryptSuccessCount", "0");
-				agentStatusListResult.get(i).put("encryptFailCount", "0");
-				agentStatusListResult.get(i).put("decryptSuccessCount", "0");
-				agentStatusListResult.get(i).put("decryptFailCount", "0");
-				agentStatusListResult.get(i).put("sumCount", "0");
-			
-				tResult.add(agentStatusListResult.get(i));
-			}
-		
-			
-			if(statisticsListResult.get(0).get("categoryColumn").equals("-")){	
-				for(int k=0; k<agentList.size(); k++){
-					result.put("resultCode", agentList.get(0).get("resultCode"));
-					result.put("resultMessage", agentList.get(0).get("resultMessage"));
-					
-					agentList.get(k).put("encryptSuccessCount", "0");
-					agentList.get(k).put("encryptFailCount", "0");
-					agentList.get(k).put("decryptSuccessCount", "0");
-					agentList.get(k).put("decryptFailCount", "0");
-					agentList.get(k).put("sumCount", "0");
-					
-					int temp =0;
-					for(int i=0; i<agentStatusListResult.size(); i++){					
-						if(agentList.get(k).get("createName").equals(agentStatusListResult.get(i).get("monitoredName"))){
-							temp ++;
-						}
-					}
-					if(temp == 0){
-						JSONObject addList = new JSONObject();
-						addList.put("monitoredName", agentList.get(k).get("createName"));
-						addList.put("encryptSuccessCount", agentList.get(k).get("encryptSuccessCount"));
-						addList.put("encryptFailCount", agentList.get(k).get("encryptFailCount"));
-						addList.put("decryptSuccessCount", agentList.get(k).get("decryptSuccessCount"));
-						addList.put("decryptFailCount", agentList.get(k).get("decryptFailCount"));
-						addList.put("sumCount", agentList.get(k).get("sumCount"));
-						addList.put("status", "start");
-						tResult.add(addList);
-					}
-				}				
+			if(statisticsListResult.size() == 0){
+				result.put("resultCode", statisticsResult.get("resultCode"));
+				result.put("resultMessage", statisticsResult.get("resultMessage"));
 			}else{
-				for(int k=0; k<agentList.size(); k++){
-					int temp =0;
-					result.put("resultCode", agentList.get(0).get("resultCode"));
-					result.put("resultMessage", agentList.get(0).get("resultMessage"));
-					for(int i =0; i<statisticsListResult.size(); i++){
-						if(agentList.get(k).get("createName").toString().contains(statisticsListResult.get(i).get("categoryColumn").toString())){
-							agentList.get(k).put("encryptSuccessCount", statisticsListResult.get(i).get("encryptSuccessCount"));
-							agentList.get(k).put("encryptFailCount", statisticsListResult.get(i).get("encryptFailCount"));
-							agentList.get(k).put("decryptSuccessCount", statisticsListResult.get(i).get("decryptSuccessCount"));
-							agentList.get(k).put("decryptFailCount", statisticsListResult.get(i).get("decryptFailCount"));
-							agentList.get(k).put("sumCount", statisticsListResult.get(i).get("sumCount"));
-						}
-					}						
-					for(int i=0; i<agentStatusListResult.size(); i++){
-						result.put("resultCode", agentStatusListResult.get(0).get("resultCode"));
-						result.put("resultMessage", agentStatusListResult.get(0).get("resultMessage"));
-						if(agentList.get(k).get("createName").equals(agentStatusListResult.get(i).get("monitoredName"))){
-							temp ++;
-						}
-					}
-					if(temp == 0){
-						JSONObject addList = new JSONObject();
-						addList.put("monitoredName", agentList.get(k).get("createName"));
-						addList.put("encryptSuccessCount", agentList.get(k).get("encryptSuccessCount"));
-						addList.put("encryptFailCount", agentList.get(k).get("encryptFailCount"));
-						addList.put("decryptSuccessCount", agentList.get(k).get("decryptSuccessCount"));
-						addList.put("decryptFailCount", agentList.get(k).get("decryptFailCount"));
-						addList.put("sumCount", agentList.get(k).get("sumCount"));
-						addList.put("status", "start");
-						tResult.add(addList);
-					}
+				for(int i=0; i<agentStatusListResult.size(); i++){	
+					agentStatusListResult.get(i).put("encryptSuccessCount", "0");
+					agentStatusListResult.get(i).put("encryptFailCount", "0");
+					agentStatusListResult.get(i).put("decryptSuccessCount", "0");
+					agentStatusListResult.get(i).put("decryptFailCount", "0");
+					agentStatusListResult.get(i).put("sumCount", "0");
+				
+					tResult.add(agentStatusListResult.get(i));
 				}
-
-			}
 			
+				if(statisticsListResult.get(0).get("categoryColumn").equals("-")){	
+					for(int k=0; k<agentList.size(); k++){
+						result.put("resultCode", agentList.get(0).get("resultCode"));
+						result.put("resultMessage", agentList.get(0).get("resultMessage"));
+						
+						agentList.get(k).put("encryptSuccessCount", "0");
+						agentList.get(k).put("encryptFailCount", "0");
+						agentList.get(k).put("decryptSuccessCount", "0");
+						agentList.get(k).put("decryptFailCount", "0");
+						agentList.get(k).put("sumCount", "0");
+						
+						int temp =0;
+						for(int i=0; i<agentStatusListResult.size(); i++){					
+							if(agentList.get(k).get("createName").equals(agentStatusListResult.get(i).get("monitoredName"))){
+								temp ++;
+							}
+						}
+						if(temp == 0){
+							JSONObject addList = new JSONObject();
+							addList.put("monitoredName", agentList.get(k).get("createName"));
+							addList.put("encryptSuccessCount", agentList.get(k).get("encryptSuccessCount"));
+							addList.put("encryptFailCount", agentList.get(k).get("encryptFailCount"));
+							addList.put("decryptSuccessCount", agentList.get(k).get("decryptSuccessCount"));
+							addList.put("decryptFailCount", agentList.get(k).get("decryptFailCount"));
+							addList.put("sumCount", agentList.get(k).get("sumCount"));
+							addList.put("status", "start");
+							tResult.add(addList);
+						}
+					}				
+				}else{
+					for(int k=0; k<agentList.size(); k++){
+						int temp =0;
+						result.put("resultCode", agentList.get(0).get("resultCode"));
+						result.put("resultMessage", agentList.get(0).get("resultMessage"));
+						for(int i =0; i<statisticsListResult.size(); i++){
+							if(agentList.get(k).get("createName").toString().contains(statisticsListResult.get(i).get("categoryColumn").toString())){
+								agentList.get(k).put("encryptSuccessCount", statisticsListResult.get(i).get("encryptSuccessCount"));
+								agentList.get(k).put("encryptFailCount", statisticsListResult.get(i).get("encryptFailCount"));
+								agentList.get(k).put("decryptSuccessCount", statisticsListResult.get(i).get("decryptSuccessCount"));
+								agentList.get(k).put("decryptFailCount", statisticsListResult.get(i).get("decryptFailCount"));
+								agentList.get(k).put("sumCount", statisticsListResult.get(i).get("sumCount"));
+							}
+						}						
+						for(int i=0; i<agentStatusListResult.size(); i++){
+							result.put("resultCode", agentStatusListResult.get(0).get("resultCode"));
+							result.put("resultMessage", agentStatusListResult.get(0).get("resultMessage"));
+							if(agentList.get(k).get("createName").equals(agentStatusListResult.get(i).get("monitoredName"))){
+								temp ++;
+							}
+						}
+						if(temp == 0){
+							JSONObject addList = new JSONObject();
+							addList.put("monitoredName", agentList.get(k).get("createName"));
+							addList.put("encryptSuccessCount", agentList.get(k).get("encryptSuccessCount"));
+							addList.put("encryptFailCount", agentList.get(k).get("encryptFailCount"));
+							addList.put("decryptSuccessCount", agentList.get(k).get("decryptSuccessCount"));
+							addList.put("decryptFailCount", agentList.get(k).get("decryptFailCount"));
+							addList.put("sumCount", agentList.get(k).get("sumCount"));
+							addList.put("status", "start");
+							tResult.add(addList);
+						}
+					}
+	
+				}
+				
+			}
 			
 			/*for(int k=0; k<agentList.size(); k++){
 				int temp =0;

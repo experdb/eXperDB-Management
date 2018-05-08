@@ -68,17 +68,17 @@ public class ServiceCallTest {
 		String entityId = "";
 		String password = "";
 		
-		loginId = "admin";
+		loginId = "swbyun";
 		password = "experdb12#";
 		//password = "password";
-		entityId = "00000000-0000-0000-0000-000000000001";
+		entityId = "d8c1f0e2-42c2-4ed7-a522-fcf731e86640";
 		
 		//loginId = "testuser";
 		//password = "1234qwer";
 		//entityId = "d06c0acb-ca3a-4324-83ed-71df370acdb3";
 
 
-		String strTocken = "r5DWdylMR8XzbUfmHD9PtHdZWXwVIlt9ODZcRnJ1JYg=";
+		String strTocken = "AEItQbfONOmmrUVAp7nwrGM0pdS9RvWUgAlmLTz+z4Y=";
 
 
 		ServiceCallTest test = new ServiceCallTest();

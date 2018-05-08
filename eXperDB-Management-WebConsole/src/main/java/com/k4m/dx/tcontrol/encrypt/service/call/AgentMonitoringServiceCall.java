@@ -101,10 +101,15 @@ public class AgentMonitoringServiceCall {
 						jsonArray.add(jObj);
 					}							
 				}
-			}else{
-
-			}	
-		} 
+			}
+		}else{
+			JSONObject jObj = new JSONObject();
+			jObj.put("resultCode", resultCode);
+			jObj.put("resultMessage", resultMessage);
+			jsonArray.add(jObj);
+		}
+		
+		
 		return jsonArray;
 	}
 }

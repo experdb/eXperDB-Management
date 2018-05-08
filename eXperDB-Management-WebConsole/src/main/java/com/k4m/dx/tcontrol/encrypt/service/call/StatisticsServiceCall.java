@@ -114,7 +114,9 @@ public class StatisticsServiceCall {
 				
 				result.put("list", jsonArray);
 			}
-		} 
+		}else{	
+			result.put("list", jsonArray);			
+		}
 		
 		result.put("resultCode", resultCode);
 		result.put("resultMessage", resultMessage);

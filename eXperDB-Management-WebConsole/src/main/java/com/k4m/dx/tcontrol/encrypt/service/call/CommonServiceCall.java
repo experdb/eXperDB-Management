@@ -316,14 +316,13 @@ public class CommonServiceCall {
 		String resultCode = (String) resultJson.get("resultCode");
 		String resultMessage = (String) resultJson.get("resultMessage");
 		resultMessage = new String(resultMessage.getBytes("iso-8859-1"),"UTF-8"); 
-		long totalListCount = (long) resultJson.get("totalListCount");
+
 		
 		
 		if(resultCode.equals("0000000000")) {
 			ArrayList list = (ArrayList) resultJson.get("list");
 			
 			//System.out.println("list Size : " + list.size());
-			if(totalListCount > 0) {
 				for(int i=0; i<list.size(); i++) {
 					JSONObject data = (JSONObject) list.get(i);
 					
@@ -343,8 +342,13 @@ public class CommonServiceCall {
 					
 					jsonArray.add(jObj);					
 				}			
-			}
 		}		
+		else{
+			JSONObject jObj = new JSONObject();
+			jObj.put("resultCode", resultCode);
+			jObj.put("resultMessage", resultMessage);
+			jsonArray.add(jObj);		
+		}
 		return jsonArray;
 	}	
 }
