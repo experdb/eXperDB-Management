@@ -34,7 +34,7 @@ function fn_init(){
 		columns : [
 			{data : "idx", columnDefs: [ { searchable: false, orderable: false, targets: 0} ], order: [[ 1, 'asc' ]],  className : "dt-center", defaultContent : ""},
 			{ data : "monitoredName", defaultContent : ""}, 
-			{ data : "status", defaultContent : "", render: function (data, type, full){
+			{ data : "status", defaultContent : "", className : "dt-center", render: function (data, type, full){
 				if(full.status == "start"){
 					var html = '<img src="../images/ico_agent_1.png" alt="" />';
 						return html;
@@ -106,28 +106,29 @@ function fn_refresh(){
 	<div id="contents">
 				<div class="contents_wrap">
 					<div class="contents_tit">
-						<h4>Encrypt <spring:message code="menu.agent_monitoring" /><a href="#n"><img src="../images/ico_tit.png" class="btn_info"/></a></h4>
+						<h4><spring:message code="agent_monitoring.Encrypt_agent"/><a href="#n"><img src="../images/ico_tit.png" class="btn_info"/></a></h4>
 						<div class="infobox"> 
 							<ul>
-				
+								<li><spring:message code="encrypt_help.Encrypt_agent"/></li>
+								<li><spring:message code="help.agent_monitoring_02" /> </li>
 							</ul>
 						</div>
 						<div class="location">
 							<ul>
 								<li>Admin</li>
 								<li><spring:message code="menu.agent_monitoring" /></li>
-								<li class="on">암화화 에이전트</li>
+								<li class="on"><spring:message code="agent_monitoring.Encrypt_agent"/></li>
 							</ul>
 						</div>
 					</div>
 					<div class="contents">
 						<div class="cmm_grp">
 							<div class="btn_type_01">
-								<span class="btn"><button onclick="fn_refresh()">새로고침</button></span>
+								<span class="btn"><button onclick="fn_refresh()"><spring:message code="encrypt_agent.Refresh"/></button></span>
 							</div>
 
 							<div class="overflow_area">
-								<table class="list"  id="monitoring" cellspacing="0" width="100%">
+								<table id="monitoring" class="display" cellspacing="0" width="100%">
 									<caption>Encrypt Agent 모니터링 리스트</caption>
 									<colgroup>
 										<col style="width:5%;" />
@@ -138,7 +139,7 @@ function fn_refresh(){
 										<tr>
 											<th scope="col"><spring:message code="common.no" /></th>
 											<th scope="col">Agent IP</th>
-											<th scope="col">Agent 상태 </th>
+											<th scope="col">Agent <spring:message code="properties.status" /></th>
 										</tr>
 									</thead>
 								</table>

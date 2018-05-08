@@ -369,8 +369,8 @@ function fn_cookie(url) {
 					        </li>
 					        <li><a href="#n" id="MN0007"><spring:message code="menu.agent_monitoring"/></a>
 					        	<ul class="depth_3">
-									<li><a href="/agentMonitoring.do" onClick="fn_cookie(null)" id="MN000701" target="main">관리 에이전트</a></li>	
-									<li><a href="/encryptAgentMonitoring.do" onClick="fn_cookie(null)" id="MN000702" target="main">암호화 에이전트</a></li>								
+									<li><a href="/agentMonitoring.do" onClick="fn_cookie(null)" id="MN000701" target="main"><spring:message code="agent_monitoring.Management_agent"/></a></li>	
+									<li><a href="/encryptAgentMonitoring.do" onClick="fn_cookie(null)" id="MN000702" target="main"><spring:message code="agent_monitoring.Encrypt_agent"/></a></li>								
 								</ul>
 					        </li>
 							<li><a href="/extensionList.do" onClick="fn_cookie(null)" id="MN0008" target="main"><spring:message code="menu.extension_pack_installation_information"/></a></li>
@@ -402,9 +402,9 @@ function fn_cookie(url) {
 									<li><a href="/securityAgentMonitoring.do" target="main"  id="MN0001304" onClick="fn_cookie('securityAgentMonitoring')"><spring:message code="encrypt_agent.Encryption_agent_setting"/></a></li>
 								</ul>
         					</li>
-        					<li><a href="#n" id="MN00014" onClick="fn_cookie(null)">통계</a>
+        					<li><a href="#n" id="MN00014" onClick="fn_cookie(null)"><spring:message code="encrypt_Statistics.Statistics"/></a>
         						<ul class="depth_3">
-        							<li><a href="/securityStatistics.do" target="main" id="MN0001401" onClick="fn_cookie('securityStatistics')">암호화통계</a></li>
+        							<li><a href="/securityStatistics.do" target="main" id="MN0001401" onClick="fn_cookie('securityStatistics')"><spring:message code="encrypt_Statistics.Encrypt_Statistics"/></a></li>
         						</ul>
         					</li>
 						</ul>

@@ -586,7 +586,7 @@ function fn_dateValidation(exe_dt){
 	var today = yyyy +"" + mm + "" + dd;
 	
 	 if(today > exe_dt){
-		alert("현재날짜 이후 날짜를 선택하여야 합니다.");
+		alert('<spring:message code="message.msg213"/>');
 		return false;
 	} 
 	 return true;

@@ -156,17 +156,17 @@ $(window.document).ready(function() {
 <div id="contents">
 	<div class="contents_wrap">
 		<div class="contents_tit">
-			<h4>암호화통계<a href="#n"><img src="../images/ico_tit.png" class="btn_info" /></a></h4>
+			<h4><spring:message code="encrypt_Statistics.Encrypt_Statistics"/><a href="#n"><img src="../images/ico_tit.png" class="btn_info" /></a></h4>
 			<div class="infobox">
 				<ul>
-					<li>암호화통계</li>
+					<li><spring:message code="encrypt_help.Encrypt_Statistics"/></li>
 				</ul>
 			</div>
 			<div class="location">
 				<ul>
 					<li>Encrypt</li>
-					<li>통계</li>
-					<li class="on">암호화통계</li>
+					<li><spring:message code="encrypt_Statistics.Statistics"/></li>
+					<li class="on"><spring:message code="encrypt_Statistics.Encrypt_Statistics"/></li>
 				</ul>
 			</div>
 		</div>
@@ -179,13 +179,13 @@ $(window.document).ready(function() {
 					<table class="write">
 						<caption>검색 조회</caption>
 						<colgroup>
-							<col style="width: 10px;" />
+							<col style="width: 15px;" />
 							<col style="width: 120px;" />
 							</col>
 						</colgroup>
 						<tbody>
 							<tr>
-								<th scope="row" class="t10">조회일자</th>
+								<th scope="row" class="t10"><spring:message code="encrypt_Statistics.Search_Date"/></th>
 								<td>
 									<div class="calendar_area">
 										<a href="#n" class="calendar_btn">달력열기</a> 
@@ -194,16 +194,16 @@ $(window.document).ready(function() {
 								</td>
 							</tr>
 							<tr>
-								<th scope="row" class="t9">조회조건</th>
+								<th scope="row" class="t9"><spring:message code="encrypt_Statistics.Search_Condition"/></th>
 								<td>
 									<select class="select t5" id="categoryColumn">
-										<option value="SITE_ACCESS_ADDRESS">클라이언트 주소</option>
-										<option value="PROFILE_NM">정책 이름</option>										
-										<option value="HOST_NM">호스트 이름</option>
-										<option value="EXTRA_NM">추가 필드</option>
-										<option value="MODULE_INFO">모듈 정보</option>
-										<option value="LOCATION_INFO">DB 컬럼</option>
-										<option value="SERVER_LOGIN_ID">DB 사용자 아이디</option>
+										<option value="SITE_ACCESS_ADDRESS"><spring:message code="encrypt_log_decode.Client_Address"/></option>
+										<option value="PROFILE_NM"><spring:message code="encrypt_policy_management.Policy_Name"/></option>										
+										<option value="HOST_NM"><spring:message code="encrypt_policy_management.Host_Name"/></option>
+										<option value="EXTRA_NM"><spring:message code="encrypt_policy_management.Additional_Fields"/></option>
+										<option value="MODULE_INFO"><spring:message code="encrypt_log_decode.Module_Information"/></option>
+										<option value="LOCATION_INFO"><spring:message code="encrypt_log_decode.Column_Name"/></option>
+										<option value="SERVER_LOGIN_ID">DB <spring:message code="history_management.user" /> <spring:message code="user_management.id" /></option>
 									</select>
 								</td>
 							</tr>
@@ -227,15 +227,15 @@ $(window.document).ready(function() {
 							<thead>
 								<tr>
 									<th scope="col" rowspan="2">Encrypt Agent IP</th>						
-									<th scope="col" colspan="2">암호화</th>
-									<th scope="col" colspan="2">복호화</th>
-									<th scope="col" rowspan="2">합계  </th>						
+									<th scope="col" colspan="2"><spring:message code="encrypt_log_decode.Encryption"/></th>
+									<th scope="col" colspan="2"><spring:message code="encrypt_log_decode.Decryption"/></th>
+									<th scope="col" rowspan="2"><spring:message code="encrypt_Statistics.Sum"/>  </th>						
 								</tr>
 								<tr>
-									<th scope="col">성공</th>
-									<th scope="col">실패</th>
-									<th scope="col">성공</th>
-									<th scope="col">실패</th>
+									<th scope="col"><spring:message code="common.success" /> </th>
+									<th scope="col"><spring:message code="common.failed" /></th>
+									<th scope="col"><spring:message code="common.success" /> </th>
+									<th scope="col"><spring:message code="common.failed" /></th>
 								</tr>
 							</thead>
 							<tbody id="col">

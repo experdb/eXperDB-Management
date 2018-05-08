@@ -631,7 +631,7 @@ function fn_syncUpdate(db_id){
 			}
 		},
 		success : function(result) {
-			alert("데이터베이스 정보를 동기화 하였습니다.");
+			alert('<spring:message code="message.msg212"/>');
 		}
 	});
 }

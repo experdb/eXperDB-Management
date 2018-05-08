@@ -14,11 +14,27 @@ var today = "";
 $(window.document).ready(function() {
 
 	today = new Date();
-	$("#today").text("●"+today.toJSON().slice(0,10).replace(/-/g,'-'));
+	
+	var html ="";
+	html += "<img src='../images/ico_state_09.png' style='margin-right:5px;'>"+today.toJSON().slice(0,10).replace(/-/g,'-');
+	$( "#today" ).append(html);
+	
 	today.toJSON().slice(0,10).replace(/-/g,'');
-	fn_serverStatus();
+	
+	var encryptServer = document.getElementById("encryptServer");
+	var encryptAgent = document.getElementById("encryptAgent");
+	if("${sessionScope.encp_use_yn}" == "Y"){
+		fn_serverStatus();
+		encryptServer.style.display = '';
+		encryptAgent.style.display = '';
+	}else{
+		encryptServer.style.display = 'none';
+		encryptAgent.style.display = 'none';
+	} 
 
 });
+
+
 
 
 function fn_serverStatus(){
@@ -113,6 +129,7 @@ function fn_selectSecurityStatistics(today){
 		}
 	});		
 }
+
 
 </script>
 
@@ -473,15 +490,15 @@ function fn_selectSecurityStatistics(today){
 				
 				
 				<!-- eXperDB Encrypt Server 상태 -->
-				<div class="main_server_info">
-					<p class="tit">eXperDB Encrypt Server 상태</p>
+				<div class="main_server_info" id="encryptServer">
+					<p class="tit">eXperDB Encrypt Server <spring:message code="properties.status" /> </p>
 					<div class="inner">
 						<table class="list" style="width: 320px;">
 							<caption>eXperDB Encrypt Server 상태</caption>
 							<colgroup>
 							</colgroup>
 							<tr>
-								<th>구동상태</th>						
+								<th><spring:message code="common.run_status" /></th>						
 								<th id="encryptServer"></th>
 							</tr>		
 						</table>
@@ -492,8 +509,8 @@ function fn_selectSecurityStatistics(today){
 				
 				
 				<!-- eXperDB Encrypt Agent 상태 -->
-				<div class="main_server_info">
-					<p class="tit">eXperDB Encrypt Agent 상태</p>
+				<div class="main_server_info" id="encryptAgent">
+					<p class="tit">eXperDB Encrypt Agent <spring:message code="properties.status" /> </p>
 					<div class="inner">
 							<div align="right" id="today"></div>
 							<table class="list" border="1">
@@ -511,17 +528,17 @@ function fn_selectSecurityStatistics(today){
 							</colgroup>
 							<thead>
 								<tr>
-									<th scope="col" rowspan="2">Encrypt Agent IP</th>						
-									<th scope="col" colspan="2">암호화</th>
-									<th scope="col" colspan="2">복호화</th>
-									<th scope="col" rowspan="2">합계  </th>
-									<th scope="col" rowspan="2">구동상태</th>								
+									<th scope="col" rowspan="2">Encrypt Agent IP </th>						
+									<th scope="col" colspan="2"><spring:message code="encrypt_log_decode.Encryption"/></th>
+									<th scope="col" colspan="2"><spring:message code="encrypt_log_decode.Decryption"/></th>
+									<th scope="col" rowspan="2"><spring:message code="encrypt_Statistics.Sum"/>  </th>
+									<th scope="col" rowspan="2"><spring:message code="common.run_status" /></th>								
 								</tr>
 								<tr>
-									<th scope="col">성공</th>
-									<th scope="col">실패</th>
-									<th scope="col">성공</th>
-									<th scope="col">실패</th>
+									<th scope="col"><spring:message code="common.success" /></th>
+									<th scope="col"><spring:message code="common.failed" /></th>
+									<th scope="col"><spring:message code="common.success" /></th>
+									<th scope="col"><spring:message code="common.failed" /></th>
 								</tr>
 							</thead>
 							<tbody id="col">
