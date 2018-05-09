@@ -38,7 +38,7 @@
 	 	* Author : 김주영
 	 	**/
 	 	SELECT
-        sum(coalesce(A.master_couble_chk, 0)) as master_couble_chk_cnt
+        count(NULLIF(A.master_couble_chk, 0)) as master_couble_chk_cnt
 		FROM
 		(
 		  SELECT

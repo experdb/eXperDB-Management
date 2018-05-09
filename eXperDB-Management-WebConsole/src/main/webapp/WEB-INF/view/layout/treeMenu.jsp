@@ -59,7 +59,7 @@ $(window.document).ready(function() {
 	});   
    
    	/*Tree Connector 조회*/
-   	if('${sessionScope.transfer}' == 'Y'){
+   
    	   	$.ajax({
    			async : false,
    			url : "/selectTreeConnectorRegister.do",
@@ -84,10 +84,7 @@ $(window.document).ready(function() {
    				fn_usrMenuAut(result);
    			}
    		});  
-   	   
-   	}else{
-   		$('.transferMenu').hide();
-   	}
+
 
    	/*암호화 조회*/
    	if('${sessionScope.encp_use_yn}' == 'Y'){
@@ -218,8 +215,12 @@ $(window.document).ready(function() {
 				}
 			},
 			success : function(result) {
-				GetJsonDataConnector(data, result);
 				Schedule(result);
+		   		if('${sessionScope.transfer}' == 'Y'){ 
+		   			GetJsonDataConnector(data, result);
+		   	   	}else{
+		   	   		$('.transferMenu').hide();
+		   	   	}
 			}
 		})
 	}	

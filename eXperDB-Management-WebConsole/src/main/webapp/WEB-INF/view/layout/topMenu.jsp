@@ -13,10 +13,14 @@ var version = "${sessionScope.version}";
  ******************************************************** */
 $(window.document).ready(function() {
 	var encryptMenu = document.getElementById("encryptMenu");
+	var encryptAgentMenu = document.getElementById("encryptAgentMenu");
+	
  	if("${sessionScope.encp_use_yn}" == "Y"){
 		encryptMenu.style.display = '';
+		encryptAgentMenu.style.display = '';
 	}else{
 		encryptMenu.style.display = 'none';
+		encryptAgentMenu.style.display = 'none';
 	} 
  	
  	
@@ -370,7 +374,7 @@ function fn_cookie(url) {
 					        <li><a href="#n" id="MN0007"><spring:message code="menu.agent_monitoring"/></a>
 					        	<ul class="depth_3">
 									<li><a href="/agentMonitoring.do" onClick="fn_cookie(null)" id="MN000701" target="main"><spring:message code="agent_monitoring.Management_agent"/></a></li>	
-									<li><a href="/encryptAgentMonitoring.do" onClick="fn_cookie(null)" id="MN000702" target="main"><spring:message code="agent_monitoring.Encrypt_agent"/></a></li>								
+									<li id="encryptAgentMenu"><a href="/encryptAgentMonitoring.do" onClick="fn_cookie(null)" id="MN000702" target="main"><spring:message code="agent_monitoring.Encrypt_agent"/></a></li>								
 								</ul>
 					        </li>
 							<li><a href="/extensionList.do" onClick="fn_cookie(null)" id="MN0008" target="main"><spring:message code="menu.extension_pack_installation_information"/></a></li>
