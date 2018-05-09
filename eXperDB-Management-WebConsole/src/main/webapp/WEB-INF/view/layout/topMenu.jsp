@@ -1,5 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags"%>
 
 <%
@@ -16,10 +17,8 @@ $(window.document).ready(function() {
 	var encryptAgentMenu = document.getElementById("encryptAgentMenu");
 	
  	if("${sessionScope.encp_use_yn}" == "Y"){
-		encryptMenu.style.display = '';
 		encryptAgentMenu.style.display = '';
 	}else{
-		encryptMenu.style.display = 'none';
 		encryptAgentMenu.style.display = 'none';
 	} 
  	
@@ -379,9 +378,17 @@ function fn_cookie(url) {
 					        </li>
 							<li><a href="/extensionList.do" onClick="fn_cookie(null)" id="MN0008" target="main"><spring:message code="menu.extension_pack_installation_information"/></a></li>
 						</ul>
-					</li>
+					</li>					
 					
-					<li id="encryptMenu"><a href="#n" onClick="fn_cookie(null)"><span><img src="/images/encrypt.png" alt="ENCRYPT" /></span></a>
+					<c:choose>
+					    <c:when test="${sessionScope.encp_use_yn eq 'Y'}">
+					    	<li id="encryptMenu" ><a href="#n" onClick="fn_cookie(null)"><span><img src="/images/encrypt.png" alt="ENCRYPT" /></span></a>				       	
+					    </c:when>
+					    <c:otherwise>
+					        <li id="encryptMenu" style="display:none;"><a href="#n" onClick="fn_cookie(null)"><span><img src="/images/encrypt.png" alt="ENCRYPT" /></span></a>
+					    </c:otherwise>
+					</c:choose>
+
 						<ul class="depth_2">
 						    <li><a href="#n" id="MN00011" onClick="fn_cookie(null)"><spring:message code="encrypt_policy_management.Policy_Key_Management"/></a>
         						<ul class="depth_3">
