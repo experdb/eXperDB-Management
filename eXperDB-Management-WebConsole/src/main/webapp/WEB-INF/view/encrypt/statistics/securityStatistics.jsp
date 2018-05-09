@@ -211,8 +211,8 @@ $(window.document).ready(function() {
 					</table>
 				</div>
 				
-
-					<table class="list" border="1">
+				<div class="overflow_area" style="height: 370px;">
+					<table class="list">
 							<caption><spring:message code="dashboard.dbms_info" /></caption>
 							<colgroup>
 								<col style="width: 13.5%;" />
@@ -227,8 +227,8 @@ $(window.document).ready(function() {
 							<thead>
 								<tr>
 									<th scope="col" rowspan="2">Encrypt Agent IP</th>						
-									<th scope="col" colspan="2"><spring:message code="encrypt_log_decode.Encryption"/></th>
-									<th scope="col" colspan="2"><spring:message code="encrypt_log_decode.Decryption"/></th>
+									<th scope="col" colspan="2" style="border-bottom: 1px solid #b8c3c6"><spring:message code="encrypt_log_decode.Encryption"/></th>
+									<th scope="col" colspan="2" style="border-bottom: 1px solid #b8c3c6"><spring:message code="encrypt_log_decode.Decryption"/></th>
 									<th scope="col" rowspan="2"><spring:message code="encrypt_Statistics.Sum"/>  </th>						
 								</tr>
 								<tr>
@@ -240,7 +240,8 @@ $(window.document).ready(function() {
 							</thead>
 							<tbody id="col">
 							</tbody>
-						</table>						
+						</table>	
+					</div>					
 			</div>
 				<!-- <div id="chart_div" ></div> -->		
 		</div>
