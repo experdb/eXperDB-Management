@@ -243,6 +243,11 @@
 		        } 
 
 		         var usr_id = userTable.row('.selected').data().usr_id;
+		         		         
+		         if (svr_server.length == 0){
+		        	 alert("<spring:message code='message.msg214'/>");
+		        	 return false;
+		         }
 		         
 		        /* ********************************************************
 		         * 선택된 유저 대한 디비서버권한 조회
