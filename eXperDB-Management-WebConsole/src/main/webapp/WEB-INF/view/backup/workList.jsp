@@ -647,6 +647,7 @@ function fn_deleteWork_dump(scheduleChk, bck_wrk_id_List, wrk_id_List){
  ******************************************************** */
 function selectTab(tab){
 	if(tab == "dump"){
+		getDumpDataList();
 		$("#dumpDataTable").show();
 		$("#dumpDataTable_wrapper").show();
 		$("#rmanDataTable").hide();
@@ -658,6 +659,7 @@ function selectTab(tab){
 		$("#btnRman").hide();
 		$("#btnDump").show();
 	}else{
+		getRmanDataList();
 		$("#rmanDataTable").show();
 		$("#rmanDataTable_wrapper").show();
 		$("#dumpDataTable").hide();
