@@ -50,12 +50,15 @@ $(window.document).ready(function() {
 			
 			pnlNewPasswordView = true;
 			pnlOldPasswordView = false;
+			$("#mstKeyUse").attr('checked', false);
+			
 		}else if(isServerPasswordEmpty == "false" && isServerKeyEmpty == "true") {
 			$("#pnlOldPassword").show();
 			$("#pnlChangePassword").hide();
 			$("#pnlNewPassword").hide();
 			pnlNewPasswordView = false;
-			pnlOldPasswordView = true;			
+			pnlOldPasswordView = true;		
+			$("#mstKeyUse").attr('checked', true);
 		} else {
 			$("#pnlOldPassword").show();
 			$("#pnlChangePassword").show();
@@ -63,9 +66,9 @@ $(window.document).ready(function() {
 			
 			pnlNewPasswordView = true;
 			pnlOldPasswordView = true;
+			$("#mstKeyUse").attr('checked', true);
 		}
 	
-	$("#mstKeyUse").attr('checked', true);
 	$("#mstKeyRenew").attr('checked', true);
 	
 });
