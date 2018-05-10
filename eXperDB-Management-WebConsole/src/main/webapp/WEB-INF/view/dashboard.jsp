@@ -96,35 +96,36 @@ function fn_selectSecurityStatistics(today){
 				alert("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""));
 			}
 		},
-		success : function(data) {		
+		success : function(data) {
+			if(data.list.length != 0){
+				if(data.resultCode == "0000000000"){
+				 	var html ="";
+					for(var i=0; i<data.list.length; i++){
+						html += '<tr>';
+						html += '<td>'+data.list[i].monitoredName+'</td>';
+						html += '<td>'+data.list[i].encryptSuccessCount+'</td>';
+						html += '<td>'+data.list[i].encryptFailCount+'</td>';
+						html += '<td>'+data.list[i].decryptSuccessCount+'</td>';
+						html += '<td>'+data.list[i].decryptFailCount+'</td>';
+						html += '<td>'+data.list[i].sumCount+'</td>';
+						if(data.list[i].status == "start"){
+							html += '<td><img src="../images/ico_agent_1.png" alt="" /></td>';
+						}else{
+							html += '<td><img src="../images/ico_agent_2.png" alt="" /></td>';
+						}
+						html += '</tr>';
 
-			if(data.resultCode == "0000000000"){
-			 	var html ="";
-				for(var i=0; i<data.list.length; i++){
-					html += '<tr>';
-					html += '<td>'+data.list[i].monitoredName+'</td>';
-					html += '<td>'+data.list[i].encryptSuccessCount+'</td>';
-					html += '<td>'+data.list[i].encryptFailCount+'</td>';
-					html += '<td>'+data.list[i].decryptSuccessCount+'</td>';
-					html += '<td>'+data.list[i].decryptFailCount+'</td>';
-					html += '<td>'+data.list[i].sumCount+'</td>';
-					if(data.list[i].status == "start"){
-						html += '<td><img src="../images/ico_agent_1.png" alt="" /></td>';
-					}else{
-						html += '<td><img src="../images/ico_agent_2.png" alt="" /></td>';
-					}
-					html += '</tr>';
-
-					$( "#col" ).html(html);
-				} 
-			}else if(data.resultCode == "8000000002"){
-				alert("<spring:message code='message.msg05' />");
-				location.href="/";
-			}else if(data.resultCode == "8000000003"){
-				alert(data.resultMessage);
-				location.href="/securityKeySet.do";
-			}else{
-				alert(data.resultMessage +"("+data.resultCode+")");
+						$( "#col" ).html(html);
+					} 
+				}else if(data.resultCode == "8000000002"){
+					alert("<spring:message code='message.msg05' />");
+					location.href="/";
+				}else if(data.resultCode == "8000000003"){
+					alert(data.resultMessage);
+					location.href="/securityKeySet.do";
+				}else{
+					alert(data.resultMessage +"("+data.resultCode+")");
+				}
 			}
 		}
 	});		

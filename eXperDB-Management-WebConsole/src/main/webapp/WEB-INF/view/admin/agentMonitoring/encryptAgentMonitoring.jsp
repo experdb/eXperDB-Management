@@ -87,17 +87,19 @@ function fn_refresh(){
 			}
 		},
 		success : function(data) {
-			if(data.resultCode == "0000000000"){
-				table.clear().draw();
-				table.rows.add(data.list).draw();
-			}else if(data.resultCode == "8000000002"){
-				alert("<spring:message code='message.msg05' />");
-				top.location.href = "/";
-			}else if(data.resultCode == "8000000003"){
-				alert(data.resultMessage);
-				location.href = "/securityKeySet.do";
-			}else{
-				alert(data.resultMessage +"("+data.resultCode+")");
+			if(data.list.length != 0){
+				if(data.resultCode == "0000000000"){
+					table.clear().draw();
+					table.rows.add(data.list).draw();
+				}else if(data.resultCode == "8000000002"){
+					alert("<spring:message code='message.msg05' />");
+					top.location.href = "/";
+				}else if(data.resultCode == "8000000003"){
+					alert(data.resultMessage);
+					location.href = "/securityKeySet.do";
+				}else{
+					alert(data.resultMessage +"("+data.resultCode+")");
+				}
 			}
 		}
 	});	

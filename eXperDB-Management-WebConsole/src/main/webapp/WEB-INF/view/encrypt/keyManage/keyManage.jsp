@@ -147,7 +147,7 @@ var table = null;
 				}
 			},
 			success : function(data) {
-				if(data==null){
+				if(data.list.length != 0){
 					table.clear().draw();
 				}else if(data.resultCode == "0000000000"){
 					table.clear().draw();

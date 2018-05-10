@@ -559,6 +559,7 @@ public class EncriptSettingController {
 			String mstKeyRenewPassword = multiRequest.getParameter("mstKeyRenewPassword");
 			String chk = multiRequest.getParameter("chk");
 			String useYN = multiRequest.getParameter("useYN");
+			String initKey = multiRequest.getParameter("initKey");
 			MultipartFile keyFile = multiRequest.getFile("keyFile");	
 			
 			if(chk.equals("true")){
@@ -576,6 +577,7 @@ public class EncriptSettingController {
 			//암호화 키파일 생성
 			System.out.println("키파일생성");
 			EncryptSettingServiceCall essc = new EncryptSettingServiceCall();
+			CommonServiceCall csc = new CommonServiceCall();
 			String masterKey = essc.encMasterkey(mstKeyRenewPassword, loginId, entityId);		
 			System.out.println(masterKey);
 			
@@ -586,13 +588,27 @@ public class EncriptSettingController {
 				encKey = essc.serverMasterKeyDecode(mstKeyRenewPassword, masterKey, loginId, entityId);		
 				System.out.println(mstKeyPassword);
 				System.out.println(encKey);
-				result = essc.changeServerKey(restIp, restPort, strTocken,mstKeyPassword,encKey, loginId, entityId);
+				
+				
+				
+				if(initKey.equals("true")){
+					//서버 시작 후 초기 마스터키등록
+					result = csc.loadServerKey(restIp, restPort, strTocken, encKey, loginId, entityId);
+				}else{
+					//기존 마스터키 변경
+					result = essc.changeServerKey(restIp, restPort, strTocken,mstKeyPassword,encKey, loginId, entityId);
+				}
+
 			//마스터키 파일 사용안함
 			}else{
 				System.out.println("마스터키사용안함");
 				System.out.println(mstKeyPassword);
-				System.out.println(encKey);
-				result = essc.changeServerKey(restIp, restPort, strTocken,mstKeyPassword,mstKeyRenewPassword, loginId, entityId);
+				if(initKey.equals("true")){
+					result = csc.loadServerKey(restIp, restPort, strTocken, mstKeyRenewPassword, loginId, entityId);
+				}else{
+					result = essc.changeServerKey(restIp, restPort, strTocken,mstKeyPassword,mstKeyRenewPassword, loginId, entityId);
+				}
+				
 			}
 		
 			if(result.get("resultCode").equals("0000000000")){

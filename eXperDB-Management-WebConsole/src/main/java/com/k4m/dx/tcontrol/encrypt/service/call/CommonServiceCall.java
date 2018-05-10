@@ -323,6 +323,7 @@ public class CommonServiceCall {
 			ArrayList list = (ArrayList) resultJson.get("list");
 			
 			//System.out.println("list Size : " + list.size());
+			if(list != null){
 				for(int i=0; i<list.size(); i++) {
 					JSONObject data = (JSONObject) list.get(i);
 					
@@ -341,7 +342,8 @@ public class CommonServiceCall {
 					System.out.println("getEntityName : " + new String(entity.getEntityName().toString().getBytes("iso-8859-1"),"UTF-8") );
 					
 					jsonArray.add(jObj);					
-				}			
+				}	
+			}
 		}		
 		else{
 			JSONObject jObj = new JSONObject();

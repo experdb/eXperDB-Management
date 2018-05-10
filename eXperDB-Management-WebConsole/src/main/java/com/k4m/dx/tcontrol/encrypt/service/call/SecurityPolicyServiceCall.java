@@ -106,10 +106,9 @@ public class SecurityPolicyServiceCall {
 					}
 					
 					jsonArray.add(jsonObj);
-				}
-				
-				result.put("list", jsonArray);
+				}	
 			}
+			result.put("list", jsonArray);
 		}
 		result.put("resultCode", resultCode);
 		result.put("resultMessage", resultMessage);

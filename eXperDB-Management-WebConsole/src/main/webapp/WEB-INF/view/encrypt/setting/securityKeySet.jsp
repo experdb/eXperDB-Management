@@ -38,12 +38,14 @@ var pnlOldPasswordView ="";
 var pnlNewPasswordView ="";
 var mstKeyUseChk ="";
 var mstKeyRenewChk ="";
+var initKey="";
 /* ********************************************************
  * 페이지 시작시 함수
  ******************************************************** */
 $(window.document).ready(function() {
 	fn_buttonAut();
 	if(isServerPasswordEmpty == "true") {
+			initKey = true;
 			$("#pnlOldPassword").hide();
 			$("#pnlChangePassword").hide();
 			$("#pnlNewPassword").show();
@@ -53,6 +55,7 @@ $(window.document).ready(function() {
 			$("#mstKeyUse").attr('checked', false);
 			
 		}else if(isServerPasswordEmpty == "false" && isServerKeyEmpty == "true") {
+			initKey = false;
 			$("#pnlOldPassword").show();
 			$("#pnlChangePassword").hide();
 			$("#pnlNewPassword").hide();
@@ -60,6 +63,7 @@ $(window.document).ready(function() {
 			pnlOldPasswordView = true;		
 			$("#mstKeyUse").attr('checked', true);
 		} else {
+			initKey = false;
 			$("#pnlOldPassword").show();
 			$("#pnlChangePassword").show();
 			$("#pnlNewPassword").show();
@@ -178,7 +182,7 @@ function fn_save(){
 		
 			//새로운 마스터키 파일 생성
 			if($("#mstKeyMode").val() == "0000"){
-				fn_newMasterKey("y",chk);
+				fn_newMasterKey("y",chk, initKey);
 			//마스터키 사용안함
 			}else{
 				fn_newMasterKey("n",chk);
@@ -264,7 +268,8 @@ function fn_noKeyFileLoadServerKey(keyPassword){
 	});
 }
 
-function fn_newMasterKey(useYN,chk){
+function fn_newMasterKey(useYN,chk,initKey){
+	
 	var formData = new FormData(); 
 
 	formData.append("useYN", useYN);
@@ -273,6 +278,7 @@ function fn_newMasterKey(useYN,chk){
 	formData.append("keyFile", $("input[name=keyFile]")[0].files[0])
 	formData.append("mstKeyPassword", $("input[name=mstKeyPassword]").val()); 
 	formData.append("mstKeyRenewPassword", $("input[name=mstKeyRenewPassword]").val()); 
+	formData.append("initKey", initKey); 
 	
 	$.ajax({
 		url : "/securityMasterKeySave03.do", 

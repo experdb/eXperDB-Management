@@ -132,8 +132,8 @@ public class KeyManageServiceCall {
 					}
 					System.out.println(bf.toString());
 				}
-				result.put("list", jsonArray);
 			}
+			result.put("list", jsonArray);
 		}
 			result.put("resultCode", resultCode);
 			result.put("resultMessage", resultMessage);
