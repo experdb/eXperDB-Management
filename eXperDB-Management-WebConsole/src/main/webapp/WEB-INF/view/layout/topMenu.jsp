@@ -270,6 +270,21 @@ $(window.document).ready(function() {
 							}
 						}
 					} 
+				 
+				 
+				 if((result[37].mnu_cd == "MN0001401" &&  result[37].read_aut_yn == "N") ){
+	 					document.getElementById("MN00014").style.display = 'none';
+					}else{
+						document.getElementById("MN00014").style.display = '';
+						if(result[i].mnu_cd == "MN0001401"){
+							if(result[i].read_aut_yn == "N"){
+								 document.getElementById("MN0001401").style.display = 'none';
+							}else{
+								 document.getElementById("MN0001401").style.display = '';
+							}
+						}
+					} 
+				 
 			}
 		}
 	});    

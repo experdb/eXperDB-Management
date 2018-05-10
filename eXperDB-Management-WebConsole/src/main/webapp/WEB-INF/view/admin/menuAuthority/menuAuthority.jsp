@@ -131,7 +131,7 @@ $(window.document).ready(function() {
     		},
     		success : function(result) {
   				for(var i = 0; i<result.length; i++){  
-  					if(result[i].mnu_cd != "MN0001" && result[i].mnu_cd != "MN0002" && result[i].mnu_cd != "MN0003" && result[i].mnu_cd != "MN0005" && result[i].mnu_cd != "MN0006" && result[i].mnu_cd != "MN0007" && result[i].mnu_cd != "MN0009" && result[i].mnu_cd != "MN00010" && result[i].mnu_cd != "MN00011" && result[i].mnu_cd != "MN00012" && result[i].mnu_cd != "MN00013"){
+  					if(result[i].mnu_cd != "MN0001" && result[i].mnu_cd != "MN0002" && result[i].mnu_cd != "MN0003" && result[i].mnu_cd != "MN0005" && result[i].mnu_cd != "MN0006" && result[i].mnu_cd != "MN0007" && result[i].mnu_cd != "MN0009" && result[i].mnu_cd != "MN00010" && result[i].mnu_cd != "MN00011" && result[i].mnu_cd != "MN00012" && result[i].mnu_cd != "MN00013"  && result[i].mnu_cd != "MN00014"){
      					//읽기권한
   						if(result[i].read_aut_yn == "Y"){	  									
   							document.getElementById("r_"+result[i].mnu_cd).checked = true;
@@ -196,7 +196,7 @@ $(function() {
 	    		},
 	    		success : function(result) {
       				for(var i = 0; i<result.length; i++){  
-      					if(result[i].mnu_cd != "MN0001" && result[i].mnu_cd != "MN0002" && result[i].mnu_cd != "MN0003" && result[i].mnu_cd != "MN0005" && result[i].mnu_cd != "MN0006" && result[i].mnu_cd != "MN0007" && result[i].mnu_cd != "MN0009" && result[i].mnu_cd != "MN00010" && result[i].mnu_cd != "MN00011" && result[i].mnu_cd != "MN00012" && result[i].mnu_cd != "MN00013"){
+      					if(result[i].mnu_cd != "MN0001" && result[i].mnu_cd != "MN0002" && result[i].mnu_cd != "MN0003" && result[i].mnu_cd != "MN0005" && result[i].mnu_cd != "MN0006" && result[i].mnu_cd != "MN0007" && result[i].mnu_cd != "MN0009" && result[i].mnu_cd != "MN00010" && result[i].mnu_cd != "MN00011" && result[i].mnu_cd != "MN00012" && result[i].mnu_cd != "MN00013" && result[i].mnu_cd != "MN00014"){
       						//읽기권한
 	  						if(result[i].read_aut_yn == "Y"){	  									
 	  							document.getElementById("r_"+result[i].mnu_cd).checked = true;
@@ -362,7 +362,7 @@ $(function() {
 		
 		//Encrypt 선택 전체 체크박스
 		$("#encrypt").click(function() { 
-			var array = new Array("MN0001101","MN0001102","MN0001201","MN0001202","MN0001203","MN0001301","MN0001302","MN0001303","MN0001304");
+			var array = new Array("MN0001101","MN0001102","MN0001201","MN0001202","MN0001203","MN0001301","MN0001302","MN0001303","MN0001304","MN0001401");
 			var datas = userTable.row('.selected').length;
 			 if(datas != 1){
 				 alert("<spring:message code='message.msg165'/>");
@@ -959,11 +959,12 @@ function fn_search(){
 													<input type="hidden"  name="mnu_id" value="34">	
 													<input type="hidden"  name="mnu_id" value="35">	
 													<input type="hidden"  name="mnu_id" value="36">	
+													<input type="hidden"  name="mnu_id" value="38">
 													
 														</td>											
 													</tr>	
 													<tr class="encrypt">
-														<th scope="row" rowspan="9">
+														<th scope="row" rowspan="10">
 															<div class="inp_chk">
 																<input type="checkbox" id="encrypt" name="encrypt"/>
 																<label for="encrypt">Encrypt</label>
@@ -1134,7 +1135,23 @@ function fn_search(){
 																<label for="w_MN0001304"></label>
 															</div>
 														</td>	
-													</tr>								
+													</tr>	
+													<tr class="encrypt">
+														<th scope="row"><spring:message code="encrypt_Statistics.Statistics"/></th>
+														<td><spring:message code="encrypt_Statistics.Encrypt_Statistics"/></td>
+														<td>
+															<div class="inp_chk">
+																<input type="checkbox" id="r_MN0001401" name="r_mnu_nm" />
+																<label for="r_MN0001401"></label>
+															</div>
+														</td>	
+															<td>
+															<div class="inp_chk">
+																<input type="checkbox" id="w_MN0001401" name="w_mnu_nm" />
+																<label for="w_MN0001401"></label>
+															</div>
+														</td>
+													</tr>							
 												</tbody>
 											</table>
 										</div>

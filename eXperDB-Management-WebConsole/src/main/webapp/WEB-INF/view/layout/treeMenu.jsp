@@ -388,9 +388,9 @@ $(window.document).ready(function() {
 			html4 += '<a href="#n"><img src="../images/ico_lnb_3.png" id="treeImg"><div class="tooltip">통계<span class="tooltiptext">통계</span></div></a>';
 			html4 += '</div>';
 			html4 += '<ul class="depth_2">';
-			//if(result.length != 0 && result[10].read_aut_yn == "Y" && result[10].mnu_cd == "MN0001401"){
+			if(result.length != 0 && result[10].read_aut_yn == "Y" && result[10].mnu_cd == "MN0001401"){
 				html4 +='<li class="ico2_4" id="securityStatistics"><a href="/securityStatistics.do" id="securityStatisticsc" onclick=fn_GoLink("securityStatistics"); target="main"><img src="../images/ico_lnb_10.png" id="treeImg">암호화통계 </a></li>';
-			//}
+			}
 			html4 += '</ul>';
 			html4 += '</ul>';
 	    	  
