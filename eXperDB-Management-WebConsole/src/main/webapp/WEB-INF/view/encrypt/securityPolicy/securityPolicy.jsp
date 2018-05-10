@@ -102,8 +102,10 @@ var table = null;
 					alert("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""));
 				}
 			},
-			success : function(data) {	
-				if(data.resultCode == "0000000000"){
+			success : function(data) {
+				if(data==null){
+					table.clear().draw();
+				}else if(data.resultCode == "0000000000"){
 					table.clear().draw();
 					table.rows.add(data.list).draw();
 				}else if(data.resultCode == "8000000002"){
