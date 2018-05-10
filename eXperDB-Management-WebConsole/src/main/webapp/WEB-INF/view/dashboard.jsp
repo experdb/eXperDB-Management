@@ -97,7 +97,6 @@ function fn_selectSecurityStatistics(today){
 			}
 		},
 		success : function(data) {
-			if(data.list.length != 0){
 				if(data.resultCode == "0000000000"){
 				 	var html ="";
 					for(var i=0; i<data.list.length; i++){
@@ -124,9 +123,10 @@ function fn_selectSecurityStatistics(today){
 					alert(data.resultMessage);
 					location.href="/securityKeySet.do";
 				}else{
-					alert(data.resultMessage +"("+data.resultCode+")");
+					if(data.list.length != 0){
+						alert(data.resultMessage +"("+data.resultCode+")");
+					}
 				}
-			}
 		}
 	});		
 }
