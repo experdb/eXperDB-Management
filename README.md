@@ -102,5 +102,5 @@ All rights reserved.
 
 
 ## Community
-* https://www.facebook.com/experdb
+* [eXperDB Facebook Page : https://www.facebook.com/experdb](https://www.facebook.com/experdb)
 * http://cafe.naver.com/psqlmaster
