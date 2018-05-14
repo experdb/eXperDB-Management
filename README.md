@@ -1,5 +1,5 @@
 ## Introduction
-eXperDB-Management is a PostgreSQL integrated operations management tool. Use backup settings and regular scheduling to prepare for system failure, grants access to the system and view the history of backup and access control.
+eXperDB-Management is a PostgreSQL management tool(for efficient operation and management). Use backup settings and periodic scheduling to prepare for system failures, grant access to the system, and view backup and access control history. It also provides data encryption for information protection.
 
 
 ## Features
@@ -12,6 +12,13 @@ eXperDB-Management is a PostgreSQL integrated operations management tool. Use ba
 * Data transmission
   - Real-time data transfer from PostgreSQL to HDFS
 
+  
+## TODO
+* Data Encryption
+  - Data Encryption for Information Protection
+  - Combine separate solutions with eXperDB-Management  
+  - Want to complete it in the first half but there is a possibility of fluctuation.
+  
 
 ## License
 [![LICENSE](https://img.shields.io/badge/LICENSE-GPLv3-ff69b4.svg)](https://github.com/experdb/eXperDB-Management/blob/master/LICENSE)
@@ -90,11 +97,10 @@ Project > Run As > Maven Install --> eXperDB-Management-WebConsole.war
 
 
 ## Copyright
-Copyright (c) 2016-2017, eXperDB Development Team
+Copyright (c) 2016-2018, eXperDB Development Team
 All rights reserved.
 
 
 ## Community
 * https://www.facebook.com/experdb
 * http://cafe.naver.com/psqlmaster
-
