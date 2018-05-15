@@ -13,14 +13,16 @@ eXperDB-Management is a PostgreSQL management tool(for efficient operation and m
   - Schedule for tasks that need to be done on a regular basis
 * Data transmission
   - Real-time data transfer from PostgreSQL to HDFS
-
-  
-## TODO
 * Data Encryption
   - Data Encryption for Information Protection
-  - Combine separate solutions with eXperDB-Management  
-  - Want to complete it in the first half but there is a possibility of fluctuation.
-  
+* Multiple Languages Support
+  - Korean, English
+
+<!--  
+## TODO
+* 
+-->
+
 
 ## License
 [![LICENSE](https://img.shields.io/badge/LICENSE-GPLv3-ff69b4.svg)](https://github.com/experdb/eXperDB-Management/blob/master/LICENSE)
