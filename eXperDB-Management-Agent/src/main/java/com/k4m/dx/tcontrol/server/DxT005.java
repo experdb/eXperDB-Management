@@ -210,7 +210,7 @@ public class DxT005 extends SocketCtl {
 							// 스캐줄 이력 update
 							service.updateT_WRKEXE_G(endVO);
 
-							if (strNXT_EXD_YN.equals("y")) {
+							if (strNXT_EXD_YN.toLowerCase().equals("y")) {
 								continue;
 							} else {
 								break;
@@ -263,7 +263,7 @@ public class DxT005 extends SocketCtl {
 
 					service.updateT_WRKEXE_G(endVO);
 
-					if (strNXT_EXD_YN.equals("y")) {
+					if (strNXT_EXD_YN.toLowerCase().equals("y")) {
 						continue;
 					} else {
 						break;
