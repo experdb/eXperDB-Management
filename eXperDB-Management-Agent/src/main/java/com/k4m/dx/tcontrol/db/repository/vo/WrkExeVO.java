@@ -22,7 +22,7 @@ public class WrkExeVO {
 	private String EXE_RSLT_CD;
 	private String BCK_OPT_CD;
 	private int TLI;
-	private int FILE_SZ;
+	private long FILE_SZ;
 	private int DB_ID;
 	private String BCK_FILE_PTH;
 	private String FRST_REGR_ID;
@@ -129,10 +129,10 @@ public class WrkExeVO {
 	public void setTLI(int tLI) {
 		TLI = tLI;
 	}
-	public int getFILE_SZ() {
+	public long getFILE_SZ() {
 		return FILE_SZ;
 	}
-	public void setFILE_SZ(int fILE_SZ) {
+	public void setFILE_SZ(long fILE_SZ) {
 		FILE_SZ = fILE_SZ;
 	}
 	public int getDB_ID() {

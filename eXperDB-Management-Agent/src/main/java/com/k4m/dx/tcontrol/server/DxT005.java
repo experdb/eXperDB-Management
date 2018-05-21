@@ -226,7 +226,7 @@ public class DxT005 extends SocketCtl {
 					WrkExeVO endVO = new WrkExeVO();
 					endVO.setEXE_RSLT_CD(strResultCode);
 					endVO.setEXE_SN(intSeq);
-					endVO.setFILE_SZ(Integer.parseInt(strFileSize));
+					endVO.setFILE_SZ(Long.parseLong(strFileSize));
 					endVO.setBCK_FILENM(strFileName);
 					endVO.setRSLT_MSG(retVal + " " + strResultMessge);
 
