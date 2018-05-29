@@ -253,18 +253,23 @@ public class DbServerManagerDAO extends EgovAbstractMapper{
 		//3-1 백업작업ID 조회
 		sl = (List<Map<String, Object>>) list("dbserverManagerSql.selectBckWrkId",db_svr_id);
 		
-		List<String> ids = new ArrayList<String>(); 
 		HashMap<String , Object> paramvalue = new HashMap<String, Object>();
+		List<String> ids = new ArrayList<String>(); 
+		
 		
 		for(int i=0; i<sl.size(); i++){
-			ids.add(sl.get(i).toString()); 
+			ids.add(sl.get(i).get("bck_wrk_id").toString()); 
 		}
-		paramvalue.put("bck_wrk_id", ids);
 		
-		//3-2 백업오브젝트내역 삭제
-		delete("dbserverManagerSql.deleteBckObjHistory", paramvalue);		
-		//3-2 백업옵션정보 삭제
-		delete("dbserverManagerSql.deleteBckOptInfo", paramvalue);		
+		if(ids.size() != 0 ){
+			paramvalue.put("bck_wrk_id", ids);
+			
+			//3-2 백업오브젝트내역 삭제
+			delete("dbserverManagerSql.deleteBckObjHistory", paramvalue);		
+			//3-2 백업옵션정보 삭제
+			delete("dbserverManagerSql.deleteBckOptInfo", paramvalue);		
+		}
+	
 	}
 
 	// 4. 스케줄 삭제
@@ -277,16 +282,18 @@ public class DbServerManagerDAO extends EgovAbstractMapper{
 		HashMap<String , Object> paramvalue = new HashMap<String, Object>();
 		
 		for(int i=0; i<sl.size(); i++){
-			ids.add(sl.get(i).toString()); 
+			ids.add(sl.get(i).get("scd_id").toString()); 
 		}
-		paramvalue.put("bck_wrk_id", ids);
-		
-		//4-2 작업실행로그 삭제
-		delete("dbserverManagerSql.deleteWrkexe", paramvalue);				
-		//4-3 스케줄상세 삭제
-		delete("dbserverManagerSql.deleteScdD", paramvalue);		
-		//4-4 스케줄기본 삭제
-		delete("dbserverManagerSql.deleteScdM", paramvalue);		
+		if(ids.size() != 0 ){
+			paramvalue.put("scd_id", ids);
+			
+			//4-2 작업실행로그 삭제
+			delete("dbserverManagerSql.deleteWrkexe", paramvalue);				
+			//4-3 스케줄상세 삭제
+			delete("dbserverManagerSql.deleteScdD", paramvalue);		
+			//4-4 스케줄기본 삭제
+			delete("dbserverManagerSql.deleteScdM", paramvalue);	
+		}
 	}	
 	
 	

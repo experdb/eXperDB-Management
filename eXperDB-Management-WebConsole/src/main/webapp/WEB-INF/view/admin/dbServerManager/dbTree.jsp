@@ -158,6 +158,11 @@ $(window.document).ready(function() {
 	fn_buttonAut();	
 	fn_init();
 	
+	fn_selectTreeDbServerList();
+});
+
+
+function fn_selectTreeDbServerList(){
   	$.ajax({
 		url : "/selectTreeDbServerList.do",
 		data : {},
@@ -182,7 +187,7 @@ $(window.document).ready(function() {
 			table_dbServer.rows.add(result).draw();
 		}
 	});
-});
+}
 
 function fn_buttonAut(){
 	var wrt_button = document.getElementById("wrt_button"); 
@@ -516,7 +521,7 @@ function fn_dataCompareChcek(svrDbList){
 					alert('<spring:message code="message.msg194"/>');
 				}else{
 					if (confirm('<spring:message code="message.msg206"/>')){
-						return false;
+						//return false;
 						fn_delete(db_svr_id);
 					}else{
 						return false;
@@ -550,7 +555,8 @@ function fn_dataCompareChcek(svrDbList){
 				}
 			},
 			success : function(result) {
-				alert("<spring:message code='message.msg12' />")
+				alert("<spring:message code='message.msg12' />");
+				fn_selectTreeDbServerList();
 			}
 		});
 	}

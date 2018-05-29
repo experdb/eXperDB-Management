@@ -198,39 +198,7 @@ public class CmmnController {
 		return result;
 	}
 	
-	/**
-	 * Tbale 리스트를 조회한다.
-	 * @param WorkVO
-	 * @return resultSet
-	 * @throws Exception
-	 */
-	@SuppressWarnings("unchecked")
-	@RequestMapping(value = "/selectTableList.do")
-	@ResponseBody
-	public Map<String, Object> selectTableList (@ModelAttribute("workVO") WorkVO workVO, HttpServletRequest request) {
-		Map<String, Object> result =new HashMap<String, Object>();
 
-		try {
-			AES256 aes = new AES256(AES256_KEY.ENC_KEY);
-			DbServerVO dbServerVO = backupService.selectDbSvrNm(workVO);
-			JSONObject serverObj = new JSONObject();
-			
-			serverObj.put(ClientProtocolID.SERVER_NAME, dbServerVO.getDb_svr_nm());
-			serverObj.put(ClientProtocolID.SERVER_IP, dbServerVO.getIpadr());
-			serverObj.put(ClientProtocolID.SERVER_PORT, dbServerVO.getPortno());
-			serverObj.put(ClientProtocolID.DATABASE_NAME, dbServerVO.getDft_db_nm());
-			serverObj.put(ClientProtocolID.USER_ID, dbServerVO.getSvr_spr_usr_id());
-			serverObj.put(ClientProtocolID.USER_PWD, aes.aesDecode(dbServerVO.getSvr_spr_scm_pwd()));
-			
-			ClientInfoCmmn cic = new ClientInfoCmmn();
-			result = cic.table_List(serverObj,  String.valueOf(workVO.getUsr_role_nm()));
-			
-			//System.out.println(result);
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-		return result;
-	}
 	
 	/**
 	 * Object 리스트를 조회한다.

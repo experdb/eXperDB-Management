@@ -11,9 +11,6 @@ import org.json.simple.JSONObject;
 
 public class ClientInfoCmmn {
 
-	String Ip = "222.110.153.162";
-	int port = 9001;
-
 	// 1. 서버 연결 테스트 (serverConn)
 	public Map<String, Object> DbserverConn(JSONObject serverObj, String IP, int PORT) {
 
@@ -84,49 +81,6 @@ public class ClientInfoCmmn {
 		return result;
 	}
 
-	// 3. 테이블 리스트 (tableList)
-	@SuppressWarnings({ "unchecked", "rawtypes" })
-	public JSONObject table_List(JSONObject serverObj, String strSchema) {
-
-		JSONArray jsonArray = new JSONArray(); // 객체를 담기위해 JSONArray 선언.
-		JSONObject result = new JSONObject();
-
-		List<Object> selectList = null;
-
-		try {
-			JSONObject objList;
-
-			ClientAdapter CA = new ClientAdapter(Ip, port);
-			CA.open();
-
-			objList = CA.dxT002(ClientTranCodeType.DxT002, serverObj, strSchema);
-
-			String strErrMsg = (String) objList.get(ClientProtocolID.ERR_MSG);
-			String strDxExCode = (String) objList.get(ClientProtocolID.DX_EX_CODE);
-
-			selectList = (ArrayList<Object>) objList.get(ClientProtocolID.RESULT_DATA);
-
-			for (int i = 0; i < selectList.size(); i++) {
-				JSONObject jsonObj = new JSONObject();
-				Object obj = selectList.get(i);
-				HashMap hp = (HashMap) obj;
-				String table_schema = (String) hp.get("table_schema");
-				String table_name = (String) hp.get("table_name");
-
-				jsonObj.put("schema", table_schema);
-				jsonObj.put("name", table_name);
-				jsonArray.add(jsonObj);
-
-			}
-			result.put("data", jsonArray);
-
-			CA.close();
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-		return result;
-	}
-
 	// 5. 백업실행
 	public void db_backup(List<Map<String, Object>> resultWork, ArrayList<String> CMD, String IP, int PORT, ArrayList<String> BCKNM, int db_svr_ipadr_id) {
 		try {
@@ -167,6 +121,7 @@ public class ClientInfoCmmn {
 				// 백업명령 실행후,
 				// [pg_rman validate -B 백업경로] 명령어 실행해줘여함
 				// [pg_rman validate -B 백업경로] 정합성 체크하는 명령어, 안할실 복구불가능
+				// rman은 두번 실행되기때문에 두번째 실행시, LOG_YN=N으로 해주면서, 업데이트 및 이력이 남지않도록한다 
 				if (resultWork.get(i).get("bck_bsn_dscd").equals("TC000201")) {
 					System.out.println("▶▶▶ RMAN Validataion 시작");
 					j++;

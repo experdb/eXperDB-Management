@@ -559,7 +559,7 @@
      </select>		
      
      
-     <delete id="deleteBckObjHistory" parameterType="int">
+     <delete id="deleteBckObjHistory" parameterType="HashMap">
 		/**
 	 	*  Query ID : deleteBckObjHistory
 	 	* Description : 백업오브젝트내역 삭제
@@ -573,7 +573,7 @@
 	   </foreach>
 	</delete>
 	
-	<delete id="deleteBckOptInfo" parameterType="int">
+	<delete id="deleteBckOptInfo" parameterType="HashMap">
 		/**
 	 	*  Query ID : deleteBckOptInfo
 	 	* Description : 백업옵션정보 삭제
@@ -603,7 +603,7 @@
      </select>	
 
      
-     <delete id="deleteWrkexe" parameterType="int">
+     <delete id="deleteWrkexe" parameterType="HashMap">
 		/**
 	 	*  Query ID : deleteWrkexe
 	 	* Description : 작업실행로그
@@ -618,7 +618,7 @@
 	</delete>
 	
 	
-	<delete id="deleteScdD" parameterType="int">
+	<delete id="deleteScdD" parameterType="HashMap">
 		/**
 	 	*  Query ID : deleteScdD
 	 	* Description : 스케줄 디테일 삭제
@@ -633,7 +633,7 @@
 	</delete>
 	
 	
-	<delete id="deleteScdM" parameterType="int">
+	<delete id="deleteScdM" parameterType="HashMap">
 		/**
 	 	*  Query ID : deleteScdM
 	 	* Description : 스케줄기본 삭제
@@ -648,7 +648,7 @@
 	</delete>
 	
 	
-	<delete id="deleteBckWrkcng" parameterType="int">
+	<delete id="deleteBckWrkcng" parameterType="HashMap">
 		/**
 	 	*  Query ID : deleteBckWrkcng
 	 	* Description : 백업작업설정정보 삭제
@@ -713,7 +713,7 @@
 	 	* Author : 변승우
 	 	**/	
 	 	DELETE 
-	 				FROM T_DBSVR_IS
+	 				FROM T_DBSVR_I
 		WHERE DB_SVR_ID = #{db_svr_id}
 	</delete>
 	
