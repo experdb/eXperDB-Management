@@ -60,7 +60,7 @@ public class RunCommandExec extends Thread {
 
 		try{
 			//proc = Runtime.getRuntime().exec(cmd);
-			proc = Runtime.getRuntime().exec(new String[]{"/bin/sh", "-c", "--login "+cmd}); 
+			proc = Runtime.getRuntime().exec(new String[]{"/bin/sh", "-c", cmd}); 
 			try (InputStream psout = proc.getInputStream()) {
 	            this.copy_old(psout, System.out);
 				//this.copy(psout);
@@ -101,7 +101,7 @@ public class RunCommandExec extends Thread {
 		String strScanner = "";
 		try{
 			//proc = Runtime.getRuntime().exec(cmd);
-			proc = Runtime.getRuntime().exec(new String[]{"/bin/sh", "-c", "--login " + cmd}); 
+			proc = Runtime.getRuntime().exec(new String[]{"/bin/sh", "-c", cmd}); 
 			
 			BufferedReader br = new BufferedReader(new InputStreamReader(proc.getInputStream()));
 			
@@ -141,7 +141,7 @@ public class RunCommandExec extends Thread {
 		String strResultErrInfo = "";
 		try{
 			//proc = Runtime.getRuntime().exec(cmd);
-			proc = Runtime.getRuntime().exec(new String[]{"/bin/sh", "-c", "--login " + cmd}); 
+			proc = Runtime.getRuntime().exec(new String[]{"/bin/sh", "-c", cmd}); 
 			proc.waitFor ();
 			
 			socketLogger.info("proc.exitValue() --> " + proc.exitValue());
