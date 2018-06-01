@@ -44,6 +44,7 @@
 	function fn_init() {
 		tableList = $('#tableList').DataTable({
 			scrollY : "200px",
+			scrollX : true,
 			searching : false,
 			paging: false,
 			bSort: false,
@@ -54,8 +55,13 @@
 			 ],'select': {'style': 'multi'}
 		});
 		
+		tableList.tables().header().to$().find('th:eq(0)').css('min-width', '50px');
+		tableList.tables().header().to$().find('th:eq(1)').css('min-width', '50px');
+		tableList.tables().header().to$().find('th:eq(2)').css('min-width', '50px');
+		
 		connectorTableList = $('#connectorTableList').DataTable({
 			scrollY : "200px",
+			scrollX : true,
 			searching : false,
 			paging: false,
 			bSort: false,
@@ -65,6 +71,11 @@
 			{ data : "table_name",  defaultContent : ""}, 
 			 ],'select': {'style': 'multi'}
 		});
+		
+		connectorTableList.tables().header().to$().find('th:eq(0)').css('min-width', '80px');
+		connectorTableList.tables().header().to$().find('th:eq(1)').css('min-width', '80px');
+		connectorTableList.tables().header().to$().find('th:eq(2)').css('min-width', '80px');
+		$(window).trigger('resize');
 	}
 
 	
@@ -426,9 +437,9 @@
 					<table id="tableList" class="display" cellspacing="0" width="100%">
 						<thead>
 							<tr>
-								<th></th>
-								<th><spring:message code="data_transfer.schema"/></th>
-								<th><spring:message code="data_transfer.tableNm"/></th>
+								<th width="50"></th>
+								<th width="50"><spring:message code="data_transfer.schema"/></th>
+								<th width="50"><spring:message code="data_transfer.tableNm"/></th>
 							</tr>
 						</thead>
 					</table>
@@ -440,9 +451,9 @@
 					<table id="connectorTableList" class="display" cellspacing="0" width="100%">
 						<thead>
 							<tr>
-								<th></th>
-								<th><spring:message code="data_transfer.schema"/></th>
-								<th><spring:message code="data_transfer.tableNm"/></th>
+								<th width="80"></th>
+								<th width="80"><spring:message code="data_transfer.schema"/></th>
+								<th width="80"><spring:message code="data_transfer.tableNm"/></th>
 							</tr>	
 							</thead>			
 					</table>

@@ -15,7 +15,7 @@ public class WorkLogVO {
 	private String bck_opt_cd;
 	private String bck_opt_cd_nm;
 	private int tli;
-	private int file_sz;
+	private long file_sz;
 	private int db_id;
 	private String db_nm;
 	private String bck_file_pth;
@@ -160,12 +160,12 @@ public class WorkLogVO {
 	public void setTli(int tli) {
 		this.tli = tli;
 	}
-
-	public int getFile_sz() {
+	
+	public long getFile_sz() {
 		return file_sz;
 	}
 
-	public void setFile_sz(int file_sz) {
+	public void setFile_sz(long file_sz) {
 		this.file_sz = file_sz;
 	}
 

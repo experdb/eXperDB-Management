@@ -884,4 +884,61 @@ public class SecurityPolicyServiceCall {
 		return jsonArray;
 	}
 	
+	
+	
+	/**
+	 * 공통코드리스트
+	 * @param restIp
+	 * @param restPort
+	 * @param strTocken
+	 * @return 
+	 * @throws Exception
+	 */
+	public JSONArray selectSysCodeList(String restIp, int restPort, String strTocken, String loginId, String entityId) throws Exception {
+		JSONArray jsonArray = new JSONArray();
+		EncryptCommonService api = new EncryptCommonService(restIp, restPort);
+
+		String strService = SystemCode.ServiceName.SYSTEM_SERVICE;
+		String strCommand = SystemCode.ServiceCommand.SELECTSYSCODELIST;
+	
+		HashMap body = new HashMap();
+		//body.put(TypeUtility.getJustClassName(param.getClass()), param.toJSONString());
+
+		String parameters = TypeUtility.makeRequestBody(body);
+		
+		HashMap header = new HashMap();
+		header.put(SystemCode.FieldName.LOGIN_ID, loginId);
+		header.put(SystemCode.FieldName.ENTITY_UID, entityId);
+		header.put(SystemCode.FieldName.TOKEN_VALUE, strTocken);
+
+		JSONObject resultJson = api.callService(strService, strCommand, header, parameters.toString());
+		
+		Iterator<?> iter = resultJson.entrySet().iterator();
+		while (iter.hasNext()) {
+			Map.Entry entry = (Map.Entry) iter.next();
+
+			System.out.println(String.valueOf(entry.getKey()) + " = " + String.valueOf(entry.getValue()));
+		}
+		
+		String resultCode = (String) resultJson.get("resultCode");
+		String resultMessage = (String) resultJson.get("resultMessage");
+		long totalListCount = (long) resultJson.get("totalListCount");
+		
+		if(resultCode.equals("0000000000")) {
+			ArrayList list = (ArrayList) resultJson.get("list");
+			if(totalListCount > 0) {
+				for(int i=0; i<list.size(); i++) {
+					JSONObject data = (JSONObject) list.get(i);
+					StringBuffer bf = new StringBuffer();
+					JSONObject jsonObj = new JSONObject();
+					
+					if(data.get("sysStatusCode").equals("SS50") && data.get("categoryKey").equals("CIPHER_ALGORITHM")){
+						jsonObj.put("sysCodeName", data.get("sysCodeName"));
+						jsonArray.add(jsonObj);
+					}
+				}
+			}
+		}
+		return jsonArray;
+	}
 }
