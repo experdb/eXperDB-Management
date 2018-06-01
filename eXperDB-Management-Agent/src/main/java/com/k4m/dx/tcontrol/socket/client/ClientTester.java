@@ -64,8 +64,8 @@ public class ClientTester {
 		ClientTester clientTester = new ClientTester();
 		
 		String Ip = "222.110.153.162";
-		Ip = "222.110.153.251";
-		 	Ip = "127.0.0.1";
+		//Ip = "222.110.153.251";
+		 //	Ip = "127.0.0.1";
 		// Ip = "222.110.153.231";
 		
 		//Ip = "222.110.153.204";
@@ -73,11 +73,11 @@ public class ClientTester {
 		//port = 5869;
 		try {
 			
-			clientTester.dxT001(Ip, port);
+			//clientTester.dxT001(Ip, port);
 			//clientTester.dxT002(Ip, port);
 			//clientTester.dxT003(Ip, port);
 			//clientTester.dxT004(Ip, port);
-			//clientTester.dxT005(Ip, port);
+			clientTester.dxT005(Ip, port);
 			//clientTester.dxT006_C(Ip, port);
 //			clientTester.dxT006_R(Ip, port);
 			//clientTester.dxT006_U(Ip, port);
@@ -304,6 +304,7 @@ public class ClientTester {
 					, "pg_rman validate -B /home/experdb/pgdata/bakup/rman"
 					, "pg_rman backup  --host=222.110.153.251 --port=5433 --username=experdb --no-password --pgdata=/home/experdb/pgdata/data --backup-path=/home/experdb/pgdata/bakup/rman --backup-mode=full -A $PGDATA/pg_xlog/archive_status/ --keep-data-generations=0 --keep-data-days=0 --keep-arclog-files=0 --keep-arclog-days=0 --keep-srvlog-files=0 --keep-srvlog-days=0"
 					,  "pg_rman backup  --host=222.110.153.251 --port=5433 --username=experdb --no-password --pgdata=/home/experdb/pgdata/data --backup-path=/home/experdb/pgdata/bakup/rman --backup-mode=full -A $PGDATA/pg_xlog/archive_status/ --keep-data-generations=0 --keep-data-days=0 --keep-arclog-files=0 --keep-arclog-days=0 --keep-srvlog-files=0 --keep-srvlog-days=0"
+					, "pg_rman backup --port=6432 --username=experdba --no-password --pgdata=/home/devel/experdb/data --backup-path=/home/devel/experdb/backup/rman --backup-mode=full -A $PGDATA/pg_xlog/archive_status/ --keep-data-generations=1 --keep-data-days=2 --keep-arclog-files=2 --keep-arclog-days=2 --keep-srvlog-files=0 --keep-srvlog-days=1"
 
 				};
 			
@@ -372,16 +373,30 @@ public class ClientTester {
 			objJob_04.put(ClientProtocolID.BCK_FILE_PTH, "1");
 			objJob_04.put(ClientProtocolID.BCK_FILENM, "1");
 			objJob_04.put(ClientProtocolID.LOG_YN, "Y");
-			
+
+			JSONObject objJob_05 = new JSONObject();
+			objJob_05.put(ClientProtocolID.SCD_ID, "1"); //스캐쥴ID
+			objJob_05.put(ClientProtocolID.WORK_ID, "1"); //작업ID
+			objJob_05.put(ClientProtocolID.EXD_ORD, "1"); //실행순서
+			objJob_05.put(ClientProtocolID.NXT_EXD_YN, "1"); //다음실행여부
+			objJob_05.put(ClientProtocolID.REQ_CMD, CMD[5]);
+			objJob_05.put(ClientProtocolID.BCK_OPT_CD, "1");
+			objJob_05.put(ClientProtocolID.BCK_BSN_DSCD, "TC000201");
+			objJob_05.put(ClientProtocolID.DB_SVR_IPADR_ID, "1");
+
+			objJob_05.put(ClientProtocolID.DB_ID, "1");
+			objJob_05.put(ClientProtocolID.BCK_FILE_PTH, "1");
+			objJob_05.put(ClientProtocolID.BCK_FILENM, "1");
+			objJob_05.put(ClientProtocolID.LOG_YN, "Y");
 			//arrCmd.add(0, objJob_01);
 			//arrCmd.add(1, objJob_02);
-			arrCmd.add(0, objJob_04);
+			arrCmd.add(0, objJob_05);
 
 			JSONObject serverObj = new JSONObject();
 			
-			serverObj.put(ClientProtocolID.SERVER_NAME, "222.110.153.251");
-			serverObj.put(ClientProtocolID.SERVER_IP, "222.110.153.251");
-			serverObj.put(ClientProtocolID.SERVER_PORT, "5432");
+			serverObj.put(ClientProtocolID.SERVER_NAME, "222.110.153.162");
+			serverObj.put(ClientProtocolID.SERVER_IP, "222.110.153.162");
+			serverObj.put(ClientProtocolID.SERVER_PORT, "6432");
 			
 			reqJObj.put(ClientProtocolID.DX_EX_CODE, ClientTranCodeType.DxT005);
 			reqJObj.put(ClientProtocolID.SERVER_INFO, serverObj);

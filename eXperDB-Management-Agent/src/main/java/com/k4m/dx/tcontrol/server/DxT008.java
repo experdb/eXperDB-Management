@@ -176,7 +176,7 @@ public class DxT008 extends SocketCtl {
 
 			sessDB = sqlSessionFactory.openSession(connDB);
 
-			String strAuditUseYn = (String) acInfoObj.get(ProtocolID.AUDIT_USE_YN);
+			//String strAuditUseYn = (String) acInfoObj.get(ProtocolID.AUDIT_USE_YN);
 			String strAuditLog = (String) acInfoObj.get(ProtocolID.AUDIT_LOG);
 			String strAuditLevel = (String) acInfoObj.get(ProtocolID.AUDIT_LEVEL);
 			String strAuditCatalog = (String) acInfoObj.get(ProtocolID.AUDIT_CATALOG);
@@ -185,8 +185,8 @@ public class DxT008 extends SocketCtl {
 			String strAuditStatementOnce = (String) acInfoObj.get(ProtocolID.AUDIT_STATEMENT_ONCE);
 			String strAuditRole = (String) acInfoObj.get(ProtocolID.AUDIT_ROLE);
 
-			if (strAuditUseYn.equals("N"))
-				strAuditLog = "";
+			//if (strAuditUseYn.equals("N"))
+			//	strAuditLog = "";
 
 			// 1. auditLog - read, write, function, role, ddl, misc
 			HashMap<String, String> hpLog = new HashMap<String, String>();

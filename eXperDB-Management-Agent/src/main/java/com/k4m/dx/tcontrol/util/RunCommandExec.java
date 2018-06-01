@@ -166,11 +166,14 @@ public class RunCommandExec extends Thread {
 				strReturnVal = "failed";
 			} else {
 				BufferedReader out = new BufferedReader ( new InputStreamReader ( proc.getInputStream() ) );
+
 				while ( out.ready() ) {
 					strResult += out.readLine();
+					
+					socketLogger.info("out.ready() --> " + strResult);
 				}
 				out.close();
-				strReturnVal = "success";
+				strReturnVal = "success " + strResult;
 			}
 			//socketLogger.info("@@@@@@@@@ scanner end" );
 
