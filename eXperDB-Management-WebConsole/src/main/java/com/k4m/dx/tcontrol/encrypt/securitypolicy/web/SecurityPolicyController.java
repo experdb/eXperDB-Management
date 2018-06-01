@@ -235,7 +235,6 @@ public class SecurityPolicyController {
 	@RequestMapping(value = "/popup/securityPolicyRegForm.do")
 	public ModelAndView securityPolicyRegForm(@ModelAttribute("historyVO") HistoryVO historyVO, HttpServletRequest request) {
 		ModelAndView mv = new ModelAndView();
-		CommonServiceCall csc= new CommonServiceCall();
 		SecurityPolicyServiceCall sic = new SecurityPolicyServiceCall();
 		KeyManageServiceCall kmsc= new KeyManageServiceCall();
 		JSONArray cipherAlgorithmCode = new JSONArray();
@@ -262,7 +261,7 @@ public class SecurityPolicyController {
 			binUid = kmsc.selectCryptoKeyList(restIp, restPort, strTocken,loginId,entityId);
 			mv.addObject("binUid",binUid);
 			/*암호화알고리즘*/
-			cipherAlgorithmCode = csc.selectSysCodeListExper(restIp, restPort, strTocken,loginId,entityId);
+			cipherAlgorithmCode = sic.selectSysCodeList(restIp, restPort, strTocken,loginId,entityId);
 			mv.addObject("cipherAlgorithmCode",cipherAlgorithmCode);
 			/*초기벡터*/
 			initialVectorTypeCode = sic.selectParamSysCodeListVector(restIp, restPort, strTocken,loginId,entityId);
@@ -434,6 +433,9 @@ public class SecurityPolicyController {
 				if(getCipherAlgorithmCode.equals("LPE-NUM")){
 					cipherAlgorithmCode = "CALN";
 				}
+				if(getCipherAlgorithmCode.equals("SHA-256")){
+					cipherAlgorithmCode = "CAS2";
+				}
 				
 				p.setCipherAlgorithmCode(cipherAlgorithmCode);
 				
@@ -475,15 +477,19 @@ public class SecurityPolicyController {
 				String entityId = (String)session.getAttribute("ectityUid");
 				
 				cryptoKey = sic.selectCryptoKeySymmetricList(restIp, restPort, strTocken, loginId, entityId);
-				String getbinuid = jsrow.get("binUid").toString(); //키이름
-				String binuid = "";
-				for(int j=0; j<cryptoKey.size(); j++){
-					JSONObject data = (JSONObject) cryptoKey.get(j);
-					if(getbinuid.equals(data.get("resourceName"))){
-						binuid=(String) data.get("getBinUid");
+
+				if(jsrow.get("binUid")!=null){
+					String getbinuid = jsrow.get("binUid").toString(); //키이름
+					String binuid = "";
+					for(int j=0; j<cryptoKey.size(); j++){
+						JSONObject data = (JSONObject) cryptoKey.get(j);
+						if(getbinuid.equals(data.get("resourceName"))){
+							binuid=(String) data.get("getBinUid");
+						}
 					}
+					p.setBinUid(binuid);
 				}
-				p.setBinUid(binuid);
+				
 				param2.add(p.toJSONString());
 			}
 
@@ -673,6 +679,9 @@ public class SecurityPolicyController {
 				if(getCipherAlgorithmCode.equals("LPE-NUM")){
 					cipherAlgorithmCode = "CALN";
 				}
+				if(getCipherAlgorithmCode.equals("SHA-256")){
+					cipherAlgorithmCode = "CAS2";
+				}
 				
 				p.setCipherAlgorithmCode(cipherAlgorithmCode);
 				
@@ -715,15 +724,19 @@ public class SecurityPolicyController {
 				String entityId = (String)session.getAttribute("ectityUid");
 				
 				cryptoKey = sic.selectCryptoKeySymmetricList(restIp, restPort, strTocken, loginId, entityId);
-				String getbinuid = jsrow.get("binUid").toString(); //키이름
-				String binuid = "";
-				for(int j=0; j<cryptoKey.size(); j++){
-					JSONObject data = (JSONObject) cryptoKey.get(j);
-					if(getbinuid.equals(data.get("resourceName"))){
-						binuid=(String) data.get("getBinUid");
+				
+				if(jsrow.get("binUid")!=null){
+					String getbinuid = jsrow.get("binUid").toString(); //키이름
+					String binuid = "";
+					for(int j=0; j<cryptoKey.size(); j++){
+						JSONObject data = (JSONObject) cryptoKey.get(j);
+						if(getbinuid.equals(data.get("resourceName"))){
+							binuid=(String) data.get("getBinUid");
+						}
 					}
+					p.setBinUid(binuid);
 				}
-				p.setBinUid(binuid);
+				
 				param2.add(p.toJSONString());
 			}
 

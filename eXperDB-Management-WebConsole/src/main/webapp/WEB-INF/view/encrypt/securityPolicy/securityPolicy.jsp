@@ -103,7 +103,6 @@ var table = null;
 				}
 			},
 			success : function(data) {
-				if(data.list.length != 0){
 					if(data.resultCode == "0000000000"){
 						table.clear().draw();
 						table.rows.add(data.list).draw();
@@ -117,7 +116,6 @@ var table = null;
 						alert(data.resultMessage +"("+data.resultCode+")");
 					}
 				}
-			}
 		});
 	});
 

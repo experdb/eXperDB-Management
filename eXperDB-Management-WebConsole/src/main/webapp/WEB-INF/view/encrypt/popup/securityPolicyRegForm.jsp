@@ -72,9 +72,12 @@ function fn_validation(){
 		length.focus();
 		return false;
 	}
-	if (binUid.value == "" || binUid.value == "undefind" || binUid.value == null) {
-		alert('<spring:message code="encrypt_msg.msg11"/>');
-		return false;
+	
+	if(cipherAlgorithmCode.value!="SHA-256"){
+		if (binUid.value == "" || binUid.value == "undefind" || binUid.value == null) {
+			alert('<spring:message code="encrypt_msg.msg11"/>');
+			return false;
+		}
 	}
 	
 	return true;
