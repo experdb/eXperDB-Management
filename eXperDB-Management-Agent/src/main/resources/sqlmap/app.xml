@@ -144,9 +144,16 @@
 	 	* Description : log Setting - read, write, function, role, ddl, misc
 	 	* Author : 박태혁
 	 	**/
-	 	<![CDATA[
-		ALTER SYSTEM SET pgaudit.log = ${auditLog}
-		]]>
+	 	<choose> 
+		 	<when test="auditLog == ''"> 
+		 	   ALTER SYSTEM SET pgaudit.log = ''
+		 	</when> 
+		 	<otherwise> 
+		 		ALTER SYSTEM SET pgaudit.log = ${auditLog}
+		 	</otherwise> 
+	 	</choose>
+
+		
 	</insert>
 	
 	<insert  id="updatePgAuditLogLevelSetting" parameterType="AuditVO">
@@ -155,9 +162,7 @@
 	 	* Description : log_level Setting - debug, info, notice, warning
 	 	* Author : 박태혁
 	 	**/
-	 	<![CDATA[
 		ALTER SYSTEM SET pgaudit.log_level = ${auditLevel}
-		]]>
 	</insert>
 	
 	<insert  id="updatePgAuditLogCatalogSetting" parameterType="AuditVO">

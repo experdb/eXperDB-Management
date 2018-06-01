@@ -243,6 +243,10 @@ public class DxT007 extends SocketCtl{
 			String strAuditStatementOnce = (String) acInfoObj.get(ProtocolID.AUDIT_STATEMENT_ONCE);
 			String strAuditRole = (String) acInfoObj.get(ProtocolID.AUDIT_ROLE);
 			
+			if(strAuditLog.equals("")) {
+				//socketLogger.info("strAuditLog  ##" + strAuditLog + "$$");
+				strAuditLog = "";
+			}
 			AuditVO vo = new AuditVO();
 			vo.setAuditLog(strAuditLog);
 			vo.setAuditLevel(strAuditLevel);
@@ -252,7 +256,8 @@ public class DxT007 extends SocketCtl{
 			vo.setAuditStatementOnce(strAuditStatementOnce);
 			vo.setAuditRole(strAuditRole);
 			
-			if(strAuditUseYn.equals("N")) strAuditLog = "";
+			//if(strAuditUseYn.equals("N")) strAuditLog = "";
+
 			
 			//1. auditLog - read, write, function, role, ddl, misc
 			sessDB.insert("app.updatePgAuditLogSetting", vo);
