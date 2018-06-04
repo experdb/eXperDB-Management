@@ -33,6 +33,7 @@ import com.k4m.dx.tcontrol.server.DxT022;
 import com.k4m.dx.tcontrol.server.DxT023;
 import com.k4m.dx.tcontrol.server.DxT024;
 import com.k4m.dx.tcontrol.server.DxT025;
+import com.k4m.dx.tcontrol.server.DxT026;
 import com.k4m.dx.tcontrol.socket.ProtocolID;
 import com.k4m.dx.tcontrol.socket.SocketCtl;
 import com.k4m.dx.tcontrol.socket.TranCodeType;
@@ -272,8 +273,15 @@ public class DXTcontrolSocketExecute extends SocketCtl implements Runnable {
 					dxT025.execute(strDX_EX_CODE, jObj);
 
 					break;
+				//install extension pgAudit
+				case TranCodeType.DxT026 :
+							
+						
+						DxT026 dxT026 = new DxT026(client, is, os);
+						dxT026.execute(strDX_EX_CODE, jObj);
+			
+						break;
 				}
-				
 				objSERVER_INFO = null;
 
 			//}

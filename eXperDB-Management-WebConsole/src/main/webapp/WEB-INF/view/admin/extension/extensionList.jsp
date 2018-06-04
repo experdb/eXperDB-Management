@@ -156,6 +156,7 @@ $(function() {
     			}
     		},
     		success : function(result) {
+    			alert(result);
     			table_db.clear().draw();
     			if(result == null){
     				alert("<spring:message code='message.msg05' />");

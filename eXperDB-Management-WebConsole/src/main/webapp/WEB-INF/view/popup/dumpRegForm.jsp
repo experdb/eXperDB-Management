@@ -282,6 +282,18 @@ function valCheck(){
 		alert('<spring:message code="backup_management.bckPath_effective_check"/>');		
 		$("#save_pth").focus();
 		return false;
+	}else if($("#file_fmt_cd").val() == "0000"){
+		alert('파일포멧을 선택해주세요.');		
+		$("#file_fmt_cd").focus();
+		return false;
+	}else if($("#encd_mth_nm").val() == "0000"){
+		alert('인코딩방식을 선택해주세요.');		
+		$("#encd_mth_nm").focus();
+		return false;
+	}else if($("#usr_role_nm").val() == "0000"){
+		alert('RoleName을 선택해주세요');		
+		$("#usr_role_nm").focus();
+		return false;
 	}else{
 		return true;
 	}
@@ -684,7 +696,7 @@ function fn_check() {
 						<th scope="row" class="ico_t2"><spring:message code="backup_management.file_format" /></th>
 						<td>
 							<select name="file_fmt_cd" id="file_fmt_cd" onChange="changeFileFmtCd();" class="select t5">
-								<option value=""><spring:message code="schedule.total" /></option>
+								<option value="0000"><spring:message code="common.choice" /></option>
 								<option value="TC000401">tar</option>
 								<option value="TC000402">plain</option>
 								<option value="TC000403">directory</option>
@@ -694,7 +706,7 @@ function fn_check() {
 						<th scope="row" class="ico_t2"><spring:message code="backup_management.incording_method" /></th>
 						<td>
 							<select name="encd_mth_nm" id="encd_mth_nm" class="select t5">
-								<option value=""><spring:message code="schedule.total" /></option>
+								<option value="0000"><spring:message code="common.choice" /></option>
 								<c:forEach var="result" items="${incodeList}" varStatus="status">
 									<option value="<c:out value="${result.sys_cd}"/>"><c:out value="${result.sys_cd_nm}"/></option>
 								</c:forEach>
@@ -703,7 +715,7 @@ function fn_check() {
 						<th scope="row" class="ico_t2"><spring:message code="backup_management.rolename" /></th>
 						<td>
 							<select name="usr_role_nm" id="usr_role_nm" class="select t4">
-								<option value=""><spring:message code="schedule.total" /></option>
+								<option value="0000"><spring:message code="common.choice" /></option>
 								<c:forEach var="result" items="${roleList.data}" varStatus="status">
 								<option value="<c:out value="${result.rolname}"/>"><c:out value="${result.rolname}"/></option>
 								</c:forEach>

@@ -63,7 +63,7 @@ public class ClientTester {
 		
 		ClientTester clientTester = new ClientTester();
 		
-		String Ip = "222.110.153.162";
+		String Ip = "192.168.56.117";
 		//Ip = "222.110.153.251";
 		 //	Ip = "127.0.0.1";
 		// Ip = "222.110.153.231";
@@ -77,7 +77,7 @@ public class ClientTester {
 			//clientTester.dxT002(Ip, port);
 			//clientTester.dxT003(Ip, port);
 			//clientTester.dxT004(Ip, port);
-			clientTester.dxT005(Ip, port);
+			//clientTester.dxT005(Ip, port);
 			//clientTester.dxT006_C(Ip, port);
 //			clientTester.dxT006_R(Ip, port);
 			//clientTester.dxT006_U(Ip, port);
@@ -112,7 +112,7 @@ public class ClientTester {
 			//clientTester.dxT023(Ip, port);
 			//clientTester.dxT024(Ip, port);
 			//clientTester.dxT025(Ip, port);
-			
+			clientTester.dxT026(Ip, port);
 			//clientTester.test();
 		} catch(Exception e) {
 			e.printStackTrace();
@@ -2237,6 +2237,50 @@ public class ClientTester {
 			}
 		
 				
+			CA.close();
+		} catch(Exception e) {
+			e.printStackTrace();
+		}
+	}
+	
+	
+	
+	/**
+	 * extension 설치
+	 * @param Ip
+	 * @param port
+	 */
+	private void dxT026(String Ip, int port) {
+
+		try {
+			
+			JSONObject serverObj = new JSONObject();
+			
+			serverObj.put(ClientProtocolID.SERVER_NAME, "192.168.56.117");
+			serverObj.put(ClientProtocolID.SERVER_IP, "192.168.56.117");
+			serverObj.put(ClientProtocolID.SERVER_PORT, "5432");
+			serverObj.put(ClientProtocolID.DATABASE_NAME, "encrypt");
+			serverObj.put(ClientProtocolID.USER_ID, "experdb");
+			serverObj.put(ClientProtocolID.USER_PWD, "experdb");
+			
+			JSONObject jObj = new JSONObject();
+			
+			ClientAdapter CA = new ClientAdapter(Ip, port);
+			CA.open(); 
+			
+			JSONObject objList;
+			
+			jObj.put(ClientProtocolID.DX_EX_CODE, ClientTranCodeType.DxT026);
+			jObj.put(ClientProtocolID.SERVER_INFO, serverObj);
+			
+			
+			objList = CA.dxT026(jObj);
+			
+			String strErrMsg = (String)objList.get(ClientProtocolID.ERR_MSG);
+			String strErrCode = (String)objList.get(ClientProtocolID.ERR_CODE);
+			String strDxExCode = (String)objList.get(ClientProtocolID.DX_EX_CODE);
+			String strResultCode = (String)objList.get(ClientProtocolID.RESULT_CODE);
+
 			CA.close();
 		} catch(Exception e) {
 			e.printStackTrace();

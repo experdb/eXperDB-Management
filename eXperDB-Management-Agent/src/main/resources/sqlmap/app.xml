@@ -460,5 +460,14 @@
 		]]>
 	</select>
 	
+	<update id="createPgExtensionPgAudit">
+			/**
+		 	* Query ID : createPgExtensionPgAudit
+		 	* Description : createPgExtensionPgAudit
+		 	* Author : 변승우
+		 	**/
+		
+			CREATE EXTENSION PGAUDIT 
+	</update>
 
 </mapper>
