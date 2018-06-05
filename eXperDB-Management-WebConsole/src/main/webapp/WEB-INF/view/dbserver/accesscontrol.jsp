@@ -159,8 +159,8 @@
 		if(extName == "agent") {
 			alert("<spring:message code='message.msg25' />");
 			top.location.href = "/";
-		}else if(extName == "pgaudit"){
-			alert("<spring:message code='message.msg26' />");
+		}else if(extName == "adminpack"){
+			alert("<spring:message code='message.msg215' />");
 			top.location.href = "/";
 		}else if(extName == "agentfail"){
 			alert("<spring:message code='message.msg27' />");

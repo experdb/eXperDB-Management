@@ -172,8 +172,8 @@ var table = null;
 			success : function(result) {			
 				if (result=="true") {
 					alert("<spring:message code='message.msg31' />");
-				}else if(result=="pgaudit"){
-					alert("<spring:message code='message.msg26' />");
+				}else if(result=="adminpack"){
+					alert("<spring:message code='message.msg215' />");
 				}else if(result=="agent"){
 					alert("<spring:message code='message.msg25' />");
 				}else if(extName == "agentfail"){

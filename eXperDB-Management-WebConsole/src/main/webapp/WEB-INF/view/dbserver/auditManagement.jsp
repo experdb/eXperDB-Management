@@ -154,12 +154,12 @@
 							<div class="btn_type_01">
 								<span class="btn btnC_01"><button id="btnSave"><spring:message code="common.apply" /></button></span>
 							</div>
-							<div class="sch_form p1">
-								<div class="inp_chk chk3">
-									<input type="checkbox" id="chkLogActive" name="chkLogActive"<c:if test="${fn:toLowerCase(audit.isActive) == 'on'}"> checked="checked"</c:if>  onClick="javascript:fnChkLogActive();">
-									<label for="chkLogActive"><span class="chk_img"><img src="../images/popup/ico_box_1.png" alt="" /></span><spring:message code="access_control_management.audit_activation" /></label>
-								</div>
-							</div>
+<!-- 							<div class="sch_form p1"> -->
+<!-- 								<div class="inp_chk chk3"> -->
+<%-- 									<input type="checkbox" id="chkLogActive" name="chkLogActive"<c:if test="${fn:toLowerCase(audit.isActive) == 'on'}"> checked="checked"</c:if>  onClick="javascript:fnChkLogActive();"> --%>
+<%-- 									<label for="chkLogActive"><span class="chk_img"><img src="../images/popup/ico_box_1.png" alt="" /></span><spring:message code="access_control_management.audit_activation" /></label> --%>
+<!-- 								</div> -->
+<!-- 							</div> -->
 							<div class="layout_grp">
 								<div class="layout_lt">
 									<table class="log_table">

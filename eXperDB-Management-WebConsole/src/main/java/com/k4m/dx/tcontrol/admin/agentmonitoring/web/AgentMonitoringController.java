@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import org.json.simple.JSONArray;
@@ -25,6 +26,8 @@ import com.k4m.dx.tcontrol.cmmn.CmmnUtils;
 import com.k4m.dx.tcontrol.common.service.HistoryVO;
 import com.k4m.dx.tcontrol.encrypt.service.call.AgentMonitoringServiceCall;
 import com.k4m.dx.tcontrol.encrypt.service.call.CommonServiceCall;
+import com.k4m.dx.tcontrol.encrypt.service.call.UserManagerServiceCall;
+import com.k4m.dx.tcontrol.login.service.UserVO;
 
 /**
  * Agent 모니터링 컨트롤러 클래스를 정의한다.
@@ -170,7 +173,18 @@ public class AgentMonitoringController {
 			agentStatusList = amsc.selectSystemStatus(restIp, restPort, strTocken, loginId, entityId);
 			
 			for(int j=0; j<agentStatusList.size(); j++){
-				tResult.add(agentStatusList.get(j));
+				for(int m=0; m<agentList.size(); m++){
+					JSONObject jsonObj = (JSONObject) agentStatusList.get(j);
+					if(jsonObj.get("monitoredName").equals(agentList.get(m).get("createName"))){	
+						JSONObject jObj = new JSONObject();			
+						jObj.put("getEntityUid", agentList.get(m).get("getEntityUid"));
+						jObj.put("monitoredName", jsonObj.get("monitoredName"));
+						jObj.put("status", "stop");
+						jObj.put("resultCode", jsonObj.get("resultCode"));
+						jObj.put("resultMessage", jsonObj.get("resultMessage"));
+						tResult.add(jObj);
+					}
+				}
 			}
 					
 			agentStatusListResult = (List<Map<String, Object>>) agentStatusList;
@@ -186,18 +200,61 @@ public class AgentMonitoringController {
 				}
 				if(temp == 0){
 					JSONObject addList = new JSONObject();
+					addList.put("getEntityUid", agentList.get(k).get("getEntityUid"));
 					addList.put("monitoredName", agentList.get(k).get("createName"));
 					addList.put("status", "start");
 					tResult.add(addList);
 				}
 			}
-			
 			result.put("list", tResult);
-			
-			System.out.println(result);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 		return result;
 	}		
+	
+	
+	/**
+	 * 에이전트를 삭제한다.
+	 * 
+	 * @param historyVO
+	 * @param request
+	 * @return 
+	 * @throws Exception
+	 */
+	@RequestMapping(value = "/deleteEncryptAgentMonitoring.do")
+	public @ResponseBody JSONObject deleteEncryptAgentMonitoring(@ModelAttribute("historyVO") HistoryVO historyVO, HttpServletResponse response, HttpServletRequest request) {
+		UserManagerServiceCall uic= new UserManagerServiceCall();
+		JSONObject result = new JSONObject();
+		try {
+//			CmmnUtils cu = new CmmnUtils();
+//			menuAut = cu.selectMenuAut(menuAuthorityService, "MN0004");
+//			
+//			//쓰기권한이 없는경우
+//			if(menuAut.get(0).get("wrt_aut_yn").equals("N")){
+//				response.sendRedirect("/autError.do");
+//			}
+			
+			// 화면접근이력 이력 남기기
+			CmmnUtils.saveHistory(request, historyVO);
+			historyVO.setExe_dtl_cd("DX-T0123_02");
+			historyVO.setMnu_id(12);
+			accessHistoryService.insertHistory(historyVO);
+			
+			HttpSession session = request.getSession();
+			String strTocken = (String)session.getAttribute("tockenValue");
+			String loginId = (String)session.getAttribute("usr_id");
+			String entityId = (String)session.getAttribute("ectityUid");
+			String restIp = (String)session.getAttribute("restIp");
+			int restPort = (int)session.getAttribute("restPort");
+			
+			String[] param = request.getParameter("entityuid").toString().split(",");
+			for (int i = 0; i < param.length; i++) {
+				result = uic.deleteEntity(restIp, restPort, strTocken, loginId, entityId, param[i]);
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return result;
+	}
 }

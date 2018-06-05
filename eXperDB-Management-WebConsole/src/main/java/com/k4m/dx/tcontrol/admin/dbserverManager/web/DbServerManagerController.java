@@ -320,7 +320,7 @@ public class DbServerManagerController {
 			
 		ClientInfoCmmn cic = new ClientInfoCmmn();
 		
-		String strExtName = "pgaudit";
+		String strExtName = "adminpack";
 		List<Object> results = cic.extension_select(serverObj,IP,PORT,strExtName);
 		if(results != null || result.size() != 0) {
 			int current_his_grp= accessControlService.selectCurrenthisrp();

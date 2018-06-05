@@ -111,7 +111,7 @@ public class AccessControlController {
 				} else {
 					String IP = dbServerVO.getIpadr();
 					int PORT = agentInfo.getSOCKET_PORT();
-					String strExtname = "pgaudit";
+					String strExtname = "adminpack";
 
 					serverObj.put(ClientProtocolID.SERVER_NAME, dbServerVO.getDb_svr_nm());
 					serverObj.put(ClientProtocolID.SERVER_IP, dbServerVO.getIpadr());
@@ -492,10 +492,10 @@ public class AccessControlController {
 				serverObj.put(ClientProtocolID.USER_ID, dbServerVO.get(m).getSvr_spr_usr_id());
 				serverObj.put(ClientProtocolID.USER_PWD, dec.aesDecode(dbServerVO.get(m).getSvr_spr_scm_pwd()));
 
-				String strExtname = "pgaudit";
+				String strExtname = "adminpack";
 				List<Object> resultExt = cic.extension_select(serverObj, IP, PORT, strExtname);
 				if (resultExt == null || resultExt.size() == 0) {
-					return "pgaudit";
+					return "adminpack";
 				}
 				
 				/*pg_hba.conf 전체 삭제*/

@@ -32,6 +32,7 @@ function fn_init(){
 		deferRender : true,
 		scrollX: true,
 		columns : [
+			{ data : "", defaultContent : "", targets : 0, orderable : false, checkboxes : {'selectRow' : true}}, 
 			{data : "idx", columnDefs: [ { searchable: false, orderable: false, targets: 0} ], order: [[ 1, 'asc' ]],  className : "dt-center", defaultContent : ""},
 			{ data : "monitoredName", defaultContent : ""}, 
 			{ data : "status", defaultContent : "", className : "dt-center", render: function (data, type, full){
@@ -50,11 +51,12 @@ function fn_init(){
 			{ data : "monitorType", defaultContent : "", visible: false},
 			{ data : "resultLevel", defaultContent : "", visible: false},
 			{ data : "logMessage", defaultContent : "", visible: false},
-		 ]
+			{ data : "getEntityUid", defaultContent : "", visible: false},
+		 ],'select': {'style': 'multi'}
 	});
 	
 	table.on( 'order.dt search.dt', function () {
-    	table.column(0, {search:'applied', order:'applied'}).nodes().each( function (cell, i) {
+    	table.column(1, {search:'applied', order:'applied'}).nodes().each( function (cell, i) {
             cell.innerHTML = i+1;
         } );
     } ).draw();
@@ -87,9 +89,10 @@ function fn_refresh(){
 			}
 		},
 		success : function(data) {
+			table.rows({selected: true}).deselect();
+			table.clear().draw();
 			if(data.list.length != 0){
 				if(data.resultCode == "0000000000"){
-					table.clear().draw();
 					table.rows.add(data.list).draw();
 				}else if(data.resultCode == "8000000002"){
 					alert("<spring:message code='message.msg05' />");
@@ -100,9 +103,63 @@ function fn_refresh(){
 				}else{
 					alert(data.resultMessage +"("+data.resultCode+")");
 				}
+			}else{
+				alert(data.resultMessage +"("+data.resultCode+")");
 			}
 		}
 	});	
+}
+
+function fn_delete(){
+	var datas = table.rows('.selected').data();
+	if (datas.length <= 0) {
+		alert("<spring:message code='message.msg04' />");
+		return false;
+	} else {
+		if (!confirm('<spring:message code="message.msg162"/>'))return false;
+		var rowList = [];
+		for (var i = 0; i < datas.length; i++) {
+			rowList += datas[i].getEntityUid + ',';	
+		}
+		
+		$.ajax({
+			url : "/deleteEncryptAgentMonitoring.do", 
+		  	data : {
+		  		entityuid : rowList,
+		  	},
+			dataType : "json",
+			type : "post",
+			beforeSend: function(xhr) {
+		        xhr.setRequestHeader("AJAX", true);
+		     },
+			error : function(xhr, status, error) {
+				if(xhr.status == 401) {
+					alert("<spring:message code='message.msg02' />");
+					top.location.href = "/";
+				} else if(xhr.status == 403) {
+					alert("<spring:message code='message.msg03' />");
+					top.location.href = "/";
+				} else {
+					alert("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""));
+				}
+			},
+			success : function(data) {
+				if(data.resultCode == "0000000000"){
+					alert("<spring:message code='message.msg37' />");
+					fn_refresh();
+				}else if(data.resultCode == "8000000002"){
+					alert("<spring:message code='message.msg05' />");
+					top.location.href = "/";
+				}else if(data.resultCode == "8000000003"){
+					alert(data.resultMessage);
+					location.href = "/securityKeySet.do";
+				}else{
+					alert(data.resultMessage +"("+data.resultCode+")");
+				}
+			}
+		});	
+	}
+
 }
 </script>
 	<div id="contents">
@@ -127,18 +184,21 @@ function fn_refresh(){
 						<div class="cmm_grp">
 							<div class="btn_type_01">
 								<span class="btn"><button onclick="fn_refresh()"><spring:message code="encrypt_agent.Refresh"/></button></span>
+								<span class="btn"><button onclick="fn_delete()"><spring:message code="common.delete"/></button></span>
 							</div>
 
 							<div class="overflow_area">
 								<table id="monitoring" class="display" cellspacing="0" width="100%">
 									<caption>Encrypt Agent 모니터링 리스트</caption>
 									<colgroup>
+										<col style="width:3%;" />
 										<col style="width:5%;" />
 										<col style="width:35%;" />
 										<col style="width:15%;" />
 									</colgroup>
 									<thead>
 										<tr>
+											<th scope="col"></th>
 											<th scope="col"><spring:message code="common.no" /></th>
 											<th scope="col">Agent IP</th>
 											<th scope="col">Agent <spring:message code="properties.status" /></th>

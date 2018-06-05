@@ -337,6 +337,7 @@ public class CommonServiceCall {
 					jObj.put("createName", entity.getCreateName());	
 					jObj.put("resultCode", resultCode);
 					jObj.put("resultMessage", resultMessage);
+					jObj.put("getEntityUid", entity.getEntityUid());
 					
 					System.out.println("getEntityUid : " + entity.getEntityUid());
 					System.out.println("getEntityName : " + new String(entity.getEntityName().toString().getBytes("iso-8859-1"),"UTF-8") );
