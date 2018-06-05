@@ -460,14 +460,14 @@
 		]]>
 	</select>
 	
-	<update id="createPgExtensionPgAudit">
+	<update id="createPgExtensionPgAudit" parameterType="hashmap" >
 			/**
 		 	* Query ID : createPgExtensionPgAudit
 		 	* Description : createPgExtensionPgAudit
 		 	* Author : 변승우
 		 	**/
 		
-			CREATE EXTENSION PGAUDIT 
+			CREATE EXTENSION ${extname} 
 	</update>
 
 </mapper>

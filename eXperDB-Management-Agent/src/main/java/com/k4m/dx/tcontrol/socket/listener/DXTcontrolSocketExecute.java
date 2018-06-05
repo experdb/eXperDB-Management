@@ -275,12 +275,13 @@ public class DXTcontrolSocketExecute extends SocketCtl implements Runnable {
 					break;
 				//install extension pgAudit
 				case TranCodeType.DxT026 :
-							
-						
-						DxT026 dxT026 = new DxT026(client, is, os);
-						dxT026.execute(strDX_EX_CODE, jObj);
+					
+					String strExtname = (String) jObj.get(ProtocolID.EXTENSION);
+					
+					DxT026 dxT026 = new DxT026(client, is, os);
+					dxT026.execute(strDX_EX_CODE, jObj,strExtname);
 			
-						break;
+					break;
 				}
 				objSERVER_INFO = null;
 

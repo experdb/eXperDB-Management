@@ -46,7 +46,7 @@ public class DxT026 extends SocketCtl{
 		this.os = os;
 	}
 
-	public void execute(String strDxExCode, JSONObject dbInfoObj) throws Exception {
+	public void execute(String strDxExCode, JSONObject dbInfoObj, String strExtname) throws Exception {
 		
 		socketLogger.info("DxT026.execute : " + strDxExCode);
 		
@@ -75,9 +75,12 @@ public class DxT026 extends SocketCtl{
 			connDB = DriverManager.getConnection("jdbc:apache:commons:dbcp:" + poolName); 
 			sessDB = sqlSessionFactory.openSession(connDB);
 			
-	
-			sessDB.update("app.createPgExtensionPgAudit");
+			socketLogger.info("DxT026.EXTENSION : " + strExtname);
+				
+			HashMap hp = new HashMap();
+			hp.put("extname", strExtname);
 			
+			sessDB.update("app.createPgExtensionPgAudit",hp);
 			
 			outputObj.put(ProtocolID.DX_EX_CODE, strDxExCode);
 			outputObj.put(ProtocolID.RESULT_CODE, strSuccessCode);

@@ -2270,9 +2270,12 @@ public class ClientTester {
 			
 			JSONObject objList;
 			
+			String strExtname = "PGAUDIT";
+			
+			
 			jObj.put(ClientProtocolID.DX_EX_CODE, ClientTranCodeType.DxT026);
 			jObj.put(ClientProtocolID.SERVER_INFO, serverObj);
-			
+			jObj.put(ClientProtocolID.EXTENSION, strExtname);
 			
 			objList = CA.dxT026(jObj);
 			

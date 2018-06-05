@@ -197,5 +197,6 @@ public class ClientProtocolID {
 	public static final String RMAN_CURTLI = "CURTLI";
 	public static final String RMAN_PARENTTLI = "PARENTTLI";
 	public static final String RMAN_STATUS = "STATUS";
+	public static final String EXTENSION = "EXTENSION";
 
 }
