@@ -53,6 +53,10 @@ var connCheck = "fail";
 var idCheck = "fail";
 var db_svr_nmChk ="fail";
 
+var agentPort = null;
+var ipadr = null;
+var port = null;
+
 /* var pghomeCheck="fail";
 var pgdataCheck ="fail"; */
 
@@ -213,7 +217,6 @@ function fn_insertDbServer(){
 	if (!fn_dbServerValidation()) return false;
 	if (!fn_saveValidation()) return false;
 	var datas = table.rows().data();
-	
 	var arrmaps = [];
 	for (var i = 0; i < datas.length; i++){
 		var tmpmap = new Object();
@@ -252,16 +255,60 @@ function fn_insertDbServer(){
 				alert("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""));
 			}
 		},
-		success : function(result) {
-			alert('<spring:message code="message.msg144"/>');
-			opener.location.reload();
-			self.close();	 			
+		success : function(result) {	
+			//서버등록 성공 후, PG_Audit Create
+			fu_extensionCreate(arrmaps);
 		}
 	}); 
 	}else{
 		return false;
 	}
 } 
+
+
+//EXTENSION 설치
+function fu_extensionCreate(arrmaps){
+	
+	for (var i = 0; i < arrmaps.length; i++){
+		if(arrmaps[i].master_gbn == "M"){
+			ipadr = arrmaps[i].ipadr;
+			port = arrmaps[i].portno;
+		}
+	} 
+	
+  	$.ajax({
+		url : "/extensionCreate.do",
+		data : {
+			agentPort : agentPort,
+			ipadr : ipadr,
+			port :	port,
+			db_svr_nm : $("#db_svr_nm").val(),
+			dft_db_nm : $("#dft_db_nm").val(),
+			svr_spr_usr_id : $("#svr_spr_usr_id").val(),
+			svr_spr_scm_pwd : $("#svr_spr_scm_pwd").val(),
+		},
+		type : "post",
+		beforeSend: function(xhr) {
+	        xhr.setRequestHeader("AJAX", true);
+	     },
+		error : function(xhr, status, error) {
+			if(xhr.status == 401) {
+				alert('<spring:message code="message.msg02" />');
+				top.location.href = "/";
+			} else if(xhr.status == 403) {
+				alert('<spring:message code="message.msg03" />');
+				top.location.href = "/";
+			} else {
+				alert("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""));
+			}
+		},
+		success : function(result) {
+			alert('<spring:message code="message.msg144"/>');
+			opener.location.reload();
+			self.close();	 			
+		}
+	}); 
+}
 
 
 //DBserver 연결테스트
@@ -422,6 +469,7 @@ function fn_getHostNm(ipadr) {
 		},
 		success : function(result) {
 			document.getElementById("db_svr_nm").value = result.host;
+			agentPort = result.agentPort;
 		},
 		beforeSend: function(xhr) {
 	        xhr.setRequestHeader("AJAX", true);

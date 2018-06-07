@@ -1287,4 +1287,39 @@ public List<HashMap<String, String>> dumpShow(String IP, int PORT,String cmd) {
 		}
 		return dumpList;
 	}
+
+
+	public void extensionCreate(JSONObject serverObj, String IP, int PORT, String strExtname) {
+		
+		try {			
+			
+			System.out.println(IP);
+			System.out.println(PORT);
+			System.out.println(strExtname);
+			
+			JSONObject jObj = new JSONObject();
+			
+			ClientAdapter CA = new ClientAdapter(IP, PORT);
+			CA.open(); 
+			
+			JSONObject objList;
+
+			
+			jObj.put(ClientProtocolID.DX_EX_CODE, ClientTranCodeType.DxT026);
+			jObj.put(ClientProtocolID.SERVER_INFO, serverObj);
+			jObj.put(ClientProtocolID.EXTENSION, strExtname);
+			
+			objList = CA.dxT026(jObj);
+			
+			String strErrMsg = (String)objList.get(ClientProtocolID.ERR_MSG);
+			String strErrCode = (String)objList.get(ClientProtocolID.ERR_CODE);
+			String strDxExCode = (String)objList.get(ClientProtocolID.DX_EX_CODE);
+			String strResultCode = (String)objList.get(ClientProtocolID.RESULT_CODE);
+
+			CA.close();
+		} catch(Exception e) {
+			e.printStackTrace();
+		}
+	}
+
 }

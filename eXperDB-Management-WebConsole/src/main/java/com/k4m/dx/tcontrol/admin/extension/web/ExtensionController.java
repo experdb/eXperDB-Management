@@ -1,6 +1,8 @@
 package com.k4m.dx.tcontrol.admin.extension.web;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -18,6 +20,7 @@ import com.k4m.dx.tcontrol.cmmn.AES256;
 import com.k4m.dx.tcontrol.cmmn.AES256_KEY;
 import com.k4m.dx.tcontrol.cmmn.CmmnUtils;
 import com.k4m.dx.tcontrol.cmmn.client.ClientAdapter;
+import com.k4m.dx.tcontrol.cmmn.client.ClientInfoCmmn;
 import com.k4m.dx.tcontrol.cmmn.client.ClientProtocolID;
 import com.k4m.dx.tcontrol.cmmn.client.ClientTranCodeType;
 import com.k4m.dx.tcontrol.common.service.AgentInfoVO;
@@ -126,4 +129,70 @@ public class ExtensionController {
 		
 		return selectDBList;
 	}
+	
+	
+	
+	@RequestMapping(value = "/extensionCreate.do")
+	@ResponseBody
+	public void extensionCreate(@ModelAttribute("historyVO") HistoryVO historyVO, HttpServletRequest request) {
+	
+		try {	
+
+			int agentPORT = Integer.parseInt(request.getParameter("agentPort"));
+			String serverIp = request.getParameter("ipadr");
+			String serverName = request.getParameter("db_svr_nm");
+			String serverPort = request.getParameter("port");
+			String DatabaseName =request.getParameter("dft_db_nm");
+			String userId = request.getParameter("svr_spr_usr_id");
+			String userPw = request.getParameter("svr_spr_scm_pwd");
+
+			JSONObject serverObj = new JSONObject();
+			
+			serverObj.put(ClientProtocolID.SERVER_NAME, serverName);
+			serverObj.put(ClientProtocolID.SERVER_IP, serverIp);
+			serverObj.put(ClientProtocolID.SERVER_PORT, serverPort);
+			serverObj.put(ClientProtocolID.DATABASE_NAME, DatabaseName);
+			serverObj.put(ClientProtocolID.USER_ID, userId);
+			serverObj.put(ClientProtocolID.USER_PWD, userPw);
+					
+		
+			ClientInfoCmmn cic = new ClientInfoCmmn();
+			
+			String strExtName = "";
+			List<Object> results = cic.extension_select(serverObj,serverIp,agentPORT,strExtName);
+			
+			if(results.size() > 0) {
+				boolean isAdminPackYn = false;
+				boolean isAuditYn = false;
+				
+				for(int i=0; i<results.size(); i++) {
+					Object obj = results.get(i);		
+					HashMap hp = (HashMap) obj;
+					String extname = (String) hp.get("extname");
+								
+					if(extname.equals("adminpack")){
+						isAdminPackYn = true;
+					}
+					if(extname.equals("pgaudit")){
+						isAuditYn = true;
+					}	
+					System.out.println(i + " " + extname);
+				}	
+				
+				
+				if(isAdminPackYn == false){
+					System.out.println("ADMINPACK 미설치");
+					cic.extensionCreate(serverObj,serverIp,agentPORT,"ADMINPACK");
+				}
+				if(isAuditYn == false){
+					System.out.println("PGAUDIT 미설치");
+					cic.extensionCreate(serverObj,serverIp,agentPORT,"PGAUDIT");
+				}
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}	
+	}
+	
+	
 }

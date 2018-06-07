@@ -686,6 +686,7 @@ public class DbServerManagerController {
 			System.out.println("포트:" + PORT);
 			ClientInfoCmmn cic = new ClientInfoCmmn();
 			result = cic.getHostName(IP, PORT);
+			result.put("agentPort", PORT);
 			System.out.println(result);
 		} catch (Exception e) {
 			e.printStackTrace();
