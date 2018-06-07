@@ -51,6 +51,14 @@ public class DxT005 extends SocketCtl {
 
 	private static String TC001801 = "TC001801"; // 대기
 	private static String TC001802 = "TC001802"; // 실행중
+	private static String TC001701 = "TC001701"; // 성공
+	private static String TC001702 = "TC001702"; // 실패
+	private static String TC001901 = "TC001901"; // 백업
+	private static String TC001902 = "TC001902"; // 스크립트실행
+	
+	private static String TC000202 = "TC000202"; // dump
+	
+	
 
 	ApplicationContext context;
 
@@ -77,7 +85,7 @@ public class DxT005 extends SocketCtl {
 		context = new ClassPathXmlApplicationContext(new String[] { "context-tcontrol.xml" });
 		SystemServiceImpl service = (SystemServiceImpl) context.getBean("SystemService");
 
-		String strResultCode = "TC001701";
+		String strResultCode = TC001701;
 
 		try {
 
@@ -95,10 +103,19 @@ public class DxT005 extends SocketCtl {
 				String strBCK_OPT_CD = objJob.get(ProtocolID.BCK_OPT_CD).toString();
 				String strBCK_BSN_DSCD = objJob.get(ProtocolID.BCK_BSN_DSCD).toString();
 				String strDB_ID = objJob.get(ProtocolID.DB_ID).toString();
+				if(strDB_ID == null || strDB_ID.equals("")) {
+					strDB_ID = "0";
+				}
+				
 				String strBCK_FILE_PTH = objJob.get(ProtocolID.BCK_FILE_PTH).toString();
 				String strLOG_YN = objJob.get(ProtocolID.LOG_YN).toString();
 				String strBCK_FILENM = objJob.get(ProtocolID.BCK_FILENM).toString();
 				String strDB_SVR_IPADR_ID = objJob.get(ProtocolID.DB_SVR_IPADR_ID).toString();
+				if(strDB_SVR_IPADR_ID == null || strDB_SVR_IPADR_ID.equals("")) {
+					strDB_SVR_IPADR_ID = "0";
+				}
+				
+				String strBSN_DSCD = objJob.get(ProtocolID.BSN_DSCD).toString();
 
 				int intSeq = service.selectQ_WRKEXE_G_01_SEQ();
 
@@ -147,80 +164,83 @@ public class DxT005 extends SocketCtl {
 
 					socketLogger.info("[BCK_BSN_DSCD] " + strBCK_BSN_DSCD);
 
-					// dump 일경우만 실행
-					if (strBCK_BSN_DSCD.equals("TC000202")) {
-
-						// 백업파일관리
-						// BCK_MTN_ECNT(백업유지개수) FILE_STG_DCNT(파일보관일수)
-						// 백업유지개수
-						String strBCK_MTN_ECNT = objJob.get(ProtocolID.BCK_MTN_ECNT).toString();
-						int intBCK_MTN_ECNT = Integer.parseInt(strBCK_MTN_ECNT);
-						
-						// 파일보관일수
-						String strFILE_STG_DCNT = objJob.get(ProtocolID.FILE_STG_DCNT).toString();
-						int intFILE_STG_DCNT = Integer.parseInt(strFILE_STG_DCNT);
-
-						String strSlush = "/";
-
-						if (!strBCK_FILE_PTH.contentEquals("")) {
-							String strSl = strBCK_FILE_PTH.substring(strBCK_FILE_PTH.length() - 1,
-									strBCK_FILE_PTH.length());
-							if (strSl.equals("/")) {
-								strSlush = "";
+					//TC001901 : 백업 업무구분코드
+					if(strBSN_DSCD.equals(TC001901)) {
+						// dump 일경우만 실행
+						if (strBCK_BSN_DSCD.equals(TC000202)) {
+	
+							// 백업파일관리
+							// BCK_MTN_ECNT(백업유지개수) FILE_STG_DCNT(파일보관일수)
+							// 백업유지개수
+							String strBCK_MTN_ECNT = objJob.get(ProtocolID.BCK_MTN_ECNT).toString();
+							int intBCK_MTN_ECNT = Integer.parseInt(strBCK_MTN_ECNT);
+							
+							// 파일보관일수
+							String strFILE_STG_DCNT = objJob.get(ProtocolID.FILE_STG_DCNT).toString();
+							int intFILE_STG_DCNT = Integer.parseInt(strFILE_STG_DCNT);
+	
+							String strSlush = "/";
+	
+							if (!strBCK_FILE_PTH.contentEquals("")) {
+								String strSl = strBCK_FILE_PTH.substring(strBCK_FILE_PTH.length() - 1,
+										strBCK_FILE_PTH.length());
+								if (strSl.equals("/")) {
+									strSlush = "";
+								}
 							}
-						}
-
-						String strCmd = "ls -al " + strBCK_FILE_PTH + strSlush + strFileName + " | awk '{print $5}'";
-						
-						CommonUtil util = new CommonUtil();
-						
-						strFileSize = util.getPidExec(strCmd);
-						
-						util = null;
-
-						socketLogger.info("[File COMMAND] " + strCmd);
-
-						// socketLogger.info("##### strFileSize cmd : " + strCmd
-						// );
-						// socketLogger.info("##### strFileSize : " +
-						// strFileSize );
-
-						if (strFileSize == null)
+	
+							String strCmd = "ls -al " + strBCK_FILE_PTH + strSlush + strFileName + " | awk '{print $5}'";
+							
+							CommonUtil util = new CommonUtil();
+							
+							strFileSize = util.getPidExec(strCmd);
+							
+							util = null;
+	
+							socketLogger.info("[File COMMAND] " + strCmd);
+	
+							// socketLogger.info("##### strFileSize cmd : " + strCmd
+							// );
+							// socketLogger.info("##### strFileSize : " +
+							// strFileSize );
+	
+							if (strFileSize == null)
+								strFileSize = "0";
+							
+							String[] sarrFileName = strFileName.split("_");
+							String fileName = sarrFileName[0] + "_" + sarrFileName[1];
+							
+							//백업파일관리
+							dumpFileManagement(strBCK_FILE_PTH, fileName, intBCK_MTN_ECNT, intFILE_STG_DCNT, strSlush);
+	
+							if (strFileSize == null || strFileSize.equals("0")) {
+	
+								WrkExeVO endVO = new WrkExeVO();
+								endVO.setEXE_RSLT_CD(TC001702);
+								endVO.setEXE_SN(intSeq);
+								endVO.setRSLT_MSG("An Error is Zero File Size");
+	
+								endVO.setSCD_ID(Integer.parseInt(strSCD_ID));
+								endVO.setSCD_CNDT(TC001801); // 대기중
+	
+								// 스케줄 상태변경
+								service.updateSCD_CNDT(endVO);
+	
+								// 스캐줄 이력 update
+								service.updateT_WRKEXE_G(endVO);
+	
+								if (strNXT_EXD_YN.toLowerCase().equals("y")) {
+									continue;
+								} else {
+									break;
+								}
+	
+							}
+	
+						} else {
 							strFileSize = "0";
-						
-						String[] sarrFileName = strFileName.split("_");
-						String fileName = sarrFileName[0] + "_" + sarrFileName[1];
-						
-						//백업파일관리
-						dumpFileManagement(strBCK_FILE_PTH, fileName, intBCK_MTN_ECNT, intFILE_STG_DCNT, strSlush);
-
-						if (strFileSize == null || strFileSize.equals("0")) {
-
-							WrkExeVO endVO = new WrkExeVO();
-							endVO.setEXE_RSLT_CD("TC001702");
-							endVO.setEXE_SN(intSeq);
-							endVO.setRSLT_MSG("An Error is Zero File Size");
-
-							endVO.setSCD_ID(Integer.parseInt(strSCD_ID));
-							endVO.setSCD_CNDT(TC001801); // 대기중
-
-							// 스케줄 상태변경
-							service.updateSCD_CNDT(endVO);
-
-							// 스캐줄 이력 update
-							service.updateT_WRKEXE_G(endVO);
-
-							if (strNXT_EXD_YN.toLowerCase().equals("y")) {
-								continue;
-							} else {
-								break;
-							}
-
+							strFileName = "";
 						}
-
-					} else {
-						strFileSize = "0";
-						strFileName = "";
 					}
 
 					WrkExeVO endVO = new WrkExeVO();
@@ -248,7 +268,7 @@ public class DxT005 extends SocketCtl {
 
 					errLogger.error("[ERROR] DxT005 SCD_ID[" + strSCD_ID + "] {} ", retVal + " " + strResultMessge);
 
-					strResultCode = "TC001702";
+					strResultCode = TC001702;
 
 					WrkExeVO endVO = new WrkExeVO();
 					endVO.setEXE_RSLT_CD(strResultCode);
