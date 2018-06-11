@@ -55,8 +55,8 @@
 			(CASE WHEN DB_ID>0 THEN (SELECT DB_NM FROM T_DB_I WHERE A.DB_ID=DB_ID AND USEYN = 'Y') ELSE '' END) AS DB_NM,
 			BCK_BSN_DSCD,
 			(SELECT SYS_CD_NM FROM T_SYSDTL_C WHERE A.BCK_BSN_DSCD = SYS_CD ) AS BCK_BSN_DSCD_NM,
-			WRK_NM,
-			WRK_EXP,
+			(SELECT WRK_NM FROM T_WRKCNG_I WHERE WRK_ID = A.WRK_ID) WRK_NM,
+			(SELECT WRK_EXP FROM T_WRKCNG_I WHERE WRK_ID = A.WRK_ID) WRK_EXP,
 			BCK_OPT_CD,
 			(SELECT SYS_CD_NM FROM T_SYSDTL_C WHERE A.BCK_OPT_CD = SYS_CD ) AS BCK_OPT_CD_NM,
 			BCK_MTN_ECNT,
@@ -167,8 +167,6 @@
 			wrk_id,
 			db_svr_id,
 			bck_bsn_dscd,
-			wrk_nm,
-			wrk_exp,
 			bck_opt_cd,
 			bck_mtn_ecnt,
 			cps_yn,
@@ -192,8 +190,6 @@
 			#{wrk_id},
 			#{db_svr_id},
 			'TC000201',
-			#{wrk_nm},
-			#{wrk_exp},
 			#{bck_opt_cd},
 			#{bck_mtn_ecnt},
 			#{cps_yn},
@@ -225,8 +221,6 @@
 			wrk_id,
 			db_svr_id,
 			bck_bsn_dscd,
-			wrk_nm,
-			wrk_exp,
 			db_id,
 			save_pth,
 			log_file_pth,
@@ -248,8 +242,6 @@
 			#{wrk_id},
 			#{db_svr_id},
 			'TC000202',
-			#{wrk_nm},
-			#{wrk_exp},
 			#{db_id},
 			#{save_pth},
 			#{log_file_pth},
@@ -274,8 +266,6 @@
 	 	* Author : Yoon jh
 	 	**/
 		UPDATE T_BCK_WRKCNG_I SET
-			wrk_nm = #{wrk_nm},
-			wrk_exp = #{wrk_exp},
 			bck_opt_cd = #{bck_opt_cd},
 			cps_yn = #{cps_yn},
 			log_file_bck_yn = #{log_file_bck_yn},
@@ -301,8 +291,6 @@
 	 	* Author : Yoon jh
 	 	**/
 		UPDATE T_BCK_WRKCNG_I SET
-			wrk_nm = #{wrk_nm},
-			wrk_exp = #{wrk_exp},
 			db_id = #{db_id},
 			save_pth = #{save_pth},
 			file_fmt_cd = #{file_fmt_cd},
@@ -513,8 +501,8 @@
 	 		TWG.SCD_ID AS SCD_ID,
 	 		(SELECT SCD_NM FROM T_SCD_M WHERE TWG.SCD_ID = SCD_ID ) AS SCD_NM,
 	 		TWG.WRK_ID AS WRK_ID,
-	 		TWI.WRK_NM,
-	 		TWI.WRK_EXP,
+	 		(SELECT WRK_NM FROM T_WRKCNG_I WHERE WRK_ID = TWI.WRK_ID) WRK_NM,
+	 		(SELECT WRK_EXP FROM T_WRKCNG_I WHERE WRK_ID = TWI.WRK_ID) WRK_EXP,
 	 		to_char(TWG.WRK_STRT_DTM,'YYYY-MM-DD HH24:MI') AS WRK_STRT_DTM,
 	 		to_char(TWG.WRK_END_DTM,'YYYY-MM-DD HH24:MI') AS WRK_END_DTM,
 	 		to_char(to_char(TWG.WRK_END_DTM,'YYYY-MM-DD HH24:MI')::timestamp - to_char(TWG.WRK_STRT_DTM,'YYYY-MM-DD HH24:MI')::timestamp, 'HH24:MI') AS WRK_DTM,
@@ -671,7 +659,7 @@
 		**/
 		SELECT 
 				 COUNT(*)
-		FROM T_BCK_WRKCNG_I
+		FROM T_WRKCNG_I
 		WHERE WRK_NM = #{wrk_nm}
 	</select>	
 	
