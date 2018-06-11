@@ -22,17 +22,54 @@
 <script type="text/javascript">
 var table = null;
 
-
-/* ********************************************************
- * Data initialization
- ******************************************************** */
 $(window.document).ready(function() {
+	var lgi_dtm_start = "${lgi_dtm_start}";
+	var lgi_dtm_end = "${lgi_dtm_end}";
+	if (lgi_dtm_start != "" && lgi_dtm_end != "") {
+		$('#from').val(lgi_dtm_start);
+		$('#to').val(lgi_dtm_end);
+	} else {
+		var today = new Date();
+		var day_end = today.toJSON().slice(0,10);
+		today.setDate(today.getDate() - 7);
+		var day_start = today.toJSON().slice(0,10); 
+		$('#from').val(day_start);
+		$('#to').val(day_end);
+	}
+	
 	fn_init();
 });
 
-/* ********************************************************
- * Rman Data Table initialization
- ******************************************************** */
+
+$(function() {		
+	var dateFormat = "yyyy-mm-dd", from = $("#from").datepicker({
+		changeMonth : false,
+		changeYear : false,
+		onClose : function(selectedDate) {
+			$("#to").datepicker("option", "minDate", selectedDate);
+		}
+	})
+
+	to = $("#to").datepicker({
+		changeMonth : false,
+		changeYear : false,
+		onClose : function(selectedDate) {
+			$("#from").datepicker("option", "maxDate", selectedDate);
+		}
+	})
+
+	function getDate(element) {
+		var date;
+		try {
+			date = $.datepicker.parseDate(dateFormat, element.value);
+		} catch (error) {
+			date = null;
+		}
+		return date;
+	}
+});
+
+
 function fn_init(){
    	table = $('#scriptHistory').DataTable({	
 		scrollY: "405px",
@@ -53,22 +90,27 @@ function fn_init(){
 		    				return html;
 		    			},
 		    			defaultContent : ""
-		    		}
+		    		},
+		    		{ data: "", className: "dt-center", defaultContent: ""}, 
+		    		{ data: "", className: "dt-center", defaultContent: ""}, 
+		    		{ data: "", className: "dt-center", defaultContent: ""}, 
+		    		{ data: "", className: "dt-center", defaultContent: ""}
  		        ]
 	});
    	
-   	table.tables().header().to$().find('th:eq(0)').css('min-width', '40px');
-   	table.tables().header().to$().find('th:eq(1)').css('min-width', '150px');
-   	table.tables().header().to$().find('th:eq(2)').css('min-width', '150px');
+   	table.tables().header().to$().find('th:eq(0)').css('min-width', '100px');
+   	table.tables().header().to$().find('th:eq(1)').css('min-width', '100px');
+   	table.tables().header().to$().find('th:eq(2)').css('min-width', '100px');
+   	table.tables().header().to$().find('th:eq(3)').css('min-width', '100px');
+   	table.tables().header().to$().find('th:eq(4)').css('min-width', '100px');
+   	table.tables().header().to$().find('th:eq(5)').css('min-width', '100px');
+   	table.tables().header().to$().find('th:eq(6)').css('min-width', '100px');
 
     $(window).trigger('resize'); 
 }
 
 
-
-
 </script>
-
 <!-- contents -->
 <div id="contents">
 	<div class="contents_wrap">
@@ -76,8 +118,7 @@ function fn_init(){
 			<h4>스크립트이력<a href="#n"><img src="/images/ico_tit.png" class="btn_info"/></a></h4>
 			<div class="infobox"> 
 				<ul>
-					<li>스크립트관리</li>
-					<li>스크립트이력</li>
+					<li>스크립트이력 설명</li>
 				</ul>
 			</div>
 			<div class="location">
@@ -111,14 +152,14 @@ function fn_init(){
 								<td colspan="3">
 									<div class="calendar_area">
 										<a href="#n" class="calendar_btn">달력열기</a>
-										<input type="text" name="wrk_strt_dtm" id="wrk_strt_dtm" class="calendar" readonly/>
+										<input type="text" name="wrk_strt_dtm" id="from" class="calendar" readonly/>
 										<span class="wave">~</span>
 										<a href="#n" class="calendar_btn">달력열기</a>
-										<input type="text" name="wrk_end_dtm" id="wrk_end_dtm" class="calendar" readonly/>
+										<input type="text" name="wrk_end_dtm" id="to" class="calendar" readonly/>
 									</div>
 								</td>
 							</tr>
-							<tr style="height:35px;">
+							<tr>
 								<th scope="row" class="t9"><spring:message code="common.status" /></th>
 								<td>
 									<select name="exe_rslt_cd" id="exe_rslt_cd" class="select t5">
@@ -130,13 +171,13 @@ function fn_init(){
 							</tr>
 							<tr>
 								<th scope="row" class="t9"><spring:message code="common.work_name" /></th>
-								<td><input type="text" name="wrk_nm" id="wrk_nm" class="txt t5" maxlength="25"  /></td>
+								<td><input type="text" name="wrk_nm" id="wrk_nm" class="txt t5" maxlength="25" /></td>
 							</tr>
 						</tbody>
 					</table>
 					</form>
 				</div>
-								
+				<div class="overflow_area">				
 					<table class="display" id="scriptHistory" cellspacing="0" width="100%">
 						<caption>스크립트 이력화면 리스트</caption>
 						<thead>
@@ -144,10 +185,14 @@ function fn_init(){
 								<th width="100"><spring:message code="common.no" /></th>
 								<th width="100"><spring:message code="common.work_name" /></th>
 								<th width="100"><spring:message code="common.work_description" /></th>
+								<th width="100">작업시작시간</th>
+								<th width="100">작업종료시간</th>
+								<th width="100">경과시간</th>
+								<th width="100">상태</th>
 							</tr>
 						</thead>
 					</table>
-							
+				</div>			
 			</div>
 		</div>
 	</div>
