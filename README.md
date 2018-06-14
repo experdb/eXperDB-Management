@@ -101,7 +101,7 @@ Project > Run As > Maven Install --> eXperDB-Management-WebConsole.war
 
 
 ## Appendix
-[1. Installation eXperDB-Trnasfer(for Data Transfer](https://github.com/experdb/eXperDB-Management/blob/master/eXperDB-Transfer.md)
+[1. Installation eXperDB-Trnasfer(for Data Transfer)](https://github.com/experdb/eXperDB-Management/blob/master/eXperDB-Transfer.md)
 
 
 ## Copyright
