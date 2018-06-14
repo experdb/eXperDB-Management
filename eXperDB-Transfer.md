@@ -105,7 +105,7 @@ host    replication     <user>  ::1/128           trust
 ```
 
 ### 3. Installation and Configuration Hadoop
-### 3-1. Pre-work
+3-1. Pre-work
 ```
 3-1-1. Enter the host name of the node that constitutes the cluster in the hosts file.
 $ vi /etc/hosts
@@ -159,7 +159,7 @@ $ reboot
 ```
 
 
-### 3-2. Installation Cloudera Manager
+3-2. Installation Cloudera Manager
 ```
 3-2-1. Installation and Start
 $ wget http://archive.cloudera.com/cm5/installer/latest/cloudera-manager-installer.bin
