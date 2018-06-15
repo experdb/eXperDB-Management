@@ -1,9 +1,11 @@
+# eXperDB-Transfer
+
 ## Introduction
 eXperDB-Transfer is an extension of eXperDB-Management to transfer completed transactions from the RDBMS to the BigData platform in real time.
 We have used PostgreSQL's logical replication and various open source tools such as kafka, zookeeper, and bottlewater for customization.
 In the current version, PostgreSQL is capable of real-time data transfer to HDFS and will add various functions required for transmission to a wider variety of platforms and big data environment in the future.
 
-## Installation and Configuration eXperDB-Transfer
+## Installation and Configuration
 ### 1. Configuration
 1-1. Registration signed key
 ```
