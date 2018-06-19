@@ -238,7 +238,7 @@ $(window.document).ready(function() {
 			var html = "";
 
  			$(data).each(function (index, item) {
- 				if(aut.length != 0 && aut[index].bck_cng_aut_yn == "N" && aut[index].bck_hist_aut_yn == "N" && aut[index].bck_scdr_aut_yn == "N" && aut[index].acs_cntr_aut_yn == "N" && aut[index].policy_change_his_aut_yn == "N" && aut[index].adt_cng_aut_yn == "N" && aut[index].adt_hist_aut_yn == "N" ){	
+ 				if(aut.length != 0 && aut[index].bck_cng_aut_yn == "N" && aut[index].bck_hist_aut_yn == "N" && aut[index].bck_scdr_aut_yn == "N" && aut[index].acs_cntr_aut_yn == "N" && aut[index].policy_change_his_aut_yn == "N" && aut[index].adt_cng_aut_yn == "N" && aut[index].adt_hist_aut_yn == "N" && aut[index].script_cng_aut_yn == "N"  && aut[index].script_his_aut_yn == "N" ){	
  				}else{
  					html1+='<ul class="depth_1 lnbMenu">';
 					html1+='	<li><div class="border"  ><a href="/property.do?db_svr_id='+item.db_svr_id+'" onClick=javascript:fn_GoLink("#n"); target="main"><img src="../images/ico_lnb_3.png" id="treeImg"><div class="tooltip">'+item.db_svr_nm+'<span class="tooltiptext">'+item.ipadr+'</span></div></a></div>';
@@ -280,10 +280,10 @@ $(window.document).ready(function() {
 					
 					html1+='			<li class="ico2_2"><a href="#n"><img src="../images/ico_lnb_7.png" id="treeImg">스크립트관리</a>';
 					html1+='				<ul class="depth_3">'
-					if(aut.length != 0 && aut[index].adt_cng_aut_yn == "Y"){
+					if(aut.length != 0 && aut[index].script_cng_aut_yn == "Y"){
 						html1+='					<li class="ico3_4" id="scriptManagement'+item.db_svr_id+'"><a href=/scriptManagement.do?db_svr_id='+item.db_svr_id+' id="scriptManagement'+item.db_svr_id+'c" onClick=javascript:fn_GoLink("scriptManagement'+item.db_svr_id+'"); target="main"><img src="../images/ico_lnb_10.png" id="treeImg">스크립트 설정</a></li>';
 					}
-					if(aut.length != 0 && aut[index].adt_hist_aut_yn == "Y"){
+					if(aut.length != 0 && aut[index].script_his_aut_yn == "Y"){
 						html1+='					<li class="ico3_5" id="scriptHistory'+item.db_svr_id+'"><a href=/scriptHistory.do?db_svr_id='+item.db_svr_id+' id="scriptHistory'+item.db_svr_id+'c" onClick=javascript:fn_GoLink("scriptHistory'+item.db_svr_id+'"); target="main"><img src="../images/ico_lnb_14.png" id="treeImg">스크립트 이력</a></li>';
 					}
 					html1+='				</ul>';

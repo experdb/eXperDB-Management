@@ -383,7 +383,7 @@
 								<tr>
 									<th scope="row" class="t9" ><spring:message code="schedule.schedule_name" /> </th>
 									<td>
-										<select class="select t4" name="scd_nm" id="scd_nm" onChange="fn_selectWrkNmList(this);">
+										<select class="select t4" name="scd_nm" id="scd_nm">
 											<option value="%"><spring:message code="schedule.total" /></option>
 										</select>	
 									</td>

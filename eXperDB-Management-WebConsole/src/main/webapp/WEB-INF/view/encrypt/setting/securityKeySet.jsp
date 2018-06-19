@@ -33,6 +33,7 @@ border:0;
 <script>
 var isServerKeyEmpty  = "${isServerKeyEmpty}";
 var isServerPasswordEmpty = "${isServerPasswordEmpty}";
+var resultCode = "${resultCode}";
 
 var pnlOldPasswordView ="";
 var pnlNewPasswordView ="";
@@ -43,6 +44,11 @@ var initKey="";
  * 페이지 시작시 함수
  ******************************************************** */
 $(window.document).ready(function() {
+	if(resultCode=="8000000002"){
+		alert("<spring:message code='message.msg05' />");
+		top.location.href = "/";
+	}
+	
 	fn_buttonAut();
 	if(isServerPasswordEmpty == "true") {
 			initKey = true;

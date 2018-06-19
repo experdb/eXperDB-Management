@@ -67,13 +67,11 @@ public class EncryptStatisticsController {
 		String categoryColumn = request.getParameter("categoryColumn");
 		
 		StatisticsServiceCall ssc = new StatisticsServiceCall();
-		
-		try {						
-			result = ssc.selectAuditLogSiteHourForStat(restIp, restPort, strTocken, loginId, entityId, from, to, categoryColumn);
 			
-			System.out.println(result.get("list"));
-		} catch (Exception e) {
-			e.printStackTrace();
+		try{
+			result = ssc.selectAuditLogSiteHourForStat(restIp, restPort, strTocken, loginId, entityId, from, to, categoryColumn);
+		}catch(Exception e){
+			result.put("resultCode", "8000000002");
 		}
 		return result;
 	}
