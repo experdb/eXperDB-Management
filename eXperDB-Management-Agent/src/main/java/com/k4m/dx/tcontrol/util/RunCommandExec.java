@@ -173,7 +173,7 @@ public class RunCommandExec extends Thread {
 					socketLogger.info("out.ready() --> " + strResult);
 				}
 				out.close();
-				strReturnVal = "success " + strResult;
+				strReturnVal = "success";
 			}
 			//socketLogger.info("@@@@@@@@@ scanner end" );
 
