@@ -184,7 +184,9 @@
 				, A.ADT_CNG_AUT_YN
 				, A.ADT_HIST_AUT_YN
 				, A.BCK_SCDR_AUT_YN
-				, A.POLICY_CHANGE_HIS_AUT_YN	 
+				, A.POLICY_CHANGE_HIS_AUT_YN
+				, A.SCRIPT_CNG_AUT_YN
+				, A.SCRIPT_HIS_AUT_YN
 				, C.IPADR
 		FROM T_USRDBSVRAUT_I A, T_DBSVR_I B,T_DBSVRIPADR_I C
 		WHERE 1 = 1
@@ -211,6 +213,8 @@
 				, ADT_HIST_AUT_YN = #{adt_hist_aut_yt}
 				, BCK_SCDR_AUT_YN = #{bck_scdr_aut_yn}
 				, POLICY_CHANGE_HIS_AUT_YN = #{policy_change_his_aut_yn} 	 	
+				, SCRIPT_CNG_AUT_YN = #{script_cng_aut_yn} 
+				, SCRIPT_HIS_AUT_YN = #{script_his_aut_yn} 
 	 	WHERE USR_ID=#{usr_id}
 	 	AND DB_SVR_ID = #{db_svr_id}::numeric
 	</update>	
@@ -303,6 +307,8 @@
 			, ADT_HIST_AUT_YN
 			, BCK_SCDR_AUT_YN
 			, POLICY_CHANGE_HIS_AUT_YN
+			, SCRIPT_CNG_AUT_YN
+			, SCRIPT_HIS_AUT_YN
 			, FRST_REGR_ID
 			, FRST_REG_DTM
 			, LST_MDFR_ID
@@ -320,6 +326,8 @@
 			, #{adt_hist_aut_yt}
 			, #{bck_scdr_aut_yn}
 			, #{policy_change_his_aut_yn}
+			, #{script_cng_aut_yn}
+			, #{script_his_aut_yn}
 			, #{usr_id}
 			, clock_timestamp()
 			, #{usr_id}

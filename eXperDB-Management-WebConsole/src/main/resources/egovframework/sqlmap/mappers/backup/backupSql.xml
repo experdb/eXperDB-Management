@@ -259,6 +259,19 @@
 			)
 	</insert>
 	
+	  <update id="updateWork" parameterType="workVO">
+    	/**
+	 	* Query ID : updateWork
+	 	* Description : 워크 업데이트
+	 	* Author : 변승우
+	 	**/
+	 		UPDATE T_WRKCNG_I SET
+	 			wrk_exp = #{wrk_exp}
+	 		WHERE WRK_ID = #{wrk_id}			 		
+    </update>
+	
+	
+	
 	<update id="updateRmanWork" parameterType="workVO">
 		/**
 	 	* Query ID : updateRmanWork
@@ -523,7 +536,7 @@
 	 		to_char(TWG.FRST_REG_DTM,'YYYY-MM-DD HH24:MI') AS FRST_REG_DTM,
 	 		TWG.LST_MDFR_ID AS LST_MDFR_ID,
 	 		to_char(TWG.LST_MDF_DTM,'YYYY-MM-DD HH24:MI') AS LST_MDF_DTM	 		
-	 	FROM T_WRKEXE_G TWG, T_BCK_WRKCNG_I TWI, T_DBSVRIPADR_I B
+	 	FROM T_WRKEXE_G TWG, T_BCK_WRKCNG_I TWI, T_DBSVRIPADR_I B, T_WRKCNG_I C
 <!-- 	 	LEFT OUTER JOIN T_BCK_WRKCNG_I TWI
          ON TWG.WRK_ID = TWI.WRK_ID
         LEFT OUTER JOIN T_DBSVRIPADR_I B       
@@ -531,6 +544,7 @@
         AND B.DB_SVR_ID=#{db_svr_id}::numeric  -->
  	 	WHERE 1=1
 	 		AND TWG.WRK_ID = TWI.WRK_ID
+	 		AND TWG.WRK_ID = C.WRK_ID 
             AND B.DB_SVR_ID=#{db_svr_id}::numeric 
             AND TWG.DB_SVR_IPADR_ID = B.DB_SVR_IPADR_ID 
 	 	<if test="wrk_id != null and wrk_id != '' ">
@@ -572,7 +586,7 @@
       		AND TWG.EXE_RSLT_CD=#{exe_rslt_cd}
       	</if>  
       	<if test="wrk_nm != null and wrk_nm != '' ">
-      		AND TWI.WRK_NM=#{wrk_nm}
+      		AND C.WRK_NM=#{wrk_nm}
       	</if>   	
       	<if test="fix_rsltcd == null and fix_rsltcd == '' ">
 			AND TWG.FIX_RSLTCD LIKE '%'

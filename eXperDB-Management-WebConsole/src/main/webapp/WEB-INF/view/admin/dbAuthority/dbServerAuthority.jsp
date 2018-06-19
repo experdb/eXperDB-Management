@@ -200,7 +200,27 @@
 					html1+=			'<label for="'+item.db_svr_nm+'_adt_hist"></label>';
 					html1+=		'</div>';
 					html1+=	'</td>';
-					html1+='</tr>	';					
+					html1+='</tr>	';			
+					html1+='<tr>';
+					html1+=	'<th scope="row">스크립트설정</th>';
+					html1+=	'<td>';
+					html1+=		'<div class="inp_chk">';
+					html1+=			'<input type="checkbox" id="'+item.db_svr_nm+'_script_cng" name="script_cng_aut"  onClick="fn_userCheck();"/>';
+					html1+=			'<label for="'+item.db_svr_nm+'_script_cng"></label>';
+					html1+=		'</div>';
+					html1+=	'</td>';
+					html1+='</tr>	';	
+					html1+='<tr>';
+					html1+=	'<th scope="row">스크립트이력</th>';
+					html1+=	'<td>';
+					html1+=		'<div class="inp_chk">';
+					html1+=			'<input type="checkbox" id="'+item.db_svr_nm+'_script_his" name="script_his_aut"  onClick="fn_userCheck();"/>';
+					html1+=			'<label for="'+item.db_svr_nm+'_script_his"></label>';
+					html1+=		'</div>';
+					html1+=	'</td>';
+					html1+='</tr>	';	
+					
+					
 					html1+='</tbody>';
 					html1+='<input type="hidden"  name="db_svr_id" value="'+item.db_svr_id+'">';
 				})		
@@ -221,7 +241,7 @@
 	
 	function fn_allCheck(db_svr_nm){
 		fn_userCheck();
-		var array = new Array("_bck_cng","_bck_hist","_bck_scdr","_acs_cntr","_policy_change_his","_adt_cng","_adt_hist");
+		var array = new Array("_bck_cng","_bck_hist","_bck_scdr","_acs_cntr","_policy_change_his","_adt_cng","_adt_hist","_script_cng","_script_his");
 		for(var i=0; i<array.length; i++){
 			if ($("#"+db_svr_nm).prop("checked")) {
 					document.getElementById(db_svr_nm+array[i]).checked = true;
@@ -276,7 +296,6 @@
 		    		success : function(result) {
 		    			if(result.length != 0){
 	       	 		 		for(var i = 0; i<result.length; i++){  
-	       	 		 		
 		     					//백업설정 권한
 		  						if(result.length != 0 && result[i].bck_cng_aut_yn == "Y"){	  									
 		  							document.getElementById(result[i].db_svr_nm+"_bck_cng").checked = true;
@@ -324,7 +343,21 @@
 		  							document.getElementById(result[i].db_svr_nm+"_adt_hist").checked = true;
 		  						}else{
 		  							document.getElementById(result[i].db_svr_nm+"_adt_hist").checked = false;
-		  						}		  						
+		  						}		  	
+		  						
+		  						//스크립트설정 권한
+		  						if(result.length != 0 && result[i].script_cng_aut_yn == "Y"){
+		  							document.getElementById(result[i].db_svr_nm+"_script_cng").checked = true;
+		  						}else{
+		  							document.getElementById(result[i].db_svr_nm+"_script_cng").checked = false;
+		  						}	
+		  						
+		  						//스크립트설정 권한
+		  						if(result.length != 0 && result[i].script_his_aut_yn == "Y"){
+		  							document.getElementById(result[i].db_svr_nm+"_script_his").checked = true;
+		  						}else{
+		  							document.getElementById(result[i].db_svr_nm+"_script_his").checked = false;
+		  						}	
 	    					} 
 		    			}else{
 		    				document.getElementById(svr_server[0].db_svr_nm+"_bck_cng").checked = false;
@@ -334,6 +367,8 @@
 		    				document.getElementById(svr_server[0].db_svr_nm+"_policy_change_his").checked = false;
 		    				document.getElementById(svr_server[0].db_svr_nm+"_adt_cng").checked = false;
 		    				document.getElementById(svr_server[0].db_svr_nm+"_adt_hist").checked = false;
+		    				document.getElementById(svr_server[0].db_svr_nm+"_script_cng").checked = false;
+		    				document.getElementById(svr_server[0].db_svr_nm+"_script_his").checked = false;
     					}	
 		    		} 
 		    	});	 	 	   	 
@@ -359,6 +394,8 @@
 			 var policy_change_his_aut = $("input[name='policy_change_his_aut']");
 			 var adt_cng_aut = $("input[name='adt_cng_aut']");
 			 var adt_hist_aut = $("input[name='adt_hist_aut']");
+			 var script_cng_aut = $("input[name='script_cng_aut']");
+			 var script_his_aut = $("input[name='script_his_aut']");
 			 
 			 
 	 		 for(var i = 0; i < svr_server.length; i++){
@@ -414,6 +451,20 @@
 			    	 	autCheck++;
 			        }else{
 			        	rows.adt_hist_aut_yt = "N";
+			        }
+			     
+			     if(script_cng_aut[i].checked){ //선택되어 있으면 배열에 값을 저장함
+			    	 	rows.script_cng_aut_yn = "Y";   
+			    	 	autCheck++;
+			        }else{
+			        	rows.script_cng_aut_yn = "N";
+			        }
+			     
+			     if(script_his_aut[i].checked){ //선택되어 있으면 배열에 값을 저장함
+			    	 	rows.script_his_aut_yn = "Y";   
+			    	 	autCheck++;
+			        }else{
+			        	rows.script_his_aut_yn = "N";
 			        }
 			     datasArr.push(rows);
 			     

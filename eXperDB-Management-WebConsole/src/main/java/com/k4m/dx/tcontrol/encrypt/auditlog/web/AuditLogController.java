@@ -72,7 +72,13 @@ public class AuditLogController {
 				String loginId = (String)session.getAttribute("usr_id");
 				String entityId = (String)session.getAttribute("ectityUid");	
 				
-				result = sic.selectEntityAgentList(restIp, restPort, strTocken, loginId ,entityId);
+				try{
+					result = sic.selectEntityAgentList(restIp, restPort, strTocken, loginId ,entityId);
+				}catch(Exception e){
+					JSONObject jsonObj = new JSONObject();
+					jsonObj.put("resultCode", "8000000002");
+					result.add(jsonObj);
+				}
 				
 				mv.setViewName("encrypt/auditLog/encodeDecodeAuditLog");
 				mv.addObject("result",result);
@@ -180,12 +186,17 @@ public class AuditLogController {
 				int restPort = (int)session.getAttribute("restPort");
 				String strTocken = (String)session.getAttribute("tockenValue");
 				String loginId = (String)session.getAttribute("usr_id");
-				String entityId = (String)session.getAttribute("ectityUid");	
+				String entityId = (String)session.getAttribute("ectityUid");		
 				
+				try{
+					entityuid =sic.selectEntityList(restIp, restPort, strTocken, loginId ,entityId);
+				}catch(Exception e){
+					JSONObject jsonObj = new JSONObject();
+					jsonObj.put("resultCode", "8000000002");
+					entityuid.add(jsonObj);
+				}
 				
-				entityuid =sic.selectEntityList(restIp, restPort, strTocken, loginId ,entityId);
 				mv.addObject("entityuid", entityuid);
-				
 				mv.setViewName("encrypt/auditLog/managementServerAuditLog");
 			}	
 		} catch (Exception e) {
@@ -317,9 +328,14 @@ public class AuditLogController {
 				String loginId = (String)session.getAttribute("usr_id");
 				String entityId = (String)session.getAttribute("ectityUid");	
 				
-				entityuid =sic.selectEntityList(restIp, restPort, strTocken, loginId ,entityId);
+				try{
+					entityuid =sic.selectEntityList(restIp, restPort, strTocken, loginId ,entityId);
+				}catch(Exception e){
+					JSONObject jsonObj = new JSONObject();
+					jsonObj.put("resultCode", "8000000002");
+					entityuid.add(jsonObj);
+				}
 				mv.addObject("entityuid", entityuid);
-				
 				mv.setViewName("encrypt/auditLog/encodeDecodeKeyAuditLog");
 			}
 		} catch (Exception e) {

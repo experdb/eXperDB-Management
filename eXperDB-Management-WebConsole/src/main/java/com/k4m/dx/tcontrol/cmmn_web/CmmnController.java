@@ -41,6 +41,7 @@ import com.k4m.dx.tcontrol.encrypt.service.call.AgentMonitoringServiceCall;
 import com.k4m.dx.tcontrol.encrypt.service.call.CommonServiceCall;
 import com.k4m.dx.tcontrol.encrypt.service.call.StatisticsServiceCall;
 import com.k4m.dx.tcontrol.functions.schedule.service.ScheduleService;
+import com.k4m.dx.tcontrol.script.service.ScriptService;
 
 /**
  * 공통 컨트롤러 클래스를 정의한다.
@@ -59,6 +60,9 @@ import com.k4m.dx.tcontrol.functions.schedule.service.ScheduleService;
 
 @Controller
 public class CmmnController {
+	
+	@Autowired
+	private ScriptService scriptService;
 	
 	@Autowired
 	private BackupService backupService;
@@ -638,4 +642,31 @@ public class CmmnController {
 				}
 		return result;
 	}
+	
+	
+	/**
+	 * ScriptWORK 정보
+	 * @param 
+	 * @return resultSet
+	 * @throws Exception
+	 */
+	@SuppressWarnings("unchecked")
+	@RequestMapping(value = "/selectSciptExeInfo.do")
+	@ResponseBody
+	public List<Map<String, Object>> selectSciptExeInfo(HttpServletRequest request) {
+		List<Map<String, Object>> result = null;
+		
+		try {
+			int wrk_id = Integer.parseInt(request.getParameter("wrk_id"));
+			
+			result = scriptService.selectSciptExeInfo(wrk_id);	
+			System.out.println(result.size());
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return result;
+	}	
+	
+	
+	
 }

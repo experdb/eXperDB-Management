@@ -82,9 +82,15 @@ public class KeyManageController {
 				int restPort = (int)session.getAttribute("restPort");
 				String strTocken = (String)session.getAttribute("tockenValue");
 				String loginId = (String)session.getAttribute("usr_id");
-				String entityId = (String)session.getAttribute("ectityUid");
+				String entityId = (String)session.getAttribute("ectityUid");			
 				
-				result = csc.selectSysCodeListExper(restIp, restPort, strTocken,loginId,entityId);
+				try{
+					result = csc.selectSysCodeListExper(restIp, restPort, strTocken,loginId,entityId);
+				}catch(Exception e){
+					JSONObject jsonObj = new JSONObject();
+					jsonObj.put("resultCode", "8000000002");
+					result.add(jsonObj);
+				}
 				mv.setViewName("encrypt/keyManage/keyManage");
 				mv.addObject("result",result);
 			}

@@ -32,6 +32,7 @@
 var wrk_id = null;
 var bck_wrk_id = null;
 var db_svr_id = "${db_svr_id}";
+var wrk_id = "${wrk_id}";
 var haCnt = 0;
 
 $(window.document).ready(function() {

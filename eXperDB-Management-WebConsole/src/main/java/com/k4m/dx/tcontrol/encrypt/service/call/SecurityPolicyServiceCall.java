@@ -10,7 +10,6 @@ import java.util.Map;
 
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
-import org.springframework.web.bind.annotation.RequestParam;
 
 import com.google.gson.Gson;
 import com.k4m.dx.tcontrol.cmmn.serviceproxy.EncryptCommonService;
@@ -104,7 +103,6 @@ public class SecurityPolicyServiceCall {
 					if(updateName != null){
 						jsonObj.put("updateName", new String(updateName.getBytes("iso-8859-1"),"UTF-8"));
 					}
-					
 					jsonArray.add(jsonObj);
 				}	
 			}

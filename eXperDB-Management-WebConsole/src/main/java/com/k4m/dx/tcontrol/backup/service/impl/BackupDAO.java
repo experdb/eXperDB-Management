@@ -52,10 +52,12 @@ public class BackupDAO extends EgovAbstractMapper{
 	}
 	
 	public void updateRmanWork(WorkVO workVO) throws Exception{
+		update("backupSQL.updateWork",workVO);
 		update("backupSQL.updateRmanWork",workVO);
 	}
 	
 	public void updateDumpWork(WorkVO workVO) throws Exception{
+		update("backupSQL.updateWork",workVO);
 		update("backupSQL.updateDumpWork",workVO);
 	}
 	

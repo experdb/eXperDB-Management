@@ -127,7 +127,7 @@ public class EncriptSettingController {
 		try {						
 			result = essc.selectSysConfigListLike(restIp, restPort, strTocken, loginId, entityId);
 		} catch (Exception e) {
-			e.printStackTrace();
+			result.put("resultCode", "8000000002");
 		}
 		return result;
 	}
@@ -286,7 +286,7 @@ public class EncriptSettingController {
 		try {
 			result = essc.selectSysMultiValueConfigListLike2(restIp, restPort, strTocken, loginId, entityId);
 		} catch (Exception e) {
-			e.printStackTrace();
+			result.put("resultCode", "8000000002");
 		}
 		return result;
 	}
@@ -377,14 +377,16 @@ public class EncriptSettingController {
 				accessHistoryService.insertHistory(historyVO);
 							
 				CommonServiceCall csc = new CommonServiceCall();
-					
-				result = csc.selectServerStatus(restIp, restPort, strTocken, loginId, entityId);
 				
-				String isServerKeyEmpty = result.get("isServerKeyEmpty").toString();
-				String isServerPasswordEmpty = result.get("isServerPasswordEmpty").toString();
-				
-				mv.addObject("isServerKeyEmpty",isServerKeyEmpty);
-				mv.addObject("isServerPasswordEmpty",isServerPasswordEmpty);
+				try{
+					result = csc.selectServerStatus(restIp, restPort, strTocken, loginId, entityId);
+					String isServerKeyEmpty = result.get("isServerKeyEmpty").toString();
+					String isServerPasswordEmpty = result.get("isServerPasswordEmpty").toString();
+					mv.addObject("isServerKeyEmpty",isServerKeyEmpty);
+					mv.addObject("isServerPasswordEmpty",isServerPasswordEmpty);
+				}catch(Exception e){
+					mv.addObject("resultCode","8000000002");
+				}
 				mv.setViewName("encrypt/setting/securityKeySet");
 			}
 		} catch (Exception e) {
@@ -757,7 +759,7 @@ public class EncriptSettingController {
 		try {
 			result = essc.selectAgentMonitoring(restIp, restPort, strTocken, loginId, entityId);
 		} catch (Exception e) {
-			e.printStackTrace();
+			result.put("resultCode", "8000000002");
 		}
 		return result;
 	}

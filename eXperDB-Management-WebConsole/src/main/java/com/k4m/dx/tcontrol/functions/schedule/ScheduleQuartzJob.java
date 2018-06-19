@@ -103,99 +103,107 @@ public class ScheduleQuartzJob implements Job{
 	        	db_svr_ipadr_id = Integer.parseInt(resultDbconn.get(0).get("db_svr_ipadr_id").toString());
 	        	ArrayList<String> CMD = new ArrayList<String>();
 		        //WORK 갯수만큼 루프
-				for(int i =0; i<resultWork.size(); i++){			        
-					if(resultWork.get(i).get("file_fmt_cd_nm") != null && resultWork.get(i).get("file_fmt_cd_nm") != ""){
-						if(resultWork.get(i).get("file_fmt_cd_nm").equals("tar")){
-							bck_fileNm = "eXperDB_"+resultWork.get(i).get("wrk_id")+"_"+today+".tar";	
-						}else if(resultWork.get(i).get("file_fmt_cd_nm").equals("diretocry")){
-							bck_fileNm = "eXperDB_"+resultWork.get(i).get("wrk_id")+"_"+today;
-						}else{						
-							bck_fileNm = "eXperDB_"+resultWork.get(i).get("wrk_id")+"_"+today+".dump";									
-						}
-					}
-								
-					int wrk_id = Integer.parseInt(resultWork.get(i).get("wrk_id").toString());
-												
-					//부가옵션 조회
-					addOption= scheduleService.selectAddOption(wrk_id);
-					
-					//오브젝트옵션 조회
-					addObject= scheduleService.selectAddObject(wrk_id);
-											
-					// 백업 내용이 DUMP 백업일경우 
-					if(resultWork.get(i).get("bck_bsn_dscd").equals("TC000202")){
-						String strCmd ="";
-						strCmd = dumpBackupMakeCmd(resultDbconn, resultWork, addOption, addObject, i, bck_fileNm);	
-						BCK_NM.add(bck_fileNm);
-						CMD.add(strCmd);
-					// 백업 내용이 RMAN 백업일경우	
-					}else{
-						//실행중인 리스트와 해당스케줄정보 비교하여 현재 실행중이면서 RMAN 백업으로 디렉토리가 같으면, UPDATA(에러처리)
-						if(runSchedule.size() > 0){
-							 // ArrayList 생성
-							ArrayList arr = new ArrayList();
-
-							System.out.println("▶▶▶ Running중인 동일한 RMAN 체크 . . . ");
-							
-							// 실행중인 RMAN의 백업디렉토리와 현재 실행할  RMAN의 디렉토리가 같으면 1, 다르면 0
-							for(int k=0; k<runSchedule.size(); k++){
-								System.out.println("실행할["+resultWork.get(i).get("bck_pth").toString() +"]==실행중["+ runSchedule.get(k).get("bck_pth").toString()+"]");
-								if(resultWork.get(i).get("bck_pth").toString().equals(runSchedule.get(k).get("bck_pth").toString())){
-									System.out.println("▶▶▶ Running중인 동일한 RMAN 존재!");
-									arr.add(k,"running");
+				for(int i =0; i<resultWork.size(); i++){					
+					//DSN_DSCD==TC001901 백업
+					if(resultWork.get(i).get("bsn_dscd").toString().equals("TC001901")){
+							//파일포멧 별 파일명 지정
+							if(resultWork.get(i).get("file_fmt_cd_nm") != null && resultWork.get(i).get("file_fmt_cd_nm") != ""){
+								if(resultWork.get(i).get("file_fmt_cd_nm").equals("tar")){
+									bck_fileNm = "eXperDB_"+resultWork.get(i).get("wrk_id")+"_"+today+".tar";	
+								}else if(resultWork.get(i).get("file_fmt_cd_nm").equals("diretocry")){
+									bck_fileNm = "eXperDB_"+resultWork.get(i).get("wrk_id")+"_"+today;
+								}else{						
+									bck_fileNm = "eXperDB_"+resultWork.get(i).get("wrk_id")+"_"+today+".dump";									
 								}
-							}						
-							// length>0 크면 현재 실행될 RMAN백업의 디렉토리에 기실행중인 백업이 존재함,
-							// 실행결과 및 오류내용 업데이트
-							if(arr.size() > 0){
+							}
+										
+							int wrk_id = Integer.parseInt(resultWork.get(i).get("wrk_id").toString());
+														
+							//부가옵션 조회
+							addOption= scheduleService.selectAddOption(wrk_id);
 							
-								int intSeq = scheduleService.selectQ_WRKEXE_G_01_SEQ();
-								int intGrpSeq = scheduleService.selectQ_WRKEXE_G_02_SEQ();
-								
-								WrkExeVO vo = new WrkExeVO();
-								vo.setExe_sn(intSeq);
-								vo.setScd_id(Integer.parseInt(resultWork.get(i).get("scd_id").toString()));
-								vo.setWrk_id(Integer.parseInt(resultWork.get(i).get("wrk_id").toString()));
-								vo.setExe_rslt_cd("TC001702");
-								vo.setRslt_msg("failed ERROR: could not lock backup catalogDETAIL: Another pg_rman is just running. Skip this backup.");
-								vo.setBck_opt_cd(resultWork.get(i).get("bck_opt_cd").toString());
-								vo.setDb_id(Integer.parseInt(resultWork.get(i).get("db_id").toString()));
-								vo.setBck_file_pth(resultWork.get(i).get("bck_pth").toString());
-								vo.setExe_grp_sn(intGrpSeq);
-								vo.setScd_cndt("TC001802"); //(실행 -> 정지)
-								vo.setDb_svr_ipadr_id(Integer.parseInt(resultWork.get(i).get("db_svr_ipadr_id").toString()));
-								
-								//스케줄 상태변경
-								System.out.println("▶▶▶ 스케줄 상태변경(실행 -> 중지)");
-								scheduleService.updateSCD_CNDT(vo);
-								
-								//스케줄 이력등록
-								System.out.println("▶▶▶ 스케줄이력등록(실패, 동일한 RMAN 작업 실행중)");
-								scheduleService.insertT_WRKEXE_G(vo);
-								
-								return;
+							//오브젝트옵션 조회
+							addObject= scheduleService.selectAddObject(wrk_id);
+													
+							// 백업 내용이 DUMP 백업일경우 
+							if(resultWork.get(i).get("bck_bsn_dscd").equals("TC000202")){
+								String strCmd ="";
+								strCmd = dumpBackupMakeCmd(resultDbconn, resultWork, addOption, addObject, i, bck_fileNm);	
+								BCK_NM.add(bck_fileNm);
+								CMD.add(strCmd);
+							// 백업 내용이 RMAN 백업일경우	
 							}else{
-								BCK_NM.add("");
-								String rmanCmd ="";
-								rmanCmd = rmanBackupMakeCmd(resultWork, i, resultDbconn);		
-								CMD.add(rmanCmd);
-							}				
-						}else{
-							BCK_NM.add("");
-							String rmanCmd ="";
-							rmanCmd = rmanBackupMakeCmd(resultWork, i, resultDbconn);		
-							CMD.add(rmanCmd);
-						}
+								//실행중인 리스트와 해당스케줄정보 비교하여 현재 실행중이면서 RMAN 백업으로 디렉토리가 같으면, UPDATA(에러처리)
+								if(runSchedule.size() > 0){
+									 // ArrayList 생성
+									ArrayList arr = new ArrayList();
+		
+									System.out.println("▶▶▶ Running중인 동일한 RMAN 체크 . . . ");
+									
+									// 실행중인 RMAN의 백업디렉토리와 현재 실행할  RMAN의 디렉토리가 같으면 1, 다르면 0
+									for(int k=0; k<runSchedule.size(); k++){
+										System.out.println("실행할["+resultWork.get(i).get("bck_pth").toString() +"]==실행중["+ runSchedule.get(k).get("bck_pth").toString()+"]");
+										if(resultWork.get(i).get("bck_pth").toString().equals(runSchedule.get(k).get("bck_pth").toString())){
+											System.out.println("▶▶▶ Running중인 동일한 RMAN 존재!");
+											arr.add(k,"running");
+										}
+									}						
+									// length>0 크면 현재 실행될 RMAN백업의 디렉토리에 기실행중인 백업이 존재함,
+									// 실행결과 및 오류내용 업데이트
+									if(arr.size() > 0){
+									
+										int intSeq = scheduleService.selectQ_WRKEXE_G_01_SEQ();
+										int intGrpSeq = scheduleService.selectQ_WRKEXE_G_02_SEQ();
+										
+										WrkExeVO vo = new WrkExeVO();
+										vo.setExe_sn(intSeq);
+										vo.setScd_id(Integer.parseInt(resultWork.get(i).get("scd_id").toString()));
+										vo.setWrk_id(Integer.parseInt(resultWork.get(i).get("wrk_id").toString()));
+										vo.setExe_rslt_cd("TC001702");
+										vo.setRslt_msg("failed ERROR: could not lock backup catalogDETAIL: Another pg_rman is just running. Skip this backup.");
+										vo.setBck_opt_cd(resultWork.get(i).get("bck_opt_cd").toString());
+										vo.setDb_id(Integer.parseInt(resultWork.get(i).get("db_id").toString()));
+										vo.setBck_file_pth(resultWork.get(i).get("bck_pth").toString());
+										vo.setExe_grp_sn(intGrpSeq);
+										vo.setScd_cndt("TC001802"); //(실행 -> 정지)
+										vo.setDb_svr_ipadr_id(Integer.parseInt(resultWork.get(i).get("db_svr_ipadr_id").toString()));
+										
+										//스케줄 상태변경
+										System.out.println("▶▶▶ 스케줄 상태변경(실행 -> 중지)");
+										scheduleService.updateSCD_CNDT(vo);
+										
+										//스케줄 이력등록
+										System.out.println("▶▶▶ 스케줄이력등록(실패, 동일한 RMAN 작업 실행중)");
+										scheduleService.insertT_WRKEXE_G(vo);
+										
+										return;
+									}else{
+										BCK_NM.add("");
+										String rmanCmd ="";
+										rmanCmd = rmanBackupMakeCmd(resultWork, i, resultDbconn);		
+										CMD.add(rmanCmd);
+									}				
+								}else{
+									BCK_NM.add("");
+									String rmanCmd ="";
+									rmanCmd = rmanBackupMakeCmd(resultWork, i, resultDbconn);		
+									CMD.add(rmanCmd);
+								}
+							}		
+					//DSN_DSCD==TC001902 스크립트
+					}else if(resultWork.get(i).get("bsn_dscd").toString().equals("TC001902")){
+						String strCmd =resultWork.get(i).get("exe_cmd").toString();						
+						CMD.add(strCmd);
 					}
-				}						
-				agentCall(resultWork, CMD, BCK_NM, resultDbconn, db_svr_ipadr_id);
+					agentCall(resultWork, CMD, BCK_NM, resultDbconn, db_svr_ipadr_id);
+				}										
 		}catch(Exception e){
 			e.printStackTrace();
 		}
 
 	}
 
-
+	
 	/**
 	 * 1. Connection Option 명령어 생성
 	 * 2. 기본옵션 명령어 생성
@@ -428,5 +436,7 @@ public class ScheduleQuartzJob implements Job{
 		}
 	}
 	
+	
+
 
 }

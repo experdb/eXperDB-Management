@@ -194,6 +194,12 @@ public class LoginController {
 						JSONObject result = cic.login(restIp,restPort,id,userVo.getPwd());
 						request.getSession().setAttribute("restIp", restIp);
 						request.getSession().setAttribute("restPort", restPort);
+						
+						System.out.println("*******Login******");
+						System.out.println(result.get("tockenValue"));
+						System.out.println(result.get("ectityUid"));
+						System.out.println("******************");
+						
 						request.getSession().setAttribute("tockenValue", result.get("tockenValue")==null?"":result.get("tockenValue"));
 						request.getSession().setAttribute("ectityUid", result.get("ectityUid")==null?"":result.get("ectityUid"));
 					}catch(Exception e){

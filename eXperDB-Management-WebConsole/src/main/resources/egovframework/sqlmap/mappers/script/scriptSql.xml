@@ -1,0 +1,260 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper   PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="scriptSql">
+
+	<select id="selectScriptList" parameterType="scriptVO" resultType="hashMap">
+		/**
+	 	* Query ID : selectScriptList
+	 	* Description : selectScriptList 조회
+	 	* Author : 변승우
+	 	**/
+	 	SELECT 
+	 			 (ROW_NUMBER() OVER()) AS ROWNUM
+				, (ROW_NUMBER() OVER()) AS IDX
+				, AA.WRK_ID
+				, AA.WRK_NM
+				, AA.WRK_EXP
+				, AA.EXE_CMD
+		 		, AA.FRST_REGR_ID
+		 		, AA.FRST_REG_DTM
+		 		, AA.LST_MDFR_ID
+		 		, AA.LST_MDF_DTM
+	 	FROM(
+			SELECT 
+			        A.WRK_ID
+					, A.WRK_NM
+					, A.WRK_EXP
+					, B.EXE_CMD
+			 		, B.FRST_REGR_ID
+			 		, TO_CHAR(B.FRST_REG_DTM,'YYYY-MM-DD HH24:MI') AS FRST_REG_DTM
+			 		, B.LST_MDFR_ID
+			 		, TO_CHAR(B.LST_MDF_DTM,'YYYY-MM-DD HH24:MI') AS LST_MDF_DTM
+			FROM T_WRKCNG_I A, T_BCK_WRKCNG_I B 		
+			WHERE 1 = 1
+			AND  A.WRK_ID = B.WRK_ID	 	
+			AND  B.DB_SVR_ID = #{db_svr_id}
+			<if test="wrk_nm != null and wrk_nm != '' ">
+	      		AND A.WRK_NM LIKE CONCAT('%',#{wrk_nm},'%')
+	      	</if> 	
+	      	<if test="wrk_id != null and wrk_id != '' ">
+	      		AND A.WRK_ID = #{wrk_id}
+	      	</if> 	
+	      	AND A.BSN_DSCD = 'TC001902'
+		 	 ORDER BY B.LST_MDF_DTM DESC
+	 	)AA
+    </select>
+    
+    
+    <select id="selectScriptHistoryList" parameterType="scriptVO" resultType="hashMap">
+	 	SELECT
+	 		(ROW_NUMBER() OVER()) AS ROWNUM,
+	 		AA.DB_SVR_ID,
+            AA.IPADR,
+	 		AA.EXE_SN,
+	 		AA.SCD_ID,
+	 		AA.SCD_NM,
+	 		AA.WRK_ID,
+	 		AA.WRK_NM,
+	 		AA.WRK_EXP,
+	 		AA.WRK_STRT_DTM,
+	 		AA.WRK_END_DTM,
+	 		AA.WRK_DTM,
+	 		AA.EXE_RSLT_CD,
+	 		AA.EXE_RSLT_CD_NM,
+	 		AA.BCK_OPT_CD,
+	 		AA.BCK_OPT_CD_NM,
+	 		AA.TLI,
+	 		AA.FILE_SZ,
+	 		AA.DB_ID,
+	 		AA.DB_NM,
+	 		AA.BCK_FILE_PTH,
+	 		AA.BCK_FILENM,
+	 		AA.FRST_REGR_ID,
+	 		AA.RSLT_MSG,
+	 		AA.FIX_RSLTCD,
+	 		AA.FIX_RSLT_MSG,
+	 		AA.FRST_REG_DTM,
+	 		AA.LST_MDFR_ID,
+	 		AA.LST_MDF_DTM
+        FROM
+        (SELECT
+        	B.DB_SVR_ID,
+	 		B.IPADR,
+	 		TWG.EXE_SN AS EXE_SN,
+	 		TWG.SCD_ID AS SCD_ID,
+	 		(SELECT SCD_NM FROM T_SCD_M WHERE TWG.SCD_ID = SCD_ID ) AS SCD_NM,
+	 		TWG.WRK_ID AS WRK_ID,
+	 		(SELECT WRK_NM FROM T_WRKCNG_I WHERE WRK_ID = TWI.WRK_ID) WRK_NM,
+	 		(SELECT WRK_EXP FROM T_WRKCNG_I WHERE WRK_ID = TWI.WRK_ID) WRK_EXP,
+	 		to_char(TWG.WRK_STRT_DTM,'YYYY-MM-DD HH24:MI') AS WRK_STRT_DTM,
+	 		to_char(TWG.WRK_END_DTM,'YYYY-MM-DD HH24:MI') AS WRK_END_DTM,
+	 		to_char(to_char(TWG.WRK_END_DTM,'YYYY-MM-DD HH24:MI')::timestamp - to_char(TWG.WRK_STRT_DTM,'YYYY-MM-DD HH24:MI')::timestamp, 'HH24:MI') AS WRK_DTM,
+	 		TWG.EXE_RSLT_CD AS EXE_RSLT_CD,
+	 		(SELECT SYS_CD_NM FROM T_SYSDTL_C WHERE TWG.EXE_RSLT_CD = SYS_CD ) AS EXE_RSLT_CD_NM,
+	 		TWG.BCK_OPT_CD AS BCK_OPT_CD,
+	 		(SELECT SYS_CD_NM FROM T_SYSDTL_C WHERE TWG.BCK_OPT_CD = SYS_CD ) AS BCK_OPT_CD_NM,
+	 		TWG.TLI AS TLI,
+	 		TWG.FILE_SZ AS FILE_SZ,
+	 		TWG.DB_ID AS DB_ID,
+	 		(SELECT DB_NM FROM T_DB_I WHERE TWG.DB_ID=DB_ID AND USEYN = 'Y') AS DB_NM,
+	 		TWG.BCK_FILE_PTH AS BCK_FILE_PTH,
+	 		TWG.BCK_FILENM AS BCK_FILENM,
+	 		TWG.FRST_REGR_ID AS FRST_REGR_ID,
+	 		TWG.RSLT_MSG AS RSLT_MSG,
+	 		TWG.FIX_RSLTCD,
+	 		TWG.FIX_RSLT_MSG,
+	 		to_char(TWG.FRST_REG_DTM,'YYYY-MM-DD HH24:MI') AS FRST_REG_DTM,
+	 		TWG.LST_MDFR_ID AS LST_MDFR_ID,
+	 		to_char(TWG.LST_MDF_DTM,'YYYY-MM-DD HH24:MI') AS LST_MDF_DTM	 		
+	 	FROM T_WRKEXE_G TWG, T_BCK_WRKCNG_I TWI, T_DBSVRIPADR_I B, T_WRKCNG_I C
+ 	 	WHERE 1=1
+	 		AND TWG.WRK_ID = TWI.WRK_ID
+	 		AND TWG.WRK_ID = C.WRK_ID
+            AND B.DB_SVR_ID=#{db_svr_id}::numeric
+            AND TWG.DB_SVR_IPADR_ID = B.DB_SVR_IPADR_ID 
+            AND C.BSN_DSCD = 'TC001902'
+            <if test="wrk_strt_dtm != null and wrk_strt_dtm != '' ">
+	      		<if test="wrk_end_dtm != null and wrk_end_dtm != '' ">
+	      			AND (
+	      				TO_DATE(to_char(TWG.WRK_STRT_DTM,'YYYY-MM-DD'),'YYYY-MM-DD') BETWEEN TO_DATE(#{wrk_strt_dtm},'YYYY-MM-DD') AND TO_DATE(#{wrk_end_dtm},'YYYY-MM-DD')
+	      				OR
+	      				TO_DATE(to_char(TWG.WRK_END_DTM,'YYYY-MM-DD'),'YYYY-MM-DD') BETWEEN TO_DATE(#{wrk_strt_dtm},'YYYY-MM-DD') AND TO_DATE(#{wrk_end_dtm},'YYYY-MM-DD')
+	      				)
+	      		</if>
+	      	</if>
+	      	<if test="exe_rslt_cd != null and exe_rslt_cd != '' ">
+	      		AND TWG.EXE_RSLT_CD=#{exe_rslt_cd}
+	      	</if>  
+	      	<if test="wrk_nm != null and wrk_nm != '' ">
+	      		AND C.WRK_NM=#{wrk_nm}
+	      	</if>
+      		ORDER BY LST_MDF_DTM DESC   		
+      	)AA    
+    </select>
+    
+
+	<insert id="insertScriptWork" parameterType="scriptVO">
+		/**
+	 	* Query ID : "insertScriptWork"
+	 	* Description : Work등록
+	 	* Author : 변승우
+	 	**/
+	 	INSERT INTO T_WRKCNG_I
+	 		(
+	 		WRK_ID
+	 		, BSN_DSCD
+	 		, WRK_NM
+	 		, WRK_EXP
+	 		, FRST_REGR_ID
+	 		, FRST_REG_DTM
+	 		, LST_MDFR_ID
+	 		, LST_MDF_DTM
+	 		)
+	 		VALUES
+	 		(
+	 		nextval('q_wrkcng_i_01')
+	 		, 'TC001902'
+	 		, #{wrk_nm}
+			, #{wrk_exp}
+			, #{frst_regr_id}
+			, now()
+			, #{frst_regr_id}
+			, now()
+	 		)
+	</insert>
+
+
+
+	<insert id="insertScript" parameterType="scriptVO">
+		/**
+	 	* Query ID : "insertScript"
+	 	* Description : 스크립트 실행 명령문 등록
+	 	* Author : 변승우
+	 	**/
+	 	INSERT INTO T_BCK_WRKCNG_I
+	 		(
+	 		BCK_WRK_ID
+	 		, WRK_ID
+	 		, DB_SVR_ID
+	 		, EXE_CMD
+	 		, FRST_REGR_ID
+	 		, FRST_REG_DTM
+	 		, LST_MDFR_ID
+	 		, LST_MDF_DTM
+	 		)
+	 		VALUES
+	 		(
+	 		nextval('q_bck_wrkcng_i')
+	 		, #{wrk_id}
+	 		, #{db_svr_id}
+	 		, #{exe_cmd}
+			, #{frst_regr_id}
+			, now()
+			, #{frst_regr_id}
+			, now()
+	 		)
+	</insert>
+	
+	
+	<select id="selectSciptExeInfo" parameterType="int" resultType="hashMap">
+		/**
+	 	* Query ID : selectSciptExeInfo
+	 	* Description : selectSciptExeInfo 조회
+	 	* Author : 변승우
+	 	**/
+			SELECT 
+					EXE_CMD
+			FROM  T_BCK_WRKCNG_I		
+			WHERE WRK_ID = #{wrk_id}			
+    </select>
+    
+    
+    <update id="updateScript" parameterType="scriptVO">
+    	/**
+	 	* Query ID : updateScript
+	 	* Description : 실행명령어 업데이트
+	 	* Author : 변승우
+	 	**/
+	 		UPDATE T_WRKCNG_I SET
+	 			wrk_exp = #{wrk_exp}
+	 		WHERE WRK_ID = #{wrk_id}			
+	 		
+    </update>
+    
+    
+    <update id="updateScriptWork" parameterType="scriptVO">
+		/**
+	 	* Query ID : updateScriptWork
+	 	* Description : work 테이블 업데이트
+	 	* Author : 변승우
+	 	**/   
+	 		UPDATE T_BCK_WRKCNG_I SET
+	 			exe_cmd = #{exe_cmd}
+	 		WHERE WRK_ID = #{wrk_id}	
+    </update>
+    
+    
+    
+	 <delete id="deleteScript" parameterType="scriptVO">
+	   	/**
+	 	* Query ID : deleteScript
+	 	* Description : 실행명령어 삭제
+	 	* Author : 변승우
+	 	**/
+	 		DELETE FROM T_WRKCNG_I
+	 		WHERE WRK_ID = #{wrk_id}			
+	 		
+    </delete>
+    
+    
+    <update id="deleteScriptWork" parameterType="scriptVO">
+		/**
+	 	* Query ID : deleteScriptWork
+	 	* Description : work 테이블 삭제
+	 	* Author : 변승우
+	 	**/   
+	 		DELETE FROM T_BCK_WRKCNG_I 
+	 		WHERE WRK_ID = #{wrk_id}	
+    </update>
+</mapper>

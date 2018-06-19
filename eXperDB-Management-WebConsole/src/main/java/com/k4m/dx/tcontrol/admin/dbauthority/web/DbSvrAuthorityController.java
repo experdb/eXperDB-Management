@@ -185,6 +185,7 @@ public class DbSvrAuthorityController {
 				}
 				
 				resultSet = dbAuthorityService.selectUsrDBSrvAutInfo(usr_id);	
+
 			//}
 		} catch (Exception e) {
 			e.printStackTrace();

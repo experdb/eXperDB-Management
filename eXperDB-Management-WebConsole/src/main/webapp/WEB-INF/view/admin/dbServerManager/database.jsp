@@ -36,7 +36,7 @@ function fn_init() {
 		scrollX: true,
 		bSort: false,
 		columns : [
-		{data : "idx", defaultContent : ""},		
+		{data : "idx", defaultContent : "", className : "dt-center"},		
 		{data : "db_svr_nm", defaultContent : ""},
 		{data : "ipadr", defaultContent : ""},
 		{data : "portno", defaultContent : ""},

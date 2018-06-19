@@ -105,7 +105,9 @@ var table = null;
 			success : function(data) {
 					if(data.resultCode == "0000000000"){
 						table.clear().draw();
-						table.rows.add(data.list).draw();
+						if(data.list.length != 0){
+							table.rows.add(data.list).draw();
+						}
 					}else if(data.resultCode == "8000000002"){
 						alert("<spring:message code='message.msg05' />");
 						top.location.href="/";

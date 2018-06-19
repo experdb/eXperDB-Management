@@ -61,24 +61,24 @@ public class ServiceCallTest {
 
 		restPort = 9443;
 		
-		restIp = "222.110.153.214";
+		restIp = "192.168.56.112";
 
 		
 		String loginId = "";
 		String entityId = "";
 		String password = "";
 		
-		loginId = "swbyun";
+		loginId = "admin";
 		password = "experdb12#";
 		//password = "password";
-		entityId = "d8c1f0e2-42c2-4ed7-a522-fcf731e86640";
+		entityId = "00000000-0000-0000-0000-000000000001";
 		
 		//loginId = "testuser";
 		//password = "1234qwer";
 		//entityId = "d06c0acb-ca3a-4324-83ed-71df370acdb3";
 
 
-		String strTocken = "AEItQbfONOmmrUVAp7nwrGM0pdS9RvWUgAlmLTz+z4Y=";
+		String strTocken = "vWSxujcVJbRz1L2o0sAQei3SAlCX9n4l1WT/EfhGrcI=";
 
 
 		ServiceCallTest test = new ServiceCallTest();
@@ -196,7 +196,7 @@ public class ServiceCallTest {
 		//test.selectEntityUid(restIp, restPort, strTocken, loginId, entityId, loginId);
 		
 		//암호화 통계
-		//test.selectAuditLogSiteHourForStat(restIp, restPort, strTocken, loginId, entityId);
+		test.selectAuditLogSiteHourForStat(restIp, restPort, strTocken, loginId, entityId);
 		
 		//암호화 Agent상태조회
 		test.selectSystemStatus(restIp, restPort, strTocken, loginId, entityId);

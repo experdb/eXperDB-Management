@@ -44,7 +44,8 @@ function fn_init(){
 	{data : "rownum", defaultContent : "", targets : 0, orderable : false, checkboxes : {'selectRow' : true}}, 
 	{data : "idx", className : "dt-center", columnDefs: [ { searchable: false, orderable: false, targets: 0} ], order: [[ 1, 'asc' ]],  defaultContent : ""},
 	{data : "db_svr_nm",  defaultContent : ""}, //서버명
-	{data : "bck_bsn_dscd_nm",  defaultContent : ""}, //구분
+	{data : "bsn_dscd_nm",  defaultContent : ""}, //구분
+	{data : "bck_bsn_dscd_nm",  defaultContent : ""}, //백업구분
 	{data : "wrk_nm", className : "dt-left", defaultContent : ""}, //work명
 	{ data : "wrk_exp",
 			render : function(data, type, full, meta) {	 	
@@ -140,11 +141,12 @@ function fn_init(){
 	  table.tables().header().to$().find('th:eq(1)').css('min-width', '30px');
 	  table.tables().header().to$().find('th:eq(2)').css('min-width', '130px');
 	  table.tables().header().to$().find('th:eq(3)').css('min-width', '70px');
-	  table.tables().header().to$().find('th:eq(4)').css('min-width', '200px');
-	  table.tables().header().to$().find('th:eq(5)').css('min-width', '300px');
-	  table.tables().header().to$().find('th:eq(6)').css('min-width', '80px');
-	  table.tables().header().to$().find('th:eq(7)').css('min-width', '80px');  
-	  table.tables().header().to$().find('th:eq(8)').css('min-width', '0px');
+	  table.tables().header().to$().find('th:eq(4)').css('min-width', '70px');
+	  table.tables().header().to$().find('th:eq(5)').css('min-width', '200px');
+	  table.tables().header().to$().find('th:eq(6)').css('min-width', '300px');
+	  table.tables().header().to$().find('th:eq(7)').css('min-width', '80px');
+	  table.tables().header().to$().find('th:eq(8)').css('min-width', '80px');  
+	  table.tables().header().to$().find('th:eq(9)').css('min-width', '0px');
 
     $(window).trigger('resize'); 
 }
@@ -641,6 +643,7 @@ function fn_check() {
 												<th width="30"><spring:message code="common.no" /></th>												
 												<th width="130"><spring:message code="common.dbms_name" /></th>
 												<th width="70"><spring:message code="common.division" /></th>
+												<th width="70"><spring:message code="backup_management.bck_div" /></th>
 												<th width="200" class="dt-center"><spring:message code="common.work_name" /> </th>
 												<th width="300" class="dt-center"><spring:message code="common.work_description" /></th>												
 												<th width="80"><spring:message code="data_transfer.run_order" /></th>
