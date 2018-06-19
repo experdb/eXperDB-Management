@@ -40,7 +40,7 @@ function fn_init(){
 		{data : "idx", className : "dt-center", defaultContent : ""}, 
 		{data : "wrk_nm", className : "dt-left", defaultContent : ""
 			,"render": function (data, type, full) {				
-				  return '<span onClick=javascript:fn_workLayer("'+full.wrk_id+'"); class="bold">' + full.wrk_nm + '</span>';
+				  return '<span onClick=javascript:fn_scriptLayer("'+full.wrk_id+'"); class="bold">' + full.wrk_nm + '</span>';
 			}
 		},
 		{ data : "wrk_exp",
@@ -55,6 +55,7 @@ function fn_init(){
 		{data : "frst_reg_dtm", defaultContent : ""},
 		{data : "lst_mdfr_id", defaultContent : ""},
 		{data : "lst_mdf_dtm", defaultContent : ""},
+		{data : "wrk_id", defaultContent : "", visible: false }
 	],'select': {'style': 'multi'}
 	});
 	
@@ -66,23 +67,57 @@ function fn_init(){
 	table.tables().header().to$().find('th:eq(5)').css('min-width', '100px');  
 	table.tables().header().to$().find('th:eq(6)').css('min-width', '100px');
 	table.tables().header().to$().find('th:eq(7)').css('min-width', '100px');
-
+	table.tables().header().to$().find('th:eq(8)').css('min-width', '0px');
 	$(window).trigger('resize'); 
 }
 
 
 $(window.document).ready(
 		function() {	
-			fn_init();		
+			fn_init();					
+			fn_search();
 		}
 );
 	
 	
 
 
-function fn_script_reg_popup(){
-	var popUrl = "/popup/scriptRegForm.do";
-	//var popUrl = "/popup/scriptRegForm.do?db_svr_id=${db_svr_id}";
+function fn_search(){
+	$.ajax({
+		url : "/selectScriptList.do", 
+	  	data : {
+	  		db_svr_id : '<c:out value="${db_svr_id}"/>',
+	  		wrk_nm : $("#wrk_nm").val()
+	  	},
+		dataType : "json",
+		type : "post",
+		beforeSend: function(xhr) {
+	        xhr.setRequestHeader("AJAX", true);
+	     },
+		error : function(xhr, status, error) {
+			if(xhr.status == 401) {
+				alert("<spring:message code='message.msg02' />");
+				top.location.href = "/";
+			} else if(xhr.status == 403) {
+				alert("<spring:message code='message.msg03' />");
+				top.location.href = "/";
+			} else {
+				alert("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""));
+			}
+		},
+		success : function(data) {
+			table.clear().draw();
+			table.rows.add(data).draw();
+		}
+	});
+}
+
+
+
+
+function fn_reg_popup(){
+	//var popUrl = "/popup/scriptRegForm.do";
+	var popUrl = "/popup/scriptRegForm.do?db_svr_id=${db_svr_id}";
 	var width = 954;
 	var height = 669;
 	var left = (window.screen.width / 2) - (width / 2);
@@ -93,8 +128,75 @@ function fn_script_reg_popup(){
 	winPop.focus();
 }
 
+
+function fn_rereg_popup(){
+	var datas = table.rows('.selected').data();
+	var wrk_id = table.row('.selected').data().wrk_id;
+	
+	if (datas.length <= 0) {
+		alert("<spring:message code='message.msg35' />");
+		return false;
+	}else if(datas.length > 1){
+		alert("<spring:message code='message.msg04' />");
+		return false;
+	}else{	
+		var popUrl = "/popup/scriptReregForm.do?db_svr_id=${db_svr_id}&wrk_id="+wrk_id;
+		var width = 954;
+		var height = 669;
+		var left = (window.screen.width / 2) - (width / 2);
+		var top = (window.screen.height /2) - (height / 2);
+		var popOption = "width="+width+", height="+height+", top="+top+", left="+left+", resizable=no, scrollbars=yes, status=no, toolbar=no, titlebar=yes, location=no,";
+		
+		var winPop = window.open(popUrl,"scriptReregPop",popOption);
+		winPop.focus();
+	}
+}
+
+
+function fn_delete(){
+	var datas = table.rows('.selected').data();
+	var wrk_id = table.row('.selected').data().wrk_id;
+	
+	if (datas.length <= 0) {
+		alert("<spring:message code='message.msg35' />");
+		return false;
+	}else if(datas.length > 1){
+		alert("<spring:message code='message.msg04' />");
+		return false;
+	}else{	
+		 if(confirm('<spring:message code="message.msg162"/>')){
+				$.ajax({
+					url : "/deleteScript.do", 
+				  	data : {
+				  		wrk_id : wrk_id
+				  	},
+					dataType : "json",
+					type : "post",
+					beforeSend: function(xhr) {
+				        xhr.setRequestHeader("AJAX", true);
+				     },
+					error : function(xhr, status, error) {
+						if(xhr.status == 401) {
+							alert("<spring:message code='message.msg02' />");
+							top.location.href = "/";
+						} else if(xhr.status == 403) {
+							alert("<spring:message code='message.msg03' />");
+							top.location.href = "/";
+						} else {
+							alert("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""));
+						}
+					},
+					success : function(data) {
+						alert('<spring:message code="message.msg60" />');
+						location.reload();
+					}
+				});
+		 }
+	}
+}
 </script>
 
+<%@include file="../cmmn/workScriptInfo.jsp"%>
 
 <!-- contents -->
 <div id="contents">
@@ -117,10 +219,10 @@ function fn_script_reg_popup(){
 		<div class="contents">
 			<div class="cmm_grp">
 				<div class="btn_type_01">
-					<a class="btn" onClick="fn_rman_find_list();"><button><spring:message code="common.search" /></button></a>
-					<span class="btn" onclick="fn_script_reg_popup()"><button><spring:message code="common.registory" /></button></span>
-					<span class="btn" onClick="fn_script_regreg_popup()"><button><spring:message code="common.modify" /></button></span>
-					<span class="btn" onClick="fn_script_work_delete()"><button><spring:message code="common.delete" /></button></span>
+					<a class="btn" onClick="fn_search();"><button><spring:message code="common.search" /></button></a>
+					<span class="btn" onclick="fn_reg_popup()"><button><spring:message code="common.registory" /></button></span>
+					<span class="btn" onClick="fn_rereg_popup()"><button><spring:message code="common.modify" /></button></span>
+					<span class="btn" onClick="fn_delete()"><button><spring:message code="common.delete" /></button></span>
 				</div>	
 				<div class="sch_form">
 					<table class="write">
@@ -150,6 +252,7 @@ function fn_script_reg_popup(){
 									<th width="100"><spring:message code="common.regist_datetime" /></th>
 									<th width="100"><spring:message code="common.modifier" /></th>
 									<th width="100"><spring:message code="common.modify_datetime" /></th>
+									<th width="0"></th>
 								</tr>
 							</thead>
 					</table>

@@ -23,51 +23,44 @@
 var table = null;
 
 $(window.document).ready(function() {
-	var lgi_dtm_start = "${lgi_dtm_start}";
-	var lgi_dtm_end = "${lgi_dtm_end}";
-	if (lgi_dtm_start != "" && lgi_dtm_end != "") {
-		$('#from').val(lgi_dtm_start);
-		$('#to').val(lgi_dtm_end);
-	} else {
-		var today = new Date();
-		var day_end = today.toJSON().slice(0,10);
-		today.setDate(today.getDate() - 7);
-		var day_start = today.toJSON().slice(0,10); 
-		$('#from').val(day_start);
-		$('#to').val(day_end);
-	}
+	var today = new Date();
+	var day_end = today.toJSON().slice(0,10);
+	
+	today.setDate(today.getDate() - 7);
+	var day_start = today.toJSON().slice(0,10); 
+
+	$("#wrk_strt_dtm").val(day_start);
+	$("#wrk_end_dtm").val(day_end);
+
+	$( ".calendar" ).datepicker({
+		dateFormat: 'yy-mm-dd',
+		changeMonth : true,
+		changeYear : true
+ 	});
 	
 	fn_init();
+	fn_search();
+	
 });
 
 
-$(function() {		
-	var dateFormat = "yyyy-mm-dd", from = $("#from").datepicker({
-		changeMonth : false,
-		changeYear : false,
-		onClose : function(selectedDate) {
-			$("#to").datepicker("option", "minDate", selectedDate);
-		}
-	})
+ $(function() {			
+	$("#btnSelect").click(function() {
+		var wrk_strt_dtm = $("#wrk_strt_dtm").val();
+		var wrk_end_dtm = $("#wrk_end_dtm").val();
 
-	to = $("#to").datepicker({
-		changeMonth : false,
-		changeYear : false,
-		onClose : function(selectedDate) {
-			$("#from").datepicker("option", "maxDate", selectedDate);
+		if (wrk_strt_dtm != "" && wrk_end_dtm == "") {
+			alert("<spring:message code='message.msg14' />");
+			return false;
 		}
-	})
 
-	function getDate(element) {
-		var date;
-		try {
-			date = $.datepicker.parseDate(dateFormat, element.value);
-		} catch (error) {
-			date = null;
+		if (wrk_end_dtm != "" && wrk_strt_dtm == "") {
+			alert("<spring:message code='message.msg15' />");
+			return false;
 		}
-		return date;
-	}
-});
+		 fn_search();
+	});
+}); 
 
 
 function fn_init(){
@@ -80,7 +73,7 @@ function fn_init(){
 		         	{ data: "rownum", className: "dt-center", defaultContent: ""}, 
 		         	{data : "wrk_nm", className : "dt-left", defaultContent : ""
 		    			,"render": function (data, type, full) {				
-		    				  return '<span onClick=javascript:fn_workLayer("'+full.wrk_id+'"); class="bold">' + full.wrk_nm + '</span>';
+		    				  return '<span onClick=javascript:fn_scriptLayer("'+full.wrk_id+'"); class="bold">' + full.wrk_nm + '</span>';
 		    			}
 		    		},
 		    		{ data : "wrk_exp",
@@ -91,10 +84,25 @@ function fn_init(){
 		    			},
 		    			defaultContent : ""
 		    		},
-		    		{ data: "", className: "dt-center", defaultContent: ""}, 
-		    		{ data: "", className: "dt-center", defaultContent: ""}, 
-		    		{ data: "", className: "dt-center", defaultContent: ""}, 
-		    		{ data: "", className: "dt-center", defaultContent: ""}
+		    		{ data: "wrk_strt_dtm", className: "dt-center", defaultContent: ""}, 
+		    		{ data: "wrk_end_dtm", className: "dt-center", defaultContent: ""}, 
+		    		{ data: "wrk_dtm", className: "dt-center", defaultContent: ""}, 
+		    		{
+	 					data : "exe_rslt_cd_nm",
+	 					render : function(data, type, full, meta) {	 						
+	 						var html = '';
+	 						if (full.exe_rslt_cd == 'TC001701') {
+	 							html += '<span class="btn btnC_01 btnF_02"><img src="../images/ico_state_02.png" style="margin-right:3px;"/>Success</span>';
+	 						} else if(full.exe_rslt_cd == 'TC001702'){
+	 							html += '<span class="btn btnC_01 btnF_02"><button onclick="fn_failLog('+full.exe_sn+')"><img src="../images/ico_state_01.png" style="margin-right:3px;"/>Fail</button></span>';
+	 						} else {
+	 							html +='<span class="btn btnC_01 btnF_02"><img src="../images/ico_state_03.png" style="margin-right:3px;"/><spring:message code="etc.etc28"/></span>';
+	 						}
+	 						return html;
+	 					},
+	 					className : "dt-center",
+	 					defaultContent : ""
+	 				}
  		        ]
 	});
    	
@@ -110,7 +118,46 @@ function fn_init(){
 }
 
 
+/* ********************************************************
+ *  스크립트 리스트
+ ******************************************************** */
+function fn_search(){	
+	$.ajax({
+		url : "/selectScriptHistoryList.do",
+	  	data : {
+	  		db_svr_id : $("#db_svr_id").val(),
+	  		wrk_strt_dtm : $("#wrk_strt_dtm").val(),
+	  		wrk_end_dtm : $("#wrk_end_dtm").val(),
+	  		exe_rslt_cd : $("#exe_rslt_cd").val(),
+	  		wrk_nm : $('#wrk_nm').val(),
+	  	},
+		dataType : "json",
+		type : "post",
+		beforeSend: function(xhr) {
+	        xhr.setRequestHeader("AJAX", true);
+	     },
+		error : function(xhr, status, error) {
+			if(xhr.status == 401) {
+				alert("<spring:message code='message.msg02' />");
+				top.location.href = "/";
+			} else if(xhr.status == 403) {
+				alert("<spring:message code='message.msg03' />");
+				top.location.href = "/";
+			} else {
+				alert("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""));
+			}
+		},
+		success : function(result) {
+			table.rows({selected: true}).deselect();
+			table.clear().draw();
+			table.rows.add(result).draw();
+		}
+	});
+}
 </script>
+
+<%@include file="../cmmn/workScriptInfo.jsp"%>
+
 <!-- contents -->
 <div id="contents">
 	<div class="contents_wrap">
@@ -152,10 +199,10 @@ function fn_init(){
 								<td colspan="3">
 									<div class="calendar_area">
 										<a href="#n" class="calendar_btn">달력열기</a>
-										<input type="text" name="wrk_strt_dtm" id="from" class="calendar" readonly/>
+										<input type="text" name="wrk_strt_dtm" id="wrk_strt_dtm" class="calendar" readonly/>
 										<span class="wave">~</span>
 										<a href="#n" class="calendar_btn">달력열기</a>
-										<input type="text" name="wrk_end_dtm" id="to" class="calendar" readonly/>
+										<input type="text" name="wrk_end_dtm" id="wrk_end_dtm" class="calendar" readonly/>
 									</div>
 								</td>
 							</tr>
@@ -185,10 +232,10 @@ function fn_init(){
 								<th width="100"><spring:message code="common.no" /></th>
 								<th width="100"><spring:message code="common.work_name" /></th>
 								<th width="100"><spring:message code="common.work_description" /></th>
-								<th width="100">작업시작시간</th>
-								<th width="100">작업종료시간</th>
-								<th width="100">경과시간</th>
-								<th width="100">상태</th>
+								<th width="100"><spring:message code="backup_management.work_start_time" /></th>
+								<th width="100"><spring:message code="backup_management.work_end_time" /></th>
+								<th width="100"><spring:message code="backup_management.elapsed_time" /></th>
+								<th width="100"><spring:message code="common.status" /></th>
 							</tr>
 						</thead>
 					</table>

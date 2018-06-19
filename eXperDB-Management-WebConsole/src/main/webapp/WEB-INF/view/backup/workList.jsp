@@ -260,7 +260,8 @@ function fn_rman_regreg_popup(){
 			return false;
 		}else{
 			var bck_wrk_id = tableRman.row('.selected').data().bck_wrk_id;
-			var popUrl = "/popup/rmanRegReForm.do?db_svr_id=${db_svr_id}&bck_wrk_id="+bck_wrk_id;
+			var wrk_id = tableRman.row('.selected').data().wrk_id;
+			var popUrl = "/popup/rmanRegReForm.do?db_svr_id=${db_svr_id}&bck_wrk_id="+bck_wrk_id+"&wrk_id="+wrk_id;
 			var width = 954;
 			var height = 799;
 			var left = (window.screen.width / 2) - (width / 2);
@@ -317,7 +318,8 @@ function fn_dump_regreg_popup(){
 		return false;
 	}else{
 		var bck_wrk_id = tableDump.row('.selected').data().bck_wrk_id;
-		var popUrl = "/popup/dumpRegReForm.do?db_svr_id=${db_svr_id}&bck_wrk_id="+bck_wrk_id;
+		var wrk_id = tableDump.row('.selected').data().wrk_id;
+		var popUrl = "/popup/dumpRegReForm.do?db_svr_id=${db_svr_id}&bck_wrk_id="+bck_wrk_id+"&wrk_id="+wrk_id;
 		var width = 954;
 		var height = 900;
 		var left = (window.screen.width / 2) - (width / 2);

@@ -31,6 +31,7 @@
 // 저장후 작업ID
 var wrk_id = null;
 var haCnt =0;
+var wrk_id = "${wrk_id}";
 
 /* ********************************************************
  * DB Object initialization

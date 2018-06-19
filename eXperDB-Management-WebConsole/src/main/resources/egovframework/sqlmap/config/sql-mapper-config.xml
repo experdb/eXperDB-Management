@@ -40,6 +40,7 @@
 		<typeAlias alias="tblKafkaConfigVO" type="com.k4m.dx.tcontrol.tree.transfer.service.TblKafkaConfigVO" /> 
 		<typeAlias alias="ipadrVO" type="com.k4m.dx.tcontrol.admin.dbserverManager.service.IpadrVO" /> 
 		<typeAlias alias="wrkExeVO" type="com.k4m.dx.tcontrol.functions.schedule.service.WrkExeVO" /> 
+		<typeAlias alias="scriptVO" type="com.k4m.dx.tcontrol.script.service.ScriptVO" /> 
     </typeAliases>
     
  	<mappers>
@@ -80,6 +81,9 @@
 		
 		<!-- dashboard -->
 		<mapper resource="egovframework/sqlmap/mappers/dashboard/dashboardSql.xml" />
+		
+		<!-- script -->
+		<mapper resource="egovframework/sqlmap/mappers/script/scriptSql.xml" />
 		
 	</mappers>
 </configuration>

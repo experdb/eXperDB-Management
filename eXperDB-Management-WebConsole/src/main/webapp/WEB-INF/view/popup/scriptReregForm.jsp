@@ -28,16 +28,47 @@
 <script type="text/javascript" src="/js/jquery-1.9.1.min.js"></script>
 <script type="text/javascript" src="/js/common.js"></script>
 <script type="text/javascript">
-// 저장후 작업ID
-var wrk_id = null;
-var wrk_nmChk ="fail";
+
+var wrk_id = "${wrk_id}";
 var db_svr_id = "${db_svr_id}";
 
 
 $(window.document).ready(function() {
-
+	fn_search();
 });
 
+
+
+function fn_search(){
+	$.ajax({
+		url : "/selectScriptList.do", 
+	  	data : {
+	  		db_svr_id : '<c:out value="${db_svr_id}"/>',
+	  		wrk_id : '<c:out value="${wrk_id}"/>'
+	  	},
+		dataType : "json",
+		type : "post",
+		beforeSend: function(xhr) {
+	        xhr.setRequestHeader("AJAX", true);
+	     },
+		error : function(xhr, status, error) {
+			if(xhr.status == 401) {
+				alert("<spring:message code='message.msg02' />");
+				top.location.href = "/";
+			} else if(xhr.status == 403) {
+				alert("<spring:message code='message.msg03' />");
+				top.location.href = "/";
+			} else {
+				alert("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""));
+			}
+		},
+		success : function(data) {
+			document.getElementById("wrk_nm").value=data[0].wrk_nm;
+			document.getElementById("wrk_exp").value=data[0].wrk_exp;
+			document.getElementById("exe_cmd").value=data[0].exe_cmd;
+		}
+	});
+}
 
 
 
@@ -46,14 +77,7 @@ $(window.document).ready(function() {
  * Validation Check
  ******************************************************** */
 function valCheck(){
-	if($("#wrk_nm").val() == ""){
-		alert('<spring:message code="message.msg107" />');
-		$("#wrk_nm").focus();
-		return false;
-	}else if(wrk_nmChk =="fail"){
-		alert('<spring:message code="backup_management.work_overlap_check"/>');
-		return false;
-	}else if($("#wrk_exp").val() == ""){
+	 if($("#wrk_exp").val() == ""){
 		alert('<spring:message code="message.msg108" />');
 		$("#wrk_exp").focus();
 		return false;
@@ -68,65 +92,20 @@ function valCheck(){
 
 
 
-//work명 중복체크
-function fn_check() {
-	var wrk_nm = document.getElementById("wrk_nm");
-	if (wrk_nm.value == "") {
-		alert('<spring:message code="message.msg107" />');
-		document.getElementById('wrk_nm').focus();
-		return;
-	}
-	$.ajax({
-		url : '/wrk_nmCheck.do',
-		type : 'post',
-		data : {
-			wrk_nm : $("#wrk_nm").val()
-		},
-		success : function(result) {
-			if (result == "true") {
-				alert('<spring:message code="backup_management.reg_possible_work_nm"/>');
-				document.getElementById("wrk_nm").focus();
-				wrk_nmChk = "success";		
-			} else {
-				scd_nmChk = "fail";
-				alert('<spring:message code="backup_management.effective_work_nm"/>');
-				document.getElementById("wrk_nm").focus();
-			}
-		},
-		beforeSend: function(xhr) {
-	        xhr.setRequestHeader("AJAX", true);
-	     },
-		error : function(xhr, status, error) {
-			if(xhr.status == 401) {
-				alert('<spring:message code="message.msg02" />');
-				top.location.href = "/";
-			} else if(xhr.status == 403) {
-				alert('<spring:message code="message.msg03" />');
-				top.location.href = "/";
-			} else {
-				alert("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""));
-			}
-		}
-	});
-}
-
-
-function fn_insert_work(){
+function fn_update_work(){
 	if(valCheck()){
 		$.ajax({
-			url : '/popup/insertScript.do',
+			url : '/popup/updateScript.do',
 			type : 'post',
 			data : {
-				db_svr_id : db_svr_id,
-				bsn_dscd : "TC001902",
-				wrk_nm : $("#wrk_nm").val(),
+				wrk_id : wrk_id,
 				wrk_exp : $("#wrk_exp").val(),
 				exe_cmd : $("#exe_cmd").val()
 			},
 			success : function(result) {
-				alert("등록하였습니다.");
+				alert("수정하였습니다.");
 				window.close();
-				opener.fn_search();		
+				opener.fn_search();
 			},
 			beforeSend: function(xhr) {
 		        xhr.setRequestHeader("AJAX", true);
@@ -154,10 +133,10 @@ function fn_insert_work(){
 <body>
 		<div class="pop_container">
 			<div class="pop_cts">
-				<p class="tit">스크립트 명령어등록</p>
+				<p class="tit">스크립트 명령어수정</p>
 				<div class="pop_cmm">
 					<table class="write">
-						<caption>스크립트 명령어등록</caption>
+						<caption>스크립트 명령어수정</caption>
 						<colgroup>
 							<col style="width:130px;" />
 							<col />
@@ -165,8 +144,7 @@ function fn_insert_work(){
 						<tbody>
 							<tr>
 								<th scope="row" class="ico_t1"><spring:message code="common.work_name" /></th>
-								<td><input type="text" class="txt" name="wrk_nm" id="wrk_nm" maxlength="20" onkeyup="fn_checkWord(this,20)" placeholder="20<spring:message code='message.msg188'/>" onblur="this.value=this.value.trim()"/>
-								<span class="btn btnC_01"><button type="button" class= "btn_type_02" onclick="fn_check()" style="width: 60px; margin-right: -60px; margin-top: 0;"><spring:message code="common.overlap_check" /></button></span>
+								<td><input type="text" class="txt" name="wrk_nm" id="wrk_nm" maxlength="20" <spring:message code='message.msg188'/>" readonly/>					
 								</td>
 							</tr>
 							<tr>
@@ -197,7 +175,7 @@ function fn_insert_work(){
 					</table>
 				</div>
 				<div class="btn_type_02">
-					<span class="btn btnC_01" onClick="fn_insert_work();"><button><spring:message code="common.registory" /></button></span>
+					<span class="btn btnC_01" onClick="fn_update_work();"><button><spring:message code="common.modify" /></button></span>
 					<span class="btn" onclick="self.close();return false;"><button><spring:message code="common.cancel" /></button></span>
 				</div>
 		</div><!-- //pop-container -->
