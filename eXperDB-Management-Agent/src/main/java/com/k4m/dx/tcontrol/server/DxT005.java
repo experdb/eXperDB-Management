@@ -160,7 +160,7 @@ public class DxT005 extends SocketCtl {
 				// 다음실행여부가 Y 이면 에러나도 다음 시행함.
 				if (retVal.equals("success")) {
 					String strFileName = strBCK_FILENM;
-					String strFileSize = "";
+					String strFileSize = "0";
 
 					socketLogger.info("[BCK_BSN_DSCD] " + strBCK_BSN_DSCD);
 
