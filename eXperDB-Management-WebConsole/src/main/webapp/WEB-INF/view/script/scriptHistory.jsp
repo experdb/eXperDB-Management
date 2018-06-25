@@ -92,7 +92,7 @@ function fn_init(){
 	 					render : function(data, type, full, meta) {	 						
 	 						var html = '';
 	 						if (full.exe_rslt_cd == 'TC001701') {
-	 							html += '<span class="btn btnC_01 btnF_02"><img src="../images/ico_state_02.png" style="margin-right:3px;"/>Success</span>';
+	 							html += '<span class="btn btnC_01 btnF_02"><button onclick="fn_failLog('+full.exe_sn+')"><img src="../images/ico_state_02.png" style="margin-right:3px;"/>Success</button></span>';
 	 						} else if(full.exe_rslt_cd == 'TC001702'){
 	 							html += '<span class="btn btnC_01 btnF_02"><button onclick="fn_failLog('+full.exe_sn+')"><img src="../images/ico_state_01.png" style="margin-right:3px;"/>Fail</button></span>';
 	 						} else {
@@ -157,6 +157,7 @@ function fn_search(){
 </script>
 
 <%@include file="../cmmn/workScriptInfo.jsp"%>
+<%@include file="../cmmn/wrkLog.jsp"%>
 
 <!-- contents -->
 <div id="contents">

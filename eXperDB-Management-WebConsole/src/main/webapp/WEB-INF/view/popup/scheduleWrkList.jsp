@@ -46,6 +46,7 @@ function fn_init(){
 	{data : "idx", className : "dt-center", columnDefs: [ { searchable: false, orderable: false, targets: 0} ], order: [[ 1, 'asc' ]],  defaultContent : ""},
 	{data : "wrk_id",  defaultContent : "", visible: false },
 	{data : "db_svr_nm",  defaultContent : ""}, //서버명
+	{data : "bsn_dscd_nm",  defaultContent : ""},
 	{data : "bck_bsn_dscd_nm",  defaultContent : ""}, //구분
 	{data : "wrk_nm", className : "dt-left", defaultContent : ""
 		,"render": function (data, type, full) {
@@ -128,10 +129,18 @@ $(window.document).ready(function() {
 	margin-top: 0px !important;
 }
 
+
+#scriptInfo{
+	width: 80% !important;
+	height: 500px !important;
+	margin-top: 0px !important;
+}
+
 </style>
 <%@include file="../cmmn/commonLocale.jsp"%>  
 <%@include file="../cmmn/workRmanInfo.jsp"%>
 <%@include file="../cmmn/workDumpInfo.jsp"%>
+<%@include file="../cmmn/workScriptInfo.jsp"%>
 
 <div class="pop_container">
 	<div class="pop_cts">
@@ -145,7 +154,8 @@ $(window.document).ready(function() {
 						<th width="30"><spring:message code="common.no" /></th>
 						<th width="0"></th>
 						<th width="100"><spring:message code="data_transfer.server_name" /></th>
-						<th width="100"><spring:message code="common.division" /></th>
+						<th width="100"><spring:message code="common.division" /></th>	
+						<th width="100"><spring:message code="backup_management.bck_div"/></th>		
 						<th width="200" class="dt-center"><spring:message code="common.work_name" /></th>
 						<th width="300" class="dt-center"><spring:message code="common.work_description" /></th>
 						<th width="80"><spring:message code="schedule.onerror" /></th>

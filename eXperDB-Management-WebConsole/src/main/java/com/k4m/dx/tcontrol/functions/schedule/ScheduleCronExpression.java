@@ -78,26 +78,26 @@ public class ScheduleCronExpression {
 			exe_hms += " " + exe_dt.substring(6) + " " + exe_dt.substring(4, 6) + " ? " + exe_dt.substring(0, 4);
 		}
 		
-		initStrExecutCycle(exe_perd_cd, exe_dt, exe_h, exe_m, exe_s, exe_month, exe_day);
+		//initStrExecutCycle(exe_perd_cd, exe_dt, exe_h, exe_m, exe_s, exe_month, exe_day);
 		
 		return exe_hms;
 	}
 	
-	private void initStrExecutCycle(String exe_perd_cd, String exe_dt, String exe_h, String exe_m, String exe_s, String exe_month, String exe_day)
+/*	private void initStrExecutCycle(String exe_perd_cd, String exe_dt, String exe_h, String exe_m, String exe_s, String exe_month, String exe_day)
 	{
 	
 		String exe_hms = "";
 				
 		exe_hms = exe_s + "초" + exe_m + "분 " + exe_h + "시";
 		
-		/*
+		
 		 * 실행주기(exe_perd_cd)
 		 * exe_perd_cd:	TC001601 = 매일
 		 * 				TC001602 = 매주
 		 * 				TC001603 = 매월
 		 * 				TC001604 = 매년
 		 * 				TC001605 = 1회실행
-		 */
+		 
 		if ("TC001601".equals(exe_perd_cd))
 		{
 			exe_hms = "매일 " + exe_hms;
@@ -156,6 +156,6 @@ public class ScheduleCronExpression {
 		{
 			exe_hms = exe_dt.substring(0, 4) + "년 " + exe_dt.substring(4, 6) + "월 " + exe_dt.substring(6) + "일 " + exe_hms;
 		}
-	}
+	}*/
 
 }

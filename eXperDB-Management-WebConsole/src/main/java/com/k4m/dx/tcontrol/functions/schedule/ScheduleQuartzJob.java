@@ -430,6 +430,9 @@ public class ScheduleQuartzJob implements Job{
 				int PORT = agentInfo.getSOCKET_PORT();
 						
 				ClientInfoCmmn clc = new ClientInfoCmmn();
+				System.out.println(IP);
+				System.out.println(PORT);
+				System.out.println(db_svr_ipadr_id);
 				clc.db_backup(resultWork, CMD, IP ,PORT, BCKNM, db_svr_ipadr_id);	
 		} catch (Exception e) {
 			e.printStackTrace();

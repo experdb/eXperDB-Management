@@ -182,7 +182,7 @@ public class ScriptController {
 	@ResponseBody
 	public List<Map<String, Object>> selectScriptList(@ModelAttribute("ScriptVO") ScriptVO scriptVO,HttpServletRequest request, @ModelAttribute("historyVO") HistoryVO historyVO){
 		List<Map<String, Object>> resultSet = null;
-		
+		String result;
 		// 화면접근이력 이력 남기기
 		/*try {
 			CmmnUtils.saveHistory(request, historyVO);
@@ -284,6 +284,9 @@ public class ScriptController {
 			
 			if(wrkid_result.equals("S")){
 				try {	
+					String cmd = toTEXT(scriptVO.getExe_cmd());
+					scriptVO.setExe_cmd(cmd);
+					
 					scriptService.insertScript(scriptVO);
 				} catch (Exception e) {
 					e.printStackTrace();
@@ -334,8 +337,11 @@ public class ScriptController {
 			HttpSession session = request.getSession();
 			String usr_id = (String) session.getAttribute("usr_id");
 			scriptVO.setFrst_regr_id(usr_id);		
-			
+
 			try{
+				String cmd = toTEXT(scriptVO.getExe_cmd());
+				scriptVO.setExe_cmd(cmd);
+
 				// 화면접근이력 이력 남기기
 				/*try {
 					CmmnUtils.saveHistory(request, historyVO);
@@ -383,4 +389,22 @@ public class ScriptController {
 				e.printStackTrace();
 			}
 		}		
+		
+		public static String toTEXT(String str) {
+
+			if(str == null)
+			return null;
+
+			String returnStr = str;
+			returnStr = returnStr.replaceAll("<br>", "\n");
+			returnStr = returnStr.replaceAll("&gt;", ">");
+			returnStr = returnStr.replaceAll("&lt;", "<");
+			returnStr = returnStr.replaceAll("&quot;", "\"");
+			returnStr = returnStr.replaceAll("&nbsp;", " ");
+			returnStr = returnStr.replaceAll("&amp;", "&");
+			returnStr = returnStr.replaceAll("\"", "&#34;");
+			returnStr = returnStr.replaceAll("&apos;", "'");
+			return returnStr;
+			}
+
 }

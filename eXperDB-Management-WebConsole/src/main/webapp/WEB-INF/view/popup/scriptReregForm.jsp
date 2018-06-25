@@ -29,6 +29,7 @@
 <script type="text/javascript" src="/js/common.js"></script>
 <script type="text/javascript">
 
+var str = null;
 var wrk_id = "${wrk_id}";
 var db_svr_id = "${db_svr_id}";
 
@@ -93,6 +94,7 @@ function valCheck(){
 
 
 function fn_update_work(){
+	
 	if(valCheck()){
 		$.ajax({
 			url : '/popup/updateScript.do',
@@ -125,7 +127,6 @@ function fn_update_work(){
 	}
 	
 }
-
 </script>
 
 

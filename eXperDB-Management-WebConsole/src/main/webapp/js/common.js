@@ -390,52 +390,56 @@ function fn_workLayer(wrk_id){
 		success : function(result) {
 			if(result.length==0){
 				alert("Work가 삭제되어 Work 정보를 확인할 수 없습니다.");
-			}else{
-				// RMAN
-				if(result[0].bck_bsn_dscd == "TC000201"){
-					$("#r_bck_bsn_dscd_nm").html(result[0].bck_bsn_dscd_nm);
-					$("#bck_opt_cd_nm").html(result[0].bck_opt_cd_nm);
-					$("#r_wrk_nm").html(result[0].wrk_nm);
-					$("#r_wrk_exp").html(result[0].wrk_exp);
-					if(result[0].cps_yn == "N"){
-						$("#cps_yn").html(agent_monitoring_no);
+			}else{				
+				if(result[0].bsn_dscd == "TC001901"){
+					// RMAN
+					if(result[0].bck_bsn_dscd == "TC000201"){
+						$("#r_bck_bsn_dscd_nm").html(result[0].bck_bsn_dscd_nm);
+						$("#bck_opt_cd_nm").html(result[0].bck_opt_cd_nm);
+						$("#r_wrk_nm").html(result[0].wrk_nm);
+						$("#r_wrk_exp").html(result[0].wrk_exp);
+						if(result[0].cps_yn == "N"){
+							$("#cps_yn").html(agent_monitoring_no);
+						}else{
+							$("#cps_yn").html(agent_monitoring_yes);
+						}
+						//$("#cps_yn").html(result[0].cps_yn);
+						$("#log_file_pth").html(result[0].log_file_pth);
+						$("#data_pth").html(result[0].data_pth);
+						$("#bck_pth").html(result[0].bck_pth);
+						$("#r_file_stg_dcnt").html(result[0].file_stg_dcnt);
+						$("#r_bck_mtn_ecnt").html(result[0].bck_mtn_ecnt);
+						$("#acv_file_stgdt").html(result[0].acv_file_stgdt);
+						$("#acv_file_mtncnt").html(result[0].acv_file_mtncnt);
+						if(result[0].log_file_bck_yn == "N"){
+							$("#log_file_bck_yn").html(agent_monitoring_no);
+						}else{
+							$("#log_file_bck_yn").html(agent_monitoring_yes);
+						}
+						//$("#log_file_bck_yn").html(result[0].log_file_bck_yn);
+						$("#r_log_file_stg_dcnt").html(result[0].log_file_stg_dcnt);
+						$("#r_log_file_mtn_ecnt").html(result[0].log_file_mtn_ecnt);
+						
+						toggleLayer($('#pop_layer_rman'), 'on');			
+					// DUMP
 					}else{
-						$("#cps_yn").html(agent_monitoring_yes);
+						$("#d_bck_bsn_dscd_nm").html(result[0].bck_bsn_dscd_nm);
+						$("#d_wrk_nm").html(result[0].wrk_nm);
+						$("#d_wrk_exp").html(result[0].wrk_exp);
+						$("#db_nm").html(result[0].db_nm);
+						$("#save_pth").html(result[0].save_pth);
+						$("#file_fmt_cd_nm").html(result[0].file_fmt_cd_nm);
+						$("#cprt").html(result[0].cprt);
+						$("#encd_mth_nm").html(result[0].encd_mth_nm);
+						$("#usr_role_nm").html(result[0].usr_role_nm);
+						$("#d_file_stg_dcnt").html(result[0].file_stg_dcnt);
+						$("#d_bck_mtn_ecnt").html(result[0].bck_mtn_ecnt);
+						fn_workOptionLayer(result[0].bck_wrk_id, result[0].db_svr_id, result[0].db_nm);
+						toggleLayer($('#pop_layer_dump'), 'on');		
 					}
-					//$("#cps_yn").html(result[0].cps_yn);
-					$("#log_file_pth").html(result[0].log_file_pth);
-					$("#data_pth").html(result[0].data_pth);
-					$("#bck_pth").html(result[0].bck_pth);
-					$("#r_file_stg_dcnt").html(result[0].file_stg_dcnt);
-					$("#r_bck_mtn_ecnt").html(result[0].bck_mtn_ecnt);
-					$("#acv_file_stgdt").html(result[0].acv_file_stgdt);
-					$("#acv_file_mtncnt").html(result[0].acv_file_mtncnt);
-					if(result[0].log_file_bck_yn == "N"){
-						$("#log_file_bck_yn").html(agent_monitoring_no);
-					}else{
-						$("#log_file_bck_yn").html(agent_monitoring_yes);
-					}
-					//$("#log_file_bck_yn").html(result[0].log_file_bck_yn);
-					$("#r_log_file_stg_dcnt").html(result[0].log_file_stg_dcnt);
-					$("#r_log_file_mtn_ecnt").html(result[0].log_file_mtn_ecnt);
-					
-					toggleLayer($('#pop_layer_rman'), 'on');			
-				// DUMP
-				}else{
-					$("#d_bck_bsn_dscd_nm").html(result[0].bck_bsn_dscd_nm);
-					$("#d_wrk_nm").html(result[0].wrk_nm);
-					$("#d_wrk_exp").html(result[0].wrk_exp);
-					$("#db_nm").html(result[0].db_nm);
-					$("#save_pth").html(result[0].save_pth);
-					$("#file_fmt_cd_nm").html(result[0].file_fmt_cd_nm);
-					$("#cprt").html(result[0].cprt);
-					$("#encd_mth_nm").html(result[0].encd_mth_nm);
-					$("#usr_role_nm").html(result[0].usr_role_nm);
-					$("#d_file_stg_dcnt").html(result[0].file_stg_dcnt);
-					$("#d_bck_mtn_ecnt").html(result[0].bck_mtn_ecnt);
-					fn_workOptionLayer(result[0].bck_wrk_id, result[0].db_svr_id, result[0].db_nm);
-					toggleLayer($('#pop_layer_dump'), 'on');		
-				}	
+				}else if(result[0].bsn_dscd == "TC001902"){
+					fn_scriptLayer(result[0].wrk_id);
+				}
 			}
 	
 		}
