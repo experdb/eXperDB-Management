@@ -49,7 +49,7 @@
 	  FROM(	
       SELECT 
       		BCK_WRK_ID,
-      		WRK_ID,
+      		A.WRK_ID,
 			DB_SVR_ID,
 			DB_ID,
 			(CASE WHEN DB_ID>0 THEN (SELECT DB_NM FROM T_DB_I WHERE A.DB_ID=DB_ID AND USEYN = 'Y') ELSE '' END) AS DB_NM,
@@ -72,22 +72,23 @@
 			(SELECT SYS_CD_NM FROM T_SYSDTL_C WHERE A.ENCD_MTH_NM = SYS_CD ) AS ENCD_MTH_NM,
 			A.ENCD_MTH_NM AS ENCD_MTH_CD,
 			USR_ROLE_NM,
-			FRST_REGR_ID,
-			TO_CHAR(FRST_REG_DTM,'YYYY-MM-DD HH24:MI') AS FRST_REG_DTM,
-			LST_MDFR_ID,
-			TO_CHAR(LST_MDF_DTM,'YYYY-MM-DD HH24:MI') AS LST_MDF_DTM,
+			A.FRST_REGR_ID,
+			TO_CHAR(A.FRST_REG_DTM,'YYYY-MM-DD HH24:MI') AS FRST_REG_DTM,
+			A.LST_MDFR_ID,
+			TO_CHAR(A.LST_MDF_DTM,'YYYY-MM-DD HH24:MI') AS LST_MDF_DTM,
 			BCK_FILENM,
 			DATA_PTH,
 			BCK_PTH,
 			ACV_FILE_STGDT,
 			ACV_FILE_MTNCNT,
 			LOG_FILE_PTH
-      FROM T_BCK_WRKCNG_I A
+      FROM T_BCK_WRKCNG_I A, T_WRKCNG_I B
       WHERE 1=1	
+      	AND A.WRK_ID=B.WRK_ID
       	AND DB_SVR_ID=#{db_svr_id}
       	AND BCK_BSN_DSCD=#{bck_bsn_dscd}
       	<if test="wrk_nm != null and wrk_nm != '' ">
-      		AND WRK_NM LIKE CONCAT('%',#{wrk_nm},'%')
+      		AND B.WRK_NM LIKE CONCAT('%',#{wrk_nm},'%')
       	</if>
       	<if test="bck_opt_cd != null and bck_opt_cd != '' ">
       		AND BCK_OPT_CD=#{bck_opt_cd}
