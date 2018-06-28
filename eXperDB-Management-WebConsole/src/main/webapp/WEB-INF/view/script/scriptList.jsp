@@ -202,17 +202,18 @@ function fn_delete(){
 <div id="contents">
 	<div class="contents_wrap">
 		<div class="contents_tit">
-			<h4>스크립트 관리<a href="#n"><img src="/images/ico_tit.png" class="btn_info"/></a></h4>
+			<h4><spring:message code="menu.script_settings" /><a href="#n"><img src="/images/ico_tit.png" class="btn_info"/></a></h4>
 			<div class="infobox"> 
 				<ul>
-					<li>스크립트설정 </li>
+					<li><spring:message code="help.script_settings_01" /></li>
+					<li><spring:message code="help.script_settings_02" /></li>
 				</ul>
 			</div>
 			<div class="location">
 				<ul>
 					<li class="bold">${db_svr_nm}</li>
-					<li>스크립트관리</li>
-					<li class="on">스크립트설정></li>
+					<li><spring:message code="menu.script_management" /></li>
+					<li class="on"><spring:message code="menu.script_settings" /></li>
 				</ul>
 			</div>
 		</div>	
@@ -239,7 +240,7 @@ function fn_delete(){
 						</tbody>
 					</table>
 				</div>
-				
+				<div class="overflow_area">	
 					<table id="scriptTable" class="display" cellspacing="0" width="100%">
 						<caption>스크립트 화면 리스트</caption>
 							<thead>
@@ -256,7 +257,7 @@ function fn_delete(){
 								</tr>
 							</thead>
 					</table>
-	
+				</div>
 				</form>				
 			</div>
 		</div>

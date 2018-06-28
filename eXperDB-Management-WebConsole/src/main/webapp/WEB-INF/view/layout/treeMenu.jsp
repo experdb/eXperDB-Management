@@ -278,13 +278,13 @@ $(window.document).ready(function() {
 					html1+='			</li>';
 					
 					
-					html1+='			<li class="ico2_2"><a href="#n"><img src="../images/ico_lnb_7.png" id="treeImg">스크립트관리</a>';
+					html1+='			<li class="ico2_2"><a href="#n"><img src="../images/ico_lnb_7.png" id="treeImg"><spring:message code="menu.script_management"/></a>';
 					html1+='				<ul class="depth_3">'
 					if(aut.length != 0 && aut[index].script_cng_aut_yn == "Y"){
-						html1+='					<li class="ico3_4" id="scriptManagement'+item.db_svr_id+'"><a href=/scriptManagement.do?db_svr_id='+item.db_svr_id+' id="scriptManagement'+item.db_svr_id+'c" onClick=javascript:fn_GoLink("scriptManagement'+item.db_svr_id+'"); target="main"><img src="../images/ico_lnb_10.png" id="treeImg">스크립트 설정</a></li>';
+						html1+='					<li class="ico3_4" id="scriptManagement'+item.db_svr_id+'"><a href=/scriptManagement.do?db_svr_id='+item.db_svr_id+' id="scriptManagement'+item.db_svr_id+'c" onClick=javascript:fn_GoLink("scriptManagement'+item.db_svr_id+'"); target="main"><img src="../images/ico_lnb_10.png" id="treeImg"><spring:message code="menu.script_settings" /></a></li>';
 					}
 					if(aut.length != 0 && aut[index].script_his_aut_yn == "Y"){
-						html1+='					<li class="ico3_5" id="scriptHistory'+item.db_svr_id+'"><a href=/scriptHistory.do?db_svr_id='+item.db_svr_id+' id="scriptHistory'+item.db_svr_id+'c" onClick=javascript:fn_GoLink("scriptHistory'+item.db_svr_id+'"); target="main"><img src="../images/ico_lnb_14.png" id="treeImg">스크립트 이력</a></li>';
+						html1+='					<li class="ico3_5" id="scriptHistory'+item.db_svr_id+'"><a href=/scriptHistory.do?db_svr_id='+item.db_svr_id+' id="scriptHistory'+item.db_svr_id+'c" onClick=javascript:fn_GoLink("scriptHistory'+item.db_svr_id+'"); target="main"><img src="../images/ico_lnb_14.png" id="treeImg"><spring:message code="menu.script_history" /></a></li>';
 					}
 					html1+='				</ul>';
 					html1+='			</li>';

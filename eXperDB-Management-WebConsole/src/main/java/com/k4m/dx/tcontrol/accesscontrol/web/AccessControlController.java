@@ -91,7 +91,6 @@ public class AccessControlController {
 				// 화면접근이력 이력 남기기
 				CmmnUtils.saveHistory(request, historyVO);
 				historyVO.setExe_dtl_cd("DX-T0027");
-				historyVO.setMnu_id(28);
 				accessHistoryService.insertHistory(historyVO);
 
 				AES256 dec = new AES256(AES256_KEY.ENC_KEY);
@@ -232,14 +231,12 @@ public class AccessControlController {
 			if (act.equals("i")) {
 				// 화면접근이력 이력 남기기
 				historyVO.setExe_dtl_cd("DX-T0028");
-				historyVO.setMnu_id(28);
 				accessHistoryService.insertHistory(historyVO);
 			}
 
 			if (act.equals("u")) {
 				// 화면접근이력 이력 남기기
 				historyVO.setExe_dtl_cd("DX-T0029");
-				historyVO.setMnu_id(28);
 				accessHistoryService.insertHistory(historyVO);
 
 				mv.addObject("prms_seq",request.getParameter("Seq").equals("undefined") ? "" : request.getParameter("Seq"));
@@ -286,7 +283,6 @@ public class AccessControlController {
 			// 화면접근이력 이력 남기기
 			CmmnUtils.saveHistory(request, historyVO);
 			historyVO.setExe_dtl_cd("DX-T0027_02");
-			historyVO.setMnu_id(28);
 			accessHistoryService.insertHistory(historyVO);
 			
 			List<DbServerVO> dbServerVO = cmmnServerInfoService.selectAllIpadrList(db_svr_id);
@@ -404,7 +400,6 @@ public class AccessControlController {
 				// 화면접근이력 이력 남기기
 				 CmmnUtils.saveHistory(request, historyVO);
 				 historyVO.setExe_dtl_cd("DX-T0030");
-				 historyVO.setMnu_id(29);
 				 accessHistoryService.insertHistory(historyVO);
 	
 				DbServerVO schDbServerVO = new DbServerVO();
@@ -439,7 +434,6 @@ public class AccessControlController {
 			// 화면접근이력 이력 남기기
 			 CmmnUtils.saveHistory(request, historyVO);
 			 historyVO.setExe_dtl_cd("DX-T0030_01");
-			 historyVO.setMnu_id(29);
 			 accessHistoryService.insertHistory(historyVO);
 
 			resultSet = accessControlService.selectAccessControlHistory(accessControlHistoryVO);
@@ -463,7 +457,6 @@ public class AccessControlController {
 			// 화면접근이력 이력 남기기
 			 CmmnUtils.saveHistory(request, historyVO);
 			 historyVO.setExe_dtl_cd("DX-T0030_02");
-			 historyVO.setMnu_id(29);
 			 accessHistoryService.insertHistory(historyVO);
 
 			AES256 dec = new AES256(AES256_KEY.ENC_KEY);

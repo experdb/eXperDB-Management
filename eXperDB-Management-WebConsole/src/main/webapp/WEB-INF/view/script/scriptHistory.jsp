@@ -106,7 +106,7 @@ function fn_init(){
  		        ]
 	});
    	
-   	table.tables().header().to$().find('th:eq(0)').css('min-width', '100px');
+   	table.tables().header().to$().find('th:eq(0)').css('min-width', '30px');
    	table.tables().header().to$().find('th:eq(1)').css('min-width', '100px');
    	table.tables().header().to$().find('th:eq(2)').css('min-width', '100px');
    	table.tables().header().to$().find('th:eq(3)').css('min-width', '100px');
@@ -163,17 +163,18 @@ function fn_search(){
 <div id="contents">
 	<div class="contents_wrap">
 		<div class="contents_tit">
-			<h4>스크립트이력<a href="#n"><img src="/images/ico_tit.png" class="btn_info"/></a></h4>
+			<h4><spring:message code="menu.script_history" /><a href="#n"><img src="/images/ico_tit.png" class="btn_info"/></a></h4>
 			<div class="infobox"> 
 				<ul>
-					<li>스크립트이력 설명</li>
+					<li><spring:message code="help.script_history_01" /></li>
+					<li><spring:message code="help.script_settings_02" /></li>
 				</ul>
 			</div>
 			<div class="location">
 				<ul>
 					<li class="bold">${db_svr_nm}</li>
-					<li>스크립트관리</li>
-					<li class="on">스크립트이력</li>
+					<li><spring:message code="menu.script_management" /></li>
+					<li class="on"><spring:message code="menu.script_history" /></li>
 				</ul>
 			</div>
 		</div>
@@ -189,7 +190,7 @@ function fn_search(){
 					<table class="write">
 						<caption>검색 조회</caption>
 						<colgroup>
-							<col style="width:90px;" />
+							<col style="width:110px;" />
 							<col style="width:230px;" />
 							<col style="width:110px;" />
 							<col />
@@ -230,7 +231,7 @@ function fn_search(){
 						<caption>스크립트 이력화면 리스트</caption>
 						<thead>
 							<tr>
-								<th width="100"><spring:message code="common.no" /></th>
+								<th width="30"><spring:message code="common.no" /></th>
 								<th width="100"><spring:message code="common.work_name" /></th>
 								<th width="100"><spring:message code="common.work_description" /></th>
 								<th width="100"><spring:message code="backup_management.work_start_time" /></th>

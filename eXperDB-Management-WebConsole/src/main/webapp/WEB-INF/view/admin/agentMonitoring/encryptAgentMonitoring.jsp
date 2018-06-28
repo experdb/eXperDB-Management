@@ -91,9 +91,10 @@ function fn_refresh(){
 		success : function(data) {
 			table.rows({selected: true}).deselect();
 			table.clear().draw();
-			if(data.list.length != 0){
 				if(data.resultCode == "0000000000"){
-					table.rows.add(data.list).draw();
+					if(data.list.length != 0){
+						table.rows.add(data.list).draw();
+					}
 				}else if(data.resultCode == "8000000002"){
 					alert("<spring:message code='message.msg05' />");
 					top.location.href = "/";
@@ -103,9 +104,6 @@ function fn_refresh(){
 				}else{
 					alert(data.resultMessage +"("+data.resultCode+")");
 				}
-			}else{
-				alert(data.resultMessage +"("+data.resultCode+")");
-			}
 		}
 	});	
 }

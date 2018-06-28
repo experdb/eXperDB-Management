@@ -83,7 +83,7 @@ function valCheck(){
 		$("#wrk_exp").focus();
 		return false;
 	}else if($("#exe_cmd").val() == ""){
-		alert('실행명령어를 입력해주세요.');
+		alert('<spring:message code="message.msg216" />');
 		$("#exe_cmd").focus();
 		return false;
 	}else{
@@ -105,7 +105,7 @@ function fn_update_work(){
 				exe_cmd : $("#exe_cmd").val()
 			},
 			success : function(result) {
-				alert("수정하였습니다.");
+				alert('<spring:message code="message.msg84" />');
 				window.close();
 				opener.fn_search();
 			},
@@ -134,7 +134,7 @@ function fn_update_work(){
 <body>
 		<div class="pop_container">
 			<div class="pop_cts">
-				<p class="tit">스크립트 명령어수정</p>
+				<p class="tit"><spring:message code="script_settings.Modify_Script_Command"/></p>
 				<div class="pop_cmm">
 					<table class="write">
 						<caption>스크립트 명령어수정</caption>
@@ -163,7 +163,7 @@ function fn_update_work(){
 					<table class="write">
 						<tbody>
 							<tr>
-								<th scope="row" class="ico_t1">실행명령어</th>
+								<th scope="row" class="ico_t1"><spring:message code="script_settings.Execution_Command"/></th>
 							</tr>
 							<tr>
 								<td>

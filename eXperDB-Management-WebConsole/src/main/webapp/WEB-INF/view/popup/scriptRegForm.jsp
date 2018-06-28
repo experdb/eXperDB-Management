@@ -58,7 +58,7 @@ function valCheck(){
 		$("#wrk_exp").focus();
 		return false;
 	}else if($("#exe_cmd").val() == ""){
-		alert('실행명령어를 입력해주세요.');
+		alert('<spring:message code="message.msg216" />');
 		$("#exe_cmd").focus();
 		return false;
 	}else{
@@ -124,7 +124,7 @@ function fn_insert_work(){
 				exe_cmd : $("#exe_cmd").val()
 			},
 			success : function(result) {
-				alert("등록하였습니다.");
+				alert('<spring:message code="message.msg144"/>');
 				window.close();
 				opener.fn_search();		
 			},
@@ -154,7 +154,7 @@ function fn_insert_work(){
 <body>
 		<div class="pop_container">
 			<div class="pop_cts">
-				<p class="tit">스크립트 명령어등록</p>
+				<p class="tit"><spring:message code="script_settings.Register_Script_Command"/></p>
 				<div class="pop_cmm">
 					<table class="write">
 						<caption>스크립트 명령어등록</caption>
@@ -166,7 +166,7 @@ function fn_insert_work(){
 							<tr>
 								<th scope="row" class="ico_t1"><spring:message code="common.work_name" /></th>
 								<td><input type="text" class="txt" name="wrk_nm" id="wrk_nm" maxlength="20" onkeyup="fn_checkWord(this,20)" placeholder="20<spring:message code='message.msg188'/>" onblur="this.value=this.value.trim()"/>
-								<span class="btn btnC_01"><button type="button" class= "btn_type_02" onclick="fn_check()" style="width: 60px; margin-right: -60px; margin-top: 0;"><spring:message code="common.overlap_check" /></button></span>
+								<span class="btn btnC_01"><button type="button" class= "btn_type_02" onclick="fn_check()" style="width: 105px; margin-right: -60px; margin-top: 0;"><spring:message code="common.overlap_check" /></button></span>
 								</td>
 							</tr>
 							<tr>
@@ -184,7 +184,7 @@ function fn_insert_work(){
 					<table class="write">
 						<tbody>
 							<tr>
-								<th scope="row" class="ico_t1">실행명령어</th>
+								<th scope="row" class="ico_t1"><spring:message code="script_settings.Execution_Command"/></th>
 							</tr>
 							<tr>
 								<td>

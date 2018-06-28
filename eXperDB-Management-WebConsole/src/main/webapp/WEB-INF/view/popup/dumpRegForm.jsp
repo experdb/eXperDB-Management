@@ -283,15 +283,15 @@ function valCheck(){
 		$("#save_pth").focus();
 		return false;
 	}else if($("#file_fmt_cd").val() == "0000"){
-		alert('파일포멧을 선택해주세요.');		
+		alert('<spring:message code="message.msg217" />');
 		$("#file_fmt_cd").focus();
 		return false;
 	}else if($("#encd_mth_nm").val() == "0000"){
-		alert('인코딩방식을 선택해주세요.');		
+		alert('<spring:message code="message.msg218" />');
 		$("#encd_mth_nm").focus();
 		return false;
 	}else if($("#usr_role_nm").val() == "0000"){
-		alert('RoleName을 선택해주세요');		
+		alert('<spring:message code="message.msg219" />');
 		$("#usr_role_nm").focus();
 		return false;
 	}else{

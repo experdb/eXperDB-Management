@@ -169,7 +169,13 @@ public class AgentMonitoringController {
 			CommonServiceCall csc = new CommonServiceCall();			
 			AgentMonitoringServiceCall amsc = new AgentMonitoringServiceCall();		
 			
-			agentList = csc.selectEntityList2(restIp, restPort, strTocken, loginId, entityId);			
+			try{
+				agentList = csc.selectEntityList2(restIp, restPort, strTocken, loginId, entityId);		
+			}catch(Exception e){
+				result.put("resultCode", "8000000002");
+				return result;
+			}
+			
 			agentStatusList = amsc.selectSystemStatus(restIp, restPort, strTocken, loginId, entityId);
 			
 			for(int j=0; j<agentStatusList.size(); j++){

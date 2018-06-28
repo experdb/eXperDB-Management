@@ -99,7 +99,6 @@ public class BackupController {
 				// 화면접근이력 이력 남기기
 				CmmnUtils.saveHistory(request, historyVO);
 				historyVO.setExe_dtl_cd("DX-T0021");
-				historyVO.setMnu_id(25);
 				accessHistoryService.insertHistory(historyVO);
 				
 				HttpSession session = request.getSession();
@@ -143,7 +142,6 @@ public class BackupController {
 			}else{
 				historyVO.setExe_dtl_cd("DX-T0021_03");
 			}
-			historyVO.setMnu_id(25);
 			accessHistoryService.insertHistory(historyVO);
 		} catch (Exception e2) {
 			// TODO Auto-generated catch block
@@ -184,7 +182,6 @@ public class BackupController {
 				// 화면접근이력 이력 남기기
 				CmmnUtils.saveHistory(request, historyVO);
 				historyVO.setExe_dtl_cd("DX-T0026");
-				historyVO.setMnu_id(25);
 				accessHistoryService.insertHistory(historyVO);
 				
 				HttpSession session = request.getSession();
@@ -229,7 +226,6 @@ public class BackupController {
 			}else{
 				historyVO.setExe_dtl_cd("DX-T0026_02");
 			}
-			historyVO.setMnu_id(26);
 			accessHistoryService.insertHistory(historyVO);
 		} catch (Exception e2) {
 			// TODO Auto-generated catch block
@@ -256,7 +252,6 @@ public class BackupController {
 		try {
 			CmmnUtils.saveHistory(request, historyVO);
 			historyVO.setExe_dtl_cd("DX-T0022");
-			historyVO.setMnu_id(25);
 			accessHistoryService.insertHistory(historyVO);
 		} catch (Exception e2) {
 			// TODO Auto-generated catch block
@@ -282,7 +277,6 @@ public class BackupController {
 		try {
 			CmmnUtils.saveHistory(request, historyVO);
 			historyVO.setExe_dtl_cd("DX-T0024");
-			historyVO.setMnu_id(25);
 			accessHistoryService.insertHistory(historyVO);
 		} catch (Exception e2) {
 			// TODO Auto-generated catch block
@@ -413,7 +407,6 @@ public class BackupController {
 				// 화면접근이력 이력 남기기
 				CmmnUtils.saveHistory(request, historyVO);
 				historyVO.setExe_dtl_cd("DX-T0022_01");
-				historyVO.setMnu_id(25);
 				accessHistoryService.insertHistory(historyVO);
 				
 				HttpSession session = request.getSession();
@@ -488,7 +481,6 @@ public class BackupController {
 				// 화면접근이력 이력 남기기
 				CmmnUtils.saveHistory(request, historyVO);
 				historyVO.setExe_dtl_cd("DX-T0024_01");
-				historyVO.setMnu_id(25);
 				accessHistoryService.insertHistory(historyVO);
 				
 				HttpSession session = request.getSession();
@@ -569,7 +561,6 @@ public class BackupController {
 		try {
 			CmmnUtils.saveHistory(request, historyVO);
 			historyVO.setExe_dtl_cd("DX-T0023");
-			historyVO.setMnu_id(25);
 			accessHistoryService.insertHistory(historyVO);
 		} catch (Exception e2) {
 			// TODO Auto-generated catch block
@@ -618,7 +609,6 @@ public class BackupController {
 		try {
 			CmmnUtils.saveHistory(request, historyVO);
 			historyVO.setExe_dtl_cd("DX-T0025");
-			historyVO.setMnu_id(25);
 			accessHistoryService.insertHistory(historyVO);
 		} catch (Exception e2) {
 			// TODO Auto-generated catch block
@@ -728,7 +718,6 @@ public class BackupController {
 			// 화면접근이력 이력 남기기
 			CmmnUtils.saveHistory(request, historyVO);
 			historyVO.setExe_dtl_cd("DX-T0023_01");
-			historyVO.setMnu_id(25);
 			accessHistoryService.insertHistory(historyVO);
 			
 			HttpSession session = request.getSession();
@@ -759,7 +748,6 @@ public class BackupController {
 			// 화면접근이력 이력 남기기
 			CmmnUtils.saveHistory(request, historyVO);
 			historyVO.setExe_dtl_cd("DX-T0025_01");
-			historyVO.setMnu_id(25);
 			accessHistoryService.insertHistory(historyVO);
 			
 			HttpSession session = request.getSession();
@@ -812,7 +800,6 @@ public class BackupController {
 		try {
 			CmmnUtils.saveHistory(request, historyVO);
 			historyVO.setExe_dtl_cd("DX-T0021_02");
-			historyVO.setMnu_id(25);
 			accessHistoryService.insertHistory(historyVO);
 		} catch (Exception e2) {
 			e2.printStackTrace();
@@ -867,7 +854,6 @@ public class BackupController {
 		try {
 			CmmnUtils.saveHistory(request, historyVO);
 			historyVO.setExe_dtl_cd("DX-T0021_02");
-			historyVO.setMnu_id(25);
 			accessHistoryService.insertHistory(historyVO);
 		} catch (Exception e2) {
 			e2.printStackTrace();
@@ -989,7 +975,6 @@ public class BackupController {
 				//화면접근이력 남기기
 				CmmnUtils.saveHistory(request, historyVO);
 				historyVO.setExe_dtl_cd("DX-T0051");
-				historyVO.setMnu_id(35);
 				accessHistoryService.insertHistory(historyVO);
 				
 				HttpSession session = request.getSession();
@@ -1097,7 +1082,6 @@ public class BackupController {
 			//화면접근이력 남기기
 			CmmnUtils.saveHistory(request, historyVO);
 			historyVO.setExe_dtl_cd("DX-T0052");
-			historyVO.setMnu_id(35);
 			accessHistoryService.insertHistory(historyVO);
 			
 			int db_svr_id = Integer.parseInt(request.getParameter("db_svr_id"));

@@ -202,7 +202,7 @@
 					html1+=	'</td>';
 					html1+='</tr>	';			
 					html1+='<tr>';
-					html1+=	'<th scope="row">스크립트설정</th>';
+					html1+=	'<th scope="row"><spring:message code="menu.script_settings" /></th>';
 					html1+=	'<td>';
 					html1+=		'<div class="inp_chk">';
 					html1+=			'<input type="checkbox" id="'+item.db_svr_nm+'_script_cng" name="script_cng_aut"  onClick="fn_userCheck();"/>';
@@ -211,7 +211,7 @@
 					html1+=	'</td>';
 					html1+='</tr>	';	
 					html1+='<tr>';
-					html1+=	'<th scope="row">스크립트이력</th>';
+					html1+=	'<th scope="row"><spring:message code="menu.script_history" /></th>';
 					html1+=	'<td>';
 					html1+=		'<div class="inp_chk">';
 					html1+=			'<input type="checkbox" id="'+item.db_svr_nm+'_script_his" name="script_his_aut"  onClick="fn_userCheck();"/>';

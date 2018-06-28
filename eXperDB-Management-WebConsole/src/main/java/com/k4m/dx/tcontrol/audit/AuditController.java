@@ -82,7 +82,6 @@ public class AuditController {
 				// 화면접근이력 이력 남기기
 				CmmnUtils.saveHistory(request, historyVO);
 				historyVO.setExe_dtl_cd("DX-T0031");
-				historyVO.setMnu_id(30);
 				accessHistoryService.insertHistory(historyVO);
 				
 				DbServerVO schDbServerVO = new DbServerVO();
@@ -201,7 +200,6 @@ public class AuditController {
 			// 화면접근이력 이력 남기기
 			CmmnUtils.saveHistory(request, historyVO);
 			historyVO.setExe_dtl_cd("DX-T0031_01");
-			historyVO.setMnu_id(30);
 			accessHistoryService.insertHistory(historyVO);
 					
 			String strLogActive = request.getParameter("chkLogActive") == null?"":request.getParameter("chkLogActive");
@@ -310,7 +308,6 @@ public class AuditController {
 				// 화면접근이력 이력 남기기
 				CmmnUtils.saveHistory(request, historyVO);
 				historyVO.setExe_dtl_cd("DX-T0032");
-				historyVO.setMnu_id(31);
 				accessHistoryService.insertHistory(historyVO); 
 				
 				SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
@@ -418,7 +415,6 @@ public class AuditController {
 			// 화면접근이력 이력 남기기
 			CmmnUtils.saveHistory(request, historyVO);
 			historyVO.setExe_dtl_cd("DX-T0032_01");
-			historyVO.setMnu_id(31);
 			accessHistoryService.insertHistory(historyVO);
 			
 			AES256 dec = new AES256(AES256_KEY.ENC_KEY);
@@ -487,7 +483,6 @@ public class AuditController {
 			// 화면접근이력 이력 남기기
 			CmmnUtils.saveHistory(request, historyVO);
 			historyVO.setExe_dtl_cd("DX-T0032_01");
-			historyVO.setMnu_id(31);
 			accessHistoryService.insertHistory(historyVO); 
 			
 			String strDbSvrId = request.getParameter("db_svr_id");
@@ -600,7 +595,6 @@ public class AuditController {
 			// 화면접근이력 이력 남기기
 			CmmnUtils.saveHistory(request, historyVO);
 			historyVO.setExe_dtl_cd("DX-T0032_02");
-			historyVO.setMnu_id(31);
 			accessHistoryService.insertHistory(historyVO);
 			
 			String strDbSvrId = request.getParameter("db_svr_id");
@@ -841,7 +835,6 @@ public class AuditController {
 			// 화면접근이력 이력 남기기
 			CmmnUtils.saveHistory(request, historyVO);
 			historyVO.setExe_dtl_cd("DX-T0032_02");
-			historyVO.setMnu_id(31);
 			accessHistoryService.insertHistory(historyVO);
 			
 			String strDbSvrId = request.getParameter("db_svr_id");
