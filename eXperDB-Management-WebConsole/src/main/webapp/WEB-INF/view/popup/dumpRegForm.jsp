@@ -738,9 +738,9 @@ function fn_check() {
 								<option value="9">9Level</option>
 							</select> %</td>
 						<th scope="row" class="ico_t2"><spring:message code="backup_management.file_keep_day" /></th>
-						<td><input type="number" class="txt t6" name="file_stg_dcnt" id="file_stg_dcnt" maxlength=3 min=0 value="0"/> <spring:message code="common.day" /></td>
+						<td><input type="number" class="txt t6" name="file_stg_dcnt" id="file_stg_dcnt" maxlength=3 min=1 value="1"/> <spring:message code="common.day" /></td>
 						<th scope="row" class="ico_t2"><spring:message code="backup_management.backup_maintenance_count" /></th>
-						<td><input type="number" class="txt t6" name="bck_mtn_ecnt" id="bck_mtn_ecnt" maxlength=3 min=0 value="0"/><spring:message code="backup_management.count"/></td>
+						<td><input type="number" class="txt t6" name="bck_mtn_ecnt" id="bck_mtn_ecnt" maxlength=3 min=1 value="1"/><spring:message code="backup_management.count"/></td>
 					</tr>
 				</tbody>
 			</table>
