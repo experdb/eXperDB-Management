@@ -131,8 +131,6 @@ function fn_reg_popup(){
 
 function fn_rereg_popup(){
 	var datas = table.rows('.selected').data();
-	var wrk_id = table.row('.selected').data().wrk_id;
-	
 	if (datas.length <= 0) {
 		alert("<spring:message code='message.msg35' />");
 		return false;
@@ -140,6 +138,7 @@ function fn_rereg_popup(){
 		alert("<spring:message code='message.msg04' />");
 		return false;
 	}else{	
+		var wrk_id = table.row('.selected').data().wrk_id;
 		var popUrl = "/popup/scriptReregForm.do?db_svr_id=${db_svr_id}&wrk_id="+wrk_id;
 		var width = 954;
 		var height = 669;
@@ -155,7 +154,6 @@ function fn_rereg_popup(){
 
 function fn_delete(){
 	var datas = table.rows('.selected').data();
-	var wrk_id = table.row('.selected').data().wrk_id;
 	
 	if (datas.length <= 0) {
 		alert("<spring:message code='message.msg35' />");
@@ -164,6 +162,7 @@ function fn_delete(){
 		alert("<spring:message code='message.msg04' />");
 		return false;
 	}else{	
+		var wrk_id = table.row('.selected').data().wrk_id;
 		 if(confirm('<spring:message code="message.msg162"/>')){
 				$.ajax({
 					url : "/deleteScript.do", 

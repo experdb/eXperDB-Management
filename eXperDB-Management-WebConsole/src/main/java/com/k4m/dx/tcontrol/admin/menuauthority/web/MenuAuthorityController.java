@@ -11,6 +11,7 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import org.json.simple.JSONArray;
+import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -243,7 +244,14 @@ public class MenuAuthorityController {
 				JSONArray rows = (JSONArray) new JSONParser().parse(strRows);
 				
 				for(int i=0; i<rows.size(); i++){
-					menuAuthorityService.updateUsrMnuAut(rows.get(i));
+					JSONObject jsonObject = (JSONObject) rows.get(i);
+					int mnu_id=menuAuthorityService.selectMenuId(jsonObject.get("mnu_cd").toString());			
+					Map<String, Object> param = new HashMap<String, Object>();
+					param.put("mnu_id", mnu_id);
+					param.put("usr_id", jsonObject.get("usr_id").toString());
+					param.put("read_aut_yn", jsonObject.get("read_aut_yn").toString());
+					param.put("wrt_aut_yn", jsonObject.get("wrt_aut_yn").toString());
+					menuAuthorityService.updateUsrMnuAut(param);
 				}
 			}
 		} catch (Exception e) {

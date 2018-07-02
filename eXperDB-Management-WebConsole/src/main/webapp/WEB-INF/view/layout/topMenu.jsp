@@ -52,7 +52,6 @@ $(window.document).ready(function() {
 		},
 		success : function(result) {
 			for(var i = 0; i<result.length; i++){ 
-				
 			 	if((result[1].mnu_cd == "MN000101" &&  result[1].read_aut_yn == "N") &&  (result[2].mnu_cd == "MN000102" && result[2].read_aut_yn == "N") && (result[3].mnu_cd == "MN000103" && result[3].read_aut_yn == "N")){
 					document.getElementById("MN0001").style.display = 'none';
 				}else{
@@ -168,7 +167,7 @@ $(window.document).ready(function() {
 					}				
 				} 
 							
-				if((result[19].mnu_cd == "MN000701" &&  result[19].read_aut_yn == "N")) {
+				if((result[19].mnu_cd == "MN000701" &&  result[19].read_aut_yn == "N") && (result[38].mnu_cd == "MN000702" &&  result[38].read_aut_yn == "N")) {
  					document.getElementById("MN0007").style.display = 'none';
 				}else{
 					document.getElementById("MN0007").style.display = '';
@@ -177,6 +176,12 @@ $(window.document).ready(function() {
 							 document.getElementById("MN000701").style.display = 'none';
 						}else{
 							 document.getElementById("MN000701").style.display = '';
+						}
+					}else if(result[i].mnu_cd == "MN000702"){
+						if(result[i].read_aut_yn == "N"){
+							 document.getElementById("MN000702").style.display = 'none';
+						}else{
+							 document.getElementById("MN000302").style.display = '';
 						}
 					}				
 				} 

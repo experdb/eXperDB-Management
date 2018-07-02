@@ -43,7 +43,6 @@
 		SELECT 
 				 mnu_id
 		FROM T_MNU_I
-		WHERE mnu_id &lt; 39
     </select>
   
   
@@ -80,7 +79,7 @@
 	</insert>
 	
 	
-	<update id="updateUsrMnuAut" parameterType="object">
+	<update id="updateUsrMnuAut" parameterType="HashMap">
 	   	/**
 	 	* Query ID : updateUsrMnuAut
 	 	* Description : 사용자 메뉴권한 업데이트
@@ -94,7 +93,16 @@
 	 	AND MNU_ID = #{mnu_id}::numeric
 	</update>
 	
-	
+	<select id="selectMenuId" resultType="int" parameterType="String">
+		/**
+		* Query ID : selectMenuId
+		* Description : mnu_id 조회
+		* Author : 김주영
+		**/
+		SELECT mnu_id
+		FROM t_mnu_i
+		WHERE mnu_cd=#{mnu_cd}
+	</select>
 	
 	<select id="selectMenuAut"  parameterType="HashMap"  resultType="HashMap">
 		/**

@@ -56,11 +56,22 @@ public class MenuAuthorityDAO extends EgovAbstractMapper{
 	 * @param 
 	 * @throws Exception
 	 */
-	public void updateUsrMnuAut(Object object) {
-		insert("menuauthoritySql.updateUsrMnuAut",object);			
+	public void updateUsrMnuAut(Map<String, Object> param) {
+		insert("menuauthoritySql.updateUsrMnuAut",param);			
 	}
 
 
+	/**
+	 * mnu_id 조회
+	 * @param mnu_cd
+	 * @throws Exception
+	 */
+	public int selectMenuId(String mnu_cd) {
+		int mnu_id = 0;
+		mnu_id = (int) getSqlSession().selectOne("menuauthoritySql.selectMenuId", mnu_cd);
+		return mnu_id;
+	}
+	
 	/**
 	 * 사용자 화면권한 조회
 	 * @param 
@@ -94,5 +105,6 @@ public class MenuAuthorityDAO extends EgovAbstractMapper{
 		sl = (List<MenuAuthorityVO>) list("menuauthoritySql.transferAuthorityList", menuAuthorityVO);
 		return sl;
 	}
+
 	
 }

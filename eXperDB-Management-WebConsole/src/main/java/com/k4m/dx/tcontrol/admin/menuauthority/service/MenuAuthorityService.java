@@ -36,7 +36,15 @@ public interface MenuAuthorityService {
 	 * @param 
 	 * @throws Exception
 	 */
-	void updateUsrMnuAut(Object object) throws Exception;
+	void updateUsrMnuAut(Map<String, Object> param) throws Exception;
+
+
+	/**
+	 * mnu_id 조회
+	 * @param mnu_cd
+	 * @throws Exception
+	 */
+	int selectMenuId(String mnu_cd) throws Exception;
 
 
 	/**
@@ -61,9 +69,6 @@ public interface MenuAuthorityService {
 	 * @throws Exception
 	 */
 	List<MenuAuthorityVO> transferAuthorityList(MenuAuthorityVO menuAuthorityVO);
-
-
-
 
 
 }

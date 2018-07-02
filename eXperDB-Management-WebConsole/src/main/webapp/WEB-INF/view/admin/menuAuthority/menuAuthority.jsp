@@ -159,7 +159,6 @@ $(window.document).ready(function() {
 
 
 $(function() {
-	
 	   $('#user tbody').on( 'click', 'tr', function () {
 		   $("input[type=checkbox]").prop("checked",false);
 	         if ( $(this).hasClass('selected') ) {
@@ -274,7 +273,7 @@ $(function() {
 		
 		//admin 선택 전체 체크박스 
 		$("#admin").click(function() { 
-			var array = new Array("MN000301","MN000302","MN000303","MN0004","MN000501","MN000502","MN000503","MN000601","MN000701","MN0008");
+			var array = new Array("MN000301","MN000302","MN000303","MN0004","MN000501","MN000502","MN000503","MN000601","MN000701","MN000702","MN0008");
 			var datas = userTable.row('.selected').length;
 			 if(datas != 1){
 				 alert("<spring:message code='message.msg165'/>");
@@ -487,7 +486,6 @@ $(function() {
 
 function fn_buttonAut(){
 	var save_button = document.getElementById("save_button"); 
-
 	if("${wrt_aut_yn}" == "Y"){
 		save_button.style.display = '';
 	}else{
@@ -502,22 +500,20 @@ function fn_save(){
 		 alert("<spring:message code='message.msg165'/>");
 		 return false;
 	 }else{
-	 var usr_id = userTable.row('.selected').data().usr_id;
-	
-	    var mnu_id = $("input[name='mnu_id']");
+	 	var usr_id = userTable.row('.selected').data().usr_id;
 	 	var read_aut = $("input[name='r_mnu_nm']");
 	    var wrt_aut = $("input[name='w_mnu_nm']");
 	   
 	    for(var i = 0; i < read_aut.length; i++){
 	     	var datas = new Object();
 	        datas.usr_id = usr_id;
-	        datas.mnu_id = mnu_id[i].value;
+			var mnu_cd = $(read_aut[i]).val();
+			datas.mnu_cd= mnu_cd;
 	    	if(read_aut[i].checked){ //선택되어 있으면 배열에 값을 저장함
 	        	datas.read_aut_yn = "Y";   
 	        }else{
 	        	datas.read_aut_yn = "N";
 	        }
-	        
 	        if(wrt_aut[i].checked){ //선택되어 있으면 배열에 값을 저장함
 	        	datas.wrt_aut_yn = "Y";   	
 	        }else{
@@ -525,7 +521,7 @@ function fn_save(){
 	        }
 	        datasArr.push(datas);
 	    }	    
-
+	    
 		if (confirm('<spring:message code="message.msg148"/>')){
 			$.ajax({
 				url : "/updateUsrMnuAut.do",
@@ -587,10 +583,8 @@ function fn_search(){
 			userTable.rows.add(result).draw();
 		}
 	});
-	
 	$("input[type=checkbox]").prop("checked",false);
 }
-
 </script>
 			<!-- contents -->
 			<div id="contents">
@@ -686,13 +680,13 @@ function fn_search(){
 														<td><spring:message code="menu.schedule_registration" /> </td>
 														<td>
 															<div class="inp_chk">
-																<input type="checkbox" id="r_MN000101" name="r_mnu_nm" />
+																<input type="checkbox" id="r_MN000101" name="r_mnu_nm" value="MN000101"/>
 																<label for="r_MN000101"></label>
 															</div>
 														</td>
 														<td>
 															<div class="inp_chk">
-																<input type="checkbox" id="w_MN000101" name="w_mnu_nm"  />
+																<input type="checkbox" id="w_MN000101" name="w_mnu_nm"/>
 																<label for="w_MN000101"></label>
 															</div>
 														</td>
@@ -701,13 +695,13 @@ function fn_search(){
 														<td><spring:message code="menu.schedule_run_stop" /></td>
 														<td>
 															<div class="inp_chk">
-																<input type="checkbox" id="r_MN000102" name="r_mnu_nm" />
+																<input type="checkbox" id="r_MN000102" name="r_mnu_nm" value="MN000102"/>
 																<label for="r_MN000102"></label>
 															</div>
 														</td>
 														<td>
 															<div class="inp_chk">
-																<input type="checkbox" id="w_MN000102" name="w_mnu_nm" />
+																<input type="checkbox" id="w_MN000102" name="w_mnu_nm"/>
 																<label for="w_MN000102"></label>
 															</div>
 														</td>													
@@ -716,7 +710,7 @@ function fn_search(){
 														<td><spring:message code="menu.shedule_execution_history" /></td>
 														<td>
 															<div class="inp_chk">
-																<input type="checkbox" id="r_MN000103" name="r_mnu_nm"  />
+																<input type="checkbox" id="r_MN000103" name="r_mnu_nm"  value="MN000103"/>
 																<label for="r_MN000103"></label>
 															</div>
 														</td>
@@ -737,7 +731,7 @@ function fn_search(){
 														<td><spring:message code="menu.transfer_server_settings" /></td>
 														<td>
 															<div class="inp_chk">
-																<input type="checkbox" id="r_MN000201" name="r_mnu_nm" />
+																<input type="checkbox" id="r_MN000201" name="r_mnu_nm" value="MN000201"/>
 																<label for="r_MN000201"></label>
 															</div>
 														</td>
@@ -752,7 +746,7 @@ function fn_search(){
 														<td><spring:message code="menu.connector_management" /></td>
 														<td>
 															<div class="inp_chk">
-																<input type="checkbox" id="r_MN000202" name="r_mnu_nm" />
+																<input type="checkbox" id="r_MN000202" name="r_mnu_nm" value="MN000202"/>
 																<label for="r_MN000202"></label>
 															</div>
 														</td>
@@ -764,7 +758,7 @@ function fn_search(){
 														</td>											
 													</tr>
 													<tr>
-														<th scope="row" rowspan="10">
+														<th scope="row" rowspan="11">
 															<div class="inp_chk">
 																<input type="checkbox" id="admin" name="admin"/>
 																<label for="admin">Admin</label>
@@ -779,7 +773,7 @@ function fn_search(){
 														<td><spring:message code="menu.dbms_registration" /></td>
 														<td>
 															<div class="inp_chk">
-																<input type="checkbox" id="r_MN000301" name="r_mnu_nm" />
+																<input type="checkbox" id="r_MN000301" name="r_mnu_nm" value="MN000301"/>
 																<label for="r_MN000301"></label>
 															</div>
 														</td>
@@ -794,7 +788,7 @@ function fn_search(){
 														<td><spring:message code="menu.dbms_management" /></td>
 														<td>
 															<div class="inp_chk">
-																<input type="checkbox" id="r_MN000302" name="r_mnu_nm" />
+																<input type="checkbox" id="r_MN000302" name="r_mnu_nm" value="MN000302"/>
 																<label for="r_MN000302"></label>
 															</div>
 														</td>
@@ -809,7 +803,7 @@ function fn_search(){
 														<td><spring:message code="menu.database_management" /></td>
 														<td>
 															<div class="inp_chk">
-																<input type="checkbox" id="r_MN000303" name="r_mnu_nm" />
+																<input type="checkbox" id="r_MN000303" name="r_mnu_nm" value="MN000303"/>
 																<label for="r_MN000303"></label>
 															</div>
 														</td>
@@ -824,7 +818,7 @@ function fn_search(){
 														<td colspan="2"><spring:message code="menu.user_management" /></td>
 														<td>
 															<div class="inp_chk">
-																<input type="checkbox" id="r_MN0004" name="r_mnu_nm"  />
+																<input type="checkbox" id="r_MN0004" name="r_mnu_nm" value="MN0004"/>
 																<label for="r_MN0004"></label>
 															</div>
 														</td>
@@ -847,7 +841,7 @@ function fn_search(){
 														<td><spring:message code="menu.menu_auth_management" /></td>
 														<td>
 															<div class="inp_chk">
-																<input type="checkbox" id="r_MN000501" name="r_mnu_nm" />
+																<input type="checkbox" id="r_MN000501" name="r_mnu_nm" value="MN000501"/>
 																<label for="r_MN000501"></label>
 															</div>
 														</td>
@@ -862,7 +856,7 @@ function fn_search(){
 														<td><spring:message code="menu.server_auth_management" /></td>
 														<td>
 															<div class="inp_chk">
-																<input type="checkbox" id="r_MN000502" name="r_mnu_nm" />
+																<input type="checkbox" id="r_MN000502" name="r_mnu_nm" value="MN000502"/>
 																<label for="r_MN000502"></label>
 															</div>
 														</td>
@@ -877,7 +871,7 @@ function fn_search(){
 														<td><spring:message code="menu.database_auth_management" /></td>
 														<td>
 															<div class="inp_chk">
-																<input type="checkbox" id="r_MN000503" name="r_mnu_nm" />
+																<input type="checkbox" id="r_MN000503" name="r_mnu_nm" value="MN000503"/>
 																<label for="r_MN000503"></label>
 															</div>
 														</td>
@@ -893,7 +887,7 @@ function fn_search(){
 														<td><spring:message code="menu.screen_access_history" /></td>
 														<td>
 															<div class="inp_chk">
-																<input type="checkbox" id="r_MN000601" name="r_mnu_nm" />
+																<input type="checkbox" id="r_MN000601" name="r_mnu_nm" value="MN000601"/>
 																<label for="r_MN000601"></label>
 															</div>
 														</td>
@@ -903,13 +897,13 @@ function fn_search(){
 																<label for="w_MN000601"></label>
 															</div>
 														</td>										
-													</tr>
+													</tr>						
 													<tr>
-														<th scope="row" rowspan="1"><spring:message code="menu.monitoring" /></th>
-														<td><spring:message code="menu.agent_monitoring" /></td>
+														<th scope="row" rowspan="2"><spring:message code="menu.agent_monitoring" /></th>
+														<td><spring:message code="agent_monitoring.Management_agent" /></td>
 														<td>
 															<div class="inp_chk">
-																<input type="checkbox" id="r_MN000701" name="r_mnu_nm" />
+																<input type="checkbox" id="r_MN000701" name="r_mnu_nm" value="MN000701"/>
 																<label for="r_MN000701"></label>
 															</div>
 														</td>
@@ -921,10 +915,25 @@ function fn_search(){
 														</td>										
 													</tr>
 													<tr>
+														<td><spring:message code="agent_monitoring.Encrypt_agent" /></td>
+														<td>
+															<div class="inp_chk">
+																<input type="checkbox" id="r_MN000702" name="r_mnu_nm" value="MN000702"/>
+																<label for="r_MN000702"></label>
+															</div>
+														</td>
+														<td>
+															<div class="inp_chk">
+																<input type="checkbox" id="w_MN000702" name="w_mnu_nm" />
+																<label for="w_MN000702"></label>
+															</div>
+														</td>											
+													</tr>
+													<tr>
 														<td colspan="2"><spring:message code="menu.extension_pack_installation_information" /></td>
 														<td>
 															<div class="inp_chk">
-																<input type="checkbox" id="r_MN0008" name="r_mnu_nm"  />
+																<input type="checkbox" id="r_MN0008" name="r_mnu_nm" value="MN0008"/>
 																<label for="r_MN0008"></label>
 															</div>
 														</td>
@@ -933,34 +942,6 @@ function fn_search(){
 																<input type="checkbox" id="w_MN0008" name="w_mnu_nm"  />
 																<label for="w_MN0008"></label>
 															</div>
-													<input type="hidden"  name="mnu_id" value="2">		
-													<input type="hidden"  name="mnu_id" value="3">		
-													<input type="hidden"  name="mnu_id" value="4">		
-													<input type="hidden"  name="mnu_id" value="6">		
-													<input type="hidden"  name="mnu_id" value="7">		
-													<input type="hidden"  name="mnu_id" value="9">		
-													<input type="hidden"  name="mnu_id" value="10">		
-													<input type="hidden"  name="mnu_id" value="11">			
-													<input type="hidden"  name="mnu_id" value="12">			
-													<input type="hidden"  name="mnu_id" value="14" >		
-													<input type="hidden"  name="mnu_id" value="15">		
-													<input type="hidden"  name="mnu_id" value="16" >		
-													<input type="hidden"  name="mnu_id" value="18">	
-													<input type="hidden"  name="mnu_id" value="20">
-													<input type="hidden"  name="mnu_id" value="21">	
-													
-													<input type="hidden"  name="mnu_id" value="25">	
-													<input type="hidden"  name="mnu_id" value="26">	
-													<input type="hidden"  name="mnu_id" value="28">	
-													<input type="hidden"  name="mnu_id" value="29">	
-													<input type="hidden"  name="mnu_id" value="30">	
-													<input type="hidden"  name="mnu_id" value="31">	
-													<input type="hidden"  name="mnu_id" value="33">	
-													<input type="hidden"  name="mnu_id" value="34">	
-													<input type="hidden"  name="mnu_id" value="35">	
-													<input type="hidden"  name="mnu_id" value="36">	
-													<input type="hidden"  name="mnu_id" value="38">
-													
 														</td>											
 													</tr>	
 													<tr class="encrypt">
@@ -979,7 +960,7 @@ function fn_search(){
 														<td><spring:message code="encrypt_policy_management.Security_Policy_Management"/></td>
 														<td>
 															<div class="inp_chk">
-																<input type="checkbox" id="r_MN0001101" name="r_mnu_nm" />
+																<input type="checkbox" id="r_MN0001101" name="r_mnu_nm" value="MN0001101"/>
 																<label for="r_MN0001101"></label>
 															</div>
 														</td>
@@ -994,7 +975,7 @@ function fn_search(){
 														<td><spring:message code="encrypt_key_management.Encryption_Key_Management"/></td>
 														<td>
 															<div class="inp_chk">
-																<input type="checkbox" id="r_MN0001102" name="r_mnu_nm" />
+																<input type="checkbox" id="r_MN0001102" name="r_mnu_nm" value="MN0001102"/>
 																<label for="r_MN0001102"></label>
 															</div>
 														</td>
@@ -1014,7 +995,7 @@ function fn_search(){
 														<td><spring:message code="encrypt_log_decode.Encryption_Decryption"/></td>
 														<td>
 															<div class="inp_chk">
-																<input type="checkbox" id="r_MN0001201" name="r_mnu_nm" />
+																<input type="checkbox" id="r_MN0001201" name="r_mnu_nm" value="MN0001201"/>
 																<label for="r_MN0001201"></label>
 															</div>
 														</td>
@@ -1029,7 +1010,7 @@ function fn_search(){
 														<td><spring:message code="encrypt_log_sever.Management_Server"/></td>
 														<td>
 															<div class="inp_chk">
-																<input type="checkbox" id="r_MN0001202" name="r_mnu_nm" />
+																<input type="checkbox" id="r_MN0001202" name="r_mnu_nm" value="MN0001202"/>
 																<label for="r_MN0001202"></label>
 															</div>
 														</td>
@@ -1044,7 +1025,7 @@ function fn_search(){
 														<td><spring:message code="encrypt_policy_management.Encryption_Key"/></td>
 														<td>
 															<div class="inp_chk">
-																<input type="checkbox" id="r_MN0001203" name="r_mnu_nm" />
+																<input type="checkbox" id="r_MN0001203" name="r_mnu_nm" value="MN0001203"/>
 																<label for="r_MN0001203"></label>
 															</div>
 														</td>
@@ -1059,7 +1040,7 @@ function fn_search(){
 														<td>자원사용</td>
 														<td>
 															<div class="inp_chk">
-																<input type="checkbox" id="r_MN0001204" name="r_mnu_nm" />
+																<input type="checkbox" id="r_MN0001204" name="r_mnu_nm" value="MN0001204"/>
 																<label for="r_MN0001204"></label>
 															</div>
 														</td>
@@ -1080,7 +1061,7 @@ function fn_search(){
 														<td><spring:message code="encrypt_policyOption.Security_Policy_Option_Setting"/></td>
 														<td>
 															<div class="inp_chk">
-																<input type="checkbox" id="r_MN0001301" name="r_mnu_nm" />
+																<input type="checkbox" id="r_MN0001301" name="r_mnu_nm" value="MN0001301"/>
 																<label for="r_MN0001301"></label>
 															</div>
 														</td>
@@ -1095,7 +1076,7 @@ function fn_search(){
 														<td><spring:message code="encrypt_encryptSet.Encryption_Settings"/></td>
 														<td>
 															<div class="inp_chk">
-																<input type="checkbox" id="r_MN0001302" name="r_mnu_nm" />
+																<input type="checkbox" id="r_MN0001302" name="r_mnu_nm" value="MN0001302"/>
 																<label for="r_MN0001302"></label>
 															</div>
 														</td>
@@ -1110,7 +1091,7 @@ function fn_search(){
 														<td><spring:message code="encrypt_serverMasterKey.Setting_the_server_master_key_password"/></td>
 														<td>
 															<div class="inp_chk">
-																<input type="checkbox" id="r_MN0001303" name="r_mnu_nm" />
+																<input type="checkbox" id="r_MN0001303" name="r_mnu_nm" value="MN0001303"/>
 																<label for="r_MN0001303"></label>
 															</div>
 														</td>
@@ -1125,7 +1106,7 @@ function fn_search(){
 														<td><spring:message code="encrypt_agent.Encryption_agent_setting"/></td>
 														<td>
 															<div class="inp_chk">
-																<input type="checkbox" id="r_MN0001304" name="r_mnu_nm" />
+																<input type="checkbox" id="r_MN0001304" name="r_mnu_nm" value="MN0001304"/>
 																<label for="r_MN0001304"></label>
 															</div>
 														</td>
@@ -1141,7 +1122,7 @@ function fn_search(){
 														<td><spring:message code="encrypt_Statistics.Encrypt_Statistics"/></td>
 														<td>
 															<div class="inp_chk">
-																<input type="checkbox" id="r_MN0001401" name="r_mnu_nm" />
+																<input type="checkbox" id="r_MN0001401" name="r_mnu_nm" value="MN0001401"/>
 																<label for="r_MN0001401"></label>
 															</div>
 														</td>	

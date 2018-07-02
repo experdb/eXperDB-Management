@@ -60,9 +60,19 @@ public class MenuAuthorityServiceImpl extends EgovAbstractServiceImpl implements
 	 * @throws Exception
 	 */
 	@Override
-	public void updateUsrMnuAut(Object object) throws Exception {
-		menuAuthorityDAO.updateUsrMnuAut(object);	
+	public void updateUsrMnuAut(Map<String, Object> param) throws Exception {
+		menuAuthorityDAO.updateUsrMnuAut(param);	
 		
+	}
+
+	/**
+	 * mnu_id 조회
+	 * @param mnu_cd 
+	 * @throws Exception
+	 */
+	@Override
+	public int selectMenuId(String mnu_cd) throws Exception {
+		return menuAuthorityDAO.selectMenuId(mnu_cd);
 	}
 
 
@@ -92,7 +102,5 @@ public class MenuAuthorityServiceImpl extends EgovAbstractServiceImpl implements
 	public List<MenuAuthorityVO> transferAuthorityList(MenuAuthorityVO menuAuthorityVO) {
 		return menuAuthorityDAO.transferAuthorityList(menuAuthorityVO);
 	}
-
-
 
 }
