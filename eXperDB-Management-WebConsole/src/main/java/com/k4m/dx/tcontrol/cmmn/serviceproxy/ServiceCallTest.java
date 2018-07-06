@@ -196,10 +196,14 @@ public class ServiceCallTest {
 		//test.selectEntityUid(restIp, restPort, strTocken, loginId, entityId, loginId);
 		
 		//암호화 통계
-		test.selectAuditLogSiteHourForStat(restIp, restPort, strTocken, loginId, entityId);
+		//test.selectAuditLogSiteHourForStat(restIp, restPort, strTocken, loginId, entityId);
 		
 		//암호화 Agent상태조회
-		test.selectSystemStatus(restIp, restPort, strTocken, loginId, entityId);
+		//test.selectSystemStatus(restIp, restPort, strTocken, loginId, entityId);
+		
+		
+		//사용자 비밀번호 수정
+		//test.updatePassword(restIp, restPort, strTocken, loginId, entityId);
 		
 	}
 
@@ -2925,6 +2929,62 @@ public class ServiceCallTest {
 		}
 
 	}
+	
+	/**
+	 * 비밀번호 변경
+	 * @param restIp
+	 * @param restPort
+	 * @param strTocken
+	 * @param loginId
+	 * @param entityId
+	 * @throws Exception
+	 */
+	private void updatePassword(String restIp, int restPort, String strTocken, String loginId, String entityId) throws Exception {
+		EncryptCommonService api = new EncryptCommonService(restIp, restPort);
+
+		String strService = SystemCode.ServiceName.ENTITY_SERVICE;
+		String strCommand = SystemCode.ServiceCommand.UPDATEPASSWORD;
+
+		String strEntityUid = entityId;
+		String password = "1234qwer";
+		String strUpdateUid = entityId;
+
+		
+		AuthCredentialToken param = new AuthCredentialToken();
+		param.setEntityUid(entityId);
+		param.setPassword(password);
+		param.setUpdateUid(strUpdateUid);
+
+		HashMap body = new HashMap();
+
+		body.put(TypeUtility.getJustClassName(param.getClass()), param.toJSONString());
+		
+		String parameters = TypeUtility.makeRequestBody(body);
+		
+		System.out.println(parameters);
+
+		HashMap header = new HashMap();
+		header.put(SystemCode.FieldName.LOGIN_ID, loginId);
+		header.put(SystemCode.FieldName.ENTITY_UID, entityId);
+		header.put(SystemCode.FieldName.TOKEN_VALUE, strTocken);
+
+		JSONObject resultJson = api.callService(strService, strCommand, header, parameters.toString());
+		
+		Iterator<?> iter = resultJson.entrySet().iterator();
+		while (iter.hasNext()) {
+			Map.Entry entry = (Map.Entry) iter.next();
+
+			System.out.println(String.valueOf(entry.getKey()) + " = " + String.valueOf(entry.getValue()));
+		}
+		
+		
+		String resultCode = (String) resultJson.get("resultCode");
+		String resultMessage = (String) resultJson.get("resultMessage");
+		//long totalListCount = (long) resultJson.get("totalListCount");
+		
+		
+	}
+	
 	
 	
 	private void checkChar(String originalStr) throws Exception {
