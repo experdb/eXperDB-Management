@@ -166,6 +166,20 @@
 	</update> 
 	
 	
+	<update id="updateDbServerPort" parameterType="dbServerVO">
+   	    /**
+	 	* Query ID : updateDbServerPort
+	 	* Description : DB서버 포트 수정
+	 	* Author : 변승우
+	 	**/
+	 	
+		UPDATE T_DBSVRIPADR_I
+		SET 
+		       PORTNO=#{portno}
+		WHERE DB_SVR_ID=#{db_svr_id}
+	</update> 
+	
+	
 <!-- <delete id="deleteCmmnCode" parameterType="cmmnCodeVO">
        	/**
 	 	* Query ID : deleteCmmnCode

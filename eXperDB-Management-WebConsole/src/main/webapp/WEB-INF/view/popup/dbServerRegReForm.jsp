@@ -73,8 +73,18 @@ function fn_init() {
 	           }
 	           return data;
 	        }}, 
-		{data : "ipadr",  defaultContent : ""},
-		{data : "portno",  defaultContent : ""},
+		{data : "ipadr",  defaultContent : ""},		
+		{data : "portno", defaultContent : "", 
+			targets: 0,
+	        searchable: false,
+	        orderable: false,
+	        render: function(data, type, full, meta){
+	           if(type === 'display'){
+	              data = '<input type="text" class="txt" name="port" value="' +full.portno + '" style="width: 132px; height: 25px;" id="port">';      
+	           }
+	           
+	           return data;
+	      }}, 		
 		{data : "master_gbn",  defaultContent : ""},
 		{data : "connYn",  defaultContent : ""},
 		{data : "svr_host_nm",  defaultContent : "", visible: false}
@@ -100,10 +110,10 @@ function fn_dbServerValidation(){
 			alert("PG_DATA경로 확인 하셔야합니다.");
 			return false;
 		} */
- 		if(connCheck != "success"){
+ 		 if(connCheck != "success"){
 			alert('<spring:message code="message.msg89" /> ');
 			return false;
-		}
+		} 
  		return true;
 }
 
@@ -245,11 +255,14 @@ function fn_dbServerConnTest(){
 	var ipadrCnt = table.column(0).data().length;
 	
 	
+	var list = $("input[name='port']");
+	
+	
 	for(var i = 0; i < ipadrCnt; i++){
 		 var datas = new Object();
 		 datas.SERVER_NAME = $("#db_svr_nm").val();
 	     datas.SERVER_IP = table.rows().data()[i].ipadr;
-	     datas.SERVER_PORT = table.rows().data()[i].portno;		  
+	     datas.SERVER_PORT = list[i].value;	  
 	     datas.DATABASE_NAME = $("#dft_db_nm").val();	
 	     datas.USER_ID = $("#svr_spr_usr_id").val();	
 	     datas.USER_PWD = $("#svr_spr_scm_pwd").val();	
@@ -341,6 +354,7 @@ function fn_pathCall(ipadr, datasArr){
 
 //DBserver 수정
 function fn_updateDbServer(){
+	var list = $("input[name='port']");
 	 var useyn = $(":input:radio[name=useyn]:checked").val();
 
 	if (!fn_dbServerValidation()) return false;
@@ -352,7 +366,7 @@ function fn_updateDbServer(){
 	for (var i = 0; i < datas.length; i++){
 		var tmpmap = new Object();
 		tmpmap["ipadr"] = table.rows().data()[i].ipadr;
-        tmpmap["portno"] = table.rows().data()[i].portno;      
+        tmpmap["portno"] = list[i].value;	  
         tmpmap["master_gbn"] = table.rows().data()[i].master_gbn;
         tmpmap["svr_host_nm"] = table.rows().data()[i].svr_host_nm;
 		arrmaps.push(tmpmap);	

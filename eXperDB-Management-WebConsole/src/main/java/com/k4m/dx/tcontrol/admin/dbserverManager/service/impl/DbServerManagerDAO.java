@@ -54,7 +54,9 @@ public class DbServerManagerDAO extends EgovAbstractMapper{
 	 * @throws Exception
 	 */	
 	public void updateDbServer(DbServerVO dbServerVO) throws SQLException {
+		System.out.println(dbServerVO.getPortno());
 		update("dbserverManagerSql.updateDbServer", dbServerVO);	
+		update("dbserverManagerSql.updateDbServerPort", dbServerVO);	
 	}
 
 
