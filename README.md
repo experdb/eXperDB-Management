@@ -1,4 +1,4 @@
-## eXperDB-Management: PostgreSQL Management Tool
+## eXperDB-Management: eXperDB or PostgreSQL Management Tool
 
 ## Introduction
 eXperDB-Management is a PostgreSQL management tool(for efficient operation and management). Use backup settings and periodic scheduling to prepare for system failures, grant access to the system, and view backup and access control history. It also provides data encryption for information protection.
