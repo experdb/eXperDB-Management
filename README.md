@@ -29,7 +29,6 @@ eXperDB-Management is a PostgreSQL management tool(for efficient operation and m
 
 ## License
 [![LICENSE](https://img.shields.io/badge/LICENSE-GPLv3-ff69b4.svg)](https://github.com/experdb/eXperDB-Management/blob/master/LICENSE)
-[![LICENSE](https://img.shields.io/aur/license/yaourt.svg)](https://github.com/experdb/eXperDB-Management/blob/master/LICENSE)
 
 ## Installation
 ### System Requirements
