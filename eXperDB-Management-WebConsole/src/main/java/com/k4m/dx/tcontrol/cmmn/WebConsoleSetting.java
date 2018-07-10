@@ -29,6 +29,7 @@ public class WebConsoleSetting {
 		String strDatabaseUrl = "";
 		
 		String strTransferYN ="";
+		String strAuditYN="";
 		
 		String strLanguage ="";
 		String strVersion ="eXperDB-Management-WebConsole-9.6.1.0";
@@ -43,7 +44,7 @@ public class WebConsoleSetting {
 		
 		Scanner scan = new Scanner(System.in);
 		
-		System.out.println("Language(ko(한글), en(영문)) :");
+		System.out.println("Language(ko:Korean), (en:English) :");
 		
 		strLanguage = scan.nextLine();
 
@@ -125,9 +126,29 @@ public class WebConsoleSetting {
 				break;
 			}
 		}	
+	
+		/* 감사설정 사용여부 */
+		System.out.println("Whether to enable auditing settings? (y, n)");
+		
+		strAuditYN = scan.nextLine();
+		strAuditYN = strAuditYN.toUpperCase();
+		
+		while (true) {
+			if(strAuditYN.equals("")) {
+				System.out.println("Please enter your auditing setting yn. ");
+				
+				System.out.println("Whether to enable auditing settings? (y, n) :");
+				
+				strAuditYN = scan.nextLine();
+				strAuditYN = strAuditYN.toUpperCase();
+			} else {
+				break;
+			}
+		}	
+		
 		
 		/* 전송설정 사용여부 */
-		System.out.println("데이터 전송 사용여부? (y, n)");
+		System.out.println("Whether data transfer is enabled? (y, n)");
 		
 		strTransferYN = scan.nextLine();
 		strTransferYN = strTransferYN.toUpperCase();
@@ -136,7 +157,7 @@ public class WebConsoleSetting {
 			if(strTransferYN.equals("")) {
 				System.out.println("Please enter your transfer setting yn. ");
 				
-				System.out.println("데이터 전송 사용여부? (y, n) :");
+				System.out.println("Whether data transfer is enabled? (y, n) :");
 				
 				strTransferYN = scan.nextLine();
 				strTransferYN = strTransferYN.toUpperCase();
@@ -148,7 +169,7 @@ public class WebConsoleSetting {
 		
 		
 		/* eXperDB-Encrypt 설치 */
-		System.out.println("eXperDB-Encrypt 사용여부? (y, n)");
+		System.out.println("Whether eXperDB-Encrypt is enabled? (y, n)");
 	
 		String strEnctyptYn = scan.nextLine();
 		
@@ -196,8 +217,9 @@ public class WebConsoleSetting {
 			System.out.println("Repository database port :" + strDatabasePort);		
 			System.out.println("Repository database username :" + strDatabaseUsername);
 			System.out.println("Repository database password :" + strDatabasePassword);
-			System.out.println("Repository database 접속정보 :" + strDatabaseUrl);
-			System.out.println("데이터 전송 사용 여부 : " + strTransferYN);
+			System.out.println("Repository database Access information :" + strDatabaseUrl);
+			System.out.println("Whether to enable auditing settings : " + strAuditYN);
+			System.out.println("Whether data transfer is enabled : " + strTransferYN);
 			System.out.println("#################################################");
 			System.out.println("###################eXperDB-Encrypt##################");
 			System.out.println("eXperDB-Encrypt server.url :" + strEncryptServerUrl);
@@ -212,8 +234,9 @@ public class WebConsoleSetting {
 			System.out.println("Repository database port :" + strDatabasePort);		
 			System.out.println("Repository database username :" + strDatabaseUsername);
 			System.out.println("Repository database password :" + strDatabasePassword);
-			System.out.println("Repository database 접속정보 :" + strDatabaseUrl);
-			System.out.println("데이터 전송 사용 여부 : " + strTransferYN);
+			System.out.println("Repository database Access information :" + strDatabaseUrl);
+			System.out.println("Whether to enable auditing settings : " + strAuditYN);
+			System.out.println("Whether data transfer is enabled : " + strTransferYN);
 			System.out.println("#################################################");
 		}
 		
@@ -228,7 +251,7 @@ public class WebConsoleSetting {
 		System.out.println("Repository database 접속정보 :" + strDatabaseUrl);
 		System.out.println("#####################################################");*/
 		
-		System.out.println("입력한 내용으로 적용하시겠습니까? (y, n)");
+		System.out.println("Do you want to apply what you entered? (y, n)");
 		
 		
 		String strApply = scan.nextLine();
@@ -289,7 +312,8 @@ public class WebConsoleSetting {
 		    prop.setProperty("database.password", "ENC(" + password + ")");
 		    prop.setProperty("lang", strLanguage);
 		    prop.setProperty("version", strVersion);
-		    prop.setProperty("transfer", strTransferYN);
+		    prop.setProperty("pg_audit", strAuditYN);
+		    prop.setProperty("transfer", strTransferYN);		   
 
 		    if(strEnctyptYn.equals("Y")){
 		    	prop.setProperty("encrypt.useyn", strEnctyptYn);

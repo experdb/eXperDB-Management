@@ -266,18 +266,19 @@ $(window.document).ready(function() {
 					}			
 					html1+='				</ul>';
 					html1+='			</li>';
-					html1+='			<li class="ico2_2"><a href="#n"><img src="../images/ico_lnb_7.png" id="treeImg"><spring:message code="menu.audit_management"/></a>';
-					html1+='				<ul class="depth_3">'
-					if(aut.length != 0 && aut[index].adt_cng_aut_yn == "Y"){
-						html1+='					<li class="ico3_4" id="auditManagement'+item.db_svr_id+'"><a href=/audit/auditManagement.do?db_svr_id='+item.db_svr_id+' id="auditManagement'+item.db_svr_id+'c" onClick=javascript:fn_GoLink("auditManagement'+item.db_svr_id+'"); target="main"><img src="../images/ico_lnb_10.png" id="treeImg"><spring:message code="menu.audit_settings" /></a></li>';
+					//pg_audit 사용여부에 따른 tree메뉴 권한
+					if('${sessionScope.pg_audit}' == 'Y'){
+						html1+='			<li class="ico2_2"><a href="#n"><img src="../images/ico_lnb_7.png" id="treeImg"><spring:message code="menu.audit_management"/></a>';
+						html1+='				<ul class="depth_3">'
+						if(aut.length != 0 && aut[index].adt_cng_aut_yn == "Y"){
+							html1+='					<li class="ico3_4" id="auditManagement'+item.db_svr_id+'"><a href=/audit/auditManagement.do?db_svr_id='+item.db_svr_id+' id="auditManagement'+item.db_svr_id+'c" onClick=javascript:fn_GoLink("auditManagement'+item.db_svr_id+'"); target="main"><img src="../images/ico_lnb_10.png" id="treeImg"><spring:message code="menu.audit_settings" /></a></li>';
+						}
+						if(aut.length != 0 && aut[index].adt_hist_aut_yn == "Y"){
+							html1+='					<li class="ico3_5" id="auditLogList'+item.db_svr_id+'"><a href=/audit/auditLogList.do?db_svr_id='+item.db_svr_id+' id="auditLogList'+item.db_svr_id+'c" onClick=javascript:fn_GoLink("auditLogList'+item.db_svr_id+'"); target="main"><img src="../images/ico_lnb_14.png" id="treeImg"><spring:message code="menu.audit_history" /></a></li>';
+						}
+						html1+='				</ul>';
+						html1+='			</li>';		
 					}
-					if(aut.length != 0 && aut[index].adt_hist_aut_yn == "Y"){
-						html1+='					<li class="ico3_5" id="auditLogList'+item.db_svr_id+'"><a href=/audit/auditLogList.do?db_svr_id='+item.db_svr_id+' id="auditLogList'+item.db_svr_id+'c" onClick=javascript:fn_GoLink("auditLogList'+item.db_svr_id+'"); target="main"><img src="../images/ico_lnb_14.png" id="treeImg"><spring:message code="menu.audit_history" /></a></li>';
-					}
-					html1+='				</ul>';
-					html1+='			</li>';
-					
-					
 					html1+='			<li class="ico2_2"><a href="#n"><img src="../images/ico_lnb_7.png" id="treeImg"><spring:message code="menu.script_management"/></a>';
 					html1+='				<ul class="depth_3">'
 					if(aut.length != 0 && aut[index].script_cng_aut_yn == "Y"){

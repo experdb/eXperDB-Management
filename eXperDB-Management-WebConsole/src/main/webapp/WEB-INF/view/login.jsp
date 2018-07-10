@@ -53,11 +53,13 @@ $(window.document).ready(function() {
 				<p class="tit">MEMBER LOGIN</p>
 				<div class="inp_wrap t1">
 					<label for="member_id"><spring:message code="user_management.id" /></label>
-					<input type="text" class="txt" id="usr_id" name="usr_id" maxlength="" placeholder='<spring:message code="message.msg128" />'/>
+					<input type="text" class="txt" id="usr_id" name="usr_id"  maxlength="" placeholder='<spring:message code="message.msg128" />'/>
+					<%-- <input type="text" class="txt" id="usr_id" name="usr_id" value="swbyun" maxlength="" placeholder='<spring:message code="message.msg128" />'/> --%>
 				</div>
 				<div class="inp_wrap t2">
 					<label for="member_pwd"><spring:message code="user_management.password" /></label>
 					<input type="password" class="txt" id="pwd" name="pwd"  maxlength="20" placeholder='<spring:message code="message.msg129" />'/>
+					<%-- <input type="password" class="txt" id="pwd" name="pwd"  value="experdb12#" maxlength="20" placeholder='<spring:message code="message.msg129" />'/> --%>
 				</div>
 				<div class="inp_wrap t2" id="errormessage">
 				<c:if test="${not empty error}">

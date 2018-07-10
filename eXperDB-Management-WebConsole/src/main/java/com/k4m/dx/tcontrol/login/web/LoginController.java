@@ -183,6 +183,9 @@ public class LoginController {
 				String version = props.get("version").toString();
 				request.getSession().setAttribute("version", version);
 				
+				String pg_audit = props.get("pg_audit").toString();
+				request.getSession().setAttribute("pg_audit", pg_audit);
+				
 				String transfer = props.get("transfer").toString();
 				request.getSession().setAttribute("transfer", transfer);
 				

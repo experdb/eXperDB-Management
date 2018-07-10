@@ -343,6 +343,18 @@ function fn_cookie(url) {
 			}
 		})
  	}
+	
+	
+	/* function fn_monitoring(){		
+		var popUrl = "/monitoringDashboard.do";
+		var width = 954;
+		var height = 799;
+		var popOption = "width="+width+", height="+height+", fullscreen=yes, resizable=no, scrollbars=yes, status=no, toolbar=no, titlebar=yes, location=no,";
+		
+		var winPop = window.open(popUrl,"eXperDB_Monitoring",popOption);
+		winPop.focus();
+
+	} */
 </script>
 <%@include file="../help/aboutExperdbLayer.jsp"%>
 <%@include file="../help/openSourceLayer.jsp"%>
@@ -454,6 +466,8 @@ function fn_cookie(url) {
         					<li><a href="/myScheduleListView.do" onClick="fn_cookie(null)" target="main"><spring:message code="menu.my_schedule_management"/></a></li>
 						</ul>
 					</li>
+					<!-- <li><a href="#n" onClick="fn_monitoring();"><span><img src="/images/ico_h_9.png" alt="Monitoring" /></span></a>
+					</li> -->
 					<li><a href="#n"><span><img src="/images/ico_h_8.png" alt="HELP" /></span></a>
 						<ul class="depth_2">
 							<!-- <li><a href="#n" onClick="fn_cookie(null)" target="main">Online Help</a></li> -->

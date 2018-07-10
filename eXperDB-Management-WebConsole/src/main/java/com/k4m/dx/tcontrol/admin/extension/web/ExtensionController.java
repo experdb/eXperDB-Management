@@ -1,14 +1,17 @@
 package com.k4m.dx.tcontrol.admin.extension.web;
 
+import java.io.FileInputStream;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Properties;
 
 import javax.servlet.http.HttpServletRequest;
 
 import org.json.simple.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.util.ResourceUtils;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -138,6 +141,11 @@ public class ExtensionController {
 	
 		try {	
 
+			Properties props = new Properties();
+			props.load(new FileInputStream(ResourceUtils.getFile("classpath:egovframework/tcontrolProps/globals.properties")));			
+			
+			String pg_audit = props.get("audit").toString();	
+			
 			int agentPORT = Integer.parseInt(request.getParameter("agentPort"));
 			String serverIp = request.getParameter("ipadr");
 			String serverName = request.getParameter("db_svr_nm");
@@ -155,38 +163,40 @@ public class ExtensionController {
 			serverObj.put(ClientProtocolID.USER_ID, userId);
 			serverObj.put(ClientProtocolID.USER_PWD, userPw);
 					
-		
-			ClientInfoCmmn cic = new ClientInfoCmmn();
 			
-			String strExtName = "";
-			List<Object> results = cic.extension_select(serverObj,serverIp,agentPORT,strExtName);
-			
-			if(results.size() > 0) {
-				boolean isAdminPackYn = false;
-				boolean isAuditYn = false;
+			if(pg_audit.equals("Y")){			
+				ClientInfoCmmn cic = new ClientInfoCmmn();
 				
-				for(int i=0; i<results.size(); i++) {
-					Object obj = results.get(i);		
-					HashMap hp = (HashMap) obj;
-					String extname = (String) hp.get("extname");
-								
-					if(extname.equals("adminpack")){
-						isAdminPackYn = true;
-					}
-					if(extname.equals("pgaudit")){
-						isAuditYn = true;
+				String strExtName = "";
+				List<Object> results = cic.extension_select(serverObj,serverIp,agentPORT,strExtName);
+				
+				if(results.size() > 0) {
+					boolean isAdminPackYn = false;
+					boolean isAuditYn = false;
+					
+					for(int i=0; i<results.size(); i++) {
+						Object obj = results.get(i);		
+						HashMap hp = (HashMap) obj;
+						String extname = (String) hp.get("extname");
+									
+						if(extname.equals("adminpack")){
+							isAdminPackYn = true;
+						}
+						if(extname.equals("pgaudit")){
+							isAuditYn = true;
+						}	
+						System.out.println(i + " " + extname);
 					}	
-					System.out.println(i + " " + extname);
-				}	
-				
-				
-				if(isAdminPackYn == false){
-					System.out.println("ADMINPACK 미설치");
-					cic.extensionCreate(serverObj,serverIp,agentPORT,"ADMINPACK");
-				}
-				if(isAuditYn == false){
-					System.out.println("PGAUDIT 미설치");
-					cic.extensionCreate(serverObj,serverIp,agentPORT,"PGAUDIT");
+					
+					
+					if(isAdminPackYn == false){
+						System.out.println("ADMINPACK 미설치");
+						cic.extensionCreate(serverObj,serverIp,agentPORT,"ADMINPACK");
+					}
+					if(isAuditYn == false){
+						System.out.println("PGAUDIT 미설치");
+						cic.extensionCreate(serverObj,serverIp,agentPORT,"PGAUDIT");
+					}
 				}
 			}
 		} catch (Exception e) {
