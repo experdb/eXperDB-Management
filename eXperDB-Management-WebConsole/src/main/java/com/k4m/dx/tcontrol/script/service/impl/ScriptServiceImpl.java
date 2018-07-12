@@ -42,8 +42,8 @@ public class ScriptServiceImpl implements ScriptService{
 	}
 
 	@Override
-	public void deleteScriptWork(ScriptVO scriptVO) throws Exception {
-		ScriptDAO.deleteScriptWork(scriptVO);	
+	public void deleteScriptWork(int wrk_id) throws Exception {
+		ScriptDAO.deleteScriptWork(wrk_id);	
 	}
 
 	@Override

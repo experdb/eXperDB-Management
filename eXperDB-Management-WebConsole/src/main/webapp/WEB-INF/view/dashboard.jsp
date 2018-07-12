@@ -64,7 +64,9 @@ function fn_serverStatus(){
 				fn_selectSecurityStatistics(today);
 			}else if(data.resultCode == "8000000002"){
 				alert("<spring:message code='message.msg05' />");	
-				var html ='<img src="../images/ico_agent_2.png" alt="" />';
+				
+				var html ='<img src="../images/ico_state_07.png" alt="Stop" /> STOP';
+				//var html ='<img src="../images/ico_agent_2.png" alt="" />';
 				$("#encryptServer").html(html);
 			}
 		}
@@ -442,7 +444,7 @@ function fn_selectSecurityStatistics(today){
 									<th scope="col"><spring:message code="menu.access_control" /></th>
 
 									<th scope="col" colspan="2"><spring:message code="menu.data_transfer" /></th>
-									<th scope="col" rowspan="2"><spring:message code="data_transfer.experdb_agent" /></th>								
+									<th scope="col" rowspan="2">Agent <spring:message code="properties.status" /></th>								
 								</tr>
 								<tr>
 									<th scope="col"><spring:message code="common.registory" /></th>
@@ -489,32 +491,23 @@ function fn_selectSecurityStatistics(today){
 					</div>
 				</div>
 				
-				
-				<!-- eXperDB Encrypt Server 상태 -->
-				<div class="main_server_info" id="encryptDashbaordServer">
-					<p class="tit">eXperDB Encrypt Server <spring:message code="properties.status" /> </p>
+				<!-- eXperDB Encrypt 상태 -->
+				<div class="main_server_info" >
+					<p class="tit">eXperDB Encrypt <%-- <spring:message code="properties.status" /> --%> <div  id="today" align="right"></div></p>
+					
 					<div class="inner">
-						<table class="list" style="width: 320px;">
-							<caption>eXperDB Encrypt Server 상태</caption>
+						<table class="list" style="width: 320px;" id="encryptDashbaordServer">
+							<caption>eXperDB Encrypt Server </caption>
 							<colgroup>
 							</colgroup>
 							<tr>
-								<th><spring:message code="common.run_status" /></th>						
+								<th>Server <spring:message code="properties.status" /></th>						
 								<th id="encryptServer"></th>
 							</tr>		
-						</table>
+						</table>			
 					
-					</div>
-				</div>
-					
-				
-				
-				<!-- eXperDB Encrypt Agent 상태 -->
-				<div class="main_server_info" id="encryptDashbaordAgent">
-					<p class="tit">eXperDB Encrypt Agent <spring:message code="properties.status" /> </p>
-					<div class="inner">
-							<div align="right" id="today"></div>
-							<table class="list" border="1">
+							
+						<table class="list" border="1" id="encryptDashbaordAgent">
 							<caption><spring:message code="dashboard.dbms_info" /></caption>
 							<colgroup>
 								<col style="width: 13.5%;" />
@@ -533,7 +526,7 @@ function fn_selectSecurityStatistics(today){
 									<th scope="col" colspan="2"><spring:message code="encrypt_log_decode.Encryption"/></th>
 									<th scope="col" colspan="2"><spring:message code="encrypt_log_decode.Decryption"/></th>
 									<th scope="col" rowspan="2"><spring:message code="encrypt_Statistics.Sum"/>  </th>
-									<th scope="col" rowspan="2"><spring:message code="common.run_status" /></th>								
+									<th scope="col" rowspan="2">Agent <spring:message code="properties.status" /></th>								
 								</tr>
 								<tr>
 									<th scope="col"><spring:message code="common.success" /></th>

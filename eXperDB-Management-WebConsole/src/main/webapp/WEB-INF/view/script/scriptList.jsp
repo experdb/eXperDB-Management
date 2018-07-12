@@ -55,7 +55,8 @@ function fn_init(){
 		{data : "frst_reg_dtm", defaultContent : ""},
 		{data : "lst_mdfr_id", defaultContent : ""},
 		{data : "lst_mdf_dtm", defaultContent : ""},
-		{data : "wrk_id", defaultContent : "", visible: false }
+		{data : "wrk_id", defaultContent : "", visible: false },
+		{data : "bck_wrk_id", defaultContent : "", visible: false }
 	],'select': {'style': 'multi'}
 	});
 	
@@ -68,7 +69,25 @@ function fn_init(){
 	table.tables().header().to$().find('th:eq(6)').css('min-width', '100px');
 	table.tables().header().to$().find('th:eq(7)').css('min-width', '100px');
 	table.tables().header().to$().find('th:eq(8)').css('min-width', '0px');
+	table.tables().header().to$().find('th:eq(9)').css('min-width', '0px');
 	$(window).trigger('resize'); 
+	
+	
+	
+	//더블 클릭시
+	 $('#scriptTable tbody').on('dblclick','tr',function() {
+		var wrk_id = table.row(this).data().wrk_id;
+		
+		var popUrl = "/popup/scriptReregForm.do?db_svr_id=${db_svr_id}&wrk_id="+wrk_id;
+		var width = 954;
+		var height = 669;
+		var left = (window.screen.width / 2) - (width / 2);
+		var top = (window.screen.height /2) - (height / 2);
+		var popOption = "width="+width+", height="+height+", top="+top+", left="+left+", resizable=no, scrollbars=yes, status=no, toolbar=no, titlebar=yes, location=no,";
+		
+		var winPop = window.open(popUrl,"scriptReregPop",popOption);
+		winPop.focus();
+	});		 
 }
 
 
@@ -152,22 +171,62 @@ function fn_rereg_popup(){
 }
 
 
-function fn_delete(){
+function fn_scheduleCheck(){
 	var datas = table.rows('.selected').data();
 	
 	if (datas.length <= 0) {
 		alert("<spring:message code='message.msg35' />");
 		return false;
-	}else if(datas.length > 1){
-		alert("<spring:message code='message.msg04' />");
-		return false;
 	}else{	
 		var wrk_id = table.row('.selected').data().wrk_id;
+		
+		var bck_wrk_id_List = [];
+		var wrk_id_List = [];
+		
+	    for (var i = 0; i < datas.length; i++) {
+	    	bck_wrk_id_List.push( table.rows('.selected').data()[i].bck_wrk_id);   
+	    	wrk_id_List.push( table.rows('.selected').data()[i].wrk_id);   
+	  	}	
+	    
+	    $.ajax({
+			url : "/popup/scheduleCheck.do",
+		  	data : {
+		  		bck_wrk_id_List : JSON.stringify(bck_wrk_id_List),
+		  		wrk_id_List : JSON.stringify(wrk_id_List)
+		  	},
+			dataType : "json",
+			type : "post",
+			beforeSend: function(xhr) {
+		        xhr.setRequestHeader("AJAX", true);
+		     },
+			error : function(xhr, status, error) {
+				if(xhr.status == 401) {
+					alert("<spring:message code='message.msg02' />");
+					top.location.href = "/";
+				} else if(xhr.status == 403) {
+					alert("<spring:message code='message.msg03' />");
+					top.location.href = "/";
+				} else {
+					alert("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""));
+				}
+			},
+			success : function(data) {
+				fn_delete(data, bck_wrk_id_List, wrk_id_List);
+			}
+		});	
+	}
+}
+
+function fn_delete(scheduleChk, bck_wrk_id_List, wrk_id_List){
+    if(scheduleChk != 0 ){
+		alert("<spring:message code='backup_management.reg_schedule_delete_no'/>");
+		return false;
+	}else{   
 		 if(confirm('<spring:message code="message.msg162"/>')){
 				$.ajax({
 					url : "/deleteScript.do", 
 				  	data : {
-				  		wrk_id : wrk_id
+				  		wrk_id_List : JSON.stringify(wrk_id_List)
 				  	},
 					dataType : "json",
 					type : "post",
@@ -222,7 +281,7 @@ function fn_delete(){
 					<a class="btn" onClick="fn_search();"><button><spring:message code="common.search" /></button></a>
 					<span class="btn" onclick="fn_reg_popup()"><button><spring:message code="common.registory" /></button></span>
 					<span class="btn" onClick="fn_rereg_popup()"><button><spring:message code="common.modify" /></button></span>
-					<span class="btn" onClick="fn_delete()"><button><spring:message code="common.delete" /></button></span>
+					<span class="btn" onClick="fn_scheduleCheck()"><button><spring:message code="common.delete" /></button></span>
 				</div>	
 				<div class="sch_form">
 					<table class="write">
@@ -252,6 +311,7 @@ function fn_delete(){
 									<th width="100"><spring:message code="common.regist_datetime" /></th>
 									<th width="100"><spring:message code="common.modifier" /></th>
 									<th width="100"><spring:message code="common.modify_datetime" /></th>
+									<th width="0"></th>
 									<th width="0"></th>
 								</tr>
 							</thead>

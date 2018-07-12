@@ -6,8 +6,14 @@ import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
+import org.json.simple.JSONArray;
+import org.json.simple.parser.JSONParser;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.transaction.PlatformTransactionManager;
+import org.springframework.transaction.TransactionDefinition;
+import org.springframework.transaction.TransactionStatus;
+import org.springframework.transaction.support.DefaultTransactionDefinition;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -49,6 +55,12 @@ public class ScriptController {
 	@Autowired
 	private AccessHistoryService accessHistoryService;
 
+	/**
+	 * Mybatis Transaction 
+	 */
+	@Autowired
+	private PlatformTransactionManager txManager;
+	
 	/**
 	 * 스크립트 화면을 보여준다.
 	 * 
@@ -195,7 +207,7 @@ public class ScriptController {
 		 */
 		@RequestMapping(value = "/popup/insertScript.do")
 		@ResponseBody
-		public void insertScript(@ModelAttribute("historyVO") HistoryVO historyVO, @ModelAttribute("ScriptVO") ScriptVO scriptVO, @ModelAttribute("workVO") WorkVO workVO, HttpServletRequest request){
+		public String insertScript(@ModelAttribute("historyVO") HistoryVO historyVO, @ModelAttribute("ScriptVO") ScriptVO scriptVO, @ModelAttribute("workVO") WorkVO workVO, HttpServletRequest request){
 			HttpSession session = request.getSession();
 			String usr_id = (String) session.getAttribute("usr_id");
 			scriptVO.setFrst_regr_id(usr_id);		
@@ -204,41 +216,62 @@ public class ScriptController {
 			String wrkid_result = "S";
 			WorkVO resultSet = null;
 			
+			// Wrk_nm 중복체크 flag 값
+			String wrkNmCk = "S";
+			
 			try{
-				scriptService.insertScriptWork(scriptVO);
-			} catch (Exception e) {
-				result = "F";
+				String wrk_nm = request.getParameter("wrk_nm");
+				int wrkNmCheck = backupService.wrk_nmCheck(wrk_nm);
+				
+				if (wrkNmCheck > 0) {
+					wrkNmCk = "F";
+				}
+				
+			}catch(Exception e){
 				e.printStackTrace();
 			}
 			
-			// Get Last wrk_id
-			if(result.equals("S")){
-				try {
-					resultSet = backupService.lastWorkId();
-					scriptVO.setWrk_id(resultSet.getWrk_id());		
+			//중복체크 - 사용가능 wrk_nm
+			if(wrkNmCk == "S"){		
+				try{
+					scriptService.insertScriptWork(scriptVO);
 				} catch (Exception e) {
-					wrkid_result ="F";
+					result = "F";
 					e.printStackTrace();
 				}
+				
+				// Get Last wrk_id
+				if(result.equals("S")){
+					try {
+						resultSet = backupService.lastWorkId();
+						scriptVO.setWrk_id(resultSet.getWrk_id());		
+					} catch (Exception e) {
+						wrkid_result ="F";
+						e.printStackTrace();
+					}
+				}
+				
+				System.out.println(scriptVO.getWrk_id());
+				
+				if(wrkid_result.equals("S")){
+					try {	
+						String cmd = toTEXT(scriptVO.getExe_cmd());
+						scriptVO.setExe_cmd(cmd);
+						
+						scriptService.insertScript(scriptVO);
+						
+						// 화면접근이력 이력 남기기
+						CmmnUtils.saveHistory(request, historyVO);
+						historyVO.setExe_dtl_cd("DX-T0126_01");
+						accessHistoryService.insertHistory(historyVO);
+					} catch (Exception e) {
+						e.printStackTrace();
+					} 
+				}	
+			}else{
+				return wrkNmCk;
 			}
-			
-			System.out.println(scriptVO.getWrk_id());
-			
-			if(wrkid_result.equals("S")){
-				try {	
-					String cmd = toTEXT(scriptVO.getExe_cmd());
-					scriptVO.setExe_cmd(cmd);
-					
-					scriptService.insertScript(scriptVO);
-					
-					// 화면접근이력 이력 남기기
-					CmmnUtils.saveHistory(request, historyVO);
-					historyVO.setExe_dtl_cd("DX-T0126_01");
-					accessHistoryService.insertHistory(historyVO);
-				} catch (Exception e) {
-					e.printStackTrace();
-				} 
-			}			
+			return Integer.toString(resultSet.getBck_wrk_id());
 		}
 		
 		
@@ -311,16 +344,33 @@ public class ScriptController {
 			String usr_id = (String) session.getAttribute("usr_id");
 			scriptVO.setFrst_regr_id(usr_id);		
 			
+			// Transaction 
+			DefaultTransactionDefinition def  = new DefaultTransactionDefinition();
+			def.setPropagationBehavior(TransactionDefinition.PROPAGATION_REQUIRED);
+			TransactionStatus status = txManager.getTransaction(def);
+			
 			try{
+				String wrk_id_Rows = request.getParameter("wrk_id_List").toString().replaceAll("&quot;", "\"");
+				JSONArray wrk_ids = (JSONArray) new JSONParser().parse(wrk_id_Rows);	
+				
 				// 화면접근이력 이력 남기기
 				CmmnUtils.saveHistory(request, historyVO);
 				historyVO.setExe_dtl_cd("DX-T0125_02");
 				accessHistoryService.insertHistory(historyVO);
 				
-				scriptService.deleteScriptWork(scriptVO);
-			} catch (Exception e) {
+
+				//전체 작업 삭제
+				for(int i=0; i<wrk_ids.size(); i++){
+					int wrk_id = Integer.parseInt(wrk_ids.get(i).toString());
+					scriptService.deleteScriptWork(wrk_id);
+				}
+				
+			} catch(Exception e){
 				e.printStackTrace();
-			}
+				txManager.rollback(status);
+			}finally{
+				txManager.commit(status);
+			}	
 		}		
 		
 		public static String toTEXT(String str) {

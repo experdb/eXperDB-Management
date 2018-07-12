@@ -112,7 +112,7 @@ function fn_check() {
 
 
 function fn_insert_work(){
-	if(valCheck()){
+	if (!valCheck()) return false;
 		$.ajax({
 			url : '/popup/insertScript.do',
 			type : 'post',
@@ -124,9 +124,14 @@ function fn_insert_work(){
 				exe_cmd : $("#exe_cmd").val()
 			},
 			success : function(result) {
+				if(result == "F"){
+					alert('<spring:message code="message.msg191"/>');
+					return false;
+				}else{
 				alert('<spring:message code="message.msg144"/>');
 				window.close();
 				opener.fn_search();		
+				}
 			},
 			beforeSend: function(xhr) {
 		        xhr.setRequestHeader("AJAX", true);
@@ -145,7 +150,7 @@ function fn_insert_work(){
 		});
 	}
 	
-}
+
 
 </script>
 

@@ -56,7 +56,7 @@ public interface ScriptService {
 	 * @return 
 	 * @throws Exception
 	 */
-	public void deleteScriptWork(ScriptVO scriptVO) throws Exception;
+	public void deleteScriptWork(int wrk_id) throws Exception;
 
 
 	public List<Map<String, Object>> selectScriptHistoryList(ScriptVO scriptVO) throws Exception;

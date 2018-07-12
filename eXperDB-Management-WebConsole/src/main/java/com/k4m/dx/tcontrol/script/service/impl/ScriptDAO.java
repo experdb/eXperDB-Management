@@ -38,9 +38,9 @@ public class ScriptDAO extends EgovAbstractMapper{
 		update("scriptSql.updateScriptWork",scriptVO);	
 	}
 
-	public void deleteScriptWork(ScriptVO scriptVO) {
-		delete("scriptSql.deleteScript",scriptVO);	
-		delete("scriptSql.deleteScriptWork",scriptVO);
+	public void deleteScriptWork(int wrk_id) {
+		delete("scriptSql.deleteScript",wrk_id);	
+		delete("scriptSql.deleteScriptWork",wrk_id);
 	}
 
 	public List<Map<String, Object>> selectScriptHistoryList(ScriptVO scriptVO) {

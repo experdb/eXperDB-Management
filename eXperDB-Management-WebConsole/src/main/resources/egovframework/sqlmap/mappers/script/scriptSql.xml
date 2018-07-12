@@ -12,6 +12,7 @@
 	 	SELECT 
 	 			 (ROW_NUMBER() OVER()) AS ROWNUM
 				, (ROW_NUMBER() OVER()) AS IDX
+				, AA.BCK_WRK_ID
 				, AA.WRK_ID
 				, AA.WRK_NM
 				, AA.WRK_EXP
@@ -22,7 +23,8 @@
 		 		, AA.LST_MDF_DTM
 	 	FROM(
 			SELECT 
-			        A.WRK_ID
+					B.BCK_WRK_ID
+			        , A.WRK_ID
 					, A.WRK_NM
 					, A.WRK_EXP
 					, B.EXE_CMD
@@ -236,7 +238,7 @@
     
     
     
-	 <delete id="deleteScript" parameterType="scriptVO">
+	 <delete id="deleteScript" parameterType="int">
 	   	/**
 	 	* Query ID : deleteScript
 	 	* Description : 실행명령어 삭제
@@ -248,7 +250,7 @@
     </delete>
     
     
-    <update id="deleteScriptWork" parameterType="scriptVO">
+    <update id="deleteScriptWork" parameterType="int">
 		/**
 	 	* Query ID : deleteScriptWork
 	 	* Description : work 테이블 삭제
