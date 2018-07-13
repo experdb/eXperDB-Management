@@ -260,10 +260,10 @@
 		<div class="contents">
 			<div class="cmm_grp">
 				<div class="btn_type_01">
-					<span class="btn"><button onclick="fn_select()" id="btnSelect"><spring:message code="common.search" /></button></span>
-					<span class="btn"><button onclick="fn_insert()" id="btnInsert"><spring:message code="common.registory" /></button></span>
-					<span class="btn"><button onclick="fn_update()" id="btnUpdate"><spring:message code="common.modify" /> </button></span>
-					<span class="btn"><button onclick="fn_delete()" id="btnDelete"><spring:message code="common.delete" /> </button></span>
+					<span class="btn"><button type="button" onclick="fn_select()" id="btnSelect"><spring:message code="common.search" /></button></span>
+					<span class="btn"><button type="button" onclick="fn_insert()" id="btnInsert"><spring:message code="common.registory" /></button></span>
+					<span class="btn"><button type="button" onclick="fn_update()" id="btnUpdate"><spring:message code="common.modify" /> </button></span>
+					<span class="btn"><button type="button" onclick="fn_delete()" id="btnDelete"><spring:message code="common.delete" /> </button></span>
 				</div>
 				<div class="sch_form">
 					<table class="write">

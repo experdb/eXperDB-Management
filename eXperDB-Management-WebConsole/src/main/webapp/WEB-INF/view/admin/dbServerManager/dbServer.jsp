@@ -247,9 +247,9 @@ function fn_regRe_popup(){
 		<div class="contents">
 			<div class="cmm_grp">
 				<div class="btn_type_01">
-						<span class="btn" onClick="fn_search()" id="read_button"><button><spring:message code="common.search" /></button></span>
-						<span class="btn" onclick="fn_reg_popup();" id="int_button"><button><spring:message code="common.registory" /></button></span>
-						<span class="btn" onclick="fn_regRe_popup();" id="mdf_button"><button><spring:message code="common.modify" /></button></span>
+						<span class="btn" onClick="fn_search()" id="read_button"><button type="button"><spring:message code="common.search" /></button></span>
+						<span class="btn" onclick="fn_reg_popup();" id="int_button"><button type="button"><spring:message code="common.registory" /></button></span>
+						<span class="btn" onclick="fn_regRe_popup();" id="mdf_button"><button type="button"><spring:message code="common.modify" /></button></span>
 						
 				</div>
 				<div class="sch_form">

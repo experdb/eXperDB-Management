@@ -726,8 +726,8 @@ function checkPghome(){
 		<input type="hidden" id="db_svr_id" name="db_svr_id">
 		</form>
 		<div class="btn_type_02">
-			<span class="btn"><button onClick="fn_updateDbServer();"><spring:message code="common.save"/></button></span>
-			<span class="btn btnF_01 btnC_01"><button onClick="fn_dbServerConnTest();"><spring:message code="dbms_information.conn_Test"/></button></span>
+			<span class="btn"><button type="button" onClick="fn_updateDbServer();"><spring:message code="common.save"/></button></span>
+			<span class="btn btnF_01 btnC_01"><button type="button" onClick="fn_dbServerConnTest();"><spring:message code="dbms_information.conn_Test"/ ></button></span>
 			<a href="#n" class="btn" onclick="window.close();"><span><spring:message code="common.cancel" /></span></a>
 		</div>
 	</div>

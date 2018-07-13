@@ -309,7 +309,7 @@
 		<div class="contents">
 			<div class="cmm_grp">
 				<div class="btn_type_01">
-					<span class="btn" id="read_button"><button onClick="fn_selectScheduleHistory();"><spring:message code="common.search" /></button></span>
+					<span class="btn" id="read_button"><button type="button" onClick="fn_selectScheduleHistory();"><spring:message code="common.search" /></button></span>
 				</div>
 				<form:form commandName="pagingVO" name="selectScheduleHistory" id="selectScheduleHistory" method="post">
 				<div class="sch_form">

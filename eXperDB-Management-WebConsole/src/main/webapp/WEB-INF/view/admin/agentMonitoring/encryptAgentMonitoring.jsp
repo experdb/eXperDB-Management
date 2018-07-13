@@ -181,8 +181,8 @@ function fn_delete(){
 					<div class="contents">
 						<div class="cmm_grp">
 							<div class="btn_type_01">
-								<span class="btn"><button onclick="fn_refresh()"><spring:message code="encrypt_agent.Refresh"/></button></span>
-								<span class="btn"><button onclick="fn_delete()"><spring:message code="common.delete"/></button></span>
+								<span class="btn"><button type="button" onclick="fn_refresh()"><spring:message code="encrypt_agent.Refresh"/></button></span>
+								<span class="btn"><button type="button" onclick="fn_delete()"><spring:message code="common.delete"/></button></span>
 							</div>
 
 							<div class="overflow_area">

@@ -195,7 +195,7 @@
 					</td>
 					<td>
 						<div class="btn_type_01">
-							<span class="btn btnC_01"><button onClick="fn_addView();"><spring:message code="auth_management.viewMore"/></button></span>
+							<span class="btn btnC_01"><button type="button" onClick="fn_addView();"><spring:message code="auth_management.viewMore"/></button></span>
 							<!--  <span class="btn btnC_01"><button onClick="fn_copy();">복사</button></span>-->
 							<a href="#n" class="btn" onclick="window.close();"><span><spring:message code="common.cancel" /></span></a>
 						</div>

@@ -240,7 +240,7 @@ function fn_agentMonitoringModifyForm(){
 			<div class="cmm_grp">
 				<div class="btn_type_01">
 					<!-- <span class="btn"><button onClick="fn_select();">조회</button></span>  -->
-					<span class="btn"><button onClick="fn_agentMonitoringModifyForm();"><spring:message code="common.modify" /></button></span>
+					<span class="btn"><button type="button" onClick="fn_agentMonitoringModifyForm();"><spring:message code="common.modify" /></button></span>
 				</div>
 				<%-- <div class="sch_form">
 					<table class="write">

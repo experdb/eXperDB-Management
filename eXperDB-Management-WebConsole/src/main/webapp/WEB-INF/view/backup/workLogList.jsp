@@ -573,7 +573,7 @@ function fn_fix_rslt_msg_modify(){
 			</div>
 			<div class="cmm_grp">
 				<div class="btn_type_01">
-					<span class="btn"><button id="btnSelect"><spring:message code="common.search" /></button></span>
+					<span class="btn"><button type="button" id="btnSelect"><spring:message code="common.search" /></button></span>
 				</div>
 				<div class="sch_form">
 				<form name="findList" id="findList" method="post">

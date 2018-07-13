@@ -506,8 +506,8 @@ function fn_check() {
 					</div>
 				</div>
 				<div class="btn_type_02">
-					<span class="btn btnC_01" onClick="fn_insert_work();return false;"><button><spring:message code="common.registory" /></button></span>
-					<span class="btn" onclick="self.close();return false;"><button><spring:message code="common.cancel" /></button></span>
+					<span class="btn btnC_01" onClick="fn_insert_work();return false;"><button type="button"><spring:message code="common.registory" /></button></span>
+					<span class="btn" onclick="self.close();return false;"><button type="button"><spring:message code="common.cancel" /></button></span>
 				</div>
 		</div><!-- //pop-container -->
 	</div>

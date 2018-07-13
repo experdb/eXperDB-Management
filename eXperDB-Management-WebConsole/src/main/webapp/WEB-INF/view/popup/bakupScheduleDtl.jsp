@@ -426,7 +426,7 @@ function fn_bckModifyPopup(){
 			<p class="tit"><spring:message code="schedule.scheduleDetail"/></p>
 			<div class="cmm_grp">
 				<div class="btn_type_01">
-					<span class="btn" onClick="fn_bckModifyPopup()"><button><spring:message code="common.modify" /></button></span>
+					<span class="btn" onClick="fn_bckModifyPopup()"><button type="button"><spring:message code="common.modify" /></button></span>
 				</div>
 				<div class="sch_form">
 					<table class="write">

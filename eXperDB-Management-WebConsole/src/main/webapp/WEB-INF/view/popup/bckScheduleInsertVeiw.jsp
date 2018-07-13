@@ -793,7 +793,7 @@ var haCnt = 0;
 			</div>
 			<div class="btn_type_02">
 				<span class="btn btnC_01"
-					onClick="fn_insert_bckScheduler();"><button><spring:message code="common.registory" /></button></span>
+					onClick="fn_insert_bckScheduler();"><button type="button"><spring:message code="common.registory" /></button></span>
 			</div>
 		</div>
 	</div>

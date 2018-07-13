@@ -912,7 +912,7 @@ function checkFolder(keyType){
 			</form>
 		</div>
 		<div class="btn_type_02">
-			<span class="btn btnC_01" onClick="fn_update_work();return false;"><button><spring:message code="button.modify" /></button></span>
+			<span class="btn btnC_01" onClick="fn_update_work();return false;"><button type="button"><spring:message code="button.modify" /></button></span>
 			<a href="#n" class="btn" onclick="self.close();return false;"><span><spring:message code="common.cancel" /></span></a>
 		</div>
 	</div>

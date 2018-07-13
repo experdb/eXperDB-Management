@@ -665,9 +665,9 @@ function fn_syncUpdate(db_id){
 				<div class="tree_lt">
 					<div class="btn_type_01">
 					<div id="wrt_button">
-						<span class="btn"><button onclick="fn_reg_popup();"><spring:message code="common.registory" /></button></span>
-						<span class="btn"><button onClick="fn_regRe_popup();"><spring:message code="common.modify" /></button></span>		
-						<span class="btn" onClick="fn_exeCheck()"><button><spring:message code="common.delete" /></button></span>
+						<span class="btn"><button type="button" onclick="fn_reg_popup();"><spring:message code="common.registory" /></button></span>
+						<span class="btn"><button type="button" onClick="fn_regRe_popup();"><spring:message code="common.modify" /></button></span>		
+						<span class="btn" onClick="fn_exeCheck()"><button type="button"><spring:message code="common.delete" /></button></span>
 					</div>
 					</div>
 					<div class="inner">
@@ -699,8 +699,8 @@ function fn_syncUpdate(db_id){
 				<div class="tree_rt"  style="width: 44%; margin-left: 2%;">
 					<div class="btn_type_01">
 						<div id="save_button">
-						<span class="btn"><button onClick="fn_insertDB()"><spring:message code="common.save"/></button></span>
-						<span class="btn"><button onClick="fn_dbSync()"><spring:message code="dbms_information.Synchronization"/></button></span>
+						<span class="btn"><button type="button" onClick="fn_insertDB()"><spring:message code="common.save"/></button></span>
+						<span class="btn"><button type="button" onClick="fn_dbSync()"><spring:message code="dbms_information.Synchronization"/></button></span>
 						</div>
 					</div>
 					<div class="inner">

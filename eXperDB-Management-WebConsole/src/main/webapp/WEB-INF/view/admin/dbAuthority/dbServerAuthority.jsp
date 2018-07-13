@@ -599,7 +599,7 @@
 									<div class="btn_type_01">
 										<div class="search_area">
 											<input type="text" class="txt search" id="search">
-											<button class="search_btn" onClick="fn_search()"><spring:message code="button.search" /></button>
+											<button type="button" class="search_btn" onClick="fn_search()"><spring:message code="button.search" /></button>
 										</div>
 									</div>
 									<div class="inner">
@@ -621,7 +621,7 @@
 								
 								<div class="db_roll_rt">
 									<div class="btn_type_01">
-										<span class="btn"><button onClick="fn_svr_save();" id="server_button"><spring:message code="common.save"/></button></span>
+										<span class="btn"><button type="button" onClick="fn_svr_save();" id="server_button"><spring:message code="common.save"/></button></span>
 									</div>
 									<div class="inner">
 										<p class="tit"><spring:message code="auth_management.db_server_menu_auth_mng" /></p>

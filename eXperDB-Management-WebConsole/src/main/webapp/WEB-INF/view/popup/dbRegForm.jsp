@@ -375,7 +375,7 @@ function fn_dataCompareChcek(svrDbList,db_svr_id){
 		</div>
 		
 		<div class="btn_type_02">
-			<span class="btn"><button onClick="fn_insertDB();"><spring:message code="common.registory" /></button></span>
+			<span class="btn"><button type="button" onClick="fn_insertDB();"><spring:message code="common.registory" /></button></span>
 			<a href="#n" class="btn" onClick="window.close();"><span><spring:message code="common.cancel" /></span></a>
 		</div>
 	</div>

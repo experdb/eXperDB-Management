@@ -872,7 +872,7 @@ function fn_check() {
 			</form>
 		</div>
 		<div class="btn_type_02">
-			<span class="btn btnC_01" onClick="fn_insert_work();"><button><spring:message code="common.registory" /></button></span>
+			<span class="btn btnC_01" onClick="fn_insert_work();"><button type="button"><spring:message code="common.registory" /></button></span>
 			<a href="#n" class="btn" onclick="self.close();"><span><spring:message code="common.cancel" /></span></a>
 		</div>
 	</div>

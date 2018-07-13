@@ -266,7 +266,7 @@ function fn_workAdd(){
 	<div class="pop_cts">
 		<p class="tit"><spring:message code="schedule.workReg"/></p>
 			<div class="btn_type_01">
-				<span class="btn"><button onClick="fn_search();"><spring:message code="common.search" /></button></span>
+				<span class="btn"><button onClick="fn_search();" type="button"><spring:message code="common.search" /></button></span>
 			</div>
 		<div class="pop_cmm">							
 			<table class="write bdtype1">
@@ -341,7 +341,7 @@ function fn_workAdd(){
 		</div>
 		
 		<div class="btn_type_02">
-			<span class="btn btnC_01"><button onClick="fn_workAdd();"><spring:message code="common.add" /></button></span>
+			<span class="btn btnC_01"><button onClick="fn_workAdd();" type="button"><spring:message code="common.add" /></button></span>
 			<a href="#n" class="btn" onclick="window.close();"><span><spring:message code="common.cancel" /></span></a>
 		</div>
 	</div>

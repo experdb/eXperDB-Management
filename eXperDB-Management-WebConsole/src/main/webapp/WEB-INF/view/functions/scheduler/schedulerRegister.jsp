@@ -546,7 +546,7 @@ function fn_check() {
 					<div class="contents">
 						<div class="cmm_grp">
 							<div class="btn_type_01">
-								<span class="btn"  onClick="fn_insertSchedule();" id="int_button"><button><spring:message code="common.registory" /></button></span>
+								<span class="btn"  onClick="fn_insertSchedule();" id="int_button"><button type="button"><spring:message code="common.registory" /></button></span>
 							</div>
 							<div class="sch_form">
 								<table class="write">

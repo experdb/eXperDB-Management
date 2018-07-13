@@ -622,7 +622,7 @@ function fn_dateValidation(exe_dt){
 					<div class="contents">
 						<div class="cmm_grp">
 							<div class="btn_type_01">
-								<span class="btn"><button onClick="fn_scheduleStop();"><spring:message code="button.modify" /></button></span>
+								<span class="btn"><button type="button" onClick="fn_scheduleStop();"><spring:message code="button.modify" /></button></span>
 							</div>
 							<div class="sch_form">
 								<table class="write">

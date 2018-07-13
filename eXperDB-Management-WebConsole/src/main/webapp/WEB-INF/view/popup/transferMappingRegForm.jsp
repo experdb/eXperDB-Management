@@ -467,7 +467,7 @@
 			</div>
 		</div>
 		<div class="btn_type_02">
-			<span class="btn btnC_01"><button onclick="fn_insert()"><spring:message code="button.create" /></button></span>
+			<span class="btn btnC_01"><button onclick="fn_insert()" type="button"><spring:message code="button.create" /></button></span>
 			<a href="#n" class="btn" onclick="window.close();"><span><spring:message code="common.cancel" /></span></a>
 		</div>
 	</div>

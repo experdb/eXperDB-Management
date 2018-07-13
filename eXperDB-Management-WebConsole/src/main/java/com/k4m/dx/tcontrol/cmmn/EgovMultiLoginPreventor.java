@@ -32,12 +32,17 @@ public class EgovMultiLoginPreventor {
 	 * 사용자의 로그인 아이디로 이미 존재하는 세션을 무효화한다
 	 * */
 	public static void invalidateByLoginId(String loginId) {
-		Enumeration<String> e = loginUsers.keys();
-		while (e.hasMoreElements()) {
-			String key = (String) e.nextElement();
-			if (key.equals(loginId)) {
-				loginUsers.get(key).invalidate();
+		
+		try {
+			Enumeration<String> e = loginUsers.keys();
+			while (e.hasMoreElements()) {
+				String key = (String) e.nextElement();
+				if (key.equals(loginId)) {
+					loginUsers.get(key).invalidate();
+				}
 			}
+		} catch(Exception e) {
+			e.printStackTrace();
 		}
 	}
 }

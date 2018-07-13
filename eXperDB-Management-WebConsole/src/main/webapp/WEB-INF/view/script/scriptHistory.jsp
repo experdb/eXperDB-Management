@@ -182,7 +182,7 @@ function fn_search(){
 		<div class="contents">
 			<div class="cmm_grp">
 				<div class="btn_type_01">
-					<span class="btn"><button id="btnSelect"><spring:message code="common.search" /></button></span>
+					<span class="btn"><button id="btnSelect" type="button"><spring:message code="common.search" /></button></span>
 				</div>
 				<div class="sch_form">
 				<form name="findList" id="findList" method="post">

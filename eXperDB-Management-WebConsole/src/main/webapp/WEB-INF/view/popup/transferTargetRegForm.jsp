@@ -313,8 +313,8 @@
 			</tbody>
 		</table>
 		<div class="btn_type_02">
-			<c:if test="${act == 'i'}"><span class="btn" onclick="fn_insert();"><button><spring:message code="button.create" /></button></span></c:if>
-			<c:if test="${act == 'u'}"><span class="btn" onclick="fn_update();"><button><spring:message code="button.modify" /></button></span></c:if>
+			<c:if test="${act == 'i'}"><span class="btn" onclick="fn_insert();"><button type="button"><spring:message code="button.create" /></button></span></c:if>
+			<c:if test="${act == 'u'}"><span class="btn" onclick="fn_update();"><button type="button"><spring:message code="button.modify" /></button></span></c:if>
 			<a href="#n" class="btn" onclick="window.close();"><span><spring:message code="common.cancel" /></span></a>
 		</div>
 	</div>

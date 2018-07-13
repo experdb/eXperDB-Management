@@ -278,7 +278,7 @@
 		<div class="contents">
 			<div class="cmm_grp">
 				<div class="btn_type_01">
-					<span class="btn" onclick="fn_select();"><button><spring:message code="common.search" /></button></span>
+					<span class="btn" onclick="fn_select();"><button type="button"><spring:message code="common.search" /></button></span>
 				</div>
 				<div class="sch_form">
 					<table class="write">

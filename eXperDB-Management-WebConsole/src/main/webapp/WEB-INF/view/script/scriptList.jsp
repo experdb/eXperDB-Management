@@ -278,10 +278,10 @@ function fn_delete(scheduleChk, bck_wrk_id_List, wrk_id_List){
 		<div class="contents">
 			<div class="cmm_grp">
 				<div class="btn_type_01">
-					<a class="btn" onClick="fn_search();"><button><spring:message code="common.search" /></button></a>
-					<span class="btn" onclick="fn_reg_popup()"><button><spring:message code="common.registory" /></button></span>
-					<span class="btn" onClick="fn_rereg_popup()"><button><spring:message code="common.modify" /></button></span>
-					<span class="btn" onClick="fn_scheduleCheck()"><button><spring:message code="common.delete" /></button></span>
+					<a class="btn" onClick="fn_search();"><button type="button"><spring:message code="common.search" /></button></a>
+					<span class="btn" onclick="fn_reg_popup()"><button type="button"><spring:message code="common.registory" /></button></span>
+					<span class="btn" onClick="fn_rereg_popup()"><button type="button"><spring:message code="common.modify" /></button></span>
+					<span class="btn" onClick="fn_scheduleCheck()"><button type="button"><spring:message code="common.delete" /></button></span>
 				</div>	
 				<div class="sch_form">
 					<table class="write">

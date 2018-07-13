@@ -306,9 +306,9 @@ var table = null;
 			<div class="cmm_grp">
 				<div class="btn_type_01">
 <!-- 					<span class="btn" onclick="fn_select();"><button>조회</button></span> -->
-					<span class="btn" onclick="fn_insert();"><button id="btnInsert"><spring:message code="common.registory" /></button></span>
-					<span class="btn" onclick="fn_update();"><button id="btnUpdate"><spring:message code="common.modify" /></button></span>
-					<span class="btn" onclick="fn_delete();"><button id="btnDelete"><spring:message code="common.delete" /></button></span>
+					<span class="btn" onclick="fn_insert();"><button type="button" id="btnInsert"><spring:message code="common.registory" /></button></span>
+					<span class="btn" onclick="fn_update();"><button type="button" id="btnUpdate"><spring:message code="common.modify" /></button></span>
+					<span class="btn" onclick="fn_delete();"><button type="button" id="btnDelete"><spring:message code="common.delete" /></button></span>
 				</div>
 <!-- 				<div class="sch_form"> -->
 <!-- 					<table class="write"> -->

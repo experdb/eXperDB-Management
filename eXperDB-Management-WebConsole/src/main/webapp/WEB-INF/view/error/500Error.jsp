@@ -36,7 +36,7 @@
 				    </c:otherwise>
 				</c:choose>
 				<div class="btn_wrap">
-					<button onclick="history.go(-1)"><spring:message code="common.back"/></button>
+					<button type="button" onclick="history.go(-1)"><spring:message code="common.back"/></button>
 				</div>
 			</div>
 		</div>

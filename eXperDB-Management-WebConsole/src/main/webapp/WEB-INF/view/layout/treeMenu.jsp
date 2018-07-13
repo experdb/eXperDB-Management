@@ -480,7 +480,7 @@ $(window.document).ready(function() {
 			<form name="treeView" id="treeView">
 				<div class="logout">
 					    <div style="color: white; margin-bottom: 5%; font-size: 14px;"><%=(String)session.getAttribute("usr_nm")%><spring:message code="common.wellcome"/></div>		
-					<a href="#"  target="_top"><button onClick="fn_logout();"><spring:message code="common.logout"/></button></a>		
+					<a href="#"  target="_top"><button type="button" onClick="fn_logout();"><spring:message code="common.logout"/></button></a>		
 				</div>
 			</form>
 			

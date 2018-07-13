@@ -294,9 +294,9 @@ function fn_delete(){
 		<div class="contents">
 			<div class="cmm_grp">
 				<div class="btn_type_01">
-					<span class="btn"><button onclick="fn_select()" id="btnSelect"><spring:message code="common.search" /></button></span>
-					<span class="btn"><button onclick="fn_insert()" id="btnInsert"><spring:message code="common.registory" /></button></span>
-					<span class="btn"><button onclick="fn_update()" id="btnUpdate"><spring:message code="common.modify" /></button></span>
+					<span class="btn"><button type="button" onclick="fn_select()" id="btnSelect"><spring:message code="common.search" /></button></span>
+					<span class="btn"><button type="button" onclick="fn_insert()" id="btnInsert"><spring:message code="common.registory" /></button></span>
+					<span class="btn"><button type="button" onclick="fn_update()" id="btnUpdate"><spring:message code="common.modify" /></button></span>
 					<a href="#n" class="btn" id="btnDelete" onclick="fn_delete()"><span><spring:message code="common.delete" /></span></a>
 				</div>
 				<div class="sch_form">

@@ -99,7 +99,7 @@
 		<div class="contents">
 			<div class="cmm_grp">
 				<div class="btn_type_01">
-					<span class="btn"><button onclick="fn_update()"><spring:message code="common.save"/></button></span>
+					<span class="btn"><button type="button" onclick="fn_update()"><spring:message code="common.save"/></button></span>
 				</div>
 				<table class="write2">
 					<caption>개인정보 수정 저장 폼</caption>
@@ -118,7 +118,7 @@
 						</tr>
 						<tr>
 							<th scope="row"><spring:message code="user_management.password" /> (*)</th>
-							<td><span class="btn btnC_01 btnF_02"><button onclick="fn_pwdPopup()"><spring:message code="user_management.edit_password" /></button></span></td>
+							<td><span class="btn btnC_01 btnF_02"><button type="button" onclick="fn_pwdPopup()"><spring:message code="user_management.edit_password" /></button></span></td>
 						</tr>
 						<tr>
 							<th scope="row"><spring:message code="user_management.company" /></th>

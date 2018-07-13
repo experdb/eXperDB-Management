@@ -401,10 +401,10 @@
 		<div class="contents">
 			<div class="cmm_grp">
 				<div class="btn_type_01">
-					<span class="btn" onclick="fn_insert();"><button><spring:message code="common.add" /></button></span>
-					<span class="btn" onclick="fn_update();"><button><spring:message code="button.modify" /></button></span>
-					<span class="btn" onclick="fn_delete();"><button><spring:message code="button.delete" /></button></span>
-					<span class="btn" onclick="fn_save();"><button><spring:message code="common.apply" /></button></span>
+					<span class="btn" onclick="fn_insert();"><button type="button"><spring:message code="common.add" /></button></span>
+					<span class="btn" onclick="fn_update();"><button type="button"><spring:message code="button.modify" /></button></span>
+					<span class="btn" onclick="fn_delete();"><button type="button"><spring:message code="button.delete" /></button></span>
+					<span class="btn" onclick="fn_save();"><button type="button"><spring:message code="common.apply" /></button></span>
 				</div>
 				<div class="overflow_area">
 					<table id="accessControlTable" class="display" cellspacing="0" width="100%">

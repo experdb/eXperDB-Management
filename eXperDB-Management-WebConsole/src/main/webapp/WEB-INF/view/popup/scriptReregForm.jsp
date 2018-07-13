@@ -176,8 +176,8 @@ function fn_update_work(){
 					</table>
 				</div>
 				<div class="btn_type_02">
-					<span class="btn btnC_01" onClick="fn_update_work();"><button><spring:message code="common.modify" /></button></span>
-					<span class="btn" onclick="self.close();return false;"><button><spring:message code="common.cancel" /></button></span>
+					<span class="btn btnC_01" onClick="fn_update_work();"><button type="button"><spring:message code="common.modify" /></button></span>
+					<span class="btn" onclick="self.close();return false;"><button type="button"><spring:message code="common.cancel" /></button></span>
 				</div>
 		</div><!-- //pop-container -->
 	</div>

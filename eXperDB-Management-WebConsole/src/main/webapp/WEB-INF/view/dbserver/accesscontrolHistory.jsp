@@ -208,8 +208,8 @@ var table = null;
 		<div class="contents">
 			<div class="cmm_grp">
 				<div class="btn_type_01">
-					<span class="btn"><button onclick="fn_select()"><spring:message code="common.search" /></button></span>
-					<span class="btn"><button onclick="fn_recovery()"><spring:message code="common.restore" /></button></span>
+					<span class="btn"><button type="button" onclick="fn_select()"><spring:message code="common.search" /></button></span>
+					<span class="btn"><button type="button" onclick="fn_recovery()"><spring:message code="common.restore" /></button></span>
 				</div>
 				<div class="sch_form">
 					<table class="write">

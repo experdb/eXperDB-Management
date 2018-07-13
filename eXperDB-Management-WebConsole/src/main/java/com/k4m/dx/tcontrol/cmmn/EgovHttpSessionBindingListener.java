@@ -23,9 +23,8 @@ public class EgovHttpSessionBindingListener implements HttpSessionBindingListene
 	 * */
 	@Override
 	public void valueBound(HttpSessionBindingEvent event) {
-		if (EgovMultiLoginPreventor.findByLoginId(event.getName())) {
-			System.out.println("사용자 세션이 이미 존재");
-			System.out.println(event.getName());
+		boolean loginUser = EgovMultiLoginPreventor.findByLoginId(event.getName());
+		if (loginUser == true) {
 			EgovMultiLoginPreventor.invalidateByLoginId(event.getName());
 		}
 		EgovMultiLoginPreventor.loginUsers.put(event.getName(), event.getSession());

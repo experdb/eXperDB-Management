@@ -18,10 +18,10 @@
 
 <script type="text/javascript">
 	
-function fn_login(){
+function fn_validation(){
 	var strid = document.getElementById('usr_id').value;
-	var strpw = document.getElementById('pwd').value; 
-	 
+	var strpw = document.getElementById('pwd').value;
+	
 	if (strid == "" || strid == "undefind" || strid == null)
 	{
 		alert("<spring:message code='message.msg128' />");
@@ -33,12 +33,17 @@ function fn_login(){
 			document.getElementById('usr_id').focus();
 			return false;
 	}
-	document.loginForm.action="<c:url value='/loginAction.do'/>";
-   	document.loginForm.submit();
+	return true;
 }
+	
 
+	function fn_login(){
+		if (!fn_validation()) return false;
+		document.loginForm.action = "/loginAction.do";
+		document.loginForm.submit();
+	}
 
-$(window.document).ready(function() {				
+	$(window.document).ready(function() {				
 		 document.getElementById("usr_id").focus();	
 	});
 	
@@ -82,11 +87,11 @@ $(window.document).ready(function() {
 					</c:choose>		
 				</c:if></div>	
 				<div class="btn_wrap">
-					<button onClick="fn_login()">LOGIN</button>
+					<button type="button" onClick="fn_login()">LOGIN</button>
 				</div>
 			</div>
 		</div>
 	</div>
-</form>
+	</form>
 </body>
 </html>
