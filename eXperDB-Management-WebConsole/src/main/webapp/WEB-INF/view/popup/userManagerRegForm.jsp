@@ -168,8 +168,8 @@
 							use_yn : $("#use_yn").val(),
 							encp_use_yn : $("#encp_use_yn").val()
 						},
-						success : function(result) {
-							if(result.resultCode == 0000000000){
+						success : function(data) {				
+							if(data.resultCode == "0000000000"){
 								alert('<spring:message code="message.msg144"/>');
 								if (confirm('<spring:message code="message.msg145"/>')) {
 									window.close();
@@ -178,9 +178,13 @@
 									window.close();
 									opener.fn_select();
 								}
+							}else if(data.resultCode == "8000000002"){
+								alert("<spring:message code='message.msg05' />");
+							}else if(data.resultCode == "8000000003"){
+								alert(data.resultMessage);
+								window.close();
 							}else{
-								alert(result.resultMessage);
-								return false;
+								alert(data.resultMessage +"("+data.resultCode+")");
 							}
 						},
 						beforeSend: function(xhr) {

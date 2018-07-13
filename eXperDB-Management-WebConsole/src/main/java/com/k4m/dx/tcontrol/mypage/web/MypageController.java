@@ -7,6 +7,7 @@ import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
+import org.json.simple.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -19,6 +20,7 @@ import com.k4m.dx.tcontrol.cmmn.AES256;
 import com.k4m.dx.tcontrol.cmmn.AES256_KEY;
 import com.k4m.dx.tcontrol.cmmn.CmmnUtils;
 import com.k4m.dx.tcontrol.common.service.HistoryVO;
+import com.k4m.dx.tcontrol.encrypt.service.call.UserManagerServiceCall;
 import com.k4m.dx.tcontrol.login.service.UserVO;
 import com.k4m.dx.tcontrol.mypage.service.MyPageService;
 
@@ -184,15 +186,35 @@ public class MypageController {
 	 * @throws Exception
 	 */
 	@RequestMapping(value = "/updatePwd.do")
-	public @ResponseBody void updatePwd(@ModelAttribute("userVo") UserVO userVo,@ModelAttribute("historyVO") HistoryVO historyVO,HttpServletRequest request) {
+	public @ResponseBody JSONObject updatePwd(@ModelAttribute("userVo") UserVO userVo,@ModelAttribute("historyVO") HistoryVO historyVO,HttpServletRequest request) {
+		JSONObject result = new JSONObject();
+		UserManagerServiceCall uic= new UserManagerServiceCall();
+		HttpSession session = request.getSession();
 		try {
-			HttpSession session = request.getSession();
-			String usr_id = (String)session.getAttribute("usr_id");
-			userVo.setUsr_id(usr_id);
-			userVo.setLst_mdfr_id(usr_id);
-			AES256 aes = new AES256(AES256_KEY.ENC_KEY);
-			userVo.setPwd(aes.aesEncode(userVo.getPwd()));
-			myPageService.updatePwd(userVo);
+			String strTocken = (String)session.getAttribute("tockenValue");
+			String loginId = (String)session.getAttribute("usr_id");
+			String entityId = (String)session.getAttribute("ectityUid");	
+			String encp_use_yn = (String)session.getAttribute("encp_use_yn");
+			String password = userVo.getPwd();		
+			
+			if(encp_use_yn.equals("Y") && strTocken != null && entityId !=null){
+				String restIp = (String)session.getAttribute("restIp");
+				int restPort = (int)session.getAttribute("restPort");
+				try{
+					result = uic.updatePassword(restIp, restPort, strTocken, loginId, entityId, password);
+				}catch(Exception e){
+					result.put("resultCode", "8000000002");
+				}
+			}
+			
+			if(result.get("resultCode").equals("0000000000")){
+				String usr_id = (String)session.getAttribute("usr_id");
+				userVo.setUsr_id(usr_id);
+				userVo.setLst_mdfr_id(usr_id);
+				AES256 aes = new AES256(AES256_KEY.ENC_KEY);
+				userVo.setPwd(aes.aesEncode(userVo.getPwd()));
+				myPageService.updatePwd(userVo);
+			}
 			
 			// 화면접근이력 이력 남기기
 			CmmnUtils.saveHistory(request, historyVO);
@@ -203,5 +225,6 @@ public class MypageController {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
+		return result;
 	}
 }

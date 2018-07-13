@@ -29,7 +29,7 @@ var table = null;
 			deferRender : true,
 			scrollX: true,
 			columns : [
-				{ data : "", defaultContent : "", targets : 0, orderable : false, checkboxes : {'selectRow' : true}}, 
+				{ data : "rnum", defaultContent : "", targets : 0, orderable : false, checkboxes : {'selectRow' : true}}, 
 				{ data : "rnum", className : "dt-center", defaultContent : ""},
 				{ data : "profileName", defaultContent : ""},
 				{ data : "profileNote",

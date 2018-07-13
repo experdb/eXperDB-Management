@@ -183,24 +183,28 @@
 					html1+=		'</div>';
 					html1+=	'</td>';
 					html1+='</tr>';
-					html1+='<tr>';
-					html1+=	'<th scope="row"><spring:message code="menu.audit_settings" /></th>';
-					html1+=	'<td>';
-					html1+=		'<div class="inp_chk">';
-					html1+=			'<input type="checkbox" id="'+item.db_svr_nm+'_adt_cng" name="adt_cng_aut" onClick="fn_userCheck();"/>';
-					html1+=			'<label for="'+item.db_svr_nm+'_adt_cng"></label>';
-					html1+=		'</div>';
-					html1+=	'</td>';
-					html1+='</tr>';
-					html1+='<tr>';
-					html1+=	'<th scope="row"><spring:message code="menu.audit_history" /></th>';
-					html1+=	'<td>';
-					html1+=		'<div class="inp_chk">';
-					html1+=			'<input type="checkbox" id="'+item.db_svr_nm+'_adt_hist" name="adt_hist_aut"  onClick="fn_userCheck();"/>';
-					html1+=			'<label for="'+item.db_svr_nm+'_adt_hist"></label>';
-					html1+=		'</div>';
-					html1+=	'</td>';
-					html1+='</tr>	';			
+					
+					if("${sessionScope.pg_audit}"== "Y"){
+						html1+='<tr>';
+						html1+=	'<th scope="row"><spring:message code="menu.audit_settings" /></th>';
+						html1+=	'<td>';
+						html1+=		'<div class="inp_chk">';
+						html1+=			'<input type="checkbox" id="'+item.db_svr_nm+'_adt_cng" name="adt_cng_aut" onClick="fn_userCheck();"/>';
+						html1+=			'<label for="'+item.db_svr_nm+'_adt_cng"></label>';
+						html1+=		'</div>';
+						html1+=	'</td>';
+						html1+='</tr>';
+						html1+='<tr>';
+						html1+=	'<th scope="row"><spring:message code="menu.audit_history" /></th>';
+						html1+=	'<td>';
+						html1+=		'<div class="inp_chk">';
+						html1+=			'<input type="checkbox" id="'+item.db_svr_nm+'_adt_hist" name="adt_hist_aut"  onClick="fn_userCheck();"/>';
+						html1+=			'<label for="'+item.db_svr_nm+'_adt_hist"></label>';
+						html1+=		'</div>';
+						html1+=	'</td>';
+						html1+='</tr>	';			
+					}
+					
 					html1+='<tr>';
 					html1+=	'<th scope="row"><spring:message code="menu.script_settings" /></th>';
 					html1+=	'<td>';

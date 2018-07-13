@@ -255,15 +255,18 @@ function fn_delete(){
 					alert("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""));
 				}
 			},
-			success : function(result) {		
-				if(result.resultCode == 0000000000){
+			success : function(data) {				
+				if(data.resultCode == "0000000000"){
 					alert("<spring:message code='message.msg37' />");
 					fn_select();
+				}else if(data.resultCode == "8000000002"){
+					alert("<spring:message code='message.msg05' />");
+				}else if(data.resultCode == "8000000003"){
+					alert(data.resultMessage);
+					location.href="/securityKeySet.do";
 				}else{
-					alert(result.resultMessage);
-					return false;
+					alert(data.resultMessage +"("+data.resultCode+")");	
 				}
-				
 			}
 		});
 	}

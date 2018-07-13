@@ -84,9 +84,17 @@
 						data : {
 							pwd : $("#pwd").val()
 						},
-						success : function(result) {
-							alert('<spring:message code="message.msg57" /> ');
-							window.close();
+						success : function(data) {
+							if(data.resultCode == "0000000000"){
+								alert('<spring:message code="message.msg57" /> ');
+								window.close();
+							}else if(data.resultCode == "8000000002"){
+								alert("<spring:message code='message.msg05' />");
+							}else if(data.resultCode == "8000000003"){
+								alert(data.resultMessage);
+							}else{
+								alert(data.resultMessage +"("+data.resultCode+")");
+							}
 						},
 						beforeSend: function(xhr) {
 					        xhr.setRequestHeader("AJAX", true);

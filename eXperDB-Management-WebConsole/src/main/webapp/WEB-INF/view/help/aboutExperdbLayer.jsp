@@ -26,9 +26,19 @@
 						<th scope="row" class="t1">Copyright</th>
 						<td>2018, The eXperDB-Management Development Team</td>
 					</tr>
+					<tr>
+						<th scope="row" class="t1" rowspan="3">Community</th>
+						<td>https://github.com/experdb/eXperDB-Management</td>
+					</tr>
+					<tr>
+						<td>https://www.facebook.com/experdb</td>
+					</tr>
+					<tr>
+						<td>http://cafe.naver.com/psqlmaster</td>
+					</tr>
 				</tbody>
 			</table>
-			<br><br><br><br><br><br><br><br><br>
+			<br><br><br><br><br><br>
 			<div class="btn_type_02">
 				<a href="#n" class="btn"
 					onclick="toggleLayer($('#pop_layer_aboutExperdb'), 'off');"><span><spring:message code="common.close"/></span></a>

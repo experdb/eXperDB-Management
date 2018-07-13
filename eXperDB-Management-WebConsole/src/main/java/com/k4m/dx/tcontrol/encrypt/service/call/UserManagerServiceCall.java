@@ -210,10 +210,68 @@ public class UserManagerServiceCall {
 		
 		
 		String resultCode = (String) resultJson.get("resultCode");
-		String resultMessage = (String) resultJson.get("resultMessage");
+		String resultMessage = new String(resultJson.get("resultMessage").toString().getBytes("iso-8859-1"),"UTF-8");
 		//long totalListCount = (long) resultJson.get("totalListCount");
 		
 		JSONObject result = new JSONObject();
+		result.put("resultCode", resultCode);
+		result.put("resultMessage", resultMessage);
+		return result;
+	}
+	
+	
+	/**
+	 * 비밀번호 변경
+	 * @param restIp
+	 * @param restPort
+	 * @param strTocken
+	 * @param loginId
+	 * @param entityId
+	 * @throws Exception
+	 */
+	public JSONObject updatePassword(String restIp, int restPort, String strTocken, String loginId, String entityId, String password) throws Exception {
+		JSONObject result = new JSONObject();
+		EncryptCommonService api = new EncryptCommonService(restIp, restPort);
+
+		String strService = SystemCode.ServiceName.AUTH_SERVICE;
+		String strCommand = SystemCode.ServiceCommand.UPDATEPASSWORD;
+
+		String strEntityUid = entityId;
+		String strUpdateUid = entityId;
+
+		
+		AuthCredentialToken param = new AuthCredentialToken();
+		param.setEntityUid(entityId);
+		param.setPassword(password);
+		param.setUpdateUid(strUpdateUid);
+
+		HashMap body = new HashMap();
+
+		body.put(TypeUtility.getJustClassName(param.getClass()), param.toJSONString());
+		
+		String parameters = TypeUtility.makeRequestBody(body);
+		
+		System.out.println(parameters);
+
+		HashMap header = new HashMap();
+		header.put(SystemCode.FieldName.LOGIN_ID, loginId);
+		header.put(SystemCode.FieldName.ENTITY_UID, entityId);
+		header.put(SystemCode.FieldName.TOKEN_VALUE, strTocken);
+
+		JSONObject resultJson = api.callService(strService, strCommand, header, parameters.toString());
+		
+		Iterator<?> iter = resultJson.entrySet().iterator();
+		while (iter.hasNext()) {
+			Map.Entry entry = (Map.Entry) iter.next();
+
+			System.out.println(String.valueOf(entry.getKey()) + " = " + String.valueOf(entry.getValue()));
+		}
+		
+		
+		String resultCode = (String) resultJson.get("resultCode");
+		String resultMessage = (String) resultJson.get("resultMessage");
+		resultMessage = new String(resultMessage.getBytes("iso-8859-1"),"UTF-8"); 
+		
 		result.put("resultCode", resultCode);
 		result.put("resultMessage", resultMessage);
 		return result;

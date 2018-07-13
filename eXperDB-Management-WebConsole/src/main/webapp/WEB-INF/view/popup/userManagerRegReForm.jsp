@@ -113,16 +113,19 @@
 				use_yn : $("#use_yn").val(),
 				encp_use_yn : $("#encp_use_yn").val()
 			},
-			success : function(result) {
-				if(result.resultCode == 0000000000){
+			success : function(data) {		
+				if(data.resultCode == "0000000000"){
 					alert("<spring:message code='message.msg84' />");
 					window.close();
-					opener.fn_select();
+					opener.fn_select()
+				}else if(data.resultCode == "8000000002"){
+					alert("<spring:message code='message.msg05' />");
+				}else if(data.resultCode == "8000000003"){
+					alert(data.resultMessage);
+					window.close();
 				}else{
-					alert(result.resultMessage);
-					return false;
-				}
-				
+					alert(data.resultMessage +"("+data.resultCode+")");
+				}			
 			},
 			beforeSend: function(xhr) {
 		        xhr.setRequestHeader("AJAX", true);
@@ -184,9 +187,9 @@
 					</tr>
 					<tr>
 						<th scope="row" class="ico_t1"><spring:message code="user_management.password" />(*)</th>
-						<td><input type="password" class="txt" name="pwd" id="pwd" value="${pwd}" maxlength="20" onkeyup="fn_checkWord(this,20)" placeholder="<spring:message code='message.msg109'/>"/></td>
+						<td><input type="password" class="txt" name="pwd" id="pwd" value="${pwd}" maxlength="20" onkeyup="fn_checkWord(this,20)" placeholder="<spring:message code='message.msg109'/>" readonly="readonly"/></td>
 						<th scope="row" class="ico_t1"><spring:message code="user_management.confirm_password" />(*)</th>
-						<td><input type="password" class="txt" name="pwdCheck" id="pwdCheck" value="${pwd}" maxlength="20" onkeyup="fn_checkWord(this,20)" placeholder="<spring:message code='message.msg109'/>" /></td>
+						<td><input type="password" class="txt" name="pwdCheck" id="pwdCheck" value="${pwd}" maxlength="20" onkeyup="fn_checkWord(this,20)" placeholder="<spring:message code='message.msg109'/>" readonly="readonly"/></td>
 					</tr>
 				</tbody>
 			</table>
