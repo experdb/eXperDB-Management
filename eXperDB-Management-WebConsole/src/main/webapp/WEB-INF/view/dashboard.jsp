@@ -63,8 +63,6 @@ function fn_serverStatus(){
 				$("#encryptServer").html(html);
 				fn_selectSecurityStatistics(today);
 			}else if(data.resultCode == "8000000002"){
-				alert("<spring:message code='message.msg05' />");	
-				
 				var html ='<img src="../images/ico_state_07.png" alt="Stop" /> STOP';
 				//var html ='<img src="../images/ico_agent_2.png" alt="" />';
 				$("#encryptServer").html(html);
