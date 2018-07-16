@@ -34,6 +34,7 @@ import com.k4m.dx.tcontrol.cmmn.client.ClientProtocolID;
 import com.k4m.dx.tcontrol.common.service.AgentInfoVO;
 import com.k4m.dx.tcontrol.common.service.CmmnServerInfoService;
 import com.k4m.dx.tcontrol.common.service.HistoryVO;
+import com.k4m.dx.tcontrol.login.service.LoginVO;
 
 /**
  * 접근제어관리 컨트롤러 클래스를 정의한다.
@@ -220,7 +221,10 @@ public class AccessControlController {
 			DbAutVO dbAutVO = new DbAutVO();
 			dbAutVO.setDb_svr_id(db_svr_id);
 			HttpSession session = request.getSession();
-			dbAutVO.setUsr_id((String) session.getAttribute("usr_id"));
+			LoginVO loginVo = (LoginVO) session.getAttribute("session");
+			String usr_id = loginVo.getUsr_id();
+			
+			dbAutVO.setUsr_id(usr_id);
 			List<DbIDbServerVO> resultSet = accessControlService.selectDatabaseList(dbAutVO);
 			mv.addObject("resultSet", resultSet);
 			List<AccessControlVO> resultType = accessControlService.selectCodeType("TC0011");
@@ -331,7 +335,8 @@ public class AccessControlController {
 				if(dbServerVO.get(m).getMaster_gbn().equals("M")){
 					accessControlService.deleteDbAccessControl(db_svr_id);
 					HttpSession session = request.getSession();
-					String usr_id = (String) session.getAttribute("usr_id");
+					LoginVO loginVo = (LoginVO) session.getAttribute("session");
+					String usr_id = loginVo.getUsr_id();
 					accessControlVO.setFrst_regr_id(usr_id);
 					accessControlVO.setLst_mdfr_id(usr_id);		
 					accessControlHistoryVO.setLst_mdfr_id(usr_id);

@@ -27,6 +27,7 @@ import com.k4m.dx.tcontrol.common.service.HistoryVO;
 import com.k4m.dx.tcontrol.encrypt.service.call.AgentMonitoringServiceCall;
 import com.k4m.dx.tcontrol.encrypt.service.call.CommonServiceCall;
 import com.k4m.dx.tcontrol.encrypt.service.call.UserManagerServiceCall;
+import com.k4m.dx.tcontrol.login.service.LoginVO;
 import com.k4m.dx.tcontrol.login.service.UserVO;
 
 /**
@@ -153,11 +154,12 @@ public class AgentMonitoringController {
 		List<Map<String, Object>> agentStatusListResult = null;
 
 		HttpSession session = request.getSession();
-		String restIp = (String)session.getAttribute("restIp");
-		int restPort = (int)session.getAttribute("restPort");
-		String strTocken = (String)session.getAttribute("tockenValue");
-		String loginId = (String)session.getAttribute("usr_id");
-		String entityId = (String)session.getAttribute("ectityUid");	
+		LoginVO loginVo = (LoginVO) session.getAttribute("session");
+		String restIp = loginVo.getRestIp();
+		int restPort = loginVo.getRestPort();
+		String strTocken = loginVo.getTockenValue();
+		String loginId = loginVo.getUsr_id();
+		String entityId = loginVo.getEctityUid();
 
 		try {		
 			// 화면접근이력 이력 남기기
@@ -248,11 +250,12 @@ public class AgentMonitoringController {
 			accessHistoryService.insertHistory(historyVO);
 			
 			HttpSession session = request.getSession();
-			String strTocken = (String)session.getAttribute("tockenValue");
-			String loginId = (String)session.getAttribute("usr_id");
-			String entityId = (String)session.getAttribute("ectityUid");
-			String restIp = (String)session.getAttribute("restIp");
-			int restPort = (int)session.getAttribute("restPort");
+			LoginVO loginVo = (LoginVO) session.getAttribute("session");
+			String strTocken = loginVo.getTockenValue();
+			String loginId = loginVo.getUsr_id();
+			String entityId = loginVo.getEctityUid();
+			String restIp = loginVo.getRestIp();
+			int restPort = loginVo.getRestPort();		
 			
 			String[] param = request.getParameter("entityuid").toString().split(",");
 			for (int i = 0; i < param.length; i++) {

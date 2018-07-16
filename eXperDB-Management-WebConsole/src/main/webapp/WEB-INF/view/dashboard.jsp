@@ -23,7 +23,7 @@ $(window.document).ready(function() {
 	
 	var encryptDashbaordServer = document.getElementById("encryptDashbaordServer");
 	var encryptDashbaordAgent = document.getElementById("encryptDashbaordAgent");
-	if("${sessionScope.encp_use_yn}" == "Y"){
+	if("${sessionScope.session.encp_use_yn}" == "Y"){
 		encryptDashbaordServer.style.display = '';
 		encryptDashbaordAgent.style.display = '';
 		fn_serverStatus();

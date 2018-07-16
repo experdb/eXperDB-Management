@@ -3,11 +3,9 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags"%>
 
-<%
-	String usr_id = (String)session.getAttribute("usr_id");
-%>
+
 <script>
-var version = "${sessionScope.version}";
+var version = "${sessionScope.session.version}";
 
 /* ********************************************************
  * 페이지 시작시 함수
@@ -16,7 +14,7 @@ $(window.document).ready(function() {
 	var encryptMenu = document.getElementById("encryptMenu");
 	var encryptAgentMenu = document.getElementById("encryptAgentMenu");
 	
- 	if("${sessionScope.encp_use_yn}" == "Y"){
+ 	if("${sessionScope.session.encp_use_yn}" == "Y"){
 		encryptAgentMenu.style.display = '';
 	}else{
 		encryptAgentMenu.style.display = 'none';
@@ -24,7 +22,7 @@ $(window.document).ready(function() {
  	
  	
 	var trnasferMenu = document.getElementById("trnasferMenu");
- 	if("${sessionScope.transfer}" == "Y"){
+ 	if("${sessionScope.session.transfer}" == "Y"){
  		trnasferMenu.style.display = '';
 	}else{
 		trnasferMenu.style.display = 'none';
@@ -413,7 +411,7 @@ function fn_cookie(url) {
 					</li>					
 					
 					<c:choose>
-					    <c:when test="${sessionScope.encp_use_yn eq 'Y'}">
+					    <c:when test="${sessionScope.session.encp_use_yn eq 'Y'}">
 					    	<li id="encryptMenu" ><a href="#n" onClick="fn_cookie(null)"><span><img src="/images/encrypt.png" alt="ENCRYPT" /></span></a>				       	
 					    </c:when>
 					    <c:otherwise>
@@ -471,7 +469,7 @@ function fn_cookie(url) {
 					<li><a href="#n"><span><img src="/images/ico_h_8.png" alt="HELP" /></span></a>
 						<ul class="depth_2">
 							<!-- <li><a href="#n" onClick="fn_cookie(null)" target="main">Online Help</a></li> -->
-							<li><a href="#n" onClick="fn_aboutExperdb('${sessionScope.version}')" >About eXperDB</a></li>
+							<li><a href="#n" onClick="fn_aboutExperdb('${sessionScope.session.version}')" >About eXperDB</a></li>
 							<li><a href="#n" onClick="fn_openSource()" >Open Source License</a></li>
 						</ul>
 					</li>

@@ -13,7 +13,6 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
@@ -41,6 +40,7 @@ import com.k4m.dx.tcontrol.cmmn.CmmnUtils;
 import com.k4m.dx.tcontrol.common.service.HistoryVO;
 import com.k4m.dx.tcontrol.encrypt.service.call.CommonServiceCall;
 import com.k4m.dx.tcontrol.encrypt.service.call.EncryptSettingServiceCall;
+import com.k4m.dx.tcontrol.login.service.LoginVO;
 
 /**
  * Encript 설정 컨트롤러 클래스를 정의한다.
@@ -116,11 +116,12 @@ public class EncriptSettingController {
 		JSONObject result = new JSONObject();
 		
 		HttpSession session = request.getSession();
-		String restIp = (String)session.getAttribute("restIp");
-		int restPort = (int)session.getAttribute("restPort");
-		String strTocken = (String)session.getAttribute("tockenValue");
-		String loginId = (String)session.getAttribute("usr_id");
-		String entityId = (String)session.getAttribute("ectityUid");	
+		LoginVO loginVo = (LoginVO) session.getAttribute("session");
+		String restIp = loginVo.getRestIp();
+		int restPort = loginVo.getRestPort();
+		String strTocken = loginVo.getTockenValue();
+		String loginId = loginVo.getUsr_id();
+		String entityId = loginVo.getEctityUid();
 				
 		EncryptSettingServiceCall essc = new EncryptSettingServiceCall();
 		
@@ -145,11 +146,12 @@ public class EncriptSettingController {
 		JSONObject result = new JSONObject();
 		
 		HttpSession session = request.getSession();
-		String restIp = (String)session.getAttribute("restIp");
-		int restPort = (int)session.getAttribute("restPort");
-		String strTocken = (String)session.getAttribute("tockenValue");
-		String loginId = (String)session.getAttribute("usr_id");
-		String entityId = (String)session.getAttribute("ectityUid");	
+		LoginVO loginVo = (LoginVO) session.getAttribute("session");
+		String restIp = loginVo.getRestIp();
+		int restPort = loginVo.getRestPort();
+		String strTocken = loginVo.getTockenValue();
+		String loginId = loginVo.getUsr_id();
+		String entityId = loginVo.getEctityUid();	
 		
 		EncryptSettingServiceCall essc = new EncryptSettingServiceCall();
 		
@@ -172,11 +174,12 @@ public class EncriptSettingController {
 	public @ResponseBody JSONObject sysConfigSave(@ModelAttribute("historyVO") HistoryVO historyVO, HttpServletRequest request) {
 		
 		HttpSession session = request.getSession();
-		String restIp = (String)session.getAttribute("restIp");
-		int restPort = (int)session.getAttribute("restPort");
-		String strTocken = (String)session.getAttribute("tockenValue");
-		String loginId = (String)session.getAttribute("usr_id");
-		String entityId = (String)session.getAttribute("ectityUid");	
+		LoginVO loginVo = (LoginVO) session.getAttribute("session");
+		String restIp = loginVo.getRestIp();
+		int restPort = loginVo.getRestPort();
+		String strTocken = loginVo.getTockenValue();
+		String loginId = loginVo.getUsr_id();
+		String entityId = loginVo.getEctityUid();
 		
 		JSONObject result01 = new JSONObject();
 		JSONObject result02 = new JSONObject();
@@ -275,11 +278,12 @@ public class EncriptSettingController {
 		JSONObject result = new JSONObject();
 		
 		HttpSession session = request.getSession();
-		String restIp = (String)session.getAttribute("restIp");
-		int restPort = (int)session.getAttribute("restPort");
-		String strTocken = (String)session.getAttribute("tockenValue");
-		String loginId = (String)session.getAttribute("usr_id");
-		String entityId = (String)session.getAttribute("ectityUid");	
+		LoginVO loginVo = (LoginVO) session.getAttribute("session");
+		String restIp = loginVo.getRestIp();
+		int restPort = loginVo.getRestPort();
+		String strTocken = loginVo.getTockenValue();
+		String loginId = loginVo.getUsr_id();
+		String entityId = loginVo.getEctityUid();
 			
 		EncryptSettingServiceCall essc = new EncryptSettingServiceCall();
 
@@ -303,11 +307,12 @@ public class EncriptSettingController {
 		JSONObject result = new JSONObject();
 		
 		HttpSession session = request.getSession();
-		String restIp = (String)session.getAttribute("restIp");
-		int restPort = (int)session.getAttribute("restPort");
-		String strTocken = (String)session.getAttribute("tockenValue");
-		String loginId = (String)session.getAttribute("usr_id");
-		String entityId = (String)session.getAttribute("ectityUid");	
+		LoginVO loginVo = (LoginVO) session.getAttribute("session");
+		String restIp = loginVo.getRestIp();
+		int restPort = loginVo.getRestPort();
+		String strTocken = loginVo.getTockenValue();
+		String loginId = loginVo.getUsr_id();
+		String entityId = loginVo.getEctityUid();
 		
 
 		try {		
@@ -355,11 +360,12 @@ public class EncriptSettingController {
 		JSONObject result = new JSONObject();
 		
 		HttpSession session = request.getSession();
-		String restIp = (String)session.getAttribute("restIp");
-		int restPort = (int)session.getAttribute("restPort");
-		String strTocken = (String)session.getAttribute("tockenValue");
-		String loginId = (String)session.getAttribute("usr_id");
-		String entityId = (String)session.getAttribute("ectityUid");	
+		LoginVO loginVo = (LoginVO) session.getAttribute("session");
+		String restIp = loginVo.getRestIp();
+		int restPort = loginVo.getRestPort();
+		String strTocken = loginVo.getTockenValue();
+		String loginId = loginVo.getUsr_id();
+		String entityId = loginVo.getEctityUid();	
 		
 		try {		
 			CmmnUtils cu = new CmmnUtils();
@@ -407,11 +413,12 @@ public class EncriptSettingController {
 	public @ResponseBody JSONObject securityMasterKeySave01(@ModelAttribute("historyVO") HistoryVO historyVO, MultipartHttpServletRequest multiRequest, HttpServletResponse response, HttpServletRequest request) throws FileNotFoundException {
 	
 		HttpSession session = request.getSession();
-		String restIp = (String)session.getAttribute("restIp");
-		int restPort = (int)session.getAttribute("restPort");
-		String strTocken = (String)session.getAttribute("tockenValue");
-		String loginId = (String)session.getAttribute("usr_id");
-		String entityId = (String)session.getAttribute("ectityUid");	
+		LoginVO loginVo = (LoginVO) session.getAttribute("session");
+		String restIp = loginVo.getRestIp();
+		int restPort = loginVo.getRestPort();
+		String strTocken = loginVo.getTockenValue();
+		String loginId = loginVo.getUsr_id();
+		String entityId = loginVo.getEctityUid();	
 		
 		JSONObject result = new JSONObject();
 		String encKey = null;
@@ -506,11 +513,12 @@ public class EncriptSettingController {
 	public @ResponseBody JSONObject securityMasterKeySave02(@ModelAttribute("historyVO") HistoryVO historyVO, HttpServletRequest request) throws FileNotFoundException {
 		
 		HttpSession session = request.getSession();
-		String restIp = (String)session.getAttribute("restIp");
-		int restPort = (int)session.getAttribute("restPort");
-		String strTocken = (String)session.getAttribute("tockenValue");
-		String loginId = (String)session.getAttribute("usr_id");
-		String entityId = (String)session.getAttribute("ectityUid");	
+		LoginVO loginVo = (LoginVO) session.getAttribute("session");
+		String restIp = loginVo.getRestIp();
+		int restPort = loginVo.getRestPort();
+		String strTocken = loginVo.getTockenValue();
+		String loginId = loginVo.getUsr_id();
+		String entityId = loginVo.getEctityUid();	
 		
 		JSONObject result = new JSONObject();
 		try {		
@@ -540,11 +548,12 @@ public class EncriptSettingController {
 	public @ResponseBody JSONObject securityMasterKeySave03(@ModelAttribute("historyVO") HistoryVO historyVO, MultipartHttpServletRequest multiRequest, HttpServletRequest request) throws FileNotFoundException {
 		
 		HttpSession session = request.getSession();
-		String restIp = (String)session.getAttribute("restIp");
-		int restPort = (int)session.getAttribute("restPort");
-		String strTocken = (String)session.getAttribute("tockenValue");
-		String loginId = (String)session.getAttribute("usr_id");
-		String entityId = (String)session.getAttribute("ectityUid");	
+		LoginVO loginVo = (LoginVO) session.getAttribute("session");
+		String restIp = loginVo.getRestIp();
+		int restPort = loginVo.getRestPort();
+		String strTocken = loginVo.getTockenValue();
+		String loginId = loginVo.getUsr_id();
+		String entityId = loginVo.getEctityUid();
 		
 		String encKey = null;
 		
@@ -708,11 +717,12 @@ public class EncriptSettingController {
 									
 				System.out.println(key.size());
 				HttpSession session = request.getSession();
-				String restIp = (String)session.getAttribute("restIp");
-				int restPort = (int)session.getAttribute("restPort");
-				String strTocken = (String)session.getAttribute("tockenValue");
-				String loginId = (String)session.getAttribute("usr_id");
-				String entityId = (String)session.getAttribute("ectityUid");	
+				LoginVO loginVo = (LoginVO) session.getAttribute("session");
+				String restIp = loginVo.getRestIp();
+				int restPort = loginVo.getRestPort();
+				String strTocken = loginVo.getTockenValue();
+				String loginId = loginVo.getUsr_id();
+				String entityId = loginVo.getEctityUid();
 				
 				EncryptSettingServiceCall essc = new EncryptSettingServiceCall();
 				result = essc.selectParamSysCodeList( restIp, restPort, strTocken, loginId, entityId);
@@ -748,11 +758,12 @@ public class EncriptSettingController {
 		JSONObject result = new JSONObject();
 		
 		HttpSession session = request.getSession();
-		String restIp = (String)session.getAttribute("restIp");
-		int restPort = (int)session.getAttribute("restPort");
-		String strTocken = (String)session.getAttribute("tockenValue");
-		String loginId = (String)session.getAttribute("usr_id");
-		String entityId = (String)session.getAttribute("ectityUid");	
+		LoginVO loginVo = (LoginVO) session.getAttribute("session");
+		String restIp = loginVo.getRestIp();
+		int restPort = loginVo.getRestPort();
+		String strTocken = loginVo.getTockenValue();
+		String loginId = loginVo.getUsr_id();
+		String entityId = loginVo.getEctityUid();	
 					
 		EncryptSettingServiceCall essc = new EncryptSettingServiceCall();
 
@@ -782,11 +793,12 @@ public class EncriptSettingController {
 		String entityStatusCode = request.getParameter("entityStatusCode");
 		
 		HttpSession session = request.getSession();
-		String restIp = (String)session.getAttribute("restIp");
-		int restPort = (int)session.getAttribute("restPort");
-		String strTocken = (String)session.getAttribute("tockenValue");
-		String loginId = (String)session.getAttribute("usr_id");
-		String entityId = (String)session.getAttribute("ectityUid");	
+		LoginVO loginVo = (LoginVO) session.getAttribute("session");
+		String restIp = loginVo.getRestIp();
+		int restPort = loginVo.getRestPort();
+		String strTocken = loginVo.getTockenValue();
+		String loginId = loginVo.getUsr_id();
+		String entityId = loginVo.getEctityUid();
 		
 		try {	
 			// 화면접근이력 이력 남기기

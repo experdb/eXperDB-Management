@@ -30,6 +30,7 @@ import com.k4m.dx.tcontrol.cmmn.EgovHttpSessionBindingListener;
 import com.k4m.dx.tcontrol.common.service.HistoryVO;
 import com.k4m.dx.tcontrol.encrypt.service.call.CommonServiceCall;
 import com.k4m.dx.tcontrol.login.service.LoginService;
+import com.k4m.dx.tcontrol.login.service.LoginVO;
 import com.k4m.dx.tcontrol.login.service.UserVO;
 
 /**
@@ -62,9 +63,9 @@ public class LoginController {
 		ModelAndView mv = new ModelAndView();
 		try {       
 			HttpSession session = request.getSession();
-			String usr_id = (String) session.getAttribute("usr_id");
+			LoginVO loginVo = (LoginVO) session.getAttribute("session");
 			
-			if(usr_id==null){
+			if(loginVo==null){
 				mv.setViewName("login");
 			}else{
 				mv.setViewName("redirect:/experdb.do");
@@ -145,29 +146,32 @@ public class LoginController {
 			}
 			List<UserVO> userList = loginService.selectUserList(userVo);
 			int intLoginCnt = userList.size();
-			mv.setViewName("login");
 			if (intLoginCnt == 0) {
 				mv.addObject("error", "msg156");
+				mv.setViewName("login");
+				return mv;
 			} else if (!id.equals(userList.get(0).getUsr_id()) || !pw.equals(userList.get(0).getPwd())) {
 				mv.addObject("error", "msg157");
+				mv.setViewName("login");
+				return mv;
 			} else if (userList.get(0).getUse_yn().equals("N")) {
 				mv.addObject("error", "msg158");
+				mv.setViewName("login");
+				return mv;
 			} else if (userList.get(0).getUsr_expr_dt().equals("N")) {
 				mv.addObject("error", "msg159");
+				mv.setViewName("login");
+				return mv;
 			} else {
-				/*중복로그인방지*/
-				EgovHttpSessionBindingListener listener = new EgovHttpSessionBindingListener();
-				request.getSession().setAttribute(userList.get(0).getUsr_id(), listener);
-				
 				// session 설정
 				HttpSession session = request.getSession();
-				request.getSession().setAttribute("session", session);
-				request.getSession().setAttribute("usr_id", userList.get(0).getUsr_id());
-				request.getSession().setAttribute("usr_nm", userList.get(0).getUsr_nm());
-			
+				LoginVO loginVo = new LoginVO();
+				loginVo.setUsr_id(userList.get(0).getUsr_id());
+				loginVo.setUsr_nm(userList.get(0).getUsr_nm());
+		
 				InetAddress local = InetAddress.getLocalHost();
 				String ip = local.getHostAddress();
-				request.getSession().setAttribute("ip", ip);
+				loginVo.setIp(ip);
 
 				Properties props = new Properties();
 				props.load(new FileInputStream(ResourceUtils.getFile("classpath:egovframework/tcontrolProps/globals.properties")));			
@@ -178,16 +182,16 @@ public class LoginController {
 			    localeResolver.setLocale(request, response, locale);
 				
 				String encp_use_yn = props.get("encrypt.useyn").toString();
-				request.getSession().setAttribute("encp_use_yn", encp_use_yn);
+				loginVo.setEncp_use_yn(encp_use_yn);
 				
 				String version = props.get("version").toString();
-				request.getSession().setAttribute("version", version);
+				loginVo.setVersion(version);
 				
 				String pg_audit = props.get("pg_audit").toString();
-				request.getSession().setAttribute("pg_audit", pg_audit);
+				loginVo.setPg_audit(pg_audit);
 				
 				String transfer = props.get("transfer").toString();
-				request.getSession().setAttribute("transfer", transfer);
+				loginVo.setTransfer(transfer);
 				
 				if(encp_use_yn.equals("Y")){
 					String restIp = props.get("encrypt.server.url").toString();
@@ -195,23 +199,28 @@ public class LoginController {
 					try{
 						CommonServiceCall cic = new CommonServiceCall();
 						JSONObject result = cic.login(restIp,restPort,id,userVo.getPwd());
-						request.getSession().setAttribute("restIp", restIp);
-						request.getSession().setAttribute("restPort", restPort);
-						
+						loginVo.setRestIp(restIp);
+						loginVo.setRestPort(restPort);
+						loginVo.setTockenValue((String) (result.get("tockenValue")==null?"":result.get("tockenValue")));
+						loginVo.setEctityUid((String) (result.get("ectityUid")==null?"":result.get("ectityUid")));
+
 						System.out.println("*******Login******");
 						System.out.println(result.get("tockenValue"));
 						System.out.println(result.get("ectityUid"));
 						System.out.println("******************");
-						
-						request.getSession().setAttribute("tockenValue", result.get("tockenValue")==null?"":result.get("tockenValue"));
-						request.getSession().setAttribute("ectityUid", result.get("ectityUid")==null?"":result.get("ectityUid"));
 					}catch(Exception e){
-						request.getSession().setAttribute("restIp", restIp);
-						request.getSession().setAttribute("restPort", restPort);
-						request.getSession().setAttribute("tockenValue", "");
-						request.getSession().setAttribute("ectityUid", "");
+						loginVo.setRestIp(restIp);
+						loginVo.setRestPort(restPort);
+						loginVo.setTockenValue("");
+						loginVo.setEctityUid("");
 					}
 				}
+				
+				session.setAttribute("session", loginVo);
+				
+				/*중복로그인방지*/
+				EgovHttpSessionBindingListener listener = new EgovHttpSessionBindingListener();
+				request.getSession().setAttribute(userList.get(0).getUsr_id(), listener);
 				
 				// 로그인 이력 남기기
 				CmmnUtils.saveHistory(request, historyVO);
@@ -241,16 +250,15 @@ public class LoginController {
 			HttpServletRequest request, HttpServletResponse response) {
 		try {
 			HttpSession session = request.getSession();
-			String usr_id = (String)session.getAttribute("usr_id");
-			
-			if(usr_id !=null){
+			LoginVO loginVo = (LoginVO) session.getAttribute("session");
+		
+			if(loginVo !=null){
 				// 로그아웃 이력 남기기
 				CmmnUtils.saveHistory(request, historyVO);
 				historyVO.setExe_dtl_cd("DX-T0003_01");
 				accessHistoryService.insertHistory(historyVO);			
 			}						
 			request.getSession().invalidate();
-			return "redirect:/";
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

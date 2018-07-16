@@ -24,6 +24,7 @@ import com.k4m.dx.tcontrol.cmmn.serviceproxy.vo.BackupLog;
 import com.k4m.dx.tcontrol.cmmn.serviceproxy.vo.SystemUsage;
 import com.k4m.dx.tcontrol.common.service.HistoryVO;
 import com.k4m.dx.tcontrol.encrypt.service.call.AuditLogServiceCall;
+import com.k4m.dx.tcontrol.login.service.LoginVO;
 
 
 @Controller
@@ -66,11 +67,12 @@ public class AuditLogController {
 				JSONArray result = new JSONArray();
 				
 				HttpSession session = request.getSession();
-				String restIp = (String)session.getAttribute("restIp");
-				int restPort = (int)session.getAttribute("restPort");
-				String strTocken = (String)session.getAttribute("tockenValue");
-				String loginId = (String)session.getAttribute("usr_id");
-				String entityId = (String)session.getAttribute("ectityUid");	
+				LoginVO loginVo = (LoginVO) session.getAttribute("session");
+				String restIp = loginVo.getRestIp();
+				int restPort = loginVo.getRestPort();
+				String strTocken = loginVo.getTockenValue();
+				String loginId = loginVo.getUsr_id();
+				String entityId = loginVo.getEctityUid();			
 				
 				try{
 					result = sic.selectEntityAgentList(restIp, restPort, strTocken, loginId ,entityId);
@@ -136,11 +138,12 @@ public class AuditLogController {
 			param.setTotalCountLimit(10001);
 			
 			HttpSession session = request.getSession();
-			String restIp = (String)session.getAttribute("restIp");
-			int restPort = (int)session.getAttribute("restPort");
-			String strTocken = (String)session.getAttribute("tockenValue");
-			String loginId = (String)session.getAttribute("usr_id");
-			String entityId = (String)session.getAttribute("ectityUid");
+			LoginVO loginVo = (LoginVO) session.getAttribute("session");
+			String restIp = loginVo.getRestIp();
+			int restPort = loginVo.getRestPort();
+			String strTocken = loginVo.getTockenValue();
+			String loginId = loginVo.getUsr_id();
+			String entityId = loginVo.getEctityUid();
 			
 			try{
 				result = sic.selectAuditLogSiteList(restIp, restPort, strTocken, param, loginId ,entityId);
@@ -182,12 +185,13 @@ public class AuditLogController {
 				accessHistoryService.insertHistory(historyVO);
 				
 				HttpSession session = request.getSession();
-				String restIp = (String)session.getAttribute("restIp");
-				int restPort = (int)session.getAttribute("restPort");
-				String strTocken = (String)session.getAttribute("tockenValue");
-				String loginId = (String)session.getAttribute("usr_id");
-				String entityId = (String)session.getAttribute("ectityUid");		
-				
+				LoginVO loginVo = (LoginVO) session.getAttribute("session");
+				String restIp = loginVo.getRestIp();
+				int restPort = loginVo.getRestPort();
+				String strTocken = loginVo.getTockenValue();
+				String loginId = loginVo.getUsr_id();
+				String entityId = loginVo.getEctityUid();
+			
 				try{
 					entityuid =sic.selectEntityList(restIp, restPort, strTocken, loginId ,entityId);
 				}catch(Exception e){
@@ -239,11 +243,12 @@ public class AuditLogController {
 			param.setTotalCountLimit(10001);
 
 			HttpSession session = request.getSession();
-			String restIp = (String)session.getAttribute("restIp");
-			int restPort = (int)session.getAttribute("restPort");
-			String strTocken = (String)session.getAttribute("tockenValue");
-			String loginId = (String)session.getAttribute("usr_id");
-			String entityId = (String)session.getAttribute("ectityUid");
+			LoginVO loginVo = (LoginVO) session.getAttribute("session");
+			String restIp = loginVo.getRestIp();
+			int restPort = loginVo.getRestPort();
+			String strTocken = loginVo.getTockenValue();
+			String loginId = loginVo.getUsr_id();
+			String entityId = loginVo.getEctityUid();
 		
 			try{
 				result = sic.selectAuditLogList(restIp, restPort, strTocken, loginId ,entityId, param);
@@ -322,11 +327,12 @@ public class AuditLogController {
 				accessHistoryService.insertHistory(historyVO);
 				
 				HttpSession session = request.getSession();
-				String restIp = (String)session.getAttribute("restIp");
-				int restPort = (int)session.getAttribute("restPort");
-				String strTocken = (String)session.getAttribute("tockenValue");
-				String loginId = (String)session.getAttribute("usr_id");
-				String entityId = (String)session.getAttribute("ectityUid");	
+				LoginVO loginVo = (LoginVO) session.getAttribute("session");
+				String restIp = loginVo.getRestIp();
+				int restPort = loginVo.getRestPort();
+				String strTocken = loginVo.getTockenValue();
+				String loginId = loginVo.getUsr_id();
+				String entityId = loginVo.getEctityUid();
 				
 				try{
 					entityuid =sic.selectEntityList(restIp, restPort, strTocken, loginId ,entityId);
@@ -379,11 +385,12 @@ public class AuditLogController {
 			param.setTotalCountLimit(10001);
 			
 			HttpSession session = request.getSession();
-			String restIp = (String)session.getAttribute("restIp");
-			int restPort = (int)session.getAttribute("restPort");
-			String strTocken = (String)session.getAttribute("tockenValue");
-			String loginId = (String)session.getAttribute("usr_id");
-			String entityId = (String)session.getAttribute("ectityUid");
+			LoginVO loginVo = (LoginVO) session.getAttribute("session");
+			String restIp = loginVo.getRestIp();
+			int restPort = loginVo.getRestPort();
+			String strTocken = loginVo.getTockenValue();
+			String loginId = loginVo.getUsr_id();
+			String entityId = loginVo.getEctityUid();
 			
 			try{
 				result = sic.selectAuditLogListKey(restIp, restPort, strTocken, loginId, entityId, param);
@@ -453,11 +460,12 @@ public class AuditLogController {
 			accessHistoryService.insertHistory(historyVO);*/
 			
 			HttpSession session = request.getSession();
-			String restIp = (String)session.getAttribute("restIp");
-			int restPort = (int)session.getAttribute("restPort");
-			String strTocken = (String)session.getAttribute("tockenValue");
-			String loginId = (String)session.getAttribute("usr_id");
-			String entityId = (String)session.getAttribute("ectityUid");
+			LoginVO loginVo = (LoginVO) session.getAttribute("session");
+			String restIp = loginVo.getRestIp();
+			int restPort = loginVo.getRestPort();
+			String strTocken = loginVo.getTockenValue();
+			String loginId = loginVo.getUsr_id();
+			String entityId = loginVo.getEctityUid();
 			
 			entityuid =sic.selectEntityList(restIp, restPort, strTocken, loginId ,entityId);
 
@@ -498,11 +506,12 @@ public class AuditLogController {
 			param.setTotalCountLimit(10001);
 			
 			HttpSession session = request.getSession();
-			String restIp = (String)session.getAttribute("restIp");
-			int restPort = (int)session.getAttribute("restPort");
-			String strTocken = (String)session.getAttribute("tockenValue");
-			String loginId = (String)session.getAttribute("usr_id");
-			String entityId = (String)session.getAttribute("ectityUid");
+			LoginVO loginVo = (LoginVO) session.getAttribute("session");
+			String restIp = loginVo.getRestIp();
+			int restPort = loginVo.getRestPort();
+			String strTocken = loginVo.getTockenValue();
+			String loginId = loginVo.getUsr_id();
+			String entityId = loginVo.getEctityUid();
 			
 			result = sic.selectBackupLogList(restIp, restPort, strTocken, loginId ,entityId, param);
 		} catch (Exception e) {
@@ -530,11 +539,12 @@ public class AuditLogController {
 			accessHistoryService.insertHistory(historyVO);*/
 			
 			HttpSession session = request.getSession();
-			String restIp = (String)session.getAttribute("restIp");
-			int restPort = (int)session.getAttribute("restPort");
-			String strTocken = (String)session.getAttribute("tockenValue");
-			String loginId = (String)session.getAttribute("usr_id");
-			String entityId = (String)session.getAttribute("ectityUid");
+			LoginVO loginVo = (LoginVO) session.getAttribute("session");
+			String restIp = loginVo.getRestIp();
+			int restPort = loginVo.getRestPort();
+			String strTocken = loginVo.getTockenValue();
+			String loginId = loginVo.getUsr_id();
+			String entityId = loginVo.getEctityUid();
 			
 			monitoreduid =sic.selectEntityAgentList(restIp, restPort, strTocken, loginId ,entityId);
 			mv.addObject("monitoreduid", monitoreduid);
@@ -571,11 +581,12 @@ public class AuditLogController {
 			param.setPageSize(10001);
 			
 			HttpSession session = request.getSession();
-			String restIp = (String)session.getAttribute("restIp");
-			int restPort = (int)session.getAttribute("restPort");
-			String strTocken = (String)session.getAttribute("tockenValue");
-			String loginId = (String)session.getAttribute("usr_id");
-			String entityId = (String)session.getAttribute("ectityUid");
+			LoginVO loginVo = (LoginVO) session.getAttribute("session");
+			String restIp = loginVo.getRestIp();
+			int restPort = loginVo.getRestPort();
+			String strTocken = loginVo.getTockenValue();
+			String loginId = loginVo.getUsr_id();
+			String entityId = loginVo.getEctityUid();
 			
 			result = sic.selectSystemUsageLogList(restIp, restPort, strTocken, loginId ,entityId, param);
 		} catch (Exception e) {
@@ -598,11 +609,12 @@ public class AuditLogController {
 		JSONArray result = new JSONArray();
 		try {
 			HttpSession session = request.getSession();
-			String restIp = (String)session.getAttribute("restIp");
-			int restPort = (int)session.getAttribute("restPort");
-			String strTocken = (String)session.getAttribute("tockenValue");
-			String loginId = (String)session.getAttribute("usr_id");
-			String entityId = (String)session.getAttribute("ectityUid");
+			LoginVO loginVo = (LoginVO) session.getAttribute("session");
+			String restIp = loginVo.getRestIp();
+			int restPort = loginVo.getRestPort();
+			String strTocken = loginVo.getTockenValue();
+			String loginId = loginVo.getUsr_id();
+			String entityId = loginVo.getEctityUid();
 			
 			result = alsc.selectEntityAgentList(restIp, restPort, strTocken, loginId ,entityId);
 		} catch (Exception e) {

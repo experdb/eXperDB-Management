@@ -183,7 +183,7 @@
 
 	<select id="selectServerInfoSlave" parameterType="DbServerVO" resultType="DbServerVO">
 		/**
-	 	* Query ID : selectLoginUserList
+	 	* Query ID : selectServerInfoSlave
 	 	* Description : DB서버 정보 조회(Slave)
 	 	* Author : 김주영
 	 	**/

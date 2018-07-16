@@ -35,6 +35,7 @@ import com.k4m.dx.tcontrol.common.service.HistoryVO;
 import com.k4m.dx.tcontrol.functions.transfer.service.ConnectorVO;
 import com.k4m.dx.tcontrol.functions.transfer.service.TransferService;
 import com.k4m.dx.tcontrol.functions.transfer.service.TransferVO;
+import com.k4m.dx.tcontrol.login.service.LoginVO;
 import com.k4m.dx.tcontrol.tree.transfer.service.BottlewaterVO;
 import com.k4m.dx.tcontrol.tree.transfer.service.TblKafkaConfigVO;
 import com.k4m.dx.tcontrol.tree.transfer.service.TransferDetailMappingVO;
@@ -149,7 +150,8 @@ public class TreeTransferController {
 		ClientInfoCmmn cic = new ClientInfoCmmn();
 		try {
 			HttpSession session = request.getSession();
-			String usr_id = (String) session.getAttribute("usr_id");
+			LoginVO loginVo = (LoginVO) session.getAttribute("session");
+			String usr_id = loginVo.getUsr_id();
 
 			int cnr_id = Integer.parseInt(request.getParameter("cnr_id"));
 			ConnectorVO connectInfo = (ConnectorVO) transferService.selectDetailConnectorRegister(cnr_id);
@@ -330,7 +332,8 @@ public class TreeTransferController {
 			accessHistoryService.insertHistory(historyVO);
 
 			HttpSession session = request.getSession();
-			String usr_id = (String) session.getAttribute("usr_id");
+			LoginVO loginVo = (LoginVO) session.getAttribute("session");
+			String usr_id = loginVo.getUsr_id();
 			transferTargetVO.setFrst_regr_id(usr_id);
 			transferTargetVO.setLst_mdfr_id(usr_id);
 
@@ -398,7 +401,8 @@ public class TreeTransferController {
 			int cnr_id = transferTargetVO.getCnr_id();
 
 			HttpSession session = request.getSession();
-			String usr_id = (String) session.getAttribute("usr_id");
+			LoginVO loginVo = (LoginVO) session.getAttribute("session");
+			String usr_id = loginVo.getUsr_id();
 			transferTargetVO.setFrst_regr_id(usr_id);
 			transferTargetVO.setLst_mdfr_id(usr_id);
 			transferTargetVO.setCnr_id(cnr_id);
@@ -502,7 +506,8 @@ public class TreeTransferController {
 			int cnr_id = Integer.parseInt(request.getParameter("cnr_id"));
 
 			HttpSession session = request.getSession();
-			String usr_id = (String) session.getAttribute("usr_id");
+			LoginVO loginVo = (LoginVO) session.getAttribute("session");
+			String usr_id = loginVo.getUsr_id();
 			transferTargetVO.setFrst_regr_id(usr_id);
 			transferTargetVO.setLst_mdfr_id(usr_id);
 			transferTargetVO.setCnr_id(cnr_id);
@@ -564,7 +569,8 @@ public class TreeTransferController {
 			accessHistoryService.insertHistory(historyVO);
 
 			HttpSession session = request.getSession();
-			String usr_id = (String) session.getAttribute("usr_id");
+			LoginVO loginVo = (LoginVO) session.getAttribute("session");
+			String usr_id = loginVo.getUsr_id();
 
 			int cnr_id = Integer.parseInt(request.getParameter("cnr_id"));
 			ConnectorVO connectInfo = (ConnectorVO) transferService.selectDetailConnectorRegister(cnr_id);
@@ -695,7 +701,9 @@ public class TreeTransferController {
 			}
 			
 			HttpSession session = request.getSession();
-			dbServerVO.setUsr_id((String) session.getAttribute("usr_id"));
+			LoginVO loginVo = (LoginVO) session.getAttribute("session");
+			String usr_id = loginVo.getUsr_id();
+			dbServerVO.setUsr_id(usr_id);
 			
 			resultSet = treeTransferService.selectDbServerList(dbServerVO);
 			mv.addObject("resultSet", resultSet);
@@ -724,7 +732,9 @@ public class TreeTransferController {
 		try {
 			dbAutVO.setDb_svr_nm(request.getParameter("db_svr_nm"));
 			HttpSession session = request.getSession();
-			dbAutVO.setUsr_id((String) session.getAttribute("usr_id"));
+			LoginVO loginVo = (LoginVO) session.getAttribute("session");
+			String usr_id = loginVo.getUsr_id();
+			dbAutVO.setUsr_id(usr_id);
 
 			resultSet = treeTransferService.selectServerDbList(dbAutVO);
 		} catch (Exception e) {
@@ -819,7 +829,8 @@ public class TreeTransferController {
 			accessHistoryService.insertHistory(historyVO);
 
 			HttpSession session = request.getSession();
-			String usr_id = (String) session.getAttribute("usr_id");
+			LoginVO loginVo = (LoginVO) session.getAttribute("session");
+			String usr_id = loginVo.getUsr_id();
 			transferRelationVO.setFrst_regr_id(usr_id);
 			transferRelationVO.setLst_mdfr_id(usr_id);
 			transferMappingVO.setFrst_regr_id(usr_id);
@@ -936,7 +947,8 @@ public class TreeTransferController {
 			AES256 dec = new AES256(AES256_KEY.ENC_KEY);
 
 			HttpSession session = request.getSession();
-			String usr_id = (String) session.getAttribute("usr_id");
+			LoginVO loginVo = (LoginVO) session.getAttribute("session");
+			String usr_id = loginVo.getUsr_id();
 
 			int trf_trg_id = Integer.parseInt(request.getParameter("trf_trg_id"));
 			int current_bw_pid = Integer.parseInt(request.getParameter("bw_pid"));

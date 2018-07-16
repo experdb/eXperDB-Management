@@ -184,7 +184,7 @@
 					html1+=	'</td>';
 					html1+='</tr>';
 					
-					if("${sessionScope.pg_audit}"== "Y"){
+					if("${sessionScope.session.pg_audit}"== "Y"){
 						html1+='<tr>';
 						html1+=	'<th scope="row"><spring:message code="menu.audit_settings" /></th>';
 						html1+=	'<td>';

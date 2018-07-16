@@ -6,6 +6,7 @@ import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 import org.json.simple.JSONArray;
 import org.json.simple.parser.JSONParser;
@@ -22,6 +23,7 @@ import com.k4m.dx.tcontrol.admin.menuauthority.service.MenuAuthorityService;
 import com.k4m.dx.tcontrol.admin.usermanager.service.UserManagerService;
 import com.k4m.dx.tcontrol.cmmn.CmmnUtils;
 import com.k4m.dx.tcontrol.common.service.HistoryVO;
+import com.k4m.dx.tcontrol.login.service.LoginVO;
 import com.k4m.dx.tcontrol.login.service.UserVO;
 
 @Controller
@@ -179,7 +181,9 @@ public class DbSvrAuthorityController {
 				String usr_id ="";
 				
 				if(request.getParameter("usr_id") == null){
-					usr_id = (String) request.getSession().getAttribute("usr_id");
+					HttpSession session = request.getSession();
+					LoginVO loginVo = (LoginVO) session.getAttribute("session");
+					usr_id = loginVo.getUsr_id();
 				}else{
 					usr_id = request.getParameter("usr_id");
 				}
@@ -249,9 +253,9 @@ public class DbSvrAuthorityController {
 	
 		List<Map<String, Object>> resultSet = null;
 		try {		
-			
-			String usr_id = (String) request.getSession().getAttribute("usr_id");
-
+			HttpSession session = request.getSession();
+			LoginVO loginVo = (LoginVO) session.getAttribute("session");
+			String usr_id = loginVo.getUsr_id();
 			
 			resultSet = dbAuthorityService.selectTreeDBSvrList(usr_id);	
 		} catch (Exception e) {

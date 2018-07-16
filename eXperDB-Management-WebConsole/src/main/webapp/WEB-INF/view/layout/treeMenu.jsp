@@ -87,7 +87,7 @@ $(window.document).ready(function() {
 
 
    	/*암호화 조회*/
-   	if('${sessionScope.encp_use_yn}' == 'Y'){
+   	if('${sessionScope.session.encp_use_yn}' == 'Y'){
    		$.ajax({
    			async : false,
    			url : "/selectTreeEncrypt.do",
@@ -216,7 +216,7 @@ $(window.document).ready(function() {
 			},
 			success : function(result) {
 				Schedule(result);
-		   		if('${sessionScope.transfer}' == 'Y'){ 
+		   		if('${sessionScope.session.transfer}' == 'Y'){ 
 		   			GetJsonDataConnector(data, result);
 		   	   	}else{
 		   	   		$('.transferMenu').hide();
@@ -267,7 +267,7 @@ $(window.document).ready(function() {
 					html1+='				</ul>';
 					html1+='			</li>';
 					//pg_audit 사용여부에 따른 tree메뉴 권한
-					if('${sessionScope.pg_audit}' == 'Y'){
+					if('${sessionScope.session.pg_audit}' == 'Y'){
 						html1+='			<li class="ico2_2"><a href="#n"><img src="../images/ico_lnb_7.png" id="treeImg"><spring:message code="menu.audit_management"/></a>';
 						html1+='				<ul class="depth_3">'
 						if(aut.length != 0 && aut[index].adt_cng_aut_yn == "Y"){
@@ -479,7 +479,7 @@ $(window.document).ready(function() {
 		<div id="lnb_menu">
 			<form name="treeView" id="treeView">
 				<div class="logout">
-					    <div style="color: white; margin-bottom: 5%; font-size: 14px;"><%=(String)session.getAttribute("usr_nm")%><spring:message code="common.wellcome"/></div>		
+					    <div style="color: white; margin-bottom: 5%; font-size: 14px;">${sessionScope.session.usr_nm}<spring:message code="common.wellcome"/></div>		
 					<a href="#"  target="_top"><button type="button" onClick="fn_logout();"><spring:message code="common.logout"/></button></a>		
 				</div>
 			</form>

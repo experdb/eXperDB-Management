@@ -26,9 +26,9 @@ import com.k4m.dx.tcontrol.cmmn.serviceproxy.vo.ProfileAclSpec;
 import com.k4m.dx.tcontrol.cmmn.serviceproxy.vo.ProfileCipherSpec;
 import com.k4m.dx.tcontrol.cmmn.serviceproxy.vo.ProfileProtection;
 import com.k4m.dx.tcontrol.common.service.HistoryVO;
-import com.k4m.dx.tcontrol.encrypt.service.call.CommonServiceCall;
 import com.k4m.dx.tcontrol.encrypt.service.call.KeyManageServiceCall;
 import com.k4m.dx.tcontrol.encrypt.service.call.SecurityPolicyServiceCall;
+import com.k4m.dx.tcontrol.login.service.LoginVO;
 
 /**
  * PolicyController 컨트롤러 클래스를 정의한다.
@@ -107,11 +107,12 @@ public class SecurityPolicyController {
 			accessHistoryService.insertHistory(historyVO);
 			
 			HttpSession session = request.getSession();
-			String restIp = (String)session.getAttribute("restIp");
-			int restPort = (int)session.getAttribute("restPort");
-			String strTocken = (String)session.getAttribute("tockenValue");
-			String loginId = (String)session.getAttribute("usr_id");
-			String entityId = (String)session.getAttribute("ectityUid");
+			LoginVO loginVo = (LoginVO) session.getAttribute("session");
+			String restIp = loginVo.getRestIp();
+			int restPort = loginVo.getRestPort();
+			String strTocken = loginVo.getTockenValue();
+			String loginId = loginVo.getUsr_id();
+			String entityId = loginVo.getEctityUid();
 			
 			try{
 				result = sic.selectProfileList(restIp,restPort,strTocken,loginId,entityId);
@@ -146,11 +147,12 @@ public class SecurityPolicyController {
 			accessHistoryService.insertHistory(historyVO);
 			
 			HttpSession session = request.getSession();
-			String restIp = (String)session.getAttribute("restIp");
-			int restPort = (int)session.getAttribute("restPort");
-			String strTocken = (String)session.getAttribute("tockenValue");
-			String loginId = (String)session.getAttribute("usr_id");
-			String entityId = (String)session.getAttribute("ectityUid");	
+			LoginVO loginVo = (LoginVO) session.getAttribute("session");
+			String restIp = loginVo.getRestIp();
+			int restPort = loginVo.getRestPort();
+			String strTocken = loginVo.getTockenValue();
+			String loginId = loginVo.getUsr_id();
+			String entityId = loginVo.getEctityUid();
 			
 			/*데이터타입*/
 			dataTypeCode = sic.selectParamSysCodeListDatatype(restIp, restPort, strTocken,loginId,entityId);
@@ -190,11 +192,12 @@ public class SecurityPolicyController {
 			accessHistoryService.insertHistory(historyVO);
 
 			HttpSession session = request.getSession();
-			String restIp = (String)session.getAttribute("restIp");
-			int restPort = (int)session.getAttribute("restPort");
-			String strTocken = (String)session.getAttribute("tockenValue");
-			String loginId = (String)session.getAttribute("usr_id");
-			String entityId = (String)session.getAttribute("ectityUid");	
+			LoginVO loginVo = (LoginVO) session.getAttribute("session");
+			String restIp = loginVo.getRestIp();
+			int restPort = loginVo.getRestPort();
+			String strTocken = loginVo.getTockenValue();
+			String loginId = loginVo.getUsr_id();
+			String entityId = loginVo.getEctityUid();	
 			
 			
 			/*데이터타입*/
@@ -251,11 +254,12 @@ public class SecurityPolicyController {
 			String act = request.getParameter("act");
 			
 			HttpSession session = request.getSession();
-			String restIp = (String)session.getAttribute("restIp");
-			int restPort = (int)session.getAttribute("restPort");
-			String strTocken = (String)session.getAttribute("tockenValue");
-			String loginId = (String)session.getAttribute("usr_id");
-			String entityId = (String)session.getAttribute("ectityUid");	
+			LoginVO loginVo = (LoginVO) session.getAttribute("session");
+			String restIp = loginVo.getRestIp();
+			int restPort = loginVo.getRestPort();
+			String strTocken = loginVo.getTockenValue();
+			String loginId = loginVo.getUsr_id();
+			String entityId = loginVo.getEctityUid();	
 			
 			/*암호화 키*/
 			binUid = kmsc.selectCryptoKeyList(restIp, restPort, strTocken,loginId,entityId);
@@ -470,11 +474,12 @@ public class SecurityPolicyController {
 				}
 				
 				HttpSession session = request.getSession();
-				String restIp = (String)session.getAttribute("restIp");
-				int restPort = (int)session.getAttribute("restPort");
-				String strTocken = (String)session.getAttribute("tockenValue");
-				String loginId = (String)session.getAttribute("usr_id");
-				String entityId = (String)session.getAttribute("ectityUid");
+				LoginVO loginVo = (LoginVO) session.getAttribute("session");
+				String restIp = loginVo.getRestIp();
+				int restPort = loginVo.getRestPort();
+				String strTocken = loginVo.getTockenValue();
+				String loginId = loginVo.getUsr_id();
+				String entityId = loginVo.getEctityUid();
 				
 				cryptoKey = sic.selectCryptoKeySymmetricList(restIp, restPort, strTocken, loginId, entityId);
 
@@ -567,11 +572,12 @@ public class SecurityPolicyController {
 			}
 			
 			HttpSession session = request.getSession();
-			String restIp = (String)session.getAttribute("restIp");
-			int restPort = (int)session.getAttribute("restPort");
-			String strTocken = (String)session.getAttribute("tockenValue");
-			String loginId = (String)session.getAttribute("usr_id");
-			String entityId = (String)session.getAttribute("ectityUid");	
+			LoginVO loginVo = (LoginVO) session.getAttribute("session");
+			String restIp = loginVo.getRestIp();
+			int restPort = loginVo.getRestPort();
+			String strTocken = loginVo.getTockenValue();
+			String loginId = loginVo.getUsr_id();
+			String entityId = loginVo.getEctityUid();
 			
 			try{
 				result = sic.insertProfileProtection(restIp, restPort, strTocken, loginId, entityId, param1, param2, param3);
@@ -717,11 +723,12 @@ public class SecurityPolicyController {
 				}
 				
 				HttpSession session = request.getSession();
-				String restIp = (String)session.getAttribute("restIp");
-				int restPort = (int)session.getAttribute("restPort");
-				String strTocken = (String)session.getAttribute("tockenValue");
-				String loginId = (String)session.getAttribute("usr_id");
-				String entityId = (String)session.getAttribute("ectityUid");
+				LoginVO loginVo = (LoginVO) session.getAttribute("session");
+				String restIp = loginVo.getRestIp();
+				int restPort = loginVo.getRestPort();
+				String strTocken = loginVo.getTockenValue();
+				String loginId = loginVo.getUsr_id();
+				String entityId = loginVo.getEctityUid();
 				
 				cryptoKey = sic.selectCryptoKeySymmetricList(restIp, restPort, strTocken, loginId, entityId);
 				
@@ -813,11 +820,12 @@ public class SecurityPolicyController {
 			}
 			
 			HttpSession session = request.getSession();
-			String restIp = (String)session.getAttribute("restIp");
-			int restPort = (int)session.getAttribute("restPort");
-			String strTocken = (String)session.getAttribute("tockenValue");
-			String loginId = (String)session.getAttribute("usr_id");
-			String entityId = (String)session.getAttribute("ectityUid");
+			LoginVO loginVo = (LoginVO) session.getAttribute("session");
+			String restIp = loginVo.getRestIp();
+			int restPort = loginVo.getRestPort();
+			String strTocken = loginVo.getTockenValue();
+			String loginId = loginVo.getUsr_id();
+			String entityId = loginVo.getEctityUid();
 			
 			try{
 				result= sic.updateProfileProtection(restIp, restPort, strTocken,loginId, entityId, param1, param2, param3);
@@ -850,11 +858,12 @@ public class SecurityPolicyController {
 			accessHistoryService.insertHistory(historyVO);
 			
 			HttpSession session = request.getSession();
-			String restIp = (String)session.getAttribute("restIp");
-			int restPort = (int)session.getAttribute("restPort");
-			String strTocken = (String)session.getAttribute("tockenValue");
-			String loginId = (String)session.getAttribute("usr_id");
-			String entityId = (String)session.getAttribute("ectityUid");
+			LoginVO loginVo = (LoginVO) session.getAttribute("session");
+			String restIp = loginVo.getRestIp();
+			int restPort = loginVo.getRestPort();
+			String strTocken = loginVo.getTockenValue();
+			String loginId = loginVo.getUsr_id();
+			String entityId = loginVo.getEctityUid();
 
 			ProfileProtection param = new ProfileProtection();
 			

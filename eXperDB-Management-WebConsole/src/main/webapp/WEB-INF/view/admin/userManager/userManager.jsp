@@ -215,7 +215,7 @@ function fn_update() {
 
 /*삭제 버튼 클릭시*/
 function fn_delete(){
-	var usr_id = "<%=(String)session.getAttribute("usr_id")%>"
+	var usr_id = "${sessionScope.session.usr_id}"
 	var datas = table.rows('.selected').data();
 	if (datas.length <= 0) {
 		alert("<spring:message code='message.msg04' />");

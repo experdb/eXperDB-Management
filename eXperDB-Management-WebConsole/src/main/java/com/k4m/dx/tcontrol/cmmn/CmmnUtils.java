@@ -21,6 +21,7 @@ import org.springframework.web.context.request.ServletRequestAttributes;
 import com.k4m.dx.tcontrol.admin.dbauthority.service.DbAuthorityService;
 import com.k4m.dx.tcontrol.admin.menuauthority.service.MenuAuthorityService;
 import com.k4m.dx.tcontrol.common.service.HistoryVO;
+import com.k4m.dx.tcontrol.login.service.LoginVO;
 
 /**
 * @author 박태혁
@@ -45,8 +46,9 @@ public class CmmnUtils {
 		if(session==null){
 			return false;
 		}else{
-			String usr_id = (String) session.getAttribute("usr_id");
-			String ip = (String) session.getAttribute("ip");
+			LoginVO loginVo = (LoginVO) session.getAttribute("session");
+			String usr_id = loginVo.getUsr_id();
+			String ip = loginVo.getIp();
 			historyVO.setUsr_id(usr_id);
 			historyVO.setLgi_ipadr(ip);
 			return true;
@@ -63,7 +65,8 @@ public class CmmnUtils {
 			HttpServletRequest request = sra.getRequest();
 			
 			HttpSession session = request.getSession();
-			String usr_id = (String) session.getAttribute("usr_id");
+			LoginVO loginVo = (LoginVO) session.getAttribute("session");
+			String usr_id = loginVo.getUsr_id();
 			
 			Map<String,Object> param = new HashMap<String, Object>();
 			param.put("usr_id", usr_id);
@@ -89,7 +92,8 @@ public class CmmnUtils {
 			HttpServletRequest request = sra.getRequest();
 			
 			HttpSession session = request.getSession();
-			String usr_id = (String) session.getAttribute("usr_id");
+			LoginVO loginVo = (LoginVO) session.getAttribute("session");
+			String usr_id = loginVo.getUsr_id();
 			
 			result = dbAuthorityService.selectUsrDBAutInfo(usr_id);		
 		}catch(Exception e){
@@ -109,7 +113,8 @@ public class CmmnUtils {
 			HttpServletRequest request = sra.getRequest();
 			
 			HttpSession session = request.getSession();
-			String usr_id = (String) session.getAttribute("usr_id");
+			LoginVO loginVo = (LoginVO) session.getAttribute("session");
+			String usr_id = loginVo.getUsr_id();
 			
 			HashMap<String, Object> param = new HashMap<String, Object>();
 			param.put("usr_id", usr_id);
