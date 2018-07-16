@@ -204,10 +204,6 @@ public class LoginController {
 						loginVo.setTockenValue((String) (result.get("tockenValue")==null?"":result.get("tockenValue")));
 						loginVo.setEctityUid((String) (result.get("ectityUid")==null?"":result.get("ectityUid")));
 
-						System.out.println("*******Login******");
-						System.out.println(result.get("tockenValue"));
-						System.out.println(result.get("ectityUid"));
-						System.out.println("******************");
 					}catch(Exception e){
 						loginVo.setRestIp(restIp);
 						loginVo.setRestPort(restPort);

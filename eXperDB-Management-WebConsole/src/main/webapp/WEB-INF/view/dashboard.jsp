@@ -491,7 +491,7 @@ function fn_selectSecurityStatistics(today){
 				
 				<!-- eXperDB Encrypt 상태 -->
 				<div class="main_server_info" >
-					<p class="tit">eXperDB Encrypt <%-- <spring:message code="properties.status" /> --%> <div  id="today" align="right"></div></p>
+					<p class="tit">eXperDB Encrypt <%-- <spring:message code="properties.status" /> --%> <span id="today" style="float: right; padding-right: 1%;"></span></p>
 					
 					<div class="inner">
 						<table class="list" style="width: 320px;" id="encryptDashbaordServer">

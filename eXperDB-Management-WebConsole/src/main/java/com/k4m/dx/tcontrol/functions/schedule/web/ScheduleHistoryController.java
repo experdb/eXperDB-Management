@@ -22,6 +22,7 @@ import com.k4m.dx.tcontrol.admin.menuauthority.service.MenuAuthorityService;
 import com.k4m.dx.tcontrol.cmmn.CmmnUtils;
 import com.k4m.dx.tcontrol.common.service.HistoryVO;
 import com.k4m.dx.tcontrol.functions.schedule.service.ScheduleHistoryService;
+import com.k4m.dx.tcontrol.login.service.LoginVO;
 import com.k4m.dx.tcontrol.sample.service.PagingVO;
 
 import egovframework.rte.fdl.property.EgovPropertyService;
@@ -144,7 +145,8 @@ public class ScheduleHistoryController {
 				accessHistoryService.insertHistory(historyVO);
 				
 				HttpSession session = request.getSession();
-				String usr_id = (String) session.getAttribute("usr_id");
+				LoginVO loginVo = (LoginVO) session.getAttribute("session");
+				String usr_id = loginVo.getUsr_id();
 				
 				Map<String, Object> param = new HashMap<String, Object>();
 	
@@ -402,7 +404,8 @@ public class ScheduleHistoryController {
 		List<Map<String, Object>> resultSet = null;
 		try {			
 			HttpSession session = request.getSession();
-			String usr_id = (String) session.getAttribute("usr_id");
+			LoginVO loginVo = (LoginVO) session.getAttribute("session");
+			String usr_id = loginVo.getUsr_id();
 			
 			Map<String, Object> param = new HashMap<String, Object>();
 			
@@ -433,7 +436,8 @@ public class ScheduleHistoryController {
 		List<Map<String, Object>> resultSet = null;
 		try {			
 			HttpSession session = request.getSession();
-			String usr_id = (String) session.getAttribute("usr_id");
+			LoginVO loginVo = (LoginVO) session.getAttribute("session");
+			String usr_id = loginVo.getUsr_id();
 			
 			Map<String, Object> param = new HashMap<String, Object>();
 			

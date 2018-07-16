@@ -1,7 +1,6 @@
 package com.k4m.dx.tcontrol.functions.schedule.web;
 
 
-import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -42,6 +41,7 @@ import com.k4m.dx.tcontrol.functions.schedule.ScheduleUtl;
 import com.k4m.dx.tcontrol.functions.schedule.service.ScheduleDtlVO;
 import com.k4m.dx.tcontrol.functions.schedule.service.ScheduleService;
 import com.k4m.dx.tcontrol.functions.schedule.service.ScheduleVO;
+import com.k4m.dx.tcontrol.login.service.LoginVO;
 
 /**
  * Schedule 컨트롤러 클래스를 정의한다.
@@ -269,7 +269,8 @@ public class ScheduleController {
 		TransactionStatus status = txManager.getTransaction(def);
 		
 		HttpSession session = request.getSession();
-		String usr_id = (String) session.getAttribute("usr_id");
+		LoginVO loginVo = (LoginVO) session.getAttribute("session");
+		String usr_id = loginVo.getUsr_id();
 		
 		String mInsertResult = "S";
 		String dInsertResult = "S";
@@ -867,7 +868,8 @@ public class ScheduleController {
 		TransactionStatus status = txManager.getTransaction(def);
 		
 		HttpSession session = request.getSession();
-		String usr_id = (String) session.getAttribute("usr_id");
+		LoginVO loginVo = (LoginVO) session.getAttribute("session");
+		String usr_id = loginVo.getUsr_id();
 		
 		String mUpdateResult = "S";
 		String dUpdateResult = "S";
@@ -1223,7 +1225,8 @@ public class ScheduleController {
 		TransactionStatus status = txManager.getTransaction(def);
 		
 		HttpSession session = request.getSession();
-		String usr_id = (String) session.getAttribute("usr_id");
+		LoginVO loginVo = (LoginVO) session.getAttribute("session");
+		String usr_id = loginVo.getUsr_id();
 		
 		String mInsertResult = "S";
 		String dInsertResult = "S";
@@ -1309,7 +1312,8 @@ public class ScheduleController {
 			HashMap<String , Object> paramvalue = new HashMap<String, Object>();
 			
 			HttpSession session = request.getSession();
-			String usr_id = (String) session.getAttribute("usr_id");
+			LoginVO loginVo = (LoginVO) session.getAttribute("session");
+			String usr_id = loginVo.getUsr_id();
 			
 			   int exe_sn = Integer.parseInt(request.getParameter("exe_sn").toString());
 			   String fix_rsltcd = request.getParameter("fix_rsltcd");

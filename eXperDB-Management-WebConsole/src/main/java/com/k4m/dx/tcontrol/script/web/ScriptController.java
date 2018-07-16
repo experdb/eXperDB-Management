@@ -24,6 +24,7 @@ import com.k4m.dx.tcontrol.backup.service.BackupService;
 import com.k4m.dx.tcontrol.backup.service.WorkVO;
 import com.k4m.dx.tcontrol.cmmn.CmmnUtils;
 import com.k4m.dx.tcontrol.common.service.HistoryVO;
+import com.k4m.dx.tcontrol.login.service.LoginVO;
 import com.k4m.dx.tcontrol.script.service.ScriptService;
 import com.k4m.dx.tcontrol.script.service.ScriptVO;
 
@@ -209,7 +210,8 @@ public class ScriptController {
 		@ResponseBody
 		public String insertScript(@ModelAttribute("historyVO") HistoryVO historyVO, @ModelAttribute("ScriptVO") ScriptVO scriptVO, @ModelAttribute("workVO") WorkVO workVO, HttpServletRequest request){
 			HttpSession session = request.getSession();
-			String usr_id = (String) session.getAttribute("usr_id");
+			LoginVO loginVo = (LoginVO) session.getAttribute("session");
+			String usr_id = loginVo.getUsr_id();
 			scriptVO.setFrst_regr_id(usr_id);		
 			
 			String result = "S";		
@@ -313,7 +315,8 @@ public class ScriptController {
 		@ResponseBody
 		public void updateScript(@ModelAttribute("historyVO") HistoryVO historyVO, @ModelAttribute("ScriptVO") ScriptVO scriptVO, HttpServletRequest request){
 			HttpSession session = request.getSession();
-			String usr_id = (String) session.getAttribute("usr_id");
+			LoginVO loginVo = (LoginVO) session.getAttribute("session");
+			String usr_id = loginVo.getUsr_id();
 			scriptVO.setFrst_regr_id(usr_id);		
 
 			try{
@@ -341,7 +344,8 @@ public class ScriptController {
 		@ResponseBody
 		public void deleteScript(@ModelAttribute("historyVO") HistoryVO historyVO, @ModelAttribute("ScriptVO") ScriptVO scriptVO, HttpServletRequest request){
 			HttpSession session = request.getSession();
-			String usr_id = (String) session.getAttribute("usr_id");
+			LoginVO loginVo = (LoginVO) session.getAttribute("session");
+			String usr_id = loginVo.getUsr_id();
 			scriptVO.setFrst_regr_id(usr_id);		
 			
 			// Transaction 

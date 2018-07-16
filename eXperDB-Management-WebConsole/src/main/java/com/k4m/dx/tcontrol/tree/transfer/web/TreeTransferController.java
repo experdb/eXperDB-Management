@@ -222,7 +222,8 @@ public class TreeTransferController {
 			CmmnUtils.saveHistory(request, historyVO);
 
 			HttpSession session = request.getSession();
-			String usr_id = (String) session.getAttribute("usr_id");
+			LoginVO loginVo = (LoginVO) session.getAttribute("session");
+			String usr_id = loginVo.getUsr_id();
 
 			String act = request.getParameter("act");
 			int cnr_id = Integer.parseInt(request.getParameter("cnr_id"));
