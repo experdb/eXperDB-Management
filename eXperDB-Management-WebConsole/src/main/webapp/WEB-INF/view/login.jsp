@@ -17,7 +17,14 @@
 <title>eXperDB for Management</title>
 
 <script type="text/javascript">
-	
+$(function() {
+	$("#pwd").keyup(function(e){
+		if(e.keyCode == 13) {
+			fn_login()
+		}
+	});
+});
+
 function fn_validation(){
 	var strid = document.getElementById('usr_id').value;
 	var strpw = document.getElementById('pwd').value;
