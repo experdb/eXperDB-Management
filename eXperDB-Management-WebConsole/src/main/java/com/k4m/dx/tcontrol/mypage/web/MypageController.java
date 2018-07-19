@@ -76,6 +76,7 @@ public class MypageController {
 			
 			
 			result = myPageService.selectDetailMyPage(usr_id);
+			mv.addObject("usr_id", usr_id);
 			mv.addObject("usr_nm", result.get(0).getUsr_nm());
 			mv.addObject("aut_id", result.get(0).getAut_id());
 			mv.addObject("bln_nm", result.get(0).getBln_nm());
