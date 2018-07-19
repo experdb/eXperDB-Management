@@ -1,7 +1,6 @@
 package com.k4m.dx.tcontrol.admin.agentmonitoring.web;
 
 import java.io.FileNotFoundException;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -28,7 +27,6 @@ import com.k4m.dx.tcontrol.encrypt.service.call.AgentMonitoringServiceCall;
 import com.k4m.dx.tcontrol.encrypt.service.call.CommonServiceCall;
 import com.k4m.dx.tcontrol.encrypt.service.call.UserManagerServiceCall;
 import com.k4m.dx.tcontrol.login.service.LoginVO;
-import com.k4m.dx.tcontrol.login.service.UserVO;
 
 /**
  * Agent 모니터링 컨트롤러 클래스를 정의한다.
@@ -172,7 +170,11 @@ public class AgentMonitoringController {
 			AgentMonitoringServiceCall amsc = new AgentMonitoringServiceCall();		
 			
 			try{
-				agentList = csc.selectEntityList2(restIp, restPort, strTocken, loginId, entityId);		
+				agentList = csc.selectEntityList2(restIp, restPort, strTocken, loginId, entityId);	
+				if(agentList.size()==0){
+					result.put("resultCode", "0000000000");
+					return result;
+				}
 			}catch(Exception e){
 				result.put("resultCode", "8000000002");
 				return result;
@@ -218,6 +220,7 @@ public class AgentMonitoringController {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
+		
 		return result;
 	}		
 	
@@ -259,7 +262,12 @@ public class AgentMonitoringController {
 			
 			String[] param = request.getParameter("entityuid").toString().split(",");
 			for (int i = 0; i < param.length; i++) {
-				result = uic.deleteEntity(restIp, restPort, strTocken, loginId, entityId, param[i]);
+				try{
+					result = uic.deleteEntity(restIp, restPort, strTocken, loginId, entityId, param[i]);
+				}catch (Exception e) {
+					result.put("resultCode", "8000000002");
+					return result;
+				}
 			}
 		} catch (Exception e) {
 			e.printStackTrace();

@@ -92,7 +92,7 @@ function fn_refresh(){
 			table.rows({selected: true}).deselect();
 			table.clear().draw();
 				if(data.resultCode == "0000000000"){
-					if(data.list.length != 0){
+					if(data.list != null){
 						table.rows.add(data.list).draw();
 					}
 				}else if(data.resultCode == "8000000002"){
