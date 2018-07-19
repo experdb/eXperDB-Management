@@ -335,11 +335,13 @@
 		  							document.getElementById(result[i].db_svr_nm+"_policy_change_his").checked = false;
 		  						}
 		  						
-		  						//감사설정 권한
-		  						if(result.length != 0 && result[i].adt_cng_aut_yn == "Y"){
-		  							document.getElementById(result[i].db_svr_nm+"_adt_cng").checked = true;
-		  						}else{
-		  							document.getElementById(result[i].db_svr_nm+"_adt_cng").checked = false;
+		  						if("${sessionScope.session.pg_audit}"== "Y"){
+			  						//감사설정 권한
+			  						if(result.length != 0 && result[i].adt_cng_aut_yn == "Y"){
+			  							document.getElementById(result[i].db_svr_nm+"_adt_cng").checked = true;
+			  						}else{
+			  							document.getElementById(result[i].db_svr_nm+"_adt_cng").checked = false;
+			  						}
 		  						}
 		  						
 		  						//감사이력 권한

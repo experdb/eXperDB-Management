@@ -59,7 +59,7 @@ function fn_serverStatus(){
 		},
 		success : function(data) {
 			if(data.resultCode == "0000000000"){
-				var html ='<img src="../images/ico_agent_1.png" alt="" />';
+				var html ='<img src="../images/ico_state_03.png" alt="Running Transfer" /><span> Running</span>';				
 				$("#encryptServer").html(html);
 				fn_selectSecurityStatistics(today);
 			}else if(data.resultCode == "8000000002"){
@@ -476,10 +476,13 @@ function fn_selectSecurityStatistics(today){
 										<span class="work_state"><img src="../images/ico_state_08.png" alt="Not Install" /></span>Not Install
 									</c:if>
 									<c:if test="${data.agt_cndt_cd == 'TC001101'}">
-										<span class="work_state"><img src="../images/ico_state_03.png" alt="Running" /></span>Running
+										<!-- <span class="work_state"> -->
+										<img src="../images/ico_agent_1.png" alt="" />
+										<!-- <img src="../images/ico_state_03.png" alt="Running" /></span>Running -->
 									</c:if>									
 									<c:if test="${data.agt_cndt_cd == 'TC001102'}">
-										<span class="work_state"><img src="../images/ico_state_07.png" alt="Stop" /></span>Stop
+										<img src="../images/ico_agent_2.png" alt="" />
+										<!-- <span class="work_state"><img src="../images/ico_state_07.png" alt="Stop" /></span>Stop -->
 									</c:if>											
 									</td>							
 								</tr>
