@@ -44,7 +44,7 @@
 			AND A.SCD_NM LIKE #{scd_nm}
 			</if>		
 			AND A.EXE_RSLT_CD LIKE #{exe_result}
-			GROUP BY A.EXE_GRP_SN, A.SCD_NM, A.DB_ID,A.SCD_ID,C.IPADR
+			GROUP BY A.EXE_GRP_SN, A.SCD_NM, A.DB_SVR_IPADR_ID,A.SCD_ID,C.IPADR
 			ORDER BY ${order_type} ${order}
 			LIMIT #{recordCountPerPage} OFFSET #{firstIndex}
 		)AA
@@ -164,7 +164,7 @@
 		**/	
 		SELECT A.SCD_NM
 		FROM T_SCD_M A, T_WRKEXE_G B
-		WHERE B.DB_ID IN (SELECT DB_ID FROM T_USRDBAUT_I WHERE AUT_YN='Y' AND USR_ID = #{usr_id} GROUP BY DB_ID)
+		WHERE B.DB_SVR_IPADR_ID IN (SELECT DB_ID FROM T_USRDBAUT_I WHERE AUT_YN='Y' AND USR_ID = #{usr_id} GROUP BY DB_ID)
 		AND A.SCD_ID = B.SCD_ID
 		AND to_char(B.WRK_END_DTM,'YYYY-MM-DD') between #{wrk_start_dtm} and #{wrk_end_dtm}
 		GROUP BY A.SCD_NM

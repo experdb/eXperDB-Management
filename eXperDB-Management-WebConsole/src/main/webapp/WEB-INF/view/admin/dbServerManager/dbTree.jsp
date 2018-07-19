@@ -557,6 +557,7 @@ function fn_dataCompareChcek(svrDbList){
 			success : function(result) {
 				alert("<spring:message code='message.msg12' />");
 				fn_selectTreeDbServerList();
+				table_db.clear().draw();
 			}
 		});
 	}

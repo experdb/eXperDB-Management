@@ -355,12 +355,14 @@ function fn_dbServerConnTest(){
 			}
 		},
 		success : function(result) {
-			if(result[0].result_code == 0){
+			if(result[0].result_code == 0){				
 				 for(var i=0; i<result.length; i++){		
 					if(table.rows().data()[i].ipadr == result[i].result_data[0].SERVER_IP){
 						table.cell(i, 3).data(result[i].result_data[0].MASTER_GBN).draw();
-						table.cell(i, 4).data(result[i].result_data[0].CONNECT_YN).draw();					
-						table.cell(i, 5).data(result[i].result_data[0].CMD_HOSTNAME).draw();	
+						table.cell(i, 4).data(result[i].result_data[0].CONNECT_YN).draw();	
+						 if(result[i].result_data[0].MASTER_GBN != "N" || result[i].result_data[0].CONNECT_YN != "N"){
+							 table.cell(i, 5).data(result[i].result_data[0].CMD_HOSTNAME).draw();	
+						 }
 					}				
 					 if(result[i].result_data[0].MASTER_GBN == "N" || result[i].result_data[0].CONNECT_YN == "N"){
 							connCheck = "fail"
