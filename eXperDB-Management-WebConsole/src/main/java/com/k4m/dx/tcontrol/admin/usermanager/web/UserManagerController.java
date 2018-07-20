@@ -377,7 +377,7 @@ public class UserManagerController {
 				param.put("db_id", dbList.get(k).get("db_id"));
 				dbAuthorityService.insertUsrDbAut(param);
 			}
-
+			results.put("resultCode", "0000000000");
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

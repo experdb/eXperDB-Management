@@ -341,15 +341,14 @@
 			  							document.getElementById(result[i].db_svr_nm+"_adt_cng").checked = true;
 			  						}else{
 			  							document.getElementById(result[i].db_svr_nm+"_adt_cng").checked = false;
-			  						}
+			  						}		  						
+			  						//감사이력 권한
+			  						if(result.length != 0 && result[i].adt_hist_aut_yn == "Y"){
+			  							document.getElementById(result[i].db_svr_nm+"_adt_hist").checked = true;
+			  						}else{
+			  							document.getElementById(result[i].db_svr_nm+"_adt_hist").checked = false;
+			  						}		  	
 		  						}
-		  						
-		  						//감사이력 권한
-		  						if(result.length != 0 && result[i].adt_hist_aut_yn == "Y"){
-		  							document.getElementById(result[i].db_svr_nm+"_adt_hist").checked = true;
-		  						}else{
-		  							document.getElementById(result[i].db_svr_nm+"_adt_hist").checked = false;
-		  						}		  	
 		  						
 		  						//스크립트설정 권한
 		  						if(result.length != 0 && result[i].script_cng_aut_yn == "Y"){
@@ -371,8 +370,10 @@
 		    				document.getElementById(svr_server[0].db_svr_nm+"_bck_scdr").checked = false;
 		    				document.getElementById(svr_server[0].db_svr_nm+"_acs_cntr").checked = false;
 		    				document.getElementById(svr_server[0].db_svr_nm+"_policy_change_his").checked = false;
-		    				document.getElementById(svr_server[0].db_svr_nm+"_adt_cng").checked = false;
-		    				document.getElementById(svr_server[0].db_svr_nm+"_adt_hist").checked = false;
+		    				if("${sessionScope.session.pg_audit}"== "Y"){
+		    					document.getElementById(svr_server[0].db_svr_nm+"_adt_cng").checked = false;
+			    				document.getElementById(svr_server[0].db_svr_nm+"_adt_hist").checked = false;
+		    				}
 		    				document.getElementById(svr_server[0].db_svr_nm+"_script_cng").checked = false;
 		    				document.getElementById(svr_server[0].db_svr_nm+"_script_his").checked = false;
     					}	
