@@ -516,7 +516,10 @@ public class AccessControlController {
 				if(dbServerVO.get(m).getMaster_gbn().equals("M")){
 					accessControlService.deleteDbAccessControl(db_svr_id);
 					
-					String id = (String) request.getSession().getAttribute("usr_id");
+					HttpSession session = request.getSession();
+					LoginVO loginVo = (LoginVO) session.getAttribute("session");
+					String id = loginVo.getUsr_id();
+				
 					accessControlVO.setFrst_regr_id(id);
 					accessControlVO.setLst_mdfr_id(id);
 					accessControlHistoryVO.setLst_mdfr_id(id);

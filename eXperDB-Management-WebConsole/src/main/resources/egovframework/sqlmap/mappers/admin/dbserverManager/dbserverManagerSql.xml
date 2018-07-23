@@ -673,6 +673,18 @@
 		WHERE DB_SVR_ID = #{db_svr_id}
 	</delete>
 	
+	
+	<delete id="deleteWrkcng" parameterType="HashMap">
+		/**
+	 	*  Query ID : deleteWrkcng
+	 	* Description : WORK정보 삭제
+	 	* Author : 변승우
+	 	**/	
+	 	DELETE FROM T_WRKCNG_I
+		WHERE WRK_ID IN ( SELECT WRK_ID FROM T_BCK_WRKCNG_I
+						   		  WHERE DB_SVR_ID =#{db_svr_id})
+	</delete>
+	
 
 	<delete id="deleteUsrDbAut" parameterType="int">
 		/**

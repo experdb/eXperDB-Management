@@ -48,10 +48,10 @@ import com.k4m.dx.tcontrol.login.service.LoginVO;
 	        if(isAjaxRequest(req)) {
 	        	HttpSession session = req.getSession();
 	    		LoginVO loginVo = (LoginVO) session.getAttribute("session");
-                if(loginVo.getUsr_id() == null){
-                	res.sendError(HttpServletResponse.SC_FORBIDDEN);
-                }
-                
+	    		if(loginVo == null){
+	    			res.sendError(HttpServletResponse.SC_FORBIDDEN);
+	    		}
+      
                 try {
                 	chain.doFilter(req, res);
                 } catch (AccessDeniedException e) {

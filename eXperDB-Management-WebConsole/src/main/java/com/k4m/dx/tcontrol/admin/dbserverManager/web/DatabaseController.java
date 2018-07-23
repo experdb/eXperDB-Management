@@ -6,6 +6,7 @@ import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
@@ -29,6 +30,7 @@ import com.k4m.dx.tcontrol.backup.service.DbVO;
 import com.k4m.dx.tcontrol.cmmn.CmmnUtils;
 import com.k4m.dx.tcontrol.common.service.CmmnServerInfoService;
 import com.k4m.dx.tcontrol.common.service.HistoryVO;
+import com.k4m.dx.tcontrol.login.service.LoginVO;
 
 /**
  * [DB DATABASE] DB 서버 관리 컨트롤러 클래스를 정의한다.
@@ -283,8 +285,10 @@ public class DatabaseController {
 				historyVO.setExe_dtl_cd("DX-T0010_01");
 				historyVO.setMnu_id(11);
 				accessHistoryService.insertHistory(historyVO);
-				
-				String id = (String) request.getSession().getAttribute("usr_id");
+						
+				HttpSession session = request.getSession();
+				LoginVO loginVo = (LoginVO) session.getAttribute("session");
+				String id = loginVo.getUsr_id();
 				
 				dbServerVO.setFrst_regr_id(id);
 				dbServerVO.setLst_mdfr_id(id);

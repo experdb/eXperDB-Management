@@ -71,7 +71,7 @@ public class ClientTester {
 		//Ip = "222.110.153.251";
 		 //	Ip = "127.0.0.1";
 		// Ip = "222.110.153.231";
-		Ip = "192.168.56.108";
+		Ip = "192.168.56.117";
 		//Ip = "222.110.153.204";
 		int port = 9001;
 		//port = 5869;
@@ -112,7 +112,7 @@ public class ClientTester {
 			//clientTester.dxT018_delete(Ip, port);
 			//clientTester.dxT019(Ip, port);
 			//clientTester.dxT020(Ip, port);
-			//clientTester.dxT021(Ip, port);
+			clientTester.dxT021(Ip, port);
 			//clientTester.dxT023(Ip, port);
 			//clientTester.dxT024(Ip, port);
 			//clientTester.dxT025(Ip, port);
@@ -798,7 +798,7 @@ public class ClientTester {
 			serverObj.put(ClientProtocolID.SERVER_NAME, "192.168.56.117");
 			serverObj.put(ClientProtocolID.SERVER_IP, "192.168.56.117");
 			serverObj.put(ClientProtocolID.SERVER_PORT, "5432");
-			serverObj.put(ClientProtocolID.DATABASE_NAME, "encrypt");
+			serverObj.put(ClientProtocolID.DATABASE_NAME, "enc_test");
 			serverObj.put(ClientProtocolID.USER_ID, "experdb");
 			serverObj.put(ClientProtocolID.USER_PWD, "experdb");
 			
@@ -1975,10 +1975,10 @@ public class ClientTester {
 
 			JSONObject serverObj = new JSONObject();
 
-			serverObj.put(ClientProtocolID.SERVER_NAME, "192.168.56.116");
-			serverObj.put(ClientProtocolID.SERVER_IP, "192.168.56.116");
+			serverObj.put(ClientProtocolID.SERVER_NAME, "192.168.56.117");
+			serverObj.put(ClientProtocolID.SERVER_IP, "192.168.56.117");
 			serverObj.put(ClientProtocolID.SERVER_PORT, "5432");
-			serverObj.put(ClientProtocolID.DATABASE_NAME, "experdb");
+			serverObj.put(ClientProtocolID.DATABASE_NAME, "enc_test");
 			serverObj.put(ClientProtocolID.USER_ID, "experdb");
 			serverObj.put(ClientProtocolID.USER_PWD, "experdb");
 		

@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
@@ -38,6 +39,7 @@ import com.k4m.dx.tcontrol.cmmn.client.ClientProtocolID;
 import com.k4m.dx.tcontrol.common.service.AgentInfoVO;
 import com.k4m.dx.tcontrol.common.service.CmmnServerInfoService;
 import com.k4m.dx.tcontrol.common.service.HistoryVO;
+import com.k4m.dx.tcontrol.login.service.LoginVO;
 
 /**
  * DB 서버 관리 컨트롤러 클래스를 정의한다.
@@ -232,7 +234,9 @@ public class DbServerManagerController {
 		
 		String insertResult = "S";
 		
-		String id = (String) request.getSession().getAttribute("usr_id");
+		HttpSession session = request.getSession();
+		LoginVO loginVo = (LoginVO) session.getAttribute("session");
+		String id = loginVo.getUsr_id();
 
 		dbServerVO.setFrst_regr_id(id);
 		dbServerVO.setLst_mdfr_id(id);
@@ -428,7 +432,9 @@ public class DbServerManagerController {
 		def.setPropagationBehavior(TransactionDefinition.PROPAGATION_REQUIRED);
 		TransactionStatus status = txManager.getTransaction(def);
 					
-		String id = (String) request.getSession().getAttribute("usr_id");
+		HttpSession session = request.getSession();
+		LoginVO loginVo = (LoginVO) session.getAttribute("session");
+		String id = loginVo.getUsr_id();
 
 		dbServerVO.setFrst_regr_id(id);
 		dbServerVO.setLst_mdfr_id(id);

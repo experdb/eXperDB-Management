@@ -276,7 +276,9 @@ public class TreeController {
 				historyVO.setMnu_id(9);
 				accessHistoryService.insertHistory(historyVO);
 
-				String id = (String) request.getSession().getAttribute("usr_id");
+				HttpSession session = request.getSession();
+				LoginVO loginVo = (LoginVO) session.getAttribute("session");
+				String id = loginVo.getUsr_id();
 
 				dbServerVO.setFrst_regr_id(id);
 				dbServerVO.setLst_mdfr_id(id);
