@@ -1,6 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ taglib prefix="c"      uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags"%>
+<%@include file="../cmmn/commonLocale.jsp"%>
 <style>
 .tooltip {
     position: relative;
@@ -337,7 +338,7 @@ $(window.document).ready(function() {
 	    	  var html3="";
 	    	  for(var i=0; i<aut.length; i++){ 	  
 		          if(aut.length != 0 && aut[i].read_aut_yn == "Y" && aut[i].mnu_cd == "MN000101"){	      
-	    	  	 html3 += '      <ul class="depth_1 lnbMenu"><li class="t2"><div class="border" ><a href="#n"><img src="../images/ico_lnb_14.png" id="treeImg"><div class="tooltip"><spring:message code="menu.schedule_information" /><span class="tooltiptext"><spring:message code="menu.schedule_information" /></span></div></a></div>';
+	    	  	 html3 += '      <ul class="depth_1 lnbMenu"><li class="t2"><div class="border" ><a href="#n"><img src="../images/ico_lnb_14.png" id="treeImg"><div class="tooltip"><spring:message code="menu.schedule_information" /></div></a></div>';
 	    	  	 html3 += '			<ul class="depth_2"><li class="ico2_2" id="insertScheduleView"><a href="/insertScheduleView.do" id="insertScheduleViewc" onClick=javascript:fn_GoLink("insertScheduleView"); target="main" ><img src="../images/ico_lnb_13.png" id="treeImg"><spring:message code="menu.schedule_registration" /></a></li>';
 		          }
 		          
@@ -358,7 +359,7 @@ $(window.document).ready(function() {
 				var html4 = "";
 				html4 += '<ul class="depth_1 lnbMenu">';
 				html4 += '<li class="t2"><div class="border">';
-				html4 += '<a href="#n"><img src="../images/ico_lnb_3.png" id="treeImg"><div class="tooltip"><spring:message code="encrypt_policy_management.Policy_Key_Management"/><span class="tooltiptext"><spring:message code="encrypt_policy_management.Policy_Key_Management"/></span></div></a>';
+				html4 += '<a href="#n"><img src="../images/ico_lnb_3.png" id="treeImg"><div class="tooltip"><spring:message code="encrypt_policy_management.Policy_Key_Management"/></div></a>';
 				html4 += '</div>';
 				html4 += '<ul class="depth_2">';
 				if(result.length != 0 && result[0].read_aut_yn == "Y" && result[0].mnu_cd == "MN0001101"){
@@ -371,7 +372,7 @@ $(window.document).ready(function() {
 				html4 += '</li>';
 				
 				html4 += '<li class="t2"><div class="border">';
-				html4 += '<a href="#n"><img src="../images/ico_lnb_3.png" id="treeImg"><div class="tooltip"><spring:message code="encrypt_log.Audit_Log"/><span class="tooltiptext"><spring:message code="encrypt_log.Audit_Log"/></span></div></a>';
+				html4 += '<a href="#n"><img src="../images/ico_lnb_3.png" id="treeImg"><div class="tooltip"><spring:message code="encrypt_log.Audit_Log"/></div></a>';
 				html4 += '</div>';
 				html4 += '<ul class="depth_2">';
 				if(result.length != 0 && result[2].read_aut_yn == "Y" && result[2].mnu_cd == "MN0001201"){
@@ -391,7 +392,7 @@ $(window.document).ready(function() {
 				
 				
 				html4 += '<li class="t2"><div class="border">';
-				html4 += '<a href="#n"><img src="../images/ico_lnb_3.png" id="treeImg"><div class="tooltip"><spring:message code="encrypt_policyOption.Settings"/><span class="tooltiptext"><spring:message code="encrypt_policyOption.Settings"/></span></div></a>';
+				html4 += '<a href="#n"><img src="../images/ico_lnb_3.png" id="treeImg"><div class="tooltip"><spring:message code="encrypt_policyOption.Settings"/></div></a>';
 				html4 += '</div>';
 				html4 += '<ul class="depth_2">';
 				if(result.length != 0 && result[6].read_aut_yn == "Y" && result[6].mnu_cd == "MN0001301"){
@@ -411,11 +412,11 @@ $(window.document).ready(function() {
 				
 				/* 암호화 통계 추가 */
 				html4 += '<li class="t2"><div class="border">';
-				html4 += '<a href="#n"><img src="../images/ico_lnb_3.png" id="treeImg"><div class="tooltip">통계<span class="tooltiptext">통계</span></div></a>';
+				html4 += '<a href="#n"><img src="../images/ico_lnb_3.png" id="treeImg"><div class="tooltip"><spring:message code="encrypt_Statistics.Statistics"/></div></a>';
 				html4 += '</div>';
 				html4 += '<ul class="depth_2">';
 				if(result.length != 0 && result[10].read_aut_yn == "Y" && result[10].mnu_cd == "MN0001401"){
-					html4 +='<li class="ico2_4" id="securityStatistics"><a href="/securityStatistics.do" id="securityStatisticsc" onclick=fn_GoLink("securityStatistics"); target="main"><img src="../images/ico_lnb_10.png" id="treeImg">암호화통계 </a></li>';
+					html4 +='<li class="ico2_4" id="securityStatistics"><a href="/securityStatistics.do" id="securityStatisticsc" onclick=fn_GoLink("securityStatistics"); target="main"><img src="../images/ico_lnb_10.png" id="treeImg"><spring:message code="encrypt_Statistics.Encrypt_Statistics"/> </a></li>';
 				}
 				html4 += '</ul>';
 				html4 += '</ul>';

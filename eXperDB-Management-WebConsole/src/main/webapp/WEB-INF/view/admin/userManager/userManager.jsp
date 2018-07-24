@@ -22,9 +22,12 @@ var table = null;
 function fn_init() {
 	table = $('#userListTable').DataTable({
 		scrollY : "400px",
-		searching : false,
+		scrollX: true,	
+		bDestroy: true,
+		paging : true,
+		processing : true,
+		searching : false,	
 		deferRender : true,
-		scrollX: true,
 		bSort: false,
 		columns : [
 		{ data : "rownum", defaultContent : "", targets : 0, orderable : false, checkboxes : {'selectRow' : true}}, 
@@ -63,15 +66,15 @@ function fn_init() {
 		],'select': {'style': 'multi'}
 	});
 
-	table.tables().header().to$().find('th:eq(0)').css('min-width', '30px');
+	table.tables().header().to$().find('th:eq(0)').css('min-width', '40px');
 	table.tables().header().to$().find('th:eq(1)').css('min-width', '40px');
-	table.tables().header().to$().find('th:eq(2)').css('min-width', '120px');
-	table.tables().header().to$().find('th:eq(3)').css('min-width', '100px');
-	table.tables().header().to$().find('th:eq(4)').css('min-width', '100px');
-	table.tables().header().to$().find('th:eq(5)').css('min-width', '100px');
-	table.tables().header().to$().find('th:eq(6)').css('min-width', '80px');
-	table.tables().header().to$().find('th:eq(7)').css('min-width', '80px');
-	table.tables().header().to$().find('th:eq(8)').css('min-width', '100px');
+	table.tables().header().to$().find('th:eq(2)').css('min-width', '150px');
+	table.tables().header().to$().find('th:eq(3)').css('min-width', '150px');
+	table.tables().header().to$().find('th:eq(4)').css('min-width', '150px');
+	table.tables().header().to$().find('th:eq(5)').css('min-width', '150px');
+	table.tables().header().to$().find('th:eq(6)').css('min-width', '100px');
+	table.tables().header().to$().find('th:eq(7)').css('min-width', '100px');
+	table.tables().header().to$().find('th:eq(8)').css('min-width', '150px');
     $(window).trigger('resize'); 
     
 	//더블 클릭시
@@ -346,15 +349,15 @@ function fn_delete(){
 					<table id="userListTable" class="display" cellspacing="0" width="100%">
 						<thead>
 							<tr>
-								<th width="30"></th>
+								<th width="40"></th>
 								<th width="40"><spring:message code="common.no" /></th>
-								<th width="120"><spring:message code="user_management.id" /></th>
-								<th width="100"><spring:message code="user_management.company" /></th>
-								<th width="100"><spring:message code="user_management.user_name" /></th>
-								<th width="100"><spring:message code="user_management.contact" /></th>
-								<th width="80"><spring:message code="user_management.use_yn" /></th>
-								<th width="80"><spring:message code="encrypt_log_decode.Encryption"/> <spring:message code="user_management.use_yn" /></th>
-								<th width="100"><spring:message code="user_management.expiration_date" /></th>
+								<th width="150"><spring:message code="user_management.id" /></th>
+								<th width="150"><spring:message code="user_management.company" /></th>
+								<th width="150"><spring:message code="user_management.user_name" /></th>
+								<th width="150"><spring:message code="user_management.contact" /></th>
+								<th width="100"><spring:message code="user_management.use_yn" /></th>
+								<th width="100"><spring:message code="encrypt_log_decode.Encryption"/> <spring:message code="user_management.use_yn" /></th>
+								<th width="150"><spring:message code="user_management.expiration_date" /></th>
 							</tr>
 						</thead>
 					</table>

@@ -22,6 +22,25 @@ var schedule_saturday="<spring:message code='schedule.saturday' />";
 var agent_monitoring_yes="<spring:message code='agent_monitoring.yes' />";
 var agent_monitoring_no="<spring:message code='agent_monitoring.no' />";
 var message_msg211="<spring:message code='message.msg211'/>";
+var common_total="<spring:message code='common.total'/>";
+var common_preview="<spring:message code='common.preview'/>"; 
+var common_next="<spring:message code='common.next'/>"; 
+var common_unit="<spring:message code='common.unit'/>"; 
+var common_January="<spring:message code='common.January'/>"; 
+var common_February="<spring:message code='common.February'/>";
+var common_March="<spring:message code='common.March'/>";
+var common_April="<spring:message code='common.April'/>";
+var common_May="<spring:message code='common.May'/>";
+var common_June="<spring:message code='common.June'/>";
+var common_July="<spring:message code='common.July'/>"; 
+var common_August="<spring:message code='common.August'/>";
+var common_September="<spring:message code='common.September'/>";
+var common_October="<spring:message code='common.October'/>";
+var common_November="<spring:message code='common.November'/>";
+var common_December="<spring:message code='common.December'/>";
+var common_next_month ="<spring:message code='common.next_month'/>";
+var common_previous_month ="<spring:message code='common.previous_month'/>";
+var etc_etc09="<spring:message code='etc.etc09'/>";
 </script>
 <body>
 

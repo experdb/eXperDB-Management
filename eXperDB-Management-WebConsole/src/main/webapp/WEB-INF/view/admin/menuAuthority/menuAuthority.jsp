@@ -692,7 +692,7 @@ function fn_search(){
 														</td>
 													</tr>
 													<tr>
-														<td><spring:message code="menu.schedule_run_stop" /></td>
+														<td><spring:message code="etc.etc27" /></td>
 														<td>
 															<div class="inp_chk">
 																<input type="checkbox" id="r_MN000102" name="r_mnu_nm" value="MN000102"/>

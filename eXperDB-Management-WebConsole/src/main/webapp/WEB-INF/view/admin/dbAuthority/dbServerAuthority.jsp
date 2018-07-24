@@ -534,7 +534,7 @@
 						}
 					},
 					success : function(result) {
-						location.reload();
+						alert("<spring:message code='message.msg07' />");
 					}
 				}); 	
 			}else{

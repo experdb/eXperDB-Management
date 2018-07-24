@@ -8,14 +8,14 @@ $(window).ready(function(){
 function useDatepicker(){
 $.datepicker.setDefaults({
 	dateFormat: 'yy-mm-dd',
-	prevText: '이전 달',
-	nextText: '다음 달',
-	monthNames: ['1월', '2월', '3월', '4월', '5월', '6월', '7월', '8월', '9월', '10월', '11월', '12월'],
-	monthNamesShort: ['1월', '2월', '3월', '4월', '5월', '6월', '7월', '8월', '9월', '10월', '11월', '12월'],
-	dayNames: ['일', '월', '화', '수', '목', '금', '토'],
-	dayNamesShort: ['일', '월', '화', '수', '목', '금', '토'],
-	dayNamesMin: ['일', '월', '화', '수', '목', '금', '토'],
+	prevText: common_previous_month,
+	nextText: common_next_month,
+	monthNames: [common_January,common_February,common_March,common_April,common_May,common_June,common_July,common_August,common_September,common_October,common_November,common_December],
+	monthNamesShort: [common_January,common_February,common_March,common_April,common_May,common_June,common_July,common_August,common_September,common_October,common_November,common_December],
+	dayNames: [schedule_sunday, schedule_monday, schedule_thuesday, schedule_wednesday, schedule_thursday, schedule_friday, schedule_saturday],
+	dayNamesShort: [schedule_sunday, schedule_monday, schedule_thuesday, schedule_wednesday, schedule_thursday, schedule_friday, schedule_saturday],
+	dayNamesMin: [schedule_sunday, schedule_monday, schedule_thuesday, schedule_wednesday, schedule_thursday, schedule_friday, schedule_saturday],
 	showMonthAfterYear: true,
-	yearSuffix: '년'
+	yearSuffix: etc_etc09
 });
 }
