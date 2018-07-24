@@ -105,18 +105,7 @@ public class ScheduleQuartzJob implements Job{
 		        //WORK 갯수만큼 루프
 				for(int i =0; i<resultWork.size(); i++){					
 					//DSN_DSCD==TC001901 백업
-					if(resultWork.get(i).get("bsn_dscd").toString().equals("TC001901")){
-							//파일포멧 별 파일명 지정
-							if(resultWork.get(i).get("file_fmt_cd_nm") != null && resultWork.get(i).get("file_fmt_cd_nm") != ""){
-								if(resultWork.get(i).get("file_fmt_cd_nm").equals("tar")){
-									bck_fileNm = "eXperDB_"+resultWork.get(i).get("wrk_id")+"_"+today+".tar";	
-								}else if(resultWork.get(i).get("file_fmt_cd_nm").equals("diretocry")){
-									bck_fileNm = "eXperDB_"+resultWork.get(i).get("wrk_id")+"_"+today;
-								}else{						
-									bck_fileNm = "eXperDB_"+resultWork.get(i).get("wrk_id")+"_"+today+".dump";									
-								}
-							}
-										
+					if(resultWork.get(i).get("bsn_dscd").toString().equals("TC001901")){								
 							int wrk_id = Integer.parseInt(resultWork.get(i).get("wrk_id").toString());
 														
 							//부가옵션 조회
@@ -127,6 +116,17 @@ public class ScheduleQuartzJob implements Job{
 													
 							// 백업 내용이 DUMP 백업일경우 
 							if(resultWork.get(i).get("bck_bsn_dscd").equals("TC000202")){
+								//파일포멧 별 파일명 지정
+								if(resultWork.get(i).get("file_fmt_cd_nm") != null && resultWork.get(i).get("file_fmt_cd_nm") != ""){
+									if(resultWork.get(i).get("file_fmt_cd_nm").equals("tar")){
+										bck_fileNm = "eXperDB_"+resultWork.get(i).get("wrk_id")+"_"+today+".tar";	
+									}else if(resultWork.get(i).get("file_fmt_cd_nm").equals("diretocry")){
+										bck_fileNm = "eXperDB_"+resultWork.get(i).get("wrk_id")+"_"+today;
+									}else{						
+										bck_fileNm = "eXperDB_"+resultWork.get(i).get("wrk_id")+"_"+today+".dump";									
+									}
+								}
+								
 								String strCmd ="";
 								strCmd = dumpBackupMakeCmd(resultDbconn, resultWork, addOption, addObject, i, bck_fileNm);	
 								BCK_NM.add(bck_fileNm);
@@ -178,25 +178,25 @@ public class ScheduleQuartzJob implements Job{
 										
 										return;
 									}else{
-										BCK_NM.add("");
 										String rmanCmd ="";
 										rmanCmd = rmanBackupMakeCmd(resultWork, i, resultDbconn);		
 										CMD.add(rmanCmd);
 									}				
 								}else{
-									BCK_NM.add("");
 									String rmanCmd ="";
 									rmanCmd = rmanBackupMakeCmd(resultWork, i, resultDbconn);		
 									CMD.add(rmanCmd);
 								}
+								BCK_NM.add("OnlinBackup");
 							}		
 					//DSN_DSCD==TC001902 스크립트
 					}else if(resultWork.get(i).get("bsn_dscd").toString().equals("TC001902")){
 						String strCmd =resultWork.get(i).get("exe_cmd").toString();						
 						CMD.add(strCmd);
-					}
-					agentCall(resultWork, CMD, BCK_NM, resultDbconn, db_svr_ipadr_id);
-				}										
+						BCK_NM.add("SCRIPT");
+					}				
+				}		
+				agentCall(resultWork, CMD, BCK_NM, resultDbconn, db_svr_ipadr_id);
 		}catch(Exception e){
 			e.printStackTrace();
 		}
@@ -430,9 +430,13 @@ public class ScheduleQuartzJob implements Job{
 				int PORT = agentInfo.getSOCKET_PORT();
 						
 				ClientInfoCmmn clc = new ClientInfoCmmn();
-				System.out.println(IP);
-				System.out.println(PORT);
-				System.out.println(db_svr_ipadr_id);
+			
+				
+				System.out.println("resultWork 사이즈="+resultWork.size());				
+				System.out.println("CMD 사이즈="+CMD.size());	
+				System.out.println("BCKNM 사이즈="+BCKNM.size());	
+				
+				
 				clc.db_backup(resultWork, CMD, IP ,PORT, BCKNM, db_svr_ipadr_id);	
 		} catch (Exception e) {
 			e.printStackTrace();

@@ -96,7 +96,6 @@ $(window.document).ready(function() {
  * Dump Backup Insert
  ******************************************************** */
 function fn_insert_work(){
-	alert(wrk_nmChk);
 	if (!valCheck()) return false;
 		$.ajax({
 			async : false,

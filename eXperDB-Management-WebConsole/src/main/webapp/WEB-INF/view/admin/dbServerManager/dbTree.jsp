@@ -99,6 +99,7 @@ function fn_init() {
 		paging : false,		
 		deferRender : true,
 		columns : [
+		{data : "dft_db_nm", defaultContent : "", targets : 0, orderable : false, checkboxes : {'selectRow' : true}}	,
 		{data : "dft_db_nm", defaultContent : ""}, 
 		{data : "db_exp", defaultContent : "", 
 			targets: 0,
@@ -106,12 +107,11 @@ function fn_init() {
 	        orderable: false,
 	        render: function(data, type, full, meta){
 	           if(type === 'display'){
-	              data = '<input type="text" class="txt" name="db_exp" maxlength="500" value="' +full.db_exp + '" style="width: 450px; height: 25px;" id="db_exp">';      
-	           }
-	           
+	              data = '<input type="text" class="txt" name="db_exp" maxlength="100" value="' +full.db_exp + '" style="width: 360px; height: 25px;" id="db_exp">';      
+	           }	           
 	           return data;
 	        }}, 
-	        { data : "dft_db_nm", defaultContent : "", targets : 0, orderable : false, checkboxes : {'selectRow' : true}}	
+	        
 		]
 	});
 	
@@ -131,9 +131,9 @@ function fn_init() {
     table_dbServer.tables().header().to$().find('th:eq(12)').css('min-width', '0px');  
     table_dbServer.tables().header().to$().find('th:eq(13)').css('min-width', '0px'); */
     
-    table_db.tables().header().to$().find('th:eq(0)').css('min-width', '80px');
-    table_db.tables().header().to$().find('th:eq(1)').css('min-width', '440px');
-    table_db.tables().header().to$().find('th:eq(2)').css('min-width', '10px');
+    table_db.tables().header().to$().find('th:eq(0)').css('min-width', '10px');
+    table_db.tables().header().to$().find('th:eq(1)').css('min-width', '110px');
+    table_db.tables().header().to$().find('th:eq(2)').css('min-width', '360px');
     
     
     $(window).trigger('resize'); 
@@ -724,9 +724,9 @@ function fn_syncUpdate(db_id){
 							<table id="dbList" class="cell-border display" cellspacing="0" align="left">
 								<thead>
 									<tr>
-										<th width="90"><spring:message code="common.database" /></th>
-										<th width="450"><spring:message code="common.desc" /></th>
 										<th width="10"><input name="select" value="1" type="checkbox"></th>
+										<th width="110"><spring:message code="common.database" /></th>
+										<th width="360"><spring:message code="common.desc" /></th>										
 									</tr>
 								</thead>
 							</table>
