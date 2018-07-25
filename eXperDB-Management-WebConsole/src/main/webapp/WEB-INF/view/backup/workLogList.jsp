@@ -142,7 +142,7 @@ function fn_rman_init(){
  ******************************************************** */
 function fn_dump_init(){
    	tableDump = $('#logDumpList').DataTable({	
-		scrollY: "325px",	
+		scrollY: "405px",	
 		searching : false,
 		scrollX: true,
 		bSort: false,
@@ -428,8 +428,8 @@ function fn_fix_rslt_reg(exe_sn){
 }
 
 function fn_fix_rslt_msg_reg(){
-	var fix_rsltcd = $(":input:radio[name=rdo_r]:checked").val();
-	
+	var fix_rsltcd = $(":input:radio[name=rdo]:checked").val();
+
 	$.ajax({
 			url : "/updateFixRslt.do",
 			data : {
@@ -455,7 +455,9 @@ function fn_fix_rslt_msg_reg(){
 			},
 			success : function(result) {
 				toggleLayer($('#pop_layer_fix_rslt_reg'), 'off');
-				location.reload();
+				fn_get_rman_list();
+				fn_get_dump_list();
+				//location.reload();
 			}
 		}); 
 }
@@ -489,7 +491,9 @@ function fn_fix_rslt_msg_modify(){
 			},
 			success : function(result) {
 				toggleLayer($('#pop_layer_fix_rslt_msg'), 'off');
-				location.reload();
+				fn_get_rman_list();
+				fn_get_dump_list();
+				//location.reload();
 			}
 		}); 
 }
@@ -517,9 +521,9 @@ function fn_fix_rslt_msg_modify(){
 						<tr>
 							<td>
 								<div class="inp_rdo">
-									<input name="rdo_r" id="rdo_r_1" type="radio" checked="checked">
+									<input name="rdo_r" id="rdo_r_1" type="radio" value="TC002001" checked="checked">
 										<label for="rdo_r_1" style="margin-right: 2%;"><spring:message code="etc.etc29"/></label> 
-									<input name="rdo_r" id="rdo_r_2" type="radio"> 
+									<input name="rdo_r" id="rdo_r_2" type="radio" value="TC002002"> 
 										<label for="rdo_r_2"><spring:message code="etc.etc30"/></label>
 								</div>
 							</td>

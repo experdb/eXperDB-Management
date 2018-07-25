@@ -115,7 +115,7 @@
 
     function fn_fix_rslt_reg(exe_sn){
     	document.getElementById("exe_sn").value = exe_sn;
-    	$('#fix_rslt_msg').val('');
+    	$('#fix_rslt_msg_r').val('');
     	$("#rdo_r_1").attr('checked', true);
     	toggleLayer($('#pop_layer_fix_rslt_reg'), 'on')
     }
@@ -128,7 +128,7 @@
    			data : {
    				exe_sn : $('#exe_sn').val(),
    				fix_rsltcd : fix_rsltcd,
-   				fix_rslt_msg : $('#fix_rslt_msg').val()
+   				fix_rslt_msg : $('#fix_rslt_msg_r').val()
    			},
    			dataType : "json",
    			type : "post",
@@ -213,9 +213,12 @@
 							</td>
 						</tr>
 						<tr>
-							<td><textarea name="fix_rslt_msg" id="fix_rslt_msg" style="height: 250px;"> </textarea>
-									<input type="hidden" name="exe_sn" id="exe_sn">
+							<td><textarea name="fix_rslt_msg_r" id="fix_rslt_msg_r" style="height: 250px;"> </textarea>
+									<input type="hidden" name="exe_sn_r" id="exe_sn_r">
 							</td>
+							<!-- <td><textarea name="fix_rslt_msg" id="fix_rslt_msg" style="height: 250px;"> </textarea>
+									<input type="hidden" name="exe_sn" id="exe_sn">
+							</td> -->
 						</tr>
 					</tbody>
 				</table>
