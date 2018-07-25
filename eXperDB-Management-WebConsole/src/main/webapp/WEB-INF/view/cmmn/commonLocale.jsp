@@ -22,7 +22,7 @@ var schedule_saturday="<spring:message code='schedule.saturday' />";
 var agent_monitoring_yes="<spring:message code='agent_monitoring.yes' />";
 var agent_monitoring_no="<spring:message code='agent_monitoring.no' />";
 var message_msg211="<spring:message code='message.msg211'/>";
-var common_total="<spring:message code='common.total'/>";
+var common_totals="<spring:message code='common.totals'/>";
 var common_preview="<spring:message code='common.preview'/>"; 
 var common_next="<spring:message code='common.next'/>"; 
 var common_unit="<spring:message code='common.unit'/>"; 

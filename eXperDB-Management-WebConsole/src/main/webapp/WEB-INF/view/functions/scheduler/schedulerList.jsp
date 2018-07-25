@@ -336,14 +336,15 @@ $(window.document).ready(function() {
 
 
 function fn_buttonAut(){
+
 	var read_button = document.getElementById("read_button"); 
 	
 	//조회버튼만 남기고, 등록,수정,삭제는 My스케줄에서 가능
-/* 	var int_button = document.getElementById("int_button"); 
+ 	var int_button = document.getElementById("int_button"); 
 	var mdf_button = document.getElementById("mdf_button"); 
-	var del_button = document.getElementById("del_button");  */
+	var del_button = document.getElementById("del_button"); 
 	
-	/* if("${wrt_aut_yn}" == "Y"){
+	 if("${wrt_aut_yn}" == "Y"){
 		int_button.style.display = '';
 		mdf_button.style.display = '';
 		del_button.style.display = '';
@@ -351,7 +352,7 @@ function fn_buttonAut(){
 		int_button.style.display = 'none';
 		mdf_button.style.display = 'none';
 		del_button.style.display = 'none';
-	} */
+	} 
 		
 	if("${read_aut_yn}" == "Y"){
 		read_button.style.display = '';
