@@ -428,7 +428,7 @@ function fn_fix_rslt_reg(exe_sn){
 }
 
 function fn_fix_rslt_msg_reg(){
-	var fix_rsltcd = $(":input:radio[name=rdo]:checked").val();
+	var fix_rsltcd = $(":input:radio[name=rdo_r]:checked").val();
 
 	$.ajax({
 			url : "/updateFixRslt.do",

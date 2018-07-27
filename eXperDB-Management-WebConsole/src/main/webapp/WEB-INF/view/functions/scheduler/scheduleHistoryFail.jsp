@@ -121,8 +121,8 @@
     }
     
     function fn_fix_rslt_msg_reg(){
-    	var fix_rsltcd = $(":input:radio[name=rdo]:checked").val();
-
+    	var fix_rsltcd = $(":input:radio[name=rdo_r]:checked").val();
+    	
     	$.ajax({
    			url : "/updateFixRslt.do",
    			data : {
@@ -148,9 +148,43 @@
    			},
    			success : function(result) {
    				toggleLayer($('#pop_layer_fix_rslt_reg'), 'off');
-   				location.reload();
+   				fn_scheduleFail_list();
    			}
    		}); 
+    }
+
+    
+    function fn_fix_rslt_msg_modify(){
+    	var fix_rsltcd = $(":input:radio[name=rdo]:checked").val();
+
+    	$.ajax({
+    			url : "/updateFixRslt.do",
+    			data : {
+    				exe_sn : $('#exe_sn').val(),
+    				fix_rsltcd : fix_rsltcd,
+    				fix_rslt_msg : $('#fix_rslt_msg').val()
+    			},
+    			dataType : "json",
+    			type : "post",
+    			beforeSend: function(xhr) {
+    		        xhr.setRequestHeader("AJAX", true);
+    		     },
+    			error : function(xhr, status, error) {
+    				if(xhr.status == 401) {
+    					alert('<spring:message code="message.msg02" />');
+    					top.location.href = "/";
+    				} else if(xhr.status == 403) {
+    					alert('<spring:message code="message.msg03" />');
+    					top.location.href = "/";
+    				} else {
+    					alert("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""));
+    				}
+    			},
+    			success : function(result) {
+    				toggleLayer($('#pop_layer_fix_rslt_msg'), 'off');
+    				fn_scheduleFail_list();
+    			}
+    		}); 
     }
 
     
