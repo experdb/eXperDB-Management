@@ -316,8 +316,8 @@
 					<table class="write">
 						<caption>검색 조회</caption>
 						<colgroup>
-							<col style="width: 50px;" />
-							<col style="width: 200px;" />
+							<col style="width: 60px;" />
+							<col style="width: 180px;" />
 							<col style="width: 50px;" />
 							<col style="width: 300px;" />
 							</col>
@@ -383,7 +383,7 @@
 								<tr>
 									<th scope="row" class="t9" ><spring:message code="schedule.schedule_name" /> </th>
 									<td>
-										<select class="select t4" name="scd_nm" id="scd_nm">
+										<select class="select t5" name="scd_nm" id="scd_nm">
 											<option value="%"><spring:message code="schedule.total" /></option>
 										</select>	
 									</td>

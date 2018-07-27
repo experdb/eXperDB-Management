@@ -133,37 +133,7 @@
 	
 	$(window.document).ready(function() {
 		fn_init();
-		$.ajax({
-			url : "/selectTransferTarget.do",
-			data : {
-				trf_trg_cnn_nm : $("#trf_trg_cnn_nm").val(),
-				cnr_id : cnr_id
-			},
-			dataType : "json",
-			type : "post",
-			beforeSend: function(xhr) {
-		        xhr.setRequestHeader("AJAX", true);
-		     },
-			error : function(xhr, status, error) {
-				if(xhr.status == 401) {
-					alert("<spring:message code='message.msg02' />");
-					top.location.href = "/";
-				} else if(xhr.status == 403) {
-					alert("<spring:message code='message.msg03' />");
-					top.location.href = "/";
-				} else {
-					alert("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""));
-				}
-			},
-			success : function(result) {
-				table.clear().draw();
-				if(result.error != null){
-					alert("<spring:message code='message.msg173'/>");
-				}else if(result.data != null){
-					table.rows.add(result.data).draw();
-				}
-			}
-		});
+		fn_select();
 	
 	});
 	

@@ -64,61 +64,28 @@ var table = null;
 	    $(window).trigger('resize');
 	    
 		//더블 클릭시
-		$('#policyTable tbody').on('dblclick', 'tr', function() {
-			var datas = table.row(this).data();
-			if (datas.length <= 0) {
-				alert('<spring:message code="message.msg35" />');
-			}else if (datas.length >1){
-				alert('<spring:message code="message.msg38" />');			
-			}else{
-				var profileUid = datas.profileUid;
-				var form = document.modifyForm;
-				form.action = "/securityPolicyModify.do?profileUid="+profileUid;
-				form.submit();
-				return;
-			}
-		});
+		if("${wrt_aut_yn}" == "Y"){
+			$('#policyTable tbody').on('dblclick', 'tr', function() {
+				var datas = table.row(this).data();
+				if (datas.length <= 0) {
+					alert('<spring:message code="message.msg35" />');
+				}else if (datas.length >1){
+					alert('<spring:message code="message.msg38" />');			
+				}else{
+					var profileUid = datas.profileUid;
+					var form = document.modifyForm;
+					form.action = "/securityPolicyModify.do?profileUid="+profileUid;
+					form.submit();
+					return;
+				}
+			});
+		}
+
 	}
 	$(window.document).ready(function() {
 		fn_buttonAut();
 		fn_init();
-		$.ajax({
-			url : "/selectSecurityPolicy.do",
-			data : {
-			},
-			dataType : "json",
-			type : "post",
-			beforeSend: function(xhr) {
-		        xhr.setRequestHeader("AJAX", true);
-		     },
-			error : function(xhr, status, error) {
-				if(xhr.status == 401) {
-					alert("<spring:message code='message.msg02' />");
-					top.location.href = "/";
-				} else if(xhr.status == 403) {
-					alert("<spring:message code='message.msg03' />");
-					top.location.href = "/";
-				} else {
-					alert("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""));
-				}
-			},
-			success : function(data) {
-					if(data.resultCode == "0000000000"){
-						table.clear().draw();
-						if(data.list.length != 0){
-							table.rows.add(data.list).draw();
-						}
-					}else if(data.resultCode == "8000000002"){
-						alert("<spring:message code='message.msg05' />");
-						top.location.href="/";
-					}else if(data.resultCode == "8000000003"){
-						alert(data.resultMessage);
-						location.href="/securityKeySet.do";
-					}else{
-						alert(data.resultMessage +"("+data.resultCode+")");
-					}
-				}
-		});
+		fn_select();
 	});
 
 	function fn_buttonAut(){

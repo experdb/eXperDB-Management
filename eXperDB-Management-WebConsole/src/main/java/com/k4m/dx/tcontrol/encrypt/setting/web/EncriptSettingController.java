@@ -641,16 +641,26 @@ public class EncriptSettingController {
 	 * @throws Exception
 	 */
 	@RequestMapping(value = "/securityAgentMonitoring.do")
-	public ModelAndView securityAgentMonitoring(@ModelAttribute("historyVO") HistoryVO historyVO, HttpServletRequest request) {
+	public ModelAndView securityAgentMonitoring(@ModelAttribute("historyVO") HistoryVO historyVO, HttpServletRequest request,HttpServletResponse response) {
 		ModelAndView mv = new ModelAndView();
 		try {
-			// 화면접근이력 이력 남기기
-			CmmnUtils.saveHistory(request, historyVO);
-			historyVO.setExe_dtl_cd("DX-T0118");
-			historyVO.setMnu_id(36);
-			accessHistoryService.insertHistory(historyVO);
-											
-			mv.setViewName("encrypt/setting/agentMonitoring");
+			CmmnUtils cu = new CmmnUtils();
+			menuAut = cu.selectMenuAut(menuAuthorityService, "MN0001304");
+			if (menuAut.get(0).get("read_aut_yn").equals("N")) {
+				mv.setViewName("error/autError");
+			} else {
+				mv.addObject("read_aut_yn", menuAut.get(0).get("read_aut_yn"));
+				mv.addObject("wrt_aut_yn", menuAut.get(0).get("wrt_aut_yn"));
+				
+				// 화면접근이력 이력 남기기
+				CmmnUtils.saveHistory(request, historyVO);
+				historyVO.setExe_dtl_cd("DX-T0118");
+				historyVO.setMnu_id(36);
+				accessHistoryService.insertHistory(historyVO);
+												
+				mv.setViewName("encrypt/setting/agentMonitoring");
+			}
+				
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

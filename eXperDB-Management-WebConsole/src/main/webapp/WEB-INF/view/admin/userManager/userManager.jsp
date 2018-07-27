@@ -97,36 +97,7 @@ function fn_init() {
 $(window.document).ready(function() {
 	fn_buttonAut();
 	fn_init();
-	$.ajax({
-		url : "/selectUserManager.do",
-		data : {
-			type : $("#type").val(),
-			search : "%" + $("#search").val() + "%",
-			use_yn : $("#use_yn").val(),
-			encp_use_yn : $("#encp_use_yn").val()
-		},
-		dataType : "json",
-		type : "post",
-		beforeSend: function(xhr) {
-	        xhr.setRequestHeader("AJAX", true);
-	     },
-		error : function(xhr, status, error) {
-			if(xhr.status == 401) {
-				alert("<spring:message code='message.msg02' />");
-				top.location.href = "/";
-			} else if(xhr.status == 403) {
-				alert("<spring:message code='message.msg03' />");
-				top.location.href = "/";
-			} else {
-				alert("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""));
-			}
-		},
-		success : function(result) {
-			table.clear().draw();
-			table.rows.add(result).draw();
-		}
-	});
-
+	fn_select();
 });
 
 function fn_buttonAut(){

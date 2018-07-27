@@ -21,6 +21,7 @@ import org.springframework.web.servlet.ModelAndView;
 import com.k4m.dx.tcontrol.admin.accesshistory.service.AccessHistoryService;
 import com.k4m.dx.tcontrol.admin.agentmonitoring.service.AgentMonitoringService;
 import com.k4m.dx.tcontrol.admin.agentmonitoring.service.AgentMonitoringVO;
+import com.k4m.dx.tcontrol.admin.menuauthority.service.MenuAuthorityService;
 import com.k4m.dx.tcontrol.cmmn.CmmnUtils;
 import com.k4m.dx.tcontrol.common.service.HistoryVO;
 import com.k4m.dx.tcontrol.encrypt.service.call.AgentMonitoringServiceCall;
@@ -52,6 +53,11 @@ public class AgentMonitoringController {
 	@Autowired
 	private AgentMonitoringService agentMonitoringService;
 
+	@Autowired
+	private MenuAuthorityService menuAuthorityService;
+	
+	private List<Map<String, Object>> menuAut;
+	
 	/**
 	 * Management Agent 모니터링 화면을 보여준다.
 	 * 
@@ -117,13 +123,23 @@ public class AgentMonitoringController {
 	public ModelAndView encryptAgentMonitoring(@ModelAttribute("historyVO") HistoryVO historyVO, HttpServletRequest request, ModelMap model) {
 		ModelAndView mv = new ModelAndView();
 		try {
-			// 화면접근이력 이력 남기기
-			CmmnUtils.saveHistory(request, historyVO);
-			historyVO.setExe_dtl_cd("DX-T0123");
-			historyVO.setMnu_id(20);
-			accessHistoryService.insertHistory(historyVO);
-			
-			mv.setViewName("admin/agentMonitoring/encryptAgentMonitoring");
+			CmmnUtils cu = new CmmnUtils();
+			menuAut = cu.selectMenuAut(menuAuthorityService, "MN000702");	
+			if(menuAut.get(0).get("read_aut_yn").equals("N")){
+				mv.setViewName("error/autError");
+			}else{
+				mv.addObject("read_aut_yn", menuAut.get(0).get("read_aut_yn"));
+				mv.addObject("wrt_aut_yn", menuAut.get(0).get("wrt_aut_yn"));
+				
+				// 화면접근이력 이력 남기기
+				CmmnUtils.saveHistory(request, historyVO);
+				historyVO.setExe_dtl_cd("DX-T0123");
+				historyVO.setMnu_id(20);
+				accessHistoryService.insertHistory(historyVO);
+				
+				mv.setViewName("admin/agentMonitoring/encryptAgentMonitoring");
+			}
+
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

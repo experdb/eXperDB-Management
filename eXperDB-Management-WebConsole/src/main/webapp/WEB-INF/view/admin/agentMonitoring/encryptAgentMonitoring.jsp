@@ -63,10 +63,19 @@ function fn_init(){
 }
 
 $(window.document).ready(function() {
+	fn_buttonAut();
 	fn_init();
 	fn_refresh();
 });
 
+function fn_buttonAut(){
+	var btndelete = document.getElementById("btndelete"); 
+	if("${wrt_aut_yn}" == "Y"){
+		btndelete.style.display = '';
+	}else{
+		btndelete.style.display = 'none';
+	}
+}	
 
 function fn_refresh(){
 	$.ajax({
@@ -182,7 +191,7 @@ function fn_delete(){
 						<div class="cmm_grp">
 							<div class="btn_type_01">
 								<span class="btn"><button type="button" onclick="fn_refresh()"><spring:message code="common.search"/></button></span>
-								<span class="btn"><button type="button" onclick="fn_delete()"><spring:message code="common.delete"/></button></span>
+								<span class="btn"><button type="button" onclick="fn_delete()" id="btndelete"><spring:message code="common.delete"/></button></span>
 							</div>
 
 							<div class="overflow_area">

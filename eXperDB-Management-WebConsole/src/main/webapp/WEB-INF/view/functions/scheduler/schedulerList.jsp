@@ -108,6 +108,7 @@ function fn_init(){
 	],'select': {'style': 'multi'}
 	});
 	
+
  	$('#scheduleList tbody').on('click','#scheduleStop', function () {
  	    var $this = $(this);
 	    var $row = $this.parent().parent();
@@ -198,20 +199,22 @@ function fn_init(){
  	    return false;
 	}); 
  	
- 	
 	//더블 클릭시
-	 $('#scheduleList tbody').on('dblclick','tr',function() {
-		var scd_id = table.row(this).data().scd_id;
-		
-		var popUrl = "/scheduleWrkListVeiw.do?scd_id="+scd_id; // 서버 url 팝업경로
-		var width = 1100;
-		var height = 550;
-		var left = (window.screen.width / 2) - (width / 2);
-		var top = (window.screen.height /2) - (height / 2);
-		var popOption = "width="+width+", height="+height+", top="+top+", left="+left+", resizable=no, scrollbars=yes, status=no, toolbar=no, titlebar=yes, location=no,";
-				
-		window.open(popUrl,"",popOption);
-	});		 
+	if("${wrt_aut_yn}" == "Y"){
+		 $('#scheduleList tbody').on('dblclick','tr',function() {
+			var scd_id = table.row(this).data().scd_id;
+			
+			var popUrl = "/scheduleWrkListVeiw.do?scd_id="+scd_id; // 서버 url 팝업경로
+			var width = 1100;
+			var height = 550;
+			var left = (window.screen.width / 2) - (width / 2);
+			var top = (window.screen.height /2) - (height / 2);
+			var popOption = "width="+width+", height="+height+", top="+top+", left="+left+", resizable=no, scrollbars=yes, status=no, toolbar=no, titlebar=yes, location=no,";
+					
+			window.open(popUrl,"",popOption);
+		});		
+	}
+ 
 	
 	
 	//상세조회 클릭시
@@ -233,6 +236,7 @@ function fn_init(){
  			window.open(popUrl,"",popOption);
     	}
 	});	
+	
 	  table.tables().header().to$().find('th:eq(0)').css('min-width', '10px');
 	  table.tables().header().to$().find('th:eq(1)').css('min-width', '30px');	  
 	  table.tables().header().to$().find('th:eq(2)').css('min-width', '200px');

@@ -54,24 +54,7 @@ function fn_init(){
 		}
 	}, //work명
 	{data : "wrk_exp", className : "dt-left", defaultContent : ""}, //work설명
-	{data : "nxt_exe_yn",  
-		className: "dt-center",
-      	defaultContent: "",
-        	render: function (data, type, full){
-        		
-        		var onError ='<select  id="nxt_exe_yn" name="nxt_exe_yn">';
-        		if(full.nxt_exe_yn  == 'Y') {
-        			onError +='<option value="Y" selected>Y</option>';
-        			onError +='<option value="N">N</option>';
-        		} else {
-        			onError +='<option value="Y">Y</option>';
-        			onError +='<option value="N" selected>N</option>';
-        		}
-
-        		onError +='</select>';
-        		return onError;	
-        	}
-          }
+	{data : "nxt_exe_yn", className: "dt-center", defaultContent: ""}
 	]
 });
 
