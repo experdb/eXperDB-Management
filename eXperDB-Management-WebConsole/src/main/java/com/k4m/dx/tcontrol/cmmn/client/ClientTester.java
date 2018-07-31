@@ -71,7 +71,7 @@ public class ClientTester {
 		//Ip = "222.110.153.251";
 		 //	Ip = "127.0.0.1";
 		// Ip = "222.110.153.231";
-		Ip = "192.168.56.117";
+		Ip = "192.168.56.108";
 		//Ip = "222.110.153.204";
 		int port = 9001;
 		//port = 5869;
@@ -112,9 +112,9 @@ public class ClientTester {
 			//clientTester.dxT018_delete(Ip, port);
 			//clientTester.dxT019(Ip, port);
 			//clientTester.dxT020(Ip, port);
-			clientTester.dxT021(Ip, port);
+			//clientTester.dxT021(Ip, port);
 			//clientTester.dxT023(Ip, port);
-			//clientTester.dxT024(Ip, port);
+			clientTester.dxT024(Ip, port);
 			//clientTester.dxT025(Ip, port);
 			//clientTester.dxT026(Ip, port);
 			//clientTester.test();
