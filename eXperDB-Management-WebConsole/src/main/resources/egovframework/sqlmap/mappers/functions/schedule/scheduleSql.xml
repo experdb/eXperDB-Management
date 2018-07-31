@@ -707,6 +707,7 @@
                 , B.CPRT
                 ,(SELECT SYS_CD_NM FROM T_SYSDTL_C WHERE B.ENCD_MTH_NM = SYS_CD ) AS  ENCD_MTH_NM
                 , B.USR_ROLE_NM
+                , B.DB_SVR_ID
 		FROM T_WRKCNG_I A, T_BCK_WRKCNG_I B   
 		WHERE A.WRK_ID = B.WRK_ID
 		AND A.WRK_ID = #{wrk_id}  
