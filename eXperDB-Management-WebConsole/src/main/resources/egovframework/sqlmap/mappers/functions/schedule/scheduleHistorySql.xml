@@ -163,8 +163,7 @@
 		**/	
 		SELECT A.SCD_NM
 		FROM T_SCD_M A, T_WRKEXE_G B
-		WHERE B.DB_SVR_IPADR_ID IN (SELECT DB_ID FROM T_USRDBAUT_I WHERE AUT_YN='Y' AND USR_ID = #{usr_id} GROUP BY DB_ID)
-		AND A.SCD_ID = B.SCD_ID
+		WHERE A.SCD_ID = B.SCD_ID
 		AND to_char(B.WRK_END_DTM,'YYYY-MM-DD') between #{wrk_start_dtm} and #{wrk_end_dtm}
 		GROUP BY A.SCD_NM
 	</select>
@@ -176,16 +175,11 @@
 		* Description : DBMS명 조회
 		* Author : 김주영
 		**/	
-		SELECT DISTINCT C.DB_SVR_NM
-		FROM T_DBSVR_I C,T_DB_I D
-		WHERE D.DB_ID IN(
-				SELECT B.DB_ID
-				FROM T_SCD_M A, T_WRKEXE_G B
-				WHERE B.DB_ID IN (SELECT DB_ID FROM T_USRDBAUT_I WHERE AUT_YN='Y' AND USR_ID = #{usr_id} GROUP BY DB_ID)
-				AND A.SCD_ID = B.SCD_ID
-				AND TO_CHAR(B.WRK_END_DTM,'YYYY-MM-DD') BETWEEN #{wrk_start_dtm} AND #{wrk_end_dtm}
-				GROUP BY B.DB_ID)
-		AND C.DB_SVR_ID =D.DB_SVR_ID
+		SELECT DISTINCT C.DB_SVR_NM 
+		FROM T_BCK_WRKCNG_I A, T_WRKEXE_G B,T_DBSVR_I C
+		WHERE TO_CHAR(B.WRK_END_DTM,'YYYY-MM-DD') BETWEEN #{wrk_start_dtm} AND #{wrk_end_dtm}
+		AND A.WRK_ID = B.WRK_ID
+		AND A.DB_SVR_ID = C.DB_SVR_ID
 	</select>
 	
 	<select id="selectWrkNmList" resultType="hashmap" >

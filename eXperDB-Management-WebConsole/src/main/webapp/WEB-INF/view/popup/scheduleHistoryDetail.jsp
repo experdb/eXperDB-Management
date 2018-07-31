@@ -231,10 +231,16 @@ function fn_fix_rslt_msg_modify(){
 	margin-top: 0px !important;
 }
 
+#scriptInfo{
+	width: 60% !important;
+	height: 610px !important;
+	margin-top: 0px !important;
+}
 </style>
 <%@include file="../cmmn/commonLocale.jsp"%>  
 <%@include file="../cmmn/workRmanInfo.jsp"%>
 <%@include file="../cmmn/workDumpInfo.jsp"%>
+<%@include file="../cmmn/workScriptInfo.jsp"%>
 <%@include file="../cmmn/scheduleInfo.jsp"%>
 <%@include file="../cmmn/wrkLog.jsp"%>
 <%@include file="../cmmn/fixRsltMsg.jsp"%>

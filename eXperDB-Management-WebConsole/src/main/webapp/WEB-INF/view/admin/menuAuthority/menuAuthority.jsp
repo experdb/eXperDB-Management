@@ -545,7 +545,6 @@ function fn_save(){
 					}
 				},
 				success : function(result) {
-					location.reload();
 				}
 			}); 	
 		}else{

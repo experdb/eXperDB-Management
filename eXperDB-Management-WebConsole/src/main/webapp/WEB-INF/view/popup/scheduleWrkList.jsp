@@ -112,13 +112,11 @@ $(window.document).ready(function() {
 	margin-top: 0px !important;
 }
 
-
 #scriptInfo{
-	width: 80% !important;
+	width: 60% !important;
 	height: 500px !important;
 	margin-top: 0px !important;
 }
-
 </style>
 <%@include file="../cmmn/commonLocale.jsp"%>  
 <%@include file="../cmmn/workRmanInfo.jsp"%>

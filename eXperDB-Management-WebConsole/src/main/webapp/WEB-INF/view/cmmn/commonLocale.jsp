@@ -3,8 +3,9 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head>
+<link rel="shortcut icon" type="image/x-icon" href="../images/logo.ico" />
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-<title>Insert title here</title>
+<title>eXperDB for Management</title>
 </head>
 <script type="text/javascript">
 var message_msg02="<spring:message code='message.msg02' />";

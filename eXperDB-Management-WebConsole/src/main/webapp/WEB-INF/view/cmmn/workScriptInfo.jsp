@@ -5,7 +5,7 @@
 
 <div id="pop_layer_script" class="pop-layer">
 		<div class="pop-container" style="padding: 0px;">
-			<div class="pop_cts" style="width: 55%; height: 730px; overflow: auto; padding: 20px; margin: 0 auto; min-height:0; min-width:0; margin-top: 10%" id="scriptInfo">
+			<div class="pop_cts" style="width: 55%; height: 600px; overflow: auto; padding: 20px; margin: 0 auto; min-height:0; min-width:0; margin-top: 10%" id="scriptInfo">
 				<p class="tit" style="margin-bottom: 15px;">스크립트 실행 명령어
 					<a href="#n" class="btn" onclick="toggleLayer($('#pop_layer_script'), 'off');" style="float: right;"><img src="/images/ico_state_01.png" style="margin-left: 235px;"/></a>
 				</p>
@@ -15,7 +15,7 @@
 							<tr>
 								<td>
 									<div class="textarea_grp">
-										<textarea name="exe_cmd" id="exe_cmd"  style="height: 550px;" maxlength="100"  readonly></textarea>
+										<textarea name="exe_cmd" id="exe_cmd"  style="height: 440px;" maxlength="100"  readonly></textarea>
 									</div>
 								</td>
 							</tr>					

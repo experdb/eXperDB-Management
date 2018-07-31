@@ -435,10 +435,6 @@ public class ScheduleHistoryController {
 	public List<Map<String, Object>> selectScheduleDBMSList(HttpServletRequest request) {
 		List<Map<String, Object>> resultSet = null;
 		try {			
-			HttpSession session = request.getSession();
-			LoginVO loginVo = (LoginVO) session.getAttribute("session");
-			String usr_id = loginVo.getUsr_id();
-			
 			Map<String, Object> param = new HashMap<String, Object>();
 			
 			String wrk_start_dtm = request.getParameter("wrk_start_dtm");
@@ -446,9 +442,8 @@ public class ScheduleHistoryController {
 			
 			param.put("wrk_start_dtm", wrk_start_dtm);
 			param.put("wrk_end_dtm", wrk_end_dtm);
-			param.put("usr_id", usr_id);
 			
-			resultSet = scheduleHistoryService.selectScheduleDBMSList(param);	
+			resultSet = scheduleHistoryService.selectScheduleDBMSList(param);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

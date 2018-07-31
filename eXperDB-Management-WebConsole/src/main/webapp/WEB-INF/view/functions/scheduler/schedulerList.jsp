@@ -206,7 +206,7 @@ function fn_init(){
 			
 			var popUrl = "/scheduleWrkListVeiw.do?scd_id="+scd_id; // 서버 url 팝업경로
 			var width = 1100;
-			var height = 550;
+			var height = 560;
 			var left = (window.screen.width / 2) - (width / 2);
 			var top = (window.screen.height /2) - (height / 2);
 			var popOption = "width="+width+", height="+height+", top="+top+", left="+left+", resizable=no, scrollbars=yes, status=no, toolbar=no, titlebar=yes, location=no,";
@@ -229,7 +229,7 @@ function fn_init(){
  			var scd_id  = row.scd_id;
  			var popUrl = "/scheduleWrkListVeiw.do?scd_id="+scd_id; // 서버 url 팝업경로
  			var width = 1100;
- 			var height = 550;
+ 			var height = 560;
  			var left = (window.screen.width / 2) - (width / 2);
  			var top = (window.screen.height /2) - (height / 2);
  			var popOption = "width="+width+", height="+height+", top="+top+", left="+left+", resizable=no, scrollbars=yes, status=no, toolbar=no, titlebar=yes, location=no,";
