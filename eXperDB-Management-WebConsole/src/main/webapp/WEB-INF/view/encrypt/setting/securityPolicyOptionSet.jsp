@@ -434,7 +434,7 @@ margin-right: 10px;
 
 				<div class="cmm_bd">
 					<div class="sub_tit">
-						<p>로그압축</p>
+						<p><spring:message code="encrypt_policy_management.Log_Compression"/></p>
 					</div>
 					<div class="overflows_areas">
 						<table class="write">

@@ -98,42 +98,42 @@
 		document.selectScheduleHistory.submit();
 	}
 	
-	/* DBMS 조회 [SELECT BOX] */
-	function fn_SelectDBMS(svr_nm){
-	  	$.ajax({
-			url : "/selectScheduleDBMSList.do",
-			data : {
-				wrk_start_dtm : $('#from').val(),
-				wrk_end_dtm : 	$('#to').val()	
-			},
-			dataType : "json",
-			type : "post",
-			beforeSend: function(xhr) {
-		        xhr.setRequestHeader("AJAX", true);
-		     },
-			error : function(xhr, status, error) {
-				if(xhr.status == 401) {
-					alert("<spring:message code='message.msg02' />");
-					top.location.href = "/";
-				} else if(xhr.status == 403) {
-					alert("<spring:message code='message.msg03' />");
-					top.location.href = "/";
-				} else {
-					alert("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""));
-				}
-			},
-			success : function(result) {		
-				$("#db_svr_nm").children().remove();
-				$("#db_svr_nm").append("<option value='%'><spring:message code='common.total' /></option>");
-				if(result.length > 0){
-					for(var i=0; i<result.length; i++){
-						$("#db_svr_nm").append("<option value='"+result[i].db_svr_nm+"'>"+result[i].db_svr_nm+"</option>");	
-					}									
-				}
-				$("#db_svr_nm").val(svr_nm).attr("selected", "selected");
-			}
-		});	 
-	}
+// 	/* DBMS 조회 [SELECT BOX] */
+// 	function fn_SelectDBMS(svr_nm){
+// 	  	$.ajax({
+// 			url : "/selectScheduleDBMSList.do",
+// 			data : {
+// 				wrk_start_dtm : $('#from').val(),
+// 				wrk_end_dtm : 	$('#to').val()	
+// 			},
+// 			dataType : "json",
+// 			type : "post",
+// 			beforeSend: function(xhr) {
+// 		        xhr.setRequestHeader("AJAX", true);
+// 		     },
+// 			error : function(xhr, status, error) {
+// 				if(xhr.status == 401) {
+// 					alert("<spring:message code='message.msg02' />");
+// 					top.location.href = "/";
+// 				} else if(xhr.status == 403) {
+// 					alert("<spring:message code='message.msg03' />");
+// 					top.location.href = "/";
+// 				} else {
+// 					alert("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""));
+// 				}
+// 			},
+// 			success : function(result) {		
+// 				$("#db_svr_nm").children().remove();
+// 				$("#db_svr_nm").append("<option value='%'><spring:message code='common.total' /></option>");
+// 				if(result.length > 0){
+// 					for(var i=0; i<result.length; i++){
+// 						$("#db_svr_nm").append("<option value='"+result[i].db_svr_nm+"'>"+result[i].db_svr_nm+"</option>");	
+// 					}									
+// 				}
+// 				$("#db_svr_nm").val(svr_nm).attr("selected", "selected");
+// 			}
+// 		});	 
+// 	}
 	
 	function setSearchDate(start){
 		$('input:not(:checked)').parent(".chkbox2").removeClass("on");
@@ -169,51 +169,49 @@
 		// 시작일은 종료일 이후 날짜 선택하지 못하도록 비활성화
 		$("#from").datepicker( "option", "maxDate", endDate );
 
-        fn_ScheduleNmList();
-        fn_SelectDBMS();
 	}
 
-	function fn_ScheduleNmList(scd_nm){
-	  	$.ajax({
-			url : "/selectScheduleNmList.do",
-			data : {
-				wrk_start_dtm : $('#from').val(),
-				wrk_end_dtm : 	$('#to').val()				
-			},
-			dataType : "json",
-			type : "post",
-			beforeSend: function(xhr) {
-		        xhr.setRequestHeader("AJAX", true);
-		     },
-			error : function(xhr, status, error) {
-				if(xhr.status == 401) {
-					alert("<spring:message code='message.msg02' />");
-					top.location.href = "/";
-				} else if(xhr.status == 403) {
-					alert("<spring:message code='message.msg03' />");
-					top.location.href = "/";
-				} else {
-					alert("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""));
-				}
-			},
-			success : function(result) {		
-				$("#scd_nm").children().remove();
-				$("#scd_nm").append("<option value='%'><spring:message code='schedule.total' /></option>");
-				if(result.length > 0){
-					for(var i=0; i<result.length; i++){
-						$("#scd_nm").append("<option value='"+result[i].scd_nm+"'>"+result[i].scd_nm+"</option>");	
-					}									
-				}
-				$("#scd_nm").val(scd_nm).attr("selected", "selected");		
-// 				fn_selectedWork(scd_nm);
-			}
-		});	 
-	}
+// 	function fn_ScheduleNmList(scd_nm){
+// 	  	$.ajax({
+// 			url : "/selectScheduleNmList.do",
+// 			data : {
+// 				wrk_start_dtm : $('#from').val(),
+// 				wrk_end_dtm : 	$('#to').val()				
+// 			},
+// 			dataType : "json",
+// 			type : "post",
+// 			beforeSend: function(xhr) {
+// 		        xhr.setRequestHeader("AJAX", true);
+// 		     },
+// 			error : function(xhr, status, error) {
+// 				if(xhr.status == 401) {
+// 					alert("<spring:message code='message.msg02' />");
+// 					top.location.href = "/";
+// 				} else if(xhr.status == 403) {
+// 					alert("<spring:message code='message.msg03' />");
+// 					top.location.href = "/";
+// 				} else {
+// 					alert("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""));
+// 				}
+// 			},
+// 			success : function(result) {		
+// 				$("#scd_nm").children().remove();
+// 				$("#scd_nm").append("<option value='%'><spring:message code='schedule.total' /></option>");
+// 				if(result.length > 0){
+// 					for(var i=0; i<result.length; i++){
+// 						$("#scd_nm").append("<option value='"+result[i].scd_nm+"'>"+result[i].scd_nm+"</option>");	
+// 					}									
+// 				}
+// 				$("#scd_nm").val(scd_nm).attr("selected", "selected");		
+// // 				fn_selectedWork(scd_nm);
+// 			}
+// 		});	 
+// 	}
 	
 	
-	function fn_dtm(){
-		fn_ScheduleNmList();
-	}
+// 	function fn_dtm(){
+// 		fn_ScheduleNmList();
+// 	}
 	
 // 	function fn_selectedWork(scd_nm){
 // 	  	 $.ajax({
@@ -239,39 +237,39 @@
 // 		});
 // 	}
 	
-	function fn_selectWrkNmList(scd_nm){
-	  	 $.ajax({
-			url : "selectWrkNmList.do",
-			data : {
-				scd_nm : scd_nm.value
-			},
-			dataType : "json",
-			type : "post",
-			beforeSend: function(xhr) {
-		        xhr.setRequestHeader("AJAX", true);
-		     },
-			error : function(xhr, status, error) {
-				if(xhr.status == 401) {
-					alert("<spring:message code='message.msg02' />");
-					top.location.href = "/";
-				} else if(xhr.status == 403) {
-					alert("<spring:message code='message.msg03' />");
-					top.location.href = "/";
-				} else {
-					alert("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""));
-				}
-			},
-			success : function(result) {		
-				$("#wrk_nm").children().remove();
-				$("#wrk_nm").append("<option value='%'><spring:message code='common.total' /></option>");
-				if(result.length > 0){
-					for(var i=0; i<result.length; i++){
-						$("#wrk_nm").append("<option value='"+result[i].wrk_nm+"'>"+result[i].wrk_nm+"</option>");	
-					}									
-				}
-			}
-		});
-	}
+// 	function fn_selectWrkNmList(scd_nm){
+// 	  	 $.ajax({
+// 			url : "selectWrkNmList.do",
+// 			data : {
+// 				scd_nm : scd_nm.value
+// 			},
+// 			dataType : "json",
+// 			type : "post",
+// 			beforeSend: function(xhr) {
+// 		        xhr.setRequestHeader("AJAX", true);
+// 		     },
+// 			error : function(xhr, status, error) {
+// 				if(xhr.status == 401) {
+// 					alert("<spring:message code='message.msg02' />");
+// 					top.location.href = "/";
+// 				} else if(xhr.status == 403) {
+// 					alert("<spring:message code='message.msg03' />");
+// 					top.location.href = "/";
+// 				} else {
+// 					alert("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""));
+// 				}
+// 			},
+// 			success : function(result) {		
+// 				$("#wrk_nm").children().remove();
+// 				$("#wrk_nm").append("<option value='%'><spring:message code='common.total' /></option>");
+// 				if(result.length > 0){
+// 					for(var i=0; i<result.length; i++){
+// 						$("#wrk_nm").append("<option value='"+result[i].wrk_nm+"'>"+result[i].wrk_nm+"</option>");	
+// 					}									
+// 				}
+// 			}
+// 		});
+// 	}
 
 	function fn_detail(exe_sn){
 		var popUrl = "/popup/scheduleHistoryDetail.do?exe_sn="+exe_sn; // 서버 url 팝업경로
@@ -383,15 +381,11 @@
 								<tr>
 									<th scope="row" class="t9" ><spring:message code="schedule.schedule_name" /> </th>
 									<td>
-										<select class="select t5" name="scd_nm" id="scd_nm">
-											<option value="%"><spring:message code="schedule.total" /></option>
-										</select>	
+										<input type="text" class="txt t2" id="scd_nm" name="scd_nm" value="${scd_nm}">
 									</td>
 									<th scope="row" class="t9"><spring:message code="common.dbms_name" /></th>
 									<td>
-										<select class="select t5" name="db_svr_nm" id="db_svr_nm" >
-											<option value="%"><spring:message code="schedule.total" /></option>
-										</select>	
+										<input type="text" class="txt t2" id="db_svr_nm" name="db_svr_nm" value="${svr_nm}">
 									</td>									
 								</tr>	
 								<tr>

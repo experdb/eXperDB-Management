@@ -179,7 +179,7 @@
 <input type="hidden" id="fChrSize" name="fChrSize" value="0">
 
 
-<div class="pop_container">
+<div id="pop_container">
 	<div class="pop_cts">
 		<p class="tit"><spring:message code="auth_management.auditHistoryView"/></p>
 		<div>

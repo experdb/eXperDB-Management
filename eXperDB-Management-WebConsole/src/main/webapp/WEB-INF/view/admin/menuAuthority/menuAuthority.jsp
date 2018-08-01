@@ -545,6 +545,7 @@ function fn_save(){
 					}
 				},
 				success : function(result) {
+					alert('<spring:message code="message.msg07" />');
 				}
 			}); 	
 		}else{

@@ -57,8 +57,9 @@ $(window.document).ready(function() {
 function fn_rman_init(){
    	tableRman = $('#logRmanList').DataTable({	
 		scrollY: "405px",
-		searching : false,
-		scrollX: true,
+		scrollX : true,
+		searching : false,	
+		deferRender : true,
 		bSort: false,
 	    columns : [
 		         	{ data: "rownum", className: "dt-center", defaultContent: ""}, 
@@ -113,7 +114,7 @@ function fn_rman_init(){
 	 							if(full.exe_rslt_cd == 'TC001701'){
 	 								html += ' - ';
 	 							}else{
-	 								html +='<span class="btn btnC_01 btnF_02" onClick=javascript:fn_fix_rslt_reg('+full.exe_sn+');><input type="button" value="조치입력"></span>';
+	 								html +='<span class="btn btnC_01 btnF_02" onClick=javascript:fn_fix_rslt_reg('+full.exe_sn+');><input type="button" value="<spring:message code="backup_management.Enter_Action"/>"></span>';
 	 							}	 
 	 						}
 	 						return html;
@@ -143,8 +144,12 @@ function fn_rman_init(){
 function fn_dump_init(){
    	tableDump = $('#logDumpList').DataTable({	
 		scrollY: "405px",	
-		searching : false,
-		scrollX: true,
+		scrollX: true,	
+		bDestroy: true,
+		paging : true,
+		processing : true,
+		searching : false,	
+		deferRender : true,
 		bSort: false,
 	    columns : [
 		         	{ data: "rownum", className: "dt-center", defaultContent: ""}, 
@@ -154,7 +159,14 @@ function fn_dump_init(){
 		    			}
 		    		}, 
 		    		{ data: "ipadr", className: "dt-center", defaultContent: ""},
-		         	{ data: "wrk_exp", defaultContent: ""}, 
+		    		{ data : "wrk_exp",
+		    			render : function(data, type, full, meta) {	 	
+		    				var html = '';					
+		    				html += '<span title="'+full.wrk_exp+'">' + full.wrk_exp + '</span>';
+		    				return html;
+		    			},
+		    			defaultContent : ""
+		    		},  
  		         	{ data: "db_nm", defaultContent: ""}, 
  		         	//{ data: "file_sz", className: "dt-center", defaultContent: ""},
  		         	
@@ -173,7 +185,7 @@ function fn_dump_init(){
  		         	
  		         	{data : "bck_file_pth", defaultContent : ""
 	 		   			,"render": function (data, type, full) {
-	 		   				  return '<span onClick=javascript:fn_dumpShow("'+full.bck_file_pth+'","'+full.db_svr_id+'"); class="bold">' + full.bck_file_pth + '</span>';
+	 		   				  return '<span onClick=javascript:fn_dumpShow("'+full.bck_file_pth+'","'+full.db_svr_id+'"); title="'+full.bck_file_pth+'" class="bold">' + full.bck_file_pth + '</span>';
 	 		   			}
 	 		   		 },
  		         	{ data: "bck_filenm", defaultContent: ""},
@@ -208,7 +220,7 @@ function fn_dump_init(){
 	 							if(full.exe_rslt_cd == 'TC001701'){
 	 								html += ' - ';
 	 							}else{
-	 								html +='<span class="btn btnC_01 btnF_02" onClick=javascript:fn_fix_rslt_reg('+full.exe_sn+');><input type="button" value="조치입력"></span>';
+	 								html +='<span class="btn btnC_01 btnF_02" onClick=javascript:fn_fix_rslt_reg('+full.exe_sn+');><input type="button" value="<spring:message code="backup_management.Enter_Action"/>"></span>';
 	 							}
 	 						}
 	 						return html;
@@ -218,14 +230,14 @@ function fn_dump_init(){
  		        ],'select': {'style': 'multi'} 
 	});
 
-   	tableDump.tables().header().to$().find('th:eq(0)').css('min-width', '100px');
-   	tableDump.tables().header().to$().find('th:eq(1)').css('min-width', '100px');
+   	tableDump.tables().header().to$().find('th:eq(0)').css('min-width', '40px');
+   	tableDump.tables().header().to$().find('th:eq(1)').css('min-width', '150px');
    	tableDump.tables().header().to$().find('th:eq(2)').css('min-width', '100px');
-   	tableDump.tables().header().to$().find('th:eq(3)').css('min-width', '100px');
+   	tableDump.tables().header().to$().find('th:eq(3)').css('min-width', '150px');
    	tableDump.tables().header().to$().find('th:eq(4)').css('min-width', '100px');
    	tableDump.tables().header().to$().find('th:eq(5)').css('min-width', '100px');
-   	tableDump.tables().header().to$().find('th:eq(6)').css('min-width', '100px');
-   	tableDump.tables().header().to$().find('th:eq(7)').css('min-width', '100px');
+   	tableDump.tables().header().to$().find('th:eq(6)').css('min-width', '170px');
+   	tableDump.tables().header().to$().find('th:eq(7)').css('min-width', '170px');
    	tableDump.tables().header().to$().find('th:eq(8)').css('min-width', '100px');
    	tableDump.tables().header().to$().find('th:eq(9)').css('min-width', '100px');
    	tableDump.tables().header().to$().find('th:eq(10)').css('min-width', '100px');
@@ -666,19 +678,19 @@ function fn_fix_rslt_msg_modify(){
 						</thead>
 					</table>
 				</div>
-				<div class="overflow_area" style="display:none;" id="logDumpListDiv">
+				<div class="overflow_area" id="logDumpListDiv">
 					<table class="display" id="logDumpList" cellspacing="0" width="100%">
 						<caption>Dump 백업관리 이력화면 리스트</caption>
 						<thead>
 							<tr>
-								<th width="100"><spring:message code="common.no" /></th>
-								<th width="100"><spring:message code="common.work_name" /></th>
+								<th width="40"><spring:message code="common.no" /></th>
+								<th width="150"><spring:message code="common.work_name" /></th>
 								<th width="100"><spring:message code="dbms_information.dbms_ip" /></th>
-								<th width="100"><spring:message code="common.work_description" /></th>
+								<th width="150"><spring:message code="common.work_description" /></th>
 								<th width="100"><spring:message code="common.database" /></th>
 								<th width="100"><spring:message code="backup_management.size" /></th>
-								<th width="100"><spring:message code="etc.etc08"/></th>			
-								<th width="100"><spring:message code="backup_management.fileName"/></th>						
+								<th width="170"><spring:message code="etc.etc08"/></th>			
+								<th width="170"><spring:message code="backup_management.fileName"/></th>						
 								<th width="100"><spring:message code="backup_management.work_start_time" /></th>
 								<th width="100"><spring:message code="backup_management.work_end_time" /></th>
 								<th width="100"><spring:message code="backup_management.elapsed_time" /></th>

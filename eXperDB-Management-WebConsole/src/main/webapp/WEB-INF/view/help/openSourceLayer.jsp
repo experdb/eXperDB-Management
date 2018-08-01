@@ -21,7 +21,7 @@ p{
 				along with applicable license information, below.<br>
 				We are deeply grateful to these developers for their work and contributions.<p>
 				<div class="pop_cmm2">
-					<p style="background: url(../images/popup/ico_p_2.png) 8px 48% no-repeat; font-weight: bold;">전자정부 표준프레임워크 라이선스</p>
+					<p style="background: url(../images/popup/ico_p_2.png) 8px 48% no-repeat; font-weight: bold;">Egovframe License</p>
 					<p>	Version 2.0, January 2004<br> 
 					http://www.apache.org/licenses/<br> 
 					Apache License</p>

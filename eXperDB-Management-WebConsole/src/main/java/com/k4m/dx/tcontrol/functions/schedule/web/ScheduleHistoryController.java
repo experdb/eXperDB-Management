@@ -157,23 +157,19 @@ public class ScheduleHistoryController {
 				String exe_result = request.getParameter("exe_result");
 				String order_type = request.getParameter("order_type");
 				String order = request.getParameter("order");
-				
-				if(scd_nm.equals("") ){
-					scd_nm="%";
-				}
-				
+						
 				param.put("lgi_dtm_start", lgi_dtm_start);
 				param.put("lgi_dtm_end", lgi_dtm_end);
-				param.put("scd_nm", scd_nm);
-				param.put("db_svr_nm", db_svr_nm);
+				param.put("scd_nm", "%"+scd_nm+"%");
+				param.put("db_svr_nm", "%"+db_svr_nm+"%");
 				param.put("exe_result", exe_result);
 				param.put("order_type", order_type);
 				param.put("order", order);
 				param.put("usr_id", usr_id);
 	
 				System.out.println("********PARAMETER*******");
-				System.out.println("DB서버 : "+ db_svr_nm);
-				System.out.println("스케줄명 : "+ scd_nm);
+				System.out.println("DB서버 : "+ "%"+db_svr_nm+"%");
+				System.out.println("스케줄명 : "+ "%"+scd_nm+"%");
 				System.out.println("시작날짜 : "+ lgi_dtm_start);
 				System.out.println("종료날짜 : " +lgi_dtm_end);
 				System.out.println("실행결과 : " +exe_result);

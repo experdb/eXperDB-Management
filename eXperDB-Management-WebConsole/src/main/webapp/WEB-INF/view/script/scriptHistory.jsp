@@ -115,7 +115,7 @@ function fn_init(){
 	 							if(full.exe_rslt_cd == 'TC001701'){
 	 								html += ' - ';
 	 							}else{
-	 								html +='<span class="btn btnC_01 btnF_02" onClick=javascript:fn_fix_rslt_reg('+full.exe_sn+');><input type="button" value="조치입력"></span>';
+	 								html +='<span class="btn btnC_01 btnF_02" onClick=javascript:fn_fix_rslt_reg('+full.exe_sn+');><input type="button" value="<spring:message code="backup_management.Enter_Action"/>"></span>';
 	 							}	 
 	 						}
 	 						return html;
