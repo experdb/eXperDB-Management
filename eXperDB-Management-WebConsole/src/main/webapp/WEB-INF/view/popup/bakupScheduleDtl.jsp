@@ -420,7 +420,7 @@ function fn_bckModifyPopup(){
 	<%@include file="../cmmn/commonLocale.jsp"%>  
 	<%@include file="../cmmn/workRmanInfo.jsp"%>
 	<%@include file="../cmmn/workDumpInfo.jsp"%>
-		<%@include file="../cmmn/workScriptInfo.jsp"%>
+	<%@include file="../cmmn/workScriptInfo.jsp"%>
 	<div class="pop_container">
 		<div class="pop_cts">
 			<p class="tit"><spring:message code="schedule.scheduleDetail"/></p>
