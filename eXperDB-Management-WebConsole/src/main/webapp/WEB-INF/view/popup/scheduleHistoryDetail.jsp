@@ -55,10 +55,17 @@ function fn_init() {
 		{ data : "rownum", className : "dt-center",  defaultContent : ""}, 
 		{data : "wrk_nm", className : "dt-left", defaultContent : ""
 			,"render": function (data, type, full) {
-				  return '<span onClick=javascript:fn_workLayer("'+full.wrk_id+'"); class="bold">' + full.wrk_nm + '</span>';
+				  return '<span onClick=javascript:fn_workLayer("'+full.wrk_id+'"); class="bold" title="'+full.wrk_nm+'">' + full.wrk_nm + '</span>';
 			}
 		},
-		{ data : "wrk_exp", className : "dt-left", defaultContent : ""}, 
+		{ data : "wrk_exp",
+			render : function(data, type, full, meta) {	 	
+				var html = '';					
+				html += '<span title="'+full.wrk_exp+'">' + full.wrk_exp + '</span>';
+				return html;
+			},
+			defaultContent : ""
+		},
 		{ data : "wrk_strt_dtm",  defaultContent : ""},  
 		{ data : "wrk_end_dtm",  defaultContent : ""},
 		{ data : "wrk_dtm",  defaultContent : ""},

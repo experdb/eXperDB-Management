@@ -38,7 +38,7 @@ function fn_init(){
 	 * work리스트
 	 ******************************************************** */
 	table = $('#dumpShowList').DataTable({
-	scrollY : "475px",
+	scrollY : "470px",
 	scrollX : true,
 	bDestroy: true,
 	processing : true,

@@ -679,7 +679,7 @@ $(function(){
 						var height = "160px";	
 
 						if (result.length > 4)
-							height = String(12 * result.length) + "px"
+							height = String(17 * result.length) + "px"
 
 						for(var i=0;i<7;i++){
 							var showdt = stdt.format("MM/dd");

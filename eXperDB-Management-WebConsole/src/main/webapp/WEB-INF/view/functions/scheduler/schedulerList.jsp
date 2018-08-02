@@ -26,7 +26,7 @@ function fn_init(){
 		{data : "rownum",  className : "dt-center", defaultContent : ""}, 		
 		{data : "scd_nm", className : "dt-left", defaultContent : ""
 			,render: function (data, type, full) {
-				  return '<span onClick=javascript:fn_scdLayer("'+full.scd_id+'"); class="bold">' + full.scd_nm + '</span>';
+				  return '<span onClick=javascript:fn_scdLayer("'+full.scd_id+'"); class="bold" title="'+full.scd_nm+'">' + full.scd_nm + '</span>';
 			}
 		},
 		{ data : "scd_exp",
@@ -631,17 +631,23 @@ function fn_dateValidation(exe_dt){
 					<table class="write">
 						<caption>검색 조회</caption>
 						<colgroup>
-							<col style="width:140px;" />
-							<col  />
+							<col style="width: 100px;" />
+							<col style="width: 450px;" />
+							<col style="width: 100px;" />
+							</col>
 						</colgroup> 
 						<tbody>
 								<tr>
 									<th scope="row" class="t9 line" style="width:130px;"><spring:message code="schedule.schedule_name" /></th>
-									<td><input type="text" class="txt t2" id="scd_nm" name="scd_nm" maxlength="20"/></td>
+									<td><input type="text" class="txt t2" id="scd_nm" name="scd_nm" maxlength="20" onkeyup="fn_checkWord(this,20)" style="width:270px;"/></td>
+									<th scope="row" class="t9 line"><spring:message code="common.work_name" /></th>
+									<td ><input type="text" class="txt t2" id="wrk_nm" name="wrk_nm" maxlength="20"/></td>
 								</tr>
 								<tr>
 									<th scope="row" class="t9 line"><spring:message code="schedule.scheduleExp"/></th>
-									<td><textarea class="tbd1" name="scd_exp" id="scd_exp" maxlength="150"></textarea></td>
+									<td><input type="text" class="txt t2" id="scd_exp" name="scd_exp" maxlength="150" onkeyup="fn_checkWord(this,150)" style="width:350px;"/></td>
+									<th scope="row" class="t9 line"><spring:message code="common.register" /></th>
+									<td ><input type="text" class="txt t2" id="frst_regr_id" name="frst_regr_id" /></td>	
 								</tr>
 								<%-- <tr>
 									<th scope="row" class="t9 line"><spring:message code="schedule.next_run_time" /></th>
@@ -665,10 +671,7 @@ function fn_dateValidation(exe_dt){
 										</span>
 									</td>
 								</tr> --%>
-								<tr>
-									<th scope="row" class="t9 line"><spring:message code="common.work_name" /></th>
-									<td ><input type="text" class="txt t2" id="wrk_nm" name="wrk_nm" maxlength="20"/></td>
-								</tr>
+
 								<tr>
 									<th scope="row" class="t9 line" ><spring:message code="common.run_status" /></th>
 									<td>
@@ -677,12 +680,8 @@ function fn_dateValidation(exe_dt){
 										<option value="TC001801"><spring:message code="etc.etc37"/></option>
 										<option value="TC001802"><spring:message code="schedule.run" /></option>
 										<option value="TC001803"><spring:message code="schedule.stop" /></option>
-									</select>	</td>				
+									</select>	</td>			
 								</tr>				
-								<tr>
-									<th scope="row" class="t9 line"><spring:message code="common.register" /></th>
-									<td ><input type="text" class="txt t2" id="frst_regr_id" name="frst_regr_id" /></td>
-								</tr>
 						</tbody>
 					</table>
 				</div>

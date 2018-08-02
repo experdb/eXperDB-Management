@@ -20,7 +20,7 @@
     	searching : false,	
     	bSort: false,
     	columns : [
-    		{data : "rownum",  defaultContent : ""}, 
+    		{data : "rownum",  className : "dt-center", defaultContent : ""}, 
     		{
 				data : "exe_result",
 				render : function(data, type, full, meta) {
@@ -51,13 +51,13 @@
 				},
     		{data : "scd_nm", className : "dt-left", defaultContent : ""
     			,"render": function (data, type, full) {				
-    				  return '<span onClick=javascript:fn_scdLayer("'+full.scd_id+'"); class="bold">' + full.scd_nm + '</span>';
+    				  return '<span onClick=javascript:fn_scdLayer("'+full.scd_id+'"); class="bold" title="'+full.scd_nm+'">' + full.scd_nm + '</span>';
     			}
     		}, 
     		{data : "db_svr_nm",  defaultContent : ""},
     		{data : "wrk_nm", className : "dt-left", defaultContent : ""
     			,"render": function (data, type, full) {				
-    				  return '<span onClick=javascript:fn_workLayer("'+full.wrk_id+'"); class="bold">' + full.wrk_nm + '</span>';
+    				  return '<span onClick=javascript:fn_workLayer("'+full.wrk_id+'"); class="bold" title="'+full.wrk_nm+'">' + full.wrk_nm + '</span>';
     			}
     		}, 
     		{data : "wrk_strt_dtm",  defaultContent : ""}, 

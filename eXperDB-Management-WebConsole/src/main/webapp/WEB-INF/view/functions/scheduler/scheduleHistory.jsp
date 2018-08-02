@@ -41,8 +41,8 @@
 		}else{
 			document.getElementById("exe_result").value=exe_result;
 		}
-		fn_SelectDBMS(svr_nm);
-		fn_ScheduleNmList(scd_nm);
+// 		fn_SelectDBMS(svr_nm);
+// 		fn_ScheduleNmList(scd_nm);
 	
 	});
 	
@@ -326,9 +326,9 @@
 									<td>
 										<div class="calendar_area">
 											<a href="#n" class="calendar_btn">달력열기</a> 
-											<input type="text" class="calendar" id="from" name="lgi_dtm_start" title="기간검색 시작날짜"  onChange="fn_dtm();" /> <span class="wave">~</span>
+											<input type="text" class="calendar" id="from" name="lgi_dtm_start" title="기간검색 시작날짜" /> <span class="wave">~</span>
 											<a href="#n" class="calendar_btn">달력열기</a> 
-											<input type="text" class="calendar" id="to" name="lgi_dtm_end" title="기간검색 종료날짜" onChange="fn_dtm();"  />
+											<input type="text" class="calendar" id="to" name="lgi_dtm_end" title="기간검색 종료날짜" />
 										</div>							
 									</td>
 									<th colspan="2">
@@ -444,7 +444,7 @@
 							<c:forEach var="result" items="${result}" varStatus="status">
 								<tr>
 									<td><c:out value="${pagingVO.pageSize*(pagingVO.pageIndex-1) + result.rownum}" /></td>
-									<td style="text-align: left;"><span onclick="fn_scdLayer('${result.scd_id}');" class="bold"><c:out value="${result.scd_nm}" /></span></td>
+									<td style="text-align: left;"><span onclick="fn_scdLayer('${result.scd_id}');" class="bold" title="${result.scd_nm}"><c:out value="${result.scd_nm}" /></span></td>
 									<td style="text-align: left;"><c:out value="${result.db_svr_nm}" /></td>		
 									<td style="text-align: left;"><c:out value="${result.ipadr}" /></td>				
 									<td style="text-align: left;"><c:out value="${result.wrk_strt_dtm}" /></td>
