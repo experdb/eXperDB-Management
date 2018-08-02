@@ -274,7 +274,14 @@ $(window.document).ready(function() {
 		},
 		success : function(result) {
 			if(result[0].exe_perd_cd == "TC001602"){
-				$("#weekDay").show();
+				$("#weekDay").show();				
+				if(result[0].exe_dt.length ==7){
+					for(var i=0; i<result[0].exe_dt.length; i++){
+						if(result[0].exe_dt[i] == 1){
+							document.getElementById('chk'+i).checked = true;
+						}
+					}					
+				}				
 			}else if(result[0].exe_perd_cd == "TC001603"){
 				$("#day").show();
 			}else if(result[0].exe_perd_cd == "TC001604"){
@@ -288,15 +295,7 @@ $(window.document).ready(function() {
 			document.getElementById('scd_exp').value= result[0].scd_exp;				
 			document.getElementById('exe_perd_cd').value= result[0].exe_perd_cd;
 			//document.getElementById('weekDay').value= result[0].exe_dt==null?'':result[0].exe_dt;
-			if(result[0].exe_dt.length ==7){
-				for(var i=0; i<result[0].exe_dt.length; i++){
-					if(result[0].exe_dt[i] == 1){
-						document.getElementById('chk'+i).checked = true;
-					}
-				}					
-			}else{
-				document.getElementById('datepicker1').value= result[0].exe_dt==null?'':result[0].exe_dt;
-			}
+			document.getElementById('datepicker1').value= result[0].exe_dt==null?'':result[0].exe_dt;	
 			document.getElementById('exe_month').value= result[0].exe_month;
 			document.getElementById('exe_day').value= result[0].exe_day;
  			document.getElementById('exe_h').value= result[0].exe_hms.substring(4, 6);

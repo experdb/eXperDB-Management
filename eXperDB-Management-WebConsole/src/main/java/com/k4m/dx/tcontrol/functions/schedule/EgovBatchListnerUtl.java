@@ -301,6 +301,7 @@ public class EgovBatchListnerUtl implements JobListener {
         	    		if(strChecked == null) {
         	    			if(String.valueOf(result.get(0).get("exe_dt").toString().charAt(i)).equals("1")) {	    			
         		    			strChecked = week[i];	
+        		    			System.out.println("오늘 날짜 체크가 안되있을때 오른쪽으로 = "+strChecked);
         		    			String nextDay = weekDay[Integer.parseInt(strChecked)]+" "+detail;
         			    		Date dt = transFormat.parse(nextDay);		                
         		                cal.setTime(dt);     
@@ -314,6 +315,8 @@ public class EgovBatchListnerUtl implements JobListener {
             				strFirstCheck  = week[toDay];
             	    		if(intNextCnt == 1 && strFirstCheck != null) {
             	    			strChecked = week[i]; 	    
+            	    			
+            	    			System.out.println("오늘 날짜 체크 되있을때 오른쪽으로 = "+strChecked);
             	    			String nextDay = weekDay[Integer.parseInt(strChecked)]+" "+detail;
             		    		Date dt = transFormat.parse(nextDay);		                
             	                cal.setTime(dt);            	                           
@@ -331,10 +334,11 @@ public class EgovBatchListnerUtl implements JobListener {
         	    //5. 오늘 요일로부터 Prev <------------------------ 검색
         	    if(prevCheck == true) {
         	    	//5.1 처음부터 오늘요일 이전날짜 까지 검색하여 업데이트
-        	    	for(int i=0; i<toDay ; i++){
+        	    	for(int i=toDay; i>=0; i--){
         	    		if(String.valueOf(result.get(0).get("exe_dt").toString().charAt(i)).equals("1")) {	    			
         	    			strChecked = week[i];
         	    			intPrevCnt ++;
+        	    			System.out.println("처음부터검색 ="+strChecked);
         	    			String nextDay = weekDay[Integer.parseInt(strChecked)]+" "+detail;
         		    		Date dt = transFormat.parse(nextDay);		                
         	                cal.setTime(dt);
@@ -354,6 +358,7 @@ public class EgovBatchListnerUtl implements JobListener {
         	    if(finalCheck == true){
         	    	if(intNextCnt==1 && intPrevCnt==0 && strFirstCheck != null) {
         	    		strChecked  = week[toDay];
+        	    		System.out.println("오늘요일만 매주 ="+strChecked);
         	    		String nextDay = weekDay[Integer.parseInt(strChecked)]+" "+detail;
         	    		Date dt = transFormat.parse(nextDay);		                
                         cal.setTime(dt);
