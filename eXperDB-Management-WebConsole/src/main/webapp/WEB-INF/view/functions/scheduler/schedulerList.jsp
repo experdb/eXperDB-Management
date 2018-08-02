@@ -373,6 +373,7 @@ function fn_selectScheduleList(){
 	var nxt_exe_from = $("#from").val() + " " + $("#from_exe_h").val() + ":" + $("#from_exe_m").val();
 	var nxt_exe_to = $("#to").val() + " " + $("#to_exe_h").val() + ":" + $("#to_exe_m").val();
 	
+	
   	$.ajax({
 		url : "/selectScheduleList.do",
 		data : {
@@ -642,7 +643,7 @@ function fn_dateValidation(exe_dt){
 									<th scope="row" class="t9 line"><spring:message code="schedule.scheduleExp"/></th>
 									<td><textarea class="tbd1" name="scd_exp" id="scd_exp" maxlength="150"></textarea></td>
 								</tr>
-								<tr>
+								<%-- <tr>
 									<th scope="row" class="t9 line"><spring:message code="schedule.next_run_time" /></th>
 									<td>
 										<span id="calendar">
@@ -663,7 +664,7 @@ function fn_dateValidation(exe_dt){
 												</span>
 										</span>
 									</td>
-								</tr>
+								</tr> --%>
 								<tr>
 									<th scope="row" class="t9 line"><spring:message code="common.work_name" /></th>
 									<td ><input type="text" class="txt t2" id="wrk_nm" name="wrk_nm" maxlength="20"/></td>

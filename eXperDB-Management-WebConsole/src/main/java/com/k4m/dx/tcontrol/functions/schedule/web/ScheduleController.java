@@ -596,7 +596,6 @@ public class ScheduleController {
 				
 				//현재 서비스 올라간 스케줄 그룹 정보
 				Scheduler scheduler = new StdSchedulerFactory().getScheduler();   
-
 				
 				List<Map<String, Object>> result = scheduleService.selectScheduleList(scheduleVO);
 					
