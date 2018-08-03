@@ -50,10 +50,17 @@ function fn_init(){
 	{data : "bck_bsn_dscd_nm",  defaultContent : ""}, //구분
 	{data : "wrk_nm", className : "dt-left", defaultContent : ""
 		,"render": function (data, type, full) {
-			  return '<span onClick=javascript:fn_workLayer("'+full.wrk_id+'"); class="bold">' + full.wrk_nm + '</span>';
+			  return '<span onClick=javascript:fn_workLayer("'+full.wrk_id+'"); class="bold" title="'+full.wrk_nm+'">' + full.wrk_nm + '</span>';
 		}
 	}, //work명
-	{data : "wrk_exp", className : "dt-left", defaultContent : ""}, //work설명
+	{ data : "wrk_exp",
+		render : function(data, type, full, meta) {	 	
+			var html = '';					
+			html += '<span title="'+full.wrk_exp+'">' + full.wrk_exp + '</span>';
+			return html;
+		},
+		defaultContent : ""
+	},
 	{data : "nxt_exe_yn", className: "dt-center", defaultContent: ""}
 	]
 });

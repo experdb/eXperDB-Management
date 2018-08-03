@@ -49,6 +49,7 @@ $(window.document).ready(function() {
 		changeMonth : true,
 		changeYear : true
  	});
+	$("#logDumpListDiv").hide();
 });
 
 /* ********************************************************
