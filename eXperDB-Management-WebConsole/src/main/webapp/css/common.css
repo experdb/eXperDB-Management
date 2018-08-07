@@ -213,7 +213,7 @@ input[type="text"]:disabled, input[type="text"].disabled {background:#e4e9ec;col
 }
 .btn.btnF_02 input, .btn.btnF_02 span, .btn.btnF_02 button{
 	width:114px;
-	height:23px;
+	height:22px;
 	line-height:23px;
 }
 .btn.btnF_03 input, .btn.btnF_03 span, .btn.btnF_03 button{
@@ -889,18 +889,18 @@ box-shadow: 1px 1px 2px 0px rgba(0,0,0,0.5);}
 		white-space:nowrap;
 	} 
 	
-/*데이터테이블 높이 고정*/
+
 table.display tr{
 	height: 40px;
 }
 
 
-table.display td{
+/* table.display td{
 	text-overflow:ellipsis;
 	overflow:hidden;
 	white-space:nowrap;
-}
+} */
 
 table.display {
 	table-layout: fixed;
-}
+} 

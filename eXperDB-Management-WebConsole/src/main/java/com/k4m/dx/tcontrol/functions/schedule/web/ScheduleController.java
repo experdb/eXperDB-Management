@@ -412,7 +412,7 @@ public class ScheduleController {
 		        	    //5. 오늘 요일로부터 Prev <------------------------ 검색
 		        	    if(prevCheck == true) {
 		        	    	//5.1 처음부터 오늘요일 이전날짜 까지 검색하여 업데이트
-		        	    	for(int i=0; i<toDay ; i++){
+		        	    	for(int i=toDay; i>=0; i--){
 		        	    		if(String.valueOf(scheduleVO.getExe_dt().charAt(i)).equals("1")) {	    			
 		        	    			strChecked = week[i];
 		        	    			intPrevCnt ++;

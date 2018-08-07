@@ -3,8 +3,8 @@
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form"%>
 <%@ taglib prefix="ui" uri="http://egovframework.gov/ctl/ui"%>
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags"%>
-
 <%@include file="../../cmmn/cs.jsp"%>
+
 <script>
 var table = null;
 var scd_cndt = null;
@@ -92,6 +92,7 @@ function fn_init(){
 		{
 			data : "",
 			render : function(data, type, full, meta) {
+				/* var html = "<span><button class='btnDtail' id='detail'><spring:message code='data_transfer.detail_search' /> </button></span>"; */
 				var html = "<span class='btn btnC_01 btnF_02'><button id='detail'><spring:message code='data_transfer.detail_search' /> </button></span>";
 				return html;
 			},
