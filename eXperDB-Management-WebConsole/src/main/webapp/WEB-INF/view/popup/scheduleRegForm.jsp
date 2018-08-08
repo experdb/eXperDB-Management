@@ -257,6 +257,24 @@ function fn_workAdd(){
 </script>
 
 </head>
+<style>
+#scdinfo{
+	width: 35% !important;
+	margin-top: 0px !important;
+}
+
+#workinfo{
+	width: 60% !important;
+	height: 610px !important;
+	margin-top: 0px !important;
+}
+
+#scriptInfo{
+	width: 60% !important;
+	height: 610px !important;
+	margin-top: 0px !important;
+}
+</style>
 <body>
 <%@include file="../cmmn/commonLocale.jsp"%>  
 <%@include file="../cmmn/workRmanInfo.jsp"%>

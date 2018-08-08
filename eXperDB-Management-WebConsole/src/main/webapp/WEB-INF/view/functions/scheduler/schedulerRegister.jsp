@@ -141,7 +141,7 @@ function fn_init(){
 	  table.tables().header().to$().find('th:eq(1)').css('min-width', '30px');
 	  table.tables().header().to$().find('th:eq(2)').css('min-width', '130px');
 	  table.tables().header().to$().find('th:eq(3)').css('min-width', '70px');
-	  table.tables().header().to$().find('th:eq(4)').css('min-width', '70px');
+	  table.tables().header().to$().find('th:eq(4)').css('min-width', '130px');
 	  table.tables().header().to$().find('th:eq(5)').css('min-width', '200px');
 	  table.tables().header().to$().find('th:eq(6)').css('min-width', '300px');
 	  table.tables().header().to$().find('th:eq(7)').css('min-width', '80px');
@@ -643,7 +643,7 @@ function fn_check() {
 												<th width="30"><spring:message code="common.no" /></th>												
 												<th width="130"><spring:message code="common.dbms_name" /></th>
 												<th width="70"><spring:message code="common.division" /></th>
-												<th width="70"><spring:message code="backup_management.detail_div" /></th>
+												<th width="130"><spring:message code="backup_management.detail_div" /></th>
 												<th width="200" class="dt-center"><spring:message code="common.work_name" /> </th>
 												<th width="300" class="dt-center"><spring:message code="common.work_description" /></th>												
 												<th width="80"><spring:message code="data_transfer.run_order" /></th>

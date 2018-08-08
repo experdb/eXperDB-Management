@@ -598,7 +598,7 @@ function fn_fix_rslt_msg_modify(){
 					<table class="write">
 						<caption>검색 조회</caption>
 						<colgroup>
-							<col style="width:90px;" />
+							<col style="width:110px;" />
 							<col style="width:230px;" />
 							<col style="width:110px;" />
 							<col />

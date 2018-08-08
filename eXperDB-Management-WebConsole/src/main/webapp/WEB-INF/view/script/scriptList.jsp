@@ -65,7 +65,7 @@ function fn_init(){
 	table.tables().header().to$().find('th:eq(2)').css('min-width', '100px');
 	table.tables().header().to$().find('th:eq(3)').css('min-width', '300px');
 	table.tables().header().to$().find('th:eq(4)').css('min-width', '100px');
-	table.tables().header().to$().find('th:eq(5)').css('min-width', '100px');  
+	table.tables().header().to$().find('th:eq(5)').css('min-width', '110px');  
 	table.tables().header().to$().find('th:eq(6)').css('min-width', '100px');
 	table.tables().header().to$().find('th:eq(7)').css('min-width', '100px');
 	table.tables().header().to$().find('th:eq(8)').css('min-width', '0px');
@@ -308,7 +308,7 @@ function fn_delete(scheduleChk, bck_wrk_id_List, wrk_id_List){
 									<th width="100"><spring:message code="common.work_name" /></th>
 									<th width="300"><spring:message code="common.work_description" /></th>
 									<th width="100"><spring:message code="common.register" /></th>
-									<th width="100"><spring:message code="common.regist_datetime" /></th>
+									<th width="110"><spring:message code="common.regist_datetime" /></th>
 									<th width="100"><spring:message code="common.modifier" /></th>
 									<th width="100"><spring:message code="common.modify_datetime" /></th>
 									<th width="0"></th>

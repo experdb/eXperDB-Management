@@ -78,7 +78,7 @@ function fn_init(){
 	table.tables().header().to$().find('th:eq(1)').css('min-width', '30px');
 	table.tables().header().to$().find('th:eq(2)').css('min-width', '100px');
 	table.tables().header().to$().find('th:eq(3)').css('min-width', '100px');
-	table.tables().header().to$().find('th:eq(4)').css('min-width', '100px');
+	table.tables().header().to$().find('th:eq(4)').css('min-width', '130px');
 	table.tables().header().to$().find('th:eq(5)').css('min-width', '200px');
 	table.tables().header().to$().find('th:eq(6)').css('min-width', '300px');
 	table.tables().header().to$().find('th:eq(7)').css('min-width', '80px');
@@ -727,7 +727,7 @@ function fn_dateValidation(exe_dt){
 												<th width="0"></th>
 												<th width="100"><spring:message code="common.dbms_name" /></th>
 												<th width="100"><spring:message code="common.division" /></th>
-												<th width="100"><spring:message code="backup_management.detail_div" /></th>												
+												<th width="130"><spring:message code="backup_management.detail_div" /></th>												
 												<th width="200" class="dt-center"><spring:message code="common.work_name" /> </th>
 												<th width="300" class="dt-center"><spring:message code="common.work_description" /></th>
 												<th width="80"><spring:message code="data_transfer.run_order" /></th>

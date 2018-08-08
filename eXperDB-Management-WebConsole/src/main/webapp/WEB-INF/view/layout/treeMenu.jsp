@@ -553,7 +553,7 @@ $(window.document).ready(function() {
 					</div>
 			</div>
 
-			<div id="treeTitle" class="encrypt"><img src="../images/ico_lnb_2.png" id="treeImg">
+			<div id="treeTitle" class="encrypt"><img src="../images/ico_lnb_1.png" id="treeImg">
 			
 			<c:set var="aut_use" value="${sessionScope.session.encp_use_yn}" />
 			<c:choose>
