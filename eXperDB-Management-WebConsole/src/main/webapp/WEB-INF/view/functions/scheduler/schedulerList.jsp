@@ -238,21 +238,21 @@ function fn_init(){
     	}
 	});	
 	
-	  table.tables().header().to$().find('th:eq(0)').css('min-width', '10px');
+	  table.tables().header().to$().find('th:eq(0)').css('min-width', '30px');
 	  table.tables().header().to$().find('th:eq(1)').css('min-width', '30px');	  
-	  table.tables().header().to$().find('th:eq(2)').css('min-width', '200px');
-	  table.tables().header().to$().find('th:eq(3)').css('min-width', '300px');
+	  table.tables().header().to$().find('th:eq(2)').css('min-width', '120px');
+	  table.tables().header().to$().find('th:eq(3)').css('min-width', '200px');
 	  table.tables().header().to$().find('th:eq(4)').css('min-width', '100px');
-	  table.tables().header().to$().find('th:eq(5)').css('min-width', '70px');
-	  table.tables().header().to$().find('th:eq(6)').css('min-width', '130px');
-	  table.tables().header().to$().find('th:eq(7)').css('min-width', '130px');
-	  table.tables().header().to$().find('th:eq(8)').css('min-width', '70px');  
-	  table.tables().header().to$().find('th:eq(9)').css('min-width', '130px');
+	  table.tables().header().to$().find('th:eq(5)').css('min-width', '50px');
+	  table.tables().header().to$().find('th:eq(6)').css('min-width', '100px');
+	  table.tables().header().to$().find('th:eq(7)').css('min-width', '100px');
+	  table.tables().header().to$().find('th:eq(8)').css('min-width', '80px');  
+	  table.tables().header().to$().find('th:eq(9)').css('min-width', '100px');
 	  table.tables().header().to$().find('th:eq(10)').css('min-width', '100px');
-	  table.tables().header().to$().find('th:eq(11)').css('min-width', '65px');
-	  table.tables().header().to$().find('th:eq(12)').css('min-width', '130px');
-	  table.tables().header().to$().find('th:eq(13)').css('min-width', '65px'); 
-	  table.tables().header().to$().find('th:eq(14)').css('min-width', '130px'); 
+	  table.tables().header().to$().find('th:eq(11)').css('min-width', '100px');
+	  table.tables().header().to$().find('th:eq(12)').css('min-width', '100px');
+	  table.tables().header().to$().find('th:eq(13)').css('min-width', '100px'); 
+	  table.tables().header().to$().find('th:eq(14)').css('min-width', '100px'); 
 	  table.tables().header().to$().find('th:eq(15)').css('min-width', '0px');
 	  table.tables().header().to$().find('th:eq(16)').css('min-width', '0px');
     $(window).trigger('resize'); 
@@ -692,21 +692,21 @@ function fn_dateValidation(exe_dt){
 				<caption>스케줄 리스트</caption>
 					<thead>
 						<tr>
-							<th width="10"></th>
+							<th width="30"></th>
 							<th width="30"><spring:message code="common.no" /></th>							
-							<th width="200"><spring:message code="schedule.schedule_name" /></th>
-							<th width="300"><spring:message code="schedule.scheduleExp"/></th>
+							<th width="120"><spring:message code="schedule.schedule_name" /></th>
+							<th width="200"><spring:message code="schedule.scheduleExp"/></th>
 							<th width="100"><spring:message code="data_transfer.server_name" /></th>
-							<th width="70"><spring:message code="schedule.work_count" /></th>
-							<th width="130"><spring:message code="schedule.pre_run_time" /></th>
-							<th width="130"><spring:message code="schedule.next_run_time" /></th>
-							<th width="70"><spring:message code="common.run_status" /></th>
-							<th width="130"><spring:message code="etc.etc26"/></th>
+							<th width="50"><spring:message code="schedule.work_count" /></th>
+							<th width="100"><spring:message code="schedule.pre_run_time" /></th>
+							<th width="100"><spring:message code="schedule.next_run_time" /></th>
+							<th width="80"><spring:message code="common.run_status" /></th>
+							<th width="100"><spring:message code="etc.etc26"/></th>
 							<th width="100"><spring:message code="data_transfer.detail_search" /></th>
-							<th width="65"><spring:message code="common.register" /></th>
-							<th width="130"><spring:message code="common.regist_datetime" /></th>
-							<th width="65"><spring:message code="common.modifier" /></th>
-							<th width="130"><spring:message code="common.modify_datetime" /></th>
+							<th width="100"><spring:message code="common.register" /></th>
+							<th width="100"><spring:message code="common.regist_datetime" /></th>
+							<th width="100"><spring:message code="common.modifier" /></th>
+							<th width="100"><spring:message code="common.modify_datetime" /></th>
 							<th width="0"></th>
 							<th width="0"></th>
 						</tr>

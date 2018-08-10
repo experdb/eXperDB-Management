@@ -50,15 +50,15 @@ var table = null;
 			 ],'select': {'style': 'multi'}
 		});
 		
-		table.tables().header().to$().find('th:eq(0)').css('min-width', '20px');
+		table.tables().header().to$().find('th:eq(0)').css('min-width', '40px');
 		table.tables().header().to$().find('th:eq(1)').css('min-width', '40px');
-		table.tables().header().to$().find('th:eq(2)').css('min-width', '100px');
-		table.tables().header().to$().find('th:eq(3)').css('min-width', '100px');
-		table.tables().header().to$().find('th:eq(4)').css('min-width', '100px');
-		table.tables().header().to$().find('th:eq(5)').css('min-width', '100px');
-		table.tables().header().to$().find('th:eq(6)').css('min-width', '150px');
-		table.tables().header().to$().find('th:eq(7)').css('min-width', '80px');
-		table.tables().header().to$().find('th:eq(8)').css('min-width', '150px');
+		table.tables().header().to$().find('th:eq(2)').css('min-width', '130px');
+		table.tables().header().to$().find('th:eq(3)').css('min-width', '200px');
+		table.tables().header().to$().find('th:eq(4)').css('min-width', '60px');
+		table.tables().header().to$().find('th:eq(5)').css('min-width', '70px');
+		table.tables().header().to$().find('th:eq(6)').css('min-width', '90px');
+		table.tables().header().to$().find('th:eq(7)').css('min-width', '70px');
+		table.tables().header().to$().find('th:eq(8)').css('min-width', '90px');
 		table.tables().header().to$().find('th:eq(9)').css('min-width', '0px');
 	
 	    $(window).trigger('resize');
@@ -267,15 +267,15 @@ var table = null;
 					<table id="policyTable" class="display" cellspacing="0" width="100%">
 						<thead>
 							<tr>
-								<th width="20"></th>
+								<th width="40"></th>
 								<th width="40"><spring:message code="common.no" /></th>
-								<th width="100"><spring:message code="encrypt_policy_management.Policy_Name"/></th>
-								<th width="100"><spring:message code="encrypt_policy_management.Description"/></th>
-								<th width="100"><spring:message code="encrypt_policy_management.Status"/></th>
-								<th width="100"><spring:message code="common.register" /></th>
-								<th width="150"><spring:message code="common.regist_datetime" /></th>
-								<th width="80"><spring:message code="common.modifier" /></th>
-								<th width="150"><spring:message code="common.modify_datetime" /></th>
+								<th width="130"><spring:message code="encrypt_policy_management.Policy_Name"/></th>
+								<th width="200"><spring:message code="encrypt_policy_management.Description"/></th>
+								<th width="60"><spring:message code="encrypt_policy_management.Status"/></th>
+								<th width="70"><spring:message code="common.register" /></th>
+								<th width="90"><spring:message code="common.regist_datetime" /></th>
+								<th width="70"><spring:message code="common.modifier" /></th>
+								<th width="90"><spring:message code="common.modify_datetime" /></th>
 								<th width="0"></th>
 							</tr>
 						</thead>

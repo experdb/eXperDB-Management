@@ -68,13 +68,13 @@ function fn_init() {
 
 	table.tables().header().to$().find('th:eq(0)').css('min-width', '40px');
 	table.tables().header().to$().find('th:eq(1)').css('min-width', '40px');
-	table.tables().header().to$().find('th:eq(2)').css('min-width', '150px');
-	table.tables().header().to$().find('th:eq(3)').css('min-width', '150px');
-	table.tables().header().to$().find('th:eq(4)').css('min-width', '150px');
-	table.tables().header().to$().find('th:eq(5)').css('min-width', '150px');
+	table.tables().header().to$().find('th:eq(2)').css('min-width', '100px');
+	table.tables().header().to$().find('th:eq(3)').css('min-width', '100px');
+	table.tables().header().to$().find('th:eq(4)').css('min-width', '100px');
+	table.tables().header().to$().find('th:eq(5)').css('min-width', '100px');
 	table.tables().header().to$().find('th:eq(6)').css('min-width', '100px');
 	table.tables().header().to$().find('th:eq(7)').css('min-width', '100px');
-	table.tables().header().to$().find('th:eq(8)').css('min-width', '150px');
+	table.tables().header().to$().find('th:eq(8)').css('min-width', '100px');
     $(window).trigger('resize'); 
     
 	//더블 클릭시
@@ -322,13 +322,13 @@ function fn_delete(){
 							<tr>
 								<th width="40"></th>
 								<th width="40"><spring:message code="common.no" /></th>
-								<th width="150"><spring:message code="user_management.id" /></th>
-								<th width="150"><spring:message code="user_management.company" /></th>
-								<th width="150"><spring:message code="user_management.user_name" /></th>
-								<th width="150"><spring:message code="user_management.contact" /></th>
+								<th width="100"><spring:message code="user_management.id" /></th>
+								<th width="100"><spring:message code="user_management.company" /></th>
+								<th width="100"><spring:message code="user_management.user_name" /></th>
+								<th width="100"><spring:message code="user_management.contact" /></th>
 								<th width="100"><spring:message code="user_management.use_yn" /></th>
 								<th width="100"><spring:message code="encrypt_log_decode.Encryption"/> <spring:message code="user_management.use_yn" /></th>
-								<th width="150"><spring:message code="user_management.expiration_date" /></th>
+								<th width="100"><spring:message code="user_management.expiration_date" /></th>
 							</tr>
 						</thead>
 					</table>
