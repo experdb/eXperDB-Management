@@ -14,6 +14,7 @@ import com.k4m.dx.tcontrol.db.repository.service.SystemServiceImpl;
 import com.k4m.dx.tcontrol.deamon.DxDaemon;
 import com.k4m.dx.tcontrol.deamon.DxDaemonManager;
 import com.k4m.dx.tcontrol.deamon.IllegalDxDaemonClassException;
+import com.k4m.dx.tcontrol.monitoring.schedule.listener.TaskExecuteListener;
 import com.k4m.dx.tcontrol.socket.DXTcontrolAgentSocket;
 import com.k4m.dx.tcontrol.socket.listener.ServerCheckListener;
 import com.k4m.dx.tcontrol.util.FileUtil;
@@ -84,14 +85,28 @@ public class DaemonStart implements DxDaemon{
 		}
 	}
 	
-	ApplicationContext context;
+	private static ApplicationContext context;
 	
+	
+	public static ApplicationContext getContext() {
+		return context;
+	}
+
+	public static void setContext(ApplicationContext context) {
+		DaemonStart.context = context;
+	}
+
 	//@Override
 	public void startDaemon() {
 		
 		try {
-		
-			context = new ClassPathXmlApplicationContext(new String[] {"context-tcontrol.xml"});
+			String strMonitoringYN = FileUtil.getPropertyValue("context.properties", "agent.monitoring.useyn");
+			
+			if(strMonitoringYN.equals("Y")) {
+				context = new ClassPathXmlApplicationContext(new String[] {"context-tcontrol.xml", "context-scheduling.xml"});
+			} else {
+				context = new ClassPathXmlApplicationContext(new String[] {"context-tcontrol.xml"});
+			}
 			SystemServiceImpl service = (SystemServiceImpl) context.getBean("SystemService");
 
 			// SqlSessionManager 초기화
@@ -137,6 +152,8 @@ public class DaemonStart implements DxDaemon{
 			//System.out.println("2222222222");
 			socketService = new DXTcontrolAgentSocket();
 			socketService.start();
+			
+			TaskExecuteListener.load();
 			
 			//serverCheckListener.join();
 		

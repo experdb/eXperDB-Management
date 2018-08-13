@@ -34,6 +34,8 @@ public class RunCommandExec extends Thread {
 	
 	private String returnMessage = "";
 	
+	public RunCommandExec(){}
+	
 	public RunCommandExec(String cmd){
 		this.CMD = cmd;
 	}
@@ -208,4 +210,14 @@ public class RunCommandExec extends Thread {
         	this.consoleTxt += input.read(buffer);
         }
     }
+	
+	public static void main(String[] args) throws Exception {
+		RunCommandExec runCommandExec = new RunCommandExec();
+		
+		String path = runCommandExec.getClass().getResource("/").getPath();
+		
+		System.out.println(path);
+
+		
+	}
 }
