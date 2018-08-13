@@ -71,7 +71,7 @@ public class ClientTester {
 		//Ip = "222.110.153.251";
 		 //	Ip = "127.0.0.1";
 		// Ip = "222.110.153.231";
-		Ip = "192.168.56.108";
+		Ip = "192.168.56.116";
 		//Ip = "222.110.153.204";
 		int port = 9001;
 		//port = 5869;
@@ -101,7 +101,7 @@ public class ClientTester {
 			//clientTester.dxT014_U(Ip, port);
 			//clientTester.dxT014_D(Ip, port);
 			
-			//clientTester.dxT015_R(Ip, port);
+			clientTester.dxT015_R(Ip, port);
 			//clientTester.dxT015_V(Ip, port);
 			//clientTester.dxT015_DL(Ip, port);
 			//clientTester.dxT016(Ip, port);
@@ -1308,17 +1308,17 @@ public class ClientTester {
 	private void dxT015_R(String Ip, int port) {
 		try {
 
-			String strDirectory = "/home/devel/experdb/data/pg_log/";
+			String strDirectory = "/experdata/data/log";
 			
-			strDirectory = "C:\\k4m\\01-1. DX 제폼개발\\04. 시험\\pg_log\\";
+			//strDirectory = "C:\\k4m\\01-1. DX 제폼개발\\04. 시험\\pg_log\\";
 			
 			JSONObject serverObj = new JSONObject();
 			
 			serverObj.put(ClientProtocolID.SERVER_NAME, Ip);
 			serverObj.put(ClientProtocolID.SERVER_IP, Integer.toString(port));
 			
-			String strStartDate = "2017-07-25";
-			String strEndDate = "2017-07-26";
+			String strStartDate = "2018-07-20";
+			String strEndDate = "2018-07-20";
 				
 			JSONObject searchInfoObj = new JSONObject();
 			searchInfoObj.put(ClientProtocolID.START_DATE, strStartDate);
