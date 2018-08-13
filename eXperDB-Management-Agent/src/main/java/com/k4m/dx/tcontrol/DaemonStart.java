@@ -153,7 +153,8 @@ public class DaemonStart implements DxDaemon{
 			socketService = new DXTcontrolAgentSocket();
 			socketService.start();
 			
-			TaskExecuteListener.load();
+			///monitoring task
+			//TaskExecuteListener.load();
 			
 			//serverCheckListener.join();
 		
