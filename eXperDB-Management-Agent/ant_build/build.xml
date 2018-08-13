@@ -33,6 +33,8 @@
 	<property name="output.script.dir" value="${output.dir}/bin" />
 	
 	<property name="output.install.dir" value="${build.dir}/install" />
+	
+	<property name="sigar.lib.dir" value="sigar_lib/" />
 
 	
 	<path id="classpath">
@@ -76,6 +78,7 @@
         </copy>
 		<copy todir="${output.lib.dir}">
 			<fileset dir="${lib.dir}" />
+			<fileset dir="${sigar.lib.dir}" />
         </copy>
 		<copy todir="${output.script.dir}">
 			<fileset dir="${script.dir}" />
