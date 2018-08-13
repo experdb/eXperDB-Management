@@ -18,6 +18,7 @@
 
 <script>
 function fn_logout(){
+	alert('<spring:message code="message.msg03" />');
 	var frm = document.sessionOut;
 	frm.submit();	
 }	

@@ -545,7 +545,7 @@ function fn_save(){
 					}
 				},
 				success : function(result) {
-					location.reload();
+					alert('<spring:message code="message.msg07" />');
 				}
 			}); 	
 		}else{
@@ -612,7 +612,7 @@ function fn_search(){
 									<div class="btn_type_01">
 										<div class="search_area">
 											<input type="text" class="txt search" id="search">
-											<button class="search_btn" onClick="fn_search()"><spring:message code="button.search" /></button>
+											<button type="button" class="search_btn" onClick="fn_search()"><spring:message code="button.search" /></button>
 										</div>
 									</div>
 									<div class="inner">
@@ -632,7 +632,7 @@ function fn_search(){
 								</div>
 								<div class="menu_roll_rt">
 									<div class="btn_type_01">
-										<span class="btn"><button onClick="fn_save()"; id="save_button"><spring:message code="common.save"/></button></span>
+										<span class="btn"><button type="button" onClick="fn_save()"; id="save_button"><spring:message code="common.save"/></button></span>
 									</div>
 									<div class="inner">
 										<p class="tit"><spring:message code="auth_management.menu_auth" /></p>
@@ -692,7 +692,7 @@ function fn_search(){
 														</td>
 													</tr>
 													<tr>
-														<td><spring:message code="menu.schedule_run_stop" /></td>
+														<td><spring:message code="etc.etc27" /></td>
 														<td>
 															<div class="inp_chk">
 																<input type="checkbox" id="r_MN000102" name="r_mnu_nm" value="MN000102"/>

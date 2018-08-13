@@ -21,6 +21,7 @@ import com.k4m.dx.tcontrol.admin.accesshistory.service.AccessHistoryService;
 import com.k4m.dx.tcontrol.cmmn.CmmnUtils;
 import com.k4m.dx.tcontrol.common.service.HistoryVO;
 import com.k4m.dx.tcontrol.functions.schedule.service.ScheduleVO;
+import com.k4m.dx.tcontrol.login.service.LoginVO;
 import com.k4m.dx.tcontrol.mypage.service.MyScheduleService;
 
 /**
@@ -95,7 +96,8 @@ public class MyscheduleController {
 			accessHistoryService.insertHistory(historyVO);
 		
 			HttpSession session = request.getSession();
-			String usr_id = (String) session.getAttribute("usr_id");
+			LoginVO loginVo = (LoginVO) session.getAttribute("session");
+			String usr_id = loginVo.getUsr_id();
 			
 			scheduleVO.setLst_mdfr_id(usr_id);
 			

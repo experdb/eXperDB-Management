@@ -99,6 +99,7 @@ function fn_init() {
 		paging : false,		
 		deferRender : true,
 		columns : [
+		{data : "dft_db_nm", defaultContent : "", targets : 0, orderable : false, checkboxes : {'selectRow' : true}}	,
 		{data : "dft_db_nm", defaultContent : ""}, 
 		{data : "db_exp", defaultContent : "", 
 			targets: 0,
@@ -106,16 +107,11 @@ function fn_init() {
 	        orderable: false,
 	        render: function(data, type, full, meta){
 	           if(type === 'display'){
-	              data = '<input type="text" class="txt" name="db_exp" maxlength="500" value="' +full.db_exp + '" style="width: 450px; height: 25px;" id="db_exp">';      
-	           }
-	           
+	              data = '<input type="text" class="txt" name="db_exp" maxlength="100" value="' +full.db_exp + '" style="width: 360px; height: 25px;" id="db_exp">';      
+	           }	           
 	           return data;
 	        }}, 
-		{data : "dft_db_nm", defaultContent : "", targets : 0, orderable : false, 
-	    render: function (data, type, full, meta){
-		             return '<input type="checkbox" name="chk" onClick=checkedDisable()  value="' 
-		                + $('<div/>').text(data).html() + '">';		         
-		}}, 		
+	        
 		]
 	});
 	
@@ -135,21 +131,15 @@ function fn_init() {
     table_dbServer.tables().header().to$().find('th:eq(12)').css('min-width', '0px');  
     table_dbServer.tables().header().to$().find('th:eq(13)').css('min-width', '0px'); */
     
-    table_db.tables().header().to$().find('th:eq(0)').css('min-width', '80px');
-    table_db.tables().header().to$().find('th:eq(1)').css('min-width', '440px');
-    table_db.tables().header().to$().find('th:eq(2)').css('min-width', '10px');
+    table_db.tables().header().to$().find('th:eq(0)').css('min-width', '10px');
+    table_db.tables().header().to$().find('th:eq(1)').css('min-width', '110px');
+    table_db.tables().header().to$().find('th:eq(2)').css('min-width', '360px');
     
     
     $(window).trigger('resize'); 
 	
 }
 
-//클릭시 체크 하이라이트 제거
-function checkedDisable(){
-	//$(this).hasClass('selected'); 
-	$(this).removeClass('selected');
-	//table_db.$(this).removeClass('selected');
-}
 
 /* ********************************************************
  * 페이지 시작시(서버 조회)
@@ -313,46 +303,70 @@ function fn_insertDB(){
 	var datasArr = new Array();	
 	var db_svr_id = table_dbServer.row('.selected').data().db_svr_id;
 	var ipadr = table_dbServer.row('.selected').data().ipadr;
+	
 	var datas = table_db.rows().data();
-	
-	// CheckBox 검사
-	var chked = [];		
-	
-	//체크된갯수
-	//var checkCnt = table_db.rows('.selected').data().length;
-	var checkCnt = $("input:checkbox[name='chk']:checked").length;
-	var rows = [];
-    	for (var i = 0; i<datas.length; i++) {
-     		var rows = new Object();
-     		
-     		var org_dbName = table_db.rows().data()[i].dft_db_nm;	
-     		var returnValue = false;
-     		 
-     		//체크된값 배열로 받음
-     		$("input[name=chk]:checked").each(function() {
-     			chked.push($(this).val());
-     		});
+	var selectedDatas = table_db.rows('.selected').data();
 
-     		  for(var j=0; j<checkCnt; j++) {     			
-     			var chkDBName = chked[j];
-     			if(org_dbName  == chkDBName) {
-     				returnValue = true;
-     				break;
-     			}
-     		}  
-
-     	 	if(returnValue == true){
-     	 		rows.db_exp = list[i].value;
-     			rows.useyn = "Y";
-     			rows.dft_db_nm = table_db.rows().data()[i].dft_db_nm;
-     		}else{
-     			rows.db_exp = list[i].value;
-     			rows.useyn = "N";
-     			rows.dft_db_nm = table_db.rows().data()[i].dft_db_nm;
-     		}   		 
-    		datasArr.push(rows);
+	for(var i=0; i<datas.length; i++){
+		var rows = new Object();
+		var returnValue = false;
+		
+		for(var j=0; j<selectedDatas.length; j++){
+			if(datas[i].dft_db_nm == selectedDatas[j].dft_db_nm){
+				returnValue = true;
+				break;
+			}
 		}
-    	
+		
+		if(returnValue == true){
+			rows.useyn = "Y";
+		}else{
+			rows.useyn = "N";
+		}
+		
+		rows.db_exp = list[i].value;
+		rows.dft_db_nm = datas[i].dft_db_nm;	
+		datasArr.push(rows);
+	}
+		
+// 	// CheckBox 검사
+// 	var chked = [];		
+	
+// 	//체크된갯수
+// 	//var checkCnt = table_db.rows('.selected').data().length;
+// 	var checkCnt = $("input:checkbox[name='chk']:checked").length;
+// 	var rows = [];
+//     	for (var i = 0; i<datas.length; i++) {
+//      		var rows = new Object();
+     		
+//      		var org_dbName = table_db.rows().data()[i].dft_db_nm;	
+//      		var returnValue = false;
+     		 
+//      		//체크된값 배열로 받음
+//      		$("input[name=chk]:checked").each(function() {
+//      			chked.push($(this).val());
+//      		});
+
+//      		  for(var j=0; j<checkCnt; j++) {     			
+//      			var chkDBName = chked[j];
+//      			if(org_dbName  == chkDBName) {
+//      				returnValue = true;
+//      				break;
+//      			}
+//      		}  
+
+//      	 	if(returnValue == true){
+//      	 		rows.db_exp = list[i].value;
+//      			rows.useyn = "Y";
+//      			rows.dft_db_nm = table_db.rows().data()[i].dft_db_nm;
+//      		}else{
+//      			rows.db_exp = list[i].value;
+//      			rows.useyn = "N";
+//      			rows.dft_db_nm = table_db.rows().data()[i].dft_db_nm;
+//      		}   		 
+//     		datasArr.push(rows);
+// 		}
+
     	if (confirm('<spring:message code="message.msg160"/>')){
 			$.ajax({
 				url : "/insertTreeDB.do",
@@ -557,6 +571,7 @@ function fn_dataCompareChcek(svrDbList){
 			success : function(result) {
 				alert("<spring:message code='message.msg12' />");
 				fn_selectTreeDbServerList();
+				table_db.clear().draw();
 			}
 		});
 	}
@@ -665,9 +680,9 @@ function fn_syncUpdate(db_id){
 				<div class="tree_lt">
 					<div class="btn_type_01">
 					<div id="wrt_button">
-						<span class="btn"><button onclick="fn_reg_popup();"><spring:message code="common.registory" /></button></span>
-						<span class="btn"><button onClick="fn_regRe_popup();"><spring:message code="common.modify" /></button></span>		
-						<span class="btn" onClick="fn_exeCheck()"><button><spring:message code="common.delete" /></button></span>
+						<span class="btn"><button type="button" onclick="fn_reg_popup();"><spring:message code="common.registory" /></button></span>
+						<span class="btn"><button type="button" onClick="fn_regRe_popup();"><spring:message code="common.modify" /></button></span>		
+						<span class="btn" onClick="fn_exeCheck()"><button type="button"><spring:message code="common.delete" /></button></span>
 					</div>
 					</div>
 					<div class="inner">
@@ -699,8 +714,8 @@ function fn_syncUpdate(db_id){
 				<div class="tree_rt"  style="width: 44%; margin-left: 2%;">
 					<div class="btn_type_01">
 						<div id="save_button">
-						<span class="btn"><button onClick="fn_insertDB()"><spring:message code="common.save"/></button></span>
-						<span class="btn"><button onClick="fn_dbSync()"><spring:message code="dbms_information.Synchronization"/></button></span>
+						<span class="btn"><button type="button" onClick="fn_insertDB()"><spring:message code="common.save"/></button></span>
+						<span class="btn"><button type="button" onClick="fn_dbSync()"><spring:message code="dbms_information.Synchronization"/></button></span>
 						</div>
 					</div>
 					<div class="inner">
@@ -709,9 +724,9 @@ function fn_syncUpdate(db_id){
 							<table id="dbList" class="cell-border display" cellspacing="0" align="left">
 								<thead>
 									<tr>
-										<th width="90"><spring:message code="common.database" /></th>
-										<th width="450"><spring:message code="common.desc" /></th>
 										<th width="10"><input name="select" value="1" type="checkbox"></th>
+										<th width="110"><spring:message code="common.database" /></th>
+										<th width="360"><spring:message code="common.desc" /></th>										
 									</tr>
 								</thead>
 							</table>

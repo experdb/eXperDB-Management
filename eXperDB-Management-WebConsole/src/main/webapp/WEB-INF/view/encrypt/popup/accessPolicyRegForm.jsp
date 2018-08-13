@@ -3,6 +3,7 @@
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form"%>
 <%@ taglib prefix="ui" uri="http://egovframework.gov/ctl/ui"%>
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags"%>
+<%@include file="../../cmmn/commonLocale.jsp"%>
 <%
 	/**
 	* @Class Name : accessPolicyRegForm.jsp
@@ -409,7 +410,7 @@ function fn_update(){
 						<tr>
 							<th scope="row" class="ico_t1"><spring:message code="encrypt_policy_management.Threshold_Operations)"/></th>
 							<td>
-								<input type="number" class="txt"  min="0" name="massiveThreshold" id="massiveThreshold" style="width: 50px;" onKeyPress="NumObj(this);"/>&nbsp&nbsp건수/ &nbsp&nbsp 
+								<input type="number" class="txt"  min="0" name="massiveThreshold" id="massiveThreshold" style="width: 50px;" onKeyPress="NumObj(this);"/>&nbsp&nbsp<spring:message code="encrypt_policy_management.Threshold"/> &nbsp&nbsp 
 								<input type="number" class="txt" min="0" name="massiveTimeInterval" id="massiveTimeInterval" style="width: 50px;" onKeyPress="NumObj(this);"/><spring:message code='encrypt_policy_management.sec'/>
 							</td>
 						</tr>

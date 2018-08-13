@@ -23,7 +23,7 @@ $(window.document).ready(function() {
 	
 	var encryptDashbaordServer = document.getElementById("encryptDashbaordServer");
 	var encryptDashbaordAgent = document.getElementById("encryptDashbaordAgent");
-	if("${sessionScope.encp_use_yn}" == "Y"){
+	if("${sessionScope.session.encp_use_yn}" == "Y"){
 		encryptDashbaordServer.style.display = '';
 		encryptDashbaordAgent.style.display = '';
 		fn_serverStatus();
@@ -59,12 +59,10 @@ function fn_serverStatus(){
 		},
 		success : function(data) {
 			if(data.resultCode == "0000000000"){
-				var html ='<img src="../images/ico_agent_1.png" alt="" />';
+				var html ='<img src="../images/ico_state_03.png" alt="Running Transfer" /><span> Running</span>';				
 				$("#encryptServer").html(html);
 				fn_selectSecurityStatistics(today);
 			}else if(data.resultCode == "8000000002"){
-				alert("<spring:message code='message.msg05' />");	
-				
 				var html ='<img src="../images/ico_state_07.png" alt="Stop" /> STOP';
 				//var html ='<img src="../images/ico_agent_2.png" alt="" />';
 				$("#encryptServer").html(html);
@@ -478,10 +476,13 @@ function fn_selectSecurityStatistics(today){
 										<span class="work_state"><img src="../images/ico_state_08.png" alt="Not Install" /></span>Not Install
 									</c:if>
 									<c:if test="${data.agt_cndt_cd == 'TC001101'}">
-										<span class="work_state"><img src="../images/ico_state_03.png" alt="Running" /></span>Running
+										<!-- <span class="work_state"> -->
+										<img src="../images/ico_agent_1.png" alt="" />
+										<!-- <img src="../images/ico_state_03.png" alt="Running" /></span>Running -->
 									</c:if>									
 									<c:if test="${data.agt_cndt_cd == 'TC001102'}">
-										<span class="work_state"><img src="../images/ico_state_07.png" alt="Stop" /></span>Stop
+										<img src="../images/ico_agent_2.png" alt="" />
+										<!-- <span class="work_state"><img src="../images/ico_state_07.png" alt="Stop" /></span>Stop -->
 									</c:if>											
 									</td>							
 								</tr>
@@ -493,7 +494,7 @@ function fn_selectSecurityStatistics(today){
 				
 				<!-- eXperDB Encrypt 상태 -->
 				<div class="main_server_info" >
-					<p class="tit">eXperDB Encrypt <%-- <spring:message code="properties.status" /> --%> <div  id="today" align="right"></div></p>
+					<p class="tit">eXperDB Encrypt <%-- <spring:message code="properties.status" /> --%> <span id="today" style="float: right; padding-right: 1%;"></span></p>
 					
 					<div class="inner">
 						<table class="list" style="width: 320px;" id="encryptDashbaordServer">

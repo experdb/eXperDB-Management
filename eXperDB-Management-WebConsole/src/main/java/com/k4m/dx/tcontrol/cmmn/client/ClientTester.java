@@ -114,7 +114,7 @@ public class ClientTester {
 			//clientTester.dxT020(Ip, port);
 			//clientTester.dxT021(Ip, port);
 			//clientTester.dxT023(Ip, port);
-			//clientTester.dxT024(Ip, port);
+			clientTester.dxT024(Ip, port);
 			//clientTester.dxT025(Ip, port);
 			//clientTester.dxT026(Ip, port);
 			//clientTester.test();
@@ -798,7 +798,7 @@ public class ClientTester {
 			serverObj.put(ClientProtocolID.SERVER_NAME, "192.168.56.117");
 			serverObj.put(ClientProtocolID.SERVER_IP, "192.168.56.117");
 			serverObj.put(ClientProtocolID.SERVER_PORT, "5432");
-			serverObj.put(ClientProtocolID.DATABASE_NAME, "encrypt");
+			serverObj.put(ClientProtocolID.DATABASE_NAME, "enc_test");
 			serverObj.put(ClientProtocolID.USER_ID, "experdb");
 			serverObj.put(ClientProtocolID.USER_PWD, "experdb");
 			
@@ -1975,10 +1975,10 @@ public class ClientTester {
 
 			JSONObject serverObj = new JSONObject();
 
-			serverObj.put(ClientProtocolID.SERVER_NAME, "192.168.56.116");
-			serverObj.put(ClientProtocolID.SERVER_IP, "192.168.56.116");
+			serverObj.put(ClientProtocolID.SERVER_NAME, "192.168.56.117");
+			serverObj.put(ClientProtocolID.SERVER_IP, "192.168.56.117");
 			serverObj.put(ClientProtocolID.SERVER_PORT, "5432");
-			serverObj.put(ClientProtocolID.DATABASE_NAME, "experdb");
+			serverObj.put(ClientProtocolID.DATABASE_NAME, "enc_test");
 			serverObj.put(ClientProtocolID.USER_ID, "experdb");
 			serverObj.put(ClientProtocolID.USER_PWD, "experdb");
 		

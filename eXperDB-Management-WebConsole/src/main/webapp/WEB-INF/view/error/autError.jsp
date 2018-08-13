@@ -2,17 +2,10 @@
 	pageEncoding="UTF-8"%>
 <%@ taglib prefix="c"      uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags"%>  
-<style>
-#error {
-	float: left;
-	position: relative;
-	right: 50%;
-	margin-top: 50%;
-}
-</style>
+<link rel="stylesheet" type="text/css" href="../css/common.css">
 <body class="bg">
 	<div id="login_wrap">
-		<div class="inr">
+		<div class="inr" style="width: 800px; float: center;">
 			<div id="error">
 				<c:set var="data" value="${pageContext.response.locale}" />
 					<c:choose>
@@ -24,7 +17,7 @@
 				    </c:otherwise>
 				</c:choose>
 				<div class="btn_wrap">
-					<button onclick="history.go(-1)"><spring:message code="common.back"/></button>
+					<button type="button" onclick="history.go(-1)"><spring:message code="common.back"/></button>
 				</div>
 			</div>
 		</div>

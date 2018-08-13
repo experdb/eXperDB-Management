@@ -21,6 +21,7 @@ import com.k4m.dx.tcontrol.cmmn.AES256_KEY;
 import com.k4m.dx.tcontrol.cmmn.CmmnUtils;
 import com.k4m.dx.tcontrol.common.service.HistoryVO;
 import com.k4m.dx.tcontrol.encrypt.service.call.UserManagerServiceCall;
+import com.k4m.dx.tcontrol.login.service.LoginVO;
 import com.k4m.dx.tcontrol.login.service.UserVO;
 import com.k4m.dx.tcontrol.mypage.service.MyPageService;
 
@@ -64,7 +65,8 @@ public class MypageController {
 		try {
 			
 			HttpSession session = request.getSession();
-			String usr_id = (String) session.getAttribute("usr_id");
+			LoginVO loginVo = (LoginVO) session.getAttribute("session");
+			String usr_id = loginVo.getUsr_id();
 
 			// 화면접근이력 이력 남기기
 			CmmnUtils.saveHistory(request, historyVO);
@@ -74,6 +76,7 @@ public class MypageController {
 			
 			
 			result = myPageService.selectDetailMyPage(usr_id);
+			mv.addObject("usr_id", usr_id);
 			mv.addObject("usr_nm", result.get(0).getUsr_nm());
 			mv.addObject("aut_id", result.get(0).getAut_id());
 			mv.addObject("bln_nm", result.get(0).getBln_nm());
@@ -105,7 +108,8 @@ public class MypageController {
 	public @ResponseBody void updateMypage(@ModelAttribute("userVo") UserVO userVo,@ModelAttribute("historyVO") HistoryVO historyVO,HttpServletRequest request) {
 		try {
 			HttpSession session = request.getSession();
-			String usr_id = (String)session.getAttribute("usr_id");
+			LoginVO loginVo = (LoginVO) session.getAttribute("session");
+			String usr_id = loginVo.getUsr_id();
 			userVo.setLst_mdfr_id(usr_id);
 			
 			myPageService.updateMypage(userVo);
@@ -157,7 +161,8 @@ public class MypageController {
 		try {
 			Map<String, Object> param = new HashMap<String, Object>();
 			HttpSession session = request.getSession();
-			String usr_id = (String) session.getAttribute("usr_id");
+			LoginVO loginVo = (LoginVO) session.getAttribute("session");
+			String usr_id = loginVo.getUsr_id();
 			AES256 aes = new AES256(AES256_KEY.ENC_KEY);
 			String nowpwd = aes.aesEncode(request.getParameter("nowpwd"));;
 			param.put("usr_id", usr_id);
@@ -190,16 +195,17 @@ public class MypageController {
 		JSONObject result = new JSONObject();
 		UserManagerServiceCall uic= new UserManagerServiceCall();
 		HttpSession session = request.getSession();
+		LoginVO loginVo = (LoginVO) session.getAttribute("session");
 		try {
-			String strTocken = (String)session.getAttribute("tockenValue");
-			String loginId = (String)session.getAttribute("usr_id");
-			String entityId = (String)session.getAttribute("ectityUid");	
-			String encp_use_yn = (String)session.getAttribute("encp_use_yn");
+			String strTocken = loginVo.getTockenValue();
+			String loginId = loginVo.getUsr_id();
+			String entityId = loginVo.getEctityUid();	
+			String encp_use_yn = loginVo.getEncp_use_yn();
 			String password = userVo.getPwd();		
 			
 			if(encp_use_yn.equals("Y") && strTocken != null && entityId !=null){
-				String restIp = (String)session.getAttribute("restIp");
-				int restPort = (int)session.getAttribute("restPort");
+				String restIp = loginVo.getRestIp();
+				int restPort = loginVo.getRestPort();
 				try{
 					result = uic.updatePassword(restIp, restPort, strTocken, loginId, entityId, password);
 				}catch(Exception e){
@@ -208,7 +214,7 @@ public class MypageController {
 			}
 			
 			if(result.get("resultCode").equals("0000000000")){
-				String usr_id = (String)session.getAttribute("usr_id");
+				String usr_id = loginVo.getUsr_id();
 				userVo.setUsr_id(usr_id);
 				userVo.setLst_mdfr_id(usr_id);
 				AES256 aes = new AES256(AES256_KEY.ENC_KEY);

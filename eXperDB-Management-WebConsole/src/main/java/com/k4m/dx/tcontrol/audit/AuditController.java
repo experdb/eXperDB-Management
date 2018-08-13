@@ -10,6 +10,7 @@ import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -310,6 +311,29 @@ public class AuditController {
 				historyVO.setExe_dtl_cd("DX-T0032");
 				accessHistoryService.insertHistory(historyVO); 
 				
+				ClientInfoCmmn cic = new ClientInfoCmmn();
+				JSONObject serverObj = new JSONObject();
+				AES256 dec = new AES256(AES256_KEY.ENC_KEY);
+				
+				DbServerVO schDbServerVO = new DbServerVO();
+				schDbServerVO.setDb_svr_id(db_svr_id);
+				DbServerVO dbServerVO = (DbServerVO) cmmnServerInfoService.selectServerInfo(schDbServerVO);
+				String strIpAdr = dbServerVO.getIpadr();
+				AgentInfoVO vo = new AgentInfoVO();
+				vo.setIPADR(strIpAdr);
+				AgentInfoVO agentInfo = (AgentInfoVO) cmmnServerInfoService.selectAgentInfo(vo);
+				String IP = dbServerVO.getIpadr();
+				int PORT = agentInfo.getSOCKET_PORT();
+				serverObj.put(ClientProtocolID.SERVER_NAME, dbServerVO.getDb_svr_nm());
+				serverObj.put(ClientProtocolID.SERVER_IP, dbServerVO.getIpadr());
+				serverObj.put(ClientProtocolID.SERVER_PORT, dbServerVO.getPortno());
+				serverObj.put(ClientProtocolID.DATABASE_NAME, dbServerVO.getDft_db_nm());
+				serverObj.put(ClientProtocolID.USER_ID, dbServerVO.getSvr_spr_usr_id());
+				serverObj.put(ClientProtocolID.USER_PWD, dec.aesDecode(dbServerVO.getSvr_spr_scm_pwd()));
+				JSONObject result = cic.dbms_inforamtion(IP, PORT, serverObj);
+				String strDirectoryPath = (String) result.get("LOG_PATH");
+
+				
 				SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
 		        Calendar c1 = Calendar.getInstance();
 		        String strToday = sdf.format(c1.getTime());
@@ -320,17 +344,16 @@ public class AuditController {
 				searchInfoObj.put(ClientProtocolID.START_DATE, strStartDate);
 				searchInfoObj.put(ClientProtocolID.END_DATE, strEndDate);
 				
-				DbServerVO schDbServerVO = new DbServerVO();
+				schDbServerVO = new DbServerVO();
 				schDbServerVO.setDb_svr_id(db_svr_id);
-				DbServerVO dbServerVO = (DbServerVO)  cmmnServerInfoService.selectServerInfo(schDbServerVO);
-				String strIpAdr = dbServerVO.getIpadr();
-				AgentInfoVO vo = new AgentInfoVO();
+				dbServerVO = (DbServerVO)  cmmnServerInfoService.selectServerInfo(schDbServerVO);
+				strIpAdr = dbServerVO.getIpadr();
+				vo = new AgentInfoVO();
 				vo.setIPADR(strIpAdr);
-				AgentInfoVO agentInfo =  (AgentInfoVO) cmmnServerInfoService.selectAgentInfo(vo);
-				String strDirectory = dbServerVO.getPgdata_pth() + "/pg_log/";
-				JSONObject serverObj = new JSONObject();
+				agentInfo =  (AgentInfoVO) cmmnServerInfoService.selectAgentInfo(vo);
+				String strDirectory = strDirectoryPath;
+				serverObj = new JSONObject();
 				
-				AES256 dec = new AES256(AES256_KEY.ENC_KEY);
 				String strPwd = dec.aesDecode(dbServerVO.getSvr_spr_scm_pwd());
 				
 				serverObj.put(ClientProtocolID.SERVER_NAME, dbServerVO.getDb_svr_nm());
@@ -353,8 +376,8 @@ public class AuditController {
 					return mv;
 				}
 				
-				String IP = dbServerVO.getIpadr();
-				int PORT = agentInfo.getSOCKET_PORT();
+				IP = dbServerVO.getIpadr();
+				PORT = agentInfo.getSOCKET_PORT();
 				
 				ClientAdapter CA = new ClientAdapter(IP, PORT);
 				
@@ -373,23 +396,8 @@ public class AuditController {
 					return mv;
 				}
 				
-//				CA.open(); 
-//				JSONObject objList = CA.dxT015(jObj);
-//				CA.close();
-				
-//				String strErrMsg = (String)objList.get(ClientProtocolID.ERR_MSG);
-//				String strErrCode = (String)objList.get(ClientProtocolID.ERR_CODE);
-//				String strDxExCode = (String)objList.get(ClientProtocolID.DX_EX_CODE);
-//				String strResultCode = (String)objList.get(ClientProtocolID.RESULT_CODE);
-//				System.out.println("RESULT_CODE : " +  strResultCode);
-//				System.out.println("ERR_CODE : " +  strErrCode);
-//				System.out.println("ERR_MSG : " +  strErrMsg);
-				
-//				List<HashMap<String, String>> fileList = (List<HashMap<String, String>>) objList.get(ClientProtocolID.RESULT_DATA);
-				
 				mv.addObject("serverName", dbServerVO.getDb_svr_nm());
 				mv.addObject("db_svr_id", db_svr_id);
-//				mv.addObject("logFileList", fileList);
 				mv.addObject("extName", strExtName);
 				mv.addObject("start_date", strStartDate);
 				mv.addObject("end_date", strEndDate);

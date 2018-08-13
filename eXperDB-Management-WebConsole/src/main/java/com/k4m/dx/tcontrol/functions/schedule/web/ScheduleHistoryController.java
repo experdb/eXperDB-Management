@@ -22,6 +22,7 @@ import com.k4m.dx.tcontrol.admin.menuauthority.service.MenuAuthorityService;
 import com.k4m.dx.tcontrol.cmmn.CmmnUtils;
 import com.k4m.dx.tcontrol.common.service.HistoryVO;
 import com.k4m.dx.tcontrol.functions.schedule.service.ScheduleHistoryService;
+import com.k4m.dx.tcontrol.login.service.LoginVO;
 import com.k4m.dx.tcontrol.sample.service.PagingVO;
 
 import egovframework.rte.fdl.property.EgovPropertyService;
@@ -144,7 +145,8 @@ public class ScheduleHistoryController {
 				accessHistoryService.insertHistory(historyVO);
 				
 				HttpSession session = request.getSession();
-				String usr_id = (String) session.getAttribute("usr_id");
+				LoginVO loginVo = (LoginVO) session.getAttribute("session");
+				String usr_id = loginVo.getUsr_id();
 				
 				Map<String, Object> param = new HashMap<String, Object>();
 	
@@ -155,23 +157,19 @@ public class ScheduleHistoryController {
 				String exe_result = request.getParameter("exe_result");
 				String order_type = request.getParameter("order_type");
 				String order = request.getParameter("order");
-				
-				if(scd_nm.equals("") ){
-					scd_nm="%";
-				}
-				
+						
 				param.put("lgi_dtm_start", lgi_dtm_start);
 				param.put("lgi_dtm_end", lgi_dtm_end);
-				param.put("scd_nm", scd_nm);
-				param.put("db_svr_nm", db_svr_nm);
+				param.put("scd_nm", "%"+scd_nm+"%");
+				param.put("db_svr_nm", "%"+db_svr_nm+"%");
 				param.put("exe_result", exe_result);
 				param.put("order_type", order_type);
 				param.put("order", order);
 				param.put("usr_id", usr_id);
 	
 				System.out.println("********PARAMETER*******");
-				System.out.println("DB서버 : "+ db_svr_nm);
-				System.out.println("스케줄명 : "+ scd_nm);
+				System.out.println("DB서버 : "+ "%"+db_svr_nm+"%");
+				System.out.println("스케줄명 : "+ "%"+scd_nm+"%");
 				System.out.println("시작날짜 : "+ lgi_dtm_start);
 				System.out.println("종료날짜 : " +lgi_dtm_end);
 				System.out.println("실행결과 : " +exe_result);
@@ -402,7 +400,8 @@ public class ScheduleHistoryController {
 		List<Map<String, Object>> resultSet = null;
 		try {			
 			HttpSession session = request.getSession();
-			String usr_id = (String) session.getAttribute("usr_id");
+			LoginVO loginVo = (LoginVO) session.getAttribute("session");
+			String usr_id = loginVo.getUsr_id();
 			
 			Map<String, Object> param = new HashMap<String, Object>();
 			
@@ -432,9 +431,6 @@ public class ScheduleHistoryController {
 	public List<Map<String, Object>> selectScheduleDBMSList(HttpServletRequest request) {
 		List<Map<String, Object>> resultSet = null;
 		try {			
-			HttpSession session = request.getSession();
-			String usr_id = (String) session.getAttribute("usr_id");
-			
 			Map<String, Object> param = new HashMap<String, Object>();
 			
 			String wrk_start_dtm = request.getParameter("wrk_start_dtm");
@@ -442,9 +438,8 @@ public class ScheduleHistoryController {
 			
 			param.put("wrk_start_dtm", wrk_start_dtm);
 			param.put("wrk_end_dtm", wrk_end_dtm);
-			param.put("usr_id", usr_id);
 			
-			resultSet = scheduleHistoryService.selectScheduleDBMSList(param);	
+			resultSet = scheduleHistoryService.selectScheduleDBMSList(param);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

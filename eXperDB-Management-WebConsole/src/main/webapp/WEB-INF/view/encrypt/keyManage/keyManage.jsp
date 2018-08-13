@@ -66,34 +66,37 @@ var table = null;
 		table.tables().header().to$().find('th:eq(14)').css('min-width', '0px');
 	    $(window).trigger('resize');
 	    
-		//더블 클릭시
-		$('#keyManageTable tbody').on('dblclick', 'tr', function() {
-			var data = table.row(this).data();
-			
- 			var frmPop= document.frmPopup;
- 			
-			var popUrl = "/popup/keyManageRegReForm.do"; // 서버 url 팝업경로
-			var width = 1300;
-			var height = 735;
-			var left = (window.screen.width / 2) - (width / 2);
-			var top = (window.screen.height /2) - (height / 2);
-			var popOption = "width="+width+", height="+height+", top="+top+", left="+left+", resizable=no, scrollbars=yes, status=no, toolbar=no, titlebar=yes, location=no,";
-						
-			frmPop.action = popUrl;
-		    frmPop.target = 'popupView';
-		    frmPop.method = "post";
-		    
-		    window.open(popUrl,"popupView",popOption);	
-		    
-		    frmPop.resourceName.value = data.resourceName;
-		    frmPop.resourceNote.value = data.resourceNote;  
-		    frmPop.keyUid.value = data.keyUid;
-		    frmPop.keyStatusCode.value = data.keyStatusCode; 
-		    frmPop.keyStatusName.value = data.keyStatusName;
-		    frmPop.cipherAlgorithmName.value = data.cipherAlgorithmName; 
-		    frmPop.cipherAlgorithmCode.value = data.cipherAlgorithmCode;
-		    frmPop.submit();   
-		});
+	  //더블 클릭시
+		if("${wrt_aut_yn}" == "Y"){
+			$('#keyManageTable tbody').on('dblclick', 'tr', function() {
+				var data = table.row(this).data();
+				
+	 			var frmPop= document.frmPopup;
+	 			
+				var popUrl = "/popup/keyManageRegReForm.do"; // 서버 url 팝업경로
+				var width = 1300;
+				var height = 735;
+				var left = (window.screen.width / 2) - (width / 2);
+				var top = (window.screen.height /2) - (height / 2);
+				var popOption = "width="+width+", height="+height+", top="+top+", left="+left+", resizable=no, scrollbars=yes, status=no, toolbar=no, titlebar=yes, location=no,";
+							
+				frmPop.action = popUrl;
+			    frmPop.target = 'popupView';
+			    frmPop.method = "post";
+			    
+			    window.open(popUrl,"popupView",popOption);	
+			    
+			    frmPop.resourceName.value = data.resourceName;
+			    frmPop.resourceNote.value = data.resourceNote;  
+			    frmPop.keyUid.value = data.keyUid;
+			    frmPop.keyStatusCode.value = data.keyStatusCode; 
+			    frmPop.keyStatusName.value = data.keyStatusName;
+			    frmPop.cipherAlgorithmName.value = data.cipherAlgorithmName; 
+			    frmPop.cipherAlgorithmCode.value = data.cipherAlgorithmCode;
+			    frmPop.submit();   
+			});
+		}
+
 	}
 	
 	$(window.document).ready(function() {
@@ -119,8 +122,7 @@ var table = null;
 	}
 	
 	/* 조회 버튼 클릭시*/
-	function fn_select() {
-		
+	function fn_select() {	
 		$.ajax({
 			url : "/selectCryptoKeyList.do", 
 		  	data : {
@@ -306,9 +308,9 @@ var table = null;
 			<div class="cmm_grp">
 				<div class="btn_type_01">
 <!-- 					<span class="btn" onclick="fn_select();"><button>조회</button></span> -->
-					<span class="btn" onclick="fn_insert();"><button id="btnInsert"><spring:message code="common.registory" /></button></span>
-					<span class="btn" onclick="fn_update();"><button id="btnUpdate"><spring:message code="common.modify" /></button></span>
-					<span class="btn" onclick="fn_delete();"><button id="btnDelete"><spring:message code="common.delete" /></button></span>
+					<span class="btn" onclick="fn_insert();"><button type="button" id="btnInsert"><spring:message code="common.registory" /></button></span>
+					<span class="btn" onclick="fn_update();"><button type="button" id="btnUpdate"><spring:message code="common.modify" /></button></span>
+					<span class="btn" onclick="fn_delete();"><button type="button" id="btnDelete"><spring:message code="common.delete" /></button></span>
 				</div>
 <!-- 				<div class="sch_form"> -->
 <!-- 					<table class="write"> -->

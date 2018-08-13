@@ -141,7 +141,7 @@ function fn_init(){
 	  table.tables().header().to$().find('th:eq(1)').css('min-width', '30px');
 	  table.tables().header().to$().find('th:eq(2)').css('min-width', '130px');
 	  table.tables().header().to$().find('th:eq(3)').css('min-width', '70px');
-	  table.tables().header().to$().find('th:eq(4)').css('min-width', '70px');
+	  table.tables().header().to$().find('th:eq(4)').css('min-width', '130px');
 	  table.tables().header().to$().find('th:eq(5)').css('min-width', '200px');
 	  table.tables().header().to$().find('th:eq(6)').css('min-width', '300px');
 	  table.tables().header().to$().find('th:eq(7)').css('min-width', '80px');
@@ -546,7 +546,7 @@ function fn_check() {
 					<div class="contents">
 						<div class="cmm_grp">
 							<div class="btn_type_01">
-								<span class="btn"  onClick="fn_insertSchedule();" id="int_button"><button><spring:message code="common.registory" /></button></span>
+								<span class="btn"  onClick="fn_insertSchedule();" id="int_button"><button type="button"><spring:message code="common.registory" /></button></span>
 							</div>
 							<div class="sch_form">
 								<table class="write">
@@ -558,7 +558,7 @@ function fn_check() {
 									<tbody>
 										<tr>
 											<th scope="row" class="t9 line"><spring:message code="schedule.schedule_name" />(*)</th>
-											<td><input type="text" class="txt t2" id="scd_nm" name="scd_nm" onkeyup="fn_checkWord(this,20)" maxlength="20" placeholder="20<spring:message code='message.msg188'/>" onblur="this.value=this.value.trim()"/>
+											<td><input type="text" class="txt t2" id="scd_nm" name="scd_nm" onkeyup="fn_checkWord(this,20)" maxlength="20" placeholder="20<spring:message code='message.msg188'/>" onblur="this.value=this.value.trim()" style="width:270px;"/>
 											<span class="btn btnF_04 btnC_01"><button type="button" class= "btn_type_02" onclick="fn_check()" style="width: 100px; margin-right: -60px; margin-top: 0;"><spring:message code="common.overlap_check" /></button></span>
 											</td>
 										</tr>
@@ -643,7 +643,7 @@ function fn_check() {
 												<th width="30"><spring:message code="common.no" /></th>												
 												<th width="130"><spring:message code="common.dbms_name" /></th>
 												<th width="70"><spring:message code="common.division" /></th>
-												<th width="70"><spring:message code="backup_management.detail_div" /></th>
+												<th width="130"><spring:message code="backup_management.detail_div" /></th>
 												<th width="200" class="dt-center"><spring:message code="common.work_name" /> </th>
 												<th width="300" class="dt-center"><spring:message code="common.work_description" /></th>												
 												<th width="80"><spring:message code="data_transfer.run_order" /></th>

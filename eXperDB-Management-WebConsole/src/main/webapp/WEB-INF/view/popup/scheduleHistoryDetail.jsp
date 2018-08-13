@@ -3,6 +3,7 @@
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form"%>
 <%@ taglib prefix="ui" uri="http://egovframework.gov/ctl/ui"%>
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags"%>
+<%@include file="../cmmn/commonLocale.jsp"%>
 <%
 	/**
 	* @Class Name : scheduleHistoryDetail.jsp
@@ -54,10 +55,17 @@ function fn_init() {
 		{ data : "rownum", className : "dt-center",  defaultContent : ""}, 
 		{data : "wrk_nm", className : "dt-left", defaultContent : ""
 			,"render": function (data, type, full) {
-				  return '<span onClick=javascript:fn_workLayer("'+full.wrk_id+'"); class="bold">' + full.wrk_nm + '</span>';
+				  return '<span onClick=javascript:fn_workLayer("'+full.wrk_id+'"); class="bold" title="'+full.wrk_nm+'">' + full.wrk_nm + '</span>';
 			}
 		},
-		{ data : "wrk_exp", className : "dt-left", defaultContent : ""}, 
+		{ data : "wrk_exp",
+			render : function(data, type, full, meta) {	 	
+				var html = '';					
+				html += '<span title="'+full.wrk_exp+'">' + full.wrk_exp + '</span>';
+				return html;
+			},
+			defaultContent : ""
+		},
 		{ data : "wrk_strt_dtm",  defaultContent : ""},  
 		{ data : "wrk_end_dtm",  defaultContent : ""},
 		{ data : "wrk_dtm",  defaultContent : ""},
@@ -87,7 +95,7 @@ function fn_init() {
 						if(full.exe_rslt_cd == 'TC001701'){
 							html += ' - ';
 						}else{
-							html +='<span class="btn btnC_01 btnF_02" onClick=javascript:fn_fix_rslt_reg('+full.exe_sn+');><input type="button" value="조치입력"></span>';
+							html +='<span class="btn btnC_01 btnF_02" onClick=javascript:fn_fix_rslt_reg('+full.exe_sn+');><input type="button" value="<spring:message code="backup_management.Enter_Action"/>"></span>';
 						}
 					}
 					return html;
@@ -230,10 +238,16 @@ function fn_fix_rslt_msg_modify(){
 	margin-top: 0px !important;
 }
 
+#scriptInfo{
+	width: 60% !important;
+	height: 610px !important;
+	margin-top: 0px !important;
+}
 </style>
 <%@include file="../cmmn/commonLocale.jsp"%>  
 <%@include file="../cmmn/workRmanInfo.jsp"%>
 <%@include file="../cmmn/workDumpInfo.jsp"%>
+<%@include file="../cmmn/workScriptInfo.jsp"%>
 <%@include file="../cmmn/scheduleInfo.jsp"%>
 <%@include file="../cmmn/wrkLog.jsp"%>
 <%@include file="../cmmn/fixRsltMsg.jsp"%>

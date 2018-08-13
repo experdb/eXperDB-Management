@@ -78,7 +78,7 @@ function fn_init(){
 	table.tables().header().to$().find('th:eq(1)').css('min-width', '30px');
 	table.tables().header().to$().find('th:eq(2)').css('min-width', '100px');
 	table.tables().header().to$().find('th:eq(3)').css('min-width', '100px');
-	table.tables().header().to$().find('th:eq(4)').css('min-width', '100px');
+	table.tables().header().to$().find('th:eq(4)').css('min-width', '130px');
 	table.tables().header().to$().find('th:eq(5)').css('min-width', '200px');
 	table.tables().header().to$().find('th:eq(6)').css('min-width', '300px');
 	table.tables().header().to$().find('th:eq(7)').css('min-width', '80px');
@@ -273,9 +273,15 @@ $(window.document).ready(function() {
 			}
 		},
 		success : function(result) {
-
 			if(result[0].exe_perd_cd == "TC001602"){
-				$("#weekDay").show();
+				$("#weekDay").show();				
+				if(result[0].exe_dt.length ==7){
+					for(var i=0; i<result[0].exe_dt.length; i++){
+						if(result[0].exe_dt[i] == 1){
+							document.getElementById('chk'+i).checked = true;
+						}
+					}					
+				}				
 			}else if(result[0].exe_perd_cd == "TC001603"){
 				$("#day").show();
 			}else if(result[0].exe_perd_cd == "TC001604"){
@@ -288,7 +294,8 @@ $(window.document).ready(function() {
 			document.getElementById('scd_nm').value= result[0].scd_nm;
 			document.getElementById('scd_exp').value= result[0].scd_exp;				
 			document.getElementById('exe_perd_cd').value= result[0].exe_perd_cd;
-			document.getElementById('datepicker1').value= result[0].exe_dt==null?'':result[0].exe_dt;
+			//document.getElementById('weekDay').value= result[0].exe_dt==null?'':result[0].exe_dt;
+			document.getElementById('datepicker1').value= result[0].exe_dt==null?'':result[0].exe_dt;	
 			document.getElementById('exe_month').value= result[0].exe_month;
 			document.getElementById('exe_day').value= result[0].exe_day;
  			document.getElementById('exe_h').value= result[0].exe_hms.substring(4, 6);
@@ -622,7 +629,7 @@ function fn_dateValidation(exe_dt){
 					<div class="contents">
 						<div class="cmm_grp">
 							<div class="btn_type_01">
-								<span class="btn"><button onClick="fn_scheduleStop();"><spring:message code="button.modify" /></button></span>
+								<span class="btn"><button type="button" onClick="fn_scheduleStop();"><spring:message code="button.modify" /></button></span>
 							</div>
 							<div class="sch_form">
 								<table class="write">
@@ -634,7 +641,7 @@ function fn_dateValidation(exe_dt){
 									<tbody>
 										<tr>
 											<th scope="row" class="t9 line"><spring:message code="schedule.schedule_name" />(*)</th>
-											<td><input type="text" class="txt t2" id="scd_nm" name="scd_nm" maxlength="20" readonly="readonly"/></td>
+											<td><input type="text" class="txt t2" id="scd_nm" name="scd_nm" maxlength="20" readonly="readonly" style="width:270px;"/></td>
 										</tr>
 										<tr>
 											<th scope="row" class="t9 line"><spring:message code="schedule.scheduleExp"/>(*)</th>
@@ -720,7 +727,7 @@ function fn_dateValidation(exe_dt){
 												<th width="0"></th>
 												<th width="100"><spring:message code="common.dbms_name" /></th>
 												<th width="100"><spring:message code="common.division" /></th>
-												<th width="100"><spring:message code="backup_management.detail_div" /></th>												
+												<th width="130"><spring:message code="backup_management.detail_div" /></th>												
 												<th width="200" class="dt-center"><spring:message code="common.work_name" /> </th>
 												<th width="300" class="dt-center"><spring:message code="common.work_description" /></th>
 												<th width="80"><spring:message code="data_transfer.run_order" /></th>

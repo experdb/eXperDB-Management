@@ -1,7 +1,6 @@
 package com.k4m.dx.tcontrol.functions.schedule.web;
 
 
-import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -42,6 +41,7 @@ import com.k4m.dx.tcontrol.functions.schedule.ScheduleUtl;
 import com.k4m.dx.tcontrol.functions.schedule.service.ScheduleDtlVO;
 import com.k4m.dx.tcontrol.functions.schedule.service.ScheduleService;
 import com.k4m.dx.tcontrol.functions.schedule.service.ScheduleVO;
+import com.k4m.dx.tcontrol.login.service.LoginVO;
 
 /**
  * Schedule 컨트롤러 클래스를 정의한다.
@@ -269,7 +269,8 @@ public class ScheduleController {
 		TransactionStatus status = txManager.getTransaction(def);
 		
 		HttpSession session = request.getSession();
-		String usr_id = (String) session.getAttribute("usr_id");
+		LoginVO loginVo = (LoginVO) session.getAttribute("session");
+		String usr_id = loginVo.getUsr_id();
 		
 		String mInsertResult = "S";
 		String dInsertResult = "S";
@@ -411,7 +412,7 @@ public class ScheduleController {
 		        	    //5. 오늘 요일로부터 Prev <------------------------ 검색
 		        	    if(prevCheck == true) {
 		        	    	//5.1 처음부터 오늘요일 이전날짜 까지 검색하여 업데이트
-		        	    	for(int i=0; i<toDay ; i++){
+		        	    	for(int i=toDay; i>=0; i--){
 		        	    		if(String.valueOf(scheduleVO.getExe_dt().charAt(i)).equals("1")) {	    			
 		        	    			strChecked = week[i];
 		        	    			intPrevCnt ++;
@@ -595,7 +596,6 @@ public class ScheduleController {
 				
 				//현재 서비스 올라간 스케줄 그룹 정보
 				Scheduler scheduler = new StdSchedulerFactory().getScheduler();   
-
 				
 				List<Map<String, Object>> result = scheduleService.selectScheduleList(scheduleVO);
 					
@@ -867,7 +867,8 @@ public class ScheduleController {
 		TransactionStatus status = txManager.getTransaction(def);
 		
 		HttpSession session = request.getSession();
-		String usr_id = (String) session.getAttribute("usr_id");
+		LoginVO loginVo = (LoginVO) session.getAttribute("session");
+		String usr_id = loginVo.getUsr_id();
 		
 		String mUpdateResult = "S";
 		String dUpdateResult = "S";
@@ -982,12 +983,13 @@ public class ScheduleController {
 	        	    //5. 오늘 요일로부터 Prev <------------------------ 검색
 	        	    if(prevCheck == true) {
 	        	    	//5.1 처음부터 오늘요일 이전날짜 까지 검색하여 업데이트
-	        	    	for(int i=0; i<toDay ; i++){
+	        	    	for(int i=toDay; i>=0; i--){
 	        	    		if(String.valueOf(scheduleVO.getExe_dt().charAt(i)).equals("1")) {	    			
 	        	    			strChecked = week[i];
 	        	    			intPrevCnt ++;
 	        	    			System.out.println("처음부터검색 ="+strChecked);
 	        	    			String nextDay = weekDay[Integer.parseInt(strChecked)]+" "+detail;
+	        	    			System.out.println(nextDay);
 	        		    		Date dt = transFormat.parse(nextDay);		                
 	        	                cal.setTime(dt);
 	        	                
@@ -1223,7 +1225,8 @@ public class ScheduleController {
 		TransactionStatus status = txManager.getTransaction(def);
 		
 		HttpSession session = request.getSession();
-		String usr_id = (String) session.getAttribute("usr_id");
+		LoginVO loginVo = (LoginVO) session.getAttribute("session");
+		String usr_id = loginVo.getUsr_id();
 		
 		String mInsertResult = "S";
 		String dInsertResult = "S";
@@ -1309,7 +1312,8 @@ public class ScheduleController {
 			HashMap<String , Object> paramvalue = new HashMap<String, Object>();
 			
 			HttpSession session = request.getSession();
-			String usr_id = (String) session.getAttribute("usr_id");
+			LoginVO loginVo = (LoginVO) session.getAttribute("session");
+			String usr_id = loginVo.getUsr_id();
 			
 			   int exe_sn = Integer.parseInt(request.getParameter("exe_sn").toString());
 			   String fix_rsltcd = request.getParameter("fix_rsltcd");

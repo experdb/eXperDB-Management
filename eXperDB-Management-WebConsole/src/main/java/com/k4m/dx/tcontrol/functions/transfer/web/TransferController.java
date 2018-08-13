@@ -23,6 +23,7 @@ import com.k4m.dx.tcontrol.common.service.HistoryVO;
 import com.k4m.dx.tcontrol.functions.transfer.service.ConnectorVO;
 import com.k4m.dx.tcontrol.functions.transfer.service.TransferService;
 import com.k4m.dx.tcontrol.functions.transfer.service.TransferVO;
+import com.k4m.dx.tcontrol.login.service.LoginVO;
 import com.k4m.dx.tcontrol.tree.transfer.service.TransferMappingVO;
 
 /**
@@ -107,7 +108,9 @@ public class TransferController {
 				response.sendRedirect("/autError.do");
 				return resultSet;
 			}
-			String usr_id = (String) session.getAttribute("usr_id");
+			
+			LoginVO loginVo = (LoginVO) session.getAttribute("session");
+			String usr_id = loginVo.getUsr_id();
 			resultSet = (TransferVO) transferService.selectTransferSetting(usr_id);
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -136,7 +139,8 @@ public class TransferController {
 				response.sendRedirect("/autError.do");
 			}
 			HttpSession session = request.getSession();
-			String usr_id = (String) session.getAttribute("usr_id");
+			LoginVO loginVo = (LoginVO) session.getAttribute("session");
+			String usr_id = loginVo.getUsr_id();
 			transferVO.setFrst_regr_id(usr_id);
 			transferVO.setLst_mdfr_id(usr_id);
 
@@ -174,7 +178,8 @@ public class TransferController {
 				return false;
 			}
 			HttpSession session = request.getSession();
-			String usr_id = (String) session.getAttribute("usr_id");
+			LoginVO loginVo = (LoginVO) session.getAttribute("session");
+			String usr_id = loginVo.getUsr_id();
 			transferVO.setLst_mdfr_id(usr_id);
 
 			transferService.updateTransferSetting(transferVO);
@@ -256,7 +261,8 @@ public class TransferController {
 			accessHistoryService.insertHistory(historyVO);
 
 			HttpSession session = request.getSession();
-			String usr_id = (String) session.getAttribute("usr_id");
+			LoginVO loginVo = (LoginVO) session.getAttribute("session");
+			String usr_id = loginVo.getUsr_id();
 
 			Map<String, Object> param = new HashMap<String, Object>();
 
@@ -361,7 +367,8 @@ public class TransferController {
 			@ModelAttribute("historyVO") HistoryVO historyVO, HttpServletRequest request) {
 		try {
 			HttpSession session = request.getSession();
-			String usr_id = (String) session.getAttribute("usr_id");
+			LoginVO loginVo = (LoginVO) session.getAttribute("session");
+			String usr_id = loginVo.getUsr_id();
 			connectorVO.setFrst_regr_id(usr_id);
 			connectorVO.setLst_mdfr_id(usr_id);
 			transferService.insertConnectorRegister(connectorVO);
@@ -390,7 +397,8 @@ public class TransferController {
 			@ModelAttribute("connectorVO") ConnectorVO connectorVO, HttpServletRequest request) {
 		try {
 			HttpSession session = request.getSession();
-			String usr_id = (String) session.getAttribute("usr_id");
+			LoginVO loginVo = (LoginVO) session.getAttribute("session");
+			String usr_id = loginVo.getUsr_id();
 			connectorVO.setLst_mdfr_id(usr_id);
 			transferService.updateConnectorRegister(connectorVO);
 

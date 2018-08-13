@@ -3,6 +3,7 @@
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form"%>
 <%@ taglib prefix="ui" uri="http://egovframework.gov/ctl/ui"%>
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags"%>
+<%@include file="../cmmn/commonLocale.jsp"%>
 <%
 	/**
 	* @Class Name : dbServerRegForm.jsp
@@ -355,12 +356,14 @@ function fn_dbServerConnTest(){
 			}
 		},
 		success : function(result) {
-			if(result[0].result_code == 0){
+			if(result[0].result_code == 0){				
 				 for(var i=0; i<result.length; i++){		
 					if(table.rows().data()[i].ipadr == result[i].result_data[0].SERVER_IP){
 						table.cell(i, 3).data(result[i].result_data[0].MASTER_GBN).draw();
-						table.cell(i, 4).data(result[i].result_data[0].CONNECT_YN).draw();					
-						table.cell(i, 5).data(result[i].result_data[0].CMD_HOSTNAME).draw();	
+						table.cell(i, 4).data(result[i].result_data[0].CONNECT_YN).draw();	
+						 if(result[i].result_data[0].MASTER_GBN != "N" || result[i].result_data[0].CONNECT_YN != "N"){
+							 table.cell(i, 5).data(result[i].result_data[0].CMD_HOSTNAME).draw();	
+						 }
 					}				
 					 if(result[i].result_data[0].MASTER_GBN == "N" || result[i].result_data[0].CONNECT_YN == "N"){
 							connCheck = "fail"
@@ -831,8 +834,8 @@ function fn_ipadrDelForm(){
 		</table>
 		</form>
 		<div class="btn_type_02">
-			<span class="btn"><button onClick="fn_insertDbServer();"><spring:message code="common.registory" /></button></span>
-			<span class="btn btnF_01 btnC_01"><button onClick="fn_dbServerConnTest();"><spring:message code="dbms_information.conn_Test"/></button></span>
+			<span class="btn"><button type="button" onClick="fn_insertDbServer();"><spring:message code="common.registory" /></button></span>
+			<span class="btn btnF_01 btnC_01"><button type="button" onClick="fn_dbServerConnTest();"><spring:message code="dbms_information.conn_Test"/></button></span>
 			<a href="#n" class="btn" onclick="window.close();"><span><spring:message code="common.cancel" /> </span></a>
 		</div>
 	</div>

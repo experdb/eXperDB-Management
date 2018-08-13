@@ -144,7 +144,7 @@ public class ExtensionController {
 			Properties props = new Properties();
 			props.load(new FileInputStream(ResourceUtils.getFile("classpath:egovframework/tcontrolProps/globals.properties")));			
 			
-			String pg_audit = props.get("audit").toString();	
+			String pg_audit = props.get("pg_audit").toString();	
 			
 			int agentPORT = Integer.parseInt(request.getParameter("agentPort"));
 			String serverIp = request.getParameter("ipadr");
@@ -164,11 +164,13 @@ public class ExtensionController {
 			serverObj.put(ClientProtocolID.USER_PWD, userPw);
 					
 			
-			if(pg_audit.equals("Y")){			
+						
 				ClientInfoCmmn cic = new ClientInfoCmmn();
 				
 				String strExtName = "";
 				List<Object> results = cic.extension_select(serverObj,serverIp,agentPORT,strExtName);
+				
+				System.out.println("extension_select_cnt=" +results.size());
 				
 				if(results.size() > 0) {
 					boolean isAdminPackYn = false;
@@ -186,19 +188,22 @@ public class ExtensionController {
 							isAuditYn = true;
 						}	
 						System.out.println(i + " " + extname);
-					}	
-					
-					
+					}		
 					if(isAdminPackYn == false){
 						System.out.println("ADMINPACK 미설치");
 						cic.extensionCreate(serverObj,serverIp,agentPORT,"ADMINPACK");
+					}else{
+						System.out.println("ADMINPACK 이미 설치됨");
 					}
-					if(isAuditYn == false){
-						System.out.println("PGAUDIT 미설치");
-						cic.extensionCreate(serverObj,serverIp,agentPORT,"PGAUDIT");
+					if(pg_audit.equals("Y")){
+						if(isAuditYn == false){
+							System.out.println("PGAUDIT 미설치");
+							cic.extensionCreate(serverObj,serverIp,agentPORT,"PGAUDIT");
+						}
+					}else{
+						System.out.println("PGAUDIT 이미 설치됨");
 					}
-				}
-			}
+				}		
 		} catch (Exception e) {
 			e.printStackTrace();
 		}	

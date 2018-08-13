@@ -3,12 +3,8 @@
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form"%>
 <%@ taglib prefix="ui" uri="http://egovframework.gov/ctl/ui"%>
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags"%>
-
 <%@include file="../../cmmn/cs.jsp"%>
 
-<%
-	String usr_id = (String)session.getAttribute("usr_id");
-%>
 <script>
 var table = null;
 var scd_cndt = null;
@@ -30,7 +26,7 @@ function fn_init(){
 		{data : "rownum",  className : "dt-center", defaultContent : ""}, 		
 		{data : "scd_nm", className : "dt-left", defaultContent : ""
 			,render: function (data, type, full) {
-				  return '<span onClick=javascript:fn_scdLayer("'+full.scd_id+'"); class="bold">' + full.scd_nm + '</span>';
+				  return '<span onClick=javascript:fn_scdLayer("'+full.scd_id+'"); class="bold" title="'+full.scd_nm+'">' + full.scd_nm + '</span>';
 			}
 		},
 		{ data : "scd_exp",
@@ -96,6 +92,7 @@ function fn_init(){
 		{
 			data : "",
 			render : function(data, type, full, meta) {
+				/* var html = "<span><button class='btnDtail' id='detail'><spring:message code='data_transfer.detail_search' /> </button></span>"; */
 				var html = "<span class='btn btnC_01 btnF_02'><button id='detail'><spring:message code='data_transfer.detail_search' /> </button></span>";
 				return html;
 			},
@@ -112,6 +109,7 @@ function fn_init(){
 	],'select': {'style': 'multi'}
 	});
 	
+
  	$('#scheduleList tbody').on('click','#scheduleStop', function () {
  	    var $this = $(this);
 	    var $row = $this.parent().parent();
@@ -202,20 +200,22 @@ function fn_init(){
  	    return false;
 	}); 
  	
- 	
 	//더블 클릭시
-	 $('#scheduleList tbody').on('dblclick','tr',function() {
-		var scd_id = table.row(this).data().scd_id;
-		
-		var popUrl = "/scheduleWrkListVeiw.do?scd_id="+scd_id; // 서버 url 팝업경로
-		var width = 1100;
-		var height = 550;
-		var left = (window.screen.width / 2) - (width / 2);
-		var top = (window.screen.height /2) - (height / 2);
-		var popOption = "width="+width+", height="+height+", top="+top+", left="+left+", resizable=no, scrollbars=yes, status=no, toolbar=no, titlebar=yes, location=no,";
-				
-		window.open(popUrl,"",popOption);
-	});		 
+	if("${wrt_aut_yn}" == "Y"){
+		 $('#scheduleList tbody').on('dblclick','tr',function() {
+			var scd_id = table.row(this).data().scd_id;
+			
+			var popUrl = "/scheduleWrkListVeiw.do?scd_id="+scd_id; // 서버 url 팝업경로
+			var width = 1100;
+			var height = 560;
+			var left = (window.screen.width / 2) - (width / 2);
+			var top = (window.screen.height /2) - (height / 2);
+			var popOption = "width="+width+", height="+height+", top="+top+", left="+left+", resizable=no, scrollbars=yes, status=no, toolbar=no, titlebar=yes, location=no,";
+					
+			window.open(popUrl,"",popOption);
+		});		
+	}
+ 
 	
 	
 	//상세조회 클릭시
@@ -230,28 +230,29 @@ function fn_init(){
  			var scd_id  = row.scd_id;
  			var popUrl = "/scheduleWrkListVeiw.do?scd_id="+scd_id; // 서버 url 팝업경로
  			var width = 1100;
- 			var height = 550;
+ 			var height = 560;
  			var left = (window.screen.width / 2) - (width / 2);
  			var top = (window.screen.height /2) - (height / 2);
  			var popOption = "width="+width+", height="+height+", top="+top+", left="+left+", resizable=no, scrollbars=yes, status=no, toolbar=no, titlebar=yes, location=no,";
  			window.open(popUrl,"",popOption);
     	}
 	});	
-	  table.tables().header().to$().find('th:eq(0)').css('min-width', '10px');
+	
+	  table.tables().header().to$().find('th:eq(0)').css('min-width', '30px');
 	  table.tables().header().to$().find('th:eq(1)').css('min-width', '30px');	  
-	  table.tables().header().to$().find('th:eq(2)').css('min-width', '200px');
-	  table.tables().header().to$().find('th:eq(3)').css('min-width', '300px');
+	  table.tables().header().to$().find('th:eq(2)').css('min-width', '120px');
+	  table.tables().header().to$().find('th:eq(3)').css('min-width', '200px');
 	  table.tables().header().to$().find('th:eq(4)').css('min-width', '100px');
-	  table.tables().header().to$().find('th:eq(5)').css('min-width', '70px');
-	  table.tables().header().to$().find('th:eq(6)').css('min-width', '130px');
-	  table.tables().header().to$().find('th:eq(7)').css('min-width', '130px');
-	  table.tables().header().to$().find('th:eq(8)').css('min-width', '70px');  
-	  table.tables().header().to$().find('th:eq(9)').css('min-width', '130px');
+	  table.tables().header().to$().find('th:eq(5)').css('min-width', '50px');
+	  table.tables().header().to$().find('th:eq(6)').css('min-width', '100px');
+	  table.tables().header().to$().find('th:eq(7)').css('min-width', '100px');
+	  table.tables().header().to$().find('th:eq(8)').css('min-width', '80px');  
+	  table.tables().header().to$().find('th:eq(9)').css('min-width', '100px');
 	  table.tables().header().to$().find('th:eq(10)').css('min-width', '100px');
-	  table.tables().header().to$().find('th:eq(11)').css('min-width', '65px');
-	  table.tables().header().to$().find('th:eq(12)').css('min-width', '130px');
-	  table.tables().header().to$().find('th:eq(13)').css('min-width', '65px'); 
-	  table.tables().header().to$().find('th:eq(14)').css('min-width', '130px'); 
+	  table.tables().header().to$().find('th:eq(11)').css('min-width', '100px');
+	  table.tables().header().to$().find('th:eq(12)').css('min-width', '100px');
+	  table.tables().header().to$().find('th:eq(13)').css('min-width', '100px'); 
+	  table.tables().header().to$().find('th:eq(14)').css('min-width', '100px'); 
 	  table.tables().header().to$().find('th:eq(15)').css('min-width', '0px');
 	  table.tables().header().to$().find('th:eq(16)').css('min-width', '0px');
     $(window).trigger('resize'); 
@@ -340,14 +341,15 @@ $(window.document).ready(function() {
 
 
 function fn_buttonAut(){
+
 	var read_button = document.getElementById("read_button"); 
 	
 	//조회버튼만 남기고, 등록,수정,삭제는 My스케줄에서 가능
-/* 	var int_button = document.getElementById("int_button"); 
+ 	var int_button = document.getElementById("int_button"); 
 	var mdf_button = document.getElementById("mdf_button"); 
-	var del_button = document.getElementById("del_button");  */
+	var del_button = document.getElementById("del_button"); 
 	
-	/* if("${wrt_aut_yn}" == "Y"){
+	 if("${wrt_aut_yn}" == "Y"){
 		int_button.style.display = '';
 		mdf_button.style.display = '';
 		del_button.style.display = '';
@@ -355,7 +357,7 @@ function fn_buttonAut(){
 		int_button.style.display = 'none';
 		mdf_button.style.display = 'none';
 		del_button.style.display = 'none';
-	} */
+	} 
 		
 	if("${read_aut_yn}" == "Y"){
 		read_button.style.display = '';
@@ -371,6 +373,7 @@ function fn_buttonAut(){
 function fn_selectScheduleList(){
 	var nxt_exe_from = $("#from").val() + " " + $("#from_exe_h").val() + ":" + $("#from_exe_m").val();
 	var nxt_exe_to = $("#to").val() + " " + $("#to_exe_h").val() + ":" + $("#to_exe_m").val();
+	
 	
   	$.ajax({
 		url : "/selectScheduleList.do",
@@ -620,28 +623,34 @@ function fn_dateValidation(exe_dt){
 		<div class="contents">
 			<div class="cmm_grp">
 				<div class="btn_type_01">
-					<span class="btn" id="read_button"><button onClick="fn_selectScheduleList();"><spring:message code="common.search" /></button></span>
+					<span class="btn" id="read_button"><button type="button" onClick="fn_selectScheduleList();"><spring:message code="common.search" /></button></span>
 					<span class="btn" id="int_button"><a href="/insertScheduleView.do"><button><spring:message code="common.registory" /></button></a></span>
-					<span class="btn" id="mdf_button"><button onClick="fn_modifyScheduleListView();"><spring:message code="common.modify" /></button></span>
-					<span class="btn" id="del_button"><button onClick="fn_deleteScheduleList();"><spring:message code="common.delete" /></button></span>
+					<span class="btn" id="mdf_button"><button type="button" onClick="fn_modifyScheduleListView();"><spring:message code="common.modify" /></button></span>
+					<span class="btn" id="del_button"><button type="button" onClick="fn_deleteScheduleList();"><spring:message code="common.delete" /></button></span>
 				</div>
 				<div class="sch_form">
 					<table class="write">
 						<caption>검색 조회</caption>
 						<colgroup>
-							<col style="width:140px;" />
-							<col  />
+							<col style="width: 100px;" />
+							<col style="width: 450px;" />
+							<col style="width: 100px;" />
+							</col>
 						</colgroup> 
 						<tbody>
 								<tr>
 									<th scope="row" class="t9 line" style="width:130px;"><spring:message code="schedule.schedule_name" /></th>
-									<td><input type="text" class="txt t2" id="scd_nm" name="scd_nm" maxlength="20"/></td>
+									<td><input type="text" class="txt t2" id="scd_nm" name="scd_nm" maxlength="20" onkeyup="fn_checkWord(this,20)" style="width:270px;"/></td>
+									<th scope="row" class="t9 line"><spring:message code="common.work_name" /></th>
+									<td ><input type="text" class="txt t2" id="wrk_nm" name="wrk_nm" maxlength="20"/></td>
 								</tr>
 								<tr>
 									<th scope="row" class="t9 line"><spring:message code="schedule.scheduleExp"/></th>
-									<td><textarea class="tbd1" name="scd_exp" id="scd_exp" maxlength="150"></textarea></td>
+									<td><input type="text" class="txt t2" id="scd_exp" name="scd_exp" maxlength="150" onkeyup="fn_checkWord(this,150)" style="width:350px;"/></td>
+									<th scope="row" class="t9 line"><spring:message code="common.register" /></th>
+									<td ><input type="text" class="txt t2" id="frst_regr_id" name="frst_regr_id" /></td>	
 								</tr>
-								<tr>
+								<%-- <tr>
 									<th scope="row" class="t9 line"><spring:message code="schedule.next_run_time" /></th>
 									<td>
 										<span id="calendar">
@@ -662,11 +671,8 @@ function fn_dateValidation(exe_dt){
 												</span>
 										</span>
 									</td>
-								</tr>
-								<tr>
-									<th scope="row" class="t9 line"><spring:message code="common.work_name" /></th>
-									<td ><input type="text" class="txt t2" id="wrk_nm" name="wrk_nm" maxlength="20"/></td>
-								</tr>
+								</tr> --%>
+
 								<tr>
 									<th scope="row" class="t9 line" ><spring:message code="common.run_status" /></th>
 									<td>
@@ -675,12 +681,8 @@ function fn_dateValidation(exe_dt){
 										<option value="TC001801"><spring:message code="etc.etc37"/></option>
 										<option value="TC001802"><spring:message code="schedule.run" /></option>
 										<option value="TC001803"><spring:message code="schedule.stop" /></option>
-									</select>	</td>				
+									</select>	</td>			
 								</tr>				
-								<tr>
-									<th scope="row" class="t9 line"><spring:message code="common.register" /></th>
-									<td ><input type="text" class="txt t2" id="frst_regr_id" name="frst_regr_id" /></td>
-								</tr>
 						</tbody>
 					</table>
 				</div>
@@ -690,21 +692,21 @@ function fn_dateValidation(exe_dt){
 				<caption>스케줄 리스트</caption>
 					<thead>
 						<tr>
-							<th width="10"></th>
+							<th width="30"></th>
 							<th width="30"><spring:message code="common.no" /></th>							
-							<th width="200"><spring:message code="schedule.schedule_name" /></th>
-							<th width="300"><spring:message code="schedule.scheduleExp"/></th>
+							<th width="120"><spring:message code="schedule.schedule_name" /></th>
+							<th width="200"><spring:message code="schedule.scheduleExp"/></th>
 							<th width="100"><spring:message code="data_transfer.server_name" /></th>
-							<th width="70"><spring:message code="schedule.work_count" /></th>
-							<th width="130"><spring:message code="schedule.pre_run_time" /></th>
-							<th width="130"><spring:message code="schedule.next_run_time" /></th>
-							<th width="70"><spring:message code="common.run_status" /></th>
-							<th width="130"><spring:message code="etc.etc26"/></th>
+							<th width="50"><spring:message code="schedule.work_count" /></th>
+							<th width="100"><spring:message code="schedule.pre_run_time" /></th>
+							<th width="100"><spring:message code="schedule.next_run_time" /></th>
+							<th width="80"><spring:message code="common.run_status" /></th>
+							<th width="100"><spring:message code="etc.etc26"/></th>
 							<th width="100"><spring:message code="data_transfer.detail_search" /></th>
-							<th width="65"><spring:message code="common.register" /></th>
-							<th width="130"><spring:message code="common.regist_datetime" /></th>
-							<th width="65"><spring:message code="common.modifier" /></th>
-							<th width="130"><spring:message code="common.modify_datetime" /></th>
+							<th width="100"><spring:message code="common.register" /></th>
+							<th width="100"><spring:message code="common.regist_datetime" /></th>
+							<th width="100"><spring:message code="common.modifier" /></th>
+							<th width="100"><spring:message code="common.modify_datetime" /></th>
 							<th width="0"></th>
 							<th width="0"></th>
 						</tr>

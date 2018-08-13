@@ -1,7 +1,6 @@
 package com.k4m.dx.tcontrol.admin.agentmonitoring.web;
 
 import java.io.FileNotFoundException;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -22,12 +21,13 @@ import org.springframework.web.servlet.ModelAndView;
 import com.k4m.dx.tcontrol.admin.accesshistory.service.AccessHistoryService;
 import com.k4m.dx.tcontrol.admin.agentmonitoring.service.AgentMonitoringService;
 import com.k4m.dx.tcontrol.admin.agentmonitoring.service.AgentMonitoringVO;
+import com.k4m.dx.tcontrol.admin.menuauthority.service.MenuAuthorityService;
 import com.k4m.dx.tcontrol.cmmn.CmmnUtils;
 import com.k4m.dx.tcontrol.common.service.HistoryVO;
 import com.k4m.dx.tcontrol.encrypt.service.call.AgentMonitoringServiceCall;
 import com.k4m.dx.tcontrol.encrypt.service.call.CommonServiceCall;
 import com.k4m.dx.tcontrol.encrypt.service.call.UserManagerServiceCall;
-import com.k4m.dx.tcontrol.login.service.UserVO;
+import com.k4m.dx.tcontrol.login.service.LoginVO;
 
 /**
  * Agent 모니터링 컨트롤러 클래스를 정의한다.
@@ -53,6 +53,11 @@ public class AgentMonitoringController {
 	@Autowired
 	private AgentMonitoringService agentMonitoringService;
 
+	@Autowired
+	private MenuAuthorityService menuAuthorityService;
+	
+	private List<Map<String, Object>> menuAut;
+	
 	/**
 	 * Management Agent 모니터링 화면을 보여준다.
 	 * 
@@ -118,13 +123,23 @@ public class AgentMonitoringController {
 	public ModelAndView encryptAgentMonitoring(@ModelAttribute("historyVO") HistoryVO historyVO, HttpServletRequest request, ModelMap model) {
 		ModelAndView mv = new ModelAndView();
 		try {
-			// 화면접근이력 이력 남기기
-			CmmnUtils.saveHistory(request, historyVO);
-			historyVO.setExe_dtl_cd("DX-T0123");
-			historyVO.setMnu_id(20);
-			accessHistoryService.insertHistory(historyVO);
-			
-			mv.setViewName("admin/agentMonitoring/encryptAgentMonitoring");
+			CmmnUtils cu = new CmmnUtils();
+			menuAut = cu.selectMenuAut(menuAuthorityService, "MN000702");	
+			if(menuAut.get(0).get("read_aut_yn").equals("N")){
+				mv.setViewName("error/autError");
+			}else{
+				mv.addObject("read_aut_yn", menuAut.get(0).get("read_aut_yn"));
+				mv.addObject("wrt_aut_yn", menuAut.get(0).get("wrt_aut_yn"));
+				
+				// 화면접근이력 이력 남기기
+				CmmnUtils.saveHistory(request, historyVO);
+				historyVO.setExe_dtl_cd("DX-T0123");
+				historyVO.setMnu_id(20);
+				accessHistoryService.insertHistory(historyVO);
+				
+				mv.setViewName("admin/agentMonitoring/encryptAgentMonitoring");
+			}
+
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -153,11 +168,12 @@ public class AgentMonitoringController {
 		List<Map<String, Object>> agentStatusListResult = null;
 
 		HttpSession session = request.getSession();
-		String restIp = (String)session.getAttribute("restIp");
-		int restPort = (int)session.getAttribute("restPort");
-		String strTocken = (String)session.getAttribute("tockenValue");
-		String loginId = (String)session.getAttribute("usr_id");
-		String entityId = (String)session.getAttribute("ectityUid");	
+		LoginVO loginVo = (LoginVO) session.getAttribute("session");
+		String restIp = loginVo.getRestIp();
+		int restPort = loginVo.getRestPort();
+		String strTocken = loginVo.getTockenValue();
+		String loginId = loginVo.getUsr_id();
+		String entityId = loginVo.getEctityUid();
 
 		try {		
 			// 화면접근이력 이력 남기기
@@ -170,7 +186,11 @@ public class AgentMonitoringController {
 			AgentMonitoringServiceCall amsc = new AgentMonitoringServiceCall();		
 			
 			try{
-				agentList = csc.selectEntityList2(restIp, restPort, strTocken, loginId, entityId);		
+				agentList = csc.selectEntityList2(restIp, restPort, strTocken, loginId, entityId);	
+				if(agentList.size()==0){
+					result.put("resultCode", "0000000000");
+					return result;
+				}
 			}catch(Exception e){
 				result.put("resultCode", "8000000002");
 				return result;
@@ -216,6 +236,7 @@ public class AgentMonitoringController {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
+		
 		return result;
 	}		
 	
@@ -248,15 +269,21 @@ public class AgentMonitoringController {
 			accessHistoryService.insertHistory(historyVO);
 			
 			HttpSession session = request.getSession();
-			String strTocken = (String)session.getAttribute("tockenValue");
-			String loginId = (String)session.getAttribute("usr_id");
-			String entityId = (String)session.getAttribute("ectityUid");
-			String restIp = (String)session.getAttribute("restIp");
-			int restPort = (int)session.getAttribute("restPort");
+			LoginVO loginVo = (LoginVO) session.getAttribute("session");
+			String strTocken = loginVo.getTockenValue();
+			String loginId = loginVo.getUsr_id();
+			String entityId = loginVo.getEctityUid();
+			String restIp = loginVo.getRestIp();
+			int restPort = loginVo.getRestPort();		
 			
 			String[] param = request.getParameter("entityuid").toString().split(",");
 			for (int i = 0; i < param.length; i++) {
-				result = uic.deleteEntity(restIp, restPort, strTocken, loginId, entityId, param[i]);
+				try{
+					result = uic.deleteEntity(restIp, restPort, strTocken, loginId, entityId, param[i]);
+				}catch (Exception e) {
+					result.put("resultCode", "8000000002");
+					return result;
+				}
 			}
 		} catch (Exception e) {
 			e.printStackTrace();

@@ -158,52 +158,7 @@
 		$('#to').val($.datepicker.formatDate('yy-mm-dd', new Date()));
 		
 		fn_init();
-		
-		$.ajax({
-			url : "/selectEncodeDecodeAuditLog.do",
-			data : {
-				from : $('#from').val(),
-				to : 	$('#to').val(),
-				resultcode : $('#resultcode').val(),
-				agentUid : $('#agentUid').val(),
-				successTrueFalse : $('#successTrueFalse').val(),
-				searchFieldName : $('#searchFieldName').val(),
-				searchOperator : $('#searchOperator').val(),
-				searchFieldValueString : $('#searchFieldValueString').val()
-			},
-			dataType : "json",
-			type : "post",
-			beforeSend: function(xhr) {
-		        xhr.setRequestHeader("AJAX", true);
-		     },
-			error : function(xhr, status, error) {
-				if(xhr.status == 401) {
-					alert("<spring:message code='message.msg02' />");
-					top.location.href = "/";
-				} else if(xhr.status == 403) {
-					alert("<spring:message code='message.msg03' />");
-					top.location.href = "/";
-				} else {
-					alert("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""));
-				}
-			},
-			success : function(data) {
-				if(data.resultCode == "0000000000"){
-					table.clear().draw();
-					if(data.list!=null){
-						table.rows.add(data.list).draw();
-					}
-				}else if(data.resultCode == "8000000002"){
-					alert("<spring:message code='message.msg05' />");
-					top.location.href = "/";
-				}else if(data.resultCode == "8000000003"){
-					alert(data.resultMessage);
-					location.href="/securityKeySet.do";
-				}else{
-					alert(data.resultMessage +"("+data.resultCode+")");	
-				}
-			}
-		});		
+		fn_select();	
 	});
 	
 
@@ -278,7 +233,7 @@
 		<div class="contents">
 			<div class="cmm_grp">
 				<div class="btn_type_01">
-					<span class="btn" onclick="fn_select();"><button><spring:message code="common.search" /></button></span>
+					<span class="btn" onclick="fn_select();"><button type="button"><spring:message code="common.search" /></button></span>
 				</div>
 				<div class="sch_form">
 					<table class="write">

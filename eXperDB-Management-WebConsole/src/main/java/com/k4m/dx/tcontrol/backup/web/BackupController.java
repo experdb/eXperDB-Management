@@ -48,6 +48,7 @@ import com.k4m.dx.tcontrol.common.service.CmmnCodeVO;
 import com.k4m.dx.tcontrol.common.service.CmmnServerInfoService;
 import com.k4m.dx.tcontrol.common.service.HistoryVO;
 import com.k4m.dx.tcontrol.common.service.PageVO;
+import com.k4m.dx.tcontrol.login.service.LoginVO;
 
 @Controller
 public class BackupController {
@@ -102,7 +103,8 @@ public class BackupController {
 				accessHistoryService.insertHistory(historyVO);
 				
 				HttpSession session = request.getSession();
-				String usr_id = (String) session.getAttribute("usr_id");
+				LoginVO loginVo = (LoginVO) session.getAttribute("session");
+				String usr_id = loginVo.getUsr_id();
 				workVO.setUsr_id(usr_id);
 				
 				mv.addObject("dbList",backupService.selectDbList(workVO));
@@ -185,7 +187,8 @@ public class BackupController {
 				accessHistoryService.insertHistory(historyVO);
 				
 				HttpSession session = request.getSession();
-				String usr_id = (String) session.getAttribute("usr_id");
+				LoginVO loginVo = (LoginVO) session.getAttribute("session");
+				String usr_id = loginVo.getUsr_id();
 				workVO.setUsr_id(usr_id);
 
 				mv.addObject("dbList",backupService.selectDbList(workVO));
@@ -286,7 +289,8 @@ public class BackupController {
 		// Get DB List
 		try {
 			HttpSession session = request.getSession();
-			String usr_id = (String) session.getAttribute("usr_id");
+			LoginVO loginVo = (LoginVO) session.getAttribute("session");
+			String usr_id = loginVo.getUsr_id();
 			workVO.setUsr_id(usr_id);
 			
 			mv.addObject("dbList", backupService.selectDbList(workVO));
@@ -410,7 +414,8 @@ public class BackupController {
 				accessHistoryService.insertHistory(historyVO);
 				
 				HttpSession session = request.getSession();
-				String usr_id = (String) session.getAttribute("usr_id");
+				LoginVO loginVo = (LoginVO) session.getAttribute("session");
+				String usr_id = loginVo.getUsr_id();
 				workVO.setFrst_regr_id(usr_id);
 				
 				//작업 정보등록
@@ -484,7 +489,8 @@ public class BackupController {
 				accessHistoryService.insertHistory(historyVO);
 				
 				HttpSession session = request.getSession();
-				String usr_id = (String) session.getAttribute("usr_id");
+				LoginVO loginVo = (LoginVO) session.getAttribute("session");
+				String usr_id = loginVo.getUsr_id();
 				workVO.setFrst_regr_id(usr_id);
 				//작업 정보등록
 				backupService.insertWork(workVO);			
@@ -538,7 +544,8 @@ public class BackupController {
 	@ResponseBody
 	public void workOptWrite(@ModelAttribute("WorkOptVO") WorkOptVO workOptVO, HttpServletRequest request){
 		HttpSession session = request.getSession();
-		String usr_id = (String) session.getAttribute("usr_id");
+		LoginVO loginVo = (LoginVO) session.getAttribute("session");
+		String usr_id = loginVo.getUsr_id();
 		workOptVO.setFrst_regr_id(usr_id);		
 		try{
 			backupService.insertWorkOpt(workOptVO);
@@ -618,7 +625,8 @@ public class BackupController {
 		// Get DB List
 		try {
 			HttpSession session = request.getSession();
-			String usr_id = (String) session.getAttribute("usr_id");
+			LoginVO loginVo = (LoginVO) session.getAttribute("session");
+			String usr_id = loginVo.getUsr_id();
 			workVO.setUsr_id(usr_id);
 			
 			mv.addObject("dbList", backupService.selectDbList(workVO));
@@ -721,7 +729,8 @@ public class BackupController {
 			accessHistoryService.insertHistory(historyVO);
 			
 			HttpSession session = request.getSession();
-			String usr_id = (String) session.getAttribute("usr_id");
+			LoginVO loginVo = (LoginVO) session.getAttribute("session");
+			String usr_id = loginVo.getUsr_id();
 			workVO.setLst_mdfr_id(usr_id);
 			backupService.updateRmanWork(workVO);
 		} catch (Exception e) {
@@ -751,7 +760,8 @@ public class BackupController {
 			accessHistoryService.insertHistory(historyVO);
 			
 			HttpSession session = request.getSession();
-			String usr_id = (String) session.getAttribute("usr_id");
+			LoginVO loginVo = (LoginVO) session.getAttribute("session");
+			String usr_id = loginVo.getUsr_id();
 			workVO.setLst_mdfr_id(usr_id);
 			backupService.updateDumpWork(workVO);
 			result = "S";
@@ -901,7 +911,8 @@ public class BackupController {
 	@ResponseBody
 	public void workObjWrite(@ModelAttribute("WorkObjVO") WorkObjVO workObjVO, HttpServletRequest request){
 		HttpSession session = request.getSession();
-		String usr_id = (String) session.getAttribute("usr_id");
+		LoginVO loginVo = (LoginVO) session.getAttribute("session");
+		String usr_id = loginVo.getUsr_id();
 
 		try{
 			workObjVO.setFrst_regr_id(usr_id);
@@ -978,7 +989,8 @@ public class BackupController {
 				accessHistoryService.insertHistory(historyVO);
 				
 				HttpSession session = request.getSession();
-				String usr_id = (String) session.getAttribute("usr_id");
+				LoginVO loginVo = (LoginVO) session.getAttribute("session");
+				String usr_id = loginVo.getUsr_id();
 				workVO.setDb_svr_id(db_svr_id);
 				workVO.setUsr_id(usr_id);
 				
@@ -1087,7 +1099,8 @@ public class BackupController {
 			int db_svr_id = Integer.parseInt(request.getParameter("db_svr_id"));
 			
 			HttpSession session = request.getSession();
-			String usr_id = (String) session.getAttribute("usr_id");
+			LoginVO loginVo = (LoginVO) session.getAttribute("session");
+			String usr_id = loginVo.getUsr_id();
 			workVO.setDb_svr_id(db_svr_id);
 			workVO.setUsr_id(usr_id);
 			
@@ -1149,7 +1162,8 @@ public class BackupController {
 			// accessHistoryService.insertHistory(historyVO);
 			
 			HttpSession session = request.getSession();
-			String usr_id = (String) session.getAttribute("usr_id");
+			LoginVO loginVo = (LoginVO) session.getAttribute("session");
+			String usr_id = loginVo.getUsr_id();
 			workVO.setFrst_regr_id(usr_id);
 			
 			//작업 정보등록

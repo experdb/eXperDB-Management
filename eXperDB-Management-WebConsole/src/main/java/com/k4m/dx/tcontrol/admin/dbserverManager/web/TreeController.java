@@ -39,6 +39,7 @@ import com.k4m.dx.tcontrol.common.service.CmmnVO;
 import com.k4m.dx.tcontrol.common.service.HistoryVO;
 import com.k4m.dx.tcontrol.functions.transfer.service.TransferService;
 import com.k4m.dx.tcontrol.functions.transfer.service.TransferVO;
+import com.k4m.dx.tcontrol.login.service.LoginVO;
 
 /**
  * [DB TREE] 컨트롤러 클래스를 정의한다.
@@ -88,6 +89,7 @@ public class TreeController {
 			@ModelAttribute("cmmnVO") CmmnVO cmmnVO, HttpServletRequest request) {
 
 		HttpSession session = request.getSession();
+		LoginVO loginVo = (LoginVO) session.getAttribute("session");
 		
 		// 해당메뉴 권한 조회 (공통메소드호출),
 		CmmnUtils cu = new CmmnUtils();
@@ -107,7 +109,7 @@ public class TreeController {
 
 				mv.addObject("read_aut_yn", menuAut.get(0).get("read_aut_yn"));
 				mv.addObject("wrt_aut_yn", menuAut.get(0).get("wrt_aut_yn"));
-				mv.addObject("encpUse", session.getAttribute("encp_use_yn"));
+				mv.addObject("encpUse", loginVo.getEncp_use_yn());
 				mv.setViewName("admin/dbServerManager/dbTree");
 			}
 		} catch (Exception e) {
@@ -274,7 +276,9 @@ public class TreeController {
 				historyVO.setMnu_id(9);
 				accessHistoryService.insertHistory(historyVO);
 
-				String id = (String) request.getSession().getAttribute("usr_id");
+				HttpSession session = request.getSession();
+				LoginVO loginVo = (LoginVO) session.getAttribute("session");
+				String id = loginVo.getUsr_id();
 
 				dbServerVO.setFrst_regr_id(id);
 				dbServerVO.setLst_mdfr_id(id);
@@ -430,7 +434,8 @@ public class TreeController {
 			String topic = "";
 			
 			HttpSession session = request.getSession();
-			String usr_id = (String) session.getAttribute("usr_id");
+			LoginVO loginVo = (LoginVO) session.getAttribute("session");
+			String usr_id = loginVo.getUsr_id();
 			TransferVO tengInfo = (TransferVO) transferService.selectTengInfo(usr_id);
 			if(tengInfo!=null){
 				String IP = tengInfo.getTeng_ip();

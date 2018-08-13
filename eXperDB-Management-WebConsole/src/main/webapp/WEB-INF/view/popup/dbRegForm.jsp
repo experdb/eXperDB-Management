@@ -3,6 +3,7 @@
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form"%>
 <%@ taglib prefix="ui" uri="http://egovframework.gov/ctl/ui"%>
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags"%>
+<%@include file="../cmmn/commonLocale.jsp"%>
 <%
 	/**
 	* @Class Name : dbRegForm.jsp
@@ -22,28 +23,35 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-<link rel="stylesheet" type="text/css" href="../../css/common.css">
-<script type="text/javascript" src="../../js/common.js"></script>
-<link rel="stylesheet" href="<c:url value='/css/dt/dataTables.jqueryui.min.css'/>" />
-<link rel="stylesheet" type="text/css" href="/css/dt/dataTables.checkboxes.css" />
-<link type="text/css" rel="stylesheet" href="<c:url value='/css/dt/jquery.dataTables.min.css'/>" />
-<script src="/js/jquery/jquery-1.12.4.js" type="text/javascript"></script>
-<script src="js/jquery/jquery-1.7.2.min.js" type="text/javascript"></script>
-<script src="/js/jquery/jquery-ui.js" type="text/javascript"></script>
+<title>eXperDB</title>
+<link rel="stylesheet" type="text/css" href="/css/jquery-ui.css">
+<link rel="stylesheet" type="text/css" href="/css/common.css">
+<link rel = "stylesheet" type="text/css" media="screen" href="/css/dt/jquery.dataTables.min.css"/>
+<link rel = "stylesheet" type="text/css" media="screen" href="/css/dt/dataTables.jqueryui.min.css"/>
+<link rel="stylesheet" type="text/css" href="<c:url value='/css/dt/dataTables.colVis.css'/>"/>
+<link rel="stylesheet" type="text/css" href="<c:url value='/css/dt/dataTables.checkboxes.css'/>"/>
+
+<script src ="/js/jquery/jquery-1.7.2.min.js" type="text/javascript"></script>
+<script src ="/js/jquery/jquery-ui.js" type="text/javascript"></script>
 <script src="/js/jquery/jquery.dataTables.min.js" type="text/javascript"></script>
-<script src="/js/dt/dataTables.checkboxes.min.js" type="text/javascript"></script>
-<title>Insert title here</title>
+<script src="/js/dt/dataTables.jqueryui.min.js" type="text/javascript"></script>
+<script src="/js/dt/dataTables.colResize.js" type="text/javascript"></script>
+<script src="/js/dt/dataTables.checkboxes.min.js" type="text/javascript"></script>	
+<script src="/js/dt/dataTables.colVis.js" type="text/javascript"></script>	
+<script type="text/javascript" src="/js/common.js"></script>
 <script type="text/javascript">
 var table_db = null;
 
 function fn_init(){
 	/* 선택된 서버에 대한 데이터베이스 정보 */
      table_db = $('#dbList').DataTable({
-		scrollY : "300px",
+    	 scrollX: true,	
+		scrollY : "250px",
 		searching : false,
 		paging :false,
 		bSort: false,
 		columns : [
+		{data : "rownum", defaultContent : "", targets : 0, orderable : false, checkboxes : {'selectRow' : true}}, 	
 		{data : "dft_db_nm",  defaultContent : ""}, 
 		{data : "db_exp", defaultContent : "",  
 			targets: 0,
@@ -51,17 +59,17 @@ function fn_init(){
 	        orderable: false,
 	        render: function(data, type, full, meta){
 	           if(type === 'display'){
-	              data = '<input type="text" class="txt" name="db_exp" value="' +full.db_exp + '" style="width: 350px; height: 25px;">';      
+	              data = '<input type="text" class="txt" name="db_exp" maxlength="100" value="' +full.db_exp + '" style="width: 400px; height: 25px;">';      
 	           }
 	           return data;
-	        }}, 
-		{data : "rownum", defaultContent : "", targets : 0, orderable : false, checkboxes : {'selectRow' : true}}, 		
+	        }}, 			
 		]
 	});
 	
-     table_db.tables().header().to$().find('th:eq(0)').css('min-width', '200px');
-     table_db.tables().header().to$().find('th:eq(1)').css('min-width', '300px');
-     table_db.tables().header().to$().find('th:eq(2)').css('min-width', '100px');
+     table_db.tables().header().to$().find('th:eq(0)').css('min-width', '10px');
+     table_db.tables().header().to$().find('th:eq(1)').css('min-width', '130px');
+     table_db.tables().header().to$().find('th:eq(2)').css('min-width', '300px');
+     
 	 $(window).trigger('resize');
 }
 
@@ -365,9 +373,9 @@ function fn_dataCompareChcek(svrDbList,db_svr_id){
 					<table id="dbList" class="display" cellspacing="0" align="left"  width="100%">
 						<thead>
 							<tr>
-								<th width="200"><spring:message code="common.database" /></th>
-								<th width="300"><spring:message code="common.desc" /> </th>
-								<th width="100"><spring:message code="dbms_information.regChoice"/></th>
+								<th width="10"><spring:message code="dbms_information.regChoice"/></th>
+								<th width="130"><spring:message code="common.database" /></th>
+								<th width="300"><spring:message code="common.desc" /> </th>								
 							</tr>
 						</thead>
 					</table>
@@ -375,7 +383,7 @@ function fn_dataCompareChcek(svrDbList,db_svr_id){
 		</div>
 		
 		<div class="btn_type_02">
-			<span class="btn"><button onClick="fn_insertDB();"><spring:message code="common.registory" /></button></span>
+			<span class="btn"><button type="button" onClick="fn_insertDB();"><spring:message code="common.registory" /></button></span>
 			<a href="#n" class="btn" onClick="window.close();"><span><spring:message code="common.cancel" /></span></a>
 		</div>
 	</div>

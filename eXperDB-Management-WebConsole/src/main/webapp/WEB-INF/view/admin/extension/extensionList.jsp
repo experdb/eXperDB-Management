@@ -50,7 +50,7 @@ function fn_init() {
 		{data : "db_svr_id", defaultContent : "", visible: false},
 		{data : "db_svr_nm", defaultContent : ""},
 		{data : "ipadr", defaultContent : ""},
-		{data : "dft_db_nm", defaultContent : "", visible: false},
+		{data : "dft_db_nm", defaultContent : ""},
 		{data : "portno", defaultContent : "", visible: false},
 		{data : "svr_spr_usr_id", defaultContent : "", visible: false},
 		{data : "frst_regr_id", defaultContent : "", visible: false},
@@ -156,7 +156,6 @@ $(function() {
     			}
     		},
     		success : function(result) {
-    			alert(result);
     			table_db.clear().draw();
     			if(result == null){
     				alert("<spring:message code='message.msg05' />");
@@ -207,7 +206,7 @@ $(function() {
 										<th></th>
 										<th><spring:message code="common.dbms_name" /></th>
 										<th><spring:message code="dbms_information.dbms_ip" /> </th>
-										<th></th>
+										<th><spring:message code="common.database" /></th>
 										<th></th>
 										<th></th>
 										<th></th>

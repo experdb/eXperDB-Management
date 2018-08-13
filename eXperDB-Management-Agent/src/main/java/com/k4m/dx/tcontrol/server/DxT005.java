@@ -191,6 +191,10 @@ public class DxT005 extends SocketCtl {
 	
 							String strCmd = "ls -al " + strBCK_FILE_PTH + strSlush + strFileName + " | awk '{print $5}'";
 							
+							if(strCommand.contains("directory")) {
+								strCmd = "du " + strBCK_FILE_PTH + strSlush + strFileName + " | awk '{print $1}'";
+							}
+							
 							CommonUtil util = new CommonUtil();
 							
 							strFileSize = util.getPidExec(strCmd);
@@ -206,15 +210,13 @@ public class DxT005 extends SocketCtl {
 	
 							if (strFileSize == null)
 								strFileSize = "0";
-							
 							String[] sarrFileName = strFileName.split("_");
 							String fileName = sarrFileName[0] + "_" + sarrFileName[1];
 							
 							//백업파일관리
 							dumpFileManagement(strBCK_FILE_PTH, fileName, intBCK_MTN_ECNT, intFILE_STG_DCNT, strSlush);
-	
+							
 							if (strFileSize == null || strFileSize.equals("0")) {
-	
 								WrkExeVO endVO = new WrkExeVO();
 								endVO.setEXE_RSLT_CD(TC001702);
 								endVO.setEXE_SN(intSeq);
@@ -236,7 +238,6 @@ public class DxT005 extends SocketCtl {
 								}
 	
 							}
-	
 						} else {
 							strFileSize = "0";
 							strFileName = "";
@@ -246,10 +247,10 @@ public class DxT005 extends SocketCtl {
 					WrkExeVO endVO = new WrkExeVO();
 					endVO.setEXE_RSLT_CD(strResultCode);
 					endVO.setEXE_SN(intSeq);
+					socketLogger.info("FileSize="+strFileSize);
 					endVO.setFILE_SZ(Long.parseLong(strFileSize));
 					endVO.setBCK_FILENM(strFileName);
-					endVO.setRSLT_MSG(retVal + " " + strResultMessge);
-
+					endVO.setRSLT_MSG(retVal + " " + strResultMessge);				
 					endVO.setSCD_ID(Integer.parseInt(strSCD_ID));
 					endVO.setSCD_CNDT(TC001801); // 대기중
 

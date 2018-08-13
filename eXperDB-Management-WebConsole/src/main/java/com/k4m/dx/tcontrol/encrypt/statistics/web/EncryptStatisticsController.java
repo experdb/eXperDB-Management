@@ -11,8 +11,8 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.k4m.dx.tcontrol.common.service.HistoryVO;
-import com.k4m.dx.tcontrol.encrypt.service.call.EncryptSettingServiceCall;
 import com.k4m.dx.tcontrol.encrypt.service.call.StatisticsServiceCall;
+import com.k4m.dx.tcontrol.login.service.LoginVO;
 
 @Controller
 public class EncryptStatisticsController {
@@ -56,11 +56,12 @@ public class EncryptStatisticsController {
 		JSONObject result = new JSONObject();
 		
 		HttpSession session = request.getSession();
-		String restIp = (String)session.getAttribute("restIp");
-		int restPort = (int)session.getAttribute("restPort");
-		String strTocken = (String)session.getAttribute("tockenValue");
-		String loginId = (String)session.getAttribute("usr_id");
-		String entityId = (String)session.getAttribute("ectityUid");	
+		LoginVO loginVo = (LoginVO) session.getAttribute("session");
+		String restIp = loginVo.getRestIp();
+		int restPort = loginVo.getRestPort();
+		String strTocken = loginVo.getTockenValue();
+		String loginId = loginVo.getUsr_id();
+		String entityId = loginVo.getEctityUid();	
 		
 		String from = request.getParameter("from");
 		String to = request.getParameter("to");

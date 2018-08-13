@@ -30,12 +30,12 @@
 			, A.SCD_NM
 			, MIN(A.EXE_SN) AS EXE_SN
 			, MAX(A.EXE_RSLT_CD) AS EXE_RSLT_CD
-			, (SELECT S.DB_SVR_NM FROM T_DBSVR_I S,T_DB_I D WHERE S.DB_SVR_ID=D.DB_SVR_ID AND D.DB_ID=A.DB_ID)AS DB_SVR_NM
+			, (SELECT S.DB_SVR_NM FROM T_DBSVR_I S,T_DBSVRIPADR_I D WHERE S.DB_SVR_ID=D.DB_SVR_ID AND D.DB_SVR_IPADR_ID=A.DB_SVR_IPADR_ID)AS DB_SVR_NM
 			, MIN(A.WRK_STRT_DTM) AS WRK_STRT_DTM
 			, MAX(A.WRK_END_DTM) AS WRK_END_DTM
 			, TO_CHAR(TO_CHAR(MAX(A.WRK_END_DTM),'YYYY-MM-DD HH24:MI:SS')::TIMESTAMP - TO_CHAR(MIN(A.WRK_STRT_DTM),'YYYY-MM-DD HH24:MI:SS')::TIMESTAMP, 'HH24시MI분SS초') AS WRK_DTM
 			FROM T_WRKEXE_G A, T_DBSVRIPADR_I C
-			WHERE A.DB_ID IN (SELECT DB_ID FROM T_USRDBAUT_I WHERE AUT_YN='Y' AND USR_ID =#{usr_id} GROUP BY DB_ID)
+			WHERE 1 = 1
 			AND A.DB_SVR_IPADR_ID = C.DB_SVR_IPADR_ID
 			<if test="lgi_dtm_start != null and lgi_dtm_start != '' ">
 			 AND to_char(A.WRK_END_DTM,'YYYY-MM-DD') between #{lgi_dtm_start} and #{lgi_dtm_end}
@@ -44,7 +44,7 @@
 			AND A.SCD_NM LIKE #{scd_nm}
 			</if>		
 			AND A.EXE_RSLT_CD LIKE #{exe_result}
-			GROUP BY A.EXE_GRP_SN, A.SCD_NM, A.DB_ID,A.SCD_ID,C.IPADR
+			GROUP BY A.EXE_GRP_SN, A.SCD_NM, A.DB_SVR_IPADR_ID,A.SCD_ID,C.IPADR
 			ORDER BY ${order_type} ${order}
 			LIMIT #{recordCountPerPage} OFFSET #{firstIndex}
 		)AA
@@ -102,8 +102,6 @@
 	        , A.EXE_SN
 	        , A.SCD_ID
 	        , A.SCD_NM
-	        , A.SCD_ID
-	        , A.SCD_NM
 	        , A.WRK_ID
 	        , A.WRK_NM
 	        , A.WRK_STRT_DTM
@@ -118,15 +116,16 @@
 		        , A.SCD_ID
 		        , C.SCD_NM
 		        , A.WRK_ID
-		        , (SELECT WRK_NM FROM T_WRKCNG_I WHERE WRK_ID = B.WRK_ID) WRK_NM
+		        , E.WRK_NM
 				, TO_CHAR(A.WRK_STRT_DTM,'YYYY-MM-DD HH24:MI:SS') AS WRK_STRT_DTM
 				, TO_CHAR(A.WRK_END_DTM,'YYYY-MM-DD HH24:MI:SS') AS WRK_END_DTM
 		        , (SELECT SYS_CD_NM FROM T_SYSDTL_C WHERE A.EXE_RSLT_CD = SYS_CD ) AS EXE_RESULT
 		        , A.FIX_RSLTCD
 		        , A.FIX_RSLT_MSG
-		FROM T_WRKEXE_G A, T_BCK_WRKCNG_I B, T_SCD_M C, T_DBSVR_I D
+		FROM T_WRKEXE_G A, T_BCK_WRKCNG_I B, T_SCD_M C, T_DBSVR_I D, T_WRKCNG_I  E
 		WHERE 1= 1
 		AND A.WRK_ID = B.WRK_ID
+		AND B.WRK_ID = E.WRK_ID
 		AND C.SCD_ID = A.SCD_ID
 		AND B.DB_SVR_ID = D.DB_SVR_ID
 		<if test="scd_nm != null and scd_nm != '' ">
@@ -136,10 +135,10 @@
 			AND C.SCD_NM LIKE '%'
 		</if>
 		<if test="wrk_nm != null and wrk_nm != '' ">
-			AND B.WRK_NM = #{wrk_nm}
+			AND E.WRK_NM = #{wrk_nm}
 		</if>
 		<if test="wrk_nm == '' ">
-			AND B.WRK_NM LIKE '%'
+			AND E.WRK_NM LIKE '%'
 		</if>
 		<if test="fix_rsltcd != 'TC002002' and fix_rsltcd != 'TC002003' ">
 			AND (A.FIX_RSLTCD IS NULL OR A.FIX_RSLTCD IN('TC002002'))
@@ -164,8 +163,7 @@
 		**/	
 		SELECT A.SCD_NM
 		FROM T_SCD_M A, T_WRKEXE_G B
-		WHERE B.DB_ID IN (SELECT DB_ID FROM T_USRDBAUT_I WHERE AUT_YN='Y' AND USR_ID = #{usr_id} GROUP BY DB_ID)
-		AND A.SCD_ID = B.SCD_ID
+		WHERE A.SCD_ID = B.SCD_ID
 		AND to_char(B.WRK_END_DTM,'YYYY-MM-DD') between #{wrk_start_dtm} and #{wrk_end_dtm}
 		GROUP BY A.SCD_NM
 	</select>
@@ -177,22 +175,17 @@
 		* Description : DBMS명 조회
 		* Author : 김주영
 		**/	
-		SELECT DISTINCT C.DB_SVR_NM
-		FROM T_DBSVR_I C,T_DB_I D
-		WHERE D.DB_ID IN(
-				SELECT B.DB_ID
-				FROM T_SCD_M A, T_WRKEXE_G B
-				WHERE B.DB_ID IN (SELECT DB_ID FROM T_USRDBAUT_I WHERE AUT_YN='Y' AND USR_ID = #{usr_id} GROUP BY DB_ID)
-				AND A.SCD_ID = B.SCD_ID
-				AND TO_CHAR(B.WRK_END_DTM,'YYYY-MM-DD') BETWEEN #{wrk_start_dtm} AND #{wrk_end_dtm}
-				GROUP BY B.DB_ID)
-		AND C.DB_SVR_ID =D.DB_SVR_ID
+		SELECT DISTINCT C.DB_SVR_NM 
+		FROM T_BCK_WRKCNG_I A, T_WRKEXE_G B,T_DBSVR_I C
+		WHERE TO_CHAR(B.WRK_END_DTM,'YYYY-MM-DD') BETWEEN #{wrk_start_dtm} AND #{wrk_end_dtm}
+		AND A.WRK_ID = B.WRK_ID
+		AND A.DB_SVR_ID = C.DB_SVR_ID
 	</select>
 	
 	<select id="selectWrkNmList" resultType="hashmap" >
 		SELECT 
 				C.WRK_NM
-		FROM T_SCD_M A, T_WRKEXE_G B, T_BCK_WRKCNG_I C
+		FROM T_SCD_M A, T_WRKEXE_G B, T_WRKCNG_I C
 		WHERE A.SCD_ID = B.SCD_ID
         AND B.WRK_ID = C.WRK_ID
 		AND A.SCD_NM = #{scd_nm}

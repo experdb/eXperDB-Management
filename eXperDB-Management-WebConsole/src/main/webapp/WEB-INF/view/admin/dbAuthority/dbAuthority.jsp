@@ -356,7 +356,7 @@
 						}
 					},
 					success : function(result) {
-						location.reload();
+						alert("<spring:message code='message.msg07' />");
 					}
 				}); 	
 			}else{
@@ -424,7 +424,7 @@
 									<div class="btn_type_01">
 										<div class="search_area">
 											<input type="text" class="txt search" id="search">
-											<button class="search_btn" onClick="fn_search()"><spring:message code="button.search" /></button>
+											<button type="button" class="search_btn" onClick="fn_search()"><spring:message code="button.search" /></button>
 										</div>
 									</div>
 									<div class="inner">
@@ -446,7 +446,7 @@
 								
 								<div class="db_roll_last">
 									<div class="btn_type_01">
-										<span class="btn"><button onClick="fn_db_save();" id="db_button"><spring:message code="common.save"/></button></span>
+										<span class="btn"><button type="button" onClick="fn_db_save();" id="db_button"><spring:message code="common.save"/></button></span>
 									</div>
 									<div class="inner">
 										<p class="tit"><spring:message code="auth_management.db_auth" /></p>

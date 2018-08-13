@@ -27,6 +27,7 @@ import com.k4m.dx.tcontrol.common.service.AgentInfoVO;
 import com.k4m.dx.tcontrol.common.service.CmmnServerInfoService;
 import com.k4m.dx.tcontrol.common.service.HistoryVO;
 import com.k4m.dx.tcontrol.functions.transfer.service.ConnectorVO;
+import com.k4m.dx.tcontrol.login.service.LoginVO;
 import com.k4m.dx.tcontrol.tree.service.TreeInfoService;
 
 /**
@@ -66,7 +67,8 @@ public class TreeInfoController {
 		List<ConnectorVO> resultSet = null;
 		try {
 			HttpSession session = request.getSession();
-			String usr_id = (String) session.getAttribute("usr_id");
+			LoginVO loginVo = (LoginVO) session.getAttribute("session");
+			String usr_id = loginVo.getUsr_id();
 			resultSet = treeInfoService.selectConnectorRegister(usr_id);
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -85,7 +87,8 @@ public class TreeInfoController {
 		List<Map<String, Object>> resultSet = null;
 		try {
 			HttpSession session = request.getSession();
-			String usr_id = (String) session.getAttribute("usr_id");
+			LoginVO loginVo = (LoginVO) session.getAttribute("session");
+			String usr_id = loginVo.getUsr_id();
 			resultSet = treeInfoService.selectTreeEncrypt(usr_id);
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -141,7 +144,8 @@ public class TreeInfoController {
 					List<DbServerVO> resultIpadr = cmmnServerInfoService.selectAllIpadrList(db_svr_id);
 					
 					HttpSession session = request.getSession();
-					String usr_id = (String) session.getAttribute("usr_id");
+					LoginVO loginVo = (LoginVO) session.getAttribute("session");
+					String usr_id = loginVo.getUsr_id();
 					dbServerVO.setUsr_id(usr_id);
 					List<DbServerVO> resultRepoDB = cmmnServerInfoService.selectRepoDBList(dbServerVO);			
 					

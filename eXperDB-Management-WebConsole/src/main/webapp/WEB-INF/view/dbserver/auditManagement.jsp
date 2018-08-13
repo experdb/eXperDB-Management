@@ -152,7 +152,7 @@
 					<div class="contents">
 						<div class="cmm_grp">
 							<div class="btn_type_01">
-								<span class="btn btnC_01"><button id="btnSave"><spring:message code="common.apply" /></button></span>
+								<span class="btn btnC_01"><button type="button" id="btnSave"><spring:message code="common.apply" /></button></span>
 							</div>
 <!-- 							<div class="sch_form p1"> -->
 <!-- 								<div class="inp_chk chk3"> -->

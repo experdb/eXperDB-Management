@@ -5,7 +5,7 @@
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form"%>
 <%@ taglib prefix="ui" uri="http://egovframework.gov/ctl/ui"%>
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags"%>
-
+<%@include file="../cmmn/commonLocale.jsp"%>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head>
@@ -38,7 +38,7 @@ function fn_init(){
 	 * work리스트
 	 ******************************************************** */
 	table = $('#dumpShowList').DataTable({
-	scrollY : "475px",
+	scrollY : "470px",
 	scrollX : true,
 	bDestroy: true,
 	processing : true,

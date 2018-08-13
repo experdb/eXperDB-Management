@@ -41,8 +41,8 @@
 		}else{
 			document.getElementById("exe_result").value=exe_result;
 		}
-		fn_SelectDBMS(svr_nm);
-		fn_ScheduleNmList(scd_nm);
+// 		fn_SelectDBMS(svr_nm);
+// 		fn_ScheduleNmList(scd_nm);
 	
 	});
 	
@@ -98,42 +98,42 @@
 		document.selectScheduleHistory.submit();
 	}
 	
-	/* DBMS 조회 [SELECT BOX] */
-	function fn_SelectDBMS(svr_nm){
-	  	$.ajax({
-			url : "/selectScheduleDBMSList.do",
-			data : {
-				wrk_start_dtm : $('#from').val(),
-				wrk_end_dtm : 	$('#to').val()	
-			},
-			dataType : "json",
-			type : "post",
-			beforeSend: function(xhr) {
-		        xhr.setRequestHeader("AJAX", true);
-		     },
-			error : function(xhr, status, error) {
-				if(xhr.status == 401) {
-					alert("<spring:message code='message.msg02' />");
-					top.location.href = "/";
-				} else if(xhr.status == 403) {
-					alert("<spring:message code='message.msg03' />");
-					top.location.href = "/";
-				} else {
-					alert("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""));
-				}
-			},
-			success : function(result) {		
-				$("#db_svr_nm").children().remove();
-				$("#db_svr_nm").append("<option value='%'><spring:message code='common.total' /></option>");
-				if(result.length > 0){
-					for(var i=0; i<result.length; i++){
-						$("#db_svr_nm").append("<option value='"+result[i].db_svr_nm+"'>"+result[i].db_svr_nm+"</option>");	
-					}									
-				}
-				$("#db_svr_nm").val(svr_nm).attr("selected", "selected");
-			}
-		});	 
-	}
+// 	/* DBMS 조회 [SELECT BOX] */
+// 	function fn_SelectDBMS(svr_nm){
+// 	  	$.ajax({
+// 			url : "/selectScheduleDBMSList.do",
+// 			data : {
+// 				wrk_start_dtm : $('#from').val(),
+// 				wrk_end_dtm : 	$('#to').val()	
+// 			},
+// 			dataType : "json",
+// 			type : "post",
+// 			beforeSend: function(xhr) {
+// 		        xhr.setRequestHeader("AJAX", true);
+// 		     },
+// 			error : function(xhr, status, error) {
+// 				if(xhr.status == 401) {
+// 					alert("<spring:message code='message.msg02' />");
+// 					top.location.href = "/";
+// 				} else if(xhr.status == 403) {
+// 					alert("<spring:message code='message.msg03' />");
+// 					top.location.href = "/";
+// 				} else {
+// 					alert("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""));
+// 				}
+// 			},
+// 			success : function(result) {		
+// 				$("#db_svr_nm").children().remove();
+// 				$("#db_svr_nm").append("<option value='%'><spring:message code='common.total' /></option>");
+// 				if(result.length > 0){
+// 					for(var i=0; i<result.length; i++){
+// 						$("#db_svr_nm").append("<option value='"+result[i].db_svr_nm+"'>"+result[i].db_svr_nm+"</option>");	
+// 					}									
+// 				}
+// 				$("#db_svr_nm").val(svr_nm).attr("selected", "selected");
+// 			}
+// 		});	 
+// 	}
 	
 	function setSearchDate(start){
 		$('input:not(:checked)').parent(".chkbox2").removeClass("on");
@@ -169,51 +169,49 @@
 		// 시작일은 종료일 이후 날짜 선택하지 못하도록 비활성화
 		$("#from").datepicker( "option", "maxDate", endDate );
 
-        fn_ScheduleNmList();
-        fn_SelectDBMS();
 	}
 
-	function fn_ScheduleNmList(scd_nm){
-	  	$.ajax({
-			url : "/selectScheduleNmList.do",
-			data : {
-				wrk_start_dtm : $('#from').val(),
-				wrk_end_dtm : 	$('#to').val()				
-			},
-			dataType : "json",
-			type : "post",
-			beforeSend: function(xhr) {
-		        xhr.setRequestHeader("AJAX", true);
-		     },
-			error : function(xhr, status, error) {
-				if(xhr.status == 401) {
-					alert("<spring:message code='message.msg02' />");
-					top.location.href = "/";
-				} else if(xhr.status == 403) {
-					alert("<spring:message code='message.msg03' />");
-					top.location.href = "/";
-				} else {
-					alert("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""));
-				}
-			},
-			success : function(result) {		
-				$("#scd_nm").children().remove();
-				$("#scd_nm").append("<option value='%'><spring:message code='schedule.total' /></option>");
-				if(result.length > 0){
-					for(var i=0; i<result.length; i++){
-						$("#scd_nm").append("<option value='"+result[i].scd_nm+"'>"+result[i].scd_nm+"</option>");	
-					}									
-				}
-				$("#scd_nm").val(scd_nm).attr("selected", "selected");		
-// 				fn_selectedWork(scd_nm);
-			}
-		});	 
-	}
+// 	function fn_ScheduleNmList(scd_nm){
+// 	  	$.ajax({
+// 			url : "/selectScheduleNmList.do",
+// 			data : {
+// 				wrk_start_dtm : $('#from').val(),
+// 				wrk_end_dtm : 	$('#to').val()				
+// 			},
+// 			dataType : "json",
+// 			type : "post",
+// 			beforeSend: function(xhr) {
+// 		        xhr.setRequestHeader("AJAX", true);
+// 		     },
+// 			error : function(xhr, status, error) {
+// 				if(xhr.status == 401) {
+// 					alert("<spring:message code='message.msg02' />");
+// 					top.location.href = "/";
+// 				} else if(xhr.status == 403) {
+// 					alert("<spring:message code='message.msg03' />");
+// 					top.location.href = "/";
+// 				} else {
+// 					alert("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""));
+// 				}
+// 			},
+// 			success : function(result) {		
+// 				$("#scd_nm").children().remove();
+// 				$("#scd_nm").append("<option value='%'><spring:message code='schedule.total' /></option>");
+// 				if(result.length > 0){
+// 					for(var i=0; i<result.length; i++){
+// 						$("#scd_nm").append("<option value='"+result[i].scd_nm+"'>"+result[i].scd_nm+"</option>");	
+// 					}									
+// 				}
+// 				$("#scd_nm").val(scd_nm).attr("selected", "selected");		
+// // 				fn_selectedWork(scd_nm);
+// 			}
+// 		});	 
+// 	}
 	
 	
-	function fn_dtm(){
-		fn_ScheduleNmList();
-	}
+// 	function fn_dtm(){
+// 		fn_ScheduleNmList();
+// 	}
 	
 // 	function fn_selectedWork(scd_nm){
 // 	  	 $.ajax({
@@ -239,39 +237,39 @@
 // 		});
 // 	}
 	
-	function fn_selectWrkNmList(scd_nm){
-	  	 $.ajax({
-			url : "selectWrkNmList.do",
-			data : {
-				scd_nm : scd_nm.value
-			},
-			dataType : "json",
-			type : "post",
-			beforeSend: function(xhr) {
-		        xhr.setRequestHeader("AJAX", true);
-		     },
-			error : function(xhr, status, error) {
-				if(xhr.status == 401) {
-					alert("<spring:message code='message.msg02' />");
-					top.location.href = "/";
-				} else if(xhr.status == 403) {
-					alert("<spring:message code='message.msg03' />");
-					top.location.href = "/";
-				} else {
-					alert("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""));
-				}
-			},
-			success : function(result) {		
-				$("#wrk_nm").children().remove();
-				$("#wrk_nm").append("<option value='%'><spring:message code='common.total' /></option>");
-				if(result.length > 0){
-					for(var i=0; i<result.length; i++){
-						$("#wrk_nm").append("<option value='"+result[i].wrk_nm+"'>"+result[i].wrk_nm+"</option>");	
-					}									
-				}
-			}
-		});
-	}
+// 	function fn_selectWrkNmList(scd_nm){
+// 	  	 $.ajax({
+// 			url : "selectWrkNmList.do",
+// 			data : {
+// 				scd_nm : scd_nm.value
+// 			},
+// 			dataType : "json",
+// 			type : "post",
+// 			beforeSend: function(xhr) {
+// 		        xhr.setRequestHeader("AJAX", true);
+// 		     },
+// 			error : function(xhr, status, error) {
+// 				if(xhr.status == 401) {
+// 					alert("<spring:message code='message.msg02' />");
+// 					top.location.href = "/";
+// 				} else if(xhr.status == 403) {
+// 					alert("<spring:message code='message.msg03' />");
+// 					top.location.href = "/";
+// 				} else {
+// 					alert("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""));
+// 				}
+// 			},
+// 			success : function(result) {		
+// 				$("#wrk_nm").children().remove();
+// 				$("#wrk_nm").append("<option value='%'><spring:message code='common.total' /></option>");
+// 				if(result.length > 0){
+// 					for(var i=0; i<result.length; i++){
+// 						$("#wrk_nm").append("<option value='"+result[i].wrk_nm+"'>"+result[i].wrk_nm+"</option>");	
+// 					}									
+// 				}
+// 			}
+// 		});
+// 	}
 
 	function fn_detail(exe_sn){
 		var popUrl = "/popup/scheduleHistoryDetail.do?exe_sn="+exe_sn; // 서버 url 팝업경로
@@ -309,15 +307,15 @@
 		<div class="contents">
 			<div class="cmm_grp">
 				<div class="btn_type_01">
-					<span class="btn" id="read_button"><button onClick="fn_selectScheduleHistory();"><spring:message code="common.search" /></button></span>
+					<span class="btn" id="read_button"><button type="button" onClick="fn_selectScheduleHistory();"><spring:message code="common.search" /></button></span>
 				</div>
 				<form:form commandName="pagingVO" name="selectScheduleHistory" id="selectScheduleHistory" method="post">
 				<div class="sch_form">
 					<table class="write">
 						<caption>검색 조회</caption>
 						<colgroup>
-							<col style="width: 50px;" />
-							<col style="width: 200px;" />
+							<col style="width: 60px;" />
+							<col style="width: 180px;" />
 							<col style="width: 50px;" />
 							<col style="width: 300px;" />
 							</col>
@@ -328,9 +326,9 @@
 									<td>
 										<div class="calendar_area">
 											<a href="#n" class="calendar_btn">달력열기</a> 
-											<input type="text" class="calendar" id="from" name="lgi_dtm_start" title="기간검색 시작날짜"  onChange="fn_dtm();" /> <span class="wave">~</span>
+											<input type="text" class="calendar" id="from" name="lgi_dtm_start" title="기간검색 시작날짜" /> <span class="wave">~</span>
 											<a href="#n" class="calendar_btn">달력열기</a> 
-											<input type="text" class="calendar" id="to" name="lgi_dtm_end" title="기간검색 종료날짜" onChange="fn_dtm();"  />
+											<input type="text" class="calendar" id="to" name="lgi_dtm_end" title="기간검색 종료날짜" />
 										</div>							
 									</td>
 									<th colspan="2">
@@ -383,15 +381,11 @@
 								<tr>
 									<th scope="row" class="t9" ><spring:message code="schedule.schedule_name" /> </th>
 									<td>
-										<select class="select t4" name="scd_nm" id="scd_nm">
-											<option value="%"><spring:message code="schedule.total" /></option>
-										</select>	
+										<input type="text" class="txt t2" id="scd_nm" name="scd_nm" value="${scd_nm}">
 									</td>
 									<th scope="row" class="t9"><spring:message code="common.dbms_name" /></th>
 									<td>
-										<select class="select t5" name="db_svr_nm" id="db_svr_nm" >
-											<option value="%"><spring:message code="schedule.total" /></option>
-										</select>	
+										<input type="text" class="txt t2" id="db_svr_nm" name="db_svr_nm" value="${svr_nm}">
 									</td>									
 								</tr>	
 								<tr>
@@ -450,7 +444,7 @@
 							<c:forEach var="result" items="${result}" varStatus="status">
 								<tr>
 									<td><c:out value="${pagingVO.pageSize*(pagingVO.pageIndex-1) + result.rownum}" /></td>
-									<td style="text-align: left;"><span onclick="fn_scdLayer('${result.scd_id}');" class="bold"><c:out value="${result.scd_nm}" /></span></td>
+									<td style="text-align: left;"><span onclick="fn_scdLayer('${result.scd_id}');" class="bold" title="${result.scd_nm}"><c:out value="${result.scd_nm}" /></span></td>
 									<td style="text-align: left;"><c:out value="${result.db_svr_nm}" /></td>		
 									<td style="text-align: left;"><c:out value="${result.ipadr}" /></td>				
 									<td style="text-align: left;"><c:out value="${result.wrk_strt_dtm}" /></td>

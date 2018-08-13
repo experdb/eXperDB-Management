@@ -298,33 +298,37 @@ public class DbServerManagerDAO extends EgovAbstractMapper{
 		}
 	}	
 	
+	// 5. WORK정보 삭제
+	public void deleteWrkcng(int db_svr_id) {
+		delete("dbserverManagerSql.deleteWrkcng", db_svr_id);			
+	}
 	
-	// 5. 백업작업설정정보 삭제
+	// 6. 백업작업설정정보 삭제
 	public void deleteBckWrkcng(int db_svr_id) {
 		delete("dbserverManagerSql.deleteBckWrkcng", db_svr_id);			
 	}
 	
-	// 6. 사용자DB권한정보 삭제
+	// 7. 사용자DB권한정보 삭제
 	public void deleteUsrDbAut(int db_svr_id) {
 		delete("dbserverManagerSql.deleteUsrDbAut", db_svr_id);		
 	}
 	
-	// 7. DB정보 삭제
+	// 8. DB정보 삭제
 	public void deleteDbInfo(int db_svr_id) {
 		delete("dbserverManagerSql.deleteDbInfo", db_svr_id);	
 	}
 	
-	// 8. 사용자DB서버권한정보 삭제
+	// 9. 사용자DB서버권한정보 삭제
 	public void deleteUsrDbSvrAut(int db_svr_id) {
 		delete("dbserverManagerSql.deleteUsrDbSvrAut", db_svr_id);		
 	}	
 	
-	// 9. DB서버아이피주소정보 삭제
+	// 10. DB서버아이피주소정보 삭제
 	public void deleteDbSvrIpAdr(int db_svr_id) {
 		delete("dbserverManagerSql.deleteDbSvrIpAdr", db_svr_id);		
 	}	
 	
-	// 10. DB서버정보 삭제
+	// 11. DB서버정보 삭제
 	public void deleteDbServer(int db_svr_id) {
 		delete("dbserverManagerSql.deleteDbServer", db_svr_id);	
 	}
@@ -340,6 +344,8 @@ public class DbServerManagerDAO extends EgovAbstractMapper{
 	public void syncUpdate(HashMap<String, Object> paramvalue) {
 		update("dbserverManagerSql.syncUpdate", paramvalue);		
 	}
+
+
 }
 
 

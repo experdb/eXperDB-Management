@@ -172,32 +172,7 @@
 				 table.search( this.value ).draw();
 			});	
 			$('.dataTables_filter').hide();
-	 		 $.ajax({
-	 			url : "/selectAccessControl.do",
-	 			data : {
-	 				db_svr_id : "${db_svr_id}",
-	 			},
-	 			dataType : "json",
-	 			type : "post",
-	 			beforeSend: function(xhr) {
-	 		        xhr.setRequestHeader("AJAX", true);
-	 		     },
-	 			error : function(xhr, status, error) {
-	 				if(xhr.status == 401) {
-	 					alert("<spring:message code='message.msg02' />");
-	 					top.location.href = "/";
-	 				} else if(xhr.status == 403) {
-	 					alert("<spring:message code='message.msg03' />");
-	 					top.location.href = "/";
-	 				} else {
-	 					alert("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""));
-	 				}
-	 			},
-	 			success : function(result) {
-	 				table.clear().draw();
-	 				table.rows.add(result.data).draw();
-	 			}
-	 		});  			
+			fn_select(); 			
 		}	
 	});
 
@@ -401,10 +376,10 @@
 		<div class="contents">
 			<div class="cmm_grp">
 				<div class="btn_type_01">
-					<span class="btn" onclick="fn_insert();"><button><spring:message code="common.add" /></button></span>
-					<span class="btn" onclick="fn_update();"><button><spring:message code="button.modify" /></button></span>
-					<span class="btn" onclick="fn_delete();"><button><spring:message code="button.delete" /></button></span>
-					<span class="btn" onclick="fn_save();"><button><spring:message code="common.apply" /></button></span>
+					<span class="btn" onclick="fn_insert();"><button type="button"><spring:message code="common.add" /></button></span>
+					<span class="btn" onclick="fn_update();"><button type="button"><spring:message code="button.modify" /></button></span>
+					<span class="btn" onclick="fn_delete();"><button type="button"><spring:message code="button.delete" /></button></span>
+					<span class="btn" onclick="fn_save();"><button type="button"><spring:message code="common.apply" /></button></span>
 				</div>
 				<div class="overflow_area">
 					<table id="accessControlTable" class="display" cellspacing="0" width="100%">

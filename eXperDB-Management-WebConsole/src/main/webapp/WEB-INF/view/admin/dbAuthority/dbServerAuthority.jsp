@@ -184,7 +184,7 @@
 					html1+=	'</td>';
 					html1+='</tr>';
 					
-					if("${sessionScope.pg_audit}"== "Y"){
+					if("${sessionScope.session.pg_audit}"== "Y"){
 						html1+='<tr>';
 						html1+=	'<th scope="row"><spring:message code="menu.audit_settings" /></th>';
 						html1+=	'<td>';
@@ -335,19 +335,20 @@
 		  							document.getElementById(result[i].db_svr_nm+"_policy_change_his").checked = false;
 		  						}
 		  						
-		  						//감사설정 권한
-		  						if(result.length != 0 && result[i].adt_cng_aut_yn == "Y"){
-		  							document.getElementById(result[i].db_svr_nm+"_adt_cng").checked = true;
-		  						}else{
-		  							document.getElementById(result[i].db_svr_nm+"_adt_cng").checked = false;
+		  						if("${sessionScope.session.pg_audit}"== "Y"){
+			  						//감사설정 권한
+			  						if(result.length != 0 && result[i].adt_cng_aut_yn == "Y"){
+			  							document.getElementById(result[i].db_svr_nm+"_adt_cng").checked = true;
+			  						}else{
+			  							document.getElementById(result[i].db_svr_nm+"_adt_cng").checked = false;
+			  						}		  						
+			  						//감사이력 권한
+			  						if(result.length != 0 && result[i].adt_hist_aut_yn == "Y"){
+			  							document.getElementById(result[i].db_svr_nm+"_adt_hist").checked = true;
+			  						}else{
+			  							document.getElementById(result[i].db_svr_nm+"_adt_hist").checked = false;
+			  						}		  	
 		  						}
-		  						
-		  						//감사이력 권한
-		  						if(result.length != 0 && result[i].adt_hist_aut_yn == "Y"){
-		  							document.getElementById(result[i].db_svr_nm+"_adt_hist").checked = true;
-		  						}else{
-		  							document.getElementById(result[i].db_svr_nm+"_adt_hist").checked = false;
-		  						}		  	
 		  						
 		  						//스크립트설정 권한
 		  						if(result.length != 0 && result[i].script_cng_aut_yn == "Y"){
@@ -369,8 +370,10 @@
 		    				document.getElementById(svr_server[0].db_svr_nm+"_bck_scdr").checked = false;
 		    				document.getElementById(svr_server[0].db_svr_nm+"_acs_cntr").checked = false;
 		    				document.getElementById(svr_server[0].db_svr_nm+"_policy_change_his").checked = false;
-		    				document.getElementById(svr_server[0].db_svr_nm+"_adt_cng").checked = false;
-		    				document.getElementById(svr_server[0].db_svr_nm+"_adt_hist").checked = false;
+		    				if("${sessionScope.session.pg_audit}"== "Y"){
+		    					document.getElementById(svr_server[0].db_svr_nm+"_adt_cng").checked = false;
+			    				document.getElementById(svr_server[0].db_svr_nm+"_adt_hist").checked = false;
+		    				}
 		    				document.getElementById(svr_server[0].db_svr_nm+"_script_cng").checked = false;
 		    				document.getElementById(svr_server[0].db_svr_nm+"_script_his").checked = false;
     					}	
@@ -531,7 +534,7 @@
 						}
 					},
 					success : function(result) {
-						location.reload();
+						alert("<spring:message code='message.msg07' />");
 					}
 				}); 	
 			}else{
@@ -599,7 +602,7 @@
 									<div class="btn_type_01">
 										<div class="search_area">
 											<input type="text" class="txt search" id="search">
-											<button class="search_btn" onClick="fn_search()"><spring:message code="button.search" /></button>
+											<button type="button" class="search_btn" onClick="fn_search()"><spring:message code="button.search" /></button>
 										</div>
 									</div>
 									<div class="inner">
@@ -621,7 +624,7 @@
 								
 								<div class="db_roll_rt">
 									<div class="btn_type_01">
-										<span class="btn"><button onClick="fn_svr_save();" id="server_button"><spring:message code="common.save"/></button></span>
+										<span class="btn"><button type="button" onClick="fn_svr_save();" id="server_button"><spring:message code="common.save"/></button></span>
 									</div>
 									<div class="inner">
 										<p class="tit"><spring:message code="auth_management.db_server_menu_auth_mng" /></p>

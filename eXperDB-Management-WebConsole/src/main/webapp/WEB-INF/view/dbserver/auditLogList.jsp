@@ -293,7 +293,7 @@ $(function() {
 		<div class="contents">
 			<div class="cmm_grp">
 				<div class="btn_type_01">
-					<span class="btn"><button onClick="javascript:fn_search();"><spring:message code="common.search" /></button></span>
+					<span class="btn"><button type="button" onClick="javascript:fn_search();"><spring:message code="common.search" /></button></span>
 				</div>
 				<div class="sch_form">
 					<table class="write">

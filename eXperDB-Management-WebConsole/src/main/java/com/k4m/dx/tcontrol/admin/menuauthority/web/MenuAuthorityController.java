@@ -27,6 +27,7 @@ import com.k4m.dx.tcontrol.admin.menuauthority.service.MenuAuthorityVO;
 import com.k4m.dx.tcontrol.admin.usermanager.service.UserManagerService;
 import com.k4m.dx.tcontrol.cmmn.CmmnUtils;
 import com.k4m.dx.tcontrol.common.service.HistoryVO;
+import com.k4m.dx.tcontrol.login.service.LoginVO;
 import com.k4m.dx.tcontrol.login.service.UserVO;
 
 /**
@@ -171,7 +172,8 @@ public class MenuAuthorityController {
 				return resultSet;
 			}else{*/
 				HttpSession session = request.getSession();
-				String usr_id = (String)session.getAttribute("usr_id");
+				LoginVO loginVo = (LoginVO) session.getAttribute("session");
+				String usr_id = loginVo.getUsr_id();
 				
 				menuAuthorityVO.setUsr_id(usr_id);
 				
@@ -274,7 +276,8 @@ public class MenuAuthorityController {
 		List<MenuAuthorityVO> resultSet = null;
 		try {		
 				HttpSession session = request.getSession();
-				String usr_id = (String)session.getAttribute("usr_id");
+				LoginVO loginVo = (LoginVO) session.getAttribute("session");
+				String usr_id = loginVo.getUsr_id();
 				
 				menuAuthorityVO.setUsr_id(usr_id);
 				

@@ -212,9 +212,9 @@
 			},
 			success : function(data) {
  				if(data==null){
- 					$('<button onclick="fn_insert()" id="btnInsert"></button>').text('<spring:message code="common.save"/>').appendTo('.btnC_01');
+ 					$('<button onclick="fn_insert()" id="btnInsert" type="button"></button>').text('<spring:message code="common.save"/>').appendTo('.btnC_01');
  				}else{
- 				  $('<button onclick="fn_update()" id="btnInsert"></button>').text('<spring:message code="common.save"/>').appendTo('.btnC_01');
+ 				  $('<button onclick="fn_update()" id="btnInsert" type="button"></button>').text('<spring:message code="common.save"/>').appendTo('.btnC_01');
  				  $("#kafka_broker_ip").val(data.kafka_broker_ip);
  				  $("#kafka_broker_port").val(data.kafka_broker_port);
  				  $("#schema_registry_ip").val(data.schema_registry_ip);

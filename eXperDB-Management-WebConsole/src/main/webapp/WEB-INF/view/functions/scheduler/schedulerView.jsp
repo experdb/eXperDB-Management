@@ -679,7 +679,7 @@ $(function(){
 						var height = "160px";	
 
 						if (result.length > 4)
-							height = String(12 * result.length) + "px"
+							height = String(17 * result.length) + "px"
 
 						for(var i=0;i<7;i++){
 							var showdt = stdt.format("MM/dd");
@@ -933,7 +933,7 @@ var DateDiff =  {
 						</div>
 						<div class="cmm_grp">
 							<div class="btn_type_01" id="btnWeek">
-								<span class="btn"  onClick="fn_insertSchedule();" id="int_button"><button style="width: 150px;"><spring:message code="backup_management.weekly_schedule_registory" /></button></span>
+								<span class="btn"  onClick="fn_insertSchedule();" id="int_button"><button type="button" style="width: 150px;"><spring:message code="backup_management.weekly_schedule_registory" /></button></span>
 							</div>
 							<div class="btn_type_01" id="btnMonth">
 								<!--  <span class="btn"  onClick="fn_insertSchedule();" id="int_button"><button>월별 스케줄등록</button></span>-->
@@ -976,7 +976,7 @@ var DateDiff =  {
 												</td>
 												<td align="right">
 	
-													<span class="btn"  id="btnGetData"><button><spring:message code="common.search" /> </button></span>
+													<span class="btn"  id="btnGetData"><button type="button"><spring:message code="common.search" /> </button></span>
 												</td>
 											</tr>
 										</tbody>

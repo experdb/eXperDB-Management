@@ -11,9 +11,12 @@ import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.core.AuthenticationException;
+
+import com.k4m.dx.tcontrol.login.service.LoginVO;
 
 /**
 * @author 박태혁
@@ -43,10 +46,12 @@ import org.springframework.security.core.AuthenticationException;
 	        HttpServletResponse res = (HttpServletResponse) response;
 	        
 	        if(isAjaxRequest(req)) {
-                if(req.getSession().getAttribute("usr_id") == null){
-                	res.sendError(HttpServletResponse.SC_FORBIDDEN);
-                }
-                
+	        	HttpSession session = req.getSession();
+	    		LoginVO loginVo = (LoginVO) session.getAttribute("session");
+	    		if(loginVo == null){
+	    			res.sendError(HttpServletResponse.SC_FORBIDDEN);
+	    		}
+      
                 try {
                 	chain.doFilter(req, res);
                 } catch (AccessDeniedException e) {

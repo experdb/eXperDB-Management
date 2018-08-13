@@ -207,9 +207,9 @@
 		<div class="contents">
 			<div class="cmm_grp">
 				<div class="btn_type_01">
-					<span class="btn" onclick="fn_select();"><button>조회</button></span>
-					<span class="btn" onclick="fn_download();"><button>다운로드</button></span>
-					<span class="btn" onclick="fn_delete();"><button>삭제</button></span>
+					<span class="btn" onclick="fn_select();"><button type="button">조회</button></span>
+					<span class="btn" onclick="fn_download();"><button type="button">다운로드</button></span>
+					<span class="btn" onclick="fn_delete();"><button type="button">삭제</button></span>
 				</div>
 				<div class="sch_form">
 					<table class="write">

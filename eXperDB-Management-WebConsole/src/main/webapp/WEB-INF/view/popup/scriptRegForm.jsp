@@ -3,6 +3,7 @@
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form"%>
 <%@ taglib prefix="ui" uri="http://egovframework.gov/ctl/ui"%>
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags"%>
+<%@include file="../cmmn/commonLocale.jsp"%>
 <%
 	/**
 	* @Class Name : scriptRegForm.jsp
@@ -202,8 +203,8 @@ function fn_insert_work(){
 					</table>
 				</div>
 				<div class="btn_type_02">
-					<span class="btn btnC_01" onClick="fn_insert_work();"><button><spring:message code="common.registory" /></button></span>
-					<span class="btn" onclick="self.close();return false;"><button><spring:message code="common.cancel" /></button></span>
+					<span class="btn btnC_01" onClick="fn_insert_work();"><button type="button"><spring:message code="common.registory" /></button></span>
+					<span class="btn" onclick="self.close();return false;"><button type="button"><spring:message code="common.cancel" /></button></span>
 				</div>
 		</div><!-- //pop-container -->
 	</div>

@@ -385,7 +385,7 @@ margin-right: 10px;
 		<div class="contents">
 			<div class="cmm_grp">
 				<div class="btn_type_01">
-					<a href="#n" class="btn" onClick="fn_save()"><button id="btnSave"><spring:message code="common.save"/></button></a> 
+					<a href="#n" class="btn" onClick="fn_save()"><button type="button" id="btnSave"><spring:message code="common.save"/></button></a> 
 				</div>
 						
 				<div class="cmm_bd">
@@ -434,7 +434,7 @@ margin-right: 10px;
 
 				<div class="cmm_bd">
 					<div class="sub_tit">
-						<p>로그압축</p>
+						<p><spring:message code="encrypt_policy_management.Log_Compression"/></p>
 					</div>
 					<div class="overflows_areas">
 						<table class="write">

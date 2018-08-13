@@ -1,8 +1,10 @@
 package com.k4m.dx.tcontrol.cmmn_web;
 
+import java.io.FileInputStream;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Properties;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
@@ -10,7 +12,6 @@ import javax.servlet.http.HttpSession;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.util.ResourceUtils;
@@ -18,10 +19,7 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
-import java.io.FileInputStream;
-import java.net.URL;
-import java.util.Properties;
- 
+
 import com.k4m.dx.tcontrol.admin.accesshistory.service.AccessHistoryService;
 import com.k4m.dx.tcontrol.admin.dbserverManager.service.DbServerVO;
 import com.k4m.dx.tcontrol.backup.service.BackupService;
@@ -33,7 +31,6 @@ import com.k4m.dx.tcontrol.cmmn.client.ClientInfoCmmn;
 import com.k4m.dx.tcontrol.cmmn.client.ClientProtocolID;
 import com.k4m.dx.tcontrol.common.service.AgentInfoVO;
 import com.k4m.dx.tcontrol.common.service.CmmnServerInfoService;
-import com.k4m.dx.tcontrol.common.service.CmmnVO;
 import com.k4m.dx.tcontrol.common.service.HistoryVO;
 import com.k4m.dx.tcontrol.dashboard.service.DashboardService;
 import com.k4m.dx.tcontrol.dashboard.service.DashboardVO;
@@ -41,6 +38,7 @@ import com.k4m.dx.tcontrol.encrypt.service.call.AgentMonitoringServiceCall;
 import com.k4m.dx.tcontrol.encrypt.service.call.CommonServiceCall;
 import com.k4m.dx.tcontrol.encrypt.service.call.StatisticsServiceCall;
 import com.k4m.dx.tcontrol.functions.schedule.service.ScheduleService;
+import com.k4m.dx.tcontrol.login.service.LoginVO;
 import com.k4m.dx.tcontrol.script.service.ScriptService;
 
 /**
@@ -481,11 +479,12 @@ public class CmmnController {
 		List<Map<String, Object>> statisticsListResult = null;
 		
 		HttpSession session = request.getSession();
-		String restIp = (String)session.getAttribute("restIp");
-		int restPort = (int)session.getAttribute("restPort");
-		String strTocken = (String)session.getAttribute("tockenValue");
-		String loginId = (String)session.getAttribute("usr_id");
-		String entityId = (String)session.getAttribute("ectityUid");	
+		LoginVO loginVo = (LoginVO) session.getAttribute("session");
+		String restIp = loginVo.getRestIp();
+		int restPort = loginVo.getRestPort();
+		String strTocken = loginVo.getTockenValue();
+		String loginId = loginVo.getUsr_id();
+		String entityId = loginVo.getEctityUid();
 
 		try {								
 			
@@ -628,11 +627,12 @@ public class CmmnController {
 				JSONObject result = new JSONObject();
 
 				HttpSession session = request.getSession();
-				String restIp = (String)session.getAttribute("restIp");
-				int restPort = (int)session.getAttribute("restPort");
-				String strTocken = (String)session.getAttribute("tockenValue");
-				String loginId = (String)session.getAttribute("usr_id");
-				String entityId = (String)session.getAttribute("ectityUid");	
+				LoginVO loginVo = (LoginVO) session.getAttribute("session");
+				String restIp = loginVo.getRestIp();
+				int restPort = loginVo.getRestPort();
+				String strTocken = loginVo.getTockenValue();
+				String loginId = loginVo.getUsr_id();
+				String entityId = loginVo.getEctityUid();
 
 				try{
 					CommonServiceCall csc = new CommonServiceCall();					

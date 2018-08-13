@@ -86,7 +86,7 @@ public class DxT024 extends SocketCtl{
 					
 					String strExtender = FileUtil.fileExtenderSubString(strFileName);
 
-					if(strExtender.equals("dump")) {
+					if(strExtender.equals("dump") || strExtender.equals("tar")) {
 						hp.put(ProtocolID.FILE_NAME, strFileName);
 						hp.put(ProtocolID.FILE_SIZE, strFileSize);
 						hp.put(ProtocolID.FILE_LASTMODIFIED, strLastModified);

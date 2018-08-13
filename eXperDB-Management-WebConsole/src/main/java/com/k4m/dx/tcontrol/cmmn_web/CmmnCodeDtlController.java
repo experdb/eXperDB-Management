@@ -4,6 +4,7 @@ import java.util.List;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -15,6 +16,7 @@ import org.springframework.web.servlet.ModelAndView;
 import com.k4m.dx.tcontrol.common.service.CmmnCodeDtlService;
 import com.k4m.dx.tcontrol.common.service.CmmnCodeVO;
 import com.k4m.dx.tcontrol.common.service.PageVO;
+import com.k4m.dx.tcontrol.login.service.LoginVO;
 
 import egovframework.rte.fdl.property.EgovPropertyService;
 import egovframework.rte.ptl.mvc.tags.ui.pagination.PaginationInfo;
@@ -134,8 +136,9 @@ public class CmmnCodeDtlController {
 	@RequestMapping(value = "/insertCmmnDtlCode.do")
 	public String insertCmmnDtlCode(@ModelAttribute("cmmnCodeVO") CmmnCodeVO cmmnCodeVO, HttpServletRequest request){
 		try {
-			
-			String usr_id = (String) request.getSession().getAttribute("usr_id");
+			HttpSession session = request.getSession();
+			LoginVO loginVo = (LoginVO) session.getAttribute("session");
+			String usr_id = loginVo.getUsr_id();
 			cmmnCodeVO.setUsr_id(usr_id);
 			
 			cmmnCodeDtlService.insertCmmnDtlCode(cmmnCodeVO);

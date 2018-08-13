@@ -26,6 +26,7 @@ import com.k4m.dx.tcontrol.cmmn.AES256_KEY;
 import com.k4m.dx.tcontrol.cmmn.CmmnUtils;
 import com.k4m.dx.tcontrol.common.service.HistoryVO;
 import com.k4m.dx.tcontrol.encrypt.service.call.UserManagerServiceCall;
+import com.k4m.dx.tcontrol.login.service.LoginVO;
 import com.k4m.dx.tcontrol.login.service.UserVO;
 
 /**
@@ -164,9 +165,10 @@ public class UserManagerController {
 				accessHistoryService.insertHistory(historyVO);
 
 				HttpSession session = request.getSession();
-				String strTocken = (String) session.getAttribute("tockenValue");
-				String entityId = (String) session.getAttribute("ectityUid");
-				String encp_use_yn = (String) session.getAttribute("encp_use_yn");
+				LoginVO loginVo = (LoginVO) session.getAttribute("session");
+				String strTocken = loginVo.getTockenValue();
+				String entityId = loginVo.getEctityUid();
+				String encp_use_yn = loginVo.getEncp_use_yn();
 
 				if (encp_use_yn.equals("Y") && strTocken != null && entityId != null) {
 					mv.addObject("encp_yn", encp_use_yn);
@@ -221,9 +223,10 @@ public class UserManagerController {
 				mv.addObject("usr_expr_dt", result.getUsr_expr_dt());
 
 				HttpSession session = request.getSession();
-				String strTocken = (String) session.getAttribute("tockenValue");
-				String entityId = (String) session.getAttribute("ectityUid");
-				String encp_use_yn = (String) session.getAttribute("encp_use_yn");
+				LoginVO loginVo = (LoginVO) session.getAttribute("session");
+				String strTocken = loginVo.getTockenValue();
+				String entityId = loginVo.getEctityUid();
+				String encp_use_yn = loginVo.getEncp_use_yn();
 
 				if (encp_use_yn.equals("Y") && strTocken != null && entityId != null) {
 					mv.addObject("encp_yn", encp_use_yn);
@@ -291,12 +294,13 @@ public class UserManagerController {
 
 			String password = userVo.getPwd();
 			HttpSession session = request.getSession();
+			LoginVO loginVo = (LoginVO) session.getAttribute("session");
 
-			// 암호화 사용자 등록
-			String strTocken = (String) session.getAttribute("tockenValue");
-			String loginId = (String) session.getAttribute("usr_id");
-			String entityId = (String) session.getAttribute("ectityUid");
-			String encp_use_yn = (String) session.getAttribute("encp_use_yn");
+			// 암호화 사용자 등록	
+			String strTocken = loginVo.getTockenValue();
+			String loginId = loginVo.getUsr_id();
+			String entityId = loginVo.getEctityUid();
+			String encp_use_yn = loginVo.getEncp_use_yn();		
 
 			if (userVo.getEncp_use_yn() == null) {
 				userVo.setEncp_use_yn("N");
@@ -308,8 +312,9 @@ public class UserManagerController {
 					if (encp_yn.equals("Y")) {
 						String strUserId = userVo.getUsr_id();
 						String entityname = userVo.getUsr_nm();
-						String restIp = (String) session.getAttribute("restIp");
-						int restPort = (int) session.getAttribute("restPort");
+						String restIp = loginVo.getRestIp();
+						int restPort = loginVo.getRestPort();
+						
 						try{
 							results = uic.insertEntityWithPermission(restIp, restPort, strTocken, loginId, entityId, strUserId, password, entityname);
 							if (!results.get("resultCode").equals("0000000000")) {
@@ -331,7 +336,7 @@ public class UserManagerController {
 			AES256 aes = new AES256(AES256_KEY.ENC_KEY);
 			userVo.setPwd(aes.aesEncode(password)); // 패스워드 암호화
 
-			String usr_id = (String) session.getAttribute("usr_id");
+			String usr_id = loginVo.getUsr_id();
 			userVo.setFrst_regr_id(usr_id);
 			userVo.setLst_mdfr_id(usr_id);
 
@@ -372,7 +377,7 @@ public class UserManagerController {
 				param.put("db_id", dbList.get(k).get("db_id"));
 				dbAuthorityService.insertUsrDbAut(param);
 			}
-
+			results.put("resultCode", "0000000000");
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -409,7 +414,8 @@ public class UserManagerController {
 			accessHistoryService.insertHistory(historyVO);
 
 			HttpSession session = request.getSession();
-			String usr_id = (String) session.getAttribute("usr_id");
+			LoginVO loginVo = (LoginVO) session.getAttribute("session");
+			String usr_id = loginVo.getUsr_id();
 			userVo.setLst_mdfr_id(usr_id);
 			UserVO userInfo = (UserVO) userManagerService.selectDetailUserManager(userVo.getUsr_id());
 
@@ -421,10 +427,10 @@ public class UserManagerController {
 				userVo.setPwd(aes.aesEncode(userVo.getPwd()));
 			}
 
-			String strTocken = (String) session.getAttribute("tockenValue");
-			String loginId = (String) session.getAttribute("usr_id");
-			String entityId = (String) session.getAttribute("ectityUid");
-			String encp_use_yn = (String) session.getAttribute("encp_use_yn");
+			String strTocken = loginVo.getTockenValue();
+			String loginId = loginVo.getUsr_id();
+			String entityId = loginVo.getEctityUid();
+			String encp_use_yn = loginVo.getEncp_use_yn();
 
 			/* 암호화 여부가 N */
 			if (encp_use_yn.equals("N") && strTocken == null && entityId == null) {
@@ -436,8 +442,8 @@ public class UserManagerController {
 
 			String beforeEncrypyn = userInfo.getEncp_use_yn();
 			String nowEncrypt = userVo.getEncp_use_yn();
-			String restIp = (String) session.getAttribute("restIp");
-			int restPort = (int) session.getAttribute("restPort");
+			String restIp = loginVo.getRestIp();
+			int restPort = loginVo.getRestPort();
 
 			if (!beforeEncrypyn.equals(nowEncrypt)) {
 				//암호화 사용유무가 N-> Y (암호화 사용자 생성)
@@ -524,18 +530,19 @@ public class UserManagerController {
 			accessHistoryService.insertHistory(historyVO);
 
 			HttpSession session = request.getSession();
-			String strTocken = (String) session.getAttribute("tockenValue");
-			String loginId = (String) session.getAttribute("usr_id");
-			String entityId = (String) session.getAttribute("ectityUid");
-			String encp_use_yn = (String) session.getAttribute("encp_use_yn");
+			LoginVO loginVo = (LoginVO) session.getAttribute("session");
+			String strTocken = loginVo.getTockenValue();
+			String loginId = loginVo.getUsr_id();
+			String entityId = loginVo.getEctityUid();
+			String encp_use_yn = loginVo.getEncp_use_yn();
 			String[] param = request.getParameter("usr_id").toString().split(",");
 			for (int i = 0; i < param.length; i++) {
 				UserVO userDetail = (UserVO) userManagerService.selectDetailUserManager(param[i]);
 				String getEncpUseyn = userDetail.getEncp_use_yn();
 				if (getEncpUseyn.equals("Y")) {
 					if (encp_use_yn.equals("Y") && strTocken != null && entityId != null) {
-						String restIp = (String) session.getAttribute("restIp");
-						int restPort = (int) session.getAttribute("restPort");
+						String restIp = loginVo.getRestIp();
+						int restPort = loginVo.getRestPort();
 						JSONObject resultEntity = new JSONObject();
 						try{
 							resultEntity = uic.selectEntityUid(restIp, restPort, strTocken, loginId, entityId, param[i]);

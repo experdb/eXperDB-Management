@@ -112,10 +112,20 @@ function fn_init() {
 
 
 $(window.document).ready(function() {
+	fn_buttonAut();
 	fn_init();
 	fn_select();
 });
 
+
+function fn_buttonAut(){
+	var btnUpdate = document.getElementById("btnUpdate"); 
+	if("${wrt_aut_yn}" == "Y"){
+		btnUpdate.style.display = '';
+	}else{
+		btnUpdate.style.display = 'none';
+	}
+}	
 
 function fn_select(){
 	$.ajax({
@@ -240,7 +250,7 @@ function fn_agentMonitoringModifyForm(){
 			<div class="cmm_grp">
 				<div class="btn_type_01">
 					<!-- <span class="btn"><button onClick="fn_select();">조회</button></span>  -->
-					<span class="btn"><button onClick="fn_agentMonitoringModifyForm();"><spring:message code="common.modify" /></button></span>
+					<span class="btn"><button type="button" onClick="fn_agentMonitoringModifyForm();" id="btnUpdate"><spring:message code="common.modify" /></button></span>
 				</div>
 				<%-- <div class="sch_form">
 					<table class="write">

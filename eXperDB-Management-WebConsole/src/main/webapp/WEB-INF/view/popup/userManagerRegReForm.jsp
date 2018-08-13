@@ -3,6 +3,7 @@
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form"%>
 <%@ taglib prefix="ui" uri="http://egovframework.gov/ctl/ui"%>
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags"%>
+<%@include file="../cmmn/commonLocale.jsp"%>
 <%
 	/**
 	* @Class Name : userManagerRegReForm.jsp
@@ -84,7 +85,7 @@
 	
 	//수정버튼 클릭시
 	function fn_update() {
-		var session_usr_id = "<%=(String)session.getAttribute("usr_id")%>"
+		var session_usr_id = "${sessionScope.session.usr_id}";
 		var usr_id=$("#usr_id").val();
 		if(usr_id=='admin'){
 			if(session_usr_id!=usr_id){

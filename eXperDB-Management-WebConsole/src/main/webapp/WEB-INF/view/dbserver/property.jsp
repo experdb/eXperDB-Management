@@ -207,7 +207,7 @@
 									<col style="width: 5%;" />
 									<col style="width: 5%;" />
 									<col style="width: 7%;" />
-									<col style="width: 5%;" />
+									<col style="width: 7%;" />
 									<col style="width: 68%;" />
 									<col /> 
 								</colgroup>

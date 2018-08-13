@@ -28,13 +28,13 @@
 					</tr>
 					<tr>
 						<th scope="row" class="t1" rowspan="3">Community</th>
-						<td>https://github.com/experdb/eXperDB-Management</td>
+						<td><a href="https://github.com/experdb/eXperDB-Management" target="_blank">https://github.com/experdb/eXperDB-Management</a></td>
 					</tr>
 					<tr>
-						<td>https://www.facebook.com/experdb</td>
+						<td><a href="https://www.facebook.com/experdb" target="_blank">https://www.facebook.com/experdb</a></td>
 					</tr>
 					<tr>
-						<td>http://cafe.naver.com/psqlmaster</td>
+						<td><a href="http://cafe.naver.com/psqlmaster" target="_blank">http://cafe.naver.com/psqlmaster</a></td>
 					</tr>
 				</tbody>
 			</table>

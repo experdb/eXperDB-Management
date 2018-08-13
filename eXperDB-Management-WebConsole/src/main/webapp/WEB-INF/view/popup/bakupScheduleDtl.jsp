@@ -5,7 +5,7 @@
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form"%>
 <%@ taglib prefix="ui" uri="http://egovframework.gov/ctl/ui"%>
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags"%>
-
+<%@include file="../cmmn/commonLocale.jsp"%>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head>
@@ -420,13 +420,13 @@ function fn_bckModifyPopup(){
 	<%@include file="../cmmn/commonLocale.jsp"%>  
 	<%@include file="../cmmn/workRmanInfo.jsp"%>
 	<%@include file="../cmmn/workDumpInfo.jsp"%>
-
+	<%@include file="../cmmn/workScriptInfo.jsp"%>
 	<div class="pop_container">
 		<div class="pop_cts">
 			<p class="tit"><spring:message code="schedule.scheduleDetail"/></p>
 			<div class="cmm_grp">
 				<div class="btn_type_01">
-					<span class="btn" onClick="fn_bckModifyPopup()"><button><spring:message code="common.modify" /></button></span>
+					<span class="btn" onClick="fn_bckModifyPopup()"><button type="button"><spring:message code="common.modify" /></button></span>
 				</div>
 				<div class="sch_form">
 					<table class="write">

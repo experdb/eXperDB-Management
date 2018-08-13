@@ -20,7 +20,7 @@
     	searching : false,	
     	bSort: false,
     	columns : [
-    		{data : "rownum",  defaultContent : ""}, 
+    		{data : "rownum",  className : "dt-center", defaultContent : ""}, 
     		{
 				data : "exe_result",
 				render : function(data, type, full, meta) {
@@ -41,7 +41,7 @@
  							if(full.exe_rslt_cd == 'TC001701'){
  								html += ' - ';
  							}else{
- 								html +='<span class="btn btnC_01 btnF_02" onClick=javascript:fn_fix_rslt_reg('+full.exe_sn+');><input type="button" value="조치입력"></span>';
+ 								html +='<span class="btn btnC_01 btnF_02" onClick=javascript:fn_fix_rslt_reg('+full.exe_sn+');><input type="button" value="<spring:message code="backup_management.Enter_Action"/>"></span>';
  							}	 
  						}
  						return html;
@@ -51,13 +51,13 @@
 				},
     		{data : "scd_nm", className : "dt-left", defaultContent : ""
     			,"render": function (data, type, full) {				
-    				  return '<span onClick=javascript:fn_scdLayer("'+full.scd_id+'"); class="bold">' + full.scd_nm + '</span>';
+    				  return '<span onClick=javascript:fn_scdLayer("'+full.scd_id+'"); class="bold" title="'+full.scd_nm+'">' + full.scd_nm + '</span>';
     			}
     		}, 
     		{data : "db_svr_nm",  defaultContent : ""},
     		{data : "wrk_nm", className : "dt-left", defaultContent : ""
     			,"render": function (data, type, full) {				
-    				  return '<span onClick=javascript:fn_workLayer("'+full.wrk_id+'"); class="bold">' + full.wrk_nm + '</span>';
+    				  return '<span onClick=javascript:fn_workLayer("'+full.wrk_id+'"); class="bold" title="'+full.wrk_nm+'">' + full.wrk_nm + '</span>';
     			}
     		}, 
     		{data : "wrk_strt_dtm",  defaultContent : ""}, 
@@ -115,20 +115,20 @@
 
     function fn_fix_rslt_reg(exe_sn){
     	document.getElementById("exe_sn").value = exe_sn;
-    	$('#fix_rslt_msg').val('');
+    	$('#fix_rslt_msg_r').val('');
     	$("#rdo_r_1").attr('checked', true);
     	toggleLayer($('#pop_layer_fix_rslt_reg'), 'on')
     }
     
     function fn_fix_rslt_msg_reg(){
-    	var fix_rsltcd = $(":input:radio[name=rdo]:checked").val();
-
+    	var fix_rsltcd = $(":input:radio[name=rdo_r]:checked").val();
+    	
     	$.ajax({
    			url : "/updateFixRslt.do",
    			data : {
    				exe_sn : $('#exe_sn').val(),
    				fix_rsltcd : fix_rsltcd,
-   				fix_rslt_msg : $('#fix_rslt_msg').val()
+   				fix_rslt_msg : $('#fix_rslt_msg_r').val()
    			},
    			dataType : "json",
    			type : "post",
@@ -148,9 +148,43 @@
    			},
    			success : function(result) {
    				toggleLayer($('#pop_layer_fix_rslt_reg'), 'off');
-   				location.reload();
+   				fn_scheduleFail_list();
    			}
    		}); 
+    }
+
+    
+    function fn_fix_rslt_msg_modify(){
+    	var fix_rsltcd = $(":input:radio[name=rdo]:checked").val();
+
+    	$.ajax({
+    			url : "/updateFixRslt.do",
+    			data : {
+    				exe_sn : $('#exe_sn').val(),
+    				fix_rsltcd : fix_rsltcd,
+    				fix_rslt_msg : $('#fix_rslt_msg').val()
+    			},
+    			dataType : "json",
+    			type : "post",
+    			beforeSend: function(xhr) {
+    		        xhr.setRequestHeader("AJAX", true);
+    		     },
+    			error : function(xhr, status, error) {
+    				if(xhr.status == 401) {
+    					alert('<spring:message code="message.msg02" />');
+    					top.location.href = "/";
+    				} else if(xhr.status == 403) {
+    					alert('<spring:message code="message.msg03" />');
+    					top.location.href = "/";
+    				} else {
+    					alert("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""));
+    				}
+    			},
+    			success : function(result) {
+    				toggleLayer($('#pop_layer_fix_rslt_msg'), 'off');
+    				fn_scheduleFail_list();
+    			}
+    		}); 
     }
 
     
@@ -191,6 +225,7 @@
 <%@include file="../../cmmn/workRmanInfo.jsp"%>
 <%@include file="../../cmmn/workDumpInfo.jsp"%>
 <%@include file="../../cmmn/scheduleInfo.jsp"%>
+<%@include file="../../cmmn/workScriptInfo.jsp"%>
 <%@include file="../../cmmn/wrkLog.jsp"%>
 <%@include file="../../cmmn/fixRsltMsg.jsp"%>
 
@@ -213,9 +248,12 @@
 							</td>
 						</tr>
 						<tr>
-							<td><textarea name="fix_rslt_msg" id="fix_rslt_msg" style="height: 250px;"> </textarea>
-									<input type="hidden" name="exe_sn" id="exe_sn">
+							<td><textarea name="fix_rslt_msg_r" id="fix_rslt_msg_r" style="height: 250px;"> </textarea>
+									<input type="hidden" name="exe_sn_r" id="exe_sn_r">
 							</td>
+							<!-- <td><textarea name="fix_rslt_msg" id="fix_rslt_msg" style="height: 250px;"> </textarea>
+									<input type="hidden" name="exe_sn" id="exe_sn">
+							</td> -->
 						</tr>
 					</tbody>
 				</table>
@@ -250,7 +288,7 @@
 		<div class="contents">
 			<div class="cmm_grp">
 				<div class="btn_type_01" id="btnRman">
-						<a class="btn" onClick="fn_scheduleFail_list();"><button><spring:message code="common.search" /></button></a>
+						<a class="btn" onClick="fn_scheduleFail_list();"><button type="button"><spring:message code="common.search" /></button></a>
 				</div>
 			<div class="sch_form">
 					<table class="write" id="searchRman">

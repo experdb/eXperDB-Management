@@ -33,7 +33,7 @@
 							</td>
 						</tr>
 						<tr>
-							<td><textarea name="fix_rslt_msg" id="fix_rslt_msg" style="height: 250px;"> </textarea>
+							<td><textarea name="fix_rslt_msg" id="fix_rslt_msg" style="height: 250px;" maxlength="500"> </textarea>
 									<input type="hidden" name="exe_sn" id="exe_sn">
 							</td>
 						</tr>

@@ -154,8 +154,8 @@
 			<div class="contents">
 				<div class="cmm_grp">
 					<div class="btn_type_float">
-						<span class="btn btnC_01 btn_fl"><button id="btnExcel" onclick="fn_ExportExcel()"><spring:message code="history_management.excel_save" /></button></span> 
-								<span class="btn btn_fr"><button id="btnSelect"onclick="fn_select()"><spring:message code="common.search" /></button></span>															
+						<span class="btn btnC_01 btn_fl"><button type="button" id="btnExcel" onclick="fn_ExportExcel()"><spring:message code="history_management.excel_save" /></button></span> 
+								<span class="btn btn_fr"><button type="button" id="btnSelect"onclick="fn_select()"><spring:message code="common.search" /></button></span>															
 					</div>
 
 					<form:form commandName="pagingVO" name="selectList" id="selectList" method="post">

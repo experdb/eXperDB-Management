@@ -22,9 +22,12 @@ var table = null;
 function fn_init() {
 	table = $('#userListTable').DataTable({
 		scrollY : "400px",
-		searching : false,
+		scrollX: true,	
+		bDestroy: true,
+		paging : true,
+		processing : true,
+		searching : false,	
 		deferRender : true,
-		scrollX: true,
 		bSort: false,
 		columns : [
 		{ data : "rownum", defaultContent : "", targets : 0, orderable : false, checkboxes : {'selectRow' : true}}, 
@@ -63,14 +66,14 @@ function fn_init() {
 		],'select': {'style': 'multi'}
 	});
 
-	table.tables().header().to$().find('th:eq(0)').css('min-width', '30px');
+	table.tables().header().to$().find('th:eq(0)').css('min-width', '40px');
 	table.tables().header().to$().find('th:eq(1)').css('min-width', '40px');
-	table.tables().header().to$().find('th:eq(2)').css('min-width', '120px');
+	table.tables().header().to$().find('th:eq(2)').css('min-width', '100px');
 	table.tables().header().to$().find('th:eq(3)').css('min-width', '100px');
 	table.tables().header().to$().find('th:eq(4)').css('min-width', '100px');
 	table.tables().header().to$().find('th:eq(5)').css('min-width', '100px');
-	table.tables().header().to$().find('th:eq(6)').css('min-width', '80px');
-	table.tables().header().to$().find('th:eq(7)').css('min-width', '80px');
+	table.tables().header().to$().find('th:eq(6)').css('min-width', '100px');
+	table.tables().header().to$().find('th:eq(7)').css('min-width', '100px');
 	table.tables().header().to$().find('th:eq(8)').css('min-width', '100px');
     $(window).trigger('resize'); 
     
@@ -94,36 +97,7 @@ function fn_init() {
 $(window.document).ready(function() {
 	fn_buttonAut();
 	fn_init();
-	$.ajax({
-		url : "/selectUserManager.do",
-		data : {
-			type : $("#type").val(),
-			search : "%" + $("#search").val() + "%",
-			use_yn : $("#use_yn").val(),
-			encp_use_yn : $("#encp_use_yn").val()
-		},
-		dataType : "json",
-		type : "post",
-		beforeSend: function(xhr) {
-	        xhr.setRequestHeader("AJAX", true);
-	     },
-		error : function(xhr, status, error) {
-			if(xhr.status == 401) {
-				alert("<spring:message code='message.msg02' />");
-				top.location.href = "/";
-			} else if(xhr.status == 403) {
-				alert("<spring:message code='message.msg03' />");
-				top.location.href = "/";
-			} else {
-				alert("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""));
-			}
-		},
-		success : function(result) {
-			table.clear().draw();
-			table.rows.add(result).draw();
-		}
-	});
-
+	fn_select();
 });
 
 function fn_buttonAut(){
@@ -215,7 +189,7 @@ function fn_update() {
 
 /*삭제 버튼 클릭시*/
 function fn_delete(){
-	var usr_id = "<%=(String)session.getAttribute("usr_id")%>"
+	var usr_id = "${sessionScope.session.usr_id}"
 	var datas = table.rows('.selected').data();
 	if (datas.length <= 0) {
 		alert("<spring:message code='message.msg04' />");
@@ -294,9 +268,9 @@ function fn_delete(){
 		<div class="contents">
 			<div class="cmm_grp">
 				<div class="btn_type_01">
-					<span class="btn"><button onclick="fn_select()" id="btnSelect"><spring:message code="common.search" /></button></span>
-					<span class="btn"><button onclick="fn_insert()" id="btnInsert"><spring:message code="common.registory" /></button></span>
-					<span class="btn"><button onclick="fn_update()" id="btnUpdate"><spring:message code="common.modify" /></button></span>
+					<span class="btn"><button type="button" onclick="fn_select()" id="btnSelect"><spring:message code="common.search" /></button></span>
+					<span class="btn"><button type="button" onclick="fn_insert()" id="btnInsert"><spring:message code="common.registory" /></button></span>
+					<span class="btn"><button type="button" onclick="fn_update()" id="btnUpdate"><spring:message code="common.modify" /></button></span>
 					<a href="#n" class="btn" id="btnDelete" onclick="fn_delete()"><span><spring:message code="common.delete" /></span></a>
 				</div>
 				<div class="sch_form">
@@ -346,14 +320,14 @@ function fn_delete(){
 					<table id="userListTable" class="display" cellspacing="0" width="100%">
 						<thead>
 							<tr>
-								<th width="30"></th>
+								<th width="40"></th>
 								<th width="40"><spring:message code="common.no" /></th>
-								<th width="120"><spring:message code="user_management.id" /></th>
+								<th width="100"><spring:message code="user_management.id" /></th>
 								<th width="100"><spring:message code="user_management.company" /></th>
 								<th width="100"><spring:message code="user_management.user_name" /></th>
 								<th width="100"><spring:message code="user_management.contact" /></th>
-								<th width="80"><spring:message code="user_management.use_yn" /></th>
-								<th width="80"><spring:message code="encrypt_log_decode.Encryption"/> <spring:message code="user_management.use_yn" /></th>
+								<th width="100"><spring:message code="user_management.use_yn" /></th>
+								<th width="100"><spring:message code="encrypt_log_decode.Encryption"/> <spring:message code="user_management.use_yn" /></th>
 								<th width="100"><spring:message code="user_management.expiration_date" /></th>
 							</tr>
 						</thead>

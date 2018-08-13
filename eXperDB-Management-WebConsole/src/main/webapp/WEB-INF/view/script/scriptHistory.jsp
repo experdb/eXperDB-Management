@@ -102,6 +102,26 @@ function fn_init(){
 	 					},
 	 					className : "dt-center",
 	 					defaultContent : ""
+	 				},
+	 				{
+	 					data : "fix_rsltcd",
+	 					render : function(data, type, full, meta) {	 						
+	 						var html = '';
+	 						if (full.fix_rsltcd == 'TC002001') {
+	 							html += '<span class="btn btnC_01 btnF_02" onClick=javascript:fn_fixLog('+full.exe_sn+');><input type="button" value="<spring:message code="etc.etc29"/>"></span>';
+	 						} else if(full.fix_rsltcd == 'TC002002'){
+	 							html += '<span class="btn btnC_01 btnF_02" onClick=javascript:fn_fixLog('+full.exe_sn+');><input type="button" value="<spring:message code="etc.etc30"/>"></span>';
+	 						} else {
+	 							if(full.exe_rslt_cd == 'TC001701'){
+	 								html += ' - ';
+	 							}else{
+	 								html +='<span class="btn btnC_01 btnF_02" onClick=javascript:fn_fix_rslt_reg('+full.exe_sn+');><input type="button" value="<spring:message code="backup_management.Enter_Action"/>"></span>';
+	 							}	 
+	 						}
+	 						return html;
+	 					},
+	 					className : "dt-center",
+	 					defaultContent : ""
 	 				}
  		        ]
 	});
@@ -113,6 +133,7 @@ function fn_init(){
    	table.tables().header().to$().find('th:eq(4)').css('min-width', '100px');
    	table.tables().header().to$().find('th:eq(5)').css('min-width', '100px');
    	table.tables().header().to$().find('th:eq(6)').css('min-width', '100px');
+   	table.tables().header().to$().find('th:eq(7)').css('min-width', '100px');
 
     $(window).trigger('resize'); 
 }
@@ -154,10 +175,120 @@ function fn_search(){
 		}
 	});
 }
+
+
+function fn_fix_rslt_reg(exe_sn){
+	document.getElementById("exe_sn_r").value = exe_sn;
+	$('#fix_rslt_msg_r').val('');
+	$("#rdo_r_1").attr('checked', true);
+	toggleLayer($('#pop_layer_fix_rslt_reg'), 'on')
+}
+
+function fn_fix_rslt_msg_reg(){
+	var fix_rsltcd = $(":input:radio[name=rdo_r]:checked").val();
+
+	$.ajax({
+			url : "/updateFixRslt.do",
+			data : {
+				exe_sn : $('#exe_sn_r').val(),
+				fix_rsltcd : fix_rsltcd,
+				fix_rslt_msg : $('#fix_rslt_msg_r').val()
+			},
+			dataType : "json",
+			type : "post",
+			beforeSend: function(xhr) {
+		        xhr.setRequestHeader("AJAX", true);
+		     },
+			error : function(xhr, status, error) {
+				if(xhr.status == 401) {
+					alert('<spring:message code="message.msg02" />');
+					top.location.href = "/";
+				} else if(xhr.status == 403) {
+					alert('<spring:message code="message.msg03" />');
+					top.location.href = "/";
+				} else {
+					alert("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""));
+				}
+			},
+			success : function(result) {
+				toggleLayer($('#pop_layer_fix_rslt_reg'), 'off');
+				fn_search()
+			}
+		}); 
+}
+
+
+function fn_fix_rslt_msg_modify(){
+	var fix_rsltcd = $(":input:radio[name=rdo]:checked").val();
+
+	$.ajax({
+			url : "/updateFixRslt.do",
+			data : {
+				exe_sn : $('#exe_sn').val(),
+				fix_rsltcd : fix_rsltcd,
+				fix_rslt_msg : $('#fix_rslt_msg').val()
+			},
+			dataType : "json",
+			type : "post",
+			beforeSend: function(xhr) {
+		        xhr.setRequestHeader("AJAX", true);
+		     },
+			error : function(xhr, status, error) {
+				if(xhr.status == 401) {
+					alert('<spring:message code="message.msg02" />');
+					top.location.href = "/";
+				} else if(xhr.status == 403) {
+					alert('<spring:message code="message.msg03" />');
+					top.location.href = "/";
+				} else {
+					alert("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""));
+				}
+			},
+			success : function(result) {
+				toggleLayer($('#pop_layer_fix_rslt_msg'), 'off');
+				fn_search()
+				//location.reload();
+			}
+		}); 
+}
 </script>
 
 <%@include file="../cmmn/workScriptInfo.jsp"%>
 <%@include file="../cmmn/wrkLog.jsp"%>
+<%@include file="../cmmn/fixRsltMsg.jsp"%>
+
+
+	<div id="pop_layer_fix_rslt_reg" class="pop-layer">
+		<div class="pop-container">
+			<div class="pop_cts" style="width: 60%; margin: 0 auto; min-height:0; min-width:0;">
+				<p class="tit" style="margin-bottom: 15px;"><spring:message code="etc.etc33"/></p>
+				<table class="write" border="0">
+					<caption><spring:message code="etc.etc33"/></caption>
+					<tbody>
+						<tr>
+							<td>
+								<div class="inp_rdo">
+									<input name="rdo_r" id="rdo_r_1" type="radio" value="TC002001" checked="checked">
+										<label for="rdo_r_1" style="margin-right: 2%;"><spring:message code="etc.etc29"/></label> 
+									<input name="rdo_r" id="rdo_r_2" type="radio" value="TC002002"> 
+										<label for="rdo_r_2"><spring:message code="etc.etc30"/></label>
+								</div>
+							</td>
+						</tr>						
+						<tr>
+							<td><textarea name="fix_rslt_msg_r" id="fix_rslt_msg_r" style="height: 250px;"> </textarea>
+									<input type="hidden" name="exe_sn_r" id="exe_sn_r">
+							</td>
+						</tr>
+					</tbody>
+				</table>
+				<div class="btn_type_02">
+					<a href="#n" class="btn" onclick="fn_fix_rslt_msg_reg();"><span><spring:message code="common.save"/></span></a>
+					<a href="#n" class="btn" onclick="toggleLayer($('#pop_layer_fix_rslt_reg'), 'off');"><span><spring:message code="common.close"/></span></a>
+				</div>
+			</div>
+		</div><!-- //pop-container -->
+	</div>
 
 <!-- contents -->
 <div id="contents">
@@ -182,7 +313,7 @@ function fn_search(){
 		<div class="contents">
 			<div class="cmm_grp">
 				<div class="btn_type_01">
-					<span class="btn"><button id="btnSelect"><spring:message code="common.search" /></button></span>
+					<span class="btn"><button id="btnSelect" type="button"><spring:message code="common.search" /></button></span>
 				</div>
 				<div class="sch_form">
 				<form name="findList" id="findList" method="post">
@@ -238,6 +369,7 @@ function fn_search(){
 								<th width="100"><spring:message code="backup_management.work_end_time" /></th>
 								<th width="100"><spring:message code="backup_management.elapsed_time" /></th>
 								<th width="100"><spring:message code="common.status" /></th>
+								<th width="100"><spring:message code="etc.etc31"/></th>
 							</tr>
 						</thead>
 					</table>

@@ -239,7 +239,7 @@ select.t6{
 		<div class="contents">
 			<div class="cmm_grp">
 				<div class="btn_type_01">
-					<a href="#n" class="btn" onClick="fn_save()"><button id="btnSave"><spring:message code="common.save"/></button></a> 
+					<a href="#n" class="btn" onClick="fn_save()"><button type="button" id="btnSave"><spring:message code="common.save"/></button></a> 
 				</div>
 				<div class="cmm_bd">
 					<div class="sub_tit">

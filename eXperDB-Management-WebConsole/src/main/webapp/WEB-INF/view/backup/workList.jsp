@@ -718,16 +718,16 @@ function selectTab(tab){
 			</div>
 			<div class="cmm_grp">
 				<div class="btn_type_01" id="btnRman">
-					<a class="btn" onClick="fn_rman_find_list();"><button><spring:message code="common.search" /></button></a>
-					<span class="btn" onclick="fn_rman_reg_popup()"><button><spring:message code="common.registory" /></button></span>
-					<span class="btn" onClick="fn_rman_regreg_popup()"><button><spring:message code="common.modify" /></button></span>
-					<span class="btn" onClick="fn_rman_work_delete()"><button><spring:message code="common.delete" /></button></span>
+					<a class="btn" onClick="fn_rman_find_list();"><button type="button"><spring:message code="common.search" /></button></a>
+					<span class="btn" onclick="fn_rman_reg_popup()"><button type="button"><spring:message code="common.registory" /></button></span>
+					<span class="btn" onClick="fn_rman_regreg_popup()"><button type="button"><spring:message code="common.modify" /></button></span>
+					<span class="btn" onClick="fn_rman_work_delete()"><button type="button"><spring:message code="common.delete" /></button></span>
 				</div>
 				<div class="btn_type_01" id="btnDump" style="display:none;">
-					<span class="btn" onclick="fn_dump_find_list()"><button><spring:message code="common.search" /></button></span>
-					<span class="btn" onclick="fn_dump_reg_popup()"><button><spring:message code="common.registory" /></button></span>
-					<span class="btn" onclick="fn_dump_regreg_popup()"><button><spring:message code="common.modify" /></button></span>
-					<span class="btn" onclick="fn_dump_work_delete()"><button><spring:message code="common.delete" /></button></span>
+					<span class="btn" onclick="fn_dump_find_list()"><button type="button"><spring:message code="common.search" /></button></span>
+					<span class="btn" onclick="fn_dump_reg_popup()"><button type="button"><spring:message code="common.registory" /></button></span>
+					<span class="btn" onclick="fn_dump_regreg_popup()"><button type="button"><spring:message code="common.modify" /></button></span>
+					<span class="btn" onclick="fn_dump_work_delete()"><button type="button"><spring:message code="common.delete" /></button></span>
 				</div>
 				<form name="findList" id="findList" method="post">
 				<input type="hidden" name="db_svr_id" id="db_svr_id" value="${db_svr_id}"/>				

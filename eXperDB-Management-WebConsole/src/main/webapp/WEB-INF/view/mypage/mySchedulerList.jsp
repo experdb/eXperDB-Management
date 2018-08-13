@@ -376,10 +376,10 @@ function fn_modifyScheduleListView(){
 		<div class="contents">
 			<div class="cmm_grp">
 				<div class="btn_type_01">
-					<span class="btn"><button onClick="fn_selectScheduleList();"><spring:message code="common.search" /></button></span>		
-					<span class="btn" id="int_button"><a href="/insertScheduleView.do"><button><spring:message code="common.registory" /></button></a></span>
-					<span class="btn" id="mdf_button"><button onClick="fn_modifyScheduleListView();"><spring:message code="common.modify" /></button></span>
-					<span class="btn" id="del_button"><button onClick="fn_deleteScheduleList();"><spring:message code="common.delete" /></button></span>
+					<span class="btn"><button type="button" onClick="fn_selectScheduleList();"><spring:message code="common.search" /></button></span>		
+					<span class="btn" id="int_button"><a href="/insertScheduleView.do"><button type="button"><spring:message code="common.registory" /></button></a></span>
+					<span class="btn" id="mdf_button"><button type="button" onClick="fn_modifyScheduleListView();"><spring:message code="common.modify" /></button></span>
+					<span class="btn" id="del_button"><button type="button" onClick="fn_deleteScheduleList();"><spring:message code="common.delete" /></button></span>
 				</div>
 				<div class="sch_form">
 					<table class="write">

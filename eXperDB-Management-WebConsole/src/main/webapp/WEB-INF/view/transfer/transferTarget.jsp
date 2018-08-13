@@ -43,7 +43,7 @@
 			{
 				data : "",
 				render : function(data, type, full, meta) {
-					var html = "<span class='btn btnC_01 btnF_02'><button id='detail'><spring:message code='data_transfer.detail_search' /> </button></span>";
+					var html = "<span class='btn btnC_01 btnF_02'><button id='detail' type='button'><spring:message code='data_transfer.detail_search' /> </button></span>";
 					return html;
 				},
 				
@@ -51,7 +51,7 @@
 				className : "dt-center",
 				orderable : false
 			}, 
-			{ data : "",  orderable : false, className : "dt-center", defaultContent : "<span class='btn btnC_01 btnF_02'><button id='mappingBtn'><spring:message code='data_transfer.table_mapping' /></button></span>"},
+			{ data : "",  orderable : false, className : "dt-center", defaultContent : "<span class='btn btnC_01 btnF_02'><button id='mappingBtn' type='button'><spring:message code='data_transfer.table_mapping' /></button></span>"},
 			],'select': {'style': 'multi'}
 		});
 		
@@ -133,37 +133,7 @@
 	
 	$(window.document).ready(function() {
 		fn_init();
-		$.ajax({
-			url : "/selectTransferTarget.do",
-			data : {
-				trf_trg_cnn_nm : $("#trf_trg_cnn_nm").val(),
-				cnr_id : cnr_id
-			},
-			dataType : "json",
-			type : "post",
-			beforeSend: function(xhr) {
-		        xhr.setRequestHeader("AJAX", true);
-		     },
-			error : function(xhr, status, error) {
-				if(xhr.status == 401) {
-					alert("<spring:message code='message.msg02' />");
-					top.location.href = "/";
-				} else if(xhr.status == 403) {
-					alert("<spring:message code='message.msg03' />");
-					top.location.href = "/";
-				} else {
-					alert("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""));
-				}
-			},
-			success : function(result) {
-				table.clear().draw();
-				if(result.error != null){
-					alert("<spring:message code='message.msg173'/>");
-				}else if(result.data != null){
-					table.rows.add(result.data).draw();
-				}
-			}
-		});
+		fn_select();
 	
 	});
 	
@@ -330,10 +300,10 @@
 		<div class="contents">
 			<div class="cmm_grp">
 				<div class="btn_type_01">
-					<span class="btn" onclick="fn_select()"><button><spring:message code="common.search" /></button></span>
-					<span class="btn" onclick="fn_insert();"><button><spring:message code="common.registory" /></button></span> 
-					<span class="btn" onclick="fn_update();"><button><spring:message code="common.modify" /></button></span> 
-					<span class="btn" onclick="fn_delete();"><button><spring:message code="common.delete" /></button></span>
+					<span class="btn" onclick="fn_select()"><button type="button"><spring:message code="common.search" /></button></span>
+					<span class="btn" onclick="fn_insert();"><button type="button"><spring:message code="common.registory" /></button></span> 
+					<span class="btn" onclick="fn_update();"><button type="button"><spring:message code="common.modify" /></button></span> 
+					<span class="btn" onclick="fn_delete();"><button type="button"><spring:message code="common.delete" /></button></span>
 				</div>
 				<div class="sch_form">
 					<table class="write">

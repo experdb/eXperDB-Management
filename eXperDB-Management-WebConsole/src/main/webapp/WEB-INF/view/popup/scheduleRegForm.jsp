@@ -5,7 +5,7 @@
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form"%>
 <%@ taglib prefix="ui" uri="http://egovframework.gov/ctl/ui"%>
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags"%>
-
+<%@include file="../cmmn/commonLocale.jsp"%>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head>
@@ -257,6 +257,24 @@ function fn_workAdd(){
 </script>
 
 </head>
+<style>
+#scdinfo{
+	width: 35% !important;
+	margin-top: 0px !important;
+}
+
+#workinfo{
+	width: 60% !important;
+	height: 610px !important;
+	margin-top: 0px !important;
+}
+
+#scriptInfo{
+	width: 60% !important;
+	height: 610px !important;
+	margin-top: 0px !important;
+}
+</style>
 <body>
 <%@include file="../cmmn/commonLocale.jsp"%>  
 <%@include file="../cmmn/workRmanInfo.jsp"%>
@@ -266,7 +284,7 @@ function fn_workAdd(){
 	<div class="pop_cts">
 		<p class="tit"><spring:message code="schedule.workReg"/></p>
 			<div class="btn_type_01">
-				<span class="btn"><button onClick="fn_search();"><spring:message code="common.search" /></button></span>
+				<span class="btn"><button onClick="fn_search();" type="button"><spring:message code="common.search" /></button></span>
 			</div>
 		<div class="pop_cmm">							
 			<table class="write bdtype1">
@@ -341,7 +359,7 @@ function fn_workAdd(){
 		</div>
 		
 		<div class="btn_type_02">
-			<span class="btn btnC_01"><button onClick="fn_workAdd();"><spring:message code="common.add" /></button></span>
+			<span class="btn btnC_01"><button onClick="fn_workAdd();" type="button"><spring:message code="common.add" /></button></span>
 			<a href="#n" class="btn" onclick="window.close();"><span><spring:message code="common.cancel" /></span></a>
 		</div>
 	</div>

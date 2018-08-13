@@ -5,7 +5,7 @@
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form"%>
 <%@ taglib prefix="ui" uri="http://egovframework.gov/ctl/ui"%>
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags"%>
-
+<%@include file="../cmmn/commonLocale.jsp"%>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head>
@@ -50,28 +50,18 @@ function fn_init(){
 	{data : "bck_bsn_dscd_nm",  defaultContent : ""}, //구분
 	{data : "wrk_nm", className : "dt-left", defaultContent : ""
 		,"render": function (data, type, full) {
-			  return '<span onClick=javascript:fn_workLayer("'+full.wrk_id+'"); class="bold">' + full.wrk_nm + '</span>';
+			  return '<span onClick=javascript:fn_workLayer("'+full.wrk_id+'"); class="bold" title="'+full.wrk_nm+'">' + full.wrk_nm + '</span>';
 		}
 	}, //work명
-	{data : "wrk_exp", className : "dt-left", defaultContent : ""}, //work설명
-	{data : "nxt_exe_yn",  
-		className: "dt-center",
-      	defaultContent: "",
-        	render: function (data, type, full){
-        		
-        		var onError ='<select  id="nxt_exe_yn" name="nxt_exe_yn">';
-        		if(full.nxt_exe_yn  == 'Y') {
-        			onError +='<option value="Y" selected>Y</option>';
-        			onError +='<option value="N">N</option>';
-        		} else {
-        			onError +='<option value="Y">Y</option>';
-        			onError +='<option value="N" selected>N</option>';
-        		}
-
-        		onError +='</select>';
-        		return onError;	
-        	}
-          }
+	{ data : "wrk_exp",
+		render : function(data, type, full, meta) {	 	
+			var html = '';					
+			html += '<span title="'+full.wrk_exp+'">' + full.wrk_exp + '</span>';
+			return html;
+		},
+		defaultContent : ""
+	},
+	{data : "nxt_exe_yn", className: "dt-center", defaultContent: ""}
 	]
 });
 
@@ -129,13 +119,11 @@ $(window.document).ready(function() {
 	margin-top: 0px !important;
 }
 
-
 #scriptInfo{
-	width: 80% !important;
+	width: 60% !important;
 	height: 500px !important;
 	margin-top: 0px !important;
 }
-
 </style>
 <%@include file="../cmmn/commonLocale.jsp"%>  
 <%@include file="../cmmn/workRmanInfo.jsp"%>
@@ -155,7 +143,7 @@ $(window.document).ready(function() {
 						<th width="0"></th>
 						<th width="100"><spring:message code="data_transfer.server_name" /></th>
 						<th width="100"><spring:message code="common.division" /></th>	
-						<th width="100"><spring:message code="backup_management.detail_div"/></th>		
+						<th width="130"><spring:message code="backup_management.detail_div"/></th>		
 						<th width="200" class="dt-center"><spring:message code="common.work_name" /></th>
 						<th width="300" class="dt-center"><spring:message code="common.work_description" /></th>
 						<th width="80"><spring:message code="schedule.onerror" /></th>

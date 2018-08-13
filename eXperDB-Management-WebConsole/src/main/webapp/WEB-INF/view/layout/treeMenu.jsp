@@ -1,6 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ taglib prefix="c"      uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags"%>
+<%@include file="../cmmn/commonLocale.jsp"%>
 <style>
 .tooltip {
     position: relative;
@@ -87,7 +88,7 @@ $(window.document).ready(function() {
 
 
    	/*암호화 조회*/
-   	if('${sessionScope.encp_use_yn}' == 'Y'){
+   	if('${sessionScope.session.encp_use_yn}' == 'Y'){
    		$.ajax({
    			async : false,
    			url : "/selectTreeEncrypt.do",
@@ -109,11 +110,12 @@ $(window.document).ready(function() {
    				}
    			},
    			success : function(result) {
-   				fn_encryptMenuAut(result);
+   				fn_encryptMenuAut_Y(result);
    			}
    		});
    	}else{
-   		$('.encrypt').hide();
+   		fn_encryptMenuAut_N();
+   		//$('.encrypt').hide();
    	}
    
       $("#tree").treeview({
@@ -216,10 +218,10 @@ $(window.document).ready(function() {
 			},
 			success : function(result) {
 				Schedule(result);
-		   		if('${sessionScope.transfer}' == 'Y'){ 
-		   			GetJsonDataConnector(data, result);
+		   		if('${sessionScope.session.transfer}' == 'Y'){ 
+		   			GetJsonDataConnector_Y(data, result);
 		   	   	}else{
-		   	   		$('.transferMenu').hide();
+		   	  	 	GetJsonDataConnector_N
 		   	   	}
 			}
 		})
@@ -266,9 +268,10 @@ $(window.document).ready(function() {
 					}			
 					html1+='				</ul>';
 					html1+='			</li>';
-					//pg_audit 사용여부에 따른 tree메뉴 권한
-					if('${sessionScope.pg_audit}' == 'Y'){
+					
 						html1+='			<li class="ico2_2"><a href="#n"><img src="../images/ico_lnb_7.png" id="treeImg"><spring:message code="menu.audit_management"/></a>';
+						//pg_audit 사용여부에 따른 tree메뉴 권한
+						if('${sessionScope.session.pg_audit}' == 'Y'){
 						html1+='				<ul class="depth_3">'
 						if(aut.length != 0 && aut[index].adt_cng_aut_yn == "Y"){
 							html1+='					<li class="ico3_4" id="auditManagement'+item.db_svr_id+'"><a href=/audit/auditManagement.do?db_svr_id='+item.db_svr_id+' id="auditManagement'+item.db_svr_id+'c" onClick=javascript:fn_GoLink("auditManagement'+item.db_svr_id+'"); target="main"><img src="../images/ico_lnb_10.png" id="treeImg"><spring:message code="menu.audit_settings" /></a></li>';
@@ -277,8 +280,9 @@ $(window.document).ready(function() {
 							html1+='					<li class="ico3_5" id="auditLogList'+item.db_svr_id+'"><a href=/audit/auditLogList.do?db_svr_id='+item.db_svr_id+' id="auditLogList'+item.db_svr_id+'c" onClick=javascript:fn_GoLink("auditLogList'+item.db_svr_id+'"); target="main"><img src="../images/ico_lnb_14.png" id="treeImg"><spring:message code="menu.audit_history" /></a></li>';
 						}
 						html1+='				</ul>';
+						}
 						html1+='			</li>';		
-					}
+					
 					html1+='			<li class="ico2_2"><a href="#n"><img src="../images/ico_lnb_7.png" id="treeImg"><spring:message code="menu.script_management"/></a>';
 					html1+='				<ul class="depth_3">'
 					if(aut.length != 0 && aut[index].script_cng_aut_yn == "Y"){
@@ -302,7 +306,7 @@ $(window.document).ready(function() {
 		
 
 		
-	      function GetJsonDataConnector(data, aut) {      
+	      function GetJsonDataConnector_Y(data, aut) {      
 	          var parseData = $.parseJSON(data);
 	          var html = "";      
 	         
@@ -322,12 +326,19 @@ $(window.document).ready(function() {
 	          $( "#tree2" ).append(html);
 	       }   
 	      
+	      function GetJsonDataConnector_N() {  
+	    	  var html = "";   
+	    	  html += '<ul class="depth_1 lnbMenu">';
+	    	  html += '</ul>';
+	          $( "#tree2" ).append(html);
+	      }
+	      
 	      
 	      function Schedule(aut){
 	    	  var html3="";
 	    	  for(var i=0; i<aut.length; i++){ 	  
 		          if(aut.length != 0 && aut[i].read_aut_yn == "Y" && aut[i].mnu_cd == "MN000101"){	      
-	    	  	 html3 += '      <ul class="depth_1 lnbMenu"><li class="t2"><div class="border" ><a href="#n"><img src="../images/ico_lnb_14.png" id="treeImg"><div class="tooltip"><spring:message code="menu.schedule_information" /><span class="tooltiptext"><spring:message code="menu.schedule_information" /></span></div></a></div>';
+	    	  	 html3 += '      <ul class="depth_1 lnbMenu"><li class="t2"><div class="border" ><a href="#n"><img src="../images/ico_lnb_14.png" id="treeImg"><div class="tooltip"><spring:message code="menu.schedule_information" /></div></a></div>';
 	    	  	 html3 += '			<ul class="depth_2"><li class="ico2_2" id="insertScheduleView"><a href="/insertScheduleView.do" id="insertScheduleViewc" onClick=javascript:fn_GoLink("insertScheduleView"); target="main" ><img src="../images/ico_lnb_13.png" id="treeImg"><spring:message code="menu.schedule_registration" /></a></li>';
 		          }
 		          
@@ -344,73 +355,82 @@ $(window.document).ready(function() {
 	      }
 	      
 	      
-	      function fn_encryptMenuAut(result){
-			var html4 = "";
-			html4 += '<ul class="depth_1 lnbMenu">';
-			html4 += '<li class="t2"><div class="border">';
-			html4 += '<a href="#n"><img src="../images/ico_lnb_3.png" id="treeImg"><div class="tooltip"><spring:message code="encrypt_policy_management.Policy_Key_Management"/><span class="tooltiptext"><spring:message code="encrypt_policy_management.Policy_Key_Management"/></span></div></a>';
-			html4 += '</div>';
-			html4 += '<ul class="depth_2">';
-			if(result.length != 0 && result[0].read_aut_yn == "Y" && result[0].mnu_cd == "MN0001101"){
-				html4 += '<li class="ico2_3" id="securityPolicy"><a href="/securityPolicy.do" id="securityPolicyc" onclick=fn_GoLink("securityPolicy"); target="main"><img src="../images/ico_lnb_10.png" id="treeImg"><spring:message code="encrypt_policy_management.Security_Policy_Management"/></a></li>';
-			}
-			if(result.length != 0 && result[1].read_aut_yn == "Y" && result[1].mnu_cd == "MN0001102"){
-				html4 += '<li class="ico2_3" id="keyManage"><a href="/keyManage.do" id="keyManagec" onclick=fn_GoLink("keyManage"); target="main"><img src="../images/ico_lnb_10.png" id="treeImg"><spring:message code="encrypt_key_management.Encryption_Key_Management"/></a></li>';
-			}
-			html4 += '</ul>';
-			html4 += '</li>';
-			
-			html4 += '<li class="t2"><div class="border">';
-			html4 += '<a href="#n"><img src="../images/ico_lnb_3.png" id="treeImg"><div class="tooltip"><spring:message code="encrypt_log.Audit_Log"/><span class="tooltiptext"><spring:message code="encrypt_log.Audit_Log"/></span></div></a>';
-			html4 += '</div>';
-			html4 += '<ul class="depth_2">';
-			if(result.length != 0 && result[2].read_aut_yn == "Y" && result[2].mnu_cd == "MN0001201"){
-				html4 += '<li class="ico2_4" id="encodeDecodeAuditLog"><a href="/encodeDecodeAuditLog.do"  id="encodeDecodeAuditLogc" onclick=fn_GoLink("encodeDecodeAuditLog"); target="main"><img src="../images/ico_lnb_14.png" id="treeImg"><spring:message code="encrypt_log_decode.Encryption_Decryption"/></a></li>';
-			}
-			if(result.length != 0 && result[3].read_aut_yn == "Y" && result[3].mnu_cd == "MN0001202"){
-				html4 += '<li class="ico2_4" id="managementServerAuditLog"><a href="/managementServerAuditLog.do" id="managementServerAuditLogc" onclick=fn_GoLink("managementServerAuditLog"); target="main"><img src="../images/ico_lnb_14.png" id="treeImg"><spring:message code="encrypt_log_sever.Management_Server"/></a></li>';
-			}
-			if(result.length != 0 && result[4].read_aut_yn == "Y" && result[4].mnu_cd == "MN0001203"){
-				html4 += '<li class="ico2_4" id="encodeDecodeKeyAuditLog"><a href="/encodeDecodeKeyAuditLog.do" id="encodeDecodeKeyAuditLogc" onclick=fn_GoLink("encodeDecodeKeyAuditLog"); target="main"><img src="../images/ico_lnb_14.png" id="treeImg"><spring:message code="encrypt_policy_management.Encryption_Key"/></a></li>';
-			}
-			if(result.length != 0 && result[5].read_aut_yn == "Y" && result[5].mnu_cd == "MN0001204"){
-				html4 += '<li class="ico2_4"><a href="/resourcesUseAuditLog.do" id="resourcesUseAuditLog" onclick=fn_GoLink("resourcesUseAuditLog"); target="main"><img src="../images/ico_lnb_9.png" id="treeImg">자원사용</a></li>';
-			}
-			html4 += '</ul>';
-			html4 += '</li>';
-			
-			
-			html4 += '<li class="t2"><div class="border">';
-			html4 += '<a href="#n"><img src="../images/ico_lnb_3.png" id="treeImg"><div class="tooltip"><spring:message code="encrypt_policyOption.Settings"/><span class="tooltiptext"><spring:message code="encrypt_policyOption.Settings"/></span></div></a>';
-			html4 += '</div>';
-			html4 += '<ul class="depth_2">';
-			if(result.length != 0 && result[6].read_aut_yn == "Y" && result[6].mnu_cd == "MN0001301"){
-				  html4 +='<li class="ico2_4" id="securityPolicyOptionSet"><a href="/securityPolicyOptionSet.do" id="securityPolicyOptionSetc" onclick=fn_GoLink("securityPolicyOptionSet"); target="main"><img src="../images/ico_lnb_10.png" id="treeImg"><spring:message code="encrypt_policyOption.Security_Policy_Option_Setting"/></a></li>';
-			}
-			if(result.length != 0 && result[7].read_aut_yn == "Y" && result[7].mnu_cd == "MN0001302"){
-				html4 +='<li class="ico2_4" id="securitySet"><a href="/securitySet.do" id="securitySetc" onclick=fn_GoLink("securitySet"); target="main"><img src="../images/ico_lnb_10.png" id="treeImg"><spring:message code="encrypt_encryptSet.Encryption_Settings"/></a></li>';
-			}
-			if(result.length != 0 && result[8].read_aut_yn == "Y" && result[8].mnu_cd == "MN0001303"){
-				html4 +='<li class="ico2_4" id="securityKeySet"><a href="/securityKeySet.do" id="securityKeySetc" onclick=fn_GoLink("securityKeySet"); target="main"><img src="../images/ico_lnb_10.png" id="treeImg"><spring:message code="encrypt_serverMasterKey.Setting_the_server_master_key_password"/></a></li>';
-			}
-			if(result.length != 0 && result[9].read_aut_yn == "Y" && result[9].mnu_cd == "MN0001304"){
-				html4 +='<li class="ico2_4" id="securityAgentMonitoring"><a href="/securityAgentMonitoring.do" id="securityAgentMonitoringc" onclick=fn_GoLink("securityAgentMonitoring"); target="main"><img src="../images/ico_lnb_10.png" id="treeImg"><spring:message code="encrypt_agent.Encryption_agent_setting"/> </a></li>';
-			}
-			html4 += '</ul>';
-			html4 += '</li>';
-			
-			/* 암호화 통계 추가 */
-			html4 += '<li class="t2"><div class="border">';
-			html4 += '<a href="#n"><img src="../images/ico_lnb_3.png" id="treeImg"><div class="tooltip">통계<span class="tooltiptext">통계</span></div></a>';
-			html4 += '</div>';
-			html4 += '<ul class="depth_2">';
-			if(result.length != 0 && result[10].read_aut_yn == "Y" && result[10].mnu_cd == "MN0001401"){
-				html4 +='<li class="ico2_4" id="securityStatistics"><a href="/securityStatistics.do" id="securityStatisticsc" onclick=fn_GoLink("securityStatistics"); target="main"><img src="../images/ico_lnb_10.png" id="treeImg">암호화통계 </a></li>';
-			}
-			html4 += '</ul>';
-			html4 += '</ul>';
-	    	  
-	    	$( "#tree3" ).append(html4);
+	      function fn_encryptMenuAut_Y(result){
+				var html4 = "";
+				html4 += '<ul class="depth_1 lnbMenu">';
+				html4 += '<li class="t2"><div class="border">';
+				html4 += '<a href="#n"><img src="../images/ico_lnb_3.png" id="treeImg"><div class="tooltip"><spring:message code="encrypt_policy_management.Policy_Key_Management"/></div></a>';
+				html4 += '</div>';
+				html4 += '<ul class="depth_2">';
+				if(result.length != 0 && result[0].read_aut_yn == "Y" && result[0].mnu_cd == "MN0001101"){
+					html4 += '<li class="ico2_3" id="securityPolicy"><a href="/securityPolicy.do" id="securityPolicyc" onclick=fn_GoLink("securityPolicy"); target="main"><img src="../images/ico_lnb_10.png" id="treeImg"><spring:message code="encrypt_policy_management.Security_Policy_Management"/></a></li>';
+				}
+				if(result.length != 0 && result[1].read_aut_yn == "Y" && result[1].mnu_cd == "MN0001102"){
+					html4 += '<li class="ico2_3" id="keyManage"><a href="/keyManage.do" id="keyManagec" onclick=fn_GoLink("keyManage"); target="main"><img src="../images/ico_lnb_10.png" id="treeImg"><spring:message code="encrypt_key_management.Encryption_Key_Management"/></a></li>';
+				}
+				html4 += '</ul>';
+				html4 += '</li>';
+				
+				html4 += '<li class="t2"><div class="border">';
+				html4 += '<a href="#n"><img src="../images/ico_lnb_3.png" id="treeImg"><div class="tooltip"><spring:message code="encrypt_log.Audit_Log"/></div></a>';
+				html4 += '</div>';
+				html4 += '<ul class="depth_2">';
+				if(result.length != 0 && result[2].read_aut_yn == "Y" && result[2].mnu_cd == "MN0001201"){
+					html4 += '<li class="ico2_4" id="encodeDecodeAuditLog"><a href="/encodeDecodeAuditLog.do"  id="encodeDecodeAuditLogc" onclick=fn_GoLink("encodeDecodeAuditLog"); target="main"><img src="../images/ico_lnb_14.png" id="treeImg"><spring:message code="encrypt_log_decode.Encryption_Decryption"/></a></li>';
+				}
+				if(result.length != 0 && result[3].read_aut_yn == "Y" && result[3].mnu_cd == "MN0001202"){
+					html4 += '<li class="ico2_4" id="managementServerAuditLog"><a href="/managementServerAuditLog.do" id="managementServerAuditLogc" onclick=fn_GoLink("managementServerAuditLog"); target="main"><img src="../images/ico_lnb_14.png" id="treeImg"><spring:message code="encrypt_log_sever.Management_Server"/></a></li>';
+				}
+				if(result.length != 0 && result[4].read_aut_yn == "Y" && result[4].mnu_cd == "MN0001203"){
+					html4 += '<li class="ico2_4" id="encodeDecodeKeyAuditLog"><a href="/encodeDecodeKeyAuditLog.do" id="encodeDecodeKeyAuditLogc" onclick=fn_GoLink("encodeDecodeKeyAuditLog"); target="main"><img src="../images/ico_lnb_14.png" id="treeImg"><spring:message code="encrypt_policy_management.Encryption_Key"/></a></li>';
+				}
+				if(result.length != 0 && result[5].read_aut_yn == "Y" && result[5].mnu_cd == "MN0001204"){
+					html4 += '<li class="ico2_4"><a href="/resourcesUseAuditLog.do" id="resourcesUseAuditLog" onclick=fn_GoLink("resourcesUseAuditLog"); target="main"><img src="../images/ico_lnb_9.png" id="treeImg">자원사용</a></li>';
+				}
+				html4 += '</ul>';
+				html4 += '</li>';
+				
+				
+				html4 += '<li class="t2"><div class="border">';
+				html4 += '<a href="#n"><img src="../images/ico_lnb_3.png" id="treeImg"><div class="tooltip"><spring:message code="encrypt_policyOption.Settings"/></div></a>';
+				html4 += '</div>';
+				html4 += '<ul class="depth_2">';
+				if(result.length != 0 && result[6].read_aut_yn == "Y" && result[6].mnu_cd == "MN0001301"){
+					  html4 +='<li class="ico2_4" id="securityPolicyOptionSet"><a href="/securityPolicyOptionSet.do" id="securityPolicyOptionSetc" onclick=fn_GoLink("securityPolicyOptionSet"); target="main"><img src="../images/ico_lnb_10.png" id="treeImg"><spring:message code="encrypt_policyOption.Security_Policy_Option_Setting"/></a></li>';
+				}
+				if(result.length != 0 && result[7].read_aut_yn == "Y" && result[7].mnu_cd == "MN0001302"){
+					html4 +='<li class="ico2_4" id="securitySet"><a href="/securitySet.do" id="securitySetc" onclick=fn_GoLink("securitySet"); target="main"><img src="../images/ico_lnb_10.png" id="treeImg"><spring:message code="encrypt_encryptSet.Encryption_Settings"/></a></li>';
+				}
+				if(result.length != 0 && result[8].read_aut_yn == "Y" && result[8].mnu_cd == "MN0001303"){
+					html4 +='<li class="ico2_4" id="securityKeySet"><a href="/securityKeySet.do" id="securityKeySetc" onclick=fn_GoLink("securityKeySet"); target="main"><img src="../images/ico_lnb_10.png" id="treeImg"><spring:message code="encrypt_serverMasterKey.Setting_the_server_master_key_password"/></a></li>';
+				}
+				if(result.length != 0 && result[9].read_aut_yn == "Y" && result[9].mnu_cd == "MN0001304"){
+					html4 +='<li class="ico2_4" id="securityAgentMonitoring"><a href="/securityAgentMonitoring.do" id="securityAgentMonitoringc" onclick=fn_GoLink("securityAgentMonitoring"); target="main"><img src="../images/ico_lnb_10.png" id="treeImg"><spring:message code="encrypt_agent.Encryption_agent_setting"/> </a></li>';
+				}
+				html4 += '</ul>';
+				html4 += '</li>';
+				
+				/* 암호화 통계 추가 */
+				html4 += '<li class="t2"><div class="border">';
+				html4 += '<a href="#n"><img src="../images/ico_lnb_3.png" id="treeImg"><div class="tooltip"><spring:message code="encrypt_Statistics.Statistics"/></div></a>';
+				html4 += '</div>';
+				html4 += '<ul class="depth_2">';
+				if(result.length != 0 && result[10].read_aut_yn == "Y" && result[10].mnu_cd == "MN0001401"){
+					html4 +='<li class="ico2_4" id="securityStatistics"><a href="/securityStatistics.do" id="securityStatisticsc" onclick=fn_GoLink("securityStatistics"); target="main"><img src="../images/ico_lnb_10.png" id="treeImg"><spring:message code="encrypt_Statistics.Encrypt_Statistics"/> </a></li>';
+				}
+				html4 += '</ul>';
+				html4 += '</ul>';
+		    	  
+		    	$( "#tree3" ).append(html4);
+	      }
+	      
+	      
+	      
+	      function fn_encryptMenuAut_N(){
+	    	  var html4 = "";
+				html4 += '<ul class="depth_1 lnbMenu">';
+	    		html4 += '</ul>';    	  
+		    	$( "#tree3" ).append(html4);
 	      }
 	      
 		
@@ -469,6 +489,11 @@ $(window.document).ready(function() {
 			}
 		})
  	}
+ 	
+ 	function fn_aut_use_yn(){
+ 		alert("접근권한이 존재하지 않습니다.");
+ 		return false;
+ 	}
     </script>
 
 
@@ -479,8 +504,8 @@ $(window.document).ready(function() {
 		<div id="lnb_menu">
 			<form name="treeView" id="treeView">
 				<div class="logout">
-					    <div style="color: white; margin-bottom: 5%; font-size: 14px;"><%=(String)session.getAttribute("usr_nm")%><spring:message code="common.wellcome"/></div>		
-					<a href="#"  target="_top"><button onClick="fn_logout();"><spring:message code="common.logout"/></button></a>		
+					    <div style="color: white; margin-bottom: 5%; font-size: 14px;">${sessionScope.session.usr_nm}<spring:message code="common.wellcome"/></div>		
+					<a href="#"  target="_top"><button type="button" onClick="fn_logout();"><spring:message code="common.logout"/></button></a>		
 				</div>
 			</form>
 			
@@ -499,11 +524,25 @@ $(window.document).ready(function() {
 				</div>
 			</div>
 				
-			<div id="treeTitle" class="transferMenu"><img src="../images/ico_lnb_2.png" id="treeImg"><a href="/connectorRegister.do" target="main" onclick="fn_GoLink();"><spring:message code="menu.data_transfer" /></a>
-					<div id="sidetreecontrol2" style="float: right;">							
-						<a href="?#"><img src="../images/ico_lnb_close.png"></a>
-						<a href="?#"><img src="../images/ico_lnb_open.png"></a>
-					</div>
+			<div id="treeTitle" class="transferMenu"><img src="../images/ico_lnb_2.png" id="treeImg">
+			<c:set var="aut_use" value="${sessionScope.session.transfer}" />
+			<c:choose>
+			    <c:when test="${aut_use eq 'Y'}">
+			        <a href="/connectorRegister.do" target="main" onclick="fn_GoLink();">
+			        	<spring:message code="menu.data_transfer" />
+					</a>
+			    </c:when>		
+			    <c:otherwise>
+			       <span onclick="fn_aut_use_yn();">
+			       		<spring:message code="menu.data_transfer" />
+					</span>
+			    </c:otherwise>
+			</c:choose>
+
+				<div id="sidetreecontrol2" style="float: right;">							
+					<a href="?#"><img src="../images/ico_lnb_close.png"></a>
+					<a href="?#"><img src="../images/ico_lnb_open.png"></a>
+				</div>
 			</div>
 				
 			<div id="sidetree">				
@@ -514,17 +553,34 @@ $(window.document).ready(function() {
 					</div>
 			</div>
 
-			<div id="treeTitle" class="encrypt"><img src="../images/ico_lnb_2.png" id="treeImg"><a href="/securityPolicy.do" target="main" onclick="fn_GoLink();"><spring:message code="encrypt_tree.Data_Encryption"/></a>
-					<div id="sidetreecontrol3" style="float: right;">							
-						<a href="?#"><img src="../images/ico_lnb_close.png"></a>
-						<a href="?#"><img src="../images/ico_lnb_open.png"></a>
-					</div>
+			<div id="treeTitle" class="encrypt"><img src="../images/ico_lnb_1.png" id="treeImg">
+			
+			<c:set var="aut_use" value="${sessionScope.session.encp_use_yn}" />
+			<c:choose>
+			    <c:when test="${aut_use eq 'Y'}">
+			        <a href="/securityPolicy.do" target="main" onclick="fn_GoLink();">
+			        	<spring:message code="encrypt_tree.Data_Encryption"/>
+					</a>
+			    </c:when>		
+			    <c:otherwise>
+			       <span onclick="fn_aut_use_yn();">
+			       		<spring:message code="encrypt_tree.Data_Encryption"/>
+					</span>
+			    </c:otherwise>
+			</c:choose>
+				<!-- <a href="/securityPolicy.do" target="main" onclick="fn_GoLink();"> -->
+				<div id="sidetreecontrol3" style="float: right;">							
+					<a href="?#"><img src="../images/ico_lnb_close.png"></a>
+					<a href="?#"><img src="../images/ico_lnb_open.png"></a>
+				</div>
 			</div>
 				
 			<div id="sidetree">				
 				<div class="treeborder">
 					<ul id="tree">
-						<div id="tree3"></div>  	 		
+						<ul class="depth_1 lnbMenu">
+						<div id="tree3"></div>
+						</ul>  	 		
 					</ul>
 				</div>
 			</div>

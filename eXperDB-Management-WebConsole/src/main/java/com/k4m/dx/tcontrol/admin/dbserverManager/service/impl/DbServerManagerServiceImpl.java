@@ -135,13 +135,16 @@ public class DbServerManagerServiceImpl extends EgovAbstractServiceImpl implemen
 		// 4 스케줄 삭제
 		dbServerManagerDAO.deleteSchedule(db_svr_id);
 		
-		// 5. 백업작업설정정보 삭제
+		// 5. WORK정보 삭제
+		dbServerManagerDAO.deleteWrkcng(db_svr_id);
+		
+		// 6. 백업작업설정정보 삭제
 		dbServerManagerDAO.deleteBckWrkcng(db_svr_id);
 		
-		// 6. 사용자DB권한정보 삭제
+		// 7. 사용자DB권한정보 삭제
 		dbServerManagerDAO.deleteUsrDbAut(db_svr_id);
 		
-		// 7. DB정보 삭제
+		// 8. DB정보 삭제
 		dbServerManagerDAO.deleteDbInfo(db_svr_id);
 		
 		// 8. 사용자DB서버권한정보 삭제

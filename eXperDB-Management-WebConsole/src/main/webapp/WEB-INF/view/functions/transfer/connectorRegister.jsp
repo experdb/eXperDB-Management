@@ -44,16 +44,16 @@
 			         ],'select': {'style': 'multi'}
 		});
 		
-		table.tables().header().to$().find('th:eq(0)').css('min-width', '40px');
-		table.tables().header().to$().find('th:eq(1)').css('min-width', '60px');
-		table.tables().header().to$().find('th:eq(2)').css('min-width', '120px');
+		table.tables().header().to$().find('th:eq(0)').css('min-width', '30px');
+		table.tables().header().to$().find('th:eq(1)').css('min-width', '30px');
+		table.tables().header().to$().find('th:eq(2)').css('min-width', '100px');
 		table.tables().header().to$().find('th:eq(3)').css('min-width', '100px');
-		table.tables().header().to$().find('th:eq(4)').css('min-width', '70px');
-		table.tables().header().to$().find('th:eq(5)').css('min-width', '70px');
-		table.tables().header().to$().find('th:eq(6)').css('min-width', '65px');
-		table.tables().header().to$().find('th:eq(7)').css('min-width', '110px');
-		table.tables().header().to$().find('th:eq(8)').css('min-width', '65px');
-		table.tables().header().to$().find('th:eq(9)').css('min-width', '110px');
+		table.tables().header().to$().find('th:eq(4)').css('min-width', '60px');
+		table.tables().header().to$().find('th:eq(5)').css('min-width', '60px');
+		table.tables().header().to$().find('th:eq(6)').css('min-width', '90px');
+		table.tables().header().to$().find('th:eq(7)').css('min-width', '100px');
+		table.tables().header().to$().find('th:eq(8)').css('min-width', '90px');
+		table.tables().header().to$().find('th:eq(9)').css('min-width', '100px');
 	    $(window).trigger('resize'); 
 	    
 		//더블 클릭시 -> 쓰기 권한이 Y일 경우
@@ -76,30 +76,7 @@
 	$(window.document).ready(function() {
 		fn_buttonAut();
 		fn_init();
-		$.ajax({
-			url : "/selectConnectorRegister.do",
-			data : {},
-			dataType : "json",
-			type : "post",
-			beforeSend: function(xhr) {
-		        xhr.setRequestHeader("AJAX", true);
-		     },
-			error : function(xhr, status, error) {
-				if(xhr.status == 401) {
-					alert('<spring:message code="message.msg02" />');
-					top.location.href = "/";
-				} else if(xhr.status == 403) {
-					alert('<spring:message code="message.msg03" />');
-					top.location.href = "/";
-				} else {
-					alert("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""));
-				}
-			},
-			success : function(result) {
-				table.clear().draw();
-				table.rows.add(result).draw();
-			}
-		});
+		fn_select();
 	});
 
 	function fn_buttonAut(){
@@ -260,10 +237,10 @@
 		<div class="contents">
 			<div class="cmm_grp">
 				<div class="btn_type_01">
-					<span class="btn"><button onclick="fn_select()" id="btnSelect"><spring:message code="common.search" /></button></span>
-					<span class="btn"><button onclick="fn_insert()" id="btnInsert"><spring:message code="common.registory" /></button></span>
-					<span class="btn"><button onclick="fn_update()" id="btnUpdate"><spring:message code="common.modify" /> </button></span>
-					<span class="btn"><button onclick="fn_delete()" id="btnDelete"><spring:message code="common.delete" /> </button></span>
+					<span class="btn"><button type="button" onclick="fn_select()" id="btnSelect"><spring:message code="common.search" /></button></span>
+					<span class="btn"><button type="button" onclick="fn_insert()" id="btnInsert"><spring:message code="common.registory" /></button></span>
+					<span class="btn"><button type="button" onclick="fn_update()" id="btnUpdate"><spring:message code="common.modify" /> </button></span>
+					<span class="btn"><button type="button" onclick="fn_delete()" id="btnDelete"><spring:message code="common.delete" /> </button></span>
 				</div>
 				<div class="sch_form">
 					<table class="write">
@@ -288,16 +265,16 @@
 					<table id="connectorTable" class="display" cellspacing="0" width="100%">
 						<thead>
 							<tr>
-								<th width="40"></th>
-								<th width="60"><spring:message code="common.no" /></th>
-								<th width="120"><spring:message code="etc.etc04"/></th>
+								<th width="30"></th>
+								<th width="30"><spring:message code="common.no" /></th>
+								<th width="100"><spring:message code="etc.etc04"/></th>
 								<th width="100"><spring:message code="data_transfer.ip" /></th>
-								<th width="70"><spring:message code="data_transfer.port" /> </th>
-								<th width="70"><spring:message code="data_transfer.type" /></th>
-								<th width="65"><spring:message code="common.register" /></th>
-								<th width="110"><spring:message code="common.regist_datetime" /></th>
-								<th width="65"><spring:message code="common.modifier" /></th>
-								<th width="110"><spring:message code="common.modify_datetime" /></th>
+								<th width="60"><spring:message code="data_transfer.port" /> </th>
+								<th width="60"><spring:message code="data_transfer.type" /></th>
+								<th width="90"><spring:message code="common.register" /></th>
+								<th width="100"><spring:message code="common.regist_datetime" /></th>
+								<th width="90"><spring:message code="common.modifier" /></th>
+								<th width="100"><spring:message code="common.modify_datetime" /></th>
 							</tr>
 						</thead>
 					</table>
