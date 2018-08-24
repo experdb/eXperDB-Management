@@ -162,18 +162,14 @@ public class ScheduleUtl {
 	 */
 	public void deleteSchdul(String scd_id) throws Exception
 	{	
-		/*------------------------------ logic ------------------------------ logic ------------------------------*/
-		/*
-		 	STEP 1. Scheduler 에 등록된 일정 삭제(KeyValue=schdulNo)
-		 */
-		/*------------------------------ logic ------------------------------ logic ------------------------------*/
+
 		
 		try
 		{
 			/*
 			 	STEP 1. Scheduler에 등록된 일정 삭제
 			 */		
-			String name = "BackupSehedule_"+String.valueOf(scd_id);
+			String name = "MonitoringSehedule_"+String.valueOf(scd_id);
 
 			
 			scheduler.deleteJob(JobKey.jobKey(name, scd_id));

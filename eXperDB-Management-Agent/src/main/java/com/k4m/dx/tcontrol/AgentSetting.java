@@ -160,17 +160,37 @@ public class AgentSetting {
 			}
 		}
 		
+		System.out.println("Whether to use monitoring (y, n) :");
+		String strMonitoringYN = scan.nextLine();
+		
+		while (true) {
+			if(strMonitoringYN.equals("")) {
+				System.out.println("Please enable or disable monitoring. ");
+				
+				System.out.println("Whether to use monitoring (y, n) :");
+				
+				strMonitoringYN = scan.nextLine();
+			} else {
+				break;
+			}
+		}
+		
+		
 		strDatabaseUrl = "jdbc:postgresql://" + strDatabaseIp + ":" + strDatabasePort + "/" + strDatabaseName;
 		
 		System.out.println("#####################################################");
 		System.out.println("agent ip :" + strAgentIp);
 		System.out.println("agent port :" + strAgentPort);
-		System.out.println("database 접속정보 :" + strDatabaseUrl);
+		System.out.println("database Connection Info :" + strDatabaseUrl);
 		System.out.println("database.username :" + strDatabaseUsername);
 		System.out.println("database.password :" + strDatabasePassword);
+		System.out.println("Whether to use monitoring  :" + strMonitoringYN);
 		System.out.println("#####################################################");
 		
-		System.out.println("입력한 내용으로 적용하시겠습니까? (y, n)");
+		
+
+		
+		System.out.println("Do you want to apply what you entered? (y, n)");
 		
 		String strApply = scan.nextLine();
 		
@@ -230,6 +250,8 @@ public class AgentSetting {
 		    
 		    prop.setProperty("socket.server.port", strAgentPort);
 		    prop.setProperty("agent.install.ip", strAgentIp);
+		    
+		    prop.setProperty("agent.monitoring.useyn", strMonitoringYN);
 		    
 		    try {
 		    	prop.store(new FileOutputStream(path + "context.properties"), "");
