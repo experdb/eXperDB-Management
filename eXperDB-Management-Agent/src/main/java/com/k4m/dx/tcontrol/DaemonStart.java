@@ -100,13 +100,16 @@ public class DaemonStart implements DxDaemon{
 	public void startDaemon() {
 		
 		try {
-			String strMonitoringYN = FileUtil.getPropertyValue("context.properties", "agent.monitoring.useyn");
+/*			String strMonitoringYN = FileUtil.getPropertyValue("context.properties", "agent.monitoring.useyn");
 			
 			if(strMonitoringYN.equals("Y")) {
 				context = new ClassPathXmlApplicationContext(new String[] {"context-tcontrol.xml", "context-scheduling.xml"});
 			} else {
 				context = new ClassPathXmlApplicationContext(new String[] {"context-tcontrol.xml"});
-			}
+			}*/
+			
+			context = new ClassPathXmlApplicationContext(new String[] {"context-tcontrol.xml"});
+			
 			SystemServiceImpl service = (SystemServiceImpl) context.getBean("SystemService");
 
 			// SqlSessionManager 초기화
