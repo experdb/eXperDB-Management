@@ -92,7 +92,8 @@ function fn_validation(){
 				          <spring:message code="message.msg176" />
 				       </c:when>
 					</c:choose>		
-				</c:if></div>	
+				</c:if>
+				</div>	
 				<div class="btn_wrap">
 					<button type="button" onClick="fn_login()">LOGIN</button>
 				</div>
