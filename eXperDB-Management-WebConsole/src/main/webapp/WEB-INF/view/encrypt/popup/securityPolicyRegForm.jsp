@@ -154,7 +154,7 @@ function fn_changeBinUid(selectObj){
 <body>
 	<div class="pop_container">
 		<div class="pop_cts">
-			<p class="tit"><spring:message code="encrypt_policy_management.Register_Policy"/></p>
+			<p class="tit"><spring:message code="etc.etc01"/></p>
 			<table class="write">
 				<caption>암복호화 정책 등록</caption>
 				<colgroup>

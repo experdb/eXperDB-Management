@@ -33,12 +33,23 @@ public interface DashboardService {
 	public List<DashboardVO> selectDashboardServerInfo(DashboardVO vo) throws SQLException;
 
 	/**
-	 * 데이터 전송 정보 조회
+	 * Dashboard 백업정보 DUMP 조회
 	 * 
-	 * @param vo
 	 * @return
 	 * @throws SQLException
 	 */
-	public DashboardVO selectDashboardTransferInfoVO() throws SQLException;
+	public List<DashboardVO> selectDashboardBackupDumpInfo(DashboardVO vo) throws SQLException;
+
+	/**
+	 * Dashboard 백업정보 ONLINE 조회
+	 * 
+	 * @return
+	 * @throws SQLException
+	 */
+	public List<DashboardVO> selectDashboardBackupRmanInfo(DashboardVO vo) throws SQLException;
+
+
+
+
 
 }

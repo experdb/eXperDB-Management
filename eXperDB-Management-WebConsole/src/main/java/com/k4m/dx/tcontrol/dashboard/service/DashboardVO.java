@@ -14,18 +14,36 @@ public class DashboardVO {
 	private int schedule_run_cnt;
 	
 	private int db_svr_id;
+	private String ipadr;
 	private String db_svr_nm;
+	private String master_gbn;
 	private int db_cnt;
 	private int wrk_cnt;
 	private int schedule_cnt;
 	private int success_cnt;
 	private int access_cnt;
 	private String agt_cndt_cd;
+	private String lst_mdf_dtm;
 	
 	private int connect_cnt;
 	private int execute_cnt;
 	
+	private String db_nm;
+	private String bck_opt_cd;
 	
+	
+	public String getBck_opt_cd() {
+		return bck_opt_cd;
+	}
+	public void setBck_opt_cd(String bck_opt_cd) {
+		this.bck_opt_cd = bck_opt_cd;
+	}
+	public String getDb_nm() {
+		return db_nm;
+	}
+	public void setDb_nm(String db_nm) {
+		this.db_nm = db_nm;
+	}
 	public int getStart_cnt() {
 		return start_cnt;
 	}
@@ -62,6 +80,12 @@ public class DashboardVO {
 	}
 	public void setDb_svr_nm(String db_svr_nm) {
 		this.db_svr_nm = db_svr_nm;
+	}
+	public String getMaster_gbn() {
+		return master_gbn;
+	}
+	public void setMaster_gbn(String master_gbn) {
+		this.master_gbn = master_gbn;
 	}
 	public int getRun_cnt() {
 		return run_cnt;
@@ -111,6 +135,12 @@ public class DashboardVO {
 	public void setDb_svr_id(int db_svr_id) {
 		this.db_svr_id = db_svr_id;
 	}
+	public String getIpadr() {
+		return ipadr;
+	}
+	public void setIpadr(String ipadr) {
+		this.ipadr = ipadr;
+	}
 	public int getWrk_cnt() {
 		return wrk_cnt;
 	}
@@ -141,7 +171,12 @@ public class DashboardVO {
 	public void setAgt_cndt_cd(String agt_cndt_cd) {
 		this.agt_cndt_cd = agt_cndt_cd;
 	}
-	
+	public String getLst_mdf_dtm() {
+		return lst_mdf_dtm;
+	}
+	public void setLst_mdf_dtm(String lst_mdf_dtm) {
+		this.lst_mdf_dtm = lst_mdf_dtm;
+	}
 	
 	
 	

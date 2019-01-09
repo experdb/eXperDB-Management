@@ -227,13 +227,6 @@ public class ClientInfoCmmn {
 			JSONObject objList;
 
 			JSONObject acObj = new JSONObject();
-			acObj.put(ClientProtocolID.AC_SET, "1");
-			acObj.put(ClientProtocolID.AC_TYPE, "host");
-			acObj.put(ClientProtocolID.AC_DATABASE, "experdba");
-			acObj.put(ClientProtocolID.AC_USER, "experdba");
-			acObj.put(ClientProtocolID.AC_IP, "222.110.153.254");
-			acObj.put(ClientProtocolID.AC_METHOD, "trust");
-			acObj.put(ClientProtocolID.AC_OPTION, "");
 
 			ClientAdapter CA = new ClientAdapter(IP, PORT);
 			CA.open();
@@ -303,13 +296,6 @@ public class ClientInfoCmmn {
 			JSONObject objList;
 
 			JSONObject acObj = new JSONObject();
-			acObj.put(ClientProtocolID.AC_SET, "1");
-			acObj.put(ClientProtocolID.AC_TYPE, "host");
-			acObj.put(ClientProtocolID.AC_DATABASE, "experdba");
-			acObj.put(ClientProtocolID.AC_USER, "experdba");
-			acObj.put(ClientProtocolID.AC_IP, "222.110.153.254");
-			acObj.put(ClientProtocolID.AC_METHOD, "trust");
-			acObj.put(ClientProtocolID.AC_OPTION, "");
 
 			ClientAdapter CA = new ClientAdapter(IP, PORT);
 			CA.open();

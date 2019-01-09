@@ -112,15 +112,57 @@
 		 GROUP BY AAA.DB_SVR_ID, AAA.IPADR
 	</select>
     
-
-	<select id="selectDashboardTransferInfoVO" parameterType="dashboardVO" resultType="dashboardVO">
-		/**
-	 	* Query ID : selectDashboardTransferInfoVO
-	 	* Description : 데이터 전송 정보 조회
+    <select id="selectDashboardBackupDumpInfo" parameterType="dashboardVO" resultType="dashboardVO">
+    	/**
+	 	* Query ID : "selectDashboardBackupDumpInfo"
+	 	* Description : Dashboard 백업정보 DUMP 조회
 	 	* Author : 김주영
-	 	**/ 
-	 	SELECT count(*) AS connect_cnt,
-		(SELECT count(*) from t_trftrgcng_i where bw_pid = 1) AS execute_cnt
-		FROM t_trftrgcng_i   
-   </select>
+	 	**/
+		SELECT 
+			 AA.db_id
+			,(SELECT DB_SVR_NM FROM T_DBSVR_I A,T_DB_I B  WHERE A.DB_SVR_ID=B.DB_SVR_ID AND DB_ID = AA.DB_ID) AS db_svr_nm
+			,(SELECT DB_NM FROM T_DBSVR_I A,T_DB_I B  WHERE A.DB_SVR_ID=B.DB_SVR_ID AND DB_ID = AA.DB_ID) AS db_nm
+			, (SELECT COUNT(*) FROM T_BCK_WRKCNG_I WHERE DB_ID = AA.DB_ID) wrk_cnt
+			, (SELECT COUNT(DISTINCT SCD_ID) FROM T_SCD_D A, T_BCK_WRKCNG_I B WHERE B.DB_ID = AA.DB_ID AND A.WRK_ID = B.WRK_ID) AS schedule_cnt
+			, (SELECT COUNT(*) FROM T_WRKEXE_G WHERE DB_ID = AA.DB_ID AND EXE_RSLT_CD = 'TC001701') success_cnt
+			, (SELECT COUNT(*) FROM T_WRKEXE_G WHERE DB_ID = AA.DB_ID AND EXE_RSLT_CD = 'TC001702') fail_cnt
+		FROM(
+			SELECT A.DB_ID FROM T_BCK_WRKCNG_I A
+			WHERE A.BCK_BSN_DSCD = 'TC000202'
+		)AA
+		GROUP BY AA.DB_ID
+    </select>
+    
+    <select id="selectDashboardBackupRmanInfo" parameterType="dashboardVO" resultType="dashboardVO">
+    	/**
+	 	* Query ID : "selectDashboardBackupRmanInfo"
+	 	* Description : Dashboard 백업정보 ONLINE 조회
+	 	* Author : 김주영
+	 	**/
+		SELECT
+		  AAA.db_svr_id
+		, (SELECT DB_SVR_NM FROM T_DBSVR_I WHERE DB_SVR_ID = AAA.DB_SVR_ID) AS db_svr_nm
+		, AAA.bck_opt_cd
+		, SUM(AAA.WRK_CNT) AS wrk_cnt
+		, SUM(AAA.SCHEDULE_CNT) AS schedule_cnt
+		, SUM(AAA.SUCCESS_CNT) AS success_cnt
+		, SUM(AAA.FAIL_CNT) AS fail_cnt
+		FROM(
+			SELECT 
+				  AA.db_svr_id
+				, AA.bck_opt_cd
+				, (SELECT COUNT(*) FROM T_BCK_WRKCNG_I WHERE WRK_ID = AA.WRK_ID) AS wrk_cnt
+				, (SELECT COUNT(DISTINCT SCD_ID) FROM T_SCD_D A, T_BCK_WRKCNG_I B WHERE B.WRK_ID = AA.WRK_ID AND A.WRK_ID = B.WRK_ID) AS schedule_cnt
+				, (SELECT COUNT(*) FROM T_WRKEXE_G WHERE WRK_ID = AA.WRK_ID AND EXE_RSLT_CD = 'TC001701') success_cnt
+				, (SELECT COUNT(*) FROM T_WRKEXE_G WHERE WRK_ID = AA.WRK_ID AND EXE_RSLT_CD = 'TC001702') fail_cnt
+				FROM
+				(
+					SELECT A.db_svr_id, A.wrk_id, A.bck_opt_cd
+					FROM T_BCK_WRKCNG_I A ,T_DBSVR_I B
+					WHERE A.BCK_BSN_DSCD = 'TC000201'
+					AND B.DB_SVR_ID = A.DB_SVR_ID
+				)AA
+		)AAA
+		GROUP BY AAA.DB_SVR_ID, AAA.BCK_OPT_CD 	
+    </select>
 </mapper>

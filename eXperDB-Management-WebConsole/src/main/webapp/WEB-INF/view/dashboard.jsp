@@ -101,6 +101,7 @@ function fn_selectSecurityStatistics(today){
 				 	var html ="";
 					for(var i=0; i<data.list.length; i++){
 						html += '<tr>';
+						html +='<td></td>';
 						html += '<td>'+data.list[i].monitoredName+'</td>';
 						html += '<td>'+data.list[i].encryptSuccessCount+'</td>';
 						html += '<td>'+data.list[i].encryptFailCount+'</td>';
@@ -113,7 +114,6 @@ function fn_selectSecurityStatistics(today){
 							html += '<td><img src="../images/ico_agent_2.png" alt="" /></td>';
 						}
 						html += '</tr>';
-
 						$( "#col" ).html(html);
 					} 
 				}else if(data.resultCode == "8000000002"){
@@ -152,6 +152,97 @@ function fn_selectSecurityStatistics(today){
 			<div class="main_grp">
 				<div class="main_info">
 					<div class="m_info_lt">
+						<p class="m_tit">관리상태</p>
+							<ul>
+								<li style="width: 400px;">
+									<table class="list3">
+										<colgroup>
+											<col style="width: 25%;">
+											<col style="width: 25%;">
+											<col style="width: 25%;">
+											<col style="width: 25%;">
+										</colgroup>
+										<thead>
+											<tr>
+												<th scope="col"></th>
+												<th scope="col">미흡</th>
+												<th scope="col">감시</th>
+												<th scope="col">양호</th>
+											</tr>
+										</thead>
+										<tbody>
+											<tr>
+												<td>작업관리</td>
+												<td></td>
+												<td></td>
+												<td></td>
+											</tr>
+											<tr>
+												<td>서버관리</td>
+												<td></td>
+												<td></td>
+												<td></td>
+											</tr>
+											<tr>
+												<td>백업관리</td>
+												<td></td>
+												<td></td>
+												<td></td>
+											</tr>
+											<tr>
+												<td>암호화관리</td>
+												<td></td>
+												<td></td>
+												<td></td>
+											</tr>
+										</tbody>
+									</table>				
+								</li>
+							</ul>
+<!-- 						<ul> -->
+<!-- 							<li> -->
+<!-- 								<p class="state"> -->
+<!-- 									<img src="../images/ico_state_10.png" alt="Server" /><span>Server</span> -->
+<!-- 								</p> -->
+<!-- 								<a href="/dbServer.do"> -->
+<%-- 								 <c:choose> --%>
+<%-- 						           <c:when test="${fn:length(fn:escapeXml(backupInfo.server_cnt))>2}"> --%>
+<!-- 						           <p class="state_num c1" style="font-size: 40px;"> -->
+<%-- 						            <c:out value="${backupInfo.stop_cnt}"/> --%>
+<!-- 						            </p> -->
+<%-- 						           </c:when> --%>
+<%-- 						           <c:otherwise> --%>
+<!-- 						           <p class="state_num c1"> -->
+<%-- 						            <c:out value="${backupInfo.server_cnt}"/> --%>
+<!-- 						            </p> -->
+<%-- 						           </c:otherwise>  --%>
+<%-- 						         </c:choose> --%>
+<!-- 								</a> -->
+<%-- 								<p class="state_txt"><spring:message code="dashboard.server" /></p> --%>
+<!-- 							</li> -->
+<!-- 							<li> -->
+<!-- 								<p class="state"> -->
+<!-- 									<img src="../images/ico_state_11.png" alt="Backup" /><span>Backup</span> -->
+<!-- 								</p> -->
+<%-- 								 <c:choose> --%>
+<%-- 						           <c:when test="${fn:length(fn:escapeXml(backupInfo.backup_cnt))>2}"> --%>
+<!-- 						           <p class="state_num c1" style="font-size: 40px;"> -->
+<%-- 						            <c:out value="${backupInfo.backup_cnt}"/> --%>
+<!-- 						            </p> -->
+<%-- 						           </c:when> --%>
+<%-- 						           <c:otherwise> --%>
+<!-- 						           <p class="state_num c1"> -->
+<%-- 						            <c:out value="${backupInfo.backup_cnt}"/> --%>
+<!-- 						            </p> -->
+<%-- 						           </c:otherwise>  --%>
+<%-- 						         </c:choose> --%>
+<%-- 								<p class="state_txt"><spring:message code="dashboard.Register_backup" /></p> --%>
+<!-- 							</li> -->
+<!-- 						</ul> -->
+					</div>
+					
+					
+					<div class="m_info_ct">
 						<p class="m_tit"><spring:message code="menu.schedule_information" /></p>
 						<ul>
 							<li>
@@ -175,13 +266,6 @@ function fn_selectSecurityStatistics(today){
 								</a>
 								<p class="state_txt"><spring:message code="dashboard.Register_schedule" /></p>
 							</li>							
-							<%-- <li>
-								<p class="state">
-									<img src="../images/ico_state_03.png" alt="Running" /><span>Running</span>
-								</p>
-								<p class="state_num c1">${scheduleInfo.run_cnt}</p>
-								<p class="state_txt">실행</p>
-							</li> --%>
 							<li>
 								<p class="state">
 									<img src="../images/ico_state_06.png" alt="Start" /><span>Start</span>
@@ -284,105 +368,49 @@ function fn_selectSecurityStatistics(today){
 							</li>
 						</ul>
 					</div>
-					<div class="m_info_ct">
-						<p class="m_tit"><spring:message code="common.backInfo"/></p>
-						<ul>
-							<li>
-								<p class="state">
-									<img src="../images/ico_state_10.png" alt="Server" /><span>Server</span>
-								</p>
-								<a href="/dbServer.do">
-								 <c:choose>
-						           <c:when test="${fn:length(fn:escapeXml(backupInfo.server_cnt))>2}">
-						           <p class="state_num c1" style="font-size: 40px;">
-						            <c:out value="${backupInfo.stop_cnt}"/>
-						            </p>
-						           </c:when>
-						           <c:otherwise>
-						           <p class="state_num c1">
-						            <c:out value="${backupInfo.server_cnt}"/>
-						            </p>
-						           </c:otherwise> 
-						         </c:choose>
-								</a>
-								<p class="state_txt"><spring:message code="dashboard.server" /></p>
-							</li>
-							<li>
-								<p class="state">
-									<img src="../images/ico_state_11.png" alt="Backup" /><span>Backup</span>
-								</p>
-								 <c:choose>
-						           <c:when test="${fn:length(fn:escapeXml(backupInfo.backup_cnt))>2}">
-						           <p class="state_num c1" style="font-size: 40px;">
-						            <c:out value="${backupInfo.backup_cnt}"/>
-						            </p>
-						           </c:when>
-						           <c:otherwise>
-						           <p class="state_num c1">
-						            <c:out value="${backupInfo.backup_cnt}"/>
-						            </p>
-						           </c:otherwise> 
-						         </c:choose>
-								<p class="state_txt"><spring:message code="dashboard.Register_backup" /></p>
-							</li>
-							<%-- <li>
-								<p class="state">
-									<img src="../images/ico_state_09.png" alt="Backup" /><span>Schedule
-									</span>
-								</p>
-								<a href="/selectScheduleListView.do"><p class="state_num c1">${backupInfo.schedule_cnt}</p></a>
-								<p class="state_txt">스캐줄등록</p>
-							</li>
-							<li>
-								<p class="state">
-									<img src="../images/ico_state_03.png" alt="Running Schedule" /><span>Running Schedule</span>
-								</p>
-								<p class="state_num c3">${backupInfo.schedule_run_cnt}</p>
-								<p class="state_txt">스케줄실행중</p>
-							</li> --%>
-						</ul>
-					</div>
-					<div class="m_info_rt">
-						<p class="m_tit"><spring:message code="menu.data_transfer_information" /></p>
-						<ul>
-							<li>
-								<p class="state">
-									<img src="../images/ico_state_10.png" alt="connet" /><span>Channel</span>
-								</p>
-								<c:choose>
-						           <c:when test="${fn:length(fn:escapeXml(transferInfo.connect_cnt))>2}">
-						           <p class="state_num c1" style="font-size: 40px;">
-						            <c:out value="${transferInfo.connect_cnt}"/>
-						            </p>
-						           </c:when>
-						           <c:otherwise>
-						           <p class="state_num c1">
-						            <c:out value="${transferInfo.connect_cnt}"/>
-						            </p>
-						           </c:otherwise> 
-						         </c:choose>
-								<p class="state_txt"><spring:message code="dashboard.connect_count" /></p>
-							</li>
-							<li>
-								<p class="state">
-									<img src="../images/ico_state_03.png" alt="Running Transfer" /><span>Running</span>
-								</p>
-								<c:choose>
-						           <c:when test="${fn:length(fn:escapeXml(transferInfo.execute_cnt))>2}">
-						           <p class="state_num c3" style="font-size: 40px;">
-						            <c:out value="${transferInfo.execute_cnt}"/>
-						            </p>
-						           </c:when>
-						           <c:otherwise>
-						           <p class="state_num c3">
-						            <c:out value="${transferInfo.execute_cnt}"/>
-						            </p>
-						           </c:otherwise> 
-						         </c:choose>
-								<p class="state_txt"><spring:message code="dashboard.running" /></p>
-							</li>
-						</ul>
-					</div>				
+
+
+<!-- 					<div class="m_info_rt"> -->
+<%-- 						<p class="m_tit"><spring:message code="menu.data_transfer_information" /></p> --%>
+<!-- 						<ul> -->
+<!-- 							<li> -->
+<!-- 								<p class="state"> -->
+<!-- 									<img src="../images/ico_state_10.png" alt="connet" /><span>Channel</span> -->
+<!-- 								</p> -->
+<%-- 								<c:choose> --%>
+<%-- 						           <c:when test="${fn:length(fn:escapeXml(transferInfo.connect_cnt))>2}"> --%>
+<!-- 						           <p class="state_num c1" style="font-size: 40px;"> -->
+<%-- 						            <c:out value="${transferInfo.connect_cnt}"/> --%>
+<!-- 						            </p> -->
+<%-- 						           </c:when> --%>
+<%-- 						           <c:otherwise> --%>
+<!-- 						           <p class="state_num c1"> -->
+<%-- 						            <c:out value="${transferInfo.connect_cnt}"/> --%>
+<!-- 						            </p> -->
+<%-- 						           </c:otherwise>  --%>
+<%-- 						         </c:choose> --%>
+<%-- 								<p class="state_txt"><spring:message code="dashboard.connect_count" /></p> --%>
+<!-- 							</li> -->
+<!-- 							<li> -->
+<!-- 								<p class="state"> -->
+<!-- 									<img src="../images/ico_state_03.png" alt="Running Transfer" /><span>Running</span> -->
+<!-- 								</p> -->
+<%-- 								<c:choose> --%>
+<%-- 						           <c:when test="${fn:length(fn:escapeXml(transferInfo.execute_cnt))>2}"> --%>
+<!-- 						           <p class="state_num c3" style="font-size: 40px;"> -->
+<%-- 						            <c:out value="${transferInfo.execute_cnt}"/> --%>
+<!-- 						            </p> -->
+<%-- 						           </c:when> --%>
+<%-- 						           <c:otherwise> --%>
+<!-- 						           <p class="state_num c3"> -->
+<%-- 						            <c:out value="${transferInfo.execute_cnt}"/> --%>
+<!-- 						            </p> -->
+<%-- 						           </c:otherwise>  --%>
+<%-- 						         </c:choose> --%>
+<%-- 								<p class="state_txt"><spring:message code="dashboard.running" /></p> --%>
+<!-- 							</li> -->
+<!-- 						</ul> -->
+<!-- 					</div>				 -->
 				</div>
 
 				<div class="main_server_info">
@@ -430,28 +458,26 @@ function fn_selectSecurityStatistics(today){
 								<col style="width: 6%;" />
 								<col style="width: 14%;" />
 
-								<col style="width: 14%;" />
-								<col style="width: 9%;" />
+								<col style="width: 12%;" />
+								<col style="width: 10%;" />
 								<col style="width: 9%;" />
 							</colgroup>
 							<thead>
 								<tr>
 									<th scope="col" rowspan="2"><spring:message code="common.dbms_name" /> </th>
-									<th scope="col" rowspan="2"><spring:message code="dashboard.management_db" />  </th>
-									<th scope="col" colspan="4"><spring:message code="menu.backup_management" /></th>
-									<th scope="col"><spring:message code="menu.access_control" /></th>
-
-									<th scope="col" colspan="2"><spring:message code="menu.data_transfer" /></th>
+									<th scope="col" rowspan="2">IP</th>
+									<th scope="col" rowspan="2">서버유형</th>
+									<th scope="col" colspan="2"><spring:message code="dashboard.management_db" />  </th>
+									<th scope="col" colspan="2">데이터전송</th>
+									<th scope="col" rowspan="2">감사</th>
+									<th scope="col" rowspan="2">접근정책<br>최종변경일자</th>
 									<th scope="col" rowspan="2">Agent <spring:message code="properties.status" /></th>								
 								</tr>
 								<tr>
-									<th scope="col"><spring:message code="common.registory" /></th>
-									<th scope="col"><spring:message code="menu.schedule" /></th>
-									<th scope="col"><spring:message code="common.success" /></th>
-									<th scope="col"><spring:message code="common.failed" /> </th>
-									<th scope="col"><spring:message code="dashboard.regist_count" /></th>
-									<th scope="col"><spring:message code="dashboard.connect_count" /></th>
-									<th scope="col"><spring:message code="schedule.run" /></th>
+									<th scope="col">관리</th>
+									<th scope="col">미관리</th>
+									<th scope="col">채널</th>
+									<th scope="col">실행</th>
 								</tr>
 							</thead>
 							<tbody>
@@ -463,14 +489,18 @@ function fn_selectSecurityStatistics(today){
 								<c:forEach var="data" items="${serverInfo}" varStatus="status">
 								<tr>
 									<td>${data.db_svr_nm}</td>
+									<td>${data.ipadr}</td>
+									<td><c:if test="${data.master_gbn=='M'}">Master</c:if>
+									<c:if test="${data.master_gbn=='S'}">Slave</c:if></td>
 									<td>${data.db_cnt}</td>
-									<td>${data.wrk_cnt}</td>
-									<td>${data.schedule_cnt}</td>
-									<td>${data.success_cnt}</td>
-									<td>${data.fail_cnt}</td>
-									<td>${data.access_cnt}</td>
+									<td></td>
 									<td>${data.connect_cnt}</td>
 									<td>${data.execute_cnt}</td>
+									<td>
+									<c:if test="${data.access_cnt == 0}">Disabled</c:if>
+									<c:if test="${data.access_cnt != 0}">Enabled</c:if>
+									</td>
+									<td>${data.lst_mdf_dtm}</td>
 									<td>
 									<c:if test="${data.agt_cndt_cd == null}">
 										<span class="work_state"><img src="../images/ico_state_08.png" alt="Not Install" /></span>Not Install
@@ -492,6 +522,100 @@ function fn_selectSecurityStatistics(today){
 					</div>
 				</div>
 				
+				<!-- 백업 정보 -->
+				<div class="main_server_info">
+					<p class="tit">백업정보</p>
+					<div class="inner">
+						<table class="list" border="1">
+							<caption><spring:message code="dashboard.dbms_info" /></caption>
+							<colgroup>
+								<col style="width: 10%;" />
+								<col style="width: 10%;" />
+								<col style="width: 6%;" />
+								<col style="width: 6%;" />
+								<col style="width: 6%;" />
+								<col style="width: 6%;" />
+							</colgroup>
+							<thead>
+								<tr>
+									<th scope="col" rowspan="2"><spring:message code="common.dbms_name" /> </th>
+									<th scope="col" rowspan="2">DB</th>
+									<th scope="col" colspan="4">덤프백업</th>						
+								</tr>
+								<tr>
+									<th scope="col"><spring:message code="common.registory" /></th>
+									<th scope="col">스케줄</th>
+									<th scope="col"><spring:message code="common.success" /></th>
+									<th scope="col"><spring:message code="common.failed" /> </th>
+								</tr>
+							</thead>
+							<tbody>
+								<c:if test="${fn:length(backupDumpInfo) == 0}">
+										<tr>
+											<td colspan="6"><spring:message code="message.msg01" /></td>
+										</tr>
+								</c:if>
+								<c:forEach var="data" items="${backupDumpInfo}" varStatus="status">
+									<tr>
+										<td>${data.db_svr_nm}</td>
+										<td>${data.db_nm}</td>
+										<td>${data.wrk_cnt}</td>
+										<td>${data.schedule_cnt}</td>
+										<td>${data.success_cnt}</td>
+										<td>${data.fail_cnt}</td>
+									</tr>
+								</c:forEach>
+							</tbody>
+						</table>
+						<table class="list" border="1">
+							<caption><spring:message code="dashboard.dbms_info" /></caption>
+							<colgroup>
+								<col style="width: 10%;" />
+								<col style="width: 10%;" />
+								<col style="width: 6%;" />
+								<col style="width: 6%;" />
+								<col style="width: 6%;" />
+								<col style="width: 6%;" />
+							</colgroup>
+							<thead>
+								<tr>
+									<th scope="col" rowspan="2"><spring:message code="common.dbms_name" /> </th>
+									<th scope="col" colspan="5">온라인백업</th>						
+								</tr>
+								<tr>
+									<th scope="col">옵션</th>
+									<th scope="col"><spring:message code="common.registory" /></th>
+									<th scope="col">스케줄</th>
+									<th scope="col"><spring:message code="common.success" /></th>
+									<th scope="col"><spring:message code="common.failed" /> </th>
+								</tr>
+							</thead>
+							<tbody>
+								<c:if test="${fn:length(backupRmanInfo) == 0}">
+										<tr>
+											<td colspan="6"><spring:message code="message.msg01" /></td>
+										</tr>
+								</c:if>
+								<c:forEach var="data" items="${backupRmanInfo}" varStatus="status">
+									<tr>
+										<td>${data.db_svr_nm}</td>
+										<td>
+										<c:if test="${data.bck_opt_cd == 'TC000301'}">FULL</c:if>
+										<c:if test="${data.bck_opt_cd == 'TC000302'}">incremental</c:if>
+										<c:if test="${data.bck_opt_cd == 'TC000303'}">archive</c:if>
+										</td>
+										<td>${data.wrk_cnt}</td>
+										<td>${data.schedule_cnt}</td>
+										<td>${data.success_cnt}</td>
+										<td>${data.fail_cnt}</td>
+									</tr>
+								</c:forEach>
+							</tbody>
+						</table>
+					</div>
+				</div>
+				
+				
 				<!-- eXperDB Encrypt 상태 -->
 				<div class="main_server_info" >
 					<p class="tit">eXperDB Encrypt <%-- <spring:message code="properties.status" /> --%> <span id="today" style="float: right; padding-right: 1%;"></span></p>
@@ -512,6 +636,7 @@ function fn_selectSecurityStatistics(today){
 							<caption><spring:message code="dashboard.dbms_info" /></caption>
 							<colgroup>
 								<col style="width: 13.5%;" />
+								<col style="width: 13.5%;" />
 
 								<col style="width: 6%;" />
 								<col style="width: 6%;" />
@@ -523,10 +648,11 @@ function fn_selectSecurityStatistics(today){
 							</colgroup>
 							<thead>
 								<tr>
-									<th scope="col" rowspan="2">Encrypt Agent IP </th>						
+									<th scope="col" rowspan="2">DBMS명</th>
+									<th scope="col" rowspan="2">Encrypt Agent IP</th>						
 									<th scope="col" colspan="2"><spring:message code="encrypt_log_decode.Encryption"/></th>
 									<th scope="col" colspan="2"><spring:message code="encrypt_log_decode.Decryption"/></th>
-									<th scope="col" rowspan="2"><spring:message code="encrypt_Statistics.Sum"/>  </th>
+									<th scope="col" rowspan="2">활성화상태</th>
 									<th scope="col" rowspan="2">Agent <spring:message code="properties.status" /></th>								
 								</tr>
 								<tr>

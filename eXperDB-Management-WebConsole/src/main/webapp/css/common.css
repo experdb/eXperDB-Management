@@ -812,11 +812,11 @@ box-shadow: 1px 1px 2px 0px rgba(0,0,0,0.5);}
 .main_grp .main_info .m_info_ct .m_tit{background:url(../images/ico_main_tit_2.png) 0 48% no-repeat;}
 .main_grp .main_info .m_info_rt .m_tit{background:url(../images/ico_main_tit_3.png) 0 48% no-repeat;}
 .main_grp .main_info ul:after{display:block;content:"";clear:both;}
-.main_grp .main_info ul > li{float:left;width:87px;height:149px;background:#fff;margin-left:6px;text-align:center;}
+.main_grp .main_info ul > li{float:left;width:87px;height:170px;background:#fff;margin-left:6px;text-align:center;}
 .main_grp .main_info ul > li:first-child{margin-left:0;}
 .main_grp .main_info ul > li .state{padding:8px 0 0;font-size:11px;color:#101922;}
 .main_grp .main_info ul > li .state span{display:block;margin-top:10px;}
-.main_grp .main_info ul > li .state_num{height:54px;line-height:54px;margin:20px 0 12px;font-size:60px;font-family:Nanum Myeongjo;font-weight:700;}
+.main_grp .main_info ul > li .state_num{height:70px;line-height:70px;margin:20px 0 12px;font-size:60px;font-family:Nanum Myeongjo;font-weight:700;}
 .main_grp .main_info ul > li .state_num.double{margin:8px 0 12px;}
 .main_grp .main_info ul > li .state_num.c1{color:#99abb0;}
 .main_grp .main_info ul > li .state_num.c2{color:#324452;}

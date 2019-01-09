@@ -32,8 +32,14 @@ public class DashboardDAO extends EgovAbstractMapper{
 		return (List<DashboardVO>) list("dashboardSql.selectDashboardServerInfo", vo);
 	}
 
-	public DashboardVO selectDashboardTransferInfoVO() {
-		return (DashboardVO) selectOne("dashboardSql.selectDashboardTransferInfoVO");
+	@SuppressWarnings({ "deprecation", "unchecked" })
+	public List<DashboardVO> selectDashboardBackupDumpInfo(DashboardVO vo) {
+		return (List<DashboardVO>) list("dashboardSql.selectDashboardBackupDumpInfo",vo);
+	}
+
+	@SuppressWarnings({ "deprecation", "unchecked" })
+	public List<DashboardVO> selectDashboardBackupRmanInfo(DashboardVO vo) {
+		return (List<DashboardVO>) list("dashboardSql.selectDashboardBackupRmanInfo",vo);
 	}
 	
 }

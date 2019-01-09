@@ -1,10 +1,8 @@
 package com.k4m.dx.tcontrol.cmmn_web;
 
-import java.io.FileInputStream;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Properties;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
@@ -14,7 +12,6 @@ import org.json.simple.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
-import org.springframework.util.ResourceUtils;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -107,24 +104,24 @@ public class CmmnController {
 		//백업정보
 		DashboardVO backupInfoVO = (DashboardVO) dashboardService.selectDashboardBackupInfo();
 		
-		//데이터전송정보
-		DashboardVO transferInfoVO = (DashboardVO) dashboardService.selectDashboardTransferInfoVO();
-		
 		DashboardVO vo = new DashboardVO();
 		
+		//DBMS정보
 		List<DashboardVO> serverInfoVO = (List<DashboardVO>) dashboardService.selectDashboardServerInfo(vo);
 		
-		Properties props = new Properties();
-		props.load(new FileInputStream(ResourceUtils.getFile("classpath:egovframework/tcontrolProps/globals.properties")));
-	
-		String lang = props.get("lang").toString();
+		//백업정보(DUMP)
+		List<DashboardVO> backupDumpInfoVO = (List<DashboardVO>) dashboardService.selectDashboardBackupDumpInfo(vo);
+		
+		//백업정보(RMAN)
+		List<DashboardVO> backupRmanInfoVO = (List<DashboardVO>) dashboardService.selectDashboardBackupRmanInfo(vo);
 		
 		ModelAndView mv = new ModelAndView();
 
 		mv.addObject("scheduleInfo", scheduleInfoVO);
 		mv.addObject("backupInfo", backupInfoVO);
 		mv.addObject("serverInfo", serverInfoVO);
-		mv.addObject("transferInfo", transferInfoVO);
+		mv.addObject("backupDumpInfo", backupDumpInfoVO);
+		mv.addObject("backupRmanInfo", backupRmanInfoVO);
 		
 		mv.setViewName("dashboard");
 		return mv;	

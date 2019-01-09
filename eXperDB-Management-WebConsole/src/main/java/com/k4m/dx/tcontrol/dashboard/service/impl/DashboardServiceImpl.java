@@ -30,8 +30,12 @@ public class DashboardServiceImpl extends EgovAbstractServiceImpl implements Das
 		return (List<DashboardVO>) dashboardDAO.selectDashboardServerInfo(vo);
 	}
 
-	public DashboardVO selectDashboardTransferInfoVO() throws SQLException {
-		return (DashboardVO) dashboardDAO.selectDashboardTransferInfoVO();
+	public List<DashboardVO> selectDashboardBackupDumpInfo(DashboardVO vo) throws SQLException {
+		return (List<DashboardVO>) dashboardDAO.selectDashboardBackupDumpInfo(vo);
+	}
+
+	public List<DashboardVO> selectDashboardBackupRmanInfo(DashboardVO vo) throws SQLException {
+		return (List<DashboardVO>) dashboardDAO.selectDashboardBackupRmanInfo(vo);
 	}
 
 }
