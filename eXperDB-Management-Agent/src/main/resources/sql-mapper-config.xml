@@ -17,6 +17,7 @@
     	<typeAlias alias="TrfTrgCngVO" type="com.k4m.dx.tcontrol.db.repository.vo.TrfTrgCngVO" />
     	<typeAlias alias="ServerInfoVO" type="com.k4m.dx.tcontrol.db.repository.vo.ServerInfoVO" />
     	<typeAlias alias="TablespaceVO" type="com.k4m.dx.tcontrol.db.repository.vo.TablespaceVO" />
+    	<typeAlias alias="RmanRestoreVO" type="com.k4m.dx.tcontrol.db.repository.vo.RmanRestoreVO" />
 
     </typeAliases>
     
