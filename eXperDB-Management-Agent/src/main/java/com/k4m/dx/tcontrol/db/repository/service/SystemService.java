@@ -4,6 +4,7 @@ import java.util.List;
 
 import com.k4m.dx.tcontrol.db.repository.vo.AgentInfoVO;
 import com.k4m.dx.tcontrol.db.repository.vo.DbServerInfoVO;
+import com.k4m.dx.tcontrol.db.repository.vo.RmanRestoreVO;
 import com.k4m.dx.tcontrol.db.repository.vo.TrfTrgCngVO;
 import com.k4m.dx.tcontrol.db.repository.vo.WrkExeVO;
 
@@ -146,4 +147,11 @@ public interface SystemService {
 	 * @throws Exception
 	 */
 	public DbServerInfoVO selectISMasterGbm(DbServerInfoVO vo) throws Exception ;
+	
+	/**
+	 * Rman Restore 상태 update
+	 * @param vo
+	 * @throws Exception
+	 */
+	public void updateRMAN_RESTORE_CNDT(RmanRestoreVO vo) throws Exception;
 }

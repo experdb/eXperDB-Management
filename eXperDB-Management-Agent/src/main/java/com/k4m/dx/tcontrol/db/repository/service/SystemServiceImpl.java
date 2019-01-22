@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 import com.k4m.dx.tcontrol.db.repository.dao.SystemDAO;
 import com.k4m.dx.tcontrol.db.repository.vo.AgentInfoVO;
 import com.k4m.dx.tcontrol.db.repository.vo.DbServerInfoVO;
+import com.k4m.dx.tcontrol.db.repository.vo.RmanRestoreVO;
 import com.k4m.dx.tcontrol.db.repository.vo.TrfTrgCngVO;
 import com.k4m.dx.tcontrol.db.repository.vo.WrkExeVO;
 import com.k4m.dx.tcontrol.util.FileUtil;
@@ -136,5 +137,9 @@ public class SystemServiceImpl implements SystemService{
 	
 	public DbServerInfoVO selectISMasterGbm(DbServerInfoVO vo) throws Exception  {
 		return (DbServerInfoVO) systemDAO.selectISMasterGbm(vo);
+	}
+	
+	public void updateRMAN_RESTORE_CNDT(RmanRestoreVO vo) throws Exception {
+		systemDAO.updateRMAN_RESTORE_CNDT(vo);
 	}
 }

@@ -8,6 +8,7 @@ import org.springframework.stereotype.Repository;
 
 import com.k4m.dx.tcontrol.db.repository.vo.AgentInfoVO;
 import com.k4m.dx.tcontrol.db.repository.vo.DbServerInfoVO;
+import com.k4m.dx.tcontrol.db.repository.vo.RmanRestoreVO;
 import com.k4m.dx.tcontrol.db.repository.vo.TrfTrgCngVO;
 import com.k4m.dx.tcontrol.db.repository.vo.WrkExeVO;
 
@@ -73,7 +74,7 @@ public class SystemDAO {
 	}
 	
 	public void updateSCD_CNDT(WrkExeVO vo) throws Exception  {
-		 session.insert("system.updateSCD_CNDT", vo);
+		 session.update("system.updateSCD_CNDT", vo);
 	}
 	
 	public DbServerInfoVO selectDatabaseConnInfo(DbServerInfoVO vo) throws Exception  {
@@ -81,15 +82,19 @@ public class SystemDAO {
 	}
 	
 	public void updateDB_CNDT(DbServerInfoVO vo) throws Exception {
-		session.insert("system.updateDB_CNDT", vo);
+		session.update("system.updateDB_CNDT", vo);
 	}
 	
 	public void updateDBSlaveAll(DbServerInfoVO vo) throws Exception {
-		session.insert("system.updateDBSlaveAll", vo);
+		session.update("system.updateDBSlaveAll", vo);
 	}
 	
 	public DbServerInfoVO selectISMasterGbm(DbServerInfoVO vo) throws Exception  {
 		return (DbServerInfoVO) session.selectOne("system.selectISMasterGbm", vo);
+	}
+	
+	public void updateRMAN_RESTORE_CNDT(RmanRestoreVO vo) throws Exception {
+		session.update("system.updateRMAN_RESTORE_CNDT", vo);
 	}
 	
 }

@@ -559,11 +559,11 @@ public class FileUtil {
 
 			// 파일읽기
 
-			String strFilePath = "C:\\k4m\\DxTcontrolWorkspace\\DX-TControl\\DX-TControlAgent\\build\\install\\";
-			String strFileName = "test.out";
+			String strFilePath = "C:\\k4m\\DxTcontrolWorkspace\\";
+			String strFileName = "test.txt";
 
-			// File inFile = new File(strFilePath, strFileName);
-
+			 File inFile = new File(strFilePath, strFileName);
+/**
 			BufferedReader in = new BufferedReader(new FileReader(strFilePath + strFileName));
 			String s;
 
@@ -614,10 +614,10 @@ public class FileUtil {
 				}
 				System.out.println("");
 			}
+**/
+			 String strFileTxt = FileUtil.getFileView(inFile);
 
-			// String strFileTxt = FileUtil.getFileView(inFile);
-
-			// System.out.println(strFileTxt);
+			 System.out.println(strFileTxt);
 
 			// file LastModified
 			// String strLastModified =

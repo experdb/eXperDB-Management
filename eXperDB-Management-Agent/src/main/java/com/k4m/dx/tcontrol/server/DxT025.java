@@ -27,7 +27,7 @@ import com.k4m.dx.tcontrol.util.CommonUtil;
 import com.k4m.dx.tcontrol.util.NetworkUtil;
 
 /**
- * 26.	database server 정보 조회
+ * rman show list
  *
  * @author 박태혁
  * @see <pre>

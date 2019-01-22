@@ -469,5 +469,22 @@
 		
 			CREATE EXTENSION ${extname} 
 	</update>
+	
+	<select id="selectTablespaceLocation"  resultType="hashmap">
+		<![CDATA[
+			/**
+		 	* Query ID : selectTablespaceLocation
+		 	* Description : tablespace location
+		 	* Author : 박태혁
+		 	**/
+		
+			SELECT 
+				spcname
+				, pg_tablespace_location(oid) AS tablespace_location 
+			FROM pg_tablespace
+			WHERE pg_tablespace_location(oid) <> ''
+		]]>
+	</select>
+
 
 </mapper>

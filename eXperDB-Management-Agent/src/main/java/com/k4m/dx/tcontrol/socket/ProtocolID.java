@@ -123,8 +123,6 @@ public class ProtocolID {
 	public static final String BCK_MTN_ECNT = "BCK_MTN_ECNT";
 	public static final String FILE_STG_DCNT = "FILE_STG_DCNT";
 	
-	
-	
 	public static final String IS_DIRECTORY = "IS_DIRECTORY";
 	public static final String IS_FILE = "IS_FILE";
 	public static final String CAPACITY = "CAPACITY";
@@ -134,7 +132,6 @@ public class ProtocolID {
 	public static final String MASTER_GBN = "MASTER_GBN";
 	public static final String ARR_SERVER_INFO = "ARR_SERVER_INFO";
 	public static final String CONNECT_YN = "CONNECT_YN";
-	
 	
 	public static final String CMD_HOSTNAME = "CMD_HOSTNAME";
 	public static final String CMD_OS_VERSION = "CMD_OS_VERSION";
@@ -187,6 +184,8 @@ public class ProtocolID {
 	public static final String PGDBAK = "PGDBAK";
 	public static final String PGRLOG = "PGRLOG";
 	public static final String PGDLOG = "PGDLOG";
+	public static final String PGALOG = "PGALOG";
+	public static final String SRVLOG = "SRVLOG";
 	
 	public static final String RMAN_START_DATE = "START_DATE";
 	public static final String RMAN_START_TIME = "START_TIME";
@@ -202,5 +201,13 @@ public class ProtocolID {
 	public static final String RMAN_PARENTTLI = "PARENTTLI";
 	public static final String RMAN_STATUS = "STATUS";
 	public static final String EXTENSION = "EXTENSION";
+	
+	public static final String RESTORE_SN = "RESTORE_SN";
+	public static final String RESTORE_DIR = "RESTORE_DIR";
+	public static final String ASIS_FLAG = "ASIS_FLAG";
+	public static final String RESTORE_FLAG = "RESTORE_FLAG";
+	public static final String TIMELINE = "TIMELINE";
+	
+	
 
 }

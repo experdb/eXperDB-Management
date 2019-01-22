@@ -23,7 +23,7 @@ import com.k4m.dx.tcontrol.util.FileListSearcher;
 import com.k4m.dx.tcontrol.util.FileUtil;
 
 /**
- * kafka-connect CRUD
+ * 로그 파일 리스트 조회
  *
  * @author 박태혁
  * @see <pre>
@@ -109,7 +109,7 @@ public class DxT024 extends SocketCtl{
 
 			
 		} catch (Exception e) {
-			errLogger.error("DxT015 {} ", e.toString());
+			errLogger.error("DxT024 {} ", e.toString());
 			
 			outputObj.put(ProtocolID.DX_EX_CODE, TranCodeType.DxT024);
 			outputObj.put(ProtocolID.RESULT_CODE, "1");

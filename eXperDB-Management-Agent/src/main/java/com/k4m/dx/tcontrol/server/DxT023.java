@@ -26,7 +26,7 @@ import com.k4m.dx.tcontrol.util.FileListSearcher;
 import com.k4m.dx.tcontrol.util.FileUtil;
 
 /**
- * kafka-connect CRUD
+ * 파일 존재 유무 체크
  *
  * @author 박태혁
  * @see <pre>
@@ -89,9 +89,9 @@ public class DxT023 extends SocketCtl{
 		} catch (Exception e) {
 			errLogger.error("DxT023 {} ", e.toString());
 			
-			outputObj.put(ProtocolID.DX_EX_CODE, TranCodeType.DxT016);
+			outputObj.put(ProtocolID.DX_EX_CODE, TranCodeType.DxT023);
 			outputObj.put(ProtocolID.RESULT_CODE, "1");
-			outputObj.put(ProtocolID.ERR_CODE, TranCodeType.DxT016);
+			outputObj.put(ProtocolID.ERR_CODE, TranCodeType.DxT023);
 			outputObj.put(ProtocolID.ERR_MSG, "DxT023 Error [" + e.toString() + "]");
 			
 			sendBuff = outputObj.toString().getBytes();

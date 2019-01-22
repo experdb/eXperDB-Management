@@ -40,6 +40,10 @@ public class TranCodeType {
 	public static final String DxT024 = "DxT024";
 	public static final String DxT025 = "DxT025";
 	public static final String DxT026 = "DxT026";
+	public static final String DxT027 = "DxT027";
+	public static final String DxT028 = "DxT028";
+	public static final String DxT029 = "DxT029";
+	
 	
 	public static final String STATUS = "STATUS";
 	public static final String STOP = "STOP";
