@@ -184,6 +184,8 @@ public class ClientProtocolID {
 	public static final String PGDBAK = "PGDBAK";
 	public static final String PGRLOG = "PGRLOG";
 	public static final String PGDLOG = "PGDLOG";
+	public static final String PGALOG = "PGALOG";
+	public static final String SRVLOG = "SRVLOG";
 	
 	public static final String RMAN_START_DATE = "START_DATE";
 	public static final String RMAN_START_TIME = "START_TIME";
@@ -199,5 +201,11 @@ public class ClientProtocolID {
 	public static final String RMAN_PARENTTLI = "PARENTTLI";
 	public static final String RMAN_STATUS = "STATUS";
 	public static final String EXTENSION = "EXTENSION";
+	
+	public static final String RESTORE_SN = "RESTORE_SN";
+	public static final String RESTORE_DIR = "RESTORE_DIR";
+	public static final String ASIS_FLAG = "ASIS_FLAG";
+	public static final String RESTORE_FLAG = "RESTORE_FLAG";
+	public static final String TIMELINE = "TIMELINE";
 
 }
