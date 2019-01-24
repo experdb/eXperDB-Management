@@ -2378,7 +2378,7 @@ public class ClientTester {
 			jObj.put(ClientProtocolID.PGRBAK, PGRBAK);
 			
 			//ASIS_FLAG
-			String ASIS_FLAG = "1";
+			String ASIS_FLAG = "0";
 			jObj.put(ClientProtocolID.ASIS_FLAG, ASIS_FLAG);
 			
 			//RESTORE_DIR

@@ -101,6 +101,7 @@ public class DxT028 extends SocketCtl {
 		String PGDATA = "--pgdata=" + strPGDATA;
 		String ARCLOG = "--arclog-path=" + strPGALOG;
 		String SRVLOG = "--srvlog-path=" + strSRVLOG;
+		String PGRBAK = "--backup-path=" + strPGRBAK;
 		String TIMELINE = "--recovery-target-time=" + strTIMELINE;
 		String logDir = "../logs/pg_resLog/" ;
 		String strLogFileName = "restore_" + strRestore_sn + ".log";
@@ -121,6 +122,8 @@ public class DxT028 extends SocketCtl {
 		
 		sbRestoreCmd.append(SPACE).append(">>");
 		sbRestoreCmd.append(SPACE).append(logDir).append(strLogFileName);
+		
+		socketLogger.info("rman restore CMD : " + sbRestoreCmd);
 
 		JSONObject outputObj = new JSONObject();
 		
