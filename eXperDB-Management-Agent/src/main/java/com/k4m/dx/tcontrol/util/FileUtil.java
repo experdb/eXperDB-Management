@@ -1,20 +1,20 @@
 package com.k4m.dx.tcontrol.util;
 
 import java.io.BufferedReader;
+import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.FileReader;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.io.RandomAccessFile;
 import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.Date;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.Locale;
 import java.util.Properties;
 
@@ -481,6 +481,19 @@ public class FileUtil {
 
 		return bytesArray;
 	}
+	
+	public static void writeFile(String strFilePath, String strLog) throws Exception {
+	    File file = new File(strFilePath);
+
+	    try {
+	      BufferedWriter bw = new BufferedWriter(new FileWriter(strFilePath, true));
+	      bw.write(strLog);
+
+	      bw.close();
+	    } catch (IOException e) {
+	      e.printStackTrace();
+	    }
+	}
 
 	  /**
      * String으로 내림차순(Desc) 정렬
@@ -630,5 +643,8 @@ public class FileUtil {
 			e.printStackTrace();
 		}
 	}
+	
+	
+	
 
 }

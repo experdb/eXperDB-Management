@@ -66,17 +66,27 @@ public class DxT028 extends SocketCtl {
 		String strRestore_sn = (String) jObj.get(ProtocolID.RESTORE_SN);
 		int intRestore_sn = Integer.parseInt(strRestore_sn);
 		
+		String strRESTORE_DIR = (String) jObj.get(ProtocolID.RESTORE_DIR);
+		//기존/신규 구분
+		String strASIS_FLAG = (String) jObj.get(ProtocolID.ASIS_FLAG);
+		
+		String strRepDir = "";
+		
+		if(strASIS_FLAG.equals("1")) {
+			strRepDir = strRESTORE_DIR;
+		}
+		
 		//백업경로
-		String strPGRBAK = (String) jObj.get(ProtocolID.PGRBAK);
+		String strPGRBAK = strRepDir + (String) jObj.get(ProtocolID.PGRBAK);
 		
 		// location of the database storage area
-		String strPGDATA = (String) jObj.get(ProtocolID.PGDATA);
+		String strPGDATA = strRepDir + (String) jObj.get(ProtocolID.PGDATA);
 		
 		//location of archive WAL storage area
-		String strPGALOG = (String) jObj.get(ProtocolID.PGALOG);
+		String strPGALOG = strRepDir + (String) jObj.get(ProtocolID.PGALOG);
 		
 		//location of server log storage area
-		String strSRVLOG = (String) jObj.get(ProtocolID.SRVLOG);
+		String strSRVLOG = strRepDir + (String) jObj.get(ProtocolID.SRVLOG);
 		
 		//복구상태 긴급복구(0), 시점복구(1)
 		String strRESTORE_FLAG = (String) jObj.get(ProtocolID.RESTORE_FLAG);
@@ -90,9 +100,9 @@ public class DxT028 extends SocketCtl {
 		String VERBOSE = "--verbose";
 		String PGDATA = "--pgdata=" + strPGDATA;
 		String ARCLOG = "--arclog-path=" + strPGALOG;
-		String SRVLOG = "--srvlog-path" + strSRVLOG;
+		String SRVLOG = "--srvlog-path=" + strSRVLOG;
 		String TIMELINE = "--recovery-target-time=" + strTIMELINE;
-		String logDir = "./pg_resLog/" ;
+		String logDir = "../logs/pg_resLog/" ;
 		String strLogFileName = "restore_" + strRestore_sn + ".log";
 		
 		FileUtil.createFileDir(logDir);
@@ -111,11 +121,6 @@ public class DxT028 extends SocketCtl {
 		
 		sbRestoreCmd.append(SPACE).append(">>");
 		sbRestoreCmd.append(SPACE).append(logDir).append(strLogFileName);
-		
-		
-		String strRESTORE_DIR = (String) jObj.get(ProtocolID.RESTORE_DIR);
-		//기존/신규 구분
-		String strASIS_FLAG = (String) jObj.get(ProtocolID.ASIS_FLAG);
 
 		JSONObject outputObj = new JSONObject();
 		
@@ -146,7 +151,7 @@ public class DxT028 extends SocketCtl {
 	        			endVo.setRESTORE_CNDT(FAILED);
 	        			
 	        			// restore running end
-	        			service.updateRMAN_RESTORE_CNDT(vo);
+	        			service.updateRMAN_RESTORE_CNDT(endVo);
 	                }
 					
 	                RunCommandExecNoWait runCommandExecNoWait = new RunCommandExecNoWait(sbRestoreCmd.toString(), intRestore_sn);

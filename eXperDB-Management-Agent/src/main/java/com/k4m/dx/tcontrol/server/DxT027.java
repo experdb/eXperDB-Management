@@ -23,7 +23,7 @@ import com.k4m.dx.tcontrol.socket.TranCodeType;
 import com.k4m.dx.tcontrol.util.CommonUtil;
 
 /**
- * 24.	Hostname 조회
+ * 	Postgres Data 경로 조회
  *
  * @author 박태혁
  * @see <pre>

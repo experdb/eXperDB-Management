@@ -33,7 +33,11 @@ public class RepTableSpaceWrap extends Thread {
 	@Override
 	public void run(){
 		try {
-			changeTableSpacePath(jObj, strPGRBAK, strRESTORE_DIR);
+			
+			JSONObject objSERVER_INFO = new JSONObject(); 
+			objSERVER_INFO = (JSONObject) jObj.get(ProtocolID.SERVER_INFO);
+			
+			changeTableSpacePath(objSERVER_INFO, strPGRBAK, strRESTORE_DIR);
 		} catch (Exception e) {
 			errLogger.error("changeTableSpacePath {} ", e.toString());
 		}

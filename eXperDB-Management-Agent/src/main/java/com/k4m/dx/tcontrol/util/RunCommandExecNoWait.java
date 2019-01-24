@@ -70,6 +70,10 @@ public class RunCommandExecNoWait extends Thread {
 		String strReturnVal = "";
 		String strResultErrInfo = "";
 		
+		String logDir = "../logs/pg_resLog/";
+		String strRestore_sn = Integer.toBinaryString(intRestore_sn);
+		String strLogFileName = "restore_" + strRestore_sn + ".log";
+		
 		SystemServiceImpl service = (SystemServiceImpl) DaemonStart.getContext().getBean("SystemService");
 		
 		try{
@@ -101,6 +105,9 @@ public class RunCommandExecNoWait extends Thread {
     			
 				strResult += strResultErrInfo;
 				socketLogger.info("err.ready() --> " + strResult);
+				
+				String strFilePath = logDir + "/" + strLogFileName;
+				FileUtil.writeFile(strFilePath, strResult);
 				err.close();
 				strReturnVal = "failed";
 			} else {

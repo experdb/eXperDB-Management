@@ -54,12 +54,9 @@ public class DxT029 extends SocketCtl{
 		String strSuccessCode = "0";
 
 		String strRESTORE_SN = (String) jObj.get(ProtocolID.RESTORE_SN);
-		String strLogFileName = "restore_" + strRESTORE_SN + ".log";
-		String logDir = "./pg_resLog/";
-
-		List<Map<String, Object>> outputArray = new ArrayList<Map<String, Object>>();
 		
-
+		String strLogFileName = "restore_" + strRESTORE_SN + ".log";
+		String logDir = "../logs/pg_resLog/";
 		
 		JSONObject outputObj = new JSONObject();
 		
@@ -74,6 +71,8 @@ public class DxT029 extends SocketCtl{
 			
 			String strFileView = FileUtil.getFileView(inFile);
 			
+			socketLogger.info("strFileView : " + strFileView);
+			
 			outputObj.put(ProtocolID.DX_EX_CODE, strDxExCode);
 			outputObj.put(ProtocolID.RESULT_CODE, strSuccessCode);
 			outputObj.put(ProtocolID.ERR_CODE, strErrCode);
@@ -81,8 +80,7 @@ public class DxT029 extends SocketCtl{
 			outputObj.put(ProtocolID.RESULT_DATA, strFileView);
 
 			inFile = null;
-			
-			send(outputObj);
+			send(TotalLengthBit, outputObj.toString().getBytes());
 		
 			//send(TotalLengthBit, outputObj.toString().getBytes());
 			
