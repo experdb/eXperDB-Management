@@ -5,6 +5,7 @@ import java.util.List;
 
 import org.springframework.stereotype.Repository;
 
+import com.k4m.dx.tcontrol.admin.dbserverManager.service.DbServerVO;
 import com.k4m.dx.tcontrol.dashboard.service.DashboardVO;
 
 import egovframework.rte.psl.dataaccess.EgovAbstractMapper;
@@ -33,13 +34,52 @@ public class DashboardDAO extends EgovAbstractMapper{
 	}
 
 	@SuppressWarnings({ "deprecation", "unchecked" })
-	public List<DashboardVO> selectDashboardBackupDumpInfo(DashboardVO vo) {
+	public List<DashboardVO> selectDashboardBackupDumpInfo(DashboardVO vo) throws SQLException{
 		return (List<DashboardVO>) list("dashboardSql.selectDashboardBackupDumpInfo",vo);
 	}
 
 	@SuppressWarnings({ "deprecation", "unchecked" })
-	public List<DashboardVO> selectDashboardBackupRmanInfo(DashboardVO vo) {
+	public List<DashboardVO> selectDashboardBackupRmanInfo(DashboardVO vo) throws SQLException{
 		return (List<DashboardVO>) list("dashboardSql.selectDashboardBackupRmanInfo",vo);
 	}
+
+	public int selectDashboardScheduleTotal() throws SQLException{
+		return (int) selectOne("dashboardSql.selectDashboardScheduleTotal");
+	}
+
+	public int selectDashboardScheduleFail() throws SQLException{
+		return (int) selectOne("dashboardSql.selectDashboardScheduleFail");
+	}
+
+	public int selectDashboardServerTotal() throws SQLException{
+		return (int) selectOne("dashboardSql.selectDashboardServerTotal");
+	}
+
+	public int selectDashboardServerUse() throws SQLException{
+		return (int) selectOne("dashboardSql.selectDashboardServerUse");
+	}
+	
+	public int selectDashboardServerDeath() throws SQLException{
+		return (int) selectOne("dashboardSql.selectDashboardServerDeath");
+	}
+
+	public int selectDashboardBackupTotal() throws SQLException{
+		return (int) selectOne("dashboardSql.selectDashboardBackupTotal");
+	}
+
+	public int selectDashboardBackupFail() throws SQLException{
+		return (int) selectOne("dashboardSql.selectDashboardBackupFail");
+	}
+
+	public int selectDashboardBackupNouse() throws SQLException{
+		return (int) selectOne("dashboardSql.selectDashboardBackupNouse");
+	}
+
+	@SuppressWarnings({ "deprecation", "unchecked" })
+	public List<DbServerVO> selectDashboardServer() throws SQLException{
+		return (List<DbServerVO>) list("dashboardSql.selectDashboardServer", null);
+	}
+
+
 	
 }

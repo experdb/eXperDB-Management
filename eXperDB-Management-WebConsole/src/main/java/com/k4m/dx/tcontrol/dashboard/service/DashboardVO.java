@@ -18,10 +18,11 @@ public class DashboardVO {
 	private String db_svr_nm;
 	private String master_gbn;
 	private int db_cnt;
+	private int undb_cnt;
 	private int wrk_cnt;
 	private int schedule_cnt;
 	private int success_cnt;
-	private int access_cnt;
+	private String audit_state;
 	private String agt_cndt_cd;
 	private String lst_mdf_dtm;
 	
@@ -74,6 +75,12 @@ public class DashboardVO {
 	}
 	public void setDb_cnt(int db_cnt) {
 		this.db_cnt = db_cnt;
+	}
+	public int getUndb_cnt() {
+		return undb_cnt;
+	}
+	public void setUndb_cnt(int undb_cnt) {
+		this.undb_cnt = undb_cnt;
 	}
 	public String getDb_svr_nm() {
 		return db_svr_nm;
@@ -159,11 +166,11 @@ public class DashboardVO {
 	public void setSuccess_cnt(int success_cnt) {
 		this.success_cnt = success_cnt;
 	}
-	public int getAccess_cnt() {
-		return access_cnt;
+	public String getAudit_state() {
+		return audit_state;
 	}
-	public void setAccess_cnt(int access_cnt) {
-		this.access_cnt = access_cnt;
+	public void setAudit_state(String audit_state) {
+		this.audit_state = audit_state;
 	}
 	public String getAgt_cndt_cd() {
 		return agt_cndt_cd;

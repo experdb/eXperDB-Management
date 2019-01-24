@@ -7,6 +7,7 @@ import javax.annotation.Resource;
 
 import org.springframework.stereotype.Service;
 
+import com.k4m.dx.tcontrol.admin.dbserverManager.service.DbServerVO;
 import com.k4m.dx.tcontrol.dashboard.service.DashboardService;
 import com.k4m.dx.tcontrol.dashboard.service.DashboardVO;
 
@@ -37,5 +38,51 @@ public class DashboardServiceImpl extends EgovAbstractServiceImpl implements Das
 	public List<DashboardVO> selectDashboardBackupRmanInfo(DashboardVO vo) throws SQLException {
 		return (List<DashboardVO>) dashboardDAO.selectDashboardBackupRmanInfo(vo);
 	}
+
+	public int selectDashboardScheduleTotal() throws SQLException {
+		return (int) dashboardDAO.selectDashboardScheduleTotal();
+	}
+
+
+	public int selectDashboardScheduleFail() throws SQLException {
+		return (int) dashboardDAO.selectDashboardScheduleFail();
+	}
+
+	@Override
+	public int selectDashboardServerTotal() throws SQLException {
+		return (int) dashboardDAO.selectDashboardServerTotal();
+	}
+
+	@Override
+	public int selectDashboardServerUse() throws SQLException {
+		return (int) dashboardDAO.selectDashboardServerUse();
+	}
+
+	@Override
+	public int selectDashboardServerDeath() throws SQLException {
+		return (int) dashboardDAO.selectDashboardServerDeath();
+	}
+	
+	@Override
+	public int selectDashboardBackupTotal() throws SQLException {
+		return (int) dashboardDAO.selectDashboardBackupTotal();
+	}
+
+	@Override
+	public int selectDashboardBackupFail() throws SQLException {
+		return (int) dashboardDAO.selectDashboardBackupFail();
+	}
+
+	@Override
+	public int selectDashboardBackupNouse() throws SQLException {
+		return (int) dashboardDAO.selectDashboardBackupNouse();
+	}
+
+	@Override
+	public List<DbServerVO> selectDashboardServer() throws SQLException {
+		return (List<DbServerVO>) dashboardDAO.selectDashboardServer();
+	}
+
+
 
 }

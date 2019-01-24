@@ -75,6 +75,7 @@
 	 	**/
 		  SELECT
 		  	AAA.DB_SVR_ID AS db_svr_id
+		  	, AAA.IPADR as ipadr
 		  	, (SELECT DB_SVR_NM FROM T_DBSVR_I WHERE DB_SVR_ID = AAA.DB_SVR_ID) AS db_svr_nm
 		    , COUNT(AAA.WRK_ID) AS wrk_cnt
 		    , (SELECT COUNT(*) FROM T_DB_I WHERE DB_SVR_ID = AAA.DB_SVR_ID AND USEYN = 'Y') AS db_cnt
@@ -83,7 +84,7 @@
 		          AND A.WRK_ID = B.WRK_ID) AS schedule_cnt
 		    , SUM(AAA.success_cnt) AS success_cnt
 		    , SUM(AAA.fail_cnt) AS fail_cnt
-			, (SELECT COUNT(*) FROM T_SVRACSCNTR_I WHERE DB_SVR_ID = AAA.DB_SVR_ID AND PRMS_SET = '1') AS access_cnt
+			, (SELECT TO_CHAR(LST_MDF_DTM, 'YYYY-MM-DD HH24:MI:SS')AS LST_MDF_DTM    FROM T_SVRACSCNTR_HIS_I WHERE DB_SVR_ID = AAA.DB_SVR_ID ORDER BY LST_MDF_DTM DESC LIMIT 1) AS lst_mdf_dtm
 		    , (SELECT DISTINCT AGT_CNDT_CD FROM T_AGTCNDT_I WHERE IPADR = AAA.IPADR) AS agt_cndt_cd
 		    , (SELECT COUNT(*) FROM t_trftrgmpp_r r, t_db_i i WHERE DB_SVR_ID = AAA.DB_SVR_ID  AND r.db_id =i.db_id)AS connect_cnt
 		    , (SELECT COUNT(*) FROM t_trftrgmpp_r r, t_db_i d, t_trftrgcng_i i where DB_SVR_ID = AAA.DB_SVR_ID AND r.db_id=d.db_id AND i.trf_trg_id=r.trf_trg_id AND i.bw_pid=1)AS execute_cnt
@@ -127,8 +128,7 @@
 			, (SELECT COUNT(*) FROM T_WRKEXE_G WHERE DB_ID = AA.DB_ID AND EXE_RSLT_CD = 'TC001701') success_cnt
 			, (SELECT COUNT(*) FROM T_WRKEXE_G WHERE DB_ID = AA.DB_ID AND EXE_RSLT_CD = 'TC001702') fail_cnt
 		FROM(
-			SELECT A.DB_ID FROM T_BCK_WRKCNG_I A
-			WHERE A.BCK_BSN_DSCD = 'TC000202'
+				SELECT DB_ID FROM T_DB_I WHERE USEYN='Y'
 		)AA
 		GROUP BY AA.DB_ID
     </select>
@@ -139,30 +139,136 @@
 	 	* Description : Dashboard 백업정보 ONLINE 조회
 	 	* Author : 김주영
 	 	**/
-		SELECT
-		  AAA.db_svr_id
-		, (SELECT DB_SVR_NM FROM T_DBSVR_I WHERE DB_SVR_ID = AAA.DB_SVR_ID) AS db_svr_nm
-		, AAA.bck_opt_cd
-		, SUM(AAA.WRK_CNT) AS wrk_cnt
-		, SUM(AAA.SCHEDULE_CNT) AS schedule_cnt
-		, SUM(AAA.SUCCESS_CNT) AS success_cnt
-		, SUM(AAA.FAIL_CNT) AS fail_cnt
-		FROM(
-			SELECT 
-				  AA.db_svr_id
-				, AA.bck_opt_cd
-				, (SELECT COUNT(*) FROM T_BCK_WRKCNG_I WHERE WRK_ID = AA.WRK_ID) AS wrk_cnt
-				, (SELECT COUNT(DISTINCT SCD_ID) FROM T_SCD_D A, T_BCK_WRKCNG_I B WHERE B.WRK_ID = AA.WRK_ID AND A.WRK_ID = B.WRK_ID) AS schedule_cnt
-				, (SELECT COUNT(*) FROM T_WRKEXE_G WHERE WRK_ID = AA.WRK_ID AND EXE_RSLT_CD = 'TC001701') success_cnt
-				, (SELECT COUNT(*) FROM T_WRKEXE_G WHERE WRK_ID = AA.WRK_ID AND EXE_RSLT_CD = 'TC001702') fail_cnt
-				FROM
-				(
-					SELECT A.db_svr_id, A.wrk_id, A.bck_opt_cd
-					FROM T_BCK_WRKCNG_I A ,T_DBSVR_I B
-					WHERE A.BCK_BSN_DSCD = 'TC000201'
-					AND B.DB_SVR_ID = A.DB_SVR_ID
-				)AA
-		)AAA
-		GROUP BY AAA.DB_SVR_ID, AAA.BCK_OPT_CD 	
+      	SELECT
+        	  AAA.DB_SVR_ID
+      		, (SELECT DB_SVR_NM FROM T_DBSVR_I WHERE DB_SVR_ID = AAA.DB_SVR_ID) AS DB_SVR_NM
+      		, AAA.BCK_OPT_CD
+      		, SUM(AAA.WRK_CNT) AS WRK_CNT
+      		, SUM(AAA.SCHEDULE_CNT) AS SCHEDULE_CNT
+      		, SUM(AAA.SUCCESS_CNT) AS SUCCESS_CNT
+      		, SUM(AAA.FAIL_CNT) AS FAIL_CNT
+      	FROM(
+	         SELECT 
+	              AA.DB_SVR_ID
+	            , AA.BCK_OPT_CD
+	            , (SELECT COUNT(*) FROM T_BCK_WRKCNG_I WHERE WRK_ID = AA.WRK_ID) AS WRK_CNT
+	            , (SELECT COUNT(DISTINCT SCD_ID) FROM T_SCD_D A, T_BCK_WRKCNG_I B WHERE B.WRK_ID = AA.WRK_ID AND A.WRK_ID = B.WRK_ID) AS SCHEDULE_CNT
+	            , (SELECT COUNT(*) FROM T_WRKEXE_G WHERE WRK_ID = AA.WRK_ID AND EXE_RSLT_CD = 'TC001701') SUCCESS_CNT
+	            , (SELECT COUNT(*) FROM T_WRKEXE_G WHERE WRK_ID = AA.WRK_ID AND EXE_RSLT_CD = 'TC001702') FAIL_CNT
+	            FROM
+	            (
+	               SELECT A.DB_SVR_ID, A.WRK_ID, A.BCK_OPT_CD
+	               FROM T_BCK_WRKCNG_I A ,T_DBSVR_I B
+	               WHERE A.BCK_BSN_DSCD = 'TC000201'
+	               AND B.DB_SVR_ID = A.DB_SVR_ID
+	            )AA
+	            UNION ALL
+	            (
+	               SELECT 
+	                 AA.DB_SVR_ID
+	               , 'TC000303'
+	               , 0 AS WRK_CNT
+	               , 0 AS SCHEDULE_CNT
+	               , 0 AS SUCCESS_CNT
+	               , 0 AS FAIL_CNT
+	               FROM
+	               (
+	                  SELECT A.DB_SVR_ID, A.WRK_ID, A.BCK_OPT_CD
+	                  FROM T_BCK_WRKCNG_I A ,T_DBSVR_I B
+	                  WHERE A.BCK_BSN_DSCD = 'TC000201'
+	                  AND B.DB_SVR_ID = A.DB_SVR_ID
+	               )AA
+	            )
+	         UNION ALL
+	         SELECT 
+	              AA.DB_SVR_ID
+	            , 'TC000302'
+	            , 0 AS WRK_CNT
+	            , 0 AS SCHEDULE_CNT
+	            , 0 AS SUCCESS_CNT
+	            , 0 AS FAIL_CNT
+	            FROM
+	            (
+	               SELECT A.DB_SVR_ID, A.WRK_ID, A.BCK_OPT_CD
+	               FROM T_BCK_WRKCNG_I A ,T_DBSVR_I B
+	               WHERE A.BCK_BSN_DSCD = 'TC000201'
+	               AND B.DB_SVR_ID = A.DB_SVR_ID
+	            )AA
+	         UNION ALL
+	         (
+	         SELECT 
+	              AA.DB_SVR_ID
+	            , 'TC000301'
+	            , 0 AS WRK_CNT
+	            , 0 AS SCHEDULE_CNT
+	            , 0 AS SUCCESS_CNT
+	            , 0 AS FAIL_CNT
+	            FROM
+	            (
+	               SELECT A.DB_SVR_ID, A.WRK_ID, A.BCK_OPT_CD
+	               FROM T_BCK_WRKCNG_I A ,T_DBSVR_I B
+	               WHERE A.BCK_BSN_DSCD = 'TC000201'
+	               AND B.DB_SVR_ID = A.DB_SVR_ID
+	            )AA
+	          )
+      )AAA
+      GROUP BY AAA.DB_SVR_ID, AAA.BCK_OPT_CD    
+      ORDER BY AAA.DB_SVR_ID, AAA.BCK_OPT_CD
+    </select>
+    
+    <select id="selectDashboardScheduleTotal" resultType="int">
+    	SELECT COUNT(*) AS SCD_TOTAL FROM T_WRKEXE_G WRK, T_SCD_M SCD WHERE WRK.SCD_ID = SCD.SCD_ID 
+    </select>
+    
+    <select id="selectDashboardScheduleFail" resultType="int">
+    	SELECT COUNT(*) AS SCD_FAIL FROM T_WRKEXE_G WRK, T_SCD_M SCD WHERE WRK.SCD_ID = SCD.SCD_ID AND EXE_RSLT_CD = 'TC001702'
+    </select>
+    
+    <select id="selectDashboardServerTotal" resultType="int">
+    	SELECT COUNT(*) AS SVR_TOTAL FROM T_AGTCNDT_I 
+    </select>
+    
+    <select id="selectDashboardServerUse" resultType="int">
+    	SELECT COUNT(*) AS SVR_USE FROM T_DBSVRIPADR_I
+    </select>
+    
+    <select id="selectDashboardServerDeath" resultType="int">
+    	SELECT COUNT(*) AS SVR_DEATH FROM T_AGTCNDT_I AGT, T_DBSVRIPADR_I DBSVR
+		WHERE AGT_CNDT_CD = 'TC001102' AND AGT.IPADR = DBSVR.IPADR
+    </select>
+    
+    <select id="selectDashboardBackupTotal" resultType="int">
+    	SELECT COUNT(*) AS BAK_TOTAL FROM T_WRKCNG_I
+    </select>
+    
+    <select id="selectDashboardBackupFail" resultType="int">
+    	SELECT COUNT(*) AS BAK_FAIL FROM T_WRKEXE_G WHERE EXE_RSLT_CD ='TC001702'
+    </select>
+    
+    <select id="selectDashboardBackupNouse" resultType="int">
+    	SELECT COUNT(*) AS BAK_NOTUSE
+  		FROM T_SCD_D A RIGHT OUTER JOIN T_WRKCNG_I B
+   		ON A.WRK_ID = B.WRK_ID
+		WHERE A.SCD_ID IS NULL
+    </select>
+    
+    <select id="selectDashboardServer" resultType="dbServerVO">
+    	SELECT 
+	            DBSVR.DB_SVR_ID
+	            , DBSVR.DB_SVR_NM
+	            , IPADR.IPADR
+	            , IPADR.PORTNO
+	            , IPADR.MASTER_GBN
+	            , DBSVR.DFT_DB_NM
+	            , DBSVR.PGHOME_PTH
+	            , DBSVR.PGDATA_PTH
+	            , DBSVR.SVR_SPR_USR_ID
+	            , DBSVR.SVR_SPR_SCM_PWD
+			    , AGTCNDT.SOCKET_PORT
+		FROM T_DBSVRIPADR_I IPADR LEFT OUTER JOIN T_DBSVR_I DBSVR
+		ON IPADR.DB_SVR_ID = DBSVR.DB_SVR_ID
+		LEFT OUTER JOIN T_AGTCNDT_I AGTCNDT
+		ON IPADR.IPADR =AGTCNDT.IPADR
+		WHERE MASTER_GBN = 'M'
     </select>
 </mapper>

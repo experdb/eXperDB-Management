@@ -1,5 +1,6 @@
 package com.k4m.dx.tcontrol.cmmn_web;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -24,8 +25,11 @@ import com.k4m.dx.tcontrol.backup.service.WorkVO;
 import com.k4m.dx.tcontrol.cmmn.AES256;
 import com.k4m.dx.tcontrol.cmmn.AES256_KEY;
 import com.k4m.dx.tcontrol.cmmn.CmmnUtils;
+import com.k4m.dx.tcontrol.cmmn.client.ClientAdapter;
 import com.k4m.dx.tcontrol.cmmn.client.ClientInfoCmmn;
 import com.k4m.dx.tcontrol.cmmn.client.ClientProtocolID;
+import com.k4m.dx.tcontrol.cmmn.client.ClientTranCodeType;
+import com.k4m.dx.tcontrol.cmmn.serviceproxy.SystemCode;
 import com.k4m.dx.tcontrol.common.service.AgentInfoVO;
 import com.k4m.dx.tcontrol.common.service.CmmnServerInfoService;
 import com.k4m.dx.tcontrol.common.service.HistoryVO;
@@ -87,45 +91,163 @@ public class CmmnController {
 	}
 	
 	/**
-	 * 데시보드화면을 보여준다.
+	 * 대시보드화면을 보여준다.
 	 * @return ModelAndView mv
 	 */	
 	@RequestMapping(value = "/dashboard.do")
 	public ModelAndView dashboard(@ModelAttribute("historyVO") HistoryVO historyVO, HttpServletRequest request, ModelMap model) throws Exception {
-	
-		// 메인 이력 남기기
-		CmmnUtils.saveHistory(request, historyVO);
-		historyVO.setExe_dtl_cd("DX-T0004");
-		accessHistoryService.insertHistory(historyVO);
-		
-		//스케줄 정보
-		DashboardVO scheduleInfoVO = (DashboardVO) dashboardService.selectDashboardScheduleInfo();
-		
-		//백업정보
-		DashboardVO backupInfoVO = (DashboardVO) dashboardService.selectDashboardBackupInfo();
-		
-		DashboardVO vo = new DashboardVO();
-		
-		//DBMS정보
-		List<DashboardVO> serverInfoVO = (List<DashboardVO>) dashboardService.selectDashboardServerInfo(vo);
-		
-		//백업정보(DUMP)
-		List<DashboardVO> backupDumpInfoVO = (List<DashboardVO>) dashboardService.selectDashboardBackupDumpInfo(vo);
-		
-		//백업정보(RMAN)
-		List<DashboardVO> backupRmanInfoVO = (List<DashboardVO>) dashboardService.selectDashboardBackupRmanInfo(vo);
-		
 		ModelAndView mv = new ModelAndView();
+		try {
+			// 메인 이력 남기기
+			CmmnUtils.saveHistory(request, historyVO);
+			historyVO.setExe_dtl_cd("DX-T0004");
+			accessHistoryService.insertHistory(historyVO);
 
-		mv.addObject("scheduleInfo", scheduleInfoVO);
-		mv.addObject("backupInfo", backupInfoVO);
-		mv.addObject("serverInfo", serverInfoVO);
-		mv.addObject("backupDumpInfo", backupDumpInfoVO);
-		mv.addObject("backupRmanInfo", backupRmanInfoVO);
-		
+			AES256 dec = new AES256(AES256_KEY.ENC_KEY);
+
+			// 스케줄 정보
+			DashboardVO scheduleInfoVO = (DashboardVO) dashboardService.selectDashboardScheduleInfo();
+
+			// 백업정보
+			DashboardVO backupInfoVO = (DashboardVO) dashboardService.selectDashboardBackupInfo();
+
+			DashboardVO dashVo = new DashboardVO();
+
+			// DBMS정보(DB전체 개수 조회, audit 설정 조회)
+			List<DashboardVO> serverInfoVOSelect = (List<DashboardVO>) dashboardService.selectDashboardServerInfo(dashVo);
+			List<DashboardVO> serverInfoVO = new ArrayList<DashboardVO>();
+			if(serverInfoVOSelect.size()>0){
+				for(int i=0; i<serverInfoVOSelect.size(); i++){
+					dashVo = new DashboardVO();
+					String db_svr_nm = serverInfoVOSelect.get(i).getDb_svr_nm();
+					List<DbServerVO> resultSet = cmmnServerInfoService.selectDbServerList(db_svr_nm);
+					AgentInfoVO vo = new AgentInfoVO();
+					vo.setIPADR(resultSet.get(i).getIpadr());
+					AgentInfoVO agentInfo = (AgentInfoVO)cmmnServerInfoService.selectAgentInfo(vo);
+					String IP = resultSet.get(i).getIpadr();
+					int PORT = agentInfo.getSOCKET_PORT();
+					JSONObject serverObj = new JSONObject();
+					serverObj.put(ClientProtocolID.SERVER_NAME,resultSet.get(i).getDb_svr_nm());
+					serverObj.put(ClientProtocolID.SERVER_IP,resultSet.get(i).getIpadr());
+					serverObj.put(ClientProtocolID.SERVER_PORT,resultSet.get(i).getPortno());
+					serverObj.put(ClientProtocolID.DATABASE_NAME,resultSet.get(i).getDft_db_nm());
+					serverObj.put(ClientProtocolID.USER_ID,resultSet.get(i).getSvr_spr_usr_id());
+					serverObj.put(ClientProtocolID.USER_PWD,dec.aesDecode(resultSet.get(i).getSvr_spr_scm_pwd()));
+					ClientInfoCmmn cic = new ClientInfoCmmn();
+					Map<String, Object> result = new HashMap<String, Object>();
+					result = cic.db_List(serverObj, IP, PORT);
+					JSONArray data = (JSONArray) result.get("data");
+					
+					ClientAdapter CA = new ClientAdapter(IP, PORT);
+					JSONObject objList;
+					CA.open();
+					objList = CA.dxT007(ClientTranCodeType.DxT007, ClientProtocolID.COMMAND_CODE_R, serverObj );
+					CA.close();
+					String strResultCode = (String)objList.get(ClientProtocolID.RESULT_CODE);
+					//strResultCode=0 이면 감사 Enabled 아니면 - 표시
+					if(strResultCode.equals("0")){
+						dashVo.setAudit_state("Enabled");
+					}else{
+						dashVo.setAudit_state("-");
+					}
+					dashVo.setDb_svr_nm(serverInfoVOSelect.get(i).getDb_svr_nm());
+					dashVo.setIpadr(serverInfoVOSelect.get(i).getIpadr());
+					dashVo.setDb_cnt(serverInfoVOSelect.get(i).getDb_cnt());
+					dashVo.setUndb_cnt(data.size()-serverInfoVOSelect.get(i).getDb_cnt());
+					dashVo.setConnect_cnt(serverInfoVOSelect.get(i).getConnect_cnt());
+					dashVo.setExecute_cnt(serverInfoVOSelect.get(i).getExecute_cnt());
+					dashVo.setLst_mdf_dtm(serverInfoVOSelect.get(i).getLst_mdf_dtm());
+					dashVo.setAgt_cndt_cd(serverInfoVOSelect.get(i).getAgt_cndt_cd());
+					serverInfoVO.add(dashVo);
+				}
+			}
+
+			
+			// 백업정보(DUMP)
+			List<DashboardVO> backupDumpInfoVO = (List<DashboardVO>) dashboardService.selectDashboardBackupDumpInfo(dashVo);
+
+			// 백업정보(RMAN)
+			List<DashboardVO> backupRmanInfoVO = (List<DashboardVO>) dashboardService.selectDashboardBackupRmanInfo(dashVo);
+
+			// 관리상태_작업관리(전체스케줄수행건수)
+			int scd_total = dashboardService.selectDashboardScheduleTotal();
+			// 관리상태_작업관리(스케줄실패건수)
+			int scd_fail = dashboardService.selectDashboardScheduleFail();
+			// 작업관리 식 : 100-((실패건수/전체수행건수)*100)
+			int wrk_state = (int) (100 - ((double) scd_fail / (double) scd_total * 100));
+			System.out.println("작업관리 : " + wrk_state+"%");
+
+			// 관리상태_서버관리(전체서버건수)
+			int svr_total = dashboardService.selectDashboardServerTotal();
+			// 관리상태_서버관리(사용서버건수)
+			int svr_use = dashboardService.selectDashboardServerUse();
+			// 관리상태_서버관리(중지되어있는 서버수)
+			int svr_death = dashboardService.selectDashboardServerDeath();
+			int svr_state = 0;
+			if (svr_death == 0) {
+				Boolean auditCheck = true;
+				List<DbServerVO> dbServerVO = (List<DbServerVO>) dashboardService.selectDashboardServer();
+				for (int i = 0; i < dbServerVO.size(); i++) {
+					String Ip = dbServerVO.get(i).getIpadr();
+					int port = dbServerVO.get(i).getSocket_port();
+					JSONObject serverObj = new JSONObject();
+					JSONObject objSettingInfo = new JSONObject();
+					serverObj.put(ClientProtocolID.SERVER_NAME, dbServerVO.get(i).getDb_svr_nm());
+					serverObj.put(ClientProtocolID.SERVER_IP, dbServerVO.get(i).getIpadr());
+					serverObj.put(ClientProtocolID.SERVER_PORT, dbServerVO.get(i).getPortno());
+					serverObj.put(ClientProtocolID.DATABASE_NAME, dbServerVO.get(i).getDft_db_nm());
+					serverObj.put(ClientProtocolID.USER_ID, dbServerVO.get(i).getSvr_spr_usr_id());
+					serverObj.put(ClientProtocolID.USER_PWD, dec.aesDecode(dbServerVO.get(i).getSvr_spr_scm_pwd()));
+					JSONObject objList;
+					ClientAdapter CA = new ClientAdapter(Ip, port);
+					CA.open();
+					objList = CA.dxT007(ClientTranCodeType.DxT007, ClientProtocolID.COMMAND_CODE_R, serverObj,objSettingInfo);
+					String strResultCode = (String) objList.get(ClientProtocolID.RESULT_CODE);
+					System.out.println("RESULT_CODE : " + strResultCode);
+					
+					CA.close();
+
+					if (!strResultCode.equals("0")) {
+						auditCheck = false;
+					}
+				}
+				// audit 설치 되어 있을 시 -> 서버관리 식: (관리건수/총건수)*100
+				if (auditCheck == true) {
+					 svr_state = (int) ((double)((double)svr_use/(double)svr_total)*100);
+				} else {
+					// audit 설치 안되어 있을 시 -> 감시로 표시
+					svr_state = 35;
+				}
+			}
+			System.out.println("서버관리 : " + svr_state+"%");
+			
+			// 관리상태_백업관리(전체등록건수)
+			int bak_total = dashboardService.selectDashboardBackupTotal();
+			// 관리상태_백업관리(실패건수)
+			int bak_fail = dashboardService.selectDashboardBackupFail();
+			// 관리상태_백업관리(사용하지않는건수)
+			int bak_nouse = dashboardService.selectDashboardBackupNouse();
+			//백업관리 식 : (미등록건수/등록건수*100)-(실패건수*5)
+			int bak_state = (int) ((double) bak_nouse / (double) bak_total * 100) - (bak_fail * 5);
+			System.out.println("백업관리 : " + bak_state+"%");
+
+			mv.addObject("scheduleInfo", scheduleInfoVO);
+			mv.addObject("backupInfo", backupInfoVO);
+			mv.addObject("serverInfo", serverInfoVO);
+			mv.addObject("backupDumpInfo", backupDumpInfoVO);
+			mv.addObject("backupRmanInfo", backupRmanInfoVO);
+			mv.addObject("wrk_state", wrk_state);
+			mv.addObject("svr_state", svr_state);
+			mv.addObject("bak_state", bak_state);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 		mv.setViewName("dashboard");
-		return mv;	
+		return mv;
 	}
+
+
+	
 	
 
 	
@@ -455,7 +577,7 @@ public class CmmnController {
 	
 		
 	/**
-	 * 데시보드 암호화통계
+	 * 대시보드 암호화통계
 	 * @param 
 	 * @return resultSet
 	 * @throws Exception

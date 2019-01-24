@@ -165,6 +165,46 @@
 					html1+=		'</div>';
 					html1+=	'</td>';
 					html1+='</tr>';
+					
+					//복구관리 작업 진행 중...
+					html1+='<tr>';
+					html1+=	'<th scope="row">긴급복구</th>';
+					html1+=	'<td>';
+					html1+=		'<div class="inp_chk">';
+					html1+=			'<input type="checkbox" id="'+item.db_svr_nm+'_emergency_restore" name="emergency_restore_aut" onClick="fn_userCheck();" />';
+					html1+=			'<label for="'+item.db_svr_nm+'_emergency_restore"></label>';
+					html1+=		'</div>';
+					html1+=	'</td>';
+					html1+='</tr>';
+					html1+='<tr>';
+					html1+=	'<th scope="row">시점복구</th>';
+					html1+=	'<td>';
+					html1+=		'<div class="inp_chk">';
+					html1+=			'<input type="checkbox" id="'+item.db_svr_nm+'_point_restore" name="point_restore_aut" onClick="fn_userCheck();" />';
+					html1+=			'<label for="'+item.db_svr_nm+'_point_restore"></label>';
+					html1+=		'</div>';
+					html1+=	'</td>';
+					html1+='</tr>';
+					html1+='<tr>';
+					html1+=	'<th scope="row">덤프복구</th>';
+					html1+=	'<td>';
+					html1+=		'<div class="inp_chk">';
+					html1+=			'<input type="checkbox" id="'+item.db_svr_nm+'_dump_restore" name="dump_restore_aut" onClick="fn_userCheck();" />';
+					html1+=			'<label for="'+item.db_svr_nm+'_dump_restore"></label>';
+					html1+=		'</div>';
+					html1+=	'</td>';
+					html1+='</tr>';
+					html1+='<tr>';
+					html1+=	'<th scope="row">복구이력</th>';
+					html1+=	'<td>';
+					html1+=		'<div class="inp_chk">';
+					html1+=			'<input type="checkbox" id="'+item.db_svr_nm+'_restore_hist" name="restore_hist_aut" onClick="fn_userCheck();" />';
+					html1+=			'<label for="'+item.db_svr_nm+'_restore_hist"></label>';
+					html1+=		'</div>';
+					html1+=	'</td>';
+					html1+='</tr>';
+					
+	
 					html1+='<tr>';
 					html1+=	'<th scope="row"><spring:message code="menu.access_control" /></th>';
 					html1+=	'<td>';
@@ -245,7 +285,12 @@
 	
 	function fn_allCheck(db_svr_nm){
 		fn_userCheck();
-		var array = new Array("_bck_cng","_bck_hist","_bck_scdr","_acs_cntr","_policy_change_his","_adt_cng","_adt_hist","_script_cng","_script_his");
+		if("${sessionScope.session.pg_audit}"== "Y"){
+			var array = new Array("_bck_cng","_bck_hist","_bck_scdr","_acs_cntr","_policy_change_his","_adt_cng","_adt_hist","_script_cng","_script_his");
+		}else{
+			var array = new Array("_bck_cng","_bck_hist","_bck_scdr","_acs_cntr","_policy_change_his","_script_cng","_script_his");
+		}
+		
 		for(var i=0; i<array.length; i++){
 			if ($("#"+db_svr_nm).prop("checked")) {
 					document.getElementById(db_svr_nm+array[i]).checked = true;
@@ -399,8 +444,10 @@
 			 var bck_scdr_aut = $("input[name='bck_scdr_aut']");
 			 var acs_cntr_aut = $("input[name='acs_cntr_aut']");
 			 var policy_change_his_aut = $("input[name='policy_change_his_aut']");
-			 var adt_cng_aut = $("input[name='adt_cng_aut']");
-			 var adt_hist_aut = $("input[name='adt_hist_aut']");
+			 if("${sessionScope.session.pg_audit}"== "Y"){
+				 var adt_cng_aut = $("input[name='adt_cng_aut']");
+				 var adt_hist_aut = $("input[name='adt_hist_aut']");
+			 }
 			 var script_cng_aut = $("input[name='script_cng_aut']");
 			 var script_his_aut = $("input[name='script_his_aut']");
 			 
@@ -445,21 +492,21 @@
 			        }else{
 			        	rows.policy_change_his_aut_yn = "N";
 			        }
-			     
-			     if(adt_cng_aut[i].checked){ //선택되어 있으면 배열에 값을 저장함
-			    	 	rows.adt_cng_aut_yn = "Y";   
-			    	 	autCheck++;
-			        }else{
-			        	rows.adt_cng_aut_yn = "N";
-			        }
-			     
-			     if(adt_hist_aut[i].checked){ //선택되어 있으면 배열에 값을 저장함
-			    	 	rows.adt_hist_aut_yt = "Y";   
-			    	 	autCheck++;
-			        }else{
-			        	rows.adt_hist_aut_yt = "N";
-			        }
-			     
+			     if("${sessionScope.session.pg_audit}"== "Y"){
+				     if(adt_cng_aut[i].checked){ //선택되어 있으면 배열에 값을 저장함
+				    	 	rows.adt_cng_aut_yn = "Y";   
+				    	 	autCheck++;
+				        }else{
+				        	rows.adt_cng_aut_yn = "N";
+				        }
+				     
+				     if(adt_hist_aut[i].checked){ //선택되어 있으면 배열에 값을 저장함
+				    	 	rows.adt_hist_aut_yt = "Y";   
+				    	 	autCheck++;
+				        }else{
+				        	rows.adt_hist_aut_yt = "N";
+				        }
+			     }
 			     if(script_cng_aut[i].checked){ //선택되어 있으면 배열에 값을 저장함
 			    	 	rows.script_cng_aut_yn = "Y";   
 			    	 	autCheck++;
@@ -567,6 +614,7 @@
  				}
  			},
  			success : function(result) {
+ 				$("input[type=checkbox]").prop("checked",false);
  				userTable.clear().draw();
  				userTable.rows.add(result).draw();
  			}

@@ -99,6 +99,8 @@ function fn_selectSecurityStatistics(today){
 		success : function(data) {
 				if(data.resultCode == "0000000000"){
 				 	var html ="";
+				 	var success=0;
+				 	var fail=0;
 					for(var i=0; i<data.list.length; i++){
 						html += '<tr>';
 						html +='<td></td>';
@@ -115,7 +117,12 @@ function fn_selectSecurityStatistics(today){
 						}
 						html += '</tr>';
 						$( "#col" ).html(html);
+						
+						success += Number(data.list[i].encryptSuccessCount)+Number(data.list[i].decryptSuccessCount);
+						fail += Number(data.list[i].encryptFailCount)+Number(data.list[i].decryptFailCount);
 					} 
+					
+					//alert("성공 : "+success+"  실패 : "+fail);
 				}else if(data.resultCode == "8000000002"){
 					alert("<spring:message code='message.msg05' />");
 					location.href="/";
@@ -152,7 +159,7 @@ function fn_selectSecurityStatistics(today){
 			<div class="main_grp">
 				<div class="main_info">
 					<div class="m_info_lt">
-						<p class="m_tit">관리상태</p>
+						<p class="m_tit" >관리상태</p>
 							<ul>
 								<li style="width: 400px;">
 									<table class="list3">
@@ -173,21 +180,21 @@ function fn_selectSecurityStatistics(today){
 										<tbody>
 											<tr>
 												<td>작업관리</td>
-												<td></td>
-												<td></td>
-												<td></td>
+												<c:if test="${wrk_state<=33}"><td style="background-color: #FF4848;"></td><td></td><td></td></c:if>
+												<c:if test="${wrk_state>=34 && wrk_state<=66}"><td></td><td style="background-color: #FFFF6C;"></td><td></td></c:if>
+												<c:if test="${wrk_state>=67 && wrk_state<=100}"><td></td><td></td><td style="background-color: #89F781;"></td></c:if>
 											</tr>
 											<tr>
 												<td>서버관리</td>
-												<td></td>
-												<td></td>
-												<td></td>
+												<c:if test="${svr_state<=33}"><td style="background-color: #FF4848;"></td><td></td><td></td></c:if>
+												<c:if test="${svr_state>=34 && svr_state<=66}"><td></td><td style="background-color: #FFFF6C;"></td><td></td></c:if>
+												<c:if test="${svr_state>=67 && svr_state<=100}"><td></td><td></td><td style="background-color: #89F781;"></td></c:if>
 											</tr>
 											<tr>
 												<td>백업관리</td>
-												<td></td>
-												<td></td>
-												<td></td>
+												<c:if test="${bak_state<=33}"><td style="background-color: #FF4848;"></td><td></td><td></td></c:if>
+												<c:if test="${bak_state>=34 && bak_state<=66}"><td></td><td style="background-color: #FFFF6C;"></td><td></td></c:if>
+												<c:if test="${bak_state>=67 && bak_state<=100}"><td></td><td></td><td style="background-color: #89F781;"></td></c:if>
 											</tr>
 											<tr>
 												<td>암호화관리</td>
@@ -247,8 +254,7 @@ function fn_selectSecurityStatistics(today){
 						<ul>
 							<li>
 								<p class="state">
-									<img src="../images/ico_state_09.png" alt="Backup" /><span>Schedule
-									</span>
+									<img src="../images/ico_state_09.png" alt="Backup" /><span>Schedule</span>
 								</p>
 								<a href="/selectScheduleListView.do">
 								<c:choose>
@@ -455,7 +461,6 @@ function fn_selectSecurityStatistics(today){
 								<col style="width: 6%;" />
 								<col style="width: 6%;" />
 								<col style="width: 6%;" />
-								<col style="width: 6%;" />
 								<col style="width: 14%;" />
 
 								<col style="width: 12%;" />
@@ -464,10 +469,9 @@ function fn_selectSecurityStatistics(today){
 							</colgroup>
 							<thead>
 								<tr>
-									<th scope="col" rowspan="2"><spring:message code="common.dbms_name" /> </th>
+									<th scope="col" rowspan="2"><spring:message code="common.dbms_name" /></th>
 									<th scope="col" rowspan="2">IP</th>
-									<th scope="col" rowspan="2">서버유형</th>
-									<th scope="col" colspan="2"><spring:message code="dashboard.management_db" />  </th>
+									<th scope="col" colspan="2"><spring:message code="dashboard.management_db" /></th>
 									<th scope="col" colspan="2">데이터전송</th>
 									<th scope="col" rowspan="2">감사</th>
 									<th scope="col" rowspan="2">접근정책<br>최종변경일자</th>
@@ -490,16 +494,11 @@ function fn_selectSecurityStatistics(today){
 								<tr>
 									<td>${data.db_svr_nm}</td>
 									<td>${data.ipadr}</td>
-									<td><c:if test="${data.master_gbn=='M'}">Master</c:if>
-									<c:if test="${data.master_gbn=='S'}">Slave</c:if></td>
 									<td>${data.db_cnt}</td>
-									<td></td>
+									<td>${data.undb_cnt}</td>
 									<td>${data.connect_cnt}</td>
 									<td>${data.execute_cnt}</td>
-									<td>
-									<c:if test="${data.access_cnt == 0}">Disabled</c:if>
-									<c:if test="${data.access_cnt != 0}">Enabled</c:if>
-									</td>
+									<td>${data.audit_state}</td>
 									<td>${data.lst_mdf_dtm}</td>
 									<td>
 									<c:if test="${data.agt_cndt_cd == null}">
@@ -539,12 +538,59 @@ function fn_selectSecurityStatistics(today){
 							<thead>
 								<tr>
 									<th scope="col" rowspan="2"><spring:message code="common.dbms_name" /> </th>
+									<th scope="col" colspan="5">온라인백업</th>						
+								</tr>
+								<tr>
+									<th scope="col">옵션</th>
+									<th scope="col"><spring:message code="common.registory" /></th>
+									<th scope="col">적용</th>
+									<th scope="col"><spring:message code="common.success" /></th>
+									<th scope="col"><spring:message code="common.failed" /> </th>
+								</tr>
+							</thead>
+							<tbody>
+								<c:if test="${fn:length(backupRmanInfo) == 0}">
+										<tr>
+											<td colspan="6"><spring:message code="message.msg01" /></td>
+										</tr>
+								</c:if>
+								
+								<c:forEach var="data" items="${backupRmanInfo}" varStatus="status">
+									<tr>
+										<td>${data.db_svr_nm}</td>
+										<td>
+											<c:if test="${data.bck_opt_cd == 'TC000301'}">FULL</c:if>
+											<c:if test="${data.bck_opt_cd == 'TC000302'}">INCREMENTAL</c:if>
+											<c:if test="${data.bck_opt_cd == 'TC000303'}">ARCHIVE</c:if>
+										</td>
+										<td>${data.wrk_cnt}</td>
+										<td>${data.schedule_cnt}</td>
+										<td>${data.success_cnt}</td>
+										<td>${data.fail_cnt}</td>
+									</tr>
+								</c:forEach>
+								
+							</tbody>
+						</table>
+						<table class="list" border="1">
+							<caption><spring:message code="dashboard.dbms_info" /></caption>
+							<colgroup>
+								<col style="width: 10%;" />
+								<col style="width: 10%;" />
+								<col style="width: 6%;" />
+								<col style="width: 6%;" />
+								<col style="width: 6%;" />
+								<col style="width: 6%;" />
+							</colgroup>
+							<thead>
+								<tr>
+									<th scope="col" rowspan="2"><spring:message code="common.dbms_name" /> </th>
 									<th scope="col" rowspan="2">DB</th>
 									<th scope="col" colspan="4">덤프백업</th>						
 								</tr>
 								<tr>
 									<th scope="col"><spring:message code="common.registory" /></th>
-									<th scope="col">스케줄</th>
+									<th scope="col">적용</th>
 									<th scope="col"><spring:message code="common.success" /></th>
 									<th scope="col"><spring:message code="common.failed" /> </th>
 								</tr>
@@ -567,58 +613,13 @@ function fn_selectSecurityStatistics(today){
 								</c:forEach>
 							</tbody>
 						</table>
-						<table class="list" border="1">
-							<caption><spring:message code="dashboard.dbms_info" /></caption>
-							<colgroup>
-								<col style="width: 10%;" />
-								<col style="width: 10%;" />
-								<col style="width: 6%;" />
-								<col style="width: 6%;" />
-								<col style="width: 6%;" />
-								<col style="width: 6%;" />
-							</colgroup>
-							<thead>
-								<tr>
-									<th scope="col" rowspan="2"><spring:message code="common.dbms_name" /> </th>
-									<th scope="col" colspan="5">온라인백업</th>						
-								</tr>
-								<tr>
-									<th scope="col">옵션</th>
-									<th scope="col"><spring:message code="common.registory" /></th>
-									<th scope="col">스케줄</th>
-									<th scope="col"><spring:message code="common.success" /></th>
-									<th scope="col"><spring:message code="common.failed" /> </th>
-								</tr>
-							</thead>
-							<tbody>
-								<c:if test="${fn:length(backupRmanInfo) == 0}">
-										<tr>
-											<td colspan="6"><spring:message code="message.msg01" /></td>
-										</tr>
-								</c:if>
-								<c:forEach var="data" items="${backupRmanInfo}" varStatus="status">
-									<tr>
-										<td>${data.db_svr_nm}</td>
-										<td>
-										<c:if test="${data.bck_opt_cd == 'TC000301'}">FULL</c:if>
-										<c:if test="${data.bck_opt_cd == 'TC000302'}">incremental</c:if>
-										<c:if test="${data.bck_opt_cd == 'TC000303'}">archive</c:if>
-										</td>
-										<td>${data.wrk_cnt}</td>
-										<td>${data.schedule_cnt}</td>
-										<td>${data.success_cnt}</td>
-										<td>${data.fail_cnt}</td>
-									</tr>
-								</c:forEach>
-							</tbody>
-						</table>
 					</div>
 				</div>
 				
 				
 				<!-- eXperDB Encrypt 상태 -->
 				<div class="main_server_info" >
-					<p class="tit">eXperDB Encrypt <%-- <spring:message code="properties.status" /> --%> <span id="today" style="float: right; padding-right: 1%;"></span></p>
+					<p class="tit">암호화 정보 <%-- <spring:message code="properties.status" /> --%> <span id="today" style="float: right; padding-right: 1%;"></span></p>
 					
 					<div class="inner">
 						<table class="list" style="width: 320px;" id="encryptDashbaordServer">
