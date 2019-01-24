@@ -41,6 +41,8 @@
 		<typeAlias alias="ipadrVO" type="com.k4m.dx.tcontrol.admin.dbserverManager.service.IpadrVO" /> 
 		<typeAlias alias="wrkExeVO" type="com.k4m.dx.tcontrol.functions.schedule.service.WrkExeVO" /> 
 		<typeAlias alias="scriptVO" type="com.k4m.dx.tcontrol.script.service.ScriptVO" /> 
+		<typeAlias alias="restoreRmanVO" type="com.k4m.dx.tcontrol.restore.service.RestoreRmanVO" /> 
+		<typeAlias alias="restoreDumpVO" type="com.k4m.dx.tcontrol.restore.service.RestoreDumpVO" /> 
     </typeAliases>
     
  	<mappers>
@@ -84,6 +86,10 @@
 		
 		<!-- script -->
 		<mapper resource="egovframework/sqlmap/mappers/script/scriptSql.xml" />
+		
+		<!-- restore -->
+		<mapper resource="egovframework/sqlmap/mappers/restore/restoreRmanSql.xml" />
+		<mapper resource="egovframework/sqlmap/mappers/restore/restoreDumpSql.xml" />
 		
 	</mappers>
 </configuration>

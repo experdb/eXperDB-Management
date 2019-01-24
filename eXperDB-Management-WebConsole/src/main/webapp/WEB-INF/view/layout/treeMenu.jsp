@@ -255,9 +255,19 @@ $(window.document).ready(function() {
 					}
 					if(aut.length != 0 && aut[index].bck_scdr_aut_yn == "Y"){
 					html1+='			<li class="ico2_2" id="schedulerView'+item.db_svr_id+'"><a href=/schedulerView.do?db_svr_id='+item.db_svr_id+'&db_svr_nm='+item.db_svr_nm+' id="schedulerView'+item.db_svr_id+'c" onClick=javascript:fn_GoLink("schedulerView'+item.db_svr_id+'"); target="main"><img src="../images/ico_main_tit_1.png" id="treeImg"><spring:message code="menu.backup_scheduler"/></a>';
-					}
+					}		
 					html1+='				</ul>';
 					html1+='			</li>';
+					
+					html1+='			<li class="ico2_2"><a href="#n"><img src="../images/ico_lnb_6.png" id="treeImg">복구관리</a>';
+					html1+='				<ul class="depth_3">';
+					html1+='                      <li class="ico3_1" id="emergencyRestore'+item.db_svr_id+'"><a href=/emergencyRestore.do?db_svr_id='+item.db_svr_id+' id="emergencyRestore'+item.db_svr_id+'c" onClick=javascript:fn_GoLink("emergencyRestore'+item.db_svr_id+'"); target="main"><img src="../images/ico_lnb_13.png" id="treeImg">긴급복구</a></li>';
+					html1+='                      <li class="ico3_1" id="timeRestore'+item.db_svr_id+'"><a href=/timeRestore.do?db_svr_id='+item.db_svr_id+' id="timeRestore'+item.db_svr_id+'c" onClick=javascript:fn_GoLink("timeRestore'+item.db_svr_id+'"); target="main"><img src="../images/ico_lnb_13.png" id="treeImg">시점복구</a></li>';
+					html1+='                      <li class="ico3_1" id="dumpRestore'+item.db_svr_id+'"><a href=/dumpRestore.do?db_svr_id='+item.db_svr_id+' id="dumpRestore'+item.db_svr_id+'c" onClick=javascript:fn_GoLink("dumpRestore'+item.db_svr_id+'"); target="main"><img src="../images/ico_lnb_13.png" id="treeImg">덤프복구</a></li>';
+					html1+='                      <li class="ico3_1" id="restoreHistory'+item.db_svr_id+'"><a href=/restoreHistory.do?db_svr_id='+item.db_svr_id+' id="restoreHistory'+item.db_svr_id+'c" onClick=javascript:fn_GoLink("restoreHistory'+item.db_svr_id+'"); target="main"><img src="../images/ico_lnb_13.png" id="treeImg">복구이력</a></li>';
+					html1+='				</ul>';
+					html1+='			</li>';
+					
 					html1+='			<li class="ico2_2"><a href="#n"><img src="../images/ico_lnb_7.png" id="treeImg"><spring:message code="menu.access_control_management"/></a>';
 					html1+='				<ul class="depth_3">';
 					if(aut.length != 0 && aut[index].acs_cntr_aut_yn == "Y"){

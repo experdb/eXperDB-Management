@@ -38,7 +38,7 @@ public class DBPasswordCreate {
 	   // String password = pbeEnc.encrypt("edcsusr");
 	    
 	    //운영
-	    String url = pbeEnc.encrypt("jdbc:postgresql://192.168.56.108:5433/experdb");
+	    String url = pbeEnc.encrypt("jdbc:postgresql://192.168.56.117:5432/experdb");
 	    String username = pbeEnc.encrypt("experdb");
 	    String password = pbeEnc.encrypt("experdb");
 	 
@@ -46,9 +46,9 @@ public class DBPasswordCreate {
 	    System.out.println(username);
 	    System.out.println(password);
 	    
-	    System.out.println(pbeEnc.decrypt("Zv4WF7Q+mnxq2qAOdTnoAu+tZ8Rg9JT3197gC13dJF3fiqIbXK+CCP3fmlyea4upTfPBZ/1C2YSbC1UG27reqg=="));
-	    System.out.println(pbeEnc.decrypt("kS1kaJjomMTeq+SuGjFZrQ=="));
-	    System.out.println(pbeEnc.decrypt("2BVLsuF33v5EQXml+f6hjQ=="));
+	    System.out.println(pbeEnc.decrypt("SeODHmBB+FuGQ229Al8UEz4Q2kCF7EvZ7oi1jtlsioEwKjRMDndnJVA0xJoN2MplW3Ru/GSsttI="));
+	    System.out.println(pbeEnc.decrypt("cYiqYw05VLHy64gH3dXlwA=="));
+	    System.out.println(pbeEnc.decrypt("g5XW2XY8QY/m1WDv/jLAKg=="));
 	    
 	    
 
