@@ -142,4 +142,8 @@ public class SystemServiceImpl implements SystemService{
 	public void updateRMAN_RESTORE_CNDT(RmanRestoreVO vo) throws Exception {
 		systemDAO.updateRMAN_RESTORE_CNDT(vo);
 	}
+	
+	public void updateRMAN_RESTORE_EXELOG(RmanRestoreVO vo) throws Exception {
+		systemDAO.updateRMAN_RESTORE_EXELOG(vo);
+	}
 }

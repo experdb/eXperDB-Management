@@ -97,4 +97,10 @@ public class SystemDAO {
 		session.update("system.updateRMAN_RESTORE_CNDT", vo);
 	}
 	
+	public void updateRMAN_RESTORE_EXELOG(RmanRestoreVO vo) throws Exception {
+		session.update("system.updateRMAN_RESTORE_EXELOG", vo);
+	}
+	
+	
+	
 }

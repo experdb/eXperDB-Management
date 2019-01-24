@@ -511,5 +511,18 @@
 		WHERE
 			 RESTORE_SN = #{RESTORE_SN}
     </update>
+    
+    <update id="updateRMAN_RESTORE_EXELOG"  parameterType="RmanRestoreVO">
+   		/**
+	 	* Query ID : updateRMAN_RESTORE_EXELOG
+	 	* Description : rman restore exelog update
+	 	* Author : 박태혁
+	 	**/
+		UPDATE T_RMAN_RESTORE
+		SET
+			EXELOG = #{EXELOG}
+		WHERE
+			 RESTORE_SN = #{RESTORE_SN}
+    </update>
 	
 </mapper>

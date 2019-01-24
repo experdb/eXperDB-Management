@@ -129,6 +129,13 @@ public class RunCommandExecNoWait extends Thread {
 				out.close();
 				strReturnVal = "success";
 			}
+			
+			RmanRestoreVO logVo = new RmanRestoreVO();
+			logVo.setRESTORE_SN(intRestore_sn);
+			logVo.setEXELOG(strResult);
+			
+			// exelog update
+			service.updateRMAN_RESTORE_EXELOG(logVo);
 
 			this.returnMessage = strResult;
 			this.retVal = strReturnVal;

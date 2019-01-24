@@ -154,4 +154,12 @@ public interface SystemService {
 	 * @throws Exception
 	 */
 	public void updateRMAN_RESTORE_CNDT(RmanRestoreVO vo) throws Exception;
+	
+	/**
+	 * pg_rman exelog update
+	 * @param vo
+	 * @throws Exception
+	 */
+	public void updateRMAN_RESTORE_EXELOG(RmanRestoreVO vo) throws Exception;
+	
 }
