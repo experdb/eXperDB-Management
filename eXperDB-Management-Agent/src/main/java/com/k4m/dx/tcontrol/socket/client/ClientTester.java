@@ -2358,17 +2358,17 @@ public class ClientTester {
 			
 			//RESTORE_DIR
 			String RESTORE_DIR = "/Rman_Restore";
-			RESTORE_DIR = "";
+			//RESTORE_DIR = "";
 			jObj.put(ClientProtocolID.RESTORE_DIR, RESTORE_DIR);
 			
 			//RESTORE_SN
 			String RESTORE_SN = "2";
 			jObj.put(ClientProtocolID.RESTORE_SN, RESTORE_SN);
 			//RESTORE_FLAG
-			String RESTORE_FLAG = "0";
+			String RESTORE_FLAG = "1";
 			jObj.put(ClientProtocolID.RESTORE_FLAG, RESTORE_FLAG);
 			//TIMELINE
-			String TIMELINE = "";
+			String TIMELINE = "2019-01-28 11:22:33.000";
 			jObj.put(ClientProtocolID.TIMELINE, TIMELINE);
 			//PGDATA
 			String PGDATA = RESTORE_DIR + "/experdata/data";
@@ -2384,7 +2384,7 @@ public class ClientTester {
 			jObj.put(ClientProtocolID.PGRBAK, PGRBAK);
 			
 			//ASIS_FLAG
-			String ASIS_FLAG = "0";
+			String ASIS_FLAG = "1";
 			jObj.put(ClientProtocolID.ASIS_FLAG, ASIS_FLAG);
 			
 			

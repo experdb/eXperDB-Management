@@ -97,7 +97,7 @@ public class DxT028 extends SocketCtl {
 		String ARCLOG = "--arclog-path=" + strPGALOG;
 		String SRVLOG = "--srvlog-path=" + strSRVLOG;
 		String PGRBAK = "--backup-path=" + strPGRBAK;
-		String TIMELINE = "--recovery-target-time=" + strTIMELINE;
+		String TIMELINE = "--recovery-target-time='" + strTIMELINE + "'";
 		String logDir = "../logs/pg_resLog/" ;
 		String strLogFileName = "restore_" + strRestore_sn + ".log";
 		
