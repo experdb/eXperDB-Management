@@ -2358,10 +2358,11 @@ public class ClientTester {
 			
 			//RESTORE_DIR
 			String RESTORE_DIR = "/Rman_Restore";
+			RESTORE_DIR = "";
 			jObj.put(ClientProtocolID.RESTORE_DIR, RESTORE_DIR);
 			
 			//RESTORE_SN
-			String RESTORE_SN = "1";
+			String RESTORE_SN = "2";
 			jObj.put(ClientProtocolID.RESTORE_SN, RESTORE_SN);
 			//RESTORE_FLAG
 			String RESTORE_FLAG = "0";
@@ -2383,7 +2384,7 @@ public class ClientTester {
 			jObj.put(ClientProtocolID.PGRBAK, PGRBAK);
 			
 			//ASIS_FLAG
-			String ASIS_FLAG = "1";
+			String ASIS_FLAG = "0";
 			jObj.put(ClientProtocolID.ASIS_FLAG, ASIS_FLAG);
 			
 			

@@ -101,6 +101,8 @@ public class DxT028 extends SocketCtl {
 		String logDir = "../logs/pg_resLog/" ;
 		String strLogFileName = "restore_" + strRestore_sn + ".log";
 		
+		socketLogger.info("strRestore_sn : " + strRestore_sn);
+		
 		FileUtil.createFileDir(logDir);
 		
 		StringBuffer sbRestoreCmd = new StringBuffer();
