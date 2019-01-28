@@ -14,9 +14,9 @@ import com.k4m.dx.tcontrol.db.repository.vo.RmanRestoreVO;
 import com.k4m.dx.tcontrol.socket.ProtocolID;
 import com.k4m.dx.tcontrol.socket.SocketCtl;
 import com.k4m.dx.tcontrol.socket.TranCodeType;
-import com.k4m.dx.tcontrol.util.ExecRmanReplaceTableSpace;
 import com.k4m.dx.tcontrol.util.FileUtil;
 import com.k4m.dx.tcontrol.util.RepTableSpaceWrap;
+import com.k4m.dx.tcontrol.util.RepTableSpaceWrapEndpoint;
 import com.k4m.dx.tcontrol.util.RunCommandExecNoWait;
 
 /**
@@ -70,23 +70,18 @@ public class DxT028 extends SocketCtl {
 		//기존/신규 구분
 		String strASIS_FLAG = (String) jObj.get(ProtocolID.ASIS_FLAG);
 		
-		String strRepDir = "";
-		
-		if(strASIS_FLAG.equals("1")) {
-			strRepDir = strRESTORE_DIR;
-		}
-		
+
 		//백업경로
-		String strPGRBAK = strRepDir + (String) jObj.get(ProtocolID.PGRBAK);
+		String strPGRBAK = (String) jObj.get(ProtocolID.PGRBAK);
 		
 		// location of the database storage area
-		String strPGDATA = strRepDir + (String) jObj.get(ProtocolID.PGDATA);
+		String strPGDATA = (String) jObj.get(ProtocolID.PGDATA);
 		
 		//location of archive WAL storage area
-		String strPGALOG = strRepDir + (String) jObj.get(ProtocolID.PGALOG);
+		String strPGALOG = (String) jObj.get(ProtocolID.PGALOG);
 		
 		//location of server log storage area
-		String strSRVLOG = strRepDir + (String) jObj.get(ProtocolID.SRVLOG);
+		String strSRVLOG = (String) jObj.get(ProtocolID.SRVLOG);
 		
 		//복구상태 긴급복구(0), 시점복구(1)
 		String strRESTORE_FLAG = (String) jObj.get(ProtocolID.RESTORE_FLAG);
@@ -111,12 +106,17 @@ public class DxT028 extends SocketCtl {
 		StringBuffer sbRestoreCmd = new StringBuffer();
 		sbRestoreCmd.append("pg_rman restore")
 		                .append(SPACE).append(VERBOSE)
+		                .append(SPACE).append(PGRBAK)
 		                .append(SPACE).append(PGDATA)
 		                .append(SPACE).append(ARCLOG)
 		                .append(SPACE).append(SRVLOG);
 						
 		
 		if(strRESTORE_FLAG.equals("1")) {
+			if(TIMELINE.equals("")) {
+				throw new Exception("TIMELINE is null.");
+			}
+			
 			sbRestoreCmd.append(SPACE).append(TIMELINE);
 		}
 		
@@ -159,6 +159,25 @@ public class DxT028 extends SocketCtl {
 					
 	                RunCommandExecNoWait runCommandExecNoWait = new RunCommandExecNoWait(sbRestoreCmd.toString(), intRestore_sn);
 	                runCommandExecNoWait.start();
+	                
+	                synchronized(runCommandExecNoWait) {
+		                
+						try {
+							runCommandExecNoWait.wait();
+		                }catch(InterruptedException e){
+		                    e.printStackTrace();
+		                    
+		        			RmanRestoreVO endVo = new RmanRestoreVO();
+		        			endVo.setRESTORE_SN(intRestore_sn);
+		        			endVo.setRESTORE_CNDT(FAILED);
+		        			
+		        			// restore running end
+		        			service.updateRMAN_RESTORE_CNDT(endVo);
+		                }
+						
+		                RepTableSpaceWrapEndpoint repTableSpaceWrapEndpoint = new RepTableSpaceWrapEndpoint(strPGRBAK, strRESTORE_DIR);
+		                repTableSpaceWrapEndpoint.start();
+	                }
 	                
 				}
 			} else {

@@ -69,6 +69,7 @@ public class ClientTester {
 		ClientTester clientTester = new ClientTester();
 		
 		String Ip = "192.168.56.117";
+		//Ip = "192.168.56.108";
 		//Ip = "222.110.153.251";
 		 //	Ip = "127.0.0.1";
 		// Ip = "222.110.153.231";
@@ -2355,6 +2356,10 @@ public class ClientTester {
 			
 			jObj.put(ClientProtocolID.DX_EX_CODE, ClientTranCodeType.DxT028);
 			
+			//RESTORE_DIR
+			String RESTORE_DIR = "/Rman_Restore";
+			jObj.put(ClientProtocolID.RESTORE_DIR, RESTORE_DIR);
+			
 			//RESTORE_SN
 			String RESTORE_SN = "1";
 			jObj.put(ClientProtocolID.RESTORE_SN, RESTORE_SN);
@@ -2365,25 +2370,22 @@ public class ClientTester {
 			String TIMELINE = "";
 			jObj.put(ClientProtocolID.TIMELINE, TIMELINE);
 			//PGDATA
-			String PGDATA = "/experdata/data";
+			String PGDATA = RESTORE_DIR + "/experdata/data";
 			jObj.put(ClientProtocolID.PGDATA, PGDATA);
 			//PGALOG
 			String PGALOG = "/experdata/archive";
 			jObj.put(ClientProtocolID.PGALOG, PGALOG);
 			//SRVLOG
-			String SRVLOG = "/experdata/data/log";
+			String SRVLOG = RESTORE_DIR + "/experdata/data/log";
 			jObj.put(ClientProtocolID.SRVLOG, SRVLOG);
 			//PGRBAK
-			String PGRBAK = "/experdata/backup/rman";
+			String PGRBAK = "/experdata/backup";
 			jObj.put(ClientProtocolID.PGRBAK, PGRBAK);
 			
 			//ASIS_FLAG
-			String ASIS_FLAG = "0";
+			String ASIS_FLAG = "1";
 			jObj.put(ClientProtocolID.ASIS_FLAG, ASIS_FLAG);
 			
-			//RESTORE_DIR
-			String RESTORE_DIR = "Rman_Restore";
-			jObj.put(ClientProtocolID.RESTORE_DIR, RESTORE_DIR);
 			
 			//SERVER_INFO
 			

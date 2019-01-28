@@ -29,6 +29,8 @@ public class RepTableSpaceWrap extends Thread {
 		this.strPGRBAK = strPGRBAK;
 		this.strRESTORE_DIR = strRESTORE_DIR;
 	}
+	
+	public RepTableSpaceWrap(){}
 
 	@Override
 	public void run(){
@@ -39,7 +41,7 @@ public class RepTableSpaceWrap extends Thread {
 			
 			changeTableSpacePath(objSERVER_INFO, strPGRBAK, strRESTORE_DIR);
 		} catch (Exception e) {
-			errLogger.error("changeTableSpacePath {} ", e.toString());
+			errLogger.error("[changeTableSpacePath run] {} ", e.toString());
 		}
 	}
 	
@@ -79,18 +81,25 @@ public class RepTableSpaceWrap extends Thread {
 				
 				String tablespace_location = (String) hp.get("tablespace_location");
 				String newTablespace_location = strRESTORE_DIR + tablespace_location;
+				String strReplaceCmd = "find " + strPGRBAK + " -name \"mkdirs.sh\" -exec perl -pi -e 's/" + replaceSlash(tablespace_location) + "/" + replaceSlash(newTablespace_location) + "/g' {} \\;";
 				
-				String strReplaceCmd = "find " + strPGRBAK + " -name \"mkdirs.sh\" -exec perl -pi -e 's/" + tablespace_location + "/" + newTablespace_location + "/g' {}";
 				
-				ExecRmanReplaceTableSpace execRmanReplaceTableSpace = new ExecRmanReplaceTableSpace(strRESTORE_DIR);
+				socketLogger.info("rman replace command >> " + strReplaceCmd);
 				
-				execRmanReplaceTableSpace.start();
-				
-				execRmanReplaceTableSpace.wait();
+				if (!tablespace_location.equals("")) {
+
+					ExecRmanReplaceTableSpace execRmanReplaceTableSpace = new ExecRmanReplaceTableSpace(strReplaceCmd);
+					
+					execRmanReplaceTableSpace.start();
+					
+					synchronized(execRmanReplaceTableSpace) {
+						execRmanReplaceTableSpace.wait();
+					}
+				}
 			}
 			
 		} catch (Exception e) {
-			errLogger.error("changeTableSpacePath {} ", e.toString());
+			errLogger.error("[changeTableSpacePath] {} ", e.toString());
 
 		} finally {
 
@@ -99,4 +108,13 @@ public class RepTableSpaceWrap extends Thread {
 
 		}	
 	}
+	
+	
+	private String replaceSlash(String strInput) throws Exception {
+		String strResult = "";
+		
+		strResult = strInput.replaceAll("/", "\\\\/");
+		return strResult;
+	}
+	
 }

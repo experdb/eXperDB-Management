@@ -65,13 +65,14 @@ public class ExecRmanReplaceTableSpace extends Thread {
 		String strReturnVal = "";
 		String strResultErrInfo = "";
 		try{
-			//proc = Runtime.getRuntime().exec(cmd);
+			socketLogger.info("@@@@@@@@@ 1111111111111111" );
+			
 			proc = Runtime.getRuntime().exec(new String[]{"/bin/sh", "-c", cmd}); 
 			proc.waitFor ();
 			
 			socketLogger.info("proc.exitValue() --> " + proc.exitValue());
 			
-		//	socketLogger.info("@@@@@@@@@ scanner start" );
+			socketLogger.info("@@@@@@@@@ 2222222222222222" );
 			
 			if ( proc.exitValue() != 0 ) {
 				BufferedReader out = new BufferedReader ( new InputStreamReader ( proc.getInputStream() ) );
