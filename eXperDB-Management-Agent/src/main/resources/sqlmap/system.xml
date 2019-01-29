@@ -502,12 +502,8 @@
 		UPDATE T_RMAN_RESTORE
 		SET
 			RESTORE_CNDT = #{RESTORE_CNDT}
-			<if test="RESTORE_CNDT == '1'">
-			, RESTORE_STRTDTM = now()
-			</if>
-			<if test="RESTORE_CNDT == '0'">
 			, RESTORE_ENDDTM = now()
-			</if>
+
 		WHERE
 			 RESTORE_SN = #{RESTORE_SN}
     </update>
