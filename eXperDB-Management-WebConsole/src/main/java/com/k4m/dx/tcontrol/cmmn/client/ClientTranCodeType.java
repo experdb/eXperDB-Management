@@ -1,8 +1,6 @@
 package com.k4m.dx.tcontrol.cmmn.client;
 
-
 /**
- * 전문에서 사용되는 코드값
 * @author 박태혁
 * @see
 * 
@@ -14,7 +12,6 @@ package com.k4m.dx.tcontrol.cmmn.client;
 *  2018.04.23   박태혁 최초 생성
 *      </pre>
 */
-
 public class ClientTranCodeType {
 	public static final String DxT001 = "DxT001";
 	public static final String DxT002 = "DxT002";
@@ -46,6 +43,9 @@ public class ClientTranCodeType {
 	public static final String DxT027 = "DxT027";
 	public static final String DxT028 = "DxT028";
 	public static final String DxT029 = "DxT029";
+	public static final String DxT030 = "DxT030";
+	public static final String DxT031 = "DxT031";
+	
 	
 	public static final String STATUS = "STATUS";
 	public static final String STOP = "STOP";
@@ -62,7 +62,6 @@ public class ClientTranCodeType {
 	 * DB커넥션 테스트
 	 */
 	public static final String WEB_DB_CONN_TEST = "WEB_DB_CONN_TEST";			  //DB커넥션 테스트
-	
 	
 
 	

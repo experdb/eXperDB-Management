@@ -10,7 +10,6 @@ import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 
-
 /**
 * @author 박태혁
 * @see
@@ -417,8 +416,9 @@ public class ClientAdapter {
 
 		return parseToJsonObj(recvBuff);
 	}
-
+	
 	public JSONObject dxT026(JSONObject jObj) throws Exception{
+
 		byte[] bt = jObj.toString().getBytes();
 		cc.send(4, bt);
 		byte[]	recvBuff = cc.recv(4, false);
@@ -445,6 +445,24 @@ public class ClientAdapter {
 	}
 	
 	public JSONObject dxT029(JSONObject jObj) throws Exception{
+
+		byte[] bt = jObj.toString().getBytes();
+		cc.send(4, bt);
+		byte[]	recvBuff = cc.recv(4, false);
+
+		return parseToJsonObj(recvBuff);
+	}
+	
+	public JSONObject dxT030(JSONObject jObj) throws Exception{
+
+		byte[] bt = jObj.toString().getBytes();
+		cc.send(4, bt);
+		byte[]	recvBuff = cc.recv(4, false);
+
+		return parseToJsonObj(recvBuff);
+	}
+	
+	public JSONObject dxT031(JSONObject jObj) throws Exception{
 
 		byte[] bt = jObj.toString().getBytes();
 		cc.send(4, bt);

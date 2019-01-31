@@ -14,7 +14,6 @@ import org.json.simple.parser.JSONParser;
 
 
 /**
- * 전문에서 사용되는 코드값
 * @author 박태혁
 * @see
 * 
@@ -54,11 +53,13 @@ import org.json.simple.parser.JSONParser;
  * 22. RMAN 백업 INIT 실행
  * 23. 파일 존재유무 체크
  * 24. dump 파일 정보 조회
- * 25. rman 파일셋 정보조회
- * 26. Create Extension pgAudit 조회 
+ * 25. rman 파일셋 정보조 회
+ * 26. Create Extension pgAudit 조회
  * 27. Postgres Data 경로 조회
  * 28. RMAN Restore 실행
  * 29.  rman restore log 조회
+ * 30.  dump restore 실행
+ * 31.  dump restore log 조회
  * 
  * @author thpark
  *
@@ -69,11 +70,12 @@ public class ClientTester {
 		
 		ClientTester clientTester = new ClientTester();
 		
-		String Ip = "222.110.153.162";
+		String Ip = "192.168.56.117";
+		//Ip = "192.168.56.108";
 		//Ip = "222.110.153.251";
 		 //	Ip = "127.0.0.1";
 		// Ip = "222.110.153.231";
-		Ip = "192.168.56.117";
+		
 		//Ip = "222.110.153.204";
 		int port = 9001;
 		//port = 5869;
@@ -120,15 +122,21 @@ public class ClientTester {
 			//clientTester.dxT025(Ip, port);
 			//clientTester.dxT026(Ip, port);
 			//clientTester.dxT027(Ip, port);
+			
 			//clientTester.dxT028(Ip, port);
-			clientTester.dxT029(Ip, port);			
+			//clientTester.dxT029(Ip, port);
+			
+			
+			//clientTester.dxT030(Ip, port);
+			clientTester.dxT031(Ip, port);
+			
+			
 			//clientTester.test();
 		} catch(Exception e) {
 			e.printStackTrace();
 		}
 	}
 	
-
 	private void dxT001(String Ip, int port) {
 		try {
 
@@ -251,12 +259,12 @@ public class ClientTester {
 		try {
 			JSONObject serverObj = new JSONObject();
 			
-			serverObj.put(ClientProtocolID.SERVER_NAME, "192.168.56.118");
-			serverObj.put(ClientProtocolID.SERVER_IP, "192.168.56.118");
-			serverObj.put(ClientProtocolID.SERVER_PORT, "5432");
-			serverObj.put(ClientProtocolID.DATABASE_NAME, "experdb");
-			serverObj.put(ClientProtocolID.USER_ID, "experdb");
-			serverObj.put(ClientProtocolID.USER_PWD, "experdb");
+			serverObj.put(ClientProtocolID.SERVER_NAME, "222.110.153.162");
+			serverObj.put(ClientProtocolID.SERVER_IP, "222.110.153.162");
+			serverObj.put(ClientProtocolID.SERVER_PORT, "6432");
+			serverObj.put(ClientProtocolID.DATABASE_NAME, "postgres");
+			serverObj.put(ClientProtocolID.USER_ID, "experdba");
+			serverObj.put(ClientProtocolID.USER_PWD, "experdba");
 			
 			JSONObject objList;
 			
@@ -314,6 +322,7 @@ public class ClientTester {
 					, "pg_rman validate -B /home/experdb/pgdata/bakup/rman"
 					, "pg_rman backup  --host=222.110.153.251 --port=5433 --username=experdb --no-password --pgdata=/home/experdb/pgdata/data --backup-path=/home/experdb/pgdata/bakup/rman --backup-mode=full -A $PGDATA/pg_xlog/archive_status/ --keep-data-generations=0 --keep-data-days=0 --keep-arclog-files=0 --keep-arclog-days=0 --keep-srvlog-files=0 --keep-srvlog-days=0"
 					,  "pg_rman backup  --host=222.110.153.251 --port=5433 --username=experdb --no-password --pgdata=/home/experdb/pgdata/data --backup-path=/home/experdb/pgdata/bakup/rman --backup-mode=full -A $PGDATA/pg_xlog/archive_status/ --keep-data-generations=0 --keep-data-days=0 --keep-arclog-files=0 --keep-arclog-days=0 --keep-srvlog-files=0 --keep-srvlog-days=0"
+					, "pg_rman backup --port=6432 --username=experdba --no-password --pgdata=/home/devel/experdb/data --backup-path=/home/devel/experdb/backup/rman --backup-mode=full -A $PGDATA/pg_xlog/archive_status/ --keep-data-generations=1 --keep-data-days=2 --keep-arclog-files=2 --keep-arclog-days=2 --keep-srvlog-files=0 --keep-srvlog-days=1"
 
 				};
 			
@@ -382,16 +391,30 @@ public class ClientTester {
 			objJob_04.put(ClientProtocolID.BCK_FILE_PTH, "1");
 			objJob_04.put(ClientProtocolID.BCK_FILENM, "1");
 			objJob_04.put(ClientProtocolID.LOG_YN, "Y");
-			
+
+			JSONObject objJob_05 = new JSONObject();
+			objJob_05.put(ClientProtocolID.SCD_ID, "1"); //스캐쥴ID
+			objJob_05.put(ClientProtocolID.WORK_ID, "1"); //작업ID
+			objJob_05.put(ClientProtocolID.EXD_ORD, "1"); //실행순서
+			objJob_05.put(ClientProtocolID.NXT_EXD_YN, "1"); //다음실행여부
+			objJob_05.put(ClientProtocolID.REQ_CMD, CMD[5]);
+			objJob_05.put(ClientProtocolID.BCK_OPT_CD, "1");
+			objJob_05.put(ClientProtocolID.BCK_BSN_DSCD, "TC000201");
+			objJob_05.put(ClientProtocolID.DB_SVR_IPADR_ID, "1");
+
+			objJob_05.put(ClientProtocolID.DB_ID, "1");
+			objJob_05.put(ClientProtocolID.BCK_FILE_PTH, "1");
+			objJob_05.put(ClientProtocolID.BCK_FILENM, "1");
+			objJob_05.put(ClientProtocolID.LOG_YN, "Y");
 			//arrCmd.add(0, objJob_01);
 			//arrCmd.add(1, objJob_02);
-			arrCmd.add(0, objJob_04);
+			arrCmd.add(0, objJob_05);
 
 			JSONObject serverObj = new JSONObject();
 			
-			serverObj.put(ClientProtocolID.SERVER_NAME, "222.110.153.251");
-			serverObj.put(ClientProtocolID.SERVER_IP, "222.110.153.251");
-			serverObj.put(ClientProtocolID.SERVER_PORT, "5432");
+			serverObj.put(ClientProtocolID.SERVER_NAME, "222.110.153.162");
+			serverObj.put(ClientProtocolID.SERVER_IP, "222.110.153.162");
+			serverObj.put(ClientProtocolID.SERVER_PORT, "6432");
 			
 			reqJObj.put(ClientProtocolID.DX_EX_CODE, ClientTranCodeType.DxT005);
 			reqJObj.put(ClientProtocolID.SERVER_INFO, serverObj);
@@ -590,12 +613,12 @@ public class ClientTester {
 		try {
 			JSONObject serverObj = new JSONObject();
 			
-			serverObj.put(ClientProtocolID.SERVER_NAME, "192.168.56.117");
-			serverObj.put(ClientProtocolID.SERVER_IP, "192.168.56.117");
-			serverObj.put(ClientProtocolID.SERVER_PORT, "5432");
-			serverObj.put(ClientProtocolID.DATABASE_NAME, "experdb");
-			serverObj.put(ClientProtocolID.USER_ID, "experdb");
-			serverObj.put(ClientProtocolID.USER_PWD, "experdb");
+			serverObj.put(ClientProtocolID.SERVER_NAME, "222.110.153.162");
+			serverObj.put(ClientProtocolID.SERVER_IP, "222.110.153.162");
+			serverObj.put(ClientProtocolID.SERVER_PORT, "6432");
+			serverObj.put(ClientProtocolID.DATABASE_NAME, "postgres");
+			serverObj.put(ClientProtocolID.USER_ID, "experdba");
+			serverObj.put(ClientProtocolID.USER_PWD, "experdba");
 			
 			JSONObject objList;
 
@@ -801,14 +824,14 @@ public class ClientTester {
 			JSONObject serverObj = new JSONObject();
 			
 			
-			serverObj.put(ClientProtocolID.SERVER_NAME, "192.168.56.117");
-			serverObj.put(ClientProtocolID.SERVER_IP, "192.168.56.117");
-			serverObj.put(ClientProtocolID.SERVER_PORT, "5432");
-			serverObj.put(ClientProtocolID.DATABASE_NAME, "enc_test");
+			serverObj.put(ClientProtocolID.SERVER_NAME, "222.110.153.251");
+			serverObj.put(ClientProtocolID.SERVER_IP, "222.110.153.251");
+			serverObj.put(ClientProtocolID.SERVER_PORT, "5433");
+			serverObj.put(ClientProtocolID.DATABASE_NAME, "experdb");
 			serverObj.put(ClientProtocolID.USER_ID, "experdb");
 			serverObj.put(ClientProtocolID.USER_PWD, "experdb");
 			
-			String strExtname = "";
+			String strExtname = "pgaudit";
 			
 			
 			ClientAdapter CA = new ClientAdapter(Ip, port);
@@ -1314,17 +1337,17 @@ public class ClientTester {
 	private void dxT015_R(String Ip, int port) {
 		try {
 
-			String strDirectory = "/experdata/data/log";
+			String strDirectory = "/home/devel/experdb/data/pg_log/";
 			
-			//strDirectory = "C:\\k4m\\01-1. DX 제폼개발\\04. 시험\\pg_log\\";
+			strDirectory = "C:\\k4m\\01-1. DX 제폼개발\\04. 시험\\pg_log\\";
 			
 			JSONObject serverObj = new JSONObject();
 			
 			serverObj.put(ClientProtocolID.SERVER_NAME, Ip);
 			serverObj.put(ClientProtocolID.SERVER_IP, Integer.toString(port));
 			
-			String strStartDate = "2018-07-20";
-			String strEndDate = "2018-07-20";
+			String strStartDate = "2017-07-25";
+			String strEndDate = "2017-07-26";
 				
 			JSONObject searchInfoObj = new JSONObject();
 			searchInfoObj.put(ClientProtocolID.START_DATE, strStartDate);
@@ -1897,12 +1920,12 @@ public class ClientTester {
 			JSONObject serverObj01 = new JSONObject();
 			
 			
-			serverObj01.put(ClientProtocolID.SERVER_NAME, "192.168.56.117");
-			serverObj01.put(ClientProtocolID.SERVER_IP, "192.168.56.117");
-			serverObj01.put(ClientProtocolID.SERVER_PORT, "5432");
+			serverObj01.put(ClientProtocolID.SERVER_NAME, "222.110.153.251");
+			serverObj01.put(ClientProtocolID.SERVER_IP, "222.110.153.251");
+			serverObj01.put(ClientProtocolID.SERVER_PORT, "5433");
 			serverObj01.put(ClientProtocolID.DATABASE_NAME, "experdb");
-			serverObj01.put(ClientProtocolID.USER_ID, "experdb");
-			serverObj01.put(ClientProtocolID.USER_PWD, "experdb");
+			serverObj01.put(ClientProtocolID.USER_ID, "experdba");
+			serverObj01.put(ClientProtocolID.USER_PWD, "experdbadddd");
 			
 			arrServerInfo.add(serverObj01);
 			
@@ -1981,10 +2004,10 @@ public class ClientTester {
 
 			JSONObject serverObj = new JSONObject();
 
-			serverObj.put(ClientProtocolID.SERVER_NAME, "192.168.56.117");
-			serverObj.put(ClientProtocolID.SERVER_IP, "192.168.56.117");
-			serverObj.put(ClientProtocolID.SERVER_PORT, "5432");
-			serverObj.put(ClientProtocolID.DATABASE_NAME, "enc_test");
+			serverObj.put(ClientProtocolID.SERVER_NAME, "222.110.153.251");
+			serverObj.put(ClientProtocolID.SERVER_IP, "222.110.153.251");
+			serverObj.put(ClientProtocolID.SERVER_PORT, "5433");
+			serverObj.put(ClientProtocolID.DATABASE_NAME, "experdb");
 			serverObj.put(ClientProtocolID.USER_ID, "experdb");
 			serverObj.put(ClientProtocolID.USER_PWD, "experdb");
 		
@@ -2251,10 +2274,10 @@ public class ClientTester {
 			
 			JSONObject serverObj = new JSONObject();
 			
-			serverObj.put(ClientProtocolID.SERVER_NAME, "222.110.153.251");
-			serverObj.put(ClientProtocolID.SERVER_IP, "222.110.153.251");
-			serverObj.put(ClientProtocolID.SERVER_PORT, "5433");
-			serverObj.put(ClientProtocolID.DATABASE_NAME, "experdb");
+			serverObj.put(ClientProtocolID.SERVER_NAME, "192.168.56.117");
+			serverObj.put(ClientProtocolID.SERVER_IP, "192.168.56.117");
+			serverObj.put(ClientProtocolID.SERVER_PORT, "5432");
+			serverObj.put(ClientProtocolID.DATABASE_NAME, "encrypt");
 			serverObj.put(ClientProtocolID.USER_ID, "experdb");
 			serverObj.put(ClientProtocolID.USER_PWD, "experdb");
 			
@@ -2340,35 +2363,37 @@ public class ClientTester {
 			
 			jObj.put(ClientProtocolID.DX_EX_CODE, ClientTranCodeType.DxT028);
 			
+			//RESTORE_DIR
+			String RESTORE_DIR = "/Rman_Restore";
+			//RESTORE_DIR = "";
+			jObj.put(ClientProtocolID.RESTORE_DIR, RESTORE_DIR);
+			
 			//RESTORE_SN
 			String RESTORE_SN = "2";
 			jObj.put(ClientProtocolID.RESTORE_SN, RESTORE_SN);
 			//RESTORE_FLAG
-			String RESTORE_FLAG = "0";
+			String RESTORE_FLAG = "1";
 			jObj.put(ClientProtocolID.RESTORE_FLAG, RESTORE_FLAG);
 			//TIMELINE
-			String TIMELINE = "";
+			String TIMELINE = "2019-01-28 11:22:33";
 			jObj.put(ClientProtocolID.TIMELINE, TIMELINE);
 			//PGDATA
-			String PGDATA = "/experdata/data";
+			String PGDATA = RESTORE_DIR + "/experdata/data";
 			jObj.put(ClientProtocolID.PGDATA, PGDATA);
 			//PGALOG
 			String PGALOG = "/experdata/archive";
 			jObj.put(ClientProtocolID.PGALOG, PGALOG);
 			//SRVLOG
-			String SRVLOG = "/experdata/data/log";
+			String SRVLOG = RESTORE_DIR + "/experdata/data/log";
 			jObj.put(ClientProtocolID.SRVLOG, SRVLOG);
 			//PGRBAK
-			String PGRBAK = "/experdata/backup/rman";
+			String PGRBAK = "/experdata/backup";
 			jObj.put(ClientProtocolID.PGRBAK, PGRBAK);
 			
 			//ASIS_FLAG
-			String ASIS_FLAG = "0";
+			String ASIS_FLAG = "1";
 			jObj.put(ClientProtocolID.ASIS_FLAG, ASIS_FLAG);
 			
-			//RESTORE_DIR
-			String RESTORE_DIR = "Rman_Restore";
-			jObj.put(ClientProtocolID.RESTORE_DIR, RESTORE_DIR);
 			
 			//SERVER_INFO
 			
@@ -2419,7 +2444,7 @@ public class ClientTester {
 			jObj.put(ClientProtocolID.DX_EX_CODE, ClientTranCodeType.DxT029);
 			
 			//RESTORE_SN
-			String RESTORE_SN = "9";
+			String RESTORE_SN = "1";
 			jObj.put(ClientProtocolID.RESTORE_SN, RESTORE_SN);
 			
 
@@ -2449,4 +2474,126 @@ public class ClientTester {
 		}
 	}
 	
+	private void dxT030(String Ip, int port) {
+		try {
+			
+			
+			JSONObject jObj = new JSONObject();
+			
+			
+			jObj.put(ClientProtocolID.DX_EX_CODE, ClientTranCodeType.DxT030);
+			
+			//RESTORE_SN
+			String RESTORE_SN = "1";
+			jObj.put(ClientProtocolID.RESTORE_SN, RESTORE_SN);
+			
+			jObj.put(ClientProtocolID.PGDBAK, "/experdata/backup/dump");
+			
+			
+			//SERVER_INFO
+			
+			JSONObject serverObj = new JSONObject();
+			
+			serverObj.put(ClientProtocolID.SERVER_NAME, "192.168.56.117");
+			serverObj.put(ClientProtocolID.SERVER_IP, "192.168.56.117");
+			serverObj.put(ClientProtocolID.SERVER_PORT, "5432");
+			serverObj.put(ClientProtocolID.DATABASE_NAME, "experdb");
+			serverObj.put(ClientProtocolID.USER_ID, "experdb");
+			serverObj.put(ClientProtocolID.USER_PWD, "experdb");
+			
+			jObj.put(ClientProtocolID.SERVER_INFO, serverObj);
+			
+			
+			JSONObject dumpOptionObj = new JSONObject();
+			
+			dumpOptionObj.put(ClientProtocolID.FORMAT, "tar");
+			dumpOptionObj.put(ClientProtocolID.FILENAME, "eXperDB_2_20190131143100.tar");
+			dumpOptionObj.put(ClientProtocolID.JOBS, "1");
+			dumpOptionObj.put(ClientProtocolID.ROLE, "experdb");
+			dumpOptionObj.put(ClientProtocolID.PRE_DATA, "N");
+			dumpOptionObj.put(ClientProtocolID.DATA, "N");
+			dumpOptionObj.put(ClientProtocolID.POST_DATA, "N");
+			dumpOptionObj.put(ClientProtocolID.DATA_ONLY, "N");
+			dumpOptionObj.put(ClientProtocolID.SCHEMA_ONLY, "N");
+			dumpOptionObj.put(ClientProtocolID.NO_OWNER, "N");
+			dumpOptionObj.put(ClientProtocolID.NO_PRIVILEGES, "N");
+			dumpOptionObj.put(ClientProtocolID.NO_TABLESPACES, "N");
+			dumpOptionObj.put(ClientProtocolID.CREATE, "N");
+			dumpOptionObj.put(ClientProtocolID.CLEAN, "N");
+			dumpOptionObj.put(ClientProtocolID.SINGLE_TRANSACTION, "N");
+			dumpOptionObj.put(ClientProtocolID.DISABLE_TRIGGERS, "N");
+			dumpOptionObj.put(ClientProtocolID.NO_DATA_FOR_FAILED_TABLES, "N");
+			dumpOptionObj.put(ClientProtocolID.VERBOSE, "Y");
+			dumpOptionObj.put(ClientProtocolID.USE_SET_SESSON_AUTH, "N");
+			dumpOptionObj.put(ClientProtocolID.EXIT_ON_ERROR, "N");
+			
+			jObj.put(ClientProtocolID.DUMP_OPTION, dumpOptionObj);
+			
+
+			JSONObject objList;
+			
+			ClientAdapter CA = new ClientAdapter(Ip, port);
+			CA.open(); 
+
+			objList = CA.dxT028(jObj);
+			
+			CA.close();
+			
+			String strErrMsg = (String)objList.get(ClientProtocolID.ERR_MSG);
+			String strErrCode = (String)objList.get(ClientProtocolID.ERR_CODE);
+			String strDxExCode = (String)objList.get(ClientProtocolID.DX_EX_CODE);
+			String strResultCode = (String)objList.get(ClientProtocolID.RESULT_CODE);
+			
+			
+			System.out.println("RESULT_CODE : " +  strResultCode);
+			System.out.println("ERR_CODE : " +  strErrCode);
+			System.out.println("ERR_MSG : " +  strErrMsg);
+			
+
+			
+		} catch(Exception e) {
+			e.printStackTrace();
+		}
+	}
+	
+	
+	private void dxT031(String Ip, int port) {
+		try {
+			
+			
+			JSONObject jObj = new JSONObject();
+			
+			
+			jObj.put(ClientProtocolID.DX_EX_CODE, ClientTranCodeType.DxT031);
+			
+			//RESTORE_SN
+			String RESTORE_SN = "1";
+			jObj.put(ClientProtocolID.RESTORE_SN, RESTORE_SN);
+			
+
+			JSONObject objList;
+			
+			ClientAdapter CA = new ClientAdapter(Ip, port);
+			CA.open(); 
+
+			objList = CA.dxT031(jObj);
+			
+			CA.close();
+			
+			String strErrMsg = (String)objList.get(ClientProtocolID.ERR_MSG);
+			String strErrCode = (String)objList.get(ClientProtocolID.ERR_CODE);
+			String strDxExCode = (String)objList.get(ClientProtocolID.DX_EX_CODE);
+			String strResultCode = (String)objList.get(ClientProtocolID.RESULT_CODE);
+			String strResultData = (String)objList.get(ClientProtocolID.RESULT_DATA);
+			
+			System.out.println("RESULT_CODE : " +  strResultCode);
+			System.out.println("ERR_CODE : " +  strErrCode);
+			System.out.println("ERR_MSG : " +  strErrMsg);
+			System.out.println("strResultData : " +  strResultData);
+
+			
+		} catch(Exception e) {
+			e.printStackTrace();
+		}
+	}
 }
