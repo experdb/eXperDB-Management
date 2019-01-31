@@ -240,7 +240,7 @@ $(window.document).ready(function() {
 			var html = "";
 
  			$(data).each(function (index, item) {
- 				if(aut.length != 0 && aut[index].bck_cng_aut_yn == "N" && aut[index].bck_hist_aut_yn == "N" && aut[index].bck_scdr_aut_yn == "N" && aut[index].acs_cntr_aut_yn == "N" && aut[index].policy_change_his_aut_yn == "N" && aut[index].adt_cng_aut_yn == "N" && aut[index].adt_hist_aut_yn == "N" && aut[index].script_cng_aut_yn == "N"  && aut[index].script_his_aut_yn == "N" ){	
+ 				if(aut.length != 0 && aut[index].bck_cng_aut_yn == "N" && aut[index].bck_hist_aut_yn == "N" && aut[index].bck_scdr_aut_yn == "N" && aut[index].acs_cntr_aut_yn == "N" && aut[index].policy_change_his_aut_yn == "N" && aut[index].adt_cng_aut_yn == "N" && aut[index].adt_hist_aut_yn == "N" && aut[index].script_cng_aut_yn == "N"  && aut[index].script_his_aut_yn == "N" && aut[index].emergency_restore_aut_yn == "N" && aut[index].point_restore_aut_yn == "N" && aut[index].dump_restore_aut_yn == "N" && aut[index].restore_his_aut_yn == "N"){	
  				}else{
  					html1+='<ul class="depth_1 lnbMenu">';
 					html1+='	<li><div class="border"  ><a href="/property.do?db_svr_id='+item.db_svr_id+'" onClick=javascript:fn_GoLink("#n"); target="main"><img src="../images/ico_lnb_3.png" id="treeImg"><div class="tooltip">'+item.db_svr_nm+'<span class="tooltiptext">'+item.ipadr+'</span></div></a></div>';
@@ -261,10 +261,18 @@ $(window.document).ready(function() {
 					
 					html1+='			<li class="ico2_2"><a href="#n"><img src="../images/ico_lnb_6.png" id="treeImg">복구관리</a>';
 					html1+='				<ul class="depth_3">';
+					if(aut.length != 0 && aut[index].emergency_restore_aut_yn == "Y"){
 					html1+='                      <li class="ico3_1" id="emergencyRestore'+item.db_svr_id+'"><a href=/emergencyRestore.do?db_svr_id='+item.db_svr_id+' id="emergencyRestore'+item.db_svr_id+'c" onClick=javascript:fn_GoLink("emergencyRestore'+item.db_svr_id+'"); target="main"><img src="../images/ico_lnb_13.png" id="treeImg">긴급복구</a></li>';
+					}
+					if(aut.length != 0 && aut[index].point_restore_aut_yn == "Y"){
 					html1+='                      <li class="ico3_1" id="timeRestore'+item.db_svr_id+'"><a href=/timeRestore.do?db_svr_id='+item.db_svr_id+' id="timeRestore'+item.db_svr_id+'c" onClick=javascript:fn_GoLink("timeRestore'+item.db_svr_id+'"); target="main"><img src="../images/ico_lnb_13.png" id="treeImg">시점복구</a></li>';
+					}
+					if(aut.length != 0 && aut[index].dump_restore_aut_yn == "Y"){
 					html1+='                      <li class="ico3_1" id="dumpRestore'+item.db_svr_id+'"><a href=/dumpRestore.do?db_svr_id='+item.db_svr_id+' id="dumpRestore'+item.db_svr_id+'c" onClick=javascript:fn_GoLink("dumpRestore'+item.db_svr_id+'"); target="main"><img src="../images/ico_lnb_13.png" id="treeImg">덤프복구</a></li>';
+					}
+					if(aut.length != 0 && aut[index].restore_his_aut_yn == "Y"){
 					html1+='                      <li class="ico3_1" id="restoreHistory'+item.db_svr_id+'"><a href=/restoreHistory.do?db_svr_id='+item.db_svr_id+' id="restoreHistory'+item.db_svr_id+'c" onClick=javascript:fn_GoLink("restoreHistory'+item.db_svr_id+'"); target="main"><img src="../images/ico_lnb_13.png" id="treeImg">복구이력</a></li>';
+					}
 					html1+='				</ul>';
 					html1+='			</li>';
 					
