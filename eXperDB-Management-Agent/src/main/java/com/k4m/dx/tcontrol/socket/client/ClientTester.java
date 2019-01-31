@@ -2368,7 +2368,7 @@ public class ClientTester {
 			String RESTORE_FLAG = "1";
 			jObj.put(ClientProtocolID.RESTORE_FLAG, RESTORE_FLAG);
 			//TIMELINE
-			String TIMELINE = "2019-01-28 11:22:33.000";
+			String TIMELINE = "2019-01-28 11:22:33";
 			jObj.put(ClientProtocolID.TIMELINE, TIMELINE);
 			//PGDATA
 			String PGDATA = RESTORE_DIR + "/experdata/data";

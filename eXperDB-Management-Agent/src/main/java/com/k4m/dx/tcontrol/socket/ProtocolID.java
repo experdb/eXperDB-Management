@@ -209,5 +209,25 @@ public class ProtocolID {
 	public static final String TIMELINE = "TIMELINE";
 	
 	
-
+	public static final String FORMAT = "FORMAT";
+	public static final String FILENAME = "FILENAME";
+	public static final String JOBS = "JOBS";
+	public static final String ROLE = "ROLE";
+	public static final String PRE_DATA = "PRE_DATA";
+	public static final String DATA = "DATA";
+	public static final String POST_DATA = "POST_DATA";
+	public static final String DATA_ONLY = "DATA_ONLY";
+	public static final String SCHEMA_ONLY = "SCHEMA_ONLY";
+	public static final String NO_OWNER = "NO_OWNER";
+	public static final String NO_PRIVILEGES = "NO_PRIVILEGES";
+	public static final String NO_TABLESPACES = "NO_TABLESPACES";
+	public static final String CREATE = "CREATE";
+	public static final String CLEAN = "CLEAN";
+	public static final String SINGLE_TRANSACTION = "SINGLE_TRANSACTION";
+	public static final String DISABLE_TRIGGERS = "DISABLE_TRIGGERS";
+	public static final String NO_DATA_FOR_FAILED_TABLES = "NO_DATA_FOR_FAILED_TABLES";
+	public static final String VERBOSE = "VERBOSE";
+	public static final String USE_SET_SESSON_AUTH = "USE_SET_SESSON_AUTH";
+	public static final String EXIT_ON_ERROR = "EXIT_ON_ERROR";
+	public static final String DUMP_OPTION = "DUMP_OPTION";
 }

@@ -507,7 +507,7 @@
 		WHERE
 			 RESTORE_SN = #{RESTORE_SN}
     </update>
-    
+
     <update id="updateRMAN_RESTORE_EXELOG"  parameterType="RmanRestoreVO">
    		/**
 	 	* Query ID : updateRMAN_RESTORE_EXELOG
@@ -515,6 +515,34 @@
 	 	* Author : 박태혁
 	 	**/
 		UPDATE T_RMAN_RESTORE
+		SET
+			EXELOG = #{EXELOG}
+		WHERE
+			 RESTORE_SN = #{RESTORE_SN}
+    </update>
+    
+    <update id="updateDUMP_RESTORE_CNDT"  parameterType="DumpRestoreVO">
+   		/**
+	 	* Query ID : updateDUMP_RESTORE_CNDT
+	 	* Description : DUMP restore stat update
+	 	* Author : 박태혁
+	 	**/
+		UPDATE T_DUMP_RESTORE
+		SET
+			RESTORE_CNDT = #{RESTORE_CNDT}
+			, RESTORE_ENDDTM = now()
+
+		WHERE
+			 RESTORE_SN = #{RESTORE_SN}
+    </update>
+    
+    <update id="updateDUMP_RESTORE_EXELOG"  parameterType="DumpRestoreVO">
+   		/**
+	 	* Query ID : updateDUMP_RESTORE_EXELOG
+	 	* Description : dump restore exelog update
+	 	* Author : 박태혁
+	 	**/
+		UPDATE T_DUMP_RESTORE
 		SET
 			EXELOG = #{EXELOG}
 		WHERE

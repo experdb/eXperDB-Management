@@ -8,6 +8,7 @@ import org.springframework.stereotype.Repository;
 
 import com.k4m.dx.tcontrol.db.repository.vo.AgentInfoVO;
 import com.k4m.dx.tcontrol.db.repository.vo.DbServerInfoVO;
+import com.k4m.dx.tcontrol.db.repository.vo.DumpRestoreVO;
 import com.k4m.dx.tcontrol.db.repository.vo.RmanRestoreVO;
 import com.k4m.dx.tcontrol.db.repository.vo.TrfTrgCngVO;
 import com.k4m.dx.tcontrol.db.repository.vo.WrkExeVO;
@@ -101,6 +102,12 @@ public class SystemDAO {
 		session.update("system.updateRMAN_RESTORE_EXELOG", vo);
 	}
 	
+	public void updateDUMP_RESTORE_CNDT(DumpRestoreVO vo) throws Exception {
+		session.update("system.updateDUMP_RESTORE_CNDT", vo);
+	}
 	
+	public void updateDUMP_RESTORE_EXELOG(DumpRestoreVO vo) throws Exception {
+		session.update("system.updateDUMP_RESTORE_EXELOG", vo);
+	}
 	
 }

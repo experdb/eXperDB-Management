@@ -18,6 +18,8 @@
     	<typeAlias alias="ServerInfoVO" type="com.k4m.dx.tcontrol.db.repository.vo.ServerInfoVO" />
     	<typeAlias alias="TablespaceVO" type="com.k4m.dx.tcontrol.db.repository.vo.TablespaceVO" />
     	<typeAlias alias="RmanRestoreVO" type="com.k4m.dx.tcontrol.db.repository.vo.RmanRestoreVO" />
+    	<typeAlias alias="DumpRestoreVO" type="com.k4m.dx.tcontrol.db.repository.vo.DumpRestoreVO" />
+    	
 
     </typeAliases>
     

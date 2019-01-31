@@ -4,6 +4,7 @@ import java.util.List;
 
 import com.k4m.dx.tcontrol.db.repository.vo.AgentInfoVO;
 import com.k4m.dx.tcontrol.db.repository.vo.DbServerInfoVO;
+import com.k4m.dx.tcontrol.db.repository.vo.DumpRestoreVO;
 import com.k4m.dx.tcontrol.db.repository.vo.RmanRestoreVO;
 import com.k4m.dx.tcontrol.db.repository.vo.TrfTrgCngVO;
 import com.k4m.dx.tcontrol.db.repository.vo.WrkExeVO;
@@ -162,4 +163,18 @@ public interface SystemService {
 	 */
 	public void updateRMAN_RESTORE_EXELOG(RmanRestoreVO vo) throws Exception;
 	
+	
+	/**
+	 * Dump Restore 상태 update
+	 * @param vo
+	 * @throws Exception
+	 */
+	public void updateDUMP_RESTORE_CNDT(DumpRestoreVO vo) throws Exception;
+	
+	/**
+	 * pg_restore exelog update
+	 * @param vo
+	 * @throws Exception
+	 */
+	public void updateDUMP_RESTORE_EXELOG(DumpRestoreVO vo) throws Exception;
 }

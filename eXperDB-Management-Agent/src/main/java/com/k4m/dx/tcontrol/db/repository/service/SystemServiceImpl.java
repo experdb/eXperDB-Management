@@ -9,10 +9,10 @@ import org.springframework.stereotype.Service;
 import com.k4m.dx.tcontrol.db.repository.dao.SystemDAO;
 import com.k4m.dx.tcontrol.db.repository.vo.AgentInfoVO;
 import com.k4m.dx.tcontrol.db.repository.vo.DbServerInfoVO;
+import com.k4m.dx.tcontrol.db.repository.vo.DumpRestoreVO;
 import com.k4m.dx.tcontrol.db.repository.vo.RmanRestoreVO;
 import com.k4m.dx.tcontrol.db.repository.vo.TrfTrgCngVO;
 import com.k4m.dx.tcontrol.db.repository.vo.WrkExeVO;
-import com.k4m.dx.tcontrol.util.FileUtil;
 
 /**
 * @author 박태혁
@@ -145,5 +145,13 @@ public class SystemServiceImpl implements SystemService{
 	
 	public void updateRMAN_RESTORE_EXELOG(RmanRestoreVO vo) throws Exception {
 		systemDAO.updateRMAN_RESTORE_EXELOG(vo);
+	}
+	
+	public void updateDUMP_RESTORE_CNDT(DumpRestoreVO vo) throws Exception {
+		systemDAO.updateDUMP_RESTORE_CNDT(vo);
+	}
+	
+	public void updateDUMP_RESTORE_EXELOG(DumpRestoreVO vo) throws Exception {
+		systemDAO.updateDUMP_RESTORE_EXELOG(vo);
 	}
 }
