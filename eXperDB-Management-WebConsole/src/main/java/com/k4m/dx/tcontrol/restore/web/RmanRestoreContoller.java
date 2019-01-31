@@ -1,5 +1,6 @@
 package com.k4m.dx.tcontrol.restore.web;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -7,6 +8,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import org.json.simple.JSONObject;
 import org.json.simple.parser.ParseException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -19,10 +21,17 @@ import org.springframework.web.servlet.ModelAndView;
 import com.k4m.dx.tcontrol.accesscontrol.service.AccessControlHistoryVO;
 import com.k4m.dx.tcontrol.accesscontrol.service.AccessControlVO;
 import com.k4m.dx.tcontrol.admin.accesshistory.service.AccessHistoryService;
+import com.k4m.dx.tcontrol.admin.dbserverManager.service.DbServerVO;
 import com.k4m.dx.tcontrol.admin.menuauthority.service.MenuAuthorityService;
 import com.k4m.dx.tcontrol.backup.service.BackupService;
 import com.k4m.dx.tcontrol.backup.service.WorkVO;
+import com.k4m.dx.tcontrol.cmmn.AES256;
+import com.k4m.dx.tcontrol.cmmn.AES256_KEY;
 import com.k4m.dx.tcontrol.cmmn.CmmnUtils;
+import com.k4m.dx.tcontrol.cmmn.client.ClientInfoCmmn;
+import com.k4m.dx.tcontrol.cmmn.client.ClientProtocolID;
+import com.k4m.dx.tcontrol.common.service.AgentInfoVO;
+import com.k4m.dx.tcontrol.common.service.CmmnServerInfoService;
 import com.k4m.dx.tcontrol.common.service.HistoryVO;
 import com.k4m.dx.tcontrol.login.service.LoginVO;
 import com.k4m.dx.tcontrol.restore.service.RestoreRmanVO;
@@ -59,6 +68,9 @@ public class RmanRestoreContoller {
 	private RestoreService restoreService;
 	
 	private List<Map<String, Object>> menuAut;
+	
+	@Autowired
+	private CmmnServerInfoService cmmnServerInfoService;
 	
 	
 	/**
@@ -102,6 +114,27 @@ public class RmanRestoreContoller {
 			mv.addObject("ipadr", backupService.selectDbSvrNm(workVO).getIpadr());
 			mv.addObject("dbList",backupService.selectDbList(workVO));
 			mv.addObject("db_svr_id",workVO.getDb_svr_id());
+			
+			int db_svr_id = workVO.getDb_svr_id();
+			DbServerVO schDbServerVO = new DbServerVO();
+			schDbServerVO.setDb_svr_id(db_svr_id);
+			DbServerVO DbServerVO = (DbServerVO) cmmnServerInfoService.selectServerInfo(schDbServerVO);
+			String strIpAdr = DbServerVO.getIpadr();
+			AgentInfoVO vo = new AgentInfoVO();
+			vo.setIPADR(strIpAdr);
+			AgentInfoVO agentInfo = (AgentInfoVO) cmmnServerInfoService.selectAgentInfo(vo);
+			
+			String IP = DbServerVO.getIpadr();
+			int PORT = agentInfo.getSOCKET_PORT();
+			
+			ClientInfoCmmn cic = new ClientInfoCmmn();
+			Map resulte = cic.restorePath(IP, PORT);
+		
+			mv.addObject("pgalog",resulte.get("PGALOG"));
+			mv.addObject("srvlog",resulte.get("SRVLOG"));
+			mv.addObject("pgdata",resulte.get("PGDATA"));
+			mv.addObject("pgrbak",resulte.get("PGRBAK"));
+			
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -151,6 +184,27 @@ public class RmanRestoreContoller {
 			mv.addObject("ipadr", backupService.selectDbSvrNm(workVO).getIpadr());
 			mv.addObject("dbList",backupService.selectDbList(workVO));
 			mv.addObject("db_svr_id",workVO.getDb_svr_id());
+			
+			int db_svr_id = workVO.getDb_svr_id();
+			DbServerVO schDbServerVO = new DbServerVO();
+			schDbServerVO.setDb_svr_id(db_svr_id);
+			DbServerVO DbServerVO = (DbServerVO) cmmnServerInfoService.selectServerInfo(schDbServerVO);
+			String strIpAdr = DbServerVO.getIpadr();
+			AgentInfoVO vo = new AgentInfoVO();
+			vo.setIPADR(strIpAdr);
+			AgentInfoVO agentInfo = (AgentInfoVO) cmmnServerInfoService.selectAgentInfo(vo);
+			
+			String IP = DbServerVO.getIpadr();
+			int PORT = agentInfo.getSOCKET_PORT();
+			
+			ClientInfoCmmn cic = new ClientInfoCmmn();
+			Map result = cic.restorePath(IP, PORT);
+		
+			mv.addObject("pgalog",result.get("PGALOG"));
+			mv.addObject("srvlog",result.get("SRVLOG"));
+			mv.addObject("pgdata",result.get("PGDATA"));
+			mv.addObject("pgrbak",result.get("PGRBAK"));
+			
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -178,28 +232,90 @@ public class RmanRestoreContoller {
 		CmmnUtils cu = new CmmnUtils();
 		menuAut = cu.selectMenuAut(menuAuthorityService, "MN000301");
 		
-		try {
-			// 쓰기 권한이 없는경우 error페이지 호출 , [추후 Exception 처리예정]
-			if (menuAut.get(0).get("wrt_aut_yn").equals("N")) {
-				response.sendRedirect("/autError.do");
-			} else {
-				// 화면접근이력 이력 남기기
-				CmmnUtils.saveHistory(request, historyVO);
-				historyVO.setExe_dtl_cd("DX-T0005_01");
-				historyVO.setMnu_id(9);
-				accessHistoryService.insertHistory(historyVO);
+		String insertResult = "S";
+		String snResult = "S";
+		RestoreRmanVO latestRestoreSN= null;
+		
 
-				HttpSession session = request.getSession();
-				LoginVO loginVo = (LoginVO) session.getAttribute("session");
-				String id = loginVo.getUsr_id();
-
-				restoreRmanVO.setRegr_id(id);
-
-				restoreService.insertRmanRestore(restoreRmanVO);		
+			try {
+				// 쓰기 권한이 없는경우 error페이지 호출 , [추후 Exception 처리예정]
+				if (menuAut.get(0).get("wrt_aut_yn").equals("N")) {
+					response.sendRedirect("/autError.do");
+				} else {
+					// 화면접근이력 이력 남기기
+					CmmnUtils.saveHistory(request, historyVO);
+					historyVO.setExe_dtl_cd("DX-T0005_01");
+					historyVO.setMnu_id(9);
+					accessHistoryService.insertHistory(historyVO);
+	
+					HttpSession session = request.getSession();
+					LoginVO loginVo = (LoginVO) session.getAttribute("session");
+					String id = loginVo.getUsr_id();
+	
+					restoreRmanVO.setRegr_id(id);
+	
+					restoreService.insertRmanRestore(restoreRmanVO);		
+				}
+			} catch (Exception e) {
+				e.printStackTrace();
+				insertResult = "F";
 			}
-		} catch (Exception e) {
-			e.printStackTrace();
-		}	
+
+			
+		// Get Latest Restore SN
+		if(insertResult.equals("S")){
+			try {
+				latestRestoreSN = restoreService.latestRestoreSN();
+				restoreRmanVO.setRestore_sn(latestRestoreSN.getRestore_sn());
+			} catch (Exception e) {
+				e.printStackTrace();
+				snResult = "F";
+			}
+		}
+		
+		// Start Rman Restore
+		if(snResult.equals("S")){
+			try{
+				AES256 aes = new AES256(AES256_KEY.ENC_KEY);
+				
+				int db_svr_id = restoreRmanVO.getDb_svr_id();
+				DbServerVO schDbServerVO = new DbServerVO();
+				schDbServerVO.setDb_svr_id(db_svr_id);
+				DbServerVO DbServerVO = (DbServerVO) cmmnServerInfoService.selectServerInfo(schDbServerVO);
+				String strIpAdr = DbServerVO.getIpadr();
+				AgentInfoVO vo = new AgentInfoVO();
+				vo.setIPADR(strIpAdr);
+				AgentInfoVO agentInfo = (AgentInfoVO) cmmnServerInfoService.selectAgentInfo(vo);
+				
+				String IP = DbServerVO.getIpadr();
+				int PORT = agentInfo.getSOCKET_PORT();
+				
+				JSONObject serverObj = new JSONObject();
+				
+				serverObj.put(ClientProtocolID.SERVER_NAME, DbServerVO.getIpadr());
+				serverObj.put(ClientProtocolID.SERVER_IP, DbServerVO.getIpadr());
+				serverObj.put(ClientProtocolID.SERVER_PORT, DbServerVO.getPortno());
+				serverObj.put(ClientProtocolID.DATABASE_NAME, DbServerVO.getDft_db_nm());
+				serverObj.put(ClientProtocolID.USER_ID, DbServerVO.getSvr_spr_usr_id());
+				serverObj.put(ClientProtocolID.USER_PWD, aes.aesDecode(DbServerVO.getSvr_spr_scm_pwd()));
+							
+				System.out.println("===============서버정보================");
+				System.out.println("SERVER_NAME = "+DbServerVO.getIpadr());
+				System.out.println("SERVER_IP = "+DbServerVO.getIpadr());
+				System.out.println("SERVER_PORT = "+DbServerVO.getPortno());
+				System.out.println("DATABASE_NAME = "+DbServerVO.getDft_db_nm());
+				System.out.println("USER_ID = "+DbServerVO.getSvr_spr_usr_id());
+				System.out.println("USER_PWD = "+aes.aesDecode(DbServerVO.getSvr_spr_scm_pwd()));				
+				System.out.println("=====================================");
+
+				ClientInfoCmmn cic = new ClientInfoCmmn();
+				cic.rmanRestoreStart(serverObj, IP, PORT, restoreRmanVO);
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		}
+		
+					
 	}	
 	
 	
@@ -223,5 +339,44 @@ public class RmanRestoreContoller {
 		}
 		return "true";
 	}
-	
+
+
+	/**
+	 * 복구명을 중복 체크한다.
+	 * 
+	 * @param scd_nm
+	 * @return
+	 * @throws Exception
+	 */
+	@RequestMapping(value = "/restoreLogCall.do")
+	public @ResponseBody Map<String, Object> restoreLogCall(HttpServletRequest request, HttpServletResponse response) {
+		
+		RestoreRmanVO latestRestoreSN= null;
+		Map<String, Object> result = new HashMap<String, Object>();
+		
+		try {
+			int db_svr_id = Integer.parseInt(request.getParameter("db_svr_id"));
+			
+			DbServerVO schDbServerVO = new DbServerVO();
+			schDbServerVO.setDb_svr_id(db_svr_id);
+			DbServerVO DbServerVO = (DbServerVO) cmmnServerInfoService.selectServerInfo(schDbServerVO);
+			String strIpAdr = DbServerVO.getIpadr();
+			AgentInfoVO vo = new AgentInfoVO();
+			vo.setIPADR(strIpAdr);
+			AgentInfoVO agentInfo = (AgentInfoVO) cmmnServerInfoService.selectAgentInfo(vo);
+			
+			String IP = DbServerVO.getIpadr();
+			int PORT = agentInfo.getSOCKET_PORT();
+			
+			latestRestoreSN = restoreService.latestRestoreSN();
+			String restore_sn = String.valueOf(latestRestoreSN.getRestore_sn());
+			
+			ClientInfoCmmn cic = new ClientInfoCmmn();
+			result = cic.restoreLog(IP, PORT, restore_sn);
+
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return result;
+	}
 }

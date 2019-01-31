@@ -3,7 +3,7 @@ package com.k4m.dx.tcontrol.restore.service;
 public class RestoreRmanVO {
 	private int rownum;
 	private int idx;
-	private int sn;
+	private int restore_sn;
 	private int db_svr_id;
 	private String restore_nm;
 	private String restore_exp;
@@ -41,12 +41,12 @@ public class RestoreRmanVO {
 		this.idx = idx;
 	}
 
-	public int getSn() {
-		return sn;
+	public int getRestore_sn() {
+		return restore_sn;
 	}
 
-	public void setSn(int sn) {
-		this.sn = sn;
+	public void setRestore_sn(int restore_sn) {
+		this.restore_sn = restore_sn;
 	}
 
 	public int getDb_svr_id() {

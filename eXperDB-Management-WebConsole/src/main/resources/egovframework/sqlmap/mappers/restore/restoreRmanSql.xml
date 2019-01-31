@@ -64,5 +64,95 @@
 				 COUNT(*)
 		FROM T_RMAN_RESTORE
 		WHERE RESTORE_NM = #{restore_nm}
-	</select>	
+	</select>
+	
+	<select id="latestRestoreSN"  resultType="restoreRmanVO">
+		/**
+		* Query ID : latestRestoreSN
+		* Description : 최근SN 조회
+		* Author : 변승우
+		**/
+		SELECT
+			COALESCE(MAX(RESTORE_SN),0) AS restore_sn
+		FROM
+		T_RMAN_RESTORE
+	</select>		
+	
+	<select id="rmanRestoreHistory" parameterType="restoreRmanVO" resultType="restoreRmanVO">
+		/**
+		* Query ID : rmanRestoreHistory
+		* Description : RMAN Restore 이력 조회
+		* Author : 변승우
+		**/
+	  	SELECT
+		        (ROW_NUMBER() OVER()) AS ROWNUM,
+				(ROW_NUMBER() OVER()) AS IDX,
+				A.RESTORE_SN,
+	      		A.DB_SVR_ID,
+				A.RESTORE_NM,
+				A.RESTORE_EXP,
+				A.TIMELINE_DT,
+				A.TIMELINE_H,
+				A.TIMELINE_M,
+				A.TIMELINE_S,
+				A.DTB_PTH,
+				A.PGALOG_PTH,
+				A.SVRLOG_PTH,
+				A.BCK_PTH,
+				A.RESTORE_STRTDTM,
+				A.RESTORE_ENDDTM,
+				A.RESTORE_CNDT,
+				A.RESTORE_FLAG,
+				A.ASIS_FLAG,
+				A.RESTORE_DIR,
+				A.EXELOG,
+				A.REGR_ID,
+				A.REG_DTM
+		  FROM(	
+	      SELECT 
+	      		RESTORE_SN,
+	      		DB_SVR_ID,
+				RESTORE_NM,
+				RESTORE_EXP,
+				TIMELINE_DT,
+				TIMELINE_H,
+				TIMELINE_M,
+				TIMELINE_S,
+				DTB_PTH,
+				PGALOG_PTH,
+				SVRLOG_PTH,
+				BCK_PTH,
+				RESTORE_STRTDTM,
+				RESTORE_ENDDTM,
+				RESTORE_CNDT,
+				RESTORE_FLAG,
+				ASIS_FLAG,
+				RESTORE_DIR,
+				EXELOG,
+				REGR_ID,
+				REG_DTM
+	      FROM T_RMAN_RESTORE
+	      WHERE 1=1	
+	      AND DB_SVR_ID=#{db_svr_id}
+	      <if test="restore_strtdtm != null and restore_strtdtm != '' ">
+      		<if test="restore_enddtm != null and restore_enddtm != '' ">
+      			AND (
+      				TO_DATE(to_char(RESTORE_STRTDTM,'YYYY-MM-DD'),'YYYY-MM-DD') BETWEEN TO_DATE(#{restore_strtdtm},'YYYY-MM-DD') AND TO_DATE(#{restore_enddtm},'YYYY-MM-DD')
+      				OR
+      				TO_DATE(to_char(RESTORE_STRTDTM,'YYYY-MM-DD'),'YYYY-MM-DD') BETWEEN TO_DATE(#{restore_strtdtm},'YYYY-MM-DD') AND TO_DATE(#{restore_enddtm},'YYYY-MM-DD')
+      				)
+      		</if>
+      	</if>
+      	<if test="restore_flag != null and restore_flag != '' ">
+	      AND RESTORE_FLAG=#{restore_flag}
+	      </if>
+	     <if test="restore_cndt != null and restore_cndt != '' ">
+	      AND RESTORE_CNDT=#{restore_cndt}
+	      </if>
+	      <if test="restore_nm != null and restore_nm != '' ">
+	      AND RESTORE_NM=#{restore_nm}
+	      </if>
+	      ORDER BY RESTORE_ENDDTM DESC
+	      )A		
+	</select>
 </mapper>
