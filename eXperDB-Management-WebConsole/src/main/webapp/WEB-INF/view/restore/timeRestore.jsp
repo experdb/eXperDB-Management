@@ -159,9 +159,7 @@ function fn_makeMin(){
  	 var new_storage = "/"+$("#restore_dir").val();
  	 
  	$("#dtb_pth").val(new_storage+$("#dtb_pth").val());
- 	$("#pgalog_pth").val(new_storage+$("#pgalog_pth").val());
  	$("#svrlog_pth").val(new_storage+$("#svrlog_pth").val());
- 	$("#bck_pth").val(new_storage+$("#bck_pth").val());
   }
   
   
@@ -419,7 +417,7 @@ function fn_makeMin(){
 								<th scope="row" class="ico_t1">Database Storage</th>							
 							</tr>
 							<tr>
-								<td><input type="text" class="txt" name="dtb_pth" id="dtb_pth" style="width: 99%;" readonly="readonly" value="/EXPERDB/DATA/"  />
+								<td><input type="text" class="txt" name="dtb_pth" id="dtb_pth" style="width: 99%;" readonly="readonly" value="${pgdata}"  />
 							</tr>
 						</tbody>
 					</table>
@@ -430,7 +428,7 @@ function fn_makeMin(){
 								<th scope="row" class="ico_t1">Archive WAL Storage</th>							
 							</tr>
 							<tr>
-								<td><input type="text" class="txt" name="pgalog_pth" id="pgalog_pth" style="width: 99%;" readonly="readonly" value="/EXPERDB/DATA/" />
+								<td><input type="text" class="txt" name="pgalog_pth" id="pgalog_pth" style="width: 99%;" readonly="readonly" value="${pgalog}"  />
 							</tr>
 						</tbody>
 					</table>
@@ -441,7 +439,7 @@ function fn_makeMin(){
 								<th scope="row" class="ico_t1">Server Log Storage</th>							
 							</tr>
 							<tr>
-								<td><input type="text" class="txt" name="svrlog_pth" id="svrlog_pth" style="width: 99%;" readonly="readonly" value="/experdb/data/log" />
+								<td><input type="text" class="txt" name="svrlog_pth" id="svrlog_pth" style="width: 99%;" readonly="readonly" value="${srvlog}"/>
 							</tr>
 						</tbody>
 					</table>
@@ -452,7 +450,7 @@ function fn_makeMin(){
 								<th scope="row" class="ico_t1">Backup Storage</th>							
 							</tr>
 							<tr>
-								<td><input type="text" class="txt" name="bck_pth" id="bck_pth" style="width: 99%;" readonly="readonly" value="/experdb/data/backup" />
+								<td><input type="text" class="txt" name="bck_pth" id="bck_pth" style="width: 99%;" readonly="readonly" value="${pgrbak}"/>
 							</tr>
 						</tbody>
 					</table>

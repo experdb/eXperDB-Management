@@ -26,6 +26,7 @@
 var tableRman = null;
 var tableDump = null;
 var tab = "rman";
+var db_svr_id = "${db_svr_id}";
 
 /* ********************************************************
  * Data initialization
@@ -65,46 +66,48 @@ function fn_rman_init(){
 		deferRender : true,
 		bSort: false,
 	    columns : [
-		         	{ data: "rownum", className: "dt-center", defaultContent: ""}, 
-		         	{data : "wrk_nm", className : "dt-left", defaultContent : ""
-		    			,"render": function (data, type, full) {				
-		    				  return '<span onClick=javascript:fn_workLayer("'+full.wrk_id+'"); class="bold">' + full.wrk_nm + '</span>';
-		    			}
-		    		},
-		    		{ data: "ipadr", className: "dt-center", defaultContent: ""},
-		    		{ data : "wrk_exp",
-		    			render : function(data, type, full, meta) {	 	
-		    				var html = '';					
-		    				html += '<span title="'+full.wrk_exp+'">' + full.wrk_exp + '</span>';
-		    				return html;
-		    			},
-		    			defaultContent : ""
-		    		}, 		         	
- 		         	{ data: "bck_opt_cd_nm", className: "dt-center", defaultContent: ""}, 
- 		         	{data : "bck_file_pth", className : "dt-left", defaultContent : ""
-	 		   			,"render": function (data, type, full) {
-	 		   				  return '<span onClick=javascript:fn_rmanShow("'+full.bck_file_pth+'","'+full.db_svr_id+'"); title="'+full.bck_file_pth+'" class="bold">' + full.bck_file_pth + '</span>';
-	 		   			}
-	 		   		 },
- 		         	{ data: "wrk_strt_dtm", className: "dt-center", defaultContent: ""}, 
- 		         	{ data: "wrk_end_dtm", className: "dt-center", defaultContent: ""}, 
- 		         	{ data: "wrk_dtm", className: "dt-center", defaultContent: ""}, 
-	 		   		{
-	 					data : "exe_rslt_cd_nm",
-	 					render : function(data, type, full, meta) {	 						
-	 						var html = '';
-	 						if (full.exe_rslt_cd == 'TC001701') {
-	 							html += '<span class="btn btnC_01 btnF_02"><img src="../images/ico_state_02.png" style="margin-right:3px;"/>Success</span>';
-	 						} else if(full.exe_rslt_cd == 'TC001702'){
-	 							html += '<span class="btn btnC_01 btnF_02"><button onclick="fn_failLog('+full.exe_sn+')"><img src="../images/ico_state_01.png" style="margin-right:3px;"/>Fail</button></span>';
-	 						} else {
-	 							html +='<span class="btn btnC_01 btnF_02"><img src="../images/ico_state_03.png" style="margin-right:3px;"/><spring:message code="etc.etc28"/></span>';
-	 						}
-	 						return html;
-	 					},
-	 					className : "dt-center",
-	 					defaultContent : ""
-	 				}
+			     		{ data: "rownum", className: "dt-center", defaultContent: ""}, 
+			     		{
+							data : "restore_flag",
+							render : function(data, type, full, meta) {
+								var html = '';
+								if (full.restore_flag == '0') {
+									html += '긴급복구';
+								} else {
+									html +='시점복구';
+								}
+								return html;
+							},
+							className : "dt-center",
+							defaultContent : ""
+						},		        
+						{ data: "restore_nm", className: "dt-center", defaultContent: ""},
+						{ data: "restore_exp", className: "dt-center", defaultContent: ""},
+			         	{ data: "timeline", className: "dt-center", defaultContent: ""}, 
+			         	{ data: "restore_strdtm", className: "dt-center", defaultContent: ""},
+			         	{ data: "restore_enddtm", className: "dt-center", defaultContent: ""}, 
+			         	{
+							data : "restore_cndt",
+							render : function(data, type, full, meta) {
+								var html = '';
+								if (full.restore_cndt == '0') {
+									html += '성공';
+								} else if (full.restore_cndt == '1'){
+									html +='시작';
+								} else if (full.restore_cndt == '2'){
+									html +='진행중';
+								} else {
+									html +='실패';
+								}
+								return html;
+							},
+							className : "dt-center",
+							defaultContent : ""
+						},		
+						
+			         	{ data: "restore_cndt", className: "dt-center", defaultContent: ""},
+			         	{ data: "exelog", className: "dt-center", defaultContent: ""}, 
+			         	{ data: "regr_id", className: "dt-center", defaultContent: ""}
  		        ]
 	});
    	
@@ -210,6 +213,45 @@ function fn_dump_init(){
 }
 
 
+	/* ********************************************************
+	 * Get Rman Restore Log List
+	 ******************************************************** */
+	function fn_get_rman_list(){
+		$.ajax({
+			url : "/rmanRestoreHistory.do",
+		  	data : {
+		  		db_svr_id : db_svr_id,
+		  		restore_flag : $("#restore_flag").val(),
+		  		restore_strtdtm : $("#restore_strtdtm").val(),
+		  		restore_enddtm : $("#restore_enddtm").val(),
+		  		restore_cndt : $("#restore_cndt").val(),
+		  		restore_nm : $('#restore_nm').val()
+		  	},
+			dataType : "json",
+			type : "post",
+			beforeSend: function(xhr) {
+		        xhr.setRequestHeader("AJAX", true);
+		     },
+			error : function(xhr, status, error) {
+				if(xhr.status == 401) {
+					alert("<spring:message code='message.msg02' />");
+					top.location.href = "/";
+				} else if(xhr.status == 403) {
+					alert("<spring:message code='message.msg03' />");
+					top.location.href = "/";
+				} else {
+					alert("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""));
+				}
+			},
+			success : function(result) {
+				tableRman.rows({selected: true}).deselect();
+				tableRman.clear().draw();
+				tableRman.rows.add(result).draw();
+			}
+		});
+	}
+
+
 /* ********************************************************
  * Tab Click
  ******************************************************** */
@@ -290,28 +332,30 @@ function selectTab(intab){
 								<td colspan="3">
 									<div class="calendar_area">
 										<a href="#n" class="calendar_btn">달력열기</a>
-										<input type="text" name="wrk_strt_dtm" id="wrk_strt_dtm" class="calendar" readonly/>
+										<input type="text" name="restore_strtdtm" id="restore_strtdtm" class="calendar" readonly/>
 										<span class="wave">~</span>
 										<a href="#n" class="calendar_btn">달력열기</a>
-										<input type="text" name="wrk_end_dtm" id="wrk_end_dtm" class="calendar" readonly/>
+										<input type="text" name="restore_enddtm" id="restore_enddtm" class="calendar" readonly/>
 									</div>
 								</td>
 							</tr>
 							<tr style="height:35px;">
 								<th scope="row" class="t9"><spring:message code="common.status" /></th>
 								<td>
-									<select name="exe_rslt_cd" id="exe_rslt_cd" class="select t5">
+									<select name="restore_cndt" id="restore_cndt" class="select t5">
 										<option value=""><spring:message code="schedule.total" /></option>
-										<option value="TC001701"><spring:message code="common.success" /></option>
-										<option value="TC001702"><spring:message code="common.failed" /></option>
+										<option value="0">성공</option>
+										<option value="1">시작</option>
+										<option value="2">진행중</option>
+										<option value="3">실패</option>
 									</select>
 								</td>
 								<th scope="row" class="t9 search_rman">복구구분</th>
 								<td class="search_rman">
-									<select name="bck_opt_cd" id="bck_opt_cd" class="select t5">
+									<select name="restore_flag" id="restore_flag" class="select t5">
 										<option value=""><spring:message code="schedule.total" /></option>
-										<option value="TC000301">긴급복구</option>
-										<option value="TC000302">시점복구</option>
+										<option value="0">긴급복구</option>
+										<option value="1">시점복구</option>
 									</select>
 								</td>
 								<th scope="row" class="t9 search_dump" style="display:none;"><spring:message code="common.database" /></th>
@@ -326,7 +370,7 @@ function selectTab(intab){
 							</tr>
 							<tr>
 								<th scope="row" class="t9">복구명</th>
-								<td><input type="text" name="wrk_nm" id="wrk_nm" class="txt t5" maxlength="25"  /></td>
+								<td><input type="text" name="restore_nm" id="restore_nm" class="txt t5" maxlength="25"  /></td>
 							</tr>
 						</tbody>
 					</table>
