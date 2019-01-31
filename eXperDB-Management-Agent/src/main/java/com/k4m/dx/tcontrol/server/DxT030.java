@@ -61,13 +61,20 @@ public class DxT030 extends SocketCtl {
 		String strErrMsg = "";
 		String strSuccessCode = "0";
 		
+		socketLogger.info("111111111111111111111");
+		
 		String strRestore_sn = (String) jObj.get(ProtocolID.RESTORE_SN);
 		int intRestore_sn = Integer.parseInt(strRestore_sn);
+		
+		String PGDBAK = (String) jObj.get(ProtocolID.PGDBAK);
 		
 		JSONObject objSERVER_INFO = new JSONObject(); 
 		objSERVER_INFO = (JSONObject) jObj.get(ProtocolID.SERVER_INFO);
 		
-		String SERVER_IP = (String) objSERVER_INFO.get(ProtocolID.SERVER_IP);
+		socketLogger.info("22222222222222222222222");
+		
+		//String SERVER_IP = (String) objSERVER_INFO.get(ProtocolID.SERVER_IP);
+		String SERVER_IP = "127.0.0.1";
 		String SERVER_PORT = (String) objSERVER_INFO.get(ProtocolID.SERVER_PORT);
 		String DATABASE_NAME = (String) objSERVER_INFO.get(ProtocolID.DATABASE_NAME);
 		String USER_ID = (String) objSERVER_INFO.get(ProtocolID.USER_ID);
@@ -76,8 +83,10 @@ public class DxT030 extends SocketCtl {
 		String HOST = "--host=" + SERVER_IP;
 		String PORT = "--port=" + SERVER_PORT;
 		String USERNAME = "--username=" + USER_ID;
-		String PASSWORD = "--password=" + USER_PWD;
+		//String PASSWORD = "--password=" + USER_PWD;
 		String DBNAME = "--dbname=" + DATABASE_NAME;
+		
+		socketLogger.info("3333333333333333");
 		
 		JSONObject objDumpOption = new JSONObject(); 
 		objDumpOption = (JSONObject) jObj.get(ProtocolID.DUMP_OPTION);
@@ -86,7 +95,7 @@ public class DxT030 extends SocketCtl {
 		String FORMAT = "--format=" + R_FORMAT;
 
 		String R_FILENAME = (String) objDumpOption.get(ProtocolID.FILENAME);
-		String FILENAME = R_FILENAME;
+		String FILENAME = PGDBAK + "/" + R_FILENAME;
 		
 		String R_JOBS = (String) objDumpOption.get(ProtocolID.JOBS);
 		String JOBS = "--jobs=" + R_JOBS;
@@ -156,29 +165,29 @@ public class DxT030 extends SocketCtl {
 		                .append(SPACE).append(HOST)
 		                .append(SPACE).append(PORT)
 		                .append(SPACE).append(USERNAME)
-		                .append(SPACE).append(PASSWORD)
 		                .append(SPACE).append(DBNAME)
 		                ;
         if(!R_FORMAT.equals("")) sbRestoreCmd.append(SPACE).append(FORMAT);
         if(!R_JOBS.equals("")) sbRestoreCmd.append(SPACE).append(JOBS);
         if(!R_ROLE.equals("")) sbRestoreCmd.append(SPACE).append(ROLE);
         
-        if(!R_PRE_DATA.equals("Y")) sbRestoreCmd.append(SPACE).append(PRE_DATA);
-        if(!R_DATA.equals("Y")) sbRestoreCmd.append(SPACE).append(DATA);
-        if(!R_POST_DATA.equals("Y")) sbRestoreCmd.append(SPACE).append(POST_DATA);
-        if(!R_DATA_ONLY.equals("Y")) sbRestoreCmd.append(SPACE).append(DATA_ONLY);
-        if(!R_SCHEMA_ONLY.equals("Y")) sbRestoreCmd.append(SPACE).append(SCHEMA_ONLY);
-        if(!R_NO_OWNER.equals("Y")) sbRestoreCmd.append(SPACE).append(NO_OWNER);
-        if(!R_NO_PRIVILEGES.equals("Y")) sbRestoreCmd.append(SPACE).append(NO_PRIVILEGES);
-        if(!R_NO_TABLESPACES.equals("Y")) sbRestoreCmd.append(SPACE).append(NO_TABLESPACES);
-        if(!R_CREATE.equals("Y")) sbRestoreCmd.append(SPACE).append(CREATE);
-        if(!R_CLEAN.equals("Y")) sbRestoreCmd.append(SPACE).append(CLEAN);
-        if(!R_SINGLE_TRANSACTION.equals("Y")) sbRestoreCmd.append(SPACE).append(SINGLE_TRANSACTION);
-        if(!R_DISABLE_TRIGGERS.equals("Y")) sbRestoreCmd.append(SPACE).append(DISABLE_TRIGGERS);
-        if(!R_NO_DATA_FOR_FAILED_TABLES.equals("Y")) sbRestoreCmd.append(SPACE).append(NO_DATA_FOR_FAILED_TABLES);
-        if(!R_VERBOSE.equals("Y")) sbRestoreCmd.append(SPACE).append(VERBOSE);
-        if(!R_USE_SET_SESSON_AUTH.equals("Y")) sbRestoreCmd.append(SPACE).append(USE_SET_SESSON_AUTH);
-        if(!R_EXIT_ON_ERROR.equals("Y")) sbRestoreCmd.append(SPACE).append(EXIT_ON_ERROR);
+        if(R_PRE_DATA.equals("Y")) sbRestoreCmd.append(SPACE).append(PRE_DATA);
+        if(R_DATA.equals("Y")) sbRestoreCmd.append(SPACE).append(DATA);
+        if(R_POST_DATA.equals("Y")) sbRestoreCmd.append(SPACE).append(POST_DATA);
+        if(R_DATA_ONLY.equals("Y")) sbRestoreCmd.append(SPACE).append(DATA_ONLY);
+        if(R_SCHEMA_ONLY.equals("Y")) sbRestoreCmd.append(SPACE).append(SCHEMA_ONLY);
+        if(R_NO_OWNER.equals("Y")) sbRestoreCmd.append(SPACE).append(NO_OWNER);
+        if(R_NO_PRIVILEGES.equals("Y")) sbRestoreCmd.append(SPACE).append(NO_PRIVILEGES);
+        if(R_NO_TABLESPACES.equals("Y")) sbRestoreCmd.append(SPACE).append(NO_TABLESPACES);
+        if(R_CREATE.equals("Y")) sbRestoreCmd.append(SPACE).append(CREATE);
+        if(R_CLEAN.equals("Y")) sbRestoreCmd.append(SPACE).append(CLEAN);
+        if(R_SINGLE_TRANSACTION.equals("Y")) sbRestoreCmd.append(SPACE).append(SINGLE_TRANSACTION);
+        if(R_DISABLE_TRIGGERS.equals("Y")) sbRestoreCmd.append(SPACE).append(DISABLE_TRIGGERS);
+        if(R_NO_DATA_FOR_FAILED_TABLES.equals("Y")) sbRestoreCmd.append(SPACE).append(NO_DATA_FOR_FAILED_TABLES);
+        //if(R_VERBOSE.equals("Y")) sbRestoreCmd.append(SPACE).append(VERBOSE);
+        sbRestoreCmd.append(SPACE).append(VERBOSE);
+        if(R_USE_SET_SESSON_AUTH.equals("Y")) sbRestoreCmd.append(SPACE).append(USE_SET_SESSON_AUTH);
+        if(R_EXIT_ON_ERROR.equals("Y")) sbRestoreCmd.append(SPACE).append(EXIT_ON_ERROR);
         
         if(!R_FILENAME.equals("")) sbRestoreCmd.append(SPACE).append(FILENAME);
 

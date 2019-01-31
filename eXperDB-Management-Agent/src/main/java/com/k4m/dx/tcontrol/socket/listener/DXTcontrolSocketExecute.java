@@ -308,6 +308,8 @@ public class DXTcontrolSocketExecute extends SocketCtl implements Runnable {
 					break;
 				case TranCodeType.DxT030 :
 					
+					
+					socketLogger.info("TranCodeType : " + strDX_EX_CODE);
 					DxT030 dxT030 = new DxT030(client, is, os);
 					dxT030.execute(strDX_EX_CODE, jObj);
 			

@@ -58,6 +58,8 @@ import org.json.simple.parser.JSONParser;
  * 27. Postgres Data 경로 조회
  * 28. RMAN Restore 실행
  * 29.  rman restore log 조회
+ * 30.  dump restore 실행
+ * 31.  dump restore log 조회
  * 
  * @author thpark
  *
@@ -121,8 +123,11 @@ public class ClientTester {
 			//clientTester.dxT026(Ip, port);
 			//clientTester.dxT027(Ip, port);
 			
-			clientTester.dxT028(Ip, port);
+			//clientTester.dxT028(Ip, port);
 			//clientTester.dxT029(Ip, port);
+			
+			
+			clientTester.dxT030(Ip, port);
 			
 			//clientTester.test();
 		} catch(Exception e) {
@@ -2460,6 +2465,88 @@ public class ClientTester {
 			System.out.println("ERR_CODE : " +  strErrCode);
 			System.out.println("ERR_MSG : " +  strErrMsg);
 			System.out.println("strResultData : " +  strResultData);
+
+			
+		} catch(Exception e) {
+			e.printStackTrace();
+		}
+	}
+	
+	private void dxT030(String Ip, int port) {
+		try {
+			
+			
+			JSONObject jObj = new JSONObject();
+			
+			
+			jObj.put(ClientProtocolID.DX_EX_CODE, ClientTranCodeType.DxT030);
+			
+			//RESTORE_SN
+			String RESTORE_SN = "1";
+			jObj.put(ClientProtocolID.RESTORE_SN, RESTORE_SN);
+			
+			jObj.put(ClientProtocolID.PGDBAK, "/experdata/backup/dump");
+			
+			
+			//SERVER_INFO
+			
+			JSONObject serverObj = new JSONObject();
+			
+			serverObj.put(ClientProtocolID.SERVER_NAME, "192.168.56.117");
+			serverObj.put(ClientProtocolID.SERVER_IP, "192.168.56.117");
+			serverObj.put(ClientProtocolID.SERVER_PORT, "5432");
+			serverObj.put(ClientProtocolID.DATABASE_NAME, "experdb");
+			serverObj.put(ClientProtocolID.USER_ID, "experdb");
+			serverObj.put(ClientProtocolID.USER_PWD, "experdb");
+			
+			jObj.put(ClientProtocolID.SERVER_INFO, serverObj);
+			
+			
+			JSONObject dumpOptionObj = new JSONObject();
+			
+			dumpOptionObj.put(ClientProtocolID.FORMAT, "tar");
+			dumpOptionObj.put(ClientProtocolID.FILENAME, "eXperDB_2_20190131143100.tar");
+			dumpOptionObj.put(ClientProtocolID.JOBS, "1");
+			dumpOptionObj.put(ClientProtocolID.ROLE, "experdb");
+			dumpOptionObj.put(ClientProtocolID.PRE_DATA, "N");
+			dumpOptionObj.put(ClientProtocolID.DATA, "N");
+			dumpOptionObj.put(ClientProtocolID.POST_DATA, "N");
+			dumpOptionObj.put(ClientProtocolID.DATA_ONLY, "N");
+			dumpOptionObj.put(ClientProtocolID.SCHEMA_ONLY, "N");
+			dumpOptionObj.put(ClientProtocolID.NO_OWNER, "N");
+			dumpOptionObj.put(ClientProtocolID.NO_PRIVILEGES, "N");
+			dumpOptionObj.put(ClientProtocolID.NO_TABLESPACES, "N");
+			dumpOptionObj.put(ClientProtocolID.CREATE, "N");
+			dumpOptionObj.put(ClientProtocolID.CLEAN, "N");
+			dumpOptionObj.put(ClientProtocolID.SINGLE_TRANSACTION, "N");
+			dumpOptionObj.put(ClientProtocolID.DISABLE_TRIGGERS, "N");
+			dumpOptionObj.put(ClientProtocolID.NO_DATA_FOR_FAILED_TABLES, "N");
+			dumpOptionObj.put(ClientProtocolID.VERBOSE, "Y");
+			dumpOptionObj.put(ClientProtocolID.USE_SET_SESSON_AUTH, "N");
+			dumpOptionObj.put(ClientProtocolID.EXIT_ON_ERROR, "N");
+			
+			jObj.put(ClientProtocolID.DUMP_OPTION, dumpOptionObj);
+			
+
+			JSONObject objList;
+			
+			ClientAdapter CA = new ClientAdapter(Ip, port);
+			CA.open(); 
+
+			objList = CA.dxT028(jObj);
+			
+			CA.close();
+			
+			String strErrMsg = (String)objList.get(ClientProtocolID.ERR_MSG);
+			String strErrCode = (String)objList.get(ClientProtocolID.ERR_CODE);
+			String strDxExCode = (String)objList.get(ClientProtocolID.DX_EX_CODE);
+			String strResultCode = (String)objList.get(ClientProtocolID.RESULT_CODE);
+			
+			
+			System.out.println("RESULT_CODE : " +  strResultCode);
+			System.out.println("ERR_CODE : " +  strErrCode);
+			System.out.println("ERR_MSG : " +  strErrMsg);
+			
 
 			
 		} catch(Exception e) {
