@@ -9,6 +9,8 @@ import java.util.Map;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 
+import com.k4m.dx.tcontrol.restore.service.RestoreRmanVO;
+
 public class ClientInfoCmmn {
 
 	// 1. 서버 연결 테스트 (serverConn)
@@ -1334,6 +1336,162 @@ public List<HashMap<String, String>> dumpShow(String IP, int PORT,String cmd) {
 		}
 	}
 
+	
+	public HashMap restorePath(String IP, int PORT) {
+		HashMap result = new HashMap();
+		
+		try {		
+			JSONObject jObj = new JSONObject();
+				
+			jObj.put(ClientProtocolID.DX_EX_CODE, ClientTranCodeType.DxT027);
+		
+			JSONObject objList;
+			
+			ClientAdapter CA = new ClientAdapter(IP, PORT);
+			CA.open(); 
+
+			objList = CA.dxT027(jObj);	
+			CA.close();
+			
+			String strErrMsg = (String)objList.get(ClientProtocolID.ERR_MSG);
+			String strErrCode = (String)objList.get(ClientProtocolID.ERR_CODE);
+			String strDxExCode = (String)objList.get(ClientProtocolID.DX_EX_CODE);
+			String strResultCode = (String)objList.get(ClientProtocolID.RESULT_CODE);
+			System.out.println("RESULT_CODE : " +  strResultCode);
+			System.out.println("ERR_CODE : " +  strErrCode);
+			System.out.println("ERR_MSG : " +  strErrMsg);
+
+		  result = (HashMap) objList.get(ClientProtocolID.RESULT_DATA);
+				
+			Iterator<String> keys = result.keySet().iterator();
+
+	        while( keys.hasNext() ){
+	            String key = keys.next();
+	            System.out.println( String.format("키 : %s, 값 : %s", key, result.get(key)) );
+	        }
+	   	       
+		} catch(Exception e) {
+			e.printStackTrace();
+		}		
+		return result;		
+	}
 
 
+	
+	public void rmanRestoreStart(JSONObject serverObj, String IP, int PORT, RestoreRmanVO restoreRmanVO) {
+	try {	
+			JSONObject jObj = new JSONObject();
+
+			jObj.put(ClientProtocolID.DX_EX_CODE, ClientTranCodeType.DxT028);
+			
+			//RESTORE_SN
+			String RESTORE_SN = String.valueOf(restoreRmanVO.getRestore_sn());
+			jObj.put(ClientProtocolID.RESTORE_SN, RESTORE_SN);
+			//RESTORE_FLAG
+			String RESTORE_FLAG = restoreRmanVO.getRestore_flag();
+			jObj.put(ClientProtocolID.RESTORE_FLAG, RESTORE_FLAG);
+			//TIMELINE
+			String TIMELINE = "";
+			jObj.put(ClientProtocolID.TIMELINE, TIMELINE);
+			//PGDATA
+			String PGDATA = restoreRmanVO.getDtb_pth();
+			jObj.put(ClientProtocolID.PGDATA, PGDATA);
+			//PGALOG
+			String PGALOG = restoreRmanVO.getPgalog_pth();
+			jObj.put(ClientProtocolID.PGALOG, PGALOG);
+			//SRVLOG
+			String SRVLOG = restoreRmanVO.getSvrlog_pth();
+			jObj.put(ClientProtocolID.SRVLOG, SRVLOG);
+			//PGRBAK
+			String PGRBAK = restoreRmanVO.getBck_pth();
+			jObj.put(ClientProtocolID.PGRBAK, PGRBAK);			
+			//ASIS_FLAG
+			String ASIS_FLAG = restoreRmanVO.getAsis_flag();
+			jObj.put(ClientProtocolID.ASIS_FLAG, ASIS_FLAG);			
+			//RESTORE_DIR
+			String RESTORE_DIR = restoreRmanVO.getRestore_dir();
+			jObj.put(ClientProtocolID.RESTORE_DIR, RESTORE_DIR);			
+			
+			System.out.println("=========== RMAN Restore 정보 ============");
+			System.out.println("RESTORE_SN = "+RESTORE_SN);
+			System.out.println("RESTORE_FLAG = "+RESTORE_FLAG);
+			System.out.println("TIMELINE = "+"");
+			System.out.println("PGDATA = "+PGDATA);
+			System.out.println("PGALOG = "+PGALOG);
+			System.out.println("SRVLOG = "+SRVLOG);
+			System.out.println("PGRBAK = "+PGRBAK);
+			System.out.println("ASIS_FLAG = "+ASIS_FLAG);
+			System.out.println("RESTORE_DIR = "+"");					
+			System.out.println("=====================================");
+			
+			//SERVER_INFO
+			jObj.put(ClientProtocolID.SERVER_INFO, serverObj);
+
+			JSONObject objList;
+			
+			ClientAdapter CA = new ClientAdapter(IP, PORT);
+			CA.open(); 
+
+			objList = CA.dxT028(jObj);
+			
+			CA.close();
+			
+			String strErrMsg = (String)objList.get(ClientProtocolID.ERR_MSG);
+			String strErrCode = (String)objList.get(ClientProtocolID.ERR_CODE);
+			String strDxExCode = (String)objList.get(ClientProtocolID.DX_EX_CODE);
+			String strResultCode = (String)objList.get(ClientProtocolID.RESULT_CODE);
+			
+			System.out.println("RESULT_CODE : " +  strResultCode);
+			System.out.println("ERR_CODE : " +  strErrCode);
+			System.out.println("ERR_MSG : " +  strErrMsg);
+			
+		} catch(Exception e) {
+			e.printStackTrace();
+		}		
+	}
+	
+	
+	public Map<String, Object> restoreLog(String IP, int PORT, String restore_sn) {
+		
+		Map<String, Object> result = new HashMap<String, Object>();
+		
+		try {								
+			JSONObject jObj = new JSONObject();
+			
+			jObj.put(ClientProtocolID.DX_EX_CODE, ClientTranCodeType.DxT029);
+			
+			//RESTORE_SN
+			jObj.put(ClientProtocolID.RESTORE_SN, restore_sn);
+			
+
+			JSONObject objList;
+			
+			ClientAdapter CA = new ClientAdapter(IP, PORT);
+			CA.open(); 
+
+			objList = CA.dxT029(jObj);
+			
+			CA.close();
+			
+			String strErrMsg = (String)objList.get(ClientProtocolID.ERR_MSG);
+			String strErrCode = (String)objList.get(ClientProtocolID.ERR_CODE);
+			String strDxExCode = (String)objList.get(ClientProtocolID.DX_EX_CODE);
+			String strResultCode = (String)objList.get(ClientProtocolID.RESULT_CODE);
+			String strResultData = (String)objList.get(ClientProtocolID.RESULT_DATA);
+			
+			System.out.println("RESULT_CODE : " +  strResultCode);
+			System.out.println("ERR_CODE : " +  strErrCode);
+			System.out.println("ERR_MSG : " +  strErrMsg);
+			System.out.println("strResultData : " +  strResultData);
+
+			result.put("RESULT_CODE", strResultCode);
+			result.put("ERR_CODE", strErrCode);
+			result.put("ERR_MSG", strErrMsg);
+			result.put("strResultData", strResultData);
+				
+		} catch(Exception e) {
+			e.printStackTrace();
+		}	
+		return result;		
+	}
 }

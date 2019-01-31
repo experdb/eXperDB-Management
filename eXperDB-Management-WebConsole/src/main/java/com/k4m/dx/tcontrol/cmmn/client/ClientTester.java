@@ -13,9 +13,6 @@ import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 
 
-
-
-
 /**
  * 전문에서 사용되는 코드값
 * @author 박태혁
@@ -57,7 +54,12 @@ import org.json.simple.parser.JSONParser;
  * 22. RMAN 백업 INIT 실행
  * 23. 파일 존재유무 체크
  * 24. dump 파일 정보 조회
- * 25. rman 파일셋 정보조 회
+ * 25. rman 파일셋 정보조회
+ * 26. Create Extension pgAudit 조회 
+ * 27. Postgres Data 경로 조회
+ * 28. RMAN Restore 실행
+ * 29.  rman restore log 조회
+ * 
  * @author thpark
  *
  */
@@ -71,7 +73,7 @@ public class ClientTester {
 		//Ip = "222.110.153.251";
 		 //	Ip = "127.0.0.1";
 		// Ip = "222.110.153.231";
-		Ip = "192.168.56.116";
+		Ip = "192.168.56.117";
 		//Ip = "222.110.153.204";
 		int port = 9001;
 		//port = 5869;
@@ -101,7 +103,7 @@ public class ClientTester {
 			//clientTester.dxT014_U(Ip, port);
 			//clientTester.dxT014_D(Ip, port);
 			
-			clientTester.dxT015_R(Ip, port);
+			//clientTester.dxT015_R(Ip, port);
 			//clientTester.dxT015_V(Ip, port);
 			//clientTester.dxT015_DL(Ip, port);
 			//clientTester.dxT016(Ip, port);
@@ -114,15 +116,19 @@ public class ClientTester {
 			//clientTester.dxT020(Ip, port);
 			//clientTester.dxT021(Ip, port);
 			//clientTester.dxT023(Ip, port);
-			clientTester.dxT024(Ip, port);
+			//clientTester.dxT024(Ip, port);
 			//clientTester.dxT025(Ip, port);
 			//clientTester.dxT026(Ip, port);
+			//clientTester.dxT027(Ip, port);
+			//clientTester.dxT028(Ip, port);
+			clientTester.dxT029(Ip, port);			
 			//clientTester.test();
 		} catch(Exception e) {
 			e.printStackTrace();
 		}
 	}
 	
+
 	private void dxT001(String Ip, int port) {
 		try {
 
@@ -2278,4 +2284,169 @@ public class ClientTester {
 			e.printStackTrace();
 		}
 	}
+	
+	
+	private void dxT027(String Ip, int port) {
+		try {
+			
+			
+			JSONObject jObj = new JSONObject();
+			
+			
+			jObj.put(ClientProtocolID.DX_EX_CODE, ClientTranCodeType.DxT027);
+			
+
+			JSONObject objList;
+			
+			ClientAdapter CA = new ClientAdapter(Ip, port);
+			CA.open(); 
+
+			objList = CA.dxT027(jObj);
+			
+			CA.close();
+			
+			String strErrMsg = (String)objList.get(ClientProtocolID.ERR_MSG);
+			String strErrCode = (String)objList.get(ClientProtocolID.ERR_CODE);
+			String strDxExCode = (String)objList.get(ClientProtocolID.DX_EX_CODE);
+			String strResultCode = (String)objList.get(ClientProtocolID.RESULT_CODE);
+			System.out.println("RESULT_CODE : " +  strResultCode);
+			System.out.println("ERR_CODE : " +  strErrCode);
+			System.out.println("ERR_MSG : " +  strErrMsg);
+
+			HashMap resultHp = (HashMap) objList.get(ClientProtocolID.RESULT_DATA);
+			
+			
+			Iterator<String> keys = resultHp.keySet().iterator();
+
+	        while( keys.hasNext() ){
+	            String key = keys.next();
+	            System.out.println( String.format("키 : %s, 값 : %s", key, resultHp.get(key)) );
+	        }
+			
+			
+		} catch(Exception e) {
+			e.printStackTrace();
+		}
+	}
+	
+	
+	
+	private void dxT028(String Ip, int port) {
+		try {
+			
+			
+			JSONObject jObj = new JSONObject();
+			
+			
+			jObj.put(ClientProtocolID.DX_EX_CODE, ClientTranCodeType.DxT028);
+			
+			//RESTORE_SN
+			String RESTORE_SN = "2";
+			jObj.put(ClientProtocolID.RESTORE_SN, RESTORE_SN);
+			//RESTORE_FLAG
+			String RESTORE_FLAG = "0";
+			jObj.put(ClientProtocolID.RESTORE_FLAG, RESTORE_FLAG);
+			//TIMELINE
+			String TIMELINE = "";
+			jObj.put(ClientProtocolID.TIMELINE, TIMELINE);
+			//PGDATA
+			String PGDATA = "/experdata/data";
+			jObj.put(ClientProtocolID.PGDATA, PGDATA);
+			//PGALOG
+			String PGALOG = "/experdata/archive";
+			jObj.put(ClientProtocolID.PGALOG, PGALOG);
+			//SRVLOG
+			String SRVLOG = "/experdata/data/log";
+			jObj.put(ClientProtocolID.SRVLOG, SRVLOG);
+			//PGRBAK
+			String PGRBAK = "/experdata/backup/rman";
+			jObj.put(ClientProtocolID.PGRBAK, PGRBAK);
+			
+			//ASIS_FLAG
+			String ASIS_FLAG = "0";
+			jObj.put(ClientProtocolID.ASIS_FLAG, ASIS_FLAG);
+			
+			//RESTORE_DIR
+			String RESTORE_DIR = "Rman_Restore";
+			jObj.put(ClientProtocolID.RESTORE_DIR, RESTORE_DIR);
+			
+			//SERVER_INFO
+			
+			JSONObject serverObj = new JSONObject();
+			
+			serverObj.put(ClientProtocolID.SERVER_NAME, "192.168.56.117");
+			serverObj.put(ClientProtocolID.SERVER_IP, "192.168.56.117");
+			serverObj.put(ClientProtocolID.SERVER_PORT, "5432");
+			serverObj.put(ClientProtocolID.DATABASE_NAME, "experdb");
+			serverObj.put(ClientProtocolID.USER_ID, "experdb");
+			serverObj.put(ClientProtocolID.USER_PWD, "experdb");
+			
+			jObj.put(ClientProtocolID.SERVER_INFO, serverObj);
+
+			JSONObject objList;
+			
+			ClientAdapter CA = new ClientAdapter(Ip, port);
+			CA.open(); 
+
+			objList = CA.dxT028(jObj);
+			
+			CA.close();
+			
+			String strErrMsg = (String)objList.get(ClientProtocolID.ERR_MSG);
+			String strErrCode = (String)objList.get(ClientProtocolID.ERR_CODE);
+			String strDxExCode = (String)objList.get(ClientProtocolID.DX_EX_CODE);
+			String strResultCode = (String)objList.get(ClientProtocolID.RESULT_CODE);
+			
+			
+			System.out.println("RESULT_CODE : " +  strResultCode);
+			System.out.println("ERR_CODE : " +  strErrCode);
+			System.out.println("ERR_MSG : " +  strErrMsg);
+			
+
+			
+		} catch(Exception e) {
+			e.printStackTrace();
+		}
+	}
+	
+	private void dxT029(String Ip, int port) {
+		try {
+			
+			
+			JSONObject jObj = new JSONObject();
+			
+			
+			jObj.put(ClientProtocolID.DX_EX_CODE, ClientTranCodeType.DxT029);
+			
+			//RESTORE_SN
+			String RESTORE_SN = "9";
+			jObj.put(ClientProtocolID.RESTORE_SN, RESTORE_SN);
+			
+
+			JSONObject objList;
+			
+			ClientAdapter CA = new ClientAdapter(Ip, port);
+			CA.open(); 
+
+			objList = CA.dxT029(jObj);
+			
+			CA.close();
+			
+			String strErrMsg = (String)objList.get(ClientProtocolID.ERR_MSG);
+			String strErrCode = (String)objList.get(ClientProtocolID.ERR_CODE);
+			String strDxExCode = (String)objList.get(ClientProtocolID.DX_EX_CODE);
+			String strResultCode = (String)objList.get(ClientProtocolID.RESULT_CODE);
+			String strResultData = (String)objList.get(ClientProtocolID.RESULT_DATA);
+			
+			System.out.println("RESULT_CODE : " +  strResultCode);
+			System.out.println("ERR_CODE : " +  strErrCode);
+			System.out.println("ERR_MSG : " +  strErrMsg);
+			System.out.println("strResultData : " +  strResultData);
+
+			
+		} catch(Exception e) {
+			e.printStackTrace();
+		}
+	}
+	
 }

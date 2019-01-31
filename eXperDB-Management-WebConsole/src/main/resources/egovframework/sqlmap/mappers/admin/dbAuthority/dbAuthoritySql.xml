@@ -191,6 +191,10 @@
 				, A.POLICY_CHANGE_HIS_AUT_YN
 				, A.SCRIPT_CNG_AUT_YN
 				, A.SCRIPT_HIS_AUT_YN
+				, A.EMERGENCY_RESTORE_AUT_YN
+				, A.POINT_RESTORE_AUT_YN
+				, A.DUMP_RESTORE_AUT_YN
+				, A.RESTORE_HIS_AUT_YN
 				, C.IPADR
 		FROM T_USRDBSVRAUT_I A, T_DBSVR_I B,T_DBSVRIPADR_I C
 		WHERE 1 = 1
@@ -219,6 +223,10 @@
 				, POLICY_CHANGE_HIS_AUT_YN = #{policy_change_his_aut_yn} 	 	
 				, SCRIPT_CNG_AUT_YN = #{script_cng_aut_yn} 
 				, SCRIPT_HIS_AUT_YN = #{script_his_aut_yn} 
+				, EMERGENCY_RESTORE_AUT_YN = #{emergency_restore_aut_yn} 
+				, POINT_RESTORE_AUT_YN = #{point_restore_aut_yn} 
+				, DUMP_RESTORE_AUT_YN = #{dump_restore_aut_yn} 
+				, RESTORE_HIS_AUT_YN = #{restore_his_aut_yn} 
 	 	WHERE USR_ID=#{usr_id}
 	 	AND DB_SVR_ID = #{db_svr_id}::numeric
 	</update>	
@@ -317,6 +325,10 @@
 			, FRST_REG_DTM
 			, LST_MDFR_ID
 			, LST_MDF_DTM
+			, EMERGENCY_RESTORE_AUT_YN
+			, POINT_RESTORE_AUT_YN
+			, DUMP_RESTORE_AUT_YN
+			, RESTORE_HIS_AUT_YN
 			)
 		VALUES
 			(			
@@ -336,6 +348,10 @@
 			, clock_timestamp()
 			, #{usr_id}
 			, clock_timestamp()
+			, #{emergency_restore_aut_yn}
+			, #{point_restore_aut_yn}
+			, #{dump_restore_aut_yn}
+			, #{restore_his_aut_yn}
 			)
 	</insert>	
 
@@ -406,6 +422,12 @@
 		        , POLICY_CHANGE_HIS_AUT_YN
 		        , ADT_CNG_AUT_YN
 		        , ADT_HIST_AUT_YN
+		        , SCRIPT_CNG_AUT_YN
+				, SCRIPT_HIS_AUT_YN
+				, EMERGENCY_RESTORE_AUT_YN
+				, POINT_RESTORE_AUT_YN
+				, DUMP_RESTORE_AUT_YN
+				, RESTORE_HIS_AUT_YN
 		        , FRST_REGR_ID
 				, FRST_REG_DTM
 				, LST_MDFR_ID

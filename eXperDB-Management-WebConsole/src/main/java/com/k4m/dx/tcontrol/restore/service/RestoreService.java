@@ -1,5 +1,9 @@
 package com.k4m.dx.tcontrol.restore.service;
 
+import java.util.List;
+
+import com.k4m.dx.tcontrol.backup.service.WorkVO;
+
 public interface RestoreService {
 	
 	
@@ -19,4 +23,20 @@ public interface RestoreService {
 	 * @throws Exception
 	 */
 	public int restore_nmCheck(String restore_nm) throws Exception;
+
+
+	/**
+	 * get sn MAX value
+	 * @return RestoreRmanVO
+	 * @throws Exception
+	 */
+	public RestoreRmanVO latestRestoreSN() throws Exception;
+
+
+	/**
+	 * RMAN 복구 이력 조회
+	 * @return RestoreRmanVO
+	 * @throws Exception
+	 */
+	List<RestoreRmanVO> rmanRestoreHistory(RestoreRmanVO restoreRmanVO) throws Exception;
 }

@@ -61,9 +61,7 @@ $(window.document).ready(function() {
 	 var new_storage = "/"+$("#restore_dir").val();
 	 
 	$("#dtb_pth").val(new_storage+$("#dtb_pth").val());
-	$("#pgalog_pth").val(new_storage+$("#pgalog_pth").val());
 	$("#svrlog_pth").val(new_storage+$("#svrlog_pth").val());
-	$("#bck_pth").val(new_storage+$("#bck_pth").val());
  }
  
  
@@ -105,7 +103,8 @@ $(window.document).ready(function() {
 				}
 			},
 			success : function(result) {
-				alert("긴급 복구를 시작합니다.");
+				alert("긴급 복구를 시작합니다.");			
+				fn_restoreLogCall();
 			}
 		}); 
  }
@@ -152,6 +151,35 @@ $(window.document).ready(function() {
  		}
  	});
  } 
+
+
+
+ function fn_restoreLogCall(){
+	 	$.ajax({
+	 		url : '/restoreLogCall.do',
+	 		type : 'post',
+	 		data : {
+				db_svr_id : db_svr_id
+	 		},	
+	 		success : function(result) {
+	 			$("#exelog").append(result.strResultData); 
+	 		},
+	 		beforeSend: function(xhr) {
+	 	        xhr.setRequestHeader("AJAX", true);
+	 	     },
+	 		error : function(xhr, status, error) {
+	 			if(xhr.status == 401) {
+	 				alert('<spring:message code="message.msg02" />');
+	 				top.location.href = "/";
+	 			} else if(xhr.status == 403) {
+	 				alert('<spring:message code="message.msg03" />');
+	 				top.location.href = "/";
+	 			} else {
+	 				alert("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""));
+	 			}
+	 		}
+	 	}); 
+ }
 </script>
 
 
@@ -180,8 +208,6 @@ $(window.document).ready(function() {
 		<div class="btn_type_01">
 			<span class="btn"><button type="button" id="btnSelect" onClick="fn_passwordConfilm();">실행</button></span>
 		</div>
-		
-		
 
 					<table class="write" style="border:1px solid #b8c3c6; border-collapse: separate;">
 						<colgroup>
@@ -265,7 +291,7 @@ $(window.document).ready(function() {
 								<th scope="row" class="ico_t1">Database Storage</th>							
 							</tr>
 							<tr>
-								<td><input type="text" class="txt" name="dtb_pth" id="dtb_pth" style="width: 99%;" readonly="readonly" value="/EXPERDB/DATA/"  />
+								<td><input type="text" class="txt" name="dtb_pth" id="dtb_pth" style="width: 99%;" readonly="readonly" value="${pgdata}" />
 							</tr>
 						</tbody>
 					</table>
@@ -276,7 +302,7 @@ $(window.document).ready(function() {
 								<th scope="row" class="ico_t1">Archive WAL Storage</th>							
 							</tr>
 							<tr>
-								<td><input type="text" class="txt" name="pgalog_pth" id="pgalog_pth" style="width: 99%;" readonly="readonly" value="/EXPERDB/DATA/" />
+								<td><input type="text" class="txt" name="pgalog_pth" id="pgalog_pth" style="width: 99%;" readonly="readonly" value="${pgalog}" />
 							</tr>
 						</tbody>
 					</table>
@@ -287,7 +313,7 @@ $(window.document).ready(function() {
 								<th scope="row" class="ico_t1">Server Log Storage</th>							
 							</tr>
 							<tr>
-								<td><input type="text" class="txt" name="svrlog_pth" id="svrlog_pth" style="width: 99%;" readonly="readonly" value="/experdb/data/log" />
+								<td><input type="text" class="txt" name="svrlog_pth" id="svrlog_pth" style="width: 99%;" readonly="readonly" value="${srvlog}"/>
 							</tr>
 						</tbody>
 					</table>
@@ -298,7 +324,7 @@ $(window.document).ready(function() {
 								<th scope="row" class="ico_t1">Backup Storage</th>							
 							</tr>
 							<tr>
-								<td><input type="text" class="txt" name="bck_pth" id="bck_pth" style="width: 99%;" readonly="readonly" value="/experdb/data/backup" />
+								<td><input type="text" class="txt" name="bck_pth" id="bck_pth" style="width: 99%;" readonly="readonly" value="${pgrbak}"/>
 							</tr>
 						</tbody>
 					</table>
@@ -307,9 +333,11 @@ $(window.document).ready(function() {
 								
 				<div class="restore_rt">
 						<p class="ly_tit"><h8>Restore 실행 로그</h8></p>								
-						<div class="overflow_area4" name="exelog"  id="exelog"></div>
+						<div class="overflow_area4" name="exelog_view"  id="exelog_view">
+								<textarea name="exelog"  id="exelog" style="height:455px"></textarea>	
+						</div>
 				</div>
-		</div>
+		</div> 
 	</div>
 </div>
 <!-- // contents -->

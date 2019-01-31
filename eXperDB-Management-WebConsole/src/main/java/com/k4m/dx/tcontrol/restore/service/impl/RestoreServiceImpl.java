@@ -1,5 +1,7 @@
 package com.k4m.dx.tcontrol.restore.service.impl;
 
+import java.util.List;
+
 import javax.annotation.Resource;
 import org.springframework.stereotype.Service;
 
@@ -21,6 +23,16 @@ public class RestoreServiceImpl extends EgovAbstractServiceImpl implements Resto
 	@Override
 	public int restore_nmCheck(String restore_nm) throws Exception {	
 		return restoreDAO.restore_nmCheck(restore_nm);
+	}
+
+	@Override
+	public RestoreRmanVO latestRestoreSN() throws Exception {
+		return restoreDAO.latestRestoreSN();
+	}
+
+	@Override
+	public List<RestoreRmanVO> rmanRestoreHistory(RestoreRmanVO restoreRmanVO) throws Exception {
+		return restoreDAO.rmanRestoreHistory(restoreRmanVO);
 	}
 
 }

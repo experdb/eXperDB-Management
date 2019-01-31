@@ -165,8 +165,6 @@
 					html1+=		'</div>';
 					html1+=	'</td>';
 					html1+='</tr>';
-					
-					//복구관리 작업 진행 중...
 					html1+='<tr>';
 					html1+=	'<th scope="row">긴급복구</th>';
 					html1+=	'<td>';
@@ -203,8 +201,6 @@
 					html1+=		'</div>';
 					html1+=	'</td>';
 					html1+='</tr>';
-					
-	
 					html1+='<tr>';
 					html1+=	'<th scope="row"><spring:message code="menu.access_control" /></th>';
 					html1+=	'<td>';
@@ -253,7 +249,7 @@
 					html1+=			'<label for="'+item.db_svr_nm+'_script_cng"></label>';
 					html1+=		'</div>';
 					html1+=	'</td>';
-					html1+='</tr>	';	
+					html1+='</tr>	';
 					html1+='<tr>';
 					html1+=	'<th scope="row"><spring:message code="menu.script_history" /></th>';
 					html1+=	'<td>';
@@ -286,9 +282,9 @@
 	function fn_allCheck(db_svr_nm){
 		fn_userCheck();
 		if("${sessionScope.session.pg_audit}"== "Y"){
-			var array = new Array("_bck_cng","_bck_hist","_bck_scdr","_acs_cntr","_policy_change_his","_adt_cng","_adt_hist","_script_cng","_script_his");
+			var array = new Array("_bck_cng","_bck_hist","_bck_scdr","_emergency_restore","_point_restore","_dump_restore","_restore_hist","_acs_cntr","_policy_change_his","_adt_cng","_adt_hist","_script_cng","_script_his");
 		}else{
-			var array = new Array("_bck_cng","_bck_hist","_bck_scdr","_acs_cntr","_policy_change_his","_script_cng","_script_his");
+			var array = new Array("_bck_cng","_bck_hist","_bck_scdr","_emergency_restore","_point_restore","_dump_restore","_restore_hist","_acs_cntr","_policy_change_his","_script_cng","_script_his");
 		}
 		
 		for(var i=0; i<array.length; i++){
@@ -366,6 +362,34 @@
 		  							document.getElementById(result[i].db_svr_nm+"_bck_scdr").checked = false;
 		  						}
 		  						
+		  						//긴급복구 권한
+		  						if(result.length != 0 && result[i].emergency_restore_aut_yn == "Y"){
+		  							document.getElementById(result[i].db_svr_nm+"_emergency_restore").checked = true;
+		  						}else{
+		  							document.getElementById(result[i].db_svr_nm+"_emergency_restore").checked = false;
+		  						}
+		  						
+		  						//시점복구 권한
+		  						if(result.length != 0 && result[i].point_restore_aut_yn == "Y"){
+		  							document.getElementById(result[i].db_svr_nm+"_point_restore").checked = true;
+		  						}else{
+		  							document.getElementById(result[i].db_svr_nm+"_point_restore").checked = false;
+		  						}
+		  						
+		  						//덤프복구 권한
+		  						if(result.length != 0 && result[i].dump_restore_aut_yn == "Y"){
+		  							document.getElementById(result[i].db_svr_nm+"_dump_restore").checked = true;
+		  						}else{
+		  							document.getElementById(result[i].db_svr_nm+"_dump_restore").checked = false;
+		  						}
+		  						
+		  						//복구이력 권한
+		  						if(result.length != 0 && result[i].restore_his_aut_yn == "Y"){
+		  							document.getElementById(result[i].db_svr_nm+"_restore_hist").checked = true;
+		  						}else{
+		  							document.getElementById(result[i].db_svr_nm+"_restore_hist").checked = false;
+		  						}
+		  						
 		  						//서버접근제어 권한
 		  						if(result.length != 0 && result[i].acs_cntr_aut_yn == "Y"){
 		  							document.getElementById(result[i].db_svr_nm+"_acs_cntr").checked = true;
@@ -412,7 +436,11 @@
 		    			}else{
 		    				document.getElementById(svr_server[0].db_svr_nm+"_bck_cng").checked = false;
 		    				document.getElementById(svr_server[0].db_svr_nm+"_bck_hist").checked = false;
-		    				document.getElementById(svr_server[0].db_svr_nm+"_bck_scdr").checked = false;
+		    				document.getElementById(svr_server[0].db_svr_nm+"_bck_scdr").checked = false;	    				
+		    				document.getElementById(svr_server[0].db_svr_nm+"_emergency_restore").checked = false;
+		    				document.getElementById(svr_server[0].db_svr_nm+"_point_restore").checked = false;
+		    				document.getElementById(svr_server[0].db_svr_nm+"_dump_restore").checked = false;
+		    				document.getElementById(svr_server[0].db_svr_nm+"_restore_hist").checked = false;			
 		    				document.getElementById(svr_server[0].db_svr_nm+"_acs_cntr").checked = false;
 		    				document.getElementById(svr_server[0].db_svr_nm+"_policy_change_his").checked = false;
 		    				if("${sessionScope.session.pg_audit}"== "Y"){
@@ -441,7 +469,11 @@
 			 var db_svr_id = $("input[name='db_svr_id']");
 			 var bck_cng_aut = $("input[name='bck_cng_aut']");
 			 var bck_hist_aut = $("input[name='bck_hist_aut']");
-			 var bck_scdr_aut = $("input[name='bck_scdr_aut']");
+			 var bck_scdr_aut = $("input[name='bck_scdr_aut']");	 
+			 var emergency_restore_aut  = $("input[name='emergency_restore_aut']");
+			 var point_restore_aut = $("input[name='point_restore_aut']");
+			 var dump_restore_aut = $("input[name='dump_restore_aut']");
+			 var restore_hist_aut = $("input[name='restore_hist_aut']");	 
 			 var acs_cntr_aut = $("input[name='acs_cntr_aut']");
 			 var policy_change_his_aut = $("input[name='policy_change_his_aut']");
 			 if("${sessionScope.session.pg_audit}"== "Y"){
@@ -477,6 +509,34 @@
 			    		autCheck++;
 			        }else{
 			        	rows.bck_scdr_aut_yn = "N";
+			        }
+			     
+			     if(emergency_restore_aut[i].checked){ //선택되어 있으면 배열에 값을 저장함
+			    		rows.emergency_restore_aut_yn= "Y"; 
+			    		autCheck++;
+			        }else{
+			        	rows.emergency_restore_aut_yn = "N";
+			        }
+			     
+			     if(point_restore_aut[i].checked){ //선택되어 있으면 배열에 값을 저장함
+			    		rows.point_restore_aut_yn = "Y"; 
+			    		autCheck++;
+			        }else{
+			        	rows.point_restore_aut_yn = "N";
+			        }
+			     
+			     if(dump_restore_aut[i].checked){ //선택되어 있으면 배열에 값을 저장함
+			    		rows.dump_restore_aut_yn = "Y"; 
+			    		autCheck++;
+			        }else{
+			        	rows.dump_restore_aut_yn = "N";
+			        }
+			     
+			     if(restore_hist_aut[i].checked){ //선택되어 있으면 배열에 값을 저장함
+			    		rows.restore_his_aut_yn = "Y"; 
+			    		autCheck++;
+			        }else{
+			        	rows.restore_his_aut_yn = "N";
 			        }
 			     
 			     if(acs_cntr_aut[i].checked){ //선택되어 있으면 배열에 값을 저장함
