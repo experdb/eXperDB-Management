@@ -61,7 +61,7 @@ public class DxT030 extends SocketCtl {
 		String strErrMsg = "";
 		String strSuccessCode = "0";
 		
-		socketLogger.info("111111111111111111111");
+		//socketLogger.info("111111111111111111111");
 		
 		String strRestore_sn = (String) jObj.get(ProtocolID.RESTORE_SN);
 		int intRestore_sn = Integer.parseInt(strRestore_sn);
@@ -71,7 +71,7 @@ public class DxT030 extends SocketCtl {
 		JSONObject objSERVER_INFO = new JSONObject(); 
 		objSERVER_INFO = (JSONObject) jObj.get(ProtocolID.SERVER_INFO);
 		
-		socketLogger.info("22222222222222222222222");
+		//socketLogger.info("22222222222222222222222");
 		
 		//String SERVER_IP = (String) objSERVER_INFO.get(ProtocolID.SERVER_IP);
 		String SERVER_IP = "127.0.0.1";
@@ -86,7 +86,7 @@ public class DxT030 extends SocketCtl {
 		//String PASSWORD = "--password=" + USER_PWD;
 		String DBNAME = "--dbname=" + DATABASE_NAME;
 		
-		socketLogger.info("3333333333333333");
+		//socketLogger.info("3333333333333333");
 		
 		JSONObject objDumpOption = new JSONObject(); 
 		objDumpOption = (JSONObject) jObj.get(ProtocolID.DUMP_OPTION);
@@ -165,7 +165,7 @@ public class DxT030 extends SocketCtl {
 		                .append(SPACE).append(HOST)
 		                .append(SPACE).append(PORT)
 		                .append(SPACE).append(USERNAME)
-		                .append(SPACE).append(DBNAME)
+		               // .append(SPACE).append(DBNAME)
 		                ;
         if(!R_FORMAT.equals("")) sbRestoreCmd.append(SPACE).append(FORMAT);
         if(!R_JOBS.equals("")) sbRestoreCmd.append(SPACE).append(JOBS);

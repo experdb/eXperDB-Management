@@ -127,8 +127,8 @@ public class ClientTester {
 			//clientTester.dxT029(Ip, port);
 			
 			
-			//clientTester.dxT030(Ip, port);
-			clientTester.dxT031(Ip, port);
+			clientTester.dxT030(Ip, port);
+			//clientTester.dxT031(Ip, port);
 			
 			
 			//clientTester.test();
