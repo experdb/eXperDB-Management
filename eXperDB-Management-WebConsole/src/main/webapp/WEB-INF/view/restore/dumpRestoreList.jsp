@@ -257,17 +257,17 @@ $(function() {
 <div id="contents">
 	<div class="contents_wrap">
 		<div class="contents_tit">
-			<h4>덤프복구 리스트<a href="#n"><img src="../images/ico_tit.png" class="btn_info" /></a></h4>
+			<h4><spring:message code="restore.Dump_Recovery" /><a href="#n"><img src="../images/ico_tit.png" class="btn_info" /></a></h4>
 			<div class="infobox">
 				<ul>
-					<li>덤프복구 리스트</li>
+					<li><spring:message code="restore.Dump_Recovery" /></li>
 				</ul>
 			</div>
 			<div class="location">
 				<ul>
 					<li class="bold">${db_svr_nm}</li>
 					<li>Restore</li>
-					<li class="on">덤프복구 리스트</li>
+					<li class="on"><spring:message code="restore.Dump_Recovery" /></li>
 				</ul>
 			</div>
 		</div>

@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.k4m.dx.tcontrol.admin.accesshistory.service.AccessHistoryService;
-import com.k4m.dx.tcontrol.admin.menuauthority.service.MenuAuthorityService;
+import com.k4m.dx.tcontrol.admin.dbauthority.service.DbAuthorityService;
 import com.k4m.dx.tcontrol.backup.service.BackupService;
 import com.k4m.dx.tcontrol.backup.service.WorkVO;
 import com.k4m.dx.tcontrol.cmmn.CmmnUtils;
@@ -37,18 +37,16 @@ import com.k4m.dx.tcontrol.login.service.LoginVO;
 
 @Controller
 public class DumpRestoreController {
-	
-	@Autowired
-	private MenuAuthorityService menuAuthorityService;
-	
 	@Autowired
 	private AccessHistoryService accessHistoryService;
 	
 	@Autowired
 	private BackupService backupService;
 	
-	private List<Map<String, Object>> menuAut;
+	@Autowired
+	private DbAuthorityService dbAuthorityService;
 	
+	private List<Map<String, Object>> dbSvrAut;
 	
 	/**
 	 * [Restore] 덤프복구 화면을 보여준다.
@@ -60,26 +58,21 @@ public class DumpRestoreController {
 	 */
 	@RequestMapping(value = "/dumpRestore.do")
 	public ModelAndView dumpyRestore(@ModelAttribute("historyVO") HistoryVO historyVO, HttpServletRequest request,@ModelAttribute("workVo") WorkVO workVO) {
-		
-		//해당메뉴 권한 조회 (공통메소드호출),
+		int db_svr_id = workVO.getDb_svr_id();
 		CmmnUtils cu = new CmmnUtils();
-		menuAut = cu.selectMenuAut(menuAuthorityService, "MN000303");
+		dbSvrAut = cu.selectUserDBSvrAutList(dbAuthorityService,db_svr_id);
 		
 		ModelAndView mv = new ModelAndView();
 		try {
 			//읽기 권한이 없는경우 에러페이지 호출 [추후 Exception 처리예정]
-			if(menuAut.get(0).get("read_aut_yn").equals("N")){
+			if (dbSvrAut.get(0).get("dump_restore_aut_yn").equals("N")) {
 				mv.setViewName("error/autError");
 			}else{
 				// 화면접근이력 이력 남기기
 				CmmnUtils.saveHistory(request, historyVO);
-				//historyVO.setExe_dtl_cd("DX-T0009");
-				//historyVO.setMnu_id(11);
+				historyVO.setExe_dtl_cd("DX-T0131");
 				accessHistoryService.insertHistory(historyVO);
-				
-				//mv.addObject("read_aut_yn", menuAut.get(0).get("read_aut_yn"));
-				//mv.addObject("wrt_aut_yn", menuAut.get(0).get("wrt_aut_yn"));
-				
+					
 				mv.setViewName("restore/dumpRestoreList");
 			}
 		} catch (Exception e) {
@@ -128,21 +121,19 @@ public class DumpRestoreController {
 	 */
 	@RequestMapping(value = "/dumpRestoreRegVeiw.do")
 	public ModelAndView dumpRestoreRegVeiw(@ModelAttribute("historyVO") HistoryVO historyVO, HttpServletRequest request,@ModelAttribute("workVo") WorkVO workVO) {
-		
-		//해당메뉴 권한 조회 (공통메소드호출),
+		int db_svr_id = workVO.getDb_svr_id();
 		CmmnUtils cu = new CmmnUtils();
-		menuAut = cu.selectMenuAut(menuAuthorityService, "MN000303");
+		dbSvrAut = cu.selectUserDBSvrAutList(dbAuthorityService,db_svr_id);
 		
 		ModelAndView mv = new ModelAndView();
 		try {
 			//읽기 권한이 없는경우 에러페이지 호출 [추후 Exception 처리예정]
-			if(menuAut.get(0).get("read_aut_yn").equals("N")){
+			if (dbSvrAut.get(0).get("dump_restore_aut_yn").equals("N")) {
 				mv.setViewName("error/autError");
 			}else{
 				// 화면접근이력 이력 남기기
 				CmmnUtils.saveHistory(request, historyVO);
 				//historyVO.setExe_dtl_cd("DX-T0009");
-				//historyVO.setMnu_id(11);
 				accessHistoryService.insertHistory(historyVO);
 				
 				mv.setViewName("restore/dumpRestoreRegVeiw");

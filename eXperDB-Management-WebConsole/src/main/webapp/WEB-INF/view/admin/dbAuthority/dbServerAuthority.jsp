@@ -166,7 +166,7 @@
 					html1+=	'</td>';
 					html1+='</tr>';
 					html1+='<tr>';
-					html1+=	'<th scope="row">긴급복구</th>';
+					html1+=	'<th scope="row"><spring:message code="restore.Emergency_Recovery" /></th>';
 					html1+=	'<td>';
 					html1+=		'<div class="inp_chk">';
 					html1+=			'<input type="checkbox" id="'+item.db_svr_nm+'_emergency_restore" name="emergency_restore_aut" onClick="fn_userCheck();" />';
@@ -175,7 +175,7 @@
 					html1+=	'</td>';
 					html1+='</tr>';
 					html1+='<tr>';
-					html1+=	'<th scope="row">시점복구</th>';
+					html1+=	'<th scope="row"><spring:message code="restore.Point-in-Time_Recovery" /></th>';
 					html1+=	'<td>';
 					html1+=		'<div class="inp_chk">';
 					html1+=			'<input type="checkbox" id="'+item.db_svr_nm+'_point_restore" name="point_restore_aut" onClick="fn_userCheck();" />';
@@ -184,7 +184,7 @@
 					html1+=	'</td>';
 					html1+='</tr>';
 					html1+='<tr>';
-					html1+=	'<th scope="row">덤프복구</th>';
+					html1+=	'<th scope="row"><spring:message code="restore.Dump_Recovery" /></th>';
 					html1+=	'<td>';
 					html1+=		'<div class="inp_chk">';
 					html1+=			'<input type="checkbox" id="'+item.db_svr_nm+'_dump_restore" name="dump_restore_aut" onClick="fn_userCheck();" />';
@@ -193,7 +193,7 @@
 					html1+=	'</td>';
 					html1+='</tr>';
 					html1+='<tr>';
-					html1+=	'<th scope="row">복구이력</th>';
+					html1+=	'<th scope="row"><spring:message code="restore.Recovery_history" /></th>';
 					html1+=	'<td>';
 					html1+=		'<div class="inp_chk">';
 					html1+=			'<input type="checkbox" id="'+item.db_svr_nm+'_restore_hist" name="restore_hist_aut" onClick="fn_userCheck();" />';

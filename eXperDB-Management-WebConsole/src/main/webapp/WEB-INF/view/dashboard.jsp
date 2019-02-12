@@ -159,7 +159,7 @@ function fn_selectSecurityStatistics(today){
 			<div class="main_grp">
 				<div class="main_info">
 					<div class="m_info_lt">
-						<p class="m_tit" >관리상태</p>
+						<p class="m_tit" ><spring:message code="dashboard.management"/> <spring:message code="properties.status" /></p>
 							<ul>
 								<li style="width: 400px;">
 									<table class="list3">
@@ -172,32 +172,32 @@ function fn_selectSecurityStatistics(today){
 										<thead>
 											<tr>
 												<th scope="col"></th>
-												<th scope="col">미흡</th>
-												<th scope="col">감시</th>
-												<th scope="col">양호</th>
+												<th scope="col"><spring:message code="dashboard.Inadequate"/></th>
+												<th scope="col"><spring:message code="dashboard.Watch"/></th>
+												<th scope="col"><spring:message code="dashboard.Good"/></th>
 											</tr>
 										</thead>
 										<tbody>
 											<tr>
-												<td>작업관리</td>
+												<td><spring:message code="dashboard.Work_Management"/></td>
 												<c:if test="${wrk_state<=33}"><td style="background-color: #FF4848;"></td><td></td><td></td></c:if>
 												<c:if test="${wrk_state>=34 && wrk_state<=66}"><td></td><td style="background-color: #FFFF6C;"></td><td></td></c:if>
 												<c:if test="${wrk_state>=67 && wrk_state<=100}"><td></td><td></td><td style="background-color: #89F781;"></td></c:if>
 											</tr>
 											<tr>
-												<td>서버관리</td>
+												<td><spring:message code="dashboard.Server_Management"/></td>
 												<c:if test="${svr_state<=33}"><td style="background-color: #FF4848;"></td><td></td><td></td></c:if>
 												<c:if test="${svr_state>=34 && svr_state<=66}"><td></td><td style="background-color: #FFFF6C;"></td><td></td></c:if>
 												<c:if test="${svr_state>=67 && svr_state<=100}"><td></td><td></td><td style="background-color: #89F781;"></td></c:if>
 											</tr>
 											<tr>
-												<td>백업관리</td>
+												<td><spring:message code="menu.backup_management" /></td>
 												<c:if test="${bak_state<=33}"><td style="background-color: #FF4848;"></td><td></td><td></td></c:if>
 												<c:if test="${bak_state>=34 && bak_state<=66}"><td></td><td style="background-color: #FFFF6C;"></td><td></td></c:if>
 												<c:if test="${bak_state>=67 && bak_state<=100}"><td></td><td></td><td style="background-color: #89F781;"></td></c:if>
 											</tr>
 											<tr>
-												<td>암호화관리</td>
+												<td><spring:message code="dashboard.Encryption_Management"/></td>
 												<td></td>
 												<td></td>
 												<td></td>
@@ -472,16 +472,16 @@ function fn_selectSecurityStatistics(today){
 									<th scope="col" rowspan="2"><spring:message code="common.dbms_name" /></th>
 									<th scope="col" rowspan="2">IP</th>
 									<th scope="col" colspan="2"><spring:message code="dashboard.management_db" /></th>
-									<th scope="col" colspan="2">데이터전송</th>
-									<th scope="col" rowspan="2">감사</th>
-									<th scope="col" rowspan="2">접근정책<br>최종변경일자</th>
+									<th scope="col" colspan="2"><spring:message code="menu.data_transfer" /></th>
+									<th scope="col" rowspan="2"><spring:message code="dashboard.audit"/></th>
+									<th scope="col" rowspan="2"><spring:message code="dashboard.Access_policy_Last_modified_date"/></th>
 									<th scope="col" rowspan="2">Agent <spring:message code="properties.status" /></th>								
 								</tr>
 								<tr>
-									<th scope="col">관리</th>
-									<th scope="col">미관리</th>
-									<th scope="col">채널</th>
-									<th scope="col">실행</th>
+									<th scope="col"><spring:message code="dashboard.management"/></th>
+									<th scope="col"><spring:message code="dashboard.Uncontrolled"/></th>
+									<th scope="col"><spring:message code="dashboard.channel"/></th>
+									<th scope="col"><spring:message code="schedule.run" /></th>
 								</tr>
 							</thead>
 							<tbody>
@@ -523,7 +523,7 @@ function fn_selectSecurityStatistics(today){
 				
 				<!-- 백업 정보 -->
 				<div class="main_server_info">
-					<p class="tit">백업정보</p>
+					<p class="tit"><spring:message code="common.backInfo" /></p>
 					<div class="inner">
 						<table class="list" border="1">
 							<caption><spring:message code="dashboard.dbms_info" /></caption>
@@ -538,12 +538,12 @@ function fn_selectSecurityStatistics(today){
 							<thead>
 								<tr>
 									<th scope="col" rowspan="2"><spring:message code="common.dbms_name" /> </th>
-									<th scope="col" colspan="5">온라인백업</th>						
+									<th scope="col" colspan="5"><spring:message code="backup_management.rman_backup" /></th>						
 								</tr>
 								<tr>
-									<th scope="col">옵션</th>
+									<th scope="col"><spring:message code="etc.etc02" /></th>
 									<th scope="col"><spring:message code="common.registory" /></th>
-									<th scope="col">적용</th>
+									<th scope="col"><spring:message code="common.apply" /></th>
 									<th scope="col"><spring:message code="common.success" /></th>
 									<th scope="col"><spring:message code="common.failed" /> </th>
 								</tr>
@@ -586,11 +586,11 @@ function fn_selectSecurityStatistics(today){
 								<tr>
 									<th scope="col" rowspan="2"><spring:message code="common.dbms_name" /> </th>
 									<th scope="col" rowspan="2">DB</th>
-									<th scope="col" colspan="4">덤프백업</th>						
+									<th scope="col" colspan="4"><spring:message code="backup_management.dumpBck" /></th>						
 								</tr>
 								<tr>
 									<th scope="col"><spring:message code="common.registory" /></th>
-									<th scope="col">적용</th>
+									<th scope="col"><spring:message code="common.apply" /></th>
 									<th scope="col"><spring:message code="common.success" /></th>
 									<th scope="col"><spring:message code="common.failed" /> </th>
 								</tr>
@@ -619,7 +619,7 @@ function fn_selectSecurityStatistics(today){
 				
 				<!-- eXperDB Encrypt 상태 -->
 				<div class="main_server_info" >
-					<p class="tit">암호화 정보 <%-- <spring:message code="properties.status" /> --%> <span id="today" style="float: right; padding-right: 1%;"></span></p>
+					<p class="tit"><spring:message code="dashboard.Encryption_Information"/> <span id="today" style="float: right; padding-right: 1%;"></span></p>
 					
 					<div class="inner">
 						<table class="list" style="width: 320px;" id="encryptDashbaordServer">
@@ -649,11 +649,11 @@ function fn_selectSecurityStatistics(today){
 							</colgroup>
 							<thead>
 								<tr>
-									<th scope="col" rowspan="2">DBMS명</th>
+									<th scope="col" rowspan="2"><spring:message code="common.dbms_name"/></th>
 									<th scope="col" rowspan="2">Encrypt Agent IP</th>						
 									<th scope="col" colspan="2"><spring:message code="encrypt_log_decode.Encryption"/></th>
 									<th scope="col" colspan="2"><spring:message code="encrypt_log_decode.Decryption"/></th>
-									<th scope="col" rowspan="2">활성화상태</th>
+									<th scope="col" rowspan="2"><spring:message code="access_control_management.activation"/><spring:message code="common.status"/></th>
 									<th scope="col" rowspan="2">Agent <spring:message code="properties.status" /></th>								
 								</tr>
 								<tr>

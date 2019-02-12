@@ -22,8 +22,8 @@ import org.springframework.web.servlet.ModelAndView;
 import com.k4m.dx.tcontrol.accesscontrol.service.AccessControlHistoryVO;
 import com.k4m.dx.tcontrol.accesscontrol.service.AccessControlVO;
 import com.k4m.dx.tcontrol.admin.accesshistory.service.AccessHistoryService;
+import com.k4m.dx.tcontrol.admin.dbauthority.service.DbAuthorityService;
 import com.k4m.dx.tcontrol.admin.dbserverManager.service.DbServerVO;
-import com.k4m.dx.tcontrol.admin.menuauthority.service.MenuAuthorityService;
 import com.k4m.dx.tcontrol.backup.service.BackupService;
 import com.k4m.dx.tcontrol.backup.service.WorkVO;
 import com.k4m.dx.tcontrol.cmmn.AES256;
@@ -60,19 +60,18 @@ public class RmanRestoreContoller {
 	private BackupService backupService;
 	
 	@Autowired
-	private MenuAuthorityService menuAuthorityService;
-	
-	@Autowired
 	private AccessHistoryService accessHistoryService;
 	
 	@Autowired
 	private RestoreService restoreService;
 	
-	private List<Map<String, Object>> menuAut;
-	
 	@Autowired
 	private CmmnServerInfoService cmmnServerInfoService;
 	
+	@Autowired
+	private DbAuthorityService dbAuthorityService;
+	
+	private List<Map<String, Object>> dbSvrAut;
 	
 	/**
 	 * [Restore] 긴급복구 화면을 보여준다.
@@ -84,25 +83,19 @@ public class RmanRestoreContoller {
 	 */
 	@RequestMapping(value = "/emergencyRestore.do")
 	public ModelAndView emergencyRestore(@ModelAttribute("historyVO") HistoryVO historyVO, HttpServletRequest request, @ModelAttribute("workVo") WorkVO workVO) {
-		
-		//해당메뉴 권한 조회 (공통메소드호출),
+		int db_svr_id = workVO.getDb_svr_id();
 		CmmnUtils cu = new CmmnUtils();
-		menuAut = cu.selectMenuAut(menuAuthorityService, "MN000303");
-		
+		dbSvrAut = cu.selectUserDBSvrAutList(dbAuthorityService,db_svr_id);
 		ModelAndView mv = new ModelAndView();
 		try {
-			//읽기 권한이 없는경우 에러페이지 호출 [추후 Exception 처리예정]
-			if(menuAut.get(0).get("read_aut_yn").equals("N")){
+			if (dbSvrAut.get(0).get("emergency_restore_aut_yn").equals("N")) {
 				mv.setViewName("error/autError");
 			}else{
 				// 화면접근이력 이력 남기기
 				CmmnUtils.saveHistory(request, historyVO);
-				historyVO.setExe_dtl_cd("DX-T0009");
-				historyVO.setMnu_id(11);
+				historyVO.setExe_dtl_cd("DX-T0129");
 				accessHistoryService.insertHistory(historyVO);
 				
-				mv.addObject("read_aut_yn", menuAut.get(0).get("read_aut_yn"));
-				mv.addObject("wrt_aut_yn", menuAut.get(0).get("wrt_aut_yn"));
 				mv.setViewName("restore/emergencyRestore");
 			}
 		} catch (Exception e) {
@@ -116,7 +109,7 @@ public class RmanRestoreContoller {
 			mv.addObject("dbList",backupService.selectDbList(workVO));
 			mv.addObject("db_svr_id",workVO.getDb_svr_id());
 			
-			int db_svr_id = workVO.getDb_svr_id();
+			db_svr_id = workVO.getDb_svr_id();
 			DbServerVO schDbServerVO = new DbServerVO();
 			schDbServerVO.setDb_svr_id(db_svr_id);
 			DbServerVO DbServerVO = (DbServerVO) cmmnServerInfoService.selectServerInfo(schDbServerVO);
@@ -154,25 +147,19 @@ public class RmanRestoreContoller {
 	 */
 	@RequestMapping(value = "/timeRestore.do")
 	public ModelAndView timeRestore(@ModelAttribute("historyVO") HistoryVO historyVO, HttpServletRequest request, @ModelAttribute("workVo") WorkVO workVO) {
-		
-		//해당메뉴 권한 조회 (공통메소드호출),
+		int db_svr_id = workVO.getDb_svr_id();
 		CmmnUtils cu = new CmmnUtils();
-		menuAut = cu.selectMenuAut(menuAuthorityService, "MN000303");
-		
+		dbSvrAut = cu.selectUserDBSvrAutList(dbAuthorityService,db_svr_id);
 		ModelAndView mv = new ModelAndView();
 		try {
-			//읽기 권한이 없는경우 에러페이지 호출 [추후 Exception 처리예정]
-			if(menuAut.get(0).get("read_aut_yn").equals("N")){
+			if (dbSvrAut.get(0).get("point_restore_aut_yn").equals("N")) {
 				mv.setViewName("error/autError");
 			}else{
 				// 화면접근이력 이력 남기기
 				CmmnUtils.saveHistory(request, historyVO);
-				historyVO.setExe_dtl_cd("DX-T0009");
-				historyVO.setMnu_id(11);
+				historyVO.setExe_dtl_cd("DX-T0130");
 				accessHistoryService.insertHistory(historyVO);
 				
-				mv.addObject("read_aut_yn", menuAut.get(0).get("read_aut_yn"));
-				mv.addObject("wrt_aut_yn", menuAut.get(0).get("wrt_aut_yn"));
 				mv.setViewName("restore/timeRestore");
 			}
 		} catch (Exception e) {
@@ -186,7 +173,7 @@ public class RmanRestoreContoller {
 			mv.addObject("dbList",backupService.selectDbList(workVO));
 			mv.addObject("db_svr_id",workVO.getDb_svr_id());
 			
-			int db_svr_id = workVO.getDb_svr_id();
+			db_svr_id = workVO.getDb_svr_id();
 			DbServerVO schDbServerVO = new DbServerVO();
 			schDbServerVO.setDb_svr_id(db_svr_id);
 			DbServerVO DbServerVO = (DbServerVO) cmmnServerInfoService.selectServerInfo(schDbServerVO);
@@ -229,24 +216,21 @@ public class RmanRestoreContoller {
 			@ModelAttribute("accessControlVO") AccessControlVO accessControlVO, @ModelAttribute("restoreRmanVO") RestoreRmanVO restoreRmanVO, @ModelAttribute("historyVO") HistoryVO historyVO,
 			HttpServletRequest request, HttpServletResponse response) throws ParseException {
 
-		// 해당메뉴 권한 조회 (공통메소드호출)
+		int db_svr_id = restoreRmanVO.getDb_svr_id();
 		CmmnUtils cu = new CmmnUtils();
-		menuAut = cu.selectMenuAut(menuAuthorityService, "MN000301");
+		dbSvrAut = cu.selectUserDBSvrAutList(dbAuthorityService,db_svr_id);
 		
 		String insertResult = "S";
 		String snResult = "S";
 		RestoreRmanVO latestRestoreSN= null;
 		
-
 			try {
-				// 쓰기 권한이 없는경우 error페이지 호출 , [추후 Exception 처리예정]
-				if (menuAut.get(0).get("wrt_aut_yn").equals("N")) {
+				if (dbSvrAut.get(0).get("emergency_restore_aut_yn").equals("N")) {
 					response.sendRedirect("/autError.do");
 				} else {
 					// 화면접근이력 이력 남기기
 					CmmnUtils.saveHistory(request, historyVO);
-					historyVO.setExe_dtl_cd("DX-T0005_01");
-					historyVO.setMnu_id(9);
+					historyVO.setExe_dtl_cd("DX-T0129_01");
 					accessHistoryService.insertHistory(historyVO);
 	
 					HttpSession session = request.getSession();
@@ -279,7 +263,7 @@ public class RmanRestoreContoller {
 			try{
 				AES256 aes = new AES256(AES256_KEY.ENC_KEY);
 				
-				int db_svr_id = restoreRmanVO.getDb_svr_id();
+				db_svr_id = restoreRmanVO.getDb_svr_id();
 				DbServerVO schDbServerVO = new DbServerVO();
 				schDbServerVO.setDb_svr_id(db_svr_id);
 				DbServerVO DbServerVO = (DbServerVO) cmmnServerInfoService.selectServerInfo(schDbServerVO);
