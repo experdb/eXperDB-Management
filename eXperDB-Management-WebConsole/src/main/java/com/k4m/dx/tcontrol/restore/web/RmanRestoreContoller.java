@@ -12,6 +12,7 @@ import org.json.simple.JSONObject;
 import org.json.simple.parser.ParseException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -342,7 +343,7 @@ public class RmanRestoreContoller {
 
 
 	/**
-	 * 복구명을 중복 체크한다.
+	 * RMAN 복구 실행시, 로그정보 호출
 	 * 
 	 * @param scd_nm
 	 * @return

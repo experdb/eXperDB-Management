@@ -122,8 +122,8 @@
 				PGALOG_PTH,
 				SVRLOG_PTH,
 				BCK_PTH,
-				RESTORE_STRTDTM,
-				RESTORE_ENDDTM,
+				TO_CHAR(RESTORE_STRTDTM,'YYYY-MM-DD HH24:MI:SS') AS RESTORE_STRTDTM,
+				TO_CHAR(RESTORE_ENDDTM,'YYYY-MM-DD HH24:MI:SS') AS RESTORE_ENDDTM,
 				RESTORE_CNDT,
 				RESTORE_FLAG,
 				ASIS_FLAG,
@@ -152,7 +152,7 @@
 	      <if test="restore_nm != null and restore_nm != '' ">
 	      AND RESTORE_NM=#{restore_nm}
 	      </if>
-	      ORDER BY RESTORE_ENDDTM DESC
+	      ORDER BY RESTORE_SN DESC
 	      )A		
 	</select>
 </mapper>

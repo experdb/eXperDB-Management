@@ -42,8 +42,10 @@ $(window.document).ready(function() {
 	today.setDate(today.getDate() - 7);
 	var day_start = today.toJSON().slice(0,10); 
 
-	$("#wrk_strt_dtm").val(day_start);
-	$("#wrk_end_dtm").val(day_end);
+	$("#restore_strtdtm").val(day_start);
+	$("#restore_enddtm").val(day_end);
+	
+	fn_get_rman_list();
 	
 	$( ".calendar" ).datepicker({
 		dateFormat: 'yy-mm-dd',
@@ -82,9 +84,9 @@ function fn_rman_init(){
 							defaultContent : ""
 						},		        
 						{ data: "restore_nm", className: "dt-center", defaultContent: ""},
-						{ data: "restore_exp", className: "dt-center", defaultContent: ""},
+						{ data: "restore_exp", className: "dt-left", defaultContent: ""},
 			         	{ data: "timeline", className: "dt-center", defaultContent: ""}, 
-			         	{ data: "restore_strdtm", className: "dt-center", defaultContent: ""},
+			         	{ data: "restore_strtdtm", className: "dt-center", defaultContent: ""},
 			         	{ data: "restore_enddtm", className: "dt-center", defaultContent: ""}, 
 			         	{
 							data : "restore_cndt",
@@ -103,24 +105,33 @@ function fn_rman_init(){
 							},
 							className : "dt-center",
 							defaultContent : ""
-						},		
-						
-			         	{ data: "restore_cndt", className: "dt-center", defaultContent: ""},
-			         	{ data: "exelog", className: "dt-center", defaultContent: ""}, 
-			         	{ data: "regr_id", className: "dt-center", defaultContent: ""}
+						},								
+			         	{
+			    			data : "",
+			    			render : function(data, type, full, meta) {
+			    				var html = '<span class="btn btnC_01 btnF_02"><button onclick="fn_restoreLogInfo('+full.restore_sn+')">로그</button></span>';
+			    				
+			    				return html;
+			    			},
+			    			className : "dt-center",
+			    			defaultContent : ""
+			    		},			         	
+			         	{ data: "regr_id", className: "dt-center", defaultContent: ""},
+			    		{ data: "restore_sn", className: "dt-center", defaultContent: "", visible: false}
  		        ]
 	});
    	
    	tableRman.tables().header().to$().find('th:eq(0)').css('min-width', '40px');
-   	tableRman.tables().header().to$().find('th:eq(1)').css('min-width', '150px');
-   	tableRman.tables().header().to$().find('th:eq(2)').css('min-width', '100px');
-   	tableRman.tables().header().to$().find('th:eq(3)').css('min-width', '150px');
-   	tableRman.tables().header().to$().find('th:eq(4)').css('min-width', '90px');
-   	tableRman.tables().header().to$().find('th:eq(5)').css('min-width', '230px');
-   	tableRman.tables().header().to$().find('th:eq(6)').css('min-width', '100px');
-   	tableRman.tables().header().to$().find('th:eq(7)').css('min-width', '100px');
+   	tableRman.tables().header().to$().find('th:eq(1)').css('min-width', '100px');
+   	tableRman.tables().header().to$().find('th:eq(2)').css('min-width', '150px');
+   	tableRman.tables().header().to$().find('th:eq(3)').css('min-width', '200px');
+   	tableRman.tables().header().to$().find('th:eq(4)').css('min-width', '120px');
+   	tableRman.tables().header().to$().find('th:eq(5)').css('min-width', '120px');
+   	tableRman.tables().header().to$().find('th:eq(6)').css('min-width', '120px');
+   	tableRman.tables().header().to$().find('th:eq(7)').css('min-width', '75px');
    	tableRman.tables().header().to$().find('th:eq(8)').css('min-width', '70px');
    	tableRman.tables().header().to$().find('th:eq(9)').css('min-width', '100px');
+   	tableRman.tables().header().to$().find('th:eq(10)').css('min-width', '0px');
     $(window).trigger('resize'); 
 }
 
@@ -198,12 +209,12 @@ function fn_dump_init(){
 	});
 
    	tableDump.tables().header().to$().find('th:eq(0)').css('min-width', '40px');
-   	tableDump.tables().header().to$().find('th:eq(1)').css('min-width', '150px');
-   	tableDump.tables().header().to$().find('th:eq(2)').css('min-width', '100px');
+   	tableDump.tables().header().to$().find('th:eq(1)').css('min-width', '100px');
+   	tableDump.tables().header().to$().find('th:eq(2)').css('min-width', '150px');
    	tableDump.tables().header().to$().find('th:eq(3)').css('min-width', '150px');
    	tableDump.tables().header().to$().find('th:eq(4)').css('min-width', '100px');
    	tableDump.tables().header().to$().find('th:eq(5)').css('min-width', '100px');
-   	tableDump.tables().header().to$().find('th:eq(6)').css('min-width', '170px');
+   	tableDump.tables().header().to$().find('th:eq(6)').css('min-width', '100px');
    	tableDump.tables().header().to$().find('th:eq(7)').css('min-width', '170px');
    	tableDump.tables().header().to$().find('th:eq(8)').css('min-width', '100px');
    	tableDump.tables().header().to$().find('th:eq(9)').css('min-width', '100px');
@@ -211,6 +222,55 @@ function fn_dump_init(){
    	tableDump.tables().header().to$().find('th:eq(11)').css('min-width', '100px');
     $(window).trigger('resize');
 }
+
+
+
+/* ********************************************************
+ * Click Search Button
+ ******************************************************** */
+$(function() {
+	
+	$(function() {	
+  		$('#logRmanList tbody').on( 'click', 'tr', function () {
+  			 if ( $(this).hasClass('selected') ) {
+  	     	}else {	        	
+  	     		tableRman.$('tr.selected').removeClass('selected');
+  	         $(this).addClass('selected');	            
+  	     } 
+  		})     
+  	});
+	
+	$(function() {	
+  		$('#logDumpList tbody').on( 'click', 'tr', function () {
+  			 if ( $(this).hasClass('selected') ) {
+  	     	}else {	        	
+  	     	tableDump.$('tr.selected').removeClass('selected');
+  	         $(this).addClass('selected');	            
+  	     } 
+  		})     
+  	});
+	
+	$("#btnSelect").click(function() {
+		var restore_strtdtm = $("#restore_strtdtm").val();
+		var restore_enddtm = $("#restore_enddtm").val();
+
+		if (restore_strtdtm != "" && restore_enddtm == "") {
+			alert("<spring:message code='message.msg14' />");
+			return false;
+		}
+
+		if (restore_enddtm != "" && restore_strtdtm == "") {
+			alert("<spring:message code='message.msg15' />");
+			return false;
+		}
+
+		if(tab == "rman"){
+			fn_get_rman_list();
+		}else{
+			fn_get_dump_list();
+		}
+	});
+});
 
 
 	/* ********************************************************
@@ -280,6 +340,38 @@ function selectTab(intab){
 }
 
 
+function fn_restoreLogInfo(restore_sn){
+	
+	//window.open("/restoreLogInfo.do?restore_sn="+ restore_sn+ "&db_svr_id="+db_svr_id  ,"popRestoreLogView","location=no,menubar=no,resizable=yes,scrollbars=yes,status=no,width=1200,height=970,top=0,left=0");	
+	window.open("/restoreLogView.do?restore_sn=" + restore_sn+ "&db_svr_id="+db_svr_id  ,"popRestoreLogView","location=no,menubar=no,resizable=yes,scrollbars=yes,status=no,width=1200,height=970,top=0,left=0");
+	
+/*   	$.ajax({
+ 		url : '/restoreLogInfo.do',
+ 		type : 'post',
+ 		data : {
+ 			restore_sn : restore_sn,
+ 			db_svr_id : db_svr_id
+ 		},	
+ 		success : function(result) {
+ 			
+ 			$("#exelog").append(result.strResultData); 
+ 		},
+ 		beforeSend: function(xhr) {
+ 	        xhr.setRequestHeader("AJAX", true);
+ 	     },
+ 		error : function(xhr, status, error) {
+ 			if(xhr.status == 401) {
+ 				alert('<spring:message code="message.msg02" />');
+ 				top.location.href = "/";
+ 			} else if(xhr.status == 403) {
+ 				alert('<spring:message code="message.msg03" />');
+ 				top.location.href = "/";
+ 			} else {
+ 				alert("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""));
+ 			}
+ 		}
+ 	}); 	 */
+}
 </script>
 <!-- contents -->
 <div id="contents">
@@ -381,15 +473,16 @@ function selectTab(intab){
 						<thead>
 							<tr>
 								<th width="40"><spring:message code="common.no" /></th>
-								<th width="150">복구구분</th>
-								<th width="100">복구명</th>
-								<th width="150">복구설명</th>
-								<th width="90">TimeLine</th>
-								<th width="230">작업시작시간</th>
-								<th width="100">작업종료시간 </th>
-								<th width="100">상태</th>
+								<th width="100">복구구분</th>
+								<th width="150">복구명</th>
+								<th width="200">복구설명</th>
+								<th width="120">TimeLine</th>
+								<th width="120">작업시작시간</th>
+								<th width="120">작업종료시간 </th>
+								<th width="75">상태</th>
 								<th width="70">로그</th>
 								<th width="100">작업자</th>
+								<th width="0"></th>
 							</tr>
 						</thead>
 					</table>
@@ -406,8 +499,8 @@ function selectTab(intab){
 								<th width="100">Database</th>
 								<th width="100">SIZE</th>
 								<th width="170">백업파일명</th>			
-								<th width="170">작업시작시간</th>						
-								<th width="100">작업종료시간</th>
+								<th width="120">작업시작시간</th>						
+								<th width="120">작업종료시간</th>
 								<th width="100">상태</th>
 								<th width="100">로그</th>
 								<th width="100">작업자</th>
@@ -417,7 +510,6 @@ function selectTab(intab){
 				</div>
 			</div>
 		</div>
-
 	</div>
 </div>
 <!-- // contents -->
