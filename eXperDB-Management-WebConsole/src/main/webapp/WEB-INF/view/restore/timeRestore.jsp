@@ -281,23 +281,23 @@ function fn_makeMin(){
 <div id="contents">
 	<div class="contents_wrap">
 		<div class="contents_tit">
-			<h4>시점복구<a href="#n"><img src="../images/ico_tit.png" class="btn_info" /></a></h4>
+			<h4><spring:message code="restore.Point-in-Time_Recovery" /><a href="#n"><img src="../images/ico_tit.png" class="btn_info" /></a></h4>
 			<div class="infobox">
 				<ul>
-					<li>시점복구</li>
+					<li><spring:message code="restore.Point-in-Time_Recovery" /></li>
 				</ul>
 			</div>
 			<div class="location">
 				<ul>
 					<li class="bold">${db_svr_nm}</li>
 					<li>Restore</li>
-					<li class="on">시점복구</li>
+					<li class="on"><spring:message code="restore.Point-in-Time_Recovery" /></li>
 				</ul>
 			</div>
 		</div>
 		<div class="contents">
 		<div class="btn_type_01">
-			<span class="btn"><button type="button" id="btnSelect" onClick="fn_passwordConfilm();">실행</button></span>
+			<span class="btn"><button type="button" id="btnSelect" onClick="fn_passwordConfilm();"><spring:message code="schedule.run" /></button></span>
 		</div>
 		
 		
@@ -310,13 +310,13 @@ function fn_makeMin(){
 						</colgroup>
 						<tbody>
 							<tr>
-								<th scope="row" class="ico_t1">복구명</th>
+								<th scope="row" class="ico_t1"><spring:message code="restore.Recovery_name" /></th>
 								<td><input type="text" class="txt" name="restore_nm" id="restore_nm" maxlength="20" onkeyup="fn_checkWord(this,20)" placeholder="20<spring:message code='message.msg188'/>" onblur="this.value=this.value.trim()"/>
 								<span class="btn btnC_01"><button type="button" class= "btn_type_02" onclick="fn_check()" style="width: 60px; margin-right: -60px; margin-top: 0;"><spring:message code="common.overlap_check" /></button></span>
 								</td>
 							</tr>
 							<tr>
-								<th scope="row" class="ico_t1">복구설명</th>
+								<th scope="row" class="ico_t1"><spring:message code="restore.Recovery_Description" /></th>
 								<td>
 									<div class="textarea_grp">
 										<textarea name="restore_exp" id="restore_exp" maxlength="25" onkeyup="fn_checkWord(this,25)" placeholder="25<spring:message code='message.msg188'/>"></textarea>
@@ -324,11 +324,11 @@ function fn_makeMin(){
 								</td>
 							</tr>
 							<tr>
-								<th scope="row" class="ico_t1">서버명</th>
+								<th scope="row" class="ico_t1"><spring:message code="data_transfer.server_name" /></th>
 								<td>
 									<input type="text" class="txt" name="db_svr_nm" id="db_svr_nm" readonly="readonly"  value="${db_svr_nm}">
 								</td>
-								<th scope="row" class="ico_t1">서버아이피</th>
+								<th scope="row" class="ico_t1"><spring:message code="restore.Server_IP" /></th>
 								<td>
 									<input type="text" class="txt" name="ipadr" id="ipadr" readonly="readonly"  value="${ipadr}">						
 								</td>
@@ -350,10 +350,10 @@ function fn_makeMin(){
 							<tr>		
 								<th scope="row" class="ico_t1">Storage 경로</th>					
 								<td>
-									<input type="radio" name="asis_flag" id="storage_path_org" value="0"  onClick="fn_storage_path_set();" checked> 기존
+									<input type="radio" name="asis_flag" id="storage_path_org" value="0"  onClick="fn_storage_path_set();" checked> <spring:message code="restore.existing" />
 								</td>
 								<td>
-									<input type="radio" name="asis_flag" id="storage_path_new" value="1" onClick="fn_storage_path_set();"> 신규
+									<input type="radio" name="asis_flag" id="storage_path_new" value="1" onClick="fn_storage_path_set();"> <spring:message code="restore.new" />
 								</td>
 							</tr>
 						</tbody>
@@ -366,7 +366,7 @@ function fn_makeMin(){
 						</colgroup>
 						<tbody>
 							<tr>
-								<th scope="row" class="ico_t1">복구경로</th>
+								<th scope="row" class="ico_t1"><spring:message code="restore.Recovery_Path" /></th>
 								<td><input type="text" class="txt" name="restore_dir" id="restore_dir" />
 								<span class="btn btnC_01"><button type="button" class= "btn_type_02" onclick="fn_new_storage_check()" style="width: 50px; margin-right: -60px; margin-top: 0;">확인</button></span>
 								</td>
@@ -384,8 +384,8 @@ function fn_makeMin(){
 						</colgroup>
 						<tbody>
 							<tr>
-								<th scope="row" class="ico_t1">시점선택</th>
-								<td><button type="button" class= "btn_type_02" onclick="fn_rmanShow();" style="width: 80px; height:25px; margin-right: -60px; margin-top: 0;">복구정보</button></td>						
+								<th scope="row" class="ico_t1"><spring:message code="restore.Select_viewpoint" /></th>
+								<td><button type="button" class= "btn_type_02" onclick="fn_rmanShow();" style="width: 150px; height:25px; margin-right: -60px; margin-top: 0;"><spring:message code="restore.Recovery_Information" /></button></td>						
 							</tr>
 							<tr>
 								<td>
@@ -458,7 +458,7 @@ function fn_makeMin(){
 								
 								
 				<div class="restore_rt">
-						<p class="ly_tit"><h8>Restore 실행 로그</h8></p>								
+						<p class="ly_tit"><h8>Restore <spring:message code="restore.Execution_log" /></h8></p>								
 						<div class="overflow_area4" name="exelog"  id="exelog"></div>
 				</div>
 		</div>

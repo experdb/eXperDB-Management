@@ -107,7 +107,7 @@ function fn_dump_init(){
  		         	
  		         	{data : "bck_file_pth", defaultContent : ""
 	 		   			,"render": function (data, type, full) {
-	 		   				  return '<span onClick=javascript:fn_dumpShow("'+full.bck_file_pth+'","'+full.db_svr_id+'"); title="'+full.bck_file_pth+'" class="bold">' + full.bck_file_pth + '</span>';
+	 		   				  return '<span onClick=javascript:fn_dumpShow("'+full.bck_file_pth+'","${db_svr_id}"); title="'+full.bck_file_pth+'" class="bold">' + full.bck_file_pth + '</span>';
 	 		   			}
 	 		   		 },
  		         	{ data: "bck_filenm", defaultContent: ""},
@@ -157,10 +157,9 @@ function fn_dumpRestorReg(){
 	var datas = tableDump.rows('.selected').data();
 
 	//var scd_id = table.row('.selected').data().scd_id;
-	
+	var db_svr_id = "${db_svr_id}";
 	var form = document.dumpRestoreRegForm;
-	//form.action = "/dumpRestoreRegVeiw.do?scd_id="+scd_id;
-	form.action = "/dumpRestoreRegVeiw.do";
+	form.action = "/dumpRestoreRegVeiw.do?db_svr_id="+db_svr_id;
 	form.submit();
 	return;
 	
@@ -211,7 +210,7 @@ function fn_get_dump_list(){
 }
 
 
-function fn_dumpShow(bck, db_svr_id){	
+function fn_dumpShow(bck, db_svr_id){
 	  var frmPop= document.frmPopup;
 	    var url = '/dumpShowView.do';
 	    window.open('','popupView','width=1000, height=800');  

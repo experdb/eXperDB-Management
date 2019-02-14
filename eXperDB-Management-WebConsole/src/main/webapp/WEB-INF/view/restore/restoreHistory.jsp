@@ -377,17 +377,17 @@ function fn_restoreLogInfo(restore_sn){
 <div id="contents">
 	<div class="contents_wrap">
 		<div class="contents_tit">
-			<h4>복구이력<a href="#n"><img src="../images/ico_tit.png" class="btn_info" /></a></h4>
+			<h4><spring:message code="restore.Recovery_history" /><a href="#n"><img src="../images/ico_tit.png" class="btn_info" /></a></h4>
 			<div class="infobox">
 				<ul>
-					<li>복구이력</li>
+					<li><spring:message code="restore.Recovery_history" /></li>
 				</ul>
 			</div>
 			<div class="location">
 				<ul>
 					<li class="bold">${db_svr_nm}</li>
 					<li>Restore</li>
-					<li class="on">복구이력</li>
+					<li class="on"><spring:message code="restore.Recovery_history" /></li>
 				</ul>
 			</div>
 		</div>
@@ -395,12 +395,12 @@ function fn_restoreLogInfo(restore_sn){
 		<div class="contents">
 			<div class="cmm_tab">
 				<ul id="tab_rman">
-					<li class="atv"><a href="javascript:selectTab('rman');">긴급/시점 복구이력</a></li>
-					<li><a href="javascript:selectTab('dump');">Dump 복구이력</a></li>
+					<li class="atv"><a href="javascript:selectTab('rman');"><spring:message code="restore.Emergency_Point-in-Time" /> <spring:message code="restore.Recovery_history" /></a></li>
+					<li><a href="javascript:selectTab('dump');">Dump <spring:message code="restore.Recovery_history" /></a></li>
 				</ul>
 				<ul id="tab_dump" style="display:none">
-					<li><a href="javascript:selectTab('rman');">긴급/시점 복구이력</a></li>
-					<li class="atv"><a href="javascript:selectTab('dump');">Dump 복구이력</a></li>
+					<li><a href="javascript:selectTab('rman');"><spring:message code="restore.Emergency_Point-in-Time" /> <spring:message code="restore.Recovery_history" /></a></li>
+					<li class="atv"><a href="javascript:selectTab('dump');">Dump <spring:message code="restore.Recovery_history" /></a></li>
 				</ul>
 			</div>
 			<div class="cmm_grp">
@@ -436,18 +436,18 @@ function fn_restoreLogInfo(restore_sn){
 								<td>
 									<select name="restore_cndt" id="restore_cndt" class="select t5">
 										<option value=""><spring:message code="schedule.total" /></option>
-										<option value="0">성공</option>
-										<option value="1">시작</option>
+										<option value="0"><spring:message code="common.success" /></option>
+										<option value="1"><spring:message code="etc.etc37" /></option>
 										<option value="2">진행중</option>
-										<option value="3">실패</option>
+										<option value="3"><spring:message code="common.failed" /></option>
 									</select>
 								</td>
 								<th scope="row" class="t9 search_rman">복구구분</th>
 								<td class="search_rman">
 									<select name="restore_flag" id="restore_flag" class="select t5">
 										<option value=""><spring:message code="schedule.total" /></option>
-										<option value="0">긴급복구</option>
-										<option value="1">시점복구</option>
+										<option value="0"><spring:message code="restore.Emergency_Recovery" /></option>
+										<option value="1"><spring:message code="restore.Point-in-Time_Recovery" /></option>
 									</select>
 								</td>
 								<th scope="row" class="t9 search_dump" style="display:none;"><spring:message code="common.database" /></th>
@@ -461,7 +461,7 @@ function fn_restoreLogInfo(restore_sn){
 								</td>							
 							</tr>
 							<tr>
-								<th scope="row" class="t9">복구명</th>
+								<th scope="row" class="t9"><spring:message code="restore.Recovery_name" /></th>
 								<td><input type="text" name="restore_nm" id="restore_nm" class="txt t5" maxlength="25"  /></td>
 							</tr>
 						</tbody>
@@ -474,12 +474,12 @@ function fn_restoreLogInfo(restore_sn){
 							<tr>
 								<th width="40"><spring:message code="common.no" /></th>
 								<th width="100">복구구분</th>
-								<th width="150">복구명</th>
-								<th width="200">복구설명</th>
+								<th width="150"><spring:message code="restore.Recovery_name" /></th>
+								<th width="200"><spring:message code="restore.Recovery_Description" /></th>
 								<th width="120">TimeLine</th>
-								<th width="120">작업시작시간</th>
-								<th width="120">작업종료시간 </th>
-								<th width="75">상태</th>
+								<th width="120"><spring:message code="backup_management.work_start_time" /></th>
+								<th width="120"><spring:message code="backup_management.work_end_time" /></th>
+								<th width="75"><spring:message code="common.status" /></th>
 								<th width="70">로그</th>
 								<th width="100">작업자</th>
 								<th width="0"></th>
@@ -493,15 +493,15 @@ function fn_restoreLogInfo(restore_sn){
 						<thead>
 							<tr>
 								<th width="40"><spring:message code="common.no" /></th>
-								<th width="150">복구명</th>
-								<th width="100">복구설명</th>
-								<th width="150">DBMS아이피</th>
+								<th width="150"><spring:message code="restore.Recovery_name" /></th>
+								<th width="100"><spring:message code="restore.Recovery_Description" /></th>
+								<th width="150"><spring:message code="dbms_information.dbms_ip" /></th>
 								<th width="100">Database</th>
 								<th width="100">SIZE</th>
-								<th width="170">백업파일명</th>			
-								<th width="120">작업시작시간</th>						
-								<th width="120">작업종료시간</th>
-								<th width="100">상태</th>
+								<th width="170"><spring:message code="backup_management.fileName" /></th>			
+								<th width="120"><spring:message code="backup_management.work_start_time" /></th>						
+								<th width="120"><spring:message code="backup_management.work_end_time" /></th>
+								<th width="100"><spring:message code="common.status" /></th>
 								<th width="100">로그</th>
 								<th width="100">작업자</th>
 							</tr>

@@ -121,7 +121,7 @@ public class DumpRestoreController {
 	 */
 	@RequestMapping(value = "/dumpRestoreRegVeiw.do")
 	public ModelAndView dumpRestoreRegVeiw(@ModelAttribute("historyVO") HistoryVO historyVO, HttpServletRequest request,@ModelAttribute("workVo") WorkVO workVO) {
-		int db_svr_id = workVO.getDb_svr_id();
+		int db_svr_id = Integer.parseInt(request.getParameter("db_svr_id"));
 		CmmnUtils cu = new CmmnUtils();
 		dbSvrAut = cu.selectUserDBSvrAutList(dbAuthorityService,db_svr_id);
 		

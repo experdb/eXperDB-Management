@@ -27,17 +27,17 @@
 <div id="contents">
 	<div class="contents_wrap">
 		<div class="contents_tit">
-			<h4>덤프복구<a href="#n"><img src="../images/ico_tit.png" class="btn_info" /></a></h4>
+			<h4><spring:message code="restore.Dump_Recovery" /><a href="#n"><img src="../images/ico_tit.png" class="btn_info" /></a></h4>
 			<div class="infobox">
 				<ul>
-					<li>덤프복구</li>
+					<li><spring:message code="restore.Dump_Recovery" /></li>
 				</ul>
 			</div>
 			<div class="location">
 				<ul>
 					<li class="bold">${db_svr_nm}</li>
 					<li>Restore</li>
-					<li class="on">덤프복구</li>
+					<li class="on"><spring:message code="restore.Dump_Recovery" /></li>
 				</ul>
 			</div>
 		</div>
@@ -58,12 +58,12 @@
 									<th scope="row" class="ico_t1"><spring:message code="common.work_name" /></th>
 									<td><input type="text" class="txt t9" name="wrk_nm" id="wrk_nm" maxlength="20" onkeyup="fn_checkWord(this,20)" placeholder="20<spring:message code='message.msg188'/>" onblur="this.value=this.value.trim()"/>
 									</td>
-									<th scope="row" class="ico_t1">상태</th>
+									<th scope="row" class="ico_t1"><spring:message code="common.status" /></th>
 									<td><input type="text" class="txt t9" name="wrk_nm" id="wrk_nm" maxlength="20" onkeyup="fn_checkWord(this,20)" placeholder="20<spring:message code='message.msg188'/>" onblur="this.value=this.value.trim()"/>
 									</td>
 								</tr>
 								<tr>
-									<th scope="row" class="ico_t1">DBMS아이피</th>
+									<th scope="row" class="ico_t1"><spring:message code="dbms_information.dbms_ip" /></th>
 									<td><input type="text" class="txt t9" name="wrk_nm" id="wrk_nm" maxlength="20" onkeyup="fn_checkWord(this,20)" placeholder="20<spring:message code='message.msg188'/>" onblur="this.value=this.value.trim()"/>
 									</td>
 									<th scope="row" class="ico_t1">Database</th>
@@ -71,7 +71,7 @@
 									</td>
 								</tr>
 								<tr>
-									<th scope="row" class="ico_t1">백업파일경로</th>
+									<th scope="row" class="ico_t1"><spring:message code="etc.etc08" /></th>
 									<td><input type="text" class="txt t9" name="wrk_nm" id="wrk_nm" maxlength="20" onkeyup="fn_checkWord(this,20)" placeholder="20<spring:message code='message.msg188'/>" onblur="this.value=this.value.trim()"/>
 									</td>
 									<th scope="row" class="ico_t1">백업파일명</th>
@@ -79,10 +79,10 @@
 									</td>
 								</tr>
 								<tr>
-									<th scope="row" class="ico_t1">작업시작시간</th>
+									<th scope="row" class="ico_t1"><spring:message code="backup_management.work_start_time" /></th>
 									<td><input type="text" class="txt t9" name="wrk_nm" id="wrk_nm" maxlength="20" onkeyup="fn_checkWord(this,20)" placeholder="20<spring:message code='message.msg188'/>" onblur="this.value=this.value.trim()"/>
 									</td>
-									<th scope="row" class="ico_t1">작업종료시간</th>
+									<th scope="row" class="ico_t1"><spring:message code="backup_management.work_end_time" /></th>
 									<td><input type="text" class="txt t9" name="wrk_nm" id="wrk_nm" maxlength="20" onkeyup="fn_checkWord(this,20)" placeholder="20<spring:message code='message.msg188'/>" onblur="this.value=this.value.trim()"/>
 									</td>
 								</tr>
@@ -250,11 +250,10 @@
 					</div>					
 				</div>
 
-				
-				
+
 				<div class="restore_rt">
-									<p class="ly_tit"><h8>Restore 실행 로그</h8></p>								
-									<div class="overflow_area4" name="restoreExeLog"  id="restoreExeLog"></div>
+					<p class="ly_tit"><h8>Restore <spring:message code="restore.Execution_log" /></h8></p>								
+					<div class="overflow_area4" name="restoreExeLog"  id="restoreExeLog"></div>
 				</div>
 				
 			</div>
