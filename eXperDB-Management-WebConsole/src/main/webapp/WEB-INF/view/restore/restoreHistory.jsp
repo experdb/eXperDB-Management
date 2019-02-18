@@ -438,11 +438,11 @@ function fn_restoreLogInfo(restore_sn){
 										<option value=""><spring:message code="schedule.total" /></option>
 										<option value="0"><spring:message code="common.success" /></option>
 										<option value="1"><spring:message code="etc.etc37" /></option>
-										<option value="2">진행중</option>
+										<option value="2"><spring:message code="restore.progress" /></option>
 										<option value="3"><spring:message code="common.failed" /></option>
 									</select>
 								</td>
-								<th scope="row" class="t9 search_rman">복구구분</th>
+								<th scope="row" class="t9 search_rman"><spring:message code="restore.Recovery_Category" /></th>
 								<td class="search_rman">
 									<select name="restore_flag" id="restore_flag" class="select t5">
 										<option value=""><spring:message code="schedule.total" /></option>
@@ -473,15 +473,15 @@ function fn_restoreLogInfo(restore_sn){
 						<thead>
 							<tr>
 								<th width="40"><spring:message code="common.no" /></th>
-								<th width="100">복구구분</th>
+								<th width="100"><spring:message code="restore.Recovery_Category" /></th>
 								<th width="150"><spring:message code="restore.Recovery_name" /></th>
 								<th width="200"><spring:message code="restore.Recovery_Description" /></th>
 								<th width="120">TimeLine</th>
 								<th width="120"><spring:message code="backup_management.work_start_time" /></th>
 								<th width="120"><spring:message code="backup_management.work_end_time" /></th>
 								<th width="75"><spring:message code="common.status" /></th>
-								<th width="70">로그</th>
-								<th width="100">작업자</th>
+								<th width="70"><spring:message code="restore.log" /></th>
+								<th width="100"><spring:message code="restore.worker" /></th>
 								<th width="0"></th>
 							</tr>
 						</thead>
@@ -502,8 +502,8 @@ function fn_restoreLogInfo(restore_sn){
 								<th width="120"><spring:message code="backup_management.work_start_time" /></th>						
 								<th width="120"><spring:message code="backup_management.work_end_time" /></th>
 								<th width="100"><spring:message code="common.status" /></th>
-								<th width="100">로그</th>
-								<th width="100">작업자</th>
+								<th width="100"><spring:message code="restore.log" /></th>
+								<th width="100"><spring:message code="restore.worker" /></th>
 							</tr>
 						</thead>
 					</table>

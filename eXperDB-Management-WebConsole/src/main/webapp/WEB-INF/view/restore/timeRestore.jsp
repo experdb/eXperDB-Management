@@ -223,7 +223,7 @@ function fn_makeMin(){
 					}
 				},
 				success : function(result) {
-					alert("시점 복구를 시작합니다.");
+					alert('<spring:message code="restore.msg223" />');
 				}
 			}); 
 	 }
@@ -245,12 +245,12 @@ function fn_makeMin(){
    		},
    		success : function(result) {
  			if (result == "true") {
- 				alert('등록 가능한 복구명 입니다.');
+ 				alert('<spring:message code="restore.msg221" />');
  				document.getElementById("restore_nm").focus();
  				wrk_nmChk = "success";		
  			} else {
  				scd_nmChk = "fail";
- 				alert('이미 존재하는 복구명 입니다.');
+ 				alert('<spring:message code="restore.msg222" />');
  				document.getElementById("restore_nm").focus();
  			}
    		},
@@ -348,7 +348,7 @@ function fn_makeMin(){
 						</colgroup>
 						<tbody>
 							<tr>		
-								<th scope="row" class="ico_t1">Storage 경로</th>					
+								<th scope="row" class="ico_t1">Storage <spring:message code="common.path" /></th>					
 								<td>
 									<input type="radio" name="asis_flag" id="storage_path_org" value="0"  onClick="fn_storage_path_set();" checked> <spring:message code="restore.existing" />
 								</td>

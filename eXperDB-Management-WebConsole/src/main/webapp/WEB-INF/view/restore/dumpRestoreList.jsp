@@ -288,7 +288,7 @@ $(function() {
 						</colgroup>
 						<tbody>
 							<tr>
-								<th scope="row" class="t10">백업기간</th>
+								<th scope="row" class="t10"><spring:message code="restore.Backup_period" /></th>
 								<td colspan="3">
 									<div class="calendar_area">
 										<a href="#n" class="calendar_btn">달력열기</a>

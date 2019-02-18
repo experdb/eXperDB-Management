@@ -74,7 +74,7 @@
 									<th scope="row" class="ico_t1"><spring:message code="etc.etc08" /></th>
 									<td><input type="text" class="txt t9" name="wrk_nm" id="wrk_nm" maxlength="20" onkeyup="fn_checkWord(this,20)" placeholder="20<spring:message code='message.msg188'/>" onblur="this.value=this.value.trim()"/>
 									</td>
-									<th scope="row" class="ico_t1">백업파일명</th>
+									<th scope="row" class="ico_t1"><spring:message code="backup_management.fileName" /></th>
 									<td><input type="text" class="txt t9" name="wrk_nm" id="wrk_nm" maxlength="20" onkeyup="fn_checkWord(this,20)" placeholder="20<spring:message code='message.msg188'/>" onblur="this.value=this.value.trim()"/>
 									</td>
 								</tr>
@@ -200,7 +200,7 @@
 											<div class="inp_chk">
 												<span>
 													<input type="checkbox" id="option_4_1" name="opt" value="Y" grp_cd="TC0009" opt_cd="TC000901" onClick="checkOid();"/>
-													<label for="option_4_1"> CREATE DATABASE 포함 </label>
+													<label for="option_4_1"><spring:message code="backup_management.create_database_include" /></label>
 												</span>
 												<span>
 													<input type="checkbox" id="option_4_2" name="opt" value="Y" grp_cd="TC0009" opt_cd="TC000902" onClick="checkOid();"/>

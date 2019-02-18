@@ -103,7 +103,7 @@ $(window.document).ready(function() {
 				}
 			},
 			success : function(result) {
-				alert("긴급 복구를 시작합니다.");			
+				alert('<spring:message code="restore.msg220" />');			
 				fn_restoreLogCall();
 			}
 		}); 
@@ -126,12 +126,12 @@ $(window.document).ready(function() {
  		},
  		success : function(result) {
  			if (result == "true") {
- 				alert('등록 가능한 복구명 입니다.');
+ 				alert('<spring:message code="restore.msg221" />');
  				document.getElementById("restore_nm").focus();
  				wrk_nmChk = "success";		
  			} else {
  				scd_nmChk = "fail";
- 				alert('이미 존재하는 복구명 입니다.');
+ 				alert('<spring:message code="restore.msg222" />');
  				document.getElementById("restore_nm").focus();
  			}
  		},
