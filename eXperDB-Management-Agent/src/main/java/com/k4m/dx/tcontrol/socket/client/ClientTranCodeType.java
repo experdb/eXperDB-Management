@@ -45,8 +45,8 @@ public class ClientTranCodeType {
 	public static final String DxT029 = "DxT029";
 	public static final String DxT030 = "DxT030";
 	public static final String DxT031 = "DxT031";
-	
-	
+	public static final String DxT032 = "DxT032";
+
 	public static final String STATUS = "STATUS";
 	public static final String STOP = "STOP";
 	public static final String CLOSE = "CLOSE";

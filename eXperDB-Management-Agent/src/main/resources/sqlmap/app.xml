@@ -486,5 +486,12 @@
 		]]>
 	</select>
 
-
+	<select id="selectSwitchWalFile" resultType="hashmap">
+		/**
+	 	* Query ID : selectSwitchWalFile
+	 	* Description : wal파일 Switch archive파일
+	 	* Author : 변승우
+	 	**/
+		SELECT pg_switch_wal()
+	</select>
 </mapper>
