@@ -45,7 +45,7 @@ public class TranCodeType {
 	public static final String DxT029 = "DxT029";
 	public static final String DxT030 = "DxT030";
 	public static final String DxT031 = "DxT031";
-
+	public static final String DxT032 = "DxT032";
 	
 	public static final String STATUS = "STATUS";
 	public static final String STOP = "STOP";
@@ -62,6 +62,7 @@ public class TranCodeType {
 	 * DB커넥션 테스트
 	 */
 	public static final String WEB_DB_CONN_TEST = "WEB_DB_CONN_TEST";			  //DB커넥션 테스트
+
 	
 
 	
