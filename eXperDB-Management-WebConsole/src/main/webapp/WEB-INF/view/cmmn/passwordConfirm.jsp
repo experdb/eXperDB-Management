@@ -29,7 +29,8 @@ function fn_passwordCheck(){
 			success : function(result) {				
 				if(result == "true"){
 					toggleLayer($('#pop_layer_pwConfilm'), 'off');
-					fn_execute();
+					//fn_execute();
+					fn_pgWalFileSwitch();
 				}else{
 					alert("비밀번호가 일치하지 않습니다.");
 				}				

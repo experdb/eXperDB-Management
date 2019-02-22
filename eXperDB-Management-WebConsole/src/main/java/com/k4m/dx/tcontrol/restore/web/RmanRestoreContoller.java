@@ -203,6 +203,61 @@ public class RmanRestoreContoller {
 	
 	
 	/**
+	 * RMAN 복구 실행전 (select pg_switch_wal())
+	 * 
+	 * @param 
+	 * @return
+	 * @throws Exception
+	 */
+	@RequestMapping(value = "/pgWalFileSwitch.do")
+	public @ResponseBody Map<String, Object> pgWalFileSwitch(HttpServletRequest request, HttpServletResponse response) {
+		
+		Map<String, Object> result = new HashMap<String, Object>();
+		int db_svr_id = Integer.parseInt(request.getParameter("db_svr_id"));
+		
+		try {
+			AES256 aes = new AES256(AES256_KEY.ENC_KEY);
+
+			DbServerVO schDbServerVO = new DbServerVO();
+			schDbServerVO.setDb_svr_id(db_svr_id);
+			DbServerVO DbServerVO = (DbServerVO) cmmnServerInfoService.selectServerInfo(schDbServerVO);
+			String strIpAdr = DbServerVO.getIpadr();
+			AgentInfoVO vo = new AgentInfoVO();
+			vo.setIPADR(strIpAdr);
+			AgentInfoVO agentInfo = (AgentInfoVO) cmmnServerInfoService.selectAgentInfo(vo);
+			
+			String IP = DbServerVO.getIpadr();
+			int PORT = agentInfo.getSOCKET_PORT();
+			
+			JSONObject serverObj = new JSONObject();
+			
+			serverObj.put(ClientProtocolID.SERVER_NAME, DbServerVO.getIpadr());
+			serverObj.put(ClientProtocolID.SERVER_IP, DbServerVO.getIpadr());
+			serverObj.put(ClientProtocolID.SERVER_PORT, DbServerVO.getPortno());
+			serverObj.put(ClientProtocolID.DATABASE_NAME, DbServerVO.getDft_db_nm());
+			serverObj.put(ClientProtocolID.USER_ID, DbServerVO.getSvr_spr_usr_id());
+			serverObj.put(ClientProtocolID.USER_PWD, aes.aesDecode(DbServerVO.getSvr_spr_scm_pwd()));
+						
+			System.out.println("===============서버정보================");
+			System.out.println("SERVER_NAME = "+DbServerVO.getIpadr());
+			System.out.println("SERVER_IP = "+DbServerVO.getIpadr());
+			System.out.println("SERVER_PORT = "+DbServerVO.getPortno());
+			System.out.println("DATABASE_NAME = "+DbServerVO.getDft_db_nm());
+			System.out.println("USER_ID = "+DbServerVO.getSvr_spr_usr_id());
+			System.out.println("USER_PWD = "+aes.aesDecode(DbServerVO.getSvr_spr_scm_pwd()));				
+			System.out.println("=====================================");
+			
+			ClientInfoCmmn cic = new ClientInfoCmmn();
+			result = cic.switchWalFile(serverObj, IP, PORT);
+
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return result;
+	}
+	
+	
+	/**
 	 *  [Restore] RMAN 복구 정보 등록 한다.
 	 * 
 	 * @param dbServerVO
