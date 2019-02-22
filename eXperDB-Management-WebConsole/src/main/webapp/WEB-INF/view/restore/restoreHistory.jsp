@@ -414,8 +414,8 @@ function fn_restoreLogInfo(restore_sn){
 						<caption>검색 조회</caption>
 						<colgroup>
 							<col style="width:110px;" />
-							<col style="width:230px;" />
-							<col style="width:110px;" />
+							<col />
+							<col style="width:130px;" />
 							<col />
 						</colgroup>
 						<tbody>
