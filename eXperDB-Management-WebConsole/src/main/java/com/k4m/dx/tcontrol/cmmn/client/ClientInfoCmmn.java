@@ -1494,4 +1494,38 @@ public List<HashMap<String, String>> dumpShow(String IP, int PORT,String cmd) {
 		}	
 		return result;		
 	}
+	
+	public Map<String, Object> switchWalFile(JSONObject serverObj, String IP, int PORT) {
+		
+		Map<String, Object> result = new HashMap<String, Object>();
+		
+		try {								
+			JSONObject jObj = new JSONObject();
+			
+			ClientAdapter CA = new ClientAdapter(IP, PORT);
+			CA.open(); 
+			
+			JSONObject objList;
+
+			
+			jObj.put(ClientProtocolID.DX_EX_CODE, ClientTranCodeType.DxT032);
+			jObj.put(ClientProtocolID.SERVER_INFO, serverObj);
+			
+			objList = CA.dxT032(jObj);
+			
+			String strErrMsg = (String)objList.get(ClientProtocolID.ERR_MSG);
+			String strErrCode = (String)objList.get(ClientProtocolID.ERR_CODE);
+			String strDxExCode = (String)objList.get(ClientProtocolID.DX_EX_CODE);
+			String strResultCode = (String)objList.get(ClientProtocolID.RESULT_CODE);
+
+			result.put("RESULT_CODE", strResultCode);
+			result.put("ERR_CODE", strErrCode);
+			result.put("ERR_MSG", strErrMsg);
+			
+			CA.close();
+		} catch(Exception e) {
+			e.printStackTrace();
+		}	
+		return result;		
+	}
 }
