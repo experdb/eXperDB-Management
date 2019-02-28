@@ -5,6 +5,7 @@
 
 <script>
 function fn_passwordCheck(){
+	var flag = $('#flag').val();
 		$.ajax({
 			url : "/psswordCheck.do",
 			data : {
@@ -28,9 +29,15 @@ function fn_passwordCheck(){
 			},
 			success : function(result) {				
 				if(result == "true"){
-					toggleLayer($('#pop_layer_pwConfilm'), 'off');
-					//fn_execute();
-					fn_pgWalFileSwitch();
+					if(flag=="rman"){
+						toggleLayer($('#pop_layer_pwConfilm'), 'off');
+						//fn_execute();
+						fn_pgWalFileSwitch();
+					}else{
+						toggleLayer($('#pop_layer_pwConfilm'), 'off');
+						fn_execute();
+						//fn_pgWalFileSwitch();
+					}
 				}else{
 					alert("비밀번호가 일치하지 않습니다.");
 				}				
@@ -52,7 +59,7 @@ function fn_passwordCheck(){
 						<tbody>
 							<tr>
 								<th scope="row" style="background:url(../images/popup/ico_p_1.png) 4px 50% no-repeat;"><strong>비밀번호 확인</strong></th>
-								<td><input type="password" class="txt" name="password" id="password" />
+								<td><input type="password" class="txt" name="password" id="password" /><input type="hidden" name="flag" id="flag">
 								<span class="btn btnC_01"><button type="button" class= "btn_type_02" onclick="fn_passwordCheck()" style="width: 70px; margin-right: -60px; margin-top: 0;">확인</button></span>
 								</td>
 							</tr>

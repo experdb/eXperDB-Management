@@ -5,6 +5,8 @@ import java.util.List;
 import javax.annotation.Resource;
 import org.springframework.stereotype.Service;
 
+import com.k4m.dx.tcontrol.backup.service.WorkLogVO;
+import com.k4m.dx.tcontrol.restore.service.RestoreDumpVO;
 import com.k4m.dx.tcontrol.restore.service.RestoreRmanVO;
 import com.k4m.dx.tcontrol.restore.service.RestoreService;
 import egovframework.rte.fdl.cmmn.EgovAbstractServiceImpl;
@@ -33,6 +35,21 @@ public class RestoreServiceImpl extends EgovAbstractServiceImpl implements Resto
 	@Override
 	public List<RestoreRmanVO> rmanRestoreHistory(RestoreRmanVO restoreRmanVO) throws Exception {
 		return restoreDAO.rmanRestoreHistory(restoreRmanVO);
+	}
+
+	@Override
+	public List<WorkLogVO> selectBckInfo(WorkLogVO workLogVO) throws Exception {
+		return restoreDAO.selectBckInfo(workLogVO);
+	}
+
+	@Override
+	public void insertDumpRestore(RestoreDumpVO restoreDumpVO) throws Exception {
+		restoreDAO.insertDumpRestore(restoreDumpVO);
+	}
+
+	@Override
+	public RestoreDumpVO latestDumpRestoreSN() throws Exception {
+		return restoreDAO.latestDumpRestoreSN();
 	}
 
 }

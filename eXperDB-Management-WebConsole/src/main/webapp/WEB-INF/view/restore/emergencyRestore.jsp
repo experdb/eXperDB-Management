@@ -253,7 +253,7 @@
 		</div>
 		<div class="contents">
 			<div class="btn_type_01">
-				<span class="btn"><button type="button" id="btnSelect" onClick="fn_passwordConfilm();">
+				<span class="btn"><button type="button" id="btnSelect" onClick="fn_passwordConfilm('rman');">
 						<spring:message code="schedule.run" /></button></span>
 			</div>
 			<div class="sch_form">

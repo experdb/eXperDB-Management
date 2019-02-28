@@ -260,7 +260,7 @@ public class RmanRestoreContoller {
 	/**
 	 *  [Restore] RMAN 복구 정보 등록 한다.
 	 * 
-	 * @param dbServerVO
+	 * @param restoreRmanVO
 	 * @param request
 	 * @return ModelAndView mv
 	 * @throws Exception

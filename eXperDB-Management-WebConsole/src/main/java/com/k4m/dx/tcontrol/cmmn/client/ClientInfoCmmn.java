@@ -9,6 +9,7 @@ import java.util.Map;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 
+import com.k4m.dx.tcontrol.restore.service.RestoreDumpVO;
 import com.k4m.dx.tcontrol.restore.service.RestoreRmanVO;
 
 public class ClientInfoCmmn {
@@ -1451,6 +1452,67 @@ public List<HashMap<String, String>> dumpShow(String IP, int PORT,String cmd) {
 	}
 	
 	
+	public void dumpRestoreStart(JSONObject serverObj, String IP, int PORT, RestoreDumpVO restoreDumpVO) {
+			try {	
+					JSONObject jObj = new JSONObject();
+		
+					jObj.put(ClientProtocolID.DX_EX_CODE, ClientTranCodeType.DxT030);
+					jObj.put(ClientProtocolID.RESTORE_SN, restoreDumpVO.getRestore_sn());
+					jObj.put(ClientProtocolID.PGDBAK, restoreDumpVO.getBck_file_pth());
+					
+					//SERVER_INFO
+					jObj.put(ClientProtocolID.SERVER_INFO, serverObj);
+		
+					JSONObject dumpOptionObj = new JSONObject();
+					
+					dumpOptionObj.put(ClientProtocolID.FORMAT, restoreDumpVO.getFormat());
+					dumpOptionObj.put(ClientProtocolID.FILENAME, restoreDumpVO.getFilename());
+					dumpOptionObj.put(ClientProtocolID.JOBS, restoreDumpVO.getJobs());
+					dumpOptionObj.put(ClientProtocolID.ROLE, restoreDumpVO.getRole());
+					dumpOptionObj.put(ClientProtocolID.PRE_DATA, restoreDumpVO.getPre_data_yn());
+					dumpOptionObj.put(ClientProtocolID.DATA, restoreDumpVO.getData_yn());
+					dumpOptionObj.put(ClientProtocolID.POST_DATA, restoreDumpVO.getPost_data_yn());
+					dumpOptionObj.put(ClientProtocolID.DATA_ONLY, restoreDumpVO.getData_only_yn());
+					dumpOptionObj.put(ClientProtocolID.SCHEMA_ONLY, restoreDumpVO.getSchema_only_yn());
+					dumpOptionObj.put(ClientProtocolID.NO_OWNER, restoreDumpVO.getNo_owner_yn());
+					dumpOptionObj.put(ClientProtocolID.NO_PRIVILEGES, restoreDumpVO.getNo_privileges_yn());
+					dumpOptionObj.put(ClientProtocolID.NO_TABLESPACES, restoreDumpVO.getNo_tablespaces_yn());
+					dumpOptionObj.put(ClientProtocolID.CREATE, restoreDumpVO.getCreate_yn());
+					dumpOptionObj.put(ClientProtocolID.CLEAN, restoreDumpVO.getClean_yn());
+					dumpOptionObj.put(ClientProtocolID.SINGLE_TRANSACTION, restoreDumpVO.getSingle_transaction_yn());
+					dumpOptionObj.put(ClientProtocolID.DISABLE_TRIGGERS, restoreDumpVO.getDisable_triggers_yn());
+					dumpOptionObj.put(ClientProtocolID.NO_DATA_FOR_FAILED_TABLES, restoreDumpVO.getNo_data_for_failed_tables_yn());
+					dumpOptionObj.put(ClientProtocolID.VERBOSE, restoreDumpVO.getVerbose_yn());
+					dumpOptionObj.put(ClientProtocolID.USE_SET_SESSON_AUTH, restoreDumpVO.getUse_set_sesson_auth_yn());
+					dumpOptionObj.put(ClientProtocolID.EXIT_ON_ERROR, restoreDumpVO.getExit_on_error_yn());
+					
+					jObj.put(ClientProtocolID.DUMP_OPTION, dumpOptionObj);
+					
+					
+					JSONObject objList;
+					
+					ClientAdapter CA = new ClientAdapter(IP, PORT);
+					CA.open(); 
+		
+					objList = CA.dxT030(jObj);
+					
+					CA.close();
+					
+					String strErrMsg = (String)objList.get(ClientProtocolID.ERR_MSG);
+					String strErrCode = (String)objList.get(ClientProtocolID.ERR_CODE);
+					String strDxExCode = (String)objList.get(ClientProtocolID.DX_EX_CODE);
+					String strResultCode = (String)objList.get(ClientProtocolID.RESULT_CODE);
+					
+					System.out.println("RESULT_CODE : " +  strResultCode);
+					System.out.println("ERR_CODE : " +  strErrCode);
+					System.out.println("ERR_MSG : " +  strErrMsg);
+					
+			} catch(Exception e) {
+				e.printStackTrace();
+			}		
+	}
+	
+	
 	public Map<String, Object> restoreLog(String IP, int PORT, String restore_sn) {
 		
 		Map<String, Object> result = new HashMap<String, Object>();
@@ -1528,4 +1590,50 @@ public List<HashMap<String, String>> dumpShow(String IP, int PORT,String cmd) {
 		}	
 		return result;		
 	}
+	
+	
+	public Map<String, Object> dumpRestoreLog(String IP, int PORT, String restore_sn) {
+		
+		Map<String, Object> result = new HashMap<String, Object>();
+		
+		try {								
+			JSONObject jObj = new JSONObject();
+			
+			jObj.put(ClientProtocolID.DX_EX_CODE, ClientTranCodeType.DxT029);
+			
+			//RESTORE_SN
+			jObj.put(ClientProtocolID.RESTORE_SN, restore_sn);
+			
+
+			JSONObject objList;
+			
+			ClientAdapter CA = new ClientAdapter(IP, PORT);
+			CA.open(); 
+
+			objList = CA.dxT031(jObj);
+			
+			CA.close();
+			
+			String strErrMsg = (String)objList.get(ClientProtocolID.ERR_MSG);
+			String strErrCode = (String)objList.get(ClientProtocolID.ERR_CODE);
+			String strDxExCode = (String)objList.get(ClientProtocolID.DX_EX_CODE);
+			String strResultCode = (String)objList.get(ClientProtocolID.RESULT_CODE);
+			String strResultData = (String)objList.get(ClientProtocolID.RESULT_DATA);
+			
+			System.out.println("RESULT_CODE : " +  strResultCode);
+			System.out.println("ERR_CODE : " +  strErrCode);
+			System.out.println("ERR_MSG : " +  strErrMsg);
+			System.out.println("strResultData : " +  strResultData);
+
+			result.put("RESULT_CODE", strResultCode);
+			result.put("ERR_CODE", strErrCode);
+			result.put("ERR_MSG", strErrMsg);
+			result.put("strResultData", strResultData);
+				
+		} catch(Exception e) {
+			e.printStackTrace();
+		}	
+		return result;		
+	}
+		
 }

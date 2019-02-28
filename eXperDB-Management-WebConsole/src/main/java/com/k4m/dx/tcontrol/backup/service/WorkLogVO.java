@@ -31,8 +31,10 @@ public class WorkLogVO {
 	private String db_svr_id;
 	private String fix_rsltcd;
 	private String fix_rslt_msg;
-	
-	
+	private String file_fmt_cd_nm;
+	private String file_fmt_cd;
+	private String usr_role_nm;
+
 	public String getFix_rsltcd() {
 		return fix_rsltcd;
 	}
@@ -160,7 +162,7 @@ public class WorkLogVO {
 	public void setTli(int tli) {
 		this.tli = tli;
 	}
-	
+
 	public long getFile_sz() {
 		return file_sz;
 	}
@@ -271,6 +273,30 @@ public class WorkLogVO {
 
 	public void setLst_mdf_dtm(String lst_mdf_dtm) {
 		this.lst_mdf_dtm = lst_mdf_dtm;
+	}
+
+	public String getFile_fmt_cd_nm() {
+		return file_fmt_cd_nm;
+	}
+
+	public void setFile_fmt_cd_nm(String file_fmt_cd_nm) {
+		this.file_fmt_cd_nm = file_fmt_cd_nm;
+	}
+
+	public String getFile_fmt_cd() {
+		return file_fmt_cd;
+	}
+
+	public void setFile_fmt_cd(String file_fmt_cd) {
+		this.file_fmt_cd = file_fmt_cd;
+	}
+
+	public String getUsr_role_nm() {
+		return usr_role_nm;
+	}
+
+	public void setUsr_role_nm(String usr_role_nm) {
+		this.usr_role_nm = usr_role_nm;
 	}
 
 }

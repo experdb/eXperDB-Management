@@ -4,6 +4,8 @@ import java.util.List;
 
 import org.springframework.stereotype.Repository;
 
+import com.k4m.dx.tcontrol.backup.service.WorkLogVO;
+import com.k4m.dx.tcontrol.restore.service.RestoreDumpVO;
 import com.k4m.dx.tcontrol.restore.service.RestoreRmanVO;
 
 import egovframework.rte.psl.dataaccess.EgovAbstractMapper;
@@ -28,6 +30,19 @@ public class RestoreDAO extends EgovAbstractMapper {
 	@SuppressWarnings({ "deprecation", "unchecked" })
 	public List<RestoreRmanVO> rmanRestoreHistory(RestoreRmanVO restoreRmanVO) {
 		return (List<RestoreRmanVO>) list("restoreRmanSql.rmanRestoreHistory",restoreRmanVO);
+	}
+
+	@SuppressWarnings({ "deprecation", "unchecked" })
+	public List<WorkLogVO> selectBckInfo(WorkLogVO workLogVO) {
+		return (List<WorkLogVO>) list("restoreDumpSql.selectBckInfo",workLogVO);
+	}
+
+	public void insertDumpRestore(RestoreDumpVO restoreDumpVO) {
+		insert("restoreDumpSql.insertDumpRestore", restoreDumpVO);				
+	}
+
+	public RestoreDumpVO latestDumpRestoreSN() {
+		return (RestoreDumpVO)getSqlSession().selectOne("restoreDumpSql.latestDumpRestoreSN");
 	}
 
 }

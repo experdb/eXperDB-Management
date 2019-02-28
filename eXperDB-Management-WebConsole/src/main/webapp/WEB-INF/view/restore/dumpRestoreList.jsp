@@ -26,6 +26,9 @@
 
 <script type="text/javascript">
 var tableDump = null;
+var wrk_id = null;
+var exe_sn = null;
+var db_svr_id =null;
 
 /* ********************************************************
  * Data initialization
@@ -71,11 +74,12 @@ function fn_dump_init(){
 		         	{ data: "restore",
 		         		"render" : function(data, type, full, meta) {
 		         			var html = '';	
+		         			/* html += '<span class="btn btnC_01 btnF_02" onClick=javascript:fn_dumpRestorReg("'+full.exe_sn+'"); ><input type="button" value="복구"></span>'; */
 		         			html += '<span class="btn btnC_01 btnF_02" onClick=javascript:fn_dumpRestorReg(); ><input type="button" value="복구"></span>';
 		         			return html;
 		         		},
 		         		defaultContent: ""}, 
-		         	{data : "wrk_nm", defaultContent : ""
+		         	{ data : "wrk_nm", defaultContent : ""
 		    			,"render": function (data, type, full) {				
 		    				  return '<span onClick=javascript:fn_workLayer("'+full.wrk_id+'"); class="bold">' + full.wrk_nm + '</span>';
 		    			}
@@ -90,9 +94,8 @@ function fn_dump_init(){
 		    			defaultContent : ""
 		    		},  
  		         	{ data: "db_nm", defaultContent: ""}, 
- 		         	//{ data: "file_sz", className: "dt-center", defaultContent: ""},
- 		         	
- 		         	 {data : "file_sz", defaultContent : ""
+ 		         	//{ data: "file_sz", className: "dt-center", defaultContent: ""}, 		         	
+ 		         	 { data : "file_sz", defaultContent : ""
 	 		   			,"render": function (data, type, full) {
 	 		   				if(full.file_sz != 0){
 				 		   		  var s = ['bytes', 'kB', 'MB', 'GB', 'TB', 'PB'];
@@ -102,9 +105,7 @@ function fn_dump_init(){
 	 		   					return full.file_sz;
 	 		   				}
 	 		   			}
-	 		   		 },
-	 		   		  
- 		         	
+	 		   		 },	 		   		  		         	
  		         	{data : "bck_file_pth", defaultContent : ""
 	 		   			,"render": function (data, type, full) {
 	 		   				  return '<span onClick=javascript:fn_dumpShow("'+full.bck_file_pth+'","${db_svr_id}"); title="'+full.bck_file_pth+'" class="bold">' + full.bck_file_pth + '</span>';
@@ -155,14 +156,16 @@ function fn_dump_init(){
  ******************************************************** */
 function fn_dumpRestorReg(){
 	var datas = tableDump.rows('.selected').data();
-
 	//var scd_id = table.row('.selected').data().scd_id;
-	var db_svr_id = "${db_svr_id}";
+	//var db_svr_id = "${db_svr_id}";
 	var form = document.dumpRestoreRegForm;
-	form.action = "/dumpRestoreRegVeiw.do?db_svr_id="+db_svr_id;
+	//form.action = "/dumpRestoreRegVeiw.do?db_svr_id="+db_svr_id+"&exe_sn="+exe_sn;
+	form.wrk_id.value = wrk_id;
+	form.db_svr_id.value = db_svr_id;  
+	form.exe_sn.value = exe_sn;  
+	form.action = "/dumpRestoreRegVeiw.do";
 	form.submit();
 	return;
-	
 }
 
 
@@ -201,7 +204,11 @@ function fn_get_dump_list(){
 				alert("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""));
 			}
 		},
-		success : function(result) {	
+		success : function(result) {
+			db_svr_id=result[0].db_svr_id;
+			wrk_id=result[0].wrk_id;
+			exe_sn= result[0].exe_sn;
+			
 			tableDump.rows({selected: true}).deselect();
 			tableDump.clear().draw();
 			tableDump.rows.add(result).draw();
@@ -246,6 +253,9 @@ $(function() {
 </script>
 
 <form name="dumpRestoreRegForm" method="post">
+	<input type="hidden" name="db_svr_id"  id="db_svr_id"  value="${db_svr_id}">
+	<input type="hidden" name="exe_sn"  id="exe_sn"  value="${exe_sn}">
+	<input type="hidden" name="wrk_id"  id="wrk_id"  value="${wrk_id}">
 </form>
 
 <form name="frmPopup">

@@ -709,7 +709,9 @@ function fn_scriptLayer(wrk_id){
 
 
 //패스워드 확인
-function fn_passwordConfilm(){
+function fn_passwordConfilm(flag){
 	document.getElementById('password').value = '';
+	document.getElementById('flag').value = flag;
+	
 	toggleLayer($('#pop_layer_pwConfilm'), 'on');	
 }

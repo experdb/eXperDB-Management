@@ -3,23 +3,39 @@ package com.k4m.dx.tcontrol.restore.service;
 public class RestoreDumpVO {
 	private int rownum;
 	private int idx;
-	private int sn;
-	private String timeline_dt;
-	private String timeline_h;
-	private String timeline_m;
-	private String timeline_s;
-	private String dtb_pth;
-	private String pgalog_pth;
-	private String svrlog_pth;
-	private String bck_pth;
+	private int restore_sn;
+	private int db_svr_id;
+	private String restore_nm;
+	private String restore_exp;
+	private int wrk_id;
+	private int wrkexe_sn;
 	private String restore_strtdtm;
 	private String restore_enddtm;
 	private String restore_cndt;
-	private String restore_flag;
-	private String restore_dir;
 	private String exelog;
+	private String format;
+	private String filename;
+	private String jobs;
+	private String role;
+	private String pre_data_yn;
+	private String data_yn;
+	private String post_data_yn;
+	private String data_only_yn;
+	private String schema_only_yn;
+	private String no_owner_yn;
+	private String no_privileges_yn;
+	private String no_tablespaces_yn;
+	private String create_yn;
+	private String clean_yn;
+	private String single_transaction_yn;
+	private String disable_triggers_yn;
+	private String no_data_for_failed_tables_yn;
+	private String verbose_yn;
+	private String use_set_sesson_auth_yn;
+	private String exit_on_error_yn;
 	private String regr_id;
 	private String reg_dtm;
+	private String bck_file_pth;
 
 	public int getRownum() {
 		return rownum;
@@ -37,76 +53,52 @@ public class RestoreDumpVO {
 		this.idx = idx;
 	}
 
-	public int getSn() {
-		return sn;
+	public int getRestore_sn() {
+		return restore_sn;
 	}
 
-	public void setSn(int sn) {
-		this.sn = sn;
+	public void setRestore_sn(int restore_sn) {
+		this.restore_sn = restore_sn;
 	}
 
-	public String getTimeline_dt() {
-		return timeline_dt;
+	public int getDb_svr_id() {
+		return db_svr_id;
 	}
 
-	public void setTimeline_dt(String timeline_dt) {
-		this.timeline_dt = timeline_dt;
+	public void setDb_svr_id(int db_svr_id) {
+		this.db_svr_id = db_svr_id;
 	}
 
-	public String getTimeline_h() {
-		return timeline_h;
+	public String getRestore_nm() {
+		return restore_nm;
 	}
 
-	public void setTimeline_h(String timeline_h) {
-		this.timeline_h = timeline_h;
+	public void setRestore_nm(String restore_nm) {
+		this.restore_nm = restore_nm;
 	}
 
-	public String getTimeline_m() {
-		return timeline_m;
+	public String getRestore_exp() {
+		return restore_exp;
 	}
 
-	public void setTimeline_m(String timeline_m) {
-		this.timeline_m = timeline_m;
+	public void setRestore_exp(String restore_exp) {
+		this.restore_exp = restore_exp;
 	}
 
-	public String getTimeline_s() {
-		return timeline_s;
+	public int getWrk_id() {
+		return wrk_id;
 	}
 
-	public void setTimeline_s(String timeline_s) {
-		this.timeline_s = timeline_s;
+	public void setWrk_id(int wrk_id) {
+		this.wrk_id = wrk_id;
 	}
 
-	public String getDtb_pth() {
-		return dtb_pth;
+	public int getWrkexe_sn() {
+		return wrkexe_sn;
 	}
 
-	public void setDtb_pth(String dtb_pth) {
-		this.dtb_pth = dtb_pth;
-	}
-
-	public String getPgalog_pth() {
-		return pgalog_pth;
-	}
-
-	public void setPgalog_pth(String pgalog_pth) {
-		this.pgalog_pth = pgalog_pth;
-	}
-
-	public String getSvrlog_pth() {
-		return svrlog_pth;
-	}
-
-	public void setSvrlog_pth(String svrlog_pth) {
-		this.svrlog_pth = svrlog_pth;
-	}
-
-	public String getBck_pth() {
-		return bck_pth;
-	}
-
-	public void setBck_pth(String bck_pth) {
-		this.bck_pth = bck_pth;
+	public void setWrkexe_sn(int wrkexe_sn) {
+		this.wrkexe_sn = wrkexe_sn;
 	}
 
 	public String getRestore_strtdtm() {
@@ -133,28 +125,172 @@ public class RestoreDumpVO {
 		this.restore_cndt = restore_cndt;
 	}
 
-	public String getRestore_flag() {
-		return restore_flag;
-	}
-
-	public void setRestore_flag(String restore_flag) {
-		this.restore_flag = restore_flag;
-	}
-
-	public String getRestore_dir() {
-		return restore_dir;
-	}
-
-	public void setRestore_dir(String restore_dir) {
-		this.restore_dir = restore_dir;
-	}
-
 	public String getExelog() {
 		return exelog;
 	}
 
 	public void setExelog(String exelog) {
 		this.exelog = exelog;
+	}
+
+	public String getFormat() {
+		return format;
+	}
+
+	public void setFormat(String format) {
+		this.format = format;
+	}
+
+	public String getFilename() {
+		return filename;
+	}
+
+	public void setFilename(String filename) {
+		this.filename = filename;
+	}
+
+	public String getJobs() {
+		return jobs;
+	}
+
+	public void setJobs(String jobs) {
+		this.jobs = jobs;
+	}
+
+	public String getRole() {
+		return role;
+	}
+
+	public void setRole(String role) {
+		this.role = role;
+	}
+
+	public String getPre_data_yn() {
+		return pre_data_yn;
+	}
+
+	public void setPre_data_yn(String pre_data_yn) {
+		this.pre_data_yn = pre_data_yn;
+	}
+
+	public String getData_yn() {
+		return data_yn;
+	}
+
+	public void setData_yn(String data_yn) {
+		this.data_yn = data_yn;
+	}
+
+	public String getPost_data_yn() {
+		return post_data_yn;
+	}
+
+	public void setPost_data_yn(String post_data_yn) {
+		this.post_data_yn = post_data_yn;
+	}
+
+	public String getData_only_yn() {
+		return data_only_yn;
+	}
+
+	public void setData_only_yn(String data_only_yn) {
+		this.data_only_yn = data_only_yn;
+	}
+
+	public String getSchema_only_yn() {
+		return schema_only_yn;
+	}
+
+	public void setSchema_only_yn(String schema_only_yn) {
+		this.schema_only_yn = schema_only_yn;
+	}
+
+	public String getNo_owner_yn() {
+		return no_owner_yn;
+	}
+
+	public void setNo_owner_yn(String no_owner_yn) {
+		this.no_owner_yn = no_owner_yn;
+	}
+
+	public String getNo_privileges_yn() {
+		return no_privileges_yn;
+	}
+
+	public void setNo_privileges_yn(String no_privileges_yn) {
+		this.no_privileges_yn = no_privileges_yn;
+	}
+
+	public String getNo_tablespaces_yn() {
+		return no_tablespaces_yn;
+	}
+
+	public void setNo_tablespaces_yn(String no_tablespaces_yn) {
+		this.no_tablespaces_yn = no_tablespaces_yn;
+	}
+
+	public String getCreate_yn() {
+		return create_yn;
+	}
+
+	public void setCreate_yn(String create_yn) {
+		this.create_yn = create_yn;
+	}
+
+	public String getClean_yn() {
+		return clean_yn;
+	}
+
+	public void setClean_yn(String clean_yn) {
+		this.clean_yn = clean_yn;
+	}
+
+	public String getSingle_transaction_yn() {
+		return single_transaction_yn;
+	}
+
+	public void setSingle_transaction_yn(String single_transaction_yn) {
+		this.single_transaction_yn = single_transaction_yn;
+	}
+
+	public String getDisable_triggers_yn() {
+		return disable_triggers_yn;
+	}
+
+	public void setDisable_triggers_yn(String disable_triggers_yn) {
+		this.disable_triggers_yn = disable_triggers_yn;
+	}
+
+	public String getNo_data_for_failed_tables_yn() {
+		return no_data_for_failed_tables_yn;
+	}
+
+	public void setNo_data_for_failed_tables_yn(String no_data_for_failed_tables_yn) {
+		this.no_data_for_failed_tables_yn = no_data_for_failed_tables_yn;
+	}
+
+	public String getVerbose_yn() {
+		return verbose_yn;
+	}
+
+	public void setVerbose_yn(String verbose_yn) {
+		this.verbose_yn = verbose_yn;
+	}
+
+	public String getUse_set_sesson_auth_yn() {
+		return use_set_sesson_auth_yn;
+	}
+
+	public void setUse_set_sesson_auth_yn(String use_set_sesson_auth_yn) {
+		this.use_set_sesson_auth_yn = use_set_sesson_auth_yn;
+	}
+
+	public String getExit_on_error_yn() {
+		return exit_on_error_yn;
+	}
+
+	public void setExit_on_error_yn(String exit_on_error_yn) {
+		this.exit_on_error_yn = exit_on_error_yn;
 	}
 
 	public String getRegr_id() {
@@ -171,6 +307,14 @@ public class RestoreDumpVO {
 
 	public void setReg_dtm(String reg_dtm) {
 		this.reg_dtm = reg_dtm;
+	}
+
+	public String getBck_file_pth() {
+		return bck_file_pth;
+	}
+
+	public void setBck_file_pth(String bck_file_pth) {
+		this.bck_file_pth = bck_file_pth;
 	}
 
 }
