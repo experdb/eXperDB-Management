@@ -73,8 +73,8 @@ public class DxT030 extends SocketCtl {
 		
 		//socketLogger.info("22222222222222222222222");
 		
-		//String SERVER_IP = (String) objSERVER_INFO.get(ProtocolID.SERVER_IP);
-		String SERVER_IP = "127.0.0.1";
+		String SERVER_IP = (String) objSERVER_INFO.get(ProtocolID.SERVER_IP);
+		//String SERVER_IP = "127.0.0.1";
 		String SERVER_PORT = (String) objSERVER_INFO.get(ProtocolID.SERVER_PORT);
 		String DATABASE_NAME = (String) objSERVER_INFO.get(ProtocolID.DATABASE_NAME);
 		String USER_ID = (String) objSERVER_INFO.get(ProtocolID.USER_ID);
