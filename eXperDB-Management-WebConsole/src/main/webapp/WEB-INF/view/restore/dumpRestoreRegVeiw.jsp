@@ -224,7 +224,7 @@ function fn_dumpRestoreLogCall() {
 			<h4><spring:message code="restore.Dump_Recovery" /><a href="#n"><img src="../images/ico_tit.png" class="btn_info" /></a></h4>
 			<div class="infobox">
 				<ul>
-					<li><spring:message code="restore.Dump_Recovery" /></li>
+					<li><spring:message code="help.Dump_Recovery" /></li>
 				</ul>
 			</div>
 			<div class="location">

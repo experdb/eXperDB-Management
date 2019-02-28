@@ -303,7 +303,7 @@
 			</h4>
 			<div class="infobox">
 				<ul>
-					<li><spring:message code="restore.Point-in-Time_Recovery" /></li>
+					<li><spring:message code="help.Point-in-Time_Recovery" /></li>
 				</ul>
 			</div>
 			<div class="location">

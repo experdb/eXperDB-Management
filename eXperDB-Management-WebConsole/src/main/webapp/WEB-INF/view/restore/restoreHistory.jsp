@@ -380,7 +380,7 @@ function fn_restoreLogInfo(restore_sn){
 			<h4><spring:message code="restore.Recovery_history" /><a href="#n"><img src="../images/ico_tit.png" class="btn_info" /></a></h4>
 			<div class="infobox">
 				<ul>
-					<li><spring:message code="restore.Recovery_history" /></li>
+					<li><spring:message code="help.Recovery_history" /></li>
 				</ul>
 			</div>
 			<div class="location">

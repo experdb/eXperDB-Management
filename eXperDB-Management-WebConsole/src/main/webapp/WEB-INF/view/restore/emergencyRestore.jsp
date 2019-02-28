@@ -240,7 +240,7 @@
 			</h4>
 			<div class="infobox">
 				<ul>
-					<li><spring:message code="restore.Emergency_Recovery" /></li>
+					<li><spring:message code="help.Emergency_Recovery" /></li>
 				</ul>
 			</div>
 			<div class="location">
