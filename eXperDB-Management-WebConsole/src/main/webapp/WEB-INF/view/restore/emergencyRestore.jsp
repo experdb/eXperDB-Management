@@ -59,8 +59,45 @@
 	function fn_new_storage_check() {
 		var new_storage = $("#restore_dir").val();
 
-		$("#dtb_pth").val(new_storage + $("#dtb_pth").val());
-		$("#svrlog_pth").val(new_storage + $("#svrlog_pth").val());
+		$.ajax({
+			async : false,
+			url : "/existDirCheck.do",
+		  	data : {
+		  		db_svr_id : "${db_svr_id}",
+		  		path : new_storage
+		  	},
+			type : "post",
+			beforeSend: function(xhr) {
+		        xhr.setRequestHeader("AJAX", true);
+		     },
+			error : function(xhr, status, error) {
+				if(xhr.status == 401) {
+					alert('<spring:message code="message.msg02" />');
+					top.location.href = "/";
+				} else if(xhr.status == 403) {
+					alert('<spring:message code="message.msg03" />');
+					top.location.href = "/";
+				} else {
+					alert("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""));
+				}
+			},
+			success : function(data) {
+				if(data.result.ERR_CODE == ""){
+					if(data.result.RESULT_DATA.IS_DIRECTORY == 0){
+						alert('<spring:message code="message.msg100" />');
+						$("#dtb_pth").val(new_storage + "${pgdata}");
+						$("#svrlog_pth").val(new_storage + "${srvlog}");
+					}else{
+						alert('<spring:message code="backup_management.invalid_path"/>');
+					}
+				}else{
+					alert('<spring:message code="message.msg76" />');
+				}
+			}
+		});
+		
+
+		
 	}
 
 	/* ********************************************************
