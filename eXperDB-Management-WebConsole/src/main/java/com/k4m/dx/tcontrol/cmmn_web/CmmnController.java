@@ -116,52 +116,54 @@ public class CmmnController {
 			// DBMS정보(DB전체 개수 조회, audit 설정 조회)
 			List<DashboardVO> serverInfoVOSelect = (List<DashboardVO>) dashboardService.selectDashboardServerInfo(dashVo);
 			List<DashboardVO> serverInfoVO = new ArrayList<DashboardVO>();
-			if(serverInfoVOSelect.size()>0){
-				for(int i=0; i<serverInfoVOSelect.size(); i++){
-					dashVo = new DashboardVO();
-					String db_svr_nm = serverInfoVOSelect.get(i).getDb_svr_nm();
-					List<DbServerVO> resultSet = cmmnServerInfoService.selectDbServerList(db_svr_nm);
-					AgentInfoVO vo = new AgentInfoVO();
-					vo.setIPADR(resultSet.get(0).getIpadr());
-					AgentInfoVO agentInfo = (AgentInfoVO)cmmnServerInfoService.selectAgentInfo(vo);
-					String IP = resultSet.get(0).getIpadr();
-					int PORT = agentInfo.getSOCKET_PORT();
-					JSONObject serverObj = new JSONObject();
-					serverObj.put(ClientProtocolID.SERVER_NAME,resultSet.get(0).getDb_svr_nm());
-					serverObj.put(ClientProtocolID.SERVER_IP,resultSet.get(0).getIpadr());
-					serverObj.put(ClientProtocolID.SERVER_PORT,resultSet.get(0).getPortno());
-					serverObj.put(ClientProtocolID.DATABASE_NAME,resultSet.get(0).getDft_db_nm());
-					serverObj.put(ClientProtocolID.USER_ID,resultSet.get(0).getSvr_spr_usr_id());
-					serverObj.put(ClientProtocolID.USER_PWD,dec.aesDecode(resultSet.get(0).getSvr_spr_scm_pwd()));
-					ClientInfoCmmn cic = new ClientInfoCmmn();
-					Map<String, Object> result = new HashMap<String, Object>();
-					result = cic.db_List(serverObj, IP, PORT);
-					JSONArray data = (JSONArray) result.get("data");
-					
-					ClientAdapter CA = new ClientAdapter(IP, PORT);
-					JSONObject objList;
-					CA.open();
-					objList = CA.dxT007(ClientTranCodeType.DxT007, ClientProtocolID.COMMAND_CODE_R, serverObj );
-					CA.close();
-					String strResultCode = (String)objList.get(ClientProtocolID.RESULT_CODE);
-					//strResultCode=0 이면 감사 Enabled 아니면 - 표시
-					if(strResultCode.equals("0")){
-						dashVo.setAudit_state("Enabled");
-					}else{
-						dashVo.setAudit_state("-");
+			try{
+				if(serverInfoVOSelect.size()>0){
+					for(int i=0; i<serverInfoVOSelect.size(); i++){
+						dashVo = new DashboardVO();
+						String db_svr_nm = serverInfoVOSelect.get(i).getDb_svr_nm();
+						List<DbServerVO> resultSet = cmmnServerInfoService.selectDbServerList(db_svr_nm);
+						AgentInfoVO vo = new AgentInfoVO();
+						vo.setIPADR(resultSet.get(0).getIpadr());
+						AgentInfoVO agentInfo = (AgentInfoVO)cmmnServerInfoService.selectAgentInfo(vo);
+						String IP = resultSet.get(0).getIpadr();
+						int PORT = agentInfo.getSOCKET_PORT();
+						JSONObject serverObj = new JSONObject();
+						serverObj.put(ClientProtocolID.SERVER_NAME,resultSet.get(0).getDb_svr_nm());
+						serverObj.put(ClientProtocolID.SERVER_IP,resultSet.get(0).getIpadr());
+						serverObj.put(ClientProtocolID.SERVER_PORT,resultSet.get(0).getPortno());
+						serverObj.put(ClientProtocolID.DATABASE_NAME,resultSet.get(0).getDft_db_nm());
+						serverObj.put(ClientProtocolID.USER_ID,resultSet.get(0).getSvr_spr_usr_id());
+						serverObj.put(ClientProtocolID.USER_PWD,dec.aesDecode(resultSet.get(0).getSvr_spr_scm_pwd()));
+						ClientInfoCmmn cic = new ClientInfoCmmn();
+						Map<String, Object> result = new HashMap<String, Object>();
+						result = cic.db_List(serverObj, IP, PORT);
+						JSONArray data = (JSONArray) result.get("data");
+						
+						ClientAdapter CA = new ClientAdapter(IP, PORT);
+						JSONObject objList;
+						CA.open();
+						objList = CA.dxT007(ClientTranCodeType.DxT007, ClientProtocolID.COMMAND_CODE_R, serverObj );
+						CA.close();
+						String strResultCode = (String)objList.get(ClientProtocolID.RESULT_CODE);
+						//strResultCode=0 이면 감사 Enabled 아니면 - 표시
+						if(strResultCode.equals("0")){
+							dashVo.setAudit_state("Enabled");
+						}else{
+							dashVo.setAudit_state("-");
+						}
+						dashVo.setDb_svr_nm(serverInfoVOSelect.get(i).getDb_svr_nm());
+						dashVo.setIpadr(serverInfoVOSelect.get(i).getIpadr());
+						dashVo.setDb_cnt(serverInfoVOSelect.get(i).getDb_cnt());
+						dashVo.setUndb_cnt(data.size()-serverInfoVOSelect.get(i).getDb_cnt());
+						dashVo.setConnect_cnt(serverInfoVOSelect.get(i).getConnect_cnt());
+						dashVo.setExecute_cnt(serverInfoVOSelect.get(i).getExecute_cnt());
+						dashVo.setLst_mdf_dtm(serverInfoVOSelect.get(i).getLst_mdf_dtm());
+						dashVo.setAgt_cndt_cd(serverInfoVOSelect.get(i).getAgt_cndt_cd());
+						serverInfoVO.add(dashVo);
 					}
-					dashVo.setDb_svr_nm(serverInfoVOSelect.get(i).getDb_svr_nm());
-					dashVo.setIpadr(serverInfoVOSelect.get(i).getIpadr());
-					dashVo.setDb_cnt(serverInfoVOSelect.get(i).getDb_cnt());
-					dashVo.setUndb_cnt(data.size()-serverInfoVOSelect.get(i).getDb_cnt());
-					dashVo.setConnect_cnt(serverInfoVOSelect.get(i).getConnect_cnt());
-					dashVo.setExecute_cnt(serverInfoVOSelect.get(i).getExecute_cnt());
-					dashVo.setLst_mdf_dtm(serverInfoVOSelect.get(i).getLst_mdf_dtm());
-					dashVo.setAgt_cndt_cd(serverInfoVOSelect.get(i).getAgt_cndt_cd());
-					serverInfoVO.add(dashVo);
 				}
+			}catch(Exception e){
 			}
-
 			
 			// 백업정보(DUMP)
 			List<DashboardVO> backupDumpInfoVO = (List<DashboardVO>) dashboardService.selectDashboardBackupDumpInfo(dashVo);

@@ -35,7 +35,6 @@ import com.k4m.dx.tcontrol.common.service.CmmnServerInfoService;
 import com.k4m.dx.tcontrol.common.service.HistoryVO;
 import com.k4m.dx.tcontrol.login.service.LoginVO;
 import com.k4m.dx.tcontrol.restore.service.RestoreDumpVO;
-import com.k4m.dx.tcontrol.restore.service.RestoreRmanVO;
 import com.k4m.dx.tcontrol.restore.service.RestoreService;
 
 /**
@@ -104,12 +103,7 @@ public class DumpRestoreController {
 		}
 		
 		// Get DB list
-		try {
-			// 화면접근이력 이력 남기기
-			CmmnUtils.saveHistory(request, historyVO);
-			historyVO.setExe_dtl_cd("DX-T0026");
-			accessHistoryService.insertHistory(historyVO);
-			
+		try {		
 			HttpSession session = request.getSession();
 			LoginVO loginVo = (LoginVO) session.getAttribute("session");
 			String usr_id = loginVo.getUsr_id();
@@ -162,7 +156,7 @@ public class DumpRestoreController {
 			}else{
 				// 화면접근이력 이력 남기기
 				CmmnUtils.saveHistory(request, historyVO);
-				//historyVO.setExe_dtl_cd("DX-T0009");
+				historyVO.setExe_dtl_cd("DX-T0132");
 				accessHistoryService.insertHistory(historyVO);
 
 				mv.addObject("exe_sn", exe_sn);
@@ -193,17 +187,9 @@ public class DumpRestoreController {
 		int exe_sn = Integer.parseInt(request.getParameter("exe_sn"));
 		String db_svr_id = request.getParameter("db_svr_id");
 		
-		// 화면접근이력 이력 남기기
 		try {		
 			workLogVO.setDb_svr_id(db_svr_id);
 			workLogVO.setExe_sn(exe_sn);
-/*			CmmnUtils.saveHistory(request, historyVO);
-			if(workLogVO.getBck_bsn_dscd().equals("TC000201")){
-				historyVO.setExe_dtl_cd("DX-T0026_01");
-			}else{
-				historyVO.setExe_dtl_cd("DX-T0026_02");
-			}
-			accessHistoryService.insertHistory(historyVO);*/
 		} catch (Exception e2) {
 			// TODO Auto-generated catch block
 			e2.printStackTrace();
@@ -239,13 +225,13 @@ public class DumpRestoreController {
 		RestoreDumpVO latestRestoreSN= null;
 		
 			try {
-				/*if (dbSvrAut.get(0).get("emergency_restore_aut_yn").equals("N")) {
+				if (dbSvrAut.get(0).get("dump_restore_aut_yn").equals("N")) {
 					response.sendRedirect("/autError.do");
-				} else {*/
+				} else {
 					// 화면접근이력 이력 남기기
-					/*CmmnUtils.saveHistory(request, historyVO);
-					historyVO.setExe_dtl_cd("DX-T0129_01");
-					accessHistoryService.insertHistory(historyVO);*/
+					CmmnUtils.saveHistory(request, historyVO);
+					historyVO.setExe_dtl_cd("DX-T0132_01");
+					accessHistoryService.insertHistory(historyVO);
 	
 					HttpSession session = request.getSession();
 					LoginVO loginVo = (LoginVO) session.getAttribute("session");
@@ -254,7 +240,7 @@ public class DumpRestoreController {
 					restoreDumpVO.setRegr_id(id);
 	
 					restoreService.insertDumpRestore(restoreDumpVO);		
-				//}
+				}
 			} catch (Exception e) {
 				e.printStackTrace();
 				insertResult = "F";
