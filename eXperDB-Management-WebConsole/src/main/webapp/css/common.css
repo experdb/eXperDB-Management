@@ -295,8 +295,8 @@ input[type="text"]:disabled, input[type="text"].disabled {background:#e4e9ec;col
 .bak_option .bak_inner{margin-top:20px;}
 .bak_option .bak_inner:after{display:block;content:"";clear:both;}
 .bak_option .bak_inner .tit{width:383px;height:22px;line-height:22px;background:#e4e9ec;text-align:center;}
-.bak_option .bak_inner .bak_lt{float:left;width:383px;}
-.bak_option .bak_inner .bak_rt{float:right;width:383px;}
+.bak_option .bak_inner .bak_lt{float:left;width:400px;}
+.bak_option .bak_inner .bak_rt{float:right;width:400px;}
 .bak_option .bak_inner .option_list{padding:10px 8px;}
 .bak_option .bak_inner .option_list ul:after{display:block;content:"";clear:both;}
 .bak_option .bak_inner .option_list ul li{float:left;width:48%;margin-top:12px;}

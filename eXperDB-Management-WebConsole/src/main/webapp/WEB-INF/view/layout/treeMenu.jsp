@@ -271,7 +271,7 @@ $(window.document).ready(function() {
 					html1+='                      <li class="ico3_1" id="dumpRestore'+item.db_svr_id+'"><a href=/dumpRestore.do?db_svr_id='+item.db_svr_id+' id="dumpRestore'+item.db_svr_id+'c" onClick=javascript:fn_GoLink("dumpRestore'+item.db_svr_id+'"); target="main"><img src="../images/ico_lnb_13.png" id="treeImg"><spring:message code="restore.Dump_Recovery"/></a></li>';
 					}
 					if(aut.length != 0 && aut[index].restore_his_aut_yn == "Y"){
-					html1+='                      <li class="ico3_1" id="restoreHistory'+item.db_svr_id+'"><a href=/restoreHistory.do?db_svr_id='+item.db_svr_id+' id="restoreHistory'+item.db_svr_id+'c" onClick=javascript:fn_GoLink("restoreHistory'+item.db_svr_id+'"); target="main"><img src="../images/ico_lnb_13.png" id="treeImg"><spring:message code="restore.Recovery_history"/></a></li>';
+					html1+='                      <li class="ico3_1" id="restoreHistory'+item.db_svr_id+'"><a href=/restoreHistory.do?db_svr_id='+item.db_svr_id+' id="restoreHistory'+item.db_svr_id+'c" onClick=javascript:fn_GoLink("restoreHistory'+item.db_svr_id+'"); target="main"><img src="../images/ico_lnb_14.png" id="treeImg"><spring:message code="restore.Recovery_history"/></a></li>';
 					}
 					html1+='				</ul>';
 					html1+='			</li>';

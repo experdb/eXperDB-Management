@@ -636,9 +636,9 @@ function checkFolder(keyType){
 				<colgroup>
 					<col style="width:105px;" />
 					<col style="width:178px;" />
-					<col style="width:95px;" />
+					<col style="width:100px;" />
 					<col style="width:178px;" />
-					<col style="width:95px;" />
+					<col style="width:100px;" />
 					<col style="width:150px;" />
 				</colgroup>
 				<tbody>

@@ -1,5 +1,4 @@
-<%@ page language="java" contentType="text/html; charset=UTF-8"
-	pageEncoding="UTF-8"%>
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form"%>
 <%@ taglib prefix="ui" uri="http://egovframework.gov/ctl/ui"%>
@@ -487,7 +486,7 @@ function fn_selectSecurityStatistics(today){
 							<tbody>
 								<c:if test="${fn:length(serverInfo) == 0}">
 										<tr>
-											<td colspan="11"><spring:message code="message.msg01" /></td>
+											<td colspan="9"><spring:message code="message.msg01" /></td>
 										</tr>
 								</c:if>
 								<c:forEach var="data" items="${serverInfo}" varStatus="status">
