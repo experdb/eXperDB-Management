@@ -146,9 +146,47 @@ function fn_Validation() {
  * Dump 복구명 중복체크
  ******************************************************** */
 function fn_check(){
-	alert("중복체크 추가해주세요!!");
-	restore_nmChk = "success";
-	restore_nmChk = "fail";
+	var restore_nm = document.getElementById("restore_nm");
+	if (restore_nm.value == "") {
+		alert('복원명을 입력해주세요.');
+		document.getElementById('restore_nm').focus();
+		return;
+	}
+	$.ajax({
+		url : '/restore_nmCheck.do',
+		type : 'post',
+		data : {
+			restore_nm : $("#restore_nm").val()
+		},
+		success : function(result) {
+			if (result == "true") {
+				alert('<spring:message code="restore.msg221" />');
+				document.getElementById("restore_nm").focus();
+				restore_nmChk = "success";
+			} else {
+				restore_nmChk = "fail";
+				alert('<spring:message code="restore.msg222" />');
+				document.getElementById("restore_nm").focus();
+			}
+		},
+		beforeSend : function(xhr) {
+			xhr.setRequestHeader("AJAX", true);
+		},
+		error : function(xhr, status, error) {
+			if (xhr.status == 401) {
+				alert('<spring:message code="message.msg02" />');
+				top.location.href = "/";
+			} else if (xhr.status == 403) {
+				alert('<spring:message code="message.msg03" />');
+				top.location.href = "/";
+			} else {
+				alert("ERROR CODE : " + xhr.status + "\n\n"
+						+ "ERROR Message : " + error + "\n\n"
+						+ "Error Detail : "
+						+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""));
+			}
+		}
+	});
 }
 
 /* ********************************************************

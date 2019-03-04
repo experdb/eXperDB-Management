@@ -61,8 +61,14 @@
 		* Author : 변승우
 		**/
 		SELECT 
-				 COUNT(*)
-		FROM T_RMAN_RESTORE
+				COUNT(A.RESTORE_NM)
+		FROM(
+				SELECT RESTORE_NM 
+				FROM T_RMAN_RESTORE		
+				UNION ALL
+				SELECT RESTORE_NM 
+				FROM T_DUMP_RESTORE
+		)A
 		WHERE RESTORE_NM = #{restore_nm}
 	</select>
 	
