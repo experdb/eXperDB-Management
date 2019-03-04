@@ -26,7 +26,8 @@
 %>
 <script type="text/javascript">
 	var db_svr_id = "${db_svr_id}";
-
+	var restore_nmChk ="fail";
+	
 	$(window.document).ready(function() {
 		fn_inti();
 	});
@@ -144,6 +145,28 @@
 		});		
 	}
 	
+	/* ********************************************************
+	 * Validation
+	 ******************************************************** */
+	function fn_Validation() {
+		var restore_nm = document.getElementById('restore_nm');
+		var restore_exp = document.getElementById('restore_exp');
+		
+		if (restore_nm.value == "" || restore_nm.value == "undefind" || restore_nm.value == null) {
+			alert("복원명을 넣어주세요.");
+			restore_nm.focus();
+			return false;
+		}else if(restore_nmChk =="fail"){
+			alert('복원명 중복체크 바랍니다.');
+			return false;
+		}else if (restore_exp.value == "" || restore_exp.value == "undefind" || restore_exp.value == null) {
+			alert("복원 설명을 넣어주세요.");
+			restore_exp.focus();
+			return false;
+		}
+		
+		fn_passwordConfilm('rman');
+	}
 	
 	/* ********************************************************
 	 * RMAN Restore 정보 저장
@@ -196,7 +219,7 @@
 	function fn_check() {
 		var restore_nm = document.getElementById("restore_nm");
 		if (restore_nm.value == "") {
-			alert('<spring:message code="message.msg107" />');
+			alert('복원명을 입력해주세요.');
 			document.getElementById('restore_nm').focus();
 			return;
 		}
@@ -210,9 +233,9 @@
 				if (result == "true") {
 					alert('<spring:message code="restore.msg221" />');
 					document.getElementById("restore_nm").focus();
-					wrk_nmChk = "success";
+					restore_nmChk = "success";
 				} else {
-					scd_nmChk = "fail";
+					restore_nmChk = "fail";
 					alert('<spring:message code="restore.msg222" />');
 					document.getElementById("restore_nm").focus();
 				}
@@ -290,7 +313,7 @@
 		</div>
 		<div class="contents">
 			<div class="btn_type_01">
-				<span class="btn"><button type="button" id="btnSelect" onClick="fn_passwordConfilm('rman');">
+				<span class="btn"><button type="button" id="btnSelect" onClick="fn_Validation();">
 						<spring:message code="schedule.run" /></button></span>
 			</div>
 			<div class="sch_form">

@@ -29,6 +29,7 @@ var exe_sn = "${exe_sn}";
 var db_svr_id = "${db_svr_id}";
 var wrk_id = "${wrk_id}";
 var flag = "dump";
+var restore_nmChk ="fail";
 /* ********************************************************
  * Data initialization
  ******************************************************** */
@@ -117,6 +118,38 @@ function checkObject(){
 	
 }
 
+/* ********************************************************
+ * Validation
+ ******************************************************** */
+function fn_Validation() {
+	var restore_nm = document.getElementById('restore_nm');
+	var restore_exp = document.getElementById('restore_exp');
+	
+	if (restore_nm.value == "" || restore_nm.value == "undefind" || restore_nm.value == null) {
+		alert("복원명을 넣어주세요.");
+		restore_nm.focus();
+		return false;
+	}else if(restore_nmChk =="fail"){
+		alert('복원명 중복체크 바랍니다.');
+		return false;
+	}else if (restore_exp.value == "" || restore_exp.value == "undefind" || restore_exp.value == null) {
+		alert("복원 설명을 넣어주세요.");
+		restore_exp.focus();
+		return false;
+	}
+	
+	fn_passwordConfilm('dump');
+}
+
+
+/* ********************************************************
+ * Dump 복구명 중복체크
+ ******************************************************** */
+function fn_check(){
+	alert("중복체크 추가해주세요!!");
+	restore_nmChk = "success";
+	restore_nmChk = "fail";
+}
 
 /* ********************************************************
  * Dump Restore 정보 저장
@@ -237,7 +270,7 @@ function fn_dumpRestoreLogCall() {
 		</div>
 		<div class="contents" style="min-height: 950px">
 			<div class="btn_type_01">
-				<span class="btn"><button type="button" id="btnSelect" onClick="fn_passwordConfilm('dump');"><spring:message code="schedule.run" /></button></span>
+				<span class="btn"><button type="button" id="btnSelect" onClick="fn_Validation();"><spring:message code="schedule.run" /></button></span>
 			</div>
 			<div class="sch_form">
 				<table class="write">

@@ -130,7 +130,7 @@ function fn_rman_init(){
    	tableRman.tables().header().to$().find('th:eq(5)').css('min-width', '120px');
    	tableRman.tables().header().to$().find('th:eq(6)').css('min-width', '120px');
    	tableRman.tables().header().to$().find('th:eq(7)').css('min-width', '75px');
-   	tableRman.tables().header().to$().find('th:eq(8)').css('min-width', '70px');
+   	tableRman.tables().header().to$().find('th:eq(8)').css('min-width', '100px');
    	tableRman.tables().header().to$().find('th:eq(9)').css('min-width', '100px');
    	tableRman.tables().header().to$().find('th:eq(10)').css('min-width', '0px');
     $(window).trigger('resize'); 
@@ -380,7 +380,7 @@ function selectTab(intab){
 
 function fn_restoreLogInfo(restore_sn){
 	var flag = "rman";
-	window.open("/restoreLogView.do?restore_sn=" + restore_sn+ "&db_svr_id="+db_svr_id+ "&flag="+flag  ,"popRestoreLogView","location=no,menubar=no,resizable=yes,scrollbars=yes,status=no,width=1200,height=970,top=0,left=0");
+	window.open("/restoreLogView.do?restore_sn=" + restore_sn+ "&db_svr_id="+db_svr_id+ "&flag="+flag  ,"popRestoreLogView","location=no,menubar=no,resizable=yes,scrollbars=yes,status=no,width=1200,height=700,top=0,left=0");
 	
 /*   	$.ajax({
  		url : '/restoreLogInfo.do',
@@ -413,7 +413,7 @@ function fn_restoreLogInfo(restore_sn){
 
 function fn_restoreDumpLogInfo(restore_sn){
 	var flag = "dump";
-	window.open("/restoreLogView.do?restore_sn=" + restore_sn+ "&db_svr_id="+db_svr_id+ "&flag="+flag  ,"popRestoreLogView","location=no,menubar=no,resizable=yes,scrollbars=yes,status=no,width=1200,height=970,top=0,left=0");
+	window.open("/restoreLogView.do?restore_sn=" + restore_sn+ "&db_svr_id="+db_svr_id+ "&flag="+flag  ,"popRestoreLogView","location=no,menubar=no,resizable=yes,scrollbars=yes,status=no,width=1200,height=700,top=0,left=0");
 }
 
 </script>
@@ -524,7 +524,7 @@ function fn_restoreDumpLogInfo(restore_sn){
 								<th width="120"><spring:message code="backup_management.work_start_time" /></th>
 								<th width="120"><spring:message code="backup_management.work_end_time" /></th>
 								<th width="75"><spring:message code="common.status" /></th>
-								<th width="70"><spring:message code="restore.log" /></th>
+								<th width="100"><spring:message code="restore.log" /></th>
 								<th width="100"><spring:message code="restore.worker" /></th>
 								<th width="0"></th>
 							</tr>
