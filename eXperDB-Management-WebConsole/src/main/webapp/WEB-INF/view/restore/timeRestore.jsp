@@ -210,7 +210,43 @@
 		$("#dtb_pth").val("${pgdata}");
 		$("#svrlog_pth").val("${srvlog}");
 	}
-
+	
+	/* ********************************************************
+	 * RMAN Restore 시작 전 (select pg_switch_wal())
+	 ******************************************************** */	
+	function fn_pgWalFileSwitch(){
+		$.ajax({
+			url : "/pgWalFileSwitch.do",
+			data : {
+				db_svr_id : db_svr_id,
+			},
+			dataType : "json",
+			type : "post",
+			beforeSend : function(xhr) {
+				xhr.setRequestHeader("AJAX", true);
+			},
+			error : function(xhr, status, error) {
+				if (xhr.status == 401) {
+					alert('<spring:message code="message.msg02" />');
+					top.location.href = "/";
+				} else if (xhr.status == 403) {
+					alert('<spring:message code="message.msg03" />');
+					top.location.href = "/";
+				} else {
+					alert("ERROR CODE : " + xhr.status + "\n\n"
+							+ "ERROR Message : " + error + "\n\n"
+							+ "Error Detail : "
+							+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""));
+				}
+			},
+			success : function(result) {
+				if(result.RESULT_CODE ==0){
+					fn_execute();
+				} 
+			}
+		});		
+	}
+	
 	/* ********************************************************
 	 * RMAN Show 정보 확인
 	 ******************************************************** */

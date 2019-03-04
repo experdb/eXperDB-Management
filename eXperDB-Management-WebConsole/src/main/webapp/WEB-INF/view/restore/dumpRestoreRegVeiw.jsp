@@ -250,7 +250,7 @@ function fn_execute() {
 			}
 		},
 		success : function(result) {
-			alert('<spring:message code="restore.msg220" />');
+			alert('덤프복원을 시작합니다.');
 			fn_dumpRestoreLogCall();
 		}
 	});

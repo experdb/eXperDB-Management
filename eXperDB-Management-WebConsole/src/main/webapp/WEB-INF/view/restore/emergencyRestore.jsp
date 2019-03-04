@@ -140,7 +140,9 @@
 				}
 			},
 			success : function(result) {
-				alert(result.RESULT_CODE);
+				if(result.RESULT_CODE ==0){
+					fn_execute();
+				} 
 			}
 		});		
 	}
