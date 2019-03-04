@@ -28,6 +28,7 @@ var tableDump = null;
 var tab = "rman";
 var db_svr_id = "${db_svr_id}";
 
+
 /* ********************************************************
  * Data initialization
  ******************************************************** */
@@ -150,23 +151,9 @@ function fn_dump_init(){
 		bSort: false,
 	    columns : [
 		         	{ data: "rownum", className: "dt-center", defaultContent: ""}, 
-		         	{data : "wrk_nm", defaultContent : ""
-		    			,"render": function (data, type, full) {				
-		    				  return '<span onClick=javascript:fn_workLayer("'+full.wrk_id+'"); class="bold">' + full.wrk_nm + '</span>';
-		    			}
-		    		}, 
-		    		{ data: "ipadr", className: "dt-center", defaultContent: ""},
-		    		{ data : "wrk_exp",
-		    			render : function(data, type, full, meta) {	 	
-		    				var html = '';					
-		    				html += '<span title="'+full.wrk_exp+'">' + full.wrk_exp + '</span>';
-		    				return html;
-		    			},
-		    			defaultContent : ""
-		    		},  
+		         	{ data: "restore_nm", className: "dt-center", defaultContent: ""},
+					{ data: "restore_exp", className: "dt-left", defaultContent: ""},
  		         	{ data: "db_nm", defaultContent: ""}, 
- 		         	//{ data: "file_sz", className: "dt-center", defaultContent: ""},
- 		         	
  		         	 {data : "file_sz", defaultContent : ""
 	 		   			,"render": function (data, type, full) {
 	 		   				if(full.file_sz != 0){
@@ -178,33 +165,39 @@ function fn_dump_init(){
 	 		   				}
 	 		   			}
 	 		   		 },
-	 		   		  
- 		         	
- 		         	{data : "bck_file_pth", defaultContent : ""
-	 		   			,"render": function (data, type, full) {
-	 		   				  return '<span onClick=javascript:fn_dumpShow("'+full.bck_file_pth+'","'+full.db_svr_id+'"); title="'+full.bck_file_pth+'" class="bold">' + full.bck_file_pth + '</span>';
-	 		   			}
-	 		   		 },
  		         	{ data: "bck_filenm", defaultContent: ""},
- 		         	{ data: "wrk_strt_dtm", defaultContent: ""}, 
- 		         	{ data: "wrk_end_dtm", defaultContent: ""},  		         			         	
- 		         	{ data: "wrk_dtm", defaultContent: ""},
-	 		   		{
-	 					data : "exe_rslt_cd",
-	 					render : function(data, type, full, meta) {
-	 						var html = '';
-	 						if (full.exe_rslt_cd == 'TC001701') {
-	 							html += '<span class="btn btnC_01 btnF_02"><img src="../images/ico_state_02.png" style="margin-right:3px;"/>Success</span>';
-	 						} else if(full.exe_rslt_cd == 'TC001702'){
-	 							html += '<span class="btn btnC_01 btnF_02"><button onclick="fn_failLog('+full.exe_sn+')"><img src="../images/ico_state_01.png" style="margin-right:3px;"/>Fail</button></span>';
-	 						} else {
-	 							html +='<span class="btn btnC_01 btnF_02"><img src="../images/ico_state_03.png" style="margin-right:3px;"/><spring:message code="etc.etc28"/></span>';
-	 						}
-	 						return html;
-	 					},
-	 					className : "dt-center",
-	 					defaultContent : ""
-	 				}
+ 		         	{ data: "restore_strtdtm", className: "dt-center", defaultContent: ""},
+		         	{ data: "restore_enddtm", className: "dt-center", defaultContent: ""},		         			         	
+ 		         	{
+						data : "restore_cndt",
+						render : function(data, type, full, meta) {
+							var html = '';
+							if (full.restore_cndt == '0') {
+								html += '성공';
+							} else if (full.restore_cndt == '1'){
+								html +='시작';
+							} else if (full.restore_cndt == '2'){
+								html +='진행중';
+							} else {
+								html +='실패';
+							}
+							return html;
+						},
+						className : "dt-center",
+						defaultContent : ""
+					},
+					{
+		    			data : "",
+		    			render : function(data, type, full, meta) {
+		    				var html = '<span class="btn btnC_01 btnF_02"><button onclick="fn_restoreDumpLogInfo('+full.restore_sn+')">로그</button></span>';
+		    				
+		    				return html;
+		    			},
+		    			className : "dt-center",
+		    			defaultContent : ""
+		    		},			         	
+		         	{ data: "regr_id", className: "dt-center", defaultContent: ""},
+		    		{ data: "restore_sn", className: "dt-center", defaultContent: "", visible: false}
  		        ],'select': {'style': 'multi'} 
 	});
 
@@ -311,6 +304,49 @@ $(function() {
 		});
 	}
 
+	
+	
+	/* ********************************************************
+	 * Get Dump Restore Log List
+	 ******************************************************** */
+	function fn_get_dump_list(){
+		var db_id = $("#db_id").val();
+		if(db_id == "") db_id = 0;
+		
+		$.ajax({
+			url : "/dumpRestoreHistory.do",
+		  	data : {
+		  		db_svr_id : db_svr_id,
+		  		db_id : db_id,
+		  		restore_strtdtm : $("#restore_strtdtm").val(),
+		  		restore_enddtm : $("#restore_enddtm").val(),
+		  		restore_cndt : $("#restore_cndt").val(),
+		  		restore_nm : $('#restore_nm').val()
+		  	},
+			dataType : "json",
+			type : "post",
+			beforeSend: function(xhr) {
+		        xhr.setRequestHeader("AJAX", true);
+		     },
+			error : function(xhr, status, error) {
+				if(xhr.status == 401) {
+					alert("<spring:message code='message.msg02' />");
+					top.location.href = "/";
+				} else if(xhr.status == 403) {
+					alert("<spring:message code='message.msg03' />");
+					top.location.href = "/";
+				} else {
+					alert("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""));
+				}
+			},
+			success : function(result) {
+				tableDump.rows({selected: true}).deselect();
+				tableDump.clear().draw();
+				tableDump.rows.add(result).draw();
+			}
+		});
+	}
+
 
 /* ********************************************************
  * Tab Click
@@ -319,6 +355,7 @@ var clickDump = false;
 function selectTab(intab){
 	tab = intab;
 	if(intab == "dump"){
+		$("#restore_nm").val("");
 		$("#tab_rman").hide();
 		$("#tab_dump").show();
 		$(".search_rman").hide();
@@ -328,22 +365,22 @@ function selectTab(intab){
 		if(clickDump == false){
 			fn_get_dump_list();
 			clickDump = true;
-		}
+		}		
 	}else{
+		$("#restore_nm").val("");
 		$("#tab_rman").show();
 		$("#tab_dump").hide();
 		$(".search_rman").show();
 		$(".search_dump").hide();
 		$("#logDumpListDiv").hide();
-		$("#logRmanListDiv").show();
+		$("#logRmanListDiv").show();		
 	}
 }
 
 
 function fn_restoreLogInfo(restore_sn){
-	
-	//window.open("/restoreLogInfo.do?restore_sn="+ restore_sn+ "&db_svr_id="+db_svr_id  ,"popRestoreLogView","location=no,menubar=no,resizable=yes,scrollbars=yes,status=no,width=1200,height=970,top=0,left=0");	
-	window.open("/restoreLogView.do?restore_sn=" + restore_sn+ "&db_svr_id="+db_svr_id  ,"popRestoreLogView","location=no,menubar=no,resizable=yes,scrollbars=yes,status=no,width=1200,height=970,top=0,left=0");
+	var flag = "rman";
+	window.open("/restoreLogView.do?restore_sn=" + restore_sn+ "&db_svr_id="+db_svr_id+ "&flag="+flag  ,"popRestoreLogView","location=no,menubar=no,resizable=yes,scrollbars=yes,status=no,width=1200,height=970,top=0,left=0");
 	
 /*   	$.ajax({
  		url : '/restoreLogInfo.do',
@@ -372,6 +409,13 @@ function fn_restoreLogInfo(restore_sn){
  		}
  	}); 	 */
 }
+
+
+function fn_restoreDumpLogInfo(restore_sn){
+	var flag = "dump";
+	window.open("/restoreLogView.do?restore_sn=" + restore_sn+ "&db_svr_id="+db_svr_id+ "&flag="+flag  ,"popRestoreLogView","location=no,menubar=no,resizable=yes,scrollbars=yes,status=no,width=1200,height=970,top=0,left=0");
+}
+
 </script>
 <!-- contents -->
 <div id="contents">
@@ -495,7 +539,6 @@ function fn_restoreLogInfo(restore_sn){
 								<th width="40"><spring:message code="common.no" /></th>
 								<th width="150"><spring:message code="restore.Recovery_name" /></th>
 								<th width="100"><spring:message code="restore.Recovery_Description" /></th>
-								<th width="150"><spring:message code="dbms_information.dbms_ip" /></th>
 								<th width="100">Database</th>
 								<th width="100">SIZE</th>
 								<th width="170"><spring:message code="backup_management.fileName" /></th>			
@@ -504,6 +547,7 @@ function fn_restoreLogInfo(restore_sn){
 								<th width="100"><spring:message code="common.status" /></th>
 								<th width="100"><spring:message code="restore.log" /></th>
 								<th width="100"><spring:message code="restore.worker" /></th>
+								<th width="0"></th>
 							</tr>
 						</thead>
 					</table>

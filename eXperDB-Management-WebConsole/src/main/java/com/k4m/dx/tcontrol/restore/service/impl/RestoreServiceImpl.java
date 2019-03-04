@@ -52,4 +52,14 @@ public class RestoreServiceImpl extends EgovAbstractServiceImpl implements Resto
 		return restoreDAO.latestDumpRestoreSN();
 	}
 
+	@Override
+	public List<RestoreDumpVO> dumpRestoreHistory(RestoreDumpVO restoreDumpVO) throws Exception {
+		return restoreDAO.dumpRestoreHistory(restoreDumpVO);
+	}
+
+	@Override
+	public List<WorkLogVO> selectDumpRestoreLogList(WorkLogVO workLogVO) throws Exception {
+		return restoreDAO.selectDumpRestoreLogList(workLogVO);
+	}
+
 }

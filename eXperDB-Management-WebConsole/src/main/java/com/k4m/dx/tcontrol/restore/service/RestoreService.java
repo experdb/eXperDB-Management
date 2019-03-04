@@ -66,4 +66,10 @@ public interface RestoreService {
 	 * @throws Exception
 	 */
 	RestoreDumpVO latestDumpRestoreSN() throws Exception;
+
+
+	List<RestoreDumpVO> dumpRestoreHistory(RestoreDumpVO restoreDumpVO) throws Exception;
+
+
+	List<WorkLogVO> selectDumpRestoreLogList(WorkLogVO workLogVO) throws Exception;
 }

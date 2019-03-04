@@ -128,6 +128,32 @@ public class DumpRestoreController {
 	}
 
 	
+	/**
+	 * Dump restore Log List
+	 * @param WorkLogVO
+	 * @return List<WorkLogVO>
+	 * @throws Exception
+	 */
+	@RequestMapping(value="/selectDumpRestoreLogList.do")
+	@ResponseBody
+	public List<WorkLogVO> selectDumpRestoreLogList(@ModelAttribute("workLogVo") WorkLogVO workLogVO, HttpServletRequest request, @ModelAttribute("historyVO") HistoryVO historyVO) throws Exception{
+		
+		// 화면접근이력 이력 남기기
+		try {
+			CmmnUtils.saveHistory(request, historyVO);
+			historyVO.setExe_dtl_cd("DX-T0131");
+			accessHistoryService.insertHistory(historyVO);
+		} catch (Exception e2) {
+			// TODO Auto-generated catch block
+			e2.printStackTrace();
+		}
+				
+		List<WorkLogVO> resultSet = null;
+		resultSet = restoreService.selectDumpRestoreLogList(workLogVO);
+
+		return resultSet;
+	}
+	
 	
 	/**
 	 * [Restore] 덤프복구 등록 화면을 보여준다.

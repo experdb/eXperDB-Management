@@ -64,7 +64,7 @@ $(window.document).ready(function() {
 			document.getElementById("bck_file_pth").value = result[0].bck_file_pth;
 			document.getElementById("bck_filenm").value = result[0].bck_filenm;
 			document.getElementById("wrk_strt_dtm").value = result[0].wrk_strt_dtm;
-			document.getElementById("wrk_end_dtm").value = result[0].wrk_end_dtm;
+			document.getElementById("wrk_end_dtm").value = result[0].wrk_end_dtm;		
 			document.getElementById("file_fmt_cd").value = result[0].file_fmt_cd;
 			document.getElementById("file_fmt_cd_nm").value = result[0].file_fmt_cd_nm;
 			document.getElementById("usr_role_nm").value = result[0].usr_role_nm;
@@ -521,12 +521,10 @@ function fn_dumpRestoreLogCall() {
 						</div>
 					</div>
 				</div>
-				
+								
 				<div class="restore_rt">
 					<p class="ly_tit"><h8>Restore <spring:message code="restore.Execution_log" /></h8></p>
-					<div class="overflow_area4" name="exelog_view" id="exelog_view">
-						<textarea name="exelog" id="exelog" style="height: 455px"></textarea>
-					</div>
+					<div class="overflow_area4" name="exelog" id="exelog"></div>
 				</div>
 				
 			</div>

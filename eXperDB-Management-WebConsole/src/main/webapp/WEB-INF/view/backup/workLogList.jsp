@@ -412,6 +412,7 @@ var clickDump = false;
 function selectTab(intab){
 	tab = intab;
 	if(intab == "dump"){
+		$("#wrk_nm").val("");
 		$("#tab_rman").hide();
 		$("#tab_dump").show();
 		$(".search_rman").hide();
@@ -423,6 +424,7 @@ function selectTab(intab){
 			clickDump = true;
 		}
 	}else{
+		$("#wrk_nm").val("");
 		$("#tab_rman").show();
 		$("#tab_dump").hide();
 		$(".search_rman").show();

@@ -36,6 +36,10 @@ public class RestoreDumpVO {
 	private String regr_id;
 	private String reg_dtm;
 	private String bck_file_pth;
+	private int db_id;
+	private String db_nm;
+	private String file_sz;
+	private String bck_filenm;
 
 	public int getRownum() {
 		return rownum;
@@ -315,6 +319,38 @@ public class RestoreDumpVO {
 
 	public void setBck_file_pth(String bck_file_pth) {
 		this.bck_file_pth = bck_file_pth;
+	}
+
+	public int getDb_id() {
+		return db_id;
+	}
+
+	public void setDb_id(int db_id) {
+		this.db_id = db_id;
+	}
+
+	public String getDb_nm() {
+		return db_nm;
+	}
+
+	public void setDb_nm(String db_nm) {
+		this.db_nm = db_nm;
+	}
+
+	public String getFile_sz() {
+		return file_sz;
+	}
+
+	public void setFile_sz(String file_sz) {
+		this.file_sz = file_sz;
+	}
+
+	public String getBck_filenm() {
+		return bck_filenm;
+	}
+
+	public void setBck_filenm(String bck_filenm) {
+		this.bck_filenm = bck_filenm;
 	}
 
 }

@@ -125,12 +125,13 @@ public class ClientTester {
 			//clientTester.dxT027(Ip, port);
 			
 			//clientTester.dxT028(Ip, port);
+			
 			//clientTester.dxT029(Ip, port);
 			
 			
 			//clientTester.dxT030(Ip, port);
-			//clientTester.dxT031(Ip, port);
-			clientTester.dxT032(Ip, port);
+			clientTester.dxT031(Ip, port);
+			//clientTester.dxT032(Ip, port);
 			
 			//clientTester.test();
 		} catch(Exception e) {
@@ -2445,7 +2446,7 @@ public class ClientTester {
 			jObj.put(ClientProtocolID.DX_EX_CODE, ClientTranCodeType.DxT029);
 			
 			//RESTORE_SN
-			String RESTORE_SN = "1";
+			String RESTORE_SN = "2";
 			jObj.put(ClientProtocolID.RESTORE_SN, RESTORE_SN);
 			
 
@@ -2485,7 +2486,7 @@ public class ClientTester {
 			jObj.put(ClientProtocolID.DX_EX_CODE, ClientTranCodeType.DxT030);
 			
 			//RESTORE_SN
-			String RESTORE_SN = "1";
+			String RESTORE_SN = "5";
 			jObj.put(ClientProtocolID.RESTORE_SN, RESTORE_SN);
 			
 			jObj.put(ClientProtocolID.PGDBAK, "/experdata/backup/dump");
@@ -2508,7 +2509,7 @@ public class ClientTester {
 			JSONObject dumpOptionObj = new JSONObject();
 			
 			dumpOptionObj.put(ClientProtocolID.FORMAT, "tar");
-			dumpOptionObj.put(ClientProtocolID.FILENAME, "eXperDB_2_20190131143100.tar");
+			dumpOptionObj.put(ClientProtocolID.FILENAME, "eXperDB_2_20190226145200.tar");
 			dumpOptionObj.put(ClientProtocolID.JOBS, "1");
 			dumpOptionObj.put(ClientProtocolID.ROLE, "experdb");
 			dumpOptionObj.put(ClientProtocolID.PRE_DATA, "N");
@@ -2536,7 +2537,7 @@ public class ClientTester {
 			ClientAdapter CA = new ClientAdapter(Ip, port);
 			CA.open(); 
 
-			objList = CA.dxT028(jObj);
+			objList = CA.dxT030(jObj);
 			
 			CA.close();
 			
@@ -2568,7 +2569,7 @@ public class ClientTester {
 			jObj.put(ClientProtocolID.DX_EX_CODE, ClientTranCodeType.DxT031);
 			
 			//RESTORE_SN
-			String RESTORE_SN = "1";
+			String RESTORE_SN = "16";
 			jObj.put(ClientProtocolID.RESTORE_SN, RESTORE_SN);
 			
 

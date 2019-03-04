@@ -177,7 +177,7 @@ function fn_get_dump_list(){
 	if(db_id == "") db_id = 0;
 
 	$.ajax({
-		url : "/backup/selectWorkLogList.do",
+		url : "/selectDumpRestoreLogList.do",
 	  	data : {
 	  		db_svr_id : $("#db_svr_id").val(),
 	  		bck_bsn_dscd : "TC000202",
@@ -252,6 +252,8 @@ $(function() {
 });
 </script>
 
+<%@include file="../cmmn/workDumpInfo.jsp"%>
+
 <form name="dumpRestoreRegForm" method="post">
 	<input type="hidden" name="db_svr_id"  id="db_svr_id"  value="${db_svr_id}">
 	<input type="hidden" name="exe_sn"  id="exe_sn"  value="${exe_sn}">
@@ -260,6 +262,7 @@ $(function() {
 
 <form name="frmPopup">
 	<input type="hidden" name="db_svr_id"  id="db_svr_id"  value="${db_svr_id}">
+	<input type="hidden" name="bck"  id="bck">
 </form>
 
 <!-- contents -->

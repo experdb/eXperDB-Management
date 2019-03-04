@@ -1455,8 +1455,11 @@ public List<HashMap<String, String>> dumpShow(String IP, int PORT,String cmd) {
 	public void dumpRestoreStart(JSONObject serverObj, String IP, int PORT, RestoreDumpVO restoreDumpVO) {
 			try {	
 					JSONObject jObj = new JSONObject();
-		
+							
 					jObj.put(ClientProtocolID.DX_EX_CODE, ClientTranCodeType.DxT030);
+					
+					System.out.println("RESTORE_SN="+restoreDumpVO.getRestore_sn());
+					
 					jObj.put(ClientProtocolID.RESTORE_SN, restoreDumpVO.getRestore_sn());
 					jObj.put(ClientProtocolID.PGDBAK, restoreDumpVO.getBck_file_pth());
 					
@@ -1493,7 +1496,7 @@ public List<HashMap<String, String>> dumpShow(String IP, int PORT,String cmd) {
 					
 					ClientAdapter CA = new ClientAdapter(IP, PORT);
 					CA.open(); 
-		
+
 					objList = CA.dxT030(jObj);
 					
 					CA.close();
@@ -1502,11 +1505,11 @@ public List<HashMap<String, String>> dumpShow(String IP, int PORT,String cmd) {
 					String strErrCode = (String)objList.get(ClientProtocolID.ERR_CODE);
 					String strDxExCode = (String)objList.get(ClientProtocolID.DX_EX_CODE);
 					String strResultCode = (String)objList.get(ClientProtocolID.RESULT_CODE);
-					
+										
 					System.out.println("RESULT_CODE : " +  strResultCode);
 					System.out.println("ERR_CODE : " +  strErrCode);
 					System.out.println("ERR_MSG : " +  strErrMsg);
-					
+
 			} catch(Exception e) {
 				e.printStackTrace();
 			}		
@@ -1599,12 +1602,11 @@ public List<HashMap<String, String>> dumpShow(String IP, int PORT,String cmd) {
 		try {								
 			JSONObject jObj = new JSONObject();
 			
-			jObj.put(ClientProtocolID.DX_EX_CODE, ClientTranCodeType.DxT029);
+			jObj.put(ClientProtocolID.DX_EX_CODE, ClientTranCodeType.DxT031);
 			
 			//RESTORE_SN
 			jObj.put(ClientProtocolID.RESTORE_SN, restore_sn);
 			
-
 			JSONObject objList;
 			
 			ClientAdapter CA = new ClientAdapter(IP, PORT);
@@ -1619,12 +1621,12 @@ public List<HashMap<String, String>> dumpShow(String IP, int PORT,String cmd) {
 			String strDxExCode = (String)objList.get(ClientProtocolID.DX_EX_CODE);
 			String strResultCode = (String)objList.get(ClientProtocolID.RESULT_CODE);
 			String strResultData = (String)objList.get(ClientProtocolID.RESULT_DATA);
-			
+		
 			System.out.println("RESULT_CODE : " +  strResultCode);
 			System.out.println("ERR_CODE : " +  strErrCode);
 			System.out.println("ERR_MSG : " +  strErrMsg);
 			System.out.println("strResultData : " +  strResultData);
-
+			
 			result.put("RESULT_CODE", strResultCode);
 			result.put("ERR_CODE", strErrCode);
 			result.put("ERR_MSG", strErrMsg);

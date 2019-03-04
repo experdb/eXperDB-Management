@@ -37,7 +37,8 @@
 <script language="javascript">
 
 var restore_sn = "${restore_sn}";
-var db_svr_id = "${db_svr_id}"
+var db_svr_id = "${db_svr_id}";
+var flag = "${flag}";
 
 $(window.document).ready(function() {
 	fn_addView();
@@ -47,28 +48,15 @@ $(window.document).ready(function() {
 	
 	//로그 더보기
 function fn_addView() {
-/* 		var v_db_svr_id = $("#db_svr_id").val();
-		var v_seek = $("#seek").val();
-		var v_file_name = $("#file_name").val();
-
-		var v_endFlag = $("#endFlag").val();
-		
-		var v_dwLen = $("#dwLen").val();
-		var v_log_line = $("#log_line").val();
-		
-		if(v_endFlag > 0) {
-			alert("<spring:message code='message.msg66' />");
-			$("#endFlag").val("0");
-			return;
-		}
-		 */
 		$.ajax({
 			url : "/restoreLogInfo.do",
 			dataType : "json",
 			type : "post",
+			async : false,
  			data : {
  				db_svr_id : db_svr_id,
- 				restore_sn : restore_sn
+ 				restore_sn : restore_sn,
+ 				flag : flag
  			},
 			beforeSend: function(xhr) {
 		        xhr.setRequestHeader("AJAX", true);
@@ -127,10 +115,17 @@ function fn_addView() {
 				<caption>복구 로그</caption>
 				<tbody>
 					<tr>
-						<td>						 
-							<div class="overflow_area4" name="exelog_view"  id="exelog_view">
-								<textarea name="restoreHistorylog"  id="restoreHistorylog" style="height:100%"></textarea>	
-							</div>						
+						<td>		
+							<c:forEach var="restore" items="${flag}" varStatus="status">
+										<c:if test="${flag eq 'rman'}">
+											<div class="overflow_area4" name="exelog_view"  id="exelog_view">
+												<textarea name="restoreHistorylog"  id="restoreHistorylog" style="height:100%"></textarea>	
+											</div>	
+										</c:if>
+										<c:if test="${flag eq 'dump'}">
+											<div class="overflow_area4" name="restoreHistorylog" id="restoreHistorylog"></div>
+										</c:if>
+							</c:forEach>			
 						</td>
 					</tr>
 				</tbody>

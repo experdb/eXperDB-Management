@@ -45,4 +45,14 @@ public class RestoreDAO extends EgovAbstractMapper {
 		return (RestoreDumpVO)getSqlSession().selectOne("restoreDumpSql.latestDumpRestoreSN");
 	}
 
+	@SuppressWarnings({ "deprecation", "unchecked" })
+	public List<RestoreDumpVO> dumpRestoreHistory(RestoreDumpVO restoreDumpVO) {
+		return (List<RestoreDumpVO>) list("restoreDumpSql.dumpRestoreHistory",restoreDumpVO);
+	}
+
+	@SuppressWarnings({ "deprecation", "unchecked" })
+	public List<WorkLogVO> selectDumpRestoreLogList(WorkLogVO workLogVO) {
+		return (List<WorkLogVO>) list("restoreDumpSql.selectDumpRestoreLogList",workLogVO);
+	}
+
 }

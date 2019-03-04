@@ -6,6 +6,7 @@ import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -26,6 +27,8 @@ import com.k4m.dx.tcontrol.cmmn.client.ClientInfoCmmn;
 import com.k4m.dx.tcontrol.common.service.AgentInfoVO;
 import com.k4m.dx.tcontrol.common.service.CmmnServerInfoService;
 import com.k4m.dx.tcontrol.common.service.HistoryVO;
+import com.k4m.dx.tcontrol.login.service.LoginVO;
+import com.k4m.dx.tcontrol.restore.service.RestoreDumpVO;
 import com.k4m.dx.tcontrol.restore.service.RestoreRmanVO;
 import com.k4m.dx.tcontrol.restore.service.RestoreService;
 
@@ -100,10 +103,22 @@ public class RestoreHistoryController {
 			e.printStackTrace();
 		}
 		
+		// Get DB List
+		try {
+			HttpSession session = request.getSession();
+			LoginVO loginVo = (LoginVO) session.getAttribute("session");
+			String usr_id = loginVo.getUsr_id();
+			workVO.setUsr_id(usr_id);
+			
+			mv.addObject("dbList", backupService.selectDbList(workVO));
+		} catch (Exception e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
+		
 		// Get DBServer Name
 		try {
 			mv.addObject("db_svr_nm", backupService.selectDbSvrNm(workVO).getDb_svr_nm());
-			mv.addObject("dbList",backupService.selectDbList(workVO));
 			mv.addObject("db_svr_id",workVO.getDb_svr_id());
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
@@ -160,6 +175,7 @@ public class RestoreHistoryController {
 		try {
 			String restore_sn = request.getParameter("restore_sn");
 			int db_svr_id = Integer.parseInt(request.getParameter("db_svr_id"));
+			String flag = request.getParameter("flag");
 			
 			DbServerVO schDbServerVO = new DbServerVO();
 			schDbServerVO.setDb_svr_id(db_svr_id);
@@ -173,7 +189,12 @@ public class RestoreHistoryController {
 			int PORT = agentInfo.getSOCKET_PORT();
 			
 			ClientInfoCmmn cic = new ClientInfoCmmn();
-			result = cic.restoreLog(IP, PORT, restore_sn);
+			
+			if(flag.equals("rman")){			
+				result = cic.restoreLog(IP, PORT, restore_sn);
+			}else{
+				result = cic.dumpRestoreLog(IP, PORT, restore_sn);
+			}
 
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -183,7 +204,7 @@ public class RestoreHistoryController {
 	
 
 	/**
-	 * [Restore] 복구이력 화면을 보여준다.
+	 * [Restore] RMAN 복구이력 화면을 보여준다.
 	 * 
 	 * @param historyVO
 	 * @param request
@@ -196,9 +217,11 @@ public class RestoreHistoryController {
 		try {
 			String restore_sn = request.getParameter("restore_sn");
 			int db_svr_id = Integer.parseInt(request.getParameter("db_svr_id"));
-
+			String flag = request.getParameter("flag");
+			
 			mv.addObject("restore_sn", restore_sn);
 			mv.addObject("db_svr_id", db_svr_id);
+			mv.addObject("flag", flag);
 			
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -207,4 +230,38 @@ public class RestoreHistoryController {
 		mv.setViewName("popup/restoreLogView");
 		return mv;
 	}
+	
+	
+	
+	/**
+	 * Rman restore Log List
+	 * @param WorkLogVO
+	 * @return List<WorkLogVO>
+	 * @throws Exception
+	 */
+	@RequestMapping(value="/dumpRestoreHistory.do")
+	@ResponseBody
+	public List<RestoreDumpVO> dumpRestoreHistory(@ModelAttribute("restoreDumpVO") RestoreDumpVO restoreDumpVO, HttpServletRequest request, @ModelAttribute("historyVO") HistoryVO historyVO) throws Exception{
+		
+		// 화면접근이력 이력 남기기
+		try {
+		/*	CmmnUtils.saveHistory(request, historyVO);
+			if(RestoreRmanVO.getBck_bsn_dscd().equals("TC000201")){
+				historyVO.setExe_dtl_cd("DX-T0026_01");
+			}else{
+				historyVO.setExe_dtl_cd("DX-T0026_02");
+			}
+			accessHistoryService.insertHistory(historyVO);*/
+		} catch (Exception e2) {
+			// TODO Auto-generated catch block
+			e2.printStackTrace();
+		}
+				
+		List<RestoreDumpVO> resultSet = null;
+		resultSet = restoreService.dumpRestoreHistory(restoreDumpVO);
+
+		return resultSet;
+	}
+	
+
 }

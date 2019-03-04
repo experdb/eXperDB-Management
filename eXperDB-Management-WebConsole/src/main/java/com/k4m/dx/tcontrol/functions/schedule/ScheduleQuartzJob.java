@@ -117,11 +117,13 @@ public class ScheduleQuartzJob implements Job{
 							// 백업 내용이 DUMP 백업일경우 
 							if(resultWork.get(i).get("bck_bsn_dscd").equals("TC000202")){
 								//파일포멧 별 파일명 지정
-								if(resultWork.get(i).get("file_fmt_cd_nm") != null && resultWork.get(i).get("file_fmt_cd_nm") != ""){
+								if(resultWork.get(i).get("file_fmt_cd_nm") != null && resultWork.get(i).get("file_fmt_cd_nm") != ""){							
 									if(resultWork.get(i).get("file_fmt_cd_nm").equals("tar")){
 										bck_fileNm = "eXperDB_"+resultWork.get(i).get("wrk_id")+"_"+today+".tar";	
 									}else if(resultWork.get(i).get("file_fmt_cd_nm").equals("diretocry")){
 										bck_fileNm = "eXperDB_"+resultWork.get(i).get("wrk_id")+"_"+today;
+									}else if(resultWork.get(i).get("file_fmt_cd_nm").equals("plain")){
+										bck_fileNm = "eXperDB_"+resultWork.get(i).get("wrk_id")+"_"+today+".sql";
 									}else{						
 										bck_fileNm = "eXperDB_"+resultWork.get(i).get("wrk_id")+"_"+today+".dump";									
 									}
