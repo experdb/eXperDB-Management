@@ -61,32 +61,24 @@ public class DxT030 extends SocketCtl {
 		String strErrMsg = "";
 		String strSuccessCode = "0";
 		
-		//socketLogger.info("111111111111111111111");
-		
-		String strRestore_sn = (String) jObj.get(ProtocolID.RESTORE_SN);
+		String strRestore_sn = jObj.get(ProtocolID.RESTORE_SN).toString();
 		int intRestore_sn = Integer.parseInt(strRestore_sn);
-		
 		String PGDBAK = (String) jObj.get(ProtocolID.PGDBAK);
-		
 		JSONObject objSERVER_INFO = new JSONObject(); 
 		objSERVER_INFO = (JSONObject) jObj.get(ProtocolID.SERVER_INFO);
 		
-		//socketLogger.info("22222222222222222222222");
-		
-		String SERVER_IP = (String) objSERVER_INFO.get(ProtocolID.SERVER_IP);
+		String SERVER_IP = objSERVER_INFO.get(ProtocolID.SERVER_IP).toString();
 		//String SERVER_IP = "127.0.0.1";
-		String SERVER_PORT = (String) objSERVER_INFO.get(ProtocolID.SERVER_PORT);
-		String DATABASE_NAME = (String) objSERVER_INFO.get(ProtocolID.DATABASE_NAME);
-		String USER_ID = (String) objSERVER_INFO.get(ProtocolID.USER_ID);
-		String USER_PWD = (String) objSERVER_INFO.get(ProtocolID.USER_PWD);
-
+		String SERVER_PORT = objSERVER_INFO.get(ProtocolID.SERVER_PORT).toString();
+		String DATABASE_NAME = objSERVER_INFO.get(ProtocolID.DATABASE_NAME).toString();
+		String USER_ID = objSERVER_INFO.get(ProtocolID.USER_ID).toString();
+		String USER_PWD =  objSERVER_INFO.get(ProtocolID.USER_PWD).toString();
+		
 		String HOST = "--host=" + SERVER_IP;
 		String PORT = "--port=" + SERVER_PORT;
 		String USERNAME = "--username=" + USER_ID;
 		//String PASSWORD = "--password=" + USER_PWD;
 		String DBNAME = "--dbname=" + DATABASE_NAME;
-		
-		//socketLogger.info("3333333333333333");
 		
 		JSONObject objDumpOption = new JSONObject(); 
 		objDumpOption = (JSONObject) jObj.get(ProtocolID.DUMP_OPTION);

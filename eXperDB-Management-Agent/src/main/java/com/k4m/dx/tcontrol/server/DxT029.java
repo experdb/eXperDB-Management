@@ -52,7 +52,9 @@ public class DxT029 extends SocketCtl{
 		String strErrCode = "";
 		String strErrMsg = "";
 		String strSuccessCode = "0";
-
+		String startLen = "2500";
+		String seek = "0";
+		
 		String strRESTORE_SN = (String) jObj.get(ProtocolID.RESTORE_SN);
 		
 		String strLogFileName = "restore_" + strRESTORE_SN + ".log";
@@ -69,8 +71,10 @@ public class DxT029 extends SocketCtl{
 			//strFileName = "webconsole.log.2017-05-31";
 			File inFile = new File(logDir, strLogFileName);
 			
+			//HashMap hp = FileUtil.getRandomAccessFileView(inFile, Integer.parseInt(startLen), Integer.parseInt(seek), 0);
 			String strFileView = FileUtil.getFileView(inFile);
 			
+			//socketLogger.info("strFileView : " + hp.get("file_desc"));
 			socketLogger.info("strFileView : " + strFileView);
 			
 			outputObj.put(ProtocolID.DX_EX_CODE, strDxExCode);
@@ -78,6 +82,7 @@ public class DxT029 extends SocketCtl{
 			outputObj.put(ProtocolID.ERR_CODE, strErrCode);
 			outputObj.put(ProtocolID.ERR_MSG, strErrMsg);
 			outputObj.put(ProtocolID.RESULT_DATA, strFileView);
+			//outputObj.put(ProtocolID.RESULT_DATA, hp.get("file_desc"));
 
 			inFile = null;
 			send(TotalLengthBit, outputObj.toString().getBytes());

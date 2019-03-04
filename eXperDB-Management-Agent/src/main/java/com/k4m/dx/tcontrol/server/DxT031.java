@@ -4,11 +4,8 @@ import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
 import java.io.File;
 import java.net.Socket;
-import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
 
 import org.json.simple.JSONObject;
 import org.slf4j.Logger;
@@ -18,7 +15,6 @@ import com.k4m.dx.tcontrol.socket.ProtocolID;
 import com.k4m.dx.tcontrol.socket.SocketCtl;
 import com.k4m.dx.tcontrol.socket.TranCodeType;
 import com.k4m.dx.tcontrol.util.FileEntry;
-import com.k4m.dx.tcontrol.util.FileListSearcher;
 import com.k4m.dx.tcontrol.util.FileUtil;
 
 /**
@@ -52,11 +48,14 @@ public class DxT031 extends SocketCtl{
 		String strErrCode = "";
 		String strErrMsg = "";
 		String strSuccessCode = "0";
+		String startLen = "2500";
+		String seek = "0";
 
-		String strRESTORE_SN = (String) jObj.get(ProtocolID.RESTORE_SN);
-		
+		String strRESTORE_SN = (String) jObj.get(ProtocolID.RESTORE_SN);		
+
 		String strLogFileName = "restore_dump_" + strRESTORE_SN + ".log";
 		String logDir = "../logs/pg_resLog/";
+
 		
 		JSONObject outputObj = new JSONObject();
 		
@@ -69,15 +68,19 @@ public class DxT031 extends SocketCtl{
 			//strFileName = "webconsole.log.2017-05-31";
 			File inFile = new File(logDir, strLogFileName);
 			
-			String strFileView = FileUtil.getFileView(inFile);
+			HashMap hp = FileUtil.getRandomAccessFileView(inFile, Integer.parseInt(startLen), Integer.parseInt(seek), 0);
 			
-			socketLogger.info("strFileView : " + strFileView);
+			//String strFileView = FileUtil.getFileView(inFile);
 			
+			//socketLogger.info("strFileView : " + strFileView);
+			socketLogger.info("strFileView : " + hp.get("file_desc"));
+	
 			outputObj.put(ProtocolID.DX_EX_CODE, strDxExCode);
 			outputObj.put(ProtocolID.RESULT_CODE, strSuccessCode);
 			outputObj.put(ProtocolID.ERR_CODE, strErrCode);
 			outputObj.put(ProtocolID.ERR_MSG, strErrMsg);
-			outputObj.put(ProtocolID.RESULT_DATA, strFileView);
+			//outputObj.put(ProtocolID.RESULT_DATA, strFileView);
+			outputObj.put(ProtocolID.RESULT_DATA, hp.get("file_desc"));
 
 			inFile = null;
 			send(TotalLengthBit, outputObj.toString().getBytes());
@@ -159,8 +162,8 @@ public class DxT031 extends SocketCtl{
     
     public static void main(String[] args) throws Exception {
 		String strLogFileDir = "C:\\logs\\";
-		String strFileName = "webconsole.log.2017-05-31";
-		String startLen = "100";
+		String strFileName = "restore_dump_18.log";
+		String startLen = "2500";
 		String seek = "0";
 		
 		File inFile = new File(strLogFileDir, strFileName);
