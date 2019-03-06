@@ -102,13 +102,11 @@ function fn_selectSecurityStatistics(today){
 				 	var fail=0;
 					for(var i=0; i<data.list.length; i++){
 						html += '<tr>';
-						html +='<td></td>';
 						html += '<td>'+data.list[i].monitoredName+'</td>';
 						html += '<td>'+data.list[i].encryptSuccessCount+'</td>';
 						html += '<td>'+data.list[i].encryptFailCount+'</td>';
 						html += '<td>'+data.list[i].decryptSuccessCount+'</td>';
 						html += '<td>'+data.list[i].decryptFailCount+'</td>';
-						html += '<td>'+data.list[i].sumCount+'</td>';
 						if(data.list[i].status == "start"){
 							html += '<td><img src="../images/ico_agent_1.png" alt="" /></td>';
 						}else{
@@ -116,12 +114,8 @@ function fn_selectSecurityStatistics(today){
 						}
 						html += '</tr>';
 						$( "#col" ).html(html);
-						
-						success += Number(data.list[i].encryptSuccessCount)+Number(data.list[i].decryptSuccessCount);
-						fail += Number(data.list[i].encryptFailCount)+Number(data.list[i].decryptFailCount);
 					} 
 					
-					//alert("성공 : "+success+"  실패 : "+fail);
 				}else if(data.resultCode == "8000000002"){
 					alert("<spring:message code='message.msg05' />");
 					location.href="/";
@@ -169,7 +163,7 @@ function fn_selectSecurityStatistics(today){
 											<col style="width: 25%;">
 										</colgroup>
 										<thead>
-											<tr>
+											<tr style="height: 50px;">
 												<th scope="col"></th>
 												<th scope="col"><spring:message code="dashboard.Inadequate"/></th>
 												<th scope="col"><spring:message code="dashboard.Watch"/></th>
@@ -177,29 +171,23 @@ function fn_selectSecurityStatistics(today){
 											</tr>
 										</thead>
 										<tbody>
-											<tr>
+											<tr style="height: 40px;">
 												<td><spring:message code="dashboard.Work_Management"/></td>
 												<c:if test="${wrk_state<=33}"><td style="background-color: #FF4848;"></td><td></td><td></td></c:if>
 												<c:if test="${wrk_state>=34 && wrk_state<=66}"><td></td><td style="background-color: #FFFF6C;"></td><td></td></c:if>
 												<c:if test="${wrk_state>=67 && wrk_state<=100}"><td></td><td></td><td style="background-color: #89F781;"></td></c:if>
 											</tr>
-											<tr>
+											<tr style="height: 40px;">
 												<td><spring:message code="dashboard.Server_Management"/></td>
 												<c:if test="${svr_state<=33}"><td style="background-color: #FF4848;"></td><td></td><td></td></c:if>
 												<c:if test="${svr_state>=34 && svr_state<=66}"><td></td><td style="background-color: #FFFF6C;"></td><td></td></c:if>
 												<c:if test="${svr_state>=67 && svr_state<=100}"><td></td><td></td><td style="background-color: #89F781;"></td></c:if>
 											</tr>
-											<tr>
+											<tr style="height: 40px;">
 												<td><spring:message code="menu.backup_management" /></td>
 												<c:if test="${bak_state<=33}"><td style="background-color: #FF4848;"></td><td></td><td></td></c:if>
 												<c:if test="${bak_state>=34 && bak_state<=66}"><td></td><td style="background-color: #FFFF6C;"></td><td></td></c:if>
 												<c:if test="${bak_state>=67 && bak_state<=100}"><td></td><td></td><td style="background-color: #89F781;"></td></c:if>
-											</tr>
-											<tr>
-												<td><spring:message code="dashboard.Encryption_Management"/></td>
-												<td></td>
-												<td></td>
-												<td></td>
 											</tr>
 										</tbody>
 									</table>				
@@ -636,7 +624,6 @@ function fn_selectSecurityStatistics(today){
 							<caption><spring:message code="dashboard.dbms_info" /></caption>
 							<colgroup>
 								<col style="width: 13.5%;" />
-								<col style="width: 13.5%;" />
 
 								<col style="width: 6%;" />
 								<col style="width: 6%;" />
@@ -644,15 +631,12 @@ function fn_selectSecurityStatistics(today){
 								<col style="width: 6%;" />
 								
 								<col style="width: 10%;" />
-								<col style="width: 10%;" />
 							</colgroup>
 							<thead>
 								<tr>
-									<th scope="col" rowspan="2"><spring:message code="common.dbms_name"/></th>
 									<th scope="col" rowspan="2">Encrypt Agent IP</th>						
 									<th scope="col" colspan="2"><spring:message code="encrypt_log_decode.Encryption"/></th>
 									<th scope="col" colspan="2"><spring:message code="encrypt_log_decode.Decryption"/></th>
-									<th scope="col" rowspan="2"><spring:message code="access_control_management.activation"/><spring:message code="common.status"/></th>
 									<th scope="col" rowspan="2">Agent <spring:message code="properties.status" /></th>								
 								</tr>
 								<tr>
