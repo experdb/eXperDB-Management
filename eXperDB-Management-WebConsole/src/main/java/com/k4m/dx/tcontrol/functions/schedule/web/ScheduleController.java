@@ -96,11 +96,16 @@ public class ScheduleController {
 	@RequestMapping(value = "/insertScheduleView.do")
 	public ModelAndView insertScheduleView(@ModelAttribute("historyVO") HistoryVO historyVO, HttpServletRequest request) {
 		
-		//해당메뉴 권한 조회 (공통메소드호출)
-		CmmnUtils cu = new CmmnUtils();
-		menuAut = cu.selectMenuAut(menuAuthorityService, "MN000101");
-		
 		ModelAndView mv = new ModelAndView();
+		
+		try {
+			//해당메뉴 권한 조회 (공통메소드호출)
+			CmmnUtils cu = new CmmnUtils();
+			menuAut = cu.selectMenuAut(menuAuthorityService, "MN000101");
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		
 		try {			
 			//읽기 권한이 없는경우 error페이지 호출 , [추후 Exception 처리예정]
 			if(menuAut.get(0).get("read_aut_yn").equals("N")){
@@ -133,11 +138,16 @@ public class ScheduleController {
 	@RequestMapping(value = "/popup/scheduleRegForm.do")
 	public ModelAndView scheduleRegForm(@ModelAttribute("historyVO") HistoryVO historyVO, HttpServletRequest request) {
 		
-		//해당메뉴 권한 조회 (공통메소드호출)
-		CmmnUtils cu = new CmmnUtils();
-		menuAut = cu.selectMenuAut(menuAuthorityService, "MN000101");
-		
 		ModelAndView mv = new ModelAndView();
+		
+		try {
+			//해당메뉴 권한 조회 (공통메소드호출)
+			CmmnUtils cu = new CmmnUtils();
+			menuAut = cu.selectMenuAut(menuAuthorityService, "MN000101");
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		
 		try {			
 			//쓰기 권한이 없는경우 error페이지 호출 , [추후 Exception 처리예정]
 			if(menuAut.get(0).get("wrt_aut_yn").equals("N")){
@@ -169,9 +179,13 @@ public class ScheduleController {
 	@ResponseBody
 	public List<WorkVO> selectWorkList(@ModelAttribute("historyVO") HistoryVO historyVO, @ModelAttribute("workVO") WorkVO workVO, HttpServletResponse response, HttpServletRequest request) {
 		
-		//해당메뉴 권한 조회 (공통메소드호출)
-		CmmnUtils cu = new CmmnUtils();
-		menuAut = cu.selectMenuAut(menuAuthorityService, "MN000101");
+		try {
+			//해당메뉴 권한 조회 (공통메소드호출)
+			CmmnUtils cu = new CmmnUtils();
+			menuAut = cu.selectMenuAut(menuAuthorityService, "MN000101");
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 		
 		List<WorkVO> resultSet = null;
 		try {			
@@ -210,11 +224,15 @@ public class ScheduleController {
 	@ResponseBody
 	public List<Map<String, Object>> selectScheduleWorkList(@ModelAttribute("historyVO") HistoryVO historyVO, HttpServletRequest request, HttpServletResponse response) {
 	
-		//해당메뉴 권한 조회 (공통메소드호출)
-		CmmnUtils cu = new CmmnUtils();
-		menuAut = cu.selectMenuAut(menuAuthorityService, "MN000101");
-		
 		List<Map<String, Object>> result = null;
+		
+		try{
+			//해당메뉴 권한 조회 (공통메소드호출)
+			CmmnUtils cu = new CmmnUtils();
+			menuAut = cu.selectMenuAut(menuAuthorityService, "MN000101");
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 		
 		try {					
 			//읽기 권한이 없는경우 error페이지 호출 , [추후 Exception 처리예정]
@@ -259,9 +277,13 @@ public class ScheduleController {
 	@ResponseBody
 	public String insertSchedule(@ModelAttribute("historyVO") HistoryVO historyVO, @ModelAttribute("scheduleVO") ScheduleVO scheduleVO,@ModelAttribute("scheduleDtlVO") ScheduleDtlVO scheduleDtlVO, HttpServletResponse response, HttpServletRequest request, @RequestParam Map<String,String> reqJson) throws Exception{
 		
-		//해당메뉴 권한 조회 (공통메소드호출)
-		CmmnUtils cu = new CmmnUtils();
-		menuAut = cu.selectMenuAut(menuAuthorityService, "MN000101");
+		try{
+			//해당메뉴 권한 조회 (공통메소드호출)
+			CmmnUtils cu = new CmmnUtils();
+			menuAut = cu.selectMenuAut(menuAuthorityService, "MN000101");
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 		
 		// Transaction 
 		DefaultTransactionDefinition def  = new DefaultTransactionDefinition();
@@ -531,11 +553,17 @@ public class ScheduleController {
 	@RequestMapping(value = "/selectScheduleListView.do")
 	public ModelAndView selectScheduleListView(@ModelAttribute("historyVO") HistoryVO historyVO, HttpServletRequest request, HttpServletResponse response) {
 		
-		//해당메뉴 권한 조회 (공통메소드호출)
-		CmmnUtils cu = new CmmnUtils();
-		menuAut = cu.selectMenuAut(menuAuthorityService, "MN000102");
-		
 		ModelAndView mv = new ModelAndView();
+		
+		try{
+			//해당메뉴 권한 조회 (공통메소드호출)
+			CmmnUtils cu = new CmmnUtils();
+			menuAut = cu.selectMenuAut(menuAuthorityService, "MN000102");
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		
+	
 		try {
 			
 			String scd_cndt = request.getParameter("scd_cndt");
@@ -576,11 +604,15 @@ public class ScheduleController {
 	@ResponseBody
 	public List<Map<String, Object>> selectScheduleList(@ModelAttribute("historyVO") HistoryVO historyVO, @ModelAttribute("scheduleVO") ScheduleVO scheduleVO, HttpServletRequest request, HttpServletResponse response) {
 	
-		//해당메뉴 권한 조회 (공통메소드호출)
-		CmmnUtils cu = new CmmnUtils();
-		menuAut = cu.selectMenuAut(menuAuthorityService, "MN000102");
-		
 		List<Map<String, Object>> resultSet = new ArrayList<Map<String, Object>>();
+		
+		try{
+			//해당메뉴 권한 조회 (공통메소드호출)
+			CmmnUtils cu = new CmmnUtils();
+			menuAut = cu.selectMenuAut(menuAuthorityService, "MN000102");
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 		
 		try {
 			//읽기 권한이 없는경우 error페이지 호출 , [추후 Exception 처리예정]
@@ -644,9 +676,13 @@ public class ScheduleController {
 	@ResponseBody
 	public boolean scheduleStop(@ModelAttribute("historyVO") HistoryVO historyVO, HttpServletRequest request, @ModelAttribute("scheduleVO") ScheduleVO scheduleVO, HttpServletResponse response) {
 		
-		//해당메뉴 권한 조회 (공통메소드호출)
-		CmmnUtils cu = new CmmnUtils();
-		menuAut = cu.selectMenuAut(menuAuthorityService, "MN000102");		
+		try{
+			//해당메뉴 권한 조회 (공통메소드호출)
+			CmmnUtils cu = new CmmnUtils();
+			menuAut = cu.selectMenuAut(menuAuthorityService, "MN000102");		
+		}catch (Exception e) {
+			e.printStackTrace();
+		}
 		
 		try {
 			//쓰기 권한이 없는경우 error페이지 호출 , [추후 Exception 처리예정]
@@ -687,9 +723,13 @@ public class ScheduleController {
 	@ResponseBody
 	public boolean scheduleReStart(@ModelAttribute("historyVO") HistoryVO historyVO, @ModelAttribute("scheduleVO") ScheduleVO scheduleVO, HttpServletRequest request, HttpServletResponse response) {
 		
-		//해당메뉴 권한 조회 (공통메소드호출)
-		CmmnUtils cu = new CmmnUtils();
-		menuAut = cu.selectMenuAut(menuAuthorityService, "MN000102");	
+		try{
+			//해당메뉴 권한 조회 (공통메소드호출)
+			CmmnUtils cu = new CmmnUtils();
+			menuAut = cu.selectMenuAut(menuAuthorityService, "MN000102");	
+		}catch (Exception e) {
+			e.printStackTrace();
+		}
 		
 		try {
 			//쓰기 권한이 없는경우 error페이지 호출 , [추후 Exception 처리예정]
@@ -742,9 +782,13 @@ public class ScheduleController {
 	@ResponseBody	
 	public void deleteScheduleList(@ModelAttribute("historyVO") HistoryVO historyVO, HttpServletRequest request, HttpServletResponse response) {
 		
-		//해당메뉴 권한 조회 (공통메소드호출)
-		CmmnUtils cu = new CmmnUtils();
-		menuAut = cu.selectMenuAut(menuAuthorityService, "MN000102");		
+		try{
+			//해당메뉴 권한 조회 (공통메소드호출)
+			CmmnUtils cu = new CmmnUtils();
+			menuAut = cu.selectMenuAut(menuAuthorityService, "MN000102");		
+		}catch (Exception e) {
+			e.printStackTrace();
+		}
 		
 		try {					
 			//쓰기 권한이 없는경우 error페이지 호출 , [추후 Exception 처리예정]
@@ -780,11 +824,16 @@ public class ScheduleController {
 	@RequestMapping(value = "/modifyScheduleListVeiw.do")
 	public ModelAndView modifyScheduleListVeiw(@ModelAttribute("historyVO") HistoryVO historyVO, HttpServletRequest request, HttpServletResponse response) {
 		
-		//해당메뉴 권한 조회 (공통메소드호출)
-		CmmnUtils cu = new CmmnUtils();
-		menuAut = cu.selectMenuAut(menuAuthorityService, "MN000102");
-		
 		ModelAndView mv = new ModelAndView();
+		
+		try{
+			System.out.println("스케줄 수정 화면");
+			//해당메뉴 권한 조회 (공통메소드호출)
+			CmmnUtils cu = new CmmnUtils();
+			menuAut = cu.selectMenuAut(menuAuthorityService, "MN000102");
+		}catch (Exception e) {
+			e.printStackTrace();
+		}
 		
 		try {
 			//쓰기 권한이 없는경우 error페이지 호출 , [추후 Exception 처리예정]
@@ -820,11 +869,16 @@ public class ScheduleController {
 	@ResponseBody
 	public List<Map<String, Object>> selectModifyScheduleList(@ModelAttribute("historyVO") HistoryVO historyVO, HttpServletRequest request, HttpServletResponse response) {
 		
-		//해당메뉴 권한 조회 (공통메소드호출)
-		CmmnUtils cu = new CmmnUtils();
-		menuAut = cu.selectMenuAut(menuAuthorityService, "MN000102");
-		
 		List<Map<String, Object>> result = null;
+		
+		try{
+			//해당메뉴 권한 조회 (공통메소드호출)
+			CmmnUtils cu = new CmmnUtils();
+			menuAut = cu.selectMenuAut(menuAuthorityService, "MN000102");
+		}catch (Exception e) {
+			e.printStackTrace();
+		}
+		
 		try {		
 			//읽기 권한이 없는경우 error페이지 호출 , [추후 Exception 처리예정]
 			if(menuAut.get(0).get("read_aut_yn").equals("N")){	
@@ -857,9 +911,13 @@ public class ScheduleController {
 	@RequestMapping(value = "/updateSchedule.do")
 	public void updateSchedule(@ModelAttribute("historyVO") HistoryVO historyVO, @ModelAttribute("scheduleVO") ScheduleVO scheduleVO,@ModelAttribute("scheduleDtlVO") ScheduleDtlVO scheduleDtlVO, HttpServletResponse response, HttpServletRequest request, @RequestParam Map<String,String> reqJson) throws Exception{
 		
-		//해당메뉴 권한 조회 (공통메소드호출)
-		CmmnUtils cu = new CmmnUtils();
-		menuAut = cu.selectMenuAut(menuAuthorityService, "MN000102");
+		try{
+			//해당메뉴 권한 조회 (공통메소드호출)
+			CmmnUtils cu = new CmmnUtils();
+			menuAut = cu.selectMenuAut(menuAuthorityService, "MN000102");
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 		
 		// Transaction 
 		DefaultTransactionDefinition def  = new DefaultTransactionDefinition();
@@ -1115,11 +1173,14 @@ public class ScheduleController {
 	@RequestMapping(value = "/scheduleWrkListVeiw.do")
 	public ModelAndView scheduleWrkListVeiw(@ModelAttribute("historyVO") HistoryVO historyVO, HttpServletRequest request, HttpServletResponse response) {
 		
-		//해당메뉴 권한 조회 (공통메소드호출)
-		CmmnUtils cu = new CmmnUtils();
-		menuAut = cu.selectMenuAut(menuAuthorityService, "MN000102");
-		
 		ModelAndView mv = new ModelAndView();
+		try{
+			//해당메뉴 권한 조회 (공통메소드호출)
+			CmmnUtils cu = new CmmnUtils();
+			menuAut = cu.selectMenuAut(menuAuthorityService, "MN000102");
+		}catch (Exception e) {
+			e.printStackTrace();
+		}
 		
 		try {
 			//쓰기 권한이 없는경우 error페이지 호출 , [추후 Exception 처리예정]
@@ -1156,11 +1217,16 @@ public class ScheduleController {
 	@ResponseBody
 	public List<Map<String, Object>> selectWrkScheduleList(@ModelAttribute("historyVO") HistoryVO historyVO, HttpServletRequest request, HttpServletResponse response) {
 		
-		//해당메뉴 권한 조회 (공통메소드호출)
-		CmmnUtils cu = new CmmnUtils();
-		menuAut = cu.selectMenuAut(menuAuthorityService, "MN000102");
-		
 		List<Map<String, Object>> result = null;
+		
+		try{
+			//해당메뉴 권한 조회 (공통메소드호출)
+			CmmnUtils cu = new CmmnUtils();
+			menuAut = cu.selectMenuAut(menuAuthorityService, "MN000102");
+		}catch (Exception e) {
+			e.printStackTrace();
+		}
+		
 		try {		
 			//읽기 권한이 없는경우 error페이지 호출 , [추후 Exception 처리예정]
 			if(menuAut.get(0).get("read_aut_yn").equals("N")){	
