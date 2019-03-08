@@ -117,7 +117,7 @@ public class MyscheduleController {
 				mp.put("exe_perd_cd", result.get(i).get("exe_perd_cd"));			
 				mp.put("exe_hms", result.get(i).get("exe_hms"));
 				mp.put("prev_exe_dtm", result.get(i).get("prev_exe_dtm"));
-				mp.put("nxt_exe_dtm", result.get(i).get("prev_exe_dtm"));
+				mp.put("nxt_exe_dtm", result.get(i).get("nxt_exe_dtm"));
 				mp.put("frst_regr_id", result.get(i).get("frst_regr_id"));
 				mp.put("frst_reg_dtm", result.get(i).get("frst_reg_dtm"));
 				mp.put("lst_mdfr_id", result.get(i).get("lst_mdfr_id"));

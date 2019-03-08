@@ -75,7 +75,7 @@ function fn_dump_init(){
 		         		"render" : function(data, type, full, meta) {
 		         			var html = '';	
 		         			/* html += '<span class="btn btnC_01 btnF_02" onClick=javascript:fn_dumpRestorReg("'+full.exe_sn+'"); ><input type="button" value="복구"></span>'; */
-		         			html += '<span class="btn btnC_01 btnF_02" onClick=javascript:fn_dumpRestorReg(); ><input type="button" value="복구"></span>';
+		         			html += '<span class="btn btnC_01 btnF_02" onClick=javascript:fn_dumpRestorReg(); ><input type="button" value="복원"></span>';
 		         			return html;
 		         		},
 		         		defaultContent: ""}, 
@@ -205,13 +205,15 @@ function fn_get_dump_list(){
 			}
 		},
 		success : function(result) {
-			db_svr_id=result[0].db_svr_id;
-			wrk_id=result[0].wrk_id;
-			exe_sn= result[0].exe_sn;
-			
-			tableDump.rows({selected: true}).deselect();
-			tableDump.clear().draw();
-			tableDump.rows.add(result).draw();
+			if(result.length > 0){
+				db_svr_id=result[0].db_svr_id;
+				wrk_id=result[0].wrk_id;
+				exe_sn= result[0].exe_sn;
+				
+				tableDump.rows({selected: true}).deselect();
+				tableDump.clear().draw();
+				tableDump.rows.add(result).draw();
+			}
 		}
 	});
 }
@@ -340,11 +342,11 @@ $(function() {
 
 				<div class="overflow_area">
 					<table class="display"  id="logDumpList"  cellspacing="0" width="100%">
-						<caption>Dump 복구</caption>
+						<caption>Dump 복원</caption>
 							<thead>
 								<tr>
 									<th width="40"><spring:message code="common.no" /></th>
-									<th width="100">복구</th>
+									<th width="100"><spring:message code="common.restore" /></th>
 									<th width="150"><spring:message code="common.work_name" /></th>
 									<th width="100"><spring:message code="dbms_information.dbms_ip" /></th>
 									<th width="150"><spring:message code="common.work_description" /></th>

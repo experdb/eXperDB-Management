@@ -32,8 +32,22 @@ function fn_init(){
 		},
 		{data : "scd_exp", className : "dt-left", defaultContent : ""}, 
 		{data : "wrk_cnt",  className : "dt-right", defaultContent : ""}, 
-		{data : "prev_exe_dtm",  defaultContent : ""}, 
-		{data : "nxt_exe_dtm",  defaultContent : ""}, 
+		{data : "prev_exe_dtm",  defaultContent : ""
+			,render: function (data, type, full) {
+			if(full.prev_exe_dtm == null){
+				var html = '-';
+				return html;
+			}
+		  return data;
+		}}, 
+		{data : "nxt_exe_dtm",  defaultContent : ""
+			,render: function (data, type, full) {
+				if(full.nxt_exe_dtm == null){
+					var html = '-';
+					return html;
+				}
+			  return data;
+		}}, 
 		{data : "status", 
 			render: function (data, type, full){
 				if(full.scd_cndt == "TC001801"){

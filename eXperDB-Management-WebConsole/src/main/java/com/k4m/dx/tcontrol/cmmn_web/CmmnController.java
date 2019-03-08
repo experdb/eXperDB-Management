@@ -29,7 +29,6 @@ import com.k4m.dx.tcontrol.cmmn.client.ClientAdapter;
 import com.k4m.dx.tcontrol.cmmn.client.ClientInfoCmmn;
 import com.k4m.dx.tcontrol.cmmn.client.ClientProtocolID;
 import com.k4m.dx.tcontrol.cmmn.client.ClientTranCodeType;
-import com.k4m.dx.tcontrol.cmmn.serviceproxy.SystemCode;
 import com.k4m.dx.tcontrol.common.service.AgentInfoVO;
 import com.k4m.dx.tcontrol.common.service.CmmnServerInfoService;
 import com.k4m.dx.tcontrol.common.service.HistoryVO;
@@ -98,6 +97,9 @@ public class CmmnController {
 	public ModelAndView dashboard(@ModelAttribute("historyVO") HistoryVO historyVO, HttpServletRequest request, ModelMap model) throws Exception {
 		ModelAndView mv = new ModelAndView();
 		try {
+			HttpSession session = request.getSession();
+			LoginVO loginVo = (LoginVO) session.getAttribute("session");
+			
 			// 메인 이력 남기기
 			CmmnUtils.saveHistory(request, historyVO);
 			historyVO.setExe_dtl_cd("DX-T0004");
@@ -112,7 +114,7 @@ public class CmmnController {
 			DashboardVO backupInfoVO = (DashboardVO) dashboardService.selectDashboardBackupInfo();
 
 			DashboardVO dashVo = new DashboardVO();
-
+			
 			// DBMS정보(DB전체 개수 조회, audit 설정 조회)
 			List<DashboardVO> serverInfoVOSelect = (List<DashboardVO>) dashboardService.selectDashboardServerInfo(dashVo);
 			List<DashboardVO> serverInfoVO = new ArrayList<DashboardVO>();
@@ -151,18 +153,22 @@ public class CmmnController {
 							result = cic.db_List(serverObj, IP, PORT);
 							JSONArray data = (JSONArray) result.get("data");
 							
-							ClientAdapter CA = new ClientAdapter(IP, PORT);
-							JSONObject objList;
-							CA.open();
-							objList = CA.dxT007(ClientTranCodeType.DxT007, ClientProtocolID.COMMAND_CODE_R, serverObj );
-							CA.close();
-							String strResultCode = (String)objList.get(ClientProtocolID.RESULT_CODE);
-							//strResultCode=0 이면 감사 Enabled 아니면 - 표시
-							if(strResultCode.equals("0")){
-								dashVo.setAudit_state("Enabled");
+							if(loginVo.getPg_audit().equals("Y")){
+								ClientAdapter CA = new ClientAdapter(IP, PORT);
+								JSONObject objList;
+								CA.open();
+								objList = CA.dxT007(ClientTranCodeType.DxT007, ClientProtocolID.COMMAND_CODE_R, serverObj );
+								CA.close();
+								String strResultCode = (String)objList.get(ClientProtocolID.RESULT_CODE);
+								//strResultCode=0 이면 감사 Enabled 아니면 - 표시
+								if(strResultCode.equals("0")){
+									dashVo.setAudit_state("Enabled");
+								}else{
+									dashVo.setAudit_state("-");
+								}
 							}else{
 								dashVo.setAudit_state("-");
-							}
+							}			
 							dashVo.setDb_svr_nm(serverInfoVOSelect.get(i).getDb_svr_nm());
 							dashVo.setIpadr(serverInfoVOSelect.get(i).getIpadr());
 							dashVo.setDb_cnt(serverInfoVOSelect.get(i).getDb_cnt());
@@ -201,30 +207,34 @@ public class CmmnController {
 			int svr_state = 0;
 			if (svr_death == 0) {
 				Boolean auditCheck = true;
-				List<DbServerVO> dbServerVO = (List<DbServerVO>) dashboardService.selectDashboardServer();
-				for (int i = 0; i < dbServerVO.size(); i++) {
-					String Ip = dbServerVO.get(i).getIpadr();
-					int port = dbServerVO.get(i).getSocket_port();
-					JSONObject serverObj = new JSONObject();
-					JSONObject objSettingInfo = new JSONObject();
-					serverObj.put(ClientProtocolID.SERVER_NAME, dbServerVO.get(i).getDb_svr_nm());
-					serverObj.put(ClientProtocolID.SERVER_IP, dbServerVO.get(i).getIpadr());
-					serverObj.put(ClientProtocolID.SERVER_PORT, dbServerVO.get(i).getPortno());
-					serverObj.put(ClientProtocolID.DATABASE_NAME, dbServerVO.get(i).getDft_db_nm());
-					serverObj.put(ClientProtocolID.USER_ID, dbServerVO.get(i).getSvr_spr_usr_id());
-					serverObj.put(ClientProtocolID.USER_PWD, dec.aesDecode(dbServerVO.get(i).getSvr_spr_scm_pwd()));
-					JSONObject objList;
-					ClientAdapter CA = new ClientAdapter(Ip, port);
-					CA.open();
-					objList = CA.dxT007(ClientTranCodeType.DxT007, ClientProtocolID.COMMAND_CODE_R, serverObj,objSettingInfo);
-					String strResultCode = (String) objList.get(ClientProtocolID.RESULT_CODE);
-					System.out.println("RESULT_CODE : " + strResultCode);
-					
-					CA.close();
-
-					if (!strResultCode.equals("0")) {
-						auditCheck = false;
+				if(loginVo.getPg_audit().equals("Y")){
+					List<DbServerVO> dbServerVO = (List<DbServerVO>) dashboardService.selectDashboardServer();
+					for (int i = 0; i < dbServerVO.size(); i++) {
+						String Ip = dbServerVO.get(i).getIpadr();
+						int port = dbServerVO.get(i).getSocket_port();
+						JSONObject serverObj = new JSONObject();
+						JSONObject objSettingInfo = new JSONObject();
+						serverObj.put(ClientProtocolID.SERVER_NAME, dbServerVO.get(i).getDb_svr_nm());
+						serverObj.put(ClientProtocolID.SERVER_IP, dbServerVO.get(i).getIpadr());
+						serverObj.put(ClientProtocolID.SERVER_PORT, dbServerVO.get(i).getPortno());
+						serverObj.put(ClientProtocolID.DATABASE_NAME, dbServerVO.get(i).getDft_db_nm());
+						serverObj.put(ClientProtocolID.USER_ID, dbServerVO.get(i).getSvr_spr_usr_id());
+						serverObj.put(ClientProtocolID.USER_PWD, dec.aesDecode(dbServerVO.get(i).getSvr_spr_scm_pwd()));
+						JSONObject objList;
+						ClientAdapter CA = new ClientAdapter(Ip, port);
+						CA.open();
+						objList = CA.dxT007(ClientTranCodeType.DxT007, ClientProtocolID.COMMAND_CODE_R, serverObj,objSettingInfo);
+						String strResultCode = (String) objList.get(ClientProtocolID.RESULT_CODE);
+						System.out.println("RESULT_CODE : " + strResultCode);
+						
+						CA.close();
+	
+						if (!strResultCode.equals("0")) {
+							auditCheck = false;
+						}
 					}
+				}else{
+					auditCheck = false;
 				}
 				// audit 설치 되어 있을 시 -> 서버관리 식: (관리건수/총건수)*100
 				if (auditCheck == true) {
@@ -431,7 +441,54 @@ public class CmmnController {
 		}
 		return result;
 	}
-	
+
+	/**
+	 * 디렉토리 존재유무 체크(master만 체크)
+	 * @param WorkVO
+	 * @return resultSet
+	 * @throws Exception
+	 */
+	@SuppressWarnings("unchecked")
+	@RequestMapping(value = "/existDirCheckMaster.do")
+	@ResponseBody
+	public Map<String, Object> existDirCheckMaster(@ModelAttribute("workVO") WorkVO workVO, HttpServletRequest request, @ModelAttribute("dbServerVO") DbServerVO dbServerVO) {
+		Map<String, Object> result =new HashMap<String, Object>();
+		String directory_path = request.getParameter("path");	
+		int db_svr_id = Integer.parseInt(request.getParameter("db_svr_id"));
+		try {
+			DbServerVO schDbServerVO = new DbServerVO();
+			schDbServerVO.setDb_svr_id(db_svr_id);
+			DbServerVO DbServerVO = (DbServerVO) cmmnServerInfoService.selectServerInfo(schDbServerVO);
+			
+			JSONObject serverObj = new JSONObject();
+				
+			AgentInfoVO vo = new AgentInfoVO();
+			String strIpAdr = DbServerVO.getIpadr();
+			vo.setIPADR(strIpAdr);
+				
+			AgentInfoVO agentInfo =  (AgentInfoVO) cmmnServerInfoService.selectAgentInfo(vo);
+				
+			String IP = DbServerVO.getIpadr();
+			int PORT = agentInfo.getSOCKET_PORT();
+				
+			serverObj.put(ClientProtocolID.SERVER_NAME, DbServerVO.getDb_svr_nm());
+			serverObj.put(ClientProtocolID.SERVER_IP, DbServerVO.getIpadr());
+			serverObj.put(ClientProtocolID.SERVER_PORT, DbServerVO.getPortno());
+
+			ClientInfoCmmn cic = new ClientInfoCmmn();
+			result = cic.directory_exist(serverObj,directory_path, IP, PORT);	
+
+			int resultCd = Integer.parseInt(result.get("resultCode").toString());
+				
+			if(resultCd == 1){
+				return result;
+			}
+
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return result;
+	}
 	
 	/**
 	 * 스케줄 정보

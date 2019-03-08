@@ -62,7 +62,7 @@
 
 		$.ajax({
 			async : false,
-			url : "/existDirCheck.do",
+			url : "/existDirCheckMaster.do",
 		  	data : {
 		  		db_svr_id : "${db_svr_id}",
 		  		path : new_storage
