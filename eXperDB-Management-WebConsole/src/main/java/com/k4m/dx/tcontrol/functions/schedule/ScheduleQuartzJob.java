@@ -365,14 +365,14 @@ public class ScheduleQuartzJob implements Job{
 		return strAdd;
 	}
 
-	private String fn_objOption(List<Map<String, Object>> addObject) {	
+	private String fn_objOption(List<Map<String, Object>> addObject) {
 		String strObj = "";
 		for(int n=0; n<addObject.size(); n++){			
 			if(addObject.get(n).get("obj_nm").equals(null) || addObject.get(n).get("obj_nm").equals("")){
-				strObj+=" -n "+addObject.get(n).get("scm_nm").toString().toLowerCase();
+				strObj+=" -n "+addObject.get(n).get("scm_nm").toString().toLowerCase();						
 			}else{
-				strObj+=" -t "+addObject.get(n).get("obj_nm").toString().toLowerCase();
-			}
+				strObj+=" -t "+addObject.get(n).get("scm_nm").toString().toLowerCase()+"."+addObject.get(n).get("obj_nm").toString().toLowerCase();
+			}			
 		}
 		return strObj;
 	}

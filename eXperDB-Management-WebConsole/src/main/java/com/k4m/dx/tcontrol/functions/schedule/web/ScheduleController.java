@@ -96,11 +96,16 @@ public class ScheduleController {
 	@RequestMapping(value = "/insertScheduleView.do")
 	public ModelAndView insertScheduleView(@ModelAttribute("historyVO") HistoryVO historyVO, HttpServletRequest request) {
 		
-		//해당메뉴 권한 조회 (공통메소드호출)
-		CmmnUtils cu = new CmmnUtils();
-		menuAut = cu.selectMenuAut(menuAuthorityService, "MN000101");
-		
 		ModelAndView mv = new ModelAndView();
+		
+		try {
+			//해당메뉴 권한 조회 (공통메소드호출)
+			CmmnUtils cu = new CmmnUtils();
+			menuAut = cu.selectMenuAut(menuAuthorityService, "MN000101");	
+		}catch (Exception e) {
+			e.printStackTrace();
+		}
+	
 		try {			
 			//읽기 권한이 없는경우 error페이지 호출 , [추후 Exception 처리예정]
 			if(menuAut.get(0).get("read_aut_yn").equals("N")){
