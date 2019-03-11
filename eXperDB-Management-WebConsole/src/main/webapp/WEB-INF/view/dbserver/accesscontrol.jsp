@@ -347,6 +347,7 @@
  			},
  			success : function(result) {
  				alert("<spring:message code='message.msg29' />");
+ 				location.reload();
  			}
  		});
 
