@@ -217,9 +217,8 @@
         		&& 	result.prms_ipadr==(table.rows().data()[i].Ipadr==undefined?'':table.rows().data()[i].Ipadr)
         		&& 	result.prms_ipmaskadr==(table.rows().data()[i].Ipmask==undefined?'':table.rows().data()[i].Ipmask)
         		&& 	result.ctf_mth_nm==(table.rows().data()[i].Method==undefined?'':table.rows().data()[i].Method)
-        		&& 	result.opt_nm==(table.rows().data()[i].Option==undefined?'':table.rows().data()[i].Option)
-        	){
-        		alert("<spring:message code='message.msg28' />");
+        		&& 	result.opt_nm==(table.rows().data()[i].Option==undefined?'':table.rows().data()[i].Option))
+        	{
         		return false;
         	}
         }    
@@ -245,9 +244,8 @@
         		&& 	result.prms_ipadr==(table.rows().data()[i].Ipadr==undefined?'':table.rows().data()[i].Ipadr)
         		&& 	result.prms_ipmaskadr==(table.rows().data()[i].Ipmask==undefined?'':table.rows().data()[i].Ipmask)
         		&& 	result.ctf_mth_nm==(table.rows().data()[i].Method==undefined?'':table.rows().data()[i].Method)
-        		&& 	result.opt_nm==(table.rows().data()[i].Option==undefined?'':table.rows().data()[i].Option)
-        	){
-        		alert("<spring:message code='message.msg136'/>");
+        		&& 	result.opt_nm==(table.rows().data()[i].Option==undefined?'':table.rows().data()[i].Option))
+        	{
         		return false;
         	}
         }    

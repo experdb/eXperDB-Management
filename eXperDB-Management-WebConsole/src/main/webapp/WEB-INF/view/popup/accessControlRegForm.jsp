@@ -88,11 +88,11 @@
 		accessResult.opt_nm = $("#opt_nm").val();
 
 		var returnCheck= opener.fn_isnertSave(accessResult);   
-		if(returnCheck!=false){
+		if(returnCheck==false){
+			alert("<spring:message code='message.msg28' />");
+		}else{
 			window.close();
-		}
-		
-		
+		}	
 	}
 	
 	/* 수정 버튼 클릭시*/
@@ -122,7 +122,9 @@
 		accessResult.opt_nm = $("#opt_nm").val();
 
 		var returnCheck=opener.fn_updateSave(accessResult);   
-		if(returnCheck!=false){
+		if(returnCheck==false){
+			alert("<spring:message code='message.msg136'/>");
+		}else{
 			window.close();
 		}
 	}

@@ -114,23 +114,7 @@ function fn_dump_init(){
  		         	{ data: "bck_filenm", defaultContent: ""},
  		         	{ data: "wrk_strt_dtm", defaultContent: ""}, 
  		         	{ data: "wrk_end_dtm", defaultContent: ""},  		         			         	
- 		         	{ data: "wrk_dtm", defaultContent: ""},
-	 		   		{
-	 					data : "exe_rslt_cd",
-	 					render : function(data, type, full, meta) {
-	 						var html = '';
-	 						if (full.exe_rslt_cd == 'TC001701') {
-	 							html += '<span class="btn btnC_01 btnF_02"><img src="../images/ico_state_02.png" style="margin-right:3px;"/>Success</span>';
-	 						} else if(full.exe_rslt_cd == 'TC001702'){
-	 							html += '<span class="btn btnC_01 btnF_02"><button onclick="fn_failLog('+full.exe_sn+')"><img src="../images/ico_state_01.png" style="margin-right:3px;"/>Fail</button></span>';
-	 						} else {
-	 							html +='<span class="btn btnC_01 btnF_02"><img src="../images/ico_state_03.png" style="margin-right:3px;"/><spring:message code="etc.etc28"/></span>';
-	 						}
-	 						return html;
-	 					},
-	 					className : "dt-center",
-	 					defaultContent : ""
-	 				}
+ 		         	{ data: "wrk_dtm", defaultContent: ""}
  		        ],'select': {'style': 'multi'} 
 	});
 
@@ -146,7 +130,6 @@ function fn_dump_init(){
    	tableDump.tables().header().to$().find('th:eq(9)').css('min-width', '100px');
    	tableDump.tables().header().to$().find('th:eq(10)').css('min-width', '100px');
    	tableDump.tables().header().to$().find('th:eq(11)').css('min-width', '100px');
-   	tableDump.tables().header().to$().find('th:eq(12 )').css('min-width', '100px');
 
     $(window).trigger('resize');
 }
@@ -184,7 +167,6 @@ function fn_get_dump_list(){
 	  		db_id : db_id,
 	  		wrk_strt_dtm : $("#wrk_strt_dtm").val(),
 	  		wrk_end_dtm : $("#wrk_end_dtm").val(),
-	  		exe_rslt_cd : $("#exe_rslt_cd").val(),
 	  		wrk_nm : $('#wrk_nm').val(),
   			fix_rsltcd : $("#fix_rsltcd").val()
 	  	},
@@ -314,16 +296,6 @@ $(function() {
 									</div>
 								</td>
 							</tr>
-							<tr style="height:35px;">
-								<th scope="row" class="t9"><spring:message code="common.status" /></th>
-								<td>
-									<select name="exe_rslt_cd" id="exe_rslt_cd" class="select t5">
-										<option value=""><spring:message code="schedule.total" /></option>
-										<option value="TC001701"><spring:message code="common.success" /></option>
-										<option value="TC001702"><spring:message code="common.failed" /></option>
-									</select>
-								</td>						
-							</tr>
 							<tr>
 								<th scope="row" class="t9 "><spring:message code="common.database" /></th>
 								<td>
@@ -357,7 +329,6 @@ $(function() {
 									<th width="100"><spring:message code="backup_management.work_start_time" /></th>
 									<th width="100"><spring:message code="backup_management.work_end_time" /></th>
 									<th width="100"><spring:message code="backup_management.elapsed_time" /></th>
-									<th width="100"><spring:message code="common.status" /></th>
 								</tr>
 							</thead>
 					</table>

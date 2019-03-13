@@ -304,6 +304,7 @@
 		            AND B.DB_SVR_ID=#{db_svr_id}::numeric 
 		            AND TWG.DB_SVR_IPADR_ID = B.DB_SVR_IPADR_ID 
 		            AND TWI.FILE_FMT_CD NOT IN('TC000402')
+		            AND TWG.EXE_RSLT_CD='TC001701'
 			 	<if test="wrk_id != null and wrk_id != '' ">
 		      		<if test='wrk_id != "0"'>
 			      		AND TWG.WRK_ID=#{wrk_id}
