@@ -157,7 +157,7 @@ public class DxT030 extends SocketCtl {
 		                .append(SPACE).append(HOST)
 		                .append(SPACE).append(PORT)
 		                .append(SPACE).append(USERNAME)
-		               // .append(SPACE).append(DBNAME)
+		                .append(SPACE).append(DBNAME)
 		                ;
         if(!R_FORMAT.equals("")) sbRestoreCmd.append(SPACE).append(FORMAT);
         if(!R_JOBS.equals("")) sbRestoreCmd.append(SPACE).append(JOBS);
@@ -182,8 +182,9 @@ public class DxT030 extends SocketCtl {
         if(R_EXIT_ON_ERROR.equals("Y")) sbRestoreCmd.append(SPACE).append(EXIT_ON_ERROR);
         
         if(!R_FILENAME.equals("")) sbRestoreCmd.append(SPACE).append(FILENAME);
-
+        
 		sbRestoreCmd.append(SPACE).append(">>");
+        //sbRestoreCmd.append(SPACE).append("| tee -a");
 		sbRestoreCmd.append(SPACE).append(logDir).append(strLogFileName);
 		
 		socketLogger.info("dump restore CMD : " + sbRestoreCmd);

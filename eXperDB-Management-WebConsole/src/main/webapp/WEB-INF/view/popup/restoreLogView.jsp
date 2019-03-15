@@ -115,8 +115,8 @@ function fn_addView() {
 				<caption>복구 로그</caption>
 				<tbody>
 					<tr>
-						<td>		
-							<c:forEach var="restore" items="${flag}" varStatus="status">
+						<td>								
+						 <c:forEach var="restore" items="${flag}" varStatus="status">
 										<c:if test="${flag eq 'rman'}">
 											<div class="overflow_area4" name="exelog_view"  id="exelog_view">
 												<textarea name="restoreHistorylog"  id="restoreHistorylog" style="height:100%"></textarea>	
@@ -125,7 +125,7 @@ function fn_addView() {
 										<c:if test="${flag eq 'dump'}">
 											<div class="overflow_area4" name="restoreHistorylog" id="restoreHistorylog"></div>
 										</c:if>
-							</c:forEach>			
+							</c:forEach>	
 						</td>
 					</tr>
 				</tbody>
