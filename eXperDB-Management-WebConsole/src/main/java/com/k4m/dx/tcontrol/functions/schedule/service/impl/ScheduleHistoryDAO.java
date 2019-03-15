@@ -45,7 +45,6 @@ public class ScheduleHistoryDAO extends EgovAbstractMapper{
 	public List<Map<String, Object>> selectScheduleHistoryFail(Map<String, Object> param) {
 		List<Map<String, Object>> sl = null;
 		sl = (List<Map<String, Object>>) list("scheduleHistorySql.selectScheduleHistoryFail", param);		
-		System.out.println(sl);
 		return sl;
 	}
 

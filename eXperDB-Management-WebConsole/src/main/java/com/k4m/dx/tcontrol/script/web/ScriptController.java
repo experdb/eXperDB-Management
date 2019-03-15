@@ -100,7 +100,6 @@ public class ScriptController {
 		ModelAndView mv = new ModelAndView();
 
 		int db_svr_id = Integer.parseInt(request.getParameter("db_svr_id")); 
-		System.out.println(db_svr_id); 
 		
 		// 화면접근이력 이력 남기기
 		try {

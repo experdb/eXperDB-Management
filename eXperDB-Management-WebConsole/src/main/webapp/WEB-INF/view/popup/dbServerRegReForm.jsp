@@ -103,14 +103,6 @@ function fn_init() {
 
 
 function fn_dbServerValidation(){
-/* 	 if(pghomeCheck != "success"){
-			alert("PG_HOME경로 확인 하셔야합니다.");
-			return false;
-		}
- 		if(pgdataCheck != "success"){
-			alert("PG_DATA경로 확인 하셔야합니다.");
-			return false;
-		} */
  		 if(connCheck != "success"){
 			alert('<spring:message code="message.msg89" /> ');
 			return false;

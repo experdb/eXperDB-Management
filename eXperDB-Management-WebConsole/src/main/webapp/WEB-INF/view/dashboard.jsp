@@ -143,7 +143,8 @@ function fn_selectSecurityStatistics(today){
 			<h4><spring:message code="menu.dashboard" /> <a href="#n"><img src="../images/ico_tit.png" alt="" class="btn_info"/></a></h4>
 			<div class="infobox"> 
 				<ul>
-					<li><spring:message code="help.dashboard" /> </li>				
+					<li><spring:message code="help.dashboard" /> </li>
+					<li>관리상태는 미흡(관리가 매우 필요), 감시(관리가 필요 주의바람), 양호(정삭적으로 관리) 중 실시간 상태를 표시합니다.</li>				
 				</ul>
 			</div>
 		</div>
