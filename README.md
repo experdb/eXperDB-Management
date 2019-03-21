@@ -52,7 +52,7 @@ eXperDB-Management is a PostgreSQL management tool(for efficient operation and m
 1-2-1. Upload to installation target server using FTP program  
 1-2-2. Run eXperDB-Management-Agent-10.7.1.0.run file  
 1-2-3. cd eXperDB-Management-Agent/bin    
-1-2-4. chmod 755 *    
+1-2-4. chmod 755 agent_setup.sh   
 1-2-5. ./agent_setup.sh    
 1-2-6. Enter information (DBMS IP, Port, Default Database, Username, password, Agent IP, Agent Port)       
 ```
@@ -72,8 +72,8 @@ eXperDB-Management is a PostgreSQL management tool(for efficient operation and m
 2-2-1. Upload to installation target server using FTP program  
 2-2-2. Run eXperDB-Management-WebConsole-10.7.1.0.run file  
 2-2-3. cd eXperDB-Management-WebConsole/webapps/eXperDB-Management-WebConsole/WEB-INF/classes    
-2-2-4. chmod 755 *    
-2-2-5. ./webConsole_setup.sh.sh    
+2-2-4. chmod 755 webConsole_setup.sh  
+2-2-5. ./webConsole_setup.sh    
 2-2-6. Enter information (DBMS IP, Port, Default Database, Username, password)       
 ```
 
