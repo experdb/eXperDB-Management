@@ -118,7 +118,7 @@
 		 		, USE_SET_SESSON_AUTH_YN
 		 		, EXIT_ON_ERROR_YN
 		 		, REGR_ID
-		 		, DB_ID
+		 		, DB_NM
 		 		)
 		 		VALUES
 		 		(
@@ -150,7 +150,7 @@
 		 		, #{use_set_sesson_auth_yn}
 		 		, #{exit_on_error_yn}	
 		 		, #{regr_id}
-		 		, #{db_id}
+		 		, #{db_nm}
 		 		)
 		</insert>	    
 		
