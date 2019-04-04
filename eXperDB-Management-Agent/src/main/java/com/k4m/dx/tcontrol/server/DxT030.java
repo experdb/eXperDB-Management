@@ -64,11 +64,14 @@ public class DxT030 extends SocketCtl {
 		String strRestore_sn = jObj.get(ProtocolID.RESTORE_SN).toString();
 		int intRestore_sn = Integer.parseInt(strRestore_sn);
 		String PGDBAK = (String) jObj.get(ProtocolID.PGDBAK);
+		
+		String DB_NM = (String) jObj.get(ProtocolID.DB_NM);
+		
 		JSONObject objSERVER_INFO = new JSONObject(); 
 		objSERVER_INFO = (JSONObject) jObj.get(ProtocolID.SERVER_INFO);
 		
-		String SERVER_IP = objSERVER_INFO.get(ProtocolID.SERVER_IP).toString();
-		//String SERVER_IP = "127.0.0.1";
+		//String SERVER_IP = objSERVER_INFO.get(ProtocolID.SERVER_IP).toString();
+		String SERVER_IP = "127.0.0.1";
 		String SERVER_PORT = objSERVER_INFO.get(ProtocolID.SERVER_PORT).toString();
 		String DATABASE_NAME = objSERVER_INFO.get(ProtocolID.DATABASE_NAME).toString();
 		String USER_ID = objSERVER_INFO.get(ProtocolID.USER_ID).toString();
@@ -78,7 +81,7 @@ public class DxT030 extends SocketCtl {
 		String PORT = "--port=" + SERVER_PORT;
 		String USERNAME = "--username=" + USER_ID;
 		//String PASSWORD = "--password=" + USER_PWD;
-		String DBNAME = "--dbname=" + DATABASE_NAME;
+		String DBNAME = "--dbname=" + DB_NM;
 		
 		JSONObject objDumpOption = new JSONObject(); 
 		objDumpOption = (JSONObject) jObj.get(ProtocolID.DUMP_OPTION);

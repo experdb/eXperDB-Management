@@ -230,4 +230,5 @@ public class ProtocolID {
 	public static final String USE_SET_SESSON_AUTH = "USE_SET_SESSON_AUTH";
 	public static final String EXIT_ON_ERROR = "EXIT_ON_ERROR";
 	public static final String DUMP_OPTION = "DUMP_OPTION";
+	public static final String DB_NM = "DB_NM";
 }
