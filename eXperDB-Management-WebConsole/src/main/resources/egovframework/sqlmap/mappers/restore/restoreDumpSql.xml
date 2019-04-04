@@ -225,7 +225,7 @@
 		      AND A.RESTORE_NM=#{restore_nm}
 		      </if>		   
 		      <if test="db_nm != null and db_nm != '' ">
-		      AND A.DB_NM=#{db_nm}::numeric
+		      AND A.DB_NM=#{db_nm}
 		     </if>	 
 		      AND B.EXE_RSLT_CD = 'TC001701'
 		       ORDER BY A.RESTORE_SN DESC

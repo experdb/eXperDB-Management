@@ -496,10 +496,10 @@ function fn_restoreDumpLogInfo(restore_sn){
 								</td>
 								<th scope="row" class="t9 search_dump" style="display:none;"><spring:message code="common.database" /></th>
 								<td class="search_dump" style="display:none;">
-									<select name="db_id" id="db_id" class="select t5">
+									<select name="db_nm" id="db_nm" class="select t5">
 										<option value=""><spring:message code="schedule.total" /></option>
 										<c:forEach var="result" items="${dbList}" varStatus="status">
-										<option value="<c:out value="${result.db_id}"/>"><c:out value="${result.db_nm}"/></option>
+										<option value="<c:out value="${result.db_nm}"/>"><c:out value="${result.db_nm}"/></option>
 										</c:forEach>
 									</select>	
 								</td>							
