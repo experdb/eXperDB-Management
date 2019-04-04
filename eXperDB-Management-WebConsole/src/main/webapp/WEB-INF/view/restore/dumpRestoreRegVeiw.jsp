@@ -124,6 +124,7 @@ function checkObject(){
 function fn_Validation() {
 	var restore_nm = document.getElementById('restore_nm');
 	var restore_exp = document.getElementById('restore_exp');
+	var db_nm = document.getElementById('db_nm');
 	
 	if (restore_nm.value == "" || restore_nm.value == "undefind" || restore_nm.value == null) {
 		alert("복원명을 넣어주세요.");
@@ -135,6 +136,10 @@ function fn_Validation() {
 	}else if (restore_exp.value == "" || restore_exp.value == "undefind" || restore_exp.value == null) {
 		alert("복원 설명을 넣어주세요.");
 		restore_exp.focus();
+		return false;
+	}else if (db_nm.value == "" || db_nm.value == "undefind" || db_nm.value == null) {
+		alert("데이터베이스를 선택해주세요.");
+		db_nm.focus();
 		return false;
 	}
 	
@@ -198,6 +203,9 @@ function fn_execute() {
 			$(this).val("Y");
 		}
 	})
+	
+	alert($("#db_nm").val());
+	return false;
 	
 	$.ajax({
 		url : "/insertDumpRestore.do",
@@ -360,9 +368,9 @@ function fn_dumpRestoreLogCall() {
 									<th scope="row" class="ico_t1">Database</th>
 									<td>
 											<select name="db_nm" id="db_nm" class="select"  style="width:100%">
-												<option value=""><spring:message code="schedule.total" /></option>
+												<option value=""><spring:message code="common.choice" /></option>
 												<c:forEach var="result" items="${dbList}" varStatus="status">
-												<option value="<c:out value="${result.db_id}"/>"><c:out value="${result.db_nm}"/></option>
+												<option value="<c:out value="${result.db_nm}"/>"><c:out value="${result.db_nm}"/></option>
 												</c:forEach>
 											</select>
 									<!-- <input type="text" class="txt t4" name="db_nm" id="db_nm" onblur="this.value=this.value.trim()"disabled="disabled" /> -->

@@ -659,7 +659,7 @@ function fn_check() {
 							<select name="db_id" id="db_id" class="select"  onChange="fn_get_object_list();">
 								<option value=""><spring:message code="schedule.total" /></option>
 								<c:forEach var="result" items="${dbList}" varStatus="status">
-								<option value="<c:out value="${result.db_nm}"/>"><c:out value="${result.db_nm}"/></option>
+								<option value="<c:out value="${result.db_id}"/>"><c:out value="${result.db_nm}"/></option>
 								</c:forEach>
 							</select>
 						</td>
