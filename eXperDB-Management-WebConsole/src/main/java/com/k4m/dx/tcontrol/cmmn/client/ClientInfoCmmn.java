@@ -1461,7 +1461,9 @@ public List<HashMap<String, String>> dumpShow(String IP, int PORT,String cmd) {
 					System.out.println("RESTORE_SN="+restoreDumpVO.getRestore_sn());
 					
 					jObj.put(ClientProtocolID.RESTORE_SN, restoreDumpVO.getRestore_sn());
-					jObj.put(ClientProtocolID.PGDBAK, restoreDumpVO.getBck_file_pth());
+					jObj.put(ClientProtocolID.PGDBAK, restoreDumpVO.getBck_file_pth());					
+					jObj.put(ClientProtocolID.DB_NM, restoreDumpVO.getDb_nm());
+					
 					
 					//SERVER_INFO
 					jObj.put(ClientProtocolID.SERVER_INFO, serverObj);
@@ -1488,7 +1490,7 @@ public List<HashMap<String, String>> dumpShow(String IP, int PORT,String cmd) {
 					dumpOptionObj.put(ClientProtocolID.VERBOSE, restoreDumpVO.getVerbose_yn());
 					dumpOptionObj.put(ClientProtocolID.USE_SET_SESSON_AUTH, restoreDumpVO.getUse_set_sesson_auth_yn());
 					dumpOptionObj.put(ClientProtocolID.EXIT_ON_ERROR, restoreDumpVO.getExit_on_error_yn());
-					
+		
 					jObj.put(ClientProtocolID.DUMP_OPTION, dumpOptionObj);
 					
 					

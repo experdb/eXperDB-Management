@@ -61,7 +61,7 @@ $(window.document).ready(function() {
 			document.getElementById("wrk_nm").value = result[0].wrk_nm;
 			document.getElementById("exe_rslt_cd_nm").value = result[0].exe_rslt_cd_nm;
 			document.getElementById("ipadr").value = result[0].ipadr;
-			document.getElementById("db_nm").value = result[0].db_nm;
+			//document.getElementById("db_nm").value = result[0].db_nm;
 			document.getElementById("bck_file_pth").value = result[0].bck_file_pth;
 			document.getElementById("bck_filenm").value = result[0].bck_filenm;
 			document.getElementById("wrk_strt_dtm").value = result[0].wrk_strt_dtm;
@@ -228,7 +228,8 @@ function fn_execute() {
 			no_data_for_failed_tables_yn : $("#option_5_2").val(),
 			verbose_yn : $("#option_6_1").val(),
 			use_set_sesson_auth_yn : $("#option_6_2").val(),
-			exit_on_error_yn : $("#option_6_3").val()
+			exit_on_error_yn : $("#option_6_3").val(),
+			db_nm : $("#db_nm").val()
 		},
 		dataType : "json",
 		type : "post",
@@ -357,7 +358,15 @@ function fn_dumpRestoreLogCall() {
 									<th scope="row" class="ico_t1"><spring:message code="dbms_information.dbms_ip" /></th>
 									<td><input type="text" class="txt t4" name="ipadr" id="ipadr" onblur="this.value=this.value.trim()" disabled="disabled"/></td>
 									<th scope="row" class="ico_t1">Database</th>
-									<td><input type="text" class="txt t4" name="db_nm" id="db_nm" onblur="this.value=this.value.trim()"disabled="disabled" /></td>
+									<td>
+											<select name="db_nm" id="db_nm" class="select"  style="width:100%">
+												<option value=""><spring:message code="schedule.total" /></option>
+												<c:forEach var="result" items="${dbList}" varStatus="status">
+												<option value="<c:out value="${result.db_id}"/>"><c:out value="${result.db_nm}"/></option>
+												</c:forEach>
+											</select>
+									<!-- <input type="text" class="txt t4" name="db_nm" id="db_nm" onblur="this.value=this.value.trim()"disabled="disabled" /> -->
+									</td>
 								</tr>
 								<tr>
 									<th scope="row" class="ico_t1"><spring:message code="etc.etc08" /></th>

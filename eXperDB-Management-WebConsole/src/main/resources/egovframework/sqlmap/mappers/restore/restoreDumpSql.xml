@@ -118,6 +118,7 @@
 		 		, USE_SET_SESSON_AUTH_YN
 		 		, EXIT_ON_ERROR_YN
 		 		, REGR_ID
+		 		, DB_ID
 		 		)
 		 		VALUES
 		 		(
@@ -149,6 +150,7 @@
 		 		, #{use_set_sesson_auth_yn}
 		 		, #{exit_on_error_yn}	
 		 		, #{regr_id}
+		 		, #{db_id}
 		 		)
 		</insert>	    
 		
@@ -193,7 +195,7 @@
 		      		A.DB_SVR_ID,
 					A.RESTORE_NM,
 					A.RESTORE_EXP,
-					(SELECT DB_NM FROM T_DB_I WHERE B.DB_ID=DB_ID AND USEYN = 'Y') AS DB_NM,
+					A.DB_NM,
 					B.FILE_SZ,
 					B.BCK_FILENM,
 					A.WRK_ID,
@@ -222,8 +224,8 @@
 		      <if test="restore_nm != null and restore_nm != '' ">
 		      AND A.RESTORE_NM=#{restore_nm}
 		      </if>		   
-		      <if test="db_id != null and db_id != '' ">
-		      AND B.DB_ID=#{db_id}::numeric
+		      <if test="db_nm != null and db_nm != '' ">
+		      AND A.DB_NM=#{db_nm}::numeric
 		     </if>	 
 		      AND B.EXE_RSLT_CD = 'TC001701'
 		       ORDER BY A.RESTORE_SN DESC

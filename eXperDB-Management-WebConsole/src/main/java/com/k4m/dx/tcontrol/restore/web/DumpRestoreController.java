@@ -193,6 +193,19 @@ public class DumpRestoreController {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
+		
+		// Get DB List
+		try {
+			HttpSession session = request.getSession();
+			LoginVO loginVo = (LoginVO) session.getAttribute("session");
+			String usr_id = loginVo.getUsr_id();
+			workVO.setUsr_id(usr_id);
+			
+			mv.addObject("dbList", backupService.selectDbList(workVO));
+		} catch (Exception e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
 
 		try {
 			mv.addObject("workOptInfo", backupService.selectWorkOptList(workVO));
