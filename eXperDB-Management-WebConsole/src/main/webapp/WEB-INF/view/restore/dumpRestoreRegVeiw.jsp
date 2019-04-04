@@ -203,10 +203,7 @@ function fn_execute() {
 			$(this).val("Y");
 		}
 	})
-	
-	alert($("#db_nm").val());
-	return false;
-	
+
 	$.ajax({
 		url : "/insertDumpRestore.do",
 		data : {			
