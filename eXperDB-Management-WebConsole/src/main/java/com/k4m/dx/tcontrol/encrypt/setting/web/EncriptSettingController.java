@@ -530,7 +530,7 @@ public class EncriptSettingController {
 						
 			String encKey = request.getParameter("mstKeyPassword");						
 			CommonServiceCall csc = new CommonServiceCall();		
-			csc.loadServerKey(restIp, restPort, strTocken, encKey, loginId, entityId);
+			result = csc.loadServerKey(restIp, restPort, strTocken, encKey, loginId, entityId);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -544,6 +544,7 @@ public class EncriptSettingController {
 	 * @return resultSet
 	 * @throws Exception
 	 */
+	@SuppressWarnings("unchecked")
 	@RequestMapping(value = "/securityMasterKeySave03.do")
 	public @ResponseBody JSONObject securityMasterKeySave03(@ModelAttribute("historyVO") HistoryVO historyVO, MultipartHttpServletRequest multiRequest, HttpServletRequest request) throws FileNotFoundException {
 		
@@ -586,20 +587,24 @@ public class EncriptSettingController {
 			}
 			
 			//암호화 키파일 생성
-			System.out.println("키파일생성");
+			//System.out.println("키파일생성");
 			EncryptSettingServiceCall essc = new EncryptSettingServiceCall();
 			CommonServiceCall csc = new CommonServiceCall();
-			String masterKey = essc.encMasterkey(mstKeyRenewPassword, loginId, entityId);		
-			System.out.println(masterKey);
+			//String masterKey = essc.encMasterkey(mstKeyRenewPassword, loginId, entityId);		
+			//System.out.println(masterKey);
 			
 			//새로운 마스터키파일 사용
 			if(useYN.equals("y")){
+				
+				System.out.println("키파일생성");
+				String masterKey = essc.encMasterkey(mstKeyRenewPassword, loginId, entityId);		
+				System.out.println(masterKey);
+				
 				System.out.println("새로운 마스터키파일 사용");
 				System.out.println("키 복호화 시작 ");
 				encKey = essc.serverMasterKeyDecode(mstKeyRenewPassword, masterKey, loginId, entityId);		
 				System.out.println(mstKeyPassword);
 				System.out.println(encKey);
-				
 				
 				
 				if(initKey.equals("true")){
@@ -610,6 +615,11 @@ public class EncriptSettingController {
 					result = essc.changeServerKey(restIp, restPort, strTocken,mstKeyPassword,encKey, loginId, entityId);
 				}
 
+				if(result.get("resultCode").equals("0000000000")){
+					result.put("masterKey", masterKey);
+					result.put("keyYN", "Y");
+				}	
+				
 			//마스터키 파일 사용안함
 			}else{
 				System.out.println("마스터키사용안함");
@@ -619,12 +629,14 @@ public class EncriptSettingController {
 				}else{
 					result = essc.changeServerKey(restIp, restPort, strTocken,mstKeyPassword,mstKeyRenewPassword, loginId, entityId);
 				}
-				
+				if(result.get("resultCode").equals("0000000000")){
+					result.put("keyYN", "N");
+				}	
 			}
-		
-			if(result.get("resultCode").equals("0000000000")){
+			
+			/*if(result.get("resultCode").equals("0000000000")){
 				result.put("masterKey", masterKey);
-			}	
+			}*/	
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

@@ -180,6 +180,7 @@ function fn_save(){
 	mstKeyUseChk = $("#mstKeyUse").prop("checked");
 
 	if(mstKeyRenewChk == true && pnlNewPasswordView == true) {
+		
 		if(mstKeyUseChk == true){
 			var chk = true;
 		}else{
@@ -191,9 +192,9 @@ function fn_save(){
 				fn_newMasterKey("y",chk, initKey);
 			//마스터키 사용안함
 			}else{
-				fn_newMasterKey("n",chk);
+				fn_newMasterKey("n",chk, initKey);
 			}
-				
+			
 	}else{		
 		if(pnlOldPasswordView == true){
 			if(mstKeyUseChk == true){
@@ -245,6 +246,7 @@ function fn_keyFileLoadServerKey(){
 
 
 function fn_noKeyFileLoadServerKey(keyPassword){		
+	
 	$.ajax({
 		url : "/securityMasterKeySave02.do", 
 	  	data : {
@@ -269,6 +271,8 @@ function fn_noKeyFileLoadServerKey(keyPassword){
 		success : function(data) {
 			if(data.resultCode == "0000000000"){
 				alert('<spring:message code="encrypt_msg.msg01"/>');
+			}else{
+				alert(data.resultMessage +"("+data.resultCode+")");
 			}
 		}
 	});
@@ -277,7 +281,7 @@ function fn_noKeyFileLoadServerKey(keyPassword){
 function fn_newMasterKey(useYN,chk,initKey){
 	
 	var formData = new FormData(); 
-
+	
 	formData.append("useYN", useYN);
 	formData.append("chk", chk);
 	
@@ -286,6 +290,7 @@ function fn_newMasterKey(useYN,chk,initKey){
 	formData.append("mstKeyRenewPassword", $("input[name=mstKeyRenewPassword]").val()); 
 	formData.append("initKey", initKey); 
 	
+
 	$.ajax({
 		url : "/securityMasterKeySave03.do", 
 	  	data : formData,
@@ -309,9 +314,17 @@ function fn_newMasterKey(useYN,chk,initKey){
 		},
 		success : function(data) {
 			if(data.resultCode == "0000000000"){
-				document.keyDownload.mstKey.value = data.masterKey;
-				fn_mstKeyDownload();	
-				alert('<spring:message code="encrypt_msg.msg02"/>');
+				if(data.keyYN == "Y"){
+					document.keyDownload.mstKey.value = data.masterKey;
+					fn_mstKeyDownload();	
+				}
+				if(initKey == true){
+					alert('<spring:message code="encrypt_msg.msg01"/>');
+				}else{
+					alert('<spring:message code="encrypt_msg.msg02"/>');
+				}
+			}else{
+				alert(data.resultMessage +"("+data.resultCode+")");
 			}
 		}
 	});	
