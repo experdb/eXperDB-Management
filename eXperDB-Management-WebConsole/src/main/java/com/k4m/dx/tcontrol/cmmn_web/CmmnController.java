@@ -240,8 +240,9 @@ public class CmmnController {
 				if (auditCheck == true) {
 					 svr_state = (int) ((double)((double)svr_use/(double)svr_total)*100);
 				} else {
-					// audit 설치 안되어 있을 시 -> 감시로 표시
-					svr_state = 35;
+					// audit 설치 안되어 있을 시 -> 감시로 표시(09.05 기능보류)
+					// svr_state = 35;
+					svr_state = (int) ((double)((double)svr_use/(double)svr_total)*100);
 				}
 			}
 			System.out.println("서버관리 : " + svr_state+"%");
