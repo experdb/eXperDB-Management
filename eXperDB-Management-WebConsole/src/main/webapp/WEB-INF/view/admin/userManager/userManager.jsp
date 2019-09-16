@@ -17,7 +17,7 @@
 	*/
 %>
 <script>
-var table = null;
+var table = null; 
 
 function fn_init() {
 	table = $('#userListTable').DataTable({

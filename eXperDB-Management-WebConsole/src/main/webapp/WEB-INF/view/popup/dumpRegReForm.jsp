@@ -632,7 +632,7 @@ function checkFolder(keyType){
 						<th scope="row" class="ico_t1">Database</th>
 						<td>
 							<select name="db_id" id="db_id" class="select"  onChange="fn_get_object_list('','');">
-								<option value=""><spring:message code="schedule.total" /></option>
+								<option value=""><spring:message code="common.choice" /></option>
 								<c:forEach var="result" items="${dbList}" varStatus="status">
 								<option value="<c:out value="${result.db_id}"/>" <c:if test="${result.db_id eq workInfo[0].db_id}"> selected</c:if>><c:out value="${result.db_nm}"/></option>
 								</c:forEach>
