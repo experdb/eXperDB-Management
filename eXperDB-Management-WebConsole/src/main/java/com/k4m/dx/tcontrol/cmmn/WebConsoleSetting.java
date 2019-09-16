@@ -32,7 +32,7 @@ public class WebConsoleSetting {
 		String strAuditYN="";
 		
 		String strLanguage ="";
-		String strVersion ="eXperDB-Management-WebConsole-9.6.1.0";
+		String strVersion ="eXperDB-Management-WebConsole-9.6.1.2";
 		
 		String strEncryptYN="";
 		
