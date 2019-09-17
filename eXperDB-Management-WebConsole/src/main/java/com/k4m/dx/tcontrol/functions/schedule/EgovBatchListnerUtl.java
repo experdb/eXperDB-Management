@@ -401,9 +401,6 @@ public class EgovBatchListnerUtl implements JobListener {
             }        
             scheduleService.updateNxtJobTime(hp2);
 
-        	System.out.println("▶▶▶ 스케줄 상태변경");
-            System.out.println(scheduleVO.getScd_cndt());
-            System.out.println(scheduleVO.getExe_perd_cd());
 			scheduleService.updateScheduleStatus(scheduleVO);
 		} catch (Exception e) {
 			e.printStackTrace();
