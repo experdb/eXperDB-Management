@@ -402,7 +402,7 @@ public class ScheduleQuartzJob implements Job{
 		}
 		
 		rmanCmd += " -A $PGALOG";
-		
+		 
 		if(resultWork.get(i).get("log_file_bck_yn").toString().equals("Y")){
 			rmanCmd += " --with-serverlog";
 		}

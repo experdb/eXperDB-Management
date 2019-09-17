@@ -175,46 +175,47 @@ public class EgovBatchListnerUtl implements JobListener {
 		    if(exe_perd_cd.equals("TC001601")){
 				 ScheduleVO scheduleVO = new ScheduleVO();
 				 scheduleVO.setScd_id(Integer.parseInt(scd_id));
-				 scheduleVO.setScd_cndt("TC001801");
+				 String scd_cndt = "TC001801";
 				 hp1.put("nFireTime", beforeTime);			
 				 System.out.println("▶▶▶ 이전 작업 수행시간 업데이트");
 				scheduleService.updatePrevJobTime(hp1);
 				System.out.println("▶▶▶ 다음 작업 수행시간 업데이트");
-				updateScheduleNextTime(scd_id);
+				updateScheduleNextTime(scd_id, scd_cndt);
 			}else if(exe_perd_cd.equals("TC001602")){
 				 ScheduleVO scheduleVO = new ScheduleVO();
 				 scheduleVO.setScd_id(Integer.parseInt(scd_id));
-				 scheduleVO.setScd_cndt("TC001801");
+				 String scd_cndt = "TC001801";
 				 hp1.put("nFireTime", beforeTime);
 				 System.out.println("▶▶▶ 이전 작업 수행시간 업데이트");
 				scheduleService.updatePrevJobTime(hp1);
 				System.out.println("▶▶▶ 다음 작업 수행시간 업데이트");
-				updateScheduleNextTime(scd_id);
+				updateScheduleNextTime(scd_id, scd_cndt);
 			}else if(exe_perd_cd.equals("TC001603")){
 				 ScheduleVO scheduleVO = new ScheduleVO();
 				 scheduleVO.setScd_id(Integer.parseInt(scd_id));
-				 scheduleVO.setScd_cndt("TC001801");
+				 String scd_cndt = "TC001801";
 				 hp1.put("nFireTime", beforeTime);
 				 System.out.println("▶▶▶ 이전 작업 수행시간 업데이트");
 				scheduleService.updatePrevJobTime(hp1);
 				System.out.println("▶▶▶ 다음 작업 수행시간 업데이트");
-				updateScheduleNextTime(scd_id);
+				updateScheduleNextTime(scd_id, scd_cndt);
 			}else if(exe_perd_cd.equals("TC001604")){	
 				 ScheduleVO scheduleVO = new ScheduleVO();
 				 scheduleVO.setScd_id(Integer.parseInt(scd_id));
-				 scheduleVO.setScd_cndt("TC001801");	
+				 String scd_cndt = "TC001801";
 				 hp1.put("nFireTime", beforeTime);
 				 System.out.println("▶▶▶ 이전 작업 수행시간 업데이트");
 				scheduleService.updatePrevJobTime(hp1);
 				System.out.println("▶▶▶ 다음 작업 수행시간 업데이트");
-				updateScheduleNextTime(scd_id);
+				updateScheduleNextTime(scd_id, scd_cndt);
 			}else{				
+				String scd_cndt = "TC001803";
 				hp1.put("nFireTime", beforeTime);
 				 System.out.println("▶▶▶ 이전 작업 수행시간 업데이트");
 				scheduleService.updatePrevJobTime(hp1);
 				//1회수행은 끝나고 이전작업수행시간 업데이트
 				System.out.println("▶▶▶ 이전 작업 수행시간 업데이트");
-				updateScheduleNextTime(scd_id);
+				updateScheduleNextTime(scd_id, scd_cndt);
 			}
 			System.out.println("================================================");		
 		}
@@ -225,11 +226,11 @@ public class EgovBatchListnerUtl implements JobListener {
 	}
 
 	
-	public void updateScheduleNextTime(String scd_id){
+	public void updateScheduleNextTime(String scd_id, String scd_cndt){
 		HashMap<String , Object> hp2 = new HashMap<String , Object>();
 		ScheduleVO scheduleVO = new ScheduleVO();
 		scheduleVO.setScd_id(Integer.parseInt(scd_id));
-		scheduleVO.setScd_cndt("TC001803");
+		scheduleVO.setScd_cndt(scd_cndt);
 		
 		List<Map<String, Object>> result = null;
 		
@@ -399,6 +400,10 @@ public class EgovBatchListnerUtl implements JobListener {
             	 hp2.put("nFireTime", cal.getTime());	
             }        
             scheduleService.updateNxtJobTime(hp2);
+
+        	System.out.println("▶▶▶ 스케줄 상태변경");
+            System.out.println(scheduleVO.getScd_cndt());
+            System.out.println(scheduleVO.getExe_perd_cd());
 			scheduleService.updateScheduleStatus(scheduleVO);
 		} catch (Exception e) {
 			e.printStackTrace();
