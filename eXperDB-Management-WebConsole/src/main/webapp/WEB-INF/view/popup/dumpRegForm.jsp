@@ -657,7 +657,7 @@ function fn_check() {
 						<th scope="row" class="ico_t1"><spring:message code="common.database" /></th>
 						<td>
 							<select name="db_id" id="db_id" class="select"  onChange="fn_get_object_list();">
-								<option value=""><spring:message code="schedule.total" /></option>
+								<option value=""><spring:message code="common.choice" /></option>
 								<c:forEach var="result" items="${dbList}" varStatus="status">
 								<option value="<c:out value="${result.db_id}"/>"><c:out value="${result.db_nm}"/></option>
 								</c:forEach>

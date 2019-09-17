@@ -11,7 +11,7 @@ import java.util.Scanner;
 
 import org.jasypt.encryption.pbe.StandardPBEStringEncryptor;
 
-public class WebConsoleSetting {
+public class WebConsoleSetting { 
 	
 	public static void main(String[] args) throws Exception {
 		

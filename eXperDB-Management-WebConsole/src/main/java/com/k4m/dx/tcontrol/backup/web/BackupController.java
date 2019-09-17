@@ -870,30 +870,20 @@ public class BackupController {
 		}
 	
 		try{
-			//WORK 옵션 삭제
+			
 			for(int i=0; i<bck_wrk_ids.size(); i++){
 				int bck_wrk_id = Integer.parseInt(bck_wrk_ids.get(i).toString());
-				backupService.deleteWorkOpt(bck_wrk_id);				
-			}
-			
-			//WORK 오브젝트 삭제
-			for(int i=0; i<bck_wrk_ids.size(); i++){
-				int bck_wrk_id = Integer.parseInt(bck_wrk_ids.get(i).toString());
-				backupService.deleteWorkObj(bck_wrk_id);
-			}	
-			
-			//백업작업 삭제
-			for(int i=0; i<bck_wrk_ids.size(); i++){
-				int bck_wrk_id = Integer.parseInt(bck_wrk_ids.get(i).toString());
-				backupService.deleteBckWork(bck_wrk_id);
-			}	
-			
-			
-			//전체 작업 삭제
-			for(int i=0; i<wrk_ids.size(); i++){
 				int wrk_id = Integer.parseInt(wrk_ids.get(i).toString());
+				//WORK 옵션 삭제
+				backupService.deleteWorkOpt(bck_wrk_id);			
+				//WORK 오브젝트 삭제
+				backupService.deleteWorkObj(bck_wrk_id);
+				//백업작업 삭제
+				backupService.deleteBckWork(bck_wrk_id);
+				//전체 작업 삭제
 				backupService.deleteWork(wrk_id);
 			}
+			
 		}catch(Exception e){
 			e.printStackTrace();
 			txManager.rollback(status);
