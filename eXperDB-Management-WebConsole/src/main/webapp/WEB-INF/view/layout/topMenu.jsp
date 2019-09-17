@@ -455,7 +455,7 @@ function fn_cookie(url) {
 						<ul class="depth_2">
 						    <li><a href="" onClick="fn_cookie(null)" target="main">SOURCE DBMS</a></li>
 							<li><a href="" onClick="fn_cookie(null)" target="main">TARGET DBMS</a></li>
-        					<li><a href="" onClick="fn_cookie(null)" target="main">DB2PG</a></li>
+        					<li><a href="/db2pgSetting.do" onClick="fn_cookie(null)" target="main">DB2PG</a></li>
 						</ul>
 					</li>
 					
