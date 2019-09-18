@@ -707,6 +707,10 @@ function fn_scriptLayer(wrk_id){
 	});	
 }
 
+//db2pg config정보
+function fn_db2pgConfigLayer(wrk_nm){
+	toggleLayer($('#pop_layer_db2pgConfig'), 'on');	
+}
 
 //패스워드 확인
 function fn_passwordConfilm(flag){

@@ -8,7 +8,7 @@
 <%
 	/**
 	* @Class Name : ddlRegForm.jsp
-	* @Description : ddl추출 등록 화면
+	* @Description : ddl추출 수정 화면
 	* @Modification Information
 	*
 	*   수정일         수정자                   수정내용
@@ -77,10 +77,10 @@ function fn_tableList(){
 <body>
 <div class="pop_container">
 	<div class="pop_cts">
-		<p class="tit">DDL 추출 등록</p>
+		<p class="tit">DDL 추출 수정</p>
 		<div class="pop_cmm">
 			<table class="write">
-				<caption>DDL 추출 등록</caption>
+				<caption>DDL 추출 수정</caption>
 				<colgroup>
 					<col style="width:105px;" />
 					<col />
