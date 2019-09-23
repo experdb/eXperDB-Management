@@ -165,8 +165,8 @@ function fn_tableList(){
 					</tr>
 					<tr>
 						<th scope="row" class="ico_t2">DDL 저장경로</th>
-						<td><input type="text" class="txt" name="save_pth" id="save_pth"/>
-							<span class="btn btnC_01"><button type="button" class= "btn_type_02" onclick="checkFolder(2)" style="width: 60px; margin-right: -60px; margin-top: 0;">경로체크</button></span>							
+						<td><textarea rows="3" cols="60" id="grp_cd_exp" name="grp_cd_exp" style="width: 80%"></textarea>
+							<span class="btn btnC_01"><button type="button" class= "btn_type_02" onclick="checkFolder(2)" style="width: 60px; margin-right: -60px; margin-top: 0; height: 58px;">경로체크</button></span>							
 						</td>
 					</tr>
 				</tbody>
