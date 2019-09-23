@@ -720,6 +720,8 @@ public class BackupController {
 	@RequestMapping(value = "/popup/workRmanReWrite.do")
 	@ResponseBody
 	public String workRmanReWrite(@ModelAttribute("historyVO") HistoryVO historyVO,@ModelAttribute("workVO") WorkVO workVO, HttpServletResponse response, HttpServletRequest request) throws IOException{
+		
+		String init = "S";
 		String result = "S";
 
 		try {
@@ -727,17 +729,51 @@ public class BackupController {
 			CmmnUtils.saveHistory(request, historyVO);
 			historyVO.setExe_dtl_cd("DX-T0023_01");
 			accessHistoryService.insertHistory(historyVO);
-			
-			HttpSession session = request.getSession();
-			LoginVO loginVo = (LoginVO) session.getAttribute("session");
-			String usr_id = loginVo.getUsr_id();
-			workVO.setLst_mdfr_id(usr_id);
-			backupService.updateRmanWork(workVO);
 		} catch (Exception e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
-			result = "F";
 		}
+		
+		// 백업 WORK 수정 시 백업 경로 INIT
+		try{
+			Map<String, Object> initResult =new HashMap<String, Object>();
+			AgentInfoVO vo = new AgentInfoVO();
+			List<DbServerVO> ipResult = null;		
+			
+			String bck_pth = workVO.getBck_pth();
+			int db_svr_id = workVO.getDb_svr_id();
+			
+			ipResult = (List<DbServerVO>) cmmnServerInfoService.selectAllIpadrList(db_svr_id);
+			
+			for(int i=0; i<ipResult.size(); i++){
+				System.out.println(ipResult.get(i).getIpadr());
+				vo.setIPADR(ipResult.get(i).getIpadr());		
+				AgentInfoVO agentInfo =  (AgentInfoVO) cmmnServerInfoService.selectAgentInfo(vo);
+				String IP = ipResult.get(i).getIpadr();
+				int PORT = agentInfo.getSOCKET_PORT();
+
+				ClientInfoCmmn cic = new ClientInfoCmmn();
+				initResult = cic.setInit(IP, PORT, bck_pth);
+			}	
+			
+		}catch(Exception e){
+			init = "F";
+			e.printStackTrace();
+		}
+		
+		//Rman 업데이트
+		if(init.equals("S")){
+			try{
+				HttpSession session = request.getSession();
+				LoginVO loginVo = (LoginVO) session.getAttribute("session");
+				String usr_id = loginVo.getUsr_id();
+
+				workVO.setLst_mdfr_id(usr_id);
+				backupService.updateRmanWork(workVO);
+			}catch(Exception e){
+				e.printStackTrace();
+				result = "F";
+			}
+		}		
 		return result;
 	}
 	
