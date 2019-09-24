@@ -603,6 +603,11 @@ table.db_table .inp_rdo input[type="radio"] + label:before{margin:0;}
 .cmm_bd .sub_tit > p{padding:0 8px 0 33px;line-height:24px;background:url(../images/ico_sch_7.png) 8px 48% no-repeat;}
 .cmm_bd .sub_tit .sub_btn{position:absolute;top:0;right:0;}
 
+/* pop_cmm mt25_bd*/
+.mt25 sub_tit{position:relative;top:0;left:0;height:24px;margin-bottom:5px;}
+.mt25 .sub_tit > p{padding:0 8px 0 33px;line-height:24px;background:url(../images/popup/ico_p_2.png) 8px 48% no-repeat;}
+.mt25 .sub_tit .sub_btn{position:absolute;top:0;right:0;}
+
 /* Layout 
 -------------------------------------------------------------- */
 body.bg{background:#fff url(../images/login_bg.png) center center no-repeat;}

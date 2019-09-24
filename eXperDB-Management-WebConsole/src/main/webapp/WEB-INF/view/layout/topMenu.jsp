@@ -450,7 +450,13 @@ function fn_cookie(url) {
         					</li>
 						</ul>
 					</li>
-
+					
+					<li><a href="#n"><span><img src="/images/ico_h_10.png" alt="DB2PG" /></span></a>
+						<ul class="depth_2">
+						    <li><a href="/db2pgDBMS.do" onClick="fn_cookie(null)" target="main">DBMS시스템</a></li>
+        					<li><a href="/db2pgSetting.do" onClick="fn_cookie(null)" target="main">DB2PG</a></li>
+						</ul>
+					</li>
 					
 					<li><a href="#n"><span><img src="/images/ico_h_7.png" alt="MY PAGE" /></span></a>
 						<ul class="depth_2">

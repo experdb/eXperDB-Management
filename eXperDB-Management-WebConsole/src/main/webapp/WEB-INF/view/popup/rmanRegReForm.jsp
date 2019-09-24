@@ -110,6 +110,7 @@ function fn_update_work(){
 			async : false,
 			url : "/popup/workRmanReWrite.do",
 		  	data : {
+		  		db_svr_id : db_svr_id,
 		  		bck_wrk_id : $("#bck_wrk_id").val(),
 		  		wrk_id : $("#wrk_id").val(),
 		  		wrk_nm : $("#wrk_nm").val().trim(),
