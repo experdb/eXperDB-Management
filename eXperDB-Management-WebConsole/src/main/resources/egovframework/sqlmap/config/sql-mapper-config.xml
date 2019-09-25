@@ -91,5 +91,9 @@
 		<mapper resource="egovframework/sqlmap/mappers/restore/restoreRmanSql.xml" />
 		<mapper resource="egovframework/sqlmap/mappers/restore/restoreDumpSql.xml" />
 		
+		<!-- db2pg -->
+		<mapper resource="egovframework/sqlmap/mappers/db2pg/dbms/dbmsSql.xml" />
+		
+		
 	</mappers>
 </configuration>
