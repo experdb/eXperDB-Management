@@ -189,8 +189,8 @@ function fn_tableList(){
 						<table class="write">
 							<caption>옵션정보</caption>
 							<colgroup>
-								<col style="width:28%" />
-								</col>
+								<col style="width:20%" />
+								<col style="width:30%" />
 								<col style="width:20%" />
 								</col>
 							</colgroup>
@@ -213,15 +213,15 @@ function fn_tableList(){
 								</tr>
 								<tr>
 									<th scope="row" class="ico_t2">추출 데이터 Fetch 사이즈</th>
-									<td><input type="text" class="txt t4" name="source_info" id="source_info"/></td>
+									<td><input type="text" class="txt t5" name="source_info" id="source_info"/></td>
 									<th scope="row" class="ico_t2">데이터 Fetch 버퍼 사이즈</th>
-									<td><input type="text" class="txt t4" name="source_info" id="source_info"/></td>
+									<td><input type="text" class="txt t5" name="source_info" id="source_info"/></td>
 								</tr>
 								<tr>
 									<th scope="row" class="ico_t2">추출 병렬처리 개수</th>
-									<td><input type="text" class="txt t4" name="source_info" id="source_info"/></td>
+									<td><input type="text" class="txt t5" name="source_info" id="source_info"/></td>
 									<th scope="row" class="ico_t2">LOB 데이터 LOB 버퍼 사이즈</th>
-									<td><input type="text" class="txt t4" name="source_info" id="source_info"/></td>
+									<td><input type="text" class="txt t5" name="source_info" id="source_info"/></td>
 								</tr>
 							</tbody>
 						</table>
