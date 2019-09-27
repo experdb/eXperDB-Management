@@ -52,3 +52,4 @@ Changelog
  - 다중 로그인 방지 익스플로러 버그 수정        
  
 ## Version 9.6.1.0(2018.05.16)
+Initial release.
