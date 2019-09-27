@@ -213,7 +213,7 @@ function fn_data_reg_popup(){
 /* ********************************************************
  * 데이터이행 수정 팝업
  ******************************************************** */
-function fn_data_reg_popup(){
+function fn_data_regre_popup(){
 	var popUrl = "/popup/dataRegReForm.do";
 	var width = 965;
 	var height = 820;
