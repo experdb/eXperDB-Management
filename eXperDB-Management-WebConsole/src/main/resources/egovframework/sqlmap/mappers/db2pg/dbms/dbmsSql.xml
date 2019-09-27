@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper   PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="dbmsSQL">
+
+    <select id="selectDbmsGrb" resultType="HashMap">
+    	/**
+	 	* Query ID : selectHaCnt
+	 	* Description : DBMS구분 리스트
+	 	* Author : 변승우
+	 	**/
+    	SELECT 
+    			COUNT(*) AS haCnt
+    	FROM T_SYSDTL_C
+    	WHERE GRP_CD = 'TC0022'
+    </select>
+
+</mapper>
