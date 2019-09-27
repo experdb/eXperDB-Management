@@ -308,8 +308,9 @@ function checkFolder(keyType){
 	}else{
 		$.ajax({
 			async : false,
-			url : "/existDirCheck.do",
-		  	data : {
+			//url : "/existDirCheck.do",
+		  	url : "/existDirCheckMaster.do",   //2019-09-26 변승우 대리, 수정(경로체크 시 MASTER만)
+			data : {
 		  		db_svr_id : $("#db_svr_id").val(),
 		  		path : save_path
 		  	},
