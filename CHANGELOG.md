@@ -43,7 +43,7 @@ Changelog
  - [스크립트] 스크립트 조회, 등록, 삭제, 수정 기능 추가
  - [스크립트] WORK 추가, 스케줄기능 추가, 스크립트 스케줄수행이력 추가  
  - [DB서버수정] 포트 수정
- - properties pg_audit 사용여부 추가, version 9.6.1.1 버전업
+ - properties pg_audit 사용여부 추가
  - 폰트 맑은고딕 수정
 
  ■ 버그수정
