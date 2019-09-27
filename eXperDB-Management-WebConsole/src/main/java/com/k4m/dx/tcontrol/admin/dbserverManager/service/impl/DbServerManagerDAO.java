@@ -346,6 +346,13 @@ public class DbServerManagerDAO extends EgovAbstractMapper{
 	}
 
 
+	public List<DbServerVO> selectPgDbmsList() {
+		List<DbServerVO>  sl = null;
+		sl = (List<DbServerVO>) list("dbserverManagerSql.selectPgDbmsList", null);
+		return sl;
+	}
+
+
 }
 
 

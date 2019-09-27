@@ -118,5 +118,8 @@ public interface DbServerManagerService {
 
 
 	void syncUpdate(HashMap<String, Object> paramvalue) throws Exception;
+
+
+	List<DbServerVO> selectPgDbmsList()  throws Exception;
 	
 }

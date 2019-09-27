@@ -168,4 +168,9 @@ public class DbServerManagerServiceImpl extends EgovAbstractServiceImpl implemen
 		dbServerManagerDAO.syncUpdate(paramvalue);
 	}
 
+	@Override
+	public List<DbServerVO> selectPgDbmsList() throws Exception {
+		return dbServerManagerDAO.selectPgDbmsList();
+	}
+
 }
