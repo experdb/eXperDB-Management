@@ -783,4 +783,51 @@
 				 #{item}::numeric
 	   </foreach>
   	</update>
+  	
+  	
+  		<select id="selectPgDbmsList" resultType="dbServerVO" >
+		/**
+	 	*  Query ID : selectPgDbmsList
+	 	* Description : DB2PG 기 등록된 PG DB리스트
+	 	* Author : 변승우
+	 	**/    
+		SELECT
+              (ROW_NUMBER() OVER()) AS ROWNUM
+			, (ROW_NUMBER() OVER()) AS IDX
+            , AA.DB_SVR_NM
+            , AA.SVR_SPR_USR_ID
+            , AA.SVR_SPR_SCM_PWD
+            , AA.IPADR
+            , AA.PORTNO
+            , AA.MASTER_GBN
+            , AA.DB_ID
+            , AA.DB_NM
+			, AA.FRST_REGR_ID
+			, AA.FRST_REG_DTM
+			, AA.LST_MDFR_ID
+			, AA.LST_MDF_DTM
+        FROM(
+	            SELECT
+	                 A.DB_SVR_NM
+	                , A.SVR_SPR_USR_ID
+	                , A.SVR_SPR_SCM_PWD
+	                , C.IPADR
+	                , C.PORTNO
+	                , C.MASTER_GBN
+	                , B.DB_ID
+	                , B.DB_NM
+					, A.FRST_REGR_ID
+					, TO_CHAR(A.FRST_REG_DTM,'YYYY-MM-DD HH24:MI:SS') AS FRST_REG_DTM
+					, A.LST_MDFR_ID
+					, TO_CHAR(A.LST_MDF_DTM,'YYYY-MM-DD HH24:MI:SS') AS LST_MDF_DTM
+	            FROM T_DBSVR_I A, T_DB_I B, T_DBSVRIPADR_I C
+	            WHERE 1 = 1
+	            AND A.DB_SVR_ID = B.DB_SVR_ID
+	            AND A.DB_SVR_ID = C.DB_SVR_ID
+	            AND C.MASTER_GBN = 'M'   	            
+			    AND B.USEYN = 'Y'
+	            ORDER BY A.LST_MDF_DTM DESC
+            )AA	 	
+	 	</select>
+  	
 </mapper>
