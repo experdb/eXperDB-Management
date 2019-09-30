@@ -110,6 +110,7 @@ function fn_update_work(){
 			async : false,
 			url : "/popup/workRmanReWrite.do",
 		  	data : {
+		  		db_svr_id : db_svr_id,
 		  		bck_wrk_id : $("#bck_wrk_id").val(),
 		  		wrk_id : $("#wrk_id").val(),
 		  		wrk_nm : $("#wrk_nm").val().trim(),
@@ -307,8 +308,9 @@ function checkFolder(keyType){
 	}else{
 		$.ajax({
 			async : false,
-			url : "/existDirCheck.do",
-		  	data : {
+			//url : "/existDirCheck.do",
+		  	url : "/existDirCheckMaster.do",   //2019-09-26 변승우 대리, 수정(경로체크 시 MASTER만)
+			data : {
 		  		db_svr_id : $("#db_svr_id").val(),
 		  		path : save_path
 		  	},
