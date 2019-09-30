@@ -88,7 +88,7 @@ function fn_dbmsInfo(){
 	var top = (window.screen.height /2) - (height / 2);
 	var popOption = "width="+width+", height="+height+", top="+top+", left="+left+", resizable=no, scrollbars=yes, status=no, toolbar=no, titlebar=yes, location=no,";
 	
-	var winPop = window.open(popUrl,"sourceInfoPop",popOption);
+	var winPop = window.open(popUrl,"dbmsInfoPop",popOption);
 }
 
 
