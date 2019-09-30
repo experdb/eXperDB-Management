@@ -133,7 +133,7 @@ function fn_Add(){
 <body>
 <div class="pop_container">
 	<div class="pop_cts">
-		<p class="tit">타겟시스템정보</p>
+		<p class="tit">DBMS시스템정보</p>
 			<div class="btn_type_01">
 				<span class="btn"><button onClick="fn_search();" type="button"><spring:message code="common.search" /></button></span>
 			</div>
@@ -166,7 +166,7 @@ function fn_Add(){
 		</div>
 
 		<div class="pop_cmm3">
-			<p class="pop_s_tit">타겟시스템 리스트</p>
+			<p class="pop_s_tit">DBMS 시스템 리스트</p>
 			<div class="overflow_area">
 				<table id="sourceList" class="display" cellspacing="0" width="100%">
 				<thead>

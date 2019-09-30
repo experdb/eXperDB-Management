@@ -45,17 +45,17 @@ function fn_insert_work(){
 }
 
 /* ********************************************************
- * 소스시스템 등록 버튼 클릭시
+ * DBMS 시스템 등록 버튼 클릭시
  ******************************************************** */
-function fn_sourceInfo(){
-	var popUrl = "/popup/sourceInfo.do";
+function fn_dbmsInfo(){
+	var popUrl = "/popup/dbmsInfo.do";
 	var width = 920;
 	var height = 670;
 	var left = (window.screen.width / 2) - (width / 2);
 	var top = (window.screen.height /2) - (height / 2);
 	var popOption = "width="+width+", height="+height+", top="+top+", left="+left+", resizable=no, scrollbars=yes, status=no, toolbar=no, titlebar=yes, location=no,";
 	
-	var winPop = window.open(popUrl,"sourceInfoPop",popOption);
+	var winPop = window.open(popUrl,"dbmsInfoPop",popOption);
 }
 
 /* ********************************************************
@@ -114,7 +114,7 @@ function fn_tableList(){
 					<tr>
 						<th scope="row" class="ico_t2">소스시스템</th>
 						<td><input type="text" class="txt" name="source_info" id="source_info"/>
-							<span class="btn btnC_01"><button type="button" class= "btn_type_02" onclick="fn_sourceInfo()" style="width: 60px; margin-right: -60px; margin-top: 0;">등록</button></span>							
+							<span class="btn btnC_01"><button type="button" class= "btn_type_02" onclick="fn_dbmsInfo()" style="width: 60px; margin-right: -60px; margin-top: 0;">등록</button></span>							
 						</td>
 					</tr>
 				</tbody>

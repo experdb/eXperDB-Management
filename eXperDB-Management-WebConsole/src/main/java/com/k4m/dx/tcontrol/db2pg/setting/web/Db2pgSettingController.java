@@ -135,14 +135,14 @@ public class Db2pgSettingController {
 	}
 	
 	/**
-	 * 소스시스템 등록 팝업 화면을 보여준다.
+	 * DBMS시스템 등록 팝업 화면을 보여준다.
 	 * 
 	 * @param historyVO
 	 * @param request
 	 * @return ModelAndView mv
 	 * @throws Exception
 	 */
-	@RequestMapping(value = "/popup/sourceInfo.do")
+	@RequestMapping(value = "/popup/dbmsInfo.do")
 	public ModelAndView sourceInfo(HttpServletRequest request, @ModelAttribute("historyVO") HistoryVO historyVO) {
 		ModelAndView mv = new ModelAndView();
 		try {
@@ -155,34 +155,10 @@ public class Db2pgSettingController {
 			e2.printStackTrace();
 		}
 				
-		mv.setViewName("db2pg/popup/sourceInfo");
+		mv.setViewName("db2pg/popup/dbmsInfo");
 		return mv;
 	}
 	
-	/**
-	 * 타겟시스템 등록 팝업 화면을 보여준다.
-	 * 
-	 * @param historyVO
-	 * @param request
-	 * @return ModelAndView mv
-	 * @throws Exception
-	 */
-	@RequestMapping(value = "/popup/targetInfo.do")
-	public ModelAndView targetInfo(HttpServletRequest request, @ModelAttribute("historyVO") HistoryVO historyVO) {
-		ModelAndView mv = new ModelAndView();
-		try {
-			// 화면접근이력 이력 남기기
-			CmmnUtils.saveHistory(request, historyVO);
-//			historyVO.setExe_dtl_cd("DX-T0022");
-//			accessHistoryService.insertHistory(historyVO);
-		} catch (Exception e2) {
-			// TODO Auto-generated catch block
-			e2.printStackTrace();
-		}
-				
-		mv.setViewName("db2pg/popup/targetInfo");
-		return mv;
-	}
 		
 	/**
 	 * 테이블리스트 등록 팝업 화면을 보여준다.
