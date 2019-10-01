@@ -1,6 +1,6 @@
 package com.k4m.dx.tcontrol.db2pg.setting.service;
 
-public class ConfigVO {
+public class DDLConfigVO {
 	private String wrk_nm;
 	private String wrk_exp;
 	

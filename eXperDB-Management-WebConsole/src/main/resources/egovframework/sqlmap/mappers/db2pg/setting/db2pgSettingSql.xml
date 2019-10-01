@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper   PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="db2pgSettingSql">
+
+    <select id="selectCode" resultType="codeVO" parameterType="String">
+    	/**
+	 	* Query ID : selectCode
+	 	* Description : 공통 코드 조회
+	 	* Author : 김주영
+	 	**/
+    	SELECT grp_cd, sys_cd, SYS_CD_NM
+	 	FROM T_SYSDTL_C 
+	 	where GRP_CD = #{grp_cd}
+    </select>
+
+</mapper>

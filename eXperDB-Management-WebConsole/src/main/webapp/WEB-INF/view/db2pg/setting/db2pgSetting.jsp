@@ -169,7 +169,7 @@ function getdataDataList(){
  * DDL추출 등록 팝업
  ******************************************************** */
 function fn_ddl_reg_popup(){
-	var popUrl = "/popup/ddlRegForm.do";
+	var popUrl = "/db2pg/popup/ddlRegForm.do";
 	var width = 965;
 	var height = 820;
 	var left = (window.screen.width / 2) - (width / 2);
@@ -184,7 +184,7 @@ function fn_ddl_reg_popup(){
  * DDL추출 수정 팝업
  ******************************************************** */
 function fn_ddl_regre_popup(){
-	var popUrl = "/popup/ddlRegReForm.do";
+	var popUrl = "/db2pg/popup/ddlRegReForm.do";
 	var width = 965;
 	var height = 820;
 	var left = (window.screen.width / 2) - (width / 2);
@@ -199,7 +199,7 @@ function fn_ddl_regre_popup(){
  * 데이터이행 등록 팝업
  ******************************************************** */
 function fn_data_reg_popup(){
-	var popUrl = "/popup/dataRegForm.do";
+	var popUrl = "/db2pg/popup/dataRegForm.do";
 	var width = 965;
 	var height = 820;
 	var left = (window.screen.width / 2) - (width / 2);
@@ -214,7 +214,7 @@ function fn_data_reg_popup(){
  * 데이터이행 수정 팝업
  ******************************************************** */
 function fn_data_regre_popup(){
-	var popUrl = "/popup/dataRegReForm.do";
+	var popUrl = "/db2pg/popup/dataRegReForm.do";
 	var width = 965;
 	var height = 820;
 	var left = (window.screen.width / 2) - (width / 2);

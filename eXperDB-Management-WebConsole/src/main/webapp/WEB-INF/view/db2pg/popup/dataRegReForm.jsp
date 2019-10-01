@@ -1,10 +1,10 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
- <%@ taglib uri="http://tiles.apache.org/tags-tiles" prefix="tiles"%>
+<%@ taglib uri="http://tiles.apache.org/tags-tiles" prefix="tiles"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form"%>
 <%@ taglib prefix="ui" uri="http://egovframework.gov/ctl/ui"%>
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags"%>
-<%@include file="../../cmmn/commonLocale.jsp"%>
+<%@ include file="../../cmmn/commonLocale.jsp"%>
 <%
 	/**
 	* @Class Name : dataRegForm.jsp
@@ -81,7 +81,7 @@ function fn_check() {
  * 소스시스템 등록 버튼 클릭시
  ******************************************************** */
 function fn_dbmsInfo(){
-	var popUrl = "/popup/dbmsInfo.do";
+	var popUrl = "/db2pg/popup/dbmsInfo.do";
 	var width = 920;
 	var height = 670;
 	var left = (window.screen.width / 2) - (width / 2);
@@ -95,7 +95,7 @@ function fn_dbmsInfo(){
  * 추출 대상 테이블, 추출 제외 테이블 등록 버튼 클릭시
  ******************************************************** */
 function fn_tableList(){
-	var popUrl = "/popup/tableInfo.do";
+	var popUrl = "/db2pg/popup/tableInfo.do";
 	var width = 930;
 	var height = 675;
 	var left = (window.screen.width / 2) - (width / 2);

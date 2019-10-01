@@ -1,10 +1,10 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
- <%@ taglib uri="http://tiles.apache.org/tags-tiles" prefix="tiles"%>
+<%@ taglib uri="http://tiles.apache.org/tags-tiles" prefix="tiles"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form"%>
 <%@ taglib prefix="ui" uri="http://egovframework.gov/ctl/ui"%>
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags"%>
-<%@include file="../../cmmn/commonLocale.jsp"%>
+<%@ include file="../../cmmn/commonLocale.jsp"%>
 <%
 	/**
 	* @Class Name : dataRegForm.jsp
@@ -30,12 +30,56 @@
 <script type="text/javascript" src="/js/jquery-1.9.1.min.js"></script>
 <script type="text/javascript" src="/js/common.js"></script>
 <script type="text/javascript">
+var wrk_nmChk ="fail";
+
 $(window.document).ready(function() {
 
 });
 
+/* ********************************************************
+ * Validation Check
+ ******************************************************** */
+function valCheck(){
+	if($("#wrk_nm").val() == ""){
+		alert('<spring:message code="message.msg107" />');
+		$("#wrk_nm").focus();
+		return false;
+	}else if(wrk_nmChk =="fail"){
+		alert('<spring:message code="backup_management.work_overlap_check"/>');
+		return false;
+	}else if($("#wrk_exp").val() == ""){
+		alert('<spring:message code="message.msg108" />');
+		$("#wrk_exp").focus();
+		return false;
+	}else if($("#source_info").val() == ""){
+		alert("소스 시스템정보를 등록해주세요.");
+		$("#source_info").focus();
+		return false;
+	}else if($("#target_info").val() == ""){
+		alert("타겟 시스템정보를 등록해주세요.");
+		$("#target_info").focus();
+		return false;
+	}else{
+		return true;
+	}
+}
 
-//work명 중복체크
+/* ********************************************************
+ * 사용자쿼리 체크박스 제어
+ ******************************************************** */
+function fn_checkBox(result){
+	if(result == 'true'){
+		$("#src_file_query_dir_path").removeAttr("readonly");
+	}else{
+		$('#src_file_query_dir_path').val('');
+		$('#src_file_query_dir_path').attr('readonly', true);
+	}
+	
+}
+
+/* ********************************************************
+ * WORK NM 중복 체크
+ ******************************************************** */
 function fn_check() {
 	var wrk_nm = document.getElementById("wrk_nm");
 	if (wrk_nm.value == "") {
@@ -55,7 +99,6 @@ function fn_check() {
 				document.getElementById("wrk_nm").focus();
 				wrk_nmChk = "success";
 			} else {
-				scd_nmChk = "fail";
 				alert('<spring:message code="backup_management.effective_work_nm"/>');
 				document.getElementById("wrk_nm").focus();
 			}
@@ -78,10 +121,58 @@ function fn_check() {
 }
 
 /* ********************************************************
+ * 등록 버튼 클릭시
+ ******************************************************** */
+function fn_insert_work(){
+	if(valCheck()){
+		$.ajax({
+			async : false,
+			url : "/db2pg/insertDataWork.do",
+		  	data : {
+		  		wrk_nm : $("#wrk_nm").val().trim(),
+		  		wrk_exp : $("#wrk_exp").val(),
+		  		source_info : $("#source_info").val(),
+		  		target_info : $("#target_info").val(),
+		  		src_rows_export : $("#src_rows_export").val(),
+		  		src_include_tables : $("#src_include_tables").val(),
+		  		src_exclude_tables : $("#src_exclude_tables").val(),
+		  		src_statement_fetch_size : $("#src_statement_fetch_size").val(),
+		  		src_buffer_size : $("#src_buffer_size").val(),
+		  		src_select_on_parallel : $("#src_select_on_parallel").val(),
+		  		src_lob_buffer_size : $("#src_lob_buffer_size").val(),
+		  		tar_constraint_rebuild : $("#tar_constraint_rebuild").val(),
+		  		tar_file_append : $("#tar_file_append").val(),
+		  		tar_constraint_ddl : $("#tar_constraint_ddl").val(),
+		  		src_where_condition : $("#src_where_condition").val(),
+		  		src_file_query_dir_path : $("#src_file_query_dir_path").val()
+		  	},
+			type : "post",
+			beforeSend: function(xhr) {
+		        xhr.setRequestHeader("AJAX", true);
+		     },
+			error : function(xhr, status, error) {
+				if(xhr.status == 401) {
+					alert('<spring:message code="message.msg02" />');
+					top.location.href = "/";
+				} else if(xhr.status == 403) {
+					alert('<spring:message code="message.msg03" />');
+					top.location.href = "/";
+				} else {
+					alert("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""));
+				}
+			},
+			success : function(result) {
+				alert(result);
+			}
+		});
+	}
+}
+
+/* ********************************************************
  * 소스시스템 등록 버튼 클릭시
  ******************************************************** */
 function fn_dbmsInfo(){
-	var popUrl = "/popup/dbmsInfo.do";
+	var popUrl = "/db2pg/popup/dbmsInfo.do";
 	var width = 920;
 	var height = 670;
 	var left = (window.screen.width / 2) - (width / 2);
@@ -96,7 +187,7 @@ function fn_dbmsInfo(){
  * 추출 대상 테이블, 추출 제외 테이블 등록 버튼 클릭시
  ******************************************************** */
 function fn_tableList(){
-	var popUrl = "/popup/tableInfo.do";
+	var popUrl = "/db2pg/popup/tableInfo.do";
 	var width = 930;
 	var height = 675;
 	var left = (window.screen.width / 2) - (width / 2);
@@ -155,7 +246,7 @@ function fn_tableList(){
 					</tr>
 					<tr>
 					<th scope="row" class="ico_t1">타겟시스템</th>
-						<td><input type="text" class="txt" name="source_info" id="source_info"/>
+						<td><input type="text" class="txt" name="target_info" id="target_info"/>
 							<span class="btn btnC_01"><button type="button" class= "btn_type_02" onclick="fn_dbmsInfo()" style="width: 60px; margin-right: -60px; margin-top: 0;">등록</button></span>							
 						</td>
 					</tr>
@@ -184,31 +275,31 @@ function fn_tableList(){
 							<tbody>
 								<tr>
 									<th scope="row" class="ico_t2">테이블에서 추출할 데이터 건수</th>
-									<td><input type="text" class="txt t4" name="source_info" id="source_info"/></td>
+									<td><input type="text" class="txt t4" name="src_rows_export" id="src_rows_export"/></td>
 								</tr>
 								<tr>
 									<th scope="row" class="ico_t2">추출 대상 테이블</th>
-									<td colspan="3"><input type="text" class="txt" name="save_pth" id="save_pth"/>
+									<td colspan="3"><input type="text" class="txt" name="src_include_tables" id="src_include_tables"/>
 										<span class="btn btnC_01"><button type="button" class= "btn_type_02" onclick="fn_tableList()" style="width: 60px; margin-right: -60px; margin-top: 0;">등록</button></span>							
 									</td>
 								</tr>
 								<tr>
 									<th scope="row" class="ico_t2">추출 제외 테이블</th>
-									<td colspan="3"><input type="text" class="txt" name="save_pth" id="save_pth"/>
+									<td colspan="3"><input type="text" class="txt" name="src_exclude_tables" id="src_exclude_tables"/>
 										<span class="btn btnC_01"><button type="button" class= "btn_type_02" onclick="fn_tableList()" style="width: 60px; margin-right: -60px; margin-top: 0;">등록</button></span>							
 									</td>
 								</tr>
 								<tr>
 									<th scope="row" class="ico_t2">추출 데이터 Fetch 사이즈</th>
-									<td><input type="text" class="txt t5" name="source_info" id="source_info"/></td>
+									<td><input type="text" class="txt t5" name="src_statement_fetch_size" id="src_statement_fetch_size"/></td>
 									<th scope="row" class="ico_t2">데이터 Fetch 버퍼 사이즈</th>
-									<td><input type="text" class="txt t5" name="source_info" id="source_info"/></td>
+									<td><input type="text" class="txt t5" name="src_buffer_size" id="src_buffer_size"/></td>
 								</tr>
 								<tr>
 									<th scope="row" class="ico_t2">추출 병렬처리 개수</th>
-									<td><input type="text" class="txt t5" name="source_info" id="source_info"/></td>
+									<td><input type="text" class="txt t5" name="src_select_on_parallel" id="src_select_on_parallel"/></td>
 									<th scope="row" class="ico_t2">LOB 데이터 LOB 버퍼 사이즈</th>
-									<td><input type="text" class="txt t5" name="source_info" id="source_info"/></td>
+									<td><input type="text" class="txt t5" name="src_lob_buffer_size" id="src_lob_buffer_size"/></td>
 								</tr>
 							</tbody>
 						</table>
@@ -219,7 +310,7 @@ function fn_tableList(){
 								<p class="op_tit" style="width: 200PX;">추출 조건(WHERE문 제외)</p>
 								<span>
 									<div class="textarea_grp">
-										<textarea name="exe_cmd" id="exe_cmd" style="height: 250px; width: 700px;"></textarea>
+										<textarea name="src_where_condition" id="src_where_condition" style="height: 250px; width: 700px;"></textarea>
 									</div>
 								</span>
 							</li>
@@ -229,10 +320,10 @@ function fn_tableList(){
 						<ul>
 							<li style="border-bottom: none;">
 								<p class="op_tit" style="width: 70px;">사용여부</p>
-								<div class="inp_rdo">
-									<input name="rdo_r" id="rdo_r_1" type="radio" value="TC002001" checked="checked">
+								<div class="inp_rdo" id="checkBoxId">
+									<input name="rdo_r" id="rdo_r_1" type="radio" value="TC002001" checked="checked" onchange="fn_checkBox('true')">
 										<label for="rdo_r_1">사용</label> 
-									<input name="rdo_r" id="rdo_r_2" type="radio" value="TC002002"> 
+									<input name="rdo_r" id="rdo_r_2" type="radio" value="TC002002" onchange="fn_checkBox('false')"> 
 										<label for="rdo_r_2">미사용</label>
 								</div>
 							</li>
@@ -240,7 +331,7 @@ function fn_tableList(){
 								<p class="op_tit">사용자 쿼리</p>
 								<span>
 									<div class="textarea_grp">
-										<textarea name="exe_cmd" id="exe_cmd" style="height: 250px; width: 700px;"></textarea>
+										<textarea name="src_file_query_dir_path" id="src_file_query_dir_path" style="height: 250px; width: 700px;"></textarea>
 									</div>
 								</span>
 							</li>
@@ -255,35 +346,35 @@ function fn_tableList(){
 			<table class="write">
 				<caption><spring:message code="dashboard.Register_backup" /></caption>
 				<colgroup>
-					<col style="width:15%;" />
-					<col style="width:15%;" />
-					<col style="width:10%;" />
+					<col style="width:12.5%;" />
 					<col style="width:20%;" />
-					<col style="width:15%;" />
-					<col style="width:15%;" />
+					<col style="width:10%;" />
+					<col style="width:25%;" />
+					<col style="width:12.5%;" />
+					<col style="width:20%;" />
 					</col>
 				</colgroup>
 				<tbody>
 					<tr>
 						<th scope="row" class="ico_t2">테이블 리빌드 여부</th>
 						<td>
-							<select name="file_fmt_cd" id="file_fmt_cd" onChange="changeFileFmtCd();" class="select t4">
-								<option value="TC000401">FALSE</option>
-								<option value="TC000402">TRUE</option>
+							<select name="tar_constraint_rebuild" id="tar_constraint_rebuild" class="select t8">
+								<option value="TC002902">FALSE</option>
+								<option value="TC002901">TRUE</option>
 							</select>
 						</td>
 						<th scope="row" class="ico_t2">입력모드</th>
 						<td>
-							<select name="encd_mth_nm" id="encd_mth_nm" class="select t4">
-								<option value="TC000401">TRUNCATE</option>
-								<option value="TC000402">APPEND</option>
+							<select name="tar_file_append" id="tar_file_append" class="select t5">
+								<option value="TC003001">TRUNCATE</option>
+								<option value="TC003002">APPEND</option>
 							</select>
 						</td>
 						<th scope="row" class="ico_t2">제약조건 추출 여부</th>
 						<td>
-							<select name="usr_role_nm" id="usr_role_nm" class="select t4">
-								<option value="TC000401">FALSE</option>
-								<option value="TC000402">TRUE</option>
+							<select name="tar_constraint_ddl" id="tar_constraint_ddl" class="select t8">
+								<option value="TC002902">FALSE</option>
+								<option value="TC002901">TRUE</option>
 							</select>
 						</td>
 					</tr>
