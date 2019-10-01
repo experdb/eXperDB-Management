@@ -43,6 +43,9 @@
 		<typeAlias alias="scriptVO" type="com.k4m.dx.tcontrol.script.service.ScriptVO" /> 
 		<typeAlias alias="restoreRmanVO" type="com.k4m.dx.tcontrol.restore.service.RestoreRmanVO" /> 
 		<typeAlias alias="restoreDumpVO" type="com.k4m.dx.tcontrol.restore.service.RestoreDumpVO" /> 
+		<typeAlias alias="codeVO" type="com.k4m.dx.tcontrol.db2pg.setting.service.CodeVO" /> 
+		<typeAlias alias="dataConfigVO" type="com.k4m.dx.tcontrol.db2pg.setting.service.DataConfigVO" /> 
+		<typeAlias alias="ddlConfigVO" type="com.k4m.dx.tcontrol.db2pg.setting.service.DDLConfigVO" /> 
     </typeAliases>
     
  	<mappers>
@@ -93,6 +96,7 @@
 		
 		<!-- db2pg -->
 		<mapper resource="egovframework/sqlmap/mappers/db2pg/dbms/dbmsSql.xml" />
+		<mapper resource="egovframework/sqlmap/mappers/db2pg/setting/db2pgSettingSql.xml" />
 		
 		
 	</mappers>
