@@ -282,9 +282,9 @@ function fn_tableList(){
 						<th scope="row" class="ico_t2">DDL&데이터 대소문자 지정</th>
 						<td>
 							<select name="src_classify_string" id="src_classify_string" class="select t5">
-								<option value="TC002801">변경없음</option>
-								<option value="TC002802">모두 대문자</option>
-								<option value="TC002803">모두 소문자</option>
+								<c:forEach var="codeLetter" items="${codeLetter}">
+									<option value="${codeLetter.sys_cd_nm}" ${sys_cd_nm eq codeLetter.sys_cd_nm ? "selected='selected'" : ""}>${codeLetter.sys_cd_nm}</option>
+								</c:forEach>
 							</select>
 						</td>
 					</tr>
@@ -292,8 +292,9 @@ function fn_tableList(){
 						<th scope="row" class="ico_t2">소스 Table DDL 추출(View 제외) 여부</th>
 						<td>
 							<select name="src_table_ddl" id="src_table_ddl" class="select t5">
-								<option value="TC002901">TRUE</option>
-								<option value="TC002902">FALSE</option>
+								<c:forEach var="codeTF" items="${codeTF}">
+									<option value="${codeTF.sys_cd_nm}" ${sys_cd_nm eq codeTF.sys_cd_nm ? "selected='selected'" : ""}>${codeTF.sys_cd_nm}</option>
+								</c:forEach>
 							</select>
 						</td>
 					</tr>
