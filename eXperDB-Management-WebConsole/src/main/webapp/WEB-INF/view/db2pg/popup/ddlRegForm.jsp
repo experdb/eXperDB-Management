@@ -30,7 +30,7 @@
 <script type="text/javascript" src="/js/jquery-1.9.1.min.js"></script>
 <script type="text/javascript" src="/js/common.js"></script>
 <script type="text/javascript">
-var wrk_nmChk ="fail";
+var db2pg_ddl_wrk_nmChk ="fail";
 var output_path ="fail";
 $(window.document).ready(function() {
 	 
@@ -41,24 +41,24 @@ $(window.document).ready(function() {
  * Validation Check
  ******************************************************** */
 function valCheck(){
-	if($("#wrk_nm").val() == ""){
+	if($("#db2pg_ddl_wrk_nm").val() == ""){
 		alert('<spring:message code="message.msg107" />');
-		$("#wrk_nm").focus();
+		$("#db2pg_ddl_wrk_nm").focus();
 		return false;
-	}else if(wrk_nmChk =="fail"){
+	}else if(db2pg_ddl_wrk_nmChk =="fail"){
 		alert('<spring:message code="backup_management.work_overlap_check"/>');
 		return false;
-	}else if($("#wrk_exp").val() == ""){
+	}else if($("#db2pg_ddl_wrk_exp").val() == ""){
 		alert('<spring:message code="message.msg108" />');
-		$("#wrk_exp").focus();
+		$("#db2pg_ddl_wrk_exp").focus();
 		return false;
-	}else if($("#source_info").val() == ""){
+	}else if($("#db2pg_sys_id").val() == ""){
 		alert("소스 시스템정보를 등록해주세요.");
-		$("#source_info").focus();
+		$("#db2pg_sys_id").focus();
 		return false;
-	}else if($("#src_file_output_path").val() == ""){
+	}else if($("#ddl_save_pth").val() == ""){
 		alert("저장경로를 입력해주세요.");
-		$("#src_file_output_path").focus();
+		$("#ddl_save_pth").focus();
 		return false;
 	}else if(output_path =="fail"){
 		alert('저장경로를 체크해주세요.');		
@@ -72,26 +72,26 @@ function valCheck(){
  * WORK NM Validation Check
  ******************************************************** */
 function fn_check() {
-	var wrk_nm = document.getElementById("wrk_nm");
-	if (wrk_nm.value == "") {
+	var db2pg_ddl_wrk_nm = document.getElementById("db2pg_ddl_wrk_nm");
+	if (db2pg_ddl_wrk_nm.value == "") {
 		alert('<spring:message code="message.msg107" />');
-		document.getElementById('wrk_nm').focus();
+		document.getElementById('db2pg_ddl_wrk_nm').focus();
 		return;
 	}
 	$.ajax({
 		url : '/wrk_nmCheck.do',
 		type : 'post',
 		data : {
-			wrk_nm : $("#wrk_nm").val()
+			wrk_nm : $("#db2pg_ddl_wrk_nm").val()
 		},
 		success : function(result) {
 			if (result == "true") {
 				alert('<spring:message code="backup_management.reg_possible_work_nm"/>');
-				document.getElementById("wrk_nm").focus();
-				wrk_nmChk = "success";		
+				document.getElementById("db2pg_ddl_wrk_nm").focus();
+				db2pg_ddl_wrk_nmChk = "success";		
 			} else {
 				alert('<spring:message code="backup_management.effective_work_nm"/>');
-				document.getElementById("wrk_nm").focus();
+				document.getElementById("db2pg_ddl_wrk_nm").focus();
 			}
 		},
 		beforeSend: function(xhr) {
@@ -115,17 +115,17 @@ function fn_check() {
  * output path Validation Check
  ******************************************************** */
 function fn_pathCheck() {
-	var src_file_output_path = document.getElementById("src_file_output_path");
-	if (src_file_output_path.value == "") {
+	var ddl_save_pth = document.getElementById("ddl_save_pth");
+	if (ddl_save_pth.value == "") {
 		alert("경로를 입력하세요.");
-		document.getElementById('src_file_output_path').focus();
+		document.getElementById('ddl_save_pth').focus();
 		return;
 	}
 	$.ajax({
 		url : '/db2pgPathCheck.do',
 		type : 'post',
 		data : {
-			src_file_output_path : $("#src_file_output_path").val()
+			ddl_save_pth : $("#ddl_save_pth").val()
 		},
 		success : function(result) {
 			if (result == "true") {
@@ -133,7 +133,7 @@ function fn_pathCheck() {
 				output_path = "success";		
 			} else {
 				alert('유효하지 않은 경로입니다.');
-				document.getElementById("src_file_output_path").focus();
+				document.getElementById("ddl_save_pth").focus();
 			}
 		},
 		beforeSend: function(xhr) {
@@ -162,14 +162,14 @@ function fn_insert_work(){
 			async : false,
 			url : "/db2pg/insertDDLWork.do",
 		  	data : {
-		  		wrk_nm : $("#wrk_nm").val().trim(),
-		  		wrk_exp : $("#wrk_exp").val(),
-		  		source_info : $("#source_info").val(),
-		  		src_classify_string : $("#src_classify_string").val(),
-		  		src_table_ddl : $("#src_table_ddl").val(),
+		  		db2pg_ddl_wrk_nm : $("#db2pg_ddl_wrk_nm").val().trim(),
+		  		db2pg_ddl_wrk_exp : $("#db2pg_ddl_wrk_exp").val(),
+		  		db2pg_sys_id : $("#db2pg_sys_id").val(),
+		  		db2pg_uchr_lchr_val : $("#db2pg_uchr_lchr_val").val(),
+		  		src_tb_ddl_exrt_tf : $("#src_tb_ddl_exrt_tf").val(),
 		  		src_include_tables : $("#src_include_tables").val(),
 		  		src_exclude_tables : $("#src_exclude_tables").val(),
-		  		src_file_output_path : $("#src_file_output_path").val()
+		  		ddl_save_pth : $("#ddl_save_pth").val()
 		  	},
 			type : "post",
 			beforeSend: function(xhr) {
@@ -188,6 +188,9 @@ function fn_insert_work(){
 			},
 			success : function(result) {
 				alert(result);
+				alert('<spring:message code="message.msg07" /> ');
+				opener.location.reload();
+				self.close();
 			}
 		});
 	}
@@ -237,7 +240,7 @@ function fn_tableList(){
 				<tbody>
 					<tr>
 						<th scope="row" class="ico_t1"><spring:message code="common.work_name" /></th>
-						<td><input type="text" class="txt" name="wrk_nm" id="wrk_nm" maxlength="20" onkeyup="fn_checkWord(this,20)" placeholder="20<spring:message code='message.msg188'/>" onblur="this.value=this.value.trim()"/>
+						<td><input type="text" class="txt" name="db2pg_ddl_wrk_nm" id="db2pg_ddl_wrk_nm" maxlength="20" onkeyup="fn_checkWord(this,20)" placeholder="20<spring:message code='message.msg188'/>" onblur="this.value=this.value.trim()"/>
 						<span class="btn btnC_01"><button type="button" class= "btn_type_02" onclick="fn_check()" style="width: 60px; margin-right: -60px; margin-top: 0;"><spring:message code="common.overlap_check" /></button></span>
 						</td>
 					</tr>
@@ -245,7 +248,7 @@ function fn_tableList(){
 						<th scope="row" class="ico_t1"><spring:message code="common.work_description" /></th>
 						<td>
 							<div class="textarea_grp">
-								<textarea name="wrk_exp" id="wrk_exp" maxlength="25" onkeyup="fn_checkWord(this,25)" placeholder="25<spring:message code='message.msg188'/>"></textarea>
+								<textarea name="db2pg_ddl_wrk_exp" id="db2pg_ddl_wrk_exp" maxlength="25" onkeyup="fn_checkWord(this,25)" placeholder="25<spring:message code='message.msg188'/>"></textarea>
 							</div>
 						</td>
 					</tr>
@@ -262,7 +265,7 @@ function fn_tableList(){
 				<tbody>
 					<tr>
 						<th scope="row" class="ico_t2">소스시스템</th>
-						<td><input type="text" class="txt" name="source_info" id="source_info"/>
+						<td><input type="text" class="txt" name="db2pg_sys_id" id="db2pg_sys_id"/>
 							<span class="btn btnC_01"><button type="button" class= "btn_type_02" onclick="fn_dbmsInfo()" style="width: 60px; margin-right: -60px; margin-top: 0;">등록</button></span>							
 						</td>
 					</tr>
@@ -281,7 +284,7 @@ function fn_tableList(){
 					<tr>
 						<th scope="row" class="ico_t2">DDL&데이터 대소문자 지정</th>
 						<td>
-							<select name="src_classify_string" id="src_classify_string" class="select t5">
+							<select name="db2pg_uchr_lchr_val" id="db2pg_uchr_lchr_val" class="select t5">
 								<c:forEach var="codeLetter" items="${codeLetter}">
 									<option value="${codeLetter.sys_cd_nm}">${codeLetter.sys_cd_nm}</option>
 								</c:forEach>
@@ -291,7 +294,7 @@ function fn_tableList(){
 					<tr>
 						<th scope="row" class="ico_t2">소스 Table DDL 추출(View 제외) 여부</th>
 						<td>
-							<select name="src_table_ddl" id="src_table_ddl" class="select t5">
+							<select name="src_tb_ddl_exrt_tf" id="src_tb_ddl_exrt_tf" class="select t5">
 								<c:forEach var="codeTF" items="${codeTF}">
 									<option value="${codeTF.sys_cd_nm}">${codeTF.sys_cd_nm}</option>
 								</c:forEach>
@@ -312,7 +315,7 @@ function fn_tableList(){
 					</tr>
 					<tr>
 						<th scope="row" class="ico_t2">DDL 저장경로</th>
-						<td><textarea rows="3" cols="60" id="src_file_output_path" name="src_file_output_path" style="width: 80%"></textarea>
+						<td><textarea rows="3" cols="60" id="ddl_save_pth" name="ddl_save_pth" style="width: 80%"></textarea>
 							<span class="btn btnC_01"><button type="button" class= "btn_type_02" onclick="fn_pathCheck()" style="width: 60px; margin-right: -60px; margin-top: 0; height: 58px;">경로체크</button></span>							
 						</td>
 					</tr>
