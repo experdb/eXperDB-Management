@@ -89,7 +89,7 @@ function fn_check() {
 				document.getElementById("wrk_nm").focus();
 				wrk_nmChk = "success";		
 			} else {
-				scd_nmChk = "fail";
+				wrk_nmChk = "fail";
 				alert('<spring:message code="backup_management.effective_work_nm"/>');
 				document.getElementById("wrk_nm").focus();
 			}
