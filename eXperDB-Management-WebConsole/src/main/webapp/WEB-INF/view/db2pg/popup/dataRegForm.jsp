@@ -30,8 +30,7 @@
 <script type="text/javascript" src="/js/jquery-1.9.1.min.js"></script>
 <script type="text/javascript" src="/js/common.js"></script>
 <script type="text/javascript">
-var wrk_nmChk ="fail";
-
+var db2pg_trsf_wrk_nmChk ="fail";
 $(window.document).ready(function() {
 
 });
@@ -40,24 +39,24 @@ $(window.document).ready(function() {
  * Validation Check
  ******************************************************** */
 function valCheck(){
-	if($("#wrk_nm").val() == ""){
+	if($("#db2pg_trsf_wrk_nm").val() == ""){
 		alert('<spring:message code="message.msg107" />');
-		$("#wrk_nm").focus();
+		$("#db2pg_trsf_wrk_nm").focus();
 		return false;
-	}else if(wrk_nmChk =="fail"){
+	}else if(db2pg_trsf_wrk_nmChk =="fail"){
 		alert('<spring:message code="backup_management.work_overlap_check"/>');
 		return false;
-	}else if($("#wrk_exp").val() == ""){
+	}else if($("#db2pg_trsf_wrk_exp").val() == ""){
 		alert('<spring:message code="message.msg108" />');
-		$("#wrk_exp").focus();
+		$("#db2pg_trsf_wrk_exp").focus();
 		return false;
-	}else if($("#source_info").val() == ""){
+	}else if($("#db2pg_source_system_id").val() == ""){
 		alert("소스 시스템정보를 등록해주세요.");
-		$("#source_info").focus();
+		$("#db2pg_source_system_id").focus();
 		return false;
-	}else if($("#target_info").val() == ""){
+	}else if($("#db2pg_trg_sys_id").val() == ""){
 		alert("타겟 시스템정보를 등록해주세요.");
-		$("#target_info").focus();
+		$("#db2pg_trg_sys_id").focus();
 		return false;
 	}else{
 		return true;
@@ -69,10 +68,10 @@ function valCheck(){
  ******************************************************** */
 function fn_checkBox(result){
 	if(result == 'true'){
-		$("#src_file_query_dir_path").removeAttr("readonly");
+		$("#db2pg_usr_qry_id").removeAttr("readonly");
 	}else{
-		$('#src_file_query_dir_path').val('');
-		$('#src_file_query_dir_path').attr('readonly', true);
+		$('#db2pg_usr_qry_id').val('');
+		$('#db2pg_usr_qry_id').attr('readonly', true);
 	}
 	
 }
@@ -81,26 +80,26 @@ function fn_checkBox(result){
  * WORK NM 중복 체크
  ******************************************************** */
 function fn_check() {
-	var wrk_nm = document.getElementById("wrk_nm");
-	if (wrk_nm.value == "") {
+	var db2pg_trsf_wrk_nm = document.getElementById("db2pg_trsf_wrk_nm");
+	if (db2pg_trsf_wrk_nm.value == "") {
 		alert('<spring:message code="message.msg107" /> ');
-		document.getElementById('wrk_nm').focus();
+		document.getElementById('db2pg_trsf_wrk_nm').focus();
 		return;
 	}
 	$.ajax({
 		url : '/wrk_nmCheck.do',
 		type : 'post',
 		data : {
-			wrk_nm : $("#wrk_nm").val()
+			wrk_nm : $("#db2pg_trsf_wrk_nm").val()
 		},
 		success : function(result) {
 			if (result == "true") {
 				alert('<spring:message code="backup_management.reg_possible_work_nm"/>');
-				document.getElementById("wrk_nm").focus();
-				wrk_nmChk = "success";
+				document.getElementById("db2pg_trsf_wrk_nm").focus();
+				db2pg_trsf_wrk_nmChk = "success";
 			} else {
 				alert('<spring:message code="backup_management.effective_work_nm"/>');
-				document.getElementById("wrk_nm").focus();
+				document.getElementById("db2pg_trsf_wrk_nm").focus();
 			}
 		},
 		beforeSend: function(xhr) {
@@ -128,23 +127,24 @@ function fn_insert_work(){
 		$.ajax({
 			async : false,
 			url : "/db2pg/insertDataWork.do",
-		  	data : {
-		  		wrk_nm : $("#wrk_nm").val().trim(),
-		  		wrk_exp : $("#wrk_exp").val(),
-		  		source_info : $("#source_info").val(),
-		  		target_info : $("#target_info").val(),
-		  		src_rows_export : $("#src_rows_export").val(),
-		  		src_include_tables : $("#src_include_tables").val(),
-		  		src_exclude_tables : $("#src_exclude_tables").val(),
-		  		src_statement_fetch_size : $("#src_statement_fetch_size").val(),
-		  		src_buffer_size : $("#src_buffer_size").val(),
-		  		src_select_on_parallel : $("#src_select_on_parallel").val(),
-		  		src_lob_buffer_size : $("#src_lob_buffer_size").val(),
-		  		tar_constraint_rebuild : $("#tar_constraint_rebuild").val(),
-		  		tar_file_append : $("#tar_file_append").val(),
-		  		tar_constraint_ddl : $("#tar_constraint_ddl").val(),
+		  	data : {  
+		  		db2pg_trsf_wrk_nm : $("#db2pg_trsf_wrk_nm").val().trim(),
+		  		db2pg_trsf_wrk_exp : $("#db2pg_trsf_wrk_exp").val(),
+		  		db2pg_source_system_id : $("#db2pg_source_system_id").val(),
+		  		db2pg_trg_sys_id : $("#db2pg_trg_sys_id").val(),
+		  		exrt_dat_cnt : $("#exrt_dat_cnt").val(),
+		  		db2pg_exrt_trg_tb_wrk_id : $("#db2pg_exrt_trg_tb_wrk_id").val(),
+		  		db2pg_exrt_exct_tb_wrk_id : $("#db2pg_exrt_exct_tb_wrk_id").val(),
+		  		exrt_dat_ftch_sz : $("#exrt_dat_ftch_sz").val(),
+		  		dat_ftch_bff_sz : $("#dat_ftch_bff_sz").val(),
+		  		exrt_prl_prcs_ecnt : $("#exrt_prl_prcs_ecnt").val(),
+		  		lob_dat_bff_sz : $("#lob_dat_bff_sz").val(),
+		  		tb_rbl_tf : $("#tb_rbl_tf").val(),
+		  		ins_opt_cd : $("#ins_opt_cd").val(),
+		  		cnst_cnd_exrt_tf : $("#cnst_cnd_exrt_tf").val(),
 		  		src_where_condition : $("#src_where_condition").val(),
-		  		src_file_query_dir_path : $("#src_file_query_dir_path").val()
+		  		usr_qry_use_tf : $("#usr_qry_use_tf").val(),
+		  		db2pg_usr_qry_id : $("#db2pg_usr_qry_id").val()
 		  	},
 			type : "post",
 			beforeSend: function(xhr) {
@@ -213,7 +213,7 @@ function fn_tableList(){
 				<tbody>
 					<tr>
 						<th scope="row" class="ico_t1"><spring:message code="common.work_name" /></th>
-						<td><input type="text" class="txt" name="wrk_nm" id="wrk_nm" maxlength="20" onkeyup="fn_checkWord(this,20)" placeholder="20<spring:message code='message.msg188'/>" onblur="this.value=this.value.trim()"/>
+						<td><input type="text" class="txt" name="db2pg_trsf_wrk_nm" id="db2pg_trsf_wrk_nm" maxlength="20" onkeyup="fn_checkWord(this,20)" placeholder="20<spring:message code='message.msg188'/>" onblur="this.value=this.value.trim()"/>
 						<span class="btn btnC_01"><button type="button" class= "btn_type_02" onclick="fn_check()" style="width: 60px; margin-right: -60px; margin-top: 0;"><spring:message code="common.overlap_check" /></button></span>
 						</td>
 					</tr>
@@ -221,7 +221,7 @@ function fn_tableList(){
 						<th scope="row" class="ico_t1"><spring:message code="common.work_description" /></th>
 						<td>
 							<div class="textarea_grp">
-								<textarea name="wrk_exp" id="wrk_exp" maxlength="25" onkeyup="fn_checkWord(this,25)" placeholder="25<spring:message code='message.msg188'/>"></textarea>
+								<textarea name="db2pg_trsf_wrk_exp" id="db2pg_trsf_wrk_exp" maxlength="25" onkeyup="fn_checkWord(this,25)" placeholder="25<spring:message code='message.msg188'/>"></textarea>
 							</div>
 						</td>
 					</tr>
@@ -240,13 +240,13 @@ function fn_tableList(){
 				<tbody>
 					<tr>
 						<th scope="row" class="ico_t1">소스시스템</th>
-						<td><input type="text" class="txt" name="source_info" id="source_info"/>
+						<td><input type="text" class="txt" name="db2pg_source_system_id" id="db2pg_source_system_id"/>
 							<span class="btn btnC_01"><button type="button" class= "btn_type_02" onclick="fn_dbmsInfo()" style="width: 60px; margin-right: -60px; margin-top: 0;">등록</button></span>							
 						</td>
 					</tr>
 					<tr>
 					<th scope="row" class="ico_t1">타겟시스템</th>
-						<td><input type="text" class="txt" name="target_info" id="target_info"/>
+						<td><input type="text" class="txt" name="db2pg_trg_sys_id" id="db2pg_trg_sys_id"/>
 							<span class="btn btnC_01"><button type="button" class= "btn_type_02" onclick="fn_dbmsInfo()" style="width: 60px; margin-right: -60px; margin-top: 0;">등록</button></span>							
 						</td>
 					</tr>
@@ -275,31 +275,31 @@ function fn_tableList(){
 							<tbody>
 								<tr>
 									<th scope="row" class="ico_t2">테이블에서 추출할 데이터 건수</th>
-									<td><input type="text" class="txt t4" name="src_rows_export" id="src_rows_export"/></td>
+									<td><input type="text" class="txt t4" name="exrt_dat_cnt" id="exrt_dat_cnt"/></td>
 								</tr>
 								<tr>
 									<th scope="row" class="ico_t2">추출 대상 테이블</th>
-									<td colspan="3"><input type="text" class="txt" name="src_include_tables" id="src_include_tables"/>
+									<td colspan="3"><input type="text" class="txt" name="db2pg_exrt_trg_tb_wrk_id" id="db2pg_exrt_trg_tb_wrk_id"/>
 										<span class="btn btnC_01"><button type="button" class= "btn_type_02" onclick="fn_tableList()" style="width: 60px; margin-right: -60px; margin-top: 0;">등록</button></span>							
 									</td>
 								</tr>
 								<tr>
 									<th scope="row" class="ico_t2">추출 제외 테이블</th>
-									<td colspan="3"><input type="text" class="txt" name="src_exclude_tables" id="src_exclude_tables"/>
+									<td colspan="3"><input type="text" class="txt" name="db2pg_exrt_exct_tb_wrk_id" id="db2pg_exrt_exct_tb_wrk_id"/>
 										<span class="btn btnC_01"><button type="button" class= "btn_type_02" onclick="fn_tableList()" style="width: 60px; margin-right: -60px; margin-top: 0;">등록</button></span>							
 									</td>
 								</tr>
 								<tr>
 									<th scope="row" class="ico_t2">추출 데이터 Fetch 사이즈</th>
-									<td><input type="text" class="txt t5" name="src_statement_fetch_size" id="src_statement_fetch_size"/></td>
+									<td><input type="text" class="txt t5" name="exrt_dat_ftch_sz" id="exrt_dat_ftch_sz"/></td>
 									<th scope="row" class="ico_t2">데이터 Fetch 버퍼 사이즈</th>
-									<td><input type="text" class="txt t5" name="src_buffer_size" id="src_buffer_size"/></td>
+									<td><input type="text" class="txt t5" name="dat_ftch_bff_sz" id="dat_ftch_bff_sz"/></td>
 								</tr>
 								<tr>
 									<th scope="row" class="ico_t2">추출 병렬처리 개수</th>
-									<td><input type="text" class="txt t5" name="src_select_on_parallel" id="src_select_on_parallel"/></td>
+									<td><input type="text" class="txt t5" name="exrt_prl_prcs_ecnt" id="exrt_prl_prcs_ecnt"/></td>
 									<th scope="row" class="ico_t2">LOB 데이터 LOB 버퍼 사이즈</th>
-									<td><input type="text" class="txt t5" name="src_lob_buffer_size" id="src_lob_buffer_size"/></td>
+									<td><input type="text" class="txt t5" name="lob_dat_bff_sz" id="lob_dat_bff_sz"/></td>
 								</tr>
 							</tbody>
 						</table>
@@ -320,7 +320,7 @@ function fn_tableList(){
 						<ul>
 							<li style="border-bottom: none;">
 								<p class="op_tit" style="width: 70px;">사용여부</p>
-								<div class="inp_rdo" id="checkBoxId">
+								<div class="inp_rdo">
 									<input name="rdo_r" id="rdo_r_1" type="radio" value="TC002001" checked="checked" onchange="fn_checkBox('true')">
 										<label for="rdo_r_1">사용</label> 
 									<input name="rdo_r" id="rdo_r_2" type="radio" value="TC002002" onchange="fn_checkBox('false')"> 
@@ -331,7 +331,7 @@ function fn_tableList(){
 								<p class="op_tit">사용자 쿼리</p>
 								<span>
 									<div class="textarea_grp">
-										<textarea name="src_file_query_dir_path" id="src_file_query_dir_path" style="height: 250px; width: 700px;"></textarea>
+										<textarea name="db2pg_usr_qry_id" id="db2pg_usr_qry_id" style="height: 250px; width: 700px;"></textarea>
 									</div>
 								</span>
 							</li>
@@ -358,23 +358,26 @@ function fn_tableList(){
 					<tr>
 						<th scope="row" class="ico_t2">테이블 리빌드 여부</th>
 						<td>
-							<select name="tar_constraint_rebuild" id="tar_constraint_rebuild" class="select t8">
-								<option value="TC002902">FALSE</option>
-								<option value="TC002901">TRUE</option>
+							<select name="tb_rbl_tf" id="tb_rbl_tf" class="select t8">
+								<c:forEach var="codeTF" items="${codeTF}">
+									<option value="${codeTF.sys_cd_nm}" ${false eq codeTF.sys_cd_nm ? "selected='selected'" : ""}>${codeTF.sys_cd_nm}</option>
+								</c:forEach>
 							</select>
 						</td>
 						<th scope="row" class="ico_t2">입력모드</th>
 						<td>
-							<select name="tar_file_append" id="tar_file_append" class="select t5">
-								<option value="TC003001">TRUNCATE</option>
-								<option value="TC003002">APPEND</option>
+							<select name="ins_opt_cd" id="ins_opt_cd" class="select t5">
+								<c:forEach var="codeInputMode" items="${codeInputMode}">
+									<option value="${codeInputMode.sys_cd_nm}">${codeInputMode.sys_cd_nm}</option>
+								</c:forEach>
 							</select>
 						</td>
 						<th scope="row" class="ico_t2">제약조건 추출 여부</th>
 						<td>
-							<select name="tar_constraint_ddl" id="tar_constraint_ddl" class="select t8">
-								<option value="TC002902">FALSE</option>
-								<option value="TC002901">TRUE</option>
+							<select name="cnst_cnd_exrt_tf" id="cnst_cnd_exrt_tf" class="select t8">
+								<c:forEach var="codeTF" items="${codeTF}">
+									<option value="${codeTF.sys_cd_nm}" ${false eq codeTF.sys_cd_nm ? "selected='selected'" : ""}>${codeTF.sys_cd_nm}</option>
+								</c:forEach>
 							</select>
 						</td>
 					</tr>
@@ -390,3 +393,4 @@ function fn_tableList(){
 </div>
 </body>
 </html>
+ 

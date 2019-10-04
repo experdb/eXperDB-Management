@@ -1,66 +1,98 @@
 package com.k4m.dx.tcontrol.db2pg.setting.service;
 
 public class DDLConfigVO {
-	private String wrk_nm;
-	private String wrk_exp;
-	
-	private String source_info;
-	private String src_classify_string;
-	private String src_table_ddl;
-	private String src_include_tables;
-	private String src_exclude_tables;
-	private String src_file_output_path;
-	
-	public String getWrk_nm() {
-		return wrk_nm;
-	}
-	public void setWrk_nm(String wrk_nm) {
-		this.wrk_nm = wrk_nm;
-	}
-	public String getWrk_exp() {
-		return wrk_exp;
-	}
-	public void setWrk_exp(String wrk_exp) {
-		this.wrk_exp = wrk_exp;
-	}
-	public String getSource_info() {
-		return source_info;
-	}
-	public void setSource_info(String source_info) {
-		this.source_info = source_info;
-	}
-	public String getSrc_classify_string() {
-		return src_classify_string;
-	}
-	public void setSrc_classify_string(String src_classify_string) {
-		this.src_classify_string = src_classify_string;
-	}
-	public String getSrc_table_ddl() {
-		return src_table_ddl;
-	}
-	public void setSrc_table_ddl(String src_table_ddl) {
-		this.src_table_ddl = src_table_ddl;
-	}
-	public String getSrc_include_tables() {
-		return src_include_tables;
-	}
-	public void setSrc_include_tables(String src_include_tables) {
-		this.src_include_tables = src_include_tables;
-	}
-	public String getSrc_exclude_tables() {
-		return src_exclude_tables;
-	}
-	public void setSrc_exclude_tables(String src_exclude_tables) {
-		this.src_exclude_tables = src_exclude_tables;
-	}
-	public String getSrc_file_output_path() {
-		return src_file_output_path;
-	}
-	public void setSrc_file_output_path(String src_file_output_path) {
-		this.src_file_output_path = src_file_output_path;
-	}
+	private int db2pg_ddl_wrk_id;
+	private String db2pg_ddl_wrk_nm;
+	private String db2pg_ddl_wrk_exp;
+	private int db2pg_sys_id;
+	private String db2pg_uchr_lchr_val;
+	private String src_tb_ddl_exrt_tf;
+	private String ddl_save_pth;
+	private int db2pg_exrt_trg_tb_wrk_id;
+	private int db2pg_exrt_exct_tb_wrk_id;
+	private String frst_regr_id;
+	private String frst_reg_dtm;
+	private String lst_mdfr_id;
+	private String lst_mdf_dtm;
 
-	
+	public int getDb2pg_ddl_wrk_id() {
+		return db2pg_ddl_wrk_id;
+	}
+	public void setDb2pg_ddl_wrk_id(int db2pg_ddl_wrk_id) {
+		this.db2pg_ddl_wrk_id = db2pg_ddl_wrk_id;
+	}
+	public String getDb2pg_ddl_wrk_nm() {
+		return db2pg_ddl_wrk_nm;
+	}
+	public void setDb2pg_ddl_wrk_nm(String db2pg_ddl_wrk_nm) {
+		this.db2pg_ddl_wrk_nm = db2pg_ddl_wrk_nm;
+	}
+	public String getDb2pg_ddl_wrk_exp() {
+		return db2pg_ddl_wrk_exp;
+	}
+	public void setDb2pg_ddl_wrk_exp(String db2pg_ddl_wrk_exp) {
+		this.db2pg_ddl_wrk_exp = db2pg_ddl_wrk_exp;
+	}
+	public int getDb2pg_sys_id() {
+		return db2pg_sys_id;
+	}
+	public void setDb2pg_sys_id(int db2pg_sys_id) {
+		this.db2pg_sys_id = db2pg_sys_id;
+	}
+	public String getDb2pg_uchr_lchr_val() {
+		return db2pg_uchr_lchr_val;
+	}
+	public void setDb2pg_uchr_lchr_val(String db2pg_uchr_lchr_val) {
+		this.db2pg_uchr_lchr_val = db2pg_uchr_lchr_val;
+	}
+	public String getSrc_tb_ddl_exrt_tf() {
+		return src_tb_ddl_exrt_tf;
+	}
+	public void setSrc_tb_ddl_exrt_tf(String src_tb_ddl_exrt_tf) {
+		this.src_tb_ddl_exrt_tf = src_tb_ddl_exrt_tf;
+	}
+	public String getDdl_save_pth() {
+		return ddl_save_pth;
+	}
+	public void setDdl_save_pth(String ddl_save_pth) {
+		this.ddl_save_pth = ddl_save_pth;
+	}
+	public int getDb2pg_exrt_trg_tb_wrk_id() {
+		return db2pg_exrt_trg_tb_wrk_id;
+	}
+	public void setDb2pg_exrt_trg_tb_wrk_id(int db2pg_exrt_trg_tb_wrk_id) {
+		this.db2pg_exrt_trg_tb_wrk_id = db2pg_exrt_trg_tb_wrk_id;
+	}
+	public int getDb2pg_exrt_exct_tb_wrk_id() {
+		return db2pg_exrt_exct_tb_wrk_id;
+	}
+	public void setDb2pg_exrt_exct_tb_wrk_id(int db2pg_exrt_exct_tb_wrk_id) {
+		this.db2pg_exrt_exct_tb_wrk_id = db2pg_exrt_exct_tb_wrk_id;
+	}
+	public String getFrst_regr_id() {
+		return frst_regr_id;
+	}
+	public void setFrst_regr_id(String frst_regr_id) {
+		this.frst_regr_id = frst_regr_id;
+	}
+	public String getFrst_reg_dtm() {
+		return frst_reg_dtm;
+	}
+	public void setFrst_reg_dtm(String frst_reg_dtm) {
+		this.frst_reg_dtm = frst_reg_dtm;
+	}
+	public String getLst_mdfr_id() {
+		return lst_mdfr_id;
+	}
+	public void setLst_mdfr_id(String lst_mdfr_id) {
+		this.lst_mdfr_id = lst_mdfr_id;
+	}
+	public String getLst_mdf_dtm() {
+		return lst_mdf_dtm;
+	}
+	public void setLst_mdf_dtm(String lst_mdf_dtm) {
+		this.lst_mdf_dtm = lst_mdf_dtm;
+	}
 
 	
 

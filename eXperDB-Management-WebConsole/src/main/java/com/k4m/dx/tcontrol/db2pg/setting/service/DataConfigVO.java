@@ -1,120 +1,154 @@
 package com.k4m.dx.tcontrol.db2pg.setting.service;
 
 public class DataConfigVO {
-	private String wrk_nm;
-	private String wrk_exp;
+	private int db2pg_trsf_wrk_id; 
+	private String db2pg_trsf_wrk_nm;
+	private String db2pg_trsf_wrk_exp;
+	private int db2pg_source_system_id;
+	private int db2pg_trg_sys_id;
+	private int exrt_dat_cnt;
+	private String db2pg_exrt_trg_tb_wrk_id;
+	private String db2pg_exrt_exct_tb_wrk_id;
+	private int exrt_dat_ftch_sz;
+	private int dat_ftch_bff_sz;
+	private int exrt_prl_prcs_ecnt;
+	private int lob_dat_bff_sz;
+	private String usr_qry_use_tf;
+	private int db2pg_usr_qry_id;
+	private String ins_opt_cd;
+	private String tb_rbl_tf;
+	private String cnst_cnd_exrt_tf;
+	private String frst_regr_id;
+	private String frst_reg_dtm;
+	private String lst_mdfr_id;
+	private String lst_mdf_dtm;
 	
-	private String source_info;
-	private String target_info;
-	private String src_rows_export;
-	private String src_include_tables;
-	private String src_exclude_tables;
-	private String src_statement_fetch_size;
-	private String src_buffer_size;
-	private String src_select_on_parallel;
-	private String src_lob_buffer_size;
-	private String tar_constraint_rebuild;
-	private String tar_file_append;
-	private String tar_constraint_ddl;
-	private String src_where_condition;
-	private String src_file_query_dir_path;
 	
-	public String getWrk_nm() {
-		return wrk_nm;
+	public int getDb2pg_trsf_wrk_id() {
+		return db2pg_trsf_wrk_id;
 	}
-	public void setWrk_nm(String wrk_nm) {
-		this.wrk_nm = wrk_nm;
+	public void setDb2pg_trsf_wrk_id(int db2pg_trsf_wrk_id) {
+		this.db2pg_trsf_wrk_id = db2pg_trsf_wrk_id;
 	}
-	public String getWrk_exp() {
-		return wrk_exp;
+	public String getDb2pg_trsf_wrk_nm() {
+		return db2pg_trsf_wrk_nm;
 	}
-	public void setWrk_exp(String wrk_exp) {
-		this.wrk_exp = wrk_exp;
+	public void setDb2pg_trsf_wrk_nm(String db2pg_trsf_wrk_nm) {
+		this.db2pg_trsf_wrk_nm = db2pg_trsf_wrk_nm;
 	}
-	public String getSource_info() {
-		return source_info;
+	public String getDb2pg_trsf_wrk_exp() {
+		return db2pg_trsf_wrk_exp;
 	}
-	public void setSource_info(String source_info) {
-		this.source_info = source_info;
+	public void setDb2pg_trsf_wrk_exp(String db2pg_trsf_wrk_exp) {
+		this.db2pg_trsf_wrk_exp = db2pg_trsf_wrk_exp;
 	}
-	public String getTarget_info() {
-		return target_info;
+	public int getDb2pg_source_system_id() {
+		return db2pg_source_system_id;
 	}
-	public void setTarget_info(String target_info) {
-		this.target_info = target_info;
+	public void setDb2pg_source_system_id(int db2pg_source_system_id) {
+		this.db2pg_source_system_id = db2pg_source_system_id;
 	}
-	public String getSrc_rows_export() {
-		return src_rows_export;
+	public int getDb2pg_trg_sys_id() {
+		return db2pg_trg_sys_id;
 	}
-	public void setSrc_rows_export(String src_rows_export) {
-		this.src_rows_export = src_rows_export;
+	public void setDb2pg_trg_sys_id(int db2pg_trg_sys_id) {
+		this.db2pg_trg_sys_id = db2pg_trg_sys_id;
 	}
-	public String getSrc_include_tables() {
-		return src_include_tables;
+	public int getExrt_dat_cnt() {
+		return exrt_dat_cnt;
 	}
-	public void setSrc_include_tables(String src_include_tables) {
-		this.src_include_tables = src_include_tables;
+	public void setExrt_dat_cnt(int exrt_dat_cnt) {
+		this.exrt_dat_cnt = exrt_dat_cnt;
 	}
-	public String getSrc_exclude_tables() {
-		return src_exclude_tables;
+	public String getDb2pg_exrt_trg_tb_wrk_id() {
+		return db2pg_exrt_trg_tb_wrk_id;
 	}
-	public void setSrc_exclude_tables(String src_exclude_tables) {
-		this.src_exclude_tables = src_exclude_tables;
+	public void setDb2pg_exrt_trg_tb_wrk_id(String db2pg_exrt_trg_tb_wrk_id) {
+		this.db2pg_exrt_trg_tb_wrk_id = db2pg_exrt_trg_tb_wrk_id;
 	}
-	public String getSrc_statement_fetch_size() {
-		return src_statement_fetch_size;
+	public String getDb2pg_exrt_exct_tb_wrk_id() {
+		return db2pg_exrt_exct_tb_wrk_id;
 	}
-	public void setSrc_statement_fetch_size(String src_statement_fetch_size) {
-		this.src_statement_fetch_size = src_statement_fetch_size;
+	public void setDb2pg_exrt_exct_tb_wrk_id(String db2pg_exrt_exct_tb_wrk_id) {
+		this.db2pg_exrt_exct_tb_wrk_id = db2pg_exrt_exct_tb_wrk_id;
 	}
-	public String getSrc_buffer_size() {
-		return src_buffer_size;
+	public int getExrt_dat_ftch_sz() {
+		return exrt_dat_ftch_sz;
 	}
-	public void setSrc_buffer_size(String src_buffer_size) {
-		this.src_buffer_size = src_buffer_size;
+	public void setExrt_dat_ftch_sz(int exrt_dat_ftch_sz) {
+		this.exrt_dat_ftch_sz = exrt_dat_ftch_sz;
 	}
-	public String getSrc_select_on_parallel() {
-		return src_select_on_parallel;
+	public int getDat_ftch_bff_sz() {
+		return dat_ftch_bff_sz;
 	}
-	public void setSrc_select_on_parallel(String src_select_on_parallel) {
-		this.src_select_on_parallel = src_select_on_parallel;
+	public void setDat_ftch_bff_sz(int dat_ftch_bff_sz) {
+		this.dat_ftch_bff_sz = dat_ftch_bff_sz;
 	}
-	public String getSrc_lob_buffer_size() {
-		return src_lob_buffer_size;
+	public int getExrt_prl_prcs_ecnt() {
+		return exrt_prl_prcs_ecnt;
 	}
-	public void setSrc_lob_buffer_size(String src_lob_buffer_size) {
-		this.src_lob_buffer_size = src_lob_buffer_size;
+	public void setExrt_prl_prcs_ecnt(int exrt_prl_prcs_ecnt) {
+		this.exrt_prl_prcs_ecnt = exrt_prl_prcs_ecnt;
 	}
-	public String getTar_constraint_rebuild() {
-		return tar_constraint_rebuild;
+	public int getLob_dat_bff_sz() {
+		return lob_dat_bff_sz;
 	}
-	public void setTar_constraint_rebuild(String tar_constraint_rebuild) {
-		this.tar_constraint_rebuild = tar_constraint_rebuild;
+	public void setLob_dat_bff_sz(int lob_dat_bff_sz) {
+		this.lob_dat_bff_sz = lob_dat_bff_sz;
 	}
-	public String getTar_file_append() {
-		return tar_file_append;
+	public String getUsr_qry_use_tf() {
+		return usr_qry_use_tf;
 	}
-	public void setTar_file_append(String tar_file_append) {
-		this.tar_file_append = tar_file_append;
+	public void setUsr_qry_use_tf(String usr_qry_use_tf) {
+		this.usr_qry_use_tf = usr_qry_use_tf;
 	}
-	public String getTar_constraint_ddl() {
-		return tar_constraint_ddl;
+	public int getDb2pg_usr_qry_id() {
+		return db2pg_usr_qry_id;
 	}
-	public void setTar_constraint_ddl(String tar_constraint_ddl) {
-		this.tar_constraint_ddl = tar_constraint_ddl;
+	public void setDb2pg_usr_qry_id(int db2pg_usr_qry_id) {
+		this.db2pg_usr_qry_id = db2pg_usr_qry_id;
 	}
-	public String getSrc_where_condition() {
-		return src_where_condition;
+	public String getIns_opt_cd() {
+		return ins_opt_cd;
 	}
-	public void setSrc_where_condition(String src_where_condition) {
-		this.src_where_condition = src_where_condition;
+	public void setIns_opt_cd(String ins_opt_cd) {
+		this.ins_opt_cd = ins_opt_cd;
 	}
-	public String getSrc_file_query_dir_path() {
-		return src_file_query_dir_path;
+	public String getTb_rbl_tf() {
+		return tb_rbl_tf;
 	}
-	public void setSrc_file_query_dir_path(String src_file_query_dir_path) {
-		this.src_file_query_dir_path = src_file_query_dir_path;
+	public void setTb_rbl_tf(String tb_rbl_tf) {
+		this.tb_rbl_tf = tb_rbl_tf;
 	}
-	
+	public String getCnst_cnd_exrt_tf() {
+		return cnst_cnd_exrt_tf;
+	}
+	public void setCnst_cnd_exrt_tf(String cnst_cnd_exrt_tf) {
+		this.cnst_cnd_exrt_tf = cnst_cnd_exrt_tf;
+	}
+	public String getFrst_regr_id() {
+		return frst_regr_id;
+	}
+	public void setFrst_regr_id(String frst_regr_id) {
+		this.frst_regr_id = frst_regr_id;
+	}
+	public String getFrst_reg_dtm() {
+		return frst_reg_dtm;
+	}
+	public void setFrst_reg_dtm(String frst_reg_dtm) {
+		this.frst_reg_dtm = frst_reg_dtm;
+	}
+	public String getLst_mdfr_id() {
+		return lst_mdfr_id;
+	}
+	public void setLst_mdfr_id(String lst_mdfr_id) {
+		this.lst_mdfr_id = lst_mdfr_id;
+	}
+	public String getLst_mdf_dtm() {
+		return lst_mdf_dtm;
+	}
+	public void setLst_mdf_dtm(String lst_mdf_dtm) {
+		this.lst_mdf_dtm = lst_mdf_dtm;
+	}
 
 }
