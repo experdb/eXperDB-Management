@@ -1640,4 +1640,46 @@ public List<HashMap<String, String>> dumpShow(String IP, int PORT,String cmd) {
 		return result;		
 	}
 		
+	
+	//33. 스키마 리스트
+	@SuppressWarnings({ "unchecked", "rawtypes" })
+	public JSONObject schemaList(JSONObject serverObj,String IP, int PORT) {
+
+		JSONArray jsonArray = new JSONArray(); // 객체를 담기위해 JSONArray 선언.
+		JSONObject result = new JSONObject();
+
+		try {
+			JSONObject objList;
+
+			ClientAdapter CA = new ClientAdapter(IP, PORT);
+			CA.open();
+
+			objList = CA.dxT033(ClientTranCodeType.DxT033, serverObj);
+
+			String strErrMsg = (String) objList.get(ClientProtocolID.ERR_MSG);
+			String strDxExCode = (String) objList.get(ClientProtocolID.DX_EX_CODE);
+
+			List<Object> selectSchemaList = (ArrayList<Object>) objList.get(ClientProtocolID.RESULT_DATA);
+
+			if(selectSchemaList.size() > 0) {
+				for(int i=0; i<selectSchemaList.size(); i++) {
+					JSONObject jsonObj = new JSONObject();
+					Object obj = selectSchemaList.get(i);
+					
+					HashMap hp = (HashMap) obj;
+					String schema = (String) hp.get("name");
+
+					jsonObj.put("schema", (String) hp.get("name"));
+					jsonArray.add(jsonObj);
+	
+				}
+			}
+			CA.close();
+			result.put("data", jsonArray);
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return result;
+	}
 }

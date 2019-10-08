@@ -6,21 +6,33 @@ import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
+import org.json.simple.JSONObject;
+import org.json.simple.parser.ParseException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
+import com.k4m.dx.tcontrol.accesscontrol.service.AccessControlHistoryVO;
+import com.k4m.dx.tcontrol.accesscontrol.service.AccessControlVO;
 import com.k4m.dx.tcontrol.admin.dbserverManager.service.DbServerManagerService;
 import com.k4m.dx.tcontrol.admin.dbserverManager.service.DbServerVO;
 import com.k4m.dx.tcontrol.cmmn.AES256;
 import com.k4m.dx.tcontrol.cmmn.AES256_KEY;
-import com.k4m.dx.tcontrol.cmmn.CmmnUtils;
+import com.k4m.dx.tcontrol.cmmn.client.ClientInfoCmmn;
+import com.k4m.dx.tcontrol.cmmn.client.ClientProtocolID;
+import com.k4m.dx.tcontrol.common.service.AgentInfoVO;
+import com.k4m.dx.tcontrol.common.service.CmmnServerInfoService;
 import com.k4m.dx.tcontrol.common.service.HistoryVO;
+import com.k4m.dx.tcontrol.db2pg.cmmn.DBCPPoolManager;
+import com.k4m.dx.tcontrol.db2pg.dbms.service.Db2pgSysInfVO;
 import com.k4m.dx.tcontrol.db2pg.dbms.service.DbmsService;
+import com.k4m.dx.tcontrol.login.service.LoginVO;
 
 @Controller
 public class Db2pgDbmsSystemController {
@@ -30,6 +42,9 @@ public class Db2pgDbmsSystemController {
 	
 	@Autowired
 	private DbServerManagerService dbServerManagerService;
+	
+	@Autowired
+	private CmmnServerInfoService cmmnServerInfoService;
 	
 	private List<Map<String, Object>> dbmsGrb;
 	
@@ -46,7 +61,13 @@ public class Db2pgDbmsSystemController {
 		
 		ModelAndView mv = new ModelAndView();
 
-		try {				
+		try {			
+			
+			dbmsGrb = dbmsService.dbmsListDbmsGrb();		
+			mv.addObject("result", dbmsGrb);
+			
+			System.out.println(dbmsGrb.get(0));
+			
 			mv.setViewName("db2pg/dbms/dbmsList");
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -66,12 +87,43 @@ public class Db2pgDbmsSystemController {
 	public ModelAndView dbmsRegForm(@ModelAttribute("historyVO") HistoryVO historyVO, HttpServletRequest request) {
 		ModelAndView mv = new ModelAndView();
 		try {				
+			
+			dbmsGrb = dbmsService.dbmsGrb();
+		
+			mv.addObject("result", dbmsGrb);
 			mv.setViewName("db2pg/popup/dbmsRegForm");
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 		return mv;
 	}
+	
+	
+	/**
+	 * DB2PG DBMS 시스템을 조회한다.
+	 * 
+	 * @param db2pgSysInfVO
+	 * @param request
+	 * @return resultSet
+	 * @throws Exception
+	 */
+	@RequestMapping(value = "/selectDb2pgDBMS.do")
+	@ResponseBody
+	public List<Db2pgSysInfVO> selectDb2pgDBMS(@ModelAttribute("historyVO") HistoryVO historyVO, @ModelAttribute("db2pgSysInfVO") Db2pgSysInfVO db2pgSysInfVO, HttpServletResponse response, HttpServletRequest request) {
+		
+		List<Db2pgSysInfVO> resultSet = null;
+		
+		try {
+			resultSet = dbmsService.selectDb2pgDBMS(db2pgSysInfVO);
+		}catch(Exception e){
+			e.printStackTrace();
+		}
+		return resultSet;
+		
+	}
+		
+	
+	
 	
 	
 	/**
@@ -123,4 +175,184 @@ public class Db2pgDbmsSystemController {
 		return resultSet;
 	}
 	
+	
+	/**
+	 * PostgreSQL 스키마 리스트조회
+	 * 
+	 * @return resultSet
+	 * @throws Exception
+	 */
+	@SuppressWarnings("unused") 
+	@RequestMapping(value = "/selectPgSchemaList.do")
+	@ResponseBody
+	public Map<String, Object> selectPgSchemaList(HttpServletRequest request, HttpServletResponse response) {
+		Map<String, Object> result =new HashMap<String, Object>();
+		JSONObject serverObj = new JSONObject();
+		AgentInfoVO vo = new AgentInfoVO();
+
+		
+		try {
+			String ip = request.getParameter("ipadr");
+			String port = request.getParameter("portno");
+			String db_nm = request.getParameter("dtb_nm");
+			String user = request.getParameter("spr_usr_id");
+			String  pw = request.getParameter("pwd");
+
+			vo.setIPADR(ip);
+			
+			AgentInfoVO agentInfo =  (AgentInfoVO) cmmnServerInfoService.selectAgentInfo(vo);
+			String IP = ip;
+			int PORT = agentInfo.getSOCKET_PORT();
+
+			serverObj.put(ClientProtocolID.SERVER_NAME, ip);
+			serverObj.put(ClientProtocolID.SERVER_IP, ip);
+			serverObj.put(ClientProtocolID.SERVER_PORT,port);
+			serverObj.put(ClientProtocolID.DATABASE_NAME, db_nm);
+			serverObj.put(ClientProtocolID.USER_ID, user);
+			serverObj.put(ClientProtocolID.USER_PWD, pw);
+			
+			ClientInfoCmmn conn  = new ClientInfoCmmn();
+			result = conn.schemaList(serverObj, IP, PORT);
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return result;
+	}
+	
+	
+	/**
+	 * 선택한 DBMS에 따른 케릭터셋 호출
+	 * 
+	 * @return resultSet
+	 * @throws Exception
+	 */
+	@SuppressWarnings("unused")
+	@RequestMapping(value = "/selectCharSetList.do")
+	@ResponseBody
+	public List<Map<String, Object>> selectCharSetList(@ModelAttribute("historyVO") HistoryVO historyVO, @ModelAttribute("dbServerVO") DbServerVO dbServerVO, HttpServletResponse response, HttpServletRequest request) {
+	
+		List<Map<String, Object>> result = null;
+		HashMap<String , Object> paramvalue = new HashMap<String, Object>();
+		try {		
+
+			String dbms_dscd = request.getParameter("dbms_dscd");
+			
+			if(dbms_dscd.equals("TC002201")){
+				paramvalue.put("dbms_dscd", "TC0023");
+			}else if(dbms_dscd.equals("TC002208")){
+				paramvalue.put("dbms_dscd", "TC0024");
+			}else if(dbms_dscd.equals("TC002205")){
+				paramvalue.put("dbms_dscd", "TC0025");
+			}else if(dbms_dscd.equals("TC002203")){
+				paramvalue.put("dbms_dscd", "TC0027");
+			}else if(dbms_dscd.equals("TC002206")){
+				paramvalue.put("dbms_dscd", "TC0026");
+			}else if(dbms_dscd.equals("TC002204")){
+				paramvalue.put("dbms_dscd", "TC0005");
+			}
+				
+			 result = dbmsService.selectCharSetList(paramvalue);
+
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return result;
+	}
+	
+	
+	/**
+	 * DBMS서버 연결 테스트를 한다.
+	 * 
+	 * @return resultSet
+	 * @throws Exception
+	 */
+	@RequestMapping(value="/dbmsConnTest.do")
+	public @ResponseBody Map<String, Object> dbmsConnTest(@ModelAttribute("historyVO") HistoryVO historyVO, HttpServletRequest request) {
+		
+		Map<String, Object> result = null;
+		
+		try {
+			
+		JSONObject serverObj = new JSONObject();
+
+		String ipadr = request.getParameter("ipadr");
+		String portno = request.getParameter("portno");
+		String db_nm = request.getParameter("dtb_nm");
+		String svr_spr_usr_id = request.getParameter("spr_usr_id");
+		String svr_spr_scm_pwd = request.getParameter("pwd");
+		String dbms_cd = request.getParameter("dbms_dscd");
+		
+		serverObj.put(ClientProtocolID.SERVER_NAME, ipadr);
+		serverObj.put(ClientProtocolID.SERVER_IP, ipadr);
+		serverObj.put(ClientProtocolID.SERVER_PORT, portno);
+		serverObj.put(ClientProtocolID.DATABASE_NAME, db_nm);
+		serverObj.put(ClientProtocolID.USER_ID, svr_spr_usr_id);
+		serverObj.put(ClientProtocolID.USER_PWD, svr_spr_scm_pwd);
+		serverObj.put(ClientProtocolID.DB_TYPE, dbms_cd);
+		
+		result =  DBCPPoolManager.setupDriver(serverObj, "db2pg", 30);
+
+	}catch (Exception e) {
+		e.printStackTrace();
+	}
+		return result;
+	}
+	
+
+	/**
+	 * 시스템명을 중복 체크한다.
+	 * 
+	 * @param scd_nm
+	 * @return
+	 * @throws Exception
+	 */
+	@RequestMapping(value = "/db2pg_sys_nmCheck.do")
+	public @ResponseBody String db2pg_sys_nmCheck(@RequestParam("db2pg_sys_nm") String db2pg_sys_nm) {
+		try {	
+			int resultSet = dbmsService.db2pg_sys_nmCheck(db2pg_sys_nm);		
+			if (resultSet > 0) {
+				// 중복값이 존재함.
+				return "false";
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return "true";
+	}
+	
+	
+	/**
+	 * DB2PG DBMS 시스템을 등록한다.
+	 * 
+	 * @param db2pgSysInfVO
+	 * @param request
+	 * @return ModelAndView mv
+	 * @throws Exception
+	 */
+	@RequestMapping(value = "/insertDb2pgDBMS.do")
+	public @ResponseBody boolean insertDb2pgDBMS(
+			@ModelAttribute("accessControlHistoryVO") AccessControlHistoryVO accessControlHistoryVO,
+			@ModelAttribute("accessControlVO") AccessControlVO accessControlVO,
+			@ModelAttribute("db2pgSysInfVO") Db2pgSysInfVO db2pgSysInfVO, @ModelAttribute("historyVO") HistoryVO historyVO,
+			HttpServletRequest request, HttpServletResponse response) throws ParseException {
+
+		// 해당메뉴 권한 조회 (공통메소드호출)
+		
+		try {
+			HttpSession session = request.getSession();
+			LoginVO loginVo = (LoginVO) session.getAttribute("session");
+			String id = loginVo.getUsr_id();
+
+			db2pgSysInfVO.setFrst_regr_id(id);
+			db2pgSysInfVO.setLst_mdfr_id(id);
+		
+			dbmsService.insertDb2pgDBMS(db2pgSysInfVO);	
+	
+		} catch (Exception e) {
+			e.printStackTrace();
+			return false;
+		}
+		return true;
+	}
 }

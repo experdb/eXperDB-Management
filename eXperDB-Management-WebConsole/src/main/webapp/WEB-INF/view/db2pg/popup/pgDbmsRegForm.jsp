@@ -110,6 +110,7 @@ function fn_Add(){
 		return false;
 	} 
 	opener.fn_pgDbmsAddCallback(datas);
+	//opener.fn_pgSchemaList(datas);
 	self.close();
 }
 
@@ -121,7 +122,19 @@ function fn_Add(){
   	     	table.$('tr.selected').removeClass('selected');
   	         $(this).addClass('selected');	            
   	     } 
-  		})     
+  		});   
+  		
+  		$('#pgDbmsList tbody').on('dblclick', 'tr', function () {
+  			var datas = table.rows('.selected').data();
+  			if (datas.length <= 0) {
+  				alert('<spring:message code="message.msg35" />');
+  				return false;
+  			} 
+  			opener.fn_pgDbmsAddCallback(datas);
+  			//opener.fn_pgSchemaList(datas);
+  			self.close();
+		});
+
   	});
 	
 </script>

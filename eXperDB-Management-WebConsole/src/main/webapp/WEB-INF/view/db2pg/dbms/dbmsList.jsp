@@ -1,6 +1,9 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
+<%@ taglib prefix="form" uri="http://www.springframework.org/tags/form"%>
+<%@ taglib prefix="ui" uri="http://egovframework.gov/ctl/ui"%>
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 
 <%@include file="../../cmmn/cs.jsp"%>
 <%
@@ -26,30 +29,29 @@ function fn_init() {
 		/* ********************************************************
 		 * 서버리스트 (데이터테이블)
 		 ******************************************************** */
-		table = $('#sourceDBMS').DataTable({	
+		table = $('#dbms').DataTable({	
 		scrollY : "245px",
 		searching : false,
 		deferRender : true,
 		scrollX: true,
 		bSort: false,
 		columns : [
-		{data : "", defaultContent : ""},
-		{data : "", defaultContent : ""},
-		{data : "", defaultContent : ""},
-		{data : "", defaultContent : ""},
-		{data : "", defaultContent : ""},
-		{data : "", defaultContent : ""},
-		{data : "", defaultContent : ""},
-	    {data : "", defaultContent : ""},
-		{data : "", defaultContent : ""},
+		{data : "no", defaultContent : ""},
+		{data : "db2pg_sys_nm", defaultContent : ""},
+		{data : "dbms_dscd", defaultContent : ""},
+		{data : "ipadr", defaultContent : ""},
+		{data : "dtb_nm", defaultContent : ""},
+		{data : "scm_nm", defaultContent : ""},
+		{data : "portno", defaultContent : ""},
+	    {data : "spr_usr_id", defaultContent : ""},
+		{data : "crts_nm", defaultContent : ""},
 		{data : "frst_regr_id", defaultContent : ""},
 		{data : "frst_reg_dtm", defaultContent : ""},
 		{data : "lst_mdfr_id", defaultContent : ""},
 		{data : "lst_mdf_dtm", defaultContent : ""}
 		]
 	});
-		
-
+	
 		table.tables().header().to$().find('th:eq(0)').css('min-width', '30px');
 		table.tables().header().to$().find('th:eq(1)').css('min-width', '130px');
 		table.tables().header().to$().find('th:eq(2)').css('min-width', '100px');
@@ -76,6 +78,7 @@ function fn_init() {
 $(window.document).ready(function() {
 	
 	fn_init();
+	fn_search();
 	
   	$(function() {	
   		$('#serverList tbody').on( 'click', 'tr', function () {
@@ -89,9 +92,46 @@ $(window.document).ready(function() {
  
 });
 
+/* ********************************************************
+ * DBMS 조회
+ ******************************************************** */
+ function fn_search(){
+	
+	 	$.ajax({
+	  		url : "/selectDb2pgDBMS.do",
+	  		data : {
+	  		 	db2pg_sys_nm : $("#db2pg_sys_nm").val(),
+	  			ipadr : $("#ipadr").val(),
+	  		 	portno : $("#portno").val(),
+	  		  	dtb_nm : $("#dtb_nm").val(),
+	  		  	scm_nm : $("#scm_nm").val(),
+	  		   	spr_usr_id : $("#spr_usr_id").val(),
+	  		  	dbms_dscd : $("#dbms_dscd").val(),
+	  		},
+	  		type : "post",
+	  		beforeSend: function(xhr) {
+	  	        xhr.setRequestHeader("AJAX", true);
+	  	     },
+	  		error : function(xhr, status, error) {
+	  			if(xhr.status == 401) {
+	  				alert('<spring:message code="message.msg02" />');
+	  				top.location.href = "/";
+	  			} else if(xhr.status == 403) {
+	  				alert('<spring:message code="message.msg03" />');
+	  				top.location.href = "/";
+	  			} else {
+	  				alert("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""));
+	  			}
+	  		},
+	  		success : function(result) {
+				table.clear().draw();
+				table.rows.add(result).draw();
+	  		}
+	  	});  
+}
 
 /* ********************************************************
- * Source DBMS 등록 팝업페이지 호출
+ * DBMS 등록 팝업페이지 호출
  ******************************************************** */
 function fn_reg_popup(){
 	var popUrl = "/db2pg/popup/dbmsRegForm.do"; // 서버 url 팝업경로
@@ -102,8 +142,6 @@ function fn_reg_popup(){
 	var popOption = "width="+width+", height="+height+", top="+top+", left="+left+", resizable=no, scrollbars=yes, status=no, toolbar=no, titlebar=yes, location=no,";
 		
 	window.open(popUrl,"",popOption);	
-	
-// 	window.open("/popup/dbServerRegForm.do?flag=tree","dbServerRegPop","location=no,menubar=no,scrollbars=yes,status=no,width=1050,height=638");
 }
 
 
@@ -154,25 +192,41 @@ function fn_reg_popup(){
 						<tbody>
 							<tr>
 								<th scope="row" class="t9">시스템명</th>
-								<td><input type="text" class="txt" name="db_svr_nm" id="db_svr_nm" /></td>
+								<td><input type="text" class="txt" name="db2pg_sys_nm" id="db2pg_sys_nm" /></td>
 								<th scope="row" class="t9">아이피</th>
 								<td><input type="text" class="txt" name="ipadr" id="ipadr" /></td>
 								<th scope="row" class="t9"><spring:message code="common.database" /></th>
-								<td><input type="text" class="txt" name="dft_db_nm" id="dft_db_nm" /></td>
+								<td><input type="text" class="txt" name="dtb_nm" id="dtb_nm" /></td>
 							</tr>
 							<tr>
 								<th scope="row" class="t9">DBMS구분</th>
-								<td><input type="text" class="txt" name="dft_db_nm" id="dft_db_nm" /></td>
+								<td>
+									<select name="dbms_dscd" id="dbms_dscd" class="select" >
+										<option value=""><spring:message code="common.total" /></option>				
+											<c:forEach var="result" items="${result}" varStatus="status">												 
+ 												<option value="<c:out value="${result.dbms_dscd}"/>" >
+	 												<c:if test="${result.dbms_dscd == 'TC002201'}"> 	<c:out value="Oracle"/> </c:if>
+	 												<c:if test="${result.dbms_dscd == 'TC002202'}"> 	<c:out value="MS-SQL"/> </c:if>
+	 												<c:if test="${result.dbms_dscd == 'TC002203'}"> 	<c:out value="MySQL"/> </c:if>
+	 												<c:if test="${result.dbms_dscd == 'TC002204'}"> 	<c:out value="PostgreSQL"/> </c:if>
+ 													<c:if test="${result.dbms_dscd == 'TC002205'}"> 	<c:out value="DB2"/> </c:if>
+													<c:if test="${result.dbms_dscd == 'TC002206'}"> 	<c:out value="SyBaseASE"/> </c:if>
+													<c:if test="${result.dbms_dscd == 'TC002207'}"> 	<c:out value="CUBRID"/> </c:if>
+													<c:if test="${result.dbms_dscd == 'TC002208'}"> 	<c:out value="Tibero"/> </c:if>
+ 												</option>
+ 											</c:forEach>
+									</select>								
+								</td>
 								<th scope="row" class="t9">계정</th>
-								<td><input type="text" class="txt" name="dft_db_nm" id="dft_db_nm" /></td>
+								<td><input type="text" class="txt" name="spr_usr_id" id="spr_usr_id" /></td>
 								<th scope="row" class="t9">스키마</th>
-								<td><input type="text" class="txt" name="dft_db_nm" id="dft_db_nm" /></td>
+								<td><input type="text" class="txt" name="scm_nm" id="scm_nm" /></td>
 							</tr>
 						</tbody>
 					</table>
 				</div>
 				<div class="overflow_area">
-					<table id="sourceDBMS" class="display" cellspacing="0" width="100%">
+					<table id="dbms" class="display" cellspacing="0" width="100%">
 						<thead>
 							<tr>
 								<th width="30"><spring:message code="common.no" /></th>

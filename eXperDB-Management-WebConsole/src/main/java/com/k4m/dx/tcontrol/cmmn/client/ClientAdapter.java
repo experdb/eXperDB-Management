@@ -479,4 +479,19 @@ public class ClientAdapter {
 
 		return parseToJsonObj(recvBuff);
 	}
+
+	
+
+	public JSONObject dxT033(String strDxExCode, JSONObject serverObj) throws Exception {
+		JSONObject jObj = new JSONObject();
+		jObj.put(ClientProtocolID.DX_EX_CODE, strDxExCode);
+		jObj.put(ClientProtocolID.SERVER_INFO, serverObj);
+
+		byte[] bt = jObj.toString().getBytes();
+		
+		cc.send(4, bt);
+		
+		byte[]	recvBuff = cc.recv(4, false);
+		return parseToJsonObj(recvBuff);
+	}
 }
