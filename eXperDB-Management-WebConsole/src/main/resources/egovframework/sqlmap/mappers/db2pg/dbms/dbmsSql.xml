@@ -3,16 +3,137 @@
 
 <mapper namespace="dbmsSQL">
 
-    <select id="selectDbmsGrb" resultType="HashMap">
+ 	<select id="selectCharSetList" parameterType="hashmap"  resultType="hashmap">
     	/**
-	 	* Query ID : selectHaCnt
-	 	* Description : DBMS구분 리스트
+	 	* Query ID : selectCharSetList
+	 	* Description : DBMS구분에 따른 케릭터셋
 	 	* Author : 변승우
 	 	**/
-    	SELECT 
-    			COUNT(*) AS haCnt
-    	FROM T_SYSDTL_C
-    	WHERE GRP_CD = 'TC0022'
+		SELECT 
+			SYS_CD,
+			SYS_CD_NM
+		FROM T_SYSDTL_C
+		WHERE GRP_CD = '${dbms_dscd}'
     </select>
 
+
+	<select id="db2pg_sys_nmCheck" resultType="int">
+		/**
+		* Query ID : db2pg_sys_nmCheck
+		* Description : 시스템명 중복 체크
+		* Author : 변승우
+		**/
+		SELECT 
+				 COUNT(*)
+		FROM T_DB2PG_SYS_INF
+		WHERE DB2PG_SYS_NM = #{db2pg_sys_nm}
+	</select>	
+	
+	<insert id="insertDb2pgDBMS"  parameterType="db2pgSysInfVO">
+		/**
+		* Query ID : insertDb2pgDBMS
+		* Description : DB2PG DBMS 시스템 등록
+		* Author : 변승우
+		**/
+			INSERT INTO T_DB2PG_SYS_INF
+		(
+			  DB2PG_SYS_ID
+			, DB2PG_SYS_NM
+			, DBMS_DSCD
+			, IPADR
+			, DTB_NM
+			, SPR_USR_ID
+			, PORTNO
+			, SCM_NM
+			, PWD
+			, CRTS_NM
+			, FRST_REGR_ID
+			, FRST_REG_DTM
+			, LST_MDFR_ID
+			, LST_MDF_DTM
+		) 
+		VALUES
+		(
+			  nextval('q_db2pg_sys_inf_01')
+			, #{db2pg_sys_nm}
+			, #{dbms_dscd}
+			, #{ipadr}
+			, #{dtb_nm}
+			, #{spr_usr_id}
+			, #{portno}
+			, #{scm_nm}
+			, #{pwd}
+			, #{crts_nm}
+			, #{frst_regr_id}
+			, clock_timestamp()
+			, #{lst_mdfr_id}
+			, clock_timestamp()	
+		)
+	</insert>
+	
+	 <select id="selectDb2pgDBMS" parameterType="db2pgSysInfVO"  resultType="db2pgSysInfVO">	 		
+	 		SELECT
+		 		  	(ROW_NUMBER() OVER()) AS ROWNUM
+					, (ROW_NUMBER() OVER()) AS IDX
+			 		, DB2PG_SYS_ID
+					, DB2PG_SYS_NM
+					, (SELECT SYS_CD_NM FROM T_SYSDTL_C WHERE SYS_CD = DBMS_DSCD ) AS DBMS_DSCD
+					, IPADR
+					, DTB_NM
+					, SPR_USR_ID
+					, PORTNO
+					, SCM_NM
+					, PWD
+					, (SELECT SYS_CD_NM FROM T_SYSDTL_C WHERE SYS_CD = CRTS_NM ) AS CRTS_NM
+					, CRTS_NM
+					, FRST_REGR_ID
+					, FRST_REG_DTM
+					, LST_MDFR_ID
+					, LST_MDF_DTM
+			FROM T_DB2PG_SYS_INF
+			WHERE 1 = 1
+				<if test="db2pg_sys_nm != null and db2pg_sys_nm != '' ">
+		      AND DB2PG_SYS_NM = #{db2pg_sys_nm}
+		      </if>	 
+		      <if test="dbms_dscd != null and dbms_dscd != '' ">
+		      AND DBMS_DSCD = #{dbms_dscd}
+		      </if>	 
+		      <if test="ipadr != null and ipadr != '' ">
+		      AND IPADR = #{ipadr}
+		      </if>	 
+		      <if test="dtb_nm != null and dtb_nm != '' ">
+		      AND DTB_NM = #{dtb_nm}
+		      </if>	 
+		      <if test="spr_usr_id != null and spr_usr_id != '' ">
+		      AND SPR_USR_ID = #{spr_usr_id}
+		      </if>	 
+		      <if test="scm_nm != null and scm_nm != '' ">
+		      AND SCM_NM = #{scm_nm}
+		      </if>	 			
+	 </select>
+
+ 	<select id="dbmsGrb" resultType="hashMap">
+    	/**
+	 	* Query ID : dbmsGrb
+	 	* Description : DBMS구분
+	 	* Author : 변승우
+	 	**/
+		SELECT 
+			SYS_CD,
+			SYS_CD_NM
+		FROM T_SYSDTL_C
+		WHERE GRP_CD = 'TC0022'
+    </select>
+
+	 <select id="dbmsListDbmsGrb" resultType="hashMap">
+    	/**
+	 	* Query ID : dbmsGrb
+	 	* Description : DB2PG LIST DBMS구분
+	 	* Author : 변승우
+	 	**/
+		SELECT 
+					DBMS_DSCD
+		FROM T_DB2PG_SYS_INF
+    </select>
+	
 </mapper>
