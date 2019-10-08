@@ -62,6 +62,7 @@ import org.json.simple.parser.JSONParser;
  * 31.  dump restore log 조회
  * 
  * 32. switch wal file
+ * 33.schema 리스트 조회
  * 
  * @author thpark
  *
@@ -72,7 +73,7 @@ public class ClientTester {
 		
 		ClientTester clientTester = new ClientTester();
 		
-		String Ip = "192.168.56.11";
+		String Ip = "192.168.56.108";
 		//Ip = "192.168.56.108";
 		//Ip = "222.110.153.251";
 		 //	Ip = "127.0.0.1";
@@ -131,8 +132,8 @@ public class ClientTester {
 			
 			//clientTester.dxT030(Ip, port);
 			//clientTester.dxT031(Ip, port);
-			clientTester.dxT032(Ip, port);
-
+			//clientTester.dxT032(Ip, port);
+			clientTester.dxT033(Ip, port);
 			
 			//clientTester.test();
 		} catch(Exception e) {
@@ -156,10 +157,10 @@ public class ClientTester {
 		**/
 			
 		
-			serverObj.put(ClientProtocolID.SERVER_NAME, "192.168.56.11");
-			serverObj.put(ClientProtocolID.SERVER_IP, "192.168.56.11");
-			serverObj.put(ClientProtocolID.SERVER_PORT, "5432");
-			serverObj.put(ClientProtocolID.DATABASE_NAME, "postgres");
+			serverObj.put(ClientProtocolID.SERVER_NAME, "192.168.56.108");
+			serverObj.put(ClientProtocolID.SERVER_IP, "192.168.56.108");
+			serverObj.put(ClientProtocolID.SERVER_PORT, "5433");
+			serverObj.put(ClientProtocolID.DATABASE_NAME, "test");
 			serverObj.put(ClientProtocolID.USER_ID, "experdba");
 			serverObj.put(ClientProtocolID.USER_PWD, "experdba");
 		
@@ -877,13 +878,12 @@ public class ClientTester {
 			JSONObject serverObj = new JSONObject();
 			
 			
-			serverObj.put(ClientProtocolID.SERVER_NAME, "222.110.153.162");
-			serverObj.put(ClientProtocolID.SERVER_IP, "222.110.153.162");
-			serverObj.put(ClientProtocolID.SERVER_PORT, "6432");
-			serverObj.put(ClientProtocolID.DATABASE_NAME, "postgres");
+			serverObj.put(ClientProtocolID.SERVER_NAME, "192.168.56.108");
+			serverObj.put(ClientProtocolID.SERVER_IP, "192.168.56.108");
+			serverObj.put(ClientProtocolID.SERVER_PORT, "5433");
+			serverObj.put(ClientProtocolID.DATABASE_NAME, "experdb");
 			serverObj.put(ClientProtocolID.USER_ID, "experdba");
 			serverObj.put(ClientProtocolID.USER_PWD, "experdba");
-			
 			
 			/**
 			serverObj.put(ClientProtocolID.SERVER_NAME, "222.110.153.162");
@@ -940,11 +940,11 @@ public class ClientTester {
 			JSONObject serverObj = new JSONObject();
 			
 			
-			serverObj.put(ClientProtocolID.SERVER_NAME, "222.110.153.251");
-			serverObj.put(ClientProtocolID.SERVER_IP, "222.110.153.251");
+			serverObj.put(ClientProtocolID.SERVER_NAME, "192.168.56.108");
+			serverObj.put(ClientProtocolID.SERVER_IP, "192.168.56.108");
 			serverObj.put(ClientProtocolID.SERVER_PORT, "5433");
-			serverObj.put(ClientProtocolID.DATABASE_NAME, "migratordb");
-			serverObj.put(ClientProtocolID.USER_ID, "experdb");
+			serverObj.put(ClientProtocolID.DATABASE_NAME, "experdb");
+			serverObj.put(ClientProtocolID.USER_ID, "experdba");
 			serverObj.put(ClientProtocolID.USER_PWD, "experdb");
 			
 			
@@ -2634,4 +2634,60 @@ public class ClientTester {
 			e.printStackTrace();
 		}
 	}	
+	
+	
+	
+	private void dxT033(String Ip, int port) {
+		try {
+
+
+			JSONObject serverObj = new JSONObject();
+			
+			
+			serverObj.put(ClientProtocolID.SERVER_NAME, "192.168.56.108");
+			serverObj.put(ClientProtocolID.SERVER_IP, "192.168.56.108");
+			serverObj.put(ClientProtocolID.SERVER_PORT, "5433");
+			serverObj.put(ClientProtocolID.DATABASE_NAME, "experdb");
+			serverObj.put(ClientProtocolID.USER_ID, "experdba");
+			serverObj.put(ClientProtocolID.USER_PWD, "experdba");
+
+			JSONObject objList;
+			
+			ClientAdapter CA = new ClientAdapter(Ip, port);
+			CA.open(); 
+				
+			objList = CA.dxT033(ClientTranCodeType.DxT033, serverObj);
+			
+			String strErrMsg = (String)objList.get(ClientProtocolID.ERR_MSG);
+			String strErrCode = (String)objList.get(ClientProtocolID.ERR_CODE);
+			String strDxExCode = (String)objList.get(ClientProtocolID.DX_EX_CODE);
+			String strResultCode = (String)objList.get(ClientProtocolID.RESULT_CODE);
+			System.out.println("RESULT_CODE : " +  strResultCode);
+			System.out.println("ERR_CODE : " +  strErrCode);
+			System.out.println("ERR_MSG : " +  strErrMsg);
+			
+			List<Object> selectSchemaList =(ArrayList<Object>) objList.get(ClientProtocolID.RESULT_DATA);
+			
+			System.out.println("strDxExCode : " + " " + strDxExCode);
+			
+			if(selectSchemaList.size() > 0) {
+				for(int i=0; i<selectSchemaList.size(); i++) {
+					
+					Object obj = selectSchemaList.get(i);
+					
+					HashMap hp = (HashMap) obj;
+					String schem = (String) hp.get("name");
+	
+					System.out.println(i + " " + schem);
+	
+				}
+			}
+				
+				
+			CA.close();
+		} catch(Exception e) {
+			e.printStackTrace();
+		}
+	}	
+	
 }
