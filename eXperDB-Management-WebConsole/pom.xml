@@ -221,8 +221,7 @@
       <!-- /excel 설정 -->
       
         <!-- mysql이나 oracle 필요시 사용 -->
-        <!--
-        <dependency>
+        <!-- <dependency>
             <groupId>com.googlecode.log4jdbc</groupId>
             <artifactId>log4jdbc</artifactId>
             <version>1.2</version>
@@ -246,14 +245,11 @@
             <version>5.1.31</version>
         </dependency>
 
-        <dependency>
-            <groupId>ojdbc</groupId>
-            <artifactId>ojdbc</artifactId>
-            <version>14</version>
-            <scope>system</scope>
-            <systemPath>${basedir}/src/main/webapp/WEB-INF/lib/ojdbc-14.jar</systemPath>
-        </dependency>
-        -->
+		<dependency>
+			<groupId>ojdbc</groupId>
+			<artifactId>ojdbc</artifactId>
+			<version>6</version>
+		</dependency> -->
         
      <dependency>
 	    <groupId>org.postgresql</groupId>
@@ -306,10 +302,127 @@
 	    <artifactId>commons-csv</artifactId>
 	    <version>1.5</version>
 	</dependency>
-
+	
+	
+	<!-- PostgreSQL JDBC -->
+		<!-- <dependency>
+			<groupId>org.postgresql</groupId>
+			<artifactId>postgresql</artifactId>
+			<version>42.2.5</version>
+			<scope>system</scope>
+			<systemPath>${project.basedir}/src/main/resources/jar/postgresql-42.2.5.jar</systemPath>
+		</dependency> -->
 		
-   </dependencies>
+			<!-- Oracle SDO API -->
+		<dependency>
+			<groupId>oracle.spatial</groupId>
+			<artifactId>geometry.sdoapi</artifactId>
+			<version>11.2</version>
+			<scope>system</scope>
+			<systemPath>${project.basedir}/src/main/resources/jar/geometry.sdoapi-11.2.jar</systemPath>
+		</dependency>
 
+		<dependency>
+			<groupId>oracle.spatial</groupId>
+			<artifactId>type</artifactId>
+			<version>11.2</version>
+			<scope>system</scope>
+			<systemPath>${project.basedir}/src/main/resources/jar/type-11.2.jar</systemPath>
+		</dependency>
+
+		<dependency>
+			<groupId>oracle.spatial</groupId>
+			<artifactId>util</artifactId>
+			<version>11.2</version>
+			<scope>system</scope>
+			<systemPath>${project.basedir}/src/main/resources/jar/util-11.2.jar</systemPath>
+		</dependency>
+		
+		
+		<!-- Oracle -->
+		<dependency>
+			<groupId>ojdbc</groupId>
+			<artifactId>ojdbc</artifactId>
+			<version>6</version>
+			<scope>system</scope>
+			<systemPath>${project.basedir}/src/main/resources/jar/ojdbc-6.jar</systemPath>
+		</dependency>
+		<dependency>
+			<groupId>ojdbc</groupId>
+			<artifactId>xdb</artifactId>
+			<version>6</version>
+			<scope>system</scope>
+			<systemPath>${project.basedir}/src/main/resources/jar/xdb-6.jar</systemPath>
+		</dependency>
+		<dependency>
+			<groupId>xmlparserv2</groupId>
+			<artifactId>xmlparserv2</artifactId>
+			<version>11.1.0.6</version>
+			<scope>system</scope>
+			<systemPath>${project.basedir}/src/main/resources/jar/xmlparserv2-11.1.0.6.jar</systemPath>
+		</dependency>
+		
+		<dependency>
+			<groupId>orai18n</groupId>
+			<artifactId>orai18n</artifactId>
+			<version>1</version>
+			<scope>system</scope>
+			<systemPath>${project.basedir}/src/main/resources/jar/orai18n-1.jar</systemPath>
+		</dependency>
+				
+		<!-- PostGIS JDBC -->
+		<dependency>
+			<groupId>org.postgis</groupId>
+			<artifactId>postgis-jdbc</artifactId>
+			<version>master.2017.07.18</version>
+			<scope>system</scope>
+			<systemPath>${project.basedir}/src/main/resources/jar/postgis-jdbc-master.2017.07.18.jar</systemPath>
+		</dependency>
+
+		<!-- DB2 -->
+		<dependency>
+			<groupId>db2jcc4</groupId>
+			<artifactId>db2jcc4</artifactId>
+			<version>1</version>
+			<scope>system</scope>
+			<systemPath>${project.basedir}/src/main/resources/jar/db2jcc4-1.jar</systemPath>
+		</dependency>
+		
+		<!-- MS-SQL -->
+		<dependency>
+			<groupId>sqljdbc41</groupId>
+			<artifactId>sqljdbc41</artifactId>
+			<version>1</version>
+			<scope>system</scope>
+			<systemPath>${project.basedir}/src/main/resources/jar/sqljdbc41-1.jar</systemPath>
+		</dependency>
+		
+		<!-- Tibero -->
+		<dependency>
+			<groupId>tibero5-jdbc</groupId>
+			<artifactId>tibero5-jdbc</artifactId>
+			<version>1</version>
+			<scope>system</scope>
+			<systemPath>${project.basedir}/src/main/resources/jar/tibero5-jdbc-1.jar</systemPath>
+		</dependency>
+		
+		<!-- MySQL -->
+		<dependency>
+			<groupId>mysql</groupId>
+			<artifactId>mysql-connector-java</artifactId>
+			<version>5.1.44</version>
+		</dependency>
+	
+		<!-- CUBRID -->	
+		<dependency>
+			<groupId>cubrid</groupId>
+			<artifactId>cubrid-jdbc</artifactId>
+			<version>9.3.6.0002</version>
+			<scope>system</scope>
+			<systemPath>${project.basedir}/src/main/resources/jar/cubrid-jdbc-9.3.6.0002.jar</systemPath>
+		</dependency>
+   </dependencies>
+   	
    <build>
         <defaultGoal>install</defaultGoal>
         <directory>${basedir}/target</directory>

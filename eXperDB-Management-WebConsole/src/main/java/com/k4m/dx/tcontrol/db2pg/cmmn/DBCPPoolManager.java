@@ -2,20 +2,11 @@ package com.k4m.dx.tcontrol.db2pg.cmmn;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
-import java.sql.SQLException;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Properties;
-import java.util.concurrent.ConcurrentHashMap;
 
-import org.apache.commons.dbcp.ConnectionFactory;
-import org.apache.commons.dbcp.DriverManagerConnectionFactory;
-import org.apache.commons.dbcp.PoolableConnectionFactory;
-import org.apache.commons.dbcp.PoolingDataSource;
 import org.apache.commons.dbcp.PoolingDriver;
-import org.apache.commons.pool.impl.GenericObjectPool;
-
-import org.apache.tomcat.dbcp.pool.ObjectPool;
 import org.json.simple.JSONObject;
 
 import com.k4m.dx.tcontrol.cmmn.client.ClientProtocolID;

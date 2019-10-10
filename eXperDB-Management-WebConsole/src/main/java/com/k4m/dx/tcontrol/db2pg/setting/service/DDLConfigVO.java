@@ -1,12 +1,14 @@
 package com.k4m.dx.tcontrol.db2pg.setting.service;
 
 public class DDLConfigVO {
+	private int rownum;
+	private int idx;
 	private int db2pg_ddl_wrk_id;
 	private String db2pg_ddl_wrk_nm;
 	private String db2pg_ddl_wrk_exp;
 	private int db2pg_sys_id;
 	private String db2pg_uchr_lchr_val;
-	private String src_tb_ddl_exrt_tf;
+	private boolean src_tb_ddl_exrt_tf;
 	private String ddl_save_pth;
 	private int db2pg_exrt_trg_tb_wrk_id;
 	private int db2pg_exrt_exct_tb_wrk_id;
@@ -15,6 +17,23 @@ public class DDLConfigVO {
 	private String lst_mdfr_id;
 	private String lst_mdf_dtm;
 
+	private String dbms_dscd;
+	private String ipadr;
+	private String dtb_nm;
+	private String scm_nm;
+	
+	public int getRownum() {
+		return rownum;
+	}
+	public void setRownum(int rownum) {
+		this.rownum = rownum;
+	}
+	public int getIdx() {
+		return idx;
+	}
+	public void setIdx(int idx) {
+		this.idx = idx;
+	}
 	public int getDb2pg_ddl_wrk_id() {
 		return db2pg_ddl_wrk_id;
 	}
@@ -45,10 +64,10 @@ public class DDLConfigVO {
 	public void setDb2pg_uchr_lchr_val(String db2pg_uchr_lchr_val) {
 		this.db2pg_uchr_lchr_val = db2pg_uchr_lchr_val;
 	}
-	public String getSrc_tb_ddl_exrt_tf() {
+	public boolean getSrc_tb_ddl_exrt_tf() {
 		return src_tb_ddl_exrt_tf;
 	}
-	public void setSrc_tb_ddl_exrt_tf(String src_tb_ddl_exrt_tf) {
+	public void setSrc_tb_ddl_exrt_tf(boolean src_tb_ddl_exrt_tf) {
 		this.src_tb_ddl_exrt_tf = src_tb_ddl_exrt_tf;
 	}
 	public String getDdl_save_pth() {
@@ -94,6 +113,30 @@ public class DDLConfigVO {
 		this.lst_mdf_dtm = lst_mdf_dtm;
 	}
 
-	
+	public String getDbms_dscd() {
+		return dbms_dscd;
+	}
+	public void setDbms_dscd(String dbms_dscd) {
+		this.dbms_dscd = dbms_dscd;
+	}
+	public String getIpadr() {
+		return ipadr;
+	}
+	public void setIpadr(String ipadr) {
+		this.ipadr = ipadr;
+	}
+	public String getDtb_nm() {
+		return dtb_nm;
+	}
+	public void setDtb_nm(String dtb_nm) {
+		this.dtb_nm = dtb_nm;
+	}
+	public String getScm_nm() {
+		return scm_nm;
+	}
+	public void setScm_nm(String scm_nm) {
+		this.scm_nm = scm_nm;
+	}
+
 
 }
