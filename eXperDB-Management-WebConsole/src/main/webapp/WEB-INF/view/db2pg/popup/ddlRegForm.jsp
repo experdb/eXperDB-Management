@@ -32,6 +32,8 @@
 <script type="text/javascript">
 var db2pg_ddl_wrk_nmChk ="fail";
 var output_path ="fail";
+
+var db2pg_sys_id ="";
 $(window.document).ready(function() {
 	 
 });
@@ -225,7 +227,13 @@ function fn_dbmsInfo(){
  * 추출 대상 테이블, 추출 제외 테이블 등록 버튼 클릭시
  ******************************************************** */
 function fn_tableList(){
-	var popUrl = "/db2pg/popup/tableInfo.do";
+
+	if($('#db2pg_sys_nm').val() == ""){
+		alert("소스시스템을 선택해주세요.");
+		return false;
+	}
+	
+	var popUrl = "/db2pg/popup/tableInfo.do?db2pg_sys_id="+$('#db2pg_sys_id').val();
 	var width = 930;
 	var height = 675;
 	var left = (window.screen.width / 2) - (width / 2);
