@@ -133,8 +133,8 @@ function fn_insert_work(){
 		  		db2pg_source_system_id : $("#db2pg_source_system_id").val(),
 		  		db2pg_trg_sys_id : $("#db2pg_trg_sys_id").val(),
 		  		exrt_dat_cnt : $("#exrt_dat_cnt").val(),
-		  		db2pg_exrt_trg_tb_wrk_id : $("#db2pg_exrt_trg_tb_wrk_id").val(),
-		  		db2pg_exrt_exct_tb_wrk_id : $("#db2pg_exrt_exct_tb_wrk_id").val(),
+		  		src_include_tables : $("#src_include_tables").val(),
+		  		src_exclude_tables : $("#src_exclude_tables").val(),
 		  		exrt_dat_ftch_sz : $("#exrt_dat_ftch_sz").val(),
 		  		dat_ftch_bff_sz : $("#dat_ftch_bff_sz").val(),
 		  		exrt_prl_prcs_ecnt : $("#exrt_prl_prcs_ecnt").val(),
@@ -144,7 +144,7 @@ function fn_insert_work(){
 		  		cnst_cnd_exrt_tf : $("#cnst_cnd_exrt_tf").val(),
 		  		src_where_condition : $("#src_where_condition").val(),
 		  		usr_qry_use_tf : $("#usr_qry_use_tf").val(),
-		  		db2pg_usr_qry_id : $("#db2pg_usr_qry_id").val()
+		  		db2pg_usr_qry : $("#db2pg_usr_qry").val()
 		  	},
 			type : "post",
 			beforeSend: function(xhr) {
@@ -163,11 +163,34 @@ function fn_insert_work(){
 			},
 			success : function(result) {
 				alert(result);
+				if(result==true){
+					alert('<spring:message code="message.msg07" /> ');
+					opener.location.reload();
+					self.close();
+				}else{
+					alert('등록에 실패했습니다.');
+				}	
 			}
 		});
 	}
 }
 
+/* ********************************************************
+ * DBMS 서버 호출하여 입력
+ ******************************************************** */
+ function fn_dbmsAddCallback(db2pg_sys_id,db2pg_sys_nm){
+	 $('#db2pg_source_system_id').val(db2pg_sys_id);
+	 $('#db2pg_source_system_nm').val(db2pg_sys_nm);
+}
+
+/* ********************************************************
+  * DBMS 서버(PG) 호출하여 입력
+  ******************************************************** */
+  function fn_dbmsPgAddCallback(db2pg_sys_id,db2pg_sys_nm){
+ 	 $('#db2pg_trg_sys_id').val(db2pg_sys_id);
+ 	 $('#db2pg_trg_sys_nm').val(db2pg_sys_nm);
+ }
+ 
 /* ********************************************************
  * 소스시스템 등록 버튼 클릭시
  ******************************************************** */
@@ -182,6 +205,19 @@ function fn_dbmsInfo(){
 	var winPop = window.open(popUrl,"dbmsInfoPop",popOption);
 }
 
+/* ********************************************************
+ * 타겟시스템(PG) 등록 버튼 클릭시
+ ******************************************************** */
+function fn_dbmsPgInfo(){
+	var popUrl = "/db2pg/popup/dbmsPgInfo.do";
+	var width = 920;
+	var height = 670;
+	var left = (window.screen.width / 2) - (width / 2);
+	var top = (window.screen.height /2) - (height / 2);
+	var popOption = "width="+width+", height="+height+", top="+top+", left="+left+", resizable=no, scrollbars=yes, status=no, toolbar=no, titlebar=yes, location=no,";
+	
+	var winPop = window.open(popUrl,"dbmsPgInfo",popOption);
+}
 
 /* ********************************************************
  * 추출 대상 테이블, 추출 제외 테이블 등록 버튼 클릭시
@@ -240,14 +276,16 @@ function fn_tableList(){
 				<tbody>
 					<tr>
 						<th scope="row" class="ico_t1">소스시스템</th>
-						<td><input type="text" class="txt" name="db2pg_source_system_id" id="db2pg_source_system_id"/>
+						<td><input type="hidden" name="db2pg_source_system_id" id="db2pg_source_system_id"/>
+							<input type="text" class="txt" name="db2pg_source_system_nm" id="db2pg_source_system_nm"/>
 							<span class="btn btnC_01"><button type="button" class= "btn_type_02" onclick="fn_dbmsInfo()" style="width: 60px; margin-right: -60px; margin-top: 0;">등록</button></span>							
 						</td>
 					</tr>
 					<tr>
 					<th scope="row" class="ico_t1">타겟시스템</th>
-						<td><input type="text" class="txt" name="db2pg_trg_sys_id" id="db2pg_trg_sys_id"/>
-							<span class="btn btnC_01"><button type="button" class= "btn_type_02" onclick="fn_dbmsInfo()" style="width: 60px; margin-right: -60px; margin-top: 0;">등록</button></span>							
+						<td><input type="hidden" name="db2pg_trg_sys_id" id="db2pg_trg_sys_id"/>
+							<input type="text" class="txt" name="db2pg_trg_sys_nm" id="db2pg_trg_sys_nm"/>
+							<span class="btn btnC_01"><button type="button" class= "btn_type_02" onclick="fn_dbmsPgInfo()" style="width: 60px; margin-right: -60px; margin-top: 0;">등록</button></span>							
 						</td>
 					</tr>
 				</tbody>
@@ -267,9 +305,9 @@ function fn_tableList(){
 						<table class="write">
 							<caption>옵션정보</caption>
 							<colgroup>
-								<col style="width:20%" />
+								<col style="width:28%" />
 								<col style="width:30%" />
-								<col style="width:20%" />
+								<col style="width:32%" />
 								</col>
 							</colgroup>
 							<tbody>
@@ -279,27 +317,27 @@ function fn_tableList(){
 								</tr>
 								<tr>
 									<th scope="row" class="ico_t2">추출 대상 테이블</th>
-									<td colspan="3"><input type="text" class="txt" name="db2pg_exrt_trg_tb_wrk_id" id="db2pg_exrt_trg_tb_wrk_id"/>
+									<td colspan="3"><input type="text" class="txt" name="src_include_tables" id="src_include_tables"/>
 										<span class="btn btnC_01"><button type="button" class= "btn_type_02" onclick="fn_tableList()" style="width: 60px; margin-right: -60px; margin-top: 0;">등록</button></span>							
 									</td>
 								</tr>
 								<tr>
 									<th scope="row" class="ico_t2">추출 제외 테이블</th>
-									<td colspan="3"><input type="text" class="txt" name="db2pg_exrt_exct_tb_wrk_id" id="db2pg_exrt_exct_tb_wrk_id"/>
+									<td colspan="3"><input type="text" class="txt" name="src_exclude_tables" id="src_exclude_tables"/>
 										<span class="btn btnC_01"><button type="button" class= "btn_type_02" onclick="fn_tableList()" style="width: 60px; margin-right: -60px; margin-top: 0;">등록</button></span>							
 									</td>
 								</tr>
 								<tr>
 									<th scope="row" class="ico_t2">추출 데이터 Fetch 사이즈</th>
-									<td><input type="text" class="txt t5" name="exrt_dat_ftch_sz" id="exrt_dat_ftch_sz"/></td>
-									<th scope="row" class="ico_t2">데이터 Fetch 버퍼 사이즈</th>
-									<td><input type="text" class="txt t5" name="dat_ftch_bff_sz" id="dat_ftch_bff_sz"/></td>
+									<td><input type="number" class="txt t8" name="exrt_dat_ftch_sz" id="exrt_dat_ftch_sz" value="3000"/></td>
+									<th scope="row" class="ico_t2">데이터 Fetch 버퍼 사이즈(단위 MIB)</th>
+									<td><input type="number" class="txt t8" name="dat_ftch_bff_sz" id="dat_ftch_bff_sz" value="10"/></td>
 								</tr>
 								<tr>
 									<th scope="row" class="ico_t2">추출 병렬처리 개수</th>
-									<td><input type="text" class="txt t5" name="exrt_prl_prcs_ecnt" id="exrt_prl_prcs_ecnt"/></td>
-									<th scope="row" class="ico_t2">LOB 데이터 LOB 버퍼 사이즈</th>
-									<td><input type="text" class="txt t5" name="lob_dat_bff_sz" id="lob_dat_bff_sz"/></td>
+									<td><input type="number" class="txt t8" name="exrt_prl_prcs_ecnt" id="exrt_prl_prcs_ecnt" value="1"/></td>
+									<th scope="row" class="ico_t2">LOB 데이터 LOB 버퍼 사이즈(단위 MIB)</th>
+									<td><input type="number" class="txt t8" name="lob_dat_bff_sz" id="lob_dat_bff_sz" value="100"/></td>
 								</tr>
 							</tbody>
 						</table>
@@ -321,9 +359,9 @@ function fn_tableList(){
 							<li style="border-bottom: none;">
 								<p class="op_tit" style="width: 70px;">사용여부</p>
 								<div class="inp_rdo">
-									<input name="rdo_r" id="rdo_r_1" type="radio" value="TC002001" checked="checked" onchange="fn_checkBox('true')">
+									<input name="rdo_r" id="rdo_r_1" type="radio" value="true" onchange="fn_checkBox('true')">
 										<label for="rdo_r_1">사용</label> 
-									<input name="rdo_r" id="rdo_r_2" type="radio" value="TC002002" onchange="fn_checkBox('false')"> 
+									<input name="rdo_r" id="rdo_r_2" type="radio" value="false" checked="checked" onchange="fn_checkBox('false')"> 
 										<label for="rdo_r_2">미사용</label>
 								</div>
 							</li>
@@ -331,7 +369,7 @@ function fn_tableList(){
 								<p class="op_tit">사용자 쿼리</p>
 								<span>
 									<div class="textarea_grp">
-										<textarea name="db2pg_usr_qry_id" id="db2pg_usr_qry_id" style="height: 250px; width: 700px;"></textarea>
+										<textarea name="db2pg_usr_qry" id="db2pg_usr_qry" style="height: 250px; width: 700px;" readonly="readonly"></textarea>
 									</div>
 								</span>
 							</li>
@@ -339,18 +377,17 @@ function fn_tableList(){
 					</div>
 				</div>
 			</div>
-
 		</div>
 		<div class="pop_cmm mt25">
 		<div class="sub_tit"><p>타겟옵션</p></div>
 			<table class="write">
 				<caption><spring:message code="dashboard.Register_backup" /></caption>
 				<colgroup>
-					<col style="width:12.5%;" />
+					<col style="width:15%;" />
 					<col style="width:20%;" />
 					<col style="width:10%;" />
-					<col style="width:25%;" />
-					<col style="width:12.5%;" />
+					<col style="width:20%;" />
+					<col style="width:15%;" />
 					<col style="width:20%;" />
 					</col>
 				</colgroup>
@@ -358,7 +395,7 @@ function fn_tableList(){
 					<tr>
 						<th scope="row" class="ico_t2">테이블 리빌드 여부</th>
 						<td>
-							<select name="tb_rbl_tf" id="tb_rbl_tf" class="select t8">
+							<select name="tb_rbl_tf" id="tb_rbl_tf" class="select t5">
 								<c:forEach var="codeTF" items="${codeTF}">
 									<option value="${codeTF.sys_cd_nm}" ${false eq codeTF.sys_cd_nm ? "selected='selected'" : ""}>${codeTF.sys_cd_nm}</option>
 								</c:forEach>
@@ -374,7 +411,7 @@ function fn_tableList(){
 						</td>
 						<th scope="row" class="ico_t2">제약조건 추출 여부</th>
 						<td>
-							<select name="cnst_cnd_exrt_tf" id="cnst_cnd_exrt_tf" class="select t8">
+							<select name="cnst_cnd_exrt_tf" id="cnst_cnd_exrt_tf" class="select t5">
 								<c:forEach var="codeTF" items="${codeTF}">
 									<option value="${codeTF.sys_cd_nm}" ${false eq codeTF.sys_cd_nm ? "selected='selected'" : ""}>${codeTF.sys_cd_nm}</option>
 								</c:forEach>

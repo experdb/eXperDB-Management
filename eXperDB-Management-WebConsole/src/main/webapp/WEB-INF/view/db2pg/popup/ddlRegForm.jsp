@@ -128,7 +128,7 @@ function fn_pathCheck() {
 			ddl_save_pth : $("#ddl_save_pth").val()
 		},
 		success : function(result) {
-			if (result == "true") {
+			if (result == true) {
 				alert('유효한 경로입니다.');
 				output_path = "success";		
 			} else {
@@ -187,13 +187,24 @@ function fn_insert_work(){
 				}
 			},
 			success : function(result) {
-				alert(result);
-				alert('<spring:message code="message.msg07" /> ');
-				opener.location.reload();
-				self.close();
+				if(result==true){
+					alert('<spring:message code="message.msg07" /> ');
+					opener.location.reload();
+					self.close();
+				}else{
+					alert('등록에 실패했습니다.');
+				}	
 			}
 		});
 	}
+}
+
+/* ********************************************************
+ * DBMS 서버 호출하여 입력
+ ******************************************************** */
+ function fn_dbmsAddCallback(db2pg_sys_id,db2pg_sys_nm){
+	 $('#db2pg_sys_id').val(db2pg_sys_id);
+	 $('#db2pg_sys_nm').val(db2pg_sys_nm);
 }
 
 /* ********************************************************
@@ -223,7 +234,6 @@ function fn_tableList(){
 	
 	var winPop = window.open(popUrl,"tableInfoPop",popOption);
 }
-
 </script>
 </head>
 <body>
@@ -265,7 +275,7 @@ function fn_tableList(){
 				<tbody>
 					<tr>
 						<th scope="row" class="ico_t2">소스시스템</th>
-						<td><input type="text" class="txt" name="db2pg_sys_id" id="db2pg_sys_id"/>
+						<td><input type="hidden" name="db2pg_sys_id" id="db2pg_sys_id"/><input type="text" class="txt" name="db2pg_sys_nm" id="db2pg_sys_nm" placeholder="등록 버튼을 눌러주세요" readonly="readonly"/>
 							<span class="btn btnC_01"><button type="button" class= "btn_type_02" onclick="fn_dbmsInfo()" style="width: 60px; margin-right: -60px; margin-top: 0;">등록</button></span>							
 						</td>
 					</tr>

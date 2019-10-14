@@ -3,7 +3,7 @@
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form"%>
 <%@ taglib prefix="ui" uri="http://egovframework.gov/ctl/ui"%>
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags"%>
-<%@include file="../../cmmn/cs.jsp"%>
+<%@ include file="../../cmmn/cs.jsp"%>
 <%
 	/**
 	* @Class Name : db2pgSetting.jsp
@@ -29,7 +29,7 @@ var tableData = null;
  * Tab Click
  ******************************************************** */
 function selectTab(tab){
-	if(tab == "dump"){
+	if(tab == "dataWork"){
 		getddlDataList();
 		$("#dataDataTable").show();
 		$("#dataDataTable_wrapper").show();
@@ -67,16 +67,42 @@ function fn_init(){
 	columns : [
 		{data : "rownum", defaultContent : "", targets : 0, orderable : false, checkboxes : {'selectRow' : true}}, 
 		{data : "idx", className : "dt-center", defaultContent : ""}, 
-		{data : "idx", className : "dt-center", defaultContent : ""}, 
-		{data : "idx", className : "dt-center", defaultContent : ""}, 
-		{data : "idx", className : "dt-center", defaultContent : ""}, 
-		{data : "idx", className : "dt-center", defaultContent : ""}, 
-		{data : "idx", className : "dt-center", defaultContent : ""}, 
-		{data : "idx", className : "dt-center", defaultContent : ""}, 
-		{data : "idx", className : "dt-center", defaultContent : ""}, 
-		{data : "idx", className : "dt-center", defaultContent : ""}, 
-		{data : "idx", className : "dt-center", defaultContent : ""}, 
-		{data : "idx", className : "dt-center", defaultContent : ""}
+		{data : "db2pg_ddl_wrk_nm", className : "dt-center", defaultContent : ""}, 
+		{data : "db2pg_ddl_wrk_exp", className : "dt-center", defaultContent : ""}, 
+		{
+			data : "dbms_dscd",
+			className : "dt-center",
+			render : function(data, type, full, meta) {
+				var html = "";
+				if (data == "TC002201") {
+					html += "Oracle";
+				}else if(data == "TC002202"){
+					html += "MS-SQL";
+				}else if(data == "TC002203"){
+					html += "MySQL";
+				}else if(data == "TC002204"){
+					html += "PostgreSQL";
+				}else if(data == "TC002205"){
+					html += "DB2";
+				}else if(data == "TC002206"){
+					html += "SyBaseASE";
+				}else if(data == "TC002207"){
+					html += "CUBRID";
+				}else if(data == "TC002208"){
+					html += "Tibero";
+				}
+				return html;
+			},
+			defaultContent : ""
+		},
+		{data : "ipadr", className : "dt-center", defaultContent : ""},
+		{data : "dtb_nm", className : "dt-center", defaultContent : ""},
+		{data : "scm_nm", className : "dt-center", defaultContent : ""},
+		{data : "frst_regr_id", className : "dt-center", defaultContent : ""},
+		{data : "frst_reg_dtm", className : "dt-center", defaultContent : ""},
+		{data : "lst_mdfr_id", className : "dt-center", defaultContent : ""},
+		{data : "lst_mdf_dtm", className : "dt-center", defaultContent : ""},
+		{data : "db2pg_ddl_wrk_id", defaultContent : "", visible: false}
 	],'select': {'style': 'multi'}
 	});
 	
@@ -92,23 +118,78 @@ function fn_init(){
 	columns : [
 		{data : "rownum", defaultContent : "", targets : 0, orderable : false, checkboxes : {'selectRow' : true}}, 
 		{data : "idx", className : "dt-center", defaultContent : ""}, 
-		{data : "idx", className : "dt-center", defaultContent : ""}, 
-		{data : "idx", className : "dt-center", defaultContent : ""}, 
-		{data : "idx", className : "dt-center", defaultContent : ""}, 
-		{data : "idx", className : "dt-center", defaultContent : ""}, 
-		{data : "idx", className : "dt-center", defaultContent : ""}, 
-		{data : "idx", className : "dt-center", defaultContent : ""}, 
-		{data : "idx", className : "dt-center", defaultContent : ""}, 
-		{data : "idx", className : "dt-center", defaultContent : ""}, 
-		{data : "idx", className : "dt-center", defaultContent : ""}, 
-		{data : "idx", className : "dt-center", defaultContent : ""}
+		{data : "db2pg_trsf_wrk_nm", className : "dt-center", defaultContent : ""}, 
+		{data : "db2pg_trsf_wrk_exp", className : "dt-center", defaultContent : ""}, 
+		{
+			data : "source_dbms_dscd",
+			className : "dt-center",
+			render : function(data, type, full, meta) {
+				var html = "";
+				if (data == "TC002201") {
+					html += "Oracle";
+				}else if(data == "TC002202"){
+					html += "MS-SQL";
+				}else if(data == "TC002203"){
+					html += "MySQL";
+				}else if(data == "TC002204"){
+					html += "PostgreSQL";
+				}else if(data == "TC002205"){
+					html += "DB2";
+				}else if(data == "TC002206"){
+					html += "SyBaseASE";
+				}else if(data == "TC002207"){
+					html += "CUBRID";
+				}else if(data == "TC002208"){
+					html += "Tibero";
+				}
+				return html;
+			},
+			defaultContent : ""
+		},
+		{data : "source_ipadr", className : "dt-center", defaultContent : ""}, 
+		{data : "source_dtb_nm", className : "dt-center", defaultContent : ""}, 
+		{data : "source_scm_nm", className : "dt-center", defaultContent : ""},
+		{
+			data : "target_dbms_dscd",
+			className : "dt-center",
+			render : function(data, type, full, meta) {
+				var html = "";
+				if (data == "TC002201") {
+					html += "Oracle";
+				}else if(data == "TC002202"){
+					html += "MS-SQL";
+				}else if(data == "TC002203"){
+					html += "MySQL";
+				}else if(data == "TC002204"){
+					html += "PostgreSQL";
+				}else if(data == "TC002205"){
+					html += "DB2";
+				}else if(data == "TC002206"){
+					html += "SyBaseASE";
+				}else if(data == "TC002207"){
+					html += "CUBRID";
+				}else if(data == "TC002208"){
+					html += "Tibero";
+				}
+				return html;
+			},
+			defaultContent : ""
+		},
+		{data : "target_ipadr", className : "dt-center", defaultContent : ""}, 
+		{data : "target_dtb_nm", className : "dt-center", defaultContent : ""},
+		{data : "target_scm_nm", className : "dt-center", defaultContent : ""},
+		{data : "frst_regr_id", className : "dt-center", defaultContent : ""},
+		{data : "frst_reg_dtm", className : "dt-center", defaultContent : ""},
+		{data : "lst_mdfr_id", className : "dt-center", defaultContent : ""},
+		{data : "lst_mdf_dtm", className : "dt-center", defaultContent : ""},
+		{data : "db2pg_trsf_wrk_id", defaultContent : "", visible: false}
 	],'select': {'style': 'multi'}
 	});
 	
 	tableDDL.tables().header().to$().find('th:eq(0)').css('min-width', '10px');
 	tableDDL.tables().header().to$().find('th:eq(1)').css('min-width', '30px');
 	tableDDL.tables().header().to$().find('th:eq(2)').css('min-width', '100px');
-	tableDDL.tables().header().to$().find('th:eq(3)').css('min-width', '100px');
+	tableDDL.tables().header().to$().find('th:eq(3)').css('min-width', '200px');
 	tableDDL.tables().header().to$().find('th:eq(4)').css('min-width', '100px');
 	tableDDL.tables().header().to$().find('th:eq(5)').css('min-width', '100px');
 	tableDDL.tables().header().to$().find('th:eq(6)').css('min-width', '100px');
@@ -118,12 +199,10 @@ function fn_init(){
 	tableDDL.tables().header().to$().find('th:eq(10)').css('min-width', '100px');
 	tableDDL.tables().header().to$().find('th:eq(11)').css('min-width', '100px');
 
-
-
 	tableData.tables().header().to$().find('th:eq(0)').css('min-width', '10px');
     tableData.tables().header().to$().find('th:eq(1)').css('min-width', '30px');
     tableData.tables().header().to$().find('th:eq(2)').css('min-width', '100px');
-    tableData.tables().header().to$().find('th:eq(3)').css('min-width', '100px');
+    tableData.tables().header().to$().find('th:eq(3)').css('min-width', '200px');
     tableData.tables().header().to$().find('th:eq(4)').css('min-width', '100px');
     tableData.tables().header().to$().find('th:eq(5)').css('min-width', '100px');
     tableData.tables().header().to$().find('th:eq(6)').css('min-width', '100px');
@@ -132,6 +211,10 @@ function fn_init(){
     tableData.tables().header().to$().find('th:eq(9)').css('min-width', '100px');
     tableData.tables().header().to$().find('th:eq(10)').css('min-width', '100px');
     tableData.tables().header().to$().find('th:eq(11)').css('min-width', '100px');
+    tableData.tables().header().to$().find('th:eq(12)').css('min-width', '100px');
+    tableData.tables().header().to$().find('th:eq(13)').css('min-width', '100px');
+    tableData.tables().header().to$().find('th:eq(14)').css('min-width', '100px');
+    tableData.tables().header().to$().find('th:eq(15)').css('min-width', '100px');
     
 	$(window).trigger('resize'); 
 }
@@ -151,18 +234,88 @@ $(window.document).ready(
 		$("#dataDataTable_wrapper").hide();		
 });
 
-
 /* ********************************************************
  * DDL추출 데이터 가져오기
  ******************************************************** */
 function getddlDataList(){
+	$.ajax({
+		url : "/db2pg/selectDDLWork.do", 
+	  	data : {
+	  		wrk_nm : "%" + $("#ddl_wrk_nm").val() + "%",
+	  		dbms_dscd : "%" + $("#ddl_dbms_dscd").val() + "%",
+	  		ipadr : "%" + $("#ddl_ipadr").val() + "%",
+	  		dtb_nm : "%" + $("#ddl_dtb_nm").val() + "%",
+	  		scm_nm : "%" + $("#ddl_scm_nm").val() + "%"
+	  	},
+		dataType : "json",
+		type : "post",
+		beforeSend: function(xhr) {
+	        xhr.setRequestHeader("AJAX", true);
+	     },
+		error : function(xhr, status, error) {
+			if(xhr.status == 401) {
+				alert("<spring:message code='message.msg02' />");
+				top.location.href = "/";
+			} else if(xhr.status == 403) {
+				alert("<spring:message code='message.msg03' />");
+				top.location.href = "/";
+			} else {
+				alert("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""));
+			}
+		},
+		success : function(data) {
+			if(data.length > 0){
+				tableDDL.rows({selected: true}).deselect();
+				tableDDL.clear().draw();
+				tableDDL.rows.add(data).draw();
+			}else{
+				tableDDL.clear().draw();
+			}
+		}
+	});
 	
 }
+
 /* ********************************************************
  * 데이터이행 데이터 가져오기
  ******************************************************** */
 function getdataDataList(){
-	
+	$.ajax({
+		url : "/db2pg/selectDataWork.do", 
+	  	data : {
+	  		wrk_nm : "%" + $("#data_wrk_nm").val() + "%",
+	  		data_dbms_dscd : $("#data_dbms_dscd").val(),
+	  		dbms_dscd : "%" +$("#dbms_dscd").val()+ "%",
+	  		ipadr : "%" + $("#data_ipadr").val() + "%",
+	  		dtb_nm : "%" + $("#data_dtb_nm").val() + "%",
+	  		scm_nm : "%" + $("#data_scm_nm").val() + "%"
+	  	},
+		dataType : "json",
+		type : "post",
+		beforeSend: function(xhr) {
+	        xhr.setRequestHeader("AJAX", true);
+	     },
+		error : function(xhr, status, error) {
+			if(xhr.status == 401) {
+				alert("<spring:message code='message.msg02' />");
+				top.location.href = "/";
+			} else if(xhr.status == 403) {
+				alert("<spring:message code='message.msg03' />");
+				top.location.href = "/";
+			} else {
+				alert("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""));
+			}
+		},
+		success : function(data) {
+			if(data.length > 0){
+	 			tableData.rows({selected: true}).deselect();
+	 			tableData.clear().draw();
+	 			tableData.rows.add(data).draw();
+			}else{
+				tableData.clear().draw();
+			}
+		}
+	});
 }
 
 /* ********************************************************
@@ -184,15 +337,22 @@ function fn_ddl_reg_popup(){
  * DDL추출 수정 팝업
  ******************************************************** */
 function fn_ddl_regre_popup(){
-	var popUrl = "/db2pg/popup/ddlRegReForm.do";
-	var width = 965;
-	var height = 820;
-	var left = (window.screen.width / 2) - (width / 2);
-	var top = (window.screen.height /2) - (height / 2);
-	var popOption = "width="+width+", height="+height+", top="+top+", left="+left+", resizable=no, scrollbars=yes, status=no, toolbar=no, titlebar=yes, location=no,";
-	
-	var winPop = window.open(popUrl,"ddlRegRePop",popOption);
-	winPop.focus();
+	var rowCnt = tableDDL.rows('.selected').data().length;
+	if (rowCnt == 1) {
+		var db2pg_ddl_wrk_id = tableDDL.row('.selected').data().db2pg_ddl_wrk_id;
+		var popUrl = "/db2pg/popup/ddlRegReForm.do?db2pg_ddl_wrk_id=" +  db2pg_ddl_wrk_id;
+		var width = 965;
+		var height = 820;
+		var left = (window.screen.width / 2) - (width / 2);
+		var top = (window.screen.height /2) - (height / 2);
+		var popOption = "width="+width+", height="+height+", top="+top+", left="+left+", resizable=no, scrollbars=yes, status=no, toolbar=no, titlebar=yes, location=no,";
+		
+		var winPop = window.open(popUrl,"ddlRegRePop",popOption);
+		winPop.focus();
+	} else {
+		alert("<spring:message code='message.msg04' />");
+		return false;
+	}
 }
 
 /* ********************************************************
@@ -300,25 +460,25 @@ function fn_copy(){
 		<div class="contents">
 			<div class="cmm_tab">
 				<ul id="tab1">
-					<li class="atv"><a href="javascript:selectTab('rman')">DDL추출</a></li>
-					<li><a href="javascript:selectTab('dump')">데이터이행</a></li>
+					<li class="atv"><a href="javascript:selectTab('ddlWork')">DDL추출</a></li>
+					<li><a href="javascript:selectTab('dataWork')">데이터이행</a></li>
 				</ul>
 				<ul id="tab2" style="display:none;">
-					<li><a href="javascript:selectTab('rman')">DDL추출</a></li>
-					<li class="atv"><a href="javascript:selectTab('dump')">데이터이행</a></li>
+					<li><a href="javascript:selectTab('ddlWork')">DDL추출</a></li>
+					<li class="atv"><a href="javascript:selectTab('dataWork')">데이터이행</a></li>
 				</ul>
 			</div>
 			<div class="cmm_grp">
 				<div class="btn_type_float">
 					<span class="btn btnC_01 btn_fl"><button type="button" id="btnExcel" onclick="fn_copy()">복제</button></span> 														
 					<div class="btn_type_01" id="btnDDL">
-						<a class="btn" onClick="fn_rman_find_list();"><button type="button"><spring:message code="common.search" /></button></a>
+						<a class="btn" onClick="getddlDataList();"><button type="button"><spring:message code="common.search" /></button></a>
 						<span class="btn" onclick="fn_ddl_reg_popup()"><button type="button"><spring:message code="common.registory" /></button></span>
 						<span class="btn" onClick="fn_ddl_regre_popup()"><button type="button"><spring:message code="common.modify" /></button></span>
 						<span class="btn" onClick="fn_rman_work_delete()"><button type="button"><spring:message code="common.delete" /></button></span>
 					</div>
 					<div class="btn_type_01" id="btnData" style="display:none;">
-						<span class="btn" onclick="fn_dump_find_list()"><button type="button"><spring:message code="common.search" /></button></span>
+						<span class="btn" onclick="getdataDataList()"><button type="button"><spring:message code="common.search" /></button></span>
 						<span class="btn" onclick="fn_data_reg_popup()"><button type="button"><spring:message code="common.registory" /></button></span>
 						<span class="btn" onclick="fn_data_regre_popup()"><button type="button"><spring:message code="common.modify" /></button></span>
 						<span class="btn" onclick="fn_dump_work_delete()"><button type="button"><spring:message code="common.delete" /></button></span>
@@ -339,24 +499,24 @@ function fn_copy(){
 						<tbody>
 							<tr>
 								<th scope="row" class="t9"><spring:message code="common.work_name" /></th>
-								<td><input type="text" name="wrk_nm" id="wrk_nm" class="txt t3" maxlength="25"/></td>
+								<td><input type="text" name="ddl_wrk_nm" id="ddl_wrk_nm" class="txt t3" maxlength="25"/></td>
 								<th scope="row" class="t9">DBMS구분</th>
-								<td><input type="text" name="dbnms_nm" id="dbnms_nm" class="txt t3" maxlength="25"/></td>
+								<td><input type="text" name="ddl_dbms_dscd" id="ddl_dbms_dscd" class="txt t3"/></td>
 							</tr>
 							<tr>
-								<th scope="row" class="t9">호스트명</th>
-								<td><input type="text" name="wrk_nm" id="wrk_nm" class="txt t3" maxlength="25"/></td>
+								<th scope="row" class="t9">아이피</th>
+								<td><input type="text" name="ddl_ipadr" id="ddl_ipadr" class="txt t3"/></td>
 								<th scope="row" class="t9">Database</th>
-								<td><input type="text" name="dbnms_nm" id="dbnms_nm" class="txt t3" maxlength="25"/></td>
+								<td><input type="text" name="ddl_dtb_nm" id="ddl_dtb_nm" class="txt t3"/></td>
 								<th scope="row" class="t9">스키마</th>
-								<td><input type="text" name="dbnms_nm" id="dbnms_nm" class="txt t3" maxlength="25"/></td>
+								<td><input type="text" name="ddl_scm_nm" id="ddl_scm_nm" class="txt t3"/></td>
 							</tr>
 						</tbody>
 					</table>
 					<table class="write" id="searchData" style="display:none;">
 						<caption>검색 조회</caption>
 						<colgroup>
-								<col style="width:10%;" />
+							<col style="width:10%;" />
 							<col style="width:25%;" />
 							<col style="width:10%;" />
 							<col style="width:25%;" />
@@ -367,22 +527,28 @@ function fn_copy(){
 						<tbody>
 							<tr>
 								<th scope="row" class="t9"><spring:message code="common.work_name" /></th>
-								<td><input type="text" name="wrk_nm" id="wrk_nm" class="txt t3" maxlength="25"/></td>
+								<td><input type="text" name="data_wrk_nm" id="data_wrk_nm" class="txt t3" maxlength="25"/></td>
+								<th scope="row" class="t9">구분</th>
+								<td>		
+									<select name="data_dbms_dscd" id="data_dbms_dscd" class="select t5" >
+										<option value="source_system">소스시스템</option>	
+										<option value="target_system">타겟시스템</option>				
+									</select>	
+								</td>
 								<th scope="row" class="t9">DBMS구분</th>
-								<td><input type="text" name="dbnms_nm" id="dbnms_nm" class="txt t3" maxlength="25"/></td>
+								<td><input type="text" name="dbms_dscd" id="dbms_dscd" class="txt t3"/></td>
 							</tr>
 							<tr>
-								<th scope="row" class="t9">호스트명</th>
-								<td><input type="text" name="wrk_nm" id="wrk_nm" class="txt t3" maxlength="25"/></td>
+								<th scope="row" class="t9">아이피</th>
+								<td><input type="text" name="data_ipadr" id="data_ipadr" class="txt t3"/></td>
 								<th scope="row" class="t9">Database</th>
-								<td><input type="text" name="dbnms_nm" id="dbnms_nm" class="txt t3" maxlength="25"/></td>
+								<td><input type="text" name="data_dtb_nm" id="data_dtb_nm" class="txt t3"/></td>
 								<th scope="row" class="t9">스키마</th>
-								<td><input type="text" name="dbnms_nm" id="dbnms_nm" class="txt t3" maxlength="25"/></td>
+								<td><input type="text" name="data_scm_nm" id="data_scm_nm" class="txt t3"/></td>
 							</tr>
 						</tbody>
 					</table>
 				</div>
-				
 				
 				<div class="overflow_area">
 					<table id="ddlDataTable" class="display" cellspacing="0" width="100%">
@@ -392,9 +558,9 @@ function fn_copy(){
 									<th width="10"></th>
 									<th width="30"><spring:message code="common.no" /></th>
 									<th width="100">Work명</th>
-									<th width="100">Work설명</th>
+									<th width="200">Work설명</th>
 									<th width="100">DBMS 구분</th>
-									<th width="100">호스트명</th>
+									<th width="100">아이피</th>
 									<th width="100">Database</th>
 									<th width="100">스키마</th>
 									<th width="100">등록자</th>
@@ -408,18 +574,26 @@ function fn_copy(){
 						<caption></caption>
 							<thead>
 								<tr>
-									<th width="10"></th>
-									<th width="100"><spring:message code="common.no" /></th>
-									<th width="100">Work명</th>
-									<th width="100">Work설명</th>
+									<th width="10" rowspan="2"></th>
+									<th width="30" rowspan="2"><spring:message code="common.no" /></th>
+									<th width="100" rowspan="2">Work명</th>
+									<th width="200" rowspan="2">Work설명</th>
+									<th width="400" colspan="4">소스시스템</th>
+									<th width="400" colspan="4">타겟시스템</th>
+									<th width="100" rowspan="2">등록자</th>
+									<th width="100" rowspan="2">등록일시</th>
+									<th width="100" rowspan="2">수정자</th>
+									<th width="100" rowspan="2">수정일시</th>
+								</tr>
+								<tr>
 									<th width="100">DBMS 구분</th>
-									<th width="100">호스트명</th>
+									<th width="100">아이피</th>
 									<th width="100">Database</th>
 									<th width="100">스키마</th>
-									<th width="100">등록자</th>
-									<th width="100">등록일시</th>
-									<th width="100">수정자</th>
-									<th width="100">수정일시</th>
+									<th width="100">DBMS 구분</th>
+									<th width="100">아이피</th>
+									<th width="100">Database</th>
+									<th width="100">스키마</th>
 								</tr>
 							</thead>
 					</table>
@@ -434,7 +608,7 @@ function fn_copy(){
 
 <div id="pop_layer_copy" class="pop-layer">
 		<div class="pop-container" style="padding: 0px;">
-			<div class="pop_cts" style="width: 50%; height: 300px; overflow: auto; padding: 20px; margin: 0 auto; min-height:0; min-width:0; margin-top: 10%" id="workinfo">
+			<div class="pop_cts" style="width: 50%; height: 350px; overflow: auto; padding: 40px; margin: 0 auto; min-height:0; min-width:0;">
 				<p class="tit" style="margin-bottom: 15px;">복제 등록
 					<a href="#n" class="btn" onclick="toggleLayer($('#pop_layer_copy'), 'off');" style="float: right;"><img src="/images/ico_state_01.png" style="margin-left: 235px;"/></a>
 				</p>

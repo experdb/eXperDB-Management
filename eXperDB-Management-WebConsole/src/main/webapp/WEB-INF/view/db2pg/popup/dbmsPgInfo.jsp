@@ -64,7 +64,7 @@ function fn_init() {
 			var datas = table.row(this).data();
 			var db2pg_sys_id = datas.db2pg_sys_id;		
 			var db2pg_sys_nm = datas.db2pg_sys_nm;		
-			opener.fn_dbmsAddCallback(db2pg_sys_id,db2pg_sys_nm);
+			opener.fn_dbmsPgAddCallback(db2pg_sys_id,db2pg_sys_nm);
 			self.close();
 		});	
 }
@@ -86,7 +86,7 @@ function fn_search(){
   		data : {
   		 	db2pg_sys_nm : $("#db2pg_sys_nm").val(),
   			ipadr : $("#ipadr").val(),
-  		  	dbms_dscd : $("#dbms_dscd").val()
+  		  	dbms_dscd : 'TC002204'
   		},
   		type : "post",
   		beforeSend: function(xhr) {
@@ -126,7 +126,7 @@ function fn_Add(){
 	} 
 	var db2pg_sys_id = datas[0].db2pg_sys_id;		
 	var db2pg_sys_nm = datas[0].db2pg_sys_nm;	
-	opener.fn_dbmsAddCallback(db2pg_sys_id,db2pg_sys_nm);
+	opener.fn_dbmsPgAddCallback(db2pg_sys_id,db2pg_sys_nm);
 	self.close();
 }
 
@@ -143,35 +143,15 @@ function fn_Add(){
 			<table class="write bdtype1">
 				<caption><spring:message code="menu.schedule_registration" /></caption>				
 				<colgroup>
-					<col style="width:8%;" />
-					<col style="width:22%;" />
-					<col style="width:8%;" />
-					<col style="width:12%;" />
-					<col style="width:8%;" />
-					<col style="width:22%;" />
+					<col style="width:10%;" />
+					<col style="width:40%;" />
+					<col style="width:10%;" />
+					<col style="width:40%;" />
 				</colgroup>
 				<tbody>
 					<tr>
 						<th scope="row" class="ico_t1">시스템명</th>
-						<td><input type="text" class="txt t3" name="db2pg_sys_nm" id="db2pg_sys_nm" /></td>		
-						<th scope="row" class="ico_t1">DBMS구분</th>
-						<td>
-							<select name="dbms_dscd" id="dbms_dscd" class="select t8" >
-									<option value=""><spring:message code="common.total" /></option>				
-										<c:forEach var="result" items="${result}" varStatus="status">												 
- 										<option value="<c:out value="${result.dbms_dscd}"/>" >
-	 											<c:if test="${result.dbms_dscd == 'TC002201'}"><c:out value="Oracle"/> </c:if>
-	 											<c:if test="${result.dbms_dscd == 'TC002202'}"><c:out value="MS-SQL"/> </c:if>
-	 											<c:if test="${result.dbms_dscd == 'TC002203'}"><c:out value="MySQL"/> </c:if>
-	 											<c:if test="${result.dbms_dscd == 'TC002204'}"><c:out value="PostgreSQL"/> </c:if>
- 												<c:if test="${result.dbms_dscd == 'TC002205'}"><c:out value="DB2"/> </c:if>
-												<c:if test="${result.dbms_dscd == 'TC002206'}"><c:out value="SyBaseASE"/> </c:if>
-												<c:if test="${result.dbms_dscd == 'TC002207'}"><c:out value="CUBRID"/> </c:if>
-												<c:if test="${result.dbms_dscd == 'TC002208'}"><c:out value="Tibero"/> </c:if>
- 										</option>
- 										</c:forEach>
-								</select>						
-						</td>									
+						<td><input type="text" class="txt t3" name="db2pg_sys_nm" id="db2pg_sys_nm" /></td>									
 						<th scope="row" class="ico_t1" >아이피</th>
 						<td><input type="text" class="txt t3" name="ipadr" id="ipadr" /></td>				
 					</tr>
