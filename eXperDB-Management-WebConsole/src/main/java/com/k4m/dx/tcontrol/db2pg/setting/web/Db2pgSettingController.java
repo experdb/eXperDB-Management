@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.k4m.dx.tcontrol.common.service.HistoryVO;
+import com.k4m.dx.tcontrol.db2pg.dbms.service.Db2pgSysInfVO;
 import com.k4m.dx.tcontrol.db2pg.dbms.service.DbmsService;
 import com.k4m.dx.tcontrol.db2pg.setting.service.CodeVO;
 import com.k4m.dx.tcontrol.db2pg.setting.service.DDLConfigVO;
@@ -507,16 +508,23 @@ public class Db2pgSettingController {
 	 * @throws Exception
 	 */
 	@RequestMapping(value = "/db2pg/popup/tableInfo.do")
-	public ModelAndView tableInfo(HttpServletRequest request, @ModelAttribute("historyVO") HistoryVO historyVO) {
+	public ModelAndView tableInfo(HttpServletRequest request, @ModelAttribute("historyVO") HistoryVO historyVO, @ModelAttribute("db2pgSysInfVO") Db2pgSysInfVO db2pgSysInfVO) {
 		ModelAndView mv = new ModelAndView();
+		List<Db2pgSysInfVO> resultSet = null;
 		try {
 			// 화면접근이력 이력 남기기
 //			CmmnUtils.saveHistory(request, historyVO);
 //			historyVO.setExe_dtl_cd("DX-T0022");
 //			accessHistoryService.insertHistory(historyVO);
+			
+			db2pgSysInfVO.setDb2pg_sys_id( Integer.parseInt(request.getParameter("db2pg_sys_id")));
+			
+			resultSet = dbmsService.selectDb2pgDBMS(db2pgSysInfVO);
+				
 		} catch (Exception e2) {
 			e2.printStackTrace();
 		}
+		mv.addObject("dbmsInfo", resultSet);
 		mv.setViewName("db2pg/popup/tableInfo");
 		return mv;
 	}
