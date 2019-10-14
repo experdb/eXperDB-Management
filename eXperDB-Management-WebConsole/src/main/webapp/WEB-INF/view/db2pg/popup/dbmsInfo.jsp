@@ -29,7 +29,7 @@
 <script>
 var table = null;
 function fn_init() {
-		table = $('#sourceList').DataTable({
+		table = $('#dbmsList').DataTable({
 		scrollY : "150px",
 		scrollX: true,	
 		bSort: false,
@@ -37,14 +37,15 @@ function fn_init() {
 		searching : false,
 		paging : true,	
 		columns : [
-		{data : "idx", className : "dt-center", defaultContent : ""}, 
-		{data : "idx", className : "dt-center", defaultContent : ""},
-		{data : "idx", className : "dt-center", defaultContent : ""},
-		{data : "idx", className : "dt-center", defaultContent : ""},
-		{data : "idx", className : "dt-center", defaultContent : ""},
-		{data : "idx", className : "dt-center", defaultContent : ""},
-		{data : "idx", className : "dt-center", defaultContent : ""},
-		{data : "idx", className : "dt-center", defaultContent : ""}		
+		   		{data : "no", defaultContent : ""},
+				{data : "db2pg_sys_nm", defaultContent : ""},
+				{data : "dbms_dscd", defaultContent : ""},
+				{data : "ipadr", defaultContent : ""},
+				{data : "dtb_nm", defaultContent : ""},
+				{data : "scm_nm", defaultContent : ""},
+				{data : "portno", defaultContent : ""},
+			    {data : "spr_usr_id", defaultContent : ""},
+			    {data : "db2pg_sys_id", defaultContent : "", visible: false}
 		],'select': {'style': 'multi'}
 	});
 		
@@ -57,8 +58,15 @@ function fn_init() {
 		table.tables().header().to$().find('th:eq(6)').css('min-width', '100px');
 		table.tables().header().to$().find('th:eq(7)').css('min-width', '100px');  
 
-		
 		$(window).trigger('resize'); 
+		
+		$('#dbmsList tbody').on('dblclick','tr',function() {
+			var datas = table.row(this).data();
+			var db2pg_sys_id = datas.db2pg_sys_id;		
+			var db2pg_sys_nm = datas.db2pg_sys_nm;		
+			opener.fn_dbmsAddCallback(db2pg_sys_id,db2pg_sys_nm);
+			self.close();
+		});	
 }
 
 /* ********************************************************
@@ -66,49 +74,47 @@ function fn_init() {
  ******************************************************** */
 $(window.document).ready(function() {
 	fn_init();
+	fn_search();
 });
 
 /* ********************************************************
  * 조회
  ******************************************************** */
 function fn_search(){
-	if($("#db_svr_nm").val() == "%"){
-		alert('<spring:message code="message.msg152"/>');
-		return false;
-	}
-
-	$.ajax({
-		url : "/selectsourceList.do",
-		data : {
-			bsn_dscd : $("#work").val(),
-			db_svr_nm : $("#db_svr_nm").val(),
-			wrk_nm : $("#wrk_nm").val()
-		},
-		dataType : "json",
-		type : "post",
-		beforeSend: function(xhr) {
-	        xhr.setRequestHeader("AJAX", true);
-	     },
-		error : function(xhr, status, error) {
-			if(xhr.status == 401) {
-				alert('<spring:message code="message.msg02" />');
-				top.location.href = "/";
-			} else if(xhr.status == 403) {
-				alert('<spring:message code="message.msg03" />');
-				top.location.href = "/";
-			} else {
-				alert("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""));
-			}
-		},
-		success : function(result) {
-			table.rows({selected: true}).deselect();
-			table.clear().draw();
-			table.rows.add(result).draw();
-		}
-	});
+ 	$.ajax({
+  		url : "/selectDb2pgDBMS.do",
+  		data : {
+  		 	db2pg_sys_nm : $("#db2pg_sys_nm").val(),
+  			ipadr : $("#ipadr").val(),
+  		  	dbms_dscd : $("#dbms_dscd").val()
+  		},
+  		type : "post",
+  		beforeSend: function(xhr) {
+  	        xhr.setRequestHeader("AJAX", true);
+  	     },
+  		error : function(xhr, status, error) {
+  			if(xhr.status == 401) {
+  				alert('<spring:message code="message.msg02" />');
+  				top.location.href = "/";
+  			} else if(xhr.status == 403) {
+  				alert('<spring:message code="message.msg03" />');
+  				top.location.href = "/";
+  			} else {
+  				alert("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""));
+  			}
+  		},
+  		success : function(result) {
+  			if(result.length > 0){
+  				table.clear().draw();
+  				table.rows.add(result).draw();
+  			}else{
+  				table.clear().draw();
+  			}
+  		}
+  	});  
 }
 
-
+	
 /* ********************************************************
  * 등록
  ******************************************************** */
@@ -118,17 +124,13 @@ function fn_Add(){
 		alert('<spring:message code="message.msg35" />');
 		return false;
 	} 
-	
-	var rowList = [];
-    for (var i = 0; i < datas.length; i++) {
-        rowList.push( table.rows('.selected').data()[i].wrk_id);   
-	   //rowList.push( table.rows('.selected').data()[i]);     
-  }	
-	opener.fn_workAddCallback(JSON.stringify(rowList));
+	var db2pg_sys_id = datas[0].db2pg_sys_id;		
+	var db2pg_sys_nm = datas[0].db2pg_sys_nm;	
+	opener.fn_dbmsAddCallback(db2pg_sys_id,db2pg_sys_nm);
 	self.close();
 }
-</script>
 
+</script>
 </head>
 <body>
 <div class="pop_container">
@@ -141,25 +143,37 @@ function fn_Add(){
 			<table class="write bdtype1">
 				<caption><spring:message code="menu.schedule_registration" /></caption>				
 				<colgroup>
-					<col style="width:10%;" />
-					<col style="width:20%;" />
-					<col style="width:10%;" />
-					<col style="width:10%;" />
-					<col style="width:10%;" />
-					<col style="width:20%;" />
+					<col style="width:8%;" />
+					<col style="width:22%;" />
+					<col style="width:8%;" />
+					<col style="width:12%;" />
+					<col style="width:8%;" />
+					<col style="width:22%;" />
 				</colgroup>
 				<tbody>
 					<tr>
 						<th scope="row" class="ico_t1">시스템명</th>
-						<td><input type="text" class="txt t4" name="wrk_nm" id="wrk_nm" /></td>		
+						<td><input type="text" class="txt t3" name="db2pg_sys_nm" id="db2pg_sys_nm" /></td>		
 						<th scope="row" class="ico_t1">DBMS구분</th>
 						<td>
-						<select class="select t8" name="work" id="work">
-								<option value="%"><spring:message code="common.choice" /></option>
-						</select>						
+							<select name="dbms_dscd" id="dbms_dscd" class="select t8" >
+									<option value=""><spring:message code="common.total" /></option>				
+										<c:forEach var="result" items="${result}" varStatus="status">												 
+ 										<option value="<c:out value="${result.dbms_dscd}"/>" >
+	 											<c:if test="${result.dbms_dscd == 'TC002201'}"><c:out value="Oracle"/> </c:if>
+	 											<c:if test="${result.dbms_dscd == 'TC002202'}"><c:out value="MS-SQL"/> </c:if>
+	 											<c:if test="${result.dbms_dscd == 'TC002203'}"><c:out value="MySQL"/> </c:if>
+	 											<c:if test="${result.dbms_dscd == 'TC002204'}"><c:out value="PostgreSQL"/> </c:if>
+ 												<c:if test="${result.dbms_dscd == 'TC002205'}"><c:out value="DB2"/> </c:if>
+												<c:if test="${result.dbms_dscd == 'TC002206'}"><c:out value="SyBaseASE"/> </c:if>
+												<c:if test="${result.dbms_dscd == 'TC002207'}"><c:out value="CUBRID"/> </c:if>
+												<c:if test="${result.dbms_dscd == 'TC002208'}"><c:out value="Tibero"/> </c:if>
+ 										</option>
+ 										</c:forEach>
+								</select>						
 						</td>									
 						<th scope="row" class="ico_t1" >아이피</th>
-						<td><input type="text" class="txt t4" name="wrk_nm" id="wrk_nm" /></td>				
+						<td><input type="text" class="txt t3" name="ipadr" id="ipadr" /></td>				
 					</tr>
 				</tbody>
 			</table>
@@ -168,15 +182,15 @@ function fn_Add(){
 		<div class="pop_cmm3">
 			<p class="pop_s_tit">DBMS 시스템 리스트</p>
 			<div class="overflow_area">
-				<table id="sourceList" class="display" cellspacing="0" width="100%">
+				<table id="dbmsList" class="display" cellspacing="0" width="100%">
 				<thead>
 					<tr>
 						<th width="50"><spring:message code="common.no" /></th>
-						<th width="100" class="dt-center">시스템명</th>
-						<th width="100" class="dt-center">DBMS구분</th>
+						<th width="100">시스템명</th>
+						<th width="100">DBMS구분</th>
 						<th width="100">아이피</th>
 						<th width="100">Database</th>
-						<th width="100">스미카</th>
+						<th width="100">스키마</th>
 						<th width="100">포트</th>
 						<th width="100">User</th>
 					</tr>
