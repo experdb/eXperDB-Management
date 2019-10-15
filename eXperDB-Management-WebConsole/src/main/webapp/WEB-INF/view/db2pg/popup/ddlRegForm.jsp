@@ -158,20 +158,57 @@ function fn_pathCheck() {
  ******************************************************** */
 function fn_insert_work(){
 	if(valCheck()){
+		//등록하기 전 work명 한번 더 중복 체크
 		$.ajax({
-			async : false,
-			url : "/db2pg/insertDDLWork.do",
-		  	data : {
-		  		db2pg_ddl_wrk_nm : $("#db2pg_ddl_wrk_nm").val().trim(),
-		  		db2pg_ddl_wrk_exp : $("#db2pg_ddl_wrk_exp").val(),
-		  		db2pg_sys_id : $("#db2pg_sys_id").val(),
-		  		db2pg_uchr_lchr_val : $("#db2pg_uchr_lchr_val").val(),
-		  		src_tb_ddl_exrt_tf : $("#src_tb_ddl_exrt_tf").val(),
-		  		src_include_tables : $("#src_include_tables").val(),
-		  		src_exclude_tables : $("#src_exclude_tables").val(),
-		  		ddl_save_pth : $("#ddl_save_pth").val()
-		  	},
-			type : "post",
+			url : '/wrk_nmCheck.do',
+			type : 'post',
+			data : {
+				wrk_nm : $("#db2pg_ddl_wrk_nm").val()
+			},
+			success : function(result) {
+				if (result == "true") {
+						$.ajax({
+							url : "/db2pg/insertDDLWork.do",
+						  	data : {
+						  		db2pg_ddl_wrk_nm : $("#db2pg_ddl_wrk_nm").val().trim(),
+						  		db2pg_ddl_wrk_exp : $("#db2pg_ddl_wrk_exp").val(),
+						  		db2pg_sys_id : $("#db2pg_sys_id").val(),
+						  		db2pg_uchr_lchr_val : $("#db2pg_uchr_lchr_val").val(),
+						  		src_tb_ddl_exrt_tf : $("#src_tb_ddl_exrt_tf").val(),
+						  		src_include_tables : $("#src_include_tables").val(),
+						  		src_exclude_tables : $("#src_exclude_tables").val(),
+						  		ddl_save_pth : $("#ddl_save_pth").val()
+						  	},
+							type : "post",
+							beforeSend: function(xhr) {
+						        xhr.setRequestHeader("AJAX", true);
+						     },
+							error : function(xhr, status, error) {
+								if(xhr.status == 401) {
+									alert('<spring:message code="message.msg02" />');
+									top.location.href = "/";
+								} else if(xhr.status == 403) {
+									alert('<spring:message code="message.msg03" />');
+									top.location.href = "/";
+								} else {
+									alert("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""));
+								}
+							},
+							success : function(result) {
+								if(result==true){
+									alert('<spring:message code="message.msg07" /> ');
+									opener.location.reload();
+									self.close();
+								}else{
+									alert('등록에 실패했습니다.');
+								}	
+							}
+						});	
+				} else {
+					alert('<spring:message code="backup_management.effective_work_nm"/>');
+					document.getElementById("db2pg_ddl_wrk_nm").focus();
+				}
+			},
 			beforeSend: function(xhr) {
 		        xhr.setRequestHeader("AJAX", true);
 		     },
@@ -185,15 +222,6 @@ function fn_insert_work(){
 				} else {
 					alert("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""));
 				}
-			},
-			success : function(result) {
-				if(result==true){
-					alert('<spring:message code="message.msg07" /> ');
-					opener.location.reload();
-					self.close();
-				}else{
-					alert('등록에 실패했습니다.');
-				}	
 			}
 		});
 	}
