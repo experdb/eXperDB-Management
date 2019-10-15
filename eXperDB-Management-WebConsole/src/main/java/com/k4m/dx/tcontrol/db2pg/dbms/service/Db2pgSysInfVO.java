@@ -2,8 +2,11 @@ package com.k4m.dx.tcontrol.db2pg.dbms.service;
 
 public class Db2pgSysInfVO {
 
+	private int rownum;
+	private int idx;
 	private int db2pg_sys_id;
 	private String db2pg_sys_nm;
+	private String dbms_dscd_nm;
 	private String dbms_dscd;
 	private String ipadr;
 	private String dtb_nm;
@@ -11,11 +14,28 @@ public class Db2pgSysInfVO {
 	private int portno;
 	private String scm_nm;
 	private String pwd;
+	private String crts;
 	private String crts_nm;
 	private String frst_regr_id;
 	private String frst_reg_dtm;
 	private String lst_mdfr_id;
 	private String lst_mdf_dtm;
+
+	public int getRownum() {
+		return rownum;
+	}
+
+	public void setRownum(int rownum) {
+		this.rownum = rownum;
+	}
+
+	public int getIdx() {
+		return idx;
+	}
+
+	public void setIdx(int idx) {
+		this.idx = idx;
+	}
 
 	public int getDb2pg_sys_id() {
 		return db2pg_sys_id;
@@ -31,6 +51,14 @@ public class Db2pgSysInfVO {
 
 	public void setDb2pg_sys_nm(String db2pg_sys_nm) {
 		this.db2pg_sys_nm = db2pg_sys_nm;
+	}
+
+	public String getDbms_dscd_nm() {
+		return dbms_dscd_nm;
+	}
+
+	public void setDbms_dscd_nm(String dbms_dscd_nm) {
+		this.dbms_dscd_nm = dbms_dscd_nm;
 	}
 
 	public String getDbms_dscd() {
@@ -87,6 +115,14 @@ public class Db2pgSysInfVO {
 
 	public void setPwd(String pwd) {
 		this.pwd = pwd;
+	}
+
+	public String getCrts() {
+		return crts;
+	}
+
+	public void setCrts(String crts) {
+		this.crts = crts;
 	}
 
 	public String getCrts_nm() {

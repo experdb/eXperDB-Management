@@ -231,4 +231,5 @@ public class ClientProtocolID {
 	public static final String DUMP_OPTION = "DUMP_OPTION";
 	public static final String DB_NM = "DB_NM";
 	public static final String DB_TYPE = "DB_TYPE";
+	public static final String TABLE_NM = "TABLE_NM";
 }

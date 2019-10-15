@@ -9,6 +9,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import org.json.simple.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -17,7 +18,10 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
+import com.k4m.dx.tcontrol.cmmn.client.ClientProtocolID;
 import com.k4m.dx.tcontrol.common.service.HistoryVO;
+import com.k4m.dx.tcontrol.db2pg.cmmn.DBCPPoolManager;
+import com.k4m.dx.tcontrol.db2pg.cmmn.DatabaseTableInfo;
 import com.k4m.dx.tcontrol.db2pg.dbms.service.Db2pgSysInfVO;
 import com.k4m.dx.tcontrol.db2pg.dbms.service.DbmsService;
 import com.k4m.dx.tcontrol.db2pg.setting.service.CodeVO;
@@ -598,5 +602,46 @@ public class Db2pgSettingController {
 			e.printStackTrace();
 		}
 		return blnReturn;
+	}
+	
+	
+	/**
+	 * 각 DBMS 테이블 리스트 조회
+	 * 
+	 * @return result
+	 * @throws Exception
+	 */
+	@RequestMapping(value="/selectTableList.do")
+	public @ResponseBody JSONObject selectTableList(@ModelAttribute("historyVO") HistoryVO historyVO, HttpServletRequest request) {
+		
+		JSONObject result = new JSONObject();
+		
+		try {
+			
+		JSONObject serverObj = new JSONObject();
+
+		String ipadr = request.getParameter("ipadr");
+		String portno = request.getParameter("portno");
+		String db_nm = request.getParameter("dtb_nm");
+		String svr_spr_usr_id = request.getParameter("spr_usr_id");
+		String svr_spr_scm_pwd = request.getParameter("pwd");
+		String dbms_cd = request.getParameter("dbms_dscd");
+		String table_nm = request.getParameter("table_nm");
+		
+		serverObj.put(ClientProtocolID.SERVER_NAME, ipadr);
+		serverObj.put(ClientProtocolID.SERVER_IP, ipadr);
+		serverObj.put(ClientProtocolID.SERVER_PORT, portno);
+		serverObj.put(ClientProtocolID.DATABASE_NAME, db_nm);
+		serverObj.put(ClientProtocolID.USER_ID, svr_spr_usr_id);
+		serverObj.put(ClientProtocolID.USER_PWD, svr_spr_scm_pwd);
+		serverObj.put(ClientProtocolID.DB_TYPE, dbms_cd);
+		serverObj.put(ClientProtocolID.TABLE_NM, table_nm);
+		
+		result =  DatabaseTableInfo.getTblList(serverObj);
+
+	}catch (Exception e) {
+		e.printStackTrace();
+	}
+		return result;
 	}
 }
