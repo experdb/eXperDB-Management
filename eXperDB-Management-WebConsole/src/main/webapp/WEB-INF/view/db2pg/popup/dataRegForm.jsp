@@ -68,10 +68,10 @@ function valCheck(){
  ******************************************************** */
 function fn_checkBox(result){
 	if(result == 'true'){
-		$("#db2pg_usr_qry_id").removeAttr("readonly");
+		$("#db2pg_usr_qry").removeAttr("readonly");
 	}else{
-		$('#db2pg_usr_qry_id').val('');
-		$('#db2pg_usr_qry_id').attr('readonly', true);
+		$('#db2pg_usr_qry').val('');
+		$('#db2pg_usr_qry').attr('readonly', true);
 	}
 	
 }
@@ -312,10 +312,6 @@ function fn_tableList(){
 							</colgroup>
 							<tbody>
 								<tr>
-									<th scope="row" class="ico_t2">테이블에서 추출할 데이터 건수</th>
-									<td><input type="text" class="txt t4" name="exrt_dat_cnt" id="exrt_dat_cnt"/></td>
-								</tr>
-								<tr>
 									<th scope="row" class="ico_t2">추출 대상 테이블</th>
 									<td colspan="3"><input type="text" class="txt" name="src_include_tables" id="src_include_tables"/>
 										<span class="btn btnC_01"><button type="button" class= "btn_type_02" onclick="fn_tableList()" style="width: 60px; margin-right: -60px; margin-top: 0;">등록</button></span>							
@@ -339,6 +335,10 @@ function fn_tableList(){
 									<th scope="row" class="ico_t2">LOB 데이터 LOB 버퍼 사이즈(단위 MIB)</th>
 									<td><input type="number" class="txt t8" name="lob_dat_bff_sz" id="lob_dat_bff_sz" value="100"/></td>
 								</tr>
+								<tr>
+									<th scope="row" class="ico_t2">테이블에서 추출할 데이터 건수</th>
+									<td><input type="number" class="txt t8" name="exrt_dat_cnt" id="exrt_dat_cnt" value="-1" min="-1"/></td>
+								</tr>								
 							</tbody>
 						</table>
 					</div>

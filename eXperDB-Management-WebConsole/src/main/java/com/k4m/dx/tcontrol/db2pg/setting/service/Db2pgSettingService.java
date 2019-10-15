@@ -57,11 +57,29 @@ public interface Db2pgSettingService {
 	void insertDDLWork(DDLConfigVO ddlConfigVO) throws Exception;
 	
 	/**
+	 * DDL WORK 수정
+	 * 
+	 * @param ddlConfigVO
+	 * @throws Exception
+	 */
+	void updateDDLWork(DDLConfigVO ddlConfigVO) throws Exception;
+	
+	/**
 	 * Data WORK 등록
 	 * 
 	 * @param dataConfigVO
 	 * @throws Exception
 	 */
 	void insertDataWork(DataConfigVO dataConfigVO) throws Exception;
+	
+	/**
+	 * DDL WORK 상세정보
+	 * 
+	 * @param ddlConfigVO
+	 * @throws Exception
+	 */
+	DDLConfigVO selectDetailDDLWork(int db2pg_ddl_wrk_id) throws Exception;
+
+
 
 }

@@ -68,10 +68,10 @@ function valCheck(){
  ******************************************************** */
 function fn_checkBox(result){
 	if(result == 'true'){
-		$("#db2pg_usr_qry_id").removeAttr("readonly");
+		$("#db2pg_usr_qry").removeAttr("readonly");
 	}else{
-		$('#db2pg_usr_qry_id').val('');
-		$('#db2pg_usr_qry_id').attr('readonly', true);
+		$('#db2pg_usr_qry').val('');
+		$('#db2pg_usr_qry').attr('readonly', true);
 	}
 	
 }
@@ -119,6 +119,22 @@ function fn_check() {
 	});
 }
 
+/* ********************************************************
+ * DBMS 서버 호출하여 입력
+ ******************************************************** */
+ function fn_dbmsAddCallback(db2pg_sys_id,db2pg_sys_nm){
+	 $('#db2pg_source_system_id').val(db2pg_sys_id);
+	 $('#db2pg_source_system_nm').val(db2pg_sys_nm);
+}
+
+/* ********************************************************
+  * DBMS 서버(PG) 호출하여 입력
+  ******************************************************** */
+  function fn_dbmsPgAddCallback(db2pg_sys_id,db2pg_sys_nm){
+ 	 $('#db2pg_trg_sys_id').val(db2pg_sys_id);
+ 	 $('#db2pg_trg_sys_nm').val(db2pg_sys_nm);
+ }
+ 
 /* ********************************************************
  * 소스시스템 등록 버튼 클릭시
  ******************************************************** */
@@ -240,10 +256,6 @@ function fn_tableList(){
 							</colgroup>
 							<tbody>
 								<tr>
-									<th scope="row" class="ico_t2">테이블에서 추출할 데이터 건수</th>
-									<td><input type="text" class="txt t4" name="exrt_dat_cnt" id="exrt_dat_cnt"/></td>
-								</tr>
-								<tr>
 									<th scope="row" class="ico_t2">추출 대상 테이블</th>
 									<td colspan="3"><input type="text" class="txt" name="src_include_tables" id="src_include_tables"/>
 										<span class="btn btnC_01"><button type="button" class= "btn_type_02" onclick="fn_tableList()" style="width: 60px; margin-right: -60px; margin-top: 0;">등록</button></span>							
@@ -257,16 +269,20 @@ function fn_tableList(){
 								</tr>
 								<tr>
 									<th scope="row" class="ico_t2">추출 데이터 Fetch 사이즈</th>
-									<td><input type="text" class="txt t8" name="exrt_dat_ftch_sz" id="exrt_dat_ftch_sz" value="3000"/></td>
+									<td><input type="number" class="txt t8" name="exrt_dat_ftch_sz" id="exrt_dat_ftch_sz" value="3000"/></td>
 									<th scope="row" class="ico_t2">데이터 Fetch 버퍼 사이즈(단위 MIB)</th>
-									<td><input type="text" class="txt t8" name="dat_ftch_bff_sz" id="dat_ftch_bff_sz" value="10"/></td>
+									<td><input type="number" class="txt t8" name="dat_ftch_bff_sz" id="dat_ftch_bff_sz" value="10"/></td>
 								</tr>
 								<tr>
 									<th scope="row" class="ico_t2">추출 병렬처리 개수</th>
-									<td><input type="text" class="txt t8" name="exrt_prl_prcs_ecnt" id="exrt_prl_prcs_ecnt" value="1"/></td>
+									<td><input type="number" class="txt t8" name="exrt_prl_prcs_ecnt" id="exrt_prl_prcs_ecnt" value="1"/></td>
 									<th scope="row" class="ico_t2">LOB 데이터 LOB 버퍼 사이즈(단위 MIB)</th>
-									<td><input type="text" class="txt t8" name="lob_dat_bff_sz" id="lob_dat_bff_sz" value="100"/></td>
+									<td><input type="number" class="txt t8" name="lob_dat_bff_sz" id="lob_dat_bff_sz" value="100"/></td>
 								</tr>
+								<tr>
+									<th scope="row" class="ico_t2">테이블에서 추출할 데이터 건수</th>
+									<td><input type="number" class="txt t8" name="exrt_dat_cnt" id="exrt_dat_cnt" value="-1" min="-1"/></td>
+								</tr>								
 							</tbody>
 						</table>
 					</div>
@@ -351,7 +367,7 @@ function fn_tableList(){
 		</div>
 		
 		<div class="btn_type_02">
-			<span class="btn btnC_01" onClick="fn_update_work();"><button type="button"><spring:message code="common.registory" /></button></span>
+			<span class="btn btnC_01" onClick="fn_update_work();"><button type="button"><spring:message code="common.modify" /></button></span>
 			<a href="#n" class="btn" onclick="self.close();"><span><spring:message code="common.cancel" /></span></a>
 		</div>
 	</div>

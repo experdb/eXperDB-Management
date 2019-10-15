@@ -50,9 +50,21 @@ public class Db2pgSettingServiceImpl extends EgovAbstractServiceImpl implements 
 		db2pgSettingDAO.insertDDLWork(ddlConfigVO);
 		
 	}
-
+	
+	@Override
+	public void updateDDLWork(DDLConfigVO ddlConfigVO) throws Exception {
+		db2pgSettingDAO.updateDDLWork(ddlConfigVO);
+	}
+	
 	@Override
 	public void insertDataWork(DataConfigVO dataConfigVO) throws Exception {
 		db2pgSettingDAO.insertDataWork(dataConfigVO);
 	}
+
+	@Override
+	public DDLConfigVO selectDetailDDLWork(int db2pg_ddl_wrk_id) throws Exception {
+		return db2pgSettingDAO.selectDetailDDLWork(db2pg_ddl_wrk_id);
+	}
+
+
 }

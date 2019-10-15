@@ -36,19 +36,11 @@ $(window.document).ready(function() {
 	 
 });
 
-
 /* ********************************************************
  * Validation Check
  ******************************************************** */
 function valCheck(){
-	if($("#db2pg_ddl_wrk_nm").val() == ""){
-		alert('<spring:message code="message.msg107" />');
-		$("#db2pg_ddl_wrk_nm").focus();
-		return false;
-	}else if(db2pg_ddl_wrk_nmChk =="fail"){
-		alert('<spring:message code="backup_management.work_overlap_check"/>');
-		return false;
-	}else if($("#db2pg_ddl_wrk_exp").val() == ""){
+	if($("#db2pg_ddl_wrk_exp").val() == ""){
 		alert('<spring:message code="message.msg108" />');
 		$("#db2pg_ddl_wrk_exp").focus();
 		return false;
@@ -66,49 +58,6 @@ function valCheck(){
 	}else{
 		return true;
 	}
-}
-
-/* ********************************************************
- * WORK NM Validation Check
- ******************************************************** */
-function fn_check() {
-	var db2pg_ddl_wrk_nm = document.getElementById("db2pg_ddl_wrk_nm");
-	if (db2pg_ddl_wrk_nm.value == "") {
-		alert('<spring:message code="message.msg107" />');
-		document.getElementById('db2pg_ddl_wrk_nm').focus();
-		return;
-	}
-	$.ajax({
-		url : '/wrk_nmCheck.do',
-		type : 'post',
-		data : {
-			wrk_nm : $("#db2pg_ddl_wrk_nm").val()
-		},
-		success : function(result) {
-			if (result == "true") {
-				alert('<spring:message code="backup_management.reg_possible_work_nm"/>');
-				document.getElementById("db2pg_ddl_wrk_nm").focus();
-				db2pg_ddl_wrk_nmChk = "success";		
-			} else {
-				alert('<spring:message code="backup_management.effective_work_nm"/>');
-				document.getElementById("db2pg_ddl_wrk_nm").focus();
-			}
-		},
-		beforeSend: function(xhr) {
-	        xhr.setRequestHeader("AJAX", true);
-	     },
-		error : function(xhr, status, error) {
-			if(xhr.status == 401) {
-				alert('<spring:message code="message.msg02" />');
-				top.location.href = "/";
-			} else if(xhr.status == 403) {
-				alert('<spring:message code="message.msg03" />');
-				top.location.href = "/";
-			} else {
-				alert("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""));
-			}
-		}
-	});
 }
 
 /* ********************************************************
@@ -152,6 +101,7 @@ function fn_pathCheck() {
 		}
 	});	
 }
+
 /* ********************************************************
  * 수정 버튼 클릭시
  ******************************************************** */
@@ -161,6 +111,7 @@ function fn_update_work(){
 			async : false,
 			url : "/db2pg/updateDDLWork.do",
 		  	data : {
+		  		db2pg_ddl_wrk_id : "${db2pg_ddl_wrk_id}",
 		  		db2pg_ddl_wrk_nm : $("#db2pg_ddl_wrk_nm").val().trim(),
 		  		db2pg_ddl_wrk_exp : $("#db2pg_ddl_wrk_exp").val(),
 		  		db2pg_sys_id : $("#db2pg_sys_id").val(),
@@ -224,7 +175,11 @@ function fn_dbmsInfo(){
  * 추출 대상 테이블, 추출 제외 테이블 등록 버튼 클릭시
  ******************************************************** */
 function fn_tableList(){
-	var popUrl = "/db2pg/popup/tableInfo.do";
+	if($('#db2pg_sys_nm').val() == ""){
+		alert("소스시스템을 선택해주세요.");
+		return false;
+	}
+	var popUrl = "/db2pg/popup/tableInfo.do?db2pg_sys_id="+$('#db2pg_sys_id').val();
 	var width = 930;
 	var height = 675;
 	var left = (window.screen.width / 2) - (width / 2);
@@ -249,15 +204,14 @@ function fn_tableList(){
 				<tbody>
 					<tr>
 						<th scope="row" class="ico_t1"><spring:message code="common.work_name" /></th>
-						<td><input type="text" class="txt" name="db2pg_ddl_wrk_nm" id="db2pg_ddl_wrk_nm" maxlength="20" onkeyup="fn_checkWord(this,20)" placeholder="20<spring:message code='message.msg188'/>" onblur="this.value=this.value.trim()"/>
-						<span class="btn btnC_01"><button type="button" class= "btn_type_02" onclick="fn_check()" style="width: 60px; margin-right: -60px; margin-top: 0;"><spring:message code="common.overlap_check" /></button></span>
+						<td><input type="text" class="txt" name="db2pg_ddl_wrk_nm" id="db2pg_ddl_wrk_nm" value="${db2pg_ddl_wrk_nm}" maxlength="20" onkeyup="fn_checkWord(this,20)" readonly="readonly"/>
 						</td>
 					</tr>
 					<tr>
 						<th scope="row" class="ico_t1"><spring:message code="common.work_description" /></th>
 						<td>
 							<div class="textarea_grp">
-								<textarea name="db2pg_ddl_wrk_exp" id="db2pg_ddl_wrk_exp" maxlength="25" onkeyup="fn_checkWord(this,25)" placeholder="25<spring:message code='message.msg188'/>"></textarea>
+								<textarea name="db2pg_ddl_wrk_exp" id="db2pg_ddl_wrk_exp" maxlength="25" onkeyup="fn_checkWord(this,25)" placeholder="25<spring:message code='message.msg188'/>"><c:out value="${db2pg_ddl_wrk_exp}"/></textarea>
 							</div>
 						</td>
 					</tr>
@@ -274,7 +228,7 @@ function fn_tableList(){
 				<tbody>
 					<tr>
 						<th scope="row" class="ico_t2">소스시스템</th>
-						<td><input type="hidden" name="db2pg_sys_id" id="db2pg_sys_id"/><input type="text" class="txt" name="db2pg_sys_nm" id="db2pg_sys_nm" placeholder="등록 버튼을 눌러주세요" readonly="readonly"/>
+						<td><input type="hidden" name="db2pg_sys_id" id="db2pg_sys_id" value="${db2pg_sys_id}"/><input type="text" class="txt" name="db2pg_sys_nm" id="db2pg_sys_nm"  value="${db2pg_sys_nm}" readonly="readonly"/>
 							<span class="btn btnC_01"><button type="button" class= "btn_type_02" onclick="fn_dbmsInfo()" style="width: 60px; margin-right: -60px; margin-top: 0;">등록</button></span>							
 						</td>
 					</tr>
@@ -295,7 +249,7 @@ function fn_tableList(){
 						<td>
 							<select name="db2pg_uchr_lchr_val" id="db2pg_uchr_lchr_val" class="select t5">
 								<c:forEach var="codeLetter" items="${codeLetter}">
-									<option value="${codeLetter.sys_cd_nm}">${codeLetter.sys_cd_nm}</option>
+									<option value="${codeLetter.sys_cd_nm}" ${db2pg_uchr_lchr_val == codeLetter.sys_cd_nm ? 'selected="selected"' : ''}>${codeLetter.sys_cd_nm}</option>
 								</c:forEach>
 							</select>
 						</td>
@@ -305,7 +259,7 @@ function fn_tableList(){
 						<td>
 							<select name="src_tb_ddl_exrt_tf" id="src_tb_ddl_exrt_tf" class="select t5">
 								<c:forEach var="codeTF" items="${codeTF}">
-									<option value="${codeTF.sys_cd_nm}">${codeTF.sys_cd_nm}</option>
+									<option value="${codeTF.sys_cd_nm}" ${src_tb_ddl_exrt_tf == codeTF.sys_cd_nm ? 'selected="selected"' : ''}>${codeTF.sys_cd_nm}</option>
 								</c:forEach>
 							</select>
 						</td>
@@ -324,7 +278,7 @@ function fn_tableList(){
 					</tr>
 					<tr>
 						<th scope="row" class="ico_t2">DDL 저장경로</th>
-						<td><textarea rows="3" cols="60" id="ddl_save_pth" name="ddl_save_pth" style="width: 80%"></textarea>
+						<td><textarea rows="3" cols="60" id="ddl_save_pth" name="ddl_save_pth" style="width: 80%"><c:out value="${ddl_save_pth}"/></textarea>
 							<span class="btn btnC_01"><button type="button" class= "btn_type_02" onclick="fn_pathCheck()" style="width: 60px; margin-right: -60px; margin-top: 0; height: 58px;">경로체크</button></span>							
 						</td>
 					</tr>
@@ -332,7 +286,7 @@ function fn_tableList(){
 			</table>
 		</div>
 		<div class="btn_type_02">
-			<span class="btn btnC_01" onClick="fn_update_work();"><button type="button"><spring:message code="common.registory" /></button></span>
+			<span class="btn btnC_01" onClick="fn_update_work();"><button type="button"><spring:message code="common.modify" /></button></span>
 			<a href="#n" class="btn" onclick="self.close();"><span><spring:message code="common.cancel" /></span></a>
 		</div>
 	</div>

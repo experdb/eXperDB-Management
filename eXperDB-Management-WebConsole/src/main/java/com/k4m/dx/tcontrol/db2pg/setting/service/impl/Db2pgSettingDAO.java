@@ -89,6 +89,16 @@ public class Db2pgSettingDAO extends EgovAbstractMapper {
 	}
 
 	/**
+	 * DDL WORK 수정
+	 * 
+	 * @param ddlConfigVO
+	 * @throws Exception
+	 */
+	public void updateDDLWork(DDLConfigVO ddlConfigVO) throws SQLException{
+		update("db2pgSettingSql.updateDDLWork", ddlConfigVO);	
+	}
+	
+	/**
 	 * Data WORK 등록
 	 * 
 	 * @param dataConfigVO
@@ -98,5 +108,15 @@ public class Db2pgSettingDAO extends EgovAbstractMapper {
 		insert("db2pgSettingSql.insertDataWork", dataConfigVO);
 	}
 
-	
+	/**
+	 * DDL WORK 상세정보
+	 * 
+	 * @param ddlConfigVO
+	 * @throws Exception
+	 */
+	public DDLConfigVO selectDetailDDLWork(int db2pg_ddl_wrk_id) throws SQLException{
+		return (DDLConfigVO) selectOne("db2pgSettingSql.selectDetailDDLWork", db2pg_ddl_wrk_id);
+	}
+
+
 }

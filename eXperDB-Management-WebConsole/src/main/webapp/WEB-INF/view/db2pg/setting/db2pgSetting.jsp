@@ -374,15 +374,22 @@ function fn_data_reg_popup(){
  * 데이터이행 수정 팝업
  ******************************************************** */
 function fn_data_regre_popup(){
-	var popUrl = "/db2pg/popup/dataRegReForm.do";
-	var width = 965;
-	var height = 820;
-	var left = (window.screen.width / 2) - (width / 2);
-	var top = (window.screen.height /2) - (height / 2);
-	var popOption = "width="+width+", height="+height+", top="+top+", left="+left+", resizable=no, scrollbars=yes, status=no, toolbar=no, titlebar=yes, location=no,";
-	
-	var winPop = window.open(popUrl,"dataRegRePop",popOption);
-	winPop.focus();
+	var rowCnt = tableData.rows('.selected').data().length;
+	if (rowCnt == 1) {
+		var db2pg_trsf_wrk_id = tableData.row('.selected').data().db2pg_trsf_wrk_id;
+		var popUrl = "/db2pg/popup/dataRegReForm.do?db2pg_trsf_wrk_id=" +  db2pg_trsf_wrk_id;
+		var width = 965;
+		var height = 820;
+		var left = (window.screen.width / 2) - (width / 2);
+		var top = (window.screen.height /2) - (height / 2);
+		var popOption = "width="+width+", height="+height+", top="+top+", left="+left+", resizable=no, scrollbars=yes, status=no, toolbar=no, titlebar=yes, location=no,";
+		
+		var winPop = window.open(popUrl,"dataRegRePop",popOption);
+		winPop.focus();
+	} else {
+		alert("<spring:message code='message.msg04' />");
+		return false;
+	}
 }
 
 /* ********************************************************
@@ -431,6 +438,13 @@ function fn_ddl_work_delete(){
 }
 
 /* ********************************************************
+ * DDL추출 Data Delete
+ ******************************************************** */
+ function fn_data_work_delete(){
+	
+}
+
+/* ********************************************************
  * 복제
  ******************************************************** */
 function fn_copy(){
@@ -475,13 +489,13 @@ function fn_copy(){
 						<a class="btn" onClick="getddlDataList();"><button type="button"><spring:message code="common.search" /></button></a>
 						<span class="btn" onclick="fn_ddl_reg_popup()"><button type="button"><spring:message code="common.registory" /></button></span>
 						<span class="btn" onClick="fn_ddl_regre_popup()"><button type="button"><spring:message code="common.modify" /></button></span>
-						<span class="btn" onClick="fn_rman_work_delete()"><button type="button"><spring:message code="common.delete" /></button></span>
+						<span class="btn" onClick="fn_ddl_work_delete()"><button type="button"><spring:message code="common.delete" /></button></span>
 					</div>
 					<div class="btn_type_01" id="btnData" style="display:none;">
 						<span class="btn" onclick="getdataDataList()"><button type="button"><spring:message code="common.search" /></button></span>
 						<span class="btn" onclick="fn_data_reg_popup()"><button type="button"><spring:message code="common.registory" /></button></span>
 						<span class="btn" onclick="fn_data_regre_popup()"><button type="button"><spring:message code="common.modify" /></button></span>
-						<span class="btn" onclick="fn_dump_work_delete()"><button type="button"><spring:message code="common.delete" /></button></span>
+						<span class="btn" onclick="fn_data_work_delete()"><button type="button"><spring:message code="common.delete" /></button></span>
 					</div>
 				</div>
 				<div class="sch_form">
@@ -634,7 +648,6 @@ function fn_copy(){
 					</tr>
 				</tbody>
 			</table>
-				
 				<div class="btn_type_02">
 				<a href="#n" class="btn" onclick="toggleLayer($('#pop_layer_copy'), 'off');"><span>저장</span></a>
 					<a href="#n" class="btn" onclick="toggleLayer($('#pop_layer_copy'), 'off');"><span><spring:message code="common.close"/></span></a>

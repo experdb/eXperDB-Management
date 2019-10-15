@@ -22,6 +22,8 @@ public class DDLConfigVO {
 	private String dtb_nm;
 	private String scm_nm;
 	
+	private String db2pg_sys_nm;
+	
 	public int getRownum() {
 		return rownum;
 	}
@@ -137,6 +139,10 @@ public class DDLConfigVO {
 	public void setScm_nm(String scm_nm) {
 		this.scm_nm = scm_nm;
 	}
-
-
+	public String getDb2pg_sys_nm() {
+		return db2pg_sys_nm;
+	}
+	public void setDb2pg_sys_nm(String db2pg_sys_nm) {
+		this.db2pg_sys_nm = db2pg_sys_nm;
+	}
 }
