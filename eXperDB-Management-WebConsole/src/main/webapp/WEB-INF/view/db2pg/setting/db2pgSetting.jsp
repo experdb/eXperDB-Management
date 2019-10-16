@@ -30,7 +30,7 @@ var tableData = null;
  ******************************************************** */
 function selectTab(tab){
 	if(tab == "dataWork"){
-		getddlDataList();
+		getdataDataList();
 		$("#dataDataTable").show();
 		$("#dataDataTable_wrapper").show();
 		$("#ddlDataTable").hide();
@@ -42,7 +42,7 @@ function selectTab(tab){
 		$("#btnDDL").hide();
 		$("#btnData").show();
 	}else{
-		getdataDataList();
+		getddlDataList();
 		$("#ddlDataTable").show();
 		$("#ddlDataTable_wrapper").show();
 		$("#dataDataTable").hide();
