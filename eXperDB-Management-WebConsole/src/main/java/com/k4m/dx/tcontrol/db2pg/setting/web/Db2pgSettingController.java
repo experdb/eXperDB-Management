@@ -1,6 +1,10 @@
 package com.k4m.dx.tcontrol.db2pg.setting.web;
 
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
 import java.io.File;
+import java.io.FileReader;
+import java.io.FileWriter;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -20,8 +24,6 @@ import org.springframework.web.servlet.ModelAndView;
 
 import com.k4m.dx.tcontrol.cmmn.client.ClientProtocolID;
 import com.k4m.dx.tcontrol.common.service.HistoryVO;
-import com.k4m.dx.tcontrol.db2pg.cmmn.DBCPPoolManager;
-import com.k4m.dx.tcontrol.db2pg.cmmn.DatabaseTableInfo;
 import com.k4m.dx.tcontrol.db2pg.dbms.service.Db2pgSysInfVO;
 import com.k4m.dx.tcontrol.db2pg.dbms.service.DbmsService;
 import com.k4m.dx.tcontrol.db2pg.setting.service.CodeVO;
@@ -226,8 +228,24 @@ public class Db2pgSettingController {
 			db2pgSettingService.insertDDLWork(ddlConfigVO);
 			
 			//4.config 생성
-			String fileName = ddlConfigVO.getDb2pg_ddl_wrk_nm();
+			String filePath = ddlConfigVO.getDdl_save_pth()+"/"+ddlConfigVO.getDb2pg_ddl_wrk_nm()+".config";
+	        String configPath = Db2pgSettingController.class.getResource("").getPath()+"db2pg.config";
+
+	        String fileContent;
+	        BufferedReader br = new BufferedReader(new FileReader(new File(configPath)));
+			BufferedWriter bw = new BufferedWriter(new FileWriter(new File(filePath)));
+
+			while((fileContent = br.readLine()) != null) {
+				fileContent = fileContent.replaceAll("SRC_DDL_EXPORT=FALSE", "SRC_DDL_EXPORT=TRUE");
+				fileContent = fileContent.replaceAll("SRC_FILE_OUTPUT_PATH=./", "SRC_FILE_OUTPUT_PATH="+ddlConfigVO.getDdl_save_pth());
+				bw.write(fileContent + "\r\n");
+				bw.flush();
+			}
 			
+			bw.close();
+			br.close();
+	        
+	        
 		} catch (Exception e) {
 			e.printStackTrace();
 			result=false;
@@ -336,6 +354,9 @@ public class Db2pgSettingController {
 			ddlConfigVO.setDb2pg_exrt_trg_tb_wrk_id(exrt_trg_tb_wrk_id);
 			ddlConfigVO.setDb2pg_exrt_exct_tb_wrk_id(exrt_exct_tb_wrk_id);
 			db2pgSettingService.updateDDLWork(ddlConfigVO);
+			
+			//기존 config 삭제하고(파일이 존재하는지 부터 체크) 새로 생성!
+			
 		} catch (Exception e) {
 			e.printStackTrace();
 			result = false;
@@ -586,7 +607,7 @@ public class Db2pgSettingController {
 	/**
 	 * 경로가 유효한지 체크한다.
 	 * 
-	 * @param src_file_output_path
+	 * @param ddl_save_pth
 	 * @return
 	 * @throws Exception
 	 */
@@ -637,7 +658,7 @@ public class Db2pgSettingController {
 		serverObj.put(ClientProtocolID.DB_TYPE, dbms_cd);
 		serverObj.put(ClientProtocolID.TABLE_NM, table_nm);
 		
-		result =  DatabaseTableInfo.getTblList(serverObj);
+//		result =  DatabaseTableInfo.getTblList(serverObj);
 
 	}catch (Exception e) {
 		e.printStackTrace();

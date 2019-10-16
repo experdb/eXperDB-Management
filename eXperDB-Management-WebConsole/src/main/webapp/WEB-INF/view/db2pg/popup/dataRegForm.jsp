@@ -73,7 +73,6 @@ function fn_checkBox(result){
 		$('#db2pg_usr_qry').val('');
 		$('#db2pg_usr_qry').attr('readonly', true);
 	}
-	
 }
 
 /* ********************************************************
@@ -124,29 +123,67 @@ function fn_check() {
  ******************************************************** */
 function fn_insert_work(){
 	if(valCheck()){
+		//등록하기 전 work명 한번 더 중복 체크
 		$.ajax({
-			async : false,
-			url : "/db2pg/insertDataWork.do",
-		  	data : {  
-		  		db2pg_trsf_wrk_nm : $("#db2pg_trsf_wrk_nm").val().trim(),
-		  		db2pg_trsf_wrk_exp : $("#db2pg_trsf_wrk_exp").val(),
-		  		db2pg_source_system_id : $("#db2pg_source_system_id").val(),
-		  		db2pg_trg_sys_id : $("#db2pg_trg_sys_id").val(),
-		  		exrt_dat_cnt : $("#exrt_dat_cnt").val(),
-		  		src_include_tables : $("#src_include_tables").val(),
-		  		src_exclude_tables : $("#src_exclude_tables").val(),
-		  		exrt_dat_ftch_sz : $("#exrt_dat_ftch_sz").val(),
-		  		dat_ftch_bff_sz : $("#dat_ftch_bff_sz").val(),
-		  		exrt_prl_prcs_ecnt : $("#exrt_prl_prcs_ecnt").val(),
-		  		lob_dat_bff_sz : $("#lob_dat_bff_sz").val(),
-		  		tb_rbl_tf : $("#tb_rbl_tf").val(),
-		  		ins_opt_cd : $("#ins_opt_cd").val(),
-		  		cnst_cnd_exrt_tf : $("#cnst_cnd_exrt_tf").val(),
-		  		src_where_condition : $("#src_where_condition").val(),
-		  		usr_qry_use_tf : $("#usr_qry_use_tf").val(),
-		  		db2pg_usr_qry : $("#db2pg_usr_qry").val()
-		  	},
-			type : "post",
+			url : '/wrk_nmCheck.do',
+			type : 'post',
+			data : {
+				wrk_nm : $("#db2pg_trsf_wrk_nm").val()
+			},
+			success : function(result) {
+				if (result == "true") {
+						$.ajax({
+							async : false,
+							url : "/db2pg/insertDataWork.do",
+						  	data : {  
+						  		db2pg_trsf_wrk_nm : $("#db2pg_trsf_wrk_nm").val().trim(),
+						  		db2pg_trsf_wrk_exp : $("#db2pg_trsf_wrk_exp").val(),
+						  		db2pg_source_system_id : $("#db2pg_source_system_id").val(),
+						  		db2pg_trg_sys_id : $("#db2pg_trg_sys_id").val(),
+						  		exrt_dat_cnt : $("#exrt_dat_cnt").val(),
+						  		src_include_tables : $("#src_include_tables").val(),
+						  		src_exclude_tables : $("#src_exclude_tables").val(),
+						  		exrt_dat_ftch_sz : $("#exrt_dat_ftch_sz").val(),
+						  		dat_ftch_bff_sz : $("#dat_ftch_bff_sz").val(),
+						  		exrt_prl_prcs_ecnt : $("#exrt_prl_prcs_ecnt").val(),
+						  		lob_dat_bff_sz : $("#lob_dat_bff_sz").val(),
+						  		tb_rbl_tf : $("#tb_rbl_tf").val(),
+						  		ins_opt_cd : $("#ins_opt_cd").val(),
+						  		cnst_cnd_exrt_tf : $("#cnst_cnd_exrt_tf").val(),
+						  		src_where_condition : $("#src_where_condition").val(),
+						  		usr_qry_use_tf : $("#usr_qry_use_tf").val(),
+						  		db2pg_usr_qry : $("#db2pg_usr_qry").val()
+						  	},
+							type : "post",
+							beforeSend: function(xhr) {
+						        xhr.setRequestHeader("AJAX", true);
+						     },
+							error : function(xhr, status, error) {
+								if(xhr.status == 401) {
+									alert('<spring:message code="message.msg02" />');
+									top.location.href = "/";
+								} else if(xhr.status == 403) {
+									alert('<spring:message code="message.msg03" />');
+									top.location.href = "/";
+								} else {
+									alert("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""));
+								}
+							},
+							success : function(result) {
+								if(result==true){
+									alert('<spring:message code="message.msg07" /> ');
+									opener.location.reload();
+									self.close();
+								}else{
+									alert('등록에 실패했습니다.');
+								}	
+							}
+						});
+				} else {
+					alert('<spring:message code="backup_management.effective_work_nm"/>');
+					document.getElementById("db2pg_trsf_wrk_nm").focus();
+				}
+			},
 			beforeSend: function(xhr) {
 		        xhr.setRequestHeader("AJAX", true);
 		     },
@@ -160,16 +197,6 @@ function fn_insert_work(){
 				} else {
 					alert("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""));
 				}
-			},
-			success : function(result) {
-				alert(result);
-				if(result==true){
-					alert('<spring:message code="message.msg07" /> ');
-					opener.location.reload();
-					self.close();
-				}else{
-					alert('등록에 실패했습니다.');
-				}	
 			}
 		});
 	}
@@ -232,7 +259,6 @@ function fn_tableList(){
 	
 	var winPop = window.open(popUrl,"tableInfoPop",popOption);
 }
-
 </script>
 </head>
 <body>
@@ -421,7 +447,6 @@ function fn_tableList(){
 				</tbody>
 			</table>
 		</div>
-		
 		<div class="btn_type_02">
 			<span class="btn btnC_01" onClick="fn_insert_work();"><button type="button"><spring:message code="common.registory" /></button></span>
 			<a href="#n" class="btn" onclick="self.close();"><span><spring:message code="common.cancel" /></span></a>

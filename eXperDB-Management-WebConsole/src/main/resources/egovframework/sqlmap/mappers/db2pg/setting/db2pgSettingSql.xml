@@ -258,8 +258,8 @@
 			, src_tb_ddl_exrt_tf
 			, ddl_save_pth
 			, db2pg_sys_id
-			, (SELECT db2pg_sys_nm FROM t_db2pg_sys_inf WHERE db2pg_sys_id=db2pg_sys_id) as db2pg_sys_nm
-		FROM t_db2pg_ddl_wrk_inf
+			, (SELECT db2pg_sys_nm FROM t_db2pg_sys_inf WHERE db2pg_sys_id=wrk_inf.db2pg_sys_id) as db2pg_sys_nm
+		FROM t_db2pg_ddl_wrk_inf wrk_inf
 		WHERE db2pg_ddl_wrk_id=#{db2pg_ddl_wrk_id}
 	</select>
 </mapper>

@@ -672,10 +672,14 @@
 		* Description : work명 중복 체크
 		* Author : 변승우
 		**/
-		SELECT 
-				 COUNT(*)
-		FROM T_WRKCNG_I
-		WHERE WRK_NM = #{wrk_nm}
+		SELECT COUNT(*)
+		FROM
+		(SELECT wrk_nm FROM t_wrkcng_i 
+		UNION
+		SELECT db2pg_ddl_wrk_nm FROM t_db2pg_ddl_wrk_inf
+		UNION
+		SELECT db2pg_trsf_wrk_nm FROM t_db2pg_trsf_wrk_inf)A
+		WHERE A.WRK_NM = #{wrk_nm}
 	</select>	
 	
 	

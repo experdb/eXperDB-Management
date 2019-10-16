@@ -30,7 +30,6 @@
 <script type="text/javascript" src="/js/jquery-1.9.1.min.js"></script>
 <script type="text/javascript" src="/js/common.js"></script>
 <script type="text/javascript">
-var db2pg_trsf_wrk_nmChk ="fail";
 $(window.document).ready(function() {
 
 });
@@ -39,14 +38,7 @@ $(window.document).ready(function() {
  * Validation Check
  ******************************************************** */
 function valCheck(){
-	if($("#db2pg_trsf_wrk_nm").val() == ""){
-		alert('<spring:message code="message.msg107" />');
-		$("#db2pg_trsf_wrk_nm").focus();
-		return false;
-	}else if(db2pg_trsf_wrk_nmChk =="fail"){
-		alert('<spring:message code="backup_management.work_overlap_check"/>');
-		return false;
-	}else if($("#db2pg_trsf_wrk_exp").val() == ""){
+	if($("#db2pg_trsf_wrk_exp").val() == ""){
 		alert('<spring:message code="message.msg108" />');
 		$("#db2pg_trsf_wrk_exp").focus();
 		return false;
@@ -73,50 +65,6 @@ function fn_checkBox(result){
 		$('#db2pg_usr_qry').val('');
 		$('#db2pg_usr_qry').attr('readonly', true);
 	}
-	
-}
-
-/* ********************************************************
- * WORK NM 중복 체크
- ******************************************************** */
-function fn_check() {
-	var db2pg_trsf_wrk_nm = document.getElementById("db2pg_trsf_wrk_nm");
-	if (db2pg_trsf_wrk_nm.value == "") {
-		alert('<spring:message code="message.msg107" /> ');
-		document.getElementById('db2pg_trsf_wrk_nm').focus();
-		return;
-	}
-	$.ajax({
-		url : '/wrk_nmCheck.do',
-		type : 'post',
-		data : {
-			wrk_nm : $("#db2pg_trsf_wrk_nm").val()
-		},
-		success : function(result) {
-			if (result == "true") {
-				alert('<spring:message code="backup_management.reg_possible_work_nm"/>');
-				document.getElementById("db2pg_trsf_wrk_nm").focus();
-				db2pg_trsf_wrk_nmChk = "success";
-			} else {
-				alert('<spring:message code="backup_management.effective_work_nm"/>');
-				document.getElementById("db2pg_trsf_wrk_nm").focus();
-			}
-		},
-		beforeSend: function(xhr) {
-	        xhr.setRequestHeader("AJAX", true);
-	     },
-		error : function(xhr, status, error) {
-			if(xhr.status == 401) {
-				alert('<spring:message code="message.msg02" />');
-				top.location.href = "/";
-			} else if(xhr.status == 403) {
-				alert('<spring:message code="message.msg03" />');
-				top.location.href = "/";
-			} else {
-				alert("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""));
-			}
-		}
-	});
 }
 
 /* ********************************************************
@@ -176,7 +124,6 @@ function fn_tableList(){
 	
 	var winPop = window.open(popUrl,"tableInfoPop",popOption);
 }
-
 </script>
 </head>
 <body>
@@ -365,7 +312,6 @@ function fn_tableList(){
 				</tbody>
 			</table>
 		</div>
-		
 		<div class="btn_type_02">
 			<span class="btn btnC_01" onClick="fn_update_work();"><button type="button"><spring:message code="common.modify" /></button></span>
 			<a href="#n" class="btn" onclick="self.close();"><span><spring:message code="common.cancel" /></span></a>
