@@ -135,9 +135,28 @@
 	 	* Description : DB2PG LIST DBMS구분
 	 	* Author : 변승우
 	 	**/
-		SELECT 
+		SELECT DISTINCT
 					DBMS_DSCD
 		FROM T_DB2PG_SYS_INF
     </select>
 	
+	<update id="updateDb2pgDBMS"  parameterType="db2pgSysInfVO">
+		/**
+	 	* Query ID : updateDb2pgDBMS
+	 	* Description : DB2PG DBMS 수정
+	 	* Author : 변승우
+	 	**/
+	 	UPDATE T_DB2PG_SYS_INF
+	 	SET
+					IPADR = #{ipadr} 	
+					, DTB_NM = #{dtb_nm} 	
+					, SPR_USR_ID = #{spr_usr_id} 	
+					, PORTNO = #{portno} 	
+					, SCM_NM = #{scm_nm} 	
+					, PWD = #{pwd} 	
+					, CRTS_NM = #{crts_nm} 	
+					, LST_MDFR_ID = #{lst_mdfr_id} 	
+					, LST_MDF_DTM = clock_timestamp()
+	 	WHERE DB2PG_SYS_ID=#{db2pg_sys_id}::numeric	
+	</update>
 </mapper>
