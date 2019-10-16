@@ -75,6 +75,34 @@ public class Db2pgDbmsSystemController {
 		return mv;
 	}
 	
+	
+	/**
+	 * DBMS 수정 팝업 화면을 보여준다.
+	 * 
+	 * @param historyVO
+	 * @param request
+	 * @return ModelAndView mv
+	 * @throws Exception
+	 */
+	@RequestMapping(value = "/db2pg/popup/dbmsRegReForm.do")
+	public ModelAndView dbmsRegReForm(@ModelAttribute("historyVO") HistoryVO historyVO, @ModelAttribute("db2pgSysInfVO") Db2pgSysInfVO db2pgSysInfVO, HttpServletRequest request) {
+		ModelAndView mv = new ModelAndView();
+		
+		List<Db2pgSysInfVO> resultSet = null;
+		
+		try {				
+			dbmsGrb = dbmsService.dbmsGrb();
+			resultSet = dbmsService.selectDb2pgDBMS(db2pgSysInfVO);
+			
+			mv.addObject("result", dbmsGrb);
+			mv.addObject("resultInfo", resultSet);
+			mv.setViewName("db2pg/popup/dbmsRegReForm");
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return mv;
+	}
+	
 	/**
 	 * DBMS 등록 팝업 화면을 보여준다.
 	 * 
@@ -291,7 +319,7 @@ public class Db2pgDbmsSystemController {
 		serverObj.put(ClientProtocolID.USER_PWD, svr_spr_scm_pwd);
 		serverObj.put(ClientProtocolID.DB_TYPE, dbms_cd);
 		
-		result =  DBCPPoolManager.setupDriver(serverObj, "db2pg", 30);
+		result =  DBCPPoolManager.setupDriver(serverObj);
 
 	}catch (Exception e) {
 		e.printStackTrace();
@@ -348,6 +376,41 @@ public class Db2pgDbmsSystemController {
 			db2pgSysInfVO.setLst_mdfr_id(id);
 		
 			dbmsService.insertDb2pgDBMS(db2pgSysInfVO);	
+	
+		} catch (Exception e) {
+			e.printStackTrace();
+			return false;
+		}
+		return true;
+	}
+	
+	
+	/**
+	 * DB2PG DBMS 시스템을 수정한다.
+	 * 
+	 * @param db2pgSysInfVO
+	 * @param request
+	 * @return ModelAndView mv
+	 * @throws Exception
+	 */
+	@RequestMapping(value = "/updateDb2pgDBMS.do")
+	public @ResponseBody boolean updateDb2pgDBMS(
+			@ModelAttribute("accessControlHistoryVO") AccessControlHistoryVO accessControlHistoryVO,
+			@ModelAttribute("accessControlVO") AccessControlVO accessControlVO,
+			@ModelAttribute("db2pgSysInfVO") Db2pgSysInfVO db2pgSysInfVO, @ModelAttribute("historyVO") HistoryVO historyVO,
+			HttpServletRequest request, HttpServletResponse response) throws ParseException {
+
+		// 해당메뉴 권한 조회 (공통메소드호출)
+		
+		try {
+			HttpSession session = request.getSession();
+			LoginVO loginVo = (LoginVO) session.getAttribute("session");
+			String id = loginVo.getUsr_id();
+
+			db2pgSysInfVO.setFrst_regr_id(id);
+			db2pgSysInfVO.setLst_mdfr_id(id);
+		
+			dbmsService.updateDb2pgDBMS(db2pgSysInfVO);	
 	
 		} catch (Exception e) {
 			e.printStackTrace();

@@ -252,23 +252,51 @@ function fn_dbmsInfo(){
 /* ********************************************************
  * 추출 대상 테이블, 추출 제외 테이블 등록 버튼 클릭시
  ******************************************************** */
-function fn_tableList(){
+function fn_tableList(gbn){
 	if($('#db2pg_sys_nm').val() == ""){
 		alert("소스시스템을 선택해주세요.");
 		return false;
 	}
-	var popUrl = "/db2pg/popup/tableInfo.do?db2pg_sys_id="+$('#db2pg_sys_id').val();
-	var width = 930;
-	var height = 675;
-	var left = (window.screen.width / 2) - (width / 2);
-	var top = (window.screen.height /2) - (height / 2);
-	var popOption = "width="+width+", height="+height+", top="+top+", left="+left+", resizable=no, scrollbars=yes, status=no, toolbar=no, titlebar=yes, location=no,";
 	
-	var winPop = window.open(popUrl,"tableInfoPop",popOption);
+	  	var frmPop= document.frmPopup;
+	    var url = '/db2pg/popup/tableInfo.do';
+	    window.open('','popupView','width=930, height=500');  
+	     
+	    frmPop.action = url;
+	    frmPop.target = 'popupView';
+	    frmPop.db2pg_sys_id.value = $('#db2pg_sys_id').val();
+	    frmPop.tableGbn.value = gbn;
+	    if(gbn == 'include'){
+	    	frmPop.src_include_table_nm.value = $('#src_include_table_nm').val();  
+	    }else{
+	    	frmPop.src_exclude_table_nm.value = $('#src_exclude_table_nm').val();  
+	    }
+   
+	    frmPop.submit();   
+}
+
+
+function fn_tableAddCallback(rowList, tableGbn){
+	
+	if(tableGbn == 'include'){
+		$('#src_include_tables').val(rowList.length+"개");
+		$('#src_include_table_nm').val(rowList);
+	}else{
+		$('#src_exclude_tables').val(rowList.length+"개");
+		$('#src_exclude_table_nm').val(rowList);
+	}
 }
 </script>
 </head>
 <body>
+
+<form name="frmPopup">
+	<input type="hidden" name="db2pg_sys_id"  id="db2pg_sys_id">
+	<input type="hidden" name="src_include_table_nm"  id="src_include_table_nm" >
+	<input type="hidden" name="src_exclude_table_nm"  id="src_exclude_table_nm" >
+	<input type="hidden" name="tableGbn"  id="tableGbn" >
+</form>
+
 <div class="pop_container">
 	<div class="pop_cts">
 		<p class="tit">DDL 추출 등록</p>
@@ -346,13 +374,15 @@ function fn_tableList(){
 					<tr>
 						<th scope="row" class="ico_t2">추출 대상 테이블</th>
 						<td><input type="text" class="txt" name="src_include_tables" id="src_include_tables"/>
-							<span class="btn btnC_01"><button type="button" class= "btn_type_02" onclick="fn_tableList()" style="width: 60px; margin-right: -60px; margin-top: 0;">등록</button></span>							
+							<span class="btn btnC_01"><button type="button" class= "btn_type_02" onclick="fn_tableList('include')" style="width: 60px; margin-right: -60px; margin-top: 0;">등록</button></span>							
+							<input type="hidden" class="txt" name="src_include_table_nm" id="src_include_table_nm"/>
 						</td>
 					</tr>
 					<tr>
 						<th scope="row" class="ico_t2">추출 제외 테이블</th>
 						<td><input type="text" class="txt" name="src_exclude_tables" id="src_exclude_tables"/>
-							<span class="btn btnC_01"><button type="button" class= "btn_type_02" onclick="fn_tableList()" style="width: 60px; margin-right: -60px; margin-top: 0;">등록</button></span>							
+							<span class="btn btnC_01"><button type="button" class= "btn_type_02" onclick="fn_tableList('exclude')" style="width: 60px; margin-right: -60px; margin-top: 0;">등록</button></span>							
+							<input type="hidden" class="txt" name="src_exclude_table_nm" id="src_exclude_table_nm"/>
 						</td>
 					</tr>
 					<tr>

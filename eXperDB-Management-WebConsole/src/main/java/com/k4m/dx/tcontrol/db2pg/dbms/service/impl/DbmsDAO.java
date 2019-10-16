@@ -50,4 +50,8 @@ public class DbmsDAO extends EgovAbstractMapper{
 		return sl;
 	}
 
+	public void updateDb2pgDBMS(Db2pgSysInfVO db2pgSysInfVO) {
+		update("dbmsSQL.updateDb2pgDBMS", db2pgSysInfVO);		
+	}
+
 }

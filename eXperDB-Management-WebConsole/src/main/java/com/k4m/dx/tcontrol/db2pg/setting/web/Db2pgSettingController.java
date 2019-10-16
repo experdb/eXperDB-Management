@@ -13,6 +13,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -24,6 +25,7 @@ import org.springframework.web.servlet.ModelAndView;
 
 import com.k4m.dx.tcontrol.cmmn.client.ClientProtocolID;
 import com.k4m.dx.tcontrol.common.service.HistoryVO;
+import com.k4m.dx.tcontrol.db2pg.cmmn.DatabaseTableInfo;
 import com.k4m.dx.tcontrol.db2pg.dbms.service.Db2pgSysInfVO;
 import com.k4m.dx.tcontrol.db2pg.dbms.service.DbmsService;
 import com.k4m.dx.tcontrol.db2pg.setting.service.CodeVO;
@@ -581,18 +583,42 @@ public class Db2pgSettingController {
 	public ModelAndView tableInfo(HttpServletRequest request, @ModelAttribute("historyVO") HistoryVO historyVO, @ModelAttribute("db2pgSysInfVO") Db2pgSysInfVO db2pgSysInfVO) {
 		ModelAndView mv = new ModelAndView();
 		List<Db2pgSysInfVO> resultSet = null;
+	
+		JSONArray jsonArray = new JSONArray(); // 객체를 담기위해 JSONArray 선언.
+
+		//테이블구분 (추출테이블 = include , 제외테이블 = exclude)
+		String tableGbn = request.getParameter("tableGbn");
+		
 		try {
 			// 화면접근이력 이력 남기기
 //			CmmnUtils.saveHistory(request, historyVO);
 //			historyVO.setExe_dtl_cd("DX-T0022");
 //			accessHistoryService.insertHistory(historyVO);
+
+			String[] tables = null;
 			
+			//테이블 구분에 따른 테이블 리스트저장
+			if(tableGbn.equals("include")){
+				System.out.println("추출테이블 리스트");
+				tables = request.getParameter("src_include_table_nm").toString().split(",");
+			}else{
+				System.out.println("제외테이블 리스트");
+				tables = request.getParameter("src_exclude_table_nm").toString().split(",");
+			}
+
+			for (int i = 0; i < tables.length; i++) {
+				jsonArray.add(tables[i]);
+			}
+
 			db2pgSysInfVO.setDb2pg_sys_id(Integer.parseInt(request.getParameter("db2pg_sys_id")));
 			resultSet = dbmsService.selectDb2pgDBMS(db2pgSysInfVO);
 				
 		} catch (Exception e2) {
 			e2.printStackTrace();
 		}
+
+		mv.addObject("tableGbn", tableGbn);
+		mv.addObject("tableList", jsonArray);
 		mv.addObject("dbmsInfo", resultSet);
 		mv.setViewName("db2pg/popup/tableInfo");
 		return mv;
@@ -652,7 +678,7 @@ public class Db2pgSettingController {
 		serverObj.put(ClientProtocolID.DB_TYPE, dbms_cd);
 		serverObj.put(ClientProtocolID.TABLE_NM, table_nm);
 		
-//		result =  DatabaseTableInfo.getTblList(serverObj);
+		result =  DatabaseTableInfo.getTblList(serverObj);
 
 	}catch (Exception e) {
 		e.printStackTrace();

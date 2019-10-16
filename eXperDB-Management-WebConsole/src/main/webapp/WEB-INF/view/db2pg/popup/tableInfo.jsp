@@ -28,9 +28,12 @@
 <script type="text/javascript" src="/js/common.js"></script>
 <script>
 var table = null;
+var tableList = ${tableList};
+var tableGbn = "${tableGbn}";
+
 function fn_init() {
-		table = $('#sourceList').DataTable({
-		scrollY : "100px",
+		table = $('#tableList').DataTable({
+		scrollY : "300px",
 		scrollX: true,	
 		bSort: false,
 		processing : true,
@@ -38,8 +41,8 @@ function fn_init() {
 		paging : true,	
 		columns : [
 		{data : "rownum", defaultContent : "", targets : 0, orderable : false, checkboxes : {'selectRow' : true}}, 
-		{data : "idx", className : "dt-center", defaultContent : ""},
-		{data : "idx", className : "dt-center", defaultContent : ""}		
+		{data : "table_name", className : "dt-center", defaultContent : ""},
+		{data : "table_schema", className : "dt-center", defaultContent : ""}		
 		],'select': {'style': 'multi'}
 	});
 		
@@ -56,23 +59,29 @@ function fn_init() {
  ******************************************************** */
 $(window.document).ready(function() {
 	fn_init();
+	fn_search();
 });
 
 /* ********************************************************
  * 조회
  ******************************************************** */
 function fn_search(){
+	
 	if($("#db_svr_nm").val() == "%"){
 		alert('<spring:message code="message.msg152"/>');
 		return false;
 	}
 
 	$.ajax({
-		url : "/selectsourceList.do",
+		url : "/selectTableList.do",
 		data : {
-			bsn_dscd : $("#work").val(),
-			db_svr_nm : $("#db_svr_nm").val(),
-			wrk_nm : $("#wrk_nm").val()
+ 		 	ipadr : $("#ipadr").val(),
+ 		 	portno : $("#portno").val(),
+ 		  	dtb_nm : $("#dtb_nm").val(),
+ 		   	spr_usr_id : $("#spr_usr_id").val(),
+ 		   	pwd : $("#pwd").val(),
+ 		  	dbms_dscd : $("#dbms_dscd").val(),
+ 		  	table_nm : $("#table_nm").val()
 		},
 		dataType : "json",
 		type : "post",
@@ -93,7 +102,11 @@ function fn_search(){
 		success : function(result) {
 			table.rows({selected: true}).deselect();
 			table.clear().draw();
-			table.rows.add(result).draw();
+			table.rows.add(result.RESULT_DATA).draw();
+			
+			if(tableList != ""){
+				fn_tableCheckSelect(tableList);
+			}
 		}
 	});
 }
@@ -103,19 +116,31 @@ function fn_search(){
  * 등록
  ******************************************************** */
 function fn_Add(){
+	
 	var datas = table.rows('.selected').data();
-	if (datas.length <= 0) {
-		alert('<spring:message code="message.msg35" />');
-		return false;
-	} 
 	
 	var rowList = [];
     for (var i = 0; i < datas.length; i++) {
-        rowList.push( table.rows('.selected').data()[i].wrk_id);   
+        rowList.push( table.rows('.selected').data()[i].table_name);   
 	   //rowList.push( table.rows('.selected').data()[i]);     
   }	
-	opener.fn_workAddCallback(JSON.stringify(rowList));
+	opener.fn_tableAddCallback(rowList, tableGbn);
 	self.close();
+}
+
+
+function fn_tableCheckSelect(tableList){
+	var datas = table.rows().data();
+	
+	 for (var i = 0; i < datas.length; i++) {
+			for(var j=0; j <tableList.length; j++ ){
+				if(table.rows().data()[i].table_name == tableList[j]){
+					$('input', table.rows(i).nodes()).prop('checked', true); 
+					table.rows(i).nodes().to$().addClass('selected');	
+				}
+			}		  
+	  }	
+	 
 }
 </script>
 
@@ -123,7 +148,7 @@ function fn_Add(){
 <body>
 <div class="pop_container">
 	<div class="pop_cts">
-		<p class="tit">소스테이블정보</p>
+		<p class="tit">테이블정보</p>
 			<div class="btn_type_01">
 				<span class="btn"><button onClick="fn_search();" type="button"><spring:message code="common.search" /></button></span>
 			</div>
@@ -140,31 +165,40 @@ function fn_Add(){
 				<tbody>
 					<tr>
 						<th scope="row" class="ico_t1">시스템명</th>
-						<td><input type="text" class="txt t4" name="wrk_nm" id="wrk_nm" /></td>										
+						<td><input type="text" class="txt t9" name="db2pg_sys_nm" id="db2pg_sys_nm" value="${dbmsInfo[0].db2pg_sys_nm}" readonly/></td>										
 						<th scope="row" class="ico_t1" >아이피</th>
-						<td><input type="text" class="txt t4" name="wrk_nm" id="wrk_nm" /></td>				
+						<td><input type="text" class="txt t9" name="ipadr" id="ipadr" value="${dbmsInfo[0].ipadr}" readonly/></td>				
 					</tr>
 					<tr>
-						<th scope="row" class="ico_t1">권한스키마명</th>
-						<td><select class="select t8" name="work" id="work">
+						<th scope="row" class="ico_t1" >스키마명</th>
+						<td><input type="text" class="txt t9" name="scm_nm" id="scm_nm" value="${dbmsInfo[0].scm_nm}" readonly/></td>			
+						<%-- <th scope="row" class="ico_t1">권한스키마명</th>
+						<td><select class="select t8" name="scm_nm" id="scm_nm" value=""/>
 								<option value="%"><spring:message code="common.choice" /></option>
-						</select></td>										
+						</select></td>	 --%>									
 						<th scope="row" class="ico_t1" >테이블명</th>
-						<td><input type="text" class="txt t4" name="wrk_nm" id="wrk_nm" /></td>				
+						<td>
+						<input type="text" class="txt t9" name="table_nm" id="table_nm" />
+						<input type="hidden" class="txt t4" name="dbms_dscd" id="dbms_dscd"  value="${dbmsInfo[0].dbms_dscd}"/>
+						<input type="hidden" class="txt t4" name="dtb_nm" id="dtb_nm" value="${dbmsInfo[0].dtb_nm}"/>
+						<input type="hidden" class="txt t4" name="spr_usr_id" id="spr_usr_id" value="${dbmsInfo[0].spr_usr_id}"/>
+						<input type="hidden" class="txt t4" name="pwd" id="pwd" value="${dbmsInfo[0].pwd}"/>
+						<input type="hidden" class="txt t4" name="portno" id="portno" value="${dbmsInfo[0].portno}"/>	
+						</td>				
 					</tr>
 				</tbody>
 			</table>
 		</div>
 
 		<div class="pop_cmm3">
-			<p class="pop_s_tit">소스 테이블 리스트</p>
+			<p class="pop_s_tit">테이블 리스트</p>
 			<div class="overflow_area">
-				<table id="sourceList" class="display" cellspacing="0" width="100%">
+				<table id="tableList" class="display" cellspacing="0" width="100%">
 				<thead>
 					<tr>
 						<th width="30"></th>
 						<th width="100" class="dt-center">테이블명</th>
-						<th width="100" class="dt-center">권한스키마명</th>
+						<th width="100" class="dt-center">스키마명</th>
 					</tr>
 				</thead>
 			</table>		
