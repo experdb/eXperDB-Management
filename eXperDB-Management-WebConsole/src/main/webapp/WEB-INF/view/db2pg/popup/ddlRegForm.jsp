@@ -175,8 +175,8 @@ function fn_insert_work(){
 						  		db2pg_sys_id : $("#db2pg_sys_id").val(),
 						  		db2pg_uchr_lchr_val : $("#db2pg_uchr_lchr_val").val(),
 						  		src_tb_ddl_exrt_tf : $("#src_tb_ddl_exrt_tf").val(),
-						  		src_include_tables : $("#src_include_tables").val(),
-						  		src_exclude_tables : $("#src_exclude_tables").val(),
+						  		src_include_tables : $("#src_include_table_nm").val(),
+						  		src_exclude_tables : $("#src_exclude_table_nm").val(),
 						  		ddl_save_pth : $("#ddl_save_pth").val()
 						  	},
 							type : "post",
