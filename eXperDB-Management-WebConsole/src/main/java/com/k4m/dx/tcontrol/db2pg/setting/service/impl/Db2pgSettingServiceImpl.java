@@ -7,10 +7,12 @@ import javax.annotation.Resource;
 
 import org.springframework.stereotype.Service;
 
+import com.k4m.dx.tcontrol.db2pg.dbms.service.Db2pgSysInfVO;
 import com.k4m.dx.tcontrol.db2pg.setting.service.CodeVO;
 import com.k4m.dx.tcontrol.db2pg.setting.service.DDLConfigVO;
 import com.k4m.dx.tcontrol.db2pg.setting.service.DataConfigVO;
 import com.k4m.dx.tcontrol.db2pg.setting.service.Db2pgSettingService;
+import com.k4m.dx.tcontrol.db2pg.setting.service.SrcTableVO;
 
 import egovframework.rte.fdl.cmmn.EgovAbstractServiceImpl;
 
@@ -46,9 +48,18 @@ public class Db2pgSettingServiceImpl extends EgovAbstractServiceImpl implements 
 	}
 
 	@Override
+	public void insertExrttrgSrcTb(SrcTableVO srctableVO) throws Exception {
+		db2pgSettingDAO.insertExrttrgSrcTb(srctableVO);
+	}
+
+	@Override
+	public void insertExrtexctSrcTb(SrcTableVO srctableVO) throws Exception {
+		db2pgSettingDAO.insertExrtexctSrcTb(srctableVO);
+	}
+	
+	@Override
 	public void insertDDLWork(DDLConfigVO ddlConfigVO) throws Exception {
 		db2pgSettingDAO.insertDDLWork(ddlConfigVO);
-		
 	}
 	
 	@Override
@@ -66,5 +77,9 @@ public class Db2pgSettingServiceImpl extends EgovAbstractServiceImpl implements 
 		return db2pgSettingDAO.selectDetailDDLWork(db2pg_ddl_wrk_id);
 	}
 
+	@Override
+	public Db2pgSysInfVO selectSoruceDBMS(int db2pg_sys_id) throws Exception {
+		return db2pgSettingDAO.selectSoruceDBMS(db2pg_sys_id);
+	}
 
 }

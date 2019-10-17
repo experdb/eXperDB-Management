@@ -6,9 +6,11 @@ import java.util.Map;
 
 import org.springframework.stereotype.Repository;
 
+import com.k4m.dx.tcontrol.db2pg.dbms.service.Db2pgSysInfVO;
 import com.k4m.dx.tcontrol.db2pg.setting.service.CodeVO;
 import com.k4m.dx.tcontrol.db2pg.setting.service.DDLConfigVO;
 import com.k4m.dx.tcontrol.db2pg.setting.service.DataConfigVO;
+import com.k4m.dx.tcontrol.db2pg.setting.service.SrcTableVO;
 
 import egovframework.rte.psl.dataaccess.EgovAbstractMapper;
 
@@ -78,6 +80,26 @@ public class Db2pgSettingDAO extends EgovAbstractMapper {
 	}
 
 	/**
+	 * 추출 대상 테이블 등록
+	 * 
+	 * @param srctableVO
+	 * @throws Exception
+	 */
+	public void insertExrttrgSrcTb(SrcTableVO srctableVO) throws SQLException{
+		insert("db2pgSettingSql.insertExrttrgSrcTb", srctableVO);
+	}
+	
+	/**
+	 * 추출 제외 테이블 등록
+	 * 
+	 * @param srctableVO
+	 * @throws Exception
+	 */
+	public void insertExrtexctSrcTb(SrcTableVO srctableVO) throws SQLException{
+		insert("db2pgSettingSql.insertExrtexctSrcTb", srctableVO);
+	}
+	
+	/**
 	 * DDL WORK 등록
 	 * 
 	 * @param ddlConfigVO
@@ -118,5 +140,13 @@ public class Db2pgSettingDAO extends EgovAbstractMapper {
 		return (DDLConfigVO) selectOne("db2pgSettingSql.selectDetailDDLWork", db2pg_ddl_wrk_id);
 	}
 
-
+	/**
+	 * 소스DBMS 접속정보
+	 * 
+	 * @param ddlConfigVO
+	 * @throws Exception
+	 */
+	public Db2pgSysInfVO selectSoruceDBMS(int db2pg_sys_id) throws SQLException{
+		return (Db2pgSysInfVO) selectOne("db2pgSettingSql.selectSoruceDBMS", db2pg_sys_id);
+	}
 }

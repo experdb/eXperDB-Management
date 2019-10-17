@@ -5,6 +5,7 @@ import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileReader;
 import java.io.FileWriter;
+import java.io.IOException;
 
 import org.json.simple.JSONObject;
 import org.springframework.stereotype.Controller;
@@ -12,16 +13,24 @@ import org.springframework.stereotype.Controller;
 @Controller
 public class Db2pgConfigController {
 
-	public static String createDDLConfig(JSONObject configObj) {
-		String filePath = configObj.get("save_pth").toString()+"/"+configObj.get("wrk_nm").toString()+".config";
-        String configPath = Db2pgSettingController.class.getResource("").getPath()+"db2pg.config";
+	public static JSONObject createDDLConfig(JSONObject configObj) throws IOException {
+		JSONObject result = new JSONObject();
+		String filePath = configObj.get("src_file_output_path").toString()+"/"+configObj.get("wrk_nm").toString()+".config";
+        String configPath = Db2pgConfigController.class.getResource("").getPath()+"db2pg.config";
+        BufferedReader br = new BufferedReader(new FileReader(new File(configPath)));
+		BufferedWriter bw = new BufferedWriter(new FileWriter(new File(filePath)));
 		try{
 	        String fileContent;
-	        BufferedReader br = new BufferedReader(new FileReader(new File(configPath)));
-			BufferedWriter bw = new BufferedWriter(new FileWriter(new File(filePath)));
-	
 			while((fileContent = br.readLine()) != null) {
 				fileContent = fileContent.replaceAll("SRC_DDL_EXPORT=FALSE", "SRC_DDL_EXPORT=TRUE");
+				fileContent = fileContent.replaceAll("SRC_HOST=", "SRC_HOST="+configObj.get("src_host").toString());
+				fileContent = fileContent.replaceAll("SRC_USER=", "SRC_USER="+configObj.get("src_user").toString());
+				fileContent = fileContent.replaceAll("SRC_PASSWORD=", "SRC_PASSWORD="+configObj.get("src_password").toString());
+				fileContent = fileContent.replaceAll("SRC_DATABASE=", "SRC_DATABASE="+configObj.get("src_database").toString());
+				fileContent = fileContent.replaceAll("SRC_SCHEMA=", "SRC_SCHEMA="+configObj.get("src_schema").toString());
+				fileContent = fileContent.replaceAll("SRC_DBMS_TYPE=ORA", "SRC_DBMS_TYPE="+configObj.get("src_dbms_type").toString());
+				fileContent = fileContent.replaceAll("SRC_PORT=1521", "SRC_PORT="+configObj.get("src_port").toString());
+				fileContent = fileContent.replaceAll("SRC_DB_CHARSET=UTF8", "SRC_DB_CHARSET="+configObj.get("src_db_charset").toString());
 				if(!configObj.get("src_include_tables").toString().equals("")){
 					fileContent = fileContent.replaceAll("#SRC_INCLUDE_TABLES=", "SRC_INCLUDE_TABLES="+configObj.get("src_include_tables").toString());
 				}
@@ -37,10 +46,25 @@ public class Db2pgConfigController {
 			
 			bw.close();
 			br.close();
+			
+			result.put("resultCode", "0000000000");
 		} catch (Exception e) {
 			e.printStackTrace();
+			result.put("resultCode", "8000000003");
 		}
-		return null;
+		return result;
+	}
+	
+	public static JSONObject createDataConfig(JSONObject configObj) throws IOException {
+		JSONObject result = new JSONObject();
+		try{
+			
+			result.put("resultCode", "0000000000");
+		}catch (Exception e) {
+			e.printStackTrace();
+			result.put("resultCode", "8000000003");
+		}
+		return result;
 	}
 	
 	

@@ -195,7 +195,7 @@ function fn_insert_work(){
 								}
 							},
 							success : function(result) {
-								if(result==true){
+								if(result.resultCode == "0000000000"){
 									alert('<spring:message code="message.msg07" /> ');
 									opener.location.reload();
 									self.close();
@@ -258,26 +258,24 @@ function fn_tableList(gbn){
 		return false;
 	}
 	
-	  	var frmPop= document.frmPopup;
-	    var url = '/db2pg/popup/tableInfo.do';
-	    window.open('','popupView','width=930, height=500');  
+	var frmPop= document.frmPopup;
+	var url = '/db2pg/popup/tableInfo.do';
+	window.open('','popupView','width=930, height=500');  
 	     
-	    frmPop.action = url;
-	    frmPop.target = 'popupView';
-	    frmPop.db2pg_sys_id.value = $('#db2pg_sys_id').val();
-	    frmPop.tableGbn.value = gbn;
-	    if(gbn == 'include'){
-	    	frmPop.src_include_table_nm.value = $('#src_include_table_nm').val();  
-	    }else{
-	    	frmPop.src_exclude_table_nm.value = $('#src_exclude_table_nm').val();  
-	    }
-   
-	    frmPop.submit();   
+	frmPop.action = url;
+	frmPop.target = 'popupView';
+	frmPop.db2pg_sys_id.value = $('#db2pg_sys_id').val();
+	frmPop.tableGbn.value = gbn;
+	if(gbn == 'include'){
+		frmPop.src_include_table_nm.value = $('#src_include_table_nm').val();  
+	}else{
+		frmPop.src_exclude_table_nm.value = $('#src_exclude_table_nm').val();  
+	}
+	frmPop.submit();   
 }
 
 
 function fn_tableAddCallback(rowList, tableGbn){
-	
 	if(tableGbn == 'include'){
 		$('#src_include_tables').val(rowList.length+"개");
 		$('#src_include_table_nm').val(rowList);
@@ -289,14 +287,12 @@ function fn_tableAddCallback(rowList, tableGbn){
 </script>
 </head>
 <body>
-
 <form name="frmPopup">
 	<input type="hidden" name="db2pg_sys_id"  id="db2pg_sys_id">
 	<input type="hidden" name="src_include_table_nm"  id="src_include_table_nm" >
 	<input type="hidden" name="src_exclude_table_nm"  id="src_exclude_table_nm" >
 	<input type="hidden" name="tableGbn"  id="tableGbn" >
 </form>
-
 <div class="pop_container">
 	<div class="pop_cts">
 		<p class="tit">DDL 추출 등록</p>
@@ -335,7 +331,7 @@ function fn_tableAddCallback(rowList, tableGbn){
 				<tbody>
 					<tr>
 						<th scope="row" class="ico_t2">소스시스템</th>
-						<td><input type="hidden" name="db2pg_sys_id" id="db2pg_sys_id"/><input type="text" class="txt" name="db2pg_sys_nm" id="db2pg_sys_nm" placeholder="등록 버튼을 눌러주세요" readonly="readonly"/>
+						<td><input type="text" class="txt" name="db2pg_sys_nm" id="db2pg_sys_nm" placeholder="등록 버튼을 눌러주세요" readonly="readonly"/>
 							<span class="btn btnC_01"><button type="button" class= "btn_type_02" onclick="fn_dbmsInfo()" style="width: 60px; margin-right: -60px; margin-top: 0;">등록</button></span>							
 						</td>
 					</tr>
@@ -373,16 +369,14 @@ function fn_tableAddCallback(rowList, tableGbn){
 					</tr>
 					<tr>
 						<th scope="row" class="ico_t2">추출 대상 테이블</th>
-						<td><input type="text" class="txt" name="src_include_tables" id="src_include_tables"/>
+						<td><input type="text" class="txt" name="src_include_tables" id="src_include_tables" readonly="readonly" />
 							<span class="btn btnC_01"><button type="button" class= "btn_type_02" onclick="fn_tableList('include')" style="width: 60px; margin-right: -60px; margin-top: 0;">등록</button></span>							
-							<input type="hidden" class="txt" name="src_include_table_nm" id="src_include_table_nm"/>
 						</td>
 					</tr>
 					<tr>
 						<th scope="row" class="ico_t2">추출 제외 테이블</th>
-						<td><input type="text" class="txt" name="src_exclude_tables" id="src_exclude_tables"/>
+						<td><input type="text" class="txt" name="src_exclude_tables" id="src_exclude_tables" readonly="readonly" />
 							<span class="btn btnC_01"><button type="button" class= "btn_type_02" onclick="fn_tableList('exclude')" style="width: 60px; margin-right: -60px; margin-top: 0;">등록</button></span>							
-							<input type="hidden" class="txt" name="src_exclude_table_nm" id="src_exclude_table_nm"/>
 						</td>
 					</tr>
 					<tr>

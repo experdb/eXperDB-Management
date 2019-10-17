@@ -3,6 +3,8 @@ package com.k4m.dx.tcontrol.db2pg.setting.service;
 import java.util.List;
 import java.util.Map;
 
+import com.k4m.dx.tcontrol.db2pg.dbms.service.Db2pgSysInfVO;
+
 public interface Db2pgSettingService {
 
 	/**
@@ -49,6 +51,22 @@ public interface Db2pgSettingService {
 	int selectExrtexctSrctblsSeq() throws Exception;
 
 	/**
+	 * 추출 대상 테이블 등록
+	 * 
+	 * @param srctableVO
+	 * @throws Exception
+	 */
+	void insertExrttrgSrcTb(SrcTableVO srctableVO) throws Exception;
+
+	/**
+	 * 추출 제외 테이블 등록
+	 * 
+	 * @param srctableVO
+	 * @throws Exception
+	 */
+	void insertExrtexctSrcTb(SrcTableVO srctableVO) throws Exception;
+
+	/**
 	 * DDL WORK 등록
 	 * 
 	 * @param ddlConfigVO
@@ -79,6 +97,14 @@ public interface Db2pgSettingService {
 	 * @throws Exception
 	 */
 	DDLConfigVO selectDetailDDLWork(int db2pg_ddl_wrk_id) throws Exception;
+
+	/**
+	 * 소스DBMS 접속정보
+	 * 
+	 * @param ddlConfigVO
+	 * @throws Exception
+	 */
+	Db2pgSysInfVO selectSoruceDBMS(int db2pg_sys_id) throws Exception;
 
 
 

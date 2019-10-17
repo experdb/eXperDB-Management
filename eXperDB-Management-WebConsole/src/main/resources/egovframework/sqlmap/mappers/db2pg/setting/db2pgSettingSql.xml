@@ -103,6 +103,54 @@
 	 	SELECT setval('q_db2pg_exrtexct_srctb_ls_01',nextval('q_db2pg_exrtexct_srctb_ls_01'))
 	</select>
 
+	<insert id="insertExrttrgSrcTb" parameterType="srcTableVO">
+		/**
+		* Query ID : insertExrttrgSrcTb
+		* Description : 추출 대상 테이블 등록
+		* Author : 김주영
+		**/
+		INSERT INTO t_db2pg_exrttrg_srctb_ls
+		(
+		  db2pg_exrt_trg_tb_wrk_id
+		, exrt_trg_tb_nm 
+		, exrt_trg_scm_nm
+		, frst_regr_id
+		, frst_reg_dtm
+		)
+		VALUES 
+		(
+		  #{db2pg_exrt_trg_tb_wrk_id}
+		, #{exrt_trg_tb_nm}
+		, #{exrt_trg_scm_nm}
+		, #{frst_regr_id}
+		, clock_timestamp()
+		)
+	</insert>
+	
+	<insert id="insertExrtexctSrcTb" parameterType="srcTableVO">
+		/**
+		* Query ID : insertExrtexctSrcTb
+		* Description : 추출 제외 테이블 등록
+		* Author : 김주영
+		**/
+		INSERT INTO t_db2pg_exrtexct_srctb_ls
+		(
+		  db2pg_exrt_exct_tb_wrk_id
+		, exrt_exct_tb_nm 
+		, exrt_exct_scm_nm
+		, frst_regr_id
+		, frst_reg_dtm
+		)
+		VALUES
+		(
+		  #{db2pg_exrt_exct_tb_wrk_id}
+		, #{exrt_exct_tb_nm} 
+		, #{exrt_exct_scm_nm}
+		, #{frst_regr_id}
+		, clock_timestamp()
+		)
+	</insert>
+	
 	<insert id="insertDDLWork" parameterType="ddlConfigVO">
 		/**
 		* Query ID : insertDDLWork
@@ -259,7 +307,40 @@
 			, ddl_save_pth
 			, db2pg_sys_id
 			, (SELECT db2pg_sys_nm FROM t_db2pg_sys_inf WHERE db2pg_sys_id=wrk_inf.db2pg_sys_id) as db2pg_sys_nm
+			, (SELECT exrt_trg_tb_nm FROM t_db2pg_exrttrg_srctb_ls WHERE db2pg_exrt_trg_tb_wrk_id=wrk_inf.db2pg_exrt_trg_tb_wrk_id) as exrt_trg_tb_nm
+			, coalesce((SELECT length(exrt_trg_tb_nm)-length(replace(exrt_trg_tb_nm,',',''))+1 FROM t_db2pg_exrttrg_srctb_ls WHERE db2pg_exrt_trg_tb_wrk_id=wrk_inf.db2pg_exrt_trg_tb_wrk_id),0) as exrt_trg_tb_cnt
+			, (SELECT exrt_exct_tb_nm FROM t_db2pg_exrtexct_srctb_ls WHERE db2pg_exrt_exct_tb_wrk_id=wrk_inf.db2pg_exrt_exct_tb_wrk_id) as exrt_exct_tb_nm
+			, coalesce((SELECT length(exrt_exct_tb_nm)-length(replace(exrt_exct_tb_nm,',',''))+1 FROM t_db2pg_exrtexct_srctb_ls WHERE db2pg_exrt_exct_tb_wrk_id=wrk_inf.db2pg_exrt_exct_tb_wrk_id),0) as exrt_exct_tb_cnt
 		FROM t_db2pg_ddl_wrk_inf wrk_inf
 		WHERE db2pg_ddl_wrk_id=#{db2pg_ddl_wrk_id}
+	</select>
+	
+	<select id="selectSoruceDBMS" resultType="db2pgSysInfVO" parameterType="int">
+		/**
+		* Query ID : selectSoruceDBMS
+		* Description : 소스DBMS 접속정보
+		* Author : 김주영
+		**/
+		SELECT 
+			  db2pg_sys_id
+			, db2pg_sys_nm
+			, case when dbms_dscd ='TC002201' then 'ORA' 
+				when dbms_dscd ='TC002202' then 'MSS'
+				when dbms_dscd ='TC002203' then 'MYS'
+				when dbms_dscd ='TC002204' then 'POG'
+				when dbms_dscd ='TC002205' then 'DB2'
+				when dbms_dscd ='TC002206' then 'ASE'
+				when dbms_dscd ='TC002207' then 'CUB'
+				when dbms_dscd ='TC002208' then 'TBR'
+				end as dbms_dscd
+			, ipadr
+			, dtb_nm
+			, spr_usr_id
+			, portno
+			, scm_nm
+			, pwd
+			, (SELECT sys_cd_nm FROM t_sysdtl_c WHERE sys_cd=sys_inf.crts_nm) as crts_nm
+		FROM t_db2pg_sys_inf sys_inf
+		WHERE db2pg_sys_id=#{db2pg_sys_id}
 	</select>
 </mapper>

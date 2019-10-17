@@ -24,6 +24,11 @@ public class DDLConfigVO {
 	
 	private String db2pg_sys_nm;
 	
+	private String exrt_trg_tb_nm;
+	private String exrt_trg_tb_cnt;
+	private String exrt_exct_tb_nm;
+	private String exrt_exct_tb_cnt;
+	
 	public int getRownum() {
 		return rownum;
 	}
@@ -144,5 +149,29 @@ public class DDLConfigVO {
 	}
 	public void setDb2pg_sys_nm(String db2pg_sys_nm) {
 		this.db2pg_sys_nm = db2pg_sys_nm;
+	}
+	public String getExrt_trg_tb_nm() {
+		return exrt_trg_tb_nm;
+	}
+	public void setExrt_trg_tb_nm(String exrt_trg_tb_nm) {
+		this.exrt_trg_tb_nm = exrt_trg_tb_nm;
+	}
+	public String getExrt_trg_tb_cnt() {
+		return exrt_trg_tb_cnt;
+	}
+	public void setExrt_trg_tb_cnt(String exrt_trg_tb_cnt) {
+		this.exrt_trg_tb_cnt = exrt_trg_tb_cnt;
+	}
+	public String getExrt_exct_tb_nm() {
+		return exrt_exct_tb_nm;
+	}
+	public void setExrt_exct_tb_nm(String exrt_exct_tb_nm) {
+		this.exrt_exct_tb_nm = exrt_exct_tb_nm;
+	}
+	public String getExrt_exct_tb_cnt() {
+		return exrt_exct_tb_cnt;
+	}
+	public void setExrt_exct_tb_cnt(String exrt_exct_tb_cnt) {
+		this.exrt_exct_tb_cnt = exrt_exct_tb_cnt;
 	}
 }
