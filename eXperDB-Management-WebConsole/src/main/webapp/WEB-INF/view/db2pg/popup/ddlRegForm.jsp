@@ -274,7 +274,25 @@ function fn_tableList(gbn){
 	frmPop.submit();   
 }
 
-
+/* ********************************************************
+ * select box control
+ ******************************************************** */
+ $(function() {
+	 $("#src_tables").change(function(){
+		 $("#src_include_tables").val("");
+		 $("#src_exclude_tables").val("");
+		 $("#src_include_table_nm").val("");
+		 $("#src_exclude_table_nm").val("");
+		    if(this.value=="include"){
+		        $("#include").show();
+			    $("#exclude").hide(); 
+		    }else{
+		        $("#exclude").show();
+			    $("#include").hide(); 
+		    }
+		});
+ });
+ 
 function fn_tableAddCallback(rowList, tableGbn){
 	if(tableGbn == 'include'){
 		$('#src_include_tables').val(rowList.length+"개");
@@ -368,15 +386,21 @@ function fn_tableAddCallback(rowList, tableGbn){
 						</td>
 					</tr>
 					<tr>
-						<th scope="row" class="ico_t2">추출 대상 테이블</th>
-						<td><input type="text" class="txt" name="src_include_tables" id="src_include_tables" readonly="readonly" />
-							<span class="btn btnC_01"><button type="button" class= "btn_type_02" onclick="fn_tableList('include')" style="width: 60px; margin-right: -60px; margin-top: 0;">등록</button></span>							
-						</td>
-					</tr>
-					<tr>
-						<th scope="row" class="ico_t2">추출 제외 테이블</th>
-						<td><input type="text" class="txt" name="src_exclude_tables" id="src_exclude_tables" readonly="readonly" />
-							<span class="btn btnC_01"><button type="button" class= "btn_type_02" onclick="fn_tableList('exclude')" style="width: 60px; margin-right: -60px; margin-top: 0;">등록</button></span>							
+						<th scope="row" class="ico_t2">
+							<select name="src_tables" id="src_tables" class="select t5" style="width: 176px;" >
+								<option value="include">추출 대상 테이블</option>
+								<option value="exclude">추출 제외 테이블</option>
+							</select>
+						</th>
+						<td>
+							<div id="include">
+								<input type="text" class="txt" name="src_include_tables" id="src_include_tables" readonly="readonly" />
+								<span class="btn btnC_01"><button type="button" class= "btn_type_02" onclick="fn_tableList('include')" style="width: 60px; margin-right: -60px; margin-top: 0;">등록</button></span>		
+							</div>
+							<div id="exclude" style="display: none;">
+								<input type="text" class="txt" name="src_exclude_tables" id="src_exclude_tables" readonly="readonly" />
+								<span class="btn btnC_01"><button type="button" class= "btn_type_02" onclick="fn_tableList('exclude')" style="width: 60px; margin-right: -60px; margin-top: 0;">등록</button></span>												
+							</div>
 						</td>
 					</tr>
 					<tr>

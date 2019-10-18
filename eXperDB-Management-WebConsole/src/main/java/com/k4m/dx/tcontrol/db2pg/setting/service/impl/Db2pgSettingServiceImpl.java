@@ -12,6 +12,7 @@ import com.k4m.dx.tcontrol.db2pg.setting.service.CodeVO;
 import com.k4m.dx.tcontrol.db2pg.setting.service.DDLConfigVO;
 import com.k4m.dx.tcontrol.db2pg.setting.service.DataConfigVO;
 import com.k4m.dx.tcontrol.db2pg.setting.service.Db2pgSettingService;
+import com.k4m.dx.tcontrol.db2pg.setting.service.QueryVO;
 import com.k4m.dx.tcontrol.db2pg.setting.service.SrcTableVO;
 
 import egovframework.rte.fdl.cmmn.EgovAbstractServiceImpl;
@@ -46,6 +47,11 @@ public class Db2pgSettingServiceImpl extends EgovAbstractServiceImpl implements 
 	public int selectExrtexctSrctblsSeq() throws Exception {
 		return db2pgSettingDAO.selectExrtexctSrctblsSeq();
 	}
+	
+	@Override
+	public int selectExrtusrQryIdSeq() throws Exception {
+		return db2pgSettingDAO.selectExrtusrQryIdSeq();
+	}
 
 	@Override
 	public void insertExrttrgSrcTb(SrcTableVO srctableVO) throws Exception {
@@ -65,6 +71,16 @@ public class Db2pgSettingServiceImpl extends EgovAbstractServiceImpl implements 
 	@Override
 	public void updateDDLWork(DDLConfigVO ddlConfigVO) throws Exception {
 		db2pgSettingDAO.updateDDLWork(ddlConfigVO);
+	}
+	
+	@Override
+	public void deleteDDLWork(int db2pg_ddl_wrk_id) throws Exception {
+		db2pgSettingDAO.deleteDDLWork(db2pg_ddl_wrk_id);
+	}
+	
+	@Override
+	public void insertUsrQry(QueryVO queryVO) throws Exception {
+		db2pgSettingDAO.insertUsrQry(queryVO);
 	}
 	
 	@Override

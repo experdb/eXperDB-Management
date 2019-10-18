@@ -400,41 +400,47 @@ function fn_ddl_work_delete(){
 	if(datas.length < 1){
 		alert("<spring:message code='message.msg16' />");
 		return false;
-	}
-	
-	var bck_wrk_id_List = [];
-	var wrk_id_List = [];
-    for (var i = 0; i < datas.length; i++) {
-    	bck_wrk_id_List.push( tableDDL.rows('.selected').data()[i].bck_wrk_id);   
-    	wrk_id_List.push( tableDDL.rows('.selected').data()[i].wrk_id);   
-  	}	
-		
-    $.ajax({
-		url : "/popup/scheduleCheck.do",
-	  	data : {
-	  		bck_wrk_id_List : JSON.stringify(bck_wrk_id_List),
-	  		wrk_id_List : JSON.stringify(wrk_id_List)
-	  	},
-		dataType : "json",
-		type : "post",
-		beforeSend: function(xhr) {
-	        xhr.setRequestHeader("AJAX", true);
-	     },
-		error : function(xhr, status, error) {
-			if(xhr.status == 401) {
-				alert("<spring:message code='message.msg02' />");
-				top.location.href = "/";
-			} else if(xhr.status == 403) {
-				alert("<spring:message code='message.msg03' />");
-				top.location.href = "/";
-			} else {
-				alert("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""));
-			}
-		},
-		success : function(data) {
-			fn_deleteWork(data, bck_wrk_id_List, wrk_id_List);
+	}else{
+		var wrkIdList = [];
+		for (var i = 0; i < datas.length; i++) {
+			wrkIdList += datas[i].db2pg_ddl_wrk_id + ',';	
 		}
-	});	
+		
+		var wrkNmList = [];
+		for (var i = 0; i < datas.length; i++) {
+			wrkNmList += datas[i].db2pg_ddl_wrk_nm + ',';	
+		}
+			$.ajax({
+				url : "/db2pg/deleteDDLWork.do",
+			  	data : {
+			  		db2pg_ddl_wrk_id : wrkIdList,
+			  		db2pg_ddl_wrk_nm : wrkNmList
+			  	},
+				type : "post",
+				beforeSend: function(xhr) {
+			        xhr.setRequestHeader("AJAX", true);
+			     },
+				error : function(xhr, status, error) {
+					if(xhr.status == 401) {
+						alert('<spring:message code="message.msg02" />');
+						top.location.href = "/";
+					} else if(xhr.status == 403) {
+						alert('<spring:message code="message.msg03" />');
+						top.location.href = "/";
+					} else {
+						alert("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""));
+					}
+				},
+				success : function(result) {
+					if(result.resultCode == "0000000000"){
+						alert("<spring:message code='message.msg37' />");
+						getddlDataList();
+					}else{
+						alert('삭제에 실패했습니다.');
+					}	
+				}
+			});	
+	}
 }
 
 /* ********************************************************

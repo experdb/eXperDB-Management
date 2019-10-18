@@ -376,9 +376,32 @@ public class Db2pgSettingController {
 	 * @return ModelAndView mv
 	 * @throws Exception
 	 */
-	//RepoDB삭제 delete from t_db2pg_ddl_wrk_inf where db2pg_ddl_wrk_id=43 
-	//config 파일 삭제
-	
+	@RequestMapping(value = "/db2pg/deleteDDLWork.do")
+	public @ResponseBody JSONObject deleteDDLWork(@ModelAttribute("historyVO") HistoryVO historyVO, HttpServletResponse response, HttpServletRequest request) {
+		JSONObject result = new JSONObject();
+		try {
+			// 화면접근이력 이력 남기기
+//			CmmnUtils.saveHistory(request, historyVO);
+//			historyVO.setExe_dtl_cd("DX-T0033_02");
+//			historyVO.setMnu_id(12);
+//			accessHistoryService.insertHistory(historyVO);
+			
+			//DB 삭제
+			String[] db2pg_ddl_wrk_id = request.getParameter("db2pg_ddl_wrk_id").toString().split(",");
+			for (int i = 0; i < db2pg_ddl_wrk_id.length; i++) {
+				db2pgSettingService.deleteDDLWork(Integer.parseInt(db2pg_ddl_wrk_id[i]));
+			}
+			//config 파일 삭제
+			String[] db2pg_ddl_wrk_nm = request.getParameter("db2pg_ddl_wrk_nm").toString().split(",");
+			for (int i = 0; i < db2pg_ddl_wrk_nm.length; i++) {
+				result = Db2pgConfigController.deleteDDLConfig(db2pg_ddl_wrk_nm[i]);
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+			result.put("resultCode", "8000000003");
+		}
+		return result;
+	}
 	
 	
 	/**
@@ -420,8 +443,8 @@ public class Db2pgSettingController {
 	 */
 	@RequestMapping(value = "/db2pg/insertDataWork.do")
 	@ResponseBody 
-	 public Boolean insertDataWork(@ModelAttribute("dataConfigVO") DataConfigVO dataConfigVO, HttpServletRequest request, HttpServletResponse response, @ModelAttribute("historyVO") HistoryVO historyVO) {
-		Boolean result = true;
+	 public JSONObject insertDataWork(@ModelAttribute("dataConfigVO") DataConfigVO dataConfigVO, HttpServletRequest request, HttpServletResponse response, @ModelAttribute("historyVO") HistoryVO historyVO) {
+		JSONObject result = new JSONObject();
 		try {
 			// 화면접근이력 이력 남기기
 //			CmmnUtils.saveHistory(request, historyVO);
@@ -461,11 +484,11 @@ public class Db2pgSettingController {
 			int usr_qry_id=0;
 			if(dataConfigVO.getUsr_qry_use_tf()==true){
 				QueryVO queryVO = new QueryVO();
-//				usr_qry_id=db2pgSettingService.selectExrtusrQryIdSeq();
-//				queryVO.setDb2pg_usr_qry_id(usr_qry_id);
-//				queryVO.setUsr_qry_exp(request.getParameter("db2pg_usr_qry"));
-//				queryVO.setFrst_regr_id(id);
-//				db2pgSettingService.insertUsrQry(queryVO);
+				usr_qry_id=db2pgSettingService.selectExrtusrQryIdSeq();
+				queryVO.setDb2pg_usr_qry_id(usr_qry_id);
+				queryVO.setUsr_qry_exp(request.getParameter("db2pg_usr_qry"));
+				queryVO.setFrst_regr_id(id);
+				db2pgSettingService.insertUsrQry(queryVO);
 			}
 			
 			//4.T_DB2PG_Data_작업_정보 insert
@@ -474,7 +497,7 @@ public class Db2pgSettingController {
 			dataConfigVO.setDb2pg_exrt_trg_tb_wrk_id(exrt_trg_tb_wrk_id);
 			dataConfigVO.setDb2pg_exrt_exct_tb_wrk_id(exrt_exct_tb_wrk_id);
 			dataConfigVO.setDb2pg_usr_qry_id(usr_qry_id);
-//			db2pgSettingService.insertDataWork(dataConfigVO);
+			db2pgSettingService.insertDataWork(dataConfigVO);
 			
 			System.out.println("**********************");
 			System.out.println(dataConfigVO.getDb2pg_trsf_wrk_nm());
@@ -495,10 +518,22 @@ public class Db2pgSettingController {
 			
 			//repo 등록 -> 2. config 파일 만들기
 			//소스시스템이 PG이면 SRC_STATEMENT_FETCH_SIZE(기존) -> SRC_COPY_SEGMENT_SIZE 옵션 사용
+			Db2pgSysInfVO sourceDBMS = (Db2pgSysInfVO) db2pgSettingService.selectSoruceDBMS(dataConfigVO.getDb2pg_source_system_id());
+			JSONObject configObj = new JSONObject();
+			configObj.put("src_host", sourceDBMS.getIpadr());
+			configObj.put("src_user", sourceDBMS.getSpr_usr_id());
+			configObj.put("src_password", aes.aesDecode(sourceDBMS.getPwd()));
+			configObj.put("src_database", sourceDBMS.getDtb_nm());
+			configObj.put("src_schema", sourceDBMS.getScm_nm());
+			configObj.put("src_dbms_type", sourceDBMS.getDbms_dscd());
+			configObj.put("src_port", sourceDBMS.getPortno());
+			configObj.put("src_db_charset", sourceDBMS.getCrts_nm());
+			
+			result = Db2pgConfigController.createDataConfig(configObj);
 			
 		} catch (Exception e) {
 			e.printStackTrace();
-			result = false;
+			result.put("resultCode", "8000000003");
 		}
 		return result;
 	}
@@ -529,6 +564,38 @@ public class Db2pgSettingController {
 		}
 		mv.setViewName("db2pg/popup/dataRegReForm");
 		return mv;
+	}
+	
+	/**
+	 * Data WORK를 삭제한다.
+	 * 
+	 * @param historyVO
+	 * @param request
+	 * @return ModelAndView mv
+	 * @throws Exception
+	 */
+	@RequestMapping(value = "/db2pg/deleteDataWork.do")
+	public @ResponseBody JSONObject deleteDataWork(@ModelAttribute("historyVO") HistoryVO historyVO, HttpServletResponse response, HttpServletRequest request) {
+		JSONObject result = new JSONObject();
+		try {
+			// 화면접근이력 이력 남기기
+//			CmmnUtils.saveHistory(request, historyVO);
+//			historyVO.setExe_dtl_cd("DX-T0033_02");
+//			historyVO.setMnu_id(12);
+//			accessHistoryService.insertHistory(historyVO);
+			
+			//RepoDB삭제 delete from t_db2pg_ddl_wrk_inf where db2pg_ddl_wrk_id=43 
+			//config 파일 삭제
+			String[] param = request.getParameter("db2pg_ddl_wrk_id").toString().split(",");
+			for (int i = 0; i < param.length; i++) {
+				System.out.println(param[i]);
+//				db2pgSettingService.deleteDDLWork(param[i]);
+			}
+			result.put("resultCode", "0000000000");
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return result;
 	}
 	
 	/**
