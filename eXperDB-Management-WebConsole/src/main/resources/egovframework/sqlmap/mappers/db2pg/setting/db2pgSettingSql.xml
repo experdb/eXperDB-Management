@@ -41,6 +41,7 @@
 		AND sys_inf.ipadr LIKE #{ipadr}
 		AND sys_inf.dtb_nm LIKE #{dtb_nm}
 		AND sys_inf.scm_nm LIKE #{scm_nm}
+		ORDER BY lst_mdf_dtm DESC
 	</select>
 	
 	<select id="selectDataWork" resultType="dataConfigVO" parameterType="hashmap">
@@ -83,6 +84,7 @@
 			AND target_sys_inf.dtb_nm LIKE #{dtb_nm}
 			AND target_sys_inf.scm_nm LIKE #{scm_nm}
 		</if>
+		ORDER BY lst_mdf_dtm DESC
 	 </select>	
 	
 	<select id="selectExrttrgSrctblsSeq" resultType="int">

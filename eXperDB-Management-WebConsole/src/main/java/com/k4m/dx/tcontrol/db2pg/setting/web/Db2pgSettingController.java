@@ -30,6 +30,7 @@ import com.k4m.dx.tcontrol.db2pg.setting.service.CodeVO;
 import com.k4m.dx.tcontrol.db2pg.setting.service.DDLConfigVO;
 import com.k4m.dx.tcontrol.db2pg.setting.service.DataConfigVO;
 import com.k4m.dx.tcontrol.db2pg.setting.service.Db2pgSettingService;
+import com.k4m.dx.tcontrol.db2pg.setting.service.QueryVO;
 import com.k4m.dx.tcontrol.db2pg.setting.service.SrcTableVO;
 import com.k4m.dx.tcontrol.login.service.LoginVO;
 
@@ -270,10 +271,10 @@ public class Db2pgSettingController {
 			mv.addObject("ddl_save_pth", result.getDdl_save_pth());
 			mv.addObject("db2pg_sys_id", result.getDb2pg_sys_id());
 			mv.addObject("db2pg_sys_nm", result.getDb2pg_sys_nm());
-			mv.addObject("exrt_trg_tb_nm",result.getExrt_trg_tb_nm());
-			mv.addObject("exrt_exct_tb_nm",result.getExrt_exct_tb_nm());
-			mv.addObject("exrt_trg_tb_cnt",result.getExrt_trg_tb_cnt());
-			mv.addObject("exrt_exct_tb_cnt",result.getExrt_exct_tb_cnt());
+			mv.addObject("exrt_trg_tb_nm", result.getExrt_trg_tb_nm());
+			mv.addObject("exrt_exct_tb_nm", result.getExrt_exct_tb_nm());
+			mv.addObject("exrt_trg_tb_cnt", result.getExrt_trg_tb_cnt());
+			mv.addObject("exrt_exct_tb_cnt", result.getExrt_exct_tb_cnt());
 			
 			List<CodeVO> codeLetter = db2pgSettingService.selectCode("TC0028");
 			mv.addObject("codeLetter", codeLetter);
@@ -289,7 +290,7 @@ public class Db2pgSettingController {
 	/**
 	 * DDL 추출 WORK 수정한다.
 	 * 
-	 * @param userVo
+	 * @param ddlConfigVO
 	 * @param request
 	 * @return
 	 * @return
@@ -297,8 +298,8 @@ public class Db2pgSettingController {
 	 */
 	@RequestMapping(value = "/db2pg/updateDDLWork.do")
 	@ResponseBody 
-	 public Boolean updateDDLWork(@ModelAttribute("ddlConfigVO") DDLConfigVO ddlConfigVO, HttpServletRequest request, HttpServletResponse response, @ModelAttribute("historyVO") HistoryVO historyVO) {
-		Boolean result = true;
+	 public JSONObject updateDDLWork(@ModelAttribute("ddlConfigVO") DDLConfigVO ddlConfigVO, HttpServletRequest request, HttpServletResponse response, @ModelAttribute("historyVO") HistoryVO historyVO) {
+		JSONObject result = new JSONObject();
 		try {
 			// 화면접근이력 이력 남기기
 //			CmmnUtils.saveHistory(request, historyVO);
@@ -340,14 +341,45 @@ public class Db2pgSettingController {
 			ddlConfigVO.setDb2pg_exrt_exct_tb_wrk_id(exrt_exct_tb_wrk_id);
 			db2pgSettingService.updateDDLWork(ddlConfigVO);
 			
-			//기존 config 삭제하고(파일이 존재하는지 부터 체크) 새로 생성!
+			//4.config 생성
+			Db2pgSysInfVO sourceDBMS = (Db2pgSysInfVO) db2pgSettingService.selectSoruceDBMS(ddlConfigVO.getDb2pg_sys_id());
+			JSONObject configObj = new JSONObject();
+			configObj.put("src_host", sourceDBMS.getIpadr());
+			configObj.put("src_user", sourceDBMS.getSpr_usr_id());
+			configObj.put("src_password", aes.aesDecode(sourceDBMS.getPwd()));
+			configObj.put("src_database", sourceDBMS.getDtb_nm());
+			configObj.put("src_schema", sourceDBMS.getScm_nm());
+			configObj.put("src_dbms_type", sourceDBMS.getDbms_dscd());
+			configObj.put("src_port", sourceDBMS.getPortno());
+			configObj.put("src_db_charset", sourceDBMS.getCrts_nm());
+			configObj.put("wrk_nm", ddlConfigVO.getDb2pg_ddl_wrk_nm());
+			configObj.put("src_classify_string", ddlConfigVO.getDb2pg_uchr_lchr_val());
+			configObj.put("src_table_ddl", ddlConfigVO.getSrc_tb_ddl_exrt_tf());
+			configObj.put("src_file_output_path", ddlConfigVO.getDdl_save_pth());
+			configObj.put("src_include_tables", src_include_tables);
+			configObj.put("src_exclude_tables", src_exclude_tables);
 			
+			result = Db2pgConfigController.createDDLConfig(configObj);
 		} catch (Exception e) {
 			e.printStackTrace();
-			result = false;
+			result.put("resultCode", "8000000003");
 		}
 		return result;
 	}
+	
+	
+	/**
+	 * DDL WORK를 삭제한다.
+	 * 
+	 * @param historyVO
+	 * @param request
+	 * @return ModelAndView mv
+	 * @throws Exception
+	 */
+	//RepoDB삭제 delete from t_db2pg_ddl_wrk_inf where db2pg_ddl_wrk_id=43 
+	//config 파일 삭제
+	
+	
 	
 	/**
 	 * DATA 이행 등록 화면을 보여준다.
@@ -397,6 +429,7 @@ public class Db2pgSettingController {
 //			historyVO.setMnu_id(12);
 //			accessHistoryService.insertHistory(historyVO);
 			
+			AES256 aes = new AES256(AES256_KEY.ENC_KEY);
 			HttpSession session = request.getSession();
 			LoginVO loginVo = (LoginVO) session.getAttribute("session");
 			String id = loginVo.getUsr_id();
@@ -405,39 +438,29 @@ public class Db2pgSettingController {
 			srctableVO.setFrst_regr_id(id);
 			int exrt_trg_tb_wrk_id =0;
 			int exrt_exct_tb_wrk_id=0;
+			String src_include_tables=request.getParameter("src_include_tables");
+			String src_exclude_tables=request.getParameter("src_exclude_tables");
 			
 			//1.T_DB2PG_추출대상소스테이블내역 insert
-			if(!request.getParameter("src_include_tables").equals("")){
+			if(!src_include_tables.equals("")){
 				exrt_trg_tb_wrk_id=db2pgSettingService.selectExrttrgSrctblsSeq();
-				System.out.println("현재 exrt_trg_tb_wrk_id SEQ : " + exrt_trg_tb_wrk_id);
-		    	String [] src_include_tables = request.getParameter("src_include_tables").split(",");
-		    	for(int i = 0; i < src_include_tables.length; i++) {
-		    		System.out.println("추출대상테이블 : "+src_include_tables[i]);
-		    		 
-//		    		srctableVO.setDb2pg_exrt_trg_tb_wrk_id(exrt_trg_tb_wrk_id);
-//		    		srctableVO.setExrt_exct_tb_nm(src_include_tables[i]);
-//					db2pgSettingService.insertExrttrgSrcTb(srctableVO);
-		    	}
+		    	srctableVO.setDb2pg_exrt_trg_tb_wrk_id(exrt_trg_tb_wrk_id);
+		    	srctableVO.setExrt_trg_tb_nm(src_include_tables);
+				db2pgSettingService.insertExrttrgSrcTb(srctableVO);
 			}
 			
 			//2.T_DB2PG_추출제외소스테이블내역 insert
-			if(!request.getParameter("src_exclude_tables").equals("")){
+			if(!src_exclude_tables.equals("")){
 				exrt_exct_tb_wrk_id=db2pgSettingService.selectExrtexctSrctblsSeq();
-				System.out.println("현재 exrt_exct_tb_wrk_id SEQ : " + exrt_exct_tb_wrk_id);
-		    	String [] src_exclude_tables = request.getParameter("src_exclude_tables").split(",");
-		    	for(int i = 0; i < src_exclude_tables.length; i++) {
-		    		System.out.println("추출제외테이블 : "+src_exclude_tables[i]);
-		    		
-//		    		srctableVO.setDb2pg_exrt_exct_tb_wrk_id(exrt_exct_tb_wrk_id);
-//		    		srctableVO.setExrt_exct_tb_nm(src_exclude_tables[i]);
-//					db2pgSettingService.insertExrtexctSrcTb(srctableVO);
-		    	}
+		    	srctableVO.setDb2pg_exrt_exct_tb_wrk_id(exrt_exct_tb_wrk_id);
+		    	srctableVO.setExrt_exct_tb_nm(src_exclude_tables);
+				db2pgSettingService.insertExrtexctSrcTb(srctableVO);
 			}
 			
 			//3.사용자쿼리를 사용할 경우 insert
 			int usr_qry_id=0;
 			if(dataConfigVO.getUsr_qry_use_tf()==true){
-//				QueryVO queryVO = new QueryVO();
+				QueryVO queryVO = new QueryVO();
 //				usr_qry_id=db2pgSettingService.selectExrtusrQryIdSeq();
 //				queryVO.setDb2pg_usr_qry_id(usr_qry_id);
 //				queryVO.setUsr_qry_exp(request.getParameter("db2pg_usr_qry"));
@@ -451,7 +474,7 @@ public class Db2pgSettingController {
 			dataConfigVO.setDb2pg_exrt_trg_tb_wrk_id(exrt_trg_tb_wrk_id);
 			dataConfigVO.setDb2pg_exrt_exct_tb_wrk_id(exrt_exct_tb_wrk_id);
 			dataConfigVO.setDb2pg_usr_qry_id(usr_qry_id);
-			db2pgSettingService.insertDataWork(dataConfigVO);
+//			db2pgSettingService.insertDataWork(dataConfigVO);
 			
 			System.out.println("**********************");
 			System.out.println(dataConfigVO.getDb2pg_trsf_wrk_nm());
@@ -657,6 +680,7 @@ public class Db2pgSettingController {
 		String svr_spr_scm_pwd = request.getParameter("pwd");
 		String dbms_cd = request.getParameter("dbms_dscd");
 		String table_nm = request.getParameter("table_nm");
+		String scm_nm = request.getParameter("scm_nm");
 		
 		serverObj.put(ClientProtocolID.SERVER_NAME, ipadr);
 		serverObj.put(ClientProtocolID.SERVER_IP, ipadr);
@@ -666,6 +690,7 @@ public class Db2pgSettingController {
 		serverObj.put(ClientProtocolID.USER_PWD, svr_spr_scm_pwd);
 		serverObj.put(ClientProtocolID.DB_TYPE, dbms_cd);
 		serverObj.put(ClientProtocolID.TABLE_NM, table_nm);
+		serverObj.put(ClientProtocolID.SCHEMA, scm_nm);
 		
 		result =  DatabaseTableInfo.getTblList(serverObj);
 

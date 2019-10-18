@@ -108,7 +108,6 @@ function fn_pathCheck() {
 function fn_update_work(){
 	if(valCheck()){
 		$.ajax({
-			async : false,
 			url : "/db2pg/updateDDLWork.do",
 		  	data : {
 		  		db2pg_ddl_wrk_id : "${db2pg_ddl_wrk_id}",
@@ -174,38 +173,38 @@ function fn_dbmsInfo(){
 /* ********************************************************
  * 추출 대상 테이블, 추출 제외 테이블 등록 버튼 클릭시
  ******************************************************** */
- function fn_tableList(gbn){
-		if($('#db2pg_sys_nm').val() == ""){
-			alert("소스시스템을 선택해주세요.");
-			return false;
-		}
-		
-		var frmPop= document.frmPopup;
-		var url = '/db2pg/popup/tableInfo.do';
-		window.open('','popupView','width=930, height=500');  
-		     
-		frmPop.action = url;
-		frmPop.target = 'popupView';
-		frmPop.db2pg_sys_id.value = $('#db2pg_sys_id').val();
-		frmPop.tableGbn.value = gbn;
-		if(gbn == 'include'){
-			frmPop.src_include_table_nm.value = $('#src_include_table_nm').val();  
-		}else{
-			frmPop.src_exclude_table_nm.value = $('#src_exclude_table_nm').val();  
-		}
-		frmPop.submit();   
+function fn_tableList(gbn){
+	if($('#db2pg_sys_nm').val() == ""){
+		alert("소스시스템을 선택해주세요.");
+		return false;
 	}
+	
+	var frmPop= document.frmPopup;
+	var url = '/db2pg/popup/tableInfo.do';
+	window.open('','popupView','width=930, height=500');  
+	     
+	frmPop.action = url;
+	frmPop.target = 'popupView';
+	frmPop.db2pg_sys_id.value = $('#db2pg_sys_id').val();
+	frmPop.tableGbn.value = gbn;
+	if(gbn == 'include'){
+		frmPop.src_include_table_nm.value = $('#src_include_table_nm').val();  
+	}else{
+		frmPop.src_exclude_table_nm.value = $('#src_exclude_table_nm').val();  
+	}
+	frmPop.submit();   
+}
 
 
-	function fn_tableAddCallback(rowList, tableGbn){
-		if(tableGbn == 'include'){
-			$('#src_include_tables').val(rowList.length+"개");
-			$('#src_include_table_nm').val(rowList);
-		}else{
-			$('#src_exclude_tables').val(rowList.length+"개");
-			$('#src_exclude_table_nm').val(rowList);
-		}
+function fn_tableAddCallback(rowList, tableGbn){
+	if(tableGbn == 'include'){
+		$('#src_include_tables').val(rowList.length+"개");
+		$('#src_include_table_nm').val(rowList);
+	}else{
+		$('#src_exclude_tables').val(rowList.length+"개");
+		$('#src_exclude_table_nm').val(rowList);
 	}
+}
 </script>
 </head>
 <body>
