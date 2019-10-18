@@ -42,7 +42,7 @@ function fn_init() {
 		columns : [
 		{data : "rownum", defaultContent : "", targets : 0, orderable : false, checkboxes : {'selectRow' : true}}, 
 		{data : "table_name", className : "dt-center", defaultContent : ""},
-		{data : "table_schema", className : "dt-center", defaultContent : ""}		
+		{data : "obj_description", className : "dt-center", defaultContent : ""}		
 		],'select': {'style': 'multi'}
 	});
 		
@@ -81,7 +81,8 @@ function fn_search(){
  		   	spr_usr_id : $("#spr_usr_id").val(),
  		   	pwd : $("#pwd").val(),
  		  	dbms_dscd : $("#dbms_dscd").val(),
- 		  	table_nm : $("#table_nm").val()
+ 		  	table_nm : $("#table_nm").val(),
+ 		  	scm_nm : $("#scm_nm").val()
 		},
 		dataType : "json",
 		type : "post",
@@ -198,7 +199,7 @@ function fn_tableCheckSelect(tableList){
 					<tr>
 						<th width="30"></th>
 						<th width="100" class="dt-center">테이블명</th>
-						<th width="100" class="dt-center">스키마명</th>
+						<th width="100" class="dt-center">COMMENT</th>
 					</tr>
 				</thead>
 			</table>		

@@ -38,7 +38,10 @@ public class DatabaseTableInfo {
 					break;
 			//PostgreSQL		
 				case "TC002204" :
-					String sql = "SELECT TABLE_SCHEMA, TABLE_NAME FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_SCHEMA ='" +serverObj.get("USER_ID") +"' AND TABLE_NAME LIKE '%" + serverObj.get("TABLE_NM") + "%' ORDER BY TABLE_NAME";    				
+					String sql =
+							"SELECT n.nspname, c.relname, obj_description(c.oid) "
+							+ "FROM pg_catalog.pg_class c inner join pg_catalog.pg_namespace n on c.relnamespace=n.oid "
+							+ "WHERE c.relkind = 'r' and nspname ='"+serverObj.get("SCHEMA") +"' and c.relname LIKE '%" + serverObj.get("TABLE_NM") + "%' ORDER BY c.relname";
 
 					ResultSet rs = stmt.executeQuery(sql);				
 					int i = 0;
@@ -46,8 +49,8 @@ public class DatabaseTableInfo {
 						i++;
 						JSONObject jsonObj = new JSONObject();
 							jsonObj.put("rownum",i);
-							jsonObj.put("table_name", rs.getString("TABLE_NAME"));
-							jsonObj.put("table_schema", rs.getString("TABLE_SCHEMA"));
+							jsonObj.put("table_name", rs.getString("relname"));
+							jsonObj.put("obj_description", rs.getString("obj_description"));
 							jsonArray.add(jsonObj);
 					}
 					result.put("RESULT_CODE", 0);
@@ -117,11 +120,12 @@ public class DatabaseTableInfo {
 			serverObj.put(ClientProtocolID.SERVER_NAME, "192.168.56.112");
 			serverObj.put(ClientProtocolID.SERVER_IP, "192.168.56.112");
 			serverObj.put(ClientProtocolID.SERVER_PORT, "5432");
-			serverObj.put(ClientProtocolID.DATABASE_NAME, "kimjy");
-			serverObj.put(ClientProtocolID.USER_ID, "kimjy");
-			serverObj.put(ClientProtocolID.USER_PWD, "kimjy");
+			serverObj.put(ClientProtocolID.DATABASE_NAME, "experdb");
+			serverObj.put(ClientProtocolID.USER_ID, "experdb");
+			serverObj.put(ClientProtocolID.USER_PWD, "experdb");
 			serverObj.put(ClientProtocolID.DB_TYPE, "TC002204");
-			serverObj.put(ClientProtocolID.TABLE_NM, "test");
+			serverObj.put(ClientProtocolID.SCHEMA, "experdb_management");
+			serverObj.put(ClientProtocolID.TABLE_NM, "t_adtcngdb_i");
 			
 			JSONObject result = getTblList(serverObj);
 			
