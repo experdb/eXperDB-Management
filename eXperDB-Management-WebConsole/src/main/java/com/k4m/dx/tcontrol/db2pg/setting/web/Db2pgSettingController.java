@@ -21,6 +21,7 @@ import org.springframework.web.servlet.ModelAndView;
 
 import com.k4m.dx.tcontrol.cmmn.AES256;
 import com.k4m.dx.tcontrol.cmmn.AES256_KEY;
+import com.k4m.dx.tcontrol.cmmn.CmmnUtils;
 import com.k4m.dx.tcontrol.cmmn.client.ClientProtocolID;
 import com.k4m.dx.tcontrol.common.service.HistoryVO;
 import com.k4m.dx.tcontrol.db2pg.cmmn.DatabaseTableInfo;
@@ -177,6 +178,9 @@ public class Db2pgSettingController {
 	@ResponseBody 
 	 public JSONObject insertDDLWork(@ModelAttribute("ddlConfigVO") DDLConfigVO ddlConfigVO, HttpServletRequest request, HttpServletResponse response, @ModelAttribute("historyVO") HistoryVO historyVO) {
 		JSONObject result = new JSONObject();
+		
+		String workInsert = "S";
+		
 		try {
 			// 화면접근이력 이력 남기기
 //			CmmnUtils.saveHistory(request, historyVO);
@@ -191,9 +195,28 @@ public class Db2pgSettingController {
 			SrcTableVO srctableVO = new SrcTableVO();
 			srctableVO.setFrst_regr_id(id);
 			int exrt_trg_tb_wrk_id =0;
-			int exrt_exct_tb_wrk_id=0;
+			int exrt_exct_tb_wrk_id=0;			
+			int wrk_id = 0;
 			String src_include_tables=request.getParameter("src_include_tables");
 			String src_exclude_tables=request.getParameter("src_exclude_tables");
+			
+			
+			//1. WORK 등록
+			try {					
+				// 화면접근이력 이력 남기기
+				CmmnUtils.saveHistory(request, historyVO);
+				ddlConfigVO.setFrst_regr_id(id);
+				
+				//시퀀스 조회
+				wrk_id=db2pgSettingService.selectWorkSeq();
+				ddlConfigVO.setWrk_id(wrk_id);
+				//작업 정보등록
+				db2pgSettingService.insertDb2pgWork(ddlConfigVO);
+			} catch (Exception e) {
+				e.printStackTrace();
+				workInsert = "F";
+			}
+			
 			
 			//1.T_DB2PG_추출대상소스테이블내역 insert
 			if(!src_include_tables.equals("")){
@@ -214,6 +237,7 @@ public class Db2pgSettingController {
 			//3.T_DB2PG_DDL_작업_정보 insert
 			ddlConfigVO.setFrst_regr_id(id);
 			ddlConfigVO.setLst_mdfr_id(id);
+			ddlConfigVO.setWrk_id(wrk_id);
 			ddlConfigVO.setDb2pg_exrt_trg_tb_wrk_id(exrt_trg_tb_wrk_id);
 			ddlConfigVO.setDb2pg_exrt_exct_tb_wrk_id(exrt_exct_tb_wrk_id);
 			db2pgSettingService.insertDDLWork(ddlConfigVO);

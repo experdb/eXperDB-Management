@@ -129,6 +129,22 @@ public interface Db2pgSettingService {
 	 * @throws Exception
 	 */
 	Db2pgSysInfVO selectSoruceDBMS(int db2pg_sys_id) throws Exception;
+	
+	/**
+	 * DB2PG WORK 등록
+	 * 
+	 * @param dataConfigVO
+	 * @throws Exception
+	 */
+	void insertDb2pgWork(DDLConfigVO ddlConfigVO) throws Exception;
+
+	/**
+	 * WORK ID SEQ 조회
+	 * 
+	 * @return int
+	 * @throws Exception
+	 */
+	int selectWorkSeq() throws Exception;
 
 
 }

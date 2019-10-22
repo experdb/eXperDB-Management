@@ -181,4 +181,19 @@ public class Db2pgSettingDAO extends EgovAbstractMapper {
 		return (Db2pgSysInfVO) selectOne("db2pgSettingSql.selectSoruceDBMS", db2pg_sys_id);
 	}
 
+	/**
+	 * DB2PG WORK 등록
+	 * 
+	 * @param ddlConfigVO
+	 * @throws Exception
+	 */
+	public void insertDb2pgWork(DDLConfigVO ddlConfigVO) throws SQLException{
+		insert("db2pgSettingSql.insertDataWork", ddlConfigVO);
+		
+	}
+
+	public int selectWorkSeq() throws SQLException{
+		return (int) getSqlSession().selectOne("db2pgSettingSql.selectWorkSeq");
+	}
+
 }
