@@ -23,9 +23,10 @@
 		SELECT 
 			(row_number() over()) as rownum
 			, (row_number() over()) as idx
-			, ddl_wrk_inf.db2pg_ddl_wrk_id
-			, ddl_wrk_inf.db2pg_ddl_wrk_nm
-			, ddl_wrk_inf.db2pg_ddl_wrk_exp
+			, ddl_wrk_inf.db2pg_ddl_wrk_id	
+			, ddl_wrk_inf.wrk_id
+			, wrkcng.wrk_nm as db2pg_ddl_wrk_nm
+			, wrkcng.wrk_exp as  db2pg_ddl_wrk_exp
 			, sys_inf.dbms_dscd
 			, sys_inf.ipadr
 			, sys_inf.dtb_nm
@@ -34,13 +35,15 @@
 			, TO_CHAR(ddl_wrk_inf.frst_reg_dtm,'YYYY-MM-DD HH24:MI') as frst_reg_dtm
 			, ddl_wrk_inf.lst_mdfr_id
 			, TO_CHAR(ddl_wrk_inf.lst_mdf_dtm,'YYYY-MM-DD HH24:MI') as lst_mdf_dtm 
-		FROM t_db2pg_ddl_wrk_inf ddl_wrk_inf, t_db2pg_sys_inf sys_inf
+		FROM t_db2pg_ddl_wrk_inf ddl_wrk_inf, t_db2pg_sys_inf sys_inf, t_wrkcng_i wrkcng
 		WHERE ddl_wrk_inf.db2pg_sys_id = sys_inf.db2pg_sys_id
-		AND ddl_wrk_inf.db2pg_ddl_wrk_nm LIKE #{wrk_nm}
+		AND ddl_wrk_inf.wrk_id = wrkcng.wrk_id
+		AND wrkcng.wrk_nm LIKE #{db2pg_ddl_wrk_nm}
 		AND sys_inf.dbms_dscd LIKE #{dbms_dscd}
 		AND sys_inf.ipadr LIKE #{ipadr}
 		AND sys_inf.dtb_nm LIKE #{dtb_nm}
 		AND sys_inf.scm_nm LIKE #{scm_nm}
+		ORDER BY lst_mdf_dtm desc
 	</select>
 	
 	<select id="selectDataWork" resultType="dataConfigVO" parameterType="hashmap">
@@ -83,6 +86,7 @@
 			AND target_sys_inf.dtb_nm LIKE #{dtb_nm}
 			AND target_sys_inf.scm_nm LIKE #{scm_nm}
 		</if>
+		ORDER BY lst_mdf_dtm DESC
 	 </select>	
 	
 	<select id="selectExrttrgSrctblsSeq" resultType="int">
@@ -102,7 +106,104 @@
 	 	**/		
 	 	SELECT setval('q_db2pg_exrtexct_srctb_ls_01',nextval('q_db2pg_exrtexct_srctb_ls_01'))
 	</select>
+	
+	<select id="selectExrtusrQryIdSeq" resultType="int">
+		/**
+	 	*  Query ID : selectExrtusrQryIdSeq
+	 	*  Description : 사용자 쿼리 내역 ID SEQ 조회
+	 	*  Author : 김주영
+	 	**/		
+	 	SELECT setval('q_db2pg_usrqry_ls_01',nextval('q_db2pg_usrqry_ls_01'))
+	</select>
 
+	<insert id="insertExrttrgSrcTb" parameterType="srcTableVO">
+		/**
+		* Query ID : insertExrttrgSrcTb
+		* Description : 추출 대상 테이블 등록
+		* Author : 김주영
+		**/
+		INSERT INTO t_db2pg_exrttrg_srctb_ls
+		(
+		  db2pg_exrt_trg_tb_wrk_id
+		, exrt_trg_tb_nm 
+		, exrt_trg_scm_nm
+		, frst_regr_id
+		, frst_reg_dtm
+		)
+		VALUES 
+		(
+		  #{db2pg_exrt_trg_tb_wrk_id}
+		, #{exrt_trg_tb_nm}
+		, #{exrt_trg_scm_nm}
+		, #{frst_regr_id}
+		, clock_timestamp()
+		)
+	</insert>
+	
+	<insert id="insertExrtexctSrcTb" parameterType="srcTableVO">
+		/**
+		* Query ID : insertExrtexctSrcTb
+		* Description : 추출 제외 테이블 등록
+		* Author : 김주영
+		**/
+		INSERT INTO t_db2pg_exrtexct_srctb_ls
+		(
+		  db2pg_exrt_exct_tb_wrk_id
+		, exrt_exct_tb_nm 
+		, exrt_exct_scm_nm
+		, frst_regr_id
+		, frst_reg_dtm
+		)
+		VALUES
+		(
+		  #{db2pg_exrt_exct_tb_wrk_id}
+		, #{exrt_exct_tb_nm} 
+		, #{exrt_exct_scm_nm}
+		, #{frst_regr_id}
+		, clock_timestamp()
+		)
+	</insert>
+	
+	<select id="selectWorkSeq" resultType="int">
+		/**
+	 	*  Query ID : selectWorkSeq
+	 	*  Description : WORK SEQ 조회
+	 	*  Author : 변승우
+	 	**/		
+	 	SELECT setval('q_wrkcng_i_01',nextval('q_wrkcng_i_01'))
+	</select>
+	
+	
+	<insert id="insertDb2pgWork" parameterType="ddlConfigVO">
+		/**
+	 	* Query ID : "insertDb2pgWork"
+	 	* Description : Work등록
+	 	* Author : 변승우
+	 	**/
+	 	INSERT INTO T_WRKCNG_I
+	 		(
+	 		WRK_ID
+	 		, BSN_DSCD
+	 		, WRK_NM
+	 		, WRK_EXP
+	 		, FRST_REGR_ID
+	 		, FRST_REG_DTM
+	 		, LST_MDFR_ID
+	 		, LST_MDF_DTM
+	 		)
+	 		VALUES
+	 		(
+	 		#{wrk_id}
+	 		, 'TC001903'
+	 		, #{db2pg_ddl_wrk_nm}
+			, #{db2pg_ddl_wrk_exp}
+			, #{frst_regr_id}
+			, now()
+			, #{frst_regr_id}
+			, now()
+	 		)
+	</insert>
+	
 	<insert id="insertDDLWork" parameterType="ddlConfigVO">
 		/**
 		* Query ID : insertDDLWork
@@ -113,8 +214,7 @@
 		INSERT INTO t_db2pg_ddl_wrk_inf
 		(
 		  db2pg_ddl_wrk_id
-		, db2pg_ddl_wrk_nm
-		, db2pg_ddl_wrk_exp
+		, wrk_id
 		, db2pg_sys_id
 		, db2pg_uchr_lchr_val
 		, src_tb_ddl_exrt_tf
@@ -133,8 +233,7 @@
 		VALUES
 		(
 		  nextval('q_db2pg_ddl_wrk_inf_01')
-		, #{db2pg_ddl_wrk_nm}
-		, #{db2pg_ddl_wrk_exp}
+		, #{wrk_id}
 		, #{db2pg_sys_id}
 		, #{db2pg_uchr_lchr_val}
 		, #{src_tb_ddl_exrt_tf}
@@ -148,6 +247,61 @@
 		, #{frst_regr_id}
 		, clock_timestamp()
 		, #{lst_mdfr_id}
+		, clock_timestamp()
+		)
+	</insert>
+	
+	<update id="updateDDLWork" parameterType="ddlConfigVO">
+		/**
+		* Query ID : updateDDLWork
+		* Description : DDL WORK 수정
+		* Author : 김주영
+		**/
+ 		UPDATE t_db2pg_ddl_wrk_inf
+		SET 
+		  db2pg_ddl_wrk_exp=#{db2pg_ddl_wrk_exp}
+		, db2pg_sys_id=#{db2pg_sys_id}
+		, db2pg_uchr_lchr_val=#{db2pg_uchr_lchr_val}
+		, src_tb_ddl_exrt_tf=#{src_tb_ddl_exrt_tf}
+		, ddl_save_pth=#{ddl_save_pth}
+		<if test="db2pg_exrt_trg_tb_wrk_id != 0">
+		, db2pg_exrt_trg_tb_wrk_id=#{db2pg_exrt_trg_tb_wrk_id}
+		</if>
+		<if test="db2pg_exrt_exct_tb_wrk_id != 0">
+		, db2pg_exrt_exct_tb_wrk_id=#{db2pg_exrt_exct_tb_wrk_id}
+		</if>
+		, lst_mdfr_id=#{lst_mdfr_id}
+		, lst_mdf_dtm= clock_timestamp()
+		WHERE db2pg_ddl_wrk_id = #{db2pg_ddl_wrk_id}
+	</update>
+	
+	<delete id="deleteDDLWork" parameterType="int">
+		/**
+		* Query ID : deleteDDLWork
+		* Description : DDL WORK 삭제
+		* Author : 김주영
+		**/
+		DELETE FROM t_db2pg_ddl_wrk_inf WHERE db2pg_ddl_wrk_id=#{db2pg_ddl_wrk_id}
+	</delete>
+	
+	<insert id="insertUsrQry" parameterType="queryVO">
+		/**
+		* Query ID : insertUsrQry
+		* Description : 사용자 쿼리 등록
+		* Author : 김주영
+		**/
+		INSERT INTO t_db2pg_usrqry_ls
+		(
+		  db2pg_usr_qry_id
+		, usr_qry_exp 
+		, frst_regr_id
+		, frst_reg_dtm
+		)
+		VALUES
+		(
+		  #{db2pg_usr_qry_id}
+		, #{usr_qry_exp} 
+		, #{frst_regr_id}
 		, clock_timestamp()
 		)
 	</insert>
@@ -219,4 +373,56 @@
 		, clock_timestamp()
 		)		
 	</insert>
+	
+	<select id="selectDetailDDLWork" resultType="ddlConfigVO" parameterType="int">
+		/**
+		* Query ID : selectDetailDDLWork
+		* Description : DDL WORK 상세정보
+		* Author : 김주영
+		**/
+		SELECT 
+			  db2pg_ddl_wrk_id
+			, db2pg_ddl_wrk_nm
+			, db2pg_ddl_wrk_exp
+			, db2pg_uchr_lchr_val
+			, src_tb_ddl_exrt_tf
+			, ddl_save_pth
+			, db2pg_sys_id
+			, (SELECT db2pg_sys_nm FROM t_db2pg_sys_inf WHERE db2pg_sys_id=wrk_inf.db2pg_sys_id) as db2pg_sys_nm
+			, (SELECT exrt_trg_tb_nm FROM t_db2pg_exrttrg_srctb_ls WHERE db2pg_exrt_trg_tb_wrk_id=wrk_inf.db2pg_exrt_trg_tb_wrk_id) as exrt_trg_tb_nm
+			, coalesce((SELECT length(exrt_trg_tb_nm)-length(replace(exrt_trg_tb_nm,',',''))+1 FROM t_db2pg_exrttrg_srctb_ls WHERE db2pg_exrt_trg_tb_wrk_id=wrk_inf.db2pg_exrt_trg_tb_wrk_id),0) as exrt_trg_tb_cnt
+			, (SELECT exrt_exct_tb_nm FROM t_db2pg_exrtexct_srctb_ls WHERE db2pg_exrt_exct_tb_wrk_id=wrk_inf.db2pg_exrt_exct_tb_wrk_id) as exrt_exct_tb_nm
+			, coalesce((SELECT length(exrt_exct_tb_nm)-length(replace(exrt_exct_tb_nm,',',''))+1 FROM t_db2pg_exrtexct_srctb_ls WHERE db2pg_exrt_exct_tb_wrk_id=wrk_inf.db2pg_exrt_exct_tb_wrk_id),0) as exrt_exct_tb_cnt
+		FROM t_db2pg_ddl_wrk_inf wrk_inf
+		WHERE db2pg_ddl_wrk_id=#{db2pg_ddl_wrk_id}
+	</select>
+	
+	<select id="selectSoruceDBMS" resultType="db2pgSysInfVO" parameterType="int">
+		/**
+		* Query ID : selectSoruceDBMS
+		* Description : 소스DBMS 접속정보
+		* Author : 김주영
+		**/
+		SELECT 
+			  db2pg_sys_id
+			, db2pg_sys_nm
+			, case when dbms_dscd ='TC002201' then 'ORA' 
+				when dbms_dscd ='TC002202' then 'MSS'
+				when dbms_dscd ='TC002203' then 'MYS'
+				when dbms_dscd ='TC002204' then 'POG'
+				when dbms_dscd ='TC002205' then 'DB2'
+				when dbms_dscd ='TC002206' then 'ASE'
+				when dbms_dscd ='TC002207' then 'CUB'
+				when dbms_dscd ='TC002208' then 'TBR'
+				end as dbms_dscd
+			, ipadr
+			, dtb_nm
+			, spr_usr_id
+			, portno
+			, scm_nm
+			, pwd
+			, (SELECT sys_cd_nm FROM t_sysdtl_c WHERE sys_cd=sys_inf.crts_nm) as crts_nm
+		FROM t_db2pg_sys_inf sys_inf
+		WHERE db2pg_sys_id=#{db2pg_sys_id}
+	</select>
 </mapper>

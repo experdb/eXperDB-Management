@@ -33,22 +33,24 @@
 var db2pg_ddl_wrk_nmChk ="fail";
 var output_path ="fail";
 $(window.document).ready(function() {
-	 
+	 if("${exrt_trg_tb_cnt}">0){
+		 $("#src_tables option:eq(0)").attr("selected", "selected");
+		 $("#src_include_tables").val("${exrt_trg_tb_cnt}개");
+		 $("#include").show();
+		 $("#exclude").hide();
+	 }else if("${exrt_exct_tb_cnt}">0){
+		 $("#src_tables option:eq(1)").attr("selected", "selected");
+		 $("#src_exclude_tables").val("${exrt_exct_tb_cnt}개");
+		 $("#exclude").show();
+		 $("#include").hide(); 
+	 }	 
 });
-
 
 /* ********************************************************
  * Validation Check
  ******************************************************** */
 function valCheck(){
-	if($("#db2pg_ddl_wrk_nm").val() == ""){
-		alert('<spring:message code="message.msg107" />');
-		$("#db2pg_ddl_wrk_nm").focus();
-		return false;
-	}else if(db2pg_ddl_wrk_nmChk =="fail"){
-		alert('<spring:message code="backup_management.work_overlap_check"/>');
-		return false;
-	}else if($("#db2pg_ddl_wrk_exp").val() == ""){
+	if($("#db2pg_ddl_wrk_exp").val() == ""){
 		alert('<spring:message code="message.msg108" />');
 		$("#db2pg_ddl_wrk_exp").focus();
 		return false;
@@ -66,49 +68,6 @@ function valCheck(){
 	}else{
 		return true;
 	}
-}
-
-/* ********************************************************
- * WORK NM Validation Check
- ******************************************************** */
-function fn_check() {
-	var db2pg_ddl_wrk_nm = document.getElementById("db2pg_ddl_wrk_nm");
-	if (db2pg_ddl_wrk_nm.value == "") {
-		alert('<spring:message code="message.msg107" />');
-		document.getElementById('db2pg_ddl_wrk_nm').focus();
-		return;
-	}
-	$.ajax({
-		url : '/wrk_nmCheck.do',
-		type : 'post',
-		data : {
-			wrk_nm : $("#db2pg_ddl_wrk_nm").val()
-		},
-		success : function(result) {
-			if (result == "true") {
-				alert('<spring:message code="backup_management.reg_possible_work_nm"/>');
-				document.getElementById("db2pg_ddl_wrk_nm").focus();
-				db2pg_ddl_wrk_nmChk = "success";		
-			} else {
-				alert('<spring:message code="backup_management.effective_work_nm"/>');
-				document.getElementById("db2pg_ddl_wrk_nm").focus();
-			}
-		},
-		beforeSend: function(xhr) {
-	        xhr.setRequestHeader("AJAX", true);
-	     },
-		error : function(xhr, status, error) {
-			if(xhr.status == 401) {
-				alert('<spring:message code="message.msg02" />');
-				top.location.href = "/";
-			} else if(xhr.status == 403) {
-				alert('<spring:message code="message.msg03" />');
-				top.location.href = "/";
-			} else {
-				alert("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""));
-			}
-		}
-	});
 }
 
 /* ********************************************************
@@ -152,22 +111,23 @@ function fn_pathCheck() {
 		}
 	});	
 }
+
 /* ********************************************************
  * 수정 버튼 클릭시
  ******************************************************** */
 function fn_update_work(){
 	if(valCheck()){
 		$.ajax({
-			async : false,
 			url : "/db2pg/updateDDLWork.do",
 		  	data : {
+		  		db2pg_ddl_wrk_id : "${db2pg_ddl_wrk_id}",
 		  		db2pg_ddl_wrk_nm : $("#db2pg_ddl_wrk_nm").val().trim(),
 		  		db2pg_ddl_wrk_exp : $("#db2pg_ddl_wrk_exp").val(),
 		  		db2pg_sys_id : $("#db2pg_sys_id").val(),
 		  		db2pg_uchr_lchr_val : $("#db2pg_uchr_lchr_val").val(),
 		  		src_tb_ddl_exrt_tf : $("#src_tb_ddl_exrt_tf").val(),
-		  		src_include_tables : $("#src_include_tables").val(),
-		  		src_exclude_tables : $("#src_exclude_tables").val(),
+		  		src_include_tables : $("#src_include_table_nm").val(),
+		  		src_exclude_tables : $("#src_exclude_table_nm").val(),
 		  		ddl_save_pth : $("#ddl_save_pth").val()
 		  	},
 			type : "post",
@@ -186,7 +146,7 @@ function fn_update_work(){
 				}
 			},
 			success : function(result) {
-				if(result==true){
+				if(result.resultCode == "0000000000"){
 					alert('<spring:message code="message.msg07" /> ');
 					opener.location.reload();
 					self.close();
@@ -223,19 +183,65 @@ function fn_dbmsInfo(){
 /* ********************************************************
  * 추출 대상 테이블, 추출 제외 테이블 등록 버튼 클릭시
  ******************************************************** */
-function fn_tableList(){
-	var popUrl = "/db2pg/popup/tableInfo.do";
-	var width = 930;
-	var height = 675;
-	var left = (window.screen.width / 2) - (width / 2);
-	var top = (window.screen.height /2) - (height / 2);
-	var popOption = "width="+width+", height="+height+", top="+top+", left="+left+", resizable=no, scrollbars=yes, status=no, toolbar=no, titlebar=yes, location=no,";
+function fn_tableList(gbn){
+	if($('#db2pg_sys_nm').val() == ""){
+		alert("소스시스템을 선택해주세요.");
+		return false;
+	}
 	
-	var winPop = window.open(popUrl,"tableInfoPop",popOption);
+	var frmPop= document.frmPopup;
+	var url = '/db2pg/popup/tableInfo.do';
+	window.open('','popupView','width=930, height=500');  
+	     
+	frmPop.action = url;
+	frmPop.target = 'popupView';
+	frmPop.db2pg_sys_id.value = $('#db2pg_sys_id').val();
+	frmPop.tableGbn.value = gbn;
+	if(gbn == 'include'){
+		frmPop.src_include_table_nm.value = $('#src_include_table_nm').val();  
+	}else{
+		frmPop.src_exclude_table_nm.value = $('#src_exclude_table_nm').val();  
+	}
+	frmPop.submit();   
+}
+
+/* ********************************************************
+ * select box control
+ ******************************************************** */
+ $(function() {
+	 $("#src_tables").change(function(){
+		 $("#src_include_tables").val("");
+		 $("#src_exclude_tables").val("");
+		 $("#src_include_table_nm").val("");
+		 $("#src_exclude_table_nm").val("");
+		    if(this.value=="include"){
+		        $("#include").show();
+			    $("#exclude").hide(); 
+		    }else{
+		        $("#exclude").show();
+			    $("#include").hide(); 
+		    }
+		});
+ });
+ 
+function fn_tableAddCallback(rowList, tableGbn){
+	if(tableGbn == 'include'){
+		$('#src_include_tables').val(rowList.length+"개");
+		$('#src_include_table_nm').val(rowList);
+	}else{
+		$('#src_exclude_tables').val(rowList.length+"개");
+		$('#src_exclude_table_nm').val(rowList);
+	}
 }
 </script>
 </head>
 <body>
+<form name="frmPopup">
+	<input type="hidden" name="db2pg_sys_id"  id="db2pg_sys_id" value="${db2pg_sys_id}">
+	<input type="hidden" name="src_include_table_nm"  id="src_include_table_nm" value="${exrt_trg_tb_nm}">
+	<input type="hidden" name="src_exclude_table_nm"  id="src_exclude_table_nm" value="${exrt_exct_tb_nm}" >
+	<input type="hidden" name="tableGbn"  id="tableGbn" >
+</form>
 <div class="pop_container">
 	<div class="pop_cts">
 		<p class="tit">DDL 추출 수정</p>
@@ -249,15 +255,14 @@ function fn_tableList(){
 				<tbody>
 					<tr>
 						<th scope="row" class="ico_t1"><spring:message code="common.work_name" /></th>
-						<td><input type="text" class="txt" name="db2pg_ddl_wrk_nm" id="db2pg_ddl_wrk_nm" maxlength="20" onkeyup="fn_checkWord(this,20)" placeholder="20<spring:message code='message.msg188'/>" onblur="this.value=this.value.trim()"/>
-						<span class="btn btnC_01"><button type="button" class= "btn_type_02" onclick="fn_check()" style="width: 60px; margin-right: -60px; margin-top: 0;"><spring:message code="common.overlap_check" /></button></span>
+						<td><input type="text" class="txt" name="db2pg_ddl_wrk_nm" id="db2pg_ddl_wrk_nm" value="${db2pg_ddl_wrk_nm}" maxlength="20" onkeyup="fn_checkWord(this,20)" readonly="readonly"/>
 						</td>
 					</tr>
 					<tr>
 						<th scope="row" class="ico_t1"><spring:message code="common.work_description" /></th>
 						<td>
 							<div class="textarea_grp">
-								<textarea name="db2pg_ddl_wrk_exp" id="db2pg_ddl_wrk_exp" maxlength="25" onkeyup="fn_checkWord(this,25)" placeholder="25<spring:message code='message.msg188'/>"></textarea>
+								<textarea name="db2pg_ddl_wrk_exp" id="db2pg_ddl_wrk_exp" maxlength="25" onkeyup="fn_checkWord(this,25)" placeholder="25<spring:message code='message.msg188'/>"><c:out value="${db2pg_ddl_wrk_exp}"/></textarea>
 							</div>
 						</td>
 					</tr>
@@ -274,7 +279,7 @@ function fn_tableList(){
 				<tbody>
 					<tr>
 						<th scope="row" class="ico_t2">소스시스템</th>
-						<td><input type="hidden" name="db2pg_sys_id" id="db2pg_sys_id"/><input type="text" class="txt" name="db2pg_sys_nm" id="db2pg_sys_nm" placeholder="등록 버튼을 눌러주세요" readonly="readonly"/>
+						<td><input type="text" class="txt" name="db2pg_sys_nm" id="db2pg_sys_nm"  value="${db2pg_sys_nm}" readonly="readonly"/>
 							<span class="btn btnC_01"><button type="button" class= "btn_type_02" onclick="fn_dbmsInfo()" style="width: 60px; margin-right: -60px; margin-top: 0;">등록</button></span>							
 						</td>
 					</tr>
@@ -295,7 +300,7 @@ function fn_tableList(){
 						<td>
 							<select name="db2pg_uchr_lchr_val" id="db2pg_uchr_lchr_val" class="select t5">
 								<c:forEach var="codeLetter" items="${codeLetter}">
-									<option value="${codeLetter.sys_cd_nm}">${codeLetter.sys_cd_nm}</option>
+									<option value="${codeLetter.sys_cd_nm}" ${db2pg_uchr_lchr_val == codeLetter.sys_cd_nm ? 'selected="selected"' : ''}>${codeLetter.sys_cd_nm}</option>
 								</c:forEach>
 							</select>
 						</td>
@@ -305,26 +310,32 @@ function fn_tableList(){
 						<td>
 							<select name="src_tb_ddl_exrt_tf" id="src_tb_ddl_exrt_tf" class="select t5">
 								<c:forEach var="codeTF" items="${codeTF}">
-									<option value="${codeTF.sys_cd_nm}">${codeTF.sys_cd_nm}</option>
+									<option value="${codeTF.sys_cd_nm}" ${src_tb_ddl_exrt_tf == codeTF.sys_cd_nm ? 'selected="selected"' : ''}>${codeTF.sys_cd_nm}</option>
 								</c:forEach>
 							</select>
 						</td>
 					</tr>
 					<tr>
-						<th scope="row" class="ico_t2">추출 대상 테이블</th>
-						<td><input type="text" class="txt" name="src_include_tables" id="src_include_tables"/>
-							<span class="btn btnC_01"><button type="button" class= "btn_type_02" onclick="fn_tableList()" style="width: 60px; margin-right: -60px; margin-top: 0;">등록</button></span>							
-						</td>
-					</tr>
-					<tr>
-						<th scope="row" class="ico_t2">추출 제외 테이블</th>
-						<td><input type="text" class="txt" name="src_exclude_tables" id="src_exclude_tables"/>
-							<span class="btn btnC_01"><button type="button" class= "btn_type_02" onclick="fn_tableList()" style="width: 60px; margin-right: -60px; margin-top: 0;">등록</button></span>							
+						<th scope="row" class="ico_t2">
+							<select name="src_tables" id="src_tables" class="select t5" style="width: 176px;" >
+								<option value="include">추출 대상 테이블</option>
+								<option value="exclude">추출 제외 테이블</option>
+							</select>
+						</th>
+						<td>
+							<div id="include">
+								<input type="text" class="txt" name="src_include_tables" id="src_include_tables" readonly="readonly" />
+								<span class="btn btnC_01"><button type="button" class= "btn_type_02" onclick="fn_tableList('include')" style="width: 60px; margin-right: -60px; margin-top: 0;">등록</button></span>		
+							</div>
+							<div id="exclude" style="display: none;">
+								<input type="text" class="txt" name="src_exclude_tables" id="src_exclude_tables" readonly="readonly" />
+								<span class="btn btnC_01"><button type="button" class= "btn_type_02" onclick="fn_tableList('exclude')" style="width: 60px; margin-right: -60px; margin-top: 0;">등록</button></span>												
+							</div>
 						</td>
 					</tr>
 					<tr>
 						<th scope="row" class="ico_t2">DDL 저장경로</th>
-						<td><textarea rows="3" cols="60" id="ddl_save_pth" name="ddl_save_pth" style="width: 80%"></textarea>
+						<td><textarea rows="3" cols="60" id="ddl_save_pth" name="ddl_save_pth" style="width: 80%"><c:out value="${ddl_save_pth}"/></textarea>
 							<span class="btn btnC_01"><button type="button" class= "btn_type_02" onclick="fn_pathCheck()" style="width: 60px; margin-right: -60px; margin-top: 0; height: 58px;">경로체크</button></span>							
 						</td>
 					</tr>
@@ -332,7 +343,7 @@ function fn_tableList(){
 			</table>
 		</div>
 		<div class="btn_type_02">
-			<span class="btn btnC_01" onClick="fn_update_work();"><button type="button"><spring:message code="common.registory" /></button></span>
+			<span class="btn btnC_01" onClick="fn_update_work();"><button type="button"><spring:message code="common.modify" /></button></span>
 			<a href="#n" class="btn" onclick="self.close();"><span><spring:message code="common.cancel" /></span></a>
 		</div>
 	</div>

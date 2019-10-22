@@ -233,7 +233,6 @@ function fn_charSet(){
   * Validation Check
   ******************************************************** */
   function fn_validation(){
-
 		if(connection != "success"){
 			alert('<spring:message code="message.msg89" />');
 			return false;
@@ -259,13 +258,16 @@ function fn_charSet(){
   		}
 
 
-		if($("#dbms_dscd").val()  == 'TC002204'){
+ 		if($("#dbms_dscd").val()  == 'TC002204'){
 			var schema_pg = document.getElementById("schema_pg");
-	 		if (schema_pg.value == "") {
-	  			   alert('스키마명을 입력해주세요.');
-	  			 schema_pg.focus();
-	  			   return false;
-	  		}
+			var schema_any = document.getElementById("schema_any");
+		 		if (schema_pg.value == "") {
+		 			if (schema_any.value == "") {
+			  			   alert('스키마명을 입력해주세요.');
+			  			 schema_any.focus();
+			  			   return false;
+			  		}
+		  		}
 		}else{
 			var schema_any = document.getElementById("schema_any");
 	 		if (schema_any.value == "") {
@@ -369,7 +371,11 @@ function fn_charSet(){
  		 if (!fn_validation()) return false;
 
  		if($("#dbms_dscd").val()  == 'TC002204'){
- 			var scm_nm = document.getElementById("schema_pg").value;
+ 			if(document.getElementById("schema_pg").value == ""){
+ 				var scm_nm = document.getElementById("schema_any").value;	
+ 			}else{
+ 				var scm_nm = document.getElementById("schema_pg").value;
+ 			}
  		}else{
  			var scm_nm = document.getElementById("schema_any").value;	
  		}

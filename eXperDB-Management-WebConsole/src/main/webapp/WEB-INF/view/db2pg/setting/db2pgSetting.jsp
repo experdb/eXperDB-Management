@@ -30,7 +30,7 @@ var tableData = null;
  ******************************************************** */
 function selectTab(tab){
 	if(tab == "dataWork"){
-		getddlDataList();
+		getdataDataList();
 		$("#dataDataTable").show();
 		$("#dataDataTable_wrapper").show();
 		$("#ddlDataTable").hide();
@@ -42,7 +42,7 @@ function selectTab(tab){
 		$("#btnDDL").hide();
 		$("#btnData").show();
 	}else{
-		getdataDataList();
+		getddlDataList();
 		$("#ddlDataTable").show();
 		$("#ddlDataTable_wrapper").show();
 		$("#dataDataTable").hide();
@@ -374,15 +374,22 @@ function fn_data_reg_popup(){
  * 데이터이행 수정 팝업
  ******************************************************** */
 function fn_data_regre_popup(){
-	var popUrl = "/db2pg/popup/dataRegReForm.do";
-	var width = 965;
-	var height = 820;
-	var left = (window.screen.width / 2) - (width / 2);
-	var top = (window.screen.height /2) - (height / 2);
-	var popOption = "width="+width+", height="+height+", top="+top+", left="+left+", resizable=no, scrollbars=yes, status=no, toolbar=no, titlebar=yes, location=no,";
-	
-	var winPop = window.open(popUrl,"dataRegRePop",popOption);
-	winPop.focus();
+	var rowCnt = tableData.rows('.selected').data().length;
+	if (rowCnt == 1) {
+		var db2pg_trsf_wrk_id = tableData.row('.selected').data().db2pg_trsf_wrk_id;
+		var popUrl = "/db2pg/popup/dataRegReForm.do?db2pg_trsf_wrk_id=" +  db2pg_trsf_wrk_id;
+		var width = 965;
+		var height = 820;
+		var left = (window.screen.width / 2) - (width / 2);
+		var top = (window.screen.height /2) - (height / 2);
+		var popOption = "width="+width+", height="+height+", top="+top+", left="+left+", resizable=no, scrollbars=yes, status=no, toolbar=no, titlebar=yes, location=no,";
+		
+		var winPop = window.open(popUrl,"dataRegRePop",popOption);
+		winPop.focus();
+	} else {
+		alert("<spring:message code='message.msg04' />");
+		return false;
+	}
 }
 
 /* ********************************************************
@@ -393,41 +400,54 @@ function fn_ddl_work_delete(){
 	if(datas.length < 1){
 		alert("<spring:message code='message.msg16' />");
 		return false;
-	}
-	
-	var bck_wrk_id_List = [];
-	var wrk_id_List = [];
-    for (var i = 0; i < datas.length; i++) {
-    	bck_wrk_id_List.push( tableDDL.rows('.selected').data()[i].bck_wrk_id);   
-    	wrk_id_List.push( tableDDL.rows('.selected').data()[i].wrk_id);   
-  	}	
-		
-    $.ajax({
-		url : "/popup/scheduleCheck.do",
-	  	data : {
-	  		bck_wrk_id_List : JSON.stringify(bck_wrk_id_List),
-	  		wrk_id_List : JSON.stringify(wrk_id_List)
-	  	},
-		dataType : "json",
-		type : "post",
-		beforeSend: function(xhr) {
-	        xhr.setRequestHeader("AJAX", true);
-	     },
-		error : function(xhr, status, error) {
-			if(xhr.status == 401) {
-				alert("<spring:message code='message.msg02' />");
-				top.location.href = "/";
-			} else if(xhr.status == 403) {
-				alert("<spring:message code='message.msg03' />");
-				top.location.href = "/";
-			} else {
-				alert("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""));
-			}
-		},
-		success : function(data) {
-			fn_deleteWork(data, bck_wrk_id_List, wrk_id_List);
+	}else{
+		var wrkIdList = [];
+		for (var i = 0; i < datas.length; i++) {
+			wrkIdList += datas[i].db2pg_ddl_wrk_id + ',';	
 		}
-	});	
+		
+		var wrkNmList = [];
+		for (var i = 0; i < datas.length; i++) {
+			wrkNmList += datas[i].db2pg_ddl_wrk_nm + ',';	
+		}
+			$.ajax({
+				url : "/db2pg/deleteDDLWork.do",
+			  	data : {
+			  		db2pg_ddl_wrk_id : wrkIdList,
+			  		db2pg_ddl_wrk_nm : wrkNmList
+			  	},
+				type : "post",
+				beforeSend: function(xhr) {
+			        xhr.setRequestHeader("AJAX", true);
+			     },
+				error : function(xhr, status, error) {
+					if(xhr.status == 401) {
+						alert('<spring:message code="message.msg02" />');
+						top.location.href = "/";
+					} else if(xhr.status == 403) {
+						alert('<spring:message code="message.msg03" />');
+						top.location.href = "/";
+					} else {
+						alert("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""));
+					}
+				},
+				success : function(result) {
+					if(result.resultCode == "0000000000"){
+						alert("<spring:message code='message.msg37' />");
+						getddlDataList();
+					}else{
+						alert('삭제에 실패했습니다.');
+					}	
+				}
+			});	
+	}
+}
+
+/* ********************************************************
+ * DDL추출 Data Delete
+ ******************************************************** */
+ function fn_data_work_delete(){
+	
 }
 
 /* ********************************************************
@@ -475,13 +495,13 @@ function fn_copy(){
 						<a class="btn" onClick="getddlDataList();"><button type="button"><spring:message code="common.search" /></button></a>
 						<span class="btn" onclick="fn_ddl_reg_popup()"><button type="button"><spring:message code="common.registory" /></button></span>
 						<span class="btn" onClick="fn_ddl_regre_popup()"><button type="button"><spring:message code="common.modify" /></button></span>
-						<span class="btn" onClick="fn_rman_work_delete()"><button type="button"><spring:message code="common.delete" /></button></span>
+						<span class="btn" onClick="fn_ddl_work_delete()"><button type="button"><spring:message code="common.delete" /></button></span>
 					</div>
 					<div class="btn_type_01" id="btnData" style="display:none;">
 						<span class="btn" onclick="getdataDataList()"><button type="button"><spring:message code="common.search" /></button></span>
 						<span class="btn" onclick="fn_data_reg_popup()"><button type="button"><spring:message code="common.registory" /></button></span>
 						<span class="btn" onclick="fn_data_regre_popup()"><button type="button"><spring:message code="common.modify" /></button></span>
-						<span class="btn" onclick="fn_dump_work_delete()"><button type="button"><spring:message code="common.delete" /></button></span>
+						<span class="btn" onclick="fn_data_work_delete()"><button type="button"><spring:message code="common.delete" /></button></span>
 					</div>
 				</div>
 				<div class="sch_form">
@@ -634,7 +654,6 @@ function fn_copy(){
 					</tr>
 				</tbody>
 			</table>
-				
 				<div class="btn_type_02">
 				<a href="#n" class="btn" onclick="toggleLayer($('#pop_layer_copy'), 'off');"><span>저장</span></a>
 					<a href="#n" class="btn" onclick="toggleLayer($('#pop_layer_copy'), 'off');"><span><spring:message code="common.close"/></span></a>

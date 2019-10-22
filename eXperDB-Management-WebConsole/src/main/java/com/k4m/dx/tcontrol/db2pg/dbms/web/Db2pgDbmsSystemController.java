@@ -47,6 +47,7 @@ public class Db2pgDbmsSystemController {
 	private CmmnServerInfoService cmmnServerInfoService;
 	
 	private List<Map<String, Object>> dbmsGrb;
+	private List<Map<String, Object>> dbmsChar;
 	
 	/**
 	 * DBMS시스템 설정 화면을 보여준다.
@@ -58,17 +59,62 @@ public class Db2pgDbmsSystemController {
 	 */
 	@RequestMapping(value = "/db2pgDBMS.do")
 	public ModelAndView db2pgDBMS(@ModelAttribute("historyVO") HistoryVO historyVO, HttpServletRequest request) {
-		
 		ModelAndView mv = new ModelAndView();
-
-		try {			
-			
+		try {						
 			dbmsGrb = dbmsService.dbmsListDbmsGrb();		
+			
 			mv.addObject("result", dbmsGrb);
-			
-			System.out.println(dbmsGrb.get(0));
-			
 			mv.setViewName("db2pg/dbms/dbmsList");
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return mv;
+	}
+	
+	
+	/**
+	 * DBMS 수정 팝업 화면을 보여준다.
+	 * 
+	 * @param historyVO
+	 * @param request
+	 * @return ModelAndView mv
+	 * @throws Exception
+	 */
+	@RequestMapping(value = "/db2pg/popup/dbmsRegReForm.do")
+	public ModelAndView dbmsRegReForm(@ModelAttribute("historyVO") HistoryVO historyVO, @ModelAttribute("db2pgSysInfVO") Db2pgSysInfVO db2pgSysInfVO, HttpServletRequest request) {
+		ModelAndView mv = new ModelAndView();
+		
+		List<Db2pgSysInfVO> resultSet = null;
+		HashMap<String , Object> paramvalue = new HashMap<String, Object>();
+		
+		try {				
+			AES256 dec = new AES256(AES256_KEY.ENC_KEY);
+			
+			dbmsGrb = dbmsService.dbmsGrb();
+			resultSet = dbmsService.selectDb2pgDBMS(db2pgSysInfVO);
+			String pwd = dec.aesDecode(resultSet.get(0).getPwd()).toString();
+			
+			if(resultSet.get(0).getDbms_dscd().equals("TC002201")){
+				paramvalue.put("dbms_dscd", "TC0023");
+			}else if(resultSet.get(0).getDbms_dscd().equals("TC002208")){
+				paramvalue.put("dbms_dscd", "TC0024");
+			}else if(resultSet.get(0).getDbms_dscd().equals("TC002205")){
+				paramvalue.put("dbms_dscd", "TC0025");
+			}else if(resultSet.get(0).getDbms_dscd().equals("TC002203")){
+				paramvalue.put("dbms_dscd", "TC0027");
+			}else if(resultSet.get(0).getDbms_dscd().equals("TC002206")){
+				paramvalue.put("dbms_dscd", "TC0026");
+			}else if(resultSet.get(0).getDbms_dscd().equals("TC002204")){
+				paramvalue.put("dbms_dscd", "TC0005");
+			}
+
+			dbmsChar = dbmsService.selectCharSetList(paramvalue);
+
+			mv.addObject("pwd", pwd);
+			mv.addObject("result", dbmsGrb);
+			mv.addObject("dbmsChar", dbmsChar);
+			mv.addObject("resultInfo", resultSet);
+			mv.setViewName("db2pg/popup/dbmsRegReForm");
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -291,7 +337,7 @@ public class Db2pgDbmsSystemController {
 		serverObj.put(ClientProtocolID.USER_PWD, svr_spr_scm_pwd);
 		serverObj.put(ClientProtocolID.DB_TYPE, dbms_cd);
 		
-		result =  DBCPPoolManager.setupDriver(serverObj, "db2pg", 30);
+		result =  DBCPPoolManager.setupDriver(serverObj);
 
 	}catch (Exception e) {
 		e.printStackTrace();
@@ -340,14 +386,60 @@ public class Db2pgDbmsSystemController {
 		// 해당메뉴 권한 조회 (공통메소드호출)
 		
 		try {
+			AES256 aes = new AES256(AES256_KEY.ENC_KEY);
+			
 			HttpSession session = request.getSession();
 			LoginVO loginVo = (LoginVO) session.getAttribute("session");
 			String id = loginVo.getUsr_id();
 
+			String pwd = aes.aesEncode(db2pgSysInfVO.getPwd());
+			
+			db2pgSysInfVO.setPwd(pwd);
+			
 			db2pgSysInfVO.setFrst_regr_id(id);
 			db2pgSysInfVO.setLst_mdfr_id(id);
 		
 			dbmsService.insertDb2pgDBMS(db2pgSysInfVO);	
+	
+		} catch (Exception e) {
+			e.printStackTrace();
+			return false;
+		}
+		return true;
+	}
+	
+	
+	/**
+	 * DB2PG DBMS 시스템을 수정한다.
+	 * 
+	 * @param db2pgSysInfVO
+	 * @param request
+	 * @return ModelAndView mv
+	 * @throws Exception
+	 */
+	@RequestMapping(value = "/updateDb2pgDBMS.do")
+	public @ResponseBody boolean updateDb2pgDBMS(
+			@ModelAttribute("accessControlHistoryVO") AccessControlHistoryVO accessControlHistoryVO,
+			@ModelAttribute("accessControlVO") AccessControlVO accessControlVO,
+			@ModelAttribute("db2pgSysInfVO") Db2pgSysInfVO db2pgSysInfVO, @ModelAttribute("historyVO") HistoryVO historyVO,
+			HttpServletRequest request, HttpServletResponse response) throws ParseException {
+
+		// 해당메뉴 권한 조회 (공통메소드호출)
+		
+		try {
+			AES256 aes = new AES256(AES256_KEY.ENC_KEY);
+			
+			HttpSession session = request.getSession();
+			LoginVO loginVo = (LoginVO) session.getAttribute("session");
+			String id = loginVo.getUsr_id();
+
+			String pwd = aes.aesEncode(db2pgSysInfVO.getPwd());
+			
+			db2pgSysInfVO.setPwd(pwd);
+			db2pgSysInfVO.setFrst_regr_id(id);
+			db2pgSysInfVO.setLst_mdfr_id(id);
+
+			dbmsService.updateDb2pgDBMS(db2pgSysInfVO);	
 	
 		} catch (Exception e) {
 			e.printStackTrace();

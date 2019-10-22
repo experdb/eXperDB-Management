@@ -36,19 +36,20 @@ function fn_init() {
 		scrollX: true,
 		bSort: false,
 		columns : [
-		{data : "no", defaultContent : ""},
-		{data : "db2pg_sys_nm", defaultContent : ""},
-		{data : "dbms_dscd", defaultContent : ""},
-		{data : "ipadr", defaultContent : ""},
-		{data : "dtb_nm", defaultContent : ""},
-		{data : "scm_nm", defaultContent : ""},
-		{data : "portno", defaultContent : ""},
-	    {data : "spr_usr_id", defaultContent : ""},
-		{data : "crts_nm", defaultContent : ""},
-		{data : "frst_regr_id", defaultContent : ""},
-		{data : "frst_reg_dtm", defaultContent : ""},
-		{data : "lst_mdfr_id", defaultContent : ""},
-		{data : "lst_mdf_dtm", defaultContent : ""}
+		{data : "rownum",  className : "dt-center", defaultContent : ""},
+		{data : "db2pg_sys_nm", className : "dt-center", defaultContent : ""},
+		{data : "dbms_dscd_nm", className : "dt-center", defaultContent : ""},
+		{data : "ipadr", className : "dt-center", defaultContent : ""},
+		{data : "dtb_nm", className : "dt-center", defaultContent : ""},
+		{data : "scm_nm", className : "dt-center", defaultContent : ""},
+		{data : "portno", className : "dt-center", defaultContent : ""},
+	    {data : "spr_usr_id", className : "dt-center", defaultContent : ""},
+		{data : "crts_nm", className : "dt-center", defaultContent : ""},
+		{data : "frst_regr_id", className : "dt-center", defaultContent : ""},
+		{data : "frst_reg_dtm", className : "dt-center", defaultContent : ""},
+		{data : "lst_mdfr_id", className : "dt-center", defaultContent : ""},
+		{data : "lst_mdf_dtm", className : "dt-center", defaultContent : ""},
+		{data : "db2pg_sys_id",  defaultContent : "", visible: false }
 		]
 	});
 	
@@ -65,6 +66,7 @@ function fn_init() {
 		table.tables().header().to$().find('th:eq(10)').css('min-width', '100px');
 		table.tables().header().to$().find('th:eq(11)').css('min-width', '65px');
 		table.tables().header().to$().find('th:eq(12)').css('min-width', '100px');
+		table.tables().header().to$().find('th:eq(13)').css('min-width', '0px');
 	    $(window).trigger('resize'); 
 }
 
@@ -81,7 +83,7 @@ $(window.document).ready(function() {
 	fn_search();
 	
   	$(function() {	
-  		$('#serverList tbody').on( 'click', 'tr', function () {
+  		$('#dbms tbody').on( 'click', 'tr', function () {
   			 if ( $(this).hasClass('selected') ) {
   	     	}else {	        	
   	     	table.$('tr.selected').removeClass('selected');
@@ -142,6 +144,35 @@ function fn_reg_popup(){
 	var popOption = "width="+width+", height="+height+", top="+top+", left="+left+", resizable=no, scrollbars=yes, status=no, toolbar=no, titlebar=yes, location=no,";
 		
 	window.open(popUrl,"",popOption);	
+}
+
+
+/* ********************************************************
+ * DBMS 수정 팝업페이지 호출
+ ******************************************************** */
+function fn_regRe_popup(){
+	
+	var datas = table.rows('.selected').data();
+	
+	if (datas.length <= 0) {
+		alert('<spring:message code="message.msg35" />');
+		return false;
+	}else if (datas.length >1){
+		alert('<spring:message code="message.msg38" />');
+		return false;
+	}
+	
+	var db2pg_sys_id = table.row('.selected').data().db2pg_sys_id;
+	
+	var popUrl = "/db2pg/popup/dbmsRegReForm.do?db2pg_sys_id="+db2pg_sys_id;
+	var width = 1000;
+	var height = 500;
+	var left = (window.screen.width / 2) - (width / 2);
+	var top = (window.screen.height /2) - (height / 2);
+	var popOption = "width="+width+", height="+height+", top="+top+", left="+left+", resizable=no, scrollbars=yes, status=no, toolbar=no, titlebar=yes, location=no,";
+	
+	var winPop = window.open(popUrl,"ddlRegRePop",popOption);
+	winPop.focus();
 }
 
 
@@ -242,6 +273,7 @@ function fn_reg_popup(){
 								<th width="100"><spring:message code="common.regist_datetime" /></th>
 								<th width="65"><spring:message code="common.modifier" /></th>
 								<th width="100"><spring:message code="common.modify_datetime" /></th>
+								<th width="0"><spring:message code="common.modify_datetime" /></th>
 							</tr>
 						</thead>
 					</table>

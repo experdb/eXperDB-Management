@@ -37,16 +37,41 @@ function fn_init() {
 		searching : false,
 		paging : true,	
 		columns : [
-		   		{data : "no", defaultContent : ""},
-				{data : "db2pg_sys_nm", defaultContent : ""},
-				{data : "dbms_dscd", defaultContent : ""},
-				{data : "ipadr", defaultContent : ""},
-				{data : "dtb_nm", defaultContent : ""},
-				{data : "scm_nm", defaultContent : ""},
-				{data : "portno", defaultContent : ""},
-			    {data : "spr_usr_id", defaultContent : ""},
+		   		{data : "rownum", className : "dt-center", defaultContent : ""},
+				{data : "db2pg_sys_nm", className : "dt-center", defaultContent : ""},
+				{
+					data : "dbms_dscd",
+					className : "dt-center",
+					render : function(data, type, full, meta) {
+						var html = "";
+						if (data == "TC002201") {
+							html += "Oracle";
+						}else if(data == "TC002202"){
+							html += "MS-SQL";
+						}else if(data == "TC002203"){
+							html += "MySQL";
+						}else if(data == "TC002204"){
+							html += "PostgreSQL";
+						}else if(data == "TC002205"){
+							html += "DB2";
+						}else if(data == "TC002206"){
+							html += "SyBaseASE";
+						}else if(data == "TC002207"){
+							html += "CUBRID";
+						}else if(data == "TC002208"){
+							html += "Tibero";
+						}
+						return html;
+					},
+					defaultContent : ""
+				},
+				{data : "ipadr", className : "dt-center", defaultContent : ""},
+				{data : "dtb_nm", className : "dt-center", defaultContent : ""},
+				{data : "scm_nm", className : "dt-center", defaultContent : ""},
+				{data : "portno", className : "dt-center", defaultContent : ""},
+			    {data : "spr_usr_id", className : "dt-center", defaultContent : ""},
 			    {data : "db2pg_sys_id", defaultContent : "", visible: false}
-		],'select': {'style': 'multi'}
+		]
 	});
 		
 		table.tables().header().to$().find('th:eq(0)').css('min-width', '50px');
@@ -75,6 +100,16 @@ function fn_init() {
 $(window.document).ready(function() {
 	fn_init();
 	fn_search();
+	
+  	$(function() {	
+  		$('#dbmsList tbody').on( 'click', 'tr', function () {
+  			 if ( $(this).hasClass('selected') ) {
+  	     	}else {	        	
+  	     	table.$('tr.selected').removeClass('selected');
+  	         $(this).addClass('selected');	            
+  	     } 
+  		})     
+  	});
 });
 
 /* ********************************************************

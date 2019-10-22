@@ -68,12 +68,11 @@ function valCheck(){
  ******************************************************** */
 function fn_checkBox(result){
 	if(result == 'true'){
-		$("#db2pg_usr_qry_id").removeAttr("readonly");
+		$("#db2pg_usr_qry").removeAttr("readonly");
 	}else{
-		$('#db2pg_usr_qry_id').val('');
-		$('#db2pg_usr_qry_id').attr('readonly', true);
+		$('#db2pg_usr_qry').val('');
+		$('#db2pg_usr_qry').attr('readonly', true);
 	}
-	
 }
 
 /* ********************************************************
@@ -124,29 +123,67 @@ function fn_check() {
  ******************************************************** */
 function fn_insert_work(){
 	if(valCheck()){
+		//등록하기 전 work명 한번 더 중복 체크
 		$.ajax({
-			async : false,
-			url : "/db2pg/insertDataWork.do",
-		  	data : {  
-		  		db2pg_trsf_wrk_nm : $("#db2pg_trsf_wrk_nm").val().trim(),
-		  		db2pg_trsf_wrk_exp : $("#db2pg_trsf_wrk_exp").val(),
-		  		db2pg_source_system_id : $("#db2pg_source_system_id").val(),
-		  		db2pg_trg_sys_id : $("#db2pg_trg_sys_id").val(),
-		  		exrt_dat_cnt : $("#exrt_dat_cnt").val(),
-		  		src_include_tables : $("#src_include_tables").val(),
-		  		src_exclude_tables : $("#src_exclude_tables").val(),
-		  		exrt_dat_ftch_sz : $("#exrt_dat_ftch_sz").val(),
-		  		dat_ftch_bff_sz : $("#dat_ftch_bff_sz").val(),
-		  		exrt_prl_prcs_ecnt : $("#exrt_prl_prcs_ecnt").val(),
-		  		lob_dat_bff_sz : $("#lob_dat_bff_sz").val(),
-		  		tb_rbl_tf : $("#tb_rbl_tf").val(),
-		  		ins_opt_cd : $("#ins_opt_cd").val(),
-		  		cnst_cnd_exrt_tf : $("#cnst_cnd_exrt_tf").val(),
-		  		src_where_condition : $("#src_where_condition").val(),
-		  		usr_qry_use_tf : $("#usr_qry_use_tf").val(),
-		  		db2pg_usr_qry : $("#db2pg_usr_qry").val()
-		  	},
-			type : "post",
+			url : '/wrk_nmCheck.do',
+			type : 'post',
+			data : {
+				wrk_nm : $("#db2pg_trsf_wrk_nm").val()
+			},
+			success : function(result) {
+				if (result == "true") {
+						$.ajax({
+							async : false,
+							url : "/db2pg/insertDataWork.do",
+						  	data : {  
+						  		db2pg_trsf_wrk_nm : $("#db2pg_trsf_wrk_nm").val().trim(),
+						  		db2pg_trsf_wrk_exp : $("#db2pg_trsf_wrk_exp").val(),
+						  		db2pg_source_system_id : $("#db2pg_sys_id").val(),
+						  		db2pg_trg_sys_id : $("#db2pg_trg_sys_id").val(),
+						  		exrt_dat_cnt : $("#exrt_dat_cnt").val(),
+						  		src_include_tables : $("#src_include_table_nm").val(),
+						  		src_exclude_tables : $("#src_exclude_table_nm").val(),
+						  		exrt_dat_ftch_sz : $("#exrt_dat_ftch_sz").val(),
+						  		dat_ftch_bff_sz : $("#dat_ftch_bff_sz").val(),
+						  		exrt_prl_prcs_ecnt : $("#exrt_prl_prcs_ecnt").val(),
+						  		lob_dat_bff_sz : $("#lob_dat_bff_sz").val(),
+						  		tb_rbl_tf : $("#tb_rbl_tf").val(),
+						  		ins_opt_cd : $("#ins_opt_cd").val(),
+						  		cnst_cnd_exrt_tf : $("#cnst_cnd_exrt_tf").val(),
+						  		src_where_condition : $("#src_where_condition").val(),
+						  		usr_qry_use_tf : $('input[name="usr_qry_use_tf"]:checked').val(),
+						  		db2pg_usr_qry : $("#db2pg_usr_qry").val()
+						  	},
+							type : "post",
+							beforeSend: function(xhr) {
+						        xhr.setRequestHeader("AJAX", true);
+						     },
+							error : function(xhr, status, error) {
+								if(xhr.status == 401) {
+									alert('<spring:message code="message.msg02" />');
+									top.location.href = "/";
+								} else if(xhr.status == 403) {
+									alert('<spring:message code="message.msg03" />');
+									top.location.href = "/";
+								} else {
+									alert("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""));
+								}
+							},
+							success : function(result) {
+								if(result==true){
+									alert('<spring:message code="message.msg07" /> ');
+									opener.location.reload();
+									self.close();
+								}else{
+									alert('등록에 실패했습니다.');
+								}	
+							}
+						});
+				} else {
+					alert('<spring:message code="backup_management.effective_work_nm"/>');
+					document.getElementById("db2pg_trsf_wrk_nm").focus();
+				}
+			},
 			beforeSend: function(xhr) {
 		        xhr.setRequestHeader("AJAX", true);
 		     },
@@ -160,16 +197,6 @@ function fn_insert_work(){
 				} else {
 					alert("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""));
 				}
-			},
-			success : function(result) {
-				alert(result);
-				if(result==true){
-					alert('<spring:message code="message.msg07" /> ');
-					opener.location.reload();
-					self.close();
-				}else{
-					alert('등록에 실패했습니다.');
-				}	
 			}
 		});
 	}
@@ -179,7 +206,7 @@ function fn_insert_work(){
  * DBMS 서버 호출하여 입력
  ******************************************************** */
  function fn_dbmsAddCallback(db2pg_sys_id,db2pg_sys_nm){
-	 $('#db2pg_source_system_id').val(db2pg_sys_id);
+	 $('#db2pg_sys_id').val(db2pg_sys_id);
 	 $('#db2pg_source_system_nm').val(db2pg_sys_nm);
 }
 
@@ -222,20 +249,47 @@ function fn_dbmsPgInfo(){
 /* ********************************************************
  * 추출 대상 테이블, 추출 제외 테이블 등록 버튼 클릭시
  ******************************************************** */
-function fn_tableList(){
-	var popUrl = "/db2pg/popup/tableInfo.do";
-	var width = 930;
-	var height = 675;
-	var left = (window.screen.width / 2) - (width / 2);
-	var top = (window.screen.height /2) - (height / 2);
-	var popOption = "width="+width+", height="+height+", top="+top+", left="+left+", resizable=no, scrollbars=yes, status=no, toolbar=no, titlebar=yes, location=no,";
+function fn_tableList(gbn){
+	if($('#db2pg_source_system_nm').val() == ""){
+		alert("소스시스템을 선택해주세요.");
+		return false;
+	}
 	
-	var winPop = window.open(popUrl,"tableInfoPop",popOption);
+	var frmPop= document.frmPopup;
+	var url = '/db2pg/popup/tableInfo.do';
+	window.open('','popupView','width=930, height=500');  
+	     
+	frmPop.action = url;
+	frmPop.target = 'popupView';
+	frmPop.db2pg_sys_id.value = $('#db2pg_sys_id').val();
+	frmPop.tableGbn.value = gbn;
+	if(gbn == 'include'){
+		frmPop.src_include_table_nm.value = $('#src_include_table_nm').val();  
+	}else{
+		frmPop.src_exclude_table_nm.value = $('#src_exclude_table_nm').val();  
+	}
+	frmPop.submit();   
 }
 
+
+function fn_tableAddCallback(rowList, tableGbn){
+	if(tableGbn == 'include'){
+		$('#src_include_tables').val(rowList.length+"개");
+		$('#src_include_table_nm').val(rowList);
+	}else{
+		$('#src_exclude_tables').val(rowList.length+"개");
+		$('#src_exclude_table_nm').val(rowList);
+	}
+}
 </script>
 </head>
 <body>
+<form name="frmPopup">
+	<input type="hidden" name="db2pg_sys_id"  id="db2pg_sys_id">
+	<input type="hidden" name="src_include_table_nm"  id="src_include_table_nm" >
+	<input type="hidden" name="src_exclude_table_nm"  id="src_exclude_table_nm" >
+	<input type="hidden" name="tableGbn"  id="tableGbn" >
+</form>
 <div class="pop_container">
 	<div class="pop_cts">
 		<p class="tit">데이터이행 등록</p>
@@ -276,15 +330,14 @@ function fn_tableList(){
 				<tbody>
 					<tr>
 						<th scope="row" class="ico_t1">소스시스템</th>
-						<td><input type="hidden" name="db2pg_source_system_id" id="db2pg_source_system_id"/>
-							<input type="text" class="txt" name="db2pg_source_system_nm" id="db2pg_source_system_nm"/>
+						<td><input type="text" class="txt" name="db2pg_source_system_nm" id="db2pg_source_system_nm" placeholder="등록 버튼을 눌러주세요" readonly="readonly"/>
 							<span class="btn btnC_01"><button type="button" class= "btn_type_02" onclick="fn_dbmsInfo()" style="width: 60px; margin-right: -60px; margin-top: 0;">등록</button></span>							
 						</td>
 					</tr>
 					<tr>
 					<th scope="row" class="ico_t1">타겟시스템</th>
 						<td><input type="hidden" name="db2pg_trg_sys_id" id="db2pg_trg_sys_id"/>
-							<input type="text" class="txt" name="db2pg_trg_sys_nm" id="db2pg_trg_sys_nm"/>
+							<input type="text" class="txt" name="db2pg_trg_sys_nm" id="db2pg_trg_sys_nm" placeholder="등록 버튼을 눌러주세요" readonly="readonly"/>
 							<span class="btn btnC_01"><button type="button" class= "btn_type_02" onclick="fn_dbmsPgInfo()" style="width: 60px; margin-right: -60px; margin-top: 0;">등록</button></span>							
 						</td>
 					</tr>
@@ -312,19 +365,15 @@ function fn_tableList(){
 							</colgroup>
 							<tbody>
 								<tr>
-									<th scope="row" class="ico_t2">테이블에서 추출할 데이터 건수</th>
-									<td><input type="text" class="txt t4" name="exrt_dat_cnt" id="exrt_dat_cnt"/></td>
-								</tr>
-								<tr>
 									<th scope="row" class="ico_t2">추출 대상 테이블</th>
-									<td colspan="3"><input type="text" class="txt" name="src_include_tables" id="src_include_tables"/>
-										<span class="btn btnC_01"><button type="button" class= "btn_type_02" onclick="fn_tableList()" style="width: 60px; margin-right: -60px; margin-top: 0;">등록</button></span>							
+									<td colspan="3"><input type="text" class="txt" name="src_include_tables" id="src_include_tables" readonly="readonly"/>
+										<span class="btn btnC_01"><button type="button" class= "btn_type_02" onclick="fn_tableList('include')" style="width: 60px; margin-right: -60px; margin-top: 0;">등록</button></span>							
 									</td>
 								</tr>
 								<tr>
 									<th scope="row" class="ico_t2">추출 제외 테이블</th>
-									<td colspan="3"><input type="text" class="txt" name="src_exclude_tables" id="src_exclude_tables"/>
-										<span class="btn btnC_01"><button type="button" class= "btn_type_02" onclick="fn_tableList()" style="width: 60px; margin-right: -60px; margin-top: 0;">등록</button></span>							
+									<td colspan="3"><input type="text" class="txt" name="src_exclude_tables" id="src_exclude_tables" readonly="readonly"/>
+										<span class="btn btnC_01"><button type="button" class= "btn_type_02" onclick="fn_tableList('exclude')" style="width: 60px; margin-right: -60px; margin-top: 0;">등록</button></span>							
 									</td>
 								</tr>
 								<tr>
@@ -339,6 +388,10 @@ function fn_tableList(){
 									<th scope="row" class="ico_t2">LOB 데이터 LOB 버퍼 사이즈(단위 MIB)</th>
 									<td><input type="number" class="txt t8" name="lob_dat_bff_sz" id="lob_dat_bff_sz" value="100"/></td>
 								</tr>
+								<tr>
+									<th scope="row" class="ico_t2">테이블에서 추출할 데이터 건수</th>
+									<td><input type="number" class="txt t8" name="exrt_dat_cnt" id="exrt_dat_cnt" value="-1" min="-1"/></td>
+								</tr>								
 							</tbody>
 						</table>
 					</div>
@@ -359,9 +412,9 @@ function fn_tableList(){
 							<li style="border-bottom: none;">
 								<p class="op_tit" style="width: 70px;">사용여부</p>
 								<div class="inp_rdo">
-									<input name="rdo_r" id="rdo_r_1" type="radio" value="true" onchange="fn_checkBox('true')">
+									<input name="usr_qry_use_tf" id="rdo_r_1" type="radio" value="true" onchange="fn_checkBox('true')">
 										<label for="rdo_r_1">사용</label> 
-									<input name="rdo_r" id="rdo_r_2" type="radio" value="false" checked="checked" onchange="fn_checkBox('false')"> 
+									<input name="usr_qry_use_tf" id="rdo_r_2" type="radio" value="false" checked="checked" onchange="fn_checkBox('false')"> 
 										<label for="rdo_r_2">미사용</label>
 								</div>
 							</li>
@@ -421,7 +474,6 @@ function fn_tableList(){
 				</tbody>
 			</table>
 		</div>
-		
 		<div class="btn_type_02">
 			<span class="btn btnC_01" onClick="fn_insert_work();"><button type="button"><spring:message code="common.registory" /></button></span>
 			<a href="#n" class="btn" onclick="self.close();"><span><spring:message code="common.cancel" /></span></a>

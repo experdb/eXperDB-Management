@@ -38,4 +38,9 @@ public interface DbmsService {
 	 */
 	List<Map<String, Object>> dbmsListDbmsGrb() throws Exception;
 
+	/**
+	 * DB2PG DBMS시스템 수정
+	 */
+	void updateDb2pgDBMS(Db2pgSysInfVO db2pgSysInfVO) throws Exception;
+
 }

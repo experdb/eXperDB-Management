@@ -6,9 +6,12 @@ import java.util.Map;
 
 import org.springframework.stereotype.Repository;
 
+import com.k4m.dx.tcontrol.db2pg.dbms.service.Db2pgSysInfVO;
 import com.k4m.dx.tcontrol.db2pg.setting.service.CodeVO;
 import com.k4m.dx.tcontrol.db2pg.setting.service.DDLConfigVO;
 import com.k4m.dx.tcontrol.db2pg.setting.service.DataConfigVO;
+import com.k4m.dx.tcontrol.db2pg.setting.service.QueryVO;
+import com.k4m.dx.tcontrol.db2pg.setting.service.SrcTableVO;
 
 import egovframework.rte.psl.dataaccess.EgovAbstractMapper;
 
@@ -76,7 +79,37 @@ public class Db2pgSettingDAO extends EgovAbstractMapper {
 	public int selectExrtexctSrctblsSeq() throws SQLException{
 		return (int) getSqlSession().selectOne("db2pgSettingSql.selectExrtexctSrctblsSeq");
 	}
+	
+	/**
+	 * 사용자 쿼리 내역 ID SEQ 조회
+	 * 
+	 * @return int
+	 * @throws Exception
+	 */
+	public int selectExrtusrQryIdSeq() throws SQLException{
+		return (int) getSqlSession().selectOne("db2pgSettingSql.selectExrtusrQryIdSeq");
+	}
 
+	/**
+	 * 추출 대상 테이블 등록
+	 * 
+	 * @param srctableVO
+	 * @throws Exception
+	 */
+	public void insertExrttrgSrcTb(SrcTableVO srctableVO) throws SQLException{
+		insert("db2pgSettingSql.insertExrttrgSrcTb", srctableVO);
+	}
+	
+	/**
+	 * 추출 제외 테이블 등록
+	 * 
+	 * @param srctableVO
+	 * @throws Exception
+	 */
+	public void insertExrtexctSrcTb(SrcTableVO srctableVO) throws SQLException{
+		insert("db2pgSettingSql.insertExrtexctSrcTb", srctableVO);
+	}
+	
 	/**
 	 * DDL WORK 등록
 	 * 
@@ -89,6 +122,36 @@ public class Db2pgSettingDAO extends EgovAbstractMapper {
 	}
 
 	/**
+	 * DDL WORK 수정
+	 * 
+	 * @param ddlConfigVO
+	 * @throws Exception
+	 */
+	public void updateDDLWork(DDLConfigVO ddlConfigVO) throws SQLException{
+		update("db2pgSettingSql.updateDDLWork", ddlConfigVO);	
+	}
+	
+	/**
+	 * DDL WORK 삭제
+	 * 
+	 * @param db2pg_ddl_wrk_id
+	 * @throws Exception
+	 */
+	public void deleteDDLWork(int db2pg_ddl_wrk_id) throws SQLException{
+		delete("db2pgSettingSql.deleteDDLWork", db2pg_ddl_wrk_id);
+	}
+	
+	/**
+	 * 사용자 쿼리 등록
+	 * 
+	 * @param dataConfigVO
+	 * @throws Exception
+	 */
+	public void insertUsrQry(QueryVO queryVO) throws SQLException{
+		insert("db2pgSettingSql.insertUsrQry", queryVO);
+	}
+	
+	/**
 	 * Data WORK 등록
 	 * 
 	 * @param dataConfigVO
@@ -98,5 +161,39 @@ public class Db2pgSettingDAO extends EgovAbstractMapper {
 		insert("db2pgSettingSql.insertDataWork", dataConfigVO);
 	}
 
-	
+	/**
+	 * DDL WORK 상세정보
+	 * 
+	 * @param ddlConfigVO
+	 * @throws Exception
+	 */
+	public DDLConfigVO selectDetailDDLWork(int db2pg_ddl_wrk_id) throws SQLException{
+		return (DDLConfigVO) selectOne("db2pgSettingSql.selectDetailDDLWork", db2pg_ddl_wrk_id);
+	}
+
+	/**
+	 * 소스DBMS 접속정보
+	 * 
+	 * @param ddlConfigVO
+	 * @throws Exception
+	 */
+	public Db2pgSysInfVO selectSoruceDBMS(int db2pg_sys_id) throws SQLException{
+		return (Db2pgSysInfVO) selectOne("db2pgSettingSql.selectSoruceDBMS", db2pg_sys_id);
+	}
+
+	/**
+	 * DB2PG WORK 등록
+	 * 
+	 * @param ddlConfigVO
+	 * @throws Exception
+	 */
+	public void insertDb2pgWork(DDLConfigVO ddlConfigVO) throws SQLException{
+		insert("db2pgSettingSql.insertDataWork", ddlConfigVO);
+		
+	}
+
+	public int selectWorkSeq() throws SQLException{
+		return (int) getSqlSession().selectOne("db2pgSettingSql.selectWorkSeq");
+	}
+
 }

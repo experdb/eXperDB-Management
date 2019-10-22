@@ -47,6 +47,11 @@ public class DbmsServiceImpl extends EgovAbstractServiceImpl implements DbmsServ
 	public List<Map<String, Object>> dbmsListDbmsGrb() throws Exception {
 		return dbmsDAO.dbmsListDbmsGrb();	
 	}
+
+	@Override
+	public void updateDb2pgDBMS(Db2pgSysInfVO db2pgSysInfVO) throws Exception {
+		dbmsDAO.updateDb2pgDBMS(db2pgSysInfVO);		
+	}
 	
 
 

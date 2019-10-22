@@ -7,10 +7,13 @@ import javax.annotation.Resource;
 
 import org.springframework.stereotype.Service;
 
+import com.k4m.dx.tcontrol.db2pg.dbms.service.Db2pgSysInfVO;
 import com.k4m.dx.tcontrol.db2pg.setting.service.CodeVO;
 import com.k4m.dx.tcontrol.db2pg.setting.service.DDLConfigVO;
 import com.k4m.dx.tcontrol.db2pg.setting.service.DataConfigVO;
 import com.k4m.dx.tcontrol.db2pg.setting.service.Db2pgSettingService;
+import com.k4m.dx.tcontrol.db2pg.setting.service.QueryVO;
+import com.k4m.dx.tcontrol.db2pg.setting.service.SrcTableVO;
 
 import egovframework.rte.fdl.cmmn.EgovAbstractServiceImpl;
 
@@ -44,15 +47,65 @@ public class Db2pgSettingServiceImpl extends EgovAbstractServiceImpl implements 
 	public int selectExrtexctSrctblsSeq() throws Exception {
 		return db2pgSettingDAO.selectExrtexctSrctblsSeq();
 	}
+	
+	@Override
+	public int selectExrtusrQryIdSeq() throws Exception {
+		return db2pgSettingDAO.selectExrtusrQryIdSeq();
+	}
 
+	@Override
+	public void insertExrttrgSrcTb(SrcTableVO srctableVO) throws Exception {
+		db2pgSettingDAO.insertExrttrgSrcTb(srctableVO);
+	}
+
+	@Override
+	public void insertExrtexctSrcTb(SrcTableVO srctableVO) throws Exception {
+		db2pgSettingDAO.insertExrtexctSrcTb(srctableVO);
+	}
+	
 	@Override
 	public void insertDDLWork(DDLConfigVO ddlConfigVO) throws Exception {
 		db2pgSettingDAO.insertDDLWork(ddlConfigVO);
-		
 	}
-
+	
+	@Override
+	public void updateDDLWork(DDLConfigVO ddlConfigVO) throws Exception {
+		db2pgSettingDAO.updateDDLWork(ddlConfigVO);
+	}
+	
+	@Override
+	public void deleteDDLWork(int db2pg_ddl_wrk_id) throws Exception {
+		db2pgSettingDAO.deleteDDLWork(db2pg_ddl_wrk_id);
+	}
+	
+	@Override
+	public void insertUsrQry(QueryVO queryVO) throws Exception {
+		db2pgSettingDAO.insertUsrQry(queryVO);
+	}
+	
 	@Override
 	public void insertDataWork(DataConfigVO dataConfigVO) throws Exception {
 		db2pgSettingDAO.insertDataWork(dataConfigVO);
 	}
+
+	@Override
+	public DDLConfigVO selectDetailDDLWork(int db2pg_ddl_wrk_id) throws Exception {
+		return db2pgSettingDAO.selectDetailDDLWork(db2pg_ddl_wrk_id);
+	}
+
+	@Override
+	public Db2pgSysInfVO selectSoruceDBMS(int db2pg_sys_id) throws Exception {
+		return db2pgSettingDAO.selectSoruceDBMS(db2pg_sys_id);
+	}
+
+	@Override
+	public void insertDb2pgWork(DDLConfigVO ddlConfigVO) throws Exception {
+		db2pgSettingDAO.insertDb2pgWork(ddlConfigVO);
+	}
+
+	@Override
+	public int selectWorkSeq() throws Exception {
+		return db2pgSettingDAO.selectWorkSeq();
+	}
+
 }

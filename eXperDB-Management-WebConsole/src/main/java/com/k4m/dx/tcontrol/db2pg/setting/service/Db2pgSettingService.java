@@ -3,6 +3,8 @@ package com.k4m.dx.tcontrol.db2pg.setting.service;
 import java.util.List;
 import java.util.Map;
 
+import com.k4m.dx.tcontrol.db2pg.dbms.service.Db2pgSysInfVO;
+
 public interface Db2pgSettingService {
 
 	/**
@@ -47,7 +49,31 @@ public interface Db2pgSettingService {
 	 * @throws Exception
 	 */
 	int selectExrtexctSrctblsSeq() throws Exception;
+	
+	/**
+	 * 사용자 쿼리 내역 ID SEQ 조회
+	 * 
+	 * @return int
+	 * @throws Exception
+	 */
+	int selectExrtusrQryIdSeq() throws Exception;
 
+	/**
+	 * 추출 대상 테이블 등록
+	 * 
+	 * @param srctableVO
+	 * @throws Exception
+	 */
+	void insertExrttrgSrcTb(SrcTableVO srctableVO) throws Exception;
+
+	/**
+	 * 추출 제외 테이블 등록
+	 * 
+	 * @param srctableVO
+	 * @throws Exception
+	 */
+	void insertExrtexctSrcTb(SrcTableVO srctableVO) throws Exception;
+	
 	/**
 	 * DDL WORK 등록
 	 * 
@@ -57,11 +83,68 @@ public interface Db2pgSettingService {
 	void insertDDLWork(DDLConfigVO ddlConfigVO) throws Exception;
 	
 	/**
+	 * DDL WORK 수정
+	 * 
+	 * @param ddlConfigVO
+	 * @throws Exception
+	 */
+	void updateDDLWork(DDLConfigVO ddlConfigVO) throws Exception;
+	
+	/**
+	 * DDL WORK 삭제
+	 * 
+	 * @param db2pg_ddl_wrk_id
+	 * @throws Exception
+	 */
+	void deleteDDLWork(int db2pg_ddl_wrk_id) throws Exception;
+	
+	/**
+	 * 사용자 쿼리 등록
+	 * 
+	 * @param dataConfigVO
+	 * @throws Exception
+	 */
+	void insertUsrQry(QueryVO queryVO) throws Exception;
+	
+	/**
 	 * Data WORK 등록
 	 * 
 	 * @param dataConfigVO
 	 * @throws Exception
 	 */
 	void insertDataWork(DataConfigVO dataConfigVO) throws Exception;
+	
+	/**
+	 * DDL WORK 상세정보
+	 * 
+	 * @param ddlConfigVO
+	 * @throws Exception
+	 */
+	DDLConfigVO selectDetailDDLWork(int db2pg_ddl_wrk_id) throws Exception;
+
+	/**
+	 * 소스DBMS 접속정보
+	 * 
+	 * @param ddlConfigVO
+	 * @throws Exception
+	 */
+	Db2pgSysInfVO selectSoruceDBMS(int db2pg_sys_id) throws Exception;
+	
+	/**
+	 * DB2PG WORK 등록
+	 * 
+	 * @param dataConfigVO
+	 * @throws Exception
+	 */
+	void insertDb2pgWork(DDLConfigVO ddlConfigVO) throws Exception;
+
+	/**
+	 * WORK ID SEQ 조회
+	 * 
+	 * @return int
+	 * @throws Exception
+	 */
+	int selectWorkSeq() throws Exception;
+
 
 }
