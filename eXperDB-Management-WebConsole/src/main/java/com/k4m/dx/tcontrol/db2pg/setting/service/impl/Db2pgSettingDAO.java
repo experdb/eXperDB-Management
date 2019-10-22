@@ -188,7 +188,7 @@ public class Db2pgSettingDAO extends EgovAbstractMapper {
 	 * @throws Exception
 	 */
 	public void insertDb2pgWork(DDLConfigVO ddlConfigVO) throws SQLException{
-		insert("db2pgSettingSql.insertDataWork", ddlConfigVO);
+		insert("db2pgSettingSql.insertDb2pgWork", ddlConfigVO);
 		
 	}
 
