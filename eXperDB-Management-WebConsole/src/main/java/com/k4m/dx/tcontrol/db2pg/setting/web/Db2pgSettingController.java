@@ -1,6 +1,7 @@
 package com.k4m.dx.tcontrol.db2pg.setting.web;
 
 import java.io.File;
+import java.sql.SQLException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -19,6 +20,8 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
+import com.k4m.dx.tcontrol.backup.service.BackupService;
+import com.k4m.dx.tcontrol.backup.service.WorkVO;
 import com.k4m.dx.tcontrol.cmmn.AES256;
 import com.k4m.dx.tcontrol.cmmn.AES256_KEY;
 import com.k4m.dx.tcontrol.cmmn.CmmnUtils;
@@ -37,6 +40,9 @@ import com.k4m.dx.tcontrol.login.service.LoginVO;
 
 @Controller
 public class Db2pgSettingController {
+	
+	@Autowired
+	private BackupService backupService;
 	
 	@Autowired
 	private Db2pgSettingService db2pgSettingService;
@@ -288,6 +294,7 @@ public class Db2pgSettingController {
 			int db2pg_ddl_wrk_id = Integer.parseInt(request.getParameter("db2pg_ddl_wrk_id"));
 			DDLConfigVO result = (DDLConfigVO) db2pgSettingService.selectDetailDDLWork(db2pg_ddl_wrk_id);
 			mv.addObject("db2pg_ddl_wrk_id", result.getDb2pg_ddl_wrk_id());
+			mv.addObject("wrk_id", result.getWrk_id());
 			mv.addObject("db2pg_ddl_wrk_nm", result.getDb2pg_ddl_wrk_nm());
 			mv.addObject("db2pg_ddl_wrk_exp", result.getDb2pg_ddl_wrk_exp());
 			mv.addObject("db2pg_uchr_lchr_val", result.getDb2pg_uchr_lchr_val());
@@ -342,6 +349,7 @@ public class Db2pgSettingController {
 			int exrt_exct_tb_wrk_id=0;
 			String src_include_tables=request.getParameter("src_include_tables");
 			String src_exclude_tables=request.getParameter("src_exclude_tables");
+
 			
 			//1.T_DB2PG_추출대상소스테이블내역 insert
 			if(!src_include_tables.equals("")){
@@ -401,8 +409,35 @@ public class Db2pgSettingController {
 	 * @throws Exception
 	 */
 	@RequestMapping(value = "/db2pg/deleteDDLWork.do")
-	public @ResponseBody JSONObject deleteDDLWork(@ModelAttribute("historyVO") HistoryVO historyVO, HttpServletResponse response, HttpServletRequest request) {
+	public @ResponseBody JSONObject deleteDDLWork(@ModelAttribute("historyVO") HistoryVO historyVO, HttpServletResponse response, HttpServletRequest request) throws SQLException {
+		
+		String ddl_wrk_delete = "S";
+		
 		JSONObject result = new JSONObject();
+		
+			try{
+				//DB 삭제
+				String[] db2pg_ddl_wrk_id = request.getParameter("db2pg_ddl_wrk_id").toString().split(",");
+				for (int i = 0; i < db2pg_ddl_wrk_id.length; i++) {
+					db2pgSettingService.deleteDDLWork(Integer.parseInt(db2pg_ddl_wrk_id[i]));
+				}
+			}catch(Exception e){
+				e.printStackTrace();
+				ddl_wrk_delete = "F";
+			}
+		
+			if(ddl_wrk_delete.equals("S")){
+				try{
+				//work 삭제
+				String[] wrk_id = request.getParameter("wrk_id").toString().split(",");
+				for (int i = 0; i < wrk_id.length; i++) {
+					backupService.deleteWork(Integer.parseInt(wrk_id[i]));
+					}
+				}catch(Exception e){
+					e.printStackTrace();
+				}
+			}
+	
 		try {
 			// 화면접근이력 이력 남기기
 //			CmmnUtils.saveHistory(request, historyVO);
@@ -410,11 +445,6 @@ public class Db2pgSettingController {
 //			historyVO.setMnu_id(12);
 //			accessHistoryService.insertHistory(historyVO);
 			
-			//DB 삭제
-			String[] db2pg_ddl_wrk_id = request.getParameter("db2pg_ddl_wrk_id").toString().split(",");
-			for (int i = 0; i < db2pg_ddl_wrk_id.length; i++) {
-				db2pgSettingService.deleteDDLWork(Integer.parseInt(db2pg_ddl_wrk_id[i]));
-			}
 			//config 파일 삭제
 			String[] db2pg_ddl_wrk_nm = request.getParameter("db2pg_ddl_wrk_nm").toString().split(",");
 			for (int i = 0; i < db2pg_ddl_wrk_nm.length; i++) {

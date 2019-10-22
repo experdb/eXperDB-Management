@@ -128,7 +128,8 @@ function fn_update_work(){
 		  		src_tb_ddl_exrt_tf : $("#src_tb_ddl_exrt_tf").val(),
 		  		src_include_tables : $("#src_include_table_nm").val(),
 		  		src_exclude_tables : $("#src_exclude_table_nm").val(),
-		  		ddl_save_pth : $("#ddl_save_pth").val()
+		  		ddl_save_pth : $("#ddl_save_pth").val(),
+		  		wrk_id : $("#wrk_id").val()
 		  	},
 			type : "post",
 			beforeSend: function(xhr) {
@@ -256,6 +257,7 @@ function fn_tableAddCallback(rowList, tableGbn){
 					<tr>
 						<th scope="row" class="ico_t1"><spring:message code="common.work_name" /></th>
 						<td><input type="text" class="txt" name="db2pg_ddl_wrk_nm" id="db2pg_ddl_wrk_nm" value="${db2pg_ddl_wrk_nm}" maxlength="20" onkeyup="fn_checkWord(this,20)" readonly="readonly"/>
+							<input type="hidden" name="wrk_id" id="wrk_id" value="${wrk_id}">
 						</td>
 					</tr>
 					<tr>
