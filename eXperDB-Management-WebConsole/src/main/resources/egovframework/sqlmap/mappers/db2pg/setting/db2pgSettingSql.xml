@@ -23,9 +23,10 @@
 		SELECT 
 			(row_number() over()) as rownum
 			, (row_number() over()) as idx
-			, ddl_wrk_inf.db2pg_ddl_wrk_id
-			, ddl_wrk_inf.db2pg_ddl_wrk_nm
-			, ddl_wrk_inf.db2pg_ddl_wrk_exp
+			, ddl_wrk_inf.db2pg_ddl_wrk_id	
+			, ddl_wrk_inf.wrk_id
+			, wrkcng.wrk_nm as db2pg_ddl_wrk_nm
+			, wrkcng.wrk_exp as  db2pg_ddl_wrk_exp
 			, sys_inf.dbms_dscd
 			, sys_inf.ipadr
 			, sys_inf.dtb_nm
@@ -34,14 +35,15 @@
 			, TO_CHAR(ddl_wrk_inf.frst_reg_dtm,'YYYY-MM-DD HH24:MI') as frst_reg_dtm
 			, ddl_wrk_inf.lst_mdfr_id
 			, TO_CHAR(ddl_wrk_inf.lst_mdf_dtm,'YYYY-MM-DD HH24:MI') as lst_mdf_dtm 
-		FROM t_db2pg_ddl_wrk_inf ddl_wrk_inf, t_db2pg_sys_inf sys_inf
+		FROM t_db2pg_ddl_wrk_inf ddl_wrk_inf, t_db2pg_sys_inf sys_inf, t_wrkcng_i wrkcng
 		WHERE ddl_wrk_inf.db2pg_sys_id = sys_inf.db2pg_sys_id
-		AND ddl_wrk_inf.db2pg_ddl_wrk_nm LIKE #{wrk_nm}
+		AND ddl_wrk_inf.wrk_id = wrkcng.wrk_id
+		AND wrkcng.wrk_nm LIKE #{db2pg_ddl_wrk_nm}
 		AND sys_inf.dbms_dscd LIKE #{dbms_dscd}
 		AND sys_inf.ipadr LIKE #{ipadr}
 		AND sys_inf.dtb_nm LIKE #{dtb_nm}
 		AND sys_inf.scm_nm LIKE #{scm_nm}
-		ORDER BY lst_mdf_dtm DESC
+		ORDER BY lst_mdf_dtm desc
 	</select>
 	
 	<select id="selectDataWork" resultType="dataConfigVO" parameterType="hashmap">
@@ -162,6 +164,46 @@
 		)
 	</insert>
 	
+	<select id="selectWorkSeq" resultType="int">
+		/**
+	 	*  Query ID : selectWorkSeq
+	 	*  Description : WORK SEQ 조회
+	 	*  Author : 변승우
+	 	**/		
+	 	SELECT setval('q_wrkcng_i_01',nextval('q_wrkcng_i_01'))
+	</select>
+	
+	
+	<insert id="insertDb2pgWork" parameterType="ddlConfigVO">
+		/**
+	 	* Query ID : "insertDb2pgWork"
+	 	* Description : Work등록
+	 	* Author : 변승우
+	 	**/
+	 	INSERT INTO T_WRKCNG_I
+	 		(
+	 		WRK_ID
+	 		, BSN_DSCD
+	 		, WRK_NM
+	 		, WRK_EXP
+	 		, FRST_REGR_ID
+	 		, FRST_REG_DTM
+	 		, LST_MDFR_ID
+	 		, LST_MDF_DTM
+	 		)
+	 		VALUES
+	 		(
+	 		#{wrk_id}
+	 		, 'TC001903'
+	 		, #{db2pg_ddl_wrk_nm}
+			, #{db2pg_ddl_wrk_exp}
+			, #{frst_regr_id}
+			, now()
+			, #{frst_regr_id}
+			, now()
+	 		)
+	</insert>
+	
 	<insert id="insertDDLWork" parameterType="ddlConfigVO">
 		/**
 		* Query ID : insertDDLWork
@@ -172,8 +214,7 @@
 		INSERT INTO t_db2pg_ddl_wrk_inf
 		(
 		  db2pg_ddl_wrk_id
-		, db2pg_ddl_wrk_nm
-		, db2pg_ddl_wrk_exp
+		, wrk_id
 		, db2pg_sys_id
 		, db2pg_uchr_lchr_val
 		, src_tb_ddl_exrt_tf
@@ -192,8 +233,7 @@
 		VALUES
 		(
 		  nextval('q_db2pg_ddl_wrk_inf_01')
-		, #{db2pg_ddl_wrk_nm}
-		, #{db2pg_ddl_wrk_exp}
+		, #{wrk_id}
 		, #{db2pg_sys_id}
 		, #{db2pg_uchr_lchr_val}
 		, #{src_tb_ddl_exrt_tf}
