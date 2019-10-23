@@ -102,7 +102,8 @@ function fn_init(){
 		{data : "frst_reg_dtm", className : "dt-center", defaultContent : ""},
 		{data : "lst_mdfr_id", className : "dt-center", defaultContent : ""},
 		{data : "lst_mdf_dtm", className : "dt-center", defaultContent : ""},
-		{data : "db2pg_ddl_wrk_id", defaultContent : "", visible: false}
+		{data : "db2pg_ddl_wrk_id", defaultContent : "", visible: false},
+		{data : "wrk_id", defaultContent : "", visible: false}
 	],'select': {'style': 'multi'}
 	});
 	
@@ -401,6 +402,12 @@ function fn_ddl_work_delete(){
 		alert("<spring:message code='message.msg16' />");
 		return false;
 	}else{
+		
+		var wrkList = [];
+		for (var i = 0; i < datas.length; i++) {
+			wrkList += datas[i].wrk_id + ',';	
+		}
+
 		var wrkIdList = [];
 		for (var i = 0; i < datas.length; i++) {
 			wrkIdList += datas[i].db2pg_ddl_wrk_id + ',';	
@@ -410,9 +417,12 @@ function fn_ddl_work_delete(){
 		for (var i = 0; i < datas.length; i++) {
 			wrkNmList += datas[i].db2pg_ddl_wrk_nm + ',';	
 		}
+		
+		 if(confirm('<spring:message code="message.msg162"/>')){
 			$.ajax({
 				url : "/db2pg/deleteDDLWork.do",
 			  	data : {
+			  		wrk_id : wrkList,
 			  		db2pg_ddl_wrk_id : wrkIdList,
 			  		db2pg_ddl_wrk_nm : wrkNmList
 			  	},
@@ -440,6 +450,7 @@ function fn_ddl_work_delete(){
 					}	
 				}
 			});	
+		 };	
 	}
 }
 

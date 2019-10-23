@@ -133,7 +133,7 @@ public interface Db2pgSettingService {
 	/**
 	 * DB2PG WORK 등록
 	 * 
-	 * @param dataConfigVO
+	 * @param ddlConfigVO
 	 * @throws Exception
 	 */
 	void insertDb2pgWork(DDLConfigVO ddlConfigVO) throws Exception;

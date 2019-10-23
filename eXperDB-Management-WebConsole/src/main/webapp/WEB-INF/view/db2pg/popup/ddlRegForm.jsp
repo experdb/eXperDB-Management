@@ -56,13 +56,6 @@ function valCheck(){
 		alert("소스 시스템정보를 등록해주세요.");
 		$("#db2pg_sys_id").focus();
 		return false;
-	}else if($("#ddl_save_pth").val() == ""){
-		alert("저장경로를 입력해주세요.");
-		$("#ddl_save_pth").focus();
-		return false;
-	}else if(output_path =="fail"){
-		alert('저장경로를 체크해주세요.');		
-		return false;
 	}else{
 		return true;
 	}
@@ -176,8 +169,7 @@ function fn_insert_work(){
 						  		db2pg_uchr_lchr_val : $("#db2pg_uchr_lchr_val").val(),
 						  		src_tb_ddl_exrt_tf : $("#src_tb_ddl_exrt_tf").val(),
 						  		src_include_tables : $("#src_include_table_nm").val(),
-						  		src_exclude_tables : $("#src_exclude_table_nm").val(),
-						  		ddl_save_pth : $("#ddl_save_pth").val()
+						  		src_exclude_tables : $("#src_exclude_table_nm").val()
 						  	},
 							type : "post",
 							beforeSend: function(xhr) {
@@ -403,12 +395,12 @@ function fn_tableAddCallback(rowList, tableGbn){
 							</div>
 						</td>
 					</tr>
-					<tr>
+<!-- 					<tr>
 						<th scope="row" class="ico_t2">DDL 저장경로</th>
 						<td><textarea rows="3" cols="60" id="ddl_save_pth" name="ddl_save_pth" style="width: 80%"></textarea>
 							<span class="btn btnC_01"><button type="button" class= "btn_type_02" onclick="fn_pathCheck()" style="width: 60px; margin-right: -60px; margin-top: 0; height: 58px;">경로체크</button></span>							
 						</td>
-					</tr>
+					</tr> -->
 				</tbody>
 			</table>
 		</div>

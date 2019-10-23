@@ -38,7 +38,7 @@
 		FROM t_db2pg_ddl_wrk_inf ddl_wrk_inf, t_db2pg_sys_inf sys_inf, t_wrkcng_i wrkcng
 		WHERE ddl_wrk_inf.db2pg_sys_id = sys_inf.db2pg_sys_id
 		AND ddl_wrk_inf.wrk_id = wrkcng.wrk_id
-		AND wrkcng.wrk_nm LIKE #{db2pg_ddl_wrk_nm}
+		AND wrkcng.wrk_nm LIKE #{wrk_nm}
 		AND sys_inf.dbms_dscd LIKE #{dbms_dscd}
 		AND sys_inf.ipadr LIKE #{ipadr}
 		AND sys_inf.dtb_nm LIKE #{dtb_nm}
@@ -52,12 +52,13 @@
 	 	*  Description : Data 작업 정보 조회
 	 	*  Author : 김주영
 	 	**/
-	 		SELECT 
+	 	SELECT 
 			(row_number() over()) as rownum
 			, (row_number() over()) as idx
 			, trsf_wrk_inf.db2pg_trsf_wrk_id
-			, trsf_wrk_inf.db2pg_trsf_wrk_nm
-			, trsf_wrk_inf.db2pg_trsf_wrk_exp
+			, trsf_wrk_inf.wrk_id
+			, wrkcng.wrk_nm as db2pg_trsf_wrk_nm
+			, wrkcng.wrk_exp as db2pg_trsf_wrk_exp
 			, source_sys_inf.dbms_dscd as source_dbms_dscd
 			, source_sys_inf.ipadr as source_ipadr
 			, source_sys_inf.dtb_nm as source_dtb_nm
@@ -71,9 +72,10 @@
 			, trsf_wrk_inf.lst_mdfr_id
 			, TO_CHAR(trsf_wrk_inf.lst_mdf_dtm,'YYYY-MM-DD HH24:MI') as lst_mdf_dtm 
 		FROM t_db2pg_trsf_wrk_inf trsf_wrk_inf 
-		LEFT OUTER JOIN t_db2pg_sys_inf source_sys_inf ON trsf_wrk_inf.db2pg_source_system_id = source_sys_inf.db2pg_sys_id
+		LEFT OUTER JOIN t_db2pg_sys_inf source_sys_inf ON trsf_wrk_inf.db2pg_src_sys_id = source_sys_inf.db2pg_sys_id
 		LEFT OUTER JOIN t_db2pg_sys_inf target_sys_inf ON trsf_wrk_inf.db2pg_trg_sys_id = target_sys_inf.db2pg_sys_id
-		WHERE trsf_wrk_inf.db2pg_trsf_wrk_nm LIKE #{wrk_nm}
+		LEFT OUTER join t_wrkcng_i wrkcng on trsf_wrk_inf.wrk_id = wrkcng.wrk_id
+		WHERE wrkcng.wrk_nm LIKE #{wrk_nm}
 		<if test="data_dbms_dscd.equals('source_system')">
 			AND source_sys_inf.dbms_dscd LIKE #{dbms_dscd}
 			AND source_sys_inf.ipadr LIKE #{ipadr}
@@ -86,7 +88,7 @@
 			AND target_sys_inf.dtb_nm LIKE #{dtb_nm}
 			AND target_sys_inf.scm_nm LIKE #{scm_nm}
 		</if>
-		ORDER BY lst_mdf_dtm DESC
+		ORDER BY lst_mdf_dtm DESC	
 	 </select>	
 	
 	<select id="selectExrttrgSrctblsSeq" resultType="int">
@@ -251,6 +253,18 @@
 		)
 	</insert>
 	
+	
+	 <update id="updateWork" parameterType="ddlConfigVO">
+    	/**
+	 	* Query ID : updateWork
+	 	* Description : 워크 업데이트
+	 	* Author : 변승우
+	 	**/
+	 		UPDATE T_WRKCNG_I SET
+	 			wrk_exp = #{db2pg_ddl_wrk_exp}
+	 		WHERE WRK_ID = #{wrk_id}			 		
+    </update>
+	
 	<update id="updateDDLWork" parameterType="ddlConfigVO">
 		/**
 		* Query ID : updateDDLWork
@@ -259,11 +273,9 @@
 		**/
  		UPDATE t_db2pg_ddl_wrk_inf
 		SET 
-		  db2pg_ddl_wrk_exp=#{db2pg_ddl_wrk_exp}
-		, db2pg_sys_id=#{db2pg_sys_id}
+		 db2pg_sys_id=#{db2pg_sys_id}
 		, db2pg_uchr_lchr_val=#{db2pg_uchr_lchr_val}
 		, src_tb_ddl_exrt_tf=#{src_tb_ddl_exrt_tf}
-		, ddl_save_pth=#{ddl_save_pth}
 		<if test="db2pg_exrt_trg_tb_wrk_id != 0">
 		, db2pg_exrt_trg_tb_wrk_id=#{db2pg_exrt_trg_tb_wrk_id}
 		</if>
@@ -382,8 +394,9 @@
 		**/
 		SELECT 
 			  db2pg_ddl_wrk_id
-			, db2pg_ddl_wrk_nm
-			, db2pg_ddl_wrk_exp
+			, wrk_inf.wrk_id  
+			, wrkcng.wrk_nm as db2pg_ddl_wrk_nm
+			, wrkcng.wrk_exp as db2pg_ddl_wrk_exp
 			, db2pg_uchr_lchr_val
 			, src_tb_ddl_exrt_tf
 			, ddl_save_pth
@@ -393,8 +406,9 @@
 			, coalesce((SELECT length(exrt_trg_tb_nm)-length(replace(exrt_trg_tb_nm,',',''))+1 FROM t_db2pg_exrttrg_srctb_ls WHERE db2pg_exrt_trg_tb_wrk_id=wrk_inf.db2pg_exrt_trg_tb_wrk_id),0) as exrt_trg_tb_cnt
 			, (SELECT exrt_exct_tb_nm FROM t_db2pg_exrtexct_srctb_ls WHERE db2pg_exrt_exct_tb_wrk_id=wrk_inf.db2pg_exrt_exct_tb_wrk_id) as exrt_exct_tb_nm
 			, coalesce((SELECT length(exrt_exct_tb_nm)-length(replace(exrt_exct_tb_nm,',',''))+1 FROM t_db2pg_exrtexct_srctb_ls WHERE db2pg_exrt_exct_tb_wrk_id=wrk_inf.db2pg_exrt_exct_tb_wrk_id),0) as exrt_exct_tb_cnt
-		FROM t_db2pg_ddl_wrk_inf wrk_inf
+		FROM t_db2pg_ddl_wrk_inf wrk_inf, t_wrkcng_i wrkcng
 		WHERE db2pg_ddl_wrk_id=#{db2pg_ddl_wrk_id}
+		AND  wrk_inf.wrk_id = wrkcng.wrk_id		
 	</select>
 	
 	<select id="selectSoruceDBMS" resultType="db2pgSysInfVO" parameterType="int">
