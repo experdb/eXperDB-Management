@@ -26,10 +26,8 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.k4m.dx.tcontrol.backup.service.BackupService;
-import com.k4m.dx.tcontrol.backup.service.WorkVO;
 import com.k4m.dx.tcontrol.cmmn.AES256;
 import com.k4m.dx.tcontrol.cmmn.AES256_KEY;
-import com.k4m.dx.tcontrol.cmmn.CmmnUtils;
 import com.k4m.dx.tcontrol.cmmn.client.ClientProtocolID;
 import com.k4m.dx.tcontrol.common.service.HistoryVO;
 import com.k4m.dx.tcontrol.db2pg.cmmn.DatabaseTableInfo;
@@ -189,9 +187,6 @@ public class Db2pgSettingController {
 	@ResponseBody 
 	 public JSONObject insertDDLWork(@ModelAttribute("ddlConfigVO") DDLConfigVO ddlConfigVO, HttpServletRequest request, HttpServletResponse response, @ModelAttribute("historyVO") HistoryVO historyVO) {
 		JSONObject result = new JSONObject();
-		
-		String workInsert = "S";
-		
 		try {
 			// 화면접근이력 이력 남기기
 //			CmmnUtils.saveHistory(request, historyVO);
@@ -211,36 +206,21 @@ public class Db2pgSettingController {
 			String src_include_tables=request.getParameter("src_include_tables");
 			String src_exclude_tables=request.getParameter("src_exclude_tables");
 			
-			
 			//1. WORK 등록
-			try {					
-				String time = nowTime();
-				
-				Properties props = new Properties();
-				props.load(new FileInputStream(ResourceUtils.getFile("classpath:egovframework/tcontrolProps/globals.properties")));			
-				String db2pg_path = props.get("db2pg_path").toString();	
-				
-				String ddl_path = db2pg_path+"/ddl/"+time+"_"+ddlConfigVO.getDb2pg_ddl_wrk_nm();
-				System.out.println(ddl_path);
-				
-				ddlConfigVO.setDdl_save_pth(ddl_path);
-				
-				// 화면접근이력 이력 남기기
-				CmmnUtils.saveHistory(request, historyVO);
-				ddlConfigVO.setFrst_regr_id(id);
-				
-				//시퀀스 조회
-				wrk_id=db2pgSettingService.selectWorkSeq();
-				ddlConfigVO.setWrk_id(wrk_id);
-				//작업 정보등록
-				db2pgSettingService.insertDb2pgWork(ddlConfigVO);
-			} catch (Exception e) {
-				e.printStackTrace();
-				workInsert = "F";
-			}
+			String time = nowTime();
+			Properties props = new Properties();
+			props.load(new FileInputStream(ResourceUtils.getFile("classpath:egovframework/tcontrolProps/globals.properties")));			
+			String db2pg_path = props.get("db2pg_path").toString();	
+			String ddl_path = db2pg_path+"/ddl/"+time+"_"+ddlConfigVO.getDb2pg_ddl_wrk_nm();
+			System.out.println(ddl_path);
+			ddlConfigVO.setDdl_save_pth(ddl_path);
+			//시퀀스 조회
+			wrk_id=db2pgSettingService.selectWorkSeq();
+			ddlConfigVO.setWrk_id(wrk_id);
+			//작업 정보등록
+			db2pgSettingService.insertDb2pgWork(ddlConfigVO);
 			
-			
-			//1.T_DB2PG_추출대상소스테이블내역 insert
+			//2.T_DB2PG_추출대상소스테이블내역 insert
 			if(!src_include_tables.equals("")){
 				exrt_trg_tb_wrk_id=db2pgSettingService.selectExrttrgSrctblsSeq();
 		    	srctableVO.setDb2pg_exrt_trg_tb_wrk_id(exrt_trg_tb_wrk_id);
@@ -248,7 +228,7 @@ public class Db2pgSettingController {
 				db2pgSettingService.insertExrttrgSrcTb(srctableVO);
 			}
 			
-			//2.T_DB2PG_추출제외소스테이블내역 insert
+			//3.T_DB2PG_추출제외소스테이블내역 insert
 			if(!src_exclude_tables.equals("")){
 				exrt_exct_tb_wrk_id=db2pgSettingService.selectExrtexctSrctblsSeq();
 		    	srctableVO.setDb2pg_exrt_exct_tb_wrk_id(exrt_exct_tb_wrk_id);
@@ -256,7 +236,7 @@ public class Db2pgSettingController {
 				db2pgSettingService.insertExrtexctSrcTb(srctableVO);
 			}
 			
-			//3.T_DB2PG_DDL_작업_정보 insert
+			//4.T_DB2PG_DDL_작업_정보 insert
 			ddlConfigVO.setFrst_regr_id(id);
 			ddlConfigVO.setLst_mdfr_id(id);
 			ddlConfigVO.setWrk_id(wrk_id);
@@ -264,9 +244,10 @@ public class Db2pgSettingController {
 			ddlConfigVO.setDb2pg_exrt_exct_tb_wrk_id(exrt_exct_tb_wrk_id);
 			db2pgSettingService.insertDDLWork(ddlConfigVO);
 			
-			//4.config 생성
+			//5.config 생성
 			Db2pgSysInfVO sourceDBMS = (Db2pgSysInfVO) db2pgSettingService.selectSoruceDBMS(ddlConfigVO.getDb2pg_sys_id());
 			JSONObject configObj = new JSONObject();
+			configObj.put("path", db2pg_path);
 			configObj.put("src_host", sourceDBMS.getIpadr());
 			configObj.put("src_user", sourceDBMS.getSpr_usr_id());
 			configObj.put("src_password", aes.aesDecode(sourceDBMS.getPwd()));
@@ -278,7 +259,7 @@ public class Db2pgSettingController {
 			configObj.put("wrk_nm", ddlConfigVO.getDb2pg_ddl_wrk_nm());
 			configObj.put("src_classify_string", ddlConfigVO.getDb2pg_uchr_lchr_val());
 			configObj.put("src_table_ddl", ddlConfigVO.getSrc_tb_ddl_exrt_tf());
-			configObj.put("src_file_output_path", ddlConfigVO.getDdl_save_pth());
+			configObj.put("src_file_output_path", ddl_path);
 			configObj.put("src_include_tables", src_include_tables);
 			configObj.put("src_exclude_tables", src_exclude_tables);
 			
