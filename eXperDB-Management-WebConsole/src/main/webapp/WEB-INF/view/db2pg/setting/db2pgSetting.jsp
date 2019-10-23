@@ -228,7 +228,7 @@ $(window.document).ready(
 	function() {	
 		fn_init();		
 		getddlDataList();
-		//getdataDataList();			
+		getdataDataList();			
 		$("#ddlDataTable").show();
 		$("#ddlDataTable_wrapper").show();
 		$("#dataDataTable").hide();

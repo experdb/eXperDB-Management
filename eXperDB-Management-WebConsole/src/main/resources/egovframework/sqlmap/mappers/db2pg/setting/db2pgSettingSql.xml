@@ -75,7 +75,7 @@
 		LEFT OUTER JOIN t_db2pg_sys_inf source_sys_inf ON trsf_wrk_inf.db2pg_src_sys_id = source_sys_inf.db2pg_sys_id
 		LEFT OUTER JOIN t_db2pg_sys_inf target_sys_inf ON trsf_wrk_inf.db2pg_trg_sys_id = target_sys_inf.db2pg_sys_id
 		LEFT OUTER join t_wrkcng_i wrkcng on trsf_wrk_inf.wrk_id = wrkcng.wrk_id
-		WHERE trsf_wrk_inf.db2pg_trsf_wrk_nm LIKE #{wrk_nm}
+		WHERE wrkcng.wrk_nm LIKE #{wrk_nm}
 		<if test="data_dbms_dscd.equals('source_system')">
 			AND source_sys_inf.dbms_dscd LIKE #{dbms_dscd}
 			AND source_sys_inf.ipadr LIKE #{ipadr}
