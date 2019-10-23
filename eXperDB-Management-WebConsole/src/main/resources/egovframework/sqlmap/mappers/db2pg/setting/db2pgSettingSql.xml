@@ -52,12 +52,13 @@
 	 	*  Description : Data 작업 정보 조회
 	 	*  Author : 김주영
 	 	**/
-	 		SELECT 
+	 	SELECT 
 			(row_number() over()) as rownum
 			, (row_number() over()) as idx
 			, trsf_wrk_inf.db2pg_trsf_wrk_id
-			, trsf_wrk_inf.db2pg_trsf_wrk_nm
-			, trsf_wrk_inf.db2pg_trsf_wrk_exp
+			, trsf_wrk_inf.wrk_id
+			, wrkcng.wrk_nm as db2pg_trsf_wrk_nm
+			, wrkcng.wrk_exp as db2pg_trsf_wrk_exp
 			, source_sys_inf.dbms_dscd as source_dbms_dscd
 			, source_sys_inf.ipadr as source_ipadr
 			, source_sys_inf.dtb_nm as source_dtb_nm
@@ -71,8 +72,9 @@
 			, trsf_wrk_inf.lst_mdfr_id
 			, TO_CHAR(trsf_wrk_inf.lst_mdf_dtm,'YYYY-MM-DD HH24:MI') as lst_mdf_dtm 
 		FROM t_db2pg_trsf_wrk_inf trsf_wrk_inf 
-		LEFT OUTER JOIN t_db2pg_sys_inf source_sys_inf ON trsf_wrk_inf.db2pg_source_system_id = source_sys_inf.db2pg_sys_id
+		LEFT OUTER JOIN t_db2pg_sys_inf source_sys_inf ON trsf_wrk_inf.db2pg_src_sys_id = source_sys_inf.db2pg_sys_id
 		LEFT OUTER JOIN t_db2pg_sys_inf target_sys_inf ON trsf_wrk_inf.db2pg_trg_sys_id = target_sys_inf.db2pg_sys_id
+		LEFT OUTER join t_wrkcng_i wrkcng on trsf_wrk_inf.wrk_id = wrkcng.wrk_id
 		WHERE trsf_wrk_inf.db2pg_trsf_wrk_nm LIKE #{wrk_nm}
 		<if test="data_dbms_dscd.equals('source_system')">
 			AND source_sys_inf.dbms_dscd LIKE #{dbms_dscd}
@@ -86,7 +88,7 @@
 			AND target_sys_inf.dtb_nm LIKE #{dtb_nm}
 			AND target_sys_inf.scm_nm LIKE #{scm_nm}
 		</if>
-		ORDER BY lst_mdf_dtm DESC
+		ORDER BY lst_mdf_dtm DESC	
 	 </select>	
 	
 	<select id="selectExrttrgSrctblsSeq" resultType="int">
@@ -274,7 +276,6 @@
 		 db2pg_sys_id=#{db2pg_sys_id}
 		, db2pg_uchr_lchr_val=#{db2pg_uchr_lchr_val}
 		, src_tb_ddl_exrt_tf=#{src_tb_ddl_exrt_tf}
-		, ddl_save_pth=#{ddl_save_pth}
 		<if test="db2pg_exrt_trg_tb_wrk_id != 0">
 		, db2pg_exrt_trg_tb_wrk_id=#{db2pg_exrt_trg_tb_wrk_id}
 		</if>

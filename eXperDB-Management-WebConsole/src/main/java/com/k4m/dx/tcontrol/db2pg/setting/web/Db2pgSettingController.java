@@ -1,10 +1,14 @@
 package com.k4m.dx.tcontrol.db2pg.setting.web;
 
 import java.io.File;
+import java.io.FileInputStream;
 import java.sql.SQLException;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Properties;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -14,6 +18,7 @@ import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.util.ResourceUtils;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -209,6 +214,17 @@ public class Db2pgSettingController {
 			
 			//1. WORK 등록
 			try {					
+				String time = nowTime();
+				
+				Properties props = new Properties();
+				props.load(new FileInputStream(ResourceUtils.getFile("classpath:egovframework/tcontrolProps/globals.properties")));			
+				String db2pg_path = props.get("db2pg_path").toString();	
+				
+				String ddl_path = db2pg_path+"/ddl/"+time+"_"+ddlConfigVO.getDb2pg_ddl_wrk_nm();
+				System.out.println(ddl_path);
+				
+				ddlConfigVO.setDdl_save_pth(ddl_path);
+				
 				// 화면접근이력 이력 남기기
 				CmmnUtils.saveHistory(request, historyVO);
 				ddlConfigVO.setFrst_regr_id(id);
@@ -556,7 +572,7 @@ public class Db2pgSettingController {
 			System.out.println("**********************");
 			System.out.println(dataConfigVO.getDb2pg_trsf_wrk_nm());
 			System.out.println(dataConfigVO.getDb2pg_trsf_wrk_exp());
-			System.out.println(dataConfigVO.getDb2pg_source_system_id());
+			System.out.println(dataConfigVO.getDb2pg_src_sys_id());
 			System.out.println(dataConfigVO.getDb2pg_trg_sys_id());
 			System.out.println(dataConfigVO.getExrt_dat_cnt());
 			System.out.println(dataConfigVO.getDb2pg_exrt_trg_tb_wrk_id());
@@ -572,7 +588,7 @@ public class Db2pgSettingController {
 			
 			//repo 등록 -> 2. config 파일 만들기
 			//소스시스템이 PG이면 SRC_STATEMENT_FETCH_SIZE(기존) -> SRC_COPY_SEGMENT_SIZE 옵션 사용
-			Db2pgSysInfVO sourceDBMS = (Db2pgSysInfVO) db2pgSettingService.selectSoruceDBMS(dataConfigVO.getDb2pg_source_system_id());
+			Db2pgSysInfVO sourceDBMS = (Db2pgSysInfVO) db2pgSettingService.selectSoruceDBMS(dataConfigVO.getDb2pg_src_sys_id());
 			JSONObject configObj = new JSONObject();
 			configObj.put("src_host", sourceDBMS.getIpadr());
 			configObj.put("src_user", sourceDBMS.getSpr_usr_id());
@@ -819,5 +835,12 @@ public class Db2pgSettingController {
 		e.printStackTrace();
 	}
 		return result;
+	}
+	
+	public String nowTime(){
+		Calendar calendar = Calendar.getInstance();				
+        java.util.Date date = calendar.getTime();
+        String today = (new SimpleDateFormat("yyyyMMddHHmmss").format(date));
+		return today;
 	}
 }
