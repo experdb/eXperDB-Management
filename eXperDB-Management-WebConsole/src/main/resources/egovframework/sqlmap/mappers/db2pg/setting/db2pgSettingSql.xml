@@ -71,6 +71,8 @@
 			, TO_CHAR(trsf_wrk_inf.frst_reg_dtm,'YYYY-MM-DD HH24:MI') as frst_reg_dtm
 			, trsf_wrk_inf.lst_mdfr_id
 			, TO_CHAR(trsf_wrk_inf.lst_mdf_dtm,'YYYY-MM-DD HH24:MI') as lst_mdf_dtm 
+			, trsf_wrk_inf.trans_save_pth
+			, trsf_wrk_inf.src_cnd_qry
 		FROM t_db2pg_trsf_wrk_inf trsf_wrk_inf 
 		LEFT OUTER JOIN t_db2pg_sys_inf source_sys_inf ON trsf_wrk_inf.db2pg_src_sys_id = source_sys_inf.db2pg_sys_id
 		LEFT OUTER JOIN t_db2pg_sys_inf target_sys_inf ON trsf_wrk_inf.db2pg_trg_sys_id = target_sys_inf.db2pg_sys_id

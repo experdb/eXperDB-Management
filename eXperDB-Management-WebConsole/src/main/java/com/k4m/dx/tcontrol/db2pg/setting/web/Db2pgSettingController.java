@@ -815,6 +815,26 @@ public class Db2pgSettingController {
 		return result;
 	}
 	
+	
+	/**
+	 * DB2PG 즉시실행
+	 * 
+	 * @return result
+	 * @throws Exception
+	 */
+	@RequestMapping(value="/db2pg/immediateStart.do")
+	public @ResponseBody JSONObject db2pgImmediateStart(@ModelAttribute("historyVO") HistoryVO historyVO, HttpServletRequest request) {
+		JSONObject result = new JSONObject();
+		try {
+		JSONObject serverObj = new JSONObject();
+
+	}catch (Exception e) {
+		e.printStackTrace();
+	}
+		return result;
+	}
+	
+	
 	/**
 	 * 현재시간 조회
 	 * 

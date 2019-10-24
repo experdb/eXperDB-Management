@@ -183,7 +183,10 @@ function fn_init(){
 		{data : "frst_reg_dtm", className : "dt-center", defaultContent : ""},
 		{data : "lst_mdfr_id", className : "dt-center", defaultContent : ""},
 		{data : "lst_mdf_dtm", className : "dt-center", defaultContent : ""},
-		{data : "db2pg_trsf_wrk_id", defaultContent : "", visible: false}
+		{data : "db2pg_trsf_wrk_id", defaultContent : "", visible: false},
+		{data : "wrk_id", defaultContent : "", visible: false},
+		{data : "trans_save_pth", defaultContent : "", visible: false},
+		{data : "src_cnd_qry", defaultContent : "", visible: false}
 	],'select': {'style': 'multi'}
 	});
 	
@@ -463,6 +466,57 @@ function fn_copy(){
 	toggleLayer($('#pop_layer_copy'), 'on');
 }
 
+/* ********************************************************
+ * 즉시실행
+ ******************************************************** */
+function fn_ImmediateStart(gbn){
+	var db2pgGbn = gbn;
+	if(gbn == 'ddl'){
+		var rowCnt = tableDDL.rows('.selected').data().length;
+		if (rowCnt == 1) {
+
+		} else {
+			alert("<spring:message code='message.msg04' />");
+			return false;
+		}
+	}else{
+		var rowCnt = tableData.rows('.selected').data().length;
+		if (rowCnt == 1) {					
+			$.ajax({
+				url : "/db2pg/immediateStart.do",
+			  	data : {
+			  		wrk_nm : tableData.row('.selected').data().db2pg_trsf_wrk_nm
+			  	},
+				type : "post",
+				beforeSend: function(xhr) {
+			        xhr.setRequestHeader("AJAX", true);
+			     },
+				error : function(xhr, status, error) {
+					if(xhr.status == 401) {
+						alert('<spring:message code="message.msg02" />');
+						top.location.href = "/";
+					} else if(xhr.status == 403) {
+						alert('<spring:message code="message.msg03" />');
+						top.location.href = "/";
+					} else {
+						alert("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""));
+					}
+				},
+				success : function(result) {
+
+				}
+			});	
+			var trans_save_pth = tableData.row('.selected').data().trans_save_pth;
+			alert(trans_save_pth);
+		
+		} else {
+			alert("<spring:message code='message.msg04' />");
+			return false;
+		}	
+	}
+}
+
+
 </script>
 <%@include file="../popup/db2pgConfigInfo.jsp"%>
 <!-- contents -->
@@ -495,15 +549,18 @@ function fn_copy(){
 				</ul>
 			</div>
 			<div class="cmm_grp">
-				<div class="btn_type_float">
-					<span class="btn btnC_01 btn_fl"><button type="button" id="btnExcel" onclick="fn_copy()">복제</button></span> 														
+				<div class="btn_type_float">													
 					<div class="btn_type_01" id="btnDDL">
+						<span class="btn btnC_01 btn_fl"><button type="button" onclick="fn_ImmediateStart('ddl')">즉시실행</button></span> 	
+						<span class="btn btnC_01 btn_fl"><button type="button" onclick="fn_copy()">복제</button></span> 	
 						<a class="btn" onClick="getddlDataList();"><button type="button"><spring:message code="common.search" /></button></a>
 						<span class="btn" onclick="fn_ddl_reg_popup()"><button type="button"><spring:message code="common.registory" /></button></span>
 						<span class="btn" onClick="fn_ddl_regre_popup()"><button type="button"><spring:message code="common.modify" /></button></span>
 						<span class="btn" onClick="fn_ddl_work_delete()"><button type="button"><spring:message code="common.delete" /></button></span>
 					</div>
 					<div class="btn_type_01" id="btnData" style="display:none;">
+						<span class="btn btnC_01 btn_fl"><button type="button" onclick="fn_ImmediateStart('trans')">즉시실행</button></span> 	
+						<span class="btn btnC_01 btn_fl"><button type="button" onclick="fn_copy()">복제</button></span> 	
 						<span class="btn" onclick="getdataDataList()"><button type="button"><spring:message code="common.search" /></button></span>
 						<span class="btn" onclick="fn_data_reg_popup()"><button type="button"><spring:message code="common.registory" /></button></span>
 						<span class="btn" onclick="fn_data_regre_popup()"><button type="button"><spring:message code="common.modify" /></button></span>
