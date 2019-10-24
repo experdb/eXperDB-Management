@@ -274,7 +274,6 @@ function getddlDataList(){
 			}
 		}
 	});
-	
 }
 
 /* ********************************************************
@@ -402,23 +401,19 @@ function fn_ddl_work_delete(){
 		alert("<spring:message code='message.msg16' />");
 		return false;
 	}else{
-		
 		var wrkList = [];
 		for (var i = 0; i < datas.length; i++) {
 			wrkList += datas[i].wrk_id + ',';	
 		}
-
 		var wrkIdList = [];
 		for (var i = 0; i < datas.length; i++) {
 			wrkIdList += datas[i].db2pg_ddl_wrk_id + ',';	
 		}
-		
 		var wrkNmList = [];
 		for (var i = 0; i < datas.length; i++) {
 			wrkNmList += datas[i].db2pg_ddl_wrk_nm + ',';	
 		}
-		
-		 if(confirm('<spring:message code="message.msg162"/>')){
+		if(confirm('<spring:message code="message.msg162"/>')){
 			$.ajax({
 				url : "/db2pg/deleteDDLWork.do",
 			  	data : {
@@ -629,20 +624,18 @@ function fn_copy(){
 							</thead>
 					</table>
 				</div>		
-						
 			</div>
 		</div>
 	</div>
 </div><!-- // contents -->
 
 
-
 <div id="pop_layer_copy" class="pop-layer">
-		<div class="pop-container" style="padding: 0px;">
-			<div class="pop_cts" style="width: 50%; height: 350px; overflow: auto; padding: 40px; margin: 0 auto; min-height:0; min-width:0;">
-				<p class="tit" style="margin-bottom: 15px;">복제 등록
-					<a href="#n" class="btn" onclick="toggleLayer($('#pop_layer_copy'), 'off');" style="float: right;"><img src="/images/ico_state_01.png" style="margin-left: 235px;"/></a>
-				</p>
+	<div class="pop-container" style="padding: 0px;">
+		<div class="pop_cts" style="width: 50%; height: 350px; overflow: auto; padding: 40px; margin: 0 auto; min-height:0; min-width:0;">
+			<p class="tit" style="margin-bottom: 15px;">복제 등록
+				<a href="#n" class="btn" onclick="toggleLayer($('#pop_layer_copy'), 'off');" style="float: right;"><img src="/images/ico_state_01.png" style="margin-left: 235px;"/></a>
+			</p>
 			<table class="write">
 				<colgroup>
 					<col style="width:105px;" />
@@ -665,10 +658,10 @@ function fn_copy(){
 					</tr>
 				</tbody>
 			</table>
-				<div class="btn_type_02">
+			<div class="btn_type_02">
 				<a href="#n" class="btn" onclick="toggleLayer($('#pop_layer_copy'), 'off');"><span>저장</span></a>
-					<a href="#n" class="btn" onclick="toggleLayer($('#pop_layer_copy'), 'off');"><span><spring:message code="common.close"/></span></a>
-				</div>		
-			</div>
-		</div><!-- //pop-container -->
-	</div>
+				<a href="#n" class="btn" onclick="toggleLayer($('#pop_layer_copy'), 'off');"><span><spring:message code="common.close"/></span></a>
+			</div>		
+		</div>
+	</div><!-- //pop-container -->
+</div>
