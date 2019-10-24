@@ -136,6 +136,25 @@ function fn_tableList(gbn){
 	frmPop.submit();   
 }
 
+/* ********************************************************
+ * select box control
+ ******************************************************** */
+ $(function() {
+	 $("#src_tables").change(function(){
+		 $("#src_include_tables").val("");
+		 $("#src_exclude_tables").val("");
+		 $("#src_include_table_nm").val("");
+		 $("#src_exclude_table_nm").val("");
+		    if(this.value=="include"){
+		        $("#include").show();
+			    $("#exclude").hide(); 
+		    }else{
+		        $("#exclude").show();
+			    $("#include").hide(); 
+		    }
+		});
+ });
+
 
 function fn_tableAddCallback(rowList, tableGbn){
 	if(tableGbn == 'include'){
@@ -230,15 +249,21 @@ function fn_tableAddCallback(rowList, tableGbn){
 							</colgroup>
 							<tbody>
 								<tr>
-									<th scope="row" class="ico_t2">추출 대상 테이블</th>
-									<td colspan="3"><input type="text" class="txt" name="src_include_tables" id="src_include_tables" readonly="readonly"/>
-										<span class="btn btnC_01"><button type="button" class= "btn_type_02" onclick="fn_tableList('include')" style="width: 60px; margin-right: -60px; margin-top: 0;">등록</button></span>							
-									</td>
-								</tr>
-								<tr>
-									<th scope="row" class="ico_t2">추출 제외 테이블</th>
-									<td colspan="3"><input type="text" class="txt" name="src_exclude_tables" id="src_exclude_tables" readonly="readonly"/>
-										<span class="btn btnC_01"><button type="button" class= "btn_type_02" onclick="fn_tableList('exclude')" style="width: 60px; margin-right: -60px; margin-top: 0;">등록</button></span>							
+									<th scope="row" class="ico_t2">
+										<select name="src_tables" id="src_tables" class="select t5" style="width: 176px;" >
+											<option value="include">추출 대상 테이블</option>
+											<option value="exclude">추출 제외 테이블</option>
+										</select>
+									</th>
+									<td colspan="2">
+										<div id="include">
+											<input type="text" class="txt" name="src_include_tables" id="src_include_tables" readonly="readonly" />
+											<span class="btn btnC_01"><button type="button" class= "btn_type_02" onclick="fn_tableList('include')" style="width: 60px; margin-right: -60px; margin-top: 0;">등록</button></span>		
+										</div>
+										<div id="exclude" style="display: none;">
+											<input type="text" class="txt" name="src_exclude_tables" id="src_exclude_tables" readonly="readonly" />
+											<span class="btn btnC_01"><button type="button" class= "btn_type_02" onclick="fn_tableList('exclude')" style="width: 60px; margin-right: -60px; margin-top: 0;">등록</button></span>												
+										</div>
 									</td>
 								</tr>
 								<tr>
@@ -266,7 +291,7 @@ function fn_tableAddCallback(rowList, tableGbn){
 								<p class="op_tit" style="width: 200PX;">추출 조건(WHERE문 제외)</p>
 								<span>
 									<div class="textarea_grp">
-										<textarea name="src_where_condition" id="src_where_condition" style="height: 250px; width: 700px;"></textarea>
+										<textarea name="src_cnd_qry" id="src_cnd_qry" style="height: 250px; width: 700px;"></textarea>
 									</div>
 								</span>
 							</li>
@@ -277,9 +302,9 @@ function fn_tableAddCallback(rowList, tableGbn){
 							<li style="border-bottom: none;">
 								<p class="op_tit" style="width: 70px;">사용여부</p>
 								<div class="inp_rdo">
-									<input name="rdo_r" id="rdo_r_1" type="radio" value="true" onchange="fn_checkBox('true')">
+									<input name="usr_qry_use_tf" id="rdo_r_1" type="radio" value="true" onchange="fn_checkBox('true')">
 										<label for="rdo_r_1">사용</label> 
-									<input name="rdo_r" id="rdo_r_2" type="radio" value="false" checked="checked" onchange="fn_checkBox('false')"> 
+									<input name="usr_qry_use_tf" id="rdo_r_2" type="radio" value="false" checked="checked" onchange="fn_checkBox('false')"> 
 										<label for="rdo_r_2">미사용</label>
 								</div>
 							</li>

@@ -166,46 +166,6 @@
 		)
 	</insert>
 	
-	<select id="selectWorkSeq" resultType="int">
-		/**
-	 	*  Query ID : selectWorkSeq
-	 	*  Description : WORK SEQ 조회
-	 	*  Author : 변승우
-	 	**/		
-	 	SELECT setval('q_wrkcng_i_01',nextval('q_wrkcng_i_01'))
-	</select>
-	
-	
-	<insert id="insertDb2pgWork" parameterType="ddlConfigVO">
-		/**
-	 	* Query ID : "insertDb2pgWork"
-	 	* Description : Work등록
-	 	* Author : 변승우
-	 	**/
-	 	INSERT INTO T_WRKCNG_I
-	 		(
-	 		WRK_ID
-	 		, BSN_DSCD
-	 		, WRK_NM
-	 		, WRK_EXP
-	 		, FRST_REGR_ID
-	 		, FRST_REG_DTM
-	 		, LST_MDFR_ID
-	 		, LST_MDF_DTM
-	 		)
-	 		VALUES
-	 		(
-	 		#{wrk_id}
-	 		, 'TC001903'
-	 		, #{db2pg_ddl_wrk_nm}
-			, #{db2pg_ddl_wrk_exp}
-			, #{frst_regr_id}
-			, now()
-			, #{frst_regr_id}
-			, now()
-	 		)
-	</insert>
-	
 	<insert id="insertDDLWork" parameterType="ddlConfigVO">
 		/**
 		* Query ID : insertDDLWork
@@ -253,16 +213,15 @@
 		)
 	</insert>
 	
-	
 	 <update id="updateWork" parameterType="ddlConfigVO">
     	/**
 	 	* Query ID : updateWork
 	 	* Description : 워크 업데이트
 	 	* Author : 변승우
 	 	**/
-	 		UPDATE T_WRKCNG_I SET
-	 			wrk_exp = #{db2pg_ddl_wrk_exp}
-	 		WHERE WRK_ID = #{wrk_id}			 		
+	 	UPDATE T_WRKCNG_I SET
+	 	wrk_exp = #{db2pg_ddl_wrk_exp}
+	 	WHERE WRK_ID = #{wrk_id}			 		
     </update>
 	
 	<update id="updateDDLWork" parameterType="ddlConfigVO">
@@ -327,9 +286,8 @@
 		INSERT INTO t_db2pg_trsf_wrk_inf
 		(
 		  db2pg_trsf_wrk_id
-		, db2pg_trsf_wrk_nm
-		, db2pg_trsf_wrk_exp
-		, db2pg_source_system_id
+		, wrk_id
+		, db2pg_src_sys_id
 		, db2pg_trg_sys_id
 		, exrt_dat_cnt
 		<if test="db2pg_exrt_trg_tb_wrk_id != 0">
@@ -353,13 +311,14 @@
 		, frst_reg_dtm
 		, lst_mdfr_id
 		, lst_mdf_dtm
+		, trans_save_pth
+		, src_cnd_qry
 		)
 		VALUES
 		(
 		  nextval('q_db2pg_trsf_wrk_inf_01')
-		, #{db2pg_trsf_wrk_nm}
-		, #{db2pg_trsf_wrk_exp}
-		, #{db2pg_source_system_id}
+		, #{wrk_id}
+		, #{db2pg_src_sys_id}
 		, #{db2pg_trg_sys_id}
 		, #{exrt_dat_cnt}
 		<if test="db2pg_exrt_trg_tb_wrk_id != 0">
@@ -383,6 +342,8 @@
 		, clock_timestamp()
 		, #{lst_mdfr_id}
 		, clock_timestamp()
+		, #{trans_save_pth}
+		, #{src_cnd_qry}
 		)		
 	</insert>
 	
@@ -411,10 +372,10 @@
 		AND  wrk_inf.wrk_id = wrkcng.wrk_id		
 	</select>
 	
-	<select id="selectSoruceDBMS" resultType="db2pgSysInfVO" parameterType="int">
+	<select id="selectDBMS" resultType="db2pgSysInfVO" parameterType="int">
 		/**
-		* Query ID : selectSoruceDBMS
-		* Description : 소스DBMS 접속정보
+		* Query ID : selectDBMS
+		* Description : DBMS 접속정보
 		* Author : 김주영
 		**/
 		SELECT 
@@ -438,5 +399,74 @@
 			, (SELECT sys_cd_nm FROM t_sysdtl_c WHERE sys_cd=sys_inf.crts_nm) as crts_nm
 		FROM t_db2pg_sys_inf sys_inf
 		WHERE db2pg_sys_id=#{db2pg_sys_id}
+	</select>
+		
+	<insert id="insertDb2pgWork" parameterType="ddlConfigVO">
+		/**
+	 	* Query ID : "insertDb2pgWork"
+	 	* Description : Work등록
+	 	* Author : 변승우
+	 	**/
+	 	INSERT INTO T_WRKCNG_I
+	 		(
+	 		WRK_ID
+	 		, BSN_DSCD
+	 		, WRK_NM
+	 		, WRK_EXP
+	 		, FRST_REGR_ID
+	 		, FRST_REG_DTM
+	 		, LST_MDFR_ID
+	 		, LST_MDF_DTM
+	 		)
+	 		VALUES
+	 		(
+	 		#{wrk_id}
+	 		, 'TC001903'
+	 		, #{db2pg_ddl_wrk_nm}
+			, #{db2pg_ddl_wrk_exp}
+			, #{frst_regr_id}
+			, now()
+			, #{frst_regr_id}
+			, now()
+	 		)
+	</insert>
+	
+	<insert id="insertDb2pgWorkData" parameterType="dataConfigVO">
+		/**
+	 	* Query ID : "insertDb2pgWorkData"
+	 	* Description : Work(Data)등록
+	 	* Author : 김주영
+	 	**/
+	 	INSERT INTO T_WRKCNG_I
+	 		(
+	 		WRK_ID
+	 		, BSN_DSCD
+	 		, WRK_NM
+	 		, WRK_EXP
+	 		, FRST_REGR_ID
+	 		, FRST_REG_DTM
+	 		, LST_MDFR_ID
+	 		, LST_MDF_DTM
+	 		)
+	 		VALUES
+	 		(
+	 		#{wrk_id}
+	 		, 'TC001903'
+	 		, #{db2pg_trsf_wrk_nm}
+			, #{db2pg_trsf_wrk_exp}
+			, #{frst_regr_id}
+			, now()
+			, #{frst_regr_id}
+			, now()
+	 		)
+	</insert>
+	
+	<select id="selectWorkSeq" resultType="int">
+		/**
+	 	*  Query ID : selectWorkSeq
+	 	*  Description : WORK SEQ 조회
+	 	*  Author : 변승우
+	 	**/		
+	 	SELECT setval('q_wrkcng_i_01',nextval('q_wrkcng_i_01'))
 	</select>
 </mapper>

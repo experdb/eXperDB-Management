@@ -138,7 +138,7 @@ function fn_insert_work(){
 						  	data : {  
 						  		db2pg_trsf_wrk_nm : $("#db2pg_trsf_wrk_nm").val().trim(),
 						  		db2pg_trsf_wrk_exp : $("#db2pg_trsf_wrk_exp").val(),
-						  		db2pg_source_system_id : $("#db2pg_sys_id").val(),
+						  		db2pg_src_sys_id : $("#db2pg_sys_id").val(),
 						  		db2pg_trg_sys_id : $("#db2pg_trg_sys_id").val(),
 						  		exrt_dat_cnt : $("#exrt_dat_cnt").val(),
 						  		src_include_tables : $("#src_include_table_nm").val(),
@@ -150,7 +150,7 @@ function fn_insert_work(){
 						  		tb_rbl_tf : $("#tb_rbl_tf").val(),
 						  		ins_opt_cd : $("#ins_opt_cd").val(),
 						  		cnst_cnd_exrt_tf : $("#cnst_cnd_exrt_tf").val(),
-						  		src_where_condition : $("#src_where_condition").val(),
+						  		src_cnd_qry : $("#src_cnd_qry").val(),
 						  		usr_qry_use_tf : $('input[name="usr_qry_use_tf"]:checked').val(),
 						  		db2pg_usr_qry : $("#db2pg_usr_qry").val()
 						  	},
@@ -170,13 +170,13 @@ function fn_insert_work(){
 								}
 							},
 							success : function(result) {
-								if(result==true){
+								if(result.resultCode == "0000000000"){
 									alert('<spring:message code="message.msg07" /> ');
 									opener.location.reload();
 									self.close();
 								}else{
 									alert('등록에 실패했습니다.');
-								}	
+								}		
 							}
 						});
 				} else {
@@ -426,7 +426,7 @@ function fn_tableAddCallback(rowList, tableGbn){
 								<p class="op_tit" style="width: 200PX;">추출 조건(WHERE문 제외)</p>
 								<span>
 									<div class="textarea_grp">
-										<textarea name="src_where_condition" id="src_where_condition" style="height: 250px; width: 700px;"></textarea>
+										<textarea name="src_cnd_qry" id="src_cnd_qry" style="height: 250px; width: 700px;"></textarea>
 									</div>
 								</span>
 							</li>

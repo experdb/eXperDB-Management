@@ -123,12 +123,12 @@ public interface Db2pgSettingService {
 	DDLConfigVO selectDetailDDLWork(int db2pg_ddl_wrk_id) throws Exception;
 
 	/**
-	 * 소스DBMS 접속정보
+	 * DBMS 접속정보
 	 * 
 	 * @param ddlConfigVO
 	 * @throws Exception
 	 */
-	Db2pgSysInfVO selectSoruceDBMS(int db2pg_sys_id) throws Exception;
+	Db2pgSysInfVO selectDBMS(int db2pg_sys_id) throws Exception;
 	
 	/**
 	 * DB2PG WORK 등록
@@ -137,6 +137,14 @@ public interface Db2pgSettingService {
 	 * @throws Exception
 	 */
 	void insertDb2pgWork(DDLConfigVO ddlConfigVO) throws Exception;
+	
+	/**
+	 * DB2PG Data WORK 등록
+	 * 
+	 * @param dataConfigVO
+	 * @throws Exception
+	 */
+	void insertDb2pgWorkData(DataConfigVO dataConfigVO) throws Exception;
 
 	/**
 	 * WORK ID SEQ 조회
@@ -145,6 +153,10 @@ public interface Db2pgSettingService {
 	 * @throws Exception
 	 */
 	int selectWorkSeq() throws Exception;
+
+
+
+
 
 
 }

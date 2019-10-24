@@ -173,15 +173,15 @@ public class Db2pgSettingDAO extends EgovAbstractMapper {
 	}
 
 	/**
-	 * 소스DBMS 접속정보
+	 * DBMS 접속정보
 	 * 
 	 * @param ddlConfigVO
 	 * @throws Exception
 	 */
-	public Db2pgSysInfVO selectSoruceDBMS(int db2pg_sys_id) throws SQLException{
-		return (Db2pgSysInfVO) selectOne("db2pgSettingSql.selectSoruceDBMS", db2pg_sys_id);
+	public Db2pgSysInfVO selectDBMS(int db2pg_sys_id) throws SQLException{
+		return (Db2pgSysInfVO) selectOne("db2pgSettingSql.selectDBMS", db2pg_sys_id);
 	}
-
+	
 	/**
 	 * DB2PG WORK 등록
 	 * 
@@ -192,7 +192,23 @@ public class Db2pgSettingDAO extends EgovAbstractMapper {
 		insert("db2pgSettingSql.insertDb2pgWork", ddlConfigVO);
 		
 	}
-
+	
+	/**
+	 * DB2PG Data WORK 등록
+	 * 
+	 * @param dataConfigVO
+	 * @throws Exception
+	 */
+	public void insertDb2pgWorkData(DataConfigVO dataConfigVO) {
+		insert("db2pgSettingSql.insertDb2pgWorkData", dataConfigVO);
+	}
+	
+	/**
+	 * WORK ID SEQ 조회
+	 * 
+	 * @return int
+	 * @throws Exception
+	 */
 	public int selectWorkSeq() throws SQLException{
 		return (int) getSqlSession().selectOne("db2pgSettingSql.selectWorkSeq");
 	}

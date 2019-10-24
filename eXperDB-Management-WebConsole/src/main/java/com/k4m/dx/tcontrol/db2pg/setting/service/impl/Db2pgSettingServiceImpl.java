@@ -94,15 +94,19 @@ public class Db2pgSettingServiceImpl extends EgovAbstractServiceImpl implements 
 	}
 
 	@Override
-	public Db2pgSysInfVO selectSoruceDBMS(int db2pg_sys_id) throws Exception {
-		return db2pgSettingDAO.selectSoruceDBMS(db2pg_sys_id);
+	public Db2pgSysInfVO selectDBMS(int db2pg_sys_id) throws Exception {
+		return db2pgSettingDAO.selectDBMS(db2pg_sys_id);
 	}
-
+	
 	@Override
 	public void insertDb2pgWork(DDLConfigVO ddlConfigVO) throws Exception {
 		db2pgSettingDAO.insertDb2pgWork(ddlConfigVO);
 	}
 
+	@Override
+	public void insertDb2pgWorkData(DataConfigVO dataConfigVO) throws Exception {
+		db2pgSettingDAO.insertDb2pgWorkData(dataConfigVO);
+	}
 	@Override
 	public int selectWorkSeq() throws Exception {
 		return db2pgSettingDAO.selectWorkSeq();

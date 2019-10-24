@@ -24,6 +24,8 @@ public class DataConfigVO {
 	private String frst_reg_dtm;
 	private String lst_mdfr_id;
 	private String lst_mdf_dtm;
+	private String trans_save_pth;
+	private String src_cnd_qry;
 
 	private String source_dbms_dscd;
 	private String source_ipadr;
@@ -290,5 +292,19 @@ public class DataConfigVO {
 	public void setWrk_id(int wrk_id) {
 		this.wrk_id = wrk_id;
 	}
+	public String getTrans_save_pth() {
+		return trans_save_pth;
+	}
 
+	public void setTrans_save_pth(String trans_save_pth) {
+		this.trans_save_pth = trans_save_pth;
+	}
+
+	public String getSrc_cnd_qry() {
+		return src_cnd_qry;
+	}
+
+	public void setSrc_cnd_qry(String src_cnd_qry) {
+		this.src_cnd_qry = src_cnd_qry;
+	}
 }

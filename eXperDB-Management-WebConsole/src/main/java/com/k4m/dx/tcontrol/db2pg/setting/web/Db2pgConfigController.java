@@ -46,7 +46,7 @@ public class Db2pgConfigController {
 				}
 				fileContent = fileContent.replaceAll("SRC_CLASSIFY_STRING=original", "SRC_CLASSIFY_STRING="+configObj.get("src_classify_string").toString());	
 				fileContent = fileContent.replaceAll("SRC_TABLE_DDL=TRUE", "SRC_TABLE_DDL="+configObj.get("src_table_ddl").toString());		
-				fileContent = fileContent.replaceAll("SRC_FILE_OUTPUT_PATH=./", "SRC_FILE_OUTPUT_PATH="+configObj.get("src_file_output_path").toString()+"/config/"+configObj.get("src_file_output_path").toString());
+				fileContent = fileContent.replaceAll("SRC_FILE_OUTPUT_PATH=./", "SRC_FILE_OUTPUT_PATH="+configObj.get("src_file_output_path").toString());
 				bw.write(fileContent + "\r\n");
 				bw.flush();
 			}
@@ -102,7 +102,7 @@ public class Db2pgConfigController {
 				if(configObj.get("src_dbms_type").toString().equals("POG")){
 					fileContent = fileContent.replaceAll("SRC_COPY_SEGMENT_SIZE=3000", "SRC_COPY_SEGMENT_SIZE="+configObj.get("src_copy_segment_size").toString());
 				}else{
-					fileContent = fileContent.replaceAll("SRC_STATEMENT_FETCH_SIZE=3000", "SRC_STATEMENT_FETCH_SIZE="+configObj.get("src_statement_fetch_size").toString());
+					fileContent = fileContent.replaceAll("SRC_STATEMENT_FETCH_SIZE=3000", "SRC_STATEMENT_FETCH_SIZE="+configObj.get("src_copy_segment_size").toString());
 				}
 				fileContent = fileContent.replaceAll("SRC_BUFFER_SIZE=10", "SRC_BUFFER_SIZE="+configObj.get("src_buffer_size").toString());
 				fileContent = fileContent.replaceAll("SRC_LOB_BUFFER_SIZE=1024", "SRC_LOB_BUFFER_SIZE="+configObj.get("src_lob_buffer_size").toString());
@@ -117,14 +117,14 @@ public class Db2pgConfigController {
 				fileContent = fileContent.replaceAll("TAR_DB_CHARSET=UTF8", "TAR_DB_CHARSET="+configObj.get("tar_db_charset").toString());
 				
 				fileContent = fileContent.replaceAll("TAR_TRUNCATE=FALSE", "TAR_TRUNCATE="+configObj.get("tar_truncate").toString());
-				fileContent = fileContent.replaceAll("TAR_FILE_APPEND=FALSE", "TAR_FILE_APPEND="+configObj.get("tar_file_append").toString());
 				fileContent = fileContent.replaceAll("TAR_CONSTRAINT_REBUILD=TRUE", "TAR_CONSTRAINT_REBUILD="+configObj.get("tar_constraint_rebuild").toString());
+				fileContent = fileContent.replaceAll("TAR_CONSTRAINT_DDL=FALSE", "TAR_CONSTRAINT_DDL="+configObj.get("tar_constraint_ddl").toString());
 				
 				if(!configObj.get("src_where_condition").toString().equals("")){
 					fileContent = fileContent.replaceAll("#SRC_WHERE_CONDITION=", "SRC_WHERE_CONDITION="+configObj.get("src_where_condition").toString());
 				}
 				
-				fileContent = fileContent.replaceAll("SRC_FILE_OUTPUT_PATH=./", "SRC_FILE_OUTPUT_PATH="+configObj.get("path").toString()+"/config/"+configObj.get("src_file_output_path").toString());
+				fileContent = fileContent.replaceAll("SRC_FILE_OUTPUT_PATH=./", "SRC_FILE_OUTPUT_PATH="+configObj.get("src_file_output_path").toString());
 				
 				bw.write(fileContent + "\r\n");
 				bw.flush();
@@ -148,10 +148,9 @@ public class Db2pgConfigController {
 	 * @return JSONObject
 	 * @throws Exception
 	 */
-	public static JSONObject deleteDDLConfig(String db2pg_ddl_wrk_nm) {
-		//String path 인자값 추가
+	public static JSONObject deleteDDLConfig(String db2pg_ddl_wrk_nm,String db2pg_path) {
 		JSONObject result = new JSONObject();
-		String filePath = "path"+"/config/"+db2pg_ddl_wrk_nm+".config";
+		String filePath = db2pg_path+"/config/"+db2pg_ddl_wrk_nm+".config";
 		try{
 			File file = new File(filePath);
 			if(file.exists()){
