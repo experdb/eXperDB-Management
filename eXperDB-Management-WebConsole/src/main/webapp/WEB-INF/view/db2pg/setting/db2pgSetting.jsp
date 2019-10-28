@@ -453,10 +453,60 @@ function fn_ddl_work_delete(){
 }
 
 /* ********************************************************
- * DDL추출 Data Delete
+ * Data 추출 Data Delete
  ******************************************************** */
  function fn_data_work_delete(){
-	
+	 var datas = tableData.rows('.selected').data();
+		if(datas.length < 1){
+			alert("<spring:message code='message.msg16' />");
+			return false;
+		}else{
+			var wrkList = [];
+			for (var i = 0; i < datas.length; i++) {
+				wrkList += datas[i].wrk_id + ',';	
+			}
+			var wrkIdList = [];
+			for (var i = 0; i < datas.length; i++) {
+				wrkIdList += datas[i].db2pg_trsf_wrk_id + ',';	
+			}
+			var wrkNmList = [];
+			for (var i = 0; i < datas.length; i++) {
+				wrkNmList += datas[i].db2pg_trsf_wrk_nm + ',';	
+			}
+			if(confirm('<spring:message code="message.msg162"/>')){
+				$.ajax({
+					url : "/db2pg/deleteDataWork.do",
+				  	data : {
+				  		wrk_id : wrkList,
+				  		db2pg_trsf_wrk_id : wrkIdList,
+				  		db2pg_trsf_wrk_nm : wrkNmList
+				  	},
+					type : "post",
+					beforeSend: function(xhr) {
+				        xhr.setRequestHeader("AJAX", true);
+				     },
+					error : function(xhr, status, error) {
+						if(xhr.status == 401) {
+							alert('<spring:message code="message.msg02" />');
+							top.location.href = "/";
+						} else if(xhr.status == 403) {
+							alert('<spring:message code="message.msg03" />');
+							top.location.href = "/";
+						} else {
+							alert("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""));
+						}
+					},
+					success : function(result) {
+						if(result.resultCode == "0000000000"){
+							alert("<spring:message code='message.msg37' />");
+							getdataDataList();	
+						}else{
+							alert('삭제에 실패했습니다.');
+						}	
+					}
+				});	
+			 };	
+		}
 }
 
 /* ********************************************************

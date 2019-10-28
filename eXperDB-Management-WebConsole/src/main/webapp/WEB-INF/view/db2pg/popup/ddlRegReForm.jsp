@@ -30,7 +30,6 @@
 <script type="text/javascript" src="/js/jquery-1.9.1.min.js"></script>
 <script type="text/javascript" src="/js/common.js"></script>
 <script type="text/javascript">
-var db2pg_ddl_wrk_nmChk ="fail";
 var output_path ="fail";
 $(window.document).ready(function() {
 	 if("${exrt_trg_tb_cnt}">0){

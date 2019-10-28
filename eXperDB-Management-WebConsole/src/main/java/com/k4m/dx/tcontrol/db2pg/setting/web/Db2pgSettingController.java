@@ -438,7 +438,7 @@ public class Db2pgSettingController {
 			String db2pg_path = props.get("db2pg_path").toString();	
 			String[] db2pg_ddl_wrk_nm = request.getParameter("db2pg_ddl_wrk_nm").toString().split(",");
 			for (i = 0; i < db2pg_ddl_wrk_nm.length; i++) {
-				result = Db2pgConfigController.deleteDDLConfig(db2pg_ddl_wrk_nm[i],db2pg_path);
+				result = Db2pgConfigController.deleteConfig(db2pg_ddl_wrk_nm[i],db2pg_path);
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -617,6 +617,32 @@ public class Db2pgSettingController {
 //			historyVO.setExe_dtl_cd("DX-T0022");
 //			accessHistoryService.insertHistory(historyVO);
 			
+			int db2pg_trsf_wrk_id = Integer.parseInt(request.getParameter("db2pg_trsf_wrk_id"));
+			DataConfigVO result = (DataConfigVO) db2pgSettingService.selectDetailDataWork(db2pg_trsf_wrk_id);
+			mv.addObject("db2pg_trsf_wrk_id", result.getDb2pg_trsf_wrk_id());
+			mv.addObject("db2pg_trsf_wrk_nm",result.getDb2pg_trsf_wrk_nm());
+			mv.addObject("db2pg_trsf_wrk_exp", result.getDb2pg_trsf_wrk_exp());
+			mv.addObject("db2pg_source_system_nm",result.getSource_dbms_nm());
+			mv.addObject("db2pg_trg_sys_nm",result.getTarget_dbms_nm());
+			mv.addObject("db2pg_sys_id", result.getDb2pg_src_sys_id());
+			mv.addObject("exrt_trg_tb_cnt",result.getExrt_trg_tb_cnt());
+			mv.addObject("exrt_exct_tb_cnt",result.getExrt_exct_tb_cnt());
+			mv.addObject("exrt_trg_tb_nm",result.getExrt_trg_tb_nm());
+			mv.addObject("exrt_exct_tb_nm",result.getExrt_exct_tb_nm());
+
+			mv.addObject("exrt_dat_cnt",result.getExrt_dat_cnt());
+			mv.addObject("exrt_dat_ftch_sz",result.getExrt_dat_ftch_sz());
+			mv.addObject("dat_ftch_bff_sz",result.getDat_ftch_bff_sz());
+			mv.addObject("exrt_prl_prcs_ecnt",result.getExrt_prl_prcs_ecnt());
+			mv.addObject("lob_dat_bff_sz",result.getLob_dat_bff_sz());
+			mv.addObject("usr_qry_use_tf",result.getUsr_qry_use_tf());
+			mv.addObject("db2pg_usr_qry_id",result.getDb2pg_usr_qry_id());
+			mv.addObject("ins_opt_cd",result.getIns_opt_cd());
+			mv.addObject("tb_rbl_tf",result.getTb_rbl_tf());
+			mv.addObject("cnst_cnd_exrt_tf",result.getCnst_cnd_exrt_tf());
+			mv.addObject("trans_save_pth",result.getTrans_save_pth());
+			mv.addObject("src_cnd_qry",result.getSrc_cnd_qry());
+			
 			List<CodeVO> codeInputMode = db2pgSettingService.selectCode("TC0030");
 			mv.addObject("codeInputMode", codeInputMode);
 			List<CodeVO> codeTF = db2pgSettingService.selectCode("TC0029"); 
@@ -626,6 +652,20 @@ public class Db2pgSettingController {
 		}
 		mv.setViewName("db2pg/popup/dataRegReForm");
 		return mv;
+	}
+	
+	/**
+	 * Data 이행 WORK 수정한다.
+	 * 
+	 * @param ddlConfigVO
+	 * @param request
+	 * @return
+	 * @return
+	 * @throws Exception
+	 */
+	public JSONObject updateDataWork(@ModelAttribute("dataConfigVO") DataConfigVO dataConfigVO, HttpServletRequest request, HttpServletResponse response, @ModelAttribute("historyVO") HistoryVO historyVO) {
+		JSONObject result = new JSONObject();
+		return result;
 	}
 	
 	/**
@@ -639,6 +679,7 @@ public class Db2pgSettingController {
 	@RequestMapping(value = "/db2pg/deleteDataWork.do")
 	public @ResponseBody JSONObject deleteDataWork(@ModelAttribute("historyVO") HistoryVO historyVO, HttpServletResponse response, HttpServletRequest request) {
 		JSONObject result = new JSONObject();
+		int i=0;
 		try {
 			// 화면접근이력 이력 남기기
 //			CmmnUtils.saveHistory(request, historyVO);
@@ -646,14 +687,24 @@ public class Db2pgSettingController {
 //			historyVO.setMnu_id(12);
 //			accessHistoryService.insertHistory(historyVO);
 			
-			//RepoDB삭제 delete from t_db2pg_ddl_wrk_inf where db2pg_ddl_wrk_id=43 
-			//config 파일 삭제
-			String[] param = request.getParameter("db2pg_ddl_wrk_id").toString().split(",");
-			for (int i = 0; i < param.length; i++) {
-				System.out.println(param[i]);
-//				db2pgSettingService.deleteDDLWork(param[i]);
+			//DB 삭제
+			String[] db2pg_trsf_wrk_id = request.getParameter("db2pg_trsf_wrk_id").toString().split(",");
+			for (i = 0; i < db2pg_trsf_wrk_id.length; i++) {
+				db2pgSettingService.deleteDataWork(Integer.parseInt(db2pg_trsf_wrk_id[i]));
 			}
-			result.put("resultCode", "0000000000");
+			//work 삭제
+			String[] wrk_id = request.getParameter("wrk_id").toString().split(",");
+			for (i = 0; i < wrk_id.length; i++) {
+				backupService.deleteWork(Integer.parseInt(wrk_id[i]));
+			}
+			//config 파일 삭제
+			Properties props = new Properties();
+			props.load(new FileInputStream(ResourceUtils.getFile("classpath:egovframework/tcontrolProps/globals.properties")));			
+			String db2pg_path = props.get("db2pg_path").toString();	
+			String[] db2pg_trsf_wrk_nm = request.getParameter("db2pg_trsf_wrk_nm").toString().split(",");
+			for (i = 0; i < db2pg_trsf_wrk_nm.length; i++) {
+				result = Db2pgConfigController.deleteConfig(db2pg_trsf_wrk_nm[i],db2pg_path);
+			}
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

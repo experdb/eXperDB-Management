@@ -148,9 +148,9 @@ public class Db2pgConfigController {
 	 * @return JSONObject
 	 * @throws Exception
 	 */
-	public static JSONObject deleteDDLConfig(String db2pg_ddl_wrk_nm,String db2pg_path) {
+	public static JSONObject deleteConfig(String db2pg_wrk_nm,String db2pg_path) {
 		JSONObject result = new JSONObject();
-		String filePath = db2pg_path+"/config/"+db2pg_ddl_wrk_nm+".config";
+		String filePath = db2pg_path+"/config/"+db2pg_wrk_nm+".config";
 		try{
 			File file = new File(filePath);
 			if(file.exists()){

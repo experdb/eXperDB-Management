@@ -349,6 +349,15 @@
 		)		
 	</insert>
 	
+	<delete id="deleteDataWork" parameterType="int">
+		/**
+		* Query ID : deleteDataWork
+		* Description : Data WORK 삭제
+		* Author : 김주영
+		**/
+		DELETE FROM t_db2pg_trsf_wrk_inf WHERE db2pg_trsf_wrk_id=#{db2pg_trsf_wrk_id}
+	</delete>
+	
 	<select id="selectDetailDDLWork" resultType="ddlConfigVO" parameterType="int">
 		/**
 		* Query ID : selectDetailDDLWork
@@ -372,6 +381,41 @@
 		FROM t_db2pg_ddl_wrk_inf wrk_inf, t_wrkcng_i wrkcng
 		WHERE db2pg_ddl_wrk_id=#{db2pg_ddl_wrk_id}
 		AND  wrk_inf.wrk_id = wrkcng.wrk_id		
+	</select>
+	
+	<select id="selectDetailDataWork" resultType="dataConfigVO" parameterType="int">
+		/**
+		* Query ID : selectDetailDataWork
+		* Description : Data WORK 상세정보
+		* Author : 김주영
+		**/
+		SELECT
+		  db2pg_trsf_wrk_id
+		, wrk_inf.wrk_id
+		, wrkcng.wrk_nm as db2pg_trsf_wrk_nm
+		, wrkcng.wrk_exp as db2pg_trsf_wrk_exp
+		, db2pg_src_sys_id
+		, (SELECT db2pg_sys_nm FROM t_db2pg_sys_inf WHERE db2pg_sys_id=wrk_inf.db2pg_src_sys_id) as source_dbms_nm
+		, (SELECT db2pg_sys_nm FROM t_db2pg_sys_inf WHERE db2pg_sys_id=wrk_inf.db2pg_trg_sys_id) as target_dbms_nm
+		, (SELECT exrt_trg_tb_nm FROM t_db2pg_exrttrg_srctb_ls WHERE db2pg_exrt_trg_tb_wrk_id=wrk_inf.db2pg_exrt_trg_tb_wrk_id) as exrt_trg_tb_nm
+		, coalesce((SELECT length(exrt_trg_tb_nm)-length(replace(exrt_trg_tb_nm,',',''))+1 FROM t_db2pg_exrttrg_srctb_ls WHERE db2pg_exrt_trg_tb_wrk_id=wrk_inf.db2pg_exrt_trg_tb_wrk_id),0) as exrt_trg_tb_cnt
+		, (SELECT exrt_exct_tb_nm FROM t_db2pg_exrtexct_srctb_ls WHERE db2pg_exrt_exct_tb_wrk_id=wrk_inf.db2pg_exrt_exct_tb_wrk_id) as exrt_exct_tb_nm
+		, coalesce((SELECT length(exrt_exct_tb_nm)-length(replace(exrt_exct_tb_nm,',',''))+1 FROM t_db2pg_exrtexct_srctb_ls WHERE db2pg_exrt_exct_tb_wrk_id=wrk_inf.db2pg_exrt_exct_tb_wrk_id),0) as exrt_exct_tb_cnt
+		, exrt_dat_cnt
+		, exrt_dat_ftch_sz
+		, dat_ftch_bff_sz
+		, exrt_prl_prcs_ecnt
+		, lob_dat_bff_sz
+		, usr_qry_use_tf
+		, db2pg_usr_qry_id
+		, ins_opt_cd
+		, tb_rbl_tf
+		, cnst_cnd_exrt_tf
+		, trans_save_pth
+		, src_cnd_qry
+		FROM t_db2pg_trsf_wrk_inf wrk_inf, t_wrkcng_i wrkcng
+		WHERE db2pg_trsf_wrk_id=#{db2pg_trsf_wrk_id}
+		AND wrk_inf.wrk_id=wrkcng.wrk_id
 	</select>
 	
 	<select id="selectDBMS" resultType="db2pgSysInfVO" parameterType="int">
@@ -411,7 +455,7 @@
 	 	**/
 	 	INSERT INTO T_WRKCNG_I
 	 		(
-	 		WRK_ID
+	 		  WRK_ID
 	 		, BSN_DSCD
 	 		, WRK_NM
 	 		, WRK_EXP
@@ -422,7 +466,7 @@
 	 		)
 	 		VALUES
 	 		(
-	 		#{wrk_id}
+	 		  #{wrk_id}
 	 		, 'TC001903'
 	 		, #{db2pg_ddl_wrk_nm}
 			, #{db2pg_ddl_wrk_exp}
@@ -436,12 +480,12 @@
 	<insert id="insertDb2pgWorkData" parameterType="dataConfigVO">
 		/**
 	 	* Query ID : "insertDb2pgWorkData"
-	 	* Description : Work(Data)등록
+	 	* Description : Work(Data) 등록
 	 	* Author : 김주영
 	 	**/
 	 	INSERT INTO T_WRKCNG_I
 	 		(
-	 		WRK_ID
+	 		  WRK_ID
 	 		, BSN_DSCD
 	 		, WRK_NM
 	 		, WRK_EXP
@@ -452,7 +496,7 @@
 	 		)
 	 		VALUES
 	 		(
-	 		#{wrk_id}
+	 		  #{wrk_id}
 	 		, 'TC001903'
 	 		, #{db2pg_trsf_wrk_nm}
 			, #{db2pg_trsf_wrk_exp}

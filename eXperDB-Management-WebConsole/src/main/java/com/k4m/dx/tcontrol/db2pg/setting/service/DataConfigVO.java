@@ -37,6 +37,62 @@ public class DataConfigVO {
 	private String target_scm_nm;
 	private int wrk_id;
 
+	private String source_dbms_nm;
+	private String target_dbms_nm;
+
+	private String exrt_trg_tb_nm;
+	private String exrt_trg_tb_cnt;
+	private String exrt_exct_tb_nm;
+	private String exrt_exct_tb_cnt;
+
+	public String getExrt_trg_tb_nm() {
+		return exrt_trg_tb_nm;
+	}
+
+	public void setExrt_trg_tb_nm(String exrt_trg_tb_nm) {
+		this.exrt_trg_tb_nm = exrt_trg_tb_nm;
+	}
+
+	public String getExrt_trg_tb_cnt() {
+		return exrt_trg_tb_cnt;
+	}
+
+	public void setExrt_trg_tb_cnt(String exrt_trg_tb_cnt) {
+		this.exrt_trg_tb_cnt = exrt_trg_tb_cnt;
+	}
+
+	public String getExrt_exct_tb_nm() {
+		return exrt_exct_tb_nm;
+	}
+
+	public void setExrt_exct_tb_nm(String exrt_exct_tb_nm) {
+		this.exrt_exct_tb_nm = exrt_exct_tb_nm;
+	}
+
+	public String getExrt_exct_tb_cnt() {
+		return exrt_exct_tb_cnt;
+	}
+
+	public void setExrt_exct_tb_cnt(String exrt_exct_tb_cnt) {
+		this.exrt_exct_tb_cnt = exrt_exct_tb_cnt;
+	}
+
+	public String getSource_dbms_nm() {
+		return source_dbms_nm;
+	}
+
+	public void setSource_dbms_nm(String source_dbms_nm) {
+		this.source_dbms_nm = source_dbms_nm;
+	}
+
+	public String getTarget_dbms_nm() {
+		return target_dbms_nm;
+	}
+
+	public void setTarget_dbms_nm(String target_dbms_nm) {
+		this.target_dbms_nm = target_dbms_nm;
+	}
+
 	public int getRownum() {
 		return rownum;
 	}
@@ -292,6 +348,7 @@ public class DataConfigVO {
 	public void setWrk_id(int wrk_id) {
 		this.wrk_id = wrk_id;
 	}
+
 	public String getTrans_save_pth() {
 		return trans_save_pth;
 	}
