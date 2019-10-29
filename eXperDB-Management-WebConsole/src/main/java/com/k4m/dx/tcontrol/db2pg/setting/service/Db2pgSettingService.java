@@ -33,7 +33,7 @@ public interface Db2pgSettingService {
 	 * @throws Exception
 	 */
 	List<DataConfigVO> selectDataWork(Map<String, Object> param) throws Exception;
-	
+
 	/**
 	 * 추출 대상 테이블 작업 ID SEQ 조회
 	 * 
@@ -49,7 +49,7 @@ public interface Db2pgSettingService {
 	 * @throws Exception
 	 */
 	int selectExrtexctSrctblsSeq() throws Exception;
-	
+
 	/**
 	 * 사용자 쿼리 내역 ID SEQ 조회
 	 * 
@@ -73,7 +73,7 @@ public interface Db2pgSettingService {
 	 * @throws Exception
 	 */
 	void insertExrtexctSrcTb(SrcTableVO srctableVO) throws Exception;
-	
+
 	/**
 	 * DDL WORK 등록
 	 * 
@@ -81,7 +81,7 @@ public interface Db2pgSettingService {
 	 * @throws Exception
 	 */
 	void insertDDLWork(DDLConfigVO ddlConfigVO) throws Exception;
-	
+
 	/**
 	 * DDL WORK 수정
 	 * 
@@ -89,7 +89,7 @@ public interface Db2pgSettingService {
 	 * @throws Exception
 	 */
 	void updateDDLWork(DDLConfigVO ddlConfigVO) throws Exception;
-	
+
 	/**
 	 * DDL WORK 삭제
 	 * 
@@ -97,7 +97,7 @@ public interface Db2pgSettingService {
 	 * @throws Exception
 	 */
 	void deleteDDLWork(int db2pg_ddl_wrk_id) throws Exception;
-	
+
 	/**
 	 * 사용자 쿼리 등록
 	 * 
@@ -105,7 +105,7 @@ public interface Db2pgSettingService {
 	 * @throws Exception
 	 */
 	void insertUsrQry(QueryVO queryVO) throws Exception;
-	
+
 	/**
 	 * Data WORK 등록
 	 * 
@@ -113,7 +113,15 @@ public interface Db2pgSettingService {
 	 * @throws Exception
 	 */
 	void insertDataWork(DataConfigVO dataConfigVO) throws Exception;
-	
+
+	/**
+	 * Data WORK 삭제
+	 * 
+	 * @param dataConfigVO
+	 * @throws Exception
+	 */
+	void deleteDataWork(int db2pg_trsf_wrk_id) throws Exception;
+
 	/**
 	 * DDL WORK 상세정보
 	 * 
@@ -123,13 +131,21 @@ public interface Db2pgSettingService {
 	DDLConfigVO selectDetailDDLWork(int db2pg_ddl_wrk_id) throws Exception;
 
 	/**
-	 * 소스DBMS 접속정보
+	 * Data WORK 상세정보
+	 * 
+	 * @param dataConfigVO
+	 * @throws Exception
+	 */
+	DataConfigVO selectDetailDataWork(int db2pg_trsf_wrk_id) throws Exception;
+
+	/**
+	 * DBMS 접속정보
 	 * 
 	 * @param ddlConfigVO
 	 * @throws Exception
 	 */
-	Db2pgSysInfVO selectSoruceDBMS(int db2pg_sys_id) throws Exception;
-	
+	Db2pgSysInfVO selectDBMS(int db2pg_sys_id) throws Exception;
+
 	/**
 	 * DB2PG WORK 등록
 	 * 
@@ -139,12 +155,19 @@ public interface Db2pgSettingService {
 	void insertDb2pgWork(DDLConfigVO ddlConfigVO) throws Exception;
 
 	/**
+	 * DB2PG Data WORK 등록
+	 * 
+	 * @param dataConfigVO
+	 * @throws Exception
+	 */
+	void insertDb2pgWorkData(DataConfigVO dataConfigVO) throws Exception;
+
+	/**
 	 * WORK ID SEQ 조회
 	 * 
 	 * @return int
 	 * @throws Exception
 	 */
 	int selectWorkSeq() throws Exception;
-
 
 }

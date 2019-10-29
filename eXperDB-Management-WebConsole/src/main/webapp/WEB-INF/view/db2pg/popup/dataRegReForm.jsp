@@ -31,7 +31,17 @@
 <script type="text/javascript" src="/js/common.js"></script>
 <script type="text/javascript">
 $(window.document).ready(function() {
-
+	 if("${exrt_trg_tb_cnt}">0){
+		 $("#src_tables option:eq(0)").attr("selected", "selected");
+		 $("#src_include_tables").val("${exrt_trg_tb_cnt}개");
+		 $("#include").show();
+		 $("#exclude").hide();
+	 }else if("${exrt_exct_tb_cnt}">0){
+		 $("#src_tables option:eq(1)").attr("selected", "selected");
+		 $("#src_exclude_tables").val("${exrt_exct_tb_cnt}개");
+		 $("#exclude").show();
+		 $("#include").hide(); 
+	 }	
 });
 
 /* ********************************************************
@@ -52,6 +62,52 @@ function valCheck(){
 		return false;
 	}else{
 		return true;
+	}
+}
+
+/* ********************************************************
+ * 수정 버튼 클릭시
+ ******************************************************** */
+function fn_update_work(){
+	if(valCheck()){
+// 		$.ajax({
+// 			url : "/db2pg/updateDDLWork.do",
+// 		  	data : {
+// 		  		db2pg_ddl_wrk_id : "${db2pg_ddl_wrk_id}",
+// 		  		db2pg_ddl_wrk_nm : $("#db2pg_ddl_wrk_nm").val().trim(),
+// 		  		db2pg_ddl_wrk_exp : $("#db2pg_ddl_wrk_exp").val(),
+// 		  		db2pg_sys_id : $("#db2pg_sys_id").val(),
+// 		  		db2pg_uchr_lchr_val : $("#db2pg_uchr_lchr_val").val(),
+// 		  		src_tb_ddl_exrt_tf : $("#src_tb_ddl_exrt_tf").val(),
+// 		  		src_include_tables : $("#src_include_table_nm").val(),
+// 		  		src_exclude_tables : $("#src_exclude_table_nm").val(),
+// 		  		wrk_id : $("#wrk_id").val()
+// 		  	},
+// 			type : "post",
+// 			beforeSend: function(xhr) {
+// 		        xhr.setRequestHeader("AJAX", true);
+// 		     },
+// 			error : function(xhr, status, error) {
+// 				if(xhr.status == 401) {
+// 					alert('<spring:message code="message.msg02" />');
+// 					top.location.href = "/";
+// 				} else if(xhr.status == 403) {
+// 					alert('<spring:message code="message.msg03" />');
+// 					top.location.href = "/";
+// 				} else {
+// 					alert("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""));
+// 				}
+// 			},
+// 			success : function(result) {
+// 				if(result.resultCode == "0000000000"){
+// 					alert('<spring:message code="message.msg07" /> ');
+// 					opener.location.reload();
+// 					self.close();
+// 				}else{
+// 					alert('등록에 실패했습니다.');
+// 				}	
+// 			}
+// 		});
 	}
 }
 
@@ -136,6 +192,25 @@ function fn_tableList(gbn){
 	frmPop.submit();   
 }
 
+/* ********************************************************
+ * select box control
+ ******************************************************** */
+ $(function() {
+	 $("#src_tables").change(function(){
+		 $("#src_include_tables").val("");
+		 $("#src_exclude_tables").val("");
+		 $("#src_include_table_nm").val("");
+		 $("#src_exclude_table_nm").val("");
+		    if(this.value=="include"){
+		        $("#include").show();
+			    $("#exclude").hide(); 
+		    }else{
+		        $("#exclude").show();
+			    $("#include").hide(); 
+		    }
+		});
+ });
+
 
 function fn_tableAddCallback(rowList, tableGbn){
 	if(tableGbn == 'include'){
@@ -150,9 +225,9 @@ function fn_tableAddCallback(rowList, tableGbn){
 </head>
 <body>
 <form name="frmPopup">
-	<input type="hidden" name="db2pg_sys_id"  id="db2pg_sys_id">
-	<input type="hidden" name="src_include_table_nm"  id="src_include_table_nm" >
-	<input type="hidden" name="src_exclude_table_nm"  id="src_exclude_table_nm" >
+	<input type="hidden" name="db2pg_sys_id"  id="db2pg_sys_id" value="${db2pg_sys_id}">
+	<input type="hidden" name="src_include_table_nm"  id="src_include_table_nm" value="${exrt_trg_tb_nm}">
+	<input type="hidden" name="src_exclude_table_nm"  id="src_exclude_table_nm" value="${exrt_exct_tb_nm}">
 	<input type="hidden" name="tableGbn"  id="tableGbn" >
 </form>
 <div class="pop_container">
@@ -168,15 +243,13 @@ function fn_tableAddCallback(rowList, tableGbn){
 				<tbody>
 					<tr>
 						<th scope="row" class="ico_t1"><spring:message code="common.work_name" /></th>
-						<td><input type="text" class="txt" name="db2pg_trsf_wrk_nm" id="db2pg_trsf_wrk_nm" maxlength="20" onkeyup="fn_checkWord(this,20)" placeholder="20<spring:message code='message.msg188'/>" onblur="this.value=this.value.trim()"/>
-						<span class="btn btnC_01"><button type="button" class= "btn_type_02" onclick="fn_check()" style="width: 60px; margin-right: -60px; margin-top: 0;"><spring:message code="common.overlap_check" /></button></span>
-						</td>
+						<td><input type="text" class="txt" name="db2pg_trsf_wrk_nm" id="db2pg_trsf_wrk_nm" value="${db2pg_trsf_wrk_nm}" maxlength="20" onkeyup="fn_checkWord(this,20)" placeholder="20<spring:message code='message.msg188'/>" onblur="this.value=this.value.trim()" readonly="readonly"/></td>
 					</tr>
 					<tr>
 						<th scope="row" class="ico_t1"><spring:message code="common.work_description" /></th>
 						<td>
 							<div class="textarea_grp">
-								<textarea name="db2pg_trsf_wrk_exp" id="db2pg_trsf_wrk_exp" maxlength="25" onkeyup="fn_checkWord(this,25)" placeholder="25<spring:message code='message.msg188'/>"></textarea>
+								<textarea name="db2pg_trsf_wrk_exp" id="db2pg_trsf_wrk_exp" maxlength="25" onkeyup="fn_checkWord(this,25)" placeholder="25<spring:message code='message.msg188'/>"><c:out value="${db2pg_trsf_wrk_exp}"/></textarea>
 							</div>
 						</td>
 					</tr>
@@ -195,14 +268,14 @@ function fn_tableAddCallback(rowList, tableGbn){
 				<tbody>
 					<tr>
 						<th scope="row" class="ico_t1">소스시스템</th>
-						<td><input type="text" class="txt" name="db2pg_source_system_nm" id="db2pg_source_system_nm" placeholder="등록 버튼을 눌러주세요" readonly="readonly"/>
+						<td><input type="text" class="txt" name="db2pg_source_system_nm" id="db2pg_source_system_nm" value="${db2pg_source_system_nm}" placeholder="등록 버튼을 눌러주세요" readonly="readonly"/>
 							<span class="btn btnC_01"><button type="button" class= "btn_type_02" onclick="fn_dbmsInfo()" style="width: 60px; margin-right: -60px; margin-top: 0;">등록</button></span>							
 						</td>
 					</tr>
 					<tr>
 					<th scope="row" class="ico_t1">타겟시스템</th>
 						<td><input type="hidden" name="db2pg_trg_sys_id" id="db2pg_trg_sys_id"/>
-							<input type="text" class="txt" name="db2pg_trg_sys_nm" id="db2pg_trg_sys_nm" placeholder="등록 버튼을 눌러주세요" readonly="readonly"/>
+							<input type="text" class="txt" name="db2pg_trg_sys_nm" id="db2pg_trg_sys_nm" value="${db2pg_trg_sys_nm}" placeholder="등록 버튼을 눌러주세요" readonly="readonly"/>
 							<span class="btn btnC_01"><button type="button" class= "btn_type_02" onclick="fn_dbmsPgInfo()" style="width: 60px; margin-right: -60px; margin-top: 0;">등록</button></span>							
 						</td>
 					</tr>
@@ -230,15 +303,21 @@ function fn_tableAddCallback(rowList, tableGbn){
 							</colgroup>
 							<tbody>
 								<tr>
-									<th scope="row" class="ico_t2">추출 대상 테이블</th>
-									<td colspan="3"><input type="text" class="txt" name="src_include_tables" id="src_include_tables" readonly="readonly"/>
-										<span class="btn btnC_01"><button type="button" class= "btn_type_02" onclick="fn_tableList('include')" style="width: 60px; margin-right: -60px; margin-top: 0;">등록</button></span>							
-									</td>
-								</tr>
-								<tr>
-									<th scope="row" class="ico_t2">추출 제외 테이블</th>
-									<td colspan="3"><input type="text" class="txt" name="src_exclude_tables" id="src_exclude_tables" readonly="readonly"/>
-										<span class="btn btnC_01"><button type="button" class= "btn_type_02" onclick="fn_tableList('exclude')" style="width: 60px; margin-right: -60px; margin-top: 0;">등록</button></span>							
+									<th scope="row" class="ico_t2">
+										<select name="src_tables" id="src_tables" class="select t5" style="width: 176px;" >
+											<option value="include">추출 대상 테이블</option>
+											<option value="exclude">추출 제외 테이블</option>
+										</select>
+									</th>
+									<td colspan="2">
+										<div id="include">
+											<input type="text" class="txt" name="src_include_tables" id="src_include_tables" readonly="readonly" />
+											<span class="btn btnC_01"><button type="button" class= "btn_type_02" onclick="fn_tableList('include')" style="width: 60px; margin-right: -60px; margin-top: 0;">등록</button></span>		
+										</div>
+										<div id="exclude" style="display: none;">
+											<input type="text" class="txt" name="src_exclude_tables" id="src_exclude_tables" readonly="readonly" />
+											<span class="btn btnC_01"><button type="button" class= "btn_type_02" onclick="fn_tableList('exclude')" style="width: 60px; margin-right: -60px; margin-top: 0;">등록</button></span>												
+										</div>
 									</td>
 								</tr>
 								<tr>
@@ -266,7 +345,7 @@ function fn_tableAddCallback(rowList, tableGbn){
 								<p class="op_tit" style="width: 200PX;">추출 조건(WHERE문 제외)</p>
 								<span>
 									<div class="textarea_grp">
-										<textarea name="src_where_condition" id="src_where_condition" style="height: 250px; width: 700px;"></textarea>
+										<textarea name="src_cnd_qry" id="src_cnd_qry" style="height: 250px; width: 700px;"></textarea>
 									</div>
 								</span>
 							</li>
@@ -277,9 +356,9 @@ function fn_tableAddCallback(rowList, tableGbn){
 							<li style="border-bottom: none;">
 								<p class="op_tit" style="width: 70px;">사용여부</p>
 								<div class="inp_rdo">
-									<input name="rdo_r" id="rdo_r_1" type="radio" value="true" onchange="fn_checkBox('true')">
+									<input name="usr_qry_use_tf" id="rdo_r_1" type="radio" value="true" onchange="fn_checkBox('true')">
 										<label for="rdo_r_1">사용</label> 
-									<input name="rdo_r" id="rdo_r_2" type="radio" value="false" checked="checked" onchange="fn_checkBox('false')"> 
+									<input name="usr_qry_use_tf" id="rdo_r_2" type="radio" value="false" checked="checked" onchange="fn_checkBox('false')"> 
 										<label for="rdo_r_2">미사용</label>
 								</div>
 							</li>
