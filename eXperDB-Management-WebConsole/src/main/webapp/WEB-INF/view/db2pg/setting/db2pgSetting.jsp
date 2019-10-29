@@ -556,9 +556,6 @@ function fn_ImmediateStart(gbn){
 
 				}
 			});	
-			var trans_save_pth = tableData.row('.selected').data().trans_save_pth;
-			alert(trans_save_pth);
-		
 		} else {
 			alert("<spring:message code='message.msg04' />");
 			return false;

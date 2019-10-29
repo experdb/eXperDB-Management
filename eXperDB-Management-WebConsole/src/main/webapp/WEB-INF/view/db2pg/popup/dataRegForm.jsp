@@ -133,7 +133,6 @@ function fn_insert_work(){
 			success : function(result) {
 				if (result == "true") {
 						$.ajax({
-							async : false,
 							url : "/db2pg/insertDataWork.do",
 						  	data : {  
 						  		db2pg_trsf_wrk_nm : $("#db2pg_trsf_wrk_nm").val().trim(),
