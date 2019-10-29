@@ -30,7 +30,6 @@ import com.k4m.dx.tcontrol.cmmn.AES256;
 import com.k4m.dx.tcontrol.cmmn.AES256_KEY;
 import com.k4m.dx.tcontrol.cmmn.client.ClientProtocolID;
 import com.k4m.dx.tcontrol.common.service.HistoryVO;
-import com.k4m.dx.tcontrol.db2pg.cmmn.DB2PG_START;
 import com.k4m.dx.tcontrol.db2pg.cmmn.DatabaseTableInfo;
 import com.k4m.dx.tcontrol.db2pg.dbms.service.Db2pgSysInfVO;
 import com.k4m.dx.tcontrol.db2pg.dbms.service.DbmsService;
@@ -626,6 +625,7 @@ public class Db2pgSettingController {
 			mv.addObject("db2pg_source_system_nm",result.getSource_dbms_nm());
 			mv.addObject("db2pg_trg_sys_nm",result.getTarget_dbms_nm());
 			mv.addObject("db2pg_sys_id", result.getDb2pg_src_sys_id());
+			mv.addObject("db2pg_trg_sys_id", result.getDb2pg_trg_sys_id());
 			mv.addObject("exrt_trg_tb_cnt",result.getExrt_trg_tb_cnt());
 			mv.addObject("exrt_exct_tb_cnt",result.getExrt_exct_tb_cnt());
 			mv.addObject("exrt_trg_tb_nm",result.getExrt_trg_tb_nm());
@@ -664,8 +664,16 @@ public class Db2pgSettingController {
 	 * @return
 	 * @throws Exception
 	 */
+	@RequestMapping(value = "/db2pg/updateDataWork.do")
 	public JSONObject updateDataWork(@ModelAttribute("dataConfigVO") DataConfigVO dataConfigVO, HttpServletRequest request, HttpServletResponse response, @ModelAttribute("historyVO") HistoryVO historyVO) {
 		JSONObject result = new JSONObject();
+		try{
+			System.out.println("*****************");
+			System.out.print(dataConfigVO.getDb2pg_trsf_wrk_id());
+		} catch (Exception e) {
+			e.printStackTrace();
+			result.put("resultCode", "8000000003");
+		}
 		return result;
 	}
 	
@@ -883,7 +891,7 @@ public class Db2pgSettingController {
 		JSONObject obj = new JSONObject();
 		obj.put("wrk_nm", wrk_nm);		
 		
-		Map<String, Object> result1  = DB2PG_START.db2pgStart(obj);
+//		Map<String, Object> result1  = DB2PG_START.db2pgStart(obj);
 	}catch (Exception e) {
 		e.printStackTrace();
 	}

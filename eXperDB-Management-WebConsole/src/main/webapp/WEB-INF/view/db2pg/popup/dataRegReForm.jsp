@@ -70,44 +70,53 @@ function valCheck(){
  ******************************************************** */
 function fn_update_work(){
 	if(valCheck()){
-// 		$.ajax({
-// 			url : "/db2pg/updateDDLWork.do",
-// 		  	data : {
-// 		  		db2pg_ddl_wrk_id : "${db2pg_ddl_wrk_id}",
-// 		  		db2pg_ddl_wrk_nm : $("#db2pg_ddl_wrk_nm").val().trim(),
-// 		  		db2pg_ddl_wrk_exp : $("#db2pg_ddl_wrk_exp").val(),
-// 		  		db2pg_sys_id : $("#db2pg_sys_id").val(),
-// 		  		db2pg_uchr_lchr_val : $("#db2pg_uchr_lchr_val").val(),
-// 		  		src_tb_ddl_exrt_tf : $("#src_tb_ddl_exrt_tf").val(),
-// 		  		src_include_tables : $("#src_include_table_nm").val(),
-// 		  		src_exclude_tables : $("#src_exclude_table_nm").val(),
-// 		  		wrk_id : $("#wrk_id").val()
-// 		  	},
-// 			type : "post",
-// 			beforeSend: function(xhr) {
-// 		        xhr.setRequestHeader("AJAX", true);
-// 		     },
-// 			error : function(xhr, status, error) {
-// 				if(xhr.status == 401) {
-// 					alert('<spring:message code="message.msg02" />');
-// 					top.location.href = "/";
-// 				} else if(xhr.status == 403) {
-// 					alert('<spring:message code="message.msg03" />');
-// 					top.location.href = "/";
-// 				} else {
-// 					alert("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""));
-// 				}
-// 			},
-// 			success : function(result) {
-// 				if(result.resultCode == "0000000000"){
-// 					alert('<spring:message code="message.msg07" /> ');
-// 					opener.location.reload();
-// 					self.close();
-// 				}else{
-// 					alert('등록에 실패했습니다.');
-// 				}	
-// 			}
-// 		});
+		$.ajax({
+			url : "/db2pg/updateDataWork.do",
+		  	data : {
+		  		db2pg_trsf_wrk_id : "${db2pg_trsf_wrk_id}",
+		  		db2pg_trsf_wrk_nm : $("#db2pg_trsf_wrk_nm").val().trim(),
+		  		db2pg_trsf_wrk_exp : $("#db2pg_trsf_wrk_exp").val(),
+		  		db2pg_src_sys_id : $("#db2pg_sys_id").val(),
+		  		db2pg_trg_sys_id : $("#db2pg_trg_sys_id").val(),
+		  		exrt_dat_cnt : $("#exrt_dat_cnt").val(),
+		  		src_include_tables : $("#src_include_table_nm").val(),
+		  		src_exclude_tables : $("#src_exclude_table_nm").val(),
+		  		exrt_dat_ftch_sz : $("#exrt_dat_ftch_sz").val(),
+		  		dat_ftch_bff_sz : $("#dat_ftch_bff_sz").val(),
+		  		exrt_prl_prcs_ecnt : $("#exrt_prl_prcs_ecnt").val(),
+		  		lob_dat_bff_sz : $("#lob_dat_bff_sz").val(),
+		  		tb_rbl_tf : $("#tb_rbl_tf").val(),
+		  		ins_opt_cd : $("#ins_opt_cd").val(),
+		  		cnst_cnd_exrt_tf : $("#cnst_cnd_exrt_tf").val(),
+		  		src_cnd_qry : $("#src_cnd_qry").val(),
+		  		usr_qry_use_tf : $('input[name="usr_qry_use_tf"]:checked').val(),
+		  		db2pg_usr_qry : $("#db2pg_usr_qry").val()
+		  	},
+			type : "post",
+			beforeSend: function(xhr) {
+		        xhr.setRequestHeader("AJAX", true);
+		     },
+			error : function(xhr, status, error) {
+				if(xhr.status == 401) {
+					alert('<spring:message code="message.msg02" />');
+					top.location.href = "/";
+				} else if(xhr.status == 403) {
+					alert('<spring:message code="message.msg03" />');
+					top.location.href = "/";
+				} else {
+					alert("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""));
+				}
+			},
+			success : function(result) {
+				if(result.resultCode == "0000000000"){
+					alert('<spring:message code="message.msg07" /> ');
+					opener.location.reload();
+					self.close();
+				}else{
+					alert('등록에 실패했습니다.');
+				}		
+			}
+		});
 	}
 }
 
@@ -226,6 +235,7 @@ function fn_tableAddCallback(rowList, tableGbn){
 <body>
 <form name="frmPopup">
 	<input type="hidden" name="db2pg_sys_id"  id="db2pg_sys_id" value="${db2pg_sys_id}">
+	<input type="hidden" name="db2pg_trg_sys_id" id="db2pg_trg_sys_id" value="${db2pg_trg_sys_id}"/>
 	<input type="hidden" name="src_include_table_nm"  id="src_include_table_nm" value="${exrt_trg_tb_nm}">
 	<input type="hidden" name="src_exclude_table_nm"  id="src_exclude_table_nm" value="${exrt_exct_tb_nm}">
 	<input type="hidden" name="tableGbn"  id="tableGbn" >
@@ -274,8 +284,7 @@ function fn_tableAddCallback(rowList, tableGbn){
 					</tr>
 					<tr>
 					<th scope="row" class="ico_t1">타겟시스템</th>
-						<td><input type="hidden" name="db2pg_trg_sys_id" id="db2pg_trg_sys_id"/>
-							<input type="text" class="txt" name="db2pg_trg_sys_nm" id="db2pg_trg_sys_nm" value="${db2pg_trg_sys_nm}" placeholder="등록 버튼을 눌러주세요" readonly="readonly"/>
+						<td><input type="text" class="txt" name="db2pg_trg_sys_nm" id="db2pg_trg_sys_nm" value="${db2pg_trg_sys_nm}" placeholder="등록 버튼을 눌러주세요" readonly="readonly"/>
 							<span class="btn btnC_01"><button type="button" class= "btn_type_02" onclick="fn_dbmsPgInfo()" style="width: 60px; margin-right: -60px; margin-top: 0;">등록</button></span>							
 						</td>
 					</tr>
@@ -322,19 +331,19 @@ function fn_tableAddCallback(rowList, tableGbn){
 								</tr>
 								<tr>
 									<th scope="row" class="ico_t2">추출 데이터 Fetch 사이즈</th>
-									<td><input type="number" class="txt t8" name="exrt_dat_ftch_sz" id="exrt_dat_ftch_sz" value="3000"/></td>
+									<td><input type="number" class="txt t8" name="exrt_dat_ftch_sz" id="exrt_dat_ftch_sz" value="${exrt_dat_ftch_sz}" min="3000"/></td>
 									<th scope="row" class="ico_t2">데이터 Fetch 버퍼 사이즈(단위 MIB)</th>
-									<td><input type="number" class="txt t8" name="dat_ftch_bff_sz" id="dat_ftch_bff_sz" value="10"/></td>
+									<td><input type="number" class="txt t8" name="dat_ftch_bff_sz" id="dat_ftch_bff_sz" value="${dat_ftch_bff_sz}" min="10"/></td>
 								</tr>
 								<tr>
 									<th scope="row" class="ico_t2">추출 병렬처리 개수</th>
-									<td><input type="number" class="txt t8" name="exrt_prl_prcs_ecnt" id="exrt_prl_prcs_ecnt" value="1"/></td>
+									<td><input type="number" class="txt t8" name="exrt_prl_prcs_ecnt" id="exrt_prl_prcs_ecnt" value="${exrt_prl_prcs_ecnt}" min="1"/></td>
 									<th scope="row" class="ico_t2">LOB 데이터 LOB 버퍼 사이즈(단위 MIB)</th>
-									<td><input type="number" class="txt t8" name="lob_dat_bff_sz" id="lob_dat_bff_sz" value="100"/></td>
+									<td><input type="number" class="txt t8" name="lob_dat_bff_sz" id="lob_dat_bff_sz" value="${lob_dat_bff_sz}" min="100"/></td>
 								</tr>
 								<tr>
 									<th scope="row" class="ico_t2">테이블에서 추출할 데이터 건수</th>
-									<td><input type="number" class="txt t8" name="exrt_dat_cnt" id="exrt_dat_cnt" value="-1" min="-1"/></td>
+									<td><input type="number" class="txt t8" name="exrt_dat_cnt" id="exrt_dat_cnt" value="${exrt_dat_cnt}" min="-1"/></td>
 								</tr>								
 							</tbody>
 						</table>
@@ -345,7 +354,7 @@ function fn_tableAddCallback(rowList, tableGbn){
 								<p class="op_tit" style="width: 200PX;">추출 조건(WHERE문 제외)</p>
 								<span>
 									<div class="textarea_grp">
-										<textarea name="src_cnd_qry" id="src_cnd_qry" style="height: 250px; width: 700px;"></textarea>
+										<textarea name="src_cnd_qry" id="src_cnd_qry" style="height: 250px; width: 700px;"><c:out value="${src_cnd_qry}"/></textarea>
 									</div>
 								</span>
 							</li>
@@ -394,7 +403,7 @@ function fn_tableAddCallback(rowList, tableGbn){
 						<td>
 							<select name="tb_rbl_tf" id="tb_rbl_tf" class="select t5">
 								<c:forEach var="codeTF" items="${codeTF}">
-									<option value="${codeTF.sys_cd_nm}" ${false eq codeTF.sys_cd_nm ? "selected='selected'" : ""}>${codeTF.sys_cd_nm}</option>
+									<option value="${codeTF.sys_cd_nm}" ${tb_rbl_tf eq codeTF.sys_cd_nm ? "selected='selected'" : ""}>${codeTF.sys_cd_nm}</option>
 								</c:forEach>
 							</select>
 						</td>
@@ -402,7 +411,7 @@ function fn_tableAddCallback(rowList, tableGbn){
 						<td>
 							<select name="ins_opt_cd" id="ins_opt_cd" class="select t5">
 								<c:forEach var="codeInputMode" items="${codeInputMode}">
-									<option value="${codeInputMode.sys_cd_nm}">${codeInputMode.sys_cd_nm}</option>
+									<option value="${codeInputMode.sys_cd_nm}" ${ins_opt_cd eq codeInputMode.sys_cd_nm ? "selected='selected'" : ""}>${codeInputMode.sys_cd_nm}</option>
 								</c:forEach>
 							</select>
 						</td>
@@ -410,7 +419,7 @@ function fn_tableAddCallback(rowList, tableGbn){
 						<td>
 							<select name="cnst_cnd_exrt_tf" id="cnst_cnd_exrt_tf" class="select t5">
 								<c:forEach var="codeTF" items="${codeTF}">
-									<option value="${codeTF.sys_cd_nm}" ${false eq codeTF.sys_cd_nm ? "selected='selected'" : ""}>${codeTF.sys_cd_nm}</option>
+									<option value="${codeTF.sys_cd_nm}" ${cnst_cnd_exrt_tf eq codeTF.sys_cd_nm ? "selected='selected'" : ""}>${codeTF.sys_cd_nm}</option>
 								</c:forEach>
 							</select>
 						</td>
