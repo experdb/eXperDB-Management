@@ -30,6 +30,7 @@ import com.k4m.dx.tcontrol.cmmn.AES256;
 import com.k4m.dx.tcontrol.cmmn.AES256_KEY;
 import com.k4m.dx.tcontrol.cmmn.client.ClientProtocolID;
 import com.k4m.dx.tcontrol.common.service.HistoryVO;
+import com.k4m.dx.tcontrol.db2pg.cmmn.DB2PG_START;
 import com.k4m.dx.tcontrol.db2pg.cmmn.DatabaseTableInfo;
 import com.k4m.dx.tcontrol.db2pg.dbms.service.Db2pgSysInfVO;
 import com.k4m.dx.tcontrol.db2pg.dbms.service.DbmsService;
@@ -877,8 +878,12 @@ public class Db2pgSettingController {
 	public @ResponseBody JSONObject db2pgImmediateStart(@ModelAttribute("historyVO") HistoryVO historyVO, HttpServletRequest request) {
 		JSONObject result = new JSONObject();
 		try {
-		JSONObject serverObj = new JSONObject();
-
+		String wrk_nm = request.getParameter("wrk_nm");	
+			
+		JSONObject obj = new JSONObject();
+		obj.put("wrk_nm", wrk_nm);		
+		
+		Map<String, Object> result1  = DB2PG_START.db2pgStart(obj);
 	}catch (Exception e) {
 		e.printStackTrace();
 	}
