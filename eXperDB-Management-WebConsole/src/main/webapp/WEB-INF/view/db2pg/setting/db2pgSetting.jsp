@@ -25,10 +25,12 @@
 var tableDDL = null;
 var tableData = null;
 
+var wrk_nmChk = "fail";
+
 /* ********************************************************
  * Tab Click
  ******************************************************** */
-function selectTab(tab){
+function selectTab(tab){	
 	if(tab == "dataWork"){
 		getdataDataList();
 		$("#dataDataTable").show();
@@ -270,6 +272,7 @@ function getddlDataList(){
 		success : function(data) {
 			if(data.length > 0){
 				tableDDL.rows({selected: true}).deselect();
+				tableData.rows({selected: true}).deselect();
 				tableDDL.clear().draw();
 				tableDDL.rows.add(data).draw();
 			}else{
@@ -311,6 +314,7 @@ function getdataDataList(){
 		},
 		success : function(data) {
 			if(data.length > 0){
+				tableDDL.rows({selected: true}).deselect();
 	 			tableData.rows({selected: true}).deselect();
 	 			tableData.clear().draw();
 	 			tableData.rows.add(data).draw();
@@ -510,12 +514,160 @@ function fn_ddl_work_delete(){
 }
 
 /* ********************************************************
- * 복제
+ * 복제버튼 클릭시
  ******************************************************** */
 function fn_copy(){
-	toggleLayer($('#pop_layer_copy'), 'on');
+	var ddlRowCnt = tableDDL.rows('.selected').data().length;
+	var dataRowCnt = tableData.rows('.selected').data().length;
+	if(ddlRowCnt==1){
+		toggleLayer($('#pop_layer_copy'), 'on');
+	}else if(dataRowCnt==1){
+		toggleLayer($('#pop_layer_copy'), 'on');
+	}else{
+		alert("하나의 항목만 선택해주세요.");
+	}
 }
 
+/* ********************************************************
+ * WORK NM Validation Check
+ ******************************************************** */
+function fn_check() {
+	var wrk_nm = document.getElementById("wrk_nm");
+	if (wrk_nm.value == "") {
+		alert('<spring:message code="message.msg107" />');
+		document.getElementById('wrk_nm').focus();
+		return;
+	}
+	$.ajax({
+		url : '/wrk_nmCheck.do',
+		type : 'post',
+		data : {
+			wrk_nm : $("#wrk_nm").val()
+		},
+		success : function(result) {
+			if (result == "true") {
+				alert('<spring:message code="backup_management.reg_possible_work_nm"/>');
+				document.getElementById("wrk_nm").focus();
+				wrk_nmChk = "success";		
+			} else {
+				alert('<spring:message code="backup_management.effective_work_nm"/>');
+				document.getElementById("wrk_nm").focus();
+				wrk_nmChk = "fail";	
+			}
+		},
+		beforeSend: function(xhr) {
+	        xhr.setRequestHeader("AJAX", true);
+	     },
+		error : function(xhr, status, error) {
+			if(xhr.status == 401) {
+				alert('<spring:message code="message.msg02" />');
+				top.location.href = "/";
+			} else if(xhr.status == 403) {
+				alert('<spring:message code="message.msg03" />');
+				top.location.href = "/";
+			} else {
+				alert("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""));
+			}
+		}
+	});
+}
+
+/* ********************************************************
+ * 복제
+ ******************************************************** */
+function fn_copy_save(){
+	if($("#wrk_nm").val() == ""){
+		alert('<spring:message code="message.msg107" />');
+		$("#wrk_nm").focus();
+		return false;
+	}else if(wrk_nmChk =="fail"){
+		alert('<spring:message code="backup_management.work_overlap_check"/>');
+		return false;
+	}else if($("#db2pg_ddl_wrk_exp").val() == ""){
+		alert('<spring:message code="message.msg108" />');
+		$("#db2pg_ddl_wrk_exp").focus();
+		return false;
+	}else{
+		var rowCnt = tableDDL.rows('.selected').data().length;
+		if (rowCnt == 1) {
+			var db2pg_ddl_wrk_id = tableDDL.row('.selected').data().db2pg_ddl_wrk_id;
+			$.ajax({
+				url : "/db2pg/insertCopyDDLWork.do",
+			  	data : {
+			  		db2pg_ddl_wrk_nm : $("#wrk_nm").val().trim(),
+			  		db2pg_ddl_wrk_exp : $("#wrk_exp").val(),
+			  		db2pg_ddl_wrk_id : db2pg_ddl_wrk_id
+			  	},
+				type : "post",
+				beforeSend: function(xhr) {
+			        xhr.setRequestHeader("AJAX", true);
+			     },
+				error : function(xhr, status, error) {
+					if(xhr.status == 401) {
+						alert('<spring:message code="message.msg02" />');
+						top.location.href = "/";
+					} else if(xhr.status == 403) {
+						alert('<spring:message code="message.msg03" />');
+						top.location.href = "/";
+					} else {
+						alert("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""));
+					}
+				},
+				success : function(result) {
+					if(result.resultCode == "0000000000"){
+						$("#wrk_nm").val("");
+						$("#wrk_exp").val("");
+						alert('<spring:message code="message.msg07" /> ');
+						toggleLayer($('#pop_layer_copy'), 'off');
+						getddlDataList();
+					}else{
+						alert('등록에 실패했습니다.');
+					}	
+				}
+			});	
+		}
+		var rowCnt = tableData.rows('.selected').data().length;
+		if (rowCnt == 1) {
+			var db2pg_trsf_wrk_id = tableData.row('.selected').data().db2pg_trsf_wrk_id;
+			alert(db2pg_trsf_wrk_id);
+			$.ajax({
+				url : "/db2pg/insertCopyDataWork.do",
+			  	data : {
+			  		db2pg_trsf_wrk_nm : $("#wrk_nm").val().trim(),
+			  		db2pg_trsf_wrk_exp : $("#wrk_exp").val(),
+			  		db2pg_trsf_wrk_id : db2pg_trsf_wrk_id
+			  	},
+				type : "post",
+				beforeSend: function(xhr) {
+			        xhr.setRequestHeader("AJAX", true);
+			     },
+				error : function(xhr, status, error) {
+					if(xhr.status == 401) {
+						alert('<spring:message code="message.msg02" />');
+						top.location.href = "/";
+					} else if(xhr.status == 403) {
+						alert('<spring:message code="message.msg03" />');
+						top.location.href = "/";
+					} else {
+						alert("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""));
+					}
+				},
+				success : function(result) {
+					if(result.resultCode == "0000000000"){
+						$("#wrk_nm").val("");
+						$("#wrk_exp").val("");
+						alert('<spring:message code="message.msg07" /> ');
+						toggleLayer($('#pop_layer_copy'), 'off');
+						getdataDataList();
+					}else{
+						alert('등록에 실패했습니다.');
+					}	
+				}
+			});
+		}
+	}
+}
+ 
 /* ********************************************************
  * 즉시실행
  ******************************************************** */
@@ -763,7 +915,7 @@ function fn_ImmediateStart(gbn){
 				</tbody>
 			</table>
 			<div class="btn_type_02">
-				<a href="#n" class="btn" onclick="toggleLayer($('#pop_layer_copy'), 'off');"><span>저장</span></a>
+				<a href="#n" class="btn" onclick="fn_copy_save()"><span>저장</span></a>
 				<a href="#n" class="btn" onclick="toggleLayer($('#pop_layer_copy'), 'off');"><span><spring:message code="common.close"/></span></a>
 			</div>		
 		</div>
