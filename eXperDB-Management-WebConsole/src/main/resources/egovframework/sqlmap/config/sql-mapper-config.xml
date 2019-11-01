@@ -50,6 +50,7 @@
 		<typeAlias alias="srcTableVO" type="com.k4m.dx.tcontrol.db2pg.setting.service.SrcTableVO" /> 
 		
 		<typeAlias alias="db2pgSysInfVO" type="com.k4m.dx.tcontrol.db2pg.dbms.service.Db2pgSysInfVO" /> 
+		<typeAlias alias="db2pgHistoryVO" type="com.k4m.dx.tcontrol.db2pg.history.service.Db2pgHistoryVO" /> 
 
     </typeAliases>
     
@@ -102,7 +103,7 @@
 		<!-- db2pg -->
 		<mapper resource="egovframework/sqlmap/mappers/db2pg/dbms/dbmsSql.xml" />
 		<mapper resource="egovframework/sqlmap/mappers/db2pg/setting/db2pgSettingSql.xml" />
-		
+		<mapper resource="egovframework/sqlmap/mappers/db2pg/history/db2pgHistorySql.xml" />
 		
 	</mappers>
 </configuration>

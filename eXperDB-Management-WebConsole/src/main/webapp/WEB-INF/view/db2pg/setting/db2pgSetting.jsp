@@ -687,7 +687,8 @@ function fn_ImmediateStart(gbn){
 			$.ajax({
 				url : "/db2pg/immediateStart.do",
 			  	data : {
-			  		wrk_nm : tableData.row('.selected').data().db2pg_trsf_wrk_nm
+			  		wrk_id : tableData.row('.selected').data().wrk_id,
+			  		wrk_nm : tableData.row('.selected').data().db2pg_trsf_wrk_nm		  		
 			  	},
 				type : "post",
 				beforeSend: function(xhr) {
@@ -705,7 +706,7 @@ function fn_ImmediateStart(gbn){
 					}
 				},
 				success : function(result) {
-
+					alert(result.RESULT);
 				}
 			});	
 		} else {
