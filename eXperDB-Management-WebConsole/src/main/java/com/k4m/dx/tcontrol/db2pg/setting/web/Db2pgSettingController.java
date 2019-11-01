@@ -30,9 +30,11 @@ import com.k4m.dx.tcontrol.cmmn.AES256;
 import com.k4m.dx.tcontrol.cmmn.AES256_KEY;
 import com.k4m.dx.tcontrol.cmmn.client.ClientProtocolID;
 import com.k4m.dx.tcontrol.common.service.HistoryVO;
+import com.k4m.dx.tcontrol.db2pg.cmmn.DB2PG_START;
 import com.k4m.dx.tcontrol.db2pg.cmmn.DatabaseTableInfo;
 import com.k4m.dx.tcontrol.db2pg.dbms.service.Db2pgSysInfVO;
 import com.k4m.dx.tcontrol.db2pg.dbms.service.DbmsService;
+import com.k4m.dx.tcontrol.db2pg.history.service.Db2pgHistoryService;
 import com.k4m.dx.tcontrol.db2pg.setting.service.CodeVO;
 import com.k4m.dx.tcontrol.db2pg.setting.service.DDLConfigVO;
 import com.k4m.dx.tcontrol.db2pg.setting.service.DataConfigVO;
@@ -51,6 +53,9 @@ public class Db2pgSettingController {
 	
 	@Autowired
 	private DbmsService dbmsService;
+	
+	@Autowired
+	private Db2pgHistoryService db2pgHistoryService;
 	
 	/**
 	 * DB2PG 설정 화면을 보여준다.
@@ -1069,16 +1074,43 @@ public class Db2pgSettingController {
 	 * @throws Exception
 	 */
 	@RequestMapping(value="/db2pg/immediateStart.do")
-	public @ResponseBody JSONObject db2pgImmediateStart(@ModelAttribute("historyVO") HistoryVO historyVO, HttpServletRequest request) {
-		JSONObject result = new JSONObject();
+	public @ResponseBody Map<String, Object> db2pgImmediateStart(@ModelAttribute("historyVO") HistoryVO historyVO, HttpServletRequest request) throws SQLException {
+		Map<String, Object> result = null;
+		Map<String, Object> param = new HashMap<String, Object>();
+		
+		HttpSession session = request.getSession();
+		LoginVO loginVo = (LoginVO) session.getAttribute("session");
+		String id = loginVo.getUsr_id();
+		
 		try {
 		String wrk_nm = request.getParameter("wrk_nm");	
+		String wrk_id = request.getParameter("wrk_id");	
+		
+		System.out.println(wrk_id);
 			
 		JSONObject obj = new JSONObject();
 		obj.put("wrk_nm", wrk_nm);		
 		
-//		Map<String, Object> result1  = DB2PG_START.db2pgStart(obj);
+		//즉시실행
+		result  = DB2PG_START.db2pgStart(obj);
+		
+		param.put("wrk_id", wrk_id);
+		param.put("wrk_strt_dtm", result.get("RESULT_startTime"));
+		param.put("wrk_end_dtm", result.get("RESULT_endTime"));
+		
+		if(result.get("RESULT").equals("SUCCESS")){
+			param.put("exe_rslt_cd", "TC001701");
+		}else{
+			param.put("exe_rslt_cd", "TC001702");
+		}
+		param.put("rslt_msg", result.get("RESULT_MSG"));
+		param.put("frst_regr_id", id);
+		param.put("lst_mdfr_id", id);
+
+		db2pgHistoryService.insertImdExe(param);
+		
 	}catch (Exception e) {
+		 result.put("RESULT", "FAIL");
 		e.printStackTrace();
 	}
 		return result;

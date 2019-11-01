@@ -211,4 +211,7 @@ public interface ScheduleService {
 
 	List<Map<String, Object>> selectFixRsltMsg(int exe_sn) throws Exception;
 
+
+	List<Map<String, Object>> selectDb2pgScheduleWorkList(HashMap<String, Object> paramvalue) throws Exception;
+
 }

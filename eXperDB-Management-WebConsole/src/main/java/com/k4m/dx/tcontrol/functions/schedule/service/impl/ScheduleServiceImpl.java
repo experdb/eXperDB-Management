@@ -287,4 +287,10 @@ public class ScheduleServiceImpl extends EgovAbstractServiceImpl  implements Sch
 	public List<Map<String, Object>> selectFixRsltMsg(int exe_sn) throws Exception {
 		return scheduleDAO.selectFixRsltMsg(exe_sn);
 	}
+
+
+	@Override
+	public List<Map<String, Object>> selectDb2pgScheduleWorkList(HashMap<String, Object> paramvalue) throws Exception {
+		return scheduleDAO.selectDb2pgScheduleWorkList(paramvalue);
+	}
 }

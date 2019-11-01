@@ -3,9 +3,11 @@ package com.k4m.dx.tcontrol.functions.schedule;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.json.simple.JSONObject;
 import org.quartz.Job;
 import org.quartz.JobDataMap;
 import org.quartz.JobExecutionContext;
@@ -19,6 +21,8 @@ import com.k4m.dx.tcontrol.admin.dbserverManager.service.DbServerVO;
 import com.k4m.dx.tcontrol.cmmn.client.ClientInfoCmmn;
 import com.k4m.dx.tcontrol.common.service.AgentInfoVO;
 import com.k4m.dx.tcontrol.common.service.CmmnServerInfoService;
+import com.k4m.dx.tcontrol.db2pg.cmmn.DB2PG_START;
+import com.k4m.dx.tcontrol.db2pg.history.service.Db2pgHistoryService;
 import com.k4m.dx.tcontrol.functions.schedule.service.ScheduleService;
 import com.k4m.dx.tcontrol.functions.schedule.service.WrkExeVO;
 
@@ -81,13 +85,13 @@ public class ScheduleQuartzJob implements Job{
 					AutowireCapableBeanFactory.AUTOWIRE_BY_TYPE, false);
 			
 			ScheduleService scheduleService = (ScheduleService) context.getBean("scheduleService");			
+			Db2pgHistoryService db2pgHistoryService = (Db2pgHistoryService) context.getBean("db2pgHistoryService");			
 			
 			// 2.실행중인 스케줄 정보 조회
 			runSchedule = scheduleService.selectRunScheduleList();
-			
-		
+					
 			// 3. scd_id에 대한 (Master)DB접속 정보 가지고옴
-			resultDbconn= scheduleService.selectDbconn(Integer.parseInt(scd_id));
+			//resultDbconn= scheduleService.selectDbconn(Integer.parseInt(scd_id));
 						
 			// 4. 해당 스케줄ID에 해당하는 스케줄 상세정보 조회(work 정보)
 			resultWork= scheduleService.selectExeScheduleList(scd_id);
@@ -98,14 +102,16 @@ public class ScheduleQuartzJob implements Job{
 	        
 	        String bck_fileNm ="";
 	        int db_svr_ipadr_id =0;
+	        String db2pg="";
 	        
-	        	ArrayList<String> BCK_NM = new ArrayList<String>();
-	        	db_svr_ipadr_id = Integer.parseInt(resultDbconn.get(0).get("db_svr_ipadr_id").toString());
+	        	ArrayList<String> BCK_NM = new ArrayList<String>();        	
 	        	ArrayList<String> CMD = new ArrayList<String>();
 		        //WORK 갯수만큼 루프
 				for(int i =0; i<resultWork.size(); i++){					
 					//DSN_DSCD==TC001901 백업
-					if(resultWork.get(i).get("bsn_dscd").toString().equals("TC001901")){								
+					if(resultWork.get(i).get("bsn_dscd").toString().equals("TC001901")){			
+						resultDbconn= scheduleService.selectDbconn(Integer.parseInt(scd_id));
+						db_svr_ipadr_id = Integer.parseInt(resultDbconn.get(0).get("db_svr_ipadr_id").toString());
 							int wrk_id = Integer.parseInt(resultWork.get(i).get("wrk_id").toString());
 														
 							//부가옵션 조회
@@ -193,12 +199,42 @@ public class ScheduleQuartzJob implements Job{
 							}		
 					//DSN_DSCD==TC001902 스크립트
 					}else if(resultWork.get(i).get("bsn_dscd").toString().equals("TC001902")){
+						resultDbconn= scheduleService.selectDbconn(Integer.parseInt(scd_id));
+						db_svr_ipadr_id = Integer.parseInt(resultDbconn.get(0).get("db_svr_ipadr_id").toString());
 						String strCmd =resultWork.get(i).get("exe_cmd").toString();						
 						CMD.add(strCmd);
 						BCK_NM.add("SCRIPT");
-					}				
+					//DSN_DSCD==TC001903 DB2PG 데이터이행	
+					}else if(resultWork.get(i).get("bsn_dscd").toString().equals("TC001903")){
+						db2pg = resultWork.get(i).get("bsn_dscd").toString();
+						
+						Map<String, Object> result = null;
+						Map<String, Object> param = new HashMap<String, Object>();
+						
+						JSONObject obj = new JSONObject();
+						obj.put("wrk_nm", resultWork.get(i).get("wrk_nm"));		
+					
+						result  = DB2PG_START.db2pgStart(obj);
+						
+						param.put("wrk_id", resultWork.get(i).get("wrk_id"));
+						param.put("wrk_strt_dtm", result.get("RESULT_startTime"));
+						param.put("wrk_end_dtm", result.get("RESULT_endTime"));
+						
+						if(result.get("RESULT").equals("SUCCESS")){
+							param.put("exe_rslt_cd", "TC001701");
+						}else{
+							param.put("exe_rslt_cd", "TC001702");
+						}
+						param.put("rslt_msg", result.get("RESULT_MSG"));
+						param.put("frst_regr_id", result.get("lst_mdfr_id"));
+						param.put("lst_mdfr_id", result.get("lst_mdfr_id"));
+
+						db2pgHistoryService.insertImdExe(param);
+					}					
 				}		
-				agentCall(resultWork, CMD, BCK_NM, resultDbconn, db_svr_ipadr_id);
+				if(!db2pg.equals("TC001903")){
+					agentCall(resultWork, CMD, BCK_NM, resultDbconn, db_svr_ipadr_id);
+				}
 		}catch(Exception e){
 			e.printStackTrace();
 		}

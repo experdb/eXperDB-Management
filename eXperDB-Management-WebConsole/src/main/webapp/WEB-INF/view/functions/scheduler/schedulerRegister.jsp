@@ -43,9 +43,6 @@ function fn_init(){
 	columns : [
 	{data : "rownum", defaultContent : "", targets : 0, orderable : false, checkboxes : {'selectRow' : true}}, 
 	{data : "idx", className : "dt-center", columnDefs: [ { searchable: false, orderable: false, targets: 0} ], order: [[ 1, 'asc' ]],  defaultContent : ""},
-	{data : "db_svr_nm",  defaultContent : ""}, //서버명
-	{data : "bsn_dscd_nm",  defaultContent : ""}, //구분
-	{data : "bck_bsn_dscd_nm",  defaultContent : ""}, //백업구분
 	{data : "wrk_nm", className : "dt-left", defaultContent : ""}, //work명
 	{ data : "wrk_exp",
 			render : function(data, type, full, meta) {	 	
@@ -54,7 +51,10 @@ function fn_init(){
 				return html;
 			},
 			defaultContent : ""
-		},
+		},	
+	{data : "db_svr_nm",  defaultContent : ""}, //서버명
+	{data : "bsn_dscd_nm",  defaultContent : ""}, //구분
+	{data : "bck_bsn_dscd_nm",  defaultContent : ""}, //백업구분
 	{data : "exe_ord",	
 			className: "dt-center",							
 			defaultContent : "",
@@ -84,7 +84,8 @@ function fn_init(){
         		return onError;	
         	}
           },
-	{data : "wrk_id",  defaultContent : "", visible: false }
+	{data : "wrk_id",  defaultContent : "", visible: false },
+    {data : "bsn_dscd",  defaultContent : "", visible: false }
 	],'select': {'style': 'multi'},
  		'drawCallback': function (settings) {
 				// Remove previous binding before adding it
@@ -139,11 +140,11 @@ function fn_init(){
   
 	  table.tables().header().to$().find('th:eq(0)').css('min-width', '10px');
 	  table.tables().header().to$().find('th:eq(1)').css('min-width', '30px');
-	  table.tables().header().to$().find('th:eq(2)').css('min-width', '130px');
-	  table.tables().header().to$().find('th:eq(3)').css('min-width', '70px');
+	  table.tables().header().to$().find('th:eq(2)').css('min-width', '200px');
+	  table.tables().header().to$().find('th:eq(3)').css('min-width', '300px');
 	  table.tables().header().to$().find('th:eq(4)').css('min-width', '130px');
-	  table.tables().header().to$().find('th:eq(5)').css('min-width', '200px');
-	  table.tables().header().to$().find('th:eq(6)').css('min-width', '300px');
+	  table.tables().header().to$().find('th:eq(5)').css('min-width', '70px');
+	  table.tables().header().to$().find('th:eq(6)').css('min-width', '130px');
 	  table.tables().header().to$().find('th:eq(7)').css('min-width', '80px');
 	  table.tables().header().to$().find('th:eq(8)').css('min-width', '80px');  
 	  table.tables().header().to$().find('th:eq(9)').css('min-width', '0px');
@@ -388,6 +389,38 @@ function fn_workAddCallback(rowList){
 	});
 }
 
+
+function fn_db2pgWorkAddCallback(rowList){
+	$.ajax({
+		url : "/selectDb2pgScheduleWorkList.do",
+		data : {
+			work_id : rowList,
+		},
+		dataType : "json",
+		type : "post",
+		beforeSend: function(xhr) {
+	        xhr.setRequestHeader("AJAX", true);
+	     },
+		error : function(xhr, status, error) {
+			if(xhr.status == 401) {
+				alert('<spring:message code="message.msg02" />');
+				top.location.href = "/";
+			} else if(xhr.status == 403) {
+				alert('<spring:message code="message.msg03" />');
+				top.location.href = "/";
+			} else {
+				alert("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""));
+			}
+		},
+		success : function(result) {	
+			table.rows({selected: true}).deselect();
+			//table.clear().draw();
+			table.rows.add(result).draw();
+		}
+	});
+}
+
+
 function fn_insertSchedule(){
 	var exe_perd_cd = $("#exe_perd_cd").val(); 
 		
@@ -409,16 +442,19 @@ function fn_insertSchedule(){
 	if (!fn_validation()) return false;
 	
 	var datas = table.rows().data();
-
+	
+	
 	if(datas.length < 1){
 		alert('<spring:message code="message.msg39" />');
 		return false;
 	}else{
 		//다른 서버가 포함되어있는지 확인
 		for (var i = 0; i < datas.length; i++){ 
-			if(table.rows().data()[0].db_svr_nm != table.rows().data()[i].db_svr_nm){
-				alert('<spring:message code="message.msg205"/>');
-				return false;
+			if(table.rows().data()[i].bsn_dscd == "TC001901"){
+				if(table.rows().data()[0].db_svr_nm != table.rows().data()[i].db_svr_nm){
+					alert('<spring:message code="message.msg205"/>');
+					return false;
+				}
 			}
 		}		
 	}
@@ -521,6 +557,33 @@ function fn_check() {
 			}
 		}
 	});
+}
+
+
+/* ********************************************************
+ * DB2PG work등록 팝업창 호출
+ ******************************************************** */
+function fn_db2pgAdd(){
+	
+/* 	if(table.rows().data().length > 0){
+		var wrk_id_list = [];
+		for (var i = 0; i < table.rows().data().length; i++) {
+			wrk_id_list.push( table.rows().data()[i].wrk_id);   
+	  	}
+		var popUrl = "/popup/db2pgWorkRegForm.do?wrk_id_list="+wrk_id_list; 
+	}else{
+		var popUrl = "/popup/db2pgWorkRegForm.do";
+	} */
+	
+	var popUrl = "/popup/db2pgWorkRegForm.do";
+	
+	var width = 1250;
+	var height = 685;
+	var left = (window.screen.width / 2) - (width / 2);
+	var top = (window.screen.height /2) - (height / 2);
+	var popOption = "width="+width+", height="+height+", top="+top+", left="+left+", resizable=no, scrollbars=yes, status=no, toolbar=no, titlebar=yes, location=no,";
+	
+	window.open(popUrl,"",popOption);
 }
 </script>
 
@@ -631,6 +694,7 @@ function fn_check() {
 								<div class="sub_tit">
 									<p>Work <span id="add_button"></p>
 									<div class="sub_btn">
+										<a href="#n" class="btn btnF_04 btnC_01" onclick="fn_db2pgAdd();"><span id="db2pg_button">DB2PG</span></a>
 										<a href="#n" class="btn btnF_04 btnC_01" onclick="fn_workAdd();"><span id="add_button"><spring:message code="common.add" /></span></a>
 										<a href="#n" class="btn btnF_04" onclick="fn_workDel();"><span id="del_button"><spring:message code="button.delete" /></span></a>
 									</div>
@@ -640,12 +704,12 @@ function fn_check() {
 										<thead>
 											<tr>
 												<th width="10"></th>
-												<th width="30"><spring:message code="common.no" /></th>												
+												<th width="30"><spring:message code="common.no" /></th>			
+												<th width="200" class="dt-center"><spring:message code="common.work_name" /> </th>
+												<th width="300" class="dt-center"><spring:message code="common.work_description" /></th>																							
 												<th width="130"><spring:message code="common.dbms_name" /></th>
 												<th width="70"><spring:message code="common.division" /></th>
-												<th width="130"><spring:message code="backup_management.detail_div" /></th>
-												<th width="200" class="dt-center"><spring:message code="common.work_name" /> </th>
-												<th width="300" class="dt-center"><spring:message code="common.work_description" /></th>												
+												<th width="130"><spring:message code="backup_management.detail_div" /></th>										
 												<th width="80"><spring:message code="data_transfer.run_order" /></th>
 												<th width="80">OnError</th>
 												<th width="0"></th>

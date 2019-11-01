@@ -212,4 +212,11 @@ public class ScheduleDAO extends EgovAbstractMapper{
 		return sl;
 	}
 
+
+	public List<Map<String, Object>> selectDb2pgScheduleWorkList(HashMap<String, Object> paramvalue) {
+		List<Map<String, Object>> sl = null;
+		sl = (List<Map<String, Object>>) list("scheduleSql.selectDb2pgScheduleWorkList", paramvalue);		
+		return sl;
+	}
+
 }
