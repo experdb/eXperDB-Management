@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper   PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="db2pgHistorySql">
+
+
+	<insert id="insertImdExe" parameterType="hashmap">
+		/**
+		* Query ID : insertImdExe
+		* Description : 즉실실행로그 등록
+		* Author : 변승우
+		**/	
+		INSERT INTO t_imdexe_g
+		(
+			imd_exe_sn
+			, wrk_id
+			, wrk_strt_dtm
+			, wrk_end_dtm
+			, exe_rslt_cd
+			, rslt_msg
+			, frst_regr_id
+			, frst_reg_dtm
+			, lst_mdfr_id
+			, lst_mdf_dtm
+		)
+		VALUES
+		(
+		  nextval('q_t_imdexe_g_01')
+		, #{wrk_id}::numeric
+		, #{wrk_strt_dtm}	
+		, #{wrk_end_dtm}
+		, #{exe_rslt_cd}
+		, #{rslt_msg}
+		, #{frst_regr_id}
+		, clock_timestamp()
+		, #{lst_mdfr_id}
+		, clock_timestamp()
+		)		
+	</insert>
+	
+	
+	<select id="selectDb2pgHistory" resultType="db2pgHistoryVO" parameterType="db2pgHistoryVO">
+		/**
+		* Query ID : selectDb2pgHistory
+		* Description : DB2PG 수행이력 조회
+		* Author : 변승우
+		**/
+	 	SELECT 
+			(ROW_NUMBER() OVER()) AS ROWNUM
+			, (ROW_NUMBER() OVER()) AS IDX
+            , IMDEXE.IMD_EXE_SN AS IMD_EXE_SN
+            , TO_TIMESTAMP(IMDEXE.WRK_STRT_DTM,'YYYYMMDDHHMISS') AS WRK_STRT_DTM
+			, TO_TIMESTAMP(IMDEXE.WRK_END_DTM,'YYYYMMDDHHMISS') AS WRK_END_DTM
+			,  EXTRACT(EPOCH FROM(TO_TIMESTAMP(IMDEXE.WRK_STRT_DTM,'YYYYMMDDHHMISS')-TO_TIMESTAMP(IMDEXE.WRK_STRT_DTM,'YYYYMMDDHH24MISS')))||'(SEC)' AS WRK_DTM
+			, IMDEXE.EXE_RSLT_CD
+			,(SELECT SYS_CD_NM FROM T_SYSDTL_C WHERE SYS_CD=IMDEXE.EXE_RSLT_CD) AS EXE_RSLT_NM
+			, IMDEXE.RSLT_MSG
+			, IMDEXE.FRST_REGR_ID
+			, TO_CHAR(IMDEXE.FRST_REG_DTM,'YYYY-MM-DD HH24:MI') AS FRST_REG_DTM
+			, IMDEXE.LST_MDFR_ID
+			, TO_CHAR(IMDEXE.LST_MDF_DTM,'YYYY-MM-DD HH24:MI') AS LST_MDF_DTM 
+			, IMDEXE.WRK_ID
+			, WRKCNG.WRK_NM AS WRK_NM
+			, WRKCNG.WRK_EXP AS WRK_EXP
+			, SOURCE_SYS_INF.DBMS_DSCD AS SOURCE_DBMS_DSCD
+			,(SELECT SYS_CD_NM FROM T_SYSDTL_C WHERE SYS_CD=SOURCE_SYS_INF.DBMS_DSCD) AS SOURCE_DBMS_DSCD_NM
+			, SOURCE_SYS_INF.IPADR AS SOURCE_IPADR
+			, SOURCE_SYS_INF.DTB_NM AS SOURCE_DTB_NM
+			, TARGET_SYS_INF.IPADR AS TARGET_IPADR
+			, TARGET_SYS_INF.DTB_NM AS TARGET_DTB_NM
+		FROM T_DB2PG_TRSF_WRK_INF TRSF_WRK_INF
+		LEFT OUTER JOIN T_DB2PG_SYS_INF SOURCE_SYS_INF ON TRSF_WRK_INF.DB2PG_SRC_SYS_ID = SOURCE_SYS_INF.DB2PG_SYS_ID
+		LEFT OUTER JOIN T_DB2PG_SYS_INF TARGET_SYS_INF ON TRSF_WRK_INF.DB2PG_TRG_SYS_ID = TARGET_SYS_INF.DB2PG_SYS_ID
+		LEFT OUTER JOIN T_WRKCNG_I WRKCNG ON TRSF_WRK_INF.WRK_ID = WRKCNG.WRK_ID
+		JOIN T_IMDEXE_G IMDEXE ON TRSF_WRK_INF.WRK_ID = IMDEXE.WRK_ID
+		WHERE 1=1		
+		<if test="exe_rslt_cd != null and exe_rslt_cd != '' ">
+      		AND IMDEXE.EXE_RSLT_CD=#{exe_rslt_cd}
+      	</if>  
+      	<if test="wrk_nm != null and wrk_nm != '' ">
+      		AND WRKCNG.WRK_NM=#{wrk_nm}
+      	</if>   
+      	
+		ORDER BY IMDEXE.LST_MDF_DTM DESC			
+	</select>
+</mapper>

@@ -262,6 +262,54 @@ public class ScheduleController {
 	
 	
 	/**
+	 * DB2PG 스케쥴 work List를 조회한다.
+	 * 
+	 * @return resultSet
+	 * @throws Exception
+	 */
+	@RequestMapping(value = "/selectDb2pgScheduleWorkList.do")
+	@ResponseBody
+	public List<Map<String, Object>> selectDb2pgScheduleWorkList(@ModelAttribute("historyVO") HistoryVO historyVO, HttpServletRequest request, HttpServletResponse response) {
+	
+		try {
+			//해당메뉴 권한 조회 (공통메소드호출)
+			CmmnUtils cu = new CmmnUtils();
+			menuAut = cu.selectMenuAut(menuAuthorityService, "MN000101");
+		}catch (Exception e) {
+			e.printStackTrace();
+		}
+		
+		List<Map<String, Object>> result = null;
+		
+		try {					
+			//읽기 권한이 없는경우 error페이지 호출 , [추후 Exception 처리예정]
+			if(menuAut.get(0).get("read_aut_yn").equals("N")){
+				response.sendRedirect("/autError.do");
+				return result;
+			}else{		
+				String work_id = request.getParameter("work_id");
+				
+				String[] Param = work_id.toString().substring(1, work_id.length()-1 ).split(",");
+				HashMap<String , Object> paramvalue = new HashMap<String, Object>();
+				List<String> ids = new ArrayList<String>(); 
+				
+				for(int i=0; i<Param.length; i++){
+					ids.add(Param[i].toString()); 
+				}
+				paramvalue.put("work_id", ids);
+				
+				result = scheduleService.selectDb2pgScheduleWorkList(paramvalue);
+				return result;
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return result;
+	}
+	
+	
+	
+	/**
 	 * 스케쥴을 등록한다.
 	 * 
 	 * @return 
@@ -1472,4 +1520,44 @@ public class ScheduleController {
 		  }		  
 		  return arrYMD;	
 	}	
+	
+
+	/**
+	 * DB2PG 스케쥴 work 등록 화면을 보여준다.
+	 * 
+	 * @param
+	 * @return ModelAndView mv
+	 * @throws Exception
+	 */
+	@RequestMapping(value = "/popup/db2pgWorkRegForm.do")
+	public ModelAndView db2pgWorkRegForm(@ModelAttribute("historyVO") HistoryVO historyVO, HttpServletRequest request) {
+		
+		ModelAndView mv = new ModelAndView();
+	
+		try {
+			//해당메뉴 권한 조회 (공통메소드호출)
+			CmmnUtils cu = new CmmnUtils();
+			menuAut = cu.selectMenuAut(menuAuthorityService, "MN000101");
+		}catch (Exception e) {
+			e.printStackTrace();
+		}
+
+		try {			
+			//쓰기 권한이 없는경우 error페이지 호출 , [추후 Exception 처리예정]
+			if(menuAut.get(0).get("wrt_aut_yn").equals("N")){
+				mv.setViewName("error/autError");
+			}else{	
+				// 화면접근이력 이력 남기기
+				CmmnUtils.saveHistory(request, historyVO);
+				historyVO.setExe_dtl_cd("DX-T0043");
+				historyVO.setMnu_id(2);
+				accessHistoryService.insertHistory(historyVO);
+				
+				mv.setViewName("popup/db2pgWorkRegForm");	
+			}			
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return mv;
+	}
 }

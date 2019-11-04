@@ -373,6 +373,8 @@
 			, src_tb_ddl_exrt_tf
 			, ddl_save_pth
 			, db2pg_sys_id
+			, db2pg_exrt_trg_tb_wrk_id
+			, db2pg_exrt_exct_tb_wrk_id
 			, (SELECT db2pg_sys_nm FROM t_db2pg_sys_inf WHERE db2pg_sys_id=wrk_inf.db2pg_sys_id) as db2pg_sys_nm
 			, (SELECT exrt_trg_tb_nm FROM t_db2pg_exrttrg_srctb_ls WHERE db2pg_exrt_trg_tb_wrk_id=wrk_inf.db2pg_exrt_trg_tb_wrk_id) as exrt_trg_tb_nm
 			, coalesce((SELECT length(exrt_trg_tb_nm)-length(replace(exrt_trg_tb_nm,',',''))+1 FROM t_db2pg_exrttrg_srctb_ls WHERE db2pg_exrt_trg_tb_wrk_id=wrk_inf.db2pg_exrt_trg_tb_wrk_id),0) as exrt_trg_tb_cnt
@@ -398,6 +400,8 @@
 		, (SELECT db2pg_sys_nm FROM t_db2pg_sys_inf WHERE db2pg_sys_id=wrk_inf.db2pg_src_sys_id) as source_dbms_nm
 		, db2pg_trg_sys_id
 		, (SELECT db2pg_sys_nm FROM t_db2pg_sys_inf WHERE db2pg_sys_id=wrk_inf.db2pg_trg_sys_id) as target_dbms_nm
+		, db2pg_exrt_trg_tb_wrk_id
+		, db2pg_exrt_exct_tb_wrk_id
 		, (SELECT exrt_trg_tb_nm FROM t_db2pg_exrttrg_srctb_ls WHERE db2pg_exrt_trg_tb_wrk_id=wrk_inf.db2pg_exrt_trg_tb_wrk_id) as exrt_trg_tb_nm
 		, coalesce((SELECT length(exrt_trg_tb_nm)-length(replace(exrt_trg_tb_nm,',',''))+1 FROM t_db2pg_exrttrg_srctb_ls WHERE db2pg_exrt_trg_tb_wrk_id=wrk_inf.db2pg_exrt_trg_tb_wrk_id),0) as exrt_trg_tb_cnt
 		, (SELECT exrt_exct_tb_nm FROM t_db2pg_exrtexct_srctb_ls WHERE db2pg_exrt_exct_tb_wrk_id=wrk_inf.db2pg_exrt_exct_tb_wrk_id) as exrt_exct_tb_nm
