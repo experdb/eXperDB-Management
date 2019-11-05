@@ -171,7 +171,7 @@ function fn_insert_work(){
 							success : function(result) {
 								if(result.resultCode == "0000000000"){
 									alert('<spring:message code="message.msg07" /> ');
-									opener.location.reload();
+									opener.getdataDataList();
 									self.close();
 								}else{
 									alert('등록에 실패했습니다.');

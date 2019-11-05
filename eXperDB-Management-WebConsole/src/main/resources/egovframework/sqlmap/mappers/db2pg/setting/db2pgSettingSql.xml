@@ -349,6 +349,52 @@
 		)		
 	</insert>
 	
+	<update id="updateDataWorkNM" parameterType="dataConfigVO">
+		/**
+		* Query ID : updateDataWorkNM
+		* Description : Data WORK 설명 수정
+		* Author : 김주영
+		**/		
+		UPDATE T_WRKCNG_I SET
+	 	wrk_exp = #{db2pg_trsf_wrk_exp}
+	 	WHERE WRK_ID = #{wrk_id}
+	</update>
+	
+	<update id="updateDataWork" parameterType="dataConfigVO">
+		/**
+		* Query ID : updateDataWork
+		* Description : Data WORK 수정
+		* Author : 김주영
+		**/		
+        UPDATE t_db2pg_trsf_wrk_inf
+		SET 
+          db2pg_src_sys_id=#{db2pg_src_sys_id}
+        , db2pg_trg_sys_id=#{db2pg_trg_sys_id}
+        , exrt_dat_cnt=#{exrt_dat_cnt}
+        <if test="db2pg_exrt_trg_tb_wrk_id != 0">
+        , db2pg_exrt_trg_tb_wrk_id=#{db2pg_exrt_trg_tb_wrk_id}
+        </if>
+        <if test="db2pg_exrt_exct_tb_wrk_id != 0">
+        , db2pg_exrt_exct_tb_wrk_id=#{db2pg_exrt_exct_tb_wrk_id}
+        </if>
+        , exrt_dat_ftch_sz=#{exrt_dat_ftch_sz}
+        , dat_ftch_bff_sz=#{dat_ftch_bff_sz}
+        , exrt_prl_prcs_ecnt=#{exrt_prl_prcs_ecnt}
+        , lob_dat_bff_sz=#{lob_dat_bff_sz}
+        , usr_qry_use_tf=#{usr_qry_use_tf}
+        <if test="db2pg_usr_qry_id != 0">
+        , db2pg_usr_qry_id=#{db2pg_usr_qry_id}
+        </if>
+        , ins_opt_cd=#{ins_opt_cd}
+        , tb_rbl_tf=#{tb_rbl_tf}
+        , cnst_cnd_exrt_tf=#{cnst_cnd_exrt_tf}
+        , lst_mdfr_id=#{lst_mdfr_id}
+        , lst_mdf_dtm=clock_timestamp()
+        , trans_save_pth=#{trans_save_pth}
+        , src_cnd_qry=#{src_cnd_qry}        
+        WHERE db2pg_trsf_wrk_id = #{db2pg_trsf_wrk_id}	
+	</update>
+	
 	<delete id="deleteDataWork" parameterType="int">
 		/**
 		* Query ID : deleteDataWork

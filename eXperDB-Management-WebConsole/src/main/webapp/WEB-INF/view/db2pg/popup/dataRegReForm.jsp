@@ -90,7 +90,8 @@ function fn_update_work(){
 		  		cnst_cnd_exrt_tf : $("#cnst_cnd_exrt_tf").val(),
 		  		src_cnd_qry : $("#src_cnd_qry").val(),
 		  		usr_qry_use_tf : $('input[name="usr_qry_use_tf"]:checked').val(),
-		  		db2pg_usr_qry : $("#db2pg_usr_qry").val()
+		  		db2pg_usr_qry : $("#db2pg_usr_qry").val(),
+		  		wrk_id : $("#wrk_id").val()
 		  	},
 			type : "post",
 			beforeSend: function(xhr) {
@@ -110,7 +111,7 @@ function fn_update_work(){
 			success : function(result) {
 				if(result.resultCode == "0000000000"){
 					alert('<spring:message code="message.msg07" /> ');
-					opener.location.reload();
+					opener.getdataDataList();
 					self.close();
 				}else{
 					alert('등록에 실패했습니다.');
@@ -253,7 +254,9 @@ function fn_tableAddCallback(rowList, tableGbn){
 				<tbody>
 					<tr>
 						<th scope="row" class="ico_t1"><spring:message code="common.work_name" /></th>
-						<td><input type="text" class="txt" name="db2pg_trsf_wrk_nm" id="db2pg_trsf_wrk_nm" value="${db2pg_trsf_wrk_nm}" maxlength="20" onkeyup="fn_checkWord(this,20)" placeholder="20<spring:message code='message.msg188'/>" onblur="this.value=this.value.trim()" readonly="readonly"/></td>
+						<td><input type="text" class="txt" name="db2pg_trsf_wrk_nm" id="db2pg_trsf_wrk_nm" value="${db2pg_trsf_wrk_nm}" maxlength="20" onkeyup="fn_checkWord(this,20)" placeholder="20<spring:message code='message.msg188'/>" onblur="this.value=this.value.trim()" readonly="readonly"/>
+							<input type="hidden" name="wrk_id" id="wrk_id" value="${wrk_id}">
+						</td>
 					</tr>
 					<tr>
 						<th scope="row" class="ico_t1"><spring:message code="common.work_description" /></th>

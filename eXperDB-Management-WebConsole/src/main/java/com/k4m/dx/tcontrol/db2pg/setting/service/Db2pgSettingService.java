@@ -115,6 +115,14 @@ public interface Db2pgSettingService {
 	void insertDataWork(DataConfigVO dataConfigVO) throws Exception;
 
 	/**
+	 * Data WORK 수정
+	 * 
+	 * @param dataConfigVO
+	 * @throws Exception
+	 */
+	void updateDataWork(DataConfigVO dataConfigVO) throws Exception;
+
+	/**
 	 * Data WORK 삭제
 	 * 
 	 * @param dataConfigVO

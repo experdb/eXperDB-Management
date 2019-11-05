@@ -89,6 +89,11 @@ public class Db2pgSettingServiceImpl extends EgovAbstractServiceImpl implements 
 	}
 
 	@Override
+	public void updateDataWork(DataConfigVO dataConfigVO) throws Exception {
+		db2pgSettingDAO.updateDataWork(dataConfigVO);
+	}
+
+	@Override
 	public void deleteDataWork(int db2pg_trsf_wrk_id) throws Exception {
 		db2pgSettingDAO.deleteDataWork(db2pg_trsf_wrk_id);
 	}
