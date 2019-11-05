@@ -163,6 +163,17 @@ public class Db2pgSettingDAO extends EgovAbstractMapper {
 	}
 
 	/**
+	 * Data WORK 수정
+	 * 
+	 * @param dataConfigVO
+	 * @throws Exception
+	 */
+	public void updateDataWork(DataConfigVO dataConfigVO) throws SQLException {
+		update("db2pgSettingSql.updateDataWorkNM", dataConfigVO);
+		update("db2pgSettingSql.updateDataWork", dataConfigVO);
+	}
+
+	/**
 	 * Data WORK 삭제
 	 * 
 	 * @param dataConfigVO

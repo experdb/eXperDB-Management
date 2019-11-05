@@ -188,8 +188,7 @@ public class Db2pgSettingController {
 	 * @throws Exception
 	 */
 	@RequestMapping(value = "/db2pg/insertDDLWork.do")
-	@ResponseBody 
-	 public JSONObject insertDDLWork(@ModelAttribute("ddlConfigVO") DDLConfigVO ddlConfigVO, HttpServletRequest request, HttpServletResponse response, @ModelAttribute("historyVO") HistoryVO historyVO) {
+	 public @ResponseBody JSONObject insertDDLWork(@ModelAttribute("ddlConfigVO") DDLConfigVO ddlConfigVO, HttpServletRequest request, HttpServletResponse response, @ModelAttribute("historyVO") HistoryVO historyVO) {
 		JSONObject result = new JSONObject();
 		try {
 			// 화면접근이력 이력 남기기
@@ -286,8 +285,7 @@ public class Db2pgSettingController {
 	 * @throws Exception
 	 */
 	@RequestMapping(value = "/db2pg/insertCopyDDLWork.do")
-	@ResponseBody 
-	 public JSONObject insertCopyDDLWork(@ModelAttribute("ddlConfigVO") DDLConfigVO ddlConfigVO, HttpServletRequest request, HttpServletResponse response, @ModelAttribute("historyVO") HistoryVO historyVO) {
+	 public @ResponseBody JSONObject insertCopyDDLWork(@ModelAttribute("ddlConfigVO") DDLConfigVO ddlConfigVO, HttpServletRequest request, HttpServletResponse response, @ModelAttribute("historyVO") HistoryVO historyVO) {
 		JSONObject result = new JSONObject();
 		try {
 			// 화면접근이력 이력 남기기
@@ -411,8 +409,7 @@ public class Db2pgSettingController {
 	 * @throws Exception
 	 */
 	@RequestMapping(value = "/db2pg/updateDDLWork.do")
-	@ResponseBody 
-	 public JSONObject updateDDLWork(@ModelAttribute("ddlConfigVO") DDLConfigVO ddlConfigVO, HttpServletRequest request, HttpServletResponse response, @ModelAttribute("historyVO") HistoryVO historyVO) {
+	 public @ResponseBody JSONObject updateDDLWork(@ModelAttribute("ddlConfigVO") DDLConfigVO ddlConfigVO, HttpServletRequest request, HttpServletResponse response, @ModelAttribute("historyVO") HistoryVO historyVO) {
 		JSONObject result = new JSONObject();
 		try {
 			// 화면접근이력 이력 남기기
@@ -571,8 +568,7 @@ public class Db2pgSettingController {
 	 * @throws Exception
 	 */
 	@RequestMapping(value = "/db2pg/insertDataWork.do")
-	@ResponseBody 
-	 public JSONObject insertDataWork(@ModelAttribute("dataConfigVO") DataConfigVO dataConfigVO, HttpServletRequest request, HttpServletResponse response, @ModelAttribute("historyVO") HistoryVO historyVO) {
+	 public @ResponseBody JSONObject insertDataWork(@ModelAttribute("dataConfigVO") DataConfigVO dataConfigVO, HttpServletRequest request, HttpServletResponse response, @ModelAttribute("historyVO") HistoryVO historyVO) {
 		JSONObject result = new JSONObject();
 		try {
 			// 화면접근이력 이력 남기기
@@ -672,8 +668,8 @@ public class Db2pgSettingController {
 			configObj.put("tar_port", targetDBMS.getPortno());
 			configObj.put("tar_db_charset", targetDBMS.getCrts_nm());
 			configObj.put("tar_truncate", dataConfigVO.getIns_opt_cd());
-			configObj.put("tar_constraint_rebuild", dataConfigVO.getCnst_cnd_exrt_tf());
-			configObj.put("tar_constraint_ddl", dataConfigVO.getTb_rbl_tf());
+			configObj.put("tar_constraint_rebuild", dataConfigVO.getTb_rbl_tf());
+			configObj.put("tar_constraint_ddl", dataConfigVO.getCnst_cnd_exrt_tf());
 			configObj.put("src_where_condition", dataConfigVO.getSrc_cnd_qry());
 			configObj.put("src_file_output_path", trans_path);
 			
@@ -695,8 +691,7 @@ public class Db2pgSettingController {
 	 * @throws Exception
 	 */
 	@RequestMapping(value = "/db2pg/insertCopyDataWork.do")
-	@ResponseBody 
-	 public JSONObject insertCopyDataWork(@ModelAttribute("dataConfigVO") DataConfigVO dataConfigVO, HttpServletRequest request, HttpServletResponse response, @ModelAttribute("historyVO") HistoryVO historyVO) {
+	 public @ResponseBody JSONObject insertCopyDataWork(@ModelAttribute("dataConfigVO") DataConfigVO dataConfigVO, HttpServletRequest request, HttpServletResponse response, @ModelAttribute("historyVO") HistoryVO historyVO) {
 		JSONObject result = new JSONObject();
 		try {
 			// 화면접근이력 이력 남기기
@@ -750,40 +745,40 @@ public class Db2pgSettingController {
 			db2pgSettingService.insertDataWork(targetDataWork);
 			
 			//3. config 파일 만들기
-//			Db2pgSysInfVO sourceDBMS = (Db2pgSysInfVO) db2pgSettingService.selectDBMS(dataConfigVO.getDb2pg_src_sys_id());
-//			Db2pgSysInfVO targetDBMS = (Db2pgSysInfVO) db2pgSettingService.selectDBMS(dataConfigVO.getDb2pg_trg_sys_id());
-//			JSONObject configObj = new JSONObject();
-//			configObj.put("path", db2pg_path);
-//			configObj.put("wrk_nm", dataConfigVO.getDb2pg_trsf_wrk_nm());
-//			configObj.put("src_host", sourceDBMS.getIpadr());
-//			configObj.put("src_user", sourceDBMS.getSpr_usr_id());
-//			configObj.put("src_password", aes.aesDecode(sourceDBMS.getPwd()));
-//			configObj.put("src_database", sourceDBMS.getDtb_nm());
-//			configObj.put("src_schema", sourceDBMS.getScm_nm());
-//			configObj.put("src_dbms_type", sourceDBMS.getDbms_dscd());
-//			configObj.put("src_port", sourceDBMS.getPortno());
-//			configObj.put("src_db_charset", sourceDBMS.getCrts_nm());
-//			configObj.put("src_include_tables", src_include_tables);
-//			configObj.put("src_exclude_tables", src_exclude_tables);
-//			configObj.put("src_select_on_parallel", dataConfigVO.getExrt_prl_prcs_ecnt());
-//			configObj.put("src_copy_segment_size", dataConfigVO.getExrt_dat_ftch_sz());
-//			configObj.put("src_buffer_size", dataConfigVO.getDat_ftch_bff_sz());
-//			configObj.put("src_lob_buffer_size", dataConfigVO.getLob_dat_bff_sz());
-//			configObj.put("src_rows_export", dataConfigVO.getExrt_dat_cnt());
-//			configObj.put("tar_host", targetDBMS.getIpadr());
-//			configObj.put("tar_user", targetDBMS.getSpr_usr_id());
-//			configObj.put("tar_password", aes.aesDecode(targetDBMS.getPwd()));
-//			configObj.put("tar_database", targetDBMS.getDtb_nm());
-//			configObj.put("tar_schema", targetDBMS.getScm_nm());
-//			configObj.put("tar_port", targetDBMS.getPortno());
-//			configObj.put("tar_db_charset", targetDBMS.getCrts_nm());
-//			configObj.put("tar_truncate", dataConfigVO.getIns_opt_cd());
-//			configObj.put("tar_constraint_rebuild", dataConfigVO.getCnst_cnd_exrt_tf());
-//			configObj.put("tar_constraint_ddl", dataConfigVO.getTb_rbl_tf());
-//			configObj.put("src_where_condition", dataConfigVO.getSrc_cnd_qry());
-//			configObj.put("src_file_output_path", trans_path);
-//			
-//			result = Db2pgConfigController.createDataConfig(configObj);
+			Db2pgSysInfVO sourceDBMS = (Db2pgSysInfVO) db2pgSettingService.selectDBMS(sourceDataWork.getDb2pg_src_sys_id());
+			Db2pgSysInfVO targetDBMS = (Db2pgSysInfVO) db2pgSettingService.selectDBMS(sourceDataWork.getDb2pg_trg_sys_id());
+			JSONObject configObj = new JSONObject();
+			configObj.put("path", db2pg_path);
+			configObj.put("wrk_nm", dataConfigVO.getDb2pg_trsf_wrk_nm());
+			configObj.put("src_host", sourceDBMS.getIpadr());
+			configObj.put("src_user", sourceDBMS.getSpr_usr_id());
+			configObj.put("src_password", aes.aesDecode(sourceDBMS.getPwd()));
+			configObj.put("src_database", sourceDBMS.getDtb_nm());
+			configObj.put("src_schema", sourceDBMS.getScm_nm());
+			configObj.put("src_dbms_type", sourceDBMS.getDbms_dscd());
+			configObj.put("src_port", sourceDBMS.getPortno());
+			configObj.put("src_db_charset", sourceDBMS.getCrts_nm());
+			configObj.put("src_include_tables", sourceDataWork.getExrt_trg_tb_nm()==null?"":sourceDataWork.getExrt_trg_tb_nm());
+			configObj.put("src_exclude_tables", sourceDataWork.getExrt_exct_tb_nm()==null?"":sourceDataWork.getExrt_exct_tb_nm());
+			configObj.put("src_select_on_parallel", sourceDataWork.getExrt_prl_prcs_ecnt());
+			configObj.put("src_copy_segment_size", sourceDataWork.getExrt_dat_ftch_sz());
+			configObj.put("src_buffer_size", sourceDataWork.getDat_ftch_bff_sz());
+			configObj.put("src_lob_buffer_size", sourceDataWork.getLob_dat_bff_sz());
+			configObj.put("src_rows_export", sourceDataWork.getExrt_dat_cnt());
+			configObj.put("tar_host", targetDBMS.getIpadr());
+			configObj.put("tar_user", targetDBMS.getSpr_usr_id());
+			configObj.put("tar_password", aes.aesDecode(targetDBMS.getPwd()));
+			configObj.put("tar_database", targetDBMS.getDtb_nm());
+			configObj.put("tar_schema", targetDBMS.getScm_nm());
+			configObj.put("tar_port", targetDBMS.getPortno());
+			configObj.put("tar_db_charset", targetDBMS.getCrts_nm());
+			configObj.put("tar_truncate", sourceDataWork.getIns_opt_cd());
+			configObj.put("tar_constraint_rebuild", dataConfigVO.getTb_rbl_tf());
+			configObj.put("tar_constraint_ddl", dataConfigVO.getCnst_cnd_exrt_tf());
+			configObj.put("src_where_condition", sourceDataWork.getSrc_cnd_qry());
+			configObj.put("src_file_output_path", trans_path);
+			
+			result = Db2pgConfigController.createDataConfig(configObj);
 		} catch (Exception e) {
 			e.printStackTrace();
 			result.put("resultCode", "8000000003");
@@ -834,6 +829,7 @@ public class Db2pgSettingController {
 			mv.addObject("cnst_cnd_exrt_tf",result.getCnst_cnd_exrt_tf());
 			mv.addObject("trans_save_pth",result.getTrans_save_pth());
 			mv.addObject("src_cnd_qry",result.getSrc_cnd_qry());
+			mv.addObject("wrk_id",result.getWrk_id());
 			
 			List<CodeVO> codeInputMode = db2pgSettingService.selectCode("TC0030");
 			mv.addObject("codeInputMode", codeInputMode);
@@ -856,11 +852,98 @@ public class Db2pgSettingController {
 	 * @throws Exception
 	 */
 	@RequestMapping(value = "/db2pg/updateDataWork.do")
-	public JSONObject updateDataWork(@ModelAttribute("dataConfigVO") DataConfigVO dataConfigVO, HttpServletRequest request, HttpServletResponse response, @ModelAttribute("historyVO") HistoryVO historyVO) {
+	public @ResponseBody JSONObject updateDataWork(@ModelAttribute("dataConfigVO") DataConfigVO dataConfigVO, HttpServletRequest request, HttpServletResponse response, @ModelAttribute("historyVO") HistoryVO historyVO) {
 		JSONObject result = new JSONObject();
 		try{
-			System.out.println("*****************");
-			System.out.print(dataConfigVO.getDb2pg_trsf_wrk_id());
+			AES256 aes = new AES256(AES256_KEY.ENC_KEY);
+			HttpSession session = request.getSession();
+			LoginVO loginVo = (LoginVO) session.getAttribute("session");
+			String id = loginVo.getUsr_id();
+			
+			SrcTableVO srctableVO = new SrcTableVO();
+			srctableVO.setFrst_regr_id(id);
+			int exrt_trg_tb_wrk_id =0;
+			int exrt_exct_tb_wrk_id=0;
+			int wrk_id = 0;
+			String src_include_tables=request.getParameter("src_include_tables");
+			String src_exclude_tables=request.getParameter("src_exclude_tables");
+			
+			//1. WORK 등록
+			String time = nowTime();
+			Properties props = new Properties();
+			props.load(new FileInputStream(ResourceUtils.getFile("classpath:egovframework/tcontrolProps/globals.properties")));			
+			String db2pg_path = props.get("db2pg_path").toString();	
+			String trans_path = db2pg_path+"/trans/"+time+"_"+dataConfigVO.getDb2pg_trsf_wrk_nm();
+
+			//1.T_DB2PG_추출대상소스테이블내역 insert
+			if(!src_include_tables.equals("")){
+				exrt_trg_tb_wrk_id=db2pgSettingService.selectExrttrgSrctblsSeq();
+		    	srctableVO.setDb2pg_exrt_trg_tb_wrk_id(exrt_trg_tb_wrk_id);
+		    	srctableVO.setExrt_trg_tb_nm(src_include_tables);
+				db2pgSettingService.insertExrttrgSrcTb(srctableVO);
+			}
+			
+			//2.T_DB2PG_추출제외소스테이블내역 insert
+			if(!src_exclude_tables.equals("")){
+				exrt_exct_tb_wrk_id=db2pgSettingService.selectExrtexctSrctblsSeq();
+		    	srctableVO.setDb2pg_exrt_exct_tb_wrk_id(exrt_exct_tb_wrk_id);
+		    	srctableVO.setExrt_exct_tb_nm(src_exclude_tables);
+				db2pgSettingService.insertExrtexctSrcTb(srctableVO);
+			}
+			
+			//3.사용자쿼리를 사용할 경우 insert(보류)
+			int usr_qry_id=0;
+//			if(dataConfigVO.getUsr_qry_use_tf()==true){
+//				QueryVO queryVO = new QueryVO();
+//				usr_qry_id=db2pgSettingService.selectExrtusrQryIdSeq();
+//				queryVO.setDb2pg_usr_qry_id(usr_qry_id);
+//				queryVO.setUsr_qry_exp(request.getParameter("db2pg_usr_qry"));
+//				queryVO.setFrst_regr_id(id);
+//				db2pgSettingService.insertUsrQry(queryVO);
+//			}
+			
+			//4.T_DB2PG_Data_작업_정보 insert
+			dataConfigVO.setTrans_save_pth(trans_path);
+			dataConfigVO.setDb2pg_exrt_trg_tb_wrk_id(exrt_trg_tb_wrk_id);
+			dataConfigVO.setDb2pg_exrt_exct_tb_wrk_id(exrt_exct_tb_wrk_id);
+			dataConfigVO.setDb2pg_usr_qry_id(usr_qry_id);
+			db2pgSettingService.updateDataWork(dataConfigVO);
+			
+			//3. config 파일 만들기
+			Db2pgSysInfVO sourceDBMS = (Db2pgSysInfVO) db2pgSettingService.selectDBMS(dataConfigVO.getDb2pg_src_sys_id());
+			Db2pgSysInfVO targetDBMS = (Db2pgSysInfVO) db2pgSettingService.selectDBMS(dataConfigVO.getDb2pg_trg_sys_id());
+			JSONObject configObj = new JSONObject();
+			configObj.put("path", db2pg_path);
+			configObj.put("wrk_nm", dataConfigVO.getDb2pg_trsf_wrk_nm());
+			configObj.put("src_host", sourceDBMS.getIpadr());
+			configObj.put("src_user", sourceDBMS.getSpr_usr_id());
+			configObj.put("src_password", aes.aesDecode(sourceDBMS.getPwd()));
+			configObj.put("src_database", sourceDBMS.getDtb_nm());
+			configObj.put("src_schema", sourceDBMS.getScm_nm());
+			configObj.put("src_dbms_type", sourceDBMS.getDbms_dscd());
+			configObj.put("src_port", sourceDBMS.getPortno());
+			configObj.put("src_db_charset", sourceDBMS.getCrts_nm());
+			configObj.put("src_include_tables", src_include_tables);
+			configObj.put("src_exclude_tables", src_exclude_tables);
+			configObj.put("src_select_on_parallel", dataConfigVO.getExrt_prl_prcs_ecnt());
+			configObj.put("src_copy_segment_size", dataConfigVO.getExrt_dat_ftch_sz());
+			configObj.put("src_buffer_size", dataConfigVO.getDat_ftch_bff_sz());
+			configObj.put("src_lob_buffer_size", dataConfigVO.getLob_dat_bff_sz());
+			configObj.put("src_rows_export", dataConfigVO.getExrt_dat_cnt());
+			configObj.put("tar_host", targetDBMS.getIpadr());
+			configObj.put("tar_user", targetDBMS.getSpr_usr_id());
+			configObj.put("tar_password", aes.aesDecode(targetDBMS.getPwd()));
+			configObj.put("tar_database", targetDBMS.getDtb_nm());
+			configObj.put("tar_schema", targetDBMS.getScm_nm());
+			configObj.put("tar_port", targetDBMS.getPortno());
+			configObj.put("tar_db_charset", targetDBMS.getCrts_nm());
+			configObj.put("tar_truncate", dataConfigVO.getIns_opt_cd());
+			configObj.put("tar_constraint_rebuild", dataConfigVO.getTb_rbl_tf());
+			configObj.put("tar_constraint_ddl", dataConfigVO.getCnst_cnd_exrt_tf());
+			configObj.put("src_where_condition", dataConfigVO.getSrc_cnd_qry());
+			configObj.put("src_file_output_path", trans_path);
+
+			result = Db2pgConfigController.createDataConfig(configObj);
 		} catch (Exception e) {
 			e.printStackTrace();
 			result.put("resultCode", "8000000003");

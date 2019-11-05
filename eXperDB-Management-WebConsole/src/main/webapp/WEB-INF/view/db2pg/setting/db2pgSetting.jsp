@@ -629,7 +629,6 @@ function fn_copy_save(){
 		var rowCnt = tableData.rows('.selected').data().length;
 		if (rowCnt == 1) {
 			var db2pg_trsf_wrk_id = tableData.row('.selected').data().db2pg_trsf_wrk_id;
-			alert(db2pg_trsf_wrk_id);
 			$.ajax({
 				url : "/db2pg/insertCopyDataWork.do",
 			  	data : {
