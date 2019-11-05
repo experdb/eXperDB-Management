@@ -71,32 +71,7 @@ function fn_init(){
 		{data : "idx", className : "dt-center", defaultContent : ""}, 
 		{data : "db2pg_ddl_wrk_nm", className : "dt-center", defaultContent : ""}, 
 		{data : "db2pg_ddl_wrk_exp", className : "dt-center", defaultContent : ""}, 
-		{
-			data : "dbms_dscd",
-			className : "dt-center",
-			render : function(data, type, full, meta) {
-				var html = "";
-				if (data == "TC002201") {
-					html += "Oracle";
-				}else if(data == "TC002202"){
-					html += "MS-SQL";
-				}else if(data == "TC002203"){
-					html += "MySQL";
-				}else if(data == "TC002204"){
-					html += "PostgreSQL";
-				}else if(data == "TC002205"){
-					html += "DB2";
-				}else if(data == "TC002206"){
-					html += "SyBaseASE";
-				}else if(data == "TC002207"){
-					html += "CUBRID";
-				}else if(data == "TC002208"){
-					html += "Tibero";
-				}
-				return html;
-			},
-			defaultContent : ""
-		},
+		{data : "dbms_dscd", className : "dt-center", defaultContent : ""}, 
 		{data : "ipadr", className : "dt-center", defaultContent : ""},
 		{data : "dtb_nm", className : "dt-center", defaultContent : ""},
 		{data : "scm_nm", className : "dt-center", defaultContent : ""},
@@ -123,61 +98,11 @@ function fn_init(){
 		{data : "idx", className : "dt-center", defaultContent : ""}, 
 		{data : "db2pg_trsf_wrk_nm", className : "dt-center", defaultContent : ""}, 
 		{data : "db2pg_trsf_wrk_exp", className : "dt-center", defaultContent : ""}, 
-		{
-			data : "source_dbms_dscd",
-			className : "dt-center",
-			render : function(data, type, full, meta) {
-				var html = "";
-				if (data == "TC002201") {
-					html += "Oracle";
-				}else if(data == "TC002202"){
-					html += "MS-SQL";
-				}else if(data == "TC002203"){
-					html += "MySQL";
-				}else if(data == "TC002204"){
-					html += "PostgreSQL";
-				}else if(data == "TC002205"){
-					html += "DB2";
-				}else if(data == "TC002206"){
-					html += "SyBaseASE";
-				}else if(data == "TC002207"){
-					html += "CUBRID";
-				}else if(data == "TC002208"){
-					html += "Tibero";
-				}
-				return html;
-			},
-			defaultContent : ""
-		},
+		{data : "source_dbms_dscd", className : "dt-center", defaultContent : ""}, 
 		{data : "source_ipadr", className : "dt-center", defaultContent : ""}, 
 		{data : "source_dtb_nm", className : "dt-center", defaultContent : ""}, 
 		{data : "source_scm_nm", className : "dt-center", defaultContent : ""},
-		{
-			data : "target_dbms_dscd",
-			className : "dt-center",
-			render : function(data, type, full, meta) {
-				var html = "";
-				if (data == "TC002201") {
-					html += "Oracle";
-				}else if(data == "TC002202"){
-					html += "MS-SQL";
-				}else if(data == "TC002203"){
-					html += "MySQL";
-				}else if(data == "TC002204"){
-					html += "PostgreSQL";
-				}else if(data == "TC002205"){
-					html += "DB2";
-				}else if(data == "TC002206"){
-					html += "SyBaseASE";
-				}else if(data == "TC002207"){
-					html += "CUBRID";
-				}else if(data == "TC002208"){
-					html += "Tibero";
-				}
-				return html;
-			},
-			defaultContent : ""
-		},
+		{data : "target_dbms_dscd", className : "dt-center", defaultContent : ""},
 		{data : "target_ipadr", className : "dt-center", defaultContent : ""}, 
 		{data : "target_dtb_nm", className : "dt-center", defaultContent : ""},
 		{data : "target_scm_nm", className : "dt-center", defaultContent : ""},
@@ -783,7 +708,14 @@ function fn_ImmediateStart(gbn){
 								<th scope="row" class="t9"><spring:message code="common.work_name" /></th>
 								<td><input type="text" name="ddl_wrk_nm" id="ddl_wrk_nm" class="txt t3" maxlength="25"/></td>
 								<th scope="row" class="t9">DBMS구분</th>
-								<td><input type="text" name="ddl_dbms_dscd" id="ddl_dbms_dscd" class="txt t3"/></td>
+								<td>
+									<select name="ddl_dbms_dscd" id="ddl_dbms_dscd" class="select t5" >
+										<option value=""><spring:message code="common.total" /></option>				
+											<c:forEach var="dbmsGrb" items="${dbmsGrb}" varStatus="status">												 
+ 												<option value="<c:out value="${dbmsGrb.sys_cd}"/>"><c:out value="${dbmsGrb.sys_cd_nm}"/></option>
+ 											</c:forEach>
+									</select>
+								</td>
 							</tr>
 							<tr>
 								<th scope="row" class="t9">아이피</th>
@@ -818,7 +750,14 @@ function fn_ImmediateStart(gbn){
 									</select>	
 								</td>
 								<th scope="row" class="t9">DBMS구분</th>
-								<td><input type="text" name="dbms_dscd" id="dbms_dscd" class="txt t3"/></td>
+								<td>
+									<select name="dbms_dscd" id="dbms_dscd" class="select t5" >
+										<option value=""><spring:message code="common.total" /></option>				
+											<c:forEach var="dbmsGrb" items="${dbmsGrb}" varStatus="status">												 
+ 												<option value="<c:out value="${dbmsGrb.sys_cd}"/>"><c:out value="${dbmsGrb.sys_cd_nm}"/></option>
+ 											</c:forEach>
+									</select>	
+								</td>
 							</tr>
 							<tr>
 								<th scope="row" class="t9">아이피</th>
