@@ -17,7 +17,6 @@ import org.springframework.beans.factory.config.AutowireCapableBeanFactory;
 import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 
-import com.k4m.dx.tcontrol.admin.dbserverManager.service.DbServerVO;
 import com.k4m.dx.tcontrol.cmmn.client.ClientInfoCmmn;
 import com.k4m.dx.tcontrol.common.service.AgentInfoVO;
 import com.k4m.dx.tcontrol.common.service.CmmnServerInfoService;
@@ -30,6 +29,10 @@ public class ScheduleQuartzJob implements Job{
 
 	@Autowired
 	private CmmnServerInfoService cmmnServerInfoService;
+	
+	@SuppressWarnings("unused")
+	@Autowired
+	private Db2pgHistoryService db2pgHistoryService;
 	
 	private ConfigurableApplicationContext context;
 	
@@ -85,7 +88,6 @@ public class ScheduleQuartzJob implements Job{
 					AutowireCapableBeanFactory.AUTOWIRE_BY_TYPE, false);
 			
 			ScheduleService scheduleService = (ScheduleService) context.getBean("scheduleService");			
-			Db2pgHistoryService db2pgHistoryService = (Db2pgHistoryService) context.getBean("db2pgHistoryService");			
 			
 			// 2.실행중인 스케줄 정보 조회
 			runSchedule = scheduleService.selectRunScheduleList();
@@ -106,6 +108,10 @@ public class ScheduleQuartzJob implements Job{
 	        
 	        	ArrayList<String> BCK_NM = new ArrayList<String>();        	
 	        	ArrayList<String> CMD = new ArrayList<String>();
+	        	
+	        	System.out.println("사이즈 = "+resultWork.size());
+	        	
+	        	
 		        //WORK 갯수만큼 루프
 				for(int i =0; i<resultWork.size(); i++){					
 					//DSN_DSCD==TC001901 백업
@@ -206,6 +212,11 @@ public class ScheduleQuartzJob implements Job{
 						BCK_NM.add("SCRIPT");
 					//DSN_DSCD==TC001903 DB2PG 데이터이행	
 					}else if(resultWork.get(i).get("bsn_dscd").toString().equals("TC001903")){
+						
+						int intSeq = scheduleService.selectQ_WRKEXE_G_01_SEQ();
+						int intGrpSeq = scheduleService.selectQ_WRKEXE_G_02_SEQ();
+						WrkExeVO vo = new WrkExeVO();
+						
 						db2pg = resultWork.get(i).get("bsn_dscd").toString();
 						
 						Map<String, Object> result = null;
@@ -221,14 +232,24 @@ public class ScheduleQuartzJob implements Job{
 						param.put("wrk_end_dtm", result.get("RESULT_endTime"));
 						
 						if(result.get("RESULT").equals("SUCCESS")){
+							vo.setExe_rslt_cd("TC001701");
 							param.put("exe_rslt_cd", "TC001701");
 						}else{
 							param.put("exe_rslt_cd", "TC001702");
+							vo.setExe_rslt_cd("TC001702");
 						}
 						param.put("rslt_msg", result.get("RESULT_MSG"));
 						param.put("frst_regr_id", result.get("lst_mdfr_id"));
 						param.put("lst_mdfr_id", result.get("lst_mdfr_id"));
-
+						
+						vo.setExe_sn(intSeq);
+						vo.setScd_id(Integer.parseInt(resultWork.get(i).get("scd_id").toString()));
+						vo.setWrk_id(Integer.parseInt(resultWork.get(i).get("wrk_id").toString()));
+						vo.setWrk_strt_dtm(result.get("RESULT_startTime").toString());
+						vo.setWrk_end_dtm(result.get("RESULT_endTime").toString());
+						vo.setExe_grp_sn(intGrpSeq);
+						
+						scheduleService.insertT_WRKEXE_G(vo);
 						db2pgHistoryService.insertImdExe(param);
 					}					
 				}		
