@@ -172,7 +172,7 @@ public class Db2pgSettingController {
 		try {
 			// 화면접근이력 이력 남기기
 //			CmmnUtils.saveHistory(request, historyVO);
-//			historyVO.setExe_dtl_cd("DX-T0022");
+//			historyVO.setExe_dtl_cd("DX-T0138");
 //			accessHistoryService.insertHistory(historyVO);
 			
 			List<CodeVO> codeLetter = db2pgSettingService.selectCode("TC0028");
@@ -201,7 +201,7 @@ public class Db2pgSettingController {
 		try {
 			// 화면접근이력 이력 남기기
 //			CmmnUtils.saveHistory(request, historyVO);
-//			historyVO.setExe_dtl_cd("DX-T0034_01");
+//			historyVO.setExe_dtl_cd("DX-T0138_01");
 //			historyVO.setMnu_id(12);
 //			accessHistoryService.insertHistory(historyVO);
 			
@@ -298,7 +298,7 @@ public class Db2pgSettingController {
 		try {
 			// 화면접근이력 이력 남기기
 //			CmmnUtils.saveHistory(request, historyVO);
-//			historyVO.setExe_dtl_cd("DX-T0034_01");
+//			historyVO.setExe_dtl_cd("DX-T0137_03");
 //			historyVO.setMnu_id(12);
 //			accessHistoryService.insertHistory(historyVO);
 			

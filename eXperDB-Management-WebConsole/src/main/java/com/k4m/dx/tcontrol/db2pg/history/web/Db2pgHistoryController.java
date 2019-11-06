@@ -17,7 +17,6 @@ import org.springframework.web.servlet.ModelAndView;
 import com.k4m.dx.tcontrol.common.service.HistoryVO;
 import com.k4m.dx.tcontrol.db2pg.history.service.Db2pgHistoryService;
 import com.k4m.dx.tcontrol.db2pg.history.service.Db2pgHistoryVO;
-import com.k4m.dx.tcontrol.db2pg.setting.service.DDLConfigVO;
 
 @Controller
 public class Db2pgHistoryController {
@@ -72,4 +71,32 @@ public class Db2pgHistoryController {
 		}
 		return resultSet;
 	}
+	
+	/**
+	 * DB2PG 수행이력 상세보기 화면을 보여준다.
+	 * 
+	 * @param
+	 * @return ModelAndView mv
+	 * @throws Exception
+	 */
+	@RequestMapping(value = "/db2pg/popup/db2pgHistoryDetail.do")
+	public ModelAndView db2pgHistoryDetail(@ModelAttribute("historyVO") HistoryVO historyVO, HttpServletRequest request) {
+		ModelAndView mv = new ModelAndView();
+		Db2pgHistoryVO result = null;
+		try {
+			// 화면접근이력 이력 남기기
+//			CmmnUtils.saveHistory(request, historyVO);
+//			historyVO.setExe_dtl_cd("DX-T0018");
+//			historyVO.setMnu_id(33);
+//			accessHistoryService.insertHistory(historyVO);
+			
+			int imd_exe_sn=Integer.parseInt(request.getParameter("imd_exe_sn"));
+			result = (Db2pgHistoryVO) db2pgHistoryService.selectDb2pgHistoryDetail(imd_exe_sn);
+			mv.addObject("result",result);
+			mv.setViewName("db2pg/popup/db2pgHistoryDetail");
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return mv;
+	}	
 }

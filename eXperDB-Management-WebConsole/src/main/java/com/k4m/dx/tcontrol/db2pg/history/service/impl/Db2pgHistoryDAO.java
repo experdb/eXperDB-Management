@@ -7,7 +7,6 @@ import java.util.Map;
 import org.springframework.stereotype.Repository;
 
 import com.k4m.dx.tcontrol.db2pg.history.service.Db2pgHistoryVO;
-import com.k4m.dx.tcontrol.db2pg.setting.service.CodeVO;
 
 import egovframework.rte.psl.dataaccess.EgovAbstractMapper;
 
@@ -24,4 +23,7 @@ public class Db2pgHistoryDAO extends EgovAbstractMapper{
 		return result;
 	}
 
+	public Db2pgHistoryVO selectDb2pgHistoryDetail(int imd_exe_sn) throws SQLException {
+		return (Db2pgHistoryVO) selectOne("db2pgHistorySql.selectDb2pgHistoryDetail", imd_exe_sn);
+	}
 }

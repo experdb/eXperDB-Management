@@ -21,5 +21,13 @@ public interface Db2pgHistoryService {
 	 * @throws Exception
 	 */
 	List<Db2pgHistoryVO> selectDb2pgHistory(Db2pgHistoryVO db2pgHistoryVO) throws Exception;
-		
+
+	
+	/**
+	 *  DB2PG 수행이력 조회
+	 * 
+	 * @param List<Db2pgHistoryVO>
+	 * @throws Exception
+	 */
+	Db2pgHistoryVO selectDb2pgHistoryDetail(int imd_exe_sn) throws Exception;
 }
