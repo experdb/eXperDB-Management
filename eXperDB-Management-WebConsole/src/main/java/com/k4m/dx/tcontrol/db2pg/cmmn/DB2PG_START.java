@@ -89,6 +89,7 @@ public class DB2PG_START {
             } else {
                 // shell 실행이 비정상 종료되었을 경우
             	endTime = nowTime();
+            	result.put("RESULT_MSG", successOutput.toString());
                 result.put("RESULT_CODE", 1);
                 result.put("RESULT", "FAIL");
             }
@@ -97,17 +98,15 @@ public class DB2PG_START {
             e.printStackTrace();
         } catch (InterruptedException e) {
             e.printStackTrace();
-        } finally {
-        	result.put("RESULT_MSG", successOutput.toString());
+        } finally {      	
         	result.put("RESULT_startTime", startTime);
         	result.put("RESULT_endTime", endTime);
         	
         	System.out.println("2. 시작시간 = "+result.get("RESULT_startTime"));
     		System.out.println("3. 종료시간 = "+result.get("RESULT_endTime"));
     		System.out.println("3. 결과 = "+result.get("RESULT"));
-    		if(result.get("RESULT").equals("FAIL")){
-    			System.out.println("4. 메세지 = "+result.get("RESULT_MSG"));
-    		}
+    		System.out.println("4. 에러 메세지 = "+result.get("RESULT_MSG"));
+
     		System.out.println( "/*****DB2PG  END ************************************************************/");
     		
     		

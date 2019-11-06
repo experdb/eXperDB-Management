@@ -19,31 +19,46 @@
 	 	*  Query ID : selectDDLWork
 	 	*  Description : DDL 작업 정보 조회
 	 	*  Author : 김주영
-	 	**/		
-		SELECT 
-			(row_number() over()) as rownum
+	 	**/
+	 	SELECT
+			  (row_number() over()) as rownum
 			, (row_number() over()) as idx
-			, ddl_wrk_inf.db2pg_ddl_wrk_id	
-			, ddl_wrk_inf.wrk_id
-			, wrkcng.wrk_nm as db2pg_ddl_wrk_nm
-			, wrkcng.wrk_exp as  db2pg_ddl_wrk_exp
-			, sys_inf.dbms_dscd
-			, sys_inf.ipadr
-			, sys_inf.dtb_nm
-			, sys_inf.scm_nm
-			, ddl_wrk_inf.frst_regr_id
-			, TO_CHAR(ddl_wrk_inf.frst_reg_dtm,'YYYY-MM-DD HH24:MI') as frst_reg_dtm
-			, ddl_wrk_inf.lst_mdfr_id
-			, TO_CHAR(ddl_wrk_inf.lst_mdf_dtm,'YYYY-MM-DD HH24:MI') as lst_mdf_dtm 
-		FROM t_db2pg_ddl_wrk_inf ddl_wrk_inf, t_db2pg_sys_inf sys_inf, t_wrkcng_i wrkcng
-		WHERE ddl_wrk_inf.db2pg_sys_id = sys_inf.db2pg_sys_id
-		AND ddl_wrk_inf.wrk_id = wrkcng.wrk_id
-		AND wrkcng.wrk_nm LIKE #{wrk_nm}
-		AND sys_inf.dbms_dscd LIKE #{dbms_dscd}
-		AND sys_inf.ipadr LIKE #{ipadr}
-		AND sys_inf.dtb_nm LIKE #{dtb_nm}
-		AND sys_inf.scm_nm LIKE #{scm_nm}
-		ORDER BY lst_mdf_dtm desc
+			, A.db2pg_ddl_wrk_id
+			, A.wrk_id
+			, A.db2pg_ddl_wrk_nm
+			, A.db2pg_ddl_wrk_exp
+			, A.dbms_dscd
+			, A.ipadr
+			, A.dtb_nm
+			, A.scm_nm
+			, A.frst_regr_id
+			, A.frst_reg_dtm
+			, A.lst_mdfr_id
+			, A.lst_mdf_dtm
+	 	FROM(		
+			SELECT 
+				  ddl_wrk_inf.db2pg_ddl_wrk_id	
+				, ddl_wrk_inf.wrk_id
+				, wrkcng.wrk_nm as db2pg_ddl_wrk_nm
+				, wrkcng.wrk_exp as  db2pg_ddl_wrk_exp
+				, (select sys_cd_nm from t_sysdtl_c where sys_cd = sys_inf.dbms_dscd ) as dbms_dscd
+				, sys_inf.ipadr
+				, sys_inf.dtb_nm
+				, sys_inf.scm_nm
+				, ddl_wrk_inf.frst_regr_id
+				, TO_CHAR(ddl_wrk_inf.frst_reg_dtm,'YYYY-MM-DD HH24:MI') as frst_reg_dtm
+				, ddl_wrk_inf.lst_mdfr_id
+				, TO_CHAR(ddl_wrk_inf.lst_mdf_dtm,'YYYY-MM-DD HH24:MI') as lst_mdf_dtm 
+			FROM t_db2pg_ddl_wrk_inf ddl_wrk_inf, t_db2pg_sys_inf sys_inf, t_wrkcng_i wrkcng
+			WHERE ddl_wrk_inf.db2pg_sys_id = sys_inf.db2pg_sys_id
+			AND ddl_wrk_inf.wrk_id = wrkcng.wrk_id
+			AND wrkcng.wrk_nm LIKE #{wrk_nm}
+			AND sys_inf.dbms_dscd LIKE #{dbms_dscd}
+			AND sys_inf.ipadr LIKE #{ipadr}
+			AND sys_inf.dtb_nm LIKE #{dtb_nm}
+			AND sys_inf.scm_nm LIKE #{scm_nm}
+			ORDER BY lst_mdf_dtm desc
+		)A	
 	</select>
 	
 	<select id="selectDataWork" resultType="dataConfigVO" parameterType="hashmap">
@@ -53,44 +68,65 @@
 	 	*  Author : 김주영
 	 	**/
 	 	SELECT 
-			(row_number() over()) as rownum
-			, (row_number() over()) as idx
-			, trsf_wrk_inf.db2pg_trsf_wrk_id
-			, trsf_wrk_inf.wrk_id
-			, wrkcng.wrk_nm as db2pg_trsf_wrk_nm
-			, wrkcng.wrk_exp as db2pg_trsf_wrk_exp
-			, source_sys_inf.dbms_dscd as source_dbms_dscd
-			, source_sys_inf.ipadr as source_ipadr
-			, source_sys_inf.dtb_nm as source_dtb_nm
-			, source_sys_inf.scm_nm as source_scm_nm
-			, target_sys_inf.dbms_dscd as target_dbms_dscd
-			, target_sys_inf.ipadr as target_ipadr
-			, target_sys_inf.dtb_nm as target_dtb_nm
-			, target_sys_inf.scm_nm as target_scm_nm
-			, trsf_wrk_inf.frst_regr_id
-			, TO_CHAR(trsf_wrk_inf.frst_reg_dtm,'YYYY-MM-DD HH24:MI') as frst_reg_dtm
-			, trsf_wrk_inf.lst_mdfr_id
-			, TO_CHAR(trsf_wrk_inf.lst_mdf_dtm,'YYYY-MM-DD HH24:MI') as lst_mdf_dtm 
-			, trsf_wrk_inf.trans_save_pth
-			, trsf_wrk_inf.src_cnd_qry
-		FROM t_db2pg_trsf_wrk_inf trsf_wrk_inf 
-		LEFT OUTER JOIN t_db2pg_sys_inf source_sys_inf ON trsf_wrk_inf.db2pg_src_sys_id = source_sys_inf.db2pg_sys_id
-		LEFT OUTER JOIN t_db2pg_sys_inf target_sys_inf ON trsf_wrk_inf.db2pg_trg_sys_id = target_sys_inf.db2pg_sys_id
-		LEFT OUTER join t_wrkcng_i wrkcng on trsf_wrk_inf.wrk_id = wrkcng.wrk_id
-		WHERE wrkcng.wrk_nm LIKE #{wrk_nm}
-		<if test="data_dbms_dscd.equals('source_system')">
-			AND source_sys_inf.dbms_dscd LIKE #{dbms_dscd}
-			AND source_sys_inf.ipadr LIKE #{ipadr}
-			AND source_sys_inf.dtb_nm LIKE #{dtb_nm}
-			AND source_sys_inf.scm_nm LIKE #{scm_nm}	
-		</if>
-		<if test="data_dbms_dscd.equals('target_system')">
-			AND target_sys_inf.dbms_dscd LIKE #{dbms_dscd}
-			AND target_sys_inf.ipadr LIKE #{ipadr}
-			AND target_sys_inf.dtb_nm LIKE #{dtb_nm}
-			AND target_sys_inf.scm_nm LIKE #{scm_nm}
-		</if>
-		ORDER BY lst_mdf_dtm DESC	
+	 	  (row_number() over()) as rownum
+		, (row_number() over()) as idx
+	 	, A.db2pg_trsf_wrk_id
+	 	, A.wrk_id
+	 	, A.db2pg_trsf_wrk_nm
+	 	, A.db2pg_trsf_wrk_exp
+	 	, A.source_dbms_dscd
+	 	, A.source_ipadr
+	 	, A.source_dtb_nm
+	 	, A.source_scm_nm
+	 	, A.target_dbms_dscd
+	 	, A.target_ipadr
+	 	, A.target_dtb_nm
+	 	, A.target_scm_nm
+	 	, A.frst_regr_id
+	 	, A.frst_reg_dtm
+	 	, A.lst_mdfr_id
+	 	, A.lst_mdf_dtm
+	 	, A.trans_save_pth
+	 	, A.src_cnd_qry
+	 	FROM(
+		 	SELECT 
+				  trsf_wrk_inf.db2pg_trsf_wrk_id
+				, trsf_wrk_inf.wrk_id
+				, wrkcng.wrk_nm as db2pg_trsf_wrk_nm
+				, wrkcng.wrk_exp as db2pg_trsf_wrk_exp
+				, (select sys_cd_nm from t_sysdtl_c where sys_cd = source_sys_inf.dbms_dscd ) as source_dbms_dscd
+				, source_sys_inf.ipadr as source_ipadr
+				, source_sys_inf.dtb_nm as source_dtb_nm
+				, source_sys_inf.scm_nm as source_scm_nm
+				, (select sys_cd_nm from t_sysdtl_c where sys_cd = target_sys_inf.dbms_dscd ) as target_dbms_dscd
+				, target_sys_inf.ipadr as target_ipadr
+				, target_sys_inf.dtb_nm as target_dtb_nm
+				, target_sys_inf.scm_nm as target_scm_nm
+				, trsf_wrk_inf.frst_regr_id
+				, TO_CHAR(trsf_wrk_inf.frst_reg_dtm,'YYYY-MM-DD HH24:MI') as frst_reg_dtm
+				, trsf_wrk_inf.lst_mdfr_id
+				, TO_CHAR(trsf_wrk_inf.lst_mdf_dtm,'YYYY-MM-DD HH24:MI') as lst_mdf_dtm 
+				, trsf_wrk_inf.trans_save_pth
+				, trsf_wrk_inf.src_cnd_qry
+			FROM t_db2pg_trsf_wrk_inf trsf_wrk_inf 
+			LEFT OUTER JOIN t_db2pg_sys_inf source_sys_inf ON trsf_wrk_inf.db2pg_src_sys_id = source_sys_inf.db2pg_sys_id
+			LEFT OUTER JOIN t_db2pg_sys_inf target_sys_inf ON trsf_wrk_inf.db2pg_trg_sys_id = target_sys_inf.db2pg_sys_id
+			LEFT OUTER join t_wrkcng_i wrkcng on trsf_wrk_inf.wrk_id = wrkcng.wrk_id
+			WHERE wrkcng.wrk_nm LIKE #{wrk_nm}
+			<if test="data_dbms_dscd.equals('source_system')">
+				AND source_sys_inf.dbms_dscd LIKE #{dbms_dscd}
+				AND source_sys_inf.ipadr LIKE #{ipadr}
+				AND source_sys_inf.dtb_nm LIKE #{dtb_nm}
+				AND source_sys_inf.scm_nm LIKE #{scm_nm}	
+			</if>
+			<if test="data_dbms_dscd.equals('target_system')">
+				AND target_sys_inf.dbms_dscd LIKE #{dbms_dscd}
+				AND target_sys_inf.ipadr LIKE #{ipadr}
+				AND target_sys_inf.dtb_nm LIKE #{dtb_nm}
+				AND target_sys_inf.scm_nm LIKE #{scm_nm}
+			</if>
+			ORDER BY lst_mdf_dtm DESC
+			)A	
 	 </select>	
 	
 	<select id="selectExrttrgSrctblsSeq" resultType="int">

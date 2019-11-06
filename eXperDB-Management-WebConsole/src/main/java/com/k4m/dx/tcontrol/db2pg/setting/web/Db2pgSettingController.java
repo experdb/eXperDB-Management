@@ -68,7 +68,15 @@ public class Db2pgSettingController {
 	@RequestMapping(value = "/db2pgSetting.do")
 	public ModelAndView db2pgSetting(@ModelAttribute("historyVO") HistoryVO historyVO, HttpServletRequest request) {
 		ModelAndView mv = new ModelAndView();
-		try {			
+		try {		
+//			// 화면접근이력 이력 남기기
+//			CmmnUtils.saveHistory(request, historyVO);
+//			historyVO.setExe_dtl_cd("DX-T0137");
+//			historyVO.setMnu_id(12);
+//			accessHistoryService.insertHistory(historyVO);
+			
+			List<Map<String, Object>> dbmsGrb = dbmsService.dbmsGrb();
+			mv.addObject("dbmsGrb", dbmsGrb);
 			mv.setViewName("db2pg/setting/db2pgSetting");
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -91,7 +99,7 @@ public class Db2pgSettingController {
 
 //			// 화면접근이력 이력 남기기
 //			CmmnUtils.saveHistory(request, historyVO);
-//			historyVO.setExe_dtl_cd("DX-T0033_01");
+//			historyVO.setExe_dtl_cd("DX-T0137_01");
 //			historyVO.setMnu_id(12);
 //			accessHistoryService.insertHistory(historyVO);
 
@@ -903,6 +911,7 @@ public class Db2pgSettingController {
 //			}
 			
 			//4.T_DB2PG_Data_작업_정보 insert
+			dataConfigVO.setLst_mdfr_id(id);
 			dataConfigVO.setTrans_save_pth(trans_path);
 			dataConfigVO.setDb2pg_exrt_trg_tb_wrk_id(exrt_trg_tb_wrk_id);
 			dataConfigVO.setDb2pg_exrt_exct_tb_wrk_id(exrt_exct_tb_wrk_id);
