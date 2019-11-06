@@ -23,6 +23,16 @@ public class Db2pgHistoryVO {
 	private String lst_mdfr_id;
 	private String lst_mdf_dtm;
 
+	private String rslt_msg;
+
+	public String getRslt_msg() {
+		return rslt_msg;
+	}
+
+	public void setRslt_msg(String rslt_msg) {
+		this.rslt_msg = rslt_msg;
+	}
+
 	public int getRownum() {
 		return rownum;
 	}

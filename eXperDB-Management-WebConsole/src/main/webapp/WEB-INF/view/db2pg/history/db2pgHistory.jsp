@@ -36,7 +36,6 @@ function fn_init(){
 		deferRender : true,
 		bSort: false,
 	columns : [
-		{data : "rownum", defaultContent : "", targets : 0, orderable : false, checkboxes : {'selectRow' : true}}, 
 		{data : "idx", className : "dt-center", defaultContent : ""}, 
 		{data : "wrk_nm", className : "dt-center", defaultContent : ""}, 
 		{data : "wrk_exp", className : "dt-center", defaultContent : ""}, 
@@ -79,32 +78,32 @@ function fn_init(){
 			render : function(data, type, full, meta) {
 				var html = "";
 				if (data == "Success") {
-					html += "<img src='../images/ico_state_02.png' style='margin-right:3px;'/>Success";
+					html += "<span class='btn btnC_01 btnF_02'><button onclick='fn_log("+full.imd_exe_sn+")'><img src='../images/ico_state_02.png' style='margin-right:3px;'>Success</button></span>";
 				} else {
-					html += "<span class='btn btnC_01 btnF_02'><button onclick='fn_failLog("+full.wrk_id+")'><img src='../images/ico_state_01.png' style='margin-right:3px;'>Fail</button></span>";
+					html += "<span class='btn btnC_01 btnF_02'><button onclick='fn_log("+full.imd_exe_sn+")'><img src='../images/ico_state_01.png' style='margin-right:3px;'>Fail</button></span>";
 				}
 				return html;
 			},
 			defaultContent : ""
 		},
 		{data : "db2pg_trsf_wrk_id", defaultContent : "", visible: false},
-		{data : "wrk_id", defaultContent : "", visible: false}
-	],'select': {'style': 'multi'}
+		{data : "wrk_id", defaultContent : "", visible: false},
+		{data : "imd_exe_sn", defaultContent : "", visible: false}
+	]
 	});
-	
-	table.tables().header().to$().find('th:eq(0)').css('min-width', '10px');
-    table.tables().header().to$().find('th:eq(1)').css('min-width', '30px');
-    table.tables().header().to$().find('th:eq(2)').css('min-width', '100px');
-    table.tables().header().to$().find('th:eq(3)').css('min-width', '200px');
+
+    table.tables().header().to$().find('th:eq(0)').css('min-width', '30px');
+    table.tables().header().to$().find('th:eq(1)').css('min-width', '100px');
+    table.tables().header().to$().find('th:eq(2)').css('min-width', '200px');
+    table.tables().header().to$().find('th:eq(3)').css('min-width', '100px');
     table.tables().header().to$().find('th:eq(4)').css('min-width', '100px');
     table.tables().header().to$().find('th:eq(5)').css('min-width', '100px');
     table.tables().header().to$().find('th:eq(6)').css('min-width', '100px');
     table.tables().header().to$().find('th:eq(7)').css('min-width', '100px');
-    table.tables().header().to$().find('th:eq(8)').css('min-width', '100px');
+    table.tables().header().to$().find('th:eq(8)').css('min-width', '130px');
     table.tables().header().to$().find('th:eq(9)').css('min-width', '130px');
-    table.tables().header().to$().find('th:eq(10)').css('min-width', '130px');
+    table.tables().header().to$().find('th:eq(10)').css('min-width', '95px');
     table.tables().header().to$().find('th:eq(11)').css('min-width', '95px');
-    table.tables().header().to$().find('th:eq(12)').css('min-width', '95px');
     
 	$(window).trigger('resize'); 
 }
@@ -179,8 +178,8 @@ function fn_search(){
 /* ********************************************************
  * 에러 로그 팝업
  ******************************************************** */
- function fn_failLog(wrk_id){
-		var popUrl = "/db2pg/popup/db2pgHistoryDetail.do?wrk_id="+wrk_id; // 서버 url 팝업경로
+ function fn_log(imd_exe_sn){
+		var popUrl = "/db2pg/popup/db2pgHistoryDetail.do?imd_exe_sn="+imd_exe_sn; // 서버 url 팝업경로
 		var width = 950;
 		var height = 690;
 		var left = (window.screen.width / 2) - (width / 2);
@@ -258,7 +257,6 @@ function fn_search(){
 						<caption></caption>
 							<thead>
 								<tr>
-									<th width="10" rowspan="2"></th>
 									<th width="30" rowspan="2"><spring:message code="common.no" /></th>
 									<th width="100" rowspan="2">Work명</th>
 									<th width="200" rowspan="2">Work설명</th>

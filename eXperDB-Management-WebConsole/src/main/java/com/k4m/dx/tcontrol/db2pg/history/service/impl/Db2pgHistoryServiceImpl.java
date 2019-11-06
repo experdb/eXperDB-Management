@@ -1,7 +1,5 @@
 package com.k4m.dx.tcontrol.db2pg.history.service.impl;
 
-
-
 import java.util.List;
 import java.util.Map;
 
@@ -15,8 +13,8 @@ import com.k4m.dx.tcontrol.db2pg.history.service.Db2pgHistoryVO;
 import egovframework.rte.fdl.cmmn.EgovAbstractServiceImpl;
 
 @Service("Db2pgHistoryServiceImpl")
-public class Db2pgHistoryServiceImpl extends EgovAbstractServiceImpl implements Db2pgHistoryService{
-	
+public class Db2pgHistoryServiceImpl extends EgovAbstractServiceImpl implements Db2pgHistoryService {
+
 	@Resource(name = "db2pgHistoryDAO")
 	private Db2pgHistoryDAO db2pgHistoryDAO;
 
@@ -28,6 +26,11 @@ public class Db2pgHistoryServiceImpl extends EgovAbstractServiceImpl implements 
 	@Override
 	public List<Db2pgHistoryVO> selectDb2pgHistory(Db2pgHistoryVO db2pgHistoryVO) throws Exception {
 		return db2pgHistoryDAO.selectDb2pgHistory(db2pgHistoryVO);
+	}
+
+	@Override
+	public Db2pgHistoryVO selectDb2pgHistoryDetail(int imd_exe_sn) throws Exception {
+		return db2pgHistoryDAO.selectDb2pgHistoryDetail(imd_exe_sn);
 	}
 
 }
