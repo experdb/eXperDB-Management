@@ -48,61 +48,11 @@ function fn_init(){
 		{data : "idx", className : "dt-center", defaultContent : ""}, 
 		{data : "db2pg_trsf_wrk_nm", className : "dt-center", defaultContent : ""}, 
 		{data : "db2pg_trsf_wrk_exp", className : "dt-center", defaultContent : ""}, 
-		{
-			data : "source_dbms_dscd",
-			className : "dt-center",
-			render : function(data, type, full, meta) {
-				var html = "";
-				if (data == "TC002201") {
-					html += "Oracle";
-				}else if(data == "TC002202"){
-					html += "MS-SQL";
-				}else if(data == "TC002203"){
-					html += "MySQL";
-				}else if(data == "TC002204"){
-					html += "PostgreSQL";
-				}else if(data == "TC002205"){
-					html += "DB2";
-				}else if(data == "TC002206"){
-					html += "SyBaseASE";
-				}else if(data == "TC002207"){
-					html += "CUBRID";
-				}else if(data == "TC002208"){
-					html += "Tibero";
-				}
-				return html;
-			},
-			defaultContent : ""
-		},
+		{data : "source_dbms_dscd", className : "dt-center",defaultContent : ""},
 		{data : "source_ipadr", className : "dt-center", defaultContent : ""}, 
 		{data : "source_dtb_nm", className : "dt-center", defaultContent : ""}, 
 		{data : "source_scm_nm", className : "dt-center", defaultContent : ""},
-		{
-			data : "target_dbms_dscd",
-			className : "dt-center",
-			render : function(data, type, full, meta) {
-				var html = "";
-				if (data == "TC002201") {
-					html += "Oracle";
-				}else if(data == "TC002202"){
-					html += "MS-SQL";
-				}else if(data == "TC002203"){
-					html += "MySQL";
-				}else if(data == "TC002204"){
-					html += "PostgreSQL";
-				}else if(data == "TC002205"){
-					html += "DB2";
-				}else if(data == "TC002206"){
-					html += "SyBaseASE";
-				}else if(data == "TC002207"){
-					html += "CUBRID";
-				}else if(data == "TC002208"){
-					html += "Tibero";
-				}
-				return html;
-			},
-			defaultContent : ""
-		},
+		{data : "target_dbms_dscd",className : "dt-center",defaultContent : ""},
 		{data : "target_ipadr", className : "dt-center", defaultContent : ""}, 
 		{data : "target_dtb_nm", className : "dt-center", defaultContent : ""},
 		{data : "target_scm_nm", className : "dt-center", defaultContent : ""},

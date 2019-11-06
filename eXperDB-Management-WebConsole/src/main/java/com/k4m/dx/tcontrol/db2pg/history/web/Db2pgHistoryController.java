@@ -15,6 +15,8 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.k4m.dx.tcontrol.common.service.HistoryVO;
+import com.k4m.dx.tcontrol.db2pg.cmmn.DB2PG_LOG;
+import com.k4m.dx.tcontrol.db2pg.cmmn.DB2PG_START;
 import com.k4m.dx.tcontrol.db2pg.history.service.Db2pgHistoryService;
 import com.k4m.dx.tcontrol.db2pg.history.service.Db2pgHistoryVO;
 
@@ -82,6 +84,7 @@ public class Db2pgHistoryController {
 	@RequestMapping(value = "/db2pg/popup/db2pgHistoryDetail.do")
 	public ModelAndView db2pgHistoryDetail(@ModelAttribute("historyVO") HistoryVO historyVO, HttpServletRequest request) {
 		ModelAndView mv = new ModelAndView();
+		Map<String, Object> db2pgResult = null;
 		Db2pgHistoryVO result = null;
 		try {
 			// 화면접근이력 이력 남기기
@@ -91,6 +94,10 @@ public class Db2pgHistoryController {
 //			accessHistoryService.insertHistory(historyVO);
 			
 			int imd_exe_sn=Integer.parseInt(request.getParameter("imd_exe_sn"));
+			String trans_save_pth = request.getParameter("trans_save_pth");
+			
+			db2pgResult  = DB2PG_LOG.db2pgLog(trans_save_pth);
+			
 			result = (Db2pgHistoryVO) db2pgHistoryService.selectDb2pgHistoryDetail(imd_exe_sn);
 			mv.addObject("result",result);
 			mv.setViewName("db2pg/popup/db2pgHistoryDetail");

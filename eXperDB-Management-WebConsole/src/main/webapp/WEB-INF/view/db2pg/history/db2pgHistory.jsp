@@ -181,10 +181,7 @@ function fn_search(){
  * 에러 로그 팝업
  ******************************************************** */
  function fn_log(imd_exe_sn, trans_save_pth){
-	
-	alert(imd_exe_sn);
-	alert(trans_save_pth);
-	
+
 	  var frmPop= document.frmPopup;
 	  
 		var width = 950;
