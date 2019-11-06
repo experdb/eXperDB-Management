@@ -73,7 +73,20 @@ function fn_init(){
 		{data : "wrk_strt_dtm", className : "dt-center", defaultContent : ""},
 		{data : "wrk_end_dtm", className : "dt-center", defaultContent : ""},
 		{data : "wrk_dtm", className : "dt-center", defaultContent : ""},
-		{data : "exe_rslt_nm", className : "dt-center", defaultContent : ""},
+		{
+			data : "exe_rslt_nm",
+			className : "dt-center",
+			render : function(data, type, full, meta) {
+				var html = "";
+				if (data == "Success") {
+					html += "<img src='../images/ico_state_02.png' style='margin-right:3px;'/>Success";
+				} else {
+					html += "<span class='btn btnC_01 btnF_02'><button onclick='fn_failLog("+full.wrk_id+")'><img src='../images/ico_state_01.png' style='margin-right:3px;'>Fail</button></span>";
+				}
+				return html;
+			},
+			defaultContent : ""
+		},
 		{data : "db2pg_trsf_wrk_id", defaultContent : "", visible: false},
 		{data : "wrk_id", defaultContent : "", visible: false}
 	],'select': {'style': 'multi'}
@@ -126,7 +139,7 @@ $(window.document).ready(
 
 
 /* ********************************************************
- * 데이터이행 데이터 가져오기
+ * DB2PG 수행이력 데이터 가져오기
  ******************************************************** */
 function fn_search(){
 	$.ajax({
@@ -163,9 +176,20 @@ function fn_search(){
 	});
 }
 
-
+/* ********************************************************
+ * 에러 로그 팝업
+ ******************************************************** */
+ function fn_failLog(wrk_id){
+		var popUrl = "/db2pg/popup/db2pgHistoryDetail.do?wrk_id="+wrk_id; // 서버 url 팝업경로
+		var width = 950;
+		var height = 690;
+		var left = (window.screen.width / 2) - (width / 2);
+		var top = (window.screen.height /2) - (height / 2);
+		var popOption = "width="+width+", height="+height+", top="+top+", left="+left+", resizable=no, scrollbars=yes, status=no, toolbar=no, titlebar=yes, location=no,";
+			
+		window.open(popUrl,"",popOption);
+}
 </script>
-
 <!-- contents -->
 <div id="contents">
 	<div class="contents_wrap">
