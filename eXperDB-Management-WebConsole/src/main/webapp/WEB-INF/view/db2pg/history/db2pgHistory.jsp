@@ -78,9 +78,10 @@ function fn_init(){
 			render : function(data, type, full, meta) {
 				var html = "";
 				if (data == "Success") {
-					html += "<span class='btn btnC_01 btnF_02'><button onclick='fn_log("+full.imd_exe_sn+")'><img src='../images/ico_state_02.png' style='margin-right:3px;'>Success</button></span>";
+					 html += "<span class='btn btnC_01 btnF_02'><button onclick='fn_log("+full.imd_exe_sn+","+full.trans_save_pth+")'><img src='../images/ico_state_02.png' style='margin-right:3px;'>Success</button></span>";
+					
 				} else {
-					html += "<span class='btn btnC_01 btnF_02'><button onclick='fn_log("+full.imd_exe_sn+")'><img src='../images/ico_state_01.png' style='margin-right:3px;'>Fail</button></span>";
+					html += "<span class='btn btnC_01 btnF_02'><button onclick='fn_log("+full.imd_exe_sn+","+full.trans_save_pth+")'><img src='../images/ico_state_01.png' style='margin-right:3px;'>Fail</button></span>";
 				}
 				return html;
 			},
@@ -88,7 +89,8 @@ function fn_init(){
 		},
 		{data : "db2pg_trsf_wrk_id", defaultContent : "", visible: false},
 		{data : "wrk_id", defaultContent : "", visible: false},
-		{data : "imd_exe_sn", defaultContent : "", visible: false}
+		{data : "imd_exe_sn", defaultContent : "", visible: false},
+		{data : "trans_save_pth", defaultContent : "", visible: false}
 	]
 	});
 
@@ -178,17 +180,35 @@ function fn_search(){
 /* ********************************************************
  * 에러 로그 팝업
  ******************************************************** */
- function fn_log(imd_exe_sn){
-		var popUrl = "/db2pg/popup/db2pgHistoryDetail.do?imd_exe_sn="+imd_exe_sn; // 서버 url 팝업경로
+ function fn_log(imd_exe_sn, trans_save_pth){
+	
+	alert(imd_exe_sn);
+	alert(trans_save_pth);
+	
+	  var frmPop= document.frmPopup;
+	  
 		var width = 950;
 		var height = 690;
 		var left = (window.screen.width / 2) - (width / 2);
 		var top = (window.screen.height /2) - (height / 2);
 		var popOption = "width="+width+", height="+height+", top="+top+", left="+left+", resizable=no, scrollbars=yes, status=no, toolbar=no, titlebar=yes, location=no,";
-			
-		window.open(popUrl,"",popOption);
+		
+	    var url = '/db2pg/popup/db2pgHistoryDetail.do';
+	    window.open('','popupView',popOption);  
+	     
+	    frmPop.action = url;
+	    frmPop.target = 'popupView';
+	    frmPop.trans_save_pth.value = trans_save_pth;
+	    frmPop.imd_exe_sn.value = imd_exe_sn;  
+	    frmPop.submit();   
 }
 </script>
+
+<form name="frmPopup">
+	<input type="hidden" name="imd_exe_sn"  id="imd_exe_sn">
+	<input type="hidden" name="trans_save_pth"  id="trans_save_pth">
+</form>
+
 <!-- contents -->
 <div id="contents">
 	<div class="contents_wrap">
@@ -211,7 +231,7 @@ function fn_search(){
 
 			<div class="cmm_grp">
 				<div class="btn_type_01">
-					<span class="btn"><button type="button" id="btnSelect" onclick="fn_search();"><spring:message code="common.search" /></button></span>
+					<span class="btn"><button type="button" id="btnSelect" onclick="fn_search();"><spring:message code="common.search" /></button></span>					
 				</div>
 				
 				<div class="sch_form">
