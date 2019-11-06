@@ -72,6 +72,13 @@
 								<td><spring:message code="schedule.jobTime" /></td>
 								<td style="text-align: left">${result.wrk_dtm}</td>
 							</tr>
+							<tr>
+								<td>수행결과</td>
+								<td style="text-align: left">
+									<c:if test="${result.exe_rslt_cd eq 'TC001701'}"><img src='../../images/ico_state_02.png' style='margin-right:3px;'>Success</c:if>
+									<c:if test="${result.exe_rslt_cd eq 'TC001702'}"><img src='../../images/ico_state_01.png' style='margin-right:3px;'>Fail</c:if>
+								</td>
+							</tr>
 					</tbody>
 				</table>
 				<br><br>
@@ -82,7 +89,7 @@
 					</caption>
 					<tbody>
 						<tr>
-							<td><textarea name="wrkLogInfo" id="wrkLogInfo" style="height: 200px;" readonly="readonly">${result.rslt_msg}</textarea></td>
+							<td><textarea name="wrkLogInfo" id="wrkLogInfo" style="height: 180px;" readonly="readonly">${result.rslt_msg}</textarea></td>
 						</tr>
 					</tbody>
 				</table>
