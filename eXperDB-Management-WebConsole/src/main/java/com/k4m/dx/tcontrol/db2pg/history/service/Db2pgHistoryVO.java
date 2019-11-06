@@ -24,6 +24,15 @@ public class Db2pgHistoryVO {
 	private String lst_mdf_dtm;
 
 	private String rslt_msg;
+	private String trans_save_pth;
+
+	public String getTrans_save_pth() {
+		return trans_save_pth;
+	}
+
+	public void setTrans_save_pth(String trans_save_pth) {
+		this.trans_save_pth = trans_save_pth;
+	}
 
 	public String getRslt_msg() {
 		return rslt_msg;
