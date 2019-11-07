@@ -92,6 +92,12 @@ eXperDB-Management is a PostgreSQL management tool(for efficient operation and m
 [1. Installation eXperDB-Trnasfer(for Data Transfer)](https://github.com/experdb/eXperDB-Management/blob/master/eXperDB-Transfer.md)
 
 
+## Contribution
+### Bug Report
+If you find a bug, please report to us by posting issues on Github
+
+
+
 ## Copyright
 Copyright (c) 2016-2019, eXperDB Development Team
 All rights reserved.
