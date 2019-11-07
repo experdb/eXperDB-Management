@@ -93,9 +93,9 @@ eXperDB-Management is a PostgreSQL management tool(for efficient operation and m
 
 
 ## Contribution
-### Bug Report
-If you find a bug, please report to us by posting issues on Github
-
+If you find a bug, please report to us by posting issues on Github.
+Source code modifications via pull requests are welcome.
+Also, if you would like to contact us directly, please send an email to experdb@inzent.com.
 
 
 ## Copyright
