@@ -34,20 +34,22 @@ eXperDB-Management is a PostgreSQL management tool(for efficient operation and m
 ## License
 [![LICENSE](https://img.shields.io/badge/LICENSE-GPLv3-ff69b4.svg)](https://github.com/experdb/eXperDB-Management/blob/master/LICENSE)
 
-## Installation
-### System Requirements
+
+## Getting Started
+### Installation
+#### System Requirements
 * OS : Developed and tested on Linux and Windows, but work on any UNIX-like system and Windows System
 * JDK : JDK 1.7 or later
 * CPU : At least 4core, recommended 8core
 * HDD : 100GB or more
 * WAS : Apache-Tomcat
 
-### Components
+#### Components
 * eXperDB-Management-Agent
 * eXperDB-Management-WebConsole
 * eXperDB-Management Repository Database
 
-### 1. Installing eXperDB-Management-Agent
+#### 1. Installing eXperDB-Management-Agent
 
 1-1. Install agent using eXperDB-Management-Agent-10.7.1.0.run file 
 ```
@@ -67,7 +69,7 @@ eXperDB-Management is a PostgreSQL management tool(for efficient operation and m
 
 
 
-### 2. Installing eXperDB-Management-WebConsole
+#### 2. Installing eXperDB-Management-WebConsole
 
 2-1. Install agent using eXperDB-Management-WebConsole-10.7.1.0.run file 
 ```
