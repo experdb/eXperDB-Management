@@ -94,13 +94,44 @@ public class Db2pgHistoryController {
 //			accessHistoryService.insertHistory(historyVO);
 			
 			int imd_exe_sn=Integer.parseInt(request.getParameter("imd_exe_sn"));
-			String trans_save_pth = request.getParameter("trans_save_pth");
-			
-			db2pgResult  = DB2PG_LOG.db2pgLog(trans_save_pth);
-			
+
 			result = (Db2pgHistoryVO) db2pgHistoryService.selectDb2pgHistoryDetail(imd_exe_sn);
 			mv.addObject("result",result);
 			mv.setViewName("db2pg/popup/db2pgHistoryDetail");
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return mv;
+	}	
+	
+	/**
+	 * DB2PG 수행 결과 화면을 보여준다.
+	 * 
+	 * @param
+	 * @return ModelAndView mv
+	 * @throws Exception
+	 */
+	@RequestMapping(value = "/db2pg/popup/db2pgResult.do")
+	public ModelAndView db2pgResult(@ModelAttribute("historyVO") HistoryVO historyVO, HttpServletRequest request) {
+		ModelAndView mv = new ModelAndView();
+		Map<String, Object> db2pgResult = null;
+		Db2pgHistoryVO result = null;
+		try {
+			// 화면접근이력 이력 남기기
+//			CmmnUtils.saveHistory(request, historyVO);
+//			historyVO.setExe_dtl_cd("DX-T0018");
+//			historyVO.setMnu_id(33);
+//			accessHistoryService.insertHistory(historyVO);
+			
+			int imd_exe_sn=Integer.parseInt(request.getParameter("imd_exe_sn"));
+			String trans_save_pth = request.getParameter("trans_save_pth");
+			
+			db2pgResult  = DB2PG_LOG.db2pgFile(trans_save_pth);
+			
+			result = (Db2pgHistoryVO) db2pgHistoryService.selectDb2pgHistoryDetail(imd_exe_sn);
+			mv.addObject("result",result);
+			mv.addObject("db2pgResult",db2pgResult);
+			mv.setViewName("db2pg/popup/db2pgResult");
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
