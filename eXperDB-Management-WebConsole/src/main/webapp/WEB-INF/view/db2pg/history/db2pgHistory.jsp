@@ -78,10 +78,10 @@ function fn_init(){
 			render : function(data, type, full, meta) {
 				var html = "";
 				if (data == "Success") {
-					 html += "<span class='btn btnC_01 btnF_02'><button onclick='fn_log("+full.imd_exe_sn+",\""+full.trans_save_pth+"\")'><img src='../images/ico_state_02.png' style='margin-right:3px;'>Success</button></span>";
+					 html += "<span class='btn btnC_01 btnF_02'><button onclick='fn_result("+full.imd_exe_sn+",\""+full.trans_save_pth+"\")'><img src='../images/ico_state_02.png' style='margin-right:3px;'>Success</button></span>";
 					
 				} else {
-					html += "<span class='btn btnC_01 btnF_02'><button onclick='fn_log("+full.imd_exe_sn+",\""+full.trans_save_pth+"\")'><img src='../images/ico_state_01.png' style='margin-right:3px;'>Fail</button></span>";
+					html += "<span class='btn btnC_01 btnF_02'><button onclick='fn_log("+full.imd_exe_sn+")'><img src='../images/ico_state_01.png' style='margin-right:3px;'>Fail</button></span>";
 				}
 				return html;
 			},
@@ -180,7 +180,7 @@ function fn_search(){
 /* ********************************************************
  * 에러 로그 팝업
  ******************************************************** */
- function fn_log(imd_exe_sn, trans_save_pth){
+ function fn_log(imd_exe_sn){
 
 	  var frmPop= document.frmPopup;
 	  
@@ -191,6 +191,26 @@ function fn_search(){
 		var popOption = "width="+width+", height="+height+", top="+top+", left="+left+", resizable=no, scrollbars=yes, status=no, toolbar=no, titlebar=yes, location=no,";
 		
 	    var url = '/db2pg/popup/db2pgHistoryDetail.do';
+	    window.open('','popupView',popOption);  
+	     
+	    frmPop.action = url;
+	    frmPop.target = 'popupView';
+	    frmPop.trans_save_pth.value = trans_save_pth;
+	    frmPop.imd_exe_sn.value = imd_exe_sn;  
+	    frmPop.submit();   
+}
+
+ function fn_result(imd_exe_sn, trans_save_pth){
+
+	  var frmPop= document.frmPopup;
+	  
+		var width = 950;
+		var height = 690;
+		var left = (window.screen.width / 2) - (width / 2);
+		var top = (window.screen.height /2) - (height / 2);
+		var popOption = "width="+width+", height="+height+", top="+top+", left="+left+", resizable=no, scrollbars=yes, status=no, toolbar=no, titlebar=yes, location=no,";
+		
+	    var url = '/db2pg/popup/db2pgResult.do';
 	    window.open('','popupView',popOption);  
 	     
 	    frmPop.action = url;

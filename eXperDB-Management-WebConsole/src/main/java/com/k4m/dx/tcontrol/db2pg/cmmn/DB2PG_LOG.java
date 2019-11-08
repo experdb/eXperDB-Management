@@ -22,7 +22,80 @@ public class DB2PG_LOG {
 
 	public DB2PG_LOG(){}
 	
-	public static  Map<String, Object> db2pgLog(String logPath) throws Exception {
+	public static  Map<String, Object> db2pgFile(String logPath) throws Exception {
+		Process process = null;
+        Runtime runtime = Runtime.getRuntime();
+        StringBuffer successOutput = new StringBuffer(); // 성공 스트링 버퍼
+        StringBuffer errorOutput = new StringBuffer(); // 오류 스트링 버퍼
+        BufferedReader successBufferReader = null; // 성공 버퍼
+        BufferedReader errorBufferReader = null; // 오류 버퍼
+        String msg = null; // 메시지
+
+       JSONObject result = new JSONObject();
+       String fileName = "";
+		
+		System.out.println( "/*****DB2PG  RESULT  ************************************************************/");
+	
+		String path = logPath+"/result;";
+		
+		String strCmd ="cd "+path+" ls -Art | tail -n 1";
+		
+		System.out.println("1. 파일 찾기 명령어 = "+strCmd);
+
+		List<String> cmdList = new ArrayList<String>(); 
+		
+		cmdList.add("/bin/sh"); 
+		cmdList.add("-c");
+		cmdList.add(strCmd); 
+
+		String[] array = cmdList.toArray(new String[cmdList.size()]);
+
+        try {       	
+            // 명령어 실행
+            process = runtime.exec(array);
+ 
+            // shell 실행이 정상 동작했을 경우
+            successBufferReader = new BufferedReader(new InputStreamReader(process.getInputStream()));
+ 
+            while ((msg = successBufferReader.readLine()) != null) {
+                successOutput.append(msg + System.getProperty("line.separator"));
+            }
+ 
+            // shell 실행시 에러가 발생했을 경우
+            errorBufferReader = new BufferedReader(new InputStreamReader(process.getErrorStream()));
+            while ((msg = errorBufferReader.readLine()) != null) {
+                errorOutput.append(msg + System.getProperty("line.separator"));
+            }
+ 
+            // 프로세스의 수행이 끝날때까지 대기
+            process.waitFor();
+ 
+            // shell 실행이 정상 종료되었을 경우
+            if (process.exitValue() == 0) {
+            	fileName = successOutput.toString();
+            	result = db2pgResult(path,fileName);
+            } 
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        } finally {      	
+        	
+        	System.out.println("결과 :" + result.get("RESULT") );
+            try {
+                process.destroy();
+                if (successBufferReader != null) successBufferReader.close();
+                if (errorBufferReader != null) errorBufferReader.close();
+            } catch (IOException e1) {
+                e1.printStackTrace();
+            }
+        }
+
+		return result;		
+	}
+
+	public static JSONObject db2pgResult(String path, String fileName) {	
 		Process process = null;
         Runtime runtime = Runtime.getRuntime();
         StringBuffer successOutput = new StringBuffer(); // 성공 스트링 버퍼
@@ -31,18 +104,12 @@ public class DB2PG_LOG {
         BufferedReader errorBufferReader = null; // 오류 버퍼
         String msg = null; // 메시지
         
-        String startTime=null;
-        String endTime=null;
-        
         JSONObject result = new JSONObject();
+        
+        
+		String strCmd ="cd "+path+" cat "+fileName;
 		
-		System.out.println( "/*****DB2PG  LOG ************************************************************/");
-	
-		String path = logPath+"/result;";
-		
-		String strCmd ="cd "+path+" ls -Art | tail -n 1";
-		
-		System.out.println("1. 명령어 = "+strCmd);
+		System.out.println("2. 결과출력 명령어 = "+strCmd);
 
 		List<String> cmdList = new ArrayList<String>(); 
 		
@@ -75,26 +142,14 @@ public class DB2PG_LOG {
             // shell 실행이 정상 종료되었을 경우
             if (process.exitValue() == 0) {
                 result.put("RESULT_CODE", 0);
-                result.put("RESULT", "SUCCESS");
-            } else {
-                // shell 실행이 비정상 종료되었을 경우
-            	result.put("RESULT_MSG", successOutput.toString());
-                result.put("RESULT_CODE", 1);
-                result.put("RESULT", "FAIL");
+                result.put("RESULT", successOutput);
             }
-
         } catch (IOException e) {
             e.printStackTrace();
         } catch (InterruptedException e) {
             e.printStackTrace();
         } finally {      	
-
-    		System.out.println("3. 결과 = "+result.get("RESULT"));
-    		System.out.println("4. 에러 메세지 = "+result.get("RESULT_MSG"));
-
-    		System.out.println( "/*****DB2PG  LOG ************************************************************/");
-    		
-    		
+        	System.out.println( "/*****DB2PG  RESULT ************************************************************/");
             try {
                 process.destroy();
                 if (successBufferReader != null) successBufferReader.close();
@@ -106,5 +161,7 @@ public class DB2PG_LOG {
 
 		return result;		
 	}
+	
+
 
 }
