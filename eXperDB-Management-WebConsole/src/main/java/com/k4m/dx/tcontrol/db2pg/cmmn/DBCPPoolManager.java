@@ -120,10 +120,10 @@ public class DBCPPoolManager {
 			//SyBaseASE	
 				case "TC002206" :
 					System.out.println("DB_TYPE.Sybase ASE");
-					/*driver = "com.sybase.jdbc4.jdbc.SybDriver" ;
-					connectURI = "jdbc:sybase:Tds:"+configInfo.SERVERIP+":"+configInfo.PORT+"/"+configInfo.DBNAME;
+					driver = "com.sybase.jdbc4.jdbc.SybDriver" ;
+					connectURI = "jdbc:sybase:Tds:"+serverObj.get("SERVER_IP")+":"+serverObj.get("SERVER_PORT")+"/"+serverObj.get("DATABASE_NAME");
 
-					props.put("DATABASE", configInfo.DBNAME);
+				/*	props.put("DATABASE", configInfo.DBNAME);
 					if (configInfo.LOAD_MODE != null && configInfo.LOAD_MODE.equals(Constant.DIRECT_PATH_LOAD)){
 						props.put("ENABLE_BULK_LOAD", "ARRAYINSERT_WITH_MIXED_STATEMENTS");
 						Log.info(0, DBCPPoolManager.class, "PROPERTY : ENABLE_BULK_LOAD=ARRAYINSERT_WITH_MIXED_STATEMENTS");
@@ -140,8 +140,8 @@ public class DBCPPoolManager {
 				case "TC002208" :
 					System.out.println("DB_TYPE.Tibero");
 					System.out.println("DB_TYPE =" + DB_TYPE);
-					/*driver = "com.tmax.tibero.jdbc.TbDriver";
-					connectURI = "jdbc:tibero:thin:@"+configInfo.SERVERIP+":"+configInfo.PORT+":"+configInfo.DBNAME;*/
+					driver = "com.tmax.tibero.jdbc.TbDriver";
+					connectURI = "jdbc:tibero:thin:@"+serverObj.get("SERVER_IP")+":"+serverObj.get("SERVER_PORT")+":"+serverObj.get("DATABASE_NAME");
 					break;										
     			}
 			
@@ -175,11 +175,11 @@ public class DBCPPoolManager {
 			//DB2
 			/*serverObj.put(ClientProtocolID.SERVER_NAME, "192.168.56.200");
 			serverObj.put(ClientProtocolID.SERVER_IP, "192.168.56.200");
-			serverObj.put(ClientProtocolID.SERVER_PORT, "48789");
-			serverObj.put(ClientProtocolID.DATABASE_NAME, "db2");
-			serverObj.put(ClientProtocolID.USER_ID, "db2");
-			serverObj.put(ClientProtocolID.USER_PWD, "db20225!!");
-			serverObj.put(ClientProtocolID.DB_TYPE, "DB2");*/		
+			serverObj.put(ClientProtocolID.SERVER_PORT, "60000");
+			serverObj.put(ClientProtocolID.DATABASE_NAME, "inst10");
+			serverObj.put(ClientProtocolID.USER_ID, "inst10");
+			serverObj.put(ClientProtocolID.USER_PWD, "inst10");
+			serverObj.put(ClientProtocolID.DB_TYPE, "TC002205");*/
 			
 			//MS-SQL
 			/*serverObj.put(ClientProtocolID.SERVER_NAME, "10.1.21.28");
@@ -188,16 +188,16 @@ public class DBCPPoolManager {
 			serverObj.put(ClientProtocolID.DATABASE_NAME, "mizuho");
 			serverObj.put(ClientProtocolID.USER_ID, "mizuho");
 			serverObj.put(ClientProtocolID.USER_PWD, "mizuho");
-			serverObj.put(ClientProtocolID.DB_TYPE, "MSS");*/
+			serverObj.put(ClientProtocolID.DB_TYPE, "TC002202");*/
 			
 			//Oracle
-			serverObj.put(ClientProtocolID.SERVER_NAME, "192.168.56.118");
-			serverObj.put(ClientProtocolID.SERVER_IP, "192.168.56.118");
+			/*serverObj.put(ClientProtocolID.SERVER_NAME, "192.168.56.117");
+			serverObj.put(ClientProtocolID.SERVER_IP, "192.168.56.117");
 			serverObj.put(ClientProtocolID.SERVER_PORT, "1521");
-			serverObj.put(ClientProtocolID.DATABASE_NAME, "ora12c");
-			serverObj.put(ClientProtocolID.USER_ID, "migrator");
-			serverObj.put(ClientProtocolID.USER_PWD, "migrator");
-			serverObj.put(ClientProtocolID.DB_TYPE, "ORA");
+			serverObj.put(ClientProtocolID.DATABASE_NAME, "orcl");
+			serverObj.put(ClientProtocolID.USER_ID, "ibizspt");
+			serverObj.put(ClientProtocolID.USER_PWD, "ibizspt");
+			serverObj.put(ClientProtocolID.DB_TYPE, "TC002201");*/
 			
 			//PostgreSQL
 			/*serverObj.put(ClientProtocolID.SERVER_NAME, "192.168.56.112");
@@ -206,7 +206,25 @@ public class DBCPPoolManager {
 			serverObj.put(ClientProtocolID.DATABASE_NAME, "kimjy");
 			serverObj.put(ClientProtocolID.USER_ID, "kimjy");
 			serverObj.put(ClientProtocolID.USER_PWD, "kimjy");
-			serverObj.put(ClientProtocolID.DB_TYPE, "POG");*/
+			serverObj.put(ClientProtocolID.DB_TYPE, "TC002204");*/
+			
+			//SyBaseASE
+			/*serverObj.put(ClientProtocolID.SERVER_NAME, "192.168.56.200");
+			serverObj.put(ClientProtocolID.SERVER_IP, "192.168.56.200");
+			serverObj.put(ClientProtocolID.SERVER_PORT, "5000");
+			serverObj.put(ClientProtocolID.DATABASE_NAME, "db2pg");
+			serverObj.put(ClientProtocolID.USER_ID, "sa");
+			serverObj.put(ClientProtocolID.USER_PWD, "sa0225!!");
+			serverObj.put(ClientProtocolID.DB_TYPE, "TC002206");*/
+					
+			//Tibero
+			serverObj.put(ClientProtocolID.SERVER_NAME, "192.168.56.105");
+			serverObj.put(ClientProtocolID.SERVER_IP, "192.168.56.105");
+			serverObj.put(ClientProtocolID.SERVER_PORT, "8629");
+			serverObj.put(ClientProtocolID.DATABASE_NAME, "tibero");
+			serverObj.put(ClientProtocolID.USER_ID, "test");
+			serverObj.put(ClientProtocolID.USER_PWD, "test");
+			serverObj.put(ClientProtocolID.DB_TYPE, "TC002208");
 			
 			Map<String, Object> result = DBCPPoolManager.setupDriver(serverObj);
 			
