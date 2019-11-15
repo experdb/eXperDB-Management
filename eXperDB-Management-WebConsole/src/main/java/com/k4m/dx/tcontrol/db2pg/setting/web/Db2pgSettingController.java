@@ -675,7 +675,11 @@ public class Db2pgSettingController {
 			configObj.put("tar_schema", targetDBMS.getScm_nm());
 			configObj.put("tar_port", targetDBMS.getPortno());
 			configObj.put("tar_db_charset", targetDBMS.getCrts_nm());
-			configObj.put("tar_truncate", dataConfigVO.getIns_opt_cd());
+			if(dataConfigVO.getIns_opt_cd().equals("TRUNCATE")){
+				configObj.put("tar_truncate", "true");
+			}else{
+				configObj.put("tar_truncate", "false");
+			}
 			configObj.put("tar_constraint_rebuild", dataConfigVO.getTb_rbl_tf());
 			configObj.put("tar_constraint_ddl", dataConfigVO.getCnst_cnd_exrt_tf());
 			configObj.put("src_where_condition", dataConfigVO.getSrc_cnd_qry());
@@ -946,7 +950,11 @@ public class Db2pgSettingController {
 			configObj.put("tar_schema", targetDBMS.getScm_nm());
 			configObj.put("tar_port", targetDBMS.getPortno());
 			configObj.put("tar_db_charset", targetDBMS.getCrts_nm());
-			configObj.put("tar_truncate", dataConfigVO.getIns_opt_cd());
+			if(dataConfigVO.getIns_opt_cd().equals("TRUNCATE")){
+				configObj.put("tar_truncate", "true");
+			}else{
+				configObj.put("tar_truncate", "false");
+			}
 			configObj.put("tar_constraint_rebuild", dataConfigVO.getTb_rbl_tf());
 			configObj.put("tar_constraint_ddl", dataConfigVO.getCnst_cnd_exrt_tf());
 			configObj.put("src_where_condition", dataConfigVO.getSrc_cnd_qry());
