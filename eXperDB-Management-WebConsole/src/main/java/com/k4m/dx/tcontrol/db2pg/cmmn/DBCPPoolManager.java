@@ -99,25 +99,36 @@ public class DBCPPoolManager {
 		try {
 			
 			switch (DB_TYPE) {
-			//오라클
+				//오라클
 				case "TC002201" :
 					System.out.println("DB_TYPE.ORACLE");
 					driver = "oracle.jdbc.driver.OracleDriver";
 					connectURI = "jdbc:oracle:thin:@"+serverObj.get("SERVER_IP")+":"+serverObj.get("SERVER_PORT")+"/"+serverObj.get("DATABASE_NAME");
 					break;
-			//PostgreSQL		
-				case "TC002204" :
-					System.out.println("DB_TYPE.PostgreSQL");
-					driver = "org.postgresql.Driver" ;
-					connectURI = "jdbc:postgresql://"+serverObj.get("SERVER_IP")+":"+serverObj.get("SERVER_PORT")+"/"+serverObj.get("DATABASE_NAME");
-					break;
-			//MS-SQL
+					
+				//MS-SQL
 				case "TC002202" :
 					System.out.println("DB_TYPE.MS-SQL");
 					driver = "com.microsoft.sqlserver.jdbc.SQLServerDriver" ;
 					connectURI = "jdbc:sqlserver://"+serverObj.get("SERVER_IP")+":"+serverObj.get("SERVER_PORT")+";databaseName="+serverObj.get("DATABASE_NAME");
 					break;
-			//SyBaseASE	
+					
+				//PostgreSQL		
+				case "TC002204" :
+					System.out.println("DB_TYPE.PostgreSQL");
+					driver = "org.postgresql.Driver" ;
+					connectURI = "jdbc:postgresql://"+serverObj.get("SERVER_IP")+":"+serverObj.get("SERVER_PORT")+"/"+serverObj.get("DATABASE_NAME");
+					break;
+					
+					//DB2		
+				case "TC002205" :
+					System.out.println("DB_TYPE.DB2");
+					driver = "com.ibm.db2.jcc.DB2Driver" ;
+					connectURI = "jdbc:db2://"+serverObj.get("SERVER_IP")+":"+serverObj.get("SERVER_PORT")+"/"+serverObj.get("DATABASE_NAME");
+					System.setProperty("db2.jcc.charsetDecoderEncoder", "3");
+					break;
+					
+				//SyBaseASE	
 				case "TC002206" :
 					System.out.println("DB_TYPE.Sybase ASE");
 					driver = "com.sybase.jdbc4.jdbc.SybDriver" ;
@@ -129,14 +140,16 @@ public class DBCPPoolManager {
 						Log.info(0, DBCPPoolManager.class, "PROPERTY : ENABLE_BULK_LOAD=ARRAYINSERT_WITH_MIXED_STATEMENTS");
 					}*/
 					break;
-			//DB2		
-				case "TC002205" :
-					System.out.println("DB_TYPE.DB2");
-					driver = "com.ibm.db2.jcc.DB2Driver" ;
-					connectURI = "jdbc:db2://"+serverObj.get("SERVER_IP")+":"+serverObj.get("SERVER_PORT")+"/"+serverObj.get("DATABASE_NAME");
-					System.setProperty("db2.jcc.charsetDecoderEncoder", "3");
-					break;
-			//Tibero		
+					
+				//CUBRID	
+				case "TC002207" :
+					System.out.println("DB_TYPE.CUBRID");
+					System.out.println("DB_TYPE =" + DB_TYPE);
+					driver = "cubrid.jdbc.driver.CUBRIDDriver";
+					connectURI = "jdbc:CUBRID:"+serverObj.get("SERVER_IP")+":"+serverObj.get("SERVER_PORT")+":"+serverObj.get("DATABASE_NAME")+":"+serverObj.get("USER_ID")+"::";
+					break;		
+								
+				//Tibero		
 				case "TC002208" :
 					System.out.println("DB_TYPE.Tibero");
 					System.out.println("DB_TYPE =" + DB_TYPE);
@@ -217,14 +230,16 @@ public class DBCPPoolManager {
 			serverObj.put(ClientProtocolID.USER_PWD, "sa0225!!");
 			serverObj.put(ClientProtocolID.DB_TYPE, "TC002206");*/
 					
-			//Tibero
-			serverObj.put(ClientProtocolID.SERVER_NAME, "192.168.56.105");
-			serverObj.put(ClientProtocolID.SERVER_IP, "192.168.56.105");
-			serverObj.put(ClientProtocolID.SERVER_PORT, "8629");
-			serverObj.put(ClientProtocolID.DATABASE_NAME, "tibero");
-			serverObj.put(ClientProtocolID.USER_ID, "test");
-			serverObj.put(ClientProtocolID.USER_PWD, "test");
-			serverObj.put(ClientProtocolID.DB_TYPE, "TC002208");
+			//CUBRID
+			serverObj.put(ClientProtocolID.SERVER_NAME, "192.168.56.200");
+			serverObj.put(ClientProtocolID.SERVER_IP, "192.168.56.200");
+			serverObj.put(ClientProtocolID.SERVER_PORT, "33000");
+			serverObj.put(ClientProtocolID.DATABASE_NAME, "demodb");
+			serverObj.put(ClientProtocolID.USER_ID, "db2pg");
+			serverObj.put(ClientProtocolID.USER_PWD, "db2pg");
+			serverObj.put(ClientProtocolID.DB_TYPE, "TC002207");
+			
+ 
 			
 			Map<String, Object> result = DBCPPoolManager.setupDriver(serverObj);
 			
