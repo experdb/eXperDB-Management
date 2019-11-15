@@ -296,6 +296,8 @@ public class Db2pgDbmsSystemController {
 				paramvalue.put("dbms_dscd", "TC0026");
 			}else if(dbms_dscd.equals("TC002204")){
 				paramvalue.put("dbms_dscd", "TC0005");
+			}else if(dbms_dscd.equals("TC002207")){
+				paramvalue.put("dbms_dscd", "TC0031");
 			}
 				
 			 result = dbmsService.selectCharSetList(paramvalue);
