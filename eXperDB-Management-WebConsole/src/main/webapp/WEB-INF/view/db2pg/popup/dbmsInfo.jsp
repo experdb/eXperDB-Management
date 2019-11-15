@@ -179,19 +179,19 @@ function fn_Add(){
 				<caption><spring:message code="menu.schedule_registration" /></caption>				
 				<colgroup>
 					<col style="width:8%;" />
-					<col style="width:22%;" />
+					<col style="width:17%;" />
 					<col style="width:8%;" />
 					<col style="width:12%;" />
 					<col style="width:8%;" />
-					<col style="width:22%;" />
+					<col style="width:17%;" />
 				</colgroup>
 				<tbody>
 					<tr>
 						<th scope="row" class="ico_t1">시스템명</th>
-						<td><input type="text" class="txt t3" name="db2pg_sys_nm" id="db2pg_sys_nm" /></td>		
+						<td><input type="text" class="txt t4" name="db2pg_sys_nm" id="db2pg_sys_nm" /></td>		
 						<th scope="row" class="ico_t1">DBMS구분</th>
 						<td>
-							<select name="dbms_dscd" id="dbms_dscd" class="select t8" >
+							<select name="dbms_dscd" id="dbms_dscd" class="select t4" >
 									<option value=""><spring:message code="common.total" /></option>				
 										<c:forEach var="result" items="${result}" varStatus="status">												 
  										<option value="<c:out value="${result.dbms_dscd}"/>" >
@@ -208,7 +208,7 @@ function fn_Add(){
 								</select>						
 						</td>									
 						<th scope="row" class="ico_t1" >아이피</th>
-						<td><input type="text" class="txt t3" name="ipadr" id="ipadr" /></td>				
+						<td><input type="text" class="txt t4" name="ipadr" id="ipadr" /></td>				
 					</tr>
 				</tbody>
 			</table>

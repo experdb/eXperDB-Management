@@ -46,9 +46,9 @@
 				, sys_inf.dtb_nm
 				, sys_inf.scm_nm
 				, ddl_wrk_inf.frst_regr_id
-				, TO_CHAR(ddl_wrk_inf.frst_reg_dtm,'YYYY-MM-DD HH24:MI') as frst_reg_dtm
+				, TO_CHAR(ddl_wrk_inf.frst_reg_dtm,'YYYY-MM-DD HH24:MI:SS') as frst_reg_dtm
 				, ddl_wrk_inf.lst_mdfr_id
-				, TO_CHAR(ddl_wrk_inf.lst_mdf_dtm,'YYYY-MM-DD HH24:MI') as lst_mdf_dtm 
+				, TO_CHAR(ddl_wrk_inf.lst_mdf_dtm,'YYYY-MM-DD HH24:MI:SS') as lst_mdf_dtm 
 			FROM t_db2pg_ddl_wrk_inf ddl_wrk_inf, t_db2pg_sys_inf sys_inf, t_wrkcng_i wrkcng
 			WHERE ddl_wrk_inf.db2pg_sys_id = sys_inf.db2pg_sys_id
 			AND ddl_wrk_inf.wrk_id = wrkcng.wrk_id
@@ -103,9 +103,9 @@
 				, target_sys_inf.dtb_nm as target_dtb_nm
 				, target_sys_inf.scm_nm as target_scm_nm
 				, trsf_wrk_inf.frst_regr_id
-				, TO_CHAR(trsf_wrk_inf.frst_reg_dtm,'YYYY-MM-DD HH24:MI') as frst_reg_dtm
+				, TO_CHAR(trsf_wrk_inf.frst_reg_dtm,'YYYY-MM-DD HH24:MI:SS') as frst_reg_dtm
 				, trsf_wrk_inf.lst_mdfr_id
-				, TO_CHAR(trsf_wrk_inf.lst_mdf_dtm,'YYYY-MM-DD HH24:MI') as lst_mdf_dtm 
+				, TO_CHAR(trsf_wrk_inf.lst_mdf_dtm,'YYYY-MM-DD HH24:MI:SS') as lst_mdf_dtm 
 				, trsf_wrk_inf.trans_save_pth
 				, trsf_wrk_inf.src_cnd_qry
 			FROM t_db2pg_trsf_wrk_inf trsf_wrk_inf 

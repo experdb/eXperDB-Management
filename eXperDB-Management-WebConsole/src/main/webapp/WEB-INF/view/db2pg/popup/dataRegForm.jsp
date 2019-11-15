@@ -222,8 +222,8 @@ function fn_insert_work(){
  ******************************************************** */
 function fn_dbmsInfo(){
 	var popUrl = "/db2pg/popup/dbmsInfo.do";
-	var width = 920;
-	var height = 670;
+	var width = 965;
+	var height = 680;
 	var left = (window.screen.width / 2) - (width / 2);
 	var top = (window.screen.height /2) - (height / 2);
 	var popOption = "width="+width+", height="+height+", top="+top+", left="+left+", resizable=no, scrollbars=yes, status=no, toolbar=no, titlebar=yes, location=no,";
@@ -236,8 +236,8 @@ function fn_dbmsInfo(){
  ******************************************************** */
 function fn_dbmsPgInfo(){
 	var popUrl = "/db2pg/popup/dbmsPgInfo.do";
-	var width = 920;
-	var height = 670;
+	var width = 965;
+	var height = 680;
 	var left = (window.screen.width / 2) - (width / 2);
 	var top = (window.screen.height /2) - (height / 2);
 	var popOption = "width="+width+", height="+height+", top="+top+", left="+left+", resizable=no, scrollbars=yes, status=no, toolbar=no, titlebar=yes, location=no,";
@@ -256,7 +256,7 @@ function fn_tableList(gbn){
 	
 	var frmPop= document.frmPopup;
 	var url = '/db2pg/popup/tableInfo.do';
-	window.open('','popupView','width=930, height=500');  
+	window.open('','popupView','width=930, height=850');
 	     
 	frmPop.action = url;
 	frmPop.target = 'popupView';
@@ -460,19 +460,19 @@ function fn_tableAddCallback(rowList, tableGbn){
 			<table class="write">
 				<caption><spring:message code="dashboard.Register_backup" /></caption>
 				<colgroup>
-					<col style="width:15%;" />
-					<col style="width:20%;" />
+					<col style="width:18%;" />
+					<col style="width:17%;" />
 					<col style="width:10%;" />
-					<col style="width:20%;" />
 					<col style="width:15%;" />
-					<col style="width:20%;" />
+					<col style="width:18%;" />
+					<col style="width:17%;" />
 					</col>
 				</colgroup>
 				<tbody>
 					<tr>
 						<th scope="row" class="ico_t2">테이블 리빌드 여부</th>
 						<td>
-							<select name="tb_rbl_tf" id="tb_rbl_tf" class="select t5">
+							<select name="tb_rbl_tf" id="tb_rbl_tf" class="select t4">
 								<c:forEach var="codeTF" items="${codeTF}">
 									<option value="${codeTF.sys_cd_nm}" ${false eq codeTF.sys_cd_nm ? "selected='selected'" : ""}>${codeTF.sys_cd_nm}</option>
 								</c:forEach>
@@ -480,7 +480,7 @@ function fn_tableAddCallback(rowList, tableGbn){
 						</td>
 						<th scope="row" class="ico_t2">입력모드</th>
 						<td>
-							<select name="ins_opt_cd" id="ins_opt_cd" class="select t5">
+							<select name="ins_opt_cd" id="ins_opt_cd" class="select t4">
 								<c:forEach var="codeInputMode" items="${codeInputMode}">
 									<option value="${codeInputMode.sys_cd_nm}">${codeInputMode.sys_cd_nm}</option>
 								</c:forEach>
@@ -488,7 +488,7 @@ function fn_tableAddCallback(rowList, tableGbn){
 						</td>
 						<th scope="row" class="ico_t2">제약조건 추출 여부</th>
 						<td>
-							<select name="cnst_cnd_exrt_tf" id="cnst_cnd_exrt_tf" class="select t5">
+							<select name="cnst_cnd_exrt_tf" id="cnst_cnd_exrt_tf" class="select t4">
 								<c:forEach var="codeTF" items="${codeTF}">
 									<option value="${codeTF.sys_cd_nm}" ${false eq codeTF.sys_cd_nm ? "selected='selected'" : ""}>${codeTF.sys_cd_nm}</option>
 								</c:forEach>

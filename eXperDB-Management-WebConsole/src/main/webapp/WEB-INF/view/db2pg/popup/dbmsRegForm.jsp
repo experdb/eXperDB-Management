@@ -114,7 +114,7 @@ $(window.document).ready(function() {
  function fn_pgdbmsCall(){
 		var popUrl = "/db2pg/popup/pgDbmsRegForm.do"; // 서버 url 팝업경로
 		var width = 1000;
-		var height = 700;
+		var height = 680;
 		var left = (window.screen.width / 2) - (width / 2);
 		var top = (window.screen.height /2) - (height / 2);
 		var popOption = "width="+width+", height="+height+", top="+top+", left="+left+", resizable=no, scrollbars=yes, status=no, toolbar=no, titlebar=yes, location=no,";
@@ -436,7 +436,7 @@ function fn_charSet(){
 			<tbody>
 				<tr>
 					<th scope="row" class="ico_t1" >시스템명</th>
-					<td colspan="3"><input type="text" class="txt t3" name="db2pg_sys_nm" id="db2pg_sys_nm"  maxlength="20"   style="width:635px" onkeyup="fn_checkWord(this,20)" placeholder="20<spring:message code='message.msg188'/>"/>
+					<td colspan="3"><input type="text" class="txt t2" name="db2pg_sys_nm" id="db2pg_sys_nm"  maxlength="20" onkeyup="fn_checkWord(this,20)" placeholder="20<spring:message code='message.msg188'/>"/>
 					<span class="btn btnC_01"><button type="button" class= "btn_type_02" onclick="fn_sysnmCheck()" style="width: 85px; margin-right: -60px; margin-top: 0;"><spring:message code="common.overlap_check" /></button></span></td>
 				</tr>
 							
@@ -477,10 +477,8 @@ function fn_charSet(){
 				</tr>	
 							
 				<tr>
-					<th scope="row" class="ico_t1">케릭터셋</th>
-						<td><select name="crts_nm" id="crts_nm" class="select"  style="width:725px" >						
-									</select>
-						</td>				
+					<th scope="row" class="ico_t1">캐릭터셋</th>
+						<td><select name="crts_nm" id="crts_nm" class="select t9"></select></td>				
 				</tr>			
 					
 			</tbody>

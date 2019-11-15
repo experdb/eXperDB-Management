@@ -1,5 +1,4 @@
-<%@ page language="java" contentType="text/html; charset=UTF-8"
-	pageEncoding="UTF-8"%>
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form"%>
 <%@ taglib prefix="ui" uri="http://egovframework.gov/ctl/ui"%>
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags"%>
@@ -30,7 +29,7 @@ function fn_init() {
 		 * 서버리스트 (데이터테이블)
 		 ******************************************************** */
 		table = $('#dbms').DataTable({	
-		scrollY : "245px",
+		scrollY : "330px",
 		searching : false,
 		deferRender : true,
 		scrollX: true,
@@ -57,14 +56,14 @@ function fn_init() {
 		table.tables().header().to$().find('th:eq(1)').css('min-width', '130px');
 		table.tables().header().to$().find('th:eq(2)').css('min-width', '100px');
 		table.tables().header().to$().find('th:eq(3)').css('min-width', '130px');
-		table.tables().header().to$().find('th:eq(4)').css('min-width', '70px');
-		table.tables().header().to$().find('th:eq(5)').css('min-width', '70px');
-		table.tables().header().to$().find('th:eq(6)').css('min-width', '70px');		
-		table.tables().header().to$().find('th:eq(7)').css('min-width', '70px');
+		table.tables().header().to$().find('th:eq(4)').css('min-width', '100px');
+		table.tables().header().to$().find('th:eq(5)').css('min-width', '150px');
+		table.tables().header().to$().find('th:eq(6)').css('min-width', '100px');		
+		table.tables().header().to$().find('th:eq(7)').css('min-width', '100px');
 		table.tables().header().to$().find('th:eq(8)').css('min-width', '130px');		
-		table.tables().header().to$().find('th:eq(9)').css('min-width', '65px');  
+		table.tables().header().to$().find('th:eq(9)').css('min-width', '100px');  
 		table.tables().header().to$().find('th:eq(10)').css('min-width', '100px');
-		table.tables().header().to$().find('th:eq(11)').css('min-width', '65px');
+		table.tables().header().to$().find('th:eq(11)').css('min-width', '100px');
 		table.tables().header().to$().find('th:eq(12)').css('min-width', '100px');
 		table.tables().header().to$().find('th:eq(13)').css('min-width', '0px');
 	    $(window).trigger('resize'); 
@@ -138,7 +137,7 @@ $(window.document).ready(function() {
 function fn_reg_popup(){
 	var popUrl = "/db2pg/popup/dbmsRegForm.do"; // 서버 url 팝업경로
 	var width = 1000;
-	var height = 500;
+	var height = 520;
 	var left = (window.screen.width / 2) - (width / 2);
 	var top = (window.screen.height /2) - (height / 2);
 	var popOption = "width="+width+", height="+height+", top="+top+", left="+left+", resizable=no, scrollbars=yes, status=no, toolbar=no, titlebar=yes, location=no,";
@@ -166,7 +165,7 @@ function fn_regRe_popup(){
 	
 	var popUrl = "/db2pg/popup/dbmsRegReForm.do?db2pg_sys_id="+db2pg_sys_id;
 	var width = 1000;
-	var height = 500;
+	var height = 520;
 	var left = (window.screen.width / 2) - (width / 2);
 	var top = (window.screen.height /2) - (height / 2);
 	var popOption = "width="+width+", height="+height+", top="+top+", left="+left+", resizable=no, scrollbars=yes, status=no, toolbar=no, titlebar=yes, location=no,";
@@ -184,7 +183,7 @@ function fn_regRe_popup(){
 <div id="contents">
 	<div class="contents_wrap">
 		<div class="contents_tit">
-			<h4>DBMS<a href="#n"><img src="../images/ico_tit.png" class="btn_info"/></a></h4>
+			<h4>DBMS시스템<a href="#n"><img src="../images/ico_tit.png" class="btn_info"/></a></h4>
 			<div class="infobox"> 
 				<ul>
 					<li><spring:message code="help.dbms_management_01" /></li>
@@ -223,16 +222,16 @@ function fn_regRe_popup(){
 						<tbody>
 							<tr>
 								<th scope="row" class="t9">시스템명</th>
-								<td><input type="text" class="txt" name="db2pg_sys_nm" id="db2pg_sys_nm" /></td>
+								<td><input type="text" class="txt t3" name="db2pg_sys_nm" id="db2pg_sys_nm" /></td>
 								<th scope="row" class="t9">아이피</th>
-								<td><input type="text" class="txt" name="ipadr" id="ipadr" /></td>
+								<td><input type="text" class="txt t3" name="ipadr" id="ipadr" /></td>
 								<th scope="row" class="t9"><spring:message code="common.database" /></th>
-								<td><input type="text" class="txt" name="dtb_nm" id="dtb_nm" /></td>
+								<td><input type="text" class="txt t3" name="dtb_nm" id="dtb_nm" /></td>
 							</tr>
 							<tr>
 								<th scope="row" class="t9">DBMS구분</th>
 								<td>
-									<select name="dbms_dscd" id="dbms_dscd" class="select" >
+									<select name="dbms_dscd" id="dbms_dscd" class="select t5" >
 										<option value=""><spring:message code="common.total" /></option>				
 											<c:forEach var="result" items="${result}" varStatus="status">												 
  												<option value="<c:out value="${result.dbms_dscd}"/>" >
@@ -249,9 +248,9 @@ function fn_regRe_popup(){
 									</select>								
 								</td>
 								<th scope="row" class="t9">계정</th>
-								<td><input type="text" class="txt" name="spr_usr_id" id="spr_usr_id" /></td>
+								<td><input type="text" class="txt t3" name="spr_usr_id" id="spr_usr_id" /></td>
 								<th scope="row" class="t9">스키마</th>
-								<td><input type="text" class="txt" name="scm_nm" id="scm_nm" /></td>
+								<td><input type="text" class="txt t3" name="scm_nm" id="scm_nm" /></td>
 							</tr>
 						</tbody>
 					</table>
@@ -264,14 +263,14 @@ function fn_regRe_popup(){
 								<th width="130">시스템명</th>
 								<th width="100">DBMS구분</th>
 								<th width="130">아이피</th>
-								<th width="70">Database</th>
-								<th width="70">스키마</th>
-								<th width="70">포트</th>
-								<th width="70">계정</th>
+								<th width="100">Database</th>
+								<th width="150">스키마</th>
+								<th width="100">포트</th>
+								<th width="100">계정</th>
 								<th width="130">케릭터셋</th>
-								<th width="65"><spring:message code="common.register" /></th>
+								<th width="100"><spring:message code="common.register" /></th>
 								<th width="100"><spring:message code="common.regist_datetime" /></th>
-								<th width="65"><spring:message code="common.modifier" /></th>
+								<th width="100"><spring:message code="common.modifier" /></th>
 								<th width="100"><spring:message code="common.modify_datetime" /></th>
 								<th width="0"><spring:message code="common.modify_datetime" /></th>
 							</tr>
