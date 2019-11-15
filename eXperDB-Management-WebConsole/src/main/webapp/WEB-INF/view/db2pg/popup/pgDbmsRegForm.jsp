@@ -48,11 +48,11 @@ function fn_init() {
 		]
 	});
 		
-		table.tables().header().to$().find('th:eq(0)').css('min-width', '50px');
+		table.tables().header().to$().find('th:eq(0)').css('min-width', '10px');
 		table.tables().header().to$().find('th:eq(1)').css('min-width', '100px');
 		table.tables().header().to$().find('th:eq(2)').css('min-width', '100px');
 		table.tables().header().to$().find('th:eq(3)').css('min-width', '100px');
-		table.tables().header().to$().find('th:eq(4)').css('min-width', '100px');
+		table.tables().header().to$().find('th:eq(4)').css('min-width', '80px');
 		table.tables().header().to$().find('th:eq(5)').css('min-width', '100px');
 		table.tables().header().to$().find('th:eq(6)').css('min-width', '0px');
 		
@@ -152,18 +152,16 @@ function fn_Add(){
 				<caption><spring:message code="menu.schedule_registration" /></caption>				
 				<colgroup>
 					<col style="width:10%;" />
-					<col style="width:20%;" />
+					<col style="width:40%;" />
 					<col style="width:10%;" />
-					<col style="width:10%;" />
-					<col style="width:10%;" />
-					<col style="width:20%;" />
+					<col style="width:40%;" />
 				</colgroup>
 				<tbody>
 					<tr>
 						<th scope="row" class="ico_t1">DBMS명</th>
-						<td><input type="text" class="txt t4" name="wrk_nm" id="wrk_nm" /></td>											
+						<td><input type="text" class="txt t3" name="wrk_nm" id="wrk_nm" /></td>											
 						<th scope="row" class="ico_t1" >Database</th>
-						<td><input type="text" class="txt t4" name="wrk_nm" id="wrk_nm" /></td>				
+						<td><input type="text" class="txt t3" name="wrk_nm" id="wrk_nm" /></td>				
 					</tr>
 				</tbody>
 			</table>
@@ -175,11 +173,11 @@ function fn_Add(){
 				<table id="pgDbmsList" class="display" cellspacing="0" width="100%">
 				<thead>
 					<tr>
-						<th width="50"><spring:message code="common.no" /></th>
+						<th width="10"><spring:message code="common.no" /></th>
 						<th width="100" class="dt-center">DBMS명</th>
 						<th width="100" class="dt-center">DBMS아이피</th>
 						<th width="100">Database</th>
-						<th width="100">포트</th>
+						<th width="80">포트</th>
 						<th width="100">계정</th>
 						<th width="0">비밀번호</th>
 					</tr>

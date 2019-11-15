@@ -46,7 +46,7 @@ import com.k4m.dx.tcontrol.login.service.UserVO;
 
 @Controller
 public class UserManagerController {
-
+ 
 	@Autowired
 	private MenuAuthorityService menuAuthorityService;
 

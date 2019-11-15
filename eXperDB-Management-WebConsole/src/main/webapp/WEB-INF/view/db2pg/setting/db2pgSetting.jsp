@@ -69,8 +69,8 @@ function fn_init(){
 	columns : [
 		{data : "rownum", defaultContent : "", targets : 0, orderable : false, checkboxes : {'selectRow' : true}}, 
 		{data : "idx", className : "dt-center", defaultContent : ""}, 
-		{data : "db2pg_ddl_wrk_nm", className : "dt-center", defaultContent : ""}, 
-		{data : "db2pg_ddl_wrk_exp", className : "dt-center", defaultContent : ""}, 
+		{data : "db2pg_ddl_wrk_nm", className : "dt-left", defaultContent : ""}, 
+		{data : "db2pg_ddl_wrk_exp", className : "dt-left", defaultContent : ""}, 
 		{data : "dbms_dscd", className : "dt-center", defaultContent : ""}, 
 		{data : "ipadr", className : "dt-center", defaultContent : ""},
 		{data : "dtb_nm", className : "dt-center", defaultContent : ""},
@@ -96,8 +96,8 @@ function fn_init(){
 	columns : [
 		{data : "rownum", defaultContent : "", targets : 0, orderable : false, checkboxes : {'selectRow' : true}}, 
 		{data : "idx", className : "dt-center", defaultContent : ""}, 
-		{data : "db2pg_trsf_wrk_nm", className : "dt-center", defaultContent : ""}, 
-		{data : "db2pg_trsf_wrk_exp", className : "dt-center", defaultContent : ""}, 
+		{data : "db2pg_trsf_wrk_nm", className : "dt-left", defaultContent : ""}, 
+		{data : "db2pg_trsf_wrk_exp", className : "dt-left", defaultContent : ""}, 
 		{data : "source_dbms_dscd", className : "dt-center", defaultContent : ""}, 
 		{data : "source_ipadr", className : "dt-center", defaultContent : ""}, 
 		{data : "source_dtb_nm", className : "dt-center", defaultContent : ""}, 
@@ -124,18 +124,20 @@ function fn_init(){
 	tableDDL.tables().header().to$().find('th:eq(4)').css('min-width', '100px');
 	tableDDL.tables().header().to$().find('th:eq(5)').css('min-width', '100px');
 	tableDDL.tables().header().to$().find('th:eq(6)').css('min-width', '100px');
-	tableDDL.tables().header().to$().find('th:eq(7)').css('min-width', '100px');
+	tableDDL.tables().header().to$().find('th:eq(7)').css('min-width', '150px');
 	tableDDL.tables().header().to$().find('th:eq(8)').css('min-width', '100px');
 	tableDDL.tables().header().to$().find('th:eq(9)').css('min-width', '100px');
 	tableDDL.tables().header().to$().find('th:eq(10)').css('min-width', '100px');
 	tableDDL.tables().header().to$().find('th:eq(11)').css('min-width', '100px');
+	tableDDL.tables().header().to$().find('th:eq(12)').css('min-width', '0px');
+	tableDDL.tables().header().to$().find('th:eq(13)').css('min-width', '0px');
 
 	tableData.tables().header().to$().find('th:eq(0)').css('min-width', '10px');
     tableData.tables().header().to$().find('th:eq(1)').css('min-width', '30px');
     tableData.tables().header().to$().find('th:eq(2)').css('min-width', '100px');
     tableData.tables().header().to$().find('th:eq(3)').css('min-width', '200px');
-    tableData.tables().header().to$().find('th:eq(4)').css('min-width', '100px');
-    tableData.tables().header().to$().find('th:eq(5)').css('min-width', '100px');
+    tableData.tables().header().to$().find('th:eq(4)').css('min-width', '450px');
+    tableData.tables().header().to$().find('th:eq(5)').css('min-width', '450px');
     tableData.tables().header().to$().find('th:eq(6)').css('min-width', '100px');
     tableData.tables().header().to$().find('th:eq(7)').css('min-width', '100px');
     tableData.tables().header().to$().find('th:eq(8)').css('min-width', '100px');
@@ -146,6 +148,12 @@ function fn_init(){
     tableData.tables().header().to$().find('th:eq(13)').css('min-width', '100px');
     tableData.tables().header().to$().find('th:eq(14)').css('min-width', '100px');
     tableData.tables().header().to$().find('th:eq(15)').css('min-width', '100px');
+    tableData.tables().header().to$().find('th:eq(16)').css('min-width', '100px');
+    tableData.tables().header().to$().find('th:eq(17)').css('min-width', '100px');
+    tableData.tables().header().to$().find('th:eq(18)').css('min-width', '0px');
+    tableData.tables().header().to$().find('th:eq(19)').css('min-width', '0px');
+    tableData.tables().header().to$().find('th:eq(20)').css('min-width', '0px');
+    tableData.tables().header().to$().find('th:eq(21)').css('min-width', '0px');
     
 	$(window).trigger('resize'); 
 }
@@ -256,7 +264,7 @@ function getdataDataList(){
 function fn_ddl_reg_popup(){
 	var popUrl = "/db2pg/popup/ddlRegForm.do";
 	var width = 965;
-	var height = 820;
+	var height = 705;
 	var left = (window.screen.width / 2) - (width / 2);
 	var top = (window.screen.height /2) - (height / 2);
 	var popOption = "width="+width+", height="+height+", top="+top+", left="+left+", resizable=no, scrollbars=yes, status=no, toolbar=no, titlebar=yes, location=no,";
@@ -274,7 +282,7 @@ function fn_ddl_regre_popup(){
 		var db2pg_ddl_wrk_id = tableDDL.row('.selected').data().db2pg_ddl_wrk_id;
 		var popUrl = "/db2pg/popup/ddlRegReForm.do?db2pg_ddl_wrk_id=" +  db2pg_ddl_wrk_id;
 		var width = 965;
-		var height = 820;
+		var height = 705;
 		var left = (window.screen.width / 2) - (width / 2);
 		var top = (window.screen.height /2) - (height / 2);
 		var popOption = "width="+width+", height="+height+", top="+top+", left="+left+", resizable=no, scrollbars=yes, status=no, toolbar=no, titlebar=yes, location=no,";
@@ -293,7 +301,7 @@ function fn_ddl_regre_popup(){
 function fn_data_reg_popup(){
 	var popUrl = "/db2pg/popup/dataRegForm.do";
 	var width = 965;
-	var height = 820;
+	var height = 800;
 	var left = (window.screen.width / 2) - (width / 2);
 	var top = (window.screen.height /2) - (height / 2);
 	var popOption = "width="+width+", height="+height+", top="+top+", left="+left+", resizable=no, scrollbars=yes, status=no, toolbar=no, titlebar=yes, location=no,";
@@ -311,7 +319,7 @@ function fn_data_regre_popup(){
 		var db2pg_trsf_wrk_id = tableData.row('.selected').data().db2pg_trsf_wrk_id;
 		var popUrl = "/db2pg/popup/dataRegReForm.do?db2pg_trsf_wrk_id=" +  db2pg_trsf_wrk_id;
 		var width = 965;
-		var height = 820;
+		var height = 800;
 		var left = (window.screen.width / 2) - (width / 2);
 		var top = (window.screen.height /2) - (height / 2);
 		var popOption = "width="+width+", height="+height+", top="+top+", left="+left+", resizable=no, scrollbars=yes, status=no, toolbar=no, titlebar=yes, location=no,";
@@ -647,7 +655,7 @@ function fn_ImmediateStart(gbn){
 <div id="contents">
 	<div class="contents_wrap">
 		<div class="contents_tit">
-			<h4>DB2PG<a href="#n"><img src="/images/ico_tit.png" class="btn_info"/></a></h4>
+			<h4>DB2PG관리<a href="#n"><img src="/images/ico_tit.png" class="btn_info"/></a></h4>
 			<div class="infobox"> 
 				<ul>
 					<li>DB2PG 설명</li>
@@ -783,11 +791,13 @@ function fn_ImmediateStart(gbn){
 									<th width="100">DBMS 구분</th>
 									<th width="100">아이피</th>
 									<th width="100">Database</th>
-									<th width="100">스키마</th>
+									<th width="150">스키마</th>
 									<th width="100">등록자</th>
 									<th width="100">등록일시</th>
 									<th width="100">수정자</th>
 									<th width="100">수정일시</th>
+									<th width="0">db2pg_ddl_wrk_id</th>
+									<th width="0">wrk_id</th>
 								</tr>
 							</thead>
 						</table>	
@@ -799,8 +809,8 @@ function fn_ImmediateStart(gbn){
 									<th width="30" rowspan="2"><spring:message code="common.no" /></th>
 									<th width="100" rowspan="2">Work명</th>
 									<th width="200" rowspan="2">Work설명</th>
-									<th width="400" colspan="4">소스시스템</th>
-									<th width="400" colspan="4">타겟시스템</th>
+									<th width="600" colspan="4">소스시스템</th>
+									<th width="600" colspan="4">타겟시스템</th>
 									<th width="100" rowspan="2">등록자</th>
 									<th width="100" rowspan="2">등록일시</th>
 									<th width="100" rowspan="2">수정자</th>
@@ -815,6 +825,10 @@ function fn_ImmediateStart(gbn){
 									<th width="100">아이피</th>
 									<th width="100">Database</th>
 									<th width="100">스키마</th>
+									<th width="0">db2pg_trsf_wrk_id</th>
+									<th width="0">wrk_id</th>
+									<th width="0">trans_save_pth</th>
+									<th width="0">src_cnd_qry</th>
 								</tr>
 							</thead>
 					</table>

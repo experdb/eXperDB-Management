@@ -163,8 +163,8 @@ function fn_update_work(){
  ******************************************************** */
 function fn_dbmsInfo(){
 	var popUrl = "/db2pg/popup/dbmsInfo.do";
-	var width = 920;
-	var height = 670;
+	var width = 965;
+	var height = 680;
 	var left = (window.screen.width / 2) - (width / 2);
 	var top = (window.screen.height /2) - (height / 2);
 	var popOption = "width="+width+", height="+height+", top="+top+", left="+left+", resizable=no, scrollbars=yes, status=no, toolbar=no, titlebar=yes, location=no,";
@@ -183,7 +183,7 @@ function fn_tableList(gbn){
 	
 	var frmPop= document.frmPopup;
 	var url = '/db2pg/popup/tableInfo.do';
-	window.open('','popupView','width=930, height=500');  
+	window.open('','popupView','width=930, height=850');
 	     
 	frmPop.action = url;
 	frmPop.target = 'popupView';

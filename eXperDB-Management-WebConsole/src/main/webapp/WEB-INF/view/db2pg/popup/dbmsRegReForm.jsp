@@ -178,7 +178,7 @@ $(window.document).ready(function() {
 			<tbody>
 				<tr>
 					<th scope="row" class="ico_t1" >시스템명</th>
-					<td colspan="3"><input type="text" class="txt t3" name="db2pg_sys_nm" id="db2pg_sys_nm"  maxlength="20"   style="width:635px"  value="${resultInfo[0].db2pg_sys_nm}" readonly/>
+					<td colspan="3"><input type="text" class="txt t2" name="db2pg_sys_nm" id="db2pg_sys_nm"  maxlength="20" value="${resultInfo[0].db2pg_sys_nm}" readonly/>
 					</td>
 				</tr>
 							
@@ -218,8 +218,8 @@ $(window.document).ready(function() {
 				</tr>	
 							
 				<tr>
-					<th scope="row" class="ico_t1">케릭터셋</th>
-						<td><select name="crts_nm" id="crts_nm" class="select"  style="width:725px" >			
+					<th scope="row" class="ico_t1">캐릭터셋</th>
+						<td><select name="crts_nm" id="crts_nm" class="select t9">			
 										<c:forEach var="dbmsChar" items="${dbmsChar}" varStatus="status">				
 											<option value="<c:out value="${dbmsChar.sys_cd}"/>"<c:if test="${resultInfo[0].crts eq dbmsChar.sys_cd}"> selected</c:if>><c:out value="${dbmsChar.sys_cd_nm}"/></option>								 
  												<%-- <option value="<c:out value="${result.sys_cd}"/><c:if test="${resultInfo[0].dbms_dscd eq result.sys_cd_nm}"> selected</c:if>" ><c:out value="${result.sys_cd_nm}"/></option> --%>
