@@ -85,7 +85,7 @@ public class Db2pgConfigController {
 				fileContent = fileContent.replaceAll("SRC_PASSWORD=", "SRC_PASSWORD="+configObj.get("src_password").toString());
 				fileContent = fileContent.replaceAll("SRC_DATABASE=", "SRC_DATABASE="+configObj.get("src_database").toString());
 				fileContent = fileContent.replaceAll("SRC_SCHEMA=", "SRC_SCHEMA="+configObj.get("src_schema").toString());
-				fileContent = fileContent.replaceAll("SRC_DBMS_TYPE=ORA", "SRC_DBMS_TYPE="+configObj.get("src_dbms_type").toString());
+				fileContent = fileContent.replaceAll("SRC_DB_TYPE=ORA", "SRC_DB_TYPE="+configObj.get("src_dbms_type").toString());
 				fileContent = fileContent.replaceAll("SRC_PORT=1521", "SRC_PORT="+configObj.get("src_port").toString());
 				fileContent = fileContent.replaceAll("SRC_DB_CHARSET=UTF8", "SRC_DB_CHARSET="+configObj.get("src_db_charset").toString());
 				if(!configObj.get("src_include_tables").toString().equals("")){
