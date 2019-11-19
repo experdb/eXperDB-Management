@@ -1038,7 +1038,50 @@ public class Db2pgSettingController {
 	}
 
 	/**
-	 * DBMS시스템(PG) 등록 팝업 화면을 보여준다.
+	 * DBMS시스템 등록 팝업 화면을 보여준다.(Oracle,MySQL,MsSQL)
+	 * 
+	 * @param historyVO
+	 * @param request
+	 * @return ModelAndView mv
+	 * @throws Exception
+	 */
+	@RequestMapping(value = "/db2pg/popup/dbmsDDLInfo.do")
+	public ModelAndView dbmsDDLInfo(HttpServletRequest request, @ModelAttribute("historyVO") HistoryVO historyVO) {
+		ModelAndView mv = new ModelAndView();
+		try {
+			// 화면접근이력 이력 남기기
+//			CmmnUtils.saveHistory(request, historyVO);
+//			historyVO.setExe_dtl_cd("DX-T0022");
+//			accessHistoryService.insertHistory(historyVO);
+		} catch (Exception e2) {
+			e2.printStackTrace();
+		}
+		mv.setViewName("db2pg/popup/dbmsDDLInfo");
+		return mv;
+	}
+	
+	/**
+	 * DB2PG DBMS 시스템을 조회한다.(Oracle,MySQL,MsSQL)
+	 * 
+	 * @param db2pgSysInfVO
+	 * @param request
+	 * @return resultSet
+	 * @throws Exception
+	 */
+	@RequestMapping(value = "/selectDDLDb2pgDBMS.do")
+	@ResponseBody
+	public List<Db2pgSysInfVO> selectDDLDb2pgDBMS(@ModelAttribute("historyVO") HistoryVO historyVO, @ModelAttribute("db2pgSysInfVO") Db2pgSysInfVO db2pgSysInfVO, HttpServletResponse response, HttpServletRequest request) {
+		List<Db2pgSysInfVO> result = null;
+		try {
+			result = dbmsService.selectDDLDb2pgDBMS(db2pgSysInfVO);
+		}catch(Exception e){
+			e.printStackTrace();
+		}
+		return result;
+	}
+	
+	/**
+	 * DBMS시스템 등록 팝업 화면을 보여준다.(PostgreSQL)
 	 * 
 	 * @param historyVO
 	 * @param request

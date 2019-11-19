@@ -11,13 +11,13 @@ public interface DbmsService {
 	/**
 	 * DB2PG DBMS구분에 따른 케릭터셋 호출
 	 */
-	List<Map<String, Object>> selectCharSetList(HashMap<String, Object> paramvalue)  throws Exception;
+	List<Map<String, Object>> selectCharSetList(HashMap<String, Object> paramvalue) throws Exception;
 
 	/**
 	 * DB2PG DBMS시스템 리스트 조회
 	 */
 	List<Db2pgSysInfVO> selectDb2pgDBMS(Db2pgSysInfVO db2pgSysInfVO) throws Exception;
-	
+
 	/**
 	 * DB2PG DBMS시스템명 중복체크
 	 */
@@ -42,5 +42,10 @@ public interface DbmsService {
 	 * DB2PG DBMS시스템 수정
 	 */
 	void updateDb2pgDBMS(Db2pgSysInfVO db2pgSysInfVO) throws Exception;
+
+	/**
+	 * DB2PG DBMS시스템 리스트 조회(Oracle, MySQL, MsSQL)
+	 */
+	List<Db2pgSysInfVO> selectDDLDb2pgDBMS(Db2pgSysInfVO db2pgSysInfVO) throws Exception;
 
 }

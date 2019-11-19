@@ -6,20 +6,19 @@ import java.util.Map;
 
 import org.springframework.stereotype.Repository;
 
-import com.k4m.dx.tcontrol.admin.dbserverManager.service.DbServerVO;
 import com.k4m.dx.tcontrol.db2pg.dbms.service.Db2pgSysInfVO;
 
 import egovframework.rte.psl.dataaccess.EgovAbstractMapper;
 
 @Repository("DbmsDAO")
-public class DbmsDAO extends EgovAbstractMapper{
+public class DbmsDAO extends EgovAbstractMapper {
 
 	@SuppressWarnings({ "deprecation", "unchecked" })
 	public List<Map<String, Object>> selectCharSetList(HashMap<String, Object> paramvalue) {
-			List<Map<String, Object>> sl = null;
-			sl = (List<Map<String, Object>>) list("dbmsSQL.selectCharSetList", paramvalue);		
-			return sl;
-		}
+		List<Map<String, Object>> sl = null;
+		sl = (List<Map<String, Object>>) list("dbmsSQL.selectCharSetList", paramvalue);
+		return sl;
+	}
 
 	public int db2pg_sys_nmCheck(String db2pg_sys_nm) {
 		int resultSet = 0;
@@ -28,7 +27,7 @@ public class DbmsDAO extends EgovAbstractMapper{
 	}
 
 	public void insertDb2pgDBMS(Db2pgSysInfVO db2pgSysInfVO) {
-		insert("dbmsSQL.insertDb2pgDBMS", db2pgSysInfVO);		
+		insert("dbmsSQL.insertDb2pgDBMS", db2pgSysInfVO);
 	}
 
 	@SuppressWarnings({ "unchecked", "deprecation" })
@@ -40,18 +39,25 @@ public class DbmsDAO extends EgovAbstractMapper{
 
 	public List<Map<String, Object>> dbmsGrb() {
 		List<Map<String, Object>> sl = null;
-		sl = (List<Map<String, Object>>) list("dbmsSQL.dbmsGrb", null);		
+		sl = (List<Map<String, Object>>) list("dbmsSQL.dbmsGrb", null);
 		return sl;
 	}
 
 	public List<Map<String, Object>> dbmsListDbmsGrb() {
 		List<Map<String, Object>> sl = null;
-		sl = (List<Map<String, Object>>) list("dbmsSQL.dbmsListDbmsGrb", null);		
+		sl = (List<Map<String, Object>>) list("dbmsSQL.dbmsListDbmsGrb", null);
 		return sl;
 	}
 
 	public void updateDb2pgDBMS(Db2pgSysInfVO db2pgSysInfVO) {
-		update("dbmsSQL.updateDb2pgDBMS", db2pgSysInfVO);		
+		update("dbmsSQL.updateDb2pgDBMS", db2pgSysInfVO);
+	}
+
+	@SuppressWarnings({ "deprecation", "unchecked" })
+	public List<Db2pgSysInfVO> selectDDLDb2pgDBMS(Db2pgSysInfVO db2pgSysInfVO) {
+		List<Db2pgSysInfVO> sl = null;
+		sl = (List<Db2pgSysInfVO>) list("dbmsSQL.selectDDLDb2pgDBMS", db2pgSysInfVO);
+		return sl;
 	}
 
 }

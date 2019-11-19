@@ -719,9 +719,9 @@ function fn_ImmediateStart(gbn){
 								<td>
 									<select name="ddl_dbms_dscd" id="ddl_dbms_dscd" class="select t5" >
 										<option value=""><spring:message code="common.total" /></option>				
-											<c:forEach var="dbmsGrb" items="${dbmsGrb}" varStatus="status">												 
- 												<option value="<c:out value="${dbmsGrb.sys_cd}"/>"><c:out value="${dbmsGrb.sys_cd_nm}"/></option>
- 											</c:forEach>
+										<option value="TC002201">Oracle</option>
+										<option value="TC002202">MS-SQL</option>
+										<option value="TC002203">MySQL</option>
 									</select>
 								</td>
 							</tr>

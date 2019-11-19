@@ -159,4 +159,43 @@
 					, LST_MDF_DTM = clock_timestamp()
 	 	WHERE DB2PG_SYS_ID=#{db2pg_sys_id}::numeric	
 	</update>
+	
+	<select id="selectDDLDb2pgDBMS" parameterType="db2pgSysInfVO"  resultType="db2pgSysInfVO">
+		/**
+	 	* Query ID : selectDDLDb2pgDBMS
+	 	* Description : DB2PG DBMS시스템 리스트 조회(Oracle, MySQL, MsSQL)
+	 	* Author : 김주영
+	 	**/	 		
+	 		SELECT
+		 		  	(ROW_NUMBER() OVER()) AS ROWNUM
+					, (ROW_NUMBER() OVER()) AS IDX
+			 		, DB2PG_SYS_ID
+					, DB2PG_SYS_NM
+					, (SELECT SYS_CD_NM FROM T_SYSDTL_C WHERE SYS_CD = DBMS_DSCD ) AS DBMS_DSCD_NM
+					, DBMS_DSCD
+					, IPADR
+					, DTB_NM
+					, SPR_USR_ID
+					, PORTNO
+					, SCM_NM
+					, PWD
+					, (SELECT SYS_CD_NM FROM T_SYSDTL_C WHERE SYS_CD = CRTS_NM ) AS CRTS_NM
+					, CRTS_NM AS CRTS
+					, FRST_REGR_ID
+					, TO_CHAR(FRST_REG_DTM,'YYYY-MM-DD HH24:MI:SS') AS FRST_REG_DTM
+					, LST_MDFR_ID
+					, TO_CHAR(LST_MDF_DTM,'YYYY-MM-DD HH24:MI:SS') AS LST_MDF_DTM 
+			FROM T_DB2PG_SYS_INF
+			WHERE 1 = 1
+			  AND DBMS_DSCD IN ( 'TC002201','TC002202','TC002203' )
+			  <if test="db2pg_sys_nm != null and db2pg_sys_nm != '' ">
+		      AND DB2PG_SYS_NM = #{db2pg_sys_nm}
+		      </if>	 
+		      <if test="dbms_dscd != null and dbms_dscd != '' ">
+		      AND DBMS_DSCD = #{dbms_dscd}
+		      </if>	 
+		      <if test="ipadr != null and ipadr != '' ">
+		      AND IPADR = #{ipadr}
+		      </if>	 			
+	 </select>
 </mapper>

@@ -16,7 +16,6 @@ import org.springframework.web.servlet.ModelAndView;
 
 import com.k4m.dx.tcontrol.common.service.HistoryVO;
 import com.k4m.dx.tcontrol.db2pg.cmmn.DB2PG_LOG;
-import com.k4m.dx.tcontrol.db2pg.cmmn.DB2PG_START;
 import com.k4m.dx.tcontrol.db2pg.history.service.Db2pgHistoryService;
 import com.k4m.dx.tcontrol.db2pg.history.service.Db2pgHistoryVO;
 

@@ -162,7 +162,7 @@ function fn_update_work(){
  * DBMS 시스템 등록 버튼 클릭시
  ******************************************************** */
 function fn_dbmsInfo(){
-	var popUrl = "/db2pg/popup/dbmsInfo.do";
+	var popUrl = "/db2pg/popup/dbmsDDLInfo.do";
 	var width = 965;
 	var height = 680;
 	var left = (window.screen.width / 2) - (width / 2);
