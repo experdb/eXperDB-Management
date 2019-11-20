@@ -37,7 +37,7 @@ public class DatabaseTableInfo {
 				case "TC002201" :
 					sql =  "SELECT A.OBJECT_NAME AS TABLE_NAME, B.COMMENTS as COMMENTS "
 							+ "FROM ALL_OBJECTS A,  ALL_TAB_COMMENTS B "
-							+ "WHERE A.OWNER='IBIZSPT' "
+							+ "WHERE A.OWNER='" +serverObj.get("USER_ID").toString().toUpperCase() + "'"
 							+ "AND A.OBJECT_NAME = B.TABLE_NAME "
 							+ "AND A.OBJECT_NAME NOT IN ('TOAD_PLAN_TABLE','PLAN_TABLE')  "
 							+ "AND A.OBJECT_NAME NOT LIKE 'MDRT%' "
@@ -228,13 +228,13 @@ public class DatabaseTableInfo {
 			serverObj.put(ClientProtocolID.DB_TYPE, "TC002205");*/
 			
 			//MS-SQL
-			/*serverObj.put(ClientProtocolID.SERVER_NAME, "10.1.21.28");
-			serverObj.put(ClientProtocolID.SERVER_IP, "10.1.21.28");
-			serverObj.put(ClientProtocolID.SERVER_PORT, "1444");
-			serverObj.put(ClientProtocolID.DATABASE_NAME, "mizuho");
-			serverObj.put(ClientProtocolID.SCHEMA, "dbo");
-			serverObj.put(ClientProtocolID.USER_ID, "mizuho");
-			serverObj.put(ClientProtocolID.USER_PWD, "mizuho");
+			/*serverObj.put(ClientProtocolID.SERVER_NAME, "10.1.21.114");
+			serverObj.put(ClientProtocolID.SERVER_IP, "10.1.21.114");
+			serverObj.put(ClientProtocolID.SERVER_PORT, "1433");
+			serverObj.put(ClientProtocolID.DATABASE_NAME, "DB2PG");
+			serverObj.put(ClientProtocolID.SCHEMA, "db2pg");
+			serverObj.put(ClientProtocolID.USER_ID, "db2pg");
+			serverObj.put(ClientProtocolID.USER_PWD, "db2pg");
 			serverObj.put(ClientProtocolID.DB_TYPE, "TC002202");*/
 			
 			//Oracle
@@ -267,13 +267,13 @@ public class DatabaseTableInfo {
 			serverObj.put(ClientProtocolID.DB_TYPE, "TC002207");*/
 			
 			//SyBaseASE
-			serverObj.put(ClientProtocolID.SERVER_NAME, "192.168.56.200");
+			/*serverObj.put(ClientProtocolID.SERVER_NAME, "192.168.56.200");
 			serverObj.put(ClientProtocolID.SERVER_IP, "192.168.56.200");
 			serverObj.put(ClientProtocolID.SERVER_PORT, "5000");
 			serverObj.put(ClientProtocolID.DATABASE_NAME, "db2pg");
 			serverObj.put(ClientProtocolID.USER_ID, "sa");
 			serverObj.put(ClientProtocolID.USER_PWD, "sa0225!!");
-			serverObj.put(ClientProtocolID.DB_TYPE, "TC002206");
+			serverObj.put(ClientProtocolID.DB_TYPE, "TC002206");*/
 			
 			//Tibero
 			/*serverObj.put(ClientProtocolID.SERVER_NAME, "192.168.56.105");
@@ -283,6 +283,14 @@ public class DatabaseTableInfo {
 			serverObj.put(ClientProtocolID.USER_ID, "test");
 			serverObj.put(ClientProtocolID.USER_PWD, "test");
 			serverObj.put(ClientProtocolID.DB_TYPE, "TC002208");*/
+			
+			serverObj.put(ClientProtocolID.SERVER_NAME, "192.168.56.200");
+			serverObj.put(ClientProtocolID.SERVER_IP, "192.168.56.200");
+			serverObj.put(ClientProtocolID.SERVER_PORT, "1521");
+			serverObj.put(ClientProtocolID.DATABASE_NAME, "PIDSVR");
+			serverObj.put(ClientProtocolID.USER_ID, "DB2PG");
+			serverObj.put(ClientProtocolID.USER_PWD, "db2pg");
+			serverObj.put(ClientProtocolID.DB_TYPE, "TC002201");
 
 			JSONObject result = getTblList(serverObj);
 			
