@@ -112,6 +112,11 @@ public class DBCPPoolManager {
 					driver = "com.microsoft.sqlserver.jdbc.SQLServerDriver" ;
 					connectURI = "jdbc:sqlserver://"+serverObj.get("SERVER_IP")+":"+serverObj.get("SERVER_PORT")+";databaseName="+serverObj.get("DATABASE_NAME");
 					break;
+
+				//MySQL
+				case "TC002203" :
+
+					break;		
 					
 				//PostgreSQL		
 				case "TC002204" :
@@ -222,24 +227,31 @@ public class DBCPPoolManager {
 			serverObj.put(ClientProtocolID.DB_TYPE, "TC002204");*/
 			
 			//SyBaseASE
-			/*serverObj.put(ClientProtocolID.SERVER_NAME, "192.168.56.200");
+			serverObj.put(ClientProtocolID.SERVER_NAME, "192.168.56.200");
 			serverObj.put(ClientProtocolID.SERVER_IP, "192.168.56.200");
 			serverObj.put(ClientProtocolID.SERVER_PORT, "5000");
 			serverObj.put(ClientProtocolID.DATABASE_NAME, "db2pg");
 			serverObj.put(ClientProtocolID.USER_ID, "sa");
 			serverObj.put(ClientProtocolID.USER_PWD, "sa0225!!");
-			serverObj.put(ClientProtocolID.DB_TYPE, "TC002206");*/
+			serverObj.put(ClientProtocolID.DB_TYPE, "TC002206");
 					
 			//CUBRID
-			serverObj.put(ClientProtocolID.SERVER_NAME, "192.168.56.200");
+			/*serverObj.put(ClientProtocolID.SERVER_NAME, "192.168.56.200");
 			serverObj.put(ClientProtocolID.SERVER_IP, "192.168.56.200");
 			serverObj.put(ClientProtocolID.SERVER_PORT, "33000");
 			serverObj.put(ClientProtocolID.DATABASE_NAME, "demodb");
 			serverObj.put(ClientProtocolID.USER_ID, "db2pg");
 			serverObj.put(ClientProtocolID.USER_PWD, "db2pg");
-			serverObj.put(ClientProtocolID.DB_TYPE, "TC002207");
+			serverObj.put(ClientProtocolID.DB_TYPE, "TC002207");*/
 			
- 
+			//Tibero
+			/*serverObj.put(ClientProtocolID.SERVER_NAME, "192.168.56.105");
+			serverObj.put(ClientProtocolID.SERVER_IP, "192.168.56.105");
+			serverObj.put(ClientProtocolID.SERVER_PORT, "8629");
+			serverObj.put(ClientProtocolID.DATABASE_NAME, "tibero");
+			serverObj.put(ClientProtocolID.USER_ID, "test");
+			serverObj.put(ClientProtocolID.USER_PWD, "test");
+			serverObj.put(ClientProtocolID.DB_TYPE, "TC002208");*/
 			
 			Map<String, Object> result = DBCPPoolManager.setupDriver(serverObj);
 			

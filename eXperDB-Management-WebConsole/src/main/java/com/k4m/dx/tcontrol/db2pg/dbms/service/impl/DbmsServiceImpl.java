@@ -5,14 +5,16 @@ import java.util.List;
 import java.util.Map;
 
 import javax.annotation.Resource;
+
 import org.springframework.stereotype.Service;
 
 import com.k4m.dx.tcontrol.db2pg.dbms.service.Db2pgSysInfVO;
 import com.k4m.dx.tcontrol.db2pg.dbms.service.DbmsService;
+
 import egovframework.rte.fdl.cmmn.EgovAbstractServiceImpl;
 
 @Service("dbmsServiceImpl")
-public class DbmsServiceImpl extends EgovAbstractServiceImpl implements DbmsService{
+public class DbmsServiceImpl extends EgovAbstractServiceImpl implements DbmsService {
 
 	@Resource(name = "DbmsDAO")
 	private DbmsDAO dbmsDAO;
@@ -30,29 +32,32 @@ public class DbmsServiceImpl extends EgovAbstractServiceImpl implements DbmsServ
 	@Override
 	public void insertDb2pgDBMS(Db2pgSysInfVO db2pgSysInfVO) throws Exception {
 		dbmsDAO.insertDb2pgDBMS(db2pgSysInfVO);
-		
+
 	}
 
 	@Override
 	public List<Db2pgSysInfVO> selectDb2pgDBMS(Db2pgSysInfVO db2pgSysInfVO) throws Exception {
-		return dbmsDAO.selectDb2pgDBMS(db2pgSysInfVO);		
+		return dbmsDAO.selectDb2pgDBMS(db2pgSysInfVO);
 	}
 
 	@Override
 	public List<Map<String, Object>> dbmsGrb() throws Exception {
-		return dbmsDAO.dbmsGrb();		
+		return dbmsDAO.dbmsGrb();
 	}
 
 	@Override
 	public List<Map<String, Object>> dbmsListDbmsGrb() throws Exception {
-		return dbmsDAO.dbmsListDbmsGrb();	
+		return dbmsDAO.dbmsListDbmsGrb();
 	}
 
 	@Override
 	public void updateDb2pgDBMS(Db2pgSysInfVO db2pgSysInfVO) throws Exception {
-		dbmsDAO.updateDb2pgDBMS(db2pgSysInfVO);		
+		dbmsDAO.updateDb2pgDBMS(db2pgSysInfVO);
 	}
-	
 
+	@Override
+	public List<Db2pgSysInfVO> selectDDLDb2pgDBMS(Db2pgSysInfVO db2pgSysInfVO) throws Exception {
+		return dbmsDAO.selectDDLDb2pgDBMS(db2pgSysInfVO);
+	}
 
 }

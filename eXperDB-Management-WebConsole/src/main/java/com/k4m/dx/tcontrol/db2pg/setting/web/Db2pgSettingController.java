@@ -1038,7 +1038,50 @@ public class Db2pgSettingController {
 	}
 
 	/**
-	 * DBMS시스템(PG) 등록 팝업 화면을 보여준다.
+	 * DBMS시스템 등록 팝업 화면을 보여준다.(Oracle,MySQL,MsSQL)
+	 * 
+	 * @param historyVO
+	 * @param request
+	 * @return ModelAndView mv
+	 * @throws Exception
+	 */
+	@RequestMapping(value = "/db2pg/popup/dbmsDDLInfo.do")
+	public ModelAndView dbmsDDLInfo(HttpServletRequest request, @ModelAttribute("historyVO") HistoryVO historyVO) {
+		ModelAndView mv = new ModelAndView();
+		try {
+			// 화면접근이력 이력 남기기
+//			CmmnUtils.saveHistory(request, historyVO);
+//			historyVO.setExe_dtl_cd("DX-T0022");
+//			accessHistoryService.insertHistory(historyVO);
+		} catch (Exception e2) {
+			e2.printStackTrace();
+		}
+		mv.setViewName("db2pg/popup/dbmsDDLInfo");
+		return mv;
+	}
+	
+	/**
+	 * DB2PG DBMS 시스템을 조회한다.(Oracle,MySQL,MsSQL)
+	 * 
+	 * @param db2pgSysInfVO
+	 * @param request
+	 * @return resultSet
+	 * @throws Exception
+	 */
+	@RequestMapping(value = "/selectDDLDb2pgDBMS.do")
+	@ResponseBody
+	public List<Db2pgSysInfVO> selectDDLDb2pgDBMS(@ModelAttribute("historyVO") HistoryVO historyVO, @ModelAttribute("db2pgSysInfVO") Db2pgSysInfVO db2pgSysInfVO, HttpServletResponse response, HttpServletRequest request) {
+		List<Db2pgSysInfVO> result = null;
+		try {
+			result = dbmsService.selectDDLDb2pgDBMS(db2pgSysInfVO);
+		}catch(Exception e){
+			e.printStackTrace();
+		}
+		return result;
+	}
+	
+	/**
+	 * DBMS시스템 등록 팝업 화면을 보여준다.(PostgreSQL)
 	 * 
 	 * @param historyVO
 	 * @param request
@@ -1137,8 +1180,12 @@ public class Db2pgSettingController {
 	 */
 	@RequestMapping(value="/selectTableList.do")
 	public @ResponseBody JSONObject selectTableList(@ModelAttribute("historyVO") HistoryVO historyVO, HttpServletRequest request) {
+		
 		JSONObject result = new JSONObject();
+		
 		try {
+		AES256 aes = new AES256(AES256_KEY.ENC_KEY);
+			
 		JSONObject serverObj = new JSONObject();
 		String ipadr = request.getParameter("ipadr");
 		String portno = request.getParameter("portno");
@@ -1148,13 +1195,13 @@ public class Db2pgSettingController {
 		String dbms_cd = request.getParameter("dbms_dscd");
 		String table_nm = request.getParameter("table_nm");
 		String scm_nm = request.getParameter("scm_nm");
-		
+
 		serverObj.put(ClientProtocolID.SERVER_NAME, ipadr);
 		serverObj.put(ClientProtocolID.SERVER_IP, ipadr);
 		serverObj.put(ClientProtocolID.SERVER_PORT, portno);
 		serverObj.put(ClientProtocolID.DATABASE_NAME, db_nm);
 		serverObj.put(ClientProtocolID.USER_ID, svr_spr_usr_id);
-		serverObj.put(ClientProtocolID.USER_PWD, svr_spr_scm_pwd);
+		serverObj.put(ClientProtocolID.USER_PWD, aes.aesDecode(svr_spr_scm_pwd));
 		serverObj.put(ClientProtocolID.DB_TYPE, dbms_cd);
 		serverObj.put(ClientProtocolID.TABLE_NM, table_nm);
 		serverObj.put(ClientProtocolID.SCHEMA, scm_nm);
