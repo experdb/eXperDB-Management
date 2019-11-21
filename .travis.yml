@@ -1,3 +1,7 @@
 language: java
 after_success:
   - bash <(curl -s https://codecov.io/bash)
+
+env:
+  global:
+    - CODECOV_TOKEN=:uuid-repo-token
