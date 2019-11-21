@@ -5,3 +5,7 @@ after_success:
 env:
   global:
     - CODECOV_TOKEN=:6cb8d358-f2de-4b52-b554-0bd190f3c39f
+
+branches:
+  only:
+    - master
