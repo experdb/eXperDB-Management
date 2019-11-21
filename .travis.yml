@@ -10,3 +10,5 @@ env:
 branches:
   only:
     - master
+    
+CODECOV_TOKEN="ffc54244-f7fd-4106-947e-1c9d92e89a9c"
