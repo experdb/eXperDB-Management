@@ -100,7 +100,7 @@ Also, if you would like to contact us directly, please send an email to experdb@
 
 ## Copyright
 Copyright (c) 2016-2019, eXperDB Development Team
-All rights reserved..
+All rights reserved.
 
 
 ## Community
