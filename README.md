@@ -1,5 +1,4 @@
 # eXperDB-Management
-[![Build Status](https://travis-ci.org/experdb/eXperDB-Management.svg?branch=master)](https://travis-ci.org/experdb/eXperDB-Management)
 
 eXperDB or PostgreSQL Management Tool
 
