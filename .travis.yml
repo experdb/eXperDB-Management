@@ -1,9 +1,0 @@
-language: java
-sudo: false # faster builds
-
-after_success:
-  - bash <(curl -s https://codecov.io/bash)
-
-env:
-  global:
-    - CODECOV_TOKEN=:3d326363-1a23-4c4b-983e-20c8755f45e5
