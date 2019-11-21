@@ -1,5 +1,4 @@
 # eXperDB-Management
-
 eXperDB or PostgreSQL Management Tool
 
 ## Introduction
