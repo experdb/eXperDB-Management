@@ -708,8 +708,43 @@ function fn_scriptLayer(wrk_id){
 }
 
 //db2pg config정보
-function fn_db2pgConfigLayer(wrk_nm){
-	toggleLayer($('#pop_layer_db2pgConfig'), 'on');	
+function fn_db2pgConfigLayer(config_nm){
+	$.ajax({
+		url : "/selectDb2pgConfigInfo.do",
+		data : {
+			config_nm : config_nm
+		},
+		dataType : "json",
+		type : "post",
+		beforeSend: function(xhr) {
+	        xhr.setRequestHeader("AJAX", true);
+	     },
+	     error : function(xhr, status, error) {
+				if(xhr.status == 401) {
+					alert(message_msg02);
+					top.location.href = "/";
+				} else if(xhr.status == 403) {
+					alert(message_msg03);
+					top.location.href = "/";
+				} else {
+					alert("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""));
+				}
+			},
+		success : function(result) {
+			if(result==null){
+				alert("서버에서 config 정보가 삭제 되어 config 정보를 확인할 수 없습니다.");
+			}else{
+				$("#config").html(result);
+				toggleLayer($('#pop_layer_db2pgConfig'), 'on');	
+			}
+	
+		}
+	});
+}
+
+//db2pg ddl 결과 정보
+function fn_db2pgDDLResultLayer(){
+	toggleLayer($('#pop_layer_db2pgDDLResult'), 'on');	
 }
 
 //패스워드 확인

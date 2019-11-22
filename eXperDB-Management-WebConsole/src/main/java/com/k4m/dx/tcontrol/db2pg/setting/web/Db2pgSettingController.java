@@ -1277,4 +1277,38 @@ public class Db2pgSettingController {
 		return today;
 	}
 	
+	/**
+	 * Db2pg config 정보
+	 * @param 
+	 * @return resultSet
+	 * @throws Exception
+	 */
+	@SuppressWarnings("unchecked")
+	@RequestMapping(value = "/selectDb2pgConfigInfo.do")
+	public @ResponseBody String selectDb2pgConfigInfo(HttpServletRequest request) {
+		String result = null;
+		try {
+			String config_nm =request.getParameter("config_nm");
+			
+			Properties props = new Properties();
+			props.load(new FileInputStream(ResourceUtils.getFile("classpath:egovframework/tcontrolProps/globals.properties")));			
+			String db2pg_path = props.get("db2pg_path").toString();	
+			String filePath = db2pg_path+"/config/"+config_nm+".config";
+		    FileInputStream fileStream = null; // 파일 스트림
+		    try{
+		    	fileStream = new FileInputStream( filePath );// 파일 스트림 생성
+		    }catch (Exception e){
+				System.out.println("파일 입출력 에러 : " + e);
+				return result;
+			}
+		    //버퍼 선언
+		    byte[ ] readBuffer = new byte[fileStream.available()];
+		    while (fileStream.read( readBuffer ) != -1){}
+		    fileStream.close(); //스트림 닫기	
+		    result=new String(readBuffer);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return result;
+	}	
 }

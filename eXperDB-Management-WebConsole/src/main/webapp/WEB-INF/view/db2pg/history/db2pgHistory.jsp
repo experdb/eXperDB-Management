@@ -37,7 +37,11 @@ function fn_init(){
 		bSort: false,
 	columns : [
 		{data : "idx", className : "dt-center", defaultContent : ""}, 
-		{data : "wrk_nm", className : "dt-center", defaultContent : ""}, 
+     	{data : "wrk_nm", className : "dt-left", defaultContent : ""
+			,"render": function (data, type, full) {				
+				  return '<span onClick=javascript:fn_db2pgConfigLayer("'+full.wrk_nm+'"); class="bold">' + full.wrk_nm + '</span>';
+			}
+		},
 		{data : "wrk_exp", className : "dt-center", defaultContent : ""}, 
 		{
 			data : "source_dbms_dscd",
@@ -220,7 +224,7 @@ function fn_search(){
 	    frmPop.submit();   
 }
 </script>
-
+<%@include file="../popup/db2pgConfigInfo.jsp"%>
 <form name="frmPopup">
 	<input type="hidden" name="imd_exe_sn"  id="imd_exe_sn">
 	<input type="hidden" name="trans_save_pth"  id="trans_save_pth">

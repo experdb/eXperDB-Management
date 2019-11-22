@@ -69,7 +69,11 @@ function fn_init(){
 	columns : [
 		{data : "rownum", defaultContent : "", targets : 0, orderable : false, checkboxes : {'selectRow' : true}}, 
 		{data : "idx", className : "dt-center", defaultContent : ""}, 
-		{data : "db2pg_ddl_wrk_nm", className : "dt-left", defaultContent : ""}, 
+     	{data : "db2pg_ddl_wrk_nm", className : "dt-left", defaultContent : ""
+			,"render": function (data, type, full) {				
+				  return '<span onClick=javascript:fn_db2pgConfigLayer("'+full.db2pg_ddl_wrk_nm+'"); class="bold">' + full.db2pg_ddl_wrk_nm + '</span>';
+			}
+		},
 		{data : "db2pg_ddl_wrk_exp", className : "dt-left", defaultContent : ""}, 
 		{data : "dbms_dscd", className : "dt-center", defaultContent : ""}, 
 		{data : "ipadr", className : "dt-center", defaultContent : ""},
@@ -96,7 +100,11 @@ function fn_init(){
 	columns : [
 		{data : "rownum", defaultContent : "", targets : 0, orderable : false, checkboxes : {'selectRow' : true}}, 
 		{data : "idx", className : "dt-center", defaultContent : ""}, 
-		{data : "db2pg_trsf_wrk_nm", className : "dt-left", defaultContent : ""}, 
+     	{data : "db2pg_trsf_wrk_nm", className : "dt-left", defaultContent : ""
+			,"render": function (data, type, full) {				
+				  return '<span onClick=javascript:fn_db2pgConfigLayer("'+full.db2pg_trsf_wrk_nm+'"); class="bold">' + full.db2pg_trsf_wrk_nm + '</span>';
+			}
+		},
 		{data : "db2pg_trsf_wrk_exp", className : "dt-left", defaultContent : ""}, 
 		{data : "source_dbms_dscd", className : "dt-center", defaultContent : ""}, 
 		{data : "source_ipadr", className : "dt-center", defaultContent : ""}, 
@@ -651,6 +659,7 @@ function fn_ImmediateStart(gbn){
 
 </script>
 <%@include file="../popup/db2pgConfigInfo.jsp"%>
+<%@include file="../popup/db2pgDDLResult.jsp"%>
 <!-- contents -->
 <div id="contents">
 	<div class="contents_wrap">
