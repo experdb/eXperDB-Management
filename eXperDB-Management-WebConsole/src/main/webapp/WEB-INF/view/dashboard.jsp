@@ -10,7 +10,7 @@
 <script type="text/javascript">
 var today = "";
 
-$(window.document).ready(function() {
+$(window.document).ready(function() { 
 
 	today = new Date();
 	
