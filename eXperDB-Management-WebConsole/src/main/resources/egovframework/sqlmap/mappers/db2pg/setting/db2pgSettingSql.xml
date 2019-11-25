@@ -31,6 +31,7 @@
 			, A.ipadr
 			, A.dtb_nm
 			, A.scm_nm
+			, A.ddl_save_pth
 			, A.frst_regr_id
 			, A.frst_reg_dtm
 			, A.lst_mdfr_id
@@ -45,6 +46,7 @@
 				, sys_inf.ipadr
 				, sys_inf.dtb_nm
 				, sys_inf.scm_nm
+				, ddl_wrk_inf.ddl_save_pth
 				, ddl_wrk_inf.frst_regr_id
 				, TO_CHAR(ddl_wrk_inf.frst_reg_dtm,'YYYY-MM-DD HH24:MI:SS') as frst_reg_dtm
 				, ddl_wrk_inf.lst_mdfr_id

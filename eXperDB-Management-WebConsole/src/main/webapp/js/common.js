@@ -743,7 +743,35 @@ function fn_db2pgConfigLayer(config_nm){
 }
 
 //db2pg ddl 결과 정보
-function fn_db2pgDDLResultLayer(){
+function fn_db2pgDDLResultLayer(ddl_save_pth,dtb_nm){
+	$.ajax({
+		url : "/db2pg/db2pgDdlCall.do",
+	  	data : {
+	  		ddl_save_pth : ddl_save_pth,
+	  		dtb_nm : dtb_nm		  		
+	  	},
+		type : "post",
+		beforeSend: function(xhr) {
+	        xhr.setRequestHeader("AJAX", true);
+	     },
+		error : function(xhr, status, error) {
+			if(xhr.status == 401) {
+				alert('<spring:message code="message.msg02" />');
+				top.location.href = "/";
+			} else if(xhr.status == 403) {
+				alert('<spring:message code="message.msg03" />');
+				top.location.href = "/";
+			} else {
+				alert("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""));
+			}
+		},
+		success : function(result) {
+			$("#table").html(result.data[0].RESULT_MSG);
+			$("#constraint").html(result.data[1].RESULT_MSG);
+			$("#index").html(result.data[2].RESULT_MSG);
+			$("#sequence").html(result.data[3].RESULT_MSG);
+		}
+	});	
 	toggleLayer($('#pop_layer_db2pgDDLResult'), 'on');	
 }
 

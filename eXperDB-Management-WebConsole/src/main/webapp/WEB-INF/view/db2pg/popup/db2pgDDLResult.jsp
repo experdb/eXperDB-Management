@@ -9,6 +9,40 @@
     margin-left: 0.5%;
 }
 </style>
+
+<script type="text/javascript">
+
+
+/* ********************************************************
+ * Tab Click
+ ******************************************************** */
+function selectTab(tab){	
+	if(tab == "table"){
+		$("#tableTab").show();
+		$("#constraintTab").hide();
+		$("#indexTab").hide();
+		$("#sequenceTab").hide();
+	}else if (tab == "constraint"){
+		$("#tableTab").hide();
+		$("#constraintTab").show();
+		$("#indexTab").hide();
+		$("#sequenceTab").hide();
+	}else if (tab == "index"){
+		$("#tableTab").hide();
+		$("#constraintTab").hide();
+		$("#indexTab").show();
+		$("#sequenceTab").hide();
+	}else {
+		$("#tableTab").hide();
+		$("#constraintTab").hide();
+		$("#indexTab").hide();
+		$("#sequenceTab").show();
+	}
+}
+
+</script>
+
+
 <div id="pop_layer_db2pgDDLResult" class="pop-layer">
 		<div class="pop-container" style="padding: 0px;">
 			<div class="pop_cts" style="width: 55%; height: 600px; overflow: auto; padding: 20px; margin: 0 auto; min-height:0; min-width:0; margin-top: 10%" id="db2pgDDLResult">
@@ -18,27 +52,26 @@
 				<div class="pop_cmm c2 mt25">
 					<div class="addOption_grp">
 						<ul class="tab">
-							<li class="on"><a href="#n">TABLE</a></li>
-							<li><a href="#n">CONSTRAINT</a></li>
-							<li><a href="#n">INDEX</a></li>
-							<li><a href="#n">SEQUENCE</a></li>
+							<li class="on"><a href="javascript:selectTab('table')">TABLE</a></li>
+							<li><a href="javascript:selectTab('constraint')">CONSTRAINT</a></li>
+							<li><a href="javascript:selectTab('index')">INDEX</a></li>
+							<li><a href="javascript:selectTab('sequence')">SEQUENCE</a></li>
 						</ul>
 						<div class="tab_view">
-							<div class="view on addOption_inr">
+							<div class="view on addOption_inr" id="tableTab">
 								<textarea name="table" id="table" style="height: 440px;" maxlength="100"  readonly></textarea>
 							</div>
-							<div class="view addOption_inr">
+							<div class="view addOption_inr" id="constraintTab">
 								<textarea name="constraint" id="constraint" style="height: 440px;" maxlength="100"  readonly></textarea>
 							</div>
-							<div class="view addOption_inr">
+							<div class="view addOption_inr" id="indexTab">
 								<textarea name="index" id="index" style="height: 440px;" maxlength="100"  readonly></textarea>
 							</div>
-							<div class="view addOption_inr">
+							<div class="view addOption_inr" id="sequenceTab">
 								<textarea name="sequence" id="sequence" style="height: 440px;" maxlength="100"  readonly></textarea>
 							</div>
 						</div>
 					</div>
-					</form>
 				</div>
 				<div class="btn_type_02">
 					<a href="#n" class="btn" onclick="toggleLayer($('#pop_layer_db2pgDDLResult'), 'off');"><span><spring:message code="common.close"/></span></a>
