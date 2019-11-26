@@ -454,7 +454,7 @@ public class AuditController {
 			searchInfoObj.put(ClientProtocolID.START_DATE, strStartDate);
 			searchInfoObj.put(ClientProtocolID.END_DATE, strEndDate);
 			
-			String strDirectory = dbServerVO.getPgdata_pth() + "/pg_log/";
+			String strDirectory = dbServerVO.getPgdata_pth() + "/log/";
 			
 			JSONObject jObj = new JSONObject();
 			jObj.put(ClientProtocolID.DX_EX_CODE, ClientTranCodeType.DxT015);
@@ -515,7 +515,7 @@ public class AuditController {
 			
 			AgentInfoVO agentInfo =  (AgentInfoVO) cmmnServerInfoService.selectAgentInfo(vo);
 			
-			String strDirectory = dbServerVO.getPgdata_pth()+ "/pg_log/";
+			String strDirectory = dbServerVO.getPgdata_pth()+ "/log/";
 			
 			JSONObject serverObj = new JSONObject();
 			
@@ -664,7 +664,7 @@ public class AuditController {
 			
 			AgentInfoVO agentInfo =  (AgentInfoVO) cmmnServerInfoService.selectAgentInfo(vo);
 			
-			String strDirectory = dbServerVO.getPgdata_pth()+ "/pg_log/";
+			String strDirectory = dbServerVO.getPgdata_pth()+ "/log/";
 			String strFileName = request.getParameter("file_name");
 			
 			//strDirectory = "C:\\k4m\\01-1. DX 제폼개발\\06. DX-Tcontrol\\07. 시험\\";
@@ -753,7 +753,7 @@ public class AuditController {
 			
 			AgentInfoVO agentInfo =  (AgentInfoVO) cmmnServerInfoService.selectAgentInfo(vo);
 			
-			String strDirectory = dbServerVO.getPgdata_pth()+ "/pg_log/";
+			String strDirectory = dbServerVO.getPgdata_pth()+ "/log/";
 			String strFileName = request.getParameter("file_name");
 			
 			JSONObject serverObj = new JSONObject();
@@ -860,7 +860,7 @@ public class AuditController {
 			
 			AgentInfoVO agentInfo =  (AgentInfoVO) cmmnServerInfoService.selectAgentInfo(vo);
 			
-			String strDirectory = dbServerVO.getPgdata_pth()+ "/pg_log/";
+			String strDirectory = dbServerVO.getPgdata_pth()+ "/log/";
 			//strDirectory = "C:\\k4m\\01-1. DX 제폼개발\\04. 시험\\pg_log\\";
 			
 			String strFileName = request.getParameter("file_name");

@@ -84,7 +84,8 @@ function fn_init(){
 		{data : "lst_mdfr_id", className : "dt-center", defaultContent : ""},
 		{data : "lst_mdf_dtm", className : "dt-center", defaultContent : ""},
 		{data : "db2pg_ddl_wrk_id", defaultContent : "", visible: false},
-		{data : "wrk_id", defaultContent : "", visible: false}
+		{data : "wrk_id", defaultContent : "", visible: false},
+		{data : "ddl_save_pth", defaultContent : "", visible: false}
 	],'select': {'style': 'multi'}
 	});
 	
@@ -139,6 +140,7 @@ function fn_init(){
 	tableDDL.tables().header().to$().find('th:eq(11)').css('min-width', '100px');
 	tableDDL.tables().header().to$().find('th:eq(12)').css('min-width', '0px');
 	tableDDL.tables().header().to$().find('th:eq(13)').css('min-width', '0px');
+	tableDDL.tables().header().to$().find('th:eq(14)').css('min-width', '0px');
 
 	tableData.tables().header().to$().find('th:eq(0)').css('min-width', '10px');
     tableData.tables().header().to$().find('th:eq(1)').css('min-width', '30px');
@@ -615,8 +617,35 @@ function fn_ImmediateStart(gbn){
 	var db2pgGbn = gbn;
 	if(gbn == 'ddl'){
 		var rowCnt = tableDDL.rows('.selected').data().length;
-		if (rowCnt == 1) {
+		var ddl_save_pth = tableDDL.row('.selected').data().ddl_save_pth;
+		var dtb_nm = tableDDL.row('.selected').data().dtb_nm;
 
+		if (rowCnt == 1) {
+			$.ajax({
+				url : "/db2pg/immediateStart.do",
+			  	data : {
+			  		wrk_id : tableDDL.row('.selected').data().wrk_id,
+			  		wrk_nm : tableDDL.row('.selected').data().db2pg_ddl_wrk_nm		  		
+			  	},
+				type : "post",
+				beforeSend: function(xhr) {
+			        xhr.setRequestHeader("AJAX", true);
+			     },
+				error : function(xhr, status, error) {
+					if(xhr.status == 401) {
+						alert('<spring:message code="message.msg02" />');
+						top.location.href = "/";
+					} else if(xhr.status == 403) {
+						alert('<spring:message code="message.msg03" />');
+						top.location.href = "/";
+					} else {
+						alert("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""));
+					}
+				},
+				success : function(result) {
+					fn_db2pgDDLResultLayer(ddl_save_pth,dtb_nm);
+				}
+			});			
 		} else {
 			alert("<spring:message code='message.msg04' />");
 			return false;
@@ -722,6 +751,7 @@ function fn_ImmediateStart(gbn){
 						</colgroup>
 						<tbody>
 							<tr>
+								<input type="hidden" name="ddl_save_pth" id="ddl_save_pth">
 								<th scope="row" class="t9"><spring:message code="common.work_name" /></th>
 								<td><input type="text" name="ddl_wrk_nm" id="ddl_wrk_nm" class="txt t3" maxlength="25"/></td>
 								<th scope="row" class="t9">DBMS구분</th>
@@ -807,6 +837,7 @@ function fn_ImmediateStart(gbn){
 									<th width="100">수정일시</th>
 									<th width="0">db2pg_ddl_wrk_id</th>
 									<th width="0">wrk_id</th>
+									<th width="0">ddl_save_pth</th>
 								</tr>
 							</thead>
 						</table>	

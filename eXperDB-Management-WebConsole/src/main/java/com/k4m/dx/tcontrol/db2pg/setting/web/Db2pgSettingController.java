@@ -30,6 +30,7 @@ import com.k4m.dx.tcontrol.cmmn.AES256;
 import com.k4m.dx.tcontrol.cmmn.AES256_KEY;
 import com.k4m.dx.tcontrol.cmmn.client.ClientProtocolID;
 import com.k4m.dx.tcontrol.common.service.HistoryVO;
+import com.k4m.dx.tcontrol.db2pg.cmmn.DB2PG_DDL;
 import com.k4m.dx.tcontrol.db2pg.cmmn.DB2PG_START;
 import com.k4m.dx.tcontrol.db2pg.cmmn.DatabaseTableInfo;
 import com.k4m.dx.tcontrol.db2pg.dbms.service.Db2pgSysInfVO;
@@ -1311,4 +1312,33 @@ public class Db2pgSettingController {
 		}
 		return result;
 	}	
+	
+	
+	/**
+	 * DB2PG DDL 호출
+	 * 
+	 * @return result
+	 * @throws Exception
+	 */
+	@RequestMapping(value="/db2pg/db2pgDdlCall.do")
+	public @ResponseBody Map<String, Object> db2pgDdlCall(@ModelAttribute("historyVO") HistoryVO historyVO, HttpServletRequest request) throws SQLException {
+		Map<String, Object> result = null;
+
+		try {
+		String ddl_save_pth = request.getParameter("ddl_save_pth");	
+		String dtb_nm = request.getParameter("dtb_nm");	
+					
+		JSONObject obj = new JSONObject();
+		obj.put("ddl_save_pth", ddl_save_pth);		
+		obj.put("dtb_nm", dtb_nm);	
+		
+		//DDL
+		result  = DB2PG_DDL.db2pgDDL(obj);
+				
+	}catch (Exception e) {
+		 result.put("RESULT", "FAIL");
+		e.printStackTrace();
+	}
+		return result;
+	}
 }
