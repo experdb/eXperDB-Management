@@ -164,10 +164,10 @@ $(window.document).ready(function() {
 <body>
 <div class="pop_container">
 	<div class="pop_cts">
-		<p class="tit">DBMS 수정</p>
+		<p class="tit">소스/타겟 DBMS 수정</p>
 		<form name="dbserverInsert" id="dbserverInsert" method="post">
 		<table class="write">
-			<caption>DBMS 수정</caption>
+			<caption>소스/타겟 DBMS 수정</caption>
 			<colgroup>
 				<col style="width:130px;" />
 				<col style="width:330px;" />
@@ -177,13 +177,13 @@ $(window.document).ready(function() {
 			</colgroup>
 			<tbody>
 				<tr>
-					<th scope="row" class="ico_t1" >시스템명</th>
+					<th scope="row" class="ico_t1" >시스템명(*)</th>
 					<td colspan="3"><input type="text" class="txt t2" name="db2pg_sys_nm" id="db2pg_sys_nm"  maxlength="20" value="${resultInfo[0].db2pg_sys_nm}" readonly/>
 					</td>
 				</tr>
 							
 				<tr>
-					<th scope="row" class="ico_t1" >DBMS구분</th>
+					<th scope="row" class="ico_t1" >DBMS구분(*)</th>
 						<td><select name="dbms_dscd" id="dbms_dscd" class="select"  style="width:205px;" onFocus='this.initialSelect = this.selectedIndex;' onChange='this.selectedIndex = this.initialSelect;'>
 										<option value=""><spring:message code="common.choice" /></option>				
 											<c:forEach var="result" items="${result}" varStatus="status">				
@@ -195,30 +195,30 @@ $(window.document).ready(function() {
 				</tr>
 				
 				<tr>
-					<th scope="row" class="ico_t1">IP</th>
+					<th scope="row" class="ico_t1">아이피(*)</th>
 					<td><input type="text" class="txt" name="ipadr" id="ipadr"  value="${resultInfo[0].ipadr}"/></td>
-					<th scope="row" class="ico_t1">Database</th>
-					<td><input type="text" class="txt" name="dtb_nm" id="dtb_nm" value="${resultInfo[0].dtb_nm}"/></td>
-				</tr>	
-				
-				<tr>
-				<th scope="row" class="ico_t1">스키마</th>
-					<td>	
-							<input type="text" class="txt" name="scm_nm" id="scm_nm" value="${resultInfo[0].scm_nm}"/>
-					</td>
-					<th scope="row" class="ico_t1">Port</th>
+					<th scope="row" class="ico_t1">포트(*)</th>
 					<td><input type="text" class="txt" name="portno" id="portno" value="${resultInfo[0].portno}"/></td>
 				</tr>	
 				
 				<tr>
-					<th scope="row" class="ico_t1">User(Super)</th>
+					<th scope="row" class="ico_t1">Database(*)</th>
+					<td><input type="text" class="txt" name="dtb_nm" id="dtb_nm" value="${resultInfo[0].dtb_nm}"/></td>
+					<th scope="row" class="ico_t1">Schema(*)</th>
+					<td>	
+							<input type="text" class="txt" name="scm_nm" id="scm_nm" value="${resultInfo[0].scm_nm}"/>
+					</td>	
+				</tr>	
+				
+				<tr>
+					<th scope="row" class="ico_t1">계정(*)</th>
 					<td><input type="text" class="txt" name="spr_usr_id" id="spr_usr_id" value="${resultInfo[0].spr_usr_id}"/></td>
 					<th scope="row" class="ico_t1"><spring:message code="user_management.password" />(*)</th>
 					<td><input type="password" class="txt" name="pwd" id="pwd" value="${pwd}" /></td>
 				</tr>	
 							
 				<tr>
-					<th scope="row" class="ico_t1">캐릭터셋</th>
+					<th scope="row" class="ico_t1">캐릭터셋(*)</th>
 						<td><select name="crts_nm" id="crts_nm" class="select t9">			
 										<c:forEach var="dbmsChar" items="${dbmsChar}" varStatus="status">				
 											<option value="<c:out value="${dbmsChar.sys_cd}"/>"<c:if test="${resultInfo[0].crts eq dbmsChar.sys_cd}"> selected</c:if>><c:out value="${dbmsChar.sys_cd_nm}"/></option>								 

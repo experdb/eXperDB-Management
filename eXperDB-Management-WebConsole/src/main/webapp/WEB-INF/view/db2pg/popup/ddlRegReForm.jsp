@@ -236,10 +236,10 @@ function fn_tableAddCallback(rowList, tableGbn){
 </form>
 <div class="pop_container">
 	<div class="pop_cts">
-		<p class="tit">DDL 추출 수정</p>
+		<p class="tit">DDL 수정</p>
 		<div class="pop_cmm">
 			<table class="write">
-				<caption>DDL 추출 수정</caption>
+				<caption>DDL 수정</caption>
 				<colgroup>
 					<col style="width:105px;" />
 					<col />
@@ -289,7 +289,7 @@ function fn_tableAddCallback(rowList, tableGbn){
 				</colgroup>
 				<tbody>
 					<tr>
-						<th scope="row" class="ico_t2">DDL&데이터 대소문자 지정</th>
+						<th scope="row" class="ico_t2">대소문자 지정</th>
 						<td>
 							<select name="db2pg_uchr_lchr_val" id="db2pg_uchr_lchr_val" class="select t5">
 								<c:forEach var="codeLetter" items="${codeLetter}">
@@ -299,7 +299,7 @@ function fn_tableAddCallback(rowList, tableGbn){
 						</td>
 					</tr>
 					<tr>
-						<th scope="row" class="ico_t2">소스 Table DDL 추출(View 제외) 여부</th>
+						<th scope="row" class="ico_t2">View Table 제외 여부</th>
 						<td>
 							<select name="src_tb_ddl_exrt_tf" id="src_tb_ddl_exrt_tf" class="select t5">
 								<c:forEach var="codeTF" items="${codeTF}">
@@ -311,8 +311,8 @@ function fn_tableAddCallback(rowList, tableGbn){
 					<tr>
 						<th scope="row" class="ico_t2">
 							<select name="src_tables" id="src_tables" class="select t5" style="width: 176px;" >
-								<option value="include">추출 대상 테이블</option>
-								<option value="exclude">추출 제외 테이블</option>
+								<option value="include">대상 테이블</option>
+								<option value="exclude">제외 테이블</option>
 							</select>
 						</th>
 						<td>

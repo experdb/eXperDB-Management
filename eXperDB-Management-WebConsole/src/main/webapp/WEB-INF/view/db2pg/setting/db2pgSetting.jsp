@@ -693,48 +693,48 @@ function fn_ImmediateStart(gbn){
 <div id="contents">
 	<div class="contents_wrap">
 		<div class="contents_tit">
-			<h4>DB2PG관리<a href="#n"><img src="/images/ico_tit.png" class="btn_info"/></a></h4>
+			<h4>설정정보관리<a href="#n"><img src="/images/ico_tit.png" class="btn_info"/></a></h4>
 			<div class="infobox"> 
 				<ul>
-					<li>DB2PG 설명</li>
+					<li>설정정보관리 설명</li>
 					<li></li>	
 				</ul>
 			</div>
 			<div class="location">
 				<ul>
-					<li class="bold">DB2PG</li>
-					<li>DB2PG 설정</li>
+					<li>Migration</li>
+					<li class="on">설정정보관리</li>
 				</ul>
 			</div>
 		</div>	
 		<div class="contents">
 			<div class="cmm_tab">
 				<ul id="tab1">
-					<li class="atv"><a href="javascript:selectTab('ddlWork')">DDL추출</a></li>
-					<li><a href="javascript:selectTab('dataWork')">데이터이행</a></li>
+					<li class="atv"><a href="javascript:selectTab('ddlWork')">DDL</a></li>
+					<li><a href="javascript:selectTab('dataWork')">Migration</a></li>
 				</ul>
 				<ul id="tab2" style="display:none;">
-					<li><a href="javascript:selectTab('ddlWork')">DDL추출</a></li>
-					<li class="atv"><a href="javascript:selectTab('dataWork')">데이터이행</a></li>
+					<li><a href="javascript:selectTab('ddlWork')">DDL</a></li>
+					<li class="atv"><a href="javascript:selectTab('dataWork')">Migration</a></li>
 				</ul>
 			</div>
 			<div class="cmm_grp">
 				<div class="btn_type_float">													
 					<div class="btn_type_01" id="btnDDL">
 						<span class="btn btnC_01 btn_fl"><button type="button" onclick="fn_ImmediateStart('ddl')">즉시실행</button></span> 	
-						<span class="btn btnC_01 btn_fl"><button type="button" onclick="fn_copy()">복제</button></span> 	
 						<a class="btn" onClick="getddlDataList();"><button type="button"><spring:message code="common.search" /></button></a>
 						<span class="btn" onclick="fn_ddl_reg_popup()"><button type="button"><spring:message code="common.registory" /></button></span>
 						<span class="btn" onClick="fn_ddl_regre_popup()"><button type="button"><spring:message code="common.modify" /></button></span>
 						<span class="btn" onClick="fn_ddl_work_delete()"><button type="button"><spring:message code="common.delete" /></button></span>
+						<span class="btn"><button type="button" onclick="fn_copy()">복제 등록</button></span> 	
 					</div>
 					<div class="btn_type_01" id="btnData" style="display:none;">
 						<span class="btn btnC_01 btn_fl"><button type="button" onclick="fn_ImmediateStart('trans')">즉시실행</button></span> 	
-						<span class="btn btnC_01 btn_fl"><button type="button" onclick="fn_copy()">복제</button></span> 	
 						<span class="btn" onclick="getdataDataList()"><button type="button"><spring:message code="common.search" /></button></span>
 						<span class="btn" onclick="fn_data_reg_popup()"><button type="button"><spring:message code="common.registory" /></button></span>
 						<span class="btn" onclick="fn_data_regre_popup()"><button type="button"><spring:message code="common.modify" /></button></span>
 						<span class="btn" onclick="fn_data_work_delete()"><button type="button"><spring:message code="common.delete" /></button></span>
+						<span class="btn"><button type="button" onclick="fn_copy()">복제 등록</button></span> 	
 					</div>
 				</div>
 				<div class="sch_form">
@@ -769,7 +769,7 @@ function fn_ImmediateStart(gbn){
 								<td><input type="text" name="ddl_ipadr" id="ddl_ipadr" class="txt t3"/></td>
 								<th scope="row" class="t9">Database</th>
 								<td><input type="text" name="ddl_dtb_nm" id="ddl_dtb_nm" class="txt t3"/></td>
-								<th scope="row" class="t9">스키마</th>
+								<th scope="row" class="t9">Schema</th>
 								<td><input type="text" name="ddl_scm_nm" id="ddl_scm_nm" class="txt t3"/></td>
 							</tr>
 						</tbody>
@@ -811,7 +811,7 @@ function fn_ImmediateStart(gbn){
 								<td><input type="text" name="data_ipadr" id="data_ipadr" class="txt t3"/></td>
 								<th scope="row" class="t9">Database</th>
 								<td><input type="text" name="data_dtb_nm" id="data_dtb_nm" class="txt t3"/></td>
-								<th scope="row" class="t9">스키마</th>
+								<th scope="row" class="t9">Schema</th>
 								<td><input type="text" name="data_scm_nm" id="data_scm_nm" class="txt t3"/></td>
 							</tr>
 						</tbody>
@@ -830,7 +830,7 @@ function fn_ImmediateStart(gbn){
 									<th width="100">DBMS 구분</th>
 									<th width="100">아이피</th>
 									<th width="100">Database</th>
-									<th width="150">스키마</th>
+									<th width="150">Schema</th>
 									<th width="100">등록자</th>
 									<th width="100">등록일시</th>
 									<th width="100">수정자</th>
@@ -860,11 +860,11 @@ function fn_ImmediateStart(gbn){
 									<th width="100">DBMS 구분</th>
 									<th width="100">아이피</th>
 									<th width="100">Database</th>
-									<th width="100">스키마</th>
+									<th width="100">Schema</th>
 									<th width="100">DBMS 구분</th>
 									<th width="100">아이피</th>
 									<th width="100">Database</th>
-									<th width="100">스키마</th>
+									<th width="100">Schema</th>
 									<th width="0">db2pg_trsf_wrk_id</th>
 									<th width="0">wrk_id</th>
 									<th width="0">trans_save_pth</th>

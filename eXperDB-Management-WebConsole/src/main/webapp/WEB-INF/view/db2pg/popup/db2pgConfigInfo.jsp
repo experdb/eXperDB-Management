@@ -5,7 +5,7 @@
 <div id="pop_layer_db2pgConfig" class="pop-layer">
 		<div class="pop-container" style="padding: 0px;">
 			<div class="pop_cts" style="width: 55%; height: 600px; overflow: auto; padding: 20px; margin: 0 auto; min-height:0; min-width:0; margin-top: 10%" id="db2pgConfig">
-				<p class="tit" style="margin-bottom: 15px;">DB2PG CONFIG 파일
+				<p class="tit" style="margin-bottom: 15px;">Configuration
 					<a href="#n" class="btn" onclick="toggleLayer($('#pop_layer_db2pgConfig'), 'off');" style="float: right;"><img src="/images/ico_state_01.png" style="margin-left: 235px;"/></a>
 				</p>
 				<table class="list" style="border:1px solid #b8c3c6;">

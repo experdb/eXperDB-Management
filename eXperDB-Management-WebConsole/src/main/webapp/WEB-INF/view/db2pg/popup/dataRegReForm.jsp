@@ -243,10 +243,10 @@ function fn_tableAddCallback(rowList, tableGbn){
 </form>
 <div class="pop_container">
 	<div class="pop_cts">
-		<p class="tit">데이터이행 등록</p>
+		<p class="tit">Migration 등록</p>
 		<div class="pop_cmm">
 			<table class="write">
-				<caption>데이터이행 등록</caption>
+				<caption>Migration 등록</caption>
 				<colgroup>
 					<col style="width:105px;" />
 					<col />
@@ -317,8 +317,8 @@ function fn_tableAddCallback(rowList, tableGbn){
 								<tr>
 									<th scope="row" class="ico_t2">
 										<select name="src_tables" id="src_tables" class="select t5" style="width: 176px;" >
-											<option value="include">추출 대상 테이블</option>
-											<option value="exclude">추출 제외 테이블</option>
+											<option value="include">대상 테이블</option>
+											<option value="exclude">제외 테이블</option>
 										</select>
 									</th>
 									<td colspan="2">
@@ -333,15 +333,15 @@ function fn_tableAddCallback(rowList, tableGbn){
 									</td>
 								</tr>
 								<tr>
-									<th scope="row" class="ico_t2">추출 데이터 Fetch 사이즈</th>
+									<th scope="row" class="ico_t2">데이터 Fetch 사이즈</th>
 									<td><input type="number" class="txt t8" name="exrt_dat_ftch_sz" id="exrt_dat_ftch_sz" value="${exrt_dat_ftch_sz}" min="3000"/></td>
 									<th scope="row" class="ico_t2">데이터 Fetch 버퍼 사이즈(단위 MIB)</th>
 									<td><input type="number" class="txt t8" name="dat_ftch_bff_sz" id="dat_ftch_bff_sz" value="${dat_ftch_bff_sz}" min="10"/></td>
 								</tr>
 								<tr>
-									<th scope="row" class="ico_t2">추출 병렬처리 개수</th>
+									<th scope="row" class="ico_t2">병렬처리 개수</th>
 									<td><input type="number" class="txt t8" name="exrt_prl_prcs_ecnt" id="exrt_prl_prcs_ecnt" value="${exrt_prl_prcs_ecnt}" min="1"/></td>
-									<th scope="row" class="ico_t2">LOB 데이터 LOB 버퍼 사이즈(단위 MIB)</th>
+									<th scope="row" class="ico_t2">LOB 버퍼 사이즈(단위 MIB)</th>
 									<td><input type="number" class="txt t8" name="lob_dat_bff_sz" id="lob_dat_bff_sz" value="${lob_dat_bff_sz}" min="100"/></td>
 								</tr>
 								<tr>
@@ -354,7 +354,7 @@ function fn_tableAddCallback(rowList, tableGbn){
 					<div class="view addOption_inr">
 						<ul>
 							<li style="border-bottom: none;">
-								<p class="op_tit" style="width: 200PX;">추출 조건(WHERE문 제외)</p>
+								<p class="op_tit" style="width: 200PX;">조건문(WHERE절)</p>
 								<span>
 									<div class="textarea_grp">
 										<textarea name="src_cnd_qry" id="src_cnd_qry" style="height: 250px; width: 700px;"><c:out value="${src_cnd_qry}"/></textarea>

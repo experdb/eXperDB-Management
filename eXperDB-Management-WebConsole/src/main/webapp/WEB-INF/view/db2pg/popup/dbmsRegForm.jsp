@@ -422,10 +422,10 @@ function fn_charSet(){
 <body>
 <div class="pop_container">
 	<div class="pop_cts">
-		<p class="tit">DBMS 등록</p>
+		<p class="tit">소스/타겟 DBMS 등록</p>
 		<form name="dbserverInsert" id="dbserverInsert" method="post">
 		<table class="write">
-			<caption>DBMS 등록</caption>
+			<caption>소스/타겟 DBMS 등록</caption>
 			<colgroup>
 				<col style="width:130px;" />
 				<col style="width:330px;" />
@@ -435,13 +435,13 @@ function fn_charSet(){
 			</colgroup>
 			<tbody>
 				<tr>
-					<th scope="row" class="ico_t1" >시스템명</th>
+					<th scope="row" class="ico_t1" >시스템명(*)</th>
 					<td colspan="3"><input type="text" class="txt t2" name="db2pg_sys_nm" id="db2pg_sys_nm"  maxlength="20" onkeyup="fn_checkWord(this,20)" placeholder="20<spring:message code='message.msg188'/>"/>
 					<span class="btn btnC_01"><button type="button" class= "btn_type_02" onclick="fn_sysnmCheck()" style="width: 85px; margin-right: -60px; margin-top: 0;"><spring:message code="common.overlap_check" /></button></span></td>
 				</tr>
 							
 				<tr>
-					<th scope="row" class="ico_t1" >DBMS구분</th>
+					<th scope="row" class="ico_t1" >DBMS구분(*)</th>
 						<td><select name="dbms_dscd" id="dbms_dscd" class="select"  style="width:205px;" onChange ="fn_charSet()">
 										<option value=""><spring:message code="common.choice" /></option>				
 											<c:forEach var="result" items="${result}" varStatus="status">												 
@@ -452,32 +452,33 @@ function fn_charSet(){
 				</tr>
 				
 				<tr>
-					<th scope="row" class="ico_t1">IP</th>
+					<th scope="row" class="ico_t1">아이피(*)</th>
 					<td><input type="text" class="txt" name="ipadr" id="ipadr" maxlength="30" onkeyup="fn_checkWord(this,30)" placeholder="30<spring:message code='message.msg188'/>"/></td>
-					<th scope="row" class="ico_t1">Database</th>
-					<td><input type="text" class="txt" name="dtb_nm" id="dtb_nm" maxlength="30" onkeyup="fn_checkWord(this,30)" placeholder="30<spring:message code='message.msg188'/>"/></td>
+					<th scope="row" class="ico_t1">포트(*)</th>
+					<td><input type="text" class="txt" name="portno" id="portno" maxlength="30" onkeyup="fn_checkWord(this,30)" placeholder="30<spring:message code='message.msg188'/>"/></td>
 				</tr>	
 				
 				<tr>
-				<th scope="row" class="ico_t1">스키마</th>
+					<th scope="row" class="ico_t1">Database(*)</th>
+						<td><input type="text" class="txt" name="dtb_nm" id="dtb_nm" maxlength="30" onkeyup="fn_checkWord(this,30)" placeholder="30<spring:message code='message.msg188'/>"/></td>
+					<th scope="row" class="ico_t1">Schema(*)</th>
 					<td>	
 							<input type="text" class="txt" name="scm_nm" id="schema_any" maxlength="30" onkeyup="fn_checkWord(this,30)" placeholder="30<spring:message code='message.msg188'/>"/>
 							<select name="scm_nm" id="schema_pg" class="select">
 							</select>
 					</td>
-					<th scope="row" class="ico_t1">Port</th>
-					<td><input type="text" class="txt" name="portno" id="portno" maxlength="30" onkeyup="fn_checkWord(this,30)" placeholder="30<spring:message code='message.msg188'/>"/></td>
+					
 				</tr>	
 				
 				<tr>
-					<th scope="row" class="ico_t1">User(Super)</th>
+					<th scope="row" class="ico_t1">계정(*)</th>
 					<td><input type="text" class="txt" name="spr_usr_id" id="spr_usr_id" maxlength="30" onkeyup="fn_checkWord(this,30)" placeholder="30<spring:message code='message.msg188'/>"/></td>
 					<th scope="row" class="ico_t1"><spring:message code="user_management.password" />(*)</th>
 					<td><input type="password" class="txt" name="pwd" id="pwd" /></td>
 				</tr>	
 							
 				<tr>
-					<th scope="row" class="ico_t1">캐릭터셋</th>
+					<th scope="row" class="ico_t1">캐릭터셋(*)</th>
 						<td><select name="crts_nm" id="crts_nm" class="select t9"></select></td>				
 				</tr>			
 					
