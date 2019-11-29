@@ -43,9 +43,9 @@
 <%@include file="../../cmmn/commonLocale.jsp"%>
 	<div class="pop_container">
 		<div class="pop_cts">
-			<p class="tit">DB2PG수행이력 상세보기</p>
+			<p class="tit">Migration 수행이력 상세보기</p>
 			<div class="pop_cmm3">
-				<p class="pop_s_tit">DB2PG정보</p>
+				<p class="pop_s_tit">작업정보</p>
 				<table class="list" style="border: 1px solid #99abb0;">
 					<colgroup>
 						<col style="width: 15%;" />

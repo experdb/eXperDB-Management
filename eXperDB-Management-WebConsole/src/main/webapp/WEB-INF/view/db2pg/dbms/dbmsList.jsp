@@ -211,12 +211,12 @@ function fn_regRe_popup(){
 					<table class="write">
 						<caption>Source DBMS 조회</caption>
 						<colgroup>
-							<col style="width: 100px;" />
-							<col style="width: 250px;" />
-							<col style="width: 100px;" />
-							<col style="width: 250px;" />
-							<col style="width: 100px;" />
-							<col style="width: 250px;" />
+							<col style="width:10%;" />
+							<col style="width:20%;" />
+							<col style="width:10%;" />
+							<col style="width:20%;" />
+							<col style="width:10%;" />
+							<col style="width:20%;" />
 							<col />
 						</colgroup>
 						<tbody>

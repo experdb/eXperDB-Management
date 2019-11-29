@@ -69,11 +69,6 @@ function fn_init(){
 		columns : [
 			{data : "rownum", defaultContent : "", targets : 0, orderable : false, checkboxes : {'selectRow' : true}}, 
 			{data : "idx", className : "dt-center", defaultContent : ""}, 
-	     	{data : "db2pg_ddl_wrk_nm", className : "dt-left", defaultContent : ""
-				,"render": function (data, type, full) {				
-					  return '<span onClick=javascript:fn_db2pgConfigLayer("'+full.db2pg_ddl_wrk_nm+'"); class="bold">' + full.db2pg_ddl_wrk_nm + '</span>';
-				}
-			},
 			{data : "db2pg_ddl_wrk_exp", className : "dt-left", defaultContent : ""}, 
 			{data : "dbms_dscd", className : "dt-center", defaultContent : ""}, 
 			{data : "ipadr", className : "dt-center", defaultContent : ""},
@@ -82,10 +77,7 @@ function fn_init(){
 			{data : "frst_regr_id", className : "dt-center", defaultContent : ""},
 			{data : "frst_reg_dtm", className : "dt-center", defaultContent : ""},
 			{data : "lst_mdfr_id", className : "dt-center", defaultContent : ""},
-			{data : "lst_mdf_dtm", className : "dt-center", defaultContent : ""},
-			{data : "db2pg_ddl_wrk_id", defaultContent : "", visible: false},
-			{data : "wrk_id", defaultContent : "", visible: false},
-			{data : "ddl_save_pth", defaultContent : "", visible: false}
+			{data : "lst_mdf_dtm", className : "dt-center", defaultContent : ""}
 		],'select': {'style': 'multi'}
 		});
 	
@@ -169,14 +161,10 @@ function fn_init(){
 	tableDDL.tables().header().to$().find('th:eq(4)').css('min-width', '100px');
 	tableDDL.tables().header().to$().find('th:eq(5)').css('min-width', '100px');
 	tableDDL.tables().header().to$().find('th:eq(6)').css('min-width', '100px');
-	tableDDL.tables().header().to$().find('th:eq(7)').css('min-width', '150px');
+	tableDDL.tables().header().to$().find('th:eq(7)').css('min-width', '100px');
 	tableDDL.tables().header().to$().find('th:eq(8)').css('min-width', '100px');
 	tableDDL.tables().header().to$().find('th:eq(9)').css('min-width', '100px');
 	tableDDL.tables().header().to$().find('th:eq(10)').css('min-width', '100px');
-	tableDDL.tables().header().to$().find('th:eq(11)').css('min-width', '100px');
-	tableDDL.tables().header().to$().find('th:eq(12)').css('min-width', '0px');
-	tableDDL.tables().header().to$().find('th:eq(13)').css('min-width', '0px');
-	tableDDL.tables().header().to$().find('th:eq(14)').css('min-width', '0px');
 	
 	tableData.tables().header().to$().find('th:eq(0)').css('min-width', '30px');
 	tableData.tables().header().to$().find('th:eq(1)').css('min-width', '100px');
@@ -217,6 +205,8 @@ $(window.document).ready(
 
 		$("#wrk_strt_dtm").val(day_start);
 		$("#wrk_end_dtm").val(day_end);
+		$("#ddl_wrk_strt_dtm").val(day_start);
+		$("#ddl_wrk_end_dtm").val(day_end);
 		
 		$( ".calendar" ).datepicker({
 			dateFormat: 'yy-mm-dd',
@@ -226,39 +216,42 @@ $(window.document).ready(
 	}
 );
 
+/* ********************************************************
+ * DDL 수행이력 데이터 가져오기
+ ******************************************************** */
 function getddlDataList(){
-	$.ajax({
-		url : "/db2pg/selectDb2pgHistory.do", 
-	  	data : {
-	  		wrk_nm :  $("#wrk_nm").val(),
-	  		exe_rslt_cd : $("#exe_rslt_cd").val()
-	  	},
-		dataType : "json",
-		type : "post",
-		beforeSend: function(xhr) {
-	        xhr.setRequestHeader("AJAX", true);
-	     },
-		error : function(xhr, status, error) {
-			if(xhr.status == 401) {
-				alert("<spring:message code='message.msg02' />");
-				top.location.href = "/";
-			} else if(xhr.status == 403) {
-				alert("<spring:message code='message.msg03' />");
-				top.location.href = "/";
-			} else {
-				alert("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""));
-			}
-		},
-		success : function(data) {
-			if(data.length > 0){
-				tableDDL.rows({selected: true}).deselect();
-				tableDDL.clear().draw();
-				tableDDL.rows.add(data).draw();
-			}else{
-				tableDDL.clear().draw();
-			}
-		}
-	});
+// 	$.ajax({
+// 		url : "/db2pg/selectDb2pgHistory.do", 
+// 	  	data : {
+// 	  		wrk_nm :  $("#wrk_nm").val(),
+// 	  		exe_rslt_cd : $("#exe_rslt_cd").val()
+// 	  	},
+// 		dataType : "json",
+// 		type : "post",
+// 		beforeSend: function(xhr) {
+// 	        xhr.setRequestHeader("AJAX", true);
+// 	     },
+// 		error : function(xhr, status, error) {
+// 			if(xhr.status == 401) {
+// 				alert("<spring:message code='message.msg02' />");
+// 				top.location.href = "/";
+// 			} else if(xhr.status == 403) {
+// 				alert("<spring:message code='message.msg03' />");
+// 				top.location.href = "/";
+// 			} else {
+// 				alert("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""));
+// 			}
+// 		},
+// 		success : function(data) {
+// 			if(data.length > 0){
+// 				tableDDL.rows({selected: true}).deselect();
+// 				tableDDL.clear().draw();
+// 				tableDDL.rows.add(data).draw();
+// 			}else{
+// 				tableDDL.clear().draw();
+// 			}
+// 		}
+// 	});
 }
 
 /* ********************************************************
@@ -395,18 +388,18 @@ function getdataDataList(){
 							<col />
 						</colgroup>
 						<tbody>
-<!-- 							<tr> -->
-<%-- 								<th scope="row" class="t10"><spring:message code="common.work_term" /></th> --%>
-<!-- 								<td colspan="3"> -->
-<!-- 									<div class="calendar_area"> -->
-<!-- 										<a href="#n" class="calendar_btn">달력열기</a> -->
-<!-- 										<input type="text" name="wrk_strt_dtm" id="wrk_strt_dtm" class="calendar" readonly/> -->
-<!-- 										<span class="wave">~</span> -->
-<!-- 										<a href="#n" class="calendar_btn">달력열기</a> -->
-<!-- 										<input type="text" name="wrk_end_dtm" id="wrk_end_dtm" class="calendar" readonly/> -->
-<!-- 									</div> -->
-<!-- 								</td> -->
-<!-- 							</tr> -->
+							<tr>
+								<th scope="row" class="t10"><spring:message code="common.work_term" /></th>
+								<td colspan="3">
+									<div class="calendar_area">
+										<a href="#n" class="calendar_btn">달력열기</a>
+										<input type="text" name="ddl_wrk_strt_dtm" id="ddl_wrk_strt_dtm" class="calendar" readonly/>
+										<span class="wave">~</span>
+										<a href="#n" class="calendar_btn">달력열기</a>
+										<input type="text" name="ddl_wrk_end_dtm" id="ddl_wrk_end_dtm" class="calendar" readonly/>
+									</div>
+								</td>
+							</tr>
 							<tr>
 								<th scope="row" class="t9"><spring:message code="common.work_name" /></th>
 								<td><input type="text" name="wrk_nm" id="wrk_nm" class="txt t5" maxlength="25"  /></td>
@@ -463,22 +456,17 @@ function getdataDataList(){
 						<caption></caption>
 							<thead>
 								<tr>
-									<th width="30" rowspan="2"><spring:message code="common.no" /></th>
-									<th width="100" rowspan="2">Work명</th>
-									<th width="200" rowspan="2">Work설명</th>
-									<th width="400" colspan="3">소스시스템</th>
-									<th width="400" colspan="2">타겟시스템</th>
-									<th width="130" rowspan="2">수행시작시간</th>
-									<th width="130" rowspan="2">수행종료시간</th>
-									<th width="95" rowspan="2">수행시간(초)</th>
-									<th width="95" rowspan="2">수행결과</th>
-								</tr>
-								<tr>
+									<th width="30"><spring:message code="common.no" /></th>
+									<th width="100">Work명</th>
+									<th width="200">Work설명</th>
+									<th width="100">아이피</th>
 									<th width="100">DBMS 구분</th>
-									<th width="100">아이피</th>
 									<th width="100">Database</th>
-									<th width="100">아이피</th>
-									<th width="100">Database</th>
+									<th width="100">작업시작시간</th>
+									<th width="100">작업종료시간</th>
+									<th width="100">작업시간</th>
+									<th width="100">상태</th>
+									<th width="100">결과</th>
 								</tr>
 							</thead>
 						</table>	
