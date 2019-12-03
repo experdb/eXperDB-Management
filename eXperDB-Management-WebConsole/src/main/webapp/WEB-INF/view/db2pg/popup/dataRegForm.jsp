@@ -123,6 +123,13 @@ function fn_check() {
  ******************************************************** */
 function fn_insert_work(){
 	if(valCheck()){
+		
+		if($("#src_table_total_cnt").val() == ""){
+			var src_table_total_cnt = 0
+		}else{
+			var src_table_total_cnt = $("#src_table_total_cnt").val()
+		}
+		
 		//등록하기 전 work명 한번 더 중복 체크
 		$.ajax({
 			url : '/wrk_nmCheck.do',
@@ -152,7 +159,7 @@ function fn_insert_work(){
 						  		src_cnd_qry : $("#src_cnd_qry").val(),
 						  		usr_qry_use_tf : $('input[name="usr_qry_use_tf"]:checked').val(),
 						  		db2pg_usr_qry : $("#db2pg_usr_qry").val(),
-						  		src_table_total_cnt : $("#src_table_total_cnt").val()
+						  		src_table_total_cnt : src_table_total_cnt
 						  	},
 							type : "post",
 							beforeSend: function(xhr) {
