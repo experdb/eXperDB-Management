@@ -103,7 +103,7 @@ $(window.document).ready(function() {
  		success : function(result) {
  			if(result.RESULT_CODE == 0){		
  				connection= "success";
- 				alert('<spring:message code="message.msg93" />');		
+ 				alert(result.RESULT_Conn);		
  			}else{
  				connection = "fail";
 	 			alert(result.ERR_MSG);

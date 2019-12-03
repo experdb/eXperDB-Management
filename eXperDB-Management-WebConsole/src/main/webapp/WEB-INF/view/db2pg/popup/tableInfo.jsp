@@ -118,6 +118,7 @@ function fn_search(){
  ******************************************************** */
 function fn_Add(){
 	
+	var totalCnt = table.rows().data().length;
 	var datas = table.rows('.selected').data();
 	
 	var rowList = [];
@@ -125,7 +126,7 @@ function fn_Add(){
         rowList.push( table.rows('.selected').data()[i].table_name);   
 	   //rowList.push( table.rows('.selected').data()[i]);     
   }	
-	opener.fn_tableAddCallback(rowList, tableGbn);
+	opener.fn_tableAddCallback(rowList, tableGbn, totalCnt);
 	self.close();
 }
 

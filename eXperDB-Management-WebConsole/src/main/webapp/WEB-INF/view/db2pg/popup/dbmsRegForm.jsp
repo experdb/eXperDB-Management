@@ -350,8 +350,8 @@ function fn_charSet(){
  		},
  		success : function(result) {
  			if(result.RESULT_CODE == 0){		
- 				connection= "success";
- 				alert('<spring:message code="message.msg93" />');		
+ 				connection= "success";			
+ 				alert(result.RESULT_Server+"\n"+result.RESULT_Driver+"\n\n"+Connected);		
  			}else{
  				connection = "fail";
 	 			alert(result.ERR_MSG);

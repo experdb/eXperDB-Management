@@ -169,7 +169,8 @@ function fn_insert_work(){
 						  		db2pg_uchr_lchr_val : $("#db2pg_uchr_lchr_val").val(),
 						  		src_tb_ddl_exrt_tf : $("#src_tb_ddl_exrt_tf").val(),
 						  		src_include_tables : $("#src_include_table_nm").val(),
-						  		src_exclude_tables : $("#src_exclude_table_nm").val()
+						  		src_exclude_tables : $("#src_exclude_table_nm").val(),
+						  		src_table_total_cnt : $("#src_table_total_cnt").val()
 						  	},
 							type : "post",
 							beforeSend: function(xhr) {
@@ -285,13 +286,15 @@ function fn_tableList(gbn){
 		});
  });
  
-function fn_tableAddCallback(rowList, tableGbn){
+function fn_tableAddCallback(rowList, tableGbn, totalCnt){
 	if(tableGbn == 'include'){
-		$('#src_include_tables').val(rowList.length+"개");
+		$('#src_include_tables').val("총 테이블 : "+totalCnt+ "개 중   /   "+rowList.length+"개 선택됨");
 		$('#src_include_table_nm').val(rowList);
+		$('#src_table_total_cnt').val(totalCnt);
 	}else{
-		$('#src_exclude_tables').val(rowList.length+"개");
+		$('#src_exclude_tables').val("총 테이블 : "+totalCnt+ "개 중   /   "+rowList.length+"개 선택됨");
 		$('#src_exclude_table_nm').val(rowList);
+		$('#src_table_total_cnt').val(totalCnt);
 	}
 }
 </script>
@@ -302,6 +305,7 @@ function fn_tableAddCallback(rowList, tableGbn){
 	<input type="hidden" name="src_include_table_nm"  id="src_include_table_nm" >
 	<input type="hidden" name="src_exclude_table_nm"  id="src_exclude_table_nm" >
 	<input type="hidden" name="tableGbn"  id="tableGbn" >
+	<input type="hidden" name="src_table_total_cnt" id="src_table_total_cnt">
 </form>
 <div class="pop_container">
 	<div class="pop_cts">

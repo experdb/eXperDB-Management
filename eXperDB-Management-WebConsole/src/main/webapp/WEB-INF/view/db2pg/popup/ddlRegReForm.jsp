@@ -34,12 +34,14 @@ var output_path ="fail";
 $(window.document).ready(function() {
 	 if("${exrt_trg_tb_cnt}">0){
 		 $("#src_tables option:eq(0)").attr("selected", "selected");
-		 $("#src_include_tables").val("${exrt_trg_tb_cnt}개");
+		 $("#src_include_tables").val("총 테이블 : ${exrt_trg_tb_total_cnt} 개 중   /   ${exrt_trg_tb_cnt}개 선택됨");
+		 $("#src_table_total_cnt").val("${exrt_trg_tb_total_cnt}");
 		 $("#include").show();
 		 $("#exclude").hide();
 	 }else if("${exrt_exct_tb_cnt}">0){
 		 $("#src_tables option:eq(1)").attr("selected", "selected");
-		 $("#src_exclude_tables").val("${exrt_exct_tb_cnt}개");
+		 $("#src_exclude_tables").val("총 테이블 : ${exrt_exct_tb_total_cnt} 개 중   /   ${exrt_exct_tb_cnt}개 선택됨");
+		 $("#src_table_total_cnt").val("${exrt_exct_tb_total_cnt}")
 		 $("#exclude").show();
 		 $("#include").hide(); 
 	 }	 
@@ -120,6 +122,7 @@ function fn_update_work(){
 		  		src_tb_ddl_exrt_tf : $("#src_tb_ddl_exrt_tf").val(),
 		  		src_include_tables : $("#src_include_table_nm").val(),
 		  		src_exclude_tables : $("#src_exclude_table_nm").val(),
+		  		src_table_total_cnt : $('#src_table_total_cnt').val(),
 		  		wrk_id : $("#wrk_id").val()
 		  	},
 			type : "post",
@@ -216,13 +219,15 @@ function fn_tableList(gbn){
 		});
  });
  
-function fn_tableAddCallback(rowList, tableGbn){
+function fn_tableAddCallback(rowList, tableGbn, totalCnt){
 	if(tableGbn == 'include'){
-		$('#src_include_tables').val(rowList.length+"개");
+		$('#src_include_tables').val("총 테이블 : "+totalCnt+ "개 중   /   "+rowList.length+"개 선택됨");
 		$('#src_include_table_nm').val(rowList);
+		$('#src_table_total_cnt').val(totalCnt);
 	}else{
-		$('#src_exclude_tables').val(rowList.length+"개");
+		$('#src_exclude_tables').val("총 테이블 : "+totalCnt+ "개 중   /   "+rowList.length+"개 선택됨");
 		$('#src_exclude_table_nm').val(rowList);
+		$('#src_table_total_cnt').val(totalCnt);
 	}
 }
 </script>
@@ -232,6 +237,7 @@ function fn_tableAddCallback(rowList, tableGbn){
 	<input type="hidden" name="db2pg_sys_id"  id="db2pg_sys_id" value="${db2pg_sys_id}">
 	<input type="hidden" name="src_include_table_nm"  id="src_include_table_nm" value="${exrt_trg_tb_nm}">
 	<input type="hidden" name="src_exclude_table_nm"  id="src_exclude_table_nm" value="${exrt_exct_tb_nm}" >
+	<input type="hidden" name="src_table_total_cnt" id="src_table_total_cnt">
 	<input type="hidden" name="tableGbn"  id="tableGbn" >
 </form>
 <div class="pop_container">

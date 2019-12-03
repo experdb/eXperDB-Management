@@ -169,6 +169,7 @@
 		  db2pg_exrt_trg_tb_wrk_id
 		, exrt_trg_tb_nm 
 		, exrt_trg_scm_nm
+		, src_table_total_cnt
 		, frst_regr_id
 		, frst_reg_dtm
 		)
@@ -177,6 +178,7 @@
 		  #{db2pg_exrt_trg_tb_wrk_id}
 		, #{exrt_trg_tb_nm}
 		, #{exrt_trg_scm_nm}
+		, #{src_table_total_cnt}
 		, #{frst_regr_id}
 		, clock_timestamp()
 		)
@@ -193,6 +195,7 @@
 		  db2pg_exrt_exct_tb_wrk_id
 		, exrt_exct_tb_nm 
 		, exrt_exct_scm_nm
+		, src_table_total_cnt
 		, frst_regr_id
 		, frst_reg_dtm
 		)
@@ -201,6 +204,7 @@
 		  #{db2pg_exrt_exct_tb_wrk_id}
 		, #{exrt_exct_tb_nm} 
 		, #{exrt_exct_scm_nm}
+		, #{src_table_total_cnt}
 		, #{frst_regr_id}
 		, clock_timestamp()
 		)
@@ -464,6 +468,8 @@
 			, coalesce((SELECT length(exrt_trg_tb_nm)-length(replace(exrt_trg_tb_nm,',',''))+1 FROM t_db2pg_exrttrg_srctb_ls WHERE db2pg_exrt_trg_tb_wrk_id=wrk_inf.db2pg_exrt_trg_tb_wrk_id),0) as exrt_trg_tb_cnt
 			, (SELECT exrt_exct_tb_nm FROM t_db2pg_exrtexct_srctb_ls WHERE db2pg_exrt_exct_tb_wrk_id=wrk_inf.db2pg_exrt_exct_tb_wrk_id) as exrt_exct_tb_nm
 			, coalesce((SELECT length(exrt_exct_tb_nm)-length(replace(exrt_exct_tb_nm,',',''))+1 FROM t_db2pg_exrtexct_srctb_ls WHERE db2pg_exrt_exct_tb_wrk_id=wrk_inf.db2pg_exrt_exct_tb_wrk_id),0) as exrt_exct_tb_cnt
+			, (SELECT src_table_total_cnt FROM t_db2pg_exrttrg_srctb_ls WHERE db2pg_exrt_trg_tb_wrk_id=wrk_inf.db2pg_exrt_trg_tb_wrk_id) as exrt_trg_tb_total_cnt
+			, (SELECT src_table_total_cnt FROM t_db2pg_exrtexct_srctb_ls WHERE db2pg_exrt_exct_tb_wrk_id=wrk_inf.db2pg_exrt_exct_tb_wrk_id) as exrt_exct_tb_total_cnt
 		FROM t_db2pg_ddl_wrk_inf wrk_inf, t_wrkcng_i wrkcng
 		WHERE db2pg_ddl_wrk_id=#{db2pg_ddl_wrk_id}
 		AND  wrk_inf.wrk_id = wrkcng.wrk_id		
@@ -490,6 +496,8 @@
 		, coalesce((SELECT length(exrt_trg_tb_nm)-length(replace(exrt_trg_tb_nm,',',''))+1 FROM t_db2pg_exrttrg_srctb_ls WHERE db2pg_exrt_trg_tb_wrk_id=wrk_inf.db2pg_exrt_trg_tb_wrk_id),0) as exrt_trg_tb_cnt
 		, (SELECT exrt_exct_tb_nm FROM t_db2pg_exrtexct_srctb_ls WHERE db2pg_exrt_exct_tb_wrk_id=wrk_inf.db2pg_exrt_exct_tb_wrk_id) as exrt_exct_tb_nm
 		, coalesce((SELECT length(exrt_exct_tb_nm)-length(replace(exrt_exct_tb_nm,',',''))+1 FROM t_db2pg_exrtexct_srctb_ls WHERE db2pg_exrt_exct_tb_wrk_id=wrk_inf.db2pg_exrt_exct_tb_wrk_id),0) as exrt_exct_tb_cnt
+		, (SELECT src_table_total_cnt FROM t_db2pg_exrttrg_srctb_ls WHERE db2pg_exrt_trg_tb_wrk_id=wrk_inf.db2pg_exrt_trg_tb_wrk_id) as exrt_trg_tb_total_cnt
+		, (SELECT src_table_total_cnt FROM t_db2pg_exrtexct_srctb_ls WHERE db2pg_exrt_exct_tb_wrk_id=wrk_inf.db2pg_exrt_exct_tb_wrk_id) as exrt_exct_tb_total_cnt
 		, exrt_dat_cnt
 		, exrt_dat_ftch_sz
 		, dat_ftch_bff_sz

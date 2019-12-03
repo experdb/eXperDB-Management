@@ -151,7 +151,8 @@ function fn_insert_work(){
 						  		cnst_cnd_exrt_tf : $("#cnst_cnd_exrt_tf").val(),
 						  		src_cnd_qry : $("#src_cnd_qry").val(),
 						  		usr_qry_use_tf : $('input[name="usr_qry_use_tf"]:checked').val(),
-						  		db2pg_usr_qry : $("#db2pg_usr_qry").val()
+						  		db2pg_usr_qry : $("#db2pg_usr_qry").val(),
+						  		src_table_total_cnt : $("#src_table_total_cnt").val()
 						  	},
 							type : "post",
 							beforeSend: function(xhr) {
@@ -289,14 +290,15 @@ function fn_tableList(gbn){
 		});
  });
 
-
-function fn_tableAddCallback(rowList, tableGbn){
+function fn_tableAddCallback(rowList, tableGbn, totalCnt){
 	if(tableGbn == 'include'){
-		$('#src_include_tables').val(rowList.length+"개");
+		 $('#src_include_tables').val("총 테이블 : "+totalCnt+ "개 중   /   "+rowList.length+"개 선택됨");
 		$('#src_include_table_nm').val(rowList);
+		$('#src_table_total_cnt').val(totalCnt);
 	}else{
-		$('#src_exclude_tables').val(rowList.length+"개");
+		$('#src_exclude_tables').val("총 테이블 : "+totalCnt+ "개 중   /   "+rowList.length+"개 선택됨");
 		$('#src_exclude_table_nm').val(rowList);
+		$('#src_table_total_cnt').val(totalCnt);
 	}
 }
 </script>
@@ -398,6 +400,7 @@ function fn_tableAddCallback(rowList, tableGbn){
 											<input type="text" class="txt" name="src_exclude_tables" id="src_exclude_tables" readonly="readonly" />
 											<span class="btn btnC_01"><button type="button" class= "btn_type_02" onclick="fn_tableList('exclude')" style="width: 60px; margin-right: -60px; margin-top: 0;">등록</button></span>												
 										</div>
+										<input type="hidden" name="src_table_total_cnt" id="src_table_total_cnt">
 									</td>
 								</tr>
 								<tr>
@@ -414,7 +417,7 @@ function fn_tableAddCallback(rowList, tableGbn){
 								</tr>
 								<tr>
 									<th scope="row" class="ico_t2">테이블에서 추출할 데이터 건수</th>
-									<td><input type="number" class="txt t8" name="exrt_dat_cnt" id="exrt_dat_cnt" value="-1" min="-1"/></td>
+									<td><input type="number" class="txt t8" name="exrt_dat_cnt" id="exrt_dat_cnt" value="-1" min="-1"/> (defult=-1 전체)</td>
 								</tr>								
 							</tbody>
 						</table>
