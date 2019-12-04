@@ -385,9 +385,9 @@ function fn_tableAddCallback(rowList, tableGbn, totalCnt){
 						<table class="write">
 							<caption>옵션정보</caption>
 							<colgroup>
-								<col style="width:28%" />
+								<col style="width:40%" />
+								<col style="width:20%" />
 								<col style="width:30%" />
-								<col style="width:32%" />
 								</col>
 							</colgroup>
 							<tbody>
@@ -423,8 +423,8 @@ function fn_tableAddCallback(rowList, tableGbn, totalCnt){
 									<td><input type="number" class="txt t8" name="lob_dat_bff_sz" id="lob_dat_bff_sz" value="100"/></td>
 								</tr>
 								<tr>
-									<th scope="row" class="ico_t2">테이블에서 추출할 데이터 건수</th>
-									<td><input type="number" class="txt t8" name="exrt_dat_cnt" id="exrt_dat_cnt" value="-1" min="-1"/> (defult=-1 전체)</td>
+									<th scope="row" class="ico_t2">테이블에서 추출할 데이터 건수(defult=-1 전체)</th>
+									<td><input type="number" class="txt t8" name="exrt_dat_cnt" id="exrt_dat_cnt" value="-1" min="-1"/></td>
 								</tr>								
 							</tbody>
 						</table>
