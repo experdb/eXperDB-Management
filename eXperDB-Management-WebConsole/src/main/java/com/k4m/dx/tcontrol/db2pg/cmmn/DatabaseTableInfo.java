@@ -38,6 +38,7 @@ public class DatabaseTableInfo {
 					sql =  "SELECT A.OBJECT_NAME AS TABLE_NAME, B.COMMENTS as COMMENTS "
 							+ "FROM ALL_OBJECTS A,  ALL_TAB_COMMENTS B "
 							+ "WHERE A.OWNER='" +serverObj.get("USER_ID").toString().toUpperCase() + "'"
+							+ "AND B.OWNER='" +serverObj.get("USER_ID").toString().toUpperCase() + "'"
 							+ "AND A.OBJECT_NAME = B.TABLE_NAME "
 							+ "AND A.OBJECT_NAME NOT IN ('TOAD_PLAN_TABLE','PLAN_TABLE')  "
 							+ "AND A.OBJECT_NAME NOT LIKE 'MDRT%' "

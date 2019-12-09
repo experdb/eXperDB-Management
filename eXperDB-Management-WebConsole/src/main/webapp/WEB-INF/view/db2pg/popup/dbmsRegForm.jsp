@@ -67,8 +67,8 @@ $(window.document).ready(function() {
  * 시스템명 중복체크
  ******************************************************** */
  function fn_sysnmCheck(){
-
-		if (db2pg_sys_nm.value == "") {
+	 
+		if ($("#db2pg_sys_nm").val() == "") {
 			alert('시스템명을 입력해주세요. ');
 			document.getElementById('db2pg_sys_nm').focus();
 			return;
