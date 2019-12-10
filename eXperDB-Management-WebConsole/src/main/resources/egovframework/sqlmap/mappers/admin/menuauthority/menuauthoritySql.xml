@@ -162,4 +162,23 @@
 		AND B.MNU_CD in ('MN000201', 'MN000101', 'MN000102', 'MN000103')
 	    ORDER BY MNU_ID
     </select>
+    
+    
+	<select id="selectAddMenu" resultType="menuAuthorityVO" parameterType="menuAuthorityVO">
+		/**
+	 	*  Query ID : selectAddMenu
+	 	* Description : 추가된 메뉴권한 조회
+	 	* Author : 변승우
+	 	**/
+		 	SELECT 
+					MNU_ID 
+			FROM T_MNU_I
+			WHERE  1=1
+			AND MNU_ID NOT IN(
+								SELECT 
+										MNU_ID 
+								FROM T_USRMNUAUT_I 
+								WHERE USR_ID= #{usr_id}
+							)
+	 </select>
 </mapper>

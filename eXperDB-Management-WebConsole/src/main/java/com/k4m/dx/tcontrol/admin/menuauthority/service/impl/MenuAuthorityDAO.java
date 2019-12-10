@@ -107,4 +107,16 @@ public class MenuAuthorityDAO extends EgovAbstractMapper{
 	}
 
 	
+	/**
+	 * 추가된 메뉴권한 확인
+	 * @param 
+	 * @throws Exception
+	 */
+	public List<MenuAuthorityVO> selectAddMenu(MenuAuthorityVO menuAuthorityVO) {
+		List<MenuAuthorityVO> sl = null;
+		sl = (List<MenuAuthorityVO>) list("menuauthoritySql.selectAddMenu", menuAuthorityVO);
+		return sl;
+	}
+
+	
 }
