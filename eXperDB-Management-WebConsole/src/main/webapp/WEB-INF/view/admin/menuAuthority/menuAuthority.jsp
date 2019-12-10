@@ -471,6 +471,28 @@ $(function() {
 			}
 		});
 		
+		//Migration 선택 전체 체크박스
+		$("#migration").click(function() { 
+			var array = new Array("MN00015","MN00016","MN00017");
+			var datas = userTable.row('.selected').length;
+			 if(datas != 1){
+				 alert("<spring:message code='message.msg165'/>");
+				 return false;
+			 }
+			if ($("#migration").prop("checked")) {
+				for(var i=0; i<array.length; i++){
+					document.getElementById("r_"+array[i]).checked = true;
+					document.getElementById("w_"+array[i]).checked = true;
+				}
+			} else {
+				for(var i=0; i<array.length; i++){
+					document.getElementById("r_"+array[i]).checked = false;
+					document.getElementById("w_"+array[i]).checked = false;
+				}
+			}
+		});
+		
+		
 		//체크박스 클릭시 사용자 선택 검사
 		$(".inp_chk").click(function() { 
 			var datas = userTable.row('.selected').length;
@@ -1132,7 +1154,58 @@ function fn_search(){
 																<label for="w_MN0001401"></label>
 															</div>
 														</td>
-													</tr>							
+													</tr>	
+													<tr>
+														<th scope="row" rowspan="3">
+															<div class="inp_chk">
+																<input type="checkbox" id="migration" name="migration"/>
+																<label for="migration">MIGRATION</label>
+															</div>
+														</th>
+														<td colspan="2">소스/타겟 DBMS 관리</td>
+														<td>
+															<div class="inp_chk">
+																<input type="checkbox" id="r_MN00015" name="r_mnu_nm" value="MN00015"/>
+																<label for="r_MN00015"></label>
+															</div>
+														</td>	
+														<td>
+															<div class="inp_chk">
+																<input type="checkbox" id="w_MN00015" name="w_mnu_nm" />
+																<label for="w_MN00015"></label>
+															</div>
+														</td>
+													</tr>										
+													<tr>
+														<td colspan="2">설정정보관리</td>
+														<td>
+															<div class="inp_chk">
+																<input type="checkbox" id="r_MN00016" name="r_mnu_nm" value="MN00016"/>
+																<label for="r_MN00016"></label>
+															</div>
+														</td>	
+														<td>
+															<div class="inp_chk">
+																<input type="checkbox" id="w_MN00016" name="w_mnu_nm" />
+																<label for="w_MN00016"></label>
+															</div>
+														</td>
+													</tr>	
+													<tr>
+														<td colspan="2">수행이력</td>
+														<td>
+															<div class="inp_chk">
+																<input type="checkbox" id="r_MN00017" name="r_mnu_nm" value="MN00017"/>
+																<label for="r_MN00017"></label>
+															</div>
+														</td>	
+														<td>
+															<div class="inp_chk">
+																<input type="checkbox" id="w_MN00017" name="w_mnu_nm" />
+																<label for="w_MN00017"></label>
+															</div>
+														</td>
+													</tr>					
 												</tbody>
 											</table>
 										</div>
