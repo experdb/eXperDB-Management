@@ -170,7 +170,7 @@ public class LoginController {
 				loginVo.setUsr_nm(userList.get(0).getUsr_nm());
 		
 				InetAddress local = InetAddress.getLocalHost();
-				String ip = local.getHostAddress();
+				String ip = request.getRemoteAddr();
 				loginVo.setIp(ip);
 
 				Properties props = new Properties();
