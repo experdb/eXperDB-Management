@@ -11,7 +11,7 @@
 var today = "";
 
 $(window.document).ready(function() { 
-
+	content();
 	today = new Date();
 	
 	var html ="";
@@ -131,6 +131,42 @@ function fn_selectSecurityStatistics(today){
 	});		
 }
 
+var intervalIDCheck;
+
+function content() {
+	var cnt = $('#refreshTimeCnt').val();
+	if(intervalIDCheck)
+		clearInterval(intervalIDCheck);
+	$('#refreshTimeCnt').val(++cnt);
+	
+	alert("dddd");
+	/*여기서 결과값을 새로고침 해야함!!!!!*/
+	
+	
+	var intervalID = '',
+	refreashRemainTime=600,
+	remainTime = $('#refreshTime').val(),
+	INTERVAL_TIME = 1000;
+
+	$('#refresh_timer').text(remainTime);
+	intervalID = setInterval(function () {
+		$('#refresh_timer').text(--remainTime);
+		if (remainTime < 1) {
+			content();
+		}
+	}, INTERVAL_TIME);
+	
+	intervalIDCheck = intervalID;
+	
+	//오랫동안 화면 새로고침을 하지 않을 경우, 화면이 먹통이 되는 경우 발생.
+	// 강제로 10분마다 화면 새로고침을 수행한다. 
+	setInterval(function() {
+		--refreashRemainTime;
+		if (refreashRemainTime < 1) {
+			document.location.reload();
+		}
+	}, INTERVAL_TIME);
+}
 
 </script>
 
@@ -140,7 +176,10 @@ function fn_selectSecurityStatistics(today){
 <div id="contents" class="main">
 	<div class="contents_wrap">
 		<div class="contents_tit">
-			<h4><spring:message code="menu.dashboard" /> <a href="#n"><img src="../images/ico_tit.png" alt="" class="btn_info"/></a></h4>
+			<h4><spring:message code="menu.dashboard" /> <a href="#n"><img src="../images/ico_tit.png" alt="" class="btn_info"/></a> 
+			<span style="float: right; margin-right: 20px;" onclick="javascript:content();"><img src="../images/ico_state_03.png" alt="새로고침" style="margin-right: 5px"/><span id="refresh_timer" style="margin-right: 5px">00</span>새로고침</span></h4>
+			<input type="hidden" id="refreshTime" name="refreshTime" value="${refreshTime}"/>
+			<input type="hidden" id="refreshTimeCnt" name="refreshTimeCnt" value="-1"/>
 			<div class="infobox"> 
 				<ul>
 					<li><spring:message code="help.dashboard" /> </li>

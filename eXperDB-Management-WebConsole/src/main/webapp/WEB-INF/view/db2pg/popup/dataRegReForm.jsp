@@ -33,12 +33,16 @@
 $(window.document).ready(function() {
 	 if("${exrt_trg_tb_cnt}">0){
 		 $("#src_tables option:eq(0)").attr("selected", "selected");
-		 $("#src_include_tables").val("${exrt_trg_tb_cnt}개");
+		 //$("#src_include_tables").val("${exrt_trg_tb_cnt}개");		 
+		 $("#src_include_tables").val("총 테이블 : ${exrt_trg_tb_total_cnt} 개 중   /   ${exrt_trg_tb_cnt}개 선택됨");
+		 $("#src_table_total_cnt").val("${exrt_trg_tb_total_cnt}");
 		 $("#include").show();
 		 $("#exclude").hide();
 	 }else if("${exrt_exct_tb_cnt}">0){
 		 $("#src_tables option:eq(1)").attr("selected", "selected");
-		 $("#src_exclude_tables").val("${exrt_exct_tb_cnt}개");
+		 //$("#src_exclude_tables").val("${exrt_exct_tb_cnt}개");
+		 $("#src_exclude_tables").val("총 테이블 : ${exrt_exct_tb_total_cnt} 개 중   /   ${exrt_exct_tb_cnt}개 선택됨");
+		 $("#src_table_total_cnt").val("${exrt_exct_tb_total_cnt}")
 		 $("#exclude").show();
 		 $("#include").hide(); 
 	 }	
@@ -91,6 +95,7 @@ function fn_update_work(){
 		  		src_cnd_qry : $("#src_cnd_qry").val(),
 		  		usr_qry_use_tf : $('input[name="usr_qry_use_tf"]:checked').val(),
 		  		db2pg_usr_qry : $("#db2pg_usr_qry").val(),
+		  		src_table_total_cnt : $('#src_table_total_cnt').val(),
 		  		wrk_id : $("#wrk_id").val()
 		  	},
 			type : "post",
@@ -222,13 +227,15 @@ function fn_tableList(gbn){
  });
 
 
-function fn_tableAddCallback(rowList, tableGbn){
+function fn_tableAddCallback(rowList, tableGbn, totalCnt){
 	if(tableGbn == 'include'){
-		$('#src_include_tables').val(rowList.length+"개");
+		$('#src_include_tables').val("총 테이블 : "+totalCnt+ "개 중   /   "+rowList.length+"개 선택됨");
 		$('#src_include_table_nm').val(rowList);
+		$('#src_table_total_cnt').val(totalCnt);
 	}else{
-		$('#src_exclude_tables').val(rowList.length+"개");
+		$('#src_exclude_tables').val("총 테이블 : "+totalCnt+ "개 중   /   "+rowList.length+"개 선택됨");
 		$('#src_exclude_table_nm').val(rowList);
+		$('#src_table_total_cnt').val(totalCnt);
 	}
 }
 </script>
@@ -239,14 +246,15 @@ function fn_tableAddCallback(rowList, tableGbn){
 	<input type="hidden" name="db2pg_trg_sys_id" id="db2pg_trg_sys_id" value="${db2pg_trg_sys_id}"/>
 	<input type="hidden" name="src_include_table_nm"  id="src_include_table_nm" value="${exrt_trg_tb_nm}">
 	<input type="hidden" name="src_exclude_table_nm"  id="src_exclude_table_nm" value="${exrt_exct_tb_nm}">
+	<input type="hidden" name="src_table_total_cnt" id="src_table_total_cnt">
 	<input type="hidden" name="tableGbn"  id="tableGbn" >
 </form>
 <div class="pop_container">
 	<div class="pop_cts">
-		<p class="tit">데이터이행 등록</p>
+		<p class="tit">Migration 등록</p>
 		<div class="pop_cmm">
 			<table class="write">
-				<caption>데이터이행 등록</caption>
+				<caption>Migration 등록</caption>
 				<colgroup>
 					<col style="width:105px;" />
 					<col />
@@ -308,17 +316,17 @@ function fn_tableAddCallback(rowList, tableGbn){
 						<table class="write">
 							<caption>옵션정보</caption>
 							<colgroup>
-								<col style="width:28%" />
+								<col style="width:40%" />
+								<col style="width:20%" />
 								<col style="width:30%" />
-								<col style="width:32%" />
 								</col>
 							</colgroup>
 							<tbody>
 								<tr>
 									<th scope="row" class="ico_t2">
 										<select name="src_tables" id="src_tables" class="select t5" style="width: 176px;" >
-											<option value="include">추출 대상 테이블</option>
-											<option value="exclude">추출 제외 테이블</option>
+											<option value="include">대상 테이블</option>
+											<option value="exclude">제외 테이블</option>
 										</select>
 									</th>
 									<td colspan="2">
@@ -333,19 +341,19 @@ function fn_tableAddCallback(rowList, tableGbn){
 									</td>
 								</tr>
 								<tr>
-									<th scope="row" class="ico_t2">추출 데이터 Fetch 사이즈</th>
+									<th scope="row" class="ico_t2">데이터 Fetch 사이즈</th>
 									<td><input type="number" class="txt t8" name="exrt_dat_ftch_sz" id="exrt_dat_ftch_sz" value="${exrt_dat_ftch_sz}" min="3000"/></td>
 									<th scope="row" class="ico_t2">데이터 Fetch 버퍼 사이즈(단위 MIB)</th>
 									<td><input type="number" class="txt t8" name="dat_ftch_bff_sz" id="dat_ftch_bff_sz" value="${dat_ftch_bff_sz}" min="10"/></td>
 								</tr>
 								<tr>
-									<th scope="row" class="ico_t2">추출 병렬처리 개수</th>
+									<th scope="row" class="ico_t2">병렬처리 개수</th>
 									<td><input type="number" class="txt t8" name="exrt_prl_prcs_ecnt" id="exrt_prl_prcs_ecnt" value="${exrt_prl_prcs_ecnt}" min="1"/></td>
-									<th scope="row" class="ico_t2">LOB 데이터 LOB 버퍼 사이즈(단위 MIB)</th>
+									<th scope="row" class="ico_t2">LOB 버퍼 사이즈(단위 MIB)</th>
 									<td><input type="number" class="txt t8" name="lob_dat_bff_sz" id="lob_dat_bff_sz" value="${lob_dat_bff_sz}" min="100"/></td>
 								</tr>
 								<tr>
-									<th scope="row" class="ico_t2">테이블에서 추출할 데이터 건수</th>
+									<th scope="row" class="ico_t2">테이블에서 추출할 데이터 건수(defult=-1 전체)</th>
 									<td><input type="number" class="txt t8" name="exrt_dat_cnt" id="exrt_dat_cnt" value="${exrt_dat_cnt}" min="-1"/></td>
 								</tr>								
 							</tbody>
@@ -354,7 +362,7 @@ function fn_tableAddCallback(rowList, tableGbn){
 					<div class="view addOption_inr">
 						<ul>
 							<li style="border-bottom: none;">
-								<p class="op_tit" style="width: 200PX;">추출 조건(WHERE문 제외)</p>
+								<p class="op_tit" style="width: 200PX;">조건문(WHERE절)</p>
 								<span>
 									<div class="textarea_grp">
 										<textarea name="src_cnd_qry" id="src_cnd_qry" style="height: 250px; width: 700px;"><c:out value="${src_cnd_qry}"/></textarea>

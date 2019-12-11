@@ -151,6 +151,13 @@ function fn_pathCheck() {
  ******************************************************** */
 function fn_insert_work(){
 	if(valCheck()){
+		
+		if($("#src_table_total_cnt").val() == ""){
+			var src_table_total_cnt = 0
+		}else{
+			var src_table_total_cnt = $("#src_table_total_cnt").val()
+		}
+
 		//등록하기 전 work명 한번 더 중복 체크
 		$.ajax({
 			url : '/wrk_nmCheck.do',
@@ -169,7 +176,8 @@ function fn_insert_work(){
 						  		db2pg_uchr_lchr_val : $("#db2pg_uchr_lchr_val").val(),
 						  		src_tb_ddl_exrt_tf : $("#src_tb_ddl_exrt_tf").val(),
 						  		src_include_tables : $("#src_include_table_nm").val(),
-						  		src_exclude_tables : $("#src_exclude_table_nm").val()
+						  		src_exclude_tables : $("#src_exclude_table_nm").val(),
+						  		src_table_total_cnt : src_table_total_cnt
 						  	},
 							type : "post",
 							beforeSend: function(xhr) {
@@ -285,13 +293,15 @@ function fn_tableList(gbn){
 		});
  });
  
-function fn_tableAddCallback(rowList, tableGbn){
+function fn_tableAddCallback(rowList, tableGbn, totalCnt){
 	if(tableGbn == 'include'){
-		$('#src_include_tables').val(rowList.length+"개");
+		$('#src_include_tables').val("총 테이블 : "+totalCnt+ "개 중   /   "+rowList.length+"개 선택됨");
 		$('#src_include_table_nm').val(rowList);
+		$('#src_table_total_cnt').val(totalCnt);
 	}else{
-		$('#src_exclude_tables').val(rowList.length+"개");
+		$('#src_exclude_tables').val("총 테이블 : "+totalCnt+ "개 중   /   "+rowList.length+"개 선택됨");
 		$('#src_exclude_table_nm').val(rowList);
+		$('#src_table_total_cnt').val(totalCnt);
 	}
 }
 </script>
@@ -302,13 +312,14 @@ function fn_tableAddCallback(rowList, tableGbn){
 	<input type="hidden" name="src_include_table_nm"  id="src_include_table_nm" >
 	<input type="hidden" name="src_exclude_table_nm"  id="src_exclude_table_nm" >
 	<input type="hidden" name="tableGbn"  id="tableGbn" >
+	<input type="hidden" name="src_table_total_cnt" id="src_table_total_cnt">
 </form>
 <div class="pop_container">
 	<div class="pop_cts">
-		<p class="tit">DDL 추출 등록</p>
+		<p class="tit">DDL 등록</p>
 		<div class="pop_cmm">
 			<table class="write">
-				<caption>DDL 추출 등록</caption>
+				<caption>DDL 등록</caption>
 				<colgroup>
 					<col style="width:105px;" />
 					<col />
@@ -358,7 +369,7 @@ function fn_tableAddCallback(rowList, tableGbn){
 				</colgroup>
 				<tbody>
 					<tr>
-						<th scope="row" class="ico_t2">DDL&데이터 대소문자 지정</th>
+						<th scope="row" class="ico_t2">대소문자 지정</th>
 						<td>
 							<select name="db2pg_uchr_lchr_val" id="db2pg_uchr_lchr_val" class="select t5">
 								<c:forEach var="codeLetter" items="${codeLetter}">
@@ -368,7 +379,7 @@ function fn_tableAddCallback(rowList, tableGbn){
 						</td>
 					</tr>
 					<tr>
-						<th scope="row" class="ico_t2">소스 Table DDL 추출(View 제외) 여부</th>
+						<th scope="row" class="ico_t2">View Table 제외 여부</th>
 						<td>
 							<select name="src_tb_ddl_exrt_tf" id="src_tb_ddl_exrt_tf" class="select t5">
 								<c:forEach var="codeTF" items="${codeTF}">
@@ -380,8 +391,8 @@ function fn_tableAddCallback(rowList, tableGbn){
 					<tr>
 						<th scope="row" class="ico_t2">
 							<select name="src_tables" id="src_tables" class="select t5" style="width: 176px;" >
-								<option value="include">추출 대상 테이블</option>
-								<option value="exclude">추출 제외 테이블</option>
+								<option value="include">대상 테이블</option>
+								<option value="exclude">제외 테이블</option>
 							</select>
 						</th>
 						<td>

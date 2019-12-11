@@ -16,7 +16,7 @@
 /* ********************************************************
  * Tab Click
  ******************************************************** */
-function selectTab(tab){	
+function selectDDL(tab){	
 	if(tab == "table"){
 		$("#tableTab").show();
 		$("#constraintTab").hide();
@@ -52,10 +52,10 @@ function selectTab(tab){
 				<div class="pop_cmm c2 mt25">
 					<div class="addOption_grp">
 						<ul class="tab">
-							<li class="on"><a href="javascript:selectTab('table')">TABLE</a></li>
-							<li><a href="javascript:selectTab('constraint')">CONSTRAINT</a></li>
-							<li><a href="javascript:selectTab('index')">INDEX</a></li>
-							<li><a href="javascript:selectTab('sequence')">SEQUENCE</a></li>
+							<li class="on"><a href="javascript:selectDDL('table')">TABLE</a></li>
+							<li><a href="javascript:selectDDL'constraint')">CONSTRAINT</a></li>
+							<li><a href="javascript:selectDDL('index')">INDEX</a></li>
+							<li><a href="javascript:selectDDL('sequence')">SEQUENCE</a></li>
 						</ul>
 						<div class="tab_view">
 							<div class="view on addOption_inr" id="tableTab">

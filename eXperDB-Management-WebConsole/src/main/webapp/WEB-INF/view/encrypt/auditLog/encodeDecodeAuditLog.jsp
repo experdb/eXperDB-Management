@@ -203,7 +203,7 @@
 					top.location.href="/";
 				}else if(data.resultCode == "8000000003"){
 					alert(data.resultMessage);
-					location.href="/securityKeySet.do";
+					top.location.href="/securityKeySet.do";
 				}else{
 					alert(data.resultMessage +"("+data.resultCode+")");	
 				}

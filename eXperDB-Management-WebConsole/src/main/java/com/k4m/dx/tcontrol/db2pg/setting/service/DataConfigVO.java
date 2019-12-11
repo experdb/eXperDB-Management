@@ -45,6 +45,25 @@ public class DataConfigVO {
 	private String exrt_exct_tb_nm;
 	private String exrt_exct_tb_cnt;
 
+	private int exrt_trg_tb_total_cnt;
+	private int exrt_exct_tb_total_cnt;
+
+	public int getExrt_trg_tb_total_cnt() {
+		return exrt_trg_tb_total_cnt;
+	}
+
+	public void setExrt_trg_tb_total_cnt(int exrt_trg_tb_total_cnt) {
+		this.exrt_trg_tb_total_cnt = exrt_trg_tb_total_cnt;
+	}
+
+	public int getExrt_exct_tb_total_cnt() {
+		return exrt_exct_tb_total_cnt;
+	}
+
+	public void setExrt_exct_tb_total_cnt(int exrt_exct_tb_total_cnt) {
+		this.exrt_exct_tb_total_cnt = exrt_exct_tb_total_cnt;
+	}
+
 	public String getExrt_trg_tb_nm() {
 		return exrt_trg_tb_nm;
 	}

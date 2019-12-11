@@ -103,4 +103,10 @@ public class MenuAuthorityServiceImpl extends EgovAbstractServiceImpl implements
 		return menuAuthorityDAO.transferAuthorityList(menuAuthorityVO);
 	}
 
+
+	@Override
+	public List<MenuAuthorityVO> selectAddMenu(MenuAuthorityVO menuAuthorityVO) {
+		return menuAuthorityDAO.selectAddMenu(menuAuthorityVO);
+	}
+
 }

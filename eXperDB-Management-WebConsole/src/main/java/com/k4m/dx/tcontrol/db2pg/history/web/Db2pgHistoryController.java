@@ -136,4 +136,28 @@ public class Db2pgHistoryController {
 		}
 		return mv;
 	}	
+	
+	/**
+	 * DDL 수행이력 상세보기 화면을 보여준다.
+	 * 
+	 * @param
+	 * @return ModelAndView mv
+	 * @throws Exception
+	 */
+	@RequestMapping(value = "/db2pg/popup/db2pgResultDDL.do")
+	public ModelAndView db2pgResultDDL(@ModelAttribute("historyVO") HistoryVO historyVO, HttpServletRequest request) {
+		ModelAndView mv = new ModelAndView();
+		try {
+			// 화면접근이력 이력 남기기
+//			CmmnUtils.saveHistory(request, historyVO);
+//			historyVO.setExe_dtl_cd("DX-T0018");
+//			historyVO.setMnu_id(33);
+//			accessHistoryService.insertHistory(historyVO);
+
+			mv.setViewName("db2pg/popup/db2pgResultDDL");
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return mv;
+	}	
 }

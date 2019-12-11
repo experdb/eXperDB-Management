@@ -58,7 +58,7 @@ function fn_init() {
 		table.tables().header().to$().find('th:eq(3)').css('min-width', '130px');
 		table.tables().header().to$().find('th:eq(4)').css('min-width', '100px');
 		table.tables().header().to$().find('th:eq(5)').css('min-width', '150px');
-		table.tables().header().to$().find('th:eq(6)').css('min-width', '100px');		
+		table.tables().header().to$().find('th:eq(6)').css('min-width', '80px');		
 		table.tables().header().to$().find('th:eq(7)').css('min-width', '100px');
 		table.tables().header().to$().find('th:eq(8)').css('min-width', '130px');		
 		table.tables().header().to$().find('th:eq(9)').css('min-width', '100px');  
@@ -183,17 +183,17 @@ function fn_regRe_popup(){
 <div id="contents">
 	<div class="contents_wrap">
 		<div class="contents_tit">
-			<h4>DBMS시스템<a href="#n"><img src="../images/ico_tit.png" class="btn_info"/></a></h4>
+			<h4>소스/타겟 DBMS 관리<a href="#n"><img src="../images/ico_tit.png" class="btn_info"/></a></h4>
 			<div class="infobox"> 
 				<ul>
-					<li><spring:message code="help.dbms_management_01" /></li>
-					<li><spring:message code="help.dbms_management_02" /></li>						
+					<li></li>
+					<li></li>						
 				</ul>
 			</div>
 			<div class="location">
 				<ul>
-					<li>DB2PG</li>
-					<li class="on"> DBMS</li>
+					<li>Migration</li> 
+					<li class="on">소스/타겟 DBMS 관리</li>
 				</ul>
 			</div>
 		</div>
@@ -211,12 +211,12 @@ function fn_regRe_popup(){
 					<table class="write">
 						<caption>Source DBMS 조회</caption>
 						<colgroup>
-							<col style="width: 100px;" />
-							<col style="width: 250px;" />
-							<col style="width: 100px;" />
-							<col style="width: 250px;" />
-							<col style="width: 100px;" />
-							<col style="width: 250px;" />
+							<col style="width:10%;" />
+							<col style="width:20%;" />
+							<col style="width:10%;" />
+							<col style="width:20%;" />
+							<col style="width:10%;" />
+							<col style="width:20%;" />
 							<col />
 						</colgroup>
 						<tbody>
@@ -249,7 +249,7 @@ function fn_regRe_popup(){
 								</td>
 								<th scope="row" class="t9">계정</th>
 								<td><input type="text" class="txt t3" name="spr_usr_id" id="spr_usr_id" /></td>
-								<th scope="row" class="t9">스키마</th>
+								<th scope="row" class="t9">Schema</th>
 								<td><input type="text" class="txt t3" name="scm_nm" id="scm_nm" /></td>
 							</tr>
 						</tbody>
@@ -264,10 +264,10 @@ function fn_regRe_popup(){
 								<th width="100">DBMS구분</th>
 								<th width="130">아이피</th>
 								<th width="100">Database</th>
-								<th width="150">스키마</th>
-								<th width="100">포트</th>
+								<th width="150">Schema</th>
+								<th width="80">포트</th>
 								<th width="100">계정</th>
-								<th width="130">케릭터셋</th>
+								<th width="130">캐릭터셋</th>
 								<th width="100"><spring:message code="common.register" /></th>
 								<th width="100"><spring:message code="common.regist_datetime" /></th>
 								<th width="100"><spring:message code="common.modifier" /></th>

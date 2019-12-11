@@ -195,19 +195,31 @@ public class MenuAuthorityController {
 	@SuppressWarnings("unused")
 	@RequestMapping(value = "/selectUsrmnuautList.do")
 	@ResponseBody
-	public List<MenuAuthorityVO> selectUsrmnuautList(@ModelAttribute("menuAuthorityVO") MenuAuthorityVO menuAuthorityVO, HttpServletResponse response) {
+	public List<MenuAuthorityVO> selectUsrmnuautList(@ModelAttribute("userVo") UserVO userVo, @ModelAttribute("menuAuthorityVO") MenuAuthorityVO menuAuthorityVO, HttpServletResponse response) {
 		
 		//해당메뉴 권한 조회 (공통메소드호출),
 		CmmnUtils cu = new CmmnUtils();
 		menuAut = cu.selectMenuAut(menuAuthorityService, "MN000501");
 				
 		List<MenuAuthorityVO> resultSet = null;
+		List<MenuAuthorityVO> addMenu = null;
 		try {		
 			//읽기 권한이 없는경우 에러페이지 호출 [추후 Exception 처리예정]
 			if(menuAut.get(0).get("read_aut_yn").equals("N")){
 				response.sendRedirect("/autError.do");
 				return resultSet;
 			}else{
+				
+				addMenu=menuAuthorityService.selectAddMenu(menuAuthorityVO);
+				
+				//추가된 메뉴조회 하여, 있을경우 추가된 메뉴 권한 N, 등록
+				if(addMenu.size() > 0){
+					for(int i =0; i<addMenu.size(); i++){
+						userVo.setMnu_id(addMenu.get(i).getMnu_id());
+						menuAuthorityService.insertUsrmnuaut(userVo);
+					}
+				}
+				
 				resultSet = menuAuthorityService.selectUsrmnuautList(menuAuthorityVO);		
 			}	
 		} catch (Exception e) {

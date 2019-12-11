@@ -30,6 +30,25 @@ public class DDLConfigVO {
 	private String exrt_exct_tb_cnt;
 	private int wrk_id;
 
+	private int exrt_trg_tb_total_cnt;
+	private int exrt_exct_tb_total_cnt;
+
+	public int getExrt_trg_tb_total_cnt() {
+		return exrt_trg_tb_total_cnt;
+	}
+
+	public void setExrt_trg_tb_total_cnt(int exrt_trg_tb_total_cnt) {
+		this.exrt_trg_tb_total_cnt = exrt_trg_tb_total_cnt;
+	}
+
+	public int getExrt_exct_tb_total_cnt() {
+		return exrt_exct_tb_total_cnt;
+	}
+
+	public void setExrt_exct_tb_total_cnt(int exrt_exct_tb_total_cnt) {
+		this.exrt_exct_tb_total_cnt = exrt_exct_tb_total_cnt;
+	}
+
 	public int getRownum() {
 		return rownum;
 	}

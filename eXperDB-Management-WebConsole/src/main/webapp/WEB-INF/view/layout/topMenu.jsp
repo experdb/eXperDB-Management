@@ -361,7 +361,7 @@ function fn_cookie(url) {
 			<div id="gnb_menu">
 				<h2 class="blind"><spring:message code="etc.etc10"/></h2>
 				<ul class="depth_1" id="gnb">
-					<li><a href="#n"><span><img src="/images/ico_h_5.png" alt="FUNCTION" /></span></a>
+					<li><a href="#n"><span><img src="/images/ico_function.png" alt="FUNCTION" /></span></a>
 						<ul class="depth_2">
 							<li><a href="#n" id="MN0001"><spring:message code="menu.schedule_information" /></a>
 								<ul class="depth_3">
@@ -378,7 +378,7 @@ function fn_cookie(url) {
 							</li>
 						</ul>
 					</li>
-					<li><a href="#n"><span><img src="/images/ico_h_6.png" alt="ADMIN" /></span></a>
+					<li><a href="#n"><span><img src="/images/ico_admin.png" alt="ADMIN" /></span></a>
 						<ul class="depth_2">
 							<li><a href="#n" id="MN0003"><spring:message code="menu.dbms_information" /></a>
 								<ul class="depth_3">
@@ -412,7 +412,7 @@ function fn_cookie(url) {
 					
 					<c:choose>
 					    <c:when test="${sessionScope.session.encp_use_yn eq 'Y'}">
-					    	<li id="encryptMenu" ><a href="#n" onClick="fn_cookie(null)"><span><img src="/images/encrypt.png" alt="ENCRYPT" /></span></a>				       	
+					    	<li id="encryptMenu" ><a href="#n" onClick="fn_cookie(null)"><span><img src="/images/ico_encrypt.png" alt="ENCRYPT" /></span></a>				       	
 					    </c:when>
 					    <c:otherwise>
 					        <li id="encryptMenu" style="display:none;"><a href="#n" onClick="fn_cookie(null)"><span><img src="/images/encrypt.png" alt="ENCRYPT" /></span></a>
@@ -451,15 +451,15 @@ function fn_cookie(url) {
 						</ul>
 					</li>
 					
-					<li><a href="#n"><span><img src="/images/ico_h_10.png" alt="DB2PG" /></span></a>
+					<li><a href="#n"><span><img src="/images/ico_migration.png" alt="DB2PG" /></span></a>
 						<ul class="depth_2">
-						    <li><a href="/db2pgDBMS.do" onClick="fn_cookie(null)" target="main">DBMS시스템</a></li>
-        					<li><a href="/db2pgSetting.do" onClick="fn_cookie(null)" target="main">DB2PG관리</a></li>
-        					<li><a href="/db2pgHistory.do" onClick="fn_cookie(null)" target="main">DB2PG 수행이력</a></li>
+						    <li><a href="/db2pgDBMS.do" onClick="fn_cookie(null)" target="main">소스/타겟 DBMS 관리</a></li>
+        					<li><a href="/db2pgSetting.do" onClick="fn_cookie(null)" target="main">설정 정보 관리</a></li>
+        					<li><a href="/db2pgHistory.do" onClick="fn_cookie(null)" target="main">수행이력</a></li>
 						</ul>
 					</li>
 					
-					<li><a href="#n"><span><img src="/images/ico_h_7.png" alt="MY PAGE" /></span></a>
+					<li><a href="#n"><span><img src="/images/ico_mypage.png" alt="MY PAGE" /></span></a>
 						<ul class="depth_2">
 						    <li><a href="#n">Language</a>
         						<ul class="depth_3">
@@ -473,7 +473,7 @@ function fn_cookie(url) {
 					</li>
 					<!-- <li><a href="#n" onClick="fn_monitoring();"><span><img src="/images/ico_h_9.png" alt="Monitoring" /></span></a>
 					</li> -->
-					<li><a href="#n"><span><img src="/images/ico_h_8.png" alt="HELP" /></span></a>
+					<li><a href="#n"><span><img src="/images/ico_help.png" alt="HELP" /></span></a>
 						<ul class="depth_2">
 							<!-- <li><a href="#n" onClick="fn_cookie(null)" target="main">Online Help</a></li> -->
 							<li><a href="#n" onClick="fn_aboutExperdb('${sessionScope.session.version}')" >About eXperDB</a></li>

@@ -218,6 +218,7 @@ public class Db2pgSettingController {
 			int wrk_id = 0;
 			String src_include_tables=request.getParameter("src_include_tables");
 			String src_exclude_tables=request.getParameter("src_exclude_tables");
+			int src_table_total_cnt = Integer.parseInt(request.getParameter("src_table_total_cnt"));
 			
 			//1. WORK 등록
 			String time = nowTime();
@@ -239,6 +240,7 @@ public class Db2pgSettingController {
 				exrt_trg_tb_wrk_id=db2pgSettingService.selectExrttrgSrctblsSeq();
 		    	srctableVO.setDb2pg_exrt_trg_tb_wrk_id(exrt_trg_tb_wrk_id);
 		    	srctableVO.setExrt_trg_tb_nm(src_include_tables);
+		    	srctableVO.setSrc_table_total_cnt(src_table_total_cnt);
 				db2pgSettingService.insertExrttrgSrcTb(srctableVO);
 			}
 			
@@ -247,6 +249,7 @@ public class Db2pgSettingController {
 				exrt_exct_tb_wrk_id=db2pgSettingService.selectExrtexctSrctblsSeq();
 		    	srctableVO.setDb2pg_exrt_exct_tb_wrk_id(exrt_exct_tb_wrk_id);
 		    	srctableVO.setExrt_exct_tb_nm(src_exclude_tables);
+		    	srctableVO.setSrc_table_total_cnt(src_table_total_cnt);
 				db2pgSettingService.insertExrtexctSrcTb(srctableVO);
 			}
 			
@@ -396,6 +399,8 @@ public class Db2pgSettingController {
 			mv.addObject("exrt_exct_tb_nm", result.getExrt_exct_tb_nm());
 			mv.addObject("exrt_trg_tb_cnt", result.getExrt_trg_tb_cnt());
 			mv.addObject("exrt_exct_tb_cnt", result.getExrt_exct_tb_cnt());
+			mv.addObject("exrt_trg_tb_total_cnt", result.getExrt_trg_tb_total_cnt());
+			mv.addObject("exrt_exct_tb_total_cnt", result.getExrt_exct_tb_total_cnt());
 			
 			List<CodeVO> codeLetter = db2pgSettingService.selectCode("TC0028");
 			mv.addObject("codeLetter", codeLetter);
@@ -438,7 +443,8 @@ public class Db2pgSettingController {
 			int exrt_exct_tb_wrk_id=0;
 			String src_include_tables=request.getParameter("src_include_tables");
 			String src_exclude_tables=request.getParameter("src_exclude_tables");
-
+			int src_table_total_cnt = Integer.parseInt(request.getParameter("src_table_total_cnt"));
+			
 			//1. WORK 등록
 			String time = nowTime();
 			Properties props = new Properties();
@@ -451,6 +457,7 @@ public class Db2pgSettingController {
 				exrt_trg_tb_wrk_id=db2pgSettingService.selectExrttrgSrctblsSeq();
 		    	srctableVO.setDb2pg_exrt_trg_tb_wrk_id(exrt_trg_tb_wrk_id);
 		    	srctableVO.setExrt_trg_tb_nm(src_include_tables);
+		    	srctableVO.setSrc_table_total_cnt(src_table_total_cnt);
 				db2pgSettingService.insertExrttrgSrcTb(srctableVO);
 			}
 			
@@ -459,6 +466,7 @@ public class Db2pgSettingController {
 				exrt_exct_tb_wrk_id=db2pgSettingService.selectExrtexctSrctblsSeq();
 		    	srctableVO.setDb2pg_exrt_exct_tb_wrk_id(exrt_exct_tb_wrk_id);
 		    	srctableVO.setExrt_exct_tb_nm(src_exclude_tables);
+		    	srctableVO.setSrc_table_total_cnt(src_table_total_cnt);
 				db2pgSettingService.insertExrtexctSrcTb(srctableVO);
 			}
 			
@@ -598,6 +606,7 @@ public class Db2pgSettingController {
 			int wrk_id = 0;
 			String src_include_tables=request.getParameter("src_include_tables");
 			String src_exclude_tables=request.getParameter("src_exclude_tables");
+			int src_table_total_cnt = Integer.parseInt(request.getParameter("src_table_total_cnt"));
 			
 			//1. WORK 등록
 			String time = nowTime();
@@ -619,6 +628,7 @@ public class Db2pgSettingController {
 				exrt_trg_tb_wrk_id=db2pgSettingService.selectExrttrgSrctblsSeq();
 		    	srctableVO.setDb2pg_exrt_trg_tb_wrk_id(exrt_trg_tb_wrk_id);
 		    	srctableVO.setExrt_trg_tb_nm(src_include_tables);
+		    	srctableVO.setSrc_table_total_cnt(src_table_total_cnt);
 				db2pgSettingService.insertExrttrgSrcTb(srctableVO);
 			}
 			
@@ -627,6 +637,7 @@ public class Db2pgSettingController {
 				exrt_exct_tb_wrk_id=db2pgSettingService.selectExrtexctSrctblsSeq();
 		    	srctableVO.setDb2pg_exrt_exct_tb_wrk_id(exrt_exct_tb_wrk_id);
 		    	srctableVO.setExrt_exct_tb_nm(src_exclude_tables);
+		    	srctableVO.setSrc_table_total_cnt(src_table_total_cnt);
 				db2pgSettingService.insertExrtexctSrcTb(srctableVO);
 			}
 			
@@ -843,6 +854,8 @@ public class Db2pgSettingController {
 			mv.addObject("trans_save_pth",result.getTrans_save_pth());
 			mv.addObject("src_cnd_qry",result.getSrc_cnd_qry());
 			mv.addObject("wrk_id",result.getWrk_id());
+			mv.addObject("exrt_trg_tb_total_cnt", result.getExrt_trg_tb_total_cnt());
+			mv.addObject("exrt_exct_tb_total_cnt", result.getExrt_exct_tb_total_cnt());
 			
 			List<CodeVO> codeInputMode = db2pgSettingService.selectCode("TC0030");
 			mv.addObject("codeInputMode", codeInputMode);
@@ -880,6 +893,7 @@ public class Db2pgSettingController {
 			int wrk_id = 0;
 			String src_include_tables=request.getParameter("src_include_tables");
 			String src_exclude_tables=request.getParameter("src_exclude_tables");
+			int src_table_total_cnt = Integer.parseInt(request.getParameter("src_table_total_cnt"));
 			
 			//1. WORK 등록
 			String time = nowTime();
@@ -893,6 +907,7 @@ public class Db2pgSettingController {
 				exrt_trg_tb_wrk_id=db2pgSettingService.selectExrttrgSrctblsSeq();
 		    	srctableVO.setDb2pg_exrt_trg_tb_wrk_id(exrt_trg_tb_wrk_id);
 		    	srctableVO.setExrt_trg_tb_nm(src_include_tables);
+		    	srctableVO.setSrc_table_total_cnt(src_table_total_cnt);
 				db2pgSettingService.insertExrttrgSrcTb(srctableVO);
 			}
 			
@@ -901,6 +916,7 @@ public class Db2pgSettingController {
 				exrt_exct_tb_wrk_id=db2pgSettingService.selectExrtexctSrctblsSeq();
 		    	srctableVO.setDb2pg_exrt_exct_tb_wrk_id(exrt_exct_tb_wrk_id);
 		    	srctableVO.setExrt_exct_tb_nm(src_exclude_tables);
+		    	srctableVO.setSrc_table_total_cnt(src_table_total_cnt);
 				db2pgSettingService.insertExrtexctSrcTb(srctableVO);
 			}
 			
@@ -1140,6 +1156,7 @@ public class Db2pgSettingController {
 			for (int i = 0; i < tables.length; i++) {
 				jsonArray.add(tables[i]);
 			}
+
 			db2pgSysInfVO.setDb2pg_sys_id(Integer.parseInt(request.getParameter("db2pg_sys_id")));
 			resultSet = dbmsService.selectDb2pgDBMS(db2pgSysInfVO);
 		} catch (Exception e2) {

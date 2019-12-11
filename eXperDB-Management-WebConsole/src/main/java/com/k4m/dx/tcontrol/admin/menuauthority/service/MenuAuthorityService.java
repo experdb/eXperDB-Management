@@ -70,5 +70,13 @@ public interface MenuAuthorityService {
 	 */
 	List<MenuAuthorityVO> transferAuthorityList(MenuAuthorityVO menuAuthorityVO);
 
+	
+	/**
+	 * 추가된 메뉴권한 확인
+	 * @param 
+	 * @throws Exception
+	 */
+	List<MenuAuthorityVO> selectAddMenu(MenuAuthorityVO menuAuthorityVO);
+
 
 }

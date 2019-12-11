@@ -24,9 +24,65 @@
 
 var table = null;
 
+var tableDDL = null;
+var tableData = null;
+
+
+/* ********************************************************
+ * Tab Click
+ ******************************************************** */
+function selectTab(tab){	
+	if(tab == "dataWork"){
+		getdataDataList();
+		$("#dataDataTable").show();
+		$("#dataDataTable_wrapper").show();
+		$("#ddlDataTable").hide();
+		$("#ddlDataTable_wrapper").hide();
+		$("#tab1").hide();
+		$("#tab2").show();
+		$("#searchDDL").hide();
+		$("#searchData").show();
+		$("#btnDDL").hide();
+		$("#btnData").show();
+	}else{
+		getddlDataList();
+		$("#ddlDataTable").show();
+		$("#ddlDataTable_wrapper").show();
+		$("#dataDataTable").hide();
+		$("#dataDataTable_wrapper").hide();
+		$("#tab1").show();
+		$("#tab2").hide();
+		$("#searchDDL").show();
+		$("#searchData").hide();
+		$("#btnDDL").show();
+		$("#btnData").hide();
+	}
+}
+
 function fn_init(){
+	tableDDL = $('#ddlDataTable').DataTable({
+		scrollY : "330px",
+		scrollX : true,
+		searching : false,	
+		deferRender : true,
+		bSort: false,
+		columns : [
+			{data : "rownum", defaultContent : "", targets : 0, orderable : false, checkboxes : {'selectRow' : true}}, 
+			{data : "idx", className : "dt-center", defaultContent : ""}, 
+			{data : "db2pg_ddl_wrk_exp", className : "dt-left", defaultContent : ""}, 
+			{data : "dbms_dscd", className : "dt-center", defaultContent : ""}, 
+			{data : "ipadr", className : "dt-center", defaultContent : ""},
+			{data : "dtb_nm", className : "dt-center", defaultContent : ""},
+			{data : "scm_nm", className : "dt-center", defaultContent : ""},
+			{data : "frst_regr_id", className : "dt-center", defaultContent : ""},
+			{data : "frst_reg_dtm", className : "dt-center", defaultContent : ""},
+			{data : "lst_mdfr_id", className : "dt-center", defaultContent : ""},
+			{data : "lst_mdf_dtm", className : "dt-center", defaultContent : ""}
+		],'select': {'style': 'multi'}
+		});
 	
-	table = $('#historyDataTable').DataTable({
+	
+	tableData = $('#dataDataTable').DataTable({
 		scrollY : "330px",
 		scrollX: true,	
 		bDestroy: true,
@@ -98,18 +154,30 @@ function fn_init(){
 	]
 	});
 
-    table.tables().header().to$().find('th:eq(0)').css('min-width', '30px');
-    table.tables().header().to$().find('th:eq(1)').css('min-width', '100px');
-    table.tables().header().to$().find('th:eq(2)').css('min-width', '200px');
-    table.tables().header().to$().find('th:eq(3)').css('min-width', '100px');
-    table.tables().header().to$().find('th:eq(4)').css('min-width', '100px');
-    table.tables().header().to$().find('th:eq(5)').css('min-width', '100px');
-    table.tables().header().to$().find('th:eq(6)').css('min-width', '100px');
-    table.tables().header().to$().find('th:eq(7)').css('min-width', '100px');
-    table.tables().header().to$().find('th:eq(8)').css('min-width', '130px');
-    table.tables().header().to$().find('th:eq(9)').css('min-width', '130px');
-    table.tables().header().to$().find('th:eq(10)').css('min-width', '95px');
-    table.tables().header().to$().find('th:eq(11)').css('min-width', '95px');
+	tableDDL.tables().header().to$().find('th:eq(0)').css('min-width', '10px');
+	tableDDL.tables().header().to$().find('th:eq(1)').css('min-width', '30px');
+	tableDDL.tables().header().to$().find('th:eq(2)').css('min-width', '100px');
+	tableDDL.tables().header().to$().find('th:eq(3)').css('min-width', '200px');
+	tableDDL.tables().header().to$().find('th:eq(4)').css('min-width', '100px');
+	tableDDL.tables().header().to$().find('th:eq(5)').css('min-width', '100px');
+	tableDDL.tables().header().to$().find('th:eq(6)').css('min-width', '100px');
+	tableDDL.tables().header().to$().find('th:eq(7)').css('min-width', '100px');
+	tableDDL.tables().header().to$().find('th:eq(8)').css('min-width', '100px');
+	tableDDL.tables().header().to$().find('th:eq(9)').css('min-width', '100px');
+	tableDDL.tables().header().to$().find('th:eq(10)').css('min-width', '100px');
+	
+	tableData.tables().header().to$().find('th:eq(0)').css('min-width', '30px');
+	tableData.tables().header().to$().find('th:eq(1)').css('min-width', '100px');
+	tableData.tables().header().to$().find('th:eq(2)').css('min-width', '200px');
+	tableData.tables().header().to$().find('th:eq(3)').css('min-width', '100px');
+	tableData.tables().header().to$().find('th:eq(4)').css('min-width', '100px');
+	tableData.tables().header().to$().find('th:eq(5)').css('min-width', '100px');
+	tableData.tables().header().to$().find('th:eq(6)').css('min-width', '100px');
+	tableData.tables().header().to$().find('th:eq(7)').css('min-width', '100px');
+	tableData.tables().header().to$().find('th:eq(8)').css('min-width', '130px');
+	tableData.tables().header().to$().find('th:eq(9)').css('min-width', '130px');
+	tableData.tables().header().to$().find('th:eq(10)').css('min-width', '95px');
+	tableData.tables().header().to$().find('th:eq(11)').css('min-width', '95px');
     
 	$(window).trigger('resize'); 
 }
@@ -122,6 +190,12 @@ $(window.document).ready(
 		
 	function() {	
 		fn_init();
+		getddlDataList();
+		getdataDataList();			
+		$("#ddlDataTable").show();
+		$("#ddlDataTable_wrapper").show();
+		$("#dataDataTable").hide();
+		$("#dataDataTable_wrapper").hide();
 		
 		var today = new Date();
 		var day_end = today.toJSON().slice(0,10);
@@ -131,22 +205,59 @@ $(window.document).ready(
 
 		$("#wrk_strt_dtm").val(day_start);
 		$("#wrk_end_dtm").val(day_end);
+		$("#ddl_wrk_strt_dtm").val(day_start);
+		$("#ddl_wrk_end_dtm").val(day_end);
 		
 		$( ".calendar" ).datepicker({
 			dateFormat: 'yy-mm-dd',
 			changeMonth : true,
 			changeYear : true
 	 	});
-		
-		fn_search();
 	}
 );
 
+/* ********************************************************
+ * DDL 수행이력 데이터 가져오기
+ ******************************************************** */
+function getddlDataList(){
+// 	$.ajax({
+// 		url : "/db2pg/selectDb2pgHistory.do", 
+// 	  	data : {
+// 	  		wrk_nm :  $("#wrk_nm").val(),
+// 	  		exe_rslt_cd : $("#exe_rslt_cd").val()
+// 	  	},
+// 		dataType : "json",
+// 		type : "post",
+// 		beforeSend: function(xhr) {
+// 	        xhr.setRequestHeader("AJAX", true);
+// 	     },
+// 		error : function(xhr, status, error) {
+// 			if(xhr.status == 401) {
+// 				alert("<spring:message code='message.msg02' />");
+// 				top.location.href = "/";
+// 			} else if(xhr.status == 403) {
+// 				alert("<spring:message code='message.msg03' />");
+// 				top.location.href = "/";
+// 			} else {
+// 				alert("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""));
+// 			}
+// 		},
+// 		success : function(data) {
+// 			if(data.length > 0){
+// 				tableDDL.rows({selected: true}).deselect();
+// 				tableDDL.clear().draw();
+// 				tableDDL.rows.add(data).draw();
+// 			}else{
+// 				tableDDL.clear().draw();
+// 			}
+// 		}
+// 	});
+}
 
 /* ********************************************************
- * DB2PG 수행이력 데이터 가져오기
+ * Migration 수행이력 데이터 가져오기
  ******************************************************** */
-function fn_search(){
+function getdataDataList(){
 	$.ajax({
 		url : "/db2pg/selectDb2pgHistory.do", 
 	  	data : {
@@ -171,11 +282,11 @@ function fn_search(){
 		},
 		success : function(data) {
 			if(data.length > 0){
-				table.rows({selected: true}).deselect();
-	 			table.clear().draw();
-	 			table.rows.add(data).draw();
+				tableData.rows({selected: true}).deselect();
+				tableData.clear().draw();
+				tableData.rows.add(data).draw();
 			}else{
-				table.clear().draw();
+				tableData.clear().draw();
 			}
 		}
 	});
@@ -205,7 +316,6 @@ function fn_search(){
 }
 
  function fn_result(imd_exe_sn, trans_save_pth){
-
 	  var frmPop= document.frmPopup;
 	  
 		var width = 950;
@@ -234,29 +344,77 @@ function fn_search(){
 <div id="contents">
 	<div class="contents_wrap">
 		<div class="contents_tit">
-			<h4>DB2PG 수행이력<a href="#n"><img src="/images/ico_tit.png" class="btn_info"/></a></h4>
+			<h4>수행이력<a href="#n"><img src="/images/ico_tit.png" class="btn_info"/></a></h4>
 			<div class="infobox"> 
 				<ul>
-					<li>DB2PG 수행이력 설명</li>
+					<li>수행이력 설명</li>
 					<li></li>	
 				</ul>
 			</div>
 			<div class="location">
 				<ul>
-					<li class="bold">DB2PG 수행이력</li>
-					<li>DB2PG 수행이력</li>
+					<li>Migration</li>
+					<li class="on">수행이력</li>
 				</ul>
 			</div>
 		</div>	
 		<div class="contents">
-
+			<div class="cmm_tab">
+				<ul id="tab1">
+					<li class="atv"><a href="javascript:selectTab('ddlWork')">DDL</a></li>
+					<li><a href="javascript:selectTab('dataWork')">Migration</a></li>
+				</ul>
+				<ul id="tab2" style="display:none;">
+					<li><a href="javascript:selectTab('ddlWork')">DDL</a></li>
+					<li class="atv"><a href="javascript:selectTab('dataWork')">Migration</a></li>
+				</ul>
+			</div>
 			<div class="cmm_grp">
-				<div class="btn_type_01">
-					<span class="btn"><button type="button" id="btnSelect" onclick="fn_search();"><spring:message code="common.search" /></button></span>					
+				<div class="btn_type_float">													
+					<div class="btn_type_01" id="btnDDL">
+						<span class="btn"><button type="button" id="btnSelect" onclick="fn_search();"><spring:message code="common.search" /></button></span>			
+					</div>
+					<div class="btn_type_01" id="btnData" style="display:none;">
+						<span class="btn"><button type="button" id="btnSelect" onclick="fn_search();"><spring:message code="common.search" /></button></span>		
+					</div>
 				</div>
-				
 				<div class="sch_form">
-				<table class="write">
+					<table class="write" id="searchDDL">
+						<caption>검색 조회</caption>
+						<colgroup>
+							<col style="width:110px;" />
+							<col style="width:230px;" />
+							<col style="width:110px;" />
+							<col />
+						</colgroup>
+						<tbody>
+							<tr>
+								<th scope="row" class="t10"><spring:message code="common.work_term" /></th>
+								<td colspan="3">
+									<div class="calendar_area">
+										<a href="#n" class="calendar_btn">달력열기</a>
+										<input type="text" name="ddl_wrk_strt_dtm" id="ddl_wrk_strt_dtm" class="calendar" readonly/>
+										<span class="wave">~</span>
+										<a href="#n" class="calendar_btn">달력열기</a>
+										<input type="text" name="ddl_wrk_end_dtm" id="ddl_wrk_end_dtm" class="calendar" readonly/>
+									</div>
+								</td>
+							</tr>
+							<tr>
+								<th scope="row" class="t9"><spring:message code="common.work_name" /></th>
+								<td><input type="text" name="wrk_nm" id="wrk_nm" class="txt t5" maxlength="25"  /></td>
+								<th scope="row" class="t9"><spring:message code="common.status" /></th>
+								<td>
+									<select name="exe_rslt_cd" id="exe_rslt_cd" class="select t5">
+										<option value=""><spring:message code="schedule.total" /></option>
+										<option value="TC001701"><spring:message code="common.success" /></option>
+										<option value="TC001702"><spring:message code="common.failed" /></option>
+									</select>
+								</td>														
+							</tr>
+						</tbody>
+					</table>
+					<table class="write" id="searchData" style="display:none;">
 						<caption>검색 조회</caption>
 						<colgroup>
 							<col style="width:110px;" />
@@ -277,7 +435,7 @@ function fn_search(){
 									</div>
 								</td>
 							</tr>
-							<tr style="height:35px;">
+							<tr>
 								<th scope="row" class="t9"><spring:message code="common.work_name" /></th>
 								<td><input type="text" name="wrk_nm" id="wrk_nm" class="txt t5" maxlength="25"  /></td>
 								<th scope="row" class="t9"><spring:message code="common.status" /></th>
@@ -294,7 +452,25 @@ function fn_search(){
 				</div>
 				
 				<div class="overflow_area">
-					<table id="historyDataTable" class="display" cellspacing="0" width="100%">
+					<table id="ddlDataTable" class="display" cellspacing="0" width="100%">
+						<caption></caption>
+							<thead>
+								<tr>
+									<th width="30"><spring:message code="common.no" /></th>
+									<th width="100">Work명</th>
+									<th width="200">Work설명</th>
+									<th width="100">아이피</th>
+									<th width="100">DBMS 구분</th>
+									<th width="100">Database</th>
+									<th width="100">작업시작시간</th>
+									<th width="100">작업종료시간</th>
+									<th width="100">작업시간</th>
+									<th width="100">상태</th>
+									<th width="100">결과</th>
+								</tr>
+							</thead>
+						</table>	
+					<table id="dataDataTable" class="display" cellspacing="0" width="100%">
 						<caption></caption>
 							<thead>
 								<tr>
