@@ -25,9 +25,11 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
+import com.k4m.dx.tcontrol.admin.accesshistory.service.AccessHistoryService;
 import com.k4m.dx.tcontrol.backup.service.BackupService;
 import com.k4m.dx.tcontrol.cmmn.AES256;
 import com.k4m.dx.tcontrol.cmmn.AES256_KEY;
+import com.k4m.dx.tcontrol.cmmn.CmmnUtils;
 import com.k4m.dx.tcontrol.cmmn.client.ClientProtocolID;
 import com.k4m.dx.tcontrol.common.service.HistoryVO;
 import com.k4m.dx.tcontrol.db2pg.cmmn.DB2PG_DDL;
@@ -58,6 +60,9 @@ public class Db2pgSettingController {
 	@Autowired
 	private Db2pgHistoryService db2pgHistoryService;
 	
+	@Autowired
+	private AccessHistoryService accessHistoryService;
+	
 	/**
 	 * DB2PG 설정 화면을 보여준다.
 	 * 
@@ -70,11 +75,11 @@ public class Db2pgSettingController {
 	public ModelAndView db2pgSetting(@ModelAttribute("historyVO") HistoryVO historyVO, HttpServletRequest request) {
 		ModelAndView mv = new ModelAndView();
 		try {		
-//			// 화면접근이력 이력 남기기
-//			CmmnUtils.saveHistory(request, historyVO);
-//			historyVO.setExe_dtl_cd("DX-T0137");
-//			historyVO.setMnu_id(12);
-//			accessHistoryService.insertHistory(historyVO);
+			// 화면접근이력 이력 남기기
+			CmmnUtils.saveHistory(request, historyVO);
+			historyVO.setExe_dtl_cd("DX-T0137");
+			historyVO.setMnu_id(41);
+			accessHistoryService.insertHistory(historyVO);
 			
 			List<Map<String, Object>> dbmsGrb = dbmsService.dbmsGrb();
 			mv.addObject("dbmsGrb", dbmsGrb);
@@ -97,12 +102,11 @@ public class Db2pgSettingController {
 		List<DDLConfigVO> resultSet = null;
 		Map<String, Object> param = new HashMap<String, Object>();
 		try {
-
-//			// 화면접근이력 이력 남기기
-//			CmmnUtils.saveHistory(request, historyVO);
-//			historyVO.setExe_dtl_cd("DX-T0137_01");
-//			historyVO.setMnu_id(12);
-//			accessHistoryService.insertHistory(historyVO);
+			// 화면접근이력 이력 남기기
+			CmmnUtils.saveHistory(request, historyVO);
+			historyVO.setExe_dtl_cd("DX-T0137_01");
+			historyVO.setMnu_id(41);
+			accessHistoryService.insertHistory(historyVO);
 
 			String wrk_nm = request.getParameter("wrk_nm");
 			String dbms_dscd = request.getParameter("dbms_dscd");
@@ -122,7 +126,7 @@ public class Db2pgSettingController {
 	}
 	
 	/**
-	 * Data WORK 리스트를 조회한다.
+	 * MIGRATION WORK 리스트를 조회한다.
 	 * 
 	 * @param request
 	 * @return resultSet
@@ -133,12 +137,11 @@ public class Db2pgSettingController {
 		List<DataConfigVO> resultSet = null;
 		Map<String, Object> param = new HashMap<String, Object>();
 		try {
-
-//			// 화면접근이력 이력 남기기
-//			CmmnUtils.saveHistory(request, historyVO);
-//			historyVO.setExe_dtl_cd("DX-T0033_01");
-//			historyVO.setMnu_id(12);
-//			accessHistoryService.insertHistory(historyVO);
+			// 화면접근이력 이력 남기기
+			CmmnUtils.saveHistory(request, historyVO);
+			historyVO.setExe_dtl_cd("DX-T0140_01");
+			historyVO.setMnu_id(41);
+			accessHistoryService.insertHistory(historyVO);
 
 			String wrk_nm = request.getParameter("wrk_nm");
 			String data_dbms_dscd = request.getParameter("data_dbms_dscd");
@@ -172,9 +175,10 @@ public class Db2pgSettingController {
 		ModelAndView mv = new ModelAndView();
 		try {
 			// 화면접근이력 이력 남기기
-//			CmmnUtils.saveHistory(request, historyVO);
-//			historyVO.setExe_dtl_cd("DX-T0138");
-//			accessHistoryService.insertHistory(historyVO);
+			CmmnUtils.saveHistory(request, historyVO);
+			historyVO.setExe_dtl_cd("DX-T0138");
+			historyVO.setMnu_id(41);
+			accessHistoryService.insertHistory(historyVO);
 			
 			List<CodeVO> codeLetter = db2pgSettingService.selectCode("TC0028");
 			mv.addObject("codeLetter", codeLetter);
@@ -201,10 +205,10 @@ public class Db2pgSettingController {
 		JSONObject result = new JSONObject();
 		try {
 			// 화면접근이력 이력 남기기
-//			CmmnUtils.saveHistory(request, historyVO);
-//			historyVO.setExe_dtl_cd("DX-T0138_01");
-//			historyVO.setMnu_id(12);
-//			accessHistoryService.insertHistory(historyVO);
+			CmmnUtils.saveHistory(request, historyVO);
+			historyVO.setExe_dtl_cd("DX-T0138_01");
+			historyVO.setMnu_id(41);
+			accessHistoryService.insertHistory(historyVO);
 			
 			AES256 aes = new AES256(AES256_KEY.ENC_KEY);
 			HttpSession session = request.getSession();
@@ -301,10 +305,10 @@ public class Db2pgSettingController {
 		JSONObject result = new JSONObject();
 		try {
 			// 화면접근이력 이력 남기기
-//			CmmnUtils.saveHistory(request, historyVO);
-//			historyVO.setExe_dtl_cd("DX-T0137_03");
-//			historyVO.setMnu_id(12);
-//			accessHistoryService.insertHistory(historyVO);
+			CmmnUtils.saveHistory(request, historyVO);
+			historyVO.setExe_dtl_cd("DX-T0137_03");
+			historyVO.setMnu_id(41);
+			accessHistoryService.insertHistory(historyVO);
 			
 			AES256 aes = new AES256(AES256_KEY.ENC_KEY);
 			HttpSession session = request.getSession();
@@ -380,9 +384,10 @@ public class Db2pgSettingController {
 		ModelAndView mv = new ModelAndView();
 		try {
 			// 화면접근이력 이력 남기기
-//			CmmnUtils.saveHistory(request, historyVO);
-//			historyVO.setExe_dtl_cd("DX-T0022");
-//			accessHistoryService.insertHistory(historyVO);
+			CmmnUtils.saveHistory(request, historyVO);
+			historyVO.setExe_dtl_cd("DX-T0139");
+			historyVO.setMnu_id(41);
+			accessHistoryService.insertHistory(historyVO);
 			
 			int db2pg_ddl_wrk_id = Integer.parseInt(request.getParameter("db2pg_ddl_wrk_id"));
 			DDLConfigVO result = (DDLConfigVO) db2pgSettingService.selectDetailDDLWork(db2pg_ddl_wrk_id);
@@ -427,10 +432,10 @@ public class Db2pgSettingController {
 		JSONObject result = new JSONObject();
 		try {
 			// 화면접근이력 이력 남기기
-//			CmmnUtils.saveHistory(request, historyVO);
-//			historyVO.setExe_dtl_cd("DX-T0034_01");
-//			historyVO.setMnu_id(12);
-//			accessHistoryService.insertHistory(historyVO);
+			CmmnUtils.saveHistory(request, historyVO);
+			historyVO.setExe_dtl_cd("DX-T0139_01");
+			historyVO.setMnu_id(41);
+			accessHistoryService.insertHistory(historyVO);
 		
 			AES256 aes = new AES256(AES256_KEY.ENC_KEY);
 			HttpSession session = request.getSession();
@@ -517,10 +522,10 @@ public class Db2pgSettingController {
 		int i=0;
 		try {
 			// 화면접근이력 이력 남기기
-//			CmmnUtils.saveHistory(request, historyVO);
-//			historyVO.setExe_dtl_cd("DX-T0033_02");
-//			historyVO.setMnu_id(12);
-//			accessHistoryService.insertHistory(historyVO);
+			CmmnUtils.saveHistory(request, historyVO);
+			historyVO.setExe_dtl_cd("DX-T0137_02");
+			historyVO.setMnu_id(41);
+			accessHistoryService.insertHistory(historyVO);
 			
 			//DB 삭제
 			String[] db2pg_ddl_wrk_id = request.getParameter("db2pg_ddl_wrk_id").toString().split(",");
@@ -548,7 +553,7 @@ public class Db2pgSettingController {
 	}
 	
 	/**
-	 * DATA 이행 등록 화면을 보여준다.
+	 * MIGRATION 등록 화면을 보여준다.
 	 * 
 	 * @param historyVO
 	 * @param request
@@ -560,9 +565,10 @@ public class Db2pgSettingController {
 		ModelAndView mv = new ModelAndView();
 		try {
 			// 화면접근이력 이력 남기기
-//			CmmnUtils.saveHistory(request, historyVO);
-//			historyVO.setExe_dtl_cd("DX-T0022");
-//			accessHistoryService.insertHistory(historyVO);
+			CmmnUtils.saveHistory(request, historyVO);
+			historyVO.setExe_dtl_cd("DX-T0141");
+			historyVO.setMnu_id(41);
+			accessHistoryService.insertHistory(historyVO);
 			
 			List<CodeVO> codeInputMode = db2pgSettingService.selectCode("TC0030");
 			mv.addObject("codeInputMode", codeInputMode);
@@ -576,7 +582,7 @@ public class Db2pgSettingController {
 	}
 	
 	/**
-	 * Data 이행 WORK 등록한다.
+	 * MIGRATION WORK 등록한다.
 	 * 
 	 * @param dataConfigVO
 	 * @param request
@@ -589,10 +595,10 @@ public class Db2pgSettingController {
 		JSONObject result = new JSONObject();
 		try {
 			// 화면접근이력 이력 남기기
-//			CmmnUtils.saveHistory(request, historyVO);
-//			historyVO.setExe_dtl_cd("DX-T0034_01");
-//			historyVO.setMnu_id(12);
-//			accessHistoryService.insertHistory(historyVO);
+			CmmnUtils.saveHistory(request, historyVO);
+			historyVO.setExe_dtl_cd("DX-T0141_01");
+			historyVO.setMnu_id(41);
+			accessHistoryService.insertHistory(historyVO);
 			
 			AES256 aes = new AES256(AES256_KEY.ENC_KEY);
 			HttpSession session = request.getSession();
@@ -607,7 +613,7 @@ public class Db2pgSettingController {
 			String src_include_tables=request.getParameter("src_include_tables");
 			String src_exclude_tables=request.getParameter("src_exclude_tables");
 			int src_table_total_cnt = Integer.parseInt(request.getParameter("src_table_total_cnt"));
-			
+					
 			//1. WORK 등록
 			String time = nowTime();
 			Properties props = new Properties();
@@ -657,6 +663,17 @@ public class Db2pgSettingController {
 			dataConfigVO.setDb2pg_exrt_trg_tb_wrk_id(exrt_trg_tb_wrk_id);
 			dataConfigVO.setDb2pg_exrt_exct_tb_wrk_id(exrt_exct_tb_wrk_id);
 			dataConfigVO.setDb2pg_usr_qry_id(usr_qry_id);
+			
+			//src_cnd_qry where문절에 where, ; 문자 제거
+			if(!dataConfigVO.getSrc_cnd_qry().equals("")){
+				if(dataConfigVO.getSrc_cnd_qry().contains("WHERE")){
+					dataConfigVO.setSrc_cnd_qry(dataConfigVO.getSrc_cnd_qry().replaceAll("WHERE", ""));
+				}else if(dataConfigVO.getSrc_cnd_qry().contains("where")){
+					dataConfigVO.setSrc_cnd_qry(dataConfigVO.getSrc_cnd_qry().replaceAll("where", ""));
+				}else if(dataConfigVO.getSrc_cnd_qry().contains(";")){
+					dataConfigVO.setSrc_cnd_qry(dataConfigVO.getSrc_cnd_qry().replaceAll(";", ""));
+				}
+			}
 			db2pgSettingService.insertDataWork(dataConfigVO);
 			
 			//3. config 파일 만들기
@@ -706,7 +723,7 @@ public class Db2pgSettingController {
 	}
 	
 	/**
-	 * Data 이행 WORK 복제 등록한다.
+	 * MIGRATION WORK 복제 등록한다.
 	 * 
 	 * @param dataConfigVO
 	 * @param request
@@ -719,10 +736,10 @@ public class Db2pgSettingController {
 		JSONObject result = new JSONObject();
 		try {
 			// 화면접근이력 이력 남기기
-//			CmmnUtils.saveHistory(request, historyVO);
-//			historyVO.setExe_dtl_cd("DX-T0034_01");
-//			historyVO.setMnu_id(12);
-//			accessHistoryService.insertHistory(historyVO);
+			CmmnUtils.saveHistory(request, historyVO);
+			historyVO.setExe_dtl_cd("DX-T0140_03");
+			historyVO.setMnu_id(41);
+			accessHistoryService.insertHistory(historyVO);
 			
 			AES256 aes = new AES256(AES256_KEY.ENC_KEY);
 			HttpSession session = request.getSession();
@@ -811,7 +828,7 @@ public class Db2pgSettingController {
 	}
 	
 	/**
-	 * DATA 이행 수정 화면을 보여준다.
+	 * MIGRATION 수정 화면을 보여준다.
 	 * 
 	 * @param historyVO
 	 * @param request
@@ -823,9 +840,10 @@ public class Db2pgSettingController {
 		ModelAndView mv = new ModelAndView();
 		try {
 			// 화면접근이력 이력 남기기
-//			CmmnUtils.saveHistory(request, historyVO);
-//			historyVO.setExe_dtl_cd("DX-T0022");
-//			accessHistoryService.insertHistory(historyVO);
+			CmmnUtils.saveHistory(request, historyVO);
+			historyVO.setExe_dtl_cd("DX-T0142");
+			historyVO.setMnu_id(41);
+			accessHistoryService.insertHistory(historyVO);
 			
 			int db2pg_trsf_wrk_id = Integer.parseInt(request.getParameter("db2pg_trsf_wrk_id"));
 			DataConfigVO result = (DataConfigVO) db2pgSettingService.selectDetailDataWork(db2pg_trsf_wrk_id);
@@ -869,9 +887,9 @@ public class Db2pgSettingController {
 	}
 	
 	/**
-	 * Data 이행 WORK 수정한다.
+	 * MIGRATION WORK 수정한다.
 	 * 
-	 * @param ddlConfigVO
+	 * @param dataConfigVO
 	 * @param request
 	 * @return
 	 * @return
@@ -881,6 +899,12 @@ public class Db2pgSettingController {
 	public @ResponseBody JSONObject updateDataWork(@ModelAttribute("dataConfigVO") DataConfigVO dataConfigVO, HttpServletRequest request, HttpServletResponse response, @ModelAttribute("historyVO") HistoryVO historyVO) {
 		JSONObject result = new JSONObject();
 		try{
+			// 화면접근이력 이력 남기기
+			CmmnUtils.saveHistory(request, historyVO);
+			historyVO.setExe_dtl_cd("DX-T0142_01");
+			historyVO.setMnu_id(41);
+			accessHistoryService.insertHistory(historyVO);
+			
 			AES256 aes = new AES256(AES256_KEY.ENC_KEY);
 			HttpSession session = request.getSession();
 			LoginVO loginVo = (LoginVO) session.getAttribute("session");
@@ -986,7 +1010,7 @@ public class Db2pgSettingController {
 	}
 	
 	/**
-	 * Data WORK를 삭제한다.
+	 * MIGRATION WORK를 삭제한다.
 	 * 
 	 * @param historyVO
 	 * @param request
@@ -999,10 +1023,10 @@ public class Db2pgSettingController {
 		int i=0;
 		try {
 			// 화면접근이력 이력 남기기
-//			CmmnUtils.saveHistory(request, historyVO);
-//			historyVO.setExe_dtl_cd("DX-T0033_02");
-//			historyVO.setMnu_id(12);
-//			accessHistoryService.insertHistory(historyVO);
+			CmmnUtils.saveHistory(request, historyVO);
+			historyVO.setExe_dtl_cd("DX-T0140_02");
+			historyVO.setMnu_id(41);
+			accessHistoryService.insertHistory(historyVO);
 			
 			//DB 삭제
 			String[] db2pg_trsf_wrk_id = request.getParameter("db2pg_trsf_wrk_id").toString().split(",");
@@ -1042,9 +1066,10 @@ public class Db2pgSettingController {
 		List<Map<String, Object>> dbmsGrb;
 		try {
 			// 화면접근이력 이력 남기기
-//			CmmnUtils.saveHistory(request, historyVO);
-//			historyVO.setExe_dtl_cd("DX-T0022");
-//			accessHistoryService.insertHistory(historyVO);
+			CmmnUtils.saveHistory(request, historyVO);
+			historyVO.setExe_dtl_cd("DX-T0144");
+			historyVO.setMnu_id(41);
+			accessHistoryService.insertHistory(historyVO);
 			dbmsGrb = dbmsService.dbmsListDbmsGrb();		
 			mv.addObject("result", dbmsGrb);
 		} catch (Exception e2) {
@@ -1067,9 +1092,10 @@ public class Db2pgSettingController {
 		ModelAndView mv = new ModelAndView();
 		try {
 			// 화면접근이력 이력 남기기
-//			CmmnUtils.saveHistory(request, historyVO);
-//			historyVO.setExe_dtl_cd("DX-T0022");
-//			accessHistoryService.insertHistory(historyVO);
+			CmmnUtils.saveHistory(request, historyVO);
+			historyVO.setExe_dtl_cd("DX-T0144");
+			historyVO.setMnu_id(41);
+			accessHistoryService.insertHistory(historyVO);
 		} catch (Exception e2) {
 			e2.printStackTrace();
 		}
@@ -1111,9 +1137,11 @@ public class Db2pgSettingController {
 		List<Map<String, Object>> dbmsGrb;
 		try {
 			// 화면접근이력 이력 남기기
-//			CmmnUtils.saveHistory(request, historyVO);
-//			historyVO.setExe_dtl_cd("DX-T0022");
-//			accessHistoryService.insertHistory(historyVO);
+			CmmnUtils.saveHistory(request, historyVO);
+			historyVO.setExe_dtl_cd("DX-T0145");
+			historyVO.setMnu_id(41);
+			accessHistoryService.insertHistory(historyVO);
+			
 			dbmsGrb = dbmsService.dbmsListDbmsGrb();		
 			mv.addObject("result", dbmsGrb);
 		} catch (Exception e2) {
@@ -1140,9 +1168,10 @@ public class Db2pgSettingController {
 		String tableGbn = request.getParameter("tableGbn");
 		try {
 			// 화면접근이력 이력 남기기
-//			CmmnUtils.saveHistory(request, historyVO);
-//			historyVO.setExe_dtl_cd("DX-T0022");
-//			accessHistoryService.insertHistory(historyVO);
+			CmmnUtils.saveHistory(request, historyVO);
+			historyVO.setExe_dtl_cd("DX-T0146");
+			historyVO.setMnu_id(41);
+			accessHistoryService.insertHistory(historyVO);
 
 			String[] tables = null;
 			//테이블 구분에 따른 테이블 리스트저장

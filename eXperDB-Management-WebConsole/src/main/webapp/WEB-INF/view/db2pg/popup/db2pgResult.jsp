@@ -89,7 +89,7 @@
 					</caption>
 					<tbody>
 						<tr>
-							<td><textarea name="wrkLogInfo" id="wrkLogInfo" style="height: 180px;" readonly="readonly">${db2pgResult.RESULT}</textarea></td>
+							<td><textarea name="wrkLogInfo" id="wrkLogInfo" style="height: 180px;" readonly="readonly"><c:if test="${db2pgResult.RESULT == null}">파일이 삭제되어 작업로그정보를 출력할 수 없습니다.</c:if>${db2pgResult.RESULT}</textarea></td>
 						</tr>
 					</tbody>
 				</table>

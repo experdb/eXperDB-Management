@@ -346,7 +346,6 @@ function fn_tableAddCallback(rowList, tableGbn, totalCnt){
 			</table>
 		</div>
 		<div class="pop_cmm mt25">
-		<div class="sub_tit"><p>시스템정보</p></div>
 			<table class="write">
 				<colgroup>
 					<col style="width:105px;" />
@@ -373,12 +372,11 @@ function fn_tableAddCallback(rowList, tableGbn, totalCnt){
 		</div>
 
 		<div class="pop_cmm c2 mt25">
-		<div class="sub_tit"><p>소스옵션</p></div>
 			<div class="addOption_grp">
 				<ul class="tab">
-					<li class="on"><a href="#n">옵션 #1</a></li>
-					<li><a href="#n">옵션 #2</a></li>
-					<li><a href="#n">옵션 #3</a></li>
+					<li class="on"><a href="#n">소스 옵션 #1</a></li>
+					<li><a href="#n">소스 옵션 #2</a></li>
+					<li style="display: none;"><a href="#n">옵션 #3</a></li>
 				</ul>
 				<div class="tab_view">
 					<div class="view on addOption_inr">	
@@ -441,7 +439,7 @@ function fn_tableAddCallback(rowList, tableGbn, totalCnt){
 							</li>
 						</ul>
 					</div>
-					<div class="view addOption_inr">
+					<div class="view addOption_inr" style="display: none">
 						<ul>
 							<li style="border-bottom: none;">
 								<p class="op_tit" style="width: 70px;">사용여부</p>
@@ -466,7 +464,6 @@ function fn_tableAddCallback(rowList, tableGbn, totalCnt){
 			</div>
 		</div>
 		<div class="pop_cmm mt25">
-		<div class="sub_tit"><p>타겟옵션</p></div>
 			<table class="write">
 				<caption><spring:message code="dashboard.Register_backup" /></caption>
 				<colgroup>

@@ -1,6 +1,5 @@
 package com.k4m.dx.tcontrol.db2pg.history.web;
 
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -14,6 +13,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
+import com.k4m.dx.tcontrol.admin.accesshistory.service.AccessHistoryService;
+import com.k4m.dx.tcontrol.cmmn.CmmnUtils;
 import com.k4m.dx.tcontrol.common.service.HistoryVO;
 import com.k4m.dx.tcontrol.db2pg.cmmn.DB2PG_LOG;
 import com.k4m.dx.tcontrol.db2pg.history.service.Db2pgHistoryService;
@@ -25,7 +26,9 @@ public class Db2pgHistoryController {
 	@Autowired
 	private Db2pgHistoryService db2pgHistoryService;
 	
-
+	@Autowired
+	private AccessHistoryService accessHistoryService;
+	
 	/**
 	 * DB2PG 수행이력 화면을 보여준다.
 	 * 
@@ -38,6 +41,12 @@ public class Db2pgHistoryController {
 	public ModelAndView db2pgHistory(@ModelAttribute("historyVO") HistoryVO historyVO, HttpServletRequest request) {
 		ModelAndView mv = new ModelAndView();
 		try {			
+			// 화면접근이력 이력 남기기
+			CmmnUtils.saveHistory(request, historyVO);
+			historyVO.setExe_dtl_cd("DX-T0143");
+			historyVO.setMnu_id(42);
+			accessHistoryService.insertHistory(historyVO);
+			
 			mv.setViewName("db2pg/history/db2pgHistory");
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -47,7 +56,7 @@ public class Db2pgHistoryController {
 	
 	
 	/**
-	 * DB2PG HISTORY 리스트를 조회한다.
+	 * Migration 수행이력 상세보기 화면을 보여준다.
 	 * 
 	 * @param request
 	 * @return resultSet
@@ -56,17 +65,14 @@ public class Db2pgHistoryController {
 	@RequestMapping(value = "/db2pg/selectDb2pgHistory.do")
 	public @ResponseBody List<Db2pgHistoryVO> selectDb2pgHistory(@ModelAttribute("historyVO") HistoryVO historyVO, @ModelAttribute("db2pgHistoryVO") Db2pgHistoryVO db2pgHistoryVO, HttpServletRequest request, HttpServletResponse response) {
 		List<Db2pgHistoryVO> resultSet = null;
-		Map<String, Object> param = new HashMap<String, Object>();
 		try {
-
-//			// 화면접근이력 이력 남기기
-//			CmmnUtils.saveHistory(request, historyVO);
-//			historyVO.setExe_dtl_cd("DX-T0033_01");
-//			historyVO.setMnu_id(12);
-//			accessHistoryService.insertHistory(historyVO);
+			// 화면접근이력 이력 남기기
+			CmmnUtils.saveHistory(request, historyVO);
+			historyVO.setExe_dtl_cd("DX-T0143_02");
+			historyVO.setMnu_id(42);
+			accessHistoryService.insertHistory(historyVO);
 
 			resultSet = db2pgHistoryService.selectDb2pgHistory(db2pgHistoryVO);
-			
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -83,15 +89,8 @@ public class Db2pgHistoryController {
 	@RequestMapping(value = "/db2pg/popup/db2pgHistoryDetail.do")
 	public ModelAndView db2pgHistoryDetail(@ModelAttribute("historyVO") HistoryVO historyVO, HttpServletRequest request) {
 		ModelAndView mv = new ModelAndView();
-		Map<String, Object> db2pgResult = null;
 		Db2pgHistoryVO result = null;
 		try {
-			// 화면접근이력 이력 남기기
-//			CmmnUtils.saveHistory(request, historyVO);
-//			historyVO.setExe_dtl_cd("DX-T0018");
-//			historyVO.setMnu_id(33);
-//			accessHistoryService.insertHistory(historyVO);
-			
 			int imd_exe_sn=Integer.parseInt(request.getParameter("imd_exe_sn"));
 
 			result = (Db2pgHistoryVO) db2pgHistoryService.selectDb2pgHistoryDetail(imd_exe_sn);
@@ -116,12 +115,6 @@ public class Db2pgHistoryController {
 		Map<String, Object> db2pgResult = null;
 		Db2pgHistoryVO result = null;
 		try {
-			// 화면접근이력 이력 남기기
-//			CmmnUtils.saveHistory(request, historyVO);
-//			historyVO.setExe_dtl_cd("DX-T0018");
-//			historyVO.setMnu_id(33);
-//			accessHistoryService.insertHistory(historyVO);
-			
 			int imd_exe_sn=Integer.parseInt(request.getParameter("imd_exe_sn"));
 			String trans_save_pth = request.getParameter("trans_save_pth");
 			
@@ -149,10 +142,10 @@ public class Db2pgHistoryController {
 		ModelAndView mv = new ModelAndView();
 		try {
 			// 화면접근이력 이력 남기기
-//			CmmnUtils.saveHistory(request, historyVO);
-//			historyVO.setExe_dtl_cd("DX-T0018");
-//			historyVO.setMnu_id(33);
-//			accessHistoryService.insertHistory(historyVO);
+			CmmnUtils.saveHistory(request, historyVO);
+			historyVO.setExe_dtl_cd("DX-T0143_01");
+			historyVO.setMnu_id(42);
+			accessHistoryService.insertHistory(historyVO);
 
 			mv.setViewName("db2pg/popup/db2pgResultDDL");
 		} catch (Exception e) {

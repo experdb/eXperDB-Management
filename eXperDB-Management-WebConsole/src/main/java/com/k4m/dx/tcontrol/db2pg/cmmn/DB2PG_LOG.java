@@ -1,6 +1,7 @@
 package com.k4m.dx.tcontrol.db2pg.cmmn;
 
 import java.io.BufferedReader;
+import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -22,7 +23,7 @@ public class DB2PG_LOG {
 
 	public DB2PG_LOG(){}
 	
-	public static  Map<String, Object> db2pgFile(String logPath) throws Exception {
+	public static Map<String, Object> db2pgFile(String logPath) throws Exception {
 		Process process = null;
         Runtime runtime = Runtime.getRuntime();
         StringBuffer successOutput = new StringBuffer(); // 성공 스트링 버퍼
@@ -38,6 +39,11 @@ public class DB2PG_LOG {
 	
 		String path = logPath+"/result;";
 		
+		File f = new File(path);
+		if(!f.exists()) {
+			return result;       
+		}
+
 		String strCmd ="cd "+path+" ls -Art | tail -n 1";
 		
 		System.out.println("1. 파일 찾기 명령어 = "+strCmd);

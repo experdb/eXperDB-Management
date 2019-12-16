@@ -288,6 +288,19 @@ $(window.document).ready(function() {
 						}
 					} 
 				 
+				 
+				 if((result[39].mnu_cd == "MN00015" &&  result[39].read_aut_yn == "N")){
+					 document.getElementById("MN00015").style.display = 'none';
+				 }
+				 
+				 if((result[40].mnu_cd == "MN00016" &&  result[40].read_aut_yn == "N")){
+					 document.getElementById("MN00016").style.display = 'none';
+				 }
+				 
+				 if((result[41].mnu_cd == "MN00017" &&  result[41].read_aut_yn == "N")){
+					 document.getElementById("MN00017").style.display = 'none';
+				 }
+				 
 			}
 		}
 	});    
@@ -453,9 +466,9 @@ function fn_cookie(url) {
 					
 					<li><a href="#n"><span><img src="/images/ico_migration.png" alt="DB2PG" /></span></a>
 						<ul class="depth_2">
-						    <li><a href="/db2pgDBMS.do" onClick="fn_cookie(null)" target="main">소스/타겟 DBMS 관리</a></li>
-        					<li><a href="/db2pgSetting.do" onClick="fn_cookie(null)" target="main">설정 정보 관리</a></li>
-        					<li><a href="/db2pgHistory.do" onClick="fn_cookie(null)" target="main">수행이력</a></li>
+						    <li><a href="/db2pgDBMS.do" id="MN00015" onClick="fn_cookie(null)" target="main">소스/타겟 DBMS 관리</a></li>
+        					<li><a href="/db2pgSetting.do" id="MN00016" onClick="fn_cookie(null)" target="main">설정 정보 관리</a></li>
+        					<li><a href="/db2pgHistory.do" id="MN00017" onClick="fn_cookie(null)" target="main">수행이력</a></li>
 						</ul>
 					</li>
 					

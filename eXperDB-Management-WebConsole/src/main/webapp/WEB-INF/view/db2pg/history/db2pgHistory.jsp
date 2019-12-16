@@ -77,7 +77,20 @@ function fn_init(){
 			{data : "frst_regr_id", className : "dt-center", defaultContent : ""},
 			{data : "frst_reg_dtm", className : "dt-center", defaultContent : ""},
 			{data : "lst_mdfr_id", className : "dt-center", defaultContent : ""},
-			{data : "lst_mdf_dtm", className : "dt-center", defaultContent : ""}
+			{
+				data : "exe_rslt_nm",
+				className : "dt-center",
+				render : function(data, type, full, meta) {
+					var html = "";
+					if (data == "Success") {
+						 html += "<span class='btn btnC_01 btnF_02'><button onclick='fn_ddlResult("+full.imd_exe_sn+",\""+full.trans_save_pth+"\")'><img src='../images/ico_state_02.png' style='margin-right:3px;'>Success</button></span>";
+					} else {
+						html += "<span class='btn btnC_01 btnF_02'><button onclick='fn_log("+full.imd_exe_sn+")'><img src='../images/ico_state_01.png' style='margin-right:3px;'>Fail</button></span>";
+					}
+					return html;
+				},
+				defaultContent : ""
+			}
 		],'select': {'style': 'multi'}
 		});
 	
@@ -139,7 +152,6 @@ function fn_init(){
 				var html = "";
 				if (data == "Success") {
 					 html += "<span class='btn btnC_01 btnF_02'><button onclick='fn_result("+full.imd_exe_sn+",\""+full.trans_save_pth+"\")'><img src='../images/ico_state_02.png' style='margin-right:3px;'>Success</button></span>";
-					
 				} else {
 					html += "<span class='btn btnC_01 btnF_02'><button onclick='fn_log("+full.imd_exe_sn+")'><img src='../images/ico_state_01.png' style='margin-right:3px;'>Fail</button></span>";
 				}
@@ -220,38 +232,38 @@ $(window.document).ready(
  * DDL 수행이력 데이터 가져오기
  ******************************************************** */
 function getddlDataList(){
-// 	$.ajax({
-// 		url : "/db2pg/selectDb2pgHistory.do", 
-// 	  	data : {
-// 	  		wrk_nm :  $("#wrk_nm").val(),
-// 	  		exe_rslt_cd : $("#exe_rslt_cd").val()
-// 	  	},
-// 		dataType : "json",
-// 		type : "post",
-// 		beforeSend: function(xhr) {
-// 	        xhr.setRequestHeader("AJAX", true);
-// 	     },
-// 		error : function(xhr, status, error) {
-// 			if(xhr.status == 401) {
-// 				alert("<spring:message code='message.msg02' />");
-// 				top.location.href = "/";
-// 			} else if(xhr.status == 403) {
-// 				alert("<spring:message code='message.msg03' />");
-// 				top.location.href = "/";
-// 			} else {
-// 				alert("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""));
-// 			}
-// 		},
-// 		success : function(data) {
-// 			if(data.length > 0){
-// 				tableDDL.rows({selected: true}).deselect();
-// 				tableDDL.clear().draw();
-// 				tableDDL.rows.add(data).draw();
-// 			}else{
-// 				tableDDL.clear().draw();
-// 			}
-// 		}
-// 	});
+	$.ajax({
+		url : "/db2pg/selectDb2pgHistory.do", 
+	  	data : {
+	  		wrk_nm :  $("#wrk_nm").val(),
+	  		exe_rslt_cd : $("#exe_rslt_cd").val()
+	  	},
+		dataType : "json",
+		type : "post",
+		beforeSend: function(xhr) {
+	        xhr.setRequestHeader("AJAX", true);
+	     },
+		error : function(xhr, status, error) {
+			if(xhr.status == 401) {
+				alert("<spring:message code='message.msg02' />");
+				top.location.href = "/";
+			} else if(xhr.status == 403) {
+				alert("<spring:message code='message.msg03' />");
+				top.location.href = "/";
+			} else {
+				alert("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""));
+			}
+		},
+		success : function(data) {
+			if(data.length > 0){
+				tableDDL.rows({selected: true}).deselect();
+				tableDDL.clear().draw();
+				tableDDL.rows.add(data).draw();
+			}else{
+				tableDDL.clear().draw();
+			}
+		}
+	});
 }
 
 /* ********************************************************
@@ -333,6 +345,25 @@ function getdataDataList(){
 	    frmPop.imd_exe_sn.value = imd_exe_sn;  
 	    frmPop.submit();   
 }
+ 
+ function fn_ddlResult(imd_exe_sn, trans_save_pth){
+	  var frmPop= document.frmPopup;
+	  
+		var width = 950;
+		var height = 690;
+		var left = (window.screen.width / 2) - (width / 2);
+		var top = (window.screen.height /2) - (height / 2);
+		var popOption = "width="+width+", height="+height+", top="+top+", left="+left+", resizable=no, scrollbars=yes, status=no, toolbar=no, titlebar=yes, location=no,";
+		
+	    var url = '/db2pg/popup/db2pgResultDDL.do';
+	    window.open('','popupView',popOption);  
+	     
+	    frmPop.action = url;
+	    frmPop.target = 'popupView';
+	    frmPop.trans_save_pth.value = trans_save_pth;
+	    frmPop.imd_exe_sn.value = imd_exe_sn;  
+	    frmPop.submit();  
+ }
 </script>
 <%@include file="../popup/db2pgConfigInfo.jsp"%>
 <form name="frmPopup">
@@ -347,8 +378,7 @@ function getdataDataList(){
 			<h4>수행이력<a href="#n"><img src="/images/ico_tit.png" class="btn_info"/></a></h4>
 			<div class="infobox"> 
 				<ul>
-					<li>수행이력 설명</li>
-					<li></li>	
+					<li><spring:message code="help.shedule_execution_history" /></li>
 				</ul>
 			</div>
 			<div class="location">

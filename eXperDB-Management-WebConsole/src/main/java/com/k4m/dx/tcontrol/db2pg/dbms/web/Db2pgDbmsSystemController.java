@@ -20,10 +20,12 @@ import org.springframework.web.servlet.ModelAndView;
 
 import com.k4m.dx.tcontrol.accesscontrol.service.AccessControlHistoryVO;
 import com.k4m.dx.tcontrol.accesscontrol.service.AccessControlVO;
+import com.k4m.dx.tcontrol.admin.accesshistory.service.AccessHistoryService;
 import com.k4m.dx.tcontrol.admin.dbserverManager.service.DbServerManagerService;
 import com.k4m.dx.tcontrol.admin.dbserverManager.service.DbServerVO;
 import com.k4m.dx.tcontrol.cmmn.AES256;
 import com.k4m.dx.tcontrol.cmmn.AES256_KEY;
+import com.k4m.dx.tcontrol.cmmn.CmmnUtils;
 import com.k4m.dx.tcontrol.cmmn.client.ClientInfoCmmn;
 import com.k4m.dx.tcontrol.cmmn.client.ClientProtocolID;
 import com.k4m.dx.tcontrol.common.service.AgentInfoVO;
@@ -46,6 +48,9 @@ public class Db2pgDbmsSystemController {
 	@Autowired
 	private CmmnServerInfoService cmmnServerInfoService;
 	
+	@Autowired
+	private AccessHistoryService accessHistoryService;
+	
 	private List<Map<String, Object>> dbmsGrb;
 	private List<Map<String, Object>> dbmsChar;
 	
@@ -60,7 +65,13 @@ public class Db2pgDbmsSystemController {
 	@RequestMapping(value = "/db2pgDBMS.do")
 	public ModelAndView db2pgDBMS(@ModelAttribute("historyVO") HistoryVO historyVO, HttpServletRequest request) {
 		ModelAndView mv = new ModelAndView();
-		try {						
+		try {
+			// 화면접근이력 이력 남기기
+			CmmnUtils.saveHistory(request, historyVO);
+			historyVO.setExe_dtl_cd("DX-T0134");
+			historyVO.setMnu_id(40);
+			accessHistoryService.insertHistory(historyVO);
+			
 			dbmsGrb = dbmsService.dbmsListDbmsGrb();		
 			
 			mv.addObject("result", dbmsGrb);
@@ -88,6 +99,12 @@ public class Db2pgDbmsSystemController {
 		HashMap<String , Object> paramvalue = new HashMap<String, Object>();
 		
 		try {				
+			// 화면접근이력 이력 남기기
+			CmmnUtils.saveHistory(request, historyVO);
+			historyVO.setExe_dtl_cd("DX-T0136");
+			historyVO.setMnu_id(40);
+			accessHistoryService.insertHistory(historyVO);
+			
 			AES256 dec = new AES256(AES256_KEY.ENC_KEY);
 			
 			dbmsGrb = dbmsService.dbmsGrb();
@@ -133,6 +150,11 @@ public class Db2pgDbmsSystemController {
 	public ModelAndView dbmsRegForm(@ModelAttribute("historyVO") HistoryVO historyVO, HttpServletRequest request) {
 		ModelAndView mv = new ModelAndView();
 		try {				
+			// 화면접근이력 이력 남기기
+			CmmnUtils.saveHistory(request, historyVO);
+			historyVO.setExe_dtl_cd("DX-T0135");
+			historyVO.setMnu_id(40);
+			accessHistoryService.insertHistory(historyVO);
 			
 			dbmsGrb = dbmsService.dbmsGrb();
 		
@@ -160,6 +182,12 @@ public class Db2pgDbmsSystemController {
 		List<Db2pgSysInfVO> resultSet = null;
 		
 		try {
+			// 화면접근이력 이력 남기기
+			CmmnUtils.saveHistory(request, historyVO);
+			historyVO.setExe_dtl_cd("DX-T0134_01");
+			historyVO.setMnu_id(40);
+			accessHistoryService.insertHistory(historyVO);
+			
 			resultSet = dbmsService.selectDb2pgDBMS(db2pgSysInfVO);
 		}catch(Exception e){
 			e.printStackTrace();
@@ -388,6 +416,12 @@ public class Db2pgDbmsSystemController {
 		// 해당메뉴 권한 조회 (공통메소드호출)
 		
 		try {
+			// 화면접근이력 이력 남기기
+			CmmnUtils.saveHistory(request, historyVO);
+			historyVO.setExe_dtl_cd("DX-T0135_01");
+			historyVO.setMnu_id(40);
+			accessHistoryService.insertHistory(historyVO);
+			
 			AES256 aes = new AES256(AES256_KEY.ENC_KEY);
 			
 			HttpSession session = request.getSession();
@@ -429,6 +463,12 @@ public class Db2pgDbmsSystemController {
 		// 해당메뉴 권한 조회 (공통메소드호출)
 		
 		try {
+			// 화면접근이력 이력 남기기
+			CmmnUtils.saveHistory(request, historyVO);
+			historyVO.setExe_dtl_cd("DX-T0136_01");
+			historyVO.setMnu_id(40);
+			accessHistoryService.insertHistory(historyVO);
+			
 			AES256 aes = new AES256(AES256_KEY.ENC_KEY);
 			
 			HttpSession session = request.getSession();

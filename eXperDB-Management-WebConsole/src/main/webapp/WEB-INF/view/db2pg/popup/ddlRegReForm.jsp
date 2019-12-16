@@ -269,7 +269,6 @@ function fn_tableAddCallback(rowList, tableGbn, totalCnt){
 			</table>
 		</div>
 		<div class="pop_cmm mt25">
-		<div class="sub_tit"><p>시스템정보</p></div>
 			<table class="write">
 				<colgroup>
 					<col style="width:105px;" />

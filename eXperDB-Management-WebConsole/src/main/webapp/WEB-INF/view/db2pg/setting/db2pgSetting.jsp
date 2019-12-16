@@ -696,8 +696,8 @@ function fn_ImmediateStart(gbn){
 			<h4>설정정보관리<a href="#n"><img src="/images/ico_tit.png" class="btn_info"/></a></h4>
 			<div class="infobox"> 
 				<ul>
-					<li>설정정보관리 설명</li>
-					<li></li>	
+					<li>서버에 생성된 설정정보관리 작업을 조회하거나 신규로 등록 또는 삭제 합니다.</li>
+					<li>조회 목록에서 Work명을 클릭하면 Configuration 정보를 조회할 수 있습니다.</li>	
 				</ul>
 			</div>
 			<div class="location">

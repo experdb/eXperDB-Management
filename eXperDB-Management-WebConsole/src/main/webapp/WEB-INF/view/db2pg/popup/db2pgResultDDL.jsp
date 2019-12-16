@@ -55,7 +55,17 @@ function fn_init() {
 		{data : "idx", className : "dt-center", defaultContent : ""},
 		{data : "idx", className : "dt-center", defaultContent : ""},
 		{data : "idx", className : "dt-center", defaultContent : ""},
-		{data : "idx", className : "dt-center", defaultContent : ""}
+		{data : "idx", className : "dt-center", defaultContent : ""},
+		{
+			data : "idx",
+			className : "dt-center",
+			render : function(data, type, full, meta) {
+				var html = "";
+				html += "<span class='btn btnC_01 btnF_02'><button onclick='fn_download()'><img src='../images/ico_state_02.png' style='margin-right:3px;'>다운로드</button></span>";
+				return html;
+			},
+			defaultContent : ""
+		}
 		]
 	});
 		
@@ -64,6 +74,7 @@ function fn_init() {
 		table.tables().header().to$().find('th:eq(2)').css('min-width', '300px');
 		table.tables().header().to$().find('th:eq(3)').css('min-width', '100px');
 		table.tables().header().to$().find('th:eq(4)').css('min-width', '200px');
+		table.tables().header().to$().find('th:eq(5)').css('min-width', '100px');
 		
 		$(window).trigger('resize'); 
 }
@@ -149,13 +160,14 @@ function getDataList(){
 				<p class="pop_s_tit">파일 정보</p>
 					<div class="overflow_area">
 						<table id="fileList" class="display" cellspacing="0" width="100%">
-								<thead>
+							<thead>
 								<tr>
 									<th width="30"><spring:message code="common.no" /></th>
 									<th width="100" class="dt-center">파일명</th>
 									<th width="300" class="dt-center">경로</th>
 									<th width="100" class="dt-center">사이즈</th>
 									<th width="200" class="dt-center">생성일시</th>
+									<th width="100" class="dt-center">다운로드</th>
 								</tr>
 							</thead>
 						</table>
