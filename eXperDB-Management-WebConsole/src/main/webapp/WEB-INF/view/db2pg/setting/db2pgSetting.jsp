@@ -611,21 +611,30 @@ function fn_copy_save(){
 }
  
 /* ********************************************************
- * 즉시실행
+ * 즉시실행 DDL 
  ******************************************************** */
 function fn_ImmediateStart(gbn){
 	var db2pgGbn = gbn;
 	if(gbn == 'ddl'){
+		var datas = tableDDL.rows('.selected').data();
 		var rowCnt = tableDDL.rows('.selected').data().length;
-		var ddl_save_pth = tableDDL.row('.selected').data().ddl_save_pth;
-		var dtb_nm = tableDDL.row('.selected').data().dtb_nm;
 
-		if (rowCnt == 1) {
+		var dataSet=[];
+		
+		if (rowCnt > 0) {
+			alert(rowCnt+" 개의 Work를 실행하였습니다.");		
+			for (var i = 0; i < datas.length; i++) {
+				 var row = new Object()
+				 row.wrk_id = datas[i].wrk_id;
+				 row.wrk_nm = datas[i].db2pg_ddl_wrk_nm;
+				 row.mig_dscd = "TC003201";
+				 row.gbn = gbn;
+				 dataSet.push(row);
+			}
 			$.ajax({
-				url : "/db2pg/immediateStart.do",
+				url : "/db2pg/ImmediateExe.do",
 			  	data : {
-			  		wrk_id : tableDDL.row('.selected').data().wrk_id,
-			  		wrk_nm : tableDDL.row('.selected').data().db2pg_ddl_wrk_nm		  		
+			  		datas : JSON.stringify(dataSet)	  		
 			  	},
 				type : "post",
 				beforeSend: function(xhr) {
@@ -643,41 +652,64 @@ function fn_ImmediateStart(gbn){
 					}
 				},
 				success : function(result) {
-					fn_db2pgDDLResultLayer(ddl_save_pth,dtb_nm);
+					if (confirm('실행결과화면으로 이동하시겠습니까?')){
+						location.href='/db2pgHistory.do' ;
+					}
 				}
 			});			
-		} else {
-			alert("<spring:message code='message.msg04' />");
+		}else {
+			alert("<spring:message code='message.msg35' />");
 			return false;
-		}
-	}else{
+		}	
+	}else{		
+/* ********************************************************
+ * 즉시실행 Migration
+ ******************************************************** */			
+		var datas = tableData.rows('.selected').data();
 		var rowCnt = tableData.rows('.selected').data().length;
-		if (rowCnt == 1) {					
-			$.ajax({
-				url : "/db2pg/immediateStart.do",
-			  	data : {
-			  		wrk_id : tableData.row('.selected').data().wrk_id,
-			  		wrk_nm : tableData.row('.selected').data().db2pg_trsf_wrk_nm		  		
-			  	},
-				type : "post",
-				beforeSend: function(xhr) {
-			        xhr.setRequestHeader("AJAX", true);
-			     },
-				error : function(xhr, status, error) {
-					if(xhr.status == 401) {
-						alert('<spring:message code="message.msg02" />');
-						top.location.href = "/";
-					} else if(xhr.status == 403) {
-						alert('<spring:message code="message.msg03" />');
-						top.location.href = "/";
-					} else {
-						alert("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""));
+		
+		var dataSet=[];
+		
+		if (rowCnt > 0) {				
+			alert(rowCnt+" 개의 Work를 실행하였습니다.");		
+			/* ********************************************************
+			 * 실행조건 필요(여러개의 WORK중 동일한 테이블 있을시, Alert알림 실행X)
+			 * 경우의 수가 너무 많음 추후 고려
+			 ******************************************************** */				
+				for (var i = 0; i < datas.length; i++) {
+					 var row = new Object()
+					 row.wrk_id = datas[i].wrk_id;
+					 row.wrk_nm = datas[i].db2pg_trsf_wrk_nm;
+					 row.mig_dscd = "TC003202";
+					 row.gbn = gbn;
+					 dataSet.push(row);
+				}			
+				$.ajax({
+					url : "/db2pg/ImmediateExe.do",
+				  	data : {
+				  		datas : JSON.stringify(dataSet)	  		
+				  	},
+					type : "post",
+					beforeSend: function(xhr) {
+				        xhr.setRequestHeader("AJAX", true);
+				     },
+					error : function(xhr, status, error) {
+						if(xhr.status == 401) {
+							alert('<spring:message code="message.msg02" />');
+							top.location.href = "/";
+						} else if(xhr.status == 403) {
+							alert('<spring:message code="message.msg03" />');
+							top.location.href = "/";
+						} else {
+							alert("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""));
+						}
+					},
+					success : function(result) {
+						if (confirm('실행결과화면으로 이동하시겠습니까?')){
+							location.href='/db2pgHistory.do' ;
+						}
 					}
-				},
-				success : function(result) {
-					alert(result.RESULT);
-				}
-			});	
+				});	
 		} else {
 			alert("<spring:message code='message.msg04' />");
 			return false;

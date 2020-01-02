@@ -4,15 +4,15 @@
 <mapper namespace="db2pgHistorySql">
 
 
-	<insert id="insertImdExe" parameterType="hashmap">
+	<insert id="insertMigExe" parameterType="hashmap">
 		/**
 		* Query ID : insertImdExe
-		* Description : 즉실실행로그 등록
+		* Description : 이행로그 등록
 		* Author : 변승우
 		**/	
-		INSERT INTO t_imdexe_g
+		INSERT INTO T_MIGEXE_G
 		(
-			imd_exe_sn
+			mig_exe_sn
 			, wrk_id
 			, wrk_strt_dtm
 			, wrk_end_dtm
@@ -22,10 +22,11 @@
 			, frst_reg_dtm
 			, lst_mdfr_id
 			, lst_mdf_dtm
+			, mig_dscd
 		)
 		VALUES
 		(
-		  nextval('q_t_imdexe_g_01')
+		  nextval('q_t_migexe_g_01')
 		, #{wrk_id}::numeric
 		, #{wrk_strt_dtm}	
 		, #{wrk_end_dtm}
@@ -35,8 +36,27 @@
 		, clock_timestamp()
 		, #{lst_mdfr_id}
 		, clock_timestamp()
+		, #{mig_dscd}
 		)		
 	</insert>
+	
+	
+		<update id="updateMigExe" parameterType="hashmap">
+		/**
+		* Query ID : updateMigExe
+		* Description : 이행로그 수정
+		* Author : 변승우
+		**/
+			UPDATE T_MIGEXE_G SET
+	 			wrk_end_dtm = #{wrk_end_dtm}
+	 			, exe_rslt_cd = #{exe_rslt_cd}
+	 			, rslt_msg = #{rslt_msg}
+	 			, lst_mdfr_id = #{lst_mdfr_id}
+	 			, lst_mdf_dtm = clock_timestamp()
+	 		WHERE 1=1
+	 		AND WRK_ID = #{wrk_id}::numeric
+	 		AND WRK_STRT_DTM = #{wrk_strt_dtm}
+		</update>
 	
 	
 	<select id="selectDb2pgHistory" resultType="db2pgHistoryVO" parameterType="db2pgHistoryVO">
@@ -107,6 +127,123 @@
 			ORDER BY IMDEXE.LST_MDF_DTM DESC
 		)A			
 	</select>
+	
+	
+	<select id="selectDb2pgDDLHistory" resultType="db2pgHistoryVO" parameterType="db2pgHistoryVO">
+		/**
+		* Query ID : selectDb2pgDDLHistory
+		* Description : DDL 수행이력 조회
+		* Author : 변승우
+		**/
+		SELECT
+			  (ROW_NUMBER() OVER()) AS ROWNUM
+			, (ROW_NUMBER() OVER()) AS IDX
+			, A.DB2PG_DDL_WRK_ID
+			, A.IMD_EXE_SN
+			, A.WRK_ID
+			, A.WRK_NM
+			, A.WRK_EXP
+			, A.SOURCE_DBMS_DSCD
+			, A.SOURCE_DBMS_DSCD_NM
+			, A.SOURCE_IPADR
+			, A.SOURCE_DTB_NM
+			, A.WRK_STRT_DTM
+			, A.WRK_END_DTM
+			, A.WRK_DTM
+			, A.EXE_RSLT_CD
+			, A.LST_MDFR_ID
+		FROM(
+				SELECT 
+				 				IMDEXE.MIG_EXE_SN AS IMD_EXE_SN
+				 				, DDL_WRK_INF.DB2PG_DDL_WRK_ID AS DB2PG_DDL_WRK_ID
+				 				, IMDEXE.WRK_ID 								
+				 				, WRKCNG.WRK_NM
+								, WRKCNG.WRK_EXP
+				 				, SOURCE_SYS_INF.DBMS_DSCD AS SOURCE_DBMS_DSCD
+								,(SELECT SYS_CD_NM FROM T_SYSDTL_C WHERE SYS_CD=SOURCE_SYS_INF.DBMS_DSCD) AS SOURCE_DBMS_DSCD_NM
+								, SOURCE_SYS_INF.IPADR AS SOURCE_IPADR
+								, SOURCE_SYS_INF.DTB_NM AS SOURCE_DTB_NM
+					            , TO_CHAR(TO_TIMESTAMP(IMDEXE.WRK_STRT_DTM,'YYYYMMDDHH24MISS'), 'YYYY-MM-DD HH24:MI:SS') AS WRK_STRT_DTM
+								, TO_CHAR(TO_TIMESTAMP(IMDEXE.WRK_END_DTM,'YYYYMMDDHH24MISS'), 'YYYY-MM-DD HH24:MI:SS') AS WRK_END_DTM			
+								,  EXTRACT(EPOCH FROM(TO_TIMESTAMP(IMDEXE.WRK_END_DTM,'YYYYMMDDHH24MISS')-TO_TIMESTAMP(IMDEXE.WRK_STRT_DTM,'YYYYMMDDHH24MISS')))||'(SEC)' AS WRK_DTM
+								, IMDEXE.EXE_RSLT_CD		
+								,(SELECT SYS_CD_NM FROM T_SYSDTL_C WHERE SYS_CD=IMDEXE.EXE_RSLT_CD) AS EXE_RSLT_C		
+								, IMDEXE.LST_MDFR_ID
+				FROM T_DB2PG_DDL_WRK_INF DDL_WRK_INF
+				LEFT OUTER JOIN T_WRKCNG_I WRKCNG ON DDL_WRK_INF.WRK_ID = WRKCNG.WRK_ID
+				LEFT OUTER JOIN T_DB2PG_SYS_INF SOURCE_SYS_INF ON DDL_WRK_INF.DB2PG_SYS_ID = SOURCE_SYS_INF.DB2PG_SYS_ID
+				JOIN T_MIGEXE_G IMDEXE ON DDL_WRK_INF.WRK_ID = IMDEXE.WRK_ID
+				WHERE 1=1
+				<if test="exe_rslt_cd != null and exe_rslt_cd != '' ">
+		      		AND IMDEXE.EXE_RSLT_CD=#{exe_rslt_cd}
+		      	</if>  
+		      	<if test="wrk_nm != null and wrk_nm != '' ">
+		      		AND WRKCNG.WRK_NM=#{wrk_nm}
+		      	</if>    
+				ORDER BY IMDEXE.LST_MDF_DTM DESC
+		)A		
+	</select>
+	
+	
+	<select id="selectDb2pgMigHistory" resultType="db2pgHistoryVO" parameterType="db2pgHistoryVO">			
+		SELECT
+				  (ROW_NUMBER() OVER()) AS ROWNUM
+				, (ROW_NUMBER() OVER()) AS IDX
+				, A.DB2PG_TRSF_WRK_ID
+				, A.IMD_EXE_SN
+				, A.WRK_ID
+				, A.WRK_NM
+				, A.WRK_EXP
+				, A.SOURCE_DBMS_DSCD
+				, A.SOURCE_DBMS_DSCD_NM
+				, A.SOURCE_IPADR
+				, A.SOURCE_DTB_NM
+				, A.TARGET_DBMS_DSCD
+				, A.TARGET_DBMS_DSCD_NM
+				, A.TARGET_IPADR
+				, A.TARGET_DTB_NM
+				, A.WRK_STRT_DTM
+				, A.WRK_END_DTM
+				, A.WRK_DTM
+				, A.EXE_RSLT_CD
+				, A.LST_MDFR_ID
+		FROM(
+					SELECT 
+					 				IMDEXE.MIG_EXE_SN AS IMD_EXE_SN
+					 				, TRSF_WRK_INF.DB2PG_TRSF_WRK_ID AS DB2PG_TRSF_WRK_ID
+					 				, IMDEXE.WRK_ID 								
+					 				, WRKCNG.WRK_NM
+									, WRKCNG.WRK_EXP								
+					 				, SOURCE_SYS_INF.DBMS_DSCD AS SOURCE_DBMS_DSCD
+									,(SELECT SYS_CD_NM FROM T_SYSDTL_C WHERE SYS_CD=SOURCE_SYS_INF.DBMS_DSCD) AS SOURCE_DBMS_DSCD_NM
+									, SOURCE_SYS_INF.IPADR AS SOURCE_IPADR
+									, SOURCE_SYS_INF.DTB_NM AS SOURCE_DTB_NM							
+									, TARGET_SYS_INF.DBMS_DSCD AS TARGET_DBMS_DSCD
+									,(SELECT SYS_CD_NM FROM T_SYSDTL_C WHERE SYS_CD=TARGET_SYS_INF.DBMS_DSCD) AS TARGET_DBMS_DSCD_NM
+									, TARGET_SYS_INF.IPADR AS TARGET_IPADR
+									, TARGET_SYS_INF.DTB_NM AS TARGET_DTB_NM	
+						            , TO_CHAR(TO_TIMESTAMP(IMDEXE.WRK_STRT_DTM,'YYYYMMDDHH24MISS'), 'YYYY-MM-DD HH24:MI:SS') AS WRK_STRT_DTM
+									, TO_CHAR(TO_TIMESTAMP(IMDEXE.WRK_END_DTM,'YYYYMMDDHH24MISS'), 'YYYY-MM-DD HH24:MI:SS') AS WRK_END_DTM			
+									,  EXTRACT(EPOCH FROM(TO_TIMESTAMP(IMDEXE.WRK_END_DTM,'YYYYMMDDHH24MISS')-TO_TIMESTAMP(IMDEXE.WRK_STRT_DTM,'YYYYMMDDHH24MISS')))||'(SEC)' AS WRK_DTM
+									, IMDEXE.EXE_RSLT_CD		
+									,(SELECT SYS_CD_NM FROM T_SYSDTL_C WHERE SYS_CD=IMDEXE.EXE_RSLT_CD) AS EXE_RSLT_C		
+									, IMDEXE.LST_MDFR_ID
+					FROM T_DB2PG_TRSF_WRK_INF TRSF_WRK_INF
+					LEFT OUTER JOIN T_WRKCNG_I WRKCNG ON TRSF_WRK_INF.WRK_ID = WRKCNG.WRK_ID
+					LEFT OUTER JOIN T_DB2PG_SYS_INF SOURCE_SYS_INF ON TRSF_WRK_INF.DB2PG_SRC_SYS_ID = SOURCE_SYS_INF.DB2PG_SYS_ID
+					LEFT OUTER JOIN T_DB2PG_SYS_INF TARGET_SYS_INF ON TRSF_WRK_INF.DB2PG_TRG_SYS_ID = TARGET_SYS_INF.DB2PG_SYS_ID
+					JOIN T_MIGEXE_G IMDEXE ON TRSF_WRK_INF.WRK_ID = IMDEXE.WRK_ID
+					WHERE 1=1
+					<if test="exe_rslt_cd != null and exe_rslt_cd != '' ">
+			      		AND IMDEXE.EXE_RSLT_CD=#{exe_rslt_cd}
+			      	</if>  
+			      	<if test="wrk_nm != null and wrk_nm != '' ">
+			      		AND WRKCNG.WRK_NM=#{wrk_nm}
+			      	</if>    
+					ORDER BY IMDEXE.LST_MDF_DTM DESC
+		)A		
+	</select>
+	
 
 	<select id="selectDb2pgHistoryDetail" resultType="db2pgHistoryVO" parameterType="int">
 		/**
@@ -144,4 +281,10 @@
 		AND IMDEXE.IMD_EXE_SN=#{imd_exe_sn}			
 	</select>	
 	
+	
+		<select id="lastMigExe" resultType="int" >
+			SELECT
+				COALESCE(MAX(MIG_EXE_SN),0) AS MIG_EXE_SN
+			FROM T_MIGEXE_G
+		</select>
 </mapper>

@@ -4,11 +4,14 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.sql.SQLException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Properties;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -16,6 +19,8 @@ import javax.servlet.http.HttpSession;
 
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
+import org.json.simple.parser.JSONParser;
+import org.json.simple.parser.ParseException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.util.ResourceUtils;
@@ -32,7 +37,7 @@ import com.k4m.dx.tcontrol.cmmn.AES256_KEY;
 import com.k4m.dx.tcontrol.cmmn.CmmnUtils;
 import com.k4m.dx.tcontrol.cmmn.client.ClientProtocolID;
 import com.k4m.dx.tcontrol.common.service.HistoryVO;
-import com.k4m.dx.tcontrol.db2pg.cmmn.DB2PG_DDL;
+import com.k4m.dx.tcontrol.db2pg.cmmn.DB2PG_ImmediateExe;
 import com.k4m.dx.tcontrol.db2pg.cmmn.DB2PG_START;
 import com.k4m.dx.tcontrol.db2pg.cmmn.DatabaseTableInfo;
 import com.k4m.dx.tcontrol.db2pg.dbms.service.Db2pgSysInfVO;
@@ -1301,8 +1306,6 @@ public class Db2pgSettingController {
 		param.put("frst_regr_id", id);
 		param.put("lst_mdfr_id", id);
 
-		db2pgHistoryService.insertImdExe(param);
-		
 	}catch (Exception e) {
 		 result.put("RESULT", "FAIL");
 		e.printStackTrace();
@@ -1361,29 +1364,48 @@ public class Db2pgSettingController {
 	
 	
 	/**
-	 * DB2PG DDL 호출
+	 * DB2PG 즉시실행
 	 * 
 	 * @return result
+	 * @throws ParseException 
 	 * @throws Exception
 	 */
-	@RequestMapping(value="/db2pg/db2pgDdlCall.do")
-	public @ResponseBody Map<String, Object> db2pgDdlCall(@ModelAttribute("historyVO") HistoryVO historyVO, HttpServletRequest request) throws SQLException {
+	@RequestMapping(value="/db2pg/ImmediateExe.do")
+	public @ResponseBody Map<String, Object> ImmediateExe(@ModelAttribute("historyVO") HistoryVO historyVO, HttpServletRequest request) throws SQLException, ParseException {
 		Map<String, Object> result = null;
+		List<DB2PG_ImmediateExe> ddlList = new ArrayList<DB2PG_ImmediateExe>();
 
-		try {
-		String ddl_save_pth = request.getParameter("ddl_save_pth");	
-		String dtb_nm = request.getParameter("dtb_nm");	
-					
-		JSONObject obj = new JSONObject();
-		obj.put("ddl_save_pth", ddl_save_pth);		
-		obj.put("dtb_nm", dtb_nm);	
 		
-		//DDL
-		result  = DB2PG_DDL.db2pgDDL(obj);
+		HttpSession session = request.getSession();
+		LoginVO loginVo = (LoginVO) session.getAttribute("session");
+		String id = loginVo.getUsr_id();
+		
+		String strRows = request.getParameter("datas").toString().replaceAll("&quot;", "\"");
+		JSONArray rows = (JSONArray) new JSONParser().parse(strRows);
+					
+		//ExecuterServer 쓰레드 갯수설정
+		ExecutorService executorService = Executors.newFixedThreadPool(rows.size());
+		
+		try {		
+			for(int i=0; i<rows.size(); i++){
+				JSONObject obj = (JSONObject) rows.get(i);		
+				
+				String gbn = obj.get("gbn").toString();
+				String wrk_id = obj.get("wrk_id").toString();
+				String wrk_nm =obj.get("wrk_nm").toString();
+				String mig_dscd =obj.get("mig_dscd").toString();
+				
+				DB2PG_ImmediateExe ddl = DB2PG_ImmediateExe.getInstance(wrk_id,wrk_nm, mig_dscd, id, gbn);
+				ddlList.add(ddl);
+				
+				executorService.execute(ddl);	
+			}
 				
 	}catch (Exception e) {
-		 result.put("RESULT", "FAIL");
 		e.printStackTrace();
+		executorService.shutdown();
+	}finally{
+		executorService.shutdown();
 	}
 		return result;
 	}

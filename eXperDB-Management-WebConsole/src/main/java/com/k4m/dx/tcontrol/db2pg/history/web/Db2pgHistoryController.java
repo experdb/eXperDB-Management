@@ -56,6 +56,56 @@ public class Db2pgHistoryController {
 	
 	
 	/**
+	 * DDL 수행이력 조회
+	 * 
+	 * @param request
+	 * @return resultSet
+	 * @throws Exception
+	 */
+	@RequestMapping(value = "/db2pg/selectDb2pgDDLHistory.do")
+	public @ResponseBody List<Db2pgHistoryVO> selectDb2pgDDLHistory(@ModelAttribute("historyVO") HistoryVO historyVO, @ModelAttribute("db2pgHistoryVO") Db2pgHistoryVO db2pgHistoryVO, HttpServletRequest request, HttpServletResponse response) {
+		List<Db2pgHistoryVO> resultSet = null;
+		try {
+			// 화면접근이력 이력 남기기
+			CmmnUtils.saveHistory(request, historyVO);
+			historyVO.setExe_dtl_cd("DX-T0143_02");
+			historyVO.setMnu_id(42);
+			accessHistoryService.insertHistory(historyVO);
+
+			resultSet = db2pgHistoryService.selectDb2pgDDLHistory(db2pgHistoryVO);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return resultSet;
+	}
+	
+	
+	/**
+	 * Migration 수행이력 조회
+	 * 
+	 * @param request
+	 * @return resultSet
+	 * @throws Exception
+	 */
+	@RequestMapping(value = "/db2pg/selectDb2pgMigHistory.do")
+	public @ResponseBody List<Db2pgHistoryVO> selectDb2pgMigHistory(@ModelAttribute("historyVO") HistoryVO historyVO, @ModelAttribute("db2pgHistoryVO") Db2pgHistoryVO db2pgHistoryVO, HttpServletRequest request, HttpServletResponse response) {
+		List<Db2pgHistoryVO> resultSet = null;
+		try {
+			// 화면접근이력 이력 남기기
+			CmmnUtils.saveHistory(request, historyVO);
+			historyVO.setExe_dtl_cd("DX-T0143_02");
+			historyVO.setMnu_id(42);
+			accessHistoryService.insertHistory(historyVO);
+
+			resultSet = db2pgHistoryService.selectDb2pgMigHistory(db2pgHistoryVO);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return resultSet;
+	}
+	
+	
+	/**
 	 * Migration 수행이력 상세보기 화면을 보여준다.
 	 * 
 	 * @param request

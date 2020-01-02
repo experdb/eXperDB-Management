@@ -69,33 +69,39 @@ function fn_init(){
 		columns : [
 			{data : "rownum", defaultContent : "", targets : 0, orderable : false, checkboxes : {'selectRow' : true}}, 
 			{data : "idx", className : "dt-center", defaultContent : ""}, 
-			{data : "db2pg_ddl_wrk_exp", className : "dt-left", defaultContent : ""}, 
-			{data : "dbms_dscd", className : "dt-center", defaultContent : ""}, 
-			{data : "ipadr", className : "dt-center", defaultContent : ""},
-			{data : "dtb_nm", className : "dt-center", defaultContent : ""},
-			{data : "scm_nm", className : "dt-center", defaultContent : ""},
-			{data : "frst_regr_id", className : "dt-center", defaultContent : ""},
-			{data : "frst_reg_dtm", className : "dt-center", defaultContent : ""},
-			{data : "lst_mdfr_id", className : "dt-center", defaultContent : ""},
-			{
-				data : "exe_rslt_nm",
-				className : "dt-center",
-				render : function(data, type, full, meta) {
-					var html = "";
-					if (data == "Success") {
-						 html += "<span class='btn btnC_01 btnF_02'><button onclick='fn_ddlResult("+full.imd_exe_sn+",\""+full.trans_save_pth+"\")'><img src='../images/ico_state_02.png' style='margin-right:3px;'>Success</button></span>";
-					} else {
-						html += "<span class='btn btnC_01 btnF_02'><button onclick='fn_log("+full.imd_exe_sn+")'><img src='../images/ico_state_01.png' style='margin-right:3px;'>Fail</button></span>";
-					}
-					return html;
+			{data : "wrk_nm", className : "dt-left", defaultContent : ""}, 
+			{data : "wrk_exp", className : "dt-left", defaultContent : ""}, 
+			{data : "source_ipadr", className : "dt-center", defaultContent : ""},
+			{data : "source_dbms_dscd_nm", className : "dt-center", defaultContent : ""}, 
+			{data : "source_dtb_nm", className : "dt-center", defaultContent : ""},
+			{data : "wrk_strt_dtm", className : "dt-center", defaultContent : ""},
+			{data : "wrk_end_dtm", className : "dt-center", defaultContent : ""},
+			{data : "wrk_dtm", className : "dt-center", defaultContent : ""},
+		   	{
+					data : "exe_rslt_cd",
+					render : function(data, type, full, meta) {	 						
+						var html = '';
+						if (full.exe_rslt_cd == 'TC001701') {
+							html += '<span class="btn btnC_01 btnF_02"><img src="../images/ico_state_02.png" style="margin-right:3px;"/>Success</span>';
+						} else if(full.exe_rslt_cd == 'TC001702'){
+							html += '<span class="btn btnC_01 btnF_02"><button onclick="fn_failLog('+full.exe_sn+')"><img src="../images/ico_state_01.png" style="margin-right:3px;"/>Fail</button></span>';
+						} else {
+							html +='<span class="btn btnC_01 btnF_02"><img src="../images/ico_state_03.png" style="margin-right:3px;"/><spring:message code="etc.etc28"/></span>';
+						}
+						return html;
+					},
+					className : "dt-center",
+					defaultContent : ""
 				},
-				defaultContent : ""
-			}
+			{data : "lst_mdfr_id", className : "dt-center", defaultContent : ""},
+			{data : "db2pg_trsf_wrk_id", defaultContent : "", visible: false},
+			{data : "wrk_id", defaultContent : "", visible: false},
+			{data : "imd_exe_sn", defaultContent : "", visible: false}
 		],'select': {'style': 'multi'}
 		});
 	
 	
-	tableData = $('#dataDataTable').DataTable({
+	tableData = $('#dataDataTable').DataTable(
 		scrollY : "330px",
 		scrollX: true,	
 		bDestroy: true,
@@ -105,64 +111,38 @@ function fn_init(){
 		deferRender : true,
 		bSort: false,
 	columns : [
+		{data : "rownum", defaultContent : "", targets : 0, orderable : false, checkboxes : {'selectRow' : true}}, 
 		{data : "idx", className : "dt-center", defaultContent : ""}, 
-     	{data : "wrk_nm", className : "dt-left", defaultContent : ""
-			,"render": function (data, type, full) {				
-				  return '<span onClick=javascript:fn_db2pgConfigLayer("'+full.wrk_nm+'"); class="bold">' + full.wrk_nm + '</span>';
-			}
-		},
-		{data : "wrk_exp", className : "dt-center", defaultContent : ""}, 
-		{
-			data : "source_dbms_dscd",
-			className : "dt-center",
-			render : function(data, type, full, meta) {
-				var html = "";
-				if (data == "TC002201") {
-					html += "Oracle";
-				}else if(data == "TC002202"){
-					html += "MS-SQL";
-				}else if(data == "TC002203"){
-					html += "MySQL";
-				}else if(data == "TC002204"){
-					html += "PostgreSQL";
-				}else if(data == "TC002205"){
-					html += "DB2";
-				}else if(data == "TC002206"){
-					html += "SyBaseASE";
-				}else if(data == "TC002207"){
-					html += "CUBRID";
-				}else if(data == "TC002208"){
-					html += "Tibero";
-				}
-				return html;
-			},
-			defaultContent : ""
-		},
-		{data : "source_ipadr", className : "dt-center", defaultContent : ""}, 
-		{data : "source_dtb_nm", className : "dt-center", defaultContent : ""}, 
+		{data : "wrk_nm", className : "dt-left", defaultContent : ""}, 
+		{data : "wrk_exp", className : "dt-left", defaultContent : ""}, 
+		{data : "source_ipadr", className : "dt-center", defaultContent : ""},
+		{data : "source_dbms_dscd_nm", className : "dt-center", defaultContent : ""}, 
+		{data : "source_dtb_nm", className : "dt-center", defaultContent : ""},		
 		{data : "target_ipadr", className : "dt-center", defaultContent : ""}, 
 		{data : "target_dtb_nm", className : "dt-center", defaultContent : ""},
 		{data : "wrk_strt_dtm", className : "dt-center", defaultContent : ""},
 		{data : "wrk_end_dtm", className : "dt-center", defaultContent : ""},
 		{data : "wrk_dtm", className : "dt-center", defaultContent : ""},
-		{
-			data : "exe_rslt_nm",
-			className : "dt-center",
-			render : function(data, type, full, meta) {
-				var html = "";
-				if (data == "Success") {
-					 html += "<span class='btn btnC_01 btnF_02'><button onclick='fn_result("+full.imd_exe_sn+",\""+full.trans_save_pth+"\")'><img src='../images/ico_state_02.png' style='margin-right:3px;'>Success</button></span>";
-				} else {
-					html += "<span class='btn btnC_01 btnF_02'><button onclick='fn_log("+full.imd_exe_sn+")'><img src='../images/ico_state_01.png' style='margin-right:3px;'>Fail</button></span>";
-				}
-				return html;
+	   	{
+				data : "exe_rslt_cd",
+				render : function(data, type, full, meta) {	 						
+					var html = '';
+					if (full.exe_rslt_cd == 'TC001701') {
+						html += '<span class="btn btnC_01 btnF_02"><img src="../images/ico_state_02.png" style="margin-right:3px;"/>Success</span>';
+					} else if(full.exe_rslt_cd == 'TC001702'){
+						html += '<span class="btn btnC_01 btnF_02"><button onclick="fn_failLog('+full.exe_sn+')"><img src="../images/ico_state_01.png" style="margin-right:3px;"/>Fail</button></span>';
+					} else {
+						html +='<span class="btn btnC_01 btnF_02"><img src="../images/ico_state_03.png" style="margin-right:3px;"/><spring:message code="etc.etc28"/></span>';
+					}
+					return html;
+				},
+				className : "dt-center",
+				defaultContent : ""
 			},
-			defaultContent : ""
-		},
+		{data : "lst_mdfr_id", className : "dt-center", defaultContent : ""},
 		{data : "db2pg_trsf_wrk_id", defaultContent : "", visible: false},
 		{data : "wrk_id", defaultContent : "", visible: false},
-		{data : "imd_exe_sn", defaultContent : "", visible: false},
-		{data : "trans_save_pth", defaultContent : "", visible: false}
+		{data : "imd_exe_sn", defaultContent : "", visible: false}
 	]
 	});
 
@@ -177,6 +157,10 @@ function fn_init(){
 	tableDDL.tables().header().to$().find('th:eq(8)').css('min-width', '100px');
 	tableDDL.tables().header().to$().find('th:eq(9)').css('min-width', '100px');
 	tableDDL.tables().header().to$().find('th:eq(10)').css('min-width', '100px');
+	tableDDL.tables().header().to$().find('th:eq(11)').css('min-width', '100px');
+	tableDDL.tables().header().to$().find('th:eq(12)').css('min-width', '100px');
+	tableDDL.tables().header().to$().find('th:eq(13)').css('min-width', '100px');
+	tableDDL.tables().header().to$().find('th:eq(14)').css('min-width', '100px');
 	
 	tableData.tables().header().to$().find('th:eq(0)').css('min-width', '30px');
 	tableData.tables().header().to$().find('th:eq(1)').css('min-width', '100px');
@@ -186,10 +170,15 @@ function fn_init(){
 	tableData.tables().header().to$().find('th:eq(5)').css('min-width', '100px');
 	tableData.tables().header().to$().find('th:eq(6)').css('min-width', '100px');
 	tableData.tables().header().to$().find('th:eq(7)').css('min-width', '100px');
-	tableData.tables().header().to$().find('th:eq(8)').css('min-width', '130px');
-	tableData.tables().header().to$().find('th:eq(9)').css('min-width', '130px');
-	tableData.tables().header().to$().find('th:eq(10)').css('min-width', '95px');
-	tableData.tables().header().to$().find('th:eq(11)').css('min-width', '95px');
+	tableData.tables().header().to$().find('th:eq(8)').css('min-width', '100px');
+	tableData.tables().header().to$().find('th:eq(9)').css('min-width', '100px');
+	tableData.tables().header().to$().find('th:eq(10)').css('min-width', '100px');
+	tableData.tables().header().to$().find('th:eq(11)').css('min-width', '100px');
+	tableData.tables().header().to$().find('th:eq(12)').css('min-width', '130px');
+	tableData.tables().header().to$().find('th:eq(13)').css('min-width', '130px');
+	tableData.tables().header().to$().find('th:eq(14)').css('min-width', '95px');
+	tableData.tables().header().to$().find('th:eq(15)').css('min-width', '95px');
+	tableData.tables().header().to$().find('th:eq(16)').css('min-width', '95px');
     
 	$(window).trigger('resize'); 
 }
@@ -203,7 +192,7 @@ $(window.document).ready(
 	function() {	
 		fn_init();
 		getddlDataList();
-		getdataDataList();			
+		//getdataDataList();			
 		$("#ddlDataTable").show();
 		$("#ddlDataTable_wrapper").show();
 		$("#dataDataTable").hide();
@@ -233,7 +222,7 @@ $(window.document).ready(
  ******************************************************** */
 function getddlDataList(){
 	$.ajax({
-		url : "/db2pg/selectDb2pgHistory.do", 
+		url : "/db2pg/selectDb2pgDDLHistory.do", 
 	  	data : {
 	  		wrk_nm :  $("#wrk_nm").val(),
 	  		exe_rslt_cd : $("#exe_rslt_cd").val()
@@ -271,7 +260,7 @@ function getddlDataList(){
  ******************************************************** */
 function getdataDataList(){
 	$.ajax({
-		url : "/db2pg/selectDb2pgHistory.do", 
+		url : "/db2pg/selectDb2pgMigHistory.do", 
 	  	data : {
 	  		wrk_nm :  $("#wrk_nm").val(),
 	  		exe_rslt_cd : $("#exe_rslt_cd").val()
@@ -487,6 +476,7 @@ function getdataDataList(){
 							<thead>
 								<tr>
 									<th width="30"><spring:message code="common.no" /></th>
+									<th width="10">NO</th>
 									<th width="100">Work명</th>
 									<th width="200">Work설명</th>
 									<th width="100">아이피</th>
@@ -496,7 +486,10 @@ function getdataDataList(){
 									<th width="100">작업종료시간</th>
 									<th width="100">작업시간</th>
 									<th width="100">상태</th>
-									<th width="100">결과</th>
+									<th width="100">수행자</th>
+									<th width="0"></th>
+									<th width="0"></th>
+									<th width="0"></th>
 								</tr>
 							</thead>
 						</table>	
@@ -513,6 +506,7 @@ function getdataDataList(){
 									<th width="130" rowspan="2">수행종료시간</th>
 									<th width="95" rowspan="2">수행시간(초)</th>
 									<th width="95" rowspan="2">수행결과</th>
+									<th width="95" rowspan="2">수행자</th>
 								</tr>
 								<tr>
 									<th width="100">DBMS 구분</th>

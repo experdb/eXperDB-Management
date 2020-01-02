@@ -250,7 +250,7 @@ public class ScheduleQuartzJob implements Job{
 						vo.setExe_grp_sn(intGrpSeq);
 						
 						scheduleService.insertT_WRKEXE_G(vo);
-						db2pgHistoryService.insertImdExe(param);
+						//db2pgHistoryService.insertImdExe(param);
 					}					
 				}		
 				if(!db2pg.equals("TC001903")){
