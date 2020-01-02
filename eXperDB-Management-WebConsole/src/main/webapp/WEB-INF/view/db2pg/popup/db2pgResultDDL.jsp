@@ -51,17 +51,17 @@ function fn_init() {
 		searching : false,
 		paging : true,	
 		columns : [
-		{data : "rownum", defaultContent : "", targets : 0, orderable : false, checkboxes : {'selectRow' : true}}, 
-		{data : "idx", className : "dt-center", defaultContent : ""},
-		{data : "idx", className : "dt-center", defaultContent : ""},
-		{data : "idx", className : "dt-center", defaultContent : ""},
-		{data : "idx", className : "dt-center", defaultContent : ""},
+		{data : "idx",  className : "dt-center", defaultContent : ""}, 
+		{data : "name", className : "dt-center", defaultContent : ""},
+		{data : "path", className : "dt-left", defaultContent : ""},
+		{data : "size", className : "dt-center", defaultContent : ""},
+		{data : "date", className : "dt-center", defaultContent : ""},
 		{
 			data : "idx",
 			className : "dt-center",
 			render : function(data, type, full, meta) {
 				var html = "";
-				html += "<span class='btn btnC_01 btnF_02'><button onclick='fn_download()'><img src='../images/ico_state_02.png' style='margin-right:3px;'>다운로드</button></span>";
+				html += "<span class='btn btnC_01 btnF_02'><button onclick='fn_download(\""+full.name+"\",\""+full.path+"/\")'>다운로드</button></span>";	
 				return html;
 			},
 			defaultContent : ""
@@ -70,7 +70,7 @@ function fn_init() {
 	});
 		
 		table.tables().header().to$().find('th:eq(0)').css('min-width', '30px');
-		table.tables().header().to$().find('th:eq(1)').css('min-width', '100px');
+		table.tables().header().to$().find('th:eq(1)').css('min-width', '200px');
 		table.tables().header().to$().find('th:eq(2)').css('min-width', '300px');
 		table.tables().header().to$().find('th:eq(3)').css('min-width', '100px');
 		table.tables().header().to$().find('th:eq(4)').css('min-width', '200px');
@@ -88,43 +88,47 @@ $(window.document).ready(function() {
 });
 
 /* ********************************************************
- * DDL 수행이력 상세정보 데이터 가져오기
+ * DDL 수행이력 파일정보 데이터 가져오기
  ******************************************************** */
 function getDataList(){
-// 	$.ajax({
-// 		url : "/db2pg/selectDb2pgHistory.do", 
-// 	  	data : {
-// 	  		wrk_nm :  $("#wrk_nm").val(),
-// 	  		exe_rslt_cd : $("#exe_rslt_cd").val()
-// 	  	},
-// 		dataType : "json",
-// 		type : "post",
-// 		beforeSend: function(xhr) {
-// 	        xhr.setRequestHeader("AJAX", true);
-// 	     },
-// 		error : function(xhr, status, error) {
-// 			if(xhr.status == 401) {
-// 				alert("<spring:message code='message.msg02' />");
-// 				top.location.href = "/";
-// 			} else if(xhr.status == 403) {
-// 				alert("<spring:message code='message.msg03' />");
-// 				top.location.href = "/";
-// 			} else {
-// 				alert("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""));
-// 			}
-// 		},
-// 		success : function(data) {
-// 			if(data.length > 0){
-// 				table.rows({selected: true}).deselect();
-// 				table.clear().draw();
-// 				table.rows.add(data).draw();
-// 			}else{
-// 				table.clear().draw();
-// 			}
-// 		}
-// 	});
+	$.ajax({
+		url : "/db2pg/selectdb2pgResultDDLFile.do", 
+	  	data : {
+	  		trans_save_pth : "${trans_save_pth}"
+	  	},
+		dataType : "json",
+		type : "post",
+		beforeSend: function(xhr) {
+	        xhr.setRequestHeader("AJAX", true);
+	     },
+		error : function(xhr, status, error) {
+			if(xhr.status == 401) {
+				alert("<spring:message code='message.msg02' />");
+				top.location.href = "/";
+			} else if(xhr.status == 403) {
+				alert("<spring:message code='message.msg03' />");
+				top.location.href = "/";
+			} else {
+				alert("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""));
+			}
+		},
+		success : function(data) {
+			if(data.length > 0){
+				table.clear().draw();
+				table.rows.add(data).draw();
+			}else{
+				table.clear().draw();
+			}
+		}
+	});
 }
-	
+
+/* ********************************************************
+ *파일 다운로드
+ ******************************************************** */
+function fn_download(name,path){
+	location.href="/db2pg/popup/db2pgFileDownload.do?name="+name+"&&path="+path;
+}
 </script>
 <body>
 <%@include file="../../cmmn/commonLocale.jsp"%>
@@ -163,7 +167,7 @@ function getDataList(){
 							<thead>
 								<tr>
 									<th width="30"><spring:message code="common.no" /></th>
-									<th width="100" class="dt-center">파일명</th>
+									<th width="200" class="dt-center">파일명</th>
 									<th width="300" class="dt-center">경로</th>
 									<th width="100" class="dt-center">사이즈</th>
 									<th width="200" class="dt-center">생성일시</th>

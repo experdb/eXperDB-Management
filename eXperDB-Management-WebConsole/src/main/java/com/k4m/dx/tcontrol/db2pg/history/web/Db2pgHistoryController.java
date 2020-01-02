@@ -1,5 +1,9 @@
 package com.k4m.dx.tcontrol.db2pg.history.web;
 
+import java.io.File;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -190,17 +194,83 @@ public class Db2pgHistoryController {
 	@RequestMapping(value = "/db2pg/popup/db2pgResultDDL.do")
 	public ModelAndView db2pgResultDDL(@ModelAttribute("historyVO") HistoryVO historyVO, HttpServletRequest request) {
 		ModelAndView mv = new ModelAndView();
+		Db2pgHistoryVO result = null;
 		try {
 			// 화면접근이력 이력 남기기
 			CmmnUtils.saveHistory(request, historyVO);
 			historyVO.setExe_dtl_cd("DX-T0143_01");
 			historyVO.setMnu_id(42);
 			accessHistoryService.insertHistory(historyVO);
-
+			
+			int imd_exe_sn=Integer.parseInt(request.getParameter("imd_exe_sn"));
+			String trans_save_pth = request.getParameter("trans_save_pth");
+			result = (Db2pgHistoryVO) db2pgHistoryService.selectDb2pgHistoryDetail(imd_exe_sn);
+			mv.addObject("result",result);
+			mv.addObject("trans_save_pth",trans_save_pth);
 			mv.setViewName("db2pg/popup/db2pgResultDDL");
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 		return mv;
+	}	
+	
+	/**
+	 * DDL 수행이력 파일 리스트를 조회한다.
+	 * 
+	 * @param historyVO
+	 * @param request
+	 * @param response
+	 * @return
+	 */
+	@RequestMapping(value = "/db2pg/selectdb2pgResultDDLFile.do")
+	public @ResponseBody List<HashMap<String, String>> selectdb2pgResultDDLFile(@ModelAttribute("historyVO") HistoryVO historyVO, HttpServletRequest request, HttpServletResponse response) {
+		List<HashMap<String, String>> result = new ArrayList<HashMap<String, String>>();
+		try {
+			String trans_save_pth = request.getParameter("trans_save_pth");	
+			//TODO local 테스트!!
+			trans_save_pth="C:/test/config";
+			
+			String pattern = "yyyy-MM-dd HH:mm:ss"; 
+			SimpleDateFormat simpleDateFormat = new SimpleDateFormat(pattern);
+			
+			File dirFile = new File(trans_save_pth);
+			File [] fileList = dirFile.listFiles();
+			
+			if(fileList!=null){
+				 for(int i=0; i < fileList.length; i++){
+					 HashMap<String, String> hp = new HashMap<String, String>();
+					 	hp.put("idx", Integer.toString(i+1));
+					    hp.put("name", fileList[i].getName());
+					    hp.put("path", trans_save_pth);
+					    hp.put("size", Long.toString(fileList[i].length())+" byte");
+					    hp.put("date", simpleDateFormat.format(fileList[i].lastModified()));
+				        result.add(hp);
+				    }
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return result;
+	}
+	
+	/**
+	 * DDL 수행이력 결과를 파일로 다운받는다.
+	 * 
+	 * @param request
+	 * @param response
+	 */
+	@RequestMapping(value = "/db2pg/popup/db2pgFileDownload.do")
+	public  void fileDownload(HttpServletRequest request, HttpServletResponse response){
+		try {
+			//파일경로입력
+			String filePath = request.getParameter("path");
+			String fileName = request.getParameter("name");
+			String viewFileNm = request.getParameter("name");
+			DownloadView fileDown = new DownloadView(); //파일다운로드 객체생성
+			fileDown.filDown(request, response, filePath, fileName, viewFileNm); //파일다운로드 
+
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 	}	
 }
