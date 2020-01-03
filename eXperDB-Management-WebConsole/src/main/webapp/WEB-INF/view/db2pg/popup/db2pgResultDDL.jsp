@@ -94,7 +94,7 @@ function getDataList(){
 	$.ajax({
 		url : "/db2pg/selectdb2pgResultDDLFile.do", 
 	  	data : {
-	  		trans_save_pth : "${trans_save_pth}"
+	  		ddl_save_pth : "${ddl_save_pth}"
 	  	},
 		dataType : "json",
 		type : "post",

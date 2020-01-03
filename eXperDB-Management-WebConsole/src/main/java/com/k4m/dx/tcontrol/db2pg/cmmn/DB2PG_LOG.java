@@ -23,6 +23,7 @@ public class DB2PG_LOG {
 
 	public DB2PG_LOG(){}
 	
+	@SuppressWarnings("unchecked")
 	public static Map<String, Object> db2pgFile(String logPath) throws Exception {
 		Process process = null;
         Runtime runtime = Runtime.getRuntime();
@@ -37,13 +38,20 @@ public class DB2PG_LOG {
 		
 		System.out.println( "/*****DB2PG  RESULT  ************************************************************/");
 	
-		String path = logPath+"/result;";
+		String filePath =   logPath+"result";
+		String path = logPath+"result;";
 		
-		File f = new File(path);
-		if(!f.exists()) {
-			return result;       
+		System.out.println("Migration 수행결과 파일 경로 = "+path);
+		
+		File f = new File(filePath);
+		File[] fList = f.listFiles();
+		
+		if(fList.length ==0){
+			System.out.println("파일이 존재하지 않습니다.");
+			return result;       			
 		}
 
+		
 		String strCmd ="cd "+path+" ls -Art | tail -n 1";
 		
 		System.out.println("1. 파일 찾기 명령어 = "+strCmd);

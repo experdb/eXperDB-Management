@@ -34,26 +34,7 @@ public interface Db2pgHistoryService {
 	 */
 	void updateMigExe(Map<String, Object> param) throws Exception;
 	
-	
-	/**
-	 *  즉시실행로그 조회
-	 * 
-	 * @param List<Db2pgHistoryVO>
-	 * @throws Exception
-	 */
-	List<Db2pgHistoryVO> selectDb2pgHistory(Db2pgHistoryVO db2pgHistoryVO) throws Exception;
 
-	
-	/**
-	 *  DB2PG 수행이력 조회
-	 * 
-	 * @param List<Db2pgHistoryVO>
-	 * @throws Exception
-	 */
-	Db2pgHistoryVO selectDb2pgHistoryDetail(int imd_exe_sn) throws Exception;
-
-
-	
 	/**
 	 *  DDL 실행로그 조회
 	 * 
@@ -70,6 +51,24 @@ public interface Db2pgHistoryService {
 	 * @throws Exception
 	 */
 	List<Db2pgHistoryVO> selectDb2pgMigHistory(Db2pgHistoryVO db2pgHistoryVO) throws Exception;
+
+
+	/**
+	 *  DDL 실행 상세로그 조회
+	 * 
+	 * @param List<Db2pgHistoryVO>
+	 * @throws Exception
+	 */
+	Db2pgHistoryVO selectDb2pgDdlHistoryDetail(int mig_exe_sn) throws Exception;
+
+
+	/**
+	 *  MIGRATION 실행 상세로그 조회
+	 * 
+	 * @param List<Db2pgHistoryVO>
+	 * @throws Exception
+	 */
+	Db2pgHistoryVO selectDb2pgMigHistoryDetail(int mig_exe_sn) throws Exception;
 
 
 

@@ -22,8 +22,8 @@
 
 <script type="text/javascript">
 
+var gbn ="${gbn}";
 var table = null;
-
 var tableDDL = null;
 var tableData = null;
 
@@ -67,7 +67,6 @@ function fn_init(){
 		deferRender : true,
 		bSort: false,
 		columns : [
-			{data : "rownum", defaultContent : "", targets : 0, orderable : false, checkboxes : {'selectRow' : true}}, 
 			{data : "idx", className : "dt-center", defaultContent : ""}, 
 			{data : "wrk_nm", className : "dt-left", defaultContent : ""}, 
 			{data : "wrk_exp", className : "dt-left", defaultContent : ""}, 
@@ -82,9 +81,9 @@ function fn_init(){
 					render : function(data, type, full, meta) {	 						
 						var html = '';
 						if (full.exe_rslt_cd == 'TC001701') {
-							html += '<span class="btn btnC_01 btnF_02"><img src="../images/ico_state_02.png" style="margin-right:3px;"/>Success</span>';
+							html += "<span class='btn btnC_01 btnF_02'><button onclick='fn_ddlResult(\""+full.mig_exe_sn+"\",\""+full.ddl_save_pth+"/\")'><img src='../images/ico_state_02.png' style='margin-right:3px;'/>Success</button></span>";	
 						} else if(full.exe_rslt_cd == 'TC001702'){
-							html += '<span class="btn btnC_01 btnF_02"><button onclick="fn_failLog('+full.exe_sn+')"><img src="../images/ico_state_01.png" style="margin-right:3px;"/>Fail</button></span>';
+							html += '<span class="btn btnC_01 btnF_02"><button onclick="fn_ddlFailLog('+full.mig_exe_sn+')"><img src="../images/ico_state_01.png" style="margin-right:3px;"/>Fail</button></span>';
 						} else {
 							html +='<span class="btn btnC_01 btnF_02"><img src="../images/ico_state_03.png" style="margin-right:3px;"/><spring:message code="etc.etc28"/></span>';
 						}
@@ -96,12 +95,13 @@ function fn_init(){
 			{data : "lst_mdfr_id", className : "dt-center", defaultContent : ""},
 			{data : "db2pg_trsf_wrk_id", defaultContent : "", visible: false},
 			{data : "wrk_id", defaultContent : "", visible: false},
-			{data : "imd_exe_sn", defaultContent : "", visible: false}
-		],'select': {'style': 'multi'}
+			{data : "mig_exe_sn", defaultContent : "", visible: false},
+			{data : "ddl_save_pth", defaultContent : "", visible: false}
+		]
 		});
 	
 	
-	tableData = $('#dataDataTable').DataTable(
+	tableData = $('#dataDataTable').DataTable({
 		scrollY : "330px",
 		scrollX: true,	
 		bDestroy: true,
@@ -111,7 +111,6 @@ function fn_init(){
 		deferRender : true,
 		bSort: false,
 	columns : [
-		{data : "rownum", defaultContent : "", targets : 0, orderable : false, checkboxes : {'selectRow' : true}}, 
 		{data : "idx", className : "dt-center", defaultContent : ""}, 
 		{data : "wrk_nm", className : "dt-left", defaultContent : ""}, 
 		{data : "wrk_exp", className : "dt-left", defaultContent : ""}, 
@@ -128,9 +127,9 @@ function fn_init(){
 				render : function(data, type, full, meta) {	 						
 					var html = '';
 					if (full.exe_rslt_cd == 'TC001701') {
-						html += '<span class="btn btnC_01 btnF_02"><img src="../images/ico_state_02.png" style="margin-right:3px;"/>Success</span>';
+						html += "<span class='btn btnC_01 btnF_02'><button onclick='fn_result(\""+full.mig_exe_sn+"\",\""+full.trans_save_pth+"/\")'><img src='../images/ico_state_02.png' style='margin-right:3px;'/>Success</button></span>";	
 					} else if(full.exe_rslt_cd == 'TC001702'){
-						html += '<span class="btn btnC_01 btnF_02"><button onclick="fn_failLog('+full.exe_sn+')"><img src="../images/ico_state_01.png" style="margin-right:3px;"/>Fail</button></span>';
+						html += '<span class="btn btnC_01 btnF_02"><button onclick="fn_migFailLog('+full.mig_exe_sn+')"><img src="../images/ico_state_01.png" style="margin-right:3px;"/>Fail</button></span>';
 					} else {
 						html +='<span class="btn btnC_01 btnF_02"><img src="../images/ico_state_03.png" style="margin-right:3px;"/><spring:message code="etc.etc28"/></span>';
 					}
@@ -142,12 +141,13 @@ function fn_init(){
 		{data : "lst_mdfr_id", className : "dt-center", defaultContent : ""},
 		{data : "db2pg_trsf_wrk_id", defaultContent : "", visible: false},
 		{data : "wrk_id", defaultContent : "", visible: false},
-		{data : "imd_exe_sn", defaultContent : "", visible: false}
+		{data : "mig_exe_sn", defaultContent : "", visible: false}
 	]
 	});
 
-	tableDDL.tables().header().to$().find('th:eq(0)').css('min-width', '10px');
-	tableDDL.tables().header().to$().find('th:eq(1)').css('min-width', '30px');
+	
+	tableDDL.tables().header().to$().find('th:eq(0)').css('min-width', '30px');
+	tableDDL.tables().header().to$().find('th:eq(1)').css('min-width', '100px');
 	tableDDL.tables().header().to$().find('th:eq(2)').css('min-width', '100px');
 	tableDDL.tables().header().to$().find('th:eq(3)').css('min-width', '200px');
 	tableDDL.tables().header().to$().find('th:eq(4)').css('min-width', '100px');
@@ -160,12 +160,12 @@ function fn_init(){
 	tableDDL.tables().header().to$().find('th:eq(11)').css('min-width', '100px');
 	tableDDL.tables().header().to$().find('th:eq(12)').css('min-width', '100px');
 	tableDDL.tables().header().to$().find('th:eq(13)').css('min-width', '100px');
-	tableDDL.tables().header().to$().find('th:eq(14)').css('min-width', '100px');
+
 	
 	tableData.tables().header().to$().find('th:eq(0)').css('min-width', '30px');
 	tableData.tables().header().to$().find('th:eq(1)').css('min-width', '100px');
-	tableData.tables().header().to$().find('th:eq(2)').css('min-width', '200px');
-	tableData.tables().header().to$().find('th:eq(3)').css('min-width', '100px');
+	tableData.tables().header().to$().find('th:eq(2)').css('min-width', '100px');
+	tableData.tables().header().to$().find('th:eq(3)').css('min-width', '200px');
 	tableData.tables().header().to$().find('th:eq(4)').css('min-width', '100px');
 	tableData.tables().header().to$().find('th:eq(5)').css('min-width', '100px');
 	tableData.tables().header().to$().find('th:eq(6)').css('min-width', '100px');
@@ -174,11 +174,11 @@ function fn_init(){
 	tableData.tables().header().to$().find('th:eq(9)').css('min-width', '100px');
 	tableData.tables().header().to$().find('th:eq(10)').css('min-width', '100px');
 	tableData.tables().header().to$().find('th:eq(11)').css('min-width', '100px');
-	tableData.tables().header().to$().find('th:eq(12)').css('min-width', '130px');
+	tableData.tables().header().to$().find('th:eq(12)').css('min-width', '100px');
 	tableData.tables().header().to$().find('th:eq(13)').css('min-width', '130px');
-	tableData.tables().header().to$().find('th:eq(14)').css('min-width', '95px');
+	tableData.tables().header().to$().find('th:eq(14)').css('min-width', '130px');
 	tableData.tables().header().to$().find('th:eq(15)').css('min-width', '95px');
-	tableData.tables().header().to$().find('th:eq(16)').css('min-width', '95px');
+
     
 	$(window).trigger('resize'); 
 }
@@ -188,15 +188,23 @@ function fn_init(){
  * Data initialization
  ******************************************************** */
 $(window.document).ready(
-		
+
 	function() {	
+	
 		fn_init();
 		getddlDataList();
-		//getdataDataList();			
+		getdataDataList();			
+	
 		$("#ddlDataTable").show();
 		$("#ddlDataTable_wrapper").show();
 		$("#dataDataTable").hide();
 		$("#dataDataTable_wrapper").hide();
+
+		if(gbn=="ddl"){
+			selectTab('ddlWork');
+		}else if (gbn=="mig"){
+			selectTab('dataWork');
+		}
 		
 		var today = new Date();
 		var day_end = today.toJSON().slice(0,10);
@@ -225,7 +233,9 @@ function getddlDataList(){
 		url : "/db2pg/selectDb2pgDDLHistory.do", 
 	  	data : {
 	  		wrk_nm :  $("#wrk_nm").val(),
-	  		exe_rslt_cd : $("#exe_rslt_cd").val()
+	  		exe_rslt_cd : $("#exe_rslt_cd").val(),
+	  		wrk_strt_dtm : $("#ddl_wrk_strt_dtm").val(),
+	  		wrk_end_dtm : $("#ddl_wrk_end_dtm").val()  		
 	  	},
 		dataType : "json",
 		type : "post",
@@ -263,7 +273,9 @@ function getdataDataList(){
 		url : "/db2pg/selectDb2pgMigHistory.do", 
 	  	data : {
 	  		wrk_nm :  $("#wrk_nm").val(),
-	  		exe_rslt_cd : $("#exe_rslt_cd").val()
+	  		exe_rslt_cd : $("#exe_rslt_cd").val(),
+			wrk_strt_dtm :  $("#wrk_strt_dtm").val(),
+	  		wrk_end_dtm : $("#wrk_end_dtm").val()
 	  	},
 		dataType : "json",
 		type : "post",
@@ -293,11 +305,12 @@ function getdataDataList(){
 	});
 }
 
-/* ********************************************************
- * 에러 로그 팝업
- ******************************************************** */
- function fn_log(imd_exe_sn){
 
+
+ /* ********************************************************
+  * DDL 에러 로그 팝업
+  ******************************************************** */
+ function fn_ddlFailLog(mig_exe_sn){
 	  var frmPop= document.frmPopup;
 	  
 		var width = 950;
@@ -306,17 +319,44 @@ function getdataDataList(){
 		var top = (window.screen.height /2) - (height / 2);
 		var popOption = "width="+width+", height="+height+", top="+top+", left="+left+", resizable=no, scrollbars=yes, status=no, toolbar=no, titlebar=yes, location=no,";
 		
-	    var url = '/db2pg/popup/db2pgHistoryDetail.do';
+	    var url = '/db2pg/popup/db2pgDdlErrHistoryDetail.do';
 	    window.open('','popupView',popOption);  
 	     
 	    frmPop.action = url;
 	    frmPop.target = 'popupView';
-	    frmPop.trans_save_pth.value = trans_save_pth;
-	    frmPop.imd_exe_sn.value = imd_exe_sn;  
+	    frmPop.mig_exe_sn.value = mig_exe_sn;  
+	    frmPop.submit();   
+}
+ 
+ 
+ /* ********************************************************
+  * MIGRATION 에러 로그 팝업
+  ******************************************************** */
+ function fn_migFailLog(mig_exe_sn){
+	  var frmPop= document.frmPopup;
+	  
+		var width = 950;
+		var height = 690;
+		var left = (window.screen.width / 2) - (width / 2);
+		var top = (window.screen.height /2) - (height / 2);
+		var popOption = "width="+width+", height="+height+", top="+top+", left="+left+", resizable=no, scrollbars=yes, status=no, toolbar=no, titlebar=yes, location=no,";
+		
+	    var url = '/db2pg/popup/db2pgMigErrHistoryDetail.do';
+	    window.open('','popupView',popOption);  
+	     
+	    frmPop.action = url;
+	    frmPop.target = 'popupView';
+	    frmPop.mig_exe_sn.value = mig_exe_sn;  
 	    frmPop.submit();   
 }
 
- function fn_result(imd_exe_sn, trans_save_pth){
+
+
+
+ /* ********************************************************
+  * MIGRATION 로그 팝업
+  ******************************************************** */
+ function fn_result(mig_exe_sn, trans_save_pth){
 	  var frmPop= document.frmPopup;
 	  
 		var width = 950;
@@ -331,11 +371,16 @@ function getdataDataList(){
 	    frmPop.action = url;
 	    frmPop.target = 'popupView';
 	    frmPop.trans_save_pth.value = trans_save_pth;
-	    frmPop.imd_exe_sn.value = imd_exe_sn;  
+	    frmPop.mig_exe_sn.value = mig_exe_sn;  
 	    frmPop.submit();   
 }
  
- function fn_ddlResult(imd_exe_sn, trans_save_pth){
+ 
+ /* ********************************************************
+  * DDL추출 로그 팝업
+  ******************************************************** */
+ function fn_ddlResult(mig_exe_sn, ddl_save_pth){
+
 	  var frmPop= document.frmPopup;
 	  
 		var width = 950;
@@ -349,15 +394,19 @@ function getdataDataList(){
 	     
 	    frmPop.action = url;
 	    frmPop.target = 'popupView';
-	    frmPop.trans_save_pth.value = trans_save_pth;
-	    frmPop.imd_exe_sn.value = imd_exe_sn;  
+	    frmPop.ddl_save_pth.value = ddl_save_pth;
+	    frmPop.mig_exe_sn.value = mig_exe_sn;  
 	    frmPop.submit();  
  }
+ 
+ 
+ 
 </script>
 <%@include file="../popup/db2pgConfigInfo.jsp"%>
 <form name="frmPopup">
-	<input type="hidden" name="imd_exe_sn"  id="imd_exe_sn">
+	<input type="hidden" name="mig_exe_sn"  id="mig_exe_sn">
 	<input type="hidden" name="trans_save_pth"  id="trans_save_pth">
+	<input type="hidden" name="ddl_save_pth"  id="ddl_save_pth">
 </form>
 
 <!-- contents -->
@@ -372,7 +421,7 @@ function getdataDataList(){
 			</div>
 			<div class="location">
 				<ul>
-					<li>Migration</li>
+					<li>MIGRATION</li>
 					<li class="on">수행이력</li>
 				</ul>
 			</div>
@@ -381,20 +430,20 @@ function getdataDataList(){
 			<div class="cmm_tab">
 				<ul id="tab1">
 					<li class="atv"><a href="javascript:selectTab('ddlWork')">DDL</a></li>
-					<li><a href="javascript:selectTab('dataWork')">Migration</a></li>
+					<li><a href="javascript:selectTab('dataWork')">MIGRATION</a></li>
 				</ul>
 				<ul id="tab2" style="display:none;">
 					<li><a href="javascript:selectTab('ddlWork')">DDL</a></li>
-					<li class="atv"><a href="javascript:selectTab('dataWork')">Migration</a></li>
+					<li class="atv"><a href="javascript:selectTab('dataWork')">MIGRATION</a></li>
 				</ul>
 			</div>
 			<div class="cmm_grp">
 				<div class="btn_type_float">													
 					<div class="btn_type_01" id="btnDDL">
-						<span class="btn"><button type="button" id="btnSelect" onclick="fn_search();"><spring:message code="common.search" /></button></span>			
+						<span class="btn"><button type="button" id="btnSelect" onclick="getddlDataList();"><spring:message code="common.search" /></button></span>			
 					</div>
 					<div class="btn_type_01" id="btnData" style="display:none;">
-						<span class="btn"><button type="button" id="btnSelect" onclick="fn_search();"><spring:message code="common.search" /></button></span>		
+						<span class="btn"><button type="button" id="btnSelect" onclick="getdataDataList();"><spring:message code="common.search" /></button></span>		
 					</div>
 				</div>
 				<div class="sch_form">
@@ -475,8 +524,7 @@ function getdataDataList(){
 						<caption></caption>
 							<thead>
 								<tr>
-									<th width="30"><spring:message code="common.no" /></th>
-									<th width="10">NO</th>
+									<th width="30">NO</th>
 									<th width="100">Work명</th>
 									<th width="200">Work설명</th>
 									<th width="100">아이피</th>
@@ -497,7 +545,7 @@ function getdataDataList(){
 						<caption></caption>
 							<thead>
 								<tr>
-									<th width="30" rowspan="2"><spring:message code="common.no" /></th>
+									<th width="30" rowspan="2">NO</th>
 									<th width="100" rowspan="2">Work명</th>
 									<th width="200" rowspan="2">Work설명</th>
 									<th width="400" colspan="3">소스시스템</th>

@@ -615,6 +615,7 @@ function fn_copy_save(){
  ******************************************************** */
 function fn_ImmediateStart(gbn){
 	var db2pgGbn = gbn;
+	
 	if(gbn == 'ddl'){
 		var datas = tableDDL.rows('.selected').data();
 		var rowCnt = tableDDL.rows('.selected').data().length;
@@ -653,7 +654,7 @@ function fn_ImmediateStart(gbn){
 				},
 				success : function(result) {
 					if (confirm('실행결과화면으로 이동하시겠습니까?')){
-						location.href='/db2pgHistory.do' ;
+						location.href='/db2pgHistory.do?gbn=ddl' ;
 					}
 				}
 			});			
@@ -706,7 +707,7 @@ function fn_ImmediateStart(gbn){
 					},
 					success : function(result) {
 						if (confirm('실행결과화면으로 이동하시겠습니까?')){
-							location.href='/db2pgHistory.do' ;
+							location.href='/db2pgHistory.do?gbn=mig' ;
 						}
 					}
 				});	
@@ -734,7 +735,7 @@ function fn_ImmediateStart(gbn){
 			</div>
 			<div class="location">
 				<ul>
-					<li>Migration</li>
+					<li>MIGRATION</li>
 					<li class="on">설정정보관리</li>
 				</ul>
 			</div>
@@ -743,11 +744,11 @@ function fn_ImmediateStart(gbn){
 			<div class="cmm_tab">
 				<ul id="tab1">
 					<li class="atv"><a href="javascript:selectTab('ddlWork')">DDL</a></li>
-					<li><a href="javascript:selectTab('dataWork')">Migration</a></li>
+					<li><a href="javascript:selectTab('dataWork')">MIGRATION</a></li>
 				</ul>
 				<ul id="tab2" style="display:none;">
 					<li><a href="javascript:selectTab('ddlWork')">DDL</a></li>
-					<li class="atv"><a href="javascript:selectTab('dataWork')">Migration</a></li>
+					<li class="atv"><a href="javascript:selectTab('dataWork')">MIGRATION</a></li>
 				</ul>
 			</div>
 			<div class="cmm_grp">

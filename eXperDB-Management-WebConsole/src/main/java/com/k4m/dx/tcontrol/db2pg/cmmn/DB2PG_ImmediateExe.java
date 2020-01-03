@@ -114,11 +114,10 @@ public class DB2PG_ImmediateExe implements Runnable{
             // shell 실행이 정상 종료되었을 경우
             if (process.exitValue() == 0) {
             	endTime = nowTime();
-            	msg = successOutput.toString();
             	exe_rslt_cd = "TC001701";      
             	
             	System.out.println( "/*****MIGRATION  실행 이력 UPDATE  ************************************************************/");
-            	 migExeUpdate(wrk_id, exe_rslt_cd, endTime, id, startTime);
+            	 migExeUpdate(wrk_id, exe_rslt_cd, endTime, id, startTime, msg);
             } else {
                 // shell 실행이 비정상 종료되었을 경우
             	endTime = nowTime();
@@ -126,7 +125,7 @@ public class DB2PG_ImmediateExe implements Runnable{
             	exe_rslt_cd = "TC001702";
             	
             	System.out.println( "/*****MIGRATION  실행 이력 UPDATE  ************************************************************/");
-            	 migExeUpdate(wrk_id, exe_rslt_cd, endTime, id, startTime);
+            	 migExeUpdate(wrk_id, exe_rslt_cd, endTime, id, startTime, msg);
             }
 
         } catch (IOException e) {
@@ -179,14 +178,14 @@ public class DB2PG_ImmediateExe implements Runnable{
 
 
 
-	public void migExeUpdate(String wrk_id, String exe_rslt_cd, String endTime, String id, String startTime) {
+	public void migExeUpdate(String wrk_id, String exe_rslt_cd, String endTime, String id, String startTime, String msg) {
 		
         try{
             Map<String, Object> param = new HashMap<String, Object>();
             param.put("wrk_id", wrk_id);
             param.put("exe_rslt_cd", exe_rslt_cd);
             param.put("wrk_end_dtm", endTime);
-            param.put("rslt_msg", "");
+            param.put("rslt_msg", msg);
             param.put("wrk_strt_dtm", startTime);
             param.put("lst_mdfr_id", id);
             

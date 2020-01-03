@@ -3,7 +3,7 @@ package com.k4m.dx.tcontrol.db2pg.history.service;
 public class Db2pgHistoryVO {
 	private int rownum;
 	private int idx;
-	private int imd_exe_sn;
+	private int mig_exe_sn;
 	private String wrk_strt_dtm;
 	private String wrk_end_dtm;
 	private String wrk_dtm;
@@ -25,6 +25,16 @@ public class Db2pgHistoryVO {
 
 	private String rslt_msg;
 	private String trans_save_pth;
+	private String ddl_save_pth;
+
+	
+	public String getDdl_save_pth() {
+		return ddl_save_pth;
+	}
+
+	public void setDdl_save_pth(String ddl_save_pth) {
+		this.ddl_save_pth = ddl_save_pth;
+	}
 
 	public String getTrans_save_pth() {
 		return trans_save_pth;
@@ -58,12 +68,12 @@ public class Db2pgHistoryVO {
 		this.idx = idx;
 	}
 
-	public int getImd_exe_sn() {
-		return imd_exe_sn;
+	public int getMig_exe_sn() {
+		return mig_exe_sn;
 	}
 
-	public void setImd_exe_sn(int imd_exe_sn) {
-		this.imd_exe_sn = imd_exe_sn;
+	public void setMig_exe_sn(int mig_exe_sn) {
+		this.mig_exe_sn = mig_exe_sn;
 	}
 
 	public String getWrk_strt_dtm() {
