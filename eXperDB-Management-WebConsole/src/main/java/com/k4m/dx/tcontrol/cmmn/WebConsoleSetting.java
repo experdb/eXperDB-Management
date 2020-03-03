@@ -31,11 +31,10 @@ public class WebConsoleSetting {
 		String strTransferYN ="";
 		String strAuditYN="";
 		
-		String strDb2pgYN = "";
 		String strDb2pgPath = "";
 		
 		String strLanguage ="";
-		String strVersion ="eXperDB-Management-WebConsole-10.7.1.3";
+		String strVersion ="eXperDB-Management-WebConsole-10.7.1.4";
 		
 		String strEncryptYN="";
 		
@@ -241,7 +240,6 @@ public class WebConsoleSetting {
 			System.out.println("Repository database Access information :" + strDatabaseUrl);
 			System.out.println("Whether to enable auditing settings : " + strAuditYN);
 			System.out.println("Whether data transfer is enabled : " + strTransferYN);
-			System.out.println("Whether DB2PG is enabled : " + strDb2pgYN);
 			System.out.println("DB2PG installation path : " + strDb2pgPath);
 			System.out.println("#################################################");
 			System.out.println("###################eXperDB-Encrypt##################");
