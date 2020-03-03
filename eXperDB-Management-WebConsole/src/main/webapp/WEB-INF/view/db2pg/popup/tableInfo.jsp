@@ -193,7 +193,7 @@ function fn_tableCheckSelect(tableList){
 		</div>
 
 		<div class="pop_cmm3">
-			<p class="pop_s_tit">테이블 리스트</p>
+			<p class="pop_s_tit"><spring:message code="data_transfer.tableList"/></p>
 			<div class="overflow_area">
 				<table id="tableList" class="display" cellspacing="0" width="100%">
 				<thead>
@@ -208,8 +208,8 @@ function fn_tableCheckSelect(tableList){
 		</div>
 		
 		<div class="btn_type_02">
-			<span class="btn btnC_01"><button onClick="fn_Add();" type="button">선택</button></span>
-			<a href="#n" class="btn" onclick="window.close();"><span>닫기</span></a>
+			<span class="btn btnC_01"><button onClick="fn_Add();" type="button"><spring:message code="common.choice" /></button></span>
+			<a href="#n" class="btn" onclick="window.close();"><span><spring:message code="common.close"/></span></a>
 		</div>
 	</div>
 </div>

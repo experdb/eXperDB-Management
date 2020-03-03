@@ -466,7 +466,7 @@ function fn_cookie(url) {
 					
 					<li><a href="#n"><span><img src="/images/ico_migration.png" alt="DB2PG" /></span></a>
 						<ul class="depth_2">
-						    <li><a href="/db2pgDBMS.do" id="MN00015" onClick="fn_cookie(null)" target="main">소스/타겟 DBMS 관리</a></li>
+						    <li><a href="/db2pgDBMS.do" id="MN00015" onClick="fn_cookie(null)" target="main"><spring:message code="migration.source/target_dbms_management"/></a></li>
         					<li><a href="/db2pgSetting.do" id="MN00016" onClick="fn_cookie(null)" target="main">설정 정보 관리</a></li>
         					<li><a href="/db2pgHistory.do" id="MN00017" onClick="fn_cookie(null)" target="main">수행이력</a></li>
 						</ul>

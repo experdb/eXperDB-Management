@@ -413,7 +413,7 @@ function getdataDataList(){
 <div id="contents">
 	<div class="contents_wrap">
 		<div class="contents_tit">
-			<h4>수행이력<a href="#n"><img src="/images/ico_tit.png" class="btn_info"/></a></h4>
+			<h4><spring:message code="migration.performance_history"/><a href="#n"><img src="/images/ico_tit.png" class="btn_info"/></a></h4>
 			<div class="infobox"> 
 				<ul>
 					<li><spring:message code="help.shedule_execution_history" /></li>
@@ -422,7 +422,7 @@ function getdataDataList(){
 			<div class="location">
 				<ul>
 					<li>MIGRATION</li>
-					<li class="on">수행이력</li>
+					<li class="on"><spring:message code="migration.performance_history"/></li>
 				</ul>
 			</div>
 		</div>	
@@ -525,15 +525,15 @@ function getdataDataList(){
 							<thead>
 								<tr>
 									<th width="30">NO</th>
-									<th width="100">Work명</th>
-									<th width="200">Work설명</th>
-									<th width="100">아이피</th>
-									<th width="100">DBMS 구분</th>
+									<th width="100"><spring:message code="common.work_name" /></th>
+									<th width="200"><spring:message code="common.work_description" /></th>
+									<th width="100"><spring:message code="data_transfer.ip" /> </th>
+									<th width="100">DBMS <spring:message code="common.division" /></th>
 									<th width="100">Database</th>
-									<th width="100">작업시작시간</th>
-									<th width="100">작업종료시간</th>
-									<th width="100">작업시간</th>
-									<th width="100">상태</th>
+									<th width="100"><spring:message code="backup_management.work_start_time" /></th>
+									<th width="100"><spring:message code="backup_management.work_end_time" /></th>
+									<th width="100"><spring:message code="schedule.jobTime"/></th>
+									<th width="100"><spring:message code="properties.status" /></th>
 									<th width="100">수행자</th>
 									<th width="0"></th>
 									<th width="0"></th>
@@ -546,10 +546,10 @@ function getdataDataList(){
 							<thead>
 								<tr>
 									<th width="30" rowspan="2">NO</th>
-									<th width="100" rowspan="2">Work명</th>
-									<th width="200" rowspan="2">Work설명</th>
-									<th width="400" colspan="3">소스시스템</th>
-									<th width="400" colspan="2">타겟시스템</th>
+									<th width="100" rowspan="2"><spring:message code="common.work_name" /></th>
+									<th width="200" rowspan="2"><spring:message code="common.work_description" /></th>
+									<th width="400" colspan="3"><spring:message code="migration.source_system"/></th>
+									<th width="400" colspan="2"><spring:message code="migration.target_system"/></th>
 									<th width="130" rowspan="2">수행시작시간</th>
 									<th width="130" rowspan="2">수행종료시간</th>
 									<th width="95" rowspan="2">수행시간(초)</th>
@@ -557,10 +557,10 @@ function getdataDataList(){
 									<th width="95" rowspan="2">수행자</th>
 								</tr>
 								<tr>
-									<th width="100">DBMS 구분</th>
-									<th width="100">아이피</th>
+									<th width="100">DBMS<spring:message code="common.division" /></th>
+									<th width="100"><spring:message code="data_transfer.ip" /></th>
 									<th width="100">Database</th>
-									<th width="100">아이피</th>
+									<th width="100"><spring:message code="data_transfer.ip" /></th>
 									<th width="100">Database</th>
 								</tr>
 							</thead>

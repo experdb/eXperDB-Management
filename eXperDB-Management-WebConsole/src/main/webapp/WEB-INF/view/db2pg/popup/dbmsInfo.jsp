@@ -189,7 +189,7 @@ function fn_Add(){
 					<tr>
 						<th scope="row" class="ico_t1">시스템명</th>
 						<td><input type="text" class="txt t4" name="db2pg_sys_nm" id="db2pg_sys_nm" /></td>		
-						<th scope="row" class="ico_t1">DBMS구분</th>
+						<th scope="row" class="ico_t1">DBMS<spring:message code="common.division" /></th>
 						<td>
 							<select name="dbms_dscd" id="dbms_dscd" class="select t4" >
 									<option value=""><spring:message code="common.total" /></option>				
@@ -222,11 +222,11 @@ function fn_Add(){
 					<tr>
 						<th width="50"><spring:message code="common.no" /></th>
 						<th width="100">시스템명</th>
-						<th width="100">DBMS구분</th>
-						<th width="100">아이피</th>
+						<th width="100">DBMS<spring:message code="common.division" /></th>
+						<th width="100"><spring:message code="data_transfer.ip" /></th>
 						<th width="100">Database</th>
-						<th width="100">스키마</th>
-						<th width="100">포트</th>
+						<th width="100">Schema</th>
+						<th width="100"><spring:message code="data_transfer.port" /></th>
 						<th width="100">User</th>
 					</tr>
 				</thead>
@@ -235,8 +235,8 @@ function fn_Add(){
 		</div>
 		
 		<div class="btn_type_02">
-			<span class="btn btnC_01"><button onClick="fn_Add();" type="button">선택</button></span>
-			<a href="#n" class="btn" onclick="window.close();"><span>닫기</span></a>
+			<span class="btn btnC_01"><button onClick="fn_Add();" type="button"><spring:message code="common.choice" /></button></span>
+			<a href="#n" class="btn" onclick="window.close();"><span><spring:message code="common.close"/></span></a>
 		</div>
 	</div>
 </div>

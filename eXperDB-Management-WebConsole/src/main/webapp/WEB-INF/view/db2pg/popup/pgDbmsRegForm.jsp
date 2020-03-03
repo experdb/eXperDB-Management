@@ -174,12 +174,12 @@ function fn_Add(){
 				<thead>
 					<tr>
 						<th width="10"><spring:message code="common.no" /></th>
-						<th width="100" class="dt-center">DBMS명</th>
-						<th width="100" class="dt-center">DBMS아이피</th>
+						<th width="100" class="dt-center"><spring:message code="common.dbms_name" /></th>
+						<th width="100" class="dt-center">DBMS<spring:message code="data_transfer.ip" /></th>
 						<th width="100">Database</th>
-						<th width="80">포트</th>
-						<th width="100">계정</th>
-						<th width="0">비밀번호</th>
+						<th width="80"><spring:message code="data_transfer.port" /></th>
+						<th width="100"><spring:message code="dbms_information.account" /></th>
+						<th width="0"><spring:message code="user_management.password" /></th>
 					</tr>
 				</thead>
 			</table>		
@@ -187,8 +187,8 @@ function fn_Add(){
 		</div>
 		
 		<div class="btn_type_02">
-			<span class="btn btnC_01"><button onClick="fn_Add();" type="button">선택</button></span>
-			<a href="#n" class="btn" onclick="window.close();"><span>닫기</span></a>
+			<span class="btn btnC_01"><button onClick="fn_Add();" type="button"><spring:message code="common.choice" /></button></span>
+			<a href="#n" class="btn" onclick="window.close();"><span><spring:message code="common.close"/></span></a>
 		</div>
 	</div>
 </div>

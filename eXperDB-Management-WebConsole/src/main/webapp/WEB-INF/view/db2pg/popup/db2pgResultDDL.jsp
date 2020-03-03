@@ -144,11 +144,11 @@ function fn_download(name,path){
 					</colgroup>
 					<tbody>
 							<tr>
-								<td>Work명</td>
+								<td><spring:message code="common.work_name" /></td>
 								<td style="text-align: left">${result.wrk_nm}</td>
 							</tr>
 							<tr>
-								<td>Work 설명</td>
+								<td><spring:message code="common.work_description" /></td>
 								<td style="text-align: left">${result.wrk_exp}</td>
 							</tr>
 							<tr>
@@ -169,7 +169,7 @@ function fn_download(name,path){
 									<th width="30"><spring:message code="common.no" /></th>
 									<th width="200" class="dt-center">파일명</th>
 									<th width="300" class="dt-center">경로</th>
-									<th width="100" class="dt-center">사이즈</th>
+									<th width="100" class="dt-center"><spring:message code="backup_management.size" /></th>
 									<th width="200" class="dt-center">생성일시</th>
 									<th width="100" class="dt-center">다운로드</th>
 								</tr>
