@@ -43,7 +43,7 @@
 <%@include file="../../cmmn/commonLocale.jsp"%>
 	<div class="pop_container">
 		<div class="pop_cts">
-			<p class="tit">Migration 수행이력 상세보기</p>
+			<p class="tit">실패 수행이력 상세보기</p>
 			<div class="pop_cmm3">
 				<p class="pop_s_tit">작업정보</p>
 				<table class="list" style="border: 1px solid #99abb0;">
@@ -53,11 +53,11 @@
 					</colgroup>
 					<tbody>
 							<tr>
-								<td>Work명</td>
+								<td><spring:message code="common.work_name" /></td>
 								<td style="text-align: left">${result.wrk_nm}</td>
 							</tr>
 							<tr>
-								<td>Work 설명</td>
+								<td><spring:message code="common.work_description" /></td>
 								<td style="text-align: left">${result.wrk_exp}</td>
 							</tr>
 							<tr>
@@ -82,7 +82,7 @@
 					</tbody>
 				</table>
 				<br><br>
-				<p class="pop_s_tit">작업로그정보</p>
+				<p class="pop_s_tit"><spring:message code="backup_management.job_log_info"/></p>
 				<table class="write" border="0">
 					<caption>
 						<spring:message code="backup_management.job_log_info" />

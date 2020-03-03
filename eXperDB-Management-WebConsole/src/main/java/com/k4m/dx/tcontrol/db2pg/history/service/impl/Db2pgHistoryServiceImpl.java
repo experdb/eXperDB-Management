@@ -19,18 +19,41 @@ public class Db2pgHistoryServiceImpl extends EgovAbstractServiceImpl implements 
 	private Db2pgHistoryDAO db2pgHistoryDAO;
 
 	@Override
-	public void insertImdExe(Map<String, Object> param) throws Exception {
-		db2pgHistoryDAO.insertImdExe(param);
+	public void insertMigExe(Map<String, Object> param) throws Exception {
+		db2pgHistoryDAO.insertMigExe(param);
 	}
 
 	@Override
-	public List<Db2pgHistoryVO> selectDb2pgHistory(Db2pgHistoryVO db2pgHistoryVO) throws Exception {
-		return db2pgHistoryDAO.selectDb2pgHistory(db2pgHistoryVO);
+	public void updateMigExe(Map<String, Object> param) throws Exception {
+		db2pgHistoryDAO.updateMigExe(param);
+	}
+	
+
+	@Override
+	public int lastMigExe() throws Exception {
+		return db2pgHistoryDAO.lastMigExe();
 	}
 
 	@Override
-	public Db2pgHistoryVO selectDb2pgHistoryDetail(int imd_exe_sn) throws Exception {
-		return db2pgHistoryDAO.selectDb2pgHistoryDetail(imd_exe_sn);
+	public List<Db2pgHistoryVO> selectDb2pgDDLHistory(Db2pgHistoryVO db2pgHistoryVO) throws Exception {
+		return db2pgHistoryDAO.selectDb2pgDDLHistory(db2pgHistoryVO);
 	}
+
+	@Override
+	public List<Db2pgHistoryVO> selectDb2pgMigHistory(Db2pgHistoryVO db2pgHistoryVO) throws Exception {
+		return db2pgHistoryDAO.selectDb2pgMigHistory(db2pgHistoryVO);
+	}
+
+	@Override
+	public Db2pgHistoryVO selectDb2pgDdlHistoryDetail(int mig_exe_sn) throws Exception {
+		return db2pgHistoryDAO.selectDb2pgDdlHistoryDetail(mig_exe_sn);
+	}
+
+	@Override
+	public Db2pgHistoryVO selectDb2pgMigHistoryDetail(int mig_exe_sn) throws Exception {
+		return db2pgHistoryDAO.selectDb2pgMigHistoryDetail(mig_exe_sn);
+	}
+
+
 
 }

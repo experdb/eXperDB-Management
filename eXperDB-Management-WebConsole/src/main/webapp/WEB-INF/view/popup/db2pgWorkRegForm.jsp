@@ -217,20 +217,20 @@ $(window.document).ready(function() {
 								<tr>
 									<th width="10" rowspan="2"></th>
 									<th width="30" rowspan="2"><spring:message code="common.no" /></th>
-									<th width="100" rowspan="2">Work명</th>
-									<th width="200" rowspan="2">Work설명</th>
-									<th width="400" colspan="4">소스시스템</th>
-									<th width="400" colspan="4">타겟시스템</th>
+									<th width="100" rowspan="2"><spring:message code="common.work_name" /></th>
+									<th width="200" rowspan="2"><spring:message code="common.work_description" /></th>
+									<th width="400" colspan="4"><spring:message code="migration.source_system"/></th>
+									<th width="400" colspan="4"><spring:message code="migration.target_system"/></th>
 								</tr>
 								<tr>
-									<th width="100">DBMS 구분</th>
-									<th width="100">아이피</th>
+									<th width="100">DBMS <spring:message code="common.division" /></th>
+									<th width="100"><spring:message code="data_transfer.ip" /></th>
 									<th width="100">Database</th>
-									<th width="100">스키마</th>
-									<th width="100">DBMS 구분</th>
-									<th width="100">아이피</th>
+									<th width="100">Schema</th>
+									<th width="100">DBMS <spring:message code="common.division" /></th>
+									<th width="100"><spring:message code="data_transfer.ip" /></th>
 									<th width="100">Database</th>
-									<th width="100">스키마</th>
+									<th width="100">Schema</th>
 								</tr>
 							</thead>
 					</table>		

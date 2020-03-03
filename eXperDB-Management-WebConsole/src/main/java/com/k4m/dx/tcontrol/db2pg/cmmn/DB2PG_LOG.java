@@ -1,6 +1,7 @@
 package com.k4m.dx.tcontrol.db2pg.cmmn;
 
 import java.io.BufferedReader;
+import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -22,7 +23,8 @@ public class DB2PG_LOG {
 
 	public DB2PG_LOG(){}
 	
-	public static  Map<String, Object> db2pgFile(String logPath) throws Exception {
+	@SuppressWarnings("unchecked")
+	public static Map<String, Object> db2pgFile(String logPath) throws Exception {
 		Process process = null;
         Runtime runtime = Runtime.getRuntime();
         StringBuffer successOutput = new StringBuffer(); // 성공 스트링 버퍼
@@ -36,7 +38,19 @@ public class DB2PG_LOG {
 		
 		System.out.println( "/*****DB2PG  RESULT  ************************************************************/");
 	
-		String path = logPath+"/result;";
+		String filePath =   logPath+"result";
+		String path = logPath+"result;";
+		
+		System.out.println("Migration 수행결과 파일 경로 = "+path);
+		
+		File f = new File(filePath);
+		File[] fList = f.listFiles();
+		
+		if(fList.length ==0){
+			System.out.println("파일이 존재하지 않습니다.");
+			return result;       			
+		}
+
 		
 		String strCmd ="cd "+path+" ls -Art | tail -n 1";
 		

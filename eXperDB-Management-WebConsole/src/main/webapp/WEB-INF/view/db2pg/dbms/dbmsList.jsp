@@ -186,14 +186,13 @@ function fn_regRe_popup(){
 			<h4>소스/타겟 DBMS 관리<a href="#n"><img src="../images/ico_tit.png" class="btn_info"/></a></h4>
 			<div class="infobox"> 
 				<ul>
-					<li></li>
-					<li></li>						
+					<li>Migration 소스/타겟 데이터베이스 서버를 신규로 등록하거나 이미 등록된 서버를 수정 또는 삭제합니다.</li>			
 				</ul>
 			</div>
 			<div class="location">
 				<ul>
 					<li>Migration</li> 
-					<li class="on">소스/타겟 DBMS 관리</li>
+					<li class="on"><spring:message code="migration.source/target_dbms_management"/></li>
 				</ul>
 			</div>
 		</div>
@@ -229,7 +228,7 @@ function fn_regRe_popup(){
 								<td><input type="text" class="txt t3" name="dtb_nm" id="dtb_nm" /></td>
 							</tr>
 							<tr>
-								<th scope="row" class="t9">DBMS구분</th>
+								<th scope="row" class="t9">DBMS<spring:message code="common.division" /></th>
 								<td>
 									<select name="dbms_dscd" id="dbms_dscd" class="select t5" >
 										<option value=""><spring:message code="common.total" /></option>				
@@ -247,7 +246,7 @@ function fn_regRe_popup(){
  											</c:forEach>
 									</select>								
 								</td>
-								<th scope="row" class="t9">계정</th>
+								<th scope="row" class="t9"><spring:message code="dbms_information.account" /></th>
 								<td><input type="text" class="txt t3" name="spr_usr_id" id="spr_usr_id" /></td>
 								<th scope="row" class="t9">Schema</th>
 								<td><input type="text" class="txt t3" name="scm_nm" id="scm_nm" /></td>
@@ -261,13 +260,13 @@ function fn_regRe_popup(){
 							<tr>
 								<th width="30"><spring:message code="common.no" /></th>
 								<th width="130">시스템명</th>
-								<th width="100">DBMS구분</th>
-								<th width="130">아이피</th>
+								<th width="100">DBMS<spring:message code="common.division" /></th>
+								<th width="130"><spring:message code="data_transfer.ip" /></th>
 								<th width="100">Database</th>
 								<th width="150">Schema</th>
-								<th width="80">포트</th>
-								<th width="100">계정</th>
-								<th width="130">캐릭터셋</th>
+								<th width="80"><spring:message code="data_transfer.port" /></th>
+								<th width="100"><spring:message code="dbms_information.account" /></th>
+								<th width="130"><spring:message code="migration.character_set"/></th>
 								<th width="100"><spring:message code="common.register" /></th>
 								<th width="100"><spring:message code="common.regist_datetime" /></th>
 								<th width="100"><spring:message code="common.modifier" /></th>

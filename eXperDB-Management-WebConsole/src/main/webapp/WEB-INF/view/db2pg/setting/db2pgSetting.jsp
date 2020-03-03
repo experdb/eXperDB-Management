@@ -611,21 +611,31 @@ function fn_copy_save(){
 }
  
 /* ********************************************************
- * 즉시실행
+ * 즉시실행 DDL 
  ******************************************************** */
 function fn_ImmediateStart(gbn){
 	var db2pgGbn = gbn;
+	
 	if(gbn == 'ddl'){
+		var datas = tableDDL.rows('.selected').data();
 		var rowCnt = tableDDL.rows('.selected').data().length;
-		var ddl_save_pth = tableDDL.row('.selected').data().ddl_save_pth;
-		var dtb_nm = tableDDL.row('.selected').data().dtb_nm;
 
-		if (rowCnt == 1) {
+		var dataSet=[];
+		
+		if (rowCnt > 0) {
+			alert(rowCnt+" 개의 Work를 실행하였습니다.");		
+			for (var i = 0; i < datas.length; i++) {
+				 var row = new Object()
+				 row.wrk_id = datas[i].wrk_id;
+				 row.wrk_nm = datas[i].db2pg_ddl_wrk_nm;
+				 row.mig_dscd = "TC003201";
+				 row.gbn = gbn;
+				 dataSet.push(row);
+			}
 			$.ajax({
-				url : "/db2pg/immediateStart.do",
+				url : "/db2pg/ImmediateExe.do",
 			  	data : {
-			  		wrk_id : tableDDL.row('.selected').data().wrk_id,
-			  		wrk_nm : tableDDL.row('.selected').data().db2pg_ddl_wrk_nm		  		
+			  		datas : JSON.stringify(dataSet)	  		
 			  	},
 				type : "post",
 				beforeSend: function(xhr) {
@@ -643,41 +653,64 @@ function fn_ImmediateStart(gbn){
 					}
 				},
 				success : function(result) {
-					fn_db2pgDDLResultLayer(ddl_save_pth,dtb_nm);
+					if (confirm('실행결과화면으로 이동하시겠습니까?')){
+						location.href='/db2pgHistory.do?gbn=ddl' ;
+					}
 				}
 			});			
-		} else {
-			alert("<spring:message code='message.msg04' />");
+		}else {
+			alert("<spring:message code='message.msg35' />");
 			return false;
-		}
-	}else{
+		}	
+	}else{		
+/* ********************************************************
+ * 즉시실행 Migration
+ ******************************************************** */			
+		var datas = tableData.rows('.selected').data();
 		var rowCnt = tableData.rows('.selected').data().length;
-		if (rowCnt == 1) {					
-			$.ajax({
-				url : "/db2pg/immediateStart.do",
-			  	data : {
-			  		wrk_id : tableData.row('.selected').data().wrk_id,
-			  		wrk_nm : tableData.row('.selected').data().db2pg_trsf_wrk_nm		  		
-			  	},
-				type : "post",
-				beforeSend: function(xhr) {
-			        xhr.setRequestHeader("AJAX", true);
-			     },
-				error : function(xhr, status, error) {
-					if(xhr.status == 401) {
-						alert('<spring:message code="message.msg02" />');
-						top.location.href = "/";
-					} else if(xhr.status == 403) {
-						alert('<spring:message code="message.msg03" />');
-						top.location.href = "/";
-					} else {
-						alert("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""));
+		
+		var dataSet=[];
+		
+		if (rowCnt > 0) {				
+			alert(rowCnt+" 개의 Work를 실행하였습니다.");		
+			/* ********************************************************
+			 * 실행조건 필요(여러개의 WORK중 동일한 테이블 있을시, Alert알림 실행X)
+			 * 경우의 수가 너무 많음 추후 고려
+			 ******************************************************** */				
+				for (var i = 0; i < datas.length; i++) {
+					 var row = new Object()
+					 row.wrk_id = datas[i].wrk_id;
+					 row.wrk_nm = datas[i].db2pg_trsf_wrk_nm;
+					 row.mig_dscd = "TC003202";
+					 row.gbn = gbn;
+					 dataSet.push(row);
+				}			
+				$.ajax({
+					url : "/db2pg/ImmediateExe.do",
+				  	data : {
+				  		datas : JSON.stringify(dataSet)	  		
+				  	},
+					type : "post",
+					beforeSend: function(xhr) {
+				        xhr.setRequestHeader("AJAX", true);
+				     },
+					error : function(xhr, status, error) {
+						if(xhr.status == 401) {
+							alert('<spring:message code="message.msg02" />');
+							top.location.href = "/";
+						} else if(xhr.status == 403) {
+							alert('<spring:message code="message.msg03" />');
+							top.location.href = "/";
+						} else {
+							alert("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""));
+						}
+					},
+					success : function(result) {
+						if (confirm('실행결과화면으로 이동하시겠습니까?')){
+							location.href='/db2pgHistory.do?gbn=mig' ;
+						}
 					}
-				},
-				success : function(result) {
-					alert(result.RESULT);
-				}
-			});	
+				});	
 		} else {
 			alert("<spring:message code='message.msg04' />");
 			return false;
@@ -693,17 +726,17 @@ function fn_ImmediateStart(gbn){
 <div id="contents">
 	<div class="contents_wrap">
 		<div class="contents_tit">
-			<h4>설정정보관리<a href="#n"><img src="/images/ico_tit.png" class="btn_info"/></a></h4>
+			<h4><spring:message code="migration.setting_information_management"/><a href="#n"><img src="/images/ico_tit.png" class="btn_info"/></a></h4>
 			<div class="infobox"> 
 				<ul>
-					<li>설정정보관리 설명</li>
-					<li></li>	
+					<li>서버에 생성된 설정정보관리 작업을 조회하거나 신규로 등록 또는 삭제 합니다.</li>
+					<li>조회 목록에서 Work명을 클릭하면 Configuration 정보를 조회할 수 있습니다.</li>	
 				</ul>
 			</div>
 			<div class="location">
 				<ul>
-					<li>Migration</li>
-					<li class="on">설정정보관리</li>
+					<li>MIGRATION</li>
+					<li class="on"><spring:message code="migration.setting_information_management"/></li>
 				</ul>
 			</div>
 		</div>	
@@ -711,30 +744,30 @@ function fn_ImmediateStart(gbn){
 			<div class="cmm_tab">
 				<ul id="tab1">
 					<li class="atv"><a href="javascript:selectTab('ddlWork')">DDL</a></li>
-					<li><a href="javascript:selectTab('dataWork')">Migration</a></li>
+					<li><a href="javascript:selectTab('dataWork')">MIGRATION</a></li>
 				</ul>
 				<ul id="tab2" style="display:none;">
 					<li><a href="javascript:selectTab('ddlWork')">DDL</a></li>
-					<li class="atv"><a href="javascript:selectTab('dataWork')">Migration</a></li>
+					<li class="atv"><a href="javascript:selectTab('dataWork')">MIGRATION</a></li>
 				</ul>
 			</div>
 			<div class="cmm_grp">
 				<div class="btn_type_float">													
 					<div class="btn_type_01" id="btnDDL">
-						<span class="btn btnC_01 btn_fl"><button type="button" onclick="fn_ImmediateStart('ddl')">즉시실행</button></span> 	
+						<span class="btn btnC_01 btn_fl"><button type="button" onclick="fn_ImmediateStart('ddl')"><spring:message code="migration.run_immediately"/></button></span> 	
 						<a class="btn" onClick="getddlDataList();"><button type="button"><spring:message code="common.search" /></button></a>
 						<span class="btn" onclick="fn_ddl_reg_popup()"><button type="button"><spring:message code="common.registory" /></button></span>
 						<span class="btn" onClick="fn_ddl_regre_popup()"><button type="button"><spring:message code="common.modify" /></button></span>
 						<span class="btn" onClick="fn_ddl_work_delete()"><button type="button"><spring:message code="common.delete" /></button></span>
-						<span class="btn"><button type="button" onclick="fn_copy()">복제 등록</button></span> 	
+						<span class="btn"><button type="button" onclick="fn_copy()"><spring:message code="migration.create_replica"/></button></span> 	
 					</div>
 					<div class="btn_type_01" id="btnData" style="display:none;">
-						<span class="btn btnC_01 btn_fl"><button type="button" onclick="fn_ImmediateStart('trans')">즉시실행</button></span> 	
+						<span class="btn btnC_01 btn_fl"><button type="button" onclick="fn_ImmediateStart('trans')"><spring:message code="migration.run_immediately"/></button></span> 	
 						<span class="btn" onclick="getdataDataList()"><button type="button"><spring:message code="common.search" /></button></span>
 						<span class="btn" onclick="fn_data_reg_popup()"><button type="button"><spring:message code="common.registory" /></button></span>
 						<span class="btn" onclick="fn_data_regre_popup()"><button type="button"><spring:message code="common.modify" /></button></span>
 						<span class="btn" onclick="fn_data_work_delete()"><button type="button"><spring:message code="common.delete" /></button></span>
-						<span class="btn"><button type="button" onclick="fn_copy()">복제 등록</button></span> 	
+						<span class="btn"><button type="button" onclick="fn_copy()"><spring:message code="migration.create_replica"/></button></span> 	
 					</div>
 				</div>
 				<div class="sch_form">
@@ -754,7 +787,7 @@ function fn_ImmediateStart(gbn){
 								<input type="hidden" name="ddl_save_pth" id="ddl_save_pth">
 								<th scope="row" class="t9"><spring:message code="common.work_name" /></th>
 								<td><input type="text" name="ddl_wrk_nm" id="ddl_wrk_nm" class="txt t3" maxlength="25"/></td>
-								<th scope="row" class="t9">DBMS구분</th>
+								<th scope="row" class="t9">DBMS<spring:message code="common.division" /></th>
 								<td>
 									<select name="ddl_dbms_dscd" id="ddl_dbms_dscd" class="select t5" >
 										<option value=""><spring:message code="common.total" /></option>				
@@ -765,7 +798,7 @@ function fn_ImmediateStart(gbn){
 								</td>
 							</tr>
 							<tr>
-								<th scope="row" class="t9">아이피</th>
+								<th scope="row" class="t9"><spring:message code="data_transfer.ip" /></th>
 								<td><input type="text" name="ddl_ipadr" id="ddl_ipadr" class="txt t3"/></td>
 								<th scope="row" class="t9">Database</th>
 								<td><input type="text" name="ddl_dtb_nm" id="ddl_dtb_nm" class="txt t3"/></td>
@@ -789,14 +822,14 @@ function fn_ImmediateStart(gbn){
 							<tr>
 								<th scope="row" class="t9"><spring:message code="common.work_name" /></th>
 								<td><input type="text" name="data_wrk_nm" id="data_wrk_nm" class="txt t3" maxlength="25"/></td>
-								<th scope="row" class="t9">구분</th>
+								<th scope="row" class="t9"><spring:message code="common.division" /></th>
 								<td>		
 									<select name="data_dbms_dscd" id="data_dbms_dscd" class="select t5" >
-										<option value="source_system">소스시스템</option>	
-										<option value="target_system">타겟시스템</option>				
+										<option value="source_system"><spring:message code="migration.source_system"/></option>	
+										<option value="target_system"><spring:message code="migration.target_system"/></option>				
 									</select>	
 								</td>
-								<th scope="row" class="t9">DBMS구분</th>
+								<th scope="row" class="t9">DBMS<spring:message code="common.division" /></th>
 								<td>
 									<select name="dbms_dscd" id="dbms_dscd" class="select t5" >
 										<option value=""><spring:message code="common.total" /></option>				
@@ -807,7 +840,7 @@ function fn_ImmediateStart(gbn){
 								</td>
 							</tr>
 							<tr>
-								<th scope="row" class="t9">아이피</th>
+								<th scope="row" class="t9"><spring:message code="data_transfer.ip" /></th>
 								<td><input type="text" name="data_ipadr" id="data_ipadr" class="txt t3"/></td>
 								<th scope="row" class="t9">Database</th>
 								<td><input type="text" name="data_dtb_nm" id="data_dtb_nm" class="txt t3"/></td>
@@ -825,16 +858,16 @@ function fn_ImmediateStart(gbn){
 								<tr>
 									<th width="10"></th>
 									<th width="30"><spring:message code="common.no" /></th>
-									<th width="100">Work명</th>
-									<th width="200">Work설명</th>
-									<th width="100">DBMS 구분</th>
-									<th width="100">아이피</th>
+									<th width="100"><spring:message code="common.work_name" /></th>
+									<th width="200"><spring:message code="common.work_description" /></th>
+									<th width="100">DBMS <spring:message code="common.division" /></th>
+									<th width="100"><spring:message code="history_management.ip" /></th>
 									<th width="100">Database</th>
 									<th width="150">Schema</th>
-									<th width="100">등록자</th>
-									<th width="100">등록일시</th>
-									<th width="100">수정자</th>
-									<th width="100">수정일시</th>
+									<th width="100"><spring:message code="common.register" /></th>
+									<th width="100"><spring:message code="common.regist_datetime" /></th>
+									<th width="100"><spring:message code="common.modifier" /></th>
+									<th width="100"><spring:message code="common.modify_datetime" /></th>
 									<th width="0">db2pg_ddl_wrk_id</th>
 									<th width="0">wrk_id</th>
 									<th width="0">ddl_save_pth</th>
@@ -847,22 +880,22 @@ function fn_ImmediateStart(gbn){
 								<tr>
 									<th width="10" rowspan="2"></th>
 									<th width="30" rowspan="2"><spring:message code="common.no" /></th>
-									<th width="100" rowspan="2">Work명</th>
-									<th width="200" rowspan="2">Work설명</th>
-									<th width="600" colspan="4">소스시스템</th>
-									<th width="600" colspan="4">타겟시스템</th>
-									<th width="100" rowspan="2">등록자</th>
-									<th width="100" rowspan="2">등록일시</th>
-									<th width="100" rowspan="2">수정자</th>
-									<th width="100" rowspan="2">수정일시</th>
+									<th width="100" rowspan="2"><spring:message code="common.work_name" /></th>
+									<th width="200" rowspan="2"><spring:message code="common.work_description" /></th>
+									<th width="600" colspan="4"><spring:message code="migration.source_system"/></th>
+									<th width="600" colspan="4"><spring:message code="migration.target_system"/></th>
+									<th width="100" rowspan="2"><spring:message code="common.register" /></th>
+									<th width="100" rowspan="2"><spring:message code="common.regist_datetime" /></th>
+									<th width="100" rowspan="2"><spring:message code="common.modifier" /></th>
+									<th width="100" rowspan="2"><spring:message code="common.modify_datetime" /></th>
 								</tr>
 								<tr>
-									<th width="100">DBMS 구분</th>
-									<th width="100">아이피</th>
+									<th width="100">DBMS <spring:message code="common.division" /></th>
+									<th width="100"><spring:message code="data_transfer.ip" /></th>
 									<th width="100">Database</th>
 									<th width="100">Schema</th>
-									<th width="100">DBMS 구분</th>
-									<th width="100">아이피</th>
+									<th width="100">DBMS <spring:message code="common.division" /></th>
+									<th width="100"><spring:message code="data_transfer.ip" /></th>
 									<th width="100">Database</th>
 									<th width="100">Schema</th>
 									<th width="0">db2pg_trsf_wrk_id</th>
@@ -882,7 +915,7 @@ function fn_ImmediateStart(gbn){
 <div id="pop_layer_copy" class="pop-layer">
 	<div class="pop-container" style="padding: 0px;">
 		<div class="pop_cts" style="width: 50%; height: 350px; overflow: auto; padding: 40px; margin: 0 auto; min-height:0; min-width:0;">
-			<p class="tit" style="margin-bottom: 15px;">복제 등록
+			<p class="tit" style="margin-bottom: 15px;"><spring:message code="migration.create_replica"/>
 				<a href="#n" class="btn" onclick="toggleLayer($('#pop_layer_copy'), 'off');" style="float: right;"><img src="/images/ico_state_01.png" style="margin-left: 235px;"/></a>
 			</p>
 			<table class="write">
@@ -908,7 +941,7 @@ function fn_ImmediateStart(gbn){
 				</tbody>
 			</table>
 			<div class="btn_type_02">
-				<a href="#n" class="btn" onclick="fn_copy_save()"><span>저장</span></a>
+				<a href="#n" class="btn" onclick="fn_copy_save()"><span><spring:message code="common.save"/></span></a>
 				<a href="#n" class="btn" onclick="toggleLayer($('#pop_layer_copy'), 'off');"><span><spring:message code="common.close"/></span></a>
 			</div>		
 		</div>

@@ -295,11 +295,11 @@ function fn_tableList(gbn){
  
 function fn_tableAddCallback(rowList, tableGbn, totalCnt){
 	if(tableGbn == 'include'){
-		$('#src_include_tables').val("총 테이블 : "+totalCnt+ "개 중   /   "+rowList.length+"개 선택됨");
+		$('#src_include_tables').val("<spring:message code='migration.total_table'/>"+totalCnt+ "<spring:message code='migration.selected_out_of'/>"+rowList.length+"<spring:message code='migration.items'/>");
 		$('#src_include_table_nm').val(rowList);
 		$('#src_table_total_cnt').val(totalCnt);
 	}else{
-		$('#src_exclude_tables').val("총 테이블 : "+totalCnt+ "개 중   /   "+rowList.length+"개 선택됨");
+		$('#src_exclude_tables').val("<spring:message code='migration.total_table'/>"+totalCnt+ "<spring:message code='migration.selected_out_of'/>"+rowList.length+"<spring:message code='migration.items'/>");
 		$('#src_exclude_table_nm').val(rowList);
 		$('#src_table_total_cnt').val(totalCnt);
 	}
@@ -316,10 +316,10 @@ function fn_tableAddCallback(rowList, tableGbn, totalCnt){
 </form>
 <div class="pop_container">
 	<div class="pop_cts">
-		<p class="tit">DDL 등록</p>
+		<p class="tit">DDL <spring:message code="common.registory" /></p>
 		<div class="pop_cmm">
 			<table class="write">
-				<caption>DDL 등록</caption>
+				<caption>DDL <spring:message code="common.registory" /></caption>
 				<colgroup>
 					<col style="width:105px;" />
 					<col />
@@ -343,7 +343,6 @@ function fn_tableAddCallback(rowList, tableGbn, totalCnt){
 			</table>
 		</div>
 		<div class="pop_cmm mt25">
-		<div class="sub_tit"><p>시스템정보</p></div>
 			<table class="write">
 				<colgroup>
 					<col style="width:105px;" />
@@ -351,7 +350,7 @@ function fn_tableAddCallback(rowList, tableGbn, totalCnt){
 				</colgroup>
 				<tbody>
 					<tr>
-						<th scope="row" class="ico_t2">소스시스템</th>
+						<th scope="row" class="ico_t2"><spring:message code="migration.source_system"/></th>
 						<td><input type="text" class="txt" name="db2pg_sys_nm" id="db2pg_sys_nm" placeholder="등록 버튼을 눌러주세요" readonly="readonly"/>
 							<span class="btn btnC_01"><button type="button" class= "btn_type_02" onclick="fn_dbmsInfo()" style="width: 60px; margin-right: -60px; margin-top: 0;">등록</button></span>							
 						</td>
@@ -360,16 +359,15 @@ function fn_tableAddCallback(rowList, tableGbn, totalCnt){
 			</table>
 		</div>
 		<div class="pop_cmm mt25">
-		<div class="sub_tit"><p>옵션정보</p></div>
+		<div class="sub_tit"><p><spring:message code="migration.option_information"/></p></div>
 			<table class="write">
-				<caption>옵션정보</caption>
 				<colgroup>
 					<col style="width:30%" />
 					</col>
 				</colgroup>
 				<tbody>
 					<tr>
-						<th scope="row" class="ico_t2">대소문자 지정</th>
+						<th scope="row" class="ico_t2"><spring:message code="migration.specify_case"/></th>
 						<td>
 							<select name="db2pg_uchr_lchr_val" id="db2pg_uchr_lchr_val" class="select t5">
 								<c:forEach var="codeLetter" items="${codeLetter}">
@@ -379,7 +377,7 @@ function fn_tableAddCallback(rowList, tableGbn, totalCnt){
 						</td>
 					</tr>
 					<tr>
-						<th scope="row" class="ico_t2">View Table 제외 여부</th>
+						<th scope="row" class="ico_t2"><spring:message code="migration.view_table_exclusion"/></th>
 						<td>
 							<select name="src_tb_ddl_exrt_tf" id="src_tb_ddl_exrt_tf" class="select t5">
 								<c:forEach var="codeTF" items="${codeTF}">
@@ -391,8 +389,8 @@ function fn_tableAddCallback(rowList, tableGbn, totalCnt){
 					<tr>
 						<th scope="row" class="ico_t2">
 							<select name="src_tables" id="src_tables" class="select t5" style="width: 176px;" >
-								<option value="include">대상 테이블</option>
-								<option value="exclude">제외 테이블</option>
+								<option value="include"><spring:message code="migration.inclusion_table"/></option>
+								<option value="exclude"><spring:message code="migration.exclusion_table"/></option>
 							</select>
 						</th>
 						<td>

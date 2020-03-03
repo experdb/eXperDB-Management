@@ -1162,7 +1162,7 @@ function fn_search(){
 																<label for="migration">MIGRATION</label>
 															</div>
 														</th>
-														<td colspan="2">소스/타겟 DBMS 관리</td>
+														<td colspan="2"><spring:message code="migration.source/target_dbms_management"/></td>
 														<td>
 															<div class="inp_chk">
 																<input type="checkbox" id="r_MN00015" name="r_mnu_nm" value="MN00015"/>
@@ -1177,7 +1177,7 @@ function fn_search(){
 														</td>
 													</tr>										
 													<tr>
-														<td colspan="2">설정정보관리</td>
+														<td colspan="2"><spring:message code="migration.setting_information_management"/></td>
 														<td>
 															<div class="inp_chk">
 																<input type="checkbox" id="r_MN00016" name="r_mnu_nm" value="MN00016"/>
@@ -1192,7 +1192,7 @@ function fn_search(){
 														</td>
 													</tr>	
 													<tr>
-														<td colspan="2">수행이력</td>
+														<td colspan="2"><spring:message code="migration.performance_history"/></td>
 														<td>
 															<div class="inp_chk">
 																<input type="checkbox" id="r_MN00017" name="r_mnu_nm" value="MN00017"/>

@@ -53,11 +53,11 @@
 					</colgroup>
 					<tbody>
 							<tr>
-								<td>Work명</td>
+								<td><spring:message code="common.work_name" /></td>
 								<td style="text-align: left">${result.wrk_nm}</td>
 							</tr>
 							<tr>
-								<td>Work 설명</td>
+								<td><spring:message code="common.work_description" /></td>
 								<td style="text-align: left">${result.wrk_exp}</td>
 							</tr>
 							<tr>
@@ -82,14 +82,14 @@
 					</tbody>
 				</table>
 				<br><br>
-				<p class="pop_s_tit">작업로그정보</p>
+				<p class="pop_s_tit"><spring:message code="backup_management.job_log_info"/></p>
 				<table class="write" border="0">
 					<caption>
 						<spring:message code="backup_management.job_log_info" />
 					</caption>
 					<tbody>
 						<tr>
-							<td><textarea name="wrkLogInfo" id="wrkLogInfo" style="height: 180px;" readonly="readonly">${db2pgResult.RESULT}</textarea></td>
+							<td><textarea name="wrkLogInfo" id="wrkLogInfo" style="height: 180px;" readonly="readonly"><c:if test="${db2pgResult.RESULT == null}">파일이 삭제되어 작업로그정보를 출력할 수 없습니다.</c:if>${db2pgResult.RESULT}</textarea></td>
 						</tr>
 					</tbody>
 				</table>

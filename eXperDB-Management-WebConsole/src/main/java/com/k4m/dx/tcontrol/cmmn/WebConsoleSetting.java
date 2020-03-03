@@ -31,11 +31,10 @@ public class WebConsoleSetting {
 		String strTransferYN ="";
 		String strAuditYN="";
 		
-		String strDb2pgYN = "";
 		String strDb2pgPath = "";
 		
 		String strLanguage ="";
-		String strVersion ="eXperDB-Management-WebConsole-10.7.1.3";
+		String strVersion ="eXperDB-Management-WebConsole-10.7.1.4";
 		
 		String strEncryptYN="";
 		
@@ -169,27 +168,8 @@ public class WebConsoleSetting {
 			}
 		}	
 		
-		
-		/* DB2PG 사용여부 */
-		System.out.println("Whether DB2PG is enabled? (y, n)");
-		
-		strDb2pgYN = scan.nextLine();
-		strDb2pgYN = strDb2pgYN.toUpperCase();
-		
-		while (true) {
-			if(strDb2pgYN.equals("")) {
-				System.out.println("Please enter your DB2PG setting yn. ");
-				
-				System.out.println("Whether DB2PG is enabled? (y, n) :");
-				
-				strDb2pgYN = scan.nextLine();
-				strDb2pgYN = strDb2pgYN.toUpperCase();
-			} else {
-				break;
-			}
-		}	
-		
-		if(strDb2pgYN.equals("Y")) {
+
+		/* DB2PG 설치 경로 */
 			System.out.println("DB2PG installation path : ");
 			
 			strDb2pgPath = scan.nextLine();
@@ -205,7 +185,6 @@ public class WebConsoleSetting {
 					break;
 				}
 			}	
-		}
 		
 		
 		
@@ -261,10 +240,7 @@ public class WebConsoleSetting {
 			System.out.println("Repository database Access information :" + strDatabaseUrl);
 			System.out.println("Whether to enable auditing settings : " + strAuditYN);
 			System.out.println("Whether data transfer is enabled : " + strTransferYN);
-			System.out.println("Whether DB2PG is enabled : " + strDb2pgYN);
-			if(strDb2pgYN.equals("Y")) {
-				System.out.println("DB2PG installation path : " + strDb2pgPath);
-			}
+			System.out.println("DB2PG installation path : " + strDb2pgPath);
 			System.out.println("#################################################");
 			System.out.println("###################eXperDB-Encrypt##################");
 			System.out.println("eXperDB-Encrypt server.url :" + strEncryptServerUrl);
@@ -282,10 +258,7 @@ public class WebConsoleSetting {
 			System.out.println("Repository database Access information :" + strDatabaseUrl);
 			System.out.println("Whether to enable auditing settings : " + strAuditYN);
 			System.out.println("Whether data transfer is enabled : " + strTransferYN);
-			System.out.println("Whether DB2PG is enabled : " + strDb2pgYN);
-			if(strDb2pgYN.equals("Y")) {
-				System.out.println("DB2PG installation path : " + strDb2pgPath);
-			}
+			System.out.println("DB2PG installation path : " + strDb2pgPath);
 			System.out.println("#################################################");
 		}
 		
@@ -363,10 +336,7 @@ public class WebConsoleSetting {
 		    prop.setProperty("version", strVersion);
 		    prop.setProperty("pg_audit", strAuditYN);
 		    prop.setProperty("transfer", strTransferYN);		  
-		    prop.setProperty("db2pg", strDb2pgYN);
-		    if(strDb2pgYN.equals("Y")){
-		    	  prop.setProperty("db2pg_path", strDb2pgPath);
-		    }		  
+		    prop.setProperty("db2pg_path", strDb2pgPath);
 
 		    if(strEnctyptYn.equals("Y")){
 		    	prop.setProperty("encrypt.useyn", strEnctyptYn);
