@@ -214,4 +214,20 @@ public interface ScheduleService {
 
 	List<Map<String, Object>> selectDb2pgScheduleWorkList(HashMap<String, Object> paramvalue) throws Exception;
 
+	
+	/**
+	 *  이행로그 등록
+	 * 
+	 * @param Map<String, Object>
+	 * @throws Exception
+	 */
+	void insertMigExe(Map<String, Object> param) throws Exception;
+
+	/**
+	 *  이행로그 수정
+	 * 
+	 * @param Map<String, Object>
+	 * @throws Exception
+	 */
+	void updateMigExe(Map<String, Object> param) throws Exception;
 }

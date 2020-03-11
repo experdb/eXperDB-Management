@@ -265,7 +265,6 @@ public class CmmnController {
 			mv.addObject("wrk_state", wrk_state);
 			mv.addObject("svr_state", svr_state);
 			mv.addObject("bak_state", bak_state);
-			mv.addObject("refreshTime", 30);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
