@@ -12,10 +12,16 @@ import java.util.List;
 import java.util.Map;
 import java.util.Properties;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.ResourceUtils;
+import org.springframework.web.context.ContextLoader;
+import org.springframework.web.context.WebApplicationContext;
 
 import com.k4m.dx.tcontrol.cmmn.BeanUtils;
+import com.k4m.dx.tcontrol.common.service.CmmnServerInfoService;
+import com.k4m.dx.tcontrol.db2pg.history.service.Db2pgHistoryService;
 import com.k4m.dx.tcontrol.db2pg.history.service.impl.Db2pgHistoryDAO;
+import com.k4m.dx.tcontrol.functions.schedule.service.ScheduleService;
 
 public class DB2PG_ImmediateExe implements Runnable{
 	
@@ -24,8 +30,8 @@ public class DB2PG_ImmediateExe implements Runnable{
 	private String mig_dscd;
 	private String id;
 	private String gbn;
-	
-	Db2pgHistoryDAO db2pgHistoryService = (Db2pgHistoryDAO) BeanUtils.getBean("db2pgHistoryService");
+
+	ScheduleService scheduleService = (ScheduleService) BeanUtils.getBean("scheduleService");		
 	
 	private DB2PG_ImmediateExe(String wrk_id, String wrk_nm, String mig_dscd, String id, String gbn) {
 		this.wrk_id = wrk_id;
@@ -169,7 +175,8 @@ public class DB2PG_ImmediateExe implements Runnable{
             param.put("frst_regr_id", id);
             param.put("lst_mdfr_id", id);
 
-            db2pgHistoryService.insertMigExe(param);
+            
+            scheduleService.insertMigExe(param);
 
         }catch(Exception e){
         	e.printStackTrace();
@@ -189,7 +196,8 @@ public class DB2PG_ImmediateExe implements Runnable{
             param.put("wrk_strt_dtm", startTime);
             param.put("lst_mdfr_id", id);
             
-            db2pgHistoryService.updateMigExe(param);
+            scheduleService.updateMigExe(param);
+
         }catch(Exception e){
         	e.printStackTrace();
         }

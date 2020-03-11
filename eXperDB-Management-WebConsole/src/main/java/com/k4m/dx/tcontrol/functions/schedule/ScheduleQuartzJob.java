@@ -21,7 +21,6 @@ import com.k4m.dx.tcontrol.cmmn.client.ClientInfoCmmn;
 import com.k4m.dx.tcontrol.common.service.AgentInfoVO;
 import com.k4m.dx.tcontrol.common.service.CmmnServerInfoService;
 import com.k4m.dx.tcontrol.db2pg.cmmn.DB2PG_START;
-import com.k4m.dx.tcontrol.db2pg.history.service.Db2pgHistoryService;
 import com.k4m.dx.tcontrol.functions.schedule.service.ScheduleService;
 import com.k4m.dx.tcontrol.functions.schedule.service.WrkExeVO;
 
@@ -31,8 +30,6 @@ public class ScheduleQuartzJob implements Job{
 	private CmmnServerInfoService cmmnServerInfoService;
 	
 	@SuppressWarnings("unused")
-	@Autowired
-	private Db2pgHistoryService db2pgHistoryService;
 	
 	private ConfigurableApplicationContext context;
 	
@@ -242,6 +239,10 @@ public class ScheduleQuartzJob implements Job{
 						param.put("frst_regr_id", result.get("lst_mdfr_id"));
 						param.put("lst_mdfr_id", result.get("lst_mdfr_id"));
 						
+						//현재 스케줄은 데이터이행만 가능
+						param.put("mig_dscd", "TC003202");
+						
+						
 						vo.setExe_sn(intSeq);
 						vo.setScd_id(Integer.parseInt(resultWork.get(i).get("scd_id").toString()));
 						vo.setWrk_id(Integer.parseInt(resultWork.get(i).get("wrk_id").toString()));
@@ -250,7 +251,7 @@ public class ScheduleQuartzJob implements Job{
 						vo.setExe_grp_sn(intGrpSeq);
 						
 						scheduleService.insertT_WRKEXE_G(vo);
-						//db2pgHistoryService.insertImdExe(param);
+						scheduleService.insertMigExe(param);
 					}					
 				}		
 				if(!db2pg.equals("TC001903")){

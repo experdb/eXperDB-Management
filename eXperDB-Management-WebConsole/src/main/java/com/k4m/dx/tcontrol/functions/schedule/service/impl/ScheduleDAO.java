@@ -1,5 +1,6 @@
 package com.k4m.dx.tcontrol.functions.schedule.service.impl;
 
+import java.sql.SQLException;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -218,5 +219,15 @@ public class ScheduleDAO extends EgovAbstractMapper{
 		sl = (List<Map<String, Object>>) list("scheduleSql.selectDb2pgScheduleWorkList", paramvalue);		
 		return sl;
 	}
+
+
+	public void insertMigExe(Map<String, Object> param) {
+		insert("db2pgHistorySql.insertMigExe", param);
+	}
+	
+	public void updateMigExe(Map<String, Object> param) {
+		update("db2pgHistorySql.updateMigExe", param);
+	}
+
 
 }

@@ -283,13 +283,12 @@
 			, TO_CHAR(A.FRST_REG_DTM,'YYYY-MM-DD HH24:MI:SS') AS FRST_REG_DTM
 			, A.LST_MDFR_ID
 			, TO_CHAR(A.LST_MDF_DTM,'YYYY-MM-DD HH24:MI:SS') AS LST_MDF_DTM
-      FROM T_SCD_M A, T_SCD_D B, T_BCK_WRKCNG_I C, T_DBSVR_I D, T_WRKCNG_I E
+      FROM T_SCD_M A, T_SCD_D B, T_DBSVR_I D, T_WRKCNG_I E
+      LEFT OUTER JOIN T_BCK_WRKCNG_I C ON C.WRK_ID= E.WRK_ID
+	  LEFT OUTER JOIN T_DB2PG_TRSF_WRK_INF F ON E.WRK_ID = F.WRK_ID 
       WHERE 1=1	
-      AND C.WRK_ID = E.WRK_ID
-      AND B.WRK_ID = C.WRK_ID
       AND A.SCD_ID = B.SCD_ID
       AND C.DB_SVR_ID = D.DB_SVR_ID
-      AND C.WRK_ID = E.WRK_ID
       <if test="scd_nm != null and scd_nm != '' ">
       AND A.SCD_NM LIKE  '%' || #{scd_nm} || '%'
 	  </if>

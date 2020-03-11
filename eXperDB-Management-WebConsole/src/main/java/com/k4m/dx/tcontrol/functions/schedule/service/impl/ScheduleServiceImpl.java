@@ -293,4 +293,17 @@ public class ScheduleServiceImpl extends EgovAbstractServiceImpl  implements Sch
 	public List<Map<String, Object>> selectDb2pgScheduleWorkList(HashMap<String, Object> paramvalue) throws Exception {
 		return scheduleDAO.selectDb2pgScheduleWorkList(paramvalue);
 	}
+
+
+	@Override
+	public void insertMigExe(Map<String, Object> param) throws Exception {
+		scheduleDAO.insertMigExe(param);	
+	}
+	
+	@Override
+	public void updateMigExe(Map<String, Object> param) throws Exception {
+		scheduleDAO.updateMigExe(param);
+	}
+	
+
 }
