@@ -152,4 +152,10 @@ public class BackupDAO extends EgovAbstractMapper{
 		resultSet = (int) getSqlSession().selectOne("backupSQL.selectScheduleCheckCnt", paramvalue);
 		return resultSet;
 	}
+
+	public List<Map<String, Object>> selectBckInfo(int wrk_id) {
+		List<Map<String, Object>> sl = null;
+		sl = (List<Map<String, Object>>) list("backupSQL.selectBckInfo", wrk_id);		
+		return sl;
+	}
 }

@@ -826,4 +826,50 @@
 				 #{item}::numeric
 	   </foreach>
   	</select>
+  	
+  	
+  	
+  	
+	<select id="selectBckInfo" resultType="hashMap" parameterType="int">
+		/**
+	 	* Query ID : selectBckInfo
+	 	* Description : 백업 정보 조회
+	 	* Author : 변승우
+	 	**/
+	 	SELECT 
+					 A.DB_SVR_ID
+					, A.DB_ID
+					, (CASE WHEN DB_ID>0 THEN (SELECT DB_NM FROM T_DB_I WHERE A.DB_ID=DB_ID AND USEYN = 'Y') ELSE '' END) AS DB_NM
+					, A.BCK_BSN_DSCD
+					, (SELECT SYS_CD_NM FROM T_SYSDTL_C WHERE A.BCK_BSN_DSCD = SYS_CD ) AS BCK_BSN_DSCD_NM
+					, B.WRK_ID
+					, B.WRK_NM
+					, B.WRK_EXP
+					, A.BCK_OPT_CD
+					, (SELECT SYS_CD_NM FROM T_SYSDTL_C WHERE A.BCK_OPT_CD = SYS_CD ) AS BCK_OPT_CD_NM
+					, A.BCK_MTN_ECNT
+					, A.CPS_YN
+					, A.LOG_FILE_BCK_YN
+					, A.LOG_FILE_STG_DCNT
+					, A.LOG_FILE_MTN_ECNT
+					, A.CPRT
+					, A.SAVE_PTH
+					, A.FILE_FMT_CD
+					, (SELECT SYS_CD_NM FROM T_SYSDTL_C WHERE A.FILE_FMT_CD = SYS_CD ) AS FILE_FMT_CD_NM
+					, A.FILE_STG_DCNT
+					, A.ENCD_MTH_NM
+					, (SELECT SYS_CD_NM FROM T_SYSDTL_C WHERE A.ENCD_MTH_NM = SYS_CD ) AS INCD
+					, A.USR_ROLE_NM
+					, A.DATA_PTH
+					, A.BCK_PTH
+					, A.ACV_FILE_STGDT
+					, A.ACV_FILE_MTNCNT
+					, A.BCK_FILENM
+					, A.LOG_FILE_PTH
+					, A.EXE_CMD
+					, B.BSN_DSCD
+		FROM T_BCK_WRKCNG_I A, T_WRKCNG_I B
+		WHERE A.WRK_ID = B.WRK_ID
+	 	AND A.WRK_ID = #{wrk_id}
+	</select>
 </mapper>

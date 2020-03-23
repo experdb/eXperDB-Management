@@ -144,4 +144,9 @@ public class BackupServiceImpl extends EgovAbstractServiceImpl implements Backup
 	public int selectScheduleCheckCnt(HashMap<String, Object> paramvalue) {
 		return backupDAO.selectScheduleCheckCnt(paramvalue);
 	}
+
+	@Override
+	public List<Map<String, Object>> selectBckInfo(int wrk_id) throws Exception{
+		return backupDAO.selectBckInfo(wrk_id);
+	}
 }

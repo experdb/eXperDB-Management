@@ -182,5 +182,7 @@ public interface BackupService {
 	public List selectMonthBckScheduleSearch(HashMap<String,Object> hp) throws Exception;
 
 	public int selectScheduleCheckCnt(HashMap<String, Object> paramvalue);
+
+	public List<Map<String, Object>> selectBckInfo(int wrk_id) throws Exception;
 	
 }

@@ -7,6 +7,8 @@ import java.util.Calendar;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -48,6 +50,7 @@ import com.k4m.dx.tcontrol.common.service.CmmnCodeVO;
 import com.k4m.dx.tcontrol.common.service.CmmnServerInfoService;
 import com.k4m.dx.tcontrol.common.service.HistoryVO;
 import com.k4m.dx.tcontrol.common.service.PageVO;
+import com.k4m.dx.tcontrol.functions.schedule.service.ScheduleService;
 import com.k4m.dx.tcontrol.login.service.LoginVO;
 
 @Controller
@@ -66,7 +69,9 @@ public class BackupController {
 	
 	@Autowired
 	private CmmnServerInfoService cmmnServerInfoService;
-
+	
+	@Autowired
+	private ScheduleService scheduleService ;
 	
 	private List<Map<String, Object>> dbSvrAut;
 	
@@ -203,6 +208,11 @@ public class BackupController {
 			} catch (Exception e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
+			}
+			
+		
+			if(request.getParameter("gbn") != null){
+				mv.addObject("gbn",request.getParameter("gbn"));
 			}
 			
 			mv.addObject("db_svr_id",workVO.getDb_svr_id());
@@ -1394,5 +1404,101 @@ public class BackupController {
 				e.printStackTrace();
 			}
 			return pgDumpInfo;
+		}
+		
+		
+
+	
+		/**
+		 * 백업 즉시 실행
+		 * 
+		 * @return resultSet
+		 * @throws Exception
+		 */
+		@RequestMapping(value = "/backupImmediateExe.do")
+		@ResponseBody
+		public List<HashMap<String, String>> backupImmediateExe (HttpServletRequest request) {
+
+			
+			Map<String, Object> result = null;
+			
+			String cmd =null;
+			String bck_fileNm ="";
+			
+			List<Map<String, Object>> resultWork = null;		
+			
+			try{
+				int db_svr_id = Integer.parseInt(request.getParameter("db_svr_id"));
+				int wrk_id = Integer.parseInt(request.getParameter("wrk_id"));
+				String bck_bsn_dscd = request.getParameter("bck_bsn_dscd");
+			
+				DbServerVO schDbServerVO = new DbServerVO();
+				schDbServerVO.setDb_svr_id(db_svr_id);
+				DbServerVO dbServerVO = (DbServerVO) cmmnServerInfoService.selectServerInfo(schDbServerVO);
+				
+				String strIpAdr = dbServerVO.getIpadr();
+				AgentInfoVO vo = new AgentInfoVO();
+				vo.setIPADR(strIpAdr);
+				AgentInfoVO agentInfo = (AgentInfoVO) cmmnServerInfoService.selectAgentInfo(vo);
+
+				String IP = dbServerVO.getIpadr();
+				int PORT = agentInfo.getSOCKET_PORT();
+				
+			
+				BackupImmediate bckImd= new  BackupImmediate();
+				
+				resultWork = backupService.selectBckInfo(wrk_id);
+				
+				
+				if(bck_bsn_dscd.equals("TC000201")){
+					 cmd = bckImd.rmanBackupMakeCmd(resultWork, dbServerVO);
+					 
+					 System.out.println("RMAN 명령어@@@@@@@@@@@@@@@@@@@@");
+					 System.out.println(cmd);
+				}else{
+					List<Map<String, Object>> addOption = null;
+					List<Map<String, Object>> addObject = null;
+					
+					Calendar calendar = Calendar.getInstance();				
+			        java.util.Date date = calendar.getTime();
+			        String today = (new SimpleDateFormat("yyyyMMddHHmmss").format(date));
+
+			    	if(resultWork.get(0).get("file_fmt_cd_nm") != null && resultWork.get(0).get("file_fmt_cd_nm") != ""){							
+						if(resultWork.get(0).get("file_fmt_cd_nm").equals("tar")){
+							bck_fileNm = "eXperDB_"+resultWork.get(0).get("wrk_id")+"_"+today+".tar";	
+						}else if(resultWork.get(0).get("file_fmt_cd_nm").equals("diretocry")){
+							bck_fileNm = "eXperDB_"+resultWork.get(0).get("wrk_id")+"_"+today;
+						}else if(resultWork.get(0).get("file_fmt_cd_nm").equals("plain")){
+							bck_fileNm = "eXperDB_"+resultWork.get(0).get("wrk_id")+"_"+today+".sql";
+						}else{						
+							bck_fileNm = "eXperDB_"+resultWork.get(0).get("wrk_id")+"_"+today+".dump";									
+						}
+					}
+			        
+			        //부가옵션 조회
+					addOption= scheduleService.selectAddOption(wrk_id);			
+					//오브젝트옵션 조회
+					addObject= scheduleService.selectAddObject(wrk_id);
+					
+					cmd = bckImd.dumpBackupMakeCmd( dbServerVO,resultWork,addOption,addObject,bck_fileNm);
+					
+					System.out.println("DUMP 명령어@@@@@@@@@@@@@@@@@@@@");
+					System.out.println(cmd);
+				}
+				
+				ClientInfoCmmn cic = new ClientInfoCmmn();
+				result = cic.immediate(IP, PORT, cmd, resultWork, bck_fileNm);
+				
+
+				System.out.println("결과");
+				System.out.println(result.get("RESULT_CODE"));
+				System.out.println(result.get("ERR_CODE"));
+				System.out.println(result.get("ERR_MSG"));
+				
+			}catch(Exception e){
+				e.printStackTrace();
+			}
+			
+			return null;			
 		}
 }

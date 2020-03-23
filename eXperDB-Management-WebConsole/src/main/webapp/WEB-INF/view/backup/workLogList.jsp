@@ -23,12 +23,13 @@
 var tableRman = null;
 var tableDump = null;
 var tab = "rman";
+var gbn = "${gbn}";
 
 /* ********************************************************
  * Data initialization
  ******************************************************** */
 $(window.document).ready(function() {
-
+	
 	fn_rman_init();
 	fn_dump_init();
 	
@@ -41,15 +42,24 @@ $(window.document).ready(function() {
 	$("#wrk_strt_dtm").val(day_start);
 	$("#wrk_end_dtm").val(day_end);
 	
-	fn_get_rman_list();
-	//fn_get_dump_list();
+
 	
 	$( ".calendar" ).datepicker({
 		dateFormat: 'yy-mm-dd',
 		changeMonth : true,
 		changeYear : true
  	});
-	$("#logDumpListDiv").hide();
+	
+	//fn_get_rman_list();
+	//fn_get_dump_list();
+	//$("#logDumpListDiv").hide();
+	//$("#logRmanListDiv").show();
+	
+	if(gbn!=""){
+		selectTab(gbn);
+	}else{
+		selectTab("rman");
+	}
 });
 
 /* ********************************************************
@@ -409,6 +419,7 @@ $(function() {
  * Tab Click
  ******************************************************** */
 var clickDump = false;
+var clickRman = false;
 function selectTab(intab){
 	tab = intab;
 	if(intab == "dump"){
@@ -423,7 +434,7 @@ function selectTab(intab){
 			fn_get_dump_list();
 			clickDump = true;
 		}
-	}else{
+	}else{	
 		$("#wrk_nm").val("");
 		$("#tab_rman").show();
 		$("#tab_dump").hide();
@@ -431,6 +442,10 @@ function selectTab(intab){
 		$(".search_dump").hide();
 		$("#logDumpListDiv").hide();
 		$("#logRmanListDiv").show();
+		if(clickRman == false){
+			fn_get_rman_list();
+			clickRman = true;
+		}
 	}
 }
 
