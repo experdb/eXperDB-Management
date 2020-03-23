@@ -109,5 +109,13 @@ public class SystemDAO {
 	public void updateDUMP_RESTORE_EXELOG(DumpRestoreVO vo) throws Exception {
 		session.update("system.updateDUMP_RESTORE_EXELOG", vo);
 	}
+
+	public int selectScd_id() throws Exception {
+		return (int) session.selectOne("system.selectScd_id");
+	}
+	
+	public void insertWRKEXE_G(WrkExeVO vo) throws Exception  {
+		 session.insert("system.insertWRKEXE_G", vo);
+	}
 	
 }

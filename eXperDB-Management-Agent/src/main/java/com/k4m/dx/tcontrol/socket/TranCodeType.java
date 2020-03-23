@@ -47,6 +47,7 @@ public class TranCodeType {
 	public static final String DxT031 = "DxT031";
 	public static final String DxT032 = "DxT032";
 	public static final String DxT033 = "DxT033";
+	public static final String DxT034 = "DxT034";
 	
 	public static final String STATUS = "STATUS";
 	public static final String STOP = "STOP";
