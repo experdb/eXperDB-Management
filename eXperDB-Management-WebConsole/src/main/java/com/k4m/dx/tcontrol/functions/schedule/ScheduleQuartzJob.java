@@ -469,13 +469,21 @@ public class ScheduleQuartzJob implements Job{
 			rmanCmd += " --compress-data";
 		}
 				
+		
+		if(resultWork.get(i).get("bck_opt_cd").toString().equals("TC000303")){
+			rmanCmd += " --keep-arclog-files="+resultWork.get(i).get("acv_file_mtncnt");
+			rmanCmd += " --keep-arclog-days="+resultWork.get(i).get("acv_file_stgdt");
+			rmanCmd += " --keep-srvlog-files="+resultWork.get(i).get("log_file_mtn_ecnt");
+			rmanCmd += " --keep-srvlog-days="+resultWork.get(i).get("log_file_stg_dcnt");
+		}else{
 		rmanCmd += " --keep-data-generations="+resultWork.get(i).get("bck_mtn_ecnt");
 		rmanCmd += " --keep-data-days="+resultWork.get(i).get("file_stg_dcnt");
 		rmanCmd += " --keep-arclog-files="+resultWork.get(i).get("acv_file_mtncnt");
 		rmanCmd += " --keep-arclog-days="+resultWork.get(i).get("acv_file_stgdt");
 		rmanCmd += " --keep-srvlog-files="+resultWork.get(i).get("log_file_mtn_ecnt");
 		rmanCmd += " --keep-srvlog-days="+resultWork.get(i).get("log_file_stg_dcnt");
-
+		}
+	
 		//rmanCmd += " >> "+resultWork.get(i).get("log_file_pth")+"/"+resultWork.get(i).get("wrk_nm").toString().replaceAll(" ", "")+".log 2>&1";
 		return rmanCmd;	
 	}
