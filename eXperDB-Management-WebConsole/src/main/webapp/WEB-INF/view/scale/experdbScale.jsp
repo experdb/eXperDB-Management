@@ -113,7 +113,6 @@ button[disabled]{
 						  return '<span onClick=javascript:fn_securityShow("'+full.instance_id+'","'+full.db_svr_id+'"); title="'+full.security_group+'" class="bold">' + full.security_group + '</span>';
 					}
 				},
-				{ data : "owner", className : "dt-left", defaultContent : ""},
 			],'select': {'style': 'multi'}
 		});
 
@@ -130,7 +129,6 @@ button[disabled]{
 		table.tables().header().to$().find('th:eq(10)').css('min-width', '100px');
 		table.tables().header().to$().find('th:eq(11)').css('min-width', '60px');
 		table.tables().header().to$().find('th:eq(12)').css('min-width', '120px');
-		table.tables().header().to$().find('th:eq(13)').css('min-width', '80px');
 
 	    $(window).trigger('resize');
 	}
@@ -567,8 +565,7 @@ button[disabled]{
 								<th width="80"><spring:message code="scale_management.IPv4_public_ip" /></th>
 								<th width="100"><spring:message code="scale_management.keyname" /></th>
 								<th width="60"><spring:message code="scale_management.monitoring" /></th>
-								<th width="120"><spring:message code="scale_management.security_group" /></th>
-								<th width="80"><spring:message code="scale_management.owner" /></th>									
+								<th width="120"><spring:message code="scale_management.security_group" /></th>							
 							</tr>
 						</thead>
 					</table>
