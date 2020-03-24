@@ -674,11 +674,78 @@ function selectTab(tab){
 		$("#btnDump").hide();
 	}
 }
+
+
+
+/* ********************************************************
+ * 즉시실행 DDL 
+ ******************************************************** */
+function fn_ImmediateStart(gbn){
+
+	if(gbn == 'rman'){
+		var datas = tableRman.rows('.selected').data();
+		var rowCnt = tableRman.rows('.selected').data().length;
+	
+		if(rowCnt <= 0){
+			alert("<spring:message code='message.msg35'/>");
+			return false;	
+		}else if(rowCnt > 1){
+			alert("<spring:message code='message.msg04'/>");
+		}
+	}else{
+		var datas = tableDump.rows('.selected').data();
+		var rowCnt = tableDump.rows('.selected').data().length;
+	
+		if(rowCnt <= 0){
+			alert("<spring:message code='message.msg35'/>");
+			return false;	
+		}else if(rowCnt > 1){
+			alert("<spring:message code='message.msg04'/>");
+		}
+	}
+	
+	if (confirm("백업을 즉시실행 하시겠습니까?")) {
+		
+			 $.ajax({
+				url : "/backupImmediateExe.do",
+			  	data : {
+			  		wrk_id:datas[0].wrk_id,
+			  		db_svr_id:datas[0].db_svr_id, 
+			  		bck_bsn_dscd:datas[0].bck_bsn_dscd,
+			  	},
+			  	timeout : 1000,    
+				type : "post",
+				async: true,
+				beforeSend: function(xhr) {
+			        xhr.setRequestHeader("AJAX", true);
+			     },
+				error : function(xhr, status, error) {
+					if(xhr.status == 401) {
+						alert('<spring:message code="message.msg02" />');
+						top.location.href = "/";
+					} else if(xhr.status == 403) {
+						alert('<spring:message code="message.msg03" />');
+						top.location.href = "/";
+					} else {
+						alert("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""));
+					}
+				},
+				success : function(result) {		
+				}
+			});		 
+		}	
+
+		alert("즉시실행 되었습니다.");
+		location.href='/backup/workLogList.do?db_svr_id='+datas[0].db_svr_id+'&&gbn='+gbn;
+	
+
+			
+
+}
 </script>
 
 <%@include file="../cmmn/workRmanInfo.jsp"%>
 <%@include file="../cmmn/workDumpInfo.jsp"%>
-
 
 <form name="frmPopup">
 	<input type="hidden" name="bck"  id="bck">
@@ -718,12 +785,17 @@ function selectTab(tab){
 			</div>
 			<div class="cmm_grp">
 				<div class="btn_type_01" id="btnRman">
+					<span class="btn btnC_01 btn_fl"><button type="button" onclick="fn_ImmediateStart('rman')">즉시실행</button></span> 
+			
+				
 					<a class="btn" onClick="fn_rman_find_list();"><button type="button"><spring:message code="common.search" /></button></a>
 					<span class="btn" onclick="fn_rman_reg_popup()"><button type="button"><spring:message code="common.registory" /></button></span>
 					<span class="btn" onClick="fn_rman_regreg_popup()"><button type="button"><spring:message code="common.modify" /></button></span>
 					<span class="btn" onClick="fn_rman_work_delete()"><button type="button"><spring:message code="common.delete" /></button></span>
 				</div>
 				<div class="btn_type_01" id="btnDump" style="display:none;">
+					<span class="btn btnC_01 btn_fl"><button type="button" onclick="fn_ImmediateStart('dump')">즉시실행</button></span> 
+				
 					<span class="btn" onclick="fn_dump_find_list()"><button type="button"><spring:message code="common.search" /></button></span>
 					<span class="btn" onclick="fn_dump_reg_popup()"><button type="button"><spring:message code="common.registory" /></button></span>
 					<span class="btn" onclick="fn_dump_regreg_popup()"><button type="button"><spring:message code="common.modify" /></button></span>

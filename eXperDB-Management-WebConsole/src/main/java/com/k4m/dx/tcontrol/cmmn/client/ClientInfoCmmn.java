@@ -9,10 +9,11 @@ import java.util.Map;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 
+import com.k4m.dx.tcontrol.db2pg.cmmn.DB2PG_ImmediateExe;
 import com.k4m.dx.tcontrol.restore.service.RestoreDumpVO;
 import com.k4m.dx.tcontrol.restore.service.RestoreRmanVO;
 
-public class ClientInfoCmmn {
+public class ClientInfoCmmn implements Runnable{
 
 	// 1. 서버 연결 테스트 (serverConn)
 	public Map<String, Object> DbserverConn(JSONObject serverObj, String IP, int PORT) {
@@ -1681,5 +1682,79 @@ public List<HashMap<String, String>> dumpShow(String IP, int PORT,String cmd) {
 			e.printStackTrace();
 		}
 		return result;
+	}
+	
+	
+	//34. 즉시실행
+	public Map<String, Object> immediate(String IP, int PORT, String cmd, List<Map<String, Object>> resultWork, String bck_fileNm) {
+		
+		Map<String, Object> result = new HashMap<String, Object>();
+		JSONArray arrCmd = new JSONArray();
+		
+		String bckCmd = cmd;
+		
+		try {
+			
+			JSONObject jObj = new JSONObject();
+							
+			arrCmd.add(0, bckCmd);
+
+			if(resultWork.get(0).get("bck_opt_cd") != null && resultWork.get(0).get("bck_opt_cd").equals("TC000301")){
+				String validateCmd = "pg_rman validate -B "+resultWork.get(0).get("bck_pth").toString(); 
+				arrCmd.add(1, validateCmd);
+			}
+			
+			if(resultWork.get(0).get("bck_bsn_dscd").equals("TC000201")){
+				jObj.put(ClientProtocolID.BCK_OPT_CD, resultWork.get(0).get("bck_opt_cd").toString());
+				jObj.put(ClientProtocolID.BCK_FILE_PTH, resultWork.get(0).get("bck_pth").toString());
+			}else{
+				jObj.put(ClientProtocolID.BCK_FILE_PTH, resultWork.get(0).get("save_pth").toString());
+			}
+			
+			jObj.put(ClientProtocolID.WORK_ID, resultWork.get(0).get("wrk_id").toString()); 
+			jObj.put(ClientProtocolID.BCK_BSN_DSCD, resultWork.get(0).get("bck_bsn_dscd").toString());
+			jObj.put(ClientProtocolID.DB_SVR_IPADR_ID, resultWork.get(0).get("db_svr_id").toString());
+			jObj.put(ClientProtocolID.DB_ID, resultWork.get(0).get("db_id").toString());
+			jObj.put(ClientProtocolID.BCK_FILENM, bck_fileNm.toString());
+			jObj.put(ClientProtocolID.DX_EX_CODE, ClientTranCodeType.DxT034);
+			jObj.put(ClientProtocolID.ARR_CMD, arrCmd);
+			
+			JSONObject objList;
+			
+			ClientAdapter CA = new ClientAdapter(IP, PORT);
+			CA.open(); 
+
+			objList = CA.dxT034(jObj);
+		
+			CA.close();
+			
+			String strErrMsg = (String)objList.get(ClientProtocolID.ERR_MSG);
+			String strErrCode = (String)objList.get(ClientProtocolID.ERR_CODE);
+			String strDxExCode = (String)objList.get(ClientProtocolID.DX_EX_CODE);
+			String strResultCode = (String)objList.get(ClientProtocolID.RESULT_CODE);
+
+			System.out.println("RESULT_CODE : " +  strResultCode);
+			System.out.println("ERR_CODE : " +  strErrCode);
+			System.out.println("ERR_MSG : " +  strErrMsg);
+
+
+			result.put("RESULT_CODE", strResultCode);
+			result.put("ERR_CODE", strErrCode);
+			result.put("ERR_MSG", strErrMsg);
+
+			
+		}catch (Exception e) {
+			e.printStackTrace();
+		}	
+		return result;
+		
+	}
+
+
+	
+	@Override
+	public void run() {
+		// TODO Auto-generated method stub
+		
 	}
 }

@@ -549,4 +549,62 @@
 			 RESTORE_SN = #{RESTORE_SN}
     </update>
 	
+	
+	 <select id="selectScd_id" resultType="int">
+   		/**
+	 	* Query ID : selectScm_id
+	 	* Description : 스케줄 ID 조회
+	 	* Author : 변승우
+	 	**/
+    	SELECT NEXTVAL('q_scd_m_01')
+    </select>
+	
+	
+	<insert id="insertWRKEXE_G"  parameterType="WrkExeVO">
+   		/**
+	 	* Query ID : insertWRKEXE_G
+	 	* Description : 즉시실행 백업 로그 insert
+	 	* Author : 변승우
+	 	**/
+	 	INSERT INTO T_WRKEXE_G
+	 	(
+			EXE_SN
+			, SCD_ID
+			, WRK_ID
+			, WRK_STRT_DTM
+			, WRK_END_DTM
+			, EXE_RSLT_CD
+			, BCK_OPT_CD
+			, TLI
+			, FILE_SZ
+			, DB_ID
+			, BCK_FILE_PTH
+			, FRST_REGR_ID
+			, LST_MDFR_ID
+			, EXE_GRP_SN
+			, WRK_NM
+			, DB_SVR_IPADR_ID
+	 	)
+	 	VALUES
+	 	(
+			#{EXE_SN}
+			, #{SCD_ID}
+			, #{WRK_ID}
+			, now()
+			, now()
+			, #{EXE_RSLT_CD}
+			, #{BCK_OPT_CD}
+			, 0
+			, 0
+			, #{DB_ID}
+			, #{BCK_FILE_PTH}
+			, 'system'
+			, 'system'
+			, #{EXE_GRP_SN}
+			, (SELECT WRK_NM FROM T_WRKCNG_I WHERE WRK_ID = #{WRK_ID})
+			, #{DB_SVR_IPADR_ID}
+	 	)	 	
+    </insert>
+	
+	
 </mapper>

@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -63,6 +64,7 @@ import org.json.simple.parser.JSONParser;
  * 
  * 32. switch wal file
  * 33.schema 리스트 조회
+ * 34.백업즉시실행
  * 
  * @author thpark
  *
@@ -73,7 +75,7 @@ public class ClientTester {
 		
 		ClientTester clientTester = new ClientTester();
 		
-		String Ip = "192.168.56.108";
+		String Ip = "192.168.56.130";
 		//Ip = "192.168.56.108";
 		//Ip = "222.110.153.251";
 		 //	Ip = "127.0.0.1";
@@ -133,7 +135,8 @@ public class ClientTester {
 			//clientTester.dxT030(Ip, port);
 			//clientTester.dxT031(Ip, port);
 			//clientTester.dxT032(Ip, port);
-			clientTester.dxT033(Ip, port);
+			//clientTester.dxT033(Ip, port);
+			clientTester.dxT034(Ip, port);
 			
 			//clientTester.test();
 		} catch(Exception e) {
@@ -2007,9 +2010,9 @@ public class ClientTester {
 
 			JSONObject serverObj = new JSONObject();
 
-			serverObj.put(ClientProtocolID.SERVER_NAME, "222.110.153.251");
-			serverObj.put(ClientProtocolID.SERVER_IP, "222.110.153.251");
-			serverObj.put(ClientProtocolID.SERVER_PORT, "5433");
+			serverObj.put(ClientProtocolID.SERVER_NAME, "192.168.56.11");
+			serverObj.put(ClientProtocolID.SERVER_IP, "192.168.56.11");
+			serverObj.put(ClientProtocolID.SERVER_PORT, "5432");
 			serverObj.put(ClientProtocolID.DATABASE_NAME, "experdb");
 			serverObj.put(ClientProtocolID.USER_ID, "experdb");
 			serverObj.put(ClientProtocolID.USER_PWD, "experdb");
@@ -2690,4 +2693,72 @@ public class ClientTester {
 		}
 	}	
 	
+	
+	private void dxT034(String Ip, int port) {
+		try {
+			
+			Map<String, Object> result = new HashMap<String, Object>();
+			JSONArray arrCmd = new JSONArray();
+			//String bckCmd = cmd;
+			
+			String bckCmd = "pg_rman backup  --port=5432 --username=experdb --no-password --pgdata=/home/experdb/app/data --backup-path=/home/experdb/app/data/backup/rman --backup-mode=full -A $PGALOG --keep-data-generations=0 --keep-data-days=0 --keep-arclog-files=0 --keep-arclog-days=0 --keep-srvlog-files=0 --keep-srvlog-days=0";
+			String wrk_id ="1";
+			String bck_opt_cd ="TC000301";
+			String bck_bsn_dscd = "TC000201";
+			String db_svr_ipadr_id ="1";
+			String db_id ="1";
+			String bck_pth ="/home/experdb/app/data/backup/rman";
+			String bck_fileNm ="";
+			
+			arrCmd.add(0, bckCmd);
+			
+			if(bck_opt_cd.equals("TC000301")){
+				String validateCmd = "pg_rman validate -B "+bck_pth; 
+				arrCmd.add(1, validateCmd);
+			}
+			
+
+			JSONObject jObj = new JSONObject();
+			
+			jObj.put(ClientProtocolID.WORK_ID, wrk_id); 
+			jObj.put(ClientProtocolID.BCK_OPT_CD, bck_opt_cd);
+			jObj.put(ClientProtocolID.BCK_BSN_DSCD, bck_bsn_dscd);
+			jObj.put(ClientProtocolID.DB_SVR_IPADR_ID, db_svr_ipadr_id);
+			jObj.put(ClientProtocolID.DB_ID, db_id);
+			jObj.put(ClientProtocolID.BCK_FILE_PTH, bck_pth);
+			jObj.put(ClientProtocolID.BCK_FILENM, bck_fileNm);
+			jObj.put(ClientProtocolID.DX_EX_CODE, ClientTranCodeType.DxT034);
+			
+			jObj.put(ClientProtocolID.ARR_CMD, arrCmd);
+			
+			JSONObject objList;
+			
+			ClientAdapter CA = new ClientAdapter(Ip, port);
+			CA.open(); 
+
+			objList = CA.dxT034(jObj);
+		
+			CA.close();
+			
+			String strErrMsg = (String)objList.get(ClientProtocolID.ERR_MSG);
+			String strErrCode = (String)objList.get(ClientProtocolID.ERR_CODE);
+			String strDxExCode = (String)objList.get(ClientProtocolID.DX_EX_CODE);
+			String strResultCode = (String)objList.get(ClientProtocolID.RESULT_CODE);
+			String strScd_id = objList.get(ClientProtocolID.SCD_ID).toString();
+
+			System.out.println("RESULT_CODE : " +  strResultCode);
+			System.out.println("ERR_CODE : " +  strErrCode);
+			System.out.println("ERR_MSG : " +  strErrMsg);
+			System.out.println("SCD_ID : " +  strScd_id);
+			
+			result.put("RESULT_CODE", strResultCode);
+			result.put("ERR_CODE", strErrCode);
+			result.put("ERR_MSG", strErrMsg);
+			result.put("SCD_ID", strScd_id);
+				
+			//CA.close();
+		} catch(Exception e) {
+			e.printStackTrace();
+		}
+	}
 }

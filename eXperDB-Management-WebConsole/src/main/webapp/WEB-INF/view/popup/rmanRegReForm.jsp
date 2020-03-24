@@ -93,6 +93,18 @@ $(window.document).ready(function() {
 			document.getElementById("bck_pth").value=result[1].PGRBAK;
 		}
 	});  */
+	
+	 $( "#bck_opt_cd" ).change(function() {
+			if($("#bck_opt_cd").val()=="TC000303"){
+				
+				$("#file_stg_dcnt").attr("disabled",true);
+				$("#bck_mtn_ecnt").attr("disabled",true);
+			}else{
+				$("#file_stg_dcnt").attr("disabled",false);
+				$("#bck_mtn_ecnt").attr("disabled",false);
+			}
+		});
+	
 });
 
 /* ********************************************************

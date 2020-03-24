@@ -98,6 +98,19 @@ $(window.document).ready(function() {
 				//fn_checkFolderVol(2);
 			}
 		}); 
+		 
+		 
+		 $( "#bck_opt_cd" ).change(function() {
+			if($("#bck_opt_cd").val()=="TC000303"){
+				
+				$("#file_stg_dcnt").attr("disabled",true);
+				$("#bck_mtn_ecnt").attr("disabled",true);
+			}else{
+				$("#file_stg_dcnt").attr("disabled",false);
+				$("#bck_mtn_ecnt").attr("disabled",false);
+			}
+		});
+		 
 });
 /* ********************************************************
  * Rman Backup Insert
@@ -354,6 +367,8 @@ function fn_check() {
 		}
 	});
 }
+
+
 </script>
 </head>
 <body>

@@ -154,4 +154,12 @@ public class SystemServiceImpl implements SystemService{
 	public void updateDUMP_RESTORE_EXELOG(DumpRestoreVO vo) throws Exception {
 		systemDAO.updateDUMP_RESTORE_EXELOG(vo);
 	}
+
+	public int selectScd_id() throws Exception {
+		return (int) systemDAO.selectScd_id();
+	}
+
+	public void insertWRKEXE_G(WrkExeVO vo)  throws Exception{
+		systemDAO.insertWRKEXE_G(vo);
+	}
 }
