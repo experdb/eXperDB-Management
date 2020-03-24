@@ -8,15 +8,14 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.sql.SQLException;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Collections;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Iterator;
-import java.util.List;
 import java.util.Map;
 import java.util.Properties;
 import java.util.Set;
+import java.util.TimeZone;
 import java.util.TreeMap;
 
 import javax.annotation.Resource;
@@ -42,7 +41,6 @@ import com.k4m.dx.tcontrol.scale.service.InstanceScaleService;
 import com.k4m.dx.tcontrol.scale.service.InstanceScaleVO;
 
 import egovframework.rte.fdl.cmmn.EgovAbstractServiceImpl;
-import net.sf.json.JSONException;
 
 /**
 * @author 
@@ -380,7 +378,13 @@ public class InstanceScaleServiceImpl extends EgovAbstractServiceImpl implements
 							
 								/* start time */
 								String LaunchTimeStr = (String) instancesObj.get("LaunchTime");  //시작일자
-							    String startTime = LaunchTimeStr;
+								
+								SimpleDateFormat old_format = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'"); // 받은 데이터 형식
+						        old_format.setTimeZone(TimeZone.getTimeZone("KST"));
+						        SimpleDateFormat new_format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss"); // 바꿀 데이터 형식
+						        
+						        Date old_date = old_format.parse(LaunchTimeStr);
+					            String startTime = new_format.format(old_date);
 							    String lang = props.get("lang").toString();
 							
 								if (!lang.equals("ko")) {startTime = startTime + " UTC+9";}
@@ -560,10 +564,14 @@ public class InstanceScaleServiceImpl extends EgovAbstractServiceImpl implements
 						jsonObj.put("instance_type", (String) instancesObj.get("InstanceType"));            //인스턴트 타입
 						
 						/* start time */
-						String LaunchTimeStr = (String) instancesObj.get("LaunchTime");  //시작일자
-						//    LocalDateTime launchDateTime = LocalDateTime.from(Instant.from(DateTimeFormatter.ISO_DATE_TIME.parse(LaunchTimeStr)).atZone(ZoneId.of("Asia/Seoul")));
-						//   String startTime = launchDateTime.format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
-					    String startTime = LaunchTimeStr;
+						String LaunchTimeStr = instancesObj.get("LaunchTime").toString();  //시작일자
+						
+						SimpleDateFormat old_format = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'"); // 받은 데이터 형식
+				        old_format.setTimeZone(TimeZone.getTimeZone("KST"));
+				        SimpleDateFormat new_format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss"); // 바꿀 데이터 형식
+				        
+				        Date old_date = old_format.parse(LaunchTimeStr);
+			            String startTime = new_format.format(old_date);
 
 						String lang = props.get("lang").toString();
 
