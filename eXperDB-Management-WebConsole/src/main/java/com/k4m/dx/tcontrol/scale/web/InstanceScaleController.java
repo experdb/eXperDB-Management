@@ -115,6 +115,8 @@ public class InstanceScaleController {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
+		
+		
 		return result;
 	}	
 	
@@ -145,7 +147,6 @@ public class InstanceScaleController {
 			try {
 				//scale log 확인
 				result = (Map<String, Object>)instanceScaleService.scaleSetResult(request);
-
 			} catch (Exception e1) {
 				// TODO Auto-generated catch block
 				e1.printStackTrace();

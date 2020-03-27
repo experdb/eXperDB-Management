@@ -34,6 +34,7 @@ button[disabled]{
 	var scale_gbn_chk = null;
 	var iCount_text = 1;
 	var btnText = "";
+	var statusChk="";
 
 	$(window.document).ready(function() {
 		fn_init();
@@ -43,7 +44,7 @@ button[disabled]{
 		});	
 		$('.dataTables_filter').hide();
 
-		fn_selectScale("first");
+		fn_selectScaleAuto();
 	});
 	
 	/* ********************************************************
@@ -132,14 +133,48 @@ button[disabled]{
 
 	    $(window).trigger('resize');
 	}
+	
+	function fn_selectScaleAuto() {
+ 		$.ajax({
+			url : "/scale/selectScaleList.do",
+			data : {
+				scale_id : $("#search_instance_id").val()
+			},
+			dataType : "json",
+			type : "post",
+			beforeSend: function(xhr) {
+		        xhr.setRequestHeader("AJAX", true);
+		     },
+			error : function(xhr, status, error) {
+				if(xhr.status == 401) {
+					alert("<spring:message code='message.msg02' />");
+					top.location.href = "/";
+				} else if(xhr.status == 403) {
+					alert("<spring:message code='message.msg03' />");
+					top.location.href = "/";
+				} else {
+					alert("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""));
+				}
+			},
+			success : function(result) {
+				table.rows({selected: true}).deselect();
+				table.clear().draw();
+				if (nvlSet(result.data) != '' && nvlSet(result.data) != '-') {
+					table.rows.add(result.data).draw();
+				}
+				
+				fn_selectScaleChk("first");
+			}
+		});
+	}
 
 	/* ********************************************************
 	 * 조회 버튼 클릭시
 	 ******************************************************** */
 	function fn_selectScale(gbn) {
-		//scale 체크 조회
-		var wrk_id = "";
+ 		var wrk_id = "";
 		var scale_gbn = "";
+
 		$.ajax({
 			url : "/scale/selectScaleLChk.do",
 			data : {
@@ -157,17 +192,22 @@ button[disabled]{
 				if (result != null) {
 					wrk_id = result.wrk_id;
 					scale_gbn = result.scale_gbn;
+
+					if (wrk_id == "1" && statusChk == "") {
+						setTimeout(fn_selectScaleChk, 3000);
+					} else {
+						statusChk = "";
+					}
 				}
-				
 				fn_buttonAut(wrk_id, scale_gbn);
 			}
 		}); 
 
+
 		if (gbn == null || gbn == "") {
 			$('#loading').hide();
 		}
-
-
+		
  		$.ajax({
 			url : "/scale/selectScaleList.do",
 			data : {
@@ -201,17 +241,13 @@ button[disabled]{
 		if (gbn == null || gbn == "") {
 			$('#loading').hide();
 		}
-		
-		if (gbn == "first") {
-			fn_selectScaleChk("first");
-		}
 	}
 
 	function fn_selectScaleChk(gbn) {
 		//scale 체크 조회
 		var wrk_id = "";
 		var scale_gbn = "";
-		
+
 		$.ajax({
 			url : "/scale/selectScaleLChk.do",
 			data : {
@@ -452,6 +488,8 @@ button[disabled]{
 
 					setTimeout(fn_selectScaleChk, 3000);
 					setTimeout(fn_selectScale, 3000);
+					
+					statusChk = "scale";
 
 				}
 		});			
@@ -488,11 +526,8 @@ button[disabled]{
 			$("#btnScaleOut").prop("disabled", "disabled");
 		}else{
 		//	$("#scaleIngMsg").hide();
-			if (scale_gbn == "1") {
-				$("#btnScaleIn").html('<spring:message code="etc.etc38" />');
-			} else {
-				$("#btnScaleOut").html('<spring:message code="etc.etc39" />');
-			}
+			$("#btnScaleIn").html('<spring:message code="etc.etc38" />');
+			$("#btnScaleOut").html('<spring:message code="etc.etc39" />');
 			
 			$("#btnScaleIn").prop("disabled", "");
 			$("#btnScaleOut").prop("disabled", "");

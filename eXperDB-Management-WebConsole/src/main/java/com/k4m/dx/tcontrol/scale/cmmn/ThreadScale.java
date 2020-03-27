@@ -4,7 +4,6 @@ import java.io.BufferedReader;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.sql.SQLException;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Properties;
@@ -48,14 +47,12 @@ public class ThreadScale extends Thread{
 	@Override
 	public void run() {//Thread.start()시 실행되는 함수,
 		System.out.println("Thread Start: "+this.strCmd);
-/*        StringBuffer successOutput = new StringBuffer(); // 성공 스트링 버퍼
+        StringBuffer successOutput = new StringBuffer(); // 성공 스트링 버퍼
         StringBuffer errorOutput = new StringBuffer(); // 오류 스트링 버퍼
         BufferedReader successBufferReaderRe = null; // 성공 버퍼
         BufferedReader errorBufferReaderRe = null; // 오류 버퍼
 
         String msg = null;
-*/
-        String errorChk = null;
 
 		if(iMode == 0) {
 			System.out.println("Scale Run Start");
@@ -64,32 +61,45 @@ public class ThreadScale extends Thread{
 				Runtime runtime = Runtime.getRuntime();
 				String[] cmdPw = {"/bin/sh","-c", strCmd};
 				p = runtime.exec(cmdPw);
-				
-/*	            successBufferReaderRe = new BufferedReader(new InputStreamReader(p.getInputStream()));
+
+				Map<String, Object> logParam = new HashMap<String, Object>();
+
+				instanceScaleService.scaleThreadLogSave(timeId, scaleGbn, loginId, logParam);
+
+				p.waitFor();
+
+	            successBufferReaderRe = new BufferedReader(new InputStreamReader(p.getInputStream()));
 	            while ((msg = successBufferReaderRe.readLine()) != null) {
-	            	System.out.println("===msg==" + msg);
 	                successOutput.append(msg + System.getProperty("line.separator"));
 	            }
 	 
 	            // shell 실행시 에러가 발생했을 경우
 	            errorBufferReaderRe = new BufferedReader(new InputStreamReader(p.getErrorStream()));
 	            while ((msg = errorBufferReaderRe.readLine()) != null) {
-	            	System.out.println("===msg111==" + msg);
 	                errorOutput.append(msg + System.getProperty("line.separator"));
-	            }*/
-			
-				Map<String, Object> logParam = new HashMap<String, Object>();
-				logParam.put("errorChk", errorChk);
+	            }
 
-				instanceScaleService.scaleThreadLogSave(timeId, scaleGbn, loginId, "insert", logParam);
+	            
+	            // shell 실행이 정상 종료되었을 경우
+	            if (p.exitValue() == 0) {
+	            	logParam.put("RESULT_MSG", "");
+	            	logParam.put("RESULT_CODE", 0);
+	            	logParam.put("RESULT", "SUCCESS");
+	            } else {
+	            	logParam.put("RESULT_MSG", successOutput.toString());
+	            	logParam.put("RESULT_CODE", 1);
+	            	logParam.put("RESULT", "FAIL");
+	            }
 
-				p.waitFor();
+	            instanceScaleService.scaleSetSession(timeId, scaleGbn, loginId, logParam);
 			}catch(Exception e) {
 				e.printStackTrace();
 				System.out.println("Scale Run Error");
 			} finally {
 				try {
 					p.destroy();
+	                if (successBufferReaderRe != null) successBufferReaderRe.close();
+	                if (errorBufferReaderRe != null) errorBufferReaderRe.close();
 				} catch (Exception e1) {
 					e1.printStackTrace();
 				}
@@ -127,7 +137,7 @@ public class ThreadScale extends Thread{
 					String strRstCnt = null;  
 					successBufferReader = new BufferedReader(new InputStreamReader(pw.getInputStream()));
 					
-					Map<String, Object> logParam = new HashMap<String, Object>();
+				//	Map<String, Object> logParam = new HashMap<String, Object>();
 
     				while ((strRstCnt = successBufferReader.readLine()) != null) {
     					System.out.println("---------------------------------------------------------------------------------------------------------");
@@ -138,7 +148,7 @@ public class ThreadScale extends Thread{
         				if(strRstCnt.equals("0") ) //0일 경우 scale process 완료
         				{
     						//log 수정
-							instanceScaleService.scaleThreadLogSave(timeId, scaleGbn, loginId, "update", logParam);
+						//	instanceScaleService.scaleThreadLogSave(timeId, scaleGbn, loginId, "update", logParam);
         					return;
         				}
     	            }
@@ -150,9 +160,9 @@ public class ThreadScale extends Thread{
 				}catch(RuntimeException e) {
 					System.out.println("Scale Process End-RuntimeException");
 					e.printStackTrace();
-		        } catch (SQLException e) {
+/*		        } catch (SQLException e) {
 					System.out.println("Scale Process End-SQLException");
-		            e.printStackTrace();
+		            e.printStackTrace();*/
 				}catch(Exception e) {
 					System.out.println("Scale Process End");
 					e.printStackTrace();

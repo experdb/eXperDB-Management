@@ -48,7 +48,8 @@ public class InstanceScaleDAO extends EgovAbstractMapper{
 	 * @param dataConfigVO
 	 * @throws Exception
 	 */
-	public void updateScaleLog(Map<String, Object> param) throws SQLException {
-		insert("instanceScaleSql.updateScaleLog", param);
+	public void updateScaleStatusLog(Map<String, Object> param) throws SQLException {
+		insert("instanceScaleSql.updateScaleStatusLog", param);
 	}
+	
 }

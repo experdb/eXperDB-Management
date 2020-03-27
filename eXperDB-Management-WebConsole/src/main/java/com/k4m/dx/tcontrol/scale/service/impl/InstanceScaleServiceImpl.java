@@ -73,6 +73,8 @@ public class InstanceScaleServiceImpl extends EgovAbstractServiceImpl implements
 	public Map<String, Object> scaleSetResult(HttpServletRequest request) throws Exception {
 		Map<String, Object> param = new HashMap<String, Object>();
 		Map<String, Object> result = new JSONObject();
+		JSONObject scalejsonObj = new JSONObject();
+		String scalejsonStr = "";
 		
 		HttpSession session = request.getSession();
 		LoginVO loginVo = (LoginVO) session.getAttribute("session");
@@ -81,7 +83,33 @@ public class InstanceScaleServiceImpl extends EgovAbstractServiceImpl implements
 		try {
 			//scale load 상태보기
 			param.put("frst_regr_id", id);
-			result = (Map<String, Object>)instanceScaleDAO.selectScaleLog(param);
+			result = (Map<String, Object>)instanceScaleDAO.selectScaleLog(param);			
+			
+			//aws도 확인힐요
+			if (!result.isEmpty()) {
+				if (result.get("wrk_id").toString().equals("2")) {
+					scalejsonObj = scaleJsonDownSearch("scaleChk", "");
+					
+					if (!scalejsonObj.isEmpty()) {
+						scalejsonStr = scalejsonObj.toString();
+						
+						if (scalejsonStr.contains("pending")) {
+							result.put("wrk_id", "1");
+							result.put("scale_gbn", "2");
+						} else if (scalejsonStr.contains("shutting-down")) {
+							result.put("wrk_id", "1");
+							result.put("scale_gbn", "1");
+						} else {
+							result.put("wrk_id", "2");
+							result.put("scale_gbn", "");
+						}
+
+					} else {
+						result.put("wrk_id", "2");
+						result.put("scale_gbn", "");
+					}
+				}
+			}
 		} catch (SQLException e) {
 			e.printStackTrace();
 		} catch (Exception e) {
@@ -188,7 +216,6 @@ public class InstanceScaleServiceImpl extends EgovAbstractServiceImpl implements
 				if (scaleArrly != null) {
 					for (int i = 0; i < scaleArrly.size(); i++) {
 						String instantsIdChk = "";
-						JSONObject jsonObj = new JSONObject();
 						JSONObject scaleSubObj = (JSONObject)scaleArrly.get(i);
 						JSONArray InstancesArrly = (JSONArray) scaleSubObj.get("Instances");
 
@@ -203,6 +230,7 @@ public class InstanceScaleServiceImpl extends EgovAbstractServiceImpl implements
 								/* securityGroupsArrly start */
 								if (securityGroupsArrly != null) {
 									for (int k = 0; k < securityGroupsArrly.size(); k++) {
+										JSONObject jsonObj = new JSONObject();
 										JSONObject securityGroupObj = (JSONObject)securityGroupsArrly.get(k);
 
 										jsonObj.put("security_group_nm", securityGroupObj.get("GroupName").toString());
@@ -379,16 +407,17 @@ public class InstanceScaleServiceImpl extends EgovAbstractServiceImpl implements
 								/* start time */
 								String LaunchTimeStr = (String) instancesObj.get("LaunchTime");  //시작일자
 								
+								String dateLocale = "KST";
+							    String lang = props.get("lang").toString();
+								if (!lang.equals("ko")) {dateLocale = "UTC";}
+
 								SimpleDateFormat old_format = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'"); // 받은 데이터 형식
-						        old_format.setTimeZone(TimeZone.getTimeZone("KST"));
+						        old_format.setTimeZone(TimeZone.getTimeZone(dateLocale));
 						        SimpleDateFormat new_format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss"); // 바꿀 데이터 형식
 						        
 						        Date old_date = old_format.parse(LaunchTimeStr);
-					            String startTime = new_format.format(old_date);
-							    String lang = props.get("lang").toString();
-							
-								if (!lang.equals("ko")) {startTime = startTime + " UTC+9";}
-								jsonObj.put("start_time", startTime);
+	
+								jsonObj.put("start_time", new_format.format(old_date));
 							    /* start time end */
 							
 								//blockDeviceMappingsArrly
@@ -566,19 +595,18 @@ public class InstanceScaleServiceImpl extends EgovAbstractServiceImpl implements
 						/* start time */
 						String LaunchTimeStr = instancesObj.get("LaunchTime").toString();  //시작일자
 						
+						String dateLocale = "KST";
+					    String lang = props.get("lang").toString();
+						if (!lang.equals("ko")) {dateLocale = "UTC";}
+
 						SimpleDateFormat old_format = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'"); // 받은 데이터 형식
-				        old_format.setTimeZone(TimeZone.getTimeZone("KST"));
+				        old_format.setTimeZone(TimeZone.getTimeZone(dateLocale));
 				        SimpleDateFormat new_format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss"); // 바꿀 데이터 형식
 				        
 				        Date old_date = old_format.parse(LaunchTimeStr);
-			            String startTime = new_format.format(old_date);
-
-						String lang = props.get("lang").toString();
-
-						if (!lang.equals("ko")) {startTime = startTime + " UTC+9";}
-						jsonObj.put("start_time", startTime);
+						jsonObj.put("start_time", new_format.format(old_date));
 						/* start time end */
-						
+
 						jsonObj.put("monitoring_state", (String) instancesObj.get("MonitoringState"));            //모니터링 상태
 						stateChk = instancesObj.get("InstanceStatusName").toString();
 						jsonObj.put("instance_status_name", stateChk);     											//인스턴스 상태
@@ -654,18 +682,13 @@ public class InstanceScaleServiceImpl extends EgovAbstractServiceImpl implements
 			if (param != null) {
 				String scaleGbn = param.get("scale_gbn").toString();
 				
-				if ("fileDown".equals(scaleGbn)) {  //wrk_id, scale_gbn setting
-					logParam.put("wrk_id", 2);
-					logParam.put("scale_gbn", 3);
+				if ("scaleIn".equals(scaleGbn)) {  //scale_gbn setting
+					logParam.put("scale_gbn", "1");
 				} else {
-					if ("scaleIn".equals(scaleGbn)) {  //scale_gbn setting
-						logParam.put("scale_gbn", "1");
-					} else {
-						logParam.put("scale_gbn", "2");
-					}
-					
-					logParam.put("wrk_id", 1);
+					logParam.put("scale_gbn", "2");
 				}
+				
+				logParam.put("wrk_id", 1);
 	
 				logParam.put("wrk_strt_dtm", param.get("RESULT_startTime"));
 				logParam.put("wrk_end_dtm", param.get("RESULT_endTime"));
@@ -708,68 +731,34 @@ public class InstanceScaleServiceImpl extends EgovAbstractServiceImpl implements
 	 * @throws Exception 
 	 */
 	@Override
-	public void scaleThreadLogSave(String timeId, String scaleGbn, String loginId, String logGbn, Map<String, Object> jParam) throws Exception {
+	public void scaleThreadLogSave(String timeId, String scaleGbn, String loginId, Map<String, Object> jParam) throws Exception {
 		Map<String, Object> logParam = new HashMap<String, Object>();
-		
+
 		try {
-			if ("insert".equals(logGbn)) {
-				
-				if ("fileDown".equals(scaleGbn)) {
-
-					if (!jParam.isEmpty()) {
-				    	logParam.put("RESULT_CODE", jParam.get("RESULT_CODE"));
-				    	logParam.put("RESULT", jParam.get("RESULT"));
-				    	
-				    	String resultMsg = (String)jParam.get("RESULT_MSG");
-				    	if (resultMsg == null || "".equals(resultMsg)) {
-				    		resultMsg = "SUCCESS";
-				    	}
-				    	
-				    	logParam.put("RESULT_MSG", resultMsg);
-					} else {
-				    	logParam.put("RESULT_CODE", 1);
-				    	logParam.put("RESULT", "FAIL");
-				    	logParam.put("RESULT_MSG", "FAIL");
-					}
-				} else {
-					if (!jParam.isEmpty()) {
-				    	String errorChkMsg = (String)jParam.get("errorChk");
-				    	if ("error".equals(errorChkMsg)) {
-					    	logParam.put("RESULT_CODE", 1);
-					    	logParam.put("RESULT", "FAIL");
-					    	logParam.put("RESULT_MSG", "FAIL");
-				    	} else {
-					    	logParam.put("RESULT_CODE", 0);
-					    	logParam.put("RESULT", "SUCCESS");
-					    	logParam.put("RESULT_MSG", "SUCCESS");
-				    	}
-					} else {
-				    	logParam.put("RESULT_CODE", 0);
-				    	logParam.put("RESULT", "SUCCESS");
-				    	logParam.put("RESULT_MSG", "SUCCESS");
-					}
-				}
-		    	logParam.put("RESULT_startTime", nowTime());
-		    	logParam.put("RESULT_endTime", nowTime());
-		    	logParam.put("login_id", loginId);
-		    	logParam.put("scale_gbn", scaleGbn);
-		    	logParam.put("instance_id", timeId);
-
-				if ("fileDown".equals(scaleGbn)) {
-					if (!jParam.isEmpty()) {
-				    	insertScaleSetLog(logParam);
-					}
-				} else {
-			    	insertScaleSetLog(logParam);
-				}
+			if (!jParam.isEmpty()) {
+			   	String errorChkMsg = (String)jParam.get("errorChk");
+			   	if ("error".equals(errorChkMsg)) {
+			    	logParam.put("RESULT_CODE", 1);
+			    	logParam.put("RESULT", "FAIL");
+			    	logParam.put("RESULT_MSG", "FAIL");
+			   	} else {
+			    	logParam.put("RESULT_CODE", 0);
+			    	logParam.put("RESULT", "SUCCESS");
+			    	logParam.put("RESULT_MSG", "SUCCESS");
+			   	}
 			} else {
-		    	logParam.put("login_id", loginId);
-		    	logParam.put("instance_id", timeId);
-		    	logParam.put("wrk_id", 2);
-		    	
-				//log 수정
-				instanceScaleDAO.updateScaleLog(logParam);
+			   	logParam.put("RESULT_CODE", 0);
+			   	logParam.put("RESULT", "SUCCESS");
+			   	logParam.put("RESULT_MSG", "SUCCESS");
 			}
+
+		    logParam.put("RESULT_startTime", nowTime());
+		    logParam.put("RESULT_endTime", nowTime());
+		    logParam.put("login_id", loginId);
+		    logParam.put("scale_gbn", scaleGbn);
+		    logParam.put("instance_id", timeId);
+
+		    insertScaleSetLog(logParam);
 		} catch (SQLException e) {
 			e.printStackTrace();
 		} catch (Exception e) {
@@ -818,15 +807,24 @@ public class InstanceScaleServiceImpl extends EgovAbstractServiceImpl implements
 		String strCmd = props.get("scale_json_view").toString();
 		String scaleServer = props.get("scale_seach_server").toString();
 		
+		
+		
 		if (searchGbn.equals("main")) {
 			strSubCmd = "--query 'sort_by\"(Reservations[*].Instances[].{LaunchTime:LaunchTime, InstanceId:InstanceId, PublicDnsName:PublicDnsName,PublicIpAddress:PublicIpAddress,PrivateIpAddress:PrivateIpAddress,PrivateDnsName:PrivateDnsName,KeyName:KeyName,InstanceType:InstanceType,MonitoringState:Monitoring.State,InstanceStatusName:State.Name, AvailabilityZone:Placement.AvailabilityZone, SecurityGroups:SecurityGroups[], TagsName:Tags[?Key==\\`Name\\`] | [0].Value}[], &LaunchTime)\"'";
+		//	strSubCmd = "--query \"sort_by(Reservations[*].Instances[].{LaunchTime:LaunchTime, InstanceId:InstanceId, PublicDnsName:PublicDnsName,PublicIpAddress:PublicIpAddress,PrivateIpAddress:PrivateIpAddress,PrivateDnsName:PrivateDnsName,KeyName:KeyName,InstanceType:InstanceType,MonitoringState:Monitoring.State,InstanceStatusName:State.Name, AvailabilityZone:Placement.AvailabilityZone, SecurityGroups:SecurityGroups[], TagsName:Tags[?Key==\\`Name\\`] | [0].Value}[], &LaunchTime)\"";
+		}  else if (searchGbn.equals("scaleChk")) {
+			strSubCmd = "--query \"Reservations[*].Instances[].{InstanceId:InstanceId, InstanceStatusName:State.Name, TagsName:Tags[?Key==\\`Name\\`] | [0].Value}[]\"";
 		}
 
 		strCmd = String.format(strCmd, strSubCmd);
 		if (param != null && !"".equals(param)) {
 			strCmd = strCmd + " \"Name=instance-id,Values=" + param + "*\"";
 		} 
-	
+		
+		if (searchGbn.equals("scaleChk")) {
+			strCmd = strCmd + " \"Name=instance-state-name,Values=pending,shutting-down\"";
+		}
+
 		Runtime runtime = Runtime.getRuntime();
 
 		String[] cmdPw = {"/bin/sh","-c",scaleServer + " " + strCmd};
@@ -852,13 +850,16 @@ public class InstanceScaleServiceImpl extends EgovAbstractServiceImpl implements
             pJson.waitFor();
 
             if (!successOutput.toString().isEmpty()) {
-        		if (searchGbn.equals("main")) {
+        		if (searchGbn.equals("main") || searchGbn.equals("scaleChk")) {
         			jsonMsg = "{ \"Instances\":" + successOutput.toString() + "}";
         		} else {
         			jsonMsg = successOutput.toString();
         		}
-    			Object obj = parser.parse( jsonMsg);
-    			jsonObj = (JSONObject) obj;
+
+        		if (!jsonMsg.isEmpty()) {
+        			Object obj = parser.parse( jsonMsg);
+        			jsonObj = (JSONObject) obj;
+        		}
             }
 
             return jsonObj;
@@ -877,5 +878,38 @@ public class InstanceScaleServiceImpl extends EgovAbstractServiceImpl implements
             }
         }
 		return jsonObj;
+	}
+	
+	/**
+	 * scale 실시간 조회
+	 * 
+	 * @param instanceScaleVO
+	 * @throws Exception 
+	 */
+	@Override
+	public void scaleSetSession(String timeId, String scaleGbn, String loginId, Map<String, Object> logParam) throws Exception {//json 다운
+		Map<String, Object> param = new HashMap<String, Object>();
+		String rsltMsg = "";
+		
+		if (!logParam.isEmpty()) {
+			param.put("login_id", loginId);
+			param.put("instance_id", timeId);
+			param.put("wrk_id", 2);
+			param.put("wrk_end_dtm", nowTime());
+			
+			rsltMsg = logParam.get("RESULT_MSG").toString();
+			
+			if (rsltMsg != null && !"".equals(rsltMsg)) {
+				param.put("rslt_msg", rsltMsg);
+				param.put("exe_rslt_cd", "TC001702");
+				
+			} else {
+				param.put("rslt_msg", "");
+				param.put("exe_rslt_cd", "TC001701");
+			}
+
+			//log 수정
+			instanceScaleDAO.updateScaleStatusLog(param);
+		}
 	}
 }

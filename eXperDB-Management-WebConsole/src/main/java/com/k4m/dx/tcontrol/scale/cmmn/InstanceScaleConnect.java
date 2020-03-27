@@ -27,6 +27,8 @@ public class InstanceScaleConnect {
 	public static JSONObject scaleSetStart(JSONObject obj) throws Exception {	
         JSONObject result = new JSONObject();
 
+        
+        
         String scale_path = "";
         String strCmd = "";
         
