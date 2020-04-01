@@ -503,5 +503,13 @@ public class ClientAdapter {
 
 		return parseToJsonObj(recvBuff);
 	}
+	
+	public JSONObject dxT036(JSONObject jObj) throws Exception{
 
+		byte[] bt = jObj.toString().getBytes();
+		cc.send(4, bt);
+		byte[]	recvBuff = cc.recv(4, false);
+
+		return parseToJsonObj(recvBuff);
+	}
 }
