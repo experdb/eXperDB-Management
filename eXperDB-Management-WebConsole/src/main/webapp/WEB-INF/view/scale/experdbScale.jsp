@@ -114,7 +114,8 @@ button[disabled]{
 						  return '<span onClick=javascript:fn_securityShow("'+full.instance_id+'","'+full.db_svr_id+'"); title="'+full.security_group+'" class="bold">' + full.security_group + '</span>';
 					}
 				},
-			],'select': {'style': 'multi'}
+			]
+		//,'select': {'style': 'multi'}
 		});
 
 		table.tables().header().to$().find('th:eq(0)').css('min-width', '30px');
@@ -138,7 +139,8 @@ button[disabled]{
  		$.ajax({
 			url : "/scale/selectScaleList.do",
 			data : {
-				scale_id : $("#search_instance_id").val()
+				scale_id : $("#search_instance_id").val(),
+		  		db_svr_id : '${db_svr_id}'
 			},
 			dataType : "json",
 			type : "post",
@@ -211,7 +213,8 @@ button[disabled]{
  		$.ajax({
 			url : "/scale/selectScaleList.do",
 			data : {
-				scale_id : $("#search_instance_id").val()
+				scale_id : $("#search_instance_id").val(),
+				db_svr_id : '${db_svr_id}'
 			},
 			dataType : "json",
 			type : "post",
@@ -300,7 +303,8 @@ button[disabled]{
 		$.ajax({
 			url : "/selectScaleInfo.do",
 			data : {
-				scale_id : scale_id
+				scale_id : scale_id,
+				db_svr_id : '${db_svr_id}'
 			},
 			dataType : "json",
 			type : "post",
@@ -462,7 +466,8 @@ button[disabled]{
 		$.ajax({
 				url : "/scale/scaleInOutSet.do",
 			  	data : {
-			  		scaleGbn : gbn
+			  		scaleGbn : gbn,
+					db_svr_id : '${db_svr_id}'
 			  	},
 				type : "post",
 				beforeSend: function(xhr) {

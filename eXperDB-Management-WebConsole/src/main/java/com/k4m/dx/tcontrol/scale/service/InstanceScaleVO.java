@@ -17,6 +17,14 @@ public class InstanceScaleVO {
 	private String RequesterId;
 	private int db_svr_id;
 	private String scale_id;
+	private String login_id;
+
+	public String getLogin_id() {
+		return login_id;
+	}
+	public void setLogin_id(String login_id) {
+		this.login_id = login_id;
+	}
 
 	public int getRownum() {
 		return rownum;
@@ -24,21 +32,21 @@ public class InstanceScaleVO {
 	public void setRownum(int rownum) {
 		this.rownum = rownum;
 	}
-	
+
 	public String getRequesterId() {
 		return RequesterId;
 	}
 	public void setRequesterId(String RequesterId) {
 		this.RequesterId = RequesterId;
 	}
-	
+
 	public int getDb_svr_id() {
 		return db_svr_id;
 	}
 	public void setDb_svr_id(int db_svr_id) {
 		this.db_svr_id = db_svr_id;
 	}
-	
+
 	public String getScale_id() {
 		return scale_id;
 	}

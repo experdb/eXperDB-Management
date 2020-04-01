@@ -62,6 +62,7 @@ public class InstanceScaleController {
 	@RequestMapping(value = "/scale/scaleList.do")
 	public ModelAndView scaleList(@ModelAttribute("historyVO") HistoryVO historyVO, HttpServletRequest request) {
 		int db_svr_id = Integer.parseInt(request.getParameter("db_svr_id"));
+
 		String dtlCd = "DX-T0056";
 
 		//유저 디비서버 권한 조회 (공통메소드호출),
@@ -84,7 +85,11 @@ public class InstanceScaleController {
 
 				mv.addObject("db_svr_nm", dbServerVO.getDb_svr_nm()); //db서버명
 				mv.addObject("db_svr_id", db_svr_id);
-
+				
+				HttpSession session = request.getSession();
+				LoginVO loginVo = (LoginVO) session.getAttribute("session");
+				mv.addObject("login_id", (String)loginVo.getUsr_id());
+				
 				mv.setViewName("scale/experdbScale");
 			} catch (Exception e1) {
 				e1.printStackTrace();
@@ -101,10 +106,15 @@ public class InstanceScaleController {
 	 */
 	@RequestMapping(value = "/scale/selectScaleList.do")
 	public @ResponseBody JSONObject selectScaleList(@ModelAttribute("historyVO") HistoryVO historyVO, @ModelAttribute("instanceScaleVO") InstanceScaleVO instanceScaleVO, HttpServletRequest request) throws Exception {
+		HttpSession session = request.getSession();
+		LoginVO loginVo = (LoginVO) session.getAttribute("session");
+
 		JSONObject result = new JSONObject();
 		String dtlCd = "DX-T0056_01";
 
 		try {
+			instanceScaleVO.setLogin_id((String)loginVo.getUsr_id());
+			
 			// 화면접근이력 이력 남기기
 			instanceScaleService.scaleSaveHistory(request, historyVO, dtlCd);
 
@@ -115,10 +125,42 @@ public class InstanceScaleController {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		
-		
+
 		return result;
-	}	
+	}
+
+	/**
+	 * scale 상세 정보
+	 * @param 
+	 * @return resultSet
+	 * @throws IOException 
+	 * @throws FileNotFoundException 
+	 * @throws Exception
+	 */
+	@SuppressWarnings("unchecked")
+	@RequestMapping(value = "/selectScaleInfo.do")
+	@ResponseBody
+	public List<Map<String, Object>> selectScaleInfo(HttpServletRequest request, @ModelAttribute("historyVO") HistoryVO historyVO, @ModelAttribute("instanceScaleVO") InstanceScaleVO instanceScaleVO) throws FileNotFoundException, IOException {
+		HttpSession session = request.getSession();
+		LoginVO loginVo = (LoginVO) session.getAttribute("session");
+
+		List<Map<String, Object>> result = null;
+		String dtlCd = "DX-T0056_04";
+
+		try {
+			instanceScaleVO.setLogin_id((String)loginVo.getUsr_id());
+			// 화면접근이력 이력 남기기
+			instanceScaleService.scaleSaveHistory(request, historyVO, dtlCd);
+
+			result = instanceScaleService.instanceInfoListSetting(instanceScaleVO);
+
+		} catch (FileNotFoundException e) {
+			e.printStackTrace();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return result;
+	}
 	
 	
 	/**
@@ -131,9 +173,15 @@ public class InstanceScaleController {
 	 */
 	@RequestMapping(value = "/scale/selectScaleLChk.do")
 	public @ResponseBody Map<String, Object> selectScaleLChk(HttpServletRequest request, HttpServletResponse response) {	
+		HttpSession session = request.getSession();
+		LoginVO loginVo = (LoginVO) session.getAttribute("session");
+
+		InstanceScaleVO instanceScaleVO = new InstanceScaleVO();
 		Map<String, Object> result = new JSONObject();
 
 		int db_svr_id = Integer.parseInt(request.getParameter("db_svr_id"));
+		instanceScaleVO.setDb_svr_id(db_svr_id);
+		instanceScaleVO.setLogin_id((String)loginVo.getUsr_id());
 
 		//유저 디비서버 권한 조회 (공통메소드호출),
 		CmmnUtils cu = new CmmnUtils();
@@ -146,7 +194,7 @@ public class InstanceScaleController {
 		}else{
 			try {
 				//scale log 확인
-				result = (Map<String, Object>)instanceScaleService.scaleSetResult(request);
+				result = (Map<String, Object>)instanceScaleService.scaleSetResult(instanceScaleVO);
 			} catch (Exception e1) {
 				// TODO Auto-generated catch block
 				e1.printStackTrace();
@@ -167,7 +215,8 @@ public class InstanceScaleController {
 	public Map<String, Object> scaleInOutSet(@ModelAttribute("historyVO") HistoryVO historyVO, HttpServletRequest request) {
 		Map<String, Object> result = null;
 		Map<String, Object> param = new HashMap<String, Object>();
-	
+		int db_svr_id = Integer.parseInt(request.getParameter("db_svr_id"));
+
 		HttpSession session = request.getSession();
 		LoginVO loginVo = (LoginVO) session.getAttribute("session");
 
@@ -186,41 +235,14 @@ public class InstanceScaleController {
 			//scale 실행
 			param.put("scale_gbn", scaleGbn);
 			param.put("login_id", (String)loginVo.getUsr_id());
+			param.put("db_svr_id", db_svr_id);
+
 			result = (Map<String, Object>)instanceScaleService.scaleInOutSet(historyVO, param);
 		} catch (Exception e) {
 			result.put("RESULT", "FAIL");
 			e.printStackTrace();
 		}
-		
-		return result;
-	}
-	
-	/**
-	 * scale 상세 정보
-	 * @param 
-	 * @return resultSet
-	 * @throws IOException 
-	 * @throws FileNotFoundException 
-	 * @throws Exception
-	 */
-	@SuppressWarnings("unchecked")
-	@RequestMapping(value = "/selectScaleInfo.do")
-	@ResponseBody
-	public List<Map<String, Object>> selectScaleInfo(HttpServletRequest request, @ModelAttribute("historyVO") HistoryVO historyVO, @ModelAttribute("instanceScaleVO") InstanceScaleVO instanceScaleVO) throws FileNotFoundException, IOException {
-		List<Map<String, Object>> result = null;
-		String dtlCd = "DX-T0056_04";
 
-		try {
-			// 화면접근이력 이력 남기기
-			instanceScaleService.scaleSaveHistory(request, historyVO, dtlCd);
-
-			result = instanceScaleService.instanceInfoListSetting(instanceScaleVO);
-
-		} catch (FileNotFoundException e) {
-			e.printStackTrace();
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
 		return result;
 	}
 
@@ -244,7 +266,7 @@ public class InstanceScaleController {
 		
 		return mv;
 	}
-	
+
 	/**
 	 * scale 리스트를 조회한다.
 	 * 
@@ -267,5 +289,5 @@ public class InstanceScaleController {
 			e.printStackTrace();
 		}
 		return result;
-	}	
+	}
 }

@@ -22,15 +22,13 @@ public class ClientProtocolID {
 	public static final String DATABASE_NAME = "DATABASE_NAME";
 	public static final String USER_ID = "USER_ID";
 	public static final String USER_PWD = "USER_PWD";
-	
-	
-	
+
 	public static final String RESULT_CODE = "RESULT_CODE";
 	public static final String ERR_CODE = "ERR_CODE";
 	public static final String ERR_MSG = "ERR_MSG";
 	public static final String RESULT_DATA = "RESULT_DATA";
 	public static final String SCHEMA = "SCHEMA";
-	
+
 	public static final String SCD_ID = "SCD_ID"; //스캐쥴ID
 	public static final String WORK_ID = "WORK_ID"; //작업ID
 	public static final String DB_SVR_IPADR_ID = "DB_SVR_IPADR_ID"; //DB_서버_IP주소_ID
@@ -38,7 +36,7 @@ public class ClientProtocolID {
 	public static final String NXT_EXD_YN = "NXT_EXD_YN"; //다음실행여부
 	public static final String REQ_CMD = "REQ_CMD"; //명령어
 	public static final String ARR_CMD = "ARR_CMD"; //명령어 Array
-	
+
 	public static final String COMMAND_CODE = "COMMAND_CODE"; // CRUD
 	public static final String COMMAND_CODE_C = "COMMAND_CODE_C"; // C
 	public static final String COMMAND_CODE_R = "COMMAND_CODE_R"; // R
@@ -47,7 +45,7 @@ public class ClientProtocolID {
 	public static final String COMMAND_CODE_V = "COMMAND_CODE_V"; // view
 	public static final String COMMAND_CODE_DL = "COMMAND_CODE_DL"; // download
 	public static final String COMMAND_CODE_D_A = "COMMAND_CODE_D_A"; // delete all
-	
+
 	public static final String ACCESS_CONTROL_INFO = "ACCESS_CONTROL_INFO";
 	public static final String AC_SEQ = "Seq";
 	public static final String AC_SET = "Set";
@@ -59,15 +57,15 @@ public class ClientProtocolID {
 	public static final String AC_METHOD = "Method";
 	public static final String AC_OPTION = "Option";
 	public static final String AC_COMMENT = "Comment";
-	
+
 	public static final String EXTNAME = "extname"; //extension 명
-	
+
 	public static final String ARR_AC_SEQ = "arrSeq";
-	
+
 	//감사로그 종류
 	public static final String SETTING_INFO = "setting_info";
 	public static final String AUDIT_USE_YN = "use_yn";
-	
+
 	public static final String AUDIT_LOG = "log";
 	public static final String AUDIT_LEVEL = "level";
 	public static final String AUDIT_CATALOG = "catalog";
@@ -75,7 +73,7 @@ public class ClientProtocolID {
 	public static final String AUDIT_RELATION = "relation";
 	public static final String AUDIT_STATEMENT_ONCE = "statement_once";
 	public static final String AUDIT_ROLE = "role";
-	
+
 	//감사로그 조회조건
 	public static final String OBJECT_NAME = "object_name";
 	public static final String USER_NAME = "user_name";
@@ -86,7 +84,7 @@ public class ClientProtocolID {
 	public static final String FILE_LASTMODIFIED = "file_lastmodified";
 	public static final String FILE_DIRECTORY = "file_directory";
 	public static final String SEARCH_INFO = "search_info";
-	
+
 	//KAFKA CONNECT
 	public static final String CONNECTOR_INFO = "CONNECTOR_INFO";
 	public static final String CONNECTOR_NAME = "CONNECTOR_NAME";
@@ -99,8 +97,7 @@ public class ClientProtocolID {
 	public static final String ROTATE_INTERVAL_MS = "ROTATE_INTERVAL_MS";
 	public static final String TOPIC = "TOPIC";
 	public static final String TRF_TRG_ID = "TRF_TRG_ID";
-	
-	
+
 	public static final String EXEC_TXT = "EXEC_TXT";
 	public static final String RUN = "RUN";
 	public static final String STOP = "STOP";
@@ -112,7 +109,7 @@ public class ClientProtocolID {
 	public static final String CONNECT_NAME = "CONNECT_NAME";
 	public static final String CONTENTS = "CONTENTS";
 	public static final String REMARK = "REMARK";
-	
+
 	public static final String BSN_DSCD = "BSN_DSCD";
 	public static final String BCK_BSN_DSCD = "BCK_BSN_DSCD";
 	public static final String BCK_OPT_CD = "BCK_OPT_CD";
@@ -122,17 +119,17 @@ public class ClientProtocolID {
 	public static final String BCK_FILENM = "BCK_FILENM";
 	public static final String BCK_MTN_ECNT = "BCK_MTN_ECNT";
 	public static final String FILE_STG_DCNT = "FILE_STG_DCNT";
-	
+
 	public static final String IS_DIRECTORY = "IS_DIRECTORY";
 	public static final String IS_FILE = "IS_FILE";
 	public static final String CAPACITY = "CAPACITY";
-	
+
 	public static final String SLOT = "SLOT";
-	
+
 	public static final String MASTER_GBN = "MASTER_GBN";
 	public static final String ARR_SERVER_INFO = "ARR_SERVER_INFO";
 	public static final String CONNECT_YN = "CONNECT_YN";
-	
+
 	public static final String CMD_HOSTNAME = "CMD_HOSTNAME";
 	public static final String CMD_OS_VERSION = "CMD_OS_VERSION";
 	public static final String CMD_OS_KERNUL = "CMD_OS_KERNUL";
@@ -142,13 +139,13 @@ public class ClientProtocolID {
 	public static final String CMD_IPADDRESS = "CMD_IPADDRESS";
 	public static final String CMD_NETWORK = "CMD_NETWORK";
 	public static final String CMD_NETWORK_INTERFACE = "CMD_NETWORK_INTERFACE";
-	
+
 	public static final String CMD_DBMS_PATH = "CMD_DBMS_PATH";
 	public static final String CMD_DATA_PATH = "CMD_DATA_PATH";
 	public static final String CMD_BACKUP_PATH = "CMD_BACKUP_PATH";
 	public static final String CMD_ARCHIVE_PATH = "CMD_ARCHIVE_PATH";
 	public static final String CMD_DATABASE_INFO = "CMD_DATABASE_INFO";
-	
+
 	public static final String CMD_LISTEN_ADDRESSES = "CMD_LISTEN_ADDRESSES";
 	public static final String CMD_PORT = "CMD_PORT";
 	public static final String CMD_MAX_CONNECTIONS = "CMD_MAX_CONNECTIONS";
@@ -170,14 +167,14 @@ public class ClientProtocolID {
 	public static final String CMD_SHARED_PRELOAD_LIBRARIES = "CMD_SHARED_PRELOAD_LIBRARIES";
 	public static final String CMD_TABLESPACE_INFO = "CMD_TABLESPACE_INFO";
 	public static final String CMD_DBMS_INFO = "CMD_DBMS_INFO";
-	
+
 	public static final String START_LEN = "START_LEN";
 	public static final String DW_LEN = "DW_LEN";
 	public static final String END_FLAG = "END_FLAG";
-	
+
 	public static final String SEEK = "SEEK";
 	public static final String READLINE = "READLINE";
-	
+
 	public static final String PGHOME = "PGHOME";
 	public static final String PGDATA = "PGDATA";
 	public static final String PGRBAK = "PGRBAK";
@@ -186,7 +183,7 @@ public class ClientProtocolID {
 	public static final String PGDLOG = "PGDLOG";
 	public static final String PGALOG = "PGALOG";
 	public static final String SRVLOG = "SRVLOG";
-	
+
 	public static final String RMAN_START_DATE = "START_DATE";
 	public static final String RMAN_START_TIME = "START_TIME";
 	public static final String RMAN_END_DATE = "END_DATE";
@@ -201,7 +198,7 @@ public class ClientProtocolID {
 	public static final String RMAN_PARENTTLI = "PARENTTLI";
 	public static final String RMAN_STATUS = "STATUS";
 	public static final String EXTENSION = "EXTENSION";
-	
+
 	public static final String RESTORE_SN = "RESTORE_SN";
 	public static final String RESTORE_DIR = "RESTORE_DIR";
 	public static final String ASIS_FLAG = "ASIS_FLAG";
@@ -232,4 +229,11 @@ public class ClientProtocolID {
 	public static final String DB_NM = "DB_NM";
 	public static final String DB_TYPE = "DB_TYPE";
 	public static final String TABLE_NM = "TABLE_NM";
+
+	/* scale 관련 */
+	public static final String SCALE_GBN = "SCALE_GBN";
+	public static final String SEARCH_GBN = "SEARCH_GBN";
+	public static final String PROCESS_ID = "PROCESS_ID";
+	public static final String LOGIN_ID = "LOGIN_ID";
+	public static final String RESULT_SUB_DATA = "RESULT_SUB_DATA";
 }
