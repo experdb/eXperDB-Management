@@ -220,9 +220,9 @@ public class InstanceScaleController {
 		HttpSession session = request.getSession();
 		LoginVO loginVo = (LoginVO) session.getAttribute("session");
 
-		String scaleGbn = request.getParameter("scaleGbn");	
+		String scaleSet = request.getParameter("scaleSet");	
 		String dtlCd = "";
-		if ("scaleIn".equals(scaleGbn)) {
+		if ("scaleIn".equals(scaleSet)) {
 			dtlCd = "DX-T0056_02";
 		} else {
 			dtlCd = "DX-T0056_03";
@@ -233,7 +233,7 @@ public class InstanceScaleController {
 			instanceScaleService.scaleSaveHistory(request, historyVO, dtlCd);
 
 			//scale 실행
-			param.put("scale_gbn", scaleGbn);
+			param.put("scale_set", scaleSet);
 			param.put("login_id", (String)loginVo.getUsr_id());
 			param.put("db_svr_id", db_svr_id);
 

@@ -31,7 +31,6 @@ button[disabled]{
 <script>
 	var table = null;
 	var popOpen = null;
-	var scale_gbn_chk = null;
 	var iCount_text = 1;
 	var btnText = "";
 	var statusChk="";
@@ -175,7 +174,7 @@ button[disabled]{
 	 ******************************************************** */
 	function fn_selectScale(gbn) {
  		var wrk_id = "";
-		var scale_gbn = "";
+		var scale_set = "";
 
 		$.ajax({
 			url : "/scale/selectScaleLChk.do",
@@ -193,7 +192,7 @@ button[disabled]{
 			success : function(result) {
 				if (result != null) {
 					wrk_id = result.wrk_id;
-					scale_gbn = result.scale_gbn;
+					scale_set = result.scale_type;
 
 					if (wrk_id == "1" && statusChk == "") {
 						setTimeout(fn_selectScaleChk, 3000);
@@ -201,7 +200,7 @@ button[disabled]{
 						statusChk = "";
 					}
 				}
-				fn_buttonAut(wrk_id, scale_gbn);
+				fn_buttonAut(wrk_id, scale_set);
 			}
 		}); 
 
@@ -249,7 +248,7 @@ button[disabled]{
 	function fn_selectScaleChk(gbn) {
 		//scale 체크 조회
 		var wrk_id = "";
-		var scale_gbn = "";
+		var scale_set = "";
 
 		$.ajax({
 			url : "/scale/selectScaleLChk.do",
@@ -267,26 +266,26 @@ button[disabled]{
 			success : function(result) {
 				if (result != null) {
 					wrk_id = result.wrk_id;
-					scale_gbn = result.scale_gbn;
+					scale_set = result.scale_type;
 				}
 
 				if (gbn == null || gbn == "") {
 					if (wrk_id == "1") {
-						fn_buttonAut(wrk_id, scale_gbn);
+						fn_buttonAut(wrk_id, scale_set);
 						setTimeout(fn_selectScaleChk, 3000);
 					} else {
-						setTimeout(fn_buttonAut, 2000, wrk_id, scale_gbn);
+						setTimeout(fn_buttonAut, 2000, wrk_id, scale_set);
 						setTimeout(fn_selectScale, 2000, "");
 					}
 				} else if (gbn == "first") {
 					if (wrk_id == "1") {
-						fn_buttonAut(wrk_id, scale_gbn);
+						fn_buttonAut(wrk_id, scale_set);
 						setTimeout(fn_selectScaleChk, 3000);
 					} else {
-						fn_buttonAut(wrk_id, scale_gbn);
+						fn_buttonAut(wrk_id, scale_set);
 					}
 				} else {
-					fn_buttonAut(wrk_id, scale_gbn);
+					fn_buttonAut(wrk_id, scale_set);
 				}
 			}
 		});
@@ -466,7 +465,7 @@ button[disabled]{
 		$.ajax({
 				url : "/scale/scaleInOutSet.do",
 			  	data : {
-			  		scaleGbn : gbn,
+			  		scaleSet : gbn,
 					db_svr_id : '${db_svr_id}'
 			  	},
 				type : "post",
@@ -515,11 +514,11 @@ button[disabled]{
 	/* ********************************************************
 	 * button 제어
 	 ******************************************************** */
-	function fn_buttonAut(wrk_id, scale_gbn){
+	function fn_buttonAut(wrk_id, scale_set){
 		var strMsg = "";
  		if(wrk_id == "1"){
 		//	$("#scaleIngMsg").show();	
-			if (scale_gbn == "1") {
+			if (scale_set == "1") {
 				strMsg = 'scale in ' + '<spring:message code="restore.progress" />';
 				$("#btnScaleIn").html(strMsg);
 			} else {

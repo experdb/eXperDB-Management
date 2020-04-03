@@ -231,9 +231,13 @@ public class ClientProtocolID {
 	public static final String TABLE_NM = "TABLE_NM";
 
 	/* scale 관련 */
-	public static final String SCALE_GBN = "SCALE_GBN";
+	public static final String SCALE_SET = "SCALE_SET";
 	public static final String SEARCH_GBN = "SEARCH_GBN";
 	public static final String PROCESS_ID = "PROCESS_ID";
 	public static final String LOGIN_ID = "LOGIN_ID";
 	public static final String RESULT_SUB_DATA = "RESULT_SUB_DATA";
+	public static final String DB_SVR_ID = "DB_SVR_ID";
+	public static final String WRK_TYPE = "WRK_TYPE";
+	public static final String AUTO_POLICY = "AUTO_POLICY";
+	public static final String AUTO_POLICY_NM = "AUTO_POLICY_NM";
 }

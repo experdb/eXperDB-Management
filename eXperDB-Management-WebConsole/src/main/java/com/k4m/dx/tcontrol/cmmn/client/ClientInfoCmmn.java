@@ -1765,12 +1765,17 @@ public List<HashMap<String, String>> dumpShow(String IP, int PORT,String cmd) {
 			JSONObject objList;
 			JSONObject jObj = new JSONObject();	
 			jObj.put(ClientProtocolID.DX_EX_CODE, ClientTranCodeType.DxT036);
-			jObj.put(ClientProtocolID.SCALE_GBN, param.get("scale_gbn").toString());   //scale 구분
-			jObj.put(ClientProtocolID.SEARCH_GBN, param.get("search_gbn").toString());   //조회구분
+			jObj.put(ClientProtocolID.SCALE_SET, param.get("scale_set").toString());             //scale 구분
+			jObj.put(ClientProtocolID.SEARCH_GBN, param.get("search_gbn").toString());           //조회구분
 			jObj.put(ClientProtocolID.ARR_CMD, arrCmd);
-			jObj.put(ClientProtocolID.PROCESS_ID, param.get("process_id").toString());
-			jObj.put(ClientProtocolID.LOGIN_ID, param.get("login_id").toString());
-			
+			jObj.put(ClientProtocolID.PROCESS_ID, param.get("process_id").toString());           //프로세스 ID
+			jObj.put(ClientProtocolID.LOGIN_ID, param.get("login_id").toString());               //로그인 ID
+			jObj.put(ClientProtocolID.DB_SVR_IPADR_ID, param.get("db_svr_ipadr_id").toString()); //DB_서버_IP주소_ID
+			jObj.put(ClientProtocolID.DB_SVR_ID, param.get("db_svr_id").toString());             //DB_서버_ID
+			jObj.put(ClientProtocolID.WRK_TYPE, "TC003302");                                     //작업유형
+			jObj.put(ClientProtocolID.AUTO_POLICY, "");                                          //AUTO_정책
+			jObj.put(ClientProtocolID.AUTO_POLICY_NM, "");                                       //AUTO_정책_명
+
 			ClientAdapter CA = new ClientAdapter(IP, PORT);
 			CA.open(); 
 			
@@ -1807,6 +1812,5 @@ public List<HashMap<String, String>> dumpShow(String IP, int PORT,String cmd) {
 	@Override
 	public void run() {
 		// TODO Auto-generated method stub
-		
 	}
 }

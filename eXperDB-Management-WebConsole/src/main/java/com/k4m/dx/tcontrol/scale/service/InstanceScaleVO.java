@@ -16,8 +16,16 @@ public class InstanceScaleVO {
 	private int rownum;
 	private String RequesterId;
 	private int db_svr_id;
+	private int db_svr_ipadr_id;
 	private String scale_id;
 	private String login_id;
+
+	public int getDb_svr_ipadr_id() {
+		return db_svr_ipadr_id;
+	}
+	public void setDb_svr_ipadr_id(int db_svr_ipadr_id) {
+		this.db_svr_ipadr_id = db_svr_ipadr_id;
+	}
 
 	public String getLogin_id() {
 		return login_id;

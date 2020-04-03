@@ -10,6 +10,7 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
 import java.util.Properties;
 import java.util.Set;
@@ -87,12 +88,15 @@ public class InstanceScaleServiceImpl extends EgovAbstractServiceImpl implements
 		//scalejsonObj = scaleJsonDownSearch("main", scaleId); 기존 조회방식
 		
 		param.put("search_gbn", "main");
-		param.put("scale_gbn", "");
+		param.put("scale_set", "");
 		param.put("login_id", (String)instanceScaleVO.getLogin_id());
-		param.put("instance_id", scaleId);
+		param.put("instance_id", scaleId);                          //확인완료
 		param.put("db_svr_id", instanceScaleVO.getDb_svr_id());
 		param.put("process_id", "");
 		param.put("monitering", "");
+		
+		////
+		//db_svr_ipadr_id 넣어야함
 
 		try {	
 			agentList = scaleInAgent(param);
@@ -120,7 +124,7 @@ public class InstanceScaleServiceImpl extends EgovAbstractServiceImpl implements
 						jsonObj.put("IPv4_public_ip", (String) instancesObj.get("PublicIpAddress"));        //IPv4 IP
 						jsonObj.put("private_ip_address", (String) instancesObj.get("PrivateIpAddress"));   //private_IP
 
-						jsonObj.put("instance_id", instancesObj.get("InstanceId"));                //인스턴트 id
+						jsonObj.put("instance_id", instancesObj.get("InstanceId"));                         //인스턴트 id - 확인완료
 						jsonObj.put("private_dns_name", (String) instancesObj.get("PrivateDnsName"));       //private_dna_name
 						jsonObj.put("key_name", (String) instancesObj.get("KeyName"));                      //키이름
 						jsonObj.put("instance_type", (String) instancesObj.get("InstanceType"));            //인스턴트 타입
@@ -210,9 +214,9 @@ public class InstanceScaleServiceImpl extends EgovAbstractServiceImpl implements
 		Map<String, Object> agentList = null;
 		
 		param.put("search_gbn", "");
-		param.put("scale_gbn", "");
+		param.put("scale_set", "");
 		param.put("login_id", (String)instanceScaleVO.getLogin_id());
-		param.put("instance_id", scaleId);
+		param.put("instance_id", scaleId);                           //확인완료
 		param.put("db_svr_id", instanceScaleVO.getDb_svr_id());
 		param.put("process_id", "");
 		param.put("monitering", "");
@@ -262,7 +266,7 @@ public class InstanceScaleServiceImpl extends EgovAbstractServiceImpl implements
 							
 								jsonObj.put("public_IPv4", (String) instancesObj.get("PublicDnsName"));			    		//public dns IPv4
 								instantsIdChk = (String) instancesObj.get("InstanceId");
-								jsonObj.put("instance_id", instantsIdChk);                									//인스턴트 id
+								jsonObj.put("instance_id", instantsIdChk);                									//인스턴트 id - 확인완료 
 								jsonObj.put("IPv4_public_ip", (String) instancesObj.get("PublicIpAddress"));        		//IPv4 IP
 								jsonObj.put("instance_type", (String) instancesObj.get("InstanceType"));            		//인스턴트 타입
 								jsonObj.put("private_dns_name", (String) instancesObj.get("PrivateDnsName"));       		//private_dna_name
@@ -449,7 +453,7 @@ public class InstanceScaleServiceImpl extends EgovAbstractServiceImpl implements
 							}
 						} else {
 							jsonObj.put("public_IPv4", null);				//퍼블릭 DNS IPv4
-							jsonObj.put("instance_id", null);				//인스턴트 id
+							jsonObj.put("instance_id", null);				//인스턴트 id  확인완료
 							jsonObj.put("tagsValue", null);					//name
 							jsonObj.put("IPv4_public_ip", null);			//IPv4 IP
 							jsonObj.put("instance_type", null);				//인스턴트 타입
@@ -522,9 +526,9 @@ public class InstanceScaleServiceImpl extends EgovAbstractServiceImpl implements
 				Map<String, Object> agentList = null;
 
 				param.put("search_gbn", "scaleChk");
-				param.put("scale_gbn", "");
+				param.put("scale_set", "");
 				param.put("login_id", id);
-				param.put("instance_id", "");
+				param.put("instance_id", "");           //확인완료
 				param.put("db_svr_id", instanceScaleVO.getDb_svr_id());
 				param.put("process_id", "");
 				param.put("monitering", "");
@@ -545,36 +549,36 @@ public class InstanceScaleServiceImpl extends EgovAbstractServiceImpl implements
 						
 					if (scalejsonStr.contains("pending")) {
 						result.put("wrk_id", "1");
-						result.put("scale_gbn", "2");
+						result.put("scale_type", "2");
 					} else if (scalejsonStr.contains("shutting-down")) {
 						result.put("wrk_id", "1");
-						result.put("scale_gbn", "1");
+						result.put("scale_type", "1");
 					} else {
 						if (!scalejsonChk.isEmpty()) {
 							if (!"0".equals(scalejsonChk)) {
 								result.put("wrk_id", "1");
-								result.put("scale_gbn", "1");
+								result.put("scale_type", "1");
 							} else {
 								result.put("wrk_id", "2");
-								result.put("scale_gbn", "");
+								result.put("scale_type", "");
 							}
 						} else {
 							result.put("wrk_id", "2");
-							result.put("scale_gbn", "");
+							result.put("scale_type", "");
 						}
 					}
 				} else {
 					if (!scalejsonChk.isEmpty()) {
 						if (!"0".equals(scalejsonChk)) {
 							result.put("wrk_id", "1");
-							result.put("scale_gbn", "1");
+							result.put("scale_type", "1");
 						} else {
 							result.put("wrk_id", "2");
-							result.put("scale_gbn", "");
+							result.put("scale_type", "");
 						}
 					} else {
 						result.put("wrk_id", "2");
-						result.put("scale_gbn", "");
+						result.put("scale_type", "");
 					}
 				}
 			}
@@ -607,7 +611,7 @@ public class InstanceScaleServiceImpl extends EgovAbstractServiceImpl implements
 			String timeId = formatDate.format(time);
 
 			param.put("search_gbn", "");
-			param.put("instance_id", "");
+			param.put("instance_id", "");         //확인완료
 			param.put("process_id", timeId);
 			param.put("monitering", "monitering");
 			
@@ -644,29 +648,24 @@ public class InstanceScaleServiceImpl extends EgovAbstractServiceImpl implements
 		String scaleServer = (String)props.get("scale_server");
 
 		//명령어 setting
-		String scaleGbn = obj.get("scale_gbn").toString();
+		String scaleSet = obj.get("scale_set").toString();
 		String searchGbn = obj.get("search_gbn").toString();
-		String instanceId = obj.get("instance_id").toString();
+		String instanceId = obj.get("instance_id").toString();   //확인완료
 		String moniteringGbn = obj.get("monitering").toString();
-		String searchGbnSub = "";
-
-		if (obj.get("scaleChk_sub") != null && obj.get("scaleChk_sub").toString().equals("Y")) {
-			searchGbnSub = obj.get("scaleChk_sub").toString();
-		}
 
 		if (!moniteringGbn.equals("")) {
-			scaleGbn = moniteringGbn;
+			scaleSet = moniteringGbn;
 		}
 
 		//scale 실행
-		if (!scaleGbn.isEmpty()) {
-			if ("scaleIn".equals(scaleGbn) && "scaleIn".equals(scaleGbn)) {
+		if (!scaleSet.isEmpty()) {
+			if ("scaleIn".equals(scaleSet) && "scaleIn".equals(scaleSet)) {
 				scale_path = props.get("scale_in_cmd").toString();
 				strCmd = String.format(scaleServer + " " + scale_path + " ", timeId);
-			} else if ("scaleOut".equals(scaleGbn)) {
+			} else if ("scaleOut".equals(scaleSet)) {
 				scale_path = props.get("scale_out_cmd").toString();
 				strCmd = String.format(scaleServer + " " + scale_path + " ", timeId);
-			} else if ("monitering".equals(scaleGbn)) {
+			} else if ("monitering".equals(scaleSet)) {
 				scale_path = props.get("scale_chk_prgress").toString();
 				scaleServer = props.get("scale_seach_server").toString();
 				strCmd = String.format(scaleServer + " " + scale_path + " ", timeId);
@@ -807,105 +806,6 @@ public class InstanceScaleServiceImpl extends EgovAbstractServiceImpl implements
 		// TODO Auto-generated method stub
 		return (Map<String, Object>) instanceScaleDAO.selectScaleLog(param);
 	}
-	
-	/**
-	 * scale log insert data setting
-	 * 
-	 * @param instanceScaleVO
-	 * @throws Exception 
-	 */
-	@Override
-	public void insertScaleSetLog(Map<String, Object> param) throws Exception {
-		Map<String, Object> logParam = new HashMap<String, Object>();
-
-		try {
-			//param값 null이 아닐경우만 log저장
-			if (param != null) {
-				String scaleGbn = param.get("scale_gbn").toString();
-
-				if ("scaleIn".equals(scaleGbn)) {  //scale_gbn setting
-					logParam.put("scale_gbn", "1");
-				} else {
-					logParam.put("scale_gbn", "2");
-				}
-
-				logParam.put("wrk_id", 1);
-
-				logParam.put("wrk_strt_dtm", param.get("RESULT_startTime"));
-				logParam.put("wrk_end_dtm", param.get("RESULT_endTime"));
-
-				if(param.get("RESULT").equals("SUCCESS")){
-					logParam.put("exe_rslt_cd", "TC001701");
-				}else{
-					logParam.put("exe_rslt_cd", "TC001702");
-				}
-
-				if (param.get("RESULT_MSG") != null) {
-					if (param.get("RESULT_MSG").toString().length() > 1000) {
-						logParam.put("rslt_msg", param.get("RESULT_MSG").toString().substring(0, 1000));
-					} else {
-						logParam.put("rslt_msg", param.get("RESULT_MSG").toString());
-					}
-				} else {
-					logParam.put("rslt_msg", "");
-				}
-
-				logParam.put("frst_regr_id", param.get("login_id"));
-				logParam.put("lst_mdfr_id", param.get("login_id"));
-
-				//차후 추가
-				logParam.put("instance_id", param.get("instance_id"));
-				logParam.put("instance_nm", "");
-
-				//history 등록
-				instanceScaleDAO.insertScaleLog(logParam);
-			}
-		} catch(SQLException e) {
-			e.printStackTrace();
-		}
-	}
-
-	/**
-	 * scale log insert
-	 * 
-	 * @param instanceScaleVO
-	 * @throws Exception 
-	 */
-	@Override
-	public void scaleThreadLogSave(String timeId, String scaleGbn, String loginId, Map<String, Object> jParam) throws Exception {
-		Map<String, Object> logParam = new HashMap<String, Object>();
-
-		try {
-			if (!jParam.isEmpty()) {
-				String errorChkMsg = (String)jParam.get("errorChk");
-				if ("error".equals(errorChkMsg)) {
-					logParam.put("RESULT_CODE", 1);
-					logParam.put("RESULT", "FAIL");
-					logParam.put("RESULT_MSG", "FAIL");
-				} else {
-					logParam.put("RESULT_CODE", 0);
-					logParam.put("RESULT", "SUCCESS");
-					logParam.put("RESULT_MSG", "SUCCESS");
-				}
-			} else {
-				logParam.put("RESULT_CODE", 0);
-				logParam.put("RESULT", "SUCCESS");
-				logParam.put("RESULT_MSG", "SUCCESS");
-			}
-
-			logParam.put("RESULT_startTime", nowTime());
-			logParam.put("RESULT_endTime", nowTime());
-			logParam.put("login_id", loginId);
-			logParam.put("scale_gbn", scaleGbn);
-			logParam.put("instance_id", timeId);
-
-			insertScaleSetLog(logParam);
-		} catch (SQLException e) {
-			e.printStackTrace();
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-	}
 
 	/**
 	 * 현재시간 조회
@@ -921,39 +821,6 @@ public class InstanceScaleServiceImpl extends EgovAbstractServiceImpl implements
 	}
 
 	/**
-	 * scale 실시간 조회
-	 * 
-	 * @param instanceScaleVO
-	 * @throws Exception 
-	 */
-	@Override
-	public void scaleSetSession(String timeId, String scaleGbn, String loginId, Map<String, Object> logParam) throws Exception {//json 다운
-		Map<String, Object> param = new HashMap<String, Object>();
-		String rsltMsg = "";
-		
-		if (!logParam.isEmpty()) {
-			param.put("login_id", loginId);
-			param.put("instance_id", timeId);
-			param.put("wrk_id", 2);
-			param.put("wrk_end_dtm", nowTime());
-
-			rsltMsg = logParam.get("RESULT_MSG").toString();
-
-			if (rsltMsg != null && !"".equals(rsltMsg)) {
-				param.put("rslt_msg", rsltMsg);
-				param.put("exe_rslt_cd", "TC001702");
-				
-			} else {
-				param.put("rslt_msg", "");
-				param.put("exe_rslt_cd", "TC001701");
-			}
-
-			//log 수정
-			instanceScaleDAO.updateScaleStatusLog(param);
-		}
-	}
-
-	/**
 	 * scale agent 전송
 	 * 
 	 * @param instanceScaleVO
@@ -961,19 +828,33 @@ public class InstanceScaleServiceImpl extends EgovAbstractServiceImpl implements
 	 */
 	public Map<String, Object> scaleInAgent(Map<String, Object> param) throws Exception {
 		Map<String, Object> result = null;
+		List<Map<String, Object>> dbResult = null;
 		JSONObject obj = new JSONObject();
 		
 		int db_svr_id = Integer.parseInt(param.get("db_svr_id").toString());
+		String scale_set = param.get("scale_set").toString();
 
 		try {
-			obj.put("scale_gbn", param.get("scale_gbn").toString());
+			obj.put("scale_set", scale_set);
 			obj.put("login_id", param.get("login_id").toString());
-			obj.put("instance_id", param.get("instance_id").toString());
+			obj.put("instance_id", param.get("instance_id").toString());  //확인완료
 			obj.put("search_gbn", param.get("search_gbn").toString());
 			obj.put("process_id", param.get("process_id").toString());
+			obj.put("db_svr_id", db_svr_id);
 			obj.put("monitering", "");
 			obj.put("scaleChk_sub", "");
-			
+
+			if (!scale_set.equals("")) {
+				dbResult = instanceScaleDAO.selectSvrIpadrList(db_svr_id);
+				if (!dbResult.isEmpty()) {
+					obj.put("db_svr_ipadr_id", dbResult.get(0).get("db_svr_ipadr_id"));
+				} else {
+					obj.put("db_svr_ipadr_id", 1);
+				}
+			} else {
+				obj.put("db_svr_ipadr_id", 1);
+			}
+
 			/* db 서버 조회 */
 			DbServerVO schDbServerVO = new DbServerVO();
 			schDbServerVO.setDb_svr_id(db_svr_id);

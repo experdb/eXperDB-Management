@@ -75,34 +75,10 @@ public interface InstanceScaleService {
 	JSONObject instanceListSetting(InstanceScaleVO instanceScaleVO) throws Exception ;
 
 	/**
-	 * scale out,in log저장
-	 * 
-	 * @param timeId, scaleGbn, loginId, logGbn, jParam
-	 * @throws Exception
-	 */
-	void scaleThreadLogSave(String timeId, String scaleGbn, String loginId, Map<String, Object> jParam) throws Exception;
-
-	/**
 	 * scale load 관련 조회 및 파일다운로드
 	 * 
 	 * @param dataConfigVO
 	 * @throws Exception
 	 */
 	Map<String, Object> scaleSetResult(InstanceScaleVO instanceScaleVO) throws Exception;
-
-	/**
-	 * scale 로그등록
-	 * 
-	 * @param dataConfigVO
-	 * @throws Exception
-	 */
-	void insertScaleSetLog(Map<String, Object> param) throws Exception;
-
-	/**
-	 * scale 로그등록
-	 * 
-	 * @param dataConfigVO
-	 * @throws Exception
-	 */
-	void scaleSetSession(String timeId, String scaleGbn, String loginId, Map<String, Object> logParam) throws Exception;
 }

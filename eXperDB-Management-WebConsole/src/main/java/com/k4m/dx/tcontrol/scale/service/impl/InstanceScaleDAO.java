@@ -1,6 +1,7 @@
 package com.k4m.dx.tcontrol.scale.service.impl;
 
 import java.sql.SQLException;
+import java.util.List;
 import java.util.Map;
 
 import org.springframework.stereotype.Repository;
@@ -32,24 +33,10 @@ public class InstanceScaleDAO extends EgovAbstractMapper{
 		return (Map<String, Object>) selectOne("instanceScaleSql.selectScaleLog", param);
 	}
 
-	/**
-	 * scale log 등록
-	 * 
-	 * @param dataConfigVO
-	 * @throws Exception
-	 */
-	public void insertScaleLog(Map<String, Object> param) throws SQLException {
-		insert("instanceScaleSql.insertScaleLog", param);
+	@SuppressWarnings({ "unchecked", "deprecation" })
+	public List<Map<String, Object>> selectSvrIpadrList(int db_svr_id) {
+		List<Map<String, Object>> sl = null;
+		sl = (List<Map<String, Object>>) list("instanceScaleSql.selectSvrIpadrList", db_svr_id);
+		return sl;
 	}
-
-	/**
-	 * scale log 수정
-	 * 
-	 * @param dataConfigVO
-	 * @throws Exception
-	 */
-	public void updateScaleStatusLog(Map<String, Object> param) throws SQLException {
-		insert("instanceScaleSql.updateScaleStatusLog", param);
-	}
-	
 }
