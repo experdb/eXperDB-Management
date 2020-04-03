@@ -60,11 +60,8 @@ public class DxT036 extends SocketCtl{
 		try {
 			String scaleCmd = "";
 			String scaleSubCmd = "";
-			String scaleGbn = jObj.get(ProtocolID.SCALE_GBN).toString(); //scale 구분
-			String searchGbn = jObj.get(ProtocolID.SEARCH_GBN).toString(); //조회구분
-			String processId = jObj.get(ProtocolID.PROCESS_ID).toString(); //프로세스id
-			String loginId = jObj.get(ProtocolID.LOGIN_ID).toString(); //로그인id
-
+			String scaleSet = jObj.get(ProtocolID.SCALE_SET).toString();             //scale 구분
+			String searchGbn = jObj.get(ProtocolID.SEARCH_GBN).toString();           //조회구분
 			String strResultSubMessge = "";
 
 			//cmd문
@@ -75,12 +72,12 @@ public class DxT036 extends SocketCtl{
 			}
 
 			//scale 실행일 경우
-			if ("scaleIn".equals(scaleGbn) || "scaleOut".equals(scaleGbn)) {
-				ScaleRunCommandExec scaleExec = new ScaleRunCommandExec(scaleCmd, processId, scaleGbn, 0, loginId);
+			if ("scaleIn".equals(scaleSet) || "scaleOut".equals(scaleSet)) {
+				ScaleRunCommandExec scaleExec = new ScaleRunCommandExec(scaleCmd, jObj, 0);
 				scaleExec.start();
 
 				//scale 확인
-				ScaleRunCommandExec scaleExecWatch = new ScaleRunCommandExec(scaleSubCmd, processId, scaleGbn, 1, loginId);
+				ScaleRunCommandExec scaleExecWatch = new ScaleRunCommandExec(scaleSubCmd, jObj, 1);
 				scaleExecWatch.start();
 
 				strSuccessCode = "0";

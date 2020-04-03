@@ -8,12 +8,14 @@ import java.util.Calendar;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.json.simple.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 
 import com.k4m.dx.tcontrol.db.repository.service.SystemServiceImpl;
+import com.k4m.dx.tcontrol.socket.ProtocolID;
 
 
 /**
@@ -34,22 +36,33 @@ public class ScaleRunCommandExec extends Thread{
 
 	public String strCmd;
 	public String timeId;
-	public String scaleGbn;
+	public String scaleSet;
 	public String loginId;
 	public int iMode;
 	public String retVal;
-	
+	public String dbSvrIpadrId;
+	public String dbSvrId;
+	public String wrkType;
+	public String autoPolicy;
+	public String autoPolicyNm;
+
 	private String returnMessage = "";
 	
 	ApplicationContext context;
 
-	public ScaleRunCommandExec(String _strCmd, String _timeId, String _scaleGbn, int _iMode, String loginId) {
+	public ScaleRunCommandExec(String _strCmd, JSONObject _jObj, int _iMode) {
 		this.strCmd=_strCmd; //cmd값
-		this.timeId=_timeId; //구분 time값(yyyymmddhhmmss)
-		this.scaleGbn = _scaleGbn; //스켕릴구분
 		this.iMode=_iMode; //구분값
-		this.loginId = loginId;
 		
+		this.timeId=_jObj.get(ProtocolID.PROCESS_ID).toString();                //time값(yyyymmddhhmmss)
+		this.scaleSet = _jObj.get(ProtocolID.SCALE_SET).toString();             //scale 구분
+		this.loginId = _jObj.get(ProtocolID.LOGIN_ID).toString();
+		this.dbSvrIpadrId = _jObj.get(ProtocolID.DB_SVR_IPADR_ID).toString();     //DB_서버_ID_IP
+		this.dbSvrId = _jObj.get(ProtocolID.DB_SVR_ID).toString();                //DB_서버_ID
+		this.wrkType = _jObj.get(ProtocolID.WRK_TYPE).toString();               //작업유형
+		this.autoPolicy = _jObj.get(ProtocolID.AUTO_POLICY).toString();         //AUTO_정책
+		this.autoPolicyNm = _jObj.get(ProtocolID.AUTO_POLICY_NM).toString();    //AUTO_정책_명
+
 		context = new ClassPathXmlApplicationContext(new String[] { "context-tcontrol.xml" });
 	}
 	
@@ -80,7 +93,7 @@ public class ScaleRunCommandExec extends Thread{
 				String[] cmdPw = {"/bin/sh","-c", strCmd};
 				p = runtime.exec(cmdPw);
 
-				logParam = logSetting(timeId, scaleGbn, loginId, "insert", strResult, retVal);
+				logParam = logSetting(timeId, scaleSet, loginId, "insert", strResult, retVal);
 				service.insertScaleLog_G(logParam);
 
 				p.waitFor();
@@ -116,7 +129,7 @@ public class ScaleRunCommandExec extends Thread{
 				this.returnMessage = strResult;
 				this.retVal = strReturnVal;
 				
-				logParam = logSetting(timeId, scaleGbn, loginId, "update", strResult, retVal);
+				logParam = logSetting(timeId, scaleSet, loginId, "update", strResult, retVal);
 				service.insertScaleLog_G(logParam);
 
 			}catch(IOException e){
@@ -220,18 +233,30 @@ public class ScaleRunCommandExec extends Thread{
 	 * @return String
 	 * @throws Exception
 	 */
-	public Map<String, Object> logSetting(String timeId, String scaleGbn, String loginId, String saveGbn, String strResult, String retVal){
+	public Map<String, Object> logSetting(String timeId, String scaleSet, String loginId, String saveGbn, String strResult, String retVal){
 		Map<String, Object> logParam = new HashMap<String, Object>();
 
-		if ("insert".equals(saveGbn)) {		   	
-			if ("scaleIn".equals(scaleGbn)) {  //scale_gbn setting
-				logParam.put("scale_gbn", "1");
+		if ("insert".equals(saveGbn)) {
+		    /////test
+			if ("scaleIn".equals(scaleSet)) {  //scale_type setting
+				logParam.put("scale_type", "1");
 			} else {
-				logParam.put("scale_gbn", "2");
+				logParam.put("scale_type", "2");
 			}
-			
-			logParam.put("wrk_id", 1);
 
+			logParam.put("db_svr_id", dbSvrId);
+			logParam.put("db_svr_ipadr_id", dbSvrIpadrId);
+			logParam.put("wrk_type", wrkType);
+			logParam.put("auto_policy", autoPolicy);
+			logParam.put("auto_policy_nm", autoPolicyNm);
+
+			//CLUSTERS 총갯수? 아님 셋팅되어있는 값? 일단 홀딩
+			//클러스터는 여기서 셋팅 - 등록시 셋팅		
+			logParam.put("wrk_id", 1);
+			
+			//차후 추가
+			logParam.put("instance_id", "");
+			logParam.put("process_id", timeId);
 		    logParam.put("wrk_strt_dtm", nowTime());
 		    logParam.put("wrk_end_dtm", nowTime());
 		    logParam.put("exe_rslt_cd", "TC001701");
@@ -246,18 +271,15 @@ public class ScaleRunCommandExec extends Thread{
 				logParam.put("rslt_msg", "");
 			}
 			
+			logParam.put("fix_rslt_msg", "");
 			logParam.put("frst_regr_id", loginId);
 			logParam.put("lst_mdfr_id", loginId);
-
-			//차후 추가
-			logParam.put("instance_id", timeId);
-			logParam.put("instance_nm", "");
 
 		    logParam.put("saveGbn", saveGbn);
 		    logParam.put("return_val", "");
 		} else {
 			logParam.put("login_id", loginId);
-			logParam.put("instance_id", timeId);
+			logParam.put("process_id", timeId);
 			logParam.put("wrk_id", 2);
 			logParam.put("wrk_end_dtm", nowTime());
 		    logParam.put("saveGbn", saveGbn);
@@ -272,6 +294,9 @@ public class ScaleRunCommandExec extends Thread{
 					logParam.put("rslt_msg", "");
 				}
 			}
+			
+			//테스트
+			logParam.put("process_id", timeId);
 		}
 
 		return logParam;
