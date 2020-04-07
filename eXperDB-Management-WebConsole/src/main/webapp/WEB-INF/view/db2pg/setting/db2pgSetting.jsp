@@ -135,9 +135,9 @@ function fn_init(){
 	tableDDL.tables().header().to$().find('th:eq(6)').css('min-width', '100px');
 	tableDDL.tables().header().to$().find('th:eq(7)').css('min-width', '150px');
 	tableDDL.tables().header().to$().find('th:eq(8)').css('min-width', '100px');
-	tableDDL.tables().header().to$().find('th:eq(9)').css('min-width', '100px');
+	tableDDL.tables().header().to$().find('th:eq(9)').css('min-width', '120px');
 	tableDDL.tables().header().to$().find('th:eq(10)').css('min-width', '100px');
-	tableDDL.tables().header().to$().find('th:eq(11)').css('min-width', '100px');
+	tableDDL.tables().header().to$().find('th:eq(11)').css('min-width', '120px');
 	tableDDL.tables().header().to$().find('th:eq(12)').css('min-width', '0px');
 	tableDDL.tables().header().to$().find('th:eq(13)').css('min-width', '0px');
 	tableDDL.tables().header().to$().find('th:eq(14)').css('min-width', '0px');
@@ -865,9 +865,9 @@ function fn_ImmediateStart(gbn){
 									<th width="100">Database</th>
 									<th width="150">Schema</th>
 									<th width="100"><spring:message code="common.register" /></th>
-									<th width="100"><spring:message code="common.regist_datetime" /></th>
+									<th width="120"><spring:message code="common.regist_datetime" /></th>
 									<th width="100"><spring:message code="common.modifier" /></th>
-									<th width="100"><spring:message code="common.modify_datetime" /></th>
+									<th width="120"><spring:message code="common.modify_datetime" /></th>
 									<th width="0">db2pg_ddl_wrk_id</th>
 									<th width="0">wrk_id</th>
 									<th width="0">ddl_save_pth</th>
@@ -885,9 +885,9 @@ function fn_ImmediateStart(gbn){
 									<th width="600" colspan="4"><spring:message code="migration.source_system"/></th>
 									<th width="600" colspan="4"><spring:message code="migration.target_system"/></th>
 									<th width="100" rowspan="2"><spring:message code="common.register" /></th>
-									<th width="100" rowspan="2"><spring:message code="common.regist_datetime" /></th>
+									<th width="120" rowspan="2"><spring:message code="common.regist_datetime" /></th>
 									<th width="100" rowspan="2"><spring:message code="common.modifier" /></th>
-									<th width="100" rowspan="2"><spring:message code="common.modify_datetime" /></th>
+									<th width="120" rowspan="2"><spring:message code="common.modify_datetime" /></th>
 								</tr>
 								<tr>
 									<th width="100">DBMS <spring:message code="common.division" /></th>

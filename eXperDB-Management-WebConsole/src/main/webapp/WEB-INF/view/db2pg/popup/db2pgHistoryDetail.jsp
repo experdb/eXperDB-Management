@@ -45,7 +45,7 @@
 		<div class="pop_cts">
 			<p class="tit">실패 수행이력 상세보기</p>
 			<div class="pop_cmm3">
-				<p class="pop_s_tit">작업정보</p>
+				<p class="pop_s_tit"><spring:message code="migration.job_information"/></p>
 				<table class="list" style="border: 1px solid #99abb0;">
 					<colgroup>
 						<col style="width: 15%;" />
@@ -73,7 +73,7 @@
 								<td style="text-align: left">${result.wrk_dtm}</td>
 							</tr>
 							<tr>
-								<td>수행결과</td>
+								<td><spring:message code="schedule.result" /></td>
 								<td style="text-align: left">
 									<c:if test="${result.exe_rslt_cd eq 'TC001701'}"><img src='../../images/ico_state_02.png' style='margin-right:3px;'>Success</c:if>
 									<c:if test="${result.exe_rslt_cd eq 'TC001702'}"><img src='../../images/ico_state_01.png' style='margin-right:3px;'>Fail</c:if>

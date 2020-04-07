@@ -62,9 +62,9 @@ function fn_init() {
 		table.tables().header().to$().find('th:eq(7)').css('min-width', '100px');
 		table.tables().header().to$().find('th:eq(8)').css('min-width', '130px');		
 		table.tables().header().to$().find('th:eq(9)').css('min-width', '100px');  
-		table.tables().header().to$().find('th:eq(10)').css('min-width', '100px');
+		table.tables().header().to$().find('th:eq(10)').css('min-width', '120px');
 		table.tables().header().to$().find('th:eq(11)').css('min-width', '100px');
-		table.tables().header().to$().find('th:eq(12)').css('min-width', '100px');
+		table.tables().header().to$().find('th:eq(12)').css('min-width', '120px');
 		table.tables().header().to$().find('th:eq(13)').css('min-width', '0px');
 	    $(window).trigger('resize'); 
 }
@@ -183,7 +183,7 @@ function fn_regRe_popup(){
 <div id="contents">
 	<div class="contents_wrap">
 		<div class="contents_tit">
-			<h4>소스/타겟 DBMS 관리<a href="#n"><img src="../images/ico_tit.png" class="btn_info"/></a></h4>
+			<h4><spring:message code="migration.source/target_dbms_management"/><a href="#n"><img src="../images/ico_tit.png" class="btn_info"/></a></h4>
 			<div class="infobox"> 
 				<ul>
 					<li>Migration 소스/타겟 데이터베이스 서버를 신규로 등록하거나 이미 등록된 서버를 수정 또는 삭제합니다.</li>			
@@ -220,9 +220,9 @@ function fn_regRe_popup(){
 						</colgroup>
 						<tbody>
 							<tr>
-								<th scope="row" class="t9">시스템명</th>
+								<th scope="row" class="t9"><spring:message code="migration.system_name"/></th>
 								<td><input type="text" class="txt t3" name="db2pg_sys_nm" id="db2pg_sys_nm" /></td>
-								<th scope="row" class="t9">아이피</th>
+								<th scope="row" class="t9"><spring:message code="history_management.ip"/></th>
 								<td><input type="text" class="txt t3" name="ipadr" id="ipadr" /></td>
 								<th scope="row" class="t9"><spring:message code="common.database" /></th>
 								<td><input type="text" class="txt t3" name="dtb_nm" id="dtb_nm" /></td>
@@ -259,7 +259,7 @@ function fn_regRe_popup(){
 						<thead>
 							<tr>
 								<th width="30"><spring:message code="common.no" /></th>
-								<th width="130">시스템명</th>
+								<th width="130"><spring:message code="migration.system_name"/></th>
 								<th width="100">DBMS<spring:message code="common.division" /></th>
 								<th width="130"><spring:message code="data_transfer.ip" /></th>
 								<th width="100">Database</th>
@@ -268,9 +268,9 @@ function fn_regRe_popup(){
 								<th width="100"><spring:message code="dbms_information.account" /></th>
 								<th width="130"><spring:message code="migration.character_set"/></th>
 								<th width="100"><spring:message code="common.register" /></th>
-								<th width="100"><spring:message code="common.regist_datetime" /></th>
+								<th width="120"><spring:message code="common.regist_datetime" /></th>
 								<th width="100"><spring:message code="common.modifier" /></th>
-								<th width="100"><spring:message code="common.modify_datetime" /></th>
+								<th width="120"><spring:message code="common.modify_datetime" /></th>
 								<th width="0"><spring:message code="common.modify_datetime" /></th>
 							</tr>
 						</thead>

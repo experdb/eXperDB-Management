@@ -187,7 +187,7 @@ function fn_Add(){
 				</colgroup>
 				<tbody>
 					<tr>
-						<th scope="row" class="ico_t1">시스템명</th>
+						<th scope="row" class="ico_t1"><spring:message code="migration.system_name"/></th>
 						<td><input type="text" class="txt t4" name="db2pg_sys_nm" id="db2pg_sys_nm" /></td>		
 						<th scope="row" class="ico_t1">DBMS<spring:message code="common.division" /></th>
 						<td>
@@ -212,7 +212,7 @@ function fn_Add(){
 				<thead>
 					<tr>
 						<th width="50"><spring:message code="common.no" /></th>
-						<th width="100">시스템명</th>
+						<th width="100"><spring:message code="migration.system_name"/></th>
 						<th width="100">DBMS<spring:message code="common.division" /></th>
 						<th width="100"><spring:message code="data_transfer.ip" /></th>
 						<th width="100">Database</th>

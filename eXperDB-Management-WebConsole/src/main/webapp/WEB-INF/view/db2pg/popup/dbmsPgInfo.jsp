@@ -195,13 +195,13 @@ function fn_Add(){
 		</div>
 
 		<div class="pop_cmm3">
-			<p class="pop_s_tit">DBMS 시스템 리스트</p>
+			<p class="pop_s_tit"><spring:message code="dbms_system_list"/></p>
 			<div class="overflow_area">
 				<table id="dbmsList" class="display" cellspacing="0" width="100%">
 				<thead>
 					<tr>
 						<th width="50"><spring:message code="common.no" /></th>
-						<th width="100">시스템명</th>
+						<th width="100"><spring:message code="migration.system_name"/></th>
 						<th width="100">DBMS<spring:message code="common.division" /></th>
 						<th width="100"><spring:message code="data_transfer.ip" /></th>
 						<th width="100">Database</th>

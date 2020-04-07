@@ -177,13 +177,13 @@ $(window.document).ready(function() {
 			</colgroup>
 			<tbody>
 				<tr>
-					<th scope="row" class="ico_t1" >시스템명(*)</th>
+					<th scope="row" class="ico_t1" ><spring:message code="migration.system_name"/>(*)</th>
 					<td colspan="3"><input type="text" class="txt t2" name="db2pg_sys_nm" id="db2pg_sys_nm"  maxlength="20" value="${resultInfo[0].db2pg_sys_nm}" readonly/>
 					</td>
 				</tr>
 							
 				<tr>
-					<th scope="row" class="ico_t1" >DBMS구분(*)</th>
+					<th scope="row" class="ico_t1" >DBMS<spring:message code="properties.division"/>(*)</th>
 						<td><select name="dbms_dscd" id="dbms_dscd" class="select"  style="width:205px;" onFocus='this.initialSelect = this.selectedIndex;' onChange='this.selectedIndex = this.initialSelect;'>
 										<option value=""><spring:message code="common.choice" /></option>				
 											<c:forEach var="result" items="${result}" varStatus="status">				
@@ -191,13 +191,13 @@ $(window.document).ready(function() {
  												<%-- <option value="<c:out value="${result.sys_cd}"/><c:if test="${resultInfo[0].dbms_dscd eq result.sys_cd_nm}"> selected</c:if>" ><c:out value="${result.sys_cd_nm}"/></option> --%>
  											</c:forEach>
 									</select>
-						<span class="btn btnC_01" id="pgbtn"><button type="button" class= "btn_type_02" onclick="fn_pgdbmsCall()" style="width: 85px; margin-right: -60px; margin-top: 0;">불러오기</button></span></td>
+						<span class="btn btnC_01" id="pgbtn"><button type="button" class= "btn_type_02" onclick="fn_pgdbmsCall()" style="width: 85px; margin-right: -60px; margin-top: 0;"><spring:message code="migration.loading"/></button></span></td>
 				</tr>
 				
 				<tr>
-					<th scope="row" class="ico_t1">아이피(*)</th>
+					<th scope="row" class="ico_t1"><spring:message code="data_transfer.ip"/>(*)</th>
 					<td><input type="text" class="txt" name="ipadr" id="ipadr"  value="${resultInfo[0].ipadr}"/></td>
-					<th scope="row" class="ico_t1">포트(*)</th>
+					<th scope="row" class="ico_t1"><spring:message code="data_transfer.port"/>(*)</th>
 					<td><input type="text" class="txt" name="portno" id="portno" value="${resultInfo[0].portno}"/></td>
 				</tr>	
 				
@@ -211,14 +211,14 @@ $(window.document).ready(function() {
 				</tr>	
 				
 				<tr>
-					<th scope="row" class="ico_t1">계정(*)</th>
+					<th scope="row" class="ico_t1"><spring:message code="dbms_information.account"/>(*)</th>
 					<td><input type="text" class="txt" name="spr_usr_id" id="spr_usr_id" value="${resultInfo[0].spr_usr_id}"/></td>
 					<th scope="row" class="ico_t1"><spring:message code="user_management.password" />(*)</th>
 					<td><input type="password" class="txt" name="pwd" id="pwd" value="${pwd}" /></td>
 				</tr>	
 							
 				<tr>
-					<th scope="row" class="ico_t1">캐릭터셋(*)</th>
+					<th scope="row" class="ico_t1"><spring:message code="migration.character_set"/>(*)</th>
 						<td><select name="crts_nm" id="crts_nm" class="select t9">			
 										<c:forEach var="dbmsChar" items="${dbmsChar}" varStatus="status">				
 											<option value="<c:out value="${dbmsChar.sys_cd}"/>"<c:if test="${resultInfo[0].crts eq dbmsChar.sys_cd}"> selected</c:if>><c:out value="${dbmsChar.sys_cd_nm}"/></option>								 

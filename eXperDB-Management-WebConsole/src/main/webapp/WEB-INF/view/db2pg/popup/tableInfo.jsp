@@ -166,9 +166,9 @@ function fn_tableCheckSelect(tableList){
 				</colgroup>
 				<tbody>
 					<tr>
-						<th scope="row" class="ico_t1">시스템명</th>
+						<th scope="row" class="ico_t1"><spring:message code="migration.system_name"/></th>
 						<td><input type="text" class="txt t9" name="db2pg_sys_nm" id="db2pg_sys_nm" value="${dbmsInfo[0].db2pg_sys_nm}" readonly/></td>										
-						<th scope="row" class="ico_t1" >아이피</th>
+						<th scope="row" class="ico_t1" ><spring:message code="data_transfer.ip"/></th>
 						<td><input type="text" class="txt t9" name="ipadr" id="ipadr" value="${dbmsInfo[0].ipadr}" readonly/></td>				
 					</tr>
 					<tr>
@@ -178,7 +178,7 @@ function fn_tableCheckSelect(tableList){
 						<td><select class="select t8" name="scm_nm" id="scm_nm" value=""/>
 								<option value="%"><spring:message code="common.choice" /></option>
 						</select></td>	 --%>									
-						<th scope="row" class="ico_t1" >테이블명</th>
+						<th scope="row" class="ico_t1" ><spring:message code="migration.table_name"/></th>
 						<td>
 						<input type="text" class="txt t9" name="table_nm" id="table_nm" />
 						<input type="hidden" class="txt t4" name="dbms_dscd" id="dbms_dscd"  value="${dbmsInfo[0].dbms_dscd}"/>
@@ -199,7 +199,7 @@ function fn_tableCheckSelect(tableList){
 				<thead>
 					<tr>
 						<th width="30"></th>
-						<th width="100" class="dt-center">테이블명</th>
+						<th width="100" class="dt-center"><spring:message code="migration.table_name"/></th>
 						<th width="100" class="dt-center">COMMENT</th>
 					</tr>
 				</thead>
