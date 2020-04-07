@@ -706,6 +706,7 @@ function fn_ImmediateStart(gbn){
 	
 	if (confirm("백업을 즉시실행 하시겠습니까?")) {
 		
+		
 			 $.ajax({
 				url : "/backupImmediateExe.do",
 			  	data : {
@@ -735,7 +736,8 @@ function fn_ImmediateStart(gbn){
 			});		 
 		}	
 
-		alert("즉시실행 되었습니다.");
+		alert("즉시실행 되었습니다.\n수행이력페이지로 이동합니다.");
+		
 		location.href='/backup/workLogList.do?db_svr_id='+datas[0].db_svr_id+'&&gbn='+gbn;
 	
 
