@@ -207,17 +207,9 @@ public class WebConsoleSetting {
 			
 			strEncryptServerUrl = scan.nextLine();
 			
-			while (true) {
 				if(strEncryptServerUrl.equals("")) {
-					System.out.println("Please enter your eXperDB-Encrypt server.url. ");
-					
-					System.out.println("eXperDB-Encrypt server.url :");
-					
-					strEncryptServerUrl = scan.nextLine();
-				} else {
-					break;
-				}
-			}
+					strEncryptServerUrl = "127.0.0.1";
+				} 
 
 			System.out.println("eXperDB-Encrypt server.port (9443) :");
 			
