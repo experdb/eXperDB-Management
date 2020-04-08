@@ -69,7 +69,7 @@ $(window.document).ready(function() {
  function fn_sysnmCheck(){
 	 
 		if ($("#db2pg_sys_nm").val() == "") {
-			alert('시스템명을 입력해주세요. ');
+			alert('<spring:message code="migration.msg01" />');
 			document.getElementById('db2pg_sys_nm').focus();
 			return;
 		}
@@ -422,7 +422,7 @@ function fn_charSet(){
 <body>
 <div class="pop_container">
 	<div class="pop_cts">
-		<p class="tit">소스/타겟 DBMS 등록</p>
+		<p class="tit"><spring:message code="migration.source/target_dbms_register"/></p>
 		<form name="dbserverInsert" id="dbserverInsert" method="post">
 		<table class="write">
 			<caption>소스/타겟 DBMS 등록</caption>

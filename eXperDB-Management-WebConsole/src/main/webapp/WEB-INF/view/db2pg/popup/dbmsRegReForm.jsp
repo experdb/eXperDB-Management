@@ -164,7 +164,7 @@ $(window.document).ready(function() {
 <body>
 <div class="pop_container">
 	<div class="pop_cts">
-		<p class="tit">소스/타겟 DBMS 수정</p>
+		<p class="tit"><spring:message code="migration.source/target_dbms_modify"/></p>
 		<form name="dbserverInsert" id="dbserverInsert" method="post">
 		<table class="write">
 			<caption>소스/타겟 DBMS 수정</caption>
