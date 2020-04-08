@@ -647,8 +647,8 @@
 		, 3  /** (정책 테이블 select 필요) **/
 		, #{instance_id}
 		, #{process_id}
-		, #{wrk_strt_dtm}
-		, #{wrk_end_dtm}
+		, clock_timestamp()
+		, clock_timestamp()
 		, #{exe_rslt_cd}
 		, #{rslt_msg}
 		, #{frst_regr_id}
@@ -665,7 +665,7 @@
 	 	* Author :
 	 	**/         
         UPDATE T_SCALE_G
-           SET WRK_END_DTM = #{wrk_end_dtm},
+           SET WRK_END_DTM = clock_timestamp(),
                EXE_RSLT_CD = #{exe_rslt_cd},
                RSLT_MSG = #{rslt_msg},
                LST_MDFR_ID = #{login_id},
