@@ -195,7 +195,7 @@ function fn_Add(){
 		</div>
 
 		<div class="pop_cmm3">
-			<p class="pop_s_tit"><spring:message code="dbms_system_list"/></p>
+			<p class="pop_s_tit"><spring:message code="migration.dbms_system_list"/></p>
 			<div class="overflow_area">
 				<table id="dbmsList" class="display" cellspacing="0" width="100%">
 				<thead>
