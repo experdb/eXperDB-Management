@@ -2,6 +2,7 @@ package com.k4m.dx.tcontrol.scale.service;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.util.List;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
@@ -62,7 +63,7 @@ public interface InstanceScaleService {
 	 * scale 상세 조회
 	 * 
 	 * @param instanceScaleVO
-	 * @throws FileNotFoundException, IOException, ParseException
+	 * @throws Exception
 	 */
 	JSONArray instanceInfoListSetting(InstanceScaleVO instanceScaleVO) throws Exception ;
 
@@ -70,15 +71,23 @@ public interface InstanceScaleService {
 	 * scale list setting
 	 * 
 	 * @param instanceScaleVO
-	 * @throws FileNotFoundException, IOException, ParseException
+	 * @throws Exception
 	 */
 	JSONObject instanceListSetting(InstanceScaleVO instanceScaleVO) throws Exception ;
 
 	/**
 	 * scale load 관련 조회 및 파일다운로드
 	 * 
-	 * @param dataConfigVO
+	 * @param instanceScaleVO
 	 * @throws Exception
 	 */
 	Map<String, Object> scaleSetResult(InstanceScaleVO instanceScaleVO) throws Exception;
+
+	/**
+	 *  scale log list 조회
+	 * 
+	 * @param instanceScaleVO
+	 * @throws Exception
+	 */
+	List<Map<String, Object>> selectScaleHistoryList(InstanceScaleVO instanceScaleVO) throws Exception;
 }

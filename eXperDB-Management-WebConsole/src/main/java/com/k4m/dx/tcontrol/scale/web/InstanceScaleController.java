@@ -21,8 +21,11 @@ import org.springframework.web.servlet.ModelAndView;
 import com.k4m.dx.tcontrol.admin.dbauthority.service.DbAuthorityService;
 import com.k4m.dx.tcontrol.admin.dbserverManager.service.DbServerVO;
 import com.k4m.dx.tcontrol.cmmn.CmmnUtils;
+import com.k4m.dx.tcontrol.common.service.CmmnCodeDtlService;
+import com.k4m.dx.tcontrol.common.service.CmmnCodeVO;
 import com.k4m.dx.tcontrol.common.service.CmmnServerInfoService;
 import com.k4m.dx.tcontrol.common.service.HistoryVO;
+import com.k4m.dx.tcontrol.common.service.PageVO;
 import com.k4m.dx.tcontrol.login.service.LoginVO;
 import com.k4m.dx.tcontrol.scale.service.InstanceScaleService;
 import com.k4m.dx.tcontrol.scale.service.InstanceScaleVO;
@@ -40,6 +43,7 @@ import com.k4m.dx.tcontrol.scale.service.InstanceScaleVO;
 *      </pre>
 */
 @Controller
+@RequestMapping("/scale")
 public class InstanceScaleController {
 	
 	@Autowired
@@ -52,14 +56,17 @@ public class InstanceScaleController {
 	
 	@Autowired
 	private CmmnServerInfoService cmmnServerInfoService;
+	
+	@Autowired
+	private CmmnCodeDtlService cmmnCodeDtlService;
 
 	/**
 	 * SCale List View page
-	 * @param WorkVO
+	 * @param HistoryVO, HttpServletRequest
 	 * @return ModelAndView
-	 * @throws Exception
+	 * @throws
 	 */
-	@RequestMapping(value = "/scale/scaleList.do")
+	@RequestMapping("/scaleList.do")
 	public ModelAndView scaleList(@ModelAttribute("historyVO") HistoryVO historyVO, HttpServletRequest request) {
 		int db_svr_id = Integer.parseInt(request.getParameter("db_svr_id"));
 
@@ -100,11 +107,11 @@ public class InstanceScaleController {
 
 	/**
 	 * scale 리스트를 조회한다.
-	 * 
-	 * @return resultSet
+	 * @param HistoryVO, InstanceScaleVO, HttpServletRequest
+	 * @return JSONObject
 	 * @throws Exception
 	 */
-	@RequestMapping(value = "/scale/selectScaleList.do")
+	@RequestMapping("/selectScaleList.do")
 	public @ResponseBody JSONObject selectScaleList(@ModelAttribute("historyVO") HistoryVO historyVO, @ModelAttribute("instanceScaleVO") InstanceScaleVO instanceScaleVO, HttpServletRequest request) throws Exception {
 		HttpSession session = request.getSession();
 		LoginVO loginVo = (LoginVO) session.getAttribute("session");
@@ -131,14 +138,14 @@ public class InstanceScaleController {
 
 	/**
 	 * scale 상세 정보
-	 * @param 
-	 * @return resultSet
+	 * @param HttpServletRequest, HistoryVO, InstanceScaleVO
+	 * @return List<Map<String, Object>>
 	 * @throws IOException 
-	 * @throws FileNotFoundException 
-	 * @throws Exception
+	 * @throws FileNotFoundException
+	 * @throws IOException
 	 */
 	@SuppressWarnings("unchecked")
-	@RequestMapping(value = "/selectScaleInfo.do")
+	@RequestMapping("/selectScaleInfo.do")
 	@ResponseBody
 	public List<Map<String, Object>> selectScaleInfo(HttpServletRequest request, @ModelAttribute("historyVO") HistoryVO historyVO, @ModelAttribute("instanceScaleVO") InstanceScaleVO instanceScaleVO) throws FileNotFoundException, IOException {
 		HttpSession session = request.getSession();
@@ -161,17 +168,13 @@ public class InstanceScaleController {
 		}
 		return result;
 	}
-	
-	
+
 	/**
 	 * scale chkeck
-	 * 
-	 * @return resultSet
-	 * @throws IOException 
-	 * @throws FileNotFoundException 
-	 * @throws Exception
+	 * @param HttpServletRequest, HttpServletResponse 
+	 * @return Map<String, Object>
 	 */
-	@RequestMapping(value = "/scale/selectScaleLChk.do")
+	@RequestMapping("/selectScaleLChk.do")
 	public @ResponseBody Map<String, Object> selectScaleLChk(HttpServletRequest request, HttpServletResponse response) {	
 		HttpSession session = request.getSession();
 		LoginVO loginVo = (LoginVO) session.getAttribute("session");
@@ -206,12 +209,12 @@ public class InstanceScaleController {
 
 	/**
 	 * scaleInOutSet
-	 * @param 
-	 * @return ModelAndView
-	 * @throws Exception
+	 * @param HistoryVO, HttpServletRequest
+	 * @return Map<String, Object>
+	 * @throws 
 	 */
 	@ResponseBody
-	@RequestMapping(value = "/scale/scaleInOutSet.do")
+	@RequestMapping("/scaleInOutSet.do")
 	public Map<String, Object> scaleInOutSet(@ModelAttribute("historyVO") HistoryVO historyVO, HttpServletRequest request) {
 		Map<String, Object> result = null;
 		Map<String, Object> param = new HashMap<String, Object>();
@@ -248,11 +251,11 @@ public class InstanceScaleController {
 
 	/**
 	 * securityGroupShowView page
-	 * @param 
+	 * @param HistoryVO, HttpServletRequest
 	 * @return ModelAndView
-	 * @throws Exception
+	 * @throws 
 	 */
-	@RequestMapping(value = "/scale/securityGroupShowView.do")
+	@RequestMapping("/securityGroupShowView.do")
 	public ModelAndView securityGroupShowView(@ModelAttribute("historyVO") HistoryVO historyVO, HttpServletRequest request) {
 	
 		ModelAndView mv = new ModelAndView();
@@ -269,11 +272,11 @@ public class InstanceScaleController {
 
 	/**
 	 * scale 리스트를 조회한다.
-	 * 
-	 * @return resultSet
+	 * @param HistoryVO, InstanceScaleVO, HttpServletRequest
+	 * @return JSONObject
 	 * @throws Exception
 	 */
-	@RequestMapping(value = "/scale/securityGroupList.do")
+	@RequestMapping("/securityGroupList.do")
 	public @ResponseBody JSONObject securityGroupList(@ModelAttribute("historyVO") HistoryVO historyVO, @ModelAttribute("instanceScaleVO") InstanceScaleVO instanceScaleVO, HttpServletRequest request) throws Exception {
 		JSONObject result = new JSONObject();
 		String dtlCd = "DX-T0056_05";
@@ -288,6 +291,108 @@ public class InstanceScaleController {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
+		return result;
+	}
+	
+	/**
+	 * Scale Log View page
+	 * @param HistoryVO, InstanceScaleVO, HttpServletRequest
+	 * @return ModelAndView
+	 */
+	@RequestMapping("/scaleLogList.do")
+	public ModelAndView rmanLogList(@ModelAttribute("historyVO") HistoryVO historyVO, @ModelAttribute("instanceScaleVO") InstanceScaleVO instanceScaleVO, HttpServletRequest request) {
+		ModelAndView mv = new ModelAndView();
+		int db_svr_id = instanceScaleVO.getDb_svr_id();
+
+		//유저 디비서버 권한 조회 (공통메소드호출),
+		CmmnUtils cu = new CmmnUtils();
+		dbSvrAut = cu.selectUserDBSvrAutList(dbAuthorityService, db_svr_id);
+
+		//읽기 권한이 없는경우 error페이지 호출 , [추후 Exception 처리예정]
+		if(dbSvrAut.get(0).get("scale_hist_yn").equals("N")){
+			mv.setViewName("error/autError");
+		} else {
+			try {
+				//db서버명 조회
+				DbServerVO schDbServerVO = new DbServerVO();
+				schDbServerVO.setDb_svr_id(db_svr_id);
+				DbServerVO dbServerVO = (DbServerVO) cmmnServerInfoService.selectServerInfo(schDbServerVO);
+				
+				String dtlCd = "DX-T0057";
+				
+				// 화면접근이력 이력 남기기
+				instanceScaleService.scaleSaveHistory(request, historyVO, dtlCd);
+				
+				mv.addObject("db_svr_nm", dbServerVO.getDb_svr_nm()); //db서버명
+				mv.addObject("db_svr_id", db_svr_id);
+
+				HttpSession session = request.getSession();
+				LoginVO loginVo = (LoginVO) session.getAttribute("session");
+				mv.addObject("login_id", (String)loginVo.getUsr_id());
+				
+				//작업유형 공통코드 조회
+				PageVO pageVO = new PageVO();
+				
+				pageVO.setGrp_cd("TC0033");
+				pageVO.setSearchCondition("0");
+				List<CmmnCodeVO> cmmnCodeVO = cmmnCodeDtlService.cmmnDtlCodeSearch(pageVO);
+				mv.addObject("wrkTypeList",cmmnCodeVO);
+				
+				//실행유형
+				pageVO.setGrp_cd("TC0034");
+				pageVO.setSearchCondition("0");
+				cmmnCodeVO = cmmnCodeDtlService.cmmnDtlCodeSearch(pageVO);
+				mv.addObject("executeTypeList",cmmnCodeVO);
+				
+				//정책유형
+				pageVO.setGrp_cd("TC0035");
+				pageVO.setSearchCondition("0");
+				cmmnCodeVO = cmmnCodeDtlService.cmmnDtlCodeSearch(pageVO);
+				mv.addObject("policyTypeList",cmmnCodeVO);
+
+				mv.setViewName("scale/experdbScaleHistory");
+			} catch (Exception e1) {
+				e1.printStackTrace();
+			}
+		}
+
+		return mv;	
+	}
+	
+	/**
+	 * scale Log List 조회
+	 * @param InstanceScaleVO
+	 * @return List<Map<String, Object>>
+	 * @throws Exception
+	 */
+	@RequestMapping("/selectScaleHistoryList.do")
+	@ResponseBody
+	public List<Map<String, Object>> selectScaleHistoryList(@ModelAttribute("instanceScaleVO") InstanceScaleVO instanceScaleVO, HttpServletRequest request, @ModelAttribute("historyVO") HistoryVO historyVO) throws Exception{
+		HttpSession session = request.getSession();
+		LoginVO loginVo = (LoginVO) session.getAttribute("session");
+		
+		String histGbn= (String)instanceScaleVO.getHist_gbn();
+
+		List<Map<String, Object>> result = null;	
+		String dtlCd = "";
+		
+		if (histGbn.equals("execute_hist")) {
+			dtlCd = "DX-T0057_01";
+		} else {
+			dtlCd = "DX-T0057_02";
+		}
+
+		try {
+			instanceScaleVO.setLogin_id((String)loginVo.getUsr_id());
+
+			// 화면접근이력 이력 남기기
+			instanceScaleService.scaleSaveHistory(request, historyVO, dtlCd);
+
+			result = instanceScaleService.selectScaleHistoryList(instanceScaleVO);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+
 		return result;
 	}
 }

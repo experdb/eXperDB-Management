@@ -6,6 +6,8 @@ import java.util.Map;
 
 import org.springframework.stereotype.Repository;
 
+import com.k4m.dx.tcontrol.scale.service.InstanceScaleVO;
+
 import egovframework.rte.psl.dataaccess.EgovAbstractMapper;
 
 /**
@@ -37,6 +39,32 @@ public class InstanceScaleDAO extends EgovAbstractMapper{
 	public List<Map<String, Object>> selectSvrIpadrList(int db_svr_id) {
 		List<Map<String, Object>> sl = null;
 		sl = (List<Map<String, Object>>) list("instanceScaleSql.selectSvrIpadrList", db_svr_id);
+		return sl;
+	}
+	
+	/**
+	 * scale log list 조회
+	 * 
+	 * @param dataConfigVO
+	 * @throws Exception
+	 */
+	@SuppressWarnings({ "unchecked", "deprecation" })
+	public List<Map<String, Object>> selectScaleHistoryList(InstanceScaleVO instanceScaleVO) {
+		List<Map<String, Object>> sl = null;
+		sl = (List<Map<String, Object>>) list("instanceScaleSql.selectScaleHistoryList", instanceScaleVO);		
+		return sl;
+	}
+	
+	/**
+	 * scale 발생 log list 조회
+	 * 
+	 * @param dataConfigVO
+	 * @throws Exception
+	 */
+	@SuppressWarnings({ "unchecked", "deprecation" })
+	public List<Map<String, Object>> selectScaleOccurHistoryList(InstanceScaleVO instanceScaleVO) {
+		List<Map<String, Object>> sl = null;
+		sl = (List<Map<String, Object>>) list("instanceScaleSql.selectScaleOccurHistoryList", instanceScaleVO);		
 		return sl;
 	}
 }

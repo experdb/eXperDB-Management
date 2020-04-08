@@ -51,6 +51,8 @@
 		
 		<typeAlias alias="db2pgSysInfVO" type="com.k4m.dx.tcontrol.db2pg.dbms.service.Db2pgSysInfVO" /> 
 		<typeAlias alias="db2pgHistoryVO" type="com.k4m.dx.tcontrol.db2pg.history.service.Db2pgHistoryVO" /> 
+		
+		<typeAlias alias="instanceScaleVO" type="com.k4m.dx.tcontrol.scale.service.InstanceScaleVO"/>
 
     </typeAliases>
     

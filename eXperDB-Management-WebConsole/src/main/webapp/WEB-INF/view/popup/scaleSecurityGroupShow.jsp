@@ -109,8 +109,8 @@
 			<table id="securityDataTable" class="display" cellspacing="0" width="100%">
 				<thead>
 					<tr>
-						<th scope="col"><spring:message code='scale_management.security_group_id' /></th>
-						<th scope="col"><spring:message code='scale_management.security_group_name' /></th>
+						<th scope="col"><spring:message code='eXperDB_scale.security_group_id' /></th>
+						<th scope="col"><spring:message code='eXperDB_scale.security_group_name' /></th>
 					</tr>
 				</thead>
 			</table>

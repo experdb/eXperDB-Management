@@ -19,7 +19,77 @@ public class InstanceScaleVO {
 	private int db_svr_ipadr_id;
 	private String scale_id;
 	private String login_id;
+	private String wrk_strt_dtm;
+	private String wrk_end_dtm;
+	private String exe_rslt_cd;
+	private String scale_type_cd;
+	private String wrk_type_Cd;
+	private String process_id_set;
+	private String fix_rsltcd;
+	private String hist_gbn;
+	private String execute_type_cd;
+	private String policy_type_cd;
 
+	public String getExecute_type_cd() {
+		return execute_type_cd;
+	}
+	public void setExecute_type_cd(String execute_type_cd) {
+		this.execute_type_cd = execute_type_cd;
+	}
+	public String getPolicy_type_cd() {
+		return policy_type_cd;
+	}
+	public void setPolicy_type_cd(String policy_type_cd) {
+		this.policy_type_cd = policy_type_cd;
+	}
+	public String getHist_gbn() {
+		return hist_gbn;
+	}
+	public void setHist_gbn(String hist_gbn) {
+		this.hist_gbn = hist_gbn;
+	}
+	public String getWrk_strt_dtm() {
+		return wrk_strt_dtm;
+	}
+	public void setWrk_strt_dtm(String wrk_strt_dtm) {
+		this.wrk_strt_dtm = wrk_strt_dtm;
+	}
+	public String getWrk_end_dtm() {
+		return wrk_end_dtm;
+	}
+	public void setWrk_end_dtm(String wrk_end_dtm) {
+		this.wrk_end_dtm = wrk_end_dtm;
+	}
+	public String getExe_rslt_cd() {
+		return exe_rslt_cd;
+	}
+	public void setExe_rslt_cd(String exe_rslt_cd) {
+		this.exe_rslt_cd = exe_rslt_cd;
+	}
+	public String getScale_type_cd() {
+		return scale_type_cd;
+	}
+	public void setScale_type_cd(String scale_type_cd) {
+		this.scale_type_cd = scale_type_cd;
+	}
+	public String getWrk_type_Cd() {
+		return wrk_type_Cd;
+	}
+	public void setWrk_type_Cd(String wrk_type_Cd) {
+		this.wrk_type_Cd = wrk_type_Cd;
+	}
+	public String getProcess_id_set() {
+		return process_id_set;
+	}
+	public void setProcess_id_set(String process_id_set) {
+		this.process_id_set = process_id_set;
+	}
+	public String getFix_rsltcd() {
+		return fix_rsltcd;
+	}
+	public void setFix_rsltcd(String fix_rsltcd) {
+		this.fix_rsltcd = fix_rsltcd;
+	}
 	public int getDb_svr_ipadr_id() {
 		return db_svr_ipadr_id;
 	}

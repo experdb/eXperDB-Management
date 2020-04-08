@@ -483,9 +483,9 @@ button[disabled]{
 				},
 				success : function(result) {
 					if (result.RESULT == "FAIL") {
-						alert(strTitle + '<spring:message code="scale_management.msg2" />');
+						alert(strTitle + '<spring:message code="eXperDB_scale.msg2" />');
 					} else {
-						alert(strTitle + '<spring:message code="scale_management.msg1" />');
+						alert(strTitle + '<spring:message code="eXperDB_scale.msg1" />');
 					}
 					
 					fn_selectScaleChk("ing");
@@ -558,6 +558,7 @@ button[disabled]{
 			<div class="location">
 				<ul>
 					<li class="bold">${db_svr_nm}</li>
+					<li><spring:message code="menu.eXperDB_scale" /></li>
 					<li class="on"><spring:message code="menu.eXperDB_scale" /></li>
 				</ul>
 			</div>
@@ -566,7 +567,7 @@ button[disabled]{
 		<div class="contents">
 			<div class="cmm_grp">
 				<div class="btn_type_01">
-					<%-- <span class="scaleIng" id="scaleIngMsg">* <spring:message code="scale_management.msg3" /></span>
+					<%-- <span class="scaleIng" id="scaleIngMsg">* <spring:message code="eXperDB_scale.msg3" /></span>
  --%>
 					<span class="btn"><button type="button" onclick="fn_selectScale('serch')"><spring:message code="common.search" /></button></span>
 					<span class="btn"><button type="button" id="btnScaleIn" onclick="fn_scaleInOut('scaleIn')" ><spring:message code="etc.etc38" /></button></span>
@@ -582,7 +583,7 @@ button[disabled]{
 						</colgroup> 
 						<tbody>
 								<tr>
-									<th scope="row" class="t9 line" style="width:130px;"><spring:message code="scale_management.instance_id" /></th>
+									<th scope="row" class="t9 line" style="width:130px;"><spring:message code="eXperDB_scale.instance_id" /></th>
 									<td><input type="text" class="txt t2" id="search_instance_id" name="search_instance_id" maxlength="100" onkeyup="fn_checkWord(this,100)" style="width:200px;"/></td>
 								</tr>
 						</tbody>
@@ -594,17 +595,17 @@ button[disabled]{
 						<thead>
 							<tr>
 								<th width="40" height="0"><spring:message code="common.no" /></th>
-								<th width="130"><spring:message code="scale_management.name" /></th>
-								<th width="120"><spring:message code="scale_management.instance_id" /></th>
-								<th width="80"><spring:message code="scale_management.instance_type" /></th>
-								<th width="100"><spring:message code="scale_management.availability_zone" /></th>
-								<th width="100"><spring:message code="scale_management.instance_state" /></th>
-								<th width="150"><spring:message code="scale_management.start_time" /></th>
-								<th width="180"><spring:message code="scale_management.public_IPv4" /></th>
-								<th width="80"><spring:message code="scale_management.IPv4_public_ip" /></th>
-								<th width="100"><spring:message code="scale_management.keyname" /></th>
-								<th width="60"><spring:message code="scale_management.monitoring" /></th>
-								<th width="120"><spring:message code="scale_management.security_group" /></th>							
+								<th width="130"><spring:message code="eXperDB_scale.name" /></th>
+								<th width="120"><spring:message code="eXperDB_scale.instance_id" /></th>
+								<th width="80"><spring:message code="eXperDB_scale.instance_type" /></th>
+								<th width="100"><spring:message code="eXperDB_scale.availability_zone" /></th>
+								<th width="100"><spring:message code="eXperDB_scale.instance_state" /></th>
+								<th width="150"><spring:message code="eXperDB_scale.start_time" /></th>
+								<th width="180"><spring:message code="eXperDB_scale.public_IPv4" /></th>
+								<th width="80"><spring:message code="eXperDB_scale.IPv4_public_ip" /></th>
+								<th width="100"><spring:message code="eXperDB_scale.keyname" /></th>
+								<th width="60"><spring:message code="eXperDB_scale.monitoring" /></th>
+								<th width="120"><spring:message code="eXperDB_scale.security_group" /></th>							
 							</tr>
 						</thead>
 					</table>

@@ -645,7 +645,7 @@ public class InstanceScaleServiceImpl extends EgovAbstractServiceImpl implements
 		Date time = new Date();
 		String timeId = formatDate.format(time);
 
-		String scaleServer = (String)props.get("scale_server");
+		//String scaleServer = (String)props.get("scale_server");
 
 		//명령어 setting
 		String scaleSet = obj.get("scale_set").toString();
@@ -661,17 +661,20 @@ public class InstanceScaleServiceImpl extends EgovAbstractServiceImpl implements
 		if (!scaleSet.isEmpty()) {
 			if ("scaleIn".equals(scaleSet) && "scaleIn".equals(scaleSet)) {
 				scale_path = props.get("scale_in_cmd").toString();
-				strCmd = String.format(scaleServer + " " + scale_path + " ", timeId);
+				//strCmd = String.format(scaleServer + " " + scale_path + " ", timeId);
+				strCmd = String.format(scale_path + " ", timeId);
 			} else if ("scaleOut".equals(scaleSet)) {
 				scale_path = props.get("scale_out_cmd").toString();
-				strCmd = String.format(scaleServer + " " + scale_path + " ", timeId);
+			//	strCmd = String.format(scaleServer + " " + scale_path + " ", timeId);
+				strCmd = String.format(scale_path + " ", timeId);
 			} else if ("monitering".equals(scaleSet)) {
 				scale_path = props.get("scale_chk_prgress").toString();
-				scaleServer = props.get("scale_seach_server").toString();
-				strCmd = String.format(scaleServer + " " + scale_path + " ", timeId);
+			//	scaleServer = props.get("scale_seach_server").toString();
+			//	strCmd = String.format(scaleServer + " " + scale_path + " ", timeId);
+				strCmd = String.format(scale_path + " ", timeId);
 			}
 		} else {
-			scaleServer = props.get("scale_seach_server").toString();
+		//	scaleServer = props.get("scale_seach_server").toString();
 
 			if (searchGbn.equals("scaleChk") && (obj.get("scaleChk_sub") != null && obj.get("scaleChk_sub").toString().equals("Y"))) {
 				strSubCmd = props.get("scale_chk_prgress").toString();
@@ -680,8 +683,8 @@ public class InstanceScaleServiceImpl extends EgovAbstractServiceImpl implements
 				strCmd = props.get("scale_json_view").toString();
 				
 				if ("main".equals(searchGbn)) {
-					strSubCmd = "--query 'sort_by\"(Reservations[*].Instances[].{LaunchTime:LaunchTime, InstanceId:InstanceId, PublicDnsName:PublicDnsName,PublicIpAddress:PublicIpAddress,PrivateIpAddress:PrivateIpAddress,PrivateDnsName:PrivateDnsName,KeyName:KeyName,InstanceType:InstanceType,MonitoringState:Monitoring.State,InstanceStatusName:State.Name, AvailabilityZone:Placement.AvailabilityZone, SecurityGroups:SecurityGroups[], TagsName:Tags[?Key==\\`Name\\`] | [0].Value}[], &LaunchTime)\"'";
-					//	strSubCmd = "--query \"sort_by(Reservations[*].Instances[].{LaunchTime:LaunchTime, InstanceId:InstanceId, PublicDnsName:PublicDnsName,PublicIpAddress:PublicIpAddress,PrivateIpAddress:PrivateIpAddress,PrivateDnsName:PrivateDnsName,KeyName:KeyName,InstanceType:InstanceType,MonitoringState:Monitoring.State,InstanceStatusName:State.Name, AvailabilityZone:Placement.AvailabilityZone, SecurityGroups:SecurityGroups[], TagsName:Tags[?Key==\\`Name\\`] | [0].Value}[], &LaunchTime)\"";
+					//strSubCmd = "--query 'sort_by\"(Reservations[*].Instances[].{LaunchTime:LaunchTime, InstanceId:InstanceId, PublicDnsName:PublicDnsName,PublicIpAddress:PublicIpAddress,PrivateIpAddress:PrivateIpAddress,PrivateDnsName:PrivateDnsName,KeyName:KeyName,InstanceType:InstanceType,MonitoringState:Monitoring.State,InstanceStatusName:State.Name, AvailabilityZone:Placement.AvailabilityZone, SecurityGroups:SecurityGroups[], TagsName:Tags[?Key==\\`Name\\`] | [0].Value}[], &LaunchTime)\"'";
+						strSubCmd = "--query \"sort_by(Reservations[*].Instances[].{LaunchTime:LaunchTime, InstanceId:InstanceId, PublicDnsName:PublicDnsName,PublicIpAddress:PublicIpAddress,PrivateIpAddress:PrivateIpAddress,PrivateDnsName:PrivateDnsName,KeyName:KeyName,InstanceType:InstanceType,MonitoringState:Monitoring.State,InstanceStatusName:State.Name, AvailabilityZone:Placement.AvailabilityZone, SecurityGroups:SecurityGroups[], TagsName:Tags[?Key==\\`Name\\`] | [0].Value}[], &LaunchTime)\"";
 				}  else if (searchGbn.equals("scaleChk") && (obj.get("scaleChk_sub") == null || obj.get("scaleChk_sub").toString().equals(""))) {
 					strSubCmd = "--query \'\"Reservations[*].Instances[].{InstanceId:InstanceId, InstanceStatusName:State.Name, TagsName:Tags[?Key==\\`Name\\`] | [0].Value}[]\"\'";
 				}
@@ -698,7 +701,7 @@ public class InstanceScaleServiceImpl extends EgovAbstractServiceImpl implements
 				
 			}
 
-			strCmd = scaleServer + " " + strCmd;
+			//strCmd = scaleServer + " " + strCmd;
 		}
 
 		return strCmd;
@@ -892,5 +895,25 @@ public class InstanceScaleServiceImpl extends EgovAbstractServiceImpl implements
 			e.printStackTrace();
 		}
 		return result;
+	}
+
+	/**
+	 * scale log list 조회
+	 * 
+	 * @param instanceScaleVO
+	 * @throws Exception 
+	 */
+	@Override
+	public List<Map<String, Object>> selectScaleHistoryList(InstanceScaleVO instanceScaleVO) throws Exception {
+		List<Map<String, Object>> list = null;
+		String histGbn = (String)instanceScaleVO.getHist_gbn();
+
+		if ("execute_hist".equals(histGbn)) {
+			list = instanceScaleDAO.selectScaleHistoryList(instanceScaleVO);
+		} else {
+			list = instanceScaleDAO.selectScaleOccurHistoryList(instanceScaleVO);
+		}
+		
+		return list;
 	}
 }

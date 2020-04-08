@@ -12,103 +12,103 @@
 					<caption><spring:message code="backup_management.work_info"/></caption>
 					<tbody>
  						<tr>
-							<td style="width: 17%;word-break:break-all;"><spring:message code="scale_management.instance_id" /></td>
+							<td style="width: 17%;word-break:break-all;"><spring:message code="eXperDB_scale.instance_id" /></td>
 							<td style="width: 33%;text-align: left;word-break:break-all;" id="d_instance_id"></td>
-							<td style="width: 17%;word-break:break-all;"><spring:message code="scale_management.public_IPv4" /></td>
+							<td style="width: 17%;word-break:break-all;"><spring:message code="eXperDB_scale.public_IPv4" /></td>
 							<td style="width: 33%;text-align: left;word-break:break-all;" id="d_public_IPv4"></td>
 						</tr>
 						<tr>
-							<td style="word-break:break-all;"><spring:message code="scale_management.instance_state" /></td>
+							<td style="word-break:break-all;"><spring:message code="eXperDB_scale.instance_state" /></td>
 							<td style="text-align: left;word-break:break-all;" id="d_instance_status_name"></td>
-							<td style="word-break:break-all;"><spring:message code="scale_management.IPv4_public_ip" /></td>
+							<td style="word-break:break-all;"><spring:message code="eXperDB_scale.IPv4_public_ip" /></td>
 							<td style="text-align: left;word-break:break-all;" id="d_IPv4_public_ip"></td>
 						</tr>
 						<tr>
-							<td style="word-break:break-all;"><spring:message code="scale_management.instance_type" /></td>
+							<td style="word-break:break-all;"><spring:message code="eXperDB_scale.instance_type" /></td>
 							<td style="text-align: left;word-break:break-all;" id="d_instance_type"></td>
-							<td style="word-break:break-all;"><spring:message code="scale_management.IPv6_ip" /></td>
+							<td style="word-break:break-all;"><spring:message code="eXperDB_scale.IPv6_ip" /></td>
 							<td style="text-align: left;word-break:break-all;" id="d_IPv6_ip"></td>
 						</tr>
 						<tr>
-							<td style="word-break:break-all;"><spring:message code="scale_management.state_reason" /></td>
+							<td style="word-break:break-all;"><spring:message code="eXperDB_scale.state_reason" /></td>
 							<td style="text-align: left;word-break:break-all;" id="d_state_reason" colspan="3"></td>
 						</tr>
 						<tr>
-							<td style="word-break:break-all;"><spring:message code="scale_management.private_dns_name" /></td>
+							<td style="word-break:break-all;"><spring:message code="eXperDB_scale.private_dns_name" /></td>
 							<td style="text-align: left;word-break:break-all;" id="d_private_dns_name"></td>
-							<td style="word-break:break-all;"><spring:message code="scale_management.availability_zone" /></td>
+							<td style="word-break:break-all;"><spring:message code="eXperDB_scale.availability_zone" /></td>
 							<td style="text-align: left;word-break:break-all;" id="d_availability_zone"></td>
 						</tr>
 						<tr>
-							<td style="word-break:break-all;"><spring:message code="scale_management.private_ip_address" /></td>
+							<td style="word-break:break-all;"><spring:message code="eXperDB_scale.private_ip_address" /></td>
 							<td style="text-align: left;word-break:break-all;" id="d_private_ip_address"></td>
-							<td style="word-break:break-all;"><spring:message code="scale_management.security_group" /></td>
+							<td style="word-break:break-all;"><spring:message code="eXperDB_scale.security_group" /></td>
 							<td style="text-align: left;word-break:break-all;" id="d_security_group"></td>
 						</tr>
 						<tr>
-							<td style="word-break:break-all;"><spring:message code="scale_management.vpc_id" /></td>
+							<td style="word-break:break-all;"><spring:message code="eXperDB_scale.vpc_id" /></td>
 							<td style="text-align: left;word-break:break-all;" id="d_vpc_id"></td>
-							<td style="word-break:break-all;"><spring:message code="scale_management.subnet_id" /></td>
+							<td style="word-break:break-all;"><spring:message code="eXperDB_scale.subnet_id" /></td>
 							<td style="text-align: left;word-break:break-all;" id="d_subnet_id"></td>
 						</tr>
 						<tr>
-							<td style="word-break:break-all;"><spring:message code="scale_management.network_interfaces" /></td>
+							<td style="word-break:break-all;"><spring:message code="eXperDB_scale.network_interfaces" /></td>
 							<td style="text-align: left;word-break:break-all;" id="d_network_interfaces"></td>
-							<td style="word-break:break-all;"><spring:message code="scale_management.keyname" /></td>
+							<td style="word-break:break-all;"><spring:message code="eXperDB_scale.keyname" /></td>
 							<td style="text-align: left;word-break:break-all;" id="d_key_name"></td>
 						</tr>
 						<tr>
-							<td style="word-break:break-all;"><spring:message code="scale_management.source_dest_check" /></td>
+							<td style="word-break:break-all;"><spring:message code="eXperDB_scale.source_dest_check" /></td>
 							<td style="text-align: left;word-break:break-all;" id="d_source_dest_check"></td>
-							<td style="word-break:break-all;"><spring:message code="scale_management.product_code" /></td>
+							<td style="word-break:break-all;"><spring:message code="eXperDB_scale.product_code" /></td>
 							<td style="text-align: left;word-break:break-all;" id="d_productcodeid"></td>
 						</tr>
 						<tr>
-							<td style="word-break:break-all;"><spring:message code="scale_management.ebs_optimized" /></td>
+							<td style="word-break:break-all;"><spring:message code="eXperDB_scale.ebs_optimized" /></td>
 							<td style="text-align: left;word-break:break-all;" id="d_ebs_optimized"></td>
-							<td style="word-break:break-all;"><spring:message code="scale_management.owner" /></td>
+							<td style="word-break:break-all;"><spring:message code="eXperDB_scale.owner" /></td>
 							<td style="text-align: left;word-break:break-all;" id="d_owner"></td>
 						</tr>
 						<tr>
-							<td style="word-break:break-all;"><spring:message code="scale_management.root_device_type" /></td>
+							<td style="word-break:break-all;"><spring:message code="eXperDB_scale.root_device_type" /></td>
 							<td style="text-align: left;word-break:break-all;" id="d_root_device_type"></td>
-							<td style="word-break:break-all;"><spring:message code="scale_management.start_time" /></td>
+							<td style="word-break:break-all;"><spring:message code="eXperDB_scale.start_time" /></td>
 							<td style="text-align: left;word-break:break-all;" id="d_start_time"></td>
 						</tr>
 						<tr>
-							<td style="word-break:break-all;"><spring:message code="scale_management.root_device_name" /></td>
+							<td style="word-break:break-all;"><spring:message code="eXperDB_scale.root_device_name" /></td>
 							<td style="text-align: left;word-break:break-all;" id="d_root_device_name"></td>
-							<td style="word-break:break-all;"><spring:message code="scale_management.monitoring" /></td>
+							<td style="word-break:break-all;"><spring:message code="eXperDB_scale.monitoring" /></td>
 							<td style="text-align: left;word-break:break-all;" id="d_monitoring"></td>
 						</tr>
 						<tr>
-							<td style="word-break:break-all;"><spring:message code="scale_management.block_device_name" /></td>
+							<td style="word-break:break-all;"><spring:message code="eXperDB_scale.block_device_name" /></td>
 							<td style="text-align: left;word-break:break-all;" id="d_block_device_name"></td>
-							<td style="word-break:break-all;"><spring:message code="scale_management.virtualization_type" /></td>
+							<td style="word-break:break-all;"><spring:message code="eXperDB_scale.virtualization_type" /></td>
 							<td style="text-align: left;word-break:break-all;" id="d_virtualization_type"></td>
 						</tr>
 						<tr>
-							<td style="word-break:break-all;"><spring:message code="scale_management.capacity_reservation_id" /></td>
+							<td style="word-break:break-all;"><spring:message code="eXperDB_scale.capacity_reservation_id" /></td>
 							<td style="text-align: left;word-break:break-all;" id="d_capacity_reservation_id"></td>
-							<td style="word-break:break-all;"><spring:message code="scale_management.reservation_id" /></td>
+							<td style="word-break:break-all;"><spring:message code="eXperDB_scale.reservation_id" /></td>
 							<td style="text-align: left;word-break:break-all;" id="d_reservation_id"></td>
 						</tr>
 						<tr>
-							<td style="word-break:break-all;"><spring:message code="scale_management.cct_revt_spect_re_id" /></td>
+							<td style="word-break:break-all;"><spring:message code="eXperDB_scale.cct_revt_spect_re_id" /></td>
 							<td style="text-align: left;word-break:break-all;" id="d_cct_revt_spect_re_id"></td>
-							<td style="word-break:break-all;"><spring:message code="scale_management.ami_launch_index" /></td>
+							<td style="word-break:break-all;"><spring:message code="eXperDB_scale.ami_launch_index" /></td>
 							<td style="text-align: left;word-break:break-all;" id="d_ami_launch_index"></td>
 						</tr>
 						<tr>
-							<td style="word-break:break-all;"><spring:message code="scale_management.image_id" /></td>
+							<td style="word-break:break-all;"><spring:message code="eXperDB_scale.image_id" /></td>
 							<td style="text-align: left;word-break:break-all;" id="d_image_id"></td>
-							<td style="word-break:break-all;"><spring:message code="scale_management.tenancy" /></td>
+							<td style="word-break:break-all;"><spring:message code="eXperDB_scale.tenancy" /></td>
 							<td style="text-align: left;word-break:break-all;" id="d_tenancy"></td>
 						</tr>
 						<tr>
-							<td style="word-break:break-all;"><spring:message code="scale_management.hiber_configured" /></td>
+							<td style="word-break:break-all;"><spring:message code="eXperDB_scale.hiber_configured" /></td>
 							<td style="text-align: left;word-break:break-all;" id="d_hiber_configured"></td>
-							<td style="word-break:break-all;"><spring:message code="scale_management.core_count" /></td>
+							<td style="word-break:break-all;"><spring:message code="eXperDB_scale.core_count" /></td>
 							<td style="text-align: left;word-break:break-all;" id="d_core_count"></td>
 						</tr>					
 					</tbody>
