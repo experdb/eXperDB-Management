@@ -66,7 +66,7 @@ public class WebConsoleSetting {
 	
 		
 		/*Repository Database IP*/
-		System.out.println("Repository database IP :");
+		System.out.println("Repository database IP (127.0.0.1):");
 		
 		strDatabaseIp = scan.nextLine();
 		
@@ -203,7 +203,7 @@ public class WebConsoleSetting {
 		
 		if(strEnctyptYn.equals("Y")) {
 		
-			System.out.println("eXperDB-Encrypt server.url :");
+			System.out.println("eXperDB-Encrypt server.url (127.0.0.1):");
 			
 			strEncryptServerUrl = scan.nextLine();
 			
