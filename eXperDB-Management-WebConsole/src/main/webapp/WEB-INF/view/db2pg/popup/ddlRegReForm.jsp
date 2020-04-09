@@ -34,13 +34,13 @@ var output_path ="fail";
 $(window.document).ready(function() {
 	 if("${exrt_trg_tb_cnt}">0){
 		 $("#src_tables option:eq(0)").attr("selected", "selected");
-		 $("#src_include_tables").val("총 테이블 : ${exrt_trg_tb_total_cnt} 개 중   /   ${exrt_trg_tb_cnt}개 선택됨");
+		 $("#src_include_tables").val("<spring:message code='migration.total_table'/>: ${exrt_trg_tb_total_cnt} <spring:message code='migration.selected_out_of'/>   /   ${exrt_trg_tb_cnt}<spring:message code='migration.items'/>");
 		 $("#src_table_total_cnt").val("${exrt_trg_tb_total_cnt}");
 		 $("#include").show();
 		 $("#exclude").hide();
 	 }else if("${exrt_exct_tb_cnt}">0){
 		 $("#src_tables option:eq(1)").attr("selected", "selected");
-		 $("#src_exclude_tables").val("총 테이블 : ${exrt_exct_tb_total_cnt} 개 중   /   ${exrt_exct_tb_cnt}개 선택됨");
+		 $("#src_exclude_tables").val("<spring:message code='migration.total_table'/> : ${exrt_exct_tb_total_cnt} <spring:message code='migration.selected_out_of'/>   /   ${exrt_exct_tb_cnt}<spring:message code='migration.items'/>");
 		 $("#src_table_total_cnt").val("${exrt_exct_tb_total_cnt}")
 		 $("#exclude").show();
 		 $("#include").hide(); 
@@ -56,7 +56,7 @@ function valCheck(){
 		$("#db2pg_ddl_wrk_exp").focus();
 		return false;
 	}else if($("#db2pg_sys_id").val() == ""){
-		alert("소스 시스템정보를 등록해주세요.");
+		alert('<spring:message code="migration.msg07"/>');
 		$("#db2pg_sys_id").focus();
 		return false;
 	}else{
@@ -146,7 +146,7 @@ function fn_update_work(){
 					opener.location.reload();
 					self.close();
 				}else{
-					alert('등록에 실패했습니다.');
+					alert('<spring:message code="migration.msg06"/>');
 				}	
 			}
 		});
@@ -180,7 +180,7 @@ function fn_dbmsInfo(){
  ******************************************************** */
 function fn_tableList(gbn){
 	if($('#db2pg_sys_nm').val() == ""){
-		alert("소스시스템을 선택해주세요.");
+		alert('<spring:message code="migration.msg03"/>');
 		return false;
 	}
 	
@@ -276,9 +276,9 @@ function fn_tableAddCallback(rowList, tableGbn, totalCnt){
 				</colgroup>
 				<tbody>
 					<tr>
-						<th scope="row" class="ico_t2">소스시스템</th>
+						<th scope="row" class="ico_t2"><spring:message code="migration.source_system"/></th>
 						<td><input type="text" class="txt" name="db2pg_sys_nm" id="db2pg_sys_nm"  value="${db2pg_sys_nm}" readonly="readonly"/>
-							<span class="btn btnC_01"><button type="button" class= "btn_type_02" onclick="fn_dbmsInfo()" style="width: 60px; margin-right: -60px; margin-top: 0;">등록</button></span>							
+							<span class="btn btnC_01"><button type="button" class= "btn_type_02" onclick="fn_dbmsInfo()" style="width: 60px; margin-right: -60px; margin-top: 0;"><spring:message code="button.create"/></button></span>							
 						</td>
 					</tr>
 				</tbody>
@@ -322,11 +322,11 @@ function fn_tableAddCallback(rowList, tableGbn, totalCnt){
 						<td>
 							<div id="include">
 								<input type="text" class="txt" name="src_include_tables" id="src_include_tables" readonly="readonly" />
-								<span class="btn btnC_01"><button type="button" class= "btn_type_02" onclick="fn_tableList('include')" style="width: 60px; margin-right: -60px; margin-top: 0;">등록</button></span>		
+								<span class="btn btnC_01"><button type="button" class= "btn_type_02" onclick="fn_tableList('include')" style="width: 60px; margin-right: -60px; margin-top: 0;"><spring:message code="button.create"/></button></span>		
 							</div>
 							<div id="exclude" style="display: none;">
 								<input type="text" class="txt" name="src_exclude_tables" id="src_exclude_tables" readonly="readonly" />
-								<span class="btn btnC_01"><button type="button" class= "btn_type_02" onclick="fn_tableList('exclude')" style="width: 60px; margin-right: -60px; margin-top: 0;">등록</button></span>												
+								<span class="btn btnC_01"><button type="button" class= "btn_type_02" onclick="fn_tableList('exclude')" style="width: 60px; margin-right: -60px; margin-top: 0;"><spring:message code="button.create"/></button></span>												
 							</div>
 						</td>
 					</tr>

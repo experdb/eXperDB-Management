@@ -23,7 +23,7 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-<title>DDL 수행이력 상세보기</title>
+<title><spring:message code="migration.ddl_performance_history"/></title>
 <link rel="stylesheet" type="text/css" href="/css/jquery-ui.css">
 <link rel="stylesheet" type="text/css" href="/css/common.css">
 <link rel="stylesheet" type="text/css" media="screen" href="<c:url value='/css/dt/jquery.dataTables.min.css'/>" />
@@ -152,7 +152,7 @@ function fn_download(name,path){
 								<td style="text-align: left">${result.wrk_exp}</td>
 							</tr>
 							<tr>
-								<td>수행결과</td>
+								<td><spring:message code="migration.result"/></td>
 								<td style="text-align: left">
 									<c:if test="${result.exe_rslt_cd eq 'TC001701'}"><img src='../../images/ico_state_02.png' style='margin-right:3px;'>Success</c:if>
 									<c:if test="${result.exe_rslt_cd eq 'TC001702'}"><img src='../../images/ico_state_01.png' style='margin-right:3px;'>Fail</c:if>

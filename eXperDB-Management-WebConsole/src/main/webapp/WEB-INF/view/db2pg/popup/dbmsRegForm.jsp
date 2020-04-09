@@ -82,12 +82,12 @@ $(window.document).ready(function() {
 			},
 			success : function(result) {
 				if (result == "true") {
-					alert('등록가능한 시스템 명입니다.');
+					alert('<spring:message code="migration.msg04"/>');
 					document.getElementById("db2pg_sys_nm").focus();
 					db2pg_sys_nmChk = "success";
 				} else {
 					db2pg_sys_nmChk = "fail";
-					alert('중복된 시스템명이 존재합니다.');
+					alert('<spring:message code="migration.msg05"/>');
 					document.getElementById("db2pg_sys_nm").focus();
 				}
 			},

@@ -186,7 +186,7 @@ function fn_regRe_popup(){
 			<h4><spring:message code="migration.source/target_dbms_management"/><a href="#n"><img src="../images/ico_tit.png" class="btn_info"/></a></h4>
 			<div class="infobox"> 
 				<ul>
-					<li>Migration 소스/타겟 데이터베이스 서버를 신규로 등록하거나 이미 등록된 서버를 수정 또는 삭제합니다.</li>			
+					<li><spring:message code="help.source/target_dbms_management_01"/></li>			
 				</ul>
 			</div>
 			<div class="location">

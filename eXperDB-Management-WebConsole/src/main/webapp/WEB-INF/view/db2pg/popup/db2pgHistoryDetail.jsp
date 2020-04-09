@@ -43,7 +43,7 @@
 <%@include file="../../cmmn/commonLocale.jsp"%>
 	<div class="pop_container">
 		<div class="pop_cts">
-			<p class="tit">실패 수행이력 상세보기</p>
+			<p class="tit"><spring:message code="migration.msg13"/></p>
 			<div class="pop_cmm3">
 				<p class="pop_s_tit"><spring:message code="migration.job_information"/></p>
 				<table class="list" style="border: 1px solid #99abb0;">

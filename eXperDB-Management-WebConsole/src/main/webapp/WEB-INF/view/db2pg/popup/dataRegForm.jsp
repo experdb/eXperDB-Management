@@ -51,11 +51,11 @@ function valCheck(){
 		$("#db2pg_trsf_wrk_exp").focus();
 		return false;
 	}else if($("#db2pg_source_system_id").val() == ""){
-		alert("소스 시스템정보를 등록해주세요.");
+		alert('<spring:message code="migration.msg07"/>');
 		$("#db2pg_source_system_id").focus();
 		return false;
 	}else if($("#db2pg_trg_sys_id").val() == ""){
-		alert("타겟 시스템정보를 등록해주세요.");
+		alert('<spring:message code="migration.msg08"/>');
 		$("#db2pg_trg_sys_id").focus();
 		return false;
 	}else{
@@ -356,14 +356,14 @@ function fn_tableAddCallback(rowList, tableGbn, totalCnt){
 				<tbody>
 					<tr>
 						<th scope="row" class="ico_t1"><spring:message code="migration.source_system"/></th>
-						<td><input type="text" class="txt t3" name="db2pg_source_system_nm" id="db2pg_source_system_nm" placeholder="등록 버튼을 눌러주세요" readonly="readonly"/>
+						<td><input type="text" class="txt t3" name="db2pg_source_system_nm" id="db2pg_source_system_nm" placeholder="<spring:message code="migration.msg02"/>" readonly="readonly"/>
 							<span class="btn btnC_01"><button type="button" class= "btn_type_02" onclick="fn_dbmsInfo()" style="width: 80px; margin-right: -60px; margin-top: 0;"><spring:message code="common.registory" /></button></span>							
 						</td>
 					</tr>
 					<tr>
 					<th scope="row" class="ico_t1"><spring:message code="migration.target_system"/></th>
 						<td><input type="hidden" name="db2pg_trg_sys_id" id="db2pg_trg_sys_id"/>
-							<input type="text" class="txt t3" name="db2pg_trg_sys_nm" id="db2pg_trg_sys_nm" placeholder="등록 버튼을 눌러주세요" readonly="readonly"/>
+							<input type="text" class="txt t3" name="db2pg_trg_sys_nm" id="db2pg_trg_sys_nm" placeholder="<spring:message code="migration.msg02"/>" readonly="readonly"/>
 							<span class="btn btnC_01"><button type="button" class= "btn_type_02" onclick="fn_dbmsPgInfo()" style="width: 80px; margin-right: -60px; margin-top: 0;"><spring:message code="common.registory" /></button></span>							
 						</td>
 					</tr>
