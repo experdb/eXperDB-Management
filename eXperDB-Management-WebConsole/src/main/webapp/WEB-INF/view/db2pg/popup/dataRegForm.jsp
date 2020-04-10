@@ -258,7 +258,7 @@ function fn_dbmsPgInfo(){
  ******************************************************** */
 function fn_tableList(gbn){
 	if($('#db2pg_source_system_nm').val() == ""){
-		alert("소스시스템을 선택해주세요.");
+		alert('<spring:message code="migration.msg03" />');
 		return false;
 	}
 	

@@ -207,7 +207,7 @@ function fn_Add(){
  										</c:forEach>
 								</select>						
 						</td>									
-						<th scope="row" class="ico_t1" >아이피</th>
+						<th scope="row" class="ico_t1" ><spring:message code="data_transfer.ip" /></th>
 						<td><input type="text" class="txt t4" name="ipadr" id="ipadr" /></td>				
 					</tr>
 				</tbody>

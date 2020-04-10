@@ -195,14 +195,14 @@ $(window.document).ready(function() {
 								<tr>
 									<th scope="row" class="t9"><spring:message code="common.work_name" /></th>
 									<td><input type="text" name="data_wrk_nm" id="data_wrk_nm" class="txt t3" maxlength="25"/></td>
-									<th scope="row" class="t9">구분</th>
+									<th scope="row" class="t9"><spring:message code="properties.division" /></th>
 									<td>		
 										<select name="data_dbms_dscd" id="data_dbms_dscd" class="select t5" >
-											<option value="source_system">소스시스템</option>	
-											<option value="target_system">타겟시스템</option>				
+											<option value="source_system"><spring:message code="migration.source_system" /></option>	
+											<option value="target_system"><spring:message code="migration.target_system" /></option>				
 										</select>	
 									</td>
-									<th scope="row" class="t9">DBMS구분</th>
+									<th scope="row" class="t9"><spring:message code="migration.dbms_classification" /></th>
 									<td><input type="text" name="dbms_dscd" id="dbms_dscd" class="txt t3"/></td>
 								</tr>
 							</tbody>
