@@ -553,7 +553,7 @@ function getdataDataList(){
 									<th width="130" rowspan="2"><spring:message code="backup_management.work_start_time"/></th>
 									<th width="130" rowspan="2"><spring:message code="backup_management.work_end_time"/></th>
 									<th width="95" rowspan="2"><spring:message code="schedule.jobTime"/></th>
-									<th width="95" rowspan="2"><spring:message code="schedule.result"/></th>
+									<th width="100" rowspan="2"><spring:message code="schedule.result"/></th>
 									<th width="95" rowspan="2"><spring:message code="migration.performer"/></th>
 								</tr>
 								<tr>

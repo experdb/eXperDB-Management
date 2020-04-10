@@ -146,7 +146,7 @@ function fn_init(){
 	tableRman.tables().header().to$().find('th:eq(6)').css('min-width', '230px');
 	/* tableRman.tables().header().to$().find('th:eq(7)').css('min-width', '230px'); */
 	tableRman.tables().header().to$().find('th:eq(7)').css('min-width', '100px');
-	tableRman.tables().header().to$().find('th:eq(8)').css('min-width', '100px');  
+	tableRman.tables().header().to$().find('th:eq(8)').css('min-width', '110px');  
 	tableRman.tables().header().to$().find('th:eq(9)').css('min-width', '100px');
 	tableRman.tables().header().to$().find('th:eq(10)').css('min-width', '100px');
 	tableRman.tables().header().to$().find('th:eq(11)').css('min-width', '0px');
@@ -165,7 +165,7 @@ function fn_init(){
 	tableDump.tables().header().to$().find('th:eq(10)').css('min-width', '90px');  
 	tableDump.tables().header().to$().find('th:eq(11)').css('min-width', '150px');
 	tableDump.tables().header().to$().find('th:eq(12)').css('min-width', '70px');
-	tableDump.tables().header().to$().find('th:eq(13)').css('min-width', '100px');
+	tableDump.tables().header().to$().find('th:eq(13)').css('min-width', '110px');
 	tableDump.tables().header().to$().find('th:eq(14)').css('min-width', '70px');  
 	tableDump.tables().header().to$().find('th:eq(15)').css('min-width', '100px');
 	tableDump.tables().header().to$().find('th:eq(16)').css('min-width', '0px');
@@ -870,7 +870,7 @@ function fn_ImmediateStart(gbn){
 									<th width="230" class="dt-center"><spring:message code="backup_management.backup_dir" /></th>
 									<%-- <th width="230" class="dt-center"><spring:message code="backup_management.backup_log_dir" /></th> --%>
 									<th width="100"><spring:message code="common.register" /> </th>
-									<th width="100"><spring:message code="common.regist_datetime" /></th>
+									<th width="110"><spring:message code="common.regist_datetime" /></th>
 									<th width="100"><spring:message code="common.modifier" /></th>
 									<th width="100"><spring:message code="common.modify_datetime" /></th>
 									<th width="0"></th>
@@ -897,7 +897,7 @@ function fn_ImmediateStart(gbn){
 									<th width="90"><spring:message code="backup_management.file_keep_day" /></th>
 									<th width="150"><spring:message code="backup_management.backup_maintenance_count" /></th>
 									<th width="70"><spring:message code="common.register" /></th>
-									<th width="100"><spring:message code="common.regist_datetime" /></th>
+									<th width="110"><spring:message code="common.regist_datetime" /></th>
 									<th width="70"><spring:message code="common.modifier" /></th>
 									<th width="100"><spring:message code="common.modify_datetime" /></th>
 									<th width="0"></th>

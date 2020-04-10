@@ -630,9 +630,9 @@ function fn_dateValidation(exe_dt){
 					<table class="write">
 						<caption>검색 조회</caption>
 						<colgroup>
-							<col style="width: 100px;" />
-							<col style="width: 450px;" />
-							<col style="width: 100px;" />
+							<col style="width: 150px;" />
+							<col style="width: 400px;" />
+							<col style="width: 150px;" />
 							</col>
 						</colgroup> 
 						<tbody>

@@ -110,10 +110,10 @@ function fn_init(){
 	table.tables().header().to$().find('th:eq(7)').css('min-width', '70px');
 	table.tables().header().to$().find('th:eq(8)').css('min-width', '100px');
 	table.tables().header().to$().find('th:eq(9)').css('min-width', '100px');
-	table.tables().header().to$().find('th:eq(10)').css('min-width', '50px');
-	table.tables().header().to$().find('th:eq(11)').css('min-width', '100px');
-	table.tables().header().to$().find('th:eq(12)').css('min-width', '50px');
-	table.tables().header().to$().find('th:eq(13)').css('min-width', '100px');
+	table.tables().header().to$().find('th:eq(10)').css('min-width', '60px');
+	table.tables().header().to$().find('th:eq(11)').css('min-width', '110px');
+	table.tables().header().to$().find('th:eq(12)').css('min-width', '60px');
+	table.tables().header().to$().find('th:eq(13)').css('min-width', '110px');
 	table.tables().header().to$().find('th:eq(14)').css('min-width', '0px');
     $(window).trigger('resize'); 
     
@@ -430,10 +430,10 @@ function fn_modifyScheduleListView(){
 							<th width="70"><spring:message code="common.run_status" /></th>
 							<th width="100"><spring:message code="etc.etc26"/></th>
 							<th width="100"><spring:message code="data_transfer.detail_search" /></th>
-							<th width="50"><spring:message code="common.register" /></th>
-							<th width="100"><spring:message code="common.regist_datetime" /></th>
-							<th width="50"><spring:message code="common.modifier" /></th>
-							<th width="100"><spring:message code="common.modify_datetime" /></th>
+							<th width="60"><spring:message code="common.register" /></th>
+							<th width="110"><spring:message code="common.regist_datetime" /></th>
+							<th width="60"><spring:message code="common.modifier" /></th>
+							<th width="110"><spring:message code="common.modify_datetime" /></th>
 							<th width="0"></th>
 						</tr>
 					</thead>
