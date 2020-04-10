@@ -487,7 +487,7 @@
 						<tbody>
 							<tr>
 								<th scope="row" class="ico_t1"><spring:message code="restore.Select_viewpoint" /></th>
-								<td><button type="button" class="btn_type_02" onclick="fn_rmanShow();" style="width: 100px; height: 25px; margin-right: -60px; margin-top: 0;">
+								<td><button type="button" class="btn_type_02" onclick="fn_rmanShow();" style="width: 150px; height: 25px; margin-right: -60px; margin-top: 0;">
 									<spring:message code="restore.Recovery_Information" /></button></td>
 							</tr>
 							<tr>
