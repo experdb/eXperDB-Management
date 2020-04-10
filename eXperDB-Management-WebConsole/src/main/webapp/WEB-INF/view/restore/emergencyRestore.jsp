@@ -155,14 +155,14 @@
 		var restore_exp = document.getElementById('restore_exp');
 		
 		if (restore_nm.value == "" || restore_nm.value == "undefind" || restore_nm.value == null) {
-			alert("복원명을 넣어주세요.");
+			alert("<spring:message code='restore.msg01' />");
 			restore_nm.focus();
 			return false;
 		}else if(restore_nmChk =="fail"){
-			alert('복원명 중복체크 바랍니다.');
+			alert('<spring:message code="restore.msg02" />');
 			return false;
 		}else if (restore_exp.value == "" || restore_exp.value == "undefind" || restore_exp.value == null) {
-			alert("복원 설명을 넣어주세요.");
+			alert("<spring:message code='restore.msg03' />");
 			restore_exp.focus();
 			return false;
 		}
@@ -379,7 +379,7 @@
 								<th scope="row" class="ico_t1"><spring:message code="restore.Recovery_Path" /></th>
 								<td><input type="text" class="txt" name="restore_dir" id="restore_dir" style="width: 70%" /> <span class="btn btnC_01"><button type="button" class="btn_type_02" onclick="fn_new_storage_check()" style="width: 50px; margin-top: 0;">
 								<spring:message code="common.dir_check" /></button></span> 
-								<span class="btn btnC_01"><button type="button" class="btn_type_02" onclick="fn_clean()" style="width: 50px; margin-top: 0;">초기화</button></span></td>
+								<span class="btn btnC_01"><button type="button" class="btn_type_02" onclick="fn_clean()" style="width: 50px; margin-top: 0;"><spring:message code="restore.reset" /></button></span></td>
 							</tr>
 						</tbody>
 					</table>
