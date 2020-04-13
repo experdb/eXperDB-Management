@@ -671,12 +671,12 @@ function fn_check() {
 			<table class="write">
 				<caption><spring:message code="dashboard.Register_backup" /></caption>
 				<colgroup>
-					<col style="width:105px;" />
-					<col style="width:178px;" />
+					<col style="width:128px;" />
+					<col style="width:155px;" />
 					<col style="width:100px;" />
 					<col style="width:178px;" />
-					<col style="width:100px;" />
-					<col style="width:150px;" />
+					<col style="width:110px;" />
+					<col style="width:140px;" />
 				</colgroup>
 				<tbody>
 					<%-- <tr>

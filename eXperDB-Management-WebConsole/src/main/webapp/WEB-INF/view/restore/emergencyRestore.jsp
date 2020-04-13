@@ -371,13 +371,13 @@
 
 					<table class="write" id="storage_view">
 						<colgroup>
-							<col style="width: 80px;" />
+							<col style="width: 100px;" />
 							<col />
 						</colgroup>
 						<tbody>
 							<tr>
 								<th scope="row" class="ico_t1"><spring:message code="restore.Recovery_Path" /></th>
-								<td><input type="text" class="txt" name="restore_dir" id="restore_dir" style="width: 70%" /> <span class="btn btnC_01"><button type="button" class="btn_type_02" onclick="fn_new_storage_check()" style="width: 50px; margin-top: 0;">
+								<td><input type="text" class="txt" name="restore_dir" id="restore_dir" style="width: 50%" /> <span class="btn btnC_01"><button type="button" class="btn_type_02" onclick="fn_new_storage_check()" style="width: 100px; margin-top: 0;">
 								<spring:message code="common.dir_check" /></button></span> 
 								<span class="btn btnC_01"><button type="button" class="btn_type_02" onclick="fn_clean()" style="width: 50px; margin-top: 0;"><spring:message code="restore.reset" /></button></span></td>
 							</tr>

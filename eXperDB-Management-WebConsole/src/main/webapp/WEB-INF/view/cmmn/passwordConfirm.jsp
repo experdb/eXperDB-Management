@@ -39,7 +39,7 @@ function fn_passwordCheck(){
 						//fn_pgWalFileSwitch();
 					}
 				}else{
-					alert("비밀번호가 일치하지 않습니다.");
+					alert('<spring:message code="encrypt_msg.msg03" />');
 				}				
 			}
 		}); 
@@ -53,14 +53,14 @@ function fn_passwordCheck(){
 			<div class="pop_cts" style="width: 60%; margin: 0 auto; min-height:0; min-width:0;">
 					<table class="write" >
 						<colgroup>
-							<col style="width:125px;" />
+							<col style="width:130px;" />
 							<col />
 						</colgroup>
 						<tbody>
 							<tr>
-								<th scope="row" style="background:url(../images/popup/ico_p_1.png) 4px 50% no-repeat;"><strong>비밀번호 확인</strong></th>
+								<th scope="row" style="background:url(../images/popup/ico_p_1.png) 4px 50% no-repeat;"><strong><spring:message code="encrypt_serverMasterKey.Confirm_Password" /></strong></th>
 								<td><input type="password" class="txt" name="password" id="password" /><input type="hidden" name="flag" id="flag">
-								<span class="btn btnC_01"><button type="button" class= "btn_type_02" onclick="fn_passwordCheck()" style="width: 70px; margin-right: -60px; margin-top: 0;">확인</button></span>
+								<span class="btn btnC_01"><button type="button" class= "btn_type_02" onclick="fn_passwordCheck()" style="width: 70px; margin-right: -60px; margin-top: 0;"><spring:message code="schedule.run" /></button></span>
 								</td>
 							</tr>
 							</tbody>
