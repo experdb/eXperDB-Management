@@ -234,7 +234,7 @@
              , DUMP_RESTORE_AUT_YN = #{dump_restore_aut_yn} 
              , RESTORE_HIS_AUT_YN = #{restore_his_aut_yn} 
 
-	    	<if test="scale_yn_chk != null and (scale_yn_chk eq 'Y'.toString()) ">
+	    	<if test='scale_yn_chk != null and (scale_yn_chk eq "Y".toString())'>
              , SCALE_YN = #{scale_yn} 
              , SCALE_HIST_YN = #{scale_hist_yn} 
 	    	</if>
@@ -343,7 +343,7 @@
                   , DUMP_RESTORE_AUT_YN
                   , RESTORE_HIS_AUT_YN
                   
-	    	<if test="scale_yn_chk != null and scale_yn_chk = 'Y' ">
+	    	<if test='scale_yn_chk != null and scale_yn_chk = "Y"'>
                   , SCALE_YN
                   , SCALE_HIST_YN
 	    	</if>
@@ -372,7 +372,7 @@
                   , #{dump_restore_aut_yn}
                   , #{restore_his_aut_yn}
                   
-	    	<if test="scale_yn_chk != null and (scale_yn_chk eq 'Y'.toString()) ">
+	    	<if test='scale_yn_chk != null and (scale_yn_chk eq "Y".toString()) '>
                   , #{scale_yn}
                   , #{scale_hist_yn}
 	    	</if>
