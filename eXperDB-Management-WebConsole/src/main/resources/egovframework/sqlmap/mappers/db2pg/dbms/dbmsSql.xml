@@ -198,4 +198,29 @@
 		      AND IPADR = #{ipadr}
 		      </if>	 			
 	 </select>
+	 
+	 <delete id="deleteDBMS" parameterType="int">
+		/**
+	 	* Query ID : deleteDBMS
+	 	* Description : DB2PG DBMS시스템 삭제
+	 	* Author : 김주영
+	 	**/	
+		DELETE FROM t_db2pg_sys_inf
+		WHERE
+			db2pg_sys_id = #{db2pg_sys_id}
+	</delete>
+	
+	<select id="exeMigCheck"  resultType="int">
+		/**
+	 	*  Query ID : exeMigCheck
+	 	* Description : DB2PG 스케줄 체크
+	 	* Author : 김주영
+	 	**/	
+		SELECT COUNT(*)
+		FROM T_WRKCNG_I A, T_DB2PG_TRSF_WRK_INF B, T_SCD_D C, T_SCD_M D
+		WHERE A.WRK_ID=B.WRK_ID
+		AND B.WRK_ID=C.WRK_ID
+		AND C.SCD_ID=D.SCD_ID
+		AND D.SCD_CNDT = 'TC001802'	
+	</select>
 </mapper>

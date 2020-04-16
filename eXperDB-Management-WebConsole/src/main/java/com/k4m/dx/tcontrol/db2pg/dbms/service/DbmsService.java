@@ -48,4 +48,14 @@ public interface DbmsService {
 	 */
 	List<Db2pgSysInfVO> selectDDLDb2pgDBMS(Db2pgSysInfVO db2pgSysInfVO) throws Exception;
 
+	/**
+	 * DB2PG DBMS시스템 삭제
+	 */
+	void deleteDBMS(int db2pg_sys_id) throws Exception;
+
+	/**
+	 * DB2PG 스케줄 체크
+	 */
+	int exeMigCheck() throws Exception;
+
 }

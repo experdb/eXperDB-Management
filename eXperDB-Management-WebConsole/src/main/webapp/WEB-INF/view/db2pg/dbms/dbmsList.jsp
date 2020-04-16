@@ -174,6 +174,79 @@ function fn_regRe_popup(){
 	winPop.focus();
 }
 
+/* ********************************************************
+ * DBMS 삭제
+ ******************************************************** */
+function fn_delete(){
+	var datas = table.rows('.selected').data();
+	if(datas.length != 1){
+		alert("<spring:message code='message.msg16' />");
+		return false;
+	}else{
+		if(confirm('<spring:message code="message.msg162"/>')){
+			var db2pg_sys_id =  table.row('.selected').data().db2pg_sys_id;
+			//실행중인 커넥터와 스케줄 확인
+			$.ajax({
+				url : "/db2pg/exeMigCheck.do",
+				data : {
+					db2pg_sys_id : db2pg_sys_id,
+				},
+				async:true,
+				//dataType : "json",
+				type : "post",
+				beforeSend: function(xhr) {
+			        xhr.setRequestHeader("AJAX", true);
+			     },
+				error : function(xhr, status, error) {
+					if(xhr.status == 401) {
+						alert("<spring:message code='message.msg02' />");
+						top.location.href = "/";
+					} else if(xhr.status == 403) {
+						alert("<spring:message code='message.msg03' />");
+						top.location.href = "/";
+					} else {
+						alert("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""));
+					}
+				},
+				success : function(result) {
+					if(result>0){
+						alert('<spring:message code="message.msg194"/>');
+					}else{
+							$.ajax({
+								url : "/db2pg/deleteDBMS.do",
+							  	data : {
+							  		db2pg_sys_id : db2pg_sys_id
+							  	},
+								type : "post",
+								beforeSend: function(xhr) {
+							        xhr.setRequestHeader("AJAX", true);
+							     },
+								error : function(xhr, status, error) {
+									if(xhr.status == 401) {
+										alert('<spring:message code="message.msg02" />');
+										top.location.href = "/";
+									} else if(xhr.status == 403) {
+										alert('<spring:message code="message.msg03" />');
+										top.location.href = "/";
+									} else {
+										alert("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""));
+									}
+								},
+								success : function(result) {
+									if(result.resultCode == "0000000000"){
+										alert("<spring:message code='message.msg37' />");
+										fn_search();
+									}else{
+										alert('<spring:message code="migration.msg09"/>');
+									}	
+								}
+							});	
+					}
+				}
+			});
+		 };	
+	}
+}
 
 </script>
 
@@ -204,7 +277,7 @@ function fn_regRe_popup(){
 						<span class="btn" onClick="fn_search()" id="read_button"><button type="button"><spring:message code="common.search" /></button></span>
 						<span class="btn" onclick="fn_reg_popup();" id="int_button"><button type="button"><spring:message code="common.registory" /></button></span>
 						<span class="btn" onclick="fn_regRe_popup();" id="mdf_button"><button type="button"><spring:message code="common.modify" /></button></span>
-						<span class="btn" onclick="fn_delete();" id="mdf_button"><button type="button"><spring:message code="common.delete" /></button></span>
+						<span class="btn" onclick="fn_delete();" id="del_button"><button type="button"><spring:message code="common.delete" /></button></span>
 				</div>
 				<div class="sch_form">
 					<table class="write">
