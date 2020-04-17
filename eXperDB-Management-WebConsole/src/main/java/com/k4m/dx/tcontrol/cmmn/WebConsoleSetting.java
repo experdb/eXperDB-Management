@@ -28,13 +28,15 @@ public class WebConsoleSetting {
 		String strDatabasePassword = "";
 		String strDatabaseUrl = "";
 		
+		String strScaleYN="";
+		
 		String strTransferYN ="";
 		String strAuditYN="";
 		
 		String strDb2pgPath = "";
 		
 		String strLanguage ="";
-		String strVersion ="eXperDB-Management-WebConsole-10.7.1.4";
+		String strVersion ="eXperDB-Management-WebConsole-11.0";
 		
 		String strEncryptYN="";
 		
@@ -61,58 +63,42 @@ public class WebConsoleSetting {
 				break;
 			}
 		}	
-					
-		System.out.println("Repository database IP :");
+	
+		
+		/*Repository Database IP*/
+		System.out.println("Repository database IP (127.0.0.1):");
 		
 		strDatabaseIp = scan.nextLine();
 		
-		while (true) {
+		
 			if(strDatabaseIp.equals("")) {
-				System.out.println("Please enter the Repository database IP address. ");
-				
-				System.out.println("Repository database IP :");
-				
-				strDatabaseIp = scan.nextLine();
-			} else {
-				break;
-			}
-		}
+				strDatabaseIp ="127.0.0.1";
+			} 
 		
 		
-		System.out.println("Repository database Port :");
+			
+		/*Repository Database PORT*/
+		System.out.println("Repository database Port (5432) :");
 				
 				strDatabasePort = scan.nextLine();
 				
-				while (true) {
-					if(strDatabasePort.equals("")) {
-						System.out.println("Please enter a Repository database Port. ");
-						
-						System.out.println("Repository the database Port :");
-						
-						strDatabasePort = scan.nextLine();
-					} else {
-						break;
-					}
-				}
+				if(strDatabasePort.equals("")) {		
+					
+					strDatabasePort = "5432";
+				} 
+	
 		
-		
-		System.out.println("Repository database.username :");
+		/*Repository Database USER*/
+		System.out.println("Repository database.username (experdb) :");
 		
 		strDatabaseUsername = scan.nextLine();
 		
-		while (true) {
 			if(strDatabaseUsername.equals("")) {
-				System.out.println("Please enter your Repository database username. ");
-				
-				System.out.println("Repository database.username :");
-				
-				strDatabaseUsername = scan.nextLine();
-			} else {
-				break;
+				strDatabaseUsername = "experdb";
 			}
-		}
 		
 		
+		/*Repository Database PASSWORD*/
 		System.out.println("Repository database.password :");
 		
 		strDatabasePassword = scan.nextLine();
@@ -129,6 +115,26 @@ public class WebConsoleSetting {
 			}
 		}	
 	
+		/* Scale in/out 사용여부 */
+		System.out.println("Whether to enable Scale settings? (y, n)");
+		
+		strScaleYN = scan.nextLine();
+		strScaleYN = strScaleYN.toUpperCase();
+		
+		while (true) {
+			if(strScaleYN.equals("")) {
+				System.out.println("Please enter your Scale setting yn. ");
+				
+				System.out.println("Whether to enable Scale settings? (y, n) :");
+				
+				strScaleYN = scan.nextLine();
+				strScaleYN = strScaleYN.toUpperCase();
+			} else {
+				break;
+			}
+		}	
+		
+		
 		/* 감사설정 사용여부 */
 		System.out.println("Whether to enable auditing settings? (y, n)");
 		
@@ -197,37 +203,21 @@ public class WebConsoleSetting {
 		
 		if(strEnctyptYn.equals("Y")) {
 		
-			System.out.println("eXperDB-Encrypt server.url :");
+			System.out.println("eXperDB-Encrypt server.url (127.0.0.1):");
 			
 			strEncryptServerUrl = scan.nextLine();
 			
-			while (true) {
 				if(strEncryptServerUrl.equals("")) {
-					System.out.println("Please enter your eXperDB-Encrypt server.url. ");
-					
-					System.out.println("eXperDB-Encrypt server.url :");
-					
-					strEncryptServerUrl = scan.nextLine();
-				} else {
-					break;
-				}
-			}
+					strEncryptServerUrl = "127.0.0.1";
+				} 
 
-			System.out.println("eXperDB-Encrypt server.port :");
+			System.out.println("eXperDB-Encrypt server.port (9443) :");
 			
 			strEncryptServerPort = scan.nextLine();
 			
-			while (true) {
 				if(strEncryptServerPort.equals("")) {
-					System.out.println("Please enter your eXperDB-Encrypt server.port. ");
-					
-					System.out.println("eXperDB-Encrypt server.port :");
-					
-					strEncryptServerPort = scan.nextLine();
-				} else {
-					break;
-				}
-			}
+					strEncryptServerPort = "9443";
+				} 
 			
 			
 			strDatabaseUrl = "jdbc:postgresql://" + strDatabaseIp + ":" + strDatabasePort + "/" + strDatabaseUsername;
@@ -238,6 +228,7 @@ public class WebConsoleSetting {
 			System.out.println("Repository database username :" + strDatabaseUsername);
 			System.out.println("Repository database password :" + strDatabasePassword);
 			System.out.println("Repository database Access information :" + strDatabaseUrl);
+			System.out.println("Whether scale is enabled : " + strScaleYN);
 			System.out.println("Whether to enable auditing settings : " + strAuditYN);
 			System.out.println("Whether data transfer is enabled : " + strTransferYN);
 			System.out.println("DB2PG installation path : " + strDb2pgPath);
@@ -256,22 +247,12 @@ public class WebConsoleSetting {
 			System.out.println("Repository database username :" + strDatabaseUsername);
 			System.out.println("Repository database password :" + strDatabasePassword);
 			System.out.println("Repository database Access information :" + strDatabaseUrl);
+			System.out.println("Whether scale is enabled : " + strScaleYN);
 			System.out.println("Whether to enable auditing settings : " + strAuditYN);
 			System.out.println("Whether data transfer is enabled : " + strTransferYN);
 			System.out.println("DB2PG installation path : " + strDb2pgPath);
 			System.out.println("#################################################");
 		}
-		
-		/*		
-		strDatabaseUrl = "jdbc:postgresql://" + strDatabaseIp + ":" + strDatabasePort + "/" + strDatabaseUsername;
-		
-		System.out.println("#####################################################");
-		System.out.println("Repository database IP address :" + strDatabaseIp);
-		System.out.println("Repository database port :" + strDatabasePort);		
-		System.out.println("Repository database username :" + strDatabaseUsername);
-		System.out.println("Repository database password :" + strDatabasePassword);
-		System.out.println("Repository database 접속정보 :" + strDatabaseUrl);
-		System.out.println("#####################################################");*/
 		
 		System.out.println("Do you want to apply what you entered? (y, n)");
 		
@@ -334,6 +315,7 @@ public class WebConsoleSetting {
 		    prop.setProperty("database.password", "ENC(" + password + ")");
 		    prop.setProperty("lang", strLanguage);
 		    prop.setProperty("version", strVersion);
+		    prop.setProperty("scale", strScaleYN);		  
 		    prop.setProperty("pg_audit", strAuditYN);
 		    prop.setProperty("transfer", strTransferYN);		  
 		    prop.setProperty("db2pg_path", strDb2pgPath);

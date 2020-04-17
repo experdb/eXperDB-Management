@@ -27,9 +27,9 @@ public class ClientConnector extends ClientSocketCtl{
 		
 		if (client == null) {
 			client	= new Socket(this.ipaddr, this.port);
-			
+				
 			client.setSoTimeout(timeout * 1000);
-			
+				
 			os		= new BufferedOutputStream(client.getOutputStream());
 			is		= new BufferedInputStream(client.getInputStream());
 		}

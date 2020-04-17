@@ -1,17 +1,21 @@
 package com.k4m.dx.tcontrol.admin.dbauthority.web;
 
+import java.io.FileInputStream;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Properties;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import org.json.simple.JSONArray;
+import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.util.ResourceUtils;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -54,7 +58,7 @@ public class DbSvrAuthorityController {
 	 */
 	@RequestMapping(value = "/dbServerAuthority.do")
 	public ModelAndView dbServerAuthority(@ModelAttribute("historyVO") HistoryVO historyVO, HttpServletRequest request) {
-		
+
 		//해당메뉴 권한 조회 (공통메소드호출),
 		CmmnUtils cu = new CmmnUtils();
 		menuAut = cu.selectMenuAut(menuAuthorityService, "MN000502");
@@ -66,6 +70,9 @@ public class DbSvrAuthorityController {
 				mv.setViewName("error/autError");
 			}else{
 				
+				Properties props = new Properties();
+				props.load(new FileInputStream(ResourceUtils.getFile("classpath:egovframework/tcontrolProps/globals.properties")));
+				
 				// 화면접근이력 이력 남기기
 				CmmnUtils.saveHistory(request, historyVO);
 				historyVO.setExe_dtl_cd("DX-T0037");
@@ -74,6 +81,15 @@ public class DbSvrAuthorityController {
 				
 				mv.addObject("read_aut_yn", menuAut.get(0).get("read_aut_yn"));
 				mv.addObject("wrt_aut_yn", menuAut.get(0).get("wrt_aut_yn"));
+				
+				String scale_yn_chk = "";
+				
+				if (props.get("scale") != null) {
+					scale_yn_chk = props.get("scale").toString();
+				}
+				
+				mv.addObject("scale_yn_chk", scale_yn_chk);
+
 				mv.setViewName("admin/dbAuthority/dbServerAuthority");
 			}
 		} catch (Exception e) {
@@ -225,17 +241,31 @@ public class DbSvrAuthorityController {
 				historyVO.setExe_dtl_cd("DX-T0037_01");
 				historyVO.setMnu_id(15);
 				accessHistoryService.insertHistory(historyVO);
-											
+	
+				Properties props = new Properties();
+				props.load(new FileInputStream(ResourceUtils.getFile("classpath:egovframework/tcontrolProps/globals.properties")));
+
+				String scale_yn_chk = "";
+				
+				if (props.get("scale") != null) {
+					scale_yn_chk = props.get("scale").toString();
+				}
+				
+
 				String strRows = request.getParameter("datasArr").toString().replaceAll("&quot;", "\"");
 				JSONArray rows = (JSONArray) new JSONParser().parse(strRows);
 						
 				for(int i=0; i<rows.size(); i++){
+					JSONObject jval = null;
 					cnt = dbAuthorityService.selectUsrDBSrvAutInfoCnt(rows.get(i));
 					
+					jval = (JSONObject) rows.get(i);
+					jval.put("scale_yn_chk", scale_yn_chk);
+					
 					if(cnt==0){
-						dbAuthorityService.insertUsrDBSrvAutInfo(rows.get(i));
+						dbAuthorityService.insertUsrDBSrvAutInfo(jval);
 					}else{
-						dbAuthorityService.updateUsrDBSrvAutInfo(rows.get(i));
+						dbAuthorityService.updateUsrDBSrvAutInfo(jval);
 					}			
 				}
 			}
@@ -262,5 +292,30 @@ public class DbSvrAuthorityController {
 			e.printStackTrace();
 		}
 		return resultSet;
+	}
+	
+	/**
+	 * scale yn check
+	 * @param HttpServletRequest, HttpServletResponse 
+	 * @return Map<String, Object>
+	 */
+	@RequestMapping("/selectServerScaleAuthInfo.do")
+	public @ResponseBody Map<String, Object> selectScaleLChk(HttpServletRequest request, HttpServletResponse response) {	
+		Map<String, Object> result = new HashMap<String, Object>();
+
+		try {
+			Properties props = new Properties();
+			props.load(new FileInputStream(ResourceUtils.getFile("classpath:egovframework/tcontrolProps/globals.properties")));
+			String scale_yn_chk = "";
+			
+			if (props.get("scale") != null) {
+				scale_yn_chk = props.get("scale").toString();
+			}
+
+			result.put("scale_yn_chk", scale_yn_chk);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return result;
 	}
 }

@@ -51,11 +51,11 @@ function valCheck(){
 		$("#db2pg_trsf_wrk_exp").focus();
 		return false;
 	}else if($("#db2pg_source_system_id").val() == ""){
-		alert("소스 시스템정보를 등록해주세요.");
+		alert('<spring:message code="migration.msg07"/>');
 		$("#db2pg_source_system_id").focus();
 		return false;
 	}else if($("#db2pg_trg_sys_id").val() == ""){
-		alert("타겟 시스템정보를 등록해주세요.");
+		alert('<spring:message code="migration.msg08"/>');
 		$("#db2pg_trg_sys_id").focus();
 		return false;
 	}else{
@@ -258,7 +258,7 @@ function fn_dbmsPgInfo(){
  ******************************************************** */
 function fn_tableList(gbn){
 	if($('#db2pg_source_system_nm').val() == ""){
-		alert("소스시스템을 선택해주세요.");
+		alert('<spring:message code="migration.msg03" />');
 		return false;
 	}
 	
@@ -348,23 +348,23 @@ function fn_tableAddCallback(rowList, tableGbn, totalCnt){
 		<div class="pop_cmm mt25">
 			<table class="write">
 				<colgroup>
-					<col style="width:105px;" />
+					<col style="width:120px;" />
 					<col />
-					<col style="width:105px;" />
+					<col style="width:120px;" />
 					<col />
 				</colgroup>
 				<tbody>
 					<tr>
 						<th scope="row" class="ico_t1"><spring:message code="migration.source_system"/></th>
-						<td><input type="text" class="txt" name="db2pg_source_system_nm" id="db2pg_source_system_nm" placeholder="등록 버튼을 눌러주세요" readonly="readonly"/>
-							<span class="btn btnC_01"><button type="button" class= "btn_type_02" onclick="fn_dbmsInfo()" style="width: 60px; margin-right: -60px; margin-top: 0;">등록</button></span>							
+						<td><input type="text" class="txt t3" name="db2pg_source_system_nm" id="db2pg_source_system_nm" placeholder="<spring:message code="migration.msg02"/>" readonly="readonly"/>
+							<span class="btn btnC_01"><button type="button" class= "btn_type_02" onclick="fn_dbmsInfo()" style="width: 80px; margin-right: -60px; margin-top: 0;"><spring:message code="common.registory" /></button></span>							
 						</td>
 					</tr>
 					<tr>
 					<th scope="row" class="ico_t1"><spring:message code="migration.target_system"/></th>
 						<td><input type="hidden" name="db2pg_trg_sys_id" id="db2pg_trg_sys_id"/>
-							<input type="text" class="txt" name="db2pg_trg_sys_nm" id="db2pg_trg_sys_nm" placeholder="등록 버튼을 눌러주세요" readonly="readonly"/>
-							<span class="btn btnC_01"><button type="button" class= "btn_type_02" onclick="fn_dbmsPgInfo()" style="width: 60px; margin-right: -60px; margin-top: 0;">등록</button></span>							
+							<input type="text" class="txt t3" name="db2pg_trg_sys_nm" id="db2pg_trg_sys_nm" placeholder="<spring:message code="migration.msg02"/>" readonly="readonly"/>
+							<span class="btn btnC_01"><button type="button" class= "btn_type_02" onclick="fn_dbmsPgInfo()" style="width: 80px; margin-right: -60px; margin-top: 0;"><spring:message code="common.registory" /></button></span>							
 						</td>
 					</tr>
 				</tbody>
@@ -398,11 +398,11 @@ function fn_tableAddCallback(rowList, tableGbn, totalCnt){
 									<td colspan="2">
 										<div id="include">
 											<input type="text" class="txt" name="src_include_tables" id="src_include_tables" readonly="readonly" />
-											<span class="btn btnC_01"><button type="button" class= "btn_type_02" onclick="fn_tableList('include')" style="width: 60px; margin-right: -60px; margin-top: 0;">등록</button></span>		
+											<span class="btn btnC_01"><button type="button" class= "btn_type_02" onclick="fn_tableList('include')" style="width: 80px; margin-right: -60px; margin-top: 0;"><spring:message code="common.registory" /></button></span>		
 										</div>
 										<div id="exclude" style="display: none;">
 											<input type="text" class="txt" name="src_exclude_tables" id="src_exclude_tables" readonly="readonly" />
-											<span class="btn btnC_01"><button type="button" class= "btn_type_02" onclick="fn_tableList('exclude')" style="width: 60px; margin-right: -60px; margin-top: 0;">등록</button></span>												
+											<span class="btn btnC_01"><button type="button" class= "btn_type_02" onclick="fn_tableList('exclude')" style="width: 80px; margin-right: -60px; margin-top: 0;"><spring:message code="common.registory" /></button></span>												
 										</div>
 										<input type="hidden" name="src_table_total_cnt" id="src_table_total_cnt">
 									</td>
@@ -466,9 +466,9 @@ function fn_tableAddCallback(rowList, tableGbn, totalCnt){
 			<table class="write">
 				<caption><spring:message code="dashboard.Register_backup" /></caption>
 				<colgroup>
-					<col style="width:18%;" />
 					<col style="width:17%;" />
-					<col style="width:10%;" />
+					<col style="width:16%;" />
+					<col style="width:12%;" />
 					<col style="width:15%;" />
 					<col style="width:18%;" />
 					<col style="width:17%;" />
@@ -476,7 +476,7 @@ function fn_tableAddCallback(rowList, tableGbn, totalCnt){
 				</colgroup>
 				<tbody>
 					<tr>
-						<th scope="row" class="ico_t2">테이블 리빌드 여부</th>
+						<th scope="row" class="ico_t2"><spring:message code="migration.table_rebuild" /></th>
 						<td>
 							<select name="tb_rbl_tf" id="tb_rbl_tf" class="select t4">
 								<c:forEach var="codeTF" items="${codeTF}">
@@ -484,7 +484,7 @@ function fn_tableAddCallback(rowList, tableGbn, totalCnt){
 								</c:forEach>
 							</select>
 						</td>
-						<th scope="row" class="ico_t2">입력모드</th>
+						<th scope="row" class="ico_t2"><spring:message code="migration.input_mode" /></th>
 						<td>
 							<select name="ins_opt_cd" id="ins_opt_cd" class="select t4">
 								<c:forEach var="codeInputMode" items="${codeInputMode}">
@@ -492,7 +492,7 @@ function fn_tableAddCallback(rowList, tableGbn, totalCnt){
 								</c:forEach>
 							</select>
 						</td>
-						<th scope="row" class="ico_t2">제약조건 추출 여부</th>
+						<th scope="row" class="ico_t2"><spring:message code="migration.contraint_extraction" /></th>
 						<td>
 							<select name="cnst_cnd_exrt_tf" id="cnst_cnd_exrt_tf" class="select t4">
 								<c:forEach var="codeTF" items="${codeTF}">

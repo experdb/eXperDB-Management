@@ -1166,7 +1166,7 @@ public class ClientInfoCmmn implements Runnable{
 		try {			
 			JSONObject jObj = new JSONObject();	
 			jObj.put(ClientProtocolID.DX_EX_CODE, ClientTranCodeType.DxT019);
-		
+
 			JSONObject objList;
 			
 			ClientAdapter CA = new ClientAdapter(IP, PORT);
@@ -1750,11 +1750,67 @@ public List<HashMap<String, String>> dumpShow(String IP, int PORT,String cmd) {
 		
 	}
 
+	/* 36. scale 실행 */
+	public Map<String, Object> scale_exec_call(String IP, int PORT, String cmd, String subCmd, JSONObject param) {
+		Map<String, Object> result = new HashMap<String, Object>();
+		HashMap resultHp = null;
+		JSONArray arrCmd = new JSONArray();
 
-	
+		try {
+			arrCmd.add(0, cmd);
+			if (!subCmd.equals("")) {
+				arrCmd.add(1, subCmd);
+			}
+
+			JSONObject objList;
+			JSONObject jObj = new JSONObject();	
+			jObj.put(ClientProtocolID.DX_EX_CODE, ClientTranCodeType.DxT036);
+			jObj.put(ClientProtocolID.SCALE_SET, param.get("scale_set").toString());             //scale 구분
+			jObj.put(ClientProtocolID.SEARCH_GBN, param.get("search_gbn").toString());           //조회구분
+			jObj.put(ClientProtocolID.ARR_CMD, arrCmd);
+			jObj.put(ClientProtocolID.PROCESS_ID, param.get("process_id").toString());           //프로세스 ID
+			jObj.put(ClientProtocolID.LOGIN_ID, param.get("login_id").toString());               //로그인 ID
+			jObj.put(ClientProtocolID.DB_SVR_IPADR_ID, param.get("db_svr_ipadr_id").toString()); //DB_서버_IP주소_ID
+			jObj.put(ClientProtocolID.DB_SVR_ID, param.get("db_svr_id").toString());             //DB_서버_ID
+			jObj.put(ClientProtocolID.WRK_TYPE, "TC003302");                                     //작업유형
+			jObj.put(ClientProtocolID.AUTO_POLICY, "");                                          //AUTO_정책
+			jObj.put(ClientProtocolID.AUTO_POLICY_NM, "");                                       //AUTO_정책_명
+
+			ClientAdapter CA = new ClientAdapter(IP, PORT);
+			CA.open(); 
+			
+			objList = CA.dxT036(jObj);
+			
+			CA.close();
+
+			String strErrMsg = (String)objList.get(ClientProtocolID.ERR_MSG);
+			String strErrCode = (String)objList.get(ClientProtocolID.ERR_CODE);
+			String strDxExCode = (String)objList.get(ClientProtocolID.DX_EX_CODE);
+			String strResultCode = (String)objList.get(ClientProtocolID.RESULT_CODE);
+
+			result.put("RESULT_CODE", strResultCode);
+			result.put("ERR_CODE", strErrCode);
+			result.put("ERR_MSG", strErrMsg);
+			
+			if (objList.get(ClientProtocolID.RESULT_DATA) != null) {
+				result.put("RESULT_DATA", objList.get(ClientProtocolID.RESULT_DATA));
+			} else {
+				result.put("RESULT_DATA", null);
+			}
+
+			if (objList.get(ClientProtocolID.RESULT_SUB_DATA) != null) {
+				result.put("RESULT_SUB_DATA", objList.get(ClientProtocolID.RESULT_SUB_DATA));
+			} else {
+				result.put("RESULT_SUB_DATA", null);
+			}
+		} catch(Exception e) {
+			e.printStackTrace();
+		}
+		return result;
+	}
+
 	@Override
 	public void run() {
 		// TODO Auto-generated method stub
-		
 	}
 }

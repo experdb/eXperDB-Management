@@ -143,7 +143,7 @@ function fn_Add(){
 <body>
 <div class="pop_container">
 	<div class="pop_cts">
-		<p class="tit">PostgreSQL DBMS 시스템정보</p>
+		<p class="tit">PostgreSQL <spring:message code="migration.dbms_system_information"/></p>
 			<div class="btn_type_01">
 				<span class="btn"><button onClick="fn_search();" type="button"><spring:message code="common.search" /></button></span>
 			</div>

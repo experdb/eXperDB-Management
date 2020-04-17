@@ -48,25 +48,20 @@ public class TranCodeType {
 	public static final String DxT032 = "DxT032";
 	public static final String DxT033 = "DxT033";
 	public static final String DxT034 = "DxT034";
-	
+
+	public static final String DxT036 = "DxT036";
+
 	public static final String STATUS = "STATUS";
 	public static final String STOP = "STOP";
 	public static final String CLOSE = "CLOSE";
 
-	
 	/**
 	 * 결과
 	 */
 	public static final String RESULT = "RESULT";								  //결과
-	
 
 	/**
 	 * DB커넥션 테스트
 	 */
 	public static final String WEB_DB_CONN_TEST = "WEB_DB_CONN_TEST";			  //DB커넥션 테스트
-
-
-	
-
-	
 }

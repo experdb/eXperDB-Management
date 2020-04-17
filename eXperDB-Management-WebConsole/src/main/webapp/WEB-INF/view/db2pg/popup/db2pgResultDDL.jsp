@@ -23,7 +23,7 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-<title>DDL 수행이력 상세보기</title>
+<title><spring:message code="migration.ddl_performance_history"/></title>
 <link rel="stylesheet" type="text/css" href="/css/jquery-ui.css">
 <link rel="stylesheet" type="text/css" href="/css/common.css">
 <link rel="stylesheet" type="text/css" media="screen" href="<c:url value='/css/dt/jquery.dataTables.min.css'/>" />
@@ -136,7 +136,7 @@ function fn_download(name,path){
 		<div class="pop_cts">
 			<p class="tit">DDL 수행이력 상세보기</p>
 			<div class="pop_cmm3">
-				<p class="pop_s_tit">작업정보</p>
+				<p class="pop_s_tit"><spring:message code="migration.job_information"/></p>
 				<table class="list" style="border: 1px solid #99abb0;">
 					<colgroup>
 						<col style="width: 15%;" />
@@ -152,7 +152,7 @@ function fn_download(name,path){
 								<td style="text-align: left">${result.wrk_exp}</td>
 							</tr>
 							<tr>
-								<td>수행결과</td>
+								<td><spring:message code="migration.result"/></td>
 								<td style="text-align: left">
 									<c:if test="${result.exe_rslt_cd eq 'TC001701'}"><img src='../../images/ico_state_02.png' style='margin-right:3px;'>Success</c:if>
 									<c:if test="${result.exe_rslt_cd eq 'TC001702'}"><img src='../../images/ico_state_01.png' style='margin-right:3px;'>Fail</c:if>
@@ -161,17 +161,17 @@ function fn_download(name,path){
 					</tbody>
 				</table>
 				<br><br>
-				<p class="pop_s_tit">파일 정보</p>
+				<p class="pop_s_tit"><spring:message code="migration.file_information"/></p>
 					<div class="overflow_area">
 						<table id="fileList" class="display" cellspacing="0" width="100%">
 							<thead>
 								<tr>
 									<th width="30"><spring:message code="common.no" /></th>
-									<th width="200" class="dt-center">파일명</th>
-									<th width="300" class="dt-center">경로</th>
+									<th width="200" class="dt-center"><spring:message code="migration.file_name"/></th>
+									<th width="300" class="dt-center"><spring:message code="migration.path"/></th>
 									<th width="100" class="dt-center"><spring:message code="backup_management.size" /></th>
-									<th width="200" class="dt-center">생성일시</th>
-									<th width="100" class="dt-center">다운로드</th>
+									<th width="200" class="dt-center"><spring:message code="migration.creation_date"/></th>
+									<th width="100" class="dt-center"><spring:message code="migration.download"/></th>
 								</tr>
 							</thead>
 						</table>

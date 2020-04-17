@@ -1,5 +1,6 @@
 package com.k4m.dx.tcontrol.db2pg.dbms.web;
 
+import java.sql.SQLException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -488,5 +489,54 @@ public class Db2pgDbmsSystemController {
 			return false;
 		}
 		return true;
+	}
+	
+	
+	
+	/**
+	 * DBMS를 삭제한다.
+	 * 
+	 * @param historyVO
+	 * @param request
+	 * @return ModelAndView mv
+	 * @throws Exception
+	 */
+	@RequestMapping(value = "/db2pg/deleteDBMS.do")
+	public @ResponseBody JSONObject deleteDBMS(@ModelAttribute("historyVO") HistoryVO historyVO, HttpServletResponse response, HttpServletRequest request) throws SQLException {
+		JSONObject result = new JSONObject();
+		try {
+			// 화면접근이력 이력 남기기
+			CmmnUtils.saveHistory(request, historyVO);
+			historyVO.setExe_dtl_cd("DX-T0134_02");
+			historyVO.setMnu_id(41);
+			accessHistoryService.insertHistory(historyVO);
+			
+			int db2pg_sys_id = Integer.parseInt(request.getParameter("db2pg_sys_id")); 
+			dbmsService.deleteDBMS(db2pg_sys_id);
+			result.put("resultCode", "0000000000");
+		} catch (Exception e) {
+			e.printStackTrace();
+			result.put("resultCode", "8000000003");
+		}
+		return result;
+	}
+	
+	
+	/**
+	 * 실행중인 Migraton 스케줄 조회
+	 * 
+	 * @return resultSet
+	 * @throws Exception
+	 */
+	@RequestMapping(value = "/db2pg/exeMigCheck.do")
+	@ResponseBody
+	public int exeMigCheck(@ModelAttribute("historyVO") HistoryVO historyVO, HttpServletRequest request, HttpServletResponse response) {
+		int result = 0;	
+		try {					
+				result = dbmsService.exeMigCheck();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return result;
 	}
 }

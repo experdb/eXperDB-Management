@@ -192,8 +192,7 @@ $(window.document).ready(
 	function() {	
 	
 		fn_init();
-		getddlDataList();
-		getdataDataList();			
+			
 	
 		$("#ddlDataTable").show();
 		$("#ddlDataTable_wrapper").show();
@@ -222,6 +221,9 @@ $(window.document).ready(
 			changeMonth : true,
 			changeYear : true
 	 	});
+		
+		getddlDataList();
+		getdataDataList();
 	}
 );
 
@@ -534,7 +536,7 @@ function getdataDataList(){
 									<th width="100"><spring:message code="backup_management.work_end_time" /></th>
 									<th width="100"><spring:message code="schedule.jobTime"/></th>
 									<th width="100"><spring:message code="properties.status" /></th>
-									<th width="100">수행자</th>
+									<th width="100"><spring:message code="migration.performer"/></th>
 									<th width="0"></th>
 									<th width="0"></th>
 									<th width="0"></th>
@@ -550,11 +552,11 @@ function getdataDataList(){
 									<th width="200" rowspan="2"><spring:message code="common.work_description" /></th>
 									<th width="400" colspan="3"><spring:message code="migration.source_system"/></th>
 									<th width="400" colspan="2"><spring:message code="migration.target_system"/></th>
-									<th width="130" rowspan="2">수행시작시간</th>
-									<th width="130" rowspan="2">수행종료시간</th>
-									<th width="95" rowspan="2">수행시간(초)</th>
-									<th width="95" rowspan="2">수행결과</th>
-									<th width="95" rowspan="2">수행자</th>
+									<th width="130" rowspan="2"><spring:message code="backup_management.work_start_time"/></th>
+									<th width="130" rowspan="2"><spring:message code="backup_management.work_end_time"/></th>
+									<th width="95" rowspan="2"><spring:message code="schedule.jobTime"/></th>
+									<th width="100" rowspan="2"><spring:message code="schedule.result"/></th>
+									<th width="95" rowspan="2"><spring:message code="migration.performer"/></th>
 								</tr>
 								<tr>
 									<th width="100">DBMS<spring:message code="common.division" /></th>

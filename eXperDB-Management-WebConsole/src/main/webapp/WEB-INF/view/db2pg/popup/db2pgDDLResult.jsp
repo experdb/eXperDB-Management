@@ -46,7 +46,7 @@ function selectDDL(tab){
 <div id="pop_layer_db2pgDDLResult" class="pop-layer">
 		<div class="pop-container" style="padding: 0px;">
 			<div class="pop_cts" style="width: 55%; height: 600px; overflow: auto; padding: 20px; margin: 0 auto; min-height:0; min-width:0; margin-top: 10%" id="db2pgDDLResult">
-				<p class="tit" style="margin-bottom: 15px;">DDL 실행 결과 화면
+				<p class="tit" style="margin-bottom: 15px;"><spring:message code="migration.ddl_execution_result"/>
 					<a href="#n" class="btn" onclick="toggleLayer($('#pop_layer_db2pgDDLResult'), 'off');" style="float: right;"><img src="/images/ico_state_01.png" style="margin-left: 235px;"/></a>
 				</p>
 				<div class="pop_cmm c2 mt25">

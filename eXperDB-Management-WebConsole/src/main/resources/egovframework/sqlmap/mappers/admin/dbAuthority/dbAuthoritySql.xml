@@ -52,50 +52,54 @@
 	
 	
 	<insert id="insertUsrDbSvrAut" parameterType="HashMap">
-		/**
-		* Query ID : insertUsrDbSvrAut
-		* Description : 유저디비서버권한 초기등록
-		* Author : 변승우
-		**/
-  			INSERT INTO T_USRDBSVRAUT_I
-			(
-			USR_DB_SVR_AUT_ID
-			, USR_ID
-			, DB_SVR_ID
-			, BCK_CNG_AUT_YN
-			, BCK_HIST_AUT_YN
-			, ACS_CNTR_AUT_YN
-			, ADT_CNG_AUT_YN
-			, ADT_HIST_AUT_YN
-			, BCK_SCDR_AUT_YN
-			, POLICY_CHANGE_HIS_AUT_YN
-			, FRST_REGR_ID
-			, FRST_REG_DTM
-			, LST_MDFR_ID
-			, LST_MDF_DTM
-			, SCRIPT_CNG_AUT_YN
-			, SCRIPT_HIS_AUT_YN
-			)
-		VALUES
-			(			
-			nextval('q_usrdbsvraut_i_01')
-			, #{user}
-			, #{db_svr_id}
-			, 'N'
-			, 'N'
-			, 'N'
-			, 'N'
-			, 'N'
-			, 'N'
-			, 'N'
-			, #{usr_id}
-			, clock_timestamp()
-			, #{usr_id}
-			, clock_timestamp()
-			, 'N'
-			, 'N'
-			)
-	</insert>	
+        /**
+        * Query ID : insertUsrDbSvrAut
+        * Description : 유저디비서버권한 초기등록
+        * Author : 변승우
+        **/
+        INSERT INTO T_USRDBSVRAUT_I
+                   (
+                     USR_DB_SVR_AUT_ID
+                   , USR_ID
+                   , DB_SVR_ID
+                   , BCK_CNG_AUT_YN
+                   , BCK_HIST_AUT_YN
+                   , ACS_CNTR_AUT_YN
+                   , ADT_CNG_AUT_YN
+                   , ADT_HIST_AUT_YN
+                   , BCK_SCDR_AUT_YN
+                   , POLICY_CHANGE_HIS_AUT_YN
+                   , FRST_REGR_ID
+                   , FRST_REG_DTM
+                   , LST_MDFR_ID
+                   , LST_MDF_DTM
+                   , SCRIPT_CNG_AUT_YN
+                   , SCRIPT_HIS_AUT_YN
+                   , SCALE_YN
+                   , SCALE_HIST_YN
+                   )
+              VALUES
+                   (
+                     nextval('q_usrdbsvraut_i_01')
+                   , #{user}
+                   , #{db_svr_id}
+                   , 'N'
+                   , 'N'
+                   , 'N'
+                   , 'N'
+                   , 'N'
+                   , 'N'
+                   , 'N'
+                   , #{usr_id}
+                   , clock_timestamp()
+                   , #{usr_id}
+                   , clock_timestamp()
+                   , 'N'
+                   , 'N'
+                   , 'N'
+                   , 'N'
+                   )
+	</insert>
 	
 	
 	<select id="selectDBList" resultType="HashMap">
@@ -172,64 +176,73 @@
 	
 
 	<select id="selectUsrDBSrvAutInfo" resultType="HashMap" parameterType="String">
-			/**
-		 	*  Query ID : selectUsrDBSrvAutInfo
-		 	* Description : 유저 DB서버 권한 조회
-		 	* Author : 변승우
-		 	**/	
-		 SELECT 
-			A.USR_DB_SVR_AUT_ID
-				, A.USR_ID
-				, A.DB_SVR_ID
-				, B.DB_SVR_NM
-	            , A.BCK_CNG_AUT_YN
-				, A.BCK_HIST_AUT_YN
-				, A.ACS_CNTR_AUT_YN
-				, A.ADT_CNG_AUT_YN
-				, A.ADT_HIST_AUT_YN
-				, A.BCK_SCDR_AUT_YN
-				, A.POLICY_CHANGE_HIS_AUT_YN
-				, A.SCRIPT_CNG_AUT_YN
-				, A.SCRIPT_HIS_AUT_YN
-				, A.EMERGENCY_RESTORE_AUT_YN
-				, A.POINT_RESTORE_AUT_YN
-				, A.DUMP_RESTORE_AUT_YN
-				, A.RESTORE_HIS_AUT_YN
-				, C.IPADR
-		FROM T_USRDBSVRAUT_I A, T_DBSVR_I B,T_DBSVRIPADR_I C
-		WHERE 1 = 1
-		AND A.DB_SVR_ID = B.DB_SVR_ID
-		AND B.DB_SVR_ID = C.DB_SVR_ID
-		AND C.MASTER_GBN = 'M'
-		AND A.USR_ID = #{usr_id}
-		ORDER BY A.DB_SVR_ID
+        /**
+        *  Query ID : selectUsrDBSrvAutInfo
+        * Description : 유저 DB서버 권한 조회
+        * Author : 변승우
+        **/	
+        SELECT 
+               A.USR_DB_SVR_AUT_ID
+             , A.USR_ID
+             , A.DB_SVR_ID
+             , B.DB_SVR_NM
+             , A.BCK_CNG_AUT_YN
+             , A.BCK_HIST_AUT_YN
+             , A.ACS_CNTR_AUT_YN
+             , A.ADT_CNG_AUT_YN
+             , A.ADT_HIST_AUT_YN
+             , A.BCK_SCDR_AUT_YN
+             , A.POLICY_CHANGE_HIS_AUT_YN
+             , A.SCRIPT_CNG_AUT_YN
+             , A.SCRIPT_HIS_AUT_YN
+             , A.EMERGENCY_RESTORE_AUT_YN
+             , A.POINT_RESTORE_AUT_YN
+             , A.DUMP_RESTORE_AUT_YN
+             , A.RESTORE_HIS_AUT_YN
+             , A.SCALE_YN
+             , A.SCALE_HIST_YN
+             , C.IPADR
+          FROM T_USRDBSVRAUT_I A, T_DBSVR_I B,T_DBSVRIPADR_I C
+         WHERE 1 = 1
+           AND A.DB_SVR_ID = B.DB_SVR_ID
+           AND B.DB_SVR_ID = C.DB_SVR_ID
+           AND C.MASTER_GBN = 'M'
+           AND A.USR_ID = #{usr_id}
+           ORDER BY A.DB_SVR_ID
 	</select>
 	
 	
 	<update id="updateUsrDBSrvAutInfo" parameterType="object">
-	   	/**
-	 	* Query ID : updateUsrDBSrvAutInfo
-	 	* Description : 사용자 DB서버권한 저장
-	 	* Author : 변승우
-	 	**/
-	 	UPDATE T_USRDBSVRAUT_I
-	 	SET
-	            BCK_CNG_AUT_YN = #{bck_cng_aut_yn} 
-				, BCK_HIST_AUT_YN = #{bck_hist_aut_yn} 
-				, ACS_CNTR_AUT_YN = #{acs_cntr_aut_yn} 
-				, ADT_CNG_AUT_YN = #{adt_cng_aut_yn} 
-				, ADT_HIST_AUT_YN = #{adt_hist_aut_yt}
-				, BCK_SCDR_AUT_YN = #{bck_scdr_aut_yn}
-				, POLICY_CHANGE_HIS_AUT_YN = #{policy_change_his_aut_yn} 	 	
-				, SCRIPT_CNG_AUT_YN = #{script_cng_aut_yn} 
-				, SCRIPT_HIS_AUT_YN = #{script_his_aut_yn} 
-				, EMERGENCY_RESTORE_AUT_YN = #{emergency_restore_aut_yn} 
-				, POINT_RESTORE_AUT_YN = #{point_restore_aut_yn} 
-				, DUMP_RESTORE_AUT_YN = #{dump_restore_aut_yn} 
-				, RESTORE_HIS_AUT_YN = #{restore_his_aut_yn} 
-	 	WHERE USR_ID=#{usr_id}
-	 	AND DB_SVR_ID = #{db_svr_id}::numeric
-	</update>	
+        /**
+        * Query ID : updateUsrDBSrvAutInfo
+        * Description : 사용자 DB서버권한 저장
+        * Author : 변승우
+        **/
+        UPDATE T_USRDBSVRAUT_I
+           SET
+               BCK_CNG_AUT_YN = #{bck_cng_aut_yn} 
+             , BCK_HIST_AUT_YN = #{bck_hist_aut_yn} 
+             , ACS_CNTR_AUT_YN = #{acs_cntr_aut_yn} 
+             , ADT_CNG_AUT_YN = #{adt_cng_aut_yn} 
+             , ADT_HIST_AUT_YN = #{adt_hist_aut_yt}
+             , BCK_SCDR_AUT_YN = #{bck_scdr_aut_yn}
+             , POLICY_CHANGE_HIS_AUT_YN = #{policy_change_his_aut_yn} 	 	
+             , SCRIPT_CNG_AUT_YN = #{script_cng_aut_yn} 
+             , SCRIPT_HIS_AUT_YN = #{script_his_aut_yn} 
+             , EMERGENCY_RESTORE_AUT_YN = #{emergency_restore_aut_yn} 
+             , POINT_RESTORE_AUT_YN = #{point_restore_aut_yn} 
+             , DUMP_RESTORE_AUT_YN = #{dump_restore_aut_yn} 
+             , RESTORE_HIS_AUT_YN = #{restore_his_aut_yn} 
+
+	    	<if test='scale_yn_chk != null and (scale_yn_chk eq "Y".toString())'>
+             , SCALE_YN = #{scale_yn} 
+             , SCALE_HIST_YN = #{scale_hist_yn} 
+	    	</if>
+             
+
+         WHERE USR_ID=#{usr_id}
+           AND DB_SVR_ID = #{db_svr_id}::numeric
+	</update>
 	
 	
 	<select id="selectDBAutInfo" resultType="HashMap">
@@ -302,58 +315,70 @@
 	
 	
 	<insert id="insertUsrDBSrvAutInfo" parameterType="HashMap">
-		/**
-		* Query ID : insertUsrDBSrvAutInfo
-		* Description : 유저디비서버 등록
-		* Author : 변승우
-		**/
-  			INSERT INTO T_USRDBSVRAUT_I
-			(
-			USR_DB_SVR_AUT_ID
-			, USR_ID
-			, DB_SVR_ID
-			, BCK_CNG_AUT_YN
-			, BCK_HIST_AUT_YN
-			, ACS_CNTR_AUT_YN
-			, ADT_CNG_AUT_YN
-			, ADT_HIST_AUT_YN
-			, BCK_SCDR_AUT_YN
-			, POLICY_CHANGE_HIS_AUT_YN
-			, SCRIPT_CNG_AUT_YN
-			, SCRIPT_HIS_AUT_YN
-			, FRST_REGR_ID
-			, FRST_REG_DTM
-			, LST_MDFR_ID
-			, LST_MDF_DTM
-			, EMERGENCY_RESTORE_AUT_YN
-			, POINT_RESTORE_AUT_YN
-			, DUMP_RESTORE_AUT_YN
-			, RESTORE_HIS_AUT_YN
-			)
-		VALUES
-			(			
-			nextval('q_usrdbsvraut_i_01')
-			, #{usr_id}
-			, #{db_svr_id}::numeric
-			, #{bck_cng_aut_yn} 
-			, #{bck_hist_aut_yn} 
-			, #{acs_cntr_aut_yn} 
-			, #{adt_cng_aut_yn} 
-			, #{adt_hist_aut_yt}
-			, #{bck_scdr_aut_yn}
-			, #{policy_change_his_aut_yn}
-			, #{script_cng_aut_yn}
-			, #{script_his_aut_yn}
-			, #{usr_id}
-			, clock_timestamp()
-			, #{usr_id}
-			, clock_timestamp()
-			, #{emergency_restore_aut_yn}
-			, #{point_restore_aut_yn}
-			, #{dump_restore_aut_yn}
-			, #{restore_his_aut_yn}
-			)
-	</insert>	
+        /**
+        * Query ID : insertUsrDBSrvAutInfo
+        * Description : 유저디비서버 등록
+        * Author : 변승우
+        **/
+        INSERT INTO T_USRDBSVRAUT_I
+                   (
+                    USR_DB_SVR_AUT_ID
+                  , USR_ID
+                  , DB_SVR_ID
+                  , BCK_CNG_AUT_YN
+                  , BCK_HIST_AUT_YN
+                  , ACS_CNTR_AUT_YN
+                  , ADT_CNG_AUT_YN
+                  , ADT_HIST_AUT_YN
+                  , BCK_SCDR_AUT_YN
+                  , POLICY_CHANGE_HIS_AUT_YN
+                  , SCRIPT_CNG_AUT_YN
+                  , SCRIPT_HIS_AUT_YN
+                  , FRST_REGR_ID
+                  , FRST_REG_DTM
+                  , LST_MDFR_ID
+                  , LST_MDF_DTM
+                  , EMERGENCY_RESTORE_AUT_YN
+                  , POINT_RESTORE_AUT_YN
+                  , DUMP_RESTORE_AUT_YN
+                  , RESTORE_HIS_AUT_YN
+                  
+	    	<if test='scale_yn_chk != null and scale_yn_chk = "Y"'>
+                  , SCALE_YN
+                  , SCALE_HIST_YN
+	    	</if>
+
+                  )
+            VALUES
+                  (
+                    nextval('q_usrdbsvraut_i_01')
+                  , #{usr_id}
+                  , #{db_svr_id}::numeric
+                  , #{bck_cng_aut_yn} 
+                  , #{bck_hist_aut_yn} 
+                  , #{acs_cntr_aut_yn} 
+                  , #{adt_cng_aut_yn} 
+                  , #{adt_hist_aut_yt}
+                  , #{bck_scdr_aut_yn}
+                  , #{policy_change_his_aut_yn}
+                  , #{script_cng_aut_yn}
+                  , #{script_his_aut_yn}
+                  , #{usr_id}
+                  , clock_timestamp()
+                  , #{usr_id}
+                  , clock_timestamp()
+                  , #{emergency_restore_aut_yn}
+                  , #{point_restore_aut_yn}
+                  , #{dump_restore_aut_yn}
+                  , #{restore_his_aut_yn}
+                  
+	    	<if test='scale_yn_chk != null and (scale_yn_chk eq "Y".toString()) '>
+                  , #{scale_yn}
+                  , #{scale_hist_yn}
+	    	</if>
+
+                  )
+	</insert>
 
 
 	 <select id="selectUsrDBAutInfoCnt" parameterType="object" resultType="int">
@@ -428,6 +453,8 @@
 				, POINT_RESTORE_AUT_YN
 				, DUMP_RESTORE_AUT_YN
 				, RESTORE_HIS_AUT_YN
+				, SCALE_YN
+				, SCALE_HIST_YN
 		        , FRST_REGR_ID
 				, FRST_REG_DTM
 				, LST_MDFR_ID

@@ -244,7 +244,7 @@
 	 	* Description :  스케줄  List 조회
 	 	* Author : 변승우
 	 	**/
-	   SELECT 
+     	   SELECT 
 	         (ROW_NUMBER() OVER()) AS ROWNUM
 			, (ROW_NUMBER() OVER()) AS IDX
 			, AA.DB_SVR_NM
@@ -264,10 +264,10 @@
 			, AA.FRST_REG_DTM
 			, AA.LST_MDFR_ID
 			, AA.LST_MDF_DTM
-	   FROM(
-       SELECT DISTINCT
-       		D.DB_SVR_NM 
-			,  A.SCD_ID
+	   FROM(		
+		SELECT DISTINCT
+			coalesce((select DB_SVR_NM from t_dbsvr_i where db_svr_id = d.db_svr_id),'DB2PG') as DB_SVR_NM 
+      		, A.SCD_ID      		
 			, A.SCD_NM
 			, A.SCD_CNDT
             , A.SCD_EXP
@@ -283,12 +283,11 @@
 			, TO_CHAR(A.FRST_REG_DTM,'YYYY-MM-DD HH24:MI:SS') AS FRST_REG_DTM
 			, A.LST_MDFR_ID
 			, TO_CHAR(A.LST_MDF_DTM,'YYYY-MM-DD HH24:MI:SS') AS LST_MDF_DTM
-      FROM T_SCD_M A, T_SCD_D B, T_DBSVR_I D, T_WRKCNG_I E
-      LEFT OUTER JOIN T_BCK_WRKCNG_I C ON C.WRK_ID= E.WRK_ID
-	  LEFT OUTER JOIN T_DB2PG_TRSF_WRK_INF F ON E.WRK_ID = F.WRK_ID 
-      WHERE 1=1	
-      AND A.SCD_ID = B.SCD_ID
-      AND C.DB_SVR_ID = D.DB_SVR_ID
+		FROM T_SCD_M A, T_SCD_D B
+		LEFT OUTER JOIN T_BCK_WRKCNG_I D ON D.WRK_ID= B.WRK_ID 
+	    LEFT OUTER JOIN T_DB2PG_TRSF_WRK_INF E ON E.WRK_ID = B.WRK_ID
+		WHERE 1=1	
+      	AND A.SCD_ID = B.SCD_ID
       <if test="scd_nm != null and scd_nm != '' ">
       AND A.SCD_NM LIKE  '%' || #{scd_nm} || '%'
 	  </if>
@@ -300,9 +299,6 @@
       </if>
       <if test="frst_regr_id != null and frst_regr_id != '' ">
       	AND A.FRST_REGR_ID LIKE  '%' || #{frst_regr_id} || '%'
-      </if>
-      <if test="wrk_nm != null and wrk_nm != '' ">
-      	AND E.WRK_NM LIKE  '%' || #{wrk_nm} || '%'
       </if>
       ORDER BY LST_MDF_DTM DESC
       )AA

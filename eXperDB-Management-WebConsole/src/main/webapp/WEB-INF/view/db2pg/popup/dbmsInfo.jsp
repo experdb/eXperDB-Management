@@ -170,7 +170,7 @@ function fn_Add(){
 <body>
 <div class="pop_container">
 	<div class="pop_cts">
-		<p class="tit">DBMS시스템정보</p>
+		<p class="tit"><spring:message code="migration.dbms_system_information"/></p>
 			<div class="btn_type_01">
 				<span class="btn"><button onClick="fn_search();" type="button"><spring:message code="common.search" /></button></span>
 			</div>
@@ -187,7 +187,7 @@ function fn_Add(){
 				</colgroup>
 				<tbody>
 					<tr>
-						<th scope="row" class="ico_t1">시스템명</th>
+						<th scope="row" class="ico_t1"><spring:message code="migration.system_name"/></th>
 						<td><input type="text" class="txt t4" name="db2pg_sys_nm" id="db2pg_sys_nm" /></td>		
 						<th scope="row" class="ico_t1">DBMS<spring:message code="common.division" /></th>
 						<td>
@@ -207,7 +207,7 @@ function fn_Add(){
  										</c:forEach>
 								</select>						
 						</td>									
-						<th scope="row" class="ico_t1" >아이피</th>
+						<th scope="row" class="ico_t1" ><spring:message code="data_transfer.ip" /></th>
 						<td><input type="text" class="txt t4" name="ipadr" id="ipadr" /></td>				
 					</tr>
 				</tbody>
@@ -215,13 +215,13 @@ function fn_Add(){
 		</div>
 
 		<div class="pop_cmm3">
-			<p class="pop_s_tit">DBMS 시스템 리스트</p>
+			<p class="pop_s_tit"><spring:message code="migration.dbms_system_list"/></p>
 			<div class="overflow_area">
 				<table id="dbmsList" class="display" cellspacing="0" width="100%">
 				<thead>
 					<tr>
 						<th width="50"><spring:message code="common.no" /></th>
-						<th width="100">시스템명</th>
+						<th width="100"><spring:message code="migration.system_name"/></th>
 						<th width="100">DBMS<spring:message code="common.division" /></th>
 						<th width="100"><spring:message code="data_transfer.ip" /></th>
 						<th width="100">Database</th>
