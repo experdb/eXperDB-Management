@@ -24,11 +24,11 @@ eXperDB-Management is a PostgreSQL management tool(for efficient operation and m
 * Multiple Languages Support
   - Korean, English
   
-※ Supports PostgreSQL Version 10.7
+※ Supports PostgreSQL Version 11
 
 
 ## TODO
-* Supports PostgreSQL Version 11
+* Supports PostgreSQL Version 12
 
 ## License
 [![LICENSE](https://img.shields.io/badge/LICENSE-GPLv3-ff69b4.svg)](https://github.com/experdb/eXperDB-Management/blob/master/LICENSE)
