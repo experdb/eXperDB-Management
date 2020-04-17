@@ -265,7 +265,7 @@
 			, AA.LST_MDFR_ID
 			, AA.LST_MDF_DTM
 	   FROM(		
-		SELECT 
+		SELECT DISTINCT
 			coalesce((select DB_SVR_NM from t_dbsvr_i where db_svr_id = d.db_svr_id),'DB2PG') as DB_SVR_NM 
       		, A.SCD_ID      		
 			, A.SCD_NM
