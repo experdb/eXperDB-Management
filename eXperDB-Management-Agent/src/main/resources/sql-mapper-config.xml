@@ -27,6 +27,6 @@
 
 		<mapper resource="sqlmap/system.xml" />
 		<mapper resource="sqlmap/app.xml" /> 
-		
+		<mapper resource="sqlmap/scale.xml" />
 	</mappers>
 </configuration>

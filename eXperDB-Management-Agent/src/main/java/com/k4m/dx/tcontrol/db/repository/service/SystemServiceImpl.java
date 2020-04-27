@@ -163,18 +163,4 @@ public class SystemServiceImpl implements SystemService{
 	public void insertWRKEXE_G(WrkExeVO vo)  throws Exception{
 		systemDAO.insertWRKEXE_G(vo);
 	}
-
-	/* scale log insert */
-	public void insertScaleLog_G(Map<String, Object> param)  throws Exception{
-
-		if (param != null) {
-			if (param.get("saveGbn").toString().equals("insert")) {
-				systemDAO.insertScaleLog_G(param);
-			} else {
-				if (param.get("return_val") != null) {
-					systemDAO.updateScaleLog_G(param);
-				}
-			}
-		}
-	}
 }
