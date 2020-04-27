@@ -17,7 +17,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
-import com.k4m.dx.tcontrol.accesscontrol.service.DbIDbServerVO;
 import com.k4m.dx.tcontrol.admin.accesshistory.service.AccessHistoryService;
 import com.k4m.dx.tcontrol.admin.dbauthority.service.DbAuthorityService;
 import com.k4m.dx.tcontrol.admin.menuauthority.service.MenuAuthorityService;

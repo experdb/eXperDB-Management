@@ -9,7 +9,6 @@ import java.util.Map;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 
-import com.k4m.dx.tcontrol.db2pg.cmmn.DB2PG_ImmediateExe;
 import com.k4m.dx.tcontrol.restore.service.RestoreDumpVO;
 import com.k4m.dx.tcontrol.restore.service.RestoreRmanVO;
 
@@ -1765,6 +1764,7 @@ public List<HashMap<String, String>> dumpShow(String IP, int PORT,String cmd) {
 			JSONObject objList;
 			JSONObject jObj = new JSONObject();	
 			jObj.put(ClientProtocolID.DX_EX_CODE, ClientTranCodeType.DxT036);
+			jObj.put(ClientProtocolID.SCALE_COUNT_SET, param.get("scale_count").toString());     //scale 갯수
 			jObj.put(ClientProtocolID.SCALE_SET, param.get("scale_set").toString());             //scale 구분
 			jObj.put(ClientProtocolID.SEARCH_GBN, param.get("search_gbn").toString());           //조회구분
 			jObj.put(ClientProtocolID.ARR_CMD, arrCmd);
@@ -1774,7 +1774,9 @@ public List<HashMap<String, String>> dumpShow(String IP, int PORT,String cmd) {
 			jObj.put(ClientProtocolID.DB_SVR_ID, param.get("db_svr_id").toString());             //DB_서버_ID
 			jObj.put(ClientProtocolID.WRK_TYPE, "TC003302");                                     //작업유형
 			jObj.put(ClientProtocolID.AUTO_POLICY, "");                                          //AUTO_정책
-			jObj.put(ClientProtocolID.AUTO_POLICY_NM, "");                                       //AUTO_정책_명
+			jObj.put(ClientProtocolID.AUTO_POLICY_SET_DIV, "");
+			jObj.put(ClientProtocolID.AUTO_POLICY_TIME, "");
+			jObj.put(ClientProtocolID.AUTO_LEVEL, "");
 
 			ClientAdapter CA = new ClientAdapter(IP, PORT);
 			CA.open(); 
@@ -1791,7 +1793,7 @@ public List<HashMap<String, String>> dumpShow(String IP, int PORT,String cmd) {
 			result.put("RESULT_CODE", strResultCode);
 			result.put("ERR_CODE", strErrCode);
 			result.put("ERR_MSG", strErrMsg);
-			
+
 			if (objList.get(ClientProtocolID.RESULT_DATA) != null) {
 				result.put("RESULT_DATA", objList.get(ClientProtocolID.RESULT_DATA));
 			} else {

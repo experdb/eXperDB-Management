@@ -32,6 +32,7 @@
 
 <script type="text/javascript">
 	var before = null;
+	var scale_yn_chk = "";
 
 	$(window.document).ready(function() {
 		$.ajax({
@@ -166,7 +167,33 @@
 	}  */
 
 	/* 서버별 메뉴 조회 */
-	function fn_UsrDBSrvAut(data){
+	function fn_UsrDBSrvAut(data){	
+	  	$.ajax({
+			async : false,
+			url : "/selectServerScaleAuthInfo.do",
+			data : {},
+			dataType : "json",
+			type : "post",
+			beforeSend: function(xhr) {
+		        xhr.setRequestHeader("AJAX", true);
+		     },
+			error : function(xhr, status, error) {
+				if(xhr.status == 401) {
+					alert('<spring:message code="message.msg02" />');
+					top.location.href = "/";
+				} else if(xhr.status == 403) {
+					alert('<spring:message code="message.msg03" />');
+					top.location.href = "/";
+				} else {
+					alert("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""));
+				}
+			},
+			success : function(result) {
+				scale_yn_chk = result.scale_yn_chk;
+			}
+		})
+		
+		
 	  	$.ajax({
 			async : false,
 			url : "/selectUsrDBSrvAutInfo.do",
@@ -245,15 +272,21 @@
 				html1+='	<li><div class="border"  ><a href="/property.do?db_svr_id='+item.db_svr_id+'" onClick=javascript:fn_GoLink("#n"); target="main"><img src="../images/ico_lnb_3.png" id="treeImg"><div class="tooltip">'+item.db_svr_nm+'<span class="tooltiptext">'+item.ipadr+'</span></div></a></div>';
 
 				html1+='		<ul class="depth_2">';
-				html1+='			<li class="ico2_1"><a href="#n"><img src="../images/ico_lnb_6.png" id="treeImg"><spring:message code="menu.eXperDB_scale"/></a>';
-
-				html1+='				<ul class="depth_3">';
-				if(aut.length != 0 && aut[index].scale_yn == "Y"){
-					html1+='				<li class="ico3_1" id="scaleList'+item.db_svr_id+'"><a href=/scale/scaleList.do?db_svr_id='+item.db_svr_id+' id="scaleList'+item.db_svr_id+'c" onClick=javascript:fn_GoLink("scaleList'+item.db_svr_id+'"); target="main"><img src="../images/ico_lnb_13.png" id="treeImg"><spring:message code="menu.eXperDB_scale"/></a></li>';
-				}
-				html1+='				</ul>';
-				html1+='			</li>';
 				
+				if (scale_yn_chk == "Y") {
+					html1+='			<li class="ico2_1"><a href="#n"><img src="../images/ico_lnb_6.png" id="treeImg"><spring:message code="menu.eXperDB_scale"/></a>';
+
+					html1+='				<ul class="depth_3">';
+					if(aut.length != 0 && aut[index].scale_yn == "Y"){
+						html1+='				<li class="ico3_1" id="scaleList'+item.db_svr_id+'"><a href=/scale/scaleList.do?db_svr_id='+item.db_svr_id+' id="scaleList'+item.db_svr_id+'c" onClick=javascript:fn_GoLink("scaleList'+item.db_svr_id+'"); target="main"><img src="../images/ico_lnb_13.png" id="treeImg"><spring:message code="menu.eXperDB_scale"/></a></li>';
+					}
+					if(aut.length != 0 && aut[index].scale_hist_yn == "Y"){
+						html1+='				<li class="ico3_2" id="scaleLogList'+item.db_svr_id+'"><a href=/scale/scaleLogList.do?db_svr_id='+item.db_svr_id+' id="scaleLogList'+item.db_svr_id+'c" onClick=javascript:fn_GoLink("scaleLogList'+item.db_svr_id+'"); target="main"><img src="../images/ico_lnb_14.png" id="treeImg"><spring:message code="menu.eXperDB_scale_history"/></a></li>';
+					}
+					html1+='				</ul>';
+					html1+='			</li>';
+				}
+
 				html1+='			<li class="ico2_2"><a href="#n"><img src="../images/ico_lnb_6.png" id="treeImg"><spring:message code="menu.backup_management"/></a>';
 
 				html1+='				<ul class="depth_3">';
