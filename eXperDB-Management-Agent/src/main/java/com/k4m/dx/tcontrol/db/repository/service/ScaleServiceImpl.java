@@ -178,10 +178,15 @@ public class ScaleServiceImpl extends SocketCtl implements ScaleService{
 								//scale-in, out 일때 최대, 최소 클러스터 갯수 비교 (scale-in 일때 현재 -1이 min클러스터보다 같거나 작을경우 실행안함), (scale-out 일때 현재 +확장클러스터수 가 max클러스터보다 같거나 클경경우 실행안함)
 								if ("1".equals(scale_type_cd)) {
 									//scale-in 일때 현재 instance -1이 min클러스터보다 같거나 작을경우
-									if (jObjCnt <= min_clusters) {
-										expansion_clusters = 1;
-										clusterChk = "scale-in_fail";
+									if (min_clusters > 2) {
+										if (jObjCnt <= min_clusters) {
+											expansion_clusters = 1;
+											clusterChk = "scale-in_fail";
+										}
+									} else {
+										clusterChk = "";
 									}
+
 								} else {
 									//scale-out 일때 현재 +확장클러스터수 가 max클러스터보다 클경경우 실행안
 									if ((jObjCnt+expansion_clusters) > max_clusters) {
@@ -210,8 +215,10 @@ public class ScaleServiceImpl extends SocketCtl implements ScaleService{
 
 								} else {
 									//실패시 실행이력 오류 insert만 하고 auto-scale 안함
-									logParam = logSetting(scaleparam, timeId, "insert", clusterChk, clusterChk_cnt);
-									this.insertScaleLog_G(logParam);
+									if (!"".equals(clusterChk)) {
+										logParam = logSetting(scaleparam, timeId, "insert", clusterChk, clusterChk_cnt);
+										this.insertScaleLog_G(logParam);
+									}
 								}
 							}
 							
