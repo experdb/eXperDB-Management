@@ -447,7 +447,7 @@ a:hover.tip span {
 							<tr>
 								<th scope="row" class="ico_t1">
 									<a href="#" class="tip"><spring:message code="eXperDB_scale.min_clusters" />
-										<span style="width: 320px;"><spring:message code="help.eXperDB_scale_set_msg07" /></span>
+										<span style="width: 400px;"><spring:message code="help.eXperDB_scale_set_msg07" /></span>
 									</a>
 								</th>
 								<td colspan="3">
@@ -457,7 +457,7 @@ a:hover.tip span {
 							<tr>
 								<th scope="row" class="ico_t1">
 									<a href="#" class="tip"><spring:message code="eXperDB_scale.max_clusters" />
-										<span style="width: 320px;"><spring:message code="help.eXperDB_scale_set_msg07" /></span>
+										<span style="width: 400px;"><spring:message code="help.eXperDB_scale_set_msg07" /></span>
 									</a>
 								</th>
 								<td>
@@ -465,7 +465,7 @@ a:hover.tip span {
 								</td>
 								<th scope="row" class="ico_t1">
 									<a href="#" class="tip"><spring:message code="eXperDB_scale.expansion_clusters" />
-										<span style="width: 320px;"><spring:message code="help.eXperDB_scale_set_msg09" /></span>
+										<span style="width: 400px;"><spring:message code="help.eXperDB_scale_set_msg09" /></span>
 									</a>
 								</th>
 								<td>

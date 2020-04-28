@@ -101,7 +101,7 @@ button[disabled]{
 		         		data : "execute_type_nm", 
 	 					render : function(data, type, full, meta) {	 						
 	 						var html = '';
-	 						if (full.execute_type_cd == 'TC003401') {
+	 						if (full.execute_type == 'TC003402') {
 	 							html += '<span class="btn btnC_01 btnF_02"><img src="../images/ico_agent_1.png" alt=""  style="margin-right:3px;"/>' + full.execute_type_nm +'</span>';
 	 						} else {
 	 							html +='<span class="btn btnC_01 btnF_02"><img src="../images/ico_agent_2.png" alt="" style="margin-right:3px;" />' + full.execute_type_nm +'</span>';
@@ -410,7 +410,7 @@ button[disabled]{
 					}
 					$("#d_level").html(level_nm);
 
-					if (result.execute_type == 'TC003401') {
+					if (result.execute_type == 'TC003402') {
 						execute_type_nm = '<span class="btn btnC_01 btnF_02"><img src="../images/ico_agent_1.png" alt=""  style="margin-right:3px;"/>' + result.execute_type_nm +'</span>';
  					} else {
  						execute_type_nm = '<span class="btn btnC_01 btnF_02"><img src="../images/ico_agent_2.png" alt="" style="margin-right:3px;" />' + result.execute_type_nm +'</span>';

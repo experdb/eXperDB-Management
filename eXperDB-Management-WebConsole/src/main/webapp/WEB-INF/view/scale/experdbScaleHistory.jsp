@@ -605,7 +605,6 @@ button[disabled]{
 					}
 
 					$("#d_auto_policy_nm").html(nvlSet(auto_policy_nm));
-					$("#d_clusters").html(nvlSet(result.clusters));
 					$("#d_wrk_strt_dtm").html(nvlSet(result.wrk_strt_dtm));
 					$("#d_wrk_end_dtm").html(nvlSet(result.wrk_end_dtm));
 					
@@ -723,6 +722,11 @@ button[disabled]{
 			seachParamInit(intab);
 		}
 	}
+	
+	function fnc_menuMove() {
+		location.href='/scale/scaleList.do?db_svr_id=' + $("#db_svr_id").val();
+	}
+
 </script>
 
 <%@include file="./scaleWrkLog.jsp"%>

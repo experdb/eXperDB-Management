@@ -12,7 +12,6 @@
 
 			<table class="list" style="border:1px solid #b8c3c6;">
 				<caption><spring:message code="menu.scale_execute_hist"/></caption>	
-				<p><h3 style="height: 20px;"><spring:message code="schedule.detail_view" /></h3></p>
 
 				<tbody>						
 					<tr>
@@ -36,10 +35,6 @@
 						<td style="width: 70%; text-align: left;word-break:break-all;" id="d_auto_policy_nm"></td>
 					</tr>
 					<tr>
-						<td style="width: 30%; height: 20px;word-break:break-all;"><spring:message code="eXperDB_scale.clusters"/></td>
-						<td style="width: 70%; text-align: left;word-break:break-all;" id="d_clusters"></td>
-					</tr>
-					<tr>
 						<td style="width: 30%; height: 20px;word-break:break-all;"><spring:message code="eXperDB_scale.work_start_time"/></td>
 						<td style="width: 70%; text-align: left;word-break:break-all;" id="d_wrk_strt_dtm"></td>
 					</tr>
@@ -57,7 +52,10 @@
 					</tr>				
 				</tbody>
 			</table>
-			
+
+			<div class="btn_type_02">
+				<a href="#n" class="btn" onclick="toggleLayer($('#pop_layer_log'), 'off');"><span><spring:message code="common.close"/></span></a>
+			</div>
 		</div>
 	</div><!-- //pop-container -->
 </div>

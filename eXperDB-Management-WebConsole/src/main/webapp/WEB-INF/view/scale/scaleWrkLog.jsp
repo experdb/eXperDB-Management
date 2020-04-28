@@ -1,6 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags"%>
+
 <!--  popup -->
 <div id="pop_layer_scaleWrkLog" class="pop-layer">
 	<div class="pop-container">
@@ -15,6 +16,7 @@
 				</tbody>
 			</table>
 			<div class="btn_type_02">
+				<a href="#n" class="btn" onclick="fnc_menuMove();"><span style="width:170px;">Node 수동확장 메뉴 이동</span></a>
 				<a href="#n" class="btn" onclick="toggleLayer($('#pop_layer_scaleWrkLog'), 'off');"><span><spring:message code="common.close"/></span></a>
 			</div>
 		</div>
