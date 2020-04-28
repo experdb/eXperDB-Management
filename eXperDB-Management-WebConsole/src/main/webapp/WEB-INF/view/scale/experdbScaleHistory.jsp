@@ -108,10 +108,11 @@ button[disabled]{
 			
 			seachParamInit(intab);
 
-			if(clickExecute == false){
+			//if(clickExecute == false){
 				fn_get_execute_list();
 				clickExecute = true;
-			}
+				$('#loading').hide();
+			//}
 		}else{	
 			$("#tab_occurHist").show();
 			$("#tab_executeHist").hide();
@@ -124,10 +125,11 @@ button[disabled]{
 			
 			seachParamInit(intab);
 			
-			if(clickOccur == false){
+			//if(clickOccur == false){
 				fn_get_occur_list();
 				clickOccur = true;
-			}
+				$('#loading').hide();
+			//}
 		}
 	}
 	

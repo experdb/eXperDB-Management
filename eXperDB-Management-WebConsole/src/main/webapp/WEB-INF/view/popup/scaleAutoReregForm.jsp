@@ -154,6 +154,11 @@ a:hover.tip span {
 			
 			$("#expansion_clusters").val("");
 			$("#max_clusters").val("");
+			
+			if ($("#min_clusters").val() == "") {
+				$("#min_clusters").val("2");
+			}
+			
 		} else if (scale_type_cd == "2" && execute_type_cd == "TC003402") { //scale-out / auto-scale
 			$("#min_clusters").prop('disabled', true);
 			$("#max_clusters").prop('disabled', false);

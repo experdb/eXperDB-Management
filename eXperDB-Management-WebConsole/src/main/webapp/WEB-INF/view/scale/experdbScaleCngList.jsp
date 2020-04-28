@@ -183,7 +183,7 @@ button[disabled]{
 	function fn_reg_popup(){
 	    var popUrl = '/scale/popup/scaleAutoRegForm.do';
 		var width = 954;
-		var height = 543;
+		var height = 483;
 		var left = (window.screen.width / 2) - (width / 2);
 		var top = (window.screen.height /2) - (height / 2);
 		var popOption = "width="+width+", height="+height+", top="+top+", left="+left+", resizable=no, scrollbars=yes, status=no, toolbar=no, titlebar=yes, location=no,";
@@ -222,7 +222,7 @@ button[disabled]{
 		
 	    var popUrl = '/scale/popup/scaleAutoReregForm.do';
 		var width = 954;
-		var height = 543;
+		var height = 483;
 		var left = (window.screen.width / 2) - (width / 2);
 		var top = (window.screen.height /2) - (height / 2);
 		var popOption = "width="+width+", height="+height+", top="+top+", left="+left+", resizable=no, scrollbars=yes, status=no, toolbar=no, titlebar=yes, location=no";
@@ -513,7 +513,7 @@ button[disabled]{
 			<h4><spring:message code="menu.eXperDB_scale_settings" /><a href="#n"><img src="../images/ico_tit.png" class="btn_info" /></a></h4>
 			<div class="infobox">
 				<ul>
-					<li><spring:message code="help.eXperDB_scale_history_01" /></li>
+					<li><spring:message code="help.eXperDB_scale_settings" /></li>
 				</ul>
 			</div>
 			<div class="location">
