@@ -460,7 +460,7 @@ button[disabled]{
 	function fn_scaleInOut(gbn){
 	    var popUrl = '/scale/popup/scaleInOutCountForm.do';
 		var width = 500;
-		var height = 286;
+		var height = 320;
 		var left = (window.screen.width / 2) - (width / 2);
 		var top = (window.screen.height /2) - (height / 2);
 		var popOption = "width="+width+", height="+height+", top="+top+", left="+left+", resizable=no, scrollbars=yes, status=no, toolbar=no, titlebar=yes, location=no";

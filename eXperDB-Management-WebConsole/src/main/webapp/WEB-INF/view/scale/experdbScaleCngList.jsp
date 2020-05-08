@@ -183,7 +183,7 @@ button[disabled]{
 	function fn_reg_popup(){
 	    var popUrl = '/scale/popup/scaleAutoRegForm.do';
 		var width = 954;
-		var height = 483;
+		var height = 543;
 		var left = (window.screen.width / 2) - (width / 2);
 		var top = (window.screen.height /2) - (height / 2);
 		var popOption = "width="+width+", height="+height+", top="+top+", left="+left+", resizable=no, scrollbars=yes, status=no, toolbar=no, titlebar=yes, location=no,";
@@ -222,7 +222,7 @@ button[disabled]{
 		
 	    var popUrl = '/scale/popup/scaleAutoReregForm.do';
 		var width = 954;
-		var height = 483;
+		var height = 543;
 		var left = (window.screen.width / 2) - (width / 2);
 		var top = (window.screen.height /2) - (height / 2);
 		var popOption = "width="+width+", height="+height+", top="+top+", left="+left+", resizable=no, scrollbars=yes, status=no, toolbar=no, titlebar=yes, location=no";
