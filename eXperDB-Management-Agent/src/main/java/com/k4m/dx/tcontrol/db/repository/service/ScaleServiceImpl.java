@@ -169,6 +169,7 @@ public class ScaleServiceImpl extends SocketCtl implements ScaleService{
 							//scale 실행
 							//미리 auto scale이 실행 중일경우에는 실행 안함
 							String execute_type = (String)scaleparam.get("execute_type");
+
 							if ("TC003402".equals(execute_type)) { //auto-scale 일때 실행
 								//현재 인스턴트 수 call
 								int jObjCnt = scaleInstanceCnt(client, is, os);
@@ -178,15 +179,16 @@ public class ScaleServiceImpl extends SocketCtl implements ScaleService{
 								//scale-in, out 일때 최대, 최소 클러스터 갯수 비교 (scale-in 일때 현재 -1이 min클러스터보다 같거나 작을경우 실행안함), (scale-out 일때 현재 +확장클러스터수 가 max클러스터보다 같거나 클경경우 실행안함)
 								if ("1".equals(scale_type_cd)) {
 									//scale-in 일때 현재 instance -1이 min클러스터보다 같거나 작을경우
-									if (min_clusters > 2) {
-										if (jObjCnt <= min_clusters) {
+									if (min_clusters < 2) {
+										clusterChk = "";
+									} else {
+										if (jObjCnt < min_clusters) {
 											expansion_clusters = 1;
 											clusterChk = "scale-in_fail";
+										} else if (jObjCnt == min_clusters) {
+											clusterChk = "";
 										}
-									} else {
-										clusterChk = "";
 									}
-
 								} else {
 									//scale-out 일때 현재 +확장클러스터수 가 max클러스터보다 클경경우 실행안
 									if ((jObjCnt+expansion_clusters) > max_clusters) {
