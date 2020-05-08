@@ -162,9 +162,21 @@ public class ScaleServiceImpl extends SocketCtl implements ScaleService{
 						//체크가 맞을때만 저장
 						if (chk_cnt > 0) {
 							scaleparam.put("exe_num_avg", exe_num_avg);
-							//발생이력 저장
-							scaleDAO.insertScaleOccurLog_G(scaleparam);  //체크가 맞을때만 저장
+							//발생이력 저장 -- scale in 이고 현재 인스턴스 수가 2와 같거나 작은경우는 로그 제외
+							int jObjCnt = 0;
+							boolean logChk = true;
+							if ("1".equals(scale_type_cd)) {
+								jObjCnt = scaleInstanceCnt(client, is, os);
+								
+								if (jObjCnt <= 2) {
+									logChk = false;
+								}
+							}
 							
+							if (logChk == true) {
+								scaleDAO.insertScaleOccurLog_G(scaleparam);  //체크가 맞을때만 저장
+							}
+
 							//auto scale일 인경우 
 							//scale 실행
 							//미리 auto scale이 실행 중일경우에는 실행 안함
@@ -172,7 +184,7 @@ public class ScaleServiceImpl extends SocketCtl implements ScaleService{
 
 							if ("TC003402".equals(execute_type)) { //auto-scale 일때 실행
 								//현재 인스턴트 수 call
-								int jObjCnt = scaleInstanceCnt(client, is, os);
+								jObjCnt = scaleInstanceCnt(client, is, os);
 								String clusterChk = "success";
 								int clusterChk_cnt = 0; //scale_in 차이cnt
 
@@ -222,7 +234,7 @@ public class ScaleServiceImpl extends SocketCtl implements ScaleService{
 										this.insertScaleLog_G(logParam);
 									}
 								}
-							}
+							} 
 							
 							
 							
