@@ -2,26 +2,24 @@
 CREATE TABLE experdb_management.t_scale_g (
 	scale_wrk_sn numeric NOT NULL DEFAULT 1,                    -- 스케일_실행_일련번호
 	wrk_id numeric(18) NOT NULL DEFAULT 1,                      -- 작업_ID
-	scale_type varchar(1) NOT NULL ,                            -- 스케일_유형
+	scale_type varchar(1) NOT NULL,                             -- 스케일_유형
 	db_svr_id numeric(18) NOT NULL DEFAULT 1,                   -- DB_서버_ID
 	db_svr_ipadr_id numeric(18) NOT NULL DEFAULT 1,             -- DB_서버_IP주소_ID
 	wrk_type varchar(8) NOT NULL,                               -- 작업_유형
 	auto_policy varchar(8) NULL,                                -- AUTO_정책
-	auto_policy_nm varchar(300) NULL,                           -- AUTO_정책_명  --삭제
+	auto_policy_set_div varchar(1) NULL,                        -- AUTO_정책_설정_구분
+	auto_policy_time numeric NULL,                              -- AUTO_정책_시간
+	auto_level varchar(8) NULL,                                 -- AUTO_레벨
 	clusters numeric NULL,                                      -- 클러스터
-	instance_id varchar(30) NULL,                               -- 인스턴트_ID  --삭제
-	auto_policy_set_div varchar(1) NULL,                      -- AUTO_정책_설정_구분
-	auto_policy_time numeric NULL,                            -- AUTO_정책_시간
-	auto_level varchar(8) NULL,                               -- AUTO_레벨
-	process_id varchar(30) NOT NULL,                              -- 프로세스_ID
-	wrk_strt_dtm timestamp NOT NULL DEFAULT clock_timestamp(),    -- 작업_시작_일시
-	wrk_end_dtm timestamp NOT NULL DEFAULT clock_timestamp(),     -- 작업_종료_일시
-	exe_rslt_cd varchar(20) NULL,                                 -- 실행_결과_코드
-	rslt_msg varchar(1000) NULL,                                  -- 결과_메시지
-	frst_regr_id varchar(30) NULL,                                -- 최초_등록자_ID
-	frst_reg_dtm timestamp NOT NULL DEFAULT clock_timestamp(),  --최초_등록_일시
+	process_id varchar(30) NOT NULL,                            -- 프로세스_ID
+	wrk_strt_dtm timestamp NOT NULL DEFAULT clock_timestamp(),  -- 작업_시작_일시
+	wrk_end_dtm timestamp NOT NULL DEFAULT clock_timestamp(),   -- 작업_종료_일시
+	exe_rslt_cd varchar(20) NULL,                               -- 실행_결과_코드
+	rslt_msg varchar(1000) NULL,                                -- 결과_메시지
+	frst_regr_id varchar(30) NULL,                              -- 최초_등록자_ID
+	frst_reg_dtm timestamp NOT NULL DEFAULT clock_timestamp(),  -- 최초_등록_일시
 	lst_mdfr_id varchar(30) NULL,  -- 최종_수정자_ID
-	lst_mdf_dtm timestamp NOT NULL DEFAULT clock_timestamp()
+	lst_mdf_dtm timestamp NOT NULL DEFAULT clock_timestamp() -- 최종_수정_일시
 );
 CREATE UNIQUE INDEX uk_t_scale_g_01 ON experdb_management.t_scale_g USING btree (scale_wrk_sn, wrk_id, db_svr_id, scale_type, process_id);
 COMMENT ON TABLE experdb_management.t_scale_g IS 'SCALE 실행로그';
@@ -33,21 +31,19 @@ COMMENT ON COLUMN experdb_management.t_scale_g.db_svr_id IS 'DB_서버_ID';
 COMMENT ON COLUMN experdb_management.t_scale_g.db_svr_ipadr_id IS 'DB_서버_IP주소_ID';
 COMMENT ON COLUMN experdb_management.t_scale_g.wrk_type IS '작업_유형';
 COMMENT ON COLUMN experdb_management.t_scale_g.auto_policy IS 'AUTO_정책';
+COMMENT ON COLUMN experdb_management.t_scale_g.auto_policy_set_div IS 'AUTO_정책_설정_구분';
+COMMENT ON COLUMN experdb_management.t_scale_g.auto_policy_time IS 'AUTO_정책_시간';
+COMMENT ON COLUMN experdb_management.t_scale_g.auto_level IS 'AUTO_레벨';
 COMMENT ON COLUMN experdb_management.t_scale_g.clusters IS '클러스터';
 COMMENT ON COLUMN experdb_management.t_scale_g.process_id IS '프로세스_ID';
 COMMENT ON COLUMN experdb_management.t_scale_g.wrk_strt_dtm IS '작업_시작_일시';
 COMMENT ON COLUMN experdb_management.t_scale_g.wrk_end_dtm IS '작업_종료_일시';
 COMMENT ON COLUMN experdb_management.t_scale_g.exe_rslt_cd IS '실행_결과_코드';
 COMMENT ON COLUMN experdb_management.t_scale_g.rslt_msg IS '결과_메시지';
-COMMENT ON COLUMN experdb_management.t_scale_g.auto_policy_set_div IS 'AUTO_정책_설정_구분';
-COMMENT ON COLUMN experdb_management.t_scale_g.auto_policy_time IS 'AUTO_정책_시간';
-COMMENT ON COLUMN experdb_management.t_scale_g.auto_level IS 'AUTO_레벨';
 COMMENT ON COLUMN experdb_management.t_scale_g.frst_regr_id IS '최초_등록자_ID';
 COMMENT ON COLUMN experdb_management.t_scale_g.frst_reg_dtm IS '최초_등록_일시';
 COMMENT ON COLUMN experdb_management.t_scale_g.lst_mdfr_id IS '최종_수정자_ID';
 COMMENT ON COLUMN experdb_management.t_scale_g.lst_mdf_dtm IS '최종_수정_일시';
-
-
 
 
 
@@ -56,7 +52,7 @@ CREATE TABLE experdb_management.t_scaleoccur_g (
 	wrk_sn numeric NOT NULL DEFAULT 1,                            -- 작업_일련번호
 	db_svr_id numeric(18) NOT NULL DEFAULT 1,                     -- DB_서버_ID
 	db_svr_ipadr_id numeric(18) NOT NULL DEFAULT 1,               -- DB_서버_IP주소_ID
-	scale_type varchar(1) NOT NULL ,                              -- 스케일_유형
+	scale_type varchar(1) NOT NULL,                               -- 스케일_유형
 	policy_type varchar(8) NOT NULL,                              -- 정책_유형
 	auto_policy_set_div varchar(1) NOT NULL,                      -- AUTO_정책_설정_구분
 	auto_policy_time numeric NOT NULL,                            -- AUTO_정책_시간
@@ -65,7 +61,7 @@ CREATE TABLE experdb_management.t_scaleoccur_g (
 	event_occur_contents varchar(8) NOT NULL,                     -- 이벤트_발생_내용
 	event_occur_dtm timestamp NOT NULL DEFAULT clock_timestamp(), -- 이벤트_발생_일시
 	frst_regr_id varchar(30) NULL,                                -- 최초_등록자_ID
-	frst_reg_dtm timestamp NOT NULL DEFAULT clock_timestamp(),    --최초_등록_일시
+	frst_reg_dtm timestamp NOT NULL DEFAULT clock_timestamp(),    -- 최초_등록_일시
 	lst_mdfr_id varchar(30) NULL,                                 -- 최종_수정자_ID
 	lst_mdf_dtm timestamp NOT NULL DEFAULT clock_timestamp()      -- 최종_수정_일시
 );
@@ -89,6 +85,7 @@ COMMENT ON COLUMN experdb_management.t_scaleoccur_g.lst_mdfr_id IS '최종_수�
 COMMENT ON COLUMN experdb_management.t_scaleoccur_g.lst_mdf_dtm IS '최종_수정_일시';
 
 
+
 -- 테이블 추가(auto scale 설정)
 CREATE TABLE experdb_management.t_scale_i (
 	wrk_id numeric(18) NOT NULL DEFAULT 1,                        -- 작업_ID
@@ -104,7 +101,7 @@ CREATE TABLE experdb_management.t_scale_i (
 	min_clusters numeric NULL,                                    -- 최소_클러스터
 	max_clusters numeric NULL,                                    -- 최대_클러스터
 	frst_regr_id varchar(30) NULL,                                -- 최초_등록자_ID
-	frst_reg_dtm timestamp NOT NULL DEFAULT clock_timestamp(),    --최초_등록_일시
+	frst_reg_dtm timestamp NOT NULL DEFAULT clock_timestamp(),    -- 최초_등록_일시
 	lst_mdfr_id varchar(30) NULL,                                 -- 최종_수정자_ID
 	lst_mdf_dtm timestamp NOT NULL DEFAULT clock_timestamp()      -- 최종_수정_일시
 );
@@ -127,6 +124,7 @@ COMMENT ON COLUMN experdb_management.t_scale_i.frst_regr_id IS '최초_등록자
 COMMENT ON COLUMN experdb_management.t_scale_i.frst_reg_dtm IS '최초_등록_일시';
 COMMENT ON COLUMN experdb_management.t_scale_i.lst_mdfr_id IS '최종_수정자_ID';
 COMMENT ON COLUMN experdb_management.t_scale_i.lst_mdf_dtm IS '최종_수정_일시';
+
 
 
 -- 테이블 추가(Auto Scale Loading 이력)
