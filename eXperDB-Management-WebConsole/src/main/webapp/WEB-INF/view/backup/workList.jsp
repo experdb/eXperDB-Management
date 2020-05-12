@@ -146,7 +146,7 @@ function fn_init(){
 	tableRman.tables().header().to$().find('th:eq(6)').css('min-width', '230px');
 	/* tableRman.tables().header().to$().find('th:eq(7)').css('min-width', '230px'); */
 	tableRman.tables().header().to$().find('th:eq(7)').css('min-width', '100px');
-	tableRman.tables().header().to$().find('th:eq(8)').css('min-width', '100px');  
+	tableRman.tables().header().to$().find('th:eq(8)').css('min-width', '110px');  
 	tableRman.tables().header().to$().find('th:eq(9)').css('min-width', '100px');
 	tableRman.tables().header().to$().find('th:eq(10)').css('min-width', '100px');
 	tableRman.tables().header().to$().find('th:eq(11)').css('min-width', '0px');
@@ -165,7 +165,7 @@ function fn_init(){
 	tableDump.tables().header().to$().find('th:eq(10)').css('min-width', '90px');  
 	tableDump.tables().header().to$().find('th:eq(11)').css('min-width', '150px');
 	tableDump.tables().header().to$().find('th:eq(12)').css('min-width', '70px');
-	tableDump.tables().header().to$().find('th:eq(13)').css('min-width', '100px');
+	tableDump.tables().header().to$().find('th:eq(13)').css('min-width', '110px');
 	tableDump.tables().header().to$().find('th:eq(14)').css('min-width', '70px');  
 	tableDump.tables().header().to$().find('th:eq(15)').css('min-width', '100px');
 	tableDump.tables().header().to$().find('th:eq(16)').css('min-width', '0px');
@@ -704,7 +704,7 @@ function fn_ImmediateStart(gbn){
 		}
 	}
 	
-	if (confirm("백업을 즉시실행 하시겠습니까?")) {
+	if (confirm("<spring:message code='backup_management.msg01' />")) {
 		
 		
 			 $.ajax({
@@ -736,7 +736,7 @@ function fn_ImmediateStart(gbn){
 			});		 
 		}	
 
-		alert("즉시실행 되었습니다.\n수행이력페이지로 이동합니다.");
+		alert("<spring:message code='backup_management.msg02' />.\n<spring:message code='backup_management.msg03' />");
 		
 		location.href='/backup/workLogList.do?db_svr_id='+datas[0].db_svr_id+'&&gbn='+gbn;
 	
@@ -787,7 +787,7 @@ function fn_ImmediateStart(gbn){
 			</div>
 			<div class="cmm_grp">
 				<div class="btn_type_01" id="btnRman">
-					<span class="btn btnC_01 btn_fl"><button type="button" onclick="fn_ImmediateStart('rman')">즉시실행</button></span> 
+					<span class="btn btnC_01 btn_fl"><button type="button" onclick="fn_ImmediateStart('rman')"><spring:message code="migration.run_immediately" /></button></span> 
 			
 				
 					<a class="btn" onClick="fn_rman_find_list();"><button type="button"><spring:message code="common.search" /></button></a>
@@ -796,7 +796,7 @@ function fn_ImmediateStart(gbn){
 					<span class="btn" onClick="fn_rman_work_delete()"><button type="button"><spring:message code="common.delete" /></button></span>
 				</div>
 				<div class="btn_type_01" id="btnDump" style="display:none;">
-					<span class="btn btnC_01 btn_fl"><button type="button" onclick="fn_ImmediateStart('dump')">즉시실행</button></span> 
+					<span class="btn btnC_01 btn_fl"><button type="button" onclick="fn_ImmediateStart('dump')"><spring:message code="migration.run_immediately" /></button></span> 
 				
 					<span class="btn" onclick="fn_dump_find_list()"><button type="button"><spring:message code="common.search" /></button></span>
 					<span class="btn" onclick="fn_dump_reg_popup()"><button type="button"><spring:message code="common.registory" /></button></span>
@@ -870,7 +870,7 @@ function fn_ImmediateStart(gbn){
 									<th width="230" class="dt-center"><spring:message code="backup_management.backup_dir" /></th>
 									<%-- <th width="230" class="dt-center"><spring:message code="backup_management.backup_log_dir" /></th> --%>
 									<th width="100"><spring:message code="common.register" /> </th>
-									<th width="100"><spring:message code="common.regist_datetime" /></th>
+									<th width="110"><spring:message code="common.regist_datetime" /></th>
 									<th width="100"><spring:message code="common.modifier" /></th>
 									<th width="100"><spring:message code="common.modify_datetime" /></th>
 									<th width="0"></th>
@@ -897,7 +897,7 @@ function fn_ImmediateStart(gbn){
 									<th width="90"><spring:message code="backup_management.file_keep_day" /></th>
 									<th width="150"><spring:message code="backup_management.backup_maintenance_count" /></th>
 									<th width="70"><spring:message code="common.register" /></th>
-									<th width="100"><spring:message code="common.regist_datetime" /></th>
+									<th width="110"><spring:message code="common.regist_datetime" /></th>
 									<th width="70"><spring:message code="common.modifier" /></th>
 									<th width="100"><spring:message code="common.modify_datetime" /></th>
 									<th width="0"></th>

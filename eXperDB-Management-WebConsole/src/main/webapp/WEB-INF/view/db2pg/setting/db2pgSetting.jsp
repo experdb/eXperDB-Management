@@ -391,7 +391,7 @@ function fn_ddl_work_delete(){
 						alert("<spring:message code='message.msg37' />");
 						getddlDataList();
 					}else{
-						alert('삭제에 실패했습니다.');
+						alert('<spring:message code="migration.msg09"/>');
 					}	
 				}
 			});	
@@ -448,7 +448,7 @@ function fn_ddl_work_delete(){
 							alert("<spring:message code='message.msg37' />");
 							getdataDataList();	
 						}else{
-							alert('삭제에 실패했습니다.');
+							alert('<spring:message code="migration.msg09"/>');
 						}	
 					}
 				});	
@@ -467,7 +467,7 @@ function fn_copy(){
 	}else if(dataRowCnt==1){
 		toggleLayer($('#pop_layer_copy'), 'on');
 	}else{
-		alert("하나의 항목만 선택해주세요.");
+		alert('<spring:message code="migration.msg10"/>');
 	}
 }
 
@@ -564,7 +564,7 @@ function fn_copy_save(){
 						toggleLayer($('#pop_layer_copy'), 'off');
 						getddlDataList();
 					}else{
-						alert('등록에 실패했습니다.');
+						alert('<spring:message code="migration.msg06"/>');
 					}	
 				}
 			});	
@@ -602,7 +602,7 @@ function fn_copy_save(){
 						toggleLayer($('#pop_layer_copy'), 'off');
 						getdataDataList();
 					}else{
-						alert('등록에 실패했습니다.');
+						alert('<spring:message code="migration.msg06"/>');
 					}	
 				}
 			});
@@ -623,7 +623,7 @@ function fn_ImmediateStart(gbn){
 		var dataSet=[];
 		
 		if (rowCnt > 0) {
-			alert(rowCnt+" 개의 Work를 실행하였습니다.");		
+			alert(rowCnt+" <spring:message code='migration.msg11'/>");		
 			for (var i = 0; i < datas.length; i++) {
 				 var row = new Object()
 				 row.wrk_id = datas[i].wrk_id;
@@ -653,7 +653,7 @@ function fn_ImmediateStart(gbn){
 					}
 				},
 				success : function(result) {
-					if (confirm('실행결과화면으로 이동하시겠습니까?')){
+					if (confirm('<spring:message code="migration.msg12"/>')){
 						location.href='/db2pgHistory.do?gbn=ddl' ;
 					}
 				}
@@ -672,7 +672,7 @@ function fn_ImmediateStart(gbn){
 		var dataSet=[];
 		
 		if (rowCnt > 0) {				
-			alert(rowCnt+" 개의 Work를 실행하였습니다.");		
+			alert(rowCnt+" <spring:message code='migration.msg11'/>");		
 			/* ********************************************************
 			 * 실행조건 필요(여러개의 WORK중 동일한 테이블 있을시, Alert알림 실행X)
 			 * 경우의 수가 너무 많음 추후 고려
@@ -706,7 +706,7 @@ function fn_ImmediateStart(gbn){
 						}
 					},
 					success : function(result) {
-						if (confirm('실행결과화면으로 이동하시겠습니까?')){
+						if (confirm('<spring:message code="migration.msg12"/>')){
 							location.href='/db2pgHistory.do?gbn=mig' ;
 						}
 					}
@@ -729,8 +729,8 @@ function fn_ImmediateStart(gbn){
 			<h4><spring:message code="migration.setting_information_management"/><a href="#n"><img src="/images/ico_tit.png" class="btn_info"/></a></h4>
 			<div class="infobox"> 
 				<ul>
-					<li>서버에 생성된 설정정보관리 작업을 조회하거나 신규로 등록 또는 삭제 합니다.</li>
-					<li>조회 목록에서 Work명을 클릭하면 Configuration 정보를 조회할 수 있습니다.</li>	
+					<li><spring:message code="help.setting_information_management_01"/></li>
+					<li><spring:message code="help.setting_information_management_02"/></li>	
 				</ul>
 			</div>
 			<div class="location">

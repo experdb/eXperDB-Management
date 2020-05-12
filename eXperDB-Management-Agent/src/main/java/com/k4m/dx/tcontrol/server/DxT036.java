@@ -116,6 +116,11 @@ public class DxT036 extends SocketCtl{
 				}
 
 				if (retVal.equals("success")) {
+					if (searchGbn.equals("scaleAwsChk")) {
+						strResultSubMessge = strResultMessge;
+						strResultMessge = "";
+					}
+					
 					if (!strResultMessge.isEmpty()) {
 						if (searchGbn.equals("main") || searchGbn.equals("scaleChk")) {
 							strResultMessge = "{ \"Instances\":" + strResultMessge + "}";

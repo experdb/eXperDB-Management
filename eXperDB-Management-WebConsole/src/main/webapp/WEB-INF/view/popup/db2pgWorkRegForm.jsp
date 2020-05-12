@@ -65,14 +65,15 @@ function fn_init(){
     tableData.tables().header().to$().find('th:eq(1)').css('min-width', '30px');
     tableData.tables().header().to$().find('th:eq(2)').css('min-width', '100px');
     tableData.tables().header().to$().find('th:eq(3)').css('min-width', '200px');
-    tableData.tables().header().to$().find('th:eq(4)').css('min-width', '100px');
+    tableData.tables().header().to$().find('th:eq(4)').css('min-width', '140px');
     tableData.tables().header().to$().find('th:eq(5)').css('min-width', '100px');
     tableData.tables().header().to$().find('th:eq(6)').css('min-width', '100px');
     tableData.tables().header().to$().find('th:eq(7)').css('min-width', '100px');
-    tableData.tables().header().to$().find('th:eq(8)').css('min-width', '100px');
+    tableData.tables().header().to$().find('th:eq(8)').css('min-width', '140px');
     tableData.tables().header().to$().find('th:eq(9)').css('min-width', '100px');
     tableData.tables().header().to$().find('th:eq(10)').css('min-width', '100px');
     tableData.tables().header().to$().find('th:eq(11)').css('min-width', '100px');
+
 	$(window).trigger('resize'); 
 }
 
@@ -183,27 +184,24 @@ $(window.document).ready(function() {
 				<table class="write" >
 							<caption>검색 조회</caption>
 							<colgroup>
-								<col style="width:6%;" />
-								<col style="width:20%;" />
-								<col style="width:5%;" />
-								<col style="width:20%;" />
-								<col style="width:7%;" />
-								<col style="width:22%;" />
+								<col style="width:10%;" />
+								<col style="width:15%;" />
+								<col style="width:10%;" />
 								<col />
 							</colgroup>
 							<tbody>
 								<tr>
 									<th scope="row" class="t9"><spring:message code="common.work_name" /></th>
-									<td><input type="text" name="data_wrk_nm" id="data_wrk_nm" class="txt t3" maxlength="25"/></td>
-									<th scope="row" class="t9">구분</th>
+									<td><input type="text" name="data_wrk_nm" id="data_wrk_nm" class="txt t4" maxlength="25"/></td>
+									<th scope="row" class="t9"><spring:message code="properties.division" /></th>
 									<td>		
 										<select name="data_dbms_dscd" id="data_dbms_dscd" class="select t5" >
-											<option value="source_system">소스시스템</option>	
-											<option value="target_system">타겟시스템</option>				
+											<option value="source_system"><spring:message code="migration.source_system" /></option>	
+											<option value="target_system"><spring:message code="migration.target_system" /></option>				
 										</select>	
 									</td>
-									<th scope="row" class="t9">DBMS구분</th>
-									<td><input type="text" name="dbms_dscd" id="dbms_dscd" class="txt t3"/></td>
+									<th scope="row" class="t9"><spring:message code="migration.dbms_classification" /></th>
+									<td><input type="text" name="dbms_dscd" id="dbms_dscd" class="txt t4"/></td>
 								</tr>
 							</tbody>
 						</table>							
@@ -219,15 +217,15 @@ $(window.document).ready(function() {
 									<th width="30" rowspan="2"><spring:message code="common.no" /></th>
 									<th width="100" rowspan="2"><spring:message code="common.work_name" /></th>
 									<th width="200" rowspan="2"><spring:message code="common.work_description" /></th>
-									<th width="400" colspan="4"><spring:message code="migration.source_system"/></th>
-									<th width="400" colspan="4"><spring:message code="migration.target_system"/></th>
+									<th width="440" colspan="4"><spring:message code="migration.source_system"/></th>
+									<th width="440" colspan="4"><spring:message code="migration.target_system"/></th>
 								</tr>
 								<tr>
-									<th width="100">DBMS <spring:message code="common.division" /></th>
+									<th width="140">DBMS <spring:message code="common.division" /></th>
 									<th width="100"><spring:message code="data_transfer.ip" /></th>
 									<th width="100">Database</th>
 									<th width="100">Schema</th>
-									<th width="100">DBMS <spring:message code="common.division" /></th>
+									<th width="140">DBMS <spring:message code="common.division" /></th>
 									<th width="100"><spring:message code="data_transfer.ip" /></th>
 									<th width="100">Database</th>
 									<th width="100">Schema</th>

@@ -170,7 +170,7 @@ function fn_Add(){
 <body>
 <div class="pop_container">
 	<div class="pop_cts">
-		<p class="tit">DBMS시스템정보</p>
+		<p class="tit"><spring:message code="migration.dbms_system_information"/></p>
 			<div class="btn_type_01">
 				<span class="btn"><button onClick="fn_search();" type="button"><spring:message code="common.search" /></button></span>
 			</div>
@@ -207,7 +207,7 @@ function fn_Add(){
  										</c:forEach>
 								</select>						
 						</td>									
-						<th scope="row" class="ico_t1" >아이피</th>
+						<th scope="row" class="ico_t1" ><spring:message code="data_transfer.ip" /></th>
 						<td><input type="text" class="txt t4" name="ipadr" id="ipadr" /></td>				
 					</tr>
 				</tbody>

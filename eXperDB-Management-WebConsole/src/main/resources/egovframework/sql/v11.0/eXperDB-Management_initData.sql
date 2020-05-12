@@ -32,6 +32,11 @@ INSERT INTO T_SYSGRP_C(GRP_CD, GRP_CD_NM, GRP_CD_EXP, USE_YN, FRST_REGR_ID, FRST
 INSERT INTO T_SYSGRP_C(GRP_CD, GRP_CD_NM, GRP_CD_EXP, USE_YN, FRST_REGR_ID, FRST_REG_DTM, LST_MDFR_ID, LST_MDF_DTM ) VALUES('TC0031', '케릭터셋(CUBRID)', '', 'Y', 'ADMIN', clock_timestamp(), 'ADMIN', clock_timestamp());
 INSERT INTO T_SYSGRP_C(GRP_CD, GRP_CD_NM, GRP_CD_EXP, USE_YN, FRST_REGR_ID, FRST_REG_DTM, LST_MDFR_ID, LST_MDF_DTM ) VALUES('TC0032', '이행구분', '', 'Y', 'ADMIN', clock_timestamp(), 'ADMIN', clock_timestamp());
 
+INSERT INTO T_SYSGRP_C(GRP_CD, GRP_CD_NM, GRP_CD_EXP, USE_YN, FRST_REGR_ID, FRST_REG_DTM, LST_MDFR_ID, LST_MDF_DTM ) VALUES( 'TC0033', '작업유형', 'SCALE 작업유형', 'Y', 'ADMIN', clock_timestamp(), 'ADMIN', clock_timestamp());
+INSERT INTO T_SYSGRP_C(GRP_CD, GRP_CD_NM, GRP_CD_EXP, USE_YN, FRST_REGR_ID, FRST_REG_DTM, LST_MDFR_ID, LST_MDF_DTM ) VALUES( 'TC0034', '실행유형', 'SCALE 실행유형', 'Y', 'ADMIN', clock_timestamp(), 'ADMIN', clock_timestamp());
+INSERT INTO T_SYSGRP_C(GRP_CD, GRP_CD_NM, GRP_CD_EXP, USE_YN, FRST_REGR_ID, FRST_REG_DTM, LST_MDFR_ID, LST_MDF_DTM ) VALUES( 'TC0035', '정책유형', 'SCALE 정책유형', 'Y', 'ADMIN', clock_timestamp(), 'ADMIN', clock_timestamp());
+
+
 INSERT INTO T_SYSDTL_C(GRP_CD, SYS_CD, SYS_CD_NM, USE_YN, FRST_REGR_ID, FRST_REG_DTM, LST_MDFR_ID, LST_MDF_DTM ) VALUES('TC0001', 'DX-T0003', '로그인', 'Y', 'ADMIN', clock_timestamp(), 'ADMIN', clock_timestamp());
 INSERT INTO T_SYSDTL_C(GRP_CD, SYS_CD, SYS_CD_NM, USE_YN, FRST_REGR_ID, FRST_REG_DTM, LST_MDFR_ID, LST_MDF_DTM ) VALUES('TC0001', 'DX-T0003_01', '로그아웃', 'Y', 'ADMIN', clock_timestamp(), 'ADMIN', clock_timestamp());
 INSERT INTO T_SYSDTL_C(GRP_CD, SYS_CD, SYS_CD_NM, USE_YN, FRST_REGR_ID, FRST_REG_DTM, LST_MDFR_ID, LST_MDF_DTM ) VALUES('TC0001', 'DX-T0004', '메인', 'Y', 'ADMIN', clock_timestamp(), 'ADMIN', clock_timestamp());
@@ -147,6 +152,7 @@ INSERT INTO T_SYSDTL_C(GRP_CD, SYS_CD, SYS_CD_NM, USE_YN, FRST_REGR_ID, FRST_REG
 INSERT INTO T_SYSDTL_C(GRP_CD, SYS_CD, SYS_CD_NM, USE_YN, FRST_REGR_ID, FRST_REG_DTM, LST_MDFR_ID, LST_MDF_DTM ) VALUES('TC0001', 'DX-T0055', 'Dashboard', 'Y', 'ADMIN', clock_timestamp(), 'ADMIN', clock_timestamp());
 INSERT INTO T_SYSDTL_C(GRP_CD, SYS_CD, SYS_CD_NM, USE_YN, FRST_REGR_ID, FRST_REG_DTM, LST_MDFR_ID, LST_MDF_DTM ) VALUES('TC0001', 'DX-T0073', '서버정보 화면', 'Y', 'ADMIN', clock_timestamp(), 'ADMIN', clock_timestamp());
 
+
 INSERT INTO T_SYSDTL_C(GRP_CD, SYS_CD, SYS_CD_NM, USE_YN, FRST_REGR_ID, FRST_REG_DTM, LST_MDFR_ID, LST_MDF_DTM ) VALUES('TC0001', 'DX-T0101', '보안정책관리 화면', 'Y', 'ADMIN', clock_timestamp(), 'ADMIN', clock_timestamp());
 INSERT INTO T_SYSDTL_C(GRP_CD, SYS_CD, SYS_CD_NM, USE_YN, FRST_REGR_ID, FRST_REG_DTM, LST_MDFR_ID, LST_MDF_DTM ) VALUES('TC0001', 'DX-T0101_01', '보안정책관리 조회', 'Y', 'ADMIN', clock_timestamp(), 'ADMIN', clock_timestamp());
 INSERT INTO T_SYSDTL_C(GRP_CD, SYS_CD, SYS_CD_NM, USE_YN, FRST_REGR_ID, FRST_REG_DTM, LST_MDFR_ID, LST_MDF_DTM ) VALUES('TC0001', 'DX-T0101_02', '보안정책관리 삭제', 'Y', 'ADMIN', clock_timestamp(), 'ADMIN', clock_timestamp());
@@ -244,6 +250,12 @@ INSERT into T_SYSDTL_C (grp_cd, sys_cd, sys_cd_nm, use_yn, frst_regr_id, frst_re
 INSERT into T_SYSDTL_C (grp_cd, sys_cd, sys_cd_nm, use_yn, frst_regr_id, frst_reg_dtm, lst_mdfr_id, lst_mdf_dtm) VALUES ('TC0001', 'DX-T0056_03', 'eXperDB_scale Scale Out', 'Y', 'ADMIN', clock_timestamp(), 'ADMIN', clock_timestamp());
 INSERT into T_SYSDTL_C (grp_cd, sys_cd, sys_cd_nm, use_yn, frst_regr_id, frst_reg_dtm, lst_mdfr_id, lst_mdf_dtm) VALUES ('TC0001', 'DX-T0056_04', 'eXperDB_scale 상세 조회', 'Y', 'ADMIN', clock_timestamp(), 'ADMIN', clock_timestamp());
 INSERT into T_SYSDTL_C (grp_cd, sys_cd, sys_cd_nm, use_yn, frst_regr_id, frst_reg_dtm, lst_mdfr_id, lst_mdf_dtm) VALUES ('TC0001', 'DX-T0056_05', 'eXperDB_scale 보안그룹 상세 조회', 'Y', 'ADMIN', clock_timestamp(), 'ADMIN', clock_timestamp());
+
+
+INSERT into T_SYSDTL_C (grp_cd, sys_cd, sys_cd_nm, use_yn, frst_regr_id, frst_reg_dtm, lst_mdfr_id, lst_mdf_dtm) VALUES ('TC0001', 'DX-T0057', 'eXperDB_scale 이력 화면', 'Y', 'ADMIN', clock_timestamp(), 'ADMIN', clock_timestamp());
+INSERT into T_SYSDTL_C (grp_cd, sys_cd, sys_cd_nm, use_yn, frst_regr_id, frst_reg_dtm, lst_mdfr_id, lst_mdf_dtm) VALUES ('TC0001', 'DX-T0057_01', 'eXperDB_scale 실행이력 조회', 'Y', 'ADMIN', clock_timestamp(), 'ADMIN', clock_timestamp());
+INSERT into T_SYSDTL_C (grp_cd, sys_cd, sys_cd_nm, use_yn, frst_regr_id, frst_reg_dtm, lst_mdfr_id, lst_mdf_dtm) VALUES ('TC0001', 'DX-T0057_02', 'eXperDB_scale auto 발생이력 조회', 'Y', 'ADMIN', clock_timestamp(), 'ADMIN', clock_timestamp());
+
 
 INSERT INTO T_SYSDTL_C(GRP_CD, SYS_CD, SYS_CD_NM, USE_YN, FRST_REGR_ID, FRST_REG_DTM, LST_MDFR_ID, LST_MDF_DTM ) VALUES('TC0002', 'TC000201', 'Online백업', 'Y', 'ADMIN', clock_timestamp(), 'ADMIN', clock_timestamp());
 INSERT INTO T_SYSDTL_C(GRP_CD, SYS_CD, SYS_CD_NM, USE_YN, FRST_REGR_ID, FRST_REG_DTM, LST_MDFR_ID, LST_MDF_DTM ) VALUES('TC0002', 'TC000202', 'Dump백업', 'Y', 'ADMIN', clock_timestamp(), 'ADMIN', clock_timestamp());
@@ -398,6 +410,12 @@ INSERT INTO T_SYSDTL_C(GRP_CD, SYS_CD, SYS_CD_NM, USE_YN, FRST_REGR_ID, FRST_REG
 INSERT INTO T_SYSDTL_C(GRP_CD, SYS_CD, SYS_CD_NM, USE_YN, FRST_REGR_ID, FRST_REG_DTM, LST_MDFR_ID, LST_MDF_DTM ) VALUES('TC0031', 'TC003101', 'DDL', 'Y', 'ADMIN', clock_timestamp(), 'ADMIN', clock_timestamp());
 INSERT INTO T_SYSDTL_C(GRP_CD, SYS_CD, SYS_CD_NM, USE_YN, FRST_REGR_ID, FRST_REG_DTM, LST_MDFR_ID, LST_MDF_DTM ) VALUES('TC0031', 'TC003102', 'MIGRATION', 'Y', 'ADMIN', clock_timestamp(), 'ADMIN', clock_timestamp());
 
+INSERT INTO T_SYSDTL_C(GRP_CD, SYS_CD, SYS_CD_NM, USE_YN, FRST_REGR_ID, FRST_REG_DTM, LST_MDFR_ID, LST_MDF_DTM ) VALUES('TC0033', 'TC003301', 'Auto', 'Y', 'ADMIN', clock_timestamp(), 'ADMIN', clock_timestamp());
+INSERT INTO T_SYSDTL_C(GRP_CD, SYS_CD, SYS_CD_NM, USE_YN, FRST_REGR_ID, FRST_REG_DTM, LST_MDFR_ID, LST_MDF_DTM ) VALUES('TC0033', 'TC003302', 'Manual', 'Y', 'ADMIN', clock_timestamp(), 'ADMIN', clock_timestamp());
+INSERT INTO T_SYSDTL_C(GRP_CD, SYS_CD, SYS_CD_NM, USE_YN, FRST_REGR_ID, FRST_REG_DTM, LST_MDFR_ID, LST_MDF_DTM ) VALUES('TC0034', 'TC003401', 'Logging', 'Y', 'ADMIN', clock_timestamp(), 'ADMIN', clock_timestamp());
+INSERT INTO T_SYSDTL_C(GRP_CD, SYS_CD, SYS_CD_NM, USE_YN, FRST_REGR_ID, FRST_REG_DTM, LST_MDFR_ID, LST_MDF_DTM ) VALUES('TC0034', 'TC003402', 'Auto-scale', 'Y', 'ADMIN', clock_timestamp(), 'ADMIN', clock_timestamp());
+INSERT INTO T_SYSDTL_C(GRP_CD, SYS_CD, SYS_CD_NM, USE_YN, FRST_REGR_ID, FRST_REG_DTM, LST_MDFR_ID, LST_MDF_DTM ) VALUES('TC0035', 'TC003501', 'CPU', 'Y', 'ADMIN', clock_timestamp(), 'ADMIN', clock_timestamp());
+INSERT INTO T_SYSDTL_C(GRP_CD, SYS_CD, SYS_CD_NM, USE_YN, FRST_REGR_ID, FRST_REG_DTM, LST_MDFR_ID, LST_MDF_DTM ) VALUES('TC0035', 'TC003502', 'TPS', 'Y', 'ADMIN', clock_timestamp(), 'ADMIN', clock_timestamp());
 
 INSERT INTO T_MNU_I(MNU_ID, MNU_CD, MNU_NM, HGR_MNU_ID, FRST_REGR_ID, FRST_REG_DTM, LST_MDFR_ID, LST_MDF_DTM)VALUES(nextval('q_mnu_i_01'), 'MN0001', 	'스케줄정보', 		'','experdb', clock_timestamp(), 'experdb', clock_timestamp());
 INSERT INTO T_MNU_I(MNU_ID, MNU_CD, MNU_NM, HGR_MNU_ID, FRST_REGR_ID, FRST_REG_DTM, LST_MDFR_ID, LST_MDF_DTM)VALUES(nextval('q_mnu_i_01'), 'MN000101', 	'스케줄 등록',   		'MN0001','experdb', clock_timestamp(), 'experdb', clock_timestamp());
@@ -488,6 +506,9 @@ INSERT INTO T_USRMNUAUT_I(USR_MNU_AUT_ID, USR_ID, MNU_ID, READ_AUT_YN, WRT_AUT_Y
 INSERT INTO T_USRMNUAUT_I(USR_MNU_AUT_ID, USR_ID, MNU_ID, READ_AUT_YN, WRT_AUT_YN, FRST_REGR_ID, FRST_REG_DTM, LST_MDFR_ID, LST_MDF_DTM)VALUES(nextval('q_usrmnuaut_i_01'), 'experdb', 37, 'Y', 'Y', 'experdb', clock_timestamp(), 'experdb', clock_timestamp());
 INSERT INTO T_USRMNUAUT_I(USR_MNU_AUT_ID, USR_ID, MNU_ID, READ_AUT_YN, WRT_AUT_YN, FRST_REGR_ID, FRST_REG_DTM, LST_MDFR_ID, LST_MDF_DTM)VALUES(nextval('q_usrmnuaut_i_01'), 'experdb', 38, 'Y', 'Y', 'experdb', clock_timestamp(), 'experdb', clock_timestamp());
 INSERT INTO T_USRMNUAUT_I(USR_MNU_AUT_ID, USR_ID, MNU_ID, READ_AUT_YN, WRT_AUT_YN, FRST_REGR_ID, FRST_REG_DTM, LST_MDFR_ID, LST_MDF_DTM)VALUES(nextval('q_usrmnuaut_i_01'), 'experdb', 39, 'Y', 'Y', 'experdb', clock_timestamp(), 'experdb', clock_timestamp());
+INSERT INTO T_USRMNUAUT_I(USR_MNU_AUT_ID, USR_ID, MNU_ID, READ_AUT_YN, WRT_AUT_YN, FRST_REGR_ID, FRST_REG_DTM, LST_MDFR_ID, LST_MDF_DTM)VALUES(nextval('q_usrmnuaut_i_01'), 'experdb', 40, 'Y', 'Y', 'experdb', clock_timestamp(), 'experdb', clock_timestamp());
+INSERT INTO T_USRMNUAUT_I(USR_MNU_AUT_ID, USR_ID, MNU_ID, READ_AUT_YN, WRT_AUT_YN, FRST_REGR_ID, FRST_REG_DTM, LST_MDFR_ID, LST_MDF_DTM)VALUES(nextval('q_usrmnuaut_i_01'), 'experdb', 41, 'Y', 'Y', 'experdb', clock_timestamp(), 'experdb', clock_timestamp());
+INSERT INTO T_USRMNUAUT_I(USR_MNU_AUT_ID, USR_ID, MNU_ID, READ_AUT_YN, WRT_AUT_YN, FRST_REGR_ID, FRST_REG_DTM, LST_MDFR_ID, LST_MDF_DTM)VALUES(nextval('q_usrmnuaut_i_01'), 'experdb', 42, 'Y', 'Y', 'experdb', clock_timestamp(), 'experdb', clock_timestamp());
 
 
 INSERT INTO T_USRMNUAUT_I(USR_MNU_AUT_ID, USR_ID, MNU_ID, READ_AUT_YN, WRT_AUT_YN, FRST_REGR_ID, FRST_REG_DTM, LST_MDFR_ID, LST_MDF_DTM)VALUES(nextval('q_usrmnuaut_i_01'), 'admin', 1, 'Y', 'Y', 'experdb', clock_timestamp(), 'experdb', clock_timestamp());
@@ -529,3 +550,6 @@ INSERT INTO T_USRMNUAUT_I(USR_MNU_AUT_ID, USR_ID, MNU_ID, READ_AUT_YN, WRT_AUT_Y
 INSERT INTO T_USRMNUAUT_I(USR_MNU_AUT_ID, USR_ID, MNU_ID, READ_AUT_YN, WRT_AUT_YN, FRST_REGR_ID, FRST_REG_DTM, LST_MDFR_ID, LST_MDF_DTM)VALUES(nextval('q_usrmnuaut_i_01'), 'admin', 37, 'Y', 'Y', 'experdb', clock_timestamp(), 'experdb', clock_timestamp());
 INSERT INTO T_USRMNUAUT_I(USR_MNU_AUT_ID, USR_ID, MNU_ID, READ_AUT_YN, WRT_AUT_YN, FRST_REGR_ID, FRST_REG_DTM, LST_MDFR_ID, LST_MDF_DTM)VALUES(nextval('q_usrmnuaut_i_01'), 'admin', 38, 'Y', 'Y', 'experdb', clock_timestamp(), 'experdb', clock_timestamp());
 INSERT INTO T_USRMNUAUT_I(USR_MNU_AUT_ID, USR_ID, MNU_ID, READ_AUT_YN, WRT_AUT_YN, FRST_REGR_ID, FRST_REG_DTM, LST_MDFR_ID, LST_MDF_DTM)VALUES(nextval('q_usrmnuaut_i_01'), 'admin', 39, 'Y', 'Y', 'experdb', clock_timestamp(), 'experdb', clock_timestamp());
+INSERT INTO T_USRMNUAUT_I(USR_MNU_AUT_ID, USR_ID, MNU_ID, READ_AUT_YN, WRT_AUT_YN, FRST_REGR_ID, FRST_REG_DTM, LST_MDFR_ID, LST_MDF_DTM)VALUES(nextval('q_usrmnuaut_i_01'), 'admin', 40, 'Y', 'Y', 'experdb', clock_timestamp(), 'experdb', clock_timestamp());
+INSERT INTO T_USRMNUAUT_I(USR_MNU_AUT_ID, USR_ID, MNU_ID, READ_AUT_YN, WRT_AUT_YN, FRST_REGR_ID, FRST_REG_DTM, LST_MDFR_ID, LST_MDF_DTM)VALUES(nextval('q_usrmnuaut_i_01'), 'admin', 41, 'Y', 'Y', 'experdb', clock_timestamp(), 'experdb', clock_timestamp());
+INSERT INTO T_USRMNUAUT_I(USR_MNU_AUT_ID, USR_ID, MNU_ID, READ_AUT_YN, WRT_AUT_YN, FRST_REGR_ID, FRST_REG_DTM, LST_MDFR_ID, LST_MDF_DTM)VALUES(nextval('q_usrmnuaut_i_01'), 'admin', 42, 'Y', 'Y', 'experdb', clock_timestamp(), 'experdb', clock_timestamp());

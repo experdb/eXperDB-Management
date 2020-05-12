@@ -170,7 +170,7 @@ function fn_Add(){
 <body>
 <div class="pop_container">
 	<div class="pop_cts">
-		<p class="tit">DBMS시스템정보</p>
+		<p class="tit"><spring:message code="migration.dbms_system_information"/></p>
 			<div class="btn_type_01">
 				<span class="btn"><button onClick="fn_search();" type="button"><spring:message code="common.search" /></button></span>
 			</div>
@@ -178,14 +178,14 @@ function fn_Add(){
 			<table class="write bdtype1">
 				<caption><spring:message code="menu.schedule_registration" /></caption>				
 				<colgroup>
-					<col style="width:10%;" />
-					<col style="width:40%;" />
+					<col style="width:15%;" />
+					<col style="width:35%;" />
 					<col style="width:10%;" />
 					<col style="width:40%;" />
 				</colgroup>
 				<tbody>
 					<tr>
-						<th scope="row" class="ico_t1">시스템명</th>
+						<th scope="row" class="ico_t1"><spring:message code="migration.system_name"/></th>
 						<td><input type="text" class="txt t3" name="db2pg_sys_nm" id="db2pg_sys_nm" /></td>									
 						<th scope="row" class="ico_t1" ><spring:message code="data_transfer.ip" /></th>
 						<td><input type="text" class="txt t3" name="ipadr" id="ipadr" /></td>				

@@ -82,12 +82,12 @@ $(window.document).ready(function() {
 			},
 			success : function(result) {
 				if (result == "true") {
-					alert('등록가능한 시스템 명입니다.');
+					alert('<spring:message code="migration.msg04"/>');
 					document.getElementById("db2pg_sys_nm").focus();
 					db2pg_sys_nmChk = "success";
 				} else {
 					db2pg_sys_nmChk = "fail";
-					alert('중복된 시스템명이 존재합니다.');
+					alert('<spring:message code="migration.msg05"/>');
 					document.getElementById("db2pg_sys_nm").focus();
 				}
 			},
@@ -239,20 +239,20 @@ function fn_charSet(){
 		}
 		
 		 if (db2pg_sys_nmChk =="fail") {
-			 alert('시스템명 중복체크 바랍니다.');
+			 alert('<spring:message code="migration.msg14" />');
 			 return false;
 		 }	 
 		 
 		var ipadr = document.getElementById("ipadr");
 		if (ipadr.value == "") {
-			   alert('아이피를 입력해주세요.');
+			   alert('<spring:message code="migration.msg15" />');
 			   ipadr.focus();
 			   return false;
 		}
 		
 		var dtb_nm = document.getElementById("dtb_nm");
  		if (dtb_nm.value == "") {
-  			   alert('데이터베이스명을 입력해주세요.');
+  			   alert('<spring:message code="migration.msg16" />');
   			 dft_db_nm.focus();
   			   return false;
   		}
@@ -263,7 +263,7 @@ function fn_charSet(){
 			var schema_any = document.getElementById("schema_any");
 		 		if (schema_pg.value == "") {
 		 			if (schema_any.value == "") {
-			  			   alert('스키마명을 입력해주세요.');
+			  			   alert('<spring:message code="migration.msg17" />');
 			  			 schema_any.focus();
 			  			   return false;
 			  		}
@@ -271,7 +271,7 @@ function fn_charSet(){
 		}else{
 			var schema_any = document.getElementById("schema_any");
 	 		if (schema_any.value == "") {
-	  			   alert('스키마명을 입력해주세요.');
+	  			   alert('<spring:message code="migration.msg17" />');
 	  			 schema_any.focus();
 	  			   return false;
 	  		}
@@ -279,7 +279,7 @@ function fn_charSet(){
 		
  		var portno = document.getElementById("portno");
 		if (portno.value == "") {
-			alert('포트를 입력해주세요.');
+			alert('<spring:message code="migration.msg18" />');
 			portno.focus();
 			return false;
 		}
@@ -292,14 +292,14 @@ function fn_charSet(){
  		
  		var spr_usr_id = document.getElementById("spr_usr_id");
  		if (spr_usr_id.value == "") {
-  			   alert('유저명을 입력해주세요.');
+  			   alert('<spring:message code="migration.msg19" />');
   			 spr_usr_id.focus();
   			   return false;
   		}		
  		
  		var pwd = document.getElementById("pwd");
  		if (pwd.value == "") {
-  			   alert('패스워드를 입력해주세요.');
+  			   alert('<spring:message code="migration.msg20" />');
   			 pwd.focus();
   			   return false;
   		}	

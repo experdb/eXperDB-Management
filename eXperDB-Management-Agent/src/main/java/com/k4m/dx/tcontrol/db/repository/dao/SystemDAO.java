@@ -1,7 +1,6 @@
 package com.k4m.dx.tcontrol.db.repository.dao;
 
 import java.util.List;
-import java.util.Map;
 
 import org.apache.ibatis.session.SqlSession;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -117,15 +116,5 @@ public class SystemDAO {
 	
 	public void insertWRKEXE_G(WrkExeVO vo) throws Exception  {
 		 session.insert("system.insertWRKEXE_G", vo);
-	}
-	
-	/* scale log insert */
-	public void insertScaleLog_G(Map<String, Object> param) throws Exception  {
-		 session.insert("system.insertScaleLog_G", param);
-	}
-	
-	/* scale log update */
-	public void updateScaleLog_G(Map<String, Object> param) throws Exception  {
-		 session.insert("system.updateScaleLog_G", param);
 	}
 }

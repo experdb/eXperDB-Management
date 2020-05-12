@@ -75,8 +75,9 @@
                    , LST_MDF_DTM
                    , SCRIPT_CNG_AUT_YN
                    , SCRIPT_HIS_AUT_YN
-                   , SCALE_YN
-                   , SCALE_HIST_YN
+                   , SCALE_CNG_AUT_YN
+                   , SCALE_AUT_YN
+                   , SCALE_HIST_AUT_YN
                    )
               VALUES
                    (
@@ -94,6 +95,7 @@
                    , clock_timestamp()
                    , #{usr_id}
                    , clock_timestamp()
+                   , 'N'
                    , 'N'
                    , 'N'
                    , 'N'
@@ -199,8 +201,9 @@
              , A.POINT_RESTORE_AUT_YN
              , A.DUMP_RESTORE_AUT_YN
              , A.RESTORE_HIS_AUT_YN
-             , A.SCALE_YN
-             , A.SCALE_HIST_YN
+             , A.SCALE_CNG_AUT_YN
+             , A.SCALE_AUT_YN
+             , A.SCALE_HIST_AUT_YN
              , C.IPADR
           FROM T_USRDBSVRAUT_I A, T_DBSVR_I B,T_DBSVRIPADR_I C
          WHERE 1 = 1
@@ -234,9 +237,10 @@
              , DUMP_RESTORE_AUT_YN = #{dump_restore_aut_yn} 
              , RESTORE_HIS_AUT_YN = #{restore_his_aut_yn} 
 
-	    	<if test="scale_yn_chk != null and (scale_yn_chk eq 'Y'.toString()) ">
-             , SCALE_YN = #{scale_yn} 
-             , SCALE_HIST_YN = #{scale_hist_yn} 
+	    	<if test='scale_yn_chk != null and (scale_yn_chk eq "Y".toString())'>
+	    	 , SCALE_CNG_AUT_YN = #{scale_cng_aut_yn}
+             , SCALE_AUT_YN = #{scale_aut_yn} 
+             , SCALE_HIST_AUT_YN = #{scale_hist_aut_yn} 
 	    	</if>
              
 
@@ -343,9 +347,10 @@
                   , DUMP_RESTORE_AUT_YN
                   , RESTORE_HIS_AUT_YN
                   
-	    	<if test="scale_yn_chk != null and scale_yn_chk = 'Y' ">
-                  , SCALE_YN
-                  , SCALE_HIST_YN
+            <if test='scale_yn_chk != null and (scale_yn_chk eq "Y".toString())'>      
+	    	      , SCALE_CNG_AUT_YN
+                  , SCALE_AUT_YN
+                  , SCALE_HIST_AUT_YN
 	    	</if>
 
                   )
@@ -372,9 +377,10 @@
                   , #{dump_restore_aut_yn}
                   , #{restore_his_aut_yn}
                   
-	    	<if test="scale_yn_chk != null and (scale_yn_chk eq 'Y'.toString()) ">
-                  , #{scale_yn}
-                  , #{scale_hist_yn}
+			<if test='scale_yn_chk != null and (scale_yn_chk eq "Y".toString())'>
+	    	      , #{scale_cng_aut_yn}
+                  , #{scale_aut_yn}
+                  , #{scale_hist_aut_yn}
 	    	</if>
 
                   )
@@ -453,8 +459,9 @@
 				, POINT_RESTORE_AUT_YN
 				, DUMP_RESTORE_AUT_YN
 				, RESTORE_HIS_AUT_YN
-				, SCALE_YN
-				, SCALE_HIST_YN
+				, SCALE_CNG_AUT_YN
+				, SCALE_AUT_YN
+				, SCALE_HIST_AUT_YN
 		        , FRST_REGR_ID
 				, FRST_REG_DTM
 				, LST_MDFR_ID

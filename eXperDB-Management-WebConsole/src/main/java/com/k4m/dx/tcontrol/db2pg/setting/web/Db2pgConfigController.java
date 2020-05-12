@@ -95,14 +95,10 @@ public class Db2pgConfigController {
 					fileContent = fileContent.replaceAll("#SRC_EXCLUDE_TABLES=", "SRC_EXCLUDE_TABLES="+configObj.get("src_exclude_tables").toString());
 				}
 				fileContent = fileContent.replaceAll("SRC_SELECT_ON_PARALLEL=1", "SRC_SELECT_ON_PARALLEL="+configObj.get("src_select_on_parallel").toString());
-				//소스시스템이 PG이면 SRC_STATEMENT_FETCH_SIZE(기존) -> SRC_COPY_SEGMENT_SIZE 옵션 사용
-//				if(configObj.get("src_dbms_type").toString().equals("POG")){
-//					fileContent = fileContent.replaceAll("SRC_COPY_SEGMENT_SIZE=3000", "SRC_COPY_SEGMENT_SIZE="+configObj.get("src_copy_segment_size").toString());
-//				}else{
-//					fileContent = fileContent.replaceAll("SRC_STATEMENT_FETCH_SIZE=3000", "SRC_STATEMENT_FETCH_SIZE="+configObj.get("src_copy_segment_size").toString());
-//				}
-				fileContent = fileContent.replaceAll("SRC_COPY_SEGMENT_SIZE=3000", "SRC_COPY_SEGMENT_SIZE="+configObj.get("src_copy_segment_size").toString());
 				
+				//blob 데이터 가능하도록 SRC_COPY_SEGMENT_SIZE,SRC_STATEMENT_FETCH_SIZE 통일 
+				fileContent = fileContent.replaceAll("SRC_COPY_SEGMENT_SIZE=3000", "SRC_COPY_SEGMENT_SIZE="+configObj.get("src_copy_segment_size").toString());
+				fileContent = fileContent.replaceAll("SRC_STATEMENT_FETCH_SIZE=3000", "SRC_STATEMENT_FETCH_SIZE="+configObj.get("src_copy_segment_size").toString());
 				
 				fileContent = fileContent.replaceAll("SRC_BUFFER_SIZE=10", "SRC_BUFFER_SIZE="+configObj.get("src_buffer_size").toString());
 				fileContent = fileContent.replaceAll("SRC_LOB_BUFFER_SIZE=1024", "SRC_LOB_BUFFER_SIZE="+configObj.get("src_lob_buffer_size").toString());

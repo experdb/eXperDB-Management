@@ -150,7 +150,7 @@ function fn_tableCheckSelect(tableList){
 <body>
 <div class="pop_container">
 	<div class="pop_cts">
-		<p class="tit">테이블정보</p>
+		<p class="tit"><spring:message code="migration.table_information" /></p>
 			<div class="btn_type_01">
 				<span class="btn"><button onClick="fn_search();" type="button"><spring:message code="common.search" /></button></span>
 			</div>
@@ -172,7 +172,7 @@ function fn_tableCheckSelect(tableList){
 						<td><input type="text" class="txt t9" name="ipadr" id="ipadr" value="${dbmsInfo[0].ipadr}" readonly/></td>				
 					</tr>
 					<tr>
-						<th scope="row" class="ico_t1" >스키마명</th>
+						<th scope="row" class="ico_t1" ><spring:message code="migration.schema_Name"/></th>
 						<td><input type="text" class="txt t9" name="scm_nm" id="scm_nm" value="${dbmsInfo[0].scm_nm}" readonly/></td>			
 						<%-- <th scope="row" class="ico_t1">권한스키마명</th>
 						<td><select class="select t8" name="scm_nm" id="scm_nm" value=""/>

@@ -36,7 +36,7 @@ public class WebConsoleSetting {
 		String strDb2pgPath = "";
 		
 		String strLanguage ="";
-		String strVersion ="eXperDB-Management-WebConsole-11.0";
+		String strVersion ="eXperDB-Management-WebConsole-11.1";
 		
 		String strEncryptYN="";
 		

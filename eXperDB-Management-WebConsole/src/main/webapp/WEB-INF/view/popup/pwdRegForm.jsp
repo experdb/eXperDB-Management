@@ -159,8 +159,8 @@
 				<table class="write">
 					<caption><spring:message code="user_management.edit_password" /></caption>
 					<colgroup>
-						<col style="width: 150px;" />
-						<col style="width: 400px;" />
+						<col style="width: 160px;" />
+						<col style="width: 390px;" />
 						<col />
 					</colgroup>
 					<tbody>
