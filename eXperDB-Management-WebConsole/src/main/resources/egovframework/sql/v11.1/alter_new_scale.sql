@@ -4,7 +4,7 @@ ALTER TABLE experdb_management.t_scale_g DROP COLUMN instance_id;
 ALTER TABLE experdb_management.t_scale_g add column auto_policy_set_div varchar(1) null;
 ALTER TABLE experdb_management.t_scale_g add column auto_policy_time numeric null;
 ALTER TABLE experdb_management.t_scale_g add column auto_level varchar(8) null;
-COMMENT ON COLUMN experdb_management.t_scale_g.`auto_policy_set_div IS 'AUTO_정책_설정_구분';
+COMMENT ON COLUMN experdb_management.t_scale_g.auto_policy_set_div IS 'AUTO_정책_설정_구분';
 COMMENT ON COLUMN experdb_management.t_scale_g.auto_policy_time IS 'AUTO_정책_시간';
 COMMENT ON COLUMN experdb_management.t_scale_g.auto_level IS 'AUTO_레벨';
 
