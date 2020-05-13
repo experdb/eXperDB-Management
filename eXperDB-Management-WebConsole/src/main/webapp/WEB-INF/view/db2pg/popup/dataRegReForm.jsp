@@ -57,11 +57,11 @@ function valCheck(){
 		$("#db2pg_trsf_wrk_exp").focus();
 		return false;
 	}else if($("#db2pg_source_system_id").val() == ""){
-		alert("소스 시스템정보를 등록해주세요.");
+		alert('<spring:message code="migration.msg07" />');
 		$("#db2pg_source_system_id").focus();
 		return false;
 	}else if($("#db2pg_trg_sys_id").val() == ""){
-		alert("타겟 시스템정보를 등록해주세요.");
+		alert('<spring:message code="migration.msg08" />');
 		$("#db2pg_trg_sys_id").focus();
 		return false;
 	}else{
@@ -125,7 +125,7 @@ function fn_update_work(){
 					opener.getdataDataList();
 					self.close();
 				}else{
-					alert('등록에 실패했습니다.');
+					alert('<spring:message code="migration.msg06" />');
 				}		
 			}
 		});
@@ -193,7 +193,7 @@ function fn_dbmsPgInfo(){
  ******************************************************** */
 function fn_tableList(gbn){
 	if($('#db2pg_source_system_nm').val() == ""){
-		alert("소스시스템을 선택해주세요.");
+		alert("<spring:message code='migration.msg03'/>");
 		return false;
 	}
 	
