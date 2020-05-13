@@ -280,30 +280,6 @@ public class InstanceScaleController {
 		
 		return mv;
 	}
-
-	/**
-	 * scale 리스트를 조회한다.
-	 * @param HistoryVO, InstanceScaleVO, HttpServletRequest
-	 * @return JSONObject
-	 * @throws Exception
-	 */
-	@RequestMapping("/securityGroupList.do")
-	public @ResponseBody JSONObject securityGroupList(@ModelAttribute("historyVO") HistoryVO historyVO, @ModelAttribute("instanceScaleVO") InstanceScaleVO instanceScaleVO, HttpServletRequest request) throws Exception {
-		JSONObject result = new JSONObject();
-		String dtlCd = "DX-T0056_05";
-
-		try {
-			// 화면접근이력 이력 남기기
-			instanceScaleService.scaleSaveHistory(request, historyVO, dtlCd);
-
-			result = instanceScaleService.instanceSecurityListSetting(instanceScaleVO);
-		} catch (FileNotFoundException e) {
-			e.printStackTrace();
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-		return result;
-	}
 	
 	/**
 	 * Scale Log View page

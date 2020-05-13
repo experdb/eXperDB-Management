@@ -271,4 +271,65 @@
 		ON IPADR.IPADR =AGTCNDT.IPADR
 		WHERE MASTER_GBN = 'M'
     </select>
+    
+	<select id="selectDashboardScaleInfo" resultType="hashMap">
+		/**
+	 	* Query ID : selectDashboardScaleInfo
+	 	* Description : 스케일 정보 조회
+	 	* Author : 
+	 	**/ 	
+                SELECT A.SVR_HOST_NM, A.IPADR, A.DB_SVR_ID,
+                       SUM(B.EXE_IN_AUTO) AS EXE_IN_AUTO,
+                       SUM(B.EXE_OUT_AUTO) AS EXE_OUT_AUTO,
+                       SUM(B.EXE_IN_MNL) AS EXE_IN_MNL,
+                       SUM(B.EXE_OUT_MNL) AS EXE_OUT_MNL,
+                       SUM(C.OCCUR_NCT) as OCCUR_NCT,
+                       SUM(C.OCCUR_AUTO) as OCCUR_AUTO,
+                       to_char(SUM(D.EXENUM), 'FM90.0') AS EXENUM
+                  FROM T_DBSVRIPADR_I A
+                       LEFT JOIN (
+                                  SELECT A.DB_SVR_IPADR_ID,
+                                         COALESCE(SUM(A.EXE_IN_AUTO), 0) AS EXE_IN_AUTO,
+                                         COALESCE(SUM(A.EXE_OUT_AUTO), 0) AS EXE_OUT_AUTO,
+                                         COALESCE(SUM(A.EXE_IN_MNL), 0) AS EXE_IN_MNL,
+                                         COALESCE(SUM(A.EXE_OUT_MNL), 0) AS EXE_OUT_MNL
+                                    FROM (
+                                         SELECT DB_SVR_IPADR_ID,
+                                                CASE WHEN SCALE_TYPE = '1' AND WRK_TYPE = 'TC003301' THEN CLUSTERS ELSE 0 END AS EXE_IN_AUTO,
+                                                CASE WHEN SCALE_TYPE = '2' AND WRK_TYPE = 'TC003301' THEN CLUSTERS ELSE 0 END AS EXE_OUT_AUTO,
+                                                CASE WHEN SCALE_TYPE = '1' AND WRK_TYPE = 'TC003302' THEN CLUSTERS ELSE 0 END AS EXE_IN_MNL,
+                                                 CASE WHEN SCALE_TYPE = '2' AND WRK_TYPE = 'TC003302' THEN CLUSTERS ELSE 0 END AS EXE_OUT_MNL
+                                          FROM T_SCALE_G
+                                         WHERE (
+                                                TO_DATE(to_char(WRK_STRT_DTM,'YYYY-MM-DD'),'YYYY-MM-DD') BETWEEN TO_DATE(to_char(current_date::date - interval '1 week','YYYY-MM-DD'),'YYYY-MM-DD') AND current_date::date
+                                                OR
+                                                TO_DATE(to_char(WRK_END_DTM,'YYYY-MM-DD'),'YYYY-MM-DD') BETWEEN TO_DATE(to_char(current_date::date - interval '1 week','YYYY-MM-DD'),'YYYY-MM-DD') AND current_date::date
+                                                )
+                                    ) A
+                                    GROUP BY A.DB_SVR_IPADR_ID
+                       ) B ON A.DB_SVR_IPADR_ID = B.DB_SVR_IPADR_ID
+                       LEFT JOIN (
+                                  SELECT A.DB_SVR_IPADR_ID,
+                                         COALESCE(SUM(A.OCCUR_NCT), 0) AS OCCUR_NCT,
+                                         COALESCE(SUM(A.OCCUR_AUTO), 0) AS OCCUR_AUTO
+                                    FROM (
+                                         SELECT DB_SVR_IPADR_ID ,
+                                                CASE WHEN EXECUTE_TYPE = 'TC003401' THEN 1 ELSE 0 END AS OCCUR_NCT,
+                                                CASE WHEN EXECUTE_TYPE = 'TC003402' THEN 1 ELSE 0 END AS OCCUR_AUTO
+                                           FROM T_SCALEOCCUR_G
+                                          WHERE TO_DATE(to_char(event_occur_dtm,'YYYY-MM-DD'),'YYYY-MM-DD') BETWEEN current_date::date AND current_date::date
+                                    ) A
+                                    GROUP BY A.DB_SVR_IPADR_ID
+                       ) C ON A.DB_SVR_IPADR_ID = C.DB_SVR_IPADR_ID
+                       LEFT JOIN (
+                      SELECT DB_SVR_IPADR_ID AS DB_SVR_IPADR_ID,
+                             EXENUM AS EXENUM
+                       FROM T_SCALELOADLOG_G
+                      WHERE POLICY_TYPE ='TC003501'
+                      ORDER BY EXEDTM DESC
+                       FETCH FIRST 1 ROW only
+                       ) D ON A.DB_SVR_IPADR_ID = C.DB_SVR_IPADR_ID
+                 WHERE A.MASTER_GBN = 'M'
+                 GROUP BY A.SVR_HOST_NM, A.IPADR, A.DB_SVR_ID
+	</select>
 </mapper>

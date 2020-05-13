@@ -214,12 +214,7 @@ button[disabled]{
 			alert("<spring:message code='message.msg04' />");
 			return;
 		}
-		
-		//scale 실행 중 체크
-		if (!fn_scaleChk()) {
-			return;
-		}
-		
+
 	    var popUrl = '/scale/popup/scaleAutoReregForm.do';
 		var width = 954;
 		var height = 543;
@@ -236,9 +231,8 @@ button[disabled]{
 	    $('#frmRegPopup').attr("target", "scaleregPop");
 
 	    $('#frmRegPopup').submit();
-	    
+		    
 	    popOpen.focus();
-		
 	}
 
 	/* ********************************************************
@@ -259,16 +253,11 @@ button[disabled]{
 		for (var i = 0; i < datas.length; i++) {
 			wrk_id_List.push( table.rows('.selected').data()[i].wrk_id); 
 		}
-		
-		//scale 실행 중 체크
-		if (!fn_scaleChk()) {
-			return;
-		}
-		
+
 		if(!confirm('<spring:message code="message.msg17" />')){
 			return;
 		}
-		
+			
 		$.ajax({
 			url : "/scale/scaleWrkIdDelete.do",
 		  	data : {
@@ -301,16 +290,15 @@ button[disabled]{
 					fn_search_list();
 				}
 			}
-		});	
-
+		});
 	}
 	
 	/* ********************************************************
-	 * scale ing check
-	 ******************************************************** */
-	function fn_scaleChk() {
+	* scale ing check
+	******************************************************** */
+	function fn_scaleChk(gbn) {
 		//scale 이 실행되고 있는 지 체크
- 		$.ajax({
+		$.ajax({
 			url : "/scale/selectScaleLChk.do",
 			data : {
 				db_svr_id : $("#db_svr_id", "#findList").val()
@@ -318,8 +306,8 @@ button[disabled]{
 			dataType : "json",
 			type : "post",
 			beforeSend: function(xhr) {
-		        xhr.setRequestHeader("AJAX", true);
-		     },
+				xhr.setRequestHeader("AJAX", true);
+			},
 			error : function(xhr, status, error) {
 				if(xhr.status == 401) {
 					alert("<spring:message code='message.msg02' />");
@@ -339,15 +327,18 @@ button[disabled]{
 
 					if (wrk_id == "1") {
 						alert("<spring:message code='eXperDB_scale.msg4' />");
-						return false;
+						return;
 					} else {
-						return true;
+						if (gbn =="mod") {
+							fn_mod_popup();
+						} else {
+							fn_del_data();
+						}
 					}
 				}
 			}
 		});
-		
-		return true;
+		$('#loading').hide();
 	}
 
 	/* ********************************************************
@@ -532,8 +523,8 @@ button[disabled]{
 
 					<span class="btn"><button type="button" id="btnCngSearch" onClick="fn_search_list();"><spring:message code="common.search" /></button></span>
 					<span class="btn"><button type="button" id="btnInsert" onClick="fn_reg_popup();"><spring:message code="common.registory" /></button></span>
-					<span class="btn"><button type="button" id="btnModify" onClick="fn_mod_popup();"><spring:message code="common.modify" /></button></span>
-					<span class="btn"><button type="button" id="btnDelete" onClick="fn_del_data();"><spring:message code="common.delete" /></button></span>
+					<span class="btn"><button type="button" id="btnModify" onClick="fn_scaleChk('mod');"><spring:message code="common.modify" /></button></span>
+					<span class="btn"><button type="button" id="btnDelete" onClick="fn_scaleChk('del');"><spring:message code="common.delete" /></button></span>
 				</div>
 				
 				<div class="sch_form">

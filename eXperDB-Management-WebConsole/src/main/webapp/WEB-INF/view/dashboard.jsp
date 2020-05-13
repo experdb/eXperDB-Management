@@ -8,128 +8,173 @@
 <%@include file="cmmn/cs.jsp"%>
 
 <script type="text/javascript">
-var today = "";
+	var today = "";
+	var scale_yn_chk = "";
 
-$(window.document).ready(function() { 
-// 	content();
-	today = new Date();
+	$(window.document).ready(function() { 
+		// 	content();
+		today = new Date();
 	
-	var html ="";
-	html += "<img src='../images/ico_state_09.png' style='margin-right:5px;'>"+today.toJSON().slice(0,10).replace(/-/g,'-');
-	$( "#today" ).append(html);
+		var html ="";
+		html += "<img src='../images/ico_state_09.png' style='margin-right:5px;'>"+today.toJSON().slice(0,10).replace(/-/g,'-');
+		$( "#today" ).append(html);
+
+		var encryptDashbaordServer = document.getElementById("encryptDashbaordServer");
+		var encryptDashbaordAgent = document.getElementById("encryptDashbaordAgent");
+
+		if("${sessionScope.session.encp_use_yn}" == "Y"){
+			encryptDashbaordServer.style.display = '';
+			encryptDashbaordAgent.style.display = '';
+			fn_serverStatus();
+		}else{
+			encryptDashbaordServer.style.display = 'none';
+			encryptDashbaordAgent.style.display = 'none';
+		} 
 	
-	today.toJSON().slice(0,10).replace(/-/g,'');
+		//scale_yn이 Y일때 만 사용가능
+		fn_selectServerScaleAuthInfo(today);
+	});
 	
-	var encryptDashbaordServer = document.getElementById("encryptDashbaordServer");
-	var encryptDashbaordAgent = document.getElementById("encryptDashbaordAgent");
-	if("${sessionScope.session.encp_use_yn}" == "Y"){
-		encryptDashbaordServer.style.display = '';
-		encryptDashbaordAgent.style.display = '';
-		fn_serverStatus();
-	}else{
-		encryptDashbaordServer.style.display = 'none';
-		encryptDashbaordAgent.style.display = 'none';
-	} 
+	//scale view
+	function fn_selectServerScaleAuthInfo(to_param){
+		var today_set;
+		var today_ing = to_param.toJSON().slice(0,10).replace(/-/g,'-');
+		var dayOfMonth = to_param.getDate();
+		to_param.setDate(dayOfMonth - 7);
 
-});
-
-
-
-
-function fn_serverStatus(){
-	$.ajax({
-		url : "/serverStatus.do",
-		data : {},
-		dataType : "json",
-		type : "post",
-		beforeSend: function(xhr) {
-	        xhr.setRequestHeader("AJAX", true);
-	     },
-		error : function(xhr, status, error) {
-			if(xhr.status == 401) {
-				alert("<spring:message code='message.msg02' />");
-				top.location.href = "/";
-			} else if(xhr.status == 403) {
-				alert("<spring:message code='message.msg03' />");
-				top.location.href = "/";
-			} else {
-				alert("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""));
-			}
-		},
-		success : function(data) {
-			if(data.resultCode == "0000000000"){
-				var html ='<img src="../images/ico_state_03.png" alt="Running Transfer" /><span> Running</span>';				
-				$("#encryptServer").html(html);
-				fn_selectSecurityStatistics(today);
-			}else if(data.resultCode == "8000000002"){
-				var html ='<img src="../images/ico_state_07.png" alt="Stop" /> STOP';
-				//var html ='<img src="../images/ico_agent_2.png" alt="" />';
-				$("#encryptServer").html(html);
-			}
-		}
-	});			
-}
-
-
-function fn_selectSecurityStatistics(today){
-	$.ajax({
-		url : "/selectDashSecurityStatistics.do",
-		data : {
-			from : today+"00",
-			to : 	today+"24",
-			categoryColumn : "SITE_ACCESS_ADDRESS"
-		},
-		dataType : "json",
-		type : "post",
-		beforeSend: function(xhr) {
-	        xhr.setRequestHeader("AJAX", true);
-	     },
-		error : function(xhr, status, error) {
-			if(xhr.status == 401) {
-				alert("<spring:message code='message.msg02' />");
-				top.location.href = "/";
-			} else if(xhr.status == 403) {
-				alert("<spring:message code='message.msg03' />");
-				top.location.href = "/";
-			} else {
-				alert("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""));
-			}
-		},
-		success : function(data) {
-				if(data.resultCode == "0000000000"){
-				 	var html ="";
-				 	var success=0;
-				 	var fail=0;
-					for(var i=0; i<data.list.length; i++){
-						html += '<tr>';
-						html += '<td>'+data.list[i].monitoredName+'</td>';
-						html += '<td>'+data.list[i].encryptSuccessCount+'</td>';
-						html += '<td>'+data.list[i].encryptFailCount+'</td>';
-						html += '<td>'+data.list[i].decryptSuccessCount+'</td>';
-						html += '<td>'+data.list[i].decryptFailCount+'</td>';
-						if(data.list[i].status == "start"){
-							html += '<td><img src="../images/ico_agent_1.png" alt="" /></td>';
-						}else{
-							html += '<td><img src="../images/ico_agent_2.png" alt="" /></td>';
-						}
-						html += '</tr>';
-						$( "#col" ).html(html);
-					} 
-					
-				}else if(data.resultCode == "8000000002"){
-					alert("<spring:message code='message.msg05' />");
-					location.href="/";
-				}else if(data.resultCode == "8000000003"){
-					alert(data.resultMessage);
-					location.href="/securityKeySet.do";
-				}else{
-					if(data.list.length != 0){
-						alert(data.resultMessage +"("+data.resultCode+")");
-					}
+		today_set = "<img src='../images/ico_state_09.png' style='margin-right:5px;'>" + today_ing;
+		$( "#today_scale" ).append(today_set);
+		
+		today_set = to_param.toJSON().slice(0,10).replace(/-/g,'-') + " ~ " + today_ing;
+		$( "#sp_date1" ).append(today_set);
+		$( "#sp_date2" ).append(today_set);
+		
+	  	$.ajax({
+			async : false,
+			url : "/selectServerScaleAuthInfo.do",
+			data : {},
+			dataType : "json",
+			type : "post",
+			beforeSend: function(xhr) {
+		        xhr.setRequestHeader("AJAX", true);
+		     },
+			error : function(xhr, status, error) {
+				if(xhr.status == 401) {
+					alert('<spring:message code="message.msg02" />');
+					top.location.href = "/";
+				} else if(xhr.status == 403) {
+					alert('<spring:message code="message.msg03" />');
+					top.location.href = "/";
+				} else {
+					alert("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""));
 				}
-		}
-	});		
-}
+			},
+			success : function(result) {
+				scale_yn_chk = result.scale_yn_chk;
+
+				//scale y일때
+				if (scale_yn_chk == "Y") {
+					$("#scale_view").show();
+				} else {
+					$("#scale_view").hide();
+				}
+			}
+		});
+	}
+
+	function fn_serverStatus(){
+		$.ajax({
+			url : "/serverStatus.do",
+			data : {},
+			dataType : "json",
+			type : "post",
+			beforeSend: function(xhr) {
+		        xhr.setRequestHeader("AJAX", true);
+		     },
+			error : function(xhr, status, error) {
+				if(xhr.status == 401) {
+					alert("<spring:message code='message.msg02' />");
+					top.location.href = "/";
+				} else if(xhr.status == 403) {
+					alert("<spring:message code='message.msg03' />");
+					top.location.href = "/";
+				} else {
+					alert("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""));
+				}
+			},
+			success : function(data) {
+				if(data.resultCode == "0000000000"){
+					var html ='<img src="../images/ico_state_03.png" alt="Running Transfer" /><span> Running</span>';				
+					$("#encryptServer").html(html);
+					fn_selectSecurityStatistics(today);
+				}else if(data.resultCode == "8000000002"){
+					var html ='<img src="../images/ico_state_07.png" alt="Stop" /> STOP';
+					//var html ='<img src="../images/ico_agent_2.png" alt="" />';
+					$("#encryptServer").html(html);
+				}
+			}
+		});			
+	}
+
+	function fn_selectSecurityStatistics(today){
+		$.ajax({
+			url : "/selectDashSecurityStatistics.do",
+			data : {
+				from : today+"00",
+				to : 	today+"24",
+				categoryColumn : "SITE_ACCESS_ADDRESS"
+			},
+			dataType : "json",
+			type : "post",
+			beforeSend: function(xhr) {
+		        xhr.setRequestHeader("AJAX", true);
+		     },
+			error : function(xhr, status, error) {
+				if(xhr.status == 401) {
+					alert("<spring:message code='message.msg02' />");
+					top.location.href = "/";
+				} else if(xhr.status == 403) {
+					alert("<spring:message code='message.msg03' />");
+					top.location.href = "/";
+				} else {
+					alert("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""));
+				}
+			},
+			success : function(data) {
+					if(data.resultCode == "0000000000"){
+					 	var html ="";
+					 	var success=0;
+					 	var fail=0;
+						for(var i=0; i<data.list.length; i++){
+							html += '<tr>';
+							html += '<td>'+data.list[i].monitoredName+'</td>';
+							html += '<td>'+data.list[i].encryptSuccessCount+'</td>';
+							html += '<td>'+data.list[i].encryptFailCount+'</td>';
+							html += '<td>'+data.list[i].decryptSuccessCount+'</td>';
+							html += '<td>'+data.list[i].decryptFailCount+'</td>';
+							if(data.list[i].status == "start"){
+								html += '<td><img src="../images/ico_agent_1.png" alt="" /></td>';
+							}else{
+								html += '<td><img src="../images/ico_agent_2.png" alt="" /></td>';
+							}
+							html += '</tr>';
+							$( "#col" ).html(html);
+						} 
+						
+					}else if(data.resultCode == "8000000002"){
+						alert("<spring:message code='message.msg05' />");
+						location.href="/";
+					}else if(data.resultCode == "8000000003"){
+						alert(data.resultMessage);
+						location.href="/securityKeySet.do";
+					}else{
+						if(data.list.length != 0){
+							alert(data.resultMessage +"("+data.resultCode+")");
+						}
+					}
+			}
+		});		
+	}
 
 // var intervalIDCheck;
 
@@ -693,7 +738,77 @@ function fn_selectSecurityStatistics(today){
 						</table>
 					</div>
 				</div>
-				
+
+				<!-- scale 상태 -->
+				<div class="main_server_info" id="scale_view" >
+					<p class="tit">
+						<spring:message code="dashboard.eXperDB_scale_Information"/>
+						<span id="today_scale" style="float: right; padding-right: 1%;"></span>
+					</p>
+
+					<div class="inner">
+						<table class="list" border="1">
+							<caption><spring:message code="dashboard.eXperDB_scale_Information" /></caption>
+							<colgroup>
+								<col style="width: 24%;" />
+								<col style="width: 10%;" />
+								<col style="width: 9%;" />
+								<col style="width: 8%;" />
+								<col style="width: 8%;" />
+								<col style="width: 8%;" />
+								<col style="width: 8%;" />
+								<col style="width: 8%;" />
+								<col style="width: 8%;" />
+								<col style="width: 9%;" />
+							</colgroup>
+							<thead>
+								<tr>
+									<th scope="col" rowspan="2"><spring:message code="common.dbms_name" /></th>
+									<th scope="col" rowspan="2">IP</th>
+									<th scope="col" rowspan="2">Node 수</th>
+									<th scope="col" colspan="2" style="line-height:15px;"><spring:message code="etc.etc39" /><br/>(<span id="sp_date1"></span>)</th>
+									<th scope="col" colspan="2" style="line-height:15px;"><spring:message code="etc.etc38" /><br/>(<span id="sp_date2"></span>)</th>
+									<th scope="col" colspan="2"><spring:message code="eXperDB_scale.auto_scale_occur" /></th>
+									<th scope="col" rowspan="2"><spring:message code="eXperDB_scale.cpu_usage" /></th>
+								</tr>
+								<tr>
+									<th scope="col"><spring:message code="eXperDB_scale.auto_expansion" /></th>
+									<th scope="col"><spring:message code="eXperDB_scale.manual_expansion" /></th>
+									<th scope="col"><spring:message code="eXperDB_scale.auto_expansion" /></th>
+									<th scope="col"><spring:message code="eXperDB_scale.manual_expansion" /></th>
+									<th scope="col">Notification</th>
+									<th scope="col">Auto-scale</th>
+								</tr>
+							</thead>
+ 							<tbody>
+								<c:if test="${fn:length(scaleIngInfo) == 0}">
+										<tr>
+											<td colspan="10"><spring:message code="message.msg01" /></td>
+										</tr>
+								</c:if>
+								
+								<c:if test="${fn:length(scaleIngInfo) > 0}">
+								
+									<c:forEach var="data" items="${scaleIngInfo}" varStatus="status">
+										<tr>
+											<td><a href="/scale/scaleList.do?db_svr_id=${data.db_svr_id}">${data.svr_host_nm}</a></td>
+											<td>${data.ipadr}</td>
+											<td>${data.instance_cnt}</td>
+											<td>${data.exe_out_auto}</td>
+											<td>${data.exe_out_mnl}</td>
+											<td>${data.exe_in_auto}</td>
+											<td>${data.exe_in_mnl}</td>
+											<td>${data.occur_nct}</td>
+											<td>${data.occur_auto}</td>
+											<td>${data.exenum}</td>
+										</tr>
+									</c:forEach>
+								
+								</c:if>
+							</tbody>
+						</table>
+					</div>
+				</div>
 			</div>
 		</div>
 	</div>

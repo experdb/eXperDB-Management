@@ -1,7 +1,5 @@
 package com.k4m.dx.tcontrol.scale.service;
 
-import java.io.FileNotFoundException;
-import java.io.IOException;
 import java.util.List;
 import java.util.Map;
 
@@ -9,7 +7,6 @@ import javax.servlet.http.HttpServletRequest;
 
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
-import org.json.simple.parser.ParseException;
 
 import com.k4m.dx.tcontrol.common.service.HistoryVO;
 
@@ -50,14 +47,6 @@ public interface InstanceScaleService {
 	 * @throws Exception
 	 */
 	void scaleSaveHistory(HttpServletRequest request, HistoryVO historyVO, String dtlCd) throws Exception;
-
-	/**
-	 * scale 보안그룹 상세조회
-	 * 
-	 * @param instanceScaleVO
-	 * @throws FileNotFoundException, IOException, ParseException
-	 */
-	JSONObject instanceSecurityListSetting(InstanceScaleVO instanceScaleVO) throws FileNotFoundException, IOException, ParseException;
 
 	/**
 	 * scale 상세 조회
@@ -156,4 +145,11 @@ public interface InstanceScaleService {
 	 */
 	Map<String, Object> scaleInstallChk(InstanceScaleVO instanceScaleVO) throws Exception;
 
+	/**
+	 * 대쉬보드 scale 조회
+	 * 
+	 * @param instanceScaleVO
+	 * @throws Exception
+	 */
+	int dashboardInstanceScale(int db_svr_id) throws Exception;
 }

@@ -44,6 +44,9 @@ button[disabled]{
 	var searchInit = "";
 	var msgVale = "";
 
+	//scale 체크 조회
+	var install_yn = "";
+
 	$(window.document).ready(function() {
 		
 		//작업기간 calender setting
@@ -91,7 +94,7 @@ button[disabled]{
 			changeYear : true
 	 	});
 	}
-	
+
 	/* ********************************************************
 	 * Tab Click
 	 ******************************************************** */
@@ -108,11 +111,13 @@ button[disabled]{
 			
 			seachParamInit(intab);
 
+			if (install_yn == "Y") {
 			//if(clickExecute == false){
 				fn_get_execute_list();
 				clickExecute = true;
 				$('#loading').hide();
 			//}
+			}
 		}else{	
 			$("#tab_occurHist").show();
 			$("#tab_executeHist").hide();
@@ -124,12 +129,14 @@ button[disabled]{
 			$(".search_occur").show();
 			
 			seachParamInit(intab);
-			
+
+			if (install_yn == "Y") {
 			//if(clickOccur == false){
 				fn_get_occur_list();
 				clickOccur = true;
 				$('#loading').hide();
 			//}
+			}
 		}
 	}
 	
@@ -643,9 +650,6 @@ button[disabled]{
 	 * aws 서버 확인
 	 ******************************************************** */
 	function fn_selectScaleInstallChk(tabGbn) {
-		//scale 체크 조회
-		var install_yn = "";
-
 		$.ajax({
 			url : "/scale/selectScaleInstallChk.do",
 			data : {
@@ -687,7 +691,9 @@ button[disabled]{
 					$("#process_id_set").prop("disabled", "disabled");
 					$("#wrk_type_Cd").prop("disabled", "disabled");
 					$("#execute_type_cd").prop("disabled", "disabled");
-					$('.a-link').click(function () {return false;});
+				//	$('.a-link').click(function () {return false;});
+					
+					selectTab("executeHist");
 				}
 			}
 		});

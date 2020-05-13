@@ -31,8 +31,6 @@ button[disabled]{
 <script>
 	var table = null;
 	var popOpen = null;
-	var iCount_text = 1;
-	var btnText = "";
 	var statusChk="";
 
 	$(window.document).ready(function() {
@@ -109,13 +107,8 @@ button[disabled]{
 				}}, 
 				{ data : "key_name", className : "dt-left", defaultContent : ""},
 				{ data : "monitoring_state", className : "dt-left", defaultContent : ""}, 
-				{ data : "security_group", className : "dt-left", defaultContent : ""
-					,"render": function (data, type, full) {
-						  return '<span onClick=javascript:fn_securityShow("'+full.instance_id+'","'+full.db_svr_id+'"); title="'+full.security_group+'" class="bold">' + full.security_group + '</span>';
-					}
-				},
+				{ data : "security_group", className : "dt-left", defaultContent : ""},
 			]
-		//,'select': {'style': 'multi'}
 		});
 
 		table.tables().header().to$().find('th:eq(0)').css('min-width', '30px');
@@ -204,7 +197,6 @@ button[disabled]{
 				fn_buttonAut(wrk_id, scale_set);
 			}
 		}); 
-
 
 		if (gbn == null || gbn == "") {
 			$('#loading').hide();
@@ -458,7 +450,7 @@ button[disabled]{
 	 * scale_in_out count pop
 	 ******************************************************** */
 	function fn_scaleInOut(gbn){
-	    var popUrl = '/scale/popup/scaleInOutCountForm.do';
+ 	    var popUrl = '/scale/popup/scaleInOutCountForm.do';
 		var width = 500;
 		var height = 320;
 		var left = (window.screen.width / 2) - (width / 2);
@@ -472,8 +464,7 @@ button[disabled]{
 
 	    $('#frmExecutePopup').attr("action", popUrl);
 	    $('#frmExecutePopup').attr("target", "popupView");
-
-	    $('#frmExecutePopup').submit();	
+	    $('#frmExecutePopup').submit();
 	}
 
 	/* ********************************************************
@@ -567,6 +558,51 @@ button[disabled]{
 		});
 		$('#loading').hide();
 	}
+	
+	/* ********************************************************
+	 * scale ing check
+	 ******************************************************** */
+	function fn_scaleInOutChk(gbn) {
+		var wrk_id_val =  "";
+		//scale 이 실행되고 있는 지 체크 후 진행
+ 		$.ajax({
+			url : "/scale/selectScaleLChk.do",
+			data : {
+				db_svr_id : '${db_svr_id}'
+			},
+			dataType : "json",
+			type : "post",
+			beforeSend: function(xhr) {
+		        xhr.setRequestHeader("AJAX", true);
+		     },
+			error : function(xhr, status, error) {
+				if(xhr.status == 401) {
+					alert("<spring:message code='message.msg02' />");
+					return false;
+				} else if(xhr.status == 403) {
+					alert("<spring:message code='message.msg03' />");
+					return false;
+				} else {
+					alert("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""));
+					return false;
+				}
+			},
+			success : function(result) {
+				if (result != null) {
+					wrk_id_val = result.wrk_id;
+
+					if (wrk_id_val == "1") {
+						alert("<spring:message code='eXperDB_scale.msg4' />");
+						fn_selectScaleAuto();
+						return;
+					} else {
+						fn_scaleInOut(gbn);
+					}
+				}
+			}
+		});
+		$('#loading').hide();
+	}
 </script>
 
 <%@include file="./experdbScaleInfo.jsp"%>
@@ -605,8 +641,8 @@ button[disabled]{
 					<span class="scaleIng" id="scaleIngMsg" style="display:none;">* <spring:message code="eXperDB_scale.msg10" /></span>
 				
 					<span class="btn"><button type="button" id="btnScaleSearch" onclick="fn_selectScale('serch')"><spring:message code="common.search" /></button></span>
-					<span class="btn"><button type="button" id="btnScaleIn" onclick="fn_scaleInOut('scaleIn')" ><spring:message code="etc.etc38" /></button></span>
-					<span class="btn"><button type="button" id="btnScaleOut" onclick="fn_scaleInOut('scaleOut')"><spring:message code="etc.etc39" /></button></span>
+					<span class="btn"><button type="button" id="btnScaleIn" onclick="fn_scaleInOutChk('scaleIn')" ><spring:message code="etc.etc38" /></button></span>
+					<span class="btn"><button type="button" id="btnScaleOut" onclick="fn_scaleInOutChk('scaleOut')"><spring:message code="etc.etc39" /></button></span>
 				</div>
 				<div class="sch_form">
 					<table class="write">

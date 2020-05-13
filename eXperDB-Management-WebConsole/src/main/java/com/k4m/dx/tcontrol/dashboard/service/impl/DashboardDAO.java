@@ -2,6 +2,7 @@ package com.k4m.dx.tcontrol.dashboard.service.impl;
 
 import java.sql.SQLException;
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.stereotype.Repository;
 
@@ -80,6 +81,8 @@ public class DashboardDAO extends EgovAbstractMapper{
 		return (List<DbServerVO>) list("dashboardSql.selectDashboardServer", null);
 	}
 
-
-	
+	@SuppressWarnings({ "deprecation", "unchecked" })
+	public List<Map<String, Object>> selectDashboardScaleInfo() throws SQLException{
+		return (List<Map<String, Object>>) list("dashboardSql.selectDashboardScaleInfo", null);
+	}
 }
