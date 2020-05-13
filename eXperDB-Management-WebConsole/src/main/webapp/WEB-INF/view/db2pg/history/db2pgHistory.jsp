@@ -81,7 +81,7 @@ function fn_init(){
 					render : function(data, type, full, meta) {	 						
 						var html = '';
 						if (full.exe_rslt_cd == 'TC001701') {
-							html += "<span class='btn btnC_01 btnF_02'><button onclick='fn_ddlResult(\""+full.mig_exe_sn+"\",\""+full.save_pth+"/\")'><img src='../images/ico_state_02.png' style='margin-right:3px;'/>Success</button></span>";	
+							html += "<span class='btn btnC_01 btnF_02'><button onclick='fn_ddlResult(\""+full.mig_exe_sn+"\",\""+full.save_pth+"/\")'><img src='../images/ico_state_02.png' style='margin-right:3px;'/>Complete</button></span>";	
 						} else if(full.exe_rslt_cd == 'TC001702'){
 							html += '<span class="btn btnC_01 btnF_02"><button onclick="fn_ddlFailLog('+full.mig_exe_sn+')"><img src="../images/ico_state_01.png" style="margin-right:3px;"/>Fail</button></span>';
 						} else {
@@ -127,7 +127,7 @@ function fn_init(){
 				render : function(data, type, full, meta) {	 						
 					var html = '';
 					if (full.exe_rslt_cd == 'TC001701') {
-						html += "<span class='btn btnC_01 btnF_02'><button onclick='fn_result(\""+full.mig_exe_sn+"\",\""+full.save_pth+"/\")'><img src='../images/ico_state_02.png' style='margin-right:3px;'/>Success</button></span>";	
+						html += "<span class='btn btnC_01 btnF_02'><button onclick='fn_result(\""+full.mig_exe_sn+"\",\""+full.save_pth+"/\")'><img src='../images/ico_state_02.png' style='margin-right:3px;'/>Complete</button></span>";	
 					} else if(full.exe_rslt_cd == 'TC001702'){
 						html += '<span class="btn btnC_01 btnF_02"><button onclick="fn_migFailLog('+full.mig_exe_sn+')"><img src="../images/ico_state_01.png" style="margin-right:3px;"/>Fail</button></span>';
 					} else {
@@ -145,6 +145,7 @@ function fn_init(){
 	]
 	});
 
+	
 	
 	tableDDL.tables().header().to$().find('th:eq(0)').css('min-width', '30px');
 	tableDDL.tables().header().to$().find('th:eq(1)').css('min-width', '100px');
