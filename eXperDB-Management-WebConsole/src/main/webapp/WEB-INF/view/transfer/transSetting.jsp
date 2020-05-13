@@ -50,7 +50,7 @@
 			{ data : "db_svr_nm",  className : "dt-center", defaultContent : "",orderable : false}, 
 			{ data : "connect_nm",  className : "dt-center", defaultContent : "",orderable : false}, 
 			{ data : "db_nm",  className : "dt-center", defaultContent : "",orderable : false}, 
-			{ data : "snapshot_nm",  className : "dt-center", defaultContent : "",orderable : false}, 			
+			/* { data : "snapshot_nm",  className : "dt-center", defaultContent : "",orderable : false}, 			
 			{
 				data : "status",
 				render : function(data, type, full, meta) {
@@ -66,7 +66,7 @@
 				},
 				className : "dt-center",
 				defaultContent : ""
-			}, 
+			},  */
 			{data : "db_svr_id", defaultContent : "", visible: false },
 			{data : "db_id", defaultContent : "", visible: false },
 			{data : "snapshot_mode", defaultContent : "", visible: false },
@@ -87,7 +87,7 @@
 		table.tables().header().to$().find('th:eq(8)').css('min-width', '100px');
 		table.tables().header().to$().find('th:eq(9)').css('min-width', '90px');
 		table.tables().header().to$().find('th:eq(10)').css('min-width', '100px');
-		table.tables().header().to$().find('th:eq(11)').css('min-width', '100px');
+		//table.tables().header().to$().find('th:eq(11)').css('min-width', '100px');
 	    $(window).trigger('resize'); 
 	    
 		table.on( 'order.dt search.dt', function () {
@@ -432,7 +432,7 @@
 								<th width="100">서버명</th>
 								<th width="100">Connect 명</th>
 								<th width="100"><spring:message code="common.dbms_name" /></th>
-								<th width="100">스냅샷 모드</th>
+								<!-- <th width="100">스냅샷 모드</th> -->
 								<th width="30">구동상태</th>
 							</tr>
 						</thead>

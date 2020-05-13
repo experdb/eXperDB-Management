@@ -267,7 +267,7 @@ var tableList = ${tables};
 		
 		var frmSchemaPop= document.frmSchemaPopup;
 		var url = '/popup/schemaMapp.do';
-		window.open('','popupView','width=550, height=650');  
+		window.open('','popupView','width=950, height=650');  
 		     
 		frmSchemaPop.action = url;
 		frmSchemaPop.target = 'popupView';
@@ -307,8 +307,10 @@ var tableList = ${tables};
 		var frmTablePop= document.frmTablePopup;
 		
 		var url = '/popup/tableMapp.do';
-		window.open('','popupView','width=930, height=850');  
-		     
+		
+		window.open('','popupView','width=950, height=650');  
+		
+
 		frmTablePop.action = url;
 		frmTablePop.target = 'popupView';
 		frmTablePop.db_svr_id.value = "${db_svr_id}";
@@ -542,20 +544,20 @@ function fn_tableAddCallback(rowList, tableGbn, totalCnt, table_mapp){
 							</select>
 						</td>
 					</tr>
-					<tr>
+					<%-- <tr>
 						<th scope="row" class="ico_t1">스냅샷 모드</th>
 						<td>
 							<select id="snapshot_mode" name="snapshot_mode" class="select" >
 								<c:forEach var="result" items="${snapshotModeList}">
 								<option value="<c:out value="${result.sys_cd}"/>"<c:if test="${snapshot_nm eq result.sys_cd_nm}"> selected</c:if>><c:out value="${result.sys_cd_nm}"/></option>
-								<%-- <option value="<c:out value="${result.sys_cd}"/>"><c:out value="${result.sys_cd_nm}"/></option> --%>
+								<option value="<c:out value="${result.sys_cd}"/>"><c:out value="${result.sys_cd_nm}"/></option>
 								</c:forEach>							
 							</select>							
 						</td>
 						<td style="font-size:13px; font-style:italic;">
 							<span id="snapshotModeDetail" name="snapshotModeDetail"></span>
 						</td>
-					</tr>
+					</tr> --%>
 					<tr>
 						<th scope="row" class="ico_t1">
 							<select name="src_tables" id="src_tables" class="select" >
