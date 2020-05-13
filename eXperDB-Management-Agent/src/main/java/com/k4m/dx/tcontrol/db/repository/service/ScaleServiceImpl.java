@@ -190,12 +190,13 @@ public class ScaleServiceImpl extends SocketCtl implements ScaleService{
 
 								//scale-in, out 일때 최대, 최소 클러스터 갯수 비교 (scale-in 일때 현재 -1이 min클러스터보다 같거나 작을경우 실행안함), (scale-out 일때 현재 +확장클러스터수 가 max클러스터보다 같거나 클경경우 실행안함)
 								if ("1".equals(scale_type_cd)) {
+									expansion_clusters = 1;
+
 									//scale-in 일때 현재 instance -1이 min클러스터보다 같거나 작을경우
 									if (min_clusters < 2) {
 										clusterChk = "";
 									} else {
 										if (jObjCnt < min_clusters) {
-											expansion_clusters = 1;
 											clusterChk = "scale-in_fail";
 										} else if (jObjCnt == min_clusters) {
 											clusterChk = "";
@@ -261,7 +262,6 @@ public class ScaleServiceImpl extends SocketCtl implements ScaleService{
 	// logSetting(scaleparam, timeId, "insert", clusterChk, expansion_clusters, clusterChk_cnt);
 	public Map<String, Object> logSetting(Map<String, Object> scaleparam, String timeId, String saveGbn, String clusterChk, int clusterChk_cnt){
 		Map<String, Object> logParam = new HashMap<String, Object>();
-		
 		String strResult = "";
 
 		if ("insert".equals(saveGbn)) {
@@ -311,8 +311,14 @@ public class ScaleServiceImpl extends SocketCtl implements ScaleService{
 		    logParam.put("return_val", "");
 
 		    //CLUSTERS 갯수
-			if (!"1".equals((String)scaleparam.get("scale_type"))) {				
-				logParam.put("scale_exe_cnt", scaleparam.get("expansion_clusters"));
+			if (!"1".equals((String)scaleparam.get("scale_type"))) {	
+				BigDecimal expansion_clusters_big = (BigDecimal) scaleparam.get("expansion_clusters");
+				int expansion_clusters = 0;
+				if (expansion_clusters_big != null) {
+					expansion_clusters = expansion_clusters_big.intValue();
+				}
+
+				logParam.put("scale_exe_cnt", expansion_clusters);
 			} else {
 				logParam.put("scale_exe_cnt", 1);
 			}

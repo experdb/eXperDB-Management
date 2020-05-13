@@ -84,6 +84,14 @@ public class DxT036 extends SocketCtl{
 				strErrCode = "";
 				strErrMsg = "";
 			} else { //조회인경우
+				String masterIp = "";
+				
+				//instance ip 찾기
+				if ("main".equals(searchGbn) || ("scaleChk".equals(searchGbn) && !"".equals(scaleSubCmd)) || "instanceCnt".equals(searchGbn))  {
+					masterIp = masterIpSearch();
+					scaleCmd = scaleCmd + " \"Name=private-ip-address,Values=" + masterIp + "\"";
+				}
+
 				//조회 쿼리돌리고 값 리턴함
 				RunCommandExec r = new RunCommandExec(scaleCmd);
 				//명령어 실행
@@ -122,7 +130,7 @@ public class DxT036 extends SocketCtl{
 					}
 					
 					if (!strResultMessge.isEmpty()) {
-						if (searchGbn.equals("main") || searchGbn.equals("scaleChk")) {
+						if (searchGbn.equals("main") || searchGbn.equals("scaleChk") || searchGbn.equals("instanceCnt")) {
 							strResultMessge = "{ \"Instances\":" + strResultMessge + "}";
 						}
 
@@ -160,5 +168,50 @@ public class DxT036 extends SocketCtl{
 			outputObj = null;
 			sendBuff = null;
 		}
+	}
+	
+	//조회 일경우 조회 목록 받기
+	public String masterIpSearch() throws Exception {
+		String scaleMainCmd = "";
+
+
+		try {
+			scaleMainCmd = "psql -c \"select conninfo from nodes where type = 'primary' ; \" -t -d repmgr -U repmgr | grep -v conninfo | grep -v row  | sed \"s/host=//\" | awk '{print $1}'";
+			RunCommandExec rMain = new RunCommandExec(scaleMainCmd);
+			//명령어 실행
+			rMain.run();
+	
+			try {
+				rMain.join();
+			} catch (InterruptedException ie) {
+				ie.printStackTrace();
+			}
+
+			String strResultMessgeMain = rMain.getMessage();
+	
+			if (!"".equals(strResultMessgeMain)) {
+				scaleMainCmd = "psql -c \"select conninfo, ','  from nodes; \" -t -h " + strResultMessgeMain + " -d repmgr -U repmgr | grep -v conninfo | grep -v row  | sed \"s/host=//\" | awk '{print $1 $6}'";
+				rMain = new RunCommandExec(scaleMainCmd);
+	
+				//명령어 실행
+				rMain.run();
+		
+				try {
+					rMain.join();
+				} catch (InterruptedException ie) {
+					ie.printStackTrace();
+				}
+	
+				strResultMessgeMain = rMain.getMessage();
+					
+				if (strResultMessgeMain != null && !"".equals(strResultMessgeMain)) {
+					scaleMainCmd = strResultMessgeMain.substring(0, strResultMessgeMain.length()-1);
+				}
+			}
+		} catch (Exception ie) {
+			ie.printStackTrace();
+		}
+		
+		return scaleMainCmd;
 	}
 }

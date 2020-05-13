@@ -62,7 +62,7 @@ public class DXTcontrolScaleExecute extends SocketCtl implements Job {
     			//사용량이 조회 될때만 처리함
     			if (usageMap != null) {
     				
-    				socketLogger.info("cpu_util_rate : " + usageMap.get("cpu_util_rate").toString());
+    			//	socketLogger.info("cpu_util_rate : " + usageMap.get("cpu_util_rate").toString());
     				loadParam.put("db_svr_id", db_svr_id); //db서버
     				
     				if (usageMap.get("cpu_util_rate") != null) {

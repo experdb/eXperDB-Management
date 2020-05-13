@@ -83,6 +83,14 @@ public class DXTcontrolScaleAwsExecute extends SocketCtl{
 				strErrMsg = "";
 			} else { //조회인경우
 				//조회 쿼리돌리고 값 리턴함
+				//instance ip 찾기
+				String masterIp = "";				
+				if ("instanceCnt".equals(searchGbn) || "scaleIngChk".equals(searchGbn))  {
+					masterIp = masterIpSearch();
+					scaleCmd = scaleCmd + " \"Name=private-ip-address,Values=" + masterIp + "\"";
+				}
+
+				
 				RunCommandExec r = new RunCommandExec(scaleCmd);
 				//명령어 실행
 				r.run();
@@ -96,8 +104,7 @@ public class DXTcontrolScaleAwsExecute extends SocketCtl{
 				String retVal = r.call();
 				String strResultMessge = r.getMessage();
 
-				socketLogger.info("retValretVal : " + retVal);
-				socketLogger.info("strResultMessge : " + strResultMessge);
+				socketLogger.info("retVal : " + retVal);
 				
 				if (retVal.equals("success")) {
 					if (searchGbn.equals("scaleAwsChk") || searchGbn.equals("scaleChk")) {
@@ -222,7 +229,52 @@ public class DXTcontrolScaleAwsExecute extends SocketCtl{
 		} catch(Exception e) {
 			e.printStackTrace();
 		}
-		socketLogger.info("DXTcontrolScaleAwsExecute.strCmd : " + strCmd);
+		//socketLogger.info("DXTcontrolScaleAwsExecute.strCmd : " + strCmd);
 		return strCmd;
+	}
+	
+	//조회 일경우 조회 목록 받기
+	public String masterIpSearch() throws Exception {
+		String scaleMainCmd = "";
+
+
+		try {
+			scaleMainCmd = "psql -c \"select conninfo from nodes where type = 'primary' ; \" -t -d repmgr -U repmgr | grep -v conninfo | grep -v row  | sed \"s/host=//\" | awk '{print $1}'";
+			RunCommandExec rMain = new RunCommandExec(scaleMainCmd);
+			//명령어 실행
+			rMain.run();
+	
+			try {
+				rMain.join();
+			} catch (InterruptedException ie) {
+				ie.printStackTrace();
+			}
+
+			String strResultMessgeMain = rMain.getMessage();
+	
+			if (!"".equals(strResultMessgeMain)) {
+				scaleMainCmd = "psql -c \"select conninfo, ','  from nodes; \" -t -h " + strResultMessgeMain + " -d repmgr -U repmgr | grep -v conninfo | grep -v row  | sed \"s/host=//\" | awk '{print $1 $6}'";
+				rMain = new RunCommandExec(scaleMainCmd);
+	
+				//명령어 실행
+				rMain.run();
+		
+				try {
+					rMain.join();
+				} catch (InterruptedException ie) {
+					ie.printStackTrace();
+				}
+	
+				strResultMessgeMain = rMain.getMessage();
+					
+				if (strResultMessgeMain != null && !"".equals(strResultMessgeMain)) {
+					scaleMainCmd = strResultMessgeMain.substring(0, strResultMessgeMain.length()-1);
+				}
+			}
+		} catch (Exception ie) {
+			ie.printStackTrace();
+		}
+		
+		return scaleMainCmd;
 	}
 }
