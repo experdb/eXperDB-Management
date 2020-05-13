@@ -1,0 +1,1 @@
+ALTER TABLE t_migexe_g ADD COLUMN save_pth varchar(300);
