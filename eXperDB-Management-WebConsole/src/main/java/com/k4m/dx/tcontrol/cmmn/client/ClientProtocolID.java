@@ -244,4 +244,15 @@ public class ClientProtocolID {
 	public static final String AUTO_POLICY_SET_DIV = "AUTO_POLICY_SET_DIV";
 	public static final String AUTO_POLICY_TIME = "AUTO_POLICY_TIME";
 	public static final String AUTO_LEVEL = "AUTO_LEVEL";
+	
+	/* 데이터전송 관련 */
+	public static final String KC_IP = "KC_IP";
+	public static final String KC_PORT = "KC_PORT";
+	public static final String SNAPSHOT_MODE = "SNAPSHOT_MODE";
+	public static final String CONNECT_NM = "CONNECT_NM";
+	public static final String TRANS_ID = "TRANS_ID";
+	public static final String EXRT_TRG_SCM_NM = "EXRT_TRG_SCM_NM";
+	public static final String EXRT_TRG_TB_NM = "EXRT_TRG_TB_NM";
+	public static final String CONNECT_INFO = "CONNECT_INFO";
+	public static final String MAPP_INFO = "MAPP_INFO";
 }

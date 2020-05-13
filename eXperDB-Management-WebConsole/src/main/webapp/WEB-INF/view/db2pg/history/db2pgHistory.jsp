@@ -81,7 +81,7 @@ function fn_init(){
 					render : function(data, type, full, meta) {	 						
 						var html = '';
 						if (full.exe_rslt_cd == 'TC001701') {
-							html += "<span class='btn btnC_01 btnF_02'><button onclick='fn_ddlResult(\""+full.mig_exe_sn+"\",\""+full.ddl_save_pth+"/\")'><img src='../images/ico_state_02.png' style='margin-right:3px;'/>Success</button></span>";	
+							html += "<span class='btn btnC_01 btnF_02'><button onclick='fn_ddlResult(\""+full.mig_exe_sn+"\",\""+full.save_pth+"/\")'><img src='../images/ico_state_02.png' style='margin-right:3px;'/>Success</button></span>";	
 						} else if(full.exe_rslt_cd == 'TC001702'){
 							html += '<span class="btn btnC_01 btnF_02"><button onclick="fn_ddlFailLog('+full.mig_exe_sn+')"><img src="../images/ico_state_01.png" style="margin-right:3px;"/>Fail</button></span>';
 						} else {
@@ -96,7 +96,7 @@ function fn_init(){
 			{data : "db2pg_trsf_wrk_id", defaultContent : "", visible: false},
 			{data : "wrk_id", defaultContent : "", visible: false},
 			{data : "mig_exe_sn", defaultContent : "", visible: false},
-			{data : "ddl_save_pth", defaultContent : "", visible: false}
+			{data : "save_pth", defaultContent : "", visible: false}
 		]
 		});
 	
@@ -127,7 +127,7 @@ function fn_init(){
 				render : function(data, type, full, meta) {	 						
 					var html = '';
 					if (full.exe_rslt_cd == 'TC001701') {
-						html += "<span class='btn btnC_01 btnF_02'><button onclick='fn_result(\""+full.mig_exe_sn+"\",\""+full.trans_save_pth+"/\")'><img src='../images/ico_state_02.png' style='margin-right:3px;'/>Success</button></span>";	
+						html += "<span class='btn btnC_01 btnF_02'><button onclick='fn_result(\""+full.mig_exe_sn+"\",\""+full.save_pth+"/\")'><img src='../images/ico_state_02.png' style='margin-right:3px;'/>Success</button></span>";	
 					} else if(full.exe_rslt_cd == 'TC001702'){
 						html += '<span class="btn btnC_01 btnF_02"><button onclick="fn_migFailLog('+full.mig_exe_sn+')"><img src="../images/ico_state_01.png" style="margin-right:3px;"/>Fail</button></span>';
 					} else {
@@ -192,7 +192,8 @@ $(window.document).ready(
 	function() {	
 	
 		fn_init();
-			
+		getddlDataList();
+		getdataDataList();			
 	
 		$("#ddlDataTable").show();
 		$("#ddlDataTable_wrapper").show();
@@ -221,9 +222,6 @@ $(window.document).ready(
 			changeMonth : true,
 			changeYear : true
 	 	});
-		
-		getddlDataList();
-		getdataDataList();
 	}
 );
 
@@ -555,7 +553,7 @@ function getdataDataList(){
 									<th width="130" rowspan="2"><spring:message code="backup_management.work_start_time"/></th>
 									<th width="130" rowspan="2"><spring:message code="backup_management.work_end_time"/></th>
 									<th width="95" rowspan="2"><spring:message code="schedule.jobTime"/></th>
-									<th width="100" rowspan="2"><spring:message code="schedule.result"/></th>
+									<th width="95" rowspan="2"><spring:message code="schedule.result"/></th>
 									<th width="95" rowspan="2"><spring:message code="migration.performer"/></th>
 								</tr>
 								<tr>

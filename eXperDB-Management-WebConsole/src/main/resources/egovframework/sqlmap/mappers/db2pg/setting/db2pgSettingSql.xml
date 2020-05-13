@@ -612,4 +612,31 @@
 	 	**/		
 	 	SELECT setval('q_wrkcng_i_01',nextval('q_wrkcng_i_01'))
 	</select>
+	
+	
+	<update id="updateDDLSavePth" parameterType="hashmap">
+		/**
+		* Query ID : updateDDLSavePth
+		* Description : DDL SAVE PATH 수정
+		* Author : 변승우
+		**/		
+        UPDATE t_db2pg_ddl_wrk_inf
+		SET 
+          ddl_save_pth=#{save_pth}
+        WHERE wrk_id = #{wrk_id}::numeric
+	</update>
+	
+	
+		<update id="updateTransSavePth" parameterType="hashmap">
+			/**
+			* Query ID : updateTransSavePth
+			* Description : TRANS SAVE PATH 수정
+			* Author : 변승우
+			**/		
+	        UPDATE t_db2pg_trsf_wrk_inf
+			SET 
+	          trans_save_pth=#{save_pth}
+	        WHERE wrk_id = #{wrk_id}::numeric
+		</update>
+	
 </mapper>

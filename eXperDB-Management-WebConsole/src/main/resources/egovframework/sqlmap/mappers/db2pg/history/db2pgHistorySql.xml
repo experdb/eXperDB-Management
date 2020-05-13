@@ -23,6 +23,7 @@
 			, lst_mdfr_id
 			, lst_mdf_dtm
 			, mig_dscd
+			, save_pth
 		)
 		VALUES
 		(
@@ -37,6 +38,7 @@
 		, #{lst_mdfr_id}
 		, clock_timestamp()
 		, #{mig_dscd}
+		, #{save_pth}
 		)		
 	</insert>
 	
@@ -82,7 +84,7 @@
 			, A.WRK_DTM
 			, A.EXE_RSLT_CD
 			, A.LST_MDFR_ID
-			, A.DDL_SAVE_PTH
+			, A.SAVE_PTH
 			, A.RSLT_MSG
 		FROM(
 				SELECT 
@@ -101,7 +103,7 @@
 								, IMDEXE.EXE_RSLT_CD		
 								,(SELECT SYS_CD_NM FROM T_SYSDTL_C WHERE SYS_CD=IMDEXE.EXE_RSLT_CD) AS EXE_RSLT_C		
 								, IMDEXE.LST_MDFR_ID
-								, DDL_WRK_INF.DDL_SAVE_PTH
+								, IMDEXE.SAVE_PTH
 								, IMDEXE.RSLT_MSG
 				FROM T_DB2PG_DDL_WRK_INF DDL_WRK_INF
 				LEFT OUTER JOIN T_WRKCNG_I WRKCNG ON DDL_WRK_INF.WRK_ID = WRKCNG.WRK_ID
@@ -150,7 +152,7 @@
 				, A.WRK_DTM
 				, A.EXE_RSLT_CD
 				, A.LST_MDFR_ID
-				, A.TRANS_SAVE_PTH
+				, A.SAVE_PTH
 				, A.RSLT_MSG
 		FROM(
 					SELECT 
@@ -173,7 +175,7 @@
 									, IMDEXE.EXE_RSLT_CD		
 									,(SELECT SYS_CD_NM FROM T_SYSDTL_C WHERE SYS_CD=IMDEXE.EXE_RSLT_CD) AS EXE_RSLT_C		
 									, IMDEXE.LST_MDFR_ID
-									, TRSF_WRK_INF.TRANS_SAVE_PTH
+									, IMDEXE.SAVE_PTH
 									, IMDEXE.RSLT_MSG
 					FROM T_DB2PG_TRSF_WRK_INF TRSF_WRK_INF
 					LEFT OUTER JOIN T_WRKCNG_I WRKCNG ON TRSF_WRK_INF.WRK_ID = WRKCNG.WRK_ID

@@ -10,6 +10,7 @@ import com.k4m.dx.tcontrol.db.repository.vo.AgentInfoVO;
 import com.k4m.dx.tcontrol.db.repository.vo.DbServerInfoVO;
 import com.k4m.dx.tcontrol.db.repository.vo.DumpRestoreVO;
 import com.k4m.dx.tcontrol.db.repository.vo.RmanRestoreVO;
+import com.k4m.dx.tcontrol.db.repository.vo.TransVO;
 import com.k4m.dx.tcontrol.db.repository.vo.TrfTrgCngVO;
 import com.k4m.dx.tcontrol.db.repository.vo.WrkExeVO;
 
@@ -116,5 +117,10 @@ public class SystemDAO {
 	
 	public void insertWRKEXE_G(WrkExeVO vo) throws Exception  {
 		 session.insert("system.insertWRKEXE_G", vo);
+	}
+	
+	public void updateTransExe(TransVO transVO) throws Exception{
+		session.update("system.updateTransExe", transVO);
+		
 	}
 }

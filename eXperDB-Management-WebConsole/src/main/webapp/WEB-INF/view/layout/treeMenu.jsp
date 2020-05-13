@@ -290,6 +290,8 @@
 					html1+='			</li>';
 				}
 
+				
+				/* 백업관리 */
 				html1+='			<li class="ico2_2"><a href="#n"><img src="../images/ico_lnb_6.png" id="treeImg"><spring:message code="menu.backup_management"/></a>';
 
 				html1+='				<ul class="depth_3">';
@@ -305,6 +307,8 @@
 				html1+='				</ul>';
 				html1+='			</li>';
 
+				
+				/* 복원관리 */
 				html1+='			<li class="ico2_2"><a href="#n"><img src="../images/ico_lnb_6.png" id="treeImg"><spring:message code="restore.Recovery_Management"/></a>';
 				html1+='				<ul class="depth_3">';
 				if(aut.length != 0 && aut[index].emergency_restore_aut_yn == "Y"){
@@ -322,6 +326,19 @@
 				html1+='				</ul>';
 				html1+='			</li>';
 
+				
+				/* 데이터전송 */
+				html1+='			<li class="ico2_2"><a href="#n"><img src="../images/ico_lnb_7.png" id="treeImg">데이터전송</a>';
+				html1+='				<ul class="depth_3">';
+
+				html1+='				<li class="ico3_4" id="transSetting'+item.db_svr_id+'"><a href=/transSetting.do?db_svr_id='+item.db_svr_id+' id="transSetting'+item.db_svr_id+'c" onClick=javascript:fn_GoLink("transSetting'+item.db_svr_id+'"); target="main"><img src="../images/ico_lnb_10.png" id="treeImg">전송관리</a></li>';
+	
+				html1+='				</ul>';
+				html1+='			</li>';
+
+				
+							
+				/* 접근제어 관리 */
 				html1+='			<li class="ico2_2"><a href="#n"><img src="../images/ico_lnb_7.png" id="treeImg"><spring:message code="menu.access_control_management"/></a>';
 				html1+='				<ul class="depth_3">';
 
@@ -334,6 +351,8 @@
 				html1+='				</ul>';
 				html1+='			</li>';
 
+				
+				/* 감사관리 */
 				html1+='			<li class="ico2_2"><a href="#n"><img src="../images/ico_lnb_7.png" id="treeImg"><spring:message code="menu.audit_management"/></a>';
 				//pg_audit 사용여부에 따른 tree메뉴 권한
 				if('${sessionScope.session.pg_audit}' == 'Y'){
@@ -348,6 +367,8 @@
 				}
 				html1+='			</li>';
 
+				
+				/* 스크립트 */
 				html1+='			<li class="ico2_2"><a href="#n"><img src="../images/ico_lnb_7.png" id="treeImg"><spring:message code="menu.script_management"/></a>';
 				html1+='				<ul class="depth_3">'
 				if(aut.length != 0 && aut[index].script_cng_aut_yn == "Y"){

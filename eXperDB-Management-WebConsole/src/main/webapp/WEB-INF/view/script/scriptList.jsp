@@ -252,6 +252,53 @@ function fn_delete(scheduleChk, bck_wrk_id_List, wrk_id_List){
 		 }
 	}
 }
+
+//스크립트 즉시 실행
+function fn_ImmediateStart(){
+
+	var db_svr_id = '<c:out value="${db_svr_id}"/>';
+	var datas = table.rows('.selected').data();
+	var rowCnt = table.rows('.selected').data().length;
+
+	if(rowCnt <= 0){
+		alert("<spring:message code='message.msg35'/>");
+		return false;	
+	}else if(rowCnt > 1){
+		alert("<spring:message code='message.msg04'/>");
+	}
+	
+	
+	if (confirm("즉시실행 하시겠습니까?")) {			
+		 $.ajax({
+			url : "/scriptImmediateExe.do",
+		  	data : {
+		  		wrk_id:datas[0].wrk_id,
+		  		wrk_id:datas[0].wrk_exp,
+		  		db_svr_id:db_svr_id, 
+		  		exe_cmd:datas[0].exe_cmd
+		  	},
+		  	timeout : 1000,    
+			type : "post",
+			async: true,
+			beforeSend: function(xhr) {
+		        xhr.setRequestHeader("AJAX", true);
+		     },
+			error : function(xhr, status, error) {
+				if(xhr.status == 401) {
+					alert('<spring:message code="message.msg02" />');
+					top.location.href = "/";
+				} else if(xhr.status == 403) {
+					alert('<spring:message code="message.msg03" />');
+					top.location.href = "/";
+				} else {
+					alert("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""));
+				}
+			},
+			success : function(result) {		
+			}
+		});		 
+	}	
+}
 </script>
 
 <%@include file="../cmmn/workScriptInfo.jsp"%>
@@ -278,6 +325,7 @@ function fn_delete(scheduleChk, bck_wrk_id_List, wrk_id_List){
 		<div class="contents">
 			<div class="cmm_grp">
 				<div class="btn_type_01">
+				    <span class="btn btnC_01 btn_fl"><button type="button" onclick="fn_ImmediateStart()">즉시실행</button></span> 
 					<a class="btn" onClick="fn_search();"><button type="button"><spring:message code="common.search" /></button></a>
 					<span class="btn" onclick="fn_reg_popup()"><button type="button"><spring:message code="common.registory" /></button></span>
 					<span class="btn" onClick="fn_rereg_popup()"><button type="button"><spring:message code="common.modify" /></button></span>

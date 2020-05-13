@@ -27,7 +27,16 @@ public class Db2pgHistoryVO {
 	private String trans_save_pth;
 	private String ddl_save_pth;
 
-	
+	private String save_pth;
+
+	public String getSave_pth() {
+		return save_pth;
+	}
+
+	public void setSave_pth(String save_pth) {
+		this.save_pth = save_pth;
+	}
+
 	public String getDdl_save_pth() {
 		return ddl_save_pth;
 	}

@@ -9,6 +9,7 @@ import java.util.Map;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 
+import com.k4m.dx.tcontrol.admin.dbserverManager.service.DbServerVO;
 import com.k4m.dx.tcontrol.restore.service.RestoreDumpVO;
 import com.k4m.dx.tcontrol.restore.service.RestoreRmanVO;
 
@@ -1793,7 +1794,7 @@ public List<HashMap<String, String>> dumpShow(String IP, int PORT,String cmd) {
 			result.put("RESULT_CODE", strResultCode);
 			result.put("ERR_CODE", strErrCode);
 			result.put("ERR_MSG", strErrMsg);
-
+			
 			if (objList.get(ClientProtocolID.RESULT_DATA) != null) {
 				result.put("RESULT_DATA", objList.get(ClientProtocolID.RESULT_DATA));
 			} else {
@@ -1815,4 +1816,173 @@ public List<HashMap<String, String>> dumpShow(String IP, int PORT,String cmd) {
 	public void run() {
 		// TODO Auto-generated method stub
 	}
+
+	public Map<String, Object> kafkaConnectionTest(String IP, int PORT, String cmd) {
+		
+		
+		Map<String, Object> result = new HashMap<String, Object>();
+		
+		try{
+				
+				JSONObject jObj = new JSONObject();
+				
+				jObj.put(ClientProtocolID.DX_EX_CODE, ClientTranCodeType.DxT037);
+				jObj.put(ClientProtocolID.REQ_CMD, cmd);
+				
+				JSONObject objList;
+				
+				ClientAdapter CA = new ClientAdapter(IP, PORT);
+				CA.open(); 
+	
+				objList = CA.dxT037(jObj);
+			
+				CA.close();
+				
+				String strErrMsg = (String)objList.get(ClientProtocolID.ERR_MSG);
+				String strErrCode = (String)objList.get(ClientProtocolID.ERR_CODE);
+				String strDxExCode = (String)objList.get(ClientProtocolID.DX_EX_CODE);
+				String strResultCode = (String)objList.get(ClientProtocolID.RESULT_CODE);
+				String strResultData = (String)objList.get(ClientProtocolID.RESULT_DATA);
+		
+				
+				System.out.println("RESULT_CODE : " +  strResultCode);
+				System.out.println("ERR_CODE : " +  strErrCode);
+				System.out.println("ERR_MSG : " +  strErrMsg);
+				System.out.println("RESULT_DATA : " +  strResultData);
+				
+				result.put("RESULT_CODE", strResultCode);
+				result.put("ERR_CODE", strErrCode);
+				result.put("ERR_MSG", strErrMsg);
+				result.put("RESULT_DATA", strResultData);
+			} catch(Exception e) {
+				e.printStackTrace();
+			}
+		
+		return result;
+	}
+
+	
+	
+	public  Map<String, Object> connectStart(String IP, int PORT, DbServerVO dbServerVO, List<Map<String, Object>> transInfo,
+			List<Map<String, Object>> mappInfo) {
+		
+		Map<String, Object> result = new HashMap<String, Object>();
+		
+		try{
+			
+			String cmd = "curl -i -X POST -H 'Accept:application/json' -H 'Content-Type:application/json' " +transInfo.get(0).get("kc_ip")+":"+transInfo.get(0).get("kc_port")+"/connectors/ -d '";
+			
+			JSONObject serverObj = new JSONObject();
+			
+			serverObj.put(ClientProtocolID.SERVER_NAME, dbServerVO.getIpadr());
+			serverObj.put(ClientProtocolID.SERVER_IP, dbServerVO.getIpadr());
+			serverObj.put(ClientProtocolID.SERVER_PORT, dbServerVO.getPortno());
+			serverObj.put(ClientProtocolID.DATABASE_NAME, transInfo.get(0).get("db_nm"));
+			serverObj.put(ClientProtocolID.USER_ID, dbServerVO.getSvr_spr_usr_id());
+			serverObj.put(ClientProtocolID.USER_PWD, dbServerVO.getSvr_spr_scm_pwd());
+			
+
+			JSONObject transObj = new JSONObject();
+			transObj.put(ClientProtocolID.KC_IP, transInfo.get(0).get("kc_ip"));
+			transObj.put(ClientProtocolID.KC_PORT, transInfo.get(0).get("kc_port"));
+			transObj.put(ClientProtocolID.SNAPSHOT_MODE, transInfo.get(0).get("snapshot_nm"));
+			transObj.put(ClientProtocolID.CONNECT_NM, transInfo.get(0).get("connect_nm"));
+			transObj.put(ClientProtocolID.TRANS_ID, transInfo.get(0).get("trans_id").toString());
+			transObj.put(ClientProtocolID.DB_NM, transInfo.get(0).get("db_nm"));
+			
+
+			JSONObject mappObj = new JSONObject();
+			mappObj.put(ClientProtocolID.EXRT_TRG_SCM_NM, mappInfo.get(0).get("exrt_trg_scm_nm"));
+			mappObj.put(ClientProtocolID.EXRT_TRG_TB_NM, mappInfo.get(0).get("exrt_trg_tb_nm"));			
+			
+			
+			JSONObject jObj = new JSONObject();
+			
+			jObj.put(ClientProtocolID.DX_EX_CODE, ClientTranCodeType.DxT038);
+			jObj.put(ClientProtocolID.SERVER_INFO, serverObj);
+			jObj.put(ClientProtocolID.CONNECT_INFO, transObj);
+			jObj.put(ClientProtocolID.MAPP_INFO, mappObj);
+			jObj.put(ClientProtocolID.REQ_CMD, cmd);
+			
+
+			JSONObject objList;
+
+			ClientAdapter CA = new ClientAdapter(IP, PORT);
+	
+			CA.open(); 
+			objList = CA.dxT038(jObj);
+			CA.close();
+
+			String strErrMsg = (String)objList.get(ClientProtocolID.ERR_MSG);
+			String strErrCode = (String)objList.get(ClientProtocolID.ERR_CODE);
+			String strDxExCode = (String)objList.get(ClientProtocolID.DX_EX_CODE);
+			String strResultCode = (String)objList.get(ClientProtocolID.RESULT_CODE);
+			String strResultData = (String)objList.get(ClientProtocolID.RESULT_DATA);
+
+			System.out.println("RESULT_CODE : " +  strResultCode);
+			System.out.println("ERR_CODE : " +  strErrCode);
+			System.out.println("ERR_MSG : " +  strErrMsg);
+			System.out.println("RESULT_DATA : " +  strResultData);
+			
+			
+			result.put("RESULT_CODE", strResultCode);
+			result.put("ERR_CODE", strErrCode);
+			result.put("ERR_MSG", strErrMsg);
+			result.put("RESULT_DATA", strErrMsg);
+			
+		} catch(Exception e) {
+			e.printStackTrace();
+		}
+		
+		return result;
+	}
+
+	
+	public Map<String, Object> connectStop(String IP, int PORT, String strCmd, String trans_id) {
+		
+		Map<String, Object> result = new HashMap<String, Object>();
+		
+		try {
+
+			JSONObject jObj = new JSONObject();
+			
+			jObj.put(ClientProtocolID.DX_EX_CODE, ClientTranCodeType.DxT039);
+			
+			jObj.put(ClientProtocolID.REQ_CMD, strCmd);
+			jObj.put(ClientProtocolID.TRANS_ID, trans_id);
+			
+			JSONObject objList;
+			
+			ClientAdapter CA = new ClientAdapter(IP, PORT);
+			CA.open(); 
+
+			objList = CA.dxT039(jObj);
+		
+			CA.close();
+			
+			String strErrMsg = (String)objList.get(ClientProtocolID.ERR_MSG);
+			String strErrCode = (String)objList.get(ClientProtocolID.ERR_CODE);
+			String strDxExCode = (String)objList.get(ClientProtocolID.DX_EX_CODE);
+			String strResultCode = (String)objList.get(ClientProtocolID.RESULT_CODE);
+			String strResultData = (String)objList.get(ClientProtocolID.RESULT_DATA);
+
+			System.out.println("RESULT_CODE : " +  strResultCode);
+			System.out.println("ERR_CODE : " +  strErrCode);
+			System.out.println("ERR_MSG : " +  strErrMsg);
+			System.out.println("RESULT_DATA : " +  strResultData);
+			
+			result.put("RESULT_CODE", strResultCode);
+			result.put("ERR_CODE", strErrCode);
+			result.put("ERR_MSG", strErrMsg);
+			result.put("RESULT_DATA", strErrMsg);
+				
+			//CA.close();
+		} catch(Exception e) {
+			e.printStackTrace();
+		}
+		
+		return result;
+	}
+	
+	
 }

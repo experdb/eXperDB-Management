@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -71,7 +72,7 @@ public class ClientTester {
 		
 		ClientTester clientTester = new ClientTester();
 		
-		String Ip = "192.168.56.117";
+		String Ip = "192.168.56.130";
 		//Ip = "192.168.56.108";
 		//Ip = "222.110.153.251";
 		 //	Ip = "127.0.0.1";
@@ -130,9 +131,11 @@ public class ClientTester {
 			
 			
 			//clientTester.dxT030(Ip, port);
-			clientTester.dxT031(Ip, port);
+			//clientTester.dxT031(Ip, port);
 			//clientTester.dxT032(Ip, port);
 			
+			
+			clientTester.dxT038(Ip, port);
 			//clientTester.test();
 		} catch(Exception e) {
 			e.printStackTrace();
@@ -2629,6 +2632,79 @@ public class ClientTester {
 			String strResultCode = (String)objList.get(ClientProtocolID.RESULT_CODE);
 
 			CA.close();
+		} catch(Exception e) {
+			e.printStackTrace();
+		}
+	}
+	
+	
+private void dxT038(String Ip, int port) {
+		
+		Map<String, Object> result = new HashMap<String, Object>();
+		
+		try {
+					
+			String kc_ip = "192.168.56.131";
+			String kc_port = "8083";
+			
+			JSONObject serverObj = new JSONObject();
+				
+			serverObj.put(ClientProtocolID.SERVER_NAME, "192.168.56.130");
+			serverObj.put(ClientProtocolID.SERVER_IP, "192.168.56.130");
+			serverObj.put(ClientProtocolID.SERVER_PORT, "5432");
+			serverObj.put(ClientProtocolID.DATABASE_NAME, "experdb");
+			serverObj.put(ClientProtocolID.USER_ID, "experdb");
+			serverObj.put(ClientProtocolID.USER_PWD, "experdb");
+			
+			String cmd = "curl -i -X POST -H 'Accept:application/json' -H 'Content-Type:application/json' " +kc_ip+":"+kc_port+"/connectors/ -d '";
+			
+			JSONObject transObj = new JSONObject();
+			transObj.put(ClientProtocolID.KC_IP, "192.168.56.131");
+			transObj.put(ClientProtocolID.KC_PORT, "8083");
+			transObj.put(ClientProtocolID.SNAPSHOT_MODE, "INITIAL");
+			transObj.put(ClientProtocolID.CONNECT_NM, "test");
+			transObj.put(ClientProtocolID.TRANS_ID, "12");
+			transObj.put(ClientProtocolID.DB_NM, "experdb");
+			
+
+			JSONObject mappObj = new JSONObject();
+			mappObj.put(ClientProtocolID.EXRT_TRG_TB_NM, "experdb_management.t_db_i,experdb_management.t_syswrk_g");
+			mappObj.put(ClientProtocolID.EXRT_TRG_SCM_NM, "experdb_management");
+
+			
+			JSONObject jObj = new JSONObject();
+			jObj.put(ClientProtocolID.DX_EX_CODE, ClientTranCodeType.DxT038);
+			jObj.put(ClientProtocolID.SERVER_INFO, serverObj);
+			jObj.put(ClientProtocolID.CONNECT_INFO, transObj);
+			jObj.put(ClientProtocolID.MAPP_INFO, mappObj);
+			jObj.put(ClientProtocolID.REQ_CMD, cmd);
+			
+			
+			JSONObject objList;
+	
+			ClientAdapter CA = new ClientAdapter(Ip, port);
+			
+			CA.open(); 
+
+			objList = CA.dxT038(jObj);
+			CA.close();
+	
+			String strErrMsg = (String)objList.get(ClientProtocolID.ERR_MSG);
+			String strErrCode = (String)objList.get(ClientProtocolID.ERR_CODE);
+			String strDxExCode = (String)objList.get(ClientProtocolID.DX_EX_CODE);
+			String strResultCode = (String)objList.get(ClientProtocolID.RESULT_CODE);
+			String strResultData = (String)objList.get(ClientProtocolID.RESULT_DATA);
+
+			System.out.println("RESULT_CODE : " +  strResultCode);
+			System.out.println("ERR_CODE : " +  strErrCode);
+			System.out.println("ERR_MSG : " +  strErrMsg);
+			System.out.println("RESULT_DATA : " +  strResultData);
+			
+			result.put("RESULT_CODE", strResultCode);
+			result.put("ERR_CODE", strErrCode);
+			result.put("ERR_MSG", strErrMsg);
+			result.put("RESULT_DATA", strErrMsg);
+				
 		} catch(Exception e) {
 			e.printStackTrace();
 		}

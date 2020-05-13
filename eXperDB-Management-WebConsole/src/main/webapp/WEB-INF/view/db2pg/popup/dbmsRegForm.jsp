@@ -370,6 +370,7 @@ function fn_charSet(){
  		// Validation 체크
  		 if (!fn_validation()) return false;
 
+
  		if($("#dbms_dscd").val()  == 'TC002204'){
  			if(document.getElementById("schema_pg").value == ""){
  				var scm_nm = document.getElementById("schema_any").value;	

@@ -128,4 +128,18 @@ public class Db2pgSettingServiceImpl extends EgovAbstractServiceImpl implements 
 		return db2pgSettingDAO.selectWorkSeq();
 	}
 
+	@Override
+	public void updateDDLSavePth(Map<String, Object> param) throws Exception {
+		db2pgSettingDAO.updateDDLSavePth(param);
+		
+	}
+
+	@Override
+	public void updateTransSavePth(Map<String, Object> param) throws Exception {
+		db2pgSettingDAO.updateTransSavePth(param);
+		
+	}
+
+
+
 }

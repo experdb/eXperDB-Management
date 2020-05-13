@@ -243,4 +243,9 @@ public class ProtocolID {
 	public static final String AUTO_POLICY_TIME = "AUTO_POLICY_TIME";
 	public static final String AUTO_LEVEL = "AUTO_LEVEL";
 	public static final String MONITERING = "MONITERING";
+	
+	public static final String CONNECT_INFO = "CONNECT_INFO";
+	public static final String MAPP_INFO = "MAPP_INFO";
+	public static final String TRANS_ID = "TRANS_ID";
+	
 }
