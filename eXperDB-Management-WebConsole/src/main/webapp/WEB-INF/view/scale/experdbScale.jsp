@@ -73,7 +73,20 @@ button[disabled]{
 					className : "dt-center",
 					defaultContent : "" 	
 				},
-				{data : "tagsValue", className : "dt-left", defaultContent : ""},
+				{data : "tagsValue", className : "dt-left", defaultContent : "",
+					render: function (data, type, full){
+						if(full.default_chk == "Y"){
+							var html = '<font color="red">' + full.tagsValue + '</font>';
+							html+='<input type="hidden" name="default_chk" class="default_hide" value="'+ full.default_chk +'" />'; 
+							return html;
+						}else{
+							var html = full.tagsValue;
+							html+='<input type="hidden" name="default_chk" class="default_hide" value="'+ full.default_chk +'" />'; 
+							return html;
+						}
+						return data;
+					},
+				},
 				{ data : "instance_id", className : "dt-left", defaultContent : ""
 					,render: function (data, type, full) {
 						  return '<span onClick=javascript:fn_scaleLayer("'+full.instance_id+'"); class="bold" title="'+full.instance_id+'">' + full.instance_id + '</span>';
@@ -564,6 +577,22 @@ button[disabled]{
 	 ******************************************************** */
 	function fn_scaleInOutChk(gbn) {
 		var wrk_id_val =  "";
+		var defaultCnt = 0;
+
+		//scale in 일때 default 만 있는 겨우
+		if (gbn == 'scaleIn') {
+			$(".default_hide").each(function(){
+				if ($(this).val() == 'N') {
+					defaultCnt = defaultCnt + 1;
+				}
+			});
+
+			if (defaultCnt <= 0) {
+				alert("<spring:message code='eXperDB_scale.msg13' />");
+				return;
+			}
+		}
+
 		//scale 이 실행되고 있는 지 체크 후 진행
  		$.ajax({
 			url : "/scale/selectScaleLChk.do",

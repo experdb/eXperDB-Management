@@ -3,14 +3,10 @@ package com.k4m.dx.tcontrol.scale.service.impl;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.net.InetAddress;
-import java.net.NetworkInterface;
-import java.net.SocketException;
 import java.sql.SQLException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
-import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
@@ -80,6 +76,7 @@ public class InstanceScaleServiceImpl extends EgovAbstractServiceImpl implements
 		String scaleId = (String)instanceScaleVO.getScale_id();
 		JSONObject scalejsonObj = new JSONObject();
 		String stateChk = "";
+		String scalejsonChk = "";
 		
 		Map<String, Object> param = new HashMap<String, Object>();
 		Map<String, Object> agentList = null;
@@ -106,9 +103,13 @@ public class InstanceScaleServiceImpl extends EgovAbstractServiceImpl implements
 
 				if (resultCode.equals("0")) {
 					scalejsonObj = (JSONObject)agentList.get(ClientProtocolID.RESULT_DATA);
+					
+					if (agentList.get(ClientProtocolID.RESULT_SUB_DATA) != null) {
+						scalejsonChk = (String)agentList.get(ClientProtocolID.RESULT_SUB_DATA);
+					}
 				}
 			}
-			
+
 			if (!scalejsonObj.isEmpty()) {
 				InstancesArrly = (JSONArray) scalejsonObj.get("Instances");
 	
@@ -122,8 +123,20 @@ public class InstanceScaleServiceImpl extends EgovAbstractServiceImpl implements
 						JSONArray securityGroupsArrly = (JSONArray) instancesObj.get("SecurityGroups");     //보안그룹
 
 						String privateIpAddressVal = "";
+
 						if (instancesObj.get("PrivateIpAddress") != null) {
 							privateIpAddressVal = (String) instancesObj.get("PrivateIpAddress");
+						}
+						
+						//재확인 필요 일단 넣어놈
+						if (scalejsonChk != null && privateIpAddressVal != null) {
+							if (Integer.parseInt(scalejsonChk.replaceAll("\\.","")) < Integer.parseInt(privateIpAddressVal.replaceAll("\\.",""))) {
+								jsonObj.put("default_chk", "N");
+							} else {
+								jsonObj.put("default_chk", "Y");
+							}
+						} else {
+							jsonObj.put("default_chk", "N");
 						}
 
 						jsonObj.put("public_IPv4", (String) instancesObj.get("PublicDnsName"));             //public dns IPv4
