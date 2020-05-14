@@ -191,7 +191,17 @@ function fn_init(){
 $(window.document).ready(
 
 	function() {	
-	
+		var today = new Date();
+		var day_end = today.toJSON().slice(0,10);
+		
+		today.setDate(today.getDate() - 7);
+		var day_start = today.toJSON().slice(0,10); 
+
+		$("#wrk_strt_dtm").val(day_start);
+		$("#wrk_end_dtm").val(day_end);
+		$("#ddl_wrk_strt_dtm").val(day_start);
+		$("#ddl_wrk_end_dtm").val(day_end);
+		
 		fn_init();
 		getddlDataList();
 		getdataDataList();			
@@ -206,17 +216,6 @@ $(window.document).ready(
 		}else if (gbn=="mig"){
 			selectTab('dataWork');
 		}
-		
-		var today = new Date();
-		var day_end = today.toJSON().slice(0,10);
-		
-		today.setDate(today.getDate() - 7);
-		var day_start = today.toJSON().slice(0,10); 
-
-		$("#wrk_strt_dtm").val(day_start);
-		$("#wrk_end_dtm").val(day_end);
-		$("#ddl_wrk_strt_dtm").val(day_start);
-		$("#ddl_wrk_end_dtm").val(day_end);
 		
 		$( ".calendar" ).datepicker({
 			dateFormat: 'yy-mm-dd',
@@ -233,7 +232,7 @@ function getddlDataList(){
 	$.ajax({
 		url : "/db2pg/selectDb2pgDDLHistory.do", 
 	  	data : {
-	  		wrk_nm :  $("#wrk_nm").val(),
+	  		wrk_nm :  "%"+$("#wrk_nm").val()+"%",
 	  		exe_rslt_cd : $("#exe_rslt_cd").val(),
 	  		wrk_strt_dtm : $("#ddl_wrk_strt_dtm").val(),
 	  		wrk_end_dtm : $("#ddl_wrk_end_dtm").val()  		
@@ -273,7 +272,7 @@ function getdataDataList(){
 	$.ajax({
 		url : "/db2pg/selectDb2pgMigHistory.do", 
 	  	data : {
-	  		wrk_nm :  $("#wrk_nm").val(),
+	  		wrk_nm :  "%"+$("#wrk_nm").val()+"%",
 	  		exe_rslt_cd : $("#exe_rslt_cd").val(),
 			wrk_strt_dtm :  $("#wrk_strt_dtm").val(),
 	  		wrk_end_dtm : $("#wrk_end_dtm").val()
@@ -475,7 +474,7 @@ function getdataDataList(){
 								<th scope="row" class="t9"><spring:message code="common.status" /></th>
 								<td>
 									<select name="exe_rslt_cd" id="exe_rslt_cd" class="select t5">
-										<option value=""><spring:message code="schedule.total" /></option>
+										<option value="%"><spring:message code="schedule.total" /></option>
 										<option value="TC001701"><spring:message code="common.success" /></option>
 										<option value="TC001702"><spring:message code="common.failed" /></option>
 									</select>
@@ -510,7 +509,7 @@ function getdataDataList(){
 								<th scope="row" class="t9"><spring:message code="common.status" /></th>
 								<td>
 									<select name="exe_rslt_cd" id="exe_rslt_cd" class="select t5">
-										<option value=""><spring:message code="schedule.total" /></option>
+										<option value="%"><spring:message code="schedule.total" /></option>
 										<option value="TC001701"><spring:message code="common.success" /></option>
 										<option value="TC001702"><spring:message code="common.failed" /></option>
 									</select>

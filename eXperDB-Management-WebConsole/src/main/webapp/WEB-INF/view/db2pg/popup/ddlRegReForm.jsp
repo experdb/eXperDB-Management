@@ -82,10 +82,10 @@ function fn_pathCheck() {
 		},
 		success : function(result) {
 			if (result == true) {
-				alert('유효한 경로입니다.');
+				alert('<spring:message code="message.msg100" />');
 				output_path = "success";		
 			} else {
-				alert('유효하지 않은 경로입니다.');
+				alert('<spring:message code="backup_management.invalid_path" />');
 				document.getElementById("ddl_save_pth").focus();
 			}
 		},

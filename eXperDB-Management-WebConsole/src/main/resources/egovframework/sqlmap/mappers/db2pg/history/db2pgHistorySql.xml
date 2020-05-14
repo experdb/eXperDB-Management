@@ -111,10 +111,10 @@
 				JOIN T_MIGEXE_G IMDEXE ON DDL_WRK_INF.WRK_ID = IMDEXE.WRK_ID
 				WHERE 1=1
 				<if test="exe_rslt_cd != null and exe_rslt_cd != '' ">
-		      		AND IMDEXE.EXE_RSLT_CD=#{exe_rslt_cd}
+		      		AND IMDEXE.EXE_RSLT_CD like #{exe_rslt_cd}
 		      	</if>  
 		      	<if test="wrk_nm != null and wrk_nm != '' ">
-		      		AND WRKCNG.WRK_NM=#{wrk_nm}
+		      		AND WRKCNG.WRK_NM like #{wrk_nm}
 		      	</if>    
 			  	<if test="wrk_strt_dtm != null and wrk_strt_dtm != '' ">
 	      			<if test="wrk_end_dtm != null and wrk_end_dtm != '' ">
@@ -184,10 +184,10 @@
 					JOIN T_MIGEXE_G IMDEXE ON TRSF_WRK_INF.WRK_ID = IMDEXE.WRK_ID
 					WHERE 1=1
 					<if test="exe_rslt_cd != null and exe_rslt_cd != '' ">
-			      		AND IMDEXE.EXE_RSLT_CD=#{exe_rslt_cd}
+			      		AND IMDEXE.EXE_RSLT_CD like #{exe_rslt_cd}
 			      	</if>  
 			      	<if test="wrk_nm != null and wrk_nm != '' ">
-			      		AND WRKCNG.WRK_NM=#{wrk_nm}
+			      		AND WRKCNG.WRK_NM like #{wrk_nm}
 			      	</if>    
 				  	<if test="wrk_strt_dtm != null and wrk_strt_dtm != '' ">
 		      			<if test="wrk_end_dtm != null and wrk_end_dtm != '' ">
