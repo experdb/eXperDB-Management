@@ -92,6 +92,9 @@ public class DxT005 extends SocketCtl {
 			int intGrpSeq = service.selectQ_WRKEXE_G_02_SEQ();
 
 			for (int i = 0; i < arrCmd.size(); i++) {
+				
+				socketLogger.info("[ 0. 총 WORK 갯수 ]   " + arrCmd.size() + "개" );	
+				
 				// System.out.println("Start : "+ (i+1));
 
 				JSONObject objJob = (JSONObject) arrCmd.get(i);
@@ -104,7 +107,7 @@ public class DxT005 extends SocketCtl {
 				String strBCK_BSN_DSCD = objJob.get(ProtocolID.BCK_BSN_DSCD).toString();
 				String strDB_ID = objJob.get(ProtocolID.DB_ID).toString();
 				if(strDB_ID == null || strDB_ID.equals("")) {
-					strDB_ID = "0";
+					strDB_ID = "1";
 				}
 				
 				String strBCK_FILE_PTH = objJob.get(ProtocolID.BCK_FILE_PTH).toString();
@@ -112,7 +115,7 @@ public class DxT005 extends SocketCtl {
 				String strBCK_FILENM = objJob.get(ProtocolID.BCK_FILENM).toString();
 				String strDB_SVR_IPADR_ID = objJob.get(ProtocolID.DB_SVR_IPADR_ID).toString();
 				if(strDB_SVR_IPADR_ID == null || strDB_SVR_IPADR_ID.equals("")) {
-					strDB_SVR_IPADR_ID = "0";
+					strDB_SVR_IPADR_ID = "1";
 				}
 				
 				String strBSN_DSCD = objJob.get(ProtocolID.BSN_DSCD).toString();
@@ -131,17 +134,22 @@ public class DxT005 extends SocketCtl {
 				vo.setSCD_CNDT(TC001802); // 실행중
 				vo.setDB_SVR_IPADR_ID(Integer.parseInt(strDB_SVR_IPADR_ID));
 
+				
+				
+				// RMAN 백업일경우, Validation 은 스케줄 수행 정보나 이력을 업데이트 하지 않음
 				if (strLOG_YN.equals("Y")) {
 					// 스케줄 상태변경
+					socketLogger.info("[ 1. 스케줄 시작 스케줄 상태 변경 ]   " + vo.getSCD_CNDT() + " 실행중" );	
 					service.updateSCD_CNDT(vo);
 
 					// 스케줄 이력등록
+					socketLogger.info("[ 2. 스케줄 수행이력 등록 ]  " );	
 					service.insertT_WRKEXE_G(vo);
 				}
 
 				String strCommand = objJob.get(ProtocolID.REQ_CMD).toString();
 
-				socketLogger.info("[COMMAND] " + strCommand);
+				socketLogger.info("[ 3. COMMAND ] " + strCommand);
 
 				RunCommandExec r = new RunCommandExec(strCommand);
 				r.start();
@@ -153,7 +161,7 @@ public class DxT005 extends SocketCtl {
 				String retVal = r.call();
 				String strResultMessge = r.getMessage();
 
-				socketLogger.info("[RESULT] " + retVal);
+				socketLogger.info("[ 4. RESULT ] " + retVal);
 
 				// socketLogger.info("##### 결과 : " + retVal + " message : " +
 				// strResultMessge);
@@ -162,12 +170,14 @@ public class DxT005 extends SocketCtl {
 					String strFileName = strBCK_FILENM;
 					String strFileSize = "0";
 
-					socketLogger.info("[BCK_BSN_DSCD] " + strBCK_BSN_DSCD);
+					//socketLogger.info("[BCK_BSN_DSCD] " + strBCK_BSN_DSCD);
 
 					//TC001901 : 백업 업무구분코드
 					if(strBSN_DSCD.equals(TC001901)) {
 						// dump 일경우만 실행
 						if (strBCK_BSN_DSCD.equals(TC000202)) {
+							
+							socketLogger.info("[  덤프일 경우, 유지갯수 및 보관일수 처리 ] " );
 	
 							// 백업파일관리
 							// BCK_MTN_ECNT(백업유지개수) FILE_STG_DCNT(파일보관일수)
@@ -201,12 +211,10 @@ public class DxT005 extends SocketCtl {
 							
 							util = null;
 	
-							socketLogger.info("[File COMMAND] " + strCmd);
+							socketLogger.info(" [ File COMMAND ] " + strCmd);
 	
-							// socketLogger.info("##### strFileSize cmd : " + strCmd
-							// );
-							// socketLogger.info("##### strFileSize : " +
-							// strFileSize );
+							// socketLogger.info("##### strFileSize cmd : " + strCmd );
+							// socketLogger.info("##### strFileSize : " + strFileSize );
 	
 							if (strFileSize == null)
 								strFileSize = "0";
@@ -216,6 +224,8 @@ public class DxT005 extends SocketCtl {
 							//백업파일관리
 							dumpFileManagement(strBCK_FILE_PTH, fileName, intBCK_MTN_ECNT, intFILE_STG_DCNT, strSlush);
 							
+													
+							//아래 코드 있을 이유 확인 해봐야 함
 							if (strFileSize == null || strFileSize.equals("0")) {
 								WrkExeVO endVO = new WrkExeVO();
 								endVO.setEXE_RSLT_CD(TC001702);
@@ -243,11 +253,12 @@ public class DxT005 extends SocketCtl {
 							strFileName = "";
 						}
 					}
-
+					
+					
 					WrkExeVO endVO = new WrkExeVO();
 					endVO.setEXE_RSLT_CD(strResultCode);
 					endVO.setEXE_SN(intSeq);
-					socketLogger.info("FileSize="+strFileSize);
+					//  socketLogger.info("FileSize="+strFileSize);
 					endVO.setFILE_SZ(Long.parseLong(strFileSize));
 					endVO.setBCK_FILENM(strFileName);
 					endVO.setRSLT_MSG(retVal + " " + strResultMessge);				
@@ -258,18 +269,22 @@ public class DxT005 extends SocketCtl {
 					// service.updateSCD_CNDT(endVO);
 
 					if (strLOG_YN.equals("Y")) {
-						socketLogger
-								.info("[SUCCESS] DxT005 SCD_ID[" + strSCD_ID + "] " + retVal + " " + strResultMessge);
+						
+						socketLogger.info("[ 5. 스케줄 수행이력 업데이트 ]   " + endVO.getEXE_RSLT_CD() + " 성공" );	
+											
+						socketLogger.info("[SUCCESS] DxT005 SCD_ID[" + strSCD_ID + "] " + retVal + " " + strResultMessge);
 
 						service.updateT_WRKEXE_G(endVO);
 					}
 
 					continue;
 				} else {
-
-					errLogger.error("[ERROR] DxT005 SCD_ID[" + strSCD_ID + "] {} ", retVal + " " + strResultMessge);
-
+					//실패했을  경우
 					strResultCode = TC001702;
+					
+					socketLogger.info("[ 5. 스케줄 수행이력 업데이트 ]   " +  strResultCode + " 실패" );	
+					
+					errLogger.error("[ERROR] DxT005 SCD_ID[" + strSCD_ID + "] {} ", retVal + " " + strResultMessge);
 
 					WrkExeVO endVO = new WrkExeVO();
 					endVO.setEXE_RSLT_CD(strResultCode);
@@ -319,15 +334,16 @@ public class DxT005 extends SocketCtl {
 		}
 	}
 
+	
+
+	
 	/**
 	 * dump 백업시 BCK_MTN_ECNT(백업유지개수) FILE_STG_DCNT(파일보관일수) 관리
 	 * 
 	 * @param filePath
 	 * @param fileName
-	 * @param BCK_MTN_ECNT
-	 *            (백업유지개수)
-	 * @param FILE_STG_DCNT
-	 *            (파일보관일수)
+	 * @param BCK_MTN_ECNT (백업유지개수)
+	 * @param FILE_STG_DCNT (파일보관일수)
 	 * @throws Exception
 	 */
 	private void dumpFileManagement(String filePath, String fileName, int BCK_MTN_ECNT, int FILE_STG_DCNT, String strSlush)
@@ -357,7 +373,6 @@ public class DxT005 extends SocketCtl {
 				
 				String strBachupFile = filePath + strSlush +  strDumpFileName;
 				
-
 				//1. 파일보관일수 많큼 파일을 보관한다.
 				fileDate = new Date(strLastModified);
 				// 현재시간과 파일 수정시간 시간차 계산(단위 : 밀리 세컨드)

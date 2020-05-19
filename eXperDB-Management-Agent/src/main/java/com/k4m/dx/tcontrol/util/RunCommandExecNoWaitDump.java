@@ -79,7 +79,7 @@ public class RunCommandExecNoWaitDump extends Thread {
 			proc = Runtime.getRuntime().exec(new String[]{"/bin/sh", "-c", cmd}); 
 			proc.waitFor ();
 			
-			socketLogger.info("proc.exitValue() --> " + proc.exitValue());
+			// socketLogger.info("proc.exitValue() --> " + proc.exitValue());
 
 			if ( proc.exitValue() != 0 ) {
 				BufferedReader out = new BufferedReader ( new InputStreamReader ( proc.getInputStream() ) );
