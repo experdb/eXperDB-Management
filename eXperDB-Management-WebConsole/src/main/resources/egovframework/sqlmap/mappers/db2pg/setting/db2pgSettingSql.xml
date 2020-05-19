@@ -367,6 +367,7 @@
 		, lst_mdf_dtm
 		, trans_save_pth
 		, src_cnd_qry
+		, db2pg_uchr_lchr_val
 		)
 		VALUES
 		(
@@ -398,6 +399,7 @@
 		, clock_timestamp()
 		, #{trans_save_pth}
 		, #{src_cnd_qry}
+		, #{db2pg_uchr_lchr_val}
 		)		
 	</insert>
 	
@@ -454,6 +456,7 @@
         , lst_mdf_dtm=clock_timestamp()
         , trans_save_pth=#{trans_save_pth}
         , src_cnd_qry=#{src_cnd_qry}        
+        , db2pg_uchr_lchr_val=#{db2pg_uchr_lchr_val} 
         WHERE db2pg_trsf_wrk_id = #{db2pg_trsf_wrk_id}	
 	</update>
 	
@@ -530,6 +533,7 @@
 		, cnst_cnd_exrt_tf
 		, trans_save_pth
 		, src_cnd_qry
+		, db2pg_uchr_lchr_val		
 		FROM t_db2pg_trsf_wrk_inf wrk_inf, t_wrkcng_i wrkcng
 		WHERE db2pg_trsf_wrk_id=#{db2pg_trsf_wrk_id}
 		AND wrk_inf.wrk_id=wrkcng.wrk_id

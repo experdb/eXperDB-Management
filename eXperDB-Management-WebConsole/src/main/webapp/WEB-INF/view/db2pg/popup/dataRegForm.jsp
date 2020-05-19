@@ -159,7 +159,8 @@ function fn_insert_work(){
 						  		src_cnd_qry : $("#src_cnd_qry").val(),
 						  		usr_qry_use_tf : $('input[name="usr_qry_use_tf"]:checked').val(),
 						  		db2pg_usr_qry : $("#db2pg_usr_qry").val(),
-						  		src_table_total_cnt : src_table_total_cnt
+						  		src_table_total_cnt : src_table_total_cnt,
+						  		db2pg_uchr_lchr_val : $("#db2pg_uchr_lchr_val").val(),
 						  	},
 							type : "post",
 							beforeSend: function(xhr) {
@@ -383,7 +384,7 @@ function fn_tableAddCallback(rowList, tableGbn, totalCnt){
 						<table class="write">
 							<colgroup>
 								<col style="width:40%" />
-								<col style="width:20%" />
+								<col style="width:15%" />
 								<col style="width:30%" />
 								</col>
 							</colgroup>
@@ -422,7 +423,15 @@ function fn_tableAddCallback(rowList, tableGbn, totalCnt){
 								<tr>
 									<th scope="row" class="ico_t2"><spring:message code="migration.number_of_rows_extracted"/></th>
 									<td><input type="number" class="txt t8" name="exrt_dat_cnt" id="exrt_dat_cnt" value="-1" min="-1"/></td>
-								</tr>								
+									<th scope="row" class="ico_t2"><spring:message code="migration.specify_case"/></th>
+									<td>
+										<select name="db2pg_uchr_lchr_val" id="db2pg_uchr_lchr_val" class="select t4">
+											<c:forEach var="codeLetter" items="${codeLetter}">
+												<option value="${codeLetter.sys_cd_nm}">${codeLetter.sys_cd_nm}</option>
+											</c:forEach>
+										</select>
+									</td>
+								</tr>	
 							</tbody>
 						</table>
 					</div>

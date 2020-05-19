@@ -584,6 +584,8 @@ public class Db2pgSettingController {
 			mv.addObject("codeInputMode", codeInputMode);
 			List<CodeVO> codeTF = db2pgSettingService.selectCode("TC0029"); 
 			mv.addObject("codeTF", codeTF);
+			List<CodeVO> codeLetter = db2pgSettingService.selectCode("TC0028");
+			mv.addObject("codeLetter", codeLetter);
 		} catch (Exception e2) {
 			e2.printStackTrace();
 		}
@@ -723,6 +725,7 @@ public class Db2pgSettingController {
 			configObj.put("tar_constraint_ddl", dataConfigVO.getCnst_cnd_exrt_tf());
 			configObj.put("src_where_condition", dataConfigVO.getSrc_cnd_qry());
 			configObj.put("src_file_output_path", trans_path);
+			configObj.put("src_classify_string", dataConfigVO.getDb2pg_uchr_lchr_val());
 			
 			result = Db2pgConfigController.createDataConfig(configObj);
 		} catch (Exception e) {
@@ -793,6 +796,8 @@ public class Db2pgSettingController {
 			targetDataWork.setLst_mdfr_id(id);
 			targetDataWork.setTrans_save_pth(trans_path);
 			targetDataWork.setSrc_cnd_qry(sourceDataWork.getSrc_cnd_qry());
+			targetDataWork.setDb2pg_uchr_lchr_val(sourceDataWork.getDb2pg_uchr_lchr_val());
+			
 			db2pgSettingService.insertDataWork(targetDataWork);
 			
 			//3. config 파일 만들기
@@ -828,6 +833,7 @@ public class Db2pgSettingController {
 			configObj.put("tar_constraint_ddl", dataConfigVO.getCnst_cnd_exrt_tf());
 			configObj.put("src_where_condition", sourceDataWork.getSrc_cnd_qry());
 			configObj.put("src_file_output_path", trans_path);
+			configObj.put("src_classify_string", sourceDataWork.getDb2pg_uchr_lchr_val());
 			
 			result = Db2pgConfigController.createDataConfig(configObj);
 		} catch (Exception e) {
@@ -884,11 +890,14 @@ public class Db2pgSettingController {
 			mv.addObject("wrk_id",result.getWrk_id());
 			mv.addObject("exrt_trg_tb_total_cnt", result.getExrt_trg_tb_total_cnt());
 			mv.addObject("exrt_exct_tb_total_cnt", result.getExrt_exct_tb_total_cnt());
+			mv.addObject("db2pg_uchr_lchr_val",result.getDb2pg_uchr_lchr_val());
 			
 			List<CodeVO> codeInputMode = db2pgSettingService.selectCode("TC0030");
 			mv.addObject("codeInputMode", codeInputMode);
 			List<CodeVO> codeTF = db2pgSettingService.selectCode("TC0029"); 
 			mv.addObject("codeTF", codeTF);
+			List<CodeVO> codeLetter = db2pgSettingService.selectCode("TC0028");
+			mv.addObject("codeLetter", codeLetter);
 		} catch (Exception e2) {
 			e2.printStackTrace();
 		}
@@ -1010,6 +1019,7 @@ public class Db2pgSettingController {
 			configObj.put("tar_constraint_ddl", dataConfigVO.getCnst_cnd_exrt_tf());
 			configObj.put("src_where_condition", dataConfigVO.getSrc_cnd_qry());
 			configObj.put("src_file_output_path", trans_path);
+			configObj.put("src_classify_string", dataConfigVO.getDb2pg_uchr_lchr_val());
 
 			result = Db2pgConfigController.createDataConfig(configObj);
 		} catch (Exception e) {

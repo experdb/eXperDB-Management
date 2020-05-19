@@ -61,7 +61,7 @@ function fn_init() {
 			className : "dt-center",
 			render : function(data, type, full, meta) {
 				var html = "";
-				html += "<span class='btn btnC_01 btnF_02'><button onclick='fn_download(\""+full.name+"\",\""+full.path+"/\")'>다운로드</button></span>";	
+				html += "<span class='btn btnC_01 btnF_02'><button onclick='fn_download(\""+full.name+"\",\""+full.path+"/\")'><spring:message code='migration.download' /></button></span>";	
 				return html;
 			},
 			defaultContent : ""
@@ -134,7 +134,7 @@ function fn_download(name,path){
 <%@include file="../../cmmn/commonLocale.jsp"%>
 	<div class="pop_container">
 		<div class="pop_cts">
-			<p class="tit">DDL 수행이력 상세보기</p>
+			<p class="tit">DDL <spring:message code="migration.performance_history"/> <spring:message code="schedule.detail_view"/></p>
 			<div class="pop_cmm3">
 				<p class="pop_s_tit"><spring:message code="migration.job_information"/></p>
 				<table class="list" style="border: 1px solid #99abb0;">

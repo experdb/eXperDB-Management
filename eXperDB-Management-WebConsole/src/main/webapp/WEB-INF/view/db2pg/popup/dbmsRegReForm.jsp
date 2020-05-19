@@ -178,8 +178,7 @@ $(window.document).ready(function() {
 			<tbody>
 				<tr>
 					<th scope="row" class="ico_t1" ><spring:message code="migration.system_name"/>(*)</th>
-					<td colspan="3"><input type="text" class="txt t2" name="db2pg_sys_nm" id="db2pg_sys_nm"  maxlength="20" value="${resultInfo[0].db2pg_sys_nm}" readonly/>
-					</td>
+					<td colspan="3"><input type="text" class="txt t2" name="db2pg_sys_nm" id="db2pg_sys_nm"  maxlength="20" value="${resultInfo[0].db2pg_sys_nm}" readonly/></td>
 				</tr>
 							
 				<tr>
@@ -205,9 +204,7 @@ $(window.document).ready(function() {
 					<th scope="row" class="ico_t1">Database(*)</th>
 					<td><input type="text" class="txt" name="dtb_nm" id="dtb_nm" value="${resultInfo[0].dtb_nm}"/></td>
 					<th scope="row" class="ico_t1">Schema(*)</th>
-					<td>	
-							<input type="text" class="txt" name="scm_nm" id="scm_nm" value="${resultInfo[0].scm_nm}"/>
-					</td>	
+					<td><input type="text" class="txt" name="scm_nm" id="scm_nm" value="${resultInfo[0].scm_nm}"/></td>	
 				</tr>	
 				
 				<tr>
