@@ -34,14 +34,15 @@ $(window.document).ready(function() {
 	 if("${exrt_trg_tb_cnt}">0){
 		 $("#src_tables option:eq(0)").attr("selected", "selected");
 		 //$("#src_include_tables").val("${exrt_trg_tb_cnt}개");		 
-		 $("#src_include_tables").val("총 테이블 : ${exrt_trg_tb_total_cnt} 개 중   /   ${exrt_trg_tb_cnt}개 선택됨");
+		 $("#src_include_tables").val("<spring:message code='migration.total_table'/>: ${exrt_trg_tb_total_cnt} <spring:message code='migration.selected_out_of'/>   /   ${exrt_trg_tb_cnt}<spring:message code='migration.items'/>");
+		 
 		 $("#src_table_total_cnt").val("${exrt_trg_tb_total_cnt}");
 		 $("#include").show();
 		 $("#exclude").hide();
 	 }else if("${exrt_exct_tb_cnt}">0){
 		 $("#src_tables option:eq(1)").attr("selected", "selected");
 		 //$("#src_exclude_tables").val("${exrt_exct_tb_cnt}개");
-		 $("#src_exclude_tables").val("총 테이블 : ${exrt_exct_tb_total_cnt} 개 중   /   ${exrt_exct_tb_cnt}개 선택됨");
+		 $("#src_exclude_tables").val("<spring:message code='migration.total_table'/> : ${exrt_exct_tb_total_cnt} <spring:message code='migration.selected_out_of'/>   /   ${exrt_exct_tb_cnt}<spring:message code='migration.items'/>");
 		 $("#src_table_total_cnt").val("${exrt_exct_tb_total_cnt}")
 		 $("#exclude").show();
 		 $("#include").hide(); 
@@ -102,7 +103,8 @@ function fn_update_work(){
 		  		usr_qry_use_tf : $('input[name="usr_qry_use_tf"]:checked').val(),
 		  		db2pg_usr_qry : $("#db2pg_usr_qry").val(),
 		  		src_table_total_cnt : src_table_total_cnt,
-		  		wrk_id : $("#wrk_id").val()
+		  		wrk_id : $("#wrk_id").val(),
+		  		db2pg_uchr_lchr_val : $("#db2pg_uchr_lchr_val").val()
 		  	},
 			type : "post",
 			beforeSend: function(xhr) {
@@ -358,6 +360,14 @@ function fn_tableAddCallback(rowList, tableGbn, totalCnt){
 								<tr>
 									<th scope="row" class="ico_t2"><spring:message code="migration.number_of_rows_extracted"/></th>
 									<td><input type="number" class="txt t8" name="exrt_dat_cnt" id="exrt_dat_cnt" value="${exrt_dat_cnt}" min="-1"/></td>
+									<th scope="row" class="ico_t2"><spring:message code="migration.specify_case"/></th>
+									<td>
+										<select name="db2pg_uchr_lchr_val" id="db2pg_uchr_lchr_val" class="select t4">
+											<c:forEach var="codeLetter" items="${codeLetter}">
+									<option value="${codeLetter.sys_cd_nm}" ${db2pg_uchr_lchr_val == codeLetter.sys_cd_nm ? 'selected="selected"' : ''}>${codeLetter.sys_cd_nm}</option>
+								</c:forEach>
+										</select>
+									</td>
 								</tr>								
 							</tbody>
 						</table>

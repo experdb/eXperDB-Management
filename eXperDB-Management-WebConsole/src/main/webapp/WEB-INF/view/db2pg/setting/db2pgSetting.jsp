@@ -673,7 +673,7 @@ function fn_ImmediateStart(gbn){
 		var dataSet=[];
 		
 		if (rowCnt > 0) {				
-			alert(rowCnt+" 개의 Work를 실행하였습니다.");		
+			alert(rowCnt+" <spring:message code='migration.msg11' />");		
 			/* ********************************************************
 			 * 실행조건 필요(여러개의 WORK중 동일한 테이블 있을시, Alert알림 실행X)
 			 * 경우의 수가 너무 많음 추후 고려
@@ -708,7 +708,7 @@ function fn_ImmediateStart(gbn){
 						}
 					},
 					success : function(result) {
-						if (confirm('실행결과화면으로 이동하시겠습니까?')){
+						if (confirm("<spring:message code='migration.msg12' />")){
 							location.href='/db2pgHistory.do?gbn=mig' ;
 						}
 					}

@@ -26,12 +26,14 @@ public class Db2pgHistoryDAO extends EgovAbstractMapper{
 		return selectOne("db2pgHistorySql.selectLastMigExe");
 	}
 
+	@SuppressWarnings({ "unchecked", "deprecation" })
 	public List<Db2pgHistoryVO> selectDb2pgDDLHistory(Db2pgHistoryVO db2pgHistoryVO) {
 		List<Db2pgHistoryVO> result = null;
 		result = (List<Db2pgHistoryVO>) list("db2pgHistorySql.selectDb2pgDDLHistory", db2pgHistoryVO);
 		return result;
 	}
 
+	@SuppressWarnings({ "deprecation", "unchecked" })
 	public List<Db2pgHistoryVO> selectDb2pgMigHistory(Db2pgHistoryVO db2pgHistoryVO) {
 		List<Db2pgHistoryVO> result = null;
 		result = (List<Db2pgHistoryVO>) list("db2pgHistorySql.selectDb2pgMigHistory", db2pgHistoryVO);

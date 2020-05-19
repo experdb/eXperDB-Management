@@ -272,6 +272,7 @@ alter table t_db2pg_ddl_wrk_inf add constraint pk_t_db2pg_ddl_wrk_inf
 primary key (db2pg_ddl_wrk_id);
  
 ALTER TABLE t_migexe_g ADD COLUMN save_pth varchar(300);
+ALTER TABLE t_db2pg_trsf_wrk_inf add column db2pg_uchr_lchr_val varchar(50);
 
 create sequence q_db2pg_ddl_wrk_inf_01;
 create sequence q_db2pg_sys_inf_01;

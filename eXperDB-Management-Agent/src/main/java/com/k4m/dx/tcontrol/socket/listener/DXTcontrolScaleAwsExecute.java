@@ -84,13 +84,13 @@ public class DXTcontrolScaleAwsExecute extends SocketCtl{
 			} else { //조회인경우
 				//조회 쿼리돌리고 값 리턴함
 				//instance ip 찾기
-				String masterIp = "";				
+				String masterNm = "";				
 				if ("instanceCnt".equals(searchGbn) || "scaleIngChk".equals(searchGbn))  {
-					masterIp = masterIpSearch();
-					scaleCmd = scaleCmd + " \"Name=private-ip-address,Values=" + masterIp + "\"";
+					masterNm = masterIpSearch();
+					//scaleCmd = scaleCmd + " \"Name=private-ip-address,Values=" + masterIp + "\"";
+					scaleCmd = scaleCmd + " \"Name=tag:Name,Values=" + masterNm + "\"";
 				}
 
-				
 				RunCommandExec r = new RunCommandExec(scaleCmd);
 				//명령어 실행
 				r.run();
@@ -236,6 +236,46 @@ public class DXTcontrolScaleAwsExecute extends SocketCtl{
 	//조회 일경우 조회 목록 받기
 	public String masterIpSearch() throws Exception {
 		String scaleMainCmd = "";
+		String scale_path = "";
+
+		try {
+			scale_path = FileUtil.getPropertyValue("context.properties", "agent.scale_path");
+
+			//scaleMainCmd = "psql -c \"select conninfo from nodes where type = 'primary' ; \" -t -d repmgr -U repmgr | grep -v conninfo | grep -v row  | sed \"s/host=//\" | awk '{print $1}'";
+			scaleMainCmd = "cat " + scale_path + "/setting.json";
+			RunCommandExec rMain = new RunCommandExec(scaleMainCmd);
+			//명령어 실행
+			rMain.run();
+
+			try {
+				rMain.join();
+			} catch (InterruptedException ie) {
+				ie.printStackTrace();
+			}
+
+			String strResultMessgeMain = rMain.getMessage();
+
+			if (!"".equals(strResultMessgeMain)) {
+				JSONParser parser = new JSONParser();
+				Object obj = parser.parse( strResultMessgeMain );
+				JSONObject jsonObj = (JSONObject) obj;
+				
+				String instanceName = (String) jsonObj.get("instanceName");
+				int iInstanceCnt = 0;
+				if (!"".equals(instanceName)) {
+					iInstanceCnt = instanceName.lastIndexOf("-");
+					scaleMainCmd = instanceName.substring(0, iInstanceCnt+1) + "*";
+				}
+			}
+		} catch (Exception ie) {
+			ie.printStackTrace();
+		}
+
+		return scaleMainCmd;
+	}
+
+/*	public String masterIpSearch() throws Exception {
+		String scaleMainCmd = "";
 
 
 		try {
@@ -276,5 +316,7 @@ public class DXTcontrolScaleAwsExecute extends SocketCtl{
 		}
 		
 		return scaleMainCmd;
-	}
+	}*/
+	
+	
 }
