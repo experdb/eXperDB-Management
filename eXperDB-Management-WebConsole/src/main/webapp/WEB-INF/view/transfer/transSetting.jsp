@@ -50,8 +50,8 @@
 			{ data : "db_svr_nm",  className : "dt-center", defaultContent : "",orderable : false}, 
 			{ data : "connect_nm",  className : "dt-center", defaultContent : "",orderable : false}, 
 			{ data : "db_nm",  className : "dt-center", defaultContent : "",orderable : false}, 
-			/* { data : "snapshot_nm",  className : "dt-center", defaultContent : "",orderable : false}, 			
-			{
+			 { data : "snapshot_nm",  className : "dt-center", defaultContent : "",orderable : false}, 			
+			/*{
 				data : "status",
 				render : function(data, type, full, meta) {
 					var html="";
@@ -99,7 +99,7 @@
 		
 		
 		//더블 클릭시
-		$('#transSettingTable tbody').on('dblclick','tr',function() {
+		/* $('#transSettingTable tbody').on('dblclick','tr',function() {
 				var data = table.row(this).data();
 				var name = data.name;
 	 			var popUrl = "/popup/transferTargetDetailRegForm.do?&&cnr_id=${cnr_id}&&name="+name; // 서버 url 팝업경로
@@ -110,7 +110,7 @@
 	 			var popOption = "width="+width+", height="+height+", top="+top+", left="+left+", resizable=no, scrollbars=yes, status=no, toolbar=no, titlebar=yes, location=no,";
 	 			
 	 			window.open(popUrl,"",popOption);
-			});	
+			}); */	
 		
 		
 	 	$('#transSettingTable tbody').on('click','#transStart', function () {
@@ -432,8 +432,8 @@
 								<th width="100">서버명</th>
 								<th width="100">Connect 명</th>
 								<th width="100"><spring:message code="common.dbms_name" /></th>
-								<!-- <th width="100">스냅샷 모드</th> -->
-								<th width="30">구동상태</th>
+								<th width="100">스냅샷 모드</th>
+								<!-- <th width="30">구동상태</th> -->
 							</tr>
 						</thead>
 					</table>

@@ -104,4 +104,13 @@ public interface TransService {
 	public void deleteTransSetting(int trans_id) throws Exception;
 
 
+	/**
+	 * 전송설정 정보 수정
+	 * @param transVO
+	 * @return vo
+	 * @throws Exception
+	 */
+	public void updateConnectInfo(TransVO transVO) throws Exception;
+
+
 }

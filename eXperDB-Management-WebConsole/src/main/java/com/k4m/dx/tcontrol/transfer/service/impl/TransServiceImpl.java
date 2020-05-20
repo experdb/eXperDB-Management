@@ -79,4 +79,9 @@ public class TransServiceImpl extends EgovAbstractServiceImpl implements TransSe
 		transDAO.deleteTransSetting(trans_id);		
 	}
 
+	@Override
+	public void updateConnectInfo(TransVO transVO) throws Exception {
+		transDAO.updateConnectInfo(transVO);	
+	}
+
 }

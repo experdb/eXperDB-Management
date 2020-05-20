@@ -218,8 +218,7 @@ public class TransController {
 				for (int i = 0; i < schemas.length; i++) {
 					tableArray.add(schemas[i]);
 				}
-				
-				
+					
 				mv.addObject("kc_ip", transInfo.get(0).get("kc_ip"));
 				mv.addObject("kc_port", transInfo.get(0).get("kc_port"));
 				mv.addObject("connect_nm", transInfo.get(0).get("connect_nm"));
@@ -231,9 +230,9 @@ public class TransController {
 				mv.addObject("schema_total_cnt", mappInfo.get(0).get("schema_total_cnt"));
 				mv.addObject("table_total_cnt", mappInfo.get(0).get("table_total_cnt"));
 				mv.addObject("trans_exrt_trg_tb_id", trans_exrt_trg_tb_id);
-				
+				mv.addObject("trans_id",trans_id);				
 			}
-			
+	
 			mv.addObject("schemas", schemaArray);
 			mv.addObject("tables", tableArray);
 			mv.addObject("act", act);
@@ -805,6 +804,7 @@ public class TransController {
 				@ModelAttribute("historyVO") HistoryVO historyVO, HttpServletRequest request,
 				HttpServletResponse response) {
 			
+			String tansExrttrgMapp_status = "success";
 			transMappVO.setTrans_exrt_trg_tb_id(Integer.parseInt(request.getParameter("trans_exrt_trg_tb_id")));
 			
 			
@@ -837,8 +837,20 @@ public class TransController {
 					
 					transService.updateTransExrttrgMapp(transMappVO);								
 				}catch (Exception e) {
+					tansExrttrgMapp_status = "fail";
 					e.printStackTrace();			
 					return false;
+				}
+				
+
+				// 전송설정 업데이트				
+				if(tansExrttrgMapp_status.equals("success")){
+					try{						
+						transService.updateConnectInfo(transVO);								
+					}catch (Exception e) {			
+						e.printStackTrace();			
+						return false;
+					}	
 				}
 
 				/*// 화면접근이력 이력 남기기

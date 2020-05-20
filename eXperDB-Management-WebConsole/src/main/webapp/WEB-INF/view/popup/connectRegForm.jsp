@@ -41,14 +41,14 @@ var tableList = ${tables};
 
 		if("${act}" =="u"){	
 			$("#db_id option").not(":selected").attr("disabled", "disabled");
-			$("#snapshot_mode option").not(":selected").attr("disabled", "disabled");
+			/* $("#snapshot_mode option").not(":selected").attr("disabled", "disabled"); */
 
 			
 			$('#trans_include_schema').val("<spring:message code='migration.total_schema'/>${schema_total_cnt}<spring:message code='migration.selected_out_of'/>"+schemaList.length+"<spring:message code='migration.items'/>");
 			$('#trans_include_table').val("<spring:message code='migration.total_table'/>${table_total_cnt}<spring:message code='migration.selected_out_of'/>"+tableList.length+"<spring:message code='migration.items'/>");
 		}
 		
-		$("#snapshotModeDetail").html("(초기스냅샷 1회만 수행)");	
+		$("#snapshotModeDetail").html("(스냅샷 수행하지 않음)");	
 	});
 
 
@@ -105,7 +105,7 @@ var tableList = ${tables};
 	 * 커넥터 설정 등록
 	 ******************************************************** */
 	function fn_insert() {
-
+		
 		if(valCheck()){
 				var kafkaIp = $("#kc_ip").val();
 				var kafkaPort=	$("#kc_port").val();
@@ -167,17 +167,23 @@ var tableList = ${tables};
 	/* 수정 버튼 클릭시*/
 	function fn_update() {
 			
+			var trans_id = "${trans_id}";
+			var db_id = $("#db_id").val();
 			var exrt_trg_scm_nm = $("#include_schema_nm").val() 
 			var exrt_trg_tb_nm = $("#table_mapp_nm").val();
 			var schema_total_cnt= $('#schema_total_cnt').val();
 			var table_total_cnt = $('#table_total_cnt').val();
 			var trans_exrt_trg_tb_id	 =	"${trans_exrt_trg_tb_id}";
+			var snapshot_mode=	$("#snapshot_mode").val();
+			
 			$.ajax({
 				url : '/updateConnectInfo.do',
 				type : 'post',
 				data : {
+					trans_id : trans_id,
 					trans_exrt_trg_tb_id : trans_exrt_trg_tb_id,
 					exrt_trg_scm_nm : exrt_trg_scm_nm,
+					snapshot_mode : snapshot_mode,
 					exrt_trg_tb_nm : exrt_trg_tb_nm,
 					schema_total_cnt : schema_total_cnt,
 					table_total_cnt : table_total_cnt
@@ -535,7 +541,7 @@ function fn_tableAddCallback(rowList, tableGbn, totalCnt, table_mapp){
 					<tr>
 						<th scope="row" class="ico_t1"><spring:message code="common.database" /></th>
 						<td colspan="2">
-							<select name="db_id" id="db_id" class="select" s>
+							<select name="db_id" id="db_id" class="select" >
 								<option value=""><spring:message code="common.choice" /></option>
 								<c:forEach var="result" items="${dbList}" varStatus="status">
 								<option value="<c:out value="${result.db_id}"/>"<c:if test="${db_nm eq result.db_nm}"> selected</c:if>><c:out value="${result.db_nm}"/></option>
@@ -544,20 +550,25 @@ function fn_tableAddCallback(rowList, tableGbn, totalCnt, table_mapp){
 							</select>
 						</td>
 					</tr>
-					<%-- <tr>
+					<tr>
 						<th scope="row" class="ico_t1">스냅샷 모드</th>
 						<td>
 							<select id="snapshot_mode" name="snapshot_mode" class="select" >
 								<c:forEach var="result" items="${snapshotModeList}">
-								<option value="<c:out value="${result.sys_cd}"/>"<c:if test="${snapshot_nm eq result.sys_cd_nm}"> selected</c:if>><c:out value="${result.sys_cd_nm}"/></option>
-								<option value="<c:out value="${result.sys_cd}"/>"><c:out value="${result.sys_cd_nm}"/></option>
+								<c:if test="${act == 'i'}">
+								<option value="<c:out value="${result.sys_cd}"/>"<c:if test="${result.sys_cd ==  'TC003603'}"> selected</c:if>><c:out value="${result.sys_cd_nm}"/></option>
+								</c:if>
+								<c:if test="${act == 'u'}">
+								
+									<option value="<c:out value="${result.sys_cd}"/>"<c:if test="${snapshot_nm eq result.sys_cd_nm}"> selected</c:if>><c:out value="${result.sys_cd_nm}"/></option>
+								</c:if>
 								</c:forEach>							
 							</select>							
 						</td>
 						<td style="font-size:13px; font-style:italic;">
 							<span id="snapshotModeDetail" name="snapshotModeDetail"></span>
 						</td>
-					</tr> --%>
+					</tr>
 					<tr>
 						<th scope="row" class="ico_t1">
 							<select name="src_tables" id="src_tables" class="select" >

@@ -67,4 +67,8 @@ public class TransDAO extends EgovAbstractMapper{
 		delete("transSQL.deleteTransSetting",trans_id);	
 	}
 
+	public void updateConnectInfo(TransVO transVO) {
+		update("transSQL.updateConnectInfo",transVO);	
+	}
+
 }
