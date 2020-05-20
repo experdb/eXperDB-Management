@@ -116,7 +116,7 @@ public class Db2pgConfigController {
 				if(!configObj.get("src_where_condition").toString().equals("")){
 					fileContent = fileContent.replaceAll("#SRC_WHERE_CONDITION=", "SRC_WHERE_CONDITION="+configObj.get("src_where_condition").toString());
 				}
-				fileContent = fileContent.replaceAll("SRC_FILE_OUTPUT_PATH=./", "SRC_FILE_OUTPUT_PATH="+configObj.get("src_file_output_path").toString());
+//				fileContent = fileContent.replaceAll("SRC_FILE_OUTPUT_PATH=./", "SRC_FILE_OUTPUT_PATH="+configObj.get("src_file_output_path").toString());
 				fileContent = fileContent.replaceAll("SRC_CLASSIFY_STRING=original", "SRC_CLASSIFY_STRING="+configObj.get("src_classify_string").toString());	
 				
 				bw.write(fileContent + "\r\n");
