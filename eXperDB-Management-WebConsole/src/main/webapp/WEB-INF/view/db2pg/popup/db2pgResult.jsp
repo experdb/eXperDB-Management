@@ -43,7 +43,7 @@
 <%@include file="../../cmmn/commonLocale.jsp"%>
 	<div class="pop_container">
 		<div class="pop_cts">
-			<p class="tit">Migration 수행이력 상세보기</p>
+			<p class="tit">Migration <spring:message code="migration.performance_history"/> <spring:message code="schedule.detail_view"/></p>
 			<div class="pop_cmm3">
 				<p class="pop_s_tit"><spring:message code="migration.job_information"/></p>
 				<table class="list" style="border: 1px solid #99abb0;">
@@ -75,7 +75,7 @@
 							<tr>
 								<td><spring:message code="schedule.result" /></td>
 								<td style="text-align: left">
-									<c:if test="${result.exe_rslt_cd eq 'TC001701'}"><img src='../../images/ico_state_02.png' style='margin-right:3px;'>Success</c:if>
+									<c:if test="${result.exe_rslt_cd eq 'TC001701'}"><img src='../../images/ico_state_02.png' style='margin-right:3px;'>Complete</c:if>
 									<c:if test="${result.exe_rslt_cd eq 'TC001702'}"><img src='../../images/ico_state_01.png' style='margin-right:3px;'>Fail</c:if>
 								</td>
 							</tr>

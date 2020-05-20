@@ -13,6 +13,10 @@ import javax.servlet.http.HttpSession;
 import org.json.simple.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.transaction.PlatformTransactionManager;
+import org.springframework.transaction.TransactionDefinition;
+import org.springframework.transaction.TransactionStatus;
+import org.springframework.transaction.support.DefaultTransactionDefinition;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -20,6 +24,7 @@ import org.springframework.web.servlet.ModelAndView;
 
 import com.k4m.dx.tcontrol.admin.dbauthority.service.DbAuthorityService;
 import com.k4m.dx.tcontrol.admin.dbserverManager.service.DbServerVO;
+import com.k4m.dx.tcontrol.backup.service.WorkVO;
 import com.k4m.dx.tcontrol.cmmn.CmmnUtils;
 import com.k4m.dx.tcontrol.common.service.CmmnCodeDtlService;
 import com.k4m.dx.tcontrol.common.service.CmmnCodeVO;
@@ -60,6 +65,9 @@ public class InstanceScaleController {
 	@Autowired
 	private CmmnCodeDtlService cmmnCodeDtlService;
 
+	@Autowired
+	private PlatformTransactionManager txManager;
+
 	/**
 	 * SCale List View page
 	 * @param HistoryVO, HttpServletRequest
@@ -78,7 +86,7 @@ public class InstanceScaleController {
 
 		ModelAndView mv = new ModelAndView();
 
-		if(dbSvrAut.get(0).get("scale_yn").equals("N")){
+		if(dbSvrAut.get(0).get("scale_aut_yn").equals("N")){
 			mv.setViewName("error/autError");
 		}else{
 			try {
@@ -192,7 +200,7 @@ public class InstanceScaleController {
 
 		ModelAndView mv = new ModelAndView();
 		//읽기 권한이 없는경우 error페이지 호출 , [추후 Exception 처리예정]
-		if(dbSvrAut.get(0).get("scale_yn").equals("N")){
+		if(dbSvrAut.get(0).get("scale_aut_yn").equals("N")){
 			mv.setViewName("error/autError");	
 		}else{
 			try {
@@ -223,7 +231,9 @@ public class InstanceScaleController {
 		HttpSession session = request.getSession();
 		LoginVO loginVo = (LoginVO) session.getAttribute("session");
 
-		String scaleSet = request.getParameter("scaleSet");	
+		String scaleSet = request.getParameter("scaleSet");
+		int scale_count = Integer.parseInt(request.getParameter("scale_count"));
+				
 		String dtlCd = "";
 		if ("scaleIn".equals(scaleSet)) {
 			dtlCd = "DX-T0056_02";
@@ -239,6 +249,7 @@ public class InstanceScaleController {
 			param.put("scale_set", scaleSet);
 			param.put("login_id", (String)loginVo.getUsr_id());
 			param.put("db_svr_id", db_svr_id);
+			param.put("scale_count", scale_count);
 
 			result = (Map<String, Object>)instanceScaleService.scaleInOutSet(historyVO, param);
 		} catch (Exception e) {
@@ -269,30 +280,6 @@ public class InstanceScaleController {
 		
 		return mv;
 	}
-
-	/**
-	 * scale 리스트를 조회한다.
-	 * @param HistoryVO, InstanceScaleVO, HttpServletRequest
-	 * @return JSONObject
-	 * @throws Exception
-	 */
-	@RequestMapping("/securityGroupList.do")
-	public @ResponseBody JSONObject securityGroupList(@ModelAttribute("historyVO") HistoryVO historyVO, @ModelAttribute("instanceScaleVO") InstanceScaleVO instanceScaleVO, HttpServletRequest request) throws Exception {
-		JSONObject result = new JSONObject();
-		String dtlCd = "DX-T0056_05";
-
-		try {
-			// 화면접근이력 이력 남기기
-			instanceScaleService.scaleSaveHistory(request, historyVO, dtlCd);
-
-			result = instanceScaleService.instanceSecurityListSetting(instanceScaleVO);
-		} catch (FileNotFoundException e) {
-			e.printStackTrace();
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-		return result;
-	}
 	
 	/**
 	 * Scale Log View page
@@ -300,7 +287,7 @@ public class InstanceScaleController {
 	 * @return ModelAndView
 	 */
 	@RequestMapping("/scaleLogList.do")
-	public ModelAndView rmanLogList(@ModelAttribute("historyVO") HistoryVO historyVO, @ModelAttribute("instanceScaleVO") InstanceScaleVO instanceScaleVO, HttpServletRequest request) {
+	public ModelAndView scaleLogList(@ModelAttribute("historyVO") HistoryVO historyVO, @ModelAttribute("instanceScaleVO") InstanceScaleVO instanceScaleVO, HttpServletRequest request) {
 		ModelAndView mv = new ModelAndView();
 		int db_svr_id = instanceScaleVO.getDb_svr_id();
 
@@ -309,7 +296,7 @@ public class InstanceScaleController {
 		dbSvrAut = cu.selectUserDBSvrAutList(dbAuthorityService, db_svr_id);
 
 		//읽기 권한이 없는경우 error페이지 호출 , [추후 Exception 처리예정]
-		if(dbSvrAut.get(0).get("scale_hist_yn").equals("N")){
+		if(dbSvrAut.get(0).get("scale_hist_aut_yn").equals("N")){
 			mv.setViewName("error/autError");
 		} else {
 			try {
@@ -391,6 +378,414 @@ public class InstanceScaleController {
 			result = instanceScaleService.selectScaleHistoryList(instanceScaleVO);
 		} catch (Exception e) {
 			e.printStackTrace();
+		}
+
+		return result;
+	}
+	
+	/**
+	 * scale 실패 이력정보
+	 * @param  request, instanceScaleVO
+	 * @return result
+	 * @throws Exception
+	 */
+	@SuppressWarnings("unchecked")
+	@RequestMapping(value = "/selectScaleWrkErrorMsg.do")
+	@ResponseBody
+	public Map<String, Object> selectScaleWrkErrorMsg(HttpServletRequest request, @ModelAttribute("instanceScaleVO") InstanceScaleVO instanceScaleVO) {
+		Map<String, Object> result = null;
+		
+		try {	
+			result = instanceScaleService.selectScaleWrkErrorMsg(instanceScaleVO);	
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return result;
+	}
+	
+	/**
+	 * scale 실행이력 상세정보 조회
+	 * @param  request
+	 * @return result
+	 * @throws Exception
+	 */
+	@SuppressWarnings("unchecked")
+	@RequestMapping(value = "/selectScaleWrkInfo.do")
+	@ResponseBody
+	public Map<String, Object> selectScaleWrkInfo(HttpServletRequest request, @ModelAttribute("instanceScaleVO") InstanceScaleVO instanceScaleVO) {
+		Map<String, Object> result = null;
+		
+		try {
+			result = instanceScaleService.selectScaleWrkInfo(instanceScaleVO);	
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return result;
+	}
+
+	/**
+	 * Scale Setting View page
+	 * @param HistoryVO, InstanceScaleVO, HttpServletRequest
+	 * @return ModelAndView
+	 */
+	@RequestMapping("/scaleManagement.do")
+	public ModelAndView scaleManagement(@ModelAttribute("historyVO") HistoryVO historyVO, @ModelAttribute("instanceScaleVO") InstanceScaleVO instanceScaleVO, HttpServletRequest request) {
+		ModelAndView mv = new ModelAndView();
+		int db_svr_id = instanceScaleVO.getDb_svr_id();
+
+		//유저 디비서버 권한 조회 (공통메소드호출),
+		CmmnUtils cu = new CmmnUtils();
+		dbSvrAut = cu.selectUserDBSvrAutList(dbAuthorityService, db_svr_id);
+
+		//읽기 권한이 없는경우 error페이지 호출 , [추후 Exception 처리예정]
+		if(dbSvrAut.get(0).get("scale_cng_aut_yn").equals("N")){
+			mv.setViewName("error/autError");
+		} else {
+			try {
+				//db서버명 조회
+				DbServerVO schDbServerVO = new DbServerVO();
+				schDbServerVO.setDb_svr_id(db_svr_id);
+				DbServerVO dbServerVO = (DbServerVO) cmmnServerInfoService.selectServerInfo(schDbServerVO);
+				
+				String dtlCd = "DX-T0058";
+				
+				// 화면접근이력 이력 남기기
+				instanceScaleService.scaleSaveHistory(request, historyVO, dtlCd);
+				
+				mv.addObject("db_svr_nm", dbServerVO.getDb_svr_nm()); //db서버명
+				mv.addObject("db_svr_id", db_svr_id);
+
+				HttpSession session = request.getSession();
+				LoginVO loginVo = (LoginVO) session.getAttribute("session");
+				mv.addObject("login_id", (String)loginVo.getUsr_id());
+				
+				//작업유형 공통코드 조회
+				PageVO pageVO = new PageVO();
+				List<CmmnCodeVO> cmmnCodeVO =  null;
+
+				//실행유형
+				pageVO.setGrp_cd("TC0034");
+				pageVO.setSearchCondition("0");
+				cmmnCodeVO = cmmnCodeDtlService.cmmnDtlCodeSearch(pageVO);
+				mv.addObject("executeTypeList",cmmnCodeVO);
+				
+				//정책유형
+				pageVO.setGrp_cd("TC0035");
+				pageVO.setSearchCondition("0");
+				cmmnCodeVO = cmmnCodeDtlService.cmmnDtlCodeSearch(pageVO);
+				mv.addObject("policyTypeList",cmmnCodeVO);
+
+				mv.setViewName("scale/experdbScaleCngList");
+			} catch (Exception e1) {
+				e1.printStackTrace();
+			}
+		}
+
+		return mv;	
+	}
+	
+	/**
+	 * Scale Auto Setting List 조회
+	 * @param WorkVO
+	 * @return List<WorkVO>
+	 */
+	@RequestMapping("/selectScaleCngList.do")
+	@ResponseBody
+	public List<Map<String, Object>> selectScriptList(@ModelAttribute("instanceScaleVO") InstanceScaleVO instanceScaleVO,HttpServletRequest request, @ModelAttribute("historyVO") HistoryVO historyVO){
+		List<Map<String, Object>> result = null;
+		
+		String dtlCd = "DX-T0058_01";
+		try {
+			// 화면접근이력 이력 남기기
+			instanceScaleService.scaleSaveHistory(request, historyVO, dtlCd);
+			
+			result = instanceScaleService.selectScaleCngList(instanceScaleVO);
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		return result;
+	}
+	
+	/**
+	 * Auto scale setting Registration View page
+	 * @param WorkVO
+	 * @return ModelAndView
+	 */
+	@SuppressWarnings("unchecked")
+	@RequestMapping("/popup/scaleAutoRegForm.do")
+	public ModelAndView scaleAutoRegForm(@ModelAttribute("instanceScaleVO") InstanceScaleVO instanceScaleVO, HttpServletRequest request, @ModelAttribute("historyVO") HistoryVO historyVO) {
+		ModelAndView mv = new ModelAndView();
+		
+		int db_svr_id = instanceScaleVO.getDb_svr_id();
+		
+		String dtlCd = "DX-T0059";
+		try {
+			// 화면접근이력 이력 남기기
+			instanceScaleService.scaleSaveHistory(request, historyVO, dtlCd);
+			//작업유형 공통코드 조회
+			PageVO pageVO = new PageVO();
+			List<CmmnCodeVO> cmmnCodeVO = null;
+
+			//정책유형
+			pageVO.setGrp_cd("TC0035");
+			pageVO.setSearchCondition("0");
+			cmmnCodeVO = cmmnCodeDtlService.cmmnDtlCodeSearch(pageVO);
+			mv.addObject("policyTypeList",cmmnCodeVO);
+			
+			//실행유형
+			pageVO.setGrp_cd("TC0034");
+			pageVO.setSearchCondition("0");
+			cmmnCodeVO = cmmnCodeDtlService.cmmnDtlCodeSearch(pageVO);
+			mv.addObject("executeTypeList",cmmnCodeVO);
+
+			mv.addObject("db_svr_id", db_svr_id);
+			mv.setViewName("popup/scaleAutoRegForm");
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
+		return mv;	
+	}
+	
+	/**
+	 * Auto scale setting insert
+	 * @param 
+	 * @return
+	 */
+	@RequestMapping("/popup/scaleCngWrite.do")
+	@ResponseBody
+	public String scaleCngWrite(@ModelAttribute("historyVO") HistoryVO historyVO, @ModelAttribute("instanceScaleVO") InstanceScaleVO instanceScaleVO, @ModelAttribute("workVO") WorkVO workVO, HttpServletResponse response, HttpServletRequest request) {
+		HttpSession session = request.getSession();
+		LoginVO loginVo = (LoginVO) session.getAttribute("session");
+		instanceScaleVO.setLogin_id((String)loginVo.getUsr_id());
+
+		//중복체크 flag 값
+		String result = "S";
+		String dtlCd = "DX-T0059_01";
+		try {
+			//저장 process
+			result = instanceScaleService.insertAutoScaleSetting(instanceScaleVO);
+
+			//저장 완료시
+			if ("S".equals(result)) {
+				// 화면접근이력 이력 남기기
+				instanceScaleService.scaleSaveHistory(request, historyVO, dtlCd);
+			}
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
+		return result;
+	}
+	
+	/**
+	 * Auto scale setting Modify View page
+	 * @param WorkVO
+	 * @return ModelAndView
+	 */
+	@SuppressWarnings("unchecked")
+	@RequestMapping("/popup/scaleAutoReregForm.do")
+	public ModelAndView scaleAutoReregForm(@ModelAttribute("instanceScaleVO") InstanceScaleVO instanceScaleVO, HttpServletRequest request, @ModelAttribute("historyVO") HistoryVO historyVO) {
+		ModelAndView mv = new ModelAndView();
+		int db_svr_id = instanceScaleVO.getDb_svr_id();
+		
+		String dtlCd = "DX-T0060";
+		try {
+			// 화면접근이력 이력 남기기
+			instanceScaleService.scaleSaveHistory(request, historyVO, dtlCd);
+			//작업유형 공통코드 조회
+			PageVO pageVO = new PageVO();
+			List<CmmnCodeVO> cmmnCodeVO = null;
+
+			//정책유형
+			pageVO.setGrp_cd("TC0035");
+			pageVO.setSearchCondition("0");
+			cmmnCodeVO = cmmnCodeDtlService.cmmnDtlCodeSearch(pageVO);
+			mv.addObject("policyTypeList",cmmnCodeVO);
+
+			//실행유형
+			pageVO.setGrp_cd("TC0034");
+			pageVO.setSearchCondition("0");
+			cmmnCodeVO = cmmnCodeDtlService.cmmnDtlCodeSearch(pageVO);
+			mv.addObject("executeTypeList",cmmnCodeVO);
+			
+			mv.addObject("db_svr_id",instanceScaleVO.getDb_svr_id());
+			mv.addObject("wrk_id",instanceScaleVO.getWrk_id());
+	
+			mv.addObject("db_svr_id", db_svr_id);
+			mv.setViewName("popup/scaleAutoReregForm");
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
+		return mv;
+	}	
+	
+	/**
+	 * Auto scale setting update
+	 * @param 
+	 * @return
+	 */
+	@RequestMapping("/popup/scaleCngUpdate.do")
+	@ResponseBody
+	public String scaleCngUpdate(@ModelAttribute("historyVO") HistoryVO historyVO, @ModelAttribute("instanceScaleVO") InstanceScaleVO instanceScaleVO, @ModelAttribute("workVO") WorkVO workVO, HttpServletResponse response, HttpServletRequest request) {
+		HttpSession session = request.getSession();
+		LoginVO loginVo = (LoginVO) session.getAttribute("session");
+		instanceScaleVO.setLogin_id((String)loginVo.getUsr_id());
+
+		//중복체크 flag 값
+		String result = "S";
+		String dtlCd = "DX-T0060_01";
+		try {
+			//저장 process
+			result = instanceScaleService.updateAutoScaleSetting(instanceScaleVO);
+
+			//저장 완료시
+			if ("S".equals(result)) {
+				// 화면접근이력 이력 남기기
+				instanceScaleService.scaleSaveHistory(request, historyVO, dtlCd);
+			}
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
+		return result;
+	}
+	
+	/**
+	 * scale 설정 정보 상세조회
+	 * @param  request
+	 * @return result
+	 * @throws Exception
+	 */
+	@RequestMapping(value = "/selectAutoScaleCngInfo.do")
+	@ResponseBody
+	public Map<String, Object> selectAutoScaleCngInfo(HttpServletRequest request, @ModelAttribute("instanceScaleVO") InstanceScaleVO instanceScaleVO) {
+		Map<String, Object> result = null;
+
+		try {
+			result = instanceScaleService.selectAutoScaleCngInfo(instanceScaleVO);	
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return result;
+	}
+	
+	/**
+	 * scale 설정 정보 delete
+	 * @param 
+	 * @return
+	 */
+	@RequestMapping(value = "/scaleWrkIdDelete.do")
+	@ResponseBody
+	public String scaleWrkIdDelete(@ModelAttribute("historyVO") HistoryVO historyVO, @ModelAttribute("instanceScaleVO") InstanceScaleVO instanceScaleVO, HttpServletRequest request){
+		HttpSession session = request.getSession();
+		LoginVO loginVo = (LoginVO) session.getAttribute("session");
+		instanceScaleVO.setLogin_id((String)loginVo.getUsr_id());	
+
+		String result = "S";
+		String dtlCd = "DX-T0058_02";
+	
+		// Transaction 
+		DefaultTransactionDefinition def  = new DefaultTransactionDefinition();
+		def.setPropagationBehavior(TransactionDefinition.PROPAGATION_REQUIRED);
+		TransactionStatus status = txManager.getTransaction(def);
+		
+		try{
+			String wrk_id_Rows = request.getParameter("wrk_id_List").toString().replaceAll("&quot;", "\"");
+			
+			if (!"".equals(wrk_id_Rows)) {
+				instanceScaleVO.setWrk_id_Rows(wrk_id_Rows);
+			} else {
+				result = "P";
+			}
+			
+			result = instanceScaleService.deleteAutoScaleSetting(instanceScaleVO);
+
+			//저장 완료시
+			if ("S".equals(result)) {
+				// 화면접근이력 이력 남기기
+				instanceScaleService.scaleSaveHistory(request, historyVO, dtlCd);
+			}
+			
+			return result;
+			
+		} catch(Exception e){
+			e.printStackTrace();
+			txManager.rollback(status);
+		}finally{
+			txManager.commit(status);
+		}
+		
+		return result;
+	}	
+	
+	/**
+	 * scale 실행 팝업
+	 * @param WorkVO
+	 * @return ModelAndView
+	 */
+	@SuppressWarnings("unchecked")
+	@RequestMapping("/popup/scaleInOutCountForm.do")
+	public ModelAndView scaleInOutCountForm(@ModelAttribute("instanceScaleVO") InstanceScaleVO instanceScaleVO, HttpServletRequest request, @ModelAttribute("historyVO") HistoryVO historyVO) {
+		ModelAndView mv = new ModelAndView();
+
+		String dtlCd = "DX-T0056_06";
+		try {
+			// 화면접근이력 이력 남기기
+			instanceScaleService.scaleSaveHistory(request, historyVO, dtlCd);
+
+			mv.addObject("db_svr_id", instanceScaleVO.getDb_svr_id());
+			mv.addObject("title_gbn", instanceScaleVO.getTitle_gbn());
+	
+			mv.setViewName("popup/scaleExecuteForm");
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
+		return mv;	
+	}
+	
+	/**
+	 * aws 설치여부 체크
+	 * @param HttpServletRequest, HttpServletResponse 
+	 * @return Map<String, Object>
+	 */
+	@RequestMapping("/selectScaleInstallChk.do")
+	public @ResponseBody Map<String, Object> selectScaleInstallChk(HttpServletRequest request, HttpServletResponse response) {	
+		HttpSession session = request.getSession();
+		LoginVO loginVo = (LoginVO) session.getAttribute("session");
+
+		InstanceScaleVO instanceScaleVO = new InstanceScaleVO();
+		Map<String, Object> result = new JSONObject();
+
+		int db_svr_id = Integer.parseInt(request.getParameter("db_svr_id"));
+		instanceScaleVO.setDb_svr_id(db_svr_id);
+		instanceScaleVO.setLogin_id((String)loginVo.getUsr_id());
+
+		//유저 디비서버 권한 조회 (공통메소드호출),
+		CmmnUtils cu = new CmmnUtils();
+		dbSvrAut = cu.selectUserDBSvrAutList(dbAuthorityService,db_svr_id);
+
+		ModelAndView mv = new ModelAndView();
+		//읽기 권한이 없는경우 error페이지 호출 , [추후 Exception 처리예정]
+		if(dbSvrAut.get(0).get("scale_aut_yn").equals("N")){
+			mv.setViewName("error/autError");	
+		}else{
+			try {
+				//scale log 확인
+				result = (Map<String, Object>)instanceScaleService.scaleInstallChk(instanceScaleVO);
+			} catch (Exception e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
 		}
 
 		return result;

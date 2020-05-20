@@ -93,7 +93,7 @@ public class DxT007 extends SocketCtl{
 			outputObj.put(ProtocolID.DX_EX_CODE, TranCodeType.DxT007);
 			outputObj.put(ProtocolID.RESULT_CODE, "1");
 			outputObj.put(ProtocolID.ERR_CODE, TranCodeType.DxT007);
-			outputObj.put(ProtocolID.ERR_MSG, "DxT006 Error [" + e.toString() + "]");
+			outputObj.put(ProtocolID.ERR_MSG, "DxT007 Error [" + e.toString() + "]");
 			
 			sendBuff = outputObj.toString().getBytes();
 			send(4, sendBuff);

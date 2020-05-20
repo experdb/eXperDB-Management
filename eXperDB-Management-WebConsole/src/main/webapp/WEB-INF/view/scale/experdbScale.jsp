@@ -31,8 +31,6 @@ button[disabled]{
 <script>
 	var table = null;
 	var popOpen = null;
-	var iCount_text = 1;
-	var btnText = "";
 	var statusChk="";
 
 	$(window.document).ready(function() {
@@ -43,7 +41,8 @@ button[disabled]{
 		});	
 		$('.dataTables_filter').hide();
 
-		fn_selectScaleAuto();
+		
+		fn_selectScaleInstallChk();
 	});
 	
 	/* ********************************************************
@@ -74,7 +73,20 @@ button[disabled]{
 					className : "dt-center",
 					defaultContent : "" 	
 				},
-				{data : "tagsValue", className : "dt-left", defaultContent : ""},
+				{data : "tagsValue", className : "dt-left", defaultContent : "",
+					render: function (data, type, full){
+						if(full.default_chk == "Y"){
+							var html = '<font color="red">' + full.tagsValue + '</font>';
+							html+='<input type="hidden" name="default_chk" class="default_hide" value="'+ full.default_chk +'" />'; 
+							return html;
+						}else{
+							var html = full.tagsValue;
+							html+='<input type="hidden" name="default_chk" class="default_hide" value="'+ full.default_chk +'" />'; 
+							return html;
+						}
+						return data;
+					},
+				},
 				{ data : "instance_id", className : "dt-left", defaultContent : ""
 					,render: function (data, type, full) {
 						  return '<span onClick=javascript:fn_scaleLayer("'+full.instance_id+'"); class="bold" title="'+full.instance_id+'">' + full.instance_id + '</span>';
@@ -108,13 +120,8 @@ button[disabled]{
 				}}, 
 				{ data : "key_name", className : "dt-left", defaultContent : ""},
 				{ data : "monitoring_state", className : "dt-left", defaultContent : ""}, 
-				{ data : "security_group", className : "dt-left", defaultContent : ""
-					,"render": function (data, type, full) {
-						  return '<span onClick=javascript:fn_securityShow("'+full.instance_id+'","'+full.db_svr_id+'"); title="'+full.security_group+'" class="bold">' + full.security_group + '</span>';
-					}
-				},
+				{ data : "security_group", className : "dt-left", defaultContent : ""},
 			]
-		//,'select': {'style': 'multi'}
 		});
 
 		table.tables().header().to$().find('th:eq(0)').css('min-width', '30px');
@@ -204,7 +211,6 @@ button[disabled]{
 			}
 		}); 
 
-
 		if (gbn == null || gbn == "") {
 			$('#loading').hide();
 		}
@@ -274,8 +280,8 @@ button[disabled]{
 						fn_buttonAut(wrk_id, scale_set);
 						setTimeout(fn_selectScaleChk, 3000);
 					} else {
-						setTimeout(fn_buttonAut, 2000, wrk_id, scale_set);
-						setTimeout(fn_selectScale, 2000, "");
+						setTimeout(fn_buttonAut, 7000, wrk_id, scale_set);
+						setTimeout(fn_selectScale, 5000, "");
 					}
 				} else if (gbn == "first") {
 					if (wrk_id == "1") {
@@ -298,9 +304,10 @@ button[disabled]{
 	function fn_scaleLayer(scale_id){
 		var root_device = "";
 		var security_group = "";
+		var msgVale = "";
 
 		$.ajax({
-			url : "/selectScaleInfo.do",
+			url : "/scale/selectScaleInfo.do",
 			data : {
 				scale_id : scale_id,
 				db_svr_id : '${db_svr_id}'
@@ -323,7 +330,8 @@ button[disabled]{
 		     },
 			success : function(result) {
 				if(result.length==0){
-					alert("scale이 삭제되어 scale 정보를 확인할 수 없습니다.");
+					msgVale = "instance";
+					alert('<spring:message code="eXperDB_scale.msg8" arguments="'+ msgVale +'" />');
 				}else{
 					//초기화
 					layerReset();
@@ -452,53 +460,26 @@ button[disabled]{
 	}
 	
 	/* ********************************************************
-	 * scale_in_out click
+	 * scale_in_out count pop
 	 ******************************************************** */
 	function fn_scaleInOut(gbn){
-		var strTitle = "";
-		if (gbn == "scaleIn") {
-			strTitle = "Scale-In";
-		} else {
-			strTitle = "Scale-Out";
-		}
+ 	    var popUrl = '/scale/popup/scaleInOutCountForm.do';
+		var width = 500;
+		var height = 320;
+		var left = (window.screen.width / 2) - (width / 2);
+		var top = (window.screen.height /2) - (height / 2);
+		var popOption = "width="+width+", height="+height+", top="+top+", left="+left+", resizable=no, scrollbars=yes, status=no, toolbar=no, titlebar=yes, location=no";
 
-		$.ajax({
-				url : "/scale/scaleInOutSet.do",
-			  	data : {
-			  		scaleSet : gbn,
-					db_svr_id : '${db_svr_id}'
-			  	},
-				type : "post",
-				beforeSend: function(xhr) {
-			        xhr.setRequestHeader("AJAX", true);
-			     },
-				error : function(xhr, status, error) {
-					if(xhr.status == 401) {
-						alert('<spring:message code="message.msg02" />');
-					} else if(xhr.status == 403) {
-						alert('<spring:message code="message.msg03" />');
-					} else {
-						alert("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""));
-					}
-				},
-				success : function(result) {
-					if (result.RESULT == "FAIL") {
-						alert(strTitle + '<spring:message code="eXperDB_scale.msg2" />');
-					} else {
-						alert(strTitle + '<spring:message code="eXperDB_scale.msg1" />');
-					}
-					
-					fn_selectScaleChk("ing");
+	    popOpen = window.open("","popupView",popOption);
 
-					setTimeout(fn_selectScaleChk, 3000);
-					setTimeout(fn_selectScale, 3000);
-					
-					statusChk = "scale";
+	    $('#title_gbn', '#frmExecutePopup').val(gbn);
+	    $('#db_svr_id', '#frmExecutePopup').val('${db_svr_id}');
 
-				}
-		});			
+	    $('#frmExecutePopup').attr("action", popUrl);
+	    $('#frmExecutePopup').attr("target", "popupView");
+	    $('#frmExecutePopup').submit();
 	}
-	
+
 	/* ********************************************************
 	 * null체크
 	 ******************************************************** */
@@ -517,19 +498,17 @@ button[disabled]{
 	function fn_buttonAut(wrk_id, scale_set){
 		var strMsg = "";
  		if(wrk_id == "1"){
-		//	$("#scaleIngMsg").show();	
 			if (scale_set == "1") {
-				strMsg = 'scale in ' + '<spring:message code="restore.progress" />';
+				strMsg = '<spring:message code="etc.etc38" />' + ' ' + '<spring:message code="restore.progress" />';
 				$("#btnScaleIn").html(strMsg);
 			} else {
-				strMsg = 'scale out ' + '<spring:message code="restore.progress" />';
+				strMsg = '<spring:message code="etc.etc39" />' + ' ' + '<spring:message code="restore.progress" />';
 				$("#btnScaleOut").html(strMsg);
 			}
 			
 			$("#btnScaleIn").prop("disabled", "disabled");
 			$("#btnScaleOut").prop("disabled", "disabled");
 		}else{
-		//	$("#scaleIngMsg").hide();
 			$("#btnScaleIn").html('<spring:message code="etc.etc38" />');
 			$("#btnScaleOut").html('<spring:message code="etc.etc39" />');
 			
@@ -537,12 +516,133 @@ button[disabled]{
 			$("#btnScaleOut").prop("disabled", "");
 		} 
 	}
+	
+	/* ********************************************************
+	 * scale 실행 result
+	 ******************************************************** */
+	function fn_scale_status_chk() {
+		fn_selectScaleChk("ing");
+		setTimeout(fn_selectScaleChk, 3000);
+		setTimeout(fn_selectScale, 4000);
+		
+		statusChk = "scale";
+	}
+	
+	/* ********************************************************
+	 * aws 서버 확인
+	 ******************************************************** */
+	function fn_selectScaleInstallChk() {
+		//scale 체크 조회
+		var install_yn = "";
+
+		$.ajax({
+			url : "/scale/selectScaleInstallChk.do",
+			data : {
+				db_svr_id : '${db_svr_id}'
+			},
+			dataType : "json",
+			type : "post",
+			beforeSend: function(xhr) {
+		        xhr.setRequestHeader("AJAX", true);
+		     },
+			error : function(xhr, status, error) {
+				console.log("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""));
+			},
+			success : function(result) {
+				if (result != null) {
+					install_yn = result.install_yn;
+				}
+
+				//AWS 서버인경우
+				if (install_yn == "Y") {
+					$("#scaleIngMsg").hide();
+					
+					fn_selectScaleAuto();
+				} else {
+					$("#scaleIngMsg").show();
+
+					//설치안된경우 버튼 막아야함
+					$("#btnScaleIn").prop("disabled", "disabled");
+					$("#btnScaleOut").prop("disabled", "disabled");
+					$("#btnScaleSearch").prop("disabled", "disabled");
+					$("#search_instance_id").prop("disabled", "disabled");
+				}
+			}
+		});
+		$('#loading').hide();
+	}
+	
+	/* ********************************************************
+	 * scale ing check
+	 ******************************************************** */
+	function fn_scaleInOutChk(gbn) {
+		var wrk_id_val =  "";
+		var defaultCnt = 0;
+
+		//scale in 일때 default 만 있는 겨우
+		if (gbn == 'scaleIn') {
+			$(".default_hide").each(function(){
+				if ($(this).val() == 'N') {
+					defaultCnt = defaultCnt + 1;
+				}
+			});
+
+			if (defaultCnt <= 0) {
+				alert("<spring:message code='eXperDB_scale.msg13' />");
+				return;
+			}
+		}
+
+		//scale 이 실행되고 있는 지 체크 후 진행
+ 		$.ajax({
+			url : "/scale/selectScaleLChk.do",
+			data : {
+				db_svr_id : '${db_svr_id}'
+			},
+			dataType : "json",
+			type : "post",
+			beforeSend: function(xhr) {
+		        xhr.setRequestHeader("AJAX", true);
+		     },
+			error : function(xhr, status, error) {
+				if(xhr.status == 401) {
+					alert("<spring:message code='message.msg02' />");
+					return false;
+				} else if(xhr.status == 403) {
+					alert("<spring:message code='message.msg03' />");
+					return false;
+				} else {
+					alert("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""));
+					return false;
+				}
+			},
+			success : function(result) {
+				if (result != null) {
+					wrk_id_val = result.wrk_id;
+
+					if (wrk_id_val == "1") {
+						alert("<spring:message code='eXperDB_scale.msg4' />");
+						fn_selectScaleAuto();
+						return;
+					} else {
+						fn_scaleInOut(gbn);
+					}
+				}
+			}
+		});
+		$('#loading').hide();
+	}
 </script>
 
-<%@include file="experdbScaleInfo.jsp"%>
+<%@include file="./experdbScaleInfo.jsp"%>
 
 <form name="frmSecurityPopup" id="frmSecurityPopup">
 	<input type="hidden" name="scale_id"  id="scale_id" />
+	<input type="hidden" name="db_svr_id"  id="db_svr_id" />
+</form>
+
+<form name="frmExecutePopup" id="frmExecutePopup">
+	<input type="hidden" name="title_gbn"  id="title_gbn" />
 	<input type="hidden" name="db_svr_id"  id="db_svr_id" />
 </form>
 
@@ -550,7 +650,7 @@ button[disabled]{
 <div id="contents">
 	<div class="contents_wrap">
 		<div class="contents_tit">
-			<h4><spring:message code="menu.eXperDB_scale" /><a href="#n"><img src="../images/ico_tit.png" class="btn_info" /></a></h4>
+			<h4><spring:message code="menu.scale_manual" /><a href="#n"><img src="../images/ico_tit.png" class="btn_info" /></a></h4>
 
 			<div class="infobox">
 				<ul><li><spring:message code="help.eXperDB_scale" /></li></ul>
@@ -559,7 +659,7 @@ button[disabled]{
 				<ul>
 					<li class="bold">${db_svr_nm}</li>
 					<li><spring:message code="menu.eXperDB_scale" /></li>
-					<li class="on"><spring:message code="menu.eXperDB_scale" /></li>
+					<li class="on"><spring:message code="menu.scale_manual" /></li>
 				</ul>
 			</div>
 		</div>
@@ -567,11 +667,11 @@ button[disabled]{
 		<div class="contents">
 			<div class="cmm_grp">
 				<div class="btn_type_01">
-					<%-- <span class="scaleIng" id="scaleIngMsg">* <spring:message code="eXperDB_scale.msg3" /></span>
- --%>
-					<span class="btn"><button type="button" onclick="fn_selectScale('serch')"><spring:message code="common.search" /></button></span>
-					<span class="btn"><button type="button" id="btnScaleIn" onclick="fn_scaleInOut('scaleIn')" ><spring:message code="etc.etc38" /></button></span>
-					<span class="btn"><button type="button" id="btnScaleOut" onclick="fn_scaleInOut('scaleOut')"><spring:message code="etc.etc39" /></button></span>
+					<span class="scaleIng" id="scaleIngMsg" style="display:none;">* <spring:message code="eXperDB_scale.msg10" /></span>
+				
+					<span class="btn"><button type="button" id="btnScaleSearch" onclick="fn_selectScale('serch')"><spring:message code="common.search" /></button></span>
+					<span class="btn"><button type="button" id="btnScaleIn" onclick="fn_scaleInOutChk('scaleIn')" ><spring:message code="etc.etc38" /></button></span>
+					<span class="btn"><button type="button" id="btnScaleOut" onclick="fn_scaleInOutChk('scaleOut')"><spring:message code="etc.etc39" /></button></span>
 				</div>
 				<div class="sch_form">
 					<table class="write">
@@ -591,7 +691,7 @@ button[disabled]{
 				</div>
 				
 				<div class="overflow_area">
-					<table id="scaleDataTable" class="display" cellspacing="0" width="100%">
+					<table id="scaleDataTable" class="display" cellspacing="0" style="width:100%">
 						<thead>
 							<tr>
 								<th width="40" height="0"><spring:message code="common.no" /></th>

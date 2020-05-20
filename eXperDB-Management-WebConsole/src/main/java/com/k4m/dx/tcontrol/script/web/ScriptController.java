@@ -1,5 +1,8 @@
 package com.k4m.dx.tcontrol.script.web;
 
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -20,9 +23,14 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.k4m.dx.tcontrol.admin.accesshistory.service.AccessHistoryService;
+import com.k4m.dx.tcontrol.admin.dbserverManager.service.DbServerVO;
 import com.k4m.dx.tcontrol.backup.service.BackupService;
 import com.k4m.dx.tcontrol.backup.service.WorkVO;
+import com.k4m.dx.tcontrol.backup.web.BackupImmediate;
 import com.k4m.dx.tcontrol.cmmn.CmmnUtils;
+import com.k4m.dx.tcontrol.cmmn.client.ClientInfoCmmn;
+import com.k4m.dx.tcontrol.common.service.AgentInfoVO;
+import com.k4m.dx.tcontrol.common.service.CmmnServerInfoService;
 import com.k4m.dx.tcontrol.common.service.HistoryVO;
 import com.k4m.dx.tcontrol.login.service.LoginVO;
 import com.k4m.dx.tcontrol.script.service.ScriptService;
@@ -56,6 +64,9 @@ public class ScriptController {
 	@Autowired
 	private AccessHistoryService accessHistoryService;
 
+	@Autowired
+	private CmmnServerInfoService cmmnServerInfoService;
+	
 	/**
 	 * Mybatis Transaction 
 	 */
@@ -393,4 +404,55 @@ public class ScriptController {
 			return returnStr;
 			}
 
+		
+		
+		
+		/**
+		 * 스크립트 즉시 실행
+		 * 
+		 * @return resultSet
+		 * @throws Exception
+		 */
+		@RequestMapping(value = "/scriptImmediateExe.do")
+		@ResponseBody
+		public List<HashMap<String, String>> backupImmediateExe (HttpServletRequest request) {
+
+			
+			Map<String, Object> result = null;
+
+			try{
+				
+				int db_svr_id = Integer.parseInt(request.getParameter("db_svr_id"));
+				int wrk_id = Integer.parseInt(request.getParameter("wrk_id"));
+				String wrk_exp =request.getParameter("wrk_exp"); 
+				String exe_cmd = request.getParameter("exe_cmd");
+			
+				DbServerVO schDbServerVO = new DbServerVO();
+				schDbServerVO.setDb_svr_id(db_svr_id);
+				DbServerVO dbServerVO = (DbServerVO) cmmnServerInfoService.selectServerInfo(schDbServerVO);
+				
+				String strIpAdr = dbServerVO.getIpadr();
+				AgentInfoVO vo = new AgentInfoVO();
+				vo.setIPADR(strIpAdr);
+				AgentInfoVO agentInfo = (AgentInfoVO) cmmnServerInfoService.selectAgentInfo(vo);
+
+				String IP = dbServerVO.getIpadr();
+				int PORT = agentInfo.getSOCKET_PORT();
+							
+				ClientInfoCmmn cic = new ClientInfoCmmn();
+				//result = cic.immediateScript(IP, PORT, exe_cmd, wrk_id, wrk_exp);
+					
+				System.out.println("결과");
+				System.out.println(result.get("RESULT_CODE"));
+				System.out.println(result.get("ERR_CODE"));
+				System.out.println(result.get("ERR_MSG"));
+				
+			}catch(Exception e){
+				e.printStackTrace();
+			}
+			
+			return null;			
+		}
+		
+		
 }

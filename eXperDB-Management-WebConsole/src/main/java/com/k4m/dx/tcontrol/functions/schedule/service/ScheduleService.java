@@ -230,4 +230,26 @@ public interface ScheduleService {
 	 * @throws Exception
 	 */
 	void updateMigExe(Map<String, Object> param) throws Exception;
+
+
+	/**
+	 *  데이터 이행 스케줄 수행전, 기존 저장경로 호출
+	 * 
+	 * @param Map<String, Object>
+	 * @throws Exception
+	 */
+	String selectOldSavePath(int wrk_id) throws Exception;
+
+	
+	
+	/**
+	 *  기존 저장경로, 새로운 경로로 업데이트
+	 * 
+	 * @param Map<String, Object>
+	 * @throws Exception
+	 */
+	void updateSavePth(Map<String, Object> param) throws Exception;
+
+
+	void updateScheduler(WrkExeVO vo) throws Exception;
 }

@@ -304,6 +304,24 @@ public class ScheduleServiceImpl extends EgovAbstractServiceImpl  implements Sch
 	public void updateMigExe(Map<String, Object> param) throws Exception {
 		scheduleDAO.updateMigExe(param);
 	}
+
+
+	@Override
+	public String selectOldSavePath(int wrk_id) throws Exception {
+		return scheduleDAO.selectOldSavePath(wrk_id);
+	}
+
+
+	@Override
+	public void updateSavePth(Map<String, Object> param) throws Exception {
+		scheduleDAO.updateSavePth(param);
+	}
+
+
+	@Override
+	public void updateScheduler(WrkExeVO wrkExeVO) throws Exception {
+		scheduleDAO.updateScheduler(wrkExeVO);
+	}
 	
 
 }

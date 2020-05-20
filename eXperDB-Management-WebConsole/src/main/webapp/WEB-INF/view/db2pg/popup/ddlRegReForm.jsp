@@ -82,10 +82,10 @@ function fn_pathCheck() {
 		},
 		success : function(result) {
 			if (result == true) {
-				alert('유효한 경로입니다.');
+				alert('<spring:message code="message.msg100" />');
 				output_path = "success";		
 			} else {
-				alert('유효하지 않은 경로입니다.');
+				alert('<spring:message code="backup_management.invalid_path" />');
 				document.getElementById("ddl_save_pth").focus();
 			}
 		},
@@ -111,6 +111,12 @@ function fn_pathCheck() {
  ******************************************************** */
 function fn_update_work(){
 	if(valCheck()){
+		if($("#src_table_total_cnt").val() == ""){
+			var src_table_total_cnt = 0
+		}else{
+			var src_table_total_cnt = $("#src_table_total_cnt").val()
+		}
+		
 		$.ajax({
 			url : "/db2pg/updateDDLWork.do",
 		  	data : {
@@ -122,7 +128,7 @@ function fn_update_work(){
 		  		src_tb_ddl_exrt_tf : $("#src_tb_ddl_exrt_tf").val(),
 		  		src_include_tables : $("#src_include_table_nm").val(),
 		  		src_exclude_tables : $("#src_exclude_table_nm").val(),
-		  		src_table_total_cnt : $('#src_table_total_cnt').val(),
+		  		src_table_total_cnt : src_table_total_cnt,
 		  		wrk_id : $("#wrk_id").val()
 		  	},
 			type : "post",

@@ -81,7 +81,7 @@ function fn_init(){
 					render : function(data, type, full, meta) {	 						
 						var html = '';
 						if (full.exe_rslt_cd == 'TC001701') {
-							html += "<span class='btn btnC_01 btnF_02'><button onclick='fn_ddlResult(\""+full.mig_exe_sn+"\",\""+full.ddl_save_pth+"/\")'><img src='../images/ico_state_02.png' style='margin-right:3px;'/>Success</button></span>";	
+							html += "<span class='btn btnC_01 btnF_02'><button onclick='fn_ddlResult(\""+full.mig_exe_sn+"\",\""+full.save_pth+"/\")'><img src='../images/ico_state_02.png' style='margin-right:3px;'/>Complete</button></span>";	
 						} else if(full.exe_rslt_cd == 'TC001702'){
 							html += '<span class="btn btnC_01 btnF_02"><button onclick="fn_ddlFailLog('+full.mig_exe_sn+')"><img src="../images/ico_state_01.png" style="margin-right:3px;"/>Fail</button></span>';
 						} else {
@@ -96,7 +96,7 @@ function fn_init(){
 			{data : "db2pg_trsf_wrk_id", defaultContent : "", visible: false},
 			{data : "wrk_id", defaultContent : "", visible: false},
 			{data : "mig_exe_sn", defaultContent : "", visible: false},
-			{data : "ddl_save_pth", defaultContent : "", visible: false}
+			{data : "save_pth", defaultContent : "", visible: false}
 		]
 		});
 	
@@ -127,7 +127,7 @@ function fn_init(){
 				render : function(data, type, full, meta) {	 						
 					var html = '';
 					if (full.exe_rslt_cd == 'TC001701') {
-						html += "<span class='btn btnC_01 btnF_02'><button onclick='fn_result(\""+full.mig_exe_sn+"\",\""+full.trans_save_pth+"/\")'><img src='../images/ico_state_02.png' style='margin-right:3px;'/>Success</button></span>";	
+						html += "<span class='btn btnC_01 btnF_02'><button onclick='fn_result(\""+full.mig_exe_sn+"\",\""+full.save_pth+"/\")'><img src='../images/ico_state_02.png' style='margin-right:3px;'/>Complete</button></span>";	
 					} else if(full.exe_rslt_cd == 'TC001702'){
 						html += '<span class="btn btnC_01 btnF_02"><button onclick="fn_migFailLog('+full.mig_exe_sn+')"><img src="../images/ico_state_01.png" style="margin-right:3px;"/>Fail</button></span>';
 					} else {
@@ -145,6 +145,7 @@ function fn_init(){
 	]
 	});
 
+	
 	
 	tableDDL.tables().header().to$().find('th:eq(0)').css('min-width', '30px');
 	tableDDL.tables().header().to$().find('th:eq(1)').css('min-width', '100px');
@@ -190,9 +191,20 @@ function fn_init(){
 $(window.document).ready(
 
 	function() {	
-	
+		var today = new Date();
+		var day_end = today.toJSON().slice(0,10);
+		
+		today.setDate(today.getDate() - 7);
+		var day_start = today.toJSON().slice(0,10); 
+
+		$("#wrk_strt_dtm").val(day_start);
+		$("#wrk_end_dtm").val(day_end);
+		$("#ddl_wrk_strt_dtm").val(day_start);
+		$("#ddl_wrk_end_dtm").val(day_end);
+		
 		fn_init();
-			
+		getddlDataList();
+		getdataDataList();			
 	
 		$("#ddlDataTable").show();
 		$("#ddlDataTable_wrapper").show();
@@ -205,25 +217,11 @@ $(window.document).ready(
 			selectTab('dataWork');
 		}
 		
-		var today = new Date();
-		var day_end = today.toJSON().slice(0,10);
-		
-		today.setDate(today.getDate() - 7);
-		var day_start = today.toJSON().slice(0,10); 
-
-		$("#wrk_strt_dtm").val(day_start);
-		$("#wrk_end_dtm").val(day_end);
-		$("#ddl_wrk_strt_dtm").val(day_start);
-		$("#ddl_wrk_end_dtm").val(day_end);
-		
 		$( ".calendar" ).datepicker({
 			dateFormat: 'yy-mm-dd',
 			changeMonth : true,
 			changeYear : true
 	 	});
-		
-		getddlDataList();
-		getdataDataList();
 	}
 );
 
@@ -234,7 +232,7 @@ function getddlDataList(){
 	$.ajax({
 		url : "/db2pg/selectDb2pgDDLHistory.do", 
 	  	data : {
-	  		wrk_nm :  $("#wrk_nm").val(),
+	  		wrk_nm :  "%"+$("#wrk_nm").val()+"%",
 	  		exe_rslt_cd : $("#exe_rslt_cd").val(),
 	  		wrk_strt_dtm : $("#ddl_wrk_strt_dtm").val(),
 	  		wrk_end_dtm : $("#ddl_wrk_end_dtm").val()  		
@@ -274,7 +272,7 @@ function getdataDataList(){
 	$.ajax({
 		url : "/db2pg/selectDb2pgMigHistory.do", 
 	  	data : {
-	  		wrk_nm :  $("#wrk_nm").val(),
+	  		wrk_nm :  "%"+$("#wrk_nm").val()+"%",
 	  		exe_rslt_cd : $("#exe_rslt_cd").val(),
 			wrk_strt_dtm :  $("#wrk_strt_dtm").val(),
 	  		wrk_end_dtm : $("#wrk_end_dtm").val()
@@ -476,7 +474,7 @@ function getdataDataList(){
 								<th scope="row" class="t9"><spring:message code="common.status" /></th>
 								<td>
 									<select name="exe_rslt_cd" id="exe_rslt_cd" class="select t5">
-										<option value=""><spring:message code="schedule.total" /></option>
+										<option value="%"><spring:message code="schedule.total" /></option>
 										<option value="TC001701"><spring:message code="common.success" /></option>
 										<option value="TC001702"><spring:message code="common.failed" /></option>
 									</select>
@@ -511,7 +509,7 @@ function getdataDataList(){
 								<th scope="row" class="t9"><spring:message code="common.status" /></th>
 								<td>
 									<select name="exe_rslt_cd" id="exe_rslt_cd" class="select t5">
-										<option value=""><spring:message code="schedule.total" /></option>
+										<option value="%"><spring:message code="schedule.total" /></option>
 										<option value="TC001701"><spring:message code="common.success" /></option>
 										<option value="TC001702"><spring:message code="common.failed" /></option>
 									</select>
@@ -555,7 +553,7 @@ function getdataDataList(){
 									<th width="130" rowspan="2"><spring:message code="backup_management.work_start_time"/></th>
 									<th width="130" rowspan="2"><spring:message code="backup_management.work_end_time"/></th>
 									<th width="95" rowspan="2"><spring:message code="schedule.jobTime"/></th>
-									<th width="100" rowspan="2"><spring:message code="schedule.result"/></th>
+									<th width="95" rowspan="2"><spring:message code="schedule.result"/></th>
 									<th width="95" rowspan="2"><spring:message code="migration.performer"/></th>
 								</tr>
 								<tr>

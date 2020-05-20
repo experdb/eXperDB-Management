@@ -53,7 +53,10 @@
 		<typeAlias alias="db2pgHistoryVO" type="com.k4m.dx.tcontrol.db2pg.history.service.Db2pgHistoryVO" /> 
 		
 		<typeAlias alias="instanceScaleVO" type="com.k4m.dx.tcontrol.scale.service.InstanceScaleVO"/>
-
+		
+		
+		<typeAlias alias="transVO" type="com.k4m.dx.tcontrol.transfer.service.TransVO"/>
+		<typeAlias alias="transMappVO" type="com.k4m.dx.tcontrol.transfer.service.TransMappVO"/>
     </typeAliases>
     
  	<mappers>
@@ -109,6 +112,9 @@
 			
 		<!-- scale -->
 		<mapper resource="egovframework/sqlmap/mappers/scale/instanceScaleSql.xml" />
+		
+		<!-- transfer -->
+		<mapper resource="egovframework/sqlmap/mappers/transfer/transSql.xml" />
 		
 	</mappers>
 </configuration>

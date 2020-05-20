@@ -317,16 +317,91 @@ $(window.document).ready(function() {
 });
 
 
+
+function fn_db2pgWorkAddCallback(rowList){
+	$.ajax({
+		url : "/selectDb2pgScheduleWorkList.do",
+		data : {
+			work_id : rowList,
+		},
+		dataType : "json",
+		type : "post",
+		beforeSend: function(xhr) {
+	        xhr.setRequestHeader("AJAX", true);
+	     },
+		error : function(xhr, status, error) {
+			if(xhr.status == 401) {
+				alert('<spring:message code="message.msg02" />');
+				top.location.href = "/";
+			} else if(xhr.status == 403) {
+				alert('<spring:message code="message.msg03" />');
+				top.location.href = "/";
+			} else {
+				alert("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""));
+			}
+		},
+		success : function(result) {	
+			table.rows({selected: true}).deselect();
+			//table.clear().draw();
+			table.rows.add(result).draw();
+		}
+	});
+}
+
+/* ********************************************************
+ * DB2PG work등록 팝업창 호출
+ ******************************************************** */
+function fn_db2pgAdd(){
+	var cnt=0;
+	
+	if(table.rows().data().length > 0){
+		for (var i = 0; i < table.rows().data().length; i++) {		
+			if(table.rows().data()[i].bsn_dscd_nm=="백업" || table.rows().data()[i].bsn_dscd_nm=="스크립트"){
+				cnt ++;
+			}	
+	  	}
+		
+		if(cnt >0){
+			alert("스케줄에 백업 및 스크립트가 포함되어 있습니다.");
+			return false;
+		}
+	}
+	
+	var popUrl = "/popup/db2pgWorkRegForm.do";
+	
+	var width = 1250;
+	var height = 685;
+	var left = (window.screen.width / 2) - (width / 2);
+	var top = (window.screen.height /2) - (height / 2);
+	var popOption = "width="+width+", height="+height+", top="+top+", left="+left+", resizable=no, scrollbars=yes, status=no, toolbar=no, titlebar=yes, location=no,";
+	
+	window.open(popUrl,"",popOption);
+}	
+	
+
 /* ********************************************************
  * work등록 팝업창 호출
  ******************************************************** */
 function fn_workAdd(){
 	
+	var cnt =0;
+	
 	if(table.rows().data().length > 0){
 		var wrk_id_list = [];
 		for (var i = 0; i < table.rows().data().length; i++) {
+			
+			if(table.rows().data()[i].bsn_dscd_nm=="MIGRATION"){
+				cnt ++;
+			}
+			
 			wrk_id_list.push( table.rows().data()[i].wrk_id);   
 	  	}
+		
+		if(cnt >0){
+			alert("스케줄에 MIGRATION이 포함되어 있습니다.");
+			return false;
+		}
+		
 		var popUrl = "/popup/scheduleRegForm.do?wrk_id_list="+wrk_id_list; 
 	}else{
 		var popUrl = "/popup/scheduleRegForm.do";
@@ -714,6 +789,7 @@ function fn_dateValidation(exe_dt){
 								<div class="sub_tit">
 									<p>Work <span id="add_button"></p>
 									<div class="sub_btn">
+										<a href="#n" class="btn btnF_04 btnC_01" onclick="fn_db2pgAdd();"><span id="db2pg_button">MIGRATION</span></a>
 										<a href="#n" class="btn btnF_04 btnC_01" onclick="fn_workAdd();"><span><spring:message code="common.add" /></span></a>
 										<a href="#n" class="btn btnF_04" onclick="fn_workDel();"><span><spring:message code="button.delete" /></span></a>
 									</div>

@@ -237,6 +237,15 @@ public class ProtocolID {
 	public static final String DB_SVR_ID = "DB_SVR_ID";
 	public static final String WRK_TYPE = "WRK_TYPE";
 	public static final String AUTO_POLICY = "AUTO_POLICY";
-	public static final String AUTO_POLICY_NM = "AUTO_POLICY_NM";
+	public static final String SCALE_COUNT_SET = "SCALE_COUNT_SET";
+	
+	public static final String AUTO_POLICY_SET_DIV = "AUTO_POLICY_SET_DIV";
+	public static final String AUTO_POLICY_TIME = "AUTO_POLICY_TIME";
+	public static final String AUTO_LEVEL = "AUTO_LEVEL";
+	public static final String MONITERING = "MONITERING";
+	
+	public static final String CONNECT_INFO = "CONNECT_INFO";
+	public static final String MAPP_INFO = "MAPP_INFO";
+	public static final String TRANS_ID = "TRANS_ID";
 	
 }

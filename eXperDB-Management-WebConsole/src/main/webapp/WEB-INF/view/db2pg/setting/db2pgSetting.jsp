@@ -623,13 +623,14 @@ function fn_ImmediateStart(gbn){
 		var dataSet=[];
 		
 		if (rowCnt > 0) {
-			alert(rowCnt+" <spring:message code='migration.msg11'/>");		
+			alert(rowCnt+" 개의 Work를 실행하였습니다.");		
 			for (var i = 0; i < datas.length; i++) {
 				 var row = new Object()
 				 row.wrk_id = datas[i].wrk_id;
 				 row.wrk_nm = datas[i].db2pg_ddl_wrk_nm;
 				 row.mig_dscd = "TC003201";
 				 row.gbn = gbn;
+				 row.ddl_save_pth = datas[i].ddl_save_pth;
 				 dataSet.push(row);
 			}
 			$.ajax({
@@ -653,7 +654,7 @@ function fn_ImmediateStart(gbn){
 					}
 				},
 				success : function(result) {
-					if (confirm('<spring:message code="migration.msg12"/>')){
+					if (confirm('실행결과화면으로 이동하시겠습니까?')){
 						location.href='/db2pgHistory.do?gbn=ddl' ;
 					}
 				}
@@ -672,7 +673,7 @@ function fn_ImmediateStart(gbn){
 		var dataSet=[];
 		
 		if (rowCnt > 0) {				
-			alert(rowCnt+" <spring:message code='migration.msg11'/>");		
+			alert(rowCnt+" <spring:message code='migration.msg11' />");		
 			/* ********************************************************
 			 * 실행조건 필요(여러개의 WORK중 동일한 테이블 있을시, Alert알림 실행X)
 			 * 경우의 수가 너무 많음 추후 고려
@@ -683,6 +684,7 @@ function fn_ImmediateStart(gbn){
 					 row.wrk_nm = datas[i].db2pg_trsf_wrk_nm;
 					 row.mig_dscd = "TC003202";
 					 row.gbn = gbn;
+					 row.trans_save_pth = datas[i].trans_save_pth;
 					 dataSet.push(row);
 				}			
 				$.ajax({
@@ -706,7 +708,7 @@ function fn_ImmediateStart(gbn){
 						}
 					},
 					success : function(result) {
-						if (confirm('<spring:message code="migration.msg12"/>')){
+						if (confirm("<spring:message code='migration.msg12' />")){
 							location.href='/db2pgHistory.do?gbn=mig' ;
 						}
 					}
@@ -717,7 +719,6 @@ function fn_ImmediateStart(gbn){
 		}	
 	}
 }
-
 
 </script>
 <%@include file="../popup/db2pgConfigInfo.jsp"%>

@@ -2,6 +2,7 @@ package com.k4m.dx.tcontrol.dashboard.service;
 
 import java.sql.SQLException;
 import java.util.List;
+import java.util.Map;
 
 import com.k4m.dx.tcontrol.admin.dbserverManager.service.DbServerVO;
 
@@ -123,6 +124,11 @@ public interface DashboardService {
 	 */
 	public List<DbServerVO> selectDashboardServer()throws SQLException;
 
-
-
+	/**
+	 * scale log list 조회
+	 * 
+	 * @return
+	 * @throws SQLException
+	 */
+	public List<Map<String, Object>> selectDashboardScaleInfo() throws SQLException;
 }

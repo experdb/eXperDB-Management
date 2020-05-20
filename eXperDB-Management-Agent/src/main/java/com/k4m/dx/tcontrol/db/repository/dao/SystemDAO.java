@@ -1,7 +1,6 @@
 package com.k4m.dx.tcontrol.db.repository.dao;
 
 import java.util.List;
-import java.util.Map;
 
 import org.apache.ibatis.session.SqlSession;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,6 +10,7 @@ import com.k4m.dx.tcontrol.db.repository.vo.AgentInfoVO;
 import com.k4m.dx.tcontrol.db.repository.vo.DbServerInfoVO;
 import com.k4m.dx.tcontrol.db.repository.vo.DumpRestoreVO;
 import com.k4m.dx.tcontrol.db.repository.vo.RmanRestoreVO;
+import com.k4m.dx.tcontrol.db.repository.vo.TransVO;
 import com.k4m.dx.tcontrol.db.repository.vo.TrfTrgCngVO;
 import com.k4m.dx.tcontrol.db.repository.vo.WrkExeVO;
 
@@ -119,13 +119,8 @@ public class SystemDAO {
 		 session.insert("system.insertWRKEXE_G", vo);
 	}
 	
-	/* scale log insert */
-	public void insertScaleLog_G(Map<String, Object> param) throws Exception  {
-		 session.insert("system.insertScaleLog_G", param);
-	}
-	
-	/* scale log update */
-	public void updateScaleLog_G(Map<String, Object> param) throws Exception  {
-		 session.insert("system.updateScaleLog_G", param);
+	public void updateTransExe(TransVO transVO) throws Exception{
+		session.update("system.updateTransExe", transVO);
+		
 	}
 }

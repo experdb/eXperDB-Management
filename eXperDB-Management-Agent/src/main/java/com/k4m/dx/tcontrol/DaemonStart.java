@@ -14,8 +14,8 @@ import com.k4m.dx.tcontrol.db.repository.service.SystemServiceImpl;
 import com.k4m.dx.tcontrol.deamon.DxDaemon;
 import com.k4m.dx.tcontrol.deamon.DxDaemonManager;
 import com.k4m.dx.tcontrol.deamon.IllegalDxDaemonClassException;
-import com.k4m.dx.tcontrol.monitoring.schedule.listener.TaskExecuteListener;
 import com.k4m.dx.tcontrol.socket.DXTcontrolAgentSocket;
+import com.k4m.dx.tcontrol.socket.listener.DXTcontrolScale;
 import com.k4m.dx.tcontrol.socket.listener.ServerCheckListener;
 import com.k4m.dx.tcontrol.util.FileUtil;
 
@@ -119,7 +119,7 @@ public class DaemonStart implements DxDaemon{
 				String strVersion = FileUtil.getPropertyValue("context.properties", "agent.install.version");
 				
 				service.agentInfoStartMng(strIpadr, strPort, strVersion);
-				
+
 			} catch (Exception e) {
 				errLogger.error("데몬 시작시 에러가 발생하였습니다. {}", e.toString());
 				e.printStackTrace();
@@ -155,6 +155,18 @@ public class DaemonStart implements DxDaemon{
 			//System.out.println("2222222222");
 			socketService = new DXTcontrolAgentSocket();
 			socketService.start();
+			
+			// SqlSessionManager 초기화
+			try {
+				//scale 자동 실행 로직 추가
+				DXTcontrolScale rSet = new DXTcontrolScale();
+				rSet.start();
+
+			} catch (Exception e) {
+				errLogger.error("auto scale 시작시 에러가 발생하였습니다. {}", e.toString());
+				e.printStackTrace();
+				return;
+			}	
 			
 			///monitoring task
 			//TaskExecuteListener.load();

@@ -26,6 +26,7 @@ public class DataConfigVO {
 	private String lst_mdf_dtm;
 	private String trans_save_pth;
 	private String src_cnd_qry;
+	private String db2pg_uchr_lchr_val;
 
 	private String source_dbms_dscd;
 	private String source_ipadr;
@@ -383,4 +384,12 @@ public class DataConfigVO {
 	public void setSrc_cnd_qry(String src_cnd_qry) {
 		this.src_cnd_qry = src_cnd_qry;
 	}
+	public String getDb2pg_uchr_lchr_val() {
+		return db2pg_uchr_lchr_val;
+	}
+
+	public void setDb2pg_uchr_lchr_val(String db2pg_uchr_lchr_val) {
+		this.db2pg_uchr_lchr_val = db2pg_uchr_lchr_val;
+	}
+
 }

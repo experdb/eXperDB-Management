@@ -34,14 +34,15 @@ $(window.document).ready(function() {
 	 if("${exrt_trg_tb_cnt}">0){
 		 $("#src_tables option:eq(0)").attr("selected", "selected");
 		 //$("#src_include_tables").val("${exrt_trg_tb_cnt}개");		 
-		 $("#src_include_tables").val("총 테이블 : ${exrt_trg_tb_total_cnt} 개 중   /   ${exrt_trg_tb_cnt}개 선택됨");
+		 $("#src_include_tables").val("<spring:message code='migration.total_table'/>: ${exrt_trg_tb_total_cnt} <spring:message code='migration.selected_out_of'/>   /   ${exrt_trg_tb_cnt}<spring:message code='migration.items'/>");
+		 
 		 $("#src_table_total_cnt").val("${exrt_trg_tb_total_cnt}");
 		 $("#include").show();
 		 $("#exclude").hide();
 	 }else if("${exrt_exct_tb_cnt}">0){
 		 $("#src_tables option:eq(1)").attr("selected", "selected");
 		 //$("#src_exclude_tables").val("${exrt_exct_tb_cnt}개");
-		 $("#src_exclude_tables").val("총 테이블 : ${exrt_exct_tb_total_cnt} 개 중   /   ${exrt_exct_tb_cnt}개 선택됨");
+		 $("#src_exclude_tables").val("<spring:message code='migration.total_table'/> : ${exrt_exct_tb_total_cnt} <spring:message code='migration.selected_out_of'/>   /   ${exrt_exct_tb_cnt}<spring:message code='migration.items'/>");
 		 $("#src_table_total_cnt").val("${exrt_exct_tb_total_cnt}")
 		 $("#exclude").show();
 		 $("#include").hide(); 
@@ -57,11 +58,11 @@ function valCheck(){
 		$("#db2pg_trsf_wrk_exp").focus();
 		return false;
 	}else if($("#db2pg_source_system_id").val() == ""){
-		alert("소스 시스템정보를 등록해주세요.");
+		alert('<spring:message code="migration.msg07" />');
 		$("#db2pg_source_system_id").focus();
 		return false;
 	}else if($("#db2pg_trg_sys_id").val() == ""){
-		alert("타겟 시스템정보를 등록해주세요.");
+		alert('<spring:message code="migration.msg08" />');
 		$("#db2pg_trg_sys_id").focus();
 		return false;
 	}else{
@@ -74,6 +75,12 @@ function valCheck(){
  ******************************************************** */
 function fn_update_work(){
 	if(valCheck()){
+		if($("#src_table_total_cnt").val() == ""){
+			var src_table_total_cnt = 0
+		}else{
+			var src_table_total_cnt = $("#src_table_total_cnt").val()
+		}
+		
 		$.ajax({
 			url : "/db2pg/updateDataWork.do",
 		  	data : {
@@ -95,8 +102,9 @@ function fn_update_work(){
 		  		src_cnd_qry : $("#src_cnd_qry").val(),
 		  		usr_qry_use_tf : $('input[name="usr_qry_use_tf"]:checked').val(),
 		  		db2pg_usr_qry : $("#db2pg_usr_qry").val(),
-		  		src_table_total_cnt : $('#src_table_total_cnt').val(),
-		  		wrk_id : $("#wrk_id").val()
+		  		src_table_total_cnt : src_table_total_cnt,
+		  		wrk_id : $("#wrk_id").val(),
+		  		db2pg_uchr_lchr_val : $("#db2pg_uchr_lchr_val").val()
 		  	},
 			type : "post",
 			beforeSend: function(xhr) {
@@ -119,7 +127,7 @@ function fn_update_work(){
 					opener.getdataDataList();
 					self.close();
 				}else{
-					alert('등록에 실패했습니다.');
+					alert('<spring:message code="migration.msg06" />');
 				}		
 			}
 		});
@@ -187,7 +195,7 @@ function fn_dbmsPgInfo(){
  ******************************************************** */
 function fn_tableList(gbn){
 	if($('#db2pg_source_system_nm').val() == ""){
-		alert("소스시스템을 선택해주세요.");
+		alert("<spring:message code='migration.msg03'/>");
 		return false;
 	}
 	
@@ -352,6 +360,14 @@ function fn_tableAddCallback(rowList, tableGbn, totalCnt){
 								<tr>
 									<th scope="row" class="ico_t2"><spring:message code="migration.number_of_rows_extracted"/></th>
 									<td><input type="number" class="txt t8" name="exrt_dat_cnt" id="exrt_dat_cnt" value="${exrt_dat_cnt}" min="-1"/></td>
+									<th scope="row" class="ico_t2"><spring:message code="migration.specify_case"/></th>
+									<td>
+										<select name="db2pg_uchr_lchr_val" id="db2pg_uchr_lchr_val" class="select t4">
+											<c:forEach var="codeLetter" items="${codeLetter}">
+									<option value="${codeLetter.sys_cd_nm}" ${db2pg_uchr_lchr_val == codeLetter.sys_cd_nm ? 'selected="selected"' : ''}>${codeLetter.sys_cd_nm}</option>
+								</c:forEach>
+										</select>
+									</td>
 								</tr>								
 							</tbody>
 						</table>

@@ -24,6 +24,14 @@
 
 table {border-spacing: 0}
 table th, table td {padding: 0}
+
+button:disabled,
+button[disabled]{
+  background-color: #fff;
+  color: #324452;
+  cursor:wait;
+}
+
 </style>
 
 <script type="text/javascript">
@@ -34,6 +42,10 @@ table th, table td {padding: 0}
 	var tab = "executeHist";
 	var tabGbn = "${tabGbn}";
 	var searchInit = "";
+	var msgVale = "";
+
+	//scale 체크 조회
+	var install_yn = "";
 
 	$(window.document).ready(function() {
 		
@@ -43,13 +55,9 @@ table th, table td {padding: 0}
 		//테이블 setting
 		fn_execute_init();
 		fn_occur_init();
-		
-		//조회
-		if(tabGbn != ""){
-			selectTab(tabGbn);
-		}else{
-			selectTab("executeHist");
-		}
+
+		//aws 서버 확인
+		fn_selectScaleInstallChk(tabGbn);
 
 		/* ********************************************************
 		 * Click Search Button
@@ -86,7 +94,7 @@ table th, table td {padding: 0}
 			changeYear : true
 	 	});
 	}
-	
+
 	/* ********************************************************
 	 * Tab Click
 	 ******************************************************** */
@@ -103,9 +111,12 @@ table th, table td {padding: 0}
 			
 			seachParamInit(intab);
 
-			if(clickExecute == false){
+			if (install_yn == "Y") {
+			//if(clickExecute == false){
 				fn_get_execute_list();
 				clickExecute = true;
+				$('#loading').hide();
+			//}
 			}
 		}else{	
 			$("#tab_occurHist").show();
@@ -118,10 +129,13 @@ table th, table td {padding: 0}
 			$(".search_occur").show();
 			
 			seachParamInit(intab);
-			
-			if(clickOccur == false){
+
+			if (install_yn == "Y") {
+			//if(clickOccur == false){
 				fn_get_occur_list();
 				clickOccur = true;
+				$('#loading').hide();
+			//}
 			}
 		}
 	}
@@ -161,24 +175,70 @@ table th, table td {padding: 0}
 			         	{ data: "rownum", className: "dt-center", defaultContent: ""},
 			         	{data : "process_id", className : "dt-center", defaultContent : ""
 							,render: function (data, type, full) {
-								  return '<span onClick=javascript:fn_scaleHistLayer("'+full.process_id+'"); class="bold" title="'+full.process_id+'">' + full.process_id + '</span>';
+								  return '<span onClick=javascript:fn_scaleExecHistLayer("'+full.scale_wrk_sn+'"); class="bold" title="'+full.process_id+'">' + full.process_id + '</span>';
 							}
 			         	},
-			         	{data : "scale_type_nm", className : "dt-center", defaultContent : ""},
+			         	{data : "scale_type_nm", 
+		 					render: function (data, type, full){
+		 						var html = '';
+		 						if (full.scale_type == "1") {
+		 							html = '<spring:message code="etc.etc38" />';
+		 						} else {
+		 							html = '<spring:message code="etc.etc39" />';
+		 						}
+
+								return html;
+							},
+
+			         		className : "dt-center", defaultContent : ""},
 			         	{data : "wrk_type_nm", className : "dt-center", defaultContent : ""},
-			         	{data : "auto_policy_nm", className : "dt-left", defaultContent : ""},
+			         	{data : "auto_policy_nm", 
+		 					render: function (data, type, full){
+		 						if (full.wrk_type == "TC003301") {
+			 						var html = full.policy_type_nm + " (";
+			 						if (full.auto_policy_set_div == "1") {
+		 								html += '<spring:message code="eXperDB_scale.policy_time_1" />';
+			 						} else {
+		 								html += '<spring:message code="eXperDB_scale.policy_time_2" />' ;
+			 						}
+			 						
+			 						html += ' ' + full.auto_level;
+			 						
+			 						if (full.auto_policy == "TC003501") {
+		 								html += '%';
+			 						}
+			 						
+			 						html += ' ' + full.auto_policy_time + "minutes) ";
+			 						
+			 						if (full.scale_type == "1") {
+			 							html += '<spring:message code="eXperDB_scale.under" />';
+			 						} else {
+			 							html += '<spring:message code="eXperDB_scale.or_more" />';
+			 						}
+		 						}
+								return html;
+							},
+							
+			         		className : "dt-left", defaultContent : ""},
 			         	{data : "wrk_strt_dtm", className : "dt-center", defaultContent : ""},
-			         	{data : "wrk_end_dtm", className : "dt-center", defaultContent : ""},
+			         	{data : "wrk_end_dtm", 
+		 					render: function (data, type, full){
+		 						var html = '';
+								if(full.wrk_id == "2"){
+									html = full.wrk_end_dtm;
+								}
+								return html;
+							},
+			         		className : "dt-center", defaultContent : ""},
 			         	{data : "wrk_id", 
 		 					render: function (data, type, full){
+		 						var html = '';
 								if(full.wrk_id == "1"){
-									var html = '<span class="btn btnC_01 btnF_02"><img src="../images/spinner_loading.png" alt="" style="width:30%; margin-right:3px;" />' + '<spring:message code="restore.progress" /></span>';
-									return html;
+									html = '<span class="btn btnC_01 btnF_02"><img src="../images/spinner_loading.png" alt="" style="width:30%; margin-right:3px;" />' + '<spring:message code="restore.progress" /></span>';
 								}else{
-									var html = '<span class="btn btnC_01 btnF_02"><spring:message code="eXperDB_scale.complete" /></span>';
-									return html;
+									html = '<span class="btn btnC_01 btnF_02"><spring:message code="eXperDB_scale.complete" /></span>';
 								}
-								return data;
+								return html;
 							},
 							className : "dt-center",
 							defaultContent : ""
@@ -190,7 +250,7 @@ table th, table td {padding: 0}
 		 						if (full.exe_rslt_cd == 'TC001701' && full.wrk_id == '2') {
 		 							html += '<span class="btn btnC_01 btnF_02"><img src="../images/ico_state_02.png" style="margin-right:3px;"/><spring:message code="common.success" /></span>';
 		 						} else if(full.exe_rslt_cd == 'TC001702' && full.wrk_id == '2') {
-		 							html += '<span class="btn btnC_01 btnF_02"><button onclick="fn_failLog('+full.scale_wrk_sn+')"><img src="../images/ico_state_01.png" style="margin-right:3px;"/><spring:message code="common.failed" /></button></span>';
+		 							html += '<span class="btn btnC_01 btnF_02"><button onclick="fn_scaleFailLog('+full.scale_wrk_sn+')"><img src="../images/ico_state_01.png" style="margin-right:3px;"/><spring:message code="common.failed" /></button></span>';
 		 						} else {
 		 							html +='<span class="btn btnC_01 btnF_02"><img src="../images/spinner_loading.png" alt="" style="width:30%; margin-right:3px;" /><spring:message code="etc.etc28"/></span>';
 		 						}
@@ -204,13 +264,13 @@ table th, table td {padding: 0}
 	   	
 		tableExecute.tables().header().to$().find('th:eq(0)').css('min-width', '40px');
 		tableExecute.tables().header().to$().find('th:eq(1)').css('min-width', '100px');
-		tableExecute.tables().header().to$().find('th:eq(2)').css('min-width', '80px');
+		tableExecute.tables().header().to$().find('th:eq(2)').css('min-width', '100px');
 		tableExecute.tables().header().to$().find('th:eq(3)').css('min-width', '80px');
 		tableExecute.tables().header().to$().find('th:eq(4)').css('min-width', '220px');
-		tableExecute.tables().header().to$().find('th:eq(5)').css('min-width', '100px');
-		tableExecute.tables().header().to$().find('th:eq(6)').css('min-width', '100px');
+		tableExecute.tables().header().to$().find('th:eq(5)').css('min-width', '90px');
+		tableExecute.tables().header().to$().find('th:eq(6)').css('min-width', '90px');
 		tableExecute.tables().header().to$().find('th:eq(7)').css('min-width', '100px');
-		tableExecute.tables().header().to$().find('th:eq(8)').css('min-width', '80px');
+		tableExecute.tables().header().to$().find('th:eq(8)').css('min-width', '100px');
 
 	   	$(window).trigger('resize');
 	}
@@ -230,7 +290,18 @@ table th, table td {padding: 0}
 			bSort: false,
 			columns : [
 						{ data: "rownum", className: "dt-center", defaultContent: ""},
-			         	{data : "scale_type_nm", className : "dt-center", defaultContent : ""},
+			         	{data : "scale_type_nm", 
+		 					render : function(data, type, full, meta) {	 						
+		 						var html = '';
+		 						if (full.scale_type == "1") {
+		 							html = '<spring:message code="etc.etc38" />';
+		 						} else {
+		 							html = '<spring:message code="etc.etc39" />';
+		 						}
+
+								return html;
+		 					},
+							className : "dt-center", defaultContent : ""},
 			         	{
 			         		data : "execute_type_nm", 
 		 					render : function(data, type, full, meta) {	 						
@@ -244,8 +315,51 @@ table th, table td {padding: 0}
 		 					},
 			         		className : "dt-center", defaultContent : ""},
 			         	{data : "policy_type_nm", className : "dt-center", defaultContent : ""},
-			         	{data : "auto_policy_contents", className : "dt-left", defaultContent : ""},
-			         	{data : "event_occur_contents", className : "dt-left", defaultContent : ""},
+			         	{data : "auto_policy_contents", 
+		 					render : function(data, type, full, meta) {	
+		 						var html = full.policy_type_nm + " (";
+		 						if (full.auto_policy_set_div == "1") {
+	 								html += '<spring:message code="eXperDB_scale.policy_time_1" />';
+		 						} else {
+	 								html += '<spring:message code="eXperDB_scale.policy_time_2" />' ;
+		 						}
+		 						
+		 						html += ' ' + full.auto_level;
+		 						
+		 						if (full.policy_type == "TC003501") {
+	 								html += '%';
+		 						}
+		 						
+		 						html += ' ' + full.auto_policy_time + "minutes) ";
+		 						
+		 						if (full.scale_type == "1") {
+		 							html += '<spring:message code="eXperDB_scale.under" />';
+		 						} else {
+		 							html += '<spring:message code="eXperDB_scale.or_more" />';
+		 						}
+								return html;
+		 					},
+							className : "dt-left", defaultContent : ""},
+				         	{data : "event_occur_contents", 
+			 					render : function(data, type, full, meta) {	
+			 						var html = full.policy_type_nm + " (";
+			 						if (full.auto_policy_set_div == "1") {
+		 								html += '<spring:message code="eXperDB_scale.policy_time_1" />';
+			 						} else {
+		 								html += '<spring:message code="eXperDB_scale.policy_time_2" />' ;
+			 						}
+			 						
+			 						html += ' ' + full.event_occur_contents;
+			 						
+			 						if (full.policy_type == "TC003501") {
+		 								html += '%';
+			 						}
+			 						
+			 						html += ") ";
+
+									return html;
+			 					},
+								className : "dt-left", defaultContent : ""},
 			         	{data : "event_occur_dtm", className : "dt-center", defaultContent : ""},
 			]
 		});
@@ -386,7 +500,243 @@ table th, table td {padding: 0}
 		
 		return strValue;
 	}
+	
+	//ERROR 로그 정보 출력
+	function fn_scaleFailLog(scale_wrk_sn){
+		$.ajax({
+			url : "/scale/selectScaleWrkErrorMsg.do",
+			data : {
+				scale_wrk_sn : scale_wrk_sn,
+				db_svr_id : $("#db_svr_id").val()
+			},
+			dataType : "json",
+			type : "post",
+			beforeSend: function(xhr) {
+		        xhr.setRequestHeader("AJAX", true);
+		     },
+			error : function(xhr, status, error) {
+				if(xhr.status == 401) {
+					alert(message_msg02);
+					top.location.href = "/";
+				} else if(xhr.status == 403) {
+					alert(message_msg03);
+					top.location.href = "/";
+				} else {
+					alert("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""));
+				}
+			},
+			success : function(result) {
+				if (result != null) {
+					if (result.rslt_msg == "Auto scale-in_fail") {
+						result.rslt_msg = '<spring:message code="eXperDB_scale.msg11" />';
+					} else if (result.rslt_msg == "Auto scale-out_fail") {
+						result.rslt_msg = '<spring:message code="eXperDB_scale.msg12" />';
+					}
+					
+					$("#scaleWrkLogInfo").html(result.rslt_msg);
+				} else {
+					$("#scaleWrkLogInfo").html("");
+				}
+
+				toggleLayer($('#pop_layer_scaleWrkLog'), 'on');
+			}
+		});	
+	}
+	
+	// scale 실행이력 상세정보
+	function fn_scaleExecHistLayer(scale_wrk_sn){
+		var scale_type_nm = "";
+		$.ajax({
+			url : "/scale/selectScaleWrkInfo.do",
+			data : {
+				scale_wrk_sn : scale_wrk_sn,
+				db_svr_id : $("#db_svr_id").val()
+			},
+			dataType : "json",
+			type : "post",
+			beforeSend: function(xhr) {
+		        xhr.setRequestHeader("AJAX", true);
+		     },
+		     error : function(xhr, status, error) {
+					if(xhr.status == 401) {
+						alert(message_msg02);
+						top.location.href = "/";
+					} else if(xhr.status == 403) {
+						alert(message_msg03);
+						top.location.href = "/";
+					} else {
+						alert("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""));
+					}
+				},
+			success : function(result) {
+				if(result == null){
+					msgVale = "<spring:message code='menu.scale_execute_hist' />";
+					alert('<spring:message code="eXperDB_scale.msg8" arguments="'+ msgVale +'" />');
+				}else{	
+					$("#d_process_id").html(nvlSet(result.process_id));
+					$("#d_ipadr").html(nvlSet(result.ipadr));
+
+ 					if (result.scale_type == "1") {
+ 						scale_type_nm = '<spring:message code="etc.etc38" />';
+ 					} else {
+ 						scale_type_nm = '<spring:message code="etc.etc39" />';
+ 					}
+
+					$("#d_scale_type_nm").html(scale_type_nm);
+					$("#d_wrk_type_nm").html(nvlSet(result.wrk_type_nm));
+					
+					var auto_policy_nm = '';
+
+					if (result.wrk_type == "TC003301") {
+						auto_policy_nm += result.policy_type_nm + " (";
+
+	 					if (result.auto_policy_set_div == "1") {
+	 						auto_policy_nm += '<spring:message code="eXperDB_scale.policy_time_1" />';
+	 					} else {
+	 						auto_policy_nm += '<spring:message code="eXperDB_scale.policy_time_2" />';
+	 					}
+	 					
+	 					auto_policy_nm += ' ' + result.auto_level;
+	 					
+ 						if (result.auto_policy == "TC003501") {
+ 							auto_policy_nm += '%';
+						}
+ 						
+ 						auto_policy_nm += ' ' + result.auto_policy_time + "minutes) ";
+ 						
+ 						if (result.scale_type == "1") {
+ 							auto_policy_nm += '<spring:message code="eXperDB_scale.under" />';
+ 						} else {
+ 							auto_policy_nm += '<spring:message code="eXperDB_scale.or_more" />';
+ 						}
+					}
+
+					$("#d_auto_policy_nm").html(nvlSet(auto_policy_nm));
+					$("#d_wrk_strt_dtm").html(nvlSet(result.wrk_strt_dtm));
+					$("#d_wrk_end_dtm").html(nvlSet(result.wrk_end_dtm));
+					
+					var wrk_stat = "";
+					if (result.wrk_id == "1") {
+						wrk_stat = '<span class="btn btnC_01 btnF_02"><img src="../images/spinner_loading.png" alt="" style="width:30%; margin-right:3px;" />' + '<spring:message code="restore.progress" /></span>';
+					} else if (result.wrk_id == "2") {
+						wrk_stat = '<span class="btn btnC_01 btnF_02"><spring:message code="eXperDB_scale.complete" /></span>'
+					} else {
+						wrk_stat = "-";
+					}
+					
+					$("#d_wrk_stat").html(wrk_stat);
+
+					var exe_rslt_cd_nm = "";
+
+ 					if (result.exe_rslt_cd == 'TC001701' && result.wrk_id == '2') {
+ 						exe_rslt_cd_nm = '<span class="btn btnC_01 btnF_02"><img src="../images/ico_state_02.png" style="margin-right:3px;"/><spring:message code="common.success" /></span>';
+ 					} else if(result.exe_rslt_cd == 'TC001702' && result.wrk_id == '2') {
+ 						exe_rslt_cd_nm = '<span class="btn btnC_01 btnF_02"><img src="../images/ico_state_01.png" style="margin-right:3px;"/><spring:message code="common.failed" /></span>';
+ 					} else {
+ 						exe_rslt_cd_nm = '<span class="btn btnC_01 btnF_02"><img src="../images/spinner_loading.png" alt="" style="width:30%; margin-right:3px;" /><spring:message code="etc.etc28"/></span>';
+ 					}					
+					$("#d_exe_rslt_cd_nm").html(exe_rslt_cd_nm);
+					$("#d_exe_rslt_msg").html(nvlSet(result.exe_rslt_msg));
+
+					toggleLayer($('#pop_layer_log'), 'on'); 
+				}
+		
+			}
+		});	
+	}
+	
+
+	/* ********************************************************
+	 * aws 서버 확인
+	 ******************************************************** */
+	function fn_selectScaleInstallChk(tabGbn) {
+		$.ajax({
+			url : "/scale/selectScaleInstallChk.do",
+			data : {
+				db_svr_id : '${db_svr_id}'
+			},
+			dataType : "json",
+			type : "post",
+			beforeSend: function(xhr) {
+		        xhr.setRequestHeader("AJAX", true);
+		     },
+			error : function(xhr, status, error) {
+				console.log("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""));
+			},
+			success : function(result) {
+				if (result != null) {
+					install_yn = result.install_yn;
+				}
+
+				//AWS 서버인경우
+				if (install_yn == "Y") {
+					$("#scaleIngMsg").hide();
+					
+					//조회
+					if(tabGbn != ""){
+						selectTab(tabGbn);
+					}else{
+						selectTab("executeHist");
+					}
+				} else {
+					$("#scaleIngMsg").show();
+
+					//설치안된경우 버튼 막아야함
+					$("#btnSelect").prop("disabled", "disabled");
+					$("#wrk_strt_dtm").prop("disabled", "disabled");
+					$("#wrk_end_dtm").prop("disabled", "disabled");
+					$("#exe_rslt_cd").prop("disabled", "disabled");
+					$("#scale_type_cd").prop("disabled", "disabled");
+					$("#policy_type_cd").prop("disabled", "disabled");
+					$("#process_id_set").prop("disabled", "disabled");
+					$("#wrk_type_Cd").prop("disabled", "disabled");
+					$("#execute_type_cd").prop("disabled", "disabled");
+				//	$('.a-link').click(function () {return false;});
+					
+					selectTab("executeHist");
+				}
+			}
+		});
+		$('#loading').hide();
+	}
+	
+	/* ********************************************************
+	 * Tab Click
+	 ******************************************************** */
+	function tabSearchParamChk(intab){
+		tab = intab;
+		if(intab == "executeHist"){
+			$("#tab_occurHist").hide();
+			$("#tab_executeHist").show();
+			
+			$("#logExecuteHistListDiv").show();
+			$("#logOccurHistListDiv").hide();
+			$(".search_execute").show();
+			$(".search_occur").hide();
+			
+			seachParamInit(intab);
+		}else{	
+			$("#tab_occurHist").show();
+			$("#tab_executeHist").hide();
+			
+			$("#logExecuteHistListDiv").hide();
+			$("#logOccurHistListDiv").show();
+			
+			$(".search_execute").hide();
+			$(".search_occur").show();
+			
+			seachParamInit(intab);
+		}
+	}
+	
+	function fnc_menuMove() {
+		location.href='/scale/scaleList.do?db_svr_id=' + $("#db_svr_id").val();
+	}
+
 </script>
+
+<%@include file="./scaleWrkLog.jsp"%>
+<%@include file="./experdbScaleLogInfo.jsp"%>
 
 <!-- contents -->
 <div id="contents">
@@ -411,17 +761,19 @@ table th, table td {padding: 0}
 		<div class="contents">
 			<div class="cmm_tab">
 				<ul id="tab_executeHist">
-					<li class="atv"><a href="javascript:selectTab('executeHist');"><spring:message code="menu.scale_execute_hist" /></a></li>
-					<li><a href="javascript:selectTab('occurHist');"><spring:message code="menu.scale_auto_occur_hist" /></a></li>
+					<li class="atv a-link"><a href="javascript:selectTab('executeHist');"><spring:message code="menu.scale_execute_hist" /></a></li>
+					<li class="a-link"><a href="javascript:selectTab('occurHist');"><spring:message code="menu.scale_auto_occur_hist" /></a></li>
 				</ul>
 				<ul id="tab_occurHist" style="display:none">
-					<li><a href="javascript:selectTab('executeHist');"><spring:message code="menu.scale_execute_hist" /></a></li>
-					<li class="atv"><a href="javascript:selectTab('occurHist');"><spring:message code="menu.scale_auto_occur_hist" /></a></li>
+					<li class="a-link"><a href="javascript:selectTab('executeHist');"><spring:message code="menu.scale_execute_hist" /></a></li>
+					<li class="atv a-link"><a href="javascript:selectTab('occurHist');"><spring:message code="menu.scale_auto_occur_hist" /></a></li>
 				</ul>
 			</div>
 		
 			<div class="cmm_grp">
 				<div class="btn_type_01">
+					<span class="scaleIng" id="scaleIngMsg" style="display:none;">* <spring:message code="eXperDB_scale.msg10" /></span>
+				
 					<span class="btn"><button id="btnSelect" type="button"><spring:message code="common.search" /></button></span>
 				</div>
 				<div class="sch_form">
@@ -478,8 +830,6 @@ table th, table td {padding: 0}
 											</c:forEach>
 										</select>
 									</td>
-									
-									
 								</tr>
 								<tr class="search_execute">
 									<th scope="row" class="t9"><spring:message code="eXperDB_scale.process_id" /></th>
@@ -515,26 +865,27 @@ table th, table td {padding: 0}
 
 				<div class="overflow_area" id="logExecuteHistListDiv">
 					<table class="display" id="scaleExecuteHistList" style="width:100%;">
-						<caption>Scale 실행이력 리스트</caption>
+						<caption><spring:message code="menu.scale_execute_hist" /> list</caption>
 						<thead>
 							<tr>
 								<th width="40"><spring:message code="common.no" /></th>
 								<th width="100"><spring:message code="eXperDB_scale.process_id" /></th>
-								<th width="80"><spring:message code="eXperDB_scale.scale_type" /></th>
+								<th width="100"><spring:message code="eXperDB_scale.scale_type" /></th>
 								<th width="80"><spring:message code="eXperDB_scale.wrk_type" /></th>
 								<th width="220"><spring:message code="eXperDB_scale.auto_policy_nm" /></th>
-								<th width="100"><spring:message code="eXperDB_scale.work_start_time" /> </th>
-								<th width="100"><spring:message code="eXperDB_scale.work_end_time" /></th>
+								<th width="90"><spring:message code="eXperDB_scale.work_start_time" /> </th>
+								<th width="90"><spring:message code="eXperDB_scale.work_end_time" /></th>
 								<th width="100"><spring:message code="eXperDB_scale.progress" /></th>
-								<th width="80"><spring:message code="common.status" /></th>
+								<th width="100"><spring:message code="common.status" /></th>
 							</tr>
 						</thead>
 					</table>
 				</div>	
-				
+
 				<div class="overflow_area" id="logOccurHistListDiv">
 					<table class="display" id="logOccurHistList" style="width:100%;">
-						<caption>Scale Auto 발생이력</caption>
+						<caption><spring:message code="menu.scale_auto_occur_hist" /> list</caption>
+						
 						<thead>
 							<tr>
 								<th width="40"><spring:message code="common.no" /></th>

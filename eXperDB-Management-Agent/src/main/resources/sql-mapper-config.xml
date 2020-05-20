@@ -20,13 +20,13 @@
     	<typeAlias alias="RmanRestoreVO" type="com.k4m.dx.tcontrol.db.repository.vo.RmanRestoreVO" />
     	<typeAlias alias="DumpRestoreVO" type="com.k4m.dx.tcontrol.db.repository.vo.DumpRestoreVO" />
     	
-
+		<typeAlias alias="TransVO" type="com.k4m.dx.tcontrol.db.repository.vo.TransVO" />	
     </typeAliases>
     
  	<mappers>
 
 		<mapper resource="sqlmap/system.xml" />
 		<mapper resource="sqlmap/app.xml" /> 
-		
+		<mapper resource="sqlmap/scale.xml" />
 	</mappers>
 </configuration>

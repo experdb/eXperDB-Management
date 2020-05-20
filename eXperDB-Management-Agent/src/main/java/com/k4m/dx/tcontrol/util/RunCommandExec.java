@@ -146,7 +146,7 @@ public class RunCommandExec extends Thread {
 			proc = Runtime.getRuntime().exec(new String[]{"/bin/sh", "-c", cmd}); 
 			proc.waitFor ();
 			
-			socketLogger.info("proc.exitValue() --> " + proc.exitValue());
+		//	socketLogger.info("proc.exitValue() --> " + proc.exitValue());
 			
 		//	socketLogger.info("@@@@@@@@@ scanner start" );
 			

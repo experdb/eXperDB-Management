@@ -50,7 +50,11 @@ function fn_init(){
 	{data : "bck_bsn_dscd_nm",  defaultContent : ""}, //구분
 	{data : "wrk_nm", className : "dt-left", defaultContent : ""
 		,"render": function (data, type, full) {
+			if(full.bsn_dscd_nm != "MIGRATION"){
 			  return '<span onClick=javascript:fn_workLayer("'+full.wrk_id+'"); class="bold" title="'+full.wrk_nm+'">' + full.wrk_nm + '</span>';
+			}else{
+				return '<span title="'+full.wrk_nm+'">' + full.wrk_nm + '</span>';
+			}
 		}
 	}, //work명
 	{ data : "wrk_exp",

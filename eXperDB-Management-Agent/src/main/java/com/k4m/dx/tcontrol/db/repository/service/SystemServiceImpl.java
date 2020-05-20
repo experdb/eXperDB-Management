@@ -12,6 +12,7 @@ import com.k4m.dx.tcontrol.db.repository.vo.AgentInfoVO;
 import com.k4m.dx.tcontrol.db.repository.vo.DbServerInfoVO;
 import com.k4m.dx.tcontrol.db.repository.vo.DumpRestoreVO;
 import com.k4m.dx.tcontrol.db.repository.vo.RmanRestoreVO;
+import com.k4m.dx.tcontrol.db.repository.vo.TransVO;
 import com.k4m.dx.tcontrol.db.repository.vo.TrfTrgCngVO;
 import com.k4m.dx.tcontrol.db.repository.vo.WrkExeVO;
 
@@ -163,18 +164,9 @@ public class SystemServiceImpl implements SystemService{
 	public void insertWRKEXE_G(WrkExeVO vo)  throws Exception{
 		systemDAO.insertWRKEXE_G(vo);
 	}
-
-	/* scale log insert */
-	public void insertScaleLog_G(Map<String, Object> param)  throws Exception{
-
-		if (param != null) {
-			if (param.get("saveGbn").toString().equals("insert")) {
-				systemDAO.insertScaleLog_G(param);
-			} else {
-				if (param.get("return_val") != null) {
-					systemDAO.updateScaleLog_G(param);
-				}
-			}
-		}
+	
+	public void updateTransExe(TransVO transVO) throws Exception{
+		systemDAO.updateTransExe(transVO);
+		
 	}
 }

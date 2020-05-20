@@ -39,6 +39,7 @@ import com.k4m.dx.tcontrol.encrypt.service.call.CommonServiceCall;
 import com.k4m.dx.tcontrol.encrypt.service.call.StatisticsServiceCall;
 import com.k4m.dx.tcontrol.functions.schedule.service.ScheduleService;
 import com.k4m.dx.tcontrol.login.service.LoginVO;
+import com.k4m.dx.tcontrol.scale.service.InstanceScaleService;
 import com.k4m.dx.tcontrol.script.service.ScriptService;
 
 /**
@@ -76,7 +77,9 @@ public class CmmnController {
 	
 	@Autowired
 	private ScheduleService scheduleService;
-	
+
+	@Autowired
+	private InstanceScaleService instanceScaleService;
 	
 	/**
 	 * 메인(홈)을 보여준다.
@@ -257,6 +260,37 @@ public class CmmnController {
 			int bak_state = (int) ((double) bak_nouse / (double) bak_total * 100) - (bak_fail * 5);
 			System.out.println("백업관리 : " + bak_state+"%");
 
+			//scale 현상태 체크(당일자료)
+			List<Map<String, Object>> resultScale = new ArrayList<Map<String, Object>>();
+			try{
+				List<Map<String, Object>> searchScale = (List<Map<String, Object>>) dashboardService.selectDashboardScaleInfo();
+				int scale_cnt = 0;
+				if (searchScale != null) {
+					if(searchScale.size()>0){
+						for(int i=0; i<searchScale.size(); i++){
+							Map<String, Object> mapScale = (HashMap<String, Object>)searchScale.get(i);
+							String str_db_svr_id = String.valueOf(mapScale.get("db_svr_id"));
+							
+							int db_svr_id = Integer.parseInt(str_db_svr_id);
+							scale_cnt = instanceScaleService.dashboardInstanceScale(db_svr_id);//instance_cnt
+							
+System.out.println("===scale_cnt===" + scale_cnt);
+							
+							mapScale.put("instance_cnt", scale_cnt);
+							
+							//instance 가 있는 경우만
+							if (scale_cnt > 0) {
+								resultScale.add(mapScale);
+							}
+
+						}
+					}
+
+				}
+			}catch(Exception e){
+				e.printStackTrace();
+			}
+
 			mv.addObject("scheduleInfo", scheduleInfoVO);
 			mv.addObject("backupInfo", backupInfoVO);
 			mv.addObject("serverInfo", serverInfoVO);
@@ -265,17 +299,15 @@ public class CmmnController {
 			mv.addObject("wrk_state", wrk_state);
 			mv.addObject("svr_state", svr_state);
 			mv.addObject("bak_state", bak_state);
+			
+			//scale 내역조회
+			mv.addObject("scaleIngInfo", resultScale);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 		mv.setViewName("dashboard");
 		return mv;
 	}
-
-
-	
-	
-
 	
 	/**
 	 *  권한 에러 화면을 보여준다.

@@ -2,6 +2,7 @@ package com.k4m.dx.tcontrol.dashboard.service.impl;
 
 import java.sql.SQLException;
 import java.util.List;
+import java.util.Map;
 
 import javax.annotation.Resource;
 
@@ -83,6 +84,10 @@ public class DashboardServiceImpl extends EgovAbstractServiceImpl implements Das
 		return (List<DbServerVO>) dashboardDAO.selectDashboardServer();
 	}
 
+	@Override
+	public List<Map<String, Object>> selectDashboardScaleInfo() throws SQLException {
+		return (List<Map<String, Object>>) dashboardDAO.selectDashboardScaleInfo();
+	}
 
 
 }

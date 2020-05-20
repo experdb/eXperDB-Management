@@ -67,9 +67,13 @@
                AA.WRK_TYPE,
                AA.WRK_TYPE_NM,
                AA.AUTO_POLICY,
-               AA.AUTO_POLICY_NM,
+               AA.POLICY_TYPE_NM,
+               
+               AA.AUTO_POLICY_SET_DIV,
+               AA.AUTO_POLICY_TIME,
+               AA.AUTO_LEVEL,
+               
                AA.CLUSTERS,
-               AA.INSTANCE_ID,
                AA.WRK_STRT_DTM,
                AA.WRK_END_DTM,
                AA.WRK_DTM,
@@ -92,9 +96,13 @@
                       A.WRK_TYPE AS WRK_TYPE,
                       (SELECT SYS_CD_NM FROM T_SYSDTL_C WHERE A.WRK_TYPE = SYS_CD ) AS WRK_TYPE_NM,
                       A.AUTO_POLICY AS AUTO_POLICY,
-                      A.AUTO_POLICY_NM AS AUTO_POLICY_NM,
+                      (SELECT SYS_CD_NM FROM T_SYSDTL_C WHERE A.AUTO_POLICY = SYS_CD ) AS POLICY_TYPE_NM,
+
+                      A.AUTO_POLICY_SET_DIV,
+                      A.AUTO_POLICY_TIME,
+                      A.AUTO_LEVEL,
+               
                       A.CLUSTERS AS CLUSTERS,
-                      A.INSTANCE_ID AS INSTANCE_ID,
                       TO_CHAR(A.WRK_STRT_DTM,'YYYY-MM-DD HH24:MI') AS WRK_STRT_DTM,
                       TO_CHAR(A.WRK_END_DTM,'YYYY-MM-DD HH24:MI') AS WRK_END_DTM,
                       TO_CHAR(TO_CHAR(A.WRK_END_DTM,'YYYY-MM-DD HH24:MI')::timestamp - TO_CHAR(A.WRK_STRT_DTM,'YYYY-MM-DD HH24:MI')::timestamp, 'HH24:MI') AS WRK_DTM,
@@ -153,7 +161,9 @@
                AA.SCALE_TYPE_NM,
                AA.POLICY_TYPE,
                AA.POLICY_TYPE_NM,
-               AA.AUTO_POLICY_CONTENTS,
+               AA.AUTO_POLICY_SET_DIV,
+               AA.AUTO_POLICY_TIME,
+               AA.AUTO_LEVEL,
                AA.EXECUTE_TYPE,
                AA.EXECUTE_TYPE_NM,
                AA.EVENT_OCCUR_CONTENTS,
@@ -171,7 +181,9 @@
                       (CASE WHEN A.SCALE_TYPE = '1' THEN 'Scale-in' ELSE 'Scale-out' END) AS SCALE_TYPE_NM,
                       A.POLICY_TYPE AS POLICY_TYPE,
                       (SELECT SYS_CD_NM FROM T_SYSDTL_C WHERE A.POLICY_TYPE = SYS_CD ) AS POLICY_TYPE_NM,
-                      A.AUTO_POLICY_CONTENTS AS AUTO_POLICY_CONTENTS,
+                      A.AUTO_POLICY_SET_DIV AS AUTO_POLICY_SET_DIV,
+                      A.AUTO_POLICY_TIME AS AUTO_POLICY_TIME,
+                      A.AUTO_LEVEL AS AUTO_LEVEL,
                       A.EXECUTE_TYPE AS EXECUTE_TYPE,
                       (SELECT SYS_CD_NM FROM T_SYSDTL_C WHERE A.EXECUTE_TYPE = SYS_CD ) AS EXECUTE_TYPE_NM,
                       A.EVENT_OCCUR_CONTENTS AS EVENT_OCCUR_CONTENTS,
@@ -204,4 +216,256 @@
                 ORDER BY A.EVENT_OCCUR_DTM DESC
          )AA
     </select>
+
+    <select id="selectScaleWrkErrorMsg" resultType="hashMap" parameterType="hashMap">
+		/**
+	 	* Query ID : selectScaleWrkErrorMsg
+	 	* Description : scale 작업로그정보 
+	 	* Author : 
+	 	**/
+        SELECT 
+               A.RSLT_MSG
+          FROM T_SCALE_G A
+               JOIN T_DBSVRIPADR_I B ON A.DB_SVR_IPADR_ID = B.DB_SVR_IPADR_ID 
+         WHERE 1 = 1
+           AND B.DB_SVR_ID=#{db_svr_id}::numeric
+           AND A.SCALE_WRK_SN = #{scale_wrk_sn}
+    </select>
+    
+	<select id="selectScaleWrkInfo" resultType="hashMap" parameterType="hashMap">
+   		/**
+	 	* Query ID : selectScaleWrkInfo
+	 	* Description : scale wrk 정보 조회
+	 	* Author : 
+	 	**/
+        SELECT
+               A.SCALE_WRK_SN AS SCALE_WRK_SN,
+               A.WRK_ID AS WRK_ID,  
+               A.SCALE_TYPE AS SCALE_TYPE,
+               (CASE WHEN A.SCALE_TYPE = '1' THEN 'Scale-in' ELSE 'Scale-out' END) AS SCALE_TYPE_NM,
+               B.DB_SVR_ID AS DB_SVR_ID,
+               B.IPADR AS IPADR,
+               A.WRK_TYPE AS WRK_TYPE,
+               (SELECT SYS_CD_NM FROM T_SYSDTL_C WHERE A.WRK_TYPE = SYS_CD ) AS WRK_TYPE_NM,
+               A.AUTO_POLICY AS AUTO_POLICY,
+               (SELECT SYS_CD_NM FROM T_SYSDTL_C WHERE A.AUTO_POLICY = SYS_CD ) AS POLICY_TYPE_NM,
+                     
+               A.AUTO_POLICY_SET_DIV,
+               A.AUTO_POLICY_TIME,
+               A.AUTO_LEVEL,
+
+               A.CLUSTERS AS CLUSTERS,
+               A.PROCESS_ID AS PROCESS_ID,
+               TO_CHAR(A.WRK_STRT_DTM,'YYYY-MM-DD HH24:MI') AS WRK_STRT_DTM,
+               TO_CHAR(A.WRK_END_DTM,'YYYY-MM-DD HH24:MI') AS WRK_END_DTM,
+               A.EXE_RSLT_CD AS EXE_RSLT_CD,
+               (SELECT SYS_CD_NM FROM T_SYSDTL_C WHERE A.EXE_RSLT_CD = SYS_CD ) AS EXE_RSLT_CD_NM,
+               A.RSLT_MSG AS RSLT_MSG,
+               A.FRST_REGR_ID AS FRST_REGR_ID,
+               TO_CHAR(A.FRST_REG_DTM,'YYYY-MM-DD HH24:MI') AS FRST_REG_DTM,
+               A.LST_MDFR_ID AS LST_MDFR_ID,
+               TO_CHAR(A.LST_MDF_DTM,'YYYY-MM-DD HH24:MI') AS LST_MDF_DTM
+          FROM T_SCALE_G A
+               JOIN T_DBSVRIPADR_I B ON A.DB_SVR_IPADR_ID = B.DB_SVR_IPADR_ID 
+         WHERE B.DB_SVR_ID=#{db_svr_id}::numeric
+           AND A.SCALE_WRK_SN = #{scale_wrk_sn}
+	</select>
+
+	<select id="selectScaleCngList" parameterType="instanceScaleVO" resultType="hashMap">
+        /**
+        * Query ID : selectScaleCngList
+        * Description : scale Auto 설정 list 조회
+        * Author : 
+        **/
+        SELECT
+               (ROW_NUMBER() OVER()) AS ROWNUM
+             , (ROW_NUMBER() OVER()) AS IDX
+             , AA.WRK_ID
+             , AA.DB_SVR_ID
+             , AA.SCALE_TYPE
+             , AA.SCALE_TYPE_NM
+             , AA.POLICY_TYPE
+             , AA.POLICY_TYPE_NM
+             , AA.AUTO_POLICY_SET_DIV
+             , AA.AUTO_POLICY_TIME
+             , AA.AUTO_LEVEL
+             , AA.EXECUTE_TYPE
+             , AA.EXECUTE_TYPE_NM
+             , AA.EXPANSION_CLUSTERS
+             , AA.MIN_CLUSTERS
+             , AA.MAX_CLUSTERS
+             , AA.FRST_REGR_ID
+             , AA.FRST_REG_DTM
+             , AA.LST_MDFR_ID
+             , AA.LST_MDF_DTM
+          FROM (
+                SELECT A.WRK_ID AS WRK_ID
+                     , B.DB_SVR_ID AS DB_SVR_ID
+                     , A.SCALE_TYPE AS SCALE_TYPE
+                     , (CASE WHEN A.SCALE_TYPE = '1' THEN 'Scale-in' ELSE 'Scale-out' END) AS SCALE_TYPE_NM
+                     , A.POLICY_TYPE AS POLICY_TYPE
+                     , (SELECT SYS_CD_NM FROM T_SYSDTL_C WHERE A.POLICY_TYPE = SYS_CD ) AS POLICY_TYPE_NM
+                     , A.AUTO_POLICY_SET_DIV AS AUTO_POLICY_SET_DIV
+                     , A.AUTO_POLICY_TIME AS AUTO_POLICY_TIME
+                     , A.AUTO_LEVEL AS AUTO_LEVEL
+                     , A.EXECUTE_TYPE AS EXECUTE_TYPE
+                     , (SELECT SYS_CD_NM FROM T_SYSDTL_C WHERE A.EXECUTE_TYPE = SYS_CD ) AS EXECUTE_TYPE_NM
+                     , A.EXPANSION_CLUSTERS AS EXPANSION_CLUSTERS
+                     , A.MIN_CLUSTERS AS MIN_CLUSTERS
+                     , A.MAX_CLUSTERS AS MAX_CLUSTERS
+                     , A.FRST_REGR_ID AS FRST_REGR_ID
+                     , TO_CHAR(A.FRST_REG_DTM,'YYYY-MM-DD HH24:MI') AS FRST_REG_DTM
+                     , A.LST_MDFR_ID AS LST_MDFR_ID
+                     , TO_CHAR(A.LST_MDF_DTM,'YYYY-MM-DD HH24:MI') AS LST_MDF_DTM
+                  FROM T_SCALE_I A
+                       JOIN T_DBSVRIPADR_I B ON A.DB_SVR_IPADR_ID = B.DB_SVR_IPADR_ID 
+                 WHERE B.DB_SVR_ID=#{db_svr_id}::numeric
+
+               <if test="scale_type_cd != null and scale_type_cd != '' ">
+                   AND A.SCALE_TYPE=#{scale_type_cd}
+               </if>
+
+               <if test="policy_type_cd != null and policy_type_cd != '' ">
+                   AND A.POLICY_TYPE = #{policy_type_cd}
+               </if>
+               
+               <if test="execute_type_cd != null and execute_type_cd != '' ">
+                   AND A.EXECUTE_TYPE = #{execute_type_cd}
+               </if>
+               
+               <if test="wrk_id != null and wrk_id != '' ">
+                   AND A.WRK_ID = #{wrk_id}::numeric
+               </if>
+                 ORDER BY A.LST_MDF_DTM DESC
+         )AA
+    </select>
+
+	<select id="selectAutoScaleSetChk" parameterType="instanceScaleVO" resultType="int">
+        /**
+        * Query ID : selectAutoScaleSetChk
+        * Description : Auto scale 설정 중복 체크
+        * Author : 
+        **/
+        SELECT COUNT(*)
+          FROM T_SCALE_I 
+          WHERE DB_SVR_ID = #{db_svr_id}::numeric
+            AND SCALE_TYPE = #{scale_type_cd}
+            AND POLICY_TYPE = #{policy_type_cd}
+            AND EXECUTE_TYPE = #{execute_type_cd}
+            AND AUTO_POLICY_SET_DIV = #{auto_policy_set_div}
+            
+          <if test="wrk_id != null and wrk_id != '' ">
+             AND WRK_ID != #{wrk_id}::numeric
+          </if>
+	</select>
+
+	<insert id="insertAutoScaleSetting" parameterType="instanceScaleVO">
+        /**
+        * Query ID : "insertAutoScaleSetting"
+        * Description : 
+        * Author : 
+        **/
+        INSERT INTO T_SCALE_I
+                    (
+                     WRK_ID
+                   , DB_SVR_ID
+                   , DB_SVR_IPADR_ID
+                   , SCALE_TYPE
+                   , POLICY_TYPE
+                   , AUTO_POLICY_SET_DIV
+                   , AUTO_POLICY_TIME
+                   , AUTO_LEVEL
+                   , EXECUTE_TYPE
+                   , EXPANSION_CLUSTERS
+                   , MIN_CLUSTERS
+                   , MAX_CLUSTERS
+                   , FRST_REGR_ID
+                   , FRST_REG_DTM
+                   , LST_MDFR_ID
+                   , LST_MDF_DTM
+                    )
+              VALUES
+                    (
+                     nextval('q_t_scale_i_01')
+                   , #{db_svr_id}::numeric
+                   , #{db_svr_ipadr_id}::numeric
+                   , #{scale_type_cd}
+                   , #{policy_type_cd}
+                   , #{auto_policy_set_div}
+                   , #{auto_policy_time}::numeric
+                   , #{auto_level}
+                   , #{execute_type_cd}
+                   , #{expansion_clusters}::numeric
+                   , #{min_clusters}::numeric
+                   , #{max_clusters}::numeric
+                   , #{login_id}
+                   , clock_timestamp()
+                   , #{login_id}
+                   , clock_timestamp()
+                   )
+	</insert>
+	
+	<update id="updateAutoScaleSetting" parameterType="instanceScaleVO">
+        /**
+        * Query ID : "updateAutoScaleSetting"
+        * Description : Auto scale 설정 수정
+        * Author : 
+        **/
+        UPDATE T_SCALE_I
+           SET SCALE_TYPE = #{scale_type_cd}
+             , POLICY_TYPE = #{policy_type_cd}
+             , AUTO_POLICY_SET_DIV = #{auto_policy_set_div}
+             , AUTO_POLICY_TIME = #{auto_policy_time}::numeric
+             , AUTO_LEVEL = #{auto_level}
+             , EXECUTE_TYPE = #{execute_type_cd}
+             , EXPANSION_CLUSTERS = #{expansion_clusters}::numeric
+             , MIN_CLUSTERS = #{min_clusters}::numeric
+             , MAX_CLUSTERS = #{max_clusters}::numeric
+             , LST_MDFR_ID = #{login_id}
+             , LST_MDF_DTM = clock_timestamp()
+         WHERE DB_SVR_ID = #{db_svr_id}::numeric
+           AND WRK_ID = #{wrk_id}::numeric
+	</update>
+
+	<select id="selectAutoScaleCngInfo" resultType="hashMap" parameterType="hashMap">
+   		/**
+	 	* Query ID : selectAutoScaleCngInfo
+	 	* Description : scale 설정 정보 상세 조회
+	 	* Author : 
+	 	**/
+       SELECT A.WRK_ID AS WRK_ID
+            , B.DB_SVR_ID AS DB_SVR_ID
+            , A.SCALE_TYPE AS SCALE_TYPE
+            , (CASE WHEN A.SCALE_TYPE = '1' THEN 'Scale-in' ELSE 'Scale-out' END) AS SCALE_TYPE_NM
+            , A.POLICY_TYPE AS POLICY_TYPE
+            , (SELECT SYS_CD_NM FROM T_SYSDTL_C WHERE A.POLICY_TYPE = SYS_CD ) AS POLICY_TYPE_NM
+            , A.AUTO_POLICY_SET_DIV AS AUTO_POLICY_SET_DIV
+            , A.AUTO_POLICY_TIME AS AUTO_POLICY_TIME
+            , A.AUTO_LEVEL AS AUTO_LEVEL
+            , A.EXECUTE_TYPE AS EXECUTE_TYPE
+            , (SELECT SYS_CD_NM FROM T_SYSDTL_C WHERE A.EXECUTE_TYPE = SYS_CD ) AS EXECUTE_TYPE_NM
+            , A.EXPANSION_CLUSTERS AS EXPANSION_CLUSTERS
+            , A.MIN_CLUSTERS AS MIN_CLUSTERS
+            , A.MAX_CLUSTERS AS MAX_CLUSTERS
+            , A.FRST_REGR_ID AS FRST_REGR_ID
+            , TO_CHAR(A.FRST_REG_DTM,'YYYY-MM-DD HH24:MI') AS FRST_REG_DTM
+            , A.LST_MDFR_ID AS LST_MDFR_ID
+            , TO_CHAR(A.LST_MDF_DTM,'YYYY-MM-DD HH24:MI') AS LST_MDF_DTM
+         FROM T_SCALE_I A
+              JOIN T_DBSVRIPADR_I B ON A.DB_SVR_IPADR_ID = B.DB_SVR_IPADR_ID 
+        WHERE B.DB_SVR_ID=#{db_svr_id}::numeric
+          AND A.WRK_ID = #{wrk_id}::numeric
+	</select>
+	
+	 <delete id="deleteAutoScaleSetting" parameterType="instanceScaleVO">
+	   	/**
+	 	* Query ID : deleteAutoScaleSetting
+	 	* Description : Auto scale 설정 삭제
+	 	* Author : 
+	 	**/
+       DELETE FROM T_SCALE_I
+        WHERE WRK_ID = #{wrk_id}::numeric
+          AND DB_SVR_ID=#{db_svr_id}::numeric
+	 		
+    </delete>
 </mapper>

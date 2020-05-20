@@ -244,4 +244,16 @@ public class Db2pgSettingDAO extends EgovAbstractMapper {
 		return (int) getSqlSession().selectOne("db2pgSettingSql.selectWorkSeq");
 	}
 
+
+
+	public void updateDDLSavePth(Map<String, Object> param) throws SQLException {
+		update("db2pgSettingSql.updateDDLSavePth", param);
+		
+	}
+
+	public void updateTransSavePth(Map<String, Object> param) throws SQLException {
+		update("db2pgSettingSql.updateTransSavePth", param);
+		
+	}
+
 }

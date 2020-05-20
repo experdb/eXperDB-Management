@@ -370,6 +370,7 @@ function fn_charSet(){
  		// Validation 체크
  		 if (!fn_validation()) return false;
 
+
  		if($("#dbms_dscd").val()  == 'TC002204'){
  			if(document.getElementById("schema_pg").value == ""){
  				var scm_nm = document.getElementById("schema_any").value;	
@@ -417,7 +418,6 @@ function fn_charSet(){
 	}
  
 </script>
-
 </head>
 <body>
 <div class="pop_container">
@@ -431,7 +431,6 @@ function fn_charSet(){
 				<col style="width:330px;" />
 				<col style="width:100px;" />
 				<col />
-				
 			</colgroup>
 			<tbody>
 				<tr>
@@ -439,49 +438,42 @@ function fn_charSet(){
 					<td colspan="3"><input type="text" class="txt t2" name="db2pg_sys_nm" id="db2pg_sys_nm"  maxlength="20" onkeyup="fn_checkWord(this,20)" placeholder="20<spring:message code='message.msg188'/>"/>
 					<span class="btn btnC_01"><button type="button" class= "btn_type_02" onclick="fn_sysnmCheck()" style="width: 85px; margin-right: -60px; margin-top: 0;"><spring:message code="common.overlap_check" /></button></span></td>
 				</tr>
-							
 				<tr>
 					<th scope="row" class="ico_t1" >DBMS<spring:message code="properties.division"/>(*)</th>
-						<td><select name="dbms_dscd" id="dbms_dscd" class="select"  style="width:205px;" onChange ="fn_charSet()">
-										<option value=""><spring:message code="common.choice" /></option>				
-											<c:forEach var="result" items="${result}" varStatus="status">												 
- 												<option value="<c:out value="${result.sys_cd}"/>" ><c:out value="${result.sys_cd_nm}"/></option>
- 											</c:forEach>
-									</select>
-						<span class="btn btnC_01" id="pgbtn"><button type="button" class= "btn_type_02" onclick="fn_pgdbmsCall()" style="width: 85px; margin-right: -60px; margin-top: 0;"><spring:message code="migration.loading"/></button></span></td>
+					<td><select name="dbms_dscd" id="dbms_dscd" class="select"  style="width:205px;" onChange ="fn_charSet()">
+							<option value=""><spring:message code="common.choice" /></option>				
+								<c:forEach var="result" items="${result}" varStatus="status">												 
+	 								<option value="<c:out value="${result.sys_cd}"/>" ><c:out value="${result.sys_cd_nm}"/></option>
+	 							</c:forEach>
+						</select>
+					<span class="btn btnC_01" id="pgbtn"><button type="button" class= "btn_type_02" onclick="fn_pgdbmsCall()" style="width: 85px; margin-right: -60px; margin-top: 0;"><spring:message code="migration.loading"/></button></span></td>
 				</tr>
-				
 				<tr>
 					<th scope="row" class="ico_t1"><spring:message code="data_transfer.ip"/>(*)</th>
 					<td><input type="text" class="txt" name="ipadr" id="ipadr" maxlength="30" onkeyup="fn_checkWord(this,30)" placeholder="30<spring:message code='message.msg188'/>"/></td>
 					<th scope="row" class="ico_t1"><spring:message code="data_transfer.port"/>(*)</th>
 					<td><input type="text" class="txt" name="portno" id="portno" maxlength="30" onkeyup="fn_checkWord(this,30)" placeholder="30<spring:message code='message.msg188'/>"/></td>
 				</tr>	
-				
 				<tr>
 					<th scope="row" class="ico_t1">Database(*)</th>
-						<td><input type="text" class="txt" name="dtb_nm" id="dtb_nm" maxlength="30" onkeyup="fn_checkWord(this,30)" placeholder="30<spring:message code='message.msg188'/>"/></td>
+					<td><input type="text" class="txt" name="dtb_nm" id="dtb_nm" maxlength="30" onkeyup="fn_checkWord(this,30)" placeholder="30<spring:message code='message.msg188'/>"/></td>
 					<th scope="row" class="ico_t1">Schema(*)</th>
 					<td>	
-							<input type="text" class="txt" name="scm_nm" id="schema_any" maxlength="30" onkeyup="fn_checkWord(this,30)" placeholder="30<spring:message code='message.msg188'/>"/>
-							<select name="scm_nm" id="schema_pg" class="select">
-							</select>
+						<input type="text" class="txt" name="scm_nm" id="schema_any" maxlength="30" onkeyup="fn_checkWord(this,30)" placeholder="30<spring:message code='message.msg188'/>"/>
+						<select name="scm_nm" id="schema_pg" class="select">
+						</select>
 					</td>
-					
 				</tr>	
-				
 				<tr>
 					<th scope="row" class="ico_t1"><spring:message code="dbms_information.account"/>(*)</th>
 					<td><input type="text" class="txt" name="spr_usr_id" id="spr_usr_id" maxlength="30" onkeyup="fn_checkWord(this,30)" placeholder="30<spring:message code='message.msg188'/>"/></td>
 					<th scope="row" class="ico_t1"><spring:message code="user_management.password" />(*)</th>
 					<td><input type="password" class="txt" name="pwd" id="pwd" /></td>
 				</tr>	
-							
 				<tr>
 					<th scope="row" class="ico_t1"><spring:message code="migration.character_set"/>(*)</th>
 						<td><select name="crts_nm" id="crts_nm" class="select t9"></select></td>				
 				</tr>			
-					
 			</tbody>
 		</table>
 		</form>
@@ -492,6 +484,5 @@ function fn_charSet(){
 		</div>
 	</div>
 </div>
-
 </body>
 </html>

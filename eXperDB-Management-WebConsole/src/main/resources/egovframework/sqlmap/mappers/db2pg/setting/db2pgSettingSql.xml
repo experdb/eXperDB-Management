@@ -279,12 +279,23 @@
 		 db2pg_sys_id=#{db2pg_sys_id}
 		, db2pg_uchr_lchr_val=#{db2pg_uchr_lchr_val}
 		, src_tb_ddl_exrt_tf=#{src_tb_ddl_exrt_tf}
-		<if test="db2pg_exrt_trg_tb_wrk_id != 0">
-		, db2pg_exrt_trg_tb_wrk_id=#{db2pg_exrt_trg_tb_wrk_id}
-		</if>
-		<if test="db2pg_exrt_exct_tb_wrk_id != 0">
-		, db2pg_exrt_exct_tb_wrk_id=#{db2pg_exrt_exct_tb_wrk_id}
-		</if>
+		, ddl_save_pth=#{ddl_save_pth}
+		<choose>
+			<when test = "db2pg_exrt_trg_tb_wrk_id != 0">
+			, db2pg_exrt_trg_tb_wrk_id=#{db2pg_exrt_trg_tb_wrk_id}
+			</when>
+			<otherwise>
+			, db2pg_exrt_trg_tb_wrk_id=null
+			</otherwise>
+		</choose>
+		<choose>
+			<when test = "db2pg_exrt_exct_tb_wrk_id != 0">
+			, db2pg_exrt_exct_tb_wrk_id=#{db2pg_exrt_exct_tb_wrk_id}
+			</when>
+			<otherwise>
+			, db2pg_exrt_exct_tb_wrk_id=null
+			</otherwise>
+		</choose>
 		, lst_mdfr_id=#{lst_mdfr_id}
 		, lst_mdf_dtm= clock_timestamp()
 		WHERE db2pg_ddl_wrk_id = #{db2pg_ddl_wrk_id}
@@ -357,6 +368,7 @@
 		, lst_mdf_dtm
 		, trans_save_pth
 		, src_cnd_qry
+		, db2pg_uchr_lchr_val
 		)
 		VALUES
 		(
@@ -388,6 +400,7 @@
 		, clock_timestamp()
 		, #{trans_save_pth}
 		, #{src_cnd_qry}
+		, #{db2pg_uchr_lchr_val}
 		)		
 	</insert>
 	
@@ -413,12 +426,22 @@
           db2pg_src_sys_id=#{db2pg_src_sys_id}
         , db2pg_trg_sys_id=#{db2pg_trg_sys_id}
         , exrt_dat_cnt=#{exrt_dat_cnt}
-        <if test="db2pg_exrt_trg_tb_wrk_id != 0">
-        , db2pg_exrt_trg_tb_wrk_id=#{db2pg_exrt_trg_tb_wrk_id}
-        </if>
-        <if test="db2pg_exrt_exct_tb_wrk_id != 0">
-        , db2pg_exrt_exct_tb_wrk_id=#{db2pg_exrt_exct_tb_wrk_id}
-        </if>
+		<choose>
+			<when test = "db2pg_exrt_trg_tb_wrk_id != 0">
+			, db2pg_exrt_trg_tb_wrk_id=#{db2pg_exrt_trg_tb_wrk_id}
+			</when>
+			<otherwise>
+			, db2pg_exrt_trg_tb_wrk_id=null
+			</otherwise>
+		</choose>
+		<choose>
+			<when test = "db2pg_exrt_exct_tb_wrk_id != 0">
+			, db2pg_exrt_exct_tb_wrk_id=#{db2pg_exrt_exct_tb_wrk_id}
+			</when>
+			<otherwise>
+			, db2pg_exrt_exct_tb_wrk_id=null
+			</otherwise>
+		</choose>
         , exrt_dat_ftch_sz=#{exrt_dat_ftch_sz}
         , dat_ftch_bff_sz=#{dat_ftch_bff_sz}
         , exrt_prl_prcs_ecnt=#{exrt_prl_prcs_ecnt}
@@ -434,6 +457,7 @@
         , lst_mdf_dtm=clock_timestamp()
         , trans_save_pth=#{trans_save_pth}
         , src_cnd_qry=#{src_cnd_qry}        
+        , db2pg_uchr_lchr_val=#{db2pg_uchr_lchr_val} 
         WHERE db2pg_trsf_wrk_id = #{db2pg_trsf_wrk_id}	
 	</update>
 	
@@ -510,6 +534,7 @@
 		, cnst_cnd_exrt_tf
 		, trans_save_pth
 		, src_cnd_qry
+		, db2pg_uchr_lchr_val		
 		FROM t_db2pg_trsf_wrk_inf wrk_inf, t_wrkcng_i wrkcng
 		WHERE db2pg_trsf_wrk_id=#{db2pg_trsf_wrk_id}
 		AND wrk_inf.wrk_id=wrkcng.wrk_id
@@ -612,4 +637,31 @@
 	 	**/		
 	 	SELECT setval('q_wrkcng_i_01',nextval('q_wrkcng_i_01'))
 	</select>
+	
+	
+	<update id="updateDDLSavePth" parameterType="hashmap">
+		/**
+		* Query ID : updateDDLSavePth
+		* Description : DDL SAVE PATH 수정
+		* Author : 변승우
+		**/		
+        UPDATE t_db2pg_ddl_wrk_inf
+		SET 
+          ddl_save_pth=#{save_pth}
+        WHERE wrk_id = #{wrk_id}::numeric
+	</update>
+	
+	
+		<update id="updateTransSavePth" parameterType="hashmap">
+			/**
+			* Query ID : updateTransSavePth
+			* Description : TRANS SAVE PATH 수정
+			* Author : 변승우
+			**/		
+	        UPDATE t_db2pg_trsf_wrk_inf
+			SET 
+	          trans_save_pth=#{save_pth}
+	        WHERE wrk_id = #{wrk_id}::numeric
+		</update>
+	
 </mapper>

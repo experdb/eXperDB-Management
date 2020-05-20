@@ -1,11 +1,14 @@
 package com.k4m.dx.tcontrol.util;
 
 import java.io.BufferedReader;
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import org.json.simple.JSONObject;
@@ -14,7 +17,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 
-import com.k4m.dx.tcontrol.db.repository.service.SystemServiceImpl;
+import com.k4m.dx.tcontrol.db.repository.service.ScaleServiceImpl;
 import com.k4m.dx.tcontrol.socket.ProtocolID;
 
 
@@ -44,16 +47,20 @@ public class ScaleRunCommandExec extends Thread{
 	public String dbSvrId;
 	public String wrkType;
 	public String autoPolicy;
-	public String autoPolicyNm;
-
+	public String scaleCount;
+	
+	public String autoPolicySetDiv;
+	public String autoPolicyTime;
+	public String autoLevel;
+	
 	private String returnMessage = "";
 	
 	ApplicationContext context;
 
 	public ScaleRunCommandExec(String _strCmd, JSONObject _jObj, int _iMode) {
+
 		this.strCmd=_strCmd; //cmd값
 		this.iMode=_iMode; //구분값
-		
 		this.timeId=_jObj.get(ProtocolID.PROCESS_ID).toString();                //time값(yyyymmddhhmmss)
 		this.scaleSet = _jObj.get(ProtocolID.SCALE_SET).toString();             //scale 구분
 		this.loginId = _jObj.get(ProtocolID.LOGIN_ID).toString();
@@ -61,7 +68,10 @@ public class ScaleRunCommandExec extends Thread{
 		this.dbSvrId = _jObj.get(ProtocolID.DB_SVR_ID).toString();                //DB_서버_ID
 		this.wrkType = _jObj.get(ProtocolID.WRK_TYPE).toString();               //작업유형
 		this.autoPolicy = _jObj.get(ProtocolID.AUTO_POLICY).toString();         //AUTO_정책
-		this.autoPolicyNm = _jObj.get(ProtocolID.AUTO_POLICY_NM).toString();    //AUTO_정책_명
+		this.scaleCount = _jObj.get(ProtocolID.SCALE_COUNT_SET).toString();     //scale 갯수
+		this.autoPolicySetDiv = _jObj.get(ProtocolID.AUTO_POLICY_SET_DIV).toString();  
+		this.autoPolicyTime = _jObj.get(ProtocolID.AUTO_POLICY_TIME).toString(); 
+		this.autoLevel = _jObj.get(ProtocolID.AUTO_LEVEL).toString();  
 
 		context = new ClassPathXmlApplicationContext(new String[] { "context-tcontrol.xml" });
 	}
@@ -83,17 +93,33 @@ public class ScaleRunCommandExec extends Thread{
         BufferedReader successBufferReaderRe = null; // 성공 버퍼
         BufferedReader errorBufferReaderRe = null; // 오류 버퍼
 
-        SystemServiceImpl service = (SystemServiceImpl) context.getBean("SystemService");
-        Map<String, Object> logParam = new HashMap<String, Object>();			
+        ScaleServiceImpl service = (ScaleServiceImpl) context.getBean("ScaleService");
+        Map<String, Object> logParam = new HashMap<String, Object>();	
+        ProcessBuilder runBuilder = null;
 
 		if(iMode == 0) {
+
 			Process p = null;
 			try {
-				Runtime runtime = Runtime.getRuntime();
-				String[] cmdPw = {"/bin/sh","-c", strCmd};
-				p = runtime.exec(cmdPw);
+				String path = FileUtil.getPropertyValue("context.properties", "agent.scale_path");
 
-				logParam = logSetting(timeId, scaleSet, loginId, "insert", strResult, retVal);
+				List runCmd = new ArrayList();
+				runCmd.add("/bin/bash");
+				runCmd.add("-c");
+				runCmd.add(strCmd);
+				
+				runBuilder = new ProcessBuilder(runCmd);
+				runBuilder.directory(new File(path));
+				
+				p = runBuilder.start();
+				
+			//	Runtime runtime = Runtime.getRuntime();
+			//	String[] cmdPw = {"/bin/sh","-c", strCmd};
+
+//socketLogger.info("strCmdstrCmdstrCmdstrCmdstrCmdstrCmdstrCmd: " + Arrays.toString(cmdPw));
+			//	p = runtime.exec(cmdPw);
+
+				logParam = logSetting(timeId, scaleSet, loginId, "insert", strResult, retVal, scaleCount);
 				service.insertScaleLog_G(logParam);
 
 				p.waitFor();
@@ -129,7 +155,7 @@ public class ScaleRunCommandExec extends Thread{
 				this.returnMessage = strResult;
 				this.retVal = strReturnVal;
 				
-				logParam = logSetting(timeId, scaleSet, loginId, "update", strResult, retVal);
+				logParam = logSetting(timeId, scaleSet, loginId, "update", strResult, retVal, scaleCount);
 				service.insertScaleLog_G(logParam);
 
 			}catch(IOException e){
@@ -233,11 +259,10 @@ public class ScaleRunCommandExec extends Thread{
 	 * @return String
 	 * @throws Exception
 	 */
-	public Map<String, Object> logSetting(String timeId, String scaleSet, String loginId, String saveGbn, String strResult, String retVal){
+	public Map<String, Object> logSetting(String timeId, String scaleSet, String loginId, String saveGbn, String strResult, String retVal, String scaleCount){
 		Map<String, Object> logParam = new HashMap<String, Object>();
 
 		if ("insert".equals(saveGbn)) {
-		    /////test
 			if ("scaleIn".equals(scaleSet)) {  //scale_type setting
 				logParam.put("scale_type", "1");
 			} else {
@@ -248,17 +273,20 @@ public class ScaleRunCommandExec extends Thread{
 			logParam.put("db_svr_ipadr_id", dbSvrIpadrId);
 			logParam.put("wrk_type", wrkType);
 			logParam.put("auto_policy", autoPolicy);
-			logParam.put("auto_policy_nm", autoPolicyNm);
+			logParam.put("auto_level", autoLevel);
+			logParam.put("auto_policy_set_div", autoPolicySetDiv);
 
-			//CLUSTERS 총갯수? 아님 셋팅되어있는 값? 일단 홀딩
+			if ("".equals(autoPolicyTime)) {
+				autoPolicyTime = "0";	
+			}
+			logParam.put("auto_policy_time", autoPolicyTime);
+
+
 			//클러스터는 여기서 셋팅 - 등록시 셋팅		
 			logParam.put("wrk_id", 1);
 			
 			//차후 추가
-			logParam.put("instance_id", "");
 			logParam.put("process_id", timeId);
-		    logParam.put("wrk_strt_dtm", nowTime());
-		    logParam.put("wrk_end_dtm", nowTime());
 		    logParam.put("exe_rslt_cd", "TC001701");
 
 			if (strResult != null) {
@@ -277,6 +305,9 @@ public class ScaleRunCommandExec extends Thread{
 
 		    logParam.put("saveGbn", saveGbn);
 		    logParam.put("return_val", "");
+
+			//CLUSTERS 갯수
+		    logParam.put("scale_exe_cnt", scaleCount);
 		} else {
 			logParam.put("login_id", loginId);
 			logParam.put("process_id", timeId);
@@ -294,8 +325,7 @@ public class ScaleRunCommandExec extends Thread{
 					logParam.put("rslt_msg", "");
 				}
 			}
-			
-			//테스트
+
 			logParam.put("process_id", timeId);
 		}
 

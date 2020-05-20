@@ -235,4 +235,19 @@
 		WHERE EXE_GRP_SN IN(
 			SELECT EXE_GRP_SN FROM T_WRKEXE_G WHERE EXE_SN=#{exe_sn})
 	</select>	
+	
+	
+		<update id="updateScheduler" parameterType="wrkExeVO">
+	   	/**
+	 	* Query ID : updateScheduler
+	 	* Description : 스케줄 시간 업데이트
+	 	* Author : 변승우
+	 	**/
+	 	UPDATE T_WRKEXE_G
+	 	SET 
+	 		   EXE_RSLT_CD = #{exe_rslt_cd}
+		       , WRK_END_DTM= now()
+	 	WHERE EXE_SN=#{exe_sn}
+	</update>
+	
 </mapper>

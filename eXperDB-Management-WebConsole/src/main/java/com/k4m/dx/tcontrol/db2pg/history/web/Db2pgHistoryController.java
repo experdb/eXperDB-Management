@@ -78,7 +78,7 @@ public class Db2pgHistoryController {
 			historyVO.setExe_dtl_cd("DX-T0143_02");
 			historyVO.setMnu_id(42);
 			accessHistoryService.insertHistory(historyVO);
-
+			
 			resultSet = db2pgHistoryService.selectDb2pgDDLHistory(db2pgHistoryVO);
 		} catch (Exception e) {
 			e.printStackTrace();

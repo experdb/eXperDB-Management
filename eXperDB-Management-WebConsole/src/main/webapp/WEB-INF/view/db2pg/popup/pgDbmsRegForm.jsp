@@ -158,7 +158,7 @@ function fn_Add(){
 				</colgroup>
 				<tbody>
 					<tr>
-						<th scope="row" class="ico_t1">DBMS명</th>
+						<th scope="row" class="ico_t1"><spring:message code="common.dbms_name" /></th>
 						<td><input type="text" class="txt t3" name="wrk_nm" id="wrk_nm" /></td>											
 						<th scope="row" class="ico_t1" >Database</th>
 						<td><input type="text" class="txt t3" name="wrk_nm" id="wrk_nm" /></td>				
@@ -168,7 +168,7 @@ function fn_Add(){
 		</div>
 
 		<div class="pop_cmm3">
-			<p class="pop_s_tit">PostgreSQL DBMS 리스트</p>
+			<p class="pop_s_tit">PostgreSQL <spring:message code="extension_pack_installation_information.dbms_list" /></p>
 			<div class="overflow_area">
 				<table id="pgDbmsList" class="display" cellspacing="0" width="100%">
 				<thead>

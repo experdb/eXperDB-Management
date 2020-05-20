@@ -103,9 +103,22 @@ table th, table td {padding: 0}
 					html1+='	</tr>';
 					
 					if (scale_yn_chk == "Y") {
+
+						/* 2020.04.09 scale_cng 추가 start */
+						html1+='	<tr>';
+						html1+='		<th scope="row"><spring:message code="menu.eXperDB_scale_settings" /></th>';
+						html1+='		<td>';
+						html1+='			<div class="inp_chk">';
+						html1+='				<input type="checkbox" id="'+item.db_svr_id+'_scale_cng" name="eXperDB_scale_cng" onClick="fn_userCheck();"/>';
+						html1+='       		<label for="'+item.db_svr_id+'_scale_cng"></label>';
+						html1+='			</div>';
+						html1+='		</td>';
+						html1+='	</tr>';
+						/* 2020.04.09 scale_cng 추가 end */
+						
 						/* 2020.03.03 scale 추가 start */
 						html1+='	<tr>';
-						html1+='		<th scope="row"><spring:message code="menu.eXperDB_scale" /></th>';
+						html1+='		<th scope="row"><spring:message code="menu.scale_manual" /></th>';
 						html1+='		<td>';
 						html1+='			<div class="inp_chk">';
 						html1+='				<input type="checkbox" id="'+item.db_svr_id+'_scale" name="eXperDB_scale" onClick="fn_userCheck();"/>';
@@ -301,15 +314,22 @@ table th, table td {padding: 0}
 					if(result.length != 0){
 						for(var i = 0; i<result.length; i++){  
  							if (scale_yn_chk == "Y") {
+ 								/* 2020.04.09 scale 설정 추가 */
+ 								if(result.length != 0 && result[i].scale_cng_aut_yn == "Y"){
+ 									document.getElementById(result[i].db_svr_id+"_scale_cng").checked = true;
+ 								}else{
+ 									document.getElementById(result[i].db_svr_id+"_scale_cng").checked = false;
+ 								}
+ 								
  								/* 2020.03.03 scale 추가 */
- 								if(result.length != 0 && result[i].scale_yn == "Y"){
+ 								if(result.length != 0 && result[i].scale_aut_yn == "Y"){
  									document.getElementById(result[i].db_svr_id+"_scale").checked = true;
  								}else{
  									document.getElementById(result[i].db_svr_id+"_scale").checked = false;
  								}
  								
  								/* 2020.04.03 scale_hist 추가 */
- 								if(result.length != 0 && result[i].scale_hist_yn == "Y"){
+ 								if(result.length != 0 && result[i].scale_hist_aut_yn == "Y"){
  									document.getElementById(result[i].db_svr_id+"_scale_hist").checked = true;
  								}else{
  									document.getElementById(result[i].db_svr_id+"_scale_hist").checked = false;
@@ -411,6 +431,7 @@ table th, table td {padding: 0}
 						}
 					}else{
 						if (scale_yn_chk == "Y") {
+							document.getElementById(svr_server[0].db_svr_id+"_scale_cng").checked = false;
 							document.getElementById(svr_server[0].db_svr_id+"_scale").checked = false;
 							document.getElementById(svr_server[0].db_svr_id+"_scale_hist").checked = false;
 						}
@@ -487,13 +508,13 @@ table th, table td {padding: 0}
 		/* 2020.03.03 scale 추가 */
 		if("${sessionScope.session.pg_audit}"== "Y"){
 			if (scale_yn_chk == "Y") {
-				var array = new Array("_scale", "_scale_hist", "_bck_cng","_bck_hist","_bck_scdr","_emergency_restore","_point_restore","_dump_restore","_restore_hist","_acs_cntr","_policy_change_his","_adt_cng","_adt_hist","_script_cng","_script_his");
+				var array = new Array("_scale_cng", "_scale", "_scale_hist", "_bck_cng","_bck_hist","_bck_scdr","_emergency_restore","_point_restore","_dump_restore","_restore_hist","_acs_cntr","_policy_change_his","_adt_cng","_adt_hist","_script_cng","_script_his");
 			} else {
 				var array = new Array("_bck_cng","_bck_hist","_bck_scdr","_emergency_restore","_point_restore","_dump_restore","_restore_hist","_acs_cntr","_policy_change_his","_adt_cng","_adt_hist","_script_cng","_script_his");
 			}
 		}else{
 			if (scale_yn_chk == "Y") {
-				var array = new Array("_scale", "_scale_hist", "_bck_cng","_bck_hist","_bck_scdr","_emergency_restore","_point_restore","_dump_restore","_restore_hist","_acs_cntr","_policy_change_his","_script_cng","_script_his");
+				var array = new Array("_scale_cng", "_scale", "_scale_hist", "_bck_cng","_bck_hist","_bck_scdr","_emergency_restore","_point_restore","_dump_restore","_restore_hist","_acs_cntr","_policy_change_his","_script_cng","_script_his");
 			} else {
 				var array = new Array("_bck_cng","_bck_hist","_bck_scdr","_emergency_restore","_point_restore","_dump_restore","_restore_hist","_acs_cntr","_policy_change_his","_script_cng","_script_his");
 			}
@@ -543,9 +564,11 @@ table th, table td {padding: 0}
 			var adt_cng_aut;
 			var adt_hist_aut;
 			
+			var eXperDB_scale_cng;
 			var eXperDB_scale;
 			var eXperDB_scale_hist;
 			if (scale_yn_chk == "Y") {
+				eXperDB_scale_cng = $("input[name='eXperDB_scale_cng']");
 				eXperDB_scale = $("input[name='eXperDB_scale']");
 				eXperDB_scale_hist = $("input[name='eXperDB_scale_hist']");
 			}
@@ -565,18 +588,25 @@ table th, table td {padding: 0}
 				rows.db_svr_id = db_svr_id[i].value;
 
 				if (scale_yn_chk == "Y") {
-					if(eXperDB_scale[i].checked){ //선택되어 있으면 배열에 값을 저장함 scale
-						rows.scale_yn = "Y";   
+					if(eXperDB_scale_cng[i].checked){ //선택되어 있으면 배열에 값을 저장함 scale cng
+						rows.scale_cng_aut_yn = "Y";   
 						autCheck++;
 					}else{
-						rows.scale_yn = "N";
+						rows.scale_cng_aut_yn = "N";
+					}
+					
+					if(eXperDB_scale[i].checked){ //선택되어 있으면 배열에 값을 저장함 scale
+						rows.scale_aut_yn = "Y";   
+						autCheck++;
+					}else{
+						rows.scale_aut_yn = "N";
 					}
 
-					if(eXperDB_scale_hist[i].checked){ //선택되어 있으면 배열에 값을 저장함 scale
-						rows.scale_hist_yn = "Y";   
+					if(eXperDB_scale_hist[i].checked){ //선택되어 있으면 배열에 값을 저장함 scale hist
+						rows.scale_hist_aut_yn = "Y";   
 						autCheck++;
 					}else{
-						rows.scale_hist_yn = "N";
+						rows.scale_hist_aut_yn = "N";
 					}
 				}
 

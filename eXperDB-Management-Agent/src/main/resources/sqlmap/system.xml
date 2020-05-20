@@ -606,78 +606,16 @@
 	 	)	 	
     </insert>
     
-	<insert id="insertScaleLog_G"  parameterType="hashmap">
+      <update id="updateTransExe" parameterType="TransVO">
    		/**
-	 	* Query ID : insertScaleLog_G
-	 	* Description : 스케일 실행 로그 등록
-	 	* Author : 
-	 	**/
-		INSERT INTO T_SCALE_G
-		(
-			SCALE_WRK_SN
-			, WRK_ID
-			, SCALE_TYPE
-			, DB_SVR_ID
-			, DB_SVR_IPADR_ID
-			, WRK_TYPE
-			, AUTO_POLICY
-			, AUTO_POLICY_NM
-			, CLUSTERS
-			, INSTANCE_ID
-			, PROCESS_ID
-			, WRK_STRT_DTM
-			, WRK_END_DTM
-			, EXE_RSLT_CD
-			, RSLT_MSG
-			, FRST_REGR_ID
-			, FRST_REG_DTM
-			, LST_MDFR_ID
-			, LST_MDF_DTM
-		)
-		VALUES
-		(
-		  nextval('q_t_scale_g_01')
-		, #{wrk_id}::numeric
-		, #{scale_type}
-		, #{db_svr_id}::numeric
-		, #{db_svr_ipadr_id}::numeric
-		, #{wrk_type}
-		, #{auto_policy}
-		, #{auto_policy_nm}
-		, 3  /** (정책 테이블 select 필요) **/
-		, #{instance_id}
-		, #{process_id}
-		, clock_timestamp()
-		, clock_timestamp()
-		, #{exe_rslt_cd}
-		, #{rslt_msg}
-		, #{frst_regr_id}
-		, clock_timestamp()
-		, #{lst_mdfr_id}
-		, clock_timestamp()
-		)	
-    </insert>
-
-	<update id="updateScaleLog_G" parameterType="hashmap">
-		/**
-	 	* Query ID : "updateScaleLog_G"
-	 	* Description : 스케일 LOG 수정
+	 	* Query ID : updateTransExe
+	 	* Description : 데이터전송 결과 수정
 	 	* Author :
 	 	**/         
-        UPDATE T_SCALE_G
-           SET WRK_END_DTM = clock_timestamp(),
-               EXE_RSLT_CD = #{exe_rslt_cd},
-               RSLT_MSG = #{rslt_msg},
-               LST_MDFR_ID = #{login_id},
-               LST_MDF_DTM = clock_timestamp(),
-               WRK_ID = #{wrk_id}::numeric
+        UPDATE T_TRANSCNG_I
+           SET EXE_STATUS = #{exe_status},
+           		LST_MDF_DTM = clock_timestamp()
          WHERE 1 = 1
-           AND SCALE_WRK_SN = (SELECT SCALE_WRK_SN
-                                 FROM T_SCALE_G
-                                WHERE 1 = 1
-                                  AND EXE_RSLT_CD = 'TC001701'
-                                  AND FRST_REGR_ID = #{login_id}
-                                  AND PROCESS_ID = #{process_id}
-                              )	
-    </update>
+           AND TRANS_ID = #{trans_id}
+    	</update>
 </mapper>

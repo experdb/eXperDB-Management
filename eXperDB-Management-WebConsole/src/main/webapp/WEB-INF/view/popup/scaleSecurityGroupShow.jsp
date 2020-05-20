@@ -68,7 +68,7 @@
 		fn_init();
 		var table = $('#securityDataTable').DataTable();
 		
- 		$.ajax({
+/*  		$.ajax({
 			url : "/scale/securityGroupList.do", 
 		  	data : {
 		  		db_svr_id: db_svr_id,
@@ -95,7 +95,7 @@
 				table.clear().draw();
 				table.rows.add(result.data).draw();
 			}
-		});
+		}); */
 	});
 </script>
 

@@ -177,5 +177,25 @@ public interface Db2pgSettingService {
 	 * @throws Exception
 	 */
 	int selectWorkSeq() throws Exception;
+	
+	
+	/**
+	 * DDL 저장경로 수정
+	 * 
+	 * @return int
+	 * @throws Exception
+	 */
+	void updateDDLSavePth(Map<String, Object> param) throws Exception;
+	
+	
+	
+	/**
+	 * 이행 저장경로 수정
+	 * 
+	 * @return int
+	 * @throws Exception
+	 */
+	void updateTransSavePth(Map<String, Object> param) throws Exception;
 
+	
 }

@@ -22,9 +22,9 @@ import com.k4m.dx.tcontrol.util.CommonUtil;
 import com.k4m.dx.tcontrol.util.RunCommandExec;
 
 /**
- * 백업 실행
+ * 백업 즉시실행
  *
- * @author 박태혁
+ * @author 변승우
  * @see
  * 
  *      <pre>
@@ -32,7 +32,7 @@ import com.k4m.dx.tcontrol.util.RunCommandExec;
  *
  *   수정일       수정자           수정내용
  *  -------     --------    ---------------------------
- *  2017.05.22   박태혁 최초 생성
+ *  2020.03.20   변승우 최초 생성
  *      </pre>
  */
 

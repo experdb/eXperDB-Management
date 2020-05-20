@@ -1,7 +1,12 @@
 package com.k4m.dx.tcontrol.db2pg.setting.web;
 
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.InputStreamReader;
+import java.io.OutputStreamWriter;
 import java.sql.SQLException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -484,6 +489,7 @@ public class Db2pgSettingController {
 			ddlConfigVO.setLst_mdfr_id(id);
 			ddlConfigVO.setDb2pg_exrt_trg_tb_wrk_id(exrt_trg_tb_wrk_id);
 			ddlConfigVO.setDb2pg_exrt_exct_tb_wrk_id(exrt_exct_tb_wrk_id);
+			ddlConfigVO.setDdl_save_pth(ddl_path);
 			db2pgSettingService.updateDDLWork(ddlConfigVO);
 			
 			//5.config 생성
@@ -579,6 +585,8 @@ public class Db2pgSettingController {
 			mv.addObject("codeInputMode", codeInputMode);
 			List<CodeVO> codeTF = db2pgSettingService.selectCode("TC0029"); 
 			mv.addObject("codeTF", codeTF);
+			List<CodeVO> codeLetter = db2pgSettingService.selectCode("TC0028");
+			mv.addObject("codeLetter", codeLetter);
 		} catch (Exception e2) {
 			e2.printStackTrace();
 		}
@@ -718,6 +726,7 @@ public class Db2pgSettingController {
 			configObj.put("tar_constraint_ddl", dataConfigVO.getCnst_cnd_exrt_tf());
 			configObj.put("src_where_condition", dataConfigVO.getSrc_cnd_qry());
 			configObj.put("src_file_output_path", trans_path);
+			configObj.put("src_classify_string", dataConfigVO.getDb2pg_uchr_lchr_val());
 			
 			result = Db2pgConfigController.createDataConfig(configObj);
 		} catch (Exception e) {
@@ -788,6 +797,8 @@ public class Db2pgSettingController {
 			targetDataWork.setLst_mdfr_id(id);
 			targetDataWork.setTrans_save_pth(trans_path);
 			targetDataWork.setSrc_cnd_qry(sourceDataWork.getSrc_cnd_qry());
+			targetDataWork.setDb2pg_uchr_lchr_val(sourceDataWork.getDb2pg_uchr_lchr_val());
+			
 			db2pgSettingService.insertDataWork(targetDataWork);
 			
 			//3. config 파일 만들기
@@ -823,6 +834,7 @@ public class Db2pgSettingController {
 			configObj.put("tar_constraint_ddl", dataConfigVO.getCnst_cnd_exrt_tf());
 			configObj.put("src_where_condition", sourceDataWork.getSrc_cnd_qry());
 			configObj.put("src_file_output_path", trans_path);
+			configObj.put("src_classify_string", sourceDataWork.getDb2pg_uchr_lchr_val());
 			
 			result = Db2pgConfigController.createDataConfig(configObj);
 		} catch (Exception e) {
@@ -879,11 +891,14 @@ public class Db2pgSettingController {
 			mv.addObject("wrk_id",result.getWrk_id());
 			mv.addObject("exrt_trg_tb_total_cnt", result.getExrt_trg_tb_total_cnt());
 			mv.addObject("exrt_exct_tb_total_cnt", result.getExrt_exct_tb_total_cnt());
+			mv.addObject("db2pg_uchr_lchr_val",result.getDb2pg_uchr_lchr_val());
 			
 			List<CodeVO> codeInputMode = db2pgSettingService.selectCode("TC0030");
 			mv.addObject("codeInputMode", codeInputMode);
 			List<CodeVO> codeTF = db2pgSettingService.selectCode("TC0029"); 
 			mv.addObject("codeTF", codeTF);
+			List<CodeVO> codeLetter = db2pgSettingService.selectCode("TC0028");
+			mv.addObject("codeLetter", codeLetter);
 		} catch (Exception e2) {
 			e2.printStackTrace();
 		}
@@ -1005,6 +1020,7 @@ public class Db2pgSettingController {
 			configObj.put("tar_constraint_ddl", dataConfigVO.getCnst_cnd_exrt_tf());
 			configObj.put("src_where_condition", dataConfigVO.getSrc_cnd_qry());
 			configObj.put("src_file_output_path", trans_path);
+			configObj.put("src_classify_string", dataConfigVO.getDb2pg_uchr_lchr_val());
 
 			result = Db2pgConfigController.createDataConfig(configObj);
 		} catch (Exception e) {
@@ -1372,6 +1388,10 @@ public class Db2pgSettingController {
 	 */
 	@RequestMapping(value="/db2pg/ImmediateExe.do")
 	public @ResponseBody Map<String, Object> ImmediateExe(@ModelAttribute("historyVO") HistoryVO historyVO, HttpServletRequest request) throws SQLException, ParseException {
+		
+		String resultCode = "8000000003";
+		String save_pth = null;
+		
 		Map<String, Object> result = null;
 		List<DB2PG_ImmediateExe> ddlList = new ArrayList<DB2PG_ImmediateExe>();
 
@@ -1380,13 +1400,20 @@ public class Db2pgSettingController {
 		LoginVO loginVo = (LoginVO) session.getAttribute("session");
 		String id = loginVo.getUsr_id();
 		
+
 		String strRows = request.getParameter("datas").toString().replaceAll("&quot;", "\"");
 		JSONArray rows = (JSONArray) new JSONParser().parse(strRows);
 					
-		//ExecuterServer 쓰레드 갯수설정
+		// ExecuterServer 쓰레드 갯수설정
 		ExecutorService executorService = Executors.newFixedThreadPool(rows.size());
 		
+
 		try {		
+			
+			Properties props = new Properties();
+			props.load(new FileInputStream(ResourceUtils.getFile("classpath:egovframework/tcontrolProps/globals.properties")));			
+			String db2pg_path = props.get("db2pg_path").toString();
+			
 			for(int i=0; i<rows.size(); i++){
 				JSONObject obj = (JSONObject) rows.get(i);		
 				
@@ -1394,11 +1421,114 @@ public class Db2pgSettingController {
 				String wrk_id = obj.get("wrk_id").toString();
 				String wrk_nm =obj.get("wrk_nm").toString();
 				String mig_dscd =obj.get("mig_dscd").toString();
+		
+				// 즉시실행시, Config파일 읽어서 수정 파일저장 경로
+				String time = nowTime();
+			
+				JSONObject DDLOutputPathChange = new JSONObject();
+				String filePath = db2pg_path+"/config/"+wrk_nm+".config";
+
+				File inputFile = new File(filePath);
+				File outputFile = new File(filePath+"temp");
+				FileInputStream fileInputStream = null;
+				FileOutputStream fileOutputStream = null;
 				
-				DB2PG_ImmediateExe ddl = DB2PG_ImmediateExe.getInstance(wrk_id,wrk_nm, mig_dscd, id, gbn);
-				ddlList.add(ddl);
+				fileInputStream = new  FileInputStream(inputFile);
+				fileOutputStream = new FileOutputStream(outputFile);
+								
+				BufferedReader br = new BufferedReader(new InputStreamReader(fileInputStream));
+				BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(fileOutputStream));
 				
-				executorService.execute(ddl);	
+				
+				// 즉시실행 DDL 
+				if(mig_dscd.equals("TC003201")){
+					String old_ddl_save_pth = obj.get("ddl_save_pth").toString();			
+					save_pth = db2pg_path+"/ddl/"+time+"_"+wrk_nm;
+					
+					System.out.println("old_path="+old_ddl_save_pth);
+					System.out.println("new="+save_pth);
+					
+					try{
+				        String fileContent;
+						while((fileContent = br.readLine()) != null) {
+							fileContent = fileContent.replaceAll("SRC_FILE_OUTPUT_PATH="+old_ddl_save_pth, "SRC_FILE_OUTPUT_PATH="+save_pth);							
+							bw.write(fileContent + "\r\n");
+							bw.flush();
+						}
+						bw.close();
+						br.close();
+
+						resultCode = "0000000000";
+					} catch (Exception e) {
+						resultCode = "8000000003";
+						e.printStackTrace();
+					}	
+					
+					
+					if(resultCode.equals("0000000000")){
+						
+						Map<String, Object> param = new HashMap<String, Object>();
+						
+						param.put("wrk_id", wrk_id);
+						param.put("save_pth", save_pth);
+						
+						//기존 저장경로 변경
+						db2pgSettingService.updateDDLSavePth(param);
+						
+						inputFile.delete();
+						outputFile.renameTo(new File(filePath));
+					}
+					
+					
+				// 즉시실행 Migration 		
+				}else{
+					String old_tans_save_pth = obj.get("trans_save_pth").toString();					
+					save_pth = db2pg_path+"/trans/"+time+"_"+wrk_nm;
+					
+					System.out.println("old_path="+old_tans_save_pth);
+					System.out.println("new="+save_pth);
+					
+					try{
+				        String fileContent;
+						while((fileContent = br.readLine()) != null) {
+							fileContent = fileContent.replaceAll("SRC_FILE_OUTPUT_PATH="+old_tans_save_pth, "SRC_FILE_OUTPUT_PATH="+save_pth);
+							bw.write(fileContent + "\r\n");
+							bw.flush();
+						}
+						bw.close();
+						br.close();
+						
+						resultCode = "0000000000";
+					} catch (Exception e) {
+						resultCode = "8000000003";
+						e.printStackTrace();
+					}	
+					
+					if(resultCode.equals("0000000000")){
+						Map<String, Object> param = new HashMap<String, Object>();
+						
+						param.put("wrk_id", wrk_id);
+						param.put("save_pth", save_pth);
+						
+						//기존 저장경로 변경
+						db2pgSettingService.updateTransSavePth(param);
+						
+						inputFile.delete();
+						outputFile.renameTo(new File(filePath));
+					}
+					
+				}
+
+		
+				// 정상적으로 Config가 변경되었을 시,
+				if(resultCode.equals("0000000000")){
+					
+					DB2PG_ImmediateExe ddl = DB2PG_ImmediateExe.getInstance(wrk_id,wrk_nm, mig_dscd, id, gbn, save_pth);
+					ddlList.add(ddl);
+					
+					executorService.execute(ddl);	
+				}
+
 			}
 				
 	}catch (Exception e) {
@@ -1410,3 +1540,6 @@ public class Db2pgSettingController {
 		return result;
 	}
 }
+
+
+

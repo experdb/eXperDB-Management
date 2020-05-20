@@ -266,7 +266,7 @@
 			, AA.LST_MDF_DTM
 	   FROM(		
 		SELECT DISTINCT
-			coalesce((select DB_SVR_NM from t_dbsvr_i where db_svr_id = d.db_svr_id),'DB2PG') as DB_SVR_NM 
+			coalesce((select DB_SVR_NM from t_dbsvr_i where db_svr_id = d.db_svr_id),'MIGRATION') as DB_SVR_NM 
       		, A.SCD_ID      		
 			, A.SCD_NM
 			, A.SCD_CNDT
@@ -705,7 +705,8 @@
 	 	* Description :  work List 조회
 	 	* Author : 변승우
 	 	**/	 	
-	 	SELECT 
+	 	
+	 	<!-- SELECT 
       		(ROW_NUMBER() OVER()) AS ROWNUM
       		,(ROW_NUMBER() OVER()) AS IDX
       		,A.*
@@ -730,7 +731,35 @@
 			      AND A.WRK_ID = C.WRK_ID
 			      AND B.SCD_ID = #{scd_id}
 			      ORDER BY B.EXE_ORD
-			      )A
+			      )A -->
+			      
+			      
+			SELECT 
+	      		(ROW_NUMBER() OVER()) AS ROWNUM
+	      		,(ROW_NUMBER() OVER()) AS IDX
+	      		,A.*
+	      	FROM(
+				     SELECT 
+				      		A.WRK_ID
+				      		, B.DB_SVR_ID
+				      		, C.SCD_ID
+				      		, (SELECT DB_SVR_NM FROM T_DBSVR_I WHERE B.DB_SVR_ID = DB_SVR_ID ) AS DB_SVR_NM
+				      		, B.DB_ID
+				      		, (CASE WHEN B.DB_ID>0 THEN (SELECT DB_NM FROM T_DB_I WHERE B.DB_ID=DB_ID AND USEYN = 'Y') ELSE '' END) AS DB_NM
+				      		, B.BCK_BSN_DSCD
+				      		, (SELECT SYS_CD_NM FROM T_SYSDTL_C WHERE B.BCK_BSN_DSCD = SYS_CD ) AS BCK_BSN_DSCD_NM
+				      		, A.WRK_NM
+							, A.WRK_EXP
+							, C.NXT_EXE_YN
+							, A.BSN_DSCD
+							, (SELECT SYS_CD_NM FROM T_SYSDTL_C WHERE A.BSN_DSCD = SYS_CD ) AS BSN_DSCD_NM		
+				      FROM T_WRKCNG_I A
+					  LEFT OUTER JOIN T_BCK_WRKCNG_I B ON B.WRK_ID= A.WRK_ID
+					  LEFT OUTER JOIN T_SCD_D C ON C.WRK_ID= A.WRK_ID
+					  WHERE 1=1
+					  AND C.SCD_ID = #{scd_id}
+				      ORDER BY C.EXE_ORD 
+				  )A  
 	 	</select>
 	 	
 	 	
@@ -745,6 +774,7 @@
 	    	BSN_DSCD
 	        , (SELECT SYS_CD_NM FROM T_SYSDTL_C WHERE BSN_DSCD = SYS_CD ) AS BSN_DSCD_NM
 	    FROM T_WRKCNG_I
+	    WHERE BSN_DSCD IN ('TC001901', 'TC001902')
 	    GROUP BY BSN_DSCD
 	 </select>
 	 
@@ -952,4 +982,16 @@
 		      AND EXE_SN = #{exe_sn}		
     </select>	
 
+
+    <select id="selectOldSavePath" parameterType="int" resultType="String">
+		/**
+	 	* Query ID : selectOldSavePath
+	 	* Description : 기존 저장경로 호출
+	 	* Author : 변승우
+	 	**/
+ 			 SELECT 
+	    		TRANS_SAVE_PTH 
+			 FROM T_DB2PG_TRSF_WRK_INF
+			 WHERE WRK_ID = #{wrk_id}	
+    </select>	
 </mapper>
