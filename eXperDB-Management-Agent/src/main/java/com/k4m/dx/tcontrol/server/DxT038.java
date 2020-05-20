@@ -80,7 +80,7 @@ public class DxT038 extends SocketCtl{
 			config.put("database.password", objSERVER_INFO.get("USER_PWD"));
 			config.put("database.dbname", objCONNECT_INFO.get("DB_NM"));
 			config.put("database.server.name", objCONNECT_INFO.get("CONNECT_NM"));
-			
+			config.put("snapshot.mode", objCONNECT_INFO.get("SNAPSHOT_MODE"));
 			config.put("schema.whitelist", objMAPP_INFO.get("EXRT_TRG_SCM_NM"));
 			config.put("table.whitelist", objMAPP_INFO.get("EXRT_TRG_TB_NM"));
 			
