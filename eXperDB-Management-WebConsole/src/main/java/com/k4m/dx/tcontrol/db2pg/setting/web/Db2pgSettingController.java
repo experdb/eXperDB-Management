@@ -489,6 +489,7 @@ public class Db2pgSettingController {
 			ddlConfigVO.setLst_mdfr_id(id);
 			ddlConfigVO.setDb2pg_exrt_trg_tb_wrk_id(exrt_trg_tb_wrk_id);
 			ddlConfigVO.setDb2pg_exrt_exct_tb_wrk_id(exrt_exct_tb_wrk_id);
+			ddlConfigVO.setDdl_save_pth(ddl_path);
 			db2pgSettingService.updateDDLWork(ddlConfigVO);
 			
 			//5.config 생성
