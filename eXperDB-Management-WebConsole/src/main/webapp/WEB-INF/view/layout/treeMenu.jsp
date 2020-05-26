@@ -328,15 +328,16 @@
 
 				
 				/* 데이터전송 */
-				html1+='			<li class="ico2_2"><a href="#n"><img src="../images/ico_lnb_7.png" id="treeImg">데이터전송</a>';
-				html1+='				<ul class="depth_3">';
+				if('${sessionScope.session.transfer}' == 'Y'){ 
+					html1+='			<li class="ico2_2"><a href="#n"><img src="../images/ico_lnb_7.png" id="treeImg">데이터전송</a>';
+					html1+='				<ul class="depth_3">';
 
-				html1+='				<li class="ico3_4" id="transSetting'+item.db_svr_id+'"><a href=/transSetting.do?db_svr_id='+item.db_svr_id+' id="transSetting'+item.db_svr_id+'c" onClick=javascript:fn_GoLink("transSetting'+item.db_svr_id+'"); target="main"><img src="../images/ico_lnb_10.png" id="treeImg">전송관리</a></li>';
-	
-				html1+='				</ul>';
-				html1+='			</li>';
+					html1+='				<li class="ico3_4" id="transSetting'+item.db_svr_id+'"><a href=/transSetting.do?db_svr_id='+item.db_svr_id+' id="transSetting'+item.db_svr_id+'c" onClick=javascript:fn_GoLink("transSetting'+item.db_svr_id+'"); target="main"><img src="../images/ico_lnb_10.png" id="treeImg">전송관리</a></li>';
+		
+					html1+='				</ul>';
+					html1+='			</li>';
+				}
 
-				
 							
 				/* 접근제어 관리 */
 				html1+='			<li class="ico2_2"><a href="#n"><img src="../images/ico_lnb_7.png" id="treeImg"><spring:message code="menu.access_control_management"/></a>';

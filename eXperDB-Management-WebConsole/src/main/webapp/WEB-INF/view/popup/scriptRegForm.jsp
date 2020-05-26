@@ -36,13 +36,10 @@ var db_svr_id = "${db_svr_id}";
 
 
 $(window.document).ready(function() {
-	
-	$("#scriptCmd").show();
-	$("#scriptCmd_wrapper").show();
-	$("#shellCmd").hide();
-	$("#shellCmd_wrapper").hide();
 
 });
+
+
 
 
 
@@ -155,26 +152,6 @@ function fn_insert_work(){
 	}
 	
 
-/* ********************************************************
- * Tab Click
- ******************************************************** */
-function selectTab(tab){
-	if(tab == "shell"){
-		$("#shellCmd").show();
-		$("#shellCmd_wrapper").show();
-		$("#scriptCmd").hide();
-		$("#scriptCmd_wrapper").hide();
-		$("#tab1").hide();
-		$("#tab2").show();
-	}else{
-		$("#scriptCmd").show();
-		$("#scriptCmd_wrapper").show();
-		$("#shellCmd").hide();
-		$("#shellCmd_wrapper").hide();
-		$("#tab1").show();
-		$("#tab2").hide();
-	}
-}
 
 </script>
 
@@ -209,50 +186,22 @@ function selectTab(tab){
 						</tbody>
 					</table>
 				</div>
-				
-	<br>			
-	<div class="contents" style="min-height:50px;">	
-			<div class="cmm_tab">
-				<ul id="tab1">
-					<li class="atv"><a href="javascript:selectTab('script')">스크립트 명령어</a></li>
-					<li><a href="javascript:selectTab('shell')">쉘 실행 명령어</a></li>
-				</ul>
-				<ul id="tab2" style="display:none;">
-					<li><a href="javascript:selectTab('script')">스크립트 명령어</a></a></li>
-					<li class="atv"><a href="javascript:selectTab('shell')">쉘 실행 명령어</a></li>
-				</ul>
-			</div>
-				
-				
-				<div class="overflow_area">
-					<table class="scriptCmd" id="scriptCmd">
+				<div class="pop_cmm mt25">
+					<table class="write">
 						<tbody>
 							<tr>
+								<th scope="row" class="ico_t1"><spring:message code="script_settings.Execution_Command"/></th>
+							</tr>
+							<tr>
 								<td>
-									<div class="textarea_grp" style="width:725px;">
+									<div class="textarea_grp">
 										<textarea name="exe_cmd" id="exe_cmd"  style="height: 250px;"></textarea>
 									</div>
 								</td>
 							</tr>
 						</tbody>
 					</table>
-					
-					
-						<table class="shellCmd" id="shellCmd">
-						<tbody>
-							<tr>
-								<td>
-									<div class="textarea_grp" style="width:725px;">
-										<textarea name="exe_cmd" id="exe_cmd"  style="height: 250px;"></textarea>
-									</div>
-								</td>
-							</tr>
-						</tbody>
-					</table>
-				</div>				
-			</div>	
-				
-			
+				</div>
 				<div class="btn_type_02">
 					<span class="btn btnC_01" onClick="fn_insert_work();"><button type="button"><spring:message code="common.registory" /></button></span>
 					<span class="btn" onclick="self.close();return false;"><button type="button"><spring:message code="common.cancel" /></button></span>
