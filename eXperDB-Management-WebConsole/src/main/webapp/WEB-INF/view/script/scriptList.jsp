@@ -273,7 +273,7 @@ function fn_ImmediateStart(){
 			url : "/scriptImmediateExe.do",
 		  	data : {
 		  		wrk_id:datas[0].wrk_id,
-		  		wrk_id:datas[0].wrk_exp,
+		  		wrk_exp:datas[0].wrk_exp,
 		  		db_svr_id:db_svr_id, 
 		  		exe_cmd:datas[0].exe_cmd
 		  	},
@@ -325,7 +325,7 @@ function fn_ImmediateStart(){
 		<div class="contents">
 			<div class="cmm_grp">
 				<div class="btn_type_01">
-				    <span class="btn btnC_01 btn_fl"><button type="button" onclick="fn_ImmediateStart()">즉시실행</button></span> 
+				    <!-- <span class="btn btnC_01 btn_fl"><button type="button" onclick="fn_ImmediateStart()">즉시실행</button></span> --> 
 					<a class="btn" onClick="fn_search();"><button type="button"><spring:message code="common.search" /></button></a>
 					<span class="btn" onclick="fn_reg_popup()"><button type="button"><spring:message code="common.registory" /></button></span>
 					<span class="btn" onClick="fn_rereg_popup()"><button type="button"><spring:message code="common.modify" /></button></span>
