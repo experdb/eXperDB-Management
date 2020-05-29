@@ -73,6 +73,27 @@ public class Db2pgSettingController {
 	@Autowired
 	private AccessHistoryService accessHistoryService;
 	
+	
+	@RequestMapping(value = "/db2pgSetting2.do")
+	public ModelAndView db2pgSetting2(@ModelAttribute("historyVO") HistoryVO historyVO, HttpServletRequest request) {
+		ModelAndView mv = new ModelAndView();
+		try {		
+			// 화면접근이력 이력 남기기
+			CmmnUtils.saveHistory(request, historyVO);
+			historyVO.setExe_dtl_cd("DX-T0137");
+			historyVO.setMnu_id(41);
+			accessHistoryService.insertHistory(historyVO);
+			
+			List<Map<String, Object>> dbmsGrb = dbmsService.dbmsGrb();
+			mv.addObject("dbmsGrb", dbmsGrb);
+			mv.setViewName("db2pg/setting/db2pgSetting2");
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return mv;
+	}
+	
+	
 	/**
 	 * DB2PG 설정 화면을 보여준다.
 	 * 

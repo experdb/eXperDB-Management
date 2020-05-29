@@ -1,816 +1,852 @@
-<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
-<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
-<%@ taglib prefix="form" uri="http://www.springframework.org/tags/form"%>
-<%@ taglib prefix="ui" uri="http://egovframework.gov/ctl/ui"%>
-<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
-<%@ taglib prefix="spring" uri="http://www.springframework.org/tags"%>
-
-<%@include file="cmmn/cs.jsp"%>
-
-<script type="text/javascript">
-	var today = "";
-	var scale_yn_chk = "";
-
-	$(window.document).ready(function() { 
-		// 	content();
-		today = new Date();
-	
-		var html ="";
-		html += "<img src='../images/ico_state_09.png' style='margin-right:5px;'>"+today.toJSON().slice(0,10).replace(/-/g,'-');
-		$( "#today" ).append(html);
-
-		var encryptDashbaordServer = document.getElementById("encryptDashbaordServer");
-		var encryptDashbaordAgent = document.getElementById("encryptDashbaordAgent");
-
-		if("${sessionScope.session.encp_use_yn}" == "Y"){
-			encryptDashbaordServer.style.display = '';
-			encryptDashbaordAgent.style.display = '';
-			fn_serverStatus();
-		}else{
-			encryptDashbaordServer.style.display = 'none';
-			encryptDashbaordAgent.style.display = 'none';
-		} 
-	
-		//scale_yn이 Y일때 만 사용가능
-		fn_selectServerScaleAuthInfo(today);
-	});
-	
-	//scale view
-	function fn_selectServerScaleAuthInfo(to_param){
-		var today_set;
-		var today_ing = to_param.toJSON().slice(0,10).replace(/-/g,'-');
-		var dayOfMonth = to_param.getDate();
-		to_param.setDate(dayOfMonth - 7);
-
-		today_set = "<img src='../images/ico_state_09.png' style='margin-right:5px;'>" + today_ing;
-		$( "#today_scale" ).append(today_set);
-		
-		today_set = to_param.toJSON().slice(0,10).replace(/-/g,'-') + " ~ " + today_ing;
-		$( "#sp_date1" ).append(today_set);
-		$( "#sp_date2" ).append(today_set);
-		
-	  	$.ajax({
-			async : false,
-			url : "/selectServerScaleAuthInfo.do",
-			data : {},
-			dataType : "json",
-			type : "post",
-			beforeSend: function(xhr) {
-		        xhr.setRequestHeader("AJAX", true);
-		     },
-			error : function(xhr, status, error) {
-				if(xhr.status == 401) {
-					alert('<spring:message code="message.msg02" />');
-					top.location.href = "/";
-				} else if(xhr.status == 403) {
-					alert('<spring:message code="message.msg03" />');
-					top.location.href = "/";
-				} else {
-					alert("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""));
-				}
-			},
-			success : function(result) {
-				scale_yn_chk = result.scale_yn_chk;
-
-				//scale y일때
-				if (scale_yn_chk == "Y") {
-					$("#scale_view").show();
-				} else {
-					$("#scale_view").hide();
-				}
-			}
-		});
-	}
-
-	function fn_serverStatus(){
-		$.ajax({
-			url : "/serverStatus.do",
-			data : {},
-			dataType : "json",
-			type : "post",
-			beforeSend: function(xhr) {
-		        xhr.setRequestHeader("AJAX", true);
-		     },
-			error : function(xhr, status, error) {
-				if(xhr.status == 401) {
-					alert("<spring:message code='message.msg02' />");
-					top.location.href = "/";
-				} else if(xhr.status == 403) {
-					alert("<spring:message code='message.msg03' />");
-					top.location.href = "/";
-				} else {
-					alert("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""));
-				}
-			},
-			success : function(data) {
-				if(data.resultCode == "0000000000"){
-					var html ='<img src="../images/ico_state_03.png" alt="Running Transfer" /><span> Running</span>';				
-					$("#encryptServer").html(html);
-					fn_selectSecurityStatistics(today);
-				}else if(data.resultCode == "8000000002"){
-					var html ='<img src="../images/ico_state_07.png" alt="Stop" /> STOP';
-					//var html ='<img src="../images/ico_agent_2.png" alt="" />';
-					$("#encryptServer").html(html);
-				}
-			}
-		});			
-	}
-
-	function fn_selectSecurityStatistics(today){
-		$.ajax({
-			url : "/selectDashSecurityStatistics.do",
-			data : {
-				from : today+"00",
-				to : 	today+"24",
-				categoryColumn : "SITE_ACCESS_ADDRESS"
-			},
-			dataType : "json",
-			type : "post",
-			beforeSend: function(xhr) {
-		        xhr.setRequestHeader("AJAX", true);
-		     },
-			error : function(xhr, status, error) {
-				if(xhr.status == 401) {
-					alert("<spring:message code='message.msg02' />");
-					top.location.href = "/";
-				} else if(xhr.status == 403) {
-					alert("<spring:message code='message.msg03' />");
-					top.location.href = "/";
-				} else {
-					alert("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""));
-				}
-			},
-			success : function(data) {
-					if(data.resultCode == "0000000000"){
-					 	var html ="";
-					 	var success=0;
-					 	var fail=0;
-						for(var i=0; i<data.list.length; i++){
-							html += '<tr>';
-							html += '<td>'+data.list[i].monitoredName+'</td>';
-							html += '<td>'+data.list[i].encryptSuccessCount+'</td>';
-							html += '<td>'+data.list[i].encryptFailCount+'</td>';
-							html += '<td>'+data.list[i].decryptSuccessCount+'</td>';
-							html += '<td>'+data.list[i].decryptFailCount+'</td>';
-							if(data.list[i].status == "start"){
-								html += '<td><img src="../images/ico_agent_1.png" alt="" /></td>';
-							}else{
-								html += '<td><img src="../images/ico_agent_2.png" alt="" /></td>';
-							}
-							html += '</tr>';
-							$( "#col" ).html(html);
-						} 
-						
-					}else if(data.resultCode == "8000000002"){
-						alert("<spring:message code='message.msg05' />");
-						location.href="/";
-					}else if(data.resultCode == "8000000003"){
-						alert(data.resultMessage);
-						location.href="/securityKeySet.do";
-					}else{
-						if(data.list.length != 0){
-							alert(data.resultMessage +"("+data.resultCode+")");
-						}
-					}
-			}
-		});		
-	}
-
-// var intervalIDCheck;
-
-// function content() {
-// 	var cnt = $('#refreshTimeCnt').val();
-// 	if(intervalIDCheck)
-// 		clearInterval(intervalIDCheck);
-// 	$('#refreshTimeCnt').val(++cnt);
-	
-// 	alert("dddd");
-// 	/*여기서 결과값을 새로고침 해야함!!!!!*/
-	
-	
-// 	var intervalID = '',
-// 	refreashRemainTime=600,
-// 	remainTime = $('#refreshTime').val(),
-// 	INTERVAL_TIME = 1000;
-
-// 	$('#refresh_timer').text(remainTime);
-// 	intervalID = setInterval(function () {
-// 		$('#refresh_timer').text(--remainTime);
-// 		if (remainTime < 1) {
-// 			content();
-// 		}
-// 	}, INTERVAL_TIME);
-	
-// 	intervalIDCheck = intervalID;
-	
-// 	//오랫동안 화면 새로고침을 하지 않을 경우, 화면이 먹통이 되는 경우 발생.
-// 	// 강제로 10분마다 화면 새로고침을 수행한다. 
-// 	setInterval(function() {
-// 		--refreashRemainTime;
-// 		if (refreashRemainTime < 1) {
-// 			document.location.reload();
-// 		}
-// 	}, INTERVAL_TIME);
-// }
-
-</script>
-
-
-
-<!-- contents -->
-<div id="contents" class="main">
-	<div class="contents_wrap">
-		<div class="contents_tit">
-			<h4><spring:message code="menu.dashboard" /> <a href="#n"><img src="../images/ico_tit.png" alt="" class="btn_info"/></a> 
-<!-- 			<span style="float: right; margin-right: 20px;" onclick="javascript:content();"><img src="../images/ico_state_03.png" alt="새로고침" style="margin-right: 5px"/><span id="refresh_timer" style="margin-right: 5px">00</span>새로고침</span> -->
-			</h4>
-			<input type="hidden" id="refreshTime" name="refreshTime" value="${refreshTime}"/>
-			<input type="hidden" id="refreshTimeCnt" name="refreshTimeCnt" value="-1"/>
-			<div class="infobox"> 
-				<ul>
-					<li><spring:message code="help.dashboard" /> </li>
-					<li>관리상태는 미흡(관리가 매우 필요), 감시(관리가 필요 주의바람), 양호(정삭적으로 관리) 중 실시간 상태를 표시합니다.</li>				
-				</ul>
-			</div>
-		</div>
-		
-		<div class="contents">
-			<div class="main_grp">
-				<div class="main_info">
-					<div class="m_info_lt">
-						<p class="m_tit" ><spring:message code="dashboard.management"/> <spring:message code="properties.status" /></p>
-							<ul>
-								<li style="width: 400px;">
-									<table class="list3">
-										<colgroup>
-											<col style="width: 25%;">
-											<col style="width: 25%;">
-											<col style="width: 25%;">
-											<col style="width: 25%;">
-										</colgroup>
-										<thead>
-											<tr style="height: 50px;">
-												<th scope="col"></th>
-												<th scope="col"><spring:message code="dashboard.Inadequate"/></th>
-												<th scope="col"><spring:message code="dashboard.Watch"/></th>
-												<th scope="col"><spring:message code="dashboard.Good"/></th>
-											</tr>
-										</thead>
-										<tbody>
-											<tr style="height: 40px;">
-												<td><spring:message code="dashboard.Work_Management"/></td>
-												<c:if test="${wrk_state<=33}"><td style="background-color: #FF4848;"></td><td></td><td></td></c:if>
-												<c:if test="${wrk_state>=34 && wrk_state<=66}"><td></td><td style="background-color: #FFFF6C;"></td><td></td></c:if>
-												<c:if test="${wrk_state>=67 && wrk_state<=100}"><td></td><td></td><td style="background-color: #89F781;"></td></c:if>
-											</tr>
-											<tr style="height: 40px;">
-												<td><spring:message code="dashboard.Server_Management"/></td>
-												<c:if test="${svr_state<=33}"><td style="background-color: #FF4848;"></td><td></td><td></td></c:if>
-												<c:if test="${svr_state>=34 && svr_state<=66}"><td></td><td style="background-color: #FFFF6C;"></td><td></td></c:if>
-												<c:if test="${svr_state>=67 && svr_state<=100}"><td></td><td></td><td style="background-color: #89F781;"></td></c:if>
-											</tr>
-											<tr style="height: 40px;">
-												<td><spring:message code="menu.backup_management" /></td>
-												<c:if test="${bak_state<=33}"><td style="background-color: #FF4848;"></td><td></td><td></td></c:if>
-												<c:if test="${bak_state>=34 && bak_state<=66}"><td></td><td style="background-color: #FFFF6C;"></td><td></td></c:if>
-												<c:if test="${bak_state>=67 && bak_state<=100}"><td></td><td></td><td style="background-color: #89F781;"></td></c:if>
-											</tr>
-										</tbody>
-									</table>				
-								</li>
-							</ul>
-<!-- 						<ul> -->
-<!-- 							<li> -->
-<!-- 								<p class="state"> -->
-<!-- 									<img src="../images/ico_state_10.png" alt="Server" /><span>Server</span> -->
-<!-- 								</p> -->
-<!-- 								<a href="/dbServer.do"> -->
-<%-- 								 <c:choose> --%>
-<%-- 						           <c:when test="${fn:length(fn:escapeXml(backupInfo.server_cnt))>2}"> --%>
-<!-- 						           <p class="state_num c1" style="font-size: 40px;"> -->
-<%-- 						            <c:out value="${backupInfo.stop_cnt}"/> --%>
-<!-- 						            </p> -->
-<%-- 						           </c:when> --%>
-<%-- 						           <c:otherwise> --%>
-<!-- 						           <p class="state_num c1"> -->
-<%-- 						            <c:out value="${backupInfo.server_cnt}"/> --%>
-<!-- 						            </p> -->
-<%-- 						           </c:otherwise>  --%>
-<%-- 						         </c:choose> --%>
-<!-- 								</a> -->
-<%-- 								<p class="state_txt"><spring:message code="dashboard.server" /></p> --%>
-<!-- 							</li> -->
-<!-- 							<li> -->
-<!-- 								<p class="state"> -->
-<!-- 									<img src="../images/ico_state_11.png" alt="Backup" /><span>Backup</span> -->
-<!-- 								</p> -->
-<%-- 								 <c:choose> --%>
-<%-- 						           <c:when test="${fn:length(fn:escapeXml(backupInfo.backup_cnt))>2}"> --%>
-<!-- 						           <p class="state_num c1" style="font-size: 40px;"> -->
-<%-- 						            <c:out value="${backupInfo.backup_cnt}"/> --%>
-<!-- 						            </p> -->
-<%-- 						           </c:when> --%>
-<%-- 						           <c:otherwise> --%>
-<!-- 						           <p class="state_num c1"> -->
-<%-- 						            <c:out value="${backupInfo.backup_cnt}"/> --%>
-<!-- 						            </p> -->
-<%-- 						           </c:otherwise>  --%>
-<%-- 						         </c:choose> --%>
-<%-- 								<p class="state_txt"><spring:message code="dashboard.Register_backup" /></p> --%>
-<!-- 							</li> -->
-<!-- 						</ul> -->
-					</div>
-					
-					
-					<div class="m_info_ct">
-						<p class="m_tit"><spring:message code="menu.schedule_information" /></p>
-						<ul>
-							<li>
-								<p class="state">
-									<img src="../images/ico_state_09.png" alt="Backup" /><span>Schedule</span>
-								</p>
-								<a href="/selectScheduleListView.do">
-								<c:choose>
-						           <c:when test="${fn:length(fn:escapeXml(backupInfo.schedule_cnt))>2}">
-						           <p class="state_num c1" style="font-size: 40px;">
-						            <c:out value="${backupInfo.schedule_cnt}"/>
-						            </p>
-						           </c:when>
-						           <c:otherwise>
-						           <p class="state_num c1">
-						            <c:out value="${backupInfo.schedule_cnt}"/>
-						            </p>
-						           </c:otherwise> 
-						         </c:choose>
-								</a>
-								<p class="state_txt"><spring:message code="dashboard.Register_schedule" /></p>
-							</li>							
-							<li>
-								<p class="state">
-									<img src="../images/ico_state_06.png" alt="Start" /><span>Start</span>
-								</p>
-								<a href="/selectScheduleListView.do?scd_cndt=TC001801">
-								 <c:choose>
-						           <c:when test="${fn:length(fn:escapeXml(scheduleInfo.start_cnt))>2}">
-						           <p class="state_num c1" style="font-size: 40px;">
-						            <c:out value="${scheduleInfo.start_cnt}"/>
-						            </p>
-						           </c:when>
-						           <c:otherwise>
-						           <p class="state_num c1">
-						            <c:out value="${scheduleInfo.start_cnt}"/>
-						            </p>
-						           </c:otherwise> 
-						         </c:choose>
-								</a>
-								<p class="state_txt"><spring:message code="etc.etc37"/></p>
-							</li>
-							<li>
-								<p class="state">
-									<img src="../images/ico_state_04.png" alt="Stop" /><span>Stop</span>
-								</p>
-								<a href="/selectScheduleListView.do?scd_cndt=TC001803">
-								 <c:choose>
-						           <c:when test="${fn:length(fn:escapeXml(scheduleInfo.stop_cnt))>2}">
-						           <p class="state_num c1" style="font-size: 40px;">
-						            <c:out value="${scheduleInfo.stop_cnt}"/>
-						            </p>
-						           </c:when>
-						           <c:otherwise>
-						           <p class="state_num c1">
-						            <c:out value="${scheduleInfo.stop_cnt}"/>
-						            </p>
-						           </c:otherwise> 
-						         </c:choose>
-								</a>
-								<p class="state_txt"><spring:message code="schedule.stop" /></p>
-							</li>
-							<li>
-								<p class="state">
-									<img src="../images/ico_state_03.png" alt="Running Schedule" /><span>Running</span>
-								</p>
-								<a href="/selectScheduleListView.do?scd_cndt=TC001802">
-								 <c:choose>
-						           <c:when test="${fn:length(fn:escapeXml(scheduleInfo.run_cnt))>2}">
-						           <p class="state_num c3" style="font-size: 40px;">
-						            <c:out value="${scheduleInfo.run_cnt}"/>
-						            </p>
-						           </c:when>
-						           <c:otherwise>
-						           <p class="state_num c3">
-						            <c:out value="${scheduleInfo.run_cnt}"/>
-						            </p>
-						           </c:otherwise> 
-						         </c:choose>
-								</a>
-								<p class="state_txt"><spring:message code="dashboard.running" /></p>
-							</li>
-							<li>
-								<p class="state">
-									<img src="../images/ico_state_09.png" alt="Scheduled for today" /><span>Today</span>
-								</p>
-								
-								<c:choose>
-						           <c:when test="${fn:length(fn:escapeXml(scheduleInfo.today_cnt))>2}">
-						           <p class="state_num c1" style="font-size: 40px;">
-						            <c:out value="${scheduleInfo.today_cnt}"/>
-						            </p>
-						           </c:when>
-						           <c:otherwise>
-						           <p class="state_num c1">
-						            <c:out value="${scheduleInfo.today_cnt}"/>
-						            </p>
-						           </c:otherwise> 
-						         </c:choose>
-						         
-								<p class="state_txt"><spring:message code="dashboard.scheduled_today" /></p>
-							</li>
-							<li>
-								<p class="state">
-									<img src="../images/ico_state_01.png" alt="Fail" /><span>Fail</span>
-								</p>
-								<a href="/selectScheduleHistoryFail.do">
-								<c:choose>
-						           <c:when test="${fn:length(fn:escapeXml(scheduleInfo.fail_cnt))>2}">
-						           <p class="state_num c3" style="font-size: 40px;">
-						            <c:out value="${scheduleInfo.fail_cnt}"/>
-						            </p>
-						           </c:when>
-						           <c:otherwise>
-						           <p class="state_num c3">
-						            <c:out value="${scheduleInfo.fail_cnt}"/>
-						            </p>
-						           </c:otherwise> 
-						         </c:choose>
-								</a>
-								<p class="state_txt"><spring:message code="dashboard.failed" /></p>
-							</li>
-						</ul>
-					</div>
-
-
-<!-- 					<div class="m_info_rt"> -->
-<%-- 						<p class="m_tit"><spring:message code="menu.data_transfer_information" /></p> --%>
-<!-- 						<ul> -->
-<!-- 							<li> -->
-<!-- 								<p class="state"> -->
-<!-- 									<img src="../images/ico_state_10.png" alt="connet" /><span>Channel</span> -->
-<!-- 								</p> -->
-<%-- 								<c:choose> --%>
-<%-- 						           <c:when test="${fn:length(fn:escapeXml(transferInfo.connect_cnt))>2}"> --%>
-<!-- 						           <p class="state_num c1" style="font-size: 40px;"> -->
-<%-- 						            <c:out value="${transferInfo.connect_cnt}"/> --%>
-<!-- 						            </p> -->
-<%-- 						           </c:when> --%>
-<%-- 						           <c:otherwise> --%>
-<!-- 						           <p class="state_num c1"> -->
-<%-- 						            <c:out value="${transferInfo.connect_cnt}"/> --%>
-<!-- 						            </p> -->
-<%-- 						           </c:otherwise>  --%>
-<%-- 						         </c:choose> --%>
-<%-- 								<p class="state_txt"><spring:message code="dashboard.connect_count" /></p> --%>
-<!-- 							</li> -->
-<!-- 							<li> -->
-<!-- 								<p class="state"> -->
-<!-- 									<img src="../images/ico_state_03.png" alt="Running Transfer" /><span>Running</span> -->
-<!-- 								</p> -->
-<%-- 								<c:choose> --%>
-<%-- 						           <c:when test="${fn:length(fn:escapeXml(transferInfo.execute_cnt))>2}"> --%>
-<!-- 						           <p class="state_num c3" style="font-size: 40px;"> -->
-<%-- 						            <c:out value="${transferInfo.execute_cnt}"/> --%>
-<!-- 						            </p> -->
-<%-- 						           </c:when> --%>
-<%-- 						           <c:otherwise> --%>
-<!-- 						           <p class="state_num c3"> -->
-<%-- 						            <c:out value="${transferInfo.execute_cnt}"/> --%>
-<!-- 						            </p> -->
-<%-- 						           </c:otherwise>  --%>
-<%-- 						         </c:choose> --%>
-<%-- 								<p class="state_txt"><spring:message code="dashboard.running" /></p> --%>
-<!-- 							</li> -->
-<!-- 						</ul> -->
-<!-- 					</div>				 -->
-				</div>
-
-				<div class="main_server_info">
-					<p class="tit"><spring:message code="menu.dbms_information" /></p>
-					<div class="inner">
-					<!--
-						<div class="sch_form">
-							<table class="write">
-								<caption>검색 조회</caption>
-								<colgroup>
-									<col style="width: 104px;" />
-									<col />
-								</colgroup>
-								<tbody>
-									<tr>
-										<th scope="row" class="t2">서버명</th>
-										<td><input type="text" class="txt t2" /></td>
-									</tr>
-									<tr>
-										<th scope="row" class="t10">백업 실행일자</th>
-										<td>
-											<div class="calendar_area">
-												<a href="#n" class="calendar_btn">달력열기</a> <input
-													type="text" class="calendar" id="datepicker1"
-													title="백업 실행 시작날짜" readonly /> <span class="wave">~</span>
-												<a href="#n" class="calendar_btn">달력열기</a> <input
-													type="text" class="calendar" id="datepicker2"
-													title="백업 실행 종료날짜" readonly />
-											</div> <span class="btn btnF_03 btnBd_01"><button>조회</button></span>
-										</td>
-									</tr>
-								</tbody>
-							</table>
-						</div>
-						
-					-->
-						<table class="list" border="1">
-							<caption><spring:message code="dashboard.dbms_info" /></caption>
-							<colgroup>
-								<col style="width: 10%;" />
-								<col style="width: 10%;" />
-								<col style="width: 6%;" />
-								<col style="width: 6%;" />
-								<col style="width: 6%;" />
-								<col style="width: 14%;" />
-
-								<col style="width: 12%;" />
-								<col style="width: 10%;" />
-								<col style="width: 9%;" />
-							</colgroup>
-							<thead>
-								<tr>
-									<th scope="col" rowspan="2"><spring:message code="common.dbms_name" /></th>
-									<th scope="col" rowspan="2">IP</th>
-									<th scope="col" colspan="2"><spring:message code="dashboard.management_db" /></th>
-									<th scope="col" colspan="2"><spring:message code="menu.data_transfer" /></th>
-									<th scope="col" rowspan="2"><spring:message code="dashboard.audit"/></th>
-									<th scope="col" rowspan="2"><spring:message code="dashboard.Access_policy_Last_modified_date"/></th>
-									<th scope="col" rowspan="2">Agent <spring:message code="properties.status" /></th>								
-								</tr>
-								<tr>
-									<th scope="col"><spring:message code="dashboard.management"/></th>
-									<th scope="col"><spring:message code="dashboard.Uncontrolled"/></th>
-									<th scope="col"><spring:message code="dashboard.channel"/></th>
-									<th scope="col"><spring:message code="schedule.run" /></th>
-								</tr>
-							</thead>
-							<tbody>
-								<c:if test="${fn:length(serverInfo) == 0}">
-										<tr>
-											<td colspan="9"><spring:message code="message.msg01" /></td>
-										</tr>
-								</c:if>
-								<c:forEach var="data" items="${serverInfo}" varStatus="status">
-								<tr>
-									<td>${data.db_svr_nm}</td>
-									<td>${data.ipadr}</td>
-									<td>${data.db_cnt}</td>
-									<td>${data.undb_cnt}</td>
-									<td>${data.connect_cnt}</td>
-									<td>${data.execute_cnt}</td>
-									<td>${data.audit_state}</td>
-									<td>${data.lst_mdf_dtm}</td>
-									<td>
-									<c:if test="${data.agt_cndt_cd == null}">
-										<span class="work_state"><img src="../images/ico_state_08.png" alt="Not Install" /></span>Not Install
-									</c:if>
-									<c:if test="${data.agt_cndt_cd == 'TC001101'}">
-										<!-- <span class="work_state"> -->
-										<img src="../images/ico_agent_1.png" alt="" />
-										<!-- <img src="../images/ico_state_03.png" alt="Running" /></span>Running -->
-									</c:if>									
-									<c:if test="${data.agt_cndt_cd == 'TC001102'}">
-										<img src="../images/ico_agent_2.png" alt="" />
-										<!-- <span class="work_state"><img src="../images/ico_state_07.png" alt="Stop" /></span>Stop -->
-									</c:if>											
-									</td>							
-								</tr>
-								</c:forEach>
-							</tbody>
-						</table>
-					</div>
-				</div>
-				
-				<!-- 백업 정보 -->
-				<div class="main_server_info">
-					<p class="tit"><spring:message code="common.backInfo" /></p>
-					<div class="inner">
-						<table class="list" border="1">
-							<caption><spring:message code="dashboard.dbms_info" /></caption>
-							<colgroup>
-								<col style="width: 10%;" />
-								<col style="width: 10%;" />
-								<col style="width: 6%;" />
-								<col style="width: 6%;" />
-								<col style="width: 6%;" />
-								<col style="width: 6%;" />
-							</colgroup>
-							<thead>
-								<tr>
-									<th scope="col" rowspan="2"><spring:message code="common.dbms_name" /> </th>
-									<th scope="col" colspan="5"><spring:message code="backup_management.rman_backup" /></th>						
-								</tr>
-								<tr>
-									<th scope="col"><spring:message code="etc.etc02" /></th>
-									<th scope="col"><spring:message code="common.registory" /></th>
-									<th scope="col"><spring:message code="common.apply" /></th>
-									<th scope="col"><spring:message code="common.success" /></th>
-									<th scope="col"><spring:message code="common.failed" /> </th>
-								</tr>
-							</thead>
-							<tbody>
-								<c:if test="${fn:length(backupRmanInfo) == 0}">
-										<tr>
-											<td colspan="6"><spring:message code="message.msg01" /></td>
-										</tr>
-								</c:if>
-								
-								<c:forEach var="data" items="${backupRmanInfo}" varStatus="status">
-									<tr>
-										<td>${data.db_svr_nm}</td>
-										<td>
-											<c:if test="${data.bck_opt_cd == 'TC000301'}">FULL</c:if>
-											<c:if test="${data.bck_opt_cd == 'TC000302'}">INCREMENTAL</c:if>
-											<c:if test="${data.bck_opt_cd == 'TC000303'}">ARCHIVE</c:if>
-										</td>
-										<td>${data.wrk_cnt}</td>
-										<td>${data.schedule_cnt}</td>
-										<td>${data.success_cnt}</td>
-										<td>${data.fail_cnt}</td>
-									</tr>
-								</c:forEach>
-								
-							</tbody>
-						</table>
-						<table class="list" border="1">
-							<caption><spring:message code="dashboard.dbms_info" /></caption>
-							<colgroup>
-								<col style="width: 10%;" />
-								<col style="width: 10%;" />
-								<col style="width: 6%;" />
-								<col style="width: 6%;" />
-								<col style="width: 6%;" />
-								<col style="width: 6%;" />
-							</colgroup>
-							<thead>
-								<tr>
-									<th scope="col" rowspan="2"><spring:message code="common.dbms_name" /> </th>
-									<th scope="col" rowspan="2">DB</th>
-									<th scope="col" colspan="4"><spring:message code="backup_management.dumpBck" /></th>						
-								</tr>
-								<tr>
-									<th scope="col"><spring:message code="common.registory" /></th>
-									<th scope="col"><spring:message code="common.apply" /></th>
-									<th scope="col"><spring:message code="common.success" /></th>
-									<th scope="col"><spring:message code="common.failed" /> </th>
-								</tr>
-							</thead>
-							<tbody>
-								<c:if test="${fn:length(backupDumpInfo) == 0}">
-										<tr>
-											<td colspan="6"><spring:message code="message.msg01" /></td>
-										</tr>
-								</c:if>
-								<c:forEach var="data" items="${backupDumpInfo}" varStatus="status">
-									<tr>
-										<td>${data.db_svr_nm}</td>
-										<td>${data.db_nm}</td>
-										<td>${data.wrk_cnt}</td>
-										<td>${data.schedule_cnt}</td>
-										<td>${data.success_cnt}</td>
-										<td>${data.fail_cnt}</td>
-									</tr>
-								</c:forEach>
-							</tbody>
-						</table>
-					</div>
-				</div>
-				
-				
-				<!-- eXperDB Encrypt 상태 -->
-				<div class="main_server_info" >
-					<p class="tit"><spring:message code="dashboard.Encryption_Information"/> <span id="today" style="float: right; padding-right: 1%;"></span></p>
-					
-					<div class="inner">
-						<table class="list" style="width: 320px;" id="encryptDashbaordServer">
-							<caption>eXperDB Encrypt Server </caption>
-							<colgroup>
-							</colgroup>
-							<tr>
-								<th>Server <spring:message code="properties.status" /></th>						
-								<th id="encryptServer"></th>
-							</tr>		
-						</table>			
-					
-							
-						<table class="list" border="1" id="encryptDashbaordAgent">
-							<caption><spring:message code="dashboard.dbms_info" /></caption>
-							<colgroup>
-								<col style="width: 13.5%;" />
-
-								<col style="width: 6%;" />
-								<col style="width: 6%;" />
-								<col style="width: 6%;" />								
-								<col style="width: 6%;" />
-								
-								<col style="width: 10%;" />
-							</colgroup>
-							<thead>
-								<tr>
-									<th scope="col" rowspan="2">Encrypt Agent IP</th>						
-									<th scope="col" colspan="2"><spring:message code="encrypt_log_decode.Encryption"/></th>
-									<th scope="col" colspan="2"><spring:message code="encrypt_log_decode.Decryption"/></th>
-									<th scope="col" rowspan="2">Agent <spring:message code="properties.status" /></th>								
-								</tr>
-								<tr>
-									<th scope="col"><spring:message code="common.success" /></th>
-									<th scope="col"><spring:message code="common.failed" /></th>
-									<th scope="col"><spring:message code="common.success" /></th>
-									<th scope="col"><spring:message code="common.failed" /></th>
-								</tr>
-							</thead>
-							<tbody id="col">
-						
-							</tbody>
-						</table>
-					</div>
-				</div>
-
-				<!-- scale 상태 -->
-				<div class="main_server_info" id="scale_view" >
-					<p class="tit">
-						<spring:message code="dashboard.eXperDB_scale_Information"/>
-						<span id="today_scale" style="float: right; padding-right: 1%;"></span>
-					</p>
-
-					<div class="inner">
-						<table class="list" border="1">
-							<caption><spring:message code="dashboard.eXperDB_scale_Information" /></caption>
-							<colgroup>
-								<col style="width: 24%;" />
-								<col style="width: 10%;" />
-								<col style="width: 9%;" />
-								<col style="width: 8%;" />
-								<col style="width: 8%;" />
-								<col style="width: 8%;" />
-								<col style="width: 8%;" />
-								<col style="width: 8%;" />
-								<col style="width: 8%;" />
-								<col style="width: 9%;" />
-							</colgroup>
-							<thead>
-								<tr>
-									<th scope="col" rowspan="2"><spring:message code="common.dbms_name" /></th>
-									<th scope="col" rowspan="2">IP</th>
-									<th scope="col" rowspan="2">Node 수</th>
-									<th scope="col" colspan="2" style="line-height:15px;"><spring:message code="etc.etc39" /><br/>(<span id="sp_date1"></span>)</th>
-									<th scope="col" colspan="2" style="line-height:15px;"><spring:message code="etc.etc38" /><br/>(<span id="sp_date2"></span>)</th>
-									<th scope="col" colspan="2"><spring:message code="eXperDB_scale.auto_scale_occur" /></th>
-									<th scope="col" rowspan="2"><spring:message code="eXperDB_scale.cpu_usage" /></th>
-								</tr>
-								<tr>
-									<th scope="col"><spring:message code="eXperDB_scale.auto_expansion" /></th>
-									<th scope="col"><spring:message code="eXperDB_scale.manual_expansion" /></th>
-									<th scope="col"><spring:message code="eXperDB_scale.auto_expansion" /></th>
-									<th scope="col"><spring:message code="eXperDB_scale.manual_expansion" /></th>
-									<th scope="col">Notification</th>
-									<th scope="col">Auto-scale</th>
-								</tr>
-							</thead>
- 							<tbody>
-								<c:if test="${fn:length(scaleIngInfo) == 0}">
-										<tr>
-											<td colspan="10"><spring:message code="message.msg01" /></td>
-										</tr>
-								</c:if>
-								
-								<c:if test="${fn:length(scaleIngInfo) > 0}">
-								
-									<c:forEach var="data" items="${scaleIngInfo}" varStatus="status">
-										<tr>
-											<td><a href="/scale/scaleList.do?db_svr_id=${data.db_svr_id}">${data.svr_host_nm}</a></td>
-											<td>${data.ipadr}</td>
-											<td>${data.instance_cnt}</td>
-											<td>${data.exe_out_auto}</td>
-											<td>${data.exe_out_mnl}</td>
-											<td>${data.exe_in_auto}</td>
-											<td>${data.exe_in_mnl}</td>
-											<td>${data.occur_nct}</td>
-											<td>${data.occur_auto}</td>
-											<td>${data.exenum}</td>
-										</tr>
-									</c:forEach>
-								
-								</c:if>
-							</tbody>
-						</table>
-					</div>
-				</div>
-			</div>
-		</div>
-	</div>
-</div>
-<!-- // contents -->
+<link rel="stylesheet" href="/vertical-dark-sidebar/css/vendors/ti-icons/css/themify-icons.css">
+<link rel="stylesheet" href="/vertical-dark-sidebar/css/vendors/css/vendor.bundle.base.css">
+<!-- endinject -->
+<!-- plugin css for this page -->
+<link rel="stylesheet" href="/vertical-dark-sidebar/css/vendors/datatables.net-bs4/dataTables.bootstrap4.css">
+<!-- End plugin css for this page -->
+<!-- inject:css -->
+<link rel="stylesheet" href="/vertical-dark-sidebar/css/style.css">
+<!-- endinject -->
+<link rel="shortcut icon" href="../../../../images/favicon.png" />
+<!-- plugins:js -->
+<script src="/vertical-dark-sidebar/js/vendors/js/vendor.bundle.base.js"></script>
+<!-- endinject -->
+<!-- Plugin js for this page-->
+<script src="/vertical-dark-sidebar/js/vendors/datatables.net/jquery.dataTables.js"></script>
+<script src="/vertical-dark-sidebar/js/vendors/datatables.net-bs4/dataTables.bootstrap4.js"></script>
+<!-- End plugin js for this page-->
+<!-- inject:js -->
+<script src="/vertical-dark-sidebar/js/off-canvas.js"></script>
+<script src="/vertical-dark-sidebar/js/hoverable-collapse.js"></script>
+<script src="/vertical-dark-sidebar/js/template.js"></script>
+<script src="/vertical-dark-sidebar/js/settings.js"></script>
+<script src="/vertical-dark-sidebar/js/todolist.js"></script>
+<!-- endinject -->
+<!-- Custom js for this page-->
+<script src="/vertical-dark-sidebar/js/data-table.js"></script>
+<!-- End custom js for this page-->
+      <!-- partial -->
+        <div class="content-wrapper">
+          <div class="row">
+            <div class="col-md-12 grid-margin">
+              <div class="row">
+                <div class="col-12 col-xl-5 mb-4 mb-xl-0">
+                  <h4 class="font-weight-bold">Hi, Welcomeback!</h4>
+                  <h4 class="font-weight-normal mb-0">JustDo Dashboard,</h4>
+                </div>
+                <div class="col-12 col-xl-7">
+                  <div class="d-flex align-items-center justify-content-between flex-wrap">
+                    <div class="border-right pr-4 mb-3 mb-xl-0">
+                      <p class="text-muted">Balance</p>
+                      <h4 class="mb-0 font-weight-bold">$40079.60 M</h4>
+                    </div>
+                    <div class="border-right pr-4 mb-3 mb-xl-0">
+                      <p class="text-muted">Today’s profit</p>
+                      <h4 class="mb-0 font-weight-bold">$175.00 M</h4>
+                    </div>
+                    <div class="border-right pr-4 mb-3 mb-xl-0">
+                      <p class="text-muted">Purchases</p>
+                      <h4 class="mb-0 font-weight-bold">4006</h4>
+                    </div>
+                    <div class="pr-3 mb-3 mb-xl-0">
+                      <p class="text-muted">Downloads</p>
+                      <h4 class="mb-0 font-weight-bold">4006</h4>
+                    </div>
+                    <div class="mb-3 mb-xl-0">
+                      <button class="btn btn-warning rounded-0 text-white">Downloads</button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-md-3 grid-margin stretch-card">
+              <div class="card">
+                <div class="card-body">
+                  <p class="card-title text-md-center text-xl-left">Number of Meetings</p>
+                  <div class="d-flex flex-wrap justify-content-between justify-content-md-center justify-content-xl-between align-items-center">
+                    <h3 class="mb-0 mb-md-2 mb-xl-0 order-md-1 order-xl-0">34040</h3>
+                    <i class="ti-calendar icon-md text-muted mb-0 mb-md-3 mb-xl-0"></i>
+                  </div>  
+                  <p class="mb-0 mt-2 text-warning">2.00% <span class="text-black ml-1"><small>(30 days)</small></span></p>
+                </div>
+              </div>
+            </div>
+            <div class="col-md-3 grid-margin stretch-card">
+              <div class="card">
+                <div class="card-body">
+                  <p class="card-title text-md-center text-xl-left">Number of Clients</p>
+                  <div class="d-flex flex-wrap justify-content-between justify-content-md-center justify-content-xl-between align-items-center">
+                    <h3 class="mb-0 mb-md-2 mb-xl-0 order-md-1 order-xl-0">47033</h3>
+                    <i class="ti-user icon-md text-muted mb-0 mb-md-3 mb-xl-0"></i>
+                  </div>  
+                  <p class="mb-0 mt-2 text-danger">0.22% <span class="text-black ml-1"><small>(30 days)</small></span></p>
+                </div>
+              </div>
+            </div>
+            <div class="col-md-3 grid-margin stretch-card">
+              <div class="card">
+                <div class="card-body">
+                  <p class="card-title text-md-center text-xl-left">Today’s Bookings</p>
+                  <div class="d-flex flex-wrap justify-content-between justify-content-md-center justify-content-xl-between align-items-center">
+                    <h3 class="mb-0 mb-md-2 mb-xl-0 order-md-1 order-xl-0">40016</h3>
+                    <i class="ti-agenda icon-md text-muted mb-0 mb-md-3 mb-xl-0"></i>
+                  </div>  
+                  <p class="mb-0 mt-2 text-success">10.00%<span class="text-black ml-1"><small>(30 days)</small></span></p>
+                </div>
+              </div>
+            </div>
+            <div class="col-md-3 grid-margin stretch-card">
+              <div class="card">
+                <div class="card-body">
+                  <p class="card-title text-md-center text-xl-left">Total Items Bookings</p>
+                  <div class="d-flex flex-wrap justify-content-between justify-content-md-center justify-content-xl-between align-items-center">
+                    <h3 class="mb-0 mb-md-2 mb-xl-0 order-md-1 order-xl-0">61344</h3>
+                    <i class="ti-layers-alt icon-md text-muted mb-0 mb-md-3 mb-xl-0"></i>
+                  </div>  
+                  <p class="mb-0 mt-2 text-success">22.00%<span class="text-black ml-1"><small>(30 days)</small></span></p>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-md-6 grid-margin stretch-card">
+              <div class="card">
+                <div class="card-body">
+                  <p class="card-title">Order and Downloads</p>
+                  <p class="text-muted font-weight-light">The total number of sessions within the date range. It is the period time a user is actively engaged with your website, page or app, etc</p>
+                  <div class="d-flex flex-wrap mb-5">
+                    <div class="mr-5 mt-3">
+                      <p class="text-muted">Order value</p>
+                      <h3>12.3k</h3>
+                    </div>
+                    <div class="mr-5 mt-3">
+                      <p class="text-muted">Orders</p>
+                      <h3>14k</h3>
+                    </div>
+                    <div class="mr-5 mt-3">
+                      <p class="text-muted">Users</p>
+                      <h3>71.56%</h3>
+                    </div>
+                    <div class="mt-3">
+                      <p class="text-muted">Downloads</p>
+                      <h3>34040</h3>
+                    </div> 
+                  </div>
+                  <canvas id="order-chart"></canvas>
+                </div>
+              </div>
+            </div>
+            <div class="col-md-6 grid-margin stretch-card">
+              <div class="card">
+                <div class="card-body">
+                  <p class="card-title">Sales Report</p>
+                  <p class="text-muted font-weight-light">The total number of sessions within the date range. It is the period time a user is actively engaged with your website, page or app, etc</p>
+                  <div id="sales-legend" class="chartjs-legend mt-4 mb-2"></div>
+                  <canvas id="sales-chart"></canvas>
+                </div>
+                <div class="card border-right-0 border-left-0 border-bottom-0">
+                  <div class="d-flex justify-content-center justify-content-md-end">
+                    <div class="dropdown flex-md-grow-1 flex-xl-grow-0">
+                      <button class="btn btn-lg btn-outline-light dropdown-toggle rounded-0 border-top-0 border-bottom-0" type="button" id="dropdownMenuDate2" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+                        Today
+                      </button>
+                      <div class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenuDate2">
+                        <a class="dropdown-item" href="#">January - March</a>
+                        <a class="dropdown-item" href="#">March - June</a>
+                        <a class="dropdown-item" href="#">June - August</a>
+                        <a class="dropdown-item" href="#">August - November</a>
+                      </div>
+                    </div>
+                    <button class="btn btn-lg btn-outline-light text-primary rounded-0 border-0 d-none d-md-block" type="button"> View all </button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-md-12 grid-margin">
+              <div class="card bg-primary border-0 position-relative">
+                <div class="card-body">
+                  <p class="card-title text-white">Performance Overview</p>
+                  <div id="performanceOverview" class="carousel slide performance-overview-carousel position-static pt-2" data-ride="carousel">
+                    <div class="carousel-inner">
+                      <div class="carousel-item active">
+                        <div class="row">
+                          <div class="col-md-4 item">
+                            <div class="d-flex flex-column flex-xl-row mt-4 mt-md-0">
+                              <div class="icon icon-a text-white mr-3">
+                                <i class="ti-cup icon-lg ml-3"></i>
+                              </div>
+                              <div class="content text-white">
+                                <div class="d-flex flex-wrap align-items-center mb-2 mt-3 mt-xl-1">
+                                  <h3 class="font-weight-light mr-2 mb-1">Revenue</h3>
+                                  <h3 class="mb-0">34040</h3>
+                                </div>
+                                <div class="col-8 col-md-7 d-flex border-bottom border-info align-items-center justify-content-between px-0 pb-2 mb-3">
+                                  <h5 class="mb-0">+34040</h5>
+                                  <div class="d-flex align-items-center">
+                                    <i class="ti-angle-down mr-2"></i>
+                                    <h5 class="mb-0">0.036%</h5>
+                                  </div>  
+                                </div>
+                                <p class="text-white font-weight-light pr-lg-2 pr-xl-5">The total number of sessions within the date range. It is the period time a user is actively engaged with your website, page or app, etc</p>
+                              </div>
+                            </div>
+                          </div>
+                          <div class="col-md-4 item">
+                            <div class="d-flex flex-column flex-xl-row mt-5 mt-md-0">
+                              <div class="icon icon-b text-white mr-3">
+                                <i class="ti-bar-chart icon-lg ml-3"></i>
+                              </div>
+                              <div class="content text-white">
+                                <div class="d-flex flex-wrap align-items-center mb-2 mt-3 mt-xl-1">
+                                  <h3 class="font-weight-light mr-2 mb-1">Sales</h3>
+                                  <h3 class="mb-0">$9672471</h3>
+                                </div>
+                                <div class="col-8 col-md-7 d-flex border-bottom border-info align-items-center justify-content-between px-0 pb-2 mb-3">
+                                  <h5 class="mb-0">-7.34567</h5>
+                                  <div class="d-flex align-items-center">
+                                    <i class="ti-angle-down mr-2"></i>
+                                    <h5 class="mb-0">2.036%</h5>
+                                  </div>  
+                                </div>
+                                <p class="text-white font-weight-light pr-lg-2 pr-xl-5">The total number of sessions within the date range. It is the period time a user is actively engaged with your website, page or app, etc</p>
+                              </div>
+                            </div>
+                          </div>
+                          <div class="col-md-4 item">
+                            <div class="d-flex flex-column flex-xl-row mt-5 mt-md-0">
+                              <div class="icon icon-c text-white mr-3">
+                                <i class="ti-shopping-cart-full icon-lg ml-3"></i>
+                              </div>
+                              <div class="content text-white">
+                                <div class="d-flex flex-wrap align-items-center mb-2 mt-3 mt-xl-1">
+                                  <h3 class="font-weight-light mr-2 mb-1">Purchases</h3>
+                                  <h3 class="mb-0">6358</h3>
+                                </div>
+                                <div class="col-8 col-md-7 d-flex border-bottom border-info align-items-center justify-content-between px-0 pb-2 mb-3">
+                                  <h5 class="mb-0">+9082</h5>
+                                  <div class="d-flex align-items-center">
+                                    <i class="ti-angle-down mr-2"></i>
+                                    <h5 class="mb-0">35.54%</h5>
+                                  </div>  
+                                </div>
+                                <p class="text-white font-weight-light pr-lg-2 pr-xl-5">The total number of sessions within the date range. It is the period time a user is actively engaged with your website, page or app, etc</p>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="carousel-item">
+                        <div class="row">
+                          <div class="col-md-4 item">
+                            <div class="d-flex flex-column flex-xl-row mt-4 mt-md-0">
+                              <div class="icon icon-a text-white mr-3">
+                                <i class="ti-cup icon-lg ml-3"></i>
+                              </div>
+                              <div class="content text-white">
+                                <div class="d-flex flex-wrap align-items-center mb-2 mt-3 mt-xl-1">
+                                  <h3 class="font-weight-light mr-2 mb-1">Revenue</h3>
+                                  <h3 class="mb-0">34040</h3>
+                                </div>
+                                <div class="col-8 col-md-7 d-flex border-bottom border-info align-items-center justify-content-between px-0 pb-2 mb-3">
+                                  <h5 class="mb-0">+34040</h5>
+                                  <div class="d-flex align-items-center">
+                                    <i class="ti-angle-down mr-2"></i>
+                                    <h5 class="mb-0">0.036%</h5>
+                                  </div>  
+                                </div>
+                                <p class="text-white font-weight-light pr-lg-2 pr-xl-5">The total number of sessions within the date range. It is the period time a user is actively engaged with your website, page or app, etc</p>
+                              </div>
+                            </div>
+                          </div>
+                          <div class="col-md-4 item">
+                            <div class="d-flex flex-column flex-xl-row mt-5 mt-md-0">
+                              <div class="icon icon-b text-white mr-3">
+                                <i class="ti-bar-chart icon-lg ml-3"></i>
+                              </div>
+                              <div class="content text-white">
+                                <div class="d-flex flex-wrap align-items-center mb-2 mt-3 mt-xl-1">
+                                  <h3 class="font-weight-light mr-2 mb-1">Sales</h3>
+                                  <h3 class="mb-0">$9672471</h3>
+                                </div>
+                                <div class="col-8 col-md-7 d-flex border-bottom border-info align-items-center justify-content-between px-0 pb-2 mb-3">
+                                  <h5 class="mb-0">-7.34567</h5>
+                                  <div class="d-flex align-items-center">
+                                    <i class="ti-angle-down mr-2"></i>
+                                    <h5 class="mb-0">2.036%</h5>
+                                  </div>  
+                                </div>
+                                <p class="text-white font-weight-light pr-lg-2 pr-xl-5">The total number of sessions within the date range. It is the period time a user is actively engaged with your website, page or app, etc</p>
+                              </div>
+                            </div>
+                          </div>
+                          <div class="col-md-4 item">
+                            <div class="d-flex flex-column flex-xl-row mt-5 mt-md-0">
+                              <div class="icon icon-c text-white mr-3">
+                                <i class="ti-shopping-cart-full icon-lg ml-3"></i>
+                              </div>
+                              <div class="content text-white">
+                                <div class="d-flex flex-wrap align-items-center mb-2 mt-3 mt-xl-1">
+                                  <h3 class="font-weight-light mr-2 mb-1">Purchases</h3>
+                                  <h3 class="mb-0">6358</h3>
+                                </div>
+                                <div class="col-8 col-md-7 d-flex border-bottom border-info align-items-center justify-content-between px-0 pb-2 mb-3">
+                                  <h5 class="mb-0">+9082</h5>
+                                  <div class="d-flex align-items-center">
+                                    <i class="ti-angle-down mr-2"></i>
+                                    <h5 class="mb-0">35.54%</h5>
+                                  </div>  
+                                </div>
+                                <p class="text-white font-weight-light pr-lg-2 pr-xl-5">The total number of sessions within the date range. It is the period time a user is actively engaged with your website, page or app, etc</p>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="carousel-item">
+                        <div class="row">
+                          <div class="col-md-4 item">
+                            <div class="d-flex flex-column flex-xl-row mt-4 mt-md-0">
+                              <div class="icon icon-a text-white mr-3">
+                                <i class="ti-cup icon-lg ml-3"></i>
+                              </div>
+                              <div class="content text-white">
+                                <div class="d-flex flex-wrap align-items-center mb-2 mt-3 mt-xl-1">
+                                  <h3 class="font-weight-light mr-2 mb-1">Revenue</h3>
+                                  <h3 class="mb-0">34040</h3>
+                                </div>
+                                <div class="col-8 col-md-7 d-flex border-bottom border-info align-items-center justify-content-between px-0 pb-2 mb-3">
+                                  <h5 class="mb-0">+34040</h5>
+                                  <div class="d-flex align-items-center">
+                                    <i class="ti-angle-down mr-2"></i>
+                                    <h5 class="mb-0">0.036%</h5>
+                                  </div>  
+                                </div>
+                                <p class="text-white font-weight-light pr-lg-2 pr-xl-5">The total number of sessions within the date range. It is the period time a user is actively engaged with your website, page or app, etc</p>
+                              </div>
+                            </div>
+                          </div>
+                          <div class="col-md-4 item">
+                            <div class="d-flex flex-column flex-xl-row mt-5 mt-md-0">
+                              <div class="icon icon-b text-white mr-3">
+                                <i class="ti-bar-chart icon-lg ml-3"></i>
+                              </div>
+                              <div class="content text-white">
+                                <div class="d-flex flex-wrap align-items-center mb-2 mt-3 mt-xl-1">
+                                  <h3 class="font-weight-light mr-2 mb-1">Sales</h3>
+                                  <h3 class="mb-0">$9672471</h3>
+                                </div>
+                                <div class="col-8 col-md-7 d-flex border-bottom border-info align-items-center justify-content-between px-0 pb-2 mb-3">
+                                  <h5 class="mb-0">-7.34567</h5>
+                                  <div class="d-flex align-items-center">
+                                    <i class="ti-angle-down mr-2"></i>
+                                    <h5 class="mb-0">2.036%</h5>
+                                  </div>  
+                                </div>
+                                <p class="text-white font-weight-light pr-lg-2 pr-xl-5">The total number of sessions within the date range. It is the period time a user is actively engaged with your website, page or app, etc</p>
+                              </div>
+                            </div>
+                          </div>
+                          <div class="col-md-4 item">
+                            <div class="d-flex flex-column flex-xl-row mt-5 mt-md-0">
+                              <div class="icon icon-c text-white mr-3">
+                                <i class="ti-shopping-cart-full icon-lg ml-3"></i>
+                              </div>
+                              <div class="content text-white">
+                                <div class="d-flex flex-wrap align-items-center mb-2 mt-3 mt-xl-1">
+                                  <h3 class="font-weight-light mr-2 mb-1">Purchases</h3>
+                                  <h3 class="mb-0">6358</h3>
+                                </div>
+                                <div class="col-8 col-md-7 d-flex border-bottom border-info align-items-center justify-content-between px-0 pb-2 mb-3">
+                                  <h5 class="mb-0">+9082</h5>
+                                  <div class="d-flex align-items-center">
+                                    <i class="ti-angle-down mr-2"></i>
+                                    <h5 class="mb-0">35.54%</h5>
+                                  </div>  
+                                </div>
+                                <p class="text-white font-weight-light pr-lg-2 pr-xl-5">The total number of sessions within the date range. It is the period time a user is actively engaged with your website, page or app, etc</p>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    <a class="carousel-control-prev" href="#performanceOverview" role="button" data-slide="prev">
+                      <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                      <span class="sr-only">Previous</span>
+                    </a>
+                    <a class="carousel-control-next" href="#performanceOverview" role="button" data-slide="next">
+                      <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                      <span class="sr-only">Next</span>
+                    </a>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-md-7 grid-margin stretch-card">
+              <div class="card">
+                <div class="card-body">
+                  <p class="card-title mb-0">Top Products</p>
+                  <div class="table-responsive">
+                    <table class="table table-striped table-borderless">
+                      <thead>
+                        <tr>
+                          <th>Product</th>
+                          <th>Price</th>
+                          <th>Date</th>
+                          <th>Status</th>
+                        </tr>  
+                      </thead>
+                      <tbody>
+                        <tr>
+                          <td>Search Engine Marketing</td>
+                          <td class="font-weight-bold">$362</td>
+                          <td>21 Sep 2018</td>
+                          <td class="font-weight-medium text-success">Completed</td>
+                        </tr>
+                        <tr>
+                          <td>Search Engine Optimization</td>
+                          <td class="font-weight-bold">$116</td>
+                          <td>13 Jun 2018</td>
+                          <td class="font-weight-medium text-success">Completed</td>
+                        </tr>
+                        <tr>
+                          <td>Display Advertising</td>
+                          <td class="font-weight-bold">$551</td>
+                          <td>28 Sep 2018</td>
+                          <td class="font-weight-medium text-warning">Pending</td>
+                        </tr>
+                        <tr>
+                          <td>Pay Per Click Advertising</td>
+                          <td class="font-weight-bold">$523</td>
+                          <td>30 Jun 2018</td>
+                          <td class="font-weight-medium text-warning">Pending</td>
+                        </tr>
+                        <tr>
+                          <td>E-Mail Marketing</td>
+                          <td class="font-weight-bold">$781</td>
+                          <td>01 Nov 2018</td>
+                          <td class="font-weight-medium text-danger">Cancelled</td>
+                        </tr>
+                        <tr>
+                          <td>Referral Marketing</td>
+                          <td class="font-weight-bold">$283</td>
+                          <td>20 Mar 2018</td>
+                          <td class="font-weight-medium text-warning">Pending</td>
+                        </tr>
+                        <tr>
+                          <td>Social media marketing</td>
+                          <td class="font-weight-bold">$897</td>
+                          <td>26 Oct 2018</td>
+                          <td class="font-weight-medium text-success">Completed</td>
+                        </tr>
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="col-md-5 grid-margin stretch-card">
+							<div class="card">
+								<div class="card-body">
+									<h4 class="card-title">To Do Lists</h4>
+									<div class="list-wrapper pt-2">
+										<ul class="d-flex flex-column-reverse todo-list todo-list-custom">
+											<li>
+												<div class="form-check form-check-flat">
+													<label class="form-check-label">
+														<input class="checkbox" type="checkbox">
+														Meeting with Urban Team
+													</label>
+												</div>
+												<i class="remove ti-close"></i>
+											</li>
+											<li class="completed">
+												<div class="form-check form-check-flat">
+													<label class="form-check-label">
+														<input class="checkbox" type="checkbox" checked>
+														Duplicate a project for new customer
+													</label>
+												</div>
+												<i class="remove ti-close"></i>
+											</li>
+											<li>
+												<div class="form-check form-check-flat">
+													<label class="form-check-label">
+														<input class="checkbox" type="checkbox">
+														Project meeting with CEO
+													</label>
+												</div>
+												<i class="remove ti-close"></i>
+											</li>
+											<li class="completed">
+												<div class="form-check form-check-flat">
+													<label class="form-check-label">
+														<input class="checkbox" type="checkbox" checked>
+														Follow up of team zilla
+													</label>
+												</div>
+												<i class="remove ti-close"></i>
+											</li>
+											<li>
+												<div class="form-check form-check-flat">
+													<label class="form-check-label">
+														<input class="checkbox" type="checkbox">
+														Level up for Antony
+													</label>
+												</div>
+												<i class="remove ti-close"></i>
+											</li>
+										</ul>
+                  </div>
+                  <div class="add-items d-flex mb-0 mt-2">
+										<input type="text" class="form-control todo-list-input"  placeholder="Add new task">
+										<button class="add btn btn-icon text-primary todo-list-add-btn bg-transparent"><i class="ti-location-arrow"></i></button>
+									</div>
+								</div>
+							</div>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-md-12 grid-margin stretch-card">
+              <div class="card position-relative">
+                <div class="card-body">
+                  <p class="card-title">Detailed Reports</p>
+                  <div id="detailedReports" class="carousel slide detailed-report-carousel position-static pt-2" data-ride="carousel">
+                    <div class="carousel-inner">
+                      <div class="carousel-item active">
+                        <div class="row">
+                          <div class="col-md-12 col-xl-3 d-flex flex-column justify-content-center">
+                            <div class="ml-xl-4">
+                              <h1>$34040</h1>
+                              <h3 class="font-weight-light mb-xl-4">North America</h3>
+                              <p class="text-muted mb-2 mb-xl-0">The total number of sessions within the date range. It is the period time a user is actively engaged with your website, page or app, etc</p>
+                            </div>  
+                            </div>
+                          <div class="col-md-12 col-xl-9">
+                            <div class="row">
+                              <div class="col-md-6">
+                                <div class="table-responsive mb-3 mb-md-0">
+                                  <table class="table table-borderless report-table">
+                                    <tr>
+                                      <td class="text-muted">Illinois</td>
+                                      <td class="w-100 px-0">
+                                        <div class="progress progress-md mx-4">
+                                          <div class="progress-bar bg-success" role="progressbar" style="width: 70%" aria-valuenow="70" aria-valuemin="0" aria-valuemax="100"></div>
+                                        </div>
+                                      </td>
+                                      <td><h5 class="font-weight-bold mb-0">713</h5></td>
+                                    </tr>
+                                    <tr>
+                                      <td class="text-muted">Washington</td>
+                                      <td class="w-100 px-0">
+                                        <div class="progress progress-md mx-4">
+                                          <div class="progress-bar bg-warning" role="progressbar" style="width: 30%" aria-valuenow="30" aria-valuemin="0" aria-valuemax="100"></div>
+                                        </div>
+                                      </td>
+                                      <td><h5 class="font-weight-bold mb-0">583</h5></td>
+                                    </tr>
+                                    <tr>
+                                      <td class="text-muted">Mississippi</td>
+                                      <td class="w-100 px-0">
+                                        <div class="progress progress-md mx-4">
+                                          <div class="progress-bar bg-danger" role="progressbar" style="width: 95%" aria-valuenow="95" aria-valuemin="0" aria-valuemax="100"></div>
+                                        </div>
+                                      </td>
+                                      <td><h5 class="font-weight-bold mb-0">924</h5></td>
+                                    </tr>
+                                    <tr>
+                                      <td class="text-muted">California</td>
+                                      <td class="w-100 px-0">
+                                        <div class="progress progress-md mx-4">
+                                          <div class="progress-bar bg-primary" role="progressbar" style="width: 60%" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100"></div>
+                                        </div>
+                                      </td>
+                                      <td><h5 class="font-weight-bold mb-0">664</h5></td>
+                                    </tr>
+                                    <tr>
+                                      <td class="text-muted">Maryland</td>
+                                      <td class="w-100 px-0">
+                                        <div class="progress progress-md mx-4">
+                                          <div class="progress-bar bg-success" role="progressbar" style="width: 40%" aria-valuenow="40" aria-valuemin="0" aria-valuemax="100"></div>
+                                        </div>
+                                      </td>
+                                      <td><h5 class="font-weight-bold mb-0">560</h5></td>
+                                    </tr>
+                                    <tr>
+                                      <td class="text-muted">Alaska</td>
+                                      <td class="w-100 px-0">
+                                        <div class="progress progress-md mx-4">
+                                          <div class="progress-bar bg-danger" role="progressbar" style="width: 75%" aria-valuenow="75" aria-valuemin="0" aria-valuemax="100"></div>
+                                        </div>
+                                      </td>
+                                      <td><h5 class="font-weight-bold mb-0">793</h5></td>
+                                    </tr>
+                                  </table>
+                                </div>
+                              </div>
+                              <div class="col-md-6 mt-3">
+                                <canvas id="north-america-chart"></canvas>
+                                <div id="north-america-legend"></div>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="carousel-item">
+                        <div class="row">
+                          <div class="col-md-12 col-xl-3 d-flex flex-column justify-content-center">
+                            <div class="ml-xl-4">
+                              <h1>$61321</h1>
+                              <h3 class="font-weight-light mb-xl-4">South America</h3>
+                              <p class="text-muted mb-2 mb-xl-0">It is the period time a user is actively engaged with your website, page or app, etc. The total number of sessions within the date range. </p>
+                            </div>
+                          </div>
+                          <div class="col-md-12 col-xl-9">
+                            <div class="row">
+                              <div class="col-md-6">
+                                <div class="table-responsive mb-3 mb-md-0">
+                                  <table class="table table-borderless report-table">
+                                    <tr>
+                                      <td class="text-muted">Brazil</td>
+                                      <td class="w-100 px-0">
+                                        <div class="progress progress-md mx-4">
+                                          <div class="progress-bar bg-success" role="progressbar" style="width: 70%" aria-valuenow="70" aria-valuemin="0" aria-valuemax="100"></div>
+                                        </div>
+                                      </td>
+                                      <td><h5 class="font-weight-bold mb-0">613</h5></td>
+                                    </tr>
+                                    <tr>
+                                      <td class="text-muted">Argentina</td>
+                                      <td class="w-100 px-0">
+                                        <div class="progress progress-md mx-4">
+                                          <div class="progress-bar bg-warning" role="progressbar" style="width: 30%" aria-valuenow="30" aria-valuemin="0" aria-valuemax="100"></div>
+                                        </div>
+                                      </td>
+                                      <td><h5 class="font-weight-bold mb-0">483</h5></td>
+                                    </tr>
+                                    <tr>
+                                      <td class="text-muted">Peru</td>
+                                      <td class="w-100 px-0">
+                                        <div class="progress progress-md mx-4">
+                                          <div class="progress-bar bg-danger" role="progressbar" style="width: 95%" aria-valuenow="95" aria-valuemin="0" aria-valuemax="100"></div>
+                                        </div>
+                                      </td>
+                                      <td><h5 class="font-weight-bold mb-0">824</h5></td>
+                                    </tr>
+                                    <tr>
+                                      <td class="text-muted">Chile</td>
+                                      <td class="w-100 px-0">
+                                        <div class="progress progress-md mx-4">
+                                          <div class="progress-bar bg-primary" role="progressbar" style="width: 60%" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100"></div>
+                                        </div>
+                                      </td>
+                                      <td><h5 class="font-weight-bold mb-0">564</h5></td>
+                                    </tr>
+                                    <tr>
+                                      <td class="text-muted">Colombia</td>
+                                      <td class="w-100 px-0">
+                                        <div class="progress progress-md mx-4">
+                                          <div class="progress-bar bg-success" role="progressbar" style="width: 40%" aria-valuenow="40" aria-valuemin="0" aria-valuemax="100"></div>
+                                        </div>
+                                      </td>
+                                      <td><h5 class="font-weight-bold mb-0">460</h5></td>
+                                    </tr>
+                                    <tr>
+                                      <td class="text-muted">Uruguay</td>
+                                      <td class="w-100 px-0">
+                                        <div class="progress progress-md mx-4">
+                                          <div class="progress-bar bg-danger" role="progressbar" style="width: 75%" aria-valuenow="75" aria-valuemin="0" aria-valuemax="100"></div>
+                                        </div>
+                                      </td>
+                                      <td><h5 class="font-weight-bold mb-0">693</h5></td>
+                                    </tr>
+                                  </table>
+                                </div>
+                              </div>
+                              <div class="col-md-6 mt-3">
+                                <canvas id="south-america-chart"></canvas>
+                                <div id="south-america-legend"></div>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    <a class="carousel-control-prev" href="#detailedReports" role="button" data-slide="prev">
+                      <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                      <span class="sr-only">Previous</span>
+                    </a>
+                    <a class="carousel-control-next" href="#detailedReports" role="button" data-slide="next">
+                      <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                      <span class="sr-only">Next</span>
+                    </a>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-md-4 stretch-card grid-margin grid-margin-md-0">
+              <div class="card">
+                <div class="card-body">
+                  <p class="card-title mb-0">Projects</p>
+                  <div class="table-responsive">
+                    <table class="table table-borderless">
+                      <thead>
+                        <tr>
+                          <th class="pl-0 border-bottom">Places</th>
+                          <th class="border-bottom">Orders</th>
+                          <th class="border-bottom">Users</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        <tr>
+                          <td class="text-muted pl-0">Kentucky</td>
+                          <td><p class="mb-0"><span class="font-weight-bold mr-2">65</span>(2.15%)</p></td>
+                          <td class="text-muted">65</td>
+                        </tr>
+                        <tr>
+                          <td class="text-muted pl-0">Ohio</td>
+                          <td><p class="mb-0"><span class="font-weight-bold mr-2">54</span>(3.25%)</p></td>
+                          <td class="text-muted">51</td>
+                        </tr>
+                        <tr>
+                          <td class="text-muted pl-0">Nevada</td>
+                          <td><p class="mb-0"><span class="font-weight-bold mr-2">22</span>(2.22%)</p></td>
+                          <td class="text-muted">32</td>
+                        </tr>
+                        <tr>
+                          <td class="text-muted pl-0">North Carolina</td>
+                          <td><p class="mb-0"><span class="font-weight-bold mr-2">46</span>(3.27%)</p></td>
+                          <td class="text-muted">15</td>
+                        </tr>
+                        <tr>
+                          <td class="text-muted pl-0">Montana</td>
+                          <td><p class="mb-0"><span class="font-weight-bold mr-2">17</span>(1.25%)</p></td>
+                          <td class="text-muted">25</td>
+                        </tr>
+                        <tr>
+                          <td class="text-muted pl-0">Nevada</td>
+                          <td><p class="mb-0"><span class="font-weight-bold mr-2">52</span>(3.11%)</p></td>
+                          <td class="text-muted">71</td>
+                        </tr>
+                        <tr>
+                          <td class="text-muted pl-0 pb-0">Louisiana</td>
+                          <td class="pb-0"><p class="mb-0"><span class="font-weight-bold mr-2">25</span>(1.32%)</p></td>
+                          <td class="text-muted pb-0">14</td>
+                        </tr>
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="col-md-4 stretch-card">
+              <div class="row">
+                <div class="col-md-12 grid-margin stretch-card">
+                  <div class="card">
+                    <div class="card-body">
+                      <p class="card-title">Charts</p>
+                      <div class="charts-data">
+                        <div class="mt-3">
+                          <p class="text-muted mb-0">Orders</p>
+                          <div class="d-flex justify-content-between align-items-center">
+                            <div class="progress progress-md flex-grow-1 mr-4">
+                              <div class="progress-bar bg-success" role="progressbar" style="width: 95%" aria-valuenow="95" aria-valuemin="0" aria-valuemax="100"></div>
+                            </div>
+                            <p class="text-muted mb-0">5k</p>
+                          </div>
+                        </div>
+                        <div class="mt-3">
+                          <p class="text-muted mb-0">Users</p>
+                          <div class="d-flex justify-content-between align-items-center">
+                            <div class="progress progress-md flex-grow-1 mr-4">
+                              <div class="progress-bar bg-success" role="progressbar" style="width: 35%" aria-valuenow="35" aria-valuemin="0" aria-valuemax="100"></div>
+                            </div>
+                            <p class="text-muted mb-0">3k</p>
+                          </div>
+                        </div>
+                        <div class="mt-3">
+                          <p class="text-muted mb-0">Downloads</p>
+                          <div class="d-flex justify-content-between align-items-center">
+                            <div class="progress progress-md flex-grow-1 mr-4">
+                              <div class="progress-bar bg-success" role="progressbar" style="width: 48%" aria-valuenow="48" aria-valuemin="0" aria-valuemax="100"></div>
+                            </div>
+                            <p class="text-muted mb-0">992</p>
+                          </div>
+                        </div>
+                        <div class="mt-3">
+                          <p class="text-muted mb-0">Visitors</p>
+                          <div class="d-flex justify-content-between align-items-center">
+                            <div class="progress progress-md flex-grow-1 mr-4">
+                              <div class="progress-bar bg-success" role="progressbar" style="width: 25%" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100"></div>
+                            </div>
+                            <p class="text-muted mb-0">687</p>
+                          </div>
+                        </div>
+                      </div>  
+                    </div>
+                  </div>
+                </div>
+                <div class="col-md-12 stretch-card grid-margin grid-margin-md-0">
+                  <div class="card data-icon-card-primary">
+                    <div class="card-body">
+                      <p class="card-title text-white">Number of Meetings</p>                      
+                      <div class="row">
+                        <div class="col-8 text-white">
+                          <h3>3404</h3>
+                          <p class="text-white font-weight-light mb-0">The total number of sessions within the date range. It is the period time</p>
+                        </div>
+                        <div class="col-4 background-icon">
+                          <i class="ti-calendar"></i>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="col-md-4 stretch-card">
+              <div class="card">
+                <div class="card-body">
+                  <p class="card-title">Notifications</p>
+                  <ul class="icon-data-list">
+                    <li>
+                      <p class="text-primary mb-1">Isabella Becker</p>
+                      <p class="text-muted">Sales dashboard have been created</p>
+                      <small class="text-muted">9:30 am</small>
+                    </li>
+                    <li>
+                      <p class="text-primary mb-1">Adam Warren</p>
+                      <p class="text-muted">You have done a great job #TW11109872</p>
+                      <small class="text-muted">10:30 am</small>
+                    </li>
+                    <li>
+                      <p class="text-primary mb-1">Leonard Thornton</p>
+                      <p class="text-muted">Sales dashboard have been created</p>
+                      <small class="text-muted">11:30 am</small>
+                    </li>
+                    <li>
+                      <p class="text-primary mb-1">George Morrison</p>
+                      <p class="text-muted">Sales dashboard have been created</p>
+                      <small class="text-muted">8:50 am</small>
+                    </li>
+                    <li>
+                      <p class="text-primary mb-1">Ryan Cortez</p>
+                      <p class="text-muted">Herbs are fun and easy to grow.</p>
+                      <small class="text-muted">9:00 am</small>
+                    </li>
+                    
+                  </ul>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <!-- content-wrapper ends -->
