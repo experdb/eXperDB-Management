@@ -22,6 +22,8 @@
 <!-- Plugin js for this page-->
 <script src="/vertical-dark-sidebar/js/vendors/datatables.net/jquery.dataTables.js"></script>
 <script src="/vertical-dark-sidebar/js/vendors/datatables.net-bs4/dataTables.bootstrap4.js"></script>
+<script src="/js/dt/dataTables.select.min.js" type="text/javascript"></script>
+<script src="/js/dt/dataTables.checkboxes.min.js" type="text/javascript"></script>
 <!-- End plugin js for this page-->
 <!-- inject:js -->
 <script src="/vertical-dark-sidebar/js/off-canvas.js"></script>

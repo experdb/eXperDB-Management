@@ -162,8 +162,8 @@ function getddlDataList(){
 		},
 		success : function(data) {
 			if(data.length > 0){
-// 				tableDDL.rows({selected: true}).deselect();
-// 				tableData.rows({selected: true}).deselect();
+				tableDDL.rows({selected: true}).deselect();
+				tableData.rows({selected: true}).deselect();
 				tableDDL.clear().draw();
 				tableDDL.rows.add(data).draw();
 			}else{
@@ -205,8 +205,8 @@ function getdataDataList(){
 		},
 		success : function(data) {
 			if(data.length > 0){
-// 				tableDDL.rows({selected: true}).deselect();
-// 	 			tableData.rows({selected: true}).deselect();
+				tableDDL.rows({selected: true}).deselect();
+	 			tableData.rows({selected: true}).deselect();
 	 			tableData.clear().draw();
 	 			tableData.rows.add(data).draw();
 			}else{
@@ -847,16 +847,12 @@ function fn_ImmediateStart(gbn){
 				</select></td>
 			</tr>
 			<tr>
-				<th scope="row" class="t9"><spring:message
-						code="data_transfer.ip" /></th>
-				<td><input type="text" name="ddl_ipadr" id="ddl_ipadr"
-					class="txt t3" /></td>
+				<th scope="row" class="t9"><spring:message code="data_transfer.ip" /></th>
+				<td><input type="text" name="ddl_ipadr" id="ddl_ipadr" class="txt t3" /></td>
 				<th scope="row" class="t9">Database</th>
-				<td><input type="text" name="ddl_dtb_nm" id="ddl_dtb_nm"
-					class="txt t3" /></td>
+				<td><input type="text" name="ddl_dtb_nm" id="ddl_dtb_nm" class="txt t3" /></td>
 				<th scope="row" class="t9">Schema</th>
-				<td><input type="text" name="ddl_scm_nm" id="ddl_scm_nm"
-					class="txt t3" /></td>
+				<td><input type="text" name="ddl_scm_nm" id="ddl_scm_nm" class="txt t3" /></td>
 			</tr>
 		</tbody>
 	</table>
@@ -873,40 +869,29 @@ function fn_ImmediateStart(gbn){
 		</colgroup>
 		<tbody>
 			<tr>
-				<th scope="row" class="t9"><spring:message
-						code="common.work_name" /></th>
-				<td><input type="text" name="data_wrk_nm" id="data_wrk_nm"
-					class="txt t3" maxlength="25" /></td>
-				<th scope="row" class="t9"><spring:message
-						code="common.division" /></th>
-				<td><select name="data_dbms_dscd" id="data_dbms_dscd"
-					class="select t5">
-						<option value="source_system"><spring:message
-								code="migration.source_system" /></option>
-						<option value="target_system"><spring:message
-								code="migration.target_system" /></option>
+				<th scope="row" class="t9"><spring:message code="common.work_name" /></th>
+				<td><input type="text" name="data_wrk_nm" id="data_wrk_nm" class="txt t3" maxlength="25" /></td>
+				<th scope="row" class="t9"><spring:message code="common.division" /></th>
+				<td><select name="data_dbms_dscd" id="data_dbms_dscd" class="select t5">
+						<option value="source_system"><spring:message code="migration.source_system" /></option>
+						<option value="target_system"><spring:message code="migration.target_system" /></option>
 				</select></td>
-				<th scope="row" class="t9">DBMS<spring:message
-						code="common.division" /></th>
+				<th scope="row" class="t9">DBMS<spring:message code="common.division" /></th>
 				<td><select name="dbms_dscd" id="dbms_dscd" class="select t5">
 						<option value=""><spring:message code="common.total" /></option>
 						<c:forEach var="dbmsGrb" items="${dbmsGrb}" varStatus="status">
-							<option value="<c:out value="${dbmsGrb.sys_cd}"/>"><c:out
-									value="${dbmsGrb.sys_cd_nm}" /></option>
+							<option value="<c:out value="${dbmsGrb.sys_cd}"/>">
+							<c:out value="${dbmsGrb.sys_cd_nm}" /></option>
 						</c:forEach>
 				</select></td>
 			</tr>
 			<tr>
-				<th scope="row" class="t9"><spring:message
-						code="data_transfer.ip" /></th>
-				<td><input type="text" name="data_ipadr" id="data_ipadr"
-					class="txt t3" /></td>
+				<th scope="row" class="t9"><spring:message code="data_transfer.ip" /></th>
+				<td><input type="text" name="data_ipadr" id="data_ipadr" class="txt t3" /></td>
 				<th scope="row" class="t9">Database</th>
-				<td><input type="text" name="data_dtb_nm" id="data_dtb_nm"
-					class="txt t3" /></td>
+				<td><input type="text" name="data_dtb_nm" id="data_dtb_nm" class="txt t3" /></td>
 				<th scope="row" class="t9">Schema</th>
-				<td><input type="text" name="data_scm_nm" id="data_scm_nm"
-					class="txt t3" /></td>
+				<td><input type="text" name="data_scm_nm" id="data_scm_nm" class="txt t3" /></td>
 			</tr>
 		</tbody>
 	</table>
