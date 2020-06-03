@@ -1,3 +1,13 @@
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<%@ taglib uri="http://tiles.apache.org/tags-tiles" prefix="tiles"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<%@ taglib prefix="form" uri="http://www.springframework.org/tags/form"%>
+<%@ taglib prefix="ui" uri="http://egovframework.gov/ctl/ui"%>
+<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
+<%@ taglib prefix="spring" uri="http://www.springframework.org/tags"%>
+<%@include file="./cmmn/cs2.jsp"%> 
+
 <link rel="stylesheet" href="/vertical-dark-sidebar/css/vendors/ti-icons/css/themify-icons.css">
 <link rel="stylesheet" href="/vertical-dark-sidebar/css/vendors/css/vendor.bundle.base.css">
 <!-- endinject -->
@@ -26,7 +36,7 @@
 <script src="/vertical-dark-sidebar/js/data-table.js"></script>
 <!-- End custom js for this page-->
       <!-- partial -->
-        <div class="content-wrapper">
+        <div class="content-wrapper main_scroll" id="bodyDiv" >
           <div class="row">
             <div class="col-md-12 grid-margin">
               <div class="row">

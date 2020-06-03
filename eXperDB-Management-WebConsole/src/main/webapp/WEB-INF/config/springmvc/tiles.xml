@@ -8,6 +8,7 @@
 		<put-attribute name="topMenu" value="/WEB-INF/view/layout/topMenu.jsp" />
 		<put-attribute name="treeMenu" value="/WEB-INF/view/layout/treeMenu.jsp" />
 		<put-attribute name="contents" value="" />
+		<put-attribute name="footer" value="/WEB-INF/view/layout/footer.jsp" />
 	</definition>
 
 	<definition name="experdb/*" extends="default">

@@ -47,10 +47,14 @@
     })
 
     //Close other submenu in sidebar on opening any
-
+/*
     sidebar.on('show.bs.collapse', '.collapse', function() {
       sidebar.find('.collapse.show').collapse('hide');
-    });
+    });*/
+    
+    sidebar.on('show.bs.collapse_dapth', '.collapse_dapth', function() {
+        sidebar.find('.collapse_dapth.show').collapse('hide');
+      });
 
 
     //Change sidebar and content-wrapper height
@@ -74,12 +78,28 @@
     }
 
     $('[data-toggle="minimize"]').on("click", function() {
-      if ((body.hasClass('sidebar-toggle-display')) || (body.hasClass('sidebar-absolute'))) {
-        body.toggleClass('sidebar-hidden');
-      } else {
-        body.toggleClass('sidebar-icon-only');
-      }
-    });
+        if ((body.hasClass('sidebar-toggle-display')) || (body.hasClass('sidebar-absolute'))) {
+      	  body.toggleClass('sidebar-hidden');
+        } else {
+      	  body.toggleClass('sidebar-icon-only');
+
+	      	if($("#lft_tree").hasClass("left_scroll") === true) {
+	      		$("#lft_tree").attr('class', 'nav');
+	      		
+	      		$("#lft_tree").removeAttr("style");
+	      		$("#lft_tree").css("margin-top","-60px");
+	      		$("#lft_tree").css("max-height","calc(100vh - 160px)");	 
+	      		$("#lft_tree").css("line-height","0");
+	      	} else {
+	      		$("#lft_tree").attr('class', 'nav left_scroll');
+
+	      		$("#lft_tree").css("overflow-y","auto");
+	      		$("#lft_tree").css("position","fixed");
+/*	      		$("#lft_tree").attr('class', 'nav left_scroll');
+	      		$("#lft_tree").css("overflow","auto");*/
+	      	}
+        }
+      });
 
     //checkbox and radios
     $(".form-check label,.form-radio label").append('<i class="input-helper"></i>');

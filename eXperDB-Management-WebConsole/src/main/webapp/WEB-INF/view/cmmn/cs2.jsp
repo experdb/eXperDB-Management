@@ -11,17 +11,26 @@
 <!-- endinject -->
 <!-- plugin css for this page -->
 <link rel="stylesheet" href="/vertical-dark-sidebar/css/vendors/datatables.net-bs4/dataTables.bootstrap4.css">
+<link rel="stylesheet" href="/vertical-dark-sidebar/css/vendors/jquery-toast-plugin/jquery.toast.min.css">
+<link rel="stylesheet" href="/vertical-dark-sidebar/css/vendors/font-awesome/css/font-awesome.min.css">
+<link rel="stylesheet" href="/vertical-dark-sidebar/css/vendors/mdi/css/materialdesignicons.min.css">
 <!-- End plugin css for this page -->
+
 <!-- inject:css -->
 <link rel="stylesheet" href="/vertical-dark-sidebar/css/style.css">
+<link rel="stylesheet" href="/vertical-dark-sidebar/css/style_layout.css">
+<link rel="stylesheet" href="/vertical-dark-sidebar/css/bstreeview.css">
+
 <!-- endinject -->
 <link rel="shortcut icon" href="../../../../images/favicon.png" />
+
 <!-- plugins:js -->
 <script src="/vertical-dark-sidebar/js/vendors/js/vendor.bundle.base.js"></script>
 <!-- endinject -->
 <!-- Plugin js for this page-->
 <script src="/vertical-dark-sidebar/js/vendors/datatables.net/jquery.dataTables.js"></script>
 <script src="/vertical-dark-sidebar/js/vendors/datatables.net-bs4/dataTables.bootstrap4.js"></script>
+<script src="/vertical-dark-sidebar/js/vendors/jquery-toast-plugin/jquery.toast.min.js"></script>
 <script src="/js/dt/dataTables.select.min.js" type="text/javascript"></script>
 <script src="/js/dt/dataTables.checkboxes.min.js" type="text/javascript"></script>
 <!-- End plugin js for this page-->
@@ -31,6 +40,13 @@
 <script src="/vertical-dark-sidebar/js/template.js"></script>
 <script src="/vertical-dark-sidebar/js/settings.js"></script>
 <script src="/vertical-dark-sidebar/js/todolist.js"></script>
+
+<!-- Custom js for this page-->
+<script src="/vertical-dark-sidebar/js/desktop-notification.js"></script>
+<script src="/vertical-dark-sidebar/js/commom.js"></script>
+<script src="/vertical-dark-sidebar/js/bstreeview.js"></script>
+<!-- End custom js for this page-->
+
 <!-- endinject -->
 <!-- Custom js for this page-->
 <script src="/vertical-dark-sidebar/js/data-table.js"></script>

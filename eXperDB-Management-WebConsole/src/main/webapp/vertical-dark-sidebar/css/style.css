@@ -14915,6 +14915,7 @@ a.close.disabled {
 }
 
 .modal-dialog-scrollable .modal-header,
+.modal-dialog-scrollable .top-modal-header,
 .modal-dialog-scrollable .modal-footer {
   flex-shrink: 0;
 }
@@ -15061,6 +15062,12 @@ a.close.disabled {
 @media (min-width: 1200px) {
   .modal-xl {
     max-width: 1140px;
+  }
+}
+
+@media (min-width: 800px) {
+  .modal-xl-top {
+    max-width: 750px;
   }
 }
 
@@ -27976,6 +27983,7 @@ div.tagsinput span.tag a {
 
 .auth .auth-form-light {
   background: #ffffff;
+  background: rgba(255, 255, 255, 0.4);
 }
 
 .auth .auth-form-light select {
@@ -28123,6 +28131,26 @@ div.tagsinput span.tag a {
   }
 }
 
+
+.documentation .content-wrapper-login {
+  padding-top: 0;
+  min-height: calc(100vh - 75px);
+}
+
+.content-wrapper-login {
+  background: #fff url(../../images/login_bg.png) center center no-repeat;
+  padding: 2.68rem 2.5rem;
+  width: 100%;
+  -webkit-flex-grow: 1;
+  flex-grow: 1;
+}
+
+@media (max-width: 767px) {
+  .content-wrapper-login {
+    padding: 1.5rem 1.5rem;
+  }
+}
+
 /* Sidebar */
 .sidebar {
   min-height: calc(100vh - 70px);
@@ -28139,7 +28167,7 @@ div.tagsinput span.tag a {
 }
 
 .sidebar .nav {
-  overflow: hidden;
+/*   overflow: hidden; */
   flex-wrap: nowrap;
   flex-direction: column;
   margin-bottom: 60px;
@@ -28263,7 +28291,7 @@ div.tagsinput span.tag a {
 }
 
 .sidebar .nav:not(.sub-menu) {
-  margin-top: 1.45rem;
+  /* margin-top: 1.45rem; */
   margin-left: 0.375rem;
   margin-right: 0.375rem;
 }
@@ -28296,9 +28324,9 @@ div.tagsinput span.tag a {
   margin-bottom: 0;
   margin-top: 0;
   list-style: none;
-  padding: 0.25rem 0 0 3.07rem;
+  padding: 0.25rem 0 0 1.25rem;
   background: #e7e7e7;
-  padding-bottom: 12px;
+  padding-bottom: 8px;
 }
 
 .sidebar .nav.sub-menu .nav-item {
@@ -28312,7 +28340,7 @@ div.tagsinput span.tag a {
   position: absolute;
   margin-top: 16px;
   border-radius: 50%;
-  background: #b2b2b2;
+/*    background: #b2b2b2; */
 }
 
 .sidebar .nav.sub-menu .nav-item .nav-link {
@@ -28533,7 +28561,7 @@ div.tagsinput span.tag a {
 }
 
 .sidebar-icon-only .navbar .navbar-menu-wrapper .navbar-toggler:not(.navbar-toggler-right) {
-  transform: rotate(90deg);
+/*   transform: rotate(90deg); */
 }
 
 @media (max-width: 991px) {
@@ -29239,19 +29267,19 @@ div.tagsinput span.tag a {
     align-items: center;
     background: #e7e7e7;
     padding: 0.5rem 1.4rem;
-    left: 70px;
+    left: 69px;
     position: absolute;
     text-align: left;
     top: 0;
     bottom: 0;
-    width: 190px;
+    width: 240px;
     z-index: 1;
     line-height: 1.8;
     -webkit-box-shadow: 4px 0px 7px 0px rgba(182, 185, 189, 0.25);
     box-shadow: 4px 0px 7px 0px rgba(182, 185, 189, 0.25);
   }
   .sidebar-dark.sidebar-icon-only .sidebar .nav .nav-item.hover-open .nav-link .menu-title {
-    background: #282f3a;
+     background: #282f3a;
   }
   .rtl.sidebar-icon-only .sidebar .nav .nav-item.hover-open .nav-link .menu-title {
     left: auto;
@@ -29274,12 +29302,12 @@ div.tagsinput span.tag a {
   }
   .sidebar-icon-only .sidebar .nav .nav-item.hover-open .collapse,
   .sidebar-icon-only .sidebar .nav .nav-item.hover-open .collapsing {
-    display: block;
+     display: block;
     background: #ededed;
     border-radius: 0 0 5px 0;
     position: absolute;
-    left: 70px;
-    width: 190px;
+    left: 69px;
+    width: 240px;
     -webkit-box-shadow: 4px 4px 7px 0px rgba(182, 185, 189, 0.25);
     box-shadow: 4px 4px 7px 0px rgba(182, 185, 189, 0.25);
   }
@@ -29287,7 +29315,7 @@ div.tagsinput span.tag a {
     background: #282f3a;
   }
   .rtl.sidebar-icon-only .sidebar .nav .nav-item.hover-open .collapse, .rtl.sidebar-icon-only .sidebar .nav .nav-item.hover-open .collapsing {
-    left: auto;
+     left: auto;
     right: 70px;
     border-radius: 0 0 0 5px;
     -webkit-box-shadow: -4px 4px 7px 0px rgba(182, 185, 189, 0.25);
@@ -29300,10 +29328,10 @@ div.tagsinput span.tag a {
     border-radius: 0;
   }
   .sidebar-icon-only .sidebar .nav.sub-menu {
-    padding: 0 0 0 1.5rem;
+	padding: 0 0 0.2rem 1.5rem;
   }
   .sidebar-dark.sidebar-icon-only .sidebar .nav.sub-menu {
-    background: #282f3a;
+    /* background: #282f3a; */
   }
   .sidebar-icon-only .sidebar .nav.sub-menu .nav-item .nav-link {
     text-align: left;
