@@ -250,9 +250,6 @@ add constraint fk_t_db2pg_trsf_wrk_inf_03 foreign key (db2pg_usr_qry_id) referen
 alter table t_db2pg_trsf_wrk_inf
 add constraint fk_t_db2pg_trsf_wrk_inf_04 foreign key (wrk_id) references t_wrkcng_i (wrk_id);
 
-alter table t_migexe_g
-add constraint fk_t_migexe_g_01 foreign key (wrk_id) references t_wrkcng_i (wrk_id);
-
 alter table t_db2pg_ddl_wrk_inf add constraint pk_t_db2pg_ddl_wrk_inf 
 primary key (db2pg_ddl_wrk_id);
  
@@ -353,3 +350,10 @@ INSERT INTO T_MNU_I(MNU_ID, MNU_CD, MNU_NM, HGR_MNU_ID, FRST_REGR_ID, FRST_REG_D
 INSERT INTO T_MNU_I(MNU_ID, MNU_CD, MNU_NM, HGR_MNU_ID, FRST_REGR_ID, FRST_REG_DTM, LST_MDFR_ID, LST_MDF_DTM)VALUES(nextval('q_mnu_i_01'), 'MN00016', 	'설정정보관리', 		'','experdb', clock_timestamp(), 'experdb', clock_timestamp());
 INSERT INTO T_MNU_I(MNU_ID, MNU_CD, MNU_NM, HGR_MNU_ID, FRST_REGR_ID, FRST_REG_DTM, LST_MDFR_ID, LST_MDF_DTM)VALUES(nextval('q_mnu_i_01'), 'MN00017', 	'수행이력', 		'','experdb', clock_timestamp(), 'experdb', clock_timestamp());
 
+INSERT INTO T_USRMNUAUT_I(USR_MNU_AUT_ID, USR_ID, MNU_ID, READ_AUT_YN, WRT_AUT_YN, FRST_REGR_ID, FRST_REG_DTM, LST_MDFR_ID, LST_MDF_DTM)VALUES(nextval('q_usrmnuaut_i_01'), 'experdb', 40, 'Y', 'Y', 'experdb', clock_timestamp(), 'experdb', clock_timestamp());
+INSERT INTO T_USRMNUAUT_I(USR_MNU_AUT_ID, USR_ID, MNU_ID, READ_AUT_YN, WRT_AUT_YN, FRST_REGR_ID, FRST_REG_DTM, LST_MDFR_ID, LST_MDF_DTM)VALUES(nextval('q_usrmnuaut_i_01'), 'experdb', 41, 'Y', 'Y', 'experdb', clock_timestamp(), 'experdb', clock_timestamp());
+INSERT INTO T_USRMNUAUT_I(USR_MNU_AUT_ID, USR_ID, MNU_ID, READ_AUT_YN, WRT_AUT_YN, FRST_REGR_ID, FRST_REG_DTM, LST_MDFR_ID, LST_MDF_DTM)VALUES(nextval('q_usrmnuaut_i_01'), 'experdb', 42, 'Y', 'Y', 'experdb', clock_timestamp(), 'experdb', clock_timestamp());
+
+INSERT INTO T_USRMNUAUT_I(USR_MNU_AUT_ID, USR_ID, MNU_ID, READ_AUT_YN, WRT_AUT_YN, FRST_REGR_ID, FRST_REG_DTM, LST_MDFR_ID, LST_MDF_DTM)VALUES(nextval('q_usrmnuaut_i_01'), 'admin', 40, 'Y', 'Y', 'experdb', clock_timestamp(), 'experdb', clock_timestamp());
+INSERT INTO T_USRMNUAUT_I(USR_MNU_AUT_ID, USR_ID, MNU_ID, READ_AUT_YN, WRT_AUT_YN, FRST_REGR_ID, FRST_REG_DTM, LST_MDFR_ID, LST_MDF_DTM)VALUES(nextval('q_usrmnuaut_i_01'), 'admin', 41, 'Y', 'Y', 'experdb', clock_timestamp(), 'experdb', clock_timestamp());
+INSERT INTO T_USRMNUAUT_I(USR_MNU_AUT_ID, USR_ID, MNU_ID, READ_AUT_YN, WRT_AUT_YN, FRST_REGR_ID, FRST_REG_DTM, LST_MDFR_ID, LST_MDF_DTM)VALUES(nextval('q_usrmnuaut_i_01'), 'admin', 42, 'Y', 'Y', 'experdb', clock_timestamp(), 'experdb', clock_timestamp());
