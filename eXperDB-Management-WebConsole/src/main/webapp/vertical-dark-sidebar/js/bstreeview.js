@@ -165,43 +165,51 @@
         			var treeviewNew = $(templates.treeviewNew);
 
         			var treeItem;
-
-        			if (node.nodes) {
-        				treeItem = $(templates.treeviewItemLst)
-        					.attr('style', 'padding-left:' + leftPadding)
-        					.attr('id', node.id + "c")
-        					.attr('href', "#" + _this.itemIdPrefix + node.nodeId);
+        			
+        			if (node.menu_gbn == "blnck") {
+            			treeviewNew.attr('id', "");
+            			treeviewNew.attr('style', "height:3px;");
+            			treeviewNew.attr('line-height', "0px");
         			} else {
-        				treeItem = $(templates.treeviewItemLst)
-        					.attr('style', 'padding-left:' + leftPadding)
-        					.attr('id', node.id + "c")
-        					.attr('href', node.url)
-        					.attr('onclick', "fn_GoLink('"+ node.id + "')")
-        					treeItem.attr('target', "main");
-        			}
+            			if (node.nodes) {
+            				treeItem = $(templates.treeviewItemLst)
+            					.attr('style', 'padding-left:' + leftPadding)
+            					.attr('id', node.id + "c")
+            					.attr('href', "#" + _this.itemIdPrefix + node.nodeId);
+            			} else {
+            				treeItem = $(templates.treeviewItemLst)
+            					.attr('style', 'padding-left:' + leftPadding)
+            					.attr('id', node.id + "c")
+            					.attr('href', node.url)
+            					.attr('onclick', "fn_GoLink('"+ node.id + "')")
+            					treeItem.attr('target', "main");
+            			}
 
-        			// set node icon if exist.
-        			if (node.icon) {
-        				var treeItemIcon = $(templates.treeviewItemIcon).addClass(node.icon);
-        				treeItem.append(treeItemIcon);
+            			// set node icon if exist.
+            			if (node.icon) {
+            				var treeItemIcon = $(templates.treeviewItemIcon).addClass(node.icon);
+            				treeItem.append(treeItemIcon);
+            			}
+            			
+                        // Set node Text.
+                        // treeItem.append("    " + node.text);
+                         treeItem.append("&nbsp;" + node.text);
+                         
+                        if (node.menu_gbn =="server") {
+                        	treeItem.attr('style', 'color: #248afd !important; padding-left:' + leftPadding);
+                        }
+
+            			// Set Expand and Collapse icones.
+            			if (node.nodes) {
+     /*       				var treeItemStateIcon = $(templates.treeviewItemStateIcon).addClass(_this.settings.collapseIcon);
+            				treeItem.append(treeItemStateIcon);*/
+            			}
+
+            			treeviewNew.append(treeItem);
+            			treeviewNew.attr('id', node.id);
+            			treeviewNew.attr('style', "height:23px;");
         			}
         			
-                    // Set node Text.
-                    // treeItem.append("    " + node.text);
-                     treeItem.append("&nbsp;" + node.text);
-
-        			// Set Expand and Collapse icones.
-        			if (node.nodes) {
- /*       				var treeItemStateIcon = $(templates.treeviewItemStateIcon).addClass(_this.settings.collapseIcon);
-        				treeItem.append(treeItemStateIcon);*/
-        			}
-
-        			treeviewNew.append(treeItem);
-        			treeviewNew.attr('id', node.id);
-        			treeviewNew.attr('style', "height:23px;");
-
-/*        			treeviewNew.attr('style', "height:23px;");*/
-
         			treeviewSubGroupItem.append(treeviewNew);
 
         			// Attach node to parent.
@@ -215,6 +223,7 @@
         				_this.build(treeGroup, node.nodes, depth);
         	/*			$('#' + node.id + "c").get(0).click();*/
         			}
+        			
             	}
             });
         }
