@@ -14,6 +14,7 @@
 <link rel="stylesheet" href="/vertical-dark-sidebar/css/vendors/jquery-toast-plugin/jquery.toast.min.css">
 <link rel="stylesheet" href="/vertical-dark-sidebar/css/vendors/font-awesome/css/font-awesome.min.css">
 <link rel="stylesheet" href="/vertical-dark-sidebar/css/vendors/mdi/css/materialdesignicons.min.css">
+  <link rel="stylesheet" href="/vertical-dark-sidebar/css/vendors/jquery-bar-rating/css-stars.css">
 <!-- End plugin css for this page -->
 
 <!-- inject:css -->
@@ -31,6 +32,8 @@
 <script src="/vertical-dark-sidebar/js/vendors/datatables.net/jquery.dataTables.js"></script>
 <script src="/vertical-dark-sidebar/js/vendors/datatables.net-bs4/dataTables.bootstrap4.js"></script>
 <script src="/vertical-dark-sidebar/js/vendors/jquery-toast-plugin/jquery.toast.min.js"></script>
+<script src="/vertical-dark-sidebar/js/vendors/jquery-bar-rating/jquery.barrating.min.js"></script>
+<script src="/vertical-dark-sidebar/js/vendors/sweetalert/sweetalert.min.js"></script>
 <script src="/js/dt/dataTables.select.min.js" type="text/javascript"></script>
 <script src="/js/dt/dataTables.checkboxes.min.js" type="text/javascript"></script>
 <!-- End plugin js for this page-->

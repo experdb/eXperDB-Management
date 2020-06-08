@@ -269,23 +269,7 @@
 			$( '#li_blnck' ).css('width', widthMax - $( '.page-navigation' ).width());
 		}
 	}
-	
-	function fn_cookie(url) {
-		var cssID = sessionStorage.getItem('cssId');
 
-/* 		$("#"+cssID).css("background-color","");
-		$("#"+cssID+"c").css("color","");
-		$("#"+cssID).css("border","");	
-
-		if(url != null){
-			$("#"+url).css("background-color","#f58220");
-			$("#"+url+"c").css("color","white");
-			$("#"+url).css("border","2px solid #f58220");	
-		} */
-
-		sessionStorage.setItem('cssId',url);
-	}
-	
 	function fn_localeSet(locale){
  		$.ajax({
 			async : false,
@@ -323,10 +307,84 @@
 			$("#profileArrowUser").attr('class', 'menu-arrow_user');
 		}
 	}
+
+	/* ********************************************************
+	 * profile popup 초기화
+	 ******************************************************** */
+	function layerReset() {
+		$("#pro_name").html("");
+		$("#pro_lgi_dtm").html("");							
+		$("#pro_bln_nm").html("");							
+		$("#pro_dept_nm").html("");
+		$("#pro_pst_nm").html("");
+		$("#pro_cpn").html("");
+		$("#pro_rsp_bsn_nm").html("");
+		$("#pro_usr_expr_dt").html("");
+	}
+
+	//profile popup 호출
+	function fn_profileView(usr_id) {
+
+		$.ajax({
+			url : "/selectProfieView.do",
+			data : {
+				usr_id : usr_id
+			},
+			dataType : "json",
+			type : "post",
+			beforeSend: function(xhr) {
+		        xhr.setRequestHeader("AJAX", true);
+		    },
+		    error : function(xhr, status, error) {
+					if(xhr.status == 401) {
+						alert(message_msg02);
+						top.location.href = "/";
+					} else if(xhr.status == 403) {
+						alert(message_msg03);
+						top.location.href = "/";
+					} else {
+						alert("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""));
+					}
+			},
+			success : function(result) {
+				if(result == null){
+					showSwal('<spring:message code="message.msg158" />', '<spring:message code="common.close" />');
+					$('#pop_layer_profileView').modal('hide');
+					return;
+				}else{
+					$('#pop_layer_profileView').modal("show");
+
+					$("#pro_name").html(result.usr_nm + " (" + result.usr_id + ")");
+					$("#pro_lgi_dtm").html(nvlPrmSet('${sessionScope.session.loginChkTime}', "-"));		//최종로그인 일시
+					$("#pro_bln_nm").html(nvlPrmSet(result.bln_nm, "-"));								//소속
+					$("#pro_dept_nm").html(nvlPrmSet(result.dept_nm, "-"));								//부서
+					$("#pro_pst_nm").html(nvlPrmSet(result.pst_nm, "-"));								//직급
+					$("#pro_cpn").html(nvlPrmSet(result.cpn, "-"));										//휴대전화번호
+					$("#pro_rsp_bsn_nm").html(nvlPrmSet(result.rsp_bsn_nm, "-"));						//담당업무
+					$("#pro_usr_expr_dt").html(nvlPrmSet(result.usr_expr_dt, "-"));						//사용만료일
+					
+					var encp_use_yn = nvlPrmSet(result.encp_use_yn, "");
+					var encp_use_yn_val = "";
+
+					if (encp_use_yn != "") {
+						if (encp_use_yn == "Y") {
+							encp_use_yn_val = '<spring:message code="dbms_information.use"/>';
+						} else {
+							encp_use_yn_val = '<spring:message code="dbms_information.unuse"/>';
+						}
+					}
+
+					$("#pro_encp_use_yn").html(nvlPrmSet(encp_use_yn_val, "-"));						//암호화사용여부
+				}
+				
+			}
+		});
+	}
 </script>
 
 <%@include file="../help/aboutExperdbLayer.jsp"%>
 <%@include file="../help/openSourceLayer.jsp"%>
+<%@include file="../admin/userManager/profileView.jsp"%>
 
 <nav class="navbar col-lg-12 col-12 p-0 fixed-top d-flex flex-row">
 	<div class="text-center navbar-brand-wrapper d-flex align-items-center justify-content-center">
@@ -686,7 +744,7 @@
 													</span>
 												</li>
 												<li class="nav-item">
-													<a class="nav-link" href="/myPage.do" onClick="fn_cookie(null)">
+													<a class="nav-link" href="/myPage.do" onClick="fn_cookie(null)" target="main">
 														<spring:message code="menu.user_information_management"/>
 													</a>
 												</li>
@@ -697,7 +755,7 @@
 													</span>
 												</li>
 												<li class="nav-item">
-													<a class="nav-link" href="/myScheduleListView.do" onClick="fn_cookie(null)">
+													<a class="nav-link" href="/myScheduleListView.do" onClick="fn_cookie(null)" target="main">
 														<spring:message code="menu.my_schedule_management"/>
 													</a>
 												</li>
@@ -740,7 +798,7 @@
 													</span>
 												</li>
 												<li class="nav-item">
-													<a class="nav-link" href="#n" onClick="fn_aboutExperdb('${sessionScope.session.version}')" data-toggle="modal" data-target="#pop_layer_aboutExperdb" data-whatever="123" >
+													<a class="nav-link" href="#n" onClick="fn_aboutExperdb('${sessionScope.session.version}')" data-toggle="modal" data-target="#pop_layer_aboutExperdb" >
 														About eXperDB
 													</a>
 												</li>
@@ -767,7 +825,7 @@
 					<i id="profileArrowUser" class="menu-arrow_user"></i>
 				</a>
 				<div class="dropdown-menu dropdown-menu-right navbar-dropdown" aria-labelledby="profileDropdown">
-					<a class="dropdown-item" onClick="">
+					<a class="dropdown-item " onClick="fn_profileView('${sessionScope.session.usr_id}')" data-toggle="modal" id="profile_link" >
 						<i class="mdi mdi-face-profile text-primary"></i>
 						<spring:message code="common.profile"/>
 					</a>

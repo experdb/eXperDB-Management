@@ -283,9 +283,6 @@
   display: none;
 }
 
-
-/*# sourceMappingURL=../maps/horizontal-layout/style.css.map */
-
 .horizontal-menu .bottom-navbar .page-navigation > .nav-item .submenu ul {
   list-style-type: none;
   padding-left: 0;
@@ -725,6 +722,31 @@ table.table tr th.t2{
 									   color-stop(0.86, rgb(28,58,148)));
 }
 
+.main_scroll::-webkit-scrollbar-track
+{
+	-webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.3);
+	background-color: #F5F5F5;
+	border-radius: 10px;
+}
+
+.main_scroll::-webkit-scrollbar
+{
+	width: 10px;
+	background-color: #F5F5F5;
+}
+
+.main_scroll::-webkit-scrollbar-thumb
+{
+	border-radius: 10px;
+	background-image: -webkit-gradient(linear,
+									   left bottom,
+									   left top,
+									   color-stop(0.44, rgb(122,153,217)),
+									   color-stop(0.72, rgb(73,125,189)),
+									   color-stop(0.86, rgb(28,58,148)));
+}
+
+
 body.bg{background:#fff url(../../images/login_bg.png) center center no-repeat;}
 
 
@@ -744,4 +766,45 @@ body.bg{background:#fff url(../../images/login_bg.png) center center no-repeat;}
 /*   display: block; */
   font-size: 11px;
   line-height: 10px;
+}
+
+
+.profile_bText {
+  font-weight: bolder !important;
+  color: #248afd !important;
+  text-overflow: ellipsis;
+}
+
+.li_blank {
+  width:223px; 
+  height:3px;
+  line-height: 0;
+}
+
+
+.breadcrumb-item_ttl {
+  padding-left: 0.5rem;
+}
+
+.breadcrumb-item_ttl::before {
+  display: inline-block;
+  padding-right: 0.5rem;
+  color: #6c757d;
+}
+
+.breadcrumb-item_ttl:hover::before {
+  text-decoration: underline;
+}
+
+
+.breadcrumb-item_ttl:hover::before {
+  text-decoration: none;
+}
+
+.breadcrumb-item_ttl.active {
+  color: #495057;
+}
+
+.breadcrumb .breadcrumb-item_ttl {
+  font-size: 0.875rem;
 }

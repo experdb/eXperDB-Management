@@ -3,5 +3,5 @@
     
 
 
-<iframe name="main" src="/dashboard.do" style="display:block; width:100%; height: calc(100vh - 150px); border:none;"></iframe>
+<iframe name="main" src="/dashboard.do" style="display:block; width:100%; height: calc(100vh - 70px); border:none; "></iframe>
 

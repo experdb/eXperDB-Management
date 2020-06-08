@@ -36,7 +36,7 @@
 <script src="/vertical-dark-sidebar/js/data-table.js"></script>
 <!-- End custom js for this page-->
       <!-- partial -->
-        <div class="content-wrapper main_scroll" id="bodyDiv" >
+        <div class="content-wrapper main_scroll">
           <div class="row">
             <div class="col-md-12 grid-margin">
               <div class="row">

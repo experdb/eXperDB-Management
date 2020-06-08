@@ -175,4 +175,34 @@
 		WHERE usr_id = #{usr_id}
 	</update>
 
+    <select id="selectProfieView" parameterType="HashMap" resultType="HashMap">
+        /**
+        * Query ID : selectProfieView
+        * Description : 사용자 정보 조회
+        * Author : 
+        **/
+        SELECT 
+               A.USR_ID AS USR_ID
+             , A.USR_NM AS USR_NM
+             , A.PWD AS PWD
+             , A.BLN_NM AS BLN_NM
+             , A.DEPT_NM AS DEPT_NM
+             , A.RSP_BSN_NM AS RSP_BSN_NM
+             , A.PST_NM AS PST_NM
+             , A.AUT_ID AS AUT_ID
+             , A.CPN AS CPN
+             , TO_CHAR(A.USR_EXPR_DT::TIMESTAMP,'YYYY-MM-DD') AS USR_EXPR_DT
+             , A.USE_YN AS USE_YN
+             , A.FRST_REGR_ID AS FRST_REGR_ID
+             , TO_CHAR(A.FRST_REG_DTM::TIMESTAMP,'YYYY-MM-DD HH24:MI:SS') AS FRST_REG_DTM
+             , A.LST_MDFR_ID AS LST_MDFR_ID
+             , TO_CHAR(A.LST_MDF_DTM::TIMESTAMP,'YYYY-MM-DD HH24:MI:SS') AS LST_MDF_DTM
+             , TO_CHAR(B.LGI_DTM::TIMESTAMP,'YYYY-MM-DD HH24:MI:SS') AS LGI_DTM
+             , A.ENCP_USE_YN AS ENCP_USE_YN
+          FROM T_USR_I A
+               LEFT JOIN (SELECT LGI_DTM, USR_ID FROM T_USRLGI_H WHERE LGI_CRRNO = (SELECT MAX(LGI_CRRNO) AS LGI_CRRNO FROM T_USRLGI_H WHERE USR_ID = #{usr_id})) B
+                    ON A.USR_ID = B.USR_ID
+         WHERE 1=1
+           AND A.USR_ID = #{usr_id}
+    </select>
 </mapper>

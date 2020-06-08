@@ -6,6 +6,19 @@
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags"%>
 <%@include file="./cmmn/cs2.jsp"%> 
 
+<%
+	//로그인 cookie 추가
+	if (session != null && session.getAttribute("loginChkId") != null) {
+		String loginChkId = session.getAttribute("loginChkId").toString();
+		
+		if (loginChkId != null) {
+			if (!"".equals(loginChkId)) {
+				response.sendRedirect("/experdb.do");
+			}
+		}
+	}
+%>
+
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head>
@@ -75,6 +88,13 @@
 	//login 버튼 클릭
 	function fn_login(){
 		if (!fn_validation()) return false;
+		
+		//로그인 유지 체크박스 확인
+		if($("input:checkbox[name=login_chk]").is(":checked") == true) {
+			$("#loginChkYn", "#loginForm").val("Y");
+		} else {
+			$("#loginChkYn", "#loginForm").val("N");
+		}
 
 		$("#loginForm").attr("action", "/loginAction.do");
 		$("#loginForm").submit();
@@ -99,6 +119,8 @@
 							<h6 class="font-weight-light"><spring:message code="login.title_sub_msg" /></h6>
 							
 							<form class="pt-3" name="loginForm" id="loginForm" method="post">
+								<input type="hidden" id="loginChkYn" name="loginChkYn" value="" />
+								
  								<div class="form-group">
 									<label for="member_id"><spring:message code="user_management.id" /></label>
 									<div class="input-group">

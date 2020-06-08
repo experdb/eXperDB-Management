@@ -102,260 +102,303 @@
 								'"tooltiptext": "' + item.ipadr + '",' +
 								'"nodes": [';
 
-
-								//scale
-								if (scale_yn_chk == "Y") {
-									menuJson +=	'{' +
-													'"text": "<spring:message code="menu.eXperDB_scale"/>",' +
-													'"icon": "fa fa-inbox",' +
-													'"id": "scale'+item.db_svr_id+'",' +
-													'"nodes": [';
-
-									if(aut.length != 0 && aut[index].scale_cng_aut_yn == "Y"){
-										menuJson +=	'{' +
-														'"icon": "fa fa-inbox",' +
-														'"text": "<spring:message code="menu.eXperDB_scale_settings"/>",' +
-														'"url": "/scale/scaleManagement.do?db_svr_id='+item.db_svr_id+'",' +
-														'"id": "scaleManagement'+item.db_svr_id+'"' +
-													'},';
-									}
-
-									if(aut.length != 0 && aut[index].scale_aut_yn == "Y"){
-										menuJson +=	'{' +
-														'"icon": "fa fa-inbox",' +
-														'"text": "<spring:message code="menu.scale_manual"/>",' +
-														'"url": "/scale/scaleList.do?db_svr_id='+item.db_svr_id+'",' +
-														'"id": "scaleList'+item.db_svr_id+'"' +
-													'},';
-									}
-
-									if(aut.length != 0 && aut[index].scale_hist_aut_yn == "Y"){
-										menuJson +=	'{' +
-														'"icon": "fa fa-inbox",' +
-														'"text": "<spring:message code="menu.eXperDB_scale_history"/>",' +
-														'"url": "/scale/scaleLogList.do?db_svr_id='+item.db_svr_id+'",' +
-														'"id": "scaleLogList'+item.db_svr_id+'"' +
-													'}';
-									}
-
-									menuJson +=		']' +
-												'},';
-								}
-
-								//백업관리 //////////////////////////////////////////////////////////////////
-								menuJson +=	'{' +
-												'"text": "<spring:message code="menu.backup_management"/>",' +
-												'"icon": "fa fa-inbox",' +
-												'"id": "backup'+item.db_svr_id+'"';
-
-								if((aut.length != 0 && aut[index].bck_cng_aut_yn == "Y") || (aut.length != 0 && aut[index].bck_hist_aut_yn == "Y")
-								 || (aut.length != 0 && aut[index].bck_scdr_aut_yn == "Y")
-								){
-									menuJson +=	', "nodes": [';
-
-									if(aut.length != 0 && aut[index].bck_cng_aut_yn == "Y"){
-										menuJson +=	'{' +
-														'"icon": "fa fa-inbox",' +
-														'"text": "<spring:message code="menu.backup_settings"/>",' +
-														'"url": "/backup/workList.do?db_svr_id='+item.db_svr_id+'",' +
-														'"id": "workList'+item.db_svr_id+'"' +
-													'},';
-									}
-
-									if(aut.length != 0 && aut[index].bck_hist_aut_yn == "Y"){
-										menuJson +=	'{' +
-														'"icon": "fa fa-inbox",' +
-														'"text": "<spring:message code="menu.backup_history"/>",' +
-														'"url": "/backup/workLogList.do?db_svr_id='+item.db_svr_id+'",' +
-														'"id": "workLogList'+item.db_svr_id+'"' +
-													'},';
-									}
-
-									if(aut.length != 0 && aut[index].bck_scdr_aut_yn == "Y"){
-										menuJson +=	'{' +
-														'"icon": "fa fa-inbox",' +
-														'"text": "<spring:message code="menu.backup_scheduler"/>",' +
-														'"url": "/schedulerView.do?db_svr_id='+item.db_svr_id+'&db_svr_nm='+item.db_svr_nm+'",' +
-														'"id": "schedulerView'+item.db_svr_id+'"' +
-													'}';
-									}
-
-									menuJson +=		']';
-								}
-
-								menuJson += '},';
-								////////////////////////////////////////////////////////////////////////////
-								
-								//복원관리 //////////////////////////////////////////////////////////////////
-								menuJson +=	'{' +
-												'"text": "<spring:message code="restore.Recovery_Management"/>",' +
-												'"icon": "fa fa-inbox",' +
-												'"id": "emergency'+item.db_svr_id+'"';
-
-								if((aut.length != 0 && aut[index].emergency_restore_aut_yn == "Y") || (aut.length != 0 && aut[index].point_restore_aut_yn == "Y")
-									 || (aut.length != 0 && aut[index].dump_restore_aut_yn == "Y") || (aut.length != 0 && aut[index].restore_his_aut_yn == "Y")
-								){
-									menuJson +=	', "nodes": [';
-										
-									if(aut.length != 0 && aut[index].emergency_restore_aut_yn == "Y"){
-										menuJson +=	'{' +
-														'"icon": "fa fa-inbox",' +
-														'"text": "<spring:message code="restore.Emergency_Recovery"/>",' +
-														'"url": "/emergencyRestore.do?db_svr_id='+item.db_svr_id+'",' +
-														'"id": "emergencyRestore'+item.db_svr_id+'"' +
-													'},';
-									}
-
-									if(aut.length != 0 && aut[index].point_restore_aut_yn == "Y"){
-										menuJson +=	'{' +
-														'"icon": "fa fa-inbox",' +
-														'"text": "<spring:message code="restore.Point-in-Time_Recovery"/>",' +
-														'"url": "/timeRestore.do?db_svr_id='+item.db_svr_id+'",' +
-														'"id": "timeRestore'+item.db_svr_id+'"' +
-													'},';
-									}
-
-									if(aut.length != 0 && aut[index].dump_restore_aut_yn == "Y"){
-										menuJson +=	'{' +
-														'"icon": "fa fa-inbox",' +
-														'"text": "<spring:message code="restore.Dump_Recovery"/>",' +
-														'"url": "/dumpRestore.do?db_svr_id='+item.db_svr_id+'",' +
-														'"id": "dumpRestore'+item.db_svr_id+'"' +
-													'},';
-									}
-
-									if(aut.length != 0 && aut[index].restore_his_aut_yn == "Y"){
-										menuJson +=	'{' +
-														'"icon": "fa fa-inbox",' +
-														'"text": "<spring:message code="restore.Recovery_history"/>",' +
-														'"url": "/restoreHistory.do?db_svr_id='+item.db_svr_id+'",' +
-														'"id": "restoreHistory'+item.db_svr_id+'"' +
-													'}';
-									}
-
-									menuJson +=		']';
-								}
-								menuJson += '},';
-								////////////////////////////////////////////////////////////////////////////
-								
-								//데이터전송 //////////////////////////////////////////////////////////////////
-								menuJson +=	'{' +
-												'"text": "<spring:message code="menu.data_transfer"/>",' +
-												'"icon": "fa fa-inbox",' + 
-												'"id": "trans'+item.db_svr_id+'",' +
-												'"nodes": [';
-												
-								menuJson +=	'{' +
-												'"icon": "fa fa-inbox",' +
-												'"text": "전송관리",' +
-												'"url": "/transSetting.do?db_svr_id='+item.db_svr_id+'",' +
-												'"id": "transSetting'+item.db_svr_id+'"' +
-											'}';
-								menuJson +=		']' +
-											'},';
-								////////////////////////////////////////////////////////////////////////////
-								
-
-								//접근제어 관리 //////////////////////////////////////////////////////////////////
-								menuJson +=	'{' +
-												'"text": "<spring:message code="menu.access_control_management"/>",' + 
-												'"icon": "fa fa-inbox",' +
-												'"id": "access'+item.db_svr_id+'"';
-
-								if((aut.length != 0 && aut[index].acs_cntr_aut_yn == "Y") || (aut.length != 0 && aut[index].policy_change_his_aut_yn == "Y")){
-									menuJson +=	', "nodes": [';
-									
-									if(aut.length != 0 && aut[index].acs_cntr_aut_yn == "Y"){
-										menuJson +=	'{' +
-														'"icon": "fa fa-inbox",' +
-														'"text": "<spring:message code="menu.access_control"/>",' +
-														'"url": "/accessControl.do?db_svr_id='+item.db_svr_id+'",' +
-														'"id": "accessControl'+item.db_svr_id+'"' +
-													'},';
-									}
-									
-									if(aut.length != 0 && aut[index].policy_change_his_aut_yn == "Y"){
-										menuJson +=	'{' +
-														'"icon": "fa fa-inbox",' +
-														'"text": "<spring:message code="menu.policy_changes_history"/>",' +
-														'"url": "/accessControlHistory.do?db_svr_id='+item.db_svr_id+'",' +
-														'"id": "accessControlHistory'+item.db_svr_id+'"' +
-													'}';
-									}
-									
-									menuJson +=		']';
-								}
-								
-								menuJson +=	'},';
-								////////////////////////////////////////////////////////////////////////////
-								
-								//감사관리 //////////////////////////////////////////////////////////////////
-								menuJson +=	'{' +
-												'"text": "<spring:message code="menu.audit_management"/>",' + 
-												'"icon": "fa fa-inbox",' +
-												'"id": "audit'+item.db_svr_id+'"';
-								//pg_audit 사용여부에 따른 tree메뉴 권한
-								if('${sessionScope.session.pg_audit}' == 'Y'){
-									if((aut.length != 0 && aut[index].adt_cng_aut_yn == "Y") || (aut.length != 0 && aut[index].adt_hist_aut_yn == "Y")){
-										menuJson +=	', "nodes": [';
-										
-										if(aut.length != 0 && aut[index].adt_cng_aut_yn == "Y"){
+											//서버 속성
 											menuJson +=	'{' +
-															'"icon": "fa fa-inbox",' +
-															'"text": "<spring:message code="menu.audit_settings"/>",' +
-															'"url": "/audit/auditManagement.do?db_svr_id='+item.db_svr_id+'",' +
-															'"id": "auditManagement'+item.db_svr_id+'"' +
-														'},';
-										}
-										
-										if(aut.length != 0 && aut[index].adt_hist_aut_yn == "Y"){
-											menuJson +=	'{' +
-															'"icon": "fa fa-inbox",' +
-															'"text": "<spring:message code="menu.audit_history"/>",' +
-															'"url": "/audit/auditLogList.do?db_svr_id='+item.db_svr_id+'",' +
-															'"id": "auditLogList'+item.db_svr_id+'"' +
+																'"text": "<spring:message code="menu.server_property"/>",' +
+																'"icon": "mdi mdi-server-network",' +
+																'"id": "scale'+item.db_svr_id+'",' +
+																'"url": "/property.do?db_svr_id='+item.db_svr_id+'",' +
+																'"menu_gbn": "server"' +
 														'}';
-										}
-										
-										menuJson +=		']';
-									}
-								}
-								
-								menuJson +=	'},';
-								////////////////////////////////////////////////////////////////////////////
-								
-								//스크립트//////////////////////////////////////////////////////////////////
-								menuJson +=	'{' +
-												'"text": "<spring:message code="menu.script_management"/>",' + 
-												'"icon": "fa fa-inbox",' +
-												'"id": "script'+item.db_svr_id+'"';
+
+											//scale
+											if (scale_yn_chk == "Y") {
+												menuJson +=	', {' +
+																 '"text": "<spring:message code="menu.eXperDB_scale"/>",' +
+																 '"icon": "ti-cloud-up",' +
+																 '"id": "scale'+item.db_svr_id+'",' +
+																 '"nodes": [';
+
+												if(aut.length != 0 && aut[index].scale_cng_aut_yn == "Y"){
+													menuJson +=	'{' +
+																	'"icon": "fa fa-spin fa-cog",' +
+																	'"text": "<spring:message code="menu.eXperDB_scale_settings"/>",' +
+																	'"url": "/scale/scaleManagement.do?db_svr_id='+item.db_svr_id+'",' +
+																	'"id": "scaleManagement'+item.db_svr_id+'"' +
+																'},';
+												}
+
+												if(aut.length != 0 && aut[index].scale_aut_yn == "Y"){
+													menuJson +=	'{' +
+																	'"icon": "fa fa-expand",' +
+																	'"text": "<spring:message code="menu.scale_manual"/>",' +
+																	'"url": "/scale/scaleList.do?db_svr_id='+item.db_svr_id+'",' +
+																	'"id": "scaleList'+item.db_svr_id+'"' +
+																'},';
+												}
+
+												if(aut.length != 0 && aut[index].scale_hist_aut_yn == "Y"){
+													menuJson +=	'{' +
+																	'"icon": "fa fa-spin fa-history",' +
+																	'"text": "<spring:message code="menu.eXperDB_scale_history"/>",' +
+																	'"url": "/scale/scaleLogList.do?db_svr_id='+item.db_svr_id+'",' +
+																	'"id": "scaleLogList'+item.db_svr_id+'"' +
+																'}';
+												}
 												
-								if((aut.length != 0 && aut[index].script_cng_aut_yn == "Y") || (aut.length != 0 && aut[index].script_his_aut_yn == "Y")){
-									menuJson +=	', "nodes": [';
-									
-									if(aut.length != 0 && aut[index].script_cng_aut_yn == "Y"){
-										menuJson +=	'{' +
-														'"icon": "fa fa-inbox",' +
-														'"text": "<spring:message code="menu.script_settings"/>",' +
-														'"url": "/scriptManagement.do?db_svr_id='+item.db_svr_id+'",' +
-														'"id": "scriptManagement'+item.db_svr_id+'"' +
-													'},';
-									}
-									
-									if(aut.length != 0 && aut[index].script_his_aut_yn == "Y"){
-										menuJson +=	'{' +
-														'"icon": "fa fa-inbox",' +
-														'"text": "<spring:message code="menu.script_history"/>",' +
-														'"url": "/scriptHistory.do?db_svr_id='+item.db_svr_id+'",' +
-														'"id": "scriptHistory'+item.db_svr_id+'"' +
-													'}';
-									}
-									
-									menuJson +=		']';
-								}								
-								
-								menuJson +=	'}';
-								
+												//마지막 콤마 제거
+												if (menuJson.charAt(menuJson.length-1) == ",") {
+													menuJson = menuJson.substr(0, menuJson.length -1);
+												}
+
+												menuJson +=		']' +
+															'}';
+											}
+
+											//백업관리 //////////////////////////////////////////////////////////////////
+											menuJson +=	',{' +
+															 '"text": "<spring:message code="menu.backup_management"/>",' +
+															 '"icon": "ti-files",' +
+															 '"id": "backup'+item.db_svr_id+'"';
+
+											if((aut.length != 0 && aut[index].bck_cng_aut_yn == "Y") || (aut.length != 0 && aut[index].bck_hist_aut_yn == "Y")
+											 || (aut.length != 0 && aut[index].bck_scdr_aut_yn == "Y")){
+												menuJson +=	', "nodes": [';
+
+												if(aut.length != 0 && aut[index].bck_cng_aut_yn == "Y"){
+													menuJson +=	'{' +
+																	'"icon": "fa fa-spin fa-cog",' +
+																	'"text": "<spring:message code="menu.backup_settings"/>",' +
+																	'"url": "/backup/workList.do?db_svr_id='+item.db_svr_id+'",' +
+																	'"id": "workList'+item.db_svr_id+'"' +
+																'},';
+												}
+
+												if(aut.length != 0 && aut[index].bck_hist_aut_yn == "Y"){
+													menuJson +=	'{' +
+																	'"icon": "fa fa-spin fa-history",' +
+																	'"text": "<spring:message code="menu.backup_history"/>",' +
+																	'"url": "/backup/workLogList.do?db_svr_id='+item.db_svr_id+'",' +
+																	'"id": "workLogList'+item.db_svr_id+'"' +
+																'},';
+												}
+
+												if(aut.length != 0 && aut[index].bck_scdr_aut_yn == "Y"){
+													menuJson +=	'{' +
+																	'"icon": "fa fa-calendar",' +
+																	'"text": "<spring:message code="menu.backup_scheduler"/>",' +
+																	'"url": "/schedulerView.do?db_svr_id='+item.db_svr_id+'&db_svr_nm='+item.db_svr_nm+'",' +
+																	'"id": "schedulerView'+item.db_svr_id+'"' +
+																'}';
+												}
+
+												//마지막 콤마 제거
+												if (menuJson.charAt(menuJson.length-1) == ",") {
+													menuJson = menuJson.substr(0, menuJson.length -1);
+												}
+
+												menuJson +=		']';
+											}
+
+											menuJson += '}';
+											////////////////////////////////////////////////////////////////////////////
+
+											//복원관리 //////////////////////////////////////////////////////////////////
+											menuJson +=	',{' +
+															 '"text": "<spring:message code="restore.Recovery_Management"/>",' +
+															 '"icon": "mdi mdi-file-restore",' +
+															 '"id": "emergency'+item.db_svr_id+'"';
+
+											if((aut.length != 0 && aut[index].emergency_restore_aut_yn == "Y") || (aut.length != 0 && aut[index].point_restore_aut_yn == "Y")
+												 || (aut.length != 0 && aut[index].dump_restore_aut_yn == "Y") || (aut.length != 0 && aut[index].restore_his_aut_yn == "Y")
+											){
+												menuJson +=	', "nodes": [';
+													
+												if(aut.length != 0 && aut[index].emergency_restore_aut_yn == "Y"){
+													menuJson +=	'{' +
+																	'"icon": "fa fa-bell",' +
+																	'"text": "<spring:message code="restore.Emergency_Recovery"/>",' +
+																	'"url": "/emergencyRestore.do?db_svr_id='+item.db_svr_id+'",' +
+																	'"id": "emergencyRestore'+item.db_svr_id+'"' +
+																'},';
+												}
+
+												if(aut.length != 0 && aut[index].point_restore_aut_yn == "Y"){
+													menuJson +=	'{' +
+																	'"icon": "fa-spin mdi mdi-backup-restore",' +
+																	'"text": "<spring:message code="restore.Point-in-Time_Recovery"/>",' +
+																	'"url": "/timeRestore.do?db_svr_id='+item.db_svr_id+'",' +
+																	'"id": "timeRestore'+item.db_svr_id+'"' +
+																'},';
+												}
+
+												if(aut.length != 0 && aut[index].dump_restore_aut_yn == "Y"){
+													menuJson +=	'{' +
+																	'"icon": "fa fa-window-restore",' +
+																	'"text": "<spring:message code="restore.Dump_Recovery"/>",' +
+																	'"url": "/dumpRestore.do?db_svr_id='+item.db_svr_id+'",' +
+																	'"id": "dumpRestore'+item.db_svr_id+'"' +
+																'},';
+												}
+
+												if(aut.length != 0 && aut[index].restore_his_aut_yn == "Y"){
+													menuJson +=	'{' +
+																	'"icon": "fa fa-spin fa-history",' +
+																	'"text": "<spring:message code="restore.Recovery_history"/>",' +
+																	'"url": "/restoreHistory.do?db_svr_id='+item.db_svr_id+'",' +
+																	'"id": "restoreHistory'+item.db_svr_id+'"' +
+																'}';
+												}
+												
+												//마지막 콤마 제거
+												if (menuJson.charAt(menuJson.length-1) == ",") {
+													menuJson = menuJson.substr(0, menuJson.length -1);
+												}
+
+												menuJson +=		']';
+											}
+											menuJson += '}';
+											////////////////////////////////////////////////////////////////////////////
+
+											//데이터전송 //////////////////////////////////////////////////////////////////
+											menuJson +=	', {' +
+															 '"text": "<spring:message code="menu.data_transfer"/>",' +
+															 '"icon": "fa fa-inbox",' + 
+															 '"id": "trans'+item.db_svr_id+'",' +
+															 '"nodes": [';
+															
+											menuJson +=	'{' +
+															'"icon": "fa fa-send",' +
+															'"text": "<spring:message code="menu.trans_management"/>",' +
+															'"url": "/transSetting.do?db_svr_id='+item.db_svr_id+'",' +
+															'"id": "transSetting'+item.db_svr_id+'"' +
+														'}';
+											menuJson +=		']' +
+														'}';
+											////////////////////////////////////////////////////////////////////////////
+
+											//접근제어 관리 //////////////////////////////////////////////////////////////////
+											menuJson +=	',{' +
+														  	 '"text": "<spring:message code="menu.access_control_management"/>",' + 
+													 		 '"icon": "ti-lock",' +
+															 '"id": "access'+item.db_svr_id+'"';
+
+											if((aut.length != 0 && aut[index].acs_cntr_aut_yn == "Y") || (aut.length != 0 && aut[index].policy_change_his_aut_yn == "Y")){
+												menuJson +=	', "nodes": [';
+												
+												if(aut.length != 0 && aut[index].acs_cntr_aut_yn == "Y"){
+													menuJson +=	'{' +
+																	'"icon": "fa fa-lock",' +
+																	'"text": "<spring:message code="menu.access_control"/>",' +
+																	'"url": "/accessControl.do?db_svr_id='+item.db_svr_id+'",' +
+																	'"id": "accessControl'+item.db_svr_id+'"' +
+																'},';
+												}
+												
+												if(aut.length != 0 && aut[index].policy_change_his_aut_yn == "Y"){
+													menuJson +=	'{' +
+																	'"icon": "fa fa-spin fa-history",' +
+																	'"text": "<spring:message code="menu.policy_changes_history"/>",' +
+																	'"url": "/accessControlHistory.do?db_svr_id='+item.db_svr_id+'",' +
+																	'"id": "accessControlHistory'+item.db_svr_id+'"' +
+																'}';
+												}
+
+												//마지막 콤마 제거
+												if (menuJson.charAt(menuJson.length-1) == ",") {
+													menuJson = menuJson.substr(0, menuJson.length -1);
+												}
+												
+												menuJson +=		']';
+											}
+											
+											menuJson +=	'}';
+											////////////////////////////////////////////////////////////////////////////
+
+											//감사관리 //////////////////////////////////////////////////////////////////
+											menuJson +=	', {' +
+															 '"text": "<spring:message code="menu.audit_management"/>",' + 
+															 '"icon": "fa fa-laptop",' +
+															 '"id": "audit'+item.db_svr_id+'"';
+											//pg_audit 사용여부에 따른 tree메뉴 권한
+											if('${sessionScope.session.pg_audit}' == 'Y'){
+												if((aut.length != 0 && aut[index].adt_cng_aut_yn == "Y") || (aut.length != 0 && aut[index].adt_hist_aut_yn == "Y")){
+													menuJson +=	', "nodes": [';
+													
+													if(aut.length != 0 && aut[index].adt_cng_aut_yn == "Y"){
+														menuJson +=	'{' +
+																		'"icon": "fa fa-spin fa-cog",' +
+																		'"text": "<spring:message code="menu.audit_settings"/>",' +
+																		'"url": "/audit/auditManagement.do?db_svr_id='+item.db_svr_id+'",' +
+																		'"id": "auditManagement'+item.db_svr_id+'"' +
+																	'},';
+													}
+													
+													if(aut.length != 0 && aut[index].adt_hist_aut_yn == "Y"){
+														menuJson +=	'{' +
+																		'"icon": "fa fa-spin fa-history",' +
+																		'"text": "<spring:message code="menu.audit_history"/>",' +
+																		'"url": "/audit/auditLogList.do?db_svr_id='+item.db_svr_id+'",' +
+																		'"id": "auditLogList'+item.db_svr_id+'"' +
+																	'}';
+													}
+
+													//마지막 콤마 제거
+													if (menuJson.charAt(menuJson.length-1) == ",") {
+														menuJson = menuJson.substr(0, menuJson.length -1);
+													}
+													
+													menuJson +=		']';
+												}
+											}
+											
+											menuJson +=	'}';
+											////////////////////////////////////////////////////////////////////////////
+
+											//스크립트//////////////////////////////////////////////////////////////////
+											menuJson +=	',{' +
+															 '"text": "<spring:message code="menu.script_management"/>",' + 
+															 '"icon": "fa fa-share-square-o",' +
+															 '"id": "script'+item.db_svr_id+'"';
+															
+											if((aut.length != 0 && aut[index].script_cng_aut_yn == "Y") || (aut.length != 0 && aut[index].script_his_aut_yn == "Y")){
+												menuJson +=	', "nodes": [';
+												
+												if(aut.length != 0 && aut[index].script_cng_aut_yn == "Y"){
+													menuJson +=	'{' +
+																	'"icon": "fa fa-spin fa-cog",' +
+																	'"text": "<spring:message code="menu.script_settings"/>",' +
+																	'"url": "/scriptManagement.do?db_svr_id='+item.db_svr_id+'",' +
+																	'"id": "scriptManagement'+item.db_svr_id+'"' +
+																'},';
+												}
+												
+												if(aut.length != 0 && aut[index].script_his_aut_yn == "Y"){
+													menuJson +=	'{' +
+																	'"icon": "fa fa-spin fa-history",' +
+																	'"text": "<spring:message code="menu.script_history"/>",' +
+																	'"url": "/scriptHistory.do?db_svr_id='+item.db_svr_id+'",' +
+																	'"id": "scriptHistory'+item.db_svr_id+'"' +
+																'}';
+												}
+
+												//마지막 콤마 제거
+												if (menuJson.charAt(menuJson.length-1) == ",") {
+													menuJson = menuJson.substr(0, menuJson.length -1);
+												}
+												
+												menuJson +=		']';
+											}
+											
+											menuJson +=	'}';
+											////////////////////////////////////////////////////////////////////////////
+											
+											//빈값
+											menuJson +=	', {' +
+																'"text": "&nbsp;",' +
+																'"menu_gbn": "blnck"' +
+														 '}';
+											
 				menuJson +=		']' +
 							'},';
 			}
@@ -392,6 +435,11 @@
 		
 </script>
 
+<form name="dbServerView" id="dbServerView">
+	<input type="hidden" id="db_svr_id" name="db_svr_id" value="" />
+<!-- <a href="/property.do?db_svr_id='+item.db_svr_id+'" onClick=javascript:fn_GoLink("#n"); target="main"><im -->
+</form>
+
 <!-- partial:partials/_settings-panel.html -->
 <div class="theme-setting-wrapper">
 	<div id="settings-trigger">
@@ -420,11 +468,16 @@
 	<ul class="nav">
 		<li class="nav-item">
 			<a class="nav-link" href="/db2pgSetting2.do" target="main">
-				<i class="ti-home menu-icon"></i>
+		<!-- 		<i class="mdi mdi-amazon-clouddrive"></i> -->
+				<i class="mdi mdi-face-profile text-primary"></i>
 				<span class="menu-title">eXperDB-Sample!!!!</span>
 			</a>
 		</li>
-          
+
+		<li class="nav-item li_blank">
+            &nbsp;
+		</li>
+
  		<li class="nav-item">
 			<a class="nav-link" href="#n">
 				<i class="ti-server menu-icon"></i>
@@ -433,7 +486,7 @@
 		</li>
 	</ul>
 
-	<ul class="nav left_scroll" id="lft_tree" style="margin-top:-60px;max-height: calc(100vh - 160px);overflow-y:auto;position: fixed;">	
+	<ul class="nav left_scroll" id="lft_tree" style="margin-top:-60px;min-width:223px;min-height: calc(100vh - 170px);max-height: calc(100vh - 170px);overflow-y:auto;position: fixed;">	
 	</ul>
 	
 </nav>

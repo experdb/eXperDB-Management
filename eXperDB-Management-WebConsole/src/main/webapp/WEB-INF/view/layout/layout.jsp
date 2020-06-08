@@ -28,14 +28,10 @@
 		
 		<!-- container -->
 		<div class="container-fluid page-body-wrapper">
-			<!-- <div style="overflow-y:auto;position: fixed;line-height:0;max-height: calc(100vh - 70px);width:256px;float:left;"> -->
-<!-- 			<div style="overflow-y:auto;line-height:0;max-height: calc(100vh - 70px);width:260px;float:left;"> -->
 			<tiles:insertAttribute name="treeMenu" />
-<!-- 			</div> -->
 			
  			<div class="main-panel" style="float:left;">
  				<tiles:insertAttribute name="contents" />
-				<tiles:insertAttribute name="footer" />
 			</div>
 
 		</div>

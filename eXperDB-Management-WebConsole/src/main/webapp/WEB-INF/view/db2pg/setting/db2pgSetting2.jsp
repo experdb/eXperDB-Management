@@ -669,12 +669,11 @@ function fn_ImmediateStart(gbn){
 }
 
 </script>
-<div class="content-wrapper">
+<div class="content-wrapper main_scroll">
 	<div class="row">
 		<div class="col-12">
 			<div class="card">
 				<div class="card-body">
-					<nav aria-label="breadcrumb ">
 						<ol class="breadcrumb justify-content-end bg-info">
 							<li class="breadcrumb-item">MIGRATION</li>
 							<li class="breadcrumb-item active" aria-current="page">설정정보관리</li>
