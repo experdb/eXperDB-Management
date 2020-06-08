@@ -54,4 +54,11 @@ public interface UserManagerService {
 	 */
 	public void updateUserManager(UserVO userVo)throws Exception;
 
+	
+	/**
+	 * top화면 profile 조회
+	 * @param 
+	 * @throws Exception
+	 */
+	public Map<String, Object> selectProfieView(Map<String, Object> param)throws Exception;
 }

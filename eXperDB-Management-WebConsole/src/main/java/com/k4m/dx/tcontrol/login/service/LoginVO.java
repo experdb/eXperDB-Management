@@ -14,7 +14,8 @@ public class LoginVO {
 	private int restPort;
 	private String tockenValue;
 	private String ectityUid;
-	
+	private String loginChkTime;
+
 	public String getUsr_id() {
 		return usr_id;
 	}
@@ -81,6 +82,11 @@ public class LoginVO {
 	public void setEctityUid(String ectityUid) {
 		this.ectityUid = ectityUid;
 	}
+	public String getLoginChkTime() {
+		return loginChkTime;
+	}
+	public void setLoginChkTime(String loginChkTime) {
+		this.loginChkTime = loginChkTime;
+	}
 
-	
 }

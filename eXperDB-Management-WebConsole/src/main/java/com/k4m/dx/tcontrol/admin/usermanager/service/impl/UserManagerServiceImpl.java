@@ -41,4 +41,8 @@ public class UserManagerServiceImpl extends EgovAbstractServiceImpl implements U
 	public void updateUserManager(UserVO userVo) throws Exception {
 		userManagerDAO.updateUserManager(userVo);
 	}
+
+	public Map<String, Object> selectProfieView(Map<String, Object> param) throws Exception {
+		return userManagerDAO.selectProfieView(param);
+	}
 }

@@ -580,4 +580,28 @@ public class UserManagerController {
 		}
 		return result;
 	}
+	
+	/**
+	 * scale 설정 정보 상세조회
+	 * @param  request
+	 * @return result
+	 * @throws Exception
+	 */
+	@RequestMapping(value = "/selectProfieView.do")
+	@ResponseBody
+	public Map<String, Object> selectAutoScaleCngInfo(HttpServletRequest request, @ModelAttribute("historyVO") HistoryVO historyVO, HttpServletResponse response) {
+		Map<String, Object> result = null;
+		Map<String, Object> param = new HashMap<String, Object>();
+
+		try {
+			String usr_id = request.getParameter("usr_id");
+			System.out.println("===usr_id===" + usr_id);
+			param.put("usr_id", usr_id);
+			
+			result = userManagerService.selectProfieView(param);	
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return result;
+	}
 }

@@ -2,6 +2,8 @@ package com.k4m.dx.tcontrol.login.web;
 
 import java.io.FileInputStream;
 import java.net.InetAddress;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 import java.util.Properties;
@@ -139,6 +141,8 @@ public class LoginController {
 			String id = userVo.getUsr_id();
 			String pw = aes.aesEncode(userVo.getPwd());
 			
+			String login_chk = userVo.getLoginChkYn();
+			
 			int masterCheck = loginService.selectMasterCheck();
 			if(masterCheck>0){
 				mv.addObject("error", "msg176");
@@ -212,8 +216,20 @@ public class LoginController {
 					}
 				}
 				
+				//로그인 시간 추가
+				SimpleDateFormat loginSf= new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+				Date loginTime = new Date();
+				loginVo.setLoginChkTime(loginSf.format(loginTime));
+
 				session.setAttribute("session", loginVo);
-				
+
+				// 사용자의 로그인 유지 여부를 null 체크로 확인 
+				if (login_chk != null) { // 체크한 경우
+					if ("Y".equals(login_chk)) {
+						session.setAttribute("loginChkId", id);
+					}
+				}
+
 				/*중복로그인방지*/
 				EgovHttpSessionBindingListener listener = new EgovHttpSessionBindingListener();
 				request.getSession().setAttribute(userList.get(0).getUsr_id(), listener);

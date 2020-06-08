@@ -86,4 +86,15 @@ public class UserManagerDAO extends EgovAbstractMapper{
 	public void updateUserManager(UserVO userVo) throws SQLException {
 		update("userManagerSql.updateUserManager", userVo);	
 	}
+	
+	/**
+	 * top 화면 profile 조회
+	 * 
+	 * @param instanceScaleVO
+	 * @throws Exception
+	 */
+	@SuppressWarnings({ "deprecation", "unchecked" })
+	public Map<String, Object> selectProfieView(Map<String, Object> param) {
+		return (Map<String, Object>) selectOne("userManagerSql.selectProfieView", param);
+	}
 }
