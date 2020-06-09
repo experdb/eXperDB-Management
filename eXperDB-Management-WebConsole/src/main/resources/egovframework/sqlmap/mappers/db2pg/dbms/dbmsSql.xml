@@ -97,13 +97,13 @@
 		      AND DB2PG_SYS_ID = #{db2pg_sys_id}
 		      </if>
 			  <if test="db2pg_sys_nm != null and db2pg_sys_nm != '' ">
-		      AND DB2PG_SYS_NM = #{db2pg_sys_nm}
+		      AND DB2PG_SYS_NM LIKE '%' || #{db2pg_sys_nm} || '%'
 		      </if>	 
 		      <if test="dbms_dscd != null and dbms_dscd != '' ">
 		      AND DBMS_DSCD = #{dbms_dscd}
 		      </if>	 
 		      <if test="ipadr != null and ipadr != '' ">
-		      AND IPADR = #{ipadr}
+		      AND IPADR LIKE '%' || #{ipadr} || '%'
 		      </if>	 
 		      <if test="dtb_nm != null and dtb_nm != '' ">
 		      AND DTB_NM = #{dtb_nm}
@@ -189,13 +189,13 @@
 			WHERE 1 = 1
 			  AND DBMS_DSCD IN ( 'TC002201','TC002202','TC002203' )
 			  <if test="db2pg_sys_nm != null and db2pg_sys_nm != '' ">
-		      AND DB2PG_SYS_NM = #{db2pg_sys_nm}
+		      AND DB2PG_SYS_NM  LIKE '%' || #{db2pg_sys_nm} || '%'
 		      </if>	 
 		      <if test="dbms_dscd != null and dbms_dscd != '' ">
 		      AND DBMS_DSCD = #{dbms_dscd}
 		      </if>	 
 		      <if test="ipadr != null and ipadr != '' ">
-		      AND IPADR = #{ipadr}
+		      AND IPADR  LIKE '%' || #{ipadr} || '%'
 		      </if>	 			
 	 </select>
 	 
