@@ -184,15 +184,18 @@ function fn_delete(){
 		return false;
 	}else{
 		if(confirm('<spring:message code="message.msg162"/>')){
+			
 			var db2pg_sys_id =  table.row('.selected').data().db2pg_sys_id;
-			//실행중인 커넥터와 스케줄 확인
+			var db2pg_trg_sys_id =  table.row('.selected').data().db2pg_trg_sys_id;
+
+			
+			//ddl, mig work가 등록되어 있는지 확인
 			$.ajax({
 				url : "/db2pg/exeMigCheck.do",
 				data : {
 					db2pg_sys_id : db2pg_sys_id,
+					db2pg_trg_sys_id : db2pg_trg_sys_id
 				},
-				async:true,
-				//dataType : "json",
 				type : "post",
 				beforeSend: function(xhr) {
 			        xhr.setRequestHeader("AJAX", true);
@@ -210,7 +213,7 @@ function fn_delete(){
 				},
 				success : function(result) {
 					if(result>0){
-						alert('<spring:message code="message.msg194"/>');
+						alert('해당 DBMS가 등록된 설정들이 존재합니다.');
 					}else{
 							$.ajax({
 								url : "/db2pg/deleteDBMS.do",
@@ -233,7 +236,7 @@ function fn_delete(){
 									}
 								},
 								success : function(result) {
-									if(result.resultCode == "0000000000"){
+									if(result == true){
 										alert("<spring:message code='message.msg37' />");
 										fn_search();
 									}else{

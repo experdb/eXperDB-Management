@@ -499,4 +499,75 @@ public class Db2pgDbmsSystemController {
 		}
 		return true;
 	}
+	
+	
+	
+	
+	/**
+	 * 해당 시스템이 등록된 WORK 있는지 확인
+	 * 
+	 * @param db2pg_sys_id
+	 * @return
+	 * @throws Exception
+	 */
+	@RequestMapping(value = "/db2pg/exeMigCheck.do")
+	public @ResponseBody int exeMigCheck(HttpServletRequest request, HttpServletResponse response) {
+		
+		int result = 0;
+		
+		Map<String, Object> param = new HashMap<String, Object>();
+		
+		try {				
+			
+			String db2pg_sys_id =  request.getParameter("db2pg_sys_id");
+			String db2pg_trg_sys_id = request.getParameter("db2pg_trg_sys_id");
+
+			param.put("db2pg_sys_id", db2pg_sys_id);
+			param.put("db2pg_trg_sys_id", db2pg_trg_sys_id);
+			
+			int ddl_result = dbmsService.db2pg_ddl_check(param);				
+			int mig_result = dbmsService.db2pg_mig_check(param);		
+			
+			result = ddl_result+mig_result;		
+
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return result;
+	}
+	
+	
+	
+	/**
+	 * DB2PG DBMS 시스템을 삭제한다.
+	 * 
+	 * @param db2pgSysInfVO
+	 * @param request
+	 * @return ModelAndView mv
+	 * @throws Exception
+	 */
+	@RequestMapping(value = "/db2pg/deleteDBMS.do")
+	public @ResponseBody boolean deleteDBMS(
+			@ModelAttribute("accessControlHistoryVO") AccessControlHistoryVO accessControlHistoryVO,
+			@ModelAttribute("accessControlVO") AccessControlVO accessControlVO,
+			@ModelAttribute("historyVO") HistoryVO historyVO,
+			HttpServletRequest request, HttpServletResponse response) throws ParseException {
+
+		// 해당메뉴 권한 조회 (공통메소드호출)
+		
+		try {
+			
+			int db2pg_sys_id =  Integer.parseInt(request.getParameter("db2pg_sys_id"));
+			
+			dbmsService.deleteDBMS(db2pg_sys_id);	
+	
+		} catch (Exception e) {
+			e.printStackTrace();
+			return false;
+		}
+		return true;
+	}
+	
+		
+	
 }

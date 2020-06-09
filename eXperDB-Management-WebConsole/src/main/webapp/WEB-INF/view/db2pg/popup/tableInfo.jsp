@@ -66,6 +66,13 @@ $(window.document).ready(function() {
  * 조회
  ******************************************************** */
 function fn_search(){
+	var table_nm = null;
+	
+	if($("#table_nm").val() == ""){
+		table_nm="%";
+	}else{
+		table_nm=$("#table_nm").val();
+	}
 	
 	if($("#db_svr_nm").val() == "%"){
 		alert('<spring:message code="message.msg152"/>');
@@ -81,7 +88,7 @@ function fn_search(){
  		   	spr_usr_id : $("#spr_usr_id").val(),
  		   	pwd : $("#pwd").val(),
  		  	dbms_dscd : $("#dbms_dscd").val(),
- 		  	table_nm : $("#table_nm").val(),
+ 		  	table_nm : table_nm,
  		  	scm_nm : $("#scm_nm").val()
 		},
 		dataType : "json",

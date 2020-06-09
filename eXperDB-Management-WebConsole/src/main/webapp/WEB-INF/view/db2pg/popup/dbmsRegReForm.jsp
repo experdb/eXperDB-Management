@@ -190,7 +190,7 @@ $(window.document).ready(function() {
  												<%-- <option value="<c:out value="${result.sys_cd}"/><c:if test="${resultInfo[0].dbms_dscd eq result.sys_cd_nm}"> selected</c:if>" ><c:out value="${result.sys_cd_nm}"/></option> --%>
  											</c:forEach>
 									</select>
-						<span class="btn btnC_01" id="pgbtn"><button type="button" class= "btn_type_02" onclick="fn_pgdbmsCall()" style="width: 85px; margin-right: -60px; margin-top: 0;"><spring:message code="migration.loading"/></button></span></td>
+						<%-- <span class="btn btnC_01" id="pgbtn"><button type="button" class= "btn_type_02" onclick="fn_pgdbmsCall()" style="width: 85px; margin-right: -60px; margin-top: 0;"><spring:message code="migration.loading"/></button></span></td> --%>
 				</tr>
 				
 				<tr>

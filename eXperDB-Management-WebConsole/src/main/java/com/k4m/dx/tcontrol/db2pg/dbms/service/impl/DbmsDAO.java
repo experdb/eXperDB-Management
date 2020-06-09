@@ -69,4 +69,14 @@ public class DbmsDAO extends EgovAbstractMapper {
 		return migChk;
 	}
 
+	public int db2pg_ddl_check(Map<String, Object> param) {
+		int db2pg_ddl_check = (int) getSqlSession().selectOne("dbmsSQL.db2pg_ddl_check", param);
+		return db2pg_ddl_check;
+	}
+
+	public int db2pg_mig_check(Map<String, Object> param) {
+		int db2pg_mig_check = (int) getSqlSession().selectOne("dbmsSQL.db2pg_mig_check", param);
+		return db2pg_mig_check;
+	}
+
 }
