@@ -95,6 +95,8 @@ public class Db2pgConfigController {
 					fileContent = fileContent.replaceAll("#SRC_EXCLUDE_TABLES=", "SRC_EXCLUDE_TABLES="+configObj.get("src_exclude_tables").toString());
 				}
 				fileContent = fileContent.replaceAll("SRC_SELECT_ON_PARALLEL=1", "SRC_SELECT_ON_PARALLEL="+configObj.get("src_select_on_parallel").toString());
+				//target pool 생성 에러로 인해 소스 병렬도(SRC_SELECT_ON_PARALLEL)랑 타겟 커넥션 수(TAR_CONN_COUNT) 동일하게 변경
+				fileContent = fileContent.replaceAll("TAR_CONN_COUNT=1", "TAR_CONN_COUNT="+configObj.get("src_select_on_parallel").toString());
 				
 				//blob 데이터 가능하도록 SRC_COPY_SEGMENT_SIZE,SRC_STATEMENT_FETCH_SIZE 통일 
 				fileContent = fileContent.replaceAll("SRC_COPY_SEGMENT_SIZE=3000", "SRC_COPY_SEGMENT_SIZE="+configObj.get("src_copy_segment_size").toString());

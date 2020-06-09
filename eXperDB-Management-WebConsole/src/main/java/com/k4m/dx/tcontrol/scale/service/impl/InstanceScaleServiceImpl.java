@@ -109,7 +109,7 @@ public class InstanceScaleServiceImpl extends EgovAbstractServiceImpl implements
 					}
 				}
 			}
-
+System.out.println("===scalejsonObj===" + scalejsonObj);
 			if (!scalejsonObj.isEmpty()) {
 				InstancesArrly = (JSONArray) scalejsonObj.get("Instances");
 	
@@ -127,13 +127,17 @@ public class InstanceScaleServiceImpl extends EgovAbstractServiceImpl implements
 						if (instancesObj.get("PrivateIpAddress") != null) {
 							privateIpAddressVal = (String) instancesObj.get("PrivateIpAddress");
 						}
-						
+
 						//재확인 필요 일단 넣어놈
 						if (scalejsonChk != null && privateIpAddressVal != null) {
-							if (Integer.parseInt(scalejsonChk.replaceAll("\\.","")) < Integer.parseInt(privateIpAddressVal.replaceAll("\\.",""))) {
-								jsonObj.put("default_chk", "N");
+							if (!"".equals(scalejsonChk) && !"".equals(privateIpAddressVal)) {
+								if (Integer.parseInt(privateIpAddressVal.replaceAll("\\.","")) >= Integer.parseInt(scalejsonChk.replaceAll("\\.",""))) {
+									jsonObj.put("default_chk", "N");
+								} else {
+									jsonObj.put("default_chk", "Y");
+								}
 							} else {
-								jsonObj.put("default_chk", "Y");
+								jsonObj.put("default_chk", "N");
 							}
 						} else {
 							jsonObj.put("default_chk", "N");
@@ -603,6 +607,7 @@ public class InstanceScaleServiceImpl extends EgovAbstractServiceImpl implements
 					}
 				} else {
 					result = new JSONObject();
+
 					if (!scalejsonChk.isEmpty()) {
 						if (!"0".equals(scalejsonChk)) {
 							result.put("wrk_id", "1");
