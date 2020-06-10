@@ -473,7 +473,7 @@ function getdataDataList(){
 								<td><input type="text" name="ddl_wrk_nm" id="ddl_wrk_nm" class="txt t5" maxlength="25"  /></td>
 								<th scope="row" class="t9"><spring:message code="common.status" /></th>
 								<td>
-									<select name="ddl_exe_rslt_cd" id="exe_rslt_cd" class="select t5">
+									<select name="ddl_exe_rslt_cd" id="ddl_exe_rslt_cd" class="select t5">
 										<option value="%"><spring:message code="schedule.total" /></option>
 										<option value="TC001701"><spring:message code="common.success" /></option>
 										<option value="TC001702"><spring:message code="common.failed" /></option>
