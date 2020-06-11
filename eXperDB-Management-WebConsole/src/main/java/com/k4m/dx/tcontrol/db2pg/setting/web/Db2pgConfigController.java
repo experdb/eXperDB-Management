@@ -6,6 +6,7 @@ import java.io.File;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.util.regex.Matcher;
 
 import org.json.simple.JSONObject;
 import org.springframework.stereotype.Controller;
@@ -39,10 +40,10 @@ public class Db2pgConfigController {
 				fileContent = fileContent.replaceAll("SRC_PORT=1521", "SRC_PORT="+configObj.get("src_port").toString());
 				fileContent = fileContent.replaceAll("SRC_DB_CHARSET=UTF8", "SRC_DB_CHARSET="+configObj.get("src_db_charset").toString());
 				if(!configObj.get("src_include_tables").toString().equals("")){
-					fileContent = fileContent.replaceAll("#SRC_INCLUDE_TABLES=", "SRC_INCLUDE_TABLES="+configObj.get("src_include_tables").toString());
+					fileContent = fileContent.replaceAll("#SRC_INCLUDE_TABLES=", Matcher.quoteReplacement("SRC_INCLUDE_TABLES="+configObj.get("src_include_tables").toString()));
 				}
 				if(!configObj.get("src_exclude_tables").toString().equals("")){
-					fileContent = fileContent.replaceAll("#SRC_EXCLUDE_TABLES=", "SRC_EXCLUDE_TABLES="+configObj.get("src_exclude_tables").toString());
+					fileContent = fileContent.replaceAll("#SRC_EXCLUDE_TABLES=", Matcher.quoteReplacement("SRC_EXCLUDE_TABLES="+configObj.get("src_exclude_tables").toString()));
 				}
 				fileContent = fileContent.replaceAll("SRC_CLASSIFY_STRING=original", "SRC_CLASSIFY_STRING="+configObj.get("src_classify_string").toString());	
 				fileContent = fileContent.replaceAll("SRC_TABLE_DDL=TRUE", "SRC_TABLE_DDL="+configObj.get("src_table_ddl").toString());		
