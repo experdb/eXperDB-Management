@@ -90,10 +90,10 @@ public class Db2pgConfigController {
 				fileContent = fileContent.replaceAll("SRC_PORT=1521", "SRC_PORT="+configObj.get("src_port").toString());
 				fileContent = fileContent.replaceAll("SRC_DB_CHARSET=UTF8", "SRC_DB_CHARSET="+configObj.get("src_db_charset").toString());
 				if(!configObj.get("src_include_tables").toString().equals("")){
-					fileContent = fileContent.replaceAll("#SRC_INCLUDE_TABLES=", "SRC_INCLUDE_TABLES="+configObj.get("src_include_tables").toString());
+					fileContent = fileContent.replaceAll("#SRC_INCLUDE_TABLES=", "SRC_INCLUDE_TABLES="+Matcher.quoteReplacement(configObj.get("src_include_tables").toString()));
 				}
 				if(!configObj.get("src_exclude_tables").toString().equals("")){
-					fileContent = fileContent.replaceAll("#SRC_EXCLUDE_TABLES=", "SRC_EXCLUDE_TABLES="+configObj.get("src_exclude_tables").toString());
+					fileContent = fileContent.replaceAll("#SRC_EXCLUDE_TABLES=", "SRC_EXCLUDE_TABLES="+Matcher.quoteReplacement(configObj.get("src_exclude_tables").toString()));
 				}
 				fileContent = fileContent.replaceAll("SRC_SELECT_ON_PARALLEL=1", "SRC_SELECT_ON_PARALLEL="+configObj.get("src_select_on_parallel").toString());
 				//target pool 생성 에러로 인해 소스 병렬도(SRC_SELECT_ON_PARALLEL)랑 타겟 커넥션 수(TAR_CONN_COUNT) 동일하게 변경
