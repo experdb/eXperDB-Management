@@ -34,6 +34,9 @@ var tableGbn = "${tableGbn}";
 var act = "${act}";
 var tableList = ${tableList};
 
+
+var toatalCnt = 0;
+
 function fn_init() {
 		table = $('#tableList').DataTable({
 		scrollY : "300px",
@@ -43,15 +46,16 @@ function fn_init() {
 		paging : true,	
 		columns : [
 		{data : "rownum", defaultContent : "", targets : 0, orderable : false, checkboxes : {'selectRow' : true}}, 
-		{data : "schema", className : "dt-center", defaultContent : ""},
-		{data : "name", className : "dt-center", defaultContent : ""},
+		{data : "schema_name", className : "dt-center", defaultContent : ""},
+		{data : "table_name", className : "dt-center", defaultContent : ""},
+		{data : "obj_description", className : "dt-center", defaultContent : ""},
 		],'select': {'style': 'multi'}
 	});
 		
 		table.tables().header().to$().find('th:eq(0)').css('min-width', '30px');
 		table.tables().header().to$().find('th:eq(1)').css('min-width', '100px');
 		table.tables().header().to$().find('th:eq(2)').css('min-width', '100px');
-
+		table.tables().header().to$().find('th:eq(3)').css('min-width', '150px');
 		$(window).trigger('resize'); 
 };
 
@@ -59,19 +63,23 @@ function fn_init() {
  * 페이지 시작시 함수
  ******************************************************** */
 $(window.document).ready(function() {
+	
 	fn_init();
-	fn_search();
-});
 
-/* ********************************************************
- * 조회
- ******************************************************** */
-function fn_search(){
+	var table_nm = null;
+	
+	if($("#table_nm").val() == ""){
+		table_nm="%";
+	}else{
+		table_nm=$("#table_nm").val();
+	}
+	
 	$.ajax({
 		url : "/selectTableMappList.do",
 		data : {
 			db_svr_id : db_svr_id,
-			db_nm : db_nm
+			db_nm : db_nm,
+			table_nm : table_nm
 		},
 		dataType : "json",
 		type : "post",
@@ -92,9 +100,60 @@ function fn_search(){
 		success : function(result) {
 			table.rows({selected: true}).deselect();
 			table.clear().draw();
-			table.rows.add(result.data).draw();
+			table.rows.add(result.RESULT_DATA).draw();
 	
+			totalCnt = result.RESULT_DATA.length;
+			
 			  if(tableList != ""){
+			 	fn_tableCheckSelect(tableList,act);
+			}   
+		}
+	});
+	
+});
+
+/* ********************************************************
+ * 조회
+ ******************************************************** */
+function fn_search(){
+	
+	var table_nm = null;
+	
+	if($("#table_nm").val() == ""){
+		table_nm="%";
+	}else{
+		table_nm=$("#table_nm").val();
+	}
+	
+	$.ajax({
+		url : "/selectTableMappList.do",
+		data : {
+			db_svr_id : db_svr_id,
+			db_nm : db_nm,
+			table_nm : table_nm
+		},
+		dataType : "json",
+		type : "post",
+		beforeSend: function(xhr) {
+	        xhr.setRequestHeader("AJAX", true);
+	     },
+		error : function(xhr, status, error) {
+			if(xhr.status == 401) {
+				alert('<spring:message code="message.msg02" />');
+				top.location.href = "/";
+			} else if(xhr.status == 403) {
+				alert('<spring:message code="message.msg03" />');
+				top.location.href = "/";
+			} else {
+				alert("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""));
+			}
+		},
+		success : function(result) {
+			table.rows({selected: true}).deselect();
+			table.clear().draw();
+			table.rows.add(result.RESULT_DATA).draw();
+	
+			  if(tableList != ""){			  
 			 	fn_tableCheckSelect(tableList,act);
 			}   
 		}
@@ -107,28 +166,27 @@ function fn_search(){
  ******************************************************** */
 function fn_Add(){
 	
-	var totalCnt = table.rows().data().length;
 	var datas = table.rows('.selected').data();
-	
 	
 	var table_mapp = [];
 	var rowList = [];
     for (var i = 0; i < datas.length; i++) {
         rowList.push( table.rows('.selected').data()[i]);    
-        table_mapp.push(table.rows('.selected').data()[i].schema+"."+table.rows('.selected').data()[i].name);
+        table_mapp.push(table.rows('.selected').data()[i].schema_name+"."+table.rows('.selected').data()[i].table_name);
   }	
-	opener.fn_tableAddCallback(rowList, tableGbn, totalCnt,table_mapp);
+	opener.fn_tableAddCallback(rowList, tableGbn, totalCnt, table_mapp);
 	self.close();
 }
 
 
 function fn_tableCheckSelect(tableList,act){
+
 	var datas = table.rows().data();
 
-	if(act == "i"){
+	if(act == "i"){	
 		 for (var i = 0; i < datas.length; i++) {
 				for(var j=0; j <tableList.length; j++ ){
-					if(JSON.stringify(table.rows().data()[i]) == JSON.stringify(tableList[j])){
+					if(JSON.stringify(table.rows().data()[i].schema_name)+"."+JSON.stringify(table.rows().data()[i].table_name) == JSON.stringify(tableList[j].schema_name)+"."+JSON.stringify(tableList[j].table_name)){
 						$('input', table.rows(i).nodes()).prop('checked', true); 
 						table.rows(i).nodes().to$().addClass('selected');	
 					}
@@ -137,7 +195,7 @@ function fn_tableCheckSelect(tableList,act){
 	}else{
 		 for (var i = 0; i < datas.length; i++) {
 				for(var j=0; j <tableList.length; j++ ){				
-					if(table.rows().data()[i].schema+"."+table.rows().data()[i].name == tableList[j]){
+					if(table.rows().data()[i].schema_name+"."+table.rows().data()[i].table_name == tableList[j]){
 						$('input', table.rows(i).nodes()).prop('checked', true); 
 						table.rows(i).nodes().to$().addClass('selected');	
 					}
@@ -155,6 +213,33 @@ function fn_tableCheckSelect(tableList,act){
 <div class="pop_container">
 	<div class="pop_cts">
 		<p class="tit">테이블 정보</p>
+		
+			<div class="btn_type_01">
+				<span class="btn"><button onClick="fn_search();" type="button"><spring:message code="common.search" /></button></span>
+			</div>
+			
+
+		<div class="pop_cmm">							
+			<table class="write bdtype1">
+				<caption><spring:message code="menu.schedule_registration" /></caption>				
+				<colgroup>
+					<col style="width:30%;" />
+					<col style="width:70%;" />
+					<col style="width:30%;" />
+					<col style="width:70%;" />
+					</col>
+				</colgroup>
+				<tbody>
+					<tr>							
+						<th scope="row" class="ico_t1" ><spring:message code="migration.table_name"/></th>
+						<td>
+						<input type="text" class="txt t9" name="table_nm" id="table_nm" />
+						</td>				
+					</tr>
+				</tbody>
+			</table>
+		</div>
+
 
 		<div class="pop_cmm3">
 			<p class="pop_s_tit">테이블리스트</p>
@@ -165,10 +250,10 @@ function fn_tableCheckSelect(tableList,act){
 						<th width="30"></th>
 						<th width="100" class="dt-center">스키마명</th>
 						<th width="100" class="dt-center">테이블명</th>
+						<th width="100" class="dt-center">COMMENT</th>
 					</tr>
 				</thead>
 			</table>		
-	
 		</div>
 		
 		<div class="btn_type_02">

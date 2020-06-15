@@ -43,9 +43,21 @@ var tableList = ${tables};
 			$("#db_id option").not(":selected").attr("disabled", "disabled");
 			/* $("#snapshot_mode option").not(":selected").attr("disabled", "disabled"); */
 
+			if(schemaList == ""){
+				$('#trans_include_schema').val("");
+			}else{
+				$('#trans_include_schema').val("<spring:message code='migration.total_schema'/>${schema_total_cnt}<spring:message code='migration.selected_out_of'/>"+schemaList.length+"<spring:message code='migration.items'/>");
+			}
 			
-			$('#trans_include_schema').val("<spring:message code='migration.total_schema'/>${schema_total_cnt}<spring:message code='migration.selected_out_of'/>"+schemaList.length+"<spring:message code='migration.items'/>");
-			$('#trans_include_table').val("<spring:message code='migration.total_table'/>${table_total_cnt}<spring:message code='migration.selected_out_of'/>"+tableList.length+"<spring:message code='migration.items'/>");
+			
+			if(tableList == ""){
+				$('#trans_include_table').val("");
+			}else{
+				$('#trans_include_table').val("<spring:message code='migration.total_table'/>${table_total_cnt}<spring:message code='migration.selected_out_of'/>"+tableList.length+"<spring:message code='migration.items'/>");
+			}
+			
+			//$('#trans_include_schema').val("<spring:message code='migration.total_schema'/>${schema_total_cnt}<spring:message code='migration.selected_out_of'/>"+schemaList.length+"<spring:message code='migration.items'/>");
+			//$('#trans_include_table').val("<spring:message code='migration.total_table'/>${table_total_cnt}<spring:message code='migration.selected_out_of'/>"+tableList.length+"<spring:message code='migration.items'/>");
 		}
 		
 		$("#snapshotModeDetail").html("(스냅샷 수행하지 않음)");	
@@ -321,7 +333,6 @@ var tableList = ${tables};
 		frmTablePop.target = 'popupView';
 		frmTablePop.db_svr_id.value = "${db_svr_id}";
 		frmTablePop.tableGbn.value = gbn;
-		
 		frmTablePop.db_nm.value = $("#db_id option:checked").text();
 		
 		frmTablePop.act.value = "${act}";
@@ -331,7 +342,7 @@ var tableList = ${tables};
 			 if(gbn == 'include'){
 				 frmTablePop.include_table_nm.value = tableList;  
 				}else{
-					frmTablePop.exclude_table_nm.value = tableList;  
+				frmTablePop.exclude_table_nm.value = tableList;  
 				} 
 		}else{
 			 if(gbn == 'include'){
@@ -340,7 +351,7 @@ var tableList = ${tables};
 					frmTablePop.exclude_table_nm.value = $('#exclude_table_nm').val();  
 				} 
 		}
-		
+
 		frmTablePop.submit();   
 	}	
 		

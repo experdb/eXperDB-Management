@@ -255,4 +255,5 @@ public class ClientProtocolID {
 	public static final String EXRT_TRG_TB_NM = "EXRT_TRG_TB_NM";
 	public static final String CONNECT_INFO = "CONNECT_INFO";
 	public static final String MAPP_INFO = "MAPP_INFO";
+	public static final String COMPRESSION_TYPE = "COMPRESSION_TYPE";
 }

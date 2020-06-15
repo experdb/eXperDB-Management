@@ -84,4 +84,9 @@ public class TransServiceImpl extends EgovAbstractServiceImpl implements TransSe
 		transDAO.updateConnectInfo(transVO);	
 	}
 
+	@Override
+	public List<TransVO> selectCompressionTypeList() throws Exception {
+		return transDAO.selectCompressionTypeList();
+	}
+
 }

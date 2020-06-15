@@ -11,6 +11,7 @@ import javax.servlet.http.HttpSession;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
+import org.springframework.batch.core.scope.context.SynchronizationManagerSupport;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -32,10 +33,9 @@ import com.k4m.dx.tcontrol.cmmn.client.ClientProtocolID;
 import com.k4m.dx.tcontrol.common.service.AgentInfoVO;
 import com.k4m.dx.tcontrol.common.service.CmmnServerInfoService;
 import com.k4m.dx.tcontrol.common.service.HistoryVO;
-import com.k4m.dx.tcontrol.db2pg.cmmn.DatabaseTableInfo;
-import com.k4m.dx.tcontrol.db2pg.dbms.service.Db2pgSysInfVO;
-import com.k4m.dx.tcontrol.functions.transfer.service.TransferVO;
 import com.k4m.dx.tcontrol.login.service.LoginVO;
+import com.k4m.dx.tcontrol.transfer.TransferSchemaInfo;
+import com.k4m.dx.tcontrol.transfer.TransferTableInfo;
 import com.k4m.dx.tcontrol.transfer.service.TransMappVO;
 import com.k4m.dx.tcontrol.transfer.service.TransService;
 import com.k4m.dx.tcontrol.transfer.service.TransVO;
@@ -213,10 +213,10 @@ public class TransController {
 				}
 				
 				String[] tables = null;
-				schemas = mappInfo.get(0).get("exrt_trg_tb_nm").toString().split(",");
+				tables = mappInfo.get(0).get("exrt_trg_tb_nm").toString().split(",");
 		
-				for (int i = 0; i < schemas.length; i++) {
-					tableArray.add(schemas[i]);
+				for (int i = 0; i < tables.length; i++) {
+					tableArray.add(tables[i]);
 				}
 					
 				mv.addObject("kc_ip", transInfo.get(0).get("kc_ip"));
@@ -351,6 +351,8 @@ public class TransController {
 			}
 
 			if(tansExrttrgMapp_status.equals("success")){
+				
+				System.out.println("등록합니다.");
 				
 				transVO.setTrans_exrt_trg_tb_id(trans_exrt_trg_tb_id);
 				transService.insertConnectInfo(transVO);
@@ -499,6 +501,11 @@ public class TransController {
 		
 		int db_svr_id = Integer.parseInt(request.getParameter("db_svr_id"));
 		String db_nm = request.getParameter("db_nm");
+		String schema_nm = request.getParameter("schema_nm");
+		
+		System.out.println("db_svr_id= "+db_svr_id);
+		System.out.println("db_nm= "+db_nm);
+		System.out.println("schema_nm= "+schema_nm);
 		
 		try {
 			AES256 dec = new AES256(AES256_KEY.ENC_KEY);
@@ -525,8 +532,12 @@ public class TransController {
 			serverObj.put(ClientProtocolID.DATABASE_NAME, db_nm);
 			serverObj.put(ClientProtocolID.USER_ID, dbServerVO.getSvr_spr_usr_id());
 			serverObj.put(ClientProtocolID.USER_PWD, dec.aesDecode(dbServerVO.getSvr_spr_scm_pwd()));	
+			serverObj.put(ClientProtocolID.DB_TYPE, "TC002204");  //postgres 한정
+			serverObj.put(ClientProtocolID.SCHEMA, schema_nm);
+			serverObj.put(ClientProtocolID.TABLE_NM, "%");
 			
-			result = cic.schemaList(serverObj, IP, PORT);
+			//result = cic.schemaList(serverObj, IP, PORT);
+			result =  TransferSchemaInfo.getSchemaList(serverObj);
 			
 			System.out.println(result);
 			
@@ -575,10 +586,12 @@ public class TransController {
 				//테이블 구분에 따른 테이블 리스트저장
 				if(tableGbn.equals("include")){
 					tables = request.getParameter("include_table_nm").toString().split(",");
+					
 				}else{
 					tables = request.getParameter("exclude_table_nm").toString().split(",");
 				}
 				for (int i = 0; i < tables.length; i++) {
+					System.out.println("테이블 = "+ tables[i]);
 					jsonArray.add(tables[i]);
 				}
 				
@@ -603,7 +616,8 @@ public class TransController {
 		} catch (Exception e2) {
 			e2.printStackTrace();
 		}
-
+		
+		
 		mv.addObject("db_svr_id", db_svr_id);
 		mv.addObject("db_nm", db_nm);
 		mv.addObject("tableGbn", tableGbn);
@@ -628,6 +642,8 @@ public class TransController {
 		
 		int db_svr_id = Integer.parseInt(request.getParameter("db_svr_id"));
 		String db_nm = request.getParameter("db_nm");
+		
+		String table_nm = request.getParameter("table_nm");
 		
 		try {
 			AES256 dec = new AES256(AES256_KEY.ENC_KEY);
@@ -654,8 +670,13 @@ public class TransController {
 			serverObj.put(ClientProtocolID.DATABASE_NAME, db_nm);
 			serverObj.put(ClientProtocolID.USER_ID, dbServerVO.getSvr_spr_usr_id());
 			serverObj.put(ClientProtocolID.USER_PWD, dec.aesDecode(dbServerVO.getSvr_spr_scm_pwd()));	
+			serverObj.put(ClientProtocolID.DB_TYPE, "TC002204");  //postgres 한정
+			serverObj.put(ClientProtocolID.SCHEMA, "%");
+			serverObj.put(ClientProtocolID.TABLE_NM, table_nm);
+	
+			//result = cic.object_List(serverObj, IP, PORT);
 			
-			result = cic.object_List(serverObj, IP, PORT);
+			result =  TransferTableInfo.getTblList(serverObj);
 			
 			System.out.println(result);
 			
@@ -926,5 +947,300 @@ public class TransController {
 				return false;
 			}
 			return true;
+		}
+		
+		
+		
+		
+		/**
+		 * 전송설정등록 팝업 화면을 보여준다.
+		 * 
+		 * @param
+		 * @return ModelAndView mv
+		 * @throws Exception
+		 */
+		@RequestMapping(value = "/popup/connectRegForm2.do")
+		public ModelAndView connectRegForm2(@ModelAttribute("historyVO") HistoryVO historyVO,
+				HttpServletRequest request, @ModelAttribute("workVo") WorkVO workVO) {
+			ModelAndView mv = new ModelAndView();
+			JSONObject result = new JSONObject();
+			JSONObject serverObj = new JSONObject();
+			ClientInfoCmmn cic = new ClientInfoCmmn();
+			
+			List<Map<String, Object>> transInfo = null;
+			List<Map<String, Object>> mappInfo = null;
+			
+			JSONArray schemaArray = new JSONArray();
+			JSONArray tableArray = new JSONArray();
+			
+			// Get DB List
+			try {
+				HttpSession session = request.getSession();
+				LoginVO loginVo = (LoginVO) session.getAttribute("session");
+				String usr_id = loginVo.getUsr_id();
+				workVO.setUsr_id(usr_id);
+				
+				mv.addObject("dbList", backupService.selectDbList(workVO));
+			} catch (Exception e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
+			
+			
+			// Get 스냅샷모드 
+			try {
+				mv.addObject("snapshotModeList", transService.selectSnapshotModeList());
+			} catch (Exception e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
+			
+			
+			// 압축형식
+			try {
+				mv.addObject("compressionTypeList", transService.selectCompressionTypeList());
+			} catch (Exception e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
+			
+			try {
+
+				CmmnUtils.saveHistory(request, historyVO);
+
+				HttpSession session = request.getSession();
+				LoginVO loginVo = (LoginVO) session.getAttribute("session");
+				String usr_id = loginVo.getUsr_id();
+
+				String act = request.getParameter("act");
+
+				int db_svr_id = Integer.parseInt(request.getParameter("db_svr_id"));
+				//int cnr_id = Integer.parseInt(request.getParameter("cnr_id"));
+				
+				if (act.equals("i")) {				
+					// 화면접근이력 이력 남기기
+					historyVO.setExe_dtl_cd("DX-T0016");
+					historyVO.setMnu_id(33);
+					accessHistoryService.insertHistory(historyVO);
+				}
+				
+				if (act.equals("u")) {
+					// 화면접근이력 이력 남기기
+					historyVO.setExe_dtl_cd("DX-T0017");
+					historyVO.setMnu_id(33);
+					accessHistoryService.insertHistory(historyVO);
+
+					int trans_exrt_trg_tb_id = Integer.parseInt(request.getParameter("trans_exrt_trg_tb_id"));
+					int trans_id =  Integer.parseInt(request.getParameter("trans_id"));
+					
+					
+					try{
+						transInfo = transService.selectTransInfo(trans_id);	
+						System.out.println("전송정보 : "+transInfo.get(0));
+					}catch (Exception e) {
+						e.printStackTrace();
+					}
+					
+					try{
+						mappInfo = transService.selectMappInfo(trans_exrt_trg_tb_id);
+						System.out.println("매핑정보 : "+mappInfo.get(0));
+					}catch (Exception e) {
+						e.printStackTrace();
+					}
+									
+					String[] schemas = null;
+					schemas = mappInfo.get(0).get("exrt_trg_scm_nm").toString().split(",");
+			
+					for (int i = 0; i < schemas.length; i++) {
+						schemaArray.add(schemas[i]);
+					}
+					
+					String[] tables = null;
+					tables = mappInfo.get(0).get("exrt_trg_tb_nm").toString().split(",");
+			
+					for (int i = 0; i < tables.length; i++) {
+						tableArray.add(tables[i]);
+					}
+						
+					mv.addObject("kc_ip", transInfo.get(0).get("kc_ip"));
+					mv.addObject("kc_port", transInfo.get(0).get("kc_port"));
+					mv.addObject("connect_nm", transInfo.get(0).get("connect_nm"));
+					mv.addObject("db_id", transInfo.get(0).get("db_id"));
+					mv.addObject("db_nm", transInfo.get(0).get("db_nm"));
+					mv.addObject("snapshot_mode", transInfo.get(0).get("snapshot_mode"));
+					mv.addObject("snapshot_nm", transInfo.get(0).get("snapshot_nm"));
+					mv.addObject("trans_exrt_trg_tb_id", mappInfo.get(0).get("trans_exrt_trg_tb_id"));			
+					mv.addObject("schema_total_cnt", mappInfo.get(0).get("schema_total_cnt"));
+					mv.addObject("table_total_cnt", mappInfo.get(0).get("table_total_cnt"));
+					mv.addObject("trans_exrt_trg_tb_id", trans_exrt_trg_tb_id);
+					mv.addObject("trans_id",trans_id);				
+				}
+		
+				mv.addObject("schemas", schemaArray);
+				mv.addObject("tables", tableArray);
+				mv.addObject("act", act);
+				mv.addObject("db_svr_id", db_svr_id);
+				
+				mv.setViewName("popup/connectRegForm2");
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+			return mv;
+		}
+		
+		
+		
+		
+		/**
+		 * 수정테스트
+		 * 
+		 * @param
+		 * @return ModelAndView mv
+		 * @throws Exception
+		 */
+		@RequestMapping(value = "/popup/connectRegReForm.do")
+		public ModelAndView connectRegReForm(@ModelAttribute("historyVO") HistoryVO historyVO,
+				HttpServletRequest request, @ModelAttribute("workVo") WorkVO workVO) {
+			
+			ModelAndView mv = new ModelAndView();
+			
+			JSONObject schemaResult = new JSONObject();
+			JSONObject tableResult = new JSONObject();
+			
+			
+			JSONObject serverObj = new JSONObject();
+			ClientInfoCmmn cic = new ClientInfoCmmn();
+			
+			List<Map<String, Object>> transInfo = null;
+			List<Map<String, Object>> mappInfo = null;
+			
+			JSONArray schemaArray = new JSONArray();
+			JSONArray tableArray = new JSONArray();
+			
+			// Get DB List
+			try {
+				HttpSession session = request.getSession();
+				LoginVO loginVo = (LoginVO) session.getAttribute("session");
+				String usr_id = loginVo.getUsr_id();
+				workVO.setUsr_id(usr_id);
+				
+				mv.addObject("dbList", backupService.selectDbList(workVO));
+			} catch (Exception e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
+			
+			
+			// Get 스냅샷모드 
+			try {
+				mv.addObject("snapshotModeList", transService.selectSnapshotModeList());
+			} catch (Exception e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
+			
+			
+			// 압축형식
+			try {
+				mv.addObject("compressionTypeList", transService.selectCompressionTypeList());
+			} catch (Exception e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
+			
+			try {
+
+				CmmnUtils.saveHistory(request, historyVO);
+
+				HttpSession session = request.getSession();
+				LoginVO loginVo = (LoginVO) session.getAttribute("session");
+				String usr_id = loginVo.getUsr_id();
+
+
+				int db_svr_id = Integer.parseInt(request.getParameter("db_svr_id"));
+
+	
+					// 화면접근이력 이력 남기기
+					historyVO.setExe_dtl_cd("DX-T0017");
+					historyVO.setMnu_id(33);
+					accessHistoryService.insertHistory(historyVO);
+
+					int trans_exrt_trg_tb_id = Integer.parseInt(request.getParameter("trans_exrt_trg_tb_id"));
+					int trans_id =  Integer.parseInt(request.getParameter("trans_id"));
+					
+					
+					try{
+						transInfo = transService.selectTransInfo(trans_id);	
+						System.out.println("전송정보 : "+transInfo.get(0));
+					}catch (Exception e) {
+						e.printStackTrace();
+					}
+					
+					try{
+						mappInfo = transService.selectMappInfo(trans_exrt_trg_tb_id);
+						System.out.println("매핑정보 : "+mappInfo.get(0));
+					}catch (Exception e) {
+						e.printStackTrace();
+					}
+									
+					
+
+					String[] schemas = null;
+					schemas = mappInfo.get(0).get("exrt_trg_scm_nm").toString().split(",");
+			
+						for (int i = 0; i < schemas.length; i++) {
+							JSONObject jsonObj = new JSONObject();						
+							jsonObj.put("schema_name", schemas[i]);
+							schemaArray.add(jsonObj);
+						}
+						schemaResult.put("data", schemaArray);							
+	
+				
+						
+					String[] tables = null;
+
+					tables = mappInfo.get(0).get("exrt_trg_tb_nm").toString().split(",");
+
+					if(mappInfo.get(0).get("exrt_trg_tb_nm").toString().equals("")){
+				
+					}else {
+						for (int i = 0; i < tables.length; i++) {
+							JSONObject jsonObj = new JSONObject();
+							String[] datas = null;
+							System.out.println("tables = "+tables[i]);
+							datas = tables[i].toString().split("\\.");
+								for(int j = 0; j < 1; j++){
+									jsonObj.put("schema_name", datas[0]);
+									jsonObj.put("table_name", datas[1]);
+									tableArray.add(jsonObj);
+								}
+						}
+						tableResult.put("data", tableArray);
+					}
+					
+					mv.addObject("kc_ip", transInfo.get(0).get("kc_ip"));
+					mv.addObject("kc_port", transInfo.get(0).get("kc_port"));
+					mv.addObject("connect_nm", transInfo.get(0).get("connect_nm"));
+					mv.addObject("db_id", transInfo.get(0).get("db_id"));
+					mv.addObject("db_nm", transInfo.get(0).get("db_nm"));
+					mv.addObject("snapshot_mode", transInfo.get(0).get("snapshot_mode"));
+					mv.addObject("snapshot_nm", transInfo.get(0).get("snapshot_nm"));
+					mv.addObject("trans_exrt_trg_tb_id", mappInfo.get(0).get("trans_exrt_trg_tb_id"));			
+					mv.addObject("schema_total_cnt", mappInfo.get(0).get("schema_total_cnt"));
+					mv.addObject("table_total_cnt", mappInfo.get(0).get("table_total_cnt"));
+					mv.addObject("trans_exrt_trg_tb_id", trans_exrt_trg_tb_id);
+					mv.addObject("trans_id",trans_id);				
+					mv.addObject("compression_type", transInfo.get(0).get("compression_type"));
+					mv.addObject("compression_nm", transInfo.get(0).get("compression_nm"));
+
+				mv.addObject("schemas", schemaResult);
+				mv.addObject("tables", tableResult);
+				mv.addObject("db_svr_id", db_svr_id);
+				
+				mv.setViewName("popup/connectRegReForm");
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+			return mv;
 		}
 }

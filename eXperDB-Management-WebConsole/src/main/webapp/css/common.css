@@ -274,6 +274,20 @@ input[type="text"]:disabled, input[type="text"].disabled {background:#e4e9ec;col
 .pop_cts .pop_cmm3 .pop_s_tit{padding:0 0 0 30px;height:20px;line-height:20px;margin-bottom:10px;background:url(../images/popup/ico_p_2.png) 8px 48% no-repeat;}
 
 /* 맵핑 */
+
+.trans_mapping_area{position:relative;top:0;left:0;padding:10px 20px;border:1px solid #b8c3c6;}
+.trans_mapping_area:after{display:block;content:"";clear:both;}
+/* .mapping_area .tit{height:28px;line-height:28px;padding-left:27px;border-bottom:1px solid #b8c3c6;background:#e4e9ec;color:#101922;font-size:12px;font-family:'Nanum Square Bold';font-weight:700;} */
+.trans_mapping_area .trans_tit{height:28px;line-height:28px;padding-left:27px;border-bottom:1px solid #b8c3c6;background:#e4e9ec;color:#101922;font-size:12px;font-family:'맑은 고딕 Bold';font-weight:700;}
+.trans_mapping_area .trans_mapping_lt,
+.trans_mapping_area .trans_mapping_rt{width:333px;border:1px solid #b8c3c6;}
+.trans_mapping_area .trans_mapping_lt{float:left;}
+.trans_mapping_area .trans_mapping_rt{float:right;}
+.trans_mapping_area .trans_overflow_area{height:305px;border:none;}
+.trans_mapping_area .trans_mapping_btn{position:absolute;top:50%;left:50%;margin:-94px 0 0 -19px;}
+.trans_mapping_area .trans_mapping_btn > a{display:block;margin-top:12px;}
+.trans_mapping_area .trans_mapping_btn > a:first-child{margin-top:0;}
+
 .mapping_area{position:relative;top:0;left:0;margin-top:17px;padding:10px 20px;border:1px solid #b8c3c6;}
 .mapping_area:after{display:block;content:"";clear:both;}
 /* .mapping_area .tit{height:28px;line-height:28px;padding-left:27px;border-bottom:1px solid #b8c3c6;background:#e4e9ec;color:#101922;font-size:12px;font-family:'Nanum Square Bold';font-weight:700;} */
