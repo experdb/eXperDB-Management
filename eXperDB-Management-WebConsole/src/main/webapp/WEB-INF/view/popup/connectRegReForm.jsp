@@ -362,6 +362,10 @@ function selectTab(tab){
 	 if(tab == "schema"){		
 		fn_schema_search();
 	}else if(tab == "table"){	
+		
+		tableList.columns.adjust().draw();
+		connector_tableList.columns.adjust().draw();
+
 		var tableDatas = tableList.rows().data();
 		if(tableDatas.length==0){
 			fn_table_search();

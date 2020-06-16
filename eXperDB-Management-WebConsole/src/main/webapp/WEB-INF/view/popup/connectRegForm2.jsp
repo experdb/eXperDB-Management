@@ -504,6 +504,7 @@ function fn_table_search(){
 			}
 		},
 		success : function(result) {				
+			connector_tableList.columns.adjust().draw();
 			tableList.rows({selected: true}).deselect();
 			tableList.clear().draw();
 			tableList.rows.add(result.RESULT_DATA).draw();
