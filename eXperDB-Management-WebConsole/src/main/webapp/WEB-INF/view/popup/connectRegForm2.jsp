@@ -91,8 +91,9 @@ function fn_init(){
 		],'select': {'style': 'multi'}
 	});
 		
-	tableList.tables().header().to$().find('th:eq(0)').css('min-width', '100px');
-	tableList.tables().header().to$().find('th:eq(1)').css('min-width', '100px');
+	tableList.tables().header().to$().find('th:eq(0)').css('min-width', '161px');
+	tableList.tables().header().to$().find('th:eq(1)').css('min-width', '162px');
+
 
 		connector_tableList = $('#connector_tableList').DataTable({
 			scrollY : "340px",
@@ -106,10 +107,9 @@ function fn_init(){
 			 ],'select': {'style': 'multi'}
 		});
 		
-		connector_tableList.tables().header().to$().find('th:eq(0)').css('min-width', '100px');
-		connector_tableList.tables().header().to$().find('th:eq(1)').css('min-width', '150px');
+		connector_tableList.tables().header().to$().find('th:eq(0)').css('min-width', '161px');
+		connector_tableList.tables().header().to$().find('th:eq(1)').css('min-width', '162px');
 
-	
 		$(window).trigger('resize'); 
 }
 
@@ -117,7 +117,7 @@ function fn_init(){
 
 	$(window.document).ready(function() {
 		fn_init();
-		$("#snapshotModeDetail").html("(스냅샷 수행하지 않음)");	
+		$("#snapshotModeDetail").html("(스냅샷 수행하지 않음)");		
 	});
 
 
@@ -503,8 +503,7 @@ function fn_table_search(){
 				alert("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""));
 			}
 		},
-		success : function(result) {
-			connector_tableList.clear().draw();
+		success : function(result) {				
 			tableList.rows({selected: true}).deselect();
 			tableList.clear().draw();
 			tableList.rows.add(result.RESULT_DATA).draw();
@@ -539,6 +538,7 @@ function selectTab(tab){
 		fn_schema_search();
 		
 	}else if(tab == "table"){
+		
 		$("#tab1").hide();
 		//$("#tab2").hide()
 		$("#tab3").show();
@@ -875,11 +875,11 @@ function selectTab(tab){
 						<div class="trans_mapping_area" style="height:520px;">		
 								<div class="trans_mapping_lt" style="width:400px;">
 										<p class="trans_tit"><spring:message code="data_transfer.tableList"/></p>		
-											<table id=tableList  class="display" cellspacing="0" width="100%">
+											<table id=tableList  class="display" cellspacing="0" width="100%" >
 												<thead>
 													<tr>
-														<th width="100" class="dt-center">스키마명</th>
-														<th width="100" class="dt-center">테이블명</th>
+														<th width="161"  class="dt-center" style="width:161px;">스키마명</th>
+														<th width="162"  class="dt-center" style="width:162px;">테이블명</th>
 													</tr>
 												</thead>
 											</table>																				
@@ -891,8 +891,8 @@ function selectTab(tab){
 										<table id=connector_tableList class="display" cellspacing="0" width="100%">
 												<thead>
 													<tr>
-														<th width="100" class="dt-center">스키마명</th>
-														<th width="100" class="dt-center">테이블명</th>														
+														<th width="161" class="dt-center" >스키마명</th>
+														<th width="162" class="dt-center" >테이블명</th>														
 													</tr>
 												</thead>
 											</table>									
