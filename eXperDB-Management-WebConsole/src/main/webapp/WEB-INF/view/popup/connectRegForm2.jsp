@@ -458,6 +458,8 @@ function fn_schema_search(){
 			schema_List.rows({selected: true}).deselect();
 			schema_List.clear().draw();
 			schema_List.rows.add(result.RESULT_DATA).draw();	  
+			
+			//조회 후, connector_schemaList과 비교 후 같으면 리스트에서 제외
 		}
 	});
 }
@@ -508,8 +510,28 @@ function fn_table_search(){
 			tableList.rows({selected: true}).deselect();
 			tableList.clear().draw();
 			tableList.rows.add(result.RESULT_DATA).draw();
+					
+			//조회 후, connector_tableList과 비교 후 같으면 리스트에서 제외
+			//fn_trableListRemove();
+			
 		}
 	});
+}
+
+
+function fn_trableListRemove(){
+	var tableRows = tableList.rows().data();
+	var connTableRows = connector_tableList.rows().data();
+	
+	for(var i=0; i<tableRows.length; i++){
+		for(var j=0; j<connTableRows.length; j++){
+			if(tableRows[i].table_name == connTableRows[j].table_name){
+
+			}
+		}
+	}
+	
+	
 }
 
 /* ********************************************************
