@@ -85,38 +85,58 @@ function fn_check() {
 		document.getElementById('db2pg_trsf_wrk_nm').focus();
 		return;
 	}
-	$.ajax({
-		url : '/wrk_nmCheck.do',
-		type : 'post',
-		data : {
-			wrk_nm : $("#db2pg_trsf_wrk_nm").val()
-		},
-		success : function(result) {
-			if (result == "true") {
-				alert('<spring:message code="backup_management.reg_possible_work_nm"/>');
-				document.getElementById("db2pg_trsf_wrk_nm").focus();
-				db2pg_trsf_wrk_nmChk = "success";
-			} else {
-				alert('<spring:message code="backup_management.effective_work_nm"/>');
-				document.getElementById("db2pg_trsf_wrk_nm").focus();
+	
+	if(fnCheckNotKorean(db2pg_trsf_wrk_nm.value)){
+		$.ajax({
+			url : '/wrk_nmCheck.do',
+			type : 'post',
+			data : {
+				wrk_nm : $("#db2pg_trsf_wrk_nm").val()
+			},
+			success : function(result) {
+				if (result == "true") {
+					alert('<spring:message code="backup_management.reg_possible_work_nm"/>');
+					document.getElementById("db2pg_trsf_wrk_nm").focus();
+					db2pg_trsf_wrk_nmChk = "success";
+				} else {
+					alert('<spring:message code="backup_management.effective_work_nm"/>');
+					document.getElementById("db2pg_trsf_wrk_nm").focus();
+				}
+			},
+			beforeSend: function(xhr) {
+		        xhr.setRequestHeader("AJAX", true);
+		     },
+			error : function(xhr, status, error) {
+				if(xhr.status == 401) {
+					alert('<spring:message code="message.msg02" />');
+					top.location.href = "/";
+				} else if(xhr.status == 403) {
+					alert('<spring:message code="message.msg03" />');
+					top.location.href = "/";
+				} else {
+					alert("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""));
+				}
 			}
-		},
-		beforeSend: function(xhr) {
-	        xhr.setRequestHeader("AJAX", true);
-	     },
-		error : function(xhr, status, error) {
-			if(xhr.status == 401) {
-				alert('<spring:message code="message.msg02" />');
-				top.location.href = "/";
-			} else if(xhr.status == 403) {
-				alert('<spring:message code="message.msg03" />');
-				top.location.href = "/";
-			} else {
-				alert("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""));
-			}
-		}
-	});
+		});
+	}
 }
+
+
+
+/* 한글입력 체크 */
+function fnCheckNotKorean(koreanStr){
+    for(var i=0;i<koreanStr.length;i++){
+        var koreanChar = koreanStr.charCodeAt(i);
+        if( !( 0xAC00 <= koreanChar && koreanChar <= 0xD7A3 ) && !( 0x3131 <= koreanChar && koreanChar <= 0x318E ) ) {
+        }else{
+            alert("한글은 사용할수 없습니다.");
+            return false;
+        }
+    }
+    return true;
+}
+
+
 
 /* ********************************************************
  * 등록 버튼 클릭시
