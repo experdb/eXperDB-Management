@@ -2,7 +2,6 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <mapper namespace="scale">
-
 	<select id="selectMonitorInfo" parameterType="hashmap" resultType="hashMap">
    		/**
 	 	* Query ID : selectMonitor
@@ -140,7 +139,8 @@
 		, (SELECT COALESCE(DB_SVR_IPADR_ID, 1) AS DB_SVR_IPADR_ID
              FROM T_DBSVRIPADR_I
             WHERE 1=1
-              AND db_svr_id = #{db_svr_id}::numeric)
+              AND db_svr_id = #{db_svr_id}::numeric
+              AND MASTER_GBN = 'M')
 		, #{policy_type}
 	    , #{exenum}::numeric
 		, clock_timestamp()
