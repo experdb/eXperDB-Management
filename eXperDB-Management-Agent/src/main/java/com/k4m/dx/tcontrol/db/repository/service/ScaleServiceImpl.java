@@ -463,7 +463,7 @@ public class ScaleServiceImpl extends SocketCtl implements ScaleService{
     
     //db서버 확인
     public int dbServerInfoSet() {
-		int db_svr_id = 1;
+		int db_svr_id = 4;
 
 		context = new ClassPathXmlApplicationContext(new String[] {"context-tcontrol.xml"});
 		SystemServiceImpl service = (SystemServiceImpl) context.getBean("SystemService");
@@ -473,10 +473,11 @@ public class ScaleServiceImpl extends SocketCtl implements ScaleService{
    
 		try {
 			String strIpadr = FileUtil.getPropertyValue("context.properties", "agent.install.ip");
+
 			//서버정보 조회
 			searchDbServerInfoVO.setIPADR(strIpadr);
-			dbServerInfo = service.selectDbServerInfo(searchDbServerInfoVO);
-			
+			dbServerInfo = service.selectDatabaseConnInfo(searchDbServerInfoVO);
+
 			if (dbServerInfo != null) {
 				db_svr_id = dbServerInfo.getDB_SVR_ID();
 			}
@@ -489,7 +490,7 @@ public class ScaleServiceImpl extends SocketCtl implements ScaleService{
     
     //db서버IP 확인
     public int dbServerIPadrInfoSet() {
-		int db_svr_ipadr_id = 1;
+		int db_svr_ipadr_id = 8;
 		Map<String, Object> scaleChkData = null;
 		Map<String, Object> scaleparam = new HashMap<String, Object>();
 
