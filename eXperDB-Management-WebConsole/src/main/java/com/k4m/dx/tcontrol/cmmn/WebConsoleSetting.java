@@ -182,10 +182,10 @@ public class WebConsoleSetting {
 				if(strScaleOutMultiCmd.equals("")) {
 					strScaleOutMultiCmd = "./experscale multi-scale-out --scale-out-count %s";
 				}	
-			System.out.println("eXperDB-Scale scale_json_view (aws ec2 describe-instances %s --filters \"Name=tag:Name,Values=EA-ISJEONG-*\"):");
+			System.out.println("eXperDB-Scale scale_json_view (aws ec2 describe-instances %s --filters ):");
 			strScaleJsonView = scan.nextLine();
 				if(strScaleJsonView.equals("")) {
-					strScaleJsonView = "aws ec2 describe-instances %s --filters \"Name=tag:Name,Values=EA-ISJEONG-*\"";
+					strScaleJsonView = "aws ec2 describe-instances %s --filters ";
 				}	
 			System.out.println("eXperDB-Scale scale_chk_prgress (ps -ef | grep -v grep | grep %s | wc -l):");
 			strScaleChkPrgress = scan.nextLine();
