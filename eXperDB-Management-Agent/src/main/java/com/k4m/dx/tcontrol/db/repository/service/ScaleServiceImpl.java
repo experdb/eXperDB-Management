@@ -510,4 +510,42 @@ public class ScaleServiceImpl extends SocketCtl implements ScaleService{
 		
 		return db_svr_ipadr_id;
     }
+   
+	public void insertScaleServer()  throws Exception{
+		Map<String, Object> scaleChkData = null;
+		Map<String, Object> scaleparam = new HashMap<String, Object>();
+
+		try {
+			String strIpadr = FileUtil.getPropertyValue("context.properties", "agent.install.ip");
+			
+			scaleparam.put("IPADR", strIpadr);
+			
+			//서버정보 조회
+			scaleChkData = scaleDAO.selectDbServerIpadrInfo(scaleparam);
+socketLogger.info("insertScaleServer.scaleChkData : " + scaleChkData);
+			if (scaleChkData != null) {
+				scaleparam.put("db_svr_id", scaleChkData.get("db_svr_id"));
+				scaleparam.put("db_svr_ipadr_id", scaleChkData.get("db_svr_ipadr_id"));
+				scaleparam.put("ipdar_set", strIpadr);
+				scaleparam.put("login_id", loginId);
+	
+				socketLogger.info("insertScaleServer.db_svr_id : " + scaleChkData.get("db_svr_id"));
+				socketLogger.info("insertScaleServer.db_svr_ipadr_id : " + scaleChkData.get("db_svr_ipadr_id"));
+				socketLogger.info("insertScaleServer.strIpadr : " + strIpadr);
+				scaleDAO.insertScaleServer(scaleparam);
+			} else {
+				socketLogger.info("insertScaleServer.db_svr_id1 : ");
+				socketLogger.info("insertScaleServer.db_svr_ipadr_id2 : ");
+				socketLogger.info("insertScaleServer.strIpadr3 : ");
+			}
+		} catch(Exception e) {
+			e.printStackTrace();
+		}
+	}
+	
+
+	/* scale 기본사항 조회  */
+	public Map<String, Object> selectAutoScaleComCngInfo(Map<String, Object> param)  throws Exception{
+		return  (Map<String, Object>)scaleDAO.selectAutoScaleComCngInfo(param);
+	}
 }
