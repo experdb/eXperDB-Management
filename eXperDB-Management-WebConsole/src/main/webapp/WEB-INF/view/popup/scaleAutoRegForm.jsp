@@ -8,7 +8,7 @@
 <%
 	/**
 	* @Class Name : scaleAutoRegForm.jsp
-	* @Description : scale Auto 설정 등록 화면
+	* @Description : scale Auto ì¤ì  ë±ë¡ íë©´
 	* @Modification Information
 	*
 	*   수정일         수정자                   수정내용
@@ -69,7 +69,44 @@ a:hover.tip span {
 		$("#max_clusters").prop('disabled', true);
 
 		$("#check_execute_sp").hide();
+		
+		//데이터 조회
+		fnc_search();
 	});
+
+	/* ********************************************************
+	 * 공통내역조회
+	 ******************************************************** */
+	function fnc_search(){
+		$.ajax({
+			url : "/scale//popup/scaleAutoInstallInfo.do", 
+		  	data : {
+		  		db_svr_id : $("#db_svr_id").val()
+		  	},
+			dataType : "json",
+			type : "post",
+			beforeSend: function(xhr) {
+		        xhr.setRequestHeader("AJAX", true);
+		     },
+			error : function(xhr, status, error) {
+				if(xhr.status == 401) {
+					alert("<spring:message code='message.msg02' />");
+					top.location.href = "/";
+				} else if(xhr.status == 403) {
+					alert("<spring:message code='message.msg03' />");
+					top.location.href = "/";
+				} else {
+					alert("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""));
+				}
+			},
+			success : function(data) {
+				if (data != null) {
+					$("#min_clusters_hd").val(data.min_clusters);
+					$("#max_clusters_hd").val(data.max_clusters);
+				}
+			}
+		});
+	}
 
 	/* ********************************************************
 	 * NUMBER check
@@ -90,31 +127,26 @@ a:hover.tip span {
 		var execute_type_cd = nvlSet($("#execute_type_cd").val(),""); //실행유형
 
 		if (scale_type_cd == "1" && execute_type_cd == "TC003402") { //scale-in / auto-scale
-			$("#min_clusters").prop('disabled', false);
-			$("#max_clusters").prop('disabled', true);
-			$("#expansion_clusters").prop('disabled', true);
-
-			$("#expansion_clusters").val("");
+			$("#min_clusters").val($("#min_clusters_hd").val());
 			$("#max_clusters").val("");
+
+			$("#expansion_clusters").prop('disabled', true);
+			$("#expansion_clusters").val("");
 			
 			if ($("#min_clusters").val() == "") {
 				$("#min_clusters").val("2");
 			}
-			
 		} else if (scale_type_cd == "2" && execute_type_cd == "TC003402") { //scale-out / auto-scale
-			$("#min_clusters").prop('disabled', true);
-			$("#max_clusters").prop('disabled', false);
-			$("#expansion_clusters").prop('disabled', false);
-			
+			$("#max_clusters").val($("#max_clusters_hd").val());
 			$("#min_clusters").val("");
-		} else {
-			$("#min_clusters").prop('disabled', true);
-			$("#max_clusters").prop('disabled', true);
-			$("#expansion_clusters").prop('disabled', true);
 			
+			$("#expansion_clusters").prop('disabled', false);
+		} else {
 			$("#min_clusters").val("");
 			$("#max_clusters").val("");
 			$("#expansion_clusters").val("");
+
+			$("#expansion_clusters").prop('disabled', true);
 		}
 	}
 
@@ -168,7 +200,8 @@ a:hover.tip span {
 		  		min_clusters : min_clusters_val,
 		  		max_clusters : max_clusters_val,
 		  		expansion_clusters : expansion_clusters_val,
-		  		auto_policy_set_div : $(':radio[name="auto_policy_set_div"]:checked').val()
+		  		auto_policy_set_div : $(':radio[name="auto_policy_set_div"]:checked').val(),
+		  		useyn : $(':radio[name="useyn"]:checked').val()
 		  	},
 			type : "post",
 			beforeSend: function(xhr) {
@@ -231,16 +264,14 @@ a:hover.tip span {
 		}
 
 		if(nvlSet($("#auto_policy_time").val(),"") == "") { //auto_policy_time
-			msgVale = '<spring:message code="eXperDB_scale.policy_time" />';
-			alert('<spring:message code="errors.minlength" arguments="'+ msgVale +', 1" />');
+			alert('<spring:message code="eXperDB_scale.msg18" arguments="1" />');
 
 			$('input[name=auto_policy_time]').focus();
 			return false;
 		}
 
 		if(nvlSet($("#auto_level").val(),"") == "") { //auto_level
-			msgVale = '<spring:message code="eXperDB_scale.target_value" />';
-			alert('<spring:message code="errors.minlength" arguments="'+ msgVale +', 1" />');
+			alert('<spring:message code="eXperDB_scale.msg18" arguments="1" />');
 
 			$('input[name=auto_level]').focus();
 			return false;
@@ -249,7 +280,7 @@ a:hover.tip span {
 		if (nvlSet($("#scale_type_cd").val(),"") == "1" && nvlSet($("#execute_type_cd").val(),"") == "TC003402") { //scale-in / auto-scale
 			if(nvlSet($("#min_clusters").val(),"") == "") { 
 				msgVale = '<spring:message code="eXperDB_scale.min_clusters" />';
-				alert('<spring:message code="errors.minlength" arguments="'+ msgVale +', 1" />');
+				alert('<spring:message code="eXperDB_scale.msg19" arguments="'+ msgVale +'" />' + "\n" +'<spring:message code="eXperDB_scale.msg20" />');
 
 				$('input[name=min_clusters]').focus();
 				return false;
@@ -264,7 +295,7 @@ a:hover.tip span {
 		} else if (nvlSet($("#scale_type_cd").val(),"") == "2" && nvlSet($("#execute_type_cd").val(),"") == "TC003402") { //scale-out / auto-scale
 			if(nvlSet($("#max_clusters").val(),"") == "") { 
 				msgVale = '<spring:message code="eXperDB_scale.max_clusters" />';
-				alert('<spring:message code="errors.minlength" arguments="'+ msgVale +', 1" />');
+				alert('<spring:message code="eXperDB_scale.msg19" arguments="'+ msgVale +'" />' + "\n" +'<spring:message code="eXperDB_scale.msg20" />');
 
 				$('input[name=max_clusters]').focus();
 				return false;
@@ -272,7 +303,7 @@ a:hover.tip span {
 
 			if(nvlSet($("#expansion_clusters").val(),"") == "") { 
 				msgVale = '<spring:message code="eXperDB_scale.expansion_clusters" />';
-				alert('<spring:message code="errors.minlength" arguments="'+ msgVale +', 1" />');
+				alert('<spring:message code="eXperDB_scale.msg18" arguments="1" />');
 
 				$('input[name=expansion_clusters]').focus();
 				return false;
@@ -288,8 +319,11 @@ a:hover.tip span {
 		<div class="pop_cts">
 			<p class="tit"><spring:message code="menu.Register_auto_scale_setting" /></p>
 			<div class="pop_cmm">
-				<form name="scaleRegForm">
+				<form name="scaleRegForm" id="scaleRegForm">
 					<input type="hidden" name="db_svr_id" id="db_svr_id" value="${db_svr_id}"/>
+					<input type="hidden" name="min_clusters_hd" id="min_clusters_hd" value=""/>
+					<input type="hidden" name="max_clusters_hd" id="max_clusters_hd" value=""/>
+				
 					<table class="write">
 						<caption><spring:message code="menu.Register_auto_scale_setting" /></caption>
 						<colgroup>
@@ -332,7 +366,7 @@ a:hover.tip span {
 										<span ><spring:message code="help.eXperDB_scale_set_msg03" /></span>
 									</a>
 								</th>
-								<td colspan="3">
+								<td>
 									<select name="policy_type_cd" id="policy_type_cd" class="select t5" style="width: 170px;" onChange="fn_policy_type_chg();" tabindex=3>
 										<option value=""><spring:message code="common.choice" /></option>
 										<c:forEach var="result" items="${policyTypeList}" varStatus="status">
@@ -342,6 +376,18 @@ a:hover.tip span {
 										</c:forEach>
 									</select>
 								</td>
+								<th scope="row" class="ico_t1">
+									<spring:message code="user_management.use_yn" />
+								</th>
+								<td>
+									<div class="inp_rdo">
+										<input name="useyn" id="useyn_1" type="radio" value="Y" checked="checked" tabindex=4>
+										<label for="useyn_1" style="margin-right: 2%;"><spring:message code="dbms_information.use"/></label>
+										<input name="useyn" id="useyn_2" type="radio" value="N" tabindex=5>
+										<label for="useyn_2" style="margin-right: 2%;"><spring:message code="dbms_information.unuse"/></label>
+									</div>
+								</td>
+								
 							</tr>
 							<tr>
 								<th scope="row" class="ico_t1">
@@ -351,9 +397,9 @@ a:hover.tip span {
 								</th>
 								<td>
 									<div class="inp_rdo">
-										<input name="auto_policy_set_div" id="auto_policy_set_div_1" type="radio" value="1" checked="checked" tabindex=4>
+										<input name="auto_policy_set_div" id="auto_policy_set_div_1" type="radio" value="1" checked="checked" tabindex=5>
 										<label for="auto_policy_set_div_1" style="margin-right: 2%;"><spring:message code="eXperDB_scale.policy_time_1"/></label>
-										<input name="auto_policy_set_div" id="auto_policy_set_div_2" type="radio" value="2" tabindex=5>
+										<input name="auto_policy_set_div" id="auto_policy_set_div_2" type="radio" value="2" tabindex=6>
 										<label for="auto_policy_set_div_2" style="margin-right: 2%;"><spring:message code="eXperDB_scale.policy_time_2"/></label>
 									</div>
 								</td>
@@ -364,7 +410,7 @@ a:hover.tip span {
 								</th>
 								<td>
 									<span>
-										<input type="text" class="txt" name="auto_policy_time" id="auto_policy_time" style="width: 200px;" maxlength="10" onKeyPress="NumObj();" placeholder="10<spring:message code='message.msg188'/>" onblur="this.value=this.value.trim()" tabindex=6/>
+										<input type="text" class="txt" name="auto_policy_time" id="auto_policy_time" style="width: 200px;" maxlength="10" onKeyPress="NumObj();" placeholder="<spring:message code='eXperDB_scale.msg16'/>" onblur="this.value=this.value.trim()" tabindex=7 />
 										&nbsp;<spring:message code="eXperDB_scale.time_minute"/>
 									</span>
 								</td>
@@ -376,7 +422,7 @@ a:hover.tip span {
 									</a>
 								</th>
 								<td colspan="3">
-									<input type="text" class="txt" name="auto_level" id="auto_level" style="width: 200px;" maxlength="10" onKeyPress="NumObj();" placeholder="10<spring:message code='message.msg188'/>" onblur="this.value=this.value.trim()" tabindex=7 />
+									<input type="text" class="txt" name="auto_level" id="auto_level" style="width: 200px;" maxlength="10" onKeyPress="NumObj();" placeholder="<spring:message code="eXperDB_scale.msg15" />" onblur="this.value=this.value.trim()" tabindex=8 />
 									<span id="check_execute_sp">	
 										&nbsp;%
 									</span>
@@ -385,21 +431,21 @@ a:hover.tip span {
 							<tr>
 								<th scope="row" class="ico_t1">
 									<a href="#" class="tip"><spring:message code="eXperDB_scale.min_clusters" />
-										<span style="width: 400px;"><spring:message code="help.eXperDB_scale_set_msg07" /></span>
+										<span style="width: 400px;"><spring:message code="help.eXperDB_scale_set_msg10" /></span>
 									</a>
 								</th>
 								<td colspan="3">
-									<input type="text" class="txt" name="min_clusters" id="min_clusters" style="width: 200px;" maxlength="5" onKeyPress="NumObj();" placeholder="<spring:message code='eXperDB_scale.msg6' arguments='2' />" onblur="this.value=this.value.trim()" tabindex=8 />
+									<input type="text" class="txt" name="min_clusters" id="min_clusters" style="width: 200px;" maxlength="5" onKeyPress="NumObj();" onblur="this.value=this.value.trim()" tabindex=9 />
 								</td>
 							</tr>
 							<tr>
 								<th scope="row" class="ico_t1">
 									<a href="#" class="tip"><spring:message code="eXperDB_scale.max_clusters" />
-										<span style="width: 400px;"><spring:message code="help.eXperDB_scale_set_msg07" /></span>
+										<span style="width: 400px;"><spring:message code="help.eXperDB_scale_set_msg11" /></span>
 									</a>
 								</th>
 								<td>
-									<input type="text" class="txt" name="max_clusters" id="max_clusters" style="width: 200px;" maxlength="5" onKeyPress="NumObj();" placeholder="5<spring:message code='message.msg188'/>" onblur="this.value=this.value.trim()" tabindex=9 />
+									<input type="text" class="txt" name="max_clusters" id="max_clusters" style="width: 200px;" maxlength="5" onKeyPress="NumObj();" onblur="this.value=this.value.trim()" tabindex=10 />
 								</td>
 								<th scope="row" class="ico_t1">
 									<a href="#" class="tip"><spring:message code="eXperDB_scale.expansion_clusters" />
@@ -407,7 +453,7 @@ a:hover.tip span {
 									</a>
 								</th>
 								<td>
-									<input type="text" class="txt" name="expansion_clusters" id="expansion_clusters" style="width: 200px;" maxlength="5" onKeyPress="NumObj();" placeholder="5<spring:message code='message.msg188'/>" onblur="this.value=this.value.trim()" tabindex=10 />
+									<input type="text" class="txt" name="expansion_clusters" id="expansion_clusters" style="width: 200px;" maxlength="5" onKeyPress="NumObj();" placeholder="<spring:message code='eXperDB_scale.msg15'/>" onblur="this.value=this.value.trim()" tabindex=11 />
 								</td>
 							</tr>
 						</tbody>

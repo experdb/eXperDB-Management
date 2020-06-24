@@ -298,6 +298,7 @@
              , AA.FRST_REG_DTM
              , AA.LST_MDFR_ID
              , AA.LST_MDF_DTM
+             , AA.USEYN
           FROM (
                 SELECT A.WRK_ID AS WRK_ID
                      , B.DB_SVR_ID AS DB_SVR_ID
@@ -317,8 +318,9 @@
                      , TO_CHAR(A.FRST_REG_DTM,'YYYY-MM-DD HH24:MI') AS FRST_REG_DTM
                      , A.LST_MDFR_ID AS LST_MDFR_ID
                      , TO_CHAR(A.LST_MDF_DTM,'YYYY-MM-DD HH24:MI') AS LST_MDF_DTM
+                     , A.USEYN AS USEYN
                   FROM T_SCALE_I A
-                       JOIN T_DBSVRIPADR_I B ON A.DB_SVR_IPADR_ID = B.DB_SVR_IPADR_ID 
+                       JOIN T_DBSVRIPADR_I B ON A.DB_SVR_IPADR_ID = B.DB_SVR_IPADR_ID AND B.MASTER_GBN = 'M'
                  WHERE B.DB_SVR_ID=#{db_svr_id}::numeric
 
                <if test="scale_type_cd != null and scale_type_cd != '' ">
@@ -353,7 +355,8 @@
             AND POLICY_TYPE = #{policy_type_cd}
             AND EXECUTE_TYPE = #{execute_type_cd}
             AND AUTO_POLICY_SET_DIV = #{auto_policy_set_div}
-            
+            AND USEYN = #{useyn}::bpchar
+
           <if test="wrk_id != null and wrk_id != '' ">
              AND WRK_ID != #{wrk_id}::numeric
           </if>
@@ -383,6 +386,7 @@
                    , FRST_REG_DTM
                    , LST_MDFR_ID
                    , LST_MDF_DTM
+                   , USEYN
                     )
               VALUES
                     (
@@ -402,6 +406,7 @@
                    , clock_timestamp()
                    , #{login_id}
                    , clock_timestamp()
+                   , #{useyn}::bpchar
                    )
 	</insert>
 	
@@ -423,6 +428,7 @@
              , MAX_CLUSTERS = #{max_clusters}::numeric
              , LST_MDFR_ID = #{login_id}
              , LST_MDF_DTM = clock_timestamp()
+             , USEYN = #{useyn}::bpchar
          WHERE DB_SVR_ID = #{db_svr_id}::numeric
            AND WRK_ID = #{wrk_id}::numeric
 	</update>
@@ -451,8 +457,9 @@
             , TO_CHAR(A.FRST_REG_DTM,'YYYY-MM-DD HH24:MI') AS FRST_REG_DTM
             , A.LST_MDFR_ID AS LST_MDFR_ID
             , TO_CHAR(A.LST_MDF_DTM,'YYYY-MM-DD HH24:MI') AS LST_MDF_DTM
+            , A.USEYN AS USEYN
          FROM T_SCALE_I A
-              JOIN T_DBSVRIPADR_I B ON A.DB_SVR_IPADR_ID = B.DB_SVR_IPADR_ID 
+              JOIN T_DBSVRIPADR_I B ON A.DB_SVR_IPADR_ID = B.DB_SVR_IPADR_ID AND B.MASTER_GBN = 'M'
         WHERE B.DB_SVR_ID=#{db_svr_id}::numeric
           AND A.WRK_ID = #{wrk_id}::numeric
 	</select>
@@ -468,4 +475,70 @@
           AND DB_SVR_ID=#{db_svr_id}::numeric
 	 		
     </delete>
+	
+	<select id="selectAutoScaleComCngInfo" resultType="hashMap" parameterType="hashMap">
+   		/**
+	 	* Query ID : selectAutoScaleComCngInfo
+	 	* Description : scale 설정 정보 상세 조회
+	 	* Author : 
+	 	**/
+       SELECT A.DB_SVR_ID,
+              A.DB_SVR_IPADR_ID,
+              A.AUTO_RUN_CYCLE,
+              A.MIN_CLUSTERS,
+              A.MAX_CLUSTERS,
+              B.IPADR,
+              C.DB_SVR_NM
+         FROM T_SCALEAWSSVR_I A
+              JOIN T_DBSVR_I C ON A.DB_SVR_ID = C.DB_SVR_ID
+              JOIN T_DBSVRIPADR_I B ON A.DB_SVR_IPADR_ID = B.DB_SVR_IPADR_ID AND B.MASTER_GBN = 'M'
+        WHERE A.DB_SVR_ID=#{db_svr_id}::numeric
+        LIMIT 1
+	</select>
+	
+	<update id="updateAutoScaleCommonSetting" parameterType="instanceScaleVO">
+        /**
+        * Query ID : "updateAutoScaleCommonSetting"
+        * Description : Auto scale 공통 설정 수정
+        * Author : 
+        **/
+        UPDATE T_SCALEAWSSVR_I
+           SET MIN_CLUSTERS = #{min_clusters}::numeric
+             , MAX_CLUSTERS = #{max_clusters}::numeric
+             , AUTO_RUN_CYCLE = #{auto_run_cycle}::numeric
+             , LST_MDFR_ID = #{login_id}
+             , LST_MDF_DTM = clock_timestamp()
+         WHERE DB_SVR_ID = #{db_svr_id}::numeric
+           AND DB_SVR_IPADR_ID = #{db_svr_ipadr_id}::numeric
+	</update>
+
+	<update id="updateTotalAutoScaleSetting" parameterType="instanceScaleVO">
+        /**
+        * Query ID : "updateTotalAutoScaleSetting"
+        * Description : Auto scale 공통 수정 후 설정 전체 반영
+        * Author : 
+        **/
+        UPDATE T_SCALE_I A
+           SET MIN_CLUSTERS = (case when A.execute_type = 'TC003402' and A.scale_type = '1' then #{min_clusters}::numeric else null END),
+               MAX_CLUSTERS = (case when A.execute_type = 'TC003402' and A.scale_type = '2' then #{max_clusters}::numeric else null END)
+         WHERE DB_SVR_ID = #{db_svr_id}::numeric 
+	</update>
+
+  <select id="selectScaleAWSSvrInfo" parameterType="instanceScaleVO" resultType="hashMap">
+		/**
+		*  Query ID : selectScaleAWSSvrInfo
+		* Description : scale AWS 서버 확인
+		* Author :
+		**/
+        SELECT
+               A.DB_SVR_ID,
+               A.DB_SVR_IPADR_ID,
+               A.MIN_CLUSTERS,
+               A.MAX_CLUSTERS,
+               A.AUTO_RUN_CYCLE
+          FROM T_SCALEAWSSVR_I A
+              JOIN T_DBSVRIPADR_I B ON A.DB_SVR_IPADR_ID = B.DB_SVR_IPADR_ID AND B.MASTER_GBN = 'M'
+         WHERE A.DB_SVR_ID=#{db_svr_id}::numeric
+         LIMIT 1
+    </select>
 </mapper>

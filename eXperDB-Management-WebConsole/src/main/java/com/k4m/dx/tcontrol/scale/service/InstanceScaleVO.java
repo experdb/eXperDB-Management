@@ -39,7 +39,21 @@ public class InstanceScaleVO {
 	private String wrk_id;
 	private String wrk_id_Rows;
 	private String title_gbn;
+	private String auto_run_cycle;
+	private String useyn;
 
+	public String getUseyn() {
+		return useyn;
+	}
+	public void setUseyn(String useyn) {
+		this.useyn = useyn;
+	}
+	public String getAuto_run_cycle() {
+		return auto_run_cycle;
+	}
+	public void setAuto_run_cycle(String auto_run_cycle) {
+		this.auto_run_cycle = auto_run_cycle;
+	}
 	public String getTitle_gbn() {
 		return title_gbn;
 	}
