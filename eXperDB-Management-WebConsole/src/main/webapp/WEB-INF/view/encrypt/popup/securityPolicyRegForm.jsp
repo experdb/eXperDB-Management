@@ -37,6 +37,7 @@ $(window.document).ready(function() {
 		if("${length}" == '<spring:message code="encrypt_policy_management.End"/>'){
 			$("#last").prop('checked', true) ;
 			$('#length').attr('disabled', true);
+			$("#binUid").val("${binUidValue}").attr("selected", "selected");
 		}else{
 			$('#length').val('${length}');
 		}
@@ -93,7 +94,8 @@ function fn_save(){
 	Result.offset = $("#offset").val();
 	Result.length = $("#length").val();
 	Result.cipherAlgorithmCode = $("#cipherAlgorithmCode").val();
-	Result.binUid = $("#binUid").val();
+	Result.binUid = $("#binUid > option:selected").val();
+	Result.resourceName=$("#binUid > option:selected").attr("value2");
 	Result.initialVectorTypeCode = $("#initialVectorTypeCode").val();
 	Result.operationModeCode = $("#operationModeCode").val();
 	
@@ -118,7 +120,8 @@ function fn_update(){
 	Result.offset = $("#offset").val();
 	Result.length = $("#length").val();
 	Result.cipherAlgorithmCode = $("#cipherAlgorithmCode").val();
-	Result.binUid = $("#binUid").val();
+	Result.binUid = $("#binUid > option:selected").val();
+	Result.resourceName=$("#binUid > option:selected").attr("value2");
 	Result.initialVectorTypeCode = $("#initialVectorTypeCode").val();
 	Result.operationModeCode = $("#operationModeCode").val();
 	
@@ -142,9 +145,9 @@ function fn_lastCheck(){
 function fn_changeBinUid(selectObj){
 	$("#binUid").empty();
 	var html = "";
-	<c:forEach var="binUid" items="${binUid.list}">
+	<c:forEach var="binUid" items="${binUid}">
 	if(selectObj.value == "${binUid.cipherAlgorithmName}"){
-		html += "<option value=${binUid.resourceName}>${binUid.resourceName}</option>"
+		html += "<option value=${binUid.getBinUid} value2=${binUid.resourceName} >${binUid.resourceName} (${binUid.validEndDate})</option>"
 	}
 	</c:forEach> 
 	$("#binUid").append(html);

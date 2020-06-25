@@ -63,9 +63,10 @@
 			{ data : "offset", className : "dt-right", defaultContent : ""}, 
 			{ data : "length", className : "dt-right", defaultContent : ""}, 
 			{ data : "cipherAlgorithmCode", defaultContent : ""}, 
-			{ data : "binUid", defaultContent : ""}, 
+			{ data : "resourceName", defaultContent : ""}, 
 			{ data : "initialVectorTypeCode", defaultContent : ""}, 
-			{ data : "operationModeCode", defaultContent : ""}
+			{ data : "operationModeCode", defaultContent : ""},
+			{ data : "binUid", defaultContent : "",defaultContent : "", visible: false}
 			],'select': {'style': 'multi'}
 		});
 
@@ -226,11 +227,15 @@
 			return false;
 		}
 		
+		var resourceName="";
+		
+		
 		table.row.add({
 			"offset":result.offset,
 			"length":result.length,
 			"cipherAlgorithmCode":result.cipherAlgorithmCode,
 			"binUid":result.binUid,
+			"resourceName":result.resourceName,
 			"initialVectorTypeCode":result.initialVectorTypeCode,
 			"operationModeCode":result.operationModeCode
 		}).draw();	
@@ -646,6 +651,7 @@
 									<th width="100"><spring:message code="encrypt_policy_management.Encryption_Key"/></th>
 									<th width="80"><spring:message code="encrypt_policy_management.Initial_Vector"/></th>
 									<th width="100"><spring:message code="encrypt_policy_management.Modes"/></th>
+									<th width="0"></th>
 								</tr>
 							</thead>
 						</table>
