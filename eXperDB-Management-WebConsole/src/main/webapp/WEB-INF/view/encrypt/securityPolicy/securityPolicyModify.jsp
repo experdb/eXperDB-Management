@@ -63,9 +63,10 @@
 			{ data : "offset", className : "dt-right", defaultContent : ""}, 
 			{ data : "length", className : "dt-right", defaultContent : ""}, 
 			{ data : "cipherAlgorithmCode", defaultContent : ""}, 
-			{ data : "binUid", defaultContent : ""}, 
+			{ data : "resourceName", defaultContent : ""}, 
 			{ data : "initialVectorTypeCode", defaultContent : ""}, 
-			{ data : "operationModeCode", defaultContent : ""}
+			{ data : "operationModeCode", defaultContent : ""},
+			{ data : "binUid", defaultContent : "",defaultContent : "", visible: false}
 			],'select': {'style': 'multi'}
 		});
 
@@ -280,9 +281,10 @@
 		table.cell(result.rnum, 2).data(result.offset).draw();
 		table.cell(result.rnum, 3).data(result.length).draw();
 		table.cell(result.rnum, 4).data(result.cipherAlgorithmCode).draw();
-		table.cell(result.rnum, 5).data(result.binUid).draw();
+		table.cell(result.rnum, 5).data(result.resourceName).draw();
 		table.cell(result.rnum, 6).data(result.initialVectorTypeCode).draw();
 		table.cell(result.rnum, 7).data(result.operationModeCode).draw();
+		table.cell(result.rnum, 8).data(result.binUid).draw();
 		
 		table.rows({selected: true}).deselect();
 		return true;
@@ -660,6 +662,7 @@
 									<th width="100"><spring:message code="encrypt_policy_management.Encryption_Key"/></th>
 									<th width="80"><spring:message code="encrypt_policy_management.Initial_Vector"/></th>
 									<th width="100"><spring:message code="encrypt_policy_management.Modes"/></th>
+									<th width="0"></th>
 								</tr>
 							</thead>
 							<tbody>
@@ -686,6 +689,7 @@
 											<c:if test="${ProfileCipherSpecData.operationModeCode eq 'OMCB'}">CBC</c:if>
 											<c:if test="${ProfileCipherSpecData.operationModeCode eq 'OMCT'}">CTR</c:if>
 										</td>
+										<td>${ProfileCipherSpecData.binUid}</td>
 									</tr>
 								</c:forEach>
 							</tbody>

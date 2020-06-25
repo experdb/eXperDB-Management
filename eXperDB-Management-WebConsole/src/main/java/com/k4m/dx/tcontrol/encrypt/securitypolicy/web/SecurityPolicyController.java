@@ -243,7 +243,7 @@ public class SecurityPolicyController {
 		JSONArray cipherAlgorithmCode = new JSONArray();
 		JSONArray initialVectorTypeCode = new JSONArray();
 		JSONArray operationModeCode = new JSONArray();
-		JSONObject binUid = new JSONObject();
+		JSONArray binUid = new JSONArray();
 		try {
 			// 화면접근이력 이력 남기기
 			CmmnUtils.saveHistory(request, historyVO);
@@ -262,7 +262,7 @@ public class SecurityPolicyController {
 			String entityId = loginVo.getEctityUid();	
 			
 			/*암호화 키*/
-			binUid = kmsc.selectCryptoKeyList(restIp, restPort, strTocken,loginId,entityId);
+			binUid = sic.selectCryptoKeySymmetricList(restIp, restPort, strTocken,loginId,entityId);
 			mv.addObject("binUid",binUid);
 			/*암호화알고리즘*/
 			cipherAlgorithmCode = sic.selectSysCodeList(restIp, restPort, strTocken,loginId,entityId);
@@ -473,27 +473,11 @@ public class SecurityPolicyController {
 					p.setLength(Integer.parseInt(jsrow.get("length").toString())); //길이
 				}
 				
-				HttpSession session = request.getSession();
-				LoginVO loginVo = (LoginVO) session.getAttribute("session");
-				String restIp = loginVo.getRestIp();
-				int restPort = loginVo.getRestPort();
-				String strTocken = loginVo.getTockenValue();
-				String loginId = loginVo.getUsr_id();
-				String entityId = loginVo.getEctityUid();
-				
-				cryptoKey = sic.selectCryptoKeySymmetricList(restIp, restPort, strTocken, loginId, entityId);
-
+				//binuid
 				if(jsrow.get("binUid")!=null){
-					String getbinuid = jsrow.get("binUid").toString(); //키이름
-					String binuid = "";
-					for(int j=0; j<cryptoKey.size(); j++){
-						JSONObject data = (JSONObject) cryptoKey.get(j);
-						if(getbinuid.equals(data.get("resourceName"))){
-							binuid=(String) data.get("getBinUid");
-						}
-					}
-					p.setBinUid(binuid);
+					p.setBinUid(jsrow.get("binUid").toString());
 				}
+				
 				
 				param2.add(p.toJSONString());
 			}
@@ -722,26 +706,9 @@ public class SecurityPolicyController {
 					p.setLength(Integer.parseInt(jsrow.get("length").toString())); //길이
 				}
 				
-				HttpSession session = request.getSession();
-				LoginVO loginVo = (LoginVO) session.getAttribute("session");
-				String restIp = loginVo.getRestIp();
-				int restPort = loginVo.getRestPort();
-				String strTocken = loginVo.getTockenValue();
-				String loginId = loginVo.getUsr_id();
-				String entityId = loginVo.getEctityUid();
-				
-				cryptoKey = sic.selectCryptoKeySymmetricList(restIp, restPort, strTocken, loginId, entityId);
-				
+				//binuid
 				if(jsrow.get("binUid")!=null){
-					String getbinuid = jsrow.get("binUid").toString(); //키이름
-					String binuid = "";
-					for(int j=0; j<cryptoKey.size(); j++){
-						JSONObject data = (JSONObject) cryptoKey.get(j);
-						if(getbinuid.equals(data.get("resourceName"))){
-							binuid=(String) data.get("getBinUid");
-						}
-					}
-					p.setBinUid(binuid);
+					p.setBinUid(jsrow.get("binUid").toString());
 				}
 				
 				param2.add(p.toJSONString());

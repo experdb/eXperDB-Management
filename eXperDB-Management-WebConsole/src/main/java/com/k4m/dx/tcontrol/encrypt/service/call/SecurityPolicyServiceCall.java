@@ -322,6 +322,7 @@ public class SecurityPolicyServiceCall {
 					jsonObj.put("offset", profileCipherSpec.getOffset());
 					jsonObj.put("length", profileCipherSpec.getLength());
 					jsonObj.put("binUid", profileCipherSpec.getBinUid());
+					
 					jsonArray.add(jsonObj);
 				}
 				result.put("ProfileCipherSpecData", jsonArray);
@@ -581,9 +582,17 @@ public class SecurityPolicyServiceCall {
 					
 					System.out.println("resourceName : " + cryptoKeySymmetric.getResourceName());
 					System.out.println("getBinUid : " + cryptoKeySymmetric.getBinUid());
+					System.out.println("cipherAlgorithmName : " + cryptoKeySymmetric.getCipherAlgorithmName());
+					System.out.println("resourceName : " + cryptoKeySymmetric.getResourceName());
+					System.out.println("validEndDate : " + cryptoKeySymmetric.getValidEndDate());
 					
 					jsonObj.put("resourceName", cryptoKeySymmetric.getResourceName());
 					jsonObj.put("getBinUid", cryptoKeySymmetric.getBinUid());
+					jsonObj.put("cipherAlgorithmName", cryptoKeySymmetric.getCipherAlgorithmName());
+					jsonObj.put("resourceName", cryptoKeySymmetric.getResourceName());
+					jsonObj.put("validEndDate", cryptoKeySymmetric.getValidEndDate());
+					
+					
 					jsonArray.add(jsonObj);
 				}
 			
