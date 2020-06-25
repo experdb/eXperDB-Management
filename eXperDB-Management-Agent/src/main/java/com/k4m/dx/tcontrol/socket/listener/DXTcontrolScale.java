@@ -95,6 +95,9 @@ socketLogger.info("DXTcontrolScaleAwsExecute.iSetCount : " + iSetCount);
     	        	CronTrigger triggerMons = newTrigger().withIdentity("trggerName", "group1").withSchedule(cronSchedule(strAutoScaleTime)).build(); //매주 월요일 8시
     	        	scheduler.scheduleJob(jobMons, triggerMons);
     	        	scheduler.start();
+    	        	
+    	        	strAutoScaleTime = FileUtil.getPropertyValue("context.properties", "agent.scale_auto_reset_time");
+    	        	socketLogger.info("DXTcontrolScaleAwsExecute.strAutoScaleTime : " + strAutoScaleTime);
 
 /*        			strAutoScaleTime = FileUtil.getPropertyValue("context.properties", "agent.scale_auto_reset_time");
 socketLogger.info("DXTcontrolScaleAwsExecute.strAutoScaleTime : " + strAutoScaleTime);
