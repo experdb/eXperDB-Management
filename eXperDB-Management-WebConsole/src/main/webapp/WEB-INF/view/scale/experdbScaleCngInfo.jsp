@@ -5,7 +5,7 @@
 
 <div id="pop_layer_cng" class="pop-layer">
 	<div class="pop-container" style="padding: 0px;">
-		<div class="pop_cts" style="width: 50%; height: 600px; overflow: auto; padding: 20px; margin: 0 auto; min-height:0; min-width:0; margin-top: 10%" id="workinfo">
+		<div class="pop_cts" style="width: 50%; height: 630px; overflow: auto; padding: 20px; margin: 0 auto; min-height:0; min-width:0; margin-top: 10%" id="workinfo">
 			<p class="tit" style="margin-bottom: 15px;"><spring:message code="menu.eXperDB_scale_settings"/>
 				<a href="#n" class="btn" onclick="toggleLayer($('#pop_layer_cng'), 'off');" style="float: right;"><img src="/images/ico_state_01.png" style="position: fixed;"/></a>
 			</p>
@@ -38,6 +38,10 @@
 					<tr>
 						<td style="width: 30%; height: 20px;word-break:break-all;"><spring:message code="eXperDB_scale.execute_type"/></td>
 						<td style="width: 70%; text-align: left;word-break:break-all;" id="d_execute_type_nm"></td>
+					</tr>
+					<tr>
+						<td style="width: 30%; height: 20px;word-break:break-all;"><spring:message code="dbms_information.use_yn"/></td>
+						<td style="width: 70%; text-align: left;word-break:break-all;" id="d_useyn"></td>
 					</tr>
 					<tr>
 						<td style="width: 30px; height: 20px;word-break:break-all;"><spring:message code="eXperDB_scale.expansion_clusters"/></td>

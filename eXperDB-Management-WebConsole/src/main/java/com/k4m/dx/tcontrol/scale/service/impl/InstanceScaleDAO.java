@@ -160,4 +160,45 @@ public class InstanceScaleDAO extends EgovAbstractMapper{
 		insert("instanceScaleSql.deleteAutoScaleSetting", instanceScaleVO);	
 	}
 	
+	/**
+	 * scale 공통 설정정보 상세정보 조회
+	 * 
+	 * @param instanceScaleVO
+	 * @throws Exception
+	 */
+	@SuppressWarnings({ "deprecation", "unchecked" })
+	public Map<String, Object> selectAutoScaleComCngInfo(InstanceScaleVO instanceScaleVO) {
+		return (Map<String, Object>) selectOne("instanceScaleSql.selectAutoScaleComCngInfo", instanceScaleVO);
+	}
+	
+	/**
+	 * scale Auto common 설정 등록
+	 * 
+	 * @param instanceScaleVO
+	 * @throws Exception
+	 */
+	@SuppressWarnings({ "deprecation", "unchecked" })
+	public void updateAutoScaleCommonSetting(InstanceScaleVO instanceScaleVO) {
+		insert("instanceScaleSql.updateAutoScaleCommonSetting", instanceScaleVO);	
+	}
+	/**
+	 * scale Auto 공통 수정 후 설정 수정
+	 * 
+	 * @param instanceScaleVO
+	 * @throws Exception
+	 */
+	@SuppressWarnings({ "deprecation", "unchecked" })
+	public void updateTotalAutoScaleSetting(InstanceScaleVO instanceScaleVO) {
+		insert("instanceScaleSql.updateTotalAutoScaleSetting", instanceScaleVO);	
+	}
+	
+	/**
+	 * scale 서버 확인
+	 * 
+	 * @param dataConfigVO
+	 * @throws Exception
+	 */
+	public Map<String, Object> selectScaleAWSSvrInfo(InstanceScaleVO instanceScaleVO) throws SQLException {
+		return (Map<String, Object>) selectOne("instanceScaleSql.selectScaleAWSSvrInfo", instanceScaleVO);
+	}
 }

@@ -152,4 +152,28 @@ public interface InstanceScaleService {
 	 * @throws Exception
 	 */
 	int dashboardInstanceScale(int db_svr_id) throws Exception;
+
+	/**
+	 * scale 공통 설정정보 상세정보조회
+	 * 
+	 * @param instanceScaleVO
+	 * @throws Exception 
+	 */
+	Map<String, Object> selectAutoScaleComCngInfo(InstanceScaleVO instanceScaleVO) throws Exception;
+
+	/**
+	 * scale Auto common setting 등록
+	 * @param instanceScaleVO
+	 * @return String
+	 * @throws Exception
+	 */
+	String updateAutoScaleCommonSetting(InstanceScaleVO instanceScaleVO) throws Exception;
+
+	/**
+	 * scale 공통 내역 조회
+	 * 
+	 * @param instanceScaleVO
+	 * @throws Exception
+	 */
+	Map<String, Object> scaleInstallList(InstanceScaleVO instanceScaleVO) throws Exception;
 }

@@ -790,4 +790,108 @@ public class InstanceScaleController {
 
 		return result;
 	}
+
+	
+	/**
+	 * Auto scale setting Modify View page
+	 * @param WorkVO
+	 * @return ModelAndView
+	 */
+	@SuppressWarnings("unchecked")
+	@RequestMapping("/popup/selectAutoScaleComCngForm.do")
+	public ModelAndView selectAutoScaleComCngForm(@ModelAttribute("instanceScaleVO") InstanceScaleVO instanceScaleVO, HttpServletRequest request, @ModelAttribute("historyVO") HistoryVO historyVO) {
+		ModelAndView mv = new ModelAndView();
+		int db_svr_id = instanceScaleVO.getDb_svr_id();
+		
+		String dtlCd = "DX-T0061";
+		try {
+			// 화면접근이력 이력 남기기
+			instanceScaleService.scaleSaveHistory(request, historyVO, dtlCd);
+
+			mv.addObject("db_svr_id", db_svr_id);
+			mv.setViewName("popup/scaleAutoComRegForm");
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
+		return mv;
+	}
+	
+	/**
+	 * scale 실행이력 상세정보 조회
+	 * @param  request
+	 * @return result
+	 * @throws Exception
+	 */
+	@SuppressWarnings("unchecked")
+	@RequestMapping(value = "/popup/selectAutoScaleComCngInfo.do")
+	@ResponseBody
+	public Map<String, Object> selectAutoScaleComCngInfo(HttpServletRequest request, @ModelAttribute("instanceScaleVO") InstanceScaleVO instanceScaleVO) {
+		Map<String, Object> result = null;
+		
+		try {
+			result = instanceScaleService.selectAutoScaleComCngInfo(instanceScaleVO);	
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return result;
+	}
+	
+	/**
+	 * Auto scale common setting update
+	 * @param 
+	 * @return
+	 */
+	@RequestMapping("/popup/scaleComCngWrite.do")
+	@ResponseBody
+	public String scaleComCngWrite(@ModelAttribute("historyVO") HistoryVO historyVO, @ModelAttribute("instanceScaleVO") InstanceScaleVO instanceScaleVO, @ModelAttribute("workVO") WorkVO workVO, HttpServletResponse response, HttpServletRequest request) {
+		HttpSession session = request.getSession();
+		LoginVO loginVo = (LoginVO) session.getAttribute("session");
+		instanceScaleVO.setLogin_id((String)loginVo.getUsr_id());
+
+		//중복체크 flag 값
+		String result = "S";
+		String dtlCd = "DX-T0061_01";
+
+		try {
+			//저장 process
+			result = instanceScaleService.updateAutoScaleCommonSetting(instanceScaleVO);
+
+			//저장 완료시
+			if ("S".equals(result)) {
+				// 화면접근이력 이력 남기기
+				instanceScaleService.scaleSaveHistory(request, historyVO, dtlCd);
+			}
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
+		return result;
+	}
+	
+	/**
+	 * Auto scale setting Registration View page
+	 * @param WorkVO
+	 * @return ModelAndView
+	 */
+	@RequestMapping("/popup/scaleAutoInstallInfo.do")
+	@ResponseBody
+	public Map<String, Object> scaleAutoInstallInfo(@ModelAttribute("instanceScaleVO") InstanceScaleVO instanceScaleVO, HttpServletRequest request, @ModelAttribute("historyVO") HistoryVO historyVO) {
+		Map<String, Object> result = new HashMap<String, Object>();
+		String dtlCd = "DX-T0059";
+
+		try {
+			// 화면접근이력 이력 남기기
+			instanceScaleService.scaleSaveHistory(request, historyVO, dtlCd);
+			
+			result = instanceScaleService.scaleInstallList(instanceScaleVO);
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
+		return result;	
+	}
 }

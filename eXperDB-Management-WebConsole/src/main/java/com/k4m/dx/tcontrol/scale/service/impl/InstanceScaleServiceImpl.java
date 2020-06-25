@@ -1241,4 +1241,92 @@ System.out.println("===scalejsonChk===" + scalejsonChk);
 
 		return iNumCnt;
 	}
+
+	/**
+	 * scale 공통 설정정보 상세정보조회
+	 * 
+	 * @param instanceScaleVO
+	 * @throws Exception 
+	 */
+	@Override
+	public Map<String, Object> selectAutoScaleComCngInfo(InstanceScaleVO instanceScaleVO) throws Exception {
+		return instanceScaleDAO.selectAutoScaleComCngInfo(instanceScaleVO);
+	}
+
+	/**
+	 * scale Auto setting 등록
+	 * 
+	 * @param instanceScaleVO
+	 * @throws Exception 
+	 */
+	@Override
+	public String updateAutoScaleCommonSetting(InstanceScaleVO instanceScaleVO) throws Exception {
+		String result = "S";
+		List<Map<String, Object>> dbResult = null;
+		Map<String, Object> recultChk = null;
+		
+		try{
+			//데이터 있는지 확인
+			recultChk = (Map<String, Object>) instanceScaleDAO.selectScaleAWSSvrInfo(instanceScaleVO);
+
+			if (recultChk == null) {
+				result = "O";
+			}
+		}catch(Exception e){
+			e.printStackTrace();
+		}
+
+		//저장
+		if ("S".equals(result)) {
+			try{
+				int db_svr_id = instanceScaleVO.getDb_svr_id();
+				dbResult = instanceScaleDAO.selectSvrIpadrList(db_svr_id);
+				if (!dbResult.isEmpty()) {
+					int iDbSvrIpadrId = Integer.parseInt(String.valueOf(dbResult.get(0).get("db_svr_ipadr_id")+""));
+					instanceScaleVO.setDb_svr_ipadr_id(iDbSvrIpadrId);
+				} else {
+					instanceScaleVO.setDb_svr_ipadr_id(1);
+				}
+				
+				String min_clusters_val = instanceScaleVO.getMin_clusters();
+				
+				if ("".equals(min_clusters_val)) {
+					instanceScaleVO.setMin_clusters(null);
+				}
+
+				String max_clusters_val = instanceScaleVO.getMax_clusters();
+				
+				if ("".equals(max_clusters_val)) {
+					instanceScaleVO.setMax_clusters(null);
+				}
+				
+				String auto_run_cycle_val = instanceScaleVO.getAuto_run_cycle();
+				
+				if ("".equals(auto_run_cycle_val)) {
+					instanceScaleVO.setExpansion_clusters(null);
+				}
+				
+				instanceScaleDAO.updateAutoScaleCommonSetting(instanceScaleVO);
+				
+				//설정 전체 수정
+				instanceScaleDAO.updateTotalAutoScaleSetting(instanceScaleVO);
+			} catch (Exception e) {
+				result = "F";
+				e.printStackTrace();
+			}
+		}
+
+		return result;
+	}
+	
+	/**
+	 * 공통 INS 조회
+	 * 
+	 * @param param
+	 * @throws Exception
+	 */
+	@Override
+	public Map<String, Object> scaleInstallList(InstanceScaleVO instanceScaleVO) throws Exception {
+		return (Map<String, Object>) instanceScaleDAO.selectScaleAWSSvrInfo(instanceScaleVO);
+	}
 }

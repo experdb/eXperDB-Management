@@ -109,6 +109,21 @@ button[disabled]{
 	 						return html;
 	 					},
 		         		className : "dt-center", defaultContent : ""},
+					{
+						data : "useyn", 
+						render : function(data, type, full, meta) {
+							var html = '';
+
+							if (full.useyn == 'Y') {
+								html += '<span class="btn btnC_01 btnF_02"><img src="../images/ico_agent_1.png" alt=""  style="margin-right:3px;"/><spring:message code="dbms_information.use" /></span>';
+							} else {
+								html += '<span class="btn btnC_01 btnF_02"><img src="../images/ico_agent_2.png" alt=""  style="margin-right:3px;"/><spring:message code="dbms_information.unuse" /></span>';
+							}
+								
+							return html;
+							},
+							className : "dt-center", defaultContent : ""
+					},
 					{data : "expansion_clusters", className : "dt-right", defaultContent : ""},
 					{data : "min_clusters", className : "dt-right", defaultContent : ""},
 					{data : "max_clusters", className : "dt-right", defaultContent : ""},
@@ -129,11 +144,12 @@ button[disabled]{
 		table.tables().header().to$().find('th:eq(6)').css('min-width', '100px');
 		table.tables().header().to$().find('th:eq(7)').css('min-width', '100px');
 		table.tables().header().to$().find('th:eq(8)').css('min-width', '100px');  
-		table.tables().header().to$().find('th:eq(9)').css('min-width', '100px');
+		table.tables().header().to$().find('th:eq(9)').css('min-width', '100px');  
 		table.tables().header().to$().find('th:eq(10)').css('min-width', '100px');
 		table.tables().header().to$().find('th:eq(11)').css('min-width', '100px');
 		table.tables().header().to$().find('th:eq(12)').css('min-width', '100px');
 		table.tables().header().to$().find('th:eq(13)').css('min-width', '100px');
+		table.tables().header().to$().find('th:eq(14)').css('min-width', '100px');
  
 		$(window).trigger('resize'); 
 	}
@@ -331,6 +347,8 @@ button[disabled]{
 					} else {
 						if (gbn =="mod") {
 							fn_mod_popup();
+						} else if (gbn == "comIns") {
+							fn_common_reg_popup();
 						} else {
 							fn_del_data();
 						}
@@ -339,6 +357,30 @@ button[disabled]{
 			}
 		});
 		$('#loading').hide();
+	}
+	
+	/* ********************************************************
+	 * Scale common reg Btn click
+	 ******************************************************** */
+	function fn_common_reg_popup() {
+	    var popUrl = '/scale/popup/selectAutoScaleComCngForm.do';
+		var width = 654;
+		var height = 433;
+		var left = (window.screen.width / 2) - (width / 2);
+		var top = (window.screen.height /2) - (height / 2);
+		var popOption = "width="+width+", height="+height+", top="+top+", left="+left+", resizable=no, scrollbars=yes, status=no, toolbar=no, titlebar=yes, location=no,";
+
+	    popOpen = window.open("","scaleregPop",popOption);
+
+	    $('#wrk_id', '#frmRegPopup').val("");
+	    $('#db_svr_id', '#frmRegPopup').val($("#db_svr_id", "#findList").val());
+
+	    $('#frmRegPopup').attr("action", popUrl);
+	    $('#frmRegPopup').attr("target", "scaleregPop");
+
+	    $('#frmRegPopup').submit();
+	    
+	    popOpen.focus();
 	}
 
 	/* ********************************************************
@@ -349,6 +391,7 @@ button[disabled]{
 		var level_nm = "";
 		var execute_type_nm = "";
 		var scale_type_nm = "";
+		var useyn_nm = "";
 	
 		$.ajax({
 			url : "/scale/selectAutoScaleCngInfo.do",
@@ -407,6 +450,14 @@ button[disabled]{
  						execute_type_nm = '<span class="btn btnC_01 btnF_02"><img src="../images/ico_agent_2.png" alt="" style="margin-right:3px;" />' + result.execute_type_nm +'</span>';
  					}
 					$("#d_execute_type_nm").html(execute_type_nm);
+					
+
+					if (result.useyn == 'Y') {
+						useyn_nm = '<span class="btn btnC_01 btnF_02"><img src="../images/ico_agent_1.png" alt=""  style="margin-right:3px;"/><spring:message code="dbms_information.use" /></span>';
+ 					} else {
+ 						useyn_nm = '<span class="btn btnC_01 btnF_02"><img src="../images/ico_agent_2.png" alt="" style="margin-right:3px;" /><spring:message code="dbms_information.unuse" /></span>';
+ 					}
+					$("#d_useyn").html(useyn_nm);
 
 					$("#d_expansion_clusters").html(nvlSet(result.expansion_clusters));
 					$("#d_min_clusters").html(nvlSet(result.min_clusters));
@@ -472,7 +523,8 @@ button[disabled]{
 					$("#btnInsert").prop("disabled", "disabled");
 					$("#btnModify").prop("disabled", "disabled");
 					$("#btnDelete").prop("disabled", "disabled");
-					
+					$("#btnCommonInsert").prop("disabled", "disabled");
+
 					$("#btnCngSearch").prop("disabled", "disabled");
 
 					$("#scale_type_cd").prop("disabled", "disabled");
@@ -520,7 +572,7 @@ button[disabled]{
 			<div class="cmm_grp">
 				<div class="btn_type_01">
 					<span class="scaleIng" id="scaleIngMsg" style="display:none;">* <spring:message code="eXperDB_scale.msg10" /></span>
-
+					<span class="btn btnC_01 btn_fl"><button type="button" id="btnCommonInsert" onclick="fn_scaleChk('comIns')"><spring:message code="common.reg_default_setting" /></button></span>
 					<span class="btn"><button type="button" id="btnCngSearch" onClick="fn_search_list();"><spring:message code="common.search" /></button></span>
 					<span class="btn"><button type="button" id="btnInsert" onClick="fn_reg_popup();"><spring:message code="common.registory" /></button></span>
 					<span class="btn"><button type="button" id="btnModify" onClick="fn_scaleChk('mod');"><spring:message code="common.modify" /></button></span>
@@ -583,9 +635,10 @@ button[disabled]{
 								<th width="200"><spring:message code="eXperDB_scale.policy_type_time" /></th> <!-- 정책 유형 시간 -->
 								<th width="100"><spring:message code="eXperDB_scale.target_value" /></th> <!-- level -->
 								<th width="100"><spring:message code="eXperDB_scale.execute_type" /></th> <!-- 실행 유형 -->
-								<th width="100"><spring:message code="eXperDB_scale.expansion_clusters" /></th> <!-- 확장 클러스터 수 -->
-								<th width="100"><spring:message code="eXperDB_scale.min_clusters" /></th> <!-- 최저 클러스터 수 -->
-								<th width="100"><spring:message code="eXperDB_scale.max_clusters" /></th> <!-- 최대 클러스터 수 -->
+								<th width="100"><spring:message code="dbms_information.use_yn" /></th> <!-- 사용여부 -->
+								<th width="100"><spring:message code="eXperDB_scale.expansion_clusters" /></th> <!-- 확장 Node 수 -->
+								<th width="100"><spring:message code="eXperDB_scale.min_clusters" /></th> <!-- 최저 Node 수 -->
+								<th width="100"><spring:message code="eXperDB_scale.max_clusters" /></th> <!-- 최대 Node 수 -->
 								<th width="100"><spring:message code="common.register" /></th> <!-- 등록자 -->
 								<th width="100"><spring:message code="common.regist_datetime" /></th> <!-- 등록일시 -->
 								<th width="100"><spring:message code="common.modifier" /></th> <!-- 수정자 -->
