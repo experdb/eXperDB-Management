@@ -170,6 +170,7 @@
           FROM T_SCALE_I
 	 	 WHERE 1=1
            AND DB_SVR_ID = #{db_svr_id}::numeric
+           AND USEYN = 'Y'
 	</select>
 	
 	<select id="selectQ_T_SCALELOADLOG_G_01_SEQ" resultType="long">
@@ -210,6 +211,7 @@
               , MAX_CLUSTERS
            FROM T_SCALE_I
           WHERE DB_SVR_ID=#{db_svr_id}::numeric
+            AND USEYN = 'Y'
           ORDER BY WRK_ID
     </select>
 
@@ -298,9 +300,60 @@
         SELECT
                DB_SVR_IPADR_ID
              , DB_SVR_ID
+             , IPADR
           FROM T_DBSVRIPADR_I
          WHERE IPADR = #{IPADR}
                LIMIT 1
 		]]>
 	</select>	
+
+
+	<insert id="insertScaleServer"  parameterType="hashmap">
+        /**
+        * Query ID : insertScaleServer
+        * Description : aws 서버 등록
+        * Author : 
+        **/
+        WITH UPSERT AS(
+               UPDATE T_SCALEAWSSVR_I
+                  SET DB_SVR_ID = #{db_svr_id}::numeric,
+                      DB_SVR_IPADR_ID = #{db_svr_ipadr_id}::numeric,
+                      IPADR = #{ipdar_set}
+                WHERE DB_SVR_ID  = #{db_svr_id}::numeric
+                  AND DB_SVR_IPADR_ID = #{db_svr_ipadr_id}::numeric
+                RETURNING *
+                      )
+        INSERT
+              INTO T_SCALEAWSSVR_I (
+                        DB_SVR_ID,
+                        DB_SVR_IPADR_ID,
+                        IPADR,
+                        FRST_REGR_ID,
+                        FRST_REG_DTM,
+                        LST_MDFR_ID,
+                        LST_MDF_DTM
+                       )
+                       SELECT #{db_svr_id}::numeric,
+                              #{db_svr_ipadr_id}::numeric,
+                              #{ipdar_set},
+                              #{login_id},
+                              clock_timestamp(),
+                              #{login_id},
+                              clock_timestamp()
+         WHERE NOT EXISTS ( SELECT * FROM UPSERT )
+	</insert>
+	
+	<select id="selectAutoScaleComCngInfo" resultType="hashMap" parameterType="hashMap">
+   		/**
+	 	* Query ID : selectAutoScaleComCngInfo
+	 	* Description : scale 설정 정보 상세 조회
+	 	* Author : 
+	 	**/
+       SELECT A.DB_SVR_ID,
+              A.DB_SVR_IPADR_ID,
+              A.AUTO_RUN_CYCLE
+         FROM T_SCALEAWSSVR_I A
+        WHERE A.DB_SVR_ID=#{db_svr_id}::numeric
+        LIMIT 1
+	</select>
 </mapper>
