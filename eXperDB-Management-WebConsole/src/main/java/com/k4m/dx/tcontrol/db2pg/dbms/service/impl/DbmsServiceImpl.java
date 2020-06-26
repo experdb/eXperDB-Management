@@ -71,4 +71,15 @@ public class DbmsServiceImpl extends EgovAbstractServiceImpl implements DbmsServ
 	}
 
 
+	@Override
+	public int db2pg_ddl_check(Map<String, Object> param) {
+		return dbmsDAO.db2pg_ddl_check(param);
+	}
+
+	@Override
+	public int db2pg_mig_check(Map<String, Object> param) {
+		return dbmsDAO.db2pg_mig_check(param);
+	}
+
+
 }
