@@ -56,6 +56,7 @@ var db2pg_sys_nmChk = "fail";
  * 페이지 시작시(서버 조회)
  ******************************************************** */
 $(window.document).ready(function() {
+	//$("#crts_nm_self").hide();
 	$("#pgbtn").hide();
 	$("#schema_any").show();
 	$("#schema_pg").hide();
@@ -366,7 +367,9 @@ function fn_charSet(){
  * DBMS 등록
  ******************************************************** */
  	function fn_insertDBMS(){
-
+		
+ 		var crts_nm = null;
+		
  		// Validation 체크
  		 if (!fn_validation()) return false;
 
@@ -416,6 +419,18 @@ function fn_charSet(){
   		}
   	});    
 	}
+	
+	
+/* function fn_charChange(){
+	
+	if($("#dbms_dscd").val() == "TC002202"){
+		if($("#crts_nm").val() == "TC003805"){
+			$("#crts_nm_self").show();
+		}else{
+			$("#crts_nm_self").hide();
+		}		
+	}
+}	 */
  
 </script>
 </head>
@@ -472,7 +487,10 @@ function fn_charSet(){
 				</tr>	
 				<tr>
 					<th scope="row" class="ico_t1"><spring:message code="migration.character_set"/>(*)</th>
-						<td><select name="crts_nm" id="crts_nm" class="select t9"></select></td>				
+						<td colspan="3">
+							<select name="crts_nm" id="crts_nm" class="select t9" onChange ="fn_charChange()"></select>	
+							<!-- <input type="text" class="txt" name="crts_nm_self" id="crts_nm_self" />	 -->					
+						</td>				
 				</tr>			
 			</tbody>
 		</table>
