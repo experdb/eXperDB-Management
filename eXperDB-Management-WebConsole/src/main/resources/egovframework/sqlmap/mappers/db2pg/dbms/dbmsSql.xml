@@ -72,10 +72,28 @@
 	</insert>
 	
 	 <select id="selectDb2pgDBMS" parameterType="db2pgSysInfVO"  resultType="db2pgSysInfVO">	 		
-	 		SELECT
-		 		  	(ROW_NUMBER() OVER()) AS ROWNUM
+	 					SELECT 
+					(ROW_NUMBER() OVER()) AS ROWNUM
 					, (ROW_NUMBER() OVER()) AS IDX
-			 		, DB2PG_SYS_ID
+					,A.DB2PG_SYS_ID
+					,A.DB2PG_SYS_NM
+					,A.DBMS_DSCD_NM
+					,A.DBMS_DSCD
+					,A.IPADR
+					,A.DTB_NM
+					,A.SPR_USR_ID
+					,A.PORTNO
+					,A.SCM_NM
+					,A.PWD
+					,A.CRTS_NM
+					,A.CRTS
+					,A.FRST_REGR_ID
+					,A.FRST_REG_DTM
+					,A.LST_MDFR_ID
+					,A.LST_MDF_DTM				
+			FROM(		
+			SELECT
+			 		DB2PG_SYS_ID
 					, DB2PG_SYS_NM
 					, (SELECT SYS_CD_NM FROM T_SYSDTL_C WHERE SYS_CD = DBMS_DSCD ) AS DBMS_DSCD_NM
 					, DBMS_DSCD
@@ -93,7 +111,7 @@
 					, TO_CHAR(LST_MDF_DTM,'YYYY-MM-DD HH24:MI:SS') AS LST_MDF_DTM 
 			FROM T_DB2PG_SYS_INF
 			WHERE 1 = 1
-			<if test="db2pg_sys_id != null and db2pg_sys_id != '' ">
+			  <if test="db2pg_sys_id != null and db2pg_sys_id != '' ">
 		      AND DB2PG_SYS_ID = #{db2pg_sys_id}
 		      </if>
 			  <if test="db2pg_sys_nm != null and db2pg_sys_nm != '' ">
@@ -114,6 +132,8 @@
 		      <if test="scm_nm != null and scm_nm != '' ">
 		      AND SCM_NM = #{scm_nm}
 		      </if>	 			
+			ORDER BY LST_MDF_DTM DESC
+			) A		
 	 </select>
 
  	<select id="dbmsGrb" resultType="hashMap">
