@@ -84,7 +84,11 @@ public class DxT038 extends SocketCtl{
 			config.put("schema.whitelist", objMAPP_INFO.get("EXRT_TRG_SCM_NM"));
 			config.put("table.whitelist", objMAPP_INFO.get("EXRT_TRG_TB_NM"));
 			config.put("compression.type", objCONNECT_INFO.get("COMPRESSION_TYPE").toString().toLowerCase());
-			config.put("slot.drop.on.stop", "true");
+			config.put("slot.drop.on.stop", "true");	
+			if(objCONNECT_INFO.get("META_DATA").equals("ON")){
+				config.put("transforms", "unwrap");
+				config.put("transforms.unwrap.type", "io.debezium.transforms.ExtractNewRecordState");
+			}
 			
 			JSONObject parameters = new JSONObject();
 			parameters.put("name", objCONNECT_INFO.get("CONNECT_NM"));
