@@ -89,6 +89,26 @@ public class DatabaseTableInfo {
 			//MySQL
 				case "TC002203" :
 
+					sql = " SELECT table_name "
+							+ "FROM information_schema.tables "
+							+ "WHERE table_schema='"+serverObj.get("SCHEMA") +"' "													
+							+ "AND table_type IN ('BASE TABLE') "
+							+ "AND table_type IN ('BASE TABLE','VIEW') "
+							+ "AND table_name Like '%"+ serverObj.get("TABLE_NM") +"%'";
+					
+					ResultSet mysRs = stmt.executeQuery(sql);				
+					i = 0;
+					while (mysRs.next()) {
+						i++;
+						JSONObject jsonObj = new JSONObject();
+							jsonObj.put("rownum",i);
+							jsonObj.put("table_name", mysRs.getString("table_name"));
+							jsonObj.put("obj_description","");
+							jsonArray.add(jsonObj);
+					}
+					result.put("RESULT_CODE", 0);
+					result.put("RESULT_DATA", jsonArray);
+					
 					break;					
 					
 			//PostgreSQL		
