@@ -256,4 +256,5 @@ public class ClientProtocolID {
 	public static final String CONNECT_INFO = "CONNECT_INFO";
 	public static final String MAPP_INFO = "MAPP_INFO";
 	public static final String COMPRESSION_TYPE = "COMPRESSION_TYPE";
+	public static final String META_DATA = "META_DATA";
 }

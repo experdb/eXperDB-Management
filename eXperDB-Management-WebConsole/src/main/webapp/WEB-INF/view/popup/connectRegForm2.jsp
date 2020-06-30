@@ -201,8 +201,6 @@ function fn_init(){
 		  	}
 		}
 		
-		$('#include_schema_nm').val(schema_mapp);
-		$('#table_mapp_nm').val(table_mapp);
 		
 		if(valCheck()){
 				var kafkaIp = $("#kc_ip").val();
@@ -211,11 +209,12 @@ function fn_init(){
 				var connect_nm=	$("#connect_nm").val();
 				var db_id = $("#db_id").val();
 				var snapshot_mode=	$("#snapshot_mode").val();
-				var exrt_trg_scm_nm = $("#include_schema_nm").val() 
+				var exrt_trg_scm_nm = $("#include_schema_nm").val(); 
 				var exrt_trg_tb_nm = $("#table_mapp_nm").val();
 				var schema_total_cnt= 0;
 				var table_total_cnt = 0;
 				var compression_type=	$("#compression_type").val();			
+				var meta_data = 	$("#meta_data").val();
 				
 				$.ajax({
 					url : '/insertConnectInfo.do',
@@ -231,7 +230,8 @@ function fn_init(){
 						exrt_trg_tb_nm : exrt_trg_tb_nm,
 						schema_total_cnt : schema_total_cnt,
 						table_total_cnt : table_total_cnt,
-						compression_type : compression_type
+						compression_type : compression_type,
+						meta_data : meta_data
 					},
 					success : function(result) {
 						if(result == true){
@@ -828,8 +828,14 @@ function selectTab(tab){
 										<c:forEach var="result" items="${compressionTypeList}">
 											<option value="<c:out value="${result.sys_cd}"/>"<c:if test="${result.sys_cd ==  'TC003701'}"> selected</c:if>><c:out value="${result.sys_cd_nm}"/></option>
 										</c:forEach>							
+									</select>										
+							</li>
+							<li>
+								<p class="op_tit">MetaData</p>
+									<select id="meta_data" name="meta_data" class="select"  style="width:300px;">
+										<option value="ON" >ON</option>
+										<option value="OFF" selected>OFF</option>						
 									</select>									
-									<span id="snapshotModeDetail" name="snapshotModeDetail"></span>					
 							</li>
 						</ul>
 					</div>

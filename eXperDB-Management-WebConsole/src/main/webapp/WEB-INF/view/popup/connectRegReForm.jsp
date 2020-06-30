@@ -125,9 +125,6 @@ function fn_init(){
 		connector_tableList.rows({selected: true}).deselect();
 		connector_tableList.clear().draw();
 		connector_tableList.rows.add(tables.data).draw();	
-		
-		//fn_table_search();
-
 	});
 
 
@@ -217,6 +214,7 @@ function fn_init(){
 			var trans_exrt_trg_tb_id	 =	"${trans_exrt_trg_tb_id}";
 			var snapshot_mode=	$("#snapshot_mode").val();
 			var compression_type=	$("#compression_type").val();
+			var meta_data = $("#meta_data").val();
 			
 			$.ajax({
 				url : '/updateConnectInfo.do',
@@ -229,7 +227,8 @@ function fn_init(){
 					exrt_trg_tb_nm : exrt_trg_tb_nm,
 					schema_total_cnt : schema_total_cnt,
 					table_total_cnt : table_total_cnt,
-					compression_type : compression_type
+					compression_type : compression_type,
+					meta_data : meta_data
 				},
 				success : function(result) {
 					if(result == true){
@@ -300,7 +299,7 @@ function fn_schema_search(db_svr_id,db_nm){
 		success : function(result) {
 			schema_List.rows({selected: true}).deselect();
 			schema_List.clear().draw();
-			schema_List.rows.add(result.RESULT_DATA).draw();	  z
+			schema_List.rows.add(result.RESULT_DATA).draw();
 		}
 	});
 }
@@ -458,7 +457,7 @@ function selectTab(tab){
     	connector_tableList.rows.add(rows).draw();
     	tableList.rows('.selected').remove().draw();
 		}	 		 
-}
+	}
 	
 	/*->> 클릭시*/
 	function fn_t_allRightMove(){
@@ -474,9 +473,7 @@ function selectTab(tab){
 	        tableList.rows({selected: true}).deselect();
 	        tableList.rows().remove().draw();
 		}
-
-}
-	
+	}
 	
 	/*<- 클릭시*/
 	function fn_t_leftMove(){
@@ -604,8 +601,23 @@ function selectTab(tab){
 										<c:forEach var="result" items="${compressionTypeList}">
 											<option value="<c:out value="${result.sys_cd}"/>"<c:if test="${compression_nm eq result.sys_cd_nm}"> selected</c:if>><c:out value="${result.sys_cd_nm}"/></option>
 										</c:forEach>							
-									</select>									
-									<span id="snapshotModeDetail" name="snapshotModeDetail"></span>					
+									</select>											
+							</li>
+							<li>
+								<p class="op_tit">메타데이타</p>
+									<select id="meta_data" name="meta_data" class="select"  style="width:300px;">
+										<c:set var="meta_data" value="${meta_data}" />
+										<c:choose>
+										    <c:when test="${meta_data eq 'ON'}">
+										        <option value="ON"  selected>ON</option>
+												<option value="OFF" >OFF</option>	
+										    </c:when>								 							 
+										    <c:otherwise>
+										        <option value="ON" >ON</option>
+												<option value="OFF" selected>OFF</option>	
+										    </c:otherwise>							
+										</c:choose>
+									</select>											
 							</li>
 						</ul>
 					</div>

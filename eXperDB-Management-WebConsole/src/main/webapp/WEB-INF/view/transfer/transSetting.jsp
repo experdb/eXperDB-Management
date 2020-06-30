@@ -52,6 +52,7 @@
 			{ data : "db_nm",  className : "dt-center", defaultContent : "",orderable : false}, 
 			{ data : "snapshot_nm",  className : "dt-center", defaultContent : "",orderable : false}, 			
 			{ data : "compression_nm",  className : "dt-center", defaultContent : "",orderable : false}, 		
+			{ data : "meta_data",  className : "dt-center", defaultContent : "",orderable : false}, 		
 			/*{
 				data : "status",
 				render : function(data, type, full, meta) {
@@ -89,6 +90,7 @@
 		table.tables().header().to$().find('th:eq(9)').css('min-width', '90px');
 		table.tables().header().to$().find('th:eq(10)').css('min-width', '100px');
 		table.tables().header().to$().find('th:eq(11)').css('min-width', '100px');
+		table.tables().header().to$().find('th:eq(12)').css('min-width', '100px');
 	    $(window).trigger('resize'); 
 	    
 		table.on( 'order.dt search.dt', function () {
@@ -384,7 +386,7 @@
 	function fn_newInsert(){
 		var popUrl = "/popup/connectRegForm2.do?act=i&&db_svr_id=${db_svr_id}"; // 서버 url 팝업경로
 		var width = 1050;
-		var height = 650;
+		var height = 713;
 		var left = (window.screen.width / 2) - (width / 2);
 		var top = (window.screen.height /2) - (height / 2);
 		var popOption = "width="+width+", height="+height+", left="+left+", resizable=no, scrollbars=yes, status=no, toolbar=no, titlebar=yes, location=no,";
@@ -409,7 +411,7 @@
 				
 				var popUrl = "/popup/connectRegReForm.do?act=u&&trans_exrt_trg_tb_id="+trans_exrt_trg_tb_id+"&&trans_id="+trans_id+"&&db_svr_id=${db_svr_id}"; // 서버 url 팝업경로
 				var width = 1050;
-				var height = 650;
+				var height = 713;
 				var left = (window.screen.width / 2) - (width / 2);
 				var top = (window.screen.height /2) - (height / 2);
 				var popOption = "width="+width+", height="+height+", top="+top+", left="+left+", resizable=no, scrollbars=yes, status=no, toolbar=no, titlebar=yes, location=no,";
@@ -482,6 +484,7 @@
 								<th width="100"><spring:message code="common.dbms_name" /></th>
 								<th width="100">스냅샷 모드</th>
 								<th width="100">압축형태</th>
+								<th width="100">메타데이타</th>
 								<!-- <th width="30">구동상태</th> -->
 							</tr>
 						</thead>

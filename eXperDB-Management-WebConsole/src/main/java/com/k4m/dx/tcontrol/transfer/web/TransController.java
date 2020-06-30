@@ -1232,6 +1232,7 @@ public class TransController {
 					mv.addObject("trans_id",trans_id);				
 					mv.addObject("compression_type", transInfo.get(0).get("compression_type"));
 					mv.addObject("compression_nm", transInfo.get(0).get("compression_nm"));
+					mv.addObject("meta_data", transInfo.get(0).get("meta_data"));
 
 				mv.addObject("schemas", schemaResult);
 				mv.addObject("tables", tableResult);

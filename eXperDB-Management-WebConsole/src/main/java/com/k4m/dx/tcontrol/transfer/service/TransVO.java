@@ -31,8 +31,19 @@ public class TransVO {
 	
 	private String compression_type;
 	private String compression_nm;
-
 	
+	private String meta_data;
+	
+	
+
+	public String getMeta_data() {
+		return meta_data;
+	}
+
+	public void setMeta_data(String meta_data) {
+		this.meta_data = meta_data;
+	}
+
 	public String getCompression_type() {
 		return compression_type;
 	}

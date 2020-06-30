@@ -47,6 +47,7 @@
 	      , LST_MDFR_ID
 	      , LST_MDF_DTM 
 	      , COMPRESSION_TYPE
+	      , META_DATA
 		) 
 		VALUES
 		(
@@ -63,6 +64,7 @@
 			, #{frst_regr_id}
 			, clock_timestamp()
 			, #{compression_type}
+			, #{meta_data}
 		)
 	</insert>
 
@@ -95,6 +97,7 @@
 					, A.LST_MDF_DTM
 					, A.COMPRESSION_TYPE
 					, (SELECT SYS_CD_NM FROM T_SYSDTL_C WHERE SYS_CD = A.COMPRESSION_TYPE ) AS COMPRESSION_NM
+					, A.META_DATA
 			FROM T_TRANSCNG_I A
 			WHERE 1=1
 			AND A.DB_SVR_ID = #{db_svr_id}
@@ -217,6 +220,7 @@
 					, A.LST_MDF_DTM
 					, A.COMPRESSION_TYPE
 					, (SELECT SYS_CD_NM FROM T_SYSDTL_C WHERE SYS_CD = A.COMPRESSION_TYPE ) AS COMPRESSION_NM
+					, A.META_DATA
 			FROM T_TRANSCNG_I A
 			WHERE 1=1
 			AND A.TRANS_ID = #{trans_id}
@@ -299,6 +303,7 @@
 		UPDATE T_TRANSCNG_I SET
 				snapshot_mode = #{snapshot_mode},
 				compression_type = #{compression_type},
+				meta_data = #{meta_data},
 				lst_mdfr_id =  #{frst_regr_id}, 
 				lst_mdf_dtm =  clock_timestamp()
 	 		WHERE TRANS_ID = #{trans_id}	 		
