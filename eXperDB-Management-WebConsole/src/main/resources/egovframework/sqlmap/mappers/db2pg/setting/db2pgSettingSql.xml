@@ -13,7 +13,7 @@
 	 	FROM T_SYSDTL_C 
 	 	where GRP_CD = #{grp_cd}
     </select>
-    
+
 	<select id="selectDDLWork" resultType="ddlConfigVO" parameterType="hashmap">
 		/**
 	 	*  Query ID : selectDDLWork
