@@ -5,7 +5,7 @@
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags"%>
 <%
 	/**
-	* @Class Name : workScriptInfo.jsp
+	* @Class Name : workScriptInfoPop.jsp
 	* @Description : 스크립트 상세 화면
 	* @Modification Information
 	*
@@ -19,7 +19,21 @@
 	*/
 %>
 
-<div class="modal fade" id="pop_layer_script" tabindex="-1" role="dialog" aria-labelledby="ModalLabel" aria-hidden="true" data-backdrop="static" data-keyboard="false">
+<script type="text/javascript">
+	/* ********************************************************
+	 * 창닫기
+	 ******************************************************** */
+	function fn_workScriptInfoPopcl() {
+		var contentsGbn_chk = $("#contents_gbn", "#rsltMsgWorkForm").val();
+		$("#pop_layer_script_work").modal("hide");
+		
+		if (contentsGbn_chk != null && contentsGbn_chk != "") {
+			$("#"+ contentsGbn_chk).modal("show");
+		}
+	}
+</script>
+
+<div class="modal fade" id="pop_layer_script_work" tabindex="-1" role="dialog" aria-labelledby="ModalLabel" aria-hidden="true" data-backdrop="static" data-keyboard="false">
 	<div class="modal-dialog  modal-xl-top" role="document" style="margin: 120px 350px;">
 		<div class="modal-content" style="width:900px;">
 			<div class="modal-body" style="margin-bottom:-30px;">
@@ -29,7 +43,9 @@
 
 				<div class="card" style="margin-top:10px;border:0px;">
 					<div class="card-body">
-						<form class="cmxform" id="rsltMsgForm">
+						<form class="cmxform" id="rsltMsgWorkForm">
+							<input type="hidden" name="contents_gbn" id="contents_gbn" value="" />
+
 							<fieldset>
 								<div class="form-group row">
 									<div class="col-sm-12">
@@ -38,7 +54,7 @@
 								</div>
 
 								<div class="top-modal-footer" style="text-align: center !important; margin: -20px 0 0 -20px;" >
-									<button type="button" class="btn btn-light" data-dismiss="modal"><spring:message code="common.close"/></button>
+									<button type="button" class="btn btn-light" onclick="fn_workScriptInfoPopcl();"><spring:message code="common.close"/></button>
 								</div>
 							</fieldset>
 						</form>

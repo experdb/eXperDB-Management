@@ -298,15 +298,6 @@
 			}
 		})
 	}
-	
-	//profile chk
-	function fn_profileChk() {
-		if ($("#profileArrowUser").hasClass("menu-arrow_user")) {
-			$("#profileArrowUser").attr('class', 'menu-arrow_user_af');
-		} else {
-			$("#profileArrowUser").attr('class', 'menu-arrow_user');
-		}
-	}
 
 	/* ********************************************************
 	 * profile popup 초기화
@@ -819,7 +810,7 @@
 			</li>
 			
 			<li class="nav-item nav-profile dropdown">
-				<a class="nav-link dropdown-toggle align-bottom" href="#" data-toggle="dropdown" id="profileDropdown" onclick="fn_profileChk();">
+				<a class="nav-link dropdown-toggle align-bottom" href="#" data-toggle="dropdown" id="profileDropdown" onclick="fn_profileChk('profileArrowUser');">
 					<img src="/images/icons8-admin-settings-male-100.png" alt="profile"/>
 					<span class="menu-title">${sessionScope.session.usr_nm} <spring:message code="common.login_user"/></span>
 					<i id="profileArrowUser" class="menu-arrow_user"></i>

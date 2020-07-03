@@ -102,7 +102,6 @@ function fn_init(){
 	]
 	});
 	
-	
 	table.tables().header().to$().find('th:eq(0)').css('min-width', '120px');
 	table.tables().header().to$().find('th:eq(1)').css('min-width', '120px');
 	table.tables().header().to$().find('th:eq(2)').css('min-width', '75px');

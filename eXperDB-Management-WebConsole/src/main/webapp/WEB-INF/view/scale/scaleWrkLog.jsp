@@ -1,24 +1,40 @@
-<%@ page language="java" contentType="text/html; charset=UTF-8"
-    pageEncoding="UTF-8"%>
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags"%>
 
-<!--  popup -->
-<div id="pop_layer_scaleWrkLog" class="pop-layer">
-	<div class="pop-container">
-		<div class="pop_cts" style="width: 60%; margin: 0 auto; min-height:0; min-width:0;">
-			<p class="tit" style="margin-bottom: 15px;"><spring:message code="eXperDB_scale.scale_job_log_info"/></p>
-			<table class="write" style="border:0;">
-				<caption><spring:message code="eXperDB_scale.scale_job_log_info"/></caption>
-				<tbody>
-					<tr>
-						<td><textarea name="scaleWrkLogInfo" id="scaleWrkLogInfo" style="height: 250px;" readonly="readonly"> </textarea></td>
-					</tr>
-				</tbody>
-			</table>
-			<div class="btn_type_02">
-				<a href="#n" class="btn" onclick="fnc_menuMove();"><span style="width:170px;">Node 수동확장 메뉴 이동</span></a>
-				<a href="#n" class="btn" onclick="toggleLayer($('#pop_layer_scaleWrkLog'), 'off');"><span><spring:message code="common.close"/></span></a>
+<div class="modal fade" id="pop_layer_err_msg" tabindex="-1" role="dialog" aria-labelledby="ModalLabel" aria-hidden="true">
+ 	<div class="modal-dialog  modal-xl-top" role="document">
+		<div class="modal-content">
+			<div class="modal-body" style="margin-bottom:-40px;">
+				<h4 class="modal-title mdi mdi-alert-circle text-info" id="ModalLabel" style="padding-left:5px;cursor:pointer;" data-dismiss="modal">
+					<spring:message code="eXperDB_scale.scale_job_log_info"/>
+				</h4>
+		
+ 				<div class="card" style="border:0px;">
+					<div class="card-body-modal">
+						<!-- title -->
+						<h3 class="card-title fa fa-dot-circle-o">
+							<spring:message code="schedule.detail_view" />
+						</h3>
+								
+						<div class="table-responsive" style="overflow:auto;">
+							<table class="table table-striped">
+								<tbody>
+									<tr>
+										<td style="word-break:break-all;">
+											<textarea class="form-control" id="d_scaleWrkLogInfo" style="height: 250px;" readonly="readonly"></textarea>
+										</td>
+									</tr>
+								</tbody>
+							</table>
+						</div>
+					</div>
+				</div>
+			</div>
+
+			<div class="top-modal-footer" style="text-align: center !important;">
+				<button type="button" class="btn btn-info" onclick="fnc_menuMove()"><spring:message code="menu.scale_manual"/><spring:message code="eXperDB_scale.move_menu"/></button>
+				<button type="button" class="btn btn-light" data-dismiss="modal"><spring:message code="common.close"/></button>
 			</div>
 		</div>
-	</div><!-- //pop-container -->
+	</div>
 </div>

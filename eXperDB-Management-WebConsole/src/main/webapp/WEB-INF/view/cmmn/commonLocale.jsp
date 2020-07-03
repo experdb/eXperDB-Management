@@ -21,6 +21,7 @@ var	schedule_wednesday="<spring:message code='schedule.wednesday' />";
 var	schedule_thursday="<spring:message code='schedule.thursday' />";
 var	schedule_friday="<spring:message code='schedule.friday' />";
 var schedule_saturday="<spring:message code='schedule.saturday' />";
+var message_msg209="<spring:message code='message.msg209' />";
 var agent_monitoring_yes="<spring:message code='agent_monitoring.yes' />";
 var agent_monitoring_no="<spring:message code='agent_monitoring.no' />";
 var message_msg211="<spring:message code='message.msg211'/>";
@@ -43,6 +44,14 @@ var common_December="<spring:message code='common.December'/>";
 var common_next_month ="<spring:message code='common.next_month'/>";
 var common_previous_month ="<spring:message code='common.previous_month'/>";
 var etc_etc09="<spring:message code='etc.etc09'/>";
+
+var closeBtn = "<spring:message code='common.close' />";
+var wrk_chk_del_msg = "<spring:message code='message.msg210' />";
+var common_waiting = "<spring:message code='common.waiting' />";
+var dashboard_running = "<spring:message code='dashboard.running' />";
+var schedule_stop = "<spring:message code='schedule.stop' />";
+
+
 </script>
 <body>
 

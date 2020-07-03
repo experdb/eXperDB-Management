@@ -1,9 +1,11 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
-<%@ taglib prefix="c"      uri="http://java.sun.com/jsp/jstl/core" %>
-<%@ taglib prefix="form"   uri="http://www.springframework.org/tags/form" %>
-<%@ taglib prefix="ui"     uri="http://egovframework.gov/ctl/ui"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<%@ taglib prefix="form" uri="http://www.springframework.org/tags/form"%>
+<%@ taglib prefix="ui" uri="http://egovframework.gov/ctl/ui"%>
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags"%>
-<%@include file="../cmmn/cs.jsp"%>
+<%@ taglib prefix = "fn" uri = "http://java.sun.com/jsp/jstl/functions"  %>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
+<%@ include file="../cmmn/cs2.jsp"%>
 <%
 	/**
 	* @Class Name : experdbScaleCngList.jsp
@@ -20,22 +22,36 @@
 	*/
 %>
 <style>
-.scaleIng {  display:inline-block; margin:0 2px; height:20px; padding:0 12px; color:red; text-align:left; font-weight: bold; font-size:13px;}
-
-table {border-spacing: 0}
-table th, table td {padding: 0}
-
-button:disabled,
-button[disabled]{
-  background-color: #fff;
-  color: #324452;
-  cursor:wait;
+/*툴팁 스타일*/
+a.tip {
+    position: relative;
+    color:black;
 }
-</style>
 
+a.tip span {
+    display: none;
+    position: absolute;
+    top: 20px;
+    left: -10px;
+    width: 200px;
+    padding: 5px;
+    z-index: 100;
+    background: #000;
+    color: #fff;
+    line-height: 20px;
+    -moz-border-radius: 5px; /* 파폭 박스 둥근 정도 */
+    -webkit-border-radius: 5px; /* 사파리 박스 둥근 정도 */
+}
+
+a:hover.tip span {
+    display: block;
+}
+
+</style>
 <script type="text/javascript">
-	var popOpen = null;
 	var msgVale = "";
+	//scale 체크 조회
+	var install_yn = "";
 
 	/* ********************************************************
 	 * scale setting 초기 실행
@@ -47,94 +63,190 @@ button[disabled]{
 		fn_selectScaleInstallChk();
 	});
 
+	/* ********************************************************
+	 * table 초기화 및 설정
+	 ******************************************************** */
 	function fn_init(){
 		var scale_type_nm_init = "";
+		
 		table = $('#scaleSetTable').DataTable({
-		scrollY : "360px",
-		scrollX : true,
-		searching : false,	
-		deferRender : true,
-		bSort: false,
-		columns : [
-					{data : "rownum", defaultContent : "", targets : 0, orderable : false, checkboxes : {'selectRow' : true}}, 
-					{data : "idx", className : "dt-center", defaultContent : ""}, 
-		         	{data : "scale_type_nm", className : "dt-center", defaultContent : ""
+			scrollY : "300px",
+			scrollX : true,
+			searching : false,
+			deferRender : true,
+			bSort: false,
+			columns : [
+				{data : "rownum", defaultContent : "", targets : 0, orderable : false, checkboxes : {'selectRow' : true}}, 
+				{data : "idx", className : "dt-center", defaultContent : ""}, 
+				{data : "scale_type_nm", className : "dt-center", defaultContent : ""
 						,"render": function (data, type, full) {
-
 	 						if (full.scale_type == "1") {
 	 							scale_type_nm_init = '<spring:message code="etc.etc38" />';
 	 						} else {
 	 							scale_type_nm_init = '<spring:message code="etc.etc39" />';
 	 						}
-							return '<span onClick=javascript:fn_wrkLayer("'+full.wrk_id+'"); class="bold">' + scale_type_nm_init + '</span>';
+							return '<span onClick=javascript:fn_wrkLayer("'+full.wrk_id+'"); class="bold" data-toggle="modal">' + scale_type_nm_init + '</span>';
 						}
-		         	},
-		         	{data : "policy_type_nm", className : "dt-center", defaultContent : ""},
-		         	{
-		         		data : "auto_policy_contents", 
-	 					render : function(data, type, full, meta) {	 						
-	 						var html = '';
-	 						
-	 						if (full.auto_policy_set_div == "1") {
- 								html += '<spring:message code="eXperDB_scale.policy_time_1" />';
-	 						} else {
- 								html += '<spring:message code="eXperDB_scale.policy_time_2" />';
-	 						}
-	 						
-	 						html += "&nbsp;&nbsp;&nbsp;&nbsp;" + full.auto_policy_time + '&nbsp;' + '<spring:message code="eXperDB_scale.time_minute" />';
+				},
+				{
+					data : "policy_type_nm", 
+					render : function(data, type, full, meta) {
+						var html = '';
 
-	 						return html;
-	 					},
-		         		className : "dt-left", defaultContent : ""},
-		         	{
-		         		data : "auto_level", 
-	 					render : function(data, type, full, meta) {	 						
-	 						var html = full.auto_level;
-	 						
-	 						if (full.policy_type == "TC003501") {
- 								html += ' %';
-	 						}
-	 						return html;
-	 					},
-		         		className : "dt-right", defaultContent : ""},
-		         	{
-		         		data : "execute_type_nm", 
-	 					render : function(data, type, full, meta) {	 						
-	 						var html = '';
-	 						if (full.execute_type == 'TC003402') {
-	 							html += '<span class="btn btnC_01 btnF_02"><img src="../images/ico_agent_1.png" alt=""  style="margin-right:3px;"/>' + full.execute_type_nm +'</span>';
-	 						} else {
-	 							html +='<span class="btn btnC_01 btnF_02"><img src="../images/ico_agent_2.png" alt="" style="margin-right:3px;" />' + full.execute_type_nm +'</span>';
-	 						}
-	 						return html;
-	 					},
-		         		className : "dt-center", defaultContent : ""},
-					{
-						data : "useyn", 
-						render : function(data, type, full, meta) {
-							var html = '';
+						if (full.policy_type_nm == "CPU") {
+							html += '<i class="mdi mdi-vector-square"></i>';
+						} else {
+							html += '<i class="mdi mdi-gender-transgender"></i>';
+						}
 
-							if (full.useyn == 'Y') {
-								html += '<span class="btn btnC_01 btnF_02"><img src="../images/ico_agent_1.png" alt=""  style="margin-right:3px;"/><spring:message code="dbms_information.use" /></span>';
-							} else {
-								html += '<span class="btn btnC_01 btnF_02"><img src="../images/ico_agent_2.png" alt=""  style="margin-right:3px;"/><spring:message code="dbms_information.unuse" /></span>';
-							}
-								
-							return html;
-							},
-							className : "dt-center", defaultContent : ""
+						html += "&nbsp;" + full.policy_type_nm;
+						return html;
 					},
-					{data : "expansion_clusters", className : "dt-right", defaultContent : ""},
-					{data : "min_clusters", className : "dt-right", defaultContent : ""},
-					{data : "max_clusters", className : "dt-right", defaultContent : ""},
-					{data : "frst_regr_id", defaultContent : ""},
-					{data : "frst_reg_dtm", defaultContent : ""},
-					{data : "lst_mdfr_id", defaultContent : ""},
-					{data : "lst_mdf_dtm", defaultContent : ""},
-					{data : "wrk_id", defaultContent : "", visible: false }
-			],'select': {'style': 'multi'}
+					className : "dt-center", defaultContent : ""
+				},
+				{
+					data : "auto_policy_contents", 
+					render : function(data, type, full, meta) {
+						var html = '';
+
+						if (full.auto_policy_set_div == "1") {
+							html += '<spring:message code="eXperDB_scale.policy_time_1" />';
+						} else {
+							html += '<spring:message code="eXperDB_scale.policy_time_2" />';
+						}
+
+						html += "&nbsp;&nbsp;&nbsp;&nbsp;" + full.auto_policy_time + '&nbsp;' + '<spring:message code="eXperDB_scale.time_minute" />';
+						return html;
+					},
+					className : "dt-left", defaultContent : ""
+				},
+				{
+					data : "auto_level",
+					render : function(data, type, full, meta) {
+						var html = "";
+						var rownum = full.rownum;
+						var scale_type_id = full.scale_type;
+
+						if (full.policy_type == "TC003501") {
+							html += "<div class='row' style='width:150px;'><div class='col-8'>";
+							
+							if ( scale_type_id == '2' ) {
+								html += "<div class='progress progress-lg mt-2' style='width:100%;'>";
+								html += "	<div id='prgLevel_"+ rownum + "' class='progress-bar bg-info progress-bar-striped' role='progressbar' style='width: 0%' aria-valuenow='0' aria-valuemin='0' aria-valuemax='100'>0%</div>";
+								html += "</div>";
+							} else {
+								html += "<div class='progress progress-lg mt-2' style='width:100%;'>";
+								html += "	<div id='prgLevel_"+ rownum + "' class='progress-bar bg-danger progress-bar-striped' role='progressbar' style='width: 0%' aria-valuenow='0' aria-valuemin='0' aria-valuemax='100'>0%</div>";
+								html += "</div>";
+							}
+							
+							html += "</div>";
+							
+							html += "<div class='col-4' style='text-align: left;margin-left: -8px; margin-top: 6px;'>";
+							html += full.auto_level + " %";
+							html += "</div>";
+
+							html += "</div></div>";
+							
+							html += "<input type='hidden' name='autoLevelHd' id='autoLevelHd_" + rownum + "' value='" + full.auto_level + "'>";
+						} else {
+							html += full.auto_level;
+						}
+
+						return html;
+					},
+					className : "dt-center", defaultContent : ""
+				},
+				{
+					data : "execute_type_nm", 
+					render : function(data, type, full, meta) {
+						var html = '';
+						
+						if (full.execute_type == 'TC003402') {
+							html += "<div class='badge badge-pill badge-success'>";
+							html += "	<i class='fa fa-spin fa-spinner mr-2'></i>";
+							html += full.execute_type_nm;
+							html += "</div>";
+						} else {
+							html += "<div class='badge badge-pill badge-warning'>";
+							html += "	<i class='fa fa-bell-o mr-2'></i>";
+							html += full.execute_type_nm;
+							html += "</div>";
+						}
+
+						return html;
+					},
+					className : "dt-center", defaultContent : ""
+				},
+				{
+					data : "useyn", 
+					render : function(data, type, full, meta) {
+						var html = '';
+
+						if (full.useyn == 'Y') {
+							html += "<div class='badge badge-pill badge-primary blinking' >";
+							html += "	<i class='fa fa-spin fa-refresh mr-2'></i>";
+							html += '<spring:message code="dbms_information.use" />';
+							html += "</div>";
+						} else {
+							html += "<div class='badge badge-pill badge-danger'>";
+							html += "	<i class='fa fa-times-circle mr-2'></i>";
+							html += '<spring:message code="dbms_information.unuse" />';
+							html += "</div>";
+						}
+
+						return html;
+					},
+					className : "dt-center", defaultContent : ""
+				},
+				{data : "expansion_clusters", 
+					render : function(data, type, full, meta) {
+						var html = '';
+						
+						if (full.expansion_clusters != null && full.expansion_clusters != "") {
+							html += full.expansion_clusters;
+						} else {
+							html += "N/A";
+						}
+
+						return html;
+					},
+					className : "dt-right", defaultContent : ""},
+				{
+					data : "min_clusters", 
+					render : function(data, type, full, meta) {
+						var html = '';
+							
+						if (full.min_clusters != null && full.min_clusters != "") {
+							html += full.min_clusters;
+						} else {
+							html += "N/A";
+						}
+
+						return html;
+					},
+					className : "dt-right", defaultContent : ""},
+				{data : "max_clusters", 
+					render : function(data, type, full, meta) {
+						var html = '';
+								
+						if (full.max_clusters != null && full.max_clusters != "") {
+							html += full.max_clusters;
+						} else {
+							html += "N/A";
+						}
+
+						return html;
+					},
+					className : "dt-right", defaultContent : ""},
+				{data : "frst_regr_id", defaultContent : ""},
+				{data : "frst_reg_dtm", defaultContent : ""},
+				{data : "lst_mdfr_id", defaultContent : ""},
+				{data : "lst_mdf_dtm", defaultContent : ""},
+				{data : "wrk_id", defaultContent : "", visible: false }
+			]
 		});
-		
+
 		table.tables().header().to$().find('th:eq(0)').css('min-width', '10px');
 		table.tables().header().to$().find('th:eq(1)').css('min-width', '40px');
 		table.tables().header().to$().find('th:eq(2)').css('min-width', '100px');
@@ -143,355 +255,23 @@ button[disabled]{
 		table.tables().header().to$().find('th:eq(5)').css('min-width', '100px');
 		table.tables().header().to$().find('th:eq(6)').css('min-width', '100px');
 		table.tables().header().to$().find('th:eq(7)').css('min-width', '100px');
-		table.tables().header().to$().find('th:eq(8)').css('min-width', '100px');  
+		table.tables().header().to$().find('th:eq(8)').css('min-width', '100px');
 		table.tables().header().to$().find('th:eq(9)').css('min-width', '100px');  
 		table.tables().header().to$().find('th:eq(10)').css('min-width', '100px');
 		table.tables().header().to$().find('th:eq(11)').css('min-width', '100px');
 		table.tables().header().to$().find('th:eq(12)').css('min-width', '100px');
 		table.tables().header().to$().find('th:eq(13)').css('min-width', '100px');
 		table.tables().header().to$().find('th:eq(14)').css('min-width', '100px');
- 
+
 		$(window).trigger('resize'); 
-	}
-	
-	/* ********************************************************
-	 * Scale Data Fetch List
-	 ******************************************************** */
-	function fn_search_list(){
-		$.ajax({
-			url : "/scale/selectScaleCngList.do", 
-			data : {
-				db_svr_id : $("#db_svr_id", "#findList").val(),
-		  		scale_type_cd : $("#scale_type_cd").val(),
-		  		execute_type_cd : $("#execute_type_cd").val(),
-		  		policy_type_cd : $("#policy_type_cd").val()
-			},
-			dataType : "json",
-			type : "post",
-			beforeSend: function(xhr) {
-		        xhr.setRequestHeader("AJAX", true);
-		    },
-			error : function(xhr, status, error) {
-				if(xhr.status == 401) {
-					alert("<spring:message code='message.msg02' />");
-					top.location.href = "/";
-				} else if(xhr.status == 403) {
-					alert("<spring:message code='message.msg03' />");
-					top.location.href = "/";
-				} else {
-					alert("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""));
-				}
-			},
-			success : function(result) {
-				table.rows({selected: true}).deselect();
-				table.clear().draw();
-
-				if (nvlSet(result) != '' && nvlSet(result) != '-') {
-					table.rows.add(result).draw();
-				}
-			}
-		});
-	}
-	
-	/* ********************************************************
-	 * Scale reg Btn click
-	 ******************************************************** */
-	function fn_reg_popup(){
-	    var popUrl = '/scale/popup/scaleAutoRegForm.do';
-		var width = 954;
-		var height = 543;
-		var left = (window.screen.width / 2) - (width / 2);
-		var top = (window.screen.height /2) - (height / 2);
-		var popOption = "width="+width+", height="+height+", top="+top+", left="+left+", resizable=no, scrollbars=yes, status=no, toolbar=no, titlebar=yes, location=no,";
-
-	    popOpen = window.open("","scaleregPop",popOption);
-
-	    $('#wrk_id', '#frmRegPopup').val("");
-	    $('#db_svr_id', '#frmRegPopup').val($("#db_svr_id", "#findList").val());
-
-	    $('#frmRegPopup').attr("action", popUrl);
-	    $('#frmRegPopup').attr("target", "scaleregPop");
-
-	    $('#frmRegPopup').submit();
-	    
-	    popOpen.focus();
-	}
-	
-	/* ********************************************************
-	 * scale Aotu Reregist Window Open
-	 ******************************************************** */
-	function fn_mod_popup(){
-		var datas = table.rows('.selected').data();
-		
-		if (datas.length <= 0) {
-			alert("<spring:message code='message.msg35' />");
-			return;
-		}else if(datas.length > 1){
-			alert("<spring:message code='message.msg04' />");
-			return;
-		}
-
-	    var popUrl = '/scale/popup/scaleAutoReregForm.do';
-		var width = 954;
-		var height = 543;
-		var left = (window.screen.width / 2) - (width / 2);
-		var top = (window.screen.height /2) - (height / 2);
-		var popOption = "width="+width+", height="+height+", top="+top+", left="+left+", resizable=no, scrollbars=yes, status=no, toolbar=no, titlebar=yes, location=no";
-
-	    popOpen = window.open("","scaleregPop",popOption);
-
-	    $('#wrk_id', '#frmRegPopup').val(table.row('.selected').data().wrk_id);
-	    $('#db_svr_id', '#frmRegPopup').val($("#db_svr_id", "#findList").val());
-
-	    $('#frmRegPopup').attr("action", popUrl);
-	    $('#frmRegPopup').attr("target", "scaleregPop");
-
-	    $('#frmRegPopup').submit();
-		    
-	    popOpen.focus();
-	}
-
-	/* ********************************************************
-	 * scale setting Data Delete
-	 ******************************************************** */
-	function fn_del_data(){
- 		var wrk_id = "";
-		var scale_set = "";
-
-		var datas = table.rows('.selected').data();
-
-		if(datas.length < 1){
-			alert("<spring:message code='message.msg16' />");
-			return false;
-		}
-
-		var wrk_id_List = [];
-		for (var i = 0; i < datas.length; i++) {
-			wrk_id_List.push( table.rows('.selected').data()[i].wrk_id); 
-		}
-
-		if(!confirm('<spring:message code="message.msg17" />')){
-			return;
-		}
-			
-		$.ajax({
-			url : "/scale/scaleWrkIdDelete.do",
-		  	data : {
-		  		wrk_id_List : JSON.stringify(wrk_id_List),
-		  		db_svr_id : $("#db_svr_id", "#findList").val()
-		  	},
-			dataType : "json",
-			type : "post",
-			beforeSend: function(xhr) {
-				xhr.setRequestHeader("AJAX", true);
-			},
-			error : function(xhr, status, error) {
-				if(xhr.status == 401) {
-					alert("<spring:message code='message.msg02' />");
-					top.location.href = "/";
-				} else if(xhr.status == 403) {
-					alert("<spring:message code='message.msg03' />");
-					top.location.href = "/";
-				} else {
-					alert("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""));
-				}
-			},
-			success : function(result) {
-				if(result == "O" || result == "F"){//저장실패
-					msgVale = "<spring:message code='menu.eXperDB_scale_settings' />";
-					alert('<spring:message code="eXperDB_scale.msg9" arguments="'+ msgVale +'" />');
-					return false;
-				}else{
-					alert('<spring:message code="message.msg60" />');
-					fn_search_list();
-				}
-			}
-		});
-	}
-	
-	/* ********************************************************
-	* scale ing check
-	******************************************************** */
-	function fn_scaleChk(gbn) {
-		//scale 이 실행되고 있는 지 체크
-		$.ajax({
-			url : "/scale/selectScaleLChk.do",
-			data : {
-				db_svr_id : $("#db_svr_id", "#findList").val()
-			},
-			dataType : "json",
-			type : "post",
-			beforeSend: function(xhr) {
-				xhr.setRequestHeader("AJAX", true);
-			},
-			error : function(xhr, status, error) {
-				if(xhr.status == 401) {
-					alert("<spring:message code='message.msg02' />");
-					return false;
-				} else if(xhr.status == 403) {
-					alert("<spring:message code='message.msg03' />");
-					return false;
-				} else {
-					alert("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""));
-					return false;
-				}
-			},
-			success : function(result) {
-				if (result != null) {
-					wrk_id = result.wrk_id;
-					scale_set = result.scale_type;
-
-					if (wrk_id == "1") {
-						alert("<spring:message code='eXperDB_scale.msg4' />");
-						return;
-					} else {
-						if (gbn =="mod") {
-							fn_mod_popup();
-						} else if (gbn == "comIns") {
-							fn_common_reg_popup();
-						} else {
-							fn_del_data();
-						}
-					}
-				}
-			}
-		});
-		$('#loading').hide();
-	}
-	
-	/* ********************************************************
-	 * Scale common reg Btn click
-	 ******************************************************** */
-	function fn_common_reg_popup() {
-	    var popUrl = '/scale/popup/selectAutoScaleComCngForm.do';
-		var width = 654;
-		var height = 433;
-		var left = (window.screen.width / 2) - (width / 2);
-		var top = (window.screen.height /2) - (height / 2);
-		var popOption = "width="+width+", height="+height+", top="+top+", left="+left+", resizable=no, scrollbars=yes, status=no, toolbar=no, titlebar=yes, location=no,";
-
-	    popOpen = window.open("","scaleregPop",popOption);
-
-	    $('#wrk_id', '#frmRegPopup').val("");
-	    $('#db_svr_id', '#frmRegPopup').val($("#db_svr_id", "#findList").val());
-
-	    $('#frmRegPopup').attr("action", popUrl);
-	    $('#frmRegPopup').attr("target", "scaleregPop");
-
-	    $('#frmRegPopup').submit();
-	    
-	    popOpen.focus();
-	}
-
-	/* ********************************************************
-	 * scale 설정 상세
-	 ******************************************************** */
-	function fn_wrkLayer(wrk_id){
-		var auto_policy_set_div_nm = "";
-		var level_nm = "";
-		var execute_type_nm = "";
-		var scale_type_nm = "";
-		var useyn_nm = "";
-	
-		$.ajax({
-			url : "/scale/selectAutoScaleCngInfo.do",
-			data : {
-				wrk_id : wrk_id,
-				db_svr_id : $("#db_svr_id", "#findList").val()
-			},
-			dataType : "json",
-			type : "post",
-			beforeSend: function(xhr) {
-		        xhr.setRequestHeader("AJAX", true);
-		     },
-		     error : function(xhr, status, error) {
-					if(xhr.status == 401) {
-						alert(message_msg02);
-						top.location.href = "/";
-					} else if(xhr.status == 403) {
-						alert(message_msg03);
-						top.location.href = "/";
-					} else {
-						alert("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""));
-					}
-				},
-			success : function(result) {
-				if(result == null){
-					msgVale = "<spring:message code='menu.eXperDB_scale_settings' />";
-					alert('<spring:message code="eXperDB_scale.msg8" arguments="'+ msgVale +'" />');
-				}else{	
-					if (result.scale_type == "1") {
-						scale_type_nm = '<spring:message code="etc.etc38" />';
- 					} else {
- 						scale_type_nm = '<spring:message code="etc.etc39" />';
- 					}
-
-					$("#d_scale_type_nm").html(scale_type_nm);
-					$("#d_policy_type_nm").html(nvlSet(result.policy_type_nm));
-
-					if (result.auto_policy_set_div == "1") {
-						auto_policy_set_div_nm = '<spring:message code="eXperDB_scale.policy_time_1" />';
- 					} else {
- 						auto_policy_set_div_nm = '<spring:message code="eXperDB_scale.policy_time_2" />';
- 					}
-					$("#d_auto_policy_set_div_nm").html(auto_policy_set_div_nm);
-
-					$("#d_auto_policy_time").html(nvlSet(result.auto_policy_time + ' ' +'<spring:message code="eXperDB_scale.time_minute" />'));
-
-					level_nm = nvlSet(result.auto_level);
-					if (result.policy_type == "TC003501" && level_nm != "-") {
-						level_nm += " %";
-					}
-					$("#d_level").html(level_nm);
-
-					if (result.execute_type == 'TC003402') {
-						execute_type_nm = '<span class="btn btnC_01 btnF_02"><img src="../images/ico_agent_1.png" alt=""  style="margin-right:3px;"/>' + result.execute_type_nm +'</span>';
- 					} else {
- 						execute_type_nm = '<span class="btn btnC_01 btnF_02"><img src="../images/ico_agent_2.png" alt="" style="margin-right:3px;" />' + result.execute_type_nm +'</span>';
- 					}
-					$("#d_execute_type_nm").html(execute_type_nm);
-					
-
-					if (result.useyn == 'Y') {
-						useyn_nm = '<span class="btn btnC_01 btnF_02"><img src="../images/ico_agent_1.png" alt=""  style="margin-right:3px;"/><spring:message code="dbms_information.use" /></span>';
- 					} else {
- 						useyn_nm = '<span class="btn btnC_01 btnF_02"><img src="../images/ico_agent_2.png" alt="" style="margin-right:3px;" /><spring:message code="dbms_information.unuse" /></span>';
- 					}
-					$("#d_useyn").html(useyn_nm);
-
-					$("#d_expansion_clusters").html(nvlSet(result.expansion_clusters));
-					$("#d_min_clusters").html(nvlSet(result.min_clusters));
-					$("#d_max_clusters").html(nvlSet(result.max_clusters));
-					$("#d_frst_regr_id").html(nvlSet(result.frst_regr_id));
-					$("#d_frst_reg_dtm").html(nvlSet(result.frst_reg_dtm));
-					$("#d_lst_mdfr_id").html(nvlSet(result.lst_mdfr_id));
-					$("#d_lst_mdf_dtm").html(nvlSet(result.lst_mdf_dtm));
-
-					toggleLayer($('#pop_layer_cng'), 'on'); 
-				}
-		
-			}
-		});	
-	}
-
-	/* ********************************************************
-	 * null체크
-	 ******************************************************** */
-	function nvlSet(val) {
-		var strValue = val;
-		if( strValue == null || strValue == '') {
-			strValue = "-";
-		}
-		
-		return strValue;
 	}
 
 	/* ********************************************************
 	 * aws 서버 확인
 	 ******************************************************** */
 	function fn_selectScaleInstallChk() {
-		//scale 체크 조회
-		var install_yn = "";
+		var errorMsg = "";
+		var titleMsg = "";
 
 		$.ajax({
 			url : "/scale/selectScaleInstallChk.do",
@@ -513,18 +293,16 @@ button[disabled]{
 
 				//AWS 서버인경우
 				if (install_yn == "Y") {
-					$("#scaleIngMsg").hide();
-					
 					fn_search_list();
 				} else {
-					$("#scaleIngMsg").show();
-
+					showDangerToast('top-right', '<spring:message code="eXperDB_scale.msg10" />', '<spring:message code="eXperDB_scale.msg14" />');
+					
 					//설치안된경우 버튼 막아야함
 					$("#btnInsert").prop("disabled", "disabled");
 					$("#btnModify").prop("disabled", "disabled");
 					$("#btnDelete").prop("disabled", "disabled");
-					$("#btnCommonInsert").prop("disabled", "disabled");
-
+					$("#btnCommonInsert ").prop("disabled", "disabled");
+					
 					$("#btnCngSearch").prop("disabled", "disabled");
 
 					$("#scale_type_cd").prop("disabled", "disabled");
@@ -533,120 +311,733 @@ button[disabled]{
 				}
 			}
 		});
-		$('#loading').hide();
+	}
+
+	/* ********************************************************
+	 * Scale Data Fetch List
+	 ******************************************************** */
+	function fn_search_list(){
+		$.ajax({
+			url : "/scale/selectScaleCngList.do", 
+			data : {
+				db_svr_id : $("#db_svr_id", "#findList").val(),
+				scale_type_cd : $("#scale_type_cd").val(),
+				execute_type_cd : $("#execute_type_cd").val(),
+				policy_type_cd : $("#policy_type_cd").val()
+			},
+			dataType : "json",
+			type : "post",
+			beforeSend: function(xhr) {
+				xhr.setRequestHeader("AJAX", true);
+			},
+			error : function(xhr, status, error) {
+				if(xhr.status == 401) {
+					showSwalIcon('<spring:message code="message.msg02" />', '<spring:message code="common.close" />', '', 'error');
+					top.location.href = "/";
+				} else if(xhr.status == 403) {
+					showSwalIcon('<spring:message code="message.msg03" />', '<spring:message code="common.close" />', '', 'error');
+					top.location.href = "/";
+				} else {
+					showSwalIcon("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""), '<spring:message code="common.close" />', '', 'error');
+				}
+			},
+			success : function(result) {
+				table.rows({selected: true}).deselect();
+				table.clear().draw();
+
+				if (nvlPrmSet(result, '') != '') {
+					table.rows.add(result).draw();
+				}
+				
+				//progres bar 설정
+				fnc_progresbar_setting();
+			}
+		});
+	}
+	
+	//cpu progres bar setting
+	function fnc_progresbar_setting() {
+		var autoLevelHdCnt = $("input[name=autoLevelHd]").length;
+
+		if (autoLevelHdCnt > 0) {
+			setTimeout(function()
+				{
+					for (var i = 1; i <= autoLevelHdCnt; i++) {
+						if ($("#prgLevel_" + i) != null) {
+							$("#prgLevel_" + i).val($("#autoLevelHd_" + i).val());
+							$("#prgLevel_" + i).css("width", $("#autoLevelHd_" + i).val() + "%"); 
+							$("#prgLevel_" + i).html($("#autoLevelHd_" + i).val() + "%"); 
+						}
+					}
+				},1000);
+		}
+	}
+	
+	//sebu_cpu progres bar setting
+	function fnc_sebu_progresbar_setting() {
+		var autoLevelHdCnt = $("input[name=autoLevelHd]").length;
+
+		if (autoLevelHdCnt > 0) {
+			setTimeout(function()
+				{
+					$("#prgSsLevel").val($("#autoLevelSsHd").val());
+					$("#prgSsLevel").css("width", $("#autoLevelSsHd").val() + "%"); 
+					$("#prgSsLevel").html($("#autoLevelSsHd").val() + "%"); 
+				},500);
+		}
+	}
+	
+
+	/* ********************************************************
+	 * scale 설정 상세
+	 ******************************************************** */
+	function fn_wrkLayer(wrk_id){
+		var auto_policy_set_div_nm = "";
+		var level_nm = "";
+		var execute_type_nm = "";
+		var scale_type_nm = "";
+		var policy_type_nm = "";
+		var scale_type_id = "";
+		var useyn_nm = "";
+	
+		$.ajax({
+			url : "/scale/selectAutoScaleCngInfo.do",
+			data : {
+				wrk_id : wrk_id,
+				db_svr_id : $("#db_svr_id", "#findList").val()
+			},
+			dataType : "json",
+			type : "post",
+			beforeSend: function(xhr) {
+		        xhr.setRequestHeader("AJAX", true);
+		     },
+		     error : function(xhr, status, error) {
+					if(xhr.status == 401) {
+						showSwalIcon('<spring:message code="message.msg02" />', '<spring:message code="common.close" />', '', 'error');
+						top.location.href = "/";
+					} else if(xhr.status == 403) {
+						showSwalIcon('<spring:message code="message.msg03" />', '<spring:message code="common.close" />', '', 'error');
+						top.location.href = "/";
+					} else {
+						showSwalIcon("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""), '<spring:message code="common.close" />', '', 'error');
+					}
+				},
+			success : function(result) {
+				if(result == null){
+					msgVale = "<spring:message code='menu.eXperDB_scale_settings' />";
+					showSwalIcon('<spring:message code="eXperDB_scale.msg8" arguments="'+ msgVale +'" />', '<spring:message code="common.close" />', '', 'error');
+					
+					$('#pop_layer_cng').modal('hide');
+					return;
+				}else{	
+					$('#pop_layer_cng').modal("show");
+					
+					scale_type_id = result.scale_type;
+			
+					//확장유형
+					if (result.scale_type == "1") {
+						scale_type_nm = '<spring:message code="etc.etc38" />';
+ 					} else {
+ 						scale_type_nm = '<spring:message code="etc.etc39" />';
+ 					}
+					$("#d_scale_type_nm").html(scale_type_nm);
+					
+					//정책유형
+					if (nvlPrmSet(result.policy_type_nm, '') != "") {
+						if (result.policy_type_nm == "CPU") {
+							policy_type_nm += '<i class="mdi mdi-vector-square"></i>';
+						} else {
+							policy_type_nm += '<i class="mdi mdi-gender-transgender"></i>';
+						}
+						
+						policy_type_nm += "&nbsp;" + nvlPrmSet(result.policy_type_nm, '');
+					} else {
+						policy_type_nm = "-";
+					}
+					$("#d_policy_type_nm").html(policy_type_nm);
+
+					//정책 시간 구분
+					if (result.auto_policy_set_div == "1") {
+						auto_policy_set_div_nm = '<spring:message code="eXperDB_scale.policy_time_1" />';
+ 					} else {
+ 						auto_policy_set_div_nm = '<spring:message code="eXperDB_scale.policy_time_2" />';
+ 					}
+					$("#d_auto_policy_set_div_nm").html(auto_policy_set_div_nm);
+
+					//정책 시간
+					$("#d_auto_policy_time").html(nvlPrmSet(result.auto_policy_time + ' ' +'<spring:message code="eXperDB_scale.time_minute" />', ''));
+					
+					//실행유형
+					if (result.execute_type == 'TC003402') {
+						execute_type_nm += "<div class='badge badge-pill badge-success'>";
+						execute_type_nm += "	<i class='fa fa-spin fa-spinner mr-2'></i>";
+						execute_type_nm += result.execute_type_nm;
+						execute_type_nm += "</div>";
+ 					} else {
+ 						execute_type_nm += "<div class='badge badge-pill badge-warning'>";
+ 						execute_type_nm += "	<i class='fa fa-bell-o mr-2'></i>";
+ 						execute_type_nm += result.execute_type_nm;
+ 						execute_type_nm += "</div>";
+ 					}
+					$("#d_execute_type_nm").html(execute_type_nm);
+
+					
+					//사용여부
+					if (result.useyn == 'Y') {
+						useyn_nm += "<div class='badge badge-pill badge-primary'>";
+						useyn_nm += "	<i class='fa fa-spin fa-refresh mr-2'></i>";
+						useyn_nm += '<spring:message code="dbms_information.use" />';
+						useyn_nm += "</div>";
+ 					} else {
+ 						useyn_nm += "<div class='badge badge-pill badge-danger'>";
+ 						useyn_nm += "	<i class='fa fa-times-circle mr-2'></i>";
+ 						useyn_nm += '<spring:message code="dbms_information.unuse" />';
+ 						useyn_nm += "</div>";
+ 					}
+					$("#d_useyn").html(useyn_nm);
+
+					//대상값
+					if (result.auto_policy_set_div != null) {
+						if (result.policy_type_nm == "CPU") {
+							level_nm += "<div class='row' style='width:150px;'><div class='col-8'>";
+							
+							if ( scale_type_id == '2' ) {
+								level_nm += "<div class='progress progress-lg mt-2' style='width:100%;'>";
+								level_nm += "	<div id='prgSsLevel' class='progress-bar bg-info progress-bar-striped' role='progressbar' style='width: 0%' aria-valuenow='0' aria-valuemin='0' aria-valuemax='100'>0%</div>";
+								level_nm += "</div>";
+							} else {
+								level_nm += "<div class='progress progress-lg mt-2' style='width:100%;'>";
+								level_nm += "	<div id='prgSsLevel' class='progress-bar bg-danger progress-bar-striped' role='progressbar' style='width: 0%' aria-valuenow='0' aria-valuemin='0' aria-valuemax='100'>0%</div>";
+								level_nm += "</div>";
+							}
+							level_nm += "</div>";
+							
+							level_nm += "<div class='col-4' style='text-align: left;margin-left: -8px; margin-top: 6px;'>";
+							level_nm += nvlPrmSet(result.auto_level, "-");
+
+							if (nvlPrmSet(result.auto_level, "-") != "-") {
+								level_nm += " %";
+							}
+							
+							level_nm += "</div>";
+							level_nm += "</div></div>";
+							
+							level_nm += "<input type='hidden' name='autoLevelSsHd' id='autoLevelSsHd' value='" + nvlPrmSet(result.auto_level, "") + "'>";
+							
+						} else {
+							level_nm = nvlPrmSet(result.auto_level, "-");
+						}
+					} else {
+						level_nm = "-";
+					}
+					$("#d_level").html(level_nm);
+					
+					//확장 노드수
+					$("#d_expansion_clusters").html(nvlPrmSet(result.expansion_clusters,"N/A"));
+					
+					//최소 노드수
+					$("#d_min_clusters").html(nvlPrmSet(result.min_clusters,"N/A"));
+
+					//최대 노드수
+					$("#d_max_clusters").html(nvlPrmSet(result.max_clusters,"N/A"));
+
+					//등록자
+					$("#d_frst_regr_id").html(nvlPrmSet(result.frst_regr_id,"-"));
+					
+					//등록일시
+					$("#d_frst_reg_dtm").html(nvlPrmSet(result.frst_reg_dtm,"-"));
+
+					//대상값 setting
+					fnc_sebu_progresbar_setting();
+				}
+		
+			}
+		});	
+	}
+	
+	/* ********************************************************
+	* scale ing check
+	******************************************************** */
+	function fn_scaleChk(gbn) {
+		//scale 이 실행되고 있는 지 체크
+		$.ajax({
+			url : "/scale/selectScaleLChk.do",
+			data : {
+				db_svr_id : $("#db_svr_id", "#findList").val()
+			},
+			dataType : "json",
+			type : "post",
+			beforeSend: function(xhr) {
+				xhr.setRequestHeader("AJAX", true);
+			},
+			error : function(xhr, status, error) {
+				if(xhr.status == 401) {
+					showSwalIcon('<spring:message code="message.msg02" />', '<spring:message code="common.close" />', '', 'error');
+					return false;
+				} else if(xhr.status == 403) {
+					showSwalIcon('<spring:message code="message.msg03" />', '<spring:message code="common.close" />', '', 'error');
+					return false;
+				} else {
+					showSwalIcon("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""), '<spring:message code="common.close" />', '', 'error');
+					return false;
+				}
+			},
+			success : function(result) {
+				if (result != null) {
+					wrk_id = result.wrk_id;
+					scale_set = result.scale_type;
+
+					if (wrk_id == "1") {
+						showSwalIcon('<spring:message code="eXperDB_scale.msg4" />', '<spring:message code="common.close" />', '', 'error');
+						return;
+					} else {
+						if (gbn =="mod") {
+							fn_mod_popup();
+						} else if (gbn =="comIns") {
+							fn_common_reg_popup();
+						} else {
+							fn_del_confirm();
+						}
+					}
+				}
+			}
+		});
+	}
+
+	/* ********************************************************
+	 * Scale common reg Btn click
+	 ******************************************************** */
+	function fn_common_reg_popup() {
+		$.ajax({
+			url : "/scale/selectAutoScaleComCngInfo.do",
+			data : {
+				db_svr_id : $("#db_svr_id", "#findList").val()
+			},
+			dataType : "json",
+			type : "post",
+			beforeSend: function(xhr) {
+		        xhr.setRequestHeader("AJAX", true);
+		     },
+		     error : function(xhr, status, error) {
+					if(xhr.status == 401) {
+						showSwalIcon('<spring:message code="message.msg02" />', '<spring:message code="common.close" />', '', 'error');
+						top.location.href = "/";
+					} else if(xhr.status == 403) {
+						showSwalIcon('<spring:message code="message.msg03" />', '<spring:message code="common.close" />', '', 'error');
+						top.location.href = "/";
+					} else {
+						showSwalIcon("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""), '<spring:message code="common.close" />', '', 'error');
+					}
+				},
+			success : function(result) {
+				if(result == null){
+					msgVale = "<spring:message code='menu.eXperDB_scale_settings' />";
+					showSwalIcon('<spring:message code="eXperDB_scale.msg8" arguments="'+ msgVale +'" />', '<spring:message code="common.close" />', '', 'error');
+					
+					$('#pop_layer_com_ins_cng').modal('hide');
+					return;
+				}else{
+					//dbms 명
+					$("#com_db_svr_nm").val(nvlPrmSet(result.db_svr_nm, ""));
+
+					//dbms 명
+					$("#com_ipadr").val(nvlPrmSet(result.ipadr, ""));
+					
+					//최대노드수
+					$("#com_max_clusters").val(nvlPrmSet(result.max_clusters, ""));
+					
+					//최소노드수
+					$("#com_min_clusters").val(nvlPrmSet(result.min_clusters, ""));
+					
+					// auto scale 실행 주기
+					$("#com_auto_run_cycle").val(nvlPrmSet(result.auto_run_cycle, ""));
+					
+					$('#pop_layer_com_ins_cng').modal("show");
+				}
+			}
+		});	
+	}
+	
+	/* ********************************************************
+	 * Scale reg Btn click
+	 ******************************************************** */
+	function fn_reg_popup(){
+ 		$.ajax({
+			url : "/scale/popup/scaleAutoRegForm.do",
+			data : {
+				db_svr_id : $("#db_svr_id", "#findList").val()
+			},
+			dataType : "json",
+			type : "post",
+			beforeSend: function(xhr) {
+		        xhr.setRequestHeader("AJAX", true);
+		     },
+		     error : function(xhr, status, error) {
+					if(xhr.status == 401) {
+						showSwalIcon('<spring:message code="message.msg02" />', '<spring:message code="common.close" />', '', 'error');
+						top.location.href = "/";
+					} else if(xhr.status == 403) {
+						showSwalIcon('<spring:message code="message.msg03" />', '<spring:message code="common.close" />', '', 'error');
+						top.location.href = "/";
+					} else {
+						showSwalIcon("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""), '<spring:message code="common.close" />', '', 'error');
+					}
+				},
+			success : function(result) {
+				if(result != null){
+					//max Node
+					$("#ins_max_clusters_hd", "#insRegForm").val(nvlPrmSet(result.max_clusters, ""));
+
+					//min Node
+					$("#ins_min_clusters_hd", "#insRegForm").val(nvlPrmSet(result.min_clusters, ""));
+				} else {
+					$("#ins_max_clusters_hd", "#insRegForm").val("");
+					$("#ins_min_clusters_hd", "#insRegForm").val("");
+				}
+				
+				$("#ins_scale_type_cd", "#insRegForm").val("");
+				$("#ins_execute_type_cd", "#insRegForm").val("");
+				$("#ins_policy_type_cd", "#insRegForm").val("");
+				$("#ins_auto_policy_time", "#insRegForm").val("");
+				$("#ins_auto_level", "#insRegForm").val("");
+				$("#ins_min_clusters", "#insRegForm").val("");
+				$("#ins_max_clusters", "#insRegForm").val("");
+				$("#ins_expansion_clusters", "#insRegForm").val("");
+				$(':radio[name="ins_auto_policy_set_div"]:checked').val("1");
+				$(':radio[name="ins_useyn"]:checked').val("Y");
+				
+				$("#ins_expansion_clusters", "#insRegForm").prop('disabled', true);
+				
+				$("#ins_check_execute_sp", "#insRegForm").hide();
+
+				$('#pop_layer_ins_cng').modal("show");
+			}
+		});
+	}
+
+	/* ********************************************************
+	 * scale setting Data Delete
+	 ******************************************************** */
+	function fn_del_confirm(){
+		var wrk_id = "";
+		var scale_set = "";
+		var confile_title = "";
+
+		var datas = table.rows('.selected').data();
+
+		if(datas.length < 1){
+			showSwalIcon('<spring:message code="message.msg16" />', '<spring:message code="common.close" />', '', 'warning');
+			return false;
+		}
+		
+		confile_title = '<spring:message code="menu.eXperDB_scale_settings" />' + " " + '<spring:message code="button.delete" />' + " " + '<spring:message code="common.request" />';
+		
+		$('#confirm_tlt').html(confile_title);
+		
+		$('#confirm_msg').html('<spring:message code="message.msg17" />');
+
+		$('#pop_confirm_md').modal("show");
+	}
+
+	/* ********************************************************
+	 * confirm result
+	 ******************************************************** */
+	function fnc_confirmRst(){
+		fn_del_data();
+	}
+
+	/* ********************************************************
+	 * scale setting Data Delete
+	 ******************************************************** */
+	function fn_del_data(){
+		var scale_set = "";
+		
+		var datas = table.rows('.selected').data();
+
+		var wrk_id_List = [];
+		for (var i = 0; i < datas.length; i++) {
+			wrk_id_List.push( table.rows('.selected').data()[i].wrk_id); 
+		}
+
+ 		$.ajax({
+			url : "/scale/scaleWrkIdDelete.do",
+			data : {
+				wrk_id_List : JSON.stringify(wrk_id_List),
+				db_svr_id : $("#db_svr_id", "#findList").val()
+			},
+			dataType : "json",
+			type : "post",
+			beforeSend: function(xhr) {
+				xhr.setRequestHeader("AJAX", true);
+			},
+			error : function(xhr, status, error) {
+				if(xhr.status == 401) {
+					showSwalIcon('<spring:message code="message.msg02" />', '<spring:message code="common.close" />', '', 'error');
+					top.location.href = "/";
+				} else if(xhr.status == 403) {
+					showSwalIcon('<spring:message code="message.msg03" />', '<spring:message code="common.close" />', '', 'error');
+					top.location.href = "/";
+				} else {
+					showSwalIcon("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""), '<spring:message code="common.close" />', '', 'error');
+				}
+			},
+			success : function(result) {
+				if(result == "O" || result == "F"){//저장실패
+					msgVale = "<spring:message code='menu.eXperDB_scale_settings' />";
+					showSwalIcon('<spring:message code="eXperDB_scale.msg9" arguments="'+ msgVale +'" />', '<spring:message code="common.close" />', '', 'success');
+					return false;
+				}else{
+					showSwalIcon('<spring:message code="message.msg60"/>', '<spring:message code="common.close" />', '', 'success');
+					fn_search_list();
+				}
+			}
+		});
+	}
+
+	/* ********************************************************
+	 * scale Aotu Reregist Window Open
+	 ******************************************************** */
+	function fn_mod_popup(){
+		var datas = table.rows('.selected').data();
+		
+		if (datas.length <= 0) {
+			showSwalIcon('<spring:message code="message.msg35" />', '<spring:message code="common.close" />', '', 'error');
+			return;
+		}else if(datas.length > 1){
+			showSwalIcon('<spring:message code="message.msg04" />', '<spring:message code="common.close" />', '', 'error');
+			return;
+		}
+
+		$('#wrk_id', '#frmRegPopup').val(table.row('.selected').data().wrk_id);
+
+ 		$.ajax({
+			url : "/scale/popup/scaleAutoReregForm.do",
+			data : {
+				db_svr_id : $("#db_svr_id", "#findList").val()
+			},
+			dataType : "json",
+			type : "post",
+			beforeSend: function(xhr) {
+		        xhr.setRequestHeader("AJAX", true);
+		     },
+		     error : function(xhr, status, error) {
+					if(xhr.status == 401) {
+						showSwalIcon('<spring:message code="message.msg02" />', '<spring:message code="common.close" />', '', 'error');
+						top.location.href = "/";
+					} else if(xhr.status == 403) {
+						showSwalIcon('<spring:message code="message.msg03" />', '<spring:message code="common.close" />', '', 'error');
+						top.location.href = "/";
+					} else {
+						showSwalIcon("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""), '<spring:message code="common.close" />', '', 'error');
+					}
+				},
+			success : function(result) {
+				if(result != null){
+					//max Node
+					$("#mod_max_clusters_hd", "#scaleReregForm").val(nvlPrmSet(result.max_clusters, ""));
+
+					//min Node
+					$("#mod_min_clusters_hd", "#scaleReregForm").val(nvlPrmSet(result.min_clusters, ""));
+				} else {
+					$("#mod_max_clusters_hd", "#scaleReregForm").val("");
+					$("#mod_min_clusters_hd", "#scaleReregForm").val("");
+				}
+				
+				$("#mod_scale_type_cd", "#scaleReregForm").val("");
+				$("#mod_execute_type_cd", "#scaleReregForm").val("");
+				$("#mod_policy_type_cd", "#scaleReregForm").val("");
+				$("#mod_auto_policy_time", "#scaleReregForm").val("");
+				$("#mod_auto_level", "#scaleReregForm").val("");
+				$("#mod_min_clusters", "#scaleReregForm").val("");
+				$("#mod_max_clusters", "#scaleReregForm").val("");
+				$("#mod_expansion_clusters", "#scaleReregForm").val("");
+				$(':radio[name="mod_auto_policy_set_div"]:checked').val("1");
+				$(':radio[name="mod_useyn"]:checked').val("Y");
+
+				$("#mod_expansion_clusters", "#scaleReregForm").prop('disabled', true);
+				$("#mod_check_execute_sp", "#scaleReregForm").hide();
+				
+				$('#pop_layer_mod_cng').modal("show");
+				
+				//데이터 조회
+				fnc_mod_search();
+			}
+		});
 	}
 </script>
+
+<%@include file="./../popup/scaleAutoRegForm.jsp"%>
+<%@include file="./../popup/scaleAutoComRegForm.jsp"%>
+<%@include file="./../popup/scaleAutoReregForm.jsp"%>
+<%@include file="./../popup/confirmForm.jsp"%>
 
 <%@include file="./experdbScaleCngInfo.jsp"%>
 
 <form name="frmRegPopup" id="frmRegPopup" method="post">
-	<input type="hidden" name="db_svr_id" id="db_svr_id" value=""/>
 	<input type="hidden" name="wrk_id" id="wrk_id" value=""/>
 </form>
-
 
 <form name="findList" id="findList" method="post">
 	<input type="hidden" name="db_svr_id" id="db_svr_id" value="${db_svr_id}"/>
 </form>
 
-<!-- contents -->
-<div id="contents">
-	<div class="contents_wrap">
-		<div class="contents_tit">
-			<h4><spring:message code="menu.eXperDB_scale_settings" /><a href="#n"><img src="../images/ico_tit.png" class="btn_info" /></a></h4>
-			<div class="infobox">
-				<ul>
-					<li><spring:message code="help.eXperDB_scale_settings" /></li>
-				</ul>
-			</div>
-			<div class="location">
-				<ul>
-					<li class="bold">${db_svr_nm}</li>
-					<li><spring:message code="menu.eXperDB_scale" /></li>
-					<li class="on"><spring:message code="menu.eXperDB_scale_settings" /></li>
-				</ul>
+<div class="content-wrapper main_scroll" id="contentsDiv">
+	<div class="row">
+		<div class="col-12 div-form-margin-srn stretch-card">
+			<div class="card">
+				<div class="card-body">
+
+					<!-- title start -->
+					<div class="accordion_main accordion-multi-colored" id="accordion" role="tablist">
+						<div class="card" style="margin-bottom:0px;">
+							<div class="card-header" role="tab" id="page_header_div">
+								<div class="row">
+									<div class="col-5">
+										<h6 class="mb-0">
+											<a data-toggle="collapse" href="#page_header_sub" aria-expanded="false" aria-controls="page_header_sub" onclick="fn_profileChk('titleText')">
+												<i class="fa fa-check-square"></i>
+												<span class="menu-title"><spring:message code="menu.eXperDB_scale_settings"/></span>
+												<i class="menu-arrow_user" id="titleText" ></i>
+											</a>
+										</h6>
+									</div>
+									<div class="col-7">
+					 					<ol class="mb-0 breadcrumb_main justify-content-end bg-info" >
+					 						<li class="breadcrumb-item_main" style="font-size: 0.875rem;">
+					 							<a class="nav-link_title" href="/property.do?db_svr_id=${db_svr_id}" style="padding-right: 0rem;">${db_svr_nm}</a>
+					 						</li>
+					 						<li class="breadcrumb-item_main" style="font-size: 0.875rem;" aria-current="page"><spring:message code="menu.eXperDB_scale"/></li>
+											<li class="breadcrumb-item_main active" style="font-size: 0.875rem;" aria-current="page"><spring:message code="menu.eXperDB_scale_settings"/></li>
+										</ol>
+									</div>
+								</div>
+							</div>
+							
+							<div id="page_header_sub" class="collapse" role="tabpanel" aria-labelledby="page_header_div" data-parent="#accordion">
+								<div class="card-body">
+									<div class="row">
+										<div class="col-12">
+											<p class="mb-0"><spring:message code="help.eXperDB_scale_settings"/></p>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+					<!-- title end -->
+				</div>
 			</div>
 		</div>
+		
+		<div class="col-12 div-form-margin-cts stretch-card">
+			<div class="card">
+				<div class="card-body">
+					<!-- search param start -->
+					<div class="card">
+						<div class="card-body">
 
-		<div class="contents">
-			<div class="cmm_grp">
-				<div class="btn_type_01">
-					<span class="scaleIng" id="scaleIngMsg" style="display:none;">* <spring:message code="eXperDB_scale.msg10" /></span>
-					<span class="btn btnC_01 btn_fl"><button type="button" id="btnCommonInsert" onclick="fn_scaleChk('comIns')"><spring:message code="common.reg_default_setting" /></button></span>
-					<span class="btn"><button type="button" id="btnCngSearch" onClick="fn_search_list();"><spring:message code="common.search" /></button></span>
-					<span class="btn"><button type="button" id="btnInsert" onClick="fn_reg_popup();"><spring:message code="common.registory" /></button></span>
-					<span class="btn"><button type="button" id="btnModify" onClick="fn_scaleChk('mod');"><spring:message code="common.modify" /></button></span>
-					<span class="btn"><button type="button" id="btnDelete" onClick="fn_scaleChk('del');"><spring:message code="common.delete" /></button></span>
-				</div>
-				
-				<div class="sch_form">
-					<table class="write">
-						<caption>검색 조회</caption>
-						<colgroup>							
-							<col style="width:120px;" />
-							<col style="width:310px;" />
-							<col style="width:120px;" />
-							<col />
-						</colgroup>
-						<tbody>
-							<tr style="height:35px;">
-								<th scope="row" class="t9"><spring:message code="eXperDB_scale.scale_type" /></th>
-								<td>
-									<select name="scale_type_cd" id="scale_type_cd" class="select t5">
-										<option value=""><spring:message code="schedule.total" /></option>
+							<form class="form-inline">
+								<div class="input-group mb-2 mr-sm-2">
+									<select class="form-control" style="width:200px; margin-right: 1rem;" name="scale_type_cd" id="scale_type_cd">
+										<option value=""><spring:message code="eXperDB_scale.scale_type" />&nbsp;<spring:message code="schedule.total" /></option>
 										<option value="1"><spring:message code="eXperDB_scale.scale_in" /></option>
 										<option value="2"><spring:message code="eXperDB_scale.scale_out" /></option>
 									</select>
-								</td>
-								<th scope="row" class="t9"><spring:message code="eXperDB_scale.policy_type" /></th>
-								<td>
-									<select name="policy_type_cd" id="policy_type_cd" class="select t5">
-										<option value=""><spring:message code="schedule.total" /></option>
+								</div> 
+
+								<div class="input-group mb-2 mr-sm-2">
+									<select class="form-control" style="width:200px; margin-right: 1rem;" name="policy_type_cd" id="policy_type_cd">
+										<option value=""><spring:message code="eXperDB_scale.policy_type" />&nbsp;<spring:message code="schedule.total" /></option>
 										<c:forEach var="result" items="${policyTypeList}" varStatus="status">
 											<option value="<c:out value="${result.sys_cd}"/>"><c:out value="${result.sys_cd_nm}"/></option>
 										</c:forEach>
 									</select>
-								</td>
-							</tr>
-							<tr class="search_occur">
-								<th scope="row" class="t9"><spring:message code="eXperDB_scale.execute_type" /></th>
-								<td colspan="3">
-									<select name="execute_type_cd" id="execute_type_cd" class="select t5">
-										<option value=""><spring:message code="schedule.total" /></option>
+								</div>
+
+								<div class="input-group mb-2 mr-sm-2">
+									<select class="form-control" style="width:200px; margin-right: 1rem;" name="execute_type_cd" id="execute_type_cd">
+										<option value=""><spring:message code="eXperDB_scale.execute_type" />&nbsp;<spring:message code="schedule.total" /></option>
 										<c:forEach var="result" items="${executeTypeList}" varStatus="status">
 											<option value="<c:out value="${result.sys_cd}"/>"><c:out value="${result.sys_cd_nm}"/></option>
 										</c:forEach>
 									</select>
-								</td>
-							</tr>
-						</tbody>
-					</table>
-				</div>
+								</div>
+								<button type="button" class="btn btn-inverse-primary btn-icon-text mb-2 btn-search-disable" id="btnCngSearch" onClick="fn_search_list();" >
+									<i class="ti-search btn-icon-prepend "></i><spring:message code="common.search" />
+								</button>
+							</form>
+						</div>
+					</div>
 
-				<div class="overflow_area">
-					<table id="scaleSetTable" class="display" style="width:100%;">
-						<caption>자동확장 설정 리스트</caption>
-						<thead>
-							<tr>
-								<th width="10"></th>
-								<th width="40" height="0"><spring:message code="common.no" /></th>
-								<th width="100"><spring:message code="eXperDB_scale.scale_type" /></th> <!-- scale 유형 -->
-								<th width="100"><spring:message code="eXperDB_scale.policy_type" /></th> <!-- 정책 유형 -->
-								<th width="200"><spring:message code="eXperDB_scale.policy_type_time" /></th> <!-- 정책 유형 시간 -->
-								<th width="100"><spring:message code="eXperDB_scale.target_value" /></th> <!-- level -->
-								<th width="100"><spring:message code="eXperDB_scale.execute_type" /></th> <!-- 실행 유형 -->
-								<th width="100"><spring:message code="dbms_information.use_yn" /></th> <!-- 사용여부 -->
-								<th width="100"><spring:message code="eXperDB_scale.expansion_clusters" /></th> <!-- 확장 Node 수 -->
-								<th width="100"><spring:message code="eXperDB_scale.min_clusters" /></th> <!-- 최저 Node 수 -->
-								<th width="100"><spring:message code="eXperDB_scale.max_clusters" /></th> <!-- 최대 Node 수 -->
-								<th width="100"><spring:message code="common.register" /></th> <!-- 등록자 -->
-								<th width="100"><spring:message code="common.regist_datetime" /></th> <!-- 등록일시 -->
-								<th width="100"><spring:message code="common.modifier" /></th> <!-- 수정자 -->
-								<th width="100"><spring:message code="common.modify_datetime" /></th> <!-- 수정일시 -->				
-							</tr>
-						</thead>
-					</table>
+					<div class="row">
+						<div class="col-12">
+							<div class="template-demo">	
+								<button type="button" class="btn btn-outline-primary btn-icon-text" id="btnCommonInsert" onClick="fn_scaleChk('comIns');" data-toggle="modal">
+									<i class="fa fa-cog btn-icon-prepend "></i><spring:message code="common.reg_default_setting" />
+								</button>
+													
+								<button type="button" class="btn btn-outline-primary btn-icon-text float-right" id="btnDelete" onClick="fn_scaleChk('del');" >
+									<i class="ti-trash btn-icon-prepend "></i><spring:message code="common.delete" />
+								</button>
+								<button type="button" class="btn btn-outline-primary btn-icon-text float-right" id="btnModify" onClick="fn_scaleChk('mod');" data-toggle="modal">
+									<i class="ti-pencil-alt btn-icon-prepend "></i><spring:message code="common.modify" />
+								</button>
+								<button type="button" class="btn btn-outline-primary btn-icon-text float-right" id="btnInsert" onClick="fn_reg_popup();" data-toggle="modal">
+									<i class="ti-pencil btn-icon-prepend "></i><spring:message code="common.registory" />
+								</button>
+							</div>
+						</div>
+					</div>
 				</div>
+			</div>
+		</div>
+
+		<div class="col-12 div-form-margin-table stretch-card">
+			<div class="card">
+				<div class="card-body">
+					<div class="card my-sm-2" >
+						<div class="card-body" >
+							<div class="row">
+								<div class="col-12">
+ 									<div class="table-responsive">
+										<div id="order-listing_wrapper"
+											class="dataTables_wrapper dt-bootstrap4 no-footer">
+											<div class="row">
+												<div class="col-sm-12 col-md-6">
+													<div class="dataTables_length" id="order-listing_length">
+													</div>
+												</div>
+											</div>
+										</div>
+									</div>
+
+	 								<table id="scaleSetTable" class="table table-hover table-striped system-tlb-scroll" style="width:100%;">
+										<thead>
+ 											<tr class="bg-info text-white">
+												<th width="10"></th>
+												<th width="40" height="0"><spring:message code="common.no" /></th>
+												<th width="100"><spring:message code="eXperDB_scale.scale_type" /></th> <!-- scale 유형 -->
+												<th width="100"><spring:message code="eXperDB_scale.policy_type" /></th> <!-- 정책 유형 -->
+												<th width="200"><spring:message code="eXperDB_scale.policy_type_time" /></th> <!-- 정책 유형 시간 -->
+												<th width="100"><spring:message code="eXperDB_scale.target_value" /></th> <!-- level -->
+												<th width="100"><spring:message code="eXperDB_scale.execute_type" /></th> <!-- 실행 유형 -->
+												<th width="100"><spring:message code="dbms_information.use_yn" /></th> <!-- 사용여부 -->
+												<th width="100"><spring:message code="eXperDB_scale.expansion_clusters" /></th> <!-- 확장 노드수 -->
+												<th width="100"><spring:message code="eXperDB_scale.min_clusters" /></th> <!-- 최소 노드수 -->
+												<th width="100"><spring:message code="eXperDB_scale.max_clusters" /></th> <!-- 최대 노드수 -->
+												<th width="100"><spring:message code="common.register" /></th> <!-- 등록자 -->
+												<th width="100"><spring:message code="common.regist_datetime" /></th> <!-- 등록일시 -->
+												<th width="100"><spring:message code="common.modifier" /></th> <!-- 수정자 -->
+												<th width="100"><spring:message code="common.modify_datetime" /></th> <!-- 수정일시 -->
+											</tr>
+										</thead>
+									</table>
+							 	</div>
+						 	</div>
+						</div>
+					</div>
+				</div>
+				<!-- content-wrapper ends -->
 			</div>
 		</div>
 	</div>

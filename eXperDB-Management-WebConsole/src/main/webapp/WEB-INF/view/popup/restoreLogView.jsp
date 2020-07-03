@@ -44,8 +44,6 @@ $(window.document).ready(function() {
 	fn_addView();
 });
 
-
-	
 	//로그 더보기
 function fn_addView() {
 		$.ajax({

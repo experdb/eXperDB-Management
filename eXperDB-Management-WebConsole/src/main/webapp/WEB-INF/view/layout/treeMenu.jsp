@@ -105,7 +105,7 @@
 											//서버 속성
 											menuJson +=	'{' +
 																'"text": "<spring:message code="menu.server_property"/>",' +
-																'"icon": "mdi mdi-server-network",' +
+																'"icon": "fa fa-spinner",' +
 																'"id": "scale'+item.db_svr_id+'",' +
 																'"url": "/property.do?db_svr_id='+item.db_svr_id+'",' +
 																'"menu_gbn": "server"' +
@@ -121,7 +121,8 @@
 
 												if(aut.length != 0 && aut[index].scale_cng_aut_yn == "Y"){
 													menuJson +=	'{' +
-																	'"icon": "fa fa-spin fa-cog",' +
+																//	'"icon": "fa fa-spin fa-cog",' +
+																	'"icon": "fa fa-cog",' +
 																	'"text": "<spring:message code="menu.eXperDB_scale_settings"/>",' +
 																	'"url": "/scale/scaleManagement.do?db_svr_id='+item.db_svr_id+'",' +
 																	'"id": "scaleManagement'+item.db_svr_id+'"' +
@@ -139,7 +140,7 @@
 
 												if(aut.length != 0 && aut[index].scale_hist_aut_yn == "Y"){
 													menuJson +=	'{' +
-																	'"icon": "fa fa-spin fa-history",' +
+																	'"icon": "fa fa-history",' +
 																	'"text": "<spring:message code="menu.eXperDB_scale_history"/>",' +
 																	'"url": "/scale/scaleLogList.do?db_svr_id='+item.db_svr_id+'",' +
 																	'"id": "scaleLogList'+item.db_svr_id+'"' +
@@ -167,7 +168,7 @@
 
 												if(aut.length != 0 && aut[index].bck_cng_aut_yn == "Y"){
 													menuJson +=	'{' +
-																	'"icon": "fa fa-spin fa-cog",' +
+																	'"icon": "fa fa-cog",' +
 																	'"text": "<spring:message code="menu.backup_settings"/>",' +
 																	'"url": "/backup/workList.do?db_svr_id='+item.db_svr_id+'",' +
 																	'"id": "workList'+item.db_svr_id+'"' +
@@ -176,7 +177,7 @@
 
 												if(aut.length != 0 && aut[index].bck_hist_aut_yn == "Y"){
 													menuJson +=	'{' +
-																	'"icon": "fa fa-spin fa-history",' +
+																	'"icon": "fa fa-history",' +
 																	'"text": "<spring:message code="menu.backup_history"/>",' +
 																	'"url": "/backup/workLogList.do?db_svr_id='+item.db_svr_id+'",' +
 																	'"id": "workLogList'+item.db_svr_id+'"' +
@@ -225,7 +226,7 @@
 
 												if(aut.length != 0 && aut[index].point_restore_aut_yn == "Y"){
 													menuJson +=	'{' +
-																	'"icon": "fa-spin mdi mdi-backup-restore",' +
+																	'"icon": "mdi mdi-backup-restore",' +
 																	'"text": "<spring:message code="restore.Point-in-Time_Recovery"/>",' +
 																	'"url": "/timeRestore.do?db_svr_id='+item.db_svr_id+'",' +
 																	'"id": "timeRestore'+item.db_svr_id+'"' +
@@ -243,7 +244,7 @@
 
 												if(aut.length != 0 && aut[index].restore_his_aut_yn == "Y"){
 													menuJson +=	'{' +
-																	'"icon": "fa fa-spin fa-history",' +
+																	'"icon": "fa fa-history",' +
 																	'"text": "<spring:message code="restore.Recovery_history"/>",' +
 																	'"url": "/restoreHistory.do?db_svr_id='+item.db_svr_id+'",' +
 																	'"id": "restoreHistory'+item.db_svr_id+'"' +
@@ -297,7 +298,7 @@
 												
 												if(aut.length != 0 && aut[index].policy_change_his_aut_yn == "Y"){
 													menuJson +=	'{' +
-																	'"icon": "fa fa-spin fa-history",' +
+																	'"icon": "fa fa-history",' +
 																	'"text": "<spring:message code="menu.policy_changes_history"/>",' +
 																	'"url": "/accessControlHistory.do?db_svr_id='+item.db_svr_id+'",' +
 																	'"id": "accessControlHistory'+item.db_svr_id+'"' +
@@ -327,7 +328,7 @@
 													
 													if(aut.length != 0 && aut[index].adt_cng_aut_yn == "Y"){
 														menuJson +=	'{' +
-																		'"icon": "fa fa-spin fa-cog",' +
+																		'"icon": "fa fa-cog",' +
 																		'"text": "<spring:message code="menu.audit_settings"/>",' +
 																		'"url": "/audit/auditManagement.do?db_svr_id='+item.db_svr_id+'",' +
 																		'"id": "auditManagement'+item.db_svr_id+'"' +
@@ -336,7 +337,7 @@
 													
 													if(aut.length != 0 && aut[index].adt_hist_aut_yn == "Y"){
 														menuJson +=	'{' +
-																		'"icon": "fa fa-spin fa-history",' +
+																		'"icon": "fa fa-history",' +
 																		'"text": "<spring:message code="menu.audit_history"/>",' +
 																		'"url": "/audit/auditLogList.do?db_svr_id='+item.db_svr_id+'",' +
 																		'"id": "auditLogList'+item.db_svr_id+'"' +
@@ -366,7 +367,7 @@
 												
 												if(aut.length != 0 && aut[index].script_cng_aut_yn == "Y"){
 													menuJson +=	'{' +
-																	'"icon": "fa fa-spin fa-cog",' +
+																	'"icon": "fa fa-cog",' +
 																	'"text": "<spring:message code="menu.script_settings"/>",' +
 																	'"url": "/scriptManagement.do?db_svr_id='+item.db_svr_id+'",' +
 																	'"id": "scriptManagement'+item.db_svr_id+'"' +
@@ -375,7 +376,7 @@
 												
 												if(aut.length != 0 && aut[index].script_his_aut_yn == "Y"){
 													menuJson +=	'{' +
-																	'"icon": "fa fa-spin fa-history",' +
+																	'"icon": "fa fa-history",' +
 																	'"text": "<spring:message code="menu.script_history"/>",' +
 																	'"url": "/scriptHistory.do?db_svr_id='+item.db_svr_id+'",' +
 																	'"id": "scriptHistory'+item.db_svr_id+'"' +
@@ -417,6 +418,14 @@
 
 	/* link move */
 	function fn_GoLink(url) {
+		$('.fa-spin').toggleClass('fa-spin');
+		//선택 spin
+		$("#i"+url).toggleClass('fa-spin');
+
+		$('.text-tree-click').toggleClass('text-tree-click');
+		$("#"+url + "c").toggleClass('text-tree-click');
+	/* 	
+		toggleClass('sidebar-icon-only'); */
 	/* 	var cssID = sessionStorage.getItem('cssId');
 
 		$("#"+cssID).css("background-color","");

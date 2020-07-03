@@ -79,7 +79,6 @@
 		$(window).trigger('resize');
 	}
 
-	
 	$(window.document).ready(function() {
 		if("${error}"!=""){
 			alert('<spring:message code="message.msg174"/>');
