@@ -25,7 +25,7 @@
     var templates = {		
         treeview: '<div class="bstreeview"></div>',
     	treeviewNew : '<li class="nav-item"></li>',
-    	treeviewItemLst: '<a class="nav-link" href="#itemid"></a>',
+    	treeviewItemLst: '<a class="nav-link" href="#itemid" ></a>',
     	treeviewItem: '<a class="nav-link" data-toggle="collapse" class="list-group-item" href="#itemid" aria-expanded="false" aria-controls="ui-basic"></a>',
     	treeviewItemServer: '<a class="nav-link" data-toggle="collapse" class="list-group-item" href="#itemid" aria-expanded="false" aria-controls="ui-basic"></a>',
         treeviewGroupItem: '<div class="list-group collapse" id="itemid"></div>',
@@ -117,22 +117,23 @@
             	var treeviewNew = $(templates.treeviewNew);
             	
             	if (depth == 0 || depth == 1) {
-	            	//a태그
+	            	//a?쒓렇
 	                var treeItem = $(templates.treeviewItemServer)
 	                	.attr('aria-controls',  _this.itemIdPrefix + node.nodeId)
 /*                    	.attr('style', 'padding-left:' + leftPadding)*/
 	                    .attr('href', "#" + _this.itemIdPrefix + node.nodeId);
 	                
-	                //span태그 - Set node Text.
+	                //span?쒓렇 - Set node Text.
 	                var treeviewItemSertverTooltip = $(templates.treeviewItemSertverTooltip).attr('title', node.tooltiptext);
 	                treeviewItemSertverTooltip.append(node.text);
-	                treeviewItemSertverTooltip.attr('style', 'color: #248afd !important;');
+	                treeviewItemSertverTooltip.attr('style', 'color: #68afff !important;');
 
 	                treeItem.append(treeviewItemSertverTooltip);
 	
 	                // set node icon if exist.
 	                if (node.icon) {
 	                    var treeItemIcon = $(templates.treeviewItemIcon).addClass(node.icon + " menu-icon");
+	                    treeItemIcon.attr('style', 'color: #68afff !important;');
 	                    treeItem.append(treeItemIcon);
 	                }
 	
@@ -188,6 +189,8 @@
             			// set node icon if exist.
             			if (node.icon) {
             				var treeItemIcon = $(templates.treeviewItemIcon).addClass(node.icon);
+            				treeItemIcon.attr('id', "i" + node.id);
+            				treeItemIcon.attr('name', "iIconChk");
             				treeItem.append(treeItemIcon);
             			}
             			
@@ -196,8 +199,11 @@
                          treeItem.append("&nbsp;" + node.text);
                          
                         if (node.menu_gbn =="server") {
-                        	treeItem.attr('style', 'color: #248afd !important; padding-left:' + leftPadding);
+                        	treeItem.attr('style', 'padding-left:' + leftPadding);
+                        //	treeItem.attr('style', 'color: #68afff !important; padding-left:' + leftPadding);
                         }
+                        
+                       // treeItem.attr('style', 'color: #68afff !important;');
 
             			// Set Expand and Collapse icones.
             			if (node.nodes) {

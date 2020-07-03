@@ -781,30 +781,458 @@ body.bg{background:#fff url(../../images/login_bg.png) center center no-repeat;}
   line-height: 0;
 }
 
+/* 상단 메뉴명 처리 */
+.accordion_main > .card {
+  overflow: hidden;
+}
 
-.breadcrumb-item_ttl {
+.accordion_main > .card:not(:last-of-type) {
+  border-bottom: 0;
+  border-bottom-right-radius: 0;
+  border-bottom-left-radius: 0;
+}
+
+.accordion_main > .card:not(:first-of-type) {
+  border-top-left-radius: 0;
+  border-top-right-radius: 0;
+}
+
+.accordion_main > .card > .card-header {
+  border-radius: 0;
+  margin-bottom: -1px;
+}
+
+
+.accordion_main .card {
+  margin-bottom: .75rem;
+  box-shadow: 0px 1px 15px 1px rgba(230, 234, 236, 0.35);
+  border-radius: .25rem;
+}
+
+.accordion_main .card .card-header {
+  background-color: transparent;
+  border: none;
+  padding: 1rem 0 1rem 2rem;
+/*   padding: 2rem; */
+}
+
+.accordion_main .card .card-header * {
+  font-weight: 400;
+  font-size: 1rem;
+}
+
+.accordion_main .card .card-header a {
+  display: block;
+  color: inherit;
+  text-decoration: none;
+  font-size: inherit;
+  position: relative;
+  -webkit-transition: color 0.5s ease;
+  -moz-transition: color 0.5s ease;
+  -ms-transition: color 0.5s ease;
+  -o-transition: color 0.5s ease;
+  transition: color 0.5s ease;
+  padding-right: 1.5rem;
+}
+
+.accordion_main .card .card-header a[aria-expanded="true"] {
+  color: #248afd;
+}
+
+.accordion_main .card .card-body {
+  font-size: 14px;
+  padding: 2rem 2rem 2rem 2rem;
+  font-weight: 400;
+  line-height: 1.5;
+}
+
+.accordion_main .card .card-body i {
+  font-size: 1.25rem;
+}
+
+.accordion_main.accordion-multi-colored .card .card-header {
+  background-color: #68afff !important;
+  color: #ffffff;
+}
+
+.accordion_main.accordion-multi-colored .card .card-header a[aria-expanded="true"] {
+  color: inherit;
+}
+
+.breadcrumb_main {
+  display: flex;
+  flex-wrap: wrap;
+  padding: 0 1.13rem;
+  font-size: 0.675rem;
+  list-style: none;
+  background-color: transparent;
+  border-radius: 0.25rem;
+}
+
+.breadcrumb-item_main + .breadcrumb-item_main {
   padding-left: 0.5rem;
 }
 
-.breadcrumb-item_ttl::before {
+.breadcrumb-item_main + .breadcrumb-item_main::before {
   display: inline-block;
   padding-right: 0.5rem;
   color: #6c757d;
+  content: "/";
 }
 
-.breadcrumb-item_ttl:hover::before {
+.breadcrumb-item_main + .breadcrumb-item_main:hover::before {
   text-decoration: underline;
 }
 
-
-.breadcrumb-item_ttl:hover::before {
+.breadcrumb-item_main + .breadcrumb-item_main:hover::before {
   text-decoration: none;
 }
 
-.breadcrumb-item_ttl.active {
+.breadcrumb-item_main.active {
   color: #495057;
 }
 
-.breadcrumb .breadcrumb-item_ttl {
-  font-size: 0.875rem;
+/* Breadcrumbs */
+.breadcrumb_main {
+  border: 1px solid #c9ccd7;
 }
+
+.bitem_font {
+  font-size: 0.675rem;
+}
+
+.breadcrumb_main.bg-info {
+  border: none;
+}
+
+.breadcrumb_main.bg-info .breadcrumb-item_main {
+  color: #ffffff;
+}
+
+.breadcrumb_main.bg-info .breadcrumb-item_main:before {
+  color: inherit;
+}
+
+.breadcrumb_main.bg-info .breadcrumb-item_main a, .breadcrumb_main.bg-info .breadcrumb-item_main span {
+  color: inherit;
+}
+
+
+/* title link */
+.nav-link_title {
+  text-decoration: none;
+  text-align:right;
+}
+
+/* system 화면 */
+.system-img {
+  display:block;
+  position:absolute;
+  top:40%;
+  left:20%;
+  margin-left:-97px;
+  margin-top:-130px;
+}
+
+.system-dbms-scroll
+{
+	height: calc(100vh - 323px);
+	overflow-y:auto;
+}
+
+.fixedHeader {
+	position: sticky;
+	top: 0;
+}
+
+.system-tlb-scroll::-webkit-scrollbar-track
+{
+	-webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.3);
+	background-color: #F5F5F5;
+	border-radius: 10px;
+}
+
+.system-tlb-scroll::-webkit-scrollbar
+{
+	width: 10px;
+	background-color: #F5F5F5;
+}
+
+.system-tlb-scroll::-webkit-scrollbar-thumb
+{
+	border-radius: 10px;
+	background-image: -webkit-gradient(linear,
+									   left bottom,
+									   left top,
+									   color-stop(0.44, rgb(122,153,217)),
+									   color-stop(0.72, rgb(73,125,189)),
+									   color-stop(0.86, rgb(28,58,148)));
+}
+
+/* table */
+table {border-spacing: 0}
+table th, table td {padding: 0}
+
+.btn-outline-primary:disabled {
+  color: white;
+  background-color: #68afff;
+  border-color: #68afff;
+  cursor: wait;
+}
+
+.btn-search-disable:disabled {
+  color: white;
+  background-color: #68afff;
+  border-color: #68afff;
+  cursor: wait;
+}
+
+.text-tree-click {
+  color: #68afff !important;
+}
+
+span.bold{font-weight:bold; color:#248afd; cursor:pointer;}
+
+.pop-label-index {
+  z-index: 999;
+}
+
+.tab-two-style {
+  width:48.9%;
+  text-align:center;
+}
+
+.search-datepicker {
+  width:100x;
+}
+
+/* scale-loading bar */
+.loader-scale-box {
+  display: flex !important;
+}
+
+.loader-scale-box {
+  align-items: center !important;
+}
+
+.loader-scale-box {
+  width: 100%;
+  height: 20px;
+}
+
+.div-form-margin-z {
+ margin-bottom: 0px;
+}
+
+.div-form-margin-srn {
+ margin-bottom:  0.5rem;
+ margin-top:-30px;
+}
+
+.div-form-margin-cts {
+ margin-bottom:  0.5rem;
+}
+
+
+.div-form-margin-table {
+ margin-bottom:  -10px;
+}
+
+ .blinking{
+            -webkit-animation:blink .9s ease-in-out infinite alternate;
+            -moz-animation:blink .9s ease-in-out infinite alternate;
+            animation:blink .9s ease-in-out infinite alternate;
+        }
+        @-webkit-keyframes blink{
+            0% {opacity:0;}
+            100% {opacity:1;}
+        }
+        @-moz-keyframes blink{
+            0% {opacity:0;}
+            100% {opacity:1;}
+        }
+        @keyframes blink{
+            0% {opacity:0;}
+            100% {opacity:1;}
+        }
+        
+        
+/* on/off 버튼 */
+.onoffswitch {
+    position: relative; width: 80px; max-height:25px;
+    -webkit-user-select:none; -moz-user-select:none; -ms-user-select: none;
+}
+.onoffswitch-checkbox {
+    position: absolute;
+    opacity: 0;
+    pointer-events: none;
+}
+.onoffswitch-label {
+    display: block; overflow: hidden; cursor: pointer;
+    border: 1px solid #999999; border-radius: 5px;
+}
+.onoffswitch-inner {
+    display: block; width: 200%; margin-left: -100%;
+    transition: margin 0.3s ease-in 0s;
+}
+.onoffswitch-inner:before, .onoffswitch-inner:after {
+    display: block; float: left; width: 50%; height: 25px; padding: 0; line-height: 25px;
+    font-size: 12px; color: white; font-family: Trebuchet, Arial, sans-serif; font-weight: bold;
+    box-sizing: border-box;
+}
+.onoffswitch-inner:before {
+    content: "ON";
+    padding-left: 1px;
+    background-color: #68afff; color: #ffffff;
+/*     background: -webkit-linear-gradient(45deg, #009966, #FFF); For Safari 5.1 to 6.0
+    background: -o-linear-gradient(45deg, #009966, #FFF); For Opera 11.1 to 12.0
+    background: -moz-linear-gradient(45deg, #009966, #FFF); For Firefox 3.6 to 15
+    background: linear-gradient(135deg, #009966, #befae6); Standard syntax */
+}
+.onoffswitch-inner:after {
+    content: "OFF";
+    padding-right: 20px;
+    background-color: #EEEEEE; color: #999999;
+/*     background: -webkit-linear-gradient(135deg, #CCC, #FFF); For Safari 5.1 to 6.0
+    background: -o-linear-gradient(135deg, #CCC, #FFF); For Opera 11.1 to 12.0
+    background: -moz-linear-gradient(135deg, #CCC, #FFF); For Firefox 3.6 to 15
+    background: linear-gradient(135deg, #CCC, #FFF); Standard syntax
+     */
+    text-align: right;
+}
+.onoffswitch-switch {
+    display: block; width: 18px; margin: 6px;
+    background: #FFFFFF;
+    position: absolute; top: 0; bottom: 0;
+    right: 50px;
+    border: 2px solid #999999; border-radius: 20px;
+    transition: all 0.3s ease-in 0s;
+}
+.onoffswitch-checkbox:checked + .onoffswitch-label .onoffswitch-inner {
+    margin-left: 0;
+}
+.onoffswitch-checkbox:checked + .onoffswitch-label .onoffswitch-switch {
+    right: 0px; 
+}
+
+
+/* on/off 팝업 버튼 */
+.onoffswitch-pop {
+    position: relative; width: 80px; max-height:2.000rem;
+    -webkit-user-select:none; -moz-user-select:none; -ms-user-select: none;
+}
+.onoffswitch-pop-checkbox {
+    position: absolute;
+    opacity: 0;
+    pointer-events: none;
+}
+.onoffswitch-pop-label {
+    display: block; overflow: hidden; cursor: pointer;
+    border: 1px solid #999999; border-radius: 5px;
+}
+.onoffswitch-pop-inner {
+    display: block; width: 200%; margin-left: -100%;
+    transition: margin 0.3s ease-in 0s;
+}
+.onoffswitch-pop-inner:before, .onoffswitch-pop-inner:after {
+    display: block; float: left; width: 50%; height: 2.000rem; padding: 0; line-height: 2.000rem;
+    font-size: 12px; color: white; font-family: Trebuchet, Arial, sans-serif; font-weight: bold;
+    box-sizing: border-box;
+}
+.onoffswitch-pop-inner:before {
+    content: "ON";
+    padding-left: 20px;
+	background-color:#68afff;
+    color: #FFFFFF;
+}
+.onoffswitch-pop-inner:after {
+    content: "OFF";
+    padding-right: 20px;
+    background-color: #EEEEEE; color: #999999;
+/*     background: -webkit-linear-gradient(135deg, #CCC, #FFF); For Safari 5.1 to 6.0
+    background: -o-linear-gradient(135deg, #CCC, #FFF); For Opera 11.1 to 12.0
+    background: -moz-linear-gradient(135deg, #CCC, #FFF); For Firefox 3.6 to 15
+    background: linear-gradient(135deg, #CCC, #FFF); Standard syntax
+     */
+    text-align: right;
+}
+.onoffswitch-pop-switch {
+    display: block; width: 18px; margin: 6px;
+    background: #FFFFFF;
+    position: absolute; top: 0; bottom: 0;
+    right: 50px;
+    border: 2px solid #999999; border-radius: 20px;
+    transition: all 0.3s ease-in 0s;
+}
+.onoffswitch-pop-checkbox:checked + .onoffswitch-pop-label .onoffswitch-pop-inner {
+    margin-left: 0;
+}
+.onoffswitch-pop-checkbox:checked + .onoffswitch-pop-label .onoffswitch-pop-switch {
+    right: 0px; 
+}
+
+
+
+
+
+.example {
+	position: relative;
+	border: 1px solid #ccc;
+	padding: 1em 1em 0.5em 1em;
+	border-radius: 4px 4px 0 0;
+}
+
+.example:after {
+	content: "Example";
+	position: absolute;
+	top: 0px;
+	right: 0px;
+	padding: 3px 7px;
+	font-size: 12px;
+	font-weight: bold;
+	background-color: #f5f5f5;
+	border: 1px solid #ccc;
+	color: #9da0a4;
+	border-radius: 0px 4px 0px 4px;
+	border-width: 0px 0px 1px 1px;
+}
+
+.example + code.hljs {
+	border-top: 0;
+	border-radius: 0px 0px 4px 4px;
+}
+
+.example > * {
+	margin-bottom: 10px;
+}
+
+.example > div.toggle {
+	margin-right: 10px;
+}
+
+.table-striped code {
+	background-color: inherit;
+}
+
+.table-text-align-c {
+	text-align:center;
+}
+
+
+.tab-pop-two-style {
+  width:48.2%;
+  text-align:center;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
