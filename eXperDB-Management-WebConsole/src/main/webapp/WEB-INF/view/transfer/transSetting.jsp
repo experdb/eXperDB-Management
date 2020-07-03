@@ -113,18 +113,63 @@ a:hover.tip span {
 						{ data : "kc_ip",  className : "dt-center", defaultContent : "",orderable : false},
 						{ data : "kc_port",  className : "dt-center", defaultContent : "",orderable : false},
 						{ data : "db_svr_nm",  className : "dt-center", defaultContent : "",orderable : false},
-						{ data : "connect_nm",  className : "dt-center", defaultContent : "",orderable : false},
+						{ data : "connect_nm",  
+			    			"render": function (data, type, full) {				
+			    				  return '<span onClick=javascript:fn_transLayer("'+full.rownum+'"); class="bold">' + full.connect_nm + '</span>';
+			    			},
+							className : "dt-center", defaultContent : "",orderable : false},
 						{ data : "db_nm",  className : "dt-center", defaultContent : "",orderable : false},
 						{ data : "snapshot_nm",  className : "dt-center", defaultContent : "",orderable : false},
-						{ data : "compression_nm",  className : "dt-center", defaultContent : "",orderable : false},
-						{ data : "meta_data",  className : "dt-center", defaultContent : "",orderable : false},
+						{ data : "compression_nm",  
+			    			"render": function (data, type, full) {				
+			    				var html = "";
+			    				var compression_type_info = nvlPrmSet(full.compression_type, "");
+			    				
+			    				//메타데이타 설정
+								if (compression_type_info != "") {
+									if (compression_type_info == 'TC003701') {
+										html += "<div class='badge badge-light'>";
+										html += "	<i class='ti-close text-danger mr-2'></i>";
+										html += nvlPrmSet(full.compression_nm, "");
+										html += "</div>";
+									} else {
+										html += "<div class='badge badge-light'>";
+										html += "	<i class='fa fa-file-zip-o text-success mr-2'></i>";
+										html += nvlPrmSet(full.compression_nm, "");
+										html += "</div>";
+									}
+								}
+
+			    				return html;
+			    			},
+							className : "dt-center", defaultContent : "",orderable : false},
+						{ data : "meta_data",  
+			    			"render": function (data, type, full) {				
+			    				var html = "";
+			    				
+			    				//메타데이타 설정
+			    				if (nvlPrmSet(full.meta_data, "") == "OFF" || nvlPrmSet(full.meta_data, "") == "") {
+			    					html += "<div class='badge badge-pill badge-light' style='background-color: #EEEEEE;'>";
+			    					html += "	<i class='fa fa-power-off mr-2'></i>";
+			    					html += "OFF";
+			    					html += "</div>";
+			    				} else {
+			    					html += "<div class='badge badge-pill badge-info text-white'>";
+			    					html += "	<i class='fa fa-power-off mr-2'></i>";
+			    					html += "ON";
+			    					html += "</div>";
+			    				}
+
+			    				return html;
+			    			},
+							className : "dt-center", defaultContent : "",orderable : false},
 						{data : "db_svr_id", defaultContent : "", visible: false },
 						{data : "db_id", defaultContent : "", visible: false },
 						{data : "snapshot_mode", defaultContent : "", visible: false },
 						{data : "trans_exrt_trg_tb_id", defaultContent : "", visible: false },
 						{data : "trans_id", defaultContent : "", visible: false },
 						{data : "exe_status", defaultContent : "", visible: false }
-					]
+					],'select': {'style': 'multi'}
 		});
 
 		table.tables().header().to$().find('th:eq(0)').css('min-width', '10px');
@@ -261,7 +306,7 @@ a:hover.tip span {
 		}
 		
 		if(table.row('.selected').data().exe_status == "TC001501"){
-			validateMsg = '<spring:message code="data_transfer.msg7"/>';
+			validateMsg = '<spring:message code="data_transfer.msg11"/>';
 			showSwalIcon(validateMsg.replace("<br/>", "\n"), '<spring:message code="common.close" />', '', 'error');
 			return;
 		}
@@ -472,6 +517,19 @@ a:hover.tip span {
 	}
 
 	/* ********************************************************
+	 * confirm result
+	 ******************************************************** */
+	function fnc_confirmCancelRst(gbn){
+		var canCheckId = 'transActivation' + $('#chk_act_row', '#findList').val();
+		
+		if (gbn == "con_start") {
+			$("input:checkbox[id='" + canCheckId + "']").prop("checked", false); 
+		} else if (gbn == "con_end") {
+			$("input:checkbox[id='" + canCheckId + "']").prop("checked", true); 
+		}
+	}
+
+	/* ********************************************************
 	 * 삭제 로직 처리
 	 ******************************************************** */
 	function fn_delete(){
@@ -514,7 +572,7 @@ a:hover.tip span {
 	 * 활성화 단건실행
 	 ******************************************************** */
 	function fn_act_execute(act_gbn) {
-		var ascRow =  $('#chk_act_row', '#findList').val()
+		var ascRow =  $('#chk_act_row', '#findList').val();
 		var validateMsg ="";
 		var checkId = "";
 		
@@ -614,12 +672,133 @@ a:hover.tip span {
 			});
 		}
 	}
+	
+	/* ********************************************************
+	 * 전송관리 상세
+	 ******************************************************** */
+	function fn_transLayer(row){
+		$.ajax({
+			url : "/selectTransSettingInfo.do",
+			data : {
+				db_svr_id : $("#db_svr_id", "#findList").val(),
+				act : "u",
+				trans_exrt_trg_tb_id : $('#act_trans_exrt_trg_tb_id' + row).val(),
+				trans_id : $('#act_trans_id' + row).val()
+			},
+			dataType : "json",
+			type : "post",
+			beforeSend: function(xhr) {
+				xhr.setRequestHeader("AJAX", true);
+			},
+		    error : function(xhr, status, error) {
+				if(xhr.status == 401) {
+					showSwalIcon('<spring:message code="message.msg02" />', '<spring:message code="common.close" />', '', 'error');
+					top.location.href = "/";
+				} else if(xhr.status == 403) {
+					showSwalIcon('<spring:message code="message.msg03" />', '<spring:message code="common.close" />', '', 'error');
+					top.location.href = "/";
+				} else {
+					showSwalIcon("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""), '<spring:message code="common.close" />', '', 'error');
+				}
+			},
+			success : function(result) {
+				if(result == null){
+					msgVale = "<spring:message code='menu.trans_management' />";
+					showSwalIcon('<spring:message code="eXperDB_scale.msg8" arguments="'+ msgVale +'" />', '<spring:message code="common.close" />', '', 'error');
+					
+					$('#pop_layer_trans_info').modal('hide');
+					return;
+				} else {
+					//상세 조회 셋팅
+					fn_info_setting(result);
 
+					$('#pop_layer_trans_info').modal('show');
+				}		
+			}
+		});	
+	}
+	
+	/* ********************************************************
+	 * 상세 팝업셋팅
+	 ******************************************************** */
+	function fn_info_setting(result) {
+		//스냅샷 모드 추가
+		var snapshot_mode_re = nvlPrmSet(result.snapshot_mode, "");
+		var snapshot_mode_nm = nvlPrmSet(result.snapshot_nm, "");
+		var info_meta_data_chk = "";
+		
+		//압축형태
+		var compression_type_info_val = "";
+		var compression_type_info = nvlPrmSet(result.compression_type, "");
+
+		$("#d_kc_ip", "#searchInfoForm").html(nvlPrmSet(result.kc_ip, ""));
+		$("#d_kc_port", "#searchInfoForm").html(nvlPrmSet(result.kc_port, ""));
+
+		$("#d_connect_nm", "#infoRegForm").html(nvlPrmSet(result.connect_nm, ""));
+		$("#d_db_id", "#infoRegForm").html(nvlPrmSet(result.db_nm, ""));
+
+		//스냅샷 모드 change
+		if(snapshot_mode_re == "TC003601"){
+			snapshot_mode_nm += ' ' + '<spring:message code="data_transfer.msg2" />';
+		}else if(snapshot_mode_re == "TC003602"){
+			snapshot_mode_nm += ' ' + '<spring:message code="data_transfer.msg3" />';
+		}else if (snapshot_mode_re == "TC003603"){
+			snapshot_mode_nm += ' ' + '<spring:message code="data_transfer.msg1" />';
+		}else if (snapshot_mode_re == "TC003604"){
+			snapshot_mode_nm += ' ' + '<spring:message code="data_transfer.msg4" />';
+		}else if (snapshot_mode_re == "TC003605"){
+			snapshot_mode_nm += ' ' + '<spring:message code="data_transfer.msg5" />';
+		}
+		$("#d_snapshot_mode_nm", "#infoRegForm").html(snapshot_mode_nm);
+		
+		//압축모드
+		if (compression_type_info != "") {
+			if (compression_type_info == 'TC003701') {
+				compression_type_info_val += "<div class='badge badge-light'>";
+				compression_type_info_val += "	<i class='ti-close text-danger mr-2'></i>";
+				compression_type_info_val += nvlPrmSet(result.compression_nm, "");
+				compression_type_info_val += "</div>";
+			} else {
+				compression_type_info_val += "<div class='badge badge-light'>";
+				compression_type_info_val += "	<i class='fa fa-file-zip-o text-success mr-2'></i>";
+				compression_type_info_val += nvlPrmSet(result.compression_nm, "");
+				compression_type_info_val += "</div>";
+			}
+		}
+
+		$("#d_compression_type_nm", "#infoRegForm").html(compression_type_info_val);
+		
+		//메타데이타 설정
+		if (nvlPrmSet(result.meta_data, "") == "OFF" || nvlPrmSet(result.meta_data, "") == "") {
+			info_meta_data_chk += "<div class='badge badge-pill badge-light' style='background-color: #EEEEEE;'>";
+			info_meta_data_chk += "	<i class='fa fa-power-off mr-2'></i>";
+			info_meta_data_chk += "OFF";
+			info_meta_data_chk += "</div>";
+		} else {
+			info_meta_data_chk += "<div class='badge badge-pill badge-info text-white'>";
+			info_meta_data_chk += "	<i class='fa fa-power-off mr-2'></i>";
+			info_meta_data_chk += "ON";
+			info_meta_data_chk += "</div>";
+		}
+		$("#d_meta_data_chk", "#infoRegForm").html(info_meta_data_chk);
+		
+		info_connector_tableList.clear().draw();
+		
+		info_connector_tableList.rows({selected: true}).deselect();
+		info_connector_tableList.clear().draw();
+		
+		if (result.tables.data != null) {
+			info_connector_tableList.rows.add(result.tables.data).draw();
+		}
+
+		$('a[href="#infoSettingTab"]').tab('show');
+	}
 </script>
 
 <%@include file="./../popup/connectRegReForm.jsp"%>
 <%@include file="./../popup/connectRegForm2.jsp"%>
 <%@include file="./../popup/confirmMultiForm.jsp"%>
+<%@include file="./tansSettingInfo.jsp"%>
 
 <form name="findList" id="findList" method="post">
 	<input type="hidden" name="db_svr_id" id="db_svr_id" value="${db_svr_id}"/>

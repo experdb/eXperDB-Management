@@ -39,6 +39,8 @@ import com.k4m.dx.tcontrol.cmmn.client.ClientProtocolID;
 import com.k4m.dx.tcontrol.common.service.AgentInfoVO;
 import com.k4m.dx.tcontrol.common.service.CmmnServerInfoService;
 import com.k4m.dx.tcontrol.common.service.HistoryVO;
+import com.k4m.dx.tcontrol.functions.transfer.service.ConnectorVO;
+import com.k4m.dx.tcontrol.functions.transfer.service.TransferVO;
 import com.k4m.dx.tcontrol.login.service.LoginVO;
 import com.k4m.dx.tcontrol.transfer.TransferSchemaInfo;
 import com.k4m.dx.tcontrol.transfer.TransferTableInfo;
@@ -728,56 +730,84 @@ public class TransController {
 		return result;
 	}	
 	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-
-	
-	
-	
-	
-	
-
-	
-	
-
-	
-	
-	
-	
-
-
-
-
 	/**
-	 * Database 매핑작업 팝업 화면을 보여준다.
+	 * 전송대상상세 화면을 보여준다.
 	 * 
 	 * @param
 	 * @return ModelAndView mv
 	 * @throws Exception
 	 */
-	@RequestMapping(value = "/popup/transMappForm.do")
-	public ModelAndView transferMappingRegForm(@ModelAttribute("dbServerVO") DbServerVO dbServerVO,@ModelAttribute("historyVO") HistoryVO historyVO,
-			HttpServletRequest request) {
-		ModelAndView mv = new ModelAndView();
-		List<DbServerVO> resultSet = null;
-		List<TransferDetailMappingVO> result = null;
+	@RequestMapping(value = "/selectTransSettingInfo.do")
+	public ModelAndView selectTransSettingInfo(@ModelAttribute("historyVO") HistoryVO historyVO, HttpServletRequest request) {
+		ModelAndView mv = new ModelAndView("jsonView");
+		
+		JSONObject tableResult = new JSONObject();
+		JSONObject serverObj = new JSONObject();
+		ClientInfoCmmn cic = new ClientInfoCmmn();
+		
+		List<Map<String, Object>> transInfo = null;
+		List<Map<String, Object>> mappInfo = null;
+		
+		JSONArray schemaArray = new JSONArray();
+		JSONArray tableArray = new JSONArray();
+
 		try {
 			// 화면접근이력 이력 남기기
 			CmmnUtils.saveHistory(request, historyVO);
-			historyVO.setExe_dtl_cd("DX-T0020");
-			historyVO.setMnu_id(34);
+			historyVO.setExe_dtl_cd("DX-T0018");
+			historyVO.setMnu_id(33);
 			accessHistoryService.insertHistory(historyVO);
-			
+
+			HttpSession session = request.getSession();
+			LoginVO loginVo = (LoginVO) session.getAttribute("session");
+			String usr_id = loginVo.getUsr_id();
+
 			int db_svr_id = Integer.parseInt(request.getParameter("db_svr_id"));
-		
-			mv.setViewName("popup/transMapp");
+			int trans_exrt_trg_tb_id = Integer.parseInt(request.getParameter("trans_exrt_trg_tb_id"));
+			int trans_id =  Integer.parseInt(request.getParameter("trans_id"));
+			
+			transInfo = transService.selectTransInfo(trans_id);
+			System.out.println("전송정보 : "+transInfo.get(0));
+
+			mappInfo = transService.selectMappInfo(trans_exrt_trg_tb_id);
+			System.out.println("매핑정보 : "+mappInfo.get(0));
+
+			String[] tables = null;
+			tables = mappInfo.get(0).get("exrt_trg_tb_nm").toString().split(",");
+
+			if(mappInfo.get(0).get("exrt_trg_tb_nm") != null) {
+				if (!"".equals(mappInfo.get(0).get("exrt_trg_tb_nm").toString())) {
+					for (int i = 0; i < tables.length; i++) {
+						JSONObject jsonObj = new JSONObject();
+						String[] datas = null;
+						System.out.println("tables = "+tables[i]);
+						datas = tables[i].toString().split("\\.");
+							for(int j = 0; j < 1; j++){
+								jsonObj.put("schema_name", datas[0]);
+								jsonObj.put("table_name", datas[1]);
+								tableArray.add(jsonObj);
+							}
+					}
+					tableResult.put("data", tableArray);
+				}
+			}
+				
+			mv.addObject("kc_ip", transInfo.get(0).get("kc_ip"));				//use
+			mv.addObject("kc_port", transInfo.get(0).get("kc_port"));			//use
+			mv.addObject("connect_nm", transInfo.get(0).get("connect_nm"));		//use
+			mv.addObject("db_id", transInfo.get(0).get("db_id"));				//use
+			mv.addObject("db_nm", transInfo.get(0).get("db_nm"));				//use
+			mv.addObject("snapshot_mode", transInfo.get(0).get("snapshot_mode"));	//use
+			mv.addObject("snapshot_nm", transInfo.get(0).get("snapshot_nm"));		//use
+			mv.addObject("compression_type", transInfo.get(0).get("compression_type"));	//use
+			mv.addObject("compression_nm", transInfo.get(0).get("compression_nm"));		//use
+			mv.addObject("meta_data", transInfo.get(0).get("meta_data"));				//use
+			
+			mv.addObject("tables", tableResult); //use
+			mv.addObject("trans_exrt_trg_tb_id", trans_exrt_trg_tb_id);
+			mv.addObject("trans_id",trans_id);				
+
+			mv.addObject("db_svr_id", db_svr_id);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -786,6 +816,72 @@ public class TransController {
 
 	
 	
+	
+
+	
+	
+	
+	
+	
+
+	
+	
+
+	
+	
+	
+	
+
+
+
+
+
+
+	
+	
+
+	
+	
+	
+
+	
+	
+	
+
+	
+	
+
+	
+	
+
+	
+	
+	
+
+
+
+			
+		
+
+		
+		
+
+
+		
+		
+
+
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
 	/**
 	 * 스키마리스트 등록 팝업 화면을 보여준다.
 	 * 
@@ -835,9 +931,7 @@ public class TransController {
 		mv.setViewName("/popup/schemaMapp");
 		return mv;
 	}
-	
-	
-	
+		
 	/**
 	 * 스키마 리스트 조회
 	 * 
@@ -896,50 +990,36 @@ public class TransController {
 	}
 		return result;
 	}
-	
-	
-	
-
-	
-	
-
-	
-	
-
-	
-	
-	
-
-
-
+		
+		
+	/**
+	 * Database 매핑작업 팝업 화면을 보여준다.
+	 * 
+	 * @param
+	 * @return ModelAndView mv
+	 * @throws Exception
+	 */
+	@RequestMapping(value = "/popup/transMappForm.do")
+	public ModelAndView transferMappingRegForm(@ModelAttribute("dbServerVO") DbServerVO dbServerVO,@ModelAttribute("historyVO") HistoryVO historyVO,
+			HttpServletRequest request) {
+		ModelAndView mv = new ModelAndView();
+		List<DbServerVO> resultSet = null;
+		List<TransferDetailMappingVO> result = null;
+		try {
+			// 화면접근이력 이력 남기기
+			CmmnUtils.saveHistory(request, historyVO);
+			historyVO.setExe_dtl_cd("DX-T0020");
+			historyVO.setMnu_id(34);
+			accessHistoryService.insertHistory(historyVO);
 			
+			int db_svr_id = Integer.parseInt(request.getParameter("db_svr_id"));
 		
-
-		
-		
-
-
-		
-		
-
-
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
+			mv.setViewName("popup/transMapp");
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return mv;
+	}
 		
 	/**
 	 * 테이블리스트 등록 팝업 화면을 보여준다.

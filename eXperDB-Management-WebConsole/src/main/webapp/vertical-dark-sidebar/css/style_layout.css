@@ -1081,18 +1081,19 @@ span.bold{font-weight:bold; color:#248afd; cursor:pointer;}
     box-sizing: border-box;
 }
 .onoffswitch-inner:before {
-    content: "ON";
-    padding-left: 1px;
-    background-color: #68afff; color: #ffffff;
+    content: "PLAY";
+    padding-left: -1px;
+    padding-right: 10px;
+    background-color: #71c016; color: #ffffff;
 /*     background: -webkit-linear-gradient(45deg, #009966, #FFF); For Safari 5.1 to 6.0
     background: -o-linear-gradient(45deg, #009966, #FFF); For Opera 11.1 to 12.0
     background: -moz-linear-gradient(45deg, #009966, #FFF); For Firefox 3.6 to 15
     background: linear-gradient(135deg, #009966, #befae6); Standard syntax */
 }
 .onoffswitch-inner:after {
-    content: "OFF";
-    padding-right: 20px;
-    background-color: #EEEEEE; color: #999999;
+    content: "STOP";
+    padding-right: 15px;
+    background-color: #ff4747; color: #ffffff;
 /*     background: -webkit-linear-gradient(135deg, #CCC, #FFF); For Safari 5.1 to 6.0
     background: -o-linear-gradient(135deg, #CCC, #FFF); For Opera 11.1 to 12.0
     background: -moz-linear-gradient(135deg, #CCC, #FFF); For Firefox 3.6 to 15
