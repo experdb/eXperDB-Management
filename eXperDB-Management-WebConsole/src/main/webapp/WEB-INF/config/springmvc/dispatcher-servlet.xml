@@ -116,5 +116,9 @@
 	</bean>
 	<!-- /Excel -->
 	
+	<bean id="jsonView" class="org.springframework.web.servlet.view.json.MappingJackson2JsonView">
+		<property name="contentType" value="text/html;charset=UTF-8"/>
+	</bean>
+	
 <!--     <mvc:view-controller path="/" view-name="login"/> -->
 </beans>
