@@ -6,7 +6,6 @@
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <title>Error</title>
 </head>
-
 <body>
     <spring:message code='fail.common.msg' />
 </body>
