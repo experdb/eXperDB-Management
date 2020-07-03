@@ -130,6 +130,8 @@ public class DBCPPoolManager {
 				//MySQL
 				case "TC002203" :
 					DBMS_TYPE = "MySQL";
+					driver ="com.mysql.jdbc.Driver";
+					connectURI = "jdbc:mysql://"+serverObj.get("SERVER_IP")+"/"+serverObj.get("DATABASE_NAME");
 					break;		
 					
 				//PostgreSQL		

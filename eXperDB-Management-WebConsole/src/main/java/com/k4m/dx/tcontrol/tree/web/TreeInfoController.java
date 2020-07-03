@@ -107,22 +107,24 @@ public class TreeInfoController {
 		ModelAndView mv = new ModelAndView();
 		ClientInfoCmmn cic = new ClientInfoCmmn();
 		JSONObject serverObj = new JSONObject();
+
 		try {
-			 // 화면접근이력 이력 남기기
-			 CmmnUtils.saveHistory(request, historyVO);
-			 historyVO.setExe_dtl_cd("DX-T0073");
-			 accessHistoryService.insertHistory(historyVO);
+			// 화면접근이력 이력 남기기
+			CmmnUtils.saveHistory(request, historyVO);
+			historyVO.setExe_dtl_cd("DX-T0073");
+			accessHistoryService.insertHistory(historyVO);
 
 			AES256 dec = new AES256(AES256_KEY.ENC_KEY);
 			int db_svr_id = Integer.parseInt(request.getParameter("db_svr_id"));
 
 			DbServerVO schDbServerVO = new DbServerVO();
 			schDbServerVO.setDb_svr_id(db_svr_id);
-			DbServerVO dbServerVO = (DbServerVO) cmmnServerInfoService.selectServerInfo(schDbServerVO);
+			DbServerVO dbServerVO = (DbServerVO) cmmnServerInfoService.selectServerInfo(schDbServerVO); //서버정보조회
+			
 			String strIpAdr = dbServerVO.getIpadr();
 			AgentInfoVO vo = new AgentInfoVO();
 			vo.setIPADR(strIpAdr);
-			AgentInfoVO agentInfo = (AgentInfoVO) cmmnServerInfoService.selectAgentInfo(vo);
+			AgentInfoVO agentInfo = (AgentInfoVO) cmmnServerInfoService.selectAgentInfo(vo); //agent 정보조회
 
 			if (agentInfo == null) {
 				mv.addObject("extName", "agent");
@@ -140,7 +142,7 @@ public class TreeInfoController {
 					serverObj.put(ClientProtocolID.USER_ID, dbServerVO.getSvr_spr_usr_id());
 					serverObj.put(ClientProtocolID.USER_PWD, dec.aesDecode(dbServerVO.getSvr_spr_scm_pwd()));
 
-					JSONObject result = cic.dbms_inforamtion(IP, PORT, serverObj);
+					JSONObject result = cic.dbms_inforamtion(IP, PORT, serverObj);   //DBMS 정보(시스템정보, DBMS정보-데이터베이스정보)
 					List<DbServerVO> resultIpadr = cmmnServerInfoService.selectAllIpadrList(db_svr_id);
 					
 					HttpSession session = request.getSession();

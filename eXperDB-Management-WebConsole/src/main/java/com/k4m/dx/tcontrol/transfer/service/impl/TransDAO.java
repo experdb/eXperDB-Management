@@ -71,4 +71,10 @@ public class TransDAO extends EgovAbstractMapper{
 		update("transSQL.updateConnectInfo",transVO);	
 	}
 
+	public List<TransVO> selectCompressionTypeList() {
+		List<TransVO> sl = null;
+		sl = (List<TransVO>) list("transSQL.selectCompressionTypeList",null);
+		return sl;
+	}
+
 }

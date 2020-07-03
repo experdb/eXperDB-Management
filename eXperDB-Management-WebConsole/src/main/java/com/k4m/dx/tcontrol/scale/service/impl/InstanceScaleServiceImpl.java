@@ -60,9 +60,481 @@ public class InstanceScaleServiceImpl extends EgovAbstractServiceImpl implements
 	
 	@Resource(name = "cmmnServerInfoDAO")
 	private CmmnServerInfoDAO cmmnServerInfoDAO;
+	
+	/**
+	 * aws 설치 여부 조회
+	 * 
+	 * @param param
+	 * @throws Exception
+	 */
+	@Override
+	public Map<String, Object> scaleInstallChk(InstanceScaleVO instanceScaleVO) throws Exception {
+
+		Map<String, Object> recultChk = null;
+		Map<String, Object> result = new JSONObject();
+		Map<String, Object> param = new HashMap<String, Object>();
+		String scalejsonChk = "";
+
+		try {
+			recultChk = (Map<String, Object>) instanceScaleDAO.selectScaleAWSSvrInfo(instanceScaleVO);
+
+			if (recultChk != null) {
+				result.put("install_yn", "Y");
+			} else {
+				//서버 직접 확인
+				Map<String, Object> agentList = null;
+				String id = instanceScaleVO.getLogin_id();
+				
+				param.put("search_gbn", "scaleAwsChk");
+				param.put("scale_set", "");
+				param.put("login_id", id);
+				param.put("instance_id", "");           //확인완료
+				param.put("db_svr_id", instanceScaleVO.getDb_svr_id());
+				param.put("process_id", "");
+				param.put("monitering", "");
+				param.put("scale_count", "");
+				
+				agentList = scaleInAgent(param);
+				
+				if (!agentList.isEmpty()) {
+					String resultCode = (String)agentList.get(ClientProtocolID.RESULT_CODE);
+
+					if (resultCode.equals("0")) {
+						scalejsonChk = (String)agentList.get(ClientProtocolID.RESULT_SUB_DATA);
+					}
+				}
+				
+				if (!scalejsonChk.isEmpty()) {
+					if (scalejsonChk.contains("no aws")) {
+						result.put("install_yn", "N");
+					} else {
+
+						//서버 db 등록
+						instanceScaleDAO.insertScaleAwsserver(instanceScaleVO);
+						
+						result.put("install_yn", "Y");
+					}
+				} else {
+					result.put("install_yn", "N");
+				}
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+
+		return result;
+	}
 
 	/**
-	 * scale list setting
+	 * scale Auto 설정 list 조회
+	 * 
+	 * @param instanceScaleVO
+	 * @throws Exception 
+	 */
+	@Override
+	public List<Map<String, Object>> selectScaleCngList(InstanceScaleVO instanceScaleVO) throws Exception {
+		return  instanceScaleDAO.selectScaleCngList(instanceScaleVO);
+	}
+
+	/**
+	 * scale 설정정보 상세정보조회
+	 * 
+	 * @param instanceScaleVO
+	 * @throws Exception 
+	 */
+	@Override
+	public Map<String, Object> selectAutoScaleCngInfo(InstanceScaleVO instanceScaleVO) throws Exception {
+		return instanceScaleDAO.selectAutoScaleCngInfo(instanceScaleVO);
+	}
+
+	/**
+	 * scale 공통 설정정보 상세정보조회
+	 * 
+	 * @param instanceScaleVO
+	 * @throws Exception 
+	 */
+	@Override
+	public Map<String, Object> selectAutoScaleComCngInfo(InstanceScaleVO instanceScaleVO) throws Exception {
+		return instanceScaleDAO.selectAutoScaleComCngInfo(instanceScaleVO);
+	}
+
+	/**
+	 * scale 상태조회
+	 * 
+	 * @param param
+	 * @throws Exception
+	 */
+	@Override
+	public Map<String, Object> scaleSetResult(InstanceScaleVO instanceScaleVO) throws Exception {
+		Map<String, Object> param = new HashMap<String, Object>();
+		Map<String, Object> result = new JSONObject();
+		JSONObject scalejsonObj = new JSONObject();
+		String scalejsonChk = "";
+		String scalejsonStr = "";
+
+		String id = instanceScaleVO.getLogin_id();
+		String resultChk = "";
+
+		try {
+			//scale load 상태보기
+			param.put("frst_regr_id", id);
+			result = (Map<String, Object>)instanceScaleDAO.selectScaleLog(param);
+
+			if (result == null) {
+				resultChk = "search";
+			} else {
+				if (!result.get("wrk_id").toString().equals("1")) {
+					resultChk = "search";
+				}
+			}
+
+			//aws도 확인힐요 -- 값자체를 찾아야할듯함
+			if ("search".equals(resultChk)) {
+				Map<String, Object> agentList = null;
+
+				param.put("search_gbn", "scaleChk");
+				param.put("scale_set", "");
+				param.put("login_id", id);
+				param.put("instance_id", "");           //확인완료
+				param.put("db_svr_id", instanceScaleVO.getDb_svr_id());
+				param.put("process_id", "");
+				param.put("monitering", "");
+				param.put("scale_count", "");
+
+				agentList = scaleInAgent(param);
+
+				if (!agentList.isEmpty()) {
+					String resultCode = (String)agentList.get(ClientProtocolID.RESULT_CODE);
+
+					if (resultCode.equals("0")) {
+						scalejsonObj = (JSONObject)agentList.get(ClientProtocolID.RESULT_DATA);
+						scalejsonChk = (String)agentList.get(ClientProtocolID.RESULT_SUB_DATA);
+					}
+				}
+
+				if (!scalejsonObj.isEmpty()) {
+					scalejsonStr = scalejsonObj.toString();
+					
+					if ("{\"Instances\":[]}".equals(scalejsonStr)) {
+						result = new JSONObject();
+					}
+						
+					if (scalejsonStr.contains("pending")) {
+						result.put("wrk_id", "1");
+						result.put("scale_type", "2");
+					} else if (scalejsonStr.contains("shutting-down")) {
+						result.put("wrk_id", "1");
+						result.put("scale_type", "1");
+					} else {
+						if (!scalejsonChk.isEmpty()) {
+							if (!"0".equals(scalejsonChk)) {
+								result.put("wrk_id", "1");
+								result.put("scale_type", "1");
+							} else {
+								result.put("wrk_id", "2");
+								result.put("scale_type", "");
+							}
+						} else {
+							result.put("wrk_id", "2");
+							result.put("scale_type", "");
+						}
+					}
+				} else {
+					result = new JSONObject();
+
+					if (!scalejsonChk.isEmpty()) {
+						if (!"0".equals(scalejsonChk)) {
+							result.put("wrk_id", "1");
+							result.put("scale_type", "1");
+						} else {
+							result.put("wrk_id", "2");
+							result.put("scale_type", "");
+						}
+					} else {
+						result.put("wrk_id", "2");
+						result.put("scale_type", "");
+					}
+				}
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+
+		return result;
+	}
+	
+	/**
+	 * scale Auto setting 등록
+	 * 
+	 * @param instanceScaleVO
+	 * @throws Exception 
+	 */
+	@Override
+	public String updateAutoScaleCommonSetting(InstanceScaleVO instanceScaleVO) throws Exception {
+		String result = "S";
+		List<Map<String, Object>> dbResult = null;
+		Map<String, Object> recultChk = null;
+		
+		try{
+			//데이터 있는지 확인
+			recultChk = (Map<String, Object>) instanceScaleDAO.selectScaleAWSSvrInfo(instanceScaleVO);
+
+			if (recultChk == null) {
+				result = "O";
+			}
+		}catch(Exception e){
+			e.printStackTrace();
+		}
+
+		//저장
+		if ("S".equals(result)) {
+			try{
+				int db_svr_id = instanceScaleVO.getDb_svr_id();
+				dbResult = instanceScaleDAO.selectSvrIpadrList(db_svr_id);
+				if (!dbResult.isEmpty()) {
+					int iDbSvrIpadrId = Integer.parseInt(String.valueOf(dbResult.get(0).get("db_svr_ipadr_id")+""));
+					instanceScaleVO.setDb_svr_ipadr_id(iDbSvrIpadrId);
+				} else {
+					instanceScaleVO.setDb_svr_ipadr_id(1);
+				}
+				
+				String min_clusters_val = instanceScaleVO.getMin_clusters();
+				
+				if ("".equals(min_clusters_val)) {
+					instanceScaleVO.setMin_clusters(null);
+				}
+
+				String max_clusters_val = instanceScaleVO.getMax_clusters();
+				
+				if ("".equals(max_clusters_val)) {
+					instanceScaleVO.setMax_clusters(null);
+				}
+				
+				String auto_run_cycle_val = instanceScaleVO.getAuto_run_cycle();
+				
+				if ("".equals(auto_run_cycle_val)) {
+					instanceScaleVO.setExpansion_clusters(null);
+				}
+				
+				instanceScaleDAO.updateAutoScaleCommonSetting(instanceScaleVO);
+				
+				//설정 전체 수정
+				instanceScaleDAO.updateTotalAutoScaleSetting(instanceScaleVO);
+			} catch (Exception e) {
+				result = "F";
+				e.printStackTrace();
+			}
+		}
+
+		return result;
+	}
+	
+	/**
+	 * 공통 INS 조회
+	 * 
+	 * @param param
+	 * @throws Exception
+	 */
+	@Override
+	public Map<String, Object> scaleInstallList(InstanceScaleVO instanceScaleVO) throws Exception {
+		return (Map<String, Object>) instanceScaleDAO.selectScaleAWSSvrInfo(instanceScaleVO);
+	}
+
+	/**
+	 * scale Auto setting 등록
+	 * 
+	 * @param instanceScaleVO
+	 * @throws Exception 
+	 */
+	@Override
+	public String insertAutoScaleSetting(InstanceScaleVO instanceScaleVO) throws Exception {
+		String result = "S";
+		List<Map<String, Object>> dbResult = null;
+
+		try{
+			//중복 체크
+			int autoScaleChk = instanceScaleDAO.selectAutoScaleSetChk(instanceScaleVO);
+			if (autoScaleChk > 0) {
+				result = "O";
+			}
+		}catch(Exception e){
+			e.printStackTrace();
+		}
+
+		//저장
+		if ("S".equals(result)) {
+			try{
+				int db_svr_id = instanceScaleVO.getDb_svr_id();
+				dbResult = instanceScaleDAO.selectSvrIpadrList(db_svr_id);
+				if (!dbResult.isEmpty()) {
+					int iDbSvrIpadrId = Integer.parseInt(String.valueOf(dbResult.get(0).get("db_svr_ipadr_id")+""));
+					instanceScaleVO.setDb_svr_ipadr_id(iDbSvrIpadrId);
+				} else {
+					instanceScaleVO.setDb_svr_ipadr_id(1);
+				}
+				
+				String min_clusters_val = instanceScaleVO.getMin_clusters();
+				
+				if ("".equals(min_clusters_val)) {
+					instanceScaleVO.setMin_clusters(null);
+				}
+
+				String max_clusters_val = instanceScaleVO.getMax_clusters();
+				
+				if ("".equals(max_clusters_val)) {
+					instanceScaleVO.setMax_clusters(null);
+				}
+				
+				String expansion_clusters_val = instanceScaleVO.getExpansion_clusters();
+				
+				if ("".equals(expansion_clusters_val)) {
+					instanceScaleVO.setExpansion_clusters(null);
+				}
+
+				instanceScaleDAO.insertAutoScaleSetting(instanceScaleVO);
+			} catch (Exception e) {
+				result = "F";
+				e.printStackTrace();
+			}
+		}
+
+		return result;
+	}
+
+	/**
+	 * scale Auto setting 삭제
+	 * 
+	 * @param instanceScaleVO
+	 * @throws Exception 
+	 */
+	@Override
+	public String deleteAutoScaleSetting(InstanceScaleVO instanceScaleVO) throws Exception {
+		String result = "S";
+		
+		try{
+			JSONArray wrk_ids = (JSONArray) new JSONParser().parse(instanceScaleVO.getWrk_id_Rows());
+
+			for(int i=0; i<wrk_ids.size(); i++){
+				instanceScaleVO.setWrk_id(wrk_ids.get(i).toString());
+				instanceScaleDAO.deleteAutoScaleSetting(instanceScaleVO);
+			}
+		}catch(Exception e){
+			result = "F";
+			e.printStackTrace();
+		}
+
+		return result;
+	}
+
+	/**
+	 * scale Auto setting 수정
+	 * 
+	 * @param instanceScaleVO
+	 * @throws Exception 
+	 */
+	@Override
+	public String updateAutoScaleSetting(InstanceScaleVO instanceScaleVO) throws Exception {
+		String result = "S";
+		List<Map<String, Object>> dbResult = null;
+
+		try{
+			//중복 체크
+			int autoScaleChk = instanceScaleDAO.selectAutoScaleSetChk(instanceScaleVO);
+			if (autoScaleChk > 0) {
+				result = "O";
+			}
+		}catch(Exception e){
+			e.printStackTrace();
+		}
+
+		//저장
+		if ("S".equals(result)) {
+			try{
+				int db_svr_id = instanceScaleVO.getDb_svr_id();
+				dbResult = instanceScaleDAO.selectSvrIpadrList(db_svr_id);
+				if (!dbResult.isEmpty()) {
+					int iDbSvrIpadrId = Integer.parseInt(String.valueOf(dbResult.get(0).get("db_svr_ipadr_id")+""));
+					instanceScaleVO.setDb_svr_ipadr_id(iDbSvrIpadrId);
+				} else {
+					instanceScaleVO.setDb_svr_ipadr_id(1);
+				}
+				
+				String min_clusters_val = instanceScaleVO.getMin_clusters();
+				
+				if ("".equals(min_clusters_val)) {
+					instanceScaleVO.setMin_clusters(null);
+				}
+
+				String max_clusters_val = instanceScaleVO.getMax_clusters();
+				
+				if ("".equals(max_clusters_val)) {
+					instanceScaleVO.setMax_clusters(null);
+				}
+				
+				String expansion_clusters_val = instanceScaleVO.getExpansion_clusters();
+				
+				if ("".equals(expansion_clusters_val)) {
+					instanceScaleVO.setExpansion_clusters(null);
+				}
+
+				instanceScaleDAO.updateAutoScaleSetting(instanceScaleVO);
+			} catch (Exception e) {
+				result = "F";
+				e.printStackTrace();
+			}
+		}
+
+		return result;
+	}
+
+	/**
+	 * scale log list 조회
+	 * 
+	 * @param instanceScaleVO
+	 * @throws Exception 
+	 */
+	@Override
+	public List<Map<String, Object>> selectScaleHistoryList(InstanceScaleVO instanceScaleVO) throws Exception {
+		List<Map<String, Object>> list = null;
+		String histGbn = (String)instanceScaleVO.getHist_gbn();
+
+		if ("execute_hist".equals(histGbn)) {
+			list = instanceScaleDAO.selectScaleHistoryList(instanceScaleVO);
+		} else {
+			list = instanceScaleDAO.selectScaleOccurHistoryList(instanceScaleVO);
+		}
+		
+		return list;
+	}
+
+	/**
+	 * scale 실행이력 상세정보조회
+	 * 
+	 * @param instanceScaleVO
+	 * @throws Exception 
+	 */
+	@Override
+	public Map<String, Object> selectScaleWrkInfo(InstanceScaleVO instanceScaleVO) throws Exception {
+		return instanceScaleDAO.selectScaleWrkInfo(instanceScaleVO);
+	}
+
+	/**
+	 * scale 실패 이력정보
+	 * 
+	 * @param scale_wrk_sn
+	 * @throws Exception 
+	 */
+	@Override
+	public Map<String, Object> selectScaleWrkErrorMsg(InstanceScaleVO instanceScaleVO) throws Exception {
+		return instanceScaleDAO.selectScaleWrkErrorMsg(instanceScaleVO);
+	}
+
+	/**
+	 * scale list search
 	 * 
 	 * @param instanceScaleVO
 	 * @throws Exception 
@@ -83,9 +555,7 @@ public class InstanceScaleServiceImpl extends EgovAbstractServiceImpl implements
 
 		Properties props = new Properties();
 		props.load(new FileInputStream(ResourceUtils.getFile("classpath:egovframework/tcontrolProps/globals.properties")));
-		
-		//scalejsonObj = scaleJsonDownSearch("main", scaleId); 기존 조회방식
-		
+
 		param.put("search_gbn", "main");
 		param.put("scale_set", "");
 		param.put("login_id", (String)instanceScaleVO.getLogin_id());
@@ -109,7 +579,7 @@ public class InstanceScaleServiceImpl extends EgovAbstractServiceImpl implements
 					}
 				}
 			}
-System.out.println("===scalejsonObj===" + scalejsonObj);
+
 			if (!scalejsonObj.isEmpty()) {
 				InstancesArrly = (JSONArray) scalejsonObj.get("Instances");
 	
@@ -214,7 +684,7 @@ System.out.println("===scalejsonObj===" + scalejsonObj);
 		}
 		return result;
 	}
-	
+
 	/**
 	 * scale 상세 조회
 	 * 
@@ -523,113 +993,6 @@ System.out.println("===scalejsonObj===" + scalejsonObj);
 
 		return result;
 	}
-
-	/**
-	 * scale 상태조회
-	 * 
-	 * @param param
-	 * @throws Exception
-	 */
-	@Override
-	public Map<String, Object> scaleSetResult(InstanceScaleVO instanceScaleVO) throws Exception {
-		Map<String, Object> param = new HashMap<String, Object>();
-		Map<String, Object> result = new JSONObject();
-		JSONObject scalejsonObj = new JSONObject();
-		String scalejsonChk = "";
-		String scalejsonStr = "";
-
-		String id = instanceScaleVO.getLogin_id();
-		String resultChk = "";
-
-		try {
-			//scale load 상태보기
-			param.put("frst_regr_id", id);
-			result = (Map<String, Object>)instanceScaleDAO.selectScaleLog(param);
-
-			if (result == null) {
-				resultChk = "search";
-			} else {
-				if (!result.get("wrk_id").toString().equals("1")) {
-					resultChk = "search";
-				}
-			}
-
-			//aws도 확인힐요 -- 값자체를 찾아야할듯함
-			if ("search".equals(resultChk)) {
-				Map<String, Object> agentList = null;
-
-				param.put("search_gbn", "scaleChk");
-				param.put("scale_set", "");
-				param.put("login_id", id);
-				param.put("instance_id", "");           //확인완료
-				param.put("db_svr_id", instanceScaleVO.getDb_svr_id());
-				param.put("process_id", "");
-				param.put("monitering", "");
-				param.put("scale_count", "");
-
-				agentList = scaleInAgent(param);
-
-				if (!agentList.isEmpty()) {
-					String resultCode = (String)agentList.get(ClientProtocolID.RESULT_CODE);
-
-					if (resultCode.equals("0")) {
-						scalejsonObj = (JSONObject)agentList.get(ClientProtocolID.RESULT_DATA);
-						scalejsonChk = (String)agentList.get(ClientProtocolID.RESULT_SUB_DATA);
-					}
-				}
-
-				if (!scalejsonObj.isEmpty()) {
-					scalejsonStr = scalejsonObj.toString();
-					
-					if ("{\"Instances\":[]}".equals(scalejsonStr)) {
-						result = new JSONObject();
-					}
-						
-					if (scalejsonStr.contains("pending")) {
-						result.put("wrk_id", "1");
-						result.put("scale_type", "2");
-					} else if (scalejsonStr.contains("shutting-down")) {
-						result.put("wrk_id", "1");
-						result.put("scale_type", "1");
-					} else {
-						if (!scalejsonChk.isEmpty()) {
-							if (!"0".equals(scalejsonChk)) {
-								result.put("wrk_id", "1");
-								result.put("scale_type", "1");
-							} else {
-								result.put("wrk_id", "2");
-								result.put("scale_type", "");
-							}
-						} else {
-							result.put("wrk_id", "2");
-							result.put("scale_type", "");
-						}
-					}
-				} else {
-					result = new JSONObject();
-
-					if (!scalejsonChk.isEmpty()) {
-						if (!"0".equals(scalejsonChk)) {
-							result.put("wrk_id", "1");
-							result.put("scale_type", "1");
-						} else {
-							result.put("wrk_id", "2");
-							result.put("scale_type", "");
-						}
-					} else {
-						result.put("wrk_id", "2");
-						result.put("scale_type", "");
-					}
-				}
-			}
-		} catch (SQLException e) {
-			e.printStackTrace();
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-
-		return result;
-	}
 	
 	/**
 	 * scale in out
@@ -920,273 +1283,6 @@ System.out.println("===agentSubCmd===" + agentSubCmd);
 	}
 
 	/**
-	 * scale log list 조회
-	 * 
-	 * @param instanceScaleVO
-	 * @throws Exception 
-	 */
-	@Override
-	public List<Map<String, Object>> selectScaleHistoryList(InstanceScaleVO instanceScaleVO) throws Exception {
-		List<Map<String, Object>> list = null;
-		String histGbn = (String)instanceScaleVO.getHist_gbn();
-
-		if ("execute_hist".equals(histGbn)) {
-			list = instanceScaleDAO.selectScaleHistoryList(instanceScaleVO);
-		} else {
-			list = instanceScaleDAO.selectScaleOccurHistoryList(instanceScaleVO);
-		}
-		
-		return list;
-	}
-
-	/**
-	 * scale 실패 이력정보
-	 * 
-	 * @param scale_wrk_sn
-	 * @throws Exception 
-	 */
-	@Override
-	public Map<String, Object> selectScaleWrkErrorMsg(InstanceScaleVO instanceScaleVO) throws Exception {
-		return instanceScaleDAO.selectScaleWrkErrorMsg(instanceScaleVO);
-	}
-
-	/**
-	 * scale 실행이력 상세정보조회
-	 * 
-	 * @param instanceScaleVO
-	 * @throws Exception 
-	 */
-	@Override
-	public Map<String, Object> selectScaleWrkInfo(InstanceScaleVO instanceScaleVO) throws Exception {
-		return instanceScaleDAO.selectScaleWrkInfo(instanceScaleVO);
-	}
-
-	/**
-	 * scale Auto 설정 list 조회
-	 * 
-	 * @param instanceScaleVO
-	 * @throws Exception 
-	 */
-	@Override
-	public List<Map<String, Object>> selectScaleCngList(InstanceScaleVO instanceScaleVO) throws Exception {
-		return  instanceScaleDAO.selectScaleCngList(instanceScaleVO);
-	}
-
-	/**
-	 * scale Auto setting 등록
-	 * 
-	 * @param instanceScaleVO
-	 * @throws Exception 
-	 */
-	@Override
-	public String insertAutoScaleSetting(InstanceScaleVO instanceScaleVO) throws Exception {
-		String result = "S";
-		List<Map<String, Object>> dbResult = null;
-
-		try{
-			//중복 체크
-			int autoScaleChk = instanceScaleDAO.selectAutoScaleSetChk(instanceScaleVO);
-			if (autoScaleChk > 0) {
-				result = "O";
-			}
-		}catch(Exception e){
-			e.printStackTrace();
-		}
-
-		//저장
-		if ("S".equals(result)) {
-			try{
-				int db_svr_id = instanceScaleVO.getDb_svr_id();
-				dbResult = instanceScaleDAO.selectSvrIpadrList(db_svr_id);
-				if (!dbResult.isEmpty()) {
-					int iDbSvrIpadrId = Integer.parseInt(String.valueOf(dbResult.get(0).get("db_svr_ipadr_id")+""));
-					instanceScaleVO.setDb_svr_ipadr_id(iDbSvrIpadrId);
-				} else {
-					instanceScaleVO.setDb_svr_ipadr_id(1);
-				}
-				
-				String min_clusters_val = instanceScaleVO.getMin_clusters();
-				
-				if ("".equals(min_clusters_val)) {
-					instanceScaleVO.setMin_clusters(null);
-				}
-
-				String max_clusters_val = instanceScaleVO.getMax_clusters();
-				
-				if ("".equals(max_clusters_val)) {
-					instanceScaleVO.setMax_clusters(null);
-				}
-				
-				String expansion_clusters_val = instanceScaleVO.getExpansion_clusters();
-				
-				if ("".equals(expansion_clusters_val)) {
-					instanceScaleVO.setExpansion_clusters(null);
-				}
-
-				instanceScaleDAO.insertAutoScaleSetting(instanceScaleVO);
-			} catch (Exception e) {
-				result = "F";
-				e.printStackTrace();
-			}
-		}
-
-		return result;
-	}
-	
-	/**
-	 * scale Auto setting 수정
-	 * 
-	 * @param instanceScaleVO
-	 * @throws Exception 
-	 */
-	@Override
-	public String updateAutoScaleSetting(InstanceScaleVO instanceScaleVO) throws Exception {
-		String result = "S";
-		List<Map<String, Object>> dbResult = null;
-
-		try{
-			//중복 체크
-			int autoScaleChk = instanceScaleDAO.selectAutoScaleSetChk(instanceScaleVO);
-			if (autoScaleChk > 0) {
-				result = "O";
-			}
-		}catch(Exception e){
-			e.printStackTrace();
-		}
-
-		//저장
-		if ("S".equals(result)) {
-			try{
-				int db_svr_id = instanceScaleVO.getDb_svr_id();
-				dbResult = instanceScaleDAO.selectSvrIpadrList(db_svr_id);
-				if (!dbResult.isEmpty()) {
-					int iDbSvrIpadrId = Integer.parseInt(String.valueOf(dbResult.get(0).get("db_svr_ipadr_id")+""));
-					instanceScaleVO.setDb_svr_ipadr_id(iDbSvrIpadrId);
-				} else {
-					instanceScaleVO.setDb_svr_ipadr_id(1);
-				}
-				
-				String min_clusters_val = instanceScaleVO.getMin_clusters();
-				
-				if ("".equals(min_clusters_val)) {
-					instanceScaleVO.setMin_clusters(null);
-				}
-
-				String max_clusters_val = instanceScaleVO.getMax_clusters();
-				
-				if ("".equals(max_clusters_val)) {
-					instanceScaleVO.setMax_clusters(null);
-				}
-				
-				String expansion_clusters_val = instanceScaleVO.getExpansion_clusters();
-				
-				if ("".equals(expansion_clusters_val)) {
-					instanceScaleVO.setExpansion_clusters(null);
-				}
-
-				instanceScaleDAO.updateAutoScaleSetting(instanceScaleVO);
-			} catch (Exception e) {
-				result = "F";
-				e.printStackTrace();
-			}
-		}
-
-		return result;
-	}
-	
-
-	/**
-	 * scale 설정정보 상세정보조회
-	 * 
-	 * @param instanceScaleVO
-	 * @throws Exception 
-	 */
-	@Override
-	public Map<String, Object> selectAutoScaleCngInfo(InstanceScaleVO instanceScaleVO) throws Exception {
-		return instanceScaleDAO.selectAutoScaleCngInfo(instanceScaleVO);
-	}
-	
-	/**
-	 * scale Auto setting 삭제
-	 * 
-	 * @param instanceScaleVO
-	 * @throws Exception 
-	 */
-	@Override
-	public String deleteAutoScaleSetting(InstanceScaleVO instanceScaleVO) throws Exception {
-		String result = "S";
-		
-		try{
-			JSONArray wrk_ids = (JSONArray) new JSONParser().parse(instanceScaleVO.getWrk_id_Rows());
-
-			for(int i=0; i<wrk_ids.size(); i++){
-				instanceScaleVO.setWrk_id(wrk_ids.get(i).toString());
-				instanceScaleDAO.deleteAutoScaleSetting(instanceScaleVO);
-			}
-		}catch(Exception e){
-			result = "F";
-			e.printStackTrace();
-		}
-
-		return result;
-	}
-	
-	/**
-	 * aws 설치 여부 조회
-	 * 
-	 * @param param
-	 * @throws Exception
-	 */
-	@Override
-	public Map<String, Object> scaleInstallChk(InstanceScaleVO instanceScaleVO) throws Exception {
-		Map<String, Object> param = new HashMap<String, Object>();
-		Map<String, Object> result = new JSONObject();
-		String scalejsonChk = "";
-
-		String id = instanceScaleVO.getLogin_id();
-		String resultChk = "";
-
-		try {
-			Map<String, Object> agentList = null;
-
-			param.put("search_gbn", "scaleAwsChk");
-			param.put("scale_set", "");
-			param.put("login_id", id);
-			param.put("instance_id", "");           //확인완료
-			param.put("db_svr_id", instanceScaleVO.getDb_svr_id());
-			param.put("process_id", "");
-			param.put("monitering", "");
-			param.put("scale_count", "");
-
-			agentList = scaleInAgent(param);
-
-			if (!agentList.isEmpty()) {
-				String resultCode = (String)agentList.get(ClientProtocolID.RESULT_CODE);
-
-				if (resultCode.equals("0")) {
-					scalejsonChk = (String)agentList.get(ClientProtocolID.RESULT_SUB_DATA);
-				}
-			}
-System.out.println("===scalejsonChk===" + scalejsonChk);
-			if (!scalejsonChk.isEmpty()) {
-				if (scalejsonChk.contains("no aws")) {
-					result.put("install_yn", "N");
-				} else {
-					result.put("install_yn", "Y");
-				}
-			} else {
-				result.put("install_yn", "N");
-			}
-		} catch (SQLException e) {
-			e.printStackTrace();
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-
-		return result;
-	}
-	
-	/**
 	 * scale list setting
 	 * 
 	 * @param instanceScaleVO
@@ -1240,93 +1336,5 @@ System.out.println("===scalejsonChk===" + scalejsonChk);
 		}
 
 		return iNumCnt;
-	}
-
-	/**
-	 * scale 공통 설정정보 상세정보조회
-	 * 
-	 * @param instanceScaleVO
-	 * @throws Exception 
-	 */
-	@Override
-	public Map<String, Object> selectAutoScaleComCngInfo(InstanceScaleVO instanceScaleVO) throws Exception {
-		return instanceScaleDAO.selectAutoScaleComCngInfo(instanceScaleVO);
-	}
-
-	/**
-	 * scale Auto setting 등록
-	 * 
-	 * @param instanceScaleVO
-	 * @throws Exception 
-	 */
-	@Override
-	public String updateAutoScaleCommonSetting(InstanceScaleVO instanceScaleVO) throws Exception {
-		String result = "S";
-		List<Map<String, Object>> dbResult = null;
-		Map<String, Object> recultChk = null;
-		
-		try{
-			//데이터 있는지 확인
-			recultChk = (Map<String, Object>) instanceScaleDAO.selectScaleAWSSvrInfo(instanceScaleVO);
-
-			if (recultChk == null) {
-				result = "O";
-			}
-		}catch(Exception e){
-			e.printStackTrace();
-		}
-
-		//저장
-		if ("S".equals(result)) {
-			try{
-				int db_svr_id = instanceScaleVO.getDb_svr_id();
-				dbResult = instanceScaleDAO.selectSvrIpadrList(db_svr_id);
-				if (!dbResult.isEmpty()) {
-					int iDbSvrIpadrId = Integer.parseInt(String.valueOf(dbResult.get(0).get("db_svr_ipadr_id")+""));
-					instanceScaleVO.setDb_svr_ipadr_id(iDbSvrIpadrId);
-				} else {
-					instanceScaleVO.setDb_svr_ipadr_id(1);
-				}
-				
-				String min_clusters_val = instanceScaleVO.getMin_clusters();
-				
-				if ("".equals(min_clusters_val)) {
-					instanceScaleVO.setMin_clusters(null);
-				}
-
-				String max_clusters_val = instanceScaleVO.getMax_clusters();
-				
-				if ("".equals(max_clusters_val)) {
-					instanceScaleVO.setMax_clusters(null);
-				}
-				
-				String auto_run_cycle_val = instanceScaleVO.getAuto_run_cycle();
-				
-				if ("".equals(auto_run_cycle_val)) {
-					instanceScaleVO.setExpansion_clusters(null);
-				}
-				
-				instanceScaleDAO.updateAutoScaleCommonSetting(instanceScaleVO);
-				
-				//설정 전체 수정
-				instanceScaleDAO.updateTotalAutoScaleSetting(instanceScaleVO);
-			} catch (Exception e) {
-				result = "F";
-				e.printStackTrace();
-			}
-		}
-
-		return result;
-	}
-	
-	/**
-	 * 공통 INS 조회
-	 * 
-	 * @param param
-	 * @throws Exception
-	 */
-	@Override
-	public Map<String, Object> scaleInstallList(InstanceScaleVO instanceScaleVO) throws Exception {
-		return (Map<String, Object>) instanceScaleDAO.selectScaleAWSSvrInfo(instanceScaleVO);
 	}
 }

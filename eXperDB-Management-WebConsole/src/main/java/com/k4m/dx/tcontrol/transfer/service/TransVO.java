@@ -28,6 +28,45 @@ public class TransVO {
 
 	private int trans_exrt_trg_tb_id;
 	private int trans_exrt_exct_tb_id;
+	
+	private String compression_type;
+	private String compression_nm;
+	
+	private String meta_data;
+	
+	private String kc_port_test;
+
+	public String getKc_port_test() {
+		return kc_port_test;
+	}
+
+	public void setKc_port_test(String kc_port_test) {
+		this.kc_port_test = kc_port_test;
+	}
+
+	public String getMeta_data() {
+		return meta_data;
+	}
+
+	public void setMeta_data(String meta_data) {
+		this.meta_data = meta_data;
+	}
+
+	public String getCompression_type() {
+		return compression_type;
+	}
+
+	public void setCompression_type(String compression_type) {
+		this.compression_type = compression_type;
+	}
+
+	public String getCompression_nm() {
+		return compression_nm;
+	}
+
+	public void setCompression_nm(String compression_nm) {
+		this.compression_nm = compression_nm;
+	}
 
 	public int getTrans_id() {
 		return trans_id;

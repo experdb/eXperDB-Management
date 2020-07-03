@@ -113,4 +113,14 @@ public interface TransService {
 	public void updateConnectInfo(TransVO transVO) throws Exception;
 
 
+	
+	/**
+	 * 압축형식
+	 * @param TransVO
+	 * @return List<TransVO>
+	 * @throws Exception
+	 */
+	public List<TransVO> selectCompressionTypeList() throws Exception;
+
+
 }

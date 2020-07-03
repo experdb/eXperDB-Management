@@ -50,5 +50,15 @@ public class ScriptServiceImpl implements ScriptService{
 	public List<Map<String, Object>> selectScriptHistoryList(ScriptVO scriptVO) throws Exception {
 		return ScriptDAO.selectScriptHistoryList(scriptVO);
 	}
-	
+
+	/**
+	 * 스크립트 스케줄 리스트 조회
+	 * @param 
+	 * @throws Exception
+	 */
+	@Override
+	public List<Map<String, Object>> selectScriptScheduleList(ScriptVO scriptVO) throws Exception {
+		return ScriptDAO.selectScriptScheduleList(scriptVO);
+	}
+
 }
