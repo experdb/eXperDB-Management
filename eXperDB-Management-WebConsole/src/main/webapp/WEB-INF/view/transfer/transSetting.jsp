@@ -46,7 +46,6 @@ a.tip span {
 a:hover.tip span {
     display: block;
 }
-
 </style>
 <script type="text/javascript">
 	var table = null;
@@ -1112,7 +1111,7 @@ a:hover.tip span {
 						<div class="card-body">
 							<form class="form-inline" onsubmit="return false">
 								<div class="input-group mb-2 mr-sm-2">
-									<input type="text" class="form-control" style="width:400px;" maxlength="25" id="connect_nm" name="connect_nm" onblur="this.value=this.value.trim()" placeholder='<spring:message code="data_transfer.connect_name" />'/>					
+									<input type="text" class="form-control" style="width:400px;" maxlength="25" id="connect_nm" name="connect_nm" onblur="this.value=this.value.trim()" placeholder='<spring:message code="data_transfer.connect_name_set" />'/>					
 								</div>
 
 								<button type="button" class="btn btn-inverse-primary btn-icon-text mb-2 btn-search-disable" id="btnSearch" onClick="fn_select();" >
@@ -1176,8 +1175,8 @@ a:hover.tip span {
 												<th width="100">Kafka-Connect <spring:message code="data_transfer.ip" /></th> <!-- Kafka-Connect 아이피 -->
 												<th width="100">Kafka-Connect <spring:message code="data_transfer.port" /></th> <!-- Kafka-Connect 포트 -->
 												<th width="100"><spring:message code="data_transfer.server_name" /></th> <!-- 서버명 -->
-												<th width="100"><spring:message code="data_transfer.connect_name" /></th> <!-- Connect 명 -->
-												<th width="100"><spring:message code="common.dbms_name" /></th> <!-- DBMS명 -->
+												<th width="100"><spring:message code="data_transfer.connect_name_set" /></th> <!-- Connect 명 -->
+												<th width="100"><spring:message code="data_transfer.database" /></th> <!-- DBMS명 -->
 												<th width="100"><spring:message code="data_transfer.snapshot_mode" /></th> <!-- 스냅샷 모드 -->
 												<th width="100"><spring:message code="data_transfer.compression_type" /></th> <!-- 압축형태 -->
 												<th width="100"><spring:message code="data_transfer.metadata" /> 

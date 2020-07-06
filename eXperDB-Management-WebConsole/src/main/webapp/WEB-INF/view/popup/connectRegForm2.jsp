@@ -28,7 +28,7 @@
 	var ins_kc_ip_msg = '<spring:message code="data_transfer.ip" />';
 	var ins_kc_port_msg = '<spring:message code="data_transfer.port" />';
 	var ins_databaseMsg = '<spring:message code="data_transfer.database" />';
-	var ins_connectNmMsg = '<spring:message code="data_transfer.connect_name" />';
+	var ins_connectNmMsg = '<spring:message code="data_transfer.connect_name_set" />';
 	var ins_conn_Test_msg = '<spring:message code="dbms_information.conn_Test" />';
 
 	$(window.document).ready(function() {
@@ -202,7 +202,7 @@
 		var connect_nm_val = nvlPrmSet($("#ins_connect_nm", "#insRegForm").val(), '');
 
 		if (connect_nm_val == "") {
-			showSwalIcon('<spring:message code="message.msg116" />', '<spring:message code="common.close" />', '', 'warning');
+			showSwalIcon('<spring:message code="data_transfer.msg18" />', '<spring:message code="common.close" />', '', 'warning');
 			return;
 		}
 		
@@ -215,10 +215,10 @@
 			success : function(result) {
 				if (result == "true") {
 					ins_connect_nm_Chk = "success";
-					showSwalIcon('<spring:message code="message.msg118" />', '<spring:message code="common.close" />', '', 'success');
+					showSwalIcon('<spring:message code="data_transfer.msg19" />', '<spring:message code="common.close" />', '', 'success');
 				} else {
 					ins_connect_nm_Chk = "fail";
-					showSwalIcon('<spring:message code="message.msg119" />', '<spring:message code="common.close" />', '', 'error');
+					showSwalIcon('<spring:message code="data_transfer.msg20" />', '<spring:message code="common.close" />', '', 'error');
 				}
 
 			},
@@ -584,10 +584,10 @@
 										<div class="form-group row" style="margin-bottom:10px;">
 											<label for="ins_connect_nm" class="col-sm-2 col-form-label-sm pop-label-index" style="padding-top:calc(0.5rem-1px);">
 												<i class="item-icon fa fa-dot-circle-o"></i>
-												<spring:message code="data_transfer.connect_name" />
+												<spring:message code="data_transfer.connect_name_set" />
 											</label>
 											<div class="col-sm-8">
-												<input type="text" class="form-control form-control-xsm" id="ins_connect_nm" name="ins_connect_nm" maxlength="50" placeholder='<spring:message code='message.msg116'/>' onblur="this.value=this.value.trim()" tabindex=3 />
+												<input type="text" class="form-control form-control-xsm" id="ins_connect_nm" name="ins_connect_nm" maxlength="50" placeholder='<spring:message code='data_transfer.msg18'/>' onblur="this.value=this.value.trim()" tabindex=3 />
 											</div>
 											<div class="col-sm-2">
 												<button type="button" class="btn btn-inverse-info btn-sm btn-icon-text" onclick="fn_insConNmCheck();"><i class="mdi mdi-lan-connect btn-icon-prepend"></i><spring:message code="common.overlap_check" /></button>

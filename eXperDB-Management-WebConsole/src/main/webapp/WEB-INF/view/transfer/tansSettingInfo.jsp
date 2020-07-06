@@ -116,7 +116,7 @@
 										<div class="form-group row" style="margin-bottom:10px;">
 											<label class="col-sm-2 col-form-label-sm pop-label-index" style="padding-top:calc(0.5rem-1px);">
 												<i class="item-icon fa fa-dot-circle-o"></i>
-												<spring:message code="data_transfer.connect_name" />
+												<spring:message code="data_transfer.connect_name_set" />
 											</label>
 											<div class="col-sm-8">
 												<span class="form-control-xsm float-left text-muted" id="d_connect_nm" ></span>

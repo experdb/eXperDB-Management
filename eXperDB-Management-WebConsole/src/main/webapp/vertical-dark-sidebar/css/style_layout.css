@@ -1225,7 +1225,10 @@ span.bold{font-weight:bold; color:#248afd; cursor:pointer;}
   text-align:center;
 }
 
-
+.table-myPage-td {
+  padding: 1.25rem 0.9375rem;
+  word-break:break-all;
+}
 
 
 

@@ -427,7 +427,7 @@
 										<div class="form-group row" style="margin-bottom:10px;">
 											<label for="mod_connect_nm" class="col-sm-2 col-form-label-sm pop-label-index" style="padding-top:calc(0.5rem-1px);">
 												<i class="item-icon fa fa-dot-circle-o"></i>
-												<spring:message code="data_transfer.connect_name" />
+												<spring:message code="data_transfer.connect_name_set" />
 											</label>
 											<div class="col-sm-8">
 												<input type="text" class="form-control form-control-xsm" id="mod_connect_nm" name="mod_connect_nm" maxlength="50" readonly />
