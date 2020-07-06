@@ -100,14 +100,14 @@
 				var msgResult = "";
 				if (result.RESULT == "FAIL" || result == "") {
 					msgResult= '<spring:message code="eXperDB_scale.msg2" />';
-					msgResult = scaleMsg + msgResult.replace( '<br/>', '\n' );
+					msgResult = scaleMsg + fn_strBrReplcae(msgResult);
 
 					showSwalIcon(msgResult, '<spring:message code="common.close" />', '', 'error');
 					$('#pop_layer_scale_exe').modal('show');
 					return false;
 				} else {
 					msgResult= '<spring:message code="eXperDB_scale.msg1" />';
-					msgResult = scaleMsg + msgResult.replace( '<br/>', '\n' );
+					msgResult = scaleMsg + fn_strBrReplcae(msgResult);
 
 					showSwalIcon(msgResult, '<spring:message code="common.close" />', '', 'success');
 					$('#pop_layer_scale_exe').modal('hide');

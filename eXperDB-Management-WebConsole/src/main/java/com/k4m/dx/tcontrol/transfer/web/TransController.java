@@ -13,7 +13,6 @@ import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
-import org.springframework.batch.core.scope.context.SynchronizationManagerSupport;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.transaction.PlatformTransactionManager;
@@ -39,8 +38,6 @@ import com.k4m.dx.tcontrol.cmmn.client.ClientProtocolID;
 import com.k4m.dx.tcontrol.common.service.AgentInfoVO;
 import com.k4m.dx.tcontrol.common.service.CmmnServerInfoService;
 import com.k4m.dx.tcontrol.common.service.HistoryVO;
-import com.k4m.dx.tcontrol.functions.transfer.service.ConnectorVO;
-import com.k4m.dx.tcontrol.functions.transfer.service.TransferVO;
 import com.k4m.dx.tcontrol.login.service.LoginVO;
 import com.k4m.dx.tcontrol.transfer.TransferSchemaInfo;
 import com.k4m.dx.tcontrol.transfer.TransferTableInfo;
@@ -328,8 +325,6 @@ public class TransController {
 		
 		int trans_exrt_trg_tb_id =0;
 
-		String tansExrttrgMapp_status = "success";
-		
 		try {
 			HttpSession session = request.getSession();
 			LoginVO loginVo = (LoginVO) session.getAttribute("session");
@@ -482,18 +477,12 @@ public class TransController {
 	@RequestMapping(value = "/popup/connectRegReForm.do")
 	public ModelAndView connectRegReForm(@ModelAttribute("historyVO") HistoryVO historyVO, HttpServletRequest request, @ModelAttribute("workVo") WorkVO workVO) {
 		ModelAndView mv = new ModelAndView("jsonView");
-		
-		JSONObject schemaResult = new JSONObject();
+
 		JSONObject tableResult = new JSONObject();
-		
-		
-		JSONObject serverObj = new JSONObject();
-		ClientInfoCmmn cic = new ClientInfoCmmn();
-		
+
 		List<Map<String, Object>> transInfo = null;
 		List<Map<String, Object>> mappInfo = null;
-		
-		JSONArray schemaArray = new JSONArray();
+
 		JSONArray tableArray = new JSONArray();
 
 		try {
@@ -742,13 +731,10 @@ public class TransController {
 		ModelAndView mv = new ModelAndView("jsonView");
 		
 		JSONObject tableResult = new JSONObject();
-		JSONObject serverObj = new JSONObject();
-		ClientInfoCmmn cic = new ClientInfoCmmn();
-		
+
 		List<Map<String, Object>> transInfo = null;
 		List<Map<String, Object>> mappInfo = null;
-		
-		JSONArray schemaArray = new JSONArray();
+
 		JSONArray tableArray = new JSONArray();
 
 		try {
@@ -760,7 +746,6 @@ public class TransController {
 
 			HttpSession session = request.getSession();
 			LoginVO loginVo = (LoginVO) session.getAttribute("session");
-			String usr_id = loginVo.getUsr_id();
 
 			int db_svr_id = Integer.parseInt(request.getParameter("db_svr_id"));
 			int trans_exrt_trg_tb_id = Integer.parseInt(request.getParameter("trans_exrt_trg_tb_id"));
@@ -814,74 +799,6 @@ public class TransController {
 		return mv;
 	}
 
-	
-	
-	
-
-	
-	
-	
-	
-	
-
-	
-	
-
-	
-	
-	
-	
-
-
-
-
-
-
-	
-	
-
-	
-	
-	
-
-	
-	
-	
-
-	
-	
-
-	
-	
-
-	
-	
-	
-
-
-
-			
-		
-
-		
-		
-
-
-		
-		
-
-
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
 	/**
 	 * 스키마리스트 등록 팝업 화면을 보여준다.
 	 * 
@@ -1092,5 +1009,138 @@ public class TransController {
 			
 		mv.setViewName("/popup/tableMapp");
 		return mv;
+	}
+	
+	/**
+	 * 다중 kafka-Connection 시작
+	 * 
+	 * @param transVO
+	 * @param request
+	 * @return
+	 * @throws Exception
+	 */
+	@RequestMapping(value = "/transTotExecute.do")
+	@ResponseBody
+	public String transTotExecute(@ModelAttribute("historyVO") HistoryVO historyVO, HttpServletRequest request, HttpServletResponse response) throws IOException, ParseException {
+
+		// Transaction 
+		DefaultTransactionDefinition def  = new DefaultTransactionDefinition();
+		def.setPropagationBehavior(TransactionDefinition.PROPAGATION_REQUIRED);
+		TransactionStatus status = txManager.getTransaction(def);
+
+		int db_svr_id = Integer.parseInt(request.getParameter("db_svr_id"));
+		String execute_gbn = request.getParameter("execute_gbn").toString();
+
+		String result = "fail";
+		String result_code = "";
+		int sucCnt = 0;
+		
+		String trans_id_Rows = "";
+		String trans_exrt_trg_tb_id_Rows = "";
+		String kc_ip_Rows = "";
+		String kc_port_Rows = "";
+		String connect_nm_Rows = "";
+		JSONArray trans_ids = null;
+		JSONArray trans_exrt_trg_tb_ids = null;
+		JSONArray kc_ips = null;
+		JSONArray kc_ports = null;
+		JSONArray connect_nms = null;
+
+		if (request.getParameter("trans_id_List") != null) {
+			trans_id_Rows = request.getParameter("trans_id_List").toString().replaceAll("&quot;", "\"");
+			trans_ids = (JSONArray) new JSONParser().parse(trans_id_Rows);
+		}
+		
+		if (request.getParameter("trans_exrt_trg_tb_id_List") != null) {
+			trans_exrt_trg_tb_id_Rows = request.getParameter("trans_exrt_trg_tb_id_List").toString().replaceAll("&quot;", "\"");
+			trans_exrt_trg_tb_ids = (JSONArray) new JSONParser().parse(trans_exrt_trg_tb_id_Rows);
+		}
+
+		if (request.getParameter("kc_ip_List") != null) {
+			kc_ip_Rows = request.getParameter("kc_ip_List").toString().replaceAll("&quot;", "\"");
+			kc_ips = (JSONArray) new JSONParser().parse(kc_ip_Rows);
+		}
+		
+		if (request.getParameter("kc_port_List") != null) {
+			kc_port_Rows = request.getParameter("kc_port_List").toString().replaceAll("&quot;", "\"");
+			kc_ports = (JSONArray) new JSONParser().parse(kc_port_Rows);
+		}
+
+		if (request.getParameter("connect_nm_List") != null) {
+			connect_nm_Rows = request.getParameter("connect_nm_List").toString().replaceAll("&quot;", "\"");
+			connect_nms = (JSONArray) new JSONParser().parse(connect_nm_Rows);
+		}
+
+		Map<String, Object> connStartResult = new  HashMap<String, Object>();
+
+		List<Map<String, Object>> transInfo = null;
+		List<Map<String, Object>> mappInfo = null;
+
+		try {			
+			if (trans_exrt_trg_tb_ids != null && trans_exrt_trg_tb_ids.size() > 0) {
+				
+				AES256 dec = new AES256(AES256_KEY.ENC_KEY);
+	
+				DbServerVO schDbServerVO = new DbServerVO();
+				schDbServerVO.setDb_svr_id(db_svr_id);
+				DbServerVO dbServerVO = (DbServerVO) cmmnServerInfoService.selectServerInfo(schDbServerVO);
+				
+				String strIpAdr = dbServerVO.getIpadr();
+				AgentInfoVO vo = new AgentInfoVO();
+				vo.setIPADR(strIpAdr);
+				AgentInfoVO agentInfo = (AgentInfoVO) cmmnServerInfoService.selectAgentInfo(vo);
+
+				String IP = dbServerVO.getIpadr();
+				int PORT = agentInfo.getSOCKET_PORT();
+
+				dbServerVO.setSvr_spr_scm_pwd(dec.aesDecode(dbServerVO.getSvr_spr_scm_pwd()));
+				ClientInfoCmmn cic = new ClientInfoCmmn();
+
+				for(int i=0; i<trans_exrt_trg_tb_ids.size(); i++){
+					if ("active".equals(execute_gbn)) {
+						int trans_exrt_trg_tb_id = Integer.parseInt(trans_exrt_trg_tb_ids.get(i).toString());
+						int trans_id = Integer.parseInt(trans_ids.get(i).toString());
+						
+						transInfo = transService.selectTransInfo(trans_id);	
+						System.out.println("전송정보 : "+transInfo.get(0));
+						
+						mappInfo = transService.selectMappInfo(trans_exrt_trg_tb_id);
+						System.out.println("매핑정보 : "+mappInfo.get(0));
+
+						connStartResult = cic.connectStart(IP, PORT, dbServerVO, transInfo, mappInfo);
+					} else {
+						String kc_ip = kc_ips.get(i).toString();
+						String kc_port = kc_ports.get(i).toString();
+						String connect_nm = connect_nms.get(i).toString();
+						String trans_id_str = trans_ids.get(i).toString();
+
+						String strCmd =" curl -i -X DELETE -H 'Accept:application/json' "+kc_ip+":"+kc_port+"/connectors/"+connect_nm;
+
+						connStartResult = cic.connectStop(IP, PORT, strCmd, trans_id_str);
+					}
+
+					if (connStartResult != null) {
+						result_code = connStartResult.get("RESULT_CODE").toString();
+						if ("0".equals(result_code)) {
+							//result = "success";
+							sucCnt = sucCnt + 1;
+						}
+					}
+				}
+				
+				if (sucCnt == trans_exrt_trg_tb_ids.size() ) {
+					result = "success";
+				} else {
+					result = "fail";
+				}
+			}
+		} catch (Exception e) {
+			result = "fail";
+			e.printStackTrace();
+			txManager.rollback(status);
+		}finally{
+			txManager.commit(status);
+		}
+		return result;
 	}
 }

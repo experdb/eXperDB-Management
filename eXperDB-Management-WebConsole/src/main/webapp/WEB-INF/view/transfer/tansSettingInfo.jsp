@@ -43,8 +43,8 @@
 			 ]
 		});
 		
-		info_connector_tableList.tables().header().to$().find('th:eq(0)').css('min-width', '161px');
-		info_connector_tableList.tables().header().to$().find('th:eq(1)').css('min-width', '162px');
+		info_connector_tableList.tables().header().to$().find('th:eq(0)').css('min-width', '397px');
+		info_connector_tableList.tables().header().to$().find('th:eq(1)').css('min-width', '397px');
 
 		$(window).trigger('resize'); 
 	}

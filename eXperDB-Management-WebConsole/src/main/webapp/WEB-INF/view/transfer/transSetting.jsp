@@ -54,6 +54,9 @@ a:hover.tip span {
 	
 	var trans_id_List = [];
 	var trans_exrt_trg_tb_id_List = [];
+	var kc_ip_List = [];
+	var kc_port_List = [];
+	var connect_nm_List = [];
 
 	/* ********************************************************
 	 * scale setting 초기 실행
@@ -218,6 +221,7 @@ a:hover.tip span {
 		
 		$('#pop_confirm_multi_md').modal("show");
 	}
+
 	/* ********************************************************
 	 * transfer Data Fetch List
 	 ******************************************************** */
@@ -307,7 +311,7 @@ a:hover.tip span {
 		
 		if(table.row('.selected').data().exe_status == "TC001501"){
 			validateMsg = '<spring:message code="data_transfer.msg11"/>';
-			showSwalIcon(validateMsg.replace("<br/>", "\n"), '<spring:message code="common.close" />', '', 'error');
+			showSwalIcon(fn_strBrReplcae(validateMsg), '<spring:message code="common.close" />', '', 'error');
 			return;
 		}
 		
@@ -370,15 +374,15 @@ a:hover.tip span {
 		$("#mod_snapshot_mode", "#modRegForm").val(snapshot_mode_re).prop("selected", true);
 
 		//압축형태 추가
-		$("#mod_compression_type", "#modRegForm").val(nvlPrmSet(result.compression_type, "")).prop("selected", true);
+		$("#mod_compression_type", "#modRegForm").val(nvlPrmSet(result.compression_type, "TC003701")).prop("selected", true);
 		
 		//메타데이타 설정
 		$("#mod_meta_data", "#modRegForm").val(nvlPrmSet(result.meta_data, ""));
 		
-		if (nvlPrmSet(result.meta_data, "") == "OFF") {
-			$("input:checkbox[id='mod_meta_data_chk']").prop("checked", false); 
-		} else {
+		if (nvlPrmSet(result.meta_data, "") == "ON") {
 			$("input:checkbox[id='mod_meta_data_chk']").prop("checked", true);
+		} else {
+			$("input:checkbox[id='mod_meta_data_chk']").prop("checked", false); 
 		}
 	
 		//스냅샷 모드 change
@@ -396,7 +400,10 @@ a:hover.tip span {
 		
 		mod_connector_tableList.rows({selected: true}).deselect();
 		mod_connector_tableList.clear().draw();
-		mod_connector_tableList.rows.add(result.tables.data).draw();	
+		
+		if (result.tables.data != null) {
+			mod_connector_tableList.rows.add(result.tables.data).draw();	
+		}
 	}
 	
 	/* ********************************************************
@@ -492,7 +499,7 @@ a:hover.tip span {
 
 		if (i_exe_status > 0) {
 			validateMsg = '<spring:message code="data_transfer.msg7"/>';
-			showSwalIcon(validateMsg.replace("<br/>", "\n"), '<spring:message code="common.close" />', '', 'error');
+			showSwalIcon(fn_strBrReplcae(validateMsg), '<spring:message code="common.close" />', '', 'error');
 			return;
 		}
 		
@@ -513,6 +520,8 @@ a:hover.tip span {
 			fn_delete();
 		} else if (gbn == "con_start" || gbn == "con_end") {
 			fn_act_execute(gbn);
+		} else if (gbn == "active" || gbn == "disabled") {
+			fn_tot_act_execute(gbn);
 		}
 	}
 
@@ -520,12 +529,18 @@ a:hover.tip span {
 	 * confirm result
 	 ******************************************************** */
 	function fnc_confirmCancelRst(gbn){
-		var canCheckId = 'transActivation' + $('#chk_act_row', '#findList').val();
-		
-		if (gbn == "con_start") {
-			$("input:checkbox[id='" + canCheckId + "']").prop("checked", false); 
-		} else if (gbn == "con_end") {
-			$("input:checkbox[id='" + canCheckId + "']").prop("checked", true); 
+		if ($('#chk_act_row', '#findList') != null) {
+			var canCheckId = 'transActivation' + $('#chk_act_row', '#findList').val();
+			
+			if (gbn == "con_start") {
+				$("input:checkbox[id='" + canCheckId + "']").prop("checked", false); 
+			} else if (gbn == "con_end") {
+				$("input:checkbox[id='" + canCheckId + "']").prop("checked", true); 
+			} else if (gbn == "check_con_end") {
+				$("input:checkbox[id='" + canCheckId + "']").prop("checked", true); 
+			} else if (gbn == "check_con_start") {
+				$("input:checkbox[id='" + canCheckId + "']").prop("checked", true); 
+			}
 		}
 	}
 
@@ -605,7 +620,7 @@ a:hover.tip span {
 
 					if (result == null) {
 						validateMsg = '<spring:message code="data_transfer.msg10"/>';
-						showSwalIcon(validateMsg.replace("<br/>", "\n"), '<spring:message code="common.close" />', '', 'error');
+						showSwalIcon(fn_strBrReplcae(validateMsg), '<spring:message code="common.close" />', '', 'error');
 						
 						$("input:checkbox[id='" + checkId + "']").prop("checked", false); 
 						return;
@@ -614,7 +629,7 @@ a:hover.tip span {
 							fn_select();
 						} else {
 							validateMsg = '<spring:message code="data_transfer.msg10"/>';
-							showSwalIcon(validateMsg.replace("<br/>", "\n"), '<spring:message code="common.close" />', '', 'error');
+							showSwalIcon(fn_strBrReplcae(validateMsg), '<spring:message code="common.close" />', '', 'error');
 							
 							$("input:checkbox[id='" + checkId + "']").prop("checked", false);
 							return;
@@ -653,7 +668,7 @@ a:hover.tip span {
 
 					if (result == null) {
 						validateMsg = '<spring:message code="data_transfer.msg10"/>';
-						showSwalIcon(validateMsg.replace("<br/>", "\n"), '<spring:message code="common.close" />', '', 'error');
+						showSwalIcon(fn_strBrReplcae(validateMsg), '<spring:message code="common.close" />', '', 'error');
 						
 						$("input:checkbox[id='" + checkId + "']").prop("checked", true); 
 						return;
@@ -662,7 +677,7 @@ a:hover.tip span {
 							fn_select();
 						} else {
 							validateMsg = '<spring:message code="data_transfer.msg10"/>';
-							showSwalIcon(validateMsg.replace("<br/>", "\n"), '<spring:message code="common.close" />', '', 'error');
+							showSwalIcon(fn_strBrReplcae(validateMsg), '<spring:message code="common.close" />', '', 'error');
 							
 							$("input:checkbox[id='" + checkId + "']").prop("checked", true);
 							return;
@@ -781,9 +796,7 @@ a:hover.tip span {
 			info_meta_data_chk += "</div>";
 		}
 		$("#d_meta_data_chk", "#infoRegForm").html(info_meta_data_chk);
-		
-		info_connector_tableList.clear().draw();
-		
+
 		info_connector_tableList.rows({selected: true}).deselect();
 		info_connector_tableList.clear().draw();
 		
@@ -793,6 +806,241 @@ a:hover.tip span {
 
 		$('a[href="#infoSettingTab"]').tab('show');
 	}
+	
+	/* ********************************************************
+	 * 선택 활성화 클릭
+	 ******************************************************** */
+	function fn_activaExecute_click(tot_con_gbn){
+		var validateMsg = "";
+		var datas = table.rows('.selected').data();
+		var i_exe_status = 0;
+		var i_un_exe_status = 0;
+		trans_id_List = [];
+		trans_exrt_trg_tb_id_List = [];
+
+		kc_ip_List = [];
+		kc_port_List = [];
+		connect_nm_List = [];
+
+		if (datas.length <= 0) {
+			showSwalIcon('<spring:message code="message.msg35"/>', '<spring:message code="common.close" />', '', 'error');
+			return;
+		}
+
+		if (tot_con_gbn == "active") {
+			for (var i = 0; i < datas.length; i++) {
+	 			if(datas[i].exe_status == "TC001501"){
+					i_exe_status = i_exe_status + 1;
+				} else {
+					i_un_exe_status = i_un_exe_status + 1;
+
+		 			trans_id_List.push(datas[i].trans_id);   
+		 			trans_exrt_trg_tb_id_List.push(datas[i].trans_exrt_trg_tb_id);
+				}
+			}
+			
+			//실행 내역이 없는 경우
+			if (i_un_exe_status <= 0) {
+				showSwalIcon('<spring:message code="data_transfer.msg17" />', '<spring:message code="common.close" />', '', 'error');
+				return;
+			}
+
+			if (i_exe_status > 0) {
+				validateMsg = '<spring:message code="data_transfer.msg13"/>';
+			} else {
+				validateMsg = '<spring:message code="data_transfer.msg12"/>';
+			}
+			
+			
+			
+		} else {
+			for (var i = 0; i < datas.length; i++) {
+				console.log("===datas[i].exe_status==" + datas[i].exe_status);
+ 	 			if(datas[i].exe_status == "TC001501"){
+	 				i_exe_status = i_exe_status + 1;
+	 				
+		 			trans_id_List.push(datas[i].trans_id);   
+		 			trans_exrt_trg_tb_id_List.push(datas[i].trans_exrt_trg_tb_id);
+		 			kc_ip_List.push(datas[i].kc_ip);
+		 			kc_port_List.push(datas[i].kc_port);
+		 			connect_nm_List.push(datas[i].connect_nm);
+		 			
+				} else {
+					i_un_exe_status = i_un_exe_status + 1;
+				}
+			}
+			
+			//실행 내역이 없는 경우
+			if (i_exe_status <= 0) {
+				showSwalIcon('<spring:message code="data_transfer.msg17" />', '<spring:message code="common.close" />', '', 'error');
+				return;
+			}
+
+			if (i_un_exe_status > 0) {
+				validateMsg = '<spring:message code="data_transfer.msg15"/>';
+			} else {
+				validateMsg = '<spring:message code="data_transfer.msg14"/>';
+			}
+		}
+
+		confile_title = '<spring:message code="menu.trans_management" />' + " " + '<spring:message code="data_transfer.transfer_activity" />';
+
+		$('#con_multi_gbn', '#findConfirmMulti').val(tot_con_gbn);
+		$('#confirm_multi_tlt').html(confile_title);
+		$('#confirm_multi_msg').html(validateMsg);
+		$('#pop_confirm_multi_md').modal("show");
+	}
+	
+	
+	/* ********************************************************
+	 * 선택 활성화 실행
+	 ******************************************************** */
+	function fn_tot_act_execute(exeGbn){
+		//버튼 제어
+		fn_buttonExecuteAut("start", exeGbn);
+
+		if (exeGbn == "active") {
+			$.ajax({
+				url : "/transTotExecute.do",
+			  	data : {
+			  		execute_gbn : exeGbn,
+					db_svr_id : $("#db_svr_id", "#findList").val(),
+			  		trans_id_List : JSON.stringify(trans_id_List),
+			  		trans_exrt_trg_tb_id_List : JSON.stringify(trans_exrt_trg_tb_id_List)
+			  	},
+				dataType : "json",
+				type : "post",
+				beforeSend: function(xhr) {
+					xhr.setRequestHeader("AJAX", true);
+				},
+				error : function(xhr, status, error) {
+					//버튼제어
+					fn_buttonExecuteAut("end", "");
+					
+					if(xhr.status == 401) {
+						showSwalIcon('<spring:message code="message.msg02" />', '<spring:message code="common.close" />', '', 'error');
+						top.location.href = "/";
+					} else if(xhr.status == 403) {
+						showSwalIcon('<spring:message code="message.msg03" />', '<spring:message code="common.close" />', '', 'error');
+						top.location.href = "/";
+					} else {
+						showSwalIcon("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""), '<spring:message code="common.close" />', '', 'error');
+					}
+				},
+				success : function(result) {
+					//버튼제어
+					fn_buttonExecuteAut("end", "");
+
+					if (result == null) {
+						validateMsg = '<spring:message code="data_transfer.msg10"/>';
+						showSwalIcon(fn_strBrReplcae(validateMsg), '<spring:message code="common.close" />', '', 'error');
+						return;
+					} else {
+						if (result == "success") {
+							showSwalIcon('<spring:message code="data_transfer.msg16" />', '<spring:message code="common.close" />', '', 'success');
+							fn_select();
+						} else {
+							validateMsg = '<spring:message code="data_transfer.msg10"/>';
+							showSwalIcon(fn_strBrReplcae(validateMsg), '<spring:message code="common.close" />', '', 'error');
+							return;
+						}
+					}
+				}
+			});
+		} else {
+			$.ajax({
+				url : "/transTotExecute.do",
+			  	data : {
+			  		execute_gbn : exeGbn,
+					db_svr_id : $("#db_svr_id", "#findList").val(),
+			  		trans_id_List : JSON.stringify(trans_id_List),
+			  		trans_exrt_trg_tb_id_List : JSON.stringify(trans_exrt_trg_tb_id_List),
+			  		kc_ip_List : JSON.stringify(kc_ip_List),
+			  		kc_port_List : JSON.stringify(kc_port_List),
+			  		connect_nm_List : JSON.stringify(connect_nm_List)
+			  	},
+				dataType : "json",
+				type : "post",
+				beforeSend: function(xhr) {
+					xhr.setRequestHeader("AJAX", true);
+				},
+				error : function(xhr, status, error) {
+					//버튼제어
+					fn_buttonExecuteAut("end", "");
+
+					if(xhr.status == 401) {
+						showSwalIcon('<spring:message code="message.msg02" />', '<spring:message code="common.close" />', '', 'error');
+						top.location.href = "/";
+					} else if(xhr.status == 403) {
+						showSwalIcon('<spring:message code="message.msg03" />', '<spring:message code="common.close" />', '', 'error');
+						top.location.href = "/";
+					} else {
+						showSwalIcon("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""), '<spring:message code="common.close" />', '', 'error');
+					}
+				},
+				success : function(result) {	
+					//버튼제어
+					fn_buttonExecuteAut("end", "");
+
+					if (result == null) {
+						validateMsg = '<spring:message code="data_transfer.msg10"/>';
+						showSwalIcon(fn_strBrReplcae(validateMsg), '<spring:message code="common.close" />', '', 'error');
+						return;
+					} else {
+						if (result == "success") {
+							showSwalIcon('<spring:message code="data_transfer.msg16" />', '<spring:message code="common.close" />', '', 'success');
+							fn_select();
+						} else {
+							validateMsg = '<spring:message code="data_transfer.msg10"/>';
+							showSwalIcon(fn_strBrReplcae(validateMsg), '<spring:message code="common.close" />', '', 'error');
+							return;
+						}
+					}
+				}
+			});
+		}
+	}
+	
+	/* ********************************************************
+	 * button 제어
+	 ******************************************************** */
+	function fn_buttonExecuteAut(autIngGbn, exeIngGbn){
+		var strMsg = "";
+ 		if(autIngGbn == "start"){
+ 			if (exeIngGbn == "active") {
+				strMsg = "<i class='fa fa-spin fa-spinner btn-icon-prepend'></i>";
+				strMsg += '<spring:message code="data_transfer.save_select_active" />' + ' ' + '<spring:message code="restore.progress" />';
+
+				$("#btnChoActive").html(strMsg);
+ 			} else {
+				strMsg = "<i class='fa fa-spin fa-spinner btn-icon-prepend'></i>";
+				strMsg += '<spring:message code="data_transfer.save_select_disabled" />' + ' ' + '<spring:message code="restore.progress" />';
+
+				$("#btnChoDisabled").html(strMsg);
+ 			}
+
+			$("#btnChoActive").prop("disabled", "disabled");
+			$("#btnChoDisabled").prop("disabled", "disabled");
+
+			$("#btnDelete").prop("disabled", "disabled");
+			$("#btnModify").prop("disabled", "disabled");
+			$("#btnInsert").prop("disabled", "disabled");
+			$("#btnSearch").prop("disabled", "disabled");
+		}else{
+			strMsg = '<i class="fa fa-spin fa-cog btn-icon-prepend"></i>';
+			$("#btnChoActive").html(strMsg + '<spring:message code="data_transfer.save_select_active" />');
+			$("#btnChoDisabled").html(strMsg + '<spring:message code="data_transfer.save_select_disabled" />');
+			
+			$("#btnChoActive").prop("disabled", "");
+			$("#btnChoDisabled").prop("disabled", "");
+
+			$("#btnDelete").prop("disabled", "");
+			$("#btnModify").prop("disabled", "");
+			$("#btnInsert").prop("disabled", "");
+			$("#btnSearch").prop("disabled", "");
+		} 
+	}
+	
 </script>
 
 <%@include file="./../popup/connectRegReForm.jsp"%>
@@ -877,25 +1125,19 @@ a:hover.tip span {
 					<div class="row">
 						<div class="col-12">
 							<div class="template-demo">	
-								<button type="button" class="btn btn-outline-primary btn-icon-text" id="btnChoActive" onClick="fn_useChkSave('active');" data-toggle="modal">
+								<button type="button" class="btn btn-outline-primary btn-icon-text" id="btnChoActive" onClick="fn_activaExecute_click('active');" data-toggle="modal">
 									<i class="fa fa-spin fa-cog btn-icon-prepend "></i><spring:message code="data_transfer.save_select_active" />
 								</button>
-								<button type="button" class="btn btn-outline-primary btn-icon-text" id="btnChoDisabled" onClick="fn_useChkSave('disabled');" data-toggle="modal">
+								<button type="button" class="btn btn-outline-primary btn-icon-text" id="btnChoDisabled" onClick="fn_activaExecute_click('disabled');" data-toggle="modal">
 									<i class="fa fa-spin fa-cog btn-icon-prepend "></i><spring:message code="data_transfer.save_select_disabled" />
 								</button>
 													
 								<button type="button" class="btn btn-outline-primary btn-icon-text float-right" id="btnDelete" onClick="fn_del_confirm();" >
 									<i class="ti-trash btn-icon-prepend "></i><spring:message code="common.delete" />
 								</button>
-<%-- 								<button type="button" class="btn btn-outline-primary btn-icon-text float-right" id="btnModify" onClick="fn_update();" data-toggle="modal">
-									<i class="ti-pencil-alt btn-icon-prepend "></i><spring:message code="common.modify" />
-								</button> --%>
 								<button type="button" class="btn btn-outline-primary btn-icon-text float-right" id="btnModify" onClick="fn_newUpdate();" data-toggle="modal">
 									<i class="ti-pencil-alt btn-icon-prepend "></i><spring:message code="common.modify" />
 								</button>
-<%-- 								<button type="button" class="btn btn-outline-primary btn-icon-text float-right" id="btnInsert" onClick="fn_insert();" data-toggle="modal">
-									<i class="ti-pencil btn-icon-prepend "></i><spring:message code="common.registory" />
-								</button> --%>
 								<button type="button" class="btn btn-outline-primary btn-icon-text float-right" id="btnInsert" onClick="fn_newInsert();" data-toggle="modal">
 									<i class="ti-pencil btn-icon-prepend "></i><spring:message code="common.registory" />
 								</button>
@@ -938,12 +1180,7 @@ a:hover.tip span {
 												<th width="100"><spring:message code="common.dbms_name" /></th> <!-- DBMS명 -->
 												<th width="100"><spring:message code="data_transfer.snapshot_mode" /></th> <!-- 스냅샷 모드 -->
 												<th width="100"><spring:message code="data_transfer.compression_type" /></th> <!-- 압축형태 -->
-												<th width="100"><spring:message code="data_transfer.metadata" />
-<%-- 	 			<input type="checkbox" checked data-toggle="toggle" data-on="<i class='fa fa-play'></i> Play" data-off="<i class='fa fa-pause'></i> Pause" data-size="small" data-onstyle="info" data-offstyle="danger" data-style="slow">
-
-															<div class="example">
-				<input type="checkbox" checked data-toggle="toggle" data-on="Hello<br>World" data-off="Goodbye<br>World">
-			</div> --%>
+												<th width="100"><spring:message code="data_transfer.metadata" /> 
 												</th> <!-- 메타데이타 -->
 												<th width="0"></th>
 												<th width="0"></th>

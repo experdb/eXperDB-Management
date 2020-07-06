@@ -158,12 +158,21 @@
 	 ******************************************************** */
  	function fn_trableListModRemove(result){
 		var connTableRows = mod_connector_tableList.rows().data();
+		var iChkCnt = 0;
 
 		if (connTableRows.length > 0 && result.length > 0) {
 			for(var i=0; i<result.length; i++){
 				for(var j=0; j<connTableRows.length; j++){
-					if(result[i].table_name == connTableRows[j].table_name){
-						result.splice(i, 1);
+ 					if (result[i].table_name != null && connTableRows[j].table_name != null) {
+						if(result[i].table_name == connTableRows[j].table_name){
+							iChkCnt = iChkCnt + 1;
+						}
+						if (j == (connTableRows.length -1) && iChkCnt > 0 ) {
+							
+							result.splice(i, 1);
+							iChkCnt = 0;
+							i--; //row 삭제로 인해 추가로 -1 필요
+						}
 					}
 				}
 			}

@@ -826,7 +826,7 @@
 					}
  					
  					if (result.rslt_msg != "") {
- 						result.rslt_msg = result.rslt_msg.replace("<br/>", "\n");
+ 						result.rslt_msg = fn_strBrReplcae(result);
  					}
 
 					$("#d_scaleWrkLogInfo").html(result.rslt_msg);
