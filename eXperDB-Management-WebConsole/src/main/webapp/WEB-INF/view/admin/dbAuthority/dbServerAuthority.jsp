@@ -1,7 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags"%>
 
-<%@include file="../../cmmn/cs.jsp"%>
+<%@ include file="../../cmmn/cs2.jsp"%>
 
 <%
 	/**
@@ -18,11 +18,6 @@
 	*
 	*/
 %>
-
-<style>
-table {border-spacing: 0}
-table th, table td {padding: 0}
-</style>
 
 <script>
 	var userTable = null;
@@ -81,11 +76,10 @@ table th, table td {padding: 0}
 				svr_server = result;
 				var parseData = $.parseJSON(result);
 			 	var html1 = "";
-			 	html1+='<table class="db_table">';
-				html1+='<caption>DB서버 메뉴</caption>';
+			 	html1+='<table class="table">';
 				html1+='<colgroup>';
-				html1+=	'<col style="width:70%" />';
-				html1+=	'<col style="width:30%" />';
+				html1+=	'<col style="width:85%" />';
+				html1+=	'<col style="width:15%" />';
 				html1+='</colgroup>';
 				html1+='<thead>';
 				html1+=	'<tr>';
@@ -96,8 +90,8 @@ table th, table td {padding: 0}
 	 			$(result).each(function (index, item) {
 					//var html = "";
  					html1+='<tbody>';
-					html1+='<tr class="db_tit">';
-					html1+='		<th scope="row">'+item.db_svr_nm+'</th>';
+					html1+='<tr class="bg-primary text-white">';
+					html1+='		<td>'+item.db_svr_nm+'</td>';
 					html1+='		<td><div class="inp_chk"><input type="checkbox" id="'+item.db_svr_id+'" onClick="fn_allCheck(\''+item.db_svr_id+'\');">';
 					html1+='		<label for="'+item.db_svr_id+'"></lavel></div></td>';
 					html1+='	</tr>';
@@ -106,7 +100,7 @@ table th, table td {padding: 0}
 
 						/* 2020.04.09 scale_cng 추가 start */
 						html1+='	<tr>';
-						html1+='		<th scope="row"><spring:message code="menu.eXperDB_scale_settings" /></th>';
+						html1+='		<td><spring:message code="menu.eXperDB_scale_settings" /></td>';
 						html1+='		<td>';
 						html1+='			<div class="inp_chk">';
 						html1+='				<input type="checkbox" id="'+item.db_svr_id+'_scale_cng" name="eXperDB_scale_cng" onClick="fn_userCheck();"/>';
@@ -118,7 +112,7 @@ table th, table td {padding: 0}
 						
 						/* 2020.03.03 scale 추가 start */
 						html1+='	<tr>';
-						html1+='		<th scope="row"><spring:message code="menu.scale_manual" /></th>';
+						html1+='		<td><spring:message code="menu.scale_manual" /></td>';
 						html1+='		<td>';
 						html1+='			<div class="inp_chk">';
 						html1+='				<input type="checkbox" id="'+item.db_svr_id+'_scale" name="eXperDB_scale" onClick="fn_userCheck();"/>';
@@ -130,7 +124,7 @@ table th, table td {padding: 0}
 						
 						/* 2020.04.03 scale_hist 추가 start */
 						html1+='	<tr>';
-						html1+='		<th scope="row"><spring:message code="menu.eXperDB_scale_history" /></th>';
+						html1+='		<td><spring:message code="menu.eXperDB_scale_history" /></td>';
 						html1+='		<td>';
 						html1+='			<div class="inp_chk">';
 						html1+='				<input type="checkbox" id="'+item.db_svr_id+'_scale_hist" name="eXperDB_scale_hist" onClick="fn_userCheck();"/>';
@@ -142,7 +136,7 @@ table th, table td {padding: 0}
 					}
 
 					html1+='	<tr>';
-					html1+='		<th scope="row"><spring:message code="menu.backup_settings" /></th>';
+					html1+='		<td><spring:message code="menu.backup_settings" /></td>';
 					html1+='		<td>';
 					html1+='			<div class="inp_chk">';
 					html1+='				<input type="checkbox" id="'+item.db_svr_id+'_bck_cng" name="bck_cng_aut" onClick="fn_userCheck();"/>';
@@ -151,7 +145,7 @@ table th, table td {padding: 0}
 					html1+='		</td>';
 					html1+='	</tr>';
 					html1+='<tr>';
-					html1+=	'<th scope="row"><spring:message code="menu.backup_history" /></th>';
+					html1+=	'<td><spring:message code="menu.backup_history" /></td>';
 					html1+=	'<td>';
 					html1+=		'<div class="inp_chk">';
 					html1+=			'<input type="checkbox" id="'+item.db_svr_id+'_bck_hist" name="bck_hist_aut" onClick="fn_userCheck();" />';
@@ -160,7 +154,7 @@ table th, table td {padding: 0}
 					html1+=	'</td>';
 					html1+='</tr>';
 					html1+='<tr>';
-					html1+=	'<th scope="row"><spring:message code="menu.backup_scheduler" /></th>';
+					html1+=	'<td><spring:message code="menu.backup_scheduler" /></td>';
 					html1+=	'<td>';
 					html1+=		'<div class="inp_chk">';
 					html1+=			'<input type="checkbox" id="'+item.db_svr_id+'_bck_scdr" name="bck_scdr_aut" onClick="fn_userCheck();" />';
@@ -169,7 +163,7 @@ table th, table td {padding: 0}
 					html1+=	'</td>';
 					html1+='</tr>';
 					html1+='<tr>';
-					html1+=	'<th scope="row"><spring:message code="restore.Emergency_Recovery" /></th>';
+					html1+=	'<td><spring:message code="restore.Emergency_Recovery" /></td>';
 					html1+=	'<td>';
 					html1+=		'<div class="inp_chk">';
 					html1+=			'<input type="checkbox" id="'+item.db_svr_id+'_emergency_restore" name="emergency_restore_aut" onClick="fn_userCheck();" />';
@@ -178,7 +172,7 @@ table th, table td {padding: 0}
 					html1+=	'</td>';
 					html1+='</tr>';
 					html1+='<tr>';
-					html1+=	'<th scope="row"><spring:message code="restore.Point-in-Time_Recovery" /></th>';
+					html1+=	'<td><spring:message code="restore.Point-in-Time_Recovery" /></td>';
 					html1+=	'<td>';
 					html1+=		'<div class="inp_chk">';
 					html1+=			'<input type="checkbox" id="'+item.db_svr_id+'_point_restore" name="point_restore_aut" onClick="fn_userCheck();" />';
@@ -187,7 +181,7 @@ table th, table td {padding: 0}
 					html1+=	'</td>';
 					html1+='</tr>';
 					html1+='<tr>';
-					html1+=	'<th scope="row"><spring:message code="restore.Dump_Recovery" /></th>';
+					html1+=	'<td><spring:message code="restore.Dump_Recovery" /></td>';
 					html1+=	'<td>';
 					html1+=		'<div class="inp_chk">';
 					html1+=			'<input type="checkbox" id="'+item.db_svr_id+'_dump_restore" name="dump_restore_aut" onClick="fn_userCheck();" />';
@@ -196,7 +190,7 @@ table th, table td {padding: 0}
 					html1+=	'</td>';
 					html1+='</tr>';
 					html1+='<tr>';
-					html1+=	'<th scope="row"><spring:message code="restore.Recovery_history" /></th>';
+					html1+=	'<td><spring:message code="restore.Recovery_history" /></td>';
 					html1+=	'<td>';
 					html1+=		'<div class="inp_chk">';
 					html1+=			'<input type="checkbox" id="'+item.db_svr_id+'_restore_hist" name="restore_hist_aut" onClick="fn_userCheck();" />';
@@ -205,7 +199,7 @@ table th, table td {padding: 0}
 					html1+=	'</td>';
 					html1+='</tr>';
 					html1+='<tr>';
-					html1+=	'<th scope="row"><spring:message code="menu.access_control" /></th>';
+					html1+=	'<td><spring:message code="menu.access_control" /></td>';
 					html1+=	'<td>';
 					html1+=		'<div class="inp_chk">';
 					html1+=			'<input type="checkbox" id="'+item.db_svr_id+'_acs_cntr" name="acs_cntr_aut" onClick="fn_userCheck();" />';
@@ -214,7 +208,7 @@ table th, table td {padding: 0}
 					html1+=	'</td>';
 					html1+='</tr>';
 					html1+='<tr>';
-					html1+=	'<th scope="row"><spring:message code="menu.policy_changes_history" /></th>';
+					html1+=	'<td><spring:message code="menu.policy_changes_history" /></td>';
 					html1+=	'<td>';
 					html1+=		'<div class="inp_chk">';
 					html1+=			'<input type="checkbox" id="'+item.db_svr_id+'_policy_change_his" name="policy_change_his_aut" onClick="fn_userCheck();" />';
@@ -225,7 +219,7 @@ table th, table td {padding: 0}
 					
 					if("${sessionScope.session.pg_audit}"== "Y"){
 						html1+='<tr>';
-						html1+=	'<th scope="row"><spring:message code="menu.audit_settings" /></th>';
+						html1+=	'<td><spring:message code="menu.audit_settings" /></td>';
 						html1+=	'<td>';
 						html1+=		'<div class="inp_chk">';
 						html1+=			'<input type="checkbox" id="'+item.db_svr_id+'_adt_cng" name="adt_cng_aut" onClick="fn_userCheck();"/>';
@@ -234,7 +228,7 @@ table th, table td {padding: 0}
 						html1+=	'</td>';
 						html1+='</tr>';
 						html1+='<tr>';
-						html1+=	'<th scope="row"><spring:message code="menu.audit_history" /></th>';
+						html1+=	'<td><spring:message code="menu.audit_history" /></td>';
 						html1+=	'<td>';
 						html1+=		'<div class="inp_chk">';
 						html1+=			'<input type="checkbox" id="'+item.db_svr_id+'_adt_hist" name="adt_hist_aut"  onClick="fn_userCheck();"/>';
@@ -245,7 +239,7 @@ table th, table td {padding: 0}
 					}
 					
 					html1+='<tr>';
-					html1+=	'<th scope="row"><spring:message code="menu.script_settings" /></th>';
+					html1+=	'<td><spring:message code="menu.script_settings" /></td>';
 					html1+=	'<td>';
 					html1+=		'<div class="inp_chk">';
 					html1+=			'<input type="checkbox" id="'+item.db_svr_id+'_script_cng" name="script_cng_aut"  onClick="fn_userCheck();"/>';
@@ -254,7 +248,7 @@ table th, table td {padding: 0}
 					html1+=	'</td>';
 					html1+='</tr>	';
 					html1+='<tr>';
-					html1+=	'<th scope="row"><spring:message code="menu.script_history" /></th>';
+					html1+=	'<td><spring:message code="menu.script_history" /></td>';
 					html1+=	'<td>';
 					html1+=		'<div class="inp_chk">';
 					html1+=			'<input type="checkbox" id="'+item.db_svr_id+'_script_his" name="script_his_aut"  onClick="fn_userCheck();"/>';
@@ -262,7 +256,6 @@ table th, table td {padding: 0}
 					html1+=		'</div>';
 					html1+=	'</td>';
 					html1+='</tr>	';	
-					
 					
 					html1+='</tbody>';
 					html1+='<input type="hidden"  name="db_svr_id" value="'+item.db_svr_id+'">';
@@ -471,7 +464,7 @@ table th, table td {padding: 0}
 	/* table setting */
 	function fn_init() {
 		userTable = $('#user').DataTable({
-			scrollY : "370px",
+			scrollY : "500px",
 			scrollX: true,
 			searching : false,
 			paging : false,
@@ -545,7 +538,7 @@ table th, table td {padding: 0}
 		var datas = userTable.row('.selected').length;
 
 		if(datas != 1){
-			alert("<spring:message code='message.msg165'/>");
+			showSwalIcon('<spring:message code="message.msg165"/>', '<spring:message code="common.close" />', '', 'warning');
 			return false;
 		}else{
 			var usr_id = userTable.row('.selected').data().usr_id;
@@ -758,7 +751,7 @@ table th, table td {padding: 0}
 					}
 				},
 				success : function(result) {
-					alert("<spring:message code='message.msg07' />");
+					showSwalIcon('<spring:message code="message.msg07"/>', '<spring:message code="common.close" />', '', 'success');
 				}
 			});
 		}else{
@@ -800,64 +793,92 @@ table th, table td {padding: 0}
 </script>
 
 <body>
-	<!-- contents -->
-	<div id="contents">
-		<div class="contents_wrap">
-			<div class="contents_tit">
-				<h4><spring:message code="menu.server_auth_management" /> <a href="#n"><img src="../images/ico_tit.png" class="btn_info"/></a></h4>
-				<div class="infobox"> 
-					<ul>
-						<li><spring:message code="help.server_auth_management" /></li>
-					</ul>
-				</div>
-				<div class="location">
-					<ul>
-						<li>Admin</li>
-						<li><spring:message code="menu.auth_management" /></li>
-						<li class="on"><spring:message code="menu.server_auth_management" /></li>
-					</ul>
-				</div>
-			</div>
-			<div class="contents">
-				<div class="cmm_grp">
-					<div class="db_roll_grp">
-						<div class="db_roll_lt">
-							<div class="btn_type_01">
-								<div class="search_area">
-									<input type="text" class="txt search" id="search">
-									<button type="button" class="search_btn" onClick="fn_search()"><spring:message code="button.search" /></button>
+<div class="content-wrapper main_scroll" id="contentsDiv">
+	<div class="row">
+		<div class="col-12 div-form-margin-srn stretch-card">
+			<div class="card">
+				<div class="card-body">
+					<!-- title start -->
+					<div class="accordion_main accordion-multi-colored" id="accordion" role="tablist">
+						<div class="card" style="margin-bottom:0px;">
+							<div class="card-header" role="tab" id="page_header_div">
+								<div class="row">
+									<div class="col-5">
+										<h6 class="mb-0">
+											<a data-toggle="collapse" href="#page_header_sub" aria-expanded="false" aria-controls="page_header_sub" onclick="fn_profileChk('titleText')">
+<!-- 												<i class="fa fa-check-square"></i> -->
+												<span class="menu-title"><spring:message code="menu.server_auth_management" /></span>
+												<i class="menu-arrow_user" id="titleText" ></i>
+											</a>
+										</h6>
+									</div>
+									<div class="col-7">
+					 					<ol class="mb-0 breadcrumb_main justify-content-end bg-info" >
+					 						<li class="breadcrumb-item_main" style="font-size: 0.875rem;">Admin</li>
+					 						<li class="breadcrumb-item_main" style="font-size: 0.875rem;" aria-current="page"><spring:message code="menu.auth_management" /></li>
+											<li class="breadcrumb-item_main active" style="font-size: 0.875rem;" aria-current="page"><spring:message code="menu.server_auth_management"/></li>
+										</ol>
+									</div>
 								</div>
 							</div>
-							<div class="inner">
-								<p class="tit"><spring:message code="auth_management.user_choice" /></p>
-								<div class="overflow_area">
-									<table id="user" class="display" style="width:100%;">
-										<thead>
-											<tr>
-												<th width="20"><spring:message code="common.no"/></th>
-												<th width="90"><spring:message code="user_management.id" /></th>
-												<th width="90"><spring:message code="user_management.user_name" /></th>
-											</tr>
-										</thead>
-									</table>
+							<div id="page_header_sub" class="collapse" role="tabpanel" aria-labelledby="page_header_div" data-parent="#accordion">
+								<div class="card-body">
+									<div class="row">
+										<div class="col-12">
+											<p class="mb-0"><spring:message code="help.server_auth_management" /></p>
+										</div>
+									</div>
 								</div>
 							</div>
 						</div>
-		
-						<div class="db_roll_rt">
-							<div class="btn_type_01">
-								<span class="btn"><button type="button" onClick="fn_svr_save();" id="server_button"><spring:message code="common.save"/></button></span>
-							</div>
-							<div class="inner">
-								<p class="tit"><spring:message code="auth_management.db_server_menu_auth_mng" /></p>
-								<div class="overflow_area">
-									<div id="svrAutList"></div>
-								</div>
-							</div>
-						</div>
-
 					</div>
+					<!-- title end -->
 				</div>
 			</div>
 		</div>
-	</div><!-- // contents -->
+
+		<div class="col-lg-6 grid-margin stretch-card">
+		  <div class="card">
+		    <div class="card-body">
+		      <h4 class="card-title"><spring:message code="auth_management.user_choice" /></h4>
+		      <div class="table-responsive">
+				<form class="form-inline" style="float: right;">
+					<div class="input-group mb-2 mr-sm-2">
+						<input type="text" class="form-control" style="width:250px;" id="search">					
+					</div>
+					<button type="button" class="btn btn-inverse-primary btn-icon-text mb-2 btn-search-disable" onClick="fn_search()">
+						<i class="ti-search btn-icon-prepend "></i><spring:message code="button.search" />
+					</button>
+				</form>
+				<table id="user" class="table table-hover table-striped" style="width:100%;">
+					<thead>
+						<tr class="bg-primary text-white">
+							<th width="20"><spring:message code="common.no"/></th>
+							<th width="90"><spring:message code="user_management.id" /></th>
+							<th width="90"><spring:message code="user_management.user_name" /></th>
+						</tr>
+					</thead>
+				</table>      
+		      </div>
+		    </div>
+		  </div>
+		</div>
+            
+		<div class="col-lg-6 grid-margin stretch-card">
+		  <div class="card">
+		    <div class="card-body">
+		      <h4 class="card-title"><spring:message code="auth_management.db_server_menu_auth_mng" /></h4>
+		      <div class="table-responsive">
+			  	<form class="form-inline" style="float: right;">
+					<button type="button" class="btn btn-inverse-primary btn-icon-text mb-2 btn-search-disable" id="server_button" onClick="fn_svr_save()">
+						<i class="ti-import btn-icon-prepend "></i><spring:message code="common.save"/>
+					</button>
+				</form>
+		        <div id="svrAutList" style="height: 630px;"></div>
+		      </div>
+		    </div>
+		  </div>
+		</div>
+		
+	</div>
+</div>

@@ -30,10 +30,12 @@
 <!-- endinject -->
 <link rel="shortcut icon" href="../../../../images/favicon.png" />
 
+
 <!-- plugins:js -->
 <script src="/vertical-dark-sidebar/js/vendors/js/vendor.bundle.base.js"></script>
 <!-- endinject -->
 <!-- Plugin js for this page-->
+<script src ="/js/jquery/jquery-1.7.2.min.js" type="text/javascript"></script>
 <script src="/vertical-dark-sidebar/js/vendors/datatables.net/jquery.dataTables.js"></script>
 <script src="/vertical-dark-sidebar/js/vendors/datatables.net-bs4/dataTables.bootstrap4.js"></script>
 <script src="/vertical-dark-sidebar/js/vendors/jquery-toast-plugin/jquery.toast.min.js"></script>
