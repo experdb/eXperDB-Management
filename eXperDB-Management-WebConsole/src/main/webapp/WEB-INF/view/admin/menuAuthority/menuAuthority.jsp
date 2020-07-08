@@ -22,7 +22,7 @@ var menuTable = null;
 
 function fn_init() {
 	userTable = $('#user').DataTable({
-		scrollY : "395px",
+		scrollY : "500px",
 		processing : true,
 		searching : false,
 		paging: false,
@@ -687,7 +687,7 @@ function fn_search(){
 		  <div class="card">
 		    <div class="card-body">
 		      <h4 class="card-title"><spring:message code="auth_management.menu_auth" /></h4>
-		      <div class="table-responsive">
+		      <div class="table-responsive" style="height: 630px;">
 			  	<form class="form-inline" style="float: right;">
 					<button type="button" class="btn btn-inverse-primary btn-icon-text mb-2 btn-search-disable" id="save_button" onClick="fn_save()">
 						<i class="ti-import btn-icon-prepend "></i><spring:message code="common.save"/>
