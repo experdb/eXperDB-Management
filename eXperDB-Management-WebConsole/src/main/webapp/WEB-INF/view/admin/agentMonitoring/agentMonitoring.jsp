@@ -6,7 +6,7 @@
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags"%>
-<%@include file="../../cmmn/cs.jsp"%>
+<%@include file="../../cmmn/cs2.jsp"%>
 <%
 	/**
 	* @Class Name : agentMonitoring.jsp
@@ -32,54 +32,92 @@
 	}
 </script>
 <form name="agentForm" id="agentForm" method="post">
-	<!-- contents -->
-			<div id="contents">
-				<div class="contents_wrap">
-					<div class="contents_tit">
-						<h4><spring:message code="agent_monitoring.Management_agent"/><a href="#n"><img src="../images/ico_tit.png" class="btn_info"/></a></h4>
-						<div class="infobox"> 
-							<ul>
-								<li><spring:message code="help.agent_monitoring_01" /> </li>
-								<li><spring:message code="help.agent_monitoring_02" /> </li>
-							</ul>
-						</div>
-						<div class="location">
-							<ul>
-								<li>Admin</li>
-								<li><spring:message code="menu.agent_monitoring" /></li>
-								<li class="on"><spring:message code="agent_monitoring.Management_agent"/></li>
-							</ul>
+<div class="content-wrapper main_scroll" id="contentsDiv">
+	<div class="row">
+		<div class="col-12 div-form-margin-srn stretch-card">
+			<div class="card">
+				<div class="card-body">
+					<!-- title start -->
+					<div class="accordion_main accordion-multi-colored" id="accordion" role="tablist">
+						<div class="card" style="margin-bottom:0px;">
+							<div class="card-header" role="tab" id="page_header_div">
+								<div class="row">
+									<div class="col-5">
+										<h6 class="mb-0">
+											<a data-toggle="collapse" href="#page_header_sub" aria-expanded="false" aria-controls="page_header_sub" onclick="fn_profileChk('titleText')">
+<!-- 												<i class="fa fa-check-square"></i> -->
+												<span class="menu-title"><spring:message code="agent_monitoring.Management_agent" /></span>
+												<i class="menu-arrow_user" id="titleText" ></i>
+											</a>
+										</h6>
+									</div>
+									<div class="col-7">
+					 					<ol class="mb-0 breadcrumb_main justify-content-end bg-info" >
+					 						<li class="breadcrumb-item_main" style="font-size: 0.875rem;">Admin</li>
+					 						<li class="breadcrumb-item_main" style="font-size: 0.875rem;" aria-current="page"><spring:message code="menu.agent_monitoring" /></li>
+											<li class="breadcrumb-item_main active" style="font-size: 0.875rem;" aria-current="page"><spring:message code="agent_monitoring.Management_agent"/></li>
+										</ol>
+									</div>
+								</div>
+							</div>
+							<div id="page_header_sub" class="collapse" role="tabpanel" aria-labelledby="page_header_div" data-parent="#accordion">
+								<div class="card-body">
+									<div class="row">
+										<div class="col-12">
+											<p class="mb-0"><spring:message code="help.agent_monitoring_01" /></p>
+											<p class="mb-0"><spring:message code="help.agent_monitoring_02" /></p>
+										</div>
+									</div>
+								</div>
+							</div>
 						</div>
 					</div>
-					<div class="contents">
-						<div class="cmm_grp">
-							<div class="btn_type_01">
-								<span class="btn"><button type="button" onClick="fn_search();"><spring:message code="common.search" /></button></span>
+					<!-- title end -->
+				</div>
+			</div>
+		</div>
+		<div class="col-12 div-form-margin-cts stretch-card">
+			<div class="card">
+				<div class="card-body">
+					<!-- search param start -->
+					<div class="card">
+						<div class="card-body">
+							<div class="form-inline">
+								<div class="input-group mb-2 mr-sm-2">
+									<input type="text" class="form-control" style="width:300px;" maxlength="100" id="DB_SVR_NM" name="DB_SVR_NM" value="${db_svr_nm}" onblur="this.value=this.value.trim()" placeholder='<spring:message code="common.dbms_name" />'/>
+								</div>
+								<div class="input-group mb-2 mr-sm-2">
+									<input type="text" class="form-control" style="width:300px;" maxlength="100" id="IPADR" name="IPADR" value="${ipadr}" onblur="this.value=this.value.trim()" placeholder='<spring:message code="dbms_information.dbms_ip" />'/>
+								</div>
+								<button type="button" class="btn btn-inverse-primary btn-icon-text mb-2 btn-search-disable" onClick="fn_search();" >
+									<i class="ti-search btn-icon-prepend "></i><spring:message code="common.search" />
+								</button>
 							</div>
-							<div class="sch_form">
-								<table class="write">
-									<caption>검색 조회</caption>
-									<colgroup>
-										<col style="width: 120px;" />
-										<col style="width: 200px;" />
-										<col style="width: 120px;" />
-										<col style="width: 200px;" />
-										<col />
-									</colgroup>
-									<tbody>
-										<tr>
-											<th scope="row" class="t9"><spring:message code="common.dbms_name" /></th>
-											<td><input type="text" id="DB_SVR_NM" name="DB_SVR_NM" class="txt t2" value="${db_svr_nm}" maxlength="20"/></td>
-											<th scope="row" class="t9"><spring:message code="dbms_information.dbms_ip" /> </th>
-											<td><input type="text" id="IPADR" name="IPADR" class="txt t2" value="${ipadr}" maxlength="20"/></td>
-										</tr>
-										
-									</tbody>
-								</table>
-							</div>
-							<div class="overflow_area" style="height: 365px;">
-								<table class="list">
-									<caption>Agent 모니터링 리스트</caption>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class="col-12 stretch-card div-form-margin-table">
+			<div class="card">
+				<div class="card-body">
+					<div class="card my-sm-2" >
+						<div class="card-body" >
+							<div class="row">
+								<div class="col-12">
+ 									<div class="table-responsive">
+										<div id="order-listing_wrapper"
+											class="dataTables_wrapper dt-bootstrap4 no-footer">
+											<div class="row">
+												<div class="col-sm-12 col-md-6">
+													<div class="dataTables_length" id="order-listing_length">
+													</div>
+												</div>
+											</div>
+										</div>
+									</div>
+
+								<table class="table table-hover table-striped">
 									<colgroup>
 										<col style="width:10%;" />
 										<col style="width:35%;" />
@@ -91,7 +129,7 @@
 										<col style="width:15%;" />
 									</colgroup>
 									<thead>
-										<tr>
+										<tr class="bg-primary text-white">
 											<th scope="col"><spring:message code="common.no" /></th>
 											<th scope="col"><spring:message code="common.dbms_name" /></th>
 											<th scope="col"><spring:message code="dbms_information.dbms_ip" /> </th>
@@ -103,11 +141,9 @@
 										</tr>
 									</thead>
 									<tbody>
-
 									<c:if test="${fn:length(list) == 0}">
 										<tr>
 											<td colspan="8"><spring:message code="message.msg01" /></td>
-
 										</tr>
 									</c:if>
 									<c:forEach var="data" items="${list}" varStatus="status">
@@ -116,8 +152,8 @@
 											<td style="text-align: left;">${data.DB_SVR_NM}</td>
 											<td style="text-align: left;">${data.IPADR}</td>		
 											<td style="text-align: left;">
-												<c:if test="${data.MASTER_GBN == 'M'}">master</c:if>
-												<c:if test="${data.MASTER_GBN == 'S'}">slave</c:if>
+												<c:if test="${data.MASTER_GBN == 'M'}"><div class="badge badge-outline-primary badge-pill">master</div></c:if>
+												<c:if test="${data.MASTER_GBN == 'S'}"><div class="badge badge-outline-info badge-pill">slave</div></c:if>
 											</td>											
 											<td style="text-align: left;">${data.STRT_DTM}</td>
 											<td style="text-align: left;">
@@ -128,24 +164,33 @@
 											<font color="red"><spring:message code="agent_monitoring.no" /></font>
 											</c:if>
 											</td>
-											<td style="text-align: right;">
-												${data.AGT_VERSION}
+											<td style="text-align: center;">
+												<div class="badge badge-outline-primary">${data.AGT_VERSION}</div>
 											</td>
-											<td>
+											<td style="text-align: center;">
 											<c:if test="${data.AGT_CNDT_CD == 'TC001101'}">
-												<img src="../images/ico_agent_1.png" alt="" />
+												<div class='badge badge-pill badge-primary' >
+													<i class='fa fa-spin fa-refresh mr-2' style="margin-right: 0px !important;"></i>
+												</div>
 											</c:if>
 											<c:if test="${data.AGT_CNDT_CD == 'TC001102'}">
-												<img src="../images/ico_agent_2.png" alt="" />
+												<div class='badge badge-pill badge-danger'>
+													<i class='fa fa-times-circle mr-2' style="margin-right: 0px !important;"></i>
+												</div>
 											</c:if>
 											</td>
 										</tr>
 									</c:forEach>
 									</tbody>
 								</table>
-							</div>
+							 	</div>
+						 	</div>
 						</div>
 					</div>
+					<!-- content-wrapper ends -->
 				</div>
-			</div><!-- // contents -->
+			</div>
+		</div>
+	</div>
+</div>
 </form>

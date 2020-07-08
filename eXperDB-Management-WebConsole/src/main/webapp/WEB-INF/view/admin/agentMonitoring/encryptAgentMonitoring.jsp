@@ -6,7 +6,7 @@
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags"%>
-<%@include file="../../cmmn/cs.jsp"%>
+<%@include file="../../cmmn/cs2.jsp"%>
 <%
 	/**
 	* @Class Name : encryptAgentMonitoring.jsp
@@ -37,10 +37,10 @@ function fn_init(){
 			{ data : "monitoredName", defaultContent : ""}, 
 			{ data : "status", defaultContent : "", className : "dt-center", render: function (data, type, full){
 				if(full.status == "start"){
-					var html = '<img src="../images/ico_agent_1.png" alt="" />';
+					var html = "<div class='badge badge-pill badge-primary' ><i class='fa fa-spin fa-refresh mr-2' style='margin-right: 0px !important;'></i></div>";
 						return html;
 				}else{
-					var html = '<img src="../images/ico_agent_2.png" alt="" />';
+					var html = "<div class='badge badge-pill badge-danger' ><i class='fa fa-times-circle mr-2' style='margin-right: 0px !important;'></i></div>";
 					return html;
 				}
 				return data;
@@ -88,7 +88,7 @@ function fn_refresh(){
 	     },
 		error : function(xhr, status, error) {
 			if(xhr.status == 401) {
-				alert("<spring:message code='message.msg02' />");
+				showSwalIcon('<spring:message code="message.msg02" />', '<spring:message code="common.close" />', '', 'error');
 				top.location.href = "/";
 			} else if(xhr.status == 403) {
 				alert("<spring:message code='message.msg03' />");
@@ -120,7 +120,7 @@ function fn_refresh(){
 function fn_delete(){
 	var datas = table.rows('.selected').data();
 	if (datas.length <= 0) {
-		alert("<spring:message code='message.msg04' />");
+		showSwalIcon('<spring:message code="message.msg04"/>', '<spring:message code="common.close" />', '', 'warning');
 		return false;
 	} else {
 		if (!confirm('<spring:message code="message.msg162"/>'))return false;
@@ -141,18 +141,18 @@ function fn_delete(){
 		     },
 			error : function(xhr, status, error) {
 				if(xhr.status == 401) {
-					alert("<spring:message code='message.msg02' />");
+					showSwalIcon('<spring:message code="message.msg02" />', '<spring:message code="common.close" />', '', 'error');
 					top.location.href = "/";
 				} else if(xhr.status == 403) {
-					alert("<spring:message code='message.msg03' />");
+					showSwalIcon('<spring:message code="message.msg03" />', '<spring:message code="common.close" />', '', 'error');
 					top.location.href = "/";
 				} else {
-					alert("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""));
+					showSwalIcon("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""), '<spring:message code="common.close" />', '', 'error');
 				}
 			},
 			success : function(data) {
 				if(data.resultCode == "0000000000"){
-					alert("<spring:message code='message.msg37' />");
+					showSwalIcon('<spring:message code="message.msg37"/>', '<spring:message code="common.close" />', '', 'success');
 					fn_refresh();
 				}else if(data.resultCode == "8000000002"){
 					alert("<spring:message code='message.msg05' />");
@@ -169,51 +169,112 @@ function fn_delete(){
 
 }
 </script>
-	<div id="contents">
-				<div class="contents_wrap">
-					<div class="contents_tit">
-						<h4><spring:message code="agent_monitoring.Encrypt_agent"/><a href="#n"><img src="../images/ico_tit.png" class="btn_info"/></a></h4>
-						<div class="infobox"> 
-							<ul>
-								<li><spring:message code="encrypt_help.Encrypt_agent"/></li>
-								<li><spring:message code="help.agent_monitoring_02" /> </li>
-							</ul>
-						</div>
-						<div class="location">
-							<ul>
-								<li>Admin</li>
-								<li><spring:message code="menu.agent_monitoring" /></li>
-								<li class="on"><spring:message code="agent_monitoring.Encrypt_agent"/></li>
-							</ul>
+
+<div class="content-wrapper main_scroll" id="contentsDiv">
+	<div class="row">
+		<div class="col-12 div-form-margin-srn stretch-card">
+			<div class="card">
+				<div class="card-body">
+					<!-- title start -->
+					<div class="accordion_main accordion-multi-colored" id="accordion" role="tablist">
+						<div class="card" style="margin-bottom:0px;">
+							<div class="card-header" role="tab" id="page_header_div">
+								<div class="row">
+									<div class="col-5">
+										<h6 class="mb-0">
+											<a data-toggle="collapse" href="#page_header_sub" aria-expanded="false" aria-controls="page_header_sub" onclick="fn_profileChk('titleText')">
+<!-- 												<i class="fa fa-check-square"></i> -->
+												<span class="menu-title"><spring:message code="agent_monitoring.Encrypt_agent" /></span>
+												<i class="menu-arrow_user" id="titleText" ></i>
+											</a>
+										</h6>
+									</div>
+									<div class="col-7">
+					 					<ol class="mb-0 breadcrumb_main justify-content-end bg-info" >
+					 						<li class="breadcrumb-item_main" style="font-size: 0.875rem;">Admin</li>
+					 						<li class="breadcrumb-item_main" style="font-size: 0.875rem;" aria-current="page"><spring:message code="menu.agent_monitoring" /></li>
+											<li class="breadcrumb-item_main active" style="font-size: 0.875rem;" aria-current="page"><spring:message code="agent_monitoring.Encrypt_agent"/></li>
+										</ol>
+									</div>
+								</div>
+							</div>
+							<div id="page_header_sub" class="collapse" role="tabpanel" aria-labelledby="page_header_div" data-parent="#accordion">
+								<div class="card-body">
+									<div class="row">
+										<div class="col-12">
+											<p class="mb-0"><spring:message code="encrypt_help.Encrypt_agent" /></p>
+											<p class="mb-0"><spring:message code="help.agent_monitoring_02" /></p>
+										</div>
+									</div>
+								</div>
+							</div>
 						</div>
 					</div>
-					<div class="contents">
-						<div class="cmm_grp">
-							<div class="btn_type_01">
-								<span class="btn"><button type="button" onclick="fn_refresh()"><spring:message code="common.search"/></button></span>
-								<span class="btn"><button type="button" onclick="fn_delete()" id="btndelete"><spring:message code="common.delete"/></button></span>
-							</div>
-
-							<div class="overflow_area">
-								<table id="monitoring" class="display" cellspacing="0" width="100%">
-									<caption>Encrypt Agent 모니터링 리스트</caption>
-									<colgroup>
-										<col style="width:3%;" />
-										<col style="width:5%;" />
-										<col style="width:35%;" />
-										<col style="width:15%;" />
-									</colgroup>
-									<thead>
-										<tr>
-											<th scope="col"></th>
-											<th scope="col"><spring:message code="common.no" /></th>
-											<th scope="col">Agent IP</th>
-											<th scope="col">Agent <spring:message code="properties.status" /></th>
-										</tr>
-									</thead>
-								</table>
+					<!-- title end -->
+				</div>
+			</div>
+		</div>
+		<div class="col-12 div-form-margin-cts stretch-card">
+			<div class="card">
+				<div class="card-body">
+					<div class="row">
+						<div class="col-12">
+							<div class="template-demo">		
+								<button type="button" class="btn btn-outline-primary btn-icon-text float-right" onclick="fn_delete()" id="btndelete" data-toggle="modal">
+									<i class="ti-trash btn-icon-prepend "></i><spring:message code="common.delete" />
+								</button>
+								<button type="button" class="btn btn-outline-primary btn-icon-text float-right" onclick="fn_refresh()" data-toggle="modal">
+									<i class="ti-search btn-icon-prepend "></i><spring:message code="common.search" />
+								</button>
 							</div>
 						</div>
 					</div>
 				</div>
-			</div><!-- // contents -->
+			</div>
+		</div>
+		
+		<div class="col-12 stretch-card div-form-margin-table">
+			<div class="card">
+				<div class="card-body">
+					<div class="card my-sm-2" >
+						<div class="card-body" >
+							<div class="row">
+								<div class="col-12">
+ 									<div class="table-responsive">
+										<div id="order-listing_wrapper"
+											class="dataTables_wrapper dt-bootstrap4 no-footer">
+											<div class="row">
+												<div class="col-sm-12 col-md-6">
+													<div class="dataTables_length" id="order-listing_length">
+													</div>
+												</div>
+											</div>
+										</div>
+									</div>
+
+									<table id="monitoring" class="table table-hover table-striped" cellspacing="0" width="100%">
+										<colgroup>
+											<col style="width:3%;" />
+											<col style="width:5%;" />
+											<col style="width:35%;" />
+											<col style="width:15%;" />
+										</colgroup>
+										<thead>
+											<tr class="bg-primary text-white">
+												<th scope="col"></th>
+												<th scope="col"><spring:message code="common.no" /></th>
+												<th scope="col">Agent IP</th>
+												<th scope="col">Agent <spring:message code="properties.status" /></th>
+											</tr>
+										</thead>
+									</table>
+							 	</div>
+						 	</div>
+						</div>
+					</div>
+					<!-- content-wrapper ends -->
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
