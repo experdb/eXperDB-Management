@@ -202,7 +202,7 @@
 	function fn_userCheck(){
 		var datas = userTable.row('.selected').length;
 		 if(datas != 1){
-			 alert("<spring:message code='message.msg165'/>");
+			 showSwalIcon('<spring:message code="message.msg165"/>', '<spring:message code="common.close" />', '', 'warning');
 			 $("input[type=checkbox]").prop("checked",false);
 			 return false;
 		 }
