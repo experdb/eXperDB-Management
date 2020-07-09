@@ -20,25 +20,6 @@
 	*
 	*/
 %>
-<style>
- .blinking{
-            -webkit-animation:blink .5s ease-in-out infinite alternate;
-            -moz-animation:blink .5s ease-in-out infinite alternate;
-            animation:blink .5s ease-in-out infinite alternate;
-        }
-        @-webkit-keyframes blink{
-            0% {opacity:0;}
-            100% {opacity:1;}
-        }
-        @-moz-keyframes blink{
-            0% {opacity:0;}
-            100% {opacity:1;}
-        }
-        @keyframes blink{
-            0% {opacity:0;}
-            100% {opacity:1;}
-        }
-</style>
 <script type="text/javascript">
 	var table = null;
 	var confile_title = "";

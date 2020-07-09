@@ -127,6 +127,10 @@
 			}
 		})
 	}
+	
+	// initializing inputmask
+	$(":input").inputmask();
+
 })(jQuery);
 
 $(window).ready(function(){
@@ -205,8 +209,8 @@ function fn_checkWord(obj, maxlength) {
 	var str = obj.value; 
 	var str_length = str.length;     
 	var max_length = maxlength;  
-	if (str_length == max_length) {        
-		alert(max_length+message_msg211);
+	if (str_length == max_length) { 
+		showSwalIcon(max_length+message_msg211, closeBtn, '', 'error');
 	}    
 	obj.focus(); 
 }

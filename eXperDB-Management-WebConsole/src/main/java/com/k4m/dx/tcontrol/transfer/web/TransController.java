@@ -314,7 +314,7 @@ public class TransController {
 	 * @throws Exception
 	 */
 	@RequestMapping(value = "/insertConnectInfoNew.do")
-	public @ResponseBody boolean insertConnectInfo(@ModelAttribute("transVO") TransVO transVO, @ModelAttribute("transMappVO") TransMappVO transMappVO,
+	public @ResponseBody String insertConnectInfo(@ModelAttribute("transVO") TransVO transVO, @ModelAttribute("transMappVO") TransMappVO transMappVO,
 			@ModelAttribute("historyVO") HistoryVO historyVO, HttpServletRequest request,
 			HttpServletResponse response) {
 
@@ -322,6 +322,8 @@ public class TransController {
 		DefaultTransactionDefinition def  = new DefaultTransactionDefinition();
 		def.setPropagationBehavior(TransactionDefinition.PROPAGATION_REQUIRED);
 		TransactionStatus status = txManager.getTransaction(def);
+		
+		String result = "fail";
 		
 		int trans_exrt_trg_tb_id =0;
 
@@ -349,22 +351,26 @@ public class TransController {
 
 				//전송대상 테이블 등록
 				transService.insertTransExrttrgMapp(transMappVO);	
+				
+				result = "success";
 			} catch (Exception e) {
+				result = "fail";
 				e.printStackTrace();
 				txManager.rollback(status);
-				return false;
+				return result;
 			}
 
 			transVO.setTrans_exrt_trg_tb_id(trans_exrt_trg_tb_id);
 			transService.insertConnectInfo(transVO);		
 		} catch (Exception e) {
+			result = "fail";
 			e.printStackTrace();
 			txManager.rollback(status);
-			return false;
+			return result;
 		}finally{
 			txManager.commit(status);
 		}
-		return true;
+		return result                                                                ;
 	}
 	
 	/**

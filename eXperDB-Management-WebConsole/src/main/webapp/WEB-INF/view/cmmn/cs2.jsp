@@ -20,22 +20,24 @@
 <link rel="stylesheet" href="/vertical-dark-sidebar/css/vendors/bootstrap-datepicker/bootstrap-datepicker.min.css">
 <link rel="stylesheet" href="/vertical-dark-sidebar/css/vendors/x-editable/bootstrap-editable.css">  
 <link rel="stylesheet" href="/vertical-dark-sidebar/css/vendors/bootstrap4-toggle/bootstrap4-toggle.css">
+<link rel="stylesheet" href="/vertical-dark-sidebar/css/vendors/select2/select2.min.css">
+<link rel="stylesheet" href="/vertical-dark-sidebar/css/vendors/select2-bootstrap-theme/select2-bootstrap.min.css">
+
 <!-- End plugin css for this page -->
 
 <!-- inject:css -->
 <link rel="stylesheet" href="/vertical-dark-sidebar/css/style.css">
 <link rel="stylesheet" href="/vertical-dark-sidebar/css/style_layout.css">
 <link rel="stylesheet" href="/vertical-dark-sidebar/css/bstreeview.css">
+<link rel="stylesheet" href="/vertical-dark-sidebar/css/myTooltip.css">
 
 <!-- endinject -->
 <link rel="shortcut icon" href="../../../../images/favicon.png" />
-
 
 <!-- plugins:js -->
 <script src="/vertical-dark-sidebar/js/vendors/js/vendor.bundle.base.js"></script>
 <!-- endinject -->
 <!-- Plugin js for this page-->
-<script src ="/js/jquery/jquery-1.7.2.min.js" type="text/javascript"></script>
 <script src="/vertical-dark-sidebar/js/vendors/datatables.net/jquery.dataTables.js"></script>
 <script src="/vertical-dark-sidebar/js/vendors/datatables.net-bs4/dataTables.bootstrap4.js"></script>
 <script src="/vertical-dark-sidebar/js/vendors/jquery-toast-plugin/jquery.toast.min.js"></script>
@@ -47,6 +49,8 @@
 <script src="/vertical-dark-sidebar/js/vendors/bootstrap-datepicker/bootstrap-datepicker.kr.min.js"></script>
 <script src="/vertical-dark-sidebar/js/vendors/x-editable/bootstrap-editable.min.js"></script>
 <script src="/vertical-dark-sidebar/js/vendors/bootstrap4-toggle/bootstrap4-toggle.js"></script>
+<script src="/vertical-dark-sidebar/js/vendors/inputmask/jquery.inputmask.bundle.min.js"></script>
+<script src="/vertical-dark-sidebar/js/vendors/select2/select2.min.js"></script>
 
 <script src="/js/dt/dataTables.select.min.js" type="text/javascript"></script>
 <script src="/js/dt/dataTables.checkboxes.min.js" type="text/javascript"></script>
@@ -57,13 +61,16 @@
 <script src="/vertical-dark-sidebar/js/template.js"></script>
 <script src="/vertical-dark-sidebar/js/settings.js"></script>
 <script src="/vertical-dark-sidebar/js/todolist.js"></script>
-
+<script src="/vertical-dark-sidebar/js/myTooltip.js"></script>
 
 <!-- Custom js for this page-->
 <script src="/vertical-dark-sidebar/js/desktop-notification.js"></script>
 <script src="/vertical-dark-sidebar/js/common.js"></script>
 <script src="/vertical-dark-sidebar/js/bstreeview.js"></script>
 <script src="/vertical-dark-sidebar/js/bscalendar.js"></script>
+<script src="/vertical-dark-sidebar/js/jquery.mask.min.js"></script>
+<script src="/vertical-dark-sidebar/js/jquery.tablednd.js"></script>
+
 <!-- End custom js for this page-->
 
 <!-- endinject -->

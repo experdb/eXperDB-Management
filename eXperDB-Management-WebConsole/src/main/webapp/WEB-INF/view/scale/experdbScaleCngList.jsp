@@ -184,7 +184,7 @@ a:hover.tip span {
 						var html = '';
 
 						if (full.useyn == 'Y') {
-							html += "<div class='badge badge-pill badge-primary blinking' >";
+							html += "<div class='badge badge-pill badge-primary' >";
 							html += "	<i class='fa fa-spin fa-refresh mr-2'></i>";
 							html += '<spring:message code="dbms_information.use" />';
 							html += "</div>";
