@@ -475,13 +475,13 @@
 <!-- partial -->
 <nav class="sidebar sidebar-offcanvas" id="sidebar">
 	<ul class="nav">
-		<li class="nav-item">
+<!-- 		<li class="nav-item">
 			<a class="nav-link" href="/db2pgSetting2.do" target="main">
-		<!-- 		<i class="mdi mdi-amazon-clouddrive"></i> -->
+				<i class="mdi mdi-amazon-clouddrive"></i>
 				<i class="mdi mdi-face-profile text-primary"></i>
 				<span class="menu-title">eXperDB-Sample!!!!</span>
 			</a>
-		</li>
+		</li> -->
 
 		<li class="nav-item li_blank">
             &nbsp;
@@ -495,7 +495,7 @@
 		</li>
 	</ul>
 
-	<ul class="nav left_scroll" id="lft_tree" style="margin-top:-60px;min-width:223px;min-height: calc(100vh - 170px);max-height: calc(100vh - 170px);overflow-y:auto;position: fixed;">	
+	<ul class="nav left_scroll" id="lft_tree" style="margin-top:-60px;width:223px;min-height: calc(100vh - 170px);max-height: calc(100vh - 170px);overflow-y:auto;overflow-x:hidden;position: fixed;">	
 	</ul>
 	
 </nav>

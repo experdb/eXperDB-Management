@@ -95,8 +95,9 @@
 	      		$("#lft_tree").css("min-height","calc(100vh - 175px)");
 
 	      		$("#lft_tree").css("overflow-y","auto");
+	      		$("#lft_tree").css("overflow-x","hidden");
 	      		$("#lft_tree").css("position","fixed");
-	      		$("#lft_tree").css("min-width","223px");
+	      		$("#lft_tree").css("width","223px");
 /*	      		$("#lft_tree").attr('class', 'nav left_scroll');
 	      		$("#lft_tree").css("overflow","auto");*/
 	      	}

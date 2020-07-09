@@ -276,7 +276,16 @@ public class LoginController {
 		}
 		return "redirect:/";
 	}
-	
+
+	/**
+	 * locale 실행
+	 * 
+	 * @param userVo
+	 * @param historyVO
+	 * @param request
+	 * @return ModelAndView mv
+	 * @throws Exception
+	 */
 	@RequestMapping(value = "/setChangeLocale.do")
 	public @ResponseBody void setChangeLocale(HttpServletRequest request, HttpServletResponse response) {
 		try {

@@ -277,7 +277,7 @@
 			data : {
 				locale:locale
 			},
-			dataType : "json",
+		//	dataType : "json",
 			type : "post",
 			beforeSend: function(xhr) {
 				xhr.setRequestHeader("AJAX", true);
