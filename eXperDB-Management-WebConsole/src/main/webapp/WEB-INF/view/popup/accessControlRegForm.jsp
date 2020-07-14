@@ -320,7 +320,7 @@
 										User
 									</label>
 									<div class="col-sm-4">
-										<select class="form-control selectSearch w-100" style="margin-right: 1rem;width: 100% !important;height: 2.000rem;;" name="ins_usr_id" id="ins_usr_id" tabindex=5 >
+										<select class="form-control selectSearch w-100" style="margin-right: 1rem;width: 100% !important;height: 2.000rem;" name="ins_usr_id" id="ins_usr_id" tabindex=5 >
 											<option value="all">all</option>
 											
 											<c:forEach var="resultUser" items="${resultUser.data}" varStatus="status">
