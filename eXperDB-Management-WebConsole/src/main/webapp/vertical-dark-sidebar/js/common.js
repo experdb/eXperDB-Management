@@ -97,7 +97,31 @@
 			}
 		})
 	}
-	
+
+	//alert icon 추가 관련 js -- 결과가 있는 alert
+	showSwalIconRst = function(msg, btnText, titleText, iconText, rstGbn) {
+		'use strict';
+		swal({
+			title: titleText,
+			text: msg,
+			icon: iconText,
+			button: {
+				text: btnText,
+				value: true,
+				visible: true,
+				className: "btn btn-primary"
+			}
+		}).then(function(){
+			if (rstGbn == "his") {
+				history.go(-1);
+			} else if (rstGbn == "top") {
+				top.location.href = "/";
+			} else if (rstGbn == "reload") {
+				location.reload();
+			}
+        });
+	}
+
 	//confirm 관련 js
 	showSwalCfm = function(msg, cBtnText, conBtnText, titleText, iconText) {
 		'use strict';
@@ -236,11 +260,9 @@ function fn_fixLog(exe_sn){
 	     },
 		error : function(xhr, status, error) {
 			if(xhr.status == 401) {
-				showSwalIcon(message_msg02, closeBtn, '', 'error');
-				top.location.href = "/";
+				showSwalIconRst(message_msg02, closeBtn, '', 'error', 'top');
 			} else if(xhr.status == 403) {
-				showSwalIcon(message_msg03, closeBtn, '', 'error');
-				top.location.href = "/";
+				showSwalIconRst(message_msg03, closeBtn, '', 'error', 'top');
 			} else {
 				showSwalIcon("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""), closeBtn, '', 'error');
 			}
@@ -287,11 +309,9 @@ function fn_failLog(exe_sn){
 	     },
 		error : function(xhr, status, error) {
 			if(xhr.status == 401) {
-				showSwalIcon(message_msg02, closeBtn, '', 'error');
-				top.location.href = "/";
+				showSwalIconRst(message_msg02, closeBtn, '', 'error', 'top');
 			} else if(xhr.status == 403) {
-				showSwalIcon(message_msg03, closeBtn, '', 'error');
-				top.location.href = "/";
+				showSwalIconRst(message_msg03, closeBtn, '', 'error', 'top');
 			} else {
 				showSwalIcon("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""), closeBtn, '', 'error');
 			}
@@ -315,14 +335,12 @@ function fn_scriptLayer(wrk_id){
 		type : "post",
 		beforeSend: function(xhr) {
 	        xhr.setRequestHeader("AJAX", true);
-	     },
-	     error : function(xhr, status, error) {
+	    },
+	    error : function(xhr, status, error) {
 			if(xhr.status == 401) {
-				showSwalIcon(message_msg02, closeBtn, '', 'error');
-				top.location.href = "/";
+				showSwalIconRst(message_msg02, closeBtn, '', 'error', 'top');
 			} else if(xhr.status == 403) {
-				showSwalIcon(message_msg03, closeBtn, '', 'error');
-				top.location.href = "/";
+				showSwalIconRst(message_msg03, closeBtn, '', 'error', 'top');
 			} else {
 				showSwalIcon("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""), closeBtn, '', 'error');
 			}
@@ -353,11 +371,9 @@ function fn_workLayer(wrk_id, contentsGbn){
 	    },
 	    error : function(xhr, status, error) {
 			if(xhr.status == 401) {
-				showSwalIcon(message_msg02, closeBtn, '', 'error');
-				top.location.href = "/";
+				showSwalIconRst(message_msg02, closeBtn, '', 'error', 'top');
 			} else if(xhr.status == 403) {
-				showSwalIcon(message_msg03, closeBtn, '', 'error');
-				top.location.href = "/";
+				showSwalIconRst(message_msg03, closeBtn, '', 'error', 'top');
 			} else {
 				showSwalIcon("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""), closeBtn, '', 'error');
 			}
@@ -434,14 +450,12 @@ function fn_scriptLayerWork(wrk_id, contentsGbn){
 		type : "post",
 		beforeSend: function(xhr) {
 	        xhr.setRequestHeader("AJAX", true);
-	     },
-	     error : function(xhr, status, error) {
+	    },
+	    error : function(xhr, status, error) {
 			if(xhr.status == 401) {
-				showSwalIcon(message_msg02, closeBtn, '', 'error');
-				top.location.href = "/";
+				showSwalIconRst(message_msg02, closeBtn, '', 'error', 'top');
 			} else if(xhr.status == 403) {
-				showSwalIcon(message_msg03, closeBtn, '', 'error');
-				top.location.href = "/";
+				showSwalIconRst(message_msg03, closeBtn, '', 'error', 'top');
 			} else {
 				showSwalIcon("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""), closeBtn, '', 'error');
 			}
@@ -473,11 +487,9 @@ function fn_scdLayer(scd_id){
 		type : "post",
 		error : function(xhr, status, error) {
 			if(xhr.status == 401) {
-				showSwalIcon(message_msg02, closeBtn, '', 'error');
-				top.location.href = "/";
+				showSwalIconRst(message_msg02, closeBtn, '', 'error', 'top');
 			} else if(xhr.status == 403) {
-				showSwalIcon(message_msg03, closeBtn, '', 'error');
-				top.location.href = "/";
+				showSwalIconRst(message_msg03, closeBtn, '', 'error', 'top');
 			} else {
 				showSwalIcon("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""), closeBtn, '', 'error');
 			}

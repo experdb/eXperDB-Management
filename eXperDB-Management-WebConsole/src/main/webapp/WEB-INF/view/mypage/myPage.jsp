@@ -54,13 +54,7 @@
 	 ******************************************************** */
 	function fn_updateSubmit () {
 		$('#myPageForm').submit();
-/* 	alert("!23123");
-		if ($("#usr_nm", "#myPageForm").val() == "") {
-			showSwalIcon('<spring:message code="message.msg58" />', '<spring:message code="common.close" />', '', 'warning');
-			$("#usr_nm", "#myPageForm").focus();
-			return;
-		}
-		alert("!4444"); */
+
 		fn_update();
 	}
 	
@@ -89,11 +83,9 @@
 			},
 			error : function(xhr, status, error) {
 				if(xhr.status == 401) {
-					showSwalIcon('<spring:message code="message.msg02" />', '<spring:message code="common.close" />', '', 'error');
-					top.location.href = "/";
+					showSwalIconRst('<spring:message code="message.msg02" />', '<spring:message code="common.close" />', '', 'error', 'top');
 				} else if(xhr.status == 403) {
-					showSwalIcon('<spring:message code="message.msg03" />', '<spring:message code="common.close" />', '', 'error');
-					top.location.href = "/";
+					showSwalIconRst('<spring:message code="message.msg03" />', '<spring:message code="common.close" />', '', 'error', 'top');
 				} else {
 					showSwalIcon("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""), '<spring:message code="common.close" />', '', 'error');
 				}
@@ -112,19 +104,17 @@
 			dataType : "json",
 			type : "post",
 			beforeSend: function(xhr) {
-		        xhr.setRequestHeader("AJAX", true);
-		     },
-		     error : function(xhr, status, error) {
-					if(xhr.status == 401) {
-						showSwalIcon('<spring:message code="message.msg02" />', '<spring:message code="common.close" />', '', 'error');
-						top.location.href = "/";
-					} else if(xhr.status == 403) {
-						showSwalIcon('<spring:message code="message.msg03" />', '<spring:message code="common.close" />', '', 'error');
-						top.location.href = "/";
-					} else {
-						showSwalIcon("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""), '<spring:message code="common.close" />', '', 'error');
-					}
-				},
+				xhr.setRequestHeader("AJAX", true);
+			},
+		    error : function(xhr, status, error) {
+				if(xhr.status == 401) {
+					showSwalIconRst('<spring:message code="message.msg02" />', '<spring:message code="common.close" />', '', 'error', 'top');
+				} else if(xhr.status == 403) {
+					showSwalIconRst('<spring:message code="message.msg03" />', '<spring:message code="common.close" />', '', 'error', 'top');
+				} else {
+					showSwalIcon("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""), '<spring:message code="common.close" />', '', 'error');
+				}
+			},
 			success : function(result) {
 				//초기화
 				$("#nowpwd", "#pwdChgForm").val();

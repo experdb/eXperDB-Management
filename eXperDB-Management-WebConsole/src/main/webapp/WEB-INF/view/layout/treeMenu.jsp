@@ -317,13 +317,14 @@
 											////////////////////////////////////////////////////////////////////////////
 
 											//감사관리 //////////////////////////////////////////////////////////////////
-											menuJson +=	', {' +
-															 '"text": "<spring:message code="menu.audit_management"/>",' + 
-															 '"icon": "fa fa-laptop",' +
-															 '"id": "audit'+item.db_svr_id+'"';
 											//pg_audit 사용여부에 따른 tree메뉴 권한
 											if('${sessionScope.session.pg_audit}' == 'Y'){
 												if((aut.length != 0 && aut[index].adt_cng_aut_yn == "Y") || (aut.length != 0 && aut[index].adt_hist_aut_yn == "Y")){
+													menuJson +=	', {' +
+													 '"text": "<spring:message code="menu.audit_management"/>",' + 
+													 '"icon": "fa fa-laptop",' +
+													 '"id": "audit'+item.db_svr_id+'"';
+													 
 													menuJson +=	', "nodes": [';
 													
 													if(aut.length != 0 && aut[index].adt_cng_aut_yn == "Y"){
@@ -350,10 +351,11 @@
 													}
 													
 													menuJson +=		']';
+													
+													menuJson +=	'}';
 												}
 											}
-											
-											menuJson +=	'}';
+
 											////////////////////////////////////////////////////////////////////////////
 
 											//스크립트//////////////////////////////////////////////////////////////////

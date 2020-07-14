@@ -22410,6 +22410,19 @@ code {
   background: #282f3a;
 }
 
+
+.form-check-light_new.form-check label input[type="checkbox"] + .input-helper:before,
+.form-check-light_new.form-check label input[type="radio"] + .input-helper:before {
+  border-color: #f8f9fa;
+  background: #f8f9fa;
+}
+
+.form-check-light_new.form-check label input[type="checkbox"]:checked + .input-helper:before,
+.form-check-light_new.form-check label input[type="radio"]:checked + .input-helper:before {
+  background: #282f3a;
+}
+
+
 /* Dropdowns */
 .dropdown .dropdown-toggle:after {
   border-top: 0;

@@ -123,6 +123,7 @@ public class AccessControlController {
 					serverObj.put(ClientProtocolID.USER_PWD, dec.aesDecode(dbServerVO.getSvr_spr_scm_pwd()));
 
 					List<Object> result = cic.extension_select(serverObj, IP, PORT, strExtname);
+
 					if (result == null || result.size() == 0) {
 						mv.addObject("extName", strExtname);
 					} else {

@@ -29,12 +29,19 @@
 	$(window.document).ready(function() {
 		//테이블 셋팅
 		fn_init();
-		
+
 		//조회
-		fn_select("init");
-		
-		if ($(".selectSearch").length) {
-			$(".selectSearch").select2();
+		if (nvlPrmSet($("#lst_mdf_dtm").val(), "") != "") {
+			fn_select("init");
+			
+	 		if ($(".selectSearch").length) {
+				$(".selectSearch").select2();
+			}
+		} else {
+ 			$("#btnSearch").prop("disabled", "disabled");
+			$("#btnInsert").prop("disabled", "disabled");
+
+			showDangerToast('top-right', '<spring:message code="access_control_management.msg4" />', '<spring:message code="access_control_management.msg5" />');
 		}
 	});
 
@@ -110,7 +117,7 @@
 	function fn_select(gbn){
 		if (gbn != "init") {
 			if($("#lst_mdf_dtm").val()==null){
-				alert("<spring:message code='message.msg30' />");
+				showSwalIcon('<spring:message code="access_control_management.msg4" />', '<spring:message code="common.close" />', '', 'error');
 				return false;
 			}
 		}
@@ -124,14 +131,12 @@
 				type : "post",
 				beforeSend: function(xhr) {
 			        xhr.setRequestHeader("AJAX", true);
-			     },
+			    },
 				error : function(xhr, status, error) {
 					if(xhr.status == 401) {
-						showSwalIcon('<spring:message code="message.msg02" />', '<spring:message code="common.close" />', '', 'error');
-						top.location.href = "/";
+						showSwalIconRst('<spring:message code="message.msg02" />', '<spring:message code="common.close" />', '', 'error', 'top');
 					} else if(xhr.status == 403) {
-						showSwalIcon('<spring:message code="message.msg03" />', '<spring:message code="common.close" />', '', 'error');
-						top.location.href = "/";
+						showSwalIconRst('<spring:message code="message.msg03" />', '<spring:message code="common.close" />', '', 'error', 'top');
 					} else {
 						showSwalIcon("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""), '<spring:message code="common.close" />', '', 'error');
 					}
@@ -194,26 +199,22 @@
 			},
 			error : function(xhr, status, error) {
 				if(xhr.status == 401) {
-					showSwalIcon('<spring:message code="message.msg02" />', '<spring:message code="common.close" />', '', 'error');
-					top.location.href = "/";
+					showSwalIconRst('<spring:message code="message.msg02" />', '<spring:message code="common.close" />', '', 'error', 'top');
 				} else if(xhr.status == 403) {
-					showSwalIcon('<spring:message code="message.msg03" />', '<spring:message code="common.close" />', '', 'error');
-					top.location.href = "/";
+					showSwalIconRst('<spring:message code="message.msg03" />', '<spring:message code="common.close" />', '', 'error', 'top');
 				} else {
 					showSwalIcon("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""), '<spring:message code="common.close" />', '', 'error');
 				}
 			},
 			success : function(result) {			
 				if (result=="true") {
-					showSwalIcon('<spring:message code="message.msg31" />', '<spring:message code="common.close" />', '', 'success');
-					location.reload();
+					showSwalIconRst('<spring:message code="message.msg31" />', '<spring:message code="common.close" />', '', 'success', "reload");
 				}else if(result=="adminpack"){
 					showSwalIcon('<spring:message code="message.msg215" />', '<spring:message code="common.close" />', '', 'error');
 				}else if(result=="agent"){
 					showSwalIcon('<spring:message code="message.msg25" />', '<spring:message code="common.close" />', '', 'error');
 				}else if(extName == "agentfail"){
 					showSwalIcon('<spring:message code="message.msg27" />', '<spring:message code="common.close" />', '', 'error');
-					history.go(-1);
 				}else {
 					showSwalIcon('<spring:message code="message.msg32" />', '<spring:message code="common.close" />', '', 'error');
 				}

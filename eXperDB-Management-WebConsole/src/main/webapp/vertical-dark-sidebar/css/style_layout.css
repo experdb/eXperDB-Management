@@ -1234,3 +1234,6 @@ span.bold{font-weight:bold; color:#248afd; cursor:pointer;}
 /* order_excute*/
 .order_exc > a{display:inline-block;}
 .order_exc > a:first-child{margin-right:8px;}
+
+/* 감사 이력 상세화면 */
+.overflow_area3{height:500px;overflow-y:auto;border:1px solid #b8c3c6;}
