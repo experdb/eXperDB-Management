@@ -1,55 +1,8 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
-<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
-<%@ taglib prefix="form" uri="http://www.springframework.org/tags/form"%>
-<%@ taglib prefix="ui" uri="http://egovframework.gov/ctl/ui"%>
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags"%>
-<%@include file="../cmmn/commonLocale.jsp"%>
-<%
-	/**
-	* @Class Name : dbServerRegForm.jsp
-	* @Description : 디비 서버 등록 화면
-	* @Modification Information
-	*
-	*   수정일         수정자                   수정내용
-	*  ------------    -----------    ---------------------------
-	*  2017.06.01     최초 생성
-	*
-	* author 변승우 대리
-	* since 2017.06.01
-	*
-	*/
-%>   
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
-<head>
-<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-<title>eXperDB</title>
-<link rel="stylesheet" type="text/css" href="/css/jquery-ui.css">
-<link rel="stylesheet" type="text/css" href="/css/common.css">
-<link rel = "stylesheet" type="text/css" media="screen" href="/css/dt/jquery.dataTables.min.css"/>
-<link rel = "stylesheet" type="text/css" media="screen" href="/css/dt/dataTables.jqueryui.min.css"/>
-<link rel="stylesheet" type="text/css" href="<c:url value='/css/dt/dataTables.colVis.css'/>"/>
-<link rel="stylesheet" type="text/css" href="<c:url value='/css/dt/dataTables.checkboxes.css'/>"/>
-
-<script src ="/js/jquery/jquery-1.7.2.min.js" type="text/javascript"></script>
-<script src ="/js/jquery/jquery-ui.js" type="text/javascript"></script>
-<script src="/js/jquery/jquery.dataTables.min.js" type="text/javascript"></script>
-<script src="/js/dt/dataTables.jqueryui.min.js" type="text/javascript"></script>
-<script src="/js/dt/dataTables.colResize.js" type="text/javascript"></script>
-<script src="/js/dt/dataTables.checkboxes.min.js" type="text/javascript"></script>	
-<script src="/js/dt/dataTables.colVis.js" type="text/javascript"></script>	
-<script type="text/javascript" src="/js/common.js"></script>
-<style>
-#serverIpadr_wrapper{
-	width:725px;
-}
-</style>
 <script type="text/javascript">
-
-
-
 //연결테스트 확인여부
-var table = null;
+var dbServerTable = null;
 var connCheck = "fail";
 var idCheck = "fail";
 var db_svr_nmChk ="fail";
@@ -62,12 +15,12 @@ var port = null;
 var pgdataCheck ="fail"; */
 
 
-function fn_init() {
+function fn_init2() {
 	
 	/* ********************************************************
 	 * 서버 (데이터테이블)
 	 ******************************************************** */
-	table = $('#serverIpadr').DataTable({
+	 dbServerTable = $('#serverIpadr').DataTable({
 		scrollY : "100px",
 		bSort: false,
 		scrollX: true,	
@@ -94,12 +47,12 @@ function fn_init() {
 		]
 	});
 	
-	table.tables().header().to$().find('th:eq(0)').css('min-width', '10px');
-	table.tables().header().to$().find('th:eq(1)').css('min-width', '150px');
-	table.tables().header().to$().find('th:eq(2)').css('min-width', '120px');
-	table.tables().header().to$().find('th:eq(3)').css('min-width', '130px');
-	table.tables().header().to$().find('th:eq(4)').css('min-width', '130px');
-	table.tables().header().to$().find('th:eq(5)').css('min-width', '0px');
+	dbServerTable.tables().header().to$().find('th:eq(0)').css('min-width', '10px');
+	dbServerTable.tables().header().to$().find('th:eq(1)').css('min-width', '150px');
+	dbServerTable.tables().header().to$().find('th:eq(2)').css('min-width', '120px');
+	dbServerTable.tables().header().to$().find('th:eq(3)').css('min-width', '130px');
+	dbServerTable.tables().header().to$().find('th:eq(4)').css('min-width', '130px');
+	dbServerTable.tables().header().to$().find('th:eq(5)').css('min-width', '0px');
     $(window).trigger('resize'); 
 }
 
@@ -107,7 +60,7 @@ function fn_init() {
  * 페이지 시작시(서버 조회)
  ******************************************************** */
 $(window.document).ready(function() {
-	fn_init();
+	fn_init2();
 });
 
 $(function() {		
@@ -116,12 +69,12 @@ $(function() {
 	 * 서버 테이블 (선택영역 표시)
 	 ******************************************************** */
     $('#serverIpadr tbody').on( 'click', 'tr', function () {
-    	var check = table.row( this ).index()+1
+    	var check = dbServerTable.row( this ).index()+1
     	$(":radio[name=input:radio][value="+check+"]").prop("checked", true);
          if ( $(this).hasClass('selected') ) {
         }
         else {    	
-        	table.$('tr.selected').removeClass('selected');
+        	dbServerTable.$('tr.selected').removeClass('selected');
             $(this).addClass('selected');       
         } 
     });
@@ -139,35 +92,35 @@ function valid_numeric(objValue)
 
 function fn_dbServerValidation(){
 	
-	if(table.rows().data().length < 1){
-		alert('<spring:message code="message.msg184" />')
+	if(dbServerTable.rows().data().length < 1){
+		showSwalIcon('<spring:message code="message.msg184" />', '<spring:message code="common.close" />', '', 'error');
 		return false;
 	}
 	
 	var db_svr_nm = document.getElementById("db_svr_nm");
 		if (db_svr_nm.value == "") {
-			   alert('<spring:message code="message.msg85" />');
-			   db_svr_nm.focus();
-			   return false;
+			showSwalIcon('<spring:message code="message.msg85" />', '<spring:message code="common.close" />', '', 'error');
+			db_svr_nm.focus();
+			return false;
 		}
 		var dft_db_nm = document.getElementById("dft_db_nm");
  		if (dft_db_nm.value == "") {
-  			   alert('<spring:message code="message.msg86" />');
-  			 dft_db_nm.focus();
-  			   return false;
+ 			showSwalIcon('<spring:message code="message.msg86" />', '<spring:message code="common.close" />', '', 'error');
+  			dft_db_nm.focus();
+  			return false;
   		}
 
 		var svr_spr_usr_id = document.getElementById("svr_spr_usr_id");
  		if (svr_spr_usr_id.value == "") {
-  			   alert('<spring:message code="message.msg87" />');
-  			 svr_spr_usr_id.focus();
-  			   return false;
+ 			showSwalIcon('<spring:message code="message.msg87" />', '<spring:message code="common.close" />', '', 'error');
+  			svr_spr_usr_id.focus();
+  			return false;
   		}
  		var svr_spr_scm_pwd = document.getElementById("svr_spr_scm_pwd");
  		if (svr_spr_scm_pwd.value == "") {
-  			   alert('<spring:message code="message.msg88" />');
-  			 svr_spr_scm_pwd.focus();
-  			   return false;
+ 			showSwalIcon('<spring:message code="message.msg88" />', '<spring:message code="common.close" />', '', 'error');
+  			svr_spr_scm_pwd.focus();
+  			return false;
   		}		
  		return true;
 }
@@ -176,13 +129,13 @@ function fn_ipadrValidation(){
 	var ipadr = document.getElementById("ipadr");
 	var portno = document.getElementById("portno");
 		if (ipadr.value == "%") {
-			   alert('<spring:message code="message.msg90" />');
-			   ipadr.focus();
-			   return false;
+			showSwalIcon('<spring:message code="message.msg90" />', '<spring:message code="common.close" />', '', 'error');
+			ipadr.focus();
+			return false;
 		}else if(portno.value == ""){
-			alert('<spring:message code="message.msg83" />');
+			showSwalIcon('<spring:message code="message.msg83" />', '<spring:message code="common.close" />', '', 'error');
 			portno.focus();
-			   return false;
+			return false;
 		}
  		return true;
 }
@@ -190,7 +143,7 @@ function fn_ipadrValidation(){
 
 function fn_saveValidation(){
 	var mCnt = 0;
-	var dataCnt = table.column(0).data().length;
+	var dataCnt = dbServerTable.column(0).data().length;
 	
 	if(connCheck != "success"){
 		alert('<spring:message code="message.msg89" />');
@@ -198,15 +151,15 @@ function fn_saveValidation(){
 	}
 		
 	for(var i=0; i<dataCnt; i++){
-		if(table.rows().data()[i].master_gbn == "M"){
+		if(dbServerTable.rows().data()[i].master_gbn == "M"){
 			mCnt += 1;
 		}
 	}
 	if(mCnt == 0){
-		alert('<spring:message code="message.msg98" />');
+		showSwalIcon('<spring:message code="message.msg98" />', '<spring:message code="common.close" />', '', 'error');
 		return false;
 	}else if(mCnt > 1){
-		alert('<spring:message code="message.msg91" />');
+		showSwalIcon('<spring:message code="message.msg91" />', '<spring:message code="common.close" />', '', 'error');
 		return false;
 	}
 	return true;
@@ -217,14 +170,14 @@ function fn_insertDbServer(){
 
 	if (!fn_dbServerValidation()) return false;
 	if (!fn_saveValidation()) return false;
-	var datas = table.rows().data();
+	var datas = dbServerTable.rows().data();
 	var arrmaps = [];
 	for (var i = 0; i < datas.length; i++){
 		var tmpmap = new Object();
-		tmpmap["ipadr"] = table.rows().data()[i].ipadr;
-        tmpmap["portno"] = table.rows().data()[i].portno;      
-        tmpmap["master_gbn"] = table.rows().data()[i].master_gbn;
-        tmpmap["svr_host_nm"] = table.rows().data()[i].svr_host_nm;
+		tmpmap["ipadr"] = dbServerTable.rows().data()[i].ipadr;
+        tmpmap["portno"] = dbServerTable.rows().data()[i].portno;      
+        tmpmap["master_gbn"] = dbServerTable.rows().data()[i].master_gbn;
+        tmpmap["svr_host_nm"] = dbServerTable.rows().data()[i].svr_host_nm;
 		arrmaps.push(tmpmap);	
 		}
 	
@@ -247,13 +200,13 @@ function fn_insertDbServer(){
 	     },
 		error : function(xhr, status, error) {
 			if(xhr.status == 401) {
-				alert('<spring:message code="message.msg02" />');
+				showSwalIcon('<spring:message code="message.msg02" />', '<spring:message code="common.close" />', '', 'error');
 				top.location.href = "/";
 			} else if(xhr.status == 403) {
-				alert('<spring:message code="message.msg03" />');
+				showSwalIcon('<spring:message code="message.msg03" />', '<spring:message code="common.close" />', '', 'error');
 				top.location.href = "/";
 			} else {
-				alert("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""));
+				showSwalIcon("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""), '<spring:message code="common.close" />', '', 'error');
 			}
 		},
 		success : function(result) {	
@@ -305,8 +258,8 @@ function fu_extensionCreate(arrmaps){
 		},
 		success : function(result) {
 			alert('<spring:message code="message.msg144"/>');
-			opener.location.reload();
-			self.close();	 			
+			location.reload();
+			$('#pop_layer_dbserver_reg').modal("hide");	 			
 		}
 	}); 
 }
@@ -317,15 +270,15 @@ function fn_dbServerConnTest(){
 	
 	if (!fn_dbServerValidation()) return false;
 	var datasArr = new Array();
-	var ipadrCnt = table.column(0).data().length;
-	var ipadr = table.rows().data()[0].ipadr;
+	var ipadrCnt = dbServerTable.column(0).data().length;
+	var ipadr = dbServerTable.rows().data()[0].ipadr;
 	
 	
 	for(var i = 0; i < ipadrCnt; i++){
 		 var datas = new Object();
 		 datas.SERVER_NAME = $("#db_svr_nm").val();
-	     datas.SERVER_IP = table.rows().data()[i].ipadr;
-	     datas.SERVER_PORT = table.rows().data()[i].portno;		  
+	     datas.SERVER_IP = dbServerTable.rows().data()[i].ipadr;
+	     datas.SERVER_PORT = dbServerTable.rows().data()[i].portno;		  
 	     datas.DATABASE_NAME = $("#dft_db_nm").val();	
 	     datas.USER_ID = $("#svr_spr_usr_id").val();	
 	     datas.USER_PWD = $("#svr_spr_scm_pwd").val();	
@@ -358,11 +311,11 @@ function fn_dbServerConnTest(){
 		success : function(result) {
 			if(result[0].result_code == 0){				
 				 for(var i=0; i<result.length; i++){		
-					if(table.rows().data()[i].ipadr == result[i].result_data[0].SERVER_IP){
-						table.cell(i, 3).data(result[i].result_data[0].MASTER_GBN).draw();
-						table.cell(i, 4).data(result[i].result_data[0].CONNECT_YN).draw();	
+					if(dbServerTable.rows().data()[i].ipadr == result[i].result_data[0].SERVER_IP){
+						dbServerTable.cell(i, 3).data(result[i].result_data[0].MASTER_GBN).draw();
+						dbServerTable.cell(i, 4).data(result[i].result_data[0].CONNECT_YN).draw();	
 						 if(result[i].result_data[0].MASTER_GBN != "N" || result[i].result_data[0].CONNECT_YN != "N"){
-							 table.cell(i, 5).data(result[i].result_data[0].CMD_HOSTNAME).draw();	
+							 dbServerTable.cell(i, 5).data(result[i].result_data[0].CMD_HOSTNAME).draw();	
 						 }
 					}				
 					 if(result[i].result_data[0].MASTER_GBN == "N" || result[i].result_data[0].CONNECT_YN == "N"){
@@ -399,13 +352,13 @@ function fn_pathCall(ipadr, datasArr){
 	     },
 		error : function(xhr, status, error) {
 			if(xhr.status == 401) {
-				alert('<spring:message code="message.msg02" />');
+				showSwalIconRst('<spring:message code="message.msg02" />', '<spring:message code="common.close" />', '', 'error', 'top');
 				top.location.href = "/";
 			} else if(xhr.status == 403) {
-				alert('<spring:message code="message.msg03" />');
+				showSwalIconRst('<spring:message code="message.msg03" />', '<spring:message code="common.close" />', '', 'error', 'top');
 				top.location.href = "/";
 			} else {
-				alert("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""));
+				showSwalIcon("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""), '<spring:message code="common.close" />', '', 'error');
 			}
 		},
 		success : function(result) {		
@@ -449,13 +402,13 @@ function fn_ipadrChange() {
 	     },
 		error : function(xhr, status, error) {
 			if(xhr.status == 401) {
-				alert('<spring:message code="message.msg02" />');
+				showSwalIconRst('<spring:message code="message.msg02" />', '<spring:message code="common.close" />', '', 'error', 'top');
 				top.location.href = "/";
 			} else if(xhr.status == 403) {
-				alert('<spring:message code="message.msg03" />');
+				showSwalIconRst('<spring:message code="message.msg03" />', '<spring:message code="common.close" />', '', 'error', 'top');
 				top.location.href = "/";
 			} else {
-				alert("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""));
+				showSwalIcon("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""), '<spring:message code="common.close" />', '', 'error');
 			}
 		}
 	});
@@ -479,13 +432,13 @@ function fn_getHostNm(ipadr) {
 	     },
 		error : function(xhr, status, error) {
 			if(xhr.status == 401) {
-				alert('<spring:message code="message.msg02" />');
+				showSwalIconRst('<spring:message code="message.msg02" />', '<spring:message code="common.close" />', '', 'error', 'top');
 				top.location.href = "/";
 			} else if(xhr.status == 403) {
-				alert('<spring:message code="message.msg03" />');
+				showSwalIconRst('<spring:message code="message.msg03" />', '<spring:message code="common.close" />', '', 'error', 'top');
 				top.location.href = "/";
 			} else {
-				alert("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""));
+				showSwalIcon("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""), '<spring:message code="common.close" />', '', 'error');
 			}
 		}
 	});
@@ -511,7 +464,7 @@ function fn_svrnmCheck() {
 				document.getElementById("db_svr_nm").focus();
 				db_svr_nmChk = "success";
 			} else {
-				alert('<spring:message code="message.msg97" />');
+				showSwalIcon('<spring:message code="message.msg97" />', '<spring:message code="common.close" />', '', 'error');
 				document.getElementById("db_svr_nm").focus();
 			}
 		},
@@ -520,13 +473,13 @@ function fn_svrnmCheck() {
 	     },
 		error : function(xhr, status, error) {
 			if(xhr.status == 401) {
-				alert('<spring:message code="message.msg02" />');
+				showSwalIconRst('<spring:message code="message.msg02" />', '<spring:message code="common.close" />', '', 'error', 'top');
 				top.location.href = "/";
 			} else if(xhr.status == 403) {
-				alert('<spring:message code="message.msg03" />');
+				showSwalIconRst('<spring:message code="message.msg03" />', '<spring:message code="common.close" />', '', 'error', 'top');
 				top.location.href = "/";
 			} else {
-				alert("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""));
+				showSwalIcon("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""), '<spring:message code="common.close" />', '', 'error');
 			}
 		}
 	});
@@ -540,12 +493,12 @@ function checkPghome(){
 	var ipadr = null;
 	var portno = null;
 	
-	var dataCnt = table.column(0).data().length;
+	var dataCnt = dbServerTable.column(0).data().length;
 	
 	for(var i=0; i<dataCnt; i++){
-		if(table.rows().data()[i].master_gbn == "M"){
-			ipadr = table.rows().data()[i].ipadr;
-			portno = table.rows().data()[i].portno;
+		if(dbServerTable.rows().data()[i].master_gbn == "M"){
+			ipadr = dbServerTable.rows().data()[i].ipadr;
+			portno = dbServerTable.rows().data()[i].portno;
 		}
 	}
 	if(ipadr == null){
@@ -577,13 +530,13 @@ function checkPghome(){
 		     },
 			error : function(xhr, status, error) {
 				if(xhr.status == 401) {
-					alert('<spring:message code="message.msg02" />');
+					showSwalIconRst('<spring:message code="message.msg02" />', '<spring:message code="common.close" />', '', 'error', 'top');
 					top.location.href = "/";
 				} else if(xhr.status == 403) {
-					alert('<spring:message code="message.msg03" />');
+					showSwalIconRst('<spring:message code="message.msg03" />', '<spring:message code="common.close" />', '', 'error', 'top');
 					top.location.href = "/";
 				} else {
-					alert("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""));
+					showSwalIcon("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""), '<spring:message code="common.close" />', '', 'error');
 				}
 			},
 			success : function(data) {				
@@ -611,22 +564,22 @@ function checkPghome(){
 	 var ipadr = null;
 	var portno = null;
 		
-		var dataCnt = table.column(0).data().length;
+		var dataCnt = dbServerTable.column(0).data().length;
 		
 		for(var i=0; i<dataCnt; i++){
-			if(table.rows().data()[i].master_gbn == "M"){
-				ipadr = table.rows().data()[i].ipadr;
-				portno = table.rows().data()[i].portno;
+			if(dbServerTable.rows().data()[i].master_gbn == "M"){
+				ipadr = dbServerTable.rows().data()[i].ipadr;
+				portno = dbServerTable.rows().data()[i].portno;
 			}
 		}
 		if(ipadr == null){
-			alert('<spring:message code="message.msg98" />');
+			showSwalIcon('<spring:message code="message.msg98" />', '<spring:message code="common.close" />', '', 'error');
 			return false;
 		}
 		
 		var save_pth = $("#pgdata_pth").val();
 		if(save_pth == ""){
-			alert('<spring:message code="message.msg99" />');
+			showSwalIcon('<spring:message code="message.msg99" />', '<spring:message code="common.close" />', '', 'error');
 			$("#pgdata_pth").focus();
 		}else{
 			$.ajax({
@@ -648,13 +601,13 @@ function checkPghome(){
 			     },
 				error : function(xhr, status, error) {
 					if(xhr.status == 401) {
-						alert('<spring:message code="message.msg02" />');
+						showSwalIconRst('<spring:message code="message.msg02" />', '<spring:message code="common.close" />', '', 'error', 'top');
 						top.location.href = "/";
 					} else if(xhr.status == 403) {
-						alert('<spring:message code="message.msg03" />');
+						showSwalIconRst('<spring:message code="message.msg03" />', '<spring:message code="common.close" />', '', 'error', 'top');
 						top.location.href = "/";
 					} else {
-						alert("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""));
+						showSwalIcon("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""), '<spring:message code="common.close" />', '', 'error');
 					}
 				},
 				success : function(data) {
@@ -667,7 +620,7 @@ function checkPghome(){
 							alert('<spring:message code="backup_management.invalid_path"/>');
 						}
 					}else{
-						alert('<spring:message code="message.msg76" />');
+						showSwalIcon('<spring:message code="message.msg76" />', '<spring:message code="common.close" />', '', 'error');
 					}
 				}
 			});
@@ -685,13 +638,13 @@ function fn_ipadrAddForm(){
 	     },
 		error : function(xhr, status, error) {
 			if(xhr.status == 401) {
-				alert('<spring:message code="message.msg02" />');
+				showSwalIconRst('<spring:message code="message.msg02" />', '<spring:message code="common.close" />', '', 'error', 'top');
 				top.location.href = "/";
 			} else if(xhr.status == 403) {
-				alert('<spring:message code="message.msg03" />');
+				showSwalIconRst('<spring:message code="message.msg03" />', '<spring:message code="common.close" />', '', 'error', 'top');
 				top.location.href = "/";
 			} else {
-				alert("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""));
+				showSwalIcon("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""), '<spring:message code="common.close" />', '', 'error');
 			}
 		},
 		success : function(result) {
@@ -706,140 +659,173 @@ function fn_ipadrAddForm(){
 	});
   	
 	document.ipadr_form.reset();
-	toggleLayer($('#pop_layer'), 'on');
 }	
 	
 	
 function fn_ipadrAdd(){
 	if (!fn_ipadrValidation()) return false;
 	
-	var dataCnt = table.column(0).data().length;
+	var dataCnt = dbServerTable.column(0).data().length;
 	
 	for(var i=0; i<dataCnt; i++){
-		if(table.rows().data()[i].ipadr == $("#ipadr").val()){
+		if(dbServerTable.rows().data()[i].ipadr == $("#ipadr").val()){
 			alert('<spring:message code="message.msg170"/>');
 			return false;
 		}
 	}
 	
-	table.row.add( {
+	dbServerTable.row.add( {
         "ipadr":		$("#ipadr").val(),
         "portno":	$("#portno").val()
     } ).draw();	
-	toggleLayer($('#pop_layer'), 'off');
+	
+	$('#pop_layer_ip_reg').modal("hide");
 }
 
 
 function fn_ipadrDelForm(){
-	 table.row('.selected').remove().draw();
+	dbServerTable.row('.selected').remove().draw();
 }
 </script>
-</head>
-<body>
-	<!--  popup -->
-	<div id="pop_layer" class="pop-layer">
-		<div class="pop-container">
-			<div class="pop_cts" style="width:530px;">
-				<p class="tit"><spring:message code="dbms_information.dbms_ip_reg"/></p>
-					<form name="ipadr_form">
-						<table class="write">
-							<caption>DBMS IP등록하기</caption>
-							<colgroup>
-								<col style="width:130px;" />
-								<col />
-							</colgroup>
-							<tbody>
-								<tr>
-									<th scope="row" class="ico_t1"><spring:message code="dbms_information.dbms_ip" />(*)</th>
-									<td>
-										<select class="select"  id="ipadr" name="ipadr" onChange="fn_ipadrChange();" >
+<div class="modal fade" id="pop_layer_ip_reg" tabindex="-1" role="dialog" aria-labelledby="ModalLabel" aria-hidden="true" data-backdrop="static" data-keyboard="false" style="display: none; z-index: 1060;">
+	<div class="modal-dialog  modal-xl-top" role="document" style="margin: 250px 300px;">
+		<div class="modal-content" style="width:1000px;">			 
+			<div class="modal-body" style="margin-bottom:-30px;">
+				<h4 class="modal-title mdi mdi-alert-circle text-info" id="ModalLabel" style="padding-left:5px;">
+					<spring:message code="dbms_information.dbms_ip_reg"/>
+				</h4>
+				<div class="card" style="margin-top:10px;border:0px;">
+					<div class="card-body">
+						<form class="cmxform" name="ipadr_form" id="ipadr_form" method="post">
+							<fieldset>
+								<div class="form-group row">
+									<label for="com_max_clusters" class="col-sm-2 col-form-label pop-label-index">
+										<i class="item-icon fa fa-dot-circle-o"></i>
+										<spring:message code="dbms_information.dbms_ip" />(*)
+									</label>
+									<div class="col-sm-4">
+										<select class="form-control"  id="ipadr" name="ipadr" onChange="fn_ipadrChange();" >
 											<option value="%"><spring:message code="schedule.total" /> </option>
 										</select>
-									</td>
-								</tr>
-								<tr>
-									<th scope="row" class="ico_t1"><spring:message code="data_transfer.port" />(*)</th>
-									<td><input type="text" class="txt" name="portno" id="portno" maxlength="5"/></td>
-								</tr>
-							</tbody>
-						</table>
-					</form>
-				<div class="btn_type_02">
-					<a href="#n" class="btn" onclick="fn_ipadrAdd();"><span><spring:message code="common.add" /></span></a>
-					<a href="#n" class="btn" onclick="toggleLayer($('#pop_layer'), 'off');"><span><spring:message code="common.cancel" /></span></a>
+									</div>
+									
+									<label for="com_max_clusters" class="col-sm-2 col-form-label pop-label-index">
+										<i class="item-icon fa fa-dot-circle-o"></i>
+										<spring:message code="data_transfer.port" />(*)
+									</label>
+									<div class="col-sm-4">
+										<input type="text" class="form-control" id="portno" name="portno"  maxlength="5" onkeyup="fn_checkWord(this,5)" placeholder="5<spring:message code='message.msg188'/>">
+									</div>
+									
+								</div>
+								<div class="top-modal-footer" style="text-align: center !important; margin: -20px 0 0 -20px;" >
+									<input class="btn btn-primary" width="200px"style="vertical-align:middle;" type="button" onclick="fn_ipadrAdd();" value='<spring:message code="common.add" />' />
+									<button type="button" class="btn btn-light" data-dismiss="modal"><spring:message code="common.close"/></button>
+								</div>
+							</fieldset>
+						</form>
+					</div>
 				</div>
 			</div>
-		</div><!-- //pop-container -->
-	</div>
-
-
-<div class="pop_container">
-	<div class="pop_cts">
-		<p class="tit"><spring:message code="menu.dbms_registration" /></p>
-		<form name="dbserverInsert" id="dbserverInsert" method="post">
-		<table class="write">
-			<caption>DBMS 등록</caption>
-			<colgroup>
-				<col style="width:130px;" />
-				<col style="width:330px;" />
-				<col style="width:100px;" />
-				<col />
-			</colgroup>
-			<tbody>
-				<tr>
-					<th scope="row" class="ico_t1" ><spring:message code="dbms_information.dbms_ip" />(*)</th>
-					<td colspan="3">
-						<!-- 메인 테이블 -->
-						<span onclick="fn_ipadrAddForm();" style="cursor:pointer"><img src="../images/popup/plus.png" alt="" style="margin-left: 88%;"/></span>
-						<span onclick="fn_ipadrDelForm();" style="cursor:pointer"><img src="../images/popup/minus.png" alt=""  /></span>
-							<table id="serverIpadr" class="cell-border display" cellspacing="0" align="left">
-								<thead>
-									<tr>
-										<th width="10"></th>
-										<th width="150"><spring:message code="dbms_information.dbms_ip" /></th>
-										<th width="120"><spring:message code="data_transfer.port" /></th>
-										<th width="130"><spring:message code="common.division" /></th>
-										<th width="130"><spring:message code="dbms_information.conn_YN"/></th>	
-										<th width="0"></th>								
-									</tr>
-								</thead>
-							</table>
-					</td>
-				</tr>
-				<tr>
-					<th scope="row" class="ico_t1" ><spring:message code="common.dbms_name" />(*)</th>
-					<td><input type="text" class="txt t3" name="db_svr_nm" id="db_svr_nm"  maxlength="20" onkeyup="fn_checkWord(this,20)" placeholder="20<spring:message code='message.msg188'/>"/>
-					<span class="btn btnC_01"><button type="button" class= "btn_type_02" onclick="fn_svrnmCheck()" style="width: 85px; margin-right: -60px; margin-top: 0;"><spring:message code="common.overlap_check" /></button></span></td>
-					<th scope="row" class="ico_t1">Database(*)</th>
-					<td><input type="text" class="txt" name="dft_db_nm" id="dft_db_nm" maxlength="30" onkeyup="fn_checkWord(this,30)" placeholder="30<spring:message code='message.msg188'/>"/></td>
-				</tr>
-				<tr>
-					<th scope="row" class="ico_t1"><spring:message code="dbms_information.account" />(*)</th>
-					<td><input type="text" class="txt" name="svr_spr_usr_id" id="svr_spr_usr_id" maxlength="30" onkeyup="fn_checkWord(this,30)" placeholder="30<spring:message code='message.msg188'/>"/></td>
-					<th scope="row" class="ico_t1"><spring:message code="user_management.password" />(*)</th>
-					<td><input type="password" class="txt" name="svr_spr_scm_pwd" id="svr_spr_scm_pwd" /></td>
-				</tr>				
-				</tr>				
-				<tr>
-					<th scope="row" class="ico_t1"><spring:message code="dbms_information.pgHomePath"/>(*)</th>
-					<td>
-					<input type="text" class="txt" name="pghome_pth" id="pghome_pth" style="width:725px" readonly="readonly" /></td>				
-				</tr>
-				<tr>
-					<th scope="row" class="ico_t1"><spring:message code="dbms_information.pgDataPath"/>(*)</th>
-					<td>
-					<input type="text" class="txt" name="pgdata_pth" id="pgdata_pth" style="width:725px" readonly="readonly" /></td>				
-				</tr>				
-			</tbody>
-		</table>
-		</form>
-		<div class="btn_type_02">
-			<span class="btn"><button type="button" onClick="fn_insertDbServer();"><spring:message code="common.registory" /></button></span>
-			<span class="btn btnF_01 btnC_01"><button type="button" onClick="fn_dbServerConnTest();"><spring:message code="dbms_information.conn_Test"/></button></span>
-			<a href="#n" class="btn" onclick="window.close();"><span><spring:message code="common.cancel" /> </span></a>
 		</div>
 	</div>
 </div>
-
-</body>
-</html>
+	
+<div class="modal fade" id="pop_layer_dbserver_reg" tabindex="-1" role="dialog" aria-labelledby="ModalLabel" aria-hidden="true" data-backdrop="static" data-keyboard="false">
+	<div class="modal-dialog  modal-xl-top" role="document" style="margin: 100px 250px;">
+		<div class="modal-content" style="width:1100px;">			 
+			<div class="modal-body" style="margin-bottom:-30px;">
+				<h4 class="modal-title mdi mdi-alert-circle text-info" id="ModalLabel" style="padding-left:5px;">
+					<spring:message code="menu.dbms_registration" />
+				</h4>
+				<div class="card" style="margin-top:10px;border:0px;">
+					<div class="card-body">
+						<form class="cmxform" name="dbserverInsert" id="dbserverInsert" method="post">
+							<fieldset>
+								<div class="form-group row border-bottom">
+									<label for="com_db_svr_nm" class="col-sm-3 col-form-label">
+										<i class="item-icon fa fa-dot-circle-o"></i>
+										<spring:message code="dbms_information.dbms_ip" />
+									</label>
+									<div class="col-sm-9">
+										<a data-toggle="modal" href="#pop_layer_ip_reg"><span onclick="fn_ipadrAddForm();" style="cursor:pointer"><img src="../images/popup/plus.png" alt="" style="margin-left: 88%;"/></span></a>
+										<span onclick="fn_ipadrDelForm();" style="cursor:pointer"><img src="../images/popup/minus.png" alt=""  /></span>
+										<table id="serverIpadr" class="table table-hover table-striped" cellspacing="0" align="left">
+											<thead>
+												<tr class="bg-primary text-white">
+													<th width="10"></th>
+													<th width="150"><spring:message code="dbms_information.dbms_ip" /></th>
+													<th width="120"><spring:message code="data_transfer.port" /></th>
+													<th width="130"><spring:message code="common.division" /></th>
+													<th width="130"><spring:message code="dbms_information.conn_YN"/></th>	
+													<th width="0"></th>								
+												</tr>
+											</thead>
+										</table>
+									
+									</div>
+								</div>
+								<div class="form-group row">
+									<label for="com_max_clusters" class="col-sm-2 col-form-label pop-label-index">
+										<i class="item-icon fa fa-dot-circle-o"></i>
+										<spring:message code="common.dbms_name" />(*)
+									</label>
+									<div class="col-sm-4 form-inline">
+										<input type="text" class="form-control" id="db_svr_nm" name="db_svr_nm"  maxlength="20" onkeyup="fn_checkWord(this,20)" placeholder="20<spring:message code='message.msg188'/>" style="width: 55%;">
+										<button type="button" class= "btn btn-outline-primary form-control" onclick="fn_svrnmCheck()"><i class="ti-check-box  btn-icon-prepend "></i><spring:message code="common.overlap_check" /></button>
+									</div>
+									<label for="com_max_clusters" class="col-sm-2 col-form-label pop-label-index">
+										<i class="item-icon fa fa-dot-circle-o"></i>
+										Database(*)
+									</label>
+									<div class="col-sm-4">
+										<input type="text" class="form-control" id="dft_db_nm" name="dft_db_nm"  maxlength="30" onkeyup="fn_checkWord(this,30)" placeholder="30<spring:message code='message.msg188'/>">
+									</div>
+								</div>
+								<div class="form-group row">
+									<label for="com_max_clusters" class="col-sm-2 col-form-label pop-label-index">
+										<i class="item-icon fa fa-dot-circle-o"></i>
+										<spring:message code="dbms_information.account" />(*)
+									</label>
+									<div class="col-sm-4">
+										<input type="text" class="form-control" id="svr_spr_usr_id" name="svr_spr_usr_id"  maxlength="30" onkeyup="fn_checkWord(this,30)" placeholder="30<spring:message code='message.msg188'/>">
+									</div>
+									<label for="com_max_clusters" class="col-sm-2 col-form-label pop-label-index">
+										<i class="item-icon fa fa-dot-circle-o"></i>
+										<spring:message code="user_management.password" />(*)
+									</label>
+									<div class="col-sm-4">
+										<input type="password" class="form-control" id="svr_spr_scm_pwd" name="svr_spr_scm_pwd" >
+									</div>
+								</div>
+								<div class="form-group row">
+									<label for="com_ipadr" class="col-sm-2 col-form-label">
+										<i class="item-icon fa fa-dot-circle-o"></i>
+										<spring:message code="dbms_information.pgHomePath"/>(*)
+									</label>
+									<div class="col-sm-10">
+										<input type="text" class="form-control" id="pghome_pth" name="pghome_pth"  readonly="readonly">
+									</div>
+								</div>
+								<div class="form-group row">
+									<label for="com_max_clusters" class="col-sm-2 col-form-label pop-label-index">
+										<i class="item-icon fa fa-dot-circle-o"></i>
+										<spring:message code="dbms_information.pgDataPath"/>(*)
+									</label>
+									<div class="col-sm-10">
+										<input type="text" class="form-control" id="pgdata_pth" name="pgdata_pth"  readonly="readonly">
+									</div>
+								</div>
+								<div class="top-modal-footer" style="text-align: center !important; margin: -20px 0 0 -20px;" >
+									<input class="btn btn-primary" width="200px" style="vertical-align:middle;" type="button"  onClick="fn_insertDbServer();" value='<spring:message code="common.registory" />' />
+									<input class="btn btn-primary" width="200px" style="vertical-align:middle;" type="button" onClick="fn_dbServerConnTest();" value='<spring:message code="dbms_information.conn_Test" />' />
+									<button type="button" class="btn btn-light" data-dismiss="modal"><spring:message code="common.close"/></button>
+								</div>
+							</fieldset>
+						</form>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>

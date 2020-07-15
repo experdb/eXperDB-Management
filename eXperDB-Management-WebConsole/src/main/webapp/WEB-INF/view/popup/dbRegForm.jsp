@@ -19,34 +19,14 @@
 	*
 	*/
 %>   
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
-<head>
-<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-<title>eXperDB</title>
-<link rel="stylesheet" type="text/css" href="/css/jquery-ui.css">
-<link rel="stylesheet" type="text/css" href="/css/common.css">
-<link rel = "stylesheet" type="text/css" media="screen" href="/css/dt/jquery.dataTables.min.css"/>
-<link rel = "stylesheet" type="text/css" media="screen" href="/css/dt/dataTables.jqueryui.min.css"/>
-<link rel="stylesheet" type="text/css" href="<c:url value='/css/dt/dataTables.colVis.css'/>"/>
-<link rel="stylesheet" type="text/css" href="<c:url value='/css/dt/dataTables.checkboxes.css'/>"/>
-
-<script src ="/js/jquery/jquery-1.7.2.min.js" type="text/javascript"></script>
-<script src ="/js/jquery/jquery-ui.js" type="text/javascript"></script>
-<script src="/js/jquery/jquery.dataTables.min.js" type="text/javascript"></script>
-<script src="/js/dt/dataTables.jqueryui.min.js" type="text/javascript"></script>
-<script src="/js/dt/dataTables.colResize.js" type="text/javascript"></script>
-<script src="/js/dt/dataTables.checkboxes.min.js" type="text/javascript"></script>	
-<script src="/js/dt/dataTables.colVis.js" type="text/javascript"></script>	
-<script type="text/javascript" src="/js/common.js"></script>
 <script type="text/javascript">
 var table_db = null;
 
-function fn_init(){
+function fn_init2(){
 	/* 선택된 서버에 대한 데이터베이스 정보 */
      table_db = $('#dbList').DataTable({
     	 scrollX: true,	
-		scrollY : "250px",
+		scrollY : "300px",
 		searching : false,
 		paging :false,
 		bSort: false,
@@ -66,15 +46,15 @@ function fn_init(){
 		]
 	});
 	
-     table_db.tables().header().to$().find('th:eq(0)').css('min-width', '10px');
-     table_db.tables().header().to$().find('th:eq(1)').css('min-width', '130px');
-     table_db.tables().header().to$().find('th:eq(2)').css('min-width', '300px');
+     table_db.tables().header().to$().find('th:eq(0)').css('min-width', '30px');
+     table_db.tables().header().to$().find('th:eq(1)').css('min-width', '300px');
+     table_db.tables().header().to$().find('th:eq(2)').css('min-width', '550px');
      
 	 $(window).trigger('resize');
 }
 
 $(window.document).ready(function() {
-	fn_init();
+	fn_init2();
 
 	/* 
 	 * Repository DB에 등록되어 있는 DB의 서버명 SelectBox 
@@ -89,13 +69,13 @@ $(window.document).ready(function() {
 		     },
 			error : function(xhr, status, error) {
 				if(xhr.status == 401) {
-					alert('<spring:message code="message.msg02" />');
+					showSwalIconRst('<spring:message code="message.msg02" />', '<spring:message code="common.close" />', '', 'error', 'top');
 					top.location.href = "/";
 				} else if(xhr.status == 403) {
-					alert('<spring:message code="message.msg03" />');
+					showSwalIconRst('<spring:message code="message.msg03" />', '<spring:message code="common.close" />', '', 'error', 'top');
 					top.location.href = "/";
 				} else {
-					alert("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""));
+					showSwalIcon("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""), '<spring:message code="common.close" />', '', 'error');
 				}
 			},
 			success : function(result) {		
@@ -104,11 +84,12 @@ $(window.document).ready(function() {
 				if(result.length > 0){
 					for(var i=0; i<result.length; i++){
 						$("#db_svr_nm").append("<option value='"+result[i].db_svr_id+"'>"+result[i].db_svr_nm+"</option>");					
-					}									
+					}		
+					document.serverList.db_ipadr.value = result[0].ipadr;
+					document.serverList.portno.value = result[0].portno;
+					fn_svr_db(result[0].db_svr_nm, result[0].db_svr_id);
 				}									
-				document.serverList.ipadr.value = result[0].ipadr;
-				document.serverList.portno.value = result[0].portno;
-				fn_svr_db(result[0].db_svr_nm, result[0].db_svr_id);
+
 			}
 		}); 
 	
@@ -131,19 +112,19 @@ function fn_svr_db(db_svr_nm, db_svr_id){
 	     },
 		error : function(xhr, status, error) {
 			if(xhr.status == 401) {
-				alert('<spring:message code="message.msg02" />');
+				showSwalIconRst('<spring:message code="message.msg02" />', '<spring:message code="common.close" />', '', 'error', 'top');
 				top.location.href = "/";
 			} else if(xhr.status == 403) {
-				alert('<spring:message code="message.msg03" />');
+				showSwalIconRst('<spring:message code="message.msg03" />', '<spring:message code="common.close" />', '', 'error', 'top');
 				top.location.href = "/";
 			} else {
-				alert("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""));
+				showSwalIcon("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""), '<spring:message code="common.close" />', '', 'error');
 			}
 		},
 		success : function(result) {
 			table_db.clear().draw();
 			if(result.data == null){
-				alert('<spring:message code="message.msg05" />');
+				showSwalIcon('<spring:message code="message.msg05" />', '<spring:message code="common.close" />', '', 'error');
 			}else{
 				table_db.rows.add(result.data).draw();
 				fn_dataCompareChcek(result,db_svr_id);
@@ -170,19 +151,18 @@ function fn_dataCompareChcek(svrDbList,db_svr_id){
 	     },
 		error : function(xhr, status, error) {
 			if(xhr.status == 401) {
-				alert('<spring:message code="message.msg02" />');
+				showSwalIconRst('<spring:message code="message.msg02" />', '<spring:message code="common.close" />', '', 'error', 'top');
 				top.location.href = "/";
 			} else if(xhr.status == 403) {
-				alert('<spring:message code="message.msg03" />');
+				showSwalIconRst('<spring:message code="message.msg03" />', '<spring:message code="common.close" />', '', 'error', 'top');
 				top.location.href = "/";
 			} else {
-				alert("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""));
+				showSwalIcon("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""), '<spring:message code="common.close" />', '', 'error');
 			}
 		},
 		success : function(result) {
 			//DB목록 그리드의 설명 부분을 리스트로 가지고옴
 			var list = $("input[name='db_exp']");
-			
 			//서버디비 갯수
 			for(var i = 0; i<svrDbList.data.length; i++){
 				//repo디비 갯수
@@ -240,17 +220,17 @@ function fn_dataCompareChcek(svrDbList,db_svr_id){
 			     },
 				error : function(xhr, status, error) {
 					if(xhr.status == 401) {
-						alert('<spring:message code="message.msg02" />');
+						showSwalIconRst('<spring:message code="message.msg02" />', '<spring:message code="common.close" />', '', 'error', 'top');
 						top.location.href = "/";
 					} else if(xhr.status == 403) {
-						alert('<spring:message code="message.msg03" />');
+						showSwalIconRst('<spring:message code="message.msg03" />', '<spring:message code="common.close" />', '', 'error', 'top');
 						top.location.href = "/";
 					} else {
-						alert("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""));
+						showSwalIcon("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""), '<spring:message code="common.close" />', '', 'error');
 					}
 				},
 				success : function(result) {		
-					document.serverList.ipadr.value = result[0].ipadr;
+					document.serverList.db_ipadr.value = result[0].ipadr;
 					document.serverList.portno.value = result[0].portno;
 					fn_svr_db(result[0].db_svr_nm, result[0].db_svr_id);
 				}
@@ -265,7 +245,7 @@ function fn_dataCompareChcek(svrDbList,db_svr_id){
 	var list = $("input[name='db_exp']");
 	var datasArr = new Array();
  	var db_svr_id =  $("#db_svr_nm").val();	
- 	var ipadr = $("#ipadr").val();	
+ 	var ipadr = $("#db_ipadr").val();	
  	var datas = table_db.rows().data();
  	
  	var checkCnt = table_db.rows('.selected').data().length;
@@ -310,84 +290,82 @@ function fn_dataCompareChcek(svrDbList,db_svr_id){
  			     },
  				error : function(xhr, status, error) {
  					if(xhr.status == 401) {
- 						alert('<spring:message code="message.msg02" />');
+ 						showSwalIconRst('<spring:message code="message.msg02" />', '<spring:message code="common.close" />', '', 'error', 'top');
  						top.location.href = "/";
  					} else if(xhr.status == 403) {
- 						alert('<spring:message code="message.msg03" />');
+ 						showSwalIconRst('<spring:message code="message.msg03" />', '<spring:message code="common.close" />', '', 'error', 'top');
  						top.location.href = "/";
  					} else {
- 						alert("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""));
+ 						showSwalIcon("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""), '<spring:message code="common.close" />', '', 'error');
  					}
  				},
  				success : function(result) {
- 					alert('<spring:message code="message.msg07" /> ');
- 					opener.location.reload();
- 					self.close();	 
+ 					showSwalIconRst('<spring:message code="message.msg07" />', '<spring:message code="common.close" />', '', 'success', "reload");
  				}
  			});	
      	}else{
      		return false;
      	}
  	}else{
- 		alert('<spring:message code="message.msg06" />');
+ 		showSwalIcon('<spring:message code="message.msg06" />', '<spring:message code="common.close" />', '', 'error');
  	}
  }
  
 </script>
-</head>
-<body>
-<div class="pop_container">
-	<div class="pop_cts">
-		<p class="tit">Datebase <spring:message code="button.create" /></p>
-		<div class="pop_cmm mt25" >
-			<div class="pop_lt">			
-				<form name="serverList" id="serverList">
-				<table class="write">
-					<caption>Datebase <spring:message code="button.create" /></caption>
-					<colgroup>
-					<col style="width:110px;" />
-					<col style="width:250px;" />
-					<col style="width:75px;" />
-					<col />
-					</colgroup>
-					<tbody>
-						<tr>
-							<th scope="row" class="ico_t1 type2"><spring:message code="common.dbms_name" /></th>
-							<td>
-								<select class="select"  id="db_svr_nm" name="db_svr_nm" style="width: 200px;" onChange="fn_dbserverChange();">
-								</select>
-							</td>
-						</tr>
-						<tr>
-							<th scope="row" class="ico_t1"><spring:message code="dbms_information.dbms_ip" /></th>
-							<td><input type="text" class="txt bg1" name="ipadr" id="ipadr"  style="width: 200px;" readonly/></td>
-					
-							<th scope="row" class="ico_t1"><spring:message code="data_transfer.port" /></th>
-							<td><input type="text" class="txt bg1" name="portno" id="portno"  style="width: 200px;" readonly/></td>
-						</tr>
-					</tbody>
-				</table>
-				</form>
+<div class="modal fade" id="pop_layer_dbRegForm" tabindex="-1" role="dialog" aria-labelledby="ModalLabel" aria-hidden="true" data-backdrop="static" data-keyboard="false">
+	<div class="modal-dialog  modal-xl-top" role="document" style="margin: 100px 250px;">
+		<div class="modal-content" style="width:1100px;">			 
+			<div class="modal-body" style="margin-bottom:-30px;">
+				<h4 class="modal-title mdi mdi-alert-circle text-info" id="ModalLabel" style="padding-left:5px;">
+					Datebase <spring:message code="button.create" />
+				</h4>
+				<div class="card" style="margin-top:10px;border:0px;">
+					<div class="card-body">
+							<fieldset>
+								<form name="serverList" id="serverList" class="form-group row border-bottom">
+									<label for="com_db_svr_nm" class="col-sm-2 col-form-label">
+										<i class="item-icon fa fa-dot-circle-o"></i>
+										<spring:message code="dbms_information.dbms_ip" />
+									</label>
+									<div class="col-sm-9">
+										<select class="form-control" style="width:250px; margin-right: 1rem;" id="db_svr_nm" name="db_svr_nm" onChange="fn_dbserverChange();"></select>
+									</div>
+									<label for="com_max_clusters" class="col-sm-2 col-form-label pop-label-index">
+										<i class="item-icon fa fa-dot-circle-o"></i>
+										<spring:message code="dbms_information.dbms_ip" />
+									</label>
+									<div class="col-sm-4">
+										<input type="text" class="form-control" id="db_ipadr" name="db_ipadr" readonly>
+									</div>
+									<label for="com_max_clusters" class="col-sm-2 col-form-label pop-label-index">
+										<i class="item-icon fa fa-dot-circle-o"></i>
+										<spring:message code="data_transfer.port" />
+									</label>
+									<div class="col-sm-4">
+										<input type="text" class="form-control" name="portno" id="portno"  readonly>
+									</div>
+								</form>
+								<div class="form-group row">
+									<div class="col-sm-12">
+										<table id="dbList" class="table table-hover table-striped" cellspacing="0" align="left"  width="100%">
+											<thead>
+												<tr class="bg-primary text-white">
+													<th width="30"><spring:message code="dbms_information.regChoice"/></th>
+													<th width="300"><spring:message code="common.database" /></th>
+													<th width="550"><spring:message code="common.desc" /> </th>								
+												</tr>
+											</thead>
+										</table>
+									</div>
+								</div>
+								<div class="top-modal-footer" style="text-align: center !important; margin: -20px 0 0 -20px;" >
+									<input class="btn btn-primary" width="200px"style="vertical-align:middle;" type="button" onClick="fn_insertDB();" value='<spring:message code="common.save" />' />
+									<button type="button" class="btn btn-light" data-dismiss="modal"><spring:message code="common.close"/></button>
+								</div>
+							</fieldset>
+					</div>
+				</div>
 			</div>
-			<div class="pop_rt">
-					<table id="dbList" class="display" cellspacing="0" align="left"  width="100%">
-						<thead>
-							<tr>
-								<th width="10"><spring:message code="dbms_information.regChoice"/></th>
-								<th width="130"><spring:message code="common.database" /></th>
-								<th width="300"><spring:message code="common.desc" /> </th>								
-							</tr>
-						</thead>
-					</table>
-			</div>
-		</div>
-		
-		<div class="btn_type_02">
-			<span class="btn"><button type="button" onClick="fn_insertDB();"><spring:message code="common.registory" /></button></span>
-			<a href="#n" class="btn" onClick="window.close();"><span><spring:message code="common.cancel" /></span></a>
 		</div>
 	</div>
 </div>
-
-</body>
-</html>

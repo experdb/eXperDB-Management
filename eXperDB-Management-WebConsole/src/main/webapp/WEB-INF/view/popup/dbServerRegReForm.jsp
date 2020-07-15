@@ -3,7 +3,6 @@
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form"%>
 <%@ taglib prefix="ui" uri="http://egovframework.gov/ctl/ui"%>
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags"%>
-<%@include file="../cmmn/commonLocale.jsp"%>
 <%
 	/**
 	* @Class Name : dbServerRegReForm.jsp
@@ -19,31 +18,7 @@
 	*
 	*/
 %>   
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
-<head>
-<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-<title>eXperDB</title>
-<link rel="stylesheet" type="text/css" href="/css/jquery-ui.css">
-<link rel="stylesheet" type="text/css" href="/css/common.css">
-<link rel = "stylesheet" type = "text/css" media = "screen" href = "<c:url value='/css/dt/jquery.dataTables.min.css'/>"/>
-<link rel = "stylesheet" type = "text/css" media = "screen" href = "<c:url value='/css/dt/dataTables.jqueryui.min.css'/>"/> 
-<link rel="stylesheet" type="text/css" href="<c:url value='/css/dt/dataTables.colVis.css'/>"/>
-<link rel="stylesheet" type="text/css" href="<c:url value='/css/dt/dataTables.checkboxes.css'/>"/>
 
-<script src ="/js/jquery/jquery-1.7.2.min.js" type="text/javascript"></script>
-<script src ="/js/jquery/jquery-ui.js" type="text/javascript"></script>
-<script src="/js/jquery/jquery.dataTables.min.js" type="text/javascript"></script>
-<script src="/js/dt/dataTables.jqueryui.min.js" type="text/javascript"></script>
-<script src="/js/dt/dataTables.colResize.js" type="text/javascript"></script>
-<script src="/js/dt/dataTables.checkboxes.min.js" type="text/javascript"></script>	
-<script src="/js/dt/dataTables.colVis.js" type="text/javascript"></script>	
-<script type="text/javascript" src="/js/common.js"></script>
-<style>
-#serverIpadr_wrapper{
-	width:750px;
-}
-</style>
 <script type="text/javascript">
 
 var connCheck = "fail";
@@ -607,123 +582,111 @@ function checkPghome(){
 		 table.row('.selected').remove().draw();
 	}	
 </script>
-</head>
-<body>
-	<!--  popup -->
-	<div id="pop_layer" class="pop-layer">
-		<div class="pop-container">
-			<div class="pop_cts" style="width:530px;">
-				<p class="tit"><spring:message code="dbms_information.dbms_ip_reg"/></p>
-					<form name="ipadr_form">
-						<table class="write">
-							<caption><spring:message code="dbms_information.dbms_ip_reg"/></caption>
-							<colgroup>
-								<col style="width:130px;" />
-								<col />
-							</colgroup>
-							<tbody>
-								<tr>
-									<th scope="row" class="ico_t1"><spring:message code="dbms_information.dbms_ip" />(*)</th>
-									<td>
-										<select class="select"  id="ipadr" name="ipadr" onChange="fn_ipadrChange();" >
-											<option value="%"><spring:message code="schedule.total" /></option>
-										</select>
-									</td>
-								</tr>
-								<tr>
-									<th scope="row" class="ico_t1"><spring:message code="data_transfer.port" />(*)</th>
-									<td><input type="text" class="txt" name="portno" id="portno"/></td>
-								</tr>
-							</tbody>
-						</table>
-					</form>
-				<div class="btn_type_02">
-					<a href="#n" class="btn" onclick="fn_ipadrAdd();"><span><spring:message code="common.add" /></span></a>
-					<a href="#n" class="btn" onclick="toggleLayer($('#pop_layer'), 'off');"><span><spring:message code="common.cancel" /></span></a>
+<div class="modal fade" id="pop_layer_dbserver_mod" tabindex="-1" role="dialog" aria-labelledby="ModalLabel" aria-hidden="true" data-backdrop="static" data-keyboard="false">
+	<div class="modal-dialog  modal-xl-top" role="document" style="margin: 100px 250px;">
+		<div class="modal-content" style="width:1100px;">			 
+			<div class="modal-body" style="margin-bottom:-30px;">
+				<h4 class="modal-title mdi mdi-alert-circle text-info" id="ModalLabel" style="padding-left:5px;">
+					DBMS <spring:message code="common.modify" />
+				</h4>
+				<div class="card" style="margin-top:10px;border:0px;">
+					<div class="card-body">
+						<form class="cmxform" name="dbserverInsert" id="dbserverInsert" method="post">
+							<fieldset>
+								<div class="form-group row border-bottom">
+									<label for="com_db_svr_nm" class="col-sm-3 col-form-label">
+										<i class="item-icon fa fa-dot-circle-o"></i>
+										<spring:message code="dbms_information.dbms_ip" />
+									</label>
+									<div class="col-sm-9">
+										<a data-toggle="modal" href="#pop_layer_ip_reg"><span onclick="fn_ipadrAddForm();" style="cursor:pointer"><img src="../images/popup/plus.png" alt="" style="margin-left: 88%;"/></span></a>
+										<span onclick="fn_ipadrDelForm();" style="cursor:pointer"><img src="../images/popup/minus.png" alt=""  /></span>
+										<table id="serverIpadr" class="table table-hover table-striped" cellspacing="0" align="left">
+											<thead>
+												<tr class="bg-primary text-white">
+													<th width="10"></th>
+													<th width="150"><spring:message code="dbms_information.dbms_ip" /></th>
+													<th width="120"><spring:message code="data_transfer.port" /></th>
+													<th width="130"><spring:message code="common.division" /></th>
+													<th width="130"><spring:message code="dbms_information.conn_YN"/></th>	
+													<th width="0"></th>								
+												</tr>
+											</thead>
+										</table>
+									
+									</div>
+								</div>
+								<div class="form-group row">
+									<label for="com_max_clusters" class="col-sm-2 col-form-label pop-label-index">
+										<i class="item-icon fa fa-dot-circle-o"></i>
+										<spring:message code="common.dbms_name" />(*)
+									</label>
+									<div class="col-sm-4">
+										<input type="text" class="form-control" id="db_svr_nm" name="db_svr_nm"  readonly="readonly">
+									</div>
+									<label for="com_max_clusters" class="col-sm-2 col-form-label pop-label-index">
+										<i class="item-icon fa fa-dot-circle-o"></i>
+										Database(*)
+									</label>
+									<div class="col-sm-4">
+										<input type="text" class="form-control" id="dft_db_nm" name="dft_db_nm"  maxlength="30" onkeyup="fn_checkWord(this,30)" placeholder="30<spring:message code='message.msg188'/>">
+									</div>
+								</div>
+								<div class="form-group row">
+									<label for="com_max_clusters" class="col-sm-2 col-form-label pop-label-index">
+										<i class="item-icon fa fa-dot-circle-o"></i>
+										<spring:message code="dbms_information.account" />(*)
+									</label>
+									<div class="col-sm-4">
+										<input type="text" class="form-control" id="svr_spr_usr_id" name="svr_spr_usr_id"  maxlength="30" onkeyup="fn_checkWord(this,30)" placeholder="30<spring:message code='message.msg188'/>">
+									</div>
+									<label for="com_max_clusters" class="col-sm-2 col-form-label pop-label-index">
+										<i class="item-icon fa fa-dot-circle-o"></i>
+										<spring:message code="user_management.password" />(*)
+									</label>
+									<div class="col-sm-4">
+										<input type="password" class="form-control" id="svr_spr_scm_pwd" name="svr_spr_scm_pwd" >
+									</div>
+								</div>
+								<div class="form-group row">
+									<label for="com_ipadr" class="col-sm-2 col-form-label">
+										<i class="item-icon fa fa-dot-circle-o"></i>
+										<spring:message code="dbms_information.pgHomePath"/>(*)
+									</label>
+									<div class="col-sm-10">
+										<input type="text" class="form-control" id="pghome_pth" name="pghome_pth"  readonly="readonly">
+									</div>
+								</div>
+								<div class="form-group row">
+									<label for="com_max_clusters" class="col-sm-2 col-form-label pop-label-index">
+										<i class="item-icon fa fa-dot-circle-o"></i>
+										<spring:message code="dbms_information.pgDataPath"/>(*)
+									</label>
+									<div class="col-sm-10">
+										<input type="text" class="form-control" id="pgdata_pth" name="pgdata_pth"  readonly="readonly">
+									</div>
+								</div>
+								<div class="form-group row">
+									<label for="com_max_clusters" class="col-sm-2 col-form-label pop-label-index">
+										<i class="item-icon fa fa-dot-circle-o"></i>
+										<spring:message code="dbms_information.use_yn" />
+									</label>
+									<div class="col-sm-4">
+										<spring:message code="dbms_information.use" /><input type="radio" name="useyn" id="useyn_Y" value="Y"> 
+										<spring:message code="dbms_information.unuse" /><input type="radio" name="useyn"  id="useyn_N" value="N">
+									</div>
+								</div>
+								<div class="top-modal-footer" style="text-align: center !important; margin: -20px 0 0 -20px;" >
+									<input class="btn btn-primary" width="200px" style="vertical-align:middle;" type="button"  onClick="fn_updateDbServer();" value='<spring:message code="common.registory" />' />
+									<input class="btn btn-primary" width="200px" style="vertical-align:middle;" type="button" onClick="fn_dbServerConnTest();" value='<spring:message code="dbms_information.conn_Test" />' />
+									<button type="button" class="btn btn-light" data-dismiss="modal"><spring:message code="common.close"/></button>
+								</div>
+							</fieldset>
+							<input type="hidden" id="db_svr_id" name="db_svr_id">
+						</form>
+					</div>
 				</div>
 			</div>
-		</div><!-- //pop-container -->
-	</div>
-	
-<div class="pop_container">
-	<div class="pop_cts">
-		<p class="tit">DBMS <spring:message code="common.modify" /></p>
-		 <form name="dbserverInsert" id="dbserverInsert" method="post">
-		<table class="write">
-			<caption>DBMS <spring:message code="common.modify" /></caption>
-			<colgroup>
-				<col style="width:130px;" />
-				<col />
-				<col style="width:100px;" />
-				<col />
-			</colgroup>
-			<tbody>
-			<tr>
-				<th scope="row" class="ico_t1" ><spring:message code="dbms_information.dbms_ip" />(*)</th>
-					<td colspan="3">
-						<!-- 메인 테이블 -->
-						<span onclick="fn_ipadrAddForm();" style="cursor:pointer"><img src="../images/popup/plus.png" alt="" style="margin-left: 88%;"/></span>
-						<span onclick="fn_ipadrDelForm();" style="cursor:pointer"><img src="../images/popup/minus.png" alt=""  /></span>
-							<table id="serverIpadr" class="cell-border display" cellspacing="0" align="left">
-								<thead>
-									<tr>
-										<th width="10"></th>
-										<th width="150"><spring:message code="dbms_information.dbms_ip" /></th>
-										<th width="117"><spring:message code="data_transfer.port" /></th>
-										<th width="130"><spring:message code="common.division" /></th>
-										<th width="130"><spring:message code="dbms_information.conn_YN"/></th>	
-										<th width="0"></th>									
-									</tr>
-								</thead>
-							</table>
-					</td>
-				</tr>
-				<tr>
-					<th scope="row" class="ico_t1"><spring:message code="common.dbms_name" />(*)</th>
-					<td><input type="text" class="txt bg1" name="db_svr_nm" id="db_svr_nm"  readonly="readonly"  /></td>
-					<th scope="row" class="ico_t1">Database(*)</th>
-					<td><input type="text" class="txt" name="dft_db_nm" id="dft_db_nm" maxlength="30" onkeyup="fn_checkWord(this,30)" placeholder="30<spring:message code='message.msg188'/>"/></td>
-				</tr>
-				<tr>
-					<th scope="row" class="ico_t1"><spring:message code="dbms_information.account" />(*)</th>
-					<td><input type="text" class="txt" name="svr_spr_usr_id" id="svr_spr_usr_id" maxlength="30" onkeyup="fn_checkWord(this,30)" placeholder="30<spring:message code='message.msg188'/>" /></td>
-					<th scope="row" class="ico_t1">Password(*)</th>
-					<td><input type="password" class="txt" name="svr_spr_scm_pwd" id="svr_spr_scm_pwd" /></td>
-				</tr>
-				<tr>
-					<th scope="row" class="ico_t1"><spring:message code="dbms_information.pgHomePath"/>(*)</th>
-					<td>
-					<input type="text" class="txt" name="pghome_pth" id="pghome_pth" style="width:750px" readonly="readonly"/></td>
-<!-- 					<th scope="row" class="ico_t1"></th>
-					<td>
-					<span class="btn btnC_01"><button type="button" class= "btn_type_02" onclick="checkPghome()" style="width: 60px; margin-left: 237px; margin-top: 0;">경로체크</button></span>
-					</td>		 -->			
-				</tr>
-				<tr>
-					<th scope="row" class="ico_t1"><spring:message code="dbms_information.pgDataPath"/>(*)</th>
-					<td>
-					<input type="text" class="txt" name="pgdata_pth" id="pgdata_pth" style="width:750px" readonly="readonly"/></td>
-					<!-- <th scope="row" class="ico_t1"></th>
-					<td>
-					<span class="btn btnC_01"><button type="button" class= "btn_type_02" onclick="checkPgdata()" style="width: 60px; margin-left: 237px; margin-top: 0;">경로체크</button></span>
-					</td> -->					
-				</tr>	
-				<tr>
-					<th scope="row" class="ico_t1"><spring:message code="dbms_information.use_yn" /></th>
-					<td>
-					<spring:message code="dbms_information.use" /><input type="radio" name="useyn" id="useyn_Y" value="Y"> 
-					<spring:message code="dbms_information.unuse" /><input type="radio" name="useyn"  id="useyn_N" value="N"></td>			
-				</tr>	
-			</tbody>
-		</table>
-		<input type="hidden" id="db_svr_id" name="db_svr_id">
-		</form>
-		<div class="btn_type_02">
-			<span class="btn"><button type="button" onClick="fn_updateDbServer();"><spring:message code="common.save"/></button></span>
-			<span class="btn btnF_01 btnC_01"><button type="button" onClick="fn_dbServerConnTest();"><spring:message code="dbms_information.conn_Test"/></button></span>
-			<a href="#n" class="btn" onclick="window.close();"><span><spring:message code="common.cancel" /></span></a>
 		</div>
 	</div>
 </div>
-</body>
-</html>
