@@ -4,12 +4,12 @@
 <div class="modal fade" id="pop_layer_scheduleInfo" tabindex="-1" role="dialog" aria-labelledby="ModalLabel" aria-hidden="true">
 	<div class="modal-dialog  modal-xl-top" role="document">
 		<div class="modal-content">			 
-			<div class="modal-body" style="margin-bottom:-40px;">
+			<div class="modal-body">
 				<h4 class="modal-title mdi mdi-alert-circle text-info" id="ModalLabel" style="padding-left:5px;cursor:pointer;" data-dismiss="modal">
 					<spring:message code="menu.schedule_information" />
 				</h4>
 
-				<div class="card" style="border:0px;">
+				<div class="card" style="border:0px;margin-bottom:-40px;">
 					<div class="card-body-modal">
 						<!-- title -->
 						<h3 class="card-title fa fa-dot-circle-o">

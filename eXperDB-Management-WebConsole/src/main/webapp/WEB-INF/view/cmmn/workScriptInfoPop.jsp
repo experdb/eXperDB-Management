@@ -53,7 +53,7 @@
 									</div>
 								</div>
 
-								<div class="top-modal-footer" style="text-align: center !important; margin: -20px 0 0 -20px;" >
+								<div class="top-modal-footer" style="text-align: center !important; margin: -10px 0 0 -10px;" >
 									<button type="button" class="btn btn-light" onclick="fn_workScriptInfoPopcl();"><spring:message code="common.close"/></button>
 								</div>
 							</fieldset>

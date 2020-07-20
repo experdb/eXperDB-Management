@@ -126,34 +126,6 @@ public class ScriptController {
 	}
 
 	/**
-	 * 스크립트 이력화면을 보여준다.
-	 * 
-	 * @param workVO, historyVO, request
-	 * @return ModelAndView
-	 * @throws Exception
-	 */
-	@RequestMapping(value = "/scriptHistory.do")
-	public ModelAndView scriptHistory(@ModelAttribute("workVo") WorkVO workVO, @ModelAttribute("historyVO") HistoryVO historyVO, HttpServletRequest request) {
-		ModelAndView mv = new ModelAndView();
-
-		try {
-			int db_svr_id = Integer.parseInt(request.getParameter("db_svr_id"));  
-			
-			// 화면접근이력 이력 남기기
-			CmmnUtils.saveHistory(request, historyVO);
-			historyVO.setExe_dtl_cd("DX-T0128");
-			accessHistoryService.insertHistory(historyVO);
-			
-			mv.addObject("db_svr_id",db_svr_id);
-			mv.addObject("db_svr_nm", backupService.selectDbSvrNm(workVO).getDb_svr_nm());
-			mv.setViewName("script/scriptHistory");
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-		return mv;
-	}
-
-	/**
 	 * 스크립트 설정 List
 	 * @param scriptVO, request, historyVO
 	 * @return List<Map<String, Object>>
@@ -177,32 +149,7 @@ public class ScriptController {
 		
 		return resultSet;
 	}
-
-	/**
-	 * 스크립트 History List
-	 * @param request, scriptVO, historyVO
-	 * @return List<Map<String, Object>>
-	 */
-	@RequestMapping(value="/selectScriptHistoryList.do")
-	@ResponseBody
-	public List<Map<String, Object>> selectScriptHistoryList(@ModelAttribute("ScriptVO") ScriptVO scriptVO,HttpServletRequest request, @ModelAttribute("historyVO") HistoryVO historyVO){
-		List<Map<String, Object>> resultSet = null;
-
-		try {
-			// 화면접근이력 이력 남기기
-			CmmnUtils.saveHistory(request, historyVO);
-			historyVO.setExe_dtl_cd("DX-T0128_01");
-			accessHistoryService.insertHistory(historyVO);
-			
-			resultSet = scriptService.selectScriptHistoryList(scriptVO);
-		} catch (Exception e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		
-		return resultSet;
-	}
-
+	
 	/**
 	 * Script insert
 	 * @param 
@@ -275,7 +222,7 @@ public class ScriptController {
 		}
 		return Integer.toString(resultSet.getBck_wrk_id());
 	}
-
+	
 	/**
 	 * 스크립트 수정 화면 호출 및 데이터 조회
 	 * @param WorkVO
@@ -299,7 +246,7 @@ public class ScriptController {
 		}
 
 		return resultSet;	
-	}	
+	}
 
 	/**
 	 * Script update
@@ -390,28 +337,6 @@ public class ScriptController {
 	}
 
 	/**
-	 * TEXT 변환
-	 * @param historyVO, scriptVO, request
-	 * @return String
-	 */
-	public static String toTEXT(String str) {
-		if(str == null)
-		return null;
-
-		String returnStr = str;
-		returnStr = returnStr.replaceAll("<br>", "\n");
-		returnStr = returnStr.replaceAll("&gt;", ">");
-		returnStr = returnStr.replaceAll("&lt;", "<");
-		returnStr = returnStr.replaceAll("&quot;", "\"");
-		returnStr = returnStr.replaceAll("&nbsp;", " ");
-		returnStr = returnStr.replaceAll("&amp;", "&");
-		returnStr = returnStr.replaceAll("\"", "&#34;");
-		returnStr = returnStr.replaceAll("&apos;", "'");	
-
-		return returnStr;
-	}
-
-	/**
 	 * 스케쥴 List를 조회한다.
 	 * 
 	 * @return resultSet
@@ -424,6 +349,12 @@ public class ScriptController {
 		List<Map<String, Object>> resultSet = new ArrayList<Map<String, Object>>();
 		
 		try {
+			// 화면접근이력 이력 남기기
+			CmmnUtils.saveHistory(request, historyVO);
+			historyVO.setExe_dtl_cd("DX-T0125_03");
+			historyVO.setMnu_id(3);
+			accessHistoryService.insertHistory(historyVO);
+			
 			//현재 서비스 올라간 스케줄 그룹 정보
 			Scheduler scheduler = new StdSchedulerFactory().getScheduler();   
 				
@@ -462,7 +393,7 @@ public class ScriptController {
 		}
 		return resultSet;
 	}
-		
+
 	/**
 	 * 스케줄 WRK 리스트 화면을 보여준다.
 	 * 
@@ -481,6 +412,81 @@ public class ScriptController {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
+	}
+
+	/**
+	 * 스크립트 이력화면을 보여준다.
+	 * 
+	 * @param workVO, historyVO, request
+	 * @return ModelAndView
+	 * @throws Exception
+	 */
+	@RequestMapping(value = "/scriptHistory.do")
+	public ModelAndView scriptHistory(@ModelAttribute("workVo") WorkVO workVO, @ModelAttribute("historyVO") HistoryVO historyVO, HttpServletRequest request) {
+		ModelAndView mv = new ModelAndView();
+
+		try {
+			int db_svr_id = Integer.parseInt(request.getParameter("db_svr_id"));  
+			
+			// 화면접근이력 이력 남기기
+			CmmnUtils.saveHistory(request, historyVO);
+			historyVO.setExe_dtl_cd("DX-T0128");
+			accessHistoryService.insertHistory(historyVO);
+			
+			mv.addObject("db_svr_id",db_svr_id);
+			mv.addObject("db_svr_nm", backupService.selectDbSvrNm(workVO).getDb_svr_nm());
+			mv.setViewName("script/scriptHistory");
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return mv;
+	}
+
+	/**
+	 * 스크립트 History List
+	 * @param request, scriptVO, historyVO
+	 * @return List<Map<String, Object>>
+	 */
+	@RequestMapping(value="/selectScriptHistoryList.do")
+	@ResponseBody
+	public List<Map<String, Object>> selectScriptHistoryList(@ModelAttribute("ScriptVO") ScriptVO scriptVO,HttpServletRequest request, @ModelAttribute("historyVO") HistoryVO historyVO){
+		List<Map<String, Object>> resultSet = null;
+
+		try {
+			// 화면접근이력 이력 남기기
+			CmmnUtils.saveHistory(request, historyVO);
+			historyVO.setExe_dtl_cd("DX-T0128_01");
+			accessHistoryService.insertHistory(historyVO);
+			
+			resultSet = scriptService.selectScriptHistoryList(scriptVO);
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		return resultSet;
+	}
+
+	/**
+	 * TEXT 변환
+	 * @param historyVO, scriptVO, request
+	 * @return String
+	 */
+	public static String toTEXT(String str) {
+		if(str == null)
+		return null;
+
+		String returnStr = str;
+		returnStr = returnStr.replaceAll("<br>", "\n");
+		returnStr = returnStr.replaceAll("&gt;", ">");
+		returnStr = returnStr.replaceAll("&lt;", "<");
+		returnStr = returnStr.replaceAll("&quot;", "\"");
+		returnStr = returnStr.replaceAll("&nbsp;", " ");
+		returnStr = returnStr.replaceAll("&amp;", "&");
+		returnStr = returnStr.replaceAll("\"", "&#34;");
+		returnStr = returnStr.replaceAll("&apos;", "'");	
+
+		return returnStr;
 	}
 
 		/**

@@ -27,30 +27,52 @@
 	 * setting 초기 실행
 	 ******************************************************** */
 	$(window.document).ready(function() {
-		
+		//테이블 설정
+		fn_init();
+
 		//agent 확인
 		var extName = "${extName}";
-		if(extName == "agent") {
-			showSwalIconRst('<spring:message code="message.msg25" />', '<spring:message code="common.close" />', '', 'error', 'his');
-		} else if(extName == "adminpack") {
-			showSwalIconRst('<spring:message code="message.msg215" />', '<spring:message code="common.close" />', '', 'error', 'his');
-		} else if(extName == "agentfail") {
-			showSwalIconRst('<spring:message code="message.msg27" />', '<spring:message code="common.close" />', '', 'error', 'his');
-		} else {
-			//테이블 설정
-			fn_init();
-			table = $('#accessControlTable').DataTable();
-			$('#select').on( 'keyup', function () {
-				 table.search( this.value ).draw();
-			});
-			$('.dataTables_filter').hide();
-			fn_select();
-		}
- 		
+
 		if ($(".selectSearch").length) {
 			$(".selectSearch").select2();
 		}
+		
+		//agent 확인
+		if (!fn_chkExtName(extName)) {
+			$("#btnSave").prop("disabled", "disabled");
+			$("#btnDelete").prop("disabled", "disabled");
+			$("#btnModify").prop("disabled", "disabled");
+			$("#btnInsert").prop("disabled", "disabled");
+			return;
+		}
+		
+		table = $('#accessControlTable').DataTable();
+		$('#select').on( 'keyup', function () {
+			 table.search( this.value ).draw();
+		});
+		$('.dataTables_filter').hide();
+		fn_select(); 	
 	});
+
+	/* ********************************************************
+	 * agent 상태 확인
+	 ******************************************************** */
+	function fn_chkExtName(extName) {
+		var title = '<spring:message code="menu.access_control"/>' + ' ' + '<spring:message code="access_control_management.msg6" />';
+
+ 		if(extName == "adminpack") {
+			showDangerToast('top-right', '<spring:message code="message.msg215" />', title);
+			return false;
+ 		} else if(extName == "agent") {
+			showDangerToast('top-right', '<spring:message code="message.msg25" />', title);
+			return false;
+		}else if(extName == "agentfail"){
+			showDangerToast('top-right', '<spring:message code="message.msg27" />', title);
+			return false;
+		}
+ 		
+ 		return true;
+	}
 
 	/* ********************************************************
 	 * 테이블 설정
@@ -659,10 +681,10 @@
 			</div>
 		</div>
 
-		<div class="col-12 div-form-margin-cts stretch-card">
+		<div class="col-12 stretch-card div-form-margin-table">
 			<div class="card">
 				<div class="card-body">
-					<div class="row">
+					<div class="row" style="margin-top:-20px;">
 						<div class="col-6">
 							<div class="alert alert-fill-danger" style="margin-top: 1.5rem !important;display:none;" id="nowpwd_alert-danger">
 								<i class="ti-info-alt"></i>
@@ -672,7 +694,7 @@
 
 						<div class="col-6">
 							<div class="template-demo">	
-								<button type="button" class="btn btn-outline-primary btn-icon-text float-right" id="btnDelete" onClick="fn_save_confirm();" >
+								<button type="button" class="btn btn-outline-primary btn-icon-text float-right" id="btnSave" onClick="fn_save_confirm();" >
 									<i class="fa fa-check btn-icon-prepend "></i><spring:message code="common.apply" />
 								</button>
 													
@@ -688,13 +710,7 @@
 							</div>
 						</div>
 					</div>
-				</div>
-			</div>
-		</div>
-		
-		<div class="col-12 stretch-card div-form-margin-table">
-			<div class="card">
-				<div class="card-body">
+
 					<div class="card my-sm-2" >
 						<div class="card-body" >
 							<div class="row">

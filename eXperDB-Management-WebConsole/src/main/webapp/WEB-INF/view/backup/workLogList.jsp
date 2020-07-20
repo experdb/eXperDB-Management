@@ -19,12 +19,368 @@
 	*
 	*/
 %>
+<script type="text/javascript">
+	var selectChkTab = "rman";
+	var searchInit = "";
+	var tableRman = null;
+	var tableDump = null;
+	var tabGbn = "${tabGbn}";
+
+	$(window.document).ready(function() {
+		//검색조건 초기화
+		selectInitTab(selectChkTab);
+
+		//작업기간 calender setting
+		dateCalenderSetting();
+
+		//조회
+		if(tabGbn != ""){
+			selectTab(tabGbn);
+		}else{
+			selectTab("rman");
+		}
+		
+		/* ********************************************************
+		 * Click Search Button
+		 ******************************************************** */
+		$("#btnSelect").click(function() {
+			if(!calenderValid()) {
+				return;
+			}
+
+			if(selectChkTab == "rman"){
+				fn_get_execute_list();
+			}else{
+				fn_get_occur_list();
+			}
+		});
+	});
+	
+	/* ********************************************************
+	 * calender valid 체크
+	 ******************************************************** */
+	function calenderValid() {
+		var wrk_strt_dtm = $("#wrk_strt_dtm").val();
+		var wrk_end_dtm = $("#wrk_end_dtm").val();
+
+		if (wrk_strt_dtm != "" && wrk_end_dtm == "") {
+			showSwalIcon('<spring:message code="message.msg14" />', '<spring:message code="common.close" />', '', 'warning');
+			return false;
+		}
+
+		if (wrk_end_dtm != "" && wrk_strt_dtm == "") {
+			showSwalIcon('<spring:message code="message.msg15" />', '<spring:message code="common.close" />', '', 'warning');
+			return false;
+		}
+		
+		return true;
+	}
+	
+	/* ********************************************************
+	 * Tab Click
+	 ******************************************************** */
+	function selectInitTab(intab){
+		selectChkTab = intab;
+		if(intab == "rman"){			
+			$(".search_rman").show();
+			$(".search_dump").hide();
+			$("#logRmanListDiv").show();
+			$("#logDumpListDiv").hide();
+
+			seachParamInit(intab);
+		}else{				
+			$(".search_rman").hide();
+			$(".search_dump").show();
+			$("#logRmanListDiv").hide();
+			$("#logDumpListDiv").show();
+
+			seachParamInit(intab);
+		}
+
+		//테이블 setting
+		fn_rman_init();
+		fn_dump_init();
+	}
+	/* ********************************************************
+	 * 조회조건 초기화
+	 ******************************************************** */
+	function seachParamInit(tabGbn) {
+		if (searchInit == tabGbn) {
+			return;
+		}
+		
+		$("#wrk_nm").val("");
+		$("#exe_rslt_cd option:eq(0)").attr("selected","selected");
+		$("#fix_rsltcd option:eq(0)").attr("selected","selected");
+
+		if (tabGbn == "rman") {
+			$("#bck_opt_cd option:eq(0)").attr("selected","selected");
+		} else {
+			$("#db_id option:eq(0)").attr("selected","selected");
+		}
+
+		searchInit = tabGbn;
+	}
+
+	/* ********************************************************
+	 * 작업기간 calender 셋팅
+	 ******************************************************** */
+	function dateCalenderSetting() {
+		var today = new Date();
+		var day_end = today.toJSON().slice(0,10);
+
+		today.setDate(today.getDate() - 7);
+		var day_start = today.toJSON().slice(0,10);
+
+		$("#wrk_strt_dtm").val(day_start);
+		$("#wrk_end_dtm").val(day_end);
+
+		if ($("#wrk_strt_dtm_div").length) {
+			$('#wrk_strt_dtm_div').datepicker({
+			}).datepicker('setDate', day_start)
+			.on('hide', function(e) {
+				e.stopPropagation(); // 모달 팝업도 같이 닫히는걸 막아준다.
+		    })
+		    .on('changeDate', function(selected){
+		    	day_start = new Date(selected.date.valueOf());
+		    	day_start.setDate(day_start.getDate(new Date(selected.date.valueOf())));
+		        $("#wrk_end_dtm_div").datepicker('setStartDate', day_start);
+		        $("#wrk_end_dtm").datepicker('setStartDate', day_start);
+			}); //값 셋팅
+		}
+
+		if ($("#wrk_end_dtm_div").length) {
+			$('#wrk_end_dtm_div').datepicker({
+			}).datepicker('setDate', day_end)
+			.on('hide', function(e) {
+				e.stopPropagation(); // 모달 팝업도 같이 닫히는걸 막아준다.
+		    }); //값 셋팅
+		}
+		
+		$("#wrk_strt_dtm").datepicker('setDate', day_start);
+	    $("#wrk_end_dtm").datepicker('setDate', day_end);
+	    $('#wrk_strt_dtm_div').datepicker('updateDates');
+	    $('#wrk_end_dtm_div').datepicker('updateDates');
+	}	
+
+	/* ********************************************************
+	 * Rman Data Table initialization
+	 ******************************************************** */
+	function fn_rman_init(){
+		tableRman = $('#logRmanList').DataTable({
+			scrollY: "300px",
+			scrollX : true,
+			searching : false,
+			deferRender : true,
+			bSort: false,
+			columns : [
+						{data: "rownum", className: "dt-center", defaultContent: ""}, 
+						{data : "wrk_nm", className : "dt-left", defaultContent : ""
+							,"render": function (data, type, full) {				
+								return '<span onClick=javascript:fn_workLayer("'+full.wrk_id+'"); class="bold" data-toggle="modal" title="'+full.wrk_nm+'">' + full.wrk_nm + '</span>';
+							}
+						},
+						{data: "ipadr", className: "dt-center", defaultContent: ""},
+						{data : "wrk_exp",
+							render : function(data, type, full, meta) {
+								var html = '<span title="'+full.wrk_exp+'">' + full.wrk_exp + '</span>';
+								return html;
+							},
+							defaultContent : ""
+						},
+						{data: "bck_opt_cd_nm", className: "dt-center", defaultContent: ""},
+						{data : "bck_file_pth", className : "dt-left", defaultContent : ""
+							,"render": function (data, type, full) {
+								return '<span onClick=javascript:fn_rmanShow("'+full.bck_file_pth+'","'+full.db_svr_id+'"); data-toggle="modal" title="'+full.bck_file_pth+'" class="bold">' + full.bck_file_pth + '</span>';
+							}
+						},
+						{data: "wrk_strt_dtm", className: "dt-center", defaultContent: ""}, 
+						{data: "wrk_end_dtm", className: "dt-center", defaultContent: ""}, 
+						{data: "wrk_dtm", className: "dt-center", defaultContent: ""}, 
+						{data : "exe_rslt_cd_nm",
+							render : function(data, type, full, meta) {
+								var html = '';
+								if (full.exe_rslt_cd == 'TC001701') {
+									html += '<span class="btn btnC_01 btnF_02"><img src="../images/ico_state_02.png" style="margin-right:3px;"/>Success</span>';
+								} else if(full.exe_rslt_cd == 'TC001702'){
+									html += '<span class="btn btnC_01 btnF_02"><button onclick="fn_failLog('+full.exe_sn+')"><img src="../images/ico_state_01.png" style="margin-right:3px;"/>Fail</button></span>';
+								} else {
+									html +='<span class="btn btnC_01 btnF_02"><img src="../images/ico_state_03.png" style="margin-right:3px;"/><spring:message code="etc.etc28"/></span>';
+								}
+								return html;
+							},
+							className : "dt-center",
+							defaultContent : ""
+						},
+						{
+							data : "fix_rsltcd",
+							render : function(data, type, full, meta) {
+								var html = '';
+								if (full.fix_rsltcd == 'TC002001') {
+									html += '<span class="btn btnC_01 btnF_02" onClick=javascript:fn_fixLog('+full.exe_sn+');><input type="button" value="<spring:message code="etc.etc29"/>"></span>';
+								} else if(full.fix_rsltcd == 'TC002002'){
+									html += '<span class="btn btnC_01 btnF_02" onClick=javascript:fn_fixLog('+full.exe_sn+');><input type="button" value="<spring:message code="etc.etc30"/>"></span>';
+								} else {
+									if(full.exe_rslt_cd == 'TC001701'){
+										html += ' - ';
+									}else{
+										html +='<span class="btn btnC_01 btnF_02" onClick=javascript:fn_fix_rslt_reg('+full.exe_sn+');><input type="button" value="<spring:message code="backup_management.Enter_Action"/>"></span>';
+									}
+								}
+								return html;
+							},
+							defaultContent : ""
+						}
+			]
+		});
+
+		tableRman.tables().header().to$().find('th:eq(0)').css('min-width', '40px');
+		tableRman.tables().header().to$().find('th:eq(1)').css('min-width', '150px');
+		tableRman.tables().header().to$().find('th:eq(2)').css('min-width', '100px');
+		tableRman.tables().header().to$().find('th:eq(3)').css('min-width', '150px');
+		tableRman.tables().header().to$().find('th:eq(4)').css('min-width', '90px');
+		tableRman.tables().header().to$().find('th:eq(5)').css('min-width', '230px');
+		tableRman.tables().header().to$().find('th:eq(6)').css('min-width', '100px');
+		tableRman.tables().header().to$().find('th:eq(7)').css('min-width', '100px');
+		tableRman.tables().header().to$().find('th:eq(8)').css('min-width', '70px');
+		tableRman.tables().header().to$().find('th:eq(9)').css('min-width', '100px');
+		tableRman.tables().header().to$().find('th:eq(10)').css('min-width', '100px');
+
+		$(window).trigger('resize'); 
+	}
+
+	/* ********************************************************
+	 * Dump Data Table initialization
+	 ******************************************************** */
+	function fn_dump_init(){
+		tableDump = $('#logDumpList').DataTable({
+			scrollY: "300px",	
+			scrollX: true,
+			bDestroy: true,
+			paging : true,
+			processing : true,
+			searching : false,	
+			deferRender : true,
+			bSort: false,
+			columns : [
+						{data: "rownum", className: "dt-center", defaultContent: ""},
+						{data : "wrk_nm", defaultContent : ""
+							,"render": function (data, type, full) {				
+								return '<span onClick=javascript:fn_workLayer("'+full.wrk_id+'"); class="bold" data-toggle="modal" title="'+full.wrk_nm+'">' + full.wrk_nm + '</span>';
+							}
+						}, 
+						{data: "ipadr", className: "dt-center", defaultContent: ""},
+						{data : "wrk_exp",
+							render : function(data, type, full, meta) {
+							var html = '<span title="'+full.wrk_exp+'">' + full.wrk_exp + '</span>';
+							return html;
+							},
+							defaultContent : ""
+						},
+						{data: "db_nm", defaultContent: ""}, 
+						{data : "file_sz", defaultContent : ""
+							,"render": function (data, type, full) {
+								if(full.file_sz != 0){
+									var s = ['bytes', 'kB', 'MB', 'GB', 'TB', 'PB'];
+									var e = Math.floor(Math.log(full.file_sz) / Math.log(1024));
+									return (full.file_sz / Math.pow(1024, e)).toFixed(2) + " " + s[e];
+								}else{
+									return full.file_sz;
+								}
+							}
+						},
+						{data : "bck_file_pth", defaultContent : ""
+							,"render": function (data, type, full) {
+								return '<span onClick=javascript:fn_dumpShow("'+full.bck_file_pth+'","'+full.db_svr_id+'"); data-toggle="modal" title="'+full.bck_file_pth+'" class="bold">' + full.bck_file_pth + '</span>';
+							}
+						},
+						{data: "bck_filenm", defaultContent: ""},
+						{data: "wrk_strt_dtm", defaultContent: ""}, 
+						{data: "wrk_end_dtm", defaultContent: ""},
+						{data: "wrk_dtm", defaultContent: ""},
+						{data : "exe_rslt_cd",
+							render : function(data, type, full, meta) {
+								var html = '';
+								if (full.exe_rslt_cd == 'TC001701') {
+									html += '<span class="btn btnC_01 btnF_02"><img src="../images/ico_state_02.png" style="margin-right:3px;"/>Success</span>';
+								} else if(full.exe_rslt_cd == 'TC001702'){
+									html += '<span class="btn btnC_01 btnF_02"><button onclick="fn_failLog('+full.exe_sn+')"><img src="../images/ico_state_01.png" style="margin-right:3px;"/>Fail</button></span>';
+								} else {
+									html +='<span class="btn btnC_01 btnF_02"><img src="../images/ico_state_03.png" style="margin-right:3px;"/><spring:message code="etc.etc28"/></span>';
+								}
+								return html;
+							},
+							className : "dt-center",
+							defaultContent : ""
+						},
+						{data : "fix_rsltcd",
+							render : function(data, type, full, meta) {
+								var html = '';
+								if (full.fix_rsltcd == 'TC002001') {
+									html += '<span class="btn btnC_01 btnF_02" onClick=javascript:fn_fixLog('+full.exe_sn+');><input type="button" value="<spring:message code="etc.etc29"/>"></span>';
+								} else if(full.fix_rsltcd == 'TC002002'){
+									html += '<span class="btn btnC_01 btnF_02" onClick=javascript:fn_fixLog('+full.exe_sn+');><input type="button" value="<spring:message code="etc.etc30"/>"></span>';
+								} else {
+									if(full.exe_rslt_cd == 'TC001701'){
+										html += ' - ';
+									}else{
+										html +='<span class="btn btnC_01 btnF_02" onClick=javascript:fn_fix_rslt_reg('+full.exe_sn+');><input type="button" value="<spring:message code="backup_management.Enter_Action"/>"></span>';
+									}
+								}
+								return html;
+							},
+							defaultContent : ""
+						}
+			],'select': {'style': 'multi'} 
+		});
+
+		tableDump.tables().header().to$().find('th:eq(0)').css('min-width', '40px');
+		tableDump.tables().header().to$().find('th:eq(1)').css('min-width', '150px');
+		tableDump.tables().header().to$().find('th:eq(2)').css('min-width', '100px');
+		tableDump.tables().header().to$().find('th:eq(3)').css('min-width', '150px');
+		tableDump.tables().header().to$().find('th:eq(4)').css('min-width', '100px');
+		tableDump.tables().header().to$().find('th:eq(5)').css('min-width', '100px');
+		tableDump.tables().header().to$().find('th:eq(6)').css('min-width', '170px');
+		tableDump.tables().header().to$().find('th:eq(7)').css('min-width', '170px');
+		tableDump.tables().header().to$().find('th:eq(8)').css('min-width', '100px');
+		tableDump.tables().header().to$().find('th:eq(9)').css('min-width', '100px');
+		tableDump.tables().header().to$().find('th:eq(10)').css('min-width', '100px');
+		tableDump.tables().header().to$().find('th:eq(11)').css('min-width', '100px');
+		tableDump.tables().header().to$().find('th:eq(12)').css('min-width', '100px');
+
+	   	$(window).trigger('resize');
+	}
+
+	/* ********************************************************
+	 * Tab Click
+	 ******************************************************** */
+	function selectTab(intab){
+		selectChkTab = intab;
+		if(intab == "rman"){			
+			$(".search_rman").show();
+			$(".search_dump").hide();
+			$("#logRmanListDiv").show();
+			$("#logDumpListDiv").hide();
+
+			seachParamInit(intab);
+
+			fn_get_rman_list();
+		}else{				
+			$(".search_rman").hide();
+			$(".search_dump").show();
+			$("#logRmanListDiv").hide();
+			$("#logDumpListDiv").show();
+
+			seachParamInit(intab);
+			fn_get_dump_list();
+		}
+	}
+</script>
 
 <form name="findList" id="findList" method="post">
 	<input type="hidden" name="bck"  id="bck">
 	<input type="hidden" name="db_svr_id"  id="db_svr_id"  value="${db_svr_id}">
 </form>
-
 
 <div class="content-wrapper main_scroll" style="min-height: calc(100vh);" id="contentsDiv">
 	<div class="row">
@@ -133,7 +489,7 @@
 										</select>
 									</div>
 									
-									<div class="input-group mb-2 mr-sm-2 search_dump">
+									<div class="input-group mb-2 mr-sm-2 search_dump" style="padding-right:10px;">
 										<select class="form-control" style="width:200px;" name="db_id" id="db_id">
 											<option value=""><spring:message code="common.database" />&nbsp;<spring:message code="schedule.total" /></option>
 											<c:forEach var="result" items="${dbList}" varStatus="status">
@@ -141,4 +497,107 @@
 											</c:forEach>
 										</select>
 									</div>
+									
+									<div class="input-group mb-2 mr-sm-2" style="padding-right:10px;">
+										<input type="text" class="form-control" style="width:250px;" maxlength="25" id="wrk_nm" name="wrk_nm" onblur="this.value=this.value.trim()" placeholder='<spring:message code="message.msg107" />' />
+									</div>
 
+									<div class="input-group mb-2 mr-sm-2" style="padding-right:10px;">
+										<select class="form-control" style="width:200px;" name="fix_rsltcd" id="fix_rsltcd">
+											<option value=""><spring:message code="etc.etc31" />&nbsp;<spring:message code="schedule.total" /></option>
+											<option value="TC002003"><spring:message code="etc.etc34"/></option>
+											<option value="TC002001"><spring:message code="etc.etc29"/></option>
+											<option value="TC002002"><spring:message code="etc.etc30"/></option>
+										</select>
+									</div>
+									
+									<button type="button" class="btn btn-inverse-primary btn-icon-text mb-2 btn-search-disable" id="btnSelect">
+										<i class="ti-search btn-icon-prepend "></i><spring:message code="common.search" />
+									</button>
+								</div>
+							</form>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+
+		<div class="col-12 stretch-card div-form-margin-table">
+			<div class="card">
+				<div class="card-body">
+					<div class="card my-sm-2" >
+						<div class="card-body" >
+							<div class="row">
+								<div class="col-12" id="logRmanListDiv">
+ 									<div class="table-responsive">
+										<div id="order-listing_wrapper"
+											class="dataTables_wrapper dt-bootstrap4 no-footer">
+											<div class="row">
+												<div class="col-sm-12 col-md-6">
+													<div class="dataTables_length" id="order-listing_length">
+													</div>
+												</div>
+											</div>
+										</div>
+									</div>
+
+	 								<table id="logRmanList" class="table table-hover table-striped system-tlb-scroll" style="width:100%;">
+										<thead>
+											<tr class="bg-info text-white">
+												<th width="40"><spring:message code="common.no" /></th>
+												<th width="150"><spring:message code="common.work_name" /></th>
+												<th width="100"><spring:message code="dbms_information.dbms_ip" /></th>
+												<th width="150"><spring:message code="common.work_description" /></th>
+												<th width="90"><spring:message code="backup_management.backup_option" /></th>
+												<th width="230"><spring:message code="etc.etc08"/></th>
+												<th width="100"><spring:message code="backup_management.work_start_time" /> </th>
+												<th width="100"><spring:message code="backup_management.work_end_time" /></th>
+												<th width="70"><spring:message code="backup_management.elapsed_time" /></th>
+												<th width="100"><spring:message code="common.status" /></th>
+												<th width="100"><spring:message code="etc.etc31"/></th>
+											</tr>
+										</thead>
+									</table>
+							 	</div>
+							 	
+								<div class="col-12" id="logDumpListDiv">
+ 									<div class="table-responsive">
+										<div id="order-listing_wrapper" class="dataTables_wrapper dt-bootstrap4 no-footer">
+											<div class="row">
+												<div class="col-sm-12 col-md-6">
+													<div class="dataTables_length" id="order-listing_length">
+													</div>
+												</div>
+											</div>
+										</div>
+									</div>
+
+	 								<table id="logDumpList" class="table table-hover table-striped system-tlb-scroll" style="width:100%;">
+										<thead>
+											<tr class="bg-info text-white">
+												<th width="40"><spring:message code="common.no" /></th>
+												<th width="150"><spring:message code="common.work_name" /></th>
+												<th width="100"><spring:message code="dbms_information.dbms_ip" /></th>
+												<th width="150"><spring:message code="common.work_description" /></th>
+												<th width="100"><spring:message code="common.database" /></th>
+												<th width="100"><spring:message code="backup_management.size" /></th>
+												<th width="170"><spring:message code="etc.etc08"/></th>			
+												<th width="170"><spring:message code="backup_management.fileName"/></th>
+												<th width="100"><spring:message code="backup_management.work_start_time" /></th>
+												<th width="100"><spring:message code="backup_management.work_end_time" /></th>
+												<th width="100"><spring:message code="backup_management.elapsed_time" /></th>
+												<th width="100"><spring:message code="common.status" /></th>
+												<th width="100"><spring:message code="etc.etc31"/></th>
+											</tr>
+										</thead>
+									</table>
+							 	</div>
+						 	</div>
+						</div>
+					</div>
+				</div>
+				<!-- content-wrapper ends -->
+			</div>
+		</div>
+	</div>
+</div>

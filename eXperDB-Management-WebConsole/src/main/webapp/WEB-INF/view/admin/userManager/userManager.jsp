@@ -610,7 +610,7 @@
 				<div class="card-body">
 					<!-- search param start -->
 					<div class="card">
-						<div class="card-body">
+						<div class="card-body" style="margin:-10px -10px -15px -10px;">
 
 							<form class="form-inline">
 								<div class="input-group mb-2 mr-sm-2">
@@ -644,8 +644,15 @@
 							</form>
 						</div>
 					</div>
+				</div>
+			</div>
+		</div>
 
-					<div class="row">
+		<div class="col-12 div-form-margin-table stretch-card">
+			<div class="card">
+				<div class="card-body">
+
+					<div class="row" style="margin-top:-20px;">
 						<div class="col-12">
 							<div class="template-demo">			
 								<button type="button" class="btn btn-outline-primary btn-icon-text float-right" id="btnDelete" onClick="fn_del_confirm();" >
@@ -660,13 +667,7 @@
 							</div>
 						</div>
 					</div>
-				</div>
-			</div>
-		</div>
-
-		<div class="col-12 div-form-margin-table stretch-card">
-			<div class="card">
-				<div class="card-body">
+				
 					<div class="card my-sm-2" >
 						<div class="card-body" >
 							<div class="row">

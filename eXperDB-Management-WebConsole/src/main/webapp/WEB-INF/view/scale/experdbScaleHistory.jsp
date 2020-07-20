@@ -137,7 +137,6 @@
 		fn_occur_init();
 	}
 
-	
 	/* ********************************************************
 	 * Tab Click
 	 ******************************************************** */
@@ -170,7 +169,6 @@
 		}
 	}
 
-	
 	/* ********************************************************
 	 * 작업기간 calender 셋팅
 	 ******************************************************** */
@@ -850,7 +848,7 @@
 	<input type="hidden" name="db_svr_id" id="db_svr_id" value="${db_svr_id}"/>
 </form>
 
-<div class="content-wrapper main_scroll" id="contentsDiv">
+<div class="content-wrapper main_scroll" style="min-height: calc(100vh);" id="contentsDiv">
 	<div class="row">
 		<div class="col-12 div-form-margin-srn stretch-card">
 			<div class="card">
@@ -989,7 +987,7 @@
 											<div class="input-group-text" style="color: #248afd;margin-right: 0.5rem;"><spring:message code="eXperDB_scale.wrk_type" /></div>
 										</div>
 										 --%>	
-										<select class="form-control" style="width:200px;=-" name="wrk_type_Cd" id="wrk_type_Cd">
+										<select class="form-control" style="width:200px;" name="wrk_type_Cd" id="wrk_type_Cd">
 											<option value=""><spring:message code="eXperDB_scale.wrk_type" />&nbsp;<spring:message code="schedule.total" /></option>
 											<c:forEach var="result" items="${wrkTypeList}" varStatus="status">
 												<option value="<c:out value="${result.sys_cd}"/>"><c:out value="${result.sys_cd_nm}"/></option>

@@ -181,10 +181,10 @@
 			</div>
 		</div>
 
-		<div class="col-12 div-form-margin-cts stretch-card">
+		<div class="col-12 stretch-card div-form-margin-table">
 			<div class="card">
 				<div class="card-body">
-					<div class="row">
+					<div class="row" style="margin-top:-20px;">
 						<div class="col-12">
 							<div class="template-demo">																				
 								<button type="button" class="btn btn-outline-primary btn-icon-text float-right" id="btnSave" onClick="fn_updateSubmit();">
@@ -193,13 +193,7 @@
 							</div>
 						</div>
 					</div>
-				</div>
-			</div>
-		</div>
-
-		<div class="col-12 stretch-card div-form-margin-table">
-			<div class="card">
-				<div class="card-body">
+				
 					<div class="card my-sm-2" >
 						<div class="table-responsive system-tlb-scroll" style="overflow:auto;max-height: 540px; ">
 							<form class="cmxform" id="myPageForm">

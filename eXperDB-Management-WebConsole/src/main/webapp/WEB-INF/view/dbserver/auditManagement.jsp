@@ -32,7 +32,10 @@
 	 ******************************************************** */
 	$(window.document).ready(function() {
 		//agent 상태확인
-		fn_chkExtName(extName);
+		if (!fn_chkExtName(extName)) {
+ 			$("#btnSave").prop("disabled", "disabled");
+			return;	
+		}
 
 		//save 버튼 클릭
 		$("#btnSave").click(function () { 
@@ -55,13 +58,19 @@
 	 * agent 연결상태 체크
 	 ******************************************************** */
 	function fn_chkExtName(extName) {
-		if(extName == "") {
-			showSwalIconRst('<spring:message code="message.msg26" />', '<spring:message code="common.close" />', '', 'error', 'his');
-		} else if(extName == "agent") {
-			showSwalIconRst('<spring:message code="message.msg25" />', '<spring:message code="common.close" />', '', 'error', 'his');
+		var title = '<spring:message code="menu.audit_settings"/>' + ' ' + '<spring:message code="access_control_management.msg6" />';
+ 		if(extName == "") {
+			showDangerToast('top-right', '<spring:message code="message.msg26" />', title);
+			return false;
+ 		} else if(extName == "agent") {
+			showDangerToast('top-right', '<spring:message code="message.msg25" />', title);
+			return false;
 		}else if(extName == "agentfail"){
-			showSwalIconRst('<spring:message code="message.msg27" />', '<spring:message code="common.close" />', '', 'error', 'his');
+			showDangerToast('top-right', '<spring:message code="message.msg27" />', title);
+			return false;
 		}
+ 		
+ 		return true;
 	}
 	
 	/* ********************************************************

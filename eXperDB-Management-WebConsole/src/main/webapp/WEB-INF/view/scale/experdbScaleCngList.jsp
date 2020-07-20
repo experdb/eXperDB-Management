@@ -70,7 +70,7 @@ a:hover.tip span {
 		var scale_type_nm_init = "";
 		
 		table = $('#scaleSetTable').DataTable({
-			scrollY : "300px",
+			scrollY : "320px",
 			scrollX : true,
 			searching : false,
 			deferRender : true,
@@ -866,7 +866,7 @@ a:hover.tip span {
 	<input type="hidden" name="db_svr_id" id="db_svr_id" value="${db_svr_id}"/>
 </form>
 
-<div class="content-wrapper main_scroll" id="contentsDiv">
+<div class="content-wrapper main_scroll" style="min-height: calc(100vh);" id="contentsDiv">
 	<div class="row">
 		<div class="col-12 div-form-margin-srn stretch-card">
 			<div class="card">
@@ -919,7 +919,7 @@ a:hover.tip span {
 				<div class="card-body">
 					<!-- search param start -->
 					<div class="card">
-						<div class="card-body">
+						<div class="card-body" style="margin:-10px -10px -15px -10px;">
 
 							<form class="form-inline">
 								<div class="input-group mb-2 mr-sm-2">
@@ -953,8 +953,14 @@ a:hover.tip span {
 							</form>
 						</div>
 					</div>
+				</div>
+			</div>
+		</div>
 
-					<div class="row">
+		<div class="col-12 div-form-margin-table stretch-card">
+			<div class="card">
+				<div class="card-body">
+					<div class="row" style="margin-top:-20px;">
 						<div class="col-12">
 							<div class="template-demo">	
 								<button type="button" class="btn btn-outline-primary btn-icon-text" id="btnCommonInsert" onClick="fn_scaleChk('comIns');" data-toggle="modal">
@@ -973,13 +979,7 @@ a:hover.tip span {
 							</div>
 						</div>
 					</div>
-				</div>
-			</div>
-		</div>
-
-		<div class="col-12 div-form-margin-table stretch-card">
-			<div class="card">
-				<div class="card-body">
+				
 					<div class="card my-sm-2" >
 						<div class="card-body" >
 							<div class="row">

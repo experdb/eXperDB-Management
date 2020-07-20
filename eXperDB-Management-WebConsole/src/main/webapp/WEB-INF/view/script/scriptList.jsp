@@ -289,7 +289,6 @@
 					showSwalIcon('<spring:message code="info.nodata.msg" />', '<spring:message code="common.close" />', '', 'error');
 					return;
 				}
-				
 			}
 		});
 	}
@@ -676,7 +675,7 @@
 	<input type="hidden" name="scd_id" id="scd_id" value=""/>
 </form>
 
-<div class="content-wrapper main_scroll" id="contentsDiv">
+<div class="content-wrapper main_scroll" style="min-height: calc(100vh);" id="contentsDiv">
 	<div class="row">
 		<div class="col-12 div-form-margin-srn stretch-card">
 			<div class="card">
@@ -730,7 +729,7 @@
 				<div class="card-body">
 					<!-- search param start -->
 					<div class="card">
-						<div class="card-body">
+						<div class="card-body" style="margin:-10px -10px -15px -10px;">
 
 							<form class="form-inline" onsubmit="return false">
 								<div class="input-group mb-2 mr-sm-2">
@@ -744,8 +743,14 @@
 							</form>
 						</div>
 					</div>
+				</div>
+			</div>
+		</div>
 
-					<div class="row">
+		<div class="col-12 stretch-card div-form-margin-table" id="left_list">
+			<div class="card">
+				<div class="card-body">	
+					<div class="row" style="margin-top:-20px;">
 						<div class="col-12">
 							<div class="template-demo">	
 <%-- 								<button type="button" class="btn btn-outline-primary btn-icon-text" id="btnImmediately" onClick="fn_ImmediateStart();" data-toggle="modal">
@@ -764,46 +769,39 @@
 							</div>
 						</div>
 					</div>
-				</div>
-			</div>
-		</div>
-
-		<div class="col-12 stretch-card div-form-margin-table" id="left_list">
-			<div class="card">
-				<div class="card-body">	
-						<div class="card my-sm-2">
-							<div class="card-body">
-	 							<div class="table-responsive">
-									<div id="order-listing_wrapper"
-										class="dataTables_wrapper dt-bootstrap4 no-footer">
-										<div class="row">
-											<div class="col-sm-12 col-md-6">
-												<div class="dataTables_length" id="order-listing_length">
-												</div>
+				
+					<div class="card my-sm-2">
+						<div class="card-body">
+	 						<div class="table-responsive">
+								<div id="order-listing_wrapper" class="dataTables_wrapper dt-bootstrap4 no-footer">
+									<div class="row">
+										<div class="col-sm-12 col-md-6">
+											<div class="dataTables_length" id="order-listing_length">
 											</div>
 										</div>
 									</div>
 								</div>
-
-		 						<table id="scriptTable" class="table table-hover table-striped system-tlb-scroll" style="width:100%;">
-									<thead>
-										<tr class="bg-info text-white">
-											<th width="10"></th>
-											<th width="30"><spring:message code="common.no" /></th>
-											<th width="100"><spring:message code="common.work_name" /></th>
-											<th width="100"><spring:message code="menu.schedule_information" /></th>
-											<th width="300"><spring:message code="common.work_description" /></th>
-											<th width="100"><spring:message code="common.register" /></th>
-											<th width="110"><spring:message code="common.regist_datetime" /></th>
-											<th width="100"><spring:message code="common.modifier" /></th>
-											<th width="100"><spring:message code="common.modify_datetime" /></th>
-											<th width="0"></th>
-											<th width="0"></th>
-										</tr>
-									</thead>
-								</table>
 							</div>
+
+		 					<table id="scriptTable" class="table table-hover table-striped system-tlb-scroll" style="width:100%;">
+								<thead>
+									<tr class="bg-info text-white">
+										<th width="10"></th>
+										<th width="30"><spring:message code="common.no" /></th>
+										<th width="100"><spring:message code="common.work_name" /></th>
+										<th width="100"><spring:message code="menu.schedule_information" /></th>
+										<th width="300"><spring:message code="common.work_description" /></th>
+										<th width="100"><spring:message code="common.register" /></th>
+										<th width="110"><spring:message code="common.regist_datetime" /></th>
+										<th width="100"><spring:message code="common.modifier" /></th>
+										<th width="100"><spring:message code="common.modify_datetime" /></th>
+										<th width="0"></th>
+										<th width="0"></th>
+									</tr>
+								</thead>
+							</table>
 						</div>
+					</div>
 				</div>
 			</div>
 		</div>

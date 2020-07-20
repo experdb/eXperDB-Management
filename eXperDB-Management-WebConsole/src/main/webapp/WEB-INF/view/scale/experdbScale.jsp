@@ -83,7 +83,7 @@
 	 ******************************************************** */
 	function fn_init() {
 		table = $('#scaleDataTable').DataTable({
-			scrollY : "400px",
+			scrollY : "420px",
 			paging: false,
 			searching : false,
 			scrollX: true,
@@ -678,7 +678,7 @@
 	<input type="hidden" name="db_svr_id"  id="db_svr_id" />
 </form>
 
-<div class="content-wrapper main_scroll" id="contentsDiv">
+<div class="content-wrapper main_scroll" style="min-height: calc(100vh);" id="contentsDiv">
 	<div class="row">
 		<div class="col-12 div-form-margin-srn stretch-card">
 			<div class="card">
@@ -731,8 +731,7 @@
 				<div class="card-body">
 					<!-- search param start -->
 					<div class="card">
-						<div class="card-body">
-
+						<div class="card-body" style="margin:-10px -10px -15px -10px;">
 							<form class="form-inline" onsubmit="return false">
 								<div class="input-group mb-2 mr-sm-2">
 									<input type="text" class="form-control" style="width:400px;" maxlength="100" id="search_instance_id" name="search_instance_id" onblur="this.value=this.value.trim()" placeholder='<spring:message code="eXperDB_scale.instance_id" />'/>
@@ -744,8 +743,14 @@
 							</form>
 						</div>
 					</div>
+				</div>
+			</div>
+		</div>
 
-					<div class="row">
+		<div class="col-12 stretch-card div-form-margin-table">
+			<div class="card">
+				<div class="card-body">
+					<div class="row" style="margin-top:-20px;">
 						<div class="col-12">
 							<div class="template-demo">		
 								<button type="button" class="btn btn-outline-primary btn-icon-text float-right" id="btnScaleOut" onClick="fn_scaleInOutChk('scaleOut');" data-toggle="modal">
@@ -757,13 +762,7 @@
 							</div>
 						</div>
 					</div>
-				</div>
-			</div>
-		</div>
-
-		<div class="col-12 stretch-card div-form-margin-table">
-			<div class="card">
-				<div class="card-body">
+				
 					<div class="card my-sm-2" >
 						<div class="card-body" >
 							<div class="row">
