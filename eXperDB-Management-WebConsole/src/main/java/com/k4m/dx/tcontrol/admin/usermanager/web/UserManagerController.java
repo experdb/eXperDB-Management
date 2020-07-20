@@ -75,6 +75,7 @@ public class UserManagerController {
 		try {
 			CmmnUtils cu = new CmmnUtils();
 			menuAut = cu.selectMenuAut(menuAuthorityService, "MN0004");
+
 			if (menuAut.get(0).get("read_aut_yn").equals("N")) {
 				mv.setViewName("error/autError");
 			} else {
@@ -94,11 +95,11 @@ public class UserManagerController {
 		}
 		return mv;
 	}
-
+	
 	/**
 	 * 사용자 리스트를 조회한다.
 	 * 
-	 * @param request
+	 * @param request, historyVO, response
 	 * @return resultSet
 	 * @throws Exception
 	 */
@@ -144,16 +145,18 @@ public class UserManagerController {
 	/**
 	 * 사용자 등록 화면을 보여준다.
 	 * 
-	 * @param request
+	 * @param request, historyVO
 	 * @return ModelAndView mv
 	 * @throws Exception
 	 */
 	@RequestMapping(value = "/popup/userManagerRegForm.do")
 	public ModelAndView userManagerForm(@ModelAttribute("historyVO") HistoryVO historyVO, HttpServletRequest request) {
-		ModelAndView mv = new ModelAndView();
+		ModelAndView mv = new ModelAndView("jsonView");
+
 		try {
 			CmmnUtils cu = new CmmnUtils();
 			menuAut = cu.selectMenuAut(menuAuthorityService, "MN0004");
+
 			if (menuAut.get(0).get("wrt_aut_yn").equals("N")) {
 				mv.setViewName("error/autError");
 			} else {
@@ -173,7 +176,7 @@ public class UserManagerController {
 				if (encp_use_yn.equals("Y") && strTocken != null && entityId != null) {
 					mv.addObject("encp_yn", encp_use_yn);
 				}
-				mv.setViewName("popup/userManagerRegForm");
+				//mv.setViewName("popup/userManagerRegForm");
 			}
 
 		} catch (Exception e) {
@@ -181,65 +184,7 @@ public class UserManagerController {
 		}
 		return mv;
 	}
-
-	/**
-	 * 사용자 수정 화면을 보여준다.
-	 * 
-	 * @param request
-	 * @return ModelAndView mv
-	 * @throws Exception
-	 */
-	@RequestMapping(value = "/popup/userManagerRegReForm.do")
-	public ModelAndView userManagerRegReForm(@ModelAttribute("historyVO") HistoryVO historyVO,
-			HttpServletRequest request) {
-		ModelAndView mv = new ModelAndView();
-		try {
-			CmmnUtils cu = new CmmnUtils();
-			menuAut = cu.selectMenuAut(menuAuthorityService, "MN0004");
-			if (menuAut.get(0).get("wrt_aut_yn").equals("N")) {
-				mv.setViewName("error/autError");
-			} else {
-				CmmnUtils.saveHistory(request, historyVO);
-
-				// 화면접근이력 이력 남기기
-				historyVO.setExe_dtl_cd("DX-T0035");
-				historyVO.setMnu_id(12);
-				accessHistoryService.insertHistory(historyVO);
-
-				String usr_id = request.getParameter("usr_id");
-				UserVO result = (UserVO) userManagerService.selectDetailUserManager(usr_id);
-
-				mv.addObject("get_usr_id", result.getUsr_id());
-				mv.addObject("get_usr_nm", result.getUsr_nm());
-				mv.addObject("pwd", result.getPwd());
-				mv.addObject("bln_nm", result.getBln_nm());
-				mv.addObject("dept_nm", result.getDept_nm());
-				mv.addObject("pst_nm", result.getPst_nm());
-				mv.addObject("rsp_bsn_nm", result.getRsp_bsn_nm());
-				mv.addObject("cpn", result.getCpn());
-				mv.addObject("use_yn", result.getUse_yn());
-				mv.addObject("encp_use_yn", result.getEncp_use_yn());
-				mv.addObject("aut_id", result.getAut_id());
-				mv.addObject("usr_expr_dt", result.getUsr_expr_dt());
-
-				HttpSession session = request.getSession();
-				LoginVO loginVo = (LoginVO) session.getAttribute("session");
-				String strTocken = loginVo.getTockenValue();
-				String entityId = loginVo.getEctityUid();
-				String encp_use_yn = loginVo.getEncp_use_yn();
-
-				if (encp_use_yn.equals("Y") && strTocken != null && entityId != null) {
-					mv.addObject("encp_yn", encp_use_yn);
-				}
-				mv.setViewName("popup/userManagerRegReForm");
-			}
-
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-		return mv;
-	}
-
+	
 	/**
 	 * 중복 아이디를 체크한다.
 	 * 
@@ -247,8 +192,8 @@ public class UserManagerController {
 	 * @return
 	 * @throws Exception
 	 */
-	@RequestMapping(value = "/UserManagerIdCheck.do")
-	public @ResponseBody String UserManagerIdCheck(@RequestParam("usr_id") String usr_id) {
+	@RequestMapping(value = "/userManagerIdCheck.do")
+	public @ResponseBody String userManagerIdCheck(@RequestParam("usr_id") String usr_id) {
 		try {
 			int resultSet = userManagerService.userManagerIdCheck(usr_id);
 			if (resultSet > 0) {
@@ -259,20 +204,16 @@ public class UserManagerController {
 		}
 		return "true";
 	}
-
+	
 	/**
 	 * 사용자를 등록한다.
 	 * 
-	 * @param userVo
-	 * @param request
-	 * @return
-	 * @return
+	 * @param userVo, response, request, historyVO
+	 * @return results
 	 * @throws Exception
 	 */
 	@RequestMapping(value = "/insertUserManager.do")
-	public @ResponseBody JSONObject insertUserManager(@ModelAttribute("userVo") UserVO userVo,
-			HttpServletRequest request, HttpServletResponse response,
-			@ModelAttribute("historyVO") HistoryVO historyVO) {
+	public @ResponseBody JSONObject insertUserManager(@ModelAttribute("userVo") UserVO userVo, HttpServletRequest request, HttpServletResponse response, @ModelAttribute("historyVO") HistoryVO historyVO) {
 		List<UserVO> result = null;
 		UserManagerServiceCall uic = new UserManagerServiceCall();
 		JSONObject results = new JSONObject();
@@ -300,8 +241,9 @@ public class UserManagerController {
 			String strTocken = loginVo.getTockenValue();
 			String loginId = loginVo.getUsr_id();
 			String entityId = loginVo.getEctityUid();
-			String encp_use_yn = loginVo.getEncp_use_yn();		
+			String encp_use_yn = loginVo.getEncp_use_yn();
 
+			//암호화 여부 null 경우
 			if (userVo.getEncp_use_yn() == null) {
 				userVo.setEncp_use_yn("N");
 			}
@@ -346,6 +288,7 @@ public class UserManagerController {
 				userVo.setUsr_expr_dt(userVo.getUsr_expr_dt().replace("-", ""));
 			}
 
+			//사용자 정보등록
 			userManagerService.insertUserManager(userVo);
 
 			// 메뉴 권한 초기등록
@@ -383,30 +326,176 @@ public class UserManagerController {
 		}
 		return results;
 	}
+	
+	/**
+	 * 사용자를 삭제한다.
+	 * 
+	 * @param historyVO, response, request
+	 * @return result
+	 * @throws Exception
+	 */
+	@RequestMapping(value = "/deleteUserManager.do")
+	public @ResponseBody JSONObject deleteUserManager(@ModelAttribute("historyVO") HistoryVO historyVO, HttpServletResponse response, HttpServletRequest request) {
+		UserManagerServiceCall uic = new UserManagerServiceCall();
+		JSONObject result = new JSONObject();
 
+		try {
+			CmmnUtils cu = new CmmnUtils();
+			menuAut = cu.selectMenuAut(menuAuthorityService, "MN0004");
+
+			// 쓰기권한이 없는경우
+			if (menuAut.get(0).get("wrt_aut_yn").equals("N")) {
+				response.sendRedirect("/autError.do");
+			}
+
+			// 화면접근이력 이력 남기기
+			CmmnUtils.saveHistory(request, historyVO);
+			historyVO.setExe_dtl_cd("DX-T0033_02");
+			historyVO.setMnu_id(12);
+			accessHistoryService.insertHistory(historyVO);
+
+			HttpSession session = request.getSession();
+			LoginVO loginVo = (LoginVO) session.getAttribute("session");
+
+			String strTocken = loginVo.getTockenValue();
+			String loginId = loginVo.getUsr_id();
+			String entityId = loginVo.getEctityUid();
+			String encp_use_yn = loginVo.getEncp_use_yn();
+
+			String[] param = request.getParameter("usr_id").toString().split(",");
+
+			for (int i = 0; i < param.length; i++) {
+				//선택 사용자 정보 조회
+				UserVO userDetail = (UserVO) userManagerService.selectDetailUserManager(param[i]);
+				String getEncpUseyn = userDetail.getEncp_use_yn();
+				
+				//암호화 존재경우
+				if (getEncpUseyn.equals("Y")) {
+					if (encp_use_yn.equals("Y") && strTocken != null && entityId != null) {
+						String restIp = loginVo.getRestIp();
+						int restPort = loginVo.getRestPort();
+						JSONObject resultEntity = new JSONObject();
+
+						try{
+							resultEntity = uic.selectEntityUid(restIp, restPort, strTocken, loginId, entityId, param[i]);
+						}catch(Exception e){
+							result.put("resultCode", "8000000002");
+							return result;
+						}
+
+						if (!resultEntity.get("resultCode").equals("0000000000")) {
+							result.put("resultCode", resultEntity.get("resultCode"));
+							result.put("resultMessage", resultEntity.get("resultMessage"));
+							return result;
+						}
+
+						Map map = (Map) resultEntity.get("map");
+						String entityUid = (String) map.get("entityUid");
+						result = uic.deleteEntity(restIp, restPort, strTocken, loginId, entityId, entityUid);
+						if (!result.get("resultCode").equals("0000000000")) {
+							result.put("resultCode", result.get("resultCode"));
+							result.put("resultMessage", result.get("resultMessage"));
+							return result;
+						}
+					} else {
+						// 로그인 한 유저가 strTocken, entityId 가 없을 경우 삭제 막아야 함!
+						result.put("resultCode", "8000000002");
+						return result;
+					}
+				}
+
+				menuAuthorityService.deleteMenuAuthority(param[i]);
+				dbAuthorityService.deleteDbSvrAuthority(param[i]);
+				dbAuthorityService.deleteDbAuthority(param[i]);
+				userManagerService.deleteUserManager(param[i]);
+			}
+
+			result.put("resultCode", "0000000000");
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return result;
+	}
+	
+	/**
+	 * 사용자 수정 화면을 보여준다.
+	 * 
+	 * @param request, historyVO
+	 * @return ModelAndView mv
+	 * @throws Exception
+	 */
+	@RequestMapping(value = "/popup/userManagerRegReForm.do")
+	public ModelAndView userManagerRegReForm(@ModelAttribute("historyVO") HistoryVO historyVO, HttpServletRequest request) {
+		ModelAndView mv = new ModelAndView("jsonView");
+
+		try {
+			CmmnUtils cu = new CmmnUtils();
+			menuAut = cu.selectMenuAut(menuAuthorityService, "MN0004");
+			if (menuAut.get(0).get("wrt_aut_yn").equals("N")) {
+				mv.setViewName("error/autError");
+			} else {
+				CmmnUtils.saveHistory(request, historyVO);
+
+				// 화면접근이력 이력 남기기
+				historyVO.setExe_dtl_cd("DX-T0035");
+				historyVO.setMnu_id(12);
+				accessHistoryService.insertHistory(historyVO);
+
+				String usr_id = request.getParameter("usr_id");
+				UserVO result = (UserVO) userManagerService.selectDetailUserManager(usr_id);
+
+				mv.addObject("get_usr_id", result.getUsr_id());
+				mv.addObject("get_usr_nm", result.getUsr_nm());
+				mv.addObject("pwd", result.getPwd());
+				mv.addObject("bln_nm", result.getBln_nm());
+				mv.addObject("dept_nm", result.getDept_nm());
+				mv.addObject("pst_nm", result.getPst_nm());
+				mv.addObject("rsp_bsn_nm", result.getRsp_bsn_nm());
+				mv.addObject("cpn", result.getCpn());
+				mv.addObject("use_yn", result.getUse_yn());
+				mv.addObject("encp_use_yn", result.getEncp_use_yn());
+				mv.addObject("aut_id", result.getAut_id());
+				mv.addObject("usr_expr_dt", result.getUsr_expr_dt());
+
+				HttpSession session = request.getSession();
+				LoginVO loginVo = (LoginVO) session.getAttribute("session");
+				String strTocken = loginVo.getTockenValue();
+				String entityId = loginVo.getEctityUid();
+				String encp_use_yn = loginVo.getEncp_use_yn();
+
+				if (encp_use_yn.equals("Y") && strTocken != null && entityId != null) {
+					mv.addObject("encp_yn", encp_use_yn);
+				}
+			//	mv.setViewName("popup/userManagerRegReForm");
+			}
+
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return mv;
+	}
+	
 	/**
 	 * 사용자를 수정한다.
 	 * 
-	 * @param userVo
-	 * @param historyVO
-	 * @param request
+	 * @param userVo, response, historyVO, request
 	 * @return
 	 * @throws Exception
 	 */
 	@RequestMapping(value = "/updateUserManager.do")
 	public @ResponseBody JSONObject updateUserManager(@ModelAttribute("userVo") UserVO userVo,
-			HttpServletResponse response, @ModelAttribute("historyVO") HistoryVO historyVO,
-			HttpServletRequest request) {
+			HttpServletResponse response, @ModelAttribute("historyVO") HistoryVO historyVO, HttpServletRequest request) {
 		CmmnUtils cu = new CmmnUtils();
 		UserManagerServiceCall uic = new UserManagerServiceCall();
 		JSONObject result = new JSONObject();
-		
+	
 		try {
 			menuAut = cu.selectMenuAut(menuAuthorityService, "MN0004");
 			// 쓰기권한이 없는경우
 			if (menuAut.get(0).get("wrt_aut_yn").equals("N")) {
 				response.sendRedirect("/autError.do");
 			}
+	
 			// 화면접근이력 이력 남기기
 			CmmnUtils.saveHistory(request, historyVO);
 			historyVO.setExe_dtl_cd("DX-T0035_01");
@@ -419,12 +508,13 @@ public class UserManagerController {
 			userVo.setLst_mdfr_id(usr_id);
 			UserVO userInfo = (UserVO) userManagerService.selectDetailUserManager(userVo.getUsr_id());
 
-			if (userInfo.getPwd().equals(userVo.getPwd())) {
-				userVo.setPwd(userVo.getPwd());
-			} else {
+			//패스워드가 null이 아닌경우만
+			if (userVo.getPwd() != null && !"".equals(userVo.getPwd())) {
 				// 패스워드 암호화
 				AES256 aes = new AES256(AES256_KEY.ENC_KEY);
 				userVo.setPwd(aes.aesEncode(userVo.getPwd()));
+			} else {
+				userVo.setPwd("");
 			}
 
 			String strTocken = loginVo.getTockenValue();
@@ -477,6 +567,7 @@ public class UserManagerController {
 						result.put("resultCode", "8000000002");
 					}
 				}
+
 				if (result.get("resultCode").equals("0000000000")) {
 					userVo.setUsr_expr_dt(userVo.getUsr_expr_dt().replace("-", ""));
 					userManagerService.updateUserManager(userVo);
@@ -502,87 +593,7 @@ public class UserManagerController {
 	}
 
 	/**
-	 * 사용자를 삭제한다.
-	 * 
-	 * @param historyVO
-	 * @param request
-	 * @return
-	 * @throws Exception
-	 */
-	@RequestMapping(value = "/deleteUserManager.do")
-	public @ResponseBody JSONObject deleteUserManager(@ModelAttribute("historyVO") HistoryVO historyVO,
-			HttpServletResponse response, HttpServletRequest request) {
-		UserManagerServiceCall uic = new UserManagerServiceCall();
-		JSONObject result = new JSONObject();
-		try {
-			CmmnUtils cu = new CmmnUtils();
-			menuAut = cu.selectMenuAut(menuAuthorityService, "MN0004");
-
-			// 쓰기권한이 없는경우
-			if (menuAut.get(0).get("wrt_aut_yn").equals("N")) {
-				response.sendRedirect("/autError.do");
-			}
-
-			// 화면접근이력 이력 남기기
-			CmmnUtils.saveHistory(request, historyVO);
-			historyVO.setExe_dtl_cd("DX-T0033_02");
-			historyVO.setMnu_id(12);
-			accessHistoryService.insertHistory(historyVO);
-
-			HttpSession session = request.getSession();
-			LoginVO loginVo = (LoginVO) session.getAttribute("session");
-			String strTocken = loginVo.getTockenValue();
-			String loginId = loginVo.getUsr_id();
-			String entityId = loginVo.getEctityUid();
-			String encp_use_yn = loginVo.getEncp_use_yn();
-			String[] param = request.getParameter("usr_id").toString().split(",");
-			for (int i = 0; i < param.length; i++) {
-				UserVO userDetail = (UserVO) userManagerService.selectDetailUserManager(param[i]);
-				String getEncpUseyn = userDetail.getEncp_use_yn();
-				if (getEncpUseyn.equals("Y")) {
-					if (encp_use_yn.equals("Y") && strTocken != null && entityId != null) {
-						String restIp = loginVo.getRestIp();
-						int restPort = loginVo.getRestPort();
-						JSONObject resultEntity = new JSONObject();
-						try{
-							resultEntity = uic.selectEntityUid(restIp, restPort, strTocken, loginId, entityId, param[i]);
-						}catch(Exception e){
-							result.put("resultCode", "8000000002");
-							return result;
-						}
-						if (!resultEntity.get("resultCode").equals("0000000000")) {
-							result.put("resultCode", resultEntity.get("resultCode"));
-							result.put("resultMessage", resultEntity.get("resultMessage"));
-							return result;
-						}
-						Map map = (Map) resultEntity.get("map");
-						String entityUid = (String) map.get("entityUid");
-						result = uic.deleteEntity(restIp, restPort, strTocken, loginId, entityId, entityUid);
-						if (!result.get("resultCode").equals("0000000000")) {
-							result.put("resultCode", result.get("resultCode"));
-							result.put("resultMessage", result.get("resultMessage"));
-							return result;
-						}
-					} else {
-						// 로그인 한 유저가 strTocken, entityId 가 없을 경우 삭제 막아야 함!
-						result.put("resultCode", "8000000002");
-						return result;
-					}
-				}
-				menuAuthorityService.deleteMenuAuthority(param[i]);
-				dbAuthorityService.deleteDbSvrAuthority(param[i]);
-				dbAuthorityService.deleteDbAuthority(param[i]);
-				userManagerService.deleteUserManager(param[i]);
-			}
-			result.put("resultCode", "0000000000");
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-		return result;
-	}
-	
-	/**
-	 * scale 설정 정보 상세조회
+	 * top화면 프로필 조회
 	 * @param  request
 	 * @return result
 	 * @throws Exception
@@ -595,7 +606,6 @@ public class UserManagerController {
 
 		try {
 			String usr_id = request.getParameter("usr_id");
-			System.out.println("===usr_id===" + usr_id);
 			param.put("usr_id", usr_id);
 			
 			result = userManagerService.selectProfieView(param);	
@@ -604,4 +614,16 @@ public class UserManagerController {
 		}
 		return result;
 	}
+
+
+
+
+
+
+				
+
+
+
+	
+
 }

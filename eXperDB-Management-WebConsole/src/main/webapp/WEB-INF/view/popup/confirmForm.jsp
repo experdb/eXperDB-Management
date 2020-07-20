@@ -10,7 +10,7 @@
 	}
 </script>
 
- <div class="modal fade" id="pop_confirm_md" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel-3" aria-hidden="true" data-backdrop="static" data-keyboard="false">
+ <div class="modal fade" id="pop_confirm_md" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel-3" aria-hidden="true" data-backdrop="static" data-keyboard="false" style="z-index:9999;">
 	<div class="modal-dialog modal-sm" role="document" style="margin: 200px 650px;">
 		<div class="modal-content" style="width:400px;height:260px;">
 			<div class="modal-header" style="height:50px;padding-top:15px;">
@@ -26,7 +26,7 @@
 				</div>
 				
 				<div class="modal-footer_con">
-					<button type="button" class="btn btn-success" onclick="fnc_confirmSuccess();"><spring:message code="common.confirm" /></button>
+					<button type="button" class="btn btn-primary" onclick="fnc_confirmSuccess();"><spring:message code="common.confirm" /></button>
 					<button type="button" class="btn btn-light" data-dismiss="modal"><spring:message code="common.cancel" /></button>
 				</div>
 			</div>

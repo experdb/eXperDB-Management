@@ -391,7 +391,7 @@
 								<ul class="nav page-navigation">
 
 									<!-- SCHEDULE -->
-									<li class="nav-item width-div-a" id="scheduleMenu">
+									<li class="nav-item width-div-a" id="scheduleMenu" style="margin-top:15px;">
  										<a href="#" class="nav-link">
 											<i class="ti-calendar menu-icon"></i>
 											<span class="menu-title">SCHEDULE</span>
@@ -430,7 +430,7 @@
 											<span class="menu-title">DATA TRANSFER</span>
 											<i class="menu-arrow"></i>
 										</a>
-										<div class="submenu" id="MN0002">											
+										<div class="submenu" id="MN0002">
 											<ul class="submenu-item">
 												<li class="nav-item">
 													<span class="nav-heading-title">
@@ -453,14 +453,14 @@
 									 --%>
 									
 									<!-- ADMIN -->
-									<li class="nav-item mega-menu width-div-a" id="adminMenu">
+									<li class="nav-item mega-menu width-div-a" id="adminMenu" style="margin-top:15px;">
 										<a href="#" class="nav-link">
 											<i class="ti-desktop menu-icon"></i>
 											<span class="menu-title">ADMIN</span>
 											<i class="menu-arrow"></i>
 										</a>
-										<div class="submenu">
-											<div class="col-group-wrapper row">
+										<div class="submenu" style="margin-top:15px;">
+											<div class="col-group-wrapper row" >
 												<div class="col-group col-md-3" id="MN0003_DIV">
 													<p class="category-heading" id="MN0003">
 														<b><spring:message code="menu.dbms_information" /></b>
@@ -569,13 +569,13 @@
 
 									
 									<!-- ENCRYPT -->
-									<li class="nav-item mega-menu width-div-a" id="encryptMenu">	
+									<li class="nav-item mega-menu width-div-a" id="encryptMenu" style="margin-top:15px;">	
 										<a href="#" class="nav-link">
 											<i class="ti-lock menu-icon"></i>
 											<span class="menu-title">ENCRYPT</span>
 											<i class="menu-arrow"></i>
 										</a>
-										<div class="submenu">
+										<div class="submenu" style="margin-top:15px;">
 											<div class="col-group-wrapper row">
 												<div class="col-group col-md-3" id="MN00011">
 													<p class="category-heading">
@@ -594,7 +594,7 @@
 														</li>
 													</ul>
 												</div>
-												<div class="col-group col-md-3" id="MN00012">
+												<div class="col-group col-md-3" id="MN00012" >
 													<p class="category-heading">
 														<b><spring:message code="encrypt_log.Audit_Log" /></b>
 													</p>
@@ -666,7 +666,7 @@
 
 									
 									<!-- MIGRATION -->
-									<li class="nav-item width-div-a"  id="migrationMenu">
+									<li class="nav-item width-div-a"  id="migrationMenu" style="margin-top:15px;">
 										<a href="#" class="nav-link">
 											<i class="ti-server menu-icon"></i>
 											<span class="menu-title">MIGRATION</span>
@@ -676,7 +676,7 @@
 											<ul class="submenu-item">
 												<li class="nav-item">
 													<span class="nav-heading-title">
-														<b><spring:message code="encrypt_tree.Data_Encryption" /></b>
+														<b><spring:message code="menu.data_migration" /></b>
 													</span>
 												</li>
 												<li class="nav-item" id="MN00015">
@@ -699,7 +699,7 @@
 									</li>
 									
  									
-									<li class="nav-item width-div-a"  id="myPageMenu">
+									<li class="nav-item width-div-a"  id="myPageMenu" style="margin-top:15px;">
 										<a href="#" class="nav-link">
 											<i class="ti-user menu-icon"></i>
 											<span class="menu-title">MY PAGE</span>
@@ -788,7 +788,7 @@
 													</a>
 												</li>
 												<li class="nav-item">
-													<a class="nav-link" href="#n" data-toggle="modal" data-target="#pop_layer_openSource" >
+													<a class="nav-link" href="#n" data-toggle="modal" data-target="#pop_layer_openSource" onClick="fn_openSource()" >
 														Open Source License
 													</a>
 												</li>
@@ -820,10 +820,13 @@
 					</a>
 				</div>
 			</li>
-        </ul>
+		</ul>
 
 		<button class="navbar-toggler navbar-toggler-right d-lg-none align-self-center" type="button" data-toggle="offcanvas">
 			<span class="ti-layout-grid2"></span>
 		</button>
+        <button class="horizontal-menu_navbar-toggler navbar-toggler-right d-lg-none align-self-center" type="button" data-toggle="horizontal-menu-toggle">
+            <span class="ti-menu"></span>
+        </button>
 	</div>
 </nav>

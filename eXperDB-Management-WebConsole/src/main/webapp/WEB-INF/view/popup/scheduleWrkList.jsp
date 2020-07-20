@@ -77,7 +77,7 @@
 						,"render": function (data, type, full) {
 							var html = "";
 							if(full.bsn_dscd_nm != "MIGRATION"){
-								html +='<span onClick="fn_workLayer(\''+full.wrk_id+'\', \''+ popName+'\');" class="bold" >' + full.wrk_nm + '</span>';
+								html +='<span onClick="fn_workLayer(\''+full.wrk_id+'\');" class="bold" >' + full.wrk_nm + '</span>';
 				  				return html;
 							}else{
 								return '<span title="'+full.wrk_nm+'">' + full.wrk_nm + '</span>';
@@ -117,7 +117,8 @@
 
 <%@include file="./../cmmn/workScriptInfoPop.jsp"%>
 
-<div class="modal fade" id="pop_layer_info_schedule" tabindex="-1" role="dialog" aria-labelledby="ModalLabel" aria-hidden="true" data-backdrop="static" data-keyboard="false">
+<div class="modal fade" id="pop_layer_info_schedule" tabindex="-1" role="dialog" aria-labelledby="ModalLabel" aria-hidden="true" data-backdrop="static" data-keyboard="false" style="z-index:1060;">
+
 	<div class="modal-dialog  modal-xl-top" role="document" style="margin: 100px 350px;">
 		<div class="modal-content" style="width:1000px;">		 
 			<div class="modal-body" style="margin-bottom:-30px;">
@@ -160,7 +161,7 @@
 						</div>
 						
 
-						<div class="top-modal-footer" style="text-align: center !important; margin: -20px 0 0 -20px;" >
+						<div class="top-modal-footer" style="text-align: center !important; margin: -10px 0 0 -10px;" >
 							<button type="button" class="btn btn-light" data-dismiss="modal"><spring:message code="common.close"/></button>
 						</div>
 					</div>

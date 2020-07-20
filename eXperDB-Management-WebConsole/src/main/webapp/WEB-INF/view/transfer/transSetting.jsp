@@ -73,7 +73,7 @@ a:hover.tip span {
 	 ******************************************************** */
 	function fn_init(){
 		table = $('#transSettingTable').DataTable({
-			scrollY : "310px",
+			scrollY : "330px",
 			deferRender : true,
 			scrollX: true,
 			searching : false,
@@ -1033,7 +1033,7 @@ a:hover.tip span {
 	<input type="hidden" name="chk_act_row" id="chk_act_row" value=""/>
 </form>
 
-<div class="content-wrapper main_scroll" id="contentsDiv">
+<div class="content-wrapper main_scroll" style="min-height: calc(100vh);" id="contentsDiv">
 	<div class="row">
 		<div class="col-12 div-form-margin-srn stretch-card">
 			<div class="card">
@@ -1087,7 +1087,7 @@ a:hover.tip span {
 				<div class="card-body">
 					<!-- search param start -->
 					<div class="card">
-						<div class="card-body">
+						<div class="card-body" style="margin:-10px -10px -15px -10px;">
 							<form class="form-inline" onsubmit="return false">
 								<div class="input-group mb-2 mr-sm-2">
 									<input type="text" class="form-control" style="width:400px;" maxlength="25" id="connect_nm" name="connect_nm" onblur="this.value=this.value.trim()" placeholder='<spring:message code="data_transfer.connect_name_set" />'/>					
@@ -1099,8 +1099,14 @@ a:hover.tip span {
 							</form>
 						</div>
 					</div>
+				</div>
+			</div>
+		</div>
 
-					<div class="row">
+		<div class="col-12 div-form-margin-table stretch-card">
+			<div class="card">
+				<div class="card-body">
+					<div class="row" style="margin-top:-20px;">
 						<div class="col-12">
 							<div class="template-demo">	
 								<button type="button" class="btn btn-outline-primary btn-icon-text" id="btnChoActive" onClick="fn_activaExecute_click('active');" data-toggle="modal">
@@ -1122,14 +1128,8 @@ a:hover.tip span {
 							</div>
 						</div>
 					</div>
-				</div>
-			</div>
-		</div>
 
-		<div class="col-12 div-form-margin-table stretch-card">
-			<div class="card">
-				<div class="card-body">
-					<div class="card my-sm-2" >
+					<div class="card my-sm-2" style="margin-botom:-10px;">
 						<div class="card-body" >
 							<div class="row">
 								<div class="col-12">

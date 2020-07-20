@@ -117,9 +117,9 @@
 			},
 			success : function(result) {
 				//초기화
-				$("#nowpwd", "#pwdChgForm").val();
-				$("#newpwd", "#pwdChgForm").val();
-				$("#pwd", "#pwdChgForm").val();
+				$("#nowpwd", "#pwdChgForm").val("");
+				$("#newpwd", "#pwdChgForm").val("");
+				$("#pwd", "#pwdChgForm").val("");
 				
  				$("#newpw_alert-danger", "#pwdChgForm").html("");
 				$("#newpw_alert-danger", "#pwdChgForm").hide();

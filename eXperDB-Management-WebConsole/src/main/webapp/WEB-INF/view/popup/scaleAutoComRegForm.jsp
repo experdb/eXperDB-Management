@@ -174,7 +174,7 @@
 									<label class="col-sm-1 col-form-label"><spring:message code="eXperDB_scale.time_minute"/></label>
 								</div>
 
-								<div class="top-modal-footer" style="text-align: center !important; margin: -20px 0 0 -20px;" >
+								<div class="top-modal-footer" style="text-align: center !important; margin: -10px 0 0 -10px;" >
 									<input class="btn btn-primary" width="200px"style="vertical-align:middle;" type="submit" value='<spring:message code="common.registory" />' />
 									<button type="button" class="btn btn-light" data-dismiss="modal"><spring:message code="common.close"/></button>
 								</div>

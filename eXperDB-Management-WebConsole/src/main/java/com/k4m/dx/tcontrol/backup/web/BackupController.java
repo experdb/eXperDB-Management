@@ -167,7 +167,7 @@ public class BackupController {
 	
 	/**
 	 * Backup Log View page
-	 * @param WorkVO
+	 * @param WorkVO, historyVO, request
 	 * @return ModelAndView
 	 */
 	@RequestMapping(value = "/backup/workLogList.do")
@@ -209,8 +209,7 @@ public class BackupController {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
-			
-		
+
 			if(request.getParameter("gbn") != null){
 				mv.addObject("gbn",request.getParameter("gbn"));
 			}

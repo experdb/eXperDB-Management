@@ -177,13 +177,9 @@ $(window).ready(function(){
 	});
 });
 
-//About eXperDB
-function fn_aboutExperdb(version){
-	$("#version").html(version);
-}
-
-
-/* 로그아웃 */
+/* ********************************************************
+ * 로그아웃 
+ ******************************************************** */
 function fn_logout(){
 	sessionStorage.removeItem('cssId');
 
@@ -192,7 +188,9 @@ function fn_logout(){
 	frm.submit();
 }
 
-/* cookie 저장 */
+/* ********************************************************
+ * cookie 저장
+ ******************************************************** */
 function fn_cookie(url) {
 	var cssID = sessionStorage.getItem('cssId');
 
@@ -209,7 +207,9 @@ function fn_cookie(url) {
 	sessionStorage.setItem('cssId',url);
 }
 
-/* null 값 변경 */
+/* ********************************************************
+ * null 값 변경
+ ******************************************************** */
 function nvlPrmSet(val, subVal) {
 	var strValue = val;
 	if( strValue == null || strValue == '') {
@@ -219,7 +219,9 @@ function nvlPrmSet(val, subVal) {
 	return strValue;
 }
 
-//profile chk
+/* ********************************************************
+ * profile chk
+ ******************************************************** */
 function fn_profileChk(id) {
 	if ($("#" + id).hasClass("menu-arrow_user")) {
 		$("#" + id).attr('class', 'menu-arrow_user_af');
@@ -228,7 +230,9 @@ function fn_profileChk(id) {
 	}
 }
 
-//글자수 체크
+/* ********************************************************
+ * 글자수 체크
+ ******************************************************** */
 function fn_checkWord(obj, maxlength) { 
 	var str = obj.value; 
 	var str_length = str.length;     
@@ -239,14 +243,18 @@ function fn_checkWord(obj, maxlength) {
 	obj.focus(); 
 }
 
-//숫자 체크
+/* ********************************************************
+ * 숫자 체크
+ ******************************************************** */
 function chk_Number(object){
 	$(object).keyup(function(){
 		$(this).val($(this).val().replace(/[^0-9]/g,""));
 	});   
 }
 
-//작업 로그정보 출력
+/* ********************************************************
+ * 작업 로그정보 출력
+ ******************************************************** */
 function fn_fixLog(exe_sn){
 	$.ajax({
 		url : "/selectFixRsltMsg.do",
@@ -295,7 +303,9 @@ function fn_fixLog(exe_sn){
 	});	
 }
 
-//ERROR 로그 정보 출력
+/* ********************************************************
+ * ERROR 로그 정보 출력
+ ******************************************************** */
 function fn_failLog(exe_sn){
 	$.ajax({
 		url : "/selectWrkErrorMsg.do",
@@ -324,7 +334,9 @@ function fn_failLog(exe_sn){
 	});	
 }
 
-//ScriptWORK정보
+/* ********************************************************
+ * ScriptWORK정보
+ ******************************************************** */
 function fn_scriptLayer(wrk_id){
 	$.ajax({
 		url : "/selectSciptExeInfo.do",
@@ -357,8 +369,10 @@ function fn_scriptLayer(wrk_id){
 	});	
 }
 
-//WORK정보
-function fn_workLayer(wrk_id, contentsGbn){
+/* ********************************************************
+ * WORK정보
+ ******************************************************** */
+function fn_workLayer(wrk_id){
 	$.ajax({
 		url : "/selectWrkInfo.do",
 		data : {
@@ -431,16 +445,17 @@ function fn_workLayer(wrk_id, contentsGbn){
 						$("#pop_layer_dump").modal("show");
 					}
 				}else if(result[0].bsn_dscd == "TC001902"){
-					fn_scriptLayerWork(result[0].wrk_id, contentsGbn);
+					fn_scriptLayerWork(result[0].wrk_id);
 				}
 			}
 		}
 	});	
 }
 
-
-//ScriptWORK정보
-function fn_scriptLayerWork(wrk_id, contentsGbn){
+/* ********************************************************
+ * ScriptWORK정보
+ ******************************************************** */
+function fn_scriptLayerWork(wrk_id){
 	$.ajax({
 		url : "/selectSciptExeInfo.do",
 		data : {
@@ -466,17 +481,15 @@ function fn_scriptLayerWork(wrk_id, contentsGbn){
 			}else{
 				$("#info_exe_cmd", "#rsltMsgWorkForm").html(nvlPrmSet(result[0].exe_cmd, ""));
 
-				$("#contents_gbn", "#rsltMsgWorkForm").val(contentsGbn);
-
-				$("#"+ contentsGbn).modal("hide");
-
 				$("#pop_layer_script_work").modal("show");
 			}
 		}
 	});	
 }
 
-//스케줄정보
+/* ********************************************************
+ * 스케줄정보
+ ******************************************************** */
 function fn_scdLayer(scd_id){
 	$.ajax({
 		url : "/selectScdInfo.do",
@@ -565,13 +578,435 @@ function fn_scdLayer(scd_id){
 			
 		}
 	});
-	
 }
 
-
-//br 변환
+/* ********************************************************
+ * br 변환
+ ******************************************************** */
 function fn_strBrReplcae(msg) {
 	msg = msg.replace("<br/>", "\n");
 	
 	return msg;
 }
+
+/* ********************************************************
+ * date형 변환
+ ******************************************************** */
+function fn_dateParse(str) {
+    var y = str.substr(0, 4);
+    var m = str.substr(4, 2);
+    var d = str.substr(6, 2);
+    return new Date(y,m-1,d);
+}
+
+/* ********************************************************
+ * 비밀번호 체크
+ ******************************************************** */
+function pwdValidate(pw) {
+	if (pw == "") {
+		return;
+	}
+	
+	var reg_pwd = /^(?=.*[a-zA-Z])(?=.*[!@#$%^*+=-])(?=.*[0-9]).{6,20}/;
+
+	//비밀번호 체크
+	if (!reg_pwd.test(pw)) { 
+		return message_msg109;
+	}
+	
+	return "";
+}
+
+/* ********************************************************
+ * 비밀번호 안정성 확인
+ ******************************************************** */
+function pwdSafety(pw) {
+	if (pw == "") {
+		return;
+	}
+	
+	var o = { 
+			length: [6, 20],
+			lower: 1,
+			upper: 1,
+			alpha: 1, /* lower + upper */
+			numeric: 1,
+			special: 1, 
+			custom: [ /* regexes and/or functions */ ], 
+			badWords: [], 
+			badSequenceLength: 5, 
+			noQwertySequences: true, 
+			spaceChk: true, 
+			noSequential: false 
+	};
+
+	// bad sequence check 
+	if (o.badSequenceLength && pw.length >= o.length[0]) {
+		var lower = "abcdefghijklmnopqrstuvwxyz", 
+			upper = lower.toUpperCase(), 
+			numbers = "0123456789", 
+			qwerty = "qwertyuiopasdfghjklzxcvbnm", 
+			start = o.badSequenceLength - 1, 
+			seq = "_" + pw.slice(0, start);
+		
+		for (i = start; i < pw.length; i++) {
+			seq = seq.slice(1) + pw.charAt(i);
+			
+			if ( lower.indexOf(seq) > -1 || upper.indexOf(seq) > -1 || numbers.indexOf(seq) > -1 || (o.noQwertySequences && qwerty.indexOf(seq) > -1) ) {
+				return "<p style='line-height:200%;'>" + user_management_msg5 + " <span style='color:#E5E5E5'>|</span> <span style='color:#E3691E; font-weight:bold;'>" + user_management_msg6 + "</span> " + 
+						"<span style='color:#E3691E; font-weight:bold; font-size:20px; position: relative; top: 1.5px;'>―</span>" + 
+						"<span style='color:#E5E5E5; font-weight:bold; font-size:20px; position: relative; top: 1.5px;''>―</span>" + 
+						"<span style='color:#E5E5E5; font-weight:bold; font-size:20px; position: relative; top: 1.5px;''>―</span>" + "<br/>" + 
+						"<span style='color:#999; font-weight:bold;'>" + user_management_msg7 + "</span></p>";
+			}
+		}
+	}
+	
+	//password 정규식 체크 
+	var re = {
+			lower: /[a-z]/g, 
+			upper: /[A-Z]/g, 
+			alpha: /[A-Z]/gi, 
+			numeric: /[0-9]/g, 
+			special: /[\W_]/g 
+	},rule, i;
+
+	var lower = (pw.match(re['lower']) || []).length > 0 ? 1 : 0; 
+	var upper = (pw.match(re['upper']) || []).length > 0 ? 1 : 0; 
+	var numeric = (pw.match(re['numeric']) || []).length > 0 ? 1 : 0; 
+	var special = (pw.match(re['special']) || []).length > 0 ? 1 : 0;
+
+	//숫자, 알파벳(대문자, 소문자), 특수문자 2가지 조합
+	if(lower + upper + numeric + special <= 2) {
+		return "<p style='line-height:200%;'>" + user_management_msg5 + " <span style='color:#E5E5E5'>|</span> <span style='color:#E3691E; font-weight:bold;'>" + user_management_msg6 + "</span> " + 
+				"<span style='color:#E3691E; font-weight:bold; font-size:20px; position: relative; top: 1.5px;'>―</span>" + 
+				"<span style='color:#E5E5E5; font-weight:bold; font-size:20px; position: relative; top: 1.5px;''>―</span>" + 
+				"<span style='color:#E5E5E5; font-weight:bold; font-size:20px; position: relative; top: 1.5px;''>―</span>" + 
+				"<br/>" + 
+				"<span style='color:#999; font-weight:bold;'>" + user_management_msg7 + "</span></p>"; 
+	}
+	//숫자, 알파벳(대문자, 소문자), 특수문자 4가지 조합
+	else if(lower + upper + numeric + special <= 3) { 
+		return "<p style='line-height:200%;'>" + user_management_msg5 + " <span style='color:#E5E5E5'>|</span> <span style='color:#E3691E; font-weight:bold;'>" + user_management_msg8 + "</span> " + 
+				"<span style='color:#E3691E; font-weight:bold; font-size:20px; position: relative; top: 1.5px;'>―</span>" + 
+				"<span style='color:#E3691E; font-weight:bold; font-size:20px; position: relative; top: 1.5px;''>―</span>" + 
+				"<span style='color:#E5E5E5; font-weight:bold; font-size:20px; position: relative; top: 1.5px;''>―</span>" + 
+				"<br/>" + 
+				"<span style='color:#999; font-weight:bold;'>" + user_management_msg9 + "</span></p>"; 
+	}
+	//숫자, 알파벳(대문자, 소문자), 특수문자 4가지 조합
+	else { 
+		return "<p style='line-height:200%;'>" + user_management_msg5 + " <span style='color:#E5E5E5'>|</span> <span style='color:#E3691E; font-weight:bold;'>" + user_management_msg10 + "</span> " + 
+				"<span style='color:#E3691E; font-weight:bold; font-size:20px; position: relative; top: 1.5px;'>―</span>" + 
+				"<span style='color:#E3691E; font-weight:bold; font-size:20px; position: relative; top: 1.5px;''>―</span>" + 
+				"<span style='color:#E3691E; font-weight:bold; font-size:20px; position: relative; top: 1.5px;''>―</span>" + 
+				"<br/>" + "<span style='color:#999; font-weight:bold;'>" + user_management_msg11 + "</span></p>";
+	}
+
+	return "";
+}
+
+/* ********************************************************
+ * help_Open Source 클릭
+ ******************************************************** */
+function fn_openSource() {
+	$("#pop_layer_openSource").modal("show");
+}
+
+/* ********************************************************
+ * About eXperDB
+ ******************************************************** */
+function fn_aboutExperdb(version){
+	$("#version").html(version);
+}
+
+/* ********************************************************
+ * db2pg ddl 결과 정보
+ ******************************************************** */
+function fn_db2pgConfigLayer(config_nm){
+	$.ajax({
+		url : "/selectDb2pgConfigInfo.do",
+		data : {
+			config_nm : config_nm
+		},
+		dataType : "json",
+		type : "post",
+		beforeSend: function(xhr) {
+			xhr.setRequestHeader("AJAX", true);
+		},
+		error : function(xhr, status, error) {
+			if(xhr.status == 401) {
+				showSwalIconRst(message_msg02, closeBtn, '', 'error', 'top');
+			} else if(xhr.status == 403) {
+				showSwalIconRst(message_msg03, closeBtn, '', 'error', 'top');
+			} else {
+				showSwalIcon("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""), closeBtn, '', 'error');
+			}
+		},
+		success : function(result) {
+			if(result==null){
+				showSwalIcon(migration_msg21, closeBtn, '', 'error');
+			}else{
+				$("#config").html(result);
+
+				$("#pop_layer_db2pgConfig").modal("show");
+			}
+	
+		}
+	});
+}
+
+/* ********************************************************
+ * db2pg ddl 결과 정보
+ ******************************************************** */
+function fn_db2pgDDLResultLayer(ddl_save_pth,dtb_nm){
+	$.ajax({
+		url : "/db2pg/db2pgDdlCall.do",
+		data : {
+			ddl_save_pth : ddl_save_pth,
+			dtb_nm : dtb_nm
+		},
+		type : "post",
+		beforeSend: function(xhr) {
+			xhr.setRequestHeader("AJAX", true);
+		},
+		error : function(xhr, status, error) {
+			if(xhr.status == 401) {
+				showSwalIconRst(message_msg02, closeBtn, '', 'error', 'top');
+			} else if(xhr.status == 403) {
+				showSwalIconRst(message_msg03, closeBtn, '', 'error', 'top');
+			} else {
+				showSwalIcon("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""), closeBtn, '', 'error');
+			}
+		},
+		success : function(result) {
+			$("#table").html(result.data[0].RESULT_MSG);
+			$("#constraint").html(result.data[1].RESULT_MSG);
+			$("#index").html(result.data[2].RESULT_MSG);
+			$("#sequence").html(result.data[3].RESULT_MSG);
+		}
+	});
+	
+	$("#pop_layer_db2pgDDLResult").modal("show");
+}
+
+/* ********************************************************
+ * WORK OPTION정보
+ ******************************************************** */
+function fn_workOptionLayer(bck_wrk_id, db_svr_id, db_nm){
+	var db_svr_id = db_svr_id;
+	$.ajax({
+		url : "/workOptionLayer.do",
+		data : {
+			bck_wrk_id : bck_wrk_id
+		},
+		dataType : "json",
+		type : "post",
+		beforeSend: function(xhr) {
+			xhr.setRequestHeader("AJAX", true);
+	    },
+	    error : function(xhr, status, error) {
+			if(xhr.status == 401) {
+				showSwalIconRst(message_msg02, closeBtn, '', 'error', 'top');
+			} else if(xhr.status == 403) {
+				showSwalIconRst(message_msg03, closeBtn, '', 'error', 'top');
+			} else {
+				showSwalIcon("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""), closeBtn, '', 'error');
+			}
+		},
+		success : function(result) {		
+			var sections = "";
+			var objectType = "";
+			var save_yn = "";
+			var query = "";
+			var etc = "";
+
+			for(var i=0; i<result.length; i++){
+				if(result[i].grp_cd == "TC0006"){
+					sections += result[i].opt_cd_nm + "  /  ";
+				}else if (result[i].grp_cd == "TC0007"){
+					objectType += result[i].opt_cd_nm + "  /  ";
+				}else if (result[i].grp_cd == "TC0008"){
+					save_yn += result[i].opt_cd_nm + "  /  ";
+				}else if (result[i].grp_cd == "TC0009"){
+					query += result[i].opt_cd_nm + "  /  ";
+				}else{
+					etc += result[i].opt_cd_nm + "  /  ";
+				}
+			}
+			
+			$("#sections").html(sections);
+			$("#objectType").html(objectType);
+			$("#save_yn").html(save_yn);
+			$("#query").html(query);
+			$("#etc").html(etc);			
+	
+			fn_workObjectListTreeLayer(bck_wrk_id, db_svr_id, db_nm);
+		}		
+	});
+}
+
+/* ********************************************************
+ * WORK Object 리스트
+ ******************************************************** */
+function fn_workObjectListTreeLayer(bck_wrk_id, db_svr_id, db_nm){
+	$.ajax({
+		async : false,
+		url : "/workObjectListTreeLayer.do",
+	  	data : {
+	  		bck_wrk_id : bck_wrk_id
+	  	},
+		type : "post",
+		beforeSend: function(xhr) {
+			xhr.setRequestHeader("AJAX", true);
+	    },
+	    error : function(xhr, status, error) {
+			if(xhr.status == 401) {
+				showSwalIconRst(message_msg02, closeBtn, '', 'error', 'top');
+			} else if(xhr.status == 403) {
+				showSwalIconRst(message_msg03, closeBtn, '', 'error', 'top');
+			} else {
+				showSwalIcon("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""), closeBtn, '', 'error');
+			}
+		},
+		success : function(result) {
+			fn_workObjectTreeLayer(db_svr_id, db_nm, result);
+		}
+	});	
+}
+
+/* ********************************************************
+ * Object 리스트
+ ******************************************************** */
+function fn_workObjectTreeLayer(db_svr_id, db_nm, workObj){
+	$.ajax({
+		async : false,
+		url : "/getObjectList.do",
+		data : {
+			db_svr_id : db_svr_id,
+			db_nm : db_nm
+		},
+		type : "post",
+		beforeSend: function(xhr) {
+			xhr.setRequestHeader("AJAX", true);
+		},
+		error : function(xhr, status, error) {
+			if(xhr.status == 401) {
+				showSwalIconRst(message_msg02, closeBtn, '', 'error', 'top');
+			} else if(xhr.status == 403) {
+				showSwalIconRst(message_msg03, closeBtn, '', 'error', 'top');
+			} else {
+				showSwalIcon("ERROR CODE : "+ xhr.status+ "\n\n"+ "ERROR Message : "+ error+ "\n\n"+ "Error Detail : "+ xhr.responseText.replace(/(<([^>]+)>)/gi, ""), closeBtn, '', 'error');
+			}
+		},
+		success : function(data) {
+			fn_make_object_list(data, workObj);
+		}
+	});
+}
+
+/* ********************************************************
+ * Make Object Tree
+ ******************************************************** */
+function fn_make_object_list(data, workObj){
+	var html = "<ul>";
+	var schema = "";
+	var schemaCnt = 0;
+	$(data.data).each(function (index, item) {
+		var inSchema = item.schema;
+		
+		if(schemaCnt > 0 && schema != inSchema){
+			html += "</ul></li>\n";
+		}
+		if(schema != inSchema){
+			var checkStr = "disabled";
+			$(workObj).each(function(i,v){
+				if(v.scm_nm == item.schema && v.obj_nm == "") checkStr = " checked disabled";
+			});
+			html += "<li class='active'><a href='#'>"+item.schema+"</a>";
+			html += "<div class='inp_chk chk3'>";
+			html += "<input type='checkbox' id='schema"+schemaCnt+"' name='tree' value='"+item.schema+"' otype='schema' schema='"+item.schema+"'"+checkStr+"/><label for='schema"+schemaCnt+"'></label>";
+			html += "</div>";
+			html += "<ul>\n";
+		}
+		
+		var checkStr = "disabled";
+		$(workObj).each(function(i,v){
+			if(v.scm_nm == item.schema && v.obj_nm == item.name) checkStr = " checked disabled";
+		});
+		html += "<li><a href='#'>"+item.name+"</a>";
+		html += "<div class='inp_chk chk3'>";
+		html += "<input type='checkbox' id='table"+index+"' name='tree' value='"+item.name+"' otype='table' schema='"+item.schema+"'"+checkStr+"/><label for='table"+index+"'></label>";
+		html += "</div>";
+		html += "</li>\n";
+
+		if(schema != inSchema){
+			schema = inSchema;
+			schemaCnt++;
+		}
+	});
+	if(schemaCnt > 0) html += "</ul></li>";
+	html += "</ul>";
+
+	$(".tNav").html("");
+	$(".tNav").html(html);
+	//$.getScript( "/js/common.js", function() {});
+	
+	$('#loading').hide();
+}
+
+/* ********************************************************
+ * 패스워드 확인
+ ******************************************************** */
+function fn_passwordConfilm(flag){
+	$("#password").val("");
+	$("#flag").val(flag);
+	
+	$("#pop_layer_pwConfilm").modal("show");
+}
+
+/* ********************************************************
+ * 사이즈 리사이징
+ ******************************************************** */
+function ResizingLayer() {
+	if($(".PopupLayer").css("visibility") == "visible") {
+		//화면의 높이와 너비를 구한다. 
+		var maskHeight = $(document).height();
+		var maskWidth = $(window).width();
+
+		//마스크의 높이와 너비를 화면 것으로 만들어 전체 화면을 채운다. 
+		$("#lay_mask").css({'width':maskWidth,'height':maskHeight});
+		//$('#header').css({'width':maskWidth}); // 20131119 최창원 수정 헤더의 넓이 값을 우선 빼 봤음.
+
+		$(".PopupLayer").each(function () {
+			var left = ( $(window).scrollLeft() + ($(window).width() - $(this).width()) / 2 );
+			var top = ( $(window).scrollTop() + ($(window).height() - $(this).height()) / 2 );
+
+			if(top<0) top = 0;
+			if(left<0) left = 0;
+
+			$(this).css({"left":left, "top":top});
+		});
+	}
+	// 퀵메뉴 팝업
+	if($("#pop_setting1").css("visibility") == "visible") {
+		//화면의 높이와 너비를 구한다. 
+		var maskHeight = $(document).height();
+		var maskWidth = $(window).width();
+
+		//마스크의 높이와 너비를 화면 것으로 만들어 전체 화면을 채운다. 
+		$("#lay_mask").css({'width':maskWidth,'height':maskHeight});
+		//$('#header').css({'width':maskWidth}); // 20131119 최창원 수정 헤더의 넓이 값을 우선 빼 봤음.
+
+		$("#pop_setting1").each(function () {
+			var left = ( $(window).scrollLeft() + ($(window).width() - $(this).width()) / 2 );
+			var top = ( $(window).scrollTop() + 20 + "px" );
+
+			if(top<0) top = 0;
+			if(left<0) left = 0;
+
+			$(this).css({"left":left, "top":top});
+		});
+	}
+}
+window.onresize = ResizingLayer;

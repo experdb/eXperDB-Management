@@ -168,18 +168,6 @@
 		        $(element).addClass('form-control-danger')
 		    }
 		});
-
-/*  		$.validator.addMethod("pwdEqualsChk", function(value, element){
- 			var nowpwd_chk = $("#nowpwd", "#pwdChgForm").val(); 
- 			var pwd_chk = value;
-
- 			if (nowpwd_chk == pwd_chk) {
- 				return true;
- 			}
-
- 			return this.optional(element)|| false;
-
- 		}); */
 	});
 
 	/*확인버튼 클릭시*/
@@ -227,110 +215,6 @@
 			}
 		});
 	}
-
-	/* ********************************************************
-	 * 비밀번호 체크
-	 ******************************************************** */
-	function pwdValidate(pw) {
-		if (pw == "") {
-			return;
-		}
-		
-		var reg_pwd = /^(?=.*[a-zA-Z])(?=.*[!@#$%^*+=-])(?=.*[0-9]).{6,20}/;
-
-		//비밀번호 체크
-		if (!reg_pwd.test(pw)) { 
-			return "<spring:message code='message.msg109' />";
-		}
-		
-		return "";
-	}
-
-	/* ********************************************************
-	 * 비밀번호 안정성 확인
-	 ******************************************************** */
-	function pwdSafety(pw) {
-		if (pw == "") {
-			return;
-		}
-		
-		var o = { 
-				length: [6, 20],
-				lower: 1,
-				upper: 1,
-				alpha: 1, /* lower + upper */
-				numeric: 1,
-				special: 1, 
-				custom: [ /* regexes and/or functions */ ], 
-				badWords: [], 
-				badSequenceLength: 5, 
-				noQwertySequences: true, 
-				spaceChk: true, 
-				noSequential: false 
-		};
-
-		// bad sequence check 
-		if (o.badSequenceLength && pw.length >= o.length[0]) {
-			var lower = "abcdefghijklmnopqrstuvwxyz", 
-				upper = lower.toUpperCase(), 
-				numbers = "0123456789", 
-				qwerty = "qwertyuiopasdfghjklzxcvbnm", 
-				start = o.badSequenceLength - 1, 
-				seq = "_" + pw.slice(0, start);
-			
-			for (i = start; i < pw.length; i++) {
-				seq = seq.slice(1) + pw.charAt(i);
-				
-				if ( lower.indexOf(seq) > -1 || upper.indexOf(seq) > -1 || numbers.indexOf(seq) > -1 || (o.noQwertySequences && qwerty.indexOf(seq) > -1) ) {
-					return "<p style='line-height:200%;'>비밀번호 안전도 <span style='color:#E5E5E5'>|</span> <span style='color:#E3691E; font-weight:bold;'>낮음</span> " + "<span style='color:#E3691E; font-weight:bold; font-size:20px; position: relative; top: 1.5px;'>―</span>" + "<span style='color:#E5E5E5; font-weight:bold; font-size:20px; position: relative; top: 1.5px;''>―</span>" + "<span style='color:#E5E5E5; font-weight:bold; font-size:20px; position: relative; top: 1.5px;''>―</span>" + "<br/>" + "<span style='color:#999; font-weight:bold;'>안전도가 높은 비밀번호를 권장합니다.</span></p>";
-				}
-			}
-		}
-		
-		//password 정규식 체크 
-		var re = {
-				lower: /[a-z]/g, 
-				upper: /[A-Z]/g, 
-				alpha: /[A-Z]/gi, 
-				numeric: /[0-9]/g, 
-				special: /[\W_]/g 
-		},rule, i;
-
-		var lower = (pw.match(re['lower']) || []).length > 0 ? 1 : 0; 
-		var upper = (pw.match(re['upper']) || []).length > 0 ? 1 : 0; 
-		var numeric = (pw.match(re['numeric']) || []).length > 0 ? 1 : 0; 
-		var special = (pw.match(re['special']) || []).length > 0 ? 1 : 0;
-
-		//숫자, 알파벳(대문자, 소문자), 특수문자 2가지 조합
-		if(lower + upper + numeric + special <= 2) {
-			return "<p style='line-height:200%;'><spring:message code='user_management.msg5' /> <span style='color:#E5E5E5'>|</span> <span style='color:#E3691E; font-weight:bold;'><spring:message code='user_management.msg6' /></span> " + 
-					"<span style='color:#E3691E; font-weight:bold; font-size:20px; position: relative; top: 1.5px;'>―</span>" + 
-					"<span style='color:#E5E5E5; font-weight:bold; font-size:20px; position: relative; top: 1.5px;''>―</span>" + 
-					"<span style='color:#E5E5E5; font-weight:bold; font-size:20px; position: relative; top: 1.5px;''>―</span>" + 
-					"<br/>" + 
-					"<span style='color:#999; font-weight:bold;'><spring:message code='user_management.msg7' /></span></p>"; 
-		}
-		//숫자, 알파벳(대문자, 소문자), 특수문자 4가지 조합
-		else if(lower + upper + numeric + special <= 3) { 
-			return "<p style='line-height:200%;'><spring:message code='user_management.msg5' /> <span style='color:#E5E5E5'>|</span> <span style='color:#E3691E; font-weight:bold;'><spring:message code='user_management.msg8' /></span> " + 
-					"<span style='color:#E3691E; font-weight:bold; font-size:20px; position: relative; top: 1.5px;'>―</span>" + 
-					"<span style='color:#E3691E; font-weight:bold; font-size:20px; position: relative; top: 1.5px;''>―</span>" + 
-					"<span style='color:#E5E5E5; font-weight:bold; font-size:20px; position: relative; top: 1.5px;''>―</span>" + 
-					"<br/>" + 
-					"<span style='color:#999; font-weight:bold;'><spring:message code='user_management.msg9' /></span></p>"; 
-		}
-		//숫자, 알파벳(대문자, 소문자), 특수문자 4가지 조합
-		else { 
-			return "<p style='line-height:200%;'><spring:message code='user_management.msg5' /> <span style='color:#E5E5E5'>|</span> <span style='color:#E3691E; font-weight:bold;'><spring:message code='user_management.msg10' /></span> " + 
-					"<span style='color:#E3691E; font-weight:bold; font-size:20px; position: relative; top: 1.5px;'>―</span>" + 
-					"<span style='color:#E3691E; font-weight:bold; font-size:20px; position: relative; top: 1.5px;''>―</span>" + 
-					"<span style='color:#E3691E; font-weight:bold; font-size:20px; position: relative; top: 1.5px;''>―</span>" + 
-					"<br/>" + "<span style='color:#999; font-weight:bold;'><spring:message code='user_management.msg11' /></span></p>";
-		}
-
-		return "";
-	}
-	
 </script>
 
 
