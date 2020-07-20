@@ -295,10 +295,7 @@ public class TransController {
 			serverObj.put(ClientProtocolID.TABLE_NM, table_nm);
 
 			result =  TransferTableInfo.getTblList(serverObj);
-			
-			System.out.println("result====" + result.size());
-			
-			System.out.println(result);
+
 		}catch (Exception e) {
 			e.printStackTrace();
 		}
