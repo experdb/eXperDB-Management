@@ -1311,6 +1311,61 @@ span.bold{font-weight:bold; color:#248afd; cursor:pointer;}
 }
 
 
+/* 활성화/비활성화 팝업 버튼 */
+.activeswitch-pop {
+    position: relative; width: 100px; max-height:2.000rem;
+    -webkit-user-select:none; -moz-user-select:none; -ms-user-select: none;
+}
+.activeswitch-pop-checkbox {
+    position: absolute;
+    opacity: 0;
+    pointer-events: none;
+}
+.activeswitch-pop-label {
+    display: block; overflow: hidden; cursor: pointer;
+    border: 1px solid #999999; border-radius: 5px;
+}
+.activeswitch-pop-inner {
+    display: block; width: 200%; margin-left: -100%;
+    transition: margin 0.3s ease-in 0s;
+}
+.activeswitch-pop-inner:before, .activeswitch-pop-inner:after {
+    display: block; float: left; width: 50%; height: 2.000rem; padding: 0; line-height: 2.000rem;
+    font-size: 12px; color: white; font-family: Trebuchet, Arial, sans-serif; font-weight: bold;
+    box-sizing: border-box;
+}
+.activeswitch-pop-inner:before {
+    content: "ACTIVE";
+    padding-left: 10px;
+	background-color:#68afff;
+    color: #FFFFFF;
+}
+.activeswitch-pop-inner:after {
+    content: "INACTIVE";
+    padding-right: 10px;
+    background-color: #EEEEEE; color: #999999;
+/*     background: -webkit-linear-gradient(135deg, #CCC, #FFF); For Safari 5.1 to 6.0
+    background: -o-linear-gradient(135deg, #CCC, #FFF); For Opera 11.1 to 12.0
+    background: -moz-linear-gradient(135deg, #CCC, #FFF); For Firefox 3.6 to 15
+    background: linear-gradient(135deg, #CCC, #FFF); Standard syntax
+     */
+    text-align: right;
+}
+.activeswitch-pop-switch {
+    display: block; width: 18px; margin: 6px;
+    background: #FFFFFF;
+    position: absolute; top: 0; bottom: 0;
+    right: 70px;
+    border: 2px solid #999999; border-radius: 20px;
+    transition: all 0.3s ease-in 0s;
+}
+.activeswitch-pop-checkbox:checked + .activeswitch-pop-label .activeswitch-pop-inner {
+    margin-left: 0;
+}
+.activeswitch-pop-checkbox:checked + .activeswitch-pop-label .activeswitch-pop-switch {
+    right: 0px; 
+}
+
 
 .example {
 	position: relative;

@@ -118,6 +118,8 @@
 				top.location.href = "/";
 			} else if (rstGbn == "reload") {
 				location.reload();
+			}else if (rstGbn == "securityKeySet") {
+				location.href = "/securityKeySet.do";
 			}
         });
 	}
