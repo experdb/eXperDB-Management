@@ -439,10 +439,12 @@ public class Db2pgDbmsSystemController {
 			db2pgSysInfVO.setFrst_regr_id(id);
 			db2pgSysInfVO.setLst_mdfr_id(id);
 			
-			if(db2pgSysInfVO.getDbms_dscd().equals("TC002201") || db2pgSysInfVO.getDbms_dscd().equals("TC002208")){
-				db2pgSysInfVO.setScm_nm(db2pgSysInfVO.getScm_nm().toUpperCase());
-				db2pgSysInfVO.setDtb_nm(db2pgSysInfVO.getDtb_nm().toUpperCase());
-			}
+			if(db2pgSysInfVO.getDbms_dscd().equals("TC002201")){
+	            db2pgSysInfVO.setScm_nm(db2pgSysInfVO.getScm_nm().toUpperCase());
+	            db2pgSysInfVO.setDtb_nm(db2pgSysInfVO.getDtb_nm().toUpperCase());
+	         }else if (db2pgSysInfVO.getDbms_dscd().equals("TC002208")){
+	            db2pgSysInfVO.setScm_nm(db2pgSysInfVO.getScm_nm().toUpperCase());
+	         }
 			
 			dbmsService.insertDb2pgDBMS(db2pgSysInfVO);	
 	
